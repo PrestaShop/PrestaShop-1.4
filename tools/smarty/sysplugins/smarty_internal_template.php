@@ -202,8 +202,9 @@ class Smarty_Internal_Template extends Smarty_Internal_Data {
      */
     public function getCompiledTimestamp ()
     {
+	/* PrestaShop - Added a @ for filemtime to fix a Smarty bug */
         return $this->compiled_timestamp === null ?
-        ($this->compiled_timestamp = (!$this->resource_object->isEvaluated && file_exists($this->getCompiledFilepath())) ? filemtime($this->getCompiledFilepath()) : false) :
+        ($this->compiled_timestamp = (!$this->resource_object->isEvaluated && file_exists($this->getCompiledFilepath())) ? @filemtime($this->getCompiledFilepath()) : false) :
         $this->compiled_timestamp;
     } 
 

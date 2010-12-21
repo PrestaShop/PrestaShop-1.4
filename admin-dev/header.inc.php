@@ -63,10 +63,7 @@ echo '
 			}
 		</style>
 	</head>
-	<body '.((!empty($employee->bo_color))
-		? 'style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"'
-		: '').'
-	>
+	<body '.((!empty($employee->bo_color)) ? 'style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"' : '').'>
 	<div id="top_container" />
 		<div id="container">
 			<div id="header_infos"><span>

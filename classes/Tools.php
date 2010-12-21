@@ -652,44 +652,73 @@ class ToolsCore
 	/**
 	* Get the user's journey
 	*
-	* @param integer category id
-	* @param string finish of the path
-	* @param string [optionnal] $type_cat defined what type of categories is used (products or cms)
+	* @param integer $id_category Category ID
+	* @param string $path Path end
+	* @param boolean $linkOntheLastItem Put or not a link on the current category
+	* @param string [optionnal] $categoryType defined what type of categories is used (products or cms)
 	*/
-	static public function getPath($id_category, $path = '', $linkOntheLastItem = false, $type_cat = 'products')
+	static public function getPath($id_category, $path = '', $linkOntheLastItem = false, $categoryType = 'products')
 	{
 		global $link, $cookie;
 
-		if($type_cat === 'products')
-		    $category = new Category((int)($id_category), (int)($cookie->id_lang));
-		else if ($type_cat === 'CMS')
-		    $category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
-
-		if (!Validate::isLoadedObject($category))
-			die (self::displayError());
-		if ($category->id == 1)
+		if ($id_category == 1)
 			return '<span class="navigation_end">'.$path.'</span>';
-		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
-		$category_name = $category->name;
-		$category_link = $type_cat === 'products' ? $link->getCategoryLink($category) : $link->getCMSCategoryLink($category);
-		// htmlentitiezed because this method generates some view
-		if ($path != $category_name)
+		
+		$pipe = Configuration::get('PS_NAVIGATION_PIPE');
+		if (empty($pipe))
+			$pipe = '>';
+		
+		if ($categoryType === 'products')
 		{
-			$displayedPath = '';
-			if ($category->active)
-				$displayedPath .= '<a href="'.self::safeOutput($category_link).'">';
-			$displayedPath .= htmlentities($category_name, ENT_NOQUOTES, 'UTF-8');
-			if ($category->active)
-				$displayedPath .= '</a>';
-			$displayedPath .= '<span class="navigation-pipe">'.$pipe.'</span>'.$path;
+			$category = Db::getInstance()->getRow('
+			SELECT id_category, level_depth, nleft, nright
+			FROM '._DB_PREFIX_.'category
+			WHERE id_category = '.(int)$id_category);
+
+			if (isset($category['id_category']))
+			{
+				$categories = Db::getInstance()->ExecuteS('
+				SELECT c.id_category, cl.name, cl.link_rewrite
+				FROM '._DB_PREFIX_.'category c
+				LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category)
+				WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($cookie->id_lang).' AND c.id_category != 1
+				ORDER BY c.level_depth ASC
+				LIMIT '.(int)$category['level_depth']);
+				
+				$fullPath = '';
+				$n = 1;
+				$nCategories = (int)sizeof($categories);
+				foreach ($categories AS $category)
+				{
+					$fullPath .= 
+					(($n < $nCategories OR $linkOntheLastItem) ? '<a href="'.self::safeOutput($link->getCategoryLink((int)$category['id_category'], $category['link_rewrite'])).'" title="'.htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').'">' : '').
+					htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').
+					(($n < $nCategories OR $linkOntheLastItem) ? '</a>' : '').
+					(($n++ != $nCategories OR !empty($path)) ? '<span class="navigation-pipe">'.$pipe.'</span>' : '');
+				}
+					
+				return $fullPath.$path;
+			}
 		}
-		else
-			$displayedPath = ($linkOntheLastItem ? '<a href="'.self::safeOutput($category_link).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
-		return self::getPath((int)($category->id_parent), $displayedPath, $linkOntheLastItem, $type_cat);
+		elseif ($categoryType === 'CMS')
+		{
+			$category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
+			if (!Validate::isLoadedObject($category))
+				die(self::displayError());
+			$categoryLink = $link->getCMSCategoryLink($category);
+
+			if ($path != $category->name)
+				$fullPath .= '<a href="'.self::safeOutput($categoryLink).'">'.htmlentities($category->name, ENT_NOQUOTES, 'UTF-8').'</a><span class="navigation-pipe">'.$pipe.'</span>'.$path;
+			else
+				$fullPath = ($linkOntheLastItem ? '<a href="'.self::safeOutput($categoryLink).'">' : '').htmlentities($path, ENT_NOQUOTES, 'UTF-8').($linkOntheLastItem ? '</a>' : '');
+
+			return self::getPath((int)($category->id_parent), $fullPath, $linkOntheLastItem, $categoryType);
+		}
 	}
+	
 	/**
-     * @param string [optionnal] $type_cat defined what type of categories is used (products or cms)
-	 */
+	* @param string [optionnal] $type_cat defined what type of categories is used (products or cms)
+	*/
 	static public function getFullPath($id_category, $end, $type_cat = 'products')
 	{
 		global $cookie;

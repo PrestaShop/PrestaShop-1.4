@@ -34,8 +34,7 @@ class CategoryControllerCore extends FrontController
 			_PS_CSS_DIR_.'jquery.cluetip.css' => 'all',
 			_THEME_CSS_DIR_.'scenes.css' => 'all',
 			_THEME_CSS_DIR_.'category.css' => 'all',
-			_THEME_CSS_DIR_.'product_list.css' => 'all'
-		));
+			_THEME_CSS_DIR_.'product_list.css' => 'all'));
 		Tools::addJS(_THEME_JS_DIR_.'products-comparison.js');
 	}
 	
@@ -44,23 +43,22 @@ class CategoryControllerCore extends FrontController
 		parent::displayHeader();
 		$this->productSort();
 	}
-    public function preProcess()
-    {
-        parent::preProcess();
-        if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
-		{
-    		if ($id_category = (int)Tools::getValue('id_category'))
-    		{
-    			$rewrite_infos = Category::getUrlRewriteInformations($id_category);
-    
-    			$default_rewrite = array();
-    			foreach ($rewrite_infos AS $infos)
-    				$default_rewrite[$infos['id_lang']] = $this->link->getCategoryLink($id_category, $infos['link_rewrite'], $infos['id_lang']);
-    
-    			$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
-    		}
-		}
-    }
+	
+	public function preProcess()
+	{
+		parent::preProcess();
+		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
+			if ($id_category = (int)Tools::getValue('id_category'))
+			{
+				$rewrite_infos = Category::getUrlRewriteInformations((int)$id_category);
+
+				$default_rewrite = array();
+				foreach ($rewrite_infos AS $infos)
+					$default_rewrite[$infos['id_lang']] = $this->link->getCategoryLink((int)$id_category, $infos['link_rewrite'], $infos['id_lang']);
+
+				$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
+			}
+	}
 	public function process()
 	{
 		parent::process();
@@ -77,7 +75,7 @@ class CategoryControllerCore extends FrontController
 				$this->smarty->assign('category', $category);
 			else
 			{
-				$rewrited_url = $this->link->getCategoryLink($category->id, $category->link_rewrite);
+				$rewrited_url = $this->link->getCategoryLink((int)$category->id, $category->link_rewrite);
 				
 				/* Scenes  (could be externalised to another controler if you need them */
 				$this->smarty->assign('scenes', Scene::getScenes((int)($category->id), (int)($this->cookie->id_lang), true, false));
@@ -104,14 +102,13 @@ class CategoryControllerCore extends FrontController
 					$this->smarty->assign('subcategories', $subCategories);
 					$this->smarty->assign(array(
 						'subcategories_nb_total' => sizeof($subCategories),
-						'subcategories_nb_half' => ceil(sizeof($subCategories) / 2)
-					));
+						'subcategories_nb_half' => ceil(sizeof($subCategories) / 2)));
 				}
 				if ($category->id != 1)
 				{
 					$nbProducts = $category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
-					$this->pagination($nbProducts);
-					$this->smarty->assign('nb_products', $nbProducts);
+					$this->pagination((int)$nbProducts);
+					$this->smarty->assign('nb_products', (int)$nbProducts);
 					$cat_products = $category->getProducts((int)($this->cookie->id_lang), (int)($this->p), (int)($this->n), $this->orderBy, $this->orderWay);
 				}
 				$this->smarty->assign(array(
@@ -119,7 +116,7 @@ class CategoryControllerCore extends FrontController
 					'id_category' => (int)($category->id),
 					'id_category_parent' => (int)($category->id_parent),
 					'return_category_name' => Tools::safeOutput($category->name),
-					'path' => Tools::getPath((int)($category->id), $category->name),
+					'path' => Tools::getPath((int)($category->id)),
 					'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 					'categorySize' => Image::getSize('category'),
 					'mediumSize' => Image::getSize('medium'),

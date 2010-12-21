@@ -151,17 +151,17 @@ class ProductControllerCore extends FrontController
 				if (isset($category) AND Validate::isLoadedObject($category))
 				{
 					$this->smarty->assign(array(
+					'path' => Tools::getPath((int)$category->id, $product->name, true),
 					'category' => $category,
 					'subCategories' => $category->getSubCategories((int)($this->cookie->id_lang), true),
 					'id_category_current' => (int)($category->id),
 					'id_category_parent' => (int)($category->id_parent),
 					'return_category_name' => Tools::safeOutput($category->name)));
 				}
+				else
+					$this->$smarty->assign('path', Tools::getPath((int)$product->id_category_default, $product->name));
 
-				$this->smarty->assign(array(
-					'return_link' => (isset($category->id) AND $category->id) ? Tools::safeOutput($this->link->getCategoryLink($category)) : 'javascript: history.back();',
-					'path' => ((isset($category->id) AND $category->id) ? Tools::getFullPath((int)($category->id), $product->name) : Tools::getFullPath((int)($product->id_category_default), $product->name))
-				));
+				$this->smarty->assign('return_link', (isset($category->id) AND $category->id) ? Tools::safeOutput($this->link->getCategoryLink($category)) : 'javascript: history.back();');
 
 				$lang = Configuration::get('PS_LANG_DEFAULT');
 				if (Pack::isPack((int)($product->id), (int)($lang)) AND !Pack::isInStock((int)($product->id), (int)($lang)))

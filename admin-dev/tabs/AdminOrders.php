@@ -98,7 +98,7 @@ class AdminOrders extends AdminTab
 						'{id_order}' => (int)($order->id)
 					);
 					$subject = 'Package in transit';
-					Mail::Send((int)($order->id_lang), 'in_transit', ((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject), $templateVars, $customer->email, $customer->firstname.' '.$customer->lastname);
+					@Mail::Send((int)($order->id_lang), 'in_transit', ((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject), $templateVars, $customer->email, $customer->firstname.' '.$customer->lastname);
 				}
 			}
 			else
@@ -116,24 +116,22 @@ class AdminOrders extends AdminTab
 				else
 				{
 					$history = new OrderHistory();
-					$history->id_order = $id_order;
+					$history->id_order = (int)$id_order;
 					$history->id_employee = (int)($cookie->id_employee);
 					$history->changeIdOrderState((int)($newOrderStatusId), (int)($id_order));
-					$order = new Order($order->id);
+					$order = new Order((int)$order->id);
 					$carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
 					if ($history->id_order_state == _PS_OS_SHIPPING_ AND $order->shipping_number)
 						$templateVars = array('{followup}' => str_replace('@', $order->shipping_number, $carrier->url));
 					elseif ($history->id_order_state == _PS_OS_CHEQUE_)
 						$templateVars = array(
 							'{cheque_name}' => (Configuration::get('CHEQUE_NAME') ? Configuration::get('CHEQUE_NAME') : ''),
-							'{cheque_address_html}' => (Configuration::get('CHEQUE_ADDRESS') ? nl2br(Configuration::get('CHEQUE_ADDRESS')) : '')
-						);
+							'{cheque_address_html}' => (Configuration::get('CHEQUE_ADDRESS') ? nl2br(Configuration::get('CHEQUE_ADDRESS')) : ''));
 					elseif ($history->id_order_state == _PS_OS_BANKWIRE_)
 						$templateVars = array(
 							'{bankwire_owner}' => (Configuration::get('BANK_WIRE_OWNER') ? Configuration::get('BANK_WIRE_OWNER') : ''),
 							'{bankwire_details}' => (Configuration::get('BANK_WIRE_DETAILS') ? nl2br(Configuration::get('BANK_WIRE_DETAILS')) : ''),
-							'{bankwire_address}' => (Configuration::get('BANK_WIRE_ADDRESS') ? nl2br(Configuration::get('BANK_WIRE_ADDRESS')) : '')
-						);
+							'{bankwire_address}' => (Configuration::get('BANK_WIRE_ADDRESS') ? nl2br(Configuration::get('BANK_WIRE_ADDRESS')) : ''));
 					if ($history->addWithemail(true, $templateVars))
 						Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder'.'&token='.$this->token);
 					$this->_errors[] = Tools::displayError('an error occurred while changing status or was unable to send e-mail to the customer');
@@ -185,7 +183,7 @@ class AdminOrders extends AdminTab
 							if (Validate::isLoadedObject($order))
 							{
 								$varsTpl = array('{lastname}' => $customer->lastname, '{firstname}' => $customer->firstname, '{id_order}' => $message->id_order, '{message}' => (Configuration::get('PS_MAIL_TYPE') == 2 ? $message->message : nl2br2($message->message)));
-								if (Mail::Send((int)($order->id_lang), 'order_merchant_comment', html_entity_decode(Mail::l('New message regarding your order').' '.$message->id_order, ENT_NOQUOTES, 'UTF-8'), $varsTpl, $customer->email, $customer->firstname.' '.$customer->lastname))
+								if (@Mail::Send((int)($order->id_lang), 'order_merchant_comment', html_entity_decode(Mail::l('New message regarding your order').' '.$message->id_order, ENT_NOQUOTES, 'UTF-8'), $varsTpl, $customer->email, $customer->firstname.' '.$customer->lastname))
 									Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder&conf=11'.'&token='.$this->token);
 							}
 						}

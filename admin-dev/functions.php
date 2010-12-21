@@ -129,30 +129,47 @@ function	displayDate($sqlDate, $withTime = false)
   * @param integer $id_category Start category
   * @param string $path Current path
   * @param string $highlight String to highlight (in XHTML/CSS)
+  * @param string $type Category type (products/cms)
   */
-function	getPath($urlBase, $id_category, $path = '', $highlight = '', $type = 'catalog')
+function getPath($urlBase, $id_category, $path = '', $highlight = '', $categoryType = 'catalog')
 {
 	global $cookie;
 	
+	if ($categoryType == 'catalog')
+	{			
+		$category = Db::getInstance()->getRow('
+		SELECT id_category, level_depth, nleft, nright
+		FROM '._DB_PREFIX_.'category
+		WHERE id_category = '.(int)$id_category);
+
+		if (isset($category['id_category']))
+		{
+			$categories = Db::getInstance()->ExecuteS('
+			SELECT c.id_category, cl.name, cl.link_rewrite
+			FROM '._DB_PREFIX_.'category c
+			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category)
+			WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($cookie->id_lang).'
+			ORDER BY c.level_depth ASC
+			LIMIT '.(int)($category['level_depth'] + 1));
 			
-	switch ($type) {
-	case 'catalog':
-		$category = new Category($id_category, (int)($cookie->id_lang));
-		if (!$category->id)
-			return $path;
-		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', $category->name) : $category->name;
-		$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
-				<img src="../img/admin/edit.gif" alt="Modify" /></a> ';
-		if ($category->id == 1)
-			$edit = '<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
-					<img src="../img/admin/home.gif" alt="Home" /></a> ';
-		$path = $edit.'<a href="'.$urlBase.'&id_category='.$category->id.'&viewcategory&token=' . Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
-		'.$name.'</a> > '.$path;
-		if ($category->id == 1)
-			return substr($path, 0, strlen($path) - 3);
-		return getPath($urlBase, $category->id_parent, $path);
-		break;
-	case 'cms':
+			$fullPath = '';
+			$n = 1;
+			$nCategories = (int)sizeof($categories);
+			foreach ($categories AS $category)
+			{
+				$edit = '<a href="'.$urlBase.'&id_category='.(int)$category['id_category'].'&'.($category['id_category'] == 1 ? 'viewcategory' : 'addcategory').'&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" title="'.($category['id_category'] == 1 ? 'Home' : 'Modify').'"><img src="../img/admin/'.($category['id_category'] == 1 ? 'home' : 'edit').'.gif" alt="" /></a> ';
+				$fullPath .= $edit.
+				($n < $nCategories ? '<a href="'.$urlBase.'&id_category='.(int)$category['id_category'].'&viewcategory&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" title="'.htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').'">' : '').
+				htmlentities((!empty($highlight) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', $category['name']) : $category['name']), ENT_NOQUOTES, 'UTF-8').
+				($n < $nCategories ? '</a>' : '').
+				(($n++ != $nCategories OR !empty($path)) ? ' > ' : '');
+			}
+				
+			return $fullPath.$path;
+		}
+	}
+	elseif ($categoryType == 'cms')
+	{
 		$category = new CMSCategory($id_category, (int)($cookie->id_lang));
 		if (!$category->id)
 			return $path;
@@ -168,12 +185,10 @@ function	getPath($urlBase, $id_category, $path = '', $highlight = '', $type = 'c
 		if ($category->id == 1)
 			return substr($path, 0, strlen($path) - 3);
 		return getPath($urlBase, $category->id_parent, $path, '', 'cms');
-		break;
 	}
-	
 }
 
-function	getDirContent($path)
+function getDirContent($path)
 {
 	$content = array();
 	if (is_dir($path))

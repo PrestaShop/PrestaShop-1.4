@@ -203,7 +203,8 @@ CREATE TABLE `PREFIX_category` (
   `date_upd` datetime NOT NULL,
   `position` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_category`),
-  KEY `category_parent` (`id_parent`)
+  KEY `category_parent` (`id_parent`),
+  KEY `nleftright` (`nleft`,`nright`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_category_group` (

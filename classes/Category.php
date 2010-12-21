@@ -145,14 +145,8 @@ class CategoryCore extends ObjectModel
 	{
 		$this->position = self::getLastPosition((int)(Tools::getValue('id_parent')));
 		$this->level_depth = $this->calcLevelDepth();		
-		
-		/* Calculate the nested tree values (left, right) */
-		$nestedValues = $this->calcNestedValues((int)$this->id);
-		$this->nleft = (int)$nestedValues[0];
-		$this->nright = (int)$nestedValues[1];
-		
 		$ret = parent::add($autodate);
-		$this->updateParentNestedValues();
+		self::regenerateEntireNtree();
 		$this->updateGroup(Tools::getValue('groupBox'));
 		Module::hookExec('categoryAddition'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return $ret;
@@ -161,14 +155,9 @@ class CategoryCore extends ObjectModel
 	public	function update($nullValues = false)
 	{
 		$this->level_depth = $this->calcLevelDepth();
-		
-		/* Calculate the nested tree values (left, right) */
-		$nestedValues = $this->calcNestedValues((int)$this->id, (int)$this->nleft);
-		$this->nright = (int)$nestedValues[1];
-		
 		$this->cleanPositions((int)$this->id_parent);
 		$ret = parent::update();
-		$this->updateParentNestedValues();
+		self::regenerateEntireNtree();
 		Module::hookExec('categoryUpdate'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return $ret;
 	}
@@ -288,8 +277,8 @@ class CategoryCore extends ObjectModel
 		WHERE `id_category_default`
 		NOT IN (SELECT `id_category` FROM `'._DB_PREFIX_.'category`)');
 		
-		/* Update parent nested values */
-		$this->updateParentNestedValues();
+		/* Rebuild the nested tree */
+		self::regenerateEntireNtree();
 
 		Module::hookExec('categoryDeletion'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return true;
@@ -318,47 +307,15 @@ class CategoryCore extends ObjectModel
 	  */
 	public function calcLevelDepth()
 	{
+		/* Root category */
+		if (!$this->id_parent)
+			return 0;
+			
 		$parentCategory = new Category((int)($this->id_parent));
-		if (!$parentCategory)
+		if (!Validate::isLoadedObject($parentCategory))
 			die('parent category does not exist');
+
 		return $parentCategory->level_depth + 1;
-	}
-	
-	/**
-	  * Get the nested tree values (left, right) for a given category
-	  *
-	  * nleft = unique id
-	  * nright = nleft + (number of subcategories * 2) + 1
-	  *
-	  * @param integer $id_category Category ID
-	  * @param integer $nleft Existing nleft value
-	  * @return array Left & right values
-	  */
-	static public function calcNestedValues($id_category, $nleft = 0)
-	{
-		if (!$nleft)
-			$nleft = (int)Db::getInstance()->getValue('SELECT MAX(nleft)+1 FROM '._DB_PREFIX_.'category');
-		$nright = !empty($id_category) ? (int)($nleft + (Db::getInstance()->getValue('SELECT COUNT(id_category) FROM '._DB_PREFIX_.'category WHERE id_parent = '.(int)$id_category) * 2) + 1) : (int)($nleft + 1);
-		
-		return array(0 => (int)$nleft, 1 => (int)$nright);
-	}
-	
-	/**
-	  * Update the nested tree values (left, right) for a parent category
-	  *
-	  * @return boolean
-	  */
-	public function updateParentNestedValues()
-	{
-		$ret = false;
-		if ($this->level_depth > 0)
-		{
-			$parent = new Category((int)$this->id_parent);
-			if (Validate::isLoadedObject($parent))
-				$ret = $parent->update();
-		}
-		
-		return $ret;
 	}
 	
 	/**
@@ -366,12 +323,22 @@ class CategoryCore extends ObjectModel
 	  */
 	public static function regenerateEntireNtree()
 	{	
-		$categories = Db::getInstance()->ExecuteS('SELECT id_category, nleft, nright FROM '._DB_PREFIX_.'category');
+		$categories = Db::getInstance()->ExecuteS('SELECT id_category, id_parent FROM '._DB_PREFIX_.'category ORDER BY id_category ASC');
+		$categoriesArray = array();
 		foreach ($categories AS $category)
-		{
-			$nestedValues = self::calcNestedValues((int)$category['id_category'], (int)$category['nleft']);
-			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'category SET nleft = '.(int)$nestedValues[0].', nright = '.(int)$nestedValues[1].' WHERE id_category = '.(int)$category['id_category'].' LIMIT 1');
-		}
+			$categoriesArray[(int)$category['id_parent']]['subcategories'][(int)$category['id_category']] = 1;
+		self::_subTree($categoriesArray, 1, $n = 1);
+	}
+	
+	private static function _subTree(&$categories, $id_category, &$n)
+	{
+		$left = (int)$n++;
+		if (isset($categories[(int)$id_category]['subcategories']))
+			foreach ($categories[(int)$id_category]['subcategories'] AS $id_subcategory => $value)
+				self::_subTree($categories, (int)$id_subcategory, $n);
+		$right = (int)$n++;
+		
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'category SET nleft = '.(int)$left.', nright = '.(int)$right.' WHERE id_category = '.(int)$id_category.' LIMIT 1');
 	}
 
 	/**
@@ -448,18 +415,6 @@ class CategoryCore extends ObjectModel
 			$row['legend'] = 'no picture';
 		}
 		return $result;
-	}
-
-	private static function getAllSubCats(&$all_cats, $id_cat, $id_lang)
-	{
-		$category = new Category((int)($id_cat));
-		$sub_cats = $category->getSubcategories($id_lang);
-		if(count($sub_cats) > 0)
-			foreach ($sub_cats AS $sub_cat)
-			{
-				$all_cats[] = $sub_cat['id_category'];
-				self::getAllSubCats($all_cats, $sub_cat['id_category'], $id_lang);
-			}
 	}
 
 	/**
@@ -584,9 +539,7 @@ class CategoryCore extends ObjectModel
 
 	static public function getRootCategory($id_lang = NULL)
 	{
-		//get idLang
-		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)($id_lang);
-		return new Category (1, $id_lang);
+		return new Category (1, is_null($id_lang) ? (int)_USER_ID_LANG_ : (int)($id_lang));
 	}
 
 	static public function getChildren($id_parent, $id_lang, $active = true)
