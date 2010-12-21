@@ -1,6 +1,6 @@
 <?php
-define('URL_SAC_PROD', 'https://secure.fia-net.com/fscreener');
-define('URL_SAC_TEST', 'https://secure.fia-net.com/pprod');
+define('URL_SAC_PROD', 'https://secure.fia-net.com/fscreener/');
+define('URL_SAC_TEST', 'https://secure.fia-net.com/pprod/');
 
 define('URl_SAC_SINGET', '/engine/singet.cgi');
 define('URl_SAC_STACKING', '/engine/stacking.cgi');
