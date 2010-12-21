@@ -110,7 +110,8 @@ function isPicture($file, $types = NULL)
 		$mime_type = mime_content_type($file['tmp_name']);
 	elseif (Tools::isCallable('exec'))
 		$mime_type = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
-	elseif (!$mime_type)
+	
+	if (!$mime_type)
 		$mime_type = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
 	else
 		$mime_type = trim(exec('file --mime '.escapeshellarg($file['tmp_name'])));
