@@ -306,7 +306,7 @@ class AdminPreferences extends AdminTab
 	{
 		$tab = array();
 		foreach ($fields AS $key => $field)
-			if ($field['type'] == 'textLang')
+			if ($field['type'] == 'textLang' || $field['type'] == 'selectLang')
 				$tab[] = $key;
 		return implode('¤', $tab);
 	}
@@ -356,6 +356,21 @@ class AdminPreferences extends AdminTab
 						echo '<option value="'.(isset($value['cast']) ? $value['cast']($value[$field['identifier']]) : $value[$field['identifier']]).'"'.(($val == $value[$field['identifier']]) ? ' selected="selected"' : '').'>'.$value['name'].'</option>';
 					echo '
 					</select>';
+					break;
+
+				case 'selectLang':
+					foreach ($languages as $language)
+					{
+						echo '
+						<div id="'.$key.'_'.$language['id_lang'].'" style="margin-bottom:8px; display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; vertical-align: top;">
+							<select name="'.$key.'_'.strtoupper($language['iso_code']).'">';
+							foreach ($field['list'] AS $k => $value)
+								echo '<option value="'.(isset($value['cast']) ? $value['cast']($value[$field['identifier']]) : $value[$field['identifier']]).'"'.((htmlentities(Tools::getValue($key.'_'.strtoupper($language['iso_code']), (Configuration::get($key.'_'.strtoupper($language['iso_code'])) ? Configuration::get($key.'_'.strtoupper($language['iso_code'])) : '')), ENT_COMPAT, 'UTF-8') == $value[$field['identifier']]) ? ' selected="selected"' : '').'>'.$value['name'].'</option>';
+							echo '
+							</select>
+						</div>';
+					}
+					$this->displayFlags($languages, $defaultLanguage, $divLangName, $key);
 					break;
 
 				case 'bool':
