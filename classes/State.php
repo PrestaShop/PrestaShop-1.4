@@ -116,9 +116,6 @@ class StateCore extends ObjectModel
 	*/
 	static public function getIdByIso($iso_code)
     {
-        p('SELECT `id_state`
-			FROM `'._DB_PREFIX_.'state`
-			WHERE `iso_code` = \''.pSQL($iso_code).'\'');
 	  	return Db::getInstance()->getValue('
 			SELECT `id_state`
 			FROM `'._DB_PREFIX_.'state`
