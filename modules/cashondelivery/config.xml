@@ -5,6 +5,6 @@
     <version>0.3</version>
     <description>Accept cash on delivery payments</description>
     <tab>payments_gateways</tab>
-    <is_configurable>1</is_configurable>
+    <is_configurable>0</is_configurable>
     <need_instance>0</need_instance>
 </module>

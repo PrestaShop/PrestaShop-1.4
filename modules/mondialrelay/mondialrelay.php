@@ -29,6 +29,8 @@ class MondialRelay extends Module
 {
 	const INSTALL_SQL_FILE = 'mrInstall.sql';
 	
+	private $_postErrors;
+	
 	public function __construct()
 	{
 		$this->name		= 'mondialrelay';
@@ -532,8 +534,8 @@ class MondialRelay extends Module
 						$checkD[] = $value;
 			}
 
-			Db::getInstance()->Execute('INSERT INTO `' . _DB_PREFIX_ . 'carrier` (`id_tax`, `url`, `name`, `active`, `is_module`, `range_behavior`, `shipping_external`, `need_range`, `external_module_name`, `shipping_method`)
-									VALUES("1", NULL, "'.pSQL($array[0]).'", "1", "1", "1", "0", "1", "mondialrelay", "1")');
+			Db::getInstance()->Execute('INSERT INTO `' . _DB_PREFIX_ . 'carrier` (`id_tax_rules_group`, `url`, `name`, `active`, `is_module`, `range_behavior`, `shipping_external`, `need_range`, `external_module_name`, `shipping_method`)
+									VALUES("0", NULL, "'.pSQL($array[0]).'", "1", "1", "1", "0", "1", "mondialrelay", "1")');
 
 			$get   = Db::getInstance()->getRow('SELECT * FROM `' . _DB_PREFIX_ . 'carrier` WHERE `id_carrier` = "' . mysql_insert_id() . '"');
 			Db::getInstance()->Execute('UPDATE `' . _DB_PREFIX_ . 'mr_method` SET `id_carrier` = "' . (int)($get['id_carrier']) . '" WHERE `id_mr_method` = "' . pSQL($mainInsert) . '"');
