@@ -111,4 +111,3 @@ if (!function_exists('property_exists'))
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
-

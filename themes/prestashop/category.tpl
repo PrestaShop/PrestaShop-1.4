@@ -92,4 +92,3 @@
 		<p class="warning">{l s='This category is currently unavailable.'}</p>
 	{/if}
 {/if}
-

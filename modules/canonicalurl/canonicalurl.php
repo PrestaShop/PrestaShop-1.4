@@ -103,5 +103,3 @@ class canonicalUrl extends Module
 		return $this->display(__FILE__, 'canonicalurl.tpl');
 	}
 }
-
-

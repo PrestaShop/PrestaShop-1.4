@@ -1,0 +1,23 @@
+#layered_block_left div.block_content {
+	padding: 6px;
+}
+
+#layered_block_left ul li {
+	margin-left: 15px;
+}
+
+#layered_block_left ul li.nomargin {
+	margin-left: 0;
+}
+
+#layered_block_left span.layered_subtitle {
+	font-weight: bold;
+	font-size: 12px;
+	display: block;
+	margin-bottom: 4px;
+}
+
+#layered_block_left ul li input.checkbox {
+	vertical-align: text-bottom;
+	margin-left: 2px;
+}
