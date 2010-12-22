@@ -147,17 +147,17 @@ class Twenga extends PaymentModule
         } catch (TwengaFieldsException $e) {
             $this->_errors[] = $this->l('Params are not allowed (see details) : ').'<br />'.$e->getMessage();
         } catch (TwengaException $e) {
-            $this->_errors[] = $this->l('Error occurred With the Twenga API method (see details) : ').'<br /> '.nl2br($e->getMessage());
+            $this->_errors[] = $this->l('Error occurred with the Twenga API method (see details) : ').'<br /> '.nl2br($e->getMessage());
         }
 	}
 	private function submitTwengaLogin()
 	{
 	    if (!self::$obj_twenga->setHashkey($_POST['twenga_hashkey']))
-            $this->_errors[] = Tools::displayError('Your hashkey code is not valid. Please check the mail already sent by Twenga.');
+            $this->_errors[] = $this->l('Your hashkey is not valid. Please check the mail already sent by Twenga.');
         if (!self::$obj_twenga->setUserName($_POST['twenga_user_name']))
-            $this->_errors[] = Tools::displayError('Your user name is not valid. Please check the mail already sent by Twenga.');
+            $this->_errors[] = $this->l('Your user name is not valid. Please check the mail already sent by Twenga.');
         if (!self::$obj_twenga->setPassword($_POST['twenga_password']))
-            $this->_errors[] = Tools::displayError('Your password is not valid. Please check the mail already sent by Twenga.');
+            $this->_errors[] = $this->l('Your password is not valid. Please check the mail already sent by Twenga.');
         
         if(empty($this->_errors))
         {
@@ -169,8 +169,8 @@ class Twenga extends PaymentModule
                 $this->_errors[] = nl2br($e->getMessage());
 	        }
 	        if(!$bool_save)
-	            $this->_errors[] = Tools::displayError('Your Authentication failed.')."<br />\n"
-                    .Tools::displayError('Check the mail sent by Twenga after subscription. <br />If an error still occurred, contact the Twenga service.');
+	            $this->_errors[] = $this->l('Your authentication failed.')."<br />\n"
+                    .$this->l('Check the mail sent by Twenga after subscription. If an error still occurred, contact the Twenga service.');
         }
 	}
 	private function submitTwengaActivateTracking()
@@ -311,7 +311,7 @@ class Twenga extends PaymentModule
             $tracking_code = self::$obj_twenga->getTrackingScript($params_to_twenga);
             return $tracking_code;
         } catch (TwengaFieldsException $e) {
-            return Tools::displayError('Error occurred when params passed in Twenga API').' : <br />'.$e->getMessage();
+            return $this->l('Error occurred when params passed in Twenga API').' : <br />'.$e->getMessage();
         } catch (Exception $e) {
             return $e->getMessage();
         }
@@ -357,7 +357,7 @@ class Twenga extends PaymentModule
     			<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('Twenga').'</legend>'
     			.((self::$obj_twenga->getHashKey() === NULL || self::$obj_twenga->getHashKey() === '') ?
     				'<p>'.$this->l('After you subscribe to the Twenga API, Twenga sent you an hashkey, a login and a password to use the API.').'</p>' :
-    				'<label>'.$this->l('Feed url').' : </label><div class="margin-form">'.$this->feed_url.'</div><!-- .margin-form -->')
+    				'<label>'.$this->l('Feed\'s url').' : </label><div class="margin-form">'.$this->feed_url.'</div><!-- .margin-form -->')
     			.'<label>'.$this->l('HashKey').' <sup>*</sup> : </label>
     			<div class="margin-form">
     				<input type="text" size="38" maxlength="32" name="twenga_hashkey" value="'.self::$obj_twenga->getHashKey().'"/>&nbsp;
@@ -396,12 +396,12 @@ class Twenga extends PaymentModule
 			<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('Subscription').'</legend>
 			<p>'.$this->l('To prepare your Twenga API subscription,').'<br />'
 			.$this->l('please check the formular below and click "save" to access of Twenga subscription formular').'</p><br />
-			<label>'.$this->l('Site Url').' <sup>*</sup> : </label>
+			<label>'.$this->l('Site\'s url').' <sup>*</sup> : </label>
 			<div class="margin-form">
 				<input type="text" name="site_url" value="'.$this->site_url.'">
-				<p>'.$this->l('Site\'s URL').'</p>
+				<p>'.$this->l('Site\'s url').'</p>
 			</div><!-- .margin-form -->
-			<label>'.$this->l('Feed Url').' <sup>*</sup> : </label>
+			<label>'.$this->l('Feed\'s url').' <sup>*</sup> : </label>
 			<div class="margin-form">
 				<input type="text" name="feed_url" value="'.$this->feed_url.'">
 				<p>'
@@ -419,7 +419,7 @@ class Twenga extends PaymentModule
                 <a href="http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes" target="_blank" >> related link</a><br />
                 </p>
 			</div><!-- .margin-form -->
-			<label>'.$this->l('Site Name').' : </label>
+			<label>'.$this->l('Site\'s name').' : </label>
 			<div class="margin-form">
 				<input type="text" name="site_name" value="'.$site_name.'">
 				<p>'.$this->l('Site\'s name').'</p>
@@ -440,7 +440,7 @@ class Twenga extends PaymentModule
 			<div class="margin-form">
 				<input type="text" name="phone" value="'.$phone.'">
 			</div><!-- .margin-form -->
-			<label>'.$this->l('Organisation name ').' : </label>
+			<label>'.$this->l('Organization name ').' : </label>
 			<div class="margin-form">
 				<input type="text" name="site_name" value="'.$site_name.'">
 			</div><!-- .margin-form -->

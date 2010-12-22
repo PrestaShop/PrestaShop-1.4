@@ -187,7 +187,7 @@ class TwengaObj
             self::$arr_api_url['orderCancel'] = 'http://rts.twenga.com/api/Order/Cancel';
             
             if(self::PARTNER_AUTH_KEY === NULL)
-                throw new TwengaException(Tools::displayError('To activate the Twenga plugin, "$partner_id" attribut must be set. Default installation of Prestashop contains this value.'));
+                throw new TwengaException($this->l('To activate the Twenga plugin, "PARTNER_AUTH_KEY" contant must be set. Default installation of Prestashop contains this value.'));
             
             if (Configuration::get('TWENGA_HASHKEY') !== false && self::$hashkey === NULL)
                 self::$hashkey = Configuration::get('TWENGA_HASHKEY');
@@ -258,7 +258,7 @@ class TwengaObj
 	    {
 	        $fields = new $classname();
 	        if(!$fields instanceof TwengaFields)
-	            throw new TwengaException(Tools::displayError('Object for validate field must be an instance of TwengaFields class'));
+	            throw new TwengaException($this->l('Object for validate fields must be an instance of TwengaFields class'));
 	        try {
 	            $fields->setParams($params)->checkParams();
 	        } catch (TwengaFieldsException $e) {
@@ -475,13 +475,13 @@ class TwengaObj
 			libxml_use_internal_errors(true);
 			$xml = simplexml_load_string($resource);
 			if (libxml_get_errors())
-				throw new TwengaException(Tools::displayError('HTTP XML response is not parsable : ').'<br />'.var_export(libxml_get_errors(), true));
+				throw new TwengaException($this->l('HTTP XML response is not parsable : ').'<br />'.var_export(libxml_get_errors(), true));
 		    if($xml->getName() === 'error')
 		        throw new TwengaException((string)$xml->message, (int)$xml->code);
 			return $xml;
 		}
 		else
-			throw new TwengaException(Tools::displayError('HTTP response is empty'));
+			throw new TwengaException($this->l('HTTP response is empty'));
 	}
 	/**
 	 * @param int $status_code
@@ -495,34 +495,96 @@ class TwengaObj
 			default: throw new TwengaException('', (int)$status_code);
 		}
 	}
+	/**
+	 * Get translation for a given module text
+	 *
+	 * @param string $string String to translate
+	 * @return string Translation
+	 */
+	public function l($string, $specific = false)
+	{
+		global $_MODULES, $_MODULE, $cookie;
+
+		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
+		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
+		if (Tools::file_exists_cache($file) AND include_once($file))
+			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
+
+		if (!is_array($_MODULES))
+			return (str_replace('"', '&quot;', $string));
+
+		$source = Tools::strtolower($specific ? $specific : get_class($this));
+		$string2 = str_replace('\'', '\\\'', $string);
+		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
+		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
+
+		if (key_exists($currentKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$currentKey]);
+		elseif (key_exists($defaultKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$defaultKey]);
+		else
+			$ret = $string;
+		return str_replace('"', '&quot;', $ret);
+	}
 }
 class TwengaException extends Exception {
     public function __construct($message, $code = 0)
     {
         if($code !== 0)
         {
-            $error_label = Tools::displayError('This call to Twenga Web Services failed and returned an HTTP status of %d. That means:'."\n");
+            $error_label = $this->l('This call to Twenga Web Services failed and returned an HTTP status of %d. That means:')."\n";
             $error_label = sprintf($error_label, $code);
             if($message === '' || empty($message) || $message === NULL)
             {
                 switch ($code)
                 {
-                    case 11: $message .= Tools::displayError('The function you tried to access does not exist');break;
-        			case 12: $message .= Tools::displayError('A required field is empty');break;
-        			case 13: $message .= Tools::displayError('The type of the parameter that has been sent is different from parameter expected type');break;
-        			case 21: $message .= Tools::displayError('Hash key is not valid');break;
-        			case 24: $message .= Tools::displayError('Hash key is required');break;
-        			case 31: $message .= Tools::displayError('No order found. Please check parameters you sent');break;
-        			case 401: $message .= Tools::displayError('Authentication is required.');break;
-        			case 403: $message .= Tools::displayError('Authentication failed.');break;
-        			case 404: $message .= Tools::displayError('Invalid url.');break;
-        			case 500: $message .= Tools::displayError('The server encountered an internal server error');break;
-        			case 503: $message .= Tools::displayError('The server is unavailable for the moment');break;
-        			default:  $message .= Tools::displayError('This call to PrestaShop Web Services returned an unexpected HTTP status of:').$code;
+                    case 11: $message .= $this->l('The function you tried to access does not exist');break;
+        			case 12: $message .= $this->l('A required field is empty');break;
+        			case 13: $message .= $this->l('The type of the parameter that has been sent is different from parameter expected type');break;
+        			case 21: $message .= $this->l('Hash key is not valid');break;
+        			case 24: $message .= $this->l('Hash key is required');break;
+        			case 31: $message .= $this->l('No order found. Please check parameters you sent');break;
+        			case 401: $message .= $this->l('Authentication is required.');break;
+        			case 403: $message .= $this->l('Authentication failed.');break;
+        			case 404: $message .= $this->l('Invalid url.');break;
+        			case 500: $message .= $this->l('The server encountered an internal server error');break;
+        			case 503: $message .= $this->l('The server is unavailable for the moment');break;
+        			default:  $message .= $this->l('This call to PrestaShop Web Services returned an unexpected HTTP status of:').$code;
                 }
             }
-            $message = Tools::displayError('Error #').$code." : \n".$error_label.$message.'';
+            $message = $this->l('Error #').$code." : \n".$error_label.$message.'';
         }
         parent::__construct($message, $code);
     }
+	/**
+	 * Get translation for a given module text
+	 *
+	 * @param string $string String to translate
+	 * @return string Translation
+	 */
+	public function l($string, $specific = false)
+	{
+		global $_MODULES, $_MODULE, $cookie;
+
+		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
+		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
+		if (Tools::file_exists_cache($file) AND include_once($file))
+			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
+
+		if (!is_array($_MODULES))
+			return (str_replace('"', '&quot;', $string));
+
+		$source = Tools::strtolower($specific ? $specific : get_class($this));
+		$string2 = str_replace('\'', '\\\'', $string);
+		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
+		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
+
+		if (key_exists($currentKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$currentKey]);
+		elseif (key_exists($defaultKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$defaultKey]);
+		else
+			$ret = $string;
+		return str_replace('"', '&quot;', $ret);
+	}
 }

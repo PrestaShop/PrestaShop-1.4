@@ -294,5 +294,36 @@ abstract class TwengaFields
 	{
 	    return $this->params;
 	}
+	/**
+	 * Get translation for a given module text
+	 *
+	 * @param string $string String to translate
+	 * @return string Translation
+	 */
+	public function l($string, $specific = false)
+	{
+		global $_MODULES, $_MODULE, $cookie;
+
+		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
+		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
+		if (Tools::file_exists_cache($file) AND include_once($file))
+			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
+
+		if (!is_array($_MODULES))
+			return (str_replace('"', '&quot;', $string));
+
+		$source = Tools::strtolower($specific ? $specific : get_class($this));
+		$string2 = str_replace('\'', '\\\'', $string);
+		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
+		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
+
+		if (key_exists($currentKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$currentKey]);
+		elseif (key_exists($defaultKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$defaultKey]);
+		else
+			$ret = $string;
+		return str_replace('"', '&quot;', $ret);
+	}
 }
 class TwengaFieldsException extends Exception {}
