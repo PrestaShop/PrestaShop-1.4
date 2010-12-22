@@ -193,6 +193,7 @@ class ProductCore extends ObjectModel
 	private static $_currencies = array();
 	private static $_incat = array();
 	private static $_cart_quantity = array();
+	private static $_tax_rules_group = array();
 
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
@@ -2817,13 +2818,22 @@ class ProductCore extends ObjectModel
 	}
 
 
+
+
 	public static function getIdTaxRulesGroupByIdProduct($id_product)
 	{
-	    return Db::getInstance()->getValue('
-	    SELECT `id_tax_rules_group`
-	    FROM `'._DB_PREFIX_.'product`
-	    WHERE `id_product` = '.(int)$id_product
-	    );
+        if (!isset(self::$_tax_rules_group[$id_product]))
+        {
+	        $id_group = Db::getInstance()->getValue('
+	        SELECT `id_tax_rules_group`
+	        FROM `'._DB_PREFIX_.'product`
+	        WHERE `id_product` = '.(int)$id_product
+	        );
+
+	        self::$_tax_rules_group[$id_product] = $id_group;
+        }
+
+	    return self::$_tax_rules_group[$id_product];
 	}
 
 }

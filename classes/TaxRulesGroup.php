@@ -1,21 +1,30 @@
 <?php
-
 /*
-CREATE TABLE `ps_tax_rules_group` (
-`id_tax_rules_group` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`enable` INT NOT NULL
-) ENGINE = MYISAM ;
-
-CREATE TABLE `ps_tax_rules_group_lang` (
-`id_tax_rules_group` INT NOT NULL ,
-`id_lang` INT NOT NULL ,
-`name` VARCHAR( 32 ) NOT NULL ,
-PRIMARY KEY ( `id_tax_rules_group` , `id_lang` )
-) ENGINE = MYISAM ;
-
-ALTER TABLE `ps_product`
-  DROP `id_tax`;
+* 2007-2010 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author Prestashop SA <contact@prestashop.com>
+*  @copyright  2007-2010 Prestashop SA
+*  @version  Release: $Revision: 1.4 $
+*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*  International Registred Trademark & Property of PrestaShop SA
 */
+
 
 class TaxRulesGroupCore extends ObjectModel
 {
@@ -30,6 +39,8 @@ class TaxRulesGroupCore extends ObjectModel
 
 	protected 	$table = 'tax_rules_group';
 	protected 	$identifier = 'id_tax_rules_group';
+
+    private static $_taxes = array();
 
 	public function getFields()
 	{
@@ -53,6 +64,9 @@ class TaxRulesGroupCore extends ObjectModel
 	{
 	    if (empty($id_tax_rules_group) OR empty($id_country))
 	        return array(new Tax()); // No Tax
+
+        if (isset(self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state]))
+            return self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state];
 
 	    $rows = Db::getInstance()->ExecuteS('
 	    SELECT *
@@ -85,6 +99,8 @@ class TaxRulesGroupCore extends ObjectModel
 	       else
 	            $taxes[] = new Tax((int)$row['id_tax']);
 	    }
+
+	    self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state] = $taxes;
 
         return $taxes;
 	}
