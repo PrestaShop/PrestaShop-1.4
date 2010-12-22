@@ -33,19 +33,16 @@ class LocalizationPackCore
 	public	$version;
 	private	$_errors = array();
 
-	public function importFile($archive, $selection = array())
+	public function importFile($filename, $selection = array())
 	{
-		$gz = new Archive_Tar($archive, 'gz');
-		if (!$gz->extract(_PS_TMP_DIR_, false))
-			return false;
-		return $this->_loadXMLFile($selection);
+		return $this->_loadXMLFile($filename, $selection);
 	}
 
-	private function _loadXMLFile($selection)
+	private function _loadXMLFile($filename, $selection)
 	{
-		if (!file_exists(_PS_TMP_DIR_.'localization_pack.xml'))
+		if (!file_exists(_PS_TMP_DIR_.$filename))
 			return false;
-		if (!$xml = simplexml_load_file(_PS_TMP_DIR_.'localization_pack.xml'))
+		if (!$xml = simplexml_load_file(_PS_TMP_DIR_.$filename))
 			return false;
 		$mainAttributes = $xml->attributes();
 		$this->name = strval($mainAttributes['name']);
@@ -131,7 +128,10 @@ class LocalizationPackCore
 			    $trg->active = 1;
 
 			    if (!$trg->save())
+			    {
+    			    $this->_errors = 'cant save';
 			        return false;
+			    }
 
 			    foreach($group->taxRule as $rule)
 			    {

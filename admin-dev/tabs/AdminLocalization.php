@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -75,8 +75,11 @@ class AdminLocalization extends AdminPreferences
 						$this->_errors[] = Tools::displayError('Invalid selection!');
 						return ;
 					}
+
+                move_uploaded_file($_FILES['file']['tmp_name'], _PS_TMP_DIR_.$_FILES['file']['name']);
+
 				$localizationPack = new LocalizationPack();
-				if (!$localizationPack->importFile($_FILES['file']['tmp_name'], $selection))
+				if (!$localizationPack->importFile($_FILES['file']['name'], $selection))
 					$this->_errors = array_merge($this->_errors, $localizationPack->getErrors());
 				else
 					Tools::redirectAdmin($currentIndex.'&conf=23&token='.$this->token);
