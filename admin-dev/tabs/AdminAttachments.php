@@ -60,8 +60,8 @@ class AdminAttachments extends AdminTab
 			{
 				if (isset($_FILES['file']) AND is_uploaded_file($_FILES['file']['tmp_name']))
 				{
-					if ($_FILES['file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000))
-						$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000).' '.$this->l('kb');
+					if ($_FILES['file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024 * 1024))
+						$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024).' '.$this->l('kb').'. '.$this->l('File size you trying to upload is:').number_format(($_FILES['attachment_file']['size']/1024), 2, '.', '').$this->l('kb');
 					else
 					{
 						$uploadDir = dirname(__FILE__).'/../../download/';
@@ -73,6 +73,13 @@ class AdminAttachments extends AdminTab
 						$_POST['file'] = $uniqid;
 						$_POST['mime'] = $_FILES['file']['type'];
 					}
+				}
+				else if ((int)$_FILES['attachment_file']['error'] === 1) 
+				{
+					$max_upload = (int)(ini_get('upload_max_filesize'));
+					$max_post = (int)(ini_get('post_max_size'));
+					$upload_mb = min($max_upload, $max_post);
+					$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceed the weight allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 				}
 				else
 					$this->_errors[] = $this->l('No file or your file isn\'t uploadable, check your server configuration about the upload maximum size.');

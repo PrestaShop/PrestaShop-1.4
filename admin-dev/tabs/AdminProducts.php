@@ -24,7 +24,6 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
-
 include_once(PS_ADMIN_DIR.'/tabs/AdminProfiles.php');
 
 class AdminProducts extends AdminTab
@@ -170,6 +169,7 @@ class AdminProducts extends AdminTab
 		{
 			if ($this->tabAccess['add'] === '1')
 			{
+				
 				$languages = Language::getLanguages(false);
 				foreach ($languages AS $language)
 				{
@@ -180,12 +180,12 @@ class AdminProducts extends AdminTab
 					if (!Validate::isCleanHtml(Tools::getValue('attachment_description_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid description');
 				}
-				if (!sizeof($this->_errors))
+				if (empty($this->_errors))
 				{
 					if (isset($_FILES['attachment_file']) AND is_uploaded_file($_FILES['attachment_file']['tmp_name']))
 					{
-						if ($_FILES['attachment_file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000))
-							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1000).' '.$this->l('kb');
+						if ($_FILES['attachment_file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024 * 1024))
+							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024).' '.$this->l('kb').'. '.$this->l('File size you trying to upload is:').number_format(($_FILES['attachment_file']['size']/1024), 2, '.', '').$this->l('kb');
 						else
 						{
 							$uploadDir = dirname(__FILE__).'/../../download/';
@@ -195,30 +195,41 @@ class AdminProducts extends AdminTab
 							@unlink($_FILES['attachment_file']['tmp_name']);
 						}
 					}
-					$attachment = new Attachment();
-					foreach ($languages AS $language)
+					else if ((int)$_FILES['attachment_file']['error'] === 1) 
 					{
-						if (isset($_POST['attachment_name_'.(int)($language['id_lang'])]))
-							$attachment->name[(int)($language['id_lang'])] = pSQL($_POST['attachment_name_'.(int)($language['id_lang'])]);
-						if (isset($_POST['attachment_description_'.(int)($language['id_lang'])]))
-							$attachment->description[(int)($language['id_lang'])] = pSQL($_POST['attachment_description_'.(int)($language['id_lang'])]);
+						$max_upload = (int)(ini_get('upload_max_filesize'));
+						$max_post = (int)(ini_get('post_max_size'));
+						$upload_mb = min($max_upload, $max_post);
+						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceed the weight allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 					}
-					$attachment->file = $uniqid;
-					$attachment->mime = $_FILES['attachment_file']['type'];
-					$attachment->file_name = pSQL($_FILES['attachment_file']['name']);
-					if (empty($attachment->mime) OR Tools::strlen($attachment->mime) > 64)
-						$this->_errors[] = Tools::displayError('Invalid file extension');
-					if (!Validate::isGenericName($attachment->file_name))
-						$this->_errors[] = Tools::displayError('Invalid file name');
-					if (Tools::strlen($attachment->file_name) > 128)
-						$this->_errors[] = Tools::displayError('File name too long');
-					if (!sizeof($this->_errors))
+					
+					if(empty($this->_errors) && isset($uniqid))
 					{
-						$attachment->add();
-						Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue($this->identifier)).'&addproduct&conf=4&tabs=6&token='.($token ? $token : $this->token));
+						$attachment = new Attachment();
+						foreach ($languages AS $language)
+						{
+							if (isset($_POST['attachment_name_'.(int)($language['id_lang'])]))
+								$attachment->name[(int)($language['id_lang'])] = pSQL($_POST['attachment_name_'.(int)($language['id_lang'])]);
+							if (isset($_POST['attachment_description_'.(int)($language['id_lang'])]))
+								$attachment->description[(int)($language['id_lang'])] = pSQL($_POST['attachment_description_'.(int)($language['id_lang'])]);
+						}
+						$attachment->file = $uniqid;
+						$attachment->mime = $_FILES['attachment_file']['type'];
+						$attachment->file_name = pSQL($_FILES['attachment_file']['name']);
+						if (empty($attachment->mime) OR Tools::strlen($attachment->mime) > 64)
+							$this->_errors[] = Tools::displayError('Invalid file extension');
+						if (!Validate::isGenericName($attachment->file_name))
+							$this->_errors[] = Tools::displayError('Invalid file name');
+						if (Tools::strlen($attachment->file_name) > 128)
+							$this->_errors[] = Tools::displayError('File name too long');
+						if (!sizeof($this->_errors))
+						{
+							$attachment->add();
+							Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue($this->identifier)).'&addproduct&conf=4&tabs=6&token='.($token ? $token : $this->token));
+						}
+						else
+							$this->_errors[] = Tools::displayError('Invalid file');
 					}
-					else
-						$this->_errors[] = Tools::displayError('Invalid file');
 				}
 			}
 			else
