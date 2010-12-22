@@ -317,7 +317,13 @@ class AdminModules extends AdminTab
 			}			
 		</script>';
 	}
-		
+	public function sortModule($a, $b)
+	{
+	    if (sizeof($a) == sizeof($b)) {
+	        return 0;
+	    }
+	    return (sizeof($a) < sizeof($b)) ? -1 : 1;
+	}
 	public function displayList()
 	{
 		global $currentIndex, $cookie;
@@ -463,7 +469,7 @@ class AdminModules extends AdminTab
 	    $irow = 0;
 		foreach ($modules AS $module)
 			$orderModule[(isset($module->tab) AND !empty($module->tab) AND array_key_exists(strval($module->tab), $this->listTabModules)) ? strval($module->tab) : 'others' ][] = $module;
-		asort($orderModule);
+		uasort($orderModule,array('AdminModules', 'sortModule'));
 		
 		$concatWarning = array();
 		foreach ($orderModule AS $tabModule)
