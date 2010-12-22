@@ -14,6 +14,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_e3ff7eaa9deb31e1e91178a7216135c0'] = '1 p
 $_MODULE['<{loyalty}prestashop>loyalty_46108358594124685e77e7d49f762b30'] = 'de réduction';
 $_MODULE['<{loyalty}prestashop>loyalty_98cf9475009d3c6e795ffac5d391cec4'] = 'Détails du bon';
 $_MODULE['<{loyalty}prestashop>loyalty_eb04c23cfad386678c6e5817f253b6aa'] = 'Montant minimal pour utiliser le bon';
+$_MODULE['<{loyalty}prestashop>loyalty_51ab56dd5b46c7b5c8fdf22651ae0db6'] = 'Donner des points sur les produits en promotion';
 $_MODULE['<{loyalty}prestashop>loyalty_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
 $_MODULE['<{loyalty}prestashop>loyalty_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
 $_MODULE['<{loyalty}prestashop>loyalty_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';

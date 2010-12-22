@@ -60,3 +60,13 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_1404aa04467659fbadad2a7dd1a279b
 $_MODULE['<{shopImporter}prestashop>shopImporter_11a755d598c0c417f9a36758c3da7481'] = 'Stop';
 $_MODULE['<{shopImporter}prestashop>shopImporter_72ef2b9b6965d078e3c7f95487a82d1c'] = 'Passer';
 $_MODULE['<{shopImporter}prestashop>shopImporter_9eb6b78a99cdb6ffd3d40d18621d9f80'] = 'Forcer';
+$_MODULE['<{shopImporter}prestashop>shopImporter_3ba85f1eb1b88c1bab7f0e5f2f4b1b90'] = 'Stop : s\'il ya des erreurs dans l\'audit des données, l\'importation ne fonctionne pas. ';
+$_MODULE['<{shopImporter}prestashop>shopImporter_02ec2f594c13f3ee94dfc7ebdb424da6'] = 'Passer : s\'il ya des erreurs dans l\'audit des données d\'audit, l\'importation va sauter des données incorrectes.';
+$_MODULE['<{shopImporter}prestashop>shopImporter_d82122d9c0946c1f293a457888122b5e'] = 'Forcer : s\'il ya des erreurs dans l\'audit des données,, l\'importation des données incorrectes remplacer par des données génériques.';
+$_MODULE['<{shopImporter}prestashop>shopImporter_09b4382d10c396e0c4fcd51064702213'] = 'Options spécifiques ';
+$_MODULE['<{shopImporter}prestashop>shopImporter_01f8544c8fd4628bc686502e8b727d95'] = 'le champ';
+$_MODULE['<{shopImporter}prestashop>shopImporter_0a5fa53f3f20f67f98bd6c3b16df059d'] = 'est requit';
+$_MODULE['<{shopImporter}prestashop>shopImporter_f755e8b92cb8f02c24f6f539180d45b1'] = 'est trop long';
+$_MODULE['<{shopImporter}prestashop>shopImporter_70f4b635847038d056e33959821a7a66'] = 'caractères max ';
+$_MODULE['<{shopImporter}prestashop>shopImporter_998b344cff693ad388a14ba89b1523c7'] = 'est invalide';
+$_MODULE['<{shopImporter}prestashop>shopImporter_7e47a344b06d82a8836cbee2748a79e6'] = 'est exigée au moins dans ';
