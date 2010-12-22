@@ -7,6 +7,7 @@ $_MODULE['<{statsregistrations}prestashop>statsregistrations_54c04cc0d869c12ea9f
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_75abad0b891bc086fd4837e81a8c488a'] = 'Visiteurs bloqués à la phase d\'inscription :';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_0d298316c16a0bbdb74d50ead21590b4'] = 'Visiteurs ayant passé une commande dès leur inscription :';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_a751e9cc4ed4c7585ecc0d97781cb48a'] = 'Total de comptes créés :';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_fba0e64541196123bbf8e3737bf9287b'] = 'Nombre de comptes créés';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_15d820295ae2d9d7e6d53e1ed9714273'] = 'Le nombre d\'inscrits en lui-même n\'est pas important. Il vous permet surtout d\'apprécier son évolution sur une période plus ou moins longue. ';

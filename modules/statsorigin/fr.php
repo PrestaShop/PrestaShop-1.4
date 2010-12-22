@@ -7,6 +7,7 @@ $_MODULE['<{statsorigin}prestashop>statsorigin_b860f6548aca73c7da23337804e6022e'
 $_MODULE['<{statsorigin}prestashop>statsorigin_14542f5997c4a02d4276da364657f501'] = 'Lien direct';
 $_MODULE['<{statsorigin}prestashop>statsorigin_3edf8ca26a1ec14dd6e91dd277ae1de6'] = 'Origine';
 $_MODULE['<{statsorigin}prestashop>statsorigin_3a137c6a46a87a887817f0a17b729e82'] = 'Pourcentage des 10 meilleurs sites affluents par lesquels les visiteurs passent pour accéder à votre boutique.';
+$_MODULE['<{statsorigin}prestashop>statsorigin_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV';
 $_MODULE['<{statsorigin}prestashop>statsorigin_96b0141273eabab320119c467cdcaf17'] = 'Total';
 $_MODULE['<{statsorigin}prestashop>statsorigin_0bebf95ee829c33f34fde535ed4ed100'] = 'Liens directs uniquement';
 $_MODULE['<{statsorigin}prestashop>statsorigin_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';

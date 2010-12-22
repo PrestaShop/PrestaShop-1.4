@@ -62,7 +62,8 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (59, 'extraProductComparison', 'Extra Product Comparison', 'Extra Product Comparison', '0'),
 (60, 'categoryAddition', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
 (61, 'categoryUpdate', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
-(62, 'categoryDeletion', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0)
+(62, 'categoryDeletion', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
+(63, 'beforeAuthentication', 'Before Authentication', 'Before authentication', 0)
 ;
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES

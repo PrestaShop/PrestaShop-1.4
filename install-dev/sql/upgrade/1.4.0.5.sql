@@ -92,3 +92,4 @@ ALTER TABLE `PREFIX_carrier` DROP `id_tax`;
 DROP TABLE `PREFIX_tax_state`, `PREFIX_tax_zone`, `PREFIX_country_tax`;
 ALTER TABLE `PREFIX_orders` ADD `carrier_tax_rate` DECIMAL(10, 3) NOT NULL default '0.00' AFTER `total_shipping`;
 
+INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`) VALUES (NULL, 'beforeAuthentication', 'Before Authentication', 'Before authentication', 0);

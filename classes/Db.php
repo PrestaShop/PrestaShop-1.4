@@ -86,7 +86,9 @@ abstract class DbCore
 		
 		return self::$_instance[(int)($idServer)];
 	}
-
+	
+	public function getRessource() { return $this->_link;}
+	
 	public function __destruct()
 	{
 		$this->disconnect();
@@ -287,7 +289,8 @@ function pSQL($string, $htmlOK = false)
 		$string = stripslashes($string);
 	if (!is_numeric($string))
 	{
-		$string = _PS_MYSQL_REAL_ESCAPE_STRING_ ? mysql_real_escape_string($string) : addslashes($string);
+		$link = Db::getInstance()->getRessource();
+		$string = _PS_MYSQL_REAL_ESCAPE_STRING_ ? mysql_real_escape_string($string, $link) : addslashes($string);
 		if (!$htmlOK)
 			$string = strip_tags(nl2br2($string));
 	}

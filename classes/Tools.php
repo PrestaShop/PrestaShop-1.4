@@ -941,7 +941,7 @@ class ToolsCore
 			return false;
 		if (function_exists('mb_substr'))
 			return mb_substr($str, (int)($start), ($length === false ? self::strlen($str) : (int)($length)), $encoding);
-		return substr($str, $start, ($length === false ? strlen($str) : (int)($length)));
+		return substr($str, $start, ($length === false ? self::strlen($str) : (int)($length)));
 	}
 
 	static function ucfirst($str)

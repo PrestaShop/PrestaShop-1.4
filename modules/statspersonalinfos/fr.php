@@ -5,6 +5,7 @@ $_MODULE = array();
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_8063f7c341dbe2cadc294a530cb1cad2'] = 'Informations clients';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_c11da97e88261de65e614a77cd3358df'] = 'Affiche la répartition de vos clients par âge, sexe ou pays';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_0df28a79b0b6ee5f2a91da83bb07117c'] = 'La répartition par genre vous permet de déterminer le pourcentage d\'hommes et de femmes parmis vos clients.';
+$_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_66ea53c179f966ec08fc4710c60a85be'] = 'Les tranches d\'âges vous permettent de déterminer dans quelle tranche d\'âge se positionne votre clientèle.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_5186059c6452b447e8253c75b2afac5b'] = 'La répartition par pays vous permet de déterminer dans quelle partie du monde sont vos clients.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_f761b4cc905eb0fea56adb2bf7f8588f'] = 'Les tranches de devise vous permettent de déterminer avec quelle devise vos clients payent.';

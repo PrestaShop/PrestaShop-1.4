@@ -224,6 +224,7 @@ class AuthControllerCore extends FrontController
 		
 		if (Tools::isSubmit('SubmitLogin'))
 		{
+			Module::hookExec('beforeAuthentication');
 			$passwd = trim(Tools::getValue('passwd'));
 			$email = trim(Tools::getValue('email'));
 			if (empty($email))

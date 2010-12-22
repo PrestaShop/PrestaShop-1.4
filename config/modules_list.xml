@@ -11,6 +11,7 @@
 		<module name="blockcurrencies"/>
 		<module name="blockinfos"/>
 		<module name="blocklanguages"/>
+		<module name="blocklayered"/>
 		<module name="blocklink"/>
 		<module name="blockmanufacturer"/>
 		<module name="blockmyaccount"/>
@@ -46,6 +47,7 @@
 		<module name="gridhtml"/>
 		<module name="gsitemap"/>
 		<module name="homefeatured"/>
+		<module name="importerOsc"/>
 		<module name="loyalty"/>
 		<module name="mailalerts"/>
 		<module name="newsletter"/>
@@ -56,6 +58,7 @@
 		<module name="referralprogram"/>
 		<module name="sekeywords"/>
 		<module name="sendtoafriend"/>
+		<module name="shopImporter"/>
 		<module name="statsbestcategories"/>
 		<module name="statsbestcustomers"/>
 		<module name="statsbestmanufacturers"/>
@@ -88,23 +91,26 @@
 		<module name="watermark"/>
 	</modules>
 	<modules type="partner">
+		<module name="cashticket"/>
 		<module name="dejala"/>
 		<module name="envoimoinscher"/>
+		<module name="fedexcarrier"/>
+		<module name="fianetfraud"/>
+		<module name="fianetsceau"/>
 		<module name="hipay"/>
+		<module name="iadvize"/>
 		<module name="moneybookers"/>
 		<module name="mondialrelay"/>
 		<module name="ogone"/>
+		<module name="paysafecard"/>
 		<module name="paypal"/>
 		<module name="paypalapi"/>
+		<module name="reverso"/>
+		<module name="secuvad"/>
 		<module name="socolissimo"/>
 		<module name="treepodia"/>
 		<module name="trustedshops"/>
-		<module name="secuvad"/>
-		<module name="reverso"/>
-		<module name="iadvize"/>
-		<module name="fianetfraud"/>
-		<module name="fianetsceau"/>
-		<module name="paysafecard"/>
-		<module name="cashticket"/>
+		<module name="twenga"/>
+		<module name="uspscarrier"/>
 	</modules>
 </modules_list>

@@ -9,6 +9,7 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_981a6013008c8f4b75836b0f415b05b
 $_MODULE['<{statsproduct}prestashop>statsproduct_6780a9268e38d2ddd4f6c4a8ccf83d24'] = 'CA (hors taxes) :';
 $_MODULE['<{statsproduct}prestashop>statsproduct_b262bbde88b3b8dca3b27d730aca69bf'] = 'Total des consultations';
 $_MODULE['<{statsproduct}prestashop>statsproduct_bebbab2c1ac732ccef4181f51ed52967'] = 'Taux de conversion';
+$_MODULE['<{statsproduct}prestashop>statsproduct_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV';
 $_MODULE['<{statsproduct}prestashop>statsproduct_c90b9dca2d3f5bb6e0d0bdceac8a631d'] = 'Répartition des ventes par attributs';
 $_MODULE['<{statsproduct}prestashop>statsproduct_11ff9f68afb6b8b5b8eda218d7c83a65'] = 'CA';
 $_MODULE['<{statsproduct}prestashop>statsproduct_44749712dbec183e983dcd78a7736c41'] = 'Date';

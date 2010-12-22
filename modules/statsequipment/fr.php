@@ -5,6 +5,7 @@ $_MODULE = array();
 $_MODULE['<{statsequipment}prestashop>statsequipment_719d067b229178f03bcfa1da4ac4dede'] = 'Equipement';
 $_MODULE['<{statsequipment}prestashop>statsequipment_503a1fac5cb1efc3f60a0a318ae7caae'] = 'Affiche l\'équipement de vos visiteurs';
 $_MODULE['<{statsequipment}prestashop>statsequipment_2578610f8dbf2ffe5dfdd8dd5c6181c2'] = 'Déterminez la répartition des navigateurs web utilisés par vos clients';
+$_MODULE['<{statsequipment}prestashop>statsequipment_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV';
 $_MODULE['<{statsequipment}prestashop>statsequipment_dc29a12c359732b223367cb61df2196d'] = 'Déterminez la répartition des systèmes d\'exploitation utilisés par vos clients';
 $_MODULE['<{statsequipment}prestashop>statsequipment_575e3c9cac82aacd649b1196d845588a'] = 'Extensions';
 $_MODULE['<{statsequipment}prestashop>statsequipment_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';

@@ -8,6 +8,7 @@ $_MODULE['<{statsvisits}prestashop>statsvisits_9efcb563b932863f45ab70cbf1647a61'
 $_MODULE['<{statsvisits}prestashop>statsvisits_f0f438eaff96f1b7297393df4f39a754'] = 'On appelle visiteur une personne inconnue - non inscrite ou non identifiée - naviguant sur votre boutique. Un visiteur peut donc visiter votre boutique plusieurs fois.';
 $_MODULE['<{statsvisits}prestashop>statsvisits_54067074d24489ddb5654bf46642cb85'] = 'Nombre total de visites';
 $_MODULE['<{statsvisits}prestashop>statsvisits_23e640d55e56db79971918936e95bf9d'] = 'Nombre total de visiteurs';
+$_MODULE['<{statsvisits}prestashop>statsvisits_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV';
 $_MODULE['<{statsvisits}prestashop>statsvisits_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{statsvisits}prestashop>statsvisits_ffbee337f031c2282b311bac40bc8bb9'] = 'Déterminez l\'intérêt d\'une visite';
 $_MODULE['<{statsvisits}prestashop>statsvisits_9d528c1740b4ec88b125b4d10d07bf30'] = 'Le graphique d\'évolution des visiteurs ressemble fortement à celui des visites, mais vous apporte une information supplémentaire : vos visiteurs reviennent-ils ?';
