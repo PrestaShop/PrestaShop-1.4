@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -49,14 +49,14 @@ function isFormValid()
 
 $error = array();
 foreach ($_GET AS &$var)
-{	
+{
 	if (is_string($var))
 		$var = html_entity_decode($var, ENT_COMPAT, 'UTF-8');
 	elseif (is_array($var))
 		foreach ($var AS &$row)
 			$row = html_entity_decode($row, ENT_COMPAT, 'UTF-8');
 }
-	
+
 if(!isset($_GET['infosShop']) OR empty($_GET['infosShop']))
 	$error['infosShop'] = '0';
 else
@@ -66,12 +66,12 @@ if(!isset($_GET['infosFirstname']) OR empty($_GET['infosFirstname']))
 	$error['infosFirstname'] = '0';
 else
 	$error['infosFirstname'] = '';
-	
+
 if(!isset($_GET['infosName']) OR empty($_GET['infosName']))
 	$error['infosName'] = '0';
 else
 	$error['infosName'] = '';
-	
+
 if(isset($_GET['infosEmail']) AND !Validate::isEmail($_GET['infosEmail']))
 	$error['infosEmail'] = '3';
 else
@@ -99,16 +99,16 @@ if (!isset($_GET['infosPassword']) OR empty($_GET['infosPassword']))
 	$error['infosPassword'] = '0';
 else
 	$error['infosPassword'] = '';
-	
+
 if (!isset($_GET['infosPasswordRepeat']) OR empty($_GET['infosPasswordRepeat']))
 	$error['infosPasswordRepeat'] = '0';
 else
 	$error['infosPasswordRepeat'] = '';
 
-	
+
 if($error['infosPassword'] == '' AND $_GET['infosPassword'] != $_GET['infosPasswordRepeat'])
 	$error['infosPassword'] = '2';
-	
+
 if($error['infosPassword'] == '' AND (Tools::strlen($_GET['infosPassword']) < 8 OR !Validate::isPasswdAdmin($_GET['infosPassword'])))
 	$error['infosPassword'] = '12';
 
@@ -125,20 +125,20 @@ if(isFormValid())
 	/*$idDefault = array_search($_GET['infosDL'][0], $_GET['infosWL']) + 1;
 	//prepare the requests
 	$sqlLanguages = array();
-	
+
 	$sqlLanguages[] = "UPDATE `"._DB_PREFIX_."configuration` SET `value` = '".$idDefault."' WHERE `"._DB_PREFIX_."configuration`.`id_configuration` =1";
 	$sqlLanguages[] = "TRUNCATE TABLE `"._DB_PREFIX_."lang`";
-	
+
 	foreach ($_GET['infosWL'] AS $wl)
 		$sqlLanguages[] = "INSERT INTO `"._DB_PREFIX_."lang` (`id_lang` ,`name` ,`active` ,`iso_code`)VALUES (NULL , '".ToolsInstall::getLangString($wl)."', '1', '".pSQL($wl)."')";
 	foreach($sqlLanguages AS $query)
 		if(!Db::getInstance()->Execute($query))
 			$error['infosLanguages'] = '11';
-	
+
 	// Flags copy
 	if(!$languagesId = Db::getInstance()->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang`'))
 		$error['infosLanguages'] = '11';
-	
+
 	unset($dbInstance);*/
 }
 
@@ -181,16 +181,10 @@ if (isFormValid())
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = "'.pSQL($_GET['infosTimezone']).'" WHERE name = \'PS_TIMEZONE\'';
 		$sql_isocode = Db::getInstance()->getValue('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($_GET['infosCountry']));
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = \''.pSQL($sql_isocode).'\' WHERE name = \'PS_LOCALE_COUNTRY\'';
-		$taxes = Db::getInstance()->ExecuteS('SELECT tl.`name`, t.`id_tax` FROM `'._DB_PREFIX_.'tax` t
-											  LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax`)
-											  GROUP BY t.`id_tax`');
-		foreach ($taxes as $tax)
-		{
-			$name = explode(' ', $tax['name']);
-			if ($name[1] == $sql_isocode)
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'tax` SET `active` = 1 WHERE `id_tax` = '.(int)($tax['id_tax']));
-		}
+
 	}
+	Language::loadLanguages();
+	Configuration::loadConfiguration();
 	require_once(dirname(__FILE__).'/../../config/defines.inc.php');
 	require_once(dirname(__FILE__).'/../../classes/LocalizationPack.php');
 	$localization_file = @file_get_contents('http://www.prestashop.com/download/localization_pack.php?country='.$_GET['countryName']);
@@ -226,9 +220,9 @@ if (isFormValid())
 			$settings = preg_replace('/define\(\'_COOKIE_IV_\', \'([a-z0-9=\/+-_]+)\'\);/i', 'define(\'_COOKIE_IV_\', \'\1\');'."\n".'define(\'_RIJNDAEL_IV_\', \''.$iv.'\');', $settings);
 		}
 		if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
-			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = 1 WHERE name = \'PS_CIPHER_ALGORITHM\'';	
+			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = 1 WHERE name = \'PS_CIPHER_ALGORITHM\'';
 	}
-	
+
 	if (file_exists(realpath(INSTALL_PATH.'/../img').'/logo.jpg'))
 	{
 		list($width, $height, $type, $attr) = getimagesize(realpath(INSTALL_PATH.'/../img').'/logo.jpg');
@@ -250,5 +244,4 @@ echo '<shopConfig>'."\n";
 foreach ($error AS $key => $line)
 	echo '<field id="'.$key.'" result="'.( $line != "" ? 'fail' : 'ok').'" error="'.$line.'" />'."\n";
 echo '</shopConfig>';
-
 
