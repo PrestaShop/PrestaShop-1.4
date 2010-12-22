@@ -167,6 +167,9 @@ class BlockLayered extends Module
 		}
 		$categoriesID = rtrim($categoriesID, ',');
 		
+		if (empty($categoriesID))
+			$categoriesID = (int)Tools::getValue('id_category_layered', 0);
+		
 		/*
 		*
 		* Todo:

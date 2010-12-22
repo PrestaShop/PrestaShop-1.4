@@ -34,21 +34,11 @@
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <h1>{l s='Return Merchandise Authorization (RMA)'}</h1>
-{if $errorQuantity}
-	<p class="error">{l s='You do not have enough products to request another merchandise return.'}</p>
-{/if}
-{if $errorMsg}
-	<p class="error">{l s='Please provide an explanation for your RMA.'}</p>
-{/if}
-{if $errorDetail1}
-	<p class="error">{l s='Please check at least one product you want to return.'}</p>
-{/if}
-{if $errorDetail2}
-	<p class="error">{l s='Please provide quantity for product you checked.'}</p>
-{/if}
-{if $errorNotReturnable}
-	<p class="error">{l s='This order can\'t be returned.'}</p>
-{/if}
+{if isset($errorQuantity) && $errorQuantity}<p class="error">{l s='You do not have enough products to request another merchandise return.'}</p>{/if}
+{if isset($errorMsg) && $errorMsg}<p class="error">{l s='Please provide an explanation for your RMA.'}</p>{/if}
+{if isset($errorDetail1) && $errorDetail1}<p class="error">{l s='Please check at least one product you want to return.'}</p>{/if}
+{if isset($errorDetail2) && $errorDetail2}<p class="error">{l s='Please provide quantity for product you checked.'}</p>{/if}
+{if isset($errorNotReturnable) && $errorNotReturnable}<p class="error">{l s='This order can\'t be returned.'}</p>{/if}
 
 <p>{l s='Here are the merchandise returns you have made since ordering'}.</p>
 <div class="block-center" id="block-history">
@@ -87,8 +77,6 @@
 		<p class="warning">{l s='You have no return merchandise authorizations.'}</p>
 	{/if}
 </div>
-
-
 
 <ul class="footer_links">
 	<li><a href="{$link->getPageLink('my-account.php', true)}"><img src="{$img_dir}icon/my-account.gif" alt="" class="icon" /></a><a href="{$link->getPageLink('my-account.php', true)}">{l s='Back to Your Account'}</a></li>
