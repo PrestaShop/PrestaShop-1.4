@@ -657,7 +657,7 @@ class MondialRelay extends Module
 			JOIN `'._DB_PREFIX_.'carrier` c ON (c.`id_carrier` = m.`id_carrier`)
 			WHERE c.`deleted` = 0');
 			
-		$output .= '
+		$output = '
 		<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
 			<fieldset class="shippingList">
 				<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Shipping Method\'s list').'</legend>
@@ -723,7 +723,7 @@ class MondialRelay extends Module
 	
 	public function settingsForm()
 	{
-		$output .= '
+		$output = '
 			<script type="text/javascript" >var url_appel="";</script>
 			<script type="text/javascript" src="../modules/mondialrelay/kit_mondialrelay/js/ressources_MR.js"></script>
 			<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" >
