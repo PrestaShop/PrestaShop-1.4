@@ -36,10 +36,6 @@ class HelpAccessCore
 
     public static function trackClick($label, $version)
     {
-    p(' INSERT INTO `'._DB_PREFIX_.'help_access` (`label`, `version`) VALUES (\''.pSQL($label).'\',\''.pSQL($version).'\')
-        ON DUPLICATE KEY UPDATE `version` = \''.pSQL($version).'\'
-        ');
-
         Db::getInstance()->Execute('
         INSERT INTO `'._DB_PREFIX_.'help_access` (`label`, `version`) VALUES (\''.pSQL($label).'\',\''.pSQL($version).'\')
         ON DUPLICATE KEY UPDATE `version` = \''.pSQL($version).'\'
