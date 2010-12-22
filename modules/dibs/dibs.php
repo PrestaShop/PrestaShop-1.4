@@ -148,8 +148,6 @@ class dibs extends PaymentModule
 			$str .= '<input type="radio" name="logo_color" '.(self::$MORE_SETTINGS['logo_color'] === $logo_color ? 'checked ' : '').'value="'.$logo_color.'" /> '.$logo_color.'<br />';
 		$str .= '	<p>'.$this->l('The basic color of the logo which appears on the payment page.').'</p>
 				</div>
-				<!--<label>'.$this->l('moduleConfigName').'</label>
-				<div class="margin-form"><input type="text" size="20" name="moduleConfig" value="'.Configuration::get('MODULE_CONFIG').'" /></div>-->
 				<label>'.$this->l('Id merchant').' <sup>*</sup></label>
 				<div class="margin-form">
 					<input type="text" size="20" name="idMerchant" value="'.self::$ID_MERCHANT.'" />
@@ -275,14 +273,14 @@ class dibs extends PaymentModule
 		$dibsParams['delivery8.Company'] = $address->company;
 		
 		// order line (product list)
-		$dibsParams['ordline0-1'] = $this->l('Product ref / Product Id');
-		$dibsParams['ordline0-2'] = $this->l('Name');
-		$dibsParams['ordline0-3'] = $this->l('Description');
-		$dibsParams['ordline0-4'] = $this->l('Unit price with tax');
-		$dibsParams['ordline0-5'] = $this->l('Total price with tax');
-		$dibsParams['ordline0-6'] = $this->l('Quantity');
-		$dibsParams['ordline0-7'] = $this->l('Weight');
-		$dibsParams['ordline0-8'] = $this->l('ecotax');
+		$dibsParams['ordline0-1'] = 'Product ref / Product Id';
+		$dibsParams['ordline0-2'] = 'Name';
+		$dibsParams['ordline0-3'] = 'Description';
+		$dibsParams['ordline0-4'] = 'Unit price with tax';
+		$dibsParams['ordline0-5'] = 'Total price with tax';
+		$dibsParams['ordline0-6'] = 'Quantity';
+		$dibsParams['ordline0-7'] = 'Weight';
+		$dibsParams['ordline0-8'] = 'ecotax';
 		
 		$count_products = 1;
 		foreach ($products as $key => $product)
