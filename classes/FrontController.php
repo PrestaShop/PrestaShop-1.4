@@ -474,6 +474,6 @@ class FrontControllerCore
 		if (!Configuration::get('PS_FORCE_SMARTY_2'))
 			$smarty->registerPlugin($type, $function, $params); // Use Smarty 3 API calls, only if PHP version > 5.1.2
 		else
-			$smarty->{'register_'.$type}('dateFormat', $function, $params); // or keep a backward compatibility if PHP version < 5.1.2
+			$smarty->{'register_'.$type}($function, $params); // or keep a backward compatibility if PHP version < 5.1.2
 	}
 }
