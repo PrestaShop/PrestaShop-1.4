@@ -264,7 +264,7 @@ legend {
 	_top: -2em;
 	_margin-top: 12px;
 }
-select optgroup { 
+select optgroup {
 	background: #fff;
 	padding: 2px;
 	color: #000
@@ -643,7 +643,7 @@ tr.deleted td {
 .right {
 	text-align: right;
 }
-	
+
 .small {
 	font-size: 0.85em;
 }
@@ -697,12 +697,12 @@ tr.deleted td {
 .bullet {
 	display: list-item;
 	list-style: disc;
-	margin-left: 30px; 
+	margin-left: 30px;
 }
 
 /* access management */
 #ajax_confirmation {
-	padding-top: 3px; 
+	padding-top: 3px;
 	padding-bottom: 6px;
 }
 
@@ -890,15 +890,15 @@ table.permissions td {
 	line-height: 0;
 	height: 0;
 }
- 
+
 .clearfix {
 	display: inline-block;
 }
- 
+
 html[xmlns] .clearfix {
 	display: block;
 }
- 
+
 * html .clearfix {
 	height: 1%;
 }
@@ -1006,19 +1006,19 @@ html[xmlns] .clearfix {
 
 #first_block{
 	margin: 0;
-	background: #EFEFEF url('../img/admin/catalog_xl.png') no-repeat 6px 6px; 
+	background: #EFEFEF url('../img/admin/catalog_xl.png') no-repeat 6px 6px;
 }
 
 #second_block{
-	background: #EFEFEF url('../img/admin/customer_xl.png') no-repeat 6px 6px; 
+	background: #EFEFEF url('../img/admin/customer_xl.png') no-repeat 6px 6px;
 }
 
 #third_block{
-	background: #EFEFEF url('../img/admin/stats_xl.png') no-repeat 6px 6px; 
+	background: #EFEFEF url('../img/admin/stats_xl.png') no-repeat 6px 6px;
 }
 
 #fourth_block{
-	background: #EFEFEF url('../img/admin/employees_xl.png') no-repeat 6px 6px; 
+	background: #EFEFEF url('../img/admin/employees_xl.png') no-repeat 6px 6px;
 }
 
 .F_list li{
@@ -1193,7 +1193,7 @@ html[xmlns] .clearfix {
 
 #table_customer{
 	width: 590px;
-	cellpadding: 0; 
+	cellpadding: 0;
 	cellspacing: 0;
 }
 
@@ -1373,3 +1373,16 @@ a.blue {
 a.blue:hover {
 	color:#0000AA;
 }
+
+
+/* help cluetip */
+.cluetip-help-button {
+        width: auto;
+		text-align:left;
+		background-color:white;
+		padding:10px;
+		border:1px solid gray;
+		background:#F1F2F4 url(../img/admin/block_bg.jpg) repeat-x scroll left bottom;
+		opacity:0.75;
+	}
+

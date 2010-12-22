@@ -443,3 +443,12 @@ if (Tools::getValue('submitPublishCMS'))
 		die ('error: parameters');
 }
 
+if (Tools::isSubmit('submitTrackClickOnHelp'))
+{
+    $label = Tools::getValue('label');
+    $version = Tools::getValue('version');
+
+    if (!empty($label) && !empty($version))
+        HelpAccess::trackClick($label, $version);
+}
+

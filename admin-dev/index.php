@@ -22,13 +22,17 @@ if ($tab)
 {
 	if ($id_tab = checkingTab($tab))
 	{
+    	$isoUser = Language::getIsoById(intval($cookie->id_lang));
 		$tabs = array();
 		recursiveTab($id_tab);
 		$tabs = array_reverse($tabs);
-		echo '<div class="path_bar"><a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>';
+		$bread = '';
 		foreach ($tabs AS $key => $item)
-			echo ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />'.((sizeof($tabs) - 1 > $key) ? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">' : '').$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
-		echo '</div>';
+			$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />'.((sizeof($tabs) - 1 > $key) ? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">' : '').$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
+
+		echo '<div class="path_bar">'.HelpAccess::displayHelp($item['class_name'], $isoUser, '').'<a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>'
+			 .$bread.
+			 '</div>';
 
 		if (Validate::isLoadedObject($adminObj))
 			if (!$adminObj->checkToken())
@@ -86,11 +90,11 @@ else /* Else display homepage */
 		echo '<p>'.translate('If you don\'t know how to do that, please contact your host administrator !').'</p><br>';
 	}
   echo '</div>';
-	
+
 	echo'
 	<!--<div id="adminpresentation">
 		<div id="iframe">
-		
+
 		</div>
 		<div id="list_video">
 			<h3>Chapter 1</h3>
@@ -160,7 +164,7 @@ else /* Else display homepage */
 		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`
 		WHERE pt.`name` = \'product.php\'
 		AND dr.`time_start` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'
-		AND dr.`time_end` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'');	
+		AND dr.`time_end` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'');
 		$results = array_merge($result, array_merge($result2, $result3));
 		$currency = Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 		echo '
@@ -244,7 +248,7 @@ else /* Else display homepage */
 				</tr>
 			</table>
 		</div>
-		
+
 		<div id="table_info_large">
 			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('View more').'</a> <strong>'.translate('Statistics').'</strong> / '.translate('Sales of the week').'</h5>
 			<div id="stat_google">';
@@ -276,7 +280,7 @@ else /* Else display homepage */
 				<tr>
 			</thead>
 			<tbody>';
-	
+
 	$orders = Order::getOrdersWithInformations(10);
 	$i = 0;
 	foreach ($orders AS $order)
@@ -299,7 +303,7 @@ else /* Else display homepage */
 	echo '
 			</tbody>
 		</table>
-		
+
 	</div>
 	<div id="column_right">
 		<div id="table_info_link">
@@ -325,10 +329,11 @@ else /* Else display homepage */
 	echo '</div>
 	<div class="clear"></div>
 	';
-	
+
 	echo Module::hookExec('backOfficeHome');
 }
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
 
 ?>
+

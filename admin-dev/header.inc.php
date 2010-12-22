@@ -48,6 +48,7 @@ echo '
 		</script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery-1.4.4.min.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery.hoverIntent.minified.js"></script>
+		<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery.cluetip.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'admin.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'toggle.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'tools.js"></script>

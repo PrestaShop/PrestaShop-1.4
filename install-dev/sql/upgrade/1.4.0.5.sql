@@ -49,6 +49,13 @@ CREATE TABLE `PREFIX_tax_rules_group` (
 `active` INT NOT NULL
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `PREFIX_help_access` (
+  `id_help_access` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(45) NOT NULL,
+  `version` varchar(8) NOT NULL,
+  PRIMARY KEY (`id_help_access`),
+  UNIQUE KEY `label` (`label`)
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 
 INSERT INTO `PREFIX_tab` (id_parent, class_name, position)

@@ -1,5 +1,5 @@
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -198,7 +198,7 @@ function displayFlags(languages, defaultLanguageID, employee_cookie)
 				});
 				if ($(this).find('p:last-child').hasClass('clear'))
 					$(this).find('p:last-child').before(displayFlags).before(languagesFlags);
-				else 
+				else
 					$(this).append(displayFlags).append(languagesFlags);
 			}
 		});
@@ -281,7 +281,7 @@ function addAccessory(event, data, formatted)
 		return false;
 	var productId = data[1];
 	var productName = data[0];
-	
+
 	var $divAccessories = $('#divAccessories');
 	var $inputAccessories = $('#inputAccessories');
 	var $nameAccessories = $('#nameAccessories');
@@ -362,7 +362,7 @@ function formSubmit(e, button)
 		getE(button).focus();
 		getE(button).click();
 	}
-} 
+}
 function	noComma(elem)
 {
  	getE(elem).value = getE(elem).value.replace(new RegExp(',', 'g'), '.');
@@ -513,10 +513,10 @@ function askFeatureName(selected, selector)
 function replaceFeature(toReplace, selector)
 {
 	var elem;
-	
+
 	if ($('#feature_name_' + selector).val() == '')
 		return false;
-	
+
 	elem = getE(toReplace);
 	elem.options[elem.selectedIndex].text = $('#feature_name_' + selector).val();
 	elem.options[elem.selectedIndex].value = '#F_' + $('#feature_name_' + selector).val();
@@ -694,7 +694,7 @@ function orderOverwriteMessage(sl, text)
 {
 	var $zone = $('#txt_msg');
 	var sl_value = sl.options[sl.selectedIndex].value;
-	
+
 	if (sl_value != '0')
 	{
 		if ($zone.val().length > 0 && !confirm(text))
@@ -776,8 +776,8 @@ function toggleDraftWarning(show)
 {
 	if (show)
 		$('.draft').slideDown('slow');
-	else 
-		$('.draft').slideUp('slow');	
+	else
+		$('.draft').slideUp('slow');
 }
 
 function showOptions(show)
@@ -799,3 +799,20 @@ function submitAddcmsAndPreview()
 	$('#fakeSubmitAddcmsAndPreview').attr('name','submitAddcmsAndPreview');
 	$('#cms').submit();
 }
+
+function showHelp(url, label, iso_lang, ps_version, doc_version)
+{
+    trackClickOnHelp(label, doc_version);
+    window.open(url +'/'+iso_lang+'/doc/'+label+'?version='+ps_version+'#', 'PrestaShop Official Help', 'width=520,height=600');
+    return false;
+}
+
+
+function trackClickOnHelp(label, doc_version)
+{
+   	$.ajax({
+		url: 'ajax.php',
+		data: 'submitTrackClickOnHelp&label='+ label +'&version='+doc_version,
+	});
+}
+
