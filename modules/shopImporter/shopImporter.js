@@ -348,7 +348,6 @@ $(document).ready(function(){
 			shopImporter.database = $('#database').val();
 			shopImporter.prefix = $('#prefix').val();
 			shopImporter.hasErrors = $('input[name=hasErrors]:radio:checked').val();
-			console.log(shopImporter.hasErrors);
 			shopImporter.checkAndSaveConfig(shopImporter.save);
 		return false;
 	});	
