@@ -70,7 +70,7 @@ class AdminAccess extends AdminTab
 	 	$tabs = Tab::getTabs($cookie->id_lang);
 		$profiles = Profile::getProfiles((int)($cookie->id_lang));
 		$accesses = Profile::getProfileAccesses((int)($currentProfile));
-
+		
 		echo '
 		<script type="text/javascript">
 			setLang(Array(\''.$this->l('Profile updated').'\', \''.$this->l('Request failed!').'\', \''.$this->l('Update in progress. Please wait.').'\', \''.$this->l('Server connection failed!').'\'));
