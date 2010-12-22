@@ -39,7 +39,7 @@ class UspsCarrier extends CarrierModule
 	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LB' => 'LBS', 'LBS' => 'LBS');
 	private $_config = array(
 		'name' => 'USPS Carrier',
-		'id_tax' => 0,
+		'id_tax_rules_group' => 0,
 		'active' => true,
 		'deleted' => 0,
 		'shipping_handling' => false,

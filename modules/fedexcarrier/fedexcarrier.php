@@ -37,7 +37,7 @@ class FedexCarrier extends CarrierModule
 	private $_weightUnitList = array('KG' => 'KG', 'KGS' => 'KG', 'LB' => 'LB', 'LBS' => 'LB');
 	private $_config = array(
 		'name' => 'Fedex Carrier',
-		'id_tax' => 1,
+		'id_tax_rules_group' => 1,
 		'active' => true,
 		'deleted' => 0,
 		'shipping_handling' => false,
