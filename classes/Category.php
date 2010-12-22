@@ -49,10 +49,10 @@ class CategoryCore extends ObjectModel
 
 	/** @var integer Parents number */
 	public 		$level_depth;
-	
+
 	/** @var integer Nested tree model "left" value */
 	public 		$nleft;
-	
+
 	/** @var integer Nested tree model "right" value */
 	public 		$nright;
 
@@ -144,7 +144,7 @@ class CategoryCore extends ObjectModel
 	public	function add($autodate = true, $nullValues = false)
 	{
 		$this->position = self::getLastPosition((int)(Tools::getValue('id_parent')));
-		$this->level_depth = $this->calcLevelDepth();		
+		$this->level_depth = $this->calcLevelDepth();
 		$ret = parent::add($autodate);
 		self::regenerateEntireNtree();
 		$this->updateGroup(Tools::getValue('groupBox'));
@@ -276,7 +276,7 @@ class CategoryCore extends ObjectModel
 		SET `id_category_default` = 1
 		WHERE `id_category_default`
 		NOT IN (SELECT `id_category` FROM `'._DB_PREFIX_.'category`)');
-		
+
 		/* Rebuild the nested tree */
 		self::regenerateEntireNtree();
 
@@ -310,26 +310,27 @@ class CategoryCore extends ObjectModel
 		/* Root category */
 		if (!$this->id_parent)
 			return 0;
-			
+
 		$parentCategory = new Category((int)($this->id_parent));
 		if (!Validate::isLoadedObject($parentCategory))
 			die('parent category does not exist');
 
 		return $parentCategory->level_depth + 1;
 	}
-	
+
 	/**
 	  * Re-calculate the values of all branches of the nested tree
 	  */
 	public static function regenerateEntireNtree()
-	{	
+	{
 		$categories = Db::getInstance()->ExecuteS('SELECT id_category, id_parent FROM '._DB_PREFIX_.'category ORDER BY id_category ASC');
 		$categoriesArray = array();
 		foreach ($categories AS $category)
 			$categoriesArray[(int)$category['id_parent']]['subcategories'][(int)$category['id_category']] = 1;
-		self::_subTree($categoriesArray, 1, $n = 1);
+			$n = 1;
+		self::_subTree($categoriesArray, 1, $n);
 	}
-	
+
 	private static function _subTree(&$categories, $id_category, &$n)
 	{
 		$left = (int)$n++;
@@ -337,7 +338,7 @@ class CategoryCore extends ObjectModel
 			foreach ($categories[(int)$id_category]['subcategories'] AS $id_subcategory => $value)
 				self::_subTree($categories, (int)$id_subcategory, $n);
 		$right = (int)$n++;
-		
+
 		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'category SET nleft = '.(int)$left.', nright = '.(int)$right.' WHERE id_category = '.(int)$id_category.' LIMIT 1');
 	}
 
@@ -396,7 +397,7 @@ class CategoryCore extends ObjectModel
 	 	global $cookie;
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
-		
+
 		$groups = FrontController::getCurrentCustomerGroups();
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
