@@ -228,32 +228,15 @@ class FrontControllerCore
 		if (is_object($ps_language))
 			$smarty->ps_language = $ps_language;
 
-		/* Use Smarty 3 API calls */
-		if (!Configuration::get('PS_FORCE_SMARTY_2')) /* PHP version > 5.1.2 */
-		{
-			$smarty->registerPlugin('function', 'dateFormat', array('Tools', 'dateFormat'));
-			$smarty->registerPlugin('function', 'productPrice', array('Product', 'productPrice'));
-			$smarty->registerPlugin('function', 'convertPrice', array('Product', 'convertPrice'));
-			$smarty->registerPlugin('function', 'convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
-			$smarty->registerPlugin('function', 'convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
-			$smarty->registerPlugin('function', 'displayWtPrice', array('Product', 'displayWtPrice'));
-			$smarty->registerPlugin('function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
-			$smarty->registerPlugin('function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
-			$smarty->registerPlugin('modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
-		}
-		/* or keep a backward compatibility if PHP version < 5.1.2 */
-		else
-		{
-			$smarty->register_function('dateFormat', array('Tools', 'dateFormat'));
-			$smarty->register_function('productPrice', array('Product', 'productPrice'));
-			$smarty->register_function('convertPrice', array('Product', 'convertPrice'));
-			$smarty->register_function('convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
-			$smarty->register_function('convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
-			$smarty->register_function('displayWtPrice', array('Product', 'displayWtPrice'));
-			$smarty->register_function('displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
-			$smarty->register_function('displayPrice', array('Tools', 'displayPriceSmarty'));
-			$smarty->register_modifier('convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
-		}
+		self::registerSmartyFunction($smarty, 'function', 'dateFormat', array('Tools', 'dateFormat'));
+		self::registerSmartyFunction($smarty, 'function', 'productPrice', array('Product', 'productPrice'));
+		self::registerSmartyFunction($smarty, 'function', 'convertPrice', array('Product', 'convertPrice'));
+		self::registerSmartyFunction($smarty, 'function', 'convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
+		self::registerSmartyFunction($smarty, 'function', 'convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
+		self::registerSmartyFunction($smarty, 'function', 'displayWtPrice', array('Product', 'displayWtPrice'));
+		self::registerSmartyFunction($smarty, 'function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
+		self::registerSmartyFunction($smarty, 'function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
+		self::registerSmartyFunction($smarty, 'modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
 
 		$smarty->assign(Tools::getMetaTags($cookie->id_lang));
 		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
@@ -272,105 +255,56 @@ class FrontControllerCore
 		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
 		$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
 		define('_PS_BASE_URL_', $protocol.$server_host);
+		define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
 
 		Product::initPricesComputation();
 
-		$priceDisplay = Product::getTaxCalculationMethod();
-		if (!Configuration::get('PS_THEME_V11'))
-		{
-			define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
-			$smarty->assign(array(
-				'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
-				'base_dir_ssl' => $protocol_link.$server_host_ssl.__PS_BASE_URI__,
-				'content_dir' => $protocol_content.$server_host.__PS_BASE_URI__,
-				'tpl_dir' => _PS_THEME_DIR_,
-				'modules_dir' => _MODULE_DIR_,
-				'mail_dir' => _MAIL_DIR_,
-				'lang_iso' => $ps_language->iso_code,
-				'come_from' => Tools::getHttpHost(true, true).Tools::htmlentitiesUTF8(str_replace('\'', '', urldecode($_SERVER['REQUEST_URI']))),
-				'shop_name' => Configuration::get('PS_SHOP_NAME'),
-				'cart_qties' => (int)($cart->nbProducts()),
-				'cart' => $cart,
-				'currencies' => Currency::getCurrencies(),
-				'id_currency_cookie' => (int)($currency->id),
-				'currency' => $currency,
-				'cookie' => $cookie,
-				'languages' => Language::getLanguages(),
-				'logged' => $cookie->isLogged(),
-				'page_name' => $page_name,
-				'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
-				'priceDisplay' => $priceDisplay,
-				'roundMode' => (int)(Configuration::get('PS_PRICE_ROUND_MODE')),
-				'use_taxes' => (int)(Configuration::get('PS_TAX')),
-				'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT'))));
-			$assignArray = array(
-				'img_ps_dir' => _PS_IMG_,
-				'img_cat_dir' => _THEME_CAT_DIR_,
-				'img_lang_dir' => _THEME_LANG_DIR_,
-				'img_prod_dir' => _THEME_PROD_DIR_,
-				'img_manu_dir' => _THEME_MANU_DIR_,
-				'img_sup_dir' => _THEME_SUP_DIR_,
-				'img_ship_dir' => _THEME_SHIP_DIR_,
-				'img_store_dir' => _THEME_STORE_DIR_,
-				'img_col_dir' => _THEME_COL_DIR_,
-				'img_dir' => _THEME_IMG_DIR_,
-				'css_dir' => _THEME_CSS_DIR_,
-				'js_dir' => _THEME_JS_DIR_,
-				'pic_dir' => _THEME_PROD_PIC_DIR_,
-				'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE')
-			);// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
+		$smarty->assign(array(
+			'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
+			'base_dir_ssl' => $protocol_link.$server_host_ssl.__PS_BASE_URI__,
+			'content_dir' => $protocol_content.$server_host.__PS_BASE_URI__,
+			'tpl_dir' => _PS_THEME_DIR_,
+			'modules_dir' => _MODULE_DIR_,
+			'mail_dir' => _MAIL_DIR_,
+			'lang_iso' => $ps_language->iso_code,
+			'come_from' => Tools::getHttpHost(true, true).Tools::htmlentitiesUTF8(str_replace('\'', '', urldecode($_SERVER['REQUEST_URI']))),
+			'shop_name' => Configuration::get('PS_SHOP_NAME'),
+			'cart_qties' => (int)($cart->nbProducts()),
+			'cart' => $cart,
+			'currencies' => Currency::getCurrencies(),
+			'id_currency_cookie' => (int)($currency->id),
+			'currency' => $currency,
+			'cookie' => $cookie,
+			'languages' => Language::getLanguages(),
+			'logged' => $cookie->isLogged(),
+			'page_name' => $page_name,
+			'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
+			'priceDisplay' => Product::getTaxCalculationMethod(),
+			'roundMode' => (int)(Configuration::get('PS_PRICE_ROUND_MODE')),
+			'use_taxes' => (int)(Configuration::get('PS_TAX')),
+			'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT'))));
+		$assignArray = array(
+			'img_ps_dir' => _PS_IMG_,
+			'img_cat_dir' => _THEME_CAT_DIR_,
+			'img_lang_dir' => _THEME_LANG_DIR_,
+			'img_prod_dir' => _THEME_PROD_DIR_,
+			'img_manu_dir' => _THEME_MANU_DIR_,
+			'img_sup_dir' => _THEME_SUP_DIR_,
+			'img_ship_dir' => _THEME_SHIP_DIR_,
+			'img_store_dir' => _THEME_STORE_DIR_,
+			'img_col_dir' => _THEME_COL_DIR_,
+			'img_dir' => _THEME_IMG_DIR_,
+			'css_dir' => _THEME_CSS_DIR_,
+			'js_dir' => _THEME_JS_DIR_,
+			'pic_dir' => _THEME_PROD_PIC_DIR_,
+			'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE')
+		);// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
 
-			foreach ($assignArray as $assignKey => $assignValue)
-				if (substr($assignValue, 0, 1) == '/' OR $protocol_content == 'https://')
-					$smarty->assign($assignKey, $protocol_content.Tools::getMediaServer($assignValue).$assignValue);
-				else
-					$smarty->assign($assignKey, $assignValue);
-		}
-		else
-		{
-			$protocol = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
-			$smarty->assign(array(
-				'base_dir' => __PS_BASE_URI__,
-				'base_dir_ssl' =>  $protocol_link.$server_host_ssl.__PS_BASE_URI__,
-				'content_dir' => __PS_BASE_URI__,
-				/* If the current page need SSL encryption and the shop allow it, then active it */
-				'protocol' => $protocol,
-				'img_ps_dir' => _PS_IMG_,
-				'img_cat_dir' => _THEME_CAT_DIR_,
-				'img_lang_dir' => _THEME_LANG_DIR_,
-				'img_prod_dir' => _THEME_PROD_DIR_,
-				'img_manu_dir' => _THEME_MANU_DIR_,
-				'img_sup_dir' => _THEME_SUP_DIR_,
-				'img_ship_dir' => _THEME_SHIP_DIR_,
-				'img_store_dir' => _THEME_STORE_DIR_,
-				'img_col_dir' => _THEME_COL_DIR_,
-				'img_dir' => _THEME_IMG_DIR_,
-				'css_dir' => _THEME_CSS_DIR_,
-				'js_dir' => _THEME_JS_DIR_,
-				'tpl_dir' => _PS_THEME_DIR_,
-				'modules_dir' => _MODULE_DIR_,
-				'mail_dir' => _MAIL_DIR_,
-				'pic_dir' => _THEME_PROD_PIC_DIR_,
-				'lang_iso' => $ps_language->iso_code,
-				'come_from' => Tools::getHttpHost(true, true).htmlentities($_SERVER['REQUEST_URI']),
-				'shop_name' => Configuration::get('PS_SHOP_NAME'),
-				'cart_qties' => (int)($cart->nbProducts()),
-				'cart' => $cart,
-				'currencies' => Currency::getCurrencies(),
-				'id_currency_cookie' => (int)($currency->id),
-				'currency' => $currency,
-				'cookie' => $cookie,
-				'languages' => Language::getLanguages(),
-				'logged' => $cookie->isLogged(),
-				'priceDisplay' => $priceDisplay,
-				'page_name' => $page_name,
-				'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
-				'roundMode' => (int)(Configuration::get('PS_PRICE_ROUND_MODE')),
-				'use_taxes' => (int)(Configuration::get('PS_TAX')),
-				'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT')),
-				'opc' => !(bool)Configuration::get('PS_ORDER_PROCESS_TYPE')
-			));
-		}
+		foreach ($assignArray as $assignKey => $assignValue)
+			if (substr($assignValue, 0, 1) == '/' OR $protocol_content == 'https://')
+				$smarty->assign($assignKey, $protocol_content.Tools::getMediaServer($assignValue).$assignValue);
+			else
+				$smarty->assign($assignKey, $assignValue);
 
 		/* Display a maintenance page if shop is closed */
 		if (isset($maintenance) AND (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP')))))
@@ -507,13 +441,14 @@ class FrontControllerCore
 			$stop = (int)($pages_nb);
 		$this->smarty->assign('nb_products', $nbProducts);
 		$pagination_infos = array(
-					'pages_nb' => (int)($pages_nb),
-					'p' => (int)($this->p),
-					'n' => (int)($this->n),
-					'nArray' => $nArray,
-					'range' => (int)($range),
-					'start' => (int)($start),
-					'stop' => (int)($stop));
+			'pages_nb' => (int)($pages_nb),
+			'p' => (int)($this->p),
+			'n' => (int)($this->n),
+			'nArray' => $nArray,
+			'range' => (int)($range),
+			'start' => (int)($start),
+			'stop' => (int)($stop)
+		);
 		$this->smarty->assign($pagination_infos);
 	}
 	
@@ -530,5 +465,15 @@ class FrontControllerCore
 				self::$currentCustomerGroups[] = $row['id_group'];
 		}
 		return self::$currentCustomerGroups;
+	}
+	
+	public static function registerSmartyFunction($smarty, $type, $function, $params)
+	{
+		if (!in_array($type, array('function', 'modifier')))
+			return false;
+		if (!Configuration::get('PS_FORCE_SMARTY_2'))
+			$smarty->registerPlugin($type, $function, $params); // Use Smarty 3 API calls, only if PHP version > 5.1.2
+		else
+			$smarty->{'register_'.$type}('dateFormat', $function, $params); // or keep a backward compatibility if PHP version < 5.1.2
 	}
 }
