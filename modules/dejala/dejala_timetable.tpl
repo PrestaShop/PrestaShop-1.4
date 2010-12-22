@@ -2,7 +2,7 @@
 <tr style="border-top: 0px solid #bdc2c9;">
 	<td colspan="4" style="border-top: 0px solid #bdc2c9;width:100%;padding:0px 2px 0px 2px;">
 		
-		<div id="shipping_pref" {if $carrier.id_carrier != $checked}style="display:none;"{/if}>
+		<div id="shipping_pref" {if !$my_carrier_selected}style="display:none;"{/if}>
 			<div id="shipping_div">
 				<div id="shipping_dates">
 					<label class="title">{l s='Choose your delivery day' mod='dejala'}:</label><br class="clear"/>

@@ -46,7 +46,28 @@ class DejalaUtils
 		$responseArray = $this->makeRequest($dejalaConfig, $serviceURL, $postargs, 'POST', FALSE);
 		return ($responseArray);
 	}
+	static public function wtf($var, $arrayOfObjectsToHide=null, $fontSize=11)
+	{
+		$text = print_r($var, true);
 
+		if (is_array($arrayOfObjectsToHide)) {
+			 
+			foreach ($arrayOfObjectsToHide as $objectName) {
+				 
+				$searchPattern = '#('.$objectName.' Object\n(\s+)\().*?\n\2\)\n#s';
+				$replace = "$1<span style=\"color: #FF9900;\">--&gt; HIDDEN - courtesy of wtf() &lt;--</span>)";
+				$text = preg_replace($searchPattern, $replace, $text);
+			}
+		}
+
+		// color code objects
+		$text = preg_replace('#(\w+)(\s+Object\s+\()#s', '<span style="color: #079700;">$1</span>$2', $text);
+		// color code object properties
+		$text = preg_replace('#\[(\w+)\:(public|private|protected)\]#', '[<span style="color: #000099;">$1</span>:<span style="color: #009999;">$2</span>]', $text);
+		 
+		echo '<pre style="font-size: '.$fontSize.'px; line-height: '.$fontSize.'px;text-align:left;">'.$text.'</pre>';
+	}
+	
 	public function getStoreLocation($dejalaConfig, &$location)
 	{
 		$serviceURL = $dejalaConfig->getRootServiceURI() . '/mystore';
@@ -155,12 +176,25 @@ class DejalaUtils
    				$currentProduct[$element->nodeName] = $element->textContent;
 				}
 				if (count($currentProduct))
-					$products[$currentProduct['priority']] = $currentProduct;
+				$products[] = $currentProduct;
 			}
 		}
+
+		usort($products, array("DejalaUtils", "cmpProducts"));
 		return ($responseArray);
 	}
 
+	private static function cmpProducts($a, $b)
+	{
+	    if ($a['priority'] == $b['priority']) {
+	    	if (($a['price'] == $b['price'])) {
+	    		return ($a['id'] < $b['id']) ? -1 : 1 ;
+	    	}
+	        return ($a['price'] < $b['price']) ? -1 : 1 ;
+	    }
+	    return ($a['priority'] < $b['priority']) ? -1 : 1;
+	}
+	
 	public function getStoreQuotation($dejalaConfig, $quotationElements, &$products)
 	{
 		$serviceURL = $dejalaConfig->getRootServiceURI() . '/mystore/quotation';
@@ -195,9 +229,10 @@ class DejalaUtils
 				}
 				*/
 				if (count($currentProduct))
-					$products[$currentProduct['priority']] = $currentProduct;
+					$products[] = $currentProduct;
 			}
 		}
+		usort($products, array("DejalaUtils", "cmpProducts"));
 		return ($responseArray);
 	}
 

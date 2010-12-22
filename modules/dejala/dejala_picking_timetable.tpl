@@ -2,9 +2,10 @@
 {foreach from=$weekdayLabels item=weekday name=weekdayLoop}
 	{assign var='curWeekdayIdx' value=$smarty.foreach.weekdayLoop.index}
 	<div class="margin-form">
-		<input type="checkbox" name="weekday_{$curWeekdayIdx}" value="1" {if ($calendar.entries.$curWeekdayIdx)}checked="checked"{/if}>
-		{$weekday}: {l s='De' mod='dejala'} <select name="start_hour_{$curWeekdayIdx}" value="{$deliveryHourValues.$curIdxhour}">
-		{if ($calendar.entries.$curWeekdayIdx)}
+		<input type="checkbox" name="weekday_{$curWeekdayIdx}" value="1" {if (isset($calendar.entries.$curWeekdayIdx) && $calendar.entries.$curWeekdayIdx)}checked="checked"{/if}>
+		{$weekday}: {l s='De' mod='dejala'}
+		<select name="start_hour_{$curWeekdayIdx}">
+		{if (isset($calendar.entries.$curWeekdayIdx))}
 			{assign var='start_hour' value=$calendar.entries.$curWeekdayIdx.start_hour}
 		{else}
 			{assign var='start_hour' value=9}
@@ -14,8 +15,8 @@
 		{/section}
 		</select>
 		{l s='A' mod='dejala'}
-		<select name="stop_hour_{$curWeekdayIdx}" value="{$deliveryHourValues.$curIdxhour}">
-		{if ($calendar.entries.$curWeekdayIdx)}
+		<select name="stop_hour_{$curWeekdayIdx}">
+		{if (isset($calendar.entries.$curWeekdayIdx))}
 			{assign var='stop_hour' value=$calendar.entries.$curWeekdayIdx.stop_hour}
 		{else}
 			{assign var='stop_hour' value=18}

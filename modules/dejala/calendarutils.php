@@ -7,7 +7,7 @@ class CalendarUtils
 {
 	/**
 	*	Ajuste l'heure de dateUtc en fonction de l'ouverture
-	* La dateUtc est considérée dispo
+	* La dateUtc est considÃ©rÃ©e dispo
 	**/
 	public function adjustHour($dateUtc, $calendar) {
 		$wd = date('w', $dateUtc);
@@ -16,12 +16,12 @@ class CalendarUtils
 		$currentHour = (int)(date('H', $dateUtc));
 		$currentMin = (int)(date('i', $dateUtc));
 
-		// arrondi à l'heure juste d'après
+		// arrondi Ã  l'heure juste d'aprÃ¨s
 		if ($currentMin > 0) {
 			$currentHour = $currentHour + 1;
 			$dateUtc = mktime($currentHour, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
 		}
-		// si on est avant l'heure de départ, on se met à l'heure de départ
+		// si on est avant l'heure de dÃ©part, on se met Ã  l'heure de dÃ©part
 		if ($currentHour < $startHour) {
 			$dateUtc = mktime($startHour, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
 		}
@@ -29,7 +29,7 @@ class CalendarUtils
 	}
 	
 	/**
-	 * Ajout un délai à la date dateUtc : 0.5 jour ou 1*nb de jours 
+	 * Ajout un dÃ©lai Ã  la date dateUtc : 0.5 jour ou 1*nb de jours 
 	 * Prend en compte le calendrier & les exceptions
 	**/
 	public function addDelay($dateUtc, $delay, $calendar, $exceptions) {
@@ -43,9 +43,7 @@ class CalendarUtils
 			if ($hour < 12) {
 				$dateUtc = mktime('14', 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
 			} else {
-				$dateUtc += 3600 * 24;
-				// on remet sur 00h00 pr livrer au début du jour
-				$dateUtc = mktime(0, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
+				$dateUtc = $this->skipOneDay($dateUtc) ;
 				$dateUtc = $this->getNextDateAvailable($dateUtc, $calendar, $exceptions);				
 			}
 			return ($dateUtc);
@@ -54,15 +52,30 @@ class CalendarUtils
 		$deliveryDelay = (int)($delay);
 		while ($deliveryDelay--)
 		{
-			$dateUtc += 3600 * 24;
+			$dateUtc = strtotime(date("Y-m-d", $dateUtc) . " +1 day");
 			$dateUtc = mktime(0, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));	
 			$dateUtc = $this->getNextDateAvailable($dateUtc, $calendar, $exceptions);							
 		}
 		return ($dateUtc);
 	}
 	
+	public function skipOneDay($dateUtc) {
+		$dateUtc = strtotime(date("Y-m-d", $dateUtc) . " +1 day");
+		// on remet sur 00h00 pr livrer au dÃ©but du jour
+		$dateUtc = mktime(0, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
+		
+		return $dateUtc ;
+	}
+	public function skipCurDay($dateUtc) {
+		$currentDayZero = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
+		$dateUtcZero = mktime(0, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
+		if ($currentDayZero == $dateUtcZero) {
+			$dateUtc = $this->skipOneDay($dateUtc) ;
+		}		
+		return $dateUtc ;
+	}
 	/**
-	 *	Renvoie la prochaine journée disponible (soit $dateUtc, soit la prochaine à 00h00)
+	 *	Renvoie la prochaine journÃ©e disponible (soit $dateUtc, soit la prochaine Ã  00h00)
 	 *	Si aucune ds les 15j, renvoie NULL
 	 **/
 	public function getNextDateAvailable($dateUtc, $calendar, $exceptions)
@@ -72,12 +85,12 @@ class CalendarUtils
 			return ($dateUtc);
 		
 		$loopcount = 0;
-		// on positionne au début de journée
+		// on positionne au dÃ©but de journÃ©e
 		$dateUtc = mktime(0, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
-		// on boucle pour trouver une journée dispo (si ds les 15j, y a pas : on laisse tomber
+		// on boucle pour trouver une journÃ©e dispo (si ds les 15j, y a pas : on laisse tomber
 		do 
 		{
-			$dateUtc += 3600 * 24;
+			$dateUtc = strtotime(date("Y-m-d", $dateUtc) . " +1 day");
 			$isDateFree = $this->isDateAvailable($dateUtc, $calendar, $exceptions);
 			$loopcount++;	
 		} 
@@ -92,16 +105,16 @@ class CalendarUtils
 	 **/
 	public function isDateAvailable($dateUtc, $calendar, $exceptions)
 	{
-		// jour ferié ?
+		// jour feriÃ© ?
 		$mCalDate = date("d/m/Y", $dateUtc);
 		if (in_array($mCalDate, $exceptions))
 			return (false);
-		// jour fermé ?
+		// jour fermÃ© ?
 		$wd = date('w', $dateUtc);
 		if (!isset($calendar[$wd]))
 			return (false);
 			
-		// on arrondit à l'heure suivante & on regarde si on est avant la fermeture
+		// on arrondit Ã  l'heure suivante & on regarde si on est avant la fermeture
 		$stopHour = (int)($calendar[$wd]['stop_hour']);
 		$currentHour = (int)(date('H', $dateUtc));
 		$currentMin = (int)(date('i', $dateUtc));		

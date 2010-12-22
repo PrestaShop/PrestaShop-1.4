@@ -47,9 +47,6 @@ addLoadEvent(function() {
 	{if (isset($registered) AND $registered == 0)}
 
 		<div style="width:100%;margin:0px 10px 0px 10px">
-			<div style="width:100%;background-color:red">
-				{$errorMsg}
-			</div>
 			<div class="clear"></div>
 			<div style="float:left;width:48%;">
 				<form action="{$formAction}" method="post">

@@ -1,7 +1,7 @@
 	<script>
 		var djl_calendar = new Array({foreach from=$dates item=dateItem name=datesLoop}{if !$smarty.foreach.datesLoop.first}, {/if}new Array("{$dateItem.label}", "{$dateItem.value}", {$dateItem.start_hour}, {$dateItem.stop_hour}){/foreach}	);
 		var deliveryDateSelected = {$deliveryDateIndexSelected};
-		var deliveryHourSelected = {$deliveryHourSelected};
+		var deliveryHourSelected = {$deliveryHourSelected|intval};
 	</script>
 
 	<script type="text/javascript" src="{$timetable_js}"></script>
@@ -9,7 +9,7 @@
 	{literal}
 		<script>
 			$(document).ready(function() {
-				$("input[@name=id_carrier]").each(function(idx, elt) {
+				$('input[name="id_carrier"]').each(function(idx, elt) {
 					if ($(this).parent().hasClass("dejala")) {
 						if ($(this).get(0).checked) {
 							toggle_visibility('shipping_pref','1');
@@ -43,7 +43,7 @@
 					<td class="carrier_action radio dejala">
 						<input type="hidden" name="dejala_id_carrier" value="{$carrier.id_carrier|intval}"/>
 						<input type="hidden" name="dejala_id_product" value="{$product.id|intval}"/>
-						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $carrier.id_carrier == $checked}checked="checked"{/if}"/>
+						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $my_carrier_selected}checked="checked"{/if}"/>
 					</td>
 					<td class="carrier_name">
 						<label for="id_carrier{$carrier.id_carrier|intval}">

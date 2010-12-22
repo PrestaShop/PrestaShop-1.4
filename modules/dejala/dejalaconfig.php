@@ -16,6 +16,7 @@ class DejalaConfig
 //	public $active = 0;
 	public $visibility_status = "invisible" ;
 	public $visible_users_list = "";
+	public $internal_version ;
 
 	// Not stored in the local config. Only sent on shop creation
 	public $storeUrl ;
@@ -33,6 +34,7 @@ class DejalaConfig
 		OR Configuration::updateValue('DJL_COUNTRY', $this->country) == false
 		OR Configuration::updateValue('DJL_VISIBILITY_STATUS', $this->visibility_status) == false
 		OR Configuration::updateValue('DJL_VISIBLE_USERS_LIST', $this->visible_users_list) == false
+		OR Configuration::updateValue('DJL_VERSION', $this->internal_version) == false
 		) {
 			return (false);
 		}
@@ -54,7 +56,8 @@ class DejalaConfig
 		Configuration::deleteByName('DJL_COUNTRY');
 		Configuration::deleteByName('DJL_ACTIVE');
 		Configuration::deleteByName('DJL_VISIBILITY_STATUS');
-		Configuration::deleteByName('DJL_VISIBLE_USERS_LIST');	
+		Configuration::deleteByName('DJL_VISIBLE_USERS_LIST');
+		// DO NOT DELETE DJL_VERSION AS WE LEAVE THE TABLE IN THE DB. 
 	}
 
 	// load configuration
@@ -75,6 +78,7 @@ class DejalaConfig
 			$this->country = 'fr';
 		$this->visibility_status = html_entity_decode(Configuration::get('DJL_VISIBILITY_STATUS'), ENT_COMPAT, 'UTF-8');
 		$this->visible_users_list = html_entity_decode(Configuration::get('DJL_VISIBLE_USERS_LIST'), ENT_COMPAT, 'UTF-8');
+		$this->internal_version = Configuration::get('DJL_VERSION') ;
 
 		// Backward compatibility
 		$activeVal = html_entity_decode(Configuration::get('DJL_ACTIVE'), ENT_COMPAT, 'UTF-8') ;
