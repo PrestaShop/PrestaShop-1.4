@@ -32,23 +32,28 @@ class AdminPayment extends AdminTab
 	public function __construct()
 	{
 		/* Get all modules then select only payment ones*/
-		$modules = Module::getModulesOnDisk(true);
+
+		$modules = Module::getModulesOnDisk();
 		foreach ($modules AS $module)
+			
 			if ($module->tab == 'payments_gateways')
 			{
 				if($module->id)
 				{
-					$module->country = array();
+					if(!get_class($module) == 'SimpleXMLElement')
+						$module->country = array();
 					$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.(int)($module->id));
 					foreach ($countries as $country)
 						$module->country[] = $country['id_country'];
 						
-					$module->currency = array();
+					if(!get_class($module) == 'SimpleXMLElement')
+						$module->currency = array();
 					$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.(int)($module->id));
 					foreach ($currencies as $currency)
 						$module->currency[] = $currency['id_currency'];
 						
-					$module->group = array();
+					if(!get_class($module) == 'SimpleXMLElement')
+						$module->group = array();
 					$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.(int)($module->id));
 					foreach ($groups as $group)
 						$module->group[] = $group['id_group'];
@@ -92,12 +97,6 @@ class AdminPayment extends AdminTab
 	public function display()
 	{
 		global $cookie;
-		
-		/*
-foreach ($this->paymentModules AS $module)
-			if ($module->active AND $module->warning)
-				$this->displayWarning($module->displayName.' - '.stripslashes(pSQL($module->warning)));
-*/
 		
 		$currencies = Currency::getCurrencies();
 		$countries = Country::getCountries((int)($cookie->id_lang));
@@ -151,24 +150,24 @@ foreach ($this->paymentModules AS $module)
 			}
 		}
 		echo '
-					</tr>';
+					</tr>'; 
 		foreach ($items as $item)
 		{
-			echo '
-					<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
-						<td>'.$item['name'].'</td>';
+			echo '<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
+					<td>'.$item['name'].'</td>';
 			foreach ($this->paymentModules as $module)
 			{
 				if ($module->active)
 				{
+					$value = $module->{$nameId};
 					echo '
 						<td style="text-align: center">';
 					if ($nameId != 'currency' OR ($nameId == 'currency' AND $module->currencies AND $module->currencies_mode == 'checkbox'))
 						echo '
-							<input type="checkbox" name="'.$module->name.'_'.$nameId.'[]" value="'.$item['id_'.$nameId].'"'.(in_array($item['id_'.$nameId.''], $module->{$nameId}) ? ' checked="checked"' : '').' />';
+							<input type="checkbox" name="'.$module->name.'_'.$nameId.'[]" value="'.$item['id_'.$nameId].'"'.(in_array($item['id_'.$nameId.''], $value) ? ' checked="checked"' : '').' />';
 					elseif ($nameId == 'currency' AND $module->currencies AND $module->currencies_mode == 'radio')
 						echo '
-							<input type="radio" name="'.$module->name.'_'.$nameId.'[]" value="'.$item['id_'.$nameId].'"'.(in_array($item['id_'.$nameId.''], $module->{$nameId}) ? ' checked="checked"' : '').' />';
+							<input type="radio" name="'.$module->name.'_'.$nameId.'[]" value="'.$item['id_'.$nameId].'"'.(in_array($item['id_'.$nameId.''], $value) ? ' checked="checked"' : '').' />';
 					elseif ($nameId == 'currency')
 						echo '--';
 					echo '
