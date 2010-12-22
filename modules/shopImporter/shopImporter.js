@@ -191,7 +191,6 @@ var shopImporter = {
 	       data: 'ajax=true&truncatTable&className='+className+this.specificOptions ,
 	       success: function(jsonData)
 	       {		      
-		       	console.log(jsonData);
 		       	var jsonError;
 		       	if (jsonData.hasError)
 	    		{
