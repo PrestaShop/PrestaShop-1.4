@@ -1086,8 +1086,11 @@ class WebserviceRequest
 						if (!is_null($this->_schemaToDisplay))
 							$ret .= '<language id="" '.($this->_schemaToDisplay == 'synopsis' ? 'format="isUnsignedId"' : '').'></language>'."\n";
 						else
-							foreach ($object->$key as $idLang => $value)
-								$ret .= '<language id="'.$idLang.'" xlink:href="'.$this->_wsUrl.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
+						{
+							if (!is_null($object->$key))
+								foreach ($object->$key as $idLang => $value)
+									$ret .= '<language id="'.$idLang.'" xlink:href="'.$this->_wsUrl.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
+						}
 						$ret .= '</'.$field['sqlId'].'>'."\n";
 					}
 					else

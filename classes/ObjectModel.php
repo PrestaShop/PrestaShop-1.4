@@ -591,8 +591,7 @@ abstract class ObjectModelCore
 		'.($sql_sort != '' ? $sql_sort : '').'
 		'.($sql_limit != '' ? $sql_limit : '').'
 		';
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
-		return $result;
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 	}
 	
 	public function getFieldsRequiredDatabase($all = false)
