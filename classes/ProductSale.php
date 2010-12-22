@@ -64,12 +64,13 @@ class ProductSaleCore
 	*/
 	static public function getBestSales($id_lang, $pageNumber = 0, $nbProducts = 10, $orderBy=NULL, $orderWay=NULL)
 	{
-		global $link, $cookie;
-
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
 		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'sales';
 		if (empty($orderWay)) $orderWay = 'DESC';
+		
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*,
@@ -91,15 +92,13 @@ class ProductSaleCore
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.$sqlGroups.'
 		)
 		ORDER BY '.(isset($orderByPrefix) ? $orderByPrefix.'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
 
 		if ($orderBy == 'price')
-		{
 			Tools::orderbyPrice($resultclasses,$orderWay);
-		}
 		if (!$result)
 			return false;
 		return Product::getProductsProperties($id_lang, $result);
@@ -115,10 +114,13 @@ class ProductSaleCore
 	*/
 	static public function getBestSalesLight($id_lang, $pageNumber = 0, $nbProducts = 10)
 	{
-	 	global $link, $cookie;
+	 	global $link;
 
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
+		
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` AS sales, p.`ean13`, p.`upc`, cl.`link_rewrite` AS category
@@ -133,7 +135,7 @@ class ProductSaleCore
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.$sqlGroups.'
 		)
 		GROUP BY p.`id_product`
 		ORDER BY sales DESC

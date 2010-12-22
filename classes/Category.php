@@ -396,6 +396,9 @@ class CategoryCore extends ObjectModel
 	 	global $cookie;
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
+		
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.*, cl.id_lang, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description
@@ -404,14 +407,13 @@ class CategoryCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
 		WHERE `id_parent` = '.(int)($this->id).'
 		'.($active ? 'AND `active` = 1' : '').'
-		AND cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+		AND cg.`id_group` '.$sqlGroups.'
 		GROUP BY c.`id_category`
 		ORDER BY `level_depth` ASC, c.`position` ASC');
 
-		/* Modify SQL result */
 		foreach ($result AS &$row)
 		{
-			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? (int)($row['id_category']) : Language::getIsoById($cookie->id_lang).'-default';
+			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? (int)($row['id_category']) : Language::getIsoById($id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
 		return $result;

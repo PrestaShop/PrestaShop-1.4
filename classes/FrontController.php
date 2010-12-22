@@ -46,6 +46,8 @@ class FrontControllerCore
 	
 	public static $initialized = false;
 	
+	private static $currentCustomerGroups;
+	
 	public function __construct()
 	{
 		global $smarty, $cookie, $link, $cart, $useSSL, $iso;
@@ -513,5 +515,20 @@ class FrontControllerCore
 					'start' => (int)($start),
 					'stop' => (int)($stop));
 		$this->smarty->assign($pagination_infos);
+	}
+	
+	public static function getCurrentCustomerGroups()
+	{
+	 	global $cookie; // Cannot use $this->cookie in a static method
+		if (!$cookie->id_customer)
+			return array();
+		if (!is_array(self::$currentCustomerGroups))
+		{
+			self::$currentCustomerGroups = array();
+			$result = Db::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)$cookie->id_customer);
+			foreach ($result as $row)
+				self::$currentCustomerGroups[] = $row['id_group'];
+		}
+		return self::$currentCustomerGroups;
 	}
 }

@@ -1225,8 +1225,6 @@ class ProductCore extends ObjectModel
 	*/
 	static public function getNewProducts($id_lang, $pageNumber = 0, $nbProducts = 10, $count = false, $orderBy = NULL, $orderWay = NULL)
 	{
-		global $link, $cookie;
-
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
 		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'date_add';
@@ -1238,6 +1236,9 @@ class ProductCore extends ObjectModel
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die(Tools::displayError());
 
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
+		
 		if ($count)
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -1249,10 +1250,9 @@ class ProductCore extends ObjectModel
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
 				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-				WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+				WHERE cg.`id_group` '.$sqlGroups.'
 			)
 			');
-
 			return (int)($result['nb']);
 		}
 
@@ -1275,7 +1275,7 @@ class ProductCore extends ObjectModel
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.$sqlGroups.'
 		)
 		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
@@ -1307,10 +1307,12 @@ class ProductCore extends ObjectModel
 	*/
 	static public function getRandomSpecial($id_lang, $beginning = false, $ending = false)
 	{
-		global $cookie;
         $currentDate = date('Y-m-d H:i:s');
 		$ids_product = self::_getProductIdByDate((!$beginning ? $currentDate : $beginning), (!$ending ? $currentDate : $ending));
 
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
+		
 		// Please keep 2 distinct queries because RAND() is an awful way to achieve this result
 		$sql = '
 		SELECT p.id_product
@@ -1322,7 +1324,7 @@ class ProductCore extends ObjectModel
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.$sqlGroups.'
 		)
 		ORDER BY RAND()';
 		$id_product = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue($sql);
@@ -1357,7 +1359,6 @@ class ProductCore extends ObjectModel
 	*/
 	static public function getPricesDrop($id_lang, $pageNumber = 0, $nbProducts = 10, $count = false, $orderBy = NULL, $orderWay = NULL, $beginning = false, $ending = false)
 	{
-		global $link, $cookie;
 		if (!Validate::isBool($count))
 			die(Tools::displayError());
 
@@ -1374,6 +1375,9 @@ class ProductCore extends ObjectModel
 		$currentDate = date('Y-m-d H:i:s');
 		$ids_product = self::_getProductIdByDate((!$beginning ? $currentDate : $beginning), (!$ending ? $currentDate : $ending));
 
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
+		
 		if ($count)
 		{
 			$sql = '
@@ -1386,7 +1390,7 @@ class ProductCore extends ObjectModel
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
 				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-				WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+				WHERE cg.`id_group` '.$sqlGroups.'
 			)';
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 			return (int)($result['nb']);
@@ -1407,12 +1411,12 @@ class ProductCore extends ObjectModel
 		WHERE 1
 		AND p.`active` = 1
 		AND p.`show_price` = 1
-		'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.((is_array($ids_product) AND sizeof($ids_product)) ? implode(', ', $ids_product) : 0).')' : '').'
+		'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN ('.((is_array($ids_product) AND sizeof($ids_product)) ? implode(', ', $ids_product) : 0).')' : '').'
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.$sqlGroups.'
 		)
 		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'`'.' '.pSQL($orderWay).'
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts);

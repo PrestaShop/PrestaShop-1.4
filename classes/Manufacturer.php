@@ -180,9 +180,6 @@ class ManufacturerCore extends ObjectModel
 	  */
 	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_group = false)
 	{
-		if (!$all_group)
-			global $cookie;
-
 		if (!$id_lang)
 			$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
 		$sql = 'SELECT m.*, ml.`description`';
@@ -194,6 +191,13 @@ class ManufacturerCore extends ObjectModel
 		if ($manufacturers === false)
 			return false;
 		if ($getNbProducts)
+		{
+			$sqlGroups = '';
+			if (!$all_group)
+			{
+				$groups = FrontController::getCurrentCustomerGroups();
+				$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
+			}
 			foreach ($manufacturers as $key => $manufacturer)
 			{
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT p.`id_product`
@@ -205,10 +209,11 @@ class ManufacturerCore extends ObjectModel
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').')'));
+					WHERE cg.`id_group` '.$sqlGroups.')'));
 
 				$manufacturers[$key]['nb_products'] = sizeof($result);
 			}
+		}
 		for ($i = 0; $i < sizeof($manufacturers); $i++)
 			if ((int)(Configuration::get('PS_REWRITING_SETTINGS')))
 				$manufacturers[$i]['link_rewrite'] = Tools::link_rewrite($manufacturers[$i]['name'], false);
@@ -258,14 +263,15 @@ class ManufacturerCore extends ObjectModel
 
 	static public function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
 	{
-		global $cookie;
-
 		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) ||$orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
 
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
+			
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		/* Return only the number of products */
 		if ($getTotal)
@@ -279,7 +285,7 @@ class ManufacturerCore extends ObjectModel
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.$sqlGroups.'
 				)';
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 			return (int)(sizeof($result));
@@ -302,7 +308,7 @@ class ManufacturerCore extends ObjectModel
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.$sqlGroups.'
 				)
 		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 		LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n);

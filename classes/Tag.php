@@ -123,7 +123,8 @@ class TagCore extends ObjectModel
 	
 	static public function getMainTags($id_lang, $nb = 10)
 	{
-		global $cookie;
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT t.name, COUNT(pt.id_tag) AS times
@@ -136,7 +137,7 @@ class TagCore extends ObjectModel
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+			WHERE cg.`id_group` '.$sqlGroups.'
 		)
 		GROUP BY t.id_tag
 		ORDER BY times DESC

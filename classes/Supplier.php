@@ -113,7 +113,6 @@ class SupplierCore extends ObjectModel
 	  */
 	static public function getSuppliers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_groups = false)
 	{
-		if (!$all_groups)
 			global $cookie;
 
 		if (!$id_lang)
@@ -127,6 +126,13 @@ class SupplierCore extends ObjectModel
 		if ($suppliers === false)
 			return false;
 		if ($getNbProducts)
+		{
+			$sqlGroups = '';
+			if (!$all_groups)
+			{
+				$groups = FrontController::getCurrentCustomerGroups();
+				$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
+			}
 			foreach ($suppliers as $key => $supplier)
 			{
 				$sql = '
@@ -139,11 +145,12 @@ class SupplierCore extends ObjectModel
 						SELECT cp.`id_product`
 						FROM `'._DB_PREFIX_.'category_group` cg
 						LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-						WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+						WHERE cg.`id_group` '.$sqlGroups.'
 					)');
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 				$suppliers[$key]['nb_products'] = sizeof($result);
 			}
+		}
 		for ($i = 0; $i < sizeof($suppliers); $i++)
 			if ((int)(Configuration::get('PS_REWRITING_SETTINGS')))
 				$suppliers[$i]['link_rewrite'] = Tools::link_rewrite($suppliers[$i]['name'], false);
@@ -179,14 +186,15 @@ class SupplierCore extends ObjectModel
 
 	static public function getProducts($id_supplier, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true)
 	{
-		global $cookie;
-
 		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) OR $orderBy == 'position') $orderBy = 'name';
 	 	if (empty($orderWay)) $orderWay = 'ASC';
 
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
+			
+		$groups = FrontController::getCurrentCustomerGroups();
+		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		/* Return only the number of products */
 		if ($getTotal)
@@ -200,7 +208,7 @@ class SupplierCore extends ObjectModel
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.$sqlGroups.'
 				)';
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 			return (int)(sizeof($result));
@@ -225,7 +233,7 @@ class SupplierCore extends ObjectModel
 					SELECT cp.`id_product`
 					FROM `'._DB_PREFIX_.'category_group` cg
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-					WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').'
+					WHERE cg.`id_group` '.$sqlGroups.'
 				)
 		ORDER BY '.(($orderBy == 'id_product') ? 'p.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).'
 		LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n);
