@@ -53,12 +53,10 @@ class FrontControllerCore
 		global $smarty, $cookie, $link, $cart, $useSSL, $iso;
 
 		$useSSL = $this->ssl;
+
 		$this->init();
-		
-		$this->smarty = &$smarty;
-		$this->cookie = &$cookie;
-		$this->link = &$link;
-		$this->cart = &$cart;
+		$this->smarty = $smarty;
+		$this->link = $link;
 		$this->iso = &$iso;
 
 		if ($this->auth AND !$this->cookie->isLogged($this->guestAllowed))
@@ -142,7 +140,6 @@ class FrontControllerCore
 
 		// Init Cookie
 		$cookie = new Cookie('ps');
-		
 		// Init rewrited links
 		global $link;
 		$link = new Link();
@@ -193,6 +190,7 @@ class FrontControllerCore
 				$cart->id_currency = (int)($cookie->id_currency);
 				$cart->update();
 			}
+
 		}
 
 		if (!isset($cart) OR !$cart->id)
@@ -329,6 +327,8 @@ class FrontControllerCore
 		
 		// Load each links once, for better performances...
 		$link->preloadPageLinks();
+		$this->cookie = $cookie;
+		$this->cart = $cart;
 	}
 
 	public function preProcess()
@@ -390,7 +390,7 @@ class FrontControllerCore
 	public function displayFooter()
 	{
 		$this->smarty->assign(array(
-			'HOOK_RIGHT_COLUMN' => Module::hookExec('rightColumn'),
+			'HOOK_RIGHT_COLUMN' => Module::hookExec('rightColumn', array('cart' => $this->cart)),
 			'HOOK_FOOTER' => Module::hookExec('footer'),
 			'content_only' => (int)(Tools::getValue('content_only'))));
 		$this->smarty->display(_PS_THEME_DIR_.'footer.tpl');
