@@ -182,7 +182,7 @@ switch (_DB_TYPE_) {
 $xml = '<result><action result="ok" error="" />'."\n";
 
 $countries = Db::getInstance()->ExecuteS('
-SELECT c.`id_country`, cl.`name` FROM `'.$_GET['tablePrefix'].'country` c
+SELECT c.`id_country`, cl.`name`, c.`iso_code` FROM `'.$_GET['tablePrefix'].'country` c
 INNER JOIN `'.$_GET['tablePrefix'].'country_lang` cl ON (c.`id_country` = cl.`id_country`)
 WHERE cl.`id_lang` = '.(int)($_GET['language'] + 1).'
 ORDER BY cl.`name`');
@@ -193,7 +193,7 @@ ORDER BY `name`');
 
 $xml .= '<countries>'."\n";
 foreach ($countries as $country)
-	$xml .= "\t".'<country value="'.$country['id_country'].'" name="'.$country['name'].'" />'."\n";
+	$xml .= "\t".'<country iso="'.$country['iso_code'].'" value="'.$country['id_country'].'" name="'.$country['name'].'" />'."\n";
 $xml .= '</countries>'."\n".'<timezones>'."\n";
 foreach ($timezones as $timezone)
 	$xml .= "\t".'<timezone value="'.$timezone['name'].'" name="'.$timezone['name'].'" />'."\n";

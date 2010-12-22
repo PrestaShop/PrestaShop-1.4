@@ -168,7 +168,7 @@ if (isFormValid())
 $error['infosInsertSQL'] = '';
 if (isFormValid())
 {
-	$sqlParams = array();	
+	$sqlParams = array();
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_NAME', '".pSQL($_GET['infosShop'])."', NOW(), NOW())";
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_EMAIL', '".pSQL($_GET['infosEmail'])."', NOW(), NOW())";
 	$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_METHOD', '".pSQL($_GET['infosMailMethod'] == "smtp" ? "2": "1")."', NOW(), NOW())";
@@ -191,7 +191,14 @@ if (isFormValid())
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'tax` SET `active` = 1 WHERE `id_tax` = '.(int)($tax['id_tax']));
 		}
 	}
-
+	require_once(dirname(__FILE__).'/../../config/defines.inc.php');
+	require_once(dirname(__FILE__).'/../../classes/LocalizationPack.php');
+	$localization_file = @file_get_contents('http://www.prestashop.com/download/localization_pack.php?country='.$_GET['countryName']);
+	if ($localization_file)
+	{
+		$localizationPack = new LocalizationPackCore();
+		$localizationPack->loadLocalisationPack($localization_file, '');
+	}
 	if (isset($_GET['infosMailMethod']) AND $_GET['infosMailMethod'] == "smtp")
 	{
 		$sqlParams[] = "INSERT INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_SERVER', '".pSQL($_GET['smtpSrv'])."', NOW(), NOW())";

@@ -418,7 +418,7 @@ function createDB()
 				var html = '';
 				for (i = 0; countries_ret[i]; i=i+1)
 				{
-					html = html + '<option value="'+countries_ret[i].getAttribute("value")+'" ';
+					html = html + '<option rel="'+countries_ret[i].getAttribute('iso')+'" value="'+countries_ret[i].getAttribute("value")+'" ';
 					if (countries_ret[i].getAttribute("value") == 8)
 						html = html + ' selected="selected" ';
 					html = html + ' >'+countries_ret[i].getAttribute("name")+'</option>';
@@ -655,6 +655,7 @@ function verifyShopInfos()
 		"&infosPassword="+ encodeURIComponent($("input#infosPassword").val())+
 		"&infosPasswordRepeat="+ encodeURIComponent($("input#infosPasswordRepeat").val())+
 		"&infosNotification="+ ( ($("#infosNotification:checked").length > 0) ? "on" : "off" )+
+		"&countryName="+encodeURIComponent($("select#infosCountry option:selected").attr('rel'))+
 		urlLanguages+
 		"&infosMailMethod=" + ((smtpChecked) ? "smtp" : "native")+
 		"&smtpSrv="+ encodeURIComponent($("input#smtpSrv").val())+

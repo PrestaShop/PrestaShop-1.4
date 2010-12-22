@@ -63,8 +63,8 @@ class AdminLocalization extends AdminPreferences
 		}
 		elseif (Tools::isSubmit('submitLocalizationPack'))
 		{
-			if ($_FILES['file']['error'] == 4)
-				$this->_errors[] = Tools::displayError('Please select a localization pack archive.');
+			if (!$pack = file_get_contents('http://www.prestashop.com/download/localization/'.Tools::getValue('iso_localization_pack').'.xml'))
+				$this->_errors[] = Tools::displayError('Cannot connect to prestashop.com.');
 			elseif (!$selection = Tools::getValue('selection'))
 				$this->_errors[] = Tools::displayError('Please select at least one content to import.');
 			else
@@ -79,7 +79,7 @@ class AdminLocalization extends AdminPreferences
                 move_uploaded_file($_FILES['file']['tmp_name'], _PS_TMP_DIR_.$_FILES['file']['name']);
 
 				$localizationPack = new LocalizationPack();
-				if (!$localizationPack->importFile($_FILES['file']['name'], $selection))
+				if (!$localizationPack->loadLocalisationPack($pack, $selection))
 					$this->_errors = array_merge($this->_errors, $localizationPack->getErrors());
 				else
 					Tools::redirectAdmin($currentIndex.'&conf=23&token='.$this->token);
@@ -98,8 +98,17 @@ class AdminLocalization extends AdminPreferences
 		<fieldset>
 			<legend><img src="../img/admin/localization.gif" />'.$this->l('Localization pack import').'</legend>
 			<div style="clear: both; padding-top: 15px;">
-				<label>'.$this->l('Archive:').'</label>
-				<div class="margin-form" style="padding-top: 5px;"><input type="file" name="file" /></div>
+			<label>'.$this->l('Localization pack you want to import:').'</label>
+			<div class="margin-form">
+			<select id="iso_localization_pack" name="iso_localization_pack">';
+			$localization_packs = simplexml_load_file('http://www.prestashop.com/rss/localization.xml');
+			if ($localization_packs)
+				foreach($localization_packs->pack as $pack)
+						echo '<option value="'.$pack->iso.'">'.$pack->name.'</option>';
+			else
+				echo '<option value="0">'.$this->l('Cannot connect to prestashop.com').'</option>';
+			echo '</select></div>
+			<br />
 				<label>'.$this->l('Content to import:').'</label>
 				<div class="margin-form" style="padding-top: 5px;">
 					<input type="checkbox" name="selection[]" value="states" /> '.$this->l('States').'<br />

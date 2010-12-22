@@ -33,22 +33,22 @@ class LocalizationPackCore
 	public	$version;
 	private	$_errors = array();
 
-	public function importFile($filename, $selection = array())
+	public function loadLocalisationPack($file, $selection)
 	{
-		return $this->_loadXMLFile($filename, $selection);
-	}
 
-	private function _loadXMLFile($filename, $selection)
-	{
-		if (!file_exists(_PS_TMP_DIR_.$filename))
-			return false;
-		if (!$xml = simplexml_load_file(_PS_TMP_DIR_.$filename))
+		if (!$xml = simplexml_load_string($file))
 			return false;
 		$mainAttributes = $xml->attributes();
 		$this->name = strval($mainAttributes['name']);
 		$this->version = strval($mainAttributes['version']);
 		if (empty($selection))
-			return ($this->_installStates($xml) AND $this->_installTaxes($xml) AND $this->_installCurrencies($xml) AND $this->_installLanguages($xml) AND $this->_installUnits($xml));
+		{
+			$res = $this->_installLanguages($xml);
+			$res &= $this->_installStates($xml);
+			$res &= $this->_installTaxes($xml);
+			$res &= $this->_installCurrencies($xml);
+			return ($this->_installUnits($xml) AND $res);
+		}
 		foreach ($selection as $selected)
 			if (!Validate::isLocalizationPackSelection($selected) OR !$this->{'_install'.ucfirst($selected)}($xml))
 				return false;
@@ -85,6 +85,7 @@ class LocalizationPackCore
 					return false;
 				}
 			}
+
 		return true;
 	}
 
@@ -218,7 +219,7 @@ class LocalizationPackCore
 			foreach ($xml->languages->language as $data)
 			{
 				$attributes = $data->attributes();
-				$gz = new Archive_Tar(_PS_TMP_DIR_.strval($attributes['file']), true);
+				$gz = new Archive_Tar('http://www.prestashop.com/download/lang_packs/gzip/'.$attributes['iso_code'].'.gzip', true);
 				if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 				{
 					$this->_errors[] = Tools::displayError('Cannot decompress the translation file of the language: ').strval($attributes['iso_code']);
