@@ -24,7 +24,13 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
-<h4>{l s='Order placed on'} {dateFormat date=$order->date_add full=0}</h4>
+<form action="{$base_dir}history.php" method="post" class="submit">
+	<input type="hidden" value="{$order->id}" name="id_order">
+	<h4>
+		{l s='Order placed on'} {dateFormat date=$order->date_add full=0}
+		<input type="submit" value="{l s='Reorder'}" name="submitReorder" class="button exclusive" style="float:right">
+	</h4>
+</form>
 
 {if count($order_history)}
 <p class="bold">{l s='Follow your order step by step'}</p>

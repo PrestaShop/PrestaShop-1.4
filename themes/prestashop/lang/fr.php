@@ -295,6 +295,7 @@ $_LANG['order-confirmation_8296639e5a0a086f36c626c7a16d6660'] = 'Votre numéro d
 $_LANG['order-confirmation_4082ea29b4f196c4f60533500139725a'] = 'Suivre ma commande';
 $_LANG['order-confirmation_9390390581f54c65d6acfc8da4e17362'] = 'Retour aux commandes';
 $_LANG['order-detail_d0b7240c8f04f7c73fb5c063042ab86b'] = 'Commande du';
+$_LANG['order-detail_332c80b1838dc515f5031e09da3b7f3f'] = 'Re-commander';
 $_LANG['order-detail_9aa2b51093a63aec1983d31dac4dc0f0'] = 'Suivre votre commande pas à pas';
 $_LANG['order-detail_44749712dbec183e983dcd78a7736c41'] = 'Date';
 $_LANG['order-detail_ec53a8c4f07baed5d8825072c89799be'] = 'Statut';

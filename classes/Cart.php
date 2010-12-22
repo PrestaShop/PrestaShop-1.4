@@ -1371,5 +1371,46 @@ class CartCore extends ObjectModel
 		$customer = new Customer((int)($this->id_customer));
 		return $customer->email;
 	}
+	
+	public function duplicate()
+	{
+		if (!Validate::isLoadedObject($this))
+			return false;
+		$cart = new Cart($this->id);
+		$cart->id = NULL;
+		$cart->add();
+		
+		if (!Validate::isLoadedObject($cart))
+			return false;
+
+		$success = true;
+		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)$this->id);
+		foreach ($products AS $product)
+			$success &= $cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], NULL, 'up');
+			
+		// Customized products
+		$customs = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT *
+		FROM '._DB_PREFIX_.'customization c
+		LEFT JOIN '._DB_PREFIX_.'customized_data cd ON cd.id_customization = c.id_customization
+		WHERE c.id_cart = '.(int)$this->id);
+
+		$custom_ids = array();
+		$sql_custom_data = 'INSERT INTO '._DB_PREFIX_.'customized_data (id_customization, type, index, value) VALUES ';
+		if (count($custom_ids))
+		{
+			foreach ($customs AS $custom)
+			{
+				Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute('
+				INSERT INTO '._DB_PREFIX_.'customization (id_customization, id_cart, id_product_attribute, id_product, quantity)
+				VALUES(\'\', '.(int)$cart->id.', '.(int)$custom['id_product_attribute'].', '.(int)$custom['id_product'].', '.(int)$custom['quantity'].')');
+				$custom_ids[$custom['id_customization']] = Db::getInstance(_PS_USE_SQL_SLAVE_)->Insert_ID();
+				$sql_custom_data .= '('.(int)$custom_ids[$custom['id_customization']].', '.(int)$custom['type'].', '.(int)$custom['index'].', \''.pSQL($custom['value']).'\'),';
+			}
+			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql_custom_data);
+		}
+		
+		return array('cart' => $cart, 'success' => $success);
+	}
 }
 

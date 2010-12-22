@@ -32,6 +32,7 @@
 
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Order history'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
+{include file="$tpl_dir./errors.tpl"}
 
 <h1>{l s='Order history'}</h1>
 <p>{l s='Here are the orders you have placed since the creation of your account'}.</p>
