@@ -93,6 +93,7 @@
 	<modules type="partner">
 		<module name="cashticket"/>
 		<module name="dejala"/>
+		<module name="dibs"/>
 		<module name="envoimoinscher"/>
 		<module name="fedexcarrier"/>
 		<module name="fianetfraud"/>
