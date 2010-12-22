@@ -248,19 +248,19 @@ function saveAddress(type)
 	if (type != 'delivery' && type != 'invoice')
 		return false;
 	
-	var params = 'firstname='+escape($('#firstname').val())+'&lastname='+escape($('#lastname').val())+'&';
-	params += 'company='+escape($('#company'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'vat_number='+escape($('#vat_number'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'address1='+escape($('#address1'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'address2='+escape($('#address2'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'postcode='+escape($('#postcode'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'city='+escape($('#city'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'id_country='+escape($('#id_country'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'id_state='+escape($('#id_state'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'other='+escape($('#other'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'phone='+escape($('#phone'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'phone_mobile='+escape($('#phone_mobile'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'alias='+escape($('#alias'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	var params = 'firstname='+encodeURI($('#firstname').val())+'&lastname='+encodeURI($('#lastname').val())+'&';
+	params += 'company='+encodeURI($('#company'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'vat_number='+encodeURI($('#vat_number'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'address1='+encodeURI($('#address1'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'address2='+encodeURI($('#address2'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'postcode='+encodeURI($('#postcode'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'city='+encodeURI($('#city'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'id_country='+encodeURI($('#id_country'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'id_state='+encodeURI($('#id_state'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'other='+encodeURI($('#other'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'phone='+encodeURI($('#phone'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'phone_mobile='+encodeURI($('#phone_mobile'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'alias='+encodeURI($('#alias'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
 	// Clean the last &
 	params = params.substr(0, params.length-1);
 	
@@ -399,23 +399,23 @@ $(function() {
 				if ($(this).is('input[type=checkbox]'))
 				{
 					if ($(this).is(':checked'))
-						params += escape($(this).attr('name'))+'=1&';
+						params += encodeURI($(this).attr('name'))+'=1&';
 				}
 				else if ($(this).is('input[type=radio]'))
 				{
 					if ($(this).is(':checked'))
-						params += escape($(this).attr('name'))+'='+escape($(this).val())+'&';
+						params += encodeURI($(this).attr('name'))+'='+encodeURI($(this).val())+'&';
 				}
 				else
-					params += escape($(this).attr('name'))+'='+escape($(this).val())+'&';
+					params += encodeURI($(this).attr('name'))+'='+encodeURI($(this).val())+'&';
 			});
 			$('#opc_account_form select:visible').each(function() {
-				params += escape($(this).attr('name'))+'='+escape($(this).val())+'&';
+				params += encodeURI($(this).attr('name'))+'='+encodeURI($(this).val())+'&';
 			});
-			params += 'customer_lastname='+escape($('#customer_lastname').val())+'&';
-			params += 'customer_firstname='+escape($('#customer_firstname').val())+'&';
-			params += 'alias='+escape($('#alias').val())+'&';
-			params += 'is_new_customer='+escape($('#is_new_customer').val())+'&';
+			params += 'customer_lastname='+encodeURI($('#customer_lastname').val())+'&';
+			params += 'customer_firstname='+encodeURI($('#customer_firstname').val())+'&';
+			params += 'alias='+encodeURI($('#alias').val())+'&';
+			params += 'is_new_customer='+encodeURI($('#is_new_customer').val())+'&';
 			// Clean the last &
 			params = params.substr(0, params.length-1);
 

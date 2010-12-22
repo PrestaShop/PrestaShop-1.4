@@ -116,7 +116,7 @@ class BlockCart extends Module
 			{
 				Configuration::updateValue('PS_BLOCK_CART_AJAX', (int)($ajax));
 			}
-				$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
+			$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
 		return $output.$this->displayForm();
 	}
