@@ -43,7 +43,7 @@
 		<div id="restricted-country">
 			 <p><img src="{$content_dir}img/logo.jpg" alt="logo" /><br /><br /></p>
 			 <p id="message">
-				<img src="{$content_dir}img/admin/tab-tools.gif" style="margin-right:10px; float:left;" alt="" />{l s='You can\'t access our store from your country. We apologize for the inconvenience.'}
+				<img src="{$content_dir}img/admin/tab-tools.gif" style="margin-right:10px; float:left;" alt="" />{l s='You cannot access our store from your country. We apologize for the inconvenience.'}
 			 </p>
 			 <span style="clear:both;">&nbsp;</span>
 		</div>

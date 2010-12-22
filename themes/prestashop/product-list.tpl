@@ -31,12 +31,12 @@
 		<li class="ajax_block_product {if $smarty.foreach.products.first}first_item{elseif $smarty.foreach.products.last}last_item{/if} {if $smarty.foreach.products.index % 2}alternate_item{else}item{/if} clearfix">
 			<div class="center_block">
 				<a href="{$product.link|escape:'htmlall':'UTF-8'}" class="product_img_link" title="{$product.name|escape:'htmlall':'UTF-8'}"><img src="{$link->getImageLink($product.link_rewrite, $product.id_image, 'home')}" alt="{$product.legend|escape:'htmlall':'UTF-8'}" {if isset($homeSize)} width="{$homeSize.width}" height="{$homeSize.height}"{/if} /></a>
-				<h3>{if isset($product.new) && $product.new == 1}<span class="new">{l s='new'}</span>{/if}<a href="{$product.link|escape:'htmlall':'UTF-8'}" title="{$product.name|escape:'htmlall':'UTF-8'}">{$product.name|truncate:35:'...'|escape:'htmlall':'UTF-8'}</a></h3>
+				<h3>{if isset($product.new) && $product.new == 1}<span class="new">{l s='New'}</span>{/if}<a href="{$product.link|escape:'htmlall':'UTF-8'}" title="{$product.name|escape:'htmlall':'UTF-8'}">{$product.name|truncate:35:'...'|escape:'htmlall':'UTF-8'}</a></h3>
 				<p class="product_desc"><a href="{$product.link|escape:'htmlall':'UTF-8'}" title="{$product.description_short|truncate:360:'...'|escape:'htmlall':'UTF-8'|strip_tags:'UTF-8'}">{$product.description_short|truncate:360:'...'|strip_tags:'UTF-8'}</a></p>
 			</div>																				 
 			<div class="right_block">
 				{if isset($product.on_sale) && $product.on_sale && isset($product.show_price) && $product.show_price}<span class="on_sale">{l s='On sale!'}</span>
-				{elseif isset($product.reduction) && $product.reduction && isset($product.show_price) && $product.show_price}<span class="discount">{l s='Price lowered!'}</span>{/if}
+				{elseif isset($product.reduction) && $product.reduction && isset($product.show_price) && $product.show_price}<span class="discount">{l s='Reduced price!'}</span>{/if}
 				{if isset($product.online_only) && $product.online_only}<span class="online_only">{l s='Online only!'}</span>{/if}
 				{if (isset($product.show_price) && $product.show_price) || (isset($product.available_for_order) && $product.available_for_order)}
 				<div>

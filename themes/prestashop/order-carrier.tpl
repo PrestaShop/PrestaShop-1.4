@@ -51,13 +51,13 @@
 
 {include file="$tpl_dir./errors.tpl"}
 
-<form id="form" action="{$link->getPageLink('order.php', true)}" method="post" onsubmit="return acceptCGV('{l s='Please accept the terms of service before the next step.' js=1}');">
+<form id="form" action="{$link->getPageLink('order.php', true)}" method="post" onsubmit="return acceptCGV('{l s='You must agree to the terms of service before continuing.' js=1}');">
 
 {if $conditions AND $cms_id}
 	<h3 class="condition_title">{l s='Terms of service'}</h3>
 	<p class="checkbox">
 		<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
-		<label for="cgv">{l s='I agree with the terms of service and I adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="iframe">{l s='(read)'}</a>
+		<label for="cgv">{l s='I agree to the terms of service and adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="iframe">{l s='(read)'}</a>
 	</p>
 	<script type="text/javascript">$('a.iframe').fancybox();</script>
 {/if}
@@ -118,7 +118,7 @@
 		<div style="display: none;" id="extra_carrier"></div>
 	</div>
 	{else}
-		<p class="warning">{l s='There are no carriers available that will deliver to this address!'}</td></tr>
+		<p class="warning">{l s='There are no carriers available that will deliver to this address.'}</td></tr>
 	{/if}
 
 	{if $giftAllowed}

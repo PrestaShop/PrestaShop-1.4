@@ -184,12 +184,12 @@ class PDFCore extends PDF_PageGroupCore
 		{
 			$this->SetFont(self::fontname(), '', 8);
 			if (self::$orderSlip)
-				$textFooter = self::l('An electronic version of this credit slip is available in your account. To access it, log in to the');
+				$textFooter = self::l('An electronic version of this invoice is available in your account. To access it, log in to the');
 			else
 				$textFooter = self::l('An electronic version of this invoice is available in your account. To access it, log in to the');
 			$this->Cell(0, 10, $textFooter, 0, 0, 'C', 0, (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
 			$this->Ln(4);
-			$this->Cell(0, 10, Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_SHOP_NAME')).' '.self::l('website using your e-mail address and password (which you created while placing your first order).'), 0, 0, 'C', 0, (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
+			$this->Cell(0, 10, Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_SHOP_NAME')).' '.self::l('website using your e-mail address and password (which you created when placing your first order).'), 0, 0, 'C', 0, (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
 		}
 		else
 			$this->Ln(4);
@@ -291,7 +291,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetFont(self::fontname(), '', 9);
 		$pdf->Cell(0, 6, self::l('RETURN #').sprintf('%06d', self::$orderReturn->id).' '.self::l('from') . ' ' .Tools::displayDate(self::$orderReturn->date_upd, self::$order->id_lang), 1, 2, 'L');
 		$pdf->Cell(0, 6, self::l('We have logged your return request.'), 'TRL', 2, 'L');
-		$pdf->Cell(0, 6, self::l('We remind you that your package must be returned to us within').' '.Configuration::get('PS_ORDER_RETURN_NB_DAYS').' '.self::l('days of initially receiving your order.'), 'BRL', 2, 'L');
+		$pdf->Cell(0, 6, self::l('Your package must be returned to us within').' '.Configuration::get('PS_ORDER_RETURN_NB_DAYS').' '.self::l('days of receiving your order.'), 'BRL', 2, 'L');
 		$pdf->Ln(5);
 		$pdf->Cell(0, 6, self::l('List of items marked as returned :'), 0, 2, 'L');
 		$pdf->Ln(5);
@@ -299,7 +299,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->Ln(5);
 		$pdf->SetFont(self::fontname(), 'B', 10);
 		$pdf->Cell(0, 6, self::l('Return reference:').' '.self::l('RET').sprintf('%06d', self::$order->id), 0, 2, 'C');
-		$pdf->Cell(0, 6, self::l('Thank you for including this number on your return package.'), 0, 2, 'C');
+		$pdf->Cell(0, 6, self::l('Please include this number on your return package.'), 0, 2, 'C');
 		$pdf->Ln(5);
 		$pdf->SetFont(self::fontname(), 'B', 9);
 		$pdf->Cell(0, 6, self::l('REMINDER:'), 0, 2, 'L');
@@ -313,7 +313,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->Cell(0, 5, (!empty($conf['PS_SHOP_ADDR1']) ? self::l('Headquarters:').' '.$conf['PS_SHOP_ADDR1'].(!empty($conf['PS_SHOP_ADDR2']) ? ' '.$conf['PS_SHOP_ADDR2'] : '').' '.$conf['PS_SHOP_CODE'].' '.$conf['PS_SHOP_CITY'].' '.$conf['PS_SHOP_COUNTRY'].((isset($conf['PS_SHOP_STATE']) AND !empty($conf['PS_SHOP_STATE'])) ? (', '.$conf['PS_SHOP_STATE']) : '') : ''), 0, 1, 'C', 1);
 		$pdf->Ln(5);
 		$pdf->SetFont(self::fontname(), '', 9);
-		$pdf->Cell(0, 6, self::l('Upon receiving your package, we will inform you by e-mail and will then begin processing the reimbursement of your order total.'), 0, 2, 'L');
+		$pdf->Cell(0, 6, self::l('Upon receiving your package, we will notify you by e-mail. We will then begin processing the reimbursement of your order total.'), 0, 2, 'L');
 		$pdf->Cell(0, 6, self::l('Let us know if you have any questions.'), 0, 2, 'L');
 		$pdf->Ln(5);
 		$pdf->SetFont(self::fontname(), 'B', 10);
@@ -535,7 +535,7 @@ class PDFCore extends PDF_PageGroupCore
 
 			if(isset(self::$order->total_wrapping) and ((float)(self::$order->total_wrapping) > 0))
 			{
-				$pdf->Cell($width, 0, self::l('Total wrapping').' : ', 0, 0, 'R');
+				$pdf->Cell($width, 0, self::l('Total gift-wrapping').' : ', 0, 0, 'R');
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
 					$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 				else
@@ -939,7 +939,7 @@ g	* Discount table with value, quantities...
 			$before = $this->GetY();
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX(), $this->GetY() - $lineSize + 3);
-			$this->Cell($w[0], $lineSize, self::l('Wrapping'), 0, 0, 'R');
+			$this->Cell($w[0], $lineSize, self::l('Gift-wrapping'), 0, 0, 'R');
 			$this->Cell($w[1], $lineSize, number_format($taxRate, 3, ',', ' ').' %', 0, 0, 'R');
 			$this->Cell($w[2], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');
 			$this->Cell($w[3], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_wrapping - $priceBreakDown['wrappingCostWithoutTax'], self::$currency, true, false)), 0, 0, 'R');

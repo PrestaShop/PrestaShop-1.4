@@ -33,7 +33,7 @@
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Your vouchers'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h1>{l s='Your vouchers'}</h1>
+<h1>{l s='My Vouchers'}</h1>
 
 {if isset($discount) && count($discount) && $nbDiscounts}
 <table class="discount std">

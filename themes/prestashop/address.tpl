@@ -75,7 +75,7 @@ $(function(){ldelim}
 
 <h1>{l s='Your addresses'}</h1>
 
-<h3>{if isset($id_address)}{l s='Modify the address'} {if isset($smarty.post.alias)}"{$smarty.post.alias}"{elseif isset($address->alias)}"{$address->alias|escape:'htmlall':'UTF-8'}"{/if}{else}{l s='To add a new address, please fill out the form below.'}{/if}</h3>
+<h3>{if isset($id_address)}{l s='Modify address'} {if isset($smarty.post.alias)}"{$smarty.post.alias}"{elseif isset($address->alias)}"{$address->alias|escape:'htmlall':'UTF-8'}"{/if}{else}{l s='To add a new address, please fill out the form below.'}{/if}</h3>
 
 {include file="$tpl_dir./errors.tpl"}
 
@@ -109,11 +109,11 @@ $(function(){ldelim}
 			<sup>*</sup>
 		</p>
 		<p class="required text">
-			<label for="address2">{l s='Address (2)'}</label>
+			<label for="address2">{l s='Address (Line 2)'}</label>
 			<input type="text" id="address2" name="address2" value="{if isset($smarty.post.address2)}{$smarty.post.address2}{else}{if isset($address->address2)}{$address->address2|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 		</p>
 		<p class="required postcode text">
-			<label for="postcode">{l s='Postal code / Zip code'}</label>
+			<label for="postcode">{l s='Zip / Postal Code'}</label>
 			<input type="text" id="postcode" name="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode}{else}{if isset($address->postcode)}{$address->postcode|escape:'htmlall':'UTF-8'}{/if}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
 			<sup>*</sup>
 		</p>

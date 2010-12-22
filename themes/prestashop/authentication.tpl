@@ -82,7 +82,7 @@ $(function(){ldelim}
 	<form action="{$link->getPageLink('authentication.php', true)}" method="post" id="create-account_form" class="std">
 		<fieldset>
 			<h3>{l s='Create your account'}</h3>
-			<h4>{l s='Enter your e-mail address to create your account'}.</h4>
+			<h4>{l s='Enter your e-mail address to create an account'}.</h4>
 			<p class="text">
 				<label for="email_create">{l s='E-mail address'}</label>
 				<span><input type="text" id="email_create" name="email_create" value="{if isset($smarty.post.email_create)}{$smarty.post.email_create|escape:'htmlall'|stripslashes}{/if}" class="account_input" /></span>
@@ -157,7 +157,7 @@ $(function(){ldelim}
 						<sup>*</sup>
 					</p>
 					<p class="required postcode text" style="">
-						<label for="postcode">{l s='Postal code / Zip code'}</label>
+						<label for="postcode">{l s='Zip / Postal Code'}</label>
 						<input type="text" class="text" name="postcode" id="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode|escape:'htmlall'|stripslashes}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());">
 						<sup>*</sup>
 					</p>
@@ -232,7 +232,7 @@ $(function(){ldelim}
 			<span class="form_info">{l s='(5 characters min.)'}</span>
 		</p>
 		<p class="select">
-			<span>{l s='Birthday'}</span>
+			<span>{l s='Date of Birth'}</span>
 			<select id="days" name="days">
 				<option value="">-</option>
 				{foreach from=$days item=day}
@@ -303,7 +303,7 @@ $(function(){ldelim}
 			<sup>*</sup>
 		</p>
 		<p class="text">
-			<label for="address2">{l s='Address (2)'}</label>
+			<label for="address2">{l s='Address (Line 2)'}</label>
 			<input type="text" class="text" name="address2" id="address2" value="{if isset($smarty.post.address2)}{$smarty.post.address2}{/if}" />
 		</p>
 		<p class="required postcode text">
@@ -356,7 +356,7 @@ $(function(){ldelim}
 		<h3>{l s='Tax identification'}</h3>
 	
 		<p class="required text">
-			<label for="dni">{l s='Identication number'}</label>
+			<label for="dni">{l s='Identification number'}</label>
 			<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{/if}" />
 			<span class="form_info">{l s='DNI / NIF / NIE'}</span>
 		</p>

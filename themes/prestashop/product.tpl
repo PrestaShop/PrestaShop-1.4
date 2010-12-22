@@ -102,7 +102,7 @@ var doesntExist = '{l s='The product does not exist in this model. Please choose
 var doesntExistNoMore = '{l s='This product is no longer in stock' js=1}';
 var doesntExistNoMoreBut = '{l s='with those attributes but is available with others' js=1}';
 var uploading_in_progress = '{l s='Uploading in progress, please wait...' js=1}';
-var fieldRequired = '{l s='Please fill all required fields' js=1}';
+var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 
 
 {if isset($groups)}
@@ -126,10 +126,10 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 
 	{if isset($adminActionDisplay) && $adminActionDisplay}
 	<div id="admin-action">
-		<p>{l s='This product is not visible by your customers.'}
+		<p>{l s='This product is not visible to your customers.'}
 		<input type="hidden" id="admin-action-product-id" value="{$product->id}" />
-		<input type="submit" value="{l s='publish'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>
-		<input type="submit" value="{l s='back'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>
+		<input type="submit" value="{l s='Publish'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>
+		<input type="submit" value="{l s='Back'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>
 		</p>
 		<div class="clear" ></div>
 		<p id="admin-action-result"></p>
@@ -247,7 +247,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 					<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
 					<span class="on_sale">{l s='On sale!'}</span>
 				{elseif $product->specificPrice AND $product->specificPrice.reduction AND $productPriceWithoutRedution > $productPrice}
-					<span class="discount">{l s='Price lowered!'}</span>
+					<span class="discount">{l s='Reduced price!'}</span>
 				{/if}
 				<br />
 				<span class="our_price_display">
@@ -343,7 +343,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 			</p>
 
 			<!-- minimal quantity wanted -->
-			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display:none;"{/if}>{l s='You need add '}<b>{$product->minimal_quantity}</b>{l s=' as a minimum quantity to buy this product.'}</p>
+			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display:none;"{/if}>{l s='You must add '}<b>{$product->minimal_quantity}</b>{l s=' as a minimum quantity to buy this product.'}</p>
 			{if $product->minimal_quantity > 1}
 			<script type="text/javascript">
 				checkMinimalQuantity();
@@ -491,7 +491,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 		<form method="post" action="{$customizationFormTarget}" enctype="multipart/form-data" id="customizationForm">
 			<p>
 				<img src="{$img_dir}icon/infos.gif" alt="Informations" />
-				{l s='After saving your customized product, do not forget to add it to your cart.'}
+				{l s='After saving your customized product, remember to add it to your cart.'}
 				{if $product->uploadable_files}<br />{l s='Allowed file formats are: GIF, JPG, PNG'}{/if}
 			</p>
 			{if $product->uploadable_files|intval}
@@ -501,7 +501,7 @@ var fieldRequired = '{l s='Please fill all required fields' js=1}';
 				{foreach from=$customizationFields item='field' name='customizationFields'}
 					{if $field.type == 0}
 						<li class="customizationUploadLine{if $field.required} required{/if}">{assign var='key' value='pictures_'|cat:$product->id|cat:'_'|cat:$field.id_customization_field}
-							{if isset($pictures.$key)}<div class="customizationUploadBrowse"><img src="{$pic_dir}{$pictures.$key}_small" alt="" /><a href="{$link->getUrlWith('deletePicture', $field.id_customization_field)}"><img src="{$img_dir}icon/delete.gif" alt="{l s='delete'}" class="customization_delete_icon" width="11" height="13" /></a></div>{/if}
+							{if isset($pictures.$key)}<div class="customizationUploadBrowse"><img src="{$pic_dir}{$pictures.$key}_small" alt="" /><a href="{$link->getUrlWith('deletePicture', $field.id_customization_field)}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="customization_delete_icon" width="11" height="13" /></a></div>{/if}
 							<div class="customizationUploadBrowse"><input type="file" name="file{$field.id_customization_field}" id="img{$customizationField}" class="customization_block_input {if isset($pictures.$key)}filled{/if}" />{if $field.required}<sup>*</sup>{/if}
 							<div class="customizationUploadBrowseDescription">{if !empty($field.name)}{$field.name}{else}{l s='Please select an image file from your hard drive'}{/if}</div></div>
 						</li>

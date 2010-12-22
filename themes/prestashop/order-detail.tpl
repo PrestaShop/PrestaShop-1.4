@@ -55,7 +55,7 @@
 {/if}
 
 {if isset($followup)}
-<p class="bold">{l s='Click the following link to track delivery of your order'}</p>
+<p class="bold">{l s='Click the following link to track the delivery of your order'}</p>
 <a href="{$followup|escape:'htmlall':'UTF-8'}">{$followup|escape:'htmlall':'UTF-8'}</a>
 {/if}
 
@@ -241,7 +241,7 @@
 	{if $return_allowed}
 	<br />
 	<p class="bold">{l s='Merchandise return'}</p>
-	<p>{l s='If you want to return one or several products, please mark the corresponding checkbox(es) and provide an explanation for the return. Then click the button below.'}</p>
+	<p>{l s='If you wish to return one or more products, please mark the corresponding boxes and provide an explanation for the return. Then click the button below.'}</p>
 	<p class="textarea">
 		<textarea cols="67" rows="3" name="returnText"></textarea>
 	</p>
@@ -296,7 +296,7 @@
 	{/if}
 	<form action="{$link->getPageLink('order-detail.php', true)}" method="post" class="std" id="sendOrderMessage">
 		<p class="bold">{l s='Add a message:'}</p>
-		<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
+		<p>{l s='If you would like to comment on your order, please write it below.'}</p>
 		<p class="textarea">
 			<textarea cols="67" rows="3" name="msgText"></textarea>
 		</p>

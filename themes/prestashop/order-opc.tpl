@@ -45,7 +45,7 @@
 	var txtHasBeenSelected = "{l s='has been selected'}";
 	var txtNoCarrierIsSelected = "{l s='No carrier is selected'}";
 	var txtTOSIsAccepted = "{l s='Terms of service is accepted'}";
-	var txtTOSIsNotAccepted = "{l s='Terms of service isn\'t accepted'}";
+	var txtTOSIsNotAccepted = "{l s='Terms of service has not been accepted'}";
 	var txtThereis = "{l s='There is'}";
 	var txtErrors = "{l s='error(s)'}";
 	var txtDeliveryAddress = "{l s='Delivery address'}";
@@ -329,7 +329,7 @@
 					<a href="{$base_dir_ssl}address.php?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 				</p>
 				<div id="ordermsg">
-					<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
+					<p>{l s='If you would like to comment on your order, please write it below.'}</p>
 					<p class="textarea"><textarea cols="60" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
 				</div>
 			</div>
@@ -380,13 +380,13 @@
 						</div>
 						
 						<div class="opc_float">
-							<h4>{l s='Create your account and enjoy many benefits:'}</h4>
+							<h4>{l s='Create your account today and enjoy :'}</h4>
 							<ul class="bullet">
 								<li>{l s='Personalized and secure access'}</li>
 								<li>{l s='Fast and easy check out'}</li>
 							</ul>
 							<p>
-								<input type="button" class="button_large" id="opc_createAccount" value="{l s='Make your own account'}" />
+								<input type="button" class="button_large" id="opc_createAccount" value="{l s='Create an account'}" />
 							</p>
 						</div>
 						<div class="clear"></div>
@@ -493,11 +493,11 @@
 							<sup>*</sup>
 						</p>
 						<p class="text is_customer_param">
-							<label for="address2">{l s='Address (2)'}</label>
+							<label for="address2">{l s='Address (Line 2)'}</label>
 							<input type="text" class="text" name="address2" id="address2" value="" />
 						</p>
 						<p class="required postcode text">
-							<label for="postcode">{l s='Postal code / Zip code'}</label>
+							<label for="postcode">{l s='Zip / Postal code'}</label>
 							<input type="text" class="text" name="postcode" id="postcode" value="{if isset($guestInformations) && $guestInformations.postcode}{$guestInformations.postcode}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
 							<sup>*</sup>
 						</p>
@@ -539,7 +539,7 @@
 						
 						<p class="checkbox is_customer_param">
 							<input type="checkbox" name="invoice_address" id="invoice_address" />
-							<label for="invoice_address"><b>{l s='Use an other address for invoice'}</b></label>
+							<label for="invoice_address"><b>{l s='Please use another address for invoice'}</b></label>
 						</p>
 						
 						<div id="opc_invoice_address" class="is_customer_param">
@@ -627,7 +627,7 @@
 		{if isset($virtualCart) && $isVirtualCart}
 		<p class="warning">{l s='No carrier needed for this order'}</p>
 		{else}
-		<p class="warning" id="noCarrierWarning" {if isset($carriers) && $carriers && count($carriers)}style="display:none;"{/if}>{l s='There are no carriers available that will deliver to this address!'}</p>
+		<p class="warning" id="noCarrierWarning" {if isset($carriers) && $carriers && count($carriers)}style="display:none;"{/if}>{l s='There are no carriers available that deliver to this address.'}</p>
 		<table id="carrierTable" class="std" {if !isset($carriers) || !$carriers || !count($carriers)}style="display:none;"{/if}>
 			<thead>
 				<tr>
@@ -723,7 +723,7 @@
 		{if $conditions AND $cms_id}
 		<p class="checkbox">
 			<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
-			<label for="cgv">{l s='I agree with the terms of service and I adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="thickbox">{l s='(read)'}</a>
+			<label for="cgv">{l s='I agree to the terms of service and adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="thickbox">{l s='(read)'}</a>
 		</p>
 		{/if}
 		

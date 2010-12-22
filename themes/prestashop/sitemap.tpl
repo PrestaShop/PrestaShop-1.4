@@ -45,8 +45,8 @@
 			<li><a href="{$link->getPageLink('my-account.php', true)}">{l s='Your Account'}</a></li>
 			<li><a href="{$link->getPageLink('identity.php', true)}">{l s='Personal information'}</a></li>
 			<li><a href="{$link->getPageLink('addresses.php', true)}">{l s='Addresses'}</a></li>
-			{if $voucherAllowed}<li><a href="{$link->getPageLink('discount.php', true)}">{l s='Discount'}</a></li>{/if}
-			<li><a href="{$link->getPageLink('history.php', true)}">{l s='Orders history'}</a></li>
+			{if $voucherAllowed}<li><a href="{$link->getPageLink('discount.php', true)}">{l s='Discounts'}</a></li>{/if}
+			<li><a href="{$link->getPageLink('history.php', true)}">{l s='Order history'}</a></li>
 		</ul>
 	</div>
 	<br class="clear" />

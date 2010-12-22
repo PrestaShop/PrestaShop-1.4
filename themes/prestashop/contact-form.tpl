@@ -40,13 +40,13 @@
 		<li><a href="{$base_dir}"><img class="icon" alt="" src="{$img_dir}icon/home.gif"/></a><a href="{$base_dir}">{l s='Home'}</a></li>
 	</ul>
 {else}
-	<p class="bold">{l s='For questions about an order or for information about our products'}.</p>
+	<p class="bold">{l s='For questions about an order or for more information about our products'}.</p>
 	{include file="$tpl_dir./errors.tpl"}
 	<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std" enctype="multipart/form-data">
 		<fieldset>
 			<h3>{l s='Send a message'}</h3>
 			<p class="select">
-				<label for="id_contact">{l s='Subject'}</label>
+				<label for="id_contact">{l s='Subject Heading'}</label>
 			{if isset($customerThread.id_contact)}
 				{foreach from=$contacts item=contact}
 					{if $contact.id_contact == $customerThread.id_contact}
@@ -102,7 +102,7 @@
 		{/if}
 		{if $fileupload == 1}
 			<p class="text">
-			<label for="fileUpload">{l s='File'}</label>
+			<label for="fileUpload">{l s='Attach File'}</label>
 				<input type="hidden" name="MAX_FILE_SIZE" value="2000000">
 				<input type="file" name="fileUpload" id="fileUpload" />
 			</p>

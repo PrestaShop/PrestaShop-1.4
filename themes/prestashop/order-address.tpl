@@ -97,7 +97,7 @@
 			<a href="{$link->getPageLink('address.php', true)}?back=order.php&amp;step=1{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 		</p>
 		<div id="ordermsg">
-			<p>{l s='If you want to leave us comment about your order, please write it below.'}</p>
+			<p>{l s='If you would like to comment on your order, please write it below.'}</p>
 			<p class="textarea"><textarea cols="60" rows="3" name="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
 		</div>
 	</div>

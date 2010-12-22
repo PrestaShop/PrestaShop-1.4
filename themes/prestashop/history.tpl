@@ -37,7 +37,7 @@
 <h1>{l s='Order history'}</h1>
 <p>{l s='Here are the orders you have placed since the creation of your account'}.</p>
 
-{if $slowValidation}<p class="warning">{l s='If you have just placed an order, it may take time for it to be validated. Please refresh the page if your order is missing.'}</p>{/if}
+{if $slowValidation}<p class="warning">{l s='If you have just placed an order, it may take a few minutes for it to be validated. Please refresh the page if your order is missing.'}</p>{/if}
 
 <div class="block-center" id="block-history">
 	{if $orders && count($orders)}
@@ -57,7 +57,7 @@
 		{foreach from=$orders item=order name=myLoop}
 			<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{else}item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{/if}">
 				<td class="history_link bold">
-					{if isset($order.invoice) && $order.invoice && isset($order.virtual) && $order.virtual}<img src="{$img_dir}icon/download_product.gif" class="icon" alt="{l s='Product(s) to download'}" title="{l s='Product(s) to download'}" />{/if}
+					{if isset($order.invoice) && $order.invoice && isset($order.virtual) && $order.virtual}<img src="{$img_dir}icon/download_product.gif" class="icon" alt="{l s='Products to download'}" title="{l s='Products to download'}" />{/if}
 					<a class="color-myaccount" href="javascript:showOrder(1, {$order.id_order|intval}, 'order-detail');">{l s='#'}{$order.id_order|string_format:"%06d"}</a>
 				</td>
 				<td class="history_date bold">{dateFormat date=$order.date_add full=0}</td>

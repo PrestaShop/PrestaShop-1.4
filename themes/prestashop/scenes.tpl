@@ -45,13 +45,13 @@ $(function () {ldelim}
 					<span style="margin-top:{math equation='a/2 -10' a=$product.zone_height}px; margin-left:{math equation='a/2 -10' a=$product.zone_width}px;">&nbsp;</span>
 				</a>
 				<div id="scene_products_cluetip_{$scene_key}_{$product_key}_{$product.id_product}" style="display:none;">
-					<h4><span class="product_name">{$product.details->name}</span>{if isset($product.details->new) AND $product.details->new}<span class="new">{l s='new'}</span>{/if}</h4>
+					<h4><span class="product_name">{$product.details->name}</span>{if isset($product.details->new) AND $product.details->new}<span class="new">{l s='New'}</span>{/if}</h4>
 					<div class="prices">
 						<p class="price">{if $priceDisplay}{convertPrice price=$product.details->getPrice(false, $product.details->getDefaultAttribute($product.id_product))}{else}{convertPrice price=$product.details->getPrice(true, $product.details->getDefaultAttribute($product.id_product))}{/if}</p>
 							{if $product.details->on_sale}
 							<span class="on_sale">{l s='On sale!'}</span>
 						{elseif isset($product.reduction) && $product.reduction}
-							<span class="discount">{l s='Price lowered!'}</span>
+							<span class="discount">{l s='Reduced price!'}</span>
 						{/if}
 					</div>
 					<div class="clear">

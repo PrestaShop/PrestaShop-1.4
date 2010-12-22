@@ -27,7 +27,7 @@
 <h4>{l s='RE#'}<span class="color-myaccount">{$orderRet->id|string_format:"%06d"}</span> {l s='on'} {dateFormat date=$order->date_add full=0}</h4>
 <div>
 	<p class="bold">{l s='We have logged your return request.'}</p>
-	<p>{l s='We remind you that your package must be returned to us within'} {$nbdaysreturn} {l s='days of initially receiving your order.'}</p>
+	<p>{l s='Your package must be returned to us within'} {$nbdaysreturn} {l s='days of receiving your order.'}</p>
 	<p>{l s='Current status of your merchandise return:'} <span class="bold">{$state_name|escape:'htmlall':'UTF-8'}</span></p>
 	<p>{l s='List of items marked as returned:'}</p>
 </div>
@@ -94,13 +94,13 @@
 <div>
 	- {l s='All products must be returned in their original packaging without damage or wear.'}
 	<br />- {l s='Please print out the'} <a href="{$base_dir}pdf-order-return.php?id_order_return={$orderRet->id|intval}">{l s='PDF document'}</a> {l s='and slip it into your package.'}
-	<br />- {l s='The package should be to the correct address'} (<a href="{$base_dir}pdf-order-return.php?id_order_return={$orderRet->id|intval}">{l s='see PDF document'}</a>)
+	<br />- {l s='Please see PDF document'} (<a href="{$base_dir}pdf-order-return.php?id_order_return={$orderRet->id|intval}">{l s='for the correct address'}</a>)
 	<br /><br />
-	{l s='Upon receiving your package, we will inform you by e-mail and will then begin processing the reimbursement of your order total.'}
+	{l s='Upon receiving your package, you will be notified by e-mail. We will then begin processing the reimbursement of your order total.'}
 	<br /><br /><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Let us know if you have any questions.'}</a>
 	<br />
 	<p class="bold">{l s='If the conditions of return listed above are not respected, we reserve the right to refuse your package and/or reimbursement.'}</p>
 </div>
 {elseif $orderRet->state == 1}
-	<p class="bold">{l s='You must wait for our confirmation before returning merchandise to us.'}</p>
+	<p class="bold">{l s='You must wait for our confirmation before returning any merchandise.'}</p>
 {/if}

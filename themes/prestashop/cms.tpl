@@ -26,7 +26,7 @@
 
 <!-- Breadcrumb -->
 <div class="breadcrumb">
-	<a href="{$base_dir}" title="{l s='return to'} {l s='Home'}"><img src="{$img_dir}icon/home.gif" alt="{l s='Home'}" class="icon" /></a>
+	<a href="{$base_dir}" title="{l s='Return to'} {l s='Home'}"><img src="{$img_dir}icon/home.gif" alt="{l s='Home'}" class="icon" /></a>
 	<span class="navigation-pipe">{$navigationPipe|escape:html:'UTF-8'}</span><a href="{$link->getCMSCategoryLink(1, $home_title, $id_current_lang)|escape:'htmlall':'UTF-8'}" title="{l s='Home'}">{l s='Home'}</a>
 	 {if $path}<span class="navigation-pipe">{$navigationPipe|escape:html:'UTF-8'}</span>{if !$path|strpos:'span'}<span class="navigation_page">{$path}</span>{else}{$path}{/if}{/if}
 </div>
@@ -38,8 +38,8 @@
 		<div id="admin-action-cms">
 			<p>{l s='This CMS page is not visible to your customers.'}
 			<input type="hidden" id="admin-action-cms-id" value="{$cms->id}" />
-			<input type="submit" value="{l s='publish'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 0)"/>			
-			<input type="submit" value="{l s='back'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 1)"/>			
+			<input type="submit" value="{l s='Publish'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 0)"/>			
+			<input type="submit" value="{l s='Back'}" class="exclusive" onclick="submitPublishCMS('{$base_dir}{$smarty.get.ad}', 1)"/>			
 			</p>
 			<div class="clear" ></div>
 			<p id="admin-action-result"></p>

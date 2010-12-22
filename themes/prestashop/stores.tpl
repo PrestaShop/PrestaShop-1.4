@@ -59,7 +59,7 @@
 		var translation_3 = '{l s='stores found - see all results:' js=1}';
 		var translation_4 = '{l s='Phone:' js=1}';
 		var translation_5 = '{l s='Get Directions' js=1}';
-		var translation_6 = '{l s='not found' js=1}';
+		var translation_6 = '{l s='Not found' js=1}';
 		
 		var hasStoreIcon = '{$hasStoreIcon}';
 		var distance_unit = '{$distance_unit}';
@@ -68,8 +68,8 @@
 		//]]>
 	</script>
 
-	<p>{l s='Enter a location (eg.: a post/zip code, an address, a city or a country) in order to find the closest stores.'}</p>
-	<p>{l s='Your location:'} <input type="text" name="location" id="addressInput" value="{l s='Address, post/zip code, city, state or country'}" onclick="this.value='';" /></p>
+	<p>{l s='Enter a location (eg.: a zip/postal code, an address, a city or a country) in order to find the closest stores.'}</p>
+	<p>{l s='Your location:'} <input type="text" name="location" id="addressInput" value="{l s='Address, zip/postal code, city, state or country'}" onclick="this.value='';" /></p>
 	<p style="margin-top: 15px;">
 		{l s='Radius:'} 
 		<select name="radius" id="radiusSelect">

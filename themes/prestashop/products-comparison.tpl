@@ -53,7 +53,7 @@
 					{if $product->on_sale}
 						<span class="on_sale">{l s='On sale!'}</span>
 					{elseif $product->specificPrice AND $product->specificPrice.reduction}
-						<span class="discount">{l s='Price lowered!'}</span>
+						<span class="discount">{l s='Reduced price!'}</span>
 					{/if}
 					</div>
 

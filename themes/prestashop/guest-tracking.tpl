@@ -41,15 +41,15 @@
 	{include file="$tpl_dir./errors.tpl"}
 	
 	{if isset($transformSuccess)}
-		<p class="success">{l s='Your guest account has been transformed to customer account with success, you can now login at this'} <a href="{$link->getPageLink('authentication.php', true)}">{l s='page'}</a></p>
+		<p class="success">{l s='Your guest account has been transformed to customer account successfully, you can now log in on this'} <a href="{$link->getPageLink('authentication.php', true)}">{l s='page'}</a></p>
 	{else}
 		<form method="POST" action="{$action|escape:'htmlall':'UTF-8'}#guestToCustomer" class="std">
 			<fieldset>
-				<p class="bold">{l s='Transform your guest account to a customer account and enjoy many benefits:'}</p>
+				<p class="bold">{l s='Transform your guest account to a customer account and enjoy :'}</p>
 				<ul class="bullet">
-					<li>{l s='make new order faster'}</li>
-					<li>{l s='have a secure and personalized access'}</li>
-					<li>{l s='make a return of merchandise easiest'}</li>
+					<li>{l s='Personalized and secure access'}</li>
+					<li>{l s='Fast and easy check out'}</li>
+					<li>{l s='Easier merchandise return'}</li>
 				</ul>
 				<p class="text">
 					<label>{l s='Define your password:'}</label>
@@ -67,7 +67,7 @@
 	{include file="$tpl_dir./errors.tpl"}
 	<form method="POST" action="{$action|escape:'htmlall':'UTF-8'}" class="std">
 		<fieldset>
-			<p>{l s='In order to following your order, thank to enter the following informations:'}</p>
+			<p>{l s='To track your order, please enter the following information:'}</p>
 			<p class="text">
 				<label>{l s='Order ID:'} <b>#</b></label>
 				<input type="text" name="id_order" value="{if isset($smarty.get.id_order)}{$smarty.get.id_order|escape:'htmlall':'UTF-8'}{else}{if isset($smarty.post.id_order)}{$smarty.post.id_order|escape:'htmlall':'UTF-8'}{/if}{/if}" size="8" />

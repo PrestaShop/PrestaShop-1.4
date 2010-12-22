@@ -36,19 +36,19 @@
 {elseif isset($confirmation) && $confirmation == 2}
 <p class="success">{l s='A confirmation e-mail has been sent to your address:'} {$email|escape:'htmlall':'UTF-8'}</p>
 {else}
-<p>{l s='Please enter your e-mail address used to register. We will e-mail you your new password.'}</p>
+<p>{l s='Please enter the e-mail address used to register. We will e-mail you your new password.'}</p>
 <form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" class="std">
 	<fieldset>
 		<p class="text">
-			<label for="email">{l s='Type your e-mail address:'}</label>
+			<label for="email">{l s='E-mail:'}</label>
 			<input type="text" id="email" name="email" value="{if isset($smarty.post.email)}{$smarty.post.email|escape:'htmlall'|stripslashes}{/if}" />
 		</p>
 		<p class="submit">
-			<input type="submit" class="button" value="{l s='Retrieve'}" />
+			<input type="submit" class="button" value="{l s='Retrieve Password'}" />
 		</p>
 	</fieldset>
 </form>
 {/if}
 <p class="clear">
-	<a href="{$link->getPageLink('authentication.php', true)}" title="{l s='Back to Login'}"><img src="{$img_dir}icon/my-account.gif" alt="{l s='Back to Login'}" class="icon" /></a><a href="{$link->getPageLink('authentication.php')}" title="{l s='Back to Login'}">{l s='Back to Login'}</a>
+	<a href="{$link->getPageLink('authentication.php', true)}" title="{l s='Return to Login'}"><img src="{$img_dir}icon/my-account.gif" alt="{l s='Back to Login'}" class="icon" /></a><a href="{$link->getPageLink('authentication.php')}" title="{l s='Back to Login'}">{l s='Back to Login'}</a>
 </p>

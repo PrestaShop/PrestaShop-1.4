@@ -34,7 +34,7 @@
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <h1>{l s='My addresses'}</h1>
-<p>{l s='Configure your billing and delivery addresses that will be preselected by default when you make an order. You can also add additional addresses, which can be useful for sending gifts or receiving your order at the office.'}</p>
+<p>{l s='Please configure the desired billing and delivery addresses to be preselected when placing an order. You may also add additional addresses, useful for sending gifts or receiving your order at the office.'}</p>
 
 {if $addresses}
 <div class="addresses">
@@ -60,7 +60,7 @@
 	<p class="clear" />
 </div>
 {else}
-	<p class="warning">{l s='No addresses available.'}&nbsp;<a href="{$link->getPageLink('address.php', true)}">{l s='add a new one!'}</a></p>
+	<p class="warning">{l s='No addresses available.'}&nbsp;<a href="{$link->getPageLink('address.php', true)}">{l s='Add new address'}</a></p>
 {/if}
 
 <div class="clear address_add"><a href="{$link->getPageLink('address.php', true)}" title="{l s='Add an address'}" class="button_large">{l s='Add an address'}</a></div>

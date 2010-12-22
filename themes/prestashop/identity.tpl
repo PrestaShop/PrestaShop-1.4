@@ -43,12 +43,12 @@
 		{if isset($pwd_changed)}<br />{l s='Your password has been sent to your e-mail:'} {$email|escape:'htmlall':'UTF-8'}{/if}
 	</p>
 {else}
-	<h3>{l s='Do not hesitate to update your personal information if it has changed.'}</h3>
+	<h3>{l s='Please do not hesitate to update your personal information if it has changed.'}</h3>
 	<p class="required"><sup>*</sup>{l s='Required field'}</p>
 	<form action="{$link->getPageLink('identity.php', true)}" method="post" class="std">
 		<fieldset>
 			<p class="radio">
-				<span>{l s='Gender'}</span>
+				<span>{l s='Title'}</span>
 				<input type="radio" id="id_gender1" name="id_gender" value="1" {if $smarty.post.id_gender == 1 OR !$smarty.post.id_gender}checked="checked"{/if} />
 				<label for="id_gender1">{l s='Mr.'}</label>
 				<input type="radio" id="id_gender2" name="id_gender" value="2" {if $smarty.post.id_gender == 2}checked="checked"{/if} />
@@ -71,7 +71,7 @@
 				<input type="password" name="old_passwd" id="old_passwd" /> <sup>*</sup>
 			</p>
 			<p class="password">
-				<label for="passwd">{l s='Password'}</label>
+				<label for="passwd">{l s='New Password'}</label>
 				<input type="password" name="passwd" id="passwd" />
 			</p>
 			<p class="password">
@@ -79,7 +79,7 @@
 				<input type="password" name="confirmation" id="confirmation" />
 			</p>
 			<p class="select">
-				<label>{l s='Birthday'}</label>
+				<label>{l s='Date of Birth'}</label>
 				<select name="days" id="days">
 					<option value="">-</option>
 					{foreach from=$days item=v}
@@ -115,7 +115,7 @@
 			</p>
 			{if $need_identification_number}
 			<p class="required text">
-				<label for="dni">{l s='Identication number'}</label>
+				<label for="dni">{l s='Identification number'}</label>
 				<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{/if}" />
 				<span class="form_info">{l s='DNI / NIF / NIE'}</span>
 			</p>
