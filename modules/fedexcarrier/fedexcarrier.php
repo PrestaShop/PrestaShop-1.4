@@ -95,9 +95,9 @@ class FedexCarrier extends CarrierModule
 			if (!Configuration::get('PS_SHOP_COUNTRY_ID'))
 				$warning[] = $this->l('\'Shop country (in Preferences Tab).\'').' ';
 
-			// Check webservice fedex availibility
-			if (!$this->webserviceTest())
-				$warning[] = $this->l('Could not connect to Fedex Webservices, check your API Key').', ';
+			// Check Class Soap availibility
+			if (!extension_loaded('soap'))
+				$warning[] = $this->l('\'Class Soap\'').', ';
 
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
@@ -552,6 +552,10 @@ class FedexCarrier extends CarrierModule
 
 	public function webserviceTest()
 	{
+		// Check if class Soap is available
+		if (!extension_loaded('soap'))
+			return false;
+
 		// Getting module directory
 		$dir = dirname(__FILE__);
 		if (preg_match('/classes/i', $dir))
@@ -614,6 +618,10 @@ class FedexCarrier extends CarrierModule
 
 	public function getFedexShippingCost($fedexParams)
 	{
+		// Check if class Soap is available
+		if (!extension_loaded('soap'))
+			return array('connect' => false, 'cost' => 0);
+	
 		// Check Arguments
 		if (!$fedexParams)
 			return array('connect' => false, 'cost' => 0);

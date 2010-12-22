@@ -96,6 +96,10 @@ class UpsCarrier extends CarrierModule
 			if (!Configuration::get('PS_SHOP_COUNTRY_ID'))
 				$warning[] = $this->l('\'Shop country (in Preferences Tab).\'').' ';
 
+			// Check Curl Availibility
+			if (!extension_loaded('curl'))
+				$warning[] = $this->l('\'Curl extension\'').', ';
+
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
 			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
@@ -659,6 +663,10 @@ class UpsCarrier extends CarrierModule
 
 	public function webserviceTest()
 	{
+		// Check Curl Availibility
+		if (!extension_loaded('curl'))
+			return false;
+
 		// Example Params for testing
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('PS_SHOP_COUNTRY_ID')));
 		$shipper_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)(Configuration::get('PS_SHOP_STATE_ID')));
@@ -712,6 +720,10 @@ class UpsCarrier extends CarrierModule
 
 	public function getUpsShippingCost($upsParams)
 	{
+		// Check Curl Availibility
+		if (!extension_loaded('curl'))
+			return false;
+
 		// Check Arguments
 		if (!$upsParams)
 			return array('connect' => false, 'cost' => 0);

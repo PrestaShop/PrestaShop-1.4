@@ -97,9 +97,9 @@ class UspsCarrier extends CarrierModule
 			if (!Configuration::get('PS_SHOP_COUNTRY_ID'))
 				$warning[] = $this->l('\'Shop country (in Preferences Tab).\'').' ';
 
-			// Check webservice usps availibility
-			if (!$this->webserviceTest())
-				$warning[] = $this->l('Could not connect to USPS Webservices, check your API Key').', ';
+			// Check Curl Availibility
+			if (!extension_loaded('curl'))
+				$warning[] = $this->l('\'Curl extension\'').', ';
 
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
@@ -628,6 +628,10 @@ class UspsCarrier extends CarrierModule
 
 	public function webserviceTest()
 	{
+		// Check Curl Availibility
+		if (!extension_loaded('curl'))
+			return false;
+
 		// Example Params for testing
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('PS_SHOP_COUNTRY_ID')));
 		$shipper_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)(Configuration::get('PS_SHOP_STATE_ID')));
@@ -684,6 +688,10 @@ class UspsCarrier extends CarrierModule
 
 	public function getUspsShippingCost($uspsParams)
 	{
+		// Check Curl Availibility
+		if (!extension_loaded('curl'))
+			return array('connect' => false, 'cost' => 0);
+
 		// Check Arguments
 		if (!$uspsParams)
 			return array('connect' => false, 'cost' => 0);

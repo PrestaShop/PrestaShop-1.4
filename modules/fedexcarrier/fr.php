@@ -11,7 +11,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_81afdae0b8a0186f748de1395139f13
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_76abc208d2df4a91e55997c1dce3a256'] = '\'Type de livraison par défaut\'';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3a8facb8e638e72950a3c6645c1e0deb'] = 'Code postal de la boutique (dans le menu Préférences)';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f65fbab1ca04b5b3ff07a995c7c7f85b'] = 'Pays de la boutique (dans le menu Préférences)';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_bbce7f8608cddf71422b16a72f3fca14'] = 'N\'a pas se connecter aux webservices de Fedex, vérifiez votre API Key';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_21f60d9ad83a6212384c830829c6d73f'] = '\'Class Soap\'';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_6b6b893e432711e4188b7fa40dca078f'] = 'L\'unité de mesure de poids doit être LB ou KG (dans le menu Préférences > Localisation)';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_2a7203ece638dc235eeaef9927c52c4b'] = 'L\'unité de mesure de dimension doit être CM ou IN (dans le menu Préférences > Localisation)';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'doivent être configurés correctement pour utiliser ce module';

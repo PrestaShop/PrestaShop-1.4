@@ -11,7 +11,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_39ff41c76db47a0fd82eb9db9f339907'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_c012bc7e130f237966f791bf3bab5ed8'] = '\'Machinable\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_3a8facb8e638e72950a3c6645c1e0deb'] = '\'Code postal de la boutique (dans Préférences)\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f65fbab1ca04b5b3ff07a995c7c7f85b'] = '\'Pays de la boutique (dans Préférences)\'';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_fbed86fdb9b61416a976eb91047f538c'] = 'Prestashop n\'a pas pu se connecter aux webservices de USPS, veuillez vérifier votre clé API';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_4e14ac8fd9f8f4040153a7bdbf3caea2'] = '\'Extension Curl\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_6b6b893e432711e4188b7fa40dca078f'] = '\'Unité de poids (LB ou KG dans Préférences > Localisation)\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_2a7203ece638dc235eeaef9927c52c4b'] = '\'Unité de mesure (CM ou IN dans Préférences > Localisation)\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'doit être configuré pour fonctionner correctement';

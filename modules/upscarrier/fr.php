@@ -12,6 +12,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_ba5bf95f92e694129bc67deefb6c3218'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_bab1ba1e8fea1f602dde5c072e9bde40'] = '\'Type de paquet\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3a8facb8e638e72950a3c6645c1e0deb'] = 'Code postal de la boutique (dans le menu Préférences)';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f65fbab1ca04b5b3ff07a995c7c7f85b'] = 'Pays de la boutique (dans le menu Préférences)';
+$_MODULE['<{upscarrier}prestashop>upscarrier_4e14ac8fd9f8f4040153a7bdbf3caea2'] = '\'Extension Curl\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_31a7d67bc35a1f04d1a32031dabe266c'] = '\'Unité de poids (LB ou KG dans Préférences > Localisation)\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_932232a3461c86c71522437c3f1c37dd'] = '\'Unité de mesure (LB ou KG dans Préférences > Localisation)\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'doit être configuré pour fonctionner correctement';
