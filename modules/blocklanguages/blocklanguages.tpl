@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -30,8 +30,9 @@
 		{foreach from=$languages key=k item=language name="languages"}
 			<li {if $language.iso_code == $lang_iso}class="selected_language"{/if}>
 				{if $language.iso_code != $lang_iso}
-					{if isset($lang_rewrite_urls.{$language.id_lang})}
-						<a href="{$lang_rewrite_urls.{$language.id_lang}}" title="{$language.name}">
+				    {assign var=indice_lang value=$language.id_lang}
+					{if isset($lang_rewrite_urls.$indice_lang)}
+						<a href="{$lang_rewrite_urls.$indice_lang}" title="{$language.name}">
 					{else}
 						<a href="{$link->getLanguageLink($language.id_lang, $language.name)}" title="{$language.name}">
 					{/if}
