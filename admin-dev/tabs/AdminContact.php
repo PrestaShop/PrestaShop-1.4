@@ -90,7 +90,7 @@ class AdminContact extends AdminPreferences
 	
 	public function display()
 	{
-		$this->_displayForm('shop', $this->_fieldsShop, $this->l('Contact details'), 'width2', 'tab-contact');
+		$this->_displayForm('shop', $this->_fieldsShop, $this->l('Contact details'), 'width3', 'tab-contact');
 	}
 }
 
