@@ -31,6 +31,8 @@ require_once(dirname(__FILE__).'/WebserviceRequest.php');
 
 $method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
 
+$key = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : NULL;
+
 if (isset($_REQUEST['xml']))
 {
 	// if a XML is in POST
@@ -55,7 +57,7 @@ $params = $_GET;
 unset($params['url']);
 
 // fetch the request
-$result = WebserviceRequest::getInstance()->fetch($method, $_GET['url'], $params, $input_xml);
+$result = WebserviceRequest::getInstance()->fetch($key, $method, $_GET['url'], $params, $input_xml);
 // display result
 header($result['content_type']);
 header($result['status']);

@@ -121,24 +121,9 @@ class WebserviceRequest
 	/** @var WebserviceRequest Object instance for singleton */
 	private static $_instance;
 	
-	/**
-	 * Build a WebserviceRequest object
-	 */
-	private function __construct ()
-	{
-		// time logger
-		$this->_startTime = microtime(true);
-		
-		// two global vars, for compatibility with the PS core...
-		global $webservice_call, $display_errors;
-		$webservice_call = true;
-		$display_errors = strtolower(ini_get('display_errors')) != 'off';
-		// error handler
-		set_error_handler(array('WebserviceRequest', 'webserviceErrorHandler'));
-		ini_set('html_errors', 'off');
-		
-		$this->_wsUrl = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
-	}
+	/** @var string Key used for authentication */
+	private $_key;
+	
 	
 	/**
 	 * Get WebserviceRequest object instance (Singleton)
@@ -160,12 +145,33 @@ class WebserviceRequest
 	 * 	Check HTTP Method
 	 * 	Execute the action
 	 * 	Display the result
+	 *	
+	 * @param string $key
+	 * @param string $method
+	 * @param string $url
+	 * @param string $params
+	 * @param string $inputXml
 	 *
 	 * @return array Returns an array of results (headers, content, type of resource...)
 	 */
-	public function fetch($method, $url, $params, $inputXml = NULL)
+	public function fetch($key, $method, $url, $params, $inputXml = NULL)
 	{
-		// check webservice activation and request authentication
+		// Time logger
+		$this->_startTime = microtime(true);
+		
+		// Two global vars, for compatibility with the PS core...
+		global $webservice_call, $display_errors;
+		$webservice_call = true;
+		$display_errors = strtolower(ini_get('display_errors')) != 'off';
+		
+		// Error handler
+		set_error_handler(array('WebserviceRequest', 'webserviceErrorHandler'));
+		ini_set('html_errors', 'off');
+		$this->_wsUrl = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
+
+		$this->_key = trim($key);
+		
+		// Check webservice activation and request authentication
 		if ($this->isActivated() && $this->authenticate())
 		{
 			//parse request url
@@ -225,6 +231,8 @@ class WebserviceRequest
 		}
 		if ($this->_outputEnabled)
 			return $this->returnOutput();
+		unset($webservice_call);
+		unset ($display_errors);
 	}
 	
 	/**
@@ -398,7 +406,7 @@ class WebserviceRequest
 	{
 		if (!$this->hasErrors())
 		{
-			if (!isset($_SERVER['PHP_AUTH_USER']))
+			if (is_null($this->_key))
 			{
 				header('WWW-Authenticate: Basic realm="Welcome to PrestaShop Webservice, please enter the authentication key as the login. No password required."');
 				$this->setError(401, 'Please enter the authentication key as the login. No password required');
@@ -407,19 +415,19 @@ class WebserviceRequest
 			else
 			{
 				$auth_key = trim($_SERVER['PHP_AUTH_USER']);
-				if (empty($auth_key))
+				if (empty($this->_key))
 				{
 					$this->setError(401, 'Authentication key is empty');
 					return false;
 				}
-				elseif (strlen($auth_key) != '32')
+				elseif (strlen($this->_key) != '32')
 				{
 					$this->setError(401, 'Invalid authentication key format');
 					return false;
 				}
 				else
 				{
-					$keyValidation = Webservice::isKeyActive($auth_key);
+					$keyValidation = Webservice::isKeyActive($this->_key);
 					if (is_null($keyValidation))
 					{
 						$this->setError(401, 'Authentification key does not exist');
@@ -427,7 +435,7 @@ class WebserviceRequest
 					}
 					elseif($keyValidation === true)
 					{
-						$this->_keyPermissions = Webservice::getPermissionForAccount($auth_key);
+						$this->_keyPermissions = Webservice::getPermissionForAccount($this->_key);
 					}
 					else
 					{
