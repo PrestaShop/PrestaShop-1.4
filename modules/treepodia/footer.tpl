@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -23,26 +23,29 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 *}
+<ul class="block_various_links" id="block_various_links_footer">
+		<li class="first_item"><a href="http://api.treepodia.com/video/get/{$account_id}/{$product_sku}.flv" target="_blank">{l s='Watch Video' mod='treepodia'}</a></li>
+</ul>
 
 <script type="text/javascript">
-<!-- 
+<!--
     document.write(unescape("%3Cscript src='" + ((document.location.protocol == 'https:') ? 'https://' : 'http://') + "api.treepodia.com/video/Treepodia.js' type='text/javascript'%3E%3C/script%3E"));
 // -->
 </script>
-<script type="text/javascript"> 
+<script type="text/javascript">
 {literal}
-<!-- 
-    document.write(unescape("%3Cscript src='" + ((document.location.protocol == 'https:') ? 'https://' : 'http://') + "api.treepodia.com/utils/ps-video-dialog.js?account={/literal}{$account_id}{literal}' type='text/javascript'%3E%3C/script%3E")); 
+<!--
+    document.write(unescape("%3Cscript src='" + ((document.location.protocol == 'https:') ? 'https://' : 'http://') + "api.treepodia.com/utils/ps14-video-dialog.js?account={/literal}{$account_id}{literal}' type='text/javascript'%3E%3C/script%3E"));
 // -->
 {/literal}
-</script> 
+</script>
 
 <script type="text/javascript">
 {literal}
-<!-- 
+<!--
     var video;
     function initTreepodia() {
-        Treepodia.getProduct('{/literal}{$account_id}{literal}', '{/literal}{$product_sku}{literal}').requestVideo(handleVideo); 
+        Treepodia.getProduct('{/literal}{$account_id}{literal}', '{/literal}{$product_sku}{literal}').requestVideo(handleVideo, '{/literal}{$lang_iso}{literal}');
     }
     function handleVideo(vid) {
         video = vid;
