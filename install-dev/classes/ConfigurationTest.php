@@ -91,7 +91,16 @@ class	ConfigurationTest
 	// is_writable dirs	
 	static function		test_dir($dir, $recursive = false)
 	{
-		if (!is_writable($dir) OR !$dh = opendir($dir))
+		if (!file_exists($dir) OR !$dh = opendir($dir))
+			return false;
+		$dummy = rtrim($dir, '/').'/'.uniqid();
+		if (@file_put_contents($dummy, 'test'))
+		{
+			@unlink($dummy);
+			if (!$recursive)
+				return true;
+		}
+		elseif (!is_writable($dir))
 			return false;
 		if ($recursive)
 		{
@@ -167,11 +176,15 @@ class	ConfigurationTest
 	
 	static function		test_theme_lang_dir($dir)
 	{
+		if (!file_exists($dir))
+			return true;
 		return self::test_dir($dir, true);
 	}
 	
 	static function		test_theme_cache_dir($dir)
 	{
+		if (!file_exists($dir))
+			return true;
 		return self::test_dir($dir, true);
 	}
 
