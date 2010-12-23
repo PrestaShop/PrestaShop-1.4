@@ -43,7 +43,9 @@ class LocalizationPackCore
 		$this->version = strval($mainAttributes['version']);
 		if (empty($selection))
 		{
-			$res = $this->_installLanguages($xml);
+			$res = NULL;
+			if (!_PS_MODE_DEV_)
+				$res = $this->_installLanguages($xml);
 			$res &= $this->_installStates($xml);
 			$res &= $this->_installTaxes($xml);
 			$res &= $this->_installCurrencies($xml);
