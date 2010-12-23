@@ -56,7 +56,14 @@ class HelpAccessCore
 	    $tooltip = '';
         $version = '';
    	    $url = HelpAccess::URL.'/documentation/renderIcon';
-	    $res = file_get_contents($url);
+
+   	    $ctx = stream_context_create(array(
+                    'http' => array(
+                    'timeout' => 1
+                    )
+                ));
+
+        $res = @file_get_contents($url, 0, $ctx);
 
 	    $infos = preg_split('/\|/', $res);
 	    if (sizeof($infos) > 0 && !empty($infos[0]))
