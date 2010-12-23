@@ -64,6 +64,7 @@ $res_op = ConfigurationTest::check($tests_op);
 
 // Building XML Tree...
 echo '<config>'."\n";
+	echo '<firsttime value="'.((isset($_GET['firsttime']) AND $_GET['firsttime'] == 1) ? 1 : 0).'" />'."\n";
 	echo '<testList id="required">'."\n";
 	foreach ($res AS $key => $line)
 		echo '<test id="'.$key.'" result="'.$line.'"/>'."\n";

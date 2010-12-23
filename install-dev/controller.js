@@ -42,34 +42,29 @@ function nextTab()
 {
 	if(verifyThisStep())
 	{
-		showStep(step+1);
+		showStep(step+1, 'next');
 	}
 }
 function backTab()
 {
 	if (step != 6) {
-		showStep(step - 1);
+		showStep(step - 1, 'back');
 	}
 	else {
 		constructInstallerTabs();
-		showStep(1);
+		showStep(1, 'back');
 	} 
 }
 
-function showStep(aStep)
+function showStep(aStep, way)
 {
 	step = aStep;
 	
 	//show the sheet
-	$('div.sheet.shown').fadeOut('fast',
-		function()
-		{
-			$($('div.sheet')[(step-1)]).fadeIn('slow').addClass('shown');
-		}
-	).removeClass('shown');
-	
-	
-	
+	$('div.sheet.shown').fadeOut('fast', function() {
+		$($('div.sheet')[(step-1)]).fadeIn('slow').addClass('shown');
+	}).removeClass('shown');
+
 	//upgrade the tab
 	$('#tabs li')
 		.removeClass("selected")
@@ -132,7 +127,10 @@ function showStep(aStep)
 		case 2:
 		document.title = step2title;
 		application = "install";
-		verifyAndSetRequire();
+		if (way == 'next')
+			verifyAndSetRequire(1);
+		else
+			verifyAndSetRequire(0);
 		$("#btBack")
 			.removeAttr("disabled")
 			.removeClass("disabled")
@@ -184,7 +182,7 @@ function showStep(aStep)
 		
 		case 7:
 		document.title = step7title;
-		verifyAndSetRequire();
+		verifyAndSetRequire(0);
 		$("#btBack")
 			.removeAttr("disabled")
 			.removeClass("disabled")
@@ -216,12 +214,12 @@ function verifyThisStep()
 	{
 		case 1 :
 		if($("#formSetMethod input[type=radio]:checked").val() == "install" ){
-			showStep(2);
+			showStep(2, 'next');
 		}
 		else
 		{
 			constructUpdaterTabs();
-			showStep(6);
+			showStep(6, 'next');
 		}
 		return false;
 		break;
@@ -257,13 +255,13 @@ function setInstallerLanguage ()
 	$("#formSetInstallerLanguage").submit();
 }
 
-function verifyAndSetRequire()
+function verifyAndSetRequire(firsttime)
 {
 	$("div#"+(application == "install" ? "sheet_require" : "sheet_require_update")+" > ul").slideUp("1500");
 	$.ajax(
 	{
 		url: "model.php",
-		data: "method=checkConfig",
+		data: "method=checkConfig&firsttime="+firsttime,
 		success: function(ret)
 		{
 			isUpdate = application == "install" ? "" : "_update";
@@ -310,6 +308,9 @@ function verifyAndSetRequire()
 				$("#btNext").removeAttr('disabled');
 				$('#btNext').removeClass('disabled');
 				$("input#btNext").focus();
+				var firsttime = ret.getElementsByTagName('firsttime');
+				if (firsttime && firsttime[0].getAttribute("value") == 1)
+					$("input#btNext").click();
 			}
 		}
 	}
@@ -435,7 +436,7 @@ function createDB()
 					html = html + ' >'+timezone_ret[i].getAttribute("name")+'</option>';
 				}
 				$('#infosTimezone').html(html);
-				showStep(step+1);
+				showStep(step+1, 'next');
 			}
 			else
 			{
@@ -914,7 +915,7 @@ $(document).ready(
 		$('#req_bt_refresh, #req_bt_refresh_update').click(
 			function()
 			{
-				verifyAndSetRequire();
+				verifyAndSetRequire(0);
 			}
 		);
 		
