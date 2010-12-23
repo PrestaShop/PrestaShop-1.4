@@ -564,7 +564,7 @@
 								<input type="text" class="text" name="address2_invoice" id="address2_invoice" value="" />
 							</p>
 							<p class="required postcode text">
-								<label for="postcode_invoice">{l s='Postal code / Zip code'}</label>
+								<label for="postcode_invoice">{l s='Zip / Postal Code'}</label>
 								<input type="text" class="text" name="postcode_invoice" id="postcode_invoice" value="" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
 								<sup>*</sup>
 							</p>

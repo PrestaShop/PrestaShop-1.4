@@ -307,7 +307,7 @@ $(function(){ldelim}
 			<input type="text" class="text" name="address2" id="address2" value="{if isset($smarty.post.address2)}{$smarty.post.address2}{/if}" />
 		</p>
 		<p class="required postcode text">
-			<label for="postcode">{l s='Postal code / Zip code'}</label>
+			<label for="postcode">{l s='Zip / Postal Code'}</label>
 			<input type="text" class="text" name="postcode" id="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
 			<sup>*</sup>
 		</p>
