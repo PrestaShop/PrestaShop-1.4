@@ -50,7 +50,12 @@ class HistoryControllerCore extends FrontController
 		
 		if (Tools::isSubmit('submitReorder') AND $id_order = (int)Tools::getValue('id_order'))
 		{
-			$id_cart = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `id_cart` FROM `'._DB_PREFIX_.'orders` WHERE `id_order` = '.(int)$id_order);
+			// Customer ID is also checked in order to avoid duplicating someone else order
+			$id_cart = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `id_cart`
+			FROM `'._DB_PREFIX_.'orders`
+			WHERE `id_customer` = '.(int)$this->cookie->id_customer.'
+			AND `id_order` = '.(int)$id_order);
 			$oldCart = new Cart($id_cart);
 			$duplication = $oldCart->duplicate();
 			if (!$duplication OR !Validate::isLoadedObject($duplication['cart']))

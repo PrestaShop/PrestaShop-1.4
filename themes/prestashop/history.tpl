@@ -50,7 +50,7 @@
 				<th class="item">{l s='Payment'}</th>
 				<th class="item">{l s='Status'}</th>
 				<th class="item">{l s='Invoice'}</th>
-				<th class="last_item">&nbsp;</th>
+				<th class="last_item" style="width:65px">&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -70,7 +70,12 @@
 					<a href="{$base_dir}pdf-invoice.php?id_order={$order.id_order|intval}" title="{l s='Invoice'}">{l s='PDF'}</a>
 				{else}-{/if}
 				</td>
-				<td class="history_detail"><a class="color-myaccount" href="javascript:showOrder(1, {$order.id_order|intval}, 'order-detail');">{l s='details'}</a></td>
+				<td class="history_detail">
+					<a class="color-myaccount" href="javascript:showOrder(1, {$order.id_order|intval}, 'order-detail');">{l s='details'}</a>
+					<a href="{$base_dir_ssl}history.php?submitReorder&id_order={$order.id_order|intval}">
+						<img src="{$img_dir}arrow_rotate_anticlockwise.png" alt="{l s='Reorder'}" title="{l s='Reorder'}" class="icon" />
+					</a>
+				</td>
 			</tr>
 		{/foreach}
 		</tbody>
