@@ -32,17 +32,15 @@ function checkLangPack(){
 		{
 		   url: "ajax_lang_packs.php",
 		   cache: false,
-		   data: 
-				"iso="+$('#iso_code').val()
-		   ,
+		   data: {iso_lang:$('#iso_code').val(), ps_version:'1.3.0.0'},
+		   dataType : 'json',
 		   success: function(ret)
 		   {
-				if (ret == "ok")
-					$('p#resultCheckLangPack').html(langPackOk+' <a href="http://www.prestashop.com/download/lang_packs/gzip/'+$('#iso_code').val()+'.gzip" target="_blank">'+download+'</a><br />'+langPackInfo).show("slow");
+		   		console.log(ret);
+			   	if(typeof ret == 'object')
+					$('p#resultCheckLangPack').html(langPackOk+'<br />'+langPackVersion+''+ret.version+' <a href="http://www.prestashop.com/download/lang_packs/gzip/'+$('#iso_code').val()+'.gzip" target="_blank">'+download+'</a><br />'+langPackInfo).show("slow");
 				else if (ret == "offline")
 					$('p#resultCheckLangPack').show('slow');
-				else
-					$('p#resultCheckLangPack').html(noLangPack).show("slow");
 		   }
 		 }
 		 );

@@ -287,6 +287,7 @@ class AdminLanguages extends AdminTab
 		echo '
 		<script type="text/javascript">
 		var langPackOk = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('A language pack is available for this ISO code:').'";
+		var langPackVersion = "'.$this->l('The Prestashop current version for this language is: ').'";
 		var langPackInfo = "'.$this->l('After creating the language, you can import the content of the language pack, which you can download above under "Tools - Translations"').'";
 		var noLangPack = "<img src=\"'._PS_IMG_.'admin/information.png\" alt=\"\" /> '.$this->l('No language pack available on prestashop.com for this ISO code').'";
 		var download = "'.$this->l('Download').'";
@@ -295,6 +296,7 @@ class AdminLanguages extends AdminTab
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/world.gif" />'.$this->l('Languages').'</legend>
+				<input type="hidden" value="'._PS_VERSION_.'" name="ps_version" id="ps_version" />
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">
 					<input type="text" size="8" maxlength="32" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
