@@ -35,6 +35,7 @@ mailIsOk = false;
 smtpChecked = false;
 validShopInfos = false;
 upgradeCertify = false;
+dropdb=false;
 application="install";
 
 function nextTab()
@@ -406,7 +407,8 @@ function createDB()
 		"&password="+encodeURIComponent($("#dbPassword").val())+
 		"&engine="+$("#dbEngine option:selected").val()+
 		"&name="+ $("#dbName").val()+
-		"&language="+ id_lang
+		"&language="+ id_lang+
+		(dropdb ? "&dropAndCreate=true" : '')
 	   ,
 	   success: function(ret)
 	   {

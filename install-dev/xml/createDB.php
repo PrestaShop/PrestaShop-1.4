@@ -115,6 +115,12 @@ switch (_DB_TYPE_) {
 			die('<action result="fail" error="9" />'."\n");
 		$db_structure_settings = str_replace(array($filePrefix, $engineType), array($_GET['tablePrefix'], $_GET['engine']), $db_structure_settings);
 		$db_structure_settings = preg_split("/;\s*[\r\n]+/",$db_structure_settings);
+		if (isset($_GET['dropAndCreate']) && $_GET['dropAndCreate'] == 'true')
+		{
+			array_unshift($db_structure_settings, 'USE `'.$_GET['name'].'`;');
+			array_unshift($db_structure_settings, 'CREATE DATABASE `'.$_GET['name'].'`;');
+			array_unshift($db_structure_settings, 'DROP DATABASE `'.$_GET['name'].'`;');
+		}
 		foreach($db_structure_settings as $query){
 			$query = trim($query);
 			if(!empty($query)){
