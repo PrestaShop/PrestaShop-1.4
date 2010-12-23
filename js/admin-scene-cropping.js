@@ -56,6 +56,8 @@ function showAutocompleteBox(x1, y1) {
 	.slideDown('fast');
 	$('#product_autocomplete_input').focus();
 	$(document).bind('keydown', 'esc', undoEdit);
+	
+	
 }
 
 function editThisZone(aInFixedZoneElement) {
