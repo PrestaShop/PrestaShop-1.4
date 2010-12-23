@@ -208,7 +208,7 @@ class dibs extends PaymentModule
 		$currency_num = 0;
 		
 		// for 1.3 compatibility
-		if(isset($currency->iso_code_num) AND $currency->iso_code_num != '')
+		if(!isset($currency->iso_code_num) OR $currency->iso_code_num == '')
 		{
 			$array_currency_iso_num = array(
 				'DKK'	=> 208,
