@@ -614,7 +614,8 @@ class AdminOrders extends AdminTab
 			if ($carrier->is_module == 1)
 			{
 				$module = Module::getInstanceByName($carrier->external_module_name);
-				echo call_user_func(array($module, 'displayInfoByCart'), $order->id_cart);
+				if (method_exists($module, 'displayInfoByCart'))
+					echo call_user_func(array($module, 'displayInfoByCart'), $order->id_cart);
 			}
 			
 			/* Display shipping number field */
