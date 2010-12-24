@@ -1150,7 +1150,7 @@ class AdminImport extends AdminTab
 		</fieldset>';
 
 		echo '
-		<div class="space" style="height: 420px;">
+		<div class="space">
 				<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
 					<fieldset style="float: left; width: 650px">
 						<legend><img src="../img/admin/import.gif" />'.$this->l('Import').'</legend>
@@ -1213,6 +1213,7 @@ class AdminImport extends AdminTab
 				'.$this->l('* Required Fields').'
 				</div>
 			</div>
+			<div class="clear">&nbsp;</div>
 			<script type="text/javascript">
 				$("select#entity").change
 				(
@@ -1231,8 +1232,7 @@ class AdminImport extends AdminTab
 								)
 					}
 				);
-			</script>
-			';
+			</script>';
 	if (Tools::getValue('entity'))
 		echo' <script type="text/javascript">$("select#entity").change();</script>';
 	}
