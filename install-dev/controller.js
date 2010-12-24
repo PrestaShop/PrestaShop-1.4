@@ -409,7 +409,18 @@ function createDB()
 	   ,
 	   success: function(ret)
 	   {
-			var action_ret = ret.getElementsByTagName('action')[0];
+			var action_ret;
+			try {
+				action_ret = ret.getElementsByTagName('action')[0];
+			} catch (e) {
+				$("#dbCreateResultCheck")
+					.addClass("fail")
+					.removeClass("ok")
+					.removeClass('userInfos')
+					.html(ret)
+					.show();
+				return;
+			}
 			if (action_ret.getAttribute("result") == "ok")
 			{
 				var countries_ret = ret.getElementsByTagName('country');
@@ -436,7 +447,7 @@ function createDB()
 			}
 			else
 			{
-				if(action_ret.getAttribute("error") == "11")
+				if (action_ret.getAttribute("error") == "11")
 				{
 					$("#dbCreateResultCheck")
 						.addClass("fail")
@@ -460,8 +471,7 @@ function createDB()
 				}
 			}
 	   }
-	}
-	);
+	});
 }
 
 
