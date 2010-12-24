@@ -54,8 +54,9 @@ class AdminTaxRulesGroup extends AdminTab
 
         echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		        '.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
+    			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>
     			<input type="hidden" name="tabs" id="tabs" value="0" />
-    			<fieldset style="margin:0px; padding:0px"><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>';
+    			';
 
         echo '<label>'.$this->l('Name').'</label>
     			<div class="margin-form">
