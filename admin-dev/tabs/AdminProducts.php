@@ -2279,6 +2279,8 @@ class AdminProducts extends AdminTab
 			<?php if($productDownload->id) echo '<input type="hidden" id="virtual_product_id" name="virtual_product_id" value="'.$productDownload->id.'" />' ?>
 				<p class="block">
 	<?php if(!$productDownload->checkFile()): ?>
+	
+				<div style="padding:5px;width:50%;float:left;margin-right:20px;border-right:1px solid #E0D0B1">
 		<?php if($productDownload->id): ?>
 					<p class="alert" id="file_missing">
 						<?php echo $this->l('This product is missing') ?>:<br/>
@@ -2307,6 +2309,10 @@ class AdminProducts extends AdminTab
 					<input type="text" id="virtual_product_name" name="virtual_product_name" style="width:200px" value="<?php echo $productDownload->id > 0 ? $productDownload->display_filename : htmlentities(Tools::getValue('virtual_product_name'), ENT_COMPAT, 'UTF-8') ?>" />
 					<span class="hint" name="help_box" style="display:none;"><?php echo $this->l('The full filename with its extension (e.g., Book.pdf)') ?></span>
 				</p>
+				
+				</div>
+				<div style="padding:5px;width:40%;float:left;margin-left:10px">
+				
 				<p class="block">
 					<label for="virtual_product_nb_downloable" class="t"><?php echo $this->l('Number of downloads') ?></label>
 					<input type="text" id="virtual_product_nb_downloable" name="virtual_product_nb_downloable" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_downloadable : htmlentities(Tools::getValue('virtual_product_nb_downloable'), ENT_COMPAT, 'UTF-8') ?>" class="" size="6" />
@@ -2323,6 +2329,7 @@ class AdminProducts extends AdminTab
 					<input type="text" id="virtual_product_nb_days" name="virtual_product_nb_days" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_days_accessible : htmlentities(Tools::getValue('virtual_product_nb_days'), ENT_COMPAT, 'UTF-8') ?>" class="" size="4" /><sup> *</sup>
 					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('How many days this file can be accessed by customers') ?> - <em>(<?php echo $this->l('set zero for an unlimited access'); ?>)</em></sub></span>
 				</p>
+				</div>
 	<?php endif; // check if download directory is writable ?>
 			</div>
 		</td>
