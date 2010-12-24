@@ -49,7 +49,7 @@ class OrderControllerCore extends FrontController
 	
 	public function preProcess()
 	{
-		global $isVirtualCart;
+		global $isVirtualCart, $orderTotal;
 
 		parent::preProcess();
         
