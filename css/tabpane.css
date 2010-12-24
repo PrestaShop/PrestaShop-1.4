@@ -4,6 +4,12 @@
 	width:			928px;
 }
 
+.tab-pane-tax {
+	float: 			left;
+	position:		relative;
+	width:			900px;
+}
+
 .tab-row .tab {
 	text-align:		center;
 	font-weight:	bold;
@@ -58,3 +64,4 @@
 	z-index:		1;
 	white-space:	nowrap;
 }
+
