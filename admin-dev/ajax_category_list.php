@@ -30,7 +30,7 @@
 	include_once('tabs/AdminCatalog.php');
 	include_once('tabs/AdminProducts.php');
 	include_once('init.php');
-	
+
 	if (Tools::getValue('token') != Tools::getAdminTokenLite('AdminCatalog'))
 		die(1);
 
@@ -68,15 +68,22 @@
 									</tr>';
 			$done = array();
 			$index = array();
-			if (Tools::isSubmit('categoryBox'))
-				foreach (Tools::getValue('categoryBox') AS $k => $row)
+			
+			$categoryBox = Tools::getValue('categoryBox');
+			if ($categoryBox != '')		
+			{
+				$categoryBox = @unserialize($categoryBox);
+				foreach ($categoryBox AS $k => $row)
 					$index[] = $row;
-			elseif ((int)(Tools::getValue('id_product')))
-				foreach (Product::getIndexedCategories((int)(Tools::getValue('id_product'))) AS $k => $row)
-					$index[] = $row['id_category'];
+			}
+			elseif ((int)Tools::getValue('id_product'))
+			{
+				$indexedCategories = Product::getIndexedCategories((int)Tools::getValue('id_product'));
+				foreach ($indexedCategories AS $k => $row)
+					$index[] = (int)$row['id_category'];
+			}
 			$adminProducts->recurseCategoryForInclude((int)(Tools::getValue('id_product')), $index, $categories, $categories[0][1], 1, (int)(Tools::getValue('id_category_default')));
 			echo '				</table>
 								<p style="padding:0px; margin:0px 0px 10px 0px;">'.$adminProducts->getL('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>
 							</div>
 					</tr>';
-

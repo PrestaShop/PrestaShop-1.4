@@ -2341,6 +2341,7 @@ class AdminProducts extends AdminTab
 	</script>
 
 <?php
+
 					echo '
 					<tr>
 						<td class="col-left">'.$this->l('Pre-tax wholesale price:').'</td>
@@ -2746,17 +2747,18 @@ class AdminProducts extends AdminTab
 
 		}
 		toggleVirtualProduct(getE(\'is_virtual_good\'));
-		unitPriceWithTax(\'unit\');
+		unitPriceWithTax(\'unit\');';
+		
+		$categoryBox = Tools::getValue('categoryBox', array());
+		
+		echo '
 		$(function() {
 			$.ajax({
-				type: "POST",
+				type: \'POST\',
 				url: \'ajax_category_list.php\',
-				data: \'id_product='.$obj->id.'&id_category_default='.($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)).'&id_category='.(int)(Tools::getValue('id_category')).'&token='.$this->token.'\',
+				data: \''.(sizeof($categoryBox) > 0 ? 'categoryBox='.serialize($categoryBox).'&' : '').'id_product='.$obj->id.'&id_category_default='.($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)).'&id_category='.(int)(Tools::getValue('id_category')).'&token='.$this->token.'\',
 				async : true,
-				success: function(msg)
-					{
-						$(\'#tr_categories\').replaceWith(msg);
-					}
+				success: function(msg) { $(\'#tr_categories\').replaceWith(msg); }
 			});
 		});</script>';
 	}

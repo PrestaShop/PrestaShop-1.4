@@ -1156,6 +1156,7 @@ class CartCore extends ObjectModel
 		if ($total_tax < 0)
 			$total_tax = 0;
 
+		$total_free_ship = 0;
 		if ($free_ship = Tools::convertPrice((float)(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency((int)($this->id_currency))))
 		{
 		    $discounts = $this->getDiscounts();
@@ -1167,6 +1168,7 @@ class CartCore extends ObjectModel
 		    		break;
 		    	}
 		}
+
 		return array(
 			'delivery' => $delivery,
 			'delivery_state' => State::getNameById($delivery->id_state),
@@ -1186,7 +1188,7 @@ class CartCore extends ObjectModel
 			'total_price' => $this->getOrderTotal(),
 			'total_tax' => $total_tax,
 			'total_price_without_tax' => $this->getOrderTotal(false),
-			'free_ship' => $total_free_ship);
+			'free_ship' => (int)$total_free_ship);
 	}
 
 	/**
