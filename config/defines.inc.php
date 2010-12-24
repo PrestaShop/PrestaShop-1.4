@@ -25,6 +25,8 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
+define('_PS_MODE_DEV_', true);
+
 $currentDir = dirname(__FILE__);
 
 if (!defined('PHP_VERSION_ID')) 
