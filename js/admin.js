@@ -812,7 +812,7 @@ function trackClickOnHelp(label, doc_version)
 {
    	$.ajax({
 		url: 'ajax.php',
-		data: 'submitTrackClickOnHelp&label='+ label +'&version='+doc_version,
+		data: 'submitTrackClickOnHelp&label='+ label +'&version='+doc_version
 	});
 }
 
