@@ -252,9 +252,10 @@ class CustomerCore extends ObjectModel
 	  *
 	  * @param string $email e-mail
 	  * @param $return_id boolean
+	  * @param $ignoreGuest boolean, for exclure guest customer
 	  * @return Customer ID if found, false otherwise
 	  */
-	static public function customerExists($email, $return_id = false)
+	static public function customerExists($email, $return_id = false, $ignoreGuest = true)
 	{
 	 	if (!Validate::isEmail($email))
 	 		die (Tools::displayError());
@@ -262,7 +263,8 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `email` = \''.pSQL($email).'\'');
+		WHERE `email` = \''.pSQL($email).'\''
+		.($ignoreGuest ? 'AND `is_guest` = 0' : ''));
 
 		if ($return_id)
 			return (int)($result['id_customer']);
@@ -610,8 +612,6 @@ class CustomerCore extends ObjectModel
 		$this->passwd = Tools::encrypt($password);
 		if ($this->update())
 		{
-			//templateVars
-			//static public function Send($id_lang, $template, $subject, $templateVars, $to, $toName = NULL, $from = NULL, $fromName = NULL, $fileAttachment = NULL, $modeSMTP = NULL, $templatePath = _PS_MAIL_DIR_)
 			$vars = array(
 				'{firstname}' => $this->firstname,
 				'{lastname}' => $this->lastname,

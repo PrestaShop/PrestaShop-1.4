@@ -70,6 +70,7 @@ function updateCarrierList(json)
 			html = html + '</td>'+
 			'</tr>';
 		}
+		html += '<tr id="HOOK_EXTRACARRIER"></tr>';
 		$('#noCarrierWarning').hide();
 		$('#extra_carrier:hidden').show();
 		$('table#carrierTable tbody').html(html);
@@ -360,6 +361,7 @@ $(function() {
 			$('#is_new_customer').val('1');
 			$('.is_customer_param').show();
 			$('#opc_account_form').show();
+			$('#opc_invoice_address').hide();
 		}
 		
 		// LOGIN FORM

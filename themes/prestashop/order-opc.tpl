@@ -662,7 +662,7 @@
 						</td>
 					</tr>
 				{/foreach}
-				<div id="HOOK_EXTRACARRIER">{$HOOK_EXTRACARRIER}</div>
+				<tr id="HOOK_EXTRACARRIER">{$HOOK_EXTRACARRIER}</tr>
 			{/if}
 			</tbody>
 		</table>

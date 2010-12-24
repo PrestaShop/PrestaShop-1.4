@@ -417,7 +417,7 @@ CREATE TABLE `PREFIX_customer` (
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_customer`),
-  UNIQUE KEY `customer_email` (`email`),
+  KEY `customer_email` (`email`),
   KEY `customer_login` (`email`,`passwd`),
   KEY `id_customer_passwd` (`id_customer`,`passwd`),
   KEY `id_gender` (`id_gender`)
