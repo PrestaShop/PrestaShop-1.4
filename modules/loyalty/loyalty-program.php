@@ -45,46 +45,60 @@ $customerPoints = (int)(LoyaltyModule::getPointsByCustomer((int)($cookie->id_cus
 /* transform point into voucher if needed */
 if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 {
-	/* generate a voucher code */
-	$voucherCode = null;
+	/* Generate a voucher code */
+	$voucherCode = NULL;
 	do $voucherCode = 'FID'.rand(1000, 100000);
 	while (Discount::discountExists($voucherCode));
 
-	/* voucher creation and add to customer */
+	/* Voucher creation and affectation to the customer */
 	$voucher = new Discount();
 	$voucher->name = $voucherCode;
 	$voucher->id_discount_type = 2; // Discount on order (amount)
 	$voucher->id_customer = (int)($cookie->id_customer);
 	$voucher->id_currency = (int)($cookie->id_currency);
-	$voucher->value = LoyaltyModule::getVoucherValue($customerPoints);
+	$voucher->value = LoyaltyModule::getVoucherValue((int)$customerPoints);
 	$voucher->quantity = 1;
 	$voucher->quantity_per_user = 1;
 	$voucher->cumulable = 1;
 	$voucher->cumulable_reduction = 1;
-	$dateFrom = time();
+	
+	/* If merchandise returns are allowed, the voucher musn't be usable before this max return date */	
+	$dateFrom = Db::getInstance()->getValue('
+	SELECT UNIX_TIMESTAMP(date_add) n
+	FROM '._DB_PREFIX_.'loyalty 
+	WHERE id_discount = 0 AND id_customer = '.(int)$cookie->id_customer.'
+	ORDER BY date_add DESC');
+	
 	if (Configuration::get('PS_ORDER_RETURN'))
-		$dateFrom = $dateFrom + (60 * 60 * 24 * (int)(Configuration::get('PS_ORDER_RETURN_NB_DAYS')));
+		$dateFrom += 60 * 60 * 24 * (int)Configuration::get('PS_ORDER_RETURN_NB_DAYS');
+
 	$voucher->date_from = date('Y-m-d H:i:s', $dateFrom);
 	$voucher->date_to = date('Y-m-d H:i:s', $dateFrom + 31536000); // + 1 year
+	
 	$voucher->minimal = (float)Configuration::get('PS_LOYALTY_MINIMAL');
 	$voucher->active = 1;
+
 	$categories = Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY');
 	if ($categories != '' AND $categories != 0)
 		$categories = explode(',', Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY'));
 	else
 		die(Tools::displayError());
+
 	$languages = Language::getLanguages(true);
 	$default_text = Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', (int)(Configuration::get('PS_LANG_DEFAULT')));
-	foreach ($languages as $language)
+	
+	foreach ($languages AS $language)
 	{
 		$text = Configuration::get('PS_LOYALTY_VOUCHER_DETAILS', (int)($language['id_lang']));
 		$voucher->description[(int)($language['id_lang'])] = $text ? strval($text) : strval($default_text);
 	}
+	
 	if (is_array($categories) AND sizeof($categories))
 		$voucher->add(true, false, $categories);
 	else
 		$voucher->add();
-	/* register order(s) which contribute to create this voucher */
+
+	/* Register order(s) which contributed to create this voucher */
 	LoyaltyModule::registerDiscount($voucher);
 
 	Tools::redirect('modules/loyalty/loyalty-program.php');

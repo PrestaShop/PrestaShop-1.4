@@ -26,8 +26,8 @@
 
 {if scenes}
 <script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.cluetip.js"></script>
-<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.scrollto.js"></script>
-<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.serialScroll.js"></script>
+<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.scrollTo-1.4.2-min.js"></script>
+<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery.serialScroll-1.2.2-min.js"></script>
 <script type="text/javascript">// <![CDATA[
 i18n_scene_close = '{l s='Close'}';
 $(function () {ldelim}

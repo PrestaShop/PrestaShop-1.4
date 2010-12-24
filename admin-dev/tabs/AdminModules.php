@@ -539,7 +539,7 @@ class AdminModules extends AdminTab
 		else
 			$goto = false;
 		echo '
-  		<script src="'.__PS_BASE_URI__.'js/jquery/jquery.scrollto.js"></script>
+  		<script src="'.__PS_BASE_URI__.'js/jquery/jquery.scrollTo-1.4.2-min.js"></script>
 		<script>
 		 $(document).ready(function() {
 		 

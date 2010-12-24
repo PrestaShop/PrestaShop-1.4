@@ -184,6 +184,3 @@ class BlockCart extends Module
 			Tools::addJS(($this->_path).'ajax-cart.js');
 	}
 }
-
-
-

@@ -36,14 +36,12 @@ class ProductControllerCore extends FrontController
 		Tools::addJS(array(
 			_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js',
 			_PS_JS_DIR_.'jquery/jquery.idTabs.modified.js',
-			_PS_JS_DIR_.'jquery/jquery.scrollto.js',
-			_PS_JS_DIR_.'jquery/jquery.serialScroll.js',
+			_PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js',
 			_THEME_JS_DIR_.'tools.js',
 			_THEME_JS_DIR_.'product.js'
 		));
 
-		$jqZoomEnabled = (Configuration::get('PS_DISPLAY_JQZOOM') == 1);
-		if ($jqZoomEnabled)
+		if (Configuration::get('PS_DISPLAY_JQZOOM') == 1)
 		{
 			Tools::addCSS(_PS_CSS_DIR_.'jqzoom.css', 'screen');
 			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.jqzoom.js');

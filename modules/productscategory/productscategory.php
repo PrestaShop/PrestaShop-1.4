@@ -35,7 +35,7 @@ class productsCategory extends Module
 	public function __construct()
  	{
  	 	$this->name = 'productscategory';
- 	 	$this->version = '1.2.1';
+ 	 	$this->version = '1.3';
  	 	$this->tab = 'front_office_features';
 		
 		parent::__construct();
@@ -46,17 +46,14 @@ class productsCategory extends Module
 
 	public function install()
 	{
-	 	if (!parent::install() OR
-	 		!$this->registerHook('productfooter') OR
-	 		!Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', 0))
+	 	if (!parent::install() OR !$this->registerHook('productfooter') OR !$this->registerHook('header') OR !Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', 0))
 	 		return false;
 	 	return true;
 	}
 	
 	public function uninstall()
 	{
-	 	if (!parent::uninstall() OR
-	 		!Configuration::deleteByName('PRODUCTSCATEGORY_DISPLAY_PRICE'))
+	 	if (!parent::uninstall() OR !Configuration::deleteByName('PRODUCTSCATEGORY_DISPLAY_PRICE'))
 	 		return false;
 	 	return true;
 	}
@@ -91,7 +88,7 @@ class productsCategory extends Module
 	private function getCurrentProduct($products, $id_current)
 	{
 		if ($products)
-			foreach ($products as $key => $product)
+			foreach ($products AS $key => $product)
 				if ($product['id_product'] == $id_current)
 					return $key;
 		return false;
@@ -103,56 +100,49 @@ class productsCategory extends Module
 		
 		$idProduct = (int)(Tools::getValue('id_product'));
 		$product = new Product((int)($idProduct));
-		
-		$category = new Category(1);
+
+		/* If the visitor has came to this product by a category, use this one */
 		if (isset($params['category']->id_category))
 			$category = $params['category'];
-		if ($category->id_category == 1 AND isset($product->id_category_default) AND $product->id_category_default > 1)
-			$category = New Category((int)($product->id_category_default));
-		if (!Validate::isLoadedObject($category))
-			Tools::displayError('Bad category!');
-		if ((int)($category->id_category) === 1)
-			return;
+		/* Else, use the default product category */
+		else
+		{
+			if (isset($product->id_category_default) AND $product->id_category_default > 1)
+				$category = New Category((int)($product->id_category_default));
+		}
 		
-		if (!$category->active) 
+		if (!Validate::isLoadedObject($category) OR !$category->active) 
 			return;
 
 		// Get infos
-		$sizeOfCategoryProducts = $category->getProducts((int)($cookie->id_lang), 1, 30, NULL, NULL, true);
-		$categoryProducts = $category->getProducts((int)($cookie->id_lang), 1, $sizeOfCategoryProducts);
-		
+		$categoryProducts = $category->getProducts((int)($cookie->id_lang), 1, 100); /* 100 products max. */
+		$sizeOfCategoryProducts = (int)sizeof($categoryProducts);
 		$middlePosition = 0;
 		
-		//remove current product from the list
-		$current_product_key = null;
+		// Remove current product from the list
 		if (is_array($categoryProducts) AND sizeof($categoryProducts))
 		{
-			foreach ($categoryProducts as $key => $categoryProduct)
-			{
+			foreach ($categoryProducts AS $key => $categoryProduct)
 				if ($categoryProduct['id_product'] == $idProduct)
 				{
-					$current_product_key = $key;
+					unset($categoryProducts[$key]);
 					break;
 				}
-			}
-			$taxes_calc = Product::getTaxCalculationMethod();
+
+			$taxes = Product::getTaxCalculationMethod();
 			if (Configuration::get('PRODUCTSCATEGORY_DISPLAY_PRICE'))
-				foreach ($categoryProducts as $key => $categoryProduct)
+				foreach ($categoryProducts AS $key => $categoryProduct)
 					if ($categoryProduct['id_product'] != $idProduct)
 					{
-					
-						if ($taxes_calc == 0 || $taxes_calc == 2)
-							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic($categoryProduct['id_product'], true, NULL);
-						elseif ($taxes_calc == 1)
-							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic($categoryProduct['id_product'], false, NULL);
+						if ($taxes == 0 OR $taxes == 2)
+							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic((int)$categoryProduct['id_product'], true, NULL);
+						elseif ($taxes == 1)
+							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic((int)$categoryProduct['id_product'], false, NULL);
 					}
-			if (isset($categoryProducts[$current_product_key]))
-				unset($categoryProducts[$current_product_key]);
-		
 		
 			// Get positions
 			$middlePosition = round($sizeOfCategoryProducts / 2, 0);
-			$productPosition = $this->getCurrentProduct($categoryProducts, $idProduct);
+			$productPosition = $this->getCurrentProduct($categoryProducts, (int)$idProduct);
 		
 			// Flip middle product with current product
 			if ($productPosition)
@@ -172,10 +162,16 @@ class productsCategory extends Module
 		
 		// Display tpl
 		$smarty->assign(array(
-		'categoryProducts' => $categoryProducts,
-		'middlePosition' => $middlePosition,
-		'ProdDisplayPrice' => Configuration::get('PRODUCTSCATEGORY_DISPLAY_PRICE')));
+			'categoryProducts' => $categoryProducts,
+			'middlePosition' => (int)$middlePosition,
+			'ProdDisplayPrice' => Configuration::get('PRODUCTSCATEGORY_DISPLAY_PRICE')));
+
 		return $this->display(__FILE__, 'productscategory.tpl');
 	}
+	
+	public function hookHeader($params)
+	{
+		Tools::addCSS(($this->_path).'productscategory.css', 'all');
+		Tools::addJS(array($this->_path.'productscategory.js', _PS_JS_DIR_.'jquery/jquery.serialScroll-1.2.2-min.js'));
+	}
 }
-

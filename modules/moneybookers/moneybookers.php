@@ -34,7 +34,7 @@ class MoneyBookers extends PaymentModule
 	{
 		$this->name = 'moneybookers';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.2';
+		$this->version = '1.3';
 
 		parent::__construct();
 
@@ -481,11 +481,24 @@ class MoneyBookers extends PaymentModule
 			return ;
 
 		global $smarty;
-		$state = $params['objOrder']->getCurrentState();
-		if ($state != _PS_OS_ERROR_)
-			$smarty->assign('status', 'ok');
-		else
-			$smarty->assign('status', 'failed');
+
+		switch($params['objOrder']->getCurrentState())
+		{
+			case '_PS_OS_PAYMENT_':
+			case '_PS_OS_OUTOFSTOCK_':
+				$smarty->assign('status', 'ok');
+				break;
+				
+			case '_PS_OS_BANKWIRE_':
+				$smarty->assign('status', 'pending');
+				break;
+				
+			case _PS_OS_ERROR_:
+			default:
+				$smarty->assign('status', 'failed');
+				break;
+		}
+
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}
 }

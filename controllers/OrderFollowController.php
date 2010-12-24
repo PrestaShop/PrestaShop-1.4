@@ -89,7 +89,7 @@ class OrderFollowControllerCore extends FrontController
 	public function setMedia()
 	{
 		parent::setMedia();
-		Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.scrollto.js', _THEME_JS_DIR_.'history.js'));
+		Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js', _THEME_JS_DIR_.'history.js'));
 	}
 
 	public function displayContent()
