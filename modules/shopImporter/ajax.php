@@ -9,7 +9,16 @@ if (!Tools::getValue('ajax'))
 
 if (Tools::isSubmit('checkAndSaveConfig'))
 {
-	$db = new Mysql(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password'), Tools::getValue('database'));
+	if ($link = @mysql_connect(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password')))
+	{
+		if(!@mysql_select_db(Tools::getValue('database'), $link))
+			die('{"hasError" : true, "error" : ["'.Tools::displayError('The database selection cannot be made.').'"]}');
+		else
+			die('{"hasError" : false, "error" : []}');
+	}
+	else
+		die('{"hasError" : true, "error" : ["'.Tools::displayError('Link to database cannot be established.').'"]}');
+	
 }
 
 if (Tools::isSubmit('getData'))
@@ -64,16 +73,18 @@ if (Tools::isSubmit('displaySpecificOptions'))
 	$database = Tools::getValue('database');
 	$prefix = Tools::getValue('prefix');
 	
+	
 	if (file_exists('../../modules/'.$moduleName.'/'.$moduleName.'.php'))
 	{
 		require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
 		$importModule = new $moduleName();
 		$importModule->prefix = $prefix;
-		$importModule->initDatabaseConnection($server, $user, $password, $database);
-		if (method_exists($importModule, 'displaySpecificOptions'))
-			die($importModule->displaySpecificOptions());
-		else
-			die('not_exist');
+		$return = $importModule->initDatabaseConnection($server, $user, $password, $database);
+		if ($return)
+			if (method_exists($importModule, 'displaySpecificOptions'))
+				die($importModule->displaySpecificOptions());
+			else
+				die('not_exist');
 
 		
 	}	

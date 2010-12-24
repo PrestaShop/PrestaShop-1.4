@@ -26,16 +26,16 @@ var shopImporter = {
 	       url: '../modules/shopImporter/ajax.php',
 	       async: false,
 	       cache: false,
-	       dataType : "html",
+	       dataType : "json",
 	       data: 'ajax=true&checkAndSaveConfig&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+this.specificOptions ,
-	       success: function(data)
+	       success: function(jsonData)
 	       {
-	       	if (data.length == 0)
-	       	{
-		       	$('#checkAndSaveConfig').fadeOut('slow');
-		       	$('#steps').html('<div id="database_feedback" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+databaseOk+'</div>');
-		    	$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="next" id="next" class="button" value="'+testImport+'">');
-		    	$('#database_feedback').fadeIn('slow', function() {
+		       	if (!jsonData.hasError)
+	    		{
+			       	$('#checkAndSaveConfig').fadeOut('slow');
+			       	$('#steps').html('<div id="database_feedback" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+databaseOk+'</div>');
+			    	$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="next" id="next" class="button" value="'+testImport+'">');
+			    	$('#database_feedback').fadeIn('slow', function() {
 	    			if (save)
 			    	{
 			    		shopImporter.idMethod = 0;
@@ -66,7 +66,7 @@ var shopImporter = {
 		    }
 		    else
 		    {
-		    	$('#steps').html('<div id="database_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+data+'</div>');
+		    	$('#steps').html('<div id="database_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+jsonData.error+'</div>');
 		    	$('#database_feedback').fadeIn('slow');
 		    }
 	       },
@@ -235,8 +235,8 @@ var shopImporter = {
 		}
 		else if ((this.hasErrors != 0 || ($('.display_error_link').length == 0 && this.hasErrors == 0)) || (this.hasErrors == 1))
 		{
-			$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="submtiImport" id="submtiImport" class="button" value="'+import+'">');
-			$('#submtiImport').fadeIn('slow', function() {
+			$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="submitImport" id="submitImport" class="button" value="'+import+'">');
+			$('#submitImport').fadeIn('slow', function() {
 				$(this).unbind('click').click(function() {
 					shopImporter.save = 1;
 					shopImporter.checkAndSaveConfig(shopImporter.save);
@@ -289,7 +289,6 @@ function displaySpecificOptions(moduleName, server, user, password, database, pr
 		   }
 	   });
 }
-
 
 $(document).ready(function(){
 	
