@@ -859,6 +859,8 @@ class AdminProducts extends AdminTab
 		{
 			if (!Validate::isLoadedObject($product))
 				$this->_errors[] = Tools::displayError('cannot add image because product add failed');
+			elseif (substr($_FILES['image_product']['name'], -4) == '.zip')
+				return $this->uploadImageZip($product);
 			else
 			{
 				$image = new Image();
@@ -876,10 +878,9 @@ class AdminProducts extends AdminTab
 						$this->_errors[] = Tools::displayError('error while creating additional image');
 					else
 						$this->copyImage($product->id, $image->id, $method);
+					$id_image = $image->id;
 				}
 			}
-			$id_image = $image->id;
-
 		}
 		if (isset($image) AND Validate::isLoadedObject($image) AND !file_exists(_PS_IMG_DIR_.'p/'.$image->id_product.'-'.$image->id.'.jpg'))
 			$image->delete();
@@ -888,6 +889,91 @@ class AdminProducts extends AdminTab
 		@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$product->id.'.jpg');
 		@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$product->id.'.jpg');
 		return ((isset($id_image) AND is_int($id_image) AND $id_image) ? $id_image : true);
+	}
+	
+	public function uploadImageZip($product)
+	{
+		// Move the ZIP file to the img/tmp directory
+		if (!$zipfile = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $zipfile))
+		{
+			$this->_errors[] = Tools::displayError('An error occurred during the ZIP file upload');
+			return false;
+		}
+		
+		// Unzip the file to a subdirectory
+		$zip = new ZipArchive();
+		$subdir = _PS_TMP_IMG_DIR_.uniqid().'/';
+		
+		try
+		{
+			if ($zip->open($zipfile) !== true OR !mkdir($subdir, 0777) OR !$zip->extractTo($subdir) OR !$zip->close())
+				throw new Exception(Tools::displayError('An error occurred while unzipping your file'));
+
+			$types = array('.gif' => 'image/gif', '.jpeg' => 'image/jpeg', '.jpg' => 'image/jpg', '.png' => 'image/png');
+			$_POST['id_product'] = (int)$product->id;
+			$imagesTypes = ImageType::getImagesTypes('products');
+			$highestPosition = Image::getHighestPosition($product->id);
+			foreach (scandir($subdir) as $file)
+			{
+				if ($file[0] == '.')
+					continue;
+				
+				// Create image object
+				$image = new Image();
+				$image->id_product = (int)$product->id;
+				$image->position = ++$highestPosition;
+				$image->cover = ($highestPosition == 1 ? true : false);
+				
+				// Call automated copy function
+				$this->validateRules('Image', 'image');
+				$this->copyFromPost($image, 'image');
+				
+				if (sizeof($this->_errors))
+					throw new Exception('');
+				
+				if (!$image->add())
+					throw new Exception(Tools::displayError('error while creating additional image'));
+
+				if (filesize($subdir.$file) > $this->maxImageSize)
+				{
+					$image->delete();
+					throw new Exception(Tools::displayError('image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('KB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('KB'));
+				}
+				
+				$ext = substr($file, -4);
+				$type = (isset($types[$ext]) ? $types[$ext] : '');
+				if (!isPicture(array('tmp_name' => $subdir.$file, 'type' => $type)))
+				{
+					$image->delete();
+					throw new Exception(Tools::displayError('image format not recognized, allowed formats are: .gif, .jpg, .png'));
+				}
+
+				if (!imageResize($subdir.$file, _PS_IMG_DIR_.'p/'.$image->id_product.'-'.$image->id.'.jpg'))
+				{
+					$image->delete();
+					throw new Exception(Tools::displayError('an error occurred while resizing image'));
+				}
+
+				foreach ($imagesTypes AS $k => $imageType)
+					if (!imageResize($subdir.$file, _PS_IMG_DIR_.'p/'.$image->id_product.'-'.$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+					{
+						$image->delete();
+						throw new Exception(Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']));
+					}
+
+				Module::hookExec('watermark', array('id_image' => $image->id, 'id_product' => $image->id_product));
+			}
+		}
+		catch (Exception $e)
+		{
+			if ($error = $e->getMessage());
+				$this->_errors[] = $error;
+			Tools::deleteDirectory($subdir);
+			return false;
+		}
+		
+		Tools::deleteDirectory($subdir);
+		return true;
 	}
 
 	/**
@@ -2687,7 +2773,10 @@ class AdminProducts extends AdminTab
 						<td class="col-left">'.$this->l('File:').'</td>
 						<td style="padding-bottom:5px;">
 							<input type="file" id="image_product" name="image_product" />
-							<p>'.$this->l('Format:').' JPG, GIF, PNG<br />'.$this->l('Filesize:').' '.($this->maxImageSize / 1000).''.$this->l('Kb max.').'</p>
+							<p>
+								'.$this->l('Format:').' JPG, GIF, PNG. '.$this->l('Filesize:').' '.($this->maxImageSize / 1000).''.$this->l('Kb max.').'
+								'.(class_exists('ZipArchive', false) ? '<br />'.$this->l('You can also upload a ZIP file containing several images. Thumbnails will be resized automatically.') : '').'
+							</p>
 						</td>
 					</tr>
 					<tr>

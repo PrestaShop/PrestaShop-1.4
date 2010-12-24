@@ -405,16 +405,17 @@ class ToolsCore
 	*/
 	static public function deleteDirectory($dirname)
 	{
+		$dirname = rtrim($dirname, '/').'/';
 		$files = scandir($dirname);
 		foreach ($files as $file)
 			if ($file != '.' AND $file != '..')
 			{
-				if (is_dir($file))
-					self::deleteDirectory($file);
-				elseif (file_exists($file))
-					unlink($file);
+				if (is_dir($dirname.$file))
+					self::deleteDirectory($dirname.$file);
+				elseif (file_exists($dirname.$file))
+					unlink($dirname.$file);
 				else
-					echo 'Unable to delete '.$file;
+					p('Unable to delete '.$dirname.$file);
 			}
 		rmdir($dirname);
 	}
