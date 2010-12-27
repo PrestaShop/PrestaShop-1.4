@@ -50,6 +50,8 @@
 	var txtErrors = "{l s='error(s)'}";
 	var txtDeliveryAddress = "{l s='Delivery address'}";
 	var txtInvoiceAddress = "{l s='Invoice address'}";
+	var errorCarrier = "{$errorCarrier}";
+	var errorTOS = "{$errorTOS}";
 
 	var addresses = new Array();
 	var isLogged = {$isLogged|intval};

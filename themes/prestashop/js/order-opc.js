@@ -305,21 +305,35 @@ $(function() {
 	
 	// Event
 	$('.opc_button').click(function() {
+		var hasError = false;
 		var opc_button_clicked = $(this);	
 		
-		if ($(this).attr('href') == '#opc_block_4')
-			showPaymentModule();
+		if ($(this).attr('href') == '#opc_block_3' && $('input[name=id_carrier]:checked').length == 0)
+		{
+			alert(errorCarrier);
+			hasError = true;
+		}
+		if ($(this).attr('href') == '#opc_block_4' && $('input[name=cgv]:checked').length == 0)
+		{
+			alert(errorTOS);
+			hasError = true;
+		}
 		
-		$('.opc_block_content:visible').slideUp('slow', function() {
-			$(opc_button_clicked.attr('href')).slideDown('slow', function() {
-				$('.opc_status').each(function() {
-					if ($(this).attr('id') != $('.opc_block_content:visible').attr('id')+'_status')
-						$(this).slideDown('slow');
-					else
-						$(this).slideUp('slow');
+		if (!hasError)
+		{
+			if ($(this).attr('href') == '#opc_block_4')
+				showPaymentModule();
+			$('.opc_block_content:visible').slideUp('slow', function() {
+				$(opc_button_clicked.attr('href')).slideDown('slow', function() {
+					$('.opc_status').each(function() {
+						if ($(this).attr('id') != $('.opc_block_content:visible').attr('id')+'_status')
+							$(this).slideDown('slow');
+						else
+							$(this).slideUp('slow');
+					});
 				});
 			});
-		});
+		}
 		return false;
 	});
 
