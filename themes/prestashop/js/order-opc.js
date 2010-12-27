@@ -59,7 +59,7 @@ function updateCarrierList(json)
 				
 			html = html + 
 			'<tr class="'+itemType+'">'+
-				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'" onclick="updateCarrierSelectionAndGift();" /></td>'+
+				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'" '+(checkedCarrier == carriers[i].id_carrier ? 'checked="checked"' : '')+' /></td>'+
 				'<td class="carrier_name"><label for="id_carrier'+carriers[i].id_carrier+'">'+name+'</label></td>'+
 				'<td class="carrier_infos">'+carriers[i].delay+'</td>'+
 				'<td class="carrier_price"><span class="price">'+formatCurrency(carriers[i].price, currencyFormat, currencySign, currencyBlank)+'</span>';
@@ -321,6 +321,8 @@ $(function() {
 		
 		if (!hasError)
 		{
+			if ($(this).attr('href') == '#opc_block_3')
+				updateCarrierSelectionAndGift();
 			if ($(this).attr('href') == '#opc_block_4')
 				showPaymentModule();
 			$('.opc_block_content:visible').slideUp('slow', function() {
