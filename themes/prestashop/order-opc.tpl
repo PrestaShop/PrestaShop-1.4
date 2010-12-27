@@ -588,7 +588,7 @@
 								</select>
 								<sup>*</sup>
 							</p>
-							<p class="required id_state select">
+							<p class="required id_state_invoice select" style="display:none;">
 								<label for="id_state_invoice">{l s='State'}</label>
 								<select name="id_state_invoice" id="id_state_invoice">
 									<option value="">-</option>
