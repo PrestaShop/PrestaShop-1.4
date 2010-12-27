@@ -92,36 +92,44 @@ function	checkImage($file, $maxFileSize)
 	return false;
 }
 
+/**
+  * Check image MIME type
+  *
+  * @param string $file $_FILE of the current file
+  * @param array $types Allowed MIME types
+  */
 function isPicture($file, $types = NULL)
 {
 	/* Detect mime content type */
-	$mime_type = false;
+	$mimeType = false;
 	if (!$types)
 		$types = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
 
-	if (Tools::isCallable('finfo_open'))
+	/* Try 5 different methods to determine the mime type */
+	if (function_exists('finfo_open'))
 	{
 		$const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
 		$finfo = finfo_open($const);
-		$mime_type = finfo_file($finfo, $file['tmp_name']);
+		$mimeType = finfo_file($finfo, $file['tmp_name']);
 		finfo_close($finfo);
 	}
-	elseif (Tools::isCallable('mime_content_type'))
-		$mime_type = mime_content_type($file['tmp_name']);
-	elseif (Tools::isCallable('exec'))
-		$mime_type = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
-	
-	if (!$mime_type)
-		$mime_type = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
-	else
-		$mime_type = trim(exec('file --mime '.escapeshellarg($file['tmp_name'])));
-		
-	if (empty($mime_type) || $mime_type == 'regular file')
-		$mime_type = $file['type'];
-	if (($pos = strpos($mime_type, ';')) !== false)
-		$mime_type = substr($mime_type, 0, $pos);
-	// is it a picture ?
-	return $mime_type && in_array($mime_type, $types);
+	elseif (function_exists('mime_content_type'))
+		$mimeType = mime_content_type($file['tmp_name']);
+	elseif (function_exists('exec'))
+	{
+		$mimeType = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
+		if (!$mimeType)
+			$mimeType = trim(exec('file --mime '.escapeshellarg($file['tmp_name'])));
+		if (!$mimeType)
+			$mimeType = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
+	}
+
+	if (empty($mimeType) OR $mimeType == 'regular file')
+		$mimeType = $file['type'];
+	if (($pos = strpos($mimeType, ';')) !== false)
+		$mimeType = substr($mimeType, 0, $pos);
+
+	return $mimeType && in_array($mimeType, $types);
 }
 
 /**
