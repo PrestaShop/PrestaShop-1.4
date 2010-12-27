@@ -83,6 +83,9 @@ class FrontControllerCore
 		if (!isset($smarty))
 			exit;
 
+		// Init Cookie
+		$cookie = new Cookie('ps');
+		
 		/* Theme is missing or maintenance */
 		if (!is_dir(dirname(__FILE__).'/../themes/'._THEME_NAME_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
@@ -138,8 +141,6 @@ class FrontControllerCore
 		$page_name = basename($_SERVER['PHP_SELF'], '.'.$pathinfo['extension']);
 		$page_name = (preg_match('/^[0-9]/', $page_name)) ? 'page_'.$page_name : $page_name;
 
-		// Init Cookie
-		$cookie = new Cookie('ps');
 		// Init rewrited links
 		global $link;
 		$link = new Link();
