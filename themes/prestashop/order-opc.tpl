@@ -353,8 +353,8 @@
 					<h3>{l s='Already registered?'} <a href="#" id="openLoginFormBlock">{l s='Click here'}</a></h3>
 					<div id="login_form_content" style="display:none;">
 						<div style="margin-left:40px;margin-bottom:5px;float:left;width:40%;">
-							<label for="email">{l s='E-mail address'}</label>
-							<span><input type="text" id="email" name="email" /></span>
+							<label for="login_email">{l s='E-mail address'}</label>
+							<span><input type="text" id="login_email" name="email" /></span>
 						</div>
 						<div style="margin-left:40px;margin-bottom:5px;float:left;width:40%;">
 							<label for="passwd">{l s='Password'}</label>
