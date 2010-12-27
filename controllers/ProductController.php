@@ -37,6 +37,7 @@ class ProductControllerCore extends FrontController
 			_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js',
 			_PS_JS_DIR_.'jquery/jquery.idTabs.modified.js',
 			_PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js',
+			_PS_JS_DIR_.'jquery/jquery.serialScroll-1.2.2-min.js',
 			_THEME_JS_DIR_.'tools.js',
 			_THEME_JS_DIR_.'product.js'
 		));

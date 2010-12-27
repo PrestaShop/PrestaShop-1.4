@@ -243,8 +243,7 @@ class ParentOrderControllerCore extends FrontController
 			'currencySign' => $currency->sign,
 			'currencyRate' => $currency->conversion_rate,
 			'currencyFormat' => $currency->format,
-			'currencyBlank' => $currency->blank
-			));
+			'currencyBlank' => $currency->blank));
 	}
 	
 	protected function _assignAddress()

@@ -26,26 +26,10 @@
 
 $(document).ready(function()
 {
-	$('.cart_quantity_up').unbind('click').click(function(){
-			upQuantity($(this).attr('id').replace('cart_quantity_up_', ''));
-			return false;
-		});
-	$('.cart_quantity_down').unbind('click').click(function(){
-			downQuantity($(this).attr('id').replace('cart_quantity_down_', ''));
-			return false;
-		});
-	$('.cart_quantity_delete' ).unbind('click').click(function(){
-			deletProductFromSummary($(this).attr('id'));
-			return false;
-		});
-
-	$('.cart_quantity_input').typeWatch({ 
-		highlight:true,
-		wait:600,
-		captureLength:0,
-		callback:updateQty
-	});
-
+	$('.cart_quantity_up').unbind('click').click(function(){ upQuantity($(this).attr('id').replace('cart_quantity_up_', '')); return false;	});
+	$('.cart_quantity_down').unbind('click').click(function(){ downQuantity($(this).attr('id').replace('cart_quantity_down_', '')); return false; });
+	$('.cart_quantity_delete' ).unbind('click').click(function(){ deletProductFromSummary($(this).attr('id')); return false; });
+	$('.cart_quantity_input').typeWatch({ highlight: true, wait: 600, captureLength: 0, callback: updateQty });
 });
 
 function updateQty(val)
@@ -70,7 +54,6 @@ function updateQty(val)
 
 function deletProductFromSummary(id)
 {
-	
 	var customizationId = 0;
 	var productId = 0;
 	var productAttributeId = 0;
@@ -86,7 +69,7 @@ function deletProductFromSummary(id)
        url: baseDir + 'cart.php',
        async: true,
        cache: false,
-       dataType : "json",
+       dataType: 'json',
        data: 'ajax=true&delete&summary&id_product='+productId+'&ipa='+productAttributeId+ ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&token=' + static_token ,
        success: function(jsonData)
        {
@@ -162,7 +145,7 @@ function upQuantity(id, qty)
        url: baseDir + 'cart.php',
        async: true,
        cache: false,
-       dataType : "json",
+       dataType: 'json',
        data: 'ajax=true&add&summary&id_product='+productId+'&ipa='+productAttributeId + ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&qty='+qty+'&token=' + static_token ,
        success: function(jsonData)
        {
@@ -218,7 +201,7 @@ function downQuantity(id, qty)
 	       url: baseDir + 'cart.php',
 	       async: true,
 	       cache: false,
-	       dataType : "json",
+	       dataType: 'json',
 	       data: 'ajax=true&add&summary&id_product='+productId+'&ipa='+productAttributeId+'&op=down' + ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&qty='+qty+'&token=' + static_token ,
 	       success: function(jsonData)
 	       {
@@ -254,7 +237,7 @@ function downQuantity(id, qty)
 
 function updateCartSummary(json)
 {
-	// update products prices + discount
+	// Update products prices + discount
 	var i;
 	var nbrProducts = 0;
 	for (i=0;i<json.products.length;i++)
@@ -282,13 +265,14 @@ function updateCartSummary(json)
 			$('#cart_quantity_custom_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(json.products[i].cart_quantity);
 		}
 		
-		//show / hidden	quantity button if minimal quantity				
+		// Show / hide quantity button if minimal quantity				
 		if (parseInt(json.products[i].minimal_quantity) == parseInt(json.products[i].cart_quantity) && json.products[i].minimal_quantity != 1)
 			$('#cart_quantity_down_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',0.3);
 		else
 			$('#cart_quantity_down_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',1);
 	}
-	//update discounts
+	
+	// Update discounts
 	if (json.discounts.length == 0)
 	{
 		$('.cart_discount').each(function(){$(this).remove()});
@@ -311,11 +295,7 @@ function updateCartSummary(json)
 				}
 			}
 			if (toDelete)
-			{
-				$('#cart_discount_' + idElmt + ', #cart_total_voucher').fadeTo('fast', 0, function(){
-						$(this).remove();
-				});
-			}
+				$('#cart_discount_' + idElmt + ', #cart_total_voucher').fadeTo('fast', 0, function(){ $(this).remove(); });
 		});
 	}
 	
@@ -326,7 +306,7 @@ function updateCartSummary(json)
 	$('#cart_block_total').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
 	$('.ajax_cart_quantity').html(nbrProducts);
 
-	// cart summary
+	// Cart summary
 	$('#summary_products_quantity').html(nbrProducts);
 	$('#total_product').html(formatCurrency(json.total_products_wt, currencyFormat, currencySign, currencyBlank));
 	$('#total_price').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
@@ -341,13 +321,13 @@ function updateCartSummary(json)
 		$('#total_shipping').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));	
 	}
 	
-	if (json.free_ship <= 0)
-		$('.cart_free_shipping').fadeOut();
-	else
+	if (json.free_ship > 0 && !json.is_virtual_cart)
 	{
 		$('.cart_free_shipping').fadeIn();
 		$('#free_shipping').html(formatCurrency(json.free_ship, currencyFormat, currencySign, currencyBlank));
 	}
+	else
+		$('.cart_free_shipping').hide();
 	
 	if (json.total_wrapping > 0)
 	{

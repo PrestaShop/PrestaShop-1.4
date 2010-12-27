@@ -1177,6 +1177,7 @@ class CartCore extends ObjectModel
 			'carrier' => new Carrier((int)($this->id_carrier), $cookie->id_lang),
 			'products' => $this->getProducts(false),
 			'discounts' => $this->getDiscounts(false, true),
+			'is_virtual_cart' => (int)$this->isVirtualCart(),
 			'total_discounts' => $this->getOrderTotal(true, 2),
 			'total_discounts_tax_exc' => $this->getOrderTotal(false, 2),
 			'total_wrapping' => $this->getOrderTotal(true, 6),
@@ -1245,18 +1246,25 @@ class CartCore extends ObjectModel
 	*/
 	public function isVirtualCart()
 	{
-		if (!(int)(self::getNbProducts($this->id)))
+		$products = $this->getProducts();
+		
+		if (!sizeof($products))
 			return false;
-
-		$allVirtual = true;
-		foreach ($this->getProducts() AS $product)
-		{
-			$res = (ProductDownload::getIdFromIdProduct((int)($product['id_product'])) ? true : false);
-			$allVirtual &= $res;
-			if (!$res)
-				return $allVirtual;
-		}
-		return $allVirtual;
+		
+		$list = '';
+		foreach ($products AS $product)
+			$list .= (int)($product['id_product']).',';
+		$list = rtrim($list, ',');
+		
+		$n = (int)Db::getInstance()->getValue('
+		SELECT COUNT(`id_product_download`) n
+		FROM `'._DB_PREFIX_.'product_download`
+		WHERE `id_product` IN ('.pSQL($list).') AND `active` = 1');
+		
+		if ($n < sizeof($products))
+			return false;
+			
+		return true;
 	}
 
 	static public function getCartByOrderId($id_order)
