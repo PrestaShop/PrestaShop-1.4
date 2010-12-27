@@ -104,6 +104,10 @@ class ParentOrderControllerCore extends FrontController
 				$this->cart->deleteDiscount((int)($_GET['deleteDiscount']));
 				Tools::redirect('order-opc.php');
 			}
+			
+			/* Is there only virtual product in cart */
+			if ($isVirtualCart = $this->cart->isVirtualCart())
+				$this->_setNoCarrier();
 		}
 	}
 	
@@ -341,5 +345,15 @@ class ParentOrderControllerCore extends FrontController
 			'gift_wrapping_price' => (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
 			'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency((int)($this->cookie->id_currency))),
 			'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency((int)($this->cookie->id_currency)))));
+	}
+	
+	/**
+	 * Set id_carrier to 0 (no shipping price)
+	 *
+	 */
+	protected function _setNoCarrier()
+	{
+		$this->cart->id_carrier = 0;
+		$this->cart->update();
 	}
 }

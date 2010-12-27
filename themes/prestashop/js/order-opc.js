@@ -94,13 +94,20 @@ function updateAddressesStatus()
 
 function updateCarrierStatus()
 {
-	if ($('input[name=id_carrier]:checked').length != 0)
+	if (isVirtualCart == 1)
 	{
-		var name = $('label[for='+$('input[name=id_carrier]:checked').attr('id')+']').html();
-		$('#opc_block_2_status').css('color', 'green').html('<p>"'+name+'" '+txtHasBeenSelected+'</p>');
+		$('#opc_block_2_status').css('color', 'green').html('<p>'+txtNoCarrierIsNeeded+'</p>');
 	}
 	else
-		$('#opc_block_2_status').css('color', 'red').html('<p>'+txtNoCarrierIsSelected+'</p>');
+	{
+		if ($('input[name=id_carrier]:checked').length != 0)
+		{
+			var name = $('label[for='+$('input[name=id_carrier]:checked').attr('id')+']').html();
+			$('#opc_block_2_status').css('color', 'green').html('<p>"'+name+'" '+txtHasBeenSelected+'</p>');
+		}
+		else
+			$('#opc_block_2_status').css('color', 'red').html('<p>'+txtNoCarrierIsSelected+'</p>');
+	}
 }
 
 function updateTOSStatus()
@@ -308,7 +315,14 @@ $(function() {
 		var hasError = false;
 		var opc_button_clicked = $(this);	
 		
-		if ($(this).attr('href') == '#opc_block_3' && $('input[name=id_carrier]:checked').length == 0)
+		if ($(this).attr('href') == '#opc_block_2' && isVirtualCart == 1)
+		{
+			if ($('.opc_block_content:visible').attr('id') == 'opc_block_3')
+				$(this).attr('href', '#opc_block_1');
+			else
+				$(this).attr('href', '#opc_block_3');
+		}
+		if ($(this).attr('href') == '#opc_block_3' && $('input[name=id_carrier]:checked').length == 0 && isVirtualCart == 0)
 		{
 			alert(errorCarrier);
 			hasError = true;
@@ -503,7 +517,7 @@ $(function() {
 						updateAddressesAndCarriersList();
 						
 						$('.opc_block_content:visible').slideUp('slow', function() {
-							$('#opc_block_2').slideDown('slow', function() {
+							$((isVirtualCart == 1 ? '#opc_block_3' : '#opc_block_2')).slideDown('slow', function() {
 								$('.opc_status').each(function() {
 									if ($(this).attr('id') != $('.opc_block_content:visible').attr('id')+'_status')
 										$(this).slideDown('slow');

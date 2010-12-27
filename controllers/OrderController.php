@@ -69,12 +69,7 @@ class OrderControllerCore extends ParentOrderController
 		$this->smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
 		
 		if ($this->nbProducts)
-		{
-			/* Is there only virtual product in cart */
-			if ($isVirtualCart = $this->cart->isVirtualCart())
-				$this->setNoCarrier();
 			$this->smarty->assign('virtual_cart', $isVirtualCart);
-		}
 	}
 	
 	public function displayHeader()
@@ -166,16 +161,6 @@ class OrderControllerCore extends ParentOrderController
 		}
 		elseif ($this->step >= 3 AND !$this->cart->id_carrier AND !$isVirtualCart)
 			Tools::redirect('order.php?step=2');
-	}
-
-	/**
-	 * Set id_carrier to 0 (no shipping price)
-	 *
-	 */
-	public function setNoCarrier()
-	{
-		$this->cart->id_carrier = 0;
-		$this->cart->update();
 	}
 
 	/*

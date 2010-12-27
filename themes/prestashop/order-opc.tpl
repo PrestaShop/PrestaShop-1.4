@@ -44,6 +44,7 @@
 	var txtWithoutTax = "{l s='(tax excl.)'}";
 	var txtHasBeenSelected = "{l s='has been selected'}";
 	var txtNoCarrierIsSelected = "{l s='No carrier is selected'}";
+	var txtNoCarrierIsNeeded = "{l s='No carrier is needed for this order'}";
 	var txtTOSIsAccepted = "{l s='Terms of service is accepted'}";
 	var txtTOSIsNotAccepted = "{l s='Terms of service has not been accepted'}";
 	var txtThereis = "{l s='There is'}";
@@ -57,6 +58,7 @@
 	var addresses = new Array();
 	var isLogged = {$isLogged|intval};
 	var isGuest = {$isGuest|intval};
+	var isVirtualCart = {$isVirtualCart|intval};
 	//]]>
 </script>
 {include file="$tpl_dir./thickbox.tpl"}
@@ -338,7 +340,7 @@
 			</div>
 			
 			<div>
-				<div style="float:right;"><a href="#opc_block_2" class="exclusive opc_button">{l s='Continue'}</a></div>
+				<div style="float:right;"><a href="{if $isVirtualCart}#opc_block_3{else}#opc_block_2{/if}" class="exclusive opc_button">{l s='Continue'}</a></div>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -614,10 +616,6 @@
 					</div>
 				</fieldset>
 			</form>
-			
-			<div id="opc_block_1_button" style="display:none;">
-				<div style="float:right;"><a href="#opc_block_2" class="exclusive opc_button">{l s='Continue'}</a></div>
-			</div>
 			<div class="clear"></div>
 		</div>
 		<div id="opc_block_1_status" class="opc_status"></div>
@@ -732,7 +730,7 @@
 		{/if}
 		
 		<div>
-			<div style="float:left;"><a href="#opc_block_2" class="button opc_button">{l s='Back'}</a></div>
+			<div style="float:left;"><a href="{if $isVirtualCart}#opc_block_1{else}#opc_block_2{/if}" class="button opc_button">{l s='Back'}</a></div>
 			<div style="float:right;"><a href="#opc_block_4" class="exclusive opc_button">{l s='Continue'}</a></div>
 		</div>
 		<div class="clear"></div>
