@@ -54,7 +54,7 @@ class PasswordControllerCore extends FrontController
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname,
 							  '{path_token}' => $customer->secure_key,
-							  '{id_customer}' => $customer->id), 
+							  '{id_customer}' => (int)$customer->id), 
 						$customer->email, 
 						$customer->firstname.' '.$customer->lastname);
 						$this->smarty->assign(array('confirmation' => 2, 'email' => $customer->email));
@@ -62,7 +62,7 @@ class PasswordControllerCore extends FrontController
 				}
 			}
 		}
-		elseif (($token = Tools::getValue('token')) && ($id_customer = (int)(Tools::getValue('id'))))
+		elseif (($token = Tools::getValue('token')) && ($id_customer = (int)(Tools::getValue('id_customer'))))
 		{
 			$email = Db::getInstance()->getValue('SELECT `email` FROM '._DB_PREFIX_.'customer c WHERE c.`secure_key` = "'.pSQL($token).'" AND c.id_customer='.(int)($id_customer));
 			if ($email)
@@ -93,7 +93,7 @@ class PasswordControllerCore extends FrontController
 			else
 				$this->errors[] = Tools::displayError('We can\'t regenerate your password with the datas you submitted');
 		}
-		elseif (($token = Tools::getValue('token')) || ($id_customer = Tools::getValue('id')))
+		elseif (($token = Tools::getValue('token')) || ($id_customer = Tools::getValue('id_customer')))
 			$this->errors[] = Tools::displayError('We cannot regenerate your password with the data you submitted');
 	}
 	

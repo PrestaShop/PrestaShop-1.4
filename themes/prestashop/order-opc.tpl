@@ -173,7 +173,7 @@
 					<td id="total_price" class="price">{displayPrice price=$total_price_without_tax}</td>
 				</tr>
 				{/if}
-				<tr class="cart_free_shipping" {if $free_ship < 0 || $isVirtualCart} style="display: none;" {/if}>
+				<tr class="cart_free_shipping" {if $free_ship <= 0 || $isVirtualCart} style="display: none;" {/if}>
 					<td colspan="6" style="white-space: normal;">{l s='Remaining amount to be added to your cart in order to obtain free shipping:'}</td>
 					<td id="free_shipping" class="price">{displayPrice price=$free_ship}</td>
 				</tr>
@@ -343,8 +343,8 @@
 			<div class="clear"></div>
 		</div>
 		<div id="opc_block_1_status" class="opc_status">
-			<p>{l s='Delivery address:'} "<span id="opc_status-address_delivery">Mon adresse</span>" {l s='has been selected'}</p>
-			<p>{l s='Invoice address:'} "<span id="opc_status-address_invoice">Mon adresse</span>" {l s='has been selected'}</p>
+			<p>{l s='Delivery address:'} "<span id="opc_status-address_delivery">{l s='My address'}</span>" {l s='has been selected'}</p>
+			<p>{l s='Invoice address:'} "<span id="opc_status-address_invoice">{l s='My address'}</span>" {l s='has been selected'}</p>
 		</div>
 		<!-- END Address block -->
 	{else}

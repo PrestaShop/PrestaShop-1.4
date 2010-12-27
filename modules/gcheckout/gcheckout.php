@@ -34,7 +34,7 @@ class GCheckout extends PaymentModule
     {
         $this->name = 'gcheckout';
         $this->tab = 'payments_gateways';
-        $this->version = 1.0;
+        $this->version = 1.1;
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -57,13 +57,8 @@ class GCheckout extends PaymentModule
 
     function uninstall()
     {
-        return (
-			parent::uninstall() AND
-			Configuration::deleteByName('GCHECKOUT_MERCHANT_ID') AND
-			Configuration::deleteByName('GCHECKOUT_MERCHANT_KEY') AND
-			Configuration::deleteByName('GCHECKOUT_MODE') AND
-			Configuration::deleteByName('GCHECKOUT_LOGS')
-		);
+        return (parent::uninstall() AND Configuration::deleteByName('GCHECKOUT_MERCHANT_ID') AND Configuration::deleteByName('GCHECKOUT_MERCHANT_KEY') AND
+		Configuration::deleteByName('GCHECKOUT_MODE') AND Configuration::deleteByName('GCHECKOUT_LOGS'));
     }
 	
 	function getContent()
@@ -156,14 +151,14 @@ class GCheckout extends PaymentModule
 		
 		$currency = $this->getCurrency();
 		$googleCart = new GoogleCart(Configuration::get('GCHECKOUT_MERCHANT_ID'), Configuration::get('GCHECKOUT_MERCHANT_KEY'), Configuration::get('GCHECKOUT_MODE'), $currency->iso_code);
-		foreach ($params['cart']->getProducts() as $product)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name']), utf8_decode($product['description_short']), (int)($product['cart_quantity']), Tools::convertPrice($product['price_wt'], $currency)));
+		foreach ($params['cart']->getProducts() AS $product)
+			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].($product['attributes'] != '' ? ' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), (int)$product['cart_quantity'], Tools::convertPrice($product['price_wt'], $currency))); 
 		if ($wrapping = $params['cart']->getOrderTotal(true, 6))
 			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, Tools::convertPrice($wrapping, $currency)));
-		foreach ($params['cart']->getDiscounts() as $voucher)
+		foreach ($params['cart']->getDiscounts() AS $voucher)
 			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.Tools::convertPrice($voucher['value_real'], $currency)));
 		$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($params['cart']->getOrderShippingCost($params['cart']->id_carrier), $currency)));
-		
+
 		$googleCart->SetEditCartUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php');
 		$googleCart->SetContinueShoppingUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php');
 		$googleCart->SetRequestBuyerPhone(false);
@@ -171,10 +166,7 @@ class GCheckout extends PaymentModule
 		$googleCart->SetMerchantPrivateData($params['cart']->id.'|'.$params['cart']->secure_key);
 
 		$buttonText = $this->l('Pay with GoogleCheckout');
-		$smarty->assign(array(
-			'googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($buttonText, 'LARGE'),
-			'buttonText' => $buttonText
-		));
+		$smarty->assign(array('googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($buttonText, 'LARGE'), 'buttonText' => $buttonText));
 
 		return $this->display(__FILE__, 'payment.tpl');
 	}
@@ -187,5 +179,3 @@ class GCheckout extends PaymentModule
 		return $this->display(__FILE__, 'payment_return.tpl');
     }
 }
-
-

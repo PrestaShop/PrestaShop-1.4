@@ -39,8 +39,7 @@ class ProductControllerCore extends FrontController
 			_PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js',
 			_PS_JS_DIR_.'jquery/jquery.serialScroll-1.2.2-min.js',
 			_THEME_JS_DIR_.'tools.js',
-			_THEME_JS_DIR_.'product.js'
-		));
+			_THEME_JS_DIR_.'product.js'));
 
 		if (Configuration::get('PS_DISPLAY_JQZOOM') == 1)
 		{
@@ -52,20 +51,16 @@ class ProductControllerCore extends FrontController
 	public function preProcess()
 	{
 		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
-		{
-	        $id_product = (int)Tools::getValue('id_product');
-
-			if ($id_product)
+			if ($id_product = (int)Tools::getValue('id_product'))
 			{
-				$rewrite_infos = Product::getUrlRewriteInformations($id_product);
+				$rewrite_infos = Product::getUrlRewriteInformations((int)$id_product);
 
 				$default_rewrite = array();
 				foreach ($rewrite_infos AS $infos)
-					$default_rewrite[$infos['id_lang']] = $this->link->getProductLink($id_product, $infos['link_rewrite'], $infos['category_rewrite'], $infos['ean13'], $infos['id_lang']);
+					$default_rewrite[$infos['id_lang']] = $this->link->getProductLink((int)$id_product, $infos['link_rewrite'], $infos['category_rewrite'], $infos['ean13'], (int)$infos['id_lang']);
 
 				$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
 			}
-		}
 	}
 
 	public function process()
@@ -418,4 +413,3 @@ class ProductControllerCore extends FrontController
 		return $specificPrices;
 	}
 }
-
