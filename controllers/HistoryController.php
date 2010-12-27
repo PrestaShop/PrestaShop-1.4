@@ -44,33 +44,6 @@ class HistoryControllerCore extends FrontController
 		Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js', _THEME_JS_DIR_.'history.js'));
 	}
 	
-	public function preProcess()
-	{
-		parent::preProcess();
-		
-		if (Tools::isSubmit('submitReorder') AND $id_order = (int)Tools::getValue('id_order'))
-		{
-			// Customer ID is also checked in order to avoid duplicating someone else order
-			$id_cart = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT `id_cart`
-			FROM `'._DB_PREFIX_.'orders`
-			WHERE `id_customer` = '.(int)$this->cookie->id_customer.'
-			AND `id_order` = '.(int)$id_order);
-			$oldCart = new Cart($id_cart);
-			$duplication = $oldCart->duplicate();
-			if (!$duplication OR !Validate::isLoadedObject($duplication['cart']))
-				$this->errors[] = Tools::displayError('Sorry, we cannot renew your order');
-			elseif (!$duplication['success'])
-				$this->errors[] = Tools::displayError('Some items are missing and we cannot renew your order');
-			else
-			{
-				$this->cookie->id_cart = $duplication['cart']->id;
-				$this->cookie->write();
-				Tools::redirect('order.php');
-			}
-		}
-	}
-	
 	public function process()
 	{
 		parent::process();

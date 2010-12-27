@@ -948,5 +948,20 @@ class OrderCore extends ObjectModel
 			AND c.`is_guest` = 1
 		');
 	}
+	
+	/**
+	 * @param int $id_order
+	 * @param int $id_customer optionnal
+	 * @return int id_cart
+	 */
+	static public function getCartIdStatic($id_order, $id_customer = 0)
+	{
+		return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `id_cart` 
+			FROM `'._DB_PREFIX_.'orders` 
+			WHERE `id_order` = '.(int)$id_order.' 
+			'.($id_customer ? 'AND `id_customer` = '.(int)$id_customer : ''));
+	}
+	
 }
 

@@ -386,11 +386,10 @@ class CarrierCore extends ObjectModel
 		return $carriers;
 	}
 
-	public static function getCarriersOpc($id_country, $groups = NULL)
+	public static function getCarriersForOrder($id_zone, $groups = NULL)
 	{
 		global $cookie, $cart;
-
-		$id_zone = Country::getIdZone((int)($id_country));
+		
 		if (is_array($groups) AND !empty($groups))
 			$result = Carrier::getCarriers((int)($cookie->id_lang), true, false, (int)($id_zone), $groups, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		else
@@ -429,6 +428,19 @@ class CarrierCore extends ObjectModel
 			$resultsArray[] = $row;
 		}
 		return $resultsArray;
+	}
+	
+	/**
+	 * @param int $id_country
+	 * @param array $groups
+	 * @return Array carriers list
+	 * @deprecated
+	 */
+	public static function getCarriersOpc($id_country, $groups = NULL)
+	{
+		Tools::displayAsDeprecated();
+		
+		return self::getCarriersForOrder((int)Country::getIdZone((int)($id_country)), $groups);
 	}
 
 	public static function checkCarrierZone($id_carrier, $id_zone)

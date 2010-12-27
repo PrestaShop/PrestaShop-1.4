@@ -54,8 +54,8 @@ class FrontController extends FrontControllerCore
 		if ($n > 1)
 			return '<span style="color:red">'.round($n, 3).'s</span>'.($kikoo ? ' - You\'d better run your shop on a toaster' : '');
 		if ($n > 0.5)
-			return '<span style="color:orange">'.round($n * 1000).'ms</span>'.($kikoo ? ' - Alright if you\'re on a shared hosting platform' : '');
-		return '<span style="color:green">'.round($n * 1000).'ms</span>'.($kikoo ? ' - Good boy! That\'s what I call a webserver!' : '');
+			return '<span style="color:orange">'.round($n, 3).'s</span>'.($kikoo ? ' - Alright if you\'re on a shared hosting platform' : '');
+		return '<span style="color:green">'.round($n, 3).'s</span>'.($kikoo ? ' - Good boy! That\'s what I call a webserver!' : '');
 	}
 	
 	private function getTimeColor($n)
@@ -152,17 +152,7 @@ class FrontController extends FrontControllerCore
 		$totalSize = 0;
 		foreach (get_included_files() as $file)
 			$totalSize += filesize($file);
-		
-		$totalQueryTime = 0;
-		foreach (Db::getInstance()->queriesTime as $time)
-			$totalQueryTime += $time;
-			
-		$hooktime = Module::$hookTime;
-		arsort($hooktime);
-		$totalHookTime = 0;
-		foreach ($hooktime as $time)
-			$totalHookTime += $time;
-			
+
 		echo '<br /><br />
 		<div class="rte" style="text-align:left;padding:8px;float:left">
 			<b>Load time</b>: '.$this->displayLoadTimeColor($this->_time[6] - $start_time, true).'
@@ -176,13 +166,6 @@ class FrontController extends FrontControllerCore
 				<li>displayContent: '.$this->displayLoadTimeColor(($this->_time[5] - $this->_time[4])).'</li>
 				<li>displayFooter: '.$this->displayLoadTimeColor(($this->_time[6] - $this->_time[5])).'</li>
 			</ul>
-		</div>
-		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
-			<b>Hook processing</b>: '.$this->displayLoadTimeColor($totalHookTime).'
-			<ul>';
-		foreach ($hooktime as $hook => $time)
-			echo '<li>'.$hook.': '.$this->displayLoadTimeColor($time).'</li>';
-		echo '</ul>
 		</div>
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
 			<b>Memory usage</b>: '.$this->displayMemoryColor($this->_memory[6]).', including '.$this->displayMemoryColor($totalSize).' of files
@@ -208,7 +191,9 @@ class FrontController extends FrontControllerCore
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
 			<b>SQL Queries</b>: '.$this->displaySQLQueries(Db::getInstance()->count).'
 			<ul>'.$countByTypes.'</ul>
-			<br /><b>Time spent querying</b>: '.$this->displayLoadTimeColor($totalQueryTime).'
+		</div>
+		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
+			<b>Included files</b>: '.sizeof(get_included_files()).'
 		</div>
 		<div class="rte" style="text-align:left;padding:8px;clear:both;margin-top:20px">
 			<ul>
@@ -238,5 +223,6 @@ class FrontController extends FrontControllerCore
 		foreach ($tables as $table => $nb)
 			echo $hr.'<b '.$this->getTableColor($nb).'>'.$nb.'</b> '.$table;
 		echo '</div>';
+		
 	}
 }

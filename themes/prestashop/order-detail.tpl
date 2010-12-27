@@ -24,7 +24,7 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
-<form action="{$base_dir_ssl}history.php" method="post" class="submit">
+<form action="{$base_dir_ssl}{if isset($opc) && $opc}order-opc{else}order{/if}.php" method="post" class="submit">
 	<input type="hidden" value="{$order->id}" name="id_order">
 	<h4>
 		{l s='Order placed on'} {dateFormat date=$order->date_add full=0}

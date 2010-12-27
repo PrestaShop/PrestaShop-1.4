@@ -1370,6 +1370,7 @@ class CartCore extends ObjectModel
 	/* DEPRECATED */
 	public function getCustomeremail()
 	{
+		Tools::displayAsDeprecated();
 		$customer = new Customer((int)($this->id_customer));
 		return $customer->email;
 	}
