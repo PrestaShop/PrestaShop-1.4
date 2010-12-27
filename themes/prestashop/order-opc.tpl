@@ -52,7 +52,7 @@
 	var txtInvoiceAddress = "{l s='Invoice address'}";
 	var errorCarrier = "{$errorCarrier}";
 	var errorTOS = "{$errorTOS}";
-	var checkedCarrier = "{$checked}";
+	var checkedCarrier = "{if isset($checked)}{$checked}{else}0{/if}";
 
 	var addresses = new Array();
 	var isLogged = {$isLogged|intval};

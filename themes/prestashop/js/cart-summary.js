@@ -359,7 +359,8 @@ function updateCartSummary(json)
 		$('#total_wrapping').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
 		$('#total_wrapping').parent().hide();
 	}
-	ajaxCart.refresh();
+	if (window.ajaxCart !== undefined)
+		ajaxCart.refresh();
 }
 
 function updateCustomizedDatas(json)
