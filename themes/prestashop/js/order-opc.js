@@ -461,7 +461,7 @@ $(function() {
 						
 						var html = '<div class="opc_float_status">';
 						html += '<h4>'+txtDeliveryAddress+'</h4>';
-						html += '<b>'+$('#customer_lastname').val()+' '+$('#customer_firstname').val()+'</b><br />';
+						html += '<b>'+$('#customer_firstname').val()+' '+$('#customer_lastname').val()+'</b><br />';
 						html += $('#address1').val()+'<br />';
 						html += $('#postcode').val()+' ';
 						html += $('#city').val()+'<br />';
@@ -471,7 +471,7 @@ $(function() {
 						html += '</div>';
 						html += '<div class="opc_float_status">';
 						html += '<h4>'+txtInvoiceAddress+'</h4>';
-						html += '<b>'+$('#customer_lastname').val()+' '+$('#customer_firstname').val()+'</b><br />';
+						html += '<b>'+$('#customer_firstname').val()+' '+$('#customer_lastname').val()+'</b><br />';
 						html += $('#address1'+($('#invoice_address').is(':checked') ? '_invoice' : '')).val()+'<br />';
 						html += $('#postcode'+($('#invoice_address').is(':checked') ? '_invoice' : '')).val()+' ';
 						html += $('#city'+($('#invoice_address').is(':checked') ? '_invoice' : '')).val()+'<br />';
