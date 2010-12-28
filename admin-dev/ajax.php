@@ -355,9 +355,10 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 	die($list);
 }
 
-if (Tools::isSubmit('submitCustomerNote') AND $id_customer = (int)Tools::getValue('id_customer') AND $note = html_entity_decode(Tools::getValue('note')))
+if (Tools::isSubmit('submitCustomerNote') AND $id_customer = (int)Tools::getValue('id_customer'))
 {
-	if (!Validate::isCleanHtml($note))
+	$note = html_entity_decode(Tools::getValue('note'));
+	if (!empty($note) AND !Validate::isCleanHtml($note))
 		die ('error:validation');
 	if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'customer SET `note` = "'.pSQL($note, true).'" WHERE id_customer = '.(int)$id_customer.' LIMIT 1'))
 		die ('error:update');
