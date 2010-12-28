@@ -334,6 +334,7 @@ class ReferralProgram extends Module
 						media_external_list_url : "lists/media_list.js",
 						elements : "nourlconvert,ajaxfilemanager",
 						file_browser_callback : "ajaxfilemanager",
+						entity_encoding: "raw",
 						convert_urls : false,
 						language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 						

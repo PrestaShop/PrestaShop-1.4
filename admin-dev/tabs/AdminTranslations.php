@@ -1209,6 +1209,7 @@ class AdminTranslations extends AdminTab
 						external_image_list_url : "lists/image_list.js",
 						media_external_list_url : "lists/media_list.js",
 						elements : "nourlconvert",
+						entity_encoding: "raw",
 						convert_urls : false,
 						language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 						
