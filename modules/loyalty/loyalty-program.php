@@ -128,11 +128,11 @@ $discounts = array();
 if ($ids_discount = LoyaltyModule::getDiscountByIdCustomer((int)($cookie->id_customer)))
 {
 	$nbDiscounts = count($ids_discount);
-	foreach ($ids_discount as $key => $discount)
+	foreach ($ids_discount AS $key => $discount)
 	{
-		$discounts[$key] = new Discount($discount['id_discount'], (int)($cookie->id_lang));
+		$discounts[$key] = new Discount((int)$discount['id_discount'], (int)($cookie->id_lang));
 		$discounts[$key]->date_add = $discount['date_add'];
-		$discounts[$key]->orders = LoyaltyModule::getOrdersByIdDiscount($discount['id_discount']);
+		$discounts[$key]->orders = LoyaltyModule::getOrdersByIdDiscount((int)$discount['id_discount']);
 	}
 }
 
@@ -148,8 +148,8 @@ if (sizeof($voucherCategories) == sizeof($allCategories))
 else
 {
 	$categoriesNames = '';
-	foreach ($voucherCategories as $voucherCategory)
-		foreach ($allCategories as $allCategory)
+	foreach ($voucherCategories AS $voucherCategory)
+		foreach ($allCategories AS $allCategory)
 			if ($voucherCategory['id_category'] == $allCategory['id_category'])
 			{
 				$categoriesNames .= $allCategory['name'].', ';
@@ -159,14 +159,11 @@ else
 	$categoriesNames .= '.';
 }
 $smarty->assign(array(
-	'nbDiscounts' => $nbDiscounts,
+	'nbDiscounts' => (int)$nbDiscounts,
 	'discounts' => $discounts,
 	'minimalLoyalty' => (float)Configuration::get('PS_LOYALTY_MINIMAL'),
-	'categories' => $categoriesNames
-));
+	'categories' => $categoriesNames));
 
 echo Module::display(dirname(__FILE__).'/loyalty.php', 'loyalty.tpl');
 
 include(dirname(__FILE__).'/../../footer.php');
-
-

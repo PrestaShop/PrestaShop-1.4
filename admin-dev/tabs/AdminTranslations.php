@@ -69,13 +69,13 @@ class AdminTranslations extends AdminTab
 			unset($_POST['submitTranslations'.$type], $_POST['lang']);
 			unset($_POST['token']);
 			$toInsert = array();
-			foreach($_POST as $key => $value)
+			foreach($_POST AS $key => $value)
 				if (!empty($value))
 					$toInsert[$key] = /*htmlentities(*/$value/*, ENT_COMPAT, 'UTF-8')*/;
 
 			$tab = ($fullmark ? Tools::strtoupper($fullmark) : 'LANG').($mark ? Tools::strtoupper($mark) : '');
 			fwrite($fd, "<?php\n\nglobal \$_".$tab.";\n\$_".$tab." = array();\n");
-			foreach($toInsert as $key => $value)
+			foreach($toInsert AS $key => $value)
 				fwrite($fd, '$_'.$tab.'[\''.pSQL($key, true).'\'] = \''.pSQL($value, true).'\';'."\n");
 			fwrite($fd, "\n?>");
 			fclose($fd);
@@ -102,7 +102,7 @@ class AdminTranslations extends AdminTab
 
 		$bool = true;
 		$items = Language::getFilesList($fromLang, $fromTheme, $toLang, $toTheme, false, false, true);
-		foreach ($items as $source => $dest)
+		foreach ($items AS $source => $dest)
 		{
 			$bool &= $this->checkDirAndCreate($dest);
 			$bool &= @copy($source, $dest);
@@ -226,7 +226,7 @@ class AdminTranslations extends AdminTab
 
 						/* Write each translation on its module file */
 						$templateName = substr(basename($templateFile), 0, -4);
-						foreach ($matches[1] as $key)
+						foreach ($matches[1] AS $key)
 						{
 							$postKey = md5($moduleName.'_'.$themeName.'_'.$templateName.'_'.md5($key));
 							$pattern = '\'<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key).'\'';
@@ -262,7 +262,7 @@ class AdminTranslations extends AdminTab
 
 					/* Write each translation on its module file */
 					$templateName = substr(basename($templateFile), 0, -4);
-					foreach ($matches[1] as $key)
+					foreach ($matches[1] AS $key)
 					{
 						$moduleKey = '<{'.$moduleName.'}'.$themeName.'>'.$templateName.'_'.md5($key);
 						$translationsArray[$themeName][$moduleName][$templateName][$key] = key_exists($moduleKey, $_MODULES) ? html_entity_decode($_MODULES[$moduleKey], ENT_COMPAT, 'UTF-8') : '';
@@ -367,7 +367,7 @@ class AdminTranslations extends AdminTab
 		 		$content = Tools::getValue('mail');
 
 		 		//core mails
-		 		foreach($content['html'] as $filename => $file_content)
+		 		foreach($content['html'] AS $filename => $file_content)
 		 		{
 					$filename = str_replace('..', '', $filename);
 					if (Validate::isCleanHTML($file_content))
@@ -382,7 +382,7 @@ class AdminTranslations extends AdminTab
 					else
 						$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
 				}
-		 		foreach($content['txt'] as $filename => $file_content)
+		 		foreach ($content['txt'] AS $filename => $file_content)
 		 		{
 					$filename = str_replace('..', '', $filename);
 					$conn = @fopen(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, 'w+');
@@ -394,14 +394,14 @@ class AdminTranslations extends AdminTab
 				}
 
 				// module mails
-				foreach($content['modules'] as $module_dir => $versions)
+				foreach ($content['modules'] AS $module_dir => $versions)
 		 		{
 		 			if (!file_exists(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang')))
 		 			{
 		 				mkdir(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang'), 0777);
 		 			}
 		 			if (isset($versions['html']))
-						foreach($versions['html'] as $filename => $file_content)
+						foreach ($versions['html'] AS $filename => $file_content)
 				 		{
 							$filename = str_replace('..', '', $filename);
 							if (Validate::isCleanHTML($file_content))
@@ -418,7 +418,7 @@ class AdminTranslations extends AdminTab
 								$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
 						}
 					if (isset($versions['txt']))
-				 		foreach($versions['txt'] as $filename => $file_content)
+				 		foreach ($versions['txt'] AS $filename => $file_content)
 				 		{
 							$filename = str_replace('..', '', $filename);
 							$conn = fopen(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
@@ -432,10 +432,10 @@ class AdminTranslations extends AdminTab
 				}
 
 				// themes mail
-				foreach($content['themes'] as $theme_dir_name => $theme_dir)
+				foreach ($content['themes'] AS $theme_dir_name => $theme_dir)
 				{
 				if (isset($theme_dir['html']))
-					foreach ($theme_dir['html'] as $filename => $file_content)
+					foreach ($theme_dir['html'] AS $filename => $file_content)
 					{
 						$filename = str_replace('..', '', $filename);
 						if (Validate::isCleanHTML($file_content))
@@ -451,7 +451,7 @@ class AdminTranslations extends AdminTab
 							$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
 					}
 				if (isset($theme_dir['txt']))
-					foreach($content['txt'] as $filename => $file_content)
+					foreach ($content['txt'] AS $filename => $file_content)
 					{
 						$filename = str_replace('..', '', $filename);
 						$conn = @fopen(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, 'w+');
@@ -464,10 +464,10 @@ class AdminTranslations extends AdminTab
 				}
 
 				// themes modules mails
-				foreach ($content['themes_module'] as $theme_dir_name => $theme_dir)
-				foreach ($theme_dir as $theme_module_dir_name => $theme_module_dir)
+				foreach ($content['themes_module'] AS $theme_dir_name => $theme_dir)
+				foreach ($theme_dir AS $theme_module_dir_name => $theme_module_dir)
 				{
-					foreach($theme_module_dir['html'] as $filename => $file_content)
+					foreach ($theme_module_dir['html'] AS $filename => $file_content)
 					{
 						$filename = str_replace('..', '', $filename);
 						if (Validate::isCleanHTML($file_content))
@@ -483,7 +483,7 @@ class AdminTranslations extends AdminTab
 							$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
 					}
 					if (isset($theme_module_dir['txt']))
-					foreach($theme_module_dir['txt'] as $filename => $file_content)
+					foreach($theme_module_dir['txt'] AS $filename => $file_content)
 					{
 						$filename = str_replace('..', '', $filename);
 						$conn = @fopen(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/modules/'.$theme_module_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
@@ -500,7 +500,7 @@ class AdminTranslations extends AdminTab
 				//Tools::d($subjecttab['mails']);
 			if (isset($subjecttab))
 			{
-				foreach ($subjecttab as $key => $subjecttype)
+				foreach ($subjecttab AS $key => $subjecttype)
 				{
 
 					if ($key == 'mails')
@@ -512,7 +512,7 @@ class AdminTranslations extends AdminTab
 					elseif ($key == 'themes')
 					{
 						//Tools::d($subjecttype);
-						foreach ($subjecttype as $nametheme => $subtheme)
+						foreach ($subjecttype AS $nametheme => $subtheme)
 						{
 						if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
 							die(Tools::displayError());
@@ -561,7 +561,7 @@ class AdminTranslations extends AdminTab
 					{
 						$filename = _PS_MODULE_DIR_.$module.'/'.$lang.'.php';
 						$content = scandir(_PS_MODULE_DIR_.$module);
-						foreach ($content as $cont)
+						foreach ($content AS $cont)
 							if ($cont{0} != '.' AND $cont != 'img' AND $cont != 'mails' AND $cont != 'js' AND is_dir(_PS_MODULE_DIR_.$module.'/'.$cont))
 								if ($files = @scandir(_PS_MODULE_DIR_.$module.'/'.$cont))
 									$this->findAndWriteTranslationsIntoFile($filename, $files, 'prestashop', $module, _PS_MODULE_DIR_.$module.'/'.$cont.'/');
@@ -612,10 +612,10 @@ class AdminTranslations extends AdminTab
 				<input type="hidden" name="tab" value="AdminTranslations" />
 				<input type="hidden" name="lang" id="translation_lang" value="0" />
 				<select name="type" style="float:left; margin-right:10px;">';
-			foreach ($translations as $key => $translation)
+			foreach ($translations AS $key => $translation)
 				echo '<option value="'.$key.'">'.$translation.'&nbsp;</option>';
 			echo '</select>';
-			foreach ($languages as $language)
+			foreach ($languages AS $language)
 				echo '<a href="javascript:chooseTypeTranslation(\''.$language['iso_code'].'\')">
 						<img src="'._THEME_LANG_DIR_.$language['id_lang'].'.jpg" alt="'.$language['iso_code'].'" title="'.$language['iso_code'].'" />
 					</a>';
@@ -634,7 +634,7 @@ class AdminTranslations extends AdminTab
 			if ($lang_packs)
 			{
 				$lang_packs = unserialize($lang_packs);
-				foreach($lang_packs as $lang_pack)
+				foreach($lang_packs AS $lang_pack)
 					if (!Language::isInstalled($lang_pack['iso_code']))
 						echo '<option value="'.$lang_pack['iso_code'].'">'.$lang_pack['name'].'</option>';
 			}
@@ -676,14 +676,14 @@ class AdminTranslations extends AdminTab
 					<p>'.$this->l('Export data from one language to a file (language pack).').'<br />'.
 					$this->l('Choose the theme from which you want to export translations.').'<br />
 					<select name="iso_code" style="margin-top:10px;">';
-				foreach ($languages as $language)
+				foreach ($languages AS $language)
 					echo '<option value="'.$language['iso_code'].'">'.$language['name'].'</option>';
 				echo '
 					</select>
 					&nbsp;&nbsp;&nbsp;
 					<select name="theme" style="margin-top:10px;">';
 				$themes = self::getThemesList();
-				foreach ($themes as $theme)
+				foreach ($themes AS $theme)
 					echo '<option value="'.$theme['name'].'">'.$theme['name'].'</option>';
 				echo '
 					</select>&nbsp;&nbsp;
@@ -709,7 +709,7 @@ class AdminTranslations extends AdminTab
 							&nbsp;&nbsp;&nbsp;
 							<select name="fromTheme">';
 						$themes = self::getThemesList();
-						foreach ($themes as $theme)
+						foreach ($themes AS $theme)
 							echo '<option value="'.$theme['name'].'">'.$theme['name'].'</option>';
 						echo '
 							</select> <span style="font-style: bold; color: red;">*</span>
@@ -724,7 +724,7 @@ class AdminTranslations extends AdminTab
 							&nbsp;&nbsp;&nbsp;
 							<select name="toTheme">';
 						$themes = self::getThemesList();
-						foreach ($themes as $theme)
+						foreach ($themes AS $theme)
 							echo '<option value="'.$theme['name'].'">'.$theme['name'].'</option>';
 						echo '
 							</select>
@@ -839,7 +839,7 @@ class AdminTranslations extends AdminTab
 				preg_match_all($regex, $content, $matches);
 
 				/* Get string translation */
-				foreach($matches[1] as $key)
+				foreach($matches[1] AS $key)
 				{
 					$key2 = $template.'_'.md5($key);
 					$newLang[$key] = (key_exists($key2, $_LANG)) ? html_entity_decode($_LANG[$key2], ENT_COMPAT, 'UTF-8') : '';
@@ -855,7 +855,7 @@ class AdminTranslations extends AdminTab
 		$this->displayToggleButton(sizeof($_LANG) >= $count);
 		$this->displayAutoTranslate();
 		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-		foreach ($files as $k => $newLang)
+		foreach ($files AS $k => $newLang)
 			if (sizeof($newLang))
 			{
 				$countValues = array_count_values($newLang);
@@ -864,7 +864,7 @@ class AdminTranslations extends AdminTab
 				<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$k.'\')">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="front_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
-				foreach ($newLang as $key => $value)
+				foreach ($newLang AS $key => $value)
 				{
 					echo '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
 					if (strlen($key) < TEXTAREA_SIZED)
@@ -899,11 +899,11 @@ class AdminTranslations extends AdminTab
 				fclose($fd);
 				$regex = '/this->l\(\''._PS_TRANS_PATTERN_.'\'[\)|\,]/U';
 				preg_match_all($regex, $content, $matches);
-				foreach ($matches[1] as $key)
+				foreach ($matches[1] AS $key)
 					$tabsArray[$tab][$key] = stripslashes(key_exists($tab.md5($key), $_LANGADM) ? html_entity_decode($_LANGADM[$tab.md5($key)], ENT_COMPAT, 'UTF-8') : '');
 				$count += isset($tabsArray[$tab]) ? sizeof($tabsArray[$tab]) : 0;
 			}
-		foreach (array('header.inc', 'footer.inc', 'index', 'login', 'password') as $tab)
+		foreach (array('header.inc', 'footer.inc', 'index', 'login', 'password') AS $tab)
 		{
 			$tab = PS_ADMIN_DIR.'/'.$tab.'.php';
 			$fd = fopen($tab, 'r');
@@ -911,7 +911,7 @@ class AdminTranslations extends AdminTab
 			fclose($fd);
 			$regex = '/translate\(\''._PS_TRANS_PATTERN_.'\'\)/U';
 			preg_match_all($regex, $content, $matches);
-			foreach ($matches[1] as $key)
+			foreach ($matches[1] AS $key)
 				$tabsArray['index'][$key] = stripslashes(key_exists('index'.md5($key), $_LANGADM) ? html_entity_decode($_LANGADM['index'.md5($key)], ENT_COMPAT, 'UTF-8') : '');
 			$count += isset($tabsArray['index']) ? sizeof($tabsArray['index']) : 0;
 		}
@@ -923,7 +923,7 @@ class AdminTranslations extends AdminTab
 		$this->displayToggleButton();
 		$this->displayAutoTranslate();
 		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsBack" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-		foreach ($tabsArray as $k => $newLang)
+		foreach ($tabsArray AS $k => $newLang)
 			if (sizeof($newLang))
 			{
 				$countValues = array_count_values($newLang);
@@ -932,7 +932,7 @@ class AdminTranslations extends AdminTab
 				<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$k.'\')">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="back_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
-				foreach ($newLang as $key => $value)
+				foreach ($newLang AS $key => $value)
 				{
 					echo '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
 					if (strlen($key) < TEXTAREA_SIZED)
@@ -983,7 +983,7 @@ class AdminTranslations extends AdminTab
 					if (!filesize($fn))
 						continue;
 					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, (true|false))?\)/U', fread(fopen($fn, 'r'), filesize($fn)), $matches);
-					foreach($matches[1] as $key)
+					foreach($matches[1] AS $key)
 						$stringToTranslate[$key] = (key_exists(md5($key), $_ERRORS)) ? html_entity_decode($_ERRORS[md5($key)], ENT_COMPAT, 'UTF-8') : '';
 				}
 		$irow = 0;
@@ -992,7 +992,7 @@ class AdminTranslations extends AdminTab
 		<input type="submit" name="submitTranslationsErrors" value="'.$this->l('Update translations').'" class="button" /><br /><br />
 		<table cellpadding="0" cellspacing="0" class="table">';
 		ksort($stringToTranslate);
-		foreach ($stringToTranslate as $key => $value)
+		foreach ($stringToTranslate AS $key => $value)
 			echo '<tr '.(empty($value) ? 'style="background-color:#FBB"' : (++$irow % 2 ? 'class="alt_row"' : '')).'><td>'.stripslashes($key).'</td><td style="width: 430px">= <input type="text" name="'.md5($key).'" value="'.preg_replace('/"/', '&quot;', stripslashes($value)).'" style="width: 400px"></td></tr>';
 		echo '</table><br /><input type="submit" name="submitTranslationsErrors" value="'.$this->l('Update translations').'" class="button" /></form>';
 	}
@@ -1074,11 +1074,11 @@ class AdminTranslations extends AdminTab
 
 		$langs = Language::getLanguages();
 		$langIds = array();
-		foreach ($langs as &$lang_item)
+		foreach ($langs AS &$lang_item)
 			$langIds[] = $lang_item['iso_code'];
-		foreach (scandir(_PS_MAIL_DIR_) as $mail_lang_dir)
+		foreach (scandir(_PS_MAIL_DIR_) AS $mail_lang_dir)
 			if (in_array($mail_lang_dir, $langIds))
-				foreach (scandir(_PS_MAIL_DIR_.$mail_lang_dir) as $tpl_file)
+				foreach (scandir(_PS_MAIL_DIR_.$mail_lang_dir) AS $tpl_file)
 					if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
 					{
 						if (!isset($mailTpls[$tpl_file]))
@@ -1092,13 +1092,13 @@ class AdminTranslations extends AdminTab
 							$subjectMailContent = self::getSubjectMailContent(_PS_MAIL_DIR_.$mail_lang_dir);
 						}
 					}
-		foreach (scandir(_PS_MODULE_DIR_) as $module_dir)
+		foreach (scandir(_PS_MODULE_DIR_) AS $module_dir)
 			if ($module_dir != '.svn' && $module_dir != '.' && $module_dir != '..' && file_exists(_PS_MODULE_DIR_.$module_dir.'/mails'))
-				foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails') as $mail_lang_dir)
+				foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails') AS $mail_lang_dir)
 				{
 					if (in_array($mail_lang_dir, $langIds))
 					{
-						foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/'.$mail_lang_dir) as $tpl_file)
+						foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/'.$mail_lang_dir) AS $tpl_file)
 						{
 							if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
 							{
@@ -1116,7 +1116,7 @@ class AdminTranslations extends AdminTab
 						}
 						if ($mail_lang_dir == $lang AND file_exists(_PS_MODULE_DIR_.$module_dir.'/mails/en'))
 						{
-							foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/en') as $tpl_file)
+							foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/en') AS $tpl_file)
 							{
 								if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
 								{
@@ -1133,12 +1133,12 @@ class AdminTranslations extends AdminTab
 						}
 					}
 				}
-		foreach (scandir(_PS_ALL_THEMES_DIR_) as $theme_dir)
+		foreach (scandir(_PS_ALL_THEMES_DIR_) AS $theme_dir)
 		{
 			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails'))
 			{
 				if (in_array($mail_lang_dir, $langIds))
-					foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir) as $tpl_file)
+					foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir) AS $tpl_file)
 						if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
 						{
 							if (!isset($themeMailTpls[$tpl_file]))
@@ -1155,10 +1155,10 @@ class AdminTranslations extends AdminTab
 			}
 			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules'))
 			{
-				foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules') as $theme_name_module)
+				foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules') AS $theme_name_module)
 					if ($theme_name_module != '.svn' && $theme_name_module != '.' && $theme_name_module != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$theme_name_module.'/mails'))
 						if (in_array($mail_lang_dir, $langIds))
-							foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$theme_name_module.'/mails/'.$mail_lang_dir) as $tpl_file)
+							foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$theme_name_module.'/mails/'.$mail_lang_dir) AS $tpl_file)
 								if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
 								{
 									if (!isset($themeModuleMailTpls[$tpl_file]))
@@ -1182,13 +1182,13 @@ class AdminTranslations extends AdminTab
 		if ($noDisplay)
 		{
 			$empty = 0;
-			foreach ($mailTpls as $key => $tpl_file)
+			foreach ($mailTpls AS $key => $tpl_file)
 			{
 				if (Tools::strlen($tpl_file[$lang]) == 0)
 					$empty++;
 			}
 
-			foreach ($moduleMailTpls as $key => $tpl_file)
+			foreach ($moduleMailTpls AS $key => $tpl_file)
 				foreach ($tpl_file AS $key2 => $tpl_file2)
 				{
 					if (Tools::strlen($tpl_file[$key2][$lang]) == 0)
@@ -1247,7 +1247,7 @@ class AdminTranslations extends AdminTab
 
 		//count nb core emails
 		$nbr = 0;
-		foreach ($mailTpls as $mailTplName => $mailTpl)
+		foreach ($mailTpls AS $mailTplName => $mailTpl)
 			if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
 			OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
 				$nbr++;
@@ -1255,7 +1255,7 @@ class AdminTranslations extends AdminTab
 		echo'<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\'core\')">Core e-mails - <font color="blue">'.$nbr.'</font> templates for '.$mylang->name.':</legend><div name="mails_div" id="core">';
 
 		//core emails
-		foreach ($mailTpls as $mailTplName => $mailTpl)
+		foreach ($mailTpls AS $mailTplName => $mailTpl)
 		{
 			if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
 			OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
@@ -1287,11 +1287,11 @@ class AdminTranslations extends AdminTab
 
 		// module mails
 		echo '<br/><div id="modules">';
-		foreach ($moduleMailTpls as $key33 => $moduleMailTpls2)
+		foreach ($moduleMailTpls AS $key33 => $moduleMailTpls2)
 		{
 			echo '<fieldset><br/>
 			<legend style="cursor : pointer" onclick="openCloseLayer(\''.$key33.'\')">Module "'.$key33.'" - <font color="blue">'.(count($moduleMailTpls2,COUNT_RECURSIVE)/2).'</font> templates for '.$mylang->name.':</legend><div name="mails_div" id="'.$key33.'">';
-			foreach ($moduleMailTpls2 as $mailTplName => $mailTpl)
+			foreach ($moduleMailTpls2 AS $mailTplName => $mailTpl)
 			{
 				if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
 				OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
@@ -1334,14 +1334,14 @@ class AdminTranslations extends AdminTab
 		echo '</div><br />';
 
 		// mail theme
-		foreach (scandir(_PS_ALL_THEMES_DIR_) as $theme_dir)
+		foreach (scandir(_PS_ALL_THEMES_DIR_) AS $theme_dir)
 		{
 			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir)
 				&& isset($themeMailTpls[$theme_dir]))
 			{
 				// count nb mail in mailtheme
 				$nb = 0;
-				foreach ($themeMailTpls[$theme_dir] as $key2 => $tab)
+				foreach ($themeMailTpls[$theme_dir] AS $key2 => $tab)
 					if ((strripos($key2, '.html') AND isset($subjectMail[substr($key2, 0, -5)]))
 					OR (strripos($key2, '.txt') AND isset($subjectMail[substr($key2, 0, -4)])))
 						$nb++;
@@ -1349,7 +1349,7 @@ class AdminTranslations extends AdminTab
 				echo '<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$theme_dir.'\')">Theme : '.$theme_dir.' - <font color="blue">'.$nb.'</font> templates for '.$mylang->name.' :</legend><div name="mails_div" id="'.$theme_dir.'">';
 
 				// core mail theme
-				foreach ($themeMailTpls[$theme_dir] as $themeMailTplName => $themeMailTpl)
+				foreach ($themeMailTpls[$theme_dir] AS $themeMailTplName => $themeMailTpl)
 				{
 					if ((strripos($themeMailTplName, '.html') AND isset($subjectMail[substr($themeMailTplName, 0, -5)]))
 					OR (strripos($themeMailTplName, '.txt') AND isset($subjectMail[substr($themeMailTplName, 0, -4)])))
@@ -1394,7 +1394,7 @@ class AdminTranslations extends AdminTab
 				id="div'.$theme_dir.'">
 				<br/>';
 
-				foreach ($themeModuleMailTpls[$theme_dir] as $themeModuleName => $themeModule)
+				foreach ($themeModuleMailTpls[$theme_dir] AS $themeModuleName => $themeModule)
 				{
 					echo '<span class="style-themeModuleName"
 					onclick="openCloseLayer(\''.$theme_dir.$themeModuleName.'\')">'.$themeModuleName.' - <font color="blue">'.count($themeModule).'</font> templates for '.$mylang->name.' :</span>';
@@ -1403,7 +1403,7 @@ class AdminTranslations extends AdminTab
 					border: 1px solid #DFD5C3;
 					background: #FFFFF0;"
 					id="'.$theme_dir.$themeModuleName.'">';
-					foreach ($themeModule as $themeModuleMailTplName => $themeModuleMailTpl)
+					foreach ($themeModule AS $themeModuleMailTplName => $themeModuleMailTpl)
 					{
 						if ((strripos($themeModuleMailTplName, '.html') AND isset($subjectMail[substr($themeModuleMailTplName, 0, -5)]))
 						OR (strripos($themeModuleMailTplName, '.txt') AND isset($subjectMail[substr($themeModuleMailTplName, 0, -4)])))
@@ -1444,7 +1444,7 @@ class AdminTranslations extends AdminTab
 
 	private function getSubjectMail($directory, $subjectMail)
 	{
-		foreach (scandir($directory) as $filename)
+		foreach (scandir($directory) AS $filename)
 		{
 			if (strripos($filename, '.php') > 0 AND $filename != 'AdminTranslations.php')
 			{
@@ -1499,7 +1499,7 @@ class AdminTranslations extends AdminTab
 			$tab = 'LANGMAIL';
 			fwrite($fd, "<?php\n\nglobal \$_".$tab.";\n\$_".$tab." = array();\n");
 
-			foreach($sub as $key => $value)
+			foreach($sub AS $key => $value)
 				fwrite($fd, '$_'.$tab.'[\''.pSQL($key, true).'\'] = \''.pSQL($value, true).'\';'."\n");
 			fwrite($fd, "\n?>");
 			fclose($fd);
@@ -1531,7 +1531,7 @@ class AdminTranslations extends AdminTab
 					self::getModuleTranslations();
 
 					$content = scandir(_PS_MODULE_DIR_.$module);
-					foreach ($content as $cont)
+					foreach ($content AS $cont)
 						if ($cont{0} != '.' AND $cont != 'img' AND $cont != 'mails' AND $cont != 'js' AND is_dir(_PS_MODULE_DIR_.$module.'/'.$cont))
 							if ($files = @scandir(_PS_MODULE_DIR_.$module.'/'.$cont))
 								$count += $this->findAndFillTranslations($files, $allfiles, 'prestashop', $module, 	_PS_MODULE_DIR_.$module.'/'.$cont.'/');
@@ -1576,7 +1576,7 @@ class AdminTranslations extends AdminTab
 							<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$theme_name.'_'.$module_name.'_'.$template_name.'\')">'.$theme_name.' - '.$template_name.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 								<div name="modules_div" id="'.$theme_name.'_'.$module_name.'_'.$template_name.'" style="display: '.($empty ? 'block' : 'none').';">
 									<table cellpadding="2">';
-							foreach ($newLang as $key => $value)
+							foreach ($newLang AS $key => $value)
 							{
 								echo '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
 								if (strlen($key) < TEXTAREA_SIZED)
@@ -1618,7 +1618,7 @@ class AdminTranslations extends AdminTab
 		fclose($fd);
 		$regex = '/self::l\(\''._PS_TRANS_PATTERN_.'\'[\)|\,]/U';
 		preg_match_all($regex, $content, $matches);
-		foreach($matches[1] as $key)
+		foreach($matches[1] AS $key)
 			$tabsArray[$tab][$key] = stripslashes(key_exists($tab.md5(addslashes($key)), $_LANGPDF) ? html_entity_decode($_LANGPDF[$tab.md5(addslashes($key))], ENT_COMPAT, 'UTF-8') : '');
 		$count += isset($tabsArray[$tab]) ? sizeof($tabsArray[$tab]) : 0;
 		$closed = sizeof($_LANGPDF) >= $count;
@@ -1637,7 +1637,7 @@ class AdminTranslations extends AdminTab
 					toggleElemValue(\'buttonall\', '.($closed ? 'openAll' : 'closeAll').', '.($closed ? 'closeAll' : 'openAll').');
 				</script>';
 		echo '<input type="submit" name="submitTranslationsPDF" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-		foreach ($tabsArray as $k => $newLang)
+		foreach ($tabsArray AS $k => $newLang)
 			if (sizeof($newLang))
 			{
 				$countValues = array_count_values($newLang);
@@ -1646,7 +1646,7 @@ class AdminTranslations extends AdminTab
 				<fieldset style="width: 700px"><legend style="cursor : pointer" onclick="openCloseLayer(\''.$k.'\')">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="pdf_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
-				foreach ($newLang as $key => $value)
+				foreach ($newLang AS $key => $value)
 				{
 					echo '
 					<tr>

@@ -27,7 +27,7 @@
 {capture name=path}{l s='Guest tracking'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{l s='Guest Tracking'}</h2>
+<h1>{l s='Guest Tracking'}</h1>
 
 {if isset($order)}
 	<div id="block-history">

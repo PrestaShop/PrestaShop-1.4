@@ -221,7 +221,7 @@ class Loyalty extends Module
 			else
 			{
 				$errors = '';
-				foreach ($this->_errors as $error)
+				foreach ($this->_errors AS $error)
 					$errors .= $error.'<br />';
 				echo $this->displayError($errors);
 			}
@@ -232,7 +232,7 @@ class Loyalty extends Module
 	{
 		$cat = '';
 		if ($categories)
-			foreach ($categories as $category)
+			foreach ($categories AS $category)
 				$cat .= $category.',';
 		return rtrim($cat, ",");
 	}
@@ -477,7 +477,6 @@ class Loyalty extends Module
 	/* Hook display on customer account page */
 	public function hookCustomerAccount($params)
 	{
-		global $smarty;
 		return $this->display(__FILE__, 'my-account.tpl');
 	}
 	
@@ -488,39 +487,25 @@ class Loyalty extends Module
 	
 	/* Catch product returns and substract loyalty points */
 	public function hookOrderReturn($params)
-	{
-		$result = Db::getInstance()->getRow('
-		SELECT f.id_loyalty
-		FROM `'._DB_PREFIX_.'loyalty` f
-		WHERE f.id_customer = '.(int)($params['orderReturn']->id_customer).'
-		AND f.id_order = '.(int)($params['orderReturn']->id_order));
-		$loyalty = new LoyaltyModule((int)($result['id_loyalty']));
-		if (!Validate::isLoadedObject($loyalty))
-			return false;
-		
+	{		
 		$totalPrice = 0;
 		$details = OrderReturn::getOrdersReturnDetail((int)($params['orderReturn']->id));
 		foreach ($details AS $detail)
 		{
-			$result = Db::getInstance()->getRow('
-			SELECT product_price * (1 + (tax_rate / 100)) AS wt
+			$price_wt = Db::getInstance()->getValue('
+			SELECT product_price * (1 + (tax_rate / 100)) price
 			FROM '._DB_PREFIX_.'order_detail od
 			WHERE id_order_detail = '.(int)($detail['id_order_detail']));
-			$totalPrice += $result['wt'] * $detail['product_quantity'];
+
+			$totalPrice += number_format($price_wt, 2, '.', '') * $detail['product_quantity'];
 		}
 		
-		$canceledTotal = floor($totalPrice / (float)(Configuration::get('PS_LOYALTY_POINT_RATE')));
-		if ($canceledTotal > $loyalty->points)
-			$canceledTotal = $loyalty->points;
-				
-		Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'loyalty_history` (`id_loyalty`, `id_loyalty_state`, `points`, `date_add`)
-		VALUES ('.(int)($loyalty->id).', '.(int)(LoyaltyStateModule::getCancelId()).', -'.(int)($canceledTotal).', NOW())');
-		$loyalty->points -= $canceledTotal;
-		$loyalty->update();
-		Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'loyalty_history` (`id_loyalty`, `id_loyalty_state`, `points`, `date_add`)
-		VALUES ('.(int)($loyalty->id).', '.(int)(LoyaltyStateModule::getValidationId()).', '.(int)($loyalty->points).', NOW())');
+		$loyaltyNew = new LoyaltyModule();
+		$loyaltyNew->points = (int)(-1 * LoyaltyModule::getNbPointsByPrice($totalPrice));
+		$loyaltyNew->id_loyalty_state = (int)LoyaltyStateModule::getCancelId();
+		$loyaltyNew->id_order = (int)$params['orderReturn']->id_order;
+		$loyaltyNew->id_customer = (int)$params['orderReturn']->id_customer;
+		$loyaltyNew->save();
 	}
 
 	/* Hook display on shopping cart summary */
@@ -541,7 +526,7 @@ class Loyalty extends Module
 	public function hookNewOrder($params)
 	{
 		if (!Validate::isLoadedObject($params['customer']) OR !Validate::isLoadedObject($params['order']))
-			die (Tools::displayError('Some parameters are missing.'));
+			die(Tools::displayError('Some parameters are missing.'));
 		$loyalty = new LoyaltyModule();
 		$loyalty->id_customer = (int)$params['customer']->id;
 		$loyalty->id_order = (int)$params['order']->id;
@@ -557,11 +542,11 @@ class Loyalty extends Module
 	public function hookUpdateOrderStatus($params)
 	{
 		if (!Validate::isLoadedObject($params['newOrderStatus']))
-			die (Tools::displayError('Some parameters are missing.'));
+			die(Tools::displayError('Some parameters are missing.'));
 		$newOrder = $params['newOrderStatus'];
 		$order = new Order((int)($params['id_order']));
 		if ($order AND !Validate::isLoadedObject($order))
-			die (Tools::displayError('Incorrect object Order.'));
+			die(Tools::displayError('Incorrect object Order.'));
 		$this->instanceDefaultStates();
 
 		if ($newOrder->id == $this->loyaltyStateValidation->id_order_state OR $newOrder->id == $this->loyaltyStateCancel->id_order_state)
@@ -577,10 +562,10 @@ class Loyalty extends Module
 				if ((int)($loyalty->points) < 0)
 					$loyalty->points = abs((int)($loyalty->points));
 			}
-			else if ($newOrder->id == $this->loyaltyStateCancel->id_order_state)
+			elseif ($newOrder->id == $this->loyaltyStateCancel->id_order_state)
 			{
 				$loyalty->id_loyalty_state = LoyaltyStateModule::getCancelId();
-				$loyalty->points = 0;//-abs((int)($loyalty->points));
+				$loyalty->points = 0;
 			}
 			return $loyalty->save();
 		}
@@ -592,7 +577,7 @@ class Loyalty extends Module
 	{
 		$customer = new Customer((int)($params['id_customer']));
 		if ($customer AND !Validate::isLoadedObject($customer))
-			die (Tools::displayError('Incorrect object Customer.'));
+			die(Tools::displayError('Incorrect object Customer.'));
 
 		$fidelities = LoyaltyModule::getAllByIdCustomer((int)($params['id_customer']), (int)($params['cookie']->id_lang));
 		$points = (int)(LoyaltyModule::getPointsByCustomer((int)($params['id_customer'])));
@@ -634,17 +619,14 @@ class Loyalty extends Module
 			return false;
 		if (!Validate::isLoadedObject($loyalty = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))))))
 			return false;
-
-		$loyalty->points = $loyalty->points - LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 1 : (1 + ($orderDetail->tax_rate / 100))) * $orderDetail->product_quantity);
-		$loyalty->save();
 		
 		$loyaltyNew = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))));
-		$loyaltyNew->points = LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 1 : (1 + ($orderDetail->tax_rate / 100))) * $orderDetail->product_quantity);
-		$loyaltyNew->id_loyalty_state = LoyaltyStateModule::getCancelId();
-		$loyaltyNew->id_order = (int)($params['order']->id);
-		$loyaltyNew->id_customer = (int)($loyalty->id_customer);
+		$loyaltyNew->points = -1 * LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 1 : (1 + ($orderDetail->tax_rate / 100)))) * $orderDetail->product_quantity;
+		$loyaltyNew->id_loyalty_state = (int)LoyaltyStateModule::getCancelId();
+		$loyaltyNew->id_order = (int)$params['order']->id;
+		$loyaltyNew->id_customer = (int)$loyalty->id_customer;
 		$loyaltyNew->add();
-		
+
 		return;
 	}
 	
