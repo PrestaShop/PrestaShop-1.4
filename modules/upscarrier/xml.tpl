@@ -8,8 +8,7 @@
 		<RatingServiceSelectionRequest>
 			<Request>
 				<TransactionReference>
-					<CustomerContext>Rating and Service</CustomerContext>
-					<XpciVersion>1.0</XpciVersion>
+					<CustomerContext>Rating and Service for Prestashop</CustomerContext>
 				</TransactionReference>
 				<RequestAction>Rate</RequestAction>
 				<RequestOption>Rate</RequestOption>
@@ -54,7 +53,7 @@
 						<StateProvinceCode>[[ShipFromStateCode]]</StateProvinceCode>
 					</Address>
 				</ShipFrom>
-				<Service><Code>65</Code></Service>
+				<Service><Code>[[Service]]</Code></Service>
 				<Package>
 					<PackagingType>
 						<Code>[[PackagingTypeCode]]</Code>

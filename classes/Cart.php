@@ -1006,10 +1006,15 @@ class CartCore extends ObjectModel
 		{
 			$moduleName = $carrier->external_module_name;
 			$module = Module::getInstanceByName($moduleName);
+			$module->id_carrier = $carrier->id;
 			if($carrier->need_range)
 				$shipping_cost = $module->getOrderShippingCost($this, $shipping_cost);
 			else
 				$shipping_cost = $module->getOrderShippingCostExternal($this);
+
+			// Check if carrier is available
+			if ($shipping_cost === false)
+				return false;
 		}
 
 		// Apply tax

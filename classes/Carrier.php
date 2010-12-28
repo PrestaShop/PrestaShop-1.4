@@ -425,6 +425,14 @@ class CarrierCore extends ObjectModel
 			$row['price'] = $cart->getOrderShippingCost((int)($row['id_carrier']));
 			$row['price_tax_exc'] = $cart->getOrderShippingCost((int)($row['id_carrier']), false);
 			$row['img'] = file_exists(_PS_SHIP_IMG_DIR_.(int)($row['id_carrier']).'.jpg') ? _THEME_SHIP_DIR_.(int)($row['id_carrier']).'.jpg' : '';
+
+			// If price is false, then the carrier is unavailable (carrier module)
+			if ($row['price'] === false)
+			{
+				unset($result[$k]);
+				continue ;
+			}
+
 			$resultsArray[] = $row;
 		}
 		return $resultsArray;
