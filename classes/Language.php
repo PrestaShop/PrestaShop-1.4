@@ -32,15 +32,18 @@ class LanguageCore extends ObjectModel
 	/** @var string Name */
 	public 		$name;
 	
-	/** @var string 2 letters iso code */
+	/** @var string 2-letter iso code */
 	public 		$iso_code;
+	
+	/** @var string 5-letter iso code */
+	public 		$language_code;
 	
 	/** @var boolean Status */
 	public 		$active = true;
 	
 	protected 	$fieldsRequired = array('name', 'iso_code');
-	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 2);
-	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'active' => 'isBool');
+	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 2, 'language_code' => 5);
+	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'language_code' => 'isLanguageCode', 'active' => 'isBool');
 	
 	protected 	$table = 'lang';
 	protected 	$identifier = 'id_lang';
@@ -53,13 +56,50 @@ class LanguageCore extends ObjectModel
 			'fields' => array(
 			'name' => array('sqlId' => 'name'),
 			'active' => array('sqlId' => 'active'),
-			'iso_code' => array('sqlId' => 'iso_code')
+			'iso_code' => array('sqlId' => 'iso_code'),
+			'language_code' => array('sqlId' => 'language_code')
 		)
 	);
 	
 	public	function __construct($id = NULL, $id_lang = NULL)
 	{
 		parent::__construct($id);
+	}
+
+	public function getFields()
+	{
+		parent::validateFields();
+		$fields['name'] = pSQL($this->name);
+		$fields['iso_code'] = pSQL(strtolower($this->iso_code));
+		$fields['language_code'] = pSQL(strtolower($this->language_code));
+		if (empty($fields['language_code']))
+			$fields['language_code'] = $fields['iso_code'];
+		$fields['active'] = (int)($this->active);
+		return $fields;
+	}
+	
+	public function add($autodate = true, $nullValues = false)
+	{
+		if (!parent::add($autodate))
+			return false;
+		
+		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+			Configuration::get('PS_HTACCESS_SPECIFIC')
+		));
+	}
+
+	public function toggleStatus()
+	{
+		if (!parent::toggleStatus())
+			return false;
+			
+		return (Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
+			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+			Configuration::get('PS_HTACCESS_SPECIFIC')
+		));
 	}
 	
 	public function checkFiles()
@@ -185,39 +225,6 @@ class LanguageCore extends ObjectModel
 		
 		// Return
 		return $files;
-	}
-
-	public function getFields()
-	{
-		parent::validateFields();
-		
-		$fields['name'] = pSQL($this->name);
-		$fields['iso_code'] = pSQL(strtolower($this->iso_code));
-		$fields['active'] = (int)($this->active);
-		
-		return $fields;
-	}
-	
-	public function add($autodate = true, $nullValues = false)
-	{
-		if (!parent::add($autodate))
-			return false;
-		
-		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
-			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-			Configuration::get('PS_HTACCESS_SPECIFIC')
-		));
-	}
-
-	public function toggleStatus()
-	{
-		if (parent::toggleStatus())
-			return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-								(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
-								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-								Configuration::get('PS_HTACCESS_SPECIFIC')
-								);
 	}
 	
 	public function loadUpdateSQL()
@@ -363,12 +370,15 @@ class LanguageCore extends ObjectModel
 	 	if (!Validate::isLanguageIsoCode($iso_code))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->getRow('
-		SELECT `id_lang`
-		FROM `'._DB_PREFIX_.'lang`
-		WHERE `iso_code` = \''.pSQL(strtolower($iso_code)).'\'');
-		if (isset($result['id_lang']))
-			return (int)($result['id_lang']);
+		return Db::getInstance()->getValue('SELECT `id_lang` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = \''.pSQL(strtolower($iso_code)).'\'');
+	}
+	
+	static public function getLanguageCodeByIso($iso_code)
+	{
+	 	if (!Validate::isLanguageIsoCode($iso_code))
+	 		die(Tools::displayError());
+
+		return Db::getInstance()->getValue('SELECT `language_code` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = \''.pSQL(strtolower($iso_code)).'\'');
 	}
 
 	/**
@@ -379,14 +389,7 @@ class LanguageCore extends ObjectModel
 	  */
 	static public function getIsoIds($active = true) 
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT `id_lang`, `iso_code`
-		FROM `'._DB_PREFIX_.'lang`
-		WHERE 1
-		'.($active ? 'AND active = 1' : '').'
-		');
-
-		return $result;
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang` '.($active ? 'WHERE active = 1' : ''));
 	}
 	
 	static public function copyLanguageData($from, $to)

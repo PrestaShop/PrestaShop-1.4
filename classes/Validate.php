@@ -276,6 +276,11 @@ class ValidateCore
 		return preg_match('/^[a-z]{2,3}$/ui', $isoCode);
 	}
 	
+	static public function isLanguageCode($s)
+	{
+		return preg_match('/^[a-z]{2}(-[a-z]{2})?$/ui', $s);
+	}
+	
 	static public function isStateIsoCode($isoCode)
 	{
 		return preg_match('/^[a-z0-9]{1,4}$/ui', $isoCode);

@@ -772,30 +772,47 @@ class AdminTranslations extends AdminTab
 	
 	function displayAutoTranslate()
 	{
+		$languageCode = Tools::htmlentitiesUTF8(Language::getLanguageCodeByIso(Tools::getValue('lang')));
 		echo '
 		<input type="button" class="button" onclick="translateAll();" value="'.$this->l('Translate with Google').'" />
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
+			var displayOnce = 0;
 			google.load("language", "1");
 			function translateAll() {
-				$.each($(\'input[type="text"]\'), function() {
-					var tdinput = $(this);
-					if (tdinput.attr("value") == "" && tdinput.parent("td").prev().html()) {
-						google.language.translate(tdinput.parent("td").prev().html(), "en", "'.Tools::htmlentitiesUTF8(Tools::getValue('lang')).'", function(result) {
-							if (!result.error)
-								tdinput.val(result.translation);
-						});
-					}
-				});
-				$.each($("textarea"), function() {
-					var tdtextarea = $(this);
-					if (tdtextarea.html() == "" && tdtextarea.parent("td").prev().html()) {
-						google.language.translate(tdtextarea.parent("td").prev().html(), "en", "'.Tools::htmlentitiesUTF8(Tools::getValue('lang')).'", function(result) {
-							if (!result.error)
-								tdtextarea.html(result.translation);
-						});
-					}
-				});
+				if (!google.language.isTranslatable("'.$languageCode.'"))
+					alert(\'"'.$languageCode.'" : '.addslashes($this->l('this language is not available on Google Translate API')).'\');
+				else
+				{
+					$.each($(\'input[type="text"]\'), function() {
+						var tdinput = $(this);
+						if (tdinput.attr("value") == "" && tdinput.parent("td").prev().html()) {
+							google.language.translate(tdinput.parent("td").prev().html(), "en", "'.$languageCode.'", function(result) {
+								if (!result.error)
+									tdinput.val(result.translation);
+								else if (displayOnce == 0)
+								{
+									displayOnce = 1;
+									alert(result.error.message);
+								}
+							});
+						}
+					});
+					$.each($("textarea"), function() {
+						var tdtextarea = $(this);
+						if (tdtextarea.html() == "" && tdtextarea.parent("td").prev().html()) {
+							google.language.translate(tdtextarea.parent("td").prev().html(), "en", "'.$languageCode.'", function(result) {
+								if (!result.error)
+									tdtextarea.html(result.translation);
+								else if (displayOnce == 0)
+								{
+									displayOnce = 1;
+									alert(result.error.message);
+								}
+							});
+						}
+					});
+				}
 			}
 		</script>';
 	}

@@ -42,6 +42,7 @@ class AdminLanguages extends AdminTab
 		'flag' => array('title' => $this->l('Logo'), 'align' => 'center', 'image' => 'l', 'orderby' => false, 'search' => false),
 		'name' => array('title' => $this->l('Name'), 'width' => 120),
 		'iso_code' => array('title' => $this->l('ISO code'), 'width' => 70, 'align' => 'center'),
+		'language_code' => array('title' => $this->l('Language code'), 'width' => 70, 'align' => 'center'),
 		'active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool'));
 	
 		$this->optionTitle = $this->l('Languages options');
@@ -305,6 +306,11 @@ class AdminLanguages extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="2" name="iso_code" id="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" onKeyUp="checkLangPack();" /> <sup>*</sup>
 					<p>'.$this->l('2-letter ISO code (e.g., fr, en, de)').'</p>
+				</div>
+				<label>'.$this->l('Language code:').' </label>
+				<div class="margin-form">
+					<input type="text" size="10" maxlength="5" name="language_code" id="language_code" value="'.htmlentities($this->getFieldValue($obj, 'language_code'), ENT_COMPAT, 'UTF-8').'"/> <sup>*</sup>
+					<p>'.$this->l('Full language code (e.g., en-us, pt-br)').'</p>
 				</div>
 				<label>'.$this->l('Flag:').' </label>
 				<div class="margin-form">

@@ -180,8 +180,8 @@ INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`,
 (68, 1, 0, NOW()),(68, 2, 0, NOW()),(68, 3, 0, NOW()),
 (74, 1, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW()),(74, 2, 'Cher client,\r\n\r\nCordialement,\r\nLe service client', NOW()),(74, 3, 'Estimado cliente,\r\n\r\nUn cordial saludo,\r\nAtención al cliente', NOW());
 
-INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`) VALUES
-(1, 'English (English)', 1, 'en'),(2, 'Français (French)', 1, 'fr'),(3, 'Español (Spanish)', 1, 'es');
+INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`, `language_code`) VALUES
+(1, 'English (English)', 1, 'en', 'en-us'),(2, 'Français (French)', 1, 'fr', 'fr'),(3, 'Español (Spanish)', 1, 'es', 'es');
 
 INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES (1, 0, 0, 1, 8, 1, NOW(), NOW(), 0);
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
