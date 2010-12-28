@@ -28,29 +28,33 @@
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
+/*
+* TODO:
+*
+* - Bad behaviour when an order is cancelled after an order return
+* - We shouldn't use $cookie->id_currency in all situations
+*/
+	
 class Loyalty extends Module
 {
 	function __construct()
 	{
 		$this->name = 'loyalty';
 		$this->tab = 'pricing_promotion';
-		$this->version = '1.7';
+		$this->version = '1.8';
 
 		parent::__construct();
 
 		$this->displayName = $this->l('Customer loyalty and rewards');
 		$this->description = $this->l('Provide a loyalty program to your customers');
-
-		$path = dirname(__FILE__);
-		if (strpos(__FILE__, 'Module.php') !== false)
-			$path .= '/../modules/'.$this->name;
-		include_once($path.'/LoyaltyModule.php');
-		include_once($path.'/LoyaltyStateModule.php');
+		$this->confirmUninstall = $this->l('This will delete all loyalty points and history of your customers, are you sure?');
 	}
 
 	private function instanceDefaultStates()
 	{
-		// recover default loyalty status save at module installation
+		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
+		
+		/* Recover default loyalty status save at module installation */
 		$this->loyaltyStateDefault = new LoyaltyStateModule(LoyaltyStateModule::getDefaultId());
 		$this->loyaltyStateValidation = new LoyaltyStateModule(LoyaltyStateModule::getValidationId());
 		$this->loyaltyStateCancel = new LoyaltyStateModule(LoyaltyStateModule::getCancelId());
@@ -60,27 +64,26 @@ class Loyalty extends Module
 
 	function install()
 	{
-		if (!parent::install()
-		OR !$this->installDB()
-		OR !$this->registerHook('extraRight')
-		OR !$this->registerHook('updateOrderStatus')
-		OR !$this->registerHook('newOrder')
-		OR !$this->registerHook('adminCustomers')
-		OR !$this->registerHook('shoppingCart')
-		OR !$this->registerHook('orderReturn')
-		OR !$this->registerHook('cancelProduct')
-		OR !$this->registerHook('customerAccount')
-		OR !Configuration::updateValue('PS_LOYALTY_POINT_VALUE', '0.20')
-		OR !Configuration::updateValue('PS_LOYALTY_MINIMAL', 0)				
-		OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10')
-		OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1')
-		OR !Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', array((int)(Configuration::get('PS_LANG_DEFAULT')) => 'Loyalty voucher')))
+		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
+		
+		if (!parent::install() OR !$this->installDB() OR !$this->registerHook('extraRight') OR !$this->registerHook('updateOrderStatus')
+		OR !$this->registerHook('newOrder')	OR !$this->registerHook('adminCustomers') OR !$this->registerHook('shoppingCart')
+		OR !$this->registerHook('orderReturn') OR !$this->registerHook('cancelProduct')	OR !$this->registerHook('customerAccount')
+		OR !Configuration::updateValue('PS_LOYALTY_POINT_VALUE', '0.20') OR !Configuration::updateValue('PS_LOYALTY_MINIMAL', 0)				
+		OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10') OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1'))
 			return false;
+		
+		$defaultTranslations = array('en' => 'Loyalty voucher', 'fr' => 'Récompense fidélité');
+		$conf = array((int)Configuration::get('PS_LANG_DEFAULT') => $this->l('Loyalty voucher'));
+		foreach (Language::getLanguages() AS $language)
+			if (isset($defaultTranslations[$language['iso_code']]))
+				$conf[(int)$language['id_lang']] = $defaultTranslations[$language['iso_code']];
+		Configuration::updateValue('PS_LOYALTY_VOUCHER_DETAILS', $conf);
 
 		$category_config = '';
 		$categories = Category::getSimpleCategories((int)(Configuration::get('PS_LANG_DEFAULT')));
-		foreach ($categories as $category)
-			$category_config .= $category['id_category'].',';
+		foreach ($categories AS $category)
+			$category_config .= (int)$category['id_category'].',';
 		$category_config = rtrim($category_config, ',');
 		Configuration::updateValue('PS_LOYALTY_VOUCHER_CATEGORY', $category_config);
 
@@ -109,6 +112,7 @@ class Loyalty extends Module
 			INDEX index_loyalty_discount (`id_discount`),
 			INDEX index_loyalty_customer (`id_customer`)
 		) DEFAULT CHARSET=utf8 ;');
+
 		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'loyalty_history` (
 			`id_loyalty_history` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -120,6 +124,7 @@ class Loyalty extends Module
 			INDEX `index_loyalty_history_loyalty` (`id_loyalty`),
 			INDEX `index_loyalty_history_loyalty_state` (`id_loyalty_state`)
 		) DEFAULT CHARSET=utf8 ;');
+
 		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'loyalty_state` (
 			`id_loyalty_state` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -127,6 +132,7 @@ class Loyalty extends Module
 			PRIMARY KEY (`id_loyalty_state`),
 			INDEX index_loyalty_state_order_state (`id_order_state`)
 		) DEFAULT CHARSET=utf8 ;');
+
 		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'loyalty_state_lang` (
 			`id_loyalty_state` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -134,18 +140,14 @@ class Loyalty extends Module
 			`name` varchar(64) NOT NULL,
 			UNIQUE KEY `index_unique_loyalty_state_lang` (`id_loyalty_state`,`id_lang`)
 		) DEFAULT CHARSET=utf8 ;');
+
 		return true;
 	}
 	
 	function uninstall()
 	{
-		if (!parent::uninstall()
-		OR !$this->uninstallDB()
-		OR !Configuration::deleteByName('PS_LOYALTY_POINT_VALUE')
-		OR !Configuration::deleteByName('PS_LOYALTY_POINT_RATE')
-		OR !Configuration::deleteByName('PS_LOYALTY_NONE_AWARD')
-		OR !Configuration::deleteByName('PS_LOYALTY_MINIMAL')
-		OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_CATEGORY')
+		if (!parent::uninstall() OR !$this->uninstallDB() OR !Configuration::deleteByName('PS_LOYALTY_POINT_VALUE')	OR !Configuration::deleteByName('PS_LOYALTY_POINT_RATE')
+		OR !Configuration::deleteByName('PS_LOYALTY_NONE_AWARD') OR !Configuration::deleteByName('PS_LOYALTY_MINIMAL') OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_CATEGORY')
 		OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_DETAILS'))
 			return false;
 		return true;
@@ -234,7 +236,7 @@ class Loyalty extends Module
 		if ($categories)
 			foreach ($categories AS $category)
 				$cat .= $category.',';
-		return rtrim($cat, ",");
+		return rtrim($cat, ',');
 	}
 
 	public function getContent()
@@ -437,6 +439,8 @@ class Loyalty extends Module
 	/* Hook display on product detail */
 	public function hookExtraRight($params)
 	{
+		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		
 		global $smarty;
 
 		$product = new Product((int)Tools::getValue('id_product'));
@@ -487,7 +491,10 @@ class Loyalty extends Module
 	
 	/* Catch product returns and substract loyalty points */
 	public function hookOrderReturn($params)
-	{		
+	{
+		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
+		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		
 		$totalPrice = 0;
 		$details = OrderReturn::getOrdersReturnDetail((int)($params['orderReturn']->id));
 		foreach ($details AS $detail)
@@ -511,6 +518,8 @@ class Loyalty extends Module
 	/* Hook display on shopping cart summary */
 	public function hookShoppingCart($params)
 	{
+		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		
 		global $smarty;
 
 		if (Validate::isLoadedObject($params['cart']))
@@ -525,6 +534,9 @@ class Loyalty extends Module
 	/* Hook called when a new order is created */
 	public function hookNewOrder($params)
 	{
+		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
+		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		
 		if (!Validate::isLoadedObject($params['customer']) OR !Validate::isLoadedObject($params['order']))
 			die(Tools::displayError('Some parameters are missing.'));
 		$loyalty = new LoyaltyModule();
@@ -541,6 +553,9 @@ class Loyalty extends Module
 	/* Hook called when an order change its status */
 	public function hookUpdateOrderStatus($params)
 	{
+		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
+		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		
 		if (!Validate::isLoadedObject($params['newOrderStatus']))
 			die(Tools::displayError('Some parameters are missing.'));
 		$newOrder = $params['newOrderStatus'];
@@ -575,6 +590,8 @@ class Loyalty extends Module
 	/* Hook display in tab AdminCustomers on BO */
 	public function hookAdminCustomers($params)
 	{
+		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		
 		$customer = new Customer((int)($params['id_customer']));
 		if ($customer AND !Validate::isLoadedObject($customer))
 			die(Tools::displayError('Incorrect object Customer.'));
@@ -615,13 +632,15 @@ class Loyalty extends Module
 	
 	public function hookCancelProduct($params)
 	{
-		if (!Validate::isLoadedObject($params['order']) OR !Validate::isLoadedObject($orderDetail = new OrderDetail((int)($params['id_order_detail']))))
-			return false;
-		if (!Validate::isLoadedObject($loyalty = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))))))
+		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
+		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		
+		if (!Validate::isLoadedObject($params['order']) OR !Validate::isLoadedObject($orderDetail = new OrderDetail((int)($params['id_order_detail']))) 
+		OR !Validate::isLoadedObject($loyalty = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))))))
 			return false;
 		
-		$loyaltyNew = new LoyaltyModule((int)(LoyaltyModule::getByOrderId((int)($params['order']->id))));
-		$loyaltyNew->points = -1 * LoyaltyModule::getNbPointsByPrice($orderDetail->product_price * (Product::getTaxCalculationMethod() == PS_TAX_EXC ? 1 : (1 + ($orderDetail->tax_rate / 100)))) * $orderDetail->product_quantity;
+		$loyaltyNew = new LoyaltyModule();
+		$loyaltyNew->points = -1 * LoyaltyModule::getNbPointsByPrice(number_format($orderDetail->product_price * (1 + $orderDetail->tax_rate / 100), 2, '.', '')) * $orderDetail->product_quantity;
 		$loyaltyNew->id_loyalty_state = (int)LoyaltyStateModule::getCancelId();
 		$loyaltyNew->id_order = (int)$params['order']->id;
 		$loyaltyNew->id_customer = (int)$loyalty->id_customer;

@@ -139,18 +139,25 @@ class LoyaltyModule extends ObjectModel
 		/* Prevent division by zero */
 		$points = 0;
 		if ($pointRate = (float)(Configuration::get('PS_LOYALTY_POINT_RATE')))
-			$points = floor($price / $pointRate);
+			$points = floor(number_format($price, 2, '.', '') / $pointRate);
 
 		return (int)$points;
 	}
 
 	static public function getPointsByCustomer($id_customer)
 	{
-		return Db::getInstance()->getValue('
+		return 
+		Db::getInstance()->getValue('
 		SELECT SUM(f.points) points
 		FROM `'._DB_PREFIX_.'loyalty` f
 		WHERE f.id_customer = '.(int)($id_customer).'
-		AND f.id_loyalty_state IN ('.(int)(LoyaltyStateModule::getValidationId()).', '.(int)(LoyaltyStateModule::getNoneAwardId()).')');
+		AND f.id_loyalty_state IN ('.(int)(LoyaltyStateModule::getValidationId()).', '.(int)(LoyaltyStateModule::getNoneAwardId()).')')
+		+		
+		Db::getInstance()->getValue('
+		SELECT SUM(f.points) points
+		FROM `'._DB_PREFIX_.'loyalty` f
+		WHERE f.id_customer = '.(int)($id_customer).'
+		AND f.id_loyalty_state = '.(int)LoyaltyStateModule::getCancelId().' AND points < 0');	
 	}
 
 	static public function getAllByIdCustomer($id_customer, $id_lang, $onlyValidate = false, $pagination = false, $nb = 10, $page = 1)
@@ -162,7 +169,7 @@ class LoyaltyModule extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'loyalty_state_lang` fsl ON (f.id_loyalty_state = fsl.id_loyalty_state AND fsl.id_lang = '.(int)($id_lang).')
 		WHERE f.id_customer = '.(int)($id_customer);
 		if ($onlyValidate === true)
-			$query .= ' AND f.id_loyalty_state = '.(int)(LoyaltyStateModule::getValidationId());
+			$query .= ' AND f.id_loyalty_state = '.(int)LoyaltyStateModule::getValidationId();
 		$query .= ' GROUP BY f.id_loyalty '.
 		($pagination ? 'LIMIT '.(((int)($page) - 1) * (int)($nb)).', '.(int)($nb) : '');
 
@@ -190,6 +197,13 @@ class LoyaltyModule extends ObjectModel
 		foreach ($items AS $item)
 		{
 			$f = new LoyaltyModule((int)$item['id_loyalty']);
+			
+			/* Check for negative points for this order */
+			$negativePoints = (int)Db::getInstance()->getValue('SELECT SUM(points) points FROM '._DB_PREFIX_.'loyalty WHERE id_order = '.(int)$f->id_order.' AND id_loyalty_state = '.(int)LoyaltyStateModule::getCancelId().' AND points < 0');
+			
+			if ($f->points + $negativePoints <= 0)
+				continue;
+			
 			$f->id_discount = (int)$discount->id;
 			$f->id_loyalty_state = (int)LoyaltyStateModule::getConvertId();
 			$f->save();

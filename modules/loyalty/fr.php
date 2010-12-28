@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'Programme de fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_44c3144de5c433c8e7c9cbc66c906c01'] = 'Propose un programme de fidélité à vos clients';
+$_MODULE['<{loyalty}prestashop>loyalty_c4518d034c46f8f317871c4d84b4f815'] = 'Récompense fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_e81b2826b5aebd9c92fb5d090f0cdc9d'] = 'Vous devez choisir au moins une catégorie pour la génération des bons de réductions';
 $_MODULE['<{loyalty}prestashop>loyalty_f38f5974cdc23279ffe6d203641a8bdf'] = 'Configuration mise à jour.';
 $_MODULE['<{loyalty}prestashop>loyalty_5be9427a9169ad6e9b63b0c9c61575d9'] = 'Programme de fidélité';
@@ -25,7 +26,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_2a46cccdea2f18fdfdfacf99a98b758d'] = 'Les
 $_MODULE['<{loyalty}prestashop>loyalty_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{loyalty}prestashop>loyalty_49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_MODULE['<{loyalty}prestashop>loyalty_ceae28295d1d6543f5f5fd7905a23b1f'] = 'Cocher pour quelle(s) catégorie(s) seront utilisables les bons de réductions fidélité';
-$_MODULE['<{loyalty}prestashop>loyalty_30e793698766edbaaf84a74d4c377f72'] = 'Progression des points de fidélité';
+$_MODULE['<{loyalty}prestashop>loyalty_30e793698766edbaaf84a74d4c377f72'] = 'Statuts des points de fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_4f2a91e15af2631ff9424564b8a45fb2'] = 'Initial';
 $_MODULE['<{loyalty}prestashop>loyalty_453e6aa38d87b28ccae545967c53004f'] = 'Indisponibles';
 $_MODULE['<{loyalty}prestashop>loyalty_6366c60fc5b4f4fce0e3dd146494a4f4'] = 'Convertis';

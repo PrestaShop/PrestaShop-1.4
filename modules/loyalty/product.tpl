@@ -41,16 +41,3 @@
 	{/if}
 </p>
 <br class="clear" />
-
-{literal}
-<script>
-$(function() {
-	$('#attributes select').change(function() {
-		var price_for_loyalty = formatedNumberToFloat($('#our_price_display').html(), currencyFormat, currencySign);
-		$('#loyalty_points').html(parseInt(ps_round((parseFloat(price_for_loyalty) / currencyRate) / {/literal}{$point_rate}{literal}, 0)));
-		$('#total_loyalty_points').html(ps_round({/literal}{$points_in_cart}{literal}+parseInt($('#loyalty_points').html())));
-		$('#loyalty_price').html(formatCurrency(ps_round(parseFloat($('#total_loyalty_points').html() * {/literal}{$point_value}{literal}), 2), currencyFormat, currencySign, currencyBlank));
-	});
-});
-</script>
-{/literal}

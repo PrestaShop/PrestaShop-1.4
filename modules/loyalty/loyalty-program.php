@@ -112,7 +112,7 @@ $smarty->assign(array(
 	'orders' => $orders,
 	'displayorders' => $displayorders,
 	'pagination_link' => __PS_BASE_URI__.'modules/loyalty/loyalty-program.php',
-	'totalPoints' => $customerPoints,
+	'totalPoints' => (int)$customerPoints,
 	'voucher' => LoyaltyModule::getVoucherValue($customerPoints, (int)($cookie->id_currency)),
 	'validation_id' => LoyaltyStateModule::getValidationId(),
 	'transformation_allowed' => $customerPoints > 0,

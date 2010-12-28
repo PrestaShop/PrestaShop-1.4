@@ -68,31 +68,26 @@ class LoyaltyStateModule extends ObjectModel
 	static public function insertDefaultData()
 	{
 		$loyaltyModule = new Loyalty();
-		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$languages = Language::getLanguages();
 		
-		$default = new LoyaltyStateModule(LoyaltyStateModule::getDefaultId());
-		$default->name[$defaultLanguage] = $loyaltyModule->getL('Awaiting validation');
-		$default->save();
-
-		$validation = new LoyaltyStateModule(LoyaltyStateModule::getValidationId());
-		$validation->id_order_state = _PS_OS_DELIVERED_;
-		$validation->name[$defaultLanguage] = $loyaltyModule->getL('Available');
-		$validation->save();
-
-		$cancel = new LoyaltyStateModule(LoyaltyStateModule::getCancelId());
-		$cancel->id_order_state = _PS_OS_CANCELED_;
-		$cancel->name[$defaultLanguage] = $loyaltyModule->getL('Cancelled');
-		$cancel->save();
-
-		$convert = new LoyaltyStateModule(LoyaltyStateModule::getConvertId());
-		$convert->name[$defaultLanguage] = $loyaltyModule->getL('Already converted');
-		$convert->save();
-
-		$noneAward = new LoyaltyStateModule(LoyaltyStateModule::getNoneAwardId());
-		$noneAward->name[$defaultLanguage] = $loyaltyModule->getL('Unavailable on discounts');
-		$noneAward->save();
+		$defaultTranslations = array('default' => array('id_loyalty_state' => (int)LoyaltyStateModule::getDefaultId(), 'default' => $loyaltyModule->getL('Awaiting validation'), 'en' => 'Awaiting validation', 'fr' => 'En attente de validation'));
+		$defaultTranslations['validated'] = array('id_loyalty_state' => (int)LoyaltyStateModule::getValidationId(), 'id_order_state' => _PS_OS_DELIVERED_, 'default' => $loyaltyModule->getL('Available'), 'en' => 'Available', 'fr' => 'Disponible');
+		$defaultTranslations['cancelled'] = array('id_loyalty_state' => (int)LoyaltyStateModule::getCancelId(), 'id_order_state' => _PS_OS_CANCELED_, 'default' => $loyaltyModule->getL('Cancelled'), 'en' => 'Cancelled', 'fr' => 'Annulés');
+		$defaultTranslations['converted'] = array('id_loyalty_state' => (int)LoyaltyStateModule::getConvertId(), 'default' => $loyaltyModule->getL('Already converted'), 'en' => 'Already converted', 'fr' => 'Déjà convertis');
+		$defaultTranslations['none_award'] = array('id_loyalty_state' => (int)LoyaltyStateModule::getNoneAwardId(), 'default' => $loyaltyModule->getL('Unavailable on discounts'), 'en' => 'Unavailable on discounts', 'fr' => 'Non disponbile sur produits remisés');
+		
+		foreach ($defaultTranslations AS $loyaltyState)
+		{
+			$state = new LoyaltyStateModule((int)$loyaltyState['id_loyalty_state']);
+			if (isset($loyaltyState['id_order_state']))
+				$state->id_order_state = (int)$loyaltyState['id_order_state'];
+			$state->name[(int)Configuration::get('PS_LANG_DEFAULT')] = $loyaltyState['default'];
+			foreach ($languages AS $language)
+				if (isset($loyaltyState[$language['iso_code']]))
+					$state->name[(int)$language['id_lang']] = $loyaltyState[$language['iso_code']];
+			$state->save();
+		}
 
 		return true;
 	}
-
 }
