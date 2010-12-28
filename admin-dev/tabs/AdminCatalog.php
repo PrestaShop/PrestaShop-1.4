@@ -40,7 +40,7 @@ class AdminCatalog extends AdminTab
 	/** @var object AttributeGenerator() instance */
 	private $attributeGenerator;
 
-	/** @var object AttributeGenerator() instance */
+	/** @var object imageResize() instance */
 	private $imageResize;
 
 	/** @var object Category() instance for navigation*/
@@ -110,6 +110,10 @@ class AdminCatalog extends AdminTab
 		parent::displayErrors();
 		$this->adminProducts->displayErrors();
 		$this->adminCategories->displayErrors();
+		if (Validate::isLoadedObject($this->attributeGenerator))
+			$this->attributeGenerator->displayErrors();
+		if (Validate::isLoadedObject($this->imageResize))
+			$this->imageResize->displayErrors();
 	}
 
 	public function display()
