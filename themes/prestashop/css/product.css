@@ -20,8 +20,8 @@
 }
 #primary_block ul#usefull_link_block li { margin: 0.5em 1em 0.5em 0; display: block }
 #primary_block ul#usefull_link_block li a,
- #primary_block ul#usefull_link_block span.span_link,
- #primary_block ul#usefull_link_block span.span_link:hover {
+#primary_block ul#usefull_link_block span.span_link,
+#primary_block ul#usefull_link_block span.span_link:hover {
 	text-decoration: none;
 	color: #76839b;
 	font-size: 0.9em;
@@ -150,4 +150,9 @@
 #admin-action input.exclusive
 {
 	float: right;
+}
+
+.product_accessories_price
+{
+	margin-top: 5px
 }
