@@ -100,6 +100,7 @@ class PayPal extends PaymentModule
 		Configuration::updateValue('PAYPAL_PAYMENT_METHOD', _PAYPAL_INTEGRAL_);
 		Configuration::updateValue('PAYPAL_TEMPLATE', 'A');
 		Configuration::updateValue('PAYPAL_NEW', 1);
+		Configuration::updateValue('PAYPAL_DEBUG_MODE', 0);
 
 		$orderState = new OrderState();
 		$orderState->name = array();
@@ -138,6 +139,7 @@ class PayPal extends PaymentModule
 		Configuration::deleteByName('PAYPAL_TEMPLATE');
 		Configuration::deleteByName('PAYPAL_CAPTURE');
 		Configuration::deleteByName('PAYPAL_OS_AUTHORIZATION');
+		Configuration::deleteByName('PAYPAL_DEBUG_MODE');
 		
 		return parent::uninstall();
 	}
@@ -433,7 +435,7 @@ class PayPal extends PaymentModule
 		}
 
 		// Call payment validation method
-		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, 3)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency);
+		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, 3)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false);
 		
 		// Clean cookie
 		unset($cookie->paypal_token);
@@ -703,6 +705,7 @@ class PayPal extends PaymentModule
 	{
 		$paymentMethod = (int)(Tools::getValue('payment_method', Configuration::get('PAYPAL_PAYMENT_METHOD')));
 		$paypalExpress = (int)(Tools::isSubmit('paypal_express') ? 1 : Configuration::get('PAYPAL_EXPRESS_CHECKOUT'));
+		$paypalDebug = (int)(Tools::isSubmit('paypal_express') ? 1 : Configuration::get('PAYPAL_DEBUG_MODE'));
 		
 		return '
 		<h2>'.$this->l('Solution').'</h2>
@@ -716,6 +719,7 @@ class PayPal extends PaymentModule
 		<h3>'.$this->l('Option:').'</h3>
 		<ul style="list-style-type:none;">
 			<li><input type="checkbox" name="paypal_express" id="paypal_express" value="1" '.($paypalExpress ? 'checked="checked" ' : '').'/> <label for="paypal_express" class="t"><b>'.$this->l('PayPal Express : payment in 2 clicks').'</b> '.$this->l('with PayPal account directly from cart page').'</label></li>
+			<li><input type="checkbox" name="paypal_debug" id="paypal_debug" value="1" '.($paypalDebug ? 'checked="checked" ' : '').'/> <label for="paypal_express" class="t"><b>'.$this->l('Debug only:').'</b> '.$this->l('Active long log message').'</label></li>
 		</ul>
 		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>
 		<div style="border:1px solid red;color:red;padding:15px;">
@@ -841,12 +845,13 @@ class PayPal extends PaymentModule
 			if (!sizeof($this->_errors))
 			{
 				Configuration::updateValue('PAYPAL_SANDBOX', (int)(Tools::getValue('sandbox_mode')));
-				Configuration::updateValue('PAYPAL_BUSINESS', Tools::getValue('email_paypal'));
+				Configuration::updateValue('PAYPAL_BUSINESS', trim(Tools::getValue('email_paypal')));
 				Configuration::updateValue('PAYPAL_HEADER', Tools::getValue('banner_url'));
-				Configuration::updateValue('PAYPAL_API_USER', Tools::getValue('api_username'));
+				Configuration::updateValue('PAYPAL_API_USER', trim(Tools::getValue('api_username')));
 				Configuration::updateValue('PAYPAL_API_PASSWORD', Tools::getValue('api_password'));
-				Configuration::updateValue('PAYPAL_API_SIGNATURE', Tools::getValue('api_signature'));
+				Configuration::updateValue('PAYPAL_API_SIGNATURE', trim(Tools::getValue('api_signature')));
 				Configuration::updateValue('PAYPAL_EXPRESS_CHECKOUT', (int)(Tools::isSubmit('paypal_express')));
+				Configuration::updateValue('PAYPAL_MODE_DEBUG', (int)(Tools::isSubmit('paypal_debug')));
 				Configuration::updateValue('PAYPAL_CAPTURE', (int)(Tools::getValue('paypal_capture')));
 				Configuration::updateValue('PAYPAL_PAYMENT_METHOD', (int)(Tools::getValue('payment_method')));
 				Configuration::updateValue('PAYPAL_TEMPLATE', Tools::getValue('template_paypal'));

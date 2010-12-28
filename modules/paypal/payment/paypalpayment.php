@@ -63,7 +63,7 @@ class PaypalPayment extends Paypal
 		$country = new Country((int)$address->id_country);
 		if ($address->id_state)
 			$state = new State((int)$address->id_state);
-		$request .= '&NAME='.urlencode($address->lastname.' '.$address->firstname);
+		$request .= '&SHIPTONAME='.urlencode($address->lastname.' '.$address->firstname);
 		$request .= '&SHIPTOSTREET='.urlencode($address->address1);
 		$request .= '&SHIPTOSTREET2='.urlencode($address->address2);
 		$request .= '&SHIPTOCITY='.urlencode($address->city);

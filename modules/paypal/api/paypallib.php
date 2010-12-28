@@ -37,9 +37,16 @@ class PaypalLib extends Paypal
 				unset($response[$k]);
 			}
 		}
+		if (!Configuration::get('PAYPAL_MODE_DEBUG'))
+			$this->_logs = array();
+		$toExclude = array('TOKEN', 'SUCCESSPAGEREDIRECTREQUESTED', 'VERSION', 'BUILD', 'ACK', 'CORRELATIONID');
 		$this->_logs[] = '<b>'.$this->l('PayPal response:').'</b>';
 		foreach ($response as $k => $res)
+		{
+			if (!Configuration::get('PAYPAL_MODE_DEBUG') AND in_array($k, $toExclude))
+				continue;
 			$this->_logs[] = $k.' -> '.$res;
+		}
 		return $response;
 	}
 
