@@ -769,8 +769,14 @@ class PayPal extends PaymentModule
 		<div class="margin-form">
 			<input type="text" name="api_signature" value="'.htmlentities(Tools::getValue('api_signature', Configuration::get('PAYPAL_API_SIGNATURE')), ENT_COMPAT, 'UTF-8').'" size="40" />
 		</div>
-		'.($lang->iso_code == 'fr' ? '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=P2OmzHzbpIA" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>' : '').'
-		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>';
+		';
+		if ($lang->iso_code == 'fr')
+			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=P2OmzHzbpIA" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>';
+		elseif ($lang->iso_code == 'es')
+			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=5x_BXI4equo" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>';
+		else
+			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=ho1OefLKbM0" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>';
+		$html .= '<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>';
 		
 		return $html;
 	}
