@@ -62,7 +62,6 @@
 	
 	<body {if $page_name}id="{$page_name|escape:'htmlall':'UTF-8'}"{/if}>
 	{if !$content_only}
-		<noscript><ul><li>{l s='This shop requires JavaScript in order to run correctly. Please enable JavaScript in your browser.'}</li></ul></noscript>
 		{if isset($restricted_country_mode) && $restricted_country_mode}
 		<div id="restricted-country">
 			<p>{l s='You cannot place a new order from your country.'} <span class="bold">{$geolocalization_country}</span></p>
