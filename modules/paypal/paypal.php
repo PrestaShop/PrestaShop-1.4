@@ -104,7 +104,6 @@ class PayPal extends PaymentModule
 
 		$orderState = new OrderState();
 		$orderState->name = array();
-		// TODO espagnol ?
 		foreach (Language::getLanguages() AS $language)
 		{
 			if (strtolower($language['iso_code']) == 'fr')
@@ -1179,26 +1178,27 @@ class PayPal extends PaymentModule
 			$this->registerHook('adminOrder');
 
 			/* Create OrderState */
-			$orderState = new OrderState();
-			$orderState->name = array();
-			// TODO espagnol ?
-			foreach (Language::getLanguages() AS $language)
+			if (!Configuration::get('PAYPAL_OS_AUTHORIZATION'))
 			{
-				if (strtolower($language['iso_code']) == 'fr')
-					$orderState->name[$language['id_lang']] = 'Autorisation acceptée par PayPal';
-				else
-					$orderState->name[$language['id_lang']] = 'Authorization accepted from PayPal';
+				$orderState = new OrderState();
+				$orderState->name = array();
+				foreach (Language::getLanguages() AS $language)
+				{
+					if (strtolower($language['iso_code']) == 'fr')
+						$orderState->name[$language['id_lang']] = 'Autorisation acceptée par PayPal';
+					else
+						$orderState->name[$language['id_lang']] = 'Authorization accepted from PayPal';
+				}
+				$orderState->send_email = false;
+				$orderState->color = '#DDEEFF';
+				$orderState->hidden = false;
+				$orderState->delivery = false;
+				$orderState->logable = true;
+				$orderState->invoice = true;
+				if ($orderState->add())
+					copy(_PS_ROOT_DIR_.'/img/os/'._PS_OS_PAYPAL_.'.gif', _PS_ROOT_DIR_.'/img/os/'.(int)($orderState->id).'.gif');
+				Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)($orderState->id));
 			}
-			$orderState->send_email = false;
-			$orderState->color = '#DDEEFF';
-			$orderState->hidden = false;
-			$orderState->delivery = false;
-			$orderState->logable = true;
-			$orderState->invoice = true;
-			if ($orderState->add())
-				copy(_PS_ROOT_DIR_.'/img/os/'._PS_OS_PAYPAL_.'.gif', _PS_ROOT_DIR_.'/img/os/'.(int)($orderState->id).'.gif');
-			Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)($orderState->id));
-
 			/* Delete unseless configuration */
 			Configuration::deleteByName('PAYPAL_INTEGRAL');
 
