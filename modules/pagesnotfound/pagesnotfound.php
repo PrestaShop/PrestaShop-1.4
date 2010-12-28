@@ -75,7 +75,7 @@ class Pagesnotfound extends Module
 		$pages = array();
 		foreach ($result as $row)
 		{
-			$row['http_referer'] = preg_replace('/^www./', '', parse_url($row['http_referer'], PHP_URL_HOST)).parse_url($row['http_referer'], PHP_URL_PATH);
+			$row['http_referer'] = parse_url($row['http_referer'], PHP_URL_HOST).parse_url($row['http_referer'], PHP_URL_PATH);
 			if (!isset($row['http_referer']) OR empty($row['http_referer']))
 				$row['http_referer'] = '--';
 			if (!isset($pages[$row['request_uri']]))
