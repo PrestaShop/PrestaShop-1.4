@@ -1097,7 +1097,7 @@ class AdminTranslations extends AdminTab
 								}
 							}
 						}
-						if ($mail_lang_dir == $lang)
+						if ($mail_lang_dir == $lang AND file_exists(_PS_MODULE_DIR_.$module_dir.'/mails/en'))
 						{
 							foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/en') as $tpl_file)
 							{
