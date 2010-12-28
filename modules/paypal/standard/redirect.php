@@ -32,7 +32,7 @@ include(dirname(__FILE__).'/../paypal.php');
 $paypal = new Paypal();
 $cart = new Cart((int)($cookie->id_cart));
 
-$address = new Address((int)($cart->id_address_invoice));
+$address = new Address((int)($cart->id_address_delivery));
 $country = new Country((int)($address->id_country));
 $state = NULL;
 if ($address->id_state)
