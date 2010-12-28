@@ -1006,7 +1006,8 @@ class CartCore extends ObjectModel
 		{
 			$moduleName = $carrier->external_module_name;
 			$module = Module::getInstanceByName($moduleName);
-			$module->id_carrier = $carrier->id;
+			if (key_exists('id_carrier', $module))
+				$module->id_carrier = $carrier->id;
 			if($carrier->need_range)
 				$shipping_cost = $module->getOrderShippingCost($this, $shipping_cost);
 			else
