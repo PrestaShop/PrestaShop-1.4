@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{treepodia}prestashop>footer_93c433787599e3c6a61c27c9faad7cb1'] = 'Regarder la vidéo';
 $_MODULE['<{treepodia}prestashop>treepodia_17b4871fef9e13bfb529a4ffe1fe5119'] = 'Des vidéos de démonstration pour chacun de vos produits en 24h chrono!';
 $_MODULE['<{treepodia}prestashop>treepodia_da1aeb3fb86487543eaa71ad0ccf62c3'] = 'Le module n\'est pas configuré.';
 $_MODULE['<{treepodia}prestashop>treepodia_84d2e2420a102446904946c6611610e7'] = 'Choisissez une image ou télécharger ';
@@ -20,6 +21,9 @@ $_MODULE['<{treepodia}prestashop>treepodia_1e26f63fb925b49c1c741197cdc0dc7b'] = 
 $_MODULE['<{treepodia}prestashop>treepodia_a5267a427cf62a3a2bb94da92ecc9441'] = 'L\'implémentation par défaut, intègre le code de Treepodia dans votre magasin et affiche un lien vers la vidéo dans votre page produit.';
 $_MODULE['<{treepodia}prestashop>treepodia_56850ed64712ade8b062ed706b0fdeb6'] = 'Logo actuel:';
 $_MODULE['<{treepodia}prestashop>treepodia_fb38e79804eb66613570048c8499004a'] = 'Changer votre logo';
+$_MODULE['<{treepodia}prestashop>treepodia_d236e43ab0c1cb8f7b8024b61903ded2'] = 'Logo affiché:';
+$_MODULE['<{treepodia}prestashop>treepodia_5683dffd7845ddfa1eff733c6cd0e8a5'] = 'Au-dessus des liens utiles';
+$_MODULE['<{treepodia}prestashop>treepodia_f87758e540d66df6593a86ab336b4ae2'] = 'Au-dessus de plus d\'informations';
 $_MODULE['<{treepodia}prestashop>treepodia_a9b7f57dac4f61416f6b514b0be84e53'] = 'Placer le logo ici:';
 $_MODULE['<{treepodia}prestashop>treepodia_ac14a41802fbe8629670fca6b73a7a91'] = 'Image du produit';
 $_MODULE['<{treepodia}prestashop>treepodia_945d5e233cf7d6240f6b783b36a374ff'] = 'Gauche';

@@ -8,9 +8,9 @@ Esto puede originar un retraso en el envío. Por favor, acepta nuestras disculpa
 
 
 Puedes revisar tu pedido y descargar la factura desde tu cuenta de nuestra web en (historial de pedidos). 
-If you have guest account, you can follow your order at this page: {shop_url}guest-tracking.php
+Si tiene una cuenta invitado puede hacer un seguimiento de su pedido en esta dirección: {shop_url}guest-tracking.php
 		
-	{shop_name} - {shop_url}
+{shop_name} - {shop_url}
 
 
 
