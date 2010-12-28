@@ -63,7 +63,7 @@ class	CookieCore
 	{
 		$this->_content = array();
 		$this->_expire = isset($expire) ? (int)($expire) : (time() + 1728000);
-		$this->_name = md5($name._COOKIE_KEY_);
+		$this->_name = md5($name.Tools::getHttpHost());
 		$this->_path = trim(__PS_BASE_URI__.$path, '/\\').'/';
 		if ($this->_path{0} != '/') $this->_path = '/'.$this->_path;
 		$this->_path = rawurlencode($this->_path);
