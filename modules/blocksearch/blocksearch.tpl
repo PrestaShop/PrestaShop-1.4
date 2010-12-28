@@ -39,7 +39,7 @@
 </div>
 {if $ajaxsearch}
 	<script type="text/javascript">
-	/* <![CDATA[ */
+	// <![CDATA[
 	{literal}
 		$('document').ready( function() {
 			$("#search_query")
@@ -56,12 +56,8 @@
 						},
 						parse: function(data) {
 							var mytab = new Array();
-							for (var i = 0; i < data.length; i++) {
-								mytab[mytab.length] = { 
-									data: data[i], 
-									value: data[i].cname + ' > ' + data[i].pname 
-								};
-							}
+							for (var i = 0; i < data.length; i++)
+								mytab[mytab.length] = { data: data[i], value: data[i].cname + ' > ' + data[i].pname };
 							return mytab;
 						},
 						extraParams: {
@@ -75,7 +71,7 @@
 					document.location.href = data.product_link;
 				})
 		});{/literal}
-		/* ]]> */
+	// ]]>
 	</script>
 {/if}
 <!-- /Block search module -->

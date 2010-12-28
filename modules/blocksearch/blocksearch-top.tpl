@@ -38,7 +38,7 @@
 </div>
 {if $instantsearch}
 	<script type="text/javascript">
-/* <![CDATA[ */
+	// <![CDATA[
 		{literal}
 		function tryToCloseInstantSearch() {
 			if ($('#old_center_column').length > 0)
@@ -85,10 +85,12 @@
 			else
 				tryToCloseInstantSearch();
 		});
-		{/literal}
+	// ]]>
+	{/literal}
 	</script>
 {elseif $ajaxsearch}
 	<script type="text/javascript">{literal}
+	// <![CDATA[
 		$('document').ready( function() {
 			$("#search_query")
 				.autocomplete(
@@ -104,12 +106,8 @@
 						},
 						parse: function(data) {
 							var mytab = new Array();
-							for (var i = 0; i < data.length; i++) {
-								mytab[mytab.length] = { 
-									data: data[i], 
-									value: data[i].cname + ' > ' + data[i].pname 
-								};
-							}
+							for (var i = 0; i < data.length; i++)
+								mytab[mytab.length] = { data: data[i], value: data[i].cname + ' > ' + data[i].pname };
 							return mytab;
 						},
 						extraParams: {
@@ -123,8 +121,8 @@
 					document.location.href = data.product_link;
 				})
 		});
-		{/literal}
-		/* ]]> */
+	{/literal}
+	// ]]>
 	</script>
 {/if}
 <!-- /Block search module TOP -->

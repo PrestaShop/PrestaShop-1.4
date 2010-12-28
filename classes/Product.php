@@ -554,7 +554,7 @@ class ProductCore extends ObjectModel
 		if (!isset($result['id_product']))
 			return false;
 
-		return new self($result['id_product']);
+		return new self((int)$result['id_product']);
 	}
 
 	/**

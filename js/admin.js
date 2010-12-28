@@ -796,7 +796,7 @@ function submitAddProductAndPreview()
 
 function submitAddcmsAndPreview()
 {
-	$('#fakeSubmitAddcmsAndPreview').attr('name','submitAddcmsAndPreview');
+	$('#previewSubmitAddcmsAndPreview').attr('name','submitAddcmsAndPreview');
 	$('#cms').submit();
 }
 

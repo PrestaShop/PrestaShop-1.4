@@ -59,17 +59,18 @@ class AdminCMS extends AdminTab
 	
 	private function _displayDraftWarning($active)
 	{
-		return '<div class="warn draft" style="'.($active ? 'display:none' : '').'">
-				<p>
-				<span style="float: left">
-				<img src="../img/admin/warn2.png" />
-				'.$this->l('Your CMS page will be saved as draft').'
-				</span>
-				<span style="float:right"><a href="#" class="button" style="display: block" onclick="submitAddcmsAndPreview()" >'.$this->l('Save and preview').'</a></span>
-				<input type="hidden" name="fakeSubmitAddcmsAndPreview" id="fakeSubmitAddcmsAndPreview" />
-				<br class="clear" />
-				</p>
-	 		</div>';
+		return 
+		'<div class="warn draft" style="'.($active ? 'display:none' : '').'">
+			<p>
+			<span style="float: left">
+			<img src="../img/admin/warn2.png" />
+			'.$this->l('Your CMS page will be saved as a draft').'
+			</span>
+			<input type="button" class="button" style="float: right;" value="'.$this->l('Save and preview').'" onclick="submitAddcmsAndPreview();">
+			<input type="hidden" name="previewSubmitAddcmsAndPreview" id="previewSubmitAddcmsAndPreview" />
+			<br class="clear" />
+			</p>
+		</div>';
 	}
 	
 	public function displayForm($isMainTab = true)

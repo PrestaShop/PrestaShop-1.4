@@ -25,8 +25,8 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-class MemcachedCore extends Cache {
-	
+class MemcachedCore extends Cache
+{
 	private $_memcacheObj;
 	private $_isConnected = false;
 
@@ -42,7 +42,7 @@ class MemcachedCore extends Cache {
 		$servers = self::getMemcachedServers();
 		if (!$servers)
 			return false;
-		foreach ($servers	AS $server)
+		foreach ($servers AS $server)
 			$this->_memcacheObj->addServer($server['ip'], $server['port'], $server['weight']);
 
 		$this->_isConnected = true;
@@ -71,7 +71,7 @@ class MemcachedCore extends Cache {
 	{
 		if (!$this->_isConnected)
 			return false;
-		$this->_keysCached =	$this->_memcacheObj->get('keysCached');
+		$this->_keysCached = $this->_memcacheObj->get('keysCached');
 		$this->_tablesCached = $this->_memcacheObj->get('tablesCached');
 		
 		return true;
@@ -94,7 +94,7 @@ class MemcachedCore extends Cache {
 	{
 		if (!$this->_isConnected)
 			return false;
-		if ($this->_memcacheObj->delete($key, $timeout))
+		if (!empty($key) AND $this->_memcacheObj->delete($key, $timeout))
 			unset($this->_keysCached[$key]);
 	}
 
@@ -102,7 +102,7 @@ class MemcachedCore extends Cache {
 	{
 		if (!$this->_isConnected)
 			return false;
-		if(preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?'."\s".'/Ui', $query, $res))
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?'."\s".'/Ui', $query, $res))
 			foreach ($res[1] AS $table)
 				if (isset($this->_tablesCached[$table]))
 				{
@@ -140,14 +140,12 @@ class MemcachedCore extends Cache {
 
 	public static function addServer($ip, $port, $weight)
 	{
-		return Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'memcached_servers (id_memcached_server, ip, port, weight)
-																							VALUES(\'\', \''.pSQL($ip).'\', '.(int)$port.', '.(int)$weight.')', false);
+		return Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'memcached_servers (id_memcached_server, ip, port, weight) VALUES(\'\', \''.pSQL($ip).'\', '.(int)$port.', '.(int)$weight.')', false);
 	}
 
 	public static function getMemcachedServers()
 	{
-			return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT *
-																					FROM '._DB_PREFIX_.'memcached_servers', true, false);
+			return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'memcached_servers', true, false);
 	}
 
 	public static function deleteServer($id_server)

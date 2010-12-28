@@ -234,7 +234,7 @@ class AdminImages extends AdminTab
 	{
 		$toDel = scandir($dir);
 		foreach ($toDel AS $d)
-			foreach ($type as $imageType)
+			foreach ($type AS $imageType)
 				if (preg_match('/^[0-9]+\-'.($product ? '[0-9]+\-' : '').$imageType['name'].'\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 					if (file_exists($dir.$d))
 						unlink($dir.$d);
@@ -247,7 +247,7 @@ class AdminImages extends AdminTab
 		$toRegen = scandir($dir);
 		if (!$productsImages)
 		{
-			foreach ($toRegen as $image)
+			foreach ($toRegen AS $image)
 				if (preg_match('/^[0-9]*\.jpg$/', $image))
 					foreach ($type AS $k => $imageType)
 					{

@@ -29,11 +29,8 @@ function reorderpositions()
 {
 	//clean products position
 	$cat = Category::getCategories(1, false, false);
-	
 	foreach($cat as $i => $categ)
-	{
 		Product::cleanPositions((int)($categ['id_category']));
-	}
 	
 	//clean Category position and delete old position system
 	Language::loadLanguages();
@@ -49,7 +46,7 @@ function reorderpositions()
 							ORDER BY name ASC');
 		foreach($result as $i => $categ)
 		{
-		$sizeof = sizeof($result);
+			$sizeof = sizeof($result);
 			for ($i = 0; $i < $sizeof; ++$i)
 			{
 				Db::getInstance()->Execute('
@@ -71,9 +68,5 @@ function reorderpositions()
 	$cms_cat = CMSCategory::getCategories(1, false, false);
 	
 	foreach($cms_cat as $i => $categ)
-	{
 		CMS::cleanPositions((int)($categ['id_cms_category']));
-	}
-
 }
-

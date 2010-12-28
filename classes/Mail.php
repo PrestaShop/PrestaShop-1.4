@@ -97,11 +97,8 @@ class MailCore
 			$overrideMail = false;
 
 			// get templatePath
-			if (preg_match('#'.__PS_BASE_URI__.'modules/#', $templatePath))
-			{
-				if (preg_match('#modules/([a-z0-9_-]+)/#ui' , $templatePath , $res))
-					$moduleName = $res[1];
-			}
+			if (preg_match('#'.__PS_BASE_URI__.'modules/#', $templatePath) AND preg_match('#modules/([a-z0-9_-]+)/#ui' , $templatePath , $res))
+				$moduleName = $res[1];
 
 			if ($moduleName !== false AND (file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/mails/'.$template.'.txt') OR
 				file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/mails/'.$template.'.html')))
@@ -152,7 +149,6 @@ class MailCore
 		$result = NULL;
 		try
 		{
-
 			if($smtpChecked)
 			{
 
@@ -163,30 +159,20 @@ class MailCore
 				$swift = new Swift($smtp);
 			}
 			else
-			{
 				$swift = new Swift(new Swift_Connection_NativeMail());
-			}
 
 			$message = new Swift_Message($subject, $content, $type);
 
 			if ($swift->send($message, $to, $from))
-			{
 				$result = true;
-			}
 			else
-			{
 				$result = 999;
-			}
+
 			$swift->disconnect();
 		}
-		catch (Swift_Connection_Exception $e)
-		{
-		 $result = $e->getCode();
-		}
-		catch (Swift_Message_MimeException $e)
-		{
-		 $result = $e->getCode();
-		}
+		catch (Swift_Connection_Exception $e) { $result = $e->getCode(); }
+		catch (Swift_Message_MimeException $e) { $result = $e->getCode(); }
+
 		return $result;
 	}
 
@@ -197,7 +183,7 @@ class MailCore
 		$key = str_replace('\'', '\\\'', $string);
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
 
-		$file = _PS_THEME_DIR_.'mails/'.Language::getIsoById($id_lang).'/lang.php';
+		$file = _PS_THEME_DIR_.'mails/'.Language::getIsoById((int)$id_lang).'/lang.php';
 		if (file_exists($file))
 			include_once($file);
 

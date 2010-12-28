@@ -25,7 +25,8 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-abstract class CacheCore {
+abstract class CacheCore
+{
 	
 	private static $_instance;
 	protected $_keysCached;
