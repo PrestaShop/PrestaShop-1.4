@@ -41,10 +41,27 @@ class MailCore
 		if (!isset($from)) $from = $configuration['PS_SHOP_EMAIL'];
 		if (!isset($fromName)) $fromName = $configuration['PS_SHOP_NAME'];
 
-		if ((!empty($from) AND !Validate::isEmail($from)) OR (!empty($fromName) AND !Validate::isMailName($fromName)) OR 
-		 (!is_array($to) AND !Validate::isEmail($to)) OR (!empty($toName) AND !Validate::isMailName($toName)) OR !is_array($templateVars) OR 
-		 !Validate::isTplName($template) OR !Validate::isMailSubject($subject))
-	 		die(Tools::displayError('Error: mail parameters are corrupted'));
+		if (!empty($from) AND !Validate::isEmail($from))
+	 		die (Tools::displayError('error / mail: parameter "from" is corrupted'));
+			
+		if (!empty($fromName) AND !Validate::isMailName($fromName))
+	 		die (Tools::displayError('error / mail: parameter "fromName" is corrupted'));
+			
+		if (!is_array($to) AND !Validate::isEmail($to))
+	 		die (Tools::displayError('error / mail: parameter "to" is corrupted'));
+			
+		if (!is_array($templateVars))
+	 		die (Tools::displayError('error / mail: parameter "templateVars" is not an array'));
+		
+		// Do not crash for this error, that may be a complicated customer name
+		if (!empty($toName) AND !Validate::isMailName($toName))
+	 		$toName = NULL;
+			
+		if (!Validate::isTplName($template))
+	 		die (Tools::displayError('error / mail: template name is corrupted'));
+			
+		if (!Validate::isMailSubject($subject))
+	 		die (Tools::displayError('error / mail: subject name is not valid'));
 
 		/* Construct multiple recipients list if needed */
 		if (is_array($to))
