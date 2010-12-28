@@ -129,7 +129,13 @@ if (function_exists('finfo_open'))
 elseif (function_exists('mime_content_type'))
 	$mimeType = @mime_content_type($file);
 elseif (function_exists('exec'))
-	$mimeType = trim(@exec('file -bi '.escapeshellarg($file)));
+{	
+	$mimeType = trim(@exec('file -b --mime-type '.escapeshellarg($file)));
+	if (!$mimeType)
+		$mimeType = trim(@exec('file --mime '.escapeshellarg($file)));
+	if (!$mimeType)
+		$mimeType = trim(@exec('file -bi '.escapeshellarg($file)));
+}
 
 if (empty($mimeType))
 {
