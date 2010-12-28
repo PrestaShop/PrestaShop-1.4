@@ -26,7 +26,7 @@
 
 <html>
 	<head>
-		<script type="text/javascript" src="http://{$url}js/jquery/jquery-1.4.4.min.js"></script>
+		<script type="text/javascript" src="{$url}js/jquery/jquery-1.4.4.min.js"></script>
 	</head>
 	<body>
 		<p>{$redirect_text}<br /><a href="javascript:history.go(-1);">{$cancel_text}</a></p>
@@ -70,9 +70,9 @@
 			<input type="hidden" name="payer_id" value="{$customer->id}" />
 			<input type="hidden" name="payer_email" value="{$customer->email}" />
 			<input type="hidden" name="custom" value="{$cart_id}" />
-			<input type="hidden" name="return" value="http://{$url}order-confirmation.php?key={$customer->secure_key}&id_cart={$cart_id}&id_module={$paypal_id}&slowvalidation" />
-			<input type="hidden" name="cancel_return" value="http://{$url}index.php" />
-			<input type="hidden" name="notify_url" value="http://{$url}modules/paypal/validation.php" />
+			<input type="hidden" name="return" value="{$url}order-confirmation.php?key={$customer->secure_key}&id_cart={$cart_id}&id_module={$paypal_id}&slowvalidation" />
+			<input type="hidden" name="cancel_return" value="{$url}index.php" />
+			<input type="hidden" name="notify_url" value="{$url}modules/paypal/validation.php" />
 			<input type="hidden" name="paymentaction" value="{$paymentaction}" />
 			{if $header != NULL}
 			<input type="hidden" name="cpp_header_image" value="{$header}" />
