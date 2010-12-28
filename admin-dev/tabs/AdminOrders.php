@@ -121,6 +121,7 @@ class AdminOrders extends AdminTab
 					$history->changeIdOrderState((int)($newOrderStatusId), (int)($id_order));
 					$order = new Order((int)$order->id);
 					$carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
+					$templateVars = array();
 					if ($history->id_order_state == _PS_OS_SHIPPING_ AND $order->shipping_number)
 						$templateVars = array('{followup}' => str_replace('@', $order->shipping_number, $carrier->url));
 					elseif ($history->id_order_state == _PS_OS_CHEQUE_)

@@ -117,22 +117,22 @@ class OrderHistoryCore extends ObjectModel
 
 	static public function getLastOrderState($id_order)
 	{
-		$result = Db::getInstance()->getRow('
+		$id_order_state = Db::getInstance()->getValue('
 		SELECT `id_order_state`
 		FROM `'._DB_PREFIX_.'order_history`
 		WHERE `id_order` = '.(int)($id_order).'
 		ORDER BY `date_add` DESC, `id_order_history` DESC');
-		if (!$result OR empty($result) OR !key_exists('id_order_state', $result))
+		if (!$id_order_state)
 			return false;
-		return new OrderState((int)($result['id_order_state']), Configuration::get('PS_LANG_DEFAULT'));
+		return new OrderState($id_order_state, Configuration::get('PS_LANG_DEFAULT'));
 	}
 
 	public function addWithemail($autodate = true, $templateVars = false)
 	{
+		$lastOrderState = $this->getLastOrderState($this->id_order);
+		
 		if (!parent::add($autodate))
 			return false;
-			
-		$lastOrderState = $this->getLastOrderState($this->id_order);
 
 		$result = Db::getInstance()->getRow('
 			SELECT osl.`template`, c.`lastname`, c.`firstname`, osl.`name` AS osname, c.`email`
@@ -152,8 +152,9 @@ class OrderHistoryCore extends ObjectModel
 			$order = new Order((int)($this->id_order));
 			$data['{total_paid}'] = Tools::displayPrice((float)($order->total_paid), new Currency((int)($order->id_currency)), false, false);
 			$data['{order_name}'] = sprintf("#%06d", (int)($order->id));
-			// additionnal links for download virtual product
-			if ($virtualProducts = $order->getVirtualProducts() AND $this->id_order_state==_PS_OS_PAYMENT_)
+			
+			// An additional email is sent the first time a virtual item is validated
+			if ($virtualProducts = $order->getVirtualProducts() AND !$lastOrderState->logable AND $newOrderState = new OrderState($this->id_order_state, Configuration::get('PS_LANG_DEFAULT')) AND $newOrderState->logable)
 			{
 				global $smarty;
 				$display = '';
