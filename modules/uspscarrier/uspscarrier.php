@@ -29,6 +29,7 @@ class UspsCarrier extends CarrierModule
 {
 	private $_html = '';
 	private $_postErrors = array();
+	private $_webserviceError = '';
 	private $_packagingSizeTypeList = array();
 	private $_packagingTypeList = array();
 	private $_serviceTypeList = array();
@@ -501,7 +502,7 @@ class UspsCarrier extends CarrierModule
 			Configuration::updateValue('USPS_CARRIER_SERVICE_TYPE', Tools::getValue('usps_carrier_service_type'));
 			Configuration::updateValue('USPS_CARRIER_MACHINABLE', Tools::getValue('usps_carrier_machinable'));
 			if (!$this->webserviceTest())
-				$this->_postErrors[]  = $this->l('Prestashop could not connect to USPS webservices, check your USPS user ID');
+				$this->_postErrors[]  = $this->l('Prestashop could not connect to USPS webservices : ').'<br />'.$this->_webserviceError;
 		}
 
 		// If no errors appear, the carrier is being activated, else, the carrier is being deactivated
@@ -681,6 +682,11 @@ class UspsCarrier extends CarrierModule
 		// Return results
 		// echo '<pre>'.htmlentities(str_replace('><', ">\n<", $xml)).'</pre>';
 		// echo '<pre>'; print_r($resultTab); echo '</pre>';
+		if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION']))
+		{
+			$this->_webserviceError  = $resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
+			return false;
+		}
 		if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
 			return true;
 		return false;

@@ -68,7 +68,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_ee84d4d24885ecee8442a4994a76ac96'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_e794e452ed4d2cfa13083693a2c8810e'] = 'Le type de paquet n\'est pas spécifié';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_0caec8dfd87ddbe6c2241cdec7208a32'] = 'Le service n\'est pas spécifié';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b25a0f3caa6e0047ede272a6e91dac29'] = 'Le champs machinable n\'est pas spécifié';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_81a778b0f6952715c11c60689da38dba'] = 'Prestashop n\'a pas pu se connecter aux webservices de USPS, veuillez vérifier votre USPS user ID';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_bf6bf5b095324e2cf5fbb37211304fcb'] = 'Prestashop n\'a pas pu se connecter aux webservices de USPS : ';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_fd0119c2a5fc18aa64887b5b7ab41c19'] = 'Une erreur est survenue, veuillez réessayer ultérieurement';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Configuration non mise à jour';
