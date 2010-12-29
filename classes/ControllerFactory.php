@@ -24,13 +24,19 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
-  
+
+require_once(_PS_CONTROLLER_DIR_.'ParentOrderController.php');
+if (file_exists(_PS_ROOT_DIR_.'/override/controllers/ParentOrderController.php'))
+	require_once(_PS_ROOT_DIR_.'/override/controllers/ParentOrderController.php');
+else
+	eval('class ParentOrderController extends ParentOrderControllerCore {}');
+
 class ControllerFactoryCore
 {
 	public static function getController($className, $auth = false, $ssl = false)
 	{
 		if (!class_exists($className, false))
-		{
+		{	
 			require_once(dirname(__FILE__).'/../controllers/'.$className.'.php');
 			if (file_exists(dirname(__FILE__).'/../override/controllers/'.$className.'.php'))
 				require_once(dirname(__FILE__).'/../override/controllers/'.$className.'.php');

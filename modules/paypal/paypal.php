@@ -192,7 +192,7 @@ class PayPal extends PaymentModule
 		if (!$this->active)
 			return ;
 
-		if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT') AND !$cookie->isLogged(true) AND $this->_isPayPalAPIAvailable())
+		if (Configuration::get('PAYPAL_EXPRESS_CHECKOUT') /*AND !$cookie->isLogged(true)*/ AND $this->_isPayPalAPIAvailable())
 		{
 			$smarty->assign('logo', $this->getLogo(true));
 			return $this->display(__FILE__, 'express/shopping_cart.tpl');
@@ -704,7 +704,7 @@ class PayPal extends PaymentModule
 	{
 		$paymentMethod = (int)(Tools::getValue('payment_method', Configuration::get('PAYPAL_PAYMENT_METHOD')));
 		$paypalExpress = (int)(Tools::isSubmit('paypal_express') ? 1 : Configuration::get('PAYPAL_EXPRESS_CHECKOUT'));
-		$paypalDebug = (int)(Tools::isSubmit('paypal_express') ? 1 : Configuration::get('PAYPAL_DEBUG_MODE'));
+		$paypalDebug = (int)(Tools::isSubmit('paypal_debug') ? 1 : Configuration::get('PAYPAL_DEBUG_MODE'));
 		
 		return '
 		<h2>'.$this->l('Solution').'</h2>

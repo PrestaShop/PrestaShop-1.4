@@ -32,22 +32,20 @@ function __autoload($className)
 		if (function_exists('smartyAutoload') AND smartyAutoload($className)) 
 			return true;
 		if (file_exists(dirname(__FILE__).'/../classes/'.$className.'.php'))
-			$type = 'classes';
-		elseif (file_exists(dirname(__FILE__).'/../controllers/'.$className.'.php'))
-			$type = 'controllers';
+		{
+			require_once(dirname(__FILE__).'/../classes/'.str_replace(chr(0), '', $className).'.php');
+			if (file_exists(dirname(__FILE__).'/../override/classes/'.$className.'.php'))
+				require_once(dirname(__FILE__).'/../override/classes/'.$className.'.php');
+			else
+			{
+				$coreClass = new ReflectionClass($className.'Core');
+				if ($coreClass->isAbstract())
+					eval('abstract class '.$className.' extends '.$className.'Core {}');
+				else
+					eval('class '.$className.' extends '.$className.'Core {}');
+			}
+		}
 		else
 			return ;
-		
-		require_once(dirname(__FILE__).'/../'.$type.'/'.str_replace(chr(0), '', $className).'.php');
-		if (file_exists(dirname(__FILE__).'/../override/'.$type.'/'.$className.'.php'))
-			require_once(dirname(__FILE__).'/../override/'.$type.'/'.$className.'.php');
-		else
-		{
-			$coreClass = new ReflectionClass($className.'Core');
-			if ($coreClass->isAbstract())
-				eval('abstract class '.$className.' extends '.$className.'Core {}');
-			else
-				eval('class '.$className.' extends '.$className.'Core {}');
-		}
 	}
 }
