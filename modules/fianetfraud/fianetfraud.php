@@ -521,7 +521,6 @@ class Fianetfraud extends Module
 	{
 		$conf = Configuration::get('SAC_PRODUCTION');
 		$order = new Order((int)($params['id_order']));
-		ini_set('display_errors', 'off');
 		if (!self::needCheck($order->module, $order->total_paid))
 			return null;
 

@@ -157,7 +157,6 @@ class ThemeInstallator extends Module
 	{
 		global $currentIndex, $cookie;
 
-		ini_set('display_errors', 'on');
 		define('_EXPORT_FOLDER_', dirname(__FILE__).'/export/');
 		define('_IMPORT_FOLDER_', dirname(__FILE__).'/import/');
 		$this->page = 1;		

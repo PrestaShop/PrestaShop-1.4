@@ -29,8 +29,6 @@ include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../header.php');
 include(dirname(__FILE__).'/ogone.php');
 
-ini_set('display_errors', 'on');
-
 $ogone = new Ogone();
 $id_module = $ogone->id;
 $id_cart = Tools::getValue('orderID');

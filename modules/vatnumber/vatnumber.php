@@ -24,7 +24,7 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
-ini_set('display_errors', 'On');
+
 class VatNumber extends Module
 {
 	public function __construct()

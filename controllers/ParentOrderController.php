@@ -34,6 +34,7 @@ class ParentOrderControllerCore extends FrontController
 	
 	public function __construct()
 	{
+		$this->ssl = true;
 		parent::__construct();
 		
 		/* Disable some cache related bugs on the cart/order */

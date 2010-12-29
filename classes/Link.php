@@ -137,12 +137,12 @@ class LinkCore
 
 	public function getImageLink($name, $ids, $type = NULL)
 	{
-		global $protocol;
+		global $protocol_content;
 		if ($this->allow == 1)
 			$uri_path = __PS_BASE_URI__.$ids.($type ? '-'.$type : '').'/'.$name.'.jpg';
 		else
 			$uri_path = _THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg';
-		return $protocol.Tools::getMediaServer($uri_path).$uri_path;
+		return $protocol_content.Tools::getMediaServer($uri_path).$uri_path;
 	}
 	
 	public function getMediaLink($filepath)
