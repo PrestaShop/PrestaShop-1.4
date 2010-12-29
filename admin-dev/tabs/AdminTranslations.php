@@ -1204,7 +1204,8 @@ class AdminTranslations extends AdminTab
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 			<script type="text/javascript">
 				tinyMCE.init({
-					mode : "textareas",
+					mode : "specific_textareas",
+					editor_deselector : "noEditor",
 					theme : "advanced",
 					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
 					// Theme options
@@ -1219,7 +1220,7 @@ class AdminTranslations extends AdminTab
 					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
 					document_base_url : "'.__PS_BASE_URI__.'",
 					width: "600",
-					height: "auto",
+					height: "600",
 					font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
 					// Drop lists for link/image/media/template dialogs
 					template_external_list_url : "lists/template_list.js",
@@ -1282,8 +1283,9 @@ class AdminTranslations extends AdminTab
 					<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 				}
 				else
-					echo '<br/><div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[txt]['.$mailTplName.']" style="width:560px;margin=0;">'.htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8').'</textarea></div><br/>';
-
+				{
+					echo '<br/><div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[txt]['.$mailTplName.']" style="width:560px;margin=0;">'.htmlentities(stripslashes(strip_tags($mailTpl[$lang])), ENT_COMPAT, 'UTF-8').'</textarea></div><br/>';
+				}
 				echo '</div></div>';
 			}
 		}
@@ -1324,13 +1326,13 @@ class AdminTranslations extends AdminTab
 						<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 					}
 					else
-						echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']" style="width:560px;margin=0;">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
+						echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']" style="width:560px;margin=0;">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
 					echo '</div></div>';
 				}
 				else
 				{
 					echo '<br/><br/><div><label>'.$mailTplName.'</label><br/><div class="mail-form">';
-					echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/></div></div>';
+					echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/></div></div>';
 				}
 			}
 			echo '</div></fieldset><br />';
@@ -1382,7 +1384,7 @@ class AdminTranslations extends AdminTab
 							<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][html]['.$themeMailTplName.']">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 						}
 						else
-							echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeMailTplName.']" style="width:560px;margin=0;">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
+							echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeMailTplName.']" style="width:560px;margin=0;">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
 						echo '</div></div><br/>';
 					}
 				}
@@ -1433,7 +1435,7 @@ class AdminTranslations extends AdminTab
 								<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes_module]['.$theme_dir.']['.$themeModuleName.'][html]['.$themeModuleMailTplName.']">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 							}
 							else
-								echo '<div style="clear:both;"><textarea class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeModuleMailTplName.']" style="width:560px;margin=0;">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
+								echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeModuleMailTplName.']" style="width:560px;margin=0;">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
 							echo '</div></div><br/>';
 						}
 					}
