@@ -44,7 +44,7 @@
 	var txtWithTax = "{l s='(tax incl.)'}";
 	var txtWithoutTax = "{l s='(tax excl.)'}";
 	var txtHasBeenSelected = "{l s='has been selected'}";
-	var txtNoCarrierIsSelected = "{l s='No carrier is selected'}";
+	var txtNoCarrierIsSelected = "{l s='No carrier has been selected'}";
 	var txtNoCarrierIsNeeded = "{l s='No carrier is needed for this order'}";
 	var txtTOSIsAccepted = "{l s='Terms of service is accepted'}";
 	var txtTOSIsNotAccepted = "{l s='Terms of service has not been accepted'}";
@@ -52,6 +52,7 @@
 	var txtErrors = "{l s='error(s)'}";
 	var txtDeliveryAddress = "{l s='Delivery address'}";
 	var txtInvoiceAddress = "{l s='Invoice address'}";
+	var txtModifyMyAddress = "{l s='Modify my address'}";
 	var errorCarrier = "{$errorCarrier}";
 	var errorTOS = "{$errorTOS}";
 	var checkedCarrier = "{if isset($checked)}{$checked}{else}0{/if}";
@@ -386,7 +387,7 @@
 						</div>
 						
 						<div class="opc_float">
-							<h4>{l s='Create your account today and enjoy :'}</h4>
+							<h4>{l s='Create your account today and enjoy:'}</h4>
 							<ul class="bullet">
 								<li>{l s='Personalized and secure access'}</li>
 								<li>{l s='Fast and easy check out'}</li>
@@ -535,7 +536,7 @@
 						</p>
 						<p class="text">
 							<label for="phone">{l s='Home phone'}</label>
-							<input type="text" class="text" name="phone" id="phone" value="{if isset($guestInformations) && $guestInformations.phone}{$guestInformations.phone}{/if}" /> <sup style="color:red;">*</sup>
+							<input type="text" class="text" name="phone" id="phone" value="{if isset($guestInformations) && $guestInformations.phone}{$guestInformations.phone}{/if}" /> <sup>*</sup>
 						</p>
 						<p class="text is_customer_param">
 							<label for="phone_mobile">{l s='Mobile phone'}</label>
@@ -602,7 +603,7 @@
 							</p>
 							<p class="text">
 								<label for="phone_invoice">{l s='Home phone'}</label>
-								<input type="text" class="text" name="phone_invoice" id="phone_invoice" value="" /> <sup style="color:red;">*</sup>
+								<input type="text" class="text" name="phone_invoice" id="phone_invoice" value="" /> <sup>*</sup>
 							</p>
 							<p class="text is_customer_param">
 								<label for="phone_mobile_invoice">{l s='Mobile phone'}</label>
@@ -611,9 +612,7 @@
 							<input type="hidden" name="alias_invoice" id="alias_invoice" value="{l s='My Invoice address'}" />
 						</div>
 						<!-- END Account -->
-						<p class="text">
-							<input type="submit" class="button" name="submitAccount" id="submitAccount" value="{l s='Continue'}" />
-						</p>
+						<p style="float: right;"><input type="submit" class="exclusive button" name="submitAccount" id="submitAccount" value="{l s='Continue'}" /></p>
 					</div>
 				</fieldset>
 			</form>

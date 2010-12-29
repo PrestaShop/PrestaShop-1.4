@@ -6,26 +6,25 @@
 
 .opc_float {
 	float:left;
-	width:49%;
+	width: 49%;
 }
 
 .opc_float_status {
-	float:left;
-	width:45%;
-	padding:10px;
-	margin-bottom:10px;
+	float: left;
+	width: 45%;
+	padding: 10px;
 }
 
 #order-opc #login_form {
 	width: 100%;
-	clear: none
+	clear: none;
 } 
 
 #order-opc #login_form p.text {
 	height: 3.4em;
 	margin-left: 4em;
 	padding-left: 0;
-	padding-right: 0
+	padding-right: 0;
 }
 
 #order-opc #login_form a { color: #374853 }
@@ -33,7 +32,7 @@
 #order-opc #login_form p.submit {
 	margin-right: 0;
 	text-align: left;
-	padding-left: 17%!important
+	padding-left: 17%!important;
 }
 #order-opc p.lost_password { padding-left: 4em }
 #order-opc p.submit span { padding-right: 0.5em }
@@ -43,8 +42,9 @@
 	display: block;
 	text-align: left;
 	width: 100%;
-	margin-bottom: 0.3em
+	margin-bottom: 0.3em;
 }
 
-#order-opc textarea { width: 17em }
+#order-opc textarea { width: 17em; }
 
+#order-opc sup { color: red; }

@@ -303,6 +303,48 @@ function saveAddress(type)
 	return false;
 }
 
+function manageButtonsEvents(button)
+{
+	var hasError = false;
+	var opc_button_clicked = button;	
+	if (button.attr('href') == '#opc_block_2' && isVirtualCart == 1)
+	{
+		if ($('.opc_block_content:visible').attr('id') == 'opc_block_3')
+			button.attr('href', '#opc_block_1');
+		else
+			button.attr('href', '#opc_block_3');
+	}
+	if (button.attr('href') == '#opc_block_3' && $('input[name=id_carrier]:checked').length == 0 && isVirtualCart == 0)
+	{
+		alert(errorCarrier);
+		hasError = true;
+	}
+	if (button.attr('href') == '#opc_block_4' && $('input[name=cgv]:checked').length == 0 && conditionEnabled)
+	{
+		alert(errorTOS);
+		hasError = true;
+	}
+	
+	if (!hasError)
+	{
+		if (button.attr('href') == '#opc_block_3')
+			updateCarrierSelectionAndGift();
+		if (button.attr('href') == '#opc_block_4')
+			showPaymentModule();
+		$('.opc_block_content:visible').slideUp('slow', function() {
+			$(opc_button_clicked.attr('href')).slideDown('slow', function() {
+				$('.opc_status').each(function() {
+					if ($(this).attr('id') != $('.opc_block_content:visible').attr('id')+'_status')
+						$(this).slideDown('slow');
+					else
+						$(this).slideUp('slow');
+				});
+			});
+		});
+	}
+	return false;
+}
+
 $(function() {
 	// Init
 	$('.opc_status').show();
@@ -311,47 +353,7 @@ $(function() {
 	$('#opc_block_1_status').hide();
 	
 	// Event
-	$('.opc_button').click(function() {
-		var hasError = false;
-		var opc_button_clicked = $(this);	
-		
-		if ($(this).attr('href') == '#opc_block_2' && isVirtualCart == 1)
-		{
-			if ($('.opc_block_content:visible').attr('id') == 'opc_block_3')
-				$(this).attr('href', '#opc_block_1');
-			else
-				$(this).attr('href', '#opc_block_3');
-		}
-		if ($(this).attr('href') == '#opc_block_3' && $('input[name=id_carrier]:checked').length == 0 && isVirtualCart == 0)
-		{
-			alert(errorCarrier);
-			hasError = true;
-		}
-		if ($(this).attr('href') == '#opc_block_4' && $('input[name=cgv]:checked').length == 0 && conditionEnabled)
-		{
-			alert(errorTOS);
-			hasError = true;
-		}
-		
-		if (!hasError)
-		{
-			if ($(this).attr('href') == '#opc_block_3')
-				updateCarrierSelectionAndGift();
-			if ($(this).attr('href') == '#opc_block_4')
-				showPaymentModule();
-			$('.opc_block_content:visible').slideUp('slow', function() {
-				$(opc_button_clicked.attr('href')).slideDown('slow', function() {
-					$('.opc_status').each(function() {
-						if ($(this).attr('id') != $('.opc_block_content:visible').attr('id')+'_status')
-							$(this).slideDown('slow');
-						else
-							$(this).slideUp('slow');
-					});
-				});
-			});
-		}
-		return false;
-	});
+	$('.opc_button').click(function() { manageButtonsEvents($(this)); });
 
 	// GUEST CHECKOUT / NEW ACCOUNT MANAGEMENT
 	if ((!isLogged) || (isGuest))
@@ -498,6 +500,7 @@ $(function() {
 						html += $('#id_country option:selected').html()+'<br />';
 						if ($('#id_state').is(':visible'))
 							html += $('#id_state option:selected').html()+'<br />';
+						html += '<div style="float: left; margin-top: 10px;"><a href="#opc_block_1" class="button_large opc_button" onclick="manageButtonsEvents($(this));">'+txtModifyMyAddress+'</a></div>';
 						html += '</div>';
 						html += '<div class="opc_float_status">';
 						html += '<h4>'+txtInvoiceAddress+'</h4>';
@@ -509,7 +512,7 @@ $(function() {
 						if ($('#id_state'+($('#invoice_address').is(':checked') ? '_invoice' : '')).is(':visible'))
 							html += $('#id_state'+($('#invoice_address').is(':checked') ? '_invoice' : '')+' option:selected').html()+'<br />';
 						html += '</div>';
-						html += '<div class="clear"></div>';
+						html += '<div class="clear" style="font-size: 0px;"></div>';
 						
 						$('#opc_block_1_status').html(html);
 						
