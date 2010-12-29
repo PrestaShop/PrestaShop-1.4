@@ -55,12 +55,7 @@ abstract class ModuleGridCore extends Module
 	
 	public function install()
 	{
-		return (parent::install() AND $this->registerHook('backOfficeHeader'));
-	}
-	
-	public function hookBackOfficeHeader()
-	{
-		return '<link type="text/css" rel="stylesheet" href="../modules/gridextjs/extjs/resources/css/ext-all.css" />';
+		return (parent::install());
 	}
 	
 	public function setEmployee($id_employee)
