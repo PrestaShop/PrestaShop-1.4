@@ -313,7 +313,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 			</div>
 			{/if}
 
-			<p id="product_reference" {if isset($groups) OR !$product->reference}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape}</span></p>
+			<p id="product_reference" {if isset($groups) OR !$product->reference}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape:'htmlall':'UTF-8'}</span></p>
 
 			{if $product->minimal_quantity > 1}
 			<!-- minimal quantity JS -->
