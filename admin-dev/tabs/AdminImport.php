@@ -555,7 +555,7 @@ class AdminImport extends AdminTab
 			self::setEntityDefaultValues($product);
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
 
-            $trg_name = trim($product->tax_rules_group_name);
+            $trg_name = trim($product->id_tax_rules_group);
 
 			if (!empty($trg_name))
 			{
