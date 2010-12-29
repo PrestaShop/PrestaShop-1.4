@@ -97,15 +97,6 @@ class CategoryCore extends ObjectModel
 		'fields' => array(
 			'id_parent' => array('sqlId' => 'id_parent', 'xlink_resource'=> 'categories'),
 		),
-		'linked_tables' => array(
-			'i18n' => array(
-				'table' => 'category_lang',
-				'fields' => array(
-					'id_lang' => array('sqlId' => 'id_lang', 'xlink_resource'=> 'languages'),
-					'name' => array('sqlId' => 'name'),
-				),
-			),
-		),
 	);
 
 	public function __construct($id_category = NULL, $id_lang = NULL)
@@ -820,12 +811,12 @@ class CategoryCore extends ObjectModel
 		foreach ($res AS $category)
 			if ((int)($category['id_category']) == (int)($this->id))
 				$movedCategory = $category;
-
+		
 		if (!isset($movedCategory) || !isset($position))
 			return false;
 		// < and > statements rather than BETWEEN operator
 		// since BETWEEN is treated differently according to databases
-		return (Db::getInstance()->Execute('
+		$result = (Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category`
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
 			WHERE `position`
@@ -838,6 +829,8 @@ class CategoryCore extends ObjectModel
 			SET `position` = '.(int)($position).'
 			WHERE `id_parent` = '.(int)($movedCategory['id_parent']).'
 			AND `id_category`='.(int)($movedCategory['id_category'])));
+		Module::hookExec('categoryUpdate');
+		return $result;
 	}
 
 	static public function cleanPositions($id_category_parent)

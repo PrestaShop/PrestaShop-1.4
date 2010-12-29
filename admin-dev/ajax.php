@@ -229,12 +229,16 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 	if (Validate::isLoadedObject($category))
 	{
 		if (isset($position) && $category->updatePosition($way, $position))
+		{
+			Module::hookExec('categoryUpdate');
 			die(true);
+		}
 		else
 			die('{"hasError" : true, errors : "Can not update categories position"}');
 	}
 	else
 		die('{"hasError" : true, "errors" : "This category can not be loaded"}');
+	
 }
 
 if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
