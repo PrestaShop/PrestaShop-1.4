@@ -1200,39 +1200,43 @@ class AdminTranslations extends AdminTab
 
 		// TinyMCE
 		$iso = Language::getIsoById((int)($cookie->id_lang));
-		echo ' <script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-				<script type="text/javascript">
-					tinyMCE.init({
-						mode : "textareas",
-						theme : "advanced",
-						plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
-						// Theme options
-						theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-						theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
-						theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
-						theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
-						theme_advanced_toolbar_location : "top",
-						theme_advanced_toolbar_align : "left",
-						theme_advanced_statusbar_location : "bottom",
-						theme_advanced_resizing : false,
-						content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
-						document_base_url : "'.__PS_BASE_URI__.'",
-						width: "600",
-						height: "auto",
-						font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
-						// Drop lists for link/image/media/template dialogs
-						template_external_list_url : "lists/template_list.js",
-						external_link_list_url : "lists/link_list.js",
-						external_image_list_url : "lists/image_list.js",
-						media_external_list_url : "lists/media_list.js",
-						elements : "nourlconvert",
-						entity_encoding: "raw",
-						convert_urls : false,
-						language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
-						
-					});
-
-		</script>
+		echo '
+			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript">
+				tinyMCE.init({
+					mode : "textareas",
+					theme : "advanced",
+					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+					// Theme options
+					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
+					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
+					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
+					theme_advanced_toolbar_location : "top",
+					theme_advanced_toolbar_align : "left",
+					theme_advanced_statusbar_location : "bottom",
+					theme_advanced_resizing : false,
+					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+					document_base_url : "'.__PS_BASE_URI__.'",
+					width: "600",
+					height: "auto",
+					font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
+					// Drop lists for link/image/media/template dialogs
+					template_external_list_url : "lists/template_list.js",
+					external_link_list_url : "lists/link_list.js",
+					external_image_list_url : "lists/image_list.js",
+					media_external_list_url : "lists/media_list.js",
+					elements : "nourlconvert",
+					entity_encoding: "raw",
+					convert_urls : false,
+					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
+					
+				});
+				function displayTiny(obj)
+				{
+					tinyMCE.get(obj.attr(\'name\')).show();
+				}
+			</script>
 		';
 		$mylang = new Language(Language::getIdByIso($lang));
 			echo '<!--'.$this->l('Language').'-->';
@@ -1274,7 +1278,7 @@ class AdminTranslations extends AdminTab
 					</table></div>';
 
 					echo '<br/><br/><div><iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>
-					<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+					<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
 					<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 				}
 				else
@@ -1316,7 +1320,7 @@ class AdminTranslations extends AdminTab
 						else
 							echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
 
-						echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+						echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
 						<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 					}
 					else
@@ -1374,7 +1378,7 @@ class AdminTranslations extends AdminTab
 							else
 								echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
 
-							echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); 	tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+							echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
 							<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][html]['.$themeMailTplName.']">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 						}
 						else
@@ -1425,7 +1429,7 @@ class AdminTranslations extends AdminTab
 								else
 									echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
 
-								echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); tinyMCEInit($(this).parent().next().show()); return false;" class="button">Edit this mail template</a></div>
+								echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
 								<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes_module]['.$theme_dir.']['.$themeModuleName.'][html]['.$themeModuleMailTplName.']">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 							}
 							else
