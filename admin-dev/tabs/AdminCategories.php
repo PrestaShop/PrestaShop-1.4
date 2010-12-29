@@ -246,7 +246,7 @@ class AdminCategories extends AdminTab
 			<fieldset><legend><img src="../img/admin/tab-categories.gif" />'.$this->l('Category').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form translatable">';
-		foreach ($this->_languages as $language)
+		foreach ($this->_languages AS $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" '.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' /><sup> *</sup>
@@ -271,7 +271,7 @@ class AdminCategories extends AdminTab
 				</div>
 				<label>'.$this->l('Description:').' </label>
 				<div class="margin-form translatable">';
-		foreach ($this->_languages as $language)
+		foreach ($this->_languages AS $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<textarea name="description_'.$language['id_lang'].'" rows="5" cols="40">'.htmlentities($this->getFieldValue($obj, 'description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'</textarea>
@@ -287,7 +287,7 @@ class AdminCategories extends AdminTab
 				<div class="clear"><br /></div>	
 				<label>'.$this->l('Meta title:').' </label>
 				<div class="margin-form translatable">';
-		foreach ($this->_languages as $language)
+		foreach ($this->_languages AS $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_title_'.$language['id_lang'].'" id="meta_title_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_title', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
@@ -297,7 +297,7 @@ class AdminCategories extends AdminTab
 				</div>
 				<label>'.$this->l('Meta description:').' </label>
 				<div class="margin-form translatable">';
-		foreach ($this->_languages as $language)
+		foreach ($this->_languages AS $language)
 			echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_description_'.$language['id_lang'].'" id="meta_description_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_description', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
 						<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
@@ -306,7 +306,7 @@ class AdminCategories extends AdminTab
 				</div>
 				<label>'.$this->l('Meta keywords:').' </label>
 				<div class="margin-form translatable">';
-		foreach ($this->_languages as $language)
+		foreach ($this->_languages AS $language)
 			echo '
 					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="meta_keywords_'.$language['id_lang'].'" id="meta_keywords_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'meta_keywords', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" />
@@ -316,7 +316,7 @@ class AdminCategories extends AdminTab
 				</div>
 				<label>'.$this->l('Friendly URL:').' </label>
 				<div class="margin-form translatable">';
-		foreach ($this->_languages as $language)
+		foreach ($this->_languages AS $language)
 			echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input type="text" name="link_rewrite_'.$language['id_lang'].'" id="link_rewrite_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" onchange="this.value = str2url(this.value);" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Only letters and the minus (-) character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
@@ -336,7 +336,7 @@ class AdminCategories extends AdminTab
 							<th>'.$this->l('Group name').'</th>
 						</tr>';
 						$irow = 0;
-						foreach ($groups as $group)
+						foreach ($groups AS $group)
 							echo '
 							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 								<td><input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.((in_array($group['id_group'], $customer_groups) OR (!isset($obj->id))) ? 'checked="checked" ' : '').'/></td>

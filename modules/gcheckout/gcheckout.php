@@ -50,7 +50,9 @@ class GCheckout extends PaymentModule
 
     function install()
     {		
-        if (!parent::install() OR !$this->registerHook('payment') OR !$this->registerHook('paymentReturn') OR !Configuration::updateValue('GCHECKOUT_MERCHANT_ID', '822305931131113') OR !Configuration::updateValue('GCHECKOUT_MERCHANT_KEY', '2Lv_osMomVIocnLK0aif3A') OR !Configuration::updateValue('GCHECKOUT_LOGS', '1') OR !Configuration::updateValue('GCHECKOUT_MODE', 'real'))
+        if (!parent::install() OR !$this->registerHook('payment') OR !$this->registerHook('paymentReturn') OR !Configuration::updateValue('GCHECKOUT_MERCHANT_ID', '822305931131113') 
+		OR !Configuration::updateValue('GCHECKOUT_MERCHANT_KEY', '2Lv_osMomVIocnLK0aif3A') OR !Configuration::updateValue('GCHECKOUT_LOGS', '1') OR !Configuration::updateValue('GCHECKOUT_MODE', 'real')
+		OR !Configuration::updateValue('GCHECKOUT_NO_SHIPPING', '0'))
 			return false;
 		return true;
     }
@@ -58,7 +60,7 @@ class GCheckout extends PaymentModule
     function uninstall()
     {
         return (parent::uninstall() AND Configuration::deleteByName('GCHECKOUT_MERCHANT_ID') AND Configuration::deleteByName('GCHECKOUT_MERCHANT_KEY') AND
-		Configuration::deleteByName('GCHECKOUT_MODE') AND Configuration::deleteByName('GCHECKOUT_LOGS'));
+		Configuration::deleteByName('GCHECKOUT_MODE') AND Configuration::deleteByName('GCHECKOUT_LOGS') AND Configuration::deleteByName('GCHECKOUT_NO_SHIPPING'));
     }
 	
 	function getContent()
@@ -115,7 +117,14 @@ class GCheckout extends PaymentModule
 				<div class="margin-form">
 					<input type="text" name="gcheckout_merchant_key" value="'.Tools::getValue('gcheckout_merchant_key', Configuration::get('GCHECKOUT_MERCHANT_KEY')).'" />
 				</div>
-				<p>'.$this->l('You can log the server-to-server communication. The log files are').' '.__PS_BASE_URI__.'modules/gcheckout/googleerror.log '.$this->l('and').' '.__PS_BASE_URI__.'modules/gcheckout/googlemessage.log. '.$this->l('If you do activate it, be sure to protect them by putting a .htaccess file in the same directory. If you forget to do so, they will be readable by everyone').'</p>
+				<p>'.$this->l('If you tick this box, buyers will be able to see the shipping fees you have setup in Google Checkout on the purchase page.').'</p>
+				<label>
+					'.$this->l('Use Google shipping fees').'
+				</label>
+				<div class="margin-form" style="margin-top:5px">
+					<input type="checkbox" name="gcheckout_no_shipping"'.(Tools::getValue('gcheckout_no_shipping', Configuration::get('GCHECKOUT_NO_SHIPPING')) ? ' checked="checked"' : '').' />
+				</div>
+				<p>'.$this->l('You can log the server-to-server communication. The log files are').' '.__PS_BASE_URI__.'modules/gcheckout/googleerror.log '.$this->l('and').' '.__PS_BASE_URI__.'modules/gcheckout/googlemessage.log. '.$this->l('If you do activate it, be sure to protect them by putting a .htaccess file in the same directory. If you forget to do so, they will be readable by everyone').'</p>				
 				<label>
 					'.$this->l('Logs').'
 				</label>
@@ -141,32 +150,32 @@ class GCheckout extends PaymentModule
 	function hookPayment($params)
 	{
 		if (!$this->active)
-			return ;
+			return;
 
 		global $smarty;
 		
-		require_once('library/googlecart.php');
-		require_once('library/googleitem.php');
-		require_once('library/googleshipping.php');
+		require_once(dirname(__FILE__).'/library/googlecart.php');
+		require_once(dirname(__FILE__).'/library/googleitem.php');
+		require_once(dirname(__FILE__).'/library/googleshipping.php');
 		
 		$currency = $this->getCurrency();
 		$googleCart = new GoogleCart(Configuration::get('GCHECKOUT_MERCHANT_ID'), Configuration::get('GCHECKOUT_MERCHANT_KEY'), Configuration::get('GCHECKOUT_MODE'), $currency->iso_code);
 		foreach ($params['cart']->getProducts() AS $product)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].((isset($product['attributes']) AND $product['attributes'] != '') ? ' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), (int)$product['cart_quantity'], Tools::convertPrice($product['price_wt'], $currency))); 
+			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].((isset($product['attributes']) AND $product['attributes'] != '') ? ' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), (int)$product['cart_quantity'], Tools::convertPrice($product['price_wt'], $currency), strtoupper(Configuration::get('PS_WEIGHT_UNIT')), (float)$product['weight'])); 
 		if ($wrapping = $params['cart']->getOrderTotal(true, 6))
 			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, Tools::convertPrice($wrapping, $currency)));
 		foreach ($params['cart']->getDiscounts() AS $voucher)
 			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.Tools::convertPrice($voucher['value_real'], $currency)));
-		$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($params['cart']->getOrderShippingCost($params['cart']->id_carrier), $currency)));
+		
+		if (!Configuration::get('GCHECKOUT_NO_SHIPPING'))
+			$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($params['cart']->getOrderShippingCost($params['cart']->id_carrier), $currency)));
 
 		$googleCart->SetEditCartUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php');
 		$googleCart->SetContinueShoppingUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php');
 		$googleCart->SetRequestBuyerPhone(false);
-
 		$googleCart->SetMerchantPrivateData($params['cart']->id.'|'.$params['cart']->secure_key);
 
-		$buttonText = $this->l('Pay with GoogleCheckout');
-		$smarty->assign(array('googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($buttonText, 'LARGE'), 'buttonText' => $buttonText));
+		$smarty->assign(array('googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($this->l('Pay with GoogleCheckout'), 'LARGE'), 'buttonText' => $this->l('Pay with GoogleCheckout')));
 
 		return $this->display(__FILE__, 'payment.tpl');
 	}
@@ -174,7 +183,7 @@ class GCheckout extends PaymentModule
     function hookPaymentReturn($params)
     {
 		if (!$this->active)
-			return ;
+			return;
 
 		return $this->display(__FILE__, 'payment_return.tpl');
     }

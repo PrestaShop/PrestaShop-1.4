@@ -426,10 +426,15 @@ class CategoryCore extends ObjectModel
 	public function getProducts($id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $random = false, $randomNumberProducts = 1)
 	{
 		global $cookie;
-
+		
 		if ($p < 1) $p = 1;
+
 		if (empty($orderBy))
 			$orderBy = 'position';
+		else
+			/* Fix for all modules which are now using lowercase values for 'orderBy' parameter */
+			$orderBy = strtolower($orderBy);
+			
 		if (empty($orderWay))
 			$orderWay = 'ASC';
 		if ($orderBy == 'id_product' OR	$orderBy == 'date_add')
@@ -497,9 +502,8 @@ class CategoryCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
 		if ($orderBy == 'orderprice')
-		{
 			Tools::orderbyPrice($result, $orderWay);
-		}
+
 		if (!$result)
 			return false;
 

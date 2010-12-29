@@ -49,7 +49,7 @@ function smartyTranslate($params, &$smarty)
 	/*
 	 * Warning in Smarty-v2 : 2 lines have been added to the Smarty class.
 	 * "public $currentTemplate = null;" into the class itself
-	 * "$this->currentTemplate = substr(basename($resource_name), 0, -4);" into the "display" method
+	 * "$this->currentTemplate = Tools::substr(basename($resource_name), 0, -4);" into the "display" method
 	 *
 	 * In Smarty-v3 : No modifications, using the existing var $this->smarty->_current_file instead
 	 */
@@ -65,7 +65,7 @@ function smartyTranslate($params, &$smarty)
 	else
 	{
 		$filename = ((!isset($smarty->compiler_object) OR !is_object($smarty->compiler_object->template)) ? $smarty->template_filepath : $smarty->compiler_object->template->getTemplateFilepath());
-		$key = substr(basename($filename), 0, -4).'_'.md5($string);
+		$key = Tools::substr(basename($filename), 0, -4).'_'.md5($string);
 	}
 	
 	if ($params['mod'])
@@ -109,8 +109,8 @@ function smartyMaxWords($params, &$smarty)
 	$words = explode(' ', $params['s']);
 	
 	foreach($words AS &$word)
-		if(strlen($word) > $params['n'])
-			$word = substr(trim(chunk_split($word, $params['n']-1, '- ')), 0, -1);
+		if(Tools::strlen($word) > $params['n'])
+			$word = Tools::substr(trim(chunk_split($word, $params['n']-1, '- ')), 0, -1);
 
 	return implode(' ',  Tools::htmlentitiesUTF8($words));
 }
@@ -122,7 +122,7 @@ function smartyTruncate($params, &$smarty)
 	$sep = isset($params['sep']) ? $params['sep'] : '...';
 
 	if (Tools::strlen($text) > $length + Tools::strlen($sep))
-		$text = substr($text, 0, $length).$sep;
+		$text = Tools::substr($text, 0, $length).$sep;
 
 	return (isset($params['encode']) ? Tools::htmlentitiesUTF8($text, ENT_NOQUOTES) : $text);
 }
