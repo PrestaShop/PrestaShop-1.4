@@ -137,7 +137,6 @@ class PayPal extends PaymentModule
 		Configuration::deleteByName('PAYPAL_PAYMENT_METHOD');
 		Configuration::deleteByName('PAYPAL_TEMPLATE');
 		Configuration::deleteByName('PAYPAL_CAPTURE');
-		Configuration::deleteByName('PAYPAL_OS_AUTHORIZATION');
 		Configuration::deleteByName('PAYPAL_DEBUG_MODE');
 		
 		return parent::uninstall();
