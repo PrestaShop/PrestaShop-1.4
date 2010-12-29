@@ -290,10 +290,8 @@ function displayAccount()
 	// Select the most appropriate country
 	if (Tools::getValue('id_country'))
 		$selectedCountry = (int)(Tools::getValue('id_country'));
-	elseif (isset($result['COUNTRYCODE']))
-		$selectedCountry = Country::getByIso($result['COUNTRYCODE']);
 	else
-		$selectedCountry = Configuration::get('PS_COUNTRY_DEFAULT');
+		$selectedCountry = Country::getByIso(strval($result['COUNTRYCODE']));
 	$countries = Country::getCountries((int)($cookie->id_lang), true);
 
 	// Smarty assigns
@@ -307,13 +305,13 @@ function displayAccount()
 		'countries' => $countries,
 		'sl_country' => (isset($selectedCountry) ? $selectedCountry : 0),
 		'email' => $email,
-		'firstname' => Tools::htmlentitiesUTF8(Tools::getValue('customer_firstname', (isset($result['FIRSTNAME'])) ? $result['FIRSTNAME'] : '')),
-		'lastname' => Tools::htmlentitiesUTF8(Tools::getValue('customer_lastname', (isset($result['LASTNAME']) ? $result['LASTNAME'] : ''))),
-		'street' => Tools::htmlentitiesUTF8(Tools::getValue('address1', (isset($result['SHIPTOSTREET']) ? $result['SHIPTOSTREET'] : ''))),
-		'city' => Tools::htmlentitiesUTF8(strval(Tools::getValue('city', (isset($result['SHIPTOCITY']) ? $result['SHIPTOCITY'] : '')))),
-		'zip' => Tools::htmlentitiesUTF8(Tools::getValue('postcode', (isset($result['SHIPTOZIP']) ? $result['SHIPTOZIP'] : ''))),
+		'firstname' => (Tools::getValue('customer_firstname') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('customer_firstname'))) : $result['FIRSTNAME']),
+		'lastname' => (Tools::getValue('customer_lastname') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('customer_lastname'))) : $result['LASTNAME']),
+		'street' => (Tools::getValue('address1') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('address1'))) : (isset($result['SHIPTOSTREET']) ? $result['SHIPTOSTREET'] : '')),
+		'city' => (Tools::getValue('city') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('city'))) : (isset($result['SHIPTOCITY']) ? $result['SHIPTOCITY'] : '')),
+		'zip' => (Tools::getValue('postcode') ? Tools::htmlentitiesUTF8(strval(Tools::getValue('postcode'))) : (isset($result['SHIPTOZIP']) ? $result['SHIPTOZIP'] : '')),
 		'payerID' => $payerID,
-		'ppToken' => $cookie->paypal_token,
+		'ppToken' => strval($cookie->paypal_token),
 		'errors'=> $errors
 	));
 
@@ -371,9 +369,9 @@ else
 		{
 			// Error in token, we need to make authorization again
 			unset($cookie->paypal_token);
-			//Tools::redirect('modules/paypal/express/submit.php');
+			Tools::redirect('modules/paypal/express/submit.php');
 		}
-		if ((isset($email) AND Customer::customerExists($email)) OR Tools::isSubmit('submitLogin'))
+		if (Customer::customerExists($email) OR Tools::isSubmit('submitLogin'))
 			displayLogin();
 		displayAccount();
 	}
