@@ -38,9 +38,9 @@ class ReferralProgram extends Module
 
 		parent::__construct();
 
-		$this->confirmUninstall = $this->l('All sponsor and friends would be deleted. Do you really want to uninstall this module ?');
+		$this->confirmUninstall = $this->l('All sponsors and friends would be deleted. Do you really want to uninstall this module ?');
 		$this->displayName = $this->l('Customer referral program');
-		$this->description = $this->l('Integrate a referral program system to your shop.');
+		$this->description = $this->l('Integrate a referral program system into your shop.');
 
 		$path = dirname(__FILE__);
 		if (strpos(__FILE__, 'Module.php') !== false)

@@ -295,7 +295,7 @@ class PayPal extends PaymentModule
 			<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Capture').'</legend>
-				<p><b>'.$this->l('Informations:').'</b> '.$this->l('Funds ready to be captured before shipping').'</p>
+				<p><b>'.$this->l('Information:').'</b> '.$this->l('Funds ready to be captured before shipping').'</p>
 				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 					<input type="hidden" name="id_order" value="'.$params['id_order'].'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalCapture" value="'.$this->l('Get the money').'" /></p>
@@ -312,8 +312,8 @@ class PayPal extends PaymentModule
 			<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Refund').'</legend>
-				<p><b>'.$this->l('Informations:').'</b> '.$this->l('Payment accepted').'</p>
-				<p><b>'.$this->l('Informations:').'</b> '.$this->l('When you refund a product, a partial refund is made unless you check option "Generate a voucher"').'</p>
+				<p><b>'.$this->l('Information:').'</b> '.$this->l('Payment accepted').'</p>
+				<p><b>'.$this->l('Information:').'</b> '.$this->l('When you refund a product, a partial refund is made unless you check option "Generate a voucher"').'</p>
 				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 					<input type="hidden" name="id_order" value="'.(int)($params['id_order']).'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalRefund" value="'.$this->l('Refund total transaction').'" onclick="if(!confirm(\''.$this->l('Are you sure?').'\'))return false;" /></p>

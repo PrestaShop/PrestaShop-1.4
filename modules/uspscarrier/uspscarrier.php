@@ -424,7 +424,7 @@ class UspsCarrier extends CarrierModule
 									$idpackagingsizes[] = $kpackagingsize;
 								}
 					$html .= '</select>
-					<p>' . $this->l('Choose in packaging size type list the one.') . '</p>
+					<p>' . $this->l('Select packaging size type from within the list.') . '</p>
 					'.(!in_array((int)(Configuration::get('USPS_CARRIER_PACKAGING_SIZE_TYPE')), $idpackagingsizes) ? '<div class="warning">'.$this->l('Packaging Size Type is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Packaging Type').' : </label>
@@ -438,7 +438,7 @@ class UspsCarrier extends CarrierModule
 									$idpackagings[] = $kpackaging;
 								}
 					$html .= '</select>
-					<p>' . $this->l('Choose in packaging type list the one.') . '</p>
+					<p>' . $this->l('Select packaging type from within the list.') . '</p>
 					'.(!in_array((int)(Configuration::get('USPS_CARRIER_PACKAGING_TYPE')), $idpackagings) ? '<div class="warning">'.$this->l('Packaging Type is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Service Type').' : </label>
@@ -452,7 +452,7 @@ class UspsCarrier extends CarrierModule
 									$idservices[] = $kservice;
 								}
 					$html .= '</select>
-					<p>' . $this->l('Choose in service type list the one.') . '</p>
+					<p>' . $this->l('Select service type from within the list.') . '</p>
 					'.(!in_array((int)(Configuration::get('USPS_CARRIER_SERVICE_TYPE')), $idservices) ? '<div class="warning">'.$this->l('Service Type is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Machinable').' : </label>
@@ -501,7 +501,7 @@ class UspsCarrier extends CarrierModule
 			Configuration::updateValue('USPS_CARRIER_SERVICE_TYPE', Tools::getValue('usps_carrier_service_type'));
 			Configuration::updateValue('USPS_CARRIER_MACHINABLE', Tools::getValue('usps_carrier_machinable'));
 			if (!$this->webserviceTest())
-				$this->_postErrors[]  = $this->l('Prestashop could not connect to USPS webservices, check your API Key');
+				$this->_postErrors[]  = $this->l('Prestashop could not connect to USPS webservices, check your USPS user ID');
 		}
 
 		// If no errors appear, the carrier is being activated, else, the carrier is being deactivated

@@ -111,7 +111,7 @@ class Reverso extends Module
 	public function getContent()
 	{
 		$this->_html .= '<h2>'.$this->l('Reverso account configuration').'</h2>
-		'.$this->l('You don\'t have ReversoForm account yet?').' <a href="http://www.reversoform.com/api/">'.$this->l('Register now!').'</a>';
+		'.$this->l('You don\'t have a ReversoForm account yet?').' <a href="http://www.reversoform.com/api/">'.$this->l('Register now!').'</a>';
 		if (!empty($_POST))
 		{
 			if ($this->_postProcess())

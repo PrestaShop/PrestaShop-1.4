@@ -22,7 +22,7 @@ $_MODULE['<{cashticket}prestashop>cashticket_d6ca44369efe062cec0c09f392465f55'] 
 $_MODULE['<{cashticket}prestashop>cashticket_fe9da2c5e2e153d2415b4cd5d91166a4'] = 'n\'a pas les droits en écriture.';
 $_MODULE['<{cashticket}prestashop>cashticket_139cfa047b503ac5b9a6b4b1b03090ad'] = 'Ce module pour fonctionner correctement requiert la devise :';
 $_MODULE['<{cashticket}prestashop>cashticket_ef5d34b04ab3b2eaaf7cb9d0f51267ed'] = 'Configurer chaque devise indépendament :';
-$_MODULE['<{cashticket}prestashop>cashticket_f7e5c041093ae6902476457802835a1f'] = '(Le module de paiement ne sera pas affiché pour les clients qui utilisent une devise non configurée)';
+$_MODULE['<{cashticket}prestashop>cashticket_69a530f77bb82f704b9ff5e18bbdea6f'] = '(Le module de paiement ne sera pas affiché pour les clients qui utilisent une devise non configurée)';
 $_MODULE['<{cashticket}prestashop>cashticket_7d3d009ac1b9d1e826a1a72c046ea635'] = 'Configuration en';
 $_MODULE['<{cashticket}prestashop>cashticket_229a7ec501323b94db7ff3157a7623c9'] = 'ID Marchand';
 $_MODULE['<{cashticket}prestashop>cashticket_845314022daaa8b665e718c4b51738aa'] = 'Keyring Certificat';
@@ -32,11 +32,11 @@ $_MODULE['<{cashticket}prestashop>cashticket_0ba29c6a1afacf586b03a26162c72274'] 
 $_MODULE['<{cashticket}prestashop>cashticket_1d5ad3d37f236c9eebda547690373bba'] = 'Business Type';
 $_MODULE['<{cashticket}prestashop>cashticket_b024248d9fecf8c34f629e89a9fb93b4'] = 'Paiement immédiat';
 $_MODULE['<{cashticket}prestashop>cashticket_c80a51a60c5ee43553c3881459b8f431'] = 'Mettre à jour la configuration';
-$_MODULE['<{cashticket}prestashop>cashticket_1ed8d28fc462cdaba8f2ce9a400f2bfa'] = 'Vous devez fournir un certificat pour l\'ID marchand';
+$_MODULE['<{cashticket}prestashop>cashticket_86f28c996ee9075e9fc9a97dc8d5f254'] = 'Vous devez fournir un certificat pour l\'ID marchand';
 $_MODULE['<{cashticket}prestashop>cashticket_bbced877c13c763f0141ff906c8ed0e5'] = 'Fichier invalide';
 $_MODULE['<{cashticket}prestashop>cashticket_97e5793f511c7930ab295997cb28553a'] = 'ID marchand invalide';
 $_MODULE['<{cashticket}prestashop>cashticket_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
-$_MODULE['<{cashticket}prestashop>cashticket_d139abab2541129dfae24c733635104c'] = 'Le fichier n\'a pas été téléchargé correctement';
+$_MODULE['<{cashticket}prestashop>cashticket_a98658e7f6aa80803873db3a3e982f4d'] = 'Le fichier n\'a pas été téléchargé correctement';
 $_MODULE['<{cashticket}prestashop>cashticket_d2bbf245e9591814fe994df3cae95964'] = 'Le fichier est vide';
 $_MODULE['<{cashticket}prestashop>cashticket_ebbe99d835c79ead89db1b2b9e4fe70f'] = 'La transaction n\'a pu être initialisée du à des problèmes de connexions. Si le problème persiste, merci de nous contacter.';
 $_MODULE['<{cashticket}prestashop>cashticket_99f6765a05b697eb78e8c2e5e228f2fc'] = 'Disposition consommée';

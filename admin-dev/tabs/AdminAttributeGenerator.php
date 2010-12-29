@@ -92,7 +92,7 @@ class AdminAttributeGenerator extends AdminTab
 					$this->product->updateQuantityProductWithAttributeQuantity();
 				}
 				else
-					$this->_errors[] = Tools::displayError('Unable to initialize parameters, combinations is missing or object cannot be load.');
+					$this->_errors[] = Tools::displayError('Unable to initialize parameters, combination is missing or object cannot be loaded.');
 			}
 		}
 		elseif (isset($_POST['back']))

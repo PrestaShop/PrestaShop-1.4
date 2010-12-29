@@ -96,7 +96,7 @@ class StatsPersonalInfos extends ModuleGraph
 			<h2>'.$this->l('Target your audience').'</h2>
 			<p>
 				'.$this->l('In order for each message to have an impact, you need to know to whom it should be addressed.').'
-				'.$this->l('Addressing the right audience is essential for choosing the right tools for winning it over.').'
+				'.$this->l('Addressing the right audience is essential for choosing the right tools for winning them over.').'
 				'.$this->l('It\'s best to limit action to a group or groups of clients.').'
 				'.$this->l('Registered customer information lets you more accurately define the typical customer profile so that you can adapt your specials to various criteria.').'
 			</p><br />

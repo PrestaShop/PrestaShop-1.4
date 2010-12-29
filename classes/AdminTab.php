@@ -156,7 +156,7 @@ abstract class AdminTabCore
 		13 => $this->l('Module uninstalled successfully'), 14 => $this->l('Language successfully copied'),
 		15 => $this->l('Translations successfully added'), 16 => $this->l('Module transplanted successfully to hook'),
 		17 => $this->l('Module removed successfully from hook'), 18 => $this->l('Upload successful'),
-		19 => $this->l('Duplication completed successfully'), 20 => $this->l('Translation added successfully but the language has been not created'),
+		19 => $this->l('Duplication completed successfully'), 20 => $this->l('Translation added successfully but the language has not been created'),
 		21 => $this->l('Module reset successfully'), 22 => $this->l('Module deleted successfully'),
 		23 => $this->l('Configuration pack imported successfully'), 24 => $this->l('Refund Successful'));
 		if (!$this->identifier) $this->identifier = 'id_'.$this->table;

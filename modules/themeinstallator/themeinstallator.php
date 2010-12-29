@@ -1206,7 +1206,7 @@ class ThemeInstallator extends Module
 		$this->_html .= '
 			<label>'.$this->l('Add documentation').'</label>
 			<p class="margin-form">'.
-				$this->l('Give the user a some help. Add a field by clicking here').'
+				$this->l('Give the user some help. Add a field by clicking here').'
 				<a href="javascript:addDocumentation(0);"><img alt="add" title="add" src="'._MODULE_DIR_.$this->name.'/add.png'.'" /></a>.<br />'.
 				$this->l('File extension must be .txt or .pdf').'
 			</p>

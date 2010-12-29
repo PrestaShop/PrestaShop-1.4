@@ -25,7 +25,7 @@ $_MODULE['<{paysafecard}prestashop>paysafecard_d6ca44369efe062cec0c09f392465f55'
 $_MODULE['<{paysafecard}prestashop>paysafecard_fe9da2c5e2e153d2415b4cd5d91166a4'] = 'n\'a pas les droits en écriture.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_139cfa047b503ac5b9a6b4b1b03090ad'] = 'Ce module pour fonctionner correctement requiert la devise :';
 $_MODULE['<{paysafecard}prestashop>paysafecard_ef5d34b04ab3b2eaaf7cb9d0f51267ed'] = 'Configurer chaque devise indépendament :';
-$_MODULE['<{paysafecard}prestashop>paysafecard_f7e5c041093ae6902476457802835a1f'] = '(Le module de paiement ne sera pas affiché pour les clients qui utilisent une devise non configurée)';
+$_MODULE['<{paysafecard}prestashop>paysafecard_69a530f77bb82f704b9ff5e18bbdea6f'] = '(Le module de paiement ne sera pas affiché pour les clients qui utilisent une devise non configurée)';
 $_MODULE['<{paysafecard}prestashop>paysafecard_7d3d009ac1b9d1e826a1a72c046ea635'] = 'Configuration en';
 $_MODULE['<{paysafecard}prestashop>paysafecard_229a7ec501323b94db7ff3157a7623c9'] = 'ID Marchand';
 $_MODULE['<{paysafecard}prestashop>paysafecard_845314022daaa8b665e718c4b51738aa'] = 'Keyring Certificat';
@@ -33,9 +33,9 @@ $_MODULE['<{paysafecard}prestashop>paysafecard_a01813de717585e9ac9458bbfc54485a'
 $_MODULE['<{paysafecard}prestashop>paysafecard_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{paysafecard}prestashop>paysafecard_0ba29c6a1afacf586b03a26162c72274'] = 'Environement';
 $_MODULE['<{paysafecard}prestashop>paysafecard_1d5ad3d37f236c9eebda547690373bba'] = 'Business Type';
-$_MODULE['<{paysafecard}prestashop>paysafecard_9eacfa0a89b48392a962b3fed24cd58e'] = 'Paiement immédiat';
+$_MODULE['<{paysafecard}prestashop>paysafecard_b024248d9fecf8c34f629e89a9fb93b4'] = 'Paiement immédiat';
 $_MODULE['<{paysafecard}prestashop>paysafecard_c80a51a60c5ee43553c3881459b8f431'] = 'Mettre à jour la configuration';
-$_MODULE['<{paysafecard}prestashop>paysafecard_1ed8d28fc462cdaba8f2ce9a400f2bfa'] = 'Vous devez fournir un certificat pour l\'ID marchand';
+$_MODULE['<{paysafecard}prestashop>paysafecard_86f28c996ee9075e9fc9a97dc8d5f254'] = 'Vous devez fournir un certificat pour l\'ID marchand';
 $_MODULE['<{paysafecard}prestashop>paysafecard_bbced877c13c763f0141ff906c8ed0e5'] = 'Fichier invalide';
 $_MODULE['<{paysafecard}prestashop>paysafecard_97e5793f511c7930ab295997cb28553a'] = 'ID marchand invalide';
 $_MODULE['<{paysafecard}prestashop>paysafecard_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';

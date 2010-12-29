@@ -358,7 +358,7 @@ class UpsCarrier extends CarrierModule
 						$idcountries[] = $v['id_country'];
 					}
 				$html .= '</select>
-				<p>' . $this->l('Choose in country list the one.') . '</p>
+				<p>' . $this->l('Select country from within the list.') . '</p>
 				'.(!in_array((int)(Configuration::get('UPS_CARRIER_COUNTRY')), $idcountries) ? '<div class="warning">'.$this->l('Country is not set').'</div>' : '').'
 			</div>
 
@@ -374,7 +374,7 @@ class UpsCarrier extends CarrierModule
 						$idrateservicegroups[] = $v['id_ups_rate_service_group'];
 					}
 				$html .= '</select>
-				<p>' . $this->l('Choose in rate service group list the one.') . '</p>
+				<p>' . $this->l('Select rate service group from within the list.') . '</p>
 				'.(!in_array((int)(Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP')), $idrateservicegroups) ? '<div class="warning">'.$this->l('Rate service group is not set').'</div>' : '').'
 			</div>
 
@@ -525,7 +525,7 @@ class UpsCarrier extends CarrierModule
 									$idpickups[] = $kpickup;
 								}
 					$html .= '</select>
-					<p>' . $this->l('Choose in pickup type list the one.') . '</p>
+					<p>' . $this->l('Select pickup type from within the list.') . '</p>
 					'.(!in_array((int)(Configuration::get('UPS_CARRIER_PICKUP_TYPE')), $idpickups) ? '<div class="warning">'.$this->l('Pickup Type is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Packaging Type').' : </label>
@@ -539,7 +539,7 @@ class UpsCarrier extends CarrierModule
 									$idpackagings[] = $kpackaging;
 								}
 					$html .= '</select>
-					<p>' . $this->l('Choose in packaging type list the one.') . '</p>
+					<p>' . $this->l('Select packaging type from within the list.') . '</p>
 					'.(!in_array((int)(Configuration::get('UPS_CARRIER_PACKAGING_TYPE')), $idpackagings) ? '<div class="warning">'.$this->l('Packaging Type is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Delivery Service').' : </label>
@@ -704,7 +704,7 @@ class UpsCarrier extends CarrierModule
 					<th>'.$this->l('ID Config').'</th>
 					<th>'.$this->l('Category').'</th>
 					<th>'.$this->l('Packaging type').'</th>
-					<th>'.$this->l('Additionnal charges').'</th>
+					<th>'.$this->l('Additional charges').'</th>
 					<th>'.$this->l('Services').'</th>
 					<th>'.$this->l('Actions').'</th>
 				</tr>
@@ -793,7 +793,7 @@ class UpsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Additionnal charges').' : </label>
+						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges', $configSelected['additionnal_charges']).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
@@ -828,7 +828,7 @@ class UpsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Additionnal charges').' : </label>
+						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges').'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
@@ -861,11 +861,11 @@ class UpsCarrier extends CarrierModule
 
 			// Check if a config exists and if the IDs config correspond in Upd case
 			if (Tools::getValue('action') == 'edit' && (!isset($id_ups_rate_config) || $id_ups_rate_config != Tools::getValue('id_ups_rate_config')))
-				$this->_postErrors[]  = $this->l('An error occured, please try again.');
+				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 
 			// Check if a config exists in Delete case
 			if (Tools::getValue('action') == 'delete' && !isset($id_ups_rate_config))
-				$this->_postErrors[]  = $this->l('An error occured, please try again.');
+				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 		}
 	}
 
@@ -959,7 +959,7 @@ class UpsCarrier extends CarrierModule
 					<th>'.$this->l('ID Config').'</th>
 					<th>'.$this->l('Product').'</th>
 					<th>'.$this->l('Packaging type').'</th>
-					<th>'.$this->l('Additionnal charges').'</th>
+					<th>'.$this->l('Additional charges').'</th>
 					<th>'.$this->l('Services').'</th>
 					<th>'.$this->l('Actions').'</th>
 				</tr>
@@ -1034,7 +1034,7 @@ class UpsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Additionnal charges').' : </label>
+						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges', $configSelected['additionnal_charges']).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
@@ -1075,7 +1075,7 @@ class UpsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Additionnal charges').' : </label>
+						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges').'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
@@ -1108,11 +1108,11 @@ class UpsCarrier extends CarrierModule
 
 			// Check if a config exists and if the IDs config correspond in Upd case
 			if (Tools::getValue('action') == 'edit' && (!isset($id_ups_rate_config) || $id_ups_rate_config != Tools::getValue('id_ups_rate_config')))
-				$this->_postErrors[]  = $this->l('An error occured, please try again.');
+				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 
 			// Check if a config exists in Delete case
 			if (Tools::getValue('action') == 'delete' && !isset($id_ups_rate_config))
-				$this->_postErrors[]  = $this->l('An error occured, please try again.');
+				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 		}
 	}
 	
@@ -1196,7 +1196,7 @@ class UpsCarrier extends CarrierModule
 
 	private function _displayHelp()
 	{
-		return '<p><b>'.$this->l('Welcome in the PrestaShop UPS Module configurator !').'</b></p>
+		return '<p><b>'.$this->l('Welcome to the PrestaShop UPS Module configurator !').'</b></p>
 		<p>'.$this->l('This section will help you to understand how to configure this module correctly.').'</p>
 		<br />
 		<p><b><u>1. '.$this->l('General Settings').'</u></b></p>
@@ -1204,16 +1204,16 @@ class UpsCarrier extends CarrierModule
 		<p><b>'.$this->l('Your UPS Login, UPS Password, MyUps ID, UPS API Key').' :</b> '.$this->l('You have to subscribe on UPS website at this address').' <a href="https://www.ups.com/upsdeveloperkit" target="_blank">https://www.ups.com/upsdeveloperkit</a></p>
 		<p><b>'.$this->l('Zip / Postal Code').' :</b> '.$this->l('This field must be the Zip / Postal code of your package starting point.').'</p>
 		<p><b>'.$this->l('Country').' :</b> '.$this->l('This field must be the country of your package starting point.').'</p>
-		<p><b>'.$this->l('Rate service group').' :</b> '.$this->l('This field must be in adequation with the two fields above.').'</p>
+		<p><b>'.$this->l('Rate service group').' :</b> '.$this->l('This field must be within the two fields above.').'</p>
 		<p><b>'.$this->l('Pickup Type').' :</b> '.$this->l('This field corresponds to the pickup type you want to have with UPS.').'</p>
 		<p><b>'.$this->l('Packaging Type').' :</b> '.$this->l('This field corresponds to the default packaging type (when there is no specific configuration for the product or the category product).').'</p>
-		<p><b>'.$this->l('Delivery Service').' :</b> '.$this->l('This checkboxes correspond to the delivery services who want to be avalaible (when there is no specific configuration for the product or the category product).').'</p>
+		<p><b>'.$this->l('Delivery Service').' :</b> '.$this->l('These checkboxes correspond to the delivery services you want to be available (when there is no specific configuration for the product or the category product).').'</p>
 		<br />
 		<p><b><u>2. '.$this->l('Categories Settings').'</u></b></p>
-		<p>'.$this->l('This section will permit you to define specific UPS configuration for each product category (such as Packaging Type and Additionnal Charges).').'</p>
+		<p>'.$this->l('This section allows you to define a specific UPS configuration for each product category (such as Packaging Type and Additional charges).').'</p>
 		<br />
 		<p><b><u>3. '.$this->l('Products Settings').'</u></b></p>
-		<p>'.$this->l('This section will permit you to define specific UPS configuration for each product (such as Packaging Type and Additionnal Charges).').'</p>
+		<p>'.$this->l('This section allows you to define a specific UPS configuration for each product (such as Packaging Type and Additional charges).').'</p>
 		<br />
 		';
 	}
@@ -1384,7 +1384,7 @@ class UpsCarrier extends CarrierModule
 			$wsParams['weight'] = $product['weight'];
 			$wsParams['service'] = $serviceSelected['code'];
 
-			// If Additionnal Charges
+			// If Additional charges
 			if (isset($config['id_currency']) && isset($config['additionnal_charges']))
 			{
 				$conversionRate = 1;

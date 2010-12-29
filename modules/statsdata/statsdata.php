@@ -82,7 +82,7 @@ class StatsData extends Module
 				<label class="t" for="PS_STATSDATA_PLUGINS_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
 				<input type="radio" name="PS_STATSDATA_PLUGINS" id="PS_STATSDATA_PLUGINS_off" value="0" '.(Tools::getValue('PS_STATSDATA_PLUGINS', Configuration::get('PS_STATSDATA_PLUGINS')) ? '' : 'checked="checked"').' />
 				<label class="t" for="PS_STATSDATA_PLUGINS_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" /></label>
-				<p>'.$this->l('Plug-ins detection loads an extra 20ko javascript file for new visitors.').'</p>
+				<p>'.$this->l('Plug-ins detection loads an extra 20kb javascript file for new visitors.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<input type="submit" class="button" name="submitStatsData" value="'.$this->l('Update').'" />

@@ -4,7 +4,6 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{homefeatured}prestashop>homefeatured_cd2c2dc24eaf11ba856da4a2e2a248be'] = 'Productos Destacados en la Página de inicio';
 $_MODULE['<{homefeatured}prestashop>homefeatured_b494beb5de5dd7b4fad67262e0de6321'] = 'Mostrar Productos Destacados en el centro de su página de inicio';
-$_MODULE['<{homefeatured}prestashop>homefeatured_ced2b9f1aad1f8a5b351a3120e4b1212'] = 'Número de productos no válido';
 $_MODULE['<{homefeatured}prestashop>homefeatured_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
 $_MODULE['<{homefeatured}prestashop>homefeatured_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
 $_MODULE['<{homefeatured}prestashop>homefeatured_6df1f9b5662398a551a2c9185b26638a'] = 'Para añadir productos a su página de inicio, sólo tiene que añadirlas en la categoía  \\\"Inicio\\\" .';

@@ -93,7 +93,7 @@ class GuestTrackingControllerCore extends FrontController
 					if (!Validate::isLoadedObject($customer))
 						$this->errors[] = Tools::displayError('invalid customer');
 					if (!$customer->transformToCustomer($this->cookie->id_lang, Tools::getValue('password')))
-						$this->errors[] = Tools::displayError('an error occured while tranform guest to customer');
+						$this->errors[] = Tools::displayError('An error occurred while transforming guest to customer');
 					else
 						$this->smarty->assign('transformSuccess', true);
 				}

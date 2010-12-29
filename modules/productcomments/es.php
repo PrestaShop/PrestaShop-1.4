@@ -34,7 +34,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd
 $_MODULE['<{productcomments}prestashop>productcomments_ec53a8c4f07baed5d8825072c89799be'] = 'Estado';
 $_MODULE['<{productcomments}prestashop>productcomments_7dce122004969d56ae2e0245cb754d35'] = 'Modificar';
 $_MODULE['<{productcomments}prestashop>productcomments_b22d6730e96ba4e464493871a2f5bb09'] = 'Aplicación criterios';
-$_MODULE['<{productcomments}prestashop>productcomments_92c8811185c56998dfbcbdd30ad649d3'] = 'Criterios de clasificación';
+$_MODULE['<{productcomments}prestashop>productcomments_8465e9025ba0e07abbe42d9a8ec18446'] = 'Criterios de clasificación';
 $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e82137a72131'] = 'Productos';
 $_MODULE['<{productcomments}prestashop>productcomments_af1b98adf7f686b84cd0b443e022b7a0'] = 'Categorías';
 $_MODULE['<{productcomments}prestashop>productcomments_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
@@ -54,7 +54,6 @@ $_MODULE['<{productcomments}prestashop>productcomments_5da618e8e4b89c66fe86e32cd
 $_MODULE['<{productcomments}prestashop>productcomments_08621d00a3a801b9159a11b8bbd69f89'] = 'No hay comentarios de clientes por ahora.';
 $_MODULE['<{productcomments}prestashop>productcomments_441f4c06170a0c047e62e4d8a3ea67d5'] = 'hora(s) antes de enviar un nuevo comentario';
 $_MODULE['<{productcomments}prestashop>productcomments_c3edcf2cedbd4ce230fd6d4ea8915718'] = 'Añadir un comentario';
-$_MODULE['<{productcomments}prestashop>productcomments_221e705c06e231636fdbccfdd14f4d5c'] = 'Su nombre';
 $_MODULE['<{productcomments}prestashop>productcomments_94966d90747b97d1f0f206c98a8b1ac3'] = 'Enviar';
 $_MODULE['<{productcomments}prestashop>productcomments_720fae7db6e6055d2b47890240bb3598'] = 'Solamente los usuarios registrados pueden introducir comentarios.';
 $_MODULE['<{productcomments}prestashop>products-comparison_8413c683b4b27cc3f4dbd4c90329d8ba'] = 'Comentarios';

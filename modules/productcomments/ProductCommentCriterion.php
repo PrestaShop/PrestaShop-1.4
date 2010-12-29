@@ -210,7 +210,7 @@ class ProductCommentCriterion extends ObjectModel
 	
 	static public function getTypes()
 	{
-		return array(1 => Tools::displayError('All catalog'),
+		return array(1 => Tools::displayError('All catalogs'),
 						 2 => Tools::displayError('Category default'),
 						 3 => Tools::displayError('Products'));
 	}

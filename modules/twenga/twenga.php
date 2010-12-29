@@ -395,7 +395,7 @@ class Twenga extends PaymentModule
 		<fieldset>
 			<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('Subscription').'</legend>
 			<p>'.$this->l('To prepare your Twenga API subscription,').'<br />'
-			.$this->l('please check the formular below and click "save" to access of Twenga subscription formular').'</p><br />
+			.$this->l('Please check the formula below and click "save" to access the Twenga subscription formula').'</p><br />
 			<label>'.$this->l('Site\'s url').' <sup>*</sup> : </label>
 			<div class="margin-form">
 				<input type="text" name="site_url" value="'.$this->site_url.'">

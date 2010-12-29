@@ -266,8 +266,8 @@ class StatsProduct extends ModuleGraph
 			<p>
 				'.$this->l('After choosing a category and selecting a product available in this category, some graphs appear. Then, you can analyze them.').'
 				<ul>
-					<li class="bullet">'.$this->l('If you notice that a product is successful, very purchased, but also little viewed: you should put it more prominently on your webshop front-office.').'</li>
-					<li class="bullet">'.$this->l('On the other hand, if a product knows a lot of viewings but is not really purchased: we advise you to check or modify this product\'s information, description and photography again.').'
+					<li class="bullet">'.$this->l('If you notice that a product is successful, often purchased, but also viewed infrequently: you should put it more prominently on your webshop front-office.').'</li>
+					<li class="bullet">'.$this->l('On the other hand, if a product has a lot of viewings but is not really purchased: we advise you to check or modify this product\'s information, description and photography again.').'
 					</li>
 				</ul>
 			</p>

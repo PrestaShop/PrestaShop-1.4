@@ -13,7 +13,6 @@ $_MODULE['<{loyalty}prestashop>loyalty_315eae70bcaee168f1654c0ceeeef357'] = '1 p
 $_MODULE['<{loyalty}prestashop>loyalty_e3ff7eaa9deb31e1e91178a7216135c0'] = '1 punto =';
 $_MODULE['<{loyalty}prestashop>loyalty_46108358594124685e77e7d49f762b30'] = 'para el descuento';
 $_MODULE['<{loyalty}prestashop>loyalty_98cf9475009d3c6e795ffac5d391cec4'] = 'Detalles del vale';
-$_MODULE['<{loyalty}prestashop>loyalty_7f0aa1eff938a6d2517e349096b0fe37'] = 'Permitir descuentos';
 $_MODULE['<{loyalty}prestashop>loyalty_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
 $_MODULE['<{loyalty}prestashop>loyalty_93cba07454f06a4a960172bbd6e2a435'] = 'Sí';
 $_MODULE['<{loyalty}prestashop>loyalty_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';

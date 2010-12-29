@@ -35,7 +35,7 @@ class PayPalConnect extends Paypal
 			$this->_logs[] = $this->l('Connect failed with CURL method');
 		else
 		{
-			$this->_logs[] = $this->l('Connect with CURL method sucessfull');
+			$this->_logs[] = $this->l('Connect with CURL method successful');
 			$this->_logs[] = '<b>'.$this->l('Sending this params:').'</b>';
 			$this->_logs[] = $body;
 			@curl_setopt($ch, CURLOPT_URL, 'https://'.$url);
@@ -51,7 +51,7 @@ class PayPalConnect extends Paypal
 			if (!$result)
 				$this->_logs[] = $this->l('Send with CURL method failed ! Error:').' '.curl_error($ch);
 			else
-				$this->_logs[] = $this->l('Send with CURL method sucessfull');
+				$this->_logs[] = $this->l('Send with CURL method successful');
 			@curl_close($ch);
 		}
 		return (isset($result) ? $result : false);
@@ -65,7 +65,7 @@ class PayPalConnect extends Paypal
 		else
 		{
 			$header = $this->_makeHeader($host, $script, strlen($body));
-			$this->_logs[] = $this->l('Connect with fsockopen method sucessfull');
+			$this->_logs[] = $this->l('Connect with fsockopen method successful');
 			$this->_logs[] = $this->l('Sending this params:').' '.$header.$body;
 			@fputs($fp, $header.$body);
 			$tmp = '';
@@ -76,7 +76,7 @@ class PayPalConnect extends Paypal
 			if (!$result)
 				$this->_logs[] = $this->l('Send with fsockopen method failed !');
 			else
-				$this->_logs[] = $this->l('Send with fsockopen method sucessfull');
+				$this->_logs[] = $this->l('Send with fsockopen method successful');
 		}
 		return (isset($result) ? $result : false);
 	}

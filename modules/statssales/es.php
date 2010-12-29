@@ -13,9 +13,9 @@ $_MODULE['<{statssales}prestashop>statssales_ec3e48bb9aa902ba2ad608547fdcbfdc'] 
 $_MODULE['<{statssales}prestashop>statssales_0718e1ec4754e199aa9cb4bc43a6ff53'] = 'Puede ver la distribución del estado del pedido a continuación.';
 $_MODULE['<{statssales}prestashop>statssales_3991390ca135c8c780b4a7d9c7c7daf5'] = 'No hay pedidos para este periodo';
 $_MODULE['<{statssales}prestashop>statssales_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guía';
-$_MODULE['<{statssales}prestashop>statssales_cc23e852e21d85a834defe24867e3d05'] = 'Varios estados de pedidos';
-$_MODULE['<{statssales}prestashop>statssales_1ac658f97c9370fb579beca0d7277d56'] = 'En su Back office, hay varios estados de pedido disponibles: En espera de pago por cheque, Pago aceptado, Preparación en curso, Envío en curso, Enviado, Anulado, Reembolsado, Error en el pago, Productos no disponibles y en espera de pago por giro bancario.';
-$_MODULE['<{statssales}prestashop>statssales_ba3224a4f47de7a622fa8e17236b01e3'] = 'estos estados no pueden suprimirse del back office, pero puede añadir otros nuevos.';
+$_MODULE['<{statssales}prestashop>statssales_75288849ad081e6ef15e00c37b7570f2'] = 'Varios estados de pedidos';
+$_MODULE['<{statssales}prestashop>statssales_264a37d6022d76d1f7043daad3733a3e'] = 'En su Back office, hay varios estados de pedido disponibles: En espera de pago por cheque, Pago aceptado, Preparación en curso, Envío en curso, Enviado, Anulado, Reembolsado, Error en el pago, Productos no disponibles y en espera de pago por giro bancario.';
+$_MODULE['<{statssales}prestashop>statssales_e2e2d7a27ec3e81d16993f2d2e9d2ca2'] = 'estos estados no pueden suprimirse del back office, pero puede añadir otros nuevos.';
 $_MODULE['<{statssales}prestashop>statssales_bb7ad89807bf69ddca986c142311f936'] = 'Productos y pedidos';
 $_MODULE['<{statssales}prestashop>statssales_7442e29d7d53e549b78d93c46b8cdcfc'] = 'Pedidos';
 $_MODULE['<{statssales}prestashop>statssales_068f80c7519d0528fb08e82137a72131'] = 'Productos';

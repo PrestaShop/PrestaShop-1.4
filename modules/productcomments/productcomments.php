@@ -404,7 +404,7 @@ class ProductComments extends Module
 		$this->_html .= '
 			<fieldset><legend><img src="'.$this->_path.'img/note_go.png" alt="" title="" />'.$this->l('Criteria Application').'</legend>
 			<form action="'.$this->_baseUrl.'" method="post" name="product_criterion_form">
-				<label for="id_product">'.$this->l('Grading criterions').'</label>
+				<label for="id_product">'.$this->l('Grading criteria').'</label>
 				<div class="margin-form">
 					<select name="id_product_comment_criterion" id="id_product_comment_criterion" onchange="window.location=\''.$this->_baseUrl.'&updateCriterion=\'+$(\'#id_product_comment_criterion option:selected\').val()">
 						<option value="--">--</option>';

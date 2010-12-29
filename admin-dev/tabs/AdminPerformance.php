@@ -260,7 +260,7 @@ class AdminPerformance extends AdminTab
 				<div class="margin-form">
 					<input type="radio" name="smarty_cache" id="smarty_cache_1" value="1" '.(Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Yes').'</label>
 					<input type="radio" name="smarty_cache" id="smarty_cache_0" value="0" '.(!Configuration::get('PS_SMARTY_CACHE') ? 'checked="checked"' : '').' /> <label class="t"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('No').'</label>
-					<p>'.$this->l('Should be enabled except for debuging.').'</p>
+					<p>'.$this->l('Should be enabled except for debugging.').'</p>
 				</div>
 
 				<div class="margin-form">
@@ -273,7 +273,7 @@ class AdminPerformance extends AdminTab
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
 				<legend><img src="../img/admin/arrow_in.png" /> '.$this->l('CCC (Combine, Compress and Cache)').'</legend>
-				<p>'.$this->l('CCC allows you to reduce the loading time of your page. With these settings you will gain performance without even touching the code of your theme. Be aware, however, that your theme is compatiblewith  PrestaShop 1.4+. Otherwise, CCC will cause problems.').'</p>
+				<p>'.$this->l('CCC allows you to reduce the loading time of your page. With these settings you will gain performance without even touching the code of your theme. Make sure, however, that your theme is compatible with PrestaShop 1.4+. Otherwise, CCC will cause problems.').'</p>
 				<label>'.$this->l('Smart cache for CSS').' </label>
 				<div class="margin-form">
 					<input type="radio" value="1" name="PS_CSS_THEME_CACHE" id="PS_CSS_THEME_CACHE_1" '.(Configuration::get('PS_CSS_THEME_CACHE') ? 'checked="checked"' : '').' />

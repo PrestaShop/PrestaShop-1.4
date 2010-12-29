@@ -32,7 +32,7 @@ function displayError($msg)
 {
 	$translations = array(
 	'Invalid key.' => Tools::displayError('Invalid key.'),
-	'This product doesn\'t exists in our store.' => Tools::displayError('This product doesn\'t exists in our store.'),
+	'This product does not exist in our store.' => Tools::displayError('This product does not exist in our store.'),
 	'This product has been deleted.' => Tools::displayError('This product has been deleted.'),
 	'This file no longer exists.'	=> Tools::displayError('This file no longer exists.'),
 	'The product deadline is in the past.' => Tools::displayError('The product deadline is in the past.'),
@@ -89,7 +89,7 @@ else
 	$hash = $tmp[1];
 
 	if (!($info = OrderDetail::getDownloadFromHash($hash)))
-		displayError('This product doesn\'t exists in our store.');
+		displayError('This product does not exist in our store.');
 
 	/* Product no more present in catalog */
 	if (!isset($info['id_product_download']) OR empty($info['id_product_download']))

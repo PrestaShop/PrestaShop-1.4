@@ -185,7 +185,7 @@ class AdminProducts extends AdminTab
 					if (isset($_FILES['attachment_file']) AND is_uploaded_file($_FILES['attachment_file']['tmp_name']))
 					{
 						if ($_FILES['attachment_file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024 * 1024))
-							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024).' '.$this->l('kb').'. '.$this->l('File size you trying to upload is:').number_format(($_FILES['attachment_file']['size']/1024), 2, '.', '').$this->l('kb');
+							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024).' '.$this->l('kb').'. '.$this->l('File size you\'re trying to upload is:').number_format(($_FILES['attachment_file']['size']/1024), 2, '.', '').$this->l('kb');
 						else
 						{
 							$uploadDir = dirname(__FILE__).'/../../download/';
@@ -200,7 +200,7 @@ class AdminProducts extends AdminTab
 						$max_upload = (int)(ini_get('upload_max_filesize'));
 						$max_post = (int)(ini_get('post_max_size'));
 						$upload_mb = min($max_upload, $max_post);
-						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceed the weight allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
+						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceeds the weight allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 					}
 					
 					if(empty($this->_errors) && isset($uniqid))
@@ -2327,7 +2327,7 @@ class AdminProducts extends AdminTab
 				<p class="block">
 					<label for="virtual_product_nb_days" class="t"><?php echo $this->l('Number of days') ?></label>
 					<input type="text" id="virtual_product_nb_days" name="virtual_product_nb_days" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_days_accessible : htmlentities(Tools::getValue('virtual_product_nb_days'), ENT_COMPAT, 'UTF-8') ?>" class="" size="4" /><sup> *</sup>
-					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('How many days this file can be accessed by customers') ?> - <em>(<?php echo $this->l('set zero for an unlimited access'); ?>)</em></sub></span>
+					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('How many days this file can be accessed by customers') ?> - <em>(<?php echo $this->l('set to zero for unlimited access'); ?>)</em></sub></span>
 				</p>
 				</div>
 	<?php endif; // check if download directory is writable ?>

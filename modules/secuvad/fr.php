@@ -112,4 +112,4 @@ $_MODULE['<{secuvad}prestashop>secuvad_f6ba219e7a45632ab4d39822108d68f3'] = 'A e
 $_MODULE['<{secuvad}prestashop>secuvad_09b107c04bba6b19e1a8bf0a2e1fe1d0'] = 'A expertiser par SECUVAD';
 $_MODULE['<{secuvad}prestashop>secuvad_config_8bcaf785d6c5771e3c49bd90e0885c2a'] = 'Tentative de piratage:';
 $_MODULE['<{secuvad}prestashop>secuvad_config_1f4eee5122ff1dfb7c7ff3aa8e879222'] = 'Accès non autorisé';
-$_MODULE['<{secuvad}prestashop>secuvad_config_07d92e6fcc22058f4b93f02a29e8d9f9'] = 'Les données envoyées sont:';
+$_MODULE['<{secuvad}prestashop>secuvad_config_635c1728fc02b144a4357007b44d55b7'] = 'Les données envoyées sont:';

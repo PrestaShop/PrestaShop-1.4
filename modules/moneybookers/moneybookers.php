@@ -167,7 +167,7 @@ class MoneyBookers extends PaymentModule
 
 						$output .= '
 						<ul style="color: green; font-weight: bold; margin-bottom: 30px; width: 506px; background: #E1FFE9; border: 1px dashed #BBB; padding: 10px;">
-							<li>'.$this->l('E-mail activation successfull, you can now validate your secret word').'<img src="http://www.prestashop.com/modules/moneybookers.png?email='.urlencode($_POST['mb_email_to_validate']).'" style="float:right" /></li>
+							<li>'.$this->l('E-mail activation successful, you can now validate your secret word').'<img src="http://www.prestashop.com/modules/moneybookers.png?email='.urlencode($_POST['mb_email_to_validate']).'" style="float:right" /></li>
 						</ul>';
 					}
 					fclose($fp);
@@ -189,7 +189,7 @@ class MoneyBookers extends PaymentModule
 				{
 					$response = trim(strtolower(fgets($fp, 4096)));
 					if (strstr('velocity_check_exceeded', $response))
-						$errors[] = $this->l('Secret word validation failed, execeeded max tries (3 per hour)');
+						$errors[] = $this->l('Secret word validation failed, exceeded max tries (3 per hour)');
 					elseif (!strstr('ok', $response))
 						$errors[] = $this->l('Secret word validation failed, your secret word might be wrong');
 					else
@@ -199,7 +199,7 @@ class MoneyBookers extends PaymentModule
 
 						$output .= '
 						<ul style="color: green; font-weight: bold; margin-bottom: 30px; width: 506px; background: #E1FFE9; border: 1px dashed #BBB; padding: 10px;">
-							<li>'.$this->l('Account activation successfull, secret word OK').'</li>
+							<li>'.$this->l('Account activation successful, secret word OK').'</li>
 						</ul>';
 					}
 					fclose($fp);

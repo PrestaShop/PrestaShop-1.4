@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{homefeatured}prestashop>homefeatured_cd2c2dc24eaf11ba856da4a2e2a248be'] = 'Produits phares sur la page d\'accueil';
 $_MODULE['<{homefeatured}prestashop>homefeatured_b494beb5de5dd7b4fad67262e0de6321'] = 'Affiche les produits phares au centre de votre page d\'accueil';
-$_MODULE['<{homefeatured}prestashop>homefeatured_ced2b9f1aad1f8a5b351a3120e4b1212'] = 'Nombre de produit invalide';
+$_MODULE['<{homefeatured}prestashop>homefeatured_dd0de17e8450a0fd3248b19c4a4f803b'] = 'Nombre de produit invalide';
 $_MODULE['<{homefeatured}prestashop>homefeatured_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
 $_MODULE['<{homefeatured}prestashop>homefeatured_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{homefeatured}prestashop>homefeatured_6df1f9b5662398a551a2c9185b26638a'] = 'Pour ajouter des produits à votre page d\'accueil, ajoutez-les simplement à la catégorie \"Accueil\" du catalogue.';

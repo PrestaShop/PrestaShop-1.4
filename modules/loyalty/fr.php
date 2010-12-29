@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'Programme de fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_44c3144de5c433c8e7c9cbc66c906c01'] = 'Propose un programme de fidélité à vos clients';
+$_MODULE['<{loyalty}prestashop>loyalty_c1a15aea773888ee981e8a4b2b041664'] = 'Cette action effacera tous les points de fidélité et l\'historique des points de tous vos clients, êtes vous sûr ?';
 $_MODULE['<{loyalty}prestashop>loyalty_c4518d034c46f8f317871c4d84b4f815'] = 'Récompense fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_e81b2826b5aebd9c92fb5d090f0cdc9d'] = 'Vous devez choisir au moins une catégorie pour la génération des bons de réductions';
 $_MODULE['<{loyalty}prestashop>loyalty_f38f5974cdc23279ffe6d203641a8bdf'] = 'Configuration mise à jour.';

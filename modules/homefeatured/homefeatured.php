@@ -59,7 +59,7 @@ class HomeFeatured extends Module
 		{
 			$nbr = (int)(Tools::getValue('nbr'));
 			if (!$nbr OR $nbr <= 0 OR !Validate::isInt($nbr))
-				$errors[] = $this->l('Invalid number of product');
+				$errors[] = $this->l('Invalid number of products');
 			else
 				Configuration::updateValue('HOME_FEATURED_NBR', (int)($nbr));
 			if (isset($errors) AND sizeof($errors))

@@ -90,10 +90,10 @@ class StatsVisits extends ModuleGraph
 		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 				<h2>'.$this->l('Determine the interest of a visit').'</h2>
-				'.$this->l('Visitors\' evolution graph strongly looks like to the visits\' graph, but provides an additional information: <strong>Do your visitors come back?</strong>').'<br />
+				'.$this->l('The visitors\' evolution graph strongly resembles like to the visits\' graph, but provides an additional information: <strong>Do your visitors come back?</strong>').'<br />
 				<ul>
 					<li>'.$this->l('If this is the case, congratulations, your website is well thought out and pleasing.').'</li>
-					<li>'.$this->l('Otherwise, the conclusion is not so simple. The problem can be esthetic or ergonomic, or else the offer not sufficient. It\'s also possible that these visitors mistakenly came here, without particular interest for your shop; this phenomenon often happens with the search engines.').'</li>
+					<li>'.$this->l('Otherwise, the conclusion is not so simple. The problem can be aesthetic or ergonomic, or else the offer is not sufficient. It\'s also possible that these visitors mistakenly came here, without particular interest for your shop; this phenomenon often happens with the search engines.').'</li>
 				</ul>
 				'.$this->l('This information is mostly qualitative: you have to determine the interest of a disjointed visit.').'<br />
 		</fieldset>';

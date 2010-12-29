@@ -163,7 +163,7 @@ class AdminImport extends AdminTab
 				'meta_title' => $this->l('Meta-title'),
 				'meta_keywords' => $this->l('Meta-keywords'),
 				'meta_description' => $this->l('Meta-description'),
-				'link_rewrite' => $this->l('URL rewrited'),
+				'link_rewrite' => $this->l('URL rewritten'),
 				'available_now' => $this->l('Text when in-stock'),
 				'available_later' => $this->l('Text if back-order allowed'),
 				'image' => $this->l('Image URLs (x,y,z...)'),

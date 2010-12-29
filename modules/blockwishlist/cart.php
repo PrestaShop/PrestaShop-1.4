@@ -76,7 +76,7 @@ if ($cookie->isLogged())
 		echo Tools::displayError('No template found');
 }
 else
-	$errors[] = Tools::displayError('You need to be logged to manage your wishlist');
+	$errors[] = Tools::displayError('You need to be logged in to manage your wishlist');
 	
 if (sizeof($errors))
 {

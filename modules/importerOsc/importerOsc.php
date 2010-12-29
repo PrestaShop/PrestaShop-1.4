@@ -15,8 +15,8 @@ class importerOsc extends ImportModule
 
 		parent::__construct ();
 
-		$this->displayName = $this->l('Importer Oscommerce');
-		$this->description = $this->l('This module allows to import from Oscommerce to prestashop'); 
+		$this->displayName = $this->l('Importer osCommerce');
+		$this->description = $this->l('This module allows you to import from osCommerce to Prestashop'); 
 	}
 	
 	public function install()
@@ -36,7 +36,7 @@ class importerOsc extends ImportModule
 	public function displaySpecificOptions()
 	{
 		$langagues = $this->db->ExecuteS('SELECT * FROM  `'.addslashes($this->prefix).'languages`');
-		$html = '<label>'.$this->l('Default OsCommerce langague').' : </label>
+		$html = '<label>'.$this->l('Default osCommerce language').' : </label>
 				<div class="margin-form">
 				<select name="defaultOscLang"><option value="------">------</option>';
 				foreach($langagues as $lang)

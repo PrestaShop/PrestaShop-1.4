@@ -81,7 +81,7 @@ class AdminGenerator extends AdminTab
 		<fieldset><legend><img src="../img/admin/robots.gif" />'.$this->l('Robots file generation').'</legend>
 		<p><b>'.$this->l('Warning:').' </b>'.$this->l('Your file robots.txt MUST be in your website\'s root directory and nowhere else.').'</p>
 		<p>'.$this->l('eg: http://www.yoursite.com/robots.txt').'.</p>
-		<p>'.$this->l('This tool will automatically generate a "robots.txt" file that will grant you the possibility to deny access to search engines for some pages.').'</p>';
+		<p>'.$this->l('This tool will automatically generate a "robots.txt" file that you can configure to deny access to search engines for some pages.').'</p>';
 		if ($this->_checkConfiguration($this->_rbFile))
 			echo '
 			<p style="font-weight:bold;">'.$this->l('Generate your "robots.txt" file by clicking on the following button:').'<br /><br />

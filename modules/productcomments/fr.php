@@ -34,7 +34,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd
 $_MODULE['<{productcomments}prestashop>productcomments_ec53a8c4f07baed5d8825072c89799be'] = 'Etat';
 $_MODULE['<{productcomments}prestashop>productcomments_7dce122004969d56ae2e0245cb754d35'] = 'Modifier';
 $_MODULE['<{productcomments}prestashop>productcomments_b22d6730e96ba4e464493871a2f5bb09'] = 'Critère';
-$_MODULE['<{productcomments}prestashop>productcomments_92c8811185c56998dfbcbdd30ad649d3'] = 'Critères de notation';
+$_MODULE['<{productcomments}prestashop>productcomments_8465e9025ba0e07abbe42d9a8ec18446'] = 'Critères de notation';
 $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_MODULE['<{productcomments}prestashop>productcomments_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
 $_MODULE['<{productcomments}prestashop>productcomments_b718adec73e04ce3ec720dd11a06a308'] = 'ID';

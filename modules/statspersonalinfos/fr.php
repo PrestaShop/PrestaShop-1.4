@@ -14,7 +14,7 @@ $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_7a7012cc5c52802b45a
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_3ca26e413e485538a7f3e610c0324636'] = 'Ciblez votre public';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_c8eb1ba430d9ae8fe45fe2d990a481f5'] = 'Pour que chacun de vos messages ait de l\'impact, il faut savoir à quelle clientèle vous vous adressez.';
-$_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_e6ef09df5048542d6a707c311661e901'] = 'S\'adresser au bon public est primordial afin de choisir les bons outils pour convaincre chacun des publics cibles.';
+$_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_52c8c8ae082c162b133883adf411301a'] = 'S\'adresser au bon public est primordial afin de choisir les bons outils pour convaincre chacun des publics cibles.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_cb720046e3ddcb4045cb42d996ff1021'] = 'Il est préférable de limiter son action à un ou plusieurs groupes de clients';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_d002ddab9aa8d394956eadd0bc147dad'] = 'Les informations personnelles relatives aux clients vous permettent de mieux définir le profil du client type afin d\'adapter les promotions sur votre site en fonction des différents critères.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_2a1348fc5f72c2fff24ffc3b06bc0f44'] = 'Nous vous conseillons d\'utiliser cette information pour faire accroitre vos ventes : ';

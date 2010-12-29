@@ -26,9 +26,9 @@ if (count($_POST))
 	if ($posted_values['cookie']->id_cart != ($posted_values['orderid'] || $secure_cart[0]))
 		$errors[] = Tools::displayErrors('The order you want to validate is not Allow.');
 	if (!$posted_values['cookie']->isLogged())
-		$errors[] = Tools::displayError('Your login account his not allow');
+		$errors[] = Tools::displayError('Your login account does not allow');
 	if ((string)$posted_values['merchant'] !== (string)dibs::$ID_MERCHANT)
-		$errors[] = Tools::displayError('You don\'t use the correct merchant id');
+		$errors[] = Tools::displayError('You haven\'t used the correct merchant id');
 
 	$message = '';
 	foreach ($posted_values AS $key => $value)

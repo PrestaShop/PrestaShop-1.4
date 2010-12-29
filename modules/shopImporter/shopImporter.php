@@ -18,7 +18,7 @@ class shopImporter extends ImportModule
 		parent::__construct ();
 
 		$this->displayName = $this->l('Shop Importer');
-		$this->description = $this->l('This module allows to import from another system to prestashop');
+		$this->description = $this->l('This module allows you to import your shop from another system into prestashop');
 
 		$this->supportedImports = array(
 									'language' => array('methodName' => 'getLangagues',
@@ -162,9 +162,9 @@ class shopImporter extends ImportModule
 					var showErrors = "'.$this->l('Show errors').'";
 					var testImport = "'.$this->l('Test import process').'";
 					var import = "'.$this->l('Import').'";
-					var importHasErrors = "'.$this->l('Please fixe errors before to continue').'"
+					var importHasErrors = "'.$this->l('Please fix errors before continuing').'"
 					var importFinish = "'.$this->l('The import is completed').'"
-					var truncateTable = "'.$this->l('Remove datas').'"
+					var truncateTable = "'.$this->l('Remove data').'"
 				</script>
 				<style>
 					.margin-form{padding: 0px 0px 1em 120px;width:300px;}
@@ -173,7 +173,7 @@ class shopImporter extends ImportModule
 				</style>
 				<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" />'.$this->l('Import from another system').'</legend>
 				<div class="warn" ><img src="../img/admin/warn2.png">
-					'.$this->l('Before starting the import thank you to backup your database. ').'
+					'.$this->l('Before starting the import please backup your database. ').'
 						<a href="index.php?tab=AdminBackup&token='.Tools::getAdminToken('AdminBackup'.intval(Tab::getIdFromClassName('AdminBackup')).intval($cookie->id_employee)).'"">'.$this->l(' Click here to backup').'</a>
 				</div>
 				<div class="warn" ><img src="../img/admin/warn2.png">
@@ -671,7 +671,7 @@ private function formatInsertLang($table, $fields, $identifier)
 								$errors[] = Tools::displayError('archive cannot be extracted');
 							}
 							else
-								$errors[] = Tools::displayError('Server don\'t have permissions for writing');
+								$errors[] = Tools::displayError('Server does not have permissions for writing');
 						}
 						else
 							$errors[] = Tools::displayError('language not found');

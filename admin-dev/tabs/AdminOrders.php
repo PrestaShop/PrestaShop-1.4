@@ -556,7 +556,7 @@ class AdminOrders extends AdminTab
 			<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
 				<input type="hidden" name="id_lang" value="'.(int)$order->id_lang.'" />
 				<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
-				'.$this->l('This feature going to generate a random password and send a e-mail at customer').'
+				'.$this->l('This feature will generate a random password and send an e-mail to the customer').'
 			</form>
 			';
 		}

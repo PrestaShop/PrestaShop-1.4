@@ -19,11 +19,11 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999
 $_MODULE['<{moneybookers}prestashop>moneybookers_2d2eca55f12f72b2e1d753b7deadd9f5'] = 'Vous utilisez actuellement l\'adresse e-mail par défaut du module Moneybookers, vous devez utiliser vos paramètres.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_bd65b912e0152f62629b6afeaa8398f4'] = 'Serveur d\'activation injoignable, merci d\'essayer ultérieurement';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c9f3e0397a1b070092ab4f0bf046fd4a'] = 'Erreur lors de la validation du compte, votre adresse e-mail est peut être incorrecte';
-$_MODULE['<{moneybookers}prestashop>moneybookers_74b8a559fcedbb491aba11dd10610b5f'] = 'Activation de votre adresse e-mail OK, vous pouvez désormais valider votre mot secret';
+$_MODULE['<{moneybookers}prestashop>moneybookers_1a24addb8ec7ae193ac7f642b4a232aa'] = 'Activation de votre adresse e-mail OK, vous pouvez désormais valider votre mot secret';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7b1b775b5b6d8ea22cc69affd4bb162c'] = 'Le champ e-mail est obligatoire';
-$_MODULE['<{moneybookers}prestashop>moneybookers_214186253fc29d921411c68ac88d942e'] = 'Erreur lors de la validation de votre mot secret, vous avez dépassé le nombre maximum d\'essai (3 par heure)';
+$_MODULE['<{moneybookers}prestashop>moneybookers_aa1c444c2ee2f620d5b349fedfa68ba2'] = 'Erreur lors de la validation de votre mot secret, vous avez dépassé le nombre maximum d\'essai (3 par heure)';
 $_MODULE['<{moneybookers}prestashop>moneybookers_ccd8489089bfa25fffbc82674bf6b8b5'] = 'Erreur lors de la validation de votre mot secret, votre mot secret est peut être incorrect';
-$_MODULE['<{moneybookers}prestashop>moneybookers_7d2d842e3d3628e5fedb1899e710fb44'] = 'Activation du compte réussie, mot secret OK';
+$_MODULE['<{moneybookers}prestashop>moneybookers_cd1dfa342c3c11c17ede212e6429ca01'] = 'Activation du compte réussie, mot secret OK';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c193f11bec44b77c0f60ddf50bc30cc8'] = 'Le mot secret est obligatoire';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a9dd80641753cafc9c967e317ba92a28'] = 'A propos de Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6b9a842511dd894375882f964ee626e8'] = 'Avec plus de 14 millions de titulaires de compte, et 15 000 nouveaux comptes chaque jour, Moneybookers offre aussi l’un des plus grands portemonnaies électroniques du monde. Vos clients pourront régler leur paiement en utilisant seulement leur e-mail et leur mot de passe.';

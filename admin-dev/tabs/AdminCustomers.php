@@ -162,7 +162,7 @@ class AdminCustomers extends AdminTab
 			{
 				$customer = new Customer((int)Tools::getValue('id_customer'));
 				if (!Validate::isLoadedObject($customer))
-					$this->_errors[] = Tools::displayError('this customer doesn\'t exists');
+					$this->_errors[] = Tools::displayError('This customer does not exist');
 				if ($customer->transformToCustomer(Tools::getValue('id_lang', Configuration::get('PS_LANG_DEFAULT'))))
 					Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$customer->id.'&conf=3&token='.$this->token);
 				else
@@ -226,7 +226,7 @@ class AdminCustomers extends AdminTab
 		  	  <form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
 		  	  	<input type="hidden" name="id_lang" value="'.(int)(sizeof($orders) ? $orders[0]['id_lang'] : Configuration::get('PS_LANG_DEFAULT')).'" />
 		  	  	<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
-		  	  	'.$this->l('This feature going to generate a random password and send a e-mail at customer').'
+		  	  	'.$this->l('This feature generates a random password and sends an e-mail to the customer').'
 		  	  </form>
 		    </div>
 		    ';
@@ -377,7 +377,7 @@ class AdminCustomers extends AdminTab
 				}
 		}
 		else
-			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has placed no orders yet');
+			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has not placed any orders yet');
 			
 		if ($products AND sizeof($products))
 		{
@@ -434,7 +434,7 @@ class AdminCustomers extends AdminTab
 			</table>';
 		}
 		else
-			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has registered no addresses yet').'.';
+			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has not registered any addresses yet').'.';
 		echo '<div class="clear">&nbsp;</div>
 		<h2>'.$this->l('Discounts').' ('.sizeof($discounts).')</h2>';
 		if (sizeof($discounts))

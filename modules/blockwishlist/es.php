@@ -32,8 +32,8 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist_09dc02ecbb078868a3a86dded0300
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_7ec9cceb94985909c6994e95c31c1aa8'] = 'Mis listas de regalo';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_0ac1aeb2429db494dd42ad2dc219ca7e'] = 'Ocultar productos';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_0de9d09a36e820f9da7e87ab3678dd12'] = 'Mostrar productos';
-$_MODULE['<{blockwishlist}prestashop>managewishlist_0a0cdc20cba75ac8ecf475bd2eed89ab'] = 'Ocultar información sobre productos vendidos';
-$_MODULE['<{blockwishlist}prestashop>managewishlist_0ab1964de85acc7abae32344560d71f7'] = 'Mostrar info sobre productos vendidos';
+$_MODULE['<{blockwishlist}prestashop>managewishlist_0bb3e067c0514f5ff2d5a8e45fc0f4be'] = 'Ocultar información sobre productos vendidos';
+$_MODULE['<{blockwishlist}prestashop>managewishlist_6fe88f5681da397d46fefe19b3020a6a'] = 'Mostrar info sobre productos vendidos';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_30820a1bf6a285e45cda2beda3d7738d'] = 'Enviar esta lista';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_65a26fd603de62416ed333c7a8928713'] = 'Cerrar en envío de la lista';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Detalle producto';

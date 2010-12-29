@@ -26,7 +26,7 @@
 
 {$reverso_tag}
 <script type="text/javascript">
-	var unknown_number = '{l s='We can\'t found this number'}';
+	var unknown_number = '{l s='We can\'t find this number'}';
 </script>
 <script type="text/javascript" src="{$module_dir}js/reverso.js"></script>
 <fieldset class="account_creation">

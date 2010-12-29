@@ -78,7 +78,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_7da6f328a4647adb2b96a01
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_333dfbe2bb5c64b140df4607935ec8be'] = 'Compatible à partir de';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_e12167aa0a7698e6ebc92b4ce3909b53'] = 'Jusqu\'à';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a82cac3db0465cfc701f3765fd880019'] = 'Ajouter une documentation';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_f1c8be3c773e0ebb943f7259e7033adf'] = 'Donnez un peu d\'aide à l\'utilisateur. Ajoutez un champs en cliquant ici';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_08e27f4e5511f4f6aa73557e6ad6df48'] = 'Donnez un peu d\'aide à l\'utilisateur. Ajoutez un champs en cliquant ici';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a508df4b049c5b044cb4568b76b6c7e6'] = 'Ajouter une variation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6a7b29a06022b8e648ba29c3cff429d5'] = 'Selectionnez un autre thème à inclure et sa compatibilité';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ac70412e939d72a9234cdebb1af5867b'] = 'Chemin';

@@ -160,7 +160,7 @@ class DateOfDelivery extends Module
 			if (($carrier = new Carrier((int)(Tools::getValue('id_carrier')))) AND !Validate::isLoadedObject($carrier))
 				$errors[] = $this->l('Carrier is invalid');
 			if ($this->_isAlreadyDefinedForCarrier((int)($carrier->id), (int)(Tools::getValue('id_carrier_rule', 0))))
-				$errors[] = $this->l('you cannot used this carrier, a rule has been already saved');
+				$errors[] = $this->l('You cannot use this carrier, a rule has been already saved');
 			
 			if(!sizeof($errors))
 			{
@@ -194,14 +194,14 @@ class DateOfDelivery extends Module
 		if (Tools::isSubmit('deleteCarrierRule') AND Tools::isSubmit('id_carrier_rule') AND (int)(Tools::getValue('id_carrier_rule')) AND $this->_isCarrierRuleExists((int)(Tools::getValue('id_carrier_rule'))))
 		{
 			$this->_deleteByIdCarrierRule((int)(Tools::getValue('id_carrier_rule')));
-			$this->_html .= $this->displayConfirmation($this->l('Carrier rule is deleted with success'));
+			$this->_html .= $this->displayConfirmation($this->l('Carrier rule deleted successfully'));
 		}
 		
 		if (Tools::isSubmit('confirmAddCarrierRule'))
-			$this->_html = $this->displayConfirmation($this->l('Carrier rule is added with success'));
+			$this->_html = $this->displayConfirmation($this->l('Carrier rule added successfully'));
 		
 		if (Tools::isSubmit('confirmEditCarrierRule'))
-			$this->_html = $this->displayConfirmation($this->l('Carrier rule is updated with success'));
+			$this->_html = $this->displayConfirmation($this->l('Carrier rule updated successfully'));
 	}
 	
 	private function _setConfigurationForm()
