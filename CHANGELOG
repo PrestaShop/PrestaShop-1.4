@@ -25,6 +25,139 @@ Release Notes for PrestaShop 1.4
 --------------------------------
 
 ####################################
+#   v1.4.0.6 - 4114 (2010-12-29)   #
+####################################
+	
+	Improved/changed features:
+	
+	[*] Project : refactoring of the dispatcher in order to create unit tests
+	[*] Project : Update of jQuery SerialScroll & ScrollTo plugins
+	
+	[*] FO : Homepage is now W3C valid (fixed several errors on blocksearch)
+	[*] FO : refactoring of order controllers, with new controller ParentOrderController
+	
+	[*] BO : added check if method_exists before call_user_func() 'displayInfoByCart'
+	[*] BO : change the method to get the language pack according to the prestashop version.
+	[*] BO : you can now upload ZIPs containing your product pictures instead of uploading them one by one
+	[*] BO : Timeout on Remote Help + hide error @
+	[*] BO : you can now add the language code (e.g., pt-br, en-us) to a language in order to use Google Translate API and other feature with the right language code
+	
+	[*] Classes : Optimized version of isVirtualCart() (class Cart.php)
+	
+	[*] MO : Added a uninstall warning in the loyalty module
+	[*] MO : You can now choose to use Google Checkout shipping fees instead of the ones defined in your shop
+	[*] MO Treepodia : new features
+	[*] MO : Several improvements on Products Category module (design, code, performances)
+	[*] MO : Module UPS - The module is now fully configurable
+	[*] MO : Re-wrote a large part of the Loyalty module
+	[*] MO : Better management for negative points in the loyalty module
+	[*] MO : Moved includes from the constructor in the loyalty module (better memory management)
+	
+	[*] IN : bypass configuration check if everything's alright
+	[*] IN : improved error management in the database installation: no need to use firebug anymore!
+	
+	[*] TR : Set good link to access of lang pack on prestashop.com according to Prestashop version.
+
+	Fixed bugs:
+	
+	[-] FO : accessories description fixed on product page
+	[-] FO : Add missing UTF-8 charset on escape
+	[-] FO : Bug : 5265 - stylesheet fixes
+	[-] FO : Bug fixed - Smarty error on carrier display in orders steps
+	[-] FO : Change h2 in h1 and h3 in h2 on editorial module for better SEO.
+	[-] FO : Cookie name is now a hash generated with a string and the shop URL instead of a string and the cookie key, so you shouldn't have any "400 Bad Request" due to oversized cookies anymore
+	[-] FO : deleted "This shop requires JavaScript to run correctly. Please activate JavaScript in your browser." which appeared in your google description
+	[-] FO : Fixed #6505 Images is now loaded in SSL
+	[-] FO : Fixed #6534
+	[-] FO : Fixed a warning with $customizationQtyInput on order-follow.php
+	[-] FO : Fixed bug #5632 - W3C error with blocknewproducts
+	[-] FO : Fixed bug #6083 - The form buy_block could by empty on product page in some cases
+	[-] FO : Fixed bug #6164 - Warning with var $total_free_ship
+	[-] FO : fixed bug #6270 - Paypal v 2.0 - non-secure links in redirect.tpl
+	[-] FO : Fixed bug #6354 - Free shipping text wasn't working properly with OPC
+	[-] FO : Fixed bug #6503 - Missing password_query templates for ES language
+	[-] FO : fixed bug #6524 - States list not showing on opc invoice address
+	[-] FO : Fixed bug #6544
+	[-] FO : fixed bug #6561 - “No carrier is selected” for virtual products in opc
+	[-] FO : Fixed bug #6572 - Spelling issue "subtract" instead of "substract"
+	[-] FO : Fixed bug #6573 - Clicking quantity +/- on virtual cart causing "remaining amount" to appear
+	[-] FO : fixed bug #6574 - Javascript error when creating account on opc with cart block uninstalled
+	[-] FO : fixed bug #6576 - Customer name is displayed with lastname first after creating new account in opc
+	[-] FO : fixed bug #6577 - opc has two #email inputs
+	[-] FO : fixed bug #6595 - no default shipping method on order-opc.php
+	[-] FO : Fixed bug #6597 - SerialScroll.js was missing on the product page
+	[-] FO : Fixed bug #6606 and #6626 in Category class and ajax.php
+	[-] FO : Fixed bug #6608 - <h2> instead of <h1> for guest-tracking.tpl
+	[-] FO : Fixed bug #6609
+	[-] FO : Fixed bug #6634 - Typo error in authentication.tpl
+	[-] FO : Fixed bug #6640 - Added a button to modifiy its address on Guest checkout
+	[-] FO : jqzoom destination image link fixed
+	[-] FO : mail can be sent even if the customer name is not valid: it is removed instead of crashing prestashop
+	[-] FO : mime type detection improved for downloadable items
+	[-] FO : no  more fatal error when you cannot be geolocated with your IP address
+	[-] FO : now you can't go to next step if you haven't choose a carrier or accept terms of service on One Page checkout (#6595)
+	[-] FO : _PS_CACHE_ENABLED_ is not defined during upgrade from 1.3 => 1.4 = maintenance page crash
+	[-] FO : Put subheading editorial image in P.
+	[-] FO : Replaced all "Substract" by "Subtract"
+	[-] FO : search query fixed (tax table alias had been changed)
+	[-] FO : Shop name is now protected in the mails templates
+	[-] FO : Small translations fixes
+	[-] FO : SSL for re-ordering
+	[-] FO : Tag system on front office is now working (bug in Search SQL Request)
+	[-] FO : virtual product links are now sent the first time the order is validated and no more hard coded on PS_OS_PAYMENT
+
+	[-] BO : Bug Fixed #6596 
+	[-] BO : #6583 fixed
+	[-] BO : css bug fixed
+	[-] BO : delete the ext-all.css called in the hook hookBackOfficeHeader
+	[-] BO : Fixed bug #5129 - Categories were reseted if an error occur on the product edition page
+	[-] BO : Fixed bug #5497 - All default pictures were deleted if box "Delete all before import" was ticked
+	[-] BO : fixed bug #6535
+	[-] BO : Fixed bug #6581 - Text/HTML error on CMS edition page
+	[-] BO : Fixed bug #6601
+	[-] BO : JS error in IE6 & 7	
+	[-] BO : no more warning when "en" directory does not exists while parsing modules email translations
+	[-] BO : related to bug #6632, create a new javascript function to display the tinyMCE editor which concerns the button 'edit html' on each html mail template.
+	[-] BO : related to bug #6632, in the tinyMCE init method, the selector exclude each textareas for txt templates.
+	[-] BO : tinymce do not entities every utf8 chars anymore
+	[-] BO : Ugly display in IE
+	[-] BO : you can now clear the note associated to a customer
+	
+	[-] Classes : fixed bug #6466 - Fatal Error and Geolocalization
+	[-] Classes : fixed bug #6548 - Express checkout twice with the same email address
+	
+	[-] Core : Fixed bug #5545 - $orderBy parameter was ignored if uppercased
+	[-] Core : Fixed bug #5886 - Multibyte error in the blockcart module
+	[-] Core : Fixed bug #6515 - Warning on Memcached (empty key on deletion)
+	[-] Core : Fixed bug #6590 - Image format not recognized (JPEG/GIF/PNG...)
+	
+	[-] MO : add correct condition to allow 1.3 compatibility.
+	[-] MO : Deleted Javascript real time update (on FO) for the loyalty module (buggy and useless because we only display the maximum points the customer can win)
+	[-] MO : Fixed a Smarty v2 bug on loyalty module (missing {literal})
+	[-] MO : Fixed bad default translations in the loyalty module
+	[-] MO : Fixed bad points amount in the loyalty module (floating issue)
+	[-] MO : Fixed bad total points amount in the loyalty module
+	[-] MO : Fixed bug #4785 - Google Checkout wasn't transmitting attribute details
+	[-] MO : Fixed bug #4847 - Product weights were not sent to Google Checkout
+	[-] MO : Fixed bug #4871 - Loyalty module vouchers start date weren't the right ones
+	[-] MO : fixed bug #5437 - PaypalAPI module Vs language
+	[-] MO : Fixed bug #5578 - Module productscategory
+	[-] MO : Fixed bug #5660 - Loyalty points differents on the product page and on the shopping cart page
+	[-] MO : Fixed bug #5825 - Better management of confirmation page for Moneybookers payment module
+	[-] MO : fixed bug #5851 - Paypal module v 2.0 - inconsistent mod=
+	[-] MO : fixed bug #5894 - Paypal2.0 install error
+	[-] MO : Fixed bug #5938 - Bad amount of negative loyalty points with loyalty module
+	[-] MO : fixed bug #6093 - paypal template error
+	[-] MO : fixed bug #6343 - wrong shipping address passed to Paypal
+	[-] MO : fixed bug #6361 - reducing length of log messages from Paypal
+	[-] MO : fixed bug #6558
+	[-] MO : fixed bug order total on payment step 
+	[-] MO : Module USPS - The errors messages are more accurate
+	[-] MO : subdomain no more removed from the url in pagesnotfound
+	
+	[-] TR : Bug fixed #6630 AND #6539 - Md5 Key has been changed, french and spanish translations were reuploaded
+
+####################################
 #   v1.4.0.5 - 3979 (2010-12-22)   #
 ####################################
 
