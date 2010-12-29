@@ -36,6 +36,6 @@
 			<li>{$log}</li>
 		{/foreach}
 		</ol>
-		<p><a href="{$smarty.server.HTTP_REFERER|secureReferrer}" class="button_small" title="{l s='Back' mod='paypalapi'}">&laquo; {l s='Back' mod='paypal'}</a></p>
+		<p><a href="{$smarty.server.HTTP_REFERER|secureReferrer}" class="button_small" title="{l s='Back' mod='paypal'}">&laquo; {l s='Back' mod='paypal'}</a></p>
 	</div>
 {/if}
