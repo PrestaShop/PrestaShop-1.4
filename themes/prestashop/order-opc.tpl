@@ -36,6 +36,7 @@
 	var currencyBlank = '{$currencyBlank|intval}';
 	var displayPrice = {$priceDisplay};
 	var taxEnabled = {$use_taxes};
+	var conditionEnabled = {$conditions|intval};
 	var countries = new Array();
 	var countriesNeedIDNumber = new Array();
 	var countriesNeedZipCode = new Array();

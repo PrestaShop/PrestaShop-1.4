@@ -55,7 +55,7 @@ class PaypalExpress extends Paypal
 			$request .= '&SOLUTIONTYPE=Sole&LANDINGPAGE=Billing';
 		else
 			$request .= '&SOLUTIONTYPE=Mark&LANDINGPAGE=Login';
-		$request .= '&LOCALECODE='.strval($this->getCountryCode());
+		$request .= '&LOCALECODE='.strtoupper($this->getCountryCode());
 		if ($this->_header) $request .= '&HDRIMG='.urlencode($this->_header);
 		// Customer informations
 		$customer = new Customer((int)$cart->id_customer);

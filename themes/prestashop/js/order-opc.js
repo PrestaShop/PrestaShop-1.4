@@ -327,7 +327,7 @@ $(function() {
 			alert(errorCarrier);
 			hasError = true;
 		}
-		if ($(this).attr('href') == '#opc_block_4' && $('input[name=cgv]:checked').length == 0)
+		if ($(this).attr('href') == '#opc_block_4' && $('input[name=cgv]:checked').length == 0 && conditionEnabled)
 		{
 			alert(errorTOS);
 			hasError = true;

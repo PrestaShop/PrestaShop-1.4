@@ -52,7 +52,7 @@ class PaypalPayment extends Paypal
 			$request .= '&SOLUTIONTYPE=Sole&LANDINGPAGE=Billing';
 		else
 			$request .= '&SOLUTIONTYPE=Mark&LANDINGPAGE=Login';
-		$request .= '&LOCALECODE='.Language::getIsoById($cart->id_lang);
+		$request .= '&LOCALECODE='.strtoupper(Language::getIsoById($cart->id_lang));
 		if (Configuration::get('PAYPAL_HEADER'))
 			$request .= '&HDRIMG='.urlencode(Configuration::get('PAYPAL_HEADER'));
 		// Customer informations
