@@ -36,7 +36,7 @@ function __autoload($className)
 		elseif (file_exists(dirname(__FILE__).'/../controllers/'.$className.'.php'))
 			$type = 'controllers';
 		else
-			die('Can\'t load class: '.$className);
+			return ;
 		
 		require_once(dirname(__FILE__).'/../'.$type.'/'.str_replace(chr(0), '', $className).'.php');
 		if (file_exists(dirname(__FILE__).'/../override/'.$type.'/'.$className.'.php'))
