@@ -135,7 +135,7 @@ class Newsletter extends Module
 		'.((isset($_POST['SUSCRIBERS']) AND (int)($_POST['SUSCRIBERS']) != 0) ? 'AND c.`newsletter` = '.(int)($_POST['SUSCRIBERS'] - 1) : '').'
 		'.((isset($_POST['OPTIN']) AND (int)($_POST['OPTIN']) != 0) ? 'AND c.`optin` = '.(int)($_POST['OPTIN'] - 1) : '').'
 		'.((isset($_POST['COUNTRY']) AND (int)($_POST['COUNTRY']) != 0) ? 'AND (SELECT COUNT(a.`id_address`) as nb_country FROM `'._DB_PREFIX_.'address` a WHERE a.`id_customer` = c.`id_customer` AND a.`id_country` = '.(int)($_POST['COUNTRY']).') >= 1' : '').'
-		GROUP BY c.`id_customer`');
+		GROUP BY c.`email`');
 		$header = array('id_customer', 'lastname', 'firstname', 'email', 'ip_address', 'newsletter_date_add');
 		$result = (is_array($rq) ? array_merge(array($header), $rq) : $header);
 		return $result;
