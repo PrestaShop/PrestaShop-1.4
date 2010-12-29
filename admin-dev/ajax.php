@@ -124,7 +124,7 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	$customers = Db::getInstance()->ExecuteS('
 	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
 	FROM `'._DB_PREFIX_.'customer`
-	WHERE `deleted` = 0
+	WHERE `deleted` = 0 AND is_guest = 0
 	AND '.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.(int)($filter) : '(`email` LIKE "%'.pSQL($filter).'%"
 	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 0) ? 'OR `id_customer` = '.(int)($filterArray[1]) : '').'
 	'.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.(int)($filter) : '').'
