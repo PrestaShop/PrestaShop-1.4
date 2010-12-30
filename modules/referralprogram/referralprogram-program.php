@@ -53,15 +53,13 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 {
 	$activeTab = 'sponsor';
 	if (!Tools::getValue('conditionsValided'))
-	{
 		$error = 'conditions not valided';
-	}
 	else
 	{
 		$friendsLastName = Tools::getValue('friendsLastName');
 		$friendsFirstName = Tools::getValue('friendsFirstName');
 		$mails_exists = array();
-		foreach ($friendsEmail as $key => $friendEmail)
+		foreach ($friendsEmail AS $key => $friendEmail)
 		{
 			$friendEmail = strval($friendEmail);
 			$friendLastName = strval($friendsLastName[$key]);
@@ -104,8 +102,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 							'{lastname_friend}' => $friendLastName,
 							'{firstname_friend}' => $friendFirstName,
 							'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($cipherTool->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
-							'{discount}' => $discount,
-						);
+							'{discount}' => $discount);
 						Mail::Send((int)($cookie->id_lang), 'referralprogram-invitation', Mail::l('Referral Program'), $vars, $friendEmail, $friendFirstName.' '.$friendLastName, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 						$invitation_sent = true;
 						$nbInvitation++;

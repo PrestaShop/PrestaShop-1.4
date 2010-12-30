@@ -124,9 +124,7 @@
 				</p>
 				<p class="checkbox">
 					<input type="checkbox" name="conditionsValided" id="conditionsValided" value="1" {if isset($smarty.post.conditionsValided) AND $smarty.post.conditionsValided eq 1}checked="checked"{/if} />
-					<label for="conditionsValided">
-						{l s='I have read the conditions of the referral program and accept them in their entirety. I also agree to have my friend reminded again in two weeks (if he or she still has not made a purchase on conditions).' mod='referralprogram'}
-					</label>
+					<label for="conditionsValided">{l s='I agree to the terms of service and adhere to them unconditionally.' mod='referralprogram'}</label>
 					<a href="{$base_dir_ssl}modules/referralprogram/referralprogram-rules.php?height=500&amp;width=400" class="thickbox" title="{l s='Conditions of the referral program' mod='referralprogram'}">{l s='Read conditions.' mod='referralprogram'}</a>
 				</p>
 				<p>

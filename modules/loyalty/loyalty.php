@@ -73,8 +73,8 @@ class Loyalty extends Module
 		OR !Configuration::updateValue('PS_LOYALTY_POINT_RATE', '10') OR !Configuration::updateValue('PS_LOYALTY_NONE_AWARD', '1'))
 			return false;
 		
-		$defaultTranslations = array('en' => 'Loyalty voucher', 'fr' => 'Récompense fidélité');
-		$conf = array((int)Configuration::get('PS_LANG_DEFAULT') => $this->l('Loyalty voucher'));
+		$defaultTranslations = array('en' => 'Loyalty reward', 'fr' => 'Récompense fidélité');
+		$conf = array((int)Configuration::get('PS_LANG_DEFAULT') => $this->l('Loyalty reward'));
 		foreach (Language::getLanguages() AS $language)
 			if (isset($defaultTranslations[$language['iso_code']]))
 				$conf[(int)$language['id_lang']] = $defaultTranslations[$language['iso_code']];
