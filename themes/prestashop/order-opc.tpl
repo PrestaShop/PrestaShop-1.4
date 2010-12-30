@@ -61,6 +61,7 @@
 	var isLogged = {$isLogged|intval};
 	var isGuest = {$isGuest|intval};
 	var isVirtualCart = {$isVirtualCart|intval};
+	var isPaymentStep = {$isPaymentStep|intval};
 	//]]>
 </script>
 {include file="$tpl_dir./thickbox.tpl"}

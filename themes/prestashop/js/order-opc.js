@@ -349,8 +349,14 @@ $(function() {
 	// Init
 	$('.opc_status').show();
 	$('.opc_block_content').hide();
-	$('#opc_block_1').show();
-	$('#opc_block_1_status').hide();
+	var step = 1;
+	if (isPaymentStep == true)
+	{
+		step = 4;
+		showPaymentModule();
+	}
+	$('#opc_block_'+step).show();
+	$('#opc_block_'+step+'_status').hide();
 	
 	// Event
 	$('.opc_button').click(function() { manageButtonsEvents($(this)); });

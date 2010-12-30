@@ -52,7 +52,11 @@ class ParentOrderControllerCore extends FrontController
 		if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 0 AND strpos($_SERVER['PHP_SELF'], 'order.php') === false)
 			Tools::redirect('order.php');
 		if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1 AND strpos($_SERVER['PHP_SELF'], 'order-opc.php') === false)
+		{
+			if (isset($_GET['step']) AND $_GET['step'] == 3)
+				Tools::redirect('order-opc.php?isPaymentStep=true');
 			Tools::redirect('order-opc.php');
+		}
 		
 		if (Tools::isSubmit('submitReorder') AND $id_order = (int)Tools::getValue('id_order'))
 		{
