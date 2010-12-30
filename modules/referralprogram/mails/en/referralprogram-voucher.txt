@@ -1,9 +1,9 @@
 Hi {firstname} {lastname},
 
-We inform you about the generation of a voucher to your name from your order #{id_order}.
+We are pleased to inform you that a voucher is available in your name from your order #{id_order}.
 
-Here is the code of your voucher : {voucher_num}, with an amount of {voucher_amount} euros.
-Simply paste this code in your next cart before pay the order.
+Here is the code of your voucher : {voucher_num}, with an amount of {voucher_amount}.
+Simply copy/paste this code during the payment process for your next order.
 
 Thank you for shopping at {shop_name}.
 

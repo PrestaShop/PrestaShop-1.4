@@ -6,7 +6,7 @@ Your cart has been saved, you can resume your order by visiting our shop:
 
 {shop_url}
 
-As an exception, we grant you a discount of {amount}% off your next order! This offer is valid for {days} days, so do not waste a moment!
+As an incentive, we can give you a discount of {amount}% off your next order! This offer is valid for {days} days, so do not waste a moment!
  
 Here is your coupon: {voucher_num}
 

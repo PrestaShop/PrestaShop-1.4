@@ -1,6 +1,6 @@
 	Hi {firstname} {lastname},
 		
-	Your guest account has been transformed as customer account:
+	Your guest account has been transformed into a customer account:
 	
 	E-mail address: {email}
 	Password: {passwd}

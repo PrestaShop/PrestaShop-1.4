@@ -1332,7 +1332,18 @@ class AdminTranslations extends AdminTab
 				else
 				{
 					echo '<br/><br/><div><label>'.$mailTplName.'</label><br/><div class="mail-form">';
-					echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/></div></div>';
+					if (strripos($mailTplName, '.html'))
+					{
+						if (file_exists(_PS_MODULE_DIR_.$key33.'/mails/'.$lang.'/'.$mailTplName))
+							echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'modules/'.$key33.'/mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
+						else
+							echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
+
+						echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
+						<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
+					}
+					else
+						echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/></div></div>';
 				}
 			}
 			echo '</div></fieldset><br />';

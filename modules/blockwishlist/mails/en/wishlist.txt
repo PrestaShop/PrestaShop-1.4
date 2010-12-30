@@ -1,6 +1,6 @@
 Hi,
 
-{firstname} {lastname} suggests you to see his/her wishlist {wishlist} :
+{firstname} {lastname} indicated you may want to see his/her wishlist {wishlist} :
 {message}
 
 

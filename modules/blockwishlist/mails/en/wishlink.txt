@@ -1,6 +1,6 @@
 Hi,
 
-{shop_name} invite you to send this link to your friends, so they can see your wishlist {wishlist} :
+{shop_name} invites you to send this link to your friends, so they can see your wishlist {wishlist} :
 
 {message}
 
