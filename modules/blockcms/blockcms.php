@@ -180,50 +180,51 @@ class BlockCms extends Module
 		
 		$content = array();
 		$link = new Link();
-		foreach ($cmsCategories AS $cmsCategory)
-		{
-			$key = (int)$cmsCategory['id_block_cms'];
-			$content[$key]['display_store'] = $cmsCategory['display_store'];
-			
-			$content[$key]['cms'] = Db::getInstance()->ExecuteS('
-			SELECT cl.`id_cms`, cl.`meta_title`, cl.`link_rewrite`
-			FROM `'._DB_PREFIX_.'cms_block_page` bcp 
-			INNER JOIN `'._DB_PREFIX_.'cms_lang` cl ON (bcp.`id_cms` = cl.`id_cms`)
-			INNER JOIN `'._DB_PREFIX_.'cms` c ON (bcp.`id_cms` = c.`id_cms`)
-			WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).' AND cl.`id_lang` = '.(int)($cookie->id_lang).' AND bcp.`is_category` = 0 AND c.`active` = 1
-			ORDER BY `position`');
-			
-			$links = array();
-			if (sizeof($content[$key]['cms']))
-				foreach ($content[$key]['cms'] AS $row)
-				{
-					$row['link'] = $link->getCMSLink((int)($row['id_cms']), $row['link_rewrite']);
-					$links[] = $row;
-				}
-
-			$content[$key]['cms'] = $links;
-			
-			$content[$key]['categories'] = Db::getInstance()->ExecuteS('
-			SELECT bcp.`id_cms`, cl.`name`, cl.`link_rewrite`
-			FROM `'._DB_PREFIX_.'cms_block_page` bcp 
-			INNER JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON (bcp.`id_cms` = cl.`id_cms_category`)
-			WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).'
-			AND cl.`id_lang` = '.(int)($cookie->id_lang).'
-			AND bcp.`is_category` = 1');
-			
-			$links = array();
-			if (sizeof($content[$key]['categories']))
-				foreach ($content[$key]['categories'] as $row)
-				{
-					$row['link'] = $link->getCMSCategoryLink((int)($row['id_cms']), $row['link_rewrite']);
-					$links[] = $row;
-				}
-
-			$content[$key]['categories'] = $links;
-			$content[$key]['name'] = $cmsCategory['block_name'];
-			$content[$key]['category_link'] = $link->getCMSCategoryLink((int)($cmsCategory['id_cms_category']), $cmsCategory['link_rewrite']);
-			$content[$key]['category_name'] = $cmsCategory['category_name'];
-		}
+		if (is_array($cmsCategories) AND sizeof($cmsCategories))
+			foreach ($cmsCategories AS $cmsCategory)
+			{
+				$key = (int)$cmsCategory['id_block_cms'];
+				$content[$key]['display_store'] = $cmsCategory['display_store'];
+				
+				$content[$key]['cms'] = Db::getInstance()->ExecuteS('
+				SELECT cl.`id_cms`, cl.`meta_title`, cl.`link_rewrite`
+				FROM `'._DB_PREFIX_.'cms_block_page` bcp 
+				INNER JOIN `'._DB_PREFIX_.'cms_lang` cl ON (bcp.`id_cms` = cl.`id_cms`)
+				INNER JOIN `'._DB_PREFIX_.'cms` c ON (bcp.`id_cms` = c.`id_cms`)
+				WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).' AND cl.`id_lang` = '.(int)($cookie->id_lang).' AND bcp.`is_category` = 0 AND c.`active` = 1
+				ORDER BY `position`');
+				
+				$links = array();
+				if (sizeof($content[$key]['cms']))
+					foreach ($content[$key]['cms'] AS $row)
+					{
+						$row['link'] = $link->getCMSLink((int)($row['id_cms']), $row['link_rewrite']);
+						$links[] = $row;
+					}
+	
+				$content[$key]['cms'] = $links;
+				
+				$content[$key]['categories'] = Db::getInstance()->ExecuteS('
+				SELECT bcp.`id_cms`, cl.`name`, cl.`link_rewrite`
+				FROM `'._DB_PREFIX_.'cms_block_page` bcp 
+				INNER JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON (bcp.`id_cms` = cl.`id_cms_category`)
+				WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).'
+				AND cl.`id_lang` = '.(int)($cookie->id_lang).'
+				AND bcp.`is_category` = 1');
+				
+				$links = array();
+				if (sizeof($content[$key]['categories']))
+					foreach ($content[$key]['categories'] as $row)
+					{
+						$row['link'] = $link->getCMSCategoryLink((int)($row['id_cms']), $row['link_rewrite']);
+						$links[] = $row;
+					}
+	
+				$content[$key]['categories'] = $links;
+				$content[$key]['name'] = $cmsCategory['block_name'];
+				$content[$key]['category_link'] = $link->getCMSCategoryLink((int)($cmsCategory['id_cms_category']), $cmsCategory['link_rewrite']);
+				$content[$key]['category_name'] = $cmsCategory['category_name'];
+			}
 
 		return $content;
 	}
