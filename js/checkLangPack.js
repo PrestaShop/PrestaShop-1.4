@@ -32,7 +32,7 @@ function checkLangPack(){
 		{
 		   url: "ajax_lang_packs.php",
 		   cache: false,
-		   data: {iso_lang:$('#iso_code').val(), ps_version:'1.3.0.0'},
+		   data: {iso_lang:$('#iso_code').val(), ps_version:$('#ps_version').val()},
 		   dataType : 'json',
 		   success: function(ret)
 		   {
