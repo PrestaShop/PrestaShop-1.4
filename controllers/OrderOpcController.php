@@ -240,7 +240,7 @@ class OrderOpcControllerCore extends ParentOrderController
 			'isLogged' => $this->isLogged,
 			'isGuest' => isset($this->cookie->is_guest) ? $this->cookie->is_guest : 0,
 			'countries' => $countries,
-			'sl_country' => (isset($selectedCountry) ? $selectedCountry : 0),
+			'sl_country' => isset($selectedCountry) ? $selectedCountry : 0,
 			'PS_GUEST_CHECKOUT_ENABLED' => Configuration::get('PS_GUEST_CHECKOUT_ENABLED'),
 			'errorCarrier' => Tools::displayError('You must choose a carrier before', false),
 			'errorTOS' => Tools::displayError('You must accept terms of service before', false),
