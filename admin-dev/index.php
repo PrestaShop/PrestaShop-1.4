@@ -1,15 +1,29 @@
 <?php
-
-/**
-  * Homepage and main page for admin panel, index.php
-  * @category admin
-  *
-  * @author PrestaShop <support@prestashop.com>
-  * @copyright PrestaShop
-  * @license http://www.opensource.org/licenses/osl-3.0.php Open-source licence 3.0
-  * @version 1.3
-  *
-  */
+/*
+* 2007-2010 PrestaShop 
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author Prestashop SA <contact@prestashop.com>
+*  @copyright  2007-2010 Prestashop SA
+*  @version  Release: $Revision: 1.4 $
+*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*  International Registred Trademark & Property of PrestaShop SA
+*/
 
 define('_PS_ADMIN_DIR_', getcwd());
 define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
@@ -311,29 +325,25 @@ else /* Else display homepage */
 			<ul id="prestashop_link">
 				<li>
 					<p>'.translate('Discover the latest official guide :').'</p>
-					<a href ="#">'.translate('User Guide PrestaShop 1.3').'</a>
-					<a href ="#">'.translate('Technical Docummentation').'</a>
+					<a href="http://www.prestashop.com/download/Userguide_'.(in_array($isoUser, array('en', 'es', 'fr')) ? $isoUser : 'en').'.pdf" target="_blank">'.translate('User Guide PrestaShop 1.3').'</a>
+					<a href="http://www.prestashop.com/download/Techguide_'.(in_array($isoUser, array('fr', 'es')) ? $isoUser : 'fr').'.pdf" target="_blank">'.translate('Technical Docummentation').'</a>
 				</li>
 				<li>
 					<p>'.translate('Use the PrestaShop forum & discover a great community').'</p>
-					<a href ="http://www.prestashop.com/forums/">'.translate('Go to forums.prestashop.com').'</a>
+					<a href="http://www.prestashop.com/forums/" target="_blank">'.translate('Go to forums.prestashop.com').'</a>
 				</li>
 				<li>
 					<p>'.translate('Enhance your Shop with new templates & modules').'</p>
-					<a href ="http://addons.prestashop.com">'.translate('Go to addons.prestashop.com').'</a>
+					<a href="http://addons.prestashop.com" target="_blank">'.translate('Go to addons.prestashop.com').'</a>
 				</li>
 			</ul>
 		</div>';
 		if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3))
 			echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 450px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
 	echo '</div>
-	<div class="clear"></div>
-	';
+	<div class="clear"></div>';
 
 	echo Module::hookExec('backOfficeHome');
 }
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
-
-?>
-
