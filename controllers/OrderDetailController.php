@@ -79,6 +79,7 @@ class OrderDetailControllerCore extends FrontController
 						array(
 						'{lastname}' => $customer->lastname, 
 						'{firstname}' => $customer->firstname, 
+						'{email}' => $customer->email, 
 						'{id_order}' => (int)($message->id_order), 
 						'{message}' => $message->message),
 						$to, $toName, $customer->email, $customer->firstname.' '.$customer->lastname);
