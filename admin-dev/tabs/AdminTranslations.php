@@ -155,20 +155,24 @@ class AdminTranslations extends AdminTab
 	public function submitAddLang()
 	{
 		global $currentIndex;
-
-		if (Validate::isLangIsoCode(Tools::getValue('iso_import_language')))
+		
+		// $arr_import_lang[0] = iso lang
+		// $arr_import_lang[1] = prestashop version
+		$arr_import_lang = explode('|',Tools::getValue('params_import_language'));
+		
+		if (Validate::isLangIsoCode($arr_import_lang[0]))
 		{
 			if (@fsockopen('www.prestashop.com', 80))
 			{
-				if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.Tools::getValue('iso_import_language').'.gzip'))
+				if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$arr_import_lang[1].'/'.$arr_import_lang[0].'.gzip'))
 				{
-					$file = _PS_TRANSLATIONS_DIR_.Tools::getValue('iso_import_language').'.gzip';
+					$file = _PS_TRANSLATIONS_DIR_.$arr_import_lang[0].'.gzip';
 					if (file_put_contents($file, $content))
 					{
 						$gz = new Archive_Tar($file, true);
 						if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 						{
-							if (!Language::checkAndAddLanguage(Tools::getValue('iso_import_language')))
+							if (!Language::checkAndAddLanguage($arr_import_lang[0]))
 								$conf = 20;
 							if (!unlink($file))
 								$this->_errors[] = Tools::displayError('Cannot delete archive');
@@ -627,21 +631,23 @@ class AdminTranslations extends AdminTab
 					<img src="../img/admin/import.gif" />'.$this->l('Add a language').'
 				</legend>
 				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add a language directly from prestashop.com here').'</p>
-					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:').'
-						<select id="iso_import_language" name="iso_import_language">';
+					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:');
 			// Get all iso code available
-			$lang_packs = file_get_contents('http://www.prestashop.com/rss/lang_exists.php');
-			if ($lang_packs)
+			if(@fsockopen('www.prestashop.com', 80))
 			{
-				$lang_packs = unserialize($lang_packs);
-				foreach($lang_packs AS $lang_pack)
-					if (!Language::isInstalled($lang_pack['iso_code']))
-						echo '<option value="'.$lang_pack['iso_code'].'">'.$lang_pack['name'].'</option>';
+				$lang_packs = file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
+				if ($lang_packs != '' && $lang_packs = json_decode($lang_packs))
+				{
+					echo 	'<select id="params_import_language" name="params_import_language">';
+					foreach($lang_packs AS $lang_pack)
+						if (!Language::isInstalled($lang_pack->iso_code))
+							echo '<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
+					echo 	'</select>';
+				}
+				else
+					echo '		<p>'.$this->l('Cannot connect to prestashop.com').'</p>';
 			}
-			else
-				echo '		<option value="0">'.$this->l('Cannot connect to prestashop.com').'</option>';
-			echo 		'</select>
-					</div>
+			echo		'</div>
 					<div style="float:left;">
 						<input type="submit" value="'.$this->l('Add the language').'" name="submitAddLanguage" class="button" style="margin:0px 0px 0px 25px;" />
 					</div>

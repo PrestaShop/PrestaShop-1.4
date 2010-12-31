@@ -30,20 +30,19 @@ function checkLangPack(){
 	{
 		$.ajax(
 		{
-		   url: "ajax_lang_packs.php",
-		   cache: false,
-		   data: {iso_lang:$('#iso_code').val(), ps_version:$('#ps_version').val()},
-		   dataType : 'json',
-		   success: function(ret)
-		   {
-		   		console.log(ret);
-			   	if(typeof ret == 'object')
+			url: "ajax_lang_packs.php",
+			cache: false,
+			data: {iso_lang:$('#iso_code').val(), ps_version:$('#ps_version').val()},
+			dataType : 'json',
+			success: function(ret)
+			{
+				console.log(ret);
+				if(typeof ret == 'object')
 					$('p#resultCheckLangPack').html(langPackOk+' <b>'+ret.name+'</b>) :'+'<br />'+langPackVersion+''+ret.version+' <a href="http://www.prestashop.com/download/lang_packs/gzip/'+ret.version+'/'+$('#iso_code').val()+'.gzip" target="_blank" class="link">'+download+'</a><br />'+langPackInfo).show("slow");
 				else if (ret == "offline")
 					$('p#resultCheckLangPack').show('slow');
-		   }
-		 }
-		 );
+			}
+		 });
 	 }
 }
 

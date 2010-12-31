@@ -82,7 +82,6 @@ class LanguageCore extends ObjectModel
 	{
 		if (!parent::add($autodate))
 			return false;
-		
 		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
@@ -456,16 +455,18 @@ class LanguageCore extends ObjectModel
 				$lang->iso_code = $iso_code;
 				$lang->active = true;
 
-				if ($lang_packs = unserialize(@file_get_contents('http://www.prestashop.com/rss/lang_exists.php')))
-					foreach ($lang_packs AS $lang_pack)
-						if ($lang_pack['iso_code'] == $iso_code)
-							$lang->name = $lang_pack['name'];
-				
+				if ($lang_pack = json_decode(@file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso_code)))
+				{
+					if (isset($lang_pack->name)
+					&& isset($lang_pack->version)
+					&& isset($lang_pack->iso_code))
+						$lang->name = $lang_pack->name;
+				}
 				if (!$lang->name OR !$lang->add())
 					return false;
 				$insert_id = (int)($lang->id);
 				
-				if ($lang_packs)
+				if ($lang_pack)
 				{
 					$flag = file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
 					if ($flag != NULL && !preg_match('/<body>/', $flag))
