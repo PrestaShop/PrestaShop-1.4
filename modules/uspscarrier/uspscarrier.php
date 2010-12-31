@@ -689,6 +689,7 @@ class UspsCarrier extends CarrierModule
 		}
 		if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
 			return true;
+		$this->_webserviceError  = $this->l('Check your USPS User ID');
 		return false;
 	}
 

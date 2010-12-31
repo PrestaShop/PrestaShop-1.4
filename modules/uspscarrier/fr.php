@@ -72,3 +72,4 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_bf6bf5b095324e2cf5fbb37211304fcb'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_fd0119c2a5fc18aa64887b5b7ab41c19'] = 'Une erreur est survenue, veuillez réessayer ultérieurement';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Configuration non mise à jour';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_8144a0ea095a7b7cdbbc6e080506735a'] = 'Vérifiez votre Identifiant USPS';
