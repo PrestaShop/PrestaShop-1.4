@@ -41,7 +41,7 @@
 			</li>
 		</ul>
 		<p>
-			<a href="{$link->getPageLink('prices-drop.php')}" title="{l s='All specials' mod='blockspecials'}" class="button_large_css">{l s='All specials' mod='blockspecials'}</a>
+			<a href="{$link->getPageLink('prices-drop.php')}" title="{l s='All specials' mod='blockspecials'}" class="button_large">{l s='All specials' mod='blockspecials'}</a>
 		</p>
 {else}
 		<p>{l s='No specials at this time' mod='blockspecials'}</p>
