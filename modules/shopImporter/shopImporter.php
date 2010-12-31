@@ -648,33 +648,38 @@ private function formatInsertLang($table, $fields, $identifier)
 				{
 					if (@fsockopen('www.prestashop.com', 80))
 					{
-						if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$iso.'.gzip'))
+						if ($lang_pack = json_decode(@file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso)))
 						{
-							$file = _PS_TRANSLATIONS_DIR_.$iso.'.gzip';
-							if (file_put_contents($file, $content))
+							if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$iso.'.gzip'))
 							{
-								require_once('../../tools/tar/Archive_Tar.php');
-								$gz = new Archive_Tar($file, true);
-								if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
+								$file = _PS_TRANSLATIONS_DIR_.$iso.'.gzip';
+								if (file_put_contents($file, $content))
 								{
-									if (!Language::checkAndAddLanguage($iso))
-										$errors[] = Tools::displayError('archive cannot be extracted');
-									else
+									require_once('../../tools/tar/Archive_Tar.php');
+									$gz = new Archive_Tar($file, true);
+									if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 									{
-										$newId = Language::getIdByIso($iso);
-										Db::getInstance()->Execute('UPDATE  `'._DB_PREFIX_.'lang`
-																	SET  `id_lang_'.$moduleName.'` =  '.$language['id_lang'].'
-																	WHERE  `id_lang` = '.$newId);
-										$errors[] = true;
+										if (!Language::checkAndAddLanguage($iso))
+											$errors[] = Tools::displayError('archive cannot be extracted');
+										else
+										{
+											$newId = Language::getIdByIso($iso);
+											Db::getInstance()->Execute('UPDATE  `'._DB_PREFIX_.'lang`
+																		SET  `id_lang_'.$moduleName.'` =  '.$language['id_lang'].'
+																		WHERE  `id_lang` = '.$newId);
+											$errors[] = true;
+										}
 									}
+									$errors[] = Tools::displayError('archive cannot be extracted');
 								}
-								$errors[] = Tools::displayError('archive cannot be extracted');
+								else
+									$errors[] = Tools::displayError('Server does not have permissions for writing');
 							}
 							else
-								$errors[] = Tools::displayError('Server does not have permissions for writing');
+								$errors[] = Tools::displayError('language not found');
 						}
 						else
-							$errors[] = Tools::displayError('language not found');
+							$errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com');
 					}
 					else
 						$errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com');

@@ -223,7 +223,7 @@ class LocalizationPackCore
 				$attributes = $data->attributes();
 				if(@fsockopen('www.prestashop.com', 80))
 				{
-					if ($lang_pack = json_decode(@file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso_code)))
+					if ($lang_pack = json_decode(@file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$attributes['iso_code'])))
 					{
 						$gz = new Archive_Tar('http://www.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$attributes['iso_code'].'.gzip', true);
 						if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
