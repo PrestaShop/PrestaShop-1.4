@@ -365,6 +365,7 @@ $_LANG['order-opc_21034ae6d01a83e702839a72ba8a77b0'] = 'HT';
 $_LANG['order-opc_ea295188b69aa5e04810abcc38b2b2be'] = 'a été sélectionné';
 $_LANG['order-opc_9504d494016e17a6de7e7b51da637bc4'] = 'Aucun transporteur n\'a été sélectionné';
 $_LANG['order-opc_238a062a6a2543fd85d6616a8506fbe8'] = 'Pas de transporteur nécessaire pour cette commande';
+$_LANG['order-opc_88b99d999766e043c9367b813b66cf58'] = 'Aucune condition générale de vente doit être acceptée';
 $_LANG['order-opc_889fd2ddcd304e00d3b35d94a06c74af'] = 'Les conditions générales de vente ont été acceptées';
 $_LANG['order-opc_4fe2be72ef313f5df1a8b9490f7da97e'] = 'Les conditions générales de vente n\'ont pas été acceptées';
 $_LANG['order-opc_4ce81305b7edb043d0a7a5c75cab17d0'] = 'Il y a';

@@ -112,10 +112,15 @@ function updateCarrierStatus()
 
 function updateTOSStatus()
 {
-	if ($('input#cgv:checked').length != 0)
-		$('#opc_block_3_status').css('color', 'green').html('<p>'+txtTOSIsAccepted+'</p>');
+	if (conditionEnabled)
+	{
+		if ($('input#cgv:checked').length != 0)
+			$('#opc_block_3_status').css('color', 'green').html('<p>'+txtTOSIsAccepted+'</p>');
+		else
+			$('#opc_block_3_status').css('color', 'red').html('<p>'+txtTOSIsNotAccepted+'</p>');
+	}
 	else
-		$('#opc_block_3_status').css('color', 'red').html('<p>'+txtTOSIsNotAccepted+'</p>');
+		$('#opc_block_3_status').css('color', 'green').html('<p>'+txtConditionsIsNotNeeded+'</p>');
 }
 
 function showPaymentModule()
@@ -224,7 +229,7 @@ function updateCarrierSelectionAndGift()
 	$.ajax({
        type: 'POST',
        url: baseDir + 'order-opc.php',
-       async: true,
+       async: false,
        cache: false,
        dataType : "json",
        data: 'ajax=true&method=updateCarrier&id_carrier=' + idCarrier + '&recyclable=' + recyclablePackage + '&gift=' + gift + '&gift_message=' + giftMessage + '&token=' + static_token ,
@@ -307,6 +312,14 @@ function manageButtonsEvents(button)
 {
 	var hasError = false;
 	var opc_button_clicked = button;	
+	
+	/* Exception cases + error tracking */
+	/**
+	 * #opc_block_1 : Login / Addresses
+	 * #opc_block_2 : Delivery Methods
+	 * #opc_block_3 : Terms of service
+	 * #opc_block_4 : Payment methods
+	 */
 	if (button.attr('href') == '#opc_block_2' && isVirtualCart == 1)
 	{
 		if ($('.opc_block_content:visible').attr('id') == 'opc_block_3')
@@ -314,11 +327,27 @@ function manageButtonsEvents(button)
 		else
 			button.attr('href', '#opc_block_3');
 	}
+	
 	if (button.attr('href') == '#opc_block_3' && $('input[name=id_carrier]:checked').length == 0 && isVirtualCart == 0)
 	{
 		alert(errorCarrier);
 		hasError = true;
 	}
+	
+	if (button.attr('href') == '#opc_block_3' && !hasError && !conditionEnabled)
+		if ($('.opc_block_content:visible').attr('id') == 'opc_block_4')
+		{
+			if (isVirtualCart == 1)
+				button.attr('href', '#opc_block_1');
+			else
+				button.attr('href', '#opc_block_2');
+		}
+		else
+		{
+			updateCarrierSelectionAndGift();
+			button.attr('href', '#opc_block_4');
+		}
+	
 	if (button.attr('href') == '#opc_block_4' && $('input[name=cgv]:checked').length == 0 && conditionEnabled)
 	{
 		alert(errorTOS);
@@ -359,7 +388,7 @@ $(function() {
 	$('#opc_block_'+step+'_status').hide();
 	
 	// Event
-	$('.opc_button').click(function() { manageButtonsEvents($(this)); });
+	$('.opc_button').click(function() { manageButtonsEvents($(this));return false; });
 
 	// GUEST CHECKOUT / NEW ACCOUNT MANAGEMENT
 	if ((!isLogged) || (isGuest))
