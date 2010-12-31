@@ -75,7 +75,7 @@ class ThemeInstallator extends Module
 		'blocknewsletter', 'blockpaymentlogo', 'blockpermanentlinks', 'blockrss', 'blocksearch', 'blockspecials', 'blocksupplier',
 		'blocktags', 'blockuserinfo', 'blockvariouslinks', 'blockviewed', 'blockwishlist', 'canonicalurl', 'cashondelivery', 'cheque',
 		'crossselling', 'dejala', 'editorial', 'feeder', 'followup', 'gadsense', 'ganalytics', 'gcheckout', 'graphartichow', 'graphgooglechart',
-		'graphvisifire', 'graphxmlswfcharts', 'gridextjs', 'gsitemap', 'hipay', 'homefeatured', 'loyalty', 'mailalerts', 'moneybookers',
+		'graphvisifire', 'graphxmlswfcharts', 'gridhtml', 'gsitemap', 'hipay', 'homefeatured', 'loyalty', 'mailalerts', 'moneybookers',
 		'newsletter', 'pagesnotfound', 'paypal', 'paypalapi', 'productcomments', 'productscategory', 'producttooltip', 'referralprogram', 'reverso',
 		'sekeywords', 'sendtoafriend', 'statsbestcategories', 'statsbestcustomers', 'statsbestproducts', 'statsbestsuppliers', 'statsbestvouchers',
 		'statscarrier', 'statscatalog', 'statscheckup', 'statsdata', 'statsequipment', 'statsgeolocation', 'statshome', 'statslive', 'statsnewsletter',
