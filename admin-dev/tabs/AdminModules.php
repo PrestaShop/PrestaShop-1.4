@@ -225,10 +225,25 @@ class AdminModules extends AdminTab
 							$this->_errors[] = Tools::displayError('This module is already uninstalled : ').$module->name;
 						elseif (($echo = $module->{$method}()) AND ($key == 'configure') AND Module::isInstalled($module->name))
 						{
-							echo '
-							<p><a href="'.$currentIndex.'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to modules list').'</a></p>
-							<br />'.$echo.'<br />
-							<p><a href="'.$currentIndex.'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to modules list').'</a></p>';
+							$backlink = $currentIndex.'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name;
+							$hooklink = 'index.php?tab=AdminModulesPositions&token='.Tools::getAdminTokenLite('AdminModulesPositions').'&show_modules='.(int)$module->id;
+							$tradlink = 'index.php?tab=AdminTranslations&token='.Tools::getAdminTokenLite('AdminTranslations').'&type=modules&lang=';
+							
+							$toolbar = '<table class="table" cellpadding="0" cellspacing="0" style="margin:auto;text-align:center"><tr>
+								<th><a href="'.$backlink.'" style="padding:5px 10px">'.$this->l('Back').'</a></th>
+								<th><a href="'.$hooklink.'" style="padding:5px 10px">'.$this->l('Manage hooks').'</a></th>
+								<th style="padding:5px 10px">'.$this->l('Manage translations:').' ';
+							foreach (Language::getLanguages(false) AS $language)
+								$toolbar .= '<a href="'.$tradlink.$language['iso_code'].'#'.$module->name.'" style="margin-left:5px">
+									<img src="'._THEME_LANG_DIR_.$language['id_lang'].'.jpg" alt="'.$language['iso_code'].'" title="'.$language['iso_code'].'" />
+								</a>';
+							$toolbar .= '</th>
+							</tr></table>';
+							
+							echo 
+							$toolbar.'
+							<div class="clear">&nbsp;</div>'.$echo.'<div class="clear">&nbsp;</div>
+							'.$toolbar;
 						}
 						elseif($echo)
 							$return = ($method == 'install' ? 12 : 13);

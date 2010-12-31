@@ -1590,13 +1590,15 @@ class AdminTranslations extends AdminTab
 			echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 			foreach ($allfiles AS $theme_name => $theme)
 				foreach ($theme AS $module_name => $module)
+				{
+					echo ''.$this->l('Module:').' <a name="'.$module_name.'" style="font-style:italic">'.$module_name.'</a>';
 					foreach ($module AS $template_name => $newLang)
 						if (sizeof($newLang))
 						{
 							$countValues = array_count_values($newLang);
 							$empty = isset($countValues['']) ? $countValues[''] : 0;
 							echo '
-							<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$theme_name.'_'.$module_name.'_'.$template_name.'\')">'.$theme_name.' - '.$template_name.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+							<fieldset style="margin-top:5px"><legend style="cursor : pointer" onclick="openCloseLayer(\''.$theme_name.'_'.$module_name.'_'.$template_name.'\')">'.$theme_name.' - '.$template_name.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 								<div name="modules_div" id="'.$theme_name.'_'.$module_name.'_'.$template_name.'" style="display: '.($empty ? 'block' : 'none').';">
 									<table cellpadding="2">';
 							foreach ($newLang AS $key => $value)
@@ -1612,6 +1614,7 @@ class AdminTranslations extends AdminTab
 								</div>
 							</fieldset><br />';
 						}
+				}
 			echo '<br /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /></form>';
 
 		}
