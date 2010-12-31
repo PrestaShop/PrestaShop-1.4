@@ -613,6 +613,9 @@
 							</p>
 							<input type="hidden" name="alias_invoice" id="alias_invoice" value="{l s='My Invoice address'}" />
 						</div>
+						<p>
+							<sup>*</sup>{l s='Required field'}
+						</p>
 						<!-- END Account -->
 						<p style="float: right;"><input type="submit" class="exclusive button" name="submitAccount" id="submitAccount" value="{l s='Continue'}" /></p>
 					</div>

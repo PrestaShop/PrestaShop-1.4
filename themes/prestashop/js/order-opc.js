@@ -288,12 +288,13 @@ function saveAddress(type)
        {
        		if (jsonData.hasError)
 			{
-				var errors = '';
+       			var errors = '<b>'+txtThereis+' '+jsonData.errors.length+' '+txtErrors+':</b><ol>';
 				for(error in jsonData.errors)
 					//IE6 bug fix
 					if(error != 'indexOf')
-						errors += jsonData.errors[error] + "\n";
-				alert(errors);
+						errors += '<li>'+jsonData.errors[error]+'</li>';
+				errors += '</ol>';
+				$('#opc_account_errors').html(errors).slideDown('slow');
 				return false;
 			}
 			// update addresses id
@@ -519,9 +520,19 @@ $(function() {
 						
 						// It's not a new customer
 						if ($('input#opc_id_customer').val() != '0')
-							saveAddress('delivery');
+						{
+							if (!saveAddress('delivery'))
+								return false;
+						}
+						
+						// update id_customer
+						$('input#opc_id_customer').val(jsonData.id_customer);
+						
 						if ($('#invoice_address:checked').length != 0)
-							saveAddress('invoice');
+						{
+							if (!saveAddress('invoice'))
+								return false;
+						}
 						
 						// update id_customer
 						$('input#opc_id_customer').val(jsonData.id_customer);

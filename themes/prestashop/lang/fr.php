@@ -462,6 +462,7 @@ $_LANG['order-opc_aee0c5ed0554d46465080ed36d1d93ab'] = 'Utiliser une adresse dif
 $_LANG['order-opc_783cb853aae6984e51583b3bb80c09d2'] = 'Adresse (2)';
 $_LANG['order-opc_d30f507473129e70c4b962ceccf175cf'] = 'Code postal';
 $_LANG['order-opc_2eac22e71eedb5bdb8f94a1354964017'] = 'Mon adresse de facturation';
+$_LANG['order-opc_19f823c6453c2b1ffd09cb715214813d'] = 'Champs requis';
 $_LANG['order-opc_6f05787682585c32498e88bcd2ea88fc'] = 'Méthodes de livraison';
 $_LANG['order-opc_c8c4080207cd4f02548c8cb6285bd16b'] = 'Aucun transporteur nécessaire pour cette commande';
 $_LANG['order-opc_8f90815af11493295587f91f571c2f95'] = 'Il n\'y pas de transporteur disponible pour livrer à cette adresse !';
