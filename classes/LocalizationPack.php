@@ -221,17 +221,27 @@ class LocalizationPackCore
 			foreach ($xml->languages->language as $data)
 			{
 				$attributes = $data->attributes();
-				$gz = new Archive_Tar('http://www.prestashop.com/download/lang_packs/gzip/'.$attributes['iso_code'].'.gzip', true);
-				if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
+				if(@fsockopen('www.prestashop.com', 80))
 				{
-					$this->_errors[] = Tools::displayError('Cannot decompress the translation file of the language: ').strval($attributes['iso_code']);
-					return false;
+					if ($lang_pack = json_decode(@file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso_code)))
+					{
+						$gz = new Archive_Tar('http://www.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$attributes['iso_code'].'.gzip', true);
+						if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
+						{
+							$this->_errors[] = Tools::displayError('Cannot decompress the translation file of the language: ').strval($attributes['iso_code']);
+							return false;
+						}
+						if (!Language::checkAndAddLanguage(strval($attributes['iso_code'])))
+						{
+							$this->_errors[] = Tools::displayError('An error occurred while creating the language: ').strval($attributes['iso_code']);
+							return false;
+						}
+					}
+					else 
+					$this->_errors[] = Tools::displayError('Error occurred from prestashop.com when language was checked according to your Prestashop version.');
 				}
-				if (!Language::checkAndAddLanguage(strval($attributes['iso_code'])))
-				{
-					$this->_errors[] = Tools::displayError('An error occurred while creating the language: ').strval($attributes['iso_code']);
-					return false;
-				}
+				else
+					$this->_errors[] = Tools::displayError('Archive cannot be downloaded from prestashop.com');
 			}
 		return true;
 	}
