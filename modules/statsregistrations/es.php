@@ -7,6 +7,7 @@ $_MODULE['<{statsregistrations}prestashop>statsregistrations_54c04cc0d869c12ea9f
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_75abad0b891bc086fd4837e81a8c488a'] = 'Visitantes que no han pasado de la suscripción:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_0d298316c16a0bbdb74d50ead21590b4'] = 'Visitantes que han efectuado un pedido directamente después de suscribirse:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_a751e9cc4ed4c7585ecc0d97781cb48a'] = 'Total cuentas cliente:';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_998e4c5c80f27dec552e99dfed34889a'] = 'CSV Export';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guía';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_fba0e64541196123bbf8e3737bf9287b'] = 'Número de clientes que han creado una cuenta';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_15d820295ae2d9d7e6d53e1ed9714273'] = 'El número total de cuentas creadas no es en sí misma información importante. Sin embargo, es interesante analizar la cantidad creada en un cierto plazo. Esto indicará de una manera u otra  si las cosas van por buen camino.';

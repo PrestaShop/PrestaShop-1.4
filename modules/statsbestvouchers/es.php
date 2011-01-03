@@ -10,3 +10,4 @@ $_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_11ff9f68afb6b8b5b8eda
 $_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_df25596dc94d556af2f1823725118572'] = 'Total utilizado';
 $_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_b769cee333527b8dc6f3f67882e35a0b'] = 'Mejores vales descuento';
 $_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_8fc8a29113479bf76f0917c51795ca99'] = 'Lista de mejores vales descuento';
+$_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_998e4c5c80f27dec552e99dfed34889a'] = 'CSV Export';

@@ -12,5 +12,5 @@ $_MODULE['<{statsdata}prestashop>statsdata_5afa2e01daede51283baba1bee4d82e2'] = 
 $_MODULE['<{statsdata}prestashop>statsdata_8d48af0cf690377bfbf8963f995fdf47'] = 'Guardar las páginas vistas globales';
 $_MODULE['<{statsdata}prestashop>statsdata_9da6db806e64ef79cdcf2d4698d85ce2'] = 'Las páginas vistas necesitan menos recursos que el detalle por cliente, pero siguen necesitando bastantes.';
 $_MODULE['<{statsdata}prestashop>statsdata_48f08588e7f264b5ea1e7ea56ed768f6'] = 'Detección de plug-ins';
-$_MODULE['<{statsdata}prestashop>statsdata_54e5f8bdd6c51a73d79ed702cdc9ac05'] = 'La detección de plug-ins carga un archivo javascript de 20ko suplementarios para los nuevos visitantes.';
+$_MODULE['<{statsdata}prestashop>statsdata_baf9d6f7a4bfb4e238d2b12542712084'] = 'La detección de plug-ins carga un archivo javascript de 20ko suplementarios para los nuevos visitantes.';
 $_MODULE['<{statsdata}prestashop>statsdata_06933067aafd48425d67bcb01bba5cb6'] = 'Actualizar';

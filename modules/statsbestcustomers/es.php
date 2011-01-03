@@ -13,6 +13,7 @@ $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_57f32d7d0e6672cc2b6
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_1ff1b62d08d1195f073c6adac00f1894'] = 'Dinero enviado';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_8b83489bd116cb60e2f348e9c63cd7f6'] = 'Mejores clientes';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cdc31cfb8cc370e79d854a2f82849dd2'] = 'Lista de los mejores clientes';
+$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_998e4c5c80f27dec552e99dfed34889a'] = 'CSV Export';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guía';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cb21e843b037359d0fb5b793fccf964f'] = 'Desarrolle la fidelidad de sus clientes';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_ddc52d619df96876824d6cdfa9dbd4a0'] = 'Mantener un cliente satisfecho es más rentable que captar uno nuevo. Por lo tanto, es necesario ganarse su lealtad, para que vuelva a su tienda.';

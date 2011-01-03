@@ -70,6 +70,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_49ee3087348e8d44e1feda1
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_15bbb9d0bbf25e8d2978de1168c749dc'] = 'Sitio Web';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_d721757161f7f70c5b0949fdb6ec2c30'] = 'Tema';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_f4f10e7d35bef4e7b48e76ee4bdeae24'] = 'El nombre de su tema';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Descripción';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_742ec436610daf7b51a1ba94039adf78'] = 'Introduzca una descripción breve de su tema';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_34b6cd75171affba6957e308dcbd92be'] = 'Versión';
@@ -77,6 +78,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_7da6f328a4647adb2b96a01
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_333dfbe2bb5c64b140df4607935ec8be'] = 'Compatible a partir de ';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_e12167aa0a7698e6ebc92b4ce3909b53'] = 'Hasta';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a82cac3db0465cfc701f3765fd880019'] = 'Añadir una documentación';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_f1c8be3c773e0ebb943f7259e7033adf'] = 'Ayudar al usuario. Añadir un campo pulsando aquí';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a508df4b049c5b044cb4568b76b6c7e6'] = 'Añadir una variación';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6a7b29a06022b8e648ba29c3cff429d5'] = 'Seleccione otro tema y su contabilidad para incluir';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ac70412e939d72a9234cdebb1af5867b'] = 'Camino';

@@ -13,12 +13,12 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7ccf58c950043c9fbfed668df13
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_ecfe3ba0ff66a97029088e8e90a3f051'] = 'Plazo mínimo incorrecto';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0245cd1cce5ecea8eb23b043be00d80a'] = 'Plazo máximo incorrecto';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_e6843321c8b0edea8cf333519316ed7b'] = 'Transportista no válido';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_064962f53fa7cb12b124d6a7c9486363'] = 'No puede utilizar ningún transportista, ya se ha registrado una regla';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_2a303931eec9986d9161cd47cf9f3705'] = 'No puede utilizar ningún transportista, ya se ha registrado una regla';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_4c17dd5a837bfe49a98fea2f9d00b78c'] = 'Se ha producido un error al añadir la regla';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_d0853b509396370c9f192e151b8d1096'] = 'Se ha producido un error al configurar la regla';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_b9e3eda70ccb175c96a56bd79b89bd8b'] = 'Regla de transportista suprimida con éxito';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_25e775663057cfc945da15827d972699'] = 'Regla de transportista añadida con éxito';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_c20585756aa4f1b448a11ce77a054e32'] = 'Regla de transportista actualizada con éxito';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_6e2523984e15e5a97656eb6b1d5510e6'] = 'Regla de transportista suprimida con éxito';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_aaf25471dc6ebf54bd5a4e397056f32f'] = 'Regla de transportista añadida con éxito';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_511b1e7b6e62149db2c1e7f4d5b619b6'] = 'Regla de transportista actualizada con éxito';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_2b5bf8ae8e565a30e2f05c856f5f5f8b'] = 'Configuración del transportista';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_e6ff622b31d0cd1c32c775d1e1f20831'] = 'Añadir una nueva regla de transportista';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_1b2995b648d396416ae8648d719e1a20'] = 'Lista de las reglas de transportista';

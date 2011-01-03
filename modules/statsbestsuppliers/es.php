@@ -10,3 +10,4 @@ $_MODULE['<{statsbestsuppliers}prestashop>statsbestsuppliers_2a0440eec72540c5b30
 $_MODULE['<{statsbestsuppliers}prestashop>statsbestsuppliers_ea067eb37801c5aab1a1c685eb97d601'] = 'Total pagado';
 $_MODULE['<{statsbestsuppliers}prestashop>statsbestsuppliers_cc3eb9ba7d0e236f33023a4744d0693a'] = 'Mejores proveedores';
 $_MODULE['<{statsbestsuppliers}prestashop>statsbestsuppliers_0fbee5f62b2695e84a5eb275bcf98c6f'] = 'Lista de los mejores proveedores';
+$_MODULE['<{statsbestsuppliers}prestashop>statsbestsuppliers_998e4c5c80f27dec552e99dfed34889a'] = 'CSV Export';

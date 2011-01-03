@@ -7,6 +7,7 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_c6ba5355c465de317197693762c97e74'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_c5a847354ae407403ec0b589e5bcc89e'] = '¿Está seguro de querer suprimir todas las notificaciones de los clientes?';
 $_MODULE['<{mailalerts}prestashop>mailalerts_7cb9a154f101c674c945f88dad5c5e28'] = 'No hay mensaje';
 $_MODULE['<{mailalerts}prestashop>mailalerts_9137796c15dd92e5553c3f29574d0968'] = 'Código del vale:';
+$_MODULE['<{mailalerts}prestashop>mailalerts_4c9120f1a5947445c0e9620254ceb30b'] = 'Nuevo pedido';
 $_MODULE['<{mailalerts}prestashop>mailalerts_644f9c907ef5a8315916bd1e2f61f783'] = 'Este producto no está en stock';
 $_MODULE['<{mailalerts}prestashop>mailalerts_7a608706e248c21437882f5d1a8ece3a'] = 'Notificación al cliente';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ea379dd90c33c1345f40aa0afa6688d8'] = 'Disponibilidad del producto:';
