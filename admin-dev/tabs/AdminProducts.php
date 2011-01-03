@@ -169,7 +169,7 @@ class AdminProducts extends AdminTab
 		{
 			if ($this->tabAccess['add'] === '1')
 			{
-				
+
 				$languages = Language::getLanguages(false);
 				foreach ($languages AS $language)
 				{
@@ -195,14 +195,14 @@ class AdminProducts extends AdminTab
 							@unlink($_FILES['attachment_file']['tmp_name']);
 						}
 					}
-					else if ((int)$_FILES['attachment_file']['error'] === 1) 
+					else if ((int)$_FILES['attachment_file']['error'] === 1)
 					{
 						$max_upload = (int)(ini_get('upload_max_filesize'));
 						$max_post = (int)(ini_get('post_max_size'));
 						$upload_mb = min($max_upload, $max_post);
 						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceeds the weight allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 					}
-					
+
 					if(empty($this->_errors) && isset($uniqid))
 					{
 						$attachment = new Attachment();
@@ -890,7 +890,7 @@ class AdminProducts extends AdminTab
 		@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$product->id.'.jpg');
 		return ((isset($id_image) AND is_int($id_image) AND $id_image) ? $id_image : true);
 	}
-	
+
 	public function uploadImageZip($product)
 	{
 		// Move the ZIP file to the img/tmp directory
@@ -899,11 +899,11 @@ class AdminProducts extends AdminTab
 			$this->_errors[] = Tools::displayError('An error occurred during the ZIP file upload');
 			return false;
 		}
-		
+
 		// Unzip the file to a subdirectory
 		$zip = new ZipArchive();
 		$subdir = _PS_TMP_IMG_DIR_.uniqid().'/';
-		
+
 		try
 		{
 			if ($zip->open($zipfile) !== true OR !mkdir($subdir, 0777) OR !$zip->extractTo($subdir) OR !$zip->close())
@@ -917,20 +917,20 @@ class AdminProducts extends AdminTab
 			{
 				if ($file[0] == '.')
 					continue;
-				
+
 				// Create image object
 				$image = new Image();
 				$image->id_product = (int)$product->id;
 				$image->position = ++$highestPosition;
 				$image->cover = ($highestPosition == 1 ? true : false);
-				
+
 				// Call automated copy function
 				$this->validateRules('Image', 'image');
 				$this->copyFromPost($image, 'image');
-				
+
 				if (sizeof($this->_errors))
 					throw new Exception('');
-				
+
 				if (!$image->add())
 					throw new Exception(Tools::displayError('error while creating additional image'));
 
@@ -939,7 +939,7 @@ class AdminProducts extends AdminTab
 					$image->delete();
 					throw new Exception(Tools::displayError('image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('KB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('KB'));
 				}
-				
+
 				$ext = substr($file, -4);
 				$type = (isset($types[$ext]) ? $types[$ext] : '');
 				if (!isPicture(array('tmp_name' => $subdir.$file, 'type' => $type)))
@@ -971,7 +971,7 @@ class AdminProducts extends AdminTab
 			Tools::deleteDirectory($subdir);
 			return false;
 		}
-		
+
 		Tools::deleteDirectory($subdir);
 		return true;
 	}
@@ -2279,7 +2279,7 @@ class AdminProducts extends AdminTab
 			<?php if($productDownload->id) echo '<input type="hidden" id="virtual_product_id" name="virtual_product_id" value="'.$productDownload->id.'" />' ?>
 				<p class="block">
 	<?php if(!$productDownload->checkFile()): ?>
-	
+
 				<div style="padding:5px;width:50%;float:left;margin-right:20px;border-right:1px solid #E0D0B1">
 		<?php if($productDownload->id): ?>
 					<p class="alert" id="file_missing">
@@ -2309,10 +2309,10 @@ class AdminProducts extends AdminTab
 					<input type="text" id="virtual_product_name" name="virtual_product_name" style="width:200px" value="<?php echo $productDownload->id > 0 ? $productDownload->display_filename : htmlentities(Tools::getValue('virtual_product_name'), ENT_COMPAT, 'UTF-8') ?>" />
 					<span class="hint" name="help_box" style="display:none;"><?php echo $this->l('The full filename with its extension (e.g., Book.pdf)') ?></span>
 				</p>
-				
+
 				</div>
 				<div style="padding:5px;width:40%;float:left;margin-left:10px">
-				
+
 				<p class="block">
 					<label for="virtual_product_nb_downloable" class="t"><?php echo $this->l('Number of downloads') ?></label>
 					<input type="text" id="virtual_product_nb_downloable" name="virtual_product_nb_downloable" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_downloadable : htmlentities(Tools::getValue('virtual_product_nb_downloable'), ENT_COMPAT, 'UTF-8') ?>" class="" size="6" />
@@ -2384,7 +2384,10 @@ class AdminProducts extends AdminTab
 						foreach ($tax_rules_groups AS $tax_rules_group)
 							echo '<option value="'.$tax_rules_group['id_tax_rules_group'].'" '.(($this->getFieldValue($obj, 'id_tax_rules_group') == $tax_rules_group['id_tax_rules_group']) ? ' selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($tax_rules_group['name']).'</option>';
 
-				echo '</select>';
+				echo '</select>
+
+				<a href="?tab=AdminTaxRulesGroup&addtax_rules_group&token='.Tools::getAdminToken('AdminTaxRulesGroup'.(int)(Tab::getIdFromClassName('AdminTaxRulesGroup')).(int)($cookie->id_employee)).'&id_product='.(int)$obj->id.'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
+				';
 				if (Tax::excludeTaxeOption())
 				{
 					echo '<span style="margin-left:10px; color:red;">'.$this->l('Taxes are currently disabled').'</span> (<b><a href="index.php?tab=AdminTaxes&token='.Tools::getAdminToken('AdminTaxes'.(int)(Tab::getIdFromClassName('AdminTaxes')).(int)($cookie->id_employee)).'">'.$this->l('Tax options').'</a></b>)';
@@ -2749,9 +2752,9 @@ class AdminProducts extends AdminTab
 		}
 		toggleVirtualProduct(getE(\'is_virtual_good\'));
 		unitPriceWithTax(\'unit\');';
-		
+
 		$categoryBox = Tools::getValue('categoryBox', array());
-		
+
 		echo '
 		$(function() {
 			$.ajax({

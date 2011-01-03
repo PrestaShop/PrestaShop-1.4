@@ -52,7 +52,9 @@ class AdminTaxRulesGroup extends AdminTab
 		$obj = $this->loadObject(true);
 		$tax_rules = isset($obj->id) ? $tax_rules = TaxRule::getTaxRulesByGroupId($obj->id) : array();
 
-        echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
+        $param_product = Tools::getValue('id_product') ? '&id_product='.Tools::getValue('id_product') : '';
+
+        echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.$param_product.'" method="post">
 		        '.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
     			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>
     			<input type="hidden" name="tabs" id="tabs" value="0" />
@@ -74,7 +76,8 @@ class AdminTaxRulesGroup extends AdminTab
 				<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
             </div>
     		<div class="margin-form">
-				<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
+				<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;
+				<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" />
 			</div>';
 
         echo '<br />';
@@ -123,7 +126,8 @@ class AdminTaxRulesGroup extends AdminTab
              '</div>';
         echo '
     		<div class="margin-form" style="margin-top: 10px">
-				<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
+				<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;&nbsp;
+				<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" />
 			</div>
             </fieldset>
             </form>';
@@ -304,6 +308,121 @@ class AdminTaxRulesGroup extends AdminTab
             }
 
        }
+   }
+
+
+   public function postProcess()
+   {
+
+        global $currentIndex, $cookie;
+		if (!isset($this->table))
+			return false;
+
+		// set token
+		$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;
+
+        if (Tools::getValue('submitAdd'.$this->table))
+		{
+		    $id_product = Tools::getValue('id_product');
+
+			/* Checking fields validity */
+			$this->validateRules();
+			if (!sizeof($this->_errors))
+			{
+				$id = (int)(Tools::getValue($this->identifier));
+
+				/* Object update */
+				if (isset($id) AND !empty($id))
+				{
+					if ($this->tabAccess['edit'] === '1')
+					{
+						$object = new $this->className($id);
+						if (Validate::isLoadedObject($object))
+						{
+							/* Specific to objects which must not be deleted */
+							if ($this->deleted AND $this->beforeDelete($object))
+							{
+								// Create new one with old objet values
+								$objectNew = new $this->className($object->id);
+								$objectNew->id = NULL;
+								$objectNew->date_add = '';
+								$objectNew->date_upd = '';
+
+								// Update old object to deleted
+								$object->deleted = 1;
+								$object->update();
+
+								// Update new object with post values
+								$this->copyFromPost($objectNew, $this->table);
+								$result = $objectNew->add();
+								if (Validate::isLoadedObject($objectNew))
+									$this->afterDelete($objectNew, $object->id);
+							}
+							else
+							{
+								$this->copyFromPost($object, $this->table);
+								$result = $object->update();
+								$this->afterUpdate($object);
+							}
+							if (!$result)
+								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
+							elseif ($this->postImage($object->id) AND !sizeof($this->_errors))
+							{
+								$parent_id = (int)(Tools::getValue('id_parent', 1));
+
+								// Save and stay on same form
+								if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
+									Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&update'.$this->table.'&token='.$token);
+
+								// Default behavior (save and back)
+								$id_product = (int)Tools::getValue('id_product');
+								if ($id_product)
+    								Tools::redirectAdmin('?tab=AdminCatalog&id_product='.$id_product.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
+
+								Tools::redirectAdmin($currentIndex.($parent_id ? '&'.$this->identifier.'='.$object->id : '').'&conf=3&token='.$token);
+							}
+						}
+						else
+							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					}
+					else
+						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				}
+
+				/* Object creation */
+				else
+				{
+					if ($this->tabAccess['add'] === '1')
+					{
+						$object = new $this->className();
+						$this->copyFromPost($object, $this->table);
+						if (!$object->add())
+							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
+						{
+							$parent_id = (int)(Tools::getValue('id_parent', 1));
+							$this->afterAdd($object);
+							// Save and stay on same form
+							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
+								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$token);
+
+
+							$id_product = (int)Tools::getValue('id_product');
+							if ($id_product)
+   								Tools::redirectAdmin('?tab=AdminCatalog&id_product='.$id_product.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
+
+							Tools::redirectAdmin($currentIndex.($parent_id ? '&'.$this->identifier.'='.$object->id : '').'&conf=3&token='.$token);
+							// Default behavior (save and back)
+							Tools::redirectAdmin($currentIndex.($parent_id ? '&'.$this->identifier.'='.$object->id : '').'&conf=3&token='.$token);
+						}
+					}
+					else
+						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				}
+			}
+			$this->_errors = array_unique($this->_errors);
+		}
+		parent::postProcess();
    }
 }
 

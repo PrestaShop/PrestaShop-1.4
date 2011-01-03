@@ -2458,6 +2458,7 @@ $_LANGADM['AdminTaxRulesGroup6252c0f2c2ed83b7b06dfca86d4650bb'] = 'Caractères i
 $_LANGADM['AdminTaxRulesGroup0099c0173a3c7758b36025bdae9b4fc7'] = 'Actif';
 $_LANGADM['AdminTaxRulesGroupb9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_LANGADM['AdminTaxRulesGroup38fb7d24e0d60a048f540ecb18e13376'] = 'Sauvegarder';
+$_LANGADM['AdminTaxRulesGroup9ea67be453eaccf020697b4654fc021a'] = 'Sauvegarder et Rester';
 $_LANGADM['AdminTaxRulesGroupb1c94ca2fbc3e78fc30069c8d0f01680'] = 'Tous';
 $_LANGADM['AdminTaxRulesGroup9639e32cab248434a17ab32237cb3b71'] = 'Appliquer';
 $_LANGADM['AdminTaxRulesGroup7543e41a76c45a215627c46f4a2f4c81'] = 'Appliquer uniquement la taxe du produit';
