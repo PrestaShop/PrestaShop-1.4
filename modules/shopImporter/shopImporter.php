@@ -165,6 +165,7 @@ class shopImporter extends ImportModule
 					var importHasErrors = "'.$this->l('Please fix errors before continuing').'"
 					var importFinish = "'.$this->l('The import is completed').'"
 					var truncateTable = "'.$this->l('Remove data').'"
+					var oneThing = "'.$this->l('Please choose one thing to import').'"
 				</script>
 				<style>
 					.margin-form{padding: 0px 0px 1em 120px;width:300px;}
@@ -217,17 +218,18 @@ class shopImporter extends ImportModule
 					</div>
 					<hr>
 					<div style="display:none" id="importOptions">
-					<h2>'.$this->l('Import Options').'</h2>';
+					<h2>'.$this->l('Import Options').'</h2>
+					<div id="importOptionsYesNo">';
 					foreach($this->supportedImports as $key => $import)
 					{
 						$html .= '<label>'.$import['name'].' : </label>
 									<div class="margin-form">
-										<label class="t"><img src="../img/admin/enabled.gif" alt="Oui" title="Oui"></label>
+										<label class="t"><img src="../img/admin/enabled.gif" alt="Yes" title="Yes"></label>
 										<input type="radio" id="'.$import['identifier'].'_on'.'" name="'.$import['methodName'].'" class="'.$key.'" value="1" checked="checked">
-										<label class="t" for="'.$import['identifier'].'_on'.'"> Oui</label>&nbsp;&nbsp;
-										<label class="t"><img src="../img/admin/disabled.gif" alt="Non" title="Non" style="margin-left: 10px;"></label>
+										<label class="t" for="'.$import['identifier'].'_on'.'">'.$this->l('Yes').'</label>&nbsp;&nbsp;
+										<label class="t"><img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;"></label>
 										<input type="radio" id="'.$import['identifier'].'_off'.'" name="'.$import['methodName'].'" class="'.$key.'" value="0">
-										<label class="t" for="'.$import['identifier'].'_off'.'"> Non</label>&nbsp;&nbsp;
+										<label class="t" for="'.$import['identifier'].'_off'.'">'.$this->l('No').'</label>&nbsp;&nbsp;
 										'.(array_key_exists('delete', $import) ? '
 										<label class="t"><img src="../img/admin/delete.gif" alt="Delete" title="Delete"></label>
 										<input type="checkbox" class="truncateTable" id="'.$key.'" name="delete_'.$import['name'].'">
@@ -235,7 +237,7 @@ class shopImporter extends ImportModule
 										(array_key_exists('info', $import) ? '<p>'.$import['info'].'</p>' : '').'
 									</div>';
 					}
-					$html .= '<hr>
+					$html .= '</div><hr>
 					<h2>'.$this->l('Advanced Options').'</h2>
 					<div class="warn" id="warnSkip" style="display:none"><img src="../img/admin/warn2.png">
 					'.$this->l('This mode is dangerous').'
@@ -724,8 +726,8 @@ private function formatInsertLang($table, $fields, $identifier)
 				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'category` AUTO_INCREMENT = 2 ');
 /*
 				foreach (scandir(_PS_CAT_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-						@unlink(_PS_CAT_IMG_DIR_.$d);
+					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d))
+						unlink(_PS_CAT_IMG_DIR_.$d);
 */
 			break;
 			case 'product' :
@@ -738,12 +740,8 @@ private function formatInsertLang($table, $fields, $identifier)
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
 /*
 				foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-[0-9]+\-(.*)\.jpg$/', $d)
-								OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d)
-								OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
-					{
-						@unlink(_PS_PROD_IMG_DIR_.$d);
-					}
+					if (preg_match('/^[0-9]+\-[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
+						unlink(_PS_PROD_IMG_DIR_.$d);
 */
 				break;
 			case 'Manufacturers' :
@@ -751,8 +749,8 @@ private function formatInsertLang($table, $fields, $identifier)
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'manufacturer_lang');
 /*
 				foreach (scandir(_PS_MANU_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
-						@unlink(_PS_MANU_IMG_DIR_.$d);
+					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d))
+						unlink(_PS_MANU_IMG_DIR_.$d);
 */
 				break;
 			case 'Suppliers' :
@@ -760,7 +758,8 @@ private function formatInsertLang($table, $fields, $identifier)
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'supplier_lang');
 				foreach (scandir(_PS_SUPP_IMG_DIR_) AS $d)
 /*
-					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
+				foreach (scandir(_PS_SUPP_IMG_DIR_) AS $d)
+					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d))
 						unlink(_PS_SUPP_IMG_DIR_.$d);
 */
 				break;

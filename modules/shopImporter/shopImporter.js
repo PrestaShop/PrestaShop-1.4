@@ -72,7 +72,7 @@ var shopImporter = {
 	       },
 	      error: function(XMLHttpRequest, textStatus, errorThrown) 
 	       {
-	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR\nDetails:\nError thrown: ' + XMLHttpRequest + '\n' + 'Text status: ' + textStatus+'</div>');
+	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR<br><br>Details: '+XMLHttpRequest.responseText+'</div>');
 	       		$('#technical_error_feedback').fadeIn('slow');
 	       		
 	       }
@@ -90,7 +90,7 @@ var shopImporter = {
 			shopImporter.getDatas(conf[shopImporter.idMethod]);
 			return;
 		}
-		if (!$('#ok_feedback_'+methodName[0]).length)
+		if (typeof(methodName) != 'undefined' && !$('#ok_feedback_'+methodName[0]).length)
 			$('#steps').html($('#steps').html()+'<div id="ok_feedback_'+methodName[0]+'" style="display:none;" class="import"><img src="'+this.srcImport+'">'+methodName[1]+'<span id="display_error_'+methodName[0]+'" style="display:none"><span><div id="feedback_'+methodName[0]+'_errors_list"></div></div>');
 			$('#ok_feedback_'+methodName[0]).css('display', '');
 			$('#checkAndSaveConfig').fadeIn('slow');
@@ -167,7 +167,7 @@ var shopImporter = {
 	       },
 	       error: function(XMLHttpRequest, textStatus, errorThrown) 
 	       {
-	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR\nDetails:\nError thrown: ' + XMLHttpRequest + '\n' + 'Text status: ' + textStatus+'</div>');
+	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR<br><br>Details: '+XMLHttpRequest.responseText+'</div>');
 	       		$('#technical_error_feedback').fadeIn('slow');
 	       		$('#checkAndSaveConfig').fadeIn('slow');
 	       }
@@ -218,7 +218,7 @@ var shopImporter = {
 	    	},
 	    	error: function(XMLHttpRequest, textStatus, errorThrown) 
 	       {
-	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR\nDetails:\nError thrown: ' + XMLHttpRequest + '\n' + 'Text status: ' + textStatus+'</div>');
+	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR<br><br>Details: '+XMLHttpRequest.responseText+'</div>');
 	       		$('#technical_error_feedback').fadeIn('slow');
 	       		$('#checkAndSaveConfig').fadeIn('slow');
 	       }
@@ -330,7 +330,6 @@ $(document).ready(function(){
 		return false;
 	});	
 	
-	//
 	$('#checkAndSaveConfig').unbind('click').click(function(){
 		$('#steps').html('');
 		shopImporter.specificOptions = '';
@@ -349,6 +348,26 @@ $(document).ready(function(){
 			shopImporter.hasErrors = $('input[name=hasErrors]:radio:checked').val();
 			shopImporter.checkAndSaveConfig(shopImporter.save);
 		return false;
+		
 	});	
+	
+	$('#importOptionsYesNo :radio').change( function () {
+		$('#steps').html('');
+		onThing = false;
+		
+		$('#importOptionsYesNo :radio:checked').each( function () {
+			if ($(this).attr('value') == 1)
+				onThing = true;
+		});
+		if (onThing)
+			$('#checkAndSaveConfig').fadeIn();
+		else
+		{
+			$('#checkAndSaveConfig').fadeOut();
+			$('#steps').html('<div id="one_thing_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+oneThing+'</div>');
+			$('#one_thing_error_feedback').fadeIn('slow');
+		}			
+	});
+	
 	
 });
