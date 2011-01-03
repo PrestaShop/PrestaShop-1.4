@@ -54,11 +54,11 @@ class AdminModules extends AdminTab
 		
 		$this->listTabModules = array('administration' => $this->l('Administration'), 'advertising_marketing' => $this->l('Advertising & Marketing'),
 		 'analytics_stats' => $this->l('Analytics & Stats'), 'billing_invoicing' => $this->l('Billing & Invoicing'), 'checkout' => $this->l('Checkout'),
-		 'content_management' => $this->l('Content Management'), 'export' => $this->l('Export'), 'front_office_features' => $this->l('Front office features'),
-		 'i18n_localization' => $this->l('I18n & Localization'), 'merchandizing' => $this->l('Merchandizing'), 'migration_tools' => $this->l('Migration tools'),
+		 'content_management' => $this->l('Content Management'), 'export' => $this->l('Export'), 'front_office_features' => $this->l('Front Office Features'),
+		 'i18n_localization' => $this->l('I18n & Localization'), 'merchandizing' => $this->l('Merchandizing'), 'migration_tools' => $this->l('Migration Tools'),
 		 'payments_gateways' => $this->l('Payments & Gateways'), 'payment_security' => $this->l('Payment Security'), 'pricing_promotion' => $this->l('Pricing & Promotion'),
 		 'quick_bulk_update' => $this->l('Quick / Bulk update'), 'search_filter' => $this->l('Search & Filter'), 'seo' => $this->l('SEO'), 'shipping_logistics' => $this->l('Shipping & Logistics'),
-		 'slideshows' => $this->l('Slideshows'), 'smart_shopping' => $this->l('Smart shopping'), 'social_networks' => $this->l('Social Networks'), 'others'=> $this->l('Others Modules'));
+		 'slideshows' => $this->l('Slideshows'), 'smart_shopping' => $this->l('Smart Shopping'), 'social_networks' => $this->l('Social Networks'), 'others'=> $this->l('Other Modules'));
 		 
 		 $xmlModules = @simplexml_load_file($this->_moduleCacheFile);
 
