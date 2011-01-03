@@ -591,15 +591,22 @@ class Loyalty extends Module
 	public function hookAdminCustomers($params)
 	{
 		include_once(dirname(__FILE__).'/LoyaltyModule.php');
+		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
 		
-		$customer = new Customer((int)($params['id_customer']));
+		$customer = new Customer((int)$params['id_customer']);
 		if ($customer AND !Validate::isLoadedObject($customer))
 			die(Tools::displayError('Incorrect object Customer.'));
 
-		$fidelities = LoyaltyModule::getAllByIdCustomer((int)($params['id_customer']), (int)($params['cookie']->id_lang));
-		$points = (int)(LoyaltyModule::getPointsByCustomer((int)($params['id_customer'])));
+		$details = LoyaltyModule::getAllByIdCustomer((int)$params['id_customer'], (int)$params['cookie']->id_lang);
+		$points = (int)LoyaltyModule::getPointsByCustomer((int)$params['id_customer']);
 
-		$html = '<h2>'.$this->l('Loyalty points').'</h2>
+		$html = '
+		<br /><h2>'.$this->l('Loyalty points').' ('.(int)$points.' '.$this->l('points').')</h2>';
+		
+		if (!$points)
+			return $html.' '.$this->l('This customer has no points');
+		
+		$html .= '
 		<table cellspacing="0" cellpadding="0" class="table">
 			<tr style="background-color:#F5E9CF; padding: 0.3em 0.1em;">
 				<th>'.$this->l('Order').'</th>
@@ -608,14 +615,14 @@ class Loyalty extends Module
 				<th>'.$this->l('Points').'</th>
 				<th>'.$this->l('Points Status').'</th>
 			</tr>';
-		foreach ($fidelities AS $key => $loyalty)
+		foreach ($details AS $key => $loyalty)
 		{
 			$html.= '
-			<tr style="background-color: '.($key%2!=0 ? '#FFF6CF' : '#FFFFFF').';">
-				<td>'.((int)($loyalty['id']) > 0 ? '<a style="color: #268CCD; font-weight: bold; text-decoration: underline;" href="index.php?tab=AdminOrders&id_order='.$loyalty['id'].'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($params['cookie']->id_employee)).'">'.$this->l('#').sprintf('%06d', $loyalty['id']).'</a>' : '--').'</td>
+			<tr style="background-color: '.($key % 2 != 0 ? '#FFF6CF' : '#FFFFFF').';">
+				<td>'.((int)$loyalty['id'] > 0 ? '<a style="color: #268CCD; font-weight: bold; text-decoration: underline;" href="index.php?tab=AdminOrders&id_order='.$loyalty['id'].'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($params['cookie']->id_employee)).'">'.$this->l('#').sprintf('%06d', $loyalty['id']).'</a>' : '--').'</td>
 				<td>'.Tools::displayDate($loyalty['date'], (int)($params['cookie']->id_lang)).'</td>
-				<td>'.((int)($loyalty['id']) > 0 ? $loyalty['total_without_shipping'] : '--').'</td>
-				<td>'.$loyalty['points'].'</td>
+				<td>'.((int)$loyalty['id'] > 0 ? $loyalty['total_without_shipping'] : '--').'</td>
+				<td>'.(int)$loyalty['points'].'</td>
 				<td>'.$loyalty['state'].'</td>
 			</tr>';
 		}
@@ -624,9 +631,10 @@ class Loyalty extends Module
 				<td>&nbsp;</td>
 				<td colspan="2" class="bold" style="text-align: right;">'.$this->l('Total points available:').'</td>
 				<td>'.$points.'</td>
-				<td>'.$this->l('Voucher value:').' '.Tools::displayPrice(LoyaltyModule::getVoucherValue($points), new Currency(Configuration::get('PS_CURRENCY_DEFAULT'))).'</td>
+				<td>'.$this->l('Voucher value:').' '.Tools::displayPrice(LoyaltyModule::getVoucherValue((int)$points, (int)Configuration::get('PS_CURRENCY_DEFAULT')), new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'))).'</td>
 			</tr>
-		</table><br/>';
+		</table>';
+
 		return $html;
 	}
 	

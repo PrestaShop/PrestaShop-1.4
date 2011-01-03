@@ -118,11 +118,14 @@ class LoyaltyModule extends ObjectModel
 		return $total;
 	}
 
-	static public function getVoucherValue($nbPoints)
+	static public function getVoucherValue($nbPoints, $id_currency = NULL)
 	{
 		global $cookie;
 		
-		return (float)((float)($nbPoints) * (float)(Tools::convertPrice(Configuration::get('PS_LOYALTY_POINT_VALUE'), new Currency((int)$cookie->id_currency))));
+		if (empty($id_currency))
+			$id_currency = (int)$cookie->id_currency;
+		
+		return (int)$nbPoints * (float)Tools::convertPrice(Configuration::get('PS_LOYALTY_POINT_VALUE'), new Currency((int)$id_currency));
 	}
 
 	static public function getNbPointsByPrice($price)

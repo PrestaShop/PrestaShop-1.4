@@ -60,7 +60,7 @@ class AdminTaxes extends AdminTab
 
 		$obj = $this->loadObject(true);
 		$zones = Zone::getZones(true);
-		$states = State::getStates((int)($cookie->id_lang));
+		$states = State::getStates((int)$cookie->id_lang);
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
@@ -79,8 +79,8 @@ class AdminTaxes extends AdminTab
 				</div>
 				<label>'.$this->l('Rate:').' </label>
 				<div class="margin-form">
-					<input type="text" size="4" maxlength="5" name="rate" value="'.htmlentities($this->getFieldValue($obj, 'rate'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<p class="clear">'.$this->l('Format: XX.XX (e.g., 19.60)').'</p>
+					<input type="text" size="4" maxlength="6" name="rate" value="'.htmlentities($this->getFieldValue($obj, 'rate'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+					<p class="clear">'.$this->l('Format: XX.XX or XX.XXX (e.g., 19.60 or 13.925)').'</p>
 				</div>
 				<label>'.$this->l('Enable:').' </label>
 				<div class="margin-form">
