@@ -272,7 +272,9 @@ function checkTabRights($id_tab)
 	if ($tabAccesses === NULL)
 		$tabAccesses =  Profile::getProfileAccesses($cookie->profile);
 
-	return ($tabAccesses[(int)($id_tab)]['view'] === '1');
+	if (isset($tabAccesses[(int)($id_tab)]['view']))
+		return ($tabAccesses[(int)($id_tab)]['view'] === '1');
+	return false;
 }
 
 
