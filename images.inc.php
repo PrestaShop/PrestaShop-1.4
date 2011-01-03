@@ -100,36 +100,38 @@ function checkImage($file, $maxFileSize)
   */
 function isPicture($file, $types = NULL)
 {
-	/* Detect mime content type */
-	$mimeType = false;
-	if (!$types)
-		$types = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
+    /* Detect mime content type */
+    $mimeType = false;
+    if (!$types)
+        $types = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
 
-	/* Try 5 different methods to determine the mime type */
-	if (function_exists('finfo_open'))
-	{
-		$const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
-		$finfo = finfo_open($const);
-		$mimeType = finfo_file($finfo, $file['tmp_name']);
-		finfo_close($finfo);
-	}
-	elseif (function_exists('mime_content_type'))
-	{
-		$mimeType = mime_content_type($file['tmp_name']);
-	}
-	elseif (function_exists('exec'))
-	{
-		$mimeType = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
-		if (!$mimeType)
-			$mimeType = trim(exec('file --mime '.escapeshellarg($file['tmp_name'])));
-		if (!$mimeType)
-			$mimeType = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
-	}
-	if (empty($mimeType) OR $mimeType == 'regular file')
-		$mimeType = $file['type'];
-	if (($pos = strpos($mimeType, ';')) !== false)
-		$mimeType = substr($mimeType, 0, $pos);
-	return $mimeType && in_array($mimeType, $types);
+    /* Try 4 different methods to determine the mime type */
+    if (function_exists('finfo_open'))
+    {
+        $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
+        $finfo = finfo_open($const);
+        $mimeType = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+    }
+    elseif (function_exists('mime_content_type'))
+        $mimeType = mime_content_type($file['tmp_name']);
+    elseif (function_exists('exec'))
+    {
+        $mimeType = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
+        if (!$mimeType)
+            $mimeType = trim(exec('file --mime '.escapeshellarg($file['tmp_name'])));
+        if (!$mimeType)
+            $mimeType = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
+    }
+    if (empty($mimeType) OR $mimeType == 'regular file')
+        $mimeType = $file['type'];
+    
+    /* For each allowed MIME type, we are looking for it inside the current MIME type */
+    foreach ($types AS $type)
+        if (strstr($mimeType, $type))
+            return true;
+    
+    return false;
 }
 
 /**
