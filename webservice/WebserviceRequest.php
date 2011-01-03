@@ -408,22 +408,17 @@ class WebserviceRequest
 		{
 			if (is_null($this->_key))
 			{
-				header('WWW-Authenticate: Basic realm="Welcome to PrestaShop Webservice, please enter the authentication key as the login. No password required."');
 				$this->setError(401, 'Please enter the authentication key as the login. No password required');
-				return false;
 			}
 			else
 			{
-				$auth_key = trim($_SERVER['PHP_AUTH_USER']);
 				if (empty($this->_key))
 				{
 					$this->setError(401, 'Authentication key is empty');
-					return false;
 				}
 				elseif (strlen($this->_key) != '32')
 				{
 					$this->setError(401, 'Invalid authentication key format');
-					return false;
 				}
 				else
 				{
@@ -431,7 +426,6 @@ class WebserviceRequest
 					if (is_null($keyValidation))
 					{
 						$this->setError(401, 'Authentification key does not exist');
-						return false;
 					}
 					elseif($keyValidation === true)
 					{
@@ -440,13 +434,11 @@ class WebserviceRequest
 					else
 					{
 						$this->setError(401, 'Authentification key is not active');
-						return false;
 					}
 					
 					if (!$this->_keyPermissions)
 					{
 						$this->setError(401, 'No permission for this authentication key');
-						return false;
 					}
 				}
 			}
