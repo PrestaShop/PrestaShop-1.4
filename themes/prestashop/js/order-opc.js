@@ -277,6 +277,8 @@ function saveAddress(type)
 	// Clean the last &
 	params = params.substr(0, params.length-1);
 	
+	var result = false;
+	
 	$.ajax({
        type: 'POST',
        url: baseDir + 'address.php',
@@ -286,7 +288,7 @@ function saveAddress(type)
        data: 'ajax=true&submitAddress=true&type='+type+'&'+params+'&token=' + static_token,
        success: function(jsonData)
        {
-       		if (jsonData.hasError)
+			if (jsonData.hasError)
 			{
        			var errors = '<b>'+txtThereis+' '+jsonData.errors.length+' '+txtErrors+':</b><ol>';
 				for(error in jsonData.errors)
@@ -295,18 +297,19 @@ function saveAddress(type)
 						errors += '<li>'+jsonData.errors[error]+'</li>';
 				errors += '</ol>';
 				$('#opc_account_errors').html(errors).slideDown('slow');
-				return false;
+				console.log(type+' ... fail!');
+				result = false;
 			}
 			// update addresses id
 			$('input#opc_id_address_delivery').val(jsonData.id_address_delivery);
 			$('input#opc_id_address_invoice').val(jsonData.id_address_invoice);
-			
-			return true;
+
+			result = true;
 		},
        error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
     });
 
-	return false;
+	return result;
 }
 
 function manageButtonsEvents(button)
