@@ -38,45 +38,47 @@ if (!$cookie->isLoggedBack())
 	$destination = substr($_SERVER['REQUEST_URI'], strlen(dirname($_SERVER['SCRIPT_NAME'])) + 1);
 	Tools::redirectLink('login.php'.(empty($destination) || ($destination == 'index.php?logout') ? '' : '?redirect='.$destination));
 }
-
-$link = new Link();
-
-$currentIndex = $_SERVER['SCRIPT_NAME'].(($tab = Tools::getValue('tab')) ? '?tab='.$tab : '');
-if ($back = Tools::getValue('back'))
-	$currentIndex .= '&back='.urlencode($back);
-
-/* Server Params */
-$server_host = Tools::getHttpHost(false, true);
-$protocol = 'http://';
-$protocol_ssl = 'https://';
-$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
-$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
-define('_PS_BASE_URL_', $protocol.$server_host);
-define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
-
-$employee = new Employee((int)$cookie->id_employee);
-$cookie->id_lang = $employee->id_lang;
-$iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
-include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
-include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
-include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
-
-/* attribute id_lang is often needed, so we create a constant for performance reasons */
-define('_USER_ID_LANG_', (int)($cookie->id_lang));
-
-$path = dirname(__FILE__).'/themes/';
-if (empty($employee->bo_theme) OR !file_exists($path.$employee->bo_theme.'/admin.css'))
+else
 {
-	if (file_exists($path.'oldschool/admin.css'))
-		$employee->bo_theme = 'oldschool';
-	elseif (file_exists($path.'origins/admin.css'))
-		$employee->bo_theme = 'origins';
-	else
-		foreach (scandir($path) as $theme)
-			if ($theme[0] != '.' AND file_exists($path.$theme.'/admin.css'))
-			{
-				$employee->bo_theme = $theme;
-				break;
-			}
-	$employee->update();
+	$link = new Link();
+
+	$currentIndex = $_SERVER['SCRIPT_NAME'].(($tab = Tools::getValue('tab')) ? '?tab='.$tab : '');
+	if ($back = Tools::getValue('back'))
+		$currentIndex .= '&back='.urlencode($back);
+
+	/* Server Params */
+	$server_host = Tools::getHttpHost(false, true);
+	$protocol = 'http://';
+	$protocol_ssl = 'https://';
+	$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
+	$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
+	define('_PS_BASE_URL_', $protocol.$server_host);
+	define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
+
+	$employee = new Employee((int)$cookie->id_employee);
+	$cookie->id_lang = (int)$employee->id_lang;
+	$iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
+	include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
+	include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
+	include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
+
+	/* attribute id_lang is often needed, so we create a constant for performance reasons */
+	define('_USER_ID_LANG_', (int)$cookie->id_lang);
+
+	$path = dirname(__FILE__).'/themes/';
+	if (empty($employee->bo_theme) OR !file_exists($path.$employee->bo_theme.'/admin.css'))
+	{
+		if (file_exists($path.'oldschool/admin.css'))
+			$employee->bo_theme = 'oldschool';
+		elseif (file_exists($path.'origins/admin.css'))
+			$employee->bo_theme = 'origins';
+		else
+			foreach (scandir($path) as $theme)
+				if ($theme[0] != '.' AND file_exists($path.$theme.'/admin.css'))
+				{
+					$employee->bo_theme = $theme;
+					break;
+				}
+		$employee->update();
+	}
 }

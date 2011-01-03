@@ -31,7 +31,7 @@ class ProductCommentCriterion extends ObjectModel
 	public		$id_product_comment_criterion_type;
 	
 	public 		$name;
-	public 		$active;
+	public 		$active = 1;
  	protected 	$fieldsRequiredLang = array('name');
  	protected 	$fieldsSizeLang = array('name' => 128);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
@@ -43,8 +43,7 @@ class ProductCommentCriterion extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		return array('id_product_comment_criterion_type' => (int)$this->id_product_comment_criterion_type,
-						'active' => (int)$this->active);
+		return array('id_product_comment_criterion_type' => (int)$this->id_product_comment_criterion_type, 'active' => (int)$this->active);
 	}
 	
 	public function getTranslationsFieldsChild()
@@ -151,7 +150,7 @@ class ProductCommentCriterion extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion_product` pccp ON (pcc.`id_product_comment_criterion` = pccp.`id_product_comment_criterion` AND pccp.`id_product` = '.(int)$id_product.')
 		LEFT JOIN `'._DB_PREFIX_.'product_comment_criterion_category` pccc ON (pcc.`id_product_comment_criterion` = pccc.`id_product_comment_criterion`)
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_category_default = pccc.id_category AND p.id_product = '.(int)$id_product.')
-		WHERE pccl.`id_lang` = '.(int)($id_lang).' AND (pccp.id_product IS NOT NULL OR p.id_product IS NOT NULL OR pcc.id_product_comment_criterion_type = 1) AND pcc.active=1
+		WHERE pccl.`id_lang` = '.(int)($id_lang).' AND (pccp.id_product IS NOT NULL OR p.id_product IS NOT NULL OR pcc.id_product_comment_criterion_type = 1) AND pcc.active = 1
 		GROUP BY pcc.id_product_comment_criterion');
 	}
 	
@@ -166,17 +165,18 @@ class ProductCommentCriterion extends ObjectModel
 			die(Tools::displayError());
 		return (Db::getInstance()->ExecuteS('
 		SELECT pcc.`id_product_comment_criterion`, pcc.id_product_comment_criterion_type, pccl.`name`, pcc.active
-		  FROM `'._DB_PREFIX_.'product_comment_criterion` pcc
-		  JOIN `'._DB_PREFIX_.'product_comment_criterion_lang` pccl ON (pcc.id_product_comment_criterion = pccl.id_product_comment_criterion)
-		WHERE pccl.`id_lang` = '.(int)$id_lang.($active ? ' AND active=1' : '').($type ? ' AND id_product_comment_criterion_type='.(int)$type : '').'
+		FROM `'._DB_PREFIX_.'product_comment_criterion` pcc
+		JOIN `'._DB_PREFIX_.'product_comment_criterion_lang` pccl ON (pcc.id_product_comment_criterion = pccl.id_product_comment_criterion)
+		WHERE pccl.`id_lang` = '.(int)$id_lang.($active ? ' AND active = 1' : '').($type ? ' AND id_product_comment_criterion_type = '.(int)$type : '').'
 		ORDER BY pccl.`name` ASC'));
 	}
 	
 	public function getProducts()
 	{
-		$res = Db::getInstance()->ExecuteS('SELECT pccp.id_product, pccp.id_product_comment_criterion
-														FROM `'._DB_PREFIX_.'product_comment_criterion_product` pccp
-														WHERE pccp.id_product_comment_criterion='.(int)$this->id);
+		$res = Db::getInstance()->ExecuteS('
+		SELECT pccp.id_product, pccp.id_product_comment_criterion
+		FROM `'._DB_PREFIX_.'product_comment_criterion_product` pccp
+		WHERE pccp.id_product_comment_criterion = '.(int)$this->id);
 		$products = array();
 		if ($res)
 			foreach ($res AS $row)
@@ -186,9 +186,10 @@ class ProductCommentCriterion extends ObjectModel
 	
 	public function getCategories()
 	{
-		$res = Db::getInstance()->ExecuteS('SELECT pccc.id_category, pccc.id_product_comment_criterion
-														FROM `'._DB_PREFIX_.'product_comment_criterion_category` pccc
-														WHERE pccc.id_product_comment_criterion='.(int)$this->id);
+		$res = Db::getInstance()->ExecuteS('
+		SELECT pccc.id_category, pccc.id_product_comment_criterion
+		FROM `'._DB_PREFIX_.'product_comment_criterion_category` pccc
+		WHERE pccc.id_product_comment_criterion = '.(int)$this->id);
 		$criterions = array();
 		if ($res)
 			foreach ($res AS $row)
@@ -198,20 +199,16 @@ class ProductCommentCriterion extends ObjectModel
 	
 	public function deleteCategories()
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_comment_criterion_category`
-														WHERE `id_product_comment_criterion` = '.(int)$this->id);
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_comment_criterion_category` WHERE `id_product_comment_criterion` = '.(int)$this->id);
 	}
 	
 	public function deleteProducts()
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_comment_criterion_product`
-														WHERE `id_product_comment_criterion` = '.(int)$this->id);
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_comment_criterion_product` WHERE `id_product_comment_criterion` = '.(int)$this->id);
 	}
 	
 	static public function getTypes()
 	{
-		return array(1 => Tools::displayError('All catalogs'),
-						 2 => Tools::displayError('Category default'),
-						 3 => Tools::displayError('Products'));
+		return array(1 => Tools::displayError('Valid for the entire catalog'), 2 => Tools::displayError('Restricted to some categories'), 3 => Tools::displayError('Restricted to some products'));
 	}
 }

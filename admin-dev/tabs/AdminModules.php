@@ -229,16 +229,19 @@ class AdminModules extends AdminTab
 							$hooklink = 'index.php?tab=AdminModulesPositions&token='.Tools::getAdminTokenLite('AdminModulesPositions').'&show_modules='.(int)$module->id;
 							$tradlink = 'index.php?tab=AdminTranslations&token='.Tools::getAdminTokenLite('AdminTranslations').'&type=modules&lang=';
 							
-							$toolbar = '<table class="table" cellpadding="0" cellspacing="0" style="margin:auto;text-align:center"><tr>
-								<th><a href="'.$backlink.'" style="padding:5px 10px">'.$this->l('Back').'</a></th>
-								<th><a href="'.$hooklink.'" style="padding:5px 10px">'.$this->l('Manage hooks').'</a></th>
-								<th style="padding:5px 10px">'.$this->l('Manage translations:').' ';
-							foreach (Language::getLanguages(false) AS $language)
-								$toolbar .= '<a href="'.$tradlink.$language['iso_code'].'#'.$module->name.'" style="margin-left:5px">
-									<img src="'._THEME_LANG_DIR_.$language['id_lang'].'.jpg" alt="'.$language['iso_code'].'" title="'.$language['iso_code'].'" />
-								</a>';
-							$toolbar .= '</th>
-							</tr></table>';
+							$toolbar = '
+							<table class="table" cellpadding="0" cellspacing="0" style="margin:auto;text-align:center">
+								<tr>
+									<th>'.$this->l('Module').' <span style="color: green;">'.$module->name.'</span></th>
+									<th><a href="'.$backlink.'" style="padding:5px 10px">'.$this->l('Back').'</a></th>
+									<th><a href="'.$hooklink.'" style="padding:5px 10px">'.$this->l('Manage its hooks').'</a></th>
+									<th style="padding:5px 10px">'.$this->l('Manage its translations:').' ';
+									foreach (Language::getLanguages(false) AS $language)
+										$toolbar .= '<a href="'.$tradlink.$language['iso_code'].'#'.$module->name.'" style="margin-left:5px"><img src="'._THEME_LANG_DIR_.$language['id_lang'].'.jpg" alt="'.$language['iso_code'].'" title="'.$language['iso_code'].'" /></a>';
+							$toolbar .= '
+									</th>
+								</tr>
+							</table>';
 							
 							echo 
 							$toolbar.'
