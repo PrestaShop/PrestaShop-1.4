@@ -1520,16 +1520,13 @@ class ProductCore extends ObjectModel
 
 	static public function applyEcotax(&$price, $ecotax, $usetax, $id_address, $currency = NULL)
 	{
-		if ($ecotax)
-		{
-			if ($currency)
-				$ecotax = Tools::convertPrice($ecotax, $currency);
+		if ($currency)
+			$ecotax = Tools::convertPrice($ecotax, $currency);
 
-			if ($usetax AND $taxRate = Tax::getProductEcotaxRate($id_address))
-				$price += $ecotax * (1 + $taxRate / 100);
-			else
-				$price += $ecotax;
-		}
+		if ($usetax AND $taxRate = Tax::getProductEcotaxRate($id_address))
+			$price += $ecotax * (1 + $taxRate / 100);
+		else
+			$price += $ecotax;
 	}
 
 	/**
@@ -1548,9 +1545,10 @@ class ProductCore extends ObjectModel
 	* @param integer $id_cart Cart ID. Required when the cookie is not accessible (e.g., inside a payment module, a cron task...)
 	* @param integer $id_address Customer address ID. Required for price (tax included) calculation regarding the guest localization
 	* @param variable_reference $specificPriceOutput. If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object
+	* @param boolean $with_ecotax insert ecotax in price output.
 	* @return float Product price
 	*/
-	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL)
+	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = TRUE)
 	{
 		global $cookie, $cart;
 
@@ -1628,11 +1626,7 @@ class ProductCore extends ObjectModel
 		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0, $id_currency);
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
-		// Exclude tax
-		if ($forceAssociatedTax)
-		    $tax_rate = Tax::getProductTaxRate((int)$id_product, $id_address);
-		else
-		    $tax_rate = Tax::getProductTaxRate((int)$id_product, $id_address);
+		$tax_rate = Tax::getProductTaxRate((int)$id_product, $id_address);
 
 		if ($usetax)
 			$price = $price * (1 + ($tax_rate / 100));
@@ -1656,8 +1650,9 @@ class ProductCore extends ObjectModel
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
-
-   		self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
+		
+		if($result['ecotax'] AND $with_ecotax)
+   			self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
