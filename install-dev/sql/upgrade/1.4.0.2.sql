@@ -703,8 +703,8 @@ INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VA
 (3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'address'), 'Dirección', 'direccion');
 INSERT INTO `PREFIX_meta` (`page`) VALUES ('addresses');
 INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
-(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Addresses', 'address'),
-(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Adresses', 'adresse'),
+(1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Addresses', 'addresses'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Adresses', 'adresses'),
 (3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'addresses'), 'Direcciones', 'direcciones');
 INSERT INTO `PREFIX_meta` (`page`) VALUES ('authentication');
 INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
