@@ -27,16 +27,16 @@
 
 function reorderpositions()
 {
-	//clean products position
-	$cat = Category::getCategories(1, false, false);
-	foreach($cat as $i => $categ)
-		Product::cleanPositions((int)($categ['id_category']));
+	/* Clean products positions */
+	if ($cat = Category::getCategories(1, false, false))
+		foreach($cat AS $i => $categ)
+			Product::cleanPositions((int)$categ['id_category']);
 	
 	//clean Category position and delete old position system
 	Language::loadLanguages();
 	$language = Language::getLanguages();
 	$cat_parent = Db::getInstance()->ExecuteS('SELECT DISTINCT c.id_parent FROM `'._DB_PREFIX_.'category` c WHERE id_category != 1');
-	foreach($cat_parent as $parent)
+	foreach($cat_parent AS $parent)
 	{
 		$result = Db::getInstance()->ExecuteS('
 							SELECT DISTINCT c.*, cl.*
@@ -44,7 +44,7 @@ function reorderpositions()
 							LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)(Configuration::get('PS_LANG_DEFAULT')).')
 							WHERE c.id_parent = '.(int)($parent['id_parent']).'
 							ORDER BY name ASC');
-		foreach($result as $i => $categ)
+		foreach($result AS $i => $categ)
 		{
 			$sizeof = sizeof($result);
 			for ($i = 0; $i < $sizeof; ++$i)
@@ -56,7 +56,7 @@ function reorderpositions()
 				AND `id_category` = '.(int)($result[$i]['id_category']));
 			}
 		
-			foreach($language as $lang)
+			foreach($language AS $lang)
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'category` c 
 				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)  
 				SET `name` = \''.preg_replace('/^[0-9]+\./', '',$categ['name']).'\' 
@@ -64,9 +64,8 @@ function reorderpositions()
 		}
 	}
 	
-	//clean CMS position
-	$cms_cat = CMSCategory::getCategories(1, false, false);
-	
-	foreach($cms_cat as $i => $categ)
-		CMS::cleanPositions((int)($categ['id_cms_category']));
+	/* Clean CMS positions */
+	if ($cms_cat = CMSCategory::getCategories(1, false, false))
+		foreach($cms_cat AS $i => $categ)
+			CMS::cleanPositions((int)($categ['id_cms_category']));
 }
