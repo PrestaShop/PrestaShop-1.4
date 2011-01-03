@@ -958,8 +958,10 @@ g	* Discount table with value, quantities...
 	static protected function l($string)
 	{
 		global $cookie;
-		if (@!include(_PS_TRANSLATIONS_DIR_.Language::getIsoById($cookie->id_lang).'/pdf.php'))
-			die('Cannot include PDF translation language file : '._PS_TRANSLATIONS_DIR_.Language::getIsoById($cookie->id_lang).'/pdf.php');
+		$iso = Language::getIsoById((isset($cookie->id_lang) AND Validate::isUnsignedId($cookie->id_lang)) ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT'));
+		
+		if (@!include(_PS_TRANSLATIONS_DIR_.$iso.'/pdf.php'))
+			die('Cannot include PDF translation language file : '._PS_TRANSLATIONS_DIR_.$iso.'/pdf.php');
 
 		if (!is_array($_LANGPDF))
 			return str_replace('"', '&quot;', $string);
