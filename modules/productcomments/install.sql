@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS `PREFIX_product_comment_criterion` (
   PRIMARY KEY (`id_product_comment_criterion`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
-
 CREATE TABLE IF NOT EXISTS `PREFIX_product_comment_criterion_product` (
   `id_product` int(10) unsigned NOT NULL,
   `id_product_comment_criterion` int(10) unsigned NOT NULL,
@@ -32,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_product_comment_criterion_product` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_product_comment_criterion_lang` (
-`id_product_comment_criterion` INT( 11 ) UNSIGNED NOT NULL ,
+`id_product_comment_criterion` INT(11) UNSIGNED NOT NULL ,
 `id_lang` INT(11) UNSIGNED NOT NULL ,
 `name` VARCHAR(64) NOT NULL ,
 PRIMARY KEY ( `id_product_comment_criterion` , `id_lang` )
@@ -44,7 +43,6 @@ CREATE TABLE IF NOT EXISTS `PREFIX_product_comment_criterion_category` (
   PRIMARY KEY(`id_product_comment_criterion`, `id_category`),
   KEY `id_category` (`id_category`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-
 
 CREATE TABLE IF NOT EXISTS `PREFIX_product_comment_grade` (
   `id_product_comment` int(10) unsigned NOT NULL,

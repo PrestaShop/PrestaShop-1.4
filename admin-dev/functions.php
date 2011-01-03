@@ -276,5 +276,3 @@ function checkTabRights($id_tab)
 		return ($tabAccesses[(int)($id_tab)]['view'] === '1');
 	return false;
 }
-
-

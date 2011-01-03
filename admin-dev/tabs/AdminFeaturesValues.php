@@ -51,9 +51,11 @@ class AdminFeaturesValues extends AdminTab
 		$obj = $this->loadObject(true);
 
 		echo '
+		<h2>'.$this->l('Add a new feature value').'</h2>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.Tools::getValue('token').'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_feature_value" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/t/AdminFeatures.gif" />'.$this->l('Value').'</legend>
+			<fieldset class="width2">
+				<legend><img src="../img/t/AdminFeatures.gif" />'.$this->l('Add a new feature value').'</legend>
 				<label>'.$this->l('Value:').' </label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
@@ -113,4 +115,3 @@ class AdminFeaturesValues extends AdminTab
 			parent::postProcess();
 	}
 }
-

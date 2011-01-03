@@ -604,7 +604,7 @@ class AdminProducts extends AdminTab
 						}
 					}
 					if (!sizeof($this->_errors))
-						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(int)(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=4&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(int)(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=4&conf=4&token='.($token ? $token : $this->token));
 				}
 				else
 					$this->_errors[] = Tools::displayError('product must be created before adding features');
@@ -3271,7 +3271,13 @@ class AdminProducts extends AdminTab
 			echo '
 			<table cellpadding="5">
 				<tr>
-					<td colspan="2"><b>'.$this->l('Assign features to this product').'</b></td>
+					<td colspan="2">
+						<b>'.$this->l('Assign features to this product:').'</b><br />
+						<ul style="margin: 10px 0 0 20px;">
+							<li>'.$this->l('You can specify a value for each relevant feature regarding this product, empty fields will not be displayed.').'</li>
+							<li>'.$this->l('You can either set a specific value, or select among existing pre-defined values you added previously.').'</li>
+						</ul>
+					</td>
 				</tr>
 			</table>
 			<hr style="width:100%;" /><br />';
@@ -3280,9 +3286,9 @@ class AdminProducts extends AdminTab
 			echo '
 			<table border="0" cellpadding="0" cellspacing="0" class="table" style="width:900px;">
 				<tr>
-					<th>'.$this->l('Features').'</td>
-					<th style="width:30%">'.$this->l('Value').'</td>
-					<th style="width:40%">'.$this->l('Customized').'</td>
+					<th>'.$this->l('Feature').'</td>
+					<th style="width:30%">'.$this->l('Pre-defined value').'</td>
+					<th style="width:40%"><u>'.$this->l('or').'</u> '.$this->l('Customized value').'</td>
 				</tr>';
 			if (!$nb_feature)
 				echo '<tr><td colspan="3" style="text-align:center;">'.$this->l('No features defined').'</td></tr>';
@@ -3291,7 +3297,9 @@ class AdminProducts extends AdminTab
 			// Listing
 			if ($nb_feature)
 			{
-				echo '<table cellpadding="5" style="width:900px; margin-top:10px">';
+				echo '
+				<table cellpadding="5" style="width: 900px; margin-top: 10px">';
+				
 				foreach ($feature AS $tab_features)
 				{
 					$current_item = false;
@@ -3299,22 +3307,34 @@ class AdminProducts extends AdminTab
 					foreach ($obj->getFeatures() as $tab_products)
 						if ($tab_products['id_feature'] == $tab_features['id_feature'])
 							$current_item = $tab_products['id_feature_value'];
+					
+					$featureValues = FeatureValue::getFeatureValuesWithLang((int)$cookie->id_lang, (int)$tab_features['id_feature']);
+					
 					echo '
 					<tr>
 						<td>'.$tab_features['name'].'</td>
-						<td style="width:30%">
+						<td style="width: 30%">';
+						
+					if (sizeof($featureValues))
+					{
+						echo '
 							<select id="feature_'.$tab_features['id_feature'].'_value" name="feature_'.$tab_features['id_feature'].'_value"
 								onchange="$(\'.custom_'.$tab_features['id_feature'].'_\').val(\'\');">
 								<option value="0">---&nbsp;</option>';
-					$feature_values = FeatureValue::getFeatureValuesWithLang((int)($cookie->id_lang), $tab_features['id_feature']);
-					foreach ($feature_values AS $tab_values)
-					{
-						if ($current_item == $tab_values['id_feature_value'])
-							$custom = false;
-						echo '<option value="'.$tab_values['id_feature_value'].'"'.(($current_item == $tab_values['id_feature_value']) ? ' selected="selected"' : '').'>'.substr($tab_values['value'], 0, 40).(Tools::strlen($tab_values['value']) > 40 ? '...' : '').'&nbsp;</option>';
-					}
+					
+						foreach ($featureValues AS $value)
+						{
+							if ($current_item == $value['id_feature_value'])
+								$custom = false;
+							echo '<option value="'.$value['id_feature_value'].'"'.(($current_item == $value['id_feature_value']) ? ' selected="selected"' : '').'>'.substr($value['value'], 0, 40).(Tools::strlen($value['value']) > 40 ? '...' : '').'&nbsp;</option>';
+						}
 
-					echo '	</select>
+						echo '</select>';
+					}
+					else
+						echo '<span style="font-size: 10px; color: #666;">'.$this->l('N/A').' - <a href="index.php?tab=AdminFeatures&addfeature_value&id_feature='.(int)$tab_features['id_feature'].'&token='.Tools::getAdminToken('AdminFeatures'.(int)(Tab::getIdFromClassName('AdminFeatures')).(int)($cookie->id_employee)).'" style="color: #666; text-decoration: underline;">'.$this->l('Add pre-defined values first').'</a></span>';
+					
+					echo '
 						</td>
 						<td style="width:40%" class="translatable">';
 					$tab_customs = ($custom ? FeatureValue::getFeatureValueLang($current_item) : array());
@@ -3330,14 +3350,13 @@ class AdminProducts extends AdminTab
 				}
 				echo '
 				<tr>
-					<td>&nbsp;</td>
-					<td style="height:50px; " valign="bottom"><input type="submit" name="submitProductFeature" id="submitProductFeature" value="'.$this->l('Update features').'" class="button" /></td>
+					<td style="height: 50px; text-align: center;" colspan="3"><input type="submit" name="submitProductFeature" id="submitProductFeature" value="'.$this->l('Save modifications').'" class="button" /></td>
 				</tr>';
 			}
 			echo '</table>
 			<hr style="width:100%;" />
 			<div style="text-align:center;">
-				<a href="index.php?tab=AdminFeatures&addfeature&token='.Tools::getAdminToken('AdminFeatures'.(int)(Tab::getIdFromClassName('AdminFeatures')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="new_features" title="'.$this->l('Create new features').'" />&nbsp;'.$this->l('Create new features').'</a>
+				<a href="index.php?tab=AdminFeatures&addfeature&token='.Tools::getAdminToken('AdminFeatures'.(int)(Tab::getIdFromClassName('AdminFeatures')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('You will loose all modifications not saved, you may want to save modifications first?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="new_features" title="'.$this->l('Add a new feature').'" />&nbsp;'.$this->l('Add a new feature').'</a>
 			</div>';
 		}
 		else
