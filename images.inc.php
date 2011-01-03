@@ -81,7 +81,7 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg')
   * @param array $file Upload $_FILE value
   * @param integer $maxFileSize Maximum upload size
   */
-function	checkImage($file, $maxFileSize)
+function checkImage($file, $maxFileSize)
 {
 	if ($file['size'] > $maxFileSize)
 		return Tools::displayError('image is too large').' ('.($file['size'] / 1000).Tools::displayError('KB').'). '.Tools::displayError('Maximum allowed:').' '.($maxFileSize / 1000).Tools::displayError('KB');
@@ -114,7 +114,9 @@ function isPicture($file, $types = NULL)
 		finfo_close($finfo);
 	}
 	elseif (function_exists('mime_content_type'))
+	{
 		$mimeType = mime_content_type($file['tmp_name']);
+	}
 	elseif (function_exists('exec'))
 	{
 		$mimeType = trim(exec('file -b --mime-type '.escapeshellarg($file['tmp_name'])));
@@ -123,12 +125,10 @@ function isPicture($file, $types = NULL)
 		if (!$mimeType)
 			$mimeType = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
 	}
-
 	if (empty($mimeType) OR $mimeType == 'regular file')
 		$mimeType = $file['type'];
 	if (($pos = strpos($mimeType, ';')) !== false)
 		$mimeType = substr($mimeType, 0, $pos);
-
 	return $mimeType && in_array($mimeType, $types);
 }
 
@@ -138,7 +138,7 @@ function isPicture($file, $types = NULL)
   * @param array $file Upload $_FILE value
   * @param integer $maxFileSize Maximum upload size
   */
-function	checkIco($file, $maxFileSize)
+function checkIco($file, $maxFileSize)
 {
 	if ($file['size'] > $maxFileSize)
 		return Tools::displayError('image is too large').' ('.($file['size'] / 1000).'ko). '.Tools::displayError('Maximum allowed:').' '.($maxFileSize / 1000).'ko';
@@ -216,7 +216,7 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
   *
   * @return boolean Operation result
   */
-function	imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $fileType = 'jpg', $destX = 0, $destY = 0)
+function imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $fileType = 'jpg', $destX = 0, $destY = 0)
 {
 	if (!isset($srcFile['tmp_name']) OR !file_exists($srcFile['tmp_name']))
 		return false;
@@ -241,7 +241,7 @@ function	imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $f
 	return	($return);
 }
 
-function	createSrcImage($type, $filename)
+function createSrcImage($type, $filename)
 {
 	switch ($type)
 	{
@@ -258,7 +258,7 @@ function	createSrcImage($type, $filename)
 	}
 }
 
-function	createDestImage($width, $height)
+function createDestImage($width, $height)
 {
 	$image = imagecreatetruecolor($width, $height);
 	$white = imagecolorallocate($image, 255, 255, 255);
