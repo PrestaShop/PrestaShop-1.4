@@ -162,6 +162,7 @@ class	CookieCore
 		if (isset($this->_content[$key]))
 			$this->_modified = true;
 		unset($this->_content[$key]);
+		$this->write();
 	}
 
 	/**
