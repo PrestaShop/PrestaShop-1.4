@@ -1386,3 +1386,18 @@ a.blue:hover {
 		opacity:0.75;
 	}
 
+.ac_results ul {
+	list-style: none;
+	text-align: left;
+	background: white;
+	padding: 0;
+}
+.ac_results li {
+	padding: 5px;
+}
+.ac_even {
+	background: #EFEFEF;
+}
+.ac_over {
+	background: #ECEADE;
+}

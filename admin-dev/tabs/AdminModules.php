@@ -311,7 +311,7 @@ class AdminModules extends AdminTab
 	{
 		global $currentIndex;
 
-		echo '
+		echo '<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery.autocomplete.js"></script>
 		<script type="text/javascript">
 			function getPrestaStore(){if (getE("prestastore").style.display!=\'block\')return;$.post("'.dirname($currentIndex).'/ajax.php",{page:"prestastore"},function(a){getE("prestastore-content").innerHTML=a;})}
 			function modules_management(action)
@@ -332,7 +332,22 @@ class AdminModules extends AdminTab
 					}
 				}
 				document.location.href=\''.$currentIndex.'&token='.$this->token.'&\'+action+\'=\'+module_list.substring(1, module_list.length);
-			}			
+			}	
+			$(\'document\').ready( function() {
+				$(\'input[name="filtername"]\').autocomplete(moduleList, {
+					minChars: 0,
+					width: 310,
+					matchContains: true,
+					highlightItem: true,
+					formatItem: function(row, i, max, term) {
+						return row.name.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "<br><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
+					},
+					formatResult: function(row) {
+						return row.name;
+					}
+				});
+			});
+			
 		</script>';
 	}
 	public function sortModule($a, $b)
@@ -345,6 +360,8 @@ class AdminModules extends AdminTab
 	public function displayList()
 	{
 		global $currentIndex, $cookie;
+		
+		$autocompleteList = 'var moduleList = [';
 		
 		$showTypeModules = Configuration::get('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee));
 		$showInstalledModules = Configuration::get('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee));
@@ -378,7 +395,7 @@ class AdminModules extends AdminTab
 				});
 			</script>';
 		}
-		
+
 		//filter module list
 		foreach($modules as $key => $module)
 		{
@@ -429,9 +446,12 @@ class AdminModules extends AdminTab
 			if (!empty($filterName))
 				if (stristr($module->name, $filterName) === false AND stristr($module->displayName, $filterName) === false AND stristr($module->description, $filterName) === false)
 					unset($modules[$key]);
+			
+			$autocompleteList .= '{ name : "'.$module->displayName.'", desc : "'.$module->description.'"}, ';
 		}
 
-	
+		$autocompleteList = rtrim($autocompleteList, ' ,').'];';
+		echo '<script type="text/javascript">'.$autocompleteList.'</script>';
 		$this->displayJavascript();
 			
 		echo '
