@@ -297,7 +297,6 @@ function saveAddress(type)
 						errors += '<li>'+jsonData.errors[error]+'</li>';
 				errors += '</ol>';
 				$('#opc_account_errors').html(errors).slideDown('slow');
-				console.log(type+' ... fail!');
 				result = false;
 			}
 			// update addresses id

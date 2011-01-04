@@ -248,7 +248,6 @@ function updateCartSummary(json)
 							
 		$('#cart_block_product_'+key_for_blockcart+' span.quantity').html(json.products[i].cart_quantity);	
 		$('#cart_block_product_'+key_for_blockcart+' span.price').html(formatCurrency(json.products[i].total_wt, currencyFormat, currencySign, currencyBlank));
-		console.log(priceDisplayMethod);
 		if (priceDisplayMethod != 0)
 			$('#product_price_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(formatCurrency(json.products[i].price, currencyFormat, currencySign, currencyBlank));
 		else
