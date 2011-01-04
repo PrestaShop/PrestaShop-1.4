@@ -400,8 +400,8 @@ class AdminProducts extends AdminTab
 						SET `cover` = 1
 						WHERE `id_image` = '.(int)($first_img['id_image']));
 					}
-					@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$image->id_product.'.jpg');
-					@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$image->id_product.'.jpg');
+					@unlink(_PS_TMP_IMG_DIR_.'/product_'.$image->id_product.'.jpg');
+					@unlink(_PS_TMP_IMG_DIR_.'/product_mini_'.$image->id_product.'.jpg');
 					Tools::redirectAdmin($currentIndex.'&id_product='.$image->id_product.'&id_category='.(int)(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=1'.'&token='.($token ? $token : $this->token));
 				}
 
@@ -428,8 +428,8 @@ class AdminProducts extends AdminTab
 					else
 					{
 						$productId = (int)(Tools::getValue('id_product'));
-						@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$productId.'.jpg');
-						@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$productId.'.jpg');
+						@unlink(dirname(_PS_TMP_IMG_DIR_.'/product_'.$productId.'.jpg');
+						@unlink(dirname(_PS_TMP_IMG_DIR_.'/product_mini_'.$productId.'.jpg');
 						Tools::redirectAdmin($currentIndex.'&id_product='.$image->id_product.'&id_category='.(int)(Tools::getValue('id_category')).'&addproduct&tabs=1'.'&token='.($token ? $token : $this->token));
 					}
 				}
@@ -886,8 +886,8 @@ class AdminProducts extends AdminTab
 			$image->delete();
 		if (sizeof($this->_errors))
 			return false;
-		@unlink(dirname(__FILE__).'/../../img/tmp/product_'.$product->id.'.jpg');
-		@unlink(dirname(__FILE__).'/../../img/tmp/product_mini_'.$product->id.'.jpg');
+		@unlink(_PS_TMP_IMG_DIR_.'/product_'.$product->id.'.jpg');
+		@unlink(_PS_TMP_IMG_DIR_.'/product_mini_'.$product->id.'.jpg');
 		return ((isset($id_image) AND is_int($id_image) AND $id_image) ? $id_image : true);
 	}
 
