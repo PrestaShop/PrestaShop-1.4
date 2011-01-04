@@ -240,7 +240,7 @@ INSERT INTO `PREFIX_country` (`id_country`, `id_zone`, `iso_code`, `call_prefix`
 (29, 3, 'IL', 972, 1, 0, 0, 1, 'NNNNN'),(30, 4, 'ZA', 27, 1, 0, 0, 1, 'NNNN'),(31, 4, 'NG', 234, 1, 0, 0, 1, ''),(32, 4, 'CI', 225, 1, 0, 0, 1, ''),(33, 4, 'TG', 228, 1, 0, 0, 1, ''),
 (34, 6, 'BO', 591, 1, 0, 0, 1, ''),(35, 4, 'MU', 230, 1, 0, 0, 1, ''),(36, 1, 'RO', 40, 1, 0, 0, 1, 'NNNNNN'),(37, 1, 'SK', 421, 1, 0, 0, 1, 'NNN NN'),(38, 4, 'DZ', 213, 1, 0, 0, 1, 'NNNNN'),
 (39, 2, 'AS', 0, 1, 0, 0, 1, ''),(40, 7, 'AD', 376, 1, 0, 0, 1, 'CNNN'),(41, 4, 'AO', 244, 1, 0, 0, 0, ''),(42, 8, 'AI', 0, 1, 0, 0, 1, ''),(43, 2, 'AG', 0, 1, 0, 0, 1, ''),
-(44, 6, 'AR', 54, 1, 0, 0, 1, 'LNNNN'),(45, 3, 'AM', 374, 1, 0, 0, 1, 'NNNN'),(46, 8, 'AW', 297, 1, 0, 0, 1, ''),(47, 3, 'AZ', 994, 1, 0, 0, 1, 'CNNNN'),(48, 2, 'BS', 0, 1, 0, 0, 1, ''),
+(44, 6, 'AR', 54, 1, 1, 0, 1, 'LNNNN'),(45, 3, 'AM', 374, 1, 0, 0, 1, 'NNNN'),(46, 8, 'AW', 297, 1, 0, 0, 1, ''),(47, 3, 'AZ', 994, 1, 0, 0, 1, 'CNNNN'),(48, 2, 'BS', 0, 1, 0, 0, 1, ''),
 (49, 3, 'BH', 973, 1, 0, 0, 1, ''),(50, 3, 'BD', 880, 1, 0, 0, 1, 'NNNN'),(51, 2, 'BB', 0, 1, 0, 0, 1, 'CNNNNN'),(52, 7, 'BY', 0, 1, 0, 0, 1, 'NNNNNN'),(53, 8, 'BZ', 501, 1, 0, 0, 0, ''),
 (54, 4, 'BJ', 229, 1, 0, 0, 0, ''),(55, 2, 'BM', 0, 1, 0, 0, 1, ''),(56, 3, 'BT', 975, 1, 0, 0, 1, ''),(57, 4, 'BW', 267, 1, 0, 0, 1, ''),(58, 6, 'BR', 55, 1, 0, 0, 1, 'NNNNN-NNN'),
 (59, 3, 'BN', 673, 1, 0, 0, 1, 'LLNNNN'),(60, 4, 'BF', 226, 1, 0, 0, 1, ''),(61, 3, 'MM', 95, 1, 0, 0, 1, ''),(62, 4, 'BI', 257, 1, 0, 0, 1, ''),(63, 3, 'KH', 855, 1, 0, 0, 1, 'NNNNN'),
@@ -455,6 +455,32 @@ INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active
 (4, 2, 'Northwest Territories', 'NT', 1),
 (4, 2, 'Yukon', 'YT', 1),
 (4, 2, 'Nunavut', 'NU', 1);
+
+INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active`) VALUES
+(44, 6, 'Buenos Aires', 'B', 1),
+(44, 6, 'Catamarca', 'K', 1),
+(44, 6, 'Chaco', 'H', 1),
+(44, 6, 'Chubut', 'U', 1),
+(44, 6, 'Ciudad de Buenos Aires', 'C', 1),
+(44, 6, 'Córdoba', 'X', 1),
+(44, 6, 'Corrientes', 'W', 1),
+(44, 6, 'Entre Ríos', 'E', 1),
+(44, 6, 'Formosa', 'P', 1),
+(44, 6, 'Jujuy', 'Y', 1),
+(44, 6, 'La Pampa', 'L', 1),
+(44, 6, 'La Rioja', 'F', 1),
+(44, 6, 'Mendoza', 'M', 1),
+(44, 6, 'Misiones', 'N', 1),
+(44, 6, 'Neuquén', 'Q', 1),
+(44, 6, 'Río Negro', 'R', 1),
+(44, 6, 'Salta', 'A', 1),
+(44, 6, 'San Juan', 'J', 1),
+(44, 6, 'San Luis', 'D', 1),
+(44, 6, 'Santa Cruz', 'Z', 1),
+(44, 6, 'Santa Fe', 'S', 1),
+(44, 6, 'Santiago del Estero', 'G', 1),
+(44, 6, 'Tierra del Fuego', 'V', 1),
+(44, 6, 'Tucumán', 'T', 1);
 
 INSERT INTO `PREFIX_currency` (`name`, `iso_code`, `iso_code_num`, `sign`, `blank`, `conversion_rate`, `format`, `deleted`, `active`) VALUES
 ('Euro', 'EUR', '978', '€', 1, 1, 2, 0, 1), ('Dollar', 'USD', '840', '$', 0, 1.32, 1, 0, 1), ('Pound', 'GBP', '826', '£', 0, 0.8, 1, 0, 1), ('Yen', 'JPY', '392', '¥', 0, 113.14, 2, 0, 0),
