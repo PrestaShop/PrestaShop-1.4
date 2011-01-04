@@ -17,5 +17,4 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 ('PS_SMARTY_CACHE', '1', NOW(), NOW());
 
 ALTER TABLE `PREFIX_product_attribute` CHANGE `price` `price` decimal(20,6) NOT NULL default '0.000000';
-UPDATE `PREFIX_product_attribute` pa SET pa.`price` = IFNULL(pa.`price` / (1 + (SELECT t.`rate` FROM `PREFIX_tax` t INNER JOIN `PREFIX_product` p ON (p.`id_tax` = t.`id_tax`) WHERE p.`id_product` = pa.`id_product`) / 100), '0.000000');
-
+UPDATE `PREFIX_product_attribute` pa SET pa.`price` = pa.`price` / (1 + (SELECT IFNULL(t.`rate`,0)  FROM `PREFIX_tax` t INNER JOIN `PREFIX_product` p ON (p.`id_tax` = t.`id_tax`) WHERE p.`id_product` = pa.`id_product`) / 100); 
