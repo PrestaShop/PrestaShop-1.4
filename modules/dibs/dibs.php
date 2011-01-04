@@ -32,7 +32,7 @@ class dibs extends PaymentModule
      * define more settings values, set for new version which probably.
      * @var array
      */
-    private static $MORE_SETTINGS;
+    public static $MORE_SETTINGS;
     
     /**
      * @var string
@@ -72,6 +72,11 @@ class dibs extends PaymentModule
         self::$CANCELLED_URL = Configuration::get('DIBS_CANCELLED_URL');
         self::$TESTING = (int)Configuration::get('DIBS_TESTING');
         self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Configuration::get('DIBS_MORE_SETTINGS')) : array();
+        
+        if (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '')
+			$this->warning = $this->l('For security reason you have to set key #1 and key #2 used by MD5 control of DIBS API.');
+		if (!self::$ID_MERCHANT OR self::$ID_MERCHANT === '')
+			$this->warning = $this->l('You have to set your ID merchant to use DIBS API.');
 	}
 	
 	public function install()
@@ -82,7 +87,7 @@ class dibs extends PaymentModule
 			AND Configuration::updateValue('DIBS_ACCEPTED_URL', self::$site_url.(substr(trim(self::$site_url), -1, 1) === '/' ? '' : '/').'order-confirmation.php')
 			AND Configuration::updateValue('DIBS_CANCELLED_URL', self::$site_url)
 			AND Configuration::updateValue('DIBS_TESTING', 1)
-			AND Configuration::updateValue('DIBS_MORE_SETTINGS', serialize(array('flexwin_color' => 'blue', 'logo_color' => 'black'))));
+			AND Configuration::updateValue('DIBS_MORE_SETTINGS', serialize(array('flexwin_color' => 'blue', 'logo_color' => 'black', 'k1' => '', 'k2' => ''))));
 	}
 	
 	public function uninstall()
@@ -119,6 +124,8 @@ class dibs extends PaymentModule
 		    self::$TESTING = (int)isset($_POST['testing']);
 			self::$MORE_SETTINGS['flexwin_color'] = Tools::getValue('flexwin_color');
 			self::$MORE_SETTINGS['logo_color'] = Tools::getValue('logo_color');
+			self::$MORE_SETTINGS['k1'] = Tools::getValue('k1');
+			self::$MORE_SETTINGS['k2'] = Tools::getValue('k2');
 			    
 		    Configuration::updateValue('DIBS_ID_MERCHANT', self::$ID_MERCHANT);
 		    Configuration::updateValue('DIBS_ACCEPTED_URL', self::$ACCEPTED_URL);
@@ -152,6 +159,15 @@ class dibs extends PaymentModule
 				<div class="margin-form">
 					<input type="text" size="20" name="idMerchant" value="'.self::$ID_MERCHANT.'" />
 					<p>'.$this->l('See the e-mail sent by DIBS.').'</p>
+				</div>
+				<label>'.$this->l('Secure Key #1').' <sup>*</sup></label>
+				<div class="margin-form">
+					<input type="text" size="20" name="k1" value="'.self::$MORE_SETTINGS['k1'].'" />
+				</div>
+				<label>'.$this->l('Secure Key #2').' <sup>*</sup></label>
+				<div class="margin-form">
+					<input type="text" size="20" name="k2" value="'.self::$MORE_SETTINGS['k2'].'" />
+					<p>'.$this->l('This keys are used for security improvement.').'<br />'.$this->l('To get this keys go in DIBS administration interface and into Integration > MD5 Keys menu. Please ensure the MD5 control is activated, module don\'t work if not.').'</p>
 				</div>
 				<label>'.$this->l('Use DIBS test module').'</label>
 				<div class="margin-form">
@@ -239,6 +255,8 @@ class dibs extends PaymentModule
 		$dibsParams['uniqueoid']	= (int)($params['cart']->id).'_'.date('YmdHis').'_'.$params['cart']->secure_key; // optional - If this field exists, the orderid-field must be unique, i.e. there is no existing transaction with DIBS with the same order number. If such a transaction already exists, payment will be rejected with reason=7. Unless you are unable to generate unique order numbers, we strongly urge you to utilize this field.Note: Order numbers can be composed of a maximum of 50 characters (DIBS automatically removes surplus characters) and that uniqueoid is therefore unable to work as intended if order numbers consisting of more than 50 characters are used.
 		$dibsParams['callbackurl']	= self::$site_url.'modules/'.$this->name.'/validation.php'; // optional - An optional �server-to-server� call which tells the shop�s server that payment was a success. Can be used for many purposes, the most important of these being the ability to register the order in your own system without depending on the customer�s browser hitting a specific page of the shop. See also HTTP_COOKIE.
 		$dibsParams['HTTP_COOKIE']	= urlencode((string)serialize($params['cookie'])); // optional - Cookies/sessions which are to be sent to callbackurl. Must be sent along if you are using callbackurl and depend on cookies/sessions for keeping track of the user. Read how this is carried out in the description of automatic call-back further down this page.
+		$md5_params = 'merchant='.self::$ID_MERCHANT.'&orderid='.$dibsParams['orderid'].'&currency='.$dibsParams['currency'].'&amount='.$dibsParams['amount'];
+		$dibsParams['md5key']		= md5(self::$MORE_SETTINGS['k2'].md5(self::$MORE_SETTINGS['k1'].$md5_params)); // optional - This variable enables a MD5 key control of the values received by DIBS. This control  confirms that the values sent to DIBS has not been tampered with during the transfer. The MD5 key is calculated as:  MD5(key2 + MD5(key1 + "merchant=&orderid=&transact="))  Where key1 and key2 are shop specific keys available through the DIBS administration interface, and + is the concatenation operator. NB! MD5 key check must also be enabled through the DIBS administration interface in order to work. Further details on MD5-key control.  
 		
 		// @todo need more infos.
 		$dibsParams['account']		= ''; // optional - If multiple departments utilize the company's acquirer agreement with PBS, it may prove practical to keep the transactions separate at DIBS. An "account number" may be inserted in this field, so as to separate transactions at DIBS.
@@ -250,7 +268,6 @@ class dibs extends PaymentModule
 		$dibsParams['postype']		= ''; // optional - "postype" (one 't') is used when one wishes to register the transaction origin. For normal internet transaction it is not required to include "postype", as it is automatically set to SSL. Possible values are:  ssl = internet transactions, magnetic = magnetic stripe read, and signature is available, magnosig = magnetic stripe read, and no signature is available, mail = mail order, manual = manually entered, phone = phone order, signature = card and signature available, manually entered.
 		$dibsParams['ticketrule']	= ''; // optional - Set the value of this parameter to the same as defined by you in DIBS Admin.
 		$dibsParams['preauth']		= ''; // optional - When preauth=true is sent as part of the request to auth.cgi the DIBS server identifies the authorisation as a ticket authorisation rather than a normal transaction. Please note that the pre-authorised transaction is NOT available among the transactions in the DIBS administration interface. When using MD5 the Authkey must be calculated from the string transact=12345678&preauth=true&currency=123
-		$dibsParams['md5key']		= ''; // optional - This variable enables a MD5 key control of the values received by DIBS. This control  confirms that the values sent to DIBS has not been tampered with during the transfer. The MD5 key is calculated as:  MD5(key2 + MD5(key1 + "merchant=&orderid=&transact="))  Where key1 and key2 are shop specific keys available through the DIBS administration interface, and + is the concatenation operator. NB! MD5 key check must also be enabled through the DIBS administration interface in order to work. Further details on MD5-key control.  
 		
 		// @todo Since Prestashop manage vouchers, ask if necessary to use this params 
 		$dibsParams['voucher']		= ''; // optional - If set to "yes", then the list of payment types on the first page of FlexWin will contain vouchers, too. If FlexWin is called with a paytype, which would lead directly to the payment form, the customer is given the choice of entering a voucher code first.
