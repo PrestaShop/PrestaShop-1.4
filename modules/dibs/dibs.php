@@ -73,7 +73,8 @@ class dibs extends PaymentModule
         self::$TESTING = (int)Configuration::get('DIBS_TESTING');
         self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Configuration::get('DIBS_MORE_SETTINGS')) : array();
         
-        if (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '')
+        if (!isset(self::$MORE_SETTINGS['k1'])
+        	OR (isset(self::$MORE_SETTINGS['k1']) AND (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '') ))
 			$this->warning = $this->l('For security reason you have to set key #1 and key #2 used by MD5 control of DIBS API.');
 		if (!self::$ID_MERCHANT OR self::$ID_MERCHANT === '')
 			$this->warning = $this->l('You have to set your ID merchant to use DIBS API.');
