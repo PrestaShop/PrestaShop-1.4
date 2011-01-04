@@ -1053,7 +1053,7 @@ td.cart_quantity {
 	width: 7.5em;
 	text-align: right
 }
-.cart_quantity_input { float: right; margin: 6px 8px 0 0; }
+.cart_quantity_input { float: right; margin: 5px 10px 0 0; }
 td.cart_quantity p, td.cart_quantity a {
 	float: left;
 	display: inline
