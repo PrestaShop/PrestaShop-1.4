@@ -899,9 +899,10 @@ class ProductCore extends ObjectModel
 	* @param string $reference Reference
 	* @param string $ean13 Ean-13 barcode
 	* @param string $upc Upc barcode
+	* @param string $minimal_quantity Minimal quantity
 	* @return array Update result
 	*/
-	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $unit, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
+	public function updateProductAttribute($id_product_attribute, $wholesale_price, $price, $weight, $unit, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL, $minimal_quantity)
 	{
 		Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
@@ -920,7 +921,8 @@ class ProductCore extends ObjectModel
 		'location' => pSQL($location),
 		'ean13' => pSQL($ean13),
 		'upc' => pSQL($upc),
-		'default_on' => (int)($default));
+		'default_on' => (int)($default),
+		'minimal_quantity' => (int)($minimal_quantity));
 		if ($quantity)
 			$data['quantity'] =  (int)$quantity;
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.(int)($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.(int)($id_product_attribute)))
@@ -1913,7 +1915,7 @@ class ProductCore extends ObjectModel
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT ag.`id_attribute_group`, ag.`is_color_group`, agl.`name` AS group_name, agl.`public_name` AS public_group_name, a.`id_attribute`, al.`name` AS attribute_name,
-		a.`color` AS attribute_color, pa.`id_product_attribute`, pa.`quantity`, pa.`price`, pa.`ecotax`, pa.`weight`, pa.`default_on`, pa.`reference`, pa.`unit_price_impact`
+		a.`color` AS attribute_color, pa.`id_product_attribute`, pa.`quantity`, pa.`price`, pa.`ecotax`, pa.`weight`, pa.`default_on`, pa.`reference`, pa.`unit_price_impact`, pa.`minimal_quantity`
 		FROM `'._DB_PREFIX_.'product_attribute` pa
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
 		LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`

@@ -73,7 +73,7 @@ class AdminProducts extends AdminTab
 	protected function copyFromPost(&$object, $table)
 	{
 		parent::copyFromPost($object, $table);
-
+					
 		if (get_class($object) != 'Product')
 			return;
 
@@ -485,7 +485,8 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_ean13'),
 								Tools::getValue('attribute_default'),
 								Tools::getValue('attribute_location'),
-								Tools::getValue('attribute_upc'));
+								Tools::getValue('attribute_upc'),
+								Tools::getValue('minimal_quantity'));
 								if (in_array($mvt_type = Tools::getValue('attribute_mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('attribute_mvt_quantity') AND $mvt_qty != 0))
 								{
 									$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
@@ -2468,7 +2469,7 @@ class AdminProducts extends AdminTab
 						echo  '<tr>
 								<td class="col-left">'.$this->l('Minimum quantity:').'</td>
 									<td style="padding-bottom:5px;">
-										<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
+										<input size="3" maxlength="6" name="minimal_quantity" id="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
 										<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
 									</td>
 								</tr>';
@@ -3086,7 +3087,7 @@ class AdminProducts extends AdminTab
 			<tr>
 			<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Minimum quantity:').'</td>
 				<td style="padding-bottom:5px;">
-					<input size="3" maxlength="6" name="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
+					<input size="3" maxlength="6" name="minimal_quantity" id="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
 					<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
 				</td>
 			</tr>
@@ -3160,6 +3161,7 @@ class AdminProducts extends AdminTab
                         $combArray[$combinaison['id_product_attribute']]['supplier_reference'] = $combinaison['supplier_reference'];
                         $combArray[$combinaison['id_product_attribute']]['ean13'] = $combinaison['ean13'];
 						$combArray[$combinaison['id_product_attribute']]['upc'] = $combinaison['upc'];
+						$combArray[$combinaison['id_product_attribute']]['minimal_quantity'] = $combinaison['minimal_quantity'];
 						$combArray[$combinaison['id_product_attribute']]['location'] = $combinaison['location'];
 						$combArray[$combinaison['id_product_attribute']]['quantity'] = $combinaison['quantity'];
 						$combArray[$combinaison['id_product_attribute']]['id_image'] = isset($combinationImages[$combinaison['id_product_attribute']][0]['id_image']) ? $combinationImages[$combinaison['id_product_attribute']][0]['id_image'] : 0;
@@ -3198,7 +3200,7 @@ class AdminProducts extends AdminTab
 							<a style="cursor: pointer;">
 							<img src="../img/admin/edit.gif" alt="'.$this->l('Modify this combination').'"
 							onclick="javascript:fillCombinaison(\''.$product_attribute['wholesale_price'].'\', \''.$product_attribute['price'].'\', \''.$product_attribute['weight'].'\', \''.$product_attribute['unit_impact'].'\', \''.$product_attribute['reference'].'\', \''.$product_attribute['supplier_reference'].'\', \''.$product_attribute['ean13'].'\',
-							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\', \''.$product_attribute['upc'].'\'); calcImpactPriceTI();" /></a>&nbsp;
+							\''.$product_attribute['quantity'].'\', \''.($attrImage ? $attrImage->id : 0).'\', Array('.$jsList.'), \''.$id_product_attribute.'\', \''.$product_attribute['default_on'].'\', \''.$product_attribute['ecotax'].'\', \''.$product_attribute['location'].'\', \''.$product_attribute['upc'].'\', \''.$product_attribute['minimal_quantity'].'\'); calcImpactPriceTI();" /></a>&nbsp;
 							'.(!$product_attribute['default_on'] ? '<a href="'.$currentIndex.'&defaultProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&'.(Tools::isSubmit('id_category') ? 'id_category='.(int)(Tools::getValue('id_category')).'&' : '&').'token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 							<img src="../img/admin/asterisk.gif" alt="'.$this->l('Make this the default combination').'" title="'.$this->l('Make this combination the default one').'"></a>' : '').'
 							<a href="'.$currentIndex.'&deleteProductAttribute&id_product_attribute='.$id_product_attribute.'&id_product='.$obj->id.'&'.(Tools::isSubmit('id_category') ? 'id_category='.(int)(Tools::getValue('id_category')).'&' : '&').'token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');">

@@ -104,23 +104,20 @@ var doesntExistNoMoreBut = '{l s='with those attributes but is available with ot
 var uploading_in_progress = '{l s='Uploading in progress, please wait...' js=1}';
 var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 
-
 {if isset($groups)}
 	// Combinations
 	{foreach from=$combinations key=idCombination item=combination}
-		addCombination({$idCombination|intval}, new Array({$combination.list}), {$combination.quantity}, {$combination.price}, {$combination.ecotax}, {$combination.id_image}, '{$combination.reference|addslashes}', {$combination.unit_impact});
+		addCombination({$idCombination|intval}, new Array({$combination.list}), {$combination.quantity}, {$combination.price}, {$combination.ecotax}, {$combination.id_image}, '{$combination.reference|addslashes}', {$combination.unit_impact}, {$combination.minimal_quantity});
 	{/foreach}
 	// Colors
 	{if $colors|@count > 0}
 		{if $product->id_color_default}var id_color_default = {$product->id_color_default|intval};{/if}
 	{/if}
 {/if}
-
 //]]>
 </script>
 
 {include file="$tpl_dir./breadcrumb.tpl"}
-
 <div id="primary_block" class="clearfix">
 	<h1>{$product->name|escape:'htmlall':'UTF-8'}</h1>
 
@@ -316,36 +313,14 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 
 			<p id="product_reference" {if isset($groups) OR !$product->reference}style="display:none;"{/if}><label for="product_reference">{l s='Reference :'} </label><span class="editable">{$product->reference|escape:'htmlall':'UTF-8'}</span></p>
 
-			{if $product->minimal_quantity > 1}
-			<!-- minimal quantity JS -->
-			<script type="text/javascript">
-				var minimal_quantity = {$product->minimal_quantity};
-				{literal}
-				function checkMinimalQuantity()
-				{
-					if ($('#quantity_wanted').val() < minimal_quantity)
-					{
-						$('#quantity_wanted').css('border', '1px solid red');
-						$('#minimal_quantity_wanted_p').css('color', 'red');
-					}
-					else
-					{
-						$('#quantity_wanted').css('border', '1px solid #BDC2C9');
-						$('#minimal_quantity_wanted_p').css('color', '#374853');
-					}
-				}
-				{/literal}
-			</script>
-			{/if}
-
 			<!-- quantity wanted -->
 			<p id="quantity_wanted_p"{if (!$allow_oosp && $product->quantity == 0) OR $virtual OR !$product->available_for_order} style="display:none;"{/if}>
 				<label>{l s='Quantity :'}</label>
-				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}{if $product->minimal_quantity > 1}{$product->minimal_quantity}{else}1{/if}{/if}" size="2" maxlength="3" {if $product->minimal_quantity > 1}onkeyup="checkMinimalQuantity();"{/if} />
+				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}{if $product->minimal_quantity > 1}{$product->minimal_quantity}{else}1{/if}{/if}" size="2" maxlength="3" {if $product->minimal_quantity > 1}onkeyup="checkMinimalQuantity({$product->minimal_quantity});"{/if} />
 			</p>
-
+			
 			<!-- minimal quantity wanted -->
-			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display:none;"{/if}>{l s='You must add '}<b>{$product->minimal_quantity}</b>{l s=' as a minimum quantity to buy this product.'}</p>
+			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display:none;"{/if}>{l s='You must add '}<b id="minimal_quantity_label">{$product->minimal_quantity}</b>{l s=' as a minimum quantity to buy this product.'}</p>
 			{if $product->minimal_quantity > 1}
 			<script type="text/javascript">
 				checkMinimalQuantity();
@@ -353,7 +328,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 			{/if}
 
 			<!-- availability -->
-			<p id="availability_statut"{if ($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now) OR !$product->available_for_order} style="display:none;"{/if}>
+			<p id="availability_statut"{if ($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now) OR !$product->available_for_order} style=":none;"{/if}>
 				<span id="availability_label">{l s='Availability:'}</span>
 				<span id="availability_value"{if $product->quantity == 0} class="warning-inline"{/if}>
 					{if $product->quantity == 0}{if $allow_oosp}{$product->available_later}{else}{l s='This product is no longer in stock'}{/if}{else}{$product->available_now}{/if}

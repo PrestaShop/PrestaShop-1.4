@@ -230,7 +230,7 @@ class ProductControllerCore extends FrontController
 				{
 					$colors = array();
 					$attributesGroups = $product->getAttributesGroups((int)($this->cookie->id_lang));
-
+					//d($attributesGroups);
 					if (Db::getInstance()->numRows())
 					{
 						$combinationImages = $product->getCombinationImages((int)($this->cookie->id_lang));
@@ -263,6 +263,7 @@ class ProductControllerCore extends FrontController
 							$combinations[$row['id_product_attribute']]['quantity'] = (int)($row['quantity']);
 							$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
 							$combinations[$row['id_product_attribute']]['unit_impact'] = $row['unit_price_impact'];
+							$combinations[$row['id_product_attribute']]['minimal_quantity'] = $row['minimal_quantity'];
 							$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
 						}
 						//wash attributes list (if some attributes are unavailables and if allowed to wash it)
@@ -299,7 +300,7 @@ class ProductControllerCore extends FrontController
 					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getProductTaxRate((int)$product->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}),
 					'customizationFields' => $product->getCustomizationFields((int)($this->cookie->id_lang))
 				));
-
+				
 				// Pack management
 				$this->smarty->assign('packItems', Pack::getItemTable($product->id, (int)($this->cookie->id_lang), true));
 				$this->smarty->assign('packs', Pack::getPacksTable($product->id, (int)($this->cookie->id_lang), true, 1));

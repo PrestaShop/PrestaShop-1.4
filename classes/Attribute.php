@@ -177,5 +177,25 @@ class AttributeCore extends ObjectModel
 			return false;
 		return Db::getInstance()->NumRows();
 	}
+	
+	/**
+	 * Get minimal quantity for product with attributes quantity
+	 *
+	 * @acces public static
+	 * @param integer $id_product_attrubute
+	 * @return mixed Minimal Quantity or false
+	 */
+	static public function getAttributeMinimalQty($id_product_attrubute)
+	{
+		$row = Db::getInstance()->getValue('
+		SELECT minimal_quantity
+		FROM `'._DB_PREFIX_.'product_attribute` 
+		WHERE `id_product_attribute` = '.(int)($id_product_attrubute));
+		
+		if ($row['quantity'] !== NULL)
+			return (int)($row['quantity']);
+		return false;
+	}
+	
 }
 

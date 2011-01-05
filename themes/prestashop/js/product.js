@@ -50,7 +50,7 @@ function oosHookJsCode()
 }
 
 //add a combination of attributes in the global JS sytem
-function addCombination(idCombination, arrayOfIdAttributes, quantity, price, ecotax, id_image, reference, unit_price)
+function addCombination(idCombination, arrayOfIdAttributes, quantity, price, ecotax, id_image, reference, unit_price, minimal_quantity)
 {
 	globalQuantity += quantity;
 
@@ -63,12 +63,16 @@ function addCombination(idCombination, arrayOfIdAttributes, quantity, price, eco
 	combination['image'] = id_image;
 	combination['reference'] = reference;
 	combination['unit_price'] = unit_price;
+	combination['minimal_quantity'] = minimal_quantity;
 	combinations.push(combination);
+	
 }
 
 // search the combinations' case of attributes and update displaying of availability, prices, ecotax, and image
 function findCombination(firstTime)
 {
+	$('#minimal_quantity_wanted_p').fadeOut();
+	$('#quantity_wanted').val(1);
 	//create a temporary 'choice' array containing the choices of the customer
 	var choice = new Array();
 	$('div#attributes select').each(function(){
@@ -78,7 +82,7 @@ function findCombination(firstTime)
 	//testing every combination to find the conbination's attributes' case of the user
 
 	for (combination in combinations)
-	{
+	{		
 		//verify if this combinaison is the same that the user's choice
 		nbAttributesEquals = 0;
 		for (idAttribute in combinations[combination]['idsAttributes'])
@@ -88,6 +92,7 @@ function findCombination(firstTime)
 				//if this attribute has been choose by user
 				if (in_array(combinations[combination]['idsAttributes'][idAttribute], choice))
 				{
+					
 					//we are in a good way to find the good combination !
 					nbAttributesEquals++;
 				}
@@ -96,6 +101,13 @@ function findCombination(firstTime)
 
 		if (nbAttributesEquals == choice.length)
 		{
+			if (combinations[combination]['minimal_quantity'] > 1)
+			{
+				$('#minimal_quantity_label').html(combinations[combination]['minimal_quantity']);
+				$('#minimal_quantity_wanted_p').fadeIn();
+				$('#quantity_wanted').val(combinations[combination]['minimal_quantity']);
+				$('#quantity_wanted').bind('keyup', function() {checkMinimalQuantity(combinations[combination]['minimal_quantity'])});
+			}
 			//combination of the user has been found in our specifications of combinations (created in back office)
 			selectedCombination['unavailable'] = false;
 			selectedCombination['reference'] = combinations[combination]['reference'];
@@ -480,3 +492,16 @@ function submitPublishProduct(url, redirect)
 	return true;
 }
 
+function checkMinimalQuantity(minimal_quantity)
+{
+	if ($('#quantity_wanted').val() < minimal_quantity)
+	{
+		$('#quantity_wanted').css('border', '1px solid red');
+		$('#minimal_quantity_wanted_p').css('color', 'red');
+	}
+	else
+	{
+		$('#quantity_wanted').css('border', '1px solid #BDC2C9');
+		$('#minimal_quantity_wanted_p').css('color', '#374853');
+	}
+}

@@ -427,6 +427,11 @@ class CartCore extends ObjectModel
 	public	function updateQty($quantity, $id_product, $id_product_attribute = NULL, $id_customization = false, $operator = 'up')
 	{
 		$product = new Product((int)($id_product), false, Configuration::get('PS_LANG_DEFAULT'));
+		if ((int)($id_product_attribute))
+			$minimal_quantity = Attribute::getAttributeMinimalQty($id_product_attribute);
+		else
+			$minimal_quantity = $product->minimal_quantity;
+				
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
 		self::$_nbProducts = NULL;
@@ -462,7 +467,7 @@ class CartCore extends ObjectModel
 				{
 					$qty = '`quantity` - '.(int)($quantity);
 					$newQty = $result['quantity'] - (int)($quantity);
-					if ($newQty < $product->minimal_quantity AND $product->minimal_quantity > 1)
+					if ($newQty < $minimal_quantity AND $minimal_quantity > 1)
 						return -1;
 				}
 				else
@@ -471,7 +476,7 @@ class CartCore extends ObjectModel
 				/* Delete product from cart */
 				if ($newQty <= 0)
 					return $this->deleteProduct((int)($id_product), (int)($id_product_attribute), (int)($id_customization));
-				elseif ($newQty < $product->minimal_quantity)
+				elseif ($newQty < $minimal_quantity)
 						return -1;
 				else
 					Db::getInstance()->Execute('
@@ -497,7 +502,7 @@ class CartCore extends ObjectModel
 						if ((int)($quantity) > $productQty)
 							return false;
 
-				if ($quantity < $product->minimal_quantity)
+				if ($quantity < $minimal_quantity)
 					return -1;
 				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => (int)($id_product),
 				'id_product_attribute' => (int)($id_product_attribute), 'id_cart' => (int)($this->id),

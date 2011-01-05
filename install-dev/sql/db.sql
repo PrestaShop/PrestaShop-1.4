@@ -1143,6 +1143,7 @@ CREATE TABLE `PREFIX_product_attribute` (
   `weight` float NOT NULL default '0',
   `unit_price_impact` decimal(17,2) NOT NULL default '0.00',
   `default_on` tinyint(1) unsigned NOT NULL default '0',
+  `minimal_quantity` int(10) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY  (`id_product_attribute`),
   KEY `product_attribute_product` (`id_product`),
   KEY `reference` (`reference`),

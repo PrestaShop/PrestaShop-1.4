@@ -100,6 +100,10 @@ class CartControllerCore extends FrontController
 			else
 			{
 				$producToAdd = new Product((int)($idProduct), true, (int)($this->cookie->id_lang));
+				if ((int)($idProductAttribute))
+					$minimal_quantity = Attribute::getAttributeMinimalQty($idProductAttribute);
+				else
+					$minimal_quantity = $producToAdd->minimal_quantity;
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
 					if (Tools::getValue('ajax') == 'true')
 						die('{"hasError" : true, "errors" : ["'.Tools::displayError('product is no longer available', false).'"]}');
@@ -159,9 +163,9 @@ class CartControllerCore extends FrontController
 
 								if ($updateQuantity < 0)
 									if (Tools::getValue('ajax') == 'true')
-										die('{"hasError" : true, "errors" : ["'.Tools::displayError('you need to add', false).' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum', false).'"]}');
+										die('{"hasError" : true, "errors" : ["'.Tools::displayError('you need to add', false).' '.$minimal_quantity.' '.Tools::displayError('quantity minimum', false).'"]}');
 									else
-									$this->errors[] = Tools::displayError('you need to add').' '.$producToAdd->minimal_quantity.' '.Tools::displayError('quantity minimum')
+									$this->errors[] = Tools::displayError('you need to add').' '.$minimal_quantity.' '.Tools::displayError('quantity minimum')
 										.((isset($_SERVER['HTTP_REFERER']) AND basename($_SERVER['HTTP_REFERER']) == 'order.php' OR (!Tools::isSubmit('ajax') AND substr(basename($_SERVER['REQUEST_URI']),0, strlen('cart.php')) == 'cart.php')) ? ('<script language="javascript">setTimeout("history.back()",5000);</script><br />- '.
 										Tools::displayError('You will be redirected to your cart in a few seconds.')) : '');
 								elseif (!$updateQuantity)
