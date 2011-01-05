@@ -428,8 +428,8 @@ class AdminProducts extends AdminTab
 					else
 					{
 						$productId = (int)(Tools::getValue('id_product'));
-						@unlink(dirname(_PS_TMP_IMG_DIR_.'/product_'.$productId.'.jpg');
-						@unlink(dirname(_PS_TMP_IMG_DIR_.'/product_mini_'.$productId.'.jpg');
+						@unlink(_PS_TMP_IMG_DIR_.'/product_'.$productId.'.jpg');
+						@unlink(_PS_TMP_IMG_DIR_.'/product_mini_'.$productId.'.jpg');
 						Tools::redirectAdmin($currentIndex.'&id_product='.$image->id_product.'&id_category='.(int)(Tools::getValue('id_category')).'&addproduct&tabs=1'.'&token='.($token ? $token : $this->token));
 					}
 				}
