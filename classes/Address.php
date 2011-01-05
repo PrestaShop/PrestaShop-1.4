@@ -112,11 +112,11 @@ class AddressCore extends ObjectModel
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'addresses',
 		'fields' => array(
-			'id_customer' => array('sqlId' => 'id_customer', 'xlink_resource'=> 'customers'),
-			'id_manufacturer' => array('sqlId' => 'id_manufacturer', 'xlink_resource'=> 'manufacturers'),
-			'id_supplier' => array('sqlId' => 'id_supplier', 'xlink_resource'=> 'suppliers'),
-			'id_country' => array('sqlId' => 'id_country', 'xlink_resource'=> 'countries'),
-			'id_state' => array('sqlId' => 'id_state', 'xlink_resource'=> 'states'),
+			'id_customer' => array('xlink_resource'=> 'customers'),
+			'id_manufacturer' => array('xlink_resource'=> 'manufacturers'),
+			'id_supplier' => array('xlink_resource'=> 'suppliers'),
+			'id_country' => array('xlink_resource'=> 'countries'),
+			'id_state' => array('xlink_resource'=> 'states'),
 		),
 	);
 

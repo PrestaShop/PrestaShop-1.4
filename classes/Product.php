@@ -251,9 +251,9 @@ class ProductCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
-			'out_of_stock' => array('sqlId' => 'out_of_stock', 'required' => true),
-			'new' => array('sqlId' => 'new', 'i18n' => false),
-			'cache_default_attribute' => array('sqlId' => 'cache_default_attribute', 'i18n' => false),
+			'out_of_stock' => array('required' => true),
+			'new' => array('sqlId' => 'new'),
+			'cache_default_attribute' => array(),
 		),
 		'associations' => array(
 			'categories' => array('resource' => 'category'),

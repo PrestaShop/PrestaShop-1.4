@@ -87,14 +87,9 @@ class CarrierCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
-			'id_tax_rules_group' => array('sqlId' => 'id_tax_rules_group', 'xlink_resource'=> 'taxes'),
-			'url' => array('sqlId' => 'url'),
-			'delay' => array('sqlId' => 'delay'),
-			'active' => array('sqlId' => 'active', 'required' => true),
-			'deleted' => array('sqlId' => 'deleted'),
-			'shipping_handling' => array('sqlId' => 'shipping_handling'),
-			'range_behavior' => array('sqlId' => 'range_behavior'),
-			'is_module' => array('sqlId' => 'is_module'),
+			'id_tax_rules_group' => array('xlink_resource'=> 'taxes'),
+			'deleted' => array(),
+			'is_module' => array(),
 		),
 	);
 
