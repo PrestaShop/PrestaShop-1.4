@@ -34,7 +34,7 @@ $errors = array();
 
 /* Check for mandatory fields */
 $requiredFields = array('status', 'md5sig', 'merchant_id', 'pay_to_email', 'mb_amount', 
-'mb_transaction_id', 'currency', 'amount', 'transaction_id', 'pay_from_email', 'mb_currency');
+'mb_transaction_id', 'amount', 'currency', 'amount', 'transaction_id', 'pay_from_email', 'mb_currency');
 
 foreach ($requiredFields AS $field)
 	if (!isset($_POST[$field]))
@@ -66,12 +66,12 @@ switch ($status)
 {	
 	/* Bankwire */
 	case 0:
-		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_BANKWIRE_, (float)($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
+		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_BANKWIRE_, (float)($_POST['amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
 	/* Payment OK */
 	case 2:
-		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_PAYMENT_, (float)($_POST['mb_amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
+		$moneyBookers->validateOrder((int)($secure_cart[0]), _PS_OS_PAYMENT_, (float)($_POST['amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
 	/* Unknown or error */
