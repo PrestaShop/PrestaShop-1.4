@@ -94,10 +94,12 @@ class AdminPreferences extends AdminTab
 			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login:'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_PRICE_ROUND_MODE' => array('title' => $this->l('Round mode:'), 'desc' => $this->l('You can choose how to round prices: always round superior; always round inferior, or classic rounding'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $round_mode, 'identifier' => 'value'),
 			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check for module updates'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_DISPLAY_SUPPLIERS' => array('title' => $this->l('Display suppliers and manufacturers'), 'desc' => $this->l('Display manufacturers and suppliers list even if corresponding blocks are disabled'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_FORCE_SMARTY_2' => array('title' => $this->l('Use Smarty 2 instead of 3:'), 'desc' => $this->l('Enable if your theme is incompatible with Smarty 3 (you should update your theme, since Smarty 2 will be unsupported from PrestaShop v1.5)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			);
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
-			$this->_fieldsGeneral['PS_FORCE_SMARTY_2'] = array('title' => $this->l('Use Smarty 2 instead of 3:'), 'desc' => $this->l('Enable if your theme is incompatible with Smarty 3 (you should update your theme, since Smarty 2 will be unsupported from PrestaShop v1.5)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool');
+
 
 		parent::__construct();
 	}

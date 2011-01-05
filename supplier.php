@@ -82,25 +82,27 @@ if ($id = (int)(Tools::getValue('id_'.$objectType)))
 else
 {
 	$controller->displayHeader();
-	$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true);
-	$nbProducts = 0;
-	foreach ($data AS $n)
-		$nbProducts += (int)$n['nb_products'];
-	$controller->pagination($nbProducts);
+	if (Configuration::get('PS_DISPLAY_SUPPLIERS'))
+	{
+		$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true);
+		$nbProducts = 0;
+		foreach ($data AS $n)
+			$nbProducts += (int)$n['nb_products'];
+		$controller->pagination($nbProducts);
 
-	$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true, $controller->p, $controller->n);
-	$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;
-	foreach ($data AS &$item)
-		$item['image'] = (!file_exists($imgDir.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 
-			Language::getIsoById((int)($cookie->id_lang)).'-default' :	$item['id_'.$objectType];
-
-	$smarty->assign(array(
+		$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true, $controller->p, $controller->n);
+		$imgDir = $objectType == 'supplier' ? _PS_SUPP_IMG_DIR_ : _PS_MANU_IMG_DIR_;
+		foreach ($data AS &$item)
+			$item['image'] = (!file_exists($imgDir.'/'.$item['id_'.$objectType].'-medium.jpg')) ? 
+				Language::getIsoById((int)($cookie->id_lang)).'-default' :	$item['id_'.$objectType];
+		$smarty->assign(array(
 		'pages_nb' => ceil($nbProducts / (int)($controller->n)),
 		'nb'.$className.'s' => $nbProducts,
 		'mediumSize' => Image::getSize('medium'),
 		$objectType.'s' => $data,
 		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
-	));
+		));
+	}
 	$smarty->display(_PS_THEME_DIR_.$objectType.'-list.tpl');
 }
 
