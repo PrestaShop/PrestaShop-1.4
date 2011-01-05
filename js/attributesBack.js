@@ -26,7 +26,6 @@
 
 function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location, upc, minimal_quantity)
 {
-	console.log(minimal_quantity);
 	init_elems();
 	$('#stock_mvt_attribute').show();
 	$('#initial_stock_attribute').hide();
