@@ -80,5 +80,13 @@ class TaxRuleCore extends ObjectModel
 
         return $res;
     }
+
+    public static function deleteTaxRuleByIdTax($id_tax)
+    {
+        return Db::getInstance()->Execute('
+        DELETE FROM `'._DB_PREFIX_.'tax_rule`
+        WHERE `id_tax` = '.(int)$id_tax
+        );
+    }
 }
 
