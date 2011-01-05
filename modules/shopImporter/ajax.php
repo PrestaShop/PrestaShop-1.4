@@ -34,8 +34,6 @@ if (Tools::isSubmit('getData'))
 	$prefix = Tools::getValue('prefix');
 	$save = Tools::getValue('save');
 
-	d('prout');
-
 	if (file_exists('../../modules/'.$moduleName.'/'.$moduleName.'.php'))
 	{
 		require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
