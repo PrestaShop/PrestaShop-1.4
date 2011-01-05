@@ -41,6 +41,7 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_72d6d7a1885885bb55a565fd1070581
 $_MODULE['<{shopImporter}prestashop>shopImporter_e08d2dad1fcd8a0d89e242939b2475bb'] = 'Merci de corriger les erreurs avant de continuer';
 $_MODULE['<{shopImporter}prestashop>shopImporter_a4376f284662da6f3997514ca74597c9'] = 'L\'import est terminé';
 $_MODULE['<{shopImporter}prestashop>shopImporter_596403b61367ca30d6de75812275f9cd'] = 'Suppression des données';
+$_MODULE['<{shopImporter}prestashop>shopImporter_edc186cbc5cc897a79312880ec16c621'] = 'Merci de choisir quelquechose à importer';
 $_MODULE['<{shopImporter}prestashop>shopImporter_81b33153f65252001fe132d74b658fbe'] = 'Importer à partir d\'un autre système ';
 $_MODULE['<{shopImporter}prestashop>shopImporter_dd4c0c798ebbf8c6e15dcba8632f558d'] = 'Avant de commencer l\'importation merci de sauvegarder votre base de données.';
 $_MODULE['<{shopImporter}prestashop>shopImporter_60474e812295a5adc371de63dc62a164'] = 'Cliquez ici pour sauvegarder';
@@ -53,6 +54,8 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_e307db07b3975fef922a80d07455ee5
 $_MODULE['<{shopImporter}prestashop>shopImporter_dac130bdd2c5492a8108a4145bd9f04a'] = 'Prefix de base de données';
 $_MODULE['<{shopImporter}prestashop>shopImporter_2bb4cbbf4c51025867d47131e79ad05f'] = 'Étape suivante';
 $_MODULE['<{shopImporter}prestashop>shopImporter_72dd98a453e92ccc01697f29bb5dbeb9'] = 'Options d\'importation ';
+$_MODULE['<{shopImporter}prestashop>shopImporter_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
+$_MODULE['<{shopImporter}prestashop>shopImporter_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
 $_MODULE['<{shopImporter}prestashop>shopImporter_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer ';
 $_MODULE['<{shopImporter}prestashop>shopImporter_9dfc5d5738312210c3c75e68a468691d'] = 'Options avancées ';
 $_MODULE['<{shopImporter}prestashop>shopImporter_c195d4db1be0d349d21f236f0a6400ff'] = 'Ce mode est dangereux ';
