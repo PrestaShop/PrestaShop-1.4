@@ -61,12 +61,17 @@ class MySQLCore extends Db
 	public function	getRow($query, $use_cache = 1)
 	{
 		$this->_result = false;
+		$this->_lastQuery = $query;
 		if($use_cache AND _PS_CACHE_ENABLED_)
 			if ($result = Cache::getInstance()->get(md5($query)))
+			{
+				$this->_lastCached = true;
 				return $result;
+			}
 		if ($this->_link)
 			if ($this->_result = mysql_query($query.' LIMIT 1', $this->_link))
 			{
+				$this->_lastCached = false;
 				if (_PS_DEBUG_SQL_)
 					$this->displayMySQLError($query);
 				$result = mysql_fetch_assoc($this->_result);
@@ -82,11 +87,16 @@ class MySQLCore extends Db
 	public function	getValue($query, $use_cache = 1)
 	{
 		$this->_result = false;
+		$this->_lastQuery = $query;
 		if ($use_cache AND _PS_CACHE_ENABLED_)
 			if ($result = Cache::getInstance()->get(md5($query)))
+			{
+				$this->_lastCached = true;
 				return $result;
+			}
 		if ($this->_link AND $this->_result = mysql_query($query.' LIMIT 1', $this->_link) AND is_array($tmpArray = mysql_fetch_assoc($this->_result)))
 		{ 
+			$this->_lastCached = false;
 			$result =  array_shift($tmpArray);
 			if($use_cache AND _PS_CACHE_ENABLED_)
 				Cache::getInstance()->setQuery($query, $result);
@@ -115,12 +125,16 @@ class MySQLCore extends Db
 	public function	ExecuteS($query, $array = true, $use_cache = 1)
 	{
 		$this->_result = false;
+		$this->_lastQuery = $query;
 		if ($use_cache AND _PS_CACHE_ENABLED_)
 			if ($array AND ($result = Cache::getInstance()->get(md5($query))))
+			{
+				$this->_lastCached = true;
 				return $result;
+			}
 		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
 		{
-		
+			$this->_lastCached = false;
 			if (_PS_DEBUG_SQL_)
 				$this->displayMySQLError($query);
 			if (!$array)
@@ -161,8 +175,16 @@ class MySQLCore extends Db
 	
 	public function	NumRows()
 	{
-		if ($this->_link AND $this->_result)
-			return mysql_num_rows($this->_result);
+		if (!$this->_lastCached AND $this->_link AND $this->_result)
+		{
+			$nrows = mysql_num_rows($this->_result);
+			Cache::getInstance()->setNumRows(md5($this->_lastQuery), $nrows);
+			return $nrows;
+		}
+		elseif (_PS_CACHE_ENABLED_ AND $this->_lastCached)
+		{
+			return Cache::getInstance()->getNumRows(md5($this->_lastQuery));
+		}
 	}
 	
 	public function	Insert_ID()
@@ -186,6 +208,7 @@ class MySQLCore extends Db
 		if ($this->_link)
 		{
 			$result =  mysql_query($query, $this->_link);
+			$this->_lastQuery = $query;
 			if ($webservice_call)
 				$this->displayMySQLError($query);
 			if ($use_cache AND _PS_CACHE_ENABLED_)

@@ -403,7 +403,7 @@ class ToolsCore
 	*
 	* @param string $dirname Directory name
 	*/
-	static public function deleteDirectory($dirname)
+	static public function deleteDirectory($dirname, $delete_self = true)
 	{
 		$dirname = rtrim($dirname, '/').'/';
 		$files = scandir($dirname);
@@ -411,13 +411,14 @@ class ToolsCore
 			if ($file != '.' AND $file != '..')
 			{
 				if (is_dir($dirname.$file))
-					self::deleteDirectory($dirname.$file);
+					self::deleteDirectory($dirname.$file, true);
 				elseif (file_exists($dirname.$file))
 					unlink($dirname.$file);
 				else
 					p('Unable to delete '.$dirname.$file);
 			}
-		rmdir($dirname);
+		if($delete_self)
+			rmdir($dirname);
 	}
 
 	/**

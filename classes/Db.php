@@ -66,6 +66,9 @@ abstract class DbCore
 	*/
 	);
 	
+	protected $_lastQuery;
+	protected $_lastCached;
+	
 	private static $_idServer;
 
 	/**
@@ -118,7 +121,7 @@ abstract class DbCore
 	 * @param string $limit LIMIT clause (optional)
 	 * @return mixed|boolean SQL query result
 	 */
-	public function	autoExecute($table, $values, $type, $where = false, $limit = false)
+	public function	autoExecute($table, $values, $type, $where = false, $limit = false, $use_cache = 1)
 	{
 		if (!sizeof($values))
 			return true;
@@ -134,7 +137,7 @@ abstract class DbCore
 			$query = rtrim($query, ',').')';
 			if ($limit)
 				$query .= ' LIMIT '.(int)($limit);
-			return $this->q($query);
+			return $this->q($query, $use_cache);
 		}
 		elseif (strtoupper($type) == 'UPDATE')
 		{
@@ -146,7 +149,7 @@ abstract class DbCore
 				$query .= ' WHERE '.$where;
 			if ($limit)
 				$query .= ' LIMIT '.(int)($limit);
-			return $this->q($query);
+			return $this->q($query, $use_cache);
 		}
 		
 		return false;

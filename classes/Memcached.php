@@ -59,6 +59,16 @@ class MemcachedCore extends Cache
 			return $key;
 		}
 	}
+	
+	public function setNumRows($key, $value, $expire = 0)
+	{
+		return $this->set($key.'_nrows', $value, $expire);
+	}
+	
+	public function getNumRows($key)
+	{
+		return $this->get($key.'_nrows');
+	}
 
 	public function get($key)
 	{
@@ -107,7 +117,10 @@ class MemcachedCore extends Cache
 				if (isset($this->_tablesCached[$table]))
 				{
 					foreach ($this->_tablesCached[$table] AS $memcachedKey => $foo)
+					{
 						$this->delete($memcachedKey);
+						$this->delete($memcachedKey.'_nrows');
+					}
 					unset($this->_tablesCached[$table]);
 				}
 	}

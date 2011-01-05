@@ -37,7 +37,7 @@ class CacheFSCore extends Cache {
 	
 	private function _init()
 	{
-		$this->_depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');	
+		$this->_depth = Db::getInstance()->getValue('SELECT value FROM '._DB_PREFIX_.'configuration WHERE name=\'PS_CACHEFS_DIRECTORY_DEPTH\'', false);
 		return $this->_setKeys();
 	}
 
@@ -45,7 +45,9 @@ class CacheFSCore extends Cache {
 	{
 		$path = _PS_CACHEFS_DIRECTORY_;
 		for ($i = 0; $i < $this->_depth; $i++)
+		{
 			$path.=$key[$i].'/';
+		}
 		if(file_put_contents($path.$key, serialize($value)))
 		{
 			$this->_keysCached[$key] = true;
@@ -53,12 +55,21 @@ class CacheFSCore extends Cache {
 		}
 		return false;
 	}
+	
+	public function setNumRows($key, $value, $expire = 0)
+	{
+		return $this->set($key.'_nrows', $value, $expire);
+	}
+	
+	public function getNumRows($key)
+	{
+		return $this->get($key.'_nrows');
+	}
 
 	public function get($key)
 	{
 		if (!isset($this->_keysCached[$key]))
 			return false;
-		
 		$path = _PS_CACHEFS_DIRECTORY_;
 		for ($i = 0; $i < $this->_depth; $i++)
 			$path.=$key[$i].'/';
@@ -96,6 +107,8 @@ class CacheFSCore extends Cache {
 	public function delete($key, $timeout = 0)
 	{
 		$path = _PS_CACHEFS_DIRECTORY_;
+		if (!isset($this->_keysCached[$key]))
+			return;
 		for ($i = 0; $i < $this->_depth; $i++)
 			$path.=$key[$i].'/';
 		if (!unlink($path.$key))
@@ -112,7 +125,10 @@ class CacheFSCore extends Cache {
 				if (isset($this->_tablesCached[$table]))
 				{
 					foreach ($this->_tablesCached[$table] AS $fsKey => $foo)
+					{
 						$this->delete($fsKey);
+						$this->delete($fsKey.'_nrows');
+					}
 					unset($this->_tablesCached[$table]);
 				}
 	}
