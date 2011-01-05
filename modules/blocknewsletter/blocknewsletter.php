@@ -58,7 +58,7 @@ class Blocknewsletter extends Module
  	 	if (parent::install() == false OR $this->registerHook('leftColumn') == false OR $this->registerHook('header') == false)
  	 		return false;
  	 	return Db::getInstance()->Execute('
-		CREATE TABLE '._DB_PREFIX_.'newsletter (
+		CREATE TABLE IF NOT EXISTS '._DB_PREFIX_.'newsletter (
 			`id` int(6) NOT NULL AUTO_INCREMENT,
 			`email` varchar(255) NOT NULL,
 			`newsletter_date_add` DATETIME NULL,
