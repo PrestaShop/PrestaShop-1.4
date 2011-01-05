@@ -178,7 +178,8 @@ class MySQLCore extends Db
 		if (!$this->_lastCached AND $this->_link AND $this->_result)
 		{
 			$nrows = mysql_num_rows($this->_result);
-			Cache::getInstance()->setNumRows(md5($this->_lastQuery), $nrows);
+			if (_PS_CACHE_ENABLED_)
+				Cache::getInstance()->setNumRows(md5($this->_lastQuery), $nrows);
 			return $nrows;
 		}
 		elseif (_PS_CACHE_ENABLED_ AND $this->_lastCached)
