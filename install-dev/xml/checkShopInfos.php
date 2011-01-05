@@ -187,7 +187,10 @@ if (isFormValid())
 	Configuration::loadConfiguration();
 	require_once(dirname(__FILE__).'/../../config/defines.inc.php');
 	require_once(dirname(__FILE__).'/../../classes/LocalizationPack.php');
-	$localization_file = @file_get_contents('http://www.prestashop.com/download/localization_pack.php?country='.$_GET['countryName']);
+	
+	
+	$context = stream_context_create(array('http' => array('timeout' => 5)));
+	$localization_file = @file_get_contents('http://www.prestashop.com/download/localization_pack.php?country='.$_GET['countryName'], false, $context);
 	if ($localization_file)
 	{
 		$localizationPack = new LocalizationPackCore();
