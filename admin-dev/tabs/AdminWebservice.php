@@ -84,7 +84,7 @@ class AdminWebservice extends AdminTab
 			}
 			else
 			{
-				$warnings[] = $this->l('We could not check if basic authentification and rewrite extensions are activated. Please manually check if they are activated in order to use the PrestaShop webservice.');
+				$warnings[] = $this->l('We could not check if basic authentication and rewrite extensions are activated. Please manually check if they are activated in order to use the PrestaShop webservice.');
 			}
 		}
 		if (!extension_loaded('SimpleXML'))
