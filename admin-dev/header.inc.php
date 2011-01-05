@@ -65,7 +65,7 @@ echo '
 		</style>
 	</head>
 	<body '.((!empty($employee->bo_color)) ? 'style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"' : '').'>
-	<div id="top_container" />
+	<div id="top_container">
 		<div id="container">
 			<div id="header_infos"><span>
 				<a id="header_shopname" href="index.php"><span>'.Configuration::get('PS_SHOP_NAME').'</span></a><br />

@@ -465,22 +465,22 @@ class AdminModules extends AdminTab
 		</a>
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" style="float:right"><input type="text" name="filtername" value="'.Tools::htmlentitiesUTF8(Tools::getValue('filtername')).'" /> <input type="submit" value="'.$this->l('Search').'" class="button" /></form>
 		<div class="clear">&nbsp;</div>
-		<div id="module_install" style="display:none;width:900px; '.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'">
+		<div id="module_install" style="width:900px; '.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'">
 			<fieldset>
 				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
 				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
 				<hr />
 				<div style="float:right;margin-right:50px;border-left:solid 1px #DFD5C3">
-				<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-					<label style="width: 100px">'.$this->l('Module file').'</label>
-					<div class="margin-form" style="padding-left: 140px">
-						<input type="file" name="file" />
-						<p>'.$this->l('Upload the module from your computer.').'</p>
-					</div>
-					<div class="margin-form" style="padding-left: 140px">
-						<input type="submit" name="submitDownload2" value="'.$this->l('Upload this module').'" class="button" />
-					</div>
-				</form>
+					<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
+						<label style="width: 100px">'.$this->l('Module file').'</label>
+						<div class="margin-form" style="padding-left: 140px">
+							<input type="file" name="file" />
+							<p>'.$this->l('Upload the module from your computer.').'</p>
+						</div>
+						<div class="margin-form" style="padding-left: 140px">
+							<input type="submit" name="submitDownload2" value="'.$this->l('Upload this module').'" class="button" />
+						</div>
+					</form>
 				</div>
 				<div>
 				<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
@@ -493,8 +493,9 @@ class AdminModules extends AdminTab
 						<input type="submit" name="submitDownload" value="'.$this->l('Download this module').'" class="button" />
 					</div>
 				</form>
+				</div>
 			</fieldset>
-			<br>
+			</br>
 		</div>';
 		if (Configuration::get('PRESTASTORE_LIVE'))
 			echo '
@@ -677,9 +678,9 @@ class AdminModules extends AdminTab
 					</td>
 					<td class="center" width="120" rowspan="2">'.((!$module->id)
 					? '<input type="button" class="button small" name="Install" value="'.$this->l('Install').'"
-					onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'" />'
+					onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'">'
 					: '<input type="button" class="button small" name="Uninstall" value="'.$this->l('Uninstall').'"
-					onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'" />').'</a></td>
+					onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'">').'</td>
 					
 				</tr>
 				<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
