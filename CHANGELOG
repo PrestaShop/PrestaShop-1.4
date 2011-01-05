@@ -25,6 +25,100 @@ Release Notes for PrestaShop 1.4
 --------------------------------
 
 ####################################
+#   v1.4.0.7 - 4235 (2011-01-05)   #
+####################################
+
+	Improved/changed features:
+
+	[*] Installer : Argentinian provinces included
+	[*] Installer : Add timeout on localization pack download
+
+	[*] FO : fixed bug with "Other payment methods" and OPC feature
+	[*] FO : Suppliers and manufacturers are displayed only if you have enable it on preference
+
+	[*] BO : Direct link to AdminTaxRulesGroup tab in the product's form 
+	[*] BO : improvement of module search field
+	[*] BO : modified css backoffice.
+	[*] BO : Added a confirmation message while saving Features
+	[*] BO : Improve the lang pack proposed in AdminLanguages tabs.
+	
+	[*] MO : A visitor can now specify a referral email, even if he was not invited before
+	[*] MO : new toolbar in the configuration page of every modules
+	[*] MO : You can now define a percentage for vouchers of the referral program module
+	[*] MO : Added loyalty points on the customers page (in the block title) and added a second parameter to LoyaltyModule::getVoucherValue()
+	[*] MO : Fixed bug #6694 - Typo and HTML fix for the productscomments module
+	[*] MO : Fixed two bad translations (missing mod='') for the productscomments module
+	[*] MO : Several improvements on the productcomments module
+	[*] MO : shopImporter feedback is now more user friendly
+	
+	[*] WS : Clean classes and support for associations and i18n
+	
+	Fixed bugs:
+	
+	[-] Project : resolve Ecotax problem on Prestashop update (<1.3.3 to 1.4)
+	
+	[-] Installer : Bug fixed #6424 - SQL Meta Lang Correction (bug on htaccess)
+	[-] Installer : Bug fixed #6685 - Fixing SQL error upgrade 1.3.2.2 to 1.4.0.6
+	[-] Installer : Bug fixed #6685 - Fixing SQL error upgrade 1.3.2.2 to 1.4.0.6 / Last issue solved
+	[-] Installer : Fixing SQL error : 1.3.3.0, 1.3.4.0, 1.3.5.0 were empty
+	[-] Installer : Tax Rules translation
+	[-] Installer : Fixed bug #6426 - "ajax error" during upgrade
+	
+	[-] FO - BUG:6668 Modified css classes in specials block.
+	[-] FO : fixed bug #6646 - Error message wrong/empty value but goes to next step
+	[-] FO : fixed bug #6646 - Error message wrong/empty value but goes to next step
+	[-] FO : fixed bug #6653 - Guest checkout problem
+	[-] FO : fixed bug #6658
+	[-] FO : fixed bug #6659 - terms turned off shows wrong text
+	[-] FO : fixed css on cart summary
+	[-] FO : Remove unless js files
+	
+	[-] BO / FO : change the price value which is set in Database for order details, exclude ecotax for the HT price.
+	[-] BO / FO : fixed bug #6698
+	
+	[-] BO : Bug fixed #6738 - No more hardcoded directory img/tmp/ in AdminProducts
+	[-] BO : Fixed bug #6661 - Broken links on dashboard
+	[-] BO : Fixed bug #6700 - Lot of modifications on the "Features" tab on the product edition
+	[-] BO : fixed bug #6725 - PHP error in BO
+	[-] BO : Fixed Bug #6730 - error deleting a tax
+	[-] BO : Fixed bug #6732 - Tax rate was restricted to 2 decimals
+	[-] BO : fixed bug #6739
+	[-] BO : fixed bug #6754
+	[-] BO : related to bug #6664 :
+	[-] BO : related to bug #6664 :
+	
+	[-] Classes : fixed bug #6729 - Paypal: Invalid token due a problem of Cookie class of Prestashop
+	[-] Classes : Fixed cache errors #6672
+	
+	[-] Core : Fixed bug #6716 - Error "Image format not recognized, allowed formats are: .gif, .jpg, .png"
+	
+	[-] MO : added IF NOT EXISTS to the table creation of the newsletter module
+	[-] MO : DIBS module - logo image is replaced. Was saved in wrong encode.
+	[-] MO : Fixed a lot of other bugs, typos, and code standard errors in the referral program module
+	[-] MO : fixed bug #6472 - moneybookers errors
+	[-] MO : Fixed bug #6663 - Bad voucher value for referral program module
+	[-] MO : fixed bug #6667 - Error in modules/blockcms/blockcms.php
+	[-] MO : fixed bug #6675 - Moneybookers module error
+	[-] MO : Fixed bug #6731 - Class ‘LoyaltyStateModule’ not found in the admin panel
+	[-] MO : gridextjs has been properly removed and replaced
+	[-] MO : improve security In DIBS module
+	[-] MO : Numerous other bugs on the loyalty state module in the admin panel (customers page)
+	[-] MO : set a better conditionnal expression in DIBS constructor.
+	[-] MO : shopImporter fixed js bug
+	
+	[-] MAIL : Bug fixed #6674 (v1.4) - Mail template order_customer_comment now mention customer name and e-mail
+	[-] MAIL : fixed bug #6734 - Problem customers accounts and retrieve password
+	
+	[-] PDF : PDF won't die if no language is specified in the cookie
+	
+	[-] TR : Bug fixed #6660 - English template corrections and AdminTranslations fixed
+	[-] TR : Bug fixed #6690 - Small translation issue
+	[-] TR : Bug fixed #6695 - Small translation issue
+	
+	[-] WS : fixed authentication bug
+	
+
+####################################
 #   v1.4.0.6 - 4114 (2010-12-29)   #
 ####################################
 	
