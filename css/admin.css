@@ -1189,6 +1189,7 @@ html[xmlns] .clearfix {
 	line-height: 18px;
 	font-size: 8.5pt;
 	text-align: left;
+	float:left;
 }
 
 #table_customer{
