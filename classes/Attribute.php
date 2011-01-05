@@ -49,8 +49,8 @@ class AttributeCore extends ObjectModel
 		'objectsNodeName' => 'product_option_values',
 		'objectNodeName' => 'product_option_value',
 		'fields' => array(
-			'id_attribute_group' => array('sqlId' => 'id_attribute_group', 'xlink_resource'=> 'product_options'),
-			'default' => array('sqlId' => 'default'),
+			'id_attribute_group' => array('xlink_resource'=> 'product_options'),
+			'default' => array(),
 		),
 	);
 

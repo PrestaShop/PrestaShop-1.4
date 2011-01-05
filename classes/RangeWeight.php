@@ -39,9 +39,7 @@ class RangeWeightCore extends ObjectModel
 		
 	protected	$webserviceParameters = array(
 			'fields' => array(
-			'id_carrier' => array('sqlId' => 'id_carrier', 'xlink_resource' => 'carriers'),
-			'delimiter1' => array('sqlId' => 'delimiter1'),
-			'delimiter2' => array('sqlId' => 'delimiter2')
+			'id_carrier' => array('xlink_resource' => 'carriers'),
 		)
 	);
 	

@@ -55,10 +55,9 @@ class ConfigurationCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 			'fields' => array(
-			'name' => array('sqlId' => 'name'),
-			'value' => array('sqlId' => 'value'),
-			'date_add' => array('sqlId' => 'date_add'),
-			'date_upd' => array('sqlId' => 'date_upd')
+			'value' => array(),
+			'date_add' => array(),
+			'date_upd' => array()
 		)
 	);
 	

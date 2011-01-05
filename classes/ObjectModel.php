@@ -226,17 +226,19 @@ abstract class ObjectModelCore
 		if (method_exists($this, 'getTranslationsFieldsChild'))
 		{
 			$fields = $this->getTranslationsFieldsChild();
-			foreach ($fields as $field)
-			{
-				foreach ($field as $key => $value)
-				 	if (!Validate::isTableOrIdentifier($key))
-		 				die(Tools::displayError());
-				$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).
-				'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
-				$result *= (!Db::getInstance()->NumRows()) ? Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') :
-				Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', '`'.
-				pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
-			}
+			if (is_array($fields))
+				foreach ($fields as $field)
+				{
+					foreach ($field as $key => $value)
+						if (!Validate::isTableOrIdentifier($key))
+							die(Tools::displayError());
+					// useless ?
+					$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).
+					'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
+					$result *= (!Db::getInstance()->NumRows()) ? Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') :
+					Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', '`'.
+					pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
+				}
 		}
 		return $result;
 	}

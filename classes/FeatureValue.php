@@ -46,7 +46,7 @@ class FeatureValueCore extends ObjectModel
 		'objectsNodeName' => 'product_feature_values',
 		'objectNodeName' => 'product_feature_value',
 		'fields' => array(
-			'id_feature' => array('sqlId' => 'id_feature', 'xlink_resource'=> 'product_features'),
+			'id_feature' => array('xlink_resource'=> 'product_features'),
 		),
 	);
 

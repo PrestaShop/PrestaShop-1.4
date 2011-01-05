@@ -80,8 +80,7 @@ class CountryCore extends ObjectModel
 			'i18n' => array(
 				'table' => 'country_lang',
 				'fields' => array(
-					'id_lang' => array('sqlId' => 'id_lang', 'xlink_resource'=> 'languages'),
-					'name' => array('sqlId' => 'name'),
+					'id_lang' => array('xlink_resource'=> 'languages'),
 				),
 			),
 		),

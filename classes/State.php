@@ -51,8 +51,8 @@ class StateCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
-			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'zones'),
-			'id_country' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'countries')
+			'id_zone' => array('xlink_resource'=> 'zones'),
+			'id_country' => array('xlink_resource'=> 'countries')
 		),
 	);
 

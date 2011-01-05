@@ -84,7 +84,7 @@ class CombinationCore extends ObjectModel
 	protected	$webserviceParameters = array(
 		'objectNodeName' => 'combination',
 		'fields' => array(
-			'id_product' => array('sqlId' => 'id_product', 'required' => true, 'xlink_resource'=> 'products'),
+			'id_product' => array('required' => true, 'xlink_resource'=> 'products'),
 		),
 		'associations' => array(
 			'product_option_values' => array('resource' => 'product_option_value'),
@@ -133,6 +133,7 @@ class CombinationCore extends ObjectModel
 	
 	public function setWsProductOptionValues($values)
 	{
+		
 		$ids = array();
 		foreach ($values as $value)
 			$ids[] = $value['id'];
@@ -140,6 +141,7 @@ class CombinationCore extends ObjectModel
 		{
 			if ($ids)
 			{
+				// echo ("CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALL");
 				$sqlValues = '';
 				$ids = array_map('intval', $ids);
 				foreach ($ids as $position => $id)
@@ -148,6 +150,7 @@ class CombinationCore extends ObjectModel
 					INSERT INTO `'._DB_PREFIX_.'category_product` (`id_category`, `id_product`, `position`)
 					VALUES '.implode(',', $sqlValues)
 				);
+				// var_dump($ids);
 				return $result;
 			}
 		}

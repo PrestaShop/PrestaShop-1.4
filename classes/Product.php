@@ -252,7 +252,7 @@ class ProductCore extends ObjectModel
 	protected	$webserviceParameters = array(
 		'fields' => array(
 			'out_of_stock' => array('required' => true),
-			'new' => array('sqlId' => 'new'),
+			'new' => array(),
 			'cache_default_attribute' => array(),
 		),
 		'associations' => array(
@@ -725,7 +725,7 @@ class ProductCore extends ObjectModel
 		$idLang = is_null($idLang) ? _USER_ID_LANG_ : (int)($idLang);
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.`id_product`, pl.`description_short`, pl.`link_rewrite`, pl.`name`, i.`id_image`
+		SELECT p.`id_product`, pl.`description_short`set, pl.`link_rewrite`, pl.`name`, i.`id_image`
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = cp.id_product)
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product`)

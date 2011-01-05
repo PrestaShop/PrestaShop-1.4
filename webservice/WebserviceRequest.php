@@ -802,14 +802,14 @@ class WebserviceRequest
 				{
 					if (!is_null($this->_schemaToDisplay))
 					{
-						// display ready to use schema
+						// display blank schema
 						if ($this->_schemaToDisplay == 'blank')
 						{
 							$this->_fieldsToDisplay = 'full';
 							$this->_xmlOutput .= $this->getXmlFromEntity();
 						
 						}
-						// display ready to use schema
+						// display synopsis schema
 						else
 						{
 							$this->_fieldsToDisplay = 'full';
@@ -917,28 +917,15 @@ class WebserviceRequest
 			}
 			elseif (!isset($fieldProperties['required']) || !$fieldProperties['required'])
 				$this->_object->$sqlId = null;
-		}
-	
-		if (isset($attributes->associations))
-			foreach ($attributes->associations->children() as $association)
+			
+			if (isset($fieldProperties['i18n']) && $fieldProperties['i18n'])
 			{
-				// translated attributes
-				if ($association->getName() == 'i18n')
-				{
-					$i18n = true;
-					$fields = $association->children();
-					foreach ($fields as $field)
-					{
-						$fieldName = $field->getName();
-						$langs = array();
-						foreach ($field->children() as $translation)
-						{
-							$langs[(string)$translation['id']] = (string)$translation;
-						}
-						$this->_object->$fieldName = $langs;
-					}
-				}
+				$i18n = true;
+				foreach ($attributes->$fieldName->language as $lang)
+					$this->_object->{$fieldName}[(int)$lang->attributes()->id] = (string)$lang;
 			}
+		}
+				
 		if (!$this->hasErrors())
 		{
 			if ($i18n && ($retValidateFieldsLang = $this->_object->validateFieldsLang(false, true)) !== true)
@@ -963,18 +950,18 @@ class WebserviceRequest
 							if (isset($this->_resourceConfiguration['associations'][$association->getName()]))
 							{
 								$assocItems = $association->children();
+								$values = array();
 								foreach ($assocItems as $assocItem)
 								{
 									$fields = $assocItem->children();
-									$values = array();
 									foreach ($fields as $field)
 										$values[] = (string)$field;
-									$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
-									if (!$this->_object->$setter($values))
-									{
-										$this->setError(500, 'Error occurred while setting the '.$association->getName().' value');
-										return false;
-									}
+								}
+								$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
+								if (!$this->_object->$setter($values))
+								{
+									$this->setError(500, 'Error occurred while setting the '.$association->getName().' value');
+									return false;
 								}
 							}
 							elseif ($association->getName() != 'i18n')
@@ -1066,7 +1053,7 @@ class WebserviceRequest
 				if ($key != 'id')//TODO remove this condition
 				{
 					// get the field value with a specific getter
-					if (isset($field['getter']) && $this->_schemaToDisplay != 'blank')
+					if (isset($field['getter']) && $this->_schemaToDisplay != 'blank' && $object != null)
 						$object->$key = $object->$field['getter']();
 			
 					// display i18n fields
@@ -1129,7 +1116,7 @@ class WebserviceRequest
 			$ret .= '<associations>'."\n";
 			foreach ($this->_resourceConfiguration['associations'] as $assocName => $association)
 			{
-				$ret .= '<'.$assocName.'>'."\n";
+				$ret .= '<'.$assocName.' node_type="'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'">'."\n";
 				$getter = $this->_resourceConfiguration['associations'][$assocName]['getter'];
 				if (method_exists($object, $getter))
 				{

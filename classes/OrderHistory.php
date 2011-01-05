@@ -53,7 +53,7 @@ class OrderHistoryCore extends ObjectModel
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'order_histories',
 		'fields' => array(
-			'id_order_state' => array('sqlId' => 'id_order_state', 'required' => true, 'xlink_resource'=> 'order_states'),
+			'id_order_state' => array('required' => true, 'xlink_resource'=> 'order_states'),
 		),
 	);
 

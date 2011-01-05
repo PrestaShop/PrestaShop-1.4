@@ -53,12 +53,6 @@ class LanguageCore extends ObjectModel
 	private static $_LANGUAGES;
 	
 	protected	$webserviceParameters = array(
-			'fields' => array(
-			'name' => array('sqlId' => 'name'),
-			'active' => array('sqlId' => 'active'),
-			'iso_code' => array('sqlId' => 'iso_code'),
-			'language_code' => array('sqlId' => 'language_code')
-		)
 	);
 	
 	public	function __construct($id = NULL, $id_lang = NULL)

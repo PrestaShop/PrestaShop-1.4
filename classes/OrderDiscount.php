@@ -52,12 +52,6 @@ class OrderDiscountCore extends ObjectModel
 	protected 	$identifier = 'id_order_discount';
 
 	protected	$webserviceParameters = array(
-			'fields' => array(
-			'id_order' => array('sqlId' => 'id_order'),
-			'id_discount' => array('sqlId' => 'id_discount'),
-			'name' => array('sqlId' => 'name'),
-			'value' => array('sqlId' => 'value')
-		)
 	);
 	
 	public function getFields()
