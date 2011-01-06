@@ -430,7 +430,8 @@ class ToolsCore
 	{
 		global $_ERRORS;
 
-		//if ($string == 'Fatal error') d(debug_backtrace());
+		if (_PS_MODE_DEV_ AND $string == 'Fatal error')
+			return ('<pre>'.print_r(debug_backtrace(), true).'</pre>');
 		if (!is_array($_ERRORS))
 			return str_replace('"', '&quot;', $string);
 		$key = md5(str_replace('\'', '\\\'', $string));
@@ -972,7 +973,7 @@ class ToolsCore
 
 	static public function isEmpty($field)
 	{
-		return $field === '' OR $field === NULL;
+		return ($field === '' OR $field === NULL);
 	}
 
 	/**

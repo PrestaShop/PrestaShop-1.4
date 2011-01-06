@@ -334,7 +334,7 @@ abstract class ObjectModelCore
 	 				die(Tools::displayError());
 
 				/* Copy the field, or the default language field if it's both required and empty */
-				if (isset($this->{$field}[$language['id_lang']]) AND !Tools::isEmpty($this->{$field}[$language['id_lang']]))
+				if (isset($this->{$field}[$language['id_lang']]) AND !empty($this->{$field}[$language['id_lang']]))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$language['id_lang']]);
 				elseif (in_array($field, $this->fieldsRequiredLang))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
@@ -368,7 +368,7 @@ abstract class ObjectModelCore
 		foreach ($this->fieldsValidate as $field => $method)
 			if (!method_exists($validate, $method))
 				die (Tools::displayError('validation function not found').' '.$method);
-			elseif (!Tools::isEmpty($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
+			elseif (!empty($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' = '.$this->{$field}.')');
 				return $errorReturn ? get_class($this).' -> '.$field.' = '.$this->{$field} : false;
@@ -411,7 +411,7 @@ abstract class ObjectModelCore
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (!method_exists($validate, $method))
 					die (Tools::displayError('validation function not found').' '.$method);
-				elseif (!Tools::isEmpty($value) AND !call_user_func(array('Validate', $method), $value))
+				elseif (!empty($value) AND !call_user_func(array('Validate', $method), $value))
 				{
 					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
 					return $errorReturn ? get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k : false;

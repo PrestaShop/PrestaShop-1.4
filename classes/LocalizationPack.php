@@ -35,7 +35,6 @@ class LocalizationPackCore
 
 	public function loadLocalisationPack($file, $selection)
 	{
-
 		if (!$xml = simplexml_load_string($file))
 			return false;
 		$mainAttributes = $xml->attributes();
