@@ -338,6 +338,11 @@ class SearchCore
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON m.id_manufacturer = p.id_manufacturer
 		WHERE p.indexed = 0', false);
 
+		$countWords = 0;
+		$countProducts = 0;
+		$queryArray = array();
+		$queryArray2 = array();
+		$productsArray = array();
 		while ($product = $db->nextRow($products))
 		{
 			$product['tags'] = self::getTags($db, $product['id_product'], $product['id_lang']);
@@ -360,31 +365,44 @@ class SearchCore
 					}
 				}
 
-			$count = 0;
-			$queryArray = array();
-			$queryArray2 = array();
 			foreach ($pArray as $word => $weight)
 			{
 				if (!$weight)
 					continue;
 				$queryArray[] = '('.(int)($product['id_lang']).',\''.pSQL($word).'\')';
 				$queryArray2[] = '('.(int)($product['id_product']).',(SELECT id_word FROM '._DB_PREFIX_.'search_word WHERE word = \''.pSQL($word).'\' AND id_lang = '.(int)($product['id_lang']).' LIMIT 1),'.(int)($weight).')';
-				// Force save every 10 words in order to avoid overloading MySQL
-				if (++$count % 10 == 0)
+
+				// Force save every 40 words in order to avoid overloading MySQL
+				if (++$countWords % 40 == 0)
 					self::saveIndex($queryArray, $queryArray2);
 			}
-			self::saveIndex($queryArray, $queryArray2);
-			$db->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product = '.(int)($product['id_product']));
+			
+			$productsArray[] = (int)$product['id_product'];
+
+			// Force save every 10 products in order to avoid overloading MySQL
+			if (++$countProducts % 10 == 0) // If you change "10" here, you must change the limit in setProductsAsIndexed()
+				self::setProductsAsIndexed($productsArray);
 		}
+		// One last save is done at the end in order to save what's left
+		self::saveIndex($queryArray, $queryArray2);
+		self::setProductsAsIndexed($productsArray);
+		
 		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT id_word FROM '._DB_PREFIX_.'search_index)');
 		return true;
 	}
 
+	private static function setProductsAsIndexed(array &$products)
+	{
+		if (count($products))
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT 10');
+	}
+
+	// $queryArray and $queryArray2 are automatically emptied in order to be reused immediatly
 	private static function saveIndex(array &$queryArray, array &$queryArray2)
 	{
-		if (sizeof($queryArray) AND sizeof($queryArray2))
+		if (count($queryArray) AND count($queryArray2))
 		{
-			if (!($rows = $db = Db::getInstance()->Execute('INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word) VALUES '.implode(',',$queryArray))) OR $rows != sizeof($queryArray))
+			if (!($rows = $db = Db::getInstance()->Execute('INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word) VALUES '.implode(',',$queryArray))) OR $rows != count($queryArray))
 				Tools::d(array(mysql_error(), $queryArray));
 			if (!($rows = $db = Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'search_index (id_product, id_word, weight) VALUES '.implode(',',$queryArray2).' ON DUPLICATE KEY UPDATE weight = weight + VALUES(weight)')) OR $rows != sizeof($queryArray2))
 				Tools::d(array(mysql_error(), $queryArray2));
