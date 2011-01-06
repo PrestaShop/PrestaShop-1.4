@@ -146,15 +146,13 @@ class StatsBestCustomers extends ModuleGrid
 		GROUP BY c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`';
 		if (Validate::IsName($this->_sort))
 		{
-			if ($this->_sort == 'total')
-				$this->_sort = 'totalMoneySpent';
 			$this->_query .= ' ORDER BY `'.$this->_sort.'`';
 			if (isset($this->_direction) AND Validate::IsSortDirection($this->_direction))
 				$this->_query .= ' '.$this->_direction;
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE)->ExecuteS($this->_query);
-		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE)->getValue('SELECT FOUND_ROWS()');
+		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
+		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT FOUND_ROWS()');
 	}
 }

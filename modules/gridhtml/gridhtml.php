@@ -95,7 +95,7 @@ class GridHtml extends ModuleGridEngine
 						$("#grid_1 tbody").append("<tr><td style=\"text-align:center\" colspan=\"" + '.count($params['columns']).' + "\">'.$params['emptyMsg'].'</td></tr>");
 				});
 			}
-			$(document).ready(function(){getGridData("'.$grider.'");});
+			$(document).ready(function(){getGridData("'.$grider.'&sort='.urlencode($params['defaultSortColumn']).'");});
 		</script>';
 		return $html;
 	}
