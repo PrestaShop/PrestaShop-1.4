@@ -34,14 +34,14 @@ $id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 
 if (!$cookie->isLogged())
 {
-	$id_customer = 0;
 	$customer_email = Tools::getValue('customer_email');
 	
 	if (!Validate::isEmail($customer_email))
 		die ('0');
 	if ($customer_email == 'your@email.com')
 		die ('0');
-	
+
+	$id_customer = (int)Db::getInstance()->getValue('SELECT id_customer FROM '._DB_PREFIX_.'customer WHERE email=\''.pSQL($customer_email).'\' AND is_guest=0');
 	// Check if already in DB
 	if (Db::getInstance()->ExecuteS('
 	SELECT * 
