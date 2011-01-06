@@ -37,6 +37,7 @@ class AdminCustomers extends AdminTab
 	 	$this->delete = true;
 		$this->deleted = true;
 		$this->requiredDatabase = true;
+		$this->specificConfirmDelete = $this->l('If you delete this customer, he will not be able to create a new account with this email. However, you can temporarily disable it.');
 		
 		$this->_select = '(YEAR(CURRENT_DATE)-YEAR(`birthday`)) - (RIGHT(CURRENT_DATE, 5)<RIGHT(`birthday`, 5)) as age, (
 			SELECT c.date_add FROM '._DB_PREFIX_.'guest g
