@@ -65,17 +65,25 @@ class StatsLive extends Module
 	
 	private function getVisitorsOnline()
 	{
+		if (Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
+			return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer, pt.name as page
+			FROM `'._DB_PREFIX_.'connections` c
+			LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
+			LEFT JOIN `'._DB_PREFIX_.'page` p ON p.id_page = cp.id_page
+			LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON p.id_page_type = pt.id_page_type
+			INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
+			WHERE (g.id_customer IS NULL OR g.id_customer = 0)
+			AND cp.`time_end` IS NULL
+			AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
+			GROUP BY c.id_connections
+			ORDER BY c.date_add DESC');
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer, pt.name as page
+		SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer
 		FROM `'._DB_PREFIX_.'connections` c
-		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
-		LEFT JOIN `'._DB_PREFIX_.'page` p ON p.id_page = cp.id_page
-		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON p.id_page_type = pt.id_page_type
 		INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
 		WHERE (g.id_customer IS NULL OR g.id_customer = 0)
-		AND cp.`time_end` IS NULL
-		AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
-		GROUP BY c.id_connections
+		AND TIME_TO_SEC(TIMEDIFF(NOW(), c.`date_add`)) < 900
 		ORDER BY c.date_add DESC');
 	}
 	
@@ -89,7 +97,13 @@ class StatsLive extends Module
 		$totalVisitors = Db::getInstance()->NumRows();
 		$irow = 0;
 		
-		echo '<script type="text/javascript" language="javascript">openCloseLayer(\'calendar\');</script>
+		echo '<script type="text/javascript" language="javascript">
+			$("#calendar").next().remove();
+			$("#calendar").remove();
+		</script>';
+		if (!Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
+			echo '<div class="warn width3">'.$this->l('You must activate the option "pages views for each customer" in the "Stats datamining" module in order to see the pages currently viewed by your customers.').'</div>';
+		echo '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Customers online').'</legend>';
 		if ($totalCustomers)
 		{
@@ -121,16 +135,14 @@ class StatsLive extends Module
 			<table cellpadding="0" cellspacing="0" class="table space">
 				<tr><th>'.$this->l('Guest').'</th><th>'.$this->l('IP').'</th><th>'.$this->l('Since').'</th><th>'.$this->l('Current page').'</th><th>'.$this->l('Referrer').'</th></tr>';
 			foreach ($visitors as $visitor)
-				echo '
-					<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
-						<td>'.$visitor['id_guest'].'</td>
-						<td style="width: 80px;">'.long2ip($visitor['ip_address']).'</td>
-						<td style="width: 100px;">'.substr($visitor['date_add'], 11).'</td>
-						<td style="width: 200px;">'.$visitor['page'].'</td>
-						<td style="width: 200px;">'.(empty($visitor['http_referer']) ? $this->l('none') : parse_url($visitor['http_referer'], PHP_URL_HOST)).'</td>
-					</tr>';
-			echo '</table>
-			</div>';
+				echo '<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
+					<td>'.$visitor['id_guest'].'</td>
+					<td style="width: 80px;">'.long2ip($visitor['ip_address']).'</td>
+					<td style="width: 100px;">'.substr($visitor['date_add'], 11).'</td>
+					<td style="width: 200px;">'.(isset($visitor['page']) ? $visitor['page'] : $this->l('Undefined')).'</td>
+					<td style="width: 200px;">'.(empty($visitor['http_referer']) ? $this->l('none') : parse_url($visitor['http_referer'], PHP_URL_HOST)).'</td>
+				</tr>';
+			echo '</table></div>';
 		}
 		else
 			echo $this->l('There is no visitor online now.');

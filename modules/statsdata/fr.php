@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{statsdata}prestashop>statsdata_a51950bf91ba55cd93a33ce3f8d448c2'] = 'Récupération des données statistiques';
 $_MODULE['<{statsdata}prestashop>statsdata_7bf6ca30111df3fa9a2f915819628c1d'] = 'Ce module doit être activé pour bénéficier des statistiques';
+$_MODULE['<{statsdata}prestashop>statsdata_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration mise à jour';
 $_MODULE['<{statsdata}prestashop>statsdata_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuration';
 $_MODULE['<{statsdata}prestashop>statsdata_d54af676581940fc3e0658acccda7c38'] = 'Enregistrer les pages vues pour chaque client';
 $_MODULE['<{statsdata}prestashop>statsdata_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
