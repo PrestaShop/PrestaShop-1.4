@@ -1573,7 +1573,7 @@ class ProductCore extends ObjectModel
 
 		if ((int)($id_cart))
 		{
-			if (!isset(self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)]))
+			if (!isset(self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)]) OR self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)] !=  (int)($quantity))
 				self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 				SELECT SUM(`quantity`)
 				FROM `'._DB_PREFIX_.'cart_product`

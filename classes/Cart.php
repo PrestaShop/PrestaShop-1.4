@@ -427,6 +427,7 @@ class CartCore extends ObjectModel
 	public	function updateQty($quantity, $id_product, $id_product_attribute = NULL, $id_customization = false, $operator = 'up')
 	{
 		$product = new Product((int)($id_product), false, Configuration::get('PS_LANG_DEFAULT'));
+		/* if product has attribute, minimal quantity is set with minimal quantity of attribute*/
 		if ((int)($id_product_attribute))
 			$minimal_quantity = Attribute::getAttributeMinimalQty($id_product_attribute);
 		else
