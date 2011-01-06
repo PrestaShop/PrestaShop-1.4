@@ -43,7 +43,7 @@ class StatsBestCustomers extends ModuleGrid
 		$this->tab = 'analytics_stats';
 		$this->version = 1.0;
 		
-		$this->_defaultSortColumn = 'total';
+		$this->_defaultSortColumn = 'totalMoneySpent';
 		$this->_emptyMessage = $this->l('Empty recordset returned');
 		$this->_pagingMessage = $this->l('Displaying').' {0} - {1} '.$this->l('of').' {2}';
 		
@@ -70,12 +70,6 @@ class StatsBestCustomers extends ModuleGrid
 				'id' => 'totalVisits',
 				'header' => $this->l('Visits'),
 				'dataIndex' => 'totalVisits',
-				'width' => 80,
-				'align' => 'right'),
-			array(
-				'id' => 'totalPageViewed',
-				'header' => $this->l('Page viewed'),
-				'dataIndex' => 'totalPageViewed',
 				'width' => 80,
 				'align' => 'right'),
 			array(
@@ -107,17 +101,15 @@ class StatsBestCustomers extends ModuleGrid
 			'emptyMessage' => $this->_emptyMessage,
 			'pagingMessage' => $this->_pagingMessage
 		);
-		if (Tools::getValue('export'))
-			$this->csvExport($engineParams);
+	
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
-		<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 		</fieldset><br />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2 >'.$this->l('Develop clients\' loyalty').'</h2>
 			<p class="space">
-				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop their loyalty, in other words to make them come back to your webshop.').' <br />
+				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop its loyalty, in other words to make him come back in your webshop.').' <br />
 				'.$this->l('Word of mouth is also a means to get new satisfied clients; a dissatisfied one won\'t attract new clients.').'<br />
 				'.$this->l('In order to achieve this goal you can organize: ').'
 				<ul>
@@ -129,37 +121,27 @@ class StatsBestCustomers extends ModuleGrid
 		</fieldset>';
 		return $this->_html;
 	}
-	
-	public function getTotalCount()
-	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(DISTINCT c.`id_customer`) totalCount FROM `'._DB_PREFIX_.'customer` c
-		LEFT JOIN `'._DB_PREFIX_.'orders` o ON c.id_customer = o.id_customer
-		WHERE o.valid = 1');
-		return $result['totalCount'];
-	}
-	
+
 	public function setOption($option)
 	{
 	}
 	
 	public function getData()
-	{
-		$this->_totalCount = $this->getTotalCount();		
+	{		
 		$this->_query = '
-		SELECT	c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`,
-			COUNT(DISTINCT co.`id_connections`) AS totalVisits,
-			COUNT(cop.`id_page`) AS totalPageViewed, (
-				SELECT ROUND(SUM(IFNULL(o.`total_paid_real`, 0) / o.conversion_rate), 2) 
+		SELECT	SQL_CALC_FOUND_ROWS c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`,
+			COUNT(co.`id_connections`) as totalVisits,
+			(
+				SELECT ROUND(SUM(IFNULL(o.`total_paid_real`, 0) / cu.conversion_rate), 2) 
 				FROM `'._DB_PREFIX_.'orders` o
+				LEFT JOIN `'._DB_PREFIX_.'currency` cu ON o.id_currency = cu.id_currency
 				WHERE o.id_customer = c.id_customer
 				AND o.invoice_date BETWEEN '.$this->getDate().'
 				AND o.valid
-			) AS totalMoneySpent
+			) as totalMoneySpent
 		FROM `'._DB_PREFIX_.'customer` c
 		LEFT JOIN `'._DB_PREFIX_.'guest` g ON c.`id_customer` = g.`id_customer`
 		LEFT JOIN `'._DB_PREFIX_.'connections` co ON g.`id_guest` = co.`id_guest`
-		LEFT JOIN `'._DB_PREFIX_.'connections_page` cop ON co.`id_connections` = cop.`id_connections`
 		WHERE co.date_add BETWEEN '.$this->getDate().'
 		GROUP BY c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`';
 		if (Validate::IsName($this->_sort))
@@ -172,6 +154,7 @@ class StatsBestCustomers extends ModuleGrid
 		}
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
-		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
+		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE)->ExecuteS($this->_query);
+		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE)->getValue('SELECT FOUND_ROWS()');
 	}
 }
