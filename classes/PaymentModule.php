@@ -33,7 +33,7 @@ abstract class PaymentModuleCore extends Module
 	public	$currentOrder;
 	public	$currencies = true;
 	public	$currencies_mode = 'checkbox';
-
+	
 	public function install()
 	{
 		if (!parent::install())
@@ -392,10 +392,8 @@ abstract class PaymentModuleCore extends Module
 					else
 						$fileAttachment = NULL;
 
-					if ($orderStatus->send_email AND Validate::isEmail($customer->email))
+					if (Validate::isEmail($customer->email))
 						Mail::Send((int)($order->id_lang), 'order_conf', Mail::l('Order confirmation'), $data, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, $fileAttachment);
-					$this->currentOrder = (int)($order->id);
-					return true;
 				}
 				$this->currentOrder = (int)($order->id);
 				return true;
