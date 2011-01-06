@@ -188,9 +188,8 @@ class AdminProducts extends AdminTab
 							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024).' '.$this->l('kb').'. '.$this->l('File size you\'re trying to upload is:').number_format(($_FILES['attachment_file']['size']/1024), 2, '.', '').$this->l('kb');
 						else
 						{
-							$uploadDir = dirname(__FILE__).'/../../download/';
-							do $uniqid = sha1(microtime());	while (file_exists($uploadDir.$uniqid));
-							if (!copy($_FILES['attachment_file']['tmp_name'], $uploadDir.$uniqid))
+							do $uniqid = sha1(microtime());	while (file_exists(_PS_DOWNLOAD_DIR_.$uniqid));
+							if (!copy($_FILES['attachment_file']['tmp_name'], _PS_DOWNLOAD_DIR_.$uniqid))
 								$this->_errors[] = $this->l('File copy failed');
 							@unlink($_FILES['attachment_file']['tmp_name']);
 						}
@@ -860,7 +859,7 @@ class AdminProducts extends AdminTab
 		{
 			if (!Validate::isLoadedObject($product))
 				$this->_errors[] = Tools::displayError('cannot add image because product add failed');
-			elseif (substr($_FILES['image_product']['name'], -4) == '.zip')
+			elseif (substr($_FILES['image_product']['name'], -4) == '.zip' AND class_exists('ZipArchive', false))
 				return $this->uploadImageZip($product);
 			else
 			{
@@ -883,7 +882,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 		}
-		if (isset($image) AND Validate::isLoadedObject($image) AND !file_exists(_PS_IMG_DIR_.'p/'.$image->id_product.'-'.$image->id.'.jpg'))
+		if (isset($image) AND Validate::isLoadedObject($image) AND !file_exists(_PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'.jpg'))
 			$image->delete();
 		if (sizeof($this->_errors))
 			return false;
@@ -949,14 +948,14 @@ class AdminProducts extends AdminTab
 					throw new Exception(Tools::displayError('image format not recognized, allowed formats are: .gif, .jpg, .png'));
 				}
 
-				if (!imageResize($subdir.$file, _PS_IMG_DIR_.'p/'.$image->id_product.'-'.$image->id.'.jpg'))
+				if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'.jpg'))
 				{
 					$image->delete();
 					throw new Exception(Tools::displayError('an error occurred while resizing image'));
 				}
 
 				foreach ($imagesTypes AS $k => $imageType)
-					if (!imageResize($subdir.$file, _PS_IMG_DIR_.'p/'.$image->id_product.'-'.$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+					if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 					{
 						$image->delete();
 						throw new Exception(Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']));
@@ -993,13 +992,13 @@ class AdminProducts extends AdminTab
 		{
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $tmpName))
 				$this->_errors[] = Tools::displayError('An error occurred during the image upload');
-			elseif (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'.jpg'))
+			elseif (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$id_product.'-'.$id_image.'.jpg'))
 				$this->_errors[] = Tools::displayError('an error occurred while copying image');
 			elseif($method == 'auto')
 			{
 				$imagesTypes = ImageType::getImagesTypes('products');
 				foreach ($imagesTypes AS $k => $imageType)
-					if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$id_product.'-'.$id_image.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+					if (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$id_product.'-'.$id_image.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 						$this->_errors[] = Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']);
 			}
 			@unlink($tmpName);
@@ -1927,6 +1926,7 @@ class AdminProducts extends AdminTab
 		<div class="clear">&nbsp;</div>
 		<table><tr>
 			<td>
+				<p>'.$this->l('Attachments for this product:').'</p>
 				<select multiple id="selectAttachment1" name="attachments[]" style="width:300px;height:160px;">';
 		foreach ($attach1 as $attach)
 			echo '	<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
@@ -1936,6 +1936,7 @@ class AdminProducts extends AdminTab
 				</a>
 			</td>
 			<td style="padding-left:20px;">
+				<p>'.$this->l('Available attachments:').'</p>
 				<select multiple id="selectAttachment2" style="width:300px;height:160px;">';
 		foreach ($attach2 as $attach)
 			echo '	<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
@@ -2781,7 +2782,12 @@ class AdminProducts extends AdminTab
 					<td><b>'.$this->l('Add a new image to this product').'</b></td>
 				</tr>
 				</table>
-				<hr style="width:100%;" /><br />
+				<hr style="width: 100%;" /><br />';
+				
+		if (!class_exists('ZipArchive', false))
+			echo '<p class="warning">'.$this->l('You should ask your hosting provider to install or enable the PHP class "ZipArchive", therefore, you\'ll be able to save time by uploading a ZIP file containing several images.').'</p>';
+				
+		echo '
 				<table cellpadding="5" style="width:100%">
 					<tr>
 						<td class="col-left">'.$this->l('File:').'</td>
@@ -2853,54 +2859,55 @@ class AdminProducts extends AdminTab
 					</tr>';
 					else
 					{
-					echo '<tr>
-						<td colspan="2">
+						echo '
+						<tr>
+							<td colspan="2">
 							<table cellspacing="0" cellpadding="0" class="table">
+								<tr>
+									<th style="width: 100px;">'.$this->l('Image').'</th>
+									<th>&nbsp;</th>
+									<th>'.$this->l('Position').'</th>
+									<th>'.$this->l('Cover').'</th>
+									<th>'.$this->l('Action').'</th>
+								</tr>';
+
+						foreach ($images AS $k => $image)
+						{
+							echo  $this->_positionJS().'
 							<tr>
-								<th style="width: 100px;">'.$this->l('Image').'</th>
-								<th>&nbsp;</th>
-								<th>'.$this->l('Position').'</th>
-								<th>'.$this->l('Cover').'</th>
-								<th>'.$this->l('Action').'</th>
+								<td style="padding: 4px;"><a href="'._THEME_PROD_DIR_.$obj->id.'-'.$image['id_image'].'.jpg" target="_blank">
+								<img src="'._THEME_PROD_DIR_.$obj->id.'-'.$image['id_image'].'-small.jpg'.((int)(Tools::getValue('image_updated')) === (int)($image['id_image']) ? '?date='.time() : '').'"
+								alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></a></td>
+								<td class="center">'.(int)($image['position']).'</td>
+								<td class="position-cell">';
+
+							if ($image['position'] == 1)
+							{
+								echo '[ <img src="../img/admin/up_d.gif" alt="" border="0"> ]';
+								if ($image['position'] == $imagesTotal)
+									echo '[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
+								else
+									echo '[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
+							}
+							elseif ($image['position'] == $imagesTotal)
+								echo '
+									[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
+									[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
+							else
+								echo '
+									[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
+									[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
+							echo '
+								</td>
+								<td class="center"><a href="'.$currentIndex.'&id_image='.$image['id_image'].'&coverImage&token='.($token ? $token : $this->token).'"><img src="../img/admin/'.($image['cover'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></a></td>
+								<td class="center">
+									<a href="'.$currentIndex.'&id_image='.$image['id_image'].'&editImage&tabs=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/edit.gif" alt="'.$this->l('Modify this image').'" title="'.$this->l('Modify this image').'" /></a>
+									<a href="'.$currentIndex.'&id_image='.$image['id_image'].'&deleteImage&tabs=1&token='.($token ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete this image').'" title="'.$this->l('Delete this image').'" /></a>
+								</td>
 							</tr>';
+						}
+					}
 
-			foreach ($images AS $k => $image)
-			{
-				echo  $this->_positionJS().
-
-				'<tr>
-					<td style="padding: 4px;"><a href="../img/p/'.$obj->id.'-'.$image['id_image'].'.jpg" target="_blank">
-					<img src="../img/p/'.$obj->id.'-'.$image['id_image'].'-small.jpg'.((int)(Tools::getValue('image_updated')) === (int)($image['id_image']) ? '?date='.time() : '').'"
-					alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></a></td>
-					<td class="center">'.(int)($image['position']).'</td>
-					<td class="position-cell">';
-
-				if ($image['position'] == 1)
-				{
-					echo '[ <img src="../img/admin/up_d.gif" alt="" border="0"> ]';
-					if ($image['position'] == $imagesTotal)
-						echo '[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
-					else
-						echo '[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
-				}
-				elseif ($image['position'] == $imagesTotal)
-					echo '
-						[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
-						[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
-				else
-					echo '
-						[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
-						[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
-				echo '
-					</td>
-					<td class="center"><a href="'.$currentIndex.'&id_image='.$image['id_image'].'&coverImage&token='.($token ? $token : $this->token).'"><img src="../img/admin/'.($image['cover'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></a></td>
-					<td class="center">
-						<a href="'.$currentIndex.'&id_image='.$image['id_image'].'&editImage&tabs=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/edit.gif" alt="'.$this->l('Modify this image').'" title="'.$this->l('Modify this image').'" /></a>
-						<a href="'.$currentIndex.'&id_image='.$image['id_image'].'&deleteImage&tabs=1&token='.($token ? $token : $this->token).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete this image').'" title="'.$this->l('Delete this image').'" /></a>
-					</td>
-				</tr>';
-			}
-			}
 			echo '
 							</table>
 						</td>
@@ -3106,7 +3113,7 @@ class AdminProducts extends AdminTab
 			foreach ($images AS $image)
 			{
 				echo '<li style="float: left; width: '.$imageWidth.'px;"><input type="checkbox" name="id_image_attr[]" value="'.(int)($image['id_image']).'" id="id_image_attr_'.(int)($image['id_image']).'" />
-				<label for="id_image_attr_'.(int)($image['id_image']).'" style="float: none;"><img src="../img/p/'.$obj->id.'-'.$image['id_image'].'-small.jpg" alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></label></li>';
+				<label for="id_image_attr_'.(int)($image['id_image']).'" style="float: none;"><img src="'._THEME_PROD_DIR_.$obj->id.'-'.$image['id_image'].'-small.jpg" alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></label></li>';
 				++$i;
 			}
 			echo '</ul>

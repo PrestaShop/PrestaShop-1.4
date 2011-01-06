@@ -164,12 +164,6 @@ class AdminCarts extends AdminTab
 									<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
 									<td align="right">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
 								</tr>';
-							if (isset($image['id_image']))
-							{
-								$target = '../img/tmp/product_mini_'.(int)($product['id_product']).(isset($product['id_product_attribute']) ? '_'.(int)($product['id_product_attribute']) : '').'.jpg';
-								if (file_exists($target))
-									$products[$k]['image_size'] = getimagesize($target);
-							}
 						}
 					echo '
 					<tr class="cart_total_product">
@@ -295,5 +289,3 @@ class AdminCarts extends AdminTab
 		}
 	}
 }
-
-

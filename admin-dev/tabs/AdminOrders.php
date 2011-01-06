@@ -740,7 +740,7 @@ class AdminOrders extends AdminTab
 							'.($product['product_attribute_id'] ? 'AND pa.id_product_attribute = '.(int)($product['product_attribute_id']) : ''));
 							if (isset($image['id_image']))
 							{
-								$target = '../img/tmp/product_mini_'.(int)($product['product_id']).(isset($product['product_attribute_id']) ? '_'.(int)($product['product_attribute_id']) : '').'.jpg';
+								$target = _PS_TMP_IMG_DIR_.'product_mini_'.(int)($product['product_id']).(isset($product['product_attribute_id']) ? '_'.(int)($product['product_attribute_id']) : '').'.jpg';
 								if (file_exists($target))
 									$products[$k]['image_size'] = getimagesize($target);
 							}

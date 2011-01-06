@@ -64,9 +64,8 @@ class AdminAttachments extends AdminTab
 						$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024).' '.$this->l('kb').'. '.$this->l('File size you\'re trying to upload is:').number_format(($_FILES['attachment_file']['size']/1024), 2, '.', '').$this->l('kb');
 					else
 					{
-						$uploadDir = dirname(__FILE__).'/../../download/';
-						do $uniqid = sha1(microtime());	while (file_exists($uploadDir.$uniqid));
-						if (!copy($_FILES['file']['tmp_name'], $uploadDir.$uniqid))
+						do $uniqid = sha1(microtime());	while (file_exists(_PS_DOWNLOAD_DIR_.$uniqid));
+						if (!copy($_FILES['file']['tmp_name'], _PS_DOWNLOAD_DIR_.$uniqid))
 							$this->_errors[] = $this->l('File copy failed');
 						$_POST['file_name'] = $_FILES['file']['name'];
 						@unlink($_FILES['file']['tmp_name']);
@@ -132,5 +131,3 @@ class AdminAttachments extends AdminTab
 		</form>';
 	}
 }
-
-
