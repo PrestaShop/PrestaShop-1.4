@@ -34,7 +34,7 @@ $errors = array();
 
 /* Check for mandatory fields */
 $requiredFields = array('status', 'md5sig', 'merchant_id', 'pay_to_email', 'mb_amount', 
-'mb_transaction_id', 'amount', 'currency', 'amount', 'transaction_id', 'pay_from_email', 'mb_currency');
+'mb_transaction_id', 'currency', 'amount', 'transaction_id', 'pay_from_email', 'mb_currency');
 
 foreach ($requiredFields AS $field)
 	if (!isset($_POST[$field]))
