@@ -30,7 +30,17 @@
 -->
 </script>
 <script type="text/javascript" src="{$js_dir}layer.js"></script>
-<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}conditions.js"></script>
+<script type="text/javascript">
+function acceptCGV(msg)
+{
+	if ($('#cgv').length && !$('input#cgv:checked').length)
+	{
+		alert(msg);
+		return false;
+	}
+	else
+		return true;
+}</script>
 {if !$virtual_cart && $giftAllowed && $cart->gift == 1}
 <script type="text/javascript">{literal}
 // <![CDATA[
