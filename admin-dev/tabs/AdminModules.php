@@ -495,7 +495,7 @@ class AdminModules extends AdminTab
 				</form>
 				</div>
 			</fieldset>
-			</br>
+			<br>
 		</div>';
 		if (Configuration::get('PRESTASTORE_LIVE'))
 			echo '
