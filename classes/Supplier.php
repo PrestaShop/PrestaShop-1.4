@@ -139,6 +139,7 @@ class SupplierCore extends ObjectModel
 					FROM `'._DB_PREFIX_.'product` p
 					LEFT JOIN `'._DB_PREFIX_.'supplier` as m ON (m.`id_supplier`= p.`id_supplier`)
 					WHERE m.`id_supplier` = '.(int)($supplier['id_supplier']).
+					($active ? ' AND p.`active` = 1' : '').
 					($all_groups ? '' :'
 					AND p.`id_product` IN (
 						SELECT cp.`id_product`

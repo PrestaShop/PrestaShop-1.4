@@ -85,9 +85,7 @@ else
 	if (Configuration::get('PS_DISPLAY_SUPPLIERS'))
 	{
 		$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true);
-		$nbProducts = 0;
-		foreach ($data AS $n)
-			$nbProducts += (int)$n['nb_products'];
+		$nbProducts = count($data);
 		$controller->pagination($nbProducts);
 
 		$data = call_user_func(array($className, 'get'.$className.'s'), true, (int)($cookie->id_lang), true, $controller->p, $controller->n);
@@ -103,6 +101,8 @@ else
 		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 		));
 	}
+	else
+		$smarty->assign('nbSuppliers', 0);
 	$smarty->display(_PS_THEME_DIR_.$objectType.'-list.tpl');
 }
 
