@@ -340,7 +340,7 @@ class AdminModules extends AdminTab
 					matchContains: true,
 					highlightItem: true,
 					formatItem: function(row, i, max, term) {
-						return row.name.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "<br><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
+						return row.name.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
 					},
 					formatResult: function(row) {
 						return row.name;
@@ -495,7 +495,7 @@ class AdminModules extends AdminTab
 				</form>
 				</div>
 			</fieldset>
-			<br>
+			<br />
 		</div>';
 		if (Configuration::get('PRESTASTORE_LIVE'))
 			echo '
@@ -696,7 +696,7 @@ class AdminModules extends AdminTab
 				<input type="button" class="button big" value="'.$this->l('Install the selection').'" onclick="modules_management(\'install\')"/>
 				<input type="button" class="button big" value="'.$this->l('Uninstall the selection').'" onclick="modules_management(\'uninstall\')" />
 			</div>
-			<br>
+			<br />
 			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
 				<tr style="height:35px;background-color:#EEEEEE">
 					<td><strong>'.$this->l('Icon legend').' : </strong></td>
