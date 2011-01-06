@@ -259,7 +259,7 @@ class OrderCore extends ObjectModel
 		if ($orderDetail->reduction_percent != 0.00)
 			$reduction_amount = $price * $orderDetail->reduction_percent / 100;
 		elseif ($orderDetail->reduction_amount != '0.000000')
-			$reduction_amount = Tools::ps_round($orderDetail->reduction_amount * (1 + $orderDetail->tax_rate * 0.01), 2);
+			$reduction_amount = Tools::ps_round($orderDetail->reduction_amount, 2);
 		if (isset($reduction_amount) AND $reduction_amount)
 			$price = Tools::ps_round($price - $reduction_amount, 2);
 		$productPriceWithoutTax = number_format($productPrice / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');
@@ -405,7 +405,7 @@ class OrderCore extends ObjectModel
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 				$row['product_price'] = $row['product_price'] - $row['reduction_amount'] / (1 + $row['tax_rate'] / 100);
 			else
-				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['reduction_amount'] * (1 + ($row['tax_rate'] * 0.01)), 2);
+				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['reduction_amount'], 2);
 		}
 
 		if ($row['group_reduction'])
@@ -933,21 +933,21 @@ class OrderCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'orders`
 		WHERE invoice_number = '.(int)($id_invoice));
 	}
-	
+
 	public function isAssociatedAtGuest($email)
 	{
 		if (!$email)
 			return false;
 		return (bool)Db::getInstance()->getValue('
-			SELECT COUNT(*) 
-			FROM `'._DB_PREFIX_.'orders` o 
-			LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = o.`id_customer`) 
-			WHERE o.`id_order` = '.(int)$this->id.' 
-			AND c.`email` = \''.pSQL($email).'\' 
+			SELECT COUNT(*)
+			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = o.`id_customer`)
+			WHERE o.`id_order` = '.(int)$this->id.'
+			AND c.`email` = \''.pSQL($email).'\'
 			AND c.`is_guest` = 1
 		');
 	}
-	
+
 	/**
 	 * @param int $id_order
 	 * @param int $id_customer optionnal
@@ -956,11 +956,11 @@ class OrderCore extends ObjectModel
 	static public function getCartIdStatic($id_order, $id_customer = 0)
 	{
 		return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT `id_cart` 
-			FROM `'._DB_PREFIX_.'orders` 
-			WHERE `id_order` = '.(int)$id_order.' 
+			SELECT `id_cart`
+			FROM `'._DB_PREFIX_.'orders`
+			WHERE `id_order` = '.(int)$id_order.'
 			'.($id_customer ? 'AND `id_customer` = '.(int)$id_customer : ''));
 	}
-	
+
 }
 
