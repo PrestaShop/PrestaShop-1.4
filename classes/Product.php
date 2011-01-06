@@ -2504,7 +2504,7 @@ class ProductCore extends ObjectModel
 		if (($result = Db::getInstance()->ExecuteS('SELECT `value` FROM `'._DB_PREFIX_.'customized_data` WHERE `id_customization` = '.(int)($id_customization).' AND `type` = '._CUSTOMIZE_FILE_)) === false)
 			return false;
 		foreach ($result AS $row)
-			if (!@unlink(_PS_PROD_PIC_DIR_.$row['value']) OR !@unlink(_PS_PROD_PIC_DIR_.$row['value'].'_small'))
+			if (!@unlink(_PS_UPLOAD_DIR_.$row['value']) OR !@unlink(_PS_UPLOAD_DIR_.$row['value'].'_small'))
 				return false;
 		return (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization)) AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customized_data` WHERE `id_customization` = '.(int)($id_customization)));
 	}

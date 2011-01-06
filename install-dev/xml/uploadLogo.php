@@ -99,9 +99,8 @@ define('INSTALL_PATH', dirname(__FILE__));
 				
 				imagecopyresampled($thumb, $sourceImage, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 				
-				if(!is_writable(realpath(INSTALL_PATH.'/../../img').'/logo.jpg')){
-						$error = '37';
-				}
+				if(!is_writable(realpath(INSTALL_PATH.'/../../img').'/logo.jpg'))
+						$error = '58';
 				else
 				{
 					if(!imagejpeg($thumb, realpath(INSTALL_PATH.'/../../img').'/logo.jpg', 90))

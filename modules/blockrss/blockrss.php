@@ -60,6 +60,7 @@ class Blockrss extends Module
 	public function getContent()
 	{
 		$output = '<h2>'.$this->displayName.'</h2>';
+		
 		if (Tools::isSubmit('submitBlockRss'))
 		{
 			$urlfeed = strval(Tools::getValue('urlfeed'));
@@ -70,11 +71,12 @@ class Blockrss extends Module
 			elseif (!$title OR empty($title) OR !Validate::isGenericName($title))
 				$errors[] = $this->l('Invalid title');
 			elseif (!$nbr OR $nbr <= 0 OR !Validate::isInt($nbr))
-				$errors[] = $this->l('Invalid number of feeds');
-			elseif (stristr($urlfeed, $_SERVER['HTTP_HOST'].__PS_BASE_URI__))
-				$errors[] = $this->l('You cannot select your own RSS feed');
+				$errors[] = $this->l('Invalid number of feeds');				
 			else
 			{
+				if (stristr($urlfeed, $_SERVER['HTTP_HOST'].__PS_BASE_URI__))
+					$errors[] = $this->l('You have selected a feed URL on your own website, this is probably an error! Choose another URL (eg. http://news.google.com/?output=rss) until you know what you do');
+				
 				Configuration::updateValue('RSS_FEED_URL', $urlfeed);
 				Configuration::updateValue('RSS_FEED_TITLE', $title);
 				Configuration::updateValue('RSS_FEED_NBR', $nbr);
@@ -84,12 +86,21 @@ class Blockrss extends Module
 			else
 				$output .= $this->displayConfirmation($this->l('Settings updated'));
 		}
+		else
+		{
+			$errors = array();
+			if (stristr(Configuration::get('RSS_FEED_URL'), $_SERVER['HTTP_HOST'].__PS_BASE_URI__))
+				$errors[] = $this->l('You have selected a feed URL on your own website, this is probably an error! Choose another URL (eg. http://news.google.com/?output=rss) until you know what you do');
+			
+			if (sizeof($errors))
+				$output .= $this->displayError(implode('<br />', $errors));
+		}
 
 		return $output.$this->displayForm();
 	}
 
 	public function displayForm()
-	{
+	{					
 		$output = '
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
@@ -135,10 +146,8 @@ class Blockrss extends Module
 						$rss_links[] = array('title' => $item->title, 'url' => $item->link);
 		
 		// Display smarty
-		$smarty->assign(array(
-			'title' => ($title ? $title : $this->l('RSS feed')),
-			'rss_links' => $rss_links
-		));
+		$smarty->assign(array('title' => ($title ? $title : $this->l('RSS feed')), 'rss_links' => $rss_links));
+
  	 	return $this->display(__FILE__, 'blockrss.tpl');
  	}
 

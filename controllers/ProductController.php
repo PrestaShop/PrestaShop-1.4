@@ -354,12 +354,12 @@ class ProductControllerCore extends FrontController
 				if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
 					return false;
 				/* Original file */
-				elseif (!imageResize($tmpName, _PS_PROD_PIC_DIR_.$fileName))
+				elseif (!imageResize($tmpName, _PS_UPLOAD_DIR_.$fileName))
 					$this->errors[] = Tools::displayError('An error occurred during the image upload.');
 				/* A smaller one */
-				elseif (!imageResize($tmpName, _PS_PROD_PIC_DIR_.$fileName.'_small', (int)(Configuration::get('PS_PRODUCT_PICTURE_WIDTH')), (int)(Configuration::get('PS_PRODUCT_PICTURE_HEIGHT'))))
+				elseif (!imageResize($tmpName, _PS_UPLOAD_DIR_.$fileName.'_small', (int)(Configuration::get('PS_PRODUCT_PICTURE_WIDTH')), (int)(Configuration::get('PS_PRODUCT_PICTURE_HEIGHT'))))
 					$this->errors[] = Tools::displayError('An error occurred during the image upload.');
-				elseif (!chmod(_PS_PROD_PIC_DIR_.$fileName, 0777) OR !chmod(_PS_PROD_PIC_DIR_.$fileName.'_small', 0777))
+				elseif (!chmod(_PS_UPLOAD_DIR_.$fileName, 0777) OR !chmod(_PS_UPLOAD_DIR_.$fileName.'_small', 0777))
 					$this->errors[] = Tools::displayError('An error occurred during the image upload.');
 				else
 					$cart->addPictureToProduct((int)($product->id), $indexes[$fieldName], $fileName);

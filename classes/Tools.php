@@ -172,7 +172,7 @@ class ToolsCore
 		/* If language does not exist or is disabled, erase it */
 		if ($cookie->id_lang)
 		{
-			$lang = new Language((int)($cookie->id_lang));
+			$lang = new Language((int)$cookie->id_lang);
 			if (!Validate::isLoadedObject($lang) OR !$lang->active)
 				$cookie->id_lang = NULL;
 		}
@@ -200,10 +200,11 @@ class ToolsCore
 		if (!$cookie->id_lang OR !Validate::isUnsignedId($cookie->id_lang))
 			$cookie->id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
 
-		$iso = Language::getIsoById((int)($cookie->id_lang));
+		$iso = Language::getIsoById((int)$cookie->id_lang);
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 		@include_once(_PS_THEME_DIR_.'lang/'.$iso.'.php');
+
 		return $iso;
 	}
 

@@ -175,7 +175,7 @@ class AdminCustomerThreads extends AdminTab
 					Mail::Send($ct->id_lang, 'reply_msg','An answer to your message is available', $params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment);
 					$ct->status = 'closed';
 					$ct->update();
-					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));
+					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.(int)$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));
 				}
 				else
 					$this->_errors[] = Tools::displayError('an error occurred, your message wasn\'t sent, please contact your system administrator');
@@ -189,16 +189,13 @@ class AdminCustomerThreads extends AdminTab
 	{
 		global $cookie;
 
-		if (isset($_GET['filename']) AND file_exists(_PS_MODULE_DIR_.'../upload/'.$_GET['filename']))
+		if (isset($_GET['filename']) AND file_exists(_PS_UPLOAD_DIR_.$_GET['filename']))
 			self::openUploadedFile();
 		else if (isset($_GET['view'.$this->table]))
 			$this->viewcustomer_thread();
 		else
 		{
-			$this->getList((int)($cookie->id_lang),
-				!Tools::getValue($this->table.'Orderby') ? 'date_upd' : NULL,
-				!Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL
-			);
+			$this->getList((int)$cookie->id_lang, !Tools::getValue($this->table.'Orderby') ? 'date_upd' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 			$this->displayList();
 		}
 	}
@@ -223,8 +220,7 @@ class AdminCustomerThreads extends AdminTab
 			SELECT cl.*
 			FROM '._DB_PREFIX_.'contact ct
 			LEFT JOIN '._DB_PREFIX_.'contact_lang cl ON (cl.id_contact = ct.id_contact AND cl.id_lang = '.$cookie->id_lang.')
-			WHERE ct.customer_service = 1
-			');
+			WHERE ct.customer_service = 1');
 		$dim = count($categories);
 
 		echo '<div style="float:left;border:0;width:640px;">';
@@ -254,8 +250,8 @@ class AdminCustomerThreads extends AdminTab
 			$this->l('Total customer messages') => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_message WHERE id_employee = 0'),
 			$this->l('Total employee messages') => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_message WHERE id_employee != 0'),
 			$this->l('Thread unread') => $unread = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status = "open"'),
-			$this->l('Thread closed') => $all - ($unread + $pending)
-			);
+			$this->l('Thread closed') => $all - ($unread + $pending));
+
 		echo '<div style="float:right;padding 0px;border:1px solid #CFCFCF;width:280px;">
 				<h3 class="button" style="margin:0;line-height:23px;height:23px;border:0;padding:0 5px;">'.$this->l('Customer service').' : '.$this->l('Statistics').'</h3>
 				<table cellspacing="1" class="table" style="border-collapse:separate;width:280px;border:0">';
@@ -270,31 +266,22 @@ class AdminCustomerThreads extends AdminTab
 	private function openUploadedFile()
 	{
 		$filename = $_GET['filename'];
-		$extensions = array(
-		'.txt' => 'text/plain',
-		'.rtf' => 'application/rtf',
-		'.doc' => 'application/msword',
-		'.docx'=> 'application/msword',
-		'.pdf' => 'application/pdf',
-		'.zip' => 'multipart/x-zip',
-		'.png' => 'image/png',
-		'.jpeg' => 'image/jpeg',
-		'.gif' => 'image/gif',
-		'.jpg' => 'image/jpeg'
-		);
+		
+		$extensions = array('.txt' => 'text/plain', '.rtf' => 'application/rtf', '.doc' => 'application/msword', '.docx'=> 'application/msword',
+		'.pdf' => 'application/pdf', '.zip' => 'multipart/x-zip', '.png' => 'image/png', '.jpeg' => 'image/jpeg', '.gif' => 'image/gif', '.jpg' => 'image/jpeg');
+
 		$extension = '';
-		foreach ($extensions as $key => $val)
-		{
+		foreach ($extensions AS $key => $val)
 			if (substr($filename, -4) == $key OR substr($filename, -5) == $key)
+			{
 				$extension = $val;
-			else
-				continue;
-			break;
-		}
+				break;
+			}
+
 		ob_end_clean();
 		header('Content-Type: '.$extension);
 		header('Content-Disposition:attachment;filename="'.$filename.'"');
-		readfile(_PS_MODULE_DIR_.'../upload/'.$filename);
+		readfile(_PS_UPLOAD_DIR_.$filename);
 		die;
 	}
 	private function displayMsg($message, $email = false, $id_employee = null)
@@ -311,8 +298,8 @@ class AdminCustomerThreads extends AdminTab
 				SELECT o.id_order
 				FROM '._DB_PREFIX_.'orders o
 				LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
-				WHERE o.id_customer = '.(int)($message['id_customer']).'
-				AND od.product_id = '.(int)($message['id_product']).'
+				WHERE o.id_customer = '.(int)$message['id_customer'].'
+				AND od.product_id = '.(int)$message['id_product'].'
 				ORDER BY o.date_add DESC');
 			
 			$output = '
@@ -336,7 +323,7 @@ class AdminCustomerThreads extends AdminTab
 						? '<b>'.$this->l('Browser:').'</b> '.strip_tags($message['user_agent']).'<br />'
 						: ''
 					).(
-						(!empty($message['file_name']) AND file_exists(_PS_MODULE_DIR_.'../upload/'.$message['file_name']))
+						(!empty($message['file_name']) AND file_exists(_PS_UPLOAD_DIR_.$message['file_name']))
 						? '<b>'.$this->l('File attachment').'</b> <a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.$message['id_customer_thread'].'&viewcustomer_thread&token='.Tools::getAdminToken('AdminCustomerThreads'.(int)(Tab::getIdFromClassName('AdminCustomerThreads')).(int)($cookie->id_employee)).'&filename='.$message['file_name'].'" title="'.$this->l('View file').'"><img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).(

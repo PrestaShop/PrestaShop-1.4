@@ -87,7 +87,7 @@ class FrontControllerCore
 		$cookie = new Cookie('ps');
 		
 		/* Theme is missing or maintenance */
-		if (!is_dir(dirname(__FILE__).'/../themes/'._THEME_NAME_))
+		if (!is_dir(_PS_THEME_DIR_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
 		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !(int)(Configuration::get('PS_SHOP_ENABLE')))
 			$maintenance = true;

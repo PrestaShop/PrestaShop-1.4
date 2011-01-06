@@ -475,17 +475,18 @@ abstract class ModuleCore
 			if (!($moduleInstance = Module::getInstanceByName($array['module'])))
 				continue;
 
-			$exceptions = $moduleInstance->getExceptions((int)($array['id_hook']), $array['id_module']);
-			$phpSelf = basename($_SERVER['PHP_SELF']);
-			foreach ($exceptions as $exception)
-				if ($phpSelf == $exception['file_name'])
+			$exceptions = $moduleInstance->getExceptions((int)$array['id_hook'], (int)$array['id_module']);
+			foreach ($exceptions AS $exception)
+				if (strstr(basename($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'], $exception['file_name']))
 					continue 2;
+
 			if (is_callable(array($moduleInstance, 'hook'.$hook_name)))
-			 {
+			{
 				$hookArgs['altern'] = ++$altern;
 				$output .= call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
 			}
 		}
+
 		return $output;
 	}
 

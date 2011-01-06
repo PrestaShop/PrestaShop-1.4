@@ -1308,8 +1308,8 @@ class CartCore extends ObjectModel
 		$varName = 'pictures_'.(int)($id_product).'_'.(int)($index);
 		if ($cookie->$varName)
 		{
-			unlink(_PS_PROD_PIC_DIR_.$cookie->$varName);
-			unlink(_PS_PROD_PIC_DIR_.$cookie->$varName.'_small');
+			@unlink(_PS_UPLOAD_DIR_.$cookie->$varName);
+			@unlink(_PS_UPLOAD_DIR_.$cookie->$varName.'_small');
 		}
 		$cookie->$varName = $identifier;
 		return true;
@@ -1355,7 +1355,7 @@ class CartCore extends ObjectModel
 		$varName = 'pictures_'.(int)($id_product).'_'.(int)($index);
 		if ($picture = $cookie->$varName)
 		{
-			if (!@unlink(_PS_PROD_PIC_DIR_.$picture) OR !@unlink(_PS_PROD_PIC_DIR_.$picture.'_small'))
+			if (!@unlink(_PS_UPLOAD_DIR_.$picture) OR !@unlink(_PS_UPLOAD_DIR_.$picture.'_small'))
 				return false;
 			unset($cookie->$varName);
 			return true;

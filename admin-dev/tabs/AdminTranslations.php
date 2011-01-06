@@ -631,7 +631,7 @@ class AdminTranslations extends AdminTab
 					<img src="../img/admin/import.gif" />'.$this->l('Add a language').'
 				</legend>
 				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add a language directly from prestashop.com here').'</p>
-					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:');
+					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:').' ';
 			// Get all iso code available
 			if(@fsockopen('www.prestashop.com', 80))
 			{

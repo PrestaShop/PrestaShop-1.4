@@ -84,11 +84,9 @@ define('_PS_SHIP_IMG_DIR_',         _PS_IMG_DIR_.'s/');
 define('_PS_SUPP_IMG_DIR_',         _PS_IMG_DIR_.'su/');
 define('_PS_COL_IMG_DIR_',			_PS_IMG_DIR_.'co/');
 define('_PS_TMP_IMG_DIR_',          _PS_IMG_DIR_.'tmp/');
-define('_PS_PROD_PIC_DIR_',			_PS_ROOT_DIR_.'/upload/');
-define('_PS_TMP_DIR_',				_PS_ROOT_DIR_.'/upload/');
+define('_PS_UPLOAD_DIR_',			_PS_ROOT_DIR_.'/upload/');
 define('_PS_TOOL_DIR_',             _PS_ROOT_DIR_.'/tools/');
-define('_PS_GEOIP_DIR_',           _PS_TOOL_DIR_.'geoip/');
-define('_PS_STEST_DIR_',            _PS_TOOL_DIR_.'simpletest/');
+define('_PS_GEOIP_DIR_',            _PS_TOOL_DIR_.'geoip/');
 define('_PS_SWIFT_DIR_',            _PS_TOOL_DIR_.'swift/');
 define('_PS_FPDF_PATH_',            _PS_TOOL_DIR_.'fpdf/');
 define('_PS_PEAR_XML_PARSER_PATH_', _PS_TOOL_DIR_.'pear_xml_parser/');
@@ -128,12 +126,12 @@ define('PS_ROUND_UP', 0);
 define('PS_ROUND_DOWN', 1);
 define('PS_ROUND_HALF', 2);
 
-/* Carrier::getCarriers() filter*/
-define('PS_CARRIERS_ONLY',1);
-define('CARRIERS_MODULE',2);
-define('CARRIERS_MODULE_NEED_RANGE',3);
-define('PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE',4);
-define('ALL_CARRIERS',5);
+/* Carrier::getCarriers() filter */
+define('PS_CARRIERS_ONLY', 1);
+define('CARRIERS_MODULE', 2);
+define('CARRIERS_MODULE_NEED_RANGE', 3);
+define('PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE', 4);
+define('ALL_CARRIERS', 5);
 
 /* SQL Replication management */
 define('_PS_USE_SQL_SLAVE_', 0);
@@ -154,5 +152,4 @@ define('_PS_GEOLOCALIZATION_NO_CATALOG_', 0);
 define('_PS_GEOLOCALIZATION_NO_ORDER_', 1);
 
 if (!defined('_PS_CACHE_ENABLED_'))
-    define('_PS_CACHE_ENABLED_',0);
-
+    define('_PS_CACHE_ENABLED_', 0);
