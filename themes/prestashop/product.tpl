@@ -383,8 +383,8 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 		<tr>
 			{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
 				<td>
-				{if $quantity_discount.id_discount_type|intval == 1}
-					-{$quantity_discount.value|floatval}%
+				{if $quantity_discount.reduction_type == 'percentage'}
+					-{$quantity_discount.real_value|floatval}%
 				{else}
 					-{convertPrice price=$quantity_discount.real_value|floatval}
 				{/if}
