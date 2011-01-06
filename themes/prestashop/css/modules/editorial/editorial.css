@@ -18,3 +18,12 @@
 }
 .editorial_block p { padding-top: 0.4em }
 #editorial_block_center p { padding-left: 0 }
+
+#editorial_image_legend {
+	color: #AAAAAA;
+    font-size: 6pt;
+    font-style: italic;
+    margin: 0;
+    padding-left: 0;
+    text-align: center;
+}
