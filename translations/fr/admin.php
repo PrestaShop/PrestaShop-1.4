@@ -1551,6 +1551,7 @@ $_LANGADM['AdminPaymenta286df2cd70ded397d9f3955b0382c1c'] = 'Merci de cocher pou
 $_LANGADM['AdminPayment9d653d0b5635dcdbbbbaa7c4b42e7a31'] = 'Restrictions des devises';
 $_LANGADM['AdminPayment1b1e7483572e24b802c4f4dec44b7a31'] = 'Restrictions des groupes';
 $_LANGADM['AdminPayment66b063fcc97a757c25e64c785b3f18a8'] = 'Restrictions des pays';
+$_LANGADM['AdminPaymentcf7da676516ac041a93fd91755fa40f9'] = 'Aucun module de paiement installés';
 $_LANGADM['AdminPayment3e15057a39314e679d553bd9b6522ec8'] = 'Devise du client';
 $_LANGADM['AdminPaymentcdf4c2da827655c1ea74209dd683c903'] = 'Devise par défaut';
 $_LANGADM['AdminPaymente39a06ebd5bb473161c5dff3c79c80a5'] = 'Enregistrer';

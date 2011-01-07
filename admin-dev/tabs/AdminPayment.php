@@ -98,30 +98,45 @@ class AdminPayment extends AdminTab
 	{
 		global $cookie;
 		
+		$displayRestrictions = false;
+		
 		$currencies = Currency::getCurrencies();
 		$countries = Country::getCountries((int)($cookie->id_lang));
 		$groups = Group::getGroups((int)($cookie->id_lang));
 		
 		$tokenModules = Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee));
 		echo '<h2 class="space">'.$this->l('Payment modules list').'</h2>';
-		echo '<input type="button" class="button" onclick="document.location=\'index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$this->paymentModules[0]->name.'&tab_module=payments_gateways\'" value="'.$this->l('Click to see the list of payment modules.').'" />';
+		echo '<input type="button" class="button" onclick="document.location=\'index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$this->paymentModules[0]->name.'&tab_module=payments_gateways\'" value="'.$this->l('Click to see the list of payment modules.').'" /><br>';
 		
-		echo '<br /><h2 class="space">'.$this->l('Payment module restrictions').'</h2>';
-		$textCurrencies = $this->l('Please mark the checkbox(es) for the currency or currencies for which you want the payment module(s) to be available.');
-		$textCountries = $this->l('Please mark the checkbox(es) for the country or countries for which you want the payment module(s) to be available.');
-		$textGroups = $this->l('Please mark the checkbox(es) for the groups for which you want the payment module(s) available.');
-		$this->displayModuleRestrictions($currencies, $this->l('Currencies restrictions'), 'currency', $textCurrencies, 'dollar');
-		echo '<br />';
-		$this->displayModuleRestrictions($groups, $this->l('Groups restrictions'), 'group', $textGroups, 'group');
-		echo '<br />';
-		$this->displayModuleRestrictions($countries, $this->l('Countries restrictions'), 'country', $textCountries, 'world');
+		foreach ($this->paymentModules as $module)
+			if ($module->active)
+				$displayRestrictions= true;
+		if ($displayRestrictions)
+		{
+		
+			echo '<br /><h2 class="space">'.$this->l('Payment module restrictions').'</h2>';
+			$textCurrencies = $this->l('Please mark the checkbox(es) for the currency or currencies for which you want the payment module(s) to be available.');
+			$textCountries = $this->l('Please mark the checkbox(es) for the country or countries for which you want the payment module(s) to be available.');
+			$textGroups = $this->l('Please mark the checkbox(es) for the groups for which you want the payment module(s) available.');
+			$this->displayModuleRestrictions($currencies, $this->l('Currencies restrictions'), 'currency', $textCurrencies, 'dollar');
+			echo '<br />';
+			$this->displayModuleRestrictions($groups, $this->l('Groups restrictions'), 'group', $textGroups, 'group');
+			echo '<br />';
+			$this->displayModuleRestrictions($countries, $this->l('Countries restrictions'), 'country', $textCountries, 'world');
+		}
+		else
+		{
+			echo '<br>';
+			echo $this->displayWarning($this->l('No payment module installed'));
+		}
+
 	}
 	
 	public function displayModuleRestrictions($items, $title, $nameId, $desc, $icon)
 	{
 		global $currentIndex;
 		$irow = 0;
-		
+
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" id="form_'.$nameId.'">
 			<fieldset>
@@ -203,6 +218,7 @@ class AdminPayment extends AdminTab
 				<div style="text-align:center;"><input type="submit" class="button space" name="submitModule'.$nameId.'" value="'.$this->l('Save restrictions').'" /></div>
 			</fieldset>
 		</form>';
+
 	}
 	
 }
