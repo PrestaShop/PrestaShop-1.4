@@ -154,7 +154,7 @@ class OrderHistoryCore extends ObjectModel
 			$data['{order_name}'] = sprintf("#%06d", (int)($order->id));
 			
 			// An additional email is sent the first time a virtual item is validated
-			if ($virtualProducts = $order->getVirtualProducts() AND !$lastOrderState->logable AND $newOrderState = new OrderState($this->id_order_state, Configuration::get('PS_LANG_DEFAULT')) AND $newOrderState->logable)
+			if ($virtualProducts = $order->getVirtualProducts() AND (!$lastOrderState OR !$lastOrderState->logable) AND $newOrderState = new OrderState($this->id_order_state, Configuration::get('PS_LANG_DEFAULT')) AND $newOrderState->logable)
 			{
 				global $smarty;
 				$display = '';
@@ -183,7 +183,7 @@ class OrderHistoryCore extends ObjectModel
 				Mail::Send((int)($order->id_lang), $result['template'], $topic, $data, $result['email'], $result['firstname'].' '.$result['lastname']);
 		}
 		
-		if ($lastOrderState->id !== $this->id_order_state)
+		if (!$lastOrderState OR $lastOrderState->id !== $this->id_order_state)
 			Hook::postUpdateOrderStatus($this->id_order_state, (int)($this->id_order));
 		return true;
 	}
