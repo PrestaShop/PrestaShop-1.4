@@ -1241,7 +1241,7 @@ class ProductCore extends ObjectModel
 
 		$groups = FrontController::getCurrentCustomerGroups();
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
-		
+
 		if ($count)
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -1315,7 +1315,7 @@ class ProductCore extends ObjectModel
 
 		$groups = FrontController::getCurrentCustomerGroups();
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
-		
+
 		// Please keep 2 distinct queries because RAND() is an awful way to achieve this result
 		$sql = '
 		SELECT p.id_product
@@ -1380,7 +1380,7 @@ class ProductCore extends ObjectModel
 
 		$groups = FrontController::getCurrentCustomerGroups();
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
-		
+
 		if ($count)
 		{
 			$sql = '
@@ -1552,7 +1552,8 @@ class ProductCore extends ObjectModel
 	*/
 	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = TRUE)
 	{
-		global $cookie, $cart;
+   		global $cookie, $cart;
+        $cur_cart = $cart;
 
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
@@ -1560,7 +1561,7 @@ class ProductCore extends ObjectModel
 		if (!$id_customer)
 			$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? (int)($cookie->id_customer) : NULL);
 		$id_group = $id_customer ? (int)(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
-		if (!is_object($cart) OR (Validate::isUnsignedInt($id_cart) AND $id_cart))
+		if (!is_object($cur_cart) OR (Validate::isUnsignedInt($id_cart) AND $id_cart))
 		{
 			/*
 			* When a user (e.g., guest, customer, Google...) is on PrestaShop, he has already its cart as the global (see /init.php)
@@ -1568,7 +1569,7 @@ class ProductCore extends ObjectModel
 			*/
 			if (!$id_cart AND !Validate::isCookie($cookie))
 				die(Tools::displayError());
-			$cart = $id_cart ? new Cart((int)($id_cart)) : new Cart((int)($cookie->id_cart));
+			$cur_cart = $id_cart ? new Cart((int)($id_cart)) : new Cart((int)($cookie->id_cart));
 		}
 
 		if ((int)($id_cart))
@@ -1582,9 +1583,9 @@ class ProductCore extends ObjectModel
 			$cart_quantity = self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)];
 		}
 		$quantity = ($id_cart AND $cart_quantity) ? $cart_quantity : $quantity;
-		$id_currency = (int)(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
+		$id_currency = (int)(Validate::isLoadedObject($cur_cart) ? $cur_cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
 		if (!$id_address)
-			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+			$id_address = $cur_cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 
 		if (Tax::excludeTaxeOption())
 			$usetax = false;
@@ -1620,7 +1621,7 @@ class ProductCore extends ObjectModel
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
 			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
 		$specific_price = self::$_pricesLevel3[$cacheId3];
-		$price = (float)(((!$specific_price OR (float)($specific_price['reduction'])) OR (!$usereduc AND $result['price'] > $specific_price['price'])) ? $result['price'] : $specific_price['price']);
+		$price = (float)(((!$specific_price OR (float)($specific_price['reduction'])) OR (!$usereduc AND $result['price'] < $specific_price['price'])) ? $result['price'] : $specific_price['price']);
 		if ((!$specific_price OR !$specific_price['price'] OR !$specific_price['id_currency']) OR !$usereduc)
 			$price = Tools::convertPrice($price, $id_currency);
 		$specificPriceOutput = $specific_price;
@@ -1636,7 +1637,7 @@ class ProductCore extends ObjectModel
 		// Reduction
 		$reduc = 0;
 		if (($only_reduc OR $usereduc) AND $specific_price)
-			$reduc = Tools::ps_round($specific_price['reduction_type'] == 'amount' ? (self::$_taxCalculationMethod == PS_TAX_INC ? $specific_price['reduction'] : $specific_price['reduction'] / (1 + $result['rate'] / 100)) : ($price * $specific_price['reduction']), 2);
+			$reduc = Tools::ps_round($specific_price['reduction_type'] == 'amount' ? (self::$_taxCalculationMethod == PS_TAX_INC ? $specific_price['reduction'] : $specific_price['reduction'] / (1 + $tax_rate / 100)) : ($price * $specific_price['reduction']), 2);
 		if ($only_reduc)
 			return $reduc;
 		if ($usereduc)
@@ -1652,7 +1653,7 @@ class ProductCore extends ObjectModel
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
-		
+
 		if($result['ecotax'] AND $with_ecotax)
    			self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
 		self::$_prices[$cacheId] = $price;

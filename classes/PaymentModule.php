@@ -33,7 +33,7 @@ abstract class PaymentModuleCore extends Module
 	public	$currentOrder;
 	public	$currencies = true;
 	public	$currencies_mode = 'checkbox';
-	
+
 	public function install()
 	{
 		if (!parent::install())
@@ -200,7 +200,7 @@ abstract class PaymentModuleCore extends Module
 					}
 
 					// Exclude VAT
-					if (Tax::excludeTaxeOption() OR (isset($this->free_order_class) AND $this->free_order_class === true))
+					if (Tax::excludeTaxeOption())
 					{
 						$product['tax'] = 0;
 						$product['rate'] = 0;
