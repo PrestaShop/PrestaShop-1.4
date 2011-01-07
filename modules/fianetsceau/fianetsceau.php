@@ -101,6 +101,7 @@ class FianetSceau extends Module
 			<b>L’extranet, un outil d’analyse de performance unique</b>, exploite les réponses de vos clients à ces questionnaires. Une aide inestimable qui vous permet de mieux connaitre vos clients et de piloter votre politique marketing et communication.<br />
 			<br />
 				<span style="font-size:0.8em;font-style:italic;">(*Etude FIA-NET – Novembre 2009 – 836 répondants)</span> »</p>
+			<p>'.$this->l('To sign in, check out: ').' <u><a href="https://www.fia-net.com/marchands/devispartenaire.php?p=185" target="_blank">'.$this->l('Fia-net Website').'</a></u></p>
 		</fieldset><p class="clear">&nbsp;</p>';
 		$output .= '
 		<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">

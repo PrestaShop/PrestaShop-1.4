@@ -201,6 +201,7 @@ class Fianetfraud extends Module
 			Le logiciel expert (SAC) score vos transactions en quasi temps réel à partir de plus de 200 critères pour valider plus de 92 % de vos transactions.<br />
 			Le contrôle humain, prenant en charge les transactions les plus risqués, associé à l’assurance FIA-NET vous permet de valider et garantir jusqu’à 100 % de vos transactions.<br /><br />
 			Ne restez pas isolé face à l’explosion des réseaux de fraudeurs !
+			<p>'.$this->l('To sign in, check out: ').' <u><a href="https://www.fia-net.com/marchands/devispartenaire.php?p=185" target="_blank">'.$this->l('Fia-net Website').'</a></u></p>
 		</fieldset><br />
 		<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset>
