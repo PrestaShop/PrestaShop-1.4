@@ -102,7 +102,7 @@ class CartControllerCore extends FrontController
 				$producToAdd = new Product((int)($idProduct), true, (int)($this->cookie->id_lang));
 				/* if product has attribute, minimal quantity is set with minimal quantity of attribute*/
 				if ((int)($idProductAttribute))
-					$minimal_quantity = Attribute::getAttributeMinimalQty($idProductAttribute);
+					$minimal_quantity = Attribute::getAttributeMinimalQty((int)$idProductAttribute);
 				else
 					$minimal_quantity = $producToAdd->minimal_quantity;
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)

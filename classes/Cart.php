@@ -315,6 +315,9 @@ class CartCore extends ObjectModel
 			return array();
 		foreach ($result AS $k => $row)
 		{
+			/* if product has attribute, minimal quantity is set with minimal quantity of attribute*/
+			if ((int)$row['id_product_attribute'])
+				$row['minimal_quantity'] = Attribute::getAttributeMinimalQty((int)$row['id_product_attribute']);
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
 				$row['ecotax'] = (float)($row['ecotax_attr']);
 			$row['stock_quantity'] = (int)($row['quantity']);
