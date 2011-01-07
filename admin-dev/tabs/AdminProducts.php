@@ -73,7 +73,7 @@ class AdminProducts extends AdminTab
 	protected function copyFromPost(&$object, $table)
 	{
 		parent::copyFromPost($object, $table);
-					
+
 		if (get_class($object) != 'Product')
 			return;
 
@@ -2783,10 +2783,10 @@ class AdminProducts extends AdminTab
 				</tr>
 				</table>
 				<hr style="width: 100%;" /><br />';
-				
+
 		if (!class_exists('ZipArchive', false))
 			echo '<p class="warning">'.$this->l('You should ask your hosting provider to install or enable the PHP class "ZipArchive", therefore, you\'ll be able to save time by uploading a ZIP file containing several images.').'</p>';
-				
+
 		echo '
 				<table cellpadding="5" style="width:100%">
 					<tr>
@@ -2883,20 +2883,20 @@ class AdminProducts extends AdminTab
 
 							if ($image['position'] == 1)
 							{
-								echo '[ <img src="../img/admin/up_d.gif" alt="" border="0"> ]';
+								echo '<span>[ <img src="../img/admin/up_d.gif" alt="" border="0"> ]</span>';
 								if ($image['position'] == $imagesTotal)
-									echo '[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
+									echo '<span>[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]</span>';
 								else
-									echo '[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
+									echo '<span>[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]</span>';
 							}
 							elseif ($image['position'] == $imagesTotal)
 								echo '
-									[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
-									[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]';
+									<span>[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]</span>
+									<span>[ <img src="../img/admin/down_d.gif" alt="" border="0"> ]</span>';
 							else
 								echo '
-									[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]
-									[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]';
+									<span>[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=1&token='.($token ? $token : $this->token).'"><img src="../img/admin/up.gif" alt="" border="0"></a> ]</span>
+									<span>[ <a onclick="return hideLink();" href="'.$currentIndex.'&id_image='.$image['id_image'].'&imgPosition='.$image['position'].'&imgDirection=0&token='.($token ? $token : $this->token).'"><img src="../img/admin/down.gif" alt="" border="0"></a> ]</span>';
 							echo '
 								</td>
 								<td class="center"><a href="'.$currentIndex.'&id_image='.$image['id_image'].'&coverImage&token='.($token ? $token : $this->token).'"><img src="../img/admin/'.($image['cover'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></a></td>
@@ -3308,7 +3308,7 @@ class AdminProducts extends AdminTab
 			{
 				echo '
 				<table cellpadding="5" style="width: 900px; margin-top: 10px">';
-				
+
 				foreach ($feature AS $tab_features)
 				{
 					$current_item = false;
@@ -3316,21 +3316,21 @@ class AdminProducts extends AdminTab
 					foreach ($obj->getFeatures() as $tab_products)
 						if ($tab_products['id_feature'] == $tab_features['id_feature'])
 							$current_item = $tab_products['id_feature_value'];
-					
+
 					$featureValues = FeatureValue::getFeatureValuesWithLang((int)$cookie->id_lang, (int)$tab_features['id_feature']);
-					
+
 					echo '
 					<tr>
 						<td>'.$tab_features['name'].'</td>
 						<td style="width: 30%">';
-						
+
 					if (sizeof($featureValues))
 					{
 						echo '
 							<select id="feature_'.$tab_features['id_feature'].'_value" name="feature_'.$tab_features['id_feature'].'_value"
 								onchange="$(\'.custom_'.$tab_features['id_feature'].'_\').val(\'\');">
 								<option value="0">---&nbsp;</option>';
-					
+
 						foreach ($featureValues AS $value)
 						{
 							if ($current_item == $value['id_feature_value'])
@@ -3342,7 +3342,7 @@ class AdminProducts extends AdminTab
 					}
 					else
 						echo '<span style="font-size: 10px; color: #666;">'.$this->l('N/A').' - <a href="index.php?tab=AdminFeatures&addfeature_value&id_feature='.(int)$tab_features['id_feature'].'&token='.Tools::getAdminToken('AdminFeatures'.(int)(Tab::getIdFromClassName('AdminFeatures')).(int)($cookie->id_employee)).'" style="color: #666; text-decoration: underline;">'.$this->l('Add pre-defined values first').'</a></span>';
-					
+
 					echo '
 						</td>
 						<td style="width:40%" class="translatable">';
@@ -3548,7 +3548,8 @@ class AdminProducts extends AdminTab
 
 				function hideLink()
 				{
-					$(".position-cell").html("<img src=\"'._PS_IMG_.'loader.gif\" alt=\"\" />");
+					$(".position-cell span").hide();
+					$(".position-cell").append("<img src=\"'._PS_IMG_.'loader.gif\" alt=\"\" />");
 
 				}
 				</script>';
