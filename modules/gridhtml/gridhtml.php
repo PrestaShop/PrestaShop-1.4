@@ -75,6 +75,7 @@ class GridHtml extends ModuleGridEngine
 					</th>';
 		$html .= '</tr></thead>
 				<tbody></tbody>
+				<tfoot><tr><th colspan="'.count($params['columns']).'">'.$params['pagingMessage'].'</th></tr></tfoot>
 			</table>
 		</div>
 		<script type="text/javascript">
@@ -84,8 +85,12 @@ class GridHtml extends ModuleGridEngine
 				$.get(url, "", function(json) {
 					$("#grid_1 tbody").html("");
 					var array = $.parseJSON(json);
-					if (array.length > 0)
-						$.each(array, function(index, row){
+					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{0}", array["from"]));
+					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{1}", array["to"]));
+					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{2}", array["total"]));
+					var values = array["values"];
+					if (values.length > 0)
+						$.each(values, function(index, row){
 							var newLine = "<tr>";';
 			foreach ($params['columns'] as $column)
 				$html .= '	newLine += "<td'.(isset($column['align']) ? ' style=\"text-align:'.$column['align'].'\"' : '').'>" + row["'.$column['dataIndex'].'"] + "</td>";';
@@ -98,6 +103,10 @@ class GridHtml extends ModuleGridEngine
 			$(document).ready(function(){getGridData("'.$grider.'&sort='.urlencode($params['defaultSortColumn']).'&dir='.urlencode($params['defaultSortDirection']).'");});
 		</script>';
 		return $html;
+	}
+	
+	public function setColumnsInfos(&$infos)
+	{
 	}
 	
 	public function setValues($values)
@@ -113,11 +122,7 @@ class GridHtml extends ModuleGridEngine
 	public function setSize($width, $height)
 	{
 		$this->_width = $width;
-		$this->_nlines = $height;
-	}
-	
-	public function setColumnsInfos(&$infos)
-	{
+		$this->_height = $height;
 	}
 	
 	public function setTotalCount($totalCount)
@@ -125,9 +130,20 @@ class GridHtml extends ModuleGridEngine
 		$this->_totalCount = $totalCount;
 	}
 	
+	public function setLimit($start, $limit)
+	{
+		$this->_start = (int)$start;
+		$this->_limit = (int)$limit;
+	}
+	
 	public function render()
 	{
-		echo json_encode($this->_values);
+		echo json_encode(array(
+			'total' => $this->_totalCount,
+			'from' => $this->_start + 1,
+			'to' => min($this->_start + $this->_limit, $this->_totalCount),
+			'values' => $this->_values
+		));
 	}	
 }
 

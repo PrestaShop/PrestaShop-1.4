@@ -30,13 +30,13 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class StatsBestCustomers extends ModuleGrid
 {
-	private $_html = null;
-	private $_query =  null;
-	private $_columns = null;
-	private $_defaultSortColumn = null;
-	private $_defaultSortDirection = null;
-	private $_emptyMessage = null;
-	private $_pagingMessage = null;
+	private $_html;
+	private $_query;
+	private $_columns;
+	private $_defaultSortColumn;
+	private $_defaultSortDirection;
+	private $_emptyMessage;
+	private $_pagingMessage;
 	
 	function __construct()
 	{
@@ -109,7 +109,7 @@ class StatsBestCustomers extends ModuleGrid
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
-		<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
+		<p><a href="'.htmlentities($_SERVER['REQUEST_URI']).'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 		</fieldset><br />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2 >'.$this->l('Develop clients\' loyalty').'</h2>
@@ -134,7 +134,7 @@ class StatsBestCustomers extends ModuleGrid
 	public function getData()
 	{		
 		$this->_query = '
-		SELECT	SQL_CALC_FOUND_ROWS c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`,
+		SELECT SQL_CALC_FOUND_ROWS c.`id_customer`, c.`lastname`, c.`firstname`, c.`email`,
 			COUNT(co.`id_connections`) as totalVisits,
 			IFNULL((
 				SELECT ROUND(SUM(IFNULL(o.`total_paid_real`, 0) / cu.conversion_rate), 2) 

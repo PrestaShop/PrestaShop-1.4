@@ -34,6 +34,7 @@ class StatsBestProducts extends ModuleGrid
 	private $_query =  null;
 	private $_columns = null;
 	private $_defaultSortColumn = null;
+	private $_defaultSortDirection = null;
 	private $_emptyMessage = null;
 	private $_pagingMessage = null;
 	
@@ -44,6 +45,7 @@ class StatsBestProducts extends ModuleGrid
 		$this->version = 1.0;
 		
 		$this->_defaultSortColumn = 'totalPriceSold';
+		$this->_defaultSortDirection = 'DESC';
 		$this->_emptyMessage = $this->l('Empty recordset returned');
 		$this->_pagingMessage = $this->l('Displaying').' {0} - {1} '.$this->l('of').' {2}';
 		
@@ -124,6 +126,7 @@ class StatsBestProducts extends ModuleGrid
 			'title' => $this->displayName,
 			'columns' => $this->_columns,
 			'defaultSortColumn' => $this->_defaultSortColumn,
+			'defaultSortDirection' => $this->_defaultSortDirection,
 			'emptyMessage' => $this->_emptyMessage,
 			'pagingMessage' => $this->_pagingMessage
 		);
@@ -134,31 +137,18 @@ class StatsBestProducts extends ModuleGrid
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
-			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
+			<p><a href="'.htmlentities($_SERVER['REQUEST_URI']).'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 		</fieldset>';
 		return $this->_html;
-	}
-	
-	public function getTotalCount($dateBetween)
-	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(DISTINCT p.`id_product`) totalCount
-		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN '._DB_PREFIX_.'order_detail od ON od.product_id = p.id_product
-		LEFT JOIN '._DB_PREFIX_.'orders o ON od.id_order = o.id_order
-		WHERE p.active = 1 AND o.valid = 1
-		AND o.invoice_date BETWEEN '.$dateBetween);
-		return $result['totalCount'];
 	}
 		
 	public function getData()
 	{
 		$dateBetween = $this->getDate();
 		$arrayDateBetween = explode(' AND ', $dateBetween);
-		$this->_totalCount = $this->getTotalCount($dateBetween);
 
 		$this->_query = '
-		SELECT p.reference, p.id_product, pl.name, ROUND(AVG(od.product_price / o.conversion_rate), 2) as avgPriceSold, 
+		SELECT SQL_CALC_FOUND_ROWS p.reference, p.id_product, pl.name, ROUND(AVG(od.product_price / o.conversion_rate), 2) as avgPriceSold, 
 			IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product GROUP BY pa.id_product), p.quantity) as quantity,
 			IFNULL(SUM(od.product_quantity), 0) AS totalQuantitySold,
 			ROUND(IFNULL(IFNULL(SUM(od.product_quantity), 0) / (1 + LEAST(TO_DAYS('.$arrayDateBetween[1].'), TO_DAYS(NOW())) - GREATEST(TO_DAYS('.$arrayDateBetween[0].'), TO_DAYS(p.date_add))), 0), 2) as averageQuantitySold,
@@ -189,5 +179,6 @@ class StatsBestProducts extends ModuleGrid
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
 		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
+		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT FOUND_ROWS()');
 	}
 }

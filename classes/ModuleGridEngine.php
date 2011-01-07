@@ -65,6 +65,7 @@ abstract class ModuleGridEngineCore extends Module
 	abstract public function setTitle($title);
 	abstract public function setSize($width, $height);
 	abstract public function setTotalCount($totalCount);
+	abstract public function setLimit($start, $limit);
 	abstract public function render();
 }
 

@@ -30,12 +30,13 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class StatsBestCategories extends ModuleGrid
 {
-	private $_html = null;
-	private $_query =  null;
-	private $_columns = null;
-	private $_defaultSortColumn = null;
-	private $_emptyMessage = null;
-	private $_pagingMessage = null;
+	private $_html;
+	private $_query;
+	private $_columns;
+	private $_defaultSortColumn;
+	private $_defaultSortDirection;
+	private $_emptyMessage;
+	private $_pagingMessage;
 	
 	function __construct()
 	{
@@ -44,6 +45,7 @@ class StatsBestCategories extends ModuleGrid
 		$this->version = 1.0;
 		
 		$this->_defaultSortColumn = 'totalPriceSold';
+		$this->_defaultSortDirection = 'DESC';
 		$this->_emptyMessage = $this->l('Empty recordset returned');
 		$this->_pagingMessage = $this->l('Displaying').' {0} - {1} '.$this->l('of').' {2}';
 		
@@ -96,6 +98,7 @@ class StatsBestCategories extends ModuleGrid
 			'title' => $this->displayName,
 			'columns' => $this->_columns,
 			'defaultSortColumn' => $this->_defaultSortColumn,
+			'defaultSortDirection' => $this->_defaultSortDirection,
 			'emptyMessage' => $this->_emptyMessage,
 			'pagingMessage' => $this->_pagingMessage
 		);
@@ -106,25 +109,18 @@ class StatsBestCategories extends ModuleGrid
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			'.ModuleGrid::engine($engineParams).'
-			<br /><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a>
+			<br /><a href="'.htmlentities($_SERVER['REQUEST_URI']).'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a>
 		</fieldset>';
 		return $this->_html;
 	}
 	
-	public function getTotalCount()
-	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(c.`id_category`) FROM `'._DB_PREFIX_.'category` c');
-	}
-		
 	public function getData()
 	{
 		$dateBetween = $this->getDate();
-		$id_lang = (int)($this->getLang());
-	
-		$this->_totalCount = $this->getTotalCount();
+		$id_lang = $this->getLang();
 
 		$this->_query = '
-		SELECT ca.`id_category`, CONCAT(parent.name, \' > \', calang.`name`) as name,
+		SELECT SQL_CALC_FOUND_ROWS ca.`id_category`, CONCAT(parent.name, \' > \', calang.`name`) as name,
 			IFNULL(SUM(t.`totalQuantitySold`), 0) AS totalQuantitySold,
 			ROUND(IFNULL(SUM(t.`totalPriceSold`), 0), 2) AS totalPriceSold,
 			(
@@ -140,8 +136,8 @@ class StatsBestCategories extends ModuleGrid
 				AND dr.`time_end` BETWEEN '.$dateBetween.'
 			) AS totalPageViewed
 		FROM `'._DB_PREFIX_.'category` ca
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON (ca.`id_category` = calang.`id_category` AND calang.`id_lang` = '.$id_lang.')
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` parent ON (ca.`id_parent` = parent.`id_category` AND parent.`id_lang` = '.$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` calang ON (ca.`id_category` = calang.`id_category` AND calang.`id_lang` = '.(int)$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` parent ON (ca.`id_parent` = parent.`id_category` AND parent.`id_lang` = '.(int)$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'category_product` capr ON ca.`id_category` = capr.`id_category`
 		LEFT JOIN (
 			SELECT pr.`id_product`, t.`totalQuantitySold`, t.`totalPriceSold`
@@ -169,5 +165,6 @@ class StatsBestCategories extends ModuleGrid
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
 		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
+		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT FOUND_ROWS()');
 	}
 }

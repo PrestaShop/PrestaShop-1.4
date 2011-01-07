@@ -85,6 +85,7 @@ abstract class ModuleGridCore extends Module
 		$this->_render->setSize($width, $height);
 		$this->_render->setValues($this->_values);
 		$this->_render->setTotalCount($this->_totalCount);
+		$this->_render->setLimit($this->_start, $this->_limit);
 	}
 	
 	public function render()
