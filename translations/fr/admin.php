@@ -505,6 +505,7 @@ $_LANGADM['AdminCustomerThreadsd8a065ef1c8b81af153be321e200ace7'] = 'Commandes v
 $_LANGADM['AdminCustomerThreadsd55669822f1a8cf72ec1911e462a54eb'] = 'pour';
 $_LANGADM['AdminCustomerThreads49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_LANGADM['AdminCustomerThreads694e8d1f2ee056f98ee488bdc4982d73'] = 'Quantité';
+$_LANGADM['AdminCustomers785b88fe55e1c6afc7293b4e79633696'] = 'Si vous supprimer ce client, celui ci ne pourras plus se créer un nouveau compte avec ce mail. Vous pouvez cependant le désactiver temporairement.';
 $_LANGADM['AdminCustomers69691c7bdcc3ce6d5d8a1361f22d04ac'] = 'H';
 $_LANGADM['AdminCustomers800618943025315f869e4e1f09471012'] = 'F';
 $_LANGADM['AdminCustomersd1457b72c3fb323a2671125aef3eab5d'] = '?';
