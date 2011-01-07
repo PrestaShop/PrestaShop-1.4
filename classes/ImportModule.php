@@ -28,7 +28,11 @@ abstract class ImportModuleCore extends Module
 	{
 		$this->db = new MySQL($server, $user, $passwd, $database);
 		if (!$this->db)
+		{
 			Tools::displayError();
+			return false;
+		}
+		return true;
 	}
 	
 	public static function getImportModulesOnDisk ()
