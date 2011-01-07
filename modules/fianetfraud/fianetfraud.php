@@ -83,7 +83,7 @@ class Fianetfraud extends Module
 		parent::__construct();
 
 		$this->displayName = 'FIA-NET - Système d\'Analyse des Commandes';
-		$this->description = 'Protégez vous contre la fraude à la carte bancaire sans perturber l\'acte d\'achat';
+		$this->description = "Protégez vous contre la fraude à la carte bancaire sans perturber l'acte d'achat";
 	}
 
 	public function install()
