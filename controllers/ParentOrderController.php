@@ -46,6 +46,8 @@ class ParentOrderControllerCore extends FrontController
 	
 	public function preProcess()
 	{
+		global $isVirtualCart;
+		
 		parent::preProcess();
 		
 		// Redirect to the good order process

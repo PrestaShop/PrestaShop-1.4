@@ -95,12 +95,12 @@ abstract class PaymentModuleCore extends Module
 
 		$cart = new Cart((int)($id_cart));
 
-		if ($secure_key !== false AND $secure_key != $cart->secure_key)
-			die(Tools::displayError());
-
 		// Does order already exists ?
 		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() === 0)
 		{
+			if ($secure_key !== false AND $secure_key != $cart->secure_key)
+				die(Tools::displayError());
+			
 			// Copying data from cart
 			$order = new Order();
 			$order->id_carrier = (int)($cart->id_carrier);
@@ -369,7 +369,7 @@ abstract class PaymentModuleCore extends Module
 					'{invoice_other}' => $invoice->other,
 					'{order_name}' => sprintf("#%06d", (int)($order->id)),
 					'{date}' => Tools::displayDate(date('Y-m-d H:i:s'), (int)($order->id_lang), 1),
-					'{carrier}' => (strval($carrier->name) != '0' ? $carrier->name : Configuration::get('PS_SHOP_NAME')),
+					'{carrier}' => $carrier->name,
 					'{payment}' => $order->payment,
 					'{products}' => $productsList,
 					'{discounts}' => $discountsList,
