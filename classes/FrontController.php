@@ -255,6 +255,21 @@ class FrontControllerCore
 		$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
 		define('_PS_BASE_URL_', $protocol.$server_host);
 		define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
+		
+		$link->preloadPageLinks();
+		// Automatically redirect to the canonical URL if the current in is the right one
+		if (isset($this->php_self) AND !empty($this->php_self))
+		{
+			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
+			$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', ($this->ssl ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			{
+				header("HTTP/1.0 301 Moved");
+				if (_PS_MODE_DEV_ AND $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+				Tools::redirectLink($canonicalURL);
+			}
+		}
 
 		Product::initPricesComputation();
 
@@ -326,8 +341,6 @@ class FrontControllerCore
 		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
 		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
 		
-		// Load each links once, for better performances...
-		$link->preloadPageLinks();
 		$this->cookie = $cookie;
 		$this->cart = $cart;
 	}

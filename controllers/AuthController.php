@@ -30,6 +30,7 @@ class AuthControllerCore extends FrontController
 	public function __construct()
 	{
 		$this->ssl = true;
+		$this->php_self = 'authentication.php';
 	
 		parent::__construct();
 	}

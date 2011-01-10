@@ -27,7 +27,6 @@
 
 class GuestTrackingControllerCore extends FrontController
 {
-	
 	public function preProcess()
 	{
 		parent::preProcess();

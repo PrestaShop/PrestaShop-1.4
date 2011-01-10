@@ -30,6 +30,7 @@ class OrderReturnControllerCore extends FrontController
 	public function __construct()
 	{
 		$this->auth = true;
+		$this->php_self = 'order-follow.php';
 		$this->authRedirection = 'order-follow.php';
 		$this->ssl = true;
 		

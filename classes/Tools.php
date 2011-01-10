@@ -1438,8 +1438,6 @@ class ToolsCore
 		// ErrorDocument
 		$tab['ErrorDocument']['comment'] = '# Catch 404 errors';
 		$tab['ErrorDocument']['content'] = '404 '.__PS_BASE_URI__.'404.php';
-		$tab['ErrorDocument']['comment'] = '# Catch 404 errors';
-		$tab['ErrorDocument']['content'] = '404 '.__PS_BASE_URI__.'404.php';
 
 		// RewriteEngine
 		$tab['RewriteEngine']['comment'] = '# URL rewriting module activation';
@@ -1450,16 +1448,30 @@ class ToolsCore
 		$tab['RewriteRule']['content']['^([a-z0-9]+)\-([a-z0-9]+)(\-[_a-zA-Z0-9-]*)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/p/$1-$2$3.jpg [L]';
 		$tab['RewriteRule']['content']['^([0-9]+)\-([0-9]+)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/p/$1-$2.jpg [L]';
 		$tab['RewriteRule']['content']['^([0-9]+)(\-[_a-zA-Z0-9-]*)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/c/$1$2.jpg [L]';
-		$tab['RewriteRule']['content']['^lang-([a-z]{2})/([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$3&isolang=$1$5 [L]';
-		$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$2&isolang=$1$4 [QSA,L]';
-		$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'category.php?id_category=$2&isolang=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$2$4 [QSA,L]';
-		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)\.html(.*)$'] = 'product.php?id_product=$1$3 [QSA,L]';
-		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'category.php?id_category=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'cms.php?id_cms=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)(.*)$'] = 'cms.php?id_cms_category=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)(.*)$'] = 'supplier.php?id_supplier=$1$3 [QSA,L]';
-		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)(.*)$'] = 'manufacturer.php?id_manufacturer=$1$3 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z]{2})/([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$3&isolang=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$2&isolang=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'category.php?id_category=$2&isolang=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$2 [QSA,L]';
+		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)'] = 'category.php?id_category=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z]{2})/content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms=$2 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z]{2})/content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms_category=$2 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)__([a-zA-Z0-9-]*)'] = 'supplier.php?isolang=$1&id_supplier=$2 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?isolang=$1&id_manufacturer=$2 [QSA,L]';
+		
+		// Compatibility with the old URLs
+		if (!Configuration::get('PS_INSTALL_VERSION') OR version_compare(Configuration::get('PS_INSTALL_VERSION'), '1.4.0.7') == -1)
+		{
+			// This is a nasty copy/paste of the previous links, but with "lang-en" instead of "en"
+			// Do not update it when you add something in the one at the top, it's only for the old links
+			$tab['RewriteRule']['content']['^lang-([a-z]{2})/([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$3&isolang=$1 [QSA,L]';
+			$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$2&isolang=$1 [QSA,L]';
+			$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'category.php?id_category=$2&isolang=$1 [QSA,L]';
+			$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms=$2 [QSA,L]';
+			$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms_category=$2 [QSA,L]';
+			$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)'] = 'supplier.php?isolang=$1&id_supplier=$2 [QSA,L]';
+			$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?isolang=$1&id_manufacturer=$2 [QSA,L]';
+		}
 
 		Language::loadLanguages();
 		$default_meta = Meta::getMetasByIdLang((int)(Configuration::get('PS_LANG_DEFAULT')));
@@ -1468,15 +1480,14 @@ class ToolsCore
 		{
 			foreach (Meta::getMetasByIdLang($language['id_lang']) AS $key => $meta)
 			{
-				//RewriteRule ^lang-es/contacto$ contact-form.php [QSA,L]
+				//RewriteRule ^es/contacto$ contact-form.php [QSA,L]
 				if (!empty($meta['url_rewrite']))
-					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
+					$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
-					$tab['RewriteRule']['content']['^lang-'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
+					$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 			}
+			$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'] = 'index.php?isolang='.$language['iso_code'].' [QSA,L]';
 		}
-
-		$tab['RewriteRule']['content']['^lang-([a-z]{2})/(.*)$'] = '$2?isolang=$1 [QSA,L]';
 
 		if (!$writeFd = @fopen($path, 'w'))
 			return false;
@@ -1628,6 +1639,14 @@ FileETag INode MTime Size
 	{
 		$disabled = explode(',', ini_get('disable_functions'));
 		return (!in_array($function, $disabled) AND is_callable($function));
+	}
+	
+	public static function pRegexp($s, $delim)
+	{
+		$s = str_replace($delim, '\\'.$delim, $s);
+		foreach (array('?', '[', ']', '(', ')', '{', '}', '-', '.', '+', '*', '^', '$') as $char)
+			$s = str_replace($char, '\\'.$char, $s);
+		return $s;
 	}
 }
 

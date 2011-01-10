@@ -30,7 +30,7 @@ class LinkCore
 	/** @var boolean Rewriting activation */
 	private $allow;
 	private $url;
-	static $cache = array('page' => array());
+	public static $cache = array('page' => array());
 
 	/**
 	  * Constructor (initialization only)
@@ -153,7 +153,7 @@ class LinkCore
 	
 	public function getPageLink($filename, $ssl = false, $id_lang = NULL)
 	{
-		if($id_lang == NULL)
+		if ($id_lang == NULL)
 		{
 			global $cookie;
 			$id_lang = (int)($cookie->id_lang);
@@ -165,16 +165,26 @@ class LinkCore
 		{
 			if ($this->allow == 1)
 			{
-				$pagename = substr($filename, 0, -4);
-				$url_rewrite = Db::getInstance()->getValue('
-				SELECT url_rewrite
-				FROM `'._DB_PREFIX_.'meta` m
-				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-				WHERE id_lang = '.(int)($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
-				$uri_path = $url_rewrite ? $this->getLangLink((int)($id_lang)).$url_rewrite : $filename;
+				$url_rewrite = '';
+				if ($filename != 'index.php')
+				{
+					$pagename = substr($filename, 0, -4);
+					$url_rewrite = Db::getInstance()->getValue('
+					SELECT url_rewrite
+					FROM `'._DB_PREFIX_.'meta` m
+					LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+					WHERE id_lang = '.(int)($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
+					$uri_path = $this->getLangLink((int)$id_lang).($url_rewrite ? $url_rewrite : $filename);
+				}
+				else
+					$uri_path = $this->getLangLink((int)$id_lang);
 			}
 			else
-				$uri_path = $filename;
+			{
+				$uri_path = '';
+				if ($filename != 'index.php')
+					$uri_path = $filename;
+			}
 			self::$cache['page'][$filename.'_'.$id_lang] = $uri_path;
 		}
 		return $base.__PS_BASE_URI__.$uri_path;
@@ -184,7 +194,6 @@ class LinkCore
 	{
 		return ($this->allow == 1) ? (__PS_BASE_URI__.$id_category.($type ? '-'.$type : '').'/'.$name.'.jpg') : (_THEME_CAT_DIR_.$id_category.($type ? '-'.$type : '').'.jpg');
 	}
-
 
 	/**
 	  * Create link after language change
@@ -196,7 +205,7 @@ class LinkCore
 	{
 		$matches = array();
 		$request = $_SERVER['REQUEST_URI'];
-		preg_match('#/lang-([a-z]{2})/([^\?]*).*$#', $request, $matches);
+		preg_match('#^/([a-z]{2})/([^\?]*).*$#', $request, $matches);
 		if ($matches)
 		{
 			$current_iso = $matches[1];
@@ -205,7 +214,7 @@ class LinkCore
 			$request = str_replace($rewrite, $url_rewrite, $request);
 		}
 		if ($this->allow == 1)
-			return __PS_BASE_URI__.'lang-'.Language::getIsoById($id_lang).'/'.substr(preg_replace('#/lang-([a-z]{2})/#', '/', $request), strlen(__PS_BASE_URI__));
+			return __PS_BASE_URI__.''.Language::getIsoById($id_lang).'/'.substr(preg_replace('#^/([a-z]{2})/#', '/', $request), strlen(__PS_BASE_URI__));
 		else
 			return $this->getUrlWith('id_lang', (int)($id_lang));
 	}
@@ -281,23 +290,23 @@ class LinkCore
 		
 		if (!$this->allow)
 			return NULL;
-		return 'lang-'.Language::getIsoById((int)($id_lang)).'/';
+		return Language::getIsoById((int)($id_lang)).'/';
 	}
 	
-		public function preloadPageLinks()
+	public function preloadPageLinks()
+	{
+		global $cookie, $iso;
+		if ($this->allow)
 		{
-			global $cookie, $iso;
-			if ($this->allow)
-			{
-				$specific_pages = Db::getInstance()->ExecuteS('
-					SELECT url_rewrite, page
-					FROM `'._DB_PREFIX_.'meta` m
-					LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-					WHERE id_lang = '.(int)($cookie->id_lang));
-				foreach ($specific_pages as $specific_page)
-					self::$cache['page'][$specific_page['page'].'.php'] = 'lang-'.$iso.'/'.$specific_page['url_rewrite'];
-			}
+			$specific_pages = Db::getInstance()->ExecuteS('
+				SELECT url_rewrite, page
+				FROM `'._DB_PREFIX_.'meta` m
+				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+				WHERE id_lang = '.(int)($cookie->id_lang));
+			foreach ($specific_pages as $specific_page)
+				self::$cache['page'][$specific_page['page'].'.php'] = $iso.'/'.$specific_page['url_rewrite'];
 		}
+	}
 }
 
 

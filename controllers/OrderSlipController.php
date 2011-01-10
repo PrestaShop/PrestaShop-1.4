@@ -30,6 +30,7 @@ class OrderSlipControllerCore extends FrontController
 	public function __construct()
 	{
 		$this->auth = true;
+		$this->php_self = 'order-slip.php';
 		$this->authRedirection = 'order-slip.php';
 		$this->ssl = true;
 	

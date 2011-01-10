@@ -31,11 +31,13 @@ class AddressControllerCore extends FrontController
 	{
 		$this->auth = true;
 		$this->guestAllowed = true;
+		$this->php_self = 'address.php';
 		$this->authRedirection = 'addresses.php';
 		$this->ssl = true;
 	
 		parent::__construct();
 	}
+	
 	public function preProcess()
 	{
 		parent::preProcess();

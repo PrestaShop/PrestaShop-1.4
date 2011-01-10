@@ -29,6 +29,13 @@ define('MIN_PASSWD_LENGTH', 8);
 
 class PasswordControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->php_self = 'password.php';
+	
+		parent::__construct();
+	}
+	
 	public function process()
 	{
 		parent::process();

@@ -27,6 +27,13 @@
 
 class IndexControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->php_self = 'index.php';
+	
+		parent::__construct();
+	}
+	
 	public function process()
 	{
 		parent::process();

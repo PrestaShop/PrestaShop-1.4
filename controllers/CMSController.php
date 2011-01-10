@@ -33,16 +33,36 @@ class CmsControllerCore extends FrontController
 	
 	public function preProcess()
 	{
+		if ($id_cms = (int)Tools::getValue('id_cms'))
+		    $this->cms = new CMS($id_cms, $this->cookie->id_lang); 
+		if ($id_cms_category = (int)Tools::getValue('id_cms_category'))
+		    $this->cms_category = new CMSCategory($id_cms_category, $this->cookie->id_lang); 
+			
+		// Automatically redirect to the canonical URL if the current in is the right one
+		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
+		if ($this->cms AND $canonicalURL = $this->link->getCMSLink($this->cms))
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			{
+				header("HTTP/1.0 301 Moved");
+				if (_PS_MODE_DEV_ )
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+				Tools::redirectLink($canonicalURL);
+			}
+		if ($this->cms_category AND $canonicalURL = $this->link->getCMSCategoryLink($this->cms_category))
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			{
+				header("HTTP/1.0 301 Moved");
+				if (_PS_MODE_DEV_ )
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+				Tools::redirectLink($canonicalURL);
+			}
+		
 		parent::preProcess();
 		
 		/* assignCase (1 = CMS page, 2 = CMS category) */
-		if (($id_cms = (int)(Tools::getValue('id_cms'))) 
-		    AND $this->cms = new CMS((int)($id_cms), (int)($this->cookie->id_lang)) 
-		    AND Validate::isLoadedObject($this->cms) AND
-			    ($this->cms->active OR (Tools::getValue('adtoken') == Tools::encrypt('PreviewCMS'.$this->cms->id) 
-			    AND file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php'))))
+		if (Validate::isLoadedObject($this->cms) AND ($this->cms->active OR (Tools::getValue('adtoken') == Tools::encrypt('PreviewCMS'.$this->cms->id) AND file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php'))))
 			$this->assignCase = 1;
-		elseif (($id_cms_category = (int)(Tools::getValue('id_cms_category'))) AND $this->cms_category = new CMSCategory((int)(Tools::getValue('id_cms_category')), (int)($this->cookie->id_lang)) AND Validate::isLoadedObject($this->cms_category))
+		elseif (Validate::isLoadedObject($this->cms_category))
 			$this->assignCase = 2;
 		else
 			Tools::redirect('404.php');

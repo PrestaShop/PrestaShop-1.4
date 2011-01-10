@@ -30,6 +30,7 @@ class AddressesControllerCore extends FrontController
 	public function __construct()
 	{
 		$this->auth = true;
+		$this->php_self = 'addresses.php';
 		$this->authRedirection = 'addresses.php';
 		$this->ssl = true;
 	

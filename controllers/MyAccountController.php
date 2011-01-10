@@ -30,6 +30,7 @@ class MyAccountControllerCore extends FrontController
 	public function __construct()
 	{
 		$this->auth = true;
+		$this->php_self = 'my-account.php';
 		$this->authRedirection = 'my-account.php';
 		$this->ssl = true;
 	

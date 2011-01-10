@@ -27,6 +27,13 @@
 
 class PricesDropControllerCore extends FrontController
 {
+	public function __construct()
+	{
+		$this->php_self = 'prices-drop.php';
+	
+		parent::__construct();
+	}
+	
 	public function setMedia()
 	{
 		parent::setMedia();

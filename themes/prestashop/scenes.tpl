@@ -38,7 +38,7 @@ $(function () {ldelim}
 <div id="scenes">
 	<div>
 		{foreach from=$scenes key='scene_key' item='scene' name='scenes'}
-		<div class="screen_scene" id="screen_scene_{$scene->id}" style="background:transparent url(img/scenes/{$scene->id}-large_scene.jpg); height:{$largeSceneImageType.height}px; width:{$largeSceneImageType.width}px; {if !$smarty.foreach.scenes.first} display:none;{/if}">
+		<div class="screen_scene" id="screen_scene_{$scene->id}" style="background:transparent url({$base_dir}img/scenes/{$scene->id}-large_scene.jpg); height:{$largeSceneImageType.height}px; width:{$largeSceneImageType.width}px; {if !$smarty.foreach.scenes.first} display:none;{/if}">
 			{foreach from=$scene->products key='product_key' item='product'}
 			{assign var=imageIds value="`$product.id_product`-`$product.id_image`"}
 				<a href="{$product.link|escape:'htmlall':'UTF-8'}" rel="#scene_products_cluetip_{$scene_key}_{$product_key}_{$product.id_product}" class="cluetip" style="width:{$product.zone_width}px; height:{$product.zone_height}px; margin-left:{$product.x_axis}px ;margin-top:{$product.y_axis}px;">
