@@ -193,8 +193,10 @@ class AdminTranslations extends AdminTab
 					if (file_put_contents($file, $content))
 					{
 						$gz = new Archive_Tar($file, true);
+						$files_list = $gz->listContent();
 						if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 						{
+							$this->checkAndAddMailsFiles($arr_import_lang[0], $files_list);
 							if (!Language::checkAndAddLanguage($arr_import_lang[0]))
 								$conf = 20;
 							if (!unlink($file))
