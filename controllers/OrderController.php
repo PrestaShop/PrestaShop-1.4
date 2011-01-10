@@ -201,6 +201,8 @@ class OrderControllerCore extends ParentOrderController
 		{
 			$this->smarty->assign('errors', $this->errors);
 			$this->_assignCarrier();
+			$this->step = 2;
+			$this->displayContent(); 
 			include(dirname(__FILE__).'/../footer.php');
 			exit;
 		}
