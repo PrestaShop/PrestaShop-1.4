@@ -160,10 +160,10 @@ class AdminTranslations extends AdminTab
 		{
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
 			$iso_code = str_replace('.gzip', '', $_FILES['file']['name']);
-			$list_files = $gz->listContent();
+			$files_list = $gz->listContent();
 			if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 			{
-				$this->checkAndAddMailsFiles($iso_code, $list_files);
+				$this->checkAndAddMailsFiles($iso_code, $files_list);
 				if (Validate::isLanguageFileName($_FILES['file']['name']))
 				{
 					if (!Language::checkAndAddLanguage($iso_code))
