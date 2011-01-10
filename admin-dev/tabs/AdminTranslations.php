@@ -128,7 +128,28 @@ class AdminTranslations extends AdminTab
 		}
 		$this->_errors[] = Tools::displayError('please choose a language and a theme');
 	}
-
+	
+	public function checkAndAddMailsFiles ($iso_code, $files_list)
+	{
+		$mails = scandir(_PS_MAIL_DIR_.'en/');
+		$mails_new_lang = array();
+		foreach ($files_list as $file)
+		{
+			if (preg_match('#^mails\/([a-z0-9]+)\/#Ui', $file['filename'], $matches))
+			{
+				$slash_pos = strrpos($file['filename'], '/');
+				$mails_new_lang[] = substr($file['filename'], -(strlen($file['filename'])-$slash_pos-1));
+			}
+		}
+		$arr_mails_needed = array_diff($mails, $mails_new_lang);
+		foreach ($arr_mails_needed as $mail_to_add)
+		{
+			if ($mail_to_add !== '.' && $mail_to_add !== '..' && $mail_to_add !== '.svn')
+			{
+				@copy(_PS_MAIL_DIR_.'en/'.$mail_to_add, _PS_MAIL_DIR_.$iso_code.'/'.$mail_to_add);
+			}
+		}
+	}
 	public function submitImportLang()
 	{
 		global $currentIndex;
@@ -138,11 +159,13 @@ class AdminTranslations extends AdminTab
 		else
 		{
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
+			$iso_code = str_replace('.gzip', '', $_FILES['file']['name']);
+			$list_files = $gz->listContent();
 			if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 			{
+				$this->checkAndAddMailsFiles($iso_code, $list_files);
 				if (Validate::isLanguageFileName($_FILES['file']['name']))
 				{
-					$iso_code = str_replace('.gzip', '', $_FILES['file']['name']);
 					if (!Language::checkAndAddLanguage($iso_code))
 						$conf = 20;
 				}
