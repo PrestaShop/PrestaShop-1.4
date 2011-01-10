@@ -48,9 +48,9 @@ class MyAccountControllerCore extends FrontController
 		
 		$this->smarty->assign(array(
 			'voucherAllowed' => (int)(Configuration::get('PS_VOUCHERS')),
-			'returnAllowed' => (int)(Configuration::get('PS_ORDER_RETURN')),
-			'HOOK_CUSTOMER_ACCOUNT' => Module::hookExec('customerAccount')
+			'returnAllowed' => (int)(Configuration::get('PS_ORDER_RETURN'))
 		));
+		$this->smarty->assign('HOOK_CUSTOMER_ACCOUNT', Module::hookExec('customerAccount'));
 	}
 	
 	public function displayContent()

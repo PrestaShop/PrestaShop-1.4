@@ -242,8 +242,6 @@ class ParentOrderControllerCore extends FrontController
 			'isVirtualCart' => $this->cart->isVirtualCart(),
 			'productNumber' => $this->cart->nbProducts(),
 			'voucherAllowed' => Configuration::get('PS_VOUCHERS'),
-			'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
-			'HOOK_SHOPPING_CART_EXTRA' => Module::hookExec('shoppingCartExtra', $summary),
 			'shippingCost' => $this->cart->getOrderTotal(true, 5),
 			'shippingCostTaxExc' => $this->cart->getOrderTotal(false, 5),
 			'customizedDatas' => $customizedDatas,
@@ -255,6 +253,10 @@ class ParentOrderControllerCore extends FrontController
 			'currencyRate' => $currency->conversion_rate,
 			'currencyFormat' => $currency->format,
 			'currencyBlank' => $currency->blank));
+		$this->smarty->assign(array(
+			'HOOK_SHOPPING_CART' => Module::hookExec('shoppingCart', $summary),
+			'HOOK_SHOPPING_CART_EXTRA' => Module::hookExec('shoppingCartExtra', $summary)
+		));
 	}
 	
 	protected function _assignAddress()

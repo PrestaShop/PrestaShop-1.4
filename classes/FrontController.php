@@ -361,15 +361,17 @@ class FrontControllerCore
 
 		/* Hooks are volontary out the initialize array (need those variables already assigned) */
 		$this->smarty->assign(array(
-			'HOOK_HEADER' => Module::hookExec('header'),
-			'HOOK_LEFT_COLUMN' => Module::hookExec('leftColumn'),
-			'HOOK_TOP' => Module::hookExec('top'),
 			'static_token' => Tools::getToken(false),
 			'token' => Tools::getToken(),
 			'logo_image_width' => Configuration::get('SHOP_LOGO_WIDTH'),
 			'logo_image_height' => Configuration::get('SHOP_LOGO_HEIGHT'),
 			'priceDisplayPrecision' => _PS_PRICE_DISPLAY_PRECISION_,
 			'content_only' => (int)(Tools::getValue('content_only'))
+		));
+		$this->smarty->assign(array(
+			'HOOK_HEADER' => Module::hookExec('header'),
+			'HOOK_LEFT_COLUMN' => Module::hookExec('leftColumn'),
+			'HOOK_TOP' => Module::hookExec('top')
 		));
 
 		if (is_writable(_PS_THEME_DIR_.'cache'))

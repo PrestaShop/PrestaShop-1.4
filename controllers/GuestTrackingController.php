@@ -79,10 +79,10 @@ class GuestTrackingControllerCore extends FrontController
 			    	'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			    	'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			    	'use_tax' => Configuration::get('PS_TAX'),
-			    	'HOOK_ORDERDETAILDISPLAYED' => Module::hookExec('orderDetailDisplayed', array('order' => $order)),
 			    	'customizedDatas' => $customizedDatas));
 			    if ($carrier->url AND $order->shipping_number)
 			    	$this->smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
+			    $this->smarty->assign('HOOK_ORDERDETAILDISPLAYED', Module::hookExec('orderDetailDisplayed', array('order' => $order)));
 			    Module::hookExec('OrderDetail', array('carrier' => $carrier, 'order' => $order));
 				
 				if (Tools::isSubmit('submitTransformGuestToCustomer'))

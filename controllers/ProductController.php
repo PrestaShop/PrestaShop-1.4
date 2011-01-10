@@ -192,13 +192,16 @@ class ProductControllerCore extends FrontController
 					'last_qties' =>  (int)($configs['PS_LAST_QTIES']),
 					'group_reduction' => $group_reduction,
 					'col_img_dir' => _PS_COL_IMG_DIR_,
+				));
+				$this->smarty->assign(array(
 					'HOOK_EXTRA_LEFT' => Module::hookExec('extraLeft'),
 					'HOOK_EXTRA_RIGHT' => Module::hookExec('extraRight'),
 					'HOOK_PRODUCT_OOS' => Hook::productOutOfStock($product),
 					'HOOK_PRODUCT_FOOTER' => Hook::productFooter($product, $category),
 					'HOOK_PRODUCT_ACTIONS' => Module::hookExec('productActions'),
 					'HOOK_PRODUCT_TAB' =>  Module::hookExec('productTab'),
-					'HOOK_PRODUCT_TAB_CONTENT' =>  Module::hookExec('productTabContent')));
+					'HOOK_PRODUCT_TAB_CONTENT' =>  Module::hookExec('productTabContent')
+				));
 
 				$images = $product->getImages((int)($this->cookie->id_lang));
 				$productImages = array();
