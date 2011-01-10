@@ -145,7 +145,10 @@ class OrderOpcControllerCore extends ParentOrderController
 							if ($this->_checkFreeOrder())
 								die('freeorder');
 							
-							die(Module::hookExec('payment'));
+							$return = Module::hookExec('payment');
+							if (!$return)
+								die('<p class="warning">'.Tools::displayError('No payment method is available').'</p>');
+							die($return);
 							break;
 						case 'editCustomer':
 							$customer = new Customer((int)$this->cookie->id_customer);

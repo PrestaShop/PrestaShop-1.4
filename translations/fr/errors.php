@@ -152,6 +152,7 @@ $_ERRORS['cb20447a4bf5ff9bec717ec68a357a93'] = 'Aucun moteur de rendu choisi';
 $_ERRORS['ccacacd12f75e1ab3f9ce3e234ed5777'] = 'Aucun moteur de tableau sélectionné';
 $_ERRORS['6a8f39c3861bfa5111a88d9c76df6993'] = 'Aucune facture disponible';
 $_ERRORS['e21c3c406358073b38d481fd3d88221c'] = 'Aucune facture trouvée';
+$_ERRORS['e3ac5a39682f9b3a09f6063f714ffc48'] = 'Aucune méthode de paiement est disponible';
 $_ERRORS['8912e1863fe81af9cabd76f5de9e7495'] = 'Aucun produit ou quantité sélectionné.';
 $_ERRORS['b7d99b30df0aade1e4d459fab8c7078f'] = 'Aucun profil';
 $_ERRORS['7f3f9fec825792f2b728db9d55078e80'] = 'Aucune quantité sélectionnée pour le produit.';
