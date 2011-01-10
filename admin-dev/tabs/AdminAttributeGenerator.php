@@ -137,7 +137,7 @@ class AdminAttributeGenerator extends AdminTab
 			{
 				echo '	<optgroup name="'.$idGroup.'" id="'.$idGroup.'" label="'.htmlspecialchars(stripslashes($attributeGroup['name'])).'">';
 				foreach ($attributeJs[$idGroup] AS $k => $v)
-					echo '	<option name="'.$k.'" id="attr_'.$k.'" value="'.$v.'" title="'.$v.'"">'.$v.'</option>';
+					echo '	<option name="'.$k.'" id="attr_'.$k.'" value="'.htmlspecialchars($v, ENT_QUOTES).'" title="'.htmlspecialchars($v, ENT_QUOTES).'"">'.$v.'</option>';
 				echo '	</optgroup>';
 			}
 		}
