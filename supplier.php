@@ -102,7 +102,7 @@ else
 		));
 	}
 	else
-		$smarty->assign('nbSuppliers', 0);
+		$smarty->assign('nb'.$className.'s', 0);
 	$smarty->display(_PS_THEME_DIR_.$objectType.'-list.tpl');
 }
 
