@@ -91,13 +91,11 @@ class MemcachedCore extends Cache
 	{
 		if (!$this->_isConnected)
 			return false;
-		if (isset($this->_keysCached[md5($query)]))
-			return true;
 		$key = $this->set(md5($query), $result);
-		if(preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?'."\s".'/Ui', $query, $res))
+		if(preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach($res[1] AS $table)
 				if(!isset($this->_tablesCached[$table][$key]))
-					$this->_tablesCached[$table][$key] = true;
+					$this->_tablesCached[$table][$key] = true;	
 	}
 	
 	public function delete($key, $timeout = 0)
@@ -112,7 +110,7 @@ class MemcachedCore extends Cache
 	{
 		if (!$this->_isConnected)
 			return false;
-		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?'."\s".'/Ui', $query, $res))
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach ($res[1] AS $table)
 				if (isset($this->_tablesCached[$table]))
 				{

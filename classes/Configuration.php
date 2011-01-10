@@ -111,7 +111,6 @@ class ConfigurationCore extends ObjectModel
 	{
 	 	if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
-
 		if ($id_lang AND isset(self::$_CONF_LANG[(int)($id_lang)][$key]))
 			return self::$_CONF_LANG[(int)($id_lang)][$key];
 		elseif (key_exists($key, self::$_CONF))
@@ -226,7 +225,6 @@ class ConfigurationCore extends ObjectModel
 		if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
 		$db = Db::getInstance();
-
 		/* Update classic values */
 		if (!is_array($values))
 		{
@@ -235,7 +233,7 @@ class ConfigurationCore extends ObjectModel
 				$result = $db->AutoExecute(
 					_DB_PREFIX_.'configuration',
 					array('value' => pSQL($values, $html), 'date_upd' => date('Y-m-d H:i:s')),
-					'UPDATE', '`name` = \''.pSQL($key).'\'', true);
+					'UPDATE', '`name` = \''.pSQL($key).'\'', true, true);
 				self::$_CONF[$key] = $values;
 			}
 			else

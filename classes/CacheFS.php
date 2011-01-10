@@ -98,7 +98,7 @@ class CacheFSCore extends Cache {
 		if (isset($this->_keysCached[md5($query)]))
 			return true;
 		$key = $this->set(md5($query), $result);
-		if(preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?'."\s".'/Ui', $query, $res))
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach($res[1] AS $table)
 				if(!isset($this->_tablesCached[$table][$key]))
 					$this->_tablesCached[$table][$key] = true;
@@ -120,7 +120,7 @@ class CacheFSCore extends Cache {
 	public function deleteQuery($query)
 	{
 
-		if(preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?'."\s".'/Ui', $query, $res))
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach ($res[1] AS $table)
 				if (isset($this->_tablesCached[$table]))
 				{
