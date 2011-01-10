@@ -66,7 +66,6 @@ header($result['execution_time']);
 if (isset($result['ps_ws_version']))
 	header($result['ps_ws_version']);
 
-
 if ($result['type'] == 'xml')
 {
 	header($result['content_sha1']);
@@ -74,9 +73,9 @@ if ($result['type'] == 'xml')
 }
 elseif ($result['type'] == 'image')
 {
-	if ($result['extension'] == 'jpg')
-		
-		imagejpeg($result['resource']);
-	elseif ($result['extension'] == 'gif')
-		imagegif($result['resource']);
+	if ($result['content_type'] == 'Content-Type: image/jpeg')
+		imagejpeg(WebserviceRequest::getInstance()->_imageResource);
+	elseif ($result['content_type'] == 'Content-Type: image/gif')
+		imagegif(WebserviceRequest::getInstance()->_imageResource);
+	imagedestroy(WebserviceRequest::getInstance()->_imageResource);
 }

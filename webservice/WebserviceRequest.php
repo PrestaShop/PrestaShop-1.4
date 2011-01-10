@@ -92,7 +92,7 @@ class WebserviceRequest
 			'invoice' => array(),
 			'store_icon' => array(),
 		),
-		/*'products' => array(),*/
+		'products' => array(),
 		'categories' => array(),
 		'manufacturers' => array(),
 		'suppliers' => array(),
@@ -123,6 +123,8 @@ class WebserviceRequest
 	
 	/** @var string Key used for authentication */
 	private $_key;
+	
+	public $_imageResource = null;
 	
 	
 	/**
@@ -1159,41 +1161,35 @@ class WebserviceRequest
 		if ($this->_authenticated)
 			$return['ps_ws_version'] = 'PSWS-Version: '._PS_VERSION_;
 		$return['execution_time'] =  'Execution-Time: '.round(microtime(true) - $this->_startTime,3);
-		
+
 		// display image content if needed
 		if ($this->_imgToDisplay)
 		{
 			switch ($this->_imgExtension)
 			{
 				case 'jpg':
-					$im = @imagecreatefromjpeg($this->_imgToDisplay);
+					$this->_imageResource = @imagecreatefromjpeg($this->_imgToDisplay);
 					break;
 				case 'gif':
-					$im = @imagecreatefromgif($this->_imgToDisplay);
+					$this->_imageResource = @imagecreatefromgif($this->_imgToDisplay);
 					break;
 			}
-			if(!$im)
+			if(!$this->_imageResource)
 				$this->setError(500, 'Unable to load the image "'.str_replace(_PS_ROOT_DIR_, '[SHOP_ROOT_DIR]', $this->_imgToDisplay).'"');
 			else
 			{
+				$return['type'] = 'image';
 				switch ($this->_imgExtension)
 				{
 					case 'jpg':
-						return array(
-							'type' => 'image',
-							'content_type' => 'Content-Type: image/jpeg',
-							'resource' => $im
-						);
+						$return['content_type'] = 'Content-Type: image/jpeg';
 						break;
 					case 'gif':
-						return array(
-							'type' => 'image',
-							'content_type' => 'Content-Type: image/gif',
-							'resource' => $im
-						);
+						$return['content_type'] = 'Content-Type: image/gif';
 						break;
 				}
-				imagedestroy($im);
+				restore_error_handler();
+				return $return;
 			}
 		}
 		
@@ -1204,9 +1200,8 @@ class WebserviceRequest
 			foreach ($this->_errors as $error)
 				$this->_xmlOutput .= '<error><![CDATA['.$error.']]></error>'."\n";
 			$this->_xmlOutput .= '</errors>'."\n";
-			restore_error_handler();
 		}
-		
+		restore_error_handler();
 		// display xml content if needed
 		if (strlen($this->_xmlOutput) > 0)
 		{
@@ -1329,13 +1324,12 @@ class WebserviceRequest
 						$directory = _PS_STORE_IMG_DIR_;
 						break;
 				}
-				return $this->manageNormalImages($directory);
+				return $this->manageDeclinatedImages($directory);
 				break;
 			
 			// product image management : many image for one entity (product)
 			case 'products':
-				$this->setError(500, 'Management product images is currently not implemented at this version');
-				return false;
+				return $this->manageProductImages();
 				break;
 			
 			// images root node management : many image for one entity (product)
@@ -1460,8 +1454,52 @@ class WebserviceRequest
 	 * @param string $directory the file path of the root of the images folder type
 	 * @return boolean
 	 */
-	private function manageNormalImages($directory)
+	private function manageDeclinatedImages($directory, $product = false)
 	{
+		if ($product)
+		{
+			$image_size = $this->_urlSegment[3];
+		}
+		else
+		{
+			$image_size = $this->_urlSegment[3];
+		}
+		$image_type = $this->_urlSegment[1];
+		
+		//d($image_size);
+		/*
+		 * 
+		 *      GET    (bin)
+		 *   images/product ("product_list")  (N-2)
+		 *   	GET    (xml) (list of image)
+		 *   images/product/[1,+] ("product_description")  (N-3)
+		 *   	GET    (xml) (legend, declinations, xlink to images/product/[1,+]/bin)
+		 *   images/product/[1,+]/bin ("product_bin")  (N-4)
+		 *   	GET    (bin)
+		 *      POST   (bin) (if image does not exists)
+		 *   images/product/[1,+]/[1,+] ("product_declination")  (N-4)
+		 *   	GET    (bin)
+		 *   	POST   (xml) (legend)
+		 *   	PUT    (xml) (legend)
+		 *      DELETE
+		 *   images/product/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
+		 *   	POST   (bin) (if image does not exists)
+		 *   	GET    (bin)
+		 *   	PUT    (bin)
+		 *   images/product/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
+		 *   	GET    (bin)
+		 *   images/product/default ("product_default") (N-3)
+		 *   	GET    (bin)
+		 *   images/product/default/[en,+] ("product_default_i18n") (N-4)
+		 *   	GET    (bin)
+		 *      POST   (bin)
+		 *      PUT   (bin)
+		 *      DELETE
+		 *   images/product/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
+		 * 		GET    (bin)
+		 * 
+		 * */
+		
 		
 		// Get available image sizes for the current image type
 		$normalImageSizes = ImageType::getImagesTypes($this->_urlSegment[1]);
@@ -1501,7 +1539,7 @@ class WebserviceRequest
 					else
 						$filename = $directory.$this->_urlSegment[3].'.jpg';
 					$filename_exists = file_exists($filename);
-					return $this->manageNormalImagesCRUD($filename_exists, $filename, $normalImageSizes, $directory);//TODO
+					return $this->manageDeclinatedImagesCRUD($filename_exists, $filename, $normalImageSizes, $directory);//TODO
 				}
 				break;
 			
@@ -1567,7 +1605,7 @@ class WebserviceRequest
 					// Management of the original image (GET, PUT, POST, DELETE)
 					else
 					{
-						return $this->manageNormalImagesCRUD($orig_filename_exists, $orig_filename, $normalImageSizes, $directory);
+						return $this->manageDeclinatedImagesCRUD($orig_filename_exists, $orig_filename, $normalImageSizes, $directory);
 					}
 				}
 				else
@@ -1576,6 +1614,11 @@ class WebserviceRequest
 					return false;
 				}
 		}
+	}
+	
+	private function manageProductImages()
+	{
+		$this->manageDeclinatedImages(_PS_PROD_IMG_DIR_, true);
 	}
 	
 	/**
@@ -1587,7 +1630,7 @@ class WebserviceRequest
 	 * @param string $directory
 	 * @return boolean
 	 */
-	private function manageNormalImagesCRUD($filename_exists, $filename, $imageSizes, $directory)
+	private function manageDeclinatedImagesCRUD($filename_exists, $filename, $imageSizes, $directory)
 	{
 		switch ($this->_method)
 		{
