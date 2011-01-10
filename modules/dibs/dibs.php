@@ -1,80 +1,105 @@
 <?php
+/*
+* 2007-2010 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Open Software License (OSL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/osl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author Prestashop SA <contact@prestashop.com>
+*  @copyright  2007-2010 Prestashop SA
+*  @version  Release: $Revision: 1.4 $
+*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*  International Registred Trademark & Property of PrestaShop SA
+*/
 
 class dibs extends PaymentModule
 {
-    /**
-     * @var string set the merchant id sent by DIBS e-mail after subscription
-     * @staticvar
-     */
-    public static $ID_MERCHANT;
-    
-    /**
-     * The URL of the page to be displayed if the purchase is approved.
-     * @var string
-     * @staticvar
-     */
-    private static $ACCEPTED_URL = '';
-    
-    /**
-     * The URL of the page to be displayed if the customer cancels the payment.
-     * @var string
-     * @staticvar
-     */
-    private static $CANCELLED_URL = '';
-    
-    /**
-     * Set the testing mode.
-     * @var string
-     */
-    private static $TESTING;
+	/**
+	 * @var string set the merchant id sent by DIBS e-mail after subscription
+	 * @staticvar
+	 */
+	public static $ID_MERCHANT;
+	
+	/**
+	 * The URL of the page to be displayed if the purchase is approved.
+	 * @var string
+	 * @staticvar
+	 */
+	private static $ACCEPTED_URL = '';
+	
+	/**
+	 * The URL of the page to be displayed if the customer cancels the payment.
+	 * @var string
+	 * @staticvar
+	 */
+	private static $CANCELLED_URL = '';
+	
+	/**
+	 * Set the testing mode.
+	 * @var string
+	 */
+	private static $TESTING;
 
 	/**
-     * define more settings values, set for new version which probably.
-     * @var array
-     */
-    public static $MORE_SETTINGS;
-    
-    /**
-     * @var string
-     * @staticvar
-     */
-    private static $site_url;
-    /**
-     * Set the smarty object
-     * @var Smarty
-     */
-    private $smarty;
+	 * define more settings values, set for new version which probably.
+	 * @var array
+	 */
+	public static $MORE_SETTINGS;
+	
+	/**
+	 * @var string
+	 * @staticvar
+	 */
+	private static $site_url;
+	/**
+	 * Set the smarty object
+	 * @var Smarty
+	 */
+	private $smarty;
 	
 	/**
 	 * Only this langs array are allowed in DIBS API
 	 * @var array
 	 */
 	private static $accepted_lang = array('da','en','es','fi','fo','fr','it','nl','no','pl','sv');
-    
+	
 	public function __construct()
 	{
-	    global $smarty;
-	    $this->smarty = $smarty;
+		global $smarty;
+		$this->smarty = $smarty;
 		$this->name = 'dibs';
 		$this->tab = 'payments_gateways';
 		$this->version = '1.0';
 
-        parent::__construct();
+		parent::__construct();
 
-        $this->displayName = $this->l('DIBS');
-        $this->description = $this->l('DIBS payment API');
-        
-        if (self::$site_url === NULL)
-        	self::$site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
-        
-        self::$ID_MERCHANT = Configuration::get('DIBS_ID_MERCHANT');
-        self::$ACCEPTED_URL = Configuration::get('DIBS_ACCEPTED_URL');
-        self::$CANCELLED_URL = Configuration::get('DIBS_CANCELLED_URL');
-        self::$TESTING = (int)Configuration::get('DIBS_TESTING');
-        self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Configuration::get('DIBS_MORE_SETTINGS')) : array();
-        
-        if (!isset(self::$MORE_SETTINGS['k1'])
-        	OR (isset(self::$MORE_SETTINGS['k1']) AND (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '') ))
+		$this->displayName = $this->l('DIBS');
+		$this->description = $this->l('DIBS payment API');
+		
+		if (self::$site_url === NULL)
+			self::$site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+		
+		self::$ID_MERCHANT = Configuration::get('DIBS_ID_MERCHANT');
+		self::$ACCEPTED_URL = Configuration::get('DIBS_ACCEPTED_URL');
+		self::$CANCELLED_URL = Configuration::get('DIBS_CANCELLED_URL');
+		self::$TESTING = (int)Configuration::get('DIBS_TESTING');
+		self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Configuration::get('DIBS_MORE_SETTINGS')) : array();
+		
+		if (!isset(self::$MORE_SETTINGS['k1'])
+			OR (isset(self::$MORE_SETTINGS['k1']) AND (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '') ))
 			$this->warning = $this->l('For security reason you have to set key #1 and key #2 used by MD5 control of DIBS API.');
 		if (!self::$ID_MERCHANT OR self::$ID_MERCHANT === '')
 			$this->warning = $this->l('You have to set your ID merchant to use DIBS API.');
@@ -115,28 +140,28 @@ class dibs extends PaymentModule
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
 	
-    private function preProcess()
-    {
-        if (Tools::isSubmit('submitModule'))
+	private function preProcess()
+	{
+		if (Tools::isSubmit('submitModule'))
 		{
-		    self::$ID_MERCHANT = (Tools::getValue('idMerchant') !== '' ? Tools::getValue('idMerchant') : self::$ID_MERCHANT);
-		    self::$ACCEPTED_URL = ((Validate::isUrl(Tools::getValue('acceptedUrl'))) ? Tools::getValue('acceptedUrl') : self::$ACCEPTED_URL);
-		    self::$CANCELLED_URL = ((Validate::isUrl(Tools::getValue('cancelledUrl'))) ? Tools::getValue('cancelledUrl') : self::$CANCELLED_URL);
-		    self::$TESTING = (int)isset($_POST['testing']);
+			self::$ID_MERCHANT = (Tools::getValue('idMerchant') !== '' ? Tools::getValue('idMerchant') : self::$ID_MERCHANT);
+			self::$ACCEPTED_URL = ((Validate::isUrl(Tools::getValue('acceptedUrl'))) ? Tools::getValue('acceptedUrl') : self::$ACCEPTED_URL);
+			self::$CANCELLED_URL = ((Validate::isUrl(Tools::getValue('cancelledUrl'))) ? Tools::getValue('cancelledUrl') : self::$CANCELLED_URL);
+			self::$TESTING = (int)isset($_POST['testing']);
 			self::$MORE_SETTINGS['flexwin_color'] = Tools::getValue('flexwin_color');
 			self::$MORE_SETTINGS['logo_color'] = Tools::getValue('logo_color');
 			self::$MORE_SETTINGS['k1'] = Tools::getValue('k1');
 			self::$MORE_SETTINGS['k2'] = Tools::getValue('k2');
-			    
-		    Configuration::updateValue('DIBS_ID_MERCHANT', self::$ID_MERCHANT);
-		    Configuration::updateValue('DIBS_ACCEPTED_URL', self::$ACCEPTED_URL);
-		    Configuration::updateValue('DIBS_CANCELLED_URL', self::$CANCELLED_URL);
-		    Configuration::updateValue('DIBS_TESTING', self::$TESTING);
-		    Configuration::updateValue('DIBS_MORE_SETTINGS', serialize(self::$MORE_SETTINGS));
+			
+			Configuration::updateValue('DIBS_ID_MERCHANT', self::$ID_MERCHANT);
+			Configuration::updateValue('DIBS_ACCEPTED_URL', self::$ACCEPTED_URL);
+			Configuration::updateValue('DIBS_CANCELLED_URL', self::$CANCELLED_URL);
+			Configuration::updateValue('DIBS_TESTING', self::$TESTING);
+			Configuration::updateValue('DIBS_MORE_SETTINGS', serialize(self::$MORE_SETTINGS));
 			
 			echo '<div class="conf confirm"><img src="../img/admin/ok.gif"/>'.$this->l('Configuration updated').'</div>';
 		}
-    }
+	}
 	public function getContent()
 	{
 		$this->preProcess();
@@ -201,9 +226,9 @@ class dibs extends PaymentModule
 	}
 	public function hookPayment($params)
 	{
-	    if ((self::$ID_MERCHANT === false || self::$ID_MERCHANT === '' || self::$ID_MERCHANT === NULL) 
-			|| (self::$ACCEPTED_URL === false || self::$ACCEPTED_URL === '' || self::$ACCEPTED_URL === NULL))
-	        return '';
+		if ((self::$ID_MERCHANT === false || self::$ID_MERCHANT === '' || self::$ID_MERCHANT === NULL) 
+		|| (self::$ACCEPTED_URL === false || self::$ACCEPTED_URL === '' || self::$ACCEPTED_URL === NULL))
+	 		return '';
 
 		$currency = new Currency(intval($params['cart']->id_currency));
 		$lang = new Language(intval($params['cart']->id_lang));
@@ -322,5 +347,5 @@ class dibs extends PaymentModule
 		$this->smarty->assign('p', $dibsParams);
 		$this->smarty->assign('logo_color', self::$MORE_SETTINGS['logo_color']);
 		return $this->display(__FILE__, 'dibs.tpl');
-    }
+	}
 }
