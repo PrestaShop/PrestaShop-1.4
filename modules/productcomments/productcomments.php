@@ -243,25 +243,27 @@ class ProductComments extends Module
 			<fieldset class="width2">
 				<legend><img src="../img/admin/cog.gif" alt="" title="" />'.$this->l('Configuration').'</legend>
 				<form action="'.$this->_baseUrl.'" method="post" name="comment_configuration">
-					<label>'.$this->l('All comments must be validated by an employee').'</label>
+					<label style="padding-top: 0;">'.$this->l('All comments must be validated by an employee').'</label>
 					<div class="margin-form">
 						<input type="radio" name="moderate" id="moderate_on" value="1" '.(Configuration::get('PRODUCT_COMMENTS_MODERATE') ? 'checked="checked" ' : '').'/>
 						<label class="t" for="moderate_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 						<input type="radio" name="moderate" id="moderate_off" value="0" '.(!Configuration::get('PRODUCT_COMMENTS_MODERATE') ? 'checked="checked" ' : '').'/>
 						<label class="t" for="moderate_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					</div>
-					<div class="clear"></div>
-					<label>'.$this->l('Allow guest comments').'</label>
+					<div class="clear" style="height: 20px;"></div>
+					<label style="padding-top: 0;">'.$this->l('Allow guest comments').'</label>
 					<div class="margin-form">
 						<input type="radio" name="allow_guest" id="allow_guest_on" value="1" '.(Configuration::get('PRODUCT_COMMENTS_ALLOW_GUESTS') ? 'checked="checked" ' : '').'/>
 						<label class="t" for="allow_guest_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 						<input type="radio" name="allow_guest" id="allow_guest_off" value="0" '.(!Configuration::get('PRODUCT_COMMENTS_ALLOW_GUESTS') ? 'checked="checked" ' : '').'/>
 						<label class="t" for="allow_guest_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					</div>
-					<label>'.$this->l('Minimum time between 2 comments from the same user').'</label>
+					<div class="clear" style="height: 20px;"></div>
+					<label style="padding-top: 0;">'.$this->l('Minimum time between 2 comments from the same user').'</label>
 					<div class="margin-form">
 						<input name="product_comments_minimal_time" type="text" class="text" value="'.Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME').'" style="width: 40px; text-align: right;" /> '.$this->l('seconds').'
 					</div>
+					<div class="clear"></div>
 					<div class="margin-form clear">
 						<input type="submit" name="submitModerate" value="'.$this->l('Save').'" class="button" />
 					</div>

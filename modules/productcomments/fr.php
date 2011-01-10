@@ -13,7 +13,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_254f642527b45bc260048e307
 $_MODULE['<{productcomments}prestashop>productcomments_9ca2adc05abbe3cc0a659a16fd7d5edc'] = 'Les commentaires doivent être validés par un employé';
 $_MODULE['<{productcomments}prestashop>productcomments_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
 $_MODULE['<{productcomments}prestashop>productcomments_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
-$_MODULE['<{productcomments}prestashop>productcomments_66b06316f84eb73075bca0e27f2a5581'] = 'Autorisé les commentaires des visiteurs qui ne sont pas connectés.';
+$_MODULE['<{productcomments}prestashop>productcomments_66b06316f84eb73075bca0e27f2a5581'] = 'Autoriser les commentaires des visiteurs qui n\'ont pas de compte client';
 $_MODULE['<{productcomments}prestashop>productcomments_2e53b6c4c0d39a73718342ab2366ae37'] = 'Temps minimum entre 2 commentaires d\'un même utilisateur';
 $_MODULE['<{productcomments}prestashop>productcomments_783e8e29e6a8c3e22baa58a19420eb4f'] = 'secondes';
 $_MODULE['<{productcomments}prestashop>productcomments_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
@@ -38,8 +38,8 @@ $_MODULE['<{productcomments}prestashop>productcomments_21a512e9d635e82fc7c7077fc
 $_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Type';
 $_MODULE['<{productcomments}prestashop>productcomments_ec53a8c4f07baed5d8825072c89799be'] = 'Etat';
 $_MODULE['<{productcomments}prestashop>productcomments_7dce122004969d56ae2e0245cb754d35'] = 'Modifier';
-$_MODULE['<{productcomments}prestashop>productcomments_8eb0b6ced310b120b12106e8d4bdbdb8'] = 'Gèrer le ';
-$_MODULE['<{productcomments}prestashop>productcomments_6556e73b0255c988d9fe70141f1d4bd9'] = 'Seul les critères correspond à des catégories ou des produits peuvent être configurés ci-dessous:';
+$_MODULE['<{productcomments}prestashop>productcomments_8eb0b6ced310b120b12106e8d4bdbdb8'] = 'Gérer le champ d\'action des critères';
+$_MODULE['<{productcomments}prestashop>productcomments_6556e73b0255c988d9fe70141f1d4bd9'] = 'Seuls les critères correspondant à des catégories ou des produits peuvent être configurés ci-dessous:';
 $_MODULE['<{productcomments}prestashop>productcomments_a942d4abf908e5f708ec4dfaa949065e'] = 'Choisissez un critère';
 $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_MODULE['<{productcomments}prestashop>productcomments_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';

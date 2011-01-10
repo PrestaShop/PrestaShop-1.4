@@ -326,14 +326,18 @@ class LanguageCore extends ObjectModel
 	/**
 	  * Return available languages
 	  *
+	  * @param boolean $active Select only active languages
 	  * @return array Languages
 	  */
 	static public function getLanguages($active = true)
 	{
 		$languages = array();
 		foreach (self::$_LANGUAGES AS $language)
-			if (!$active OR ($active AND (int)($language['active'])))
-				$languages[] = $language;
+		{
+			if ($active AND !$language['active'])
+				continue;
+			$languages[] = $language;
+		}
 		return $languages;
 	}
 

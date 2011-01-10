@@ -58,7 +58,7 @@ class StatsSales extends ModuleGraph
 		global $cookie;
 		
 		$totals = $this->getTotals();
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 		if (($id_export = (int)Tools::getValue('export')) == 1)
 			$this->csvExport(array('layers' => 2, 'type' => 'line', 'option' => '1-'.(int)Tools::getValue('id_country')));
 		elseif ($id_export == 2)
@@ -82,14 +82,14 @@ class StatsSales extends ModuleGraph
 			<p>'.$this->l('Orders placed:').' '.(int)($totals['orderCount']).'</p>
 			<p>'.$this->l('Products bought:').' '.(int)($totals['products']).'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '1-'.(int)(Tools::getValue('id_country')), 'layers' => 2)).'</center>
-			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
+			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" alt="" />'.$this->l('CSV Export').'</a></p>
 			<p>'.$this->l('Sales:').' '.Tools::displayPrice($totals['orderSum'], $currency).'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line', 'option' => '2-'.(int)(Tools::getValue('id_country')))).'</center></p>
-			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=2"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
+			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=2"><img src="../img/admin/asterisk.gif" alt="" />'.$this->l('CSV Export').'</a></p>
 			<p class="space"><img src="../img/admin/down.gif" />
 				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
-			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.(int)(Tools::getValue('id_country')))) : $this->l('No order for this period')).'</center>
+			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.(int)Tools::getValue('id_country'))) : $this->l('No order for this period')).'</center>
 			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=3"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 		</fieldset>
 		<br class="clear" />
@@ -110,7 +110,7 @@ class StatsSales extends ModuleGraph
 		FROM `'._DB_PREFIX_.'orders` o
 		'.((int)(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
-		'.((int)(Tools::getValue('id_country')) ? 'AND a.id_country = '.(int)(Tools::getValue('id_country')) : '').'
+		'.((int)(Tools::getValue('id_country')) ? 'AND a.id_country = '.(int)Tools::getValue('id_country') : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		
 		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -119,7 +119,7 @@ class StatsSales extends ModuleGraph
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 		'.((int)(Tools::getValue('id_country')) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 		WHERE o.valid = 1
-		'.((int)(Tools::getValue('id_country')) ? 'AND a.id_country = '.(int)(Tools::getValue('id_country')) : '').'
+		'.((int)Tools::getValue('id_country') ? 'AND a.id_country = '.(int)Tools::getValue('id_country') : '').'
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		return array_merge($result1, $result2);
 	}
@@ -135,7 +135,7 @@ class StatsSales extends ModuleGraph
 				$this->_titles['main'][2] = $this->l('Products');
 				break;
 			case 2:
-				$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+				$currency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 				$this->_titles['main'] = $this->l('Sales in').' '.$currency->iso_code;
 				break;
 			case 3:
@@ -155,7 +155,7 @@ class StatsSales extends ModuleGraph
 			LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON od.`id_order` = o.`id_order`
 			'.((int)($this->id_country) ? 'LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_delivery = a.id_address' : '').'
 			WHERE o.valid = 1
-			'.((int)($this->id_country) ? 'AND a.id_country = '.(int)($this->id_country) : '').'
+			'.((int)($this->id_country) ? 'AND a.id_country = '.(int)$this->id_country : '').'
 			AND o.`invoice_date` BETWEEN ';
 		$this->_query2 = ' GROUP BY o.id_order';
 		$this->setDateGraph($layers, true);
@@ -226,5 +226,3 @@ class StatsSales extends ModuleGraph
 		}
 	}
 }
-
-

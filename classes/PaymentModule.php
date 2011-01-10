@@ -89,7 +89,7 @@ abstract class PaymentModuleCore extends Module
 	* @param string $message Message to attach to order
 	*/
 
-	function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, $secure_key = false)
+	public function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, $secure_key = false)
 	{
 		global $cart;
 
@@ -240,7 +240,6 @@ abstract class PaymentModuleCore extends Module
 						\''.pSQL($deadline).'\',
 						\''.pSQL($download_hash).'\'),';
 
-					$priceWithTax = number_format($price * (($tax_rate + 100) / 100), 2, '.', '');
 					$customizationQuantity = 0;
 					if (isset($customizedDatas[$product['id_product']][$product['id_product_attribute']]))
 					{
@@ -262,7 +261,7 @@ abstract class PaymentModuleCore extends Module
 						</tr>';
 					}
 
-					if (!$customizationQuantity OR (int)($product['cart_quantity']) > $customizationQuantity)
+					if (!$customizationQuantity OR (int)$product['cart_quantity'] > $customizationQuantity)
 						$productsList .=
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
 							<td style="padding: 0.6em 0.4em;">'.$product['reference'].'</td>
@@ -298,34 +297,34 @@ abstract class PaymentModuleCore extends Module
 				$oldMessage = Message::getMessageByCartId((int)($cart->id));
 				if ($oldMessage)
 				{
-					$message = new Message((int)($oldMessage['id_message']));
-					$message->id_order = (int)($order->id);
+					$message = new Message((int)$oldMessage['id_message']);
+					$message->id_order = (int)$order->id;
 					$message->update();
 				}
 
 				// Hook new order
-				$orderStatus = new OrderState((int)($id_order_state), $order->id_lang);
+				$orderStatus = new OrderState((int)$id_order_state, (int)$order->id_lang);
 				if (Validate::isLoadedObject($orderStatus))
 				{
 					Hook::newOrder($cart, $order, $customer, $currency, $orderStatus);
-					foreach ($cart->getProducts() as $product)
+					foreach ($cart->getProducts() AS $product)
 						if ($orderStatus->logable)
-							ProductSale::addProductSale((int)($product['id_product']), (int)($product['cart_quantity']));
+							ProductSale::addProductSale((int)$product['id_product'], (int)$product['cart_quantity']);
 				}
 
 				if (isset($outOfStock) AND $outOfStock)
 				{
 					$history = new OrderHistory();
-					$history->id_order = (int)($order->id);
-					$history->changeIdOrderState(_PS_OS_OUTOFSTOCK_, (int)($order->id));
+					$history->id_order = (int)$order->id;
+					$history->changeIdOrderState(_PS_OS_OUTOFSTOCK_, (int)$order->id);
 					$history->addWithemail();
 				}
 
 				// Set order state in order history ONLY even if the "out of stock" status has not been yet reached
 				// So you migth have two order states
 				$new_history = new OrderHistory();
-				$new_history->id_order = (int)($order->id);
-				$new_history->changeIdOrderState((int)($id_order_state), (int)($order->id));
+				$new_history->id_order = (int)$order->id;
+				$new_history->changeIdOrderState((int)$id_order_state, (int)$order->id);
 				$new_history->addWithemail(true, $extraVars);
 
 				// Order is reloaded because the status just changed
@@ -432,4 +431,3 @@ abstract class PaymentModuleCore extends Module
 		return (new Currency($id_currency));
 	}
 }
-
