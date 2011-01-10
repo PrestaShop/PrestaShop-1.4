@@ -194,7 +194,7 @@ if (isFormValid())
 	if ($localization_file)
 	{
 		$localizationPack = new LocalizationPackCore();
-		$localizationPack->loadLocalisationPack($localization_file, '');
+		$localizationPack->loadLocalisationPack($localization_file, '', true);
 	}
 	if (isset($_GET['infosMailMethod']) AND $_GET['infosMailMethod'] == "smtp")
 	{
