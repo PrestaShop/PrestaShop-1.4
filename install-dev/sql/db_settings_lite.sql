@@ -60,9 +60,9 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (57, 'orderDetailDisplayed', 'Order detail displayed', 'Displayed on order detail on front office', 1),
 (58, 'paymentCCAdded', 'Payment CC added', 'Payment CC added', '0'),
 (59, 'extraProductComparison', 'Extra Product Comparison', 'Extra Product Comparison', '0'),
-(60, 'categoryAddition', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
-(61, 'categoryUpdate', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
-(62, 'categoryDeletion', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
+(60, 'categoryAddition', 'Category creation', '', 0),
+(61, 'categoryUpdate', 'Category modification', '', 0),
+(62, 'categoryDeletion', 'Category removal', '', 0),
 (63, 'beforeAuthentication', 'Before Authentication', 'Before authentication', 0)
 ;
 
