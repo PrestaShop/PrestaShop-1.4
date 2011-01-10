@@ -2669,6 +2669,7 @@ $_LANGADM['AdminTab2aa80a00e1c76b0c14ef567e0e322a0e'] = 'Module réinitialisé a
 $_LANGADM['AdminTab40606a2d55f7c33c732f1d3c1b5b1e66'] = 'Module supprimé avec succès';
 $_LANGADM['AdminTab9c2b5aa34cafb3efe958e0a712e0efda'] = 'Pack de configuration importé avec succès';
 $_LANGADM['AdminTabd4fecde5ac83b59cc690fd4d26d79abe'] = 'Remboursement effectué';
+$_LANGADM['AdminTab0557fa923dcee4d0f86b1409f5c2167f'] = 'Retour';
 $_LANGADM['AdminTab630f6dc397fe74e52d5189e2c80f282b'] = 'Retour à la liste';
 $_LANGADM['AdminTab32397e87e6e403cbad4f3d26385ad6ef'] = 'Droits insuffisants (ajout)';
 $_LANGADM['AdminTabddcaee4edc8938535941b620ae5ec359'] = 'Droits insuffisants (modification)';
