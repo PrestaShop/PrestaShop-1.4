@@ -75,7 +75,7 @@ class GridHtml extends ModuleGridEngine
 					</th>';
 		$html .= '</tr></thead>
 				<tbody></tbody>
-				<tfoot><tr><th colspan="'.count($params['columns']).'">'.$params['pagingMessage'].'</th></tr></tfoot>
+				<tfoot><tr><th colspan="'.count($params['columns']).'"></th></tr></tfoot>
 			</table>
 		</div>
 		<script type="text/javascript">
@@ -85,9 +85,15 @@ class GridHtml extends ModuleGridEngine
 				$.get(url, "", function(json) {
 					$("#grid_1 tbody").html("");
 					var array = $.parseJSON(json);
+					$("#grid_1 tfoot tr th").html("'.addslashes($params['pagingMessage']).'");
 					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{0}", array["from"]));
 					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{1}", array["to"]));
 					$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html().replace("{2}", array["total"]));
+
+					if (array["from"] > 1)
+						$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html() + " &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style=\\"cursor:pointer;text-decoration:none\\" onclick=\\"gridPrevPage(\'"+ url +"\');\\">&lt;&lt;</a>");
+					if (array["to"] < array["total"])
+						$("#grid_1 tfoot tr th").html($("#grid_1 tfoot tr th").html() + " | <a style=\\"cursor:pointer;text-decoration:none\\" onclick=\\"gridNextPage(\'"+ url +"\');\\">&gt;&gt;</a>");
 					var values = array["values"];
 					if (values.length > 0)
 						$.each(values, function(index, row){
@@ -100,6 +106,35 @@ class GridHtml extends ModuleGridEngine
 						$("#grid_1 tbody").append("<tr><td style=\"text-align:center\" colspan=\"" + '.count($params['columns']).' + "\">'.$params['emptyMsg'].'</td></tr>");
 				});
 			}
+			
+			function gridNextPage(url)
+			{
+				var from = url.match(/&start=[0-9]+/i);
+				if (from && from[0] && parseInt(from[0].replace("&start=", "")) > 0)
+					from = "&start=" + (parseInt(from[0].replace("&start=", "")) + 40);
+				else
+					from = "&start=40";
+				url = url.replace(/&start=[0-9]+/i, "") + from;
+				getGridData(url);
+			}
+			
+			function gridPrevPage(url)
+			{
+				var from = url.match(/&start=[0-9]+/i);
+				if (from && from[0] && parseInt(from[0].replace("&start=", "")) > 0)
+				{
+					var fromInt = parseInt(from[0].replace("&start=", "")) - 40;
+					if (fromInt > 0)
+						from = "&start=" + fromInt;
+					else
+						from = "&start=0";
+				}
+				else
+					from = "&start=0";
+				url = url.replace(/&start=[0-9]+/i, "") + from;
+				getGridData(url);
+			}
+			
 			$(document).ready(function(){getGridData("'.$grider.'&sort='.urlencode($params['defaultSortColumn']).'&dir='.urlencode($params['defaultSortDirection']).'");});
 		</script>';
 		return $html;
