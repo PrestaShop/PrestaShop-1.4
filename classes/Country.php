@@ -301,12 +301,12 @@ class CountryCore extends ObjectModel
     {
         if (empty($id_zone) OR empty($id_lang))
             die(Tools::displayError());
-
         return Db::getInstance()->ExecuteS('
-        SELECT *
+        SELECT DISTINCT c.*, cl.*
         FROM `'._DB_PREFIX_.'country` c
+        LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_country` = c.`id_country`)
         LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country`)
-        WHERE c.`id_zone` = '.(int)$id_zone.'
+        WHERE (c.`id_zone` = '.(int)$id_zone.' OR s.`id_zone` = '.(int)$id_zone.')
         AND `id_lang` = '.(int)$id_lang
         );
     }

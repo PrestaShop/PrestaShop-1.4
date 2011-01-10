@@ -204,7 +204,7 @@ class AdminTaxRulesGroup extends AdminTab
     public function renderStates($tax_rules, $id_zone, $id_country, $id_lang)
     {
         $html = '<table style="padding-left: 20px"id="states_'.$id_country.'">';
-        $states = State::getStatesByCountryId((int)$id_country);
+        $states = State::getStatesByIdCountryAndIdZone((int)$id_country, (int)$id_zone);
         foreach ($states AS $state)
         {
             $id_tax = 0;
