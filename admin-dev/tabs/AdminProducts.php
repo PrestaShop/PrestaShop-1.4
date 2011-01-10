@@ -1720,7 +1720,10 @@ class AdminProducts extends AdminTab
 
 		<label>'.$this->l('Price (tax excl.):').'</label>
 		<div class="margin-form">
-			<span id="spm_currency_sign_pre_0">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span><input type="text" name="sp_price" value="'.(float)($product->price).'" size="11" /><span id="spm_currency_sign_post_0">'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</span>
+			<span id="spm_currency_sign_pre_0">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span>
+			<input type="text" name="sp_price" value="0" size="11" />
+			<span id="spm_currency_sign_post_0">'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</span>
+			<span id="sp_current_ht_price"> ('.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').(float)($product->price).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').')</span>
 			<div class="hint clear" style="display:block;">
 				'.$this->l('You can set this value at 0 in order to apply the default price').'
 			</div>
