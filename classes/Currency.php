@@ -71,7 +71,37 @@ class CurrencyCore extends ObjectModel
 	static private	$current = NULL;
 	/** @var array Currency cache */
 	static private	$currencies = array();
-
+	
+	/**
+	 * Overriding check if currency with the same iso code already exists.
+	 * If it's true, currency is doesn't added.
+	 * 
+	 * @see ObjectModelCore::add()
+	 */
+	public function add($autodate = true, $nullValues = false)
+	{
+		return Currency::exists($this->iso_code) ? false : parent::add();
+	}
+	
+	/**
+	 * Check if a curency already exists.
+	 * 
+	 * @param int|string $iso_code int for iso code number string for iso code
+	 * @return boolean
+	 */
+	public static function exists ($iso_code)
+	{
+		if(is_int($iso_code))
+			$id_currency_exists = Currency::getIdByIsoCodeNum($iso_code);
+		else
+			$id_currency_exists = Currency::getIdByIsoCode($iso_code);
+		
+		if ($id_currency_exists){
+			return true;
+		} else {
+			return false;
+		}
+	}
 	public function getFields()
 	{
 		parent::validateFields();
@@ -205,6 +235,15 @@ class CurrencyCore extends ObjectModel
 		WHERE `deleted` = 0
 		AND `iso_code` = \''.pSQL($iso_code).'\'');
 		return $result['id_currency'];
+	}
+	static public function getIdByIsoCodeNum($iso_code)
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT `id_currency`
+		FROM `'._DB_PREFIX_.'currency`
+		WHERE `deleted` = 0
+		AND `iso_code_num` = \''.pSQL($iso_code).'\'');
+		return (int)$result['id_currency'];
 	}
 
 	public function refreshCurrency($data, $isoCodeSource, $defaultCurrency)

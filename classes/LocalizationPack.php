@@ -203,10 +203,13 @@ class LocalizationPackCore
 					$this->_errors[] = Tools::displayError('Invalid currency properties.');
 					return false;
 				}
-				if (!$currency->add())
+				if (!Currency::exists($currency->iso_code))
 				{
-					$this->_errors[] = Tools::displayError('An error occurred while importing the currency: ').strval($attributes['name']);
-					return false;
+					if (!$currency->add())
+					{
+						$this->_errors[] = Tools::displayError('An error occurred while importing the currency: ').strval($attributes['name']);
+						return false;
+					}
 				}
 				$currency->refreshCurrency($feed->list, $isoCodeSource, $defaultCurrency);
 			}
