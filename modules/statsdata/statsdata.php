@@ -89,16 +89,7 @@ class StatsData extends Module
 			<input type="submit" class="button" name="submitStatsData" value="'.$this->l('Update').'" />
 		</fieldset>';
 	}
-	
-	private function getCipherTool()
-	{
-		// Identification information are encrypted to prevent hacking attempts
-		if (Configuration::get('PS_CIPHER_ALGORITHM'))
-			return new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
-		else
-			return new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
-	}
-    
+
 	public function hookFooter($params)
 	{
 		$html = '';
@@ -109,7 +100,7 @@ class StatsData extends Module
 			if (Configuration::get('PS_STATSDATA_PLUGINS'))
 			{
 				// Ajax request sending browser information
-				$token = $this->getCipherTool()->encrypt($params['cookie']->id_guest);
+				$token = sha1($params['cookie']->id_guest._COOKIE_KEY_);
 				$html .= '
 				<script type="text/javascript" src="'._PS_JS_DIR_.'pluginDetect.js"></script>
 				<script type="text/javascript">
@@ -147,7 +138,7 @@ class StatsData extends Module
 		if (Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
 		{
 			// Ajax request sending the time spend on the page
-			$token = $this->getCipherTool()->encrypt($tokenArray['id_connections'].'|'.$tokenArray['id_page'].'|'.$tokenArray['time_start']);
+			$token = sha1($tokenArray['id_connections'].$tokenArray['id_page'].$tokenArray['time_start']._COOKIE_KEY_);
 			$html .= '
 			<script type="text/javascript">
 				var time_start;

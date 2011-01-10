@@ -30,17 +30,12 @@ if (!isset($_POST['token']) OR !isset($_POST['type']))
 
 include(dirname(__FILE__).'/config/config.inc.php');
 
-if (Configuration::get('PS_CIPHER_ALGORITHM'))
-	$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
-else
-	$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
-$token = $cipherTool->decrypt($_POST['token']);
-
 if ($_POST['type'] == 'navinfo')
 {
-	if (!Validate::isUnsignedId((int)($token)))
-		exit;
-	$guest = new Guest($token);
+	if (sha1($_POST['id_guest']._COOKIE_KEY_) != $_POST['token'])
+		die;
+
+	$guest = new Guest((int)$_POST['id_guest']);
 	$guest->javascript = true;
 	$guest->screen_resolution_x = (int)($_POST['screen_resolution_x']);
 	$guest->screen_resolution_y = (int)($_POST['screen_resolution_y']);
@@ -55,9 +50,9 @@ if ($_POST['type'] == 'navinfo')
 }
 elseif ($_POST['type'] == 'pagetime')
 {
+	if (sha1($_POST['id_connections'].$_POST['id_page'].$_POST['time_start']._COOKIE_KEY_) != $_POST['token'])
+		die;
 	if (!Validate::isInt($_POST['time']) OR $_POST['time'] <= 0)
-		exit;
-	$tokenArray = explode('|', $token);
-	Connection::setPageTime($tokenArray[0], $tokenArray[1], substr($tokenArray[2], 0, 19), (int)($_POST['time']));
+		die;
+	Connection::setPageTime((int)$_POST['id_connections'], (int)$_POST['id_page'], substr($_POST['time_start'], 0, 19), intval($_POST['time']));
 }
-
