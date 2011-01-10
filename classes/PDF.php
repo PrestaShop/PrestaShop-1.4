@@ -774,7 +774,7 @@ g	* Discount table with value, quantities...
 			if (!isset($taxes[$product['tax_rate']]))
 				$taxes[$product['tax_rate']] = 0;
 			/* Without tax */
-			$product['priceWithoutTax'] = Tools::ps_round(self::$_priceDisplayMethod == PS_TAX_EXC ? (float)($product['product_price']) : $product['product_price_wt_but_ecotax'] / (1 + $product['tax_rate'] / 100), 2) * (int)($product['product_quantity']);
+			$product['priceWithoutTax'] = (self::$_priceDisplayMethod == PS_TAX_EXC ? Tools::ps_round((float)($product['product_price']), 2) : ($product['product_price_wt_but_ecotax'] / (1 + $product['tax_rate'] / 100))) * (int)($product['product_quantity']);
 			$amountWithoutTax += $product['priceWithoutTax'];
 			/* With tax */
 			$product['priceWithTax'] = (float)($product['product_price_wt']) * (int)($product['product_quantity']);
@@ -959,7 +959,7 @@ g	* Discount table with value, quantities...
 	{
 		global $cookie;
 		$iso = Language::getIsoById((isset($cookie->id_lang) AND Validate::isUnsignedId($cookie->id_lang)) ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT'));
-		
+
 		if (@!include(_PS_TRANSLATIONS_DIR_.$iso.'/pdf.php'))
 			die('Cannot include PDF translation language file : '._PS_TRANSLATIONS_DIR_.$iso.'/pdf.php');
 
