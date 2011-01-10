@@ -7,3 +7,4 @@ ALTER TABLE `PREFIX_orders` ADD `reference` VARCHAR(14) NOT NULL AFTER `id_addre
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES('PS_DISPLAY_SUPPLIERS', '1', NOW(), NOW());
 
 /* PHP:update_products_ecotax_v133(); */
+/* PHP:gridextjs_deprecated(); */
