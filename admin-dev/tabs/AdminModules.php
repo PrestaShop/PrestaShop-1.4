@@ -340,7 +340,7 @@ class AdminModules extends AdminTab
 					matchContains: true,
 					highlightItem: true,
 					formatItem: function(row, i, max, term) {
-						return row.name.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
+						return "<img src=\"../modules/"+row.name+"/logo.gif\" style=\"float:left;margin:5px\"><strong>" + row.displayName + "</strong>" + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
 					},
 					formatResult: function(row) {
 						return row.name;
@@ -446,8 +446,7 @@ class AdminModules extends AdminTab
 			if (!empty($filterName))
 				if (stristr($module->name, $filterName) === false AND stristr($module->displayName, $filterName) === false AND stristr($module->description, $filterName) === false)
 					unset($modules[$key]);
-			
-			$autocompleteList .= '{ name : "'.$module->displayName.'", desc : "'.$module->description.'"}, ';
+			$autocompleteList .= '{ displayName : "'.$module->displayName.'", desc : "'.$module->description.'", name : "'.$module->name.'"}, ';
 		}
 
 		$autocompleteList = rtrim($autocompleteList, ' ,').'];';
