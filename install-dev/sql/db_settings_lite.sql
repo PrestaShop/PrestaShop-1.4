@@ -528,7 +528,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (9, 'AdminTools', 0, 10),(82, 'AdminStores', 9, 11),(60, 'AdminTracking', 1, 1),(10, 'AdminManufacturers', 1, 2),(34, 'AdminSuppliers', 1, 3),(11, 'AdminAttributesGroups', 1, 4),
 (36, 'AdminFeatures', 1, 5),(58, 'AdminScenes', 1, 6),(66, 'AdminTags', 1, 7),(68, 'AdminAttachments', 1, 7),(12, 'AdminAddresses', 2, 1),(63, 'AdminGroups', 2, 2),
 (65, 'AdminCarts', 2, 3),(42, 'AdminInvoices', 3, 1),(55, 'AdminDeliverySlip', 3, 2),(47, 'AdminReturn', 3, 3),(49, 'AdminSlip', 3, 4),(59, 'AdminMessages', 3, 5),
-(13, 'AdminStatuses', 3, 6),(54, 'AdminOrderMessage', 3, 7),(14, 'AdminDiscounts', 4, 3),(15, 'AdminCurrencies', 4, 1),(16, 'AdminTaxes', 4, 2),
+(13, 'AdminStatuses', 3, 6),(54, 'AdminOrderMessage', 3, 7),(14, 'AdminDiscounts', 4, 4),(15, 'AdminCurrencies', 4, 1),(16, 'AdminTaxes', 4, 2),
 (17, 'AdminCarriers', 5, 1),(46, 'AdminStates', 5, 2),(18, 'AdminCountries', 5, 3),(19, 'AdminZones', 5, 4),(20, 'AdminRangePrice', 5, 5),
 (21, 'AdminRangeWeight', 5, 6),(51, 'AdminStatsConf', 6, 1),(61, 'AdminSearchEngines', 6, 2),(62, 'AdminReferrers', 6, 3),
 (22, 'AdminModulesPositions', 7, 4),(30, 'AdminProfiles', 29, 1),(31, 'AdminAccess', 29, 2),(28, 'AdminContacts', 29, 3),(39, 'AdminContact', 8, 1),
@@ -538,7 +538,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (53, 'AdminBackup', 9, 8),(57, 'AdminCMSContent', 9, 9),(64, 'AdminGenerator', 9, 10),(43, 'AdminSearch', -1, 0),(69, 'AdminInformation', 9, 11),
 (70, 'AdminPerformance', 8, 11),(71, 'AdminCustomerThreads', 29, 4),(72, 'AdminWebservice', 9, 12),(73, 'AdminStockMvt', 1, 9),
 (80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3),(84, 'AdminGeolocalization', 8, 12),
-(85, 'AdminTaxRulesGroup', 4, 4);
+(85, 'AdminTaxRulesGroup', 4, 3);
 
 INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (SELECT 1, id_tab, 1, 1, 1, 1 FROM PREFIX_tab);
 
