@@ -449,7 +449,7 @@ class AdminImport extends AdminTab
 
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$defaultLanguageId = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguageId = (int)Configuration::get('PS_LANG_DEFAULT');
 		self::setLocale();
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
@@ -521,6 +521,9 @@ class AdminImport extends AdminTab
 					$catMoved[$category->id] = (int)($categoryAlreadyCreated['id_category']);
 					$category->id =	(int)($categoryAlreadyCreated['id_category']);
 				}
+				
+				/* No automatic nTree regeneration for import */
+				$category->doNotRegenerateNTree = true;
 
 				// If id category AND id category already in base, trying to update
 				if ($category->id AND $category->categoryExists($category->id))
@@ -537,6 +540,10 @@ class AdminImport extends AdminTab
 				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
 			}
 		}
+		
+		/* Import has finished, we can regenerate the categories nested tree */
+		Category::regenerateEntireNtree();
+		
 		$this->closeCsvFile($handle);
 	}
 
@@ -1143,7 +1150,8 @@ class AdminImport extends AdminTab
 		}
 
 		echo '
-		<fieldset><legend><img src="../img/admin/import.gif" />'.$this->l('Upload').'</legend>
+		<fieldset class="width3">
+			<legend><img src="../img/admin/import.gif" />'.$this->l('Upload').'</legend>
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="POST" enctype="multipart/form-data">
 				<label class="clear">'.$this->l('Select a file').' </label>
 				<div class="margin-form">
@@ -1157,93 +1165,102 @@ class AdminImport extends AdminTab
 				</div>
 			</form>
 		</fieldset>';
-
-		echo '
-		<div class="space">
-				<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
-					<fieldset style="float: left; width: 650px">
-						<legend><img src="../img/admin/import.gif" />'.$this->l('Import').'</legend>
-						<label class="clear">'.$this->l('Select which entity to import:').' </label>
-						<div class="margin-form">
-							<select name="entity" id="entity">';
-		foreach ($this->entities AS $entity => $i)
-		{
-			echo '<option value="'.$i.'"';
-			if (Tools::getValue('entity') == $i)
-				echo ' selected="selected" ';
-			echo'>'.$entity.'</option>';
-		}
-		echo '				</select>
-						</div>
-						<label class="clear">'.$this->l('Select your .CSV file:').' </label>
-						<div class="margin-form">
-							<select name="csv">';
-		foreach (scandir(dirname(__FILE__).'/../import') as $filename)
-			if (!in_array($filename, array('.','..','.htaccess','index.php')))
+		
+		$filesToImport = scandir(dirname(__FILE__).'/../import');
+		uasort($filesToImport, array('AdminImport', '_usortFiles'));
+		foreach ($filesToImport AS $k => &$filename)
+			if (in_array($filename, array('.', '..', '.svn', '.htaccess', 'index.php')))
+				unset($filesToImport[$k]);
+				
+		if (sizeof($filesToImport))
+		{			
+			echo '
+			<div class="space">
+					<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
+						<fieldset style="float: left; width: 650px">
+							<legend><img src="../img/admin/import.gif" />'.$this->l('Import').'</legend>
+							<label class="clear">'.$this->l('Select which entity to import:').' </label>
+							<div class="margin-form">
+								<select name="entity" id="entity">';
+			foreach ($this->entities AS $entity => $i)
+			{
+				echo '<option value="'.$i.'"';
+				if (Tools::getValue('entity') == $i)
+					echo ' selected="selected" ';
+				echo'>'.$entity.'</option>';
+			}
+			echo '				</select>
+							</div>
+							<label class="clear">'.$this->l('Select your .CSV file:').' </label>
+							<div class="margin-form">
+								<select name="csv">';
+			foreach ($filesToImport AS $filename)
 				echo '<option value="'.$filename.'">'.$filename.'</option>';
-		echo '				</select>
-						</div>
-						<label class="clear">'.$this->l('Select language of the file (the locale must be installed):').' </label>
-						<div class="margin-form">
-							<select name="iso_lang">';
-						foreach ($this->_languages AS $lang)
-							echo '<option value="'.$lang['iso_code'].'" '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').' >'.$lang['name'].'</option>';
-						echo '</select></div><label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
-						<div class="margin-form">
-							<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
-						</div>
-						<label class="clear">'.$this->l('Field separator:').' </label>
-						<div class="margin-form">
-							<input type="text" size="2" value=";" name="separator"/>
-							'.$this->l('e.g. ').'"1<span class="bold" style="color: red">;</span>Ipod<span class="bold" style="color: red">;</span>129.90<span class="bold" style="color: red">;</span>5"
-						</div>
-						<label class="clear">'.$this->l('Multiple value separator:').' </label>
-						<div class="margin-form">
-							<input type="text" size="2" value="," name="multiple_value_separator"/>
-							'.$this->l('e.g. ').'"Ipod;red.jpg<span class="bold" style="color: red">,</span>blue.jpg<span class="bold" style="color: red">,</span>green.jpg;129.90"
-						</div>
-						<label for="truncate" class="clear">'.$this->l('Delete all').' <span id="entitie">'.$this->l('categories').'</span> '.$this->l('before import ?').' </label>
-						<div class="margin-form">
-							<input name="truncate" id="truncate" type="checkbox" style="margin-top: 6px;"/>
-						</div>
-						<div class="space margin-form">
-							<input type="submit" name="submitImportFile" value="'.$this->l('Next step').'" class="button"/>
-						</div>
-						<div>
-							'.$this->l('Note that the category import does not support categories of the same name').'
-						</div>
+			echo '				</select> ('.sizeof($filesToImport).' '.(sizeof($filesToImport) > 1 ? $this->l('files available') : $this->l('file available')).')
+							</div>
+							<label class="clear">'.$this->l('Select language of the file (the locale must be installed):').' </label>
+							<div class="margin-form">
+								<select name="iso_lang">';
+							foreach ($this->_languages AS $lang)
+								echo '<option value="'.$lang['iso_code'].'" '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').'>'.$lang['name'].'</option>';
+							echo '</select></div><label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
+							<div class="margin-form">
+								<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
+							</div>
+							<label class="clear">'.$this->l('Field separator:').' </label>
+							<div class="margin-form">
+								<input type="text" size="2" value=";" name="separator"/>
+								'.$this->l('e.g. ').'"1<span class="bold" style="color: red">;</span>Ipod<span class="bold" style="color: red">;</span>129.90<span class="bold" style="color: red">;</span>5"
+							</div>
+							<label class="clear">'.$this->l('Multiple value separator:').' </label>
+							<div class="margin-form">
+								<input type="text" size="2" value="," name="multiple_value_separator"/>
+								'.$this->l('e.g. ').'"Ipod;red.jpg<span class="bold" style="color: red">,</span>blue.jpg<span class="bold" style="color: red">,</span>green.jpg;129.90"
+							</div>
+							<label for="truncate" class="clear">'.$this->l('Delete all').' <span id="entitie">'.$this->l('categories').'</span> '.$this->l('before import ?').' </label>
+							<div class="margin-form">
+								<input name="truncate" id="truncate" type="checkbox" style="margin-top: 6px;"/>
+							</div>
+							<div class="space margin-form">
+								<input type="submit" name="submitImportFile" value="'.$this->l('Next step').'" class="button"/>
+							</div>
+							<div>
+								'.$this->l('Note that the category import does not support categories of the same name').'
+							</div>
+						</fieldset>
+					</form>
+					<fieldset style="display: inline; float: right; margin-left: 20px;">
+					<legend><img src="../img/admin/import.gif" />'.$this->l('Fields available').'</legend>
+					<div id="availableFields" style="min-height: 218px; width: 200px; font-size: 10px;">'.nl2br($this->getAvailableFields()).'</div>
 					</fieldset>
-				</form>
-				<fieldset style="display: inline; float: right; margin-left: 20px;">
-				<legend><img src="../img/admin/import.gif" />'.$this->l('Fields available').'</legend>
-				<div id="availableFields" style="min-height: 218px; width: 200px; font-size: 10px;">'.nl2br($this->getAvailableFields()).'</div>
-				</fieldset>
-				<div class="clear" style="float:right; font-size:10px; padding-right: 120px;">
-				'.$this->l('* Required Fields').'
+					<div class="clear" style="float:right; font-size:10px; padding-right: 120px;">
+					'.$this->l('* Required Fields').'
+					</div>
 				</div>
-			</div>
-			<div class="clear">&nbsp;</div>
-			<script type="text/javascript">
-				$("select#entity").change
-				(
-					function()
-					{
-						$("#entitie").html($("#entity > option:selected").text().toLowerCase());
-						$.getJSON("'.dirname($currentIndex).'/ajax.php",{getAvailableFields:1, entity: $("#entity").val()},
-									function(j)
-									{
-										var fields = "";
-										$("#availableFields").empty();
-										for (var i = 0; i < j.length; i++)
-										fields += j[i].field + "<br />";
-										$("#availableFields").html(fields);
-									}
-								)
-					}
-				);
-			</script>';
-	if (Tools::getValue('entity'))
-		echo' <script type="text/javascript">$("select#entity").change();</script>';
+				<div class="clear">&nbsp;</div>
+				<script type="text/javascript">
+					$("select#entity").change
+					(
+						function()
+						{
+							$("#entitie").html($("#entity > option:selected").text().toLowerCase());
+							$.getJSON("'.dirname($currentIndex).'/ajax.php",{getAvailableFields:1, entity: $("#entity").val()},
+										function(j)
+										{
+											var fields = "";
+											$("#availableFields").empty();
+											for (var i = 0; i < j.length; i++)
+											fields += j[i].field + "<br />";
+											$("#availableFields").html(fields);
+										}
+									)
+						}
+					);
+				</script>';
+				
+				if (Tools::getValue('entity'))
+					echo' <script type="text/javascript">$("select#entity").change();</script>';
+		}
 	}
 
 	public function utf8_encode_array(&$array)
@@ -1259,6 +1276,17 @@ class AdminImport extends AdminTab
 		$tmp = fgetcsv($handle, MAX_LINE_SIZE, $glue);
 		fseek($handle, 0);
 		return sizeof($tmp);
+	}
+	
+	private function _usortFiles($a, $b)
+	{
+		$a = strrev(substr(strrev($a), 0, 14));
+		$b = strrev(substr(strrev($b), 0, 14));
+		
+		if ($a == $b)
+			return 0;
+
+		return ($a < $b) ? 1 : -1;
 	}
 
 	private function openCsvFile()
@@ -1407,7 +1435,7 @@ class AdminImport extends AdminTab
 			case $this->entities[$this->l('Categories')]:
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE id_category != 1');
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE id_category != 1');
-				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'category` AUTO_INCREMENT = 2 ');
+				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'category` AUTO_INCREMENT = 2');
 				foreach (scandir(_PS_CAT_IMG_DIR_) AS $d)
 					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d))
 						unlink(_PS_CAT_IMG_DIR_.$d);
@@ -1513,13 +1541,10 @@ class AdminImport extends AdminTab
 		$iso_lang  = trim(Tools::getValue('iso_lang'));
 		setlocale(LC_COLLATE, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
 		setlocale(LC_CTYPE, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
-
 	}
 
 	protected function _addProductWarning($product_name, $product_id = NULL, $message = '')
 	{
 		$this->_warnings[] = $product_name.(isset($product_id) ? ' (ID '.$product_id.')' : '').' '.Tools::displayError($message);
 	}
-
 }
-

@@ -51,13 +51,13 @@ class LinkCore
 	public function getProductLink($id_product, $alias = NULL, $category = NULL, $ean13 = NULL, $id_lang = NULL)
 	{
 		if (is_object($id_product))
-			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').(int)($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)($id_product->id));
+			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').(int)$id_product->id.'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)$id_product->id);
 		elseif ($alias)
-			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(($category AND $category != 'home') ? ($category.'/') : '').(int)($id_product).'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)($id_product));
+			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).(($category AND $category != 'home') ? ($category.'/') : '').(int)$id_product.'-'.$alias.($ean13 ? '-'.$ean13 : '').'.html') :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)$id_product);
 		else
-			return _PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)($id_product);
+			return _PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)$id_product;
 	}
 
 	public function getCategoryLink($id_category, $alias = NULL, $id_lang = NULL)

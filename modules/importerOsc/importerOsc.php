@@ -1,9 +1,7 @@
 <?php
 
 class importerOsc extends ImportModule
-{		
-
-	
+{
 	public function __construct()
 	{
 		global $cookie;
@@ -39,7 +37,7 @@ class importerOsc extends ImportModule
 		$html = '<label>'.$this->l('Default osCommerce language').' : </label>
 				<div class="margin-form">
 				<select name="defaultOscLang"><option value="------">------</option>';
-				foreach($langagues as $lang)
+				foreach($langagues AS $lang)
 					$html .= '<option value="'.$lang['languages_id'].'">'.$lang['name'].'</option>';
 		$html .= '</select></div>';
 		return $html;
@@ -165,9 +163,9 @@ class importerOsc extends ImportModule
 		
 		$return = array();
 		$i = 0;
-		foreach($customers as $customer)
+		foreach($customers AS $customer)
 		{
-			foreach($customer as $attr => $val)
+			foreach($customer AS $attr => $val)
 				if (array_key_exists($attr, $matchFields))
 				{
 					switch ($attr) 
@@ -274,10 +272,10 @@ class importerOsc extends ImportModule
 		$array = array();
 		foreach ($items AS $item)
 			if (sizeof($multiLangFields) && is_array($multiLangFields) && isset($array[$item[$identifier]][$matchFields[$multiLangFields[0]]]))
-				foreach ($multiLangFields as $key)
+				foreach ($multiLangFields AS $key)
 					$array[$item[$identifier]][$matchFields[$key]][$item[$keyLanguage]] = $item[$key];
 			else
-				foreach ($item as $key => $value)
+				foreach ($item AS $key => $value)
 					if (sizeof($multiLangFields) AND in_array($key, $multiLangFields))
 						$array[$item[$identifier]][$matchFields[$key]] = array($item[$keyLanguage] => $value);
 					elseif (sizeof($multiLangFields) AND $matchFields[$key] == $matchFields[$keyLanguage])

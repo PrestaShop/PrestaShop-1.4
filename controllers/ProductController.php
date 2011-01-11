@@ -170,7 +170,7 @@ class ProductControllerCore extends FrontController
 					'return_category_name' => Tools::safeOutput($category->name)));
 				}
 				else
-					$this->$smarty->assign('path', Tools::getPath((int)$this->product->id_category_default, $this->product->name));
+					$this->smarty->assign('path', Tools::getPath((int)$this->product->id_category_default, $this->product->name));
 
 				$this->smarty->assign('return_link', (isset($category->id) AND $category->id) ? Tools::safeOutput($this->link->getCategoryLink($category)) : 'javascript: history.back();');
 

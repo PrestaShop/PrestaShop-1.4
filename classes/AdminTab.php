@@ -1626,6 +1626,7 @@ abstract class AdminTabCore
 				displayFlags(languages, id_language, '.$allowEmployeeFormLang.');
 			});
 		</script>';
+
 		echo $output;
 	}
 

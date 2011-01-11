@@ -2,10 +2,8 @@
 
 class shopImporter extends ImportModule
 {
-
 	public $match_id = array('id_language' => 'id_lang', 'id_category_default' => 'id_category');
 	private $supportedImports = array();
-
 
 	public function __construct()
 	{
@@ -253,9 +251,9 @@ class shopImporter extends ImportModule
 								<label class="t"><img src="'.$this->_path.'img/force.gif" style="margin-left: 10px;"></label>
 								<input type="radio" name="hasErrors" id="hasErrors" value="2">
 								<label class="t">'.$this->l('Force').'</label>
-								<p>'.$this->l('Stop : if there are errors in the audit data, import will not run.').'</p>
-								<p>'.$this->l('Skip : if there are errors in the audit data, import will skip incorrect data.').'</p>
-								<p>'.$this->l('Force : if there are errors in the audit data, import will replace incorrect data by generic data.').'</p>
+								<p>'.$this->l('Stop: if there are errors with the data, import will not run.').'</p>
+								<p>'.$this->l('Skip: if there are errors with the data, import will skip incorrect data.').'</p>
+								<p>'.$this->l('Force: if there are errors with the data, import will replace incorrect data by generic data.').'</p>
 							</div>
 							<hr>
 							<div style="display:none" id="specificOptions">
@@ -271,7 +269,6 @@ class shopImporter extends ImportModule
 				</fieldset>';
 		return $html;
 	}
-
 
 	public function generiqueImport($className, $fields, $save = false)
 	{
@@ -301,9 +298,8 @@ class shopImporter extends ImportModule
 				$importModule->prefix = $prefix;
 				$importModule->initDatabaseConnection($server, $user, $password, $database);
 				$languages = $importModule->getLangagues(0);
-				$idDefaultLanguage = $importModule->getDefaultIdLang();
 				$this->initDatabaseConnection(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
-				$defaultLanguage = new Language((int)$idDefaultLanguage);
+				$defaultLanguage = new Language((int)$importModule->getDefaultIdLang());
 			}
 			else
 				die('{"hasError" : true, "error" : ["FATAL ERROR"], "datas" : []}');
@@ -348,7 +344,6 @@ class shopImporter extends ImportModule
 
 		}
 		die(Tools::jsonEncode($json));
-
 	}
 
 	private function autoInsert($table, $items)
@@ -457,15 +452,15 @@ class shopImporter extends ImportModule
 			$idsMatchLang = $this->getMatchIdLang();
 			//TODO a mettre dans la methode formatInsertLang
 			$tmpTab = array();
-			foreach($multiLangFields as $multiLang => $val)
-				foreach($val as $field)
-					foreach($field as $lang => $value)
+			foreach($multiLangFields AS $multiLang => $val)
+				foreach($val AS $field)
+					foreach($field AS $lang => $value)
 						if (array_key_exists($multiLang, $tmpTab) AND array_key_exists($lang, $tmpTab[$multiLang]))
 							$tmpTab[$multiLang][$lang] .= '\''.pSQL($value).'\', ';
 						else
 							$tmpTab[$multiLang][$lang] = '\''.pSQL($foreignKeyLang[$multiLang]).'\', \''.pSQL($idsMatchLang[$lang]).'\', \''.pSQL($value).'\', ';
-			foreach($tmpTab as $tmp)
-				foreach($tmp as $t)
+			foreach($tmpTab AS $tmp)
+				foreach($tmp AS $t)
 					$queryValueLang .= '('.rtrim($t , ', ').'), ';
 
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.pSQL($table).'_lang` ('.$queryFieldsLang.')
@@ -476,7 +471,7 @@ class shopImporter extends ImportModule
 			$tmpTab = array();
 			$foreignKeyId = $this->supportedImports[$table]['association']['foreign_key'];
 			$foreignKey =  $this->getForeignKey($table, $this->supportedImports[$table]['association']['foreign_key']);
-			foreach($queryValueAssocTab as $key => $val)
+			foreach($queryValueAssocTab AS $key => $val)
 				$tmpTab[$foreignKey[$foreignKeyId[0]][key($val)]] = $foreignKey[$foreignKeyId[1]][$val[key($val)]];
 			$this->autoInsertAssociation($table, $this->supportedImports[$table]['association']['table'], $tmpTab);
 		}
@@ -486,7 +481,7 @@ class shopImporter extends ImportModule
 	{
 			$associatFields = '';
 
-			foreach($fields as $key => $val)
+			foreach($fields AS $key => $val)
 				$associatFields .= ' ('.(int)$key.', '.(int)$val.'), ';
 			$associatFields = rtrim($associatFields, ', ');
 			$fieldName = implode('`, `', $this->supportedImports[$table]['association']['foreign_key']);
@@ -509,12 +504,12 @@ private function formatInsertLang($table, $fields, $identifier)
 		$from = $table;
 		$result = array();
 		//change table name nonstandard
-		($table == 'language' ?  $from = 'lang' : ($table == 'order' ?  $from = 'orders' : '' ));
+		($table == 'language' ? $from = 'lang' : ($table == 'order' ?  $from = 'orders' : '' ));
 		$this->initDatabaseConnection(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
 		$result = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.pSQL($from).'`');
 		if (!$result)
 			$result = array();
-		foreach ($this->supportedImports[$table]['alterTable'] as $name => $type)
+		foreach ($this->supportedImports[$table]['alterTable'] AS $name => $type)
 		{
 			$moduleName = Tools::getValue('moduleName');
 			if (!array_key_exists($name.'_'.$moduleName, $result))
@@ -527,23 +522,21 @@ private function formatInsertLang($table, $fields, $identifier)
 			$query .= rtrim($queryTmp, ',');
 			Db::getInstance()->Execute($query);
 		}
-
 	}
 
 	private function getForeignKey($table, $foreign_key = null)
 	{
 		$moduleName = Tools::getValue('moduleName');
-		//$this->initDatabaseConnection(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
 		if (is_null($foreign_key))
 			$foreign_key = $this->supportedImports[$table]['foreign_key'];
 		$match = array();
-		foreach($foreign_key as $key)
+		foreach($foreign_key AS $key)
 		{
-			foreach($this->supportedImports as $table => $conf)
+			foreach($this->supportedImports AS $table => $conf)
 				if ($conf['identifier'] == $key)
 					$from = $table;
 			$return = Db::getInstance()->ExecuteS('SELECT `'.$key.'_'.$moduleName.'`, `'.$key.'` FROM `'._DB_PREFIX_.$from.'` WHERE `'.$key.'_'.$moduleName.'` != 0');
-			foreach($return as $name => $val)
+			foreach($return AS $name => $val)
 				$match[$key][$val[$key.'_'.$moduleName]] = $val[$key];
 		}
 		return $match;
@@ -555,7 +548,7 @@ private function formatInsertLang($table, $fields, $identifier)
 		$moduleName = Tools::getValue('moduleName');
 		$return = Db::getInstance()->ExecuteS('SELECT `'.$id.'_'.$moduleName.'`, `'.$id.'` FROM `'._DB_PREFIX_.pSQL($table).'` WHERE `'.$id.'_'.$moduleName.'` != 0');
 		$match = array();
-		foreach($return as $name => $val)
+		foreach($return AS $name => $val)
 				$match[$val[$id.'_'.$moduleName]] = $val[$id];
 		return $match;
 	}
@@ -564,7 +557,7 @@ private function formatInsertLang($table, $fields, $identifier)
 		$moduleName = Tools::getValue('moduleName');
 		$return = Db::getInstance()->ExecuteS('SELECT `id_lang_'.$moduleName.'`, `id_lang` FROM `'._DB_PREFIX_.'lang'.'` WHERE `id_lang_'.$moduleName.'` != 0');
 		$match = array();
-		foreach($return as $name => $val)
+		foreach($return AS $name => $val)
 				$match[$val['id_lang_'.$moduleName]] = $val['id_lang'];
 		return $match;
 	}
@@ -574,7 +567,6 @@ private function formatInsertLang($table, $fields, $identifier)
 	{
 		$returnErrors = array();
 		$hasErrors = Tools::getValue('hasErrors');
-		//$this->initDatabaseConnection(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
 
 		/* Checking for required fields */
 		foreach ($rules['required'] AS $field)
@@ -780,19 +772,15 @@ private function formatInsertLang($table, $fields, $identifier)
 		{
 			//clean category position
 			$cat = Category::getCategories(1, false, false);
-			foreach($cat as $i => $categ)
-			{
+			foreach($cat AS $i => $categ)
 				Category::cleanPositions((int)($categ['id_category']));
-			}
 		}
 		if($table == 'product')
 		{
 			//clean products position
 			$cat = Category::getCategories(1, false, false);
-			foreach($cat as $i => $categ)
-			{
+			foreach($cat AS $i => $categ)
 				Product::cleanPositions((int)($categ['id_category']));
-			}
 		}
 	}
 
@@ -800,12 +788,6 @@ private function formatInsertLang($table, $fields, $identifier)
 	{
 		return;
 	}
-
 }
-/*
-
-
-*/
 
 ?>
-

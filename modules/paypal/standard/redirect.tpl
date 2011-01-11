@@ -77,6 +77,7 @@
 			<input type="hidden" name="rm" value="2" />
 			<input type="hidden" name="bn" value="PRESTASHOP_WPS" />
 			<input type="hidden" name="cbt" value="{$return_text}" />
+			<input type="hidden" name="image_url" value="{$url}img/logo.jpg" /> 
 		</form>
 		<script type="text/javascript">
 		{literal}

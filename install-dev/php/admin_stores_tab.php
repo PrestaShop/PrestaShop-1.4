@@ -14,11 +14,7 @@ function admin_stores_tab()
 
 
         Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
-        	SELECT `id_profile`, (
-        		SELECT `id_tab`
-        		FROM `'._DB_PREFIX_.'tab`
-        		WHERE `class_name` = \'AdminStores\'
-        	), 1, 1, 1, 1 FROM `'._DB_PREFIX_.'profile`
+        	SELECT `id_profile`, (SELECT `id_tab` FROM `'._DB_PREFIX_.'tab` WHERE `class_name` = \'AdminStores\' LIMIT 1), 1, 1, 1, 1 FROM `'._DB_PREFIX_.'profile`
           )');
    }
 }

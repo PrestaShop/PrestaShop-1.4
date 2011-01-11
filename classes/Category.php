@@ -137,7 +137,8 @@ class CategoryCore extends ObjectModel
 		$this->position = self::getLastPosition((int)(Tools::getValue('id_parent')));
 		$this->level_depth = $this->calcLevelDepth();
 		$ret = parent::add($autodate);
-		self::regenerateEntireNtree();
+		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
+			self::regenerateEntireNtree();
 		$this->updateGroup(Tools::getValue('groupBox'));
 		Module::hookExec('categoryAddition'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return $ret;
@@ -148,7 +149,8 @@ class CategoryCore extends ObjectModel
 		$this->level_depth = $this->calcLevelDepth();
 		$this->cleanPositions((int)$this->id_parent);
 		$ret = parent::update();
-		self::regenerateEntireNtree();
+		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
+			self::regenerateEntireNtree();
 		Module::hookExec('categoryUpdate'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return $ret;
 	}
@@ -269,7 +271,8 @@ class CategoryCore extends ObjectModel
 		NOT IN (SELECT `id_category` FROM `'._DB_PREFIX_.'category`)');
 
 		/* Rebuild the nested tree */
-		self::regenerateEntireNtree();
+		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
+			self::regenerateEntireNtree();
 
 		Module::hookExec('categoryDeletion'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
 		return true;

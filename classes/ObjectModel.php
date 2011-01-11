@@ -191,7 +191,7 @@ abstract class ObjectModelCore
 					foreach ($field AS $key => $value)
 					 	if (!Validate::isTableOrIdentifier($key))
 			 				die(Tools::displayError());
-					$field[$this->identifier] = (int)($this->id);
+					$field[$this->identifier] = (int)$this->id;
 					$result = Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') && $result;
 				}
 		}

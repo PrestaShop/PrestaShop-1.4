@@ -107,9 +107,9 @@ class MailAlerts extends Module
 	private function _refreshProperties()
 	{
 		$this->_merchant_mails = Configuration::get('MA_MERCHANT_MAILS');
-		$this->_merchant_order = (int)(Configuration::get('MA_MERCHANT_ORDER'));
-		$this->_merchant_oos = (int)(Configuration::get('MA_MERCHANT_OOS'));
-		$this->_customer_qty = (int)(Configuration::get('MA_CUSTOMER_QTY'));
+		$this->_merchant_order = (int)Configuration::get('MA_MERCHANT_ORDER');
+		$this->_merchant_oos = (int)Configuration::get('MA_MERCHANT_OOS');
+		$this->_customer_qty = (int)Configuration::get('MA_CUSTOMER_QTY');
 	}
 
 	public function hookNewOrder($params)
@@ -251,11 +251,11 @@ class MailAlerts extends Module
 			$params['product'] = get_object_vars($params['product']);
 		
 		$qty = (int)(isset($params['product']['quantity_attribute']) AND $params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
-		if ($qty <= (int)(Configuration::get('mA_last_qties')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
+		if ($qty <= (int)(Configuration::get('MA_LAST_QTIES')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(
 				'{qty}' => $qty,
-				'{last_qty}' => (int)(Configuration::get('mA_last_qties')),
+				'{last_qty}' => (int)(Configuration::get('MA_LAST_QTIES')),
 				'{product}' => strval($params['product']['name']));
 			$iso = Language::getIsoById((int)($cookie->id_lang));
 			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
@@ -263,7 +263,7 @@ class MailAlerts extends Module
 		}
 		
 		if ($this->_customer_qty AND $params['product']['quantity'] > 0)
-			$this->sendCustomerAlert((int)($params['product']['id']), 0);
+			$this->sendCustomerAlert((int)$params['product']['id'], 0);
 		
 	}
 
