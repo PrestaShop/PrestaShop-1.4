@@ -122,15 +122,16 @@ class AdminEmployees extends AdminTab
 				<label>'.$this->l('Language:').' </label>
 				<div class="margin-form">
 					<select name="id_lang">';
-		foreach (Language::getLanguages() AS $lang)
+		foreach (Language::getLanguages() as $lang)
 			echo '		<option value="'.(int)$lang['id_lang'].'" '.($this->getFieldValue($obj, 'id_lang') == $lang['id_lang'] ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($lang['name']).'</option>';
 		echo '		</select> <sup>*</sup>
 				</div><div class="clear">&nbsp;</div>
 				<label>'.$this->l('Theme:').' </label>
 				<div class="margin-form">
 					<select name="bo_theme">';
-		foreach (scandir(_PS_ALL_THEMES_DIR_) AS $theme)
-			if ($theme[0] != '.' AND file_exists(_PS_ALL_THEMES_DIR_.$theme.'/admin.css'))
+		$path = dirname(__FILE__).'/../themes/';
+		foreach (scandir($path) as $theme)
+			if ($theme[0] != '.' AND file_exists($path.$theme.'/admin.css'))
 				echo '	<option value="'.Tools::htmlentitiesUTF8($theme).'" '.($this->getFieldValue($obj, 'bo_theme') == $theme ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($theme).'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>';
