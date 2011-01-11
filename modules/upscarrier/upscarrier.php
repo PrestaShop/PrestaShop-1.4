@@ -71,10 +71,6 @@ class UpsCarrier extends CarrierModule
 				if (!Configuration::get($keyConfiguration))
 					$warning[] = '\''.$name.'\' ';
 
-			// Check Curl Availibility
-			if (!extension_loaded('curl'))
-				$warning[] = $this->l('\'Curl extension\'').', ';
-
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
 			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
@@ -1499,10 +1495,6 @@ class UpsCarrier extends CarrierModule
 
 	public function webserviceTest()
 	{
-		// Check Curl Availibility
-		if (!extension_loaded('curl'))
-			return false;
-
 		// Example Params for testing
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('UPS_CARRIER_COUNTRY')));
 		$upsParams = array(
@@ -1545,7 +1537,7 @@ class UpsCarrier extends CarrierModule
 	  		fclose($fp);
 		}
 
-		// Get xml from Curl Result
+		// Get xml from HTTP Result
 		$data = strstr($result, '<?');
 		$xml_parser = xml_parser_create();
 		xml_parse_into_struct($xml_parser, $data, $valTab, $indexTab);
@@ -1563,10 +1555,6 @@ class UpsCarrier extends CarrierModule
 
 	public function getUpsShippingCost($wsParams)
 	{
-		// Check Curl Availibility
-		if (!extension_loaded('curl'))
-			return false;
-
 		// Check Arguments
 		if (!$wsParams)
 			return array('connect' => false, 'cost' => 0);
@@ -1590,7 +1578,7 @@ class UpsCarrier extends CarrierModule
 	  		fclose($fp);
 		}
 
-		// Get xml from Curl Result
+		// Get xml from HTTP Result
 		$data = strstr($result, '<?');
 		$xml_parser = xml_parser_create();
 		xml_parse_into_struct($xml_parser, $data, $valTab, $indexTab);
