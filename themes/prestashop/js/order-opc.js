@@ -70,7 +70,7 @@ function updateCarrierList(json)
 			html = html + '</td>'+
 			'</tr>';
 		}
-		html += '<tr id="HOOK_EXTRACARRIER"></tr>';
+		html += json.HOOK_EXTRACARRIER;
 		$('#noCarrierWarning').hide();
 		$('#extra_carrier:hidden').show();
 		$('table#carrierTable tbody').html(html);
@@ -80,7 +80,6 @@ function updateCarrierList(json)
 	
 	/* update hooks for carrier module */
 	$('#HOOK_BEFORECARRIER').html(json.HOOK_BEFORECARRIER);
-	$('#HOOK_EXTRACARRIER').html(json.HOOK_EXTRACARRIER);
 }
 
 function updateAddressesStatus()
