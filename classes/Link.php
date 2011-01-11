@@ -158,7 +158,7 @@ class LinkCore
 			global $cookie;
 			$id_lang = (int)($cookie->id_lang);
 		}
-		$base = ($ssl ? 'https://' : 'http://').Tools::getHttpHost();
+		$base = (($ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').Tools::getHttpHost();
 		if (array_key_exists($filename.'_'.$id_lang, self::$cache['page']))
 			$uri_path = self::$cache['page'][$filename.'_'.$id_lang];
 		else
