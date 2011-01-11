@@ -105,7 +105,7 @@ class AdminCarts extends AdminTab
 				echo '
 			<a href="?tab=AdminOrders&id_order='.(int)($order->id).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'"> '.$this->l('Order #').sprintf('%06d', $order->id).'</a></span>
 			<br /><br />
-			'.$this->l('Made on:').' '.$order->date_add.'<br /><br /><br /><br />';
+			'.$this->l('Made on:').' '.Tools::displayDate($order->date_add, (int)$cookie->id_lang, true).'<br /><br /><br /><br />';
 			else
 				echo $this->l('No order created from this cart').'</span>';
 		echo '</fieldset>';

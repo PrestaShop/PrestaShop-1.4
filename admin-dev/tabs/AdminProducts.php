@@ -3189,6 +3189,10 @@ class AdminProducts extends AdminTab
 					{
 						$list = '';
 						$jsList = '';
+						
+						/* In order to keep the same attributes order */
+						asort($product_attribute['attributes']);
+
 						foreach ($product_attribute['attributes'] AS $attribute)
 						{
 							$list .= addslashes(htmlspecialchars($attribute[0])).' - '.addslashes(htmlspecialchars($attribute[1])).', ';

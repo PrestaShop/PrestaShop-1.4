@@ -595,7 +595,7 @@ class AdminOrders extends AdminTab
 		if (($currentState->invoice OR $order->invoice_number) AND count($products))
 			echo '<legend><a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" /> '.$this->l('Invoice').'</a></legend>
 				<a href="pdf.php?id_order='.$order->id.'&pdf">'.$this->l('Invoice #').'<b>'.Configuration::get('PS_INVOICE_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', $order->invoice_number).'</b></a>
-				<br />'.$this->l('Created on:').' '.$order->invoice_date;
+				<br />'.$this->l('Created on:').' '.Tools::displayDate($order->invoice_date, (int)$cookie->id_lang, true);
 		else
 			echo '<legend><img src="../img/admin/charged_ko.gif" />'.$this->l('Invoice').'</legend>
 				'.$this->l('No invoice yet.');

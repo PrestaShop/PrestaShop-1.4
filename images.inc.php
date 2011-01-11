@@ -181,29 +181,26 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 	}
 	else
 	{
-		if ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 2 OR ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 AND $widthDiff > $heightDiff))
+		if (Configuration::get('PS_IMAGE_GENERATION_METHOD') == 2 OR (!Configuration::get('PS_IMAGE_GENERATION_METHOD') AND $widthDiff > $heightDiff))
 		{
 			$nextHeight = $destHeight;
-			$nextWidth = (int)(($sourceWidth * $nextHeight) / $sourceHeight);
-			$destWidth = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destWidth : $nextWidth);
+			$nextWidth = round(($sourceWidth * $nextHeight) / $sourceHeight);
+			$destWidth = (int)(!Configuration::get('PS_IMAGE_GENERATION_METHOD') ? $destWidth : $nextWidth);
 		}
 		else
 		{
 			$nextWidth = $destWidth;
-			$nextHeight = (int)($sourceHeight * $destWidth / $sourceWidth);
-			$destHeight = ((int)(Configuration::get('PS_IMAGE_GENERATION_METHOD')) == 0 ? $destHeight : $nextHeight);
+			$nextHeight = round($sourceHeight * $destWidth / $sourceWidth);
+			$destHeight = (int)(!Configuration::get('PS_IMAGE_GENERATION_METHOD') ? $destHeight : $nextHeight);
 		}
 	}
-	
-	$borderWidth = (int)(($destWidth - $nextWidth) / 2);
-	$borderHeight = (int)(($destHeight - $nextHeight) / 2);
 	
 	$destImage = imagecreatetruecolor($destWidth, $destHeight);
 
 	$white = imagecolorallocate($destImage, 255, 255, 255);
 	imagefill($destImage, 0, 0, $white);
 
-	imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
+	imagecopyresampled($destImage, $sourceImage, (int)(($destWidth - $nextWidth) / 2), (int)(($destHeight - $nextHeight) / 2), 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
 	imagecolortransparent($destImage, $white);
 	return (returnDestImage($fileType, $destImage, $destFile));
 }

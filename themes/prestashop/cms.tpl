@@ -24,13 +24,7 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
-<!-- Breadcrumb -->
-<div class="breadcrumb">
-	<a href="{$base_dir}" title="{l s='Return to'} {l s='Home'}"><img src="{$img_dir}icon/home.gif" alt="{l s='Home'}" class="icon" /></a>
-	<span class="navigation-pipe">{$navigationPipe|escape:html:'UTF-8'}</span><a href="{$link->getCMSCategoryLink(1, $home_title, $id_current_lang)|escape:'htmlall':'UTF-8'}" title="{l s='Home'}">{l s='Home'}</a>
-	 {if $path}<span class="navigation-pipe">{$navigationPipe|escape:html:'UTF-8'}</span>{if !$path|strpos:'span'}<span class="navigation_page">{$path}</span>{else}{$path}{/if}{/if}
-</div>
-<!-- /Breadcrumb -->
+{include file="$tpl_dir./breadcrumb.tpl"}
 
 {if isset($cms) && !isset($category)}
 	{if !$cms->active}

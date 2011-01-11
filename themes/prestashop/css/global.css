@@ -207,7 +207,7 @@ h4 { font-size: 1em }
 
 /* global layout */
 #page {
-	width: 980px;
+	width: 982px;
 	margin: 0 auto 2px auto;
 	text-align: left
 }
@@ -237,7 +237,7 @@ img.logo {
 	overflow: hidden
 }
 #center_column {
-	width: 556px;
+	width: 558px;
 	margin: 0 0 30px 0;
 	overflow: hidden
 }
