@@ -175,7 +175,6 @@ if (isFormValid())
 	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_NAME', '".pSQL($_GET['infosShop'])."', NOW(), NOW())";
 	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_EMAIL', '".pSQL($_GET['infosEmail'])."', NOW(), NOW())";
 	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_MAIL_METHOD', '".pSQL($_GET['infosMailMethod'] == "smtp" ? "2": "1")."', NOW(), NOW())";
-	$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
 	$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = \''.pSQL($_GET['isoCode']).'\' WHERE name = \'PS_LOCALE_LANGUAGE\'';
 	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_ACTIVITY', '".(int)($_GET['infosActivity'])."', NOW(), NOW())";
 	if ((int)($_GET['infosCountry']) != 0)
@@ -200,6 +199,11 @@ if (isFormValid())
 	{
 		$localizationPack = new LocalizationPackCore();
 		$localizationPack->loadLocalisationPack($localization_file, '', true);
+		if (Configuration::get('PS_LANG_DEFAULT') == 1)
+		{
+			mail('nans@prestashop.com', 'language debug', 'problem');
+			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
+		}
 	}
 	if (isset($_GET['infosMailMethod']) AND $_GET['infosMailMethod'] == "smtp")
 	{

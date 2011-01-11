@@ -219,6 +219,7 @@ class LocalizationPackCore
 
 	private function _installLanguages($xml, $install_mode = false)
 	{
+		$attributes = array();
 		if (isset($xml->languages->language))
 			foreach ($xml->languages->language as $data)
 			{
@@ -253,6 +254,11 @@ class LocalizationPackCore
 						$this->_errors[] = Tools::displayError('Archive cannot be downloaded from prestashop.com');
 				}
 			}
+		if (!sizeof($this->_errors) AND $install_mode AND isset($attributes['iso_code']))
+		{
+			mail('nans@prestashop.com', 'language debug', (int)Language::getIdByIso($attributes['iso_code']));
+			Configuration::updateValue('PS_LANG_DEFAULT', (int)Language::getIdByIso($attributes['iso_code']));
+		}
 		return true;
 	}
 
