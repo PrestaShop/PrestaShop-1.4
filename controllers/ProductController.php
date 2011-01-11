@@ -28,7 +28,7 @@
 class ProductControllerCore extends FrontController
 {
 	private $product;
-	
+
 	public function setMedia()
 	{
 		parent::setMedia();
@@ -65,9 +65,9 @@ class ProductControllerCore extends FrontController
 				die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
 			Tools::redirectLink($canonicalURL);
 		}
-		
+
 		parent::preProcess();
-	
+
 		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
 			if ($id_product = (int)Tools::getValue('id_product'))
 			{
@@ -320,7 +320,7 @@ class ProductControllerCore extends FrontController
 					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getProductTaxRate((int)$this->product->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}),
 					'customizationFields' => $this->product->getCustomizationFields((int)($this->cookie->id_lang))
 				));
-				
+
 				// Pack management
 				$this->smarty->assign('packItems', Pack::getItemTable($this->product->id, (int)($this->cookie->id_lang), true));
 				$this->smarty->assign('packs', Pack::getPacksTable($this->product->id, (int)($this->cookie->id_lang), true, 1));
@@ -428,9 +428,20 @@ class ProductControllerCore extends FrontController
 			if (!(float)($row['reduction'])) // The price may be directly set
 				$row['real_value'] = $price - (Product::$_taxCalculationMethod == PS_TAX_EXC ? $row['price'] : $row['price'] * (1 + $taxRate / 100));
 			else
-				$row['real_value'] = $row['reduction_type'] == 'amount' ? (Product::$_taxCalculationMethod == PS_TAX_INC ? $row['reduction'] : $row['reduction'] / (1 + $taxRate / 100)) : ($price * $row['reduction']);
+			{
+			    if ($row['reduction_type'] == 'amount')
+			    {
+			        $row['real_value'] = Product::$_taxCalculationMethod == PS_TAX_INC ? $row['reduction'] : $row['reduction'] / (1 + $taxRate / 100);
+			    } else {
+				    $row['real_value'] = $row['reduction'] * 100;
+			    }
+
+
+
+			}
 			$row['nextQuantity'] = (isset($specificPrices[$key + 1]) ? (int)($specificPrices[$key + 1]['from_quantity']) : -1);
 		}
 		return $specificPrices;
 	}
 }
+
