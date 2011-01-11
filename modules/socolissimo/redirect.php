@@ -1,4 +1,5 @@
-{*
+<?php
+/*
 * 2007-2010 PrestaShop 
 *
 * NOTICE OF LICENSE
@@ -22,16 +23,16 @@
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
-*}
+*/
 
-<script type="text/javascript">
-{literal}
-	$(document).ready(function(){ 
-{/literal}
-{foreach from=$ids item=id}
-	{literal}$($('#id_carrier{/literal}{$id}{literal}').parent().parent()).remove();{/literal}
-{/foreach}
-{literal}
-	});
-{/literal}
+require_once ('../../config/config.inc.php');
+
+echo '<form name="form" action="'.Configuration::get('SOCOLISSIMO_URL').'" method="POST">';
+foreach($_GET as $key => $val)
+	echo '<input type="hidden" name="'.$key.'" value="'.$val.'"/>';
+
+echo '<script type="text/javascript">
+	
+	document.form.submit();
 </script>
+</form>';

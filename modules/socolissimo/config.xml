@@ -2,7 +2,7 @@
 <module>
 	<name>socolissimo</name>
     <displayName>So Colissimo</displayName>
-    <version>1.5</version>
+    <version>2.0</version>
     <description>Offer to your customers, different delivery methods with LaPoste.</description>
     <tab>shipping_logistics</tab>
     <is_configurable>1</is_configurable>

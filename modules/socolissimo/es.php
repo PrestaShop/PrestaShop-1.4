@@ -49,7 +49,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_fee5b44342f1173f7a92b97ace566e57'
 $_MODULE['<{socolissimo}prestashop>socolissimo_25a997f8f21d9a0ec24e902baf9a99c0'] = 'El plazo de preparación de pedido debe ser idéntico al indicado en Back Office ColiPoste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_31e3fd47be6f64fb2e0a4f85cb63a069'] = 'Coste adicional';
 $_MODULE['<{socolissimo}prestashop>socolissimo_5f2b3818a8226aa853fc45c83783b12d'] = 'Impuesto:';
-$_MODULE['<{socolissimo}prestashop>socolissimo_7475ec0d41372a307c497acb7eeea8c4'] = 'Sin impuestos';
+$_MODULE['<{socolissimo}prestashop>socolissimo_6f3455d187a23443796efdcbe044096b'] = 'Sin impuesto:';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a68e8fd6d255edb0ca099c7400252694'] = 'Coste adicional aplicable a la entrega a domicilio previa cita';
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b8aa3268fe97228ab7337ef8cdabfb5'] = 'El coste adicional debe ser idéntico al indicado en el Back Office ColiPoste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_914419aa32f04011357d3b604a86d7eb'] = 'Transportista';

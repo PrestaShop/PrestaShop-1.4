@@ -58,26 +58,12 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 			
 				if (saveOrderShippingDetails((int)($cookie->id_cart),(int)($return['TRCLIENTNUMBER']),$return))
 				{	
+					global $cookie;
 					$cart->id_carrier = (int)($_POST['TRPARAMPLUS']);
-					if($return['DELIVERYMODE'] == 'RDV')
-					{
-						$products = $cart->getProducts(false);
-						foreach($products as $product)
-						{
-							$ids[] .= $product['id_product'];
-						}
-						if (!in_array(Configuration::get('SOCOLISSIMO_PRODUCT_ID'),$ids))
-						{
-							$product = new Product(Configuration::get('SOCOLISSIMO_PRODUCT_ID'));
-							$product->price = Configuration::get('SOCOLISSIMO_OVERCOST');
-							$product->id_tax = Configuration::get('SOCOLISSIMO_OVERCOST_TAX');
-							$product->update();
-							$cart->updateQty(1, $product->id);
-						}
-					}
-					
-					$cart->update();
-					Tools::redirect('order.php?step=3');
+					if (!$cart->update())
+						Tools::redirect();
+					else
+						Tools::redirect('order.php?step=3');
 				}
 				else
 					echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('999').'
@@ -98,7 +84,7 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 		echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('999').': ';
 		$errors = explode(',', str_replace('+',',', $return['ERRORCODE']));
 			 foreach($errors as $error)
-			 	echo $so->displaySoError($error);	
+			 	echo $so->displaySoError(rtrim($error));	
 		echo '<p><br/>
 			 <a href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour
 			 </a></p></div>';	}

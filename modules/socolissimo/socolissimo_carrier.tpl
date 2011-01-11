@@ -24,26 +24,80 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
+
+<a href="modules/socolissimo/redirect.php?{$serialsInput|escape:'htmlall':'UTF-8'}" class="iframe" style="display:none" id="soLink"></a>
+
+
 <script type="text/javascript">
+var post = '';
+
+{foreach from=$inputs item=input key=name name=myLoop}
+		post += "{$name|escape:'htmlall':'UTF-8'}={$input|strip_tags|addslashes}&"
+{/foreach}
 {literal}
-	
-	function change_action_form() {
-			if ($('#id_carrier{/literal}{$id_carrier}{literal}').is(':not(:checked)'))
-			{
-				$('#form').attr("action", 'order.php');
-			}
-			else
-			{
-				$('#form').attr("action", '{/literal}{$urlSo}{literal}');
-			}
-		}
+
+	$('#soLink').fancybox({
+			'width'				: 1000,
+			'height'			: 700,
+		    'autoScale'     	: false,
+		    'centerOnScroll'	: true,
+		    'autoDimensions'	: false,
+		    'transitionIn'		: 'none',
+			'transitionOut'		: 'none',
+			'hideOnOverlayClick' : false,
+			'hideOnContentClick' : false,
+			'showCloseButton'	: false,
+			'showIframeLoading' : true,
+			'enableEscapeButton' : false,
+			'type'				: 'iframe',
+			onClosed    :   function() {
+         	   $.ajax({
+			       type: 'GET',
+			       url: baseDir+'/modules/socolissimo/ajax.php',
+			       async: false,
+			       cache: false,
+			       dataType : "json",
+			       data: 'ajax=true',
+			       success: function(jsonData)
+			       {
+			       		if (jsonData.result)
+			       		{
+			       			alert('submit');
+			       			$('#form').submit();
+			       		}
+			       		else
+			       			alert('pas cool');
+			       },
+			       error: function(XMLHttpRequest, textStatus, errorThrown)
+				   {
+				   		alert('TECHNICAL ERROR\nDetails:\nError thrown: ' + XMLHttpRequest + '\n' + 'Text status: ' + textStatus);
+				   }
+			   });
+        	}
+			});
+
+	function so_click() 
+	{
+		
+		if ($('#id_carrier{/literal}{$id_carrier}{literal}').is(':not(:checked)'))
+			$('[name=processCarrier]').unbind('click').click( function () { 
+			 	return true;
+			});
+		else
+			$('[name=processCarrier]').unbind('click').click(function () {
+				if (acceptCGV())				
+					$("#soLink").trigger("click");
+				return false;
+			})
+	}
 
 	$(document).ready(function() 
 	{
+
 		$('input[name=id_carrier]').change(function() {
-			change_action_form();	
+			so_click();	
 		});
-		change_action_form();
+		so_click();
 	});
 {/literal}
 </script>
