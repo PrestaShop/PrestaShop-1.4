@@ -256,7 +256,6 @@ class LocalizationPackCore
 			}
 		if (!sizeof($this->_errors) AND $install_mode AND isset($attributes['iso_code']))
 		{
-			mail('nans@prestashop.com', 'language debug', (int)Language::getIdByIso($attributes['iso_code']));
 			Configuration::updateValue('PS_LANG_DEFAULT', (int)Language::getIdByIso($attributes['iso_code']));
 		}
 		return true;

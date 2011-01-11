@@ -201,7 +201,6 @@ if (isFormValid())
 		$localizationPack->loadLocalisationPack($localization_file, '', true);
 		if (Configuration::get('PS_LANG_DEFAULT') == 1)
 		{
-			mail('nans@prestashop.com', 'language debug', 'problem');
 			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
 		}
 	}
