@@ -38,7 +38,7 @@ class UpsCarrier extends CarrierModule
 	private $_weightUnit = '';
 	private $_dimensionUnitList = array('CM' => 'CM', 'IN' => 'IN', 'CMS' => 'CM', 'INC' => 'IN');
 	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LB' => 'LBS', 'LBS' => 'LBS');
-	private $_moduleName = 'UpsCarrier';
+	private $_moduleName = 'upscarrier';
 
 
 
@@ -1526,17 +1526,24 @@ class UpsCarrier extends CarrierModule
 			'weight' => 2.0
 		);
 		
-		// Curl Request
+		// POST Request
+		$errno = $errstr = $result = '';
 		$xml = $this->getXml($upsParams);
-		$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch,CURLOPT_POST,1);
-		curl_setopt($ch,CURLOPT_TIMEOUT, 60);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);
-		$result = curl_exec($ch);
+	        $fp = fsockopen("ssl://www.ups.com", "443", $errno, $errstr, $timeout=60);
+		if(!$fp)
+			die($errstr.$errno);
+		else
+		{
+			$request = "POST /ups.app/xml/Rate HTTP/1.1\r\n";
+			$request .= "Host: ssl://www.ups.com\r\n";
+			$request .= "Content-type: application/x-www-form-urlencoded\r\n";
+			$request .= "Content-length: ".strlen($xml)."\r\n";
+			$request .= "Connection: close\r\n\r\n";
+			$request .= $xml."\r\n\r\n";
+			fputs($fp, $request);
+			while(!feof($fp)) $result .= fgets($fp,4096);
+	  		fclose($fp);
+		}
 
 		// Get xml from Curl Result
 		$data = strstr($result, '<?');
@@ -1564,17 +1571,24 @@ class UpsCarrier extends CarrierModule
 		if (!$wsParams)
 			return array('connect' => false, 'cost' => 0);
 
-		// Curl Request
+		// Post Request
+		$errno = $errstr = $result = '';
 		$xml = $this->getXml($wsParams);
-		$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");
-		curl_setopt($ch, CURLOPT_HEADER, 1);
-		curl_setopt($ch,CURLOPT_POST,1);
-		curl_setopt($ch,CURLOPT_TIMEOUT, 60);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
-		curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);
-		$result = curl_exec($ch);
+	        $fp = fsockopen("ssl://www.ups.com", "443", $errno, $errstr, $timeout=60);
+		if(!$fp)
+			die($errstr.$errno);
+		else
+		{
+			$request = "POST /ups.app/xml/Rate HTTP/1.1\r\n";
+			$request .= "Host: ssl://www.ups.com\r\n";
+			$request .= "Content-type: application/x-www-form-urlencoded\r\n";
+			$request .= "Content-length: ".strlen($xml)."\r\n";
+			$request .= "Connection: close\r\n\r\n";
+			$request .= $xml."\r\n\r\n";
+			fputs($fp, $request);
+			while(!feof($fp)) $result .= fgets($fp,4096);
+	  		fclose($fp);
+		}
 
 		// Get xml from Curl Result
 		$data = strstr($result, '<?');
