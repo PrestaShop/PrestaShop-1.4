@@ -31,7 +31,7 @@
 </script>
 <script type="text/javascript" src="{$js_dir}layer.js"></script>
 <script type="text/javascript">
-
+{literal}
 var msg = '{l s='You must agree to the terms of service before continuing.' js=1}';
 
 function acceptCGV()
@@ -43,7 +43,9 @@ function acceptCGV()
 	}
 	else
 		return true;
-}</script>
+}
+{/literal}
+</script>
 {if !$virtual_cart && $giftAllowed && $cart->gift == 1}
 <script type="text/javascript">{literal}
 // <![CDATA[
