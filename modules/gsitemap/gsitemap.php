@@ -88,7 +88,11 @@ XML;
 		
 		$xml = new SimpleXMLElement($xmlString);
 
-		$this->_addSitemapNode($xml, 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
+		if (Configuration::get('PS_REWRITING_SETTINGS'))
+			foreach($langs as $lang)
+				$this->_addSitemapNode($xml, 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.$lang['iso_code'].'/', '1.00', 'daily', date('Y-m-d'));
+		else
+			$this->_addSitemapNode($xml, 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
 		
 		if (Configuration::get('GSITEMAP_ALL_CMS') OR !Module::isInstalled('blockcms'))
 			$sql_cms = '
