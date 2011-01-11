@@ -1486,7 +1486,7 @@ class ToolsCore
 				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
 					$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 			}
-			$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'] = 'index.php?isolang='.$language['iso_code'].' [QSA,L]';
+			$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';
 		}
 
 		if (!$writeFd = @fopen($path, 'w'))
