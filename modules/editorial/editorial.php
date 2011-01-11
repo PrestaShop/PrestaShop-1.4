@@ -157,7 +157,7 @@ class Editorial extends Module
 				if (isset($tmpName))
 					unlink($tmpName);
 			}
-			$this->_html .= $errors == '' ? $this->displayConfirmation('Settings updated successfully') : $errors;
+			$this->_html .= $errors == '' ? $this->displayConfirmation($this->l('Settings updated successfully')) : $errors;
 			if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
 			{
 				list($width, $height, $type, $attr) = getimagesize(dirname(__FILE__).'/homepage_logo.jpg');
