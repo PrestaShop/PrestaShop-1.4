@@ -76,6 +76,22 @@ class LanguageCore extends ObjectModel
 	{
 		if (!parent::add($autodate))
 			return false;
+		
+		$translationsFiles = array(
+			'fields' => '_FIELDS',
+			'errors' => '_ERRORS',
+			'admin' => '_LANGADM',
+			'pdf' => '_LANGPDF',
+		);
+		if (!file_exists(_PS_TRANSLATIONS_DIR_.$this->iso_code))
+			mkdir(_PS_TRANSLATIONS_DIR_.$this->iso_code);
+		foreach ($translationsFiles as $file => $var)
+			if (!file_exists(_PS_TRANSLATIONS_DIR_.$this->iso_code.'/'.$file.'.php'))
+				file_put_contents(_PS_TRANSLATIONS_DIR_.$this->iso_code.'/'.$file.'.php', '<?php
+	global $'.$var.';
+	$'.$var.' = array();
+?>');
+		
 		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
