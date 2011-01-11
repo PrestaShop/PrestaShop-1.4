@@ -31,7 +31,10 @@
 </script>
 <script type="text/javascript" src="{$js_dir}layer.js"></script>
 <script type="text/javascript">
-function acceptCGV(msg)
+
+var msg = '{l s='You must agree to the terms of service before continuing.' js=1}';
+
+function acceptCGV()
 {
 	if ($('#cgv').length && !$('input#cgv:checked').length)
 	{
@@ -61,7 +64,7 @@ function acceptCGV(msg)
 
 {include file="$tpl_dir./errors.tpl"}
 
-<form id="form" action="{$link->getPageLink('order.php', true)}" method="post" onsubmit="return acceptCGV('{l s='You must agree to the terms of service before continuing.' js=1}');">
+<form id="form" action="{$link->getPageLink('order.php', true)}" method="post" onsubmit="return acceptCGV();">
 
 {if $conditions AND $cms_id}
 	<h3 class="condition_title">{l s='Terms of service'}</h3>
