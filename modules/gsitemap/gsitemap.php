@@ -90,9 +90,9 @@ XML;
 
 		if (Configuration::get('PS_REWRITING_SETTINGS'))
 			foreach($langs as $lang)
-				$this->_addSitemapNode($xml, 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.$lang['iso_code'].'/', '1.00', 'daily', date('Y-m-d'));
+				$this->_addSitemapNode($xml, Tools::getShopDomain(true, true).__PS_BASE_URI__.$lang['iso_code'].'/', '1.00', 'daily', date('Y-m-d'));
 		else
-			$this->_addSitemapNode($xml, 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
+			$this->_addSitemapNode($xml, Tools::getShopDomain(true, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
 		
 		if (Configuration::get('GSITEMAP_ALL_CMS') OR !Module::isInstalled('blockcms'))
 			$sql_cms = '
@@ -218,7 +218,7 @@ XML;
             $nbPages = sizeof($xml->url);
 
             $this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />
-            <a href="http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml" target="_blank"><b>http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
+            <a href="'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml" target="_blank"><b>'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
 
             $this->_html .= $this->l('Update:').' <b>'.utf8_encode(strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime'])).'</b><br />';
             $this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'MB</b><br />';

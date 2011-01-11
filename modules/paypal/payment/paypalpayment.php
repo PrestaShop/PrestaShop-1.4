@@ -42,8 +42,8 @@ class PaypalPayment extends Paypal
 
 		// Making request
 		$vars = '?fromPayPal=1';
-		$returnURL = Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/paypal/payment/submit.php'.$vars;
-		$cancelURL = Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php';
+		$returnURL = Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/paypal/payment/submit.php'.$vars;
+		$cancelURL = Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order.php';
 		$paymentAmount = (float)($cart->getOrderTotal());
 		$currencyCodeType = strval($currency->iso_code);
 		$paymentType = Configuration::get('PAYPAL_CAPTURE') == 1 ? 'Authorization' : 'Sale';

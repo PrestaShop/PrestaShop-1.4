@@ -92,6 +92,28 @@ class ToolsCore
 		return $host;
 	}
 
+	static public function getShopDomain($http = false, $entities = false)
+	{
+		if (!($domain = Configuration::get('PS_SHOP_DOMAIN')))
+			$domain = self::getHttpHost();
+		if ($entities)
+			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
+		if ($http)
+			$domain = 'http://'.$domain;
+		return $domain;
+	}
+
+	static public function getShopDomainSsl($http = false, $entities = false)
+	{
+		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SLL')))
+			$domain = self::getHttpHost();
+		if ($entities)
+			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
+		if ($http)
+			$domain = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$domain;
+		return $domain;
+	}
+
 	/**
 	* Get the server variable SERVER_NAME
 	*

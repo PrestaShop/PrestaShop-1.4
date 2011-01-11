@@ -20,5 +20,9 @@ UPDATE `PREFIX_hook` SET `title` = 'Category creation', description = '' WHERE `
 UPDATE `PREFIX_hook` SET `title` = 'Category modification', description = '' WHERE `name` = 'categoryUpdate' LIMIT 1;
 UPDATE `PREFIX_hook` SET `title` = 'Category removal', description = '' WHERE `name` = 'categoryDeletion' LIMIT 1;
 
+DELETE FROM `PREFIX_module` WHERE `name` = 'canonicalurl' LIMIT 1;
+DELETE FROM `PREFIX_hook_module` WHERE `id_module` NOT IN (SELECT id_module FROM `PREFIX_module`);
+
 /* PHP:update_products_ecotax_v133(); */
 /* PHP:gridextjs_deprecated(); */
+/* PHP:shop_url(); */

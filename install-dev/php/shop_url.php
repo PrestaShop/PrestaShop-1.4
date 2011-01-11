@@ -1,4 +1,5 @@
-{*
+<?php
+/*
 * 2007-2010 PrestaShop 
 *
 * NOTICE OF LICENSE
@@ -22,8 +23,13 @@
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
-*}
+*/
 
-{if isset($canonical_url)}
-<link rel="canonical" href="{$canonical_url}" />
-{/if}
+function shop_url()
+{
+	if (!($host = Configuration::get('CANONICAL_URL')))
+		$host = Tools::getHttpHost();
+	Configuration::updateValue('PS_SHOP_DOMAIN', $host);
+	Configuration::updateValue('PS_SHOP_DOMAIN_SSL', $host);
+	return true;
+}

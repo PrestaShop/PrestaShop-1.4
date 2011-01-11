@@ -138,7 +138,7 @@ class GCheckout extends PaymentModule
 		<fieldset>
 			<legend><img src="../img/admin/warning.gif" />'.$this->l('Information').'</legend>
 			<p>- '.$this->l('In order to use your Google Checkout module, you have to configure your Google Checkout account (sandbox account as well as live account). Log in to Google Checkout then go to Settings > Integration. The API callback URL is:').'<br />
-				<b>'.Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/gcheckout/validation.php</b>
+				<b>'.Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/gcheckout/validation.php</b>
 			</p>
 			<p>- '.$this->l('The callback method must be set to').' <b>XML</b>.</p>
 			<p>- '.$this->l('The orders must be placed with the same currency as your seller account. Carts in other currencies will be converted if the customer choose to pay with this module.').'<p>
@@ -170,8 +170,8 @@ class GCheckout extends PaymentModule
 		if (!Configuration::get('GCHECKOUT_NO_SHIPPING'))
 			$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($params['cart']->getOrderShippingCost($params['cart']->id_carrier), $currency)));
 
-		$googleCart->SetEditCartUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order.php');
-		$googleCart->SetContinueShoppingUrl(Tools::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php');
+		$googleCart->SetEditCartUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order.php');
+		$googleCart->SetContinueShoppingUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order-confirmation.php');
 		$googleCart->SetRequestBuyerPhone(false);
 		$googleCart->SetAllowedWorldArea(true);
 		$googleCart->SetMerchantPrivateData($params['cart']->id.'|'.$params['cart']->secure_key);

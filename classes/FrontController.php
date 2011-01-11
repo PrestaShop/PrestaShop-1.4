@@ -243,26 +243,19 @@ class FrontControllerCore
 		/* Breadcrumb */
 		$navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 		$smarty->assign('navigationPipe', $navigationPipe);
+		
+		global $protocol_link, $protocol_content;
+		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
+		$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
+		define('_PS_BASE_URL_', Tools::getShopDomain(true));
+		define('_PS_BASE_URL_SSL_', Tools::getShopDomainSsl(true));
 
-		/* Server Params */
-		$server_host_ssl = Tools::getHttpHost(false, true);
-		$server_host     = str_replace(':'._PS_SSL_PORT_, '',$server_host_ssl);
-		
-		global $protocol, $protocol_ssl, $protocol_link, $protocol_content;
-		$protocol = 'http://';
-		$protocol_ssl = 'https://';
-		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
-		$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? $protocol_ssl : $protocol;
-		define('_PS_BASE_URL_', $protocol.$server_host);
-		define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
-		
 		$link->preloadPageLinks();
 		// Automatically redirect to the canonical URL if the current in is the right one
 		if (isset($this->php_self) AND !empty($this->php_self))
 		{
 			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 			$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
-			//d(array('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']));
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header("HTTP/1.0 301 Moved");
@@ -276,8 +269,8 @@ class FrontControllerCore
 
 		$smarty->assign(array(
 			'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
-			'base_dir_ssl' => $protocol_link.$server_host_ssl.__PS_BASE_URI__,
-			'content_dir' => $protocol_content.$server_host.__PS_BASE_URI__,
+			'base_dir_ssl' => $protocol_link.Tools::getShopDomainSsl().__PS_BASE_URI__,
+			'content_dir' => $protocol_content.Tools::getShopDomain().__PS_BASE_URI__,
 			'tpl_dir' => _PS_THEME_DIR_,
 			'modules_dir' => _MODULE_DIR_,
 			'mail_dir' => _MAIL_DIR_,

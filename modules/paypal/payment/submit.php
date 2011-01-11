@@ -87,7 +87,7 @@ function displayConfirm()
 		'cust_currency' => $cart->id_currency,
 		'currency' => $ppPayment->getCurrency(),
 		'total' => $cart->getOrderTotal(true, 3),
-		'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
+		'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
 		'mode' => 'payment/'
 	));
 

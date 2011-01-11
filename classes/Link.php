@@ -50,7 +50,6 @@ class LinkCore
 	  */
 	public function getProductLink($id_product, $alias = NULL, $category = NULL, $ean13 = NULL, $id_lang = NULL)
 	{
-		if (!isset($this->allow)) $this->allow = 0;
 		if (is_object($id_product))
 			return ($this->allow == 1)?(_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(($id_product->category != 'home' AND !empty($id_product->category)) ? $id_product->category.'/' : '').(int)($id_product->id).'-'.$id_product->link_rewrite.($id_product->ean13 ? '-'.$id_product->ean13 : '').'.html') :
 			(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)($id_product->id));
@@ -85,9 +84,7 @@ class LinkCore
 
 	public function getCMSLink($cms, $alias = null, $ssl = false, $id_lang = NULL)
 	{
-		$base = _PS_BASE_URL_;
-		if ($ssl)
-			$base = Tools::getHttpHost(true);
+		$base = ($ssl ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true));
 	
 		if (is_object($cms))
 		{
@@ -147,18 +144,15 @@ class LinkCore
 	
 	public function getMediaLink($filepath)
 	{
-		global $protocol;
-		return $protocol.Tools::getMediaServer($filepath).$filepath;
+		return 'http://'.Tools::getMediaServer($filepath).$filepath;
 	}
 	
 	public function getPageLink($filename, $ssl = false, $id_lang = NULL)
 	{
+		global $cookie;
 		if ($id_lang == NULL)
-		{
-			global $cookie;
 			$id_lang = (int)($cookie->id_lang);
-		}
-		$base = (($ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').Tools::getHttpHost();
+
 		if (array_key_exists($filename.'_'.$id_lang, self::$cache['page']))
 			$uri_path = self::$cache['page'][$filename.'_'.$id_lang];
 		else
@@ -187,7 +181,7 @@ class LinkCore
 			}
 			self::$cache['page'][$filename.'_'.$id_lang] = $uri_path;
 		}
-		return $base.__PS_BASE_URI__.$uri_path;
+		return ($ssl ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true)).__PS_BASE_URI__.$uri_path;
 	}
 
 	public function getCatImageLink($name, $id_category, $type = null)

@@ -109,7 +109,7 @@ function displayConfirm()
 		'cust_currency' => $cookie->id_currency,
 		'currencies' => $ppExpress->getCurrency(),
 		'total' => $cart->getOrderTotal(true, 3),
-		'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'. $ppExpress->name.'/',
+		'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppExpress->name.'/',
 		'payerID' => $payerID,
 		'mode' => 'express/'
 	));

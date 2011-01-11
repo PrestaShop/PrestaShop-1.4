@@ -47,13 +47,10 @@ else
 		$currentIndex .= '&back='.urlencode($back);
 
 	/* Server Params */
-	$server_host = Tools::getHttpHost(false, true);
-	$protocol = 'http://';
-	$protocol_ssl = 'https://';
-	$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
-	$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? $protocol_ssl : $protocol;
-	define('_PS_BASE_URL_', $protocol.$server_host);
-	define('_PS_BASE_URL_SSL_', $protocol_ssl.$server_host);
+	$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+	$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+	define('_PS_BASE_URL_', Tools::getShopDomain(true));
+	define('_PS_BASE_URL_SSL_', Tools::getShopDomainSsl(true));
 
 	$employee = new Employee((int)$cookie->id_employee);
 	$cookie->id_lang = (int)$employee->id_lang;

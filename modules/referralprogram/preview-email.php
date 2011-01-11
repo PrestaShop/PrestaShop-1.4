@@ -32,7 +32,7 @@ if (!$cookie->isLogged())
 	Tools::redirect('../../authentication.php?back=modules/referralprogram/referralprogram-program.php');
 */
 $shop_name = htmlentities(Configuration::get('PS_SHOP_NAME'), NULL, 'utf-8');
-$shop_url = 'http://'.Tools::getHttpHost(false, true);
+$shop_url = Tools::getHttpHost(true, true);
 $customer = new Customer((int)($cookie->id_customer));
 
 if (!preg_match("#.*\.html$#Ui", Tools::getValue('mail')) OR !preg_match("#.*\.html$#Ui", Tools::getValue('mail')))

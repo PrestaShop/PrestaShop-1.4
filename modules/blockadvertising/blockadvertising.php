@@ -127,7 +127,7 @@ class BlockAdvertising extends Module
 	*/
 	function hookRightColumn($params)
 	{
-		global $smarty, $protocol_content, $server_host;
+		global $smarty, $protocol_content;
 
 		$smarty->assign('image', $protocol_content.$this->adv_img);
 		$smarty->assign('adv_link', $this->adv_link);

@@ -179,8 +179,8 @@ abstract class PrepaidServices extends PaymentModule
 
 		$hash = md5(Configuration::get($this->prefix.'SALT') + $amount + $currency_iso);
 
-		$ok_url = Tools::getHttpHost(true, true)._MODULE_DIR_.$this->name.'/payment.php?hash='.$hash;
-		$nok_url = Tools::getHttpHost(true, true).__PS_BASE_URI__.'/order.php?step=3';
+		$ok_url = Tools::getShopDomainSsl(true, true)._MODULE_DIR_.$this->name.'/payment.php?hash='.$hash;
+		$nok_url = Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'/order.php?step=3';
 
 		list($return_code, $error_code, $message) = PrepaidServicesAPI::createDisposition($this->getAPIConfiguration($currency_iso), $mid, $mtid, $amount, $currency_iso, $ok_url, $nok_url, $business_type, $reporting_criteria);
 

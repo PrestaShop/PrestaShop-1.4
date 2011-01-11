@@ -99,7 +99,7 @@ $smarty->assign(array(
 	'paypal_id' => (int)($paypal->id),
 	'header' => $header,
 	'template' => 'Template'.Configuration::get('PAYPAL_TEMPLATE'),
-	'url' => Tools::getHttpHost(true, true).__PS_BASE_URI__,
+	'url' => Tools::getShopDomain(true, true).__PS_BASE_URI__,
 	'paymentaction' => (Configuration::get('PAYPAL_CAPTURE') ? 'authorization' : 'sale')
 ));
 

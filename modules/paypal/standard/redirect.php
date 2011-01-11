@@ -77,7 +77,7 @@ $smarty->assign(array(
 	'products' => $cart->getProducts(),
 	'paypal_id' => (int)($paypal->id),
 	'header' => $header,
-	'url' => Tools::getHttpHost(true, true).__PS_BASE_URI__
+	'url' => Tools::getShopDomain(true, true).__PS_BASE_URI__
 ));
 
 
