@@ -128,6 +128,7 @@ class OrderDetailCore extends ObjectModel
 	'product_price' => 'isPrice',
 	'reduction_percent' => 'isFloat',
 	'reduction_amount' => 'isPrice',
+	'group_reduction' => 'isFloat',
 	'product_quantity_discount' => 'isFloat',
 	'product_ean13' => 'isEan13',
 	'product_upc' => 'isUpc',
@@ -174,6 +175,7 @@ class OrderDetailCore extends ObjectModel
 		$fields['product_price'] = (float)($this->product_price);
 		$fields['reduction_percent'] = (float)($this->reduction_percent);
 		$fields['reduction_amount'] = (float)($this->reduction_amount);
+		$fields['group_reduction'] = (float)($this->group_reduction);
 		$fields['product_quantity_discount'] = (float)($this->product_quantity_discount);
 		$fields['product_ean13'] = pSQL($this->product_ean13);
 		$fields['product_upc'] = pSQL($this->product_upc);
