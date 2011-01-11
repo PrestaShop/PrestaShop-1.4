@@ -369,7 +369,16 @@ class AdminImport extends AdminTab
 
 	private static function fillInfo($infos, $key, &$entity)
 	{
-		$entity->{$key} = isset(self::$validators[$key]) ? call_user_func(self::$validators[$key], $infos) : $infos;
+		if (isset(self::$validators[$key][1]) && self::$validators[$key][1] == 'createMultiLangField' && Tools::getValue('iso_lang'))
+		{
+			$id_lang = Language::getIdByIso(Tools::getValue('iso_lang'));
+			$tmp = call_user_func(self::$validators[$key], $infos);
+			foreach ($tmp as $id_lang_tmp => $value)
+				if (empty($entity->{$key}[$id_lang_tmp]) OR $id_lang_tmp == $id_lang)
+					$entity->{$key}[$id_lang_tmp] = $value;
+		}
+		else
+			$entity->{$key} = isset(self::$validators[$key]) ? call_user_func(self::$validators[$key], $infos) : $infos;
 		return true;
 	}
 
