@@ -86,6 +86,9 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_tax_rules.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_ntree.php');
 // Before version 1.3.3 ecotax are not calculated into the price
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_products_ecotax_v133.php');
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'shop_url.php');
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'gridextjs_deprecated.php');
+
 
 //old version detection
 $oldversion = false;

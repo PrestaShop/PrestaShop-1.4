@@ -22,6 +22,6 @@ UPDATE `PREFIX_hook` SET `title` = 'Category removal', description = '' WHERE `n
 DELETE FROM `PREFIX_module` WHERE `name` = 'canonicalurl' LIMIT 1;
 DELETE FROM `PREFIX_hook_module` WHERE `id_module` NOT IN (SELECT id_module FROM `PREFIX_module`);
 
-/* PHP:update_products_ecotax_v133(); */
-/* PHP:gridextjs_deprecated(); */
-/* PHP:shop_url(); */
+/* PHP:update_products_ecotax_v133(); */;
+/* PHP:gridextjs_deprecated(); */;
+/* PHP:shop_url(); */;

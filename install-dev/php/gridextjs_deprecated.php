@@ -27,5 +27,9 @@
 
 function gridextjs_deprecated()
 {
-	return rename(dirname(__FILE__).'/../../modules/gridextjs', dirname(__FILE__).'/../../modules/gridextjs.deprecated');
+    if (file_exists(dirname(__FILE__).'/../../modules/gridextjs'))
+    	return rename(dirname(__FILE__).'/../../modules/gridextjs', dirname(__FILE__).'/../../modules/gridextjs.deprecated');
+
+    return true;
 }
+
