@@ -192,9 +192,9 @@ class LocalizationPackCore
 			$defaultCurrency = Currency::refreshCurrenciesGetDefault($feed->list, $isoCodeSource, $defaultCurrency);
 			foreach ($xml->currencies->currency as $data)
 			{
+				$attributes = $data->attributes();
 				if(Currency::exists($attributes['iso_code']))
 					continue;
-				$attributes = $data->attributes();
 				$currency = new Currency();
 				$currency->name = strval($attributes['name']);
 				$currency->iso_code = strval($attributes['iso_code']);
@@ -255,7 +255,7 @@ class LocalizationPackCore
 								return false;
 							}
 						}
-						else 
+						else
 							$this->_errors[] = Tools::displayError('Error occurred from prestashop.com when language was checked according to your Prestashop version.');
 					}
 					else
