@@ -716,7 +716,7 @@
 	
 		<div>
 			<div style="float:left;"><a href="#opc_block_1" class="button opc_button">{l s='Back'}</a></div>
-			<div style="float:right;"><a href="#opc_block_3" id="opc_block_3" class="exclusive opc_button">{l s='Continue'}</a></div>
+			<div style="float:right;"><a href="#opc_block_3" class="exclusive opc_button">{l s='Continue'}</a></div>
 		</div>
 		<div class="clear"></div>
 	</div>
