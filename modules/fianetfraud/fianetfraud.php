@@ -157,6 +157,8 @@ class Fianetfraud extends Module
 	{	
 		global $cookie;
 		
+		$error = false;
+		
 		Configuration::updateValue('SAC_PRODUCTION', ((Tools::getValue('fianetfraud_production') == 1 ) ? 1 : 0));
 		Configuration::updateValue('SAC_LOGIN', Tools::getValue('fianetfraud_login'));
 		Configuration::updateValue('SAC_PASSWORD', Tools::getValue('fianetfraud_password'));
@@ -177,12 +179,26 @@ class Fianetfraud extends Module
 			Configuration::updateValue('SAC_CATEGORY_TYPE_'.$category['id_category'],Tools::getValue('cat_'.$category['id_category']));
 		
 		$carriers = Carrier::getCarriers($cookie->id_lang);
-		foreach ($carriers as $carrier) {
+		foreach ($carriers as $carrier) 
+		{
 			if (isset($_POST['carrier_'.$carrier['id_carrier']]))
 				Configuration::updateValue('SAC_CARRIER_TYPE_'.$carrier['id_carrier'], $_POST['carrier_'.$carrier['id_carrier']]);
 			else
+			{
+				$error = true;
 				$this->_html .= '<div class="alert error">'.$this->l('Invalid carrier code').'</div>';
+			}
 		}
+		
+		if (!$error)
+		{
+			$dataSync = ((($site_id = Configuration::get('SAC_SITEID')) AND Configuration::get('SAC_PRODUCTION'))
+				? '<img src="http://www.prestashop.com/modules/fianetfraud.png?site_id='.urlencode($site_id).'" style="float:right" />'
+				: ''
+			);
+			$this->_html .= '<div class="conf confirm">'.$this->l('Settings are updated').$dataSync.'</div>';
+		}
+		
 	}
 
 	public function getContent()
