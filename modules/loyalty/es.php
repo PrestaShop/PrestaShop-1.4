@@ -4,6 +4,8 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'La fidelidad de los clientes y las recompensas';
 $_MODULE['<{loyalty}prestashop>loyalty_44c3144de5c433c8e7c9cbc66c906c01'] = 'Propone un programa de fidelización a sus clientes';
+$_MODULE['<{loyalty}prestashop>loyalty_c1a15aea773888ee981e8a4b2b041664'] = 'Esta acción suprimirá todos los puntos de fidelidad y el historial de los puntos de todos sus clientes, ¿está seguro de que desea continuar?';
+$_MODULE['<{loyalty}prestashop>loyalty_7307b68f93443d5863f1d3943c546b20'] = 'Recompensa fidelidad';
 $_MODULE['<{loyalty}prestashop>loyalty_e81b2826b5aebd9c92fb5d090f0cdc9d'] = 'Debe elegir al menos una categoría para generar vales descuento';
 $_MODULE['<{loyalty}prestashop>loyalty_f38f5974cdc23279ffe6d203641a8bdf'] = 'Ajustes actualizados.';
 $_MODULE['<{loyalty}prestashop>loyalty_5be9427a9169ad6e9b63b0c9c61575d9'] = 'Programa de Fidelidad';
@@ -33,6 +35,8 @@ $_MODULE['<{loyalty}prestashop>loyalty_13148717f8faa9037f37d28971dfc219'] = 'Val
 $_MODULE['<{loyalty}prestashop>loyalty_a149e85a44aeec9140e92733d9ed694e'] = 'Cancelado';
 $_MODULE['<{loyalty}prestashop>loyalty_38fb7d24e0d60a048f540ecb18e13376'] = 'Guardar';
 $_MODULE['<{loyalty}prestashop>loyalty_f67fb9d4e53cbac558e2735a7503ce92'] = 'Puntos de fidelidad';
+$_MODULE['<{loyalty}prestashop>loyalty_0aab81de5c4c87021772015efc184d67'] = 'Puntos';
+$_MODULE['<{loyalty}prestashop>loyalty_309cd9f5437d1bb06a7fdab1811afe1a'] = 'Este cliente no tiene puntos';
 $_MODULE['<{loyalty}prestashop>loyalty_a240fa27925a635b08dc28c9e4f9216d'] = 'Pedido';
 $_MODULE['<{loyalty}prestashop>loyalty_44749712dbec183e983dcd78a7736c41'] = 'Fecha';
 $_MODULE['<{loyalty}prestashop>loyalty_aa7f22f84f7be784055a3e7e7d22c519'] = 'Total (sin transporte)';

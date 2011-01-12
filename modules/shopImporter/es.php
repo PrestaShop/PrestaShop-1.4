@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{shopImporter}prestashop>shopImporter_d714c742b360a8ecbb124c15e9a391a1'] = 'Importador de tienda';
-$_MODULE['<{shopImporter}prestashop>shopImporter_d8bbd19b49388a565d6e7980958de764'] = 'Este módulo permite importar desde otro sistema en PrestaShop';
+$_MODULE['<{shopImporter}prestashop>shopImporter_b51e3d770566c831063a131631e494c2'] = 'Este módulo permite enviar desde otro sistema hacia PrestaShop';
 $_MODULE['<{shopImporter}prestashop>shopImporter_4994a8ffeba4ac3140beb89e8d41f174'] = 'Idioma';
 $_MODULE['<{shopImporter}prestashop>shopImporter_a9db6adcdafc85c5830439401fd866f6'] = 'Importación de idiomas';
 $_MODULE['<{shopImporter}prestashop>shopImporter_5c9ada346bd1c8b1adae50aec0e7437c'] = '¡Los nuevos idiomas se añadirán automáticamente a las traducciones!';
@@ -38,11 +38,12 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_1e411d25230ba738b9ae583bcb9b0b5
 $_MODULE['<{shopImporter}prestashop>shopImporter_3596c777cbc8b72d678f34daabc9148b'] = 'Mostrar los errores';
 $_MODULE['<{shopImporter}prestashop>shopImporter_89a399eee52b2a6daaea92eba3e14cad'] = 'Lanzar el test de importación';
 $_MODULE['<{shopImporter}prestashop>shopImporter_72d6d7a1885885bb55a565fd1070581a'] = 'Importar';
-$_MODULE['<{shopImporter}prestashop>shopImporter_46bc77e340db1621524b09f121f8c49c'] = 'Corrija los errores antes de continuar';
+$_MODULE['<{shopImporter}prestashop>shopImporter_e08d2dad1fcd8a0d89e242939b2475bb'] = 'Por favor, corrija los errores antes de continuar';
 $_MODULE['<{shopImporter}prestashop>shopImporter_a4376f284662da6f3997514ca74597c9'] = 'La importación se ha terminado';
-$_MODULE['<{shopImporter}prestashop>shopImporter_c3194448ec01d137b81495b1d8355394'] = 'Supresión de los datos';
+$_MODULE['<{shopImporter}prestashop>shopImporter_596403b61367ca30d6de75812275f9cd'] = 'Supresión de los datos';
+$_MODULE['<{shopImporter}prestashop>shopImporter_edc186cbc5cc897a79312880ec16c621'] = 'Por favor, debe seleccionar algo para importar';
 $_MODULE['<{shopImporter}prestashop>shopImporter_81b33153f65252001fe132d74b658fbe'] = 'Importar a partir de otro sistema';
-$_MODULE['<{shopImporter}prestashop>shopImporter_139ebb2d0d342561f43754866bd7785e'] = 'Antes de comenzar a importar, haga una copia de seguridad de su base de datos.';
+$_MODULE['<{shopImporter}prestashop>shopImporter_dd4c0c798ebbf8c6e15dcba8632f558d'] = 'Antes de comenzar la importación, debe hacer una copia de seguridad de su base de datos';
 $_MODULE['<{shopImporter}prestashop>shopImporter_60474e812295a5adc371de63dc62a164'] = 'Pulse aquí para hacer una copia de seguridad';
 $_MODULE['<{shopImporter}prestashop>shopImporter_05f4be265d59ea66f3a1fb12ba103583'] = 'Elija su módulo de importación';
 $_MODULE['<{shopImporter}prestashop>shopImporter_961f2247a2070bedff9f9cd8d64e2650'] = 'Elegir';
@@ -53,6 +54,8 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_e307db07b3975fef922a80d07455ee5
 $_MODULE['<{shopImporter}prestashop>shopImporter_dac130bdd2c5492a8108a4145bd9f04a'] = 'Prefijo de la base de datos';
 $_MODULE['<{shopImporter}prestashop>shopImporter_2bb4cbbf4c51025867d47131e79ad05f'] = 'Etapa siguiente';
 $_MODULE['<{shopImporter}prestashop>shopImporter_72dd98a453e92ccc01697f29bb5dbeb9'] = 'Opciones de importación';
+$_MODULE['<{shopImporter}prestashop>shopImporter_93cba07454f06a4a960172bbd6e2a435'] = 'Sí';
+$_MODULE['<{shopImporter}prestashop>shopImporter_bafd7322c6e97d25b6299b5d6fe8920b'] = 'No';
 $_MODULE['<{shopImporter}prestashop>shopImporter_f2a6c498fb90ee345d997f888fce3b18'] = 'Suprimir';
 $_MODULE['<{shopImporter}prestashop>shopImporter_9dfc5d5738312210c3c75e68a468691d'] = 'Opciones avanzadas';
 $_MODULE['<{shopImporter}prestashop>shopImporter_c195d4db1be0d349d21f236f0a6400ff'] = 'Este método es peligroso';
@@ -60,9 +63,6 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_1404aa04467659fbadad2a7dd1a279b
 $_MODULE['<{shopImporter}prestashop>shopImporter_11a755d598c0c417f9a36758c3da7481'] = 'Stop';
 $_MODULE['<{shopImporter}prestashop>shopImporter_72ef2b9b6965d078e3c7f95487a82d1c'] = 'Pasar';
 $_MODULE['<{shopImporter}prestashop>shopImporter_9eb6b78a99cdb6ffd3d40d18621d9f80'] = 'Forzar';
-$_MODULE['<{shopImporter}prestashop>shopImporter_3ba85f1eb1b88c1bab7f0e5f2f4b1b90'] = 'Stop: si hay errores en la auditoría de los datos, la importación no funciona.';
-$_MODULE['<{shopImporter}prestashop>shopImporter_02ec2f594c13f3ee94dfc7ebdb424da6'] = 'Pasar: si hay errores en la auditoría de los datos, la importación va a saltar datos incorrectos.';
-$_MODULE['<{shopImporter}prestashop>shopImporter_d82122d9c0946c1f293a457888122b5e'] = 'Forzar: si hay errores en la auditoría de los datos, la importación de los datos incorrectos se sustituirá por datos genéricos.';
 $_MODULE['<{shopImporter}prestashop>shopImporter_09b4382d10c396e0c4fcd51064702213'] = 'Opciones específicas';
 $_MODULE['<{shopImporter}prestashop>shopImporter_01f8544c8fd4628bc686502e8b727d95'] = 'el campo';
 $_MODULE['<{shopImporter}prestashop>shopImporter_0a5fa53f3f20f67f98bd6c3b16df059d'] = 'se requiere';

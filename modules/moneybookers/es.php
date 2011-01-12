@@ -19,11 +19,11 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999
 $_MODULE['<{moneybookers}prestashop>moneybookers_2d2eca55f12f72b2e1d753b7deadd9f5'] = 'Actualmente utiliza la dirección por defecto del módulo Moneybookers. Debe utilizar sus parámetros.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_bd65b912e0152f62629b6afeaa8398f4'] = 'Imposible contactar con el servidor de activación, por favor inténtelo más tarde';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c9f3e0397a1b070092ab4f0bf046fd4a'] = 'Error durante la validación de la cuenta, su correo electrónico podría estar equivocado';
-$_MODULE['<{moneybookers}prestashop>moneybookers_74b8a559fcedbb491aba11dd10610b5f'] = 'E-mail activado con éxito, ahora puede validar su palabra secreta';
+$_MODULE['<{moneybookers}prestashop>moneybookers_1a24addb8ec7ae193ac7f642b4a232aa'] = 'Activación correcta de su dirección email, ya puede validar su palabra secreta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7b1b775b5b6d8ea22cc69affd4bb162c'] = 'El campo email es obligatorio';
-$_MODULE['<{moneybookers}prestashop>moneybookers_214186253fc29d921411c68ac88d942e'] = 'Error durante la validación de la palabra secreta, ha sobrepasado el número máximo de intentos (3 por hora)';
+$_MODULE['<{moneybookers}prestashop>moneybookers_aa1c444c2ee2f620d5b349fedfa68ba2'] = 'Error durante la validación de su palabra secreta, ha sobrepasado el número máximo de intentos (3 por hora)';
 $_MODULE['<{moneybookers}prestashop>moneybookers_ccd8489089bfa25fffbc82674bf6b8b5'] = 'Error durante la validación de la palabra secreta, su palabra secreta podría estar equivocada';
-$_MODULE['<{moneybookers}prestashop>moneybookers_7d2d842e3d3628e5fedb1899e710fb44'] = 'Cuenta activada correctamente, la palabra secreta es correcta';
+$_MODULE['<{moneybookers}prestashop>moneybookers_cd1dfa342c3c11c17ede212e6429ca01'] = 'Activación de su cuenta con éxito, palabra secreta correcta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c193f11bec44b77c0f60ddf50bc30cc8'] = 'El campo palabra secreta es obligatorio';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a9dd80641753cafc9c967e317ba92a28'] = 'Sobre Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6b9a842511dd894375882f964ee626e8'] = 'Moneybookers es uno de los sistemas de pago en línea más grandes de Europa  y se sitúa entre los principales proveedores del mundo de eWallet, con más de 14 millones de titulares de cuentas. El sencillo eWallet permite a cualquier cliente pagar en línea de manera cómoda y segura sin revelar datos financieros personales, y también le permite enviar y recibir transferencias de dinero de forma rentable, usando simplemente una dirección de correo electrónico. ';

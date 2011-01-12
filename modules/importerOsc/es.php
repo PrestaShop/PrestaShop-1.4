@@ -2,6 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{importerOsc}prestashop>importerOsc_06d9bacf6c5590c1f854448b544e43fc'] = 'importador OsCommerce';
-$_MODULE['<{importerOsc}prestashop>importerOsc_ebeda04e800e975ddc45bec90e05cc9a'] = 'Este módulo permite importar a partir de OsCommerce hacia PrestaShop';
-$_MODULE['<{importerOsc}prestashop>importerOsc_5c503a150740945c58605bf9a2b613fe'] = 'Idioma por defecto OsCommerce';
+$_MODULE['<{importerOsc}prestashop>importerOsc_e273168c3697c35b8c737d14b1a5fb26'] = 'OsCommerce Importador';
+$_MODULE['<{importerOsc}prestashop>importerOsc_6042ff2da3ae0b5b78e5cc36ede31eb8'] = 'Este módulo permite importar a partir de OsCommerce hacia PrestaShop';
+$_MODULE['<{importerOsc}prestashop>importerOsc_2737b271f276b90d8a04ea4b9d18b920'] = 'Idioma por defecto OsCommerce';

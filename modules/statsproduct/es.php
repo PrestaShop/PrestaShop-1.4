@@ -32,8 +32,8 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_27ce7f8b5623b2e2df568d64cf05160
 $_MODULE['<{statsproduct}prestashop>statsproduct_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guía';
 $_MODULE['<{statsproduct}prestashop>statsproduct_6c1a8292e4da90e1ef19ae9444226d8f'] = 'Número de compras en relación con el número de visitas';
 $_MODULE['<{statsproduct}prestashop>statsproduct_78b7f73e738991f2f0c08aa76e0c1354'] = 'Tras elegir una categoría y seleccionar un producto disponible de la categoría, aparecen algunos gráficos. Entonces, usted puede analizarlos.';
-$_MODULE['<{statsproduct}prestashop>statsproduct_4c694fbaea539b8c135a187da5b508eb'] = 'Si usted observa que un producto es un éxito, muy comprado, pero que se ve poco, debe ponerlo más en valor en el front-office de su tienda.';
-$_MODULE['<{statsproduct}prestashop>statsproduct_47786db044f5982f2d9d475b03caa1ee'] = 'Por otro lado, si un producto es muy visitado pero no se compra, le aconsejamos comprobar o modificar la información, la descrición y la foto de dicho producto.';
+$_MODULE['<{statsproduct}prestashop>statsproduct_f6bfd44862a494b6ae1d55dc478b94a9'] = 'Si observa que un producto tiene éxito, que se compra mucho pero que se consulta poco, debería hacerlo resaltar más en el escaparate de su tienda.';
+$_MODULE['<{statsproduct}prestashop>statsproduct_e0cf0638f00337cfc188679226e56b3f'] = 'Si por el contrario, un producto es muy consultado pero se vende mal le aconsejamos que compruebe de nuevo o modifique las informaciones, descripción o fotografía(s) presentes en su ficha producto.';
 $_MODULE['<{statsproduct}prestashop>statsproduct_e22269bb51f9f2394e148716babbafbb'] = 'Popularidad';
 $_MODULE['<{statsproduct}prestashop>statsproduct_5e9613e58f3bdbc89b1fef07274c0877'] = 'Visitas (x100)';
 $_MODULE['<{statsproduct}prestashop>statsproduct_287234a1ff35a314b5b6bc4e5828e745'] = 'Atributos';

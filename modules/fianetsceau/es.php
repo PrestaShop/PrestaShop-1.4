@@ -7,6 +7,8 @@ $_MODULE['<{fianetsceau}prestashop>fianetsceau_79841d454ebed67000c0c982796c6b9d'
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_f9d62663cd34b0675f1fd34a0e8da283'] = 'Por favor, introduzca su Clave Privada';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_42d90cf6237830c7d1aae4c35a5211a1'] = 'Por favor, introduzca la ID de su sitio';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_c888438d14855d7d96a2724ee9c306bd'] = 'Confuguración actualizada';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_380b4179d36bce6ca862459a43b217b5'] = 'Para conectarse, visita:';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_592fcfe937f6d58f70d0918ef6373afa'] = 'Web de FIA-net';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_f4f70727dc34561dfde1a3c529b6205c'] = 'Parámetros';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_ee56be2890222bce04455a34055fd107'] = 'ID de su sitio';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_f0f5fac9602d88bc27f0edf960dda8b8'] = 'Ejemplo:';
