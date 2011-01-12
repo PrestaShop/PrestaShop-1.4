@@ -115,7 +115,7 @@ $(function(){ldelim}
 	{if isset($inOrderProcess) && $inOrderProcess && $PS_GUEST_CHECKOUT_ENABLED}
 		<form action="{$link->getPageLink('authentication.php', true)}?back={$back}" method="post" id="new_account_form" class="std">
 			<fieldset>
-				<h3>Instant Checkout</h3>
+				<h3>{l s='Instant Checkout'}</h3>
 				<div id="opc_account_form" style="display: block; ">
 					<!-- Account -->
 					<p class="required text">
@@ -124,7 +124,7 @@ $(function(){ldelim}
 						<sup>*</sup>
 					</p>
 					<p class="radio required">
-						<span>Title</span>
+						<span>{l s='Title'}</span>
 						<input type="radio" name="id_gender" id="id_gender1" value="1" {if isset($smarty.post.id_gender) && $smarty.post.id_gender == '1'}checked="checked"{/if}>
 						<label for="id_gender1" class="top">{l s='Mr.'}</label>
 						<input type="radio" name="id_gender" id="id_gender2" value="2" {if isset($smarty.post.id_gender) && $smarty.post.id_gender == '2'}checked="checked"{/if}>
@@ -156,7 +156,7 @@ $(function(){ldelim}
 						<input type="text" class="text" name="address1" id="address1" value="{if isset($smarty.post.address1)}{$smarty.post.address1}{/if}">
 						<sup>*</sup>
 					</p>
-					<p class="required postcode text" style="">
+					<p class="required postcode text">
 						<label for="postcode">{l s='Zip / Postal Code'}</label>
 						<input type="text" class="text" name="postcode" id="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode}{/if}" onblur="$('#postcode').val($('#postcode').val().toUpperCase());">
 						<sup>*</sup>

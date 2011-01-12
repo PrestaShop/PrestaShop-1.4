@@ -29,11 +29,9 @@ class AdminGenerator extends AdminTab
 {
 	public function __construct()
 	{
-		$this->_path =  dirname(__FILE__).'/../../';
-		$this->_htFile = $this->_path.'.htaccess';
-		$this->_rbFile = $this->_path.'robots.txt';
-		$this->_smFile = $this->_path.'sitemap.xml';
-		$this->_smFileName = 'sitemap.xml';
+		$this->_htFile = dirname(__FILE__).'/../../.htaccess';
+		$this->_rbFile = dirname(__FILE__).'/../../robots.txt';
+		$this->_smFile = dirname(__FILE__).'/../../sitemap.xml';
 		$this->_rbData = $this->_getRobotsContent();
 		return parent::__construct();
 	}
@@ -162,7 +160,7 @@ class AdminGenerator extends AdminTab
 					fwrite($writeFd, "# Sitemap\n");
 					if (file_exists($this->_smFile))
 						if (filesize($this->_smFile))
-							fwrite($writeFd, 'Sitemap: '.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.$this->_smFileName."\n");
+							fwrite($writeFd, 'Sitemap: '.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'sitemap.xml'."\n");
 					fwrite($writeFd, "\n");
 
 					fclose($writeFd);

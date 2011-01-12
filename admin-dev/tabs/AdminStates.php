@@ -117,7 +117,7 @@ class AdminStates extends AdminTab
 				<label>'.$this->l('ISO code:').' </label>
 				<div class="margin-form">
 					<input type="text" size="5" maxlength="4" name="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
-					<p>'.$this->l('1 to 4 letter ISO code').' (<a href="http://simple.wikipedia.org/wiki/List_of_U.S._states" target="_blank">'.$this->l('official list here').'</a>)</p>
+					<p>'.$this->l('1 to 4 letter ISO code (search on Wikipedia if you don\t know)').'</p>
 				</div>
 				<label>'.$this->l('Country:').' </label>
 				<div class="margin-form">
