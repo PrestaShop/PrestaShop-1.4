@@ -262,7 +262,7 @@ class OrderCore extends ObjectModel
 			$reduction_amount = Tools::ps_round($orderDetail->reduction_amount, 2);
 		if (isset($reduction_amount) AND $reduction_amount)
 			$price = Tools::ps_round($price - $reduction_amount, 2);
-		$productPriceWithoutTax = number_format($productPrice / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');
+		$productPriceWithoutTax = number_format($price / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');
 		$price += Tools::ps_round($orderDetail->ecotax * (1 + $orderDetail->ecotax_tax_rate / 100), 2);
 		$unitPrice = number_format($price, 2, '.', '');
 		$productPrice = number_format($quantity * $price, 2, '.', '');
