@@ -198,5 +198,4 @@ $_LANG['Your configuration is invalid. Please fix the issues below:'] = 'Su conf
 $_LANG['You have to create a database, help available in readme_en.txt'] = 'Debe crear una base de datos, puede encontrar ayuda en el archivo readme_es.txt';
 $_LANG['Discover your store'] = 'Descubra su tienda';
 $_LANG['This option can be blocking if your mail configuration is wrong, please disable it to move to the next step.'] = 'Esta opción se puede bloquear si su configuración de correo electrónico está mal, gracias a desactivarla si usted no puede moverse a la siguiente etapa.';
-
-
+$_LANG['A question about PrestaShop or issues during installation or upgrade? Call us!'] = 'Una pregunta acerca de PrestaShop o problemas durante la instalación o actualización? Llámenos!';

@@ -241,7 +241,7 @@ if ($lm->getIncludeTradFilename())
 	
 	<?php if ((isset($_GET['language']) AND $_GET['language'] == 1) OR $lm->getIsoCodeSelectedLang() == 'fr'): ?>
 	<p id="phone_block">
-		<?php echo '<span>'.lang('A question? An issue? Blocked during install? Call us!').'</span><br /><img src="img/phone.png" style="vertical-align: middle;" alt="" /> '.lang('+33 (0)1.40.18.30.04'); ?>
+		<?php echo '<span>'.lang('A question about PrestaShop or issues during installation or upgrade? Call us!').'</span><br /><img src="img/phone.png" style="vertical-align: middle;" alt="" /> '.lang('+33 (0)1.40.18.30.04'); ?>
 	</p>
 	<?php endif; ?>
 </div>
