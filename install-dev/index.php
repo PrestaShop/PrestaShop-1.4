@@ -37,7 +37,7 @@ if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
 if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 
-define('INSTALL_VERSION', '1.4.0.7');
+define('INSTALL_VERSION', '1.4.0.8');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
 define('INSTALL_PATH', dirname(__FILE__));
 if (version_compare(phpversion(), '5.0.0', '<'))
@@ -239,7 +239,7 @@ if ($lm->getIncludeTradFilename())
 		</div>
 	</div>
 	
-	<?php if (isset($_GET['language']) AND $_GET['language'] == 1): ?>
+	<?php if ((isset($_GET['language']) AND $_GET['language'] == 1) OR $lm->getIsoCodeSelectedLang() == 'fr'): ?>
 	<p id="phone_block">
 		<?php echo '<span>'.lang('A question? An issue? Blocked during install? Call us!').'</span><br />&phone; '.lang('+33 (0)1.40.18.30.04'); ?>
 	</p>
