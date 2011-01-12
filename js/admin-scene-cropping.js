@@ -48,16 +48,18 @@ function onSelectEnd(img, selection) {
 function undoEdit(){
 	hideAutocompleteBox();
 	$('#large_scene_image').imgAreaSelect({hide:true});
-	$(document).unbind('keydown', 'esc', undoEdit);
+	$(document).unbind('keydown');
 }
 
 function showAutocompleteBox(x1, y1) {
 	$('#ajax_choose_product:hidden')
 	.slideDown('fast');
 	$('#product_autocomplete_input').focus();
-	$(document).bind('keydown', 'esc', undoEdit);
-	
-	
+	$(document).keydown(function(event) {
+	  if (event.keyCode == '27') {
+		 undoEdit();
+	   }
+	});
 }
 
 function editThisZone(aInFixedZoneElement) {
