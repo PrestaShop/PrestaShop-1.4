@@ -70,7 +70,7 @@ function updateCarrierList(json)
 			html = html + '</td>'+
 			'</tr>';
 		}
-		html += json.HOOK_EXTRACARRIER;
+		if (json.HOOK_EXTRACARRIER !== null) html += json.HOOK_EXTRACARRIER;
 		$('#noCarrierWarning').hide();
 		$('#extra_carrier:hidden').show();
 		$('table#carrierTable tbody').html(html);
@@ -547,7 +547,7 @@ $(function() {
 						html += $('#id_country option:selected').html()+'<br />';
 						if ($('#id_state').is(':visible'))
 							html += $('#id_state option:selected').html()+'<br />';
-						html += '<div style="float: left; margin-top: 10px;"><a href="#opc_block_1" class="button_large opc_button" onclick="manageButtonsEvents($(this));">'+txtModifyMyAddress+'</a></div>';
+						html += '<div style="float: left; margin-top: 10px;"><a href="#opc_block_1" class="button_large opc_button" onclick="manageButtonsEvents($(this));return false;">'+txtModifyMyAddress+'</a></div>';
 						html += '</div>';
 						html += '<div class="opc_float_status">';
 						html += '<h4>'+txtInvoiceAddress+'</h4>';

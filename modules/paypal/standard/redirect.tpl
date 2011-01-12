@@ -33,7 +33,7 @@
 		<p>{$redirect_text}<br /><a href="javascript:history.go(-1);">{$cancel_text}</a></p>
 		<form action="{$paypal_url}" method="post" id="paypal_form" class="hidden">
 			<input type="hidden" name="upload" value="1" />
-			<input type="hidden" name="address_override" value="1" />
+			<input type="hidden" name="address_override" value="0" />
 			<input type="hidden" name="first_name" value="{$address->firstname|escape:'htmlall':'UTF-8'}" />
 			<input type="hidden" name="last_name" value="{$address->lastname|escape:'htmlall':'UTF-8'}" />
 			<input type="hidden" name="address1" value="{$address->address1|escape:'htmlall':'UTF-8'}" />

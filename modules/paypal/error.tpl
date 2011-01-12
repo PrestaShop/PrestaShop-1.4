@@ -24,7 +24,7 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
-{capture name=path}<a href="{$link->getPageLink('order.php', true)}">{l s='Your shopping cart' mod='paypal'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal ExpressCheckout' mod='paypal'}{/capture}
+{capture name=path}<a href="{$link->getPageLink('order.php', true)}">{l s='Your shopping cart' mod='paypal'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal' mod='paypal'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <h2>{$message}</h2>
@@ -36,6 +36,6 @@
 			<li>{$log}</li>
 		{/foreach}
 		</ol>
-		<p><a href="{$smarty.server.HTTP_REFERER|secureReferrer}" class="button_small" title="{l s='Back' mod='paypal'}">&laquo; {l s='Back' mod='paypal'}</a></p>
+		<p><a href="{$base_dir}" class="button_small" title="{l s='Back' mod='paypal'}">&laquo; {l s='Back' mod='paypal'}</a></p>
 	</div>
 {/if}

@@ -37,7 +37,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.1';
+		$this->version = '2.2';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -1154,9 +1154,9 @@ class PayPal extends PaymentModule
 						Configuration::updateValue('PAYPAL_PAYMENT_METHOD', _PAYPAL_OPTION_PLUS_);
 					$paypalapi->uninstall();
 					Configuration::loadConfiguration();
+					foreach ($confs AS $key => $value)
+						Configuration::updateValue($key, $value);
 				}
-				foreach ($confs AS $key => $value)
-					Configuration::updateValue($key, $value);
 			}
 			/* Create Table */
 			if (!Db::getInstance()->Execute('
