@@ -238,6 +238,12 @@ if ($lm->getIncludeTradFilename())
 			</ul>
 		</div>
 	</div>
+	
+	<?php if (isset($_GET['language']) AND $_GET['language'] == 1): ?>
+	<p id="phone_block">
+		<?php echo '<span>'.lang('A question? An issue? Blocked during install? Call us!').'</span><br />&phone; '.lang('+33 (0)1.40.18.30.04'); ?>
+	</p>
+	<?php endif; ?>
 </div>
 
 

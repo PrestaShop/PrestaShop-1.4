@@ -48,7 +48,7 @@ div#leftpannel{
 div#leftpannel div#help{
 	width:175px;
 	height:129px;
-	margin:20px auto;
+	margin:20px 0;
 	padding:5px;
 	background:url('img/bg_help.png') no-repeat;
 	font-family:Arial, sans-serif;
@@ -58,7 +58,7 @@ div#leftpannel div#help div.content{
 	float:right;
 	width:125px;
 }
-div#leftpannel div#help div.content p.title{color:#fff;font-weight:bold;font-size:10.5pt;margin:4pt 0 3px 0;}
+div#leftpannel div#help div.content p.title{color:#fff;font-weight:bold;font-size:10.5pt;margin:6pt 0 3px 0;}
 div#leftpannel div#help div.content p.title_down{color:#383838;font-size:8pt;margin:0;}
 div#leftpannel div#help div.content ul{margin:10px 0;padding:0;}
 div#leftpannel div#help div.content ul li{clear:both;padding-bottom:5px;list-style-type:none;}
@@ -572,4 +572,18 @@ p#php5_nok a {
 }
 #resultConfigHelper a{
 	text-decoration:underline;
+}
+
+#phone_block{
+	font-size: 16px;
+	color: #fff;
+	height: 25px;
+	width: 225px;
+	margin-left: 3px;	
+}
+
+#phone_block span{
+	font-size: 11px;
+	display: block;
+	width: 185px;
 }
