@@ -41,7 +41,10 @@
 		{l s='You have chosen the cash on delivery method.' mod='cashondelivery'}
 		<br/><br />
 		{l s='The total amount of your order is' mod='cashondelivery'}
-		<span id="amount_{$currencies.0.id_currency}" class="price">{convertPrice price=$total}</span> {l s='(tax incl.)' mod='cashondelivery'}
+		<span id="amount_{$currencies.0.id_currency}" class="price">{convertPrice price=$total}</span>
+		{if $use_taxes == 1}
+		    {l s='(tax incl.)' mod='cashondelivery'}
+		{/if}
 	</p>
 	<p>
 		<br /><br />

@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -44,7 +44,7 @@
 	</p>
 	<p style="margin-top:20px;">
 		- {l s='The total amount of your order is' mod='paypal'}
-			<span id="amount_{$currency->id}" class="price">{convertPriceWithCurrency price=$total currency=$currency}</span> {l s='(tax incl.)' mod='paypal'}
+			<span id="amount_{$currency->id}" class="price">{convertPriceWithCurrency price=$total currency=$currency}</span> {if $use_taxes == 1}{l s='(tax incl.)' mod='paypal'}{/if}
 	</p>
 	<p>
 		- {l s='We accept the following currency to be sent by PayPal:' mod='paypal'}&nbsp;<b>{$currency->name}</b>
@@ -58,3 +58,4 @@
 		<input type="submit" name="submitPayment" value="{l s='I confirm my order' mod='paypal'}" class="exclusive_large" />
 	</p>
 </form>
+

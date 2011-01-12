@@ -47,7 +47,9 @@
 <p style="margin-top:20px;">
 	- {l s='The total amount of your order is' mod='bankwire'}
 	<span id="amount" class="price">{displayPrice price=$total}</span>
-	{l s='(tax incl.)' mod='bankwire'}
+	{if $use_taxes == 1}
+    	{l s='(tax incl.)' mod='bankwire'}
+    {/if}
 </p>
 <p>
 	-
