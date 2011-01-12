@@ -50,12 +50,12 @@ class HelpAccessCore
         ');
     }
 
-    public static function retrieveInfos($label)
+    public static function retrieveInfos($label, $iso_lang, $country)
     {
    	    $image = self::$_images[0];
 	    $tooltip = '';
         $version = '';
-   	    $url = HelpAccess::URL.'/documentation/renderIcon';
+   	    $url = HelpAccess::URL.'/documentation/renderIcon?label='.$label.'&iso_lang='.$iso_lang.'&country='.$country;
 
    	    $ctx = stream_context_create(array(
                     'http' => array(
@@ -66,12 +66,16 @@ class HelpAccessCore
         $res = @file_get_contents($url, 0, $ctx);
 
 	    $infos = preg_split('/\|/', $res);
-	    if (sizeof($infos) > 0 && !empty($infos[0]))
+	    if (sizeof($infos) > 0)
 	    {
-    	    $image = self::$_images[1];
-            $version = $infos[0];
-            if (sizeof($infos) > 1)
-                $tooltip = '|'.$infos[1];
+            $version = trim($infos[0]);
+            if (!empty($version))
+            {
+        	    $image = self::$_images[1];
+
+                if (sizeof($infos) > 1)
+                    $tooltip = trim('|'.$infos[1]);
+            }
 	    }
 
         $last_version = HelpAccess::getVersion($label);
@@ -82,15 +86,14 @@ class HelpAccessCore
 	    return array('version' => $version, 'image' => $image, 'tooltip' => $tooltip);
 	}
 
-    public static function displayHelp($label, $iso_lang, $ps_version)
+    public static function displayHelp($label, $iso_lang, $country, $ps_version)
     {
-        $infos = HelpAccess::retrieveInfos($label);
-
+        $infos = HelpAccess::retrieveInfos($label, $iso_lang, $country);
         if (array_key_exists('image', $infos) && $infos['image'] != 'none')
         {
 	        echo '<div class="floatr" style="font-family: Verdana; font-size: 10px; margin-right: 4px; margin-top: 4px;">
-			        <a class="help-button" href="#" onclick="showHelp(\''.HelpAccess::URL.'\',\''.$label.'\',\''.$iso_lang.'\',\''.$ps_version.'\',\''.$infos['version'].'\');" title="'.Tools::htmlentitiesUTF8($infos['tooltip']).'">
-			        <img src="../img/admin/'.Tools::htmlentitiesUTF8($infos['image']).'" alt="" class="middle" />
+			        <a class="help-button" href="#" onclick="showHelp(\''.HelpAccess::URL.'\',\''.$label.'\',\''.$iso_lang.'\',\''.$ps_version.'\',\''.$infos['version'].'\',\''.$country.'\');" title="'.Tools::htmlentitiesUTF8($infos['tooltip']).'">
+			        <img id="help-'.$label.'" src="../img/admin/'.Tools::htmlentitiesUTF8($infos['image']).'" alt="" class="middle" />
 			        </a>
 		          </div>
 

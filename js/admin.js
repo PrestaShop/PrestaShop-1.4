@@ -800,10 +800,11 @@ function submitAddcmsAndPreview()
 	$('#cms').submit();
 }
 
-function showHelp(url, label, iso_lang, ps_version, doc_version)
+function showHelp(url, label, iso_lang, ps_version, doc_version, country)
 {
     trackClickOnHelp(label, doc_version);
-    window.open(url +'/'+iso_lang+'/doc/'+label+'?version='+ps_version+'#', 'PrestaShop Official Help', 'width=520,height=600');
+    $('#help-'+label).attr('src','../img/admin/help2.png');
+    window.open(url +'/'+iso_lang+'/doc/'+label+'?version='+ps_version+'&country='+country+'#', 'PrestaShop Official Help', 'width=520,height=600');
     return false;
 }
 
