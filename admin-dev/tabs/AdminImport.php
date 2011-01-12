@@ -141,7 +141,7 @@ class AdminImport extends AdminTab
 				'category' => $this->l('Categories (x,y,z...)'),
 				'price_tex' => $this->l('Price tax excl.'),
 				'price_tin' => $this->l('Price tax incl.'),
-				'tax_rules_group_name' => $this->l('Tax rules name'),
+				'id_tax_rules_group' => $this->l('Tax rules id'),
 				'wholesale_price' => $this->l('Wholesale price'),
 				'on_sale' => $this->l('On sale (0/1)'),
 				'reduction_price' => $this->l('Discount amount'),
@@ -570,23 +570,12 @@ class AdminImport extends AdminTab
 				$product = new Product();
 			self::setEntityDefaultValues($product);
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
+            $trg_id = (int)$product->id_tax_rules_group;
 
-            $trg_name = trim($product->id_tax_rules_group);
-
-			if (!empty($trg_name))
-			{
-			    $id_trg = (int)TaxRulesGroup::getIdByName($trg_name);
-
-			    if (!$id_trg)
-			    {
-			       	$trg = new TaxRulesGroup();
-        			$trg->name = $trg_name;
-		        	$trg->active = 1;
-		        	$trg->save();
-			    }
-
-			    $product->id_tax_rules_group = $id_trg;
-			}
+			if ($product->id_tax_rules_group == 0 || !Validate::isLoadedObject(new TaxRulesGroup($trg_id)))
+				$this->_addProductWarning('id_tax_rules_group', $product->id_tax_rules_group, Tools::displayError('invalid tax rule group ID, you first need a group with this ID'));
+			else
+			    $product->id_tax_rules_group = $trg_id;
 
 			if (isset($product->manufacturer) AND is_numeric($product->manufacturer) AND Manufacturer::manufacturerExists((int)($product->manufacturer)))
 				$product->id_manufacturer = (int)($product->manufacturer);
@@ -1532,7 +1521,7 @@ class AdminImport extends AdminTab
 					$this->_errors[] = $this->l('no entity selected');
 			}
 		}
-
+		
 		parent::postProcess();
 	}
 
