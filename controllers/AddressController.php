@@ -27,6 +27,8 @@
 
 class AddressControllerCore extends FrontController
 {
+	private $_address;
+
 	public function __construct()
 	{
 		$this->auth = true;
@@ -61,23 +63,20 @@ class AddressControllerCore extends FrontController
 		
 		if ($id_address)
 		{
-			$address = new Address((int)($id_address));
-			if (Validate::isLoadedObject($address) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($id_address)))
+			$this->_address = new Address((int)$id_address);
+			if (Validate::isLoadedObject($this->_address) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($id_address)))
 			{
 				if (Tools::isSubmit('delete'))
 				{
-					if ($this->cart->id_address_invoice == $address->id)
+					if ($this->cart->id_address_invoice == $this->_address->id)
 						unset($this->cart->id_address_invoice);
-					if ($this->cart->id_address_delivery == $address->id)
+					if ($this->cart->id_address_delivery == $this->_address->id)
 						unset($this->cart->id_address_delivery);
-					if ($address->delete())
+					if ($this->_address->delete())
 						Tools::redirect('addresses.php');
 					$this->errors[] = Tools::displayError('this address cannot be deleted');
 				}
-				$this->smarty->assign(array(
-					'address' => $address,
-					'id_address' => (int)($id_address)
-				));
+				$this->smarty->assign(array('address' => $this->_address, 'id_address' => (int)$id_address));
 			}
 			elseif (Tools::isSubmit('ajax'))
 				exit;
@@ -92,7 +91,7 @@ class AddressControllerCore extends FrontController
 
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
-			if (!$country = new Country((int)($address->id_country)) OR !Validate::isLoadedObject($country))
+			if (!$country = new Country((int)$address->id_country) OR !Validate::isLoadedObject($country))
 				die(Tools::displayError());
 			$zip_code_format = $country->zip_code_format;
 			if ($country->need_zip_code)
@@ -129,8 +128,8 @@ class AddressControllerCore extends FrontController
 					$country = new Country((int)($address->id_country));
 					if (Validate::isLoadedObject($country) AND !$country->contains_states)
 						$address->id_state = 0;
-					$address_old = new Address((int)($id_address));
-					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($address_old->id)))
+					$address_old = new Address((int)$id_address);
+					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress((int)$this->cookie->id_customer, (int)$address_old->id))
 					{
 						if (!Tools::isSubmit('ajax'))
 						{
@@ -207,21 +206,21 @@ class AddressControllerCore extends FrontController
 		/* Secure restriction for guest */
 		if ($this->cookie->is_guest)
 			Tools::redirect('addresses.php');
-		
+
 		if (Tools::isSubmit('id_country') AND Tools::getValue('id_country') != NULL AND is_numeric(Tools::getValue('id_country')))
-			$selectedCountry = (int)(Tools::getValue('id_country'));
-		elseif (isset($address) AND isset($address->id_country) AND !empty($address->id_country) AND is_numeric($address->id_country))
-			$selectedCountry = (int)($address->id_country);
+			$selectedCountry = (int)Tools::getValue('id_country');
+		elseif (isset($this->_address) AND isset($this->_address->id_country) AND !empty($this->_address->id_country) AND is_numeric($this->_address->id_country))
+			$selectedCountry = (int)$this->_address->id_country;
 		elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 		{
 			$array = preg_split('/,|-/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 			if (!Validate::isLanguageIsoCode($array[0]) OR !($selectedCountry = Country::getByIso($array[0])))
-				$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+				$selectedCountry = (int)Configuration::get('PS_COUNTRY_DEFAULT');
 		}
 		else
-			$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-
-		$countries = Country::getCountries((int)($this->cookie->id_lang), true);
+			$selectedCountry = (int)Configuration::get('PS_COUNTRY_DEFAULT');
+			
+		$countries = Country::getCountries((int)$this->cookie->id_lang, true);
 		$countriesList = '';
 		foreach ($countries AS $country)
 			$countriesList .= '<option value="'.(int)($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';

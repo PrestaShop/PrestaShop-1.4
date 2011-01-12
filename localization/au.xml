@@ -5,7 +5,6 @@
 	</currencies>
 	<taxes>
 		<tax id="1" name="GST AU 10%" rate="10" />
-		
 		<taxRulesGroup name="AU Standard rate (10%)">
 			<taxRule iso_code_country="au" id_tax="1" />
 		</taxRulesGroup>
@@ -23,8 +22,8 @@
 	<units>
 		<unit type="weight" value="kg" />
 		<unit type="volume" value="L" />
-		<unit type="short_distance" value="in" />
-		<unit type="base_distance" value="ft" />
-		<unit type="long_distance" value="mi" />
+		<unit type="short_distance" value="cm" />
+		<unit type="base_distance" value="m" />
+		<unit type="long_distance" value="km" />
 	</units>
 </localizationPack>
