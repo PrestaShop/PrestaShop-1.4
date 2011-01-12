@@ -207,8 +207,16 @@ class LinkCore
 			$url_rewrite = Meta::getEquivalentUrlRewrite($id_lang, Language::getIdByIso($current_iso), $rewrite);
 			$request = str_replace($rewrite, $url_rewrite, $request);
 		}
+
+		$queryTab = array();
+		parse_str($_SERVER['QUERY_STRING'], $queryTab);
+		unset($queryTab['isolang']);
+		$query = http_build_query($queryTab);
+		if (!empty($query))
+			$query = '?'.$query;
+
 		if ($this->allow == 1)
-			return __PS_BASE_URI__.''.Language::getIsoById($id_lang).'/'.substr(preg_replace('#^/([a-z]{2})/#', '/', $request), strlen(__PS_BASE_URI__));
+			return $this->getPageLink(substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)), false, $id_lang).$query;
 		else
 			return $this->getUrlWith('id_lang', (int)($id_lang));
 	}
