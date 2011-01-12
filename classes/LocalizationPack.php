@@ -62,6 +62,8 @@ class LocalizationPackCore
 			foreach ($xml->states->state as $data)
 			{
 				$attributes = $data->attributes();
+				if (State::getIdByName($attributes['name']))
+					continue;
 				$state = new State();
 				$state->name = strval($attributes['name']);
 				$state->iso_code = strval($attributes['iso_code']);
@@ -99,7 +101,8 @@ class LocalizationPackCore
 			foreach ($xml->taxes->tax as $taxData)
 			{
 				$attributes = $taxData->attributes();
-
+				if (Tax::getTaxIdByRate($attributes['rate']))
+					continue;
 				$tax = new Tax();
 				$tax->name[(int)(Configuration::get('PS_LANG_DEFAULT'))] = strval($attributes['name']);
 				$tax->rate = (float)($attributes['rate']);
@@ -124,7 +127,8 @@ class LocalizationPackCore
 			    $group_attributes = $group->attributes();
 			    if (!Validate::isGenericName($group_attributes['name']))
 			        continue;
-
+				 if (TaxRulesGroup::getIdByName($group['name']))
+					continue;
 			    $trg = new TaxRulesGroup();
 			    $trg->name = $group['name'];
 			    $trg->active = 1;
@@ -188,6 +192,8 @@ class LocalizationPackCore
 			$defaultCurrency = Currency::refreshCurrenciesGetDefault($feed->list, $isoCodeSource, $defaultCurrency);
 			foreach ($xml->currencies->currency as $data)
 			{
+				if(Currency::exists($attributes['iso_code']))
+					continue;
 				$attributes = $data->attributes();
 				$currency = new Currency();
 				$currency->name = strval($attributes['name']);
@@ -224,6 +230,8 @@ class LocalizationPackCore
 			foreach ($xml->languages->language as $data)
 			{
 				$attributes = $data->attributes();
+				if (Language::getIdByIso($lang['iso_code']))
+					continue;
 				$native_lang = Language::getLanguages();
 				$native_iso_code = array();
 				foreach ($native_lang as $lang){
