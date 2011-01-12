@@ -4,7 +4,6 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{upscarrier}prestashop>upscarrier_ada23a988e5bab7c573cc51ec8a62ba2'] = 'Transporteur UPS';
 $_MODULE['<{upscarrier}prestashop>upscarrier_8023a21cd748c762d4a6f0d52ed4c71c'] = 'Propose à vos clients le transporteur UPS';
-$_MODULE['<{upscarrier}prestashop>upscarrier_4e14ac8fd9f8f4040153a7bdbf3caea2'] = '\'Extension Curl\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_31a7d67bc35a1f04d1a32031dabe266c'] = '\'Unité de poids (LB ou KG dans Préférences > Localisation)\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_932232a3461c86c71522437c3f1c37dd'] = '\'Unité de mesure (LB ou KG dans Préférences > Localisation)\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'doit être configuré pour fonctionner correctement';

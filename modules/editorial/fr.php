@@ -6,6 +6,7 @@ $_MODULE['<{editorial}prestashop>editorial_a46dcd3561c3feeb53903dfc0f796a35'] = 
 $_MODULE['<{editorial}prestashop>editorial_1051bed4568ad9936781f20fb0536509'] = 'Un éditeur de texte pour votre page d\'accueil';
 $_MODULE['<{editorial}prestashop>editorial_6231a55e48ab91f49ce4e12880919c18'] = 'Vous ne pouvez pas effectuer cette action';
 $_MODULE['<{editorial}prestashop>editorial_07b8c09e490f7afbdcfa9cd5bfcfd4a9'] = 'Une erreur est survenue lors de l\'upload de l\'image';
+$_MODULE['<{editorial}prestashop>editorial_462390017ab0938911d2d4e964c0cab7'] = 'Paramètres mis à jour avec succès';
 $_MODULE['<{editorial}prestashop>editorial_0245625ee10f9c6c0ed7f50eb1838856'] = 'Titre principal';
 $_MODULE['<{editorial}prestashop>editorial_7496c27605d7ac3462a5dab8ecf1b569'] = 'Apparaît en haut de la page d\'accueil';
 $_MODULE['<{editorial}prestashop>editorial_e1f46be647e598f00eeb0ab62561d695'] = 'Pré-en-tête';

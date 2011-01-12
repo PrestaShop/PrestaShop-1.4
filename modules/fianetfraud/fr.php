@@ -3,6 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_740e53a0ed1b643f69c4aaa8ad4ae8d2'] = 'Code transporteur invalide';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_7ccf58c950043c9fbfed668df13ce608'] = 'Paramètres mis à jour avec succès';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_39b34487212efb0589ecf8c774413d85'] = 'Le client devra obligatoirement renseigner son numéro de téléphone lors de la création de son compte.';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_380b4179d36bce6ca862459a43b217b5'] = 'Pour vous inscrire, rendez-vous sur:';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_592fcfe937f6d58f70d0918ef6373afa'] = 'le site internet de Fia-Net';

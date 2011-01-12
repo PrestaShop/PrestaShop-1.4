@@ -63,9 +63,9 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_1404aa04467659fbadad2a7dd1a279b
 $_MODULE['<{shopImporter}prestashop>shopImporter_11a755d598c0c417f9a36758c3da7481'] = 'Stop';
 $_MODULE['<{shopImporter}prestashop>shopImporter_72ef2b9b6965d078e3c7f95487a82d1c'] = 'Passer';
 $_MODULE['<{shopImporter}prestashop>shopImporter_9eb6b78a99cdb6ffd3d40d18621d9f80'] = 'Forcer';
-$_MODULE['<{shopImporter}prestashop>shopImporter_3ba85f1eb1b88c1bab7f0e5f2f4b1b90'] = 'Stop : s\'il ya des erreurs dans l\'audit des données, l\'importation ne fonctionne pas. ';
-$_MODULE['<{shopImporter}prestashop>shopImporter_02ec2f594c13f3ee94dfc7ebdb424da6'] = 'Passer : s\'il ya des erreurs dans l\'audit des données d\'audit, l\'importation va sauter des données incorrectes.';
-$_MODULE['<{shopImporter}prestashop>shopImporter_d82122d9c0946c1f293a457888122b5e'] = 'Forcer : s\'il ya des erreurs dans l\'audit des données,, l\'importation des données incorrectes remplacer par des données génériques.';
+$_MODULE['<{shopImporter}prestashop>shopImporter_05d2b3715ac0c697b86799d1989c4aeb'] = 'Stopper : si des erreurs se produisent à cause des données, l\'import ne se lancera pas';
+$_MODULE['<{shopImporter}prestashop>shopImporter_690c3a7f595050729df99a6d30dd6f96'] = 'Stopper : si des erreurs se produisent à cause des données, l\'import ignorera ces dernières';
+$_MODULE['<{shopImporter}prestashop>shopImporter_35a6535254a93c5338bff1e3572755d2'] = 'Forcer : si des erreurs se produisent à cause des données, l\'import remplacera les données incorrectes par des données génériques.';
 $_MODULE['<{shopImporter}prestashop>shopImporter_09b4382d10c396e0c4fcd51064702213'] = 'Options spécifiques ';
 $_MODULE['<{shopImporter}prestashop>shopImporter_01f8544c8fd4628bc686502e8b727d95'] = 'le champ';
 $_MODULE['<{shopImporter}prestashop>shopImporter_0a5fa53f3f20f67f98bd6c3b16df059d'] = 'est requit';

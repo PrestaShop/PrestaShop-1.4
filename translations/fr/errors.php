@@ -366,6 +366,7 @@ $_ERRORS['34cad601da94898693ae7279b02fbfc5'] = 'message invalide';
 $_ERRORS['5d556366651ac81c4f2027a6a20226f0'] = 'commande invalid';
 $_ERRORS['703c2b69e5d9f7072b7db5338214448b'] = 'mot de passe invalide';
 $_ERRORS['44348ef5a170737d1faf6f42b95b511c'] = 'fourchette invalide';
+$_ERRORS['9f15e410139f7beca90c9784b15d57e8'] = 'ID du groupe invalide pour cette règle de taxe';
 $_ERRORS['8f4be21ec3cfbba15a349e9c5e888579'] = 'token invalide';
 $_ERRORS['a95125af1a5f464e0a211f15c06b59ae'] = 'facture introuvable';
 $_ERRORS['080dfd9c6b5a0810d529986417f59dfe'] = 'les factures sont désactivées sur cette boutique';
