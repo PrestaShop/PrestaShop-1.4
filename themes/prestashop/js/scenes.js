@@ -59,6 +59,7 @@ $(function () {
 		.cluetip({
 			local:true,
 			cursor: 'pointer',
+			attribute:'accesskey',
 			cluetipClass: 'product_scene',
 			dropShadow: false,
 			dropShadowSteps: 0,

@@ -35,7 +35,7 @@
 {else}
 	{assign var='request' value=$link->getPaginationLink(false, false, false, true)}
 {/if}
-<form id="productsSortForm" action="{$request}">
+<form id="productsSortForm" action="{$request|escape:'htmlall':'UTF-8'}">
 	<p class="select">
 		<select id="selectPrductSort" onchange="document.location.href = $(this).val();">
 			<option value="{$link->addSortDetails($request, 'position', $orderwayposition)|escape:'htmlall':'UTF-8'}" {if $orderby eq 'position'}selected="selected"{/if}>{l s='--'}</option>

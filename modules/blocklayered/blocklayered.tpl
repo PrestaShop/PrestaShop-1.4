@@ -29,17 +29,19 @@
 	<h4>{l s='Catalog' mod='blocklayered'}</h4>
 	<div class="block_content">
 		<form action="#" id="layered_form">
-			{if isset($layered_subcategories)}
-			<span class="layered_subtitle">{l s='Shop by category:' mod='blocklayered'}</span>
-			<ul id="layered_subcategories">
-			{foreach from=$layered_subcategories item=layered_subcategory}
-				<li{if $layered_use_checkboxes} class="nomargin"{/if}>
-				{if $layered_use_checkboxes}<input type="checkbox" class="checkbox" name="layered_category_{$layered_subcategory.id_category}" id="layered_category_{$layered_subcategory.id_category}" value="{$layered_subcategory.id_category}" /> {/if}
-				{$layered_subcategory.name|escape:html:'UTF-8'} ({$layered_subcategory.n})</li>
-			{/foreach}
-			</ul>
-			{/if}
-			<p><input type="hidden" name="id_category_layered" value="{$id_category_layered}" /></p>
+			<div>
+				{if isset($layered_subcategories)}
+				<span class="layered_subtitle">{l s='Shop by category:' mod='blocklayered'}</span>
+				<ul id="layered_subcategories">
+				{foreach from=$layered_subcategories item=layered_subcategory}
+					<li{if $layered_use_checkboxes} class="nomargin"{/if}>
+					{if $layered_use_checkboxes}<input type="checkbox" class="checkbox" name="layered_category_{$layered_subcategory.id_category}" id="layered_category_{$layered_subcategory.id_category}" value="{$layered_subcategory.id_category}" /> {/if}
+					{$layered_subcategory.name|escape:html:'UTF-8'} ({$layered_subcategory.n})</li>
+				{/foreach}
+				</ul>
+				{/if}
+				<p><input type="hidden" name="id_category_layered" value="{$id_category_layered}" /></p>
+			</div>
 		</form>
 	</div>
 </div>
