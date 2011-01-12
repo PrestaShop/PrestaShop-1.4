@@ -5,7 +5,6 @@ ALTER TABLE `PREFIX_product_attribute` ADD `minimal_quantity` int(10) unsigned N
 ALTER TABLE `PREFIX_orders` ADD `reference` VARCHAR(14) NOT NULL AFTER `id_address_invoice`;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES('PS_DISPLAY_SUPPLIERS', '1', NOW(), NOW());
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES('PREFIX_DISPLAY_SUPPLIERS', '1', NOW(), NOW());
 
 UPDATE `PREFIX_tab`
 SET `position` = `position` + 1
