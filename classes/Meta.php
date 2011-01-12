@@ -65,13 +65,8 @@ class MetaCore extends ObjectModel
 			die(Tools::displayError('Cannot scan root directory'));
 		
 		// Exclude pages forbidden
-		$exludePages = array(
-		
-		
-		'404', 'attachment',
-		'get-file', 'order-return', 'order-confirmation', 'pagination', 'pdf-invoice', 'changecurrency', 'order-detail',
-		'pdf-order-return', 'pdf-order-slip', 'product-sort', 'statistics', 'zoom', 'images.inc', 'header', 'footer', 'init',
-		'category', 'product', 'cms', 'password');
+		$exludePages = array('category', 'changecurrency', 'cms', 'footer', 'header', 'images.inc', 'init',
+		'pagination', 'product', 'product-sort', 'statistics');
 		foreach ($files as $file)
 			if (preg_match('/^[a-z0-9_.-]*\.php$/i', $file) AND !in_array(str_replace('.php', '', $file), $exludePages))
 				$selectedPages[] = str_replace('.php', '', $file);
