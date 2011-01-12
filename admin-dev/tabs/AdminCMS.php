@@ -271,7 +271,7 @@ class AdminCMS extends AdminTab
 				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
 				$redir .= '&adtoken='.Tools::encrypt('PreviewCMS'.$cms->id).'&ad='.$admin_dir;
 			}
-			Tools::redirectLink($redir);
+			Tools::redirectAdmin($redir);
 		}
 		elseif (Tools::isSubmit('deletecms'))
 		{
@@ -333,7 +333,7 @@ class AdminCMS extends AdminTab
 	
 							$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
 						}
-						Tools::redirectLink($preview_url);
+						Tools::redirectAdmin($preview_url);
 					}
 					else
 						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=3&token='.Tools::getAdminTokenLite('AdminCMSContent'));
@@ -355,7 +355,7 @@ class AdminCMS extends AdminTab
 	
 							$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
 						}
-						Tools::redirectLink($preview_url);
+						Tools::redirectAdmin($preview_url);
 					}
 					else
 						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=4&token='.Tools::getAdminTokenLite('AdminCMSContent'));

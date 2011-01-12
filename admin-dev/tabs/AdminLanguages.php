@@ -123,7 +123,7 @@ class AdminLanguages extends AdminTab
 					elseif ($object->id == $cookie->id_lang)
 						$this->_errors[] = $this->l('You cannot delete the language currently in use. Please change languages before deleting.');
 					elseif ($this->deleteNoPictureImages((int)(Tools::getValue('id_lang'))) AND $object->delete())
-						Tools::redirectLink($currentIndex.'&conf=1'.'&token='.$this->token);
+						Tools::redirectAdmin($currentIndex.'&conf=1'.'&token='.$this->token);
 				}
 				else
 					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');

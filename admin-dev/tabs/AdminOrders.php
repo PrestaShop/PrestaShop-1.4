@@ -330,7 +330,7 @@ class AdminOrders extends AdminTab
 
 				// Redirect if no errors
 				if (!sizeof($this->_errors))
-					Tools::redirectLink($currentIndex.'&id_order='.$order->id.'&vieworder&conf=24&token='.$this->token);
+					Tools::redirectAdmin($currentIndex.'&id_order='.$order->id.'&vieworder&conf=24&token='.$this->token);
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');

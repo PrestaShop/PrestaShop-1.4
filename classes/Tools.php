@@ -53,6 +53,18 @@ class ToolsCore
 	*/
 	static public function redirect($url, $baseUri = __PS_BASE_URI__)
 	{
+		if (strpos($url, 'http://') === FALSE)
+		{
+			global $link;
+			if (strpos($url, $baseUri) !== FALSE && strpos($url, $baseUri) == 0)
+				$url = substr($url, strlen($baseUri));
+			$explode = explode('?', $url);
+			$url = $link->getPageLink($explode[0]);
+			if (isset($explode[1]))
+				$url .= '?'.$explode[1];
+			$baseUri = '';
+		}
+
 		if (isset($_SERVER['HTTP_REFERER']) AND ($url == $_SERVER['HTTP_REFERER']))
 			header('Location: '.$_SERVER['HTTP_REFERER']);
 		else
@@ -67,6 +79,17 @@ class ToolsCore
 	*/
 	static public function redirectLink($url)
 	{
+		if (strpos($url, 'http://') === FALSE)
+		{
+			global $link;
+			if (strpos($url, __PS_BASE_URI__) !== FALSE && strpos($url, __PS_BASE_URI__) == 0)
+				$url = substr($url, strlen(__PS_BASE_URI__));
+			$explode = explode('?', $url);
+			$url = $link->getPageLink($explode[0]);
+			if (isset($explode[1]))
+				$url .= '?'.$explode[1];
+		}
+
 		header('Location: '.$url);
 		exit;
 	}

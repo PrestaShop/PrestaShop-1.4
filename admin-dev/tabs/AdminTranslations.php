@@ -108,7 +108,7 @@ class AdminTranslations extends AdminTab
 			$bool &= @copy($source, $dest);
 		}
 		if ($bool)
-			Tools::redirectLink($currentIndex.'&conf=14&token='.$this->token);
+			Tools::redirectAdmin($currentIndex.'&conf=14&token='.$this->token);
 		$this->_errors[] = $this->l('a part of the data has been copied but some language files could not be found or copied');
 	}
 
@@ -123,7 +123,7 @@ class AdminTranslations extends AdminTab
 			$items = array_flip(Language::getFilesList($lang, $theme, false, false, false, false, true));
 			$gz = new Archive_Tar(_PS_TRANSLATIONS_DIR_.'/export/'.$lang.'.gzip', true);
 			if ($gz->createModify($items, NULL, _PS_ROOT_DIR_));
-				Tools::redirect('translations/export/'.$lang.'.gzip');
+				Tools::redirectAdmin('translations/export/'.$lang.'.gzip');
 			$this->_errors[] = Tools::displayError('an error occurred while creating archive');
 		}
 		$this->_errors[] = Tools::displayError('please choose a language and a theme');
