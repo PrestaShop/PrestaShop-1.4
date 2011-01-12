@@ -187,13 +187,18 @@ $(function(){ldelim}
 						<label for="phone">{l s='Phone'}</label>
 						<input type="text" class="text" name="phone" id="phone" value="{if isset($smarty.post.phone)}{$smarty.post.phone}{/if}"> <sup style="color:red;">*</sup>
 					</p>
-					<input type="hidden" name="alias" id="alias" value="{l s='My address'}">
-					<input type="hidden" name="is_new_customer" id="is_new_customer" value="0">
 					
-					<!-- END Account -->
-					<p class="text">
+					<p class="text submit">
 						<input type="submit" class="button" name="submitGuestAccount" id="submitGuestAccount" value="{l s='Continue'}">
 					</p>
+					
+					<p class="required text">
+						<span><sup>*</sup>{l s='Required field'}</span>
+					</p>
+					
+					<input type="hidden" name="alias" id="alias" value="{l s='My address'}">
+					<input type="hidden" name="is_new_customer" id="is_new_customer" value="0">
+					<!-- END Account -->
 				</div>
 			</fieldset>
 		</form>

@@ -414,6 +414,7 @@ $(function() {
 				$('#is_new_customer').val('0');
 				$('#opc_account_choice').hide();
 				$('#opc_invoice_address').hide();
+				$('#new_account_title').html(txtInstantCheckout);
 			});
 		}
 		else if (isGuest)
@@ -423,6 +424,7 @@ $(function() {
 			$('#is_new_customer').val('0');
 			$('#opc_account_choice').hide();
 			$('#opc_invoice_address').hide();
+			$('#new_account_title').html(txtInstantCheckout);
 		}
 		else
 		{

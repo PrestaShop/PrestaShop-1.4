@@ -54,6 +54,7 @@
 	var txtDeliveryAddress = "{l s='Delivery address'}";
 	var txtInvoiceAddress = "{l s='Invoice address'}";
 	var txtModifyMyAddress = "{l s='Modify my address'}";
+	var txtInstantCheckout = "{l s='Instant checkout'}";
 	var errorCarrier = "{$errorCarrier}";
 	var errorTOS = "{$errorTOS}";
 	var checkedCarrier = "{if isset($checked)}{$checked}{else}0{/if}";
@@ -379,7 +380,7 @@
 			</form>
 			<form action="#" method="post" id="new_account_form" class="std">
 				<fieldset>
-					<h3>{l s='New Customer'}</h3>
+					<h3 id="new_account_title">{l s='New Customer'}</h3>
 					<div id="opc_account_choice">
 						<div class="opc_float">
 							<h4>{l s='Instant Checkout'}</h4>
@@ -613,11 +614,11 @@
 							</p>
 							<input type="hidden" name="alias_invoice" id="alias_invoice" value="{l s='My Invoice address'}" />
 						</div>
-						<p>
+						<p style="float: right;"><input type="submit" class="exclusive button" name="submitAccount" id="submitAccount" value="{l s='Continue'}" /></p>
+						<p style="clear: both;">
 							<sup>*</sup>{l s='Required field'}
 						</p>
 						<!-- END Account -->
-						<p style="float: right;"><input type="submit" class="exclusive button" name="submitAccount" id="submitAccount" value="{l s='Continue'}" /></p>
 					</div>
 				</fieldset>
 			</form>
