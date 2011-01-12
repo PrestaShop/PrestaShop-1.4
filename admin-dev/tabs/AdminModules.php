@@ -343,7 +343,7 @@ class AdminModules extends AdminTab
 						return "<img src=\"../modules/"+row.name+"/logo.gif\" style=\"float:left;margin:5px\"><strong>" + row.displayName + "</strong>" + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
 					},
 					formatResult: function(row) {
-						return row.name;
+						return row.displayName;
 					}
 				});
 			});

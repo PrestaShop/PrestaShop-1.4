@@ -76,13 +76,12 @@ class FianetSceau extends Module
 		else
 			Configuration::updateValue('FIANET_SCEAU_SITEID', Tools::getValue('FIANET_SCEAU_SITEID'));
 		Configuration::updateValue('FIANET_SCEAU_PRIVATEKEY', Tools::getValue('FIANET_SCEAU_PRIVATEKEY'));
-
-		return '
-			<div class="conf confirm">
-				<img src="../img/admin/ok.gif" alt="" title="" />
-				'.$this->l('Settings updated').'
-			</div>';
-	}
+		
+		if ((int)Tools::getValue('fia_net_mode'))
+			$dataSync = (($site_id = Configuration::get('FIANET_SCEAU_SITEID')) ? '<img src="http://www.prestashop.com/modules/fianetsceau.png?site_id='.urlencode($site_id).'" style="float:right" />' : 'toto');
+		else
+			$dataSync = '';
+		return $this->_html .= $this->displayConfirmation($this->l('Configuration updated').$dataSync);	}
 	
 	public function getContent()
 	{
