@@ -1621,9 +1621,11 @@ class ProductCore extends ObjectModel
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
 			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
 		$specific_price = self::$_pricesLevel3[$cacheId3];
-		$price = (float)(((!$specific_price OR (float)($specific_price['reduction'])) OR (!$usereduc AND $result['price'] < $specific_price['price'])) ? $result['price'] : $specific_price['price']);
-		if ((!$specific_price OR !$specific_price['price'] OR !$specific_price['id_currency']) OR !$usereduc)
+
+		$price = (float)(((!$specific_price OR (float)($specific_price['reduction'])) OR (!$usereduc AND $specific_price['price'] == 0)) ? $result['price'] : $specific_price['price']);
+	    if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
+
 		$specificPriceOutput = $specific_price;
 		// Attribute price
 		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0, $id_currency);
@@ -1634,18 +1636,34 @@ class ProductCore extends ObjectModel
 		if ($usetax)
 			$price = $price * (1 + ($tax_rate / 100));
 		$price = Tools::ps_round($price, $decimals);
+
 		// Reduction
 		$reduc = 0;
 		if (($only_reduc OR $usereduc) AND $specific_price)
-			$reduc = Tools::ps_round($specific_price['reduction_type'] == 'amount' ? (self::$_taxCalculationMethod == PS_TAX_INC ? $specific_price['reduction'] : $specific_price['reduction'] / (1 + $tax_rate / 100)) : ($price * $specific_price['reduction']), 2);
+		{
+		    if ($specific_price['reduction_type'] == 'amount')
+		    {
+		        $reduction_amount = $specific_price['reduction'];
+
+		        if (!$specific_price['id_currency'])
+		            $reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
+
+		        $reduc = Tools::ps_round(self::$_taxCalculationMethod == PS_TAX_INC ? $reduction_amount : $reduction_amount / (1 + $tax_rate / 100), 2);
+		    } else {
+		        $reduc = Tools::ps_round($price * $specific_price['reduction'], 2);
+		    }
+		}
+
 		if ($only_reduc)
 			return $reduc;
+
 		if ($usereduc)
 		{
 			if ($reduc)
 				$price = Tools::ps_round($price, 2);
 			$price -= $reduc;
 		}
+
 		// Group reduction
 		if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
@@ -2835,4 +2853,3 @@ class ProductCore extends ObjectModel
 	}
 
 }
-

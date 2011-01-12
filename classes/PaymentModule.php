@@ -100,7 +100,7 @@ abstract class PaymentModuleCore extends Module
 		{
 			if ($secure_key !== false AND $secure_key != $cart->secure_key)
 				die(Tools::displayError());
-			
+
 			// Copying data from cart
 			$order = new Order();
 			$order->id_carrier = (int)($cart->id_carrier);
@@ -173,7 +173,7 @@ abstract class PaymentModuleCore extends Module
 				Product::addCustomizationPrice($products, $customizedDatas);
 				$outOfStock = false;
 				foreach ($products AS $key => $product)
-				{					
+				{
 					$productQuantity = (int)(Product::getQuantity((int)($product['id_product']), ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL)));
 					$quantityInStock = ($productQuantity - (int)($product['cart_quantity']) < 0) ? $productQuantity : (int)($product['cart_quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
@@ -224,7 +224,7 @@ abstract class PaymentModuleCore extends Module
 						'.$quantityInStock.',
 						'.(float)(Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod((int)($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice, FALSE)).',
 						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
-						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? $specificPrice['reduction'] : 0.00).',
+						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (!$specificPrice['id_currency'] ? Tools::convertPrice($specificPrice['reduction'], $id_currency) : $specificPrice['reduction']) : 0.00).',
 						'.(float)(Group::getReduction((int)($order->id_customer))).',
 						'.$quantityDiscountValue.',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',

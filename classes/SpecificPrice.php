@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -89,7 +89,11 @@ class SpecificPriceCore extends ObjectModel
 	{
 		$now = date('Y-m-d H:i:s');
 		return Db::getInstance()->getRow('
-			SELECT *
+			SELECT *,
+					(IF (`id_shop` = '.(int)($id_shop).', 1, 0) +
+					IF (`id_currency` = '.(int)($id_currency).', 1, 0) +
+					IF (`id_country` = '.(int)($id_country).', 1, 0) +
+					IF (`id_group` = '.(int)($id_group).', 1, 0)) as `score`
 			FROM `'._DB_PREFIX_.'specific_price`
 			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
 					`id_shop` IN(0, '.(int)($id_shop).') AND
@@ -98,7 +102,7 @@ class SpecificPriceCore extends ObjectModel
 					`id_group` IN(0, '.(int)($id_group).') AND
 					`from_quantity` <= '.(int)($quantity).' AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
-			ORDER BY `priority`, '.self::getPriorities().', `from_quantity` DESC
+			ORDER BY `score` DESC, '.self::getPriorities().', `from_quantity` DESC
 		');
 	}
 
@@ -132,25 +136,48 @@ class SpecificPriceCore extends ObjectModel
 	static public function getQuantityDiscounts($id_product, $id_shop, $id_currency, $id_country, $id_group)
 	{
 		$now = date('Y-m-d H:i:s');
-		return Db::getInstance()->ExecuteS('
-			SELECT *
+		$res =  Db::getInstance()->ExecuteS('
+			SELECT *,
+					(IF (`id_shop` = '.(int)($id_shop).', 1, 0) +
+					IF (`id_currency` = '.(int)($id_currency).', 1, 0) +
+					IF (`id_country` = '.(int)($id_country).', 1, 0) +
+					IF (`id_group` = '.(int)($id_group).', 1, 0)) as `score`
 			FROM `'._DB_PREFIX_.'specific_price`
 			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
 					`id_shop` IN(0, '.(int)($id_shop).') AND
 					`id_currency` IN(0, '.(int)($id_currency).') AND
 					`id_country` IN(0, '.(int)($id_country).') AND
 					`id_group` IN(0, '.(int)($id_group).') AND
-					`from_quantity` > 1 AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
-					ORDER BY `priority`, '.self::getPriorities().', `from_quantity` DESC
+					ORDER BY `score`  DESC, '.self::getPriorities().', `from_quantity` DESC
 		');
+
+		$targeted_prices = array();
+		$max_score = NULL;
+
+		foreach($res as $specific_price)
+		{
+		    if (!isset($max_score))
+		        $max_score = $specific_price['score'];
+		    else if ($max_score != $specific_price['score'])
+		        break;
+
+            if ($specific_price['from_quantity'] > 1)
+    		    $targeted_prices[] = $specific_price;
+		}
+
+		return $targeted_prices;
 	}
 
 	static public function getQuantityDiscount($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
 	{
 		$now = date('Y-m-d H:i:s');
 		return Db::getInstance()->getRow('
-			SELECT *
+			SELECT *,
+					(IF (`id_shop` = '.(int)($id_shop).', 1, 0) +
+					IF (`id_currency` = '.(int)($id_currency).', 1, 0) +
+					IF (`id_country` = '.(int)($id_country).', 1, 0) +
+					IF (`id_group` = '.(int)($id_group).', 1, 0)) as `score`
 			FROM `'._DB_PREFIX_.'specific_price`
 			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
 					`id_shop` IN(0, '.(int)($id_shop).') AND
@@ -159,7 +186,7 @@ class SpecificPriceCore extends ObjectModel
 					`id_group` IN(0, '.(int)($id_group).') AND
 					`from_quantity` >= '.(int)($quantity).' AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
-					ORDER BY `priority`, '.self::getPriorities().', `from_quantity` DESC
+					ORDER BY `score` DESC, '.self::getPriorities().', `from_quantity` DESC
 		');
 	}
 
@@ -194,5 +221,4 @@ class SpecificPriceCore extends ObjectModel
 		return $this->add();
 	}
 }
-
 
