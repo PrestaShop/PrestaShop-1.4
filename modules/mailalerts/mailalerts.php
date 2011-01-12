@@ -250,7 +250,7 @@ class MailAlerts extends Module
 		if (is_object($params['product']))
 			$params['product'] = get_object_vars($params['product']);
 		
-		$qty = (int)(isset($params['product']['quantity_attribute']) AND $params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
+		$qty = (int)((isset($params['product']['quantity_attribute']) AND $params['product']['quantity_attribute']) ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']);
 		if ($qty <= (int)(Configuration::get('MA_LAST_QTIES')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(
