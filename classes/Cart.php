@@ -412,11 +412,11 @@ class CartCore extends ObjectModel
 	public function containsProduct($id_product, $id_product_attribute, $id_customization)
 	{
 		return Db::getInstance()->getRow('
-			SELECT cp.`quantity`
-			FROM `'._DB_PREFIX_.'cart_product` cp
-			'.($id_customization ? 'LEFT JOIN `'._DB_PREFIX_.'customization` c ON (c.`id_product` = cp.`id_product` AND c.`id_product_attribute` = cp.`id_product_attribute`)' : '').'
-			WHERE cp.`id_product` = '.(int)($id_product).' AND cp.`id_product_attribute` = '.(int)($id_product_attribute).' AND cp.`id_cart` = '.(int)($this->id).
-			($id_customization ? ' AND c.`id_customization` = '.(int)($id_customization) : ''));
+		SELECT cp.`quantity`
+		FROM `'._DB_PREFIX_.'cart_product` cp
+		'.($id_customization ? 'LEFT JOIN `'._DB_PREFIX_.'customization` c ON (c.`id_product` = cp.`id_product` AND c.`id_product_attribute` = cp.`id_product_attribute`)' : '').'
+		WHERE cp.`id_product` = '.(int)$id_product.' AND cp.`id_product_attribute` = '.(int)$id_product_attribute.' AND cp.`id_cart` = '.(int)$this->id.
+		($id_customization ? ' AND c.`id_customization` = '.(int)$id_customization : ''));
 	}
 
 	/**
@@ -429,24 +429,25 @@ class CartCore extends ObjectModel
 	 */
 	public	function updateQty($quantity, $id_product, $id_product_attribute = NULL, $id_customization = false, $operator = 'up')
 	{
-		$product = new Product((int)($id_product), false, Configuration::get('PS_LANG_DEFAULT'));
-		/* if product has attribute, minimal quantity is set with minimal quantity of attribute*/
-		if ((int)($id_product_attribute))
-			$minimal_quantity = Attribute::getAttributeMinimalQty($id_product_attribute);
+		$product = new Product((int)$id_product, false, (int)Configuration::get('PS_LANG_DEFAULT'));
+
+		/* If we have a product combination, the minimal quantity is set with the one of this combination */
+		if (!empty($id_product_attribute))
+			$minimalQuantity = (int)Attribute::getAttributeMinimalQty((int)$id_product_attribute);
 		else
-			$minimal_quantity = $product->minimal_quantity;
+			$minimalQuantity = (int)$product->minimal_quantity;
 				
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
 		self::$_nbProducts = NULL;
-		if ((int)($quantity) <= 0)
-			return $this->deleteProduct((int)($id_product), (int)($id_product_attribute), (int)($id_customization));
+		if ((int)$quantity <= 0)
+			return $this->deleteProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
 		elseif (!$product->available_for_order)
 			return false;
 		else
 		{
 			/* Check if the product is already in the cart */
-			$result = $this->containsProduct($id_product, $id_product_attribute, $id_customization);
+			$result = $this->containsProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
 
 			/* Update quantity if product already exist */
 			if (Db::getInstance()->NumRows())
@@ -454,24 +455,24 @@ class CartCore extends ObjectModel
 				if ($operator == 'up')
 				{
 					$result2 = Db::getInstance()->getRow('
-						SELECT '.($id_product_attribute ? 'pa' : 'p').'.`quantity`, p.`out_of_stock`
+						SELECT '.(!empty($id_product_attribute) ? 'pa' : 'p').'.`quantity`, p.`out_of_stock`
 						FROM `'._DB_PREFIX_.'product` p
-						'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON p.`id_product` = pa.`id_product`' : '').'
+						'.(!empty($id_product_attribute) ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON p.`id_product` = pa.`id_product`' : '').'
 						WHERE p.`id_product` = '.(int)($id_product).
-						($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.(int)($id_product_attribute) : ''));
-					$productQty = (int)($result2['quantity']);
-					$newQty = $result['quantity'] + (int)($quantity);
-					$qty = '`quantity` + '.(int)($quantity);
+						(!empty($id_product_attribute) ? ' AND `id_product_attribute` = '.(int)$id_product_attribute : ''));
+					$productQty = (int)$result2['quantity'];
+					$newQty = (int)$result['quantity'] + (int)$quantity;
+					$qty = '+ '.(int)$quantity;
 
-					if (!Product::isAvailableWhenOutOfStock((int)($result2['out_of_stock'])))
-						if ((int)($newQty) > $productQty)
+					if (!Product::isAvailableWhenOutOfStock((int)$result2['out_of_stock']))
+						if ($newQty > $productQty)
 							return false;
 				}
 				elseif ($operator == 'down')
 				{
-					$qty = '`quantity` - '.(int)($quantity);
-					$newQty = $result['quantity'] - (int)($quantity);
-					if ($newQty < $minimal_quantity AND $minimal_quantity > 1)
+					$qty = '- '.(int)$quantity;
+					$newQty = (int)$result['quantity'] - (int)$quantity;
+					if ($newQty < $minimalQuantity AND $minimalQuantity > 1)
 						return -1;
 				}
 				else
@@ -479,45 +480,50 @@ class CartCore extends ObjectModel
 
 				/* Delete product from cart */
 				if ($newQty <= 0)
-					return $this->deleteProduct((int)($id_product), (int)($id_product_attribute), (int)($id_customization));
-				elseif ($newQty < $minimal_quantity)
-						return -1;
+					return $this->deleteProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
+				elseif ($newQty < $minimalQuantity)
+					return -1;
 				else
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'cart_product`
-					SET `quantity` = '.$qty.'
-					WHERE `id_product` = '.(int)($id_product).
-					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.(int)($id_product_attribute) : '').'
-					AND `id_cart` = '.(int)($this->id));
+					SET `quantity` = `quantity` '.$qty.'
+					WHERE `id_product` = '.(int)$id_product.
+					(!empty($id_product_attribute) ? ' AND `id_product_attribute` = '.(int)$id_product_attribute : '').'
+					AND `id_cart` = '.(int)$this->id.'
+					LIMIT 1');
 			}
 
 			/* Add produt to the cart */
 			else
 			{
 				$result2 = Db::getInstance()->getRow('
-					SELECT '.($id_product_attribute ? 'pa' : 'p').'.`quantity`, p.`out_of_stock`
-					FROM `'._DB_PREFIX_.'product` p
-					'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON p.`id_product` = pa.`id_product`' : '').'
-					WHERE p.`id_product` = '.(int)($id_product).
-					($id_product_attribute != NULL ? ' AND `id_product_attribute` = '.(int)($id_product_attribute) : ''));
-				$productQty = (int)($result2['quantity']);
+				SELECT '.(!empty($id_product_attribute) ? 'pa' : 'p').'.`quantity`, p.`out_of_stock`
+				FROM `'._DB_PREFIX_.'product` p
+				'.(!empty($id_product_attribute) ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON p.`id_product` = pa.`id_product`' : '').'
+				WHERE p.`id_product` = '.(int)$id_product.
+				(!empty($id_product_attribute) ? ' AND `id_product_attribute` = '.(int)$id_product_attribute : ''));
 
-				if (!Product::isAvailableWhenOutOfStock((int)($result2['out_of_stock'])))
-						if ((int)($quantity) > $productQty)
-							return false;
+				if (!Product::isAvailableWhenOutOfStock((int)$result2['out_of_stock']))
+					if ((int)$quantity > $result2['quantity'])
+						return false;
 
-				if ($quantity < $minimal_quantity)
+				if ((int)$quantity < $minimalQuantity)
 					return -1;
-				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => (int)($id_product),
-				'id_product_attribute' => (int)($id_product_attribute), 'id_cart' => (int)($this->id),
-				'quantity' => (int)($quantity), 'date_add' => pSql(date('Y-m-d H:i:s'))), 'INSERT'))
+
+				if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'cart_product', array('id_product' => (int)$id_product,
+				'id_product_attribute' => (int)$id_product_attribute, 'id_cart' => (int)$this->id,
+				'quantity' => (int)$quantity, 'date_add' => date('Y-m-d H:i:s')), 'INSERT'))
 					return false;
 			}
 		}
 		// refresh cache of self::_products
 		$this->_products = $this->getProducts(true);
 		$this->update(true);
-		return $this->_updateCustomizationQuantity((int)($quantity), (int)($id_customization), (int)($id_product), (int)($id_product_attribute), $operator);
+		
+		if ($product->customizable)
+			return $this->_updateCustomizationQuantity((int)$quantity, (int)$id_customization, (int)$id_product, (int)$id_product_attribute, $operator);
+		else
+			return true;
 	}
 
 	/*
@@ -532,18 +538,20 @@ class CartCore extends ObjectModel
 		$textFields = $cookie->getFamily('textFields_'.(int)($id_product).'_');
 		/* Customization addition */
 		if (count($files) > 0 OR count($textFields) > 0)
-			return $this->_addCustomization((int)($id_product), (int)($id_product_attribute), $files, $textFields, (int)($quantity));
+			return $this->_addCustomization((int)$id_product, (int)$id_product_attribute, $files, $textFields, (int)$quantity);
 		/* Deletion */
-		if ((int)($id_customization) AND (int)($quantity) < 1)
-			return $this->_deleteCustomization((int)($id_customization), (int)($id_product), (int)($id_product_attribute));
+		if (!empty($id_customization) AND (int)($quantity) < 1)
+			return $this->_deleteCustomization((int)$id_customization, (int)$id_product, (int)$id_product_attribute);
 		/* Quantity update */
-		if (($result = Db::getInstance()->getRow('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization))) === false)
-			return true;
-		if (Db::getInstance()->NumRows())
+		if (!empty($id_customization))
 		{
-			if ($operator == 'down' AND (int)($result['quantity']) - (int)($quantity) < 1)
-				return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization));
-			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity` = `quantity` '.($operator == 'up' ? '+ ' : '- ').(int)($quantity).' WHERE `id_customization` = '.(int)($id_customization));
+			$result = Db::getInstance()->getRow('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)$id_customization);
+			if ($result AND Db::getInstance()->NumRows())
+			{
+				if ($operator == 'down' AND (int)($result['quantity']) - (int)($quantity) < 1)
+					return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)$id_customization);
+				return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity` = `quantity` '.($operator == 'up' ? '+ ' : '- ').(int)($quantity).' WHERE `id_customization` = '.(int)($id_customization));
+			}
 		}
 		// refresh cache of self::_products
 		$this->_products = $this->getProducts(true);

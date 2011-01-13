@@ -23,4 +23,4 @@
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
-*/ini_set('display_errors', 'On');include(dirname(__FILE__).'/../../../config/config.inc.php');include(dirname(__FILE__).'/../../../init.php');ini_set('display_errors', 'On');include(dirname(__FILE__).'/../treepodia.php');ini_set('display_errors', 'On');$treepodia = new Treepodia();$treepodia->generateXmlFlow();
+*/include(dirname(__FILE__).'/../../../config/config.inc.php');include(dirname(__FILE__).'/../../../init.php');include(dirname(__FILE__).'/../treepodia.php');$treepodia = new Treepodia();$treepodia->generateXmlFlow();
