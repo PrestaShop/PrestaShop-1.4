@@ -350,8 +350,29 @@ class AdminPerformance extends AdminTab
 			</fieldset>
 		</form>';
 
+		echo '
+		<fieldset style="margin-top:10px;">
+			<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
+			<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
+				<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but requires the PHP extension "mcrypt". If you change this configuration, all cookies will be reset.').'</p>
+				<label>'.$this->l('Algorithm').' </label>
+				<div class="margin-form">
+					<input type="radio" value="1" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_1" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? 'checked="checked"' : '').' />
+					<label class="t" for="PS_CIPHER_ALGORITHM_1">'.$this->l('Use Rijndael with mcrypt lib.').'</label>
+					<br />
+					<input type="radio" value="0" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_0" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? '' : 'checked="checked"').' />
+					<label class="t" for="PS_CIPHER_ALGORITHM_0">'.$this->l('Keep the custom BlowFish class.').'</label>
+				</div>
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitCiphering" class="button" />
+				</div>
+			</form>
+		</fieldset>
+		';
+		
 		$depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
-		echo '<fieldset style="margin-top: 10px;"><legend><img src="../img/admin/computer_key.png" /> '.$this->l('Caching').'</legend>
+		echo '<fieldset style="margin-top: 10px;">
+				<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Caching').'</legend>
 				<form action="'.$currentIndex.'&token='.Tools::getValue('token').'"  method="post">
 					<label>'.$this->l('Use cache:').' </label>
 					<div class="margin-form">
@@ -365,8 +386,7 @@ class AdminPerformance extends AdminTab
 					<div class="margin-form">
 						<select name="caching_system" id="caching_system">
 							<option value="Memcached" '.(_PS_CACHING_SYSTEM_ == 'Memcached' ? 'selected="selected"' : '' ).'>'.$this->l('Memcached').'</option>
-							<option value="CacheFS" '.(_PS_CACHING_SYSTEM_ == 'CacheFS' ? 'selected="selected"' : '' ).'>'.$this->l('File System').'</option>	
-							</option>
+							<option value="CacheFS" '.(_PS_CACHING_SYSTEM_ == 'CacheFS' ? 'selected="selected"' : '' ).'>'.$this->l('File System').'</option>
 						</select>
 					</div>
 					<div id="directory_depth">
@@ -383,27 +403,29 @@ class AdminPerformance extends AdminTab
 					<div class="margin-form">
 						<a id="addMemcachedServer" href="#" ><img src="../img/admin/add.gif" />'.$this->l('Add server').'</a>
 					</div>
-					<form id="formMemcachedServer" action="'.$currentIndex.'&token='.Tools::getValue('token').'" style="margin-top: 10px; display:none;" method="post">
-						<label>'.$this->l('IP Address:').' </label>
-						<div class="margin-form">
-							<input type="text" name="memcachedIp" />
-						</div>
-						<label>'.$this->l('Port:').' </label>
-						<div class="margin-form">
-							<input type="text" name="memcachedPort" value="11211" />
-						</div>
-						<label>'.$this->l('Weight:').' </label>
-						<div class="margin-form">
-							<input type="text" name="memcachedWeight" value="1" />
-						</div>
-						<div class="margin-form">
-							<input type="submit" value="'.$this->l('   Add Server   ').'" name="submitAddServer" class="button" />
-						</div>
-					</form>';
-					$servers = Memcached::getMemcachedServers();
-					if ($servers)					
-					{
-					echo '<div class="margin-form">
+					<div id="formMemcachedServer" style="margin-top: 10px; display:none;">
+						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
+							<label>'.$this->l('IP Address:').' </label>
+							<div class="margin-form">
+								<input type="text" name="memcachedIp" />
+							</div>
+							<label>'.$this->l('Port:').' </label>
+							<div class="margin-form">
+								<input type="text" name="memcachedPort" value="11211" />
+							</div>
+							<label>'.$this->l('Weight:').' </label>
+							<div class="margin-form">
+								<input type="text" name="memcachedWeight" value="1" />
+							</div>
+							<div class="margin-form">
+								<input type="submit" value="'.$this->l('   Add Server   ').'" name="submitAddServer" class="button" />
+							</div>
+						</form>
+					</div>';
+			$servers = Memcached::getMemcachedServers();
+			if ($servers)					
+			{
+				echo '<div class="margin-form">
 					<table style="width: 320px;" cellspacing="0" cellpadding="0" class="table">
 					<tr>
 						<th style="width: 20px; text-align: center">'.$this->l('Id').'</th>
@@ -412,31 +434,24 @@ class AdminPerformance extends AdminTab
 						<th style="width: 30px; text-align: right; font-weight:bold;">'.$this->l('Weight').'</th>
 						<th style="width: 20px; text-align: right;">&nbsp;</th>
 					</tr>';
-					foreach($servers AS $server)
-						echo '<tr><td>'.$server['id_memcached_server'].'</td><td>'.$server['ip'].'</td><td>'.$server['port'].'</td><td>'.$server['weight'].'</td>
-											<td><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&deleteMemcachedServer='.(int)$server['id_memcached_server'].'" ><img src="../img/admin/delete.gif" /></a></td></tr>';
-					echo '</table></div>';
-				}
-				echo '</div></fieldset>';
-				
+				foreach($servers AS $server)
+					echo '<tr>
+							<td>'.$server['id_memcached_server'].'</td>
+							<td>'.$server['ip'].'</td>
+							<td>'.$server['port'].'</td>
+							<td>'.$server['weight'].'</td>
+							<td>
+								<a href="'.$currentIndex.'&token='.Tools::getValue('token').'&deleteMemcachedServer='.(int)$server['id_memcached_server'].'" ><img src="../img/admin/delete.gif" /></a>
+							</td>
+						</tr>';
 				echo '
-				<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
-					<fieldset>
-						<legend><img src="../img/admin/computer_key.png" /> '.$this->l('Ciphering').'</legend>
-						<p>'.$this->l('Mcrypt is faster than our custom BlowFish class, but requires the PHP extension "mcrypt". If you change this configuration, all cookies will be reset.').'</p>
-						<label>'.$this->l('Algorithm').' </label>
-						<div class="margin-form">
-							<input type="radio" value="1" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_1" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? 'checked="checked"' : '').' />
-							<label class="t" for="PS_CIPHER_ALGORITHM_1">'.$this->l('Use Rijndael with mcrypt lib.').'</label>
-							<br />
-							<input type="radio" value="0" name="PS_CIPHER_ALGORITHM" id="PS_CIPHER_ALGORITHM_0" '.(Configuration::get('PS_CIPHER_ALGORITHM') ? '' : 'checked="checked"').' />
-							<label class="t" for="PS_CIPHER_ALGORITHM_0">'.$this->l('Keep the custom BlowFish class.').'</label>
-						</div>
-						<div class="margin-form">
-							<input type="submit" value="'.$this->l('   Save   ').'" name="submitCiphering" class="button" />
-						</div>
-					</fieldset>
-				</form>';
+					</table>
+				</div>';
+			}
+			echo '
+				</div>
+			</fieldset>
+			';
 	}
 }
 
