@@ -1314,7 +1314,7 @@ class ToolsCore
 	*
 	*/
 	static public function cccCss() {
-		global $css_files, $protocol;
+		global $css_files, $protocol_link;
 		//inits
 		$css_files_by_media = array();
 		$compressed_css_files = array();
@@ -1385,7 +1385,7 @@ class ToolsCore
 		foreach ($compressed_css_files as $media => $filename)
 		{
 			$url = str_replace(_PS_THEME_DIR_, _THEMES_DIR_._THEME_NAME_.'/', $filename);
-			$css_files[$protocol.Tools::getMediaServer($url).$url] = $media;
+			$css_files[$protocol_link.Tools::getMediaServer($url).$url] = $media;
 		}
 	}
 
@@ -1394,7 +1394,7 @@ class ToolsCore
 	*
 	*/
 	static public function cccJS() {
-		global $js_files, $protocol;
+		global $js_files, $protocol_link;
 		//inits
 		$compressed_js_files_not_found = array();
 		$js_files_infos = array();
@@ -1449,9 +1449,9 @@ class ToolsCore
 		}
 
 		// rebuild the original js_files array
-		//$css_files[$protocol.Tools::getMediaServer($url).$url] = $media;
+		//$css_files[$protocol_link.Tools::getMediaServer($url).$url] = $media;
 		$url = str_replace(_PS_ROOT_DIR_.'/', __PS_BASE_URI__, $compressed_js_path);
-		$js_files = array($protocol.Tools::getMediaServer($url).$url);
+		$js_files = array($protocol_link.Tools::getMediaServer($url).$url);
 	}
 
 	static public function getMediaServer($filename)
