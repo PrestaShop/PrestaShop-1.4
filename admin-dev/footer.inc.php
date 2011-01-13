@@ -38,7 +38,7 @@ echo '			</div>
 					| <a href="http://www.prestashop.com/forums/" target="_blank" class="footer_link">Forum</a>
 					| <a href="http://www.prestashop.com/en/contact_us/" target="_blank" class="footer_link">Contact</a>';
 					
-if ($cookie->id_lang == 2) echo ' | +33 (0)1.40.18.30.04';
+if (strtoupper(Language::getIsoById($cookie->id_lang)) == 'FR') echo ' | +33 (0)1.40.18.30.04';
 	
 echo '			</div>
 			</div>
