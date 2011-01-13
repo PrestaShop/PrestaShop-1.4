@@ -36,8 +36,11 @@ echo '			</div>
 				<div style="float:right;height:40px;margin-right:10px;line-height:38px;vertical-align:middle">
 					<a href="http://www.prestashop.com/bug_tracker/" target="_blank" class="footer_link">Bug Tracker</a>
 					| <a href="http://www.prestashop.com/forums/" target="_blank" class="footer_link">Forum</a>
-					| <a href="http://www.prestashop.com/en/contact_us/" target="_blank" class="footer_link">Contact</a>
-				</div>
+					| <a href="http://www.prestashop.com/en/contact_us/" target="_blank" class="footer_link">Contact</a>';
+					
+if ($cookie->id_lang == 2) echo ' | +33 (0)1.40.18.30.04';
+	
+echo '			</div>
 			</div>
 		</div>
 	</div>
