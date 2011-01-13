@@ -50,7 +50,7 @@ class LocalizationPackCore
 			$res &= $this->_installCurrencies($xml);
 			return ($this->_installUnits($xml) AND $res);
 		}
-		foreach ($selection as $selected)
+		foreach ($selection AS $selected)
 			if (!Validate::isLocalizationPackSelection($selected) OR !$this->{'_install'.ucfirst($selected)}($xml))
 				return false;
 		return true;
@@ -59,7 +59,7 @@ class LocalizationPackCore
 	private function _installStates($xml)
 	{
 		if (isset($xml->states->state))
-			foreach ($xml->states->state as $data)
+			foreach ($xml->states->state AS $data)
 			{
 				$attributes = $data->attributes();
 				if (State::getIdByName($attributes['name']))
@@ -98,7 +98,7 @@ class LocalizationPackCore
 		{
 		    $available_behavior = array(PS_PRODUCT_TAX, PS_STATE_TAX, PS_BOTH_TAX);
 		    $assoc_taxes = array();
-			foreach ($xml->taxes->tax as $taxData)
+			foreach ($xml->taxes->tax AS $taxData)
 			{
 				$attributes = $taxData->attributes();
 				if (Tax::getTaxIdByRate($attributes['rate']))
@@ -190,7 +190,7 @@ class LocalizationPackCore
 			}
 			$isoCodeSource = strval($feed->source['iso_code']);
 			$defaultCurrency = Currency::refreshCurrenciesGetDefault($feed->list, $isoCodeSource, $defaultCurrency);
-			foreach ($xml->currencies->currency as $data)
+			foreach ($xml->currencies->currency AS $data)
 			{
 				$attributes = $data->attributes();
 				if(Currency::exists($attributes['iso_code']))
@@ -227,16 +227,15 @@ class LocalizationPackCore
 	{
 		$attributes = array();
 		if (isset($xml->languages->language))
-			foreach ($xml->languages->language as $data)
+			foreach ($xml->languages->language AS $data)
 			{
 				$attributes = $data->attributes();
-				if (Language::getIdByIso($lang['iso_code']))
+				if (Language::getIdByIso($attributes['iso_code']))
 					continue;
 				$native_lang = Language::getLanguages();
 				$native_iso_code = array();
-				foreach ($native_lang as $lang){
+				foreach ($native_lang AS $lang)
 					$native_iso_code[] = $lang['iso_code'];
-				}
 				if ((in_array((string)$attributes['iso_code'], $native_iso_code) AND !$install_mode) OR !in_array((string)$attributes['iso_code'], $native_iso_code))
 				{
 					if(@fsockopen('www.prestashop.com', 80, $errno = 0, $errstr = '', 10))
@@ -273,7 +272,7 @@ class LocalizationPackCore
 	{
 		$varNames = array('weight' => 'PS_WEIGHT_UNIT', 'volume' => 'PS_VOLUME_UNIT', 'short_distance' => 'PS_SHORT_DISTANCE_UNIT', 'base_distance' => 'PS_BASE_DISTANCE_UNIT', 'long_distance' => 'PS_LONG_DISTANCE_UNIT');
 		if (isset($xml->units->unit))
-			foreach ($xml->units->unit as $data)
+			foreach ($xml->units->unit AS $data)
 			{
 				$attributes = $data->attributes();
 				if (!isset($varNames[strval($attributes['type'])]))
