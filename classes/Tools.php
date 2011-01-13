@@ -1208,41 +1208,38 @@ class ToolsCore
 		return false;
 	}
 
-	static public function minifyCSS ($css_content, $fileuri = false)
+	static public function minifyCSS($css_content, $fileuri = false)
 	{
 		global $current_css_file;
-		$current_css_file = $fileuri;
 
+		$current_css_file = $fileuri;
 		if (strlen($css_content) > 0)
 		{
-
-			$css_content = preg_replace('#/\*.*?\*/#s','',$css_content);
-
-			$css_content = preg_replace_callback('#url\(\'?([^\)\']*)\'?\)#s',array('Tools', 'replaceByAbsoluteURL'),$css_content);
-
-			/* url('../img/sitemap-top.gif') */
+			$css_content = preg_replace('#/\*.*?\*/#s', '', $css_content);
+			$css_content = preg_replace_callback('#url\(\'?([^\)\']*)\'?\)#s',array('Tools', 'replaceByAbsoluteURL'), $css_content);
 
 			$css_content = preg_replace('#\s+#',' ',$css_content);
-			$css_content = str_replace("\t",'',$css_content);
-			$css_content = str_replace("\n",'',$css_content);
-			//$css_content = str_replace('}',"}\n",$css_content);
+			$css_content = str_replace("\t", '', $css_content);
+			$css_content = str_replace("\n", '', $css_content);
+			//$css_content = str_replace('}', "}\n", $css_content);
 
-			$css_content = str_replace('; ',';',$css_content);
-			$css_content = str_replace(': ',':',$css_content);
-			$css_content = str_replace(' {','{',$css_content);
-			$css_content = str_replace('{ ','{',$css_content);
-			$css_content = str_replace(', ',',',$css_content);
-			$css_content = str_replace('} ','}',$css_content);
-			$css_content = str_replace(' }','}',$css_content);
-			$css_content = str_replace(';}','}',$css_content);
-			$css_content = str_replace(':0px',':0',$css_content);
-			$css_content = str_replace(' 0px',' 0',$css_content);
-			$css_content = str_replace(':0em',':0',$css_content);
-			$css_content = str_replace(' 0em',' 0',$css_content);
-			$css_content = str_replace(':0pt',':0',$css_content);
-			$css_content = str_replace(' 0pt',' 0',$css_content);
-			$css_content = str_replace(':0%',':0',$css_content);
-			$css_content = str_replace(' 0%',' 0',$css_content);
+			$css_content = str_replace('; ', ';', $css_content);
+			$css_content = str_replace(': ', ':', $css_content);
+			$css_content = str_replace(' {', '{', $css_content);
+			$css_content = str_replace('{ ', '{', $css_content);
+			$css_content = str_replace(', ', ',', $css_content);
+			$css_content = str_replace('} ', '}', $css_content);
+			$css_content = str_replace(' }', '}', $css_content);
+			$css_content = str_replace(';}', '}', $css_content);
+			$css_content = str_replace(':0px', ':0', $css_content);
+			$css_content = str_replace(' 0px', ' 0', $css_content);
+			$css_content = str_replace(':0em', ':0', $css_content);
+			$css_content = str_replace(' 0em', ' 0', $css_content);
+			$css_content = str_replace(':0pt', ':0', $css_content);
+			$css_content = str_replace(' 0pt', ' 0', $css_content);
+			$css_content = str_replace(':0%', ':0', $css_content);
+			$css_content = str_replace(' 0%', ' 0', $css_content);
+
 			return trim($css_content);
 		}
 		return false;
@@ -1250,12 +1247,12 @@ class ToolsCore
 
 	static public function replaceByAbsoluteURL($matches)
 	{
-		global $current_css_file, $protocol;
-		//$protocol.Tools::getMediaServer($url).$url
+		global $current_css_file, $protocol_link;
+
 		if (array_key_exists(1, $matches))
 		{
 			$tmp = dirname($current_css_file).'/'.$matches[1];
-			return 'url(\''.$protocol.Tools::getMediaServer($tmp).$tmp.'\')';
+			return 'url(\''.$protocol_link.Tools::getMediaServer($tmp).$tmp.'\')';
 		}
 		return false;
 	}

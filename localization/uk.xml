@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <localizationPack name="United Kingdom" version="1.0">
 	<currencies>
-		<currency name="Pound" iso_code="GBP" iso_code_num="826" sign="£" blank="1" conversion_rate="0.865759" format="2" decimals="1" />
+		<currency name="Pound" iso_code="GBP" iso_code_num="826" sign="£" blank="1" conversion_rate="0.833100" format="2" decimals="1" />
 	</currencies>
 	<taxes>
-		<tax id="1" name="VAT UK 17.5%" rate="17.5" />
+		<tax id="1" name="VAT UK 20%" rate="20" />
 		<tax id="2" name="VAT UK 5%" rate="5" />
 		
-		<taxRulesGroup name="UK Standard Rate (17.5%)">
+		<taxRulesGroup name="UK Standard Rate (20%)">
 			<taxRule iso_code_country="be" id_tax="1" />
 			<taxRule iso_code_country="bg" id_tax="1" />
 			<taxRule iso_code_country="cz" id_tax="1" />

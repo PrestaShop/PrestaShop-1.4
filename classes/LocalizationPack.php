@@ -237,7 +237,6 @@ class LocalizationPackCore
 				foreach ($native_lang AS $lang)
 					$native_iso_code[] = $lang['iso_code'];
 				if ((in_array((string)$attributes['iso_code'], $native_iso_code) AND !$install_mode) OR !in_array((string)$attributes['iso_code'], $native_iso_code))
-				{
 					if(@fsockopen('www.prestashop.com', 80, $errno = 0, $errstr = '', 10))
 					{
 						if ($lang_pack = json_decode(@file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$attributes['iso_code'])))
@@ -259,7 +258,6 @@ class LocalizationPackCore
 					}
 					else
 						$this->_errors[] = Tools::displayError('Archive cannot be downloaded from prestashop.com');
-				}
 			}
 		if (!sizeof($this->_errors) AND $install_mode AND isset($attributes['iso_code']))
 		{
