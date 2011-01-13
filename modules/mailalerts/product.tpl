@@ -23,13 +23,6 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 *}
-
-<!-- MODULE MailAlerts -->
-{if isset($email) AND $email}
-	<input type="text" id="oos_customer_email" name="customer_email" size="20" value="your@email.com" class="mailalerts_oos_email" onclick="clearText();" /><br />
-{/if}
-<a href="#" onclick="return addNotification();" id="mailalert_link">{l s='Notify me when available' mod='mailalerts'}</a>
-<span id="oos_customer_email_result" style="display:none;"></span>
 <script type="text/javascript">{literal}
 // <![CDATA[
 oosHookJsCodeFunctions.push('oosHookJsCodeMailAlert');
@@ -78,5 +71,20 @@ function  addNotification() {
 	return false;
 }{/literal}
 //]]>
+$(document).ready(function() {
+	$('#oos_customer_email').bind('keypress', function(e) {
+		if(e.keyCode == 13) 
+		{
+			addNotification();
+			return false;
+		}
+	});
+});
 </script>
+<!-- MODULE MailAlerts -->
+{if isset($email) AND $email}
+	<input type="text" id="oos_customer_email" name="customer_email" size="20" value="your@email.com" class="mailalerts_oos_email" onclick="clearText();" /><br />
+{/if}
+<a href="#" onclick="return addNotification();" id="mailalert_link">{l s='Notify me when available' mod='mailalerts'}</a>
+<span id="oos_customer_email_result" style="display:none;"></span>
 <!-- END : MODULE MailAlerts -->
