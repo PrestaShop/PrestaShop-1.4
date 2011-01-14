@@ -246,14 +246,10 @@ class LanguageCore extends ObjectModel
 		if (!$check OR ($check AND (string)$iso_from != 'en'))
 		{
 			$files_theme[$tPath_from.'lang/'.(string)$iso_from.'.php'] = ($copy ? $tPath_to.'lang/'.(string)$iso_to.'.php' : ++$number);
-			$module_theme_files = scandir($tPath_from.'modules/');
+			$module_theme_files = (file_exists($tPath_from.'modules/') ? scandir($tPath_from.'modules/') : array());
 			foreach ($module_theme_files as $module)
-			{
 				if ($module !== '.' AND $module != '..' AND $module !== '.svn' AND file_exists($tPath_from.'modules/'.$module.'/'.(string)$iso_from.'.php'))
-				{
 					$files_theme[$tPath_from.'modules/'.$module.'/'.(string)$iso_from.'.php'] = ($copy ? $tPath_to.'modules/'.$module.'/'.(string)$iso_to.'.php' : ++$number);
-				}
-			}
 		}
 		if ($select == 'theme')
 			return $files_theme;
