@@ -82,10 +82,13 @@ function smartyTranslate($params, &$smarty)
 			$translationsFile = _PS_MODULE_DIR_.$params['mod'].'/'.$iso.'.php';
 			$modKey = '<{'.$params['mod'].'}prestashop>'.$key;
 		}
-
+		
+		if(!is_array($_MODULES))
+			$_MODULES = array();
 		if (@include_once($translationsFile))
-			$_MODULES = array_merge($_MODULES, $_MODULE);
-
+			if(is_array($_MODULE))
+				$_MODULES = array_merge($_MODULES, $_MODULE);
+		
 		$msg = (is_array($_MODULES) AND key_exists($modKey, $_MODULES)) ? ($params['js'] ? addslashes($_MODULES[$modKey]) : stripslashes($_MODULES[$modKey])) : false;
 	}
 	if (!$msg)
