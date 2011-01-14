@@ -258,7 +258,6 @@ class MailAlerts extends Module
 				'{last_qty}' => (int)(Configuration::get('MA_LAST_QTIES')),
 				'{product}' => strval($params['product']['name']).(isset($params['product']['attributes_small']) ? ' '.$params['product']['attributes_small'] : ''));
 			$id_lang = (is_object($cookie) AND isset($cookie->id_lang)) ?  (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
-				
 			$iso = Language::getIsoById((int)$id_lang);
 			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
 				Mail::Send((int)(Configuration::get('PS_LANG_DEFAULT')), 'productoutofstock', $this->l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
@@ -289,6 +288,8 @@ class MailAlerts extends Module
 	public function sendCustomerAlert($id_product, $id_product_attribute)
 	{
 		global $cookie, $link;
+
+		$link = new Link();
 		
 		$customers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT id_customer, customer_email
@@ -314,7 +315,9 @@ class MailAlerts extends Module
 				$customer_email = $cust['customer_email'];
 				$customer_id = 0;
 			}
-			$iso = Language::getIsoById((int)($cookie->id_lang));
+			$id_lang = (is_object($cookie) AND isset($cookie->id_lang)) ?  (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
+			$iso = Language::getIsoById((int)$id_lang);
+			
 			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.html'))
 				Mail::Send((int)(Configuration::get('PS_LANG_DEFAULT')), 'customer_qty', Mail::l('Product available'), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			if ($customer_id)
