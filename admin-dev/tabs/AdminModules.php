@@ -631,88 +631,89 @@ class AdminModules extends AdminTab
 		 </script>';
 		if (!empty($orderModule))
 		{
-		
-		/* Browse modules by tab type */
-		foreach ($orderModule AS $tab => $tabModule)
-		{
-			echo '
-			<div id="'.$tab.'" class="header_module">
-			<div class="nbr_module">'.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</div>
-				<a class="header_module_toggle" id="'.$tab.'" href="modgo_'.$tab.'" style="margin-left: 5px;">
-					<span style="padding-right:0.5em">
-					<img class="header_module_img" id="'.$tab.'_img" src="../img/admin/more.png" alt="" />
-					</span>'.$this->listTabModules[$tab].'</a> 
-			</div>
-			<div id="'.$tab.'_content" class="tab_module_content" style="display:none;border:solid 1px #CCC">';
-			/* Display modules for each tab type */
-			foreach ($tabModule as $module)
+			/* Browse modules by tab type */
+			foreach ($orderModule AS $tab => $tabModule)
 			{
-				echo '<div id="modgo_'.$module->name.'">';
-				if ($module->id)
-				{
-					$img = '<img src="../img/admin/module_install.png" alt="'.$this->l('Module enabled').'" title="'.$this->l('Module enabled').'" />';
-					if ($module->warning)
-						$img = '<img src="../img/admin/module_warning.png" alt="'.$this->l('Module installed but with warnings').'" title="'.$this->l('Module installed but with warnings').'" />';
-					if (!$module->active)
-						$img = '<img src="../img/admin/module_disabled.png" alt="'.$this->l('Module disabled').'" title="'.$this->l('Module disabled').'" />';
-				} else
-					$img = '<img src="../img/admin/module_notinstall.png" alt="'.$this->l('Module not installed').'" title="'.$this->l('Module not installed').'" />';
-				echo '<table style="width:100%" cellpadding="0" cellspacing="0" >
-				<tr'.($irow % 2 ? ' class="alt_row"' : '').' style="height: 42px;">
-					<td style="padding-right: 10px;padding-left:10px;width:30px">
-						<input type="checkbox" name="modules" value="'.urlencode($module->name).'" '.(empty($module->confirmUninstall) ? 'rel="false"' : 'rel="'.addslashes($module->confirmUninstall).'"').' />
-					</td>
-					<td style="padding:2px 4px 2px 10px;width:500px"><img src="../modules/'.$module->name.'/logo.gif" alt="" /> <b>'.stripslashes($module->displayName).'</b>'.($module->version ? ' v'.$module->version.(strpos($module->version, '.') !== false ? '' : '.0') : '').'<br />'.stripslashes($module->description).'</td>
-					<td rowspan="2">';
-					if (Tools::getValue('module_name') == $module->name)
-						$this->displayConf();
-					echo '</td>
-					<td class="center" style="width:60px" rowspan="2">';
-				if ($module->id)
-					echo '<a href="'.$currentIndex.'&token='.$this->token.'&module_name='.$module->name.'&'.($module->active ? 'desactive' : 'active').'">';
-				echo $img;
-				if ($module->id)
-					'</a>';
 				echo '
-					</td>
-					<td class="center" width="120" rowspan="2">'.((!$module->id)
-					? '<input type="button" class="button small" name="Install" value="'.$this->l('Install').'"
-					onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'">'
-					: '<input type="button" class="button small" name="Uninstall" value="'.$this->l('Uninstall').'"
-					onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'">').'</td>
-					
-				</tr>
-				<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
-					<td style="padding-left:50px;padding-bottom:5px;padding-top:5px" colspan="2">'.$this->displayOptions($module).'</td>
-				</tr>
-				</table>
-				</div>';
+				<div id="'.$tab.'" class="header_module">
+				<div class="nbr_module">'.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</div>
+					<a class="header_module_toggle" id="'.$tab.'" href="modgo_'.$tab.'" style="margin-left: 5px;">
+						<span style="padding-right:0.5em">
+						<img class="header_module_img" id="'.$tab.'_img" src="../img/admin/more.png" alt="" />
+						</span>'.$this->listTabModules[$tab].'</a> 
+				</div>
+				<div id="'.$tab.'_content" class="tab_module_content" style="display:none;border:solid 1px #CCC">';
+				/* Display modules for each tab type */
+				foreach ($tabModule as $module)
+				{
+					echo '<div id="modgo_'.$module->name.'">';
+					if ($module->id)
+					{
+						$img = '<img src="../img/admin/module_install.png" alt="'.$this->l('Module enabled').'" title="'.$this->l('Module enabled').'" />';
+						if ($module->warning)
+							$img = '<img src="../img/admin/module_warning.png" alt="'.$this->l('Module installed but with warnings').'" title="'.$this->l('Module installed but with warnings').'" />';
+						if (!$module->active)
+							$img = '<img src="../img/admin/module_disabled.png" alt="'.$this->l('Module disabled').'" title="'.$this->l('Module disabled').'" />';
+					} else
+						$img = '<img src="../img/admin/module_notinstall.png" alt="'.$this->l('Module not installed').'" title="'.$this->l('Module not installed').'" />';
+					echo '<table style="width:100%" cellpadding="0" cellspacing="0" >
+					<tr'.($irow % 2 ? ' class="alt_row"' : '').' style="height: 42px;">
+						<td style="padding-right: 10px;padding-left:10px;width:30px">
+							<input type="checkbox" name="modules" value="'.urlencode($module->name).'" '.(empty($module->confirmUninstall) ? 'rel="false"' : 'rel="'.addslashes($module->confirmUninstall).'"').' />
+						</td>
+						<td style="padding:2px 4px 2px 10px;width:500px"><img src="../modules/'.$module->name.'/logo.gif" alt="" /> <b>'.stripslashes($module->displayName).'</b>'.($module->version ? ' v'.$module->version.(strpos($module->version, '.') !== false ? '' : '.0') : '').'<br />'.stripslashes($module->description).'</td>
+						<td rowspan="2">';
+						if (Tools::getValue('module_name') == $module->name)
+							$this->displayConf();
+						echo '</td>
+						<td class="center" style="width:60px" rowspan="2">';
+					if ($module->id)
+						echo '<a href="'.$currentIndex.'&token='.$this->token.'&module_name='.$module->name.'&'.($module->active ? 'desactive' : 'active').'">';
+					echo $img;
+					if ($module->id)
+						'</a>';
+					echo '
+						</td>
+						<td class="center" width="120" rowspan="2">'.((!$module->id)
+						? '<input type="button" class="button small" name="Install" value="'.$this->l('Install').'"
+						onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'">'
+						: '<input type="button" class="button small" name="Uninstall" value="'.$this->l('Uninstall').'"
+						onclick="'.(empty($module->confirmUninstall) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$currentIndex.'&uninstall='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'">').'</td>
+						
+					</tr>
+					<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
+						<td style="padding-left:50px;padding-bottom:5px;padding-top:5px" colspan="2">'.$this->displayOptions($module).'</td>
+					</tr>
+					</table>
+					</div>';
+				}
+				echo '</div>';
 			}
-			echo '</div>';
-		}
-		echo '
-			<div style="margin-top: 12px; width:600px;">
-				<input type="button" class="button big" value="'.$this->l('Install the selection').'" onclick="modules_management(\'install\')"/>
-				<input type="button" class="button big" value="'.$this->l('Uninstall the selection').'" onclick="modules_management(\'uninstall\')" />
-			</div>
-			<br />
-			<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
-				<tr style="height:35px;background-color:#EEEEEE">
-					<td><strong>'.$this->l('Icon legend').' : </strong></td>
-					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_install.png" />&nbsp;&nbsp;'.$this->l('Module installed and enabled').'</td>
-					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_disabled.png" />&nbsp;&nbsp;'.$this->l('Module installed but disabled').'</td>
-					<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but with warnings').'</td>
-					<td style="text-align:center"><img src="../img/admin/module_notinstall.png" />&nbsp;&nbsp;'.$this->l('Module not installed').'</td>
-				</tr>
-			</table>
-		<div style="clear:both">&nbsp;</div>';
+			echo '
+				<div style="margin-top: 12px; width:600px;">
+					<input type="button" class="button big" value="'.$this->l('Install the selection').'" onclick="modules_management(\'install\')"/>
+					<input type="button" class="button big" value="'.$this->l('Uninstall the selection').'" onclick="modules_management(\'uninstall\')" />
+				</div>
+				<br />
+				<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
+					<tr style="height:35px;background-color:#EEEEEE">
+						<td><strong>'.$this->l('Icon legend').' : </strong></td>
+						<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_install.png" />&nbsp;&nbsp;'.$this->l('Module installed and enabled').'</td>
+						<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_disabled.png" />&nbsp;&nbsp;'.$this->l('Module installed but disabled').'</td>
+						<td style="text-align:center;border-right:solid 1px gray"><img src="../img/admin/module_warning.png" />&nbsp;&nbsp;'.$this->l('Module installed but with warnings').'</td>
+						<td style="text-align:center"><img src="../img/admin/module_notinstall.png" />&nbsp;&nbsp;'.$this->l('Module not installed').'</td>
+					</tr>
+				</table>
+			<div style="clear:both">&nbsp;</div>';
 		}
 		else
-			echo '<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
+			echo '
+				<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
 					<tr>
 						<td align="center">'.$this->l('No module found').'</td>
 					</tr>
-				  </table>';
+				  </table>
+			';
 	}
 	
 	

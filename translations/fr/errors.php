@@ -338,6 +338,7 @@ $_ERRORS['3fe3a219f4e7b744a9e9630c403690d5'] = 'Erreur e-mail : le paramètre \"
 $_ERRORS['96ca181ec05c121eb5a283e4602b95e8'] = 'Erreur e-mail : le paramètre \"to\" est invalide';
 $_ERRORS['6fe79736522d66d8d94c5039eab2d7ff'] = 'Erreur e-mail : le sujet de l\'e-mail est invalide';
 $_ERRORS['5ada4a25dcd59dcb8b450cf001dd2a43'] = 'Erreur e-mail : le nom du template est invalide';
+$_ERRORS['ed2abcd316a7cdea51de1a8368b3d0db'] = 'une erreur s\'est produite lors de l\'envoi de l\'email';
 $_ERRORS['c5ca72578b226a935a38de0011debda2'] = 'une erreur s\'est produite lors de la mise à jour du panier';
 $_ERRORS['fc296b11997ad55a6dd1fe99c2d1ed0f'] = 'erreur lors de la création de l\'image supplémentaire';
 $_ERRORS['c0fb8d0229c0e534ea71bf1c4adf07cb'] = 'une erreur est survenue pendant l\'extraction du module (le fichier peut être corrompu)';

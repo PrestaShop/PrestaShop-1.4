@@ -72,7 +72,8 @@ class AdminSearchConf extends AdminPreferences
 		$cronUrl = Tools::getHttpHost(true, true).__PS_BASE_URI__.substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -strlen($currentFileName['0'])).'searchcron.php?full=1&token='.substr(_COOKIE_KEY_, 34, 8);
 		list($total, $indexed) = Db::getInstance()->getRow('SELECT COUNT(*) as "0", SUM(indexed) as "1" FROM '._DB_PREFIX_.'product');
 		echo '
-		<fieldset><legend>'.$this->l('Indexation').'</legend>
+		<fieldset>
+			<legend><img src="../img/admin/search.gif" alt="" /> '.$this->l('Indexation').'</legend>
 			'.$this->l('Indexed products:').' <b>'.(int)($indexed).' / '.(int)($total).'</b>.<br /><br />
 			-&gt; <a href="searchcron.php?token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Add missing products to index.').'</a><br />
 			-&gt; <a href="searchcron.php?full=1&token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Re-build entire index.').'</a><br /><br />

@@ -2421,7 +2421,7 @@ class AdminProducts extends AdminTab
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="unit_price" name="unit_price" type="text" value="'.$this->getFieldValue($obj, 'unit_price').'" onkeyup="this.value = this.value.replace(/,/g, \'.\'); unitPriceWithTax(\'unit\');"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <input size="6" maxlength="10" id="unity" name="unity" type="text" value="'.htmlentities($this->getFieldValue($obj, 'unity'), ENT_QUOTES, 'UTF-8').'" onkeyup="unitySecond();" onchange="unitySecond();"/>'.
 							(Configuration::get('PS_TAX') ? '<span style="margin-left:15px">'.$this->l('or').' '.($currency->format == 1 ? ' '.$currency->sign : '').'<span id="unit_price_with_tax">0.00</span>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <span id="unity_second">'.$this->getFieldValue($obj, 'unity').'</span> '.$this->l('with tax') : '').'</span>
-							<span style="margin-left:10px">
+							<p>'.$this->l('For example: 15 € per Kg').'</p>
 						</td>
 					</tr>
 					<tr>
@@ -2431,16 +2431,16 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr>
-						<td class="col-left">&nbsp;</td>
-						<td style="padding-bottom:5px;">
-							<div class="hint clear" style="display: block;">'.$this->l('You can define many discounts and specific price rules in the Prices tab').'</p>
-						</td>
-					</tr>
-					<tr>
 						<td class="col-left"><b>'.$this->l('Final retail price:').'</b></td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPrice" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').'<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'"> ('.$this->l('tax incl.').')</span>
 							<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'"> / '.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left">&nbsp;</td>
+						<td>
+							<div class="hint clear" style="display: block;width: 70%;">'.$this->l('You can define many discounts and specific price rules in the Prices tab').'</div>
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>';
@@ -2483,8 +2483,13 @@ class AdminProducts extends AdminTab
 					echo '
 						<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
 							<td style="padding-bottom:5px;"><b>'.$qty.'</b>
+						</tr>
+						<tr>
+							<td class="col-left">&nbsp;</td>
+							<td>
+								<div class="hint clear" style="display: block;width: 70%;">'.$this->l('You used combinations, for this reason you can\'t edit your stock quantity here, but into Combinations tab').'</div>
+							</td>
 						</tr>';
-
 				echo '
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>

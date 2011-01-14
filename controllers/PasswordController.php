@@ -56,15 +56,17 @@ class PasswordControllerCore extends FrontController
 						$this->errors[] = Tools::displayError('You can regenerate your password only each').' '.(int)($min_time).' '.Tools::displayError('minute(s)');
 					else
 					{	
-						Mail::Send((int)($this->cookie->id_lang), 'password_query', Mail::l('Password query confirmation'), 
+						if (Mail::Send((int)($this->cookie->id_lang), 'password_query', Mail::l('Password query confirmation'), 
 						array('{email}' => $customer->email, 
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname,
 							  '{path_token}' => $customer->secure_key,
 							  '{id_customer}' => (int)$customer->id), 
 						$customer->email, 
-						$customer->firstname.' '.$customer->lastname);
-						$this->smarty->assign(array('confirmation' => 2, 'email' => $customer->email));
+						$customer->firstname.' '.$customer->lastname))
+							$this->smarty->assign(array('confirmation' => 2, 'email' => $customer->email));
+						else
+							$this->errors[] = Tools::displayError('error occured when sending the email');
 					}
 				}
 			}
@@ -84,14 +86,16 @@ class PasswordControllerCore extends FrontController
 					$customer->last_passwd_gen = date('Y-m-d H:i:s', time());
 					if ($customer->update())
 					{
-						Mail::Send((int)($this->cookie->id_lang), 'password', Mail::l('Your password'), 
+						if (Mail::Send((int)($this->cookie->id_lang), 'password', Mail::l('Your password'), 
 						array('{email}' => $customer->email, 
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname, 
 							  '{passwd}' => $password), 
 						$customer->email, 
-						$customer->firstname.' '.$customer->lastname); 
-						$this->smarty->assign(array('confirmation' => 1, 'email' => $customer->email));
+						$customer->firstname.' '.$customer->lastname)) 
+							$this->smarty->assign(array('confirmation' => 1, 'email' => $customer->email));
+						else
+							$this->errors[] = Tools::displayError('error occured when sending the email');
 					}
 					else
 						$this->errors[] = Tools::displayError('error with your account and your new password cannot be sent to your e-mail; please report your problem using the contact form');
