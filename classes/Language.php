@@ -135,15 +135,15 @@ class LanguageCore extends ObjectModel
 		
 		$copy = ($iso_to AND $theme_to) ? true : false;
 		
-		$lPath_from = _PS_TRANSLATIONS_DIR_.strval($iso_from).'/';
-		$tPath_from = _PS_ROOT_DIR_.'/themes/'.strval($theme_from).'/lang/';
-		$mPath_from = _PS_MAIL_DIR_.strval($iso_from).'/';
+		$lPath_from = _PS_TRANSLATIONS_DIR_.(string)$iso_from.'/';
+		$tPath_from = _PS_ROOT_DIR_.'/themes/'.(string)$theme_from.'/';
+		$mPath_from = _PS_MAIL_DIR_.(string)$iso_from.'/';
 		
 		if ($copy)
 		{
-			$lPath_to = _PS_TRANSLATIONS_DIR_.strval($iso_to).'/';
-			$tPath_to = _PS_ROOT_DIR_.'/themes/'.strval($theme_to).'/lang/';
-			$mPath_to = _PS_MAIL_DIR_.strval($iso_to).'/';
+			$lPath_to = _PS_TRANSLATIONS_DIR_.(string)$iso_to.'/';
+			$tPath_to = _PS_ROOT_DIR_.'/themes/'.(string)$theme_to.'/';
+			$mPath_to = _PS_MAIL_DIR_.(string)$iso_to.'/';
 		}
 		
 		$lFiles = array('admin'.'.php', 'errors'.'.php', 'fields'.'.php', 'pdf'.'.php');
@@ -187,55 +187,77 @@ class LanguageCore extends ObjectModel
 		$files_mail = array();
 		$files_modules = array();
 		
-		// Translations files
-		if (!$check OR ($check AND strval($iso_from) != 'en'))
-			foreach ($lFiles as $file)
-				$files_tr[$lPath_from.$file] = ($copy ? $lPath_to.$file : ++$number);
-		if ($select == 'tr')
-			return $files_tr;
-		$files = array_merge($files, $files_tr);
+		
+		// When a copy is made from a theme in specific language 
+		// to an other theme for the same language,
+		// it's avoid to copy Translations, Mails files
+		// and modules files which are not override by theme.
+		if (!$copy OR $iso_from != $iso_to)
+		{
+			// Translations files
+			if (!$check OR ($check AND (string)$iso_from != 'en'))
+				foreach ($lFiles as $file)
+					$files_tr[$lPath_from.$file] = ($copy ? $lPath_to.$file : ++$number);
+			if ($select == 'tr')
+				return $files_tr;
+			$files = array_merge($files, $files_tr);
+			
+			// Mail files
+			if (!$check OR ($check AND (string)$iso_from != 'en'))
+				$files_mail[$mPath_from.'lang.php'] = ($copy ? $mPath_to.'lang.php' : ++$number);
+			foreach ($mFiles as $file)
+				$files_mail[$mPath_from.$file] = ($copy ? $mPath_to.$file : ++$number);
+			if ($select == 'mail')
+				return $files_mail;
+			$files = array_merge($files, $files_mail);
+			
+			// Modules
+			if ($modules)
+			{
+				$modList = Module::getModulesDirOnDisk();
+				foreach ($modList as $k => $mod)
+				{
+					$modDir = _PS_MODULE_DIR_.$mod;
+					// Lang file
+					if (file_exists($modDir.'/'.(string)$iso_from.'.php'))
+						$files_modules[$modDir.'/'.(string)$iso_from.'.php'] = ($copy ? $modDir.'/'.(string)$iso_to.'.php' : ++$number);
+					// Mails files
+					$modMailDirFrom = $modDir.'/mails/'.(string)$iso_from;
+					$modMailDirTo = $modDir.'/mails/'.(string)$iso_to;
+					if (file_exists($modMailDirFrom))
+					{
+						$dirFiles = scandir($modMailDirFrom);
+						foreach ($dirFiles as $file)
+							if (file_exists($modMailDirFrom.'/'.$file) AND $file != '.' AND $file != '..' AND $file != '.svn')
+								$files_modules[$modMailDirFrom.'/'.$file] = ($copy ? $modMailDirTo.'/'.$file : ++$number);
+					}
+				}
+				if ($select == 'modules')
+					return $files_modules;
+				$files = array_merge($files, $files_modules);
+			}
+		}
+		else if ($select == 'mail' OR $select == 'tr')
+		{
+			return $files;
+		}
 		
 		// Theme files
-		if (!$check OR ($check AND strval($iso_from) != 'en'))
-			$files_theme[$tPath_from.strval($iso_from).'.php'] = ($copy ? $tPath_to.strval($iso_to).'.php' : ++$number);
+		if (!$check OR ($check AND (string)$iso_from != 'en'))
+		{
+			$files_theme[$tPath_from.'lang/'.(string)$iso_from.'.php'] = ($copy ? $tPath_to.'lang/'.(string)$iso_to.'.php' : ++$number);
+			$module_theme_files = scandir($tPath_from.'modules/');
+			foreach ($module_theme_files as $module)
+			{
+				if ($module !== '.' AND $module != '..' AND $module !== '.svn' AND file_exists($tPath_from.'modules/'.$module.'/'.(string)$iso_from.'.php'))
+				{
+					$files_theme[$tPath_from.'modules/'.$module.'/'.(string)$iso_from.'.php'] = ($copy ? $tPath_to.'modules/'.$module.'/'.(string)$iso_to.'.php' : ++$number);
+				}
+			}
+		}
 		if ($select == 'theme')
 			return $files_theme;
 		$files = array_merge($files, $files_theme);
-		
-		// Mail files
-		if (!$check OR ($check AND strval($iso_from) != 'en'))
-			$files_mail[$mPath_from.'lang.php'] = ($copy ? $mPath_to.'lang.php' : ++$number);
-		foreach ($mFiles as $file)
-			$files_mail[$mPath_from.$file] = ($copy ? $mPath_to.$file : ++$number);
-		if ($select == 'mail')
-			return $files_mail;
-		$files = array_merge($files, $files_mail);
-
-		// Modules
-		if ($modules)
-		{
-			$modList = Module::getModulesDirOnDisk();
-			foreach ($modList as $k => $mod)
-			{
-				// Lang file
-				$modDir = _PS_MODULE_DIR_.$mod;
-				if (file_exists($modDir.'/'.strval($iso_from).'.php'))
-					$files_modules[$modDir.'/'.strval($iso_from).'.php'] = ($copy ? $modDir.'/'.strval($iso_to).'.php' : ++$number);
-				// Mails files
-				$modMailDirFrom = $modDir.'/mails/'.strval($iso_from);
-				$modMailDirTo = $modDir.'/mails/'.strval($iso_to);
-				if (file_exists($modMailDirFrom))
-				{
-					$dirFiles = scandir($modMailDirFrom);
-					foreach ($dirFiles as $file)
-						if (file_exists($modMailDirFrom.'/'.$file) AND $file != '.' AND $file != '..' AND $file != '.svn')
-							$files_modules[$modMailDirFrom.'/'.$file] = ($copy ? $modMailDirTo.'/'.$file : ++$number);
-				}
-			}
-			if ($select == 'modules')
-				return $files_modules;
-			$files = array_merge($files, $files_modules);
-		}
 		
 		// Return
 		return $files;
