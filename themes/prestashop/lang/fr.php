@@ -340,6 +340,7 @@ $_LANG['order-detail_cb5e100e5a9a3e7f6d1fd97512215282'] = 'erreur';
 $_LANG['order-detail_37c06f5486d3068a0a9604552c7e081f'] = 'Ajouter un message :';
 $_LANG['order-detail_78fe61e7da6ceb621679249401fbfaee'] = 'Si vous voulez nous laisser un message à propos de votre commande, merci de le rédiger ci-dessous.';
 $_LANG['order-detail_94966d90747b97d1f0f206c98a8b1ac3'] = 'Envoyer';
+$_LANG['order-detail_a9979df9e349275e2d86f7af03e24d14'] = 'Vous ne pouvez pas faire de retour de marchandise avec un compte invité';
 $_LANG['order-follow_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mon compte';
 $_LANG['order-follow_bfc23574a242be4531bcb29877ac1d8a'] = 'Retour produits';
 $_LANG['order-follow_2e99578f8bd14385bc5bcc2608e7b938'] = 'Vous n\'avez pas assez de produits pour générer un autre retour avec cette quantité !';
