@@ -112,7 +112,7 @@ class TaxRulesGroupCore extends ObjectModel
 	    FROM `'._DB_PREFIX_.'tax_rules_group` rg
    	    LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.`id_tax_rules_group` = rg.`id_tax_rules_group`)
 	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
-	    WHERE tr.`id_country` = '.(int)$id_country
+	    WHERE tr.`id_country` = '.(int)$id_country.' AND tr.`id_state` = 0'
 	    );
 
 	    $res = array();
