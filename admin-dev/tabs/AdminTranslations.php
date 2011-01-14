@@ -720,9 +720,12 @@ class AdminTranslations extends AdminTab
 					$arr_files = $this->getAllModuleFiles($modules, _PS_MODULE_DIR_, $lang, true);
 					$arr_find_and_write = array_merge($arr_find_and_write, $arr_files);
 					
-					$modules = scandir(_PS_THEME_DIR_.'/modules/');
-					$arr_files = $this->getAllModuleFiles($modules, _PS_THEME_DIR_.'modules/', $lang);
-					$arr_find_and_write = array_merge($arr_find_and_write, $arr_files);
+					if(file_exists(_PS_THEME_DIR_.'/modules/'))
+					{
+						$modules = scandir(_PS_THEME_DIR_.'/modules/');
+						$arr_files = $this->getAllModuleFiles($modules, _PS_THEME_DIR_.'modules/', $lang);
+						$arr_find_and_write = array_merge($arr_find_and_write, $arr_files);
+					}
 					
 					foreach ($arr_find_and_write as $key=>$value)
 						$this->findAndWriteTranslationsIntoFile($value['file_name'], $value['files'], $value['theme'], $value['module'], $value['dir']);
@@ -1760,10 +1763,12 @@ class AdminTranslations extends AdminTab
 			$arr_files = $this->getAllModuleFiles($modules, _PS_MODULE_DIR_, $lang, true);
 			$arr_find_and_fill = array_merge($arr_find_and_fill, $arr_files);
 			
-			$modules = scandir(_PS_THEME_DIR_.'/modules/');
-			$arr_files = $this->getAllModuleFiles($modules, _PS_THEME_DIR_.'modules/', $lang);
-			$arr_find_and_fill = array_merge($arr_find_and_fill, $arr_files);
-			
+			if(file_exists(_PS_THEME_DIR_.'/modules/'))
+			{
+				$modules = scandir(_PS_THEME_DIR_.'/modules/');
+				$arr_files = $this->getAllModuleFiles($modules, _PS_THEME_DIR_.'modules/', $lang);
+				$arr_find_and_fill = array_merge($arr_find_and_fill, $arr_files);
+			}
 			foreach ($arr_find_and_fill as $value)
 				$this->findAndFillTranslations($value['files'], $value['theme'], $value['module'], $value['dir'], $lang);
 			
