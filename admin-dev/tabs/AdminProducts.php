@@ -2484,7 +2484,9 @@ class AdminProducts extends AdminTab
 						<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
 							<td style="padding-bottom:5px;"><b>'.$qty.'</b>
 						</tr>
-						<tr>
+					';
+				if ($has_attribute)
+					echo '<tr>
 							<td class="col-left">&nbsp;</td>
 							<td>
 								<div class="hint clear" style="display: block;width: 70%;">'.$this->l('You used combinations, for this reason you can\'t edit your stock quantity here, but into Combinations tab').'</div>

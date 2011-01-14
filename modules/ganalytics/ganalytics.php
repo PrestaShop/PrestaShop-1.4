@@ -1,29 +1,4 @@
 <?php
-/*
-* 2007-2010 PrestaShop 
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Open Software License (OSL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/osl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author Prestashop SA <contact@prestashop.com>
-*  @copyright  2007-2010 Prestashop SA
-*  @version  Release: $Revision: 1.4 $
-*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
-*/
 
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
@@ -34,7 +9,7 @@ class GAnalytics extends Module
 	{
 	 	$this->name = 'ganalytics';
 	 	$this->tab = 'analytics_stats';
-	 	$this->version = '1.2';
+	 	$this->version = '1.3';
         $this->displayName = 'Google Analytics';
 		
 	 	parent::__construct();
@@ -47,7 +22,7 @@ class GAnalytics extends Module
 	
     function install()
     {
-        if (!parent::install() OR !$this->registerHook('footer') OR !$this->registerHook('orderConfirmation'))
+        if (!parent::install() OR !$this->registerHook('header') OR !$this->registerHook('orderConfirmation'))
 			return false;
 		return true;
     }
@@ -148,104 +123,83 @@ class GAnalytics extends Module
 		return $output;
 	}
 	
-	function hookFooter($params)
+	function hookHeader($params)
 	{
-		global $step;
-
-		/* hookOrderConfirmation() already send the sats bypass this step */
-		if(strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order-confirmation.php') === 0) return '';
-
-		/* Otherwise, create Google Analytics stats */
-		$output = '
-		<script type="text/javascript">
-			var gaJsHost = (("https:" == document.location.protocol ) ? "https://ssl." : "http://www.");
-			document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
-		</script>
-		<script type="text/javascript">
-		try {
-			var pageTracker = _gat._createTracker("'.Configuration::get('GANALYTICS_ID').'");
-			pageTracker._trackPageview('.
-        (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.(int)($step).'.html"' : '')
-        .');
-		}
-		catch(err) {}
-		</script>';
-		return $output;
+		global $step, $smarty;
+		
+		// hookOrderConfirmation() already send the sats bypass this step
+		if (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order-confirmation.php') === 0) return '';
+	
+		// Otherwise, create Google Analytics stats
+		$ganalytics_id = Configuration::get('GANALYTICS_ID');
+		$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.intval($step).'.html"' : '');
+		$smarty->assign('ganalytics_id', $ganalytics_id);
+		$smarty->assign('pageTrack', $pageTrack);
+		$smarty->assign('isOrder', false);
+		return $this->display(__FILE__, 'header.tpl');
 	}
 	
+	function hookFooter($params)
+	{
+		// for retrocompatibility
+		if (!$this->isRegisteredInHook('header')) $this->registerHook('header');
+		return ;
+	}
+
 	function hookOrderConfirmation($params)
 	{
-
-		/* Setting parameters */
+		global $smarty;
+		// Setting parameters
 		$parameters = Configuration::getMultiple(array('PS_LANG_DEFAULT'));
 		
 		$order = $params['objOrder'];
 		if (Validate::isLoadedObject($order))
 		{
-			$deliveryAddress = new Address((int)($order->id_address_delivery));
+			$deliveryAddress = new Address(intval($order->id_address_delivery));
 
 			$conversion_rate = 1;
 			if ($order->id_currency != Configuration::get('PS_CURRENCY_DEFAULT'))
 			{
-				$currency = new Currency((int)($order->id_currency));
-				$conversion_rate = (float)($currency->conversion_rate);
+				$currency = new Currency(intval($order->id_currency));
+				$conversion_rate = floatval($currency->conversion_rate);
 			}
 
-			/* Order general information */
-			$output = '
-      <script type="text/javascript">
-        var gaJsHost = (("https:" == document.location.protocol ) ? "https://ssl." : "http://www.");
-        document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
-      </script>
-      <script type="text/javascript">
-      try {
-        var pageTracker = _gat._createTracker("'.Configuration::get('GANALYTICS_ID').'");
-        pageTracker._trackPageview();
-        ';
+			// Order general information
+		$trans = array('id' => intval($order->id),				// order ID - required
+						'store' => htmlentities(Configuration::get('PS_SHOP_NAME')), // affiliation or store name
+						'total' => Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2),		// total - required
+						'tax' => '0', // tax
+						'shipping' => Tools::ps_round(floatval($order->total_shipping) / floatval($conversion_rate), 2),	// shipping
+						'city' => addslashes($deliveryAddress->city),		// city
+						'state' => '',				// state or province
+						'country' => addslashes($deliveryAddress->country) // country
+						);
 
-
-			/* Order information */
-			$output .= '
-        pageTracker._addTrans(
-          "'.(int)($order->id).'", // Order ID
-          "PrestaShop", // Affiliation
-          "'.Tools::ps_round((float)($order->total_paid) / (float)($conversion_rate), 2).'", // Total
-          "0", // Tax
-          "'.Tools::ps_round((float)($order->total_shipping) / (float)($conversion_rate), 2).'", // Shipping
-          "'.addslashes($deliveryAddress->city).'", // City
-          "", // State
-          "'.addslashes($deliveryAddress->country).'" // Country
-        );
-        ';
-
-			/* Product information */
+			// Product information
 			$products = $order->getProducts();
 			foreach ($products AS $product)
 			{
 				$category = Db::getInstance()->getRow('
 								SELECT name FROM `'._DB_PREFIX_.'category_lang` , '._DB_PREFIX_.'product 
-								WHERE `id_product` = '.(int)($product['product_id']).' AND `id_category_default` = `id_category` 
-								AND `id_lang` = '.(int)($parameters['PS_LANG_DEFAULT']));	
-				$output .= '
-					pageTracker._addItem(
-					"'.(int)($order->id).'", // Order ID
-					"'.addslashes($product['product_reference']).'", // SKU
-					"'.addslashes($product['product_name']).'", // Product Name 
-					"'.addslashes($category['name']).'", // Category
-					"'.Tools::ps_round((float)($product['product_price_wt']) / (float)($conversion_rate), 2).'", // Price
-					"'.addslashes((int)($product['product_quantity'])).'" // Quantity
-					);
-				';
+								WHERE `id_product` = '.intval($product['product_id']).' AND `id_category_default` = `id_category` 
+								AND `id_lang` = '.intval($parameters['PS_LANG_DEFAULT']));
+				
+				$items[] = array('OrderId' => intval($order->id),				// order ID - required
+								'SKU' => addslashes($product['product_id']),		// SKU/code - required
+								'Product' => addslashes($product['product_name']),		// product name
+								'Category' => addslashes($category['name']),			// category or variation
+								'Price' => Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2),	// unit price - required
+								'Quantity' => addslashes(intval($product['product_quantity']))	//quantity - required
+								);
 			}
-
-			/* Send command information */
-		$output .= '
-			pageTracker._trackTrans();
-			
-		} catch(err) {}
-      </script>';
-			
-			return $output;
+			$ganalytics_id = Configuration::get('GANALYTICS_ID');
+			$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.intval($step).'.html"' : '');
+			$smarty->assign('items', $items);
+			$smarty->assign('trans', $trans);
+			$smarty->assign('ganalytics_id', $ganalytics_id);
+			$smarty->assign('pageTrack', $pageTrack);
+			$smarty->assign('isOrder', true);
+			return $this->display(__FILE__, 'header.tpl');
 		}
 	}
 }
