@@ -175,7 +175,7 @@ class GridHtml extends ModuleGridEngine
 	{
 		echo json_encode(array(
 			'total' => $this->_totalCount,
-			'from' => $this->_start + 1,
+			'from' => min($this->_start + 1, $this->_totalCount),
 			'to' => min($this->_start + $this->_limit, $this->_totalCount),
 			'values' => $this->_values
 		));

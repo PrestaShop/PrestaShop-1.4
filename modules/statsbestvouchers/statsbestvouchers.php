@@ -30,12 +30,13 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class StatsBestVouchers extends ModuleGrid
 {
-	private $_html = null;
-	private $_query =  null;
-	private $_columns = null;
-	private $_defaultSortColumn = null;
-	private $_emptyMessage = null;
-	private $_pagingMessage = null;
+	private $_html;
+	private $_query;
+	private $_columns;
+	private $_defaultSortColumn;
+	private $_defaultSortDirection;
+	private $_emptyMessage;
+	private $_pagingMessage;
 	
 	function __construct()
 	{
@@ -44,6 +45,7 @@ class StatsBestVouchers extends ModuleGrid
 		$this->version = 1.0;
 		
 		$this->_defaultSortColumn = 'ca';
+		$this->_defaultSortDirection = 'DESC';
 		$this->_emptyMessage = $this->l('Empty recordset returned');
 		$this->_pagingMessage = $this->l('Displaying').' {0} - {1} '.$this->l('of').' {2}';
 		
@@ -89,6 +91,7 @@ class StatsBestVouchers extends ModuleGrid
 			'title' => $this->displayName,
 			'columns' => $this->_columns,
 			'defaultSortColumn' => $this->_defaultSortColumn,
+			'defaultSortDirection' => $this->_defaultSortDirection,
 			'emptyMessage' => $this->_emptyMessage,
 			'pagingMessage' => $this->_pagingMessage
 		);
@@ -103,18 +106,11 @@ class StatsBestVouchers extends ModuleGrid
 		</fieldset>';
 		return $this->_html;
 	}
-	
-	public function getTotalCount()
-	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order_discount`) total FROM `'._DB_PREFIX_.'order_discount`');
-		return $result['total'];
-	}
 
 	public function getData()
 	{	
-		$this->_totalCount = $this->getTotalCount();
 		$this->_query = '
-		SELECT od.name, COUNT(od.id_discount) as total, SUM(o.total_paid_real) / o.conversion_rate as ca
+		SELECT SQL_CALC_FOUND_ROWS od.name, COUNT(od.id_discount) as total, SUM(o.total_paid_real) / o.conversion_rate as ca
 		FROM '._DB_PREFIX_.'order_discount od
 		LEFT JOIN '._DB_PREFIX_.'orders o ON o.id_order = od.id_order
 		WHERE o.valid = 1
@@ -130,5 +126,6 @@ class StatsBestVouchers extends ModuleGrid
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
 		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
+		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT FOUND_ROWS()');
 	}
 }
