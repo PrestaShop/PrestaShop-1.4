@@ -250,7 +250,11 @@ class LinkCore
 		if ($type AND $id_object)
 			$url = $this->{'get'.$type.'Link'}($id_object, NULL);
 		else
+		{
 			$url = $this->url;
+			if (Configuration::get('PS_REWRITING_SETTINGS'))
+				$url = $this->getPageLink(basename($url));
+		}
 		$vars = (!$array ? '' : array());
 		$varsNb = array('n', 'search_query');
 		$varsSort = array('orderby', 'orderway');

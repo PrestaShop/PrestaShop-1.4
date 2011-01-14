@@ -26,7 +26,7 @@
 
 <!-- Block categories module -->
 <div id="categories_block_left" class="block">
-	<h4><a href="{$blockCategTree.link}">{l s='Categories' mod='blockcategories'}</a></h4>
+	<h4><a href="{$link->getPageLink($blockCategTree.link)}">{l s='Categories' mod='blockcategories'}</a></h4>
 	<div class="block_content">
 		<ul class="tree {if $isDhtml}dhtml{/if}">
 		{foreach from=$blockCategTree.children item=child name=blockCategTree}

@@ -169,9 +169,10 @@ class AdminPreferences extends AdminTab
 	  */
 	protected function _postConfig($fields)
 	{
-		global $currentIndex;
+		global $currentIndex, $smarty;
 
 		$languages = Language::getLanguages(false);
+		$smarty->clearCache();
 
 		/* Check required fields */
 		foreach ($fields AS $field => $values)
