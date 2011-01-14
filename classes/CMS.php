@@ -127,17 +127,15 @@ class CMSCore extends ObjectModel
 	public static function listCms($id_lang = NULL, $id_block = false, $active = true)
 	{
 		if (empty($id_lang))
-			$id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
+			$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
 
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.id_cms, l.meta_title
 		FROM  '._DB_PREFIX_.'cms c
 		JOIN '._DB_PREFIX_.'cms_lang l ON (c.id_cms = l.id_cms)
 		'.(($id_block) ? 'JOIN '._DB_PREFIX_.'block_cms b ON (c.id_cms = b.id_cms)' : '').'
 		WHERE l.id_lang = '.(int)($id_lang).(($id_block) ? ' AND b.id_block = '.(int)($id_block) : '').($active ? ' AND c.`active` = 1 ' : '').'
-		ORDER BY c.`position` '
-		);
-		return $result;
+		ORDER BY c.`position`');
 	}
 	
 	public static function isInBlock($id_cms, $id_block)

@@ -134,12 +134,14 @@ class OrderOpcControllerCore extends ParentOrderController
 							if (!$this->cart->checkQuantities())
 								die('<p class="warning">'.Tools::displayError('An item in your cart is no longer available, you cannot proceed with your order').'</p>');
 							
-							/* Check minimal account */
-							$orderTotalDefaultCurrency = Tools::convertPrice($this->cart->getOrderTotal(true, 1), Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT'))));
-							$minimalPurchase = (float)(Configuration::get('PS_PURCHASE_MINIMUM'));
+							/* Check minimal amount */
+							$currency = Currency::getCurrency((int)$this->cart->id_currency);
+							
+							$orderTotal = $this->cart->getOrderTotal();
+							$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
 							if ($orderTotalDefaultCurrency < $minimalPurchase)
-								die('<p class="warning">'.Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, Currency::getCurrency((int)($this->cart->id_currency))).
-								' '.Tools::displayError('is required in order to validate your order').'</p>');
+								$this->errors[] = Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
+								' '.Tools::displayError('is required in order to validate your order');
 							
 							/* Bypass payment step if total is 0 */
 							if ($this->_checkFreeOrder())

@@ -37,12 +37,12 @@ class AdminSearch extends AdminTab
 	{
 		global $cookie;
 		
-		$this->_list['products'] = Product::searchByName((int)($cookie->id_lang), $query);
+		$this->_list['products'] = Product::searchByName((int)$cookie->id_lang, $query);
 		if (!empty($this->_list['products']))
 			for ($i = 0; $i < count($this->_list['products']); $i++)
-				$this->_list['products'][$i]['nameh'] = str_ireplace($query, '<span class="highlight">'.$query.'</span>', $this->_list['products'][$i]['name']);
+				$this->_list['products'][$i]['nameh'] = str_ireplace($query, '<span class="highlight">'.Tools::htmlentitiesUTF8($query).'</span>', $this->_list['products'][$i]['name']);
 
-		$this->_list['categories'] = Category::searchByName((int)($cookie->id_lang), $query);
+		$this->_list['categories'] = Category::searchByName((int)$cookie->id_lang, $query);
 	}
 
 	/**
@@ -86,8 +86,8 @@ class AdminSearch extends AdminTab
 				));
 
 				/* Handle product ID */
-				if ($searchType == 1 AND (int)($query) AND Validate::isUnsignedInt((int)($query)))
-					if ($product = new Product((int)($query)) AND Validate::isLoadedObject($product))
+				if ($searchType == 1 AND (int)$query AND Validate::isUnsignedInt((int)$query))
+					if ($product = new Product((int)$query) AND Validate::isLoadedObject($product))
 						Tools::redirectAdmin('index.php?tab=AdminCatalog&id_product='.(int)($product->id).'&addproduct'.'&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
 
 				/* Normal catalog search */
@@ -110,8 +110,8 @@ class AdminSearch extends AdminTab
 				));
 
 				/* Handle customer ID */
-				if ($searchType AND (int)($query) AND Validate::isUnsignedInt((int)($query)))
-					if ($customer = new Customer((int)($query)) AND Validate::isLoadedObject($customer))
+				if ($searchType AND (int)$query AND Validate::isUnsignedInt((int)$query))
+					if ($customer = new Customer((int)$query) AND Validate::isLoadedObject($customer))
 						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)));
 
 				/* Normal customer search */
@@ -121,7 +121,7 @@ class AdminSearch extends AdminTab
 			/* Order */
 			if ($searchType == 3)
 			{
-				if ((int)($query) AND Validate::isUnsignedInt((int)($query)) AND $order = new Order((int)($query)) AND Validate::isLoadedObject($order))
+				if ((int)$query AND Validate::isUnsignedInt((int)$query) AND $order = new Order((int)$query) AND Validate::isLoadedObject($order))
 					Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($order->id).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
 				$this->_errors[] = Tools::displayError('no order found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
@@ -129,7 +129,7 @@ class AdminSearch extends AdminTab
 			/* Invoices */
 			if ($searchType == 4)
 			{
-				if ((int)($query) AND Validate::isUnsignedInt((int)($query)) AND $invoice = Order::getInvoice((int)($query)))
+				if ((int)$query AND Validate::isUnsignedInt((int)$query) AND $invoice = Order::getInvoice((int)$query))
 					Tools::redirectAdmin('pdf.php?id_order='.(int)($invoice['id_order']).'&pdf');
 				$this->_errors[] = Tools::displayError('no invoice found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
@@ -137,7 +137,7 @@ class AdminSearch extends AdminTab
 			/* Cart */
 			if ($searchType == 5)
 			{
-				if ((int)($query) AND Validate::isUnsignedInt((int)($query)) AND $cart = new Cart((int)($query)) AND Validate::isLoadedObject($cart))
+				if ((int)$query AND Validate::isUnsignedInt((int)$query) AND $cart = new Cart((int)$query) AND Validate::isLoadedObject($cart))
 					Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.(int)($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee)));
 				$this->_errors[] = Tools::displayError('no cart found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}

@@ -649,7 +649,7 @@
 				{foreach from=$carriers item=carrier name=myLoop}
 					<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
 						<td class="carrier_action radio">
-							<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $carrier.id_carrier == $checked}checked="checked"{/if} />
+							<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier{$carrier.id_carrier|intval}" {if $carrier.id_carrier == $checked || $carriers|@count == 1}checked="checked"{/if} />
 						</td>
 						<td class="carrier_name">
 							<label for="id_carrier{$carrier.id_carrier|intval}">

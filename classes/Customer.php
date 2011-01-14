@@ -153,18 +153,18 @@ class CustomerCore extends ObjectModel
 		/* Can't create a guest customer, if this feature is disabled */
 		if ($this->is_guest AND !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))
 			return false;
-	 	$res = parent::add($autodate, $nullValues);
-		if (!$res)
+	 	if (!parent::add($autodate, $nullValues))
 			return false;
 
 		if ($this->id_default_group == 1)
-			$row = array('id_customer' => (int)($this->id), 'id_group' => 1);
-		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
+			return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', array('id_customer' => (int)$this->id, 'id_group' => 1), 'INSERT');
+
+		return true;
 	}
 
 	public function update($nullValues = false)
 	{
-		$this->birthday = (empty($this->years) ? $this->birthday : (int)($this->years).'-'.(int)($this->months).'-'.(int)($this->days));
+		$this->birthday = (empty($this->years) ? $this->birthday : (int)$this->years.'-'.(int)$this->months.'-'.(int)$this->days);
 		if ($this->newsletter AND !$this->newsletter_date_add)
 			$this->newsletter_date_add = date('Y-m-d H:i:s');
 		if ($this->dni === 0)

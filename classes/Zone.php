@@ -41,15 +41,14 @@ class ZoneCore extends ObjectModel
 	protected 	$table = 'zone';
 	protected 	$identifier = 'id_zone';
 	
-	protected	$webserviceParameters = array(
-	);
+	protected	$webserviceParameters = array();
 
 	public function getFields()
 	{
 		parent::validateFields();
 		
 		$fields['name'] = pSQL($this->name);
-		$fields['active'] = (int)($this->active);
+		$fields['active'] = (int)$this->active;
 		
 		return $fields;
 	}
@@ -76,11 +75,8 @@ class ZoneCore extends ObjectModel
 	static public function getIdByName($name)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT `id_zone`
-			FROM `'._DB_PREFIX_.'zone`
-			WHERE `name` = \''.pSQL($name).'\''
-		);
+		SELECT `id_zone`
+		FROM `'._DB_PREFIX_.'zone`
+		WHERE `name` = \''.pSQL($name).'\'');
 	}
 }
-
-

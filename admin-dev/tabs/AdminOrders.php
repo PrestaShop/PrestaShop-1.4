@@ -526,20 +526,17 @@ class AdminOrders extends AdminTab
 			<br />';
 
 		/* Display status form */
-		if (sizeof($products))
-		{
-			echo '
-				<form action="'.$currentIndex.'&view'.$this->table.'&token='.$this->token.'" method="post" style="text-align:center;">
-					<select name="id_order_state">';
-			$currentStateTab = $order->getCurrentStateFull($cookie->id_lang);
-			foreach ($states AS $state)
-				echo '<option value="'.$state['id_order_state'].'"'.(($state['id_order_state'] == $currentStateTab['id_order_state']) ? ' selected="selected"' : '').'>'.stripslashes($state['name']).'</option>';
-			echo '
-					</select>
-					<input type="hidden" name="id_order" value="'.$order->id.'" />
-					<input type="submit" name="submitState" value="'.$this->l('Change').'" class="button" />
-				</form>';
-		}
+		echo '
+			<form action="'.$currentIndex.'&view'.$this->table.'&token='.$this->token.'" method="post" style="text-align:center;">
+				<select name="id_order_state">';
+		$currentStateTab = $order->getCurrentStateFull($cookie->id_lang);
+		foreach ($states AS $state)
+			echo '<option value="'.$state['id_order_state'].'"'.(($state['id_order_state'] == $currentStateTab['id_order_state']) ? ' selected="selected"' : '').'>'.stripslashes($state['name']).'</option>';
+		echo '
+				</select>
+				<input type="hidden" name="id_order" value="'.$order->id.'" />
+				<input type="submit" name="submitState" value="'.$this->l('Change').'" class="button" />
+			</form>';
 
 		/* Display customer information */
 		echo '

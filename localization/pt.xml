@@ -8,11 +8,11 @@
 		<language iso_code="pt" />
 	</languages>
 	<taxes>
-		<tax id="1" name="IVA PT 21%" rate="21" />
+		<tax id="1" name="IVA PT 23%" rate="23" />
 		<tax id="2" name="IVA PT 13%" rate="13" />
 		<tax id="3" name="IVA PT 6%" rate="6" />
 		
-		<taxRulesGroup name="PT Standard Rate (21%)">
+		<taxRulesGroup name="PT Standard Rate (23%)">
 			<taxRule iso_code_country="be" id_tax="1" />
 			<taxRule iso_code_country="bg" id_tax="1" />
 			<taxRule iso_code_country="cz" id_tax="1" />

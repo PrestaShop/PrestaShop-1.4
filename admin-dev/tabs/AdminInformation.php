@@ -142,11 +142,16 @@ class AdminInformation extends AdminTab
 			<p>
 				<b>'.$this->l('Prestashop Version').':</b> 
 				'._PS_VERSION_.'
-			</p>
+			</p>';
+			
+		if (function_exists('php_uname'))
+			echo '
 			<p>
 				<b>'.$this->l('Server information').':</b> 
 				'.php_uname('s').' '.php_uname('v').' '.php_uname('m').'
-			</p>
+			</p>';
+			
+		echo '
 			<p>
 				<b>'.$this->l('Server software Version').':</b> 
 				'.$_SERVER['SERVER_SOFTWARE'].'

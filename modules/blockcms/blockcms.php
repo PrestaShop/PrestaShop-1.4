@@ -146,7 +146,7 @@ class BlockCms extends Module
 				WHERE cl.`id_cms_category` = '.(int)($ids[1]).' AND (c.`active` = 1 OR c.`id_cms_category` = 1)
 				AND cl.`id_lang` = '.(int)($cookie->id_lang));
 				
-				$content[$cmsCategory]['link'] = $link->getCMSCategoryLink((int)($ids[1]), $query['link_rewrite']);
+				$content[$cmsCategory]['link'] = $link->getCMSCategoryLink((int)$ids[1], $query['link_rewrite']);
 				$content[$cmsCategory]['meta_title'] = $query['name'];
 			}
 			elseif (!$ids[0])
@@ -158,7 +158,7 @@ class BlockCms extends Module
 				WHERE cl.`id_cms` = '.(int)($ids[1]).' AND c.`active` = 1
 				AND cl.`id_lang` = '.(int)($cookie->id_lang));
 				
-				$content[$cmsCategory]['link'] = $link->getCMSLink((int)($ids[1]), $query['link_rewrite']);
+				$content[$cmsCategory]['link'] = $link->getCMSLink((int)$ids[1], $query['link_rewrite']);
 				$content[$cmsCategory]['meta_title'] = $query['meta_title'];
 			}
 		}

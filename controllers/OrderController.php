@@ -51,15 +51,16 @@ class OrderControllerCore extends ParentOrderController
 			$this->errors[] = Tools::displayError('An item in your cart is no longer available, you cannot proceed with your order');
 		}
 
-		/* Check minimal account */
+		/* Check minimal amount */
+		$currency = Currency::getCurrency((int)$this->cart->id_currency);
+		
 		$orderTotal = $this->cart->getOrderTotal();
-
-		$orderTotalDefaultCurrency = Tools::convertPrice($this->cart->getOrderTotal(true, 1), Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT'))));
-		$minimalPurchase = (float)(Configuration::get('PS_PURCHASE_MINIMUM'));
-		if ($orderTotalDefaultCurrency < $minimalPurchase)
+		$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
+		
+		if ($orderTotal < $minimalPurchase)
 		{
 			$this->step = 0;
-			$this->errors[] = Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, Currency::getCurrency((int)($this->cart->id_currency))).
+			$this->errors[] = Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
 			' '.Tools::displayError('is required in order to validate your order');
 		}
 

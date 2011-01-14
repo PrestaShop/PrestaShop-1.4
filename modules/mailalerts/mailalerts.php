@@ -271,18 +271,18 @@ class MailAlerts extends Module
 	public function hookUpdateProduct($params)
 	{
 		if ($this->_customer_qty AND $params['product']->quantity > 0)
-			$this->sendCustomerAlert((int)($params['product']->id), 0);
+			$this->sendCustomerAlert((int)$params['product']->id, 0);
 	}
 
 	public function hookUpdateProductAttribute($params)
 	{
 		$result = Db::getInstance()->getRow('
-			SELECT `id_product`, `quantity` 
-			FROM `'._DB_PREFIX_.'product_attribute` 
-			WHERE `id_product_attribute` = '.(int)($params['id_product_attribute']));
-		$qty = (int)($result['quantity']);
-		if ($this->_customer_qty AND $qty > 0)
-			$this->sendCustomerAlert((int)($result['id_product']), (int)($params['id_product_attribute']));
+		SELECT `id_product`, `quantity` 
+		FROM `'._DB_PREFIX_.'product_attribute` 
+		WHERE `id_product_attribute` = '.(int)($params['id_product_attribute']));
+
+		if ($this->_customer_qty AND $result['quantity'] > 0)
+			$this->sendCustomerAlert((int)$result['id_product'], (int)$params['id_product_attribute']);
 	}
 	
 	public function sendCustomerAlert($id_product, $id_product_attribute)
@@ -292,23 +292,22 @@ class MailAlerts extends Module
 		$link = new Link();
 		
 		$customers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT id_customer, customer_email
-			FROM `'._DB_PREFIX_.'mailalert_customer_oos`
-			WHERE `id_product` = '.(int)($id_product).' 
-			AND `id_product_attribute` = '.(int)($id_product_attribute));
+		SELECT id_customer, customer_email
+		FROM `'._DB_PREFIX_.'mailalert_customer_oos`
+		WHERE `id_product` = '.(int)$id_product.' AND `id_product_attribute` = '.(int)$id_product_attribute);
 		
-		$product =  new Product((int)($id_product), false, (int)($cookie->id_lang));
+		$product = new Product((int)$id_product, false, (int)$cookie->id_lang);
 		$templateVars = array(
 			'{product}' => (is_array($product->name) ? $product->name[(int)(Configuration::get('PS_LANG_DEFAULT'))] : $product->name),
 			'{product_link}' => $link->getProductLink($product)
 		);
-		foreach ($customers as $cust)
+		foreach ($customers AS $cust)
 		{
 			if ($cust['id_customer'])
 			{
-				$customer = new Customer((int)($cust['id_customer']));
+				$customer = new Customer((int)$cust['id_customer']);
 				$customer_email = $customer->email;
-				$customer_id = $customer->id;
+				$customer_id = (int)$customer->id;
 			}
 			else
 			{
@@ -322,15 +321,13 @@ class MailAlerts extends Module
 				Mail::Send((int)(Configuration::get('PS_LANG_DEFAULT')), 'customer_qty', Mail::l('Product available'), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			if ($customer_id)
 				$customer_email = 0;
-			self::deleteAlert((int)($customer_id), strval($customer_email), (int)($id_product), (int)($id_product_attribute));
+			self::deleteAlert((int)$customer_id, strval($customer_email), (int)$id_product, (int)$id_product_attribute);
 		}
 	}
 	
 	public function hookCustomerAccount($params)
 	{
-		if ($this->_customer_qty)
-			return $this->display(__FILE__, 'my-account.tpl');
-		return NULL;
+		return $this->_customer_qty ? $this->display(__FILE__, 'my-account.tpl') : NULL;
 	}
 	
 	public function hookMyAccountBlock($params)
@@ -523,20 +520,17 @@ class MailAlerts extends Module
 	
 	public function hookDeleteProduct($params)
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos`
-		WHERE `id_product` = '.(int)($params['product']->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos` WHERE `id_product` = '.(int)$params['product']->id);
 	}
 	
 	public function hookDeleteProductAttribute($params)
 	{
 		if ($params['deleteAllAttributes'])
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos`
-			WHERE `id_product` = '.(int)($params['id_product']));
+			WHERE `id_product` = '.(int)$params['id_product']);
 		else
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos`
-			WHERE `id_product_attribute` = '.(int)($params['id_product_attribute']).' 
-			AND `id_product` = '.(int)($params['id_product']));
+			WHERE `id_product_attribute` = '.(int)$params['id_product_attribute'].' 
+			AND `id_product` = '.(int)$params['id_product']);
 	}
 }
-
-
