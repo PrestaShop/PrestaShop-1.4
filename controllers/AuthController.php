@@ -271,18 +271,6 @@ class AuthControllerCore extends FrontController
 
 		if (isset($create_account))
 		{
-			/* Generate years, months and days */
-			if (isset($_POST['years']) AND is_numeric($_POST['years']))
-				$selectedYears = (int)($_POST['years']);
-			$years = Tools::dateYears();
-			if (isset($_POST['months']) AND is_numeric($_POST['months']))
-				$selectedMonths = (int)($_POST['months']);
-			$months = Tools::dateMonths();
-
-			if (isset($_POST['days']) AND is_numeric($_POST['days']))
-				$selectedDays = (int)($_POST['days']);
-			$days = Tools::dateDays();
-
 			/* Select the most appropriate country */
 			if (isset($_POST['id_country']) AND is_numeric($_POST['id_country']))
 				$selectedCountry = (int)($_POST['id_country']);
@@ -301,12 +289,6 @@ class AuthControllerCore extends FrontController
 			$countries = Country::getCountries((int)($this->cookie->id_lang), true);
 
 			$this->smarty->assign(array(
-				'years' => $years,
-				'sl_year' => (isset($selectedYears) ? $selectedYears : 0),
-				'months' => $months,
-				'sl_month' => (isset($selectedMonths) ? $selectedMonths : 0),
-				'days' => $days,
-				'sl_day' => (isset($selectedDays) ? $selectedDays : 0),
 				'countries' => $countries,
 				'sl_country' => (isset($selectedCountry) ? $selectedCountry : 0),
 				'vat_management' => Configuration::get('VATNUMBER_MANAGEMENT')
@@ -318,6 +300,27 @@ class AuthControllerCore extends FrontController
 				'HOOK_CREATE_ACCOUNT_TOP' => Module::hookExec('createAccountTop')
 			));
 		}
+		
+		/* Generate years, months and days */
+		if (isset($_POST['years']) AND is_numeric($_POST['years']))
+			$selectedYears = (int)($_POST['years']);
+		$years = Tools::dateYears();
+		if (isset($_POST['months']) AND is_numeric($_POST['months']))
+			$selectedMonths = (int)($_POST['months']);
+		$months = Tools::dateMonths();
+
+		if (isset($_POST['days']) AND is_numeric($_POST['days']))
+			$selectedDays = (int)($_POST['days']);
+		$days = Tools::dateDays();
+		
+		$this->smarty->assign(array(
+			'years' => $years,
+			'sl_year' => (isset($selectedYears) ? $selectedYears : 0),
+			'months' => $months,
+			'sl_month' => (isset($selectedMonths) ? $selectedMonths : 0),
+			'days' => $days,
+			'sl_day' => (isset($selectedDays) ? $selectedDays : 0)
+		));
 	}
 	
 	public function setMedia()

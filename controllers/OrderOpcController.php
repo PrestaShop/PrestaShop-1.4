@@ -154,6 +154,8 @@ class OrderOpcControllerCore extends ParentOrderController
 							break;
 						case 'editCustomer':
 							$customer = new Customer((int)$this->cookie->id_customer);
+							if (Tools::getValue('years'))
+								$customer->birthday = (int)Tools::getValue('years').'-'.(int)Tools::getValue('months').'-'.(int)Tools::getValue('days');
 							$this->errors = $customer->validateControler();
 							$customer->newsletter = (int)Tools::isSubmit('newsletter');
 							$customer->optin = (int)Tools::isSubmit('optin');
@@ -251,6 +253,14 @@ class OrderOpcControllerCore extends ParentOrderController
 			'errorTOS' => Tools::displayError('You must accept terms of service before', false),
 			'isPaymentStep' => (bool)(isset($_GET['isPaymentStep']) AND $_GET['isPaymentStep'])
 		));
+		$years = Tools::dateYears();
+		$months = Tools::dateMonths();
+		$days = Tools::dateDays();
+		$this->smarty->assign(array(
+			'years' => $years,
+			'months' => $months,
+			'days' => $days,
+		));
 		
 		/* Load guest informations */
 		if ($this->isLogged AND $this->cookie->is_guest)
@@ -291,7 +301,12 @@ class OrderOpcControllerCore extends ParentOrderController
 	{
 		$customer = new Customer((int)($this->cookie->id_customer));
 		$address_delivery = new Address((int)$this->cart->id_address_delivery);
-		
+
+		if ($customer->birthday)
+			$birthday = explode('-', $customer->birthday);
+		else
+			$birthday = array('0', '0', '0');
+
 		return array(
 			'id_customer' => (int)($this->cookie->id_customer),
 			'email' => Tools::htmlentitiesUTF8($customer->email),
@@ -300,6 +315,8 @@ class OrderOpcControllerCore extends ParentOrderController
 			'newsletter' => (int)$customer->newsletter,
 			'optin' => (int)$customer->optin,
 			'id_address_delivery' => (int)$this->cart->id_address_delivery,
+			'company' => Tools::htmlentitiesUTF8($address_delivery->company),
+			'vat_number' => Tools::htmlentitiesUTF8($address_delivery->vat_number),
 			'address1' => Tools::htmlentitiesUTF8($address_delivery->address1),
 			'postcode' => Tools::htmlentitiesUTF8($address_delivery->postcode),
 			'city' => Tools::htmlentitiesUTF8($address_delivery->city),
@@ -307,7 +324,10 @@ class OrderOpcControllerCore extends ParentOrderController
 			'phone_mobile' => Tools::htmlentitiesUTF8($address_delivery->phone_mobile),
 			'id_country' => (int)($address_delivery->id_country),
 			'id_state' => (int)($address_delivery->id_state),
-			'id_gender' => (int)$customer->id_gender
+			'id_gender' => (int)$customer->id_gender,
+			'sl_year' => $birthday[0],
+			'sl_month' => $birthday[1],
+			'sl_day' => $birthday[2]
 		);
 	}
 	

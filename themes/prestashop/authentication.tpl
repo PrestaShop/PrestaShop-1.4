@@ -142,6 +142,41 @@ $(function(){ldelim}
 						<input type="hidden" class="text" id="customer_lastname" name="customer_lastname" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname}{/if}">
 						<sup>*</sup>
 					</p>
+					<p class="select">
+						<span>{l s='Date of Birth'}</span>
+						<select id="days" name="days">
+							<option value="">-</option>
+							{foreach from=$days item=day}
+								<option value="{$day|escape:'htmlall':'UTF-8'}" {if ($sl_day == $day)} selected="selected"{/if}>{$day|escape:'htmlall':'UTF-8'}&nbsp;&nbsp;</option>
+							{/foreach}
+						</select>
+						{*
+							{l s='January'}
+							{l s='February'}
+							{l s='March'}
+							{l s='April'}
+							{l s='May'}
+							{l s='June'}
+							{l s='July'}
+							{l s='August'}
+							{l s='September'}
+							{l s='October'}
+							{l s='November'}
+							{l s='December'}
+						*}
+						<select id="months" name="months">
+							<option value="">-</option>
+							{foreach from=$months key=k item=month}
+								<option value="{$k|escape:'htmlall':'UTF-8'}" {if ($sl_month == $k)} selected="selected"{/if}>{l s="$month"}&nbsp;</option>
+							{/foreach}
+						</select>
+						<select id="years" name="years">
+							<option value="">-</option>
+							{foreach from=$years item=year}
+								<option value="{$year|escape:'htmlall':'UTF-8'}" {if ($sl_year == $year)} selected="selected"{/if}>{$year|escape:'htmlall':'UTF-8'}&nbsp;&nbsp;</option>
+							{/foreach}
+						</select>
+					</p>
 					<p class="checkbox">
 						<input type="checkbox" name="newsletter" id="newsletter" value="1" {if isset($smarty.post.newsletter) && $smarty.post.newsletter == '1'}checked="checked"{/if}>
 						<label for="newsletter">{l s='Sign up for our newsletter'}</label>
@@ -151,6 +186,16 @@ $(function(){ldelim}
 						<label for="optin">{l s='Receive special offers from our partners'}</label>
 					</p>
 					<h3>{l s='Delivery address'}</h3>
+					<p class="text">
+						<label for="company">{l s='Company'}</label>
+						<input type="text" class="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{/if}" />
+					</p>
+					<div id="vat_number" style="display:none;">
+						<p class="text">
+							<label for="vat_number">{l s='VAT number'}</label>
+							<input type="text" class="text" name="vat_number" value="{if isset($smarty.post.vat_number)}{$smarty.post.vat_number}{/if}" />
+						</p>
+					</div>
 					<p class="required text">
 						<label for="address1">{l s='Address'}</label>
 						<input type="text" class="text" name="address1" id="address1" value="{if isset($smarty.post.address1)}{$smarty.post.address1}{/if}">

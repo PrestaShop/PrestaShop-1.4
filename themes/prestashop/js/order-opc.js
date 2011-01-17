@@ -275,7 +275,7 @@ function saveAddress(type)
 	params += 'alias='+encodeURI($('#alias'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
 	// Clean the last &
 	params = params.substr(0, params.length-1);
-	
+
 	var result = false;
 	
 	$.ajax({
@@ -447,7 +447,14 @@ $(function() {
 		// INVOICE ADDRESS
 		$('#invoice_address').click(function() {
 			if ($('#invoice_address:checked').length > 0)
+			{
 				$('#opc_invoice_address').slideDown('slow');
+				if (vat_management)
+				{
+					if ($('#company_invoice').val() == '')
+						$('#vat_number_block_invoice').hide();
+				}
+			}
 			else
 				$('#opc_invoice_address').slideUp('slow');
 		});
@@ -542,6 +549,8 @@ $(function() {
 						
 						var html = '<div class="opc_float_status">';
 						html += '<h4>'+txtDeliveryAddress+'</h4>';
+						if ($('#company').val() != "")
+							html += '<b>'+$('#company').val()+'</b><br />';
 						html += '<b>'+$('#customer_firstname').val()+' '+$('#customer_lastname').val()+'</b><br />';
 						html += $('#address1').val()+'<br />';
 						html += $('#postcode').val()+' ';
@@ -553,6 +562,8 @@ $(function() {
 						html += '</div>';
 						html += '<div class="opc_float_status">';
 						html += '<h4>'+txtInvoiceAddress+'</h4>';
+						if ($('#company'+($('#invoice_address').is(':checked') ? '_invoice' : '')).val() != "")
+							html += '<b>'+$('#company'+($('#invoice_address').is(':checked') ? '_invoice' : '')).val()+'</b><br />';
 						html += '<b>'+$('#customer_firstname').val()+' '+$('#customer_lastname').val()+'</b><br />';
 						html += $('#address1'+($('#invoice_address').is(':checked') ? '_invoice' : '')).val()+'<br />';
 						html += $('#postcode'+($('#invoice_address').is(':checked') ? '_invoice' : '')).val()+' ';

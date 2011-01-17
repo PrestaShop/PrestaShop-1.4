@@ -40,6 +40,7 @@
 	var countries = new Array();
 	var countriesNeedIDNumber = new Array();
 	var countriesNeedZipCode = new Array();
+	var vat_management = {$vat_management|intval};
 	
 	var txtWithTax = "{l s='(tax incl.)'}";
 	var txtWithoutTax = "{l s='(tax excl.)'}";
@@ -66,7 +67,7 @@
 	var isPaymentStep = {$isPaymentStep|intval};
 	//]]>
 </script>
-{include file="$tpl_dir./thickbox.tpl"}
+
 {capture name=path}{l s='Your shopping cart'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 {if $productNumber}
@@ -424,18 +425,30 @@
 						//]]>
 						{if $vat_management}
 							{literal}
+							function vat_number()
+							{
+								if ($('#company').val() != '')
+									$('#vat_number_block').show();
+								else
+									$('#vat_number_block').hide();
+							}
+							function vat_number_invoice()
+							{
+								if ($('#company_invoice').val() != '')
+									$('#vat_number_block_invoice').show();
+								else
+									$('#vat_number_block_invoice').hide();
+							}
+							
 							$(document).ready(function() {
 								$('#company').blur(function(){
 									vat_number();
 								});
+								$('#company_invoice').blur(function(){
+									vat_number_invoice();
+								});
 								vat_number();
-								function vat_number()
-								{
-									if ($('#company').val() != '')
-										$('#vat_number').show();
-									else
-										$('#vat_number').hide();
-								}
+								vat_number_invoice();
 							});
 							{/literal}
 						{/if}
@@ -478,6 +491,41 @@
 							<input type="hidden" class="text" id="customer_lastname" name="customer_lastname" value="{if isset($guestInformations) && $guestInformations.lastname}{$guestInformations.lastname}{/if}" />
 							<sup>*</sup>
 						</p>
+						<p class="select">
+							<span>{l s='Date of Birth'}</span>
+							<select id="days" name="days">
+								<option value="">-</option>
+								{foreach from=$days item=day}
+									<option value="{$day|escape:'htmlall':'UTF-8'}" {if isset($guestInformations) && ($guestInformations.sl_day == $day)} selected="selected"{/if}>{$day|escape:'htmlall':'UTF-8'}&nbsp;&nbsp;</option>
+								{/foreach}
+							</select>
+							{*
+								{l s='January'}
+								{l s='February'}
+								{l s='March'}
+								{l s='April'}
+								{l s='May'}
+								{l s='June'}
+								{l s='July'}
+								{l s='August'}
+								{l s='September'}
+								{l s='October'}
+								{l s='November'}
+								{l s='December'}
+							*}
+							<select id="months" name="months">
+								<option value="">-</option>
+								{foreach from=$months key=k item=month}
+									<option value="{$k|escape:'htmlall':'UTF-8'}" {if isset($guestInformations) && ($guestInformations.sl_month == $k)} selected="selected"{/if}>{l s="$month"}&nbsp;</option>
+								{/foreach}
+							</select>
+							<select id="years" name="years">
+								<option value="">-</option>
+								{foreach from=$years item=year}
+									<option value="{$year|escape:'htmlall':'UTF-8'}" {if isset($guestInformations) && ($guestInformations.sl_year == $year)} selected="selected"{/if}>{$year|escape:'htmlall':'UTF-8'}&nbsp;&nbsp;</option>
+								{/foreach}
+							</select>
+						</p>
 						<p class="checkbox">
 							<input type="checkbox" name="newsletter" id="newsletter" value="1" {if isset($guestInformations) && $guestInformations.newsletter}checked="checked"{/if} />
 							<label for="newsletter">{l s='Sign up for our newsletter'}</label>
@@ -487,14 +535,14 @@
 							<label for="optin">{l s='Receive special offers from our partners'}</label>
 						</p>
 						<h3>{l s='Delivery address'}</h3>
-						<p class="text is_customer_param">
+						<p class="text">
 							<label for="company">{l s='Company'}</label>
-							<input type="text" class="text" id="company" name="company" value="" />
+							<input type="text" class="text" id="company" name="company" value="{if isset($guestInformations) && $guestInformations.company}{$guestInformations.company}{/if}" />
 						</p>
-						<div id="vat_number is_customer_param" style="display:none;">
+						<div id="vat_number_block" style="display:none;">
 							<p class="text">
 								<label for="vat_number">{l s='VAT number'}</label>
-								<input type="text" class="text" name="vat_number" id="vat_number" value="" />
+								<input type="text" class="text" name="vat_number" id="vat_number" value="{if isset($guestInformations) && $guestInformations.vat_number}{$guestInformations.vat_number}{/if}" />
 							</p>
 						</div>
 						<p class="required text">
@@ -558,7 +606,7 @@
 								<label for="company_invoice">{l s='Company'}</label>
 								<input type="text" class="text" id="company_invoice" name="company_invoice" value="" />
 							</p>
-							<div id="vat_number is_customer_param" style="display:none;">
+							<div id="vat_number_block_invoice" class="is_customer_param" style="display:none;">
 								<p class="text">
 									<label for="vat_number_invoice">{l s='VAT number'}</label>
 									<input type="text" class="text" id="vat_number_invoice" name="vat_number_invoice" value="" />
