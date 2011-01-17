@@ -26,14 +26,21 @@
 */
 
 include(dirname(__FILE__).'/../../config/config.inc.php');
-include(dirname(__FILE__).'/../../header.php');
+include(dirname(__FILE__).'/../../init.php');
 include(dirname(__FILE__).'/gcheckout.php');
 
 if (!$cookie->isLogged(true))
     Tools::redirect('authentication.php?back=order.php');
-	
+elseif (!$cart->getOrderTotal(true, 3))
+	Tools::displayError('Error: Empty cart');
+
 $gcheckout = new GCheckout();
-echo $gcheckout->execPayment($cart);
+// Prepare payment
+$gcheckout->preparePayment();
+
+include(dirname(__FILE__).'/../../header.php');
+// Display
+echo $gcheckout->display('gcheckout.php', 'confirm.tpl');
 
 include_once(dirname(__FILE__).'/../../footer.php');
 

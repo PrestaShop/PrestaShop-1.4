@@ -2,6 +2,17 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{gcheckout}prestashop>confirm_a40cab5994f36d4c48103a22ca082e8f'] = 'Su carrito de la compra';
+$_MODULE['<{gcheckout}prestashop>confirm_6c132b5e262594950586ae13a7d3aa94'] = 'Google Checkout';
+$_MODULE['<{gcheckout}prestashop>confirm_f1d3b424cd68795ecaa552883759aceb'] = 'Resumen del pedido ';
+$_MODULE['<{gcheckout}prestashop>confirm_3575814f89e55ba8061c55dd93214aae'] = 'Ha elegido pagar con Google Checkout. ';
+$_MODULE['<{gcheckout}prestashop>confirm_c884ed19483d45970c5bf23a681e2dd2'] = 'Breve resumen del pedido: ';
+$_MODULE['<{gcheckout}prestashop>confirm_e2867a925cba382f1436d1834bb52a1c'] = 'El importe total de su pedido es de';
+$_MODULE['<{gcheckout}prestashop>confirm_1f87346a16cf80c372065de3c54c86d9'] = '(TTC)';
+$_MODULE['<{gcheckout}prestashop>confirm_eecc59d9ca953545b6c5ac9bf11ded00'] = 'Aceptamos esta divisa para el pago : ';
+$_MODULE['<{gcheckout}prestashop>confirm_0881a11f7af33bc1b43e437391129d66'] = 'Confirme su pedido pulsando \"Confirmar pedido\"';
+$_MODULE['<{gcheckout}prestashop>confirm_569fd05bdafa1712c4f6be5b153b8418'] = 'Otras formas de pago';
+$_MODULE['<{gcheckout}prestashop>confirm_46b9e3665f187c739c55983f757ccda0'] = 'Confirmar pedido';
 $_MODULE['<{gcheckout}prestashop>gcheckout_6c132b5e262594950586ae13a7d3aa94'] = 'Google checkout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_3f3c0194c5adbe6953eb571f125af16d'] = 'Implementación de API de Google Checkout ';
 $_MODULE['<{gcheckout}prestashop>gcheckout_4402acab1c8f90dcf4a31dc96833bd86'] = 'No hay moneda configurada para este módulo';
@@ -26,6 +37,6 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_a82be0f551b8708bc08eb33cd9ded0cf'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_c4ddab20febbb0e75bb211ac8cd4c541'] = 'Para utilizar su módulo de la comprobación de Google, tiene que configurar su cuenta Google (cuenta de sandbox y su cuenta). La conexión a la comprobación de la cuenta Google > ajustes; Integración. La URL del servicio repetido del API es:';
 $_MODULE['<{gcheckout}prestashop>gcheckout_dba727a9adc372723baef4533a7fc9da'] = 'El método de callback debe fijarse a ';
 $_MODULE['<{gcheckout}prestashop>gcheckout_e2e882d58bbd478e17c5a542d5d6fcda'] = 'Los pedidos deben pasarse con la misma moneda que la cuenta del vendedor. Los carritos en otras monedas serán convertidas si el cliente elige pagar con este módulo.';
+$_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Pagar con GoogleCheckout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_ba794350deb07c0c96fe73bd12239059'] = 'Embalaje ';
 $_MODULE['<{gcheckout}prestashop>gcheckout_9f06b28a40790c4c4df5739bce3c1eb0'] = 'Costos de envío';
-$_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Pagar con GoogleCheckout';

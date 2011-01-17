@@ -154,30 +154,7 @@ class GCheckout extends PaymentModule
 
 		global $smarty;
 		
-		require_once(dirname(__FILE__).'/library/googlecart.php');
-		require_once(dirname(__FILE__).'/library/googleitem.php');
-		require_once(dirname(__FILE__).'/library/googleshipping.php');
-		
-		$currency = $this->getCurrency();
-		$googleCart = new GoogleCart(Configuration::get('GCHECKOUT_MERCHANT_ID'), Configuration::get('GCHECKOUT_MERCHANT_KEY'), Configuration::get('GCHECKOUT_MODE'), $currency->iso_code);
-		foreach ($params['cart']->getProducts() AS $product)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].((isset($product['attributes']) AND !empty($product['attributes'])) ? ' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), (int)$product['cart_quantity'], Tools::convertPrice($product['price_wt'], $currency), strtoupper(Configuration::get('PS_WEIGHT_UNIT')), (float)$product['weight'])); 
-		if ($wrapping = $params['cart']->getOrderTotal(true, 6))
-			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, Tools::convertPrice($wrapping, $currency)));
-		foreach ($params['cart']->getDiscounts() AS $voucher)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.Tools::convertPrice($voucher['value_real'], $currency)));
-		
-		if (!Configuration::get('GCHECKOUT_NO_SHIPPING'))
-			$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($params['cart']->getOrderShippingCost($params['cart']->id_carrier), $currency)));
-
-		$googleCart->SetEditCartUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order.php');
-		$googleCart->SetContinueShoppingUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order-confirmation.php');
-		$googleCart->SetRequestBuyerPhone(false);
-		$googleCart->SetAllowedWorldArea(true);
-		$googleCart->SetMerchantPrivateData($params['cart']->id.'|'.$params['cart']->secure_key);
-
-		$smarty->assign(array('googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($this->l('Pay with GoogleCheckout'), 'LARGE'), 'buttonText' => $this->l('Pay with GoogleCheckout')));
-
+		$smarty->assign('buttonText', $this->l('Pay with GoogleCheckout'));
 		return $this->display(__FILE__, 'payment.tpl');
 	}
 	
@@ -187,5 +164,42 @@ class GCheckout extends PaymentModule
 			return;
 
 		return $this->display(__FILE__, 'payment_return.tpl');
+    }
+    
+    function preparePayment()
+    {
+    	global $smarty, $cart, $cookie;
+    	
+    	require_once(dirname(__FILE__).'/library/googlecart.php');
+		require_once(dirname(__FILE__).'/library/googleitem.php');
+		require_once(dirname(__FILE__).'/library/googleshipping.php');
+		
+		$currency = $this->getCurrency();
+		if ($cart->id_currency != $currency->id)
+		{
+			$cart->id_currency = (int)$currency->id;
+			$cookie->id_currency = (int)$cart->id_currency;
+			$cart->update();
+			Tools::redirect('modules/'.$this->name.'/payment.php');
+		}
+		$googleCart = new GoogleCart(Configuration::get('GCHECKOUT_MERCHANT_ID'), Configuration::get('GCHECKOUT_MERCHANT_KEY'), Configuration::get('GCHECKOUT_MODE'), $currency->iso_code);
+		foreach ($cart->getProducts() AS $product)
+			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].((isset($product['attributes']) AND !empty($product['attributes'])) ? ' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), (int)$product['cart_quantity'], Tools::convertPrice($product['price_wt'], $currency), strtoupper(Configuration::get('PS_WEIGHT_UNIT')), (float)$product['weight'])); 
+		if ($wrapping = $cart->getOrderTotal(true, 6))
+			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, Tools::convertPrice($wrapping, $currency)));
+		foreach ($cart->getDiscounts() AS $voucher)
+			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.Tools::convertPrice($voucher['value_real'], $currency)));
+		
+		if (!Configuration::get('GCHECKOUT_NO_SHIPPING'))
+			$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($cart->getOrderShippingCost($cart->id_carrier), $currency)));
+
+		$googleCart->SetEditCartUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order.php');
+		$googleCart->SetContinueShoppingUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order-confirmation.php');
+		$googleCart->SetRequestBuyerPhone(false);
+		$googleCart->SetMerchantPrivateData($cart->id.'|'.$cart->secure_key);
+		$smarty->assign(array(
+			'googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($this->l('Pay with GoogleCheckout'), 'LARGE'),
+			'total' => $cart->getOrderTotal()
+		));
     }
 }
