@@ -93,10 +93,14 @@ class WebserviceCore extends ObjectModel
 			'price_ranges' => array('description' => 'Price ranges', 'class' => 'RangePrice'),
 			'weight_ranges' => array('description' => 'Weight ranges', 'class' => 'RangeWeight'),
 			'configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration'),
+			'translated_configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration', 'parameters_attribute' => 'webserviceParametersI18n'),
 			'languages' => array('description' => 'Shop languages', 'class' => 'Language'),
 			'order_details' => array('description' => 'Details of an order', 'class' => 'OrderDetail'),
 			'order_discounts' => array('description' => 'Discounts of an order', 'class' => 'OrderDiscount'),
-			'stores' => array('description' => 'Stores', 'class' => 'Store')
+			'stores' => array('description' => 'The stores', 'class' => 'Store'),
+			'carts' => array('description' => 'Customer\'s carts', 'class' => 'Cart'),
+			'currencies' => array('description' => 'The currencies', 'class' => 'Currency'),
+			'guests' => array('description' => 'The guests', 'class' => 'Guest'),
 		);
 		ksort($resources);
 		return $resources;

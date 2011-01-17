@@ -256,7 +256,9 @@ class ProductCore extends ObjectModel
 			'cache_default_attribute' => array(),
 		),
 		'associations' => array(
-			'categories' => array('resource' => 'category'),
+			'categories' => array('resource' => 'category', 'fields' => array('id' => 
+				array('required' => true),
+			)),
 		),
 	);
 

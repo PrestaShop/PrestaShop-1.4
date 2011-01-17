@@ -102,7 +102,7 @@ class CustomerCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
-			'id_default_group' => array(),
+			'id_default_group' => array('xlink_resource' => 'groups'),
 			'newsletter_date_add' => array(),
 			'ip_registration_newsletter' => array(),
 			'last_passwd_gen' => array(),
@@ -156,10 +156,8 @@ class CustomerCore extends ObjectModel
 	 	if (!parent::add($autodate, $nullValues))
 			return false;
 
-		if ($this->id_default_group == 1)
-			return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', array('id_customer' => (int)$this->id, 'id_group' => 1), 'INSERT');
-
-		return true;
+		$row = array('id_customer' => (int)($this->id), 'id_group' => (int)$this->id_default_group);
+		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
 	}
 
 	public function update($nullValues = false)

@@ -192,7 +192,13 @@ class WebserviceRequest
 					if ($this->_urlSegment[0] != '')
 					{
 						$object = new $this->_resourceList[$this->_urlSegment[0]]['class']();
-						$this->_resourceConfiguration = $object->getWebserviceParameters();
+						if ($this->_urlSegment[0] === 'translated_configurations')
+						{
+							$this->_resourceConfiguration = $object->getWebserviceParameters('webserviceParametersI18n');
+							$this->_resourceConfiguration['retrieveData']['retrieveMethod'] = 'getI18nConfigurationList';
+						}
+						else
+							$this->_resourceConfiguration = $object->getWebserviceParameters();
 					}
 					
 					// execute the action
@@ -648,7 +654,7 @@ class WebserviceRequest
 					}
 					else
 					{
-						$this->setError(400, 'The \'display\' synthax is wrong. You can set \'full\' or \'[field_1,field_2,field_3,...]\'. These are available: '.implode(', ', array_keys($this->_resourceConfiguration['fields'])));
+						$this->setError(400, 'The \'display\' syntax is wrong. You can set \'full\' or \'[field_1,field_2,field_3,...]\'. These are available: '.implode(', ', array_keys($this->_resourceConfiguration['fields'])));
 						return false;
 					}
 				}
@@ -708,18 +714,16 @@ class WebserviceRequest
 			$this->_objects = array();
 			if (!isset($this->_urlSegment[1]) || !strlen($this->_urlSegment[1]))
 			{
-					$this->_resourceConfiguration['retrieveData']['params'][] = $sql_join;
-					$this->_resourceConfiguration['retrieveData']['params'][] = $sql_filter;
-					$this->_resourceConfiguration['retrieveData']['params'][] = $sql_sort;
-					$this->_resourceConfiguration['retrieveData']['params'][] = $sql_limit;
+				$this->_resourceConfiguration['retrieveData']['params'][] = $sql_join;
+				$this->_resourceConfiguration['retrieveData']['params'][] = $sql_filter;
+				$this->_resourceConfiguration['retrieveData']['params'][] = $sql_sort;
+				$this->_resourceConfiguration['retrieveData']['params'][] = $sql_limit;
 				//list entities
 				$tmp = new $this->_resourceConfiguration['retrieveData']['className']();
 				$sqlObjects = call_user_func_array(array($tmp, $this->_resourceConfiguration['retrieveData']['retrieveMethod']), $this->_resourceConfiguration['retrieveData']['params']);
 				if ($sqlObjects)
 					foreach ($sqlObjects as $sqlObject)
-					{
 						$this->_objects[] = new $this->_resourceConfiguration['retrieveData']['className']($sqlObject[$this->_resourceConfiguration['fields']['id']['sqlId']]);
-					}
 			}
 			else
 			{
@@ -804,19 +808,8 @@ class WebserviceRequest
 				{
 					if (!is_null($this->_schemaToDisplay))
 					{
-						// display blank schema
-						if ($this->_schemaToDisplay == 'blank')
-						{
-							$this->_fieldsToDisplay = 'full';
-							$this->_xmlOutput .= $this->getXmlFromEntity();
-						
-						}
-						// display synopsis schema
-						else
-						{
-							$this->_fieldsToDisplay = 'full';
-							$this->_xmlOutput .= $this->getXmlFromEntity();
-						}
+						$this->_fieldsToDisplay = 'full';
+						$this->_xmlOutput .= $this->getXmlFromEntity();
 					}
 					// display specific resources list
 					else
@@ -956,8 +949,10 @@ class WebserviceRequest
 								foreach ($assocItems as $assocItem)
 								{
 									$fields = $assocItem->children();
-									foreach ($fields as $field)
-										$values[] = (string)$field;
+									$entry = array();
+									foreach ($fields as $fieldName => $fieldValue)
+										$entry[$fieldName] = (string)$fieldValue;
+									$values[] = $entry;
 								}
 								$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
 								if (!$this->_object->$setter($values))
@@ -1043,7 +1038,6 @@ class WebserviceRequest
 	 */
 	private function getXmlFromEntity($object = null)
 	{
-	
 		// two modes are available : 'schema', or 'display entity'
 	
 		$ret = '<'.$this->_resourceConfiguration['objectNodeName'].'>'."\n";
@@ -1072,14 +1066,27 @@ class WebserviceRequest
 								$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
 						}
 						$ret .= ">\n";
+						
+					
+						
 						if (!is_null($this->_schemaToDisplay))
-							$ret .= '<language id="" '.($this->_schemaToDisplay == 'synopsis' ? 'format="isUnsignedId"' : '').'></language>'."\n";
+						{
+							$languages = Language::getLanguages();
+							foreach ($languages as $language)
+								$ret .= '<language id="'.$language['id_lang'].'" '.($this->_schemaToDisplay == 'synopsis' ? 'format="isUnsignedId"' : '').'></language>'."\n";
+						}
 						else
 						{
 							if (!is_null($object->$key))
-								foreach ($object->$key as $idLang => $value)
-									$ret .= '<language id="'.$idLang.'" xlink:href="'.$this->_wsUrl.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
+							{
+								if (is_array($object->$key))
+									foreach ($object->$key as $idLang => $value)
+										$ret .= '<language id="'.$idLang.'" xlink:href="'.$this->_wsUrl.'languages/'.$idLang.'"><![CDATA['.$value.']]></language>'."\n";
+							}
 						}
+						
+						
+						
 						$ret .= '</'.$field['sqlId'].'>'."\n";
 					}
 					else
@@ -1106,8 +1113,8 @@ class WebserviceRequest
 					}
 				}
 				else
-						// display id
-						if (is_null($this->_schemaToDisplay))
+					// display id
+					if (is_null($this->_schemaToDisplay))
 						$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
 			}
 		}
@@ -1120,21 +1127,37 @@ class WebserviceRequest
 			{
 				$ret .= '<'.$assocName.' node_type="'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'">'."\n";
 				$getter = $this->_resourceConfiguration['associations'][$assocName]['getter'];
+				
+				// if we are not in schema
+				$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>';
 				if (method_exists($object, $getter))
 				{
 					$associationResources = $object->$getter();
 					if (is_array($associationResources))
 						foreach ($associationResources as $associationResource)
 						{
-							$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationResource['id'].'">'."\n";
+							$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].(in_array($assocName, $this->_resourceList) ? ' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationResource['id'].'"' : '').'>'."\n";
 							foreach ($associationResource as $fieldName => $fieldValue)
-							{
-								if ($fieldName == 'id')
-									$ret .= '<'.$fieldName.'><![CDATA['.$fieldValue.']]></'.$fieldName.'>'."\n";
-							}
+								$ret .= '<'.$fieldName.'><![CDATA['.$fieldValue.']]></'.$fieldName.'>'."\n";
 							$ret .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
 						}
 				}
+				if (!is_null($this->_schemaToDisplay))
+				{
+					
+					foreach ($this->_resourceConfiguration['associations'][$assocName]['fields'] as $fieldName => $fieldAttributes)
+					{
+						$ret .= '<'.$fieldName.
+						(isset($fieldAttributes['required']) && $fieldAttributes['required'] ? ' required="true"' : '');
+						if (isset($fieldAttributes['required']))
+							unset($fieldAttributes['required']);
+						if (count($fieldAttributes) > 0)
+							$ret .= ' format="'.explode(',', $fieldAttributes).'"';
+						$ret .= '/>'."\n";
+					}
+					
+				}
+				$ret .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>';
 				$ret .= '</'.$assocName.'>'."\n";
 			}
 			$ret .= '</associations>'."\n";

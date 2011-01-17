@@ -61,6 +61,15 @@ class ConfigurationCore extends ObjectModel
 		)
 	);
 	
+	protected	$webserviceParametersI18n = array(
+			'retrieveData' => array('retrieveMethod' => 'getI18nConfigurationList'),
+			'fields' => array(
+			'value' => array('i18n' => true),
+			'date_add' => array(),
+			'date_upd' => array('i18n' => true)
+		)
+	);
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -289,6 +298,36 @@ class ConfigurationCore extends ObjectModel
 			die(Tools::displayError('Invalid loadConfiguration() SQL query!'));
 		foreach ($result AS $row)
 			self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = $row['value'];
+	}
+	
+	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
+	{
+		$query = '
+		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` main
+		'.$sql_join.'
+		WHERE id_configuration NOT IN 
+		(	SELECT id_configuration
+			FROM '._DB_PREFIX_.$this->table.'_lang
+		) '.$sql_filter.'
+		'.($sql_sort != '' ? $sql_sort : '').'
+		'.($sql_limit != '' ? $sql_limit : '').'
+		';
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
+	}
+	
+	public function getI18nConfigurationList($sql_join, $sql_filter, $sql_sort, $sql_limit)
+	{
+		$query = '
+		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` main
+		'.$sql_join.'
+		WHERE id_configuration IN 
+		(	SELECT id_configuration
+			FROM '._DB_PREFIX_.$this->table.'_lang
+		) '.$sql_filter.'
+		'.($sql_sort != '' ? $sql_sort : '').'
+		'.($sql_limit != '' ? $sql_limit : '').'
+		';
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 	}
 }
 

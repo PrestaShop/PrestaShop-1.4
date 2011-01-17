@@ -76,14 +76,6 @@ class CountryCore extends ObjectModel
 			'id_zone' => array('sqlId' => 'id_zone', 'xlink_resource'=> 'zones'),
 			'id_currency' => array('sqlId' => 'id_currency', 'xlink_resource'=> 'currencies'),
 		),
-		'linked_tables' => array(//TODO this should be native...
-			'i18n' => array(
-				'table' => 'country_lang',
-				'fields' => array(
-					'id_lang' => array('xlink_resource'=> 'languages'),
-				),
-			),
-		),
 	);
 
 	protected 	$table = 'country';

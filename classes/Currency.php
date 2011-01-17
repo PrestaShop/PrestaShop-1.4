@@ -63,14 +63,29 @@ class CurrencyCore extends ObjectModel
  	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'iso_code_num' => 3, 'sign' => 8);
  	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'iso_code_num' => 'isNumericIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
 		'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool', 'active' => 'isBool');
-
+	
 	protected 	$table = 'currency';
 	protected 	$identifier = 'id_currency';
-
+	
 	/** @var Currency Current currency */
 	static private	$current = NULL;
 	/** @var array Currency cache */
 	static private	$currencies = array();
+	
+	protected	$webserviceParameters = array(
+		// 'objectNodeName' => 'cart',
+		// 'objectsNodeName' => 'carts',
+		'fields' => array(
+		// 'id_address_delivery' => array('xlink_resource' => 'addresses'),
+		// 'id_address_invoice' => array('xlink_resource' => 'addresses'),
+		// 'id_currency' => array('xlink_resource' => 'currencies'),
+		// 'id_customer' => array('xlink_resource' => 'customers'),
+		// 'id_guest' => array('xlink_resource' => 'guests'),
+		// 'id_lang' => array('xlink_resource' => 'languages'),
+		// 'id_carrier' => array('xlink_resource' => 'carriers'),
+		),
+	);
+
 	
 	/**
 	 * Overriding check if currency with the same iso code already exists.

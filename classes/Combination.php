@@ -133,26 +133,16 @@ class CombinationCore extends ObjectModel
 	
 	public function setWsProductOptionValues($values)
 	{
-		
-		$ids = array();
-		foreach ($values as $value)
-			$ids[] = $value['id'];
 		if ($this->deleteAssociations())
 		{
-			if ($ids)
-			{
-				// echo ("CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALL");
-				$sqlValues = '';
-				$ids = array_map('intval', $ids);
-				foreach ($ids as $position => $id)
-					$sqlValues[] = '('.(int)$id.', '.(int)$this->id.', '.(int)$position.')';
+				$sqlValues = array();
+				foreach ($values as $id)
+					$sqlValues[] = '('.(int)$id.', '.(int)$this->id.')';
 				$result = Db::getInstance()->Execute('
-					INSERT INTO `'._DB_PREFIX_.'category_product` (`id_category`, `id_product`, `position`)
+					INSERT INTO `'._DB_PREFIX_.'product_attribute_combination` (`id_attribute`, `id_product_attribute`)
 					VALUES '.implode(',', $sqlValues)
 				);
-				// var_dump($ids);
 				return $result;
-			}
 		}
 		return false;
 	}

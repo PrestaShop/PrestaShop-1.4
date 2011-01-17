@@ -74,7 +74,7 @@ class CartCore extends ObjectModel
 	protected	$fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
 		'id_currency' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'id_guest' => 'isUnsignedId', 'id_lang' => 'isUnsignedId',
 		'id_carrier' => 'isUnsignedId', 'recyclable' => 'isBool', 'gift' => 'isBool', 'gift_message' => 'isMessage');
-
+	
 	private		$_products = NULL;
 	private		$_totalWeight = NULL;
 	private		$_taxCalculationMethod = PS_TAX_EXC;
@@ -85,6 +85,26 @@ class CartCore extends ObjectModel
 	protected 	$table = 'cart';
 	protected 	$identifier = 'id_cart';
 
+	protected	$webserviceParameters = array(
+		'fields' => array(
+		'id_address_delivery' => array('xlink_resource' => 'addresses'),
+		'id_address_invoice' => array('xlink_resource' => 'addresses'),
+		'id_currency' => array('xlink_resource' => 'currencies'),
+		'id_customer' => array('xlink_resource' => 'customers'),
+		'id_guest' => array('xlink_resource' => 'guests'),
+		'id_lang' => array('xlink_resource' => 'languages'),
+		'id_carrier' => array('xlink_resource' => 'carriers'),
+		),
+		'associations' => array(
+			'cart_rows' => array('resource' => 'cart_row', 'fields' => array(
+				'id_product' => array('required' => true),
+				'id_product_attribute' => array('required' => true),
+				'quantity' => array('required' => true),
+				)
+			),
+		),
+	);
+	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -1445,6 +1465,35 @@ class CartCore extends ObjectModel
 		}
 		
 		return array('cart' => $cart, 'success' => $success);
+	}
+	
+	public function getWsCartRows()
+	{
+		$query = 'SELECT id_product, id_product_attribute, quantity
+		FROM `'._DB_PREFIX_.'cart_product` 
+		WHERE id_cart = '.(int)$this->id;
+		$result = Db::getInstance()->executeS($query);
+		return $result;
+	}
+	
+	public function setWsCartRows($values)
+	{
+		if ($this->deleteAssociations())
+		{
+			$query = 'INSERT INTO `'._DB_PREFIX_.'cart_product`(`id_cart`, `id_product`, `id_product_attribute`, `quantity`, `date_add`) VALUES ';
+			foreach ($values as $value)
+				$query .= '('.(int)$this->id.', '.(int)$value['id_product'].', '.(int)$value['id_product_attribute'].', '.(int)$value['quantity'].', NOW()),';
+			$result = Db::getInstance()->Execute(rtrim($query, ','));
+		}
+		return $result;
+	}
+	
+	
+	public function deleteAssociations()
+	{
+		return (Db::getInstance()->Execute('
+				DELETE FROM `'._DB_PREFIX_.'cart_product`
+				WHERE `id_cart` = '.(int)($this->id)) !== false);
 	}
 }
 

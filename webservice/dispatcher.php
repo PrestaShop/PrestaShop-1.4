@@ -25,9 +25,12 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
+ob_start();
 require_once(dirname(__FILE__).'/../config/config.inc.php');
 
 require_once(dirname(__FILE__).'/WebserviceRequest.php');
+
+
 
 $method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
 
@@ -79,3 +82,5 @@ elseif ($result['type'] == 'image')
 		imagegif(WebserviceRequest::getInstance()->_imageResource);
 	imagedestroy(WebserviceRequest::getInstance()->_imageResource);
 }
+
+ob_end_flush();

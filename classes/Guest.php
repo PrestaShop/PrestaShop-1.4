@@ -63,6 +63,21 @@ class GuestCore extends ObjectModel
 	protected 	$table = 'guest';
 	protected 	$identifier = 'id_guest';
 	
+	
+	protected	$webserviceParameters = array(
+		// 'objectNodeName' => 'cart',
+		// 'objectsNodeName' => 'carts',
+		'fields' => array(
+		// 'id_address_delivery' => array('xlink_resource' => 'addresses'),
+		// 'id_address_invoice' => array('xlink_resource' => 'addresses'),
+		// 'id_currency' => array('xlink_resource' => 'currencies'),
+		// 'id_customer' => array('xlink_resource' => 'customers'),
+		// 'id_guest' => array('xlink_resource' => 'guests'),
+		// 'id_lang' => array('xlink_resource' => 'languages'),
+		// 'id_carrier' => array('xlink_resource' => 'carriers'),
+		),
+	);
+	
 	public function getFields()
 	{
 		parent::validateFields();

@@ -128,8 +128,14 @@ abstract class ObjectModelCore
 				if ($result)
 					foreach ($result as $row)
 						foreach ($row AS $key => $value)
+						{
 							if (key_exists($key, $this) AND $key != $this->identifier)
-								$this->{$key}[$row['id_lang']] = stripslashes($value);
+							{
+								if (!is_array($this->{$key}))
+									$this->{$key} = array();
+								$this->{$key}[$row['id_lang']] = stripslashes($value);	
+							}
+						}
 			}
 		}
 		
@@ -467,7 +473,7 @@ abstract class ObjectModelCore
 		return $errors;
 	}
 	
-	public function getWebserviceParameters()
+	public function getWebserviceParameters($wsParamsAttributeName = NULL)
 	{
 		$defaultResourceParameters = array(
 			'objectSqlId' => $this->identifier,
@@ -480,13 +486,18 @@ abstract class ObjectModelCore
 				'id' => array('sqlId' => $this->identifier, 'i18n' => false),
 			),
 		);
-		if (!isset($this->webserviceParameters['objectNodeName']))
+		
+		if (is_null($wsParamsAttributeName))
+			$wsParamsAttributeName = 'webserviceParameters';
+		
+		
+		if (!isset($this->{$wsParamsAttributeName}['objectNodeName']))
 			$defaultResourceParameters['objectNodeName'] = $this->table;
-		if (!isset($this->webserviceParameters['objectsNodeName']))
+		if (!isset($this->{$wsParamsAttributeName}['objectsNodeName']))
 			$defaultResourceParameters['objectsNodeName'] = $this->table.'s';
 		
-		if (isset($this->webserviceParameters['associations']))
-			foreach ($this->webserviceParameters['associations'] as $assocName => &$associations)
+		if (isset($this->{$wsParamsAttributeName}['associations']))
+			foreach ($this->{$wsParamsAttributeName}['associations'] as $assocName => &$associations)
 			{
 				if (!isset($associations['setter']))
 					$associations['setter'] = Tools::toCamelCase('set_ws_'.$assocName);
@@ -494,7 +505,7 @@ abstract class ObjectModelCore
 					$associations['getter'] = Tools::toCamelCase('get_ws_'.$assocName);
 			}
 		
-		$resourceParameters = array_merge_recursive($defaultResourceParameters, $this->webserviceParameters);
+		$resourceParameters = array_merge_recursive($defaultResourceParameters, $this->{$wsParamsAttributeName});
 		if (isset($this->fieldsSize))
 			foreach ($this->fieldsSize as $fieldName => $maxSize)
 			{
