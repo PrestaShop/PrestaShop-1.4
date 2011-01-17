@@ -423,8 +423,19 @@ class ProductControllerCore extends FrontController
 		foreach ($specificPrices AS $key => &$row)
 		{
 			$row['quantity'] = &$row['from_quantity'];
-			if (!(float)($row['reduction'])) // The price may be directly set
-				$row['real_value'] = $price - (Product::$_taxCalculationMethod == PS_TAX_EXC ? $row['price'] : $row['price'] * (1 + $taxRate / 100));
+			if ($row['price'] != 0) // The price may be directly set
+			{
+			    $cur_price = (Product::$_taxCalculationMethod == PS_TAX_EXC ? $row['price'] : $row['price'] * (1 + $taxRate / 100));
+
+                if ($row['reduction_type'] == 'amount')
+			    {
+			        $cur_price = Product::$_taxCalculationMethod == PS_TAX_INC ? $cur_price - $row['reduction'] : $cur_price - ($row['reduction'] / (1 + $taxRate / 100));
+			    } else {
+				    $cur_price = $cur_price * ( 1  - ($row['reduction']));
+			    }
+
+			    $row['real_value'] = $price - $cur_price;
+			}
 			else
 			{
 			    if ($row['reduction_type'] == 'amount')
@@ -433,9 +444,6 @@ class ProductControllerCore extends FrontController
 			    } else {
 				    $row['real_value'] = $row['reduction'] * 100;
 			    }
-
-
-
 			}
 			$row['nextQuantity'] = (isset($specificPrices[$key + 1]) ? (int)($specificPrices[$key + 1]['from_quantity']) : -1);
 		}

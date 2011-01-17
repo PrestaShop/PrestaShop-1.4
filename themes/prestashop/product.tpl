@@ -145,7 +145,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 		<!-- product img-->
 		<div id="image-block">
 		{if $have_image}
-			<img src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}" 
+			<img src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}"
 				{if $jqZoomEnabled}class="jqzoom" alt="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox')}"{else} title="{$product->name|escape:'htmlall':'UTF-8'}" alt="{$product->name|escape:'htmlall':'UTF-8'}" {/if} id="bigpic" width="{$largeSize.width}" height="{$largeSize.height}" />
 		{else}
 			<img src="{$img_prod_dir}{$lang_iso}-default-large.jpg" id="bigpic" alt="" title="{$product->name|escape:'htmlall':'UTF-8'}" width="{$largeSize.width}" height="{$largeSize.height}" />
@@ -318,7 +318,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 				<label>{l s='Quantity :'}</label>
 				<input type="text" name="qty" id="quantity_wanted" class="text" value="{if isset($quantityBackup)}{$quantityBackup|intval}{else}{if $product->minimal_quantity > 1}{$product->minimal_quantity}{else}1{/if}{/if}" size="2" maxlength="3" {if $product->minimal_quantity > 1}onkeyup="checkMinimalQuantity({$product->minimal_quantity});"{/if} />
 			</p>
-			
+
 			<!-- minimal quantity wanted -->
 			<p id="minimal_quantity_wanted_p"{if $product->minimal_quantity <= 1 OR !$product->available_for_order} style="display: none;"{/if}>{l s='You must add '}<b id="minimal_quantity_label">{$product->minimal_quantity}</b>{l s=' as a minimum quantity to buy this product.'}</p>
 			{if $product->minimal_quantity > 1}
@@ -383,10 +383,10 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 		<tr>
 			{foreach from=$quantity_discounts item='quantity_discount' name='quantity_discounts'}
 				<td>
-				{if $quantity_discount.reduction_type == 'percentage'}
-					-{$quantity_discount.real_value|floatval}%
-				{else}
+				{if $quantity_discount.price != 0 OR $quantity_discount.reduction_type == 'amount'}
 					-{convertPrice price=$quantity_discount.real_value|floatval}
+				{else}
+    				-{$quantity_discount.real_value|floatval}%
 				{/if}
 				</td>
 			{/foreach}

@@ -721,7 +721,7 @@ class AdminProducts extends AdminTab
 				else
 					Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
 			}
-			elseif (!SpecificPrice::setSpecificPriorities((int)($obj->id), $priorities))
+			elseif (!SpecificPrice::setSpecificPriority((int)($obj->id), $priorities))
 				$this->_errors[] = Tools::displayError('An error occurred while setting priorities.');
 			else
 				Tools::redirectAdmin($currentIndex.'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
@@ -1542,7 +1542,7 @@ class AdminProducts extends AdminTab
 
 		$obj = $this->loadObject();
 		$specificPrices = SpecificPrice::getByProductId((int)($obj->id));
-		$specificPricePriorities = Tools::getValue('specificPricePriority', explode(';', Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES')));
+		$specificPricePriorities = SpecificPrice::getPriority((int)($obj->id));
 
 		$taxRate = TaxRulesGroup::getTaxesRate($obj->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0);
 
@@ -3196,7 +3196,7 @@ class AdminProducts extends AdminTab
 					{
 						$list = '';
 						$jsList = '';
-						
+
 						/* In order to keep the same attributes order */
 						asort($product_attribute['attributes']);
 

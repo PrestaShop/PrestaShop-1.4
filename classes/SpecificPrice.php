@@ -85,15 +85,44 @@ class SpecificPriceCore extends ObjectModel
 		');
 	}
 
+	private static function _getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group)
+	{
+	    $priority = SpecificPrice::getPriority($id_product);
+
+	    $select = '(';
+
+        // score generation for quantity discount
+	    foreach(array_reverse($priority) AS $k => $field)
+	        $select .= ' IF (`'.$field.'` = '.(int)(${$field}).', '.pow(2,$k).', 0) +';
+
+	    $select = substr($select, 0, -1).') AS `score`';
+
+	    return $select;
+	}
+
+    public static function getPriority($id_product)
+    {
+        $priority = Db::getInstance()->getValue('
+	    SELECT `priority` FROM `'._DB_PREFIX_.'specific_price_priority`
+	    WHERE `id_product` = '.(int)$id_product
+	    );
+
+	    if (!$priority)
+	        $priority = Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES');
+
+	    $fields = preg_split('/;/', $priority);
+
+	    return $fields;
+    }
+
 	static public function getSpecificPrice($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
 	{
+
 		$now = date('Y-m-d H:i:s');
+
 		return Db::getInstance()->getRow('
 			SELECT *,
-					(IF (`id_shop` = '.(int)($id_shop).', 1, 0) +
-					IF (`id_currency` = '.(int)($id_currency).', 1, 0) +
-					IF (`id_country` = '.(int)($id_country).', 1, 0) +
-					IF (`id_group` = '.(int)($id_group).', 1, 0)) as `score`
+					'.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
 			FROM `'._DB_PREFIX_.'specific_price`
 			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
 					`id_shop` IN(0, '.(int)($id_shop).') AND
@@ -102,7 +131,7 @@ class SpecificPriceCore extends ObjectModel
 					`id_group` IN(0, '.(int)($id_group).') AND
 					`from_quantity` <= '.(int)($quantity).' AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
-			ORDER BY `score` DESC, '.self::getPriorities().', `from_quantity` DESC
+			ORDER BY `score` DESC, `from_quantity` DESC
 		');
 	}
 
@@ -111,26 +140,30 @@ class SpecificPriceCore extends ObjectModel
 		$value = '';
 		foreach ($priorities as $priority)
 			$value .= pSQL($priority).';';
+
+        SpecificPrice::deletePriorities();
+
 		return Configuration::updateValue('PS_SPECIFIC_PRICE_PRIORITIES', rtrim($value, ';')) AND DB::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'specific_price` SET `priority` = 0');
 	}
 
-	static public function getPriorities()
+	public static function deletePriorities()
 	{
-		$data = Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES');
-		return '`'.str_replace(';', '`, `', $data).'`';
+	    return Db::getInstance()->Execute('
+	    DELETE FROM `'._DB_PREFIX_.'specific_price_priority`
+	    ');
 	}
 
-	static public function setSpecificPriorities($id_product, $priorities)
+	static public function setSpecificPriority($id_product, $priorities)
 	{
 		$fields = '';
 		foreach ($priorities as $priority)
-			$fields .= '`'.pSQL($priority).'` DESC, ';
-		$result = DB::getInstance()->ExecuteS('SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product).' ORDER BY '.rtrim($fields, ', DESC'));
-		$position = 0;
-		foreach ($result AS $row)
-			if (!DB::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'specific_price` SET `priority` = '.++$position.' WHERE `id_specific_price` = '.(int)($row['id_specific_price'])))
-				return false;
-		return true;
+			$value .= pSQL($priority).';';
+
+		return Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'specific_price_priority` (`id_product`, `priority`)
+		VALUES ('.(int)$id_product.',\''.rtrim($value, ';').'\')
+		ON DUPLICATE KEY UPDATE `priority` = \''.rtrim($value, ';').'\'
+		');
 	}
 
 	static public function getQuantityDiscounts($id_product, $id_shop, $id_currency, $id_country, $id_group)
@@ -138,10 +171,7 @@ class SpecificPriceCore extends ObjectModel
 		$now = date('Y-m-d H:i:s');
 		$res =  Db::getInstance()->ExecuteS('
 			SELECT *,
-					(IF (`id_shop` = '.(int)($id_shop).', 1, 0) +
-					IF (`id_currency` = '.(int)($id_currency).', 1, 0) +
-					IF (`id_country` = '.(int)($id_country).', 1, 0) +
-					IF (`id_group` = '.(int)($id_group).', 1, 0)) as `score`
+					'.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
 			FROM `'._DB_PREFIX_.'specific_price`
 			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
 					`id_shop` IN(0, '.(int)($id_shop).') AND
@@ -149,7 +179,7 @@ class SpecificPriceCore extends ObjectModel
 					`id_country` IN(0, '.(int)($id_country).') AND
 					`id_group` IN(0, '.(int)($id_group).') AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
-					ORDER BY `score`  DESC, '.self::getPriorities().', `from_quantity` DESC
+					ORDER BY `score`  DESC, `from_quantity` DESC
 		');
 
 		$targeted_prices = array();
@@ -174,10 +204,7 @@ class SpecificPriceCore extends ObjectModel
 		$now = date('Y-m-d H:i:s');
 		return Db::getInstance()->getRow('
 			SELECT *,
-					(IF (`id_shop` = '.(int)($id_shop).', 1, 0) +
-					IF (`id_currency` = '.(int)($id_currency).', 1, 0) +
-					IF (`id_country` = '.(int)($id_country).', 1, 0) +
-					IF (`id_group` = '.(int)($id_group).', 1, 0)) as `score`
+					'.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
 			FROM `'._DB_PREFIX_.'specific_price`
 			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
 					`id_shop` IN(0, '.(int)($id_shop).') AND
@@ -186,7 +213,7 @@ class SpecificPriceCore extends ObjectModel
 					`id_group` IN(0, '.(int)($id_group).') AND
 					`from_quantity` >= '.(int)($quantity).' AND
 					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
-					ORDER BY `score` DESC, '.self::getPriorities().', `from_quantity` DESC
+					ORDER BY `score` DESC, `from_quantity` DESC
 		');
 	}
 
@@ -221,4 +248,3 @@ class SpecificPriceCore extends ObjectModel
 		return $this->add();
 	}
 }
-

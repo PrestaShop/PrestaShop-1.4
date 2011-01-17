@@ -65,7 +65,7 @@ function addCombination(idCombination, arrayOfIdAttributes, quantity, price, eco
 	combination['unit_price'] = unit_price;
 	combination['minimal_quantity'] = minimal_quantity;
 	combinations.push(combination);
-	
+
 }
 
 // search the combinations' case of attributes and update displaying of availability, prices, ecotax, and image
@@ -82,7 +82,7 @@ function findCombination(firstTime)
 	//testing every combination to find the conbination's attributes' case of the user
 
 	for (combination in combinations)
-	{		
+	{
 		//verify if this combinaison is the same that the user's choice
 		nbAttributesEquals = 0;
 		for (idAttribute in combinations[combination]['idsAttributes'])
@@ -92,7 +92,7 @@ function findCombination(firstTime)
 				//if this attribute has been choose by user
 				if (in_array(combinations[combination]['idsAttributes'][idAttribute], choice))
 				{
-					
+
 					//we are in a good way to find the good combination !
 					nbAttributesEquals++;
 				}
@@ -294,7 +294,6 @@ function updateDisplay()
 			var productPrice = ps_round(taxExclPrice * tax, 2);
 			if (specific_price)
 				productPriceWithoutReduction = ps_round(productPriceWithoutReduction * tax, 2);
-			reduction_price /= tax;
 		}
 		else
 		{
@@ -304,6 +303,7 @@ function updateDisplay()
 		}
 
 		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
+
 		if (!specific_price)
 			productPriceWithoutReduction = productPrice;
 		productPrice -= reduction;
