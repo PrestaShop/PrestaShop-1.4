@@ -211,7 +211,7 @@ class PayPal extends PaymentModule
 		global $smarty, $cookie;
 	 
 		$smarty->assign('iso_code', Tools::strtolower(Language::getIsoById($cookie->id_lang ? (int)($cookie->id_lang) : 1)));
-		$smarty->assign('logo', $this->getLogo(Configuration::get('PAYPAL_EXPRESS_CHECKOUT'), true));
+		$smarty->assign('logo', $this->getLogo(false, true));
 		return $this->display(__FILE__, 'column.tpl');
 	}
 
