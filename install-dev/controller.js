@@ -841,7 +841,15 @@ function doUpgrade()
 	   ,
 	   success: function(ret)
 	   {
-			ret = ret.getElementsByTagName('action')[0];
+	   		var ret;
+			try {
+				ret = ret.getElementsByTagName('action')[0];
+			} catch (e) {
+				$("#resultUpdate").html(ret);
+				showStep(8);
+				return;
+			}
+
 			var countSqlError = 0;
 			if (ret.getAttribute("result") == "ok" || (ret.getAttribute("result") == "fail" && (ret.getAttribute("error") == "34")))
 			{
@@ -857,7 +865,8 @@ function doUpgrade()
 						$("#updateLog").append("<span class='fail'>(" + $(this).children("sqlNumberError").text() + ") " + $(this).children("sqlMsgError").text() + "</span><br/>");
 					}
 				});
-				if (ret.getAttribute("error") == "34") $("#txtErrorUpdateSQL").html(txtError[35]+" "+countSqlError+" "+txtError[36]);
+				if (ret.getAttribute("error") == "34")
+					$("#txtErrorUpdateSQL").html(txtError[35]+" "+countSqlError+" "+txtError[36]);
 				showStep(9);
 			}
 			else
@@ -865,15 +874,14 @@ function doUpgrade()
 				$("#resultUpdate").html(txtError[parseInt(ret.getAttribute("error"))]);
 				showStep(8);
 			}
-	   },
-	   error: function (data, status, e)
+		},
+		error: function (data, status, e)
 		{
-			$("#resultUpdate").html("ajax error : "+status);
+			$("#resultUpdate").html("Ajax error: " + status);
 			$("#detailsError").html(data);
 			showStep(8);
 		}
-	}
-	);
+	});
 }
 
 function showUpdateLog(){
