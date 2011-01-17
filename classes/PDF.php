@@ -217,11 +217,25 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf = new PDF('P', 'mm', 'A4');
 		foreach ($invoices AS $id_order)
 		{
-			$orderObj = new Order((int)($id_order));
+			$orderObj = new Order((int)$id_order);
 			if (Validate::isLoadedObject($orderObj))
 				PDF::invoice($orderObj, 'D', true, $pdf);
 		}
 		return $pdf->Output('invoices.pdf', 'D');
+	}
+	
+	public static function multipleOrderSlips($orderSlips)
+	{
+		$pdf = new PDF('P', 'mm', 'A4');
+		foreach ($orderSlips AS $id_order_slip)
+		{
+			$orderSlip = new OrderSlip((int)$id_order_slip);
+			$order = new Order((int)$orderSlip->id_order);
+			$order->products = OrderSlip::getOrdersSlipProducts($orderSlip->id, $order);
+			if (Validate::isLoadedObject($orderSlip) AND Validate::isLoadedObject($order))
+				PDF::invoice($order, 'D', true, $pdf, $orderSlip);
+		}
+		return $pdf->Output('order_slips.pdf', 'D');
 	}
 
 	public static function multipleDelivery($slips)
@@ -229,7 +243,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf = new PDF('P', 'mm', 'A4');
 		foreach ($slips AS $id_order)
 		{
-			$orderObj = new Order((int)($id_order));
+			$orderObj = new Order((int)$id_order);
 			if (Validate::isLoadedObject($orderObj))
 				PDF::invoice($orderObj, 'D', true, $pdf, false, $orderObj->delivery_number);
 		}
@@ -619,10 +633,15 @@ class PDFCore extends PDF_PageGroupCore
 		else
 			$w = array(120, 30, 10);
 		self::ProdTabHeader($delivery);
-		if (isset(self::$order->products) AND sizeof(self::$order->products))
-			$products = self::$order->products;
+		if (!self::$orderSlip)
+		{
+			if (isset(self::$order->products) AND sizeof(self::$order->products))
+				$products = self::$order->products;
+			else
+				$products = self::$order->getProducts();
+		}
 		else
-			$products = self::$order->getProducts();
+			$products = self::$orderSlip->getProducts();
 		$customizedDatas = Product::getAllCustomizedDatas((int)(self::$order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
 

@@ -44,13 +44,53 @@ class AdminSlip extends AdminTab
 		
 		parent::__construct();
 	}
+	
+	public function postProcess()
+	{
+		if (Tools::isSubmit('submitPrint'))
+		{
+			if (!Validate::isDate(Tools::getValue('date_from')))
+				$this->_errors[] = $this->l('Invalid from date');
+			if (!Validate::isDate(Tools::getValue('date_to')))
+				$this->_errors[] = $this->l('Invalid end date');
+			if (!sizeof($this->_errors))
+			{
+				$orderSlips = OrderSlip::getSlipsIdByDate(Tools::getValue('date_from'), Tools::getValue('date_to'));
+				if (count($orderSlips))
+					Tools::redirectAdmin('pdf.php?slips&date_from='.urlencode(Tools::getValue('date_from')).'&date_to='.urlencode(Tools::getValue('date_to')).'&token='.$this->token);
+				$this->_errors[] = $this->l('No order slips found for this period');
+			}
+		}
+		return parent::postProcess();
+	}
 
 	public function display()
 	{
-		global $cookie;
+		global $cookie, $currentIndex;		
 
+		echo '<div style="float:left;width:550px">';
 		$this->getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 		$this->displayList();
+		echo '</div>';
+		
+		echo '
+		<fieldset style="float:left;width:300px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('Print PDF').'</legend>
+			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+				<label style="width:90px">'.$this->l('From:').' </label>
+				<div class="margin-form" style="padding-left:100px">
+					<input type="text" size="4" maxlength="10" name="date_from" value="'.date('Y-m-01').'" style="width: 120px;" />
+					<p class="clear">'.$this->l('Format: 2007-12-31 (inclusive)').'</p>
+				</div>
+				<label style="width:90px">'.$this->l('To:').' </label>
+				<div class="margin-form" style="padding-left:100px">
+					<input type="text" size="4" maxlength="10" name="date_to" value="'.date('Y-m-t').'" style="width: 120px;" />
+					<p class="clear">'.$this->l('Format: 2008-12-31 (inclusive)').'</p>
+				</div>
+				<div class="margin-form" style="padding-left:100px">
+					<input type="submit" value="'.$this->l('Generate PDF file').'" name="submitPrint" class="button" />
+				</div>
+			</form>
+		</fieldset><div class="clear">&nbsp;</div>';
 	}
 	
 	public function displayListContent($token = NULL)

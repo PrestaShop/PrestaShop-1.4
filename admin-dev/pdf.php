@@ -33,8 +33,25 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 $cookie = new Cookie('psAdmin');
 if (!$cookie->id_employee)
 	Tools::redirectAdmin('login.php');
+	
+$functionArray = array(
+	'pdf' => 'generateInvoicePDF',
+	'id_order_slip' => 'generateOrderSlipPDF',
+	'id_delivery' => 'generateDeliverySlipPDF',
+	'invoices' => 'generateInvoicesPDF',
+	'invoices2' => 'generateInvoicesPDF2',
+	'slips' => 'generateOrderSlipsPDF',
+	'deliveryslips' => 'generateDeliverySlipsPDF'
+);
 
-if (isset($_GET['pdf']))
+foreach ($functionArray as $var => $function)
+	if (isset($_GET[$var]))
+	{
+		call_user_func($function);
+		die;
+	}
+
+function generateInvoicePDF()
 {
 	if (!isset($_GET['id_order']))
 		die (Tools::displayError('order ID is missing'));
@@ -43,7 +60,8 @@ if (isset($_GET['pdf']))
 		die(Tools::displayError('cannot find order in database'));
 	PDF::invoice($order);
 }
-elseif (isset($_GET['id_order_slip']))
+
+function generateOrderSlipPDF()
 {
 	$orderSlip = new OrderSlip((int)($_GET['id_order_slip']));
 	$order = new Order((int)($orderSlip->id_order));
@@ -53,7 +71,8 @@ elseif (isset($_GET['id_order_slip']))
 	$tmp = NULL;
 	PDF::invoice($order, 'D', false, $tmp, $orderSlip);
 }
-elseif (isset($_GET['id_delivery']))
+
+function generateDeliverySlipPDF()
 {
 	$order = Order::getByDelivery((int)($_GET['id_delivery']));
 	if (!Validate::isLoadedObject($order))
@@ -61,14 +80,16 @@ elseif (isset($_GET['id_delivery']))
 	$tmp = NULL;
 	PDF::invoice($order, 'D', false, $tmp, false, $order->delivery_number);
 }
-elseif (isset($_GET['invoices']))
+
+function generateInvoicesPDF()
 {
 	$orders = Order::getOrdersIdInvoiceByDate($_GET['date_from'], $_GET['date_to'], NULL, 'invoice');
 	if (!is_array($orders))
 		die (Tools::displayError('No invoices found'));
 	PDF::multipleInvoices($orders);
 }
-elseif (isset($_GET['invoices2']))
+
+function generateInvoicesPDF2()
 {
 	$allOrders = array();
 	foreach (explode('-', Tools::getValue('id_order_state')) as $id_order_state)
@@ -76,10 +97,18 @@ elseif (isset($_GET['invoices2']))
 			$allOrders = array_merge($allOrders, $orders);
 	PDF::multipleInvoices($allOrders);
 }
-elseif (isset($_GET['deliveryslips']))
+
+function generateOrderSlipsPDF()
+{
+	$orderSlips = OrderSlip::getSlipsIdByDate($_GET['date_from'], $_GET['date_to']);
+	if (!count($orderSlips))
+		die (Tools::displayError('No order slips found'));
+	PDF::multipleOrderSlips($orderSlips);
+}
+
+function generateDeliverySlipsPDF()
 {
 	$slips = unserialize(urldecode($_GET['deliveryslips']));
 	if (is_array($slips))
 		PDF::multipleDelivery($slips);
 }
-
