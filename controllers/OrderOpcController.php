@@ -139,7 +139,7 @@ class OrderOpcControllerCore extends ParentOrderController
 							
 							$orderTotal = $this->cart->getOrderTotal();
 							$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
-							if ($orderTotalDefaultCurrency < $minimalPurchase)
+							if ($orderTotal < $minimalPurchase)
 								$this->errors[] = Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
 								' '.Tools::displayError('is required in order to validate your order');
 							
