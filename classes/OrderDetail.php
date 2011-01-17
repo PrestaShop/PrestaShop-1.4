@@ -121,7 +121,7 @@ class OrderDetailCore extends ObjectModel
 	'product_attribute_id' => 'isUnsignedId',
 	'product_name' => 'isGenericName',
 	'product_quantity' => 'isInt',
-	'product_quantity_in_stock' => 'isUnsignedInt',
+	'product_quantity_in_stock' => 'isInt',
 	'product_quantity_return' => 'isUnsignedInt',
 	'product_quantity_refunded' => 'isUnsignedInt',
 	'product_quantity_reinjected' => 'isUnsignedInt',

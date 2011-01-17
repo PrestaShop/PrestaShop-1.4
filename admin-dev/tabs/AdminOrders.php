@@ -254,7 +254,7 @@ class AdminOrders extends AdminTab
 							// Reinject product
 							if (!$order->hasBeenDelivered() OR ($order->hasBeenDelivered() AND Tools::isSubmit('reinjectQuantities')))
 							{
-								$reinjectableQuantity = (int)($orderDetail->product_quantity_in_stock) - (int)($orderDetail->product_quantity_reinjected);
+								$reinjectableQuantity = (int)($orderDetail->product_quantity) - (int)($orderDetail->product_quantity_reinjected);
 								$quantityToReinject = $qtyCancelProduct > $reinjectableQuantity ? $reinjectableQuantity : $qtyCancelProduct;
 								if (!Product::reinjectQuantities($orderDetail, $quantityToReinject))
 									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
@@ -812,7 +812,7 @@ class AdminOrders extends AdminTab
 				echo '
 				<div style="clear:both; height:15px;">&nbsp;</div>
 				<div style="float: right; width: 160px;">';
-				if ($order->hasBeenDelivered())
+				if ($order->hasBeenDelivered() AND Configuration::get('PS_ORDER_RETURN'))
 					echo '
 					<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />&nbsp;<label for="reinjectQuantities" style="float:none; font-weight:normal;">'.$this->l('Re-stock products').'</label><br />';
 				if ((!$order->hasBeenDelivered() AND $order->hasBeenPaid()) OR ($order->hasBeenDelivered() AND Configuration::get('PS_ORDER_RETURN')))
