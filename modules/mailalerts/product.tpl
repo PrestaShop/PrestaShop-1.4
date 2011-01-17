@@ -70,7 +70,7 @@ function  addNotification() {
 	});
 	return false;
 }{/literal}
-//]]>
+
 $(document).ready(function() {
 	$('#oos_customer_email').bind('keypress', function(e) {
 		if(e.keyCode == 13) 
@@ -80,7 +80,9 @@ $(document).ready(function() {
 		}
 	});
 });
+//]]>
 </script>
+
 <!-- MODULE MailAlerts -->
 {if isset($email) AND $email}
 	<input type="text" id="oos_customer_email" name="customer_email" size="20" value="your@email.com" class="mailalerts_oos_email" onclick="clearText();" /><br />

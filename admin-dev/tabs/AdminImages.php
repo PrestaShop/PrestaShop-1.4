@@ -89,7 +89,8 @@ class AdminImages extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/admin/picture.gif" />'.$this->l('Images').'</legend><br />
+			<fieldset>
+				<legend><img src="../img/admin/picture.gif" />'.$this->l('Images').'</legend><br />
 				<label>'.$this->l('Type name:').' </label>
 				<div class="margin-form">
 					<input type="text" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
@@ -184,19 +185,19 @@ class AdminImages extends AdminTab
 		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-			<fieldset style="width:800px;">
+			<fieldset class="width2">
 				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Regenerate thumbnails').'</legend><br />
 				<label>'.$this->l('Select image').'</label>
 				<div class="margin-form">
 					<select name="type" onchange="changeFormat(this)">
 						<option value="all">'.$this->l('All').'</option>';
-				foreach ($types as $k => $type)
+				foreach ($types AS $k => $type)
 					echo '<option value="'.$k.'">'.$type.'</option>';
 				echo '
 					</select>
 				</div>';
 				
-			foreach ($types as $k => $type)
+			foreach ($types AS $k => $type)
 			{
 				$formats = ImageType::getImagesTypes($k);
 				echo '
@@ -204,7 +205,7 @@ class AdminImages extends AdminTab
 				<div class="second-select margin-form format_'.$k.'" style="display:none;">
 				<select class="second-select format_'.$k.'" name="format_'.$k.'">
 					<option value="all">'.$this->l('All').'</option>';
-				foreach ($formats as $format)
+				foreach ($formats AS $format)
 					echo '<option value="'.$format['id_image_type'].'">'.$format['name'].'</option>';
 				echo '</select></div>';
 			}
@@ -221,8 +222,8 @@ class AdminImages extends AdminTab
 					<input name="erase" type="checkbox" value="1" checked="checked" />
 					<p>'.$this->l('Uncheck this checkbox only if your server timed out and you need to resume the regeneration.').'</p>
 				</div>
-				<div class="clear">&nbsp;</div>
-				<input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" />
+				<div class="clear"></div>
+				<center><input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" /></center>
 			</fieldset>
 		</form>';
 	}
@@ -254,7 +255,9 @@ class AdminImages extends AdminTab
 						// Customizable writing dir
 						$newDir = $dir;
 						if ($imageType['name'] == 'thumb_scene')
-							$newDir .= 'thumbs/';
+							$newDir .= 'thumbs/';						
+						if (!file_exists($newDir))
+							continue;						
 						if (!file_exists($newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg'))
 							if (!imageResize($dir.$image, $newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height'])))
 								$errors = true;
@@ -338,7 +341,7 @@ class AdminImages extends AdminTab
 			);
 
 		// Launching generation process
-		foreach ($process as $k => $proc)
+		foreach ($process AS $k => $proc)
 		{
 			if ($type != 'all' && $type != $proc['type'])
 				continue ;
@@ -349,7 +352,7 @@ class AdminImages extends AdminTab
 			{
 				$format = strval(Tools::getValue('format_'.$type));
 				if ($format != 'all')
-					foreach ($formats as $k => $form)
+					foreach ($formats AS $k => $form)
 						if ($form['id_image_type'] != $format)
 							unset($formats[$k]);
 			}

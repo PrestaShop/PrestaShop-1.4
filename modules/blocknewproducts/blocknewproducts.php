@@ -30,9 +30,6 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class BlockNewProducts extends Module
 {
-	private $_html = '';
-	private $_postErrors = array();
-
 	public function __construct()
 	{
 		$this->name = 'blocknewproducts';

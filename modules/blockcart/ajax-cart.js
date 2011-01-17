@@ -551,7 +551,7 @@ var ajaxCart = {
 		}
 	},
 	
-	//update general cart informations everywere in the page
+	//update general cart informations everywhere in the page
 	updateCartEverywhere : function(jsonData) {
 		$('.ajax_cart_total').text(jsonData.productTotal);
 		$('.ajax_cart_shipping_cost').text(jsonData.shippingCost);

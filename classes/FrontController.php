@@ -333,8 +333,7 @@ class FrontControllerCore
 		$js_files = array();
 		
 		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
-		Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css', 'screen');
-		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js', _PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js'));
+		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
 		
 		$this->cookie = $cookie;
 		$this->cart = $cart;

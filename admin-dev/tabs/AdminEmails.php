@@ -36,11 +36,11 @@ class AdminEmails extends AdminPreferences
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
 
-		$contacts = Contact::getContacts($cookie->id_lang);
-		for ($i = 0; $i < sizeof($contacts); ++$i)
-			$contact_message[$i] = array('email_message' => $contacts[$i]['id_contact'], 'name' => $contacts[$i]['name']);
+		foreach (Contact::getContacts((int)$cookie->id_lang) AS $contact)
+			$arr[] = array('email_message' => $contact['id_contact'], 'name' => $contact['name']);
+
  		$this->_fieldsEmail = array(
-		'PS_MAIL_EMAIL_MESSAGE' => array('title' => $this->l('Send e-mail to:'), 'desc' => $this->l('When customers send message from order page'), 'validation' => 'isUnsignedId', 'type' => 'select', 'cast' => 'intval', 'identifier' => 'email_message', 'list' => $contact_message),
+		'PS_MAIL_EMAIL_MESSAGE' => array('title' => $this->l('Send e-mail to:'), 'desc' => $this->l('When customers send message from order page'), 'validation' => 'isUnsignedId', 'type' => 'select', 'cast' => 'intval', 'identifier' => 'email_message', 'list' => $arr),
 		'PS_MAIL_METHOD' => array('title' => '', 'validation' => 'isGenericName', 'required' => true, 'type' => 'radio', 'choices' => array(1 => $this->l('Use PHP mail() function.  Recommended; works in most cases'), 2 => $this->l('Set my own SMTP parameters. For advanced users ONLY')), 'js' => array(1 => 'onclick="javascript:toggleLayer(\'SMTP_CONTAINER\', 0);"', 2 => 'onclick="toggleLayer(\'SMTP_CONTAINER\', 1);"')),
 		'PS_MAIL_TYPE' => array('title' => '', 'validation' => 'isGenericName', 'required' => true, 'type' => 'radio', 'choices' => array(1 => $this->l('Send e-mail as HTML'), 2 => $this->l('Send e-mail as Text'), 3 => $this->l('Both'))),
 		'SMTP_CONTAINER' => array('title' => '', 'type' => 'container'),
@@ -49,8 +49,7 @@ class AdminEmails extends AdminPreferences
 		'PS_MAIL_PASSWD' => array('title' => $this->l('SMTP password:'), 'desc' => $this->l('Leave blank if not applicable'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'password'),
 		'PS_MAIL_SMTP_ENCRYPTION' => array('title' => $this->l('Encryption:'), 'desc' => $this->l('Use an encrypt protocol'), 'type' => 'select', 'cast' => 'strval', 'identifier' => 'mode', 'list' => array(array('mode' => 'off', 'name' => $this->l('None')), array('mode' => 'tls', 'name' => $this->l('TLS')), array('mode' => 'ssl', 'name' => $this->l('SSL')))),
 		'PS_MAIL_SMTP_PORT' => array('title' => $this->l('Port:'), 'desc' => $this->l('Number of port to use'), 'validation' => 'isInt', 'size' => 5, 'type' => 'text', 'cast' => 'intval'),
-		'SMTP_CONTAINER_END' => array('title' => '', 'type' => 'container_end', 'content' => '<script type="text/javascript">if (getE("PS_MAIL_METHOD2_on").checked == false) { toggleLayer(\'SMTP_CONTAINER\', 0); }</script>')
-		);
+		'SMTP_CONTAINER_END' => array('title' => '', 'type' => 'container_end', 'content' => '<script type="text/javascript">if (getE("PS_MAIL_METHOD2_on").checked == false) { toggleLayer(\'SMTP_CONTAINER\', 0); }</script>'));
 	
 		parent::__construct();
 	}
@@ -60,7 +59,12 @@ class AdminEmails extends AdminPreferences
 		if (isset($_POST['submitEmail'.$this->table]))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
-				$this->_postConfig($this->_fieldsEmail);
+			{
+				if ($_POST['PS_MAIL_METHOD'] == 2 AND (empty($_POST['PS_MAIL_SERVER']) OR empty($_POST['PS_MAIL_SMTP_PORT'])))
+					$this->_errors[] = Tools::displayError('You must at least define a SMTP server and a SMTP port. If you don\'t know, use the PHP mail() function instead.');
+				else
+					$this->_postConfig($this->_fieldsEmail);
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
@@ -74,7 +78,7 @@ class AdminEmails extends AdminPreferences
 	private function _displayMailTest()
 	{
 		echo '
-		<fieldset style="width:51%;margin-top:10px;">
+		<fieldset class="width2" style="margin-top: 10px;">
 			<legend><img src="../img/admin/email.gif" alt="" /> '.$this->l('Test your e-mail configuration').'</legend>
 			<script type="text/javascript">
 				var textMsg = "'.$this->l('This is a test message, your server is now available to send email').'";
@@ -84,7 +88,7 @@ class AdminEmails extends AdminPreferences
 				var errorMail = "'.$this->l('This email address is wrong!').'";
 			</script>
 			<script type="text/javascript" src="'._PS_JS_DIR_.'/sendMailTest.js"></script>
-			<div style="clear: both; padding-top:15px;">
+			<div style="clear: both; padding-top: 15px;">
 				<label>'.$this->l('Send a test e-mail to').'</label>
 				<div class="margin-form">
 					<input type="text" name="testEmail" id="testEmail" value="'.Configuration::get('PS_SHOP_EMAIL').'" style="width:210px;margin-bottom:4px;" /><br />
@@ -98,8 +102,6 @@ class AdminEmails extends AdminPreferences
 					<p id="mailResultCheck" style="display:none;"></p>
 				</div>
 			</div>
-		</fieldset>
-		';
+		</fieldset>';
 	}
 }
-

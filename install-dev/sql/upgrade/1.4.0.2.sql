@@ -856,5 +856,4 @@ CREATE TABLE `PREFIX_webservice_permission` (
 /* PHP:editorial_update(); */;
 /* PHP:reorderpositions(); */;
 /* PHP:update_image_size_in_db(); */;
-/* PHP:updateproductcomments(); */;
 /* PHP:update_order_details(); */;

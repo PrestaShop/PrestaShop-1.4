@@ -124,10 +124,13 @@ class ParentOrderControllerCore extends FrontController
 		
 		// Adding CSS style sheet
 		Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
+		Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css', 'screen');
+
 		// Adding JS files
 		Tools::addJS(_THEME_JS_DIR_.'tools.js');
 		if ((Configuration::get('PS_ORDER_PROCESS_TYPE') == 0 AND $this->step == 1) OR Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
 			Tools::addJS(_THEME_JS_DIR_.'order-address.js');
+		Tools::addJS(_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js');
 		if ((int)(Configuration::get('PS_BLOCK_CART_AJAX')) OR Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
 		{
 			Tools::addJS(_THEME_JS_DIR_.'cart-summary.js');

@@ -25,11 +25,5 @@
 *}
 
 <div class="advertising_block">
-	<a href="{$base_dir_ssl}modules/paypal/about.php?height=500&amp;width=400" class="paypal_about"><img src="{$logo}" alt="paypal" title="{l s='Pay with PayPal' mod='paypal'}" /></a>
-	<script type="text/javascript">
-	$('a.paypal_about').fancybox({
-		'width': 500,
-		'autoDimensions': false
-	});
-	</script>
+	<p><a href="{$base_dir_ssl}modules/paypal/about.php" rel="nofollow"><img src="{$logo}" alt="PayPal" title="{l s='Pay with PayPal' mod='paypal'}" /></a></p>
 </div>

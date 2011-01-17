@@ -30,9 +30,6 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class BlockCart extends Module
 {
-    private $_html = '';
-    private $_postErrors = array();
-
 	public function __construct()
 	{
 		$this->name = 'blockcart';
@@ -51,16 +48,16 @@ class BlockCart extends Module
 
 		// Set currency
 		if (!(int)($params['cart']->id_currency))
-			$currency = new Currency((int)($params['cookie']->id_currency));
+			$currency = new Currency((int)$params['cookie']->id_currency);
 		else
-			$currency = new Currency((int)($params['cart']->id_currency));
+			$currency = new Currency((int)$params['cart']->id_currency);
 		if (!Validate::isLoadedObject($currency))
 			$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 
 		if ($params['cart']->id_customer)
 		{
-			$customer = new Customer((int)($params['cart']->id_customer));
-			$taxCalculationMethod = Group::getPriceDisplayMethod((int)($customer->id_default_group));
+			$customer = new Customer((int)$params['cart']->id_customer);
+			$taxCalculationMethod = Group::getPriceDisplayMethod((int)$customer->id_default_group);
 		}
 		else
 			$taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
@@ -70,7 +67,7 @@ class BlockCart extends Module
 		$products = $params['cart']->getProducts(true);
 		$nbTotalProducts = 0;
 		foreach ($products AS $product)
-			$nbTotalProducts += (int)($product['cart_quantity']);
+			$nbTotalProducts += (int)$product['cart_quantity'];
 
 		$wrappingCost = (float)($params['cart']->getOrderTotal($useTax, 6));
 		$totalToPay = $params['cart']->getOrderTotal($useTax);

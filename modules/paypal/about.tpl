@@ -24,7 +24,7 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
-<h3>{l s='What Is PayPal?' mod='paypal'}</h3>
+<h1>{l s='What Is PayPal?' mod='paypal'}</h1>
 
 <div class="paypalapi_about">
 	<p>{l s='PayPal, the trusted leader in online payments, enables buyers and businesses to send and receive money online. PayPal has over 100 million member accounts in 190 countries and regions. It\'s accepted by merchants everywhere, both on and off eBay.' mod='paypal'}

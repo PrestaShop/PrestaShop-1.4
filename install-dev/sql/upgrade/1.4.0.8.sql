@@ -18,3 +18,4 @@ DELETE FROM `PREFIX_hook_module` WHERE `id_module` NOT IN (SELECT id_module FROM
 
 /* PHP:gridextjs_deprecated(); */;
 /* PHP:shop_url(); */;
+/* PHP:updateproductcomments(); */;

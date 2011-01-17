@@ -35,44 +35,44 @@ class MailCore
 	static public function Send($id_lang, $template, $subject, $templateVars, $to, $toName = NULL, $from = NULL, $fromName = NULL, $fileAttachment = NULL, $modeSMTP = NULL, $templatePath = _PS_MAIL_DIR_)
 	{
 		$configuration = Configuration::getMultiple(array('PS_SHOP_EMAIL', 'PS_MAIL_METHOD', 'PS_MAIL_SERVER', 'PS_MAIL_USER', 'PS_MAIL_PASSWD', 'PS_SHOP_NAME', 'PS_MAIL_SMTP_ENCRYPTION', 'PS_MAIL_SMTP_PORT', 'PS_MAIL_METHOD', 'PS_MAIL_TYPE'));
-		if(!isset($configuration['PS_MAIL_SMTP_ENCRYPTION'])) $configuration['PS_MAIL_SMTP_ENCRYPTION'] = "off";
-		if(!isset($configuration['PS_MAIL_SMTP_PORT'])) $configuration['PS_MAIL_SMTP_PORT'] = "default";
+		if(!isset($configuration['PS_MAIL_SMTP_ENCRYPTION'])) $configuration['PS_MAIL_SMTP_ENCRYPTION'] = 'off';
+		if(!isset($configuration['PS_MAIL_SMTP_PORT'])) $configuration['PS_MAIL_SMTP_PORT'] = 'default';
 
 		if (!isset($from)) $from = $configuration['PS_SHOP_EMAIL'];
 		if (!isset($fromName)) $fromName = $configuration['PS_SHOP_NAME'];
 
 		if (!empty($from) AND !Validate::isEmail($from))
-	 		die (Tools::displayError('error / mail: parameter "from" is corrupted'));
+	 		die(Tools::displayError('Error: parameter "from" is corrupted'));
 			
 		if (!empty($fromName) AND !Validate::isMailName($fromName))
-	 		die (Tools::displayError('error / mail: parameter "fromName" is corrupted'));
+	 		die(Tools::displayError('Error: parameter "fromName" is corrupted'));
 			
 		if (!is_array($to) AND !Validate::isEmail($to))
-	 		die (Tools::displayError('error / mail: parameter "to" is corrupted'));
+	 		die(Tools::displayError('Error: parameter "to" is corrupted'));
 			
 		if (!is_array($templateVars))
-	 		die (Tools::displayError('error / mail: parameter "templateVars" is not an array'));
+	 		die(Tools::displayError('Error: parameter "templateVars" is not an array'));
 		
 		// Do not crash for this error, that may be a complicated customer name
 		if (!empty($toName) AND !Validate::isMailName($toName))
 	 		$toName = NULL;
 			
 		if (!Validate::isTplName($template))
-	 		die (Tools::displayError('error / mail: template name is corrupted'));
+	 		die(Tools::displayError('Error: invalid email template'));
 			
 		if (!Validate::isMailSubject($subject))
-	 		die (Tools::displayError('error / mail: subject name is not valid'));
+	 		die(Tools::displayError('Error: invalid email subject'));
 
 		/* Construct multiple recipients list if needed */
 		if (is_array($to))
 		{
 			$to_list = new Swift_RecipientList();
-			foreach ($to as $key => $addr)
+			foreach ($to AS $key => $addr)
 			{
 				$to_name = NULL;
 				$addr = trim($addr);
 				if (!Validate::isEmail($addr))
-					die(Tools::displayError('Error: mail parameters are corrupted'));
+					die(Tools::displayError('Error: invalid email address'));
 				if ($toName AND is_array($toName) AND Validate::isGenericName($toName[$key]))
 					$to_name = $toName[$key];
 				$to_list->addTo($addr, $to_name);
@@ -86,17 +86,19 @@ class MailCore
 		}
 		try {
 			/* Connect with the appropriate configuration */
-			if ((int)($configuration['PS_MAIL_METHOD']) == 2)
+			if ($configuration['PS_MAIL_METHOD'] == 2)
 			{
+				if (empty($configuration['PS_MAIL_SERVER']) OR empty($configuration['PS_MAIL_SMTP_PORT']))
+					die(Tools::displayError('Error: invalid SMTP server or SMTP port'));
+
 				$connection = new Swift_Connection_SMTP($configuration['PS_MAIL_SERVER'], $configuration['PS_MAIL_SMTP_PORT'], ($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "ssl") ? Swift_Connection_SMTP::ENC_SSL : (($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_OFF));
 				$connection->setTimeout(4);
 				if (!$connection)
 					return false;
-				if (!empty($configuration['PS_MAIL_USER']) AND !empty($configuration['PS_MAIL_PASSWD']))
-				{
+				if (!empty($configuration['PS_MAIL_USER']))
 					$connection->setUsername($configuration['PS_MAIL_USER']);
+				if (!empty($configuration['PS_MAIL_PASSWD']))
 					$connection->setPassword($configuration['PS_MAIL_PASSWD']);
-				}
 			}
 			else
 				$connection = new Swift_Connection_NativeMail();

@@ -44,9 +44,9 @@ class sendToAFriend extends Module
 
 	function install()
 	{
-	 	if (!parent::install())
+	 	if (!parent::install() OR !$this->registerHook('extraLeft'))
 	 		return false;
-	 	return $this->registerHook('extraLeft');
+		return true;
 	}
 	
 	function hookExtraLeft($params)
