@@ -98,9 +98,47 @@ class AdminMessages extends AdminTab
 
 	public function display()
 	{
-		global $cookie;
+		global $cookie, $currentIndex;
 
-		if (isset($_GET['view'.$this->table]) AND !empty($_GET['id_order']) AND $_GET['id_order'] != '--')
+		if (isset($_GET['ajax']) && !empty($_GET['id_cart']))
+		{
+			ob_clean();
+			
+			$messages = Message::getMessagesByCartId(Tools::getValue('id_cart'), true);
+			
+			echo '
+			<style type="text/css">
+				* {
+					font-size: 12px;
+					font-family: Arial,Verdana,Helvetica,sans-serif;
+				}
+			</style>
+			<p style="color: #CC0000; font-weight: bold;">'.$this->l('This customer has not finalized its order, however here are its messages:').'</p>';
+			
+			foreach ($messages AS $message)
+			{				
+				echo '
+				<table cellpadding="5" border="1">
+					<tr>
+						<td>'.$this->l('Cart ID:').'</td>
+						<td>'.(int)$message['id_cart'].'</td>
+					</tr>
+					<tr>
+						<td>'.$this->l('Customer ID:').'</td>
+						<td>'.(int)$message['id_customer'].'</td>
+					</tr>
+					<tr>
+						<td>'.$this->l('Date:').'</td>
+						<td>'.Tools::displayDate($message['date_add'], (int)$cookie->id_lang, true).'</td>
+					</tr>
+				</table>
+				<p>'.$this->l('Message:').' '.Tools::htmlentitiesUTF8($message['message']).'</p>
+				<hr size="1" noshade style="margin-bottom: 15px;" />';
+			}
+
+			die;
+		}
+		elseif (isset($_GET['view'.$this->table]) AND !empty($_GET['id_order']) AND $_GET['id_order'] != '--')
 			Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($_GET['id_order']).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
 		else
 		{
@@ -108,14 +146,28 @@ class AdminMessages extends AdminTab
 			{
 				echo '<p class="warning bold"><img src="../img/admin/warning.gif" alt="" class="middle" /> &nbsp;'.
 				Tools::displayError('Cannot display this message because the customer has not finalized their order').'</p>';
-			}
-			foreach ($this->_list AS $k => $item)
+			}	
+					
+			foreach ($this->_list AS $k => &$item)
 				if (Tools::strlen($item['last_message']) > 150 + Tools::strlen('...'))
 					$this->_list[$k]['last_message'] = Tools::substr(html_entity_decode($item['last_message'], ENT_QUOTES, 'UTF-8'), 0, 150, 'UTF-8').'...';
+					
+			foreach ($this->_list AS $k => &$item)
+				if ($item['id_order'] == '--')
+					$this->_list[$k]['last_message'] .= ' <a class="iframe" onclick="$(this).parent().attr(\'onclick\', \'return false\');" href="'.$currentIndex.'&token='.Tools::getAdminToken('AdminMessages'.(int)(Tab::getIdFromClassName('AdminMessages')).(int)($cookie->id_employee)).'&ajax=1&id_cart='.(int)$this->_list[$k]['id_cart'].'" title="'.$this->l('View details').'"><img src="../img/admin/details.gif" alt="'.$this->l('View details').'" /></a>';
+					
+			echo '
+			<link href="'._PS_CSS_DIR_.'jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />
+			<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js"></script>
+			<script type="text/javascript">
+				$(document).ready(function()
+				{
+					$(\'a.iframe\').fancybox();
+				});
+			</script>';
+					
 			$this->displayList();
 			$this->displayOptionsList();
 		}
 	}
 }
-
-

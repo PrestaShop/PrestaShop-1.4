@@ -75,10 +75,10 @@ class MessageCore extends ObjectModel
 	}
 
 	/**
-	  * Return name from Cart ID
+	  * Return the last message from cart
 	  *
 	  * @param integer $id_cart Cart ID
-	  * @return array Messages
+	  * @return array Message
 	  */
 	static public function getMessageByCartId($id_cart)
 	{
@@ -92,7 +92,7 @@ class MessageCore extends ObjectModel
 	}
 	
 	/**
-	  * Return name from Order ID
+	  * Return messages from Order ID
 	  *
 	  * @param integer $id_order Order ID
 	  * @param boolean $private return WITH private messages
@@ -104,18 +104,43 @@ class MessageCore extends ObjectModel
 	 		die(Tools::displayError());
 
 		global $cookie;
-		$result = Db::getInstance()->ExecuteS('
-			SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) AS is_new_for_me
-			FROM `'._DB_PREFIX_.'message` m
-			LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
-			LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.(int)($cookie->id_employee).')
-			LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
-			WHERE id_order = '.(int)($id_order).'
-			'.(!$private ? ' AND m.`private` = 0' : '').'
-			GROUP BY m.id_message
-			ORDER BY m.date_add DESC
-		');
-		return $result;
+		
+		return Db::getInstance()->ExecuteS('
+		SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) AS is_new_for_me
+		FROM `'._DB_PREFIX_.'message` m
+		LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
+		LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.(int)$cookie->id_employee.')
+		LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
+		WHERE id_order = '.(int)$id_order.'
+		'.(!$private ? ' AND m.`private` = 0' : '').'
+		GROUP BY m.id_message
+		ORDER BY m.date_add DESC');
+	}
+	
+	/**
+	  * Return messages from Cart ID
+	  *
+	  * @param integer $id_order Order ID
+	  * @param boolean $private return WITH private messages
+	  * @return array Messages
+	  */
+	static public function getMessagesByCartId($id_cart, $private = false)
+	{
+	 	if (!Validate::isBool($private))
+	 		die(Tools::displayError());
+
+		global $cookie;
+
+		return Db::getInstance()->ExecuteS('
+		SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) AS is_new_for_me
+		FROM `'._DB_PREFIX_.'message` m
+		LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
+		LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.(int)$cookie->id_employee.')
+		LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
+		WHERE id_cart = '.(int)$id_cart.'
+		'.(!$private ? ' AND m.`private` = 0' : '').'
+		GROUP BY m.id_message
+		ORDER BY m.date_add DESC');
 	}
 	
 	/**

@@ -961,6 +961,4 @@ class OrderCore extends ObjectModel
 			WHERE `id_order` = '.(int)$id_order.'
 			'.($id_customer ? 'AND `id_customer` = '.(int)$id_customer : ''));
 	}
-
 }
-
