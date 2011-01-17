@@ -98,7 +98,7 @@ class ProductSaleCore
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
 
 		if ($orderBy == 'price')
-			Tools::orderbyPrice($resultclasses,$orderWay);
+			Tools::orderbyPrice($result,$orderWay);
 		if (!$result)
 			return false;
 		return Product::getProductsProperties($id_lang, $result);
