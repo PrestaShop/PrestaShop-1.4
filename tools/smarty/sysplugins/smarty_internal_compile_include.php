@@ -33,7 +33,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
     {
         $this->compiler = $compiler;
         // check and get attributes
-        $_attr = $this->_get_attributes($args);
+        $_attr = $this->_get_attributes($args); 
         // save posible attributes
         $include_file = $_attr['file'];
         $has_compiled_template = false;
@@ -136,9 +136,8 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
             $_caching = Smarty::CACHING_OFF;
         } 
         // create template object
-	
         $_output = "<?php \$_template = new {$compiler->smarty->template_class}($include_file, \$_smarty_tpl->smarty, \$_smarty_tpl, $_cache_id, $_compile_id, $_caching, $_cache_lifetime);\n"; 
-	// delete {include} standard attributes
+        // delete {include} standard attributes
         unset($_attr['file'], $_attr['assign'], $_attr['cache_id'], $_attr['compile_id'], $_attr['cache_lifetime'], $_attr['nocache'], $_attr['caching'], $_attr['scope'], $_attr['inline']); 
         // remaining attributes must be assigned as smarty variable
         if (!empty($_attr)) {

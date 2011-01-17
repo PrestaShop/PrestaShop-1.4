@@ -3,7 +3,7 @@
 /**
  * Project:     Smarty: the PHP compiling template engine
  * File:        Smarty.class.php
- * SVN:         $Id: Smarty.class.php 3794 2010-11-15 22:54:59Z uwe.tews@googlemail.com $
+ * SVN:         $Id: Smarty.class.php 3845 2010-12-05 17:21:02Z uwe.tews@googlemail.com $
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@
  * @author Monte Ohrt <monte at ohrt dot com> 
  * @author Uwe Tews 
  * @package Smarty
- * @version 3.0.5
+ * @version 3.0.6
  */
 
 /**
@@ -84,12 +84,11 @@ if (SMARTY_SPL_AUTOLOAD && set_include_path(get_include_path() . PATH_SEPARATOR 
  * This is the main Smarty class
  */
 class Smarty extends Smarty_Internal_Data {
-
 	/**
 	* constant definitions
 	*/
     // smarty version
-    const SMARTY_VERSION = 'Smarty-3.0.5'; 
+    const SMARTY_VERSION = 'Smarty-3.0.6'; 
   	//define variable scopes
 	const SCOPE_LOCAL = 0;
 	const SCOPE_PARENT = 1;
@@ -240,6 +239,8 @@ class Smarty extends Smarty_Internal_Data {
     public $deprecation_notices = true;
     // Smarty 2 BC
     public $_version = self::SMARTY_VERSION;
+    // self pointer to Smarty object
+    public $smarty;
 
     /**
      * Class constructor, initializes basic smarty properties
@@ -306,8 +307,8 @@ class Smarty extends Smarty_Internal_Data {
      * @return string rendered template output
      */
     public function fetch($template, $cache_id = null, $compile_id = null, $parent = null, $display = false)
-    {	
-	if (!empty($cache_id) && is_object($cache_id)) {
+    {
+        if (!empty($cache_id) && is_object($cache_id)) {
             $parent = $cache_id;
             $cache_id = null;
         } 
@@ -331,7 +332,7 @@ class Smarty extends Smarty_Internal_Data {
             } 
         } 
         // return redered template
-        if (isset($this->autoload_filters['output']) || isset($this->registered_filters['output'])) {
+        if ((!$this->caching || $_template->resource_object->isEvaluated) && (isset($this->autoload_filters['output']) || isset($this->registered_filters['output']))) {
             $_output = Smarty_Internal_Filter_Handler::runFilter('output', $_template->getRenderedTemplate(), $_template);
         } else {
             $_output = $_template->getRenderedTemplate();
@@ -377,7 +378,7 @@ class Smarty extends Smarty_Internal_Data {
      */
     public function display($template, $cache_id = null, $compile_id = null, $parent = null)
     { 
-	// display template
+        // display template
         $this->fetch ($template, $cache_id, $compile_id, $parent, true);
     } 
 
