@@ -68,13 +68,13 @@ class AdminSlip extends AdminTab
 	{
 		global $cookie, $currentIndex;		
 
-		echo '<div style="float:left;width:550px">';
+		echo '<div style="float:left;width:600px">';
 		$this->getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 		$this->displayList();
 		echo '</div>';
 		
 		echo '
-		<fieldset style="float:left;width:300px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('Print PDF').'</legend>
+		<fieldset style="float:left;width:280px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('Print PDF').'</legend>
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 				<label style="width:90px">'.$this->l('From:').' </label>
 				<div class="margin-form" style="padding-left:100px">
