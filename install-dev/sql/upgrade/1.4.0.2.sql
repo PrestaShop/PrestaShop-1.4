@@ -711,7 +711,7 @@ INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VA
 INSERT INTO `PREFIX_meta` (`page`) VALUES ('authentication');
 INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES
 (1, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'authentication'), 'Authentication', 'authentication'),
-(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'authentication'), 'Authentification', 'autentification'),
+(2, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'authentication'), 'Authentification', 'authentification'),
 (3, (SELECT `id_meta` FROM `PREFIX_meta` WHERE `page` = 'authentication'), 'Autenticación', 'autenticacion');
 INSERT INTO `PREFIX_meta` (`page`) VALUES ('cart');
 INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`) VALUES

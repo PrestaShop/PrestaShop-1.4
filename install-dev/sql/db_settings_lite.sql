@@ -677,7 +677,7 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (12, 2, 'Adresses', '', '', 'adresses'),
 (12, 3, 'Direcciones', '', '', 'direcciones'),
 (13, 1, 'Authentication', '', '', 'authentication'),
-(13, 2, 'Authentification', '', '', 'autentification'),
+(13, 2, 'Authentification', '', '', 'authentification'),
 (13, 3, 'Autenticación', '', '', 'autenticacion'),
 (14, 1, 'Cart', '', '', 'cart'),
 (14, 2, 'Panier', '', '', 'panier'),
