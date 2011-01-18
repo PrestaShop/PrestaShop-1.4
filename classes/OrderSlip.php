@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -29,19 +29,19 @@ class OrderSlipCore extends ObjectModel
 {
 	/** @var integer */
 	public		$id;
-	
+
 	/** @var integer */
 	public 		$id_customer;
-	
+
 	/** @var integer */
 	public 		$id_order;
-	
+
 	/** @var float */
 	public		$conversion_rate;
-	
+
 	/** @var integer */
 	public		$shipping_cost;
-	
+
 	/** @var string Object creation date */
 	public 		$date_add;
 
@@ -55,7 +55,7 @@ class OrderSlipCore extends ObjectModel
 
 	protected 	$table = 'order_slip';
 	protected 	$identifier = 'id_order_slip';
-	
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -68,18 +68,20 @@ class OrderSlipCore extends ObjectModel
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
 	}
-	
+
 	public function addSlipDetail($orderDetailList, $productQtyList)
 	{
 		foreach ($orderDetailList as $key => $orderDetail)
+		{
 			if ($qty = (int)($productQtyList[$key]))
 				Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_slip_detail', array('id_order_slip' => (int)($this->id), 'id_order_detail' => (int)($orderDetail), 'product_quantity' => $qty), 'INSERT');
+		}
 	}
-	
+
 	static public function getOrdersSlip($customer_id, $order_id = false)
 	{
 		global $cookie;
-		
+
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_slip`
@@ -87,7 +89,7 @@ class OrderSlipCore extends ObjectModel
 		($order_id ? ' AND `id_order` = '.(int)($order_id) : '').'
 		ORDER BY `date_add` DESC');
 	}
-	
+
 	static public function getOrdersSlipDetail($id_order_slip = true, $id_order_detail = false)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS(
@@ -96,13 +98,13 @@ class OrderSlipCore extends ObjectModel
 		.($id_order_slip ? ' WHERE `id_order_slip` = '.(int)($id_order_slip) : '')
 		.($id_order_detail ? ' WHERE `id_order_detail` = '.(int)($id_order_detail) : ''));
 	}
-	
+
 	static public function getOrdersSlipProducts($orderSlipId, $order)
 	{
 		$discounts = $order->getDiscounts(true);
 		$productsRet = self::getOrdersSlipDetail($orderSlipId);
 		$products = $order->getProductsDetail();
-		
+
 		$tmp = array();
 		foreach ($productsRet as $slip_detail)
 			$tmp[$slip_detail['id_order_detail']] = $slip_detail['product_quantity'];
@@ -123,12 +125,12 @@ class OrderSlipCore extends ObjectModel
 						elseif ($discount['id_discount_type'] == 2)
 							$resTab[$key]['product_price'] -= (($discount['value'] * ($product['product_price_wt'] / $order->total_products_wt)) / (1.00 + ($product['tax_rate'] / 100)));
 					}
-					
+
 				}
 			}
 		return $order->getProducts($resTab);
 	}
-	
+
 	public function getProducts()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -146,7 +148,7 @@ class OrderSlipCore extends ObjectModel
 		}
 		return $products;
 	}
-	
+
 	static public function getSlipsIdByDate($dateFrom, $dateTo)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -160,7 +162,7 @@ class OrderSlipCore extends ObjectModel
 			$slips[] = (int)$slip['id_order_slip'];
 		return $slips;
 	}
-	
+
 	static public function createOrderSlip($order, $productList, $qtyList, $shipping_cost = false)
 	{
 		$currency = new Currency($order->id_currency);

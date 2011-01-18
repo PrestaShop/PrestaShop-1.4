@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -80,7 +80,7 @@ class AdminOrders extends AdminTab
 				if (!$order->hasBeenShipped())
 					die(Tools::displayError('The shipping number can only be set once the order has been shipped!'));
 				$_GET['view'.$this->table] = true;
-				
+
 				$shipping_number = pSQL(Tools::getValue('shipping_number'));
 				$order->shipping_number = $shipping_number;
 				$order->update();
@@ -104,7 +104,7 @@ class AdminOrders extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
-		
+
 		/* Change order state, add a new entry in order history and send an e-mail to the customer if needed */
 		elseif (Tools::isSubmit('submitState') AND ($id_order = (int)(Tools::getValue('id_order'))) AND Validate::isLoadedObject($order = new Order($id_order)))
 		{
@@ -206,40 +206,52 @@ class AdminOrders extends AdminTab
 				$qtyList = Tools::getValue('cancelQuantity');
 				$customizationQtyList = Tools::getValue('cancelCustomizationQuantity');
 
+				$full_product_list = $productList;
+				$full_quantity_list = $qtyList;
+
+                if ($customizationList)
+                {
+    				foreach ($customizationList as $key => $id_order_detail)
+	    			{
+	    			    $full_product_list[$id_order_detail] = $id_order_detail;
+	    			    $full_quantity_list[$id_order_detail] = $customizationQtyList[$key];
+	    			}
+	    		}
+
 				if ($productList OR $customizationList)
 				{
 					if ($productList)
 					{
 						$id_cart = Cart::getCartIdByOrderId($order->id);
 						$customization_quantities = Customization::countQuantityByCart($id_cart);
-						
+
 						foreach ($productList AS $key => $id_order_detail)
 						{
 							$qtyCancelProduct = abs($qtyList[$key]);
 							if (!$qtyCancelProduct)
 								$this->_errors[] = Tools::displayError('No quantity selected for product.');
-							
-							// check actionable quantity 
+
+							// check actionable quantity
 							$order_detail = new OrderDetail($id_order_detail);
 							$customization_quantity = array_key_exists($order_detail->product_id, $customization_quantities) ? $customization_quantities[$order_detail->product_id] : 0;
 
 							if (($order_detail->product_quantity - $customization_quantity - $order_detail->product_quantity_refunded - $order_detail->product_quantity_return) < $qtyCancelProduct)
 								$this->_errors[] = Tools::displayError('Invalid quantity selected for product.');
-							
+
 						}
 					}
 					if ($customizationList)
 					{
 						$customization_quantities = Customization::retrieveQuantitiesFromIds(array_keys($customizationList));
-					
+
 						foreach ($customizationList AS $id_customization => $id_order_detail)
 						{
 							$qtyCancelProduct = abs($customizationQtyList[$id_customization]);
 							$customization_quantity = $customization_quantities[$id_customization];
-				
+
 							if (!$qtyCancelProduct)
 								$this->_errors[] = Tools::displayError('No quantity selected for product.');
-							
+
 							if ($qtyCancelProduct > ($customization_quantity['quantity'] - ($customization_quantity['quantity_refunded'] + $customization_quantity['quantity_returned'])))
 								$this->_errors[] = Tools::displayError('Invalid quantity selected for product.');
 						}
@@ -298,23 +310,23 @@ class AdminOrders extends AdminTab
 						$params['{firstname}'] = $customer->firstname;
 						$params['{id_order}'] = $order->id;
 					}
-					
+
 					// Generate credit slip
 					if (isset($_POST['generateCreditSlip']) AND !sizeof($this->_errors))
 					{
-						if (!OrderSlip::createOrderSlip($order, $productList, $qtyList, isset($_POST['shippingBack'])))
+						if (!OrderSlip::createOrderSlip($order, $full_product_list, $full_quantity_list, isset($_POST['shippingBack'])))
 							$this->_errors[] = Tools::displayError('Cannot generate credit slip');
 						else
 						{
-							Module::hookExec('orderSlip', array('order' => $order, 'productList' => $productList, 'qtyList' => $qtyList));
+							Module::hookExec('orderSlip', array('order' => $order, 'productList' => $full_product_list, 'qtyList' => $full_quantity_list));
 							@Mail::Send((int)($order->id_lang), 'credit_slip', html_entity_decode(Mail::l('New credit slip regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
 						}
 					}
-					
+
 					// Generate voucher
 					if (isset($_POST['generateDiscount']) AND !sizeof($this->_errors))
 					{
-						if (!$voucher = Discount::createOrderDiscount($order, $productList, $qtyList, $this->l('Credit Slip concerning the order #'), isset($_POST['shippingBack'])))
+						if (!$voucher = Discount::createOrderDiscount($order, $full_product_list, $full_quantity_list, $this->l('Credit Slip concerning the order #'), isset($_POST['shippingBack'])))
 							$this->_errors[] = Tools::displayError('Cannot generate voucher');
 						else
 						{
@@ -500,7 +512,7 @@ class AdminOrders extends AdminTab
 				<a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /> '.$this->l('Print page').'</a>
 			</div>
 			<div class="clear">&nbsp;</div>';
-			
+
 		/* Display current status */
 		echo '
 			<table cellspacing="0" cellpadding="0" class="table" style="width: 429px">
@@ -582,7 +594,7 @@ class AdminOrders extends AdminTab
 		// display hook specified to this page : AdminOrder
 		if (($hook = Module::hookExec('adminOrder', array('id_order' => $order->id))) !== false)
 			echo $hook;
-		
+
 		echo '
 		</div>
 		<div style="float: left; margin-left: 40px">';
@@ -597,7 +609,7 @@ class AdminOrders extends AdminTab
 			echo '<legend><img src="../img/admin/charged_ko.gif" />'.$this->l('Invoice').'</legend>
 				'.$this->l('No invoice yet.');
 		echo '</fieldset><br />';
-		
+
 		/* Display shipping infos */
 		echo '
 		<fieldset style="width:400px">
@@ -607,7 +619,7 @@ class AdminOrders extends AdminTab
 			'.(($currentState->delivery OR $order->delivery_number) ? '<br /><a href="pdf.php?id_delivery='.$order->delivery_number.'">'.$this->l('Delivery slip #').'<b>'.Configuration::get('PS_DELIVERY_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', $order->delivery_number).'</b></a><br />' : '');
 			if ($order->shipping_number)
 				echo $this->l('Tracking number:').' <b>'.$order->shipping_number.'</b> '.(!empty($carrier->url) ? '(<a href="'.str_replace('@', $order->shipping_number, $carrier->url).'" target="_blank">'.$this->l('Track the shipment').'</a>)' : '');
-			
+
 			/* Carrier module */
 			if ($carrier->is_module == 1)
 			{
@@ -615,7 +627,7 @@ class AdminOrders extends AdminTab
 				if (method_exists($module, 'displayInfoByCart'))
 					echo call_user_func(array($module, 'displayInfoByCart'), $order->id_cart);
 			}
-			
+
 			/* Display shipping number field */
 			if ($carrier->url && $order->hasBeenShipped())
 			 echo '
@@ -626,7 +638,7 @@ class AdminOrders extends AdminTab
 				</form>';
 			echo '
 		</fieldset>';
-		
+
 		/* Display summary order */
 		echo '
 		<br />
@@ -657,7 +669,7 @@ class AdminOrders extends AdminTab
 				'.(!empty($order->gift_message) ? '<div style="border: 1px dashed #999; padding: 5px; margin-top: 8px;"><b>'.$this->l('Message:').'</b><br />'.nl2br2($order->gift_message).'</div>' : '') : '<img src="../img/admin/disabled.gif" />').'
 			</div>
 		</fieldset>';
-		
+
 		echo '</div>
 		<div class="clear">&nbsp;</div>';
 
@@ -743,7 +755,7 @@ class AdminOrders extends AdminTab
 							}
 							// Customization display
 							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $k);
-							
+
 							// Normal display
 							if ($product['product_quantity'] > $product['customizationQuantityTotal'])
 							{
@@ -807,7 +819,7 @@ class AdminOrders extends AdminTab
 					}
 				echo '
 				</div>';
-				
+
 				// Cancel product
 				echo '
 				<div style="clear:both; height:15px;">&nbsp;</div>
@@ -829,7 +841,7 @@ class AdminOrders extends AdminTab
 			</fieldset>
 		</form>
 		<div class="clear" style="height:20px;">&nbsp;</div>';
-		
+
 		/* Display send a message to customer & returns/credit slip*/
 		$returns = OrderReturn::getOrdersReturn($order->id_customer, $order->id);
 		$slips = OrderSlip::getOrdersSlip($order->id_customer, $order->id);
@@ -882,7 +894,7 @@ class AdminOrders extends AdminTab
 			echo '</fieldset>';
 		}
 		echo '</div>';
-		
+
 		/* Display return product */
 		echo '<div style="float: left; margin-left: 40px">
 			<fieldset style="width: 400px;">
@@ -898,7 +910,7 @@ class AdminOrders extends AdminTab
 				'.$state->name[$cookie->id_lang].'<br />';
 			}
 		echo '</fieldset>';
-		
+
 		/* Display credit slip */
 		echo '
 				<br />
@@ -914,7 +926,7 @@ class AdminOrders extends AdminTab
 		echo '<div class="clear">&nbsp;</div>';
 		echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 	}
-	
+
 	public function display()
 	{
 		global $cookie;
@@ -929,11 +941,11 @@ class AdminOrders extends AdminTab
 			echo '<h2 class="space" style="text-align:right; margin-right:44px;">'.$this->l('Total:').' '.Tools::displayPrice($this->getTotal(), $currency).'</h2>';
 		}
 	}
-	
+
 	private function getTotal()
 	{
 		global $cookie;
-		
+
 		$total = 0;
 		foreach($this->_list AS $item)
 			if ($item['id_currency'] == Configuration::get('PS_CURRENCY_DEFAULT'))
@@ -946,5 +958,3 @@ class AdminOrders extends AdminTab
 		return $total;
 	}
 }
-
-
