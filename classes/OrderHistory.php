@@ -184,7 +184,7 @@ class OrderHistoryCore extends ObjectModel
 		}
 		
 		if (!$lastOrderState OR $lastOrderState->id !== $this->id_order_state)
-			Hook::postUpdateOrderStatus($this->id_order_state, (int)($this->id_order));
+			Hook::postUpdateOrderStatus($this->id_order_state, (int)$this->id_order);
 		return true;
 	}
 	
@@ -194,11 +194,8 @@ class OrderHistoryCore extends ObjectModel
 		SELECT COUNT(oh.`id_order_history`) AS nb
 		FROM `'._DB_PREFIX_.'order_state` os 
 		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (os.`id_order_state` = oh.`id_order_state`) 
-		WHERE oh.`id_order` = '.(int)($this->id_order).'
-		AND os.`logable` = 1
-		');
+		WHERE oh.`id_order` = '.(int)$this->id_order.'
+		AND os.`logable` = 1');
 	}
 
 }
-
-

@@ -926,7 +926,7 @@ class ProductCore extends ObjectModel
 		'default_on' => (int)($default),
 		'minimal_quantity' => (int)($minimal_quantity));
 		if ($quantity)
-			$data['quantity'] =  (int)$quantity;
+			$data['quantity'] = (int)$quantity;
 		if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute', $data, 'UPDATE', '`id_product_attribute` = '.(int)($id_product_attribute)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.(int)($id_product_attribute)))
 			return false;
 		if ($quantity)
