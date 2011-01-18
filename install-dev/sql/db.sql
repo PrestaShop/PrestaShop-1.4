@@ -1096,7 +1096,7 @@ CREATE TABLE `PREFIX_product` (
   `price` decimal(20,6) NOT NULL default '0.000000',
   `wholesale_price` decimal(20,6) NOT NULL default '0.000000',
   `unity` varchar(255) default NULL,
-  `unit_price` decimal(20,6) NOT NULL default '0.000000',
+  `unit_price_ratio` decimal(20,6) NOT NULL default '0.000000',
   `additional_shipping_cost` decimal(20,2) NOT NULL default '0.00',
   `reference` varchar(32) default NULL,
   `supplier_reference` varchar(32) default NULL,
