@@ -74,7 +74,7 @@ class CartCore extends ObjectModel
 	protected	$fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
 		'id_currency' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'id_guest' => 'isUnsignedId', 'id_lang' => 'isUnsignedId',
 		'id_carrier' => 'isUnsignedId', 'recyclable' => 'isBool', 'gift' => 'isBool', 'gift_message' => 'isMessage');
-	
+
 	private		$_products = NULL;
 	private		$_totalWeight = NULL;
 	private		$_taxCalculationMethod = PS_TAX_EXC;
@@ -104,7 +104,7 @@ class CartCore extends ObjectModel
 			),
 		),
 	);
-	
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -456,7 +456,7 @@ class CartCore extends ObjectModel
 			$minimalQuantity = (int)Attribute::getAttributeMinimalQty((int)$id_product_attribute);
 		else
 			$minimalQuantity = (int)$product->minimal_quantity;
-				
+
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
 		self::$_nbProducts = NULL;
@@ -539,7 +539,7 @@ class CartCore extends ObjectModel
 		// refresh cache of self::_products
 		$this->_products = $this->getProducts(true);
 		$this->update(true);
-		
+
 		if ($product->customizable)
 			return $this->_updateCustomizationQuantity((int)$quantity, (int)$id_customization, (int)$id_product, (int)$id_product_attribute, $operator);
 		else
@@ -741,15 +741,17 @@ class CartCore extends ObjectModel
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
+
 				// Here taxes are computed only once the quantity has been applied to the product price
 				$price = Product::getPriceStatic((int)$product['id_product'], false, (int)$product['id_product_attribute'], 2, NULL, false, true, $product['cart_quantity'], false, (int)$this->id_customer ? (int)$this->id_customer : NULL, (int)$this->id, ($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 
-				$total_price = $price * (int)($product['cart_quantity']);
+                $total_ecotax = $product['ecotax'] * (int)$product['cart_quantity'];
+				$total_price = $price * (int)$product['cart_quantity'];
+
 				if ($withTaxes)
 				{
-					$total_price = Tools::ps_round($total_price * (1 + (float)(
-						Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
-						) / 100), 2);
+				    $total_price = ($total_price - $total_ecotax) * (1 + (float)(Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) / 100);
+					$total_price = Tools::ps_round($total_price - $total_ecotax, 2);
 				}
 			}
 			else
@@ -884,7 +886,7 @@ class CartCore extends ObjectModel
       isset($this->id_address_delivery)
       AND $this->id_address_delivery
       AND Customer::customerHasAddress($this->id_customer, $this->id_address_delivery)
-    ) 
+    )
 			$id_zone = Address::getZoneById((int)($this->id_address_delivery));
 		else
 			$id_zone = (int)($defaultCountry->id_zone);
@@ -1303,23 +1305,23 @@ class CartCore extends ObjectModel
 	public function isVirtualCart()
 	{
 		$products = $this->getProducts();
-		
+
 		if (!sizeof($products))
 			return false;
-		
+
 		$list = '';
 		foreach ($products AS $product)
 			$list .= (int)($product['id_product']).',';
 		$list = rtrim($list, ',');
-		
+
 		$n = (int)Db::getInstance()->getValue('
 		SELECT COUNT(`id_product_download`) n
 		FROM `'._DB_PREFIX_.'product_download`
 		WHERE `id_product` IN ('.pSQL($list).') AND `active` = 1');
-		
+
 		if ($n < sizeof($products))
 			return false;
-			
+
 		return true;
 	}
 
@@ -1438,7 +1440,7 @@ class CartCore extends ObjectModel
 		$customer = new Customer((int)($this->id_customer));
 		return $customer->email;
 	}
-	
+
 	public function duplicate()
 	{
 		if (!Validate::isLoadedObject($this))
@@ -1446,7 +1448,7 @@ class CartCore extends ObjectModel
 		$cart = new Cart($this->id);
 		$cart->id = NULL;
 		$cart->add();
-		
+
 		if (!Validate::isLoadedObject($cart))
 			return false;
 
@@ -1454,7 +1456,7 @@ class CartCore extends ObjectModel
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)$this->id);
 		foreach ($products AS $product)
 			$success &= $cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], NULL, 'up');
-			
+
 		// Customized products
 		$customs = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
@@ -1476,19 +1478,19 @@ class CartCore extends ObjectModel
 			}
 			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql_custom_data);
 		}
-		
+
 		return array('cart' => $cart, 'success' => $success);
 	}
-	
+
 	public function getWsCartRows()
 	{
 		$query = 'SELECT id_product, id_product_attribute, quantity
-		FROM `'._DB_PREFIX_.'cart_product` 
+		FROM `'._DB_PREFIX_.'cart_product`
 		WHERE id_cart = '.(int)$this->id;
 		$result = Db::getInstance()->executeS($query);
 		return $result;
 	}
-	
+
 	public function setWsCartRows($values)
 	{
 		if ($this->deleteAssociations())
@@ -1500,8 +1502,8 @@ class CartCore extends ObjectModel
 		}
 		return $result;
 	}
-	
-	
+
+
 	public function deleteAssociations()
 	{
 		return (Db::getInstance()->Execute('
