@@ -136,7 +136,6 @@ abstract class PaymentModuleCore extends Module
 			// Amount paid by customer is not the right one -> Status = payment error
 			if ($order->total_paid != $order->total_paid_real)
 				$id_order_state = _PS_OS_ERROR_;
-
 			// Creating order
 			if ($cart->OrderExists() === 0)
 				$result = $order->add();
@@ -277,11 +276,35 @@ abstract class PaymentModuleCore extends Module
 				// Insert discounts from cart into order_discount table
 				$discounts = $cart->getDiscounts();
 				$discountsList = '';
+				$total_discount_value = 0;
+				$shrunk = false;
 				foreach ($discounts AS $discount)
 				{
-					$objDiscount = new Discount((int)($discount['id_discount']));
+					$objDiscount = new Discount((int)$discount['id_discount'], $order->id_lang);
 					$value = $objDiscount->getValue(sizeof($discounts), $cart->getOrderTotal(true, 1), $order->total_shipping, $cart->id);
-					$order->addDiscount($objDiscount->id, $objDiscount->name, $value);
+					if ($objDiscount->id_discount_type == 2 AND in_array($objDiscount->behavior_not_exhausted, array(1,2)))
+						$shrunk = true;
+					
+					if ($shrunk AND ($total_discount_value + $value) > ($order->total_products + $order->total_shipping + $order->total_wrapping))
+					{
+						$amount_to_add = ($order->total_products + $order->total_shipping + $order->total_wrapping) - $total_discount_value;
+						if ($objDiscount->id_discount_type == 2 AND $objDiscount->behavior_not_exhausted == 2)
+						{
+							$voucher = new Discount();	
+							foreach ($objDiscount AS $key => $discountValue)
+								$voucher->$key = $discountValue;
+							$voucher->name = 'VSRK'.(int)$order->id_customer.'O'.(int)$order->id;
+							$voucher->value = (float)$value - $amount_to_add;
+							$voucher->add();
+							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false, false);
+							$params['{voucher_num}'] = $voucher->name;
+							@Mail::Send((int)$order->id_lang, 'voucher', html_entity_decode(Mail::l('New voucher regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+						}
+					}
+					else
+						$amount_to_add = $value;
+					$order->addDiscount($objDiscount->id, $objDiscount->name, $amount_to_add);
+					$total_discount_value += $amount_to_add;
 					if ($id_order_state != _PS_OS_ERROR_ AND $id_order_state != _PS_OS_CANCELED_)
 						$objDiscount->quantity = $objDiscount->quantity - 1;
 					$objDiscount->update();

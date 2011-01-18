@@ -520,6 +520,7 @@ CREATE TABLE `PREFIX_delivery` (
 CREATE TABLE `PREFIX_discount` (
   `id_discount` int(10) unsigned NOT NULL auto_increment,
   `id_discount_type` int(10) unsigned NOT NULL,
+  `behavior_not_exhausted` TINYINT(3) DEFAULT '1',
   `id_customer` int(10) unsigned NOT NULL,
   `id_group` int(10) unsigned NOT NULL default 0,
   `id_currency` int unsigned NOT NULL default 0,

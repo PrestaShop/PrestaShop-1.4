@@ -11,3 +11,4 @@ UPDATE `PREFIX_product` SET `unit_price_ratio` =  IF (`unit_price` != 0, `price`
 
 ALTER TABLE `PREFIX_product` DROP `unit_price`;
 
+ALTER TABLE `PREFIX_discount` ADD `behavior_not_exhausted` TINYINT(3) DEFAULT '1' AFTER `id_discount_type`;

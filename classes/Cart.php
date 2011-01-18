@@ -805,9 +805,21 @@ class CartCore extends ObjectModel
 					}
 				}
 				/* Secondly applying all vouchers to the correct amount */
+				$shrunk = false;
 				foreach ($discounts AS $discount)
 					if ($discount->id_discount_type != 3)
+					{
 						$order_total -= Tools::ps_round((float)($discount->getValue(sizeof($discounts), $order_total_products, $shipping_fees, $this->id, (int)($withTaxes))), 2);
+						if ($discount->id_discount_type == 2)
+							if (in_array($discount->behavior_not_exhausted, array(1,2)))
+								$shrunk = true;
+					}
+
+					$order_total_discount = 0;
+					if ($shrunk AND $order_total < (-$wrapping_fees - $order_total_products - $shipping_fees))
+						$order_total_discount = -$wrapping_fees - $order_total_products - $shipping_fees;
+					else
+						$order_total_discount = $order_total;
 			}
 		}
 
@@ -815,7 +827,8 @@ class CartCore extends ObjectModel
 		if ($type == 6) return $wrapping_fees;
 		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
 		if ($order_total < 0 AND $type != 2) return 0;
-
+		if ($type == 2 AND isset($order_total_discount))
+			return Tools::ps_round((float)($order_total_discount), 2);
 		return Tools::ps_round((float)($order_total), 2);
 	}
 

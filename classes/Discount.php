@@ -74,6 +74,8 @@ class DiscountCore extends ObjectModel
 	/** @var integer display the discount in the summary */
 	public 		$cart_display;
 	
+	public		$behavior_not_exhausted;
+	
 	/** @var boolean Status */
 	public 		$active = true;
 	
@@ -109,6 +111,7 @@ class DiscountCore extends ObjectModel
 			'quantity_per_user' => array('sqlId' => 'quantity_per_user'),
 			'cumulable' => array('sqlId' => 'cumulable'),
 			'cumulable_reduction' => array('sqlId' => 'cumulable_reduction'),
+			'behavior_not_exhausted' => array('sqlId' => 'behavior_not_exhausted'),
 			'date_from' => array('sqlId' => 'date_from'),
 			'date_to' => array('sqlId' => 'date_to'),
 			'minimal' => array('sqlId' => 'minimal'),
@@ -138,6 +141,7 @@ class DiscountCore extends ObjectModel
 		$fields['date_from'] = pSQL($this->date_from);
 		$fields['date_to'] = pSQL($this->date_to);
 		$fields['minimal'] = (float)($this->minimal);
+		$fields['behavior_not_exhausted'] = (int)$this->behavior_not_exhausted;
 		$fields['active'] = (int)($this->active);
 		$fields['cart_display'] = (int)($this->cart_display);
 		$fields['date_add'] = pSQL($this->date_add);
@@ -318,14 +322,14 @@ class DiscountCore extends ObjectModel
 				$taxDiscount = Cart::getTaxesAverageUsed((int)($cart->id));
 				if (!$useTax AND isset($taxDiscount) AND $taxDiscount != 1)
 					$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
-
+				
 				// Main return
+				$value = 0;
 				foreach ($products AS $product)
 					if (Product::idIsOnCategoryId($product['id_product'], $categories))
-						return $this->value;
-				
+						$value = $this->value;
 				// Return 0 if there are no applicable categories
-				return 0;
+				return $value;
 				
 			/* Free shipping (does not return a value but a special code) */
 			case 3:

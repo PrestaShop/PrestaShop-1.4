@@ -193,9 +193,14 @@ class AdminDiscounts extends AdminTab
 					$("#value-div").css("display", "block");
 					$("#percent-span").css("display", "none");
 					$("#id_currency").css("display", "block");
+					$(\'#behavior_not_exhausted\').show();
+					
 				}
 				else if ($("#id_discount_type").val() == 3)
 					$("#value-div").css("display", "none");
+				if ($(\'#id_discount_type\').val() != 2)
+					$(\'#behavior_not_exhausted\').hide();
+					
 			}
 			$(document).ready(function(){
 				$("#id_discount_type").change(function(){discountType();});
@@ -223,7 +228,6 @@ class AdminDiscounts extends AdminTab
 			(($this->getFieldValue($obj, 'id_discount_type') == $discountType['id_discount_type']) ? ' selected="selected"' : '').'>'.$discountType['name'].'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>
-				<div class="clear">&nbsp;</div>
 				<div id="value-div" style="display:none">
 					<label>'.$this->l('Value').'</label>
 					<div class="margin-form">
@@ -237,7 +241,16 @@ class AdminDiscounts extends AdminTab
 						<sup style="float:left;margin-left:5px">*</sup>
 						<p class="clear">'.$this->l('Either the monetary amount or the %, depending on Type selected above').'</p>
 					</div>
-				<div class="clear">&nbsp;</div>
+				<div id="behavior_not_exhausted" style="display:none;">
+					<label>'.$this->l('Behavior not exhausted:').'</label>
+					<div class="margin-form">
+						<select name="behavior_not_exhausted">
+							<option value="1" '.($obj->behavior_not_exhausted === 1 ? 'selected="selected"' : '').'>'.$this->l('Shrunk the voucher to the total order amount').'</option>
+							<option value="2" '.($obj->behavior_not_exhausted == 2 ? 'selected="selected"' : '').'>'.$this->l('Create a new voucher with remaining amount').'</option>
+							<option value="3" '.($obj->behavior_not_exhausted == 3 ? 'selected="selected"' : '').'>'.$this->l('Create negative invoice').'</option>
+						</select>
+					</div>
+				</div>
 				</div>
 				<label>'.$this->l('Description:').' </label>
 				<div class="margin-form">';
