@@ -847,7 +847,7 @@ class AdminImport extends AdminTab
 
 			self::setDefaultValues($info);
 			$product = new Product((int)($info['id_product']), false, $defaultLanguage);
-			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), (float)($info['ecotax']), (int)($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
+			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), 0, (float)($info['ecotax']), (int)($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));
