@@ -298,11 +298,14 @@ function saveAddress(type)
 				$('#opc_account_errors').html(errors).slideDown('slow');
 				result = false;
 			}
-			// update addresses id
-			$('input#opc_id_address_delivery').val(jsonData.id_address_delivery);
-			$('input#opc_id_address_invoice').val(jsonData.id_address_invoice);
-
-			result = true;
+			else
+			{
+				// update addresses id
+				$('input#opc_id_address_delivery').val(jsonData.id_address_delivery);
+				$('input#opc_id_address_invoice').val(jsonData.id_address_invoice);
+	
+				result = true;
+			}
 		},
        error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
     });
@@ -449,11 +452,8 @@ $(function() {
 			if ($('#invoice_address:checked').length > 0)
 			{
 				$('#opc_invoice_address').slideDown('slow');
-				if (vat_management)
-				{
-					if ($('#company_invoice').val() == '')
-						$('#vat_number_block_invoice').hide();
-				}
+				if ($('#company_invoice').val() == '')
+					$('#vat_number_block_invoice').hide();
 			}
 			else
 				$('#opc_invoice_address').slideUp('slow');
