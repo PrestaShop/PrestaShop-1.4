@@ -25,6 +25,60 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
+
+function developpementErrorHandler($errno, $errstr, $errfile, $errline)
+{
+	if (!(error_reporting() & $errno))
+		return;
+	switch($errno)
+	{
+		case E_ERROR:
+			echo '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_WARNING:
+			echo '[PHP Warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_PARSE:
+			echo '[PHP Parse #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_NOTICE:
+			echo '[PHP Notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_CORE_ERROR:
+			echo '[PHP Core #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_CORE_WARNING:
+			echo '[PHP Core warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_COMPILE_ERROR:
+			echo '[PHP Compile #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_COMPILE_WARNING:
+			echo '[PHP Compile warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_USER_ERROR:
+			echo '[PHP Error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_USER_WARNING:
+			echo '[PHP User warning #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_USER_NOTICE:
+			echo '[PHP User notice #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_STRICT:
+			echo '[PHP Strict #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		case E_RECOVERABLE_ERROR:
+			echo '[PHP Recoverable error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+			break;
+		default:
+			echo '[PHP Unknown error #'.$errno.'] '.$errstr.' ('.$errfile.', line '.$errline.')';
+	}
+	die;
+	return true;
+}
+
+
 class FrontController extends FrontControllerCore
 {
 	public $_memory = array();
@@ -87,6 +141,12 @@ class FrontController extends FrontControllerCore
 	
 	public function __construct()
 	{
+		// error management
+		set_error_handler('developpementErrorHandler');
+		ini_set('html_errors', 'on');
+		ini_set('display_errors', 'on');
+		error_reporting(E_ALL | E_STRICT);
+		
 		$this->_memory = array_fill(0, 10, 0);
 		$this->_time = array_fill(0, 10, 0);
 
