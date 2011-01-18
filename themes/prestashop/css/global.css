@@ -1185,7 +1185,8 @@ tr.cart_total_price { font-weight: bold }
 	float: left;
 	cursor: pointer;
 	width: 80px;
-	height: 80px
+	height: 80px;
+	margin-right: 10px;
 }
 #view_scroll_left, #view_scroll_right {
 	background: url('../img/thumbs_left.gif') no-repeat center;

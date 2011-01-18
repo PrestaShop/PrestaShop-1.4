@@ -157,7 +157,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 		<div id="views_block" {if isset($images) && count($images) < 2}class="hidden"{/if}>
 		{if isset($images) && count($images) > 3}<span class="view_scroll_spacer"><a id="view_scroll_left" class="hidden" title="{l s='Other views'}" href="javascript:{ldelim}{rdelim}">{l s='Previous'}</a></span>{/if}
 		<div id="thumbs_list">
-			<ul style="width: {math equation="width * nbImages" width=80 nbImages=$images|@count}px" id="thumbs_list_frame">
+			<ul id="thumbs_list_frame">
 				{if isset($images)}
 					{foreach from=$images item=image name=thumbnails}
 					{assign var=imageIds value="`$product->id`-`$image.id_image`"}
