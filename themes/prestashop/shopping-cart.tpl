@@ -24,16 +24,6 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
-<script type="text/javascript">
-<!--
-	var baseDir = '{$base_dir_ssl}';
-	var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
-	var currencyRate = '{$currencyRate|floatval}';
-	var currencyFormat = '{$currencyFormat|intval}';
-	var currencyBlank = '{$currencyBlank|intval}';
--->
-</script>
-
 {capture name=path}{l s='Your shopping cart'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
@@ -47,6 +37,15 @@
 {if isset($empty)}
 	<p class="warning">{l s='Your shopping cart is empty.'}</p>
 {else}
+	<script type="text/javascript">
+<!--
+	var baseDir = '{$base_dir_ssl}';
+	var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
+	var currencyRate = '{$currencyRate|floatval}';
+	var currencyFormat = '{$currencyFormat|intval}';
+	var currencyBlank = '{$currencyBlank|intval}';
+-->
+	</script>
 	<p style="display:none" id="emptyCartWarning" class="warning">{l s='Your shopping cart is empty.'}</p>
 {if isset($lastProductAdded) AND $lastProductAdded}
 	{foreach from=$products item=product}
