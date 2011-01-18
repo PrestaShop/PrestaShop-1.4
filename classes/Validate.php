@@ -892,7 +892,7 @@ class ValidateCore
 	*/
 	static public function isDniBool($dni)
 	{
-		return (self::isDni > 0 ? 1 : 0); 
+		return (self::isDni($dni) > 0 ? 1 : 0); 
 	}
 
 	/**
