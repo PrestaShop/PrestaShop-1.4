@@ -64,6 +64,7 @@ var productReference = '{$product->reference|escape:'htmlall':'UTF-8'}';
 var productAvailableForOrder = {if isset($restricted_country_mode) AND $restricted_country_mode}'0'{else}'{$product->available_for_order}'{/if};
 var productShowPrice = '{$product->show_price}';
 var productUnitPriceRatio = '{$product->unit_price_ratio}';
+var idDefaultImage = {$cover.id_image_only};
 
 // Customizable field
 var img_ps_dir = '{$img_ps_dir}';

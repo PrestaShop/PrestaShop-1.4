@@ -388,6 +388,11 @@ function refreshProductImages(id_product_attribute)
 		var thumb_width = $('#thumbs_list_frame >li').width()+parseInt($('#thumbs_list_frame >li').css('marginRight'));
 		$('#thumbs_list_frame').width((parseInt((thumb_width)* i) + 3) + 'px'); //  Bug IE6, needs 3 pixels more ?
 	}
+	else
+	{
+		$('#thumbnail_' + idDefaultImage).show();
+		displayImage($('#thumbnail_'+ idDefaultImage +' a'));
+	}
 	$('#thumbs_list').trigger('goto', 0);
 	serialScrollFixLock('', '', '', '', 0);// SerialScroll Bug on goto 0 ?
 }
