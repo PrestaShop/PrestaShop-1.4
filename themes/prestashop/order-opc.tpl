@@ -339,10 +339,6 @@
 				<p class="address_add submit">
 					<a href="{$link->getPageLink('address.php', true)}?back=order-opc.php{if isset($back) && $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 				</p>
-				<div id="ordermsg">
-					<p>{l s='If you would like to comment on your order, please write it below.'}</p>
-					<p class="textarea"><textarea cols="60" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
-				</div>
 			</div>
 			
 			<div>
@@ -729,7 +725,13 @@
 			<label for="recyclable">{l s='I agree to receive my order in recycled packaging'}.</label>
 		</p>
 		{/if}
-	
+		
+		<h3>{l s='Leave a message'}</h3>
+		<div>
+			<p>{l s='If you would like to comment on your order, please write it below.'}</p>
+			<p><textarea cols="120" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
+		</div>
+		
 		{if $giftAllowed}
 			<script type="text/javascript" src="{$js_dir}layer.js"></script>
 			{if isset($virtual_cart) && !$virtual_cart && $giftAllowed && $cart->gift == 1}

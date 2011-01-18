@@ -264,8 +264,7 @@ class MailAlerts extends Module
 		}
 		
 		if ($this->_customer_qty AND $params['product']['quantity'] > 0)
-			$this->sendCustomerAlert((int)$params['product']['id'], 0);
-		
+			$this->sendCustomerAlert((int)$params['product']['id_product'], 0);
 	}
 
 	public function hookUpdateProduct($params)
