@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -57,7 +57,11 @@
 					{/if}
 					</div>
 
-					<p class="comparison_unit_price">{if !empty($product->unity) && $product->unit_price > 0.000000}{convertPrice price=$product->unit_price} {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}{else}&nbsp;{/if}</p>
+				{if !empty($product->unity) && $product->unit_price_ratio > 0.000000}
+					<p class="comparison_unit_price">{convertPrice price=($product->getPrice($taxes_behavior) / $product->unit_price_ratio)} {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
+				{else}
+				&nbsp;
+				{/if}
 
 				<!-- availability -->
 				<p class="comparison_availability_statut">

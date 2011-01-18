@@ -96,8 +96,8 @@ class ProductCore extends ObjectModel
 	/** @var string unity */
 	public		$unity = NULL;
 
-	/** @var float price for product's unity */
-	public		$unit_price = 0;
+    /** @var float price for product's unity ratio */
+	public		$unit_price_ratio = 0;
 
 	/** @var float Ecotax */
 	public		$ecotax = 0;
@@ -256,7 +256,7 @@ class ProductCore extends ObjectModel
 			'cache_default_attribute' => array(),
 		),
 		'associations' => array(
-			'categories' => array('resource' => 'category', 'fields' => array('id' => 
+			'categories' => array('resource' => 'category', 'fields' => array('id' =>
 				array('required' => true),
 			)),
 		),
@@ -305,7 +305,7 @@ class ProductCore extends ObjectModel
 		$fields['online_only'] = (int)($this->online_only);
 		$fields['ecotax'] = (float)($this->ecotax);
 		$fields['unity'] = pSQL($this->unity);
-		$fields['unit_price'] = (float)($this->unit_price);
+    	$fields['unit_price_ratio'] = (float)($this->unit_price > 0 ? $this->price / $this->unit_price : 0);
 		$fields['ean13'] = pSQL($this->ean13);
 		$fields['upc'] = pSQL($this->upc);
 		$fields['reference'] = pSQL($this->reference);
@@ -1275,7 +1275,7 @@ class ProductCore extends ObjectModel
 	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		WHERE p.`active` = 1
-		AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 
+		AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg

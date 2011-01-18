@@ -63,7 +63,7 @@ var displayPrice = {$priceDisplay};
 var productReference = '{$product->reference|escape:'htmlall':'UTF-8'}';
 var productAvailableForOrder = {if isset($restricted_country_mode) AND $restricted_country_mode}'0'{else}'{$product->available_for_order}'{/if};
 var productShowPrice = '{$product->show_price}';
-var productUnitPrice = '{$product->unit_price}';
+var productUnitPriceRatio = '{$product->unit_price_ratio}';
 
 // Customizable field
 var img_ps_dir = '{$img_ps_dir}';
@@ -286,8 +286,8 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 				{if $product->ecotax != 0}
 					<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{$ecotax_tax_inc|convertAndFormatPrice}</span> {l s='for green tax'}</p>
 				{/if}
-				{if !empty($product->unity) && $unit_price > 0.000000}
-					<p class="unit-price"><span id="unit_price_display">{convertPrice price=$unit_price}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
+				{if !empty($product->unity) && $product->unit_price_ratio > 0.000000}
+					<p class="unit-price"><span id="unit_price_display">{convertPrice price=($productPrice / $product->unit_price_ratio)}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
 				{/if}
 				{*close if for show price*}
 			{/if}

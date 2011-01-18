@@ -316,6 +316,7 @@ function updateDisplay()
 		//productPrice = ps_round(productPrice * currencyRate, 2);
 		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction, currencyFormat, currencySign, currencyBlank));
+
 		/* Special feature: "Display product price tax excluded on product page" */
 		if (!noTaxForThisProduct)
 			var productPricePretaxed = productPrice / tax;
@@ -323,16 +324,13 @@ function updateDisplay()
 			var productPricePretaxed = productPrice;
 		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
 		/* Unit price */
-		var newUnitPrice = parseFloat(productUnitPrice) + parseFloat(selectedCombination['unit_price']);
-		if (!noTaxForThisProduct && displayPrice != 1)
-			newUnitPrice *= tax;
-		if (group_reduction)
-			newUnitPrice *= group_reduction;
-		if (productPrice && productPriceWithoutReduction)
-			newUnitPrice *= productPrice / productPriceWithoutReduction;
-		newUnitPrice = ps_round(newUnitPrice * currencyRate, 2);
-		if (productUnitPrice)
+        productUnitPriceRatio = parseFloat(productUnitPriceRatio);
+		if (productUnitPriceRatio > 0 )
+		{
+        	newUnitPrice = (productPrice / parseFloat(productUnitPriceRatio)) + selectedCombination['unit_price'];
 			$('#unit_price_display').text(formatCurrency(newUnitPrice, currencyFormat, currencySign, currencyBlank));
+		}
+
 		/* Ecotax */
 		var ecotaxAmount = !displayPrice ? ps_round(selectedCombination['ecotax'] * (1 + ecotaxTax_rate / 100), 2) : selectedCombination['ecotax'];
 		$('#ecotax_price_display').text(formatCurrency(ecotaxAmount, currencyFormat, currencySign, currencyBlank));

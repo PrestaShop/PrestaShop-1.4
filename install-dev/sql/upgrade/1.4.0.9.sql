@@ -5,3 +5,9 @@ CREATE TABLE `PREFIX_specific_price_priority` (
 PRIMARY KEY ( `id_specific_price_priority` , `id_product` )
 )  ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
+ALTER TABLE `PREFIX_product` ADD `unit_price_ratio` DECIMAL(20, 6) NOT NULL default '0.00' AFTER `unit_price`;
+
+UPDATE `PREFIX_product` SET `unit_price_ratio` =  IF (`unit_price` != 0, `price` / `unit_price`, 0);
+
+ALTER TABLE `PREFIX_product` DROP `unit_price`;
+
