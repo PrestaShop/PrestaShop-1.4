@@ -380,7 +380,7 @@ class Fianetfraud extends Module
 	{
 		$order_status = false;
 		$conf = Configuration::getMultiple(array('SAC_PRODUCTION', 'PS_SAC_ID_FRAUD', 'SAC_SITEID', 'SAC_LOGIN', 'SAC_PASSWORD'));
-		if ($params['newOrderStatus']->id  == $conf['SAC_ID_FRAUD'])
+		if ($params['newOrderStatus']->id  == Configuration::get('SAC_ID_FRAUD'))
 			$order_status = 2;
 		elseif ($params['newOrderStatus']->id  == _PS_OS_DELIVERED_)
 			$order_status = 1;

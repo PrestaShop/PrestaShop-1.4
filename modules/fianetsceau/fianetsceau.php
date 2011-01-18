@@ -207,7 +207,7 @@ class FianetSceau extends Module
 				$upload_success = self::sendXML();
 			Db::getInstance()->Execute('
 				INSERT INTO '._DB_PREFIX_.'fianet_seal (id_order, upload_success, valid, status, date_upd, date_add)
-				VALUES ('.(int)$order->id.', '.(int)$upload_fail.','.(int)$params['newOrderStatus']->logable.', '.(int)$params['newOrderStatus']->id.', NOW(), NOW())');
+				VALUES ('.(int)$order->id.', 0,'.(int)$params['newOrderStatus']->logable.', '.(int)$params['newOrderStatus']->id.', NOW(), NOW())');
 		}
 		else
 		{
