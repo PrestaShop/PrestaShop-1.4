@@ -50,7 +50,7 @@
 		<tax id="44" name="Sales-taxes US-WI 5%" rate="5" />
 		<tax id="45" name="Sales-taxes US-WY 4%" rate="4" />
 		<tax id="46" name="Sales-taxes US-DC 6%" rate="6" />
-		
+
 		<taxRulesGroup name="US-AL Rate (4%)">
 			<taxRule iso_code_country="us" iso_code_state="al" state_behavior="1" id_tax="1" />
 		</taxRulesGroup>
@@ -60,11 +60,15 @@
 		<taxRulesGroup name="US-AR Rate (6%)">
 			<taxRule iso_code_country="us" iso_code_state="ar" state_behavior="1" id_tax="3" />
 		</taxRulesGroup>
+		<taxRulesGroup name="US-AK Rate (0%)" />
 		<taxRulesGroup name="US-CA Rate (8.25%)">
 			<taxRule iso_code_country="us" iso_code_state="ca" state_behavior="1" id_tax="4" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-CO Rate (2.9%)">
 			<taxRule iso_code_country="us" iso_code_state="co" state_behavior="1" id_tax="5" />
+		</taxRulesGroup>
+		<taxRulesGroup name="US-DC Rate (6%)">
+			<taxRule iso_code_country="us" iso_code_state="dc" state_behavior="1" id_tax="46" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-FL Rate (6%)">
 			<taxRule iso_code_country="us" iso_code_state="fl" state_behavior="1" id_tax="6" />
@@ -75,6 +79,9 @@
 		<taxRulesGroup name="US-HI Rate (4%)">
 			<taxRule iso_code_country="us" iso_code_state="hi" state_behavior="1" id_tax="8" />
 		</taxRulesGroup>
+		<taxRulesGroup name="US-IA Rate (6%)">
+			<taxRule iso_code_country="us" iso_code_state="ia" state_behavior="1" id_tax="12" />
+		</taxRulesGroup>
 		<taxRulesGroup name="US-ID Rate (6%)">
 			<taxRule iso_code_country="us" iso_code_state="id" state_behavior="1" id_tax="9" />
 		</taxRulesGroup>
@@ -83,9 +90,6 @@
 		</taxRulesGroup>
 		<taxRulesGroup name="US-IN Rate (7%)">
 			<taxRule iso_code_country="us" iso_code_state="in" state_behavior="1" id_tax="11" />
-		</taxRulesGroup>
-		<taxRulesGroup name="US-IA Rate (6%)">
-			<taxRule iso_code_country="us" iso_code_state="ia" state_behavior="1" id_tax="12" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-KS Rate (5.3%)">
 			<taxRule iso_code_country="us" iso_code_state="ks" state_behavior="1" id_tax="13" />
@@ -96,14 +100,14 @@
 		<taxRulesGroup name="US-LA Rate (4%)">
 			<taxRule iso_code_country="us" iso_code_state="la" state_behavior="1" id_tax="15" />
 		</taxRulesGroup>
-		<taxRulesGroup name="US-ME Rate (5%)">
-			<taxRule iso_code_country="us" iso_code_state="me" state_behavior="1" id_tax="16" />
+		<taxRulesGroup name="US-MA Rate (6.25%)">
+			<taxRule iso_code_country="us" iso_code_state="ma" state_behavior="1" id_tax="18" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-MD Rate (6%)">
 			<taxRule iso_code_country="us" iso_code_state="md" state_behavior="1" id_tax="17" />
 		</taxRulesGroup>
-		<taxRulesGroup name="US-MA Rate (6.25%)">
-			<taxRule iso_code_country="us" iso_code_state="ma" state_behavior="1" id_tax="18" />
+		<taxRulesGroup name="US-ME Rate (5%)">
+			<taxRule iso_code_country="us" iso_code_state="me" state_behavior="1" id_tax="16" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-MI Rate (6%)">
 			<taxRule iso_code_country="us" iso_code_state="mi" state_behavior="1" id_tax="19" />
@@ -111,32 +115,34 @@
 		<taxRulesGroup name="US-MN Rate (6.875%)">
 			<taxRule iso_code_country="us" iso_code_state="mn" state_behavior="1" id_tax="20" />
 		</taxRulesGroup>
+		<taxRulesGroup name="US-MO Rate (4.225%)">
+			<taxRule iso_code_country="us" iso_code_state="mo" state_behavior="1" id_tax="22" />
+		</taxRulesGroup>
 		<taxRulesGroup name="US-MS Rate (7%)">
 			<taxRule iso_code_country="us" iso_code_state="ms" state_behavior="1" id_tax="21" />
 		</taxRulesGroup>
-		<taxRulesGroup name="US-MO Rate (4.225%)">
-			<taxRule iso_code_country="us" iso_code_state="mo" state_behavior="1" id_tax="22" />
+		<taxRulesGroup name="US-MT Rate (0%)" />
+		<taxRulesGroup name="US-NC Rate (5.5%)">
+			<taxRule iso_code_country="us" iso_code_state="nc" state_behavior="1" id_tax="28" />
+		</taxRulesGroup>
+		<taxRulesGroup name="US-ND Rate (5%)">
+			<taxRule iso_code_country="us" iso_code_state="nd" state_behavior="1" id_tax="29" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-NE Rate (5.5%)">
 			<taxRule iso_code_country="us" iso_code_state="ne" state_behavior="1" id_tax="23" />
 		</taxRulesGroup>
-		<taxRulesGroup name="US-NV Rate (6.85%)">
-			<taxRule iso_code_country="us" iso_code_state="nv" state_behavior="1" id_tax="24" />
-		</taxRulesGroup>
+		<taxRulesGroup name="US-NH Rate (0%)" />
 		<taxRulesGroup name="US-NJ Rate (7%)">
 			<taxRule iso_code_country="us" iso_code_state="nj" state_behavior="1" id_tax="25" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-NM Rate (5.125%)">
 			<taxRule iso_code_country="us" iso_code_state="nm" state_behavior="1" id_tax="26" />
 		</taxRulesGroup>
+		<taxRulesGroup name="US-NV Rate (6.85%)">
+			<taxRule iso_code_country="us" iso_code_state="nv" state_behavior="1" id_tax="24" />
+		</taxRulesGroup>
 		<taxRulesGroup name="US-NY Rate (4%)">
 			<taxRule iso_code_country="us" iso_code_state="ny" state_behavior="1" id_tax="27" />
-		</taxRulesGroup>
-		<taxRulesGroup name="US-NC Rate (5.5%)">
-			<taxRule iso_code_country="us" iso_code_state="nc" state_behavior="1" id_tax="28" />
-		</taxRulesGroup>
-		<taxRulesGroup name="US-ND Rate (5%)">
-			<taxRule iso_code_country="us" iso_code_state="nd" state_behavior="1" id_tax="29" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-OH Rate (5.5%)">
 			<taxRule iso_code_country="us" iso_code_state="oh" state_behavior="1" id_tax="30" />
@@ -144,6 +150,7 @@
 		<taxRulesGroup name="US-OK Rate (4.5%)">
 			<taxRule iso_code_country="us" iso_code_state="ok" state_behavior="1" id_tax="31" />
 		</taxRulesGroup>
+    	<taxRulesGroup name="US-OR Rate (0%)" />
 		<taxRulesGroup name="US-PA Rate (6%)">
 			<taxRule iso_code_country="us" iso_code_state="pa" state_behavior="1" id_tax="32" />
 		</taxRulesGroup>
@@ -168,11 +175,11 @@
 		<taxRulesGroup name="US-UT Rate (4.75%)">
 			<taxRule iso_code_country="us" iso_code_state="ut" state_behavior="1" id_tax="39" />
 		</taxRulesGroup>
-		<taxRulesGroup name="US-VT Rate (6%)">
-			<taxRule iso_code_country="us" iso_code_state="vt" state_behavior="1" id_tax="40" />
-		</taxRulesGroup>
 		<taxRulesGroup name="US-VA Rate (4%)">
 			<taxRule iso_code_country="us" iso_code_state="va" state_behavior="1" id_tax="41" />
+		</taxRulesGroup>
+		<taxRulesGroup name="US-VT Rate (6%)">
+			<taxRule iso_code_country="us" iso_code_state="vt" state_behavior="1" id_tax="40" />
 		</taxRulesGroup>
 		<taxRulesGroup name="US-WA Rate (6.5%)">
 			<taxRule iso_code_country="us" iso_code_state="wa" state_behavior="1" id_tax="42" />
@@ -186,10 +193,6 @@
 		<taxRulesGroup name="US-WY Rate (4%)">
 			<taxRule iso_code_country="us" iso_code_state="wy" state_behavior="1" id_tax="45" />
 		</taxRulesGroup>
-		<taxRulesGroup name="US-DC Rate (6%)">
-			<taxRule iso_code_country="us" iso_code_state="dc" state_behavior="1" id_tax="46" />
-		</taxRulesGroup>
-		
 	</taxes>
 	<states>
 		<state name="Alabama" iso_code="AL" country="US" zone="North America" />
@@ -253,3 +256,4 @@
 		<unit type="long_distance" value="mi" />
 	</units>
 </localizationPack>
+
