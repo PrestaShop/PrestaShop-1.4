@@ -158,7 +158,7 @@ class ContactControllerCore extends FrontController
 				}
 				if (!empty($contact->email))
 				{
-					if (Mail::Send((int)($this->cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)($this->cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : $from), $fileAttachment)
+					if (Mail::Send((int)($this->cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)($this->cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : ''), $fileAttachment)
 						AND Mail::Send((int)($this->cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
 						$this->smarty->assign('confirmation', 1);
 					else
