@@ -80,14 +80,17 @@ class AuthControllerCore extends FrontController
 			if (isset($_POST['guest_email']) AND $_POST['guest_email'])
 				$_POST['email'] = $_POST['guest_email'];
 
-			if (!Validate::isEmail($email = Tools::getValue('email')) OR empty($email))
-				$this->errors[] = Tools::displayError('e-mail not valid');
-			elseif (Customer::customerExists($email))
-				$this->errors[] = Tools::displayError('someone has already registered with this e-mail address');
-			if (!Validate::isPasswd(Tools::getValue('passwd')) AND Tools::isSubmit('is_new_customer'))
-				$this->errors[] = Tools::displayError('invalid password');
+			/* Preparing customer */
+			$customer = new Customer();
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
+			$this->errors = array_unique(array_merge($this->errors, $customer->validateControler()));
+			
+			/* Preparing address */
+			$address = new Address();
+			$address->id_customer = 1;
+			$this->errors = array_unique(array_merge($this->errors, $address->validateControler()));
+			
 			$zip_code_format = Country::getZipCodeFormat((int)(Tools::getValue('id_country')));
 			if (Country::getNeedZipCode((int)(Tools::getValue('id_country'))))
 			{
@@ -122,7 +125,6 @@ class AuthControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('invalid birthday');
 			if (!sizeof($this->errors))
 			{
-				$customer = new Customer();
 				if (Tools::isSubmit('newsletter'))
 				{
 					$customer->ip_registration_newsletter = pSQL(Tools::getRemoteAddr());
@@ -131,17 +133,6 @@ class AuthControllerCore extends FrontController
 
 				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 
-				/* Customer and address, same fields, caching data */
-				$addrLastname = isset($_POST['lastname']) ? $_POST['lastname'] : $_POST['customer_lastname'];
-				$addrFirstname = isset( $_POST['firstname']) ?  $_POST['firstname'] : $_POST['customer_firstname'];
-				$_POST['lastname'] = $_POST['customer_lastname'];
-				$_POST['firstname'] = $_POST['customer_firstname'];
-				$this->errors = $customer->validateControler();
-				$_POST['lastname'] = $addrLastname;
-				$_POST['firstname'] = $addrFirstname;
-				$address = new Address();
-				$address->id_customer = 1;
-				$this->errors = array_unique(array_merge($this->errors, $address->validateControler()));
 				if (!sizeof($this->errors))
 				{
 					if (!$country = new Country($address->id_country, Configuration::get('PS_LANG_DEFAULT')) OR !Validate::isLoadedObject($country))
