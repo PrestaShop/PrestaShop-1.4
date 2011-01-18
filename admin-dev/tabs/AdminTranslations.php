@@ -971,6 +971,19 @@ class AdminTranslations extends AdminTab
 		</script>';
 	}
 
+
+	public function displayLimitPostWarning($count)
+	{
+		if (ini_get('suhosin.post.max_vars') AND ini_get('suhosin.post.max_vars') < $count) 
+		{ 
+			ini_set('suhosin.post.max_vars', $count + 100); 
+			if (ini_get('suhosin.post.max_vars') < $count) 
+				echo '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, and is limiting the maximum fields which could be posted to') 
+				.' <b>'.ini_get('suhosin.post.max_vars').'</b>'.$this->l('. As a result, your translations will be partially saved. Please ask your hosting provider to increase this limit to') 
+				.' <u><b>'.((int)$count + 100).' '.$this->l('at least.').'</b></u></div>'; 
+		}
+	}
+
 	public function displayFormfront($lang)
 	{
 		global $currentIndex;
@@ -1004,7 +1017,9 @@ class AdminTranslations extends AdminTab
 
 		echo '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Front-Office translations').'</h2>
-		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />
+		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />';
+		$this->displayLimitPostWarning($count);
+		echo '
 		<form method="post" action="'.$currentIndex.'&submitTranslationsFront=1&token='.$this->token.'" class="form">';
 		$this->displayToggleButton(sizeof($_LANG) >= $count);
 		$this->displayAutoTranslate();
@@ -1072,7 +1087,9 @@ class AdminTranslations extends AdminTab
 
 		echo '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Back-Office translations').'</h2>
-		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />
+		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
+		$this->displayLimitPostWarning($count);
+		echo '
 		<form method="post" action="'.$currentIndex.'&submitTranslationsBack=1&token='.$this->token.'" class="form">';
 		$this->displayToggleButton();
 		$this->displayAutoTranslate();
@@ -1142,7 +1159,9 @@ class AdminTranslations extends AdminTab
 				}
 		$irow = 0;
 		echo '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Errors translations').'</h2>'
-		.$this->l('Errors to translate').' : <b>'.sizeof($stringToTranslate).'</b><br /><br />
+		.$this->l('Errors to translate').' : <b>'.sizeof($stringToTranslate).'</b><br /><br />';
+		$this->displayLimitPostWarning(sizeof($stringToTranslate));
+		echo '
 		<form method="post" action="'.$currentIndex.'&submitTranslationsErrors=1&lang='.$lang.'&token='.$this->token.'" class="form">
 		<input type="submit" name="submitTranslationsErrors" value="'.$this->l('Update translations').'" class="button" /><br /><br />
 		<table cellpadding="0" cellspacing="0" class="table">';
@@ -1774,7 +1793,9 @@ class AdminTranslations extends AdminTab
 			
 			echo '
 			<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Modules translations').'</h2>
-			'.$this->l('Total expressions').' : <b>'.$this->total_expression.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />
+			'.$this->l('Total expressions').' : <b>'.$this->total_expression.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />';
+			$this->displayLimitPostWarning($this->total_expression);
+			echo '
 			<form method="post" action="'.$currentIndex.'&submitTranslationsModules=1&token='.$this->token.'" class="form">';
 			$this->displayToggleButton();
 			$this->displayAutoTranslate();
@@ -1852,7 +1873,9 @@ class AdminTranslations extends AdminTab
 
 		echo '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>
-		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />
+		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
+		$this->displayLimitPostWarning($count);
+		echo '
 		<form method="post" action="'.$currentIndex.'&submitTranslationsPDF=1&token='.$this->token.'" class="form">
 				<script type="text/javascript">
 					var openAll = \''.html_entity_decode($this->l('Expand all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
