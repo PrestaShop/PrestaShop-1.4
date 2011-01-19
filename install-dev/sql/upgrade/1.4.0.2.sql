@@ -113,11 +113,10 @@ CREATE TABLE `PREFIX_specific_price` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `priority`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`)
-	(	SELECT dq.`id_product`, 1, 1, 0, 1, 0, 0.00, dq.`quantity`, IF(dq.`id_discount_type` = 2, (dq.`value` / (1 + IF(t.`rate`,t.`rate`,0) / 100)), dq.`value` / 100), IF (dq.`id_discount_type` = 2, 'amount', 'percentage'), '0000-00-00 00:00:00', '0000-00-00 00:00:00'
+	(	SELECT dq.`id_product`, 1, 1, 0, 1, 0, 0.00, dq.`quantity`, IF(dq.`id_discount_type` = 2, dq.`value`, dq.`value` / 100), IF (dq.`id_discount_type` = 2, 'amount', 'percentage'), '0000-00-00 00:00:00', '0000-00-00 00:00:00'
 		FROM `PREFIX_discount_quantity` dq
 		INNER JOIN `PREFIX_product` p ON (p.`id_product` = dq.`id_product`)
-		LEFT JOIN `PREFIX_tax` t ON (t.`id_tax` = p.`id_tax`)
-	); 
+	);
 DROP TABLE `PREFIX_discount_quantity`;
 
 INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `priority`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`) (
@@ -130,21 +129,20 @@ INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id
 		0,
 		0.00,
 		1,
-		IF(p.`reduction_price` > 0, (p.`reduction_price` / (1 + IF(t.`rate`,t.`rate`,0) / 100)), p.`reduction_percent` / 100),
+		IF(p.`reduction_price` > 0, p.`reduction_price`, p.`reduction_percent` / 100),
 		IF(p.`reduction_price` > 0, 'amount', 'percentage'),
 		IF (p.`reduction_from` = p.`reduction_to`, '0000-00-00 00:00:00', p.`reduction_from`),
 		IF (p.`reduction_from` = p.`reduction_to`, '0000-00-00 00:00:00', p.`reduction_to`)
 	FROM `PREFIX_product` p
-	INNER JOIN `PREFIX_tax` t ON (t.`id_tax` = p.`id_tax`)
 	WHERE p.`reduction_price` OR p.`reduction_percent`
-); 
+);
 ALTER TABLE `PREFIX_product`
 	DROP `reduction_price`,
 	DROP `reduction_percent`,
 	DROP `reduction_from`,
 	DROP `reduction_to`;
 
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES 
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PS_SPECIFIC_PRICE_PRIORITIES', 'id_shop;id_currency;id_country;id_group', NOW(), NOW()),
 ('PS_TAX_DISPLAY', 0, NOW(), NOW()),
 ('PS_SMARTY_FORCE_COMPILE', 1, NOW(), NOW()),
@@ -591,7 +589,7 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('
 INSERT INTO `PREFIX_hook` (`name` ,`title` ,`description` ,`position`) VALUES ('beforeCarrier', 'Before carrier list', 'This hook is display before the carrier list on Front office', 1);
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('orderDetailDisplayed', 'Order detail displayed', 'Displayed on order detail on front office', 1);
 
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES 
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 ((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'mailalerts'), 0)),
 (SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'deleteProductAttribute'), 1);
 
@@ -806,7 +804,7 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('categoryUpdate', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
 ('categoryDeletion', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0);
 
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES 
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 ((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
 (SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryAddition'), 1),
 ((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
@@ -857,3 +855,4 @@ CREATE TABLE `PREFIX_webservice_permission` (
 /* PHP:reorderpositions(); */;
 /* PHP:update_image_size_in_db(); */;
 /* PHP:update_order_details(); */;
+
