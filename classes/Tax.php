@@ -242,20 +242,22 @@ class TaxCore extends ObjectModel
 	{
 	    Tools::displayAsDeprecated();
 		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT `id_tax`
-			FROM `'._DB_PREFIX_.'tax`
-			WHERE `rate` = '.(float)($rate).
-			($active == 1 ? ' AND `active` = 1' : ''));
+			SELECT t.`id_tax`
+			FROM `'._DB_PREFIX_.'tax` t
+			LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.id_tax = tl.id_tax)
+			WHERE t.`rate` = '.(float)($rate).
+			($active == 1 ? ' AND t.`active` = 1' : ''));
 		return $tax ? (int)($tax['id_tax']) : false;
 	}
 
 	public static function getTaxIdByName($tax_name, $active =1)
 	{
 		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT `id_tax`
-			FROM `'._DB_PREFIX_.'tax`
-			WHERE `name` = \''.pSQL($tax_name).'\' '.
-			($active == 1 ? ' AND `active` = 1' : ''));
+			SELECT t.`id_tax`
+			FROM `'._DB_PREFIX_.'tax` t
+			LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (tl.id_tax = t.id_tax)
+			WHERE tl.`name` = \''.pSQL($tax_name).'\' '.
+			($active == 1 ? ' AND t.`active` = 1' : ''));
 
 		return $tax ? (int)($tax['id_tax']) : false;
 	}
