@@ -250,7 +250,6 @@ class ProductControllerCore extends FrontController
 				{
 					$colors = array();
 					$attributesGroups = $this->product->getAttributesGroups((int)($this->cookie->id_lang));
-					//d($attributesGroups);
 					if (Db::getInstance()->numRows())
 					{
 						$combinationImages = $this->product->getCombinationImages((int)($this->cookie->id_lang));
