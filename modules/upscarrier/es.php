@@ -79,7 +79,6 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_5d5ae09e7b6041d3449ef2cbfc39f560'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_e794e452ed4d2cfa13083693a2c8810e'] = 'No ha introducido el tipo de paquete';
 $_MODULE['<{upscarrier}prestashop>upscarrier_805353d2862ea0e658c9ddda871540fa'] = 'No ha introducido el código postal';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5ecc7697a320f93f3ee8fb4048dbd64c'] = 'No ha introducido el país';
-$_MODULE['<{upscarrier}prestashop>upscarrier_9d68e32796711af455ffa6d7844e82f9'] = 'PrestaShop no ha podido conectarse a los webservicios de UPS, compruebe su clave API';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a37b48e8684078c0620a997b3baeee9f'] = 'En esta sección, puede especificar una configuración para cada categoría.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'ID Config';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoría';
