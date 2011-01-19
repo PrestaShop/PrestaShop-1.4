@@ -116,7 +116,6 @@ class Twenga extends PaymentModule
 		
 		// For Twenga subscription
 		$this->site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
-		
 		self::$base_dir = _PS_ROOT_DIR_.'/modules/twenga/';
 		self::$base_path = $this->site_url.'/modules/twenga/';
 		$this->feed_url = self::$base_path.'export.php';
@@ -370,7 +369,7 @@ class Twenga extends PaymentModule
 	public function displayTwengaIntro()
 	{
 		$errors = array();
-		try{
+		try {
 			$return = self::$obj_twenga->getSubscriptionLink(array('site_url' => $this->site_url, 'feed_url' => $this->feed_url, 'country' => self::$shop_country));
 			$this->inscription_url = $return['message'];
 		} catch (TwengaFieldsException $e) {
@@ -462,13 +461,13 @@ class Twenga extends PaymentModule
 			<p>'.$this->l('The following informations will be pre filled while your "Twenga Ready to Sell" subscription. Please check values validity').'</p><br />
 			<label>'.$this->l('Site\'s url').' <sup>*</sup> : </label>
 			<div class="margin-form">'
-				.'<div style="min-width:127px;display:inline-block;padding:3px;border:1px solid #E0D0B1;background-color:#dddddd;color:#666666;font-size:12px">'.$this->site_url.'</div>
+				.'<div class="simulate-disable-input" >'.$this->site_url.'</div>
 				<input type="hidden" name="site_url" value="'.$this->site_url.'"/>'
 				.'<p>'.$this->l('Site\'s url').'</p>
 			</div><!-- .margin-form -->
 			<label>'.$this->l('Feed\'s url').' <sup>*</sup> : </label>
 			<div class="margin-form">
-				<div style="min-width:127px;display:inline-block;padding:3px;border:1px solid #E0D0B1;background-color:#dddddd;color:#666666;font-size:12px">'.$this->feed_url.'</div>
+				<div class="simulate-disable-input" >'.$this->feed_url.'</div>
 				<input type="hidden" name="feed_url" value="'.$this->feed_url.'"/>
 				<p>'
 					.$this->l('Feeds Url, the list of product in xml.').'<br />'
@@ -477,7 +476,7 @@ class Twenga extends PaymentModule
 			</div><!-- .margin-form -->
 			<label>'.$this->l('Country').' <sup>*</sup> : </label>
 			<div class="margin-form">
-				<div style="min-width:127px;display:inline-block;padding:3px;border:1px solid #E0D0B1;background-color:#dddddd;color:#666666;font-size:12px">'.self::$shop_country.'</div>
+				<div class="simulate-disable-input" >'.self::$shop_country.'</div>
 				<input type="hidden" name="country" value="'.self::$shop_country.'"/>
 				<p>'
 				.$this->l('E-Merchant’s society country. Use the ISO_3166-1 Alpha-2 country code format.')
