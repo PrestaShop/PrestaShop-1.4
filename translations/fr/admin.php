@@ -2633,6 +2633,7 @@ $_LANGADM['AdminTranslations512cbac83650942b970818e75ddad528'] = 'Messages d\'er
 $_LANGADM['AdminTranslations02bb0d54b0a4f94c892cceb29966cc98'] = 'Traductions des champs';
 $_LANGADM['AdminTranslations4a4ec3855ac2f9f99d29088b6cc914a1'] = 'Champs à traduire';
 $_LANGADM['AdminTranslationsd05b6ed7d2345020440df396d6da7f73'] = 'champs';
+$_LANGADM['AdminTranslations47a0be8d1015d526a1fbaa56c3102135'] = 'Sujet :';
 $_LANGADM['AdminTranslationsc7892ebbb139886662c6f2fc8c450710'] = 'Sujet';
 $_LANGADM['AdminTranslations8a09d048735283dbc609ba0f9f705ed1'] = 'Traductions des modules';
 $_LANGADM['AdminTranslations7ae318fc57dcd698e2571046136b8402'] = 'Cliquez pour accéder au traduction du theme :';
