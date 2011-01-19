@@ -1650,7 +1650,7 @@ class ProductCore extends ObjectModel
 		        if (!$specific_price['id_currency'])
 		            $reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
 
-		        $reduc = Tools::ps_round(self::$_taxCalculationMethod == PS_TAX_INC ? $reduction_amount : $reduction_amount / (1 + $tax_rate / 100), 2);
+		        $reduc = Tools::ps_round((self::$_taxCalculationMethod == PS_TAX_EXC OR !$usetax) ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, 2);
 		    } else {
 		        $reduc = Tools::ps_round($price * $specific_price['reduction'], 2);
 		    }
