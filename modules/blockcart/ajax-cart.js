@@ -33,7 +33,8 @@ var ajaxCart = {
 		//for every 'add' buttons...
 		$('.ajax_add_to_cart_button').unbind('click').click(function(){
 			var idProduct =  $(this).attr('rel').replace('ajax_id_product_', '');
-			ajaxCart.add(idProduct, null, false, this);
+			if ($(this).attr('disabled') != 'disabled')
+				ajaxCart.add(idProduct, null, false, this);
 			return false;
 		});
 		//for product page 'add' button...
@@ -166,7 +167,6 @@ var ajaxCart = {
 			alert(fieldRequired);
 			return ;
 		}
-		
 		//disabled the button when adding to do not double add if user double click
 		if (addedFromProductPage)
 		{
@@ -175,7 +175,6 @@ var ajaxCart = {
 		}
 		else
 			$('.ajax_add_to_cart_button').attr('disabled', 'disabled');
-		
 		//send the ajax request to the server
 		$.ajax({
 			type: 'POST',
