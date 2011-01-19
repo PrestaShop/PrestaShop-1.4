@@ -1124,7 +1124,7 @@ class AdminImport extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 
-		if ((Tools::getValue('import')))
+		if ((Tools::getValue('import')) AND (isset($this->_warnings) AND !sizeof($this->_warnings)))
 			echo '<div class="module_confirmation conf confirm"><img src="../img/admin/ok.gif" alt="" title="" style="margin-right:5px; float:left;" />'.$this->l('The .CSV file has been imported into your shop.').'</div>';
 
 		if(!is_writable(PS_ADMIN_DIR.'/import/'))
@@ -1132,9 +1132,9 @@ class AdminImport extends AdminTab
 
 		if(isset($this->_warnings) AND sizeof($this->_warnings))
 		{
-			$warnings = '';
+			$warnings = array();
 			foreach ($this->_warnings as $warning)
-				$warnings .= $warning.'<br />';
+				$warnings[] = $warning;
 			$this->displayWarning($warnings);
 		}
 
