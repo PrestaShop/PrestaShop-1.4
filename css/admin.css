@@ -123,7 +123,15 @@ form sup {
 	font-weight: bold;
 	vertical-align: text-top;
 }
-
+form .simulate-disable-input{
+	min-width:127px;
+	display:inline-block;
+	padding:3px;
+	border:1px solid #E0D0B1;
+	background-color:#dddddd;
+	color:#666666;
+	font-size:12px;
+}
 .mail-form {
 	margin-top:-20px;
 	padding-left:200px;
