@@ -71,6 +71,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_5b1ea9a874e8e67af093b45ad34be1bd'
 $_MODULE['<{socolissimo}prestashop>socolissimo_ccdfd8ad75276f6e24db51d02e83e361'] = 'Coste adicional no válido';
 $_MODULE['<{socolissimo}prestashop>socolissimo_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuración actualizada';
 $_MODULE['<{socolissimo}prestashop>socolissimo_738a1d4da1b5dc5883063ec9856b637b'] = 'Error de configuración';
+$_MODULE['<{socolissimo}prestashop>socolissimo_f8b0594014f40c058e19a5f8ecd67c2b'] = 'Para elegir So Colissimo, por favor seleccione a continuación un modo de entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_201bdb87f8e278b943d07ae924d5de6e'] = 'Modo de entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce26601dac0dea138b7295f02b7620a7'] = 'Cliente';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7ad19f92a4021a80dbf91bbd28a68114'] = 'Empresa';

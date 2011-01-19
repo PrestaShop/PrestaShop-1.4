@@ -8,6 +8,7 @@ $_MODULE['<{blockrss}prestashop>blockrss_9680162225162baf2a085dfdc2814deb'] = 'f
 $_MODULE['<{blockrss}prestashop>blockrss_6706b6d8ba45cc4f0eda0506ba1dc3c8'] = 'URL de fuente incorrecta';
 $_MODULE['<{blockrss}prestashop>blockrss_36ed65ce17306e812fd68d9f634c0c57'] = 'Título incorrecto';
 $_MODULE['<{blockrss}prestashop>blockrss_1b3d34e25aef32a3c8daddfff856577f'] = 'Número de fuentes incorrecto';
+$_MODULE['<{blockrss}prestashop>blockrss_3485b08295c5e96444091cc8b09cafbf'] = 'Ha seleccionado un flujo RSS de su propio sitio Web, sin duda se trata de un error. Elija otro URL (ej: http://news.google.com/?output=rss) excepto si está seguro de su acción.';
 $_MODULE['<{blockrss}prestashop>blockrss_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
 $_MODULE['<{blockrss}prestashop>blockrss_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
 $_MODULE['<{blockrss}prestashop>blockrss_b22c8f9ad7db023c548c3b8e846cb169'] = 'Título del bloque';

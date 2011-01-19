@@ -20,6 +20,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c0b3132d2759b40e8525f2466c477d1
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_22db7528d7c5df8e310bf19af75e61d3'] = 'Recogida regular';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_7e8eb99ef29d93f494ebdc27b59444f5'] = 'Solicitud de mensajería';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_394a844cc3d6d99eb45b4e71afde2c99'] = 'Estación';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_46f58e2a308b68cae9d5f5dd8a5d4ad6'] = 'Europe first international priority';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0fd6265588d27073ef45ed36d5c00c75'] = 'Fedex 1 día flete';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_dfa184d2bf6a5d6ee8ffebfbaa25394c'] = 'Fedex 2 días';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_2c0f88b63bfbe05955db90f1dcccab2e'] = 'Fedex 2 días flete';

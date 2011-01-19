@@ -3,6 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_740e53a0ed1b643f69c4aaa8ad4ae8d2'] = 'Código transportista no válido';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_7ccf58c950043c9fbfed668df13ce608'] = 'Parámetros actualizados con éxito';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_39b34487212efb0589ecf8c774413d85'] = 'El número de teléfono es obligatorio';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_380b4179d36bce6ca862459a43b217b5'] = 'Para conectarse, visita:';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_592fcfe937f6d58f70d0918ef6373afa'] = 'Web de FIA-net';
