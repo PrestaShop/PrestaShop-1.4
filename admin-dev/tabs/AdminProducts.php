@@ -2836,6 +2836,7 @@ class AdminProducts extends AdminTab
 							<p>'.$this->l('If you want to select this image as a product cover').'</p>
 						</td>
 					</tr>
+					'; /* DEPRECATED FEATURE
 					<tr>
 						<td class="col-left">'.$this->l('Thumbnails resize method:').'</td>
 						<td style="padding-bottom:5px;">
@@ -2845,9 +2846,11 @@ class AdminProducts extends AdminTab
 							</select>
 							<p>'.$this->l('Method you want to use to generate resized thumbnails').'</p>
 						</td>
-					</tr>
+					</tr>*/
+					echo '
 					<tr>
 						<td colspan="2" style="text-align:center;">';
+						echo '<input type="hidden" name="resizer" value="auto" />';
 					$images = Image::getImages((int)($cookie->id_lang), $obj->id);
 					$imagesTotal = Image::getImagesTotal($obj->id);
 
