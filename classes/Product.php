@@ -96,7 +96,10 @@ class ProductCore extends ObjectModel
 	/** @var string unity */
 	public		$unity = NULL;
 
-    /** @var float price for product's unity ratio */
+    	/** @var float price for product's unity */
+	public		$unit_price;
+
+    	/** @var float price for product's unity ratio */
 	public		$unit_price_ratio = 0;
 
 	/** @var float Ecotax */
@@ -278,6 +281,7 @@ class ProductCore extends ObjectModel
 				$this->tax_rate = Tax::getProductTaxRate($this->id, NULL);
 			$this->new = $this->isNew();
 			$this->price = Product::getPriceStatic((int)($this->id), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $this->specificPrice);
+			$this->unit_price = $this->price / $this->unit_price_ratio;
 		}
 
 		if ($this->id_category_default)
