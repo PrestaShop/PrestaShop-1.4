@@ -223,7 +223,10 @@ function updateCarrierSelectionAndGift()
 	}
 	
 	if ($('input[name=id_carrier]:checked').length)
+	{
 		idCarrier = $('input[name=id_carrier]:checked').val();
+		checkedCarrier = idCarrier;
+	}
 	
 	$.ajax({
        type: 'POST',
@@ -325,6 +328,9 @@ function manageButtonsEvents(button)
 	 * #opc_block_3 : Terms of service
 	 * #opc_block_4 : Payment methods
 	 */
+	if (button.attr('href') == '#opc_block_2' && $('.opc_block_content:visible').attr('id') != 'opc_block_3')
+		updateAddressesAndCarriersList();
+	
 	if (button.attr('href') == '#opc_block_2' && isVirtualCart == 1)
 	{
 		if ($('.opc_block_content:visible').attr('id') == 'opc_block_3')
@@ -444,6 +450,55 @@ $(function() {
 			$(this).hide();
 			$('#login_form_content').slideDown('slow');
 			$('#new_account_form_content').slideUp('slow');
+			return false;
+		});
+		// LOGIN FORM SENDING
+		$('#SubmitLogin').click(function() {
+			$.ajax({
+				type: 'POST',
+				url: baseDir + 'authentication.php',
+				async: false,
+				cache: false,
+				dataType : "json",
+				data: 'SubmitLogin=true&ajax=true&email='+encodeURI($('#login_email').val())+'&passwd='+encodeURI($('#passwd').val())+'&token=' + static_token ,
+				success: function(jsonData)
+				{
+					if (jsonData.hasError)
+					{
+						var errors = '<b>'+txtThereis+' '+jsonData.errors.length+' '+txtErrors+':</b><ol>';
+						for(error in jsonData.errors)
+							//IE6 bug fix
+							if(error != 'indexOf')
+								errors += '<li>'+jsonData.errors[error]+'</li>';
+						errors += '</ol>';
+						$('#opc_login_errors').html(errors).slideDown('slow');
+					}
+					else
+					{
+						$.ajax({
+							type: 'POST',
+							url: baseDir + 'order-opc.php',
+							async: true,
+							cache: false,
+							dataType : "html",
+							data: 'ajax=true&method=getAddressBlock&token=' + static_token ,
+							success: function(html)
+							{
+								$('#opc_dynamic_block_1').fadeOut('fast', function() {
+									$('#opc_dynamic_block_1').html(html);
+									$('#opc_block_1_status').hide();
+									updateAddressesDisplay(true);
+									$('#opc_dynamic_block_1').fadeIn('fast');
+									// Event
+									$('.opc_button').click(function() { manageButtonsEvents($(this));return false; });
+								});
+							},
+							error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to send login informations \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+						});
+					}
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to send login informations \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+			});
 			return false;
 		});
 		
@@ -576,7 +631,7 @@ $(function() {
 						
 						$('#opc_block_1_status').html(html);
 						
-						// update Cart summary and carrier list
+						// force to refresh carrier list
 						updateAddressesAndCarriersList();
 						
 						$('.opc_block_content:visible').slideUp('slow', function() {

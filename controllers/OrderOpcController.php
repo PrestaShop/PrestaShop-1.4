@@ -171,6 +171,15 @@ class OrderOpcControllerCore extends ParentOrderController
 								$return['isSaved'] = false;
 							die(Tools::jsonEncode($return));
 							break;
+						case 'getAddressBlock':
+							if ($this->cookie->isLogged())
+							{
+								$this->smarty->assign('isVirtualCart', $this->cart->isVirtualCart());
+								$this->_assignAddress();
+								die($this->smarty->display(_PS_THEME_DIR_.'order-opc-address.tpl'));
+							}
+							die(Tools::displayError());
+							break;
 						default:
 							exit;
 					}

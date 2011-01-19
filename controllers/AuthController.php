@@ -233,10 +233,12 @@ class AuthControllerCore extends FrontController
 			{
 				$customer = new Customer();
 				$authentication = $customer->getByEmail(trim($email), trim($passwd));
-				/* Handle brute force attacks */
-				sleep(1);
 				if (!$authentication OR !$customer->id)
+				{
+					/* Handle brute force attacks */
+					sleep(1);
 					$this->errors[] = Tools::displayError('authentication failed');
+				}
 				else
 				{
 					$this->cookie->id_customer = (int)($customer->id);
@@ -253,10 +255,22 @@ class AuthControllerCore extends FrontController
 					$this->cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
 					$this->cart->update();
 					Module::hookExec('authentication');
-					if ($back = Tools::getValue('back'))
-						Tools::redirect($back);
-					Tools::redirect('my-account.php');
+					if (!Tools::isSubmit('ajax'))
+					{
+						if ($back = Tools::getValue('back'))
+							Tools::redirect($back);
+						Tools::redirect('my-account.php');
+					}
 				}
+			}
+			if (Tools::isSubmit('ajax'))
+			{
+				$return = array(
+					'hasError' => !empty($this->errors), 
+					'errors' => $this->errors,
+					'token' => Tools::getToken(false)
+				);
+				die(Tools::jsonEncode($return));
 			}
 		}
 
