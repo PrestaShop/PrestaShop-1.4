@@ -25,6 +25,133 @@ Release Notes for PrestaShop 1.4
 --------------------------------
 
 ####################################
+#   v1.4.0.9 - 4517 (2011-01-19)   #
+####################################
+
+	Improved/changed features:
+	
+	[*] Project : Added default states for Italy in the localization pack (thanks Jacky75)
+	[*] Project : Update Smarty from 3.0.5 to 3.0.6
+	[*] Project : Vouchers can now be shrunk in orders
+	
+	[*] FO : Now in SVN version, if you remove the _ to the FrontController overriden classe, each king of PHP errors die the script, better for developpement environnement
+	
+	[*] BO/FO : Quantity discount & discount can be cumulated
+	
+	[*] BO : adding phone number in footer for France
+	[*] BO : Searching translations for modules use now recursive method. This allow to create files in deeper folder (this change the translation file order). 
+	[*] BO : you can now generate a single PDF with all the order slips for a given period
+	[*] BO : You can now view customer messages even if they didn't finalize an order
+	
+	[*] Core : Big performance improvements when products are added to the cart!
+	
+	[*] MO: Fixed bug #5647 on mailalert / Mailalert mail does now contain attributes name
+	[*] MO: Fixed bug #5972 on mailalert
+	
+	[*] TR : set a new Translation
+	
+	[*] WS : Support for associations
+	
+	Fixed bugs:
+	
+	[-] Installer : Bug Fixed #6685 - SQL problem if tax are disabled
+	[-] Installer : fixed a spannish translation on installer
+	[-] Installer : the updater now handle ajax parse errors
+	
+	[-] FO : a bug occured when translations file are empty.
+	[-] FO : bug #6887 fixed
+	[-] FO : bug #6909 fixed
+	[-] FO : Bug fixed #5250 (1.4) - Contact php mail is now working on BlueHost
+	[-] FO : Bug fixed #5302 (1.4) - Viewed products module is now working even when there is no picture product
+	[-] FO : Bug fixed #6961 - Invert pictures between products and employees on DashBoard
+	[-] FO : Bug fixed #6966 - URL Rewriting
+	[-] FO : Bug fixed #6977 - New Products Request
+	[-] FO : Bug fixed #6992 - Blockcategories url links have been fixed
+	[-] FO : Bug fixed #7016 - "Sort by" is now working on "best sales"
+	[-] FO : Bug Fixed #7031 - Reduction percent in blockspecials
+	[-] FO : Bug Fixed #7067 - Incorrect ecotax mngt for non-taxed customer
+	[-] FO : Bug Fixed #7075 - Incorrect taxes when discount amount is used
+	[-] FO : Bug fixed #7085 (1.4) - HTML Tag are not displayed anymore in href title of short description
+	[-] FO : Cart summary displays price Tax Inc. with a customer group Tax Exc.
+	[-] FO : fix bug #5490
+	[-] FO : Fixed #7054
+	[-] FO : fixed an javascript error on One page checkout
+	[-] FO : fixed a notice error on One page checkout
+	[-] FO : Fixed bug #5685 - Minimal amount wasn't using the customer currency
+	[-] FO : fixed bug #6523 #6657 - adding missing fields on One page checkout
+	[-] FO : fixed bug #6575 - No way to provide order comment when creating new account through opc
+	[-] FO : fixed bug #6652 - Possible to skip required field with opc after pussing button “ Modify my address”
+	[-] FO : fixed bug #6766 - Not all errors are mentioned at account creation or instant checkout
+	[-] FO : fixed bug #6954 - Firebug reports an error at checkout
+	[-] FO : fixed bug #6999 - One Page Checkout - Already Registered? Redirect to Authentication
+	[-] FO : small bugs and optimizations on One page checkout
+	
+	[-] BO / FO : Bug Fixed #5775 - Credit slip on a customization = a full order credit slip
+	[-] BO / FO : Bug Fixed #6898 - unit prices not impacted by specifc prices
+	[-] BO / FO : Quantity discount now use priorities
+	[-] BO / FO : unit_price initialisation
+	
+	[-] BO : a class is added for simulate a disable input
+	[-] BO : Bug fixed #5536 (1.4) - Warning is displayed when the limit of suhosin could cause problem on translations tab
+	[-] BO : Fixed #7029 Bad quantity reinjected on products
+	[-] BO : Fixed bug #4264 - It was possible to send email by SMTP without a SMTP server specified
+	[-] BO : Fixed bug #5266
+	[-] BO : Fixed bug #5496 - Missing check on php_uname() in "Informations" tab
+	[-] BO : Fixed bug #5558 - Impossible to read customer messages without orders
+	[-] BO : Fixed bug #5953 - It was impossible to change an order state if there were no products in the order
+	[-] BO : fixed bug #6358
+	[-] BO : fixed bug #6755
+	[-] BO : Fixed bug #6857 - Missing htmlentitiesUTF8 in search results
+	[-] BO : Fixed bug #6875 - Error while regenerating Stores thumbs
+	[-] BO : Fixed bug #6940 - Updated PL tax
+	[-] BO : Fixed bug #6943 - Updated UK tax
+	[-] BO : fixed bug #6953 - Style problem (block overlaps) - (only IE7)
+	[-] BO : Fixed bug #7013 - Now using Tools::getValue to add tags
+	[-] BO : Fixed bug #7033 - Error while adding a new language (image format not recognized, allowed formats are: .gif, .jpg, .png)
+	[-] BO : fixed bug in import csv
+	[-] BO : Missing tax rules (US)
+	[-] BO : Tax on product page should not use state taxes
+	[-] BO : Modules translations works fine for a theme overriding module,
+	[-] BO : warning fixed (language tab, caused by a missing directory)
+	
+	[-] Classes : Missing taxes during Localization pack import
+	[-] Classes : Fixed bug #6942 - Notice:  Undefined variable: lang during installation
+	
+	[-] Core : Fixed bug #4248 - Zones are now deleted properly
+	[-] Core : Fixed bug #5211 - SQL error related to cart
+	[-] Core : Fixed bug #5486 - Warning on $category in Link.php class and in the mailalerts module (id <=> id_product)
+	[-] Core : Fixed bug #6950 - Error with SSL when using CCC
+	[-] Core : Fixed bug #6964 - PT localization pack was updated
+	[-] Core : Fixed bug #6982 - Undefined $row in the Customer class
+	[-] Core: Fixed bug #7083
+
+	[-] MO : Bug fixed #6816 - Webservice test is now repaired
+	[-] MO : Erase css in "style" attribut, use a new css class.
+	[-] MO : fixed a bug on mailalert module
+	[-] MO : fixed bug #5347 - Google Checkout Currency corversion error
+	[-] MO : fixed bug #6028 - paypal express and paypal block logo
+	[-] MO : Fixed bug #6701 - Module products comments wasn't working properly for user who update from < 1.4.0.2 to a new version
+	[-] MO : Fixed bug #7003 - Deleted some useless vars
+	[-] MO : Fixed bug #7021 - Bad tag in mailalerts module
+	[-] MO : Fixed bug #7026 - We don't use anymore the Thickbox in the PayPal module
+	[-] MO : Fixed bug #7031 (partially) - Deleted unused var in module blockspecials
+	[-] MO : Fixed product comments bug #7077
+	[-] MO : fixed warnings in fia-net modules
+	[-] MO : Mailalert does now not try to add product to cart when return key is pressed
+	[-] MO : set a tracker in DIBS
+	[-] MO : update Google Analytics module
+	[-] MO : related to bug #6786 - Correct ie7 integration and improved general integration and lisibility
+	
+	[-] WS : Clean WebService parameters in classes
+	
+	[-] TR : check if _PS_THEME_DIR.'/modules/' exists before scan it
+	[-] TR : Fixed bug #5266
+	[-] TR : Fixed french translation for url rewriting
+	[-] TR : Order of translate sentence changed (because of last translation tools debug), delete old translation.
+	[-] TR : related to bug #4787 - Copy translations from a theme to an other work fine and (keys translation are changed according to the theme name),
+	
+
+####################################
 #   v1.4.0.8 - 4410 (2011-01-12)   #
 ####################################
 
