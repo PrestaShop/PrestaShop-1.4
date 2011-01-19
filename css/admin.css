@@ -132,31 +132,45 @@ form .simulate-disable-input{
 	color:#666666;
 	font-size:12px;
 }
+.block-mail {
+	margin:0 0 20px 0;
+}
 .mail-form {
-	margin-top:-20px;
-	padding-left:200px;
+	margin:0 0 0 220px;
 	width:auto;
 	color: #7F7F7F;
 	font-size: 0.85em;
 }
-
-.mail-form label {
-	width:auto;
-	text-align:right;
-}
-
 .label-subject {
-	padding-top:5px;
-	margin:0 0 0 0;
+	padding:0;
+	margin:0 0 10px 0;
 	text-align:left;
-	float:left;
 }
-.mail-label {
-	margin:0 0 -20px -50px;
+.label-subject input{
+	width:555px;
 }
-
 .mail-label table {
 	width:555px;
+}
+.mails_field {
+	margin:0;
+	background: none repeat scroll 0 0 #FFFFF0;
+	border: 1px solid #DFD5C3;
+	font-size: 1.1em;
+	margin: 20px 0 20px 0;
+	padding: 2em 1em 1em 1em;
+	position:relative;
+}
+
+.mails_field h3{
+	position:absolute;
+	margin:0;
+	top:-10px;
+	font-size:1em;
+	background-color:#FFF6D3;
+	border:1px solid #DFD5C3;
+	padding: 2px 5px 2px 5px;
+	display:inline-block;
 }
 
 .style-themeModuleMail {

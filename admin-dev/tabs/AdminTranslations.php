@@ -1432,98 +1432,111 @@ class AdminTranslations extends AdminTab
 			OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
 				$nbr++;
 
-		echo'<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\'core\')">Core e-mails - <font color="blue">'.$nbr.'</font> templates for '.$mylang->name.':</legend><div name="mails_div" id="core">';
-
-		//core emails
+		echo'
+		<div class="mails_field" >
+			<h3 style="cursor : pointer" onclick="openCloseLayer(\'core\')">Core e-mails - <font color="blue">'.$nbr.'</font> templates for '.$mylang->name.':</h3>
+			<div name="mails_div" id="core">';
+		
+		// @todo : Need to be factorised
+		// core emails
 		foreach ($mailTpls AS $mailTplName => $mailTpl)
 		{
 			if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
 			OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
 			{
-				echo '<div style="clear:both;"><br/><label>'.$mailTplName.'</label><br/><br/>';
-				echo '<div class="mail-form">';
+				$subject_mail = isset($subjectMail[substr($mailTplName, 0, -5)]) ? $subjectMail[substr($mailTplName, 0, -5)] : '' ; 
+				$subject_mail = ($subject_mail === '' AND isset($subjectMail[substr($mailTplName, 0, -4)])) ? $subjectMail[substr($mailTplName, 0, -4)] : $subject_mail ;
+					
+				echo '
+				<div class="block-mail" >
+					<label>'.$mailTplName.'</label>
+					<div class="mail-form">';
 				if (strripos($mailTplName, '.html'))
 				{
-					echo '<br/><br/>
-
-					<div class="mail-label">
-					<div class="label-subject">'.$this->l('Subject').' :&nbsp</div>
-					<table>
-						<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($mailTplName, 0, -5)].'&nbsp=&nbsp</label></td>
-						<td style="width: 100%;"><input type="text" name="subject[mails]['.$subjectMail[substr($mailTplName, 0, -5)].']" value="'.(isset($subjectMailContent[$subjectMail[substr($mailTplName, 0, -5)]]) ? $subjectMailContent[$subjectMail[substr($mailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
-					</table></div>';
-
-					echo '<br/><br/><div><iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>
-					<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
+					if ($subject_mail !== '')
+					{
+						echo '
+						<div class="label-subject">
+							<b>'.$this->l('Subject:').'</b>&nbsp;'.$subject_mail.'<br />
+							<input type="text" name="subject[mails]['.$subject_mail.']" value="'.(isset($subjectMailContent[$subject_mail]) ? $subjectMailContent[$subject_mail] : '').'" />
+						</div>';
+					}
+					echo '
+					<div>
+						<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>
+						<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a>
+					</div>
 					<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 				}
 				else
 				{
-					echo '<br/><div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[txt]['.$mailTplName.']" style="width:560px;margin=0;">'.htmlentities(stripslashes(strip_tags($mailTpl[$lang])), ENT_COMPAT, 'UTF-8').'</textarea></div><br/>';
+					echo '<div><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[txt]['.$mailTplName.']" style="width:560px;margin=0;">'.htmlentities(stripslashes(strip_tags($mailTpl[$lang])), ENT_COMPAT, 'UTF-8').'</textarea></div>';
 				}
-				echo '</div></div>';
+				echo '
+					</div><!-- .mail-form -->
+				</div><!-- .block-mail -->';
 			}
 		}
-		echo '</div></fieldset>';
+		echo '
+			</div><!-- #core -->
+			<div class="clear"></div>
+		</div>';
 
 		// module mails
-		echo '<br/><div id="modules">';
+		echo '<div id="modules">';
 		foreach ($moduleMailTpls AS $key33 => $moduleMailTpls2)
 		{
-			echo '<fieldset><br/>
-			<legend style="cursor : pointer" onclick="openCloseLayer(\''.$key33.'\')">Module "'.$key33.'" - <font color="blue">'.(count($moduleMailTpls2,COUNT_RECURSIVE)/2).'</font> templates for '.$mylang->name.':</legend><div name="mails_div" id="'.$key33.'">';
+			echo '
+			<div class="mails_field" >
+				<h3 style="cursor : pointer" onclick="openCloseLayer(\''.$key33.'\')">Module "'.$key33.'" - <font color="blue">'.(count($moduleMailTpls2,COUNT_RECURSIVE)/2).'</font> templates for '.$mylang->name.':</h3>
+				<div name="mails_div" id="'.$key33.'">';
 			foreach ($moduleMailTpls2 AS $mailTplName => $mailTpl)
 			{
-				if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
-				OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
+				if (strripos($mailTplName, '.html') OR strripos($mailTplName, '.txt'))
 				{
-					echo '<br/><br/><div><label>'.$mailTplName.'</label><br/><div class="mail-form">';
-					if (strlen($mailTplName) > 30)
-						echo '<br/>';
+					$subject_mail = isset($subjectMail[substr($mailTplName, 0, -5)]) ? $subjectMail[substr($mailTplName, 0, -5)] : '' ; 
+					$subject_mail = ($subject_mail === '' AND isset($subjectMail[substr($mailTplName, 0, -4)])) ? $subjectMail[substr($mailTplName, 0, -4)] : $subject_mail ;
+					
+					echo '
+					<div class="block-mail">
+						<label>'.$mailTplName.'</label>
+						<div class="mail-form">';
 					if (strripos($mailTplName, '.html'))
 					{
-						echo '<br/><br/>
-
-						<div class="mail-label" style="margin-bottom:0;">
-						<div class="label-subject">'.$this->l('Subject').' :&nbsp</div>
-						<table>
-							<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($mailTplName, 0, -5)].'&nbsp=&nbsp</label></td>
-							<td style="width: 100%;"><input type="text" name="subject[mails]['.$subjectMail[substr($mailTplName, 0, -5)].']" value="'.(isset($subjectModuleMailContent[$subjectMail[substr($mailTplName, 0, -5)]]) ? $subjectModuleMailContent[$subjectMail[substr($mailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
-						</table></div>
-						<br/><div>';
-
+						if ($subject_mail !== '')
+						{
+							echo '
+							<div class="label-subject">
+								<b>'.$this->l('Subject:').'</b>&nbsp;'.$subject_mail.'<br />
+								<input type="text" name="subject[mails]['.$subject_mail.']" value="'.(isset($subjectModuleMailContent[$subject_mail]) ? $subjectModuleMailContent[$subject_mail] : '').'" />
+							</div>';
+						}
+						echo '
+						<div>';
 						if (file_exists(_PS_MODULE_DIR_.$key33.'/mails/'.$lang.'/'.$mailTplName))
-							echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'modules/'.$key33.'/mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
+							echo '
+							<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'modules/'.$key33.'/mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
 						else
 							echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
-
-						echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
+						
+						echo '
+							<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a>
+						</div>
 						<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 					}
 					else
-						echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']" style="width:560px;margin=0;">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
-					echo '</div></div>';
-				}
-				else
-				{
-					echo '<br/><br/><div><label>'.$mailTplName.'</label><br/><div class="mail-form">';
-					if (strripos($mailTplName, '.html'))
-					{
-						if (file_exists(_PS_MODULE_DIR_.$key33.'/mails/'.$lang.'/'.$mailTplName))
-							echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'modules/'.$key33.'/mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
-						else
-							echo 'This version is currently not translated. Please click the \'Edit this mail template\' button to create a new template.';
-
-						echo '<a style="display:block;margin-top:5px;width:130px;" href="#" onclick="$(this).parent().hide(); displayTiny($(this).parent().next()); return false;" class="button">Edit this mail template</a></div>
-						<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[modules]['.$key33.'][html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
-					}
-					else
-						echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/></div></div>';
+						echo '<div><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[modules]['.$key33.'][txt]['.$mailTplName.']" style="width:560px;margin=0;">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div>';
+					echo '
+						</div><!-- .mail-form -->
+					</div><!-- .block-mail -->';
 				}
 			}
-			echo '</div></fieldset><br />';
+			echo '
+				</div><!-- #'.$key33.' -->
+				<div class="clear"></div>
+			</div>';
 		}
-		echo '</div><br />';
+		echo '</div>';
 
 		// mail theme
 		foreach (scandir(_PS_ALL_THEMES_DIR_) AS $theme_dir)
@@ -1538,29 +1551,34 @@ class AdminTranslations extends AdminTab
 					OR (strripos($key2, '.txt') AND isset($subjectMail[substr($key2, 0, -4)])))
 						$nb++;
 
-				echo '<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$theme_dir.'\')">Theme : '.$theme_dir.' - <font color="blue">'.$nb.'</font> templates for '.$mylang->name.' :</legend><div name="mails_div" id="'.$theme_dir.'">';
+				echo '
+				<div class="mails_field" >
+					<h3 style="cursor : pointer" onclick="openCloseLayer(\''.$theme_dir.'\')">Theme : '.$theme_dir.' - <font color="blue">'.$nb.'</font> templates for '.$mylang->name.' :</h3>
+					<div name="mails_div" id="'.$theme_dir.'">';
 
 				// core mail theme
 				foreach ($themeMailTpls[$theme_dir] AS $themeMailTplName => $themeMailTpl)
 				{
-					if ((strripos($themeMailTplName, '.html') AND isset($subjectMail[substr($themeMailTplName, 0, -5)]))
-					OR (strripos($themeMailTplName, '.txt') AND isset($subjectMail[substr($themeMailTplName, 0, -4)])))
+					if (strripos($themeMailTplName, '.html') OR strripos($themeMailTplName, '.txt'))
 					{
-						echo '<br/><div style="clear:both;"><label>'.$themeMailTplName.'</label><div class="mail-form">';
+						$subject_mail = isset($subjectMail[substr($themeMailTplName, 0, -5)]) ? $subjectMail[substr($themeMailTplName, 0, -5)] : '' ; 
+						$subject_mail = ($subject_mail === '' AND isset($subjectMail[substr($themeMailTplName, 0, -4)])) ? $subjectMail[substr($themeMailTplName, 0, -4)] : $subject_mail ;
+						
+						echo '
+						<div class="block-mail">
+							<label>'.$themeMailTplName.'</label>
+							<div class="mail-form">';
 
 						if (strripos($themeMailTplName, '.html'))
 						{
-							echo '<br/><br/>
-
-							<div class="mail-label">
-							<div class="label-subject">'.$this->l('Subject').' :&nbsp</div>
-							<table>
-							<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($themeMailTplName, 0, -5)].' =&nbsp</label></td>
-							<td style="width: 100%;"><input type="text" name="subject[themes]['.$theme_dir.']['.$subjectMail[substr($themeMailTplName, 0, -5)].']" value="'.(isset($subjectThemeMailContent[$theme_dir][$subjectMail[substr($themeMailTplName, 0, -5)]]) ? $subjectThemeMailContent[$theme_dir][$subjectMail[substr($themeMailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
-							</table></div>
-
-							<br /><br /><div>';
-
+							if ($subject_mail !== '')
+							{
+								echo '
+								<div class="label-subject">*
+									<b>'.$this->l('Subject').'</b>'.$subject_mail.'<br />
+									<input type="text" name="subject[themes]['.$theme_dir.']['.$subject_mail.']" value="'.(isset($subjectThemeMailContent[$theme_dir][$subject_mail]) ? $subjectThemeMailContent[$theme_dir][$subject_mail] : '').'" />
+								</div>';
+							}
 							if (file_exists(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$lang.'/'.$themeMailTplName))
 								echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'themes/'.$theme_dir.'/mails/'.$lang.'/'.$themeMailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
 							else
@@ -1570,47 +1588,42 @@ class AdminTranslations extends AdminTab
 							<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][html]['.$themeMailTplName.']">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 						}
 						else
-							echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeMailTplName.']" style="width:560px;margin=0;">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
-						echo '</div></div><br/>';
+							echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeMailTplName.']" style="width:560px;margin=0;">'.(isset($themeMailTpl[$lang]) ? htmlentities(stripslashes($themeMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div>';
+						echo '
+							</div><!-- .mail-form -->
+						</div><!-- .block-mail -->';
 					}
 				}
 
 				// module mail theme
-				echo '<span class="style-themeModuleMail"
-				onclick="openCloseLayer(\'div'.$theme_dir.'\')">Modules - <font color="blue">'.count($themeModuleMailTpls[$theme_dir]).'</font> templates for '.$mylang->name.' :</span>';
-
-				echo '<div style="margin: 0;
-				padding: 1em;
-				border: 1px solid #DFD5C3;
-				background: #FFFFF0;"
-				id="div'.$theme_dir.'">
-				<br/>';
+				echo '<span class="style-themeModuleMail" onclick="openCloseLayer(\'div'.$theme_dir.'\')">Modules - <font color="blue">'.count($themeModuleMailTpls[$theme_dir]).'</font> templates for '.$mylang->name.' :</span>';
+				echo '<div style="margin: 0; padding: 1em; border: 1px solid #DFD5C3; background: #FFFFF0;" id="div'.$theme_dir.'">';
 
 				foreach ($themeModuleMailTpls[$theme_dir] AS $themeModuleName => $themeModule)
 				{
-					echo '<span class="style-themeModuleName"
-					onclick="openCloseLayer(\''.$theme_dir.$themeModuleName.'\')">'.$themeModuleName.' - <font color="blue">'.count($themeModule).'</font> templates for '.$mylang->name.' :</span>';
-					echo '<div style="margin: 0;
-					padding: 1em;
-					border: 1px solid #DFD5C3;
-					background: #FFFFF0;"
-					id="'.$theme_dir.$themeModuleName.'">';
+					echo '<span class="style-themeModuleName" onclick="openCloseLayer(\''.$theme_dir.$themeModuleName.'\')">'.$themeModuleName.' - <font color="blue">'.count($themeModule).'</font> templates for '.$mylang->name.' :</span>';
+					echo '<div style="margin: 0; padding: 1em; border: 1px solid #DFD5C3; background: #FFFFF0;" id="'.$theme_dir.$themeModuleName.'">';
 					foreach ($themeModule AS $themeModuleMailTplName => $themeModuleMailTpl)
 					{
-						if ((strripos($themeModuleMailTplName, '.html') AND isset($subjectMail[substr($themeModuleMailTplName, 0, -5)]))
-						OR (strripos($themeModuleMailTplName, '.txt') AND isset($subjectMail[substr($themeModuleMailTplName, 0, -4)])))
+						if (strripos($themeModuleMailTplName, '.html') OR strripos($themeModuleMailTplName, '.txt'))
 						{
-							echo '<div style="clear:both;"><label>'.$themeModuleMailTplName.'</label><div class="mail-form" style="margin-top:0;">';
+							$subject_mail = isset($subjectMail[substr($themeModuleMailTplName, 0, -5)]) ? $subjectMail[substr($themeModuleMailTplName, 0, -5)] : '' ; 
+							$subject_mail = ($subject_mail === '' AND isset($subjectMail[substr($themeModuleMailTplName, 0, -4)])) ? $subjectMail[substr($themeModuleMailTplName, 0, -4)] : $subject_mail ;
+							
+							echo '
+							<div class="block-mail">
+								<label>'.$themeModuleMailTplName.'</label>
+								<div class="mail-form">';
 							if (strripos($themeModuleMailTplName, '.html'))
 							{
-								echo '<br/><br/>
-								<div class="mail-label" style="margin-left:-20px;">
-								<div class="label-subject" style="margin-left:-30px;">'.$this->l('Subject').' :&nbsp</div>
-								<table>
-								<td style="width:0;white-space: nowrap;"><label>'.$subjectMail[substr($themeModuleMailTplName, 0, -5)].' =&nbsp</label></td>
-								<td style="width: 100%;"><input type="text" name="subject[themes]['.$theme_dir.']['.$subjectMail[substr($themeModuleMailTplName, 0, -5)].']" value="'.(isset($subjectThemeModuleMailContent[$theme_dir][$themeModuleName][$subjectMail[substr($themeModuleMailTplName, 0, -5)]]) ? $subjectThemeModuleMailContent[$theme_dir][$themeModuleName][$subjectMail[substr($themeModuleMailTplName, 0, -5)]] : '').'" style="width:100%;"/></td>
-								</table></div>
-								<br /><br /><div>';
+								if ($subject_mail !== '')
+								{
+									echo '
+									<div class="label-subject">
+										<b>'.$this->l('Subject:').'</b>&nbsp;'.$subject_mail.'<br />
+										<input type="text" name="subject[themes]['.$theme_dir.']['.$subject_mail.']" value="'.(isset($subjectThemeModuleMailContent[$theme_dir][$themeModuleName][$subject_mail]) ? $subjectThemeModuleMailContent[$theme_dir][$themeModuleName][$subject_mail] : '').'" />
+									<div><!-- .label-subject -->';
+								}
 
 								if (file_exists(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$themeModuleName.'/mails/'.$lang.'/'.$themeModuleMailTplName))
 									echo '<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'themes/'.$theme_dir.'/modules/'.$themeModuleName.'/mails/'.$lang.'/'.$themeModuleMailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>';
@@ -1621,13 +1634,19 @@ class AdminTranslations extends AdminTab
 								<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[themes_module]['.$theme_dir.']['.$themeModuleName.'][html]['.$themeModuleMailTplName.']">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 							}
 							else
-								echo '<div style="clear:both;"><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeModuleMailTplName.']" style="width:560px;margin=0;">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
-							echo '</div></div><br/>';
+								echo '<div><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[themes]['.$theme_dir.'][txt]['.$themeModuleMailTplName.']" style="width:560px;margin=0;">'.(isset($themeModuleMailTpl[$lang]) ? htmlentities(stripslashes($themeModuleMailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea></div><br/>';
+							echo '
+								</div><!-- .mail-form -->
+							</div><!-- .block-mail -->';
 						}
 					}
-					echo '</div>';
+					echo '</div><!-- #'.$theme_dir.$themeModuleName.' -->';
 				}
-				echo '</div></div></fieldset><br/>';
+				echo '
+					</div><!-- div'.$theme_dir.' -->
+					<div class="clear"></div>
+				</div>
+				</div>';
 			}
 		}
 		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsMails" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
