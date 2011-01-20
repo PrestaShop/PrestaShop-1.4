@@ -28,10 +28,10 @@
 	// <![CDATA[
 	var baseDir = '{$base_dir_ssl}';
 	var imgDir = '{$img_dir}';
-	var authenticationUrl = '{$link->getPageLink("authentication.php")}';
-	var orderOpcUrl = '{$link->getPageLink("order-opc.php")}';
-	var historyUrl = '{$link->getPageLink("history.php")}';
-	var addressUrl = '{$link->getPageLink("address.php")}';
+	var authenticationUrl = '{$link->getPageLink("authentication.php", true)}';
+	var orderOpcUrl = '{$link->getPageLink("order-opc.php", true)}';
+	var historyUrl = '{$link->getPageLink("history.php", true)}';
+	var addressUrl = '{$link->getPageLink("address.php", true)}';
 	var orderProcess = 'order-opc';
 	var guestCheckoutEnabled = {$PS_GUEST_CHECKOUT_ENABLED|intval};
 	var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
