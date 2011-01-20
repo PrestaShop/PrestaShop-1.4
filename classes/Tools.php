@@ -59,7 +59,7 @@ class ToolsCore
 			if (strpos($url, $baseUri) !== FALSE && strpos($url, $baseUri) == 0)
 				$url = substr($url, strlen($baseUri));
 			$explode = explode('?', $url);
-			$url = $link->getPageLink($explode[0]);
+			$url = $link->getPageLink($explode[0], true);
 			if (isset($explode[1]))
 				$url .= '?'.$explode[1];
 			$baseUri = '';
