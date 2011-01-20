@@ -59,7 +59,7 @@ function updateCarrierList(json)
 				
 			html = html + 
 			'<tr class="'+itemType+'">'+
-				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'" '+(checkedCarrier == carriers[i].id_carrier ? 'checked="checked"' : '')+' /></td>'+
+				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'" '+((checkedCarrier == carriers[i].id_carrier || carriers.length == 1) ? 'checked="checked"' : '')+' /></td>'+
 				'<td class="carrier_name"><label for="id_carrier'+carriers[i].id_carrier+'">'+name+'</label></td>'+
 				'<td class="carrier_infos">'+carriers[i].delay+'</td>'+
 				'<td class="carrier_price"><span class="price">'+formatCurrency(carriers[i].price, currencyFormat, currencySign, currencyBlank)+'</span>';
