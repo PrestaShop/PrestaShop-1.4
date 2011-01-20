@@ -172,7 +172,10 @@ class AdminPreferences extends AdminTab
 		global $currentIndex, $smarty;
 
 		$languages = Language::getLanguages(false);
-		$smarty->clearCache();
+		$files = scandir(_PS_THEME_DIR_);
+		foreach ($files AS $file)
+			if (!preg_match('/^\..*/', $file))
+					$smarty->clearCache($file);
 
 		/* Check required fields */
 		foreach ($fields AS $field => $values)
