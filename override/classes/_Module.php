@@ -27,7 +27,12 @@
 
 class Module extends ModuleCore
 {
-	public static $hookTime = array();
+	private static $hookTime = array();
+	
+	public static function getHookTime()
+	{
+		return self::$hookTime;
+	}
 	
 	public static function hookExec($hook_name, $hookArgs = array(), $id_module = NULL)
 	{

@@ -217,7 +217,7 @@ class FrontController extends FrontControllerCore
 		foreach (Db::getInstance()->queriesTime as $time)
 			$totalQueryTime += $time;
 			
-		$hooktime = Module::$hookTime;
+		$hooktime = Module::getHookTime();
 		arsort($hooktime);
 		$totalHookTime = 0;
 		foreach ($hooktime as $time)
