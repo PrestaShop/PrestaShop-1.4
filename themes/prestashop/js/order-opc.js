@@ -126,7 +126,7 @@ function showPaymentModule()
 {
 	$.ajax({
 	       type: 'POST',
-	       url: baseDir + 'order-opc.php',
+	       url: orderOpcUrl,
 	       async: true,
 	       cache: false,
 	       dataType : "html",
@@ -134,7 +134,7 @@ function showPaymentModule()
 	       success: function(html)
 	        {
 	       		if (html === 'freeorder')
-	       			document.location.href = 'history.php';
+	       			document.location.href = historyUrl;
 	       		else
 	       			$('#opc_payment_list').html(html);
 	    	},
@@ -147,7 +147,7 @@ function getCarrierListAndUpdate()
 {
 	$.ajax({
         type: 'POST',
-        url: baseDir + 'order-opc.php',
+        url: orderOpcUrl,
         async: true,
         cache: false,
         dataType : "json",
@@ -177,7 +177,7 @@ function updateAddressesAndCarriersList()
 	
 	$.ajax({
            type: 'POST',
-           url: baseDir + 'order-opc.php',
+           url: orderOpcUrl,
            async: true,
            cache: false,
            dataType : "json",
@@ -230,7 +230,7 @@ function updateCarrierSelectionAndGift()
 	
 	$.ajax({
        type: 'POST',
-       url: baseDir + 'order-opc.php',
+       url: orderOpcUrl,
        async: false,
        cache: false,
        dataType : "json",
@@ -283,7 +283,7 @@ function saveAddress(type)
 	
 	$.ajax({
        type: 'POST',
-       url: baseDir + 'address.php',
+       url: addressUrl,
        async: false,
        cache: false,
        dataType : "json",
@@ -456,7 +456,7 @@ $(function() {
 		$('#SubmitLogin').click(function() {
 			$.ajax({
 				type: 'POST',
-				url: baseDir + 'authentication.php',
+				url: authenticationUrl,
 				async: false,
 				cache: false,
 				dataType : "json",
@@ -477,7 +477,7 @@ $(function() {
 					{
 						$.ajax({
 							type: 'POST',
-							url: baseDir + 'order-opc.php',
+							url: orderOpcUrl,
 							async: true,
 							cache: false,
 							dataType : "html",
@@ -521,12 +521,12 @@ $(function() {
 			
 			if ($('input#opc_id_customer').val() == 0)
 			{
-				var callingFile = 'authentication.php';
+				var callingFile = authenticationUrl;
 				var params = 'submitAccount=true&';
 			}
 			else
 			{
-				var callingFile = 'order-opc.php';
+				var callingFile = orderOpcUrl;
 				var params = 'method=editCustomer&';
 			}
 			
@@ -556,7 +556,7 @@ $(function() {
 
 			$.ajax({
 				type: 'POST',
-				url: baseDir + callingFile,
+				url: callingFile,
 				async: false,
 				cache: false,
 				dataType : "json",
@@ -662,7 +662,7 @@ $(function() {
 	$('#message').blur(function() {
 		$.ajax({
            type: 'POST',
-           url: baseDir + 'order-opc.php',
+           url: orderOpcUrl,
            async: true,
            cache: false,
            dataType : "json",
@@ -697,7 +697,7 @@ $(function() {
 		
 		$.ajax({
            type: 'POST',
-           url: baseDir + 'order-opc.php',
+           url: orderOpcUrl,
            async: true,
            cache: false,
            dataType : "json",
