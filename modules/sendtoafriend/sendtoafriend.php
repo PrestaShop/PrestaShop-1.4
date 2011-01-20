@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -35,9 +35,9 @@ class sendToAFriend extends Module
  	 	$this->name = 'sendtoafriend';
  	 	$this->version = '1.1';
  	 	$this->tab = 'front_office_features';
-		
+
 		parent::__construct();
-		
+
 		$this->displayName = $this->l('Send to a Friend module');
 		$this->description = $this->l('Allows customers to send a product link to a friend');
  	}
@@ -48,7 +48,7 @@ class sendToAFriend extends Module
 	 		return false;
 		return true;
 	}
-	
+
 	function hookExtraLeft($params)
 	{
 		global $smarty;
@@ -61,14 +61,14 @@ class sendToAFriend extends Module
 		global $smarty;
 		$error = false;
 		$confirm = false;
-		
+
 		if (isset($_POST['submitAddtoafriend']))
 		{
 			global $cookie, $link;
 			/* Product informations */
 			$product = new Product((int)(Tools::getValue('id_product')), false, (int)($cookie->id_lang));
 			$productLink = $link->getProductLink($product);
-			
+
 			/* Fields verifications */
 			if (empty($_POST['email']) OR empty($_POST['name']))
 				$error = $this->l('You must fill all fields.');
@@ -88,12 +88,12 @@ class sendToAFriend extends Module
 					'{customer}' => ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : $this->l('A friend')),
 					'{name}' => Tools::safeOutput($_POST['name'])
 				);
-				
+
 				/* Email sending */
 				if (!Mail::Send((int)($cookie->id_lang), 'send_to_a_friend', Mail::l('A friend sent you a link to').' '.$product->name, $templateVars, $_POST['email'], NULL, ($cookie->email ? $cookie->email : NULL), ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : NULL), NULL, NULL, dirname(__FILE__).'/mails/'))
 					$error = $this->l('An error occurred during the process.');
 				else
-					$confirm = $this->l('An email has been sent successfully to').' '.Tools::safeOutput($_POST['email']).'.';
+					Tools::redirect(_MODULE_DIR_.'/'.$this->name.'/sendtoafriend-form.php?id_product='.$product->id.'&submited');
 			}
 		}
 		else
@@ -103,7 +103,7 @@ class sendToAFriend extends Module
 			$product = new Product((int)(Tools::getValue('id_product')), false, (int)($cookie->id_lang));
 			$productLink = $link->getProductLink($product);
 		}
-		
+
 		/* Image */
 		$images = $product->getImages((int)($cookie->id_lang));
 		foreach ($images AS $k => $image)
@@ -112,10 +112,10 @@ class sendToAFriend extends Module
 				$cover['id_image'] = (int)($product->id).'-'.(int)($image['id_image']);
 				$cover['legend'] = $image['legend'];
 			}
-		
+
 		if (!isset($cover))
 			$cover = array('id_image' => Language::getIsoById((int)($cookie->id_lang)).'-default', 'legend' => 'No picture');
-		
+
 		$smarty->assign(array(
 			'cover' => $cover,
 			'errors' => $error,
@@ -127,3 +127,4 @@ class sendToAFriend extends Module
 		return $this->display(__FILE__, 'sendtoafriend.tpl');
 	}
 }
+

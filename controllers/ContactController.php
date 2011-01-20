@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -31,10 +31,10 @@ class ContactControllerCore extends FrontController
 	{
 		$this->php_self = 'contact-form.php';
 		$this->ssl = true;
-	
+
 		parent::__construct();
 	}
-	
+
 	public function preProcess()
 	{
 		parent::preProcess();
@@ -48,8 +48,8 @@ class ContactControllerCore extends FrontController
 			$products = array();
 			$orders = array();
 			$getOrders = Db::getInstance()->ExecuteS('
-				SELECT id_order 
-				FROM '._DB_PREFIX_.'orders 
+				SELECT id_order
+				FROM '._DB_PREFIX_.'orders
 				WHERE id_customer = '.(int)$customer->id.' ORDER BY date_add');
 			foreach ($getOrders as $row)
 			{
@@ -60,12 +60,12 @@ class ContactControllerCore extends FrontController
 				foreach ($tmp as $key => $val)
 					$products[$val['product_id']] = $val['product_name'];
 			}
-			
+
 			$orderList = '';
 			foreach ($orders as $key => $val)
 				$orderList .= '<option value="'.$key.'" '.((int)(Tools::getValue('id_order')) == $key ? 'selected' : '').' >'.$key.' -- '.$val.'</option>';
 			$orderedProductList = '';
-			
+
 			foreach ($products as $key => $val)
 				$orderedProductList .= '<option value="'.$key.'" '.((int)(Tools::getValue('id_product')) == $key ? 'selected' : '').' >'.$val.'</option>';
 			$this->smarty->assign('orderList', $orderList);
@@ -105,7 +105,7 @@ class ContactControllerCore extends FrontController
 					$customer = new Customer();
 					$customer->getByEmail($from);
 				}
-				
+
 				$contact = new Contact($id_contact, $this->cookie->id_lang);
 
 				if (!((
@@ -164,7 +164,7 @@ class ContactControllerCore extends FrontController
 					else
 						$this->errors[] = Tools::displayError('an error occurred while sending message');
 				}
-				
+
 				if ($contact->customer_service)
 				{
 					if ((int)$id_customer_thread)
@@ -195,7 +195,7 @@ class ContactControllerCore extends FrontController
 						$ct->token = Tools::passwdGen(12);
 						$ct->add();
 					}
-					
+
 					if ($ct->id)
 					{
 						$cm = new CustomerMessage();
@@ -222,13 +222,13 @@ class ContactControllerCore extends FrontController
 			}
 		}
 	}
-	
+
 	public function setMedia()
 	{
 		parent::setMedia();
 		Tools::addCSS(_THEME_CSS_DIR_.'contact-form.css');
 	}
-	
+
 	public function process()
 	{
 		parent::process();
@@ -248,12 +248,12 @@ class ContactControllerCore extends FrontController
 			WHERE cm.id_customer_thread = '.(int)$id_customer_thread.' AND token = \''.pSQL($token).'\'');
 			$this->smarty->assign('customerThread', $customerThread);
 		}
-		
+
 		$this->smarty->assign(array('contacts' => Contact::getContacts((int)($this->cookie->id_lang)),
 		'message' => html_entity_decode(Tools::getValue('message'))
 		));
 	}
-	
+
 	public function displayContent()
 	{
 		$_POST = array_merge($_POST, $_GET);
@@ -261,5 +261,4 @@ class ContactControllerCore extends FrontController
 		$this->smarty->display(_PS_THEME_DIR_.'contact-form.tpl');
 	}
 }
-
 
