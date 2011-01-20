@@ -119,6 +119,16 @@
 			  PRIMARY KEY  (`id_ups_cache`)
 			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
+	// Create Test Cache Table in Database
+	$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ups_cache_test` (
+			  `id_ups_cache_test` int(10) NOT NULL AUTO_INCREMENT,
+			  `hash` varchar(1024) NOT NULL,
+			  `result` text NOT NULL,
+			  `date_add` datetime NOT NULL,
+			  `date_upd` datetime NOT NULL,
+			  PRIMARY KEY  (`id_ups_cache_test`)
+			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
+
 	// Create Config Table in Database
 	$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'ups_rate_config` (
 			  `id_ups_rate_config` int(10) NOT NULL AUTO_INCREMENT,

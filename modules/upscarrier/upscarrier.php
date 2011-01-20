@@ -39,7 +39,7 @@ class UpsCarrier extends CarrierModule
 	private $_dimensionUnit = '';
 	private $_weightUnit = '';
 	private $_dimensionUnitList = array('CM' => 'CM', 'IN' => 'IN', 'CMS' => 'CM', 'INC' => 'IN');
-	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LB' => 'LBS', 'LBS' => 'LBS');
+	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LBS' => 'LBS', 'LB' => 'LBS');
 	private $_moduleName = 'upscarrier';
 
 
@@ -55,7 +55,7 @@ class UpsCarrier extends CarrierModule
 
 		$this->name = 'upscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '0.8';
+		$this->version = '0.9';
 
 		parent::__construct ();
 
@@ -348,8 +348,33 @@ class UpsCarrier extends CarrierModule
 	{
 		global $cookie;
 
-		$html = '
-		<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&section=start" method="post" class="form">
+		$html = '<script>
+			$(document).ready(function() {
+
+				var country = $("#ups_carrier_country");
+				country.change(function() {
+					if ($("#ups_carrier_state_" + country.val()))
+					{
+						$(".stateInput.selected").removeClass("selected");
+						if ($("#ups_carrier_state_" + country.val()).size())
+							$("#ups_carrier_state_" + country.val()).addClass("selected");
+						else
+							$("#ups_carrier_state_none").addClass("selected");
+					}
+				});
+
+				$("#configForm").submit(function() {
+					$("#ups_carrier_state").val($(".stateInput.selected").val());
+				});
+
+
+			});
+		</script>
+		<style>
+			.stateInput { display: none; }
+			.stateInput.selected { display: block; }
+		</style>
+		<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&section=start" method="post" class="form" id="configForm">
 		<fieldset>
 			<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Rate Service Group').'</legend>
 			'.$this->l('You must set the starting point of your package before configuring the module.').'<br /><br />
@@ -366,24 +391,9 @@ class UpsCarrier extends CarrierModule
 			<label>'.$this->l('Your City').' : </label>
 			<div class="margin-form"><input type="text" size="20" name="ups_carrier_city" value="'.Tools::getValue('ups_carrier_city', Configuration::get('UPS_CARRIER_CITY')).'" /></div>
 
-			<label>'.$this->l('State').' : </label>
-			<div class="margin-form">
-				<select name="ups_carrier_state">
-					<option value="0">'.$this->l('Select a state ...').'</option>';
-					$idstates = array();
-					foreach (State::getStates($cookie->id_lang) as $v)
-					{
-						$html .= '<option value="'.$v['id_state'].'" '.($v['id_state'] == (int)(Configuration::get('UPS_CARRIER_STATE')) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
-						$idstates[] = $v['id_state'];
-					}
-				$html .= '</select>
-				<p>' . $this->l('Select state from within the list.') . '</p>
-				'.(!in_array((int)(Configuration::get('UPS_CARRIER_STATE')), $idcountries) ? '<div class="warning">'.$this->l('State is not set').'</div>' : '').'
-			</div>
-
 			<label>'.$this->l('Country').' : </label>
 			<div class="margin-form">
-				<select name="ups_carrier_country">
+				<select name="ups_carrier_country" id="ups_carrier_country">
 					<option value="0">'.$this->l('Select a country ...').'</option>';
 					$idcountries = array();
 					foreach (Country::getCountries($cookie->id_lang) as $v)
@@ -394,6 +404,30 @@ class UpsCarrier extends CarrierModule
 				$html .= '</select>
 				<p>' . $this->l('Select country from within the list.') . '</p>
 				'.(!in_array((int)(Configuration::get('UPS_CARRIER_COUNTRY')), $idcountries) ? '<div class="warning">'.$this->l('Country is not set').'</div>' : '').'
+			</div>
+
+			<label>'.$this->l('State').' : </label>
+			<div class="margin-form">';
+				$id_country_current = 0;
+				$statesList = Db::getInstance()->ExecuteS('
+				SELECT `id_state`, `id_country`, `name`
+				FROM `'._DB_PREFIX_.'state` WHERE `active` = 1
+				ORDER BY `id_country`, `name` ASC');
+				foreach ($statesList as $v)
+				{
+					if ($id_country_current != $v['id_country'])
+					{
+						if ($id_country_current != 0)
+							$html .= '</select>';
+						$html .= '<select id="ups_carrier_state_'.$v['id_country'].'" class="stateInput">
+							<option value="0">'.$this->l('Select a state ...').'</option>';
+					}
+					$html .= '<option value="'.$v['id_state'].'" '.($v['id_state'] == (int)(Configuration::get('UPS_CARRIER_STATE')) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';		
+					$id_country_current = $v['id_country'];
+				}
+				$html .= '</select><select id="ups_carrier_state_none" class="stateInput selected"><option value="0">'.$this->l('There is no state configuration for this country').'</option></select>';
+				$html .= '<input type="hidden" id="ups_carrier_state" name="ups_carrier_state" value="" />';
+				$html .= '<p>' . $this->l('Select state from within the list.') . '</p>
 			</div>
 
 			<label>'.$this->l('Rate service group').' : </label>
@@ -526,6 +560,20 @@ class UpsCarrier extends CarrierModule
 				</fieldset>
 
 				<fieldset style="border: 0px;">
+					<h4>'.$this->l('Localization configuration').' :</h4>
+					<label>'.$this->l('Weight unit').' : </label>
+					<div class="margin-form">
+						<input type="text" size="20" name="ps_weight_unit" value="'.Tools::getValue('ps_weight_unit', Configuration::get('PS_WEIGHT_UNIT')).'" />
+						<p>'.$this->l('The weight unit of your shop (eg. kg or lbs)').'</p>
+					</div>
+					<label>'.$this->l('Dimension unit').' : </label>
+					<div class="margin-form">
+						<input type="text" size="20" name="ps_dimension_unit" value="'.Tools::getValue('ps_dimension_unit', Configuration::get('PS_DIMENSION_UNIT')).'" />
+						<p>'.$this->l('The dimension unit of your shop (eg. cm or in)').'</p>
+					</div>
+				</fieldset>
+
+				<fieldset style="border: 0px;">
 					<h4>'.$this->l('Address configuration').' :</h4>
 					<label>'.$this->l('Your address line 1').' : </label>
 					<div class="margin-form"><input type="text" size="20" name="ups_carrier_address1" value="'.Tools::getValue('ups_carrier_address1', Configuration::get('UPS_CARRIER_ADDRESS1')).'" /></div>
@@ -601,32 +649,18 @@ class UpsCarrier extends CarrierModule
 								$idpackagings = array();
 								foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
 								{
-									$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (int)(Configuration::get('UPS_CARRIER_PACKAGING_TYPE')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+									$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (Configuration::get('UPS_CARRIER_PACKAGING_TYPE')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 									$idpackagings[] = $kpackaging;
 								}
 					$html .= '</select>
 					<p>' . $this->l('Select packaging type from within the list.') . '</p>
 					'.(!in_array((int)(Configuration::get('UPS_CARRIER_PACKAGING_TYPE')), $idpackagings) ? '<div class="warning">'.$this->l('Packaging Type is not set').'</div>' : '').'
 					</div>
-					<label>'.$this->l('Default delivery service ').' : </label>
-						<div class="margin-form">
-							<select name="ups_carrier_default_service">
-								<option value="0">'.$this->l('Select a default service ...').'</option>';
-								$idservices = array();
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
-								foreach($rateServiceList as $rateService)
-								{
-									$html .= '<option value="'.$rateService['code'].'" '.(($rateService['code'] == Configuration::get('UPS_CARRIER_DEFAULT_SERVICE')) ? 'selected="selected"' : '').'>'.$rateService['service'].'</option>';
-									$idservices[] = $rateService['code'];
-								}
-					$html .= '</select>
-					<p>' . $this->l('The default service will be used to test your configuration (check that your packaging is compliant with the service and the location.') . '</p>
-					'.(!in_array((int)(Configuration::get('UPS_CARRIER_DEFAULT_SERVICE')), $idservices) ? '<div class="warning">'.$this->l('Default Service is not set').'</div>' : '').'
-					</div>
 					<label>'.$this->l('Delivery Service').' : </label>
 						<div class="margin-form">';
+							$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
 							foreach($rateServiceList as $rateService)
-								$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
+								$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<br />';
 					$html .= '
 					<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 					</div>
@@ -658,8 +692,6 @@ class UpsCarrier extends CarrierModule
 			$this->_postErrors[]  = $this->l('Your country is not specified');
 		elseif (Tools::getValue('ups_carrier_city') == NULL)
 			$this->_postErrors[]  = $this->l('Your city is not specified');
-		elseif (Tools::getValue('ups_carrier_default_service') == NULL)
-			$this->_postErrors[]  = $this->l('Your default service is not specified');
 
 		// Check ups webservice availibity
 		if (!$this->_postErrors)
@@ -671,13 +703,18 @@ class UpsCarrier extends CarrierModule
 			Configuration::updateValue('UPS_CARRIER_API_KEY', Tools::getValue('ups_carrier_api_key'));
 			Configuration::updateValue('UPS_CARRIER_PICKUP_TYPE', Tools::getValue('ups_carrier_pickup_type'));
 			Configuration::updateValue('UPS_CARRIER_PACKAGING_TYPE', Tools::getValue('ups_carrier_packaging_type'));
-			Configuration::updateValue('UPS_CARRIER_DEFAULT_SERVICE', Tools::getValue('ups_carrier_default_service'));
 			Configuration::updateValue('UPS_CARRIER_ADDRESS1', Tools::getValue('ups_carrier_address1'));
 			Configuration::updateValue('UPS_CARRIER_ADDRESS2', Tools::getValue('ups_carrier_address2'));
 			Configuration::updateValue('UPS_CARRIER_POSTAL_CODE', Tools::getValue('ups_carrier_postal_code'));
 			Configuration::updateValue('UPS_CARRIER_CITY', Tools::getValue('ups_carrier_city'));
 			Configuration::updateValue('UPS_CARRIER_STATE', Tools::getValue('ups_carrier_state'));
 			Configuration::updateValue('UPS_CARRIER_COUNTRY', Tools::getValue('ups_carrier_country'));
+			Configuration::updateValue('PS_WEIGHT_UNIT', Tools::getValue('ps_weight_unit'));
+			Configuration::updateValue('PS_DIMENSION_UNIT', Tools::getValue('ps_dimension_unit'));
+			if (isset($this->_dimensionUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]))
+				$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_weight_unit'))];
+			if (isset($this->_weightUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]))
+				$this->_weightUnit = $this->_weightUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))];
 			if (!$this->webserviceTest())
 				$this->_postErrors[]  = $this->l('Prestashop could not connect to UPS webservices').($this->_webserviceError ? ' :<br />'.$this->_webserviceError : '');
 		}
@@ -711,10 +748,12 @@ class UpsCarrier extends CarrierModule
 			Configuration::updateValue('UPS_CARRIER_API_KEY', Tools::getValue('ups_carrier_api_key')) AND
 			Configuration::updateValue('UPS_CARRIER_PICKUP_TYPE', Tools::getValue('ups_carrier_pickup_type')) AND
 			Configuration::updateValue('UPS_CARRIER_PACKAGING_TYPE', Tools::getValue('ups_carrier_packaging_type')) AND
-			Configuration::updateValue('UPS_CARRIER_DEFAULT_SERVICE', Tools::getValue('ups_carrier_default_service')) AND
 			Configuration::updateValue('UPS_CARRIER_POSTAL_CODE', Tools::getValue('ups_carrier_postal_code')) AND
 			Configuration::updateValue('UPS_CARRIER_CITY', Tools::getValue('ups_carrier_city')) AND
-			Configuration::updateValue('UPS_CARRIER_COUNTRY', Tools::getValue('ups_carrier_country')))
+			Configuration::updateValue('UPS_CARRIER_STATE', Tools::getValue('ups_carrier_state')) AND
+			Configuration::updateValue('UPS_CARRIER_COUNTRY', Tools::getValue('ups_carrier_country')) AND
+			Configuration::updateValue('PS_WEIGHT_UNIT', Tools::getValue('ps_weight_unit')) AND
+			Configuration::updateValue('PS_DIMENSION_UNIT', Tools::getValue('ps_dimension_unit')))
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 		else
 			$this->_html .= $this->displayErrors($this->l('Settings failed'));
@@ -1591,8 +1630,12 @@ class UpsCarrier extends CarrierModule
 			$resultTab = $value;
 	}
 
-	public function webserviceTest()
+	public function webserviceTest($service = '')
 	{
+		// Check API Key
+		if (!Configuration::get('UPS_CARRIER_API_KEY'))
+			return false;
+
 		// Example Params for testing
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('UPS_CARRIER_COUNTRY')));
 		$shipper_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)(Configuration::get('UPS_CARRIER_STATE')));
@@ -1610,13 +1653,80 @@ class UpsCarrier extends CarrierModule
 			'shipper_country_iso' => $shipper_country['iso_code'],
 			'shipper_state_iso' => $shipper_state['iso_code'],
 			'packaging_type' => Configuration::get('UPS_CARRIER_PACKAGING_TYPE'),
-			'service' => Configuration::get('UPS_CARRIER_DEFAULT_SERVICE'),
 			'width' => 10,
 			'height' => 3,
 			'depth' => 10,
 			'weight' => 2.0
 		);
-		
+
+		// Unit or Large Test
+		if (!empty($service))
+			$servicesList = array(array('code' => $service));
+		else
+			$servicesList = Db::getInstance()->ExecuteS('SELECT `code` FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
+
+		// Testing Service
+		foreach ($servicesList as $service)
+		{
+			// Sending Request
+			$wsParams['service'] = $service['code'];
+			$resultTab = Db::getInstance()->getValue('SELECT `result` FROM `'._DB_PREFIX_.'ups_cache_test` WHERE `hash` = \''.pSQL(md5($this->getXml($wsParams))).'\'');
+			if ($resultTab)
+				$resultTab = unserialize($resultTab);
+			else
+			{
+				$resultTab = $this->sendRequest($wsParams);
+				if ($resultTab)
+					Db::getInstance()->autoExecute(_DB_PREFIX_.'ups_cache_test', array('hash' => pSQL(md5($this->getXml($wsParams))), 'result' => pSQL(serialize($resultTab)), 'date_add' => pSQL(date('Y-m-d H:i:s')), 'date_upd' => pSQL(date('Y-m-d H:i:s'))), 'INSERT');
+			}
+
+			// Return results
+			if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION']) && $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] == 'Success')
+				return true;
+
+			if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION']))
+				$this->_webserviceError = $this->l('Error').' '.$resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORCODE'].' : '.$resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
+			else
+			{
+				$this->_webserviceError = 'UPS Webservice seems to be down, please wait a few minutes and wait again';
+				return false;
+			}
+		}
+
+		return false;
+	}
+
+	public function getUpsShippingCost($wsParams)
+	{
+		// Check Arguments
+		if (!$wsParams)
+			return array('connect' => false, 'cost' => 0);
+
+		// Sending Request
+		$resultTab = $this->sendRequest($wsParams);
+
+		// Check currency
+		$conversionRate = 1;
+		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['CURRENCYCODE']))
+		{
+			$id_currency_return = Db::getInstance()->getValue('SELECT `id_currency` FROM `'._DB_PREFIX_.'currency` WHERE `iso_code` = \''.pSQL($resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['CURRENCYCODE']).'\'');
+			$conversionRate = $this->getCookieCurrencyRate($id_currency_return);
+		}
+
+		// Return results
+		if (isset ($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION']) && $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] == 'Success')
+			return array('connect' => true, 'cost' => $resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['MONETARYVALUE'] * $conversionRate);
+
+		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION']))
+			$this->_webserviceError = $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
+		else
+			$this->_webserviceError = 'UPS Webservice seems to be down, please wait a few minutes and wait again';
+
+		return array('connect' => false, 'cost' => 0);
+	}
+
+	public function sendRequest($wsParams)
+	{
 		// POST Request
 		$errno = $errstr = $result = '';
 		$xml = $this->getXml($wsParams);
@@ -1645,70 +1755,7 @@ class UpsCarrier extends CarrierModule
 		// Parsing XML
 		$resultTab = $this->parseXML($valTab);
 
-		// Return results
-		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION']) && $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] == 'Success')
-			return true;
-
-		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION']))
-			$this->_webserviceError = $this->l('Error').' '.$resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORCODE'].' : '.$resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
-		else
-			$this->_webserviceError = 'UPS Webservice seems to be down, please wait a few minutes and wait again';
-
-		return false;
-	}
-
-	public function getUpsShippingCost($wsParams)
-	{
-		// Check Arguments
-		if (!$wsParams)
-			return array('connect' => false, 'cost' => 0);
-
-		// Post Request
-		$errno = $errstr = $result = '';
-		$xml = $this->getXml($wsParams);
-	        $fp = fsockopen("ssl://www.ups.com", "443", $errno, $errstr, $timeout=60);
-		if(!$fp)
-			die($errstr.$errno);
-		else
-		{
-			$request = "POST /ups.app/xml/Rate HTTP/1.1\r\n";
-			$request .= "Host: ssl://www.ups.com\r\n";
-			$request .= "Content-type: application/x-www-form-urlencoded\r\n";
-			$request .= "Content-length: ".strlen($xml)."\r\n";
-			$request .= "Connection: close\r\n\r\n";
-			$request .= $xml."\r\n\r\n";
-			fputs($fp, $request);
-			while(!feof($fp)) $result .= fgets($fp,4096);
-	  		fclose($fp);
-		}
-
-		// Get xml from HTTP Result
-		$data = strstr($result, '<?');
-		$xml_parser = xml_parser_create();
-		xml_parse_into_struct($xml_parser, $data, $valTab, $indexTab);
-		xml_parser_free($xml_parser);
-
-		// Parsing XML
-		$resultTab = $this->parseXML($valTab);
-
-		// Check currency
-		$conversionRate = 1;
-		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['CURRENCYCODE']))
-		{
-			$id_currency_return = Db::getInstance()->getValue('SELECT `id_currency` FROM `'._DB_PREFIX_.'currency` WHERE `iso_code` = \''.pSQL($resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['CURRENCYCODE']).'\'');
-			$conversionRate = $this->getCookieCurrencyRate($id_currency_return);
-		}
-
-		// Return results
-		if (isset ($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION']) && $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['RESPONSESTATUSDESCRIPTION'] == 'Success')
-			return array('connect' => true, 'cost' => $resultTab['RATINGSERVICESELECTIONRESPONSE']['RATEDSHIPMENT']['TOTALCHARGES']['MONETARYVALUE'] * $conversionRate);
-
-		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION']))
-			$this->_webserviceError = $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
-		else
-			$this->_webserviceError = 'UPS Webservice seems to be down, please wait a few minutes and wait again';
-
-		return array('connect' => false, 'cost' => 0);
+		return $resultTab;
 	}
 
 	public function getXml($wsParams = array())
