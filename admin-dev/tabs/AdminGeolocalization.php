@@ -76,6 +76,17 @@ class AdminGeolocalization extends AdminTab
 				
 				<div class="clear" style="margin-top:10px;"></div>
 				
+				<label>'.$this->l('Geolocation behavior for undefined countries:').'</label>
+				<div class="margin-form">
+					<select name="PS_GEOLOCALIZATION_NA_BEHAVIOR">
+						<option value="-1" '.(Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == -1 ? 'selected' : '').'>'.$this->l('All features are available').'</option>
+						<option value="'._PS_GEOLOCALIZATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors can\'t see your catalog').'</option>
+						<option value="'._PS_GEOLOCALIZATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but can\'t make an order').'</option>
+					</select>	
+				</div>
+				
+				<div class="clear" style="margin-top:10px;"></div>
+				
 				<label>'.$this->l('Select countries that can access your store:').'</label>
 				<div class="margin-form">
 					<table class="table" cellspacing="0">
@@ -128,7 +139,8 @@ class AdminGeolocalization extends AdminTab
 				$this->_errors[] = Tools::displayError('Countries selection is invalid');
 			else
 			{
-				Configuration::updateValue('PS_GEOLOCALIZATION_BEHAVIOR', (!intval(Tools::getValue('PS_GEOLOCALIZATION_BEHAVIOR')) ? _PS_GEOLOCALIZATION_NO_CATALOG_ : _PS_GEOLOCALIZATION_NO_ORDER_));
+				Configuration::updateValue('PS_GEOLOCALIZATION_BEHAVIOR', (!(int)(Tools::getValue('PS_GEOLOCALIZATION_BEHAVIOR')) ? _PS_GEOLOCALIZATION_NO_CATALOG_ : _PS_GEOLOCALIZATION_NO_ORDER_));
+				Configuration::updateValue('PS_GEOLOCALIZATION_NA_BEHAVIOR', (int)Tools::getValue('PS_GEOLOCALIZATION_NA_BEHAVIOR'));
 				Configuration::updateValue('PS_ALLOWED_COUNTRIES', implode(';', Tools::getValue('countries')));
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}

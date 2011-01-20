@@ -104,7 +104,7 @@ class FrontControllerCore
 					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
 					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
 					
-					if (!in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))))
+					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))))
 					{
 						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
 							$restricted_country = true;
@@ -114,20 +114,27 @@ class FrontControllerCore
 								'geolocalization_country' => $record->country_name
 							));
 					}
-					else
+					elseif (is_object($record))
 					{
 						$cookie->iso_code_country = strtoupper($record->country_code);
 						$hasBeenSet = true;
 					}
 				}
 				
-				if (intval($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
+				if (is_object($record) AND (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
 				{
 					/* Update defaultCountry */
 					$defaultCountry = new Country($id_country);
 					if (isset($hasBeenSet) AND $hasBeenSet)
-						$cookie->id_currency = intval(Currency::getCurrencyInstance($defaultCountry->id_currency ? intval($defaultCountry->id_currency) : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
+						$cookie->id_currency = (int)(Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)($defaultCountry->id_currency) : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
 				}
+				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
+					$restricted_country = true;
+				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
+					$smarty->assign(array(
+						'restricted_country_mode' => true,
+						'geolocalization_country' => 'Undefined'
+					));
 			}
 			/* If not exists we disabled the geolocalization feature */
 			else
