@@ -102,24 +102,27 @@ class PayPal extends PaymentModule
 		Configuration::updateValue('PAYPAL_NEW', 1);
 		Configuration::updateValue('PAYPAL_DEBUG_MODE', 0);
 
-		$orderState = new OrderState();
-		$orderState->name = array();
-		foreach (Language::getLanguages() AS $language)
+		if (!Configuration::get('PAYPAL_OS_AUTHORIZATION'))
 		{
-			if (strtolower($language['iso_code']) == 'fr')
-				$orderState->name[$language['id_lang']] = 'Autorisation acceptée par PayPal';
-			else
-				$orderState->name[$language['id_lang']] = 'Authorization accepted from PayPal';
+			$orderState = new OrderState();
+			$orderState->name = array();
+			foreach (Language::getLanguages() AS $language)
+			{
+				if (strtolower($language['iso_code']) == 'fr')
+					$orderState->name[$language['id_lang']] = 'Autorisation acceptée par PayPal';
+				else
+					$orderState->name[$language['id_lang']] = 'Authorization accepted from PayPal';
+			}
+			$orderState->send_email = false;
+			$orderState->color = '#DDEEFF';
+			$orderState->hidden = false;
+			$orderState->delivery = false;
+			$orderState->logable = true;
+			$orderState->invoice = true;
+			if ($orderState->add())
+				copy(dirname(__FILE__).'/../../img/os/'._PS_OS_PAYPAL_.'.gif', dirname(__FILE__).'/../../img/os/'.(int)($orderState->id).'.gif');
+			Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)($orderState->id));
 		}
-		$orderState->send_email = false;
-		$orderState->color = '#DDEEFF';
-		$orderState->hidden = false;
-		$orderState->delivery = false;
-		$orderState->logable = true;
-		$orderState->invoice = true;
-		if ($orderState->add())
-			copy(dirname(__FILE__).'/../../img/os/'._PS_OS_PAYPAL_.'.gif', dirname(__FILE__).'/../../img/os/'.(int)($orderState->id).'.gif');
-		Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)($orderState->id));
 		
 		return true;
 	}
