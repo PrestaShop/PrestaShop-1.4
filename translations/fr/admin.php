@@ -1090,6 +1090,7 @@ $_LANGADM['AdminInformation768648b98e03adaf128f072119af31d3'] = 'Version de Pres
 $_LANGADM['AdminInformationd0ac12f046d68599acee4386c5c1f860'] = 'Version du logiciel serveur';
 $_LANGADM['AdminInformationab64e3d5feb645333b320d80a84c8255'] = 'Version de PHP';
 $_LANGADM['AdminInformationc26b24f06d2ee6f5b27a7f6e200711be'] = 'Version de MySQL';
+$_LANGADM['AdminInformationfc0eeb8415aed39a9d3624c7fc2fe47c'] = 'Module PageSpeed pour Apache installé (mod_instaweb)';
 $_LANGADM['AdminInformation3aea774cdcd8f2c45549f10758a71323'] = 'Informations sur votre boutique';
 $_LANGADM['AdminInformationd4b5a23bc61aeea35b4ce013d7e262c4'] = 'URL de votre boutique';
 $_LANGADM['AdminInformationfaf165f191e0bbd2c13864a08ee9aa83'] = 'Nom du thème utilisé';

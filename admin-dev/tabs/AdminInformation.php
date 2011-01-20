@@ -163,7 +163,10 @@ class AdminInformation extends AdminTab
 			<p>
 				<b>'.$this->l('MySQL Version').':</b> 
 				'.mysql_get_server_info().'
-			</p>
+			</p>';
+		if (function_exists('apache_get_modules') AND in_array('mod_instaweb', apache_get_modules()))
+			echo '<p style="color:red;font-weight:700">'.$this->l('PageSpeed module for Apache installed (mod_instaweb)').'</p>';
+		echo '
 			<hr />
 			<h3>'.$this->l('Store information').'</h3>
 			<p>
