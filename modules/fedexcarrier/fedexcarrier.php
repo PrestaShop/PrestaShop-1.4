@@ -47,7 +47,7 @@ class FedexCarrier extends CarrierModule
 		'id_zone' => 1,
 		'is_module' => true,
 		'shipping_external'=> true,
-		'external_module_name'=> 'FedexCarrier',
+		'external_module_name'=> 'fedexcarrier',
 		'need_range' => true
 	);
 

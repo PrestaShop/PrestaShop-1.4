@@ -50,7 +50,7 @@ class UspsCarrier extends CarrierModule
 		'id_zone' => 1,
 		'is_module' => true,
 		'shipping_external' => true,
-		'external_module_name' => 'UspsCarrier',
+		'external_module_name' => 'uspscarrier',
 		'need_range' => true
 		);
 
