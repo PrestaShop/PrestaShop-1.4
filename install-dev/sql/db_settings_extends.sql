@@ -446,7 +446,7 @@ Saludos cordiales,');
 
 INSERT INTO `PREFIX_cms_block` (`id_block_cms`, `id_cms_category`, `name`, `location`, `position`) VALUES(1, 1, '', 0, 0);
 INSERT INTO `PREFIX_cms_block_page` (`id_block_cms_page`, `id_block_cms`, `id_cms`, `is_category`) VALUES(1, 1, 1, 0), (2, 1, 2, 0), (3, 1, 3, 0), (4, 1, 4, 0), (5, 1, 5, 0);
-INSERT INTO `PREFIX_cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES(1, 1, 'Informations'), (1, 2, 'Informations'), (1, 3, 'Informaciónes');
+INSERT INTO `PREFIX_cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES(1, 1, 'Information'), (1, 2, 'Informations'), (1, 3, 'Informaciónes');
 
 /* Currency/Country module */
 INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (3, 1),(3, 2),(3, 3),(4, 1),(4, 2),(4, 3),(6, 1),(6, 2),(6, 3);
