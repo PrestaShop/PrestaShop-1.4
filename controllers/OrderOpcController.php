@@ -144,8 +144,13 @@ class OrderOpcControllerCore extends ParentOrderController
 								' '.Tools::displayError('is required in order to validate your order');
 							
 							/* Bypass payment step if total is 0 */
-							if ($this->_checkFreeOrder())
-								die('freeorder');
+							if (($id_order = $this->_checkFreeOrder()) AND $id_order)
+							{
+								$email = $this->cookie->email;
+								if ($this->cookie->is_guest)
+									$this->cookie->logout(); // If guest we clear the cookie for security reason
+								die('freeorder:'.$id_order.':'.$email);
+							}
 							
 							$return = Module::hookExec('payment');
 							if (!$return)

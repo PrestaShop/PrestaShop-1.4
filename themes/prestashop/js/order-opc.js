@@ -133,8 +133,14 @@ function showPaymentModule()
 	       data: 'ajax=true&method=getPaymentModule&token=' + static_token ,
 	       success: function(html)
 	        {
-	       		if (html === 'freeorder')
-	       			document.location.href = historyUrl;
+	       		var array_split = html.split(':');
+				if (array_split[0] === 'freeorder')
+	       		{
+	       			if (isGuest)
+	       				document.location.href = guestTrackingUrl+'?id_order='+encodeURI(array_split[1])+'&email='+encodeURI(array_split[2]);
+	       			else
+	       				document.location.href = historyUrl;
+	       		}
 	       		else
 	       			$('#opc_payment_list').html(html);
 	    	},
@@ -573,6 +579,8 @@ $(function() {
 						errors += '</ol>';
 						$('#opc_account_errors').html(errors).slideDown('slow');
 					}
+
+					isGuest = ($('#is_new_customer').val() == 1 ? 0 : 1);
 					
 					if (jsonData.id_customer != undefined && jsonData.id_customer != 0 && jsonData.isSaved)
 					{

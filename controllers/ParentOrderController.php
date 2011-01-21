@@ -149,7 +149,7 @@ class ParentOrderControllerCore extends FrontController
 			$order = new FreeOrder();
 			$order->free_order_class = true;
 			$order->validateOrder((int)($this->cart->id), _PS_OS_PAYMENT_, 0, Tools::displayError('Free order', false));
-			return true;
+			return (int)Order::getOrderByCartId((int)$this->cart->id);
 		}
 		return false;
 	}

@@ -103,8 +103,17 @@ class OrderControllerCore extends ParentOrderController
 					$this->processCarrier();
 				$this->autoStep();
 				/* Bypass payment step if total is 0 */
-				if ($this->_checkFreeOrder())
-					Tools::redirect('history.php');
+				if (($id_order = $this->_checkFreeOrder()) AND $id_order)
+				{
+					if ($this->cookie->is_guest)
+					{
+						$email = $this->cookie->email;
+						$this->cookie->logout(); // If guest we clear the cookie for security reason
+						Tools::redirect('guest-tracking.php?id_order='.(int)$id_order.'&email='.urlencode($email));
+					}
+					else
+						Tools::redirect('history.php');
+				}
 				$this->_assignPayment();
 				break;
 			default:

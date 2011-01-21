@@ -31,6 +31,7 @@
 	var authenticationUrl = '{$link->getPageLink("authentication.php", true)}';
 	var orderOpcUrl = '{$link->getPageLink("order-opc.php", true)}';
 	var historyUrl = '{$link->getPageLink("history.php", true)}';
+	var guestTrackingUrl = '{$link->getPageLink("guest-tracking.php", true)}';
 	var addressUrl = '{$link->getPageLink("address.php", true)}';
 	var orderProcess = 'order-opc';
 	var guestCheckoutEnabled = {$PS_GUEST_CHECKOUT_ENABLED|intval};
