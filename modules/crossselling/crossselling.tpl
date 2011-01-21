@@ -41,7 +41,7 @@
 					<a href="{$orderProduct.link}" title="{$orderProduct.name|htmlspecialchars}">
 					{$orderProduct.name|truncate:15:'...'|escape:'htmlall':'UTF-8'}
 					</a><br />
-					{if $crossDisplayPrice AND $orderProduct.show_price == 1 AND !isset($restricted_country_mode)}
+					{if $crossDisplayPrice AND $orderProduct.show_price == 1 AND !isset($restricted_country_mode) AND !$PS_CATALOG_MODE}
 						<span class="price_display">
 							<span class="price">{convertPrice price=$orderProduct.displayed_price}</span>
 						</span><br />

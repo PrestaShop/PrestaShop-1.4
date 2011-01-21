@@ -24,6 +24,10 @@
 *  International Registred Trademark & Property of PrestaShop SA
 *}
 
+{if $PS_CATALOG_MODE}
+	<h2 id="cart_title">{l s='Your shopping cart'}</h2>
+	<p class="warning">{l s='This store not accept new order.'}</p>
+{else}
 <script type="text/javascript">
 	// <![CDATA[
 	var baseDir = '{$base_dir_ssl}';
@@ -743,9 +747,9 @@
 		<div class="clear"></div>
 	</div>
 	<!-- END Terms of service block -->
-	<div class="clear"></div>
-	
+	<div class="clear"></div>	
 {else}
 	<h2>{l s='Your shopping cart'}</h2>
 	<p class="warning">{l s='Your shopping cart is empty.'}</p>
+{/if}
 {/if}

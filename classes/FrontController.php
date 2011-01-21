@@ -297,7 +297,9 @@ class FrontControllerCore
 			'priceDisplay' => Product::getTaxCalculationMethod(),
 			'roundMode' => (int)(Configuration::get('PS_PRICE_ROUND_MODE')),
 			'use_taxes' => (int)(Configuration::get('PS_TAX')),
-			'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT'))));
+			'vat_management' => (int)(Configuration::get('VATNUMBER_MANAGEMENT')),
+			'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE'),
+			'PS_CATALOG_MODE' => (bool)Configuration::get('PS_CATALOG_MODE')));
 		$assignArray = array(
 			'img_ps_dir' => _PS_IMG_,
 			'img_cat_dir' => _THEME_CAT_DIR_,
@@ -311,8 +313,7 @@ class FrontControllerCore
 			'img_dir' => _THEME_IMG_DIR_,
 			'css_dir' => _THEME_CSS_DIR_,
 			'js_dir' => _THEME_JS_DIR_,
-			'pic_dir' => _THEME_PROD_PIC_DIR_,
-			'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE')
+			'pic_dir' => _THEME_PROD_PIC_DIR_
 		);// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
 
 		foreach ($assignArray as $assignKey => $assignValue)

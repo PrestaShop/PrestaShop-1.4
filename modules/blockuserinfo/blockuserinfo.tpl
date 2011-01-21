@@ -35,6 +35,7 @@
 		{/if}
 	</p>
 	<ul id="header_nav">
+		{if !$PS_CATALOG_MODE}
 		<li id="shopping_cart">
 			<a href="{$link->getPageLink("$order_process.php", true)}" title="{l s='Your Shopping Cart' mod='blockuserinfo'}">{l s='Cart:' mod='blockuserinfo'}</a>
 			<span class="ajax_cart_quantity{if $cart_qties == 0} hidden{/if}">{$cart_qties}</span>
@@ -51,6 +52,7 @@
 			{/if}
 			<span class="ajax_cart_no_product{if $cart_qties > 0} hidden{/if}">{l s='(empty)' mod='blockuserinfo'}</span>
 		</li>
+		{/if}
 		<li id="your_account"><a href="{$link->getPageLink('my-account.php', true)}" title="{l s='Your Account' mod='blockuserinfo'}">{l s='Your Account' mod='blockuserinfo'}</a></li>
 	</ul>
 </div>

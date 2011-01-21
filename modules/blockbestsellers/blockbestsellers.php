@@ -87,6 +87,9 @@ class BlockBestSellers extends Module
 	
 	public function hookRightColumn($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
+		
 		global $smarty;
 		$currency = new Currency((int)($params['cookie']->id_currency));
 		$bestsellers = ProductSale::getBestSalesLight((int)($params['cookie']->id_lang), 0, 5);
@@ -112,6 +115,8 @@ class BlockBestSellers extends Module
 
 	public function hookHeader($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
 		Tools::addCSS(($this->_path).'blockbestsellers.css', 'all');
 	}
 

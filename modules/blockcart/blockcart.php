@@ -154,6 +154,9 @@ class BlockCart extends Module
 
 	public function hookRightColumn($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
+	
 		global $smarty, $page_name;
 
 		$smarty->assign('order_page', $page_name == 'order');
@@ -169,6 +172,9 @@ class BlockCart extends Module
 
 	public function hookAjaxCall($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
+		
 		global $smarty;
 		$this->smartyAssigns($smarty, $params);
 		return $this->display(__FILE__, 'blockcart-json.tpl');
@@ -176,6 +182,9 @@ class BlockCart extends Module
 	
 	public function hookHeader()
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
+		
 		Tools::addCSS(($this->_path).'blockcart.css', 'all');
 		if ((int)(Configuration::get('PS_BLOCK_CART_AJAX')))
 			Tools::addJS(($this->_path).'ajax-cart.js');

@@ -46,8 +46,9 @@
 				<div class="comparison_product_infos">
 				<a href="{$product->getLink()}" title="{$product->name|escape:html:'UTF-8'}" >
 					<img src="{$link->getImageLink($product->link_rewrite, $product->id_image, 'home')}" alt="{$product->name|escape:html:'UTF-8'}" width="{$homeSize.width}" height="{$homeSize.height}" />
-					</a>
+				</a>
 
+				{if isset($product->show_price) && $product->show_price && !isset($restricted_country_mode) && !$PS_CATALOG_MODE}
 					<p class="price_container"><span class="price">{convertPrice price=$product->getPrice($taxes_behavior)}</span></p>
 					<div class="product_discount">
 					{if $product->on_sale}
@@ -56,16 +57,16 @@
 						<span class="discount">{l s='Reduced price!'}</span>
 					{/if}
 					</div>
-
-				{if !empty($product->unity) && $product->unit_price_ratio > 0.000000}
-					<p class="comparison_unit_price">{convertPrice price=($product->getPrice($taxes_behavior) / $product->unit_price_ratio)} {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
-				{else}
-				&nbsp;
+				
+					{if !empty($product->unity) && $product->unit_price_ratio > 0.000000}
+						<p class="comparison_unit_price">{convertPrice price=($product->getPrice($taxes_behavior) / $product->unit_price_ratio)} {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
+					{else}
+					&nbsp;
+					{/if}
 				{/if}
-
 				<!-- availability -->
 				<p class="comparison_availability_statut">
-					{if !(($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now) OR !$product->available_for_order)}
+					{if !(($product->quantity == 0 && !$product->available_later) OR ($product->quantity != 0 && !$product->available_now) OR !$product->available_for_order OR $PS_CATALOG_MODE)}
 						<span id="availability_label">{l s='Availability:'}</span>
 						<span id="availability_value"{if $product->quantity == 0} class="warning-inline"{/if}>
 							{if $product->quantity == 0}
@@ -82,7 +83,7 @@
 				</p>
 					<a class="cmp_remove" href="{$request_uri|replace:$replace_id:''}">{l s='Remove'}</a>
 					<a class="button" href="{$product->getLink()}" title="{l s='View'}">{l s='View'}</a>
-					{if !$product->hasAttributes() OR (isset($add_prod_display) AND ($add_prod_display == 1))}
+					{if (!$product->hasAttributes() OR (isset($add_prod_display) AND ($add_prod_display == 1))) AND !$PS_CATALOG_MODE}
 						{if ($product->quantity > 0 OR $product->allow_oosp) AND $product->customizable != 2}
 							<a class="exclusive ajax_add_to_cart_button" rel="ajax_id_product_{$product->id}" href="{$base_dir}cart.php?qty=1&amp;id_product={$product->id}&amp;token={$static_token}&amp;add" title="{l s='Add to cart'}">{l s='Add to cart'}</a>
 						{else}

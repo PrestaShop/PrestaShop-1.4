@@ -30,7 +30,7 @@ if (!defined('_CAN_LOAD_FILES_'))
 	
 class BlockCurrencies extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'blockcurrencies';
 		$this->tab = 'front_office_features';
@@ -42,7 +42,7 @@ class BlockCurrencies extends Module
 		$this->description = $this->l('Adds a block for selecting a currency');
 	}
 
-	function install()
+	public function install()
 	{
 		return (parent::install() AND $this->registerHook('top') AND $this->registerHook('header'));
 	}
@@ -53,8 +53,11 @@ class BlockCurrencies extends Module
 	* @param array $params Parameters
 	* @return string Content
 	*/
-	function hookTop($params)
+	public function hookTop($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
+	
 		global $smarty;
 		$currencies = Currency::getCurrencies();
 		if (!sizeof($currencies))
@@ -63,8 +66,10 @@ class BlockCurrencies extends Module
 		return $this->display(__FILE__, 'blockcurrencies.tpl');
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
 		Tools::addCSS(($this->_path).'blockcurrencies.css', 'all');
 	}
 }

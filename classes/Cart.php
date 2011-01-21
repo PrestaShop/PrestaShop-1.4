@@ -462,7 +462,7 @@ class CartCore extends ObjectModel
 		self::$_nbProducts = NULL;
 		if ((int)$quantity <= 0)
 			return $this->deleteProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
-		elseif (!$product->available_for_order)
+		elseif (!$product->available_for_order OR Configuration::get('PS_CATALOG_MODE'))
 			return false;
 		else
 		{
@@ -1279,6 +1279,8 @@ class CartCore extends ObjectModel
 
 	public function checkQuantities()
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return false;
 		foreach ($this->getProducts() AS $product)
 			if (!$product['active'] OR (!$product['allow_oosp'] AND $product['stock_quantity'] < $product['cart_quantity']) OR !$product['available_for_order'])
 				return false;

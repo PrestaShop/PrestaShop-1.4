@@ -36,6 +36,8 @@
 
 {if isset($empty)}
 	<p class="warning">{l s='Your shopping cart is empty.'}</p>
+{elseif $PS_CATALOG_MODE}
+	<p class="warning">{l s='This store not accept new order.'}</p>
 {else}
 	<script type="text/javascript">
 <!--

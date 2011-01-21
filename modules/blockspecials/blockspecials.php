@@ -79,6 +79,9 @@ class BlockSpecials extends Module
 
 	public function hookRightColumn($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
+		
 		global $smarty;
 		if (!$special = Product::getRandomSpecial((int)($params['cookie']->id_lang)) AND !Configuration::get('PS_BLOCK_SPECIALS_DISPLAY'))
 			return;
@@ -95,6 +98,8 @@ class BlockSpecials extends Module
 		
 	public function hookHeader($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
 		Tools::addCSS(($this->_path).'blockspecials.css', 'all');
 	}
 }

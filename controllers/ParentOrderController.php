@@ -60,6 +60,9 @@ class ParentOrderControllerCore extends FrontController
 			Tools::redirect('order-opc.php');
 		}
 		
+		if (Configuration::get('PS_CATALOG_MODE'))
+			$this->errors[] = Tools::displayError('This store not accept new order');
+		
 		if (Tools::isSubmit('submitReorder') AND $id_order = (int)Tools::getValue('id_order'))
 		{
 			$oldCart = new Cart(Order::getCartIdStatic((int)$id_order, (int)$this->cookie->id_customer));

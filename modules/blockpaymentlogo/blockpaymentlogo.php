@@ -108,6 +108,9 @@ class BlockPaymentLogo extends Module
 	*/
 	public function hookLeftColumn($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
+		
 		global $smarty, $cookie;
 		
 		if (!Configuration::get('PS_PAYMENT_LOGO_CMS_ID'))
@@ -128,8 +131,10 @@ class BlockPaymentLogo extends Module
 	{
 		return $this->hookLeftColumn($params);
 	}
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
+		if (Configuration::get('PS_CATALOG_MODE'))
+			return ;
 		Tools::addCSS(($this->_path).'blockpaymentlogo.css', 'all');
 	}
 
