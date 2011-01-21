@@ -84,7 +84,7 @@ var shopImporter = {
 	},
 	checkAndSaveConfig : function (save)
 	{
-		//sync languages
+		//sync languages and currency
 		if (this.syncLang() && this.syncCurrency())
 		$.ajax({
 	       type: 'GET',
@@ -344,6 +344,7 @@ function enableShowErrorsTruncate()
 
 function displaySpecificOptions(moduleName, server, user, password, database, prefix)
 {
+	console.log(password);
 	$.ajax({
 	       type: 'GET',
 	       url: '../modules/shopImporter/ajax.php',

@@ -47,7 +47,7 @@ if (Tools::isSubmit('getData') || Tools::isSubmit('syncLang') || Tools::isSubmit
 		$importModule = new $moduleName();
 		$importModule->server = $server;
 		$importModule->user = $user;
-		$importModule->password = $password;
+		$importModule->passwd = $password;
 		$importModule->database = $database;
 		$importModule->prefix = $prefix;
 		if (!method_exists($importModule, $getMethod))
@@ -83,14 +83,13 @@ if (Tools::isSubmit('displaySpecificOptions'))
 	$database = Tools::getValue('database');
 	$prefix = Tools::getValue('prefix');
 	
-	
 	if (file_exists('../../modules/'.$moduleName.'/'.$moduleName.'.php'))
 	{
 		require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
 		$importModule = new $moduleName();
 		$importModule->server = $server;
 		$importModule->user = $user;
-		$importModule->password = $password;
+		$importModule->passwd = $password;
 		$importModule->database = $database;
 		$importModule->prefix = $prefix;
 	if ($link = @mysql_connect(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password')))

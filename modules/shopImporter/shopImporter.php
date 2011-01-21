@@ -447,7 +447,7 @@ class shopImporter extends ImportModule
 			$object = new $className;
 			$id = $item[$this->supportedImports[strtolower($className)]['identifier']];
 			if (array_key_exists('foreign_key', $this->supportedImports[strtolower($className)]))			
-				$this->replaceForeignKey(&$item, $table);
+				$this->replaceForeignKey($item, $table);
 			foreach($item as $key => $val)
 			{
 				if ($key == 'passwd')
@@ -497,7 +497,7 @@ class shopImporter extends ImportModule
 		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.pSQL($table).' SET `'.pSQL($identifier).'_'.pSQL($moduleName).'` =  '.(int)$matchId.' WHERE `'.pSQL($identifier).'` = '.(int)$psId);
 	}
 	
-	private function replaceForeignKey($item, $table)
+	private function replaceForeignKey(&$item, $table)
 	{
 		if ($table == 'product_attribute')
 			$table2 = 'combination';
