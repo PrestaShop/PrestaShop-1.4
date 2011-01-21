@@ -22,6 +22,7 @@ $_MODULE['<{twenga}prestashop>twenga_d4841389a7d896c92ecb8d81c0f42abf'] = '(des 
 $_MODULE['<{twenga}prestashop>twenga_2e7476b2a0122a4b8f8041e08b5e34bc'] = 'Etape 2 : Complétez le formulaire d’inscription Twenga.';
 $_MODULE['<{twenga}prestashop>twenga_3526e9eda1bd86bf79472b6abf88ad98'] = 'Etape 3 : Une fois votre clé Twenga reçue, retournez ici et coller cette clé dans le champ « hash key » ainsi que votre login/pass Twenga Ready to Sell. Sauvegarder.';
 $_MODULE['<{twenga}prestashop>twenga_bc88fe7063d7e7da0bf08003f21a1ad2'] = 'Augmentez votre traffic - 500 clics offerts';
+$_MODULE['<{twenga}prestashop>twenga_af020050a864b545592dd1fe7e38a577'] = 'Tarifs de Twenga';
 $_MODULE['<{twenga}prestashop>twenga_d7c78c7a4356df39e7113405bd003ab5'] = 'Votre catalogue sera référencé sous une dizaine de jours. Une fois les 500 clics consommés, vous serez facturés au clic par catégorie de 0.05€ à 0.15€. Vous aurez accès à une interface de gestion complète. Vous pouvez partir à tout moment, moyennant 1 mois de préavis.';
 $_MODULE['<{twenga}prestashop>twenga_f57624e0e72283c798dbd6cf90eed6ce'] = 'Authentification';
 $_MODULE['<{twenga}prestashop>twenga_c7f7d1a930f6d4118e2a3938bc56d8dc'] = 'Après avoir rempli les étapes 1 et 2, renseignez ici la clé Twenga et votre login Twenga Ready to Sell';

@@ -386,9 +386,28 @@ class Twenga extends PaymentModule
 			$str_error .= '</ol>';
 			$this->_errors[] = $str_error;
 		}
-		$str_return =  '
+		
+		$tarifs_link = 'https://rts.twenga.com/media/prices_'.Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')).'.jpg';
+		$tarif_arr = array(200, 200);
+		if (file_exists($tarifs_link))
+			$tarif_arr = @getimagesize($tarifs_link);
+		
+		$str_return = '
+			<script type="text/javascript">
+			$().ready(function()
+			{
+				$("#twenga_tarif").click(function(e){
+					e.preventDefault();
+					//console.log("hahaha");
+					window.open("'.$tarifs_link.'", "", "width='.$tarif_arr[0].', height='.$tarif_arr[1].', scrollbars=no, menubar=no, status=no" );
+				});
+			});
+			</script>
 			<fieldset>
 				<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('Reference your products on Twenga : 500 clicks offered from Prestashop!').'</legend>'
+				.'<div style="float:left; width:80px; height:100px">
+					<img src="../modules/'.$this->name.'/logo_big.jpg" class="middle" style="margin:20px 0 0 0;"/>
+				</div>'
 				.'<p>'.$this->l('How to test Twenga and benefit to your 500 firsts offered clicks:').'</p>'
 				.'<ul>'
 					.'<li>'.$this->l('Step 1: Clic on this special link to subscribe on "Twenga Ready to Sell":');
@@ -402,10 +421,12 @@ class Twenga extends PaymentModule
 					<li>'.$this->l('Step 3: After receive your Twenga key, go to the next formular and paste the key in "hash key" field with your Twenga "Ready to Sell" login/password. Save').'</li>
 				</ul>
 				<p style="text-align:center;"><a href="#" title="'.$this->l('Increase your traffic - 500 offered clicks').'" onclick="$(\'#submitTwengaSubscription\').click(); return false;" ><img src="'.self::$base_path.'/bt_500_clicks.gif" width="364" height="45" /></a></p>
+				<p style="text-align:center;"><a href="'.$tarifs_link.'" class="link" id="twenga_tarif">'.$this->l('Twenga Tarifs').'</a></p>
 				<p>'
 					.$this->l('Your catalogue will be referenced under tens days. After your 500 clicks are used, you will be charged per click by category from 0.05€ to 0.15€. You will access to a complete management panel. You can leave anytime, dealt 1 month notice.')
 				.'</p>
 			</fieldset>
+			
 			<br />';
 		return $str_return;
 	}
