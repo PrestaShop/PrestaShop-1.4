@@ -14,15 +14,19 @@ if (Tools::isSubmit('checkAndSaveConfig'))
 		if(!@mysql_select_db(Tools::getValue('database'), $link))
 			die('{"hasError" : true, "error" : ["'.Tools::displayError('The database selection cannot be made.').'"]}');
 		else
+		{
+			@mysql_close($link);
 			die('{"hasError" : false, "error" : []}');
+		}
 	}
 	else
 		die('{"hasError" : true, "error" : ["'.Tools::displayError('Link to database cannot be established.').'"]}');
 	
 }
 
-if (Tools::isSubmit('getData'))
-{	
+if (Tools::isSubmit('getData') || Tools::isSubmit('syncLang') || Tools::isSubmit('syncCurrency'))
+{		
+
 	$moduleName = Tools::getValue('moduleName');
 	$className =Tools::getValue('className');
 	$getMethod = Tools::getValue('getMethod');
@@ -33,13 +37,19 @@ if (Tools::isSubmit('getData'))
 	$database = Tools::getValue('database');
 	$prefix = Tools::getValue('prefix');
 	$save = Tools::getValue('save');
-
+	
+	if (Tools::isSubmit('syncLang'))
+		$save = true;
+	
 	if (file_exists('../../modules/'.$moduleName.'/'.$moduleName.'.php'))
 	{
 		require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
 		$importModule = new $moduleName();
+		$importModule->server = $server;
+		$importModule->user = $user;
+		$importModule->password = $password;
+		$importModule->database = $database;
 		$importModule->prefix = $prefix;
-		$importModule->initDatabaseConnection($server, $user, $password, $database);
 		if (!method_exists($importModule, $getMethod))
 			die('{"hasError" : true, "error" : ["not_exist"], "datas" : []}');
 		else
@@ -78,18 +88,23 @@ if (Tools::isSubmit('displaySpecificOptions'))
 	{
 		require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
 		$importModule = new $moduleName();
+		$importModule->server = $server;
+		$importModule->user = $user;
+		$importModule->password = $password;
+		$importModule->database = $database;
 		$importModule->prefix = $prefix;
-		$return = $importModule->initDatabaseConnection($server, $user, $password, $database);
-		if ($return)
-			if (method_exists($importModule, 'displaySpecificOptions'))
-				die($importModule->displaySpecificOptions());
-			else
-				die('not_exist');
-
+	if ($link = @mysql_connect(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password')))
+	{
+		if(!@mysql_select_db(Tools::getValue('database'), $link))
+			die(Tools::displayError('The database selection cannot be made.'));
+		elseif (method_exists($importModule, 'displaySpecificOptions'))
+			die($importModule->displaySpecificOptions());
+		else
+			die('not_exist');
+	}
+	else
+		die(Tools::displayError('Link to database cannot be established.'));
 		
 	}	
 }
-
-
-
 ?>

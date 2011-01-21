@@ -19,12 +19,77 @@ var shopImporter = {
 	srcWarn : '../modules/shopImporter/img/warn.png',
 	srcDelete : '../modules/shopImporter/img/delete.gif',
 	
-	checkAndSaveConfig : function (save)
+	
+	syncLang : function ()
 	{
 		$.ajax({
 	       type: 'GET',
 	       url: '../modules/shopImporter/ajax.php',
 	       async: false,
+	       cache: false,
+	       dataType : "json",
+	       data: 'ajax=true&syncLang&getMethod=getLangagues&className=Language&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+this.specificOptions ,
+	       success: function(jsonData)
+	       {
+				if (jsonData.hasError)
+	    		{
+	    			$('#steps').html('<div id="lang_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+jsonData.error+'</div>');
+		    		$('#lang_feedback').fadeIn('slow');
+
+	    		}
+
+	       },
+	      error: function(XMLHttpRequest, textStatus, errorThrown) 
+	       {
+	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR<br><br>Details: '+XMLHttpRequest.responseText+'</div>');
+	       		$('#technical_error_feedback').fadeIn('slow');
+	       		
+	       }
+	   });
+	 if ($('#lang_feedback').length == 1)
+	 	return false;
+	 else
+	 	return true;
+	},
+	syncCurrency : function ()
+	{
+		$.ajax({
+	       type: 'GET',
+	       url: '../modules/shopImporter/ajax.php',
+	       async: false,
+	       cache: false,
+	       dataType : "json",
+	       data: 'ajax=true&syncCurrency&getMethod=getCurrencies&className=Currency&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+this.specificOptions ,
+	       success: function(jsonData)
+	       {
+				if (jsonData.hasError)
+	    		{
+	    			$('#steps').html('<div id="lang_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+jsonData.error+'</div>');
+		    		$('#lang_feedback').fadeIn('slow');
+
+	    		}
+
+	       },
+	      error: function(XMLHttpRequest, textStatus, errorThrown) 
+	       {
+	       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR<br><br>Details: '+XMLHttpRequest.responseText+'</div>');
+	       		$('#technical_error_feedback').fadeIn('slow');
+	       		
+	       }
+	   });
+	 if ($('#lang_feedback').length == 1)
+	 	return false;
+	 else
+	 	return true;
+	},
+	checkAndSaveConfig : function (save)
+	{
+		//sync languages
+		if (this.syncLang() && this.syncCurrency())
+		$.ajax({
+	       type: 'GET',
+	       url: '../modules/shopImporter/ajax.php',
+	       async: true,
 	       cache: false,
 	       dataType : "json",
 	       data: 'ajax=true&checkAndSaveConfig&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+this.specificOptions ,
@@ -33,7 +98,7 @@ var shopImporter = {
 		       	if (!jsonData.hasError)
 	    		{
 			       	$('#checkAndSaveConfig').fadeOut('slow');
-			       	$('#steps').html('<div id="database_feedback" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+databaseOk+'</div>');
+			       	$('#steps').html($('#steps').html()+'<div id="database_feedback" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+databaseOk+'</div>');
 			    	$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="next" id="next" class="button" value="'+testImport+'">');
 			    	$('#database_feedback').fadeIn('slow', function() {
 	    			if (save)
@@ -91,10 +156,11 @@ var shopImporter = {
 			return;
 		}
 		if (typeof(methodName) != 'undefined' && !$('#ok_feedback_'+methodName[0]).length)
+		{
 			$('#steps').html($('#steps').html()+'<div id="ok_feedback_'+methodName[0]+'" style="display:none;" class="import"><img src="'+this.srcImport+'">'+methodName[1]+'<span id="display_error_'+methodName[0]+'" style="display:none"><span><div id="feedback_'+methodName[0]+'_errors_list"></div></div>');
 			$('#ok_feedback_'+methodName[0]).css('display', '');
-			$('#checkAndSaveConfig').fadeIn('slow');
 		
+		$('#checkAndSaveConfig').fadeIn('slow');
 		$.ajax({
 	       type: 'GET',
 	       url: '../modules/shopImporter/ajax.php',
@@ -172,6 +238,7 @@ var shopImporter = {
 	       		$('#checkAndSaveConfig').fadeIn('slow');
 	       }
 	   });
+	   }
 	},
 	
 	truncatTable : function (className)
@@ -228,20 +295,29 @@ var shopImporter = {
 	
 	displayEnd : function (finish)
 	{	
-		if (finish)
+		
+		if ((this.hasErrors != 0 || ($('.display_error_link').length == 0 && this.hasErrors == 0)) || (this.hasErrors == 1))
 		{
-			$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+importFinish+'</div>');
-			$('#technical_error_feedback').fadeIn('slow');
-		}
-		else if ((this.hasErrors != 0 || ($('.display_error_link').length == 0 && this.hasErrors == 0)) || (this.hasErrors == 1))
-		{
-			$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="submitImport" id="submitImport" class="button" value="'+import+'">');
-			$('#submitImport').fadeIn('slow', function() {
-				$(this).unbind('click').click(function() {
-					shopImporter.save = 1;
-					shopImporter.checkAndSaveConfig(shopImporter.save);
+			if (this.save)
+			{
+				$('#steps').html($('#steps').html()+'<div id="ok_feedback_end" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+importFinish+'</div>');
+				$('#ok_feedback_end').fadeIn('slow');
+			}
+			else
+			{
+				$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="submitImport" id="submitImport" class="button" value="'+import+'">');
+				$('#submitImport').fadeIn('slow', function() {
+					$(this).unbind('click').click(function() {
+					$.scrollTo($("#steps"), 300 , {
+						onAfter:function(){
+							$('#steps').html('');
+							shopImporter.save = 1;
+							shopImporter.checkAndSaveConfig(shopImporter.save);
+							}
+						});
+					});
 				});
-			});
+			}
 		}
 		else
 		{
@@ -292,6 +368,14 @@ function displaySpecificOptions(moduleName, server, user, password, database, pr
 
 $(document).ready(function(){
 	
+	$('#db_input input').each(function () {
+		$(this).keyup(function () {
+			$('#displayOptions').show();
+			$('#checkAndSaveConfig').show();
+			
+		})
+	});
+	
 	$('input[name=hasErrors]:radio').change(function () {
 		if ($(this).val() == 1)
 			$('#warnSkip').fadeIn('slow');
@@ -332,23 +416,26 @@ $(document).ready(function(){
 	
 	$('#checkAndSaveConfig').unbind('click').click(function(){
 		$('#steps').html('');
-		shopImporter.specificOptions = '';
-		$('#specificOptionsContent :input').each(function (){
-			shopImporter.specificOptions = shopImporter.specificOptions+'&'+$(this).attr('name')+'='+$(this).attr('value');
+		$.scrollTo($("#steps"), 300 , {
+			onAfter:function(){
+							shopImporter.specificOptions = '';
+							$('#specificOptionsContent :input').each(function (){
+								shopImporter.specificOptions = shopImporter.specificOptions+'&'+$(this).attr('name')+'='+$(this).attr('value');
+							});
+								shopImporter.idMethod = 0;
+								shopImporter.limit = 0;
+								shopImporter.save = 0;
+								shopImporter.moduleName = $('#import_module_name').val();
+								shopImporter.server = $('#server').val();
+								shopImporter.user = $('#user').val();
+								shopImporter.password = $('#password').val();
+								shopImporter.database = $('#database').val();
+								shopImporter.prefix = $('#prefix').val();
+								shopImporter.hasErrors = $('input[name=hasErrors]:radio:checked').val();
+								shopImporter.checkAndSaveConfig(shopImporter.save);
+							return false;
+			}
 		});
-			shopImporter.idMethod = 0;
-			shopImporter.limit = 0;
-			shopImporter.save = 0;
-			shopImporter.moduleName = $('#import_module_name').val();
-			shopImporter.server = $('#server').val();
-			shopImporter.user = $('#user').val();
-			shopImporter.password = $('#password').val();
-			shopImporter.database = $('#database').val();
-			shopImporter.prefix = $('#prefix').val();
-			shopImporter.hasErrors = $('input[name=hasErrors]:radio:checked').val();
-			shopImporter.checkAndSaveConfig(shopImporter.save);
-		return false;
-		
 	});	
 	
 	$('#importOptionsYesNo :radio').change( function () {

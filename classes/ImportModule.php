@@ -14,7 +14,15 @@
 
 abstract class ImportModuleCore extends Module
 {
-	protected $db = NULL;
+	protected $_link = NULL;
+	
+	public $server;
+	
+	public $user;
+	
+	public $passwd;
+	
+	public $database;
 	
 	/** @var string Prefix database */
 	public $prefix;
@@ -24,15 +32,34 @@ abstract class ImportModuleCore extends Module
 		parent::__construct ();
 	}	
 	
-	public function initDatabaseConnection($server, $user, $passwd, $database)
+	public function __destruct()
 	{
-		$this->db = new MySQL($server, $user, $passwd, $database);
-		if (!$this->db)
+		@mysql_close($this->_link);
+	}
+	
+	private function initDatabaseConnection()
+	{
+		if ($this->_link != NULL)
+			return $this->_link;
+		if ($this->_link = mysql_connect($this->server, $this->user, $this->passwd, true))
 		{
-			Tools::displayError();
-			return false;
+			if(!mysql_select_db($this->database, $this->_link))
+				die(Tools::displayError('The database selection cannot be made.'));
 		}
-		return true;
+		else
+			die(Tools::displayError('Link to database cannot be established.'));
+		return $this->_link;
+	}
+	
+	public function executeS($query)
+	{
+		$this->initDatabaseConnection();
+		$result = mysql_query($query, $this->_link);
+		$resultArray = array();
+		if ($result !== true)
+			while ($row = mysql_fetch_assoc($result))
+				$resultArray[] = $row;
+		return $resultArray;
 	}
 	
 	public static function getImportModulesOnDisk ()

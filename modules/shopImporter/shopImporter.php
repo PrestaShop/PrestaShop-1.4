@@ -2,7 +2,6 @@
 
 class shopImporter extends ImportModule
 {
-	public $match_id = array('id_language' => 'id_lang', 'id_category_default' => 'id_category');
 	private $supportedImports = array();
 
 	public function __construct()
@@ -17,11 +16,11 @@ class shopImporter extends ImportModule
 
 		$this->displayName = $this->l('Shop Importer');
 		$this->description = $this->l('This module allows you to import your shop from another system into prestashop');
-
 		$this->supportedImports = array(
 									'language' => array('methodName' => 'getLangagues',
 														'name' => $this->l('Language'),
 														'label' => $this->l('Import Languages'),
+														'table' => 'lang',
 														'identifier' => 'id_lang',
 														'alterTable' => array('id_lang' => 'int(10)'),
 														'info' => $this->l('New languages will automatically add translations!'),
@@ -31,6 +30,7 @@ class shopImporter extends ImportModule
 									'currency' => array('methodName' => 'getCurrencies',
 														'name' => $this->l('Currency'),
 														'label' => $this->l('Import Currencies'),
+														'table' => 'currency',
 														'identifier' => 'id_currency',
 														'alterTable' => array('id_currency' => 'int(10)'),
 														'delete' => true,
@@ -39,6 +39,7 @@ class shopImporter extends ImportModule
 									'zone' => array('methodName' => 'getZones',
 														'name' => $this->l('Zone'),
 														'label' => $this->l('Import Zones'),
+														'table' => 'zone',
 														'identifier' => 'id_zone',
 														'alterTable' => array('id_zone' => 'int(10)'),
 														'delete' => true
@@ -46,6 +47,7 @@ class shopImporter extends ImportModule
 									'country' => array('methodName' => 'getCountries',
 														'name' => $this->l('Country'),
 														'label' => $this->l('Import Countries'),
+														'table' => 'country',
 														'identifier' => 'id_country',
 														'foreign_key' => array('id_zone', 'id_currency'),
 														'alterTable' => array('id_country' => 'int(10)'),
@@ -55,6 +57,7 @@ class shopImporter extends ImportModule
 									'state' => array('methodName' => 'getStates',
 														'name' => $this->l('State'),
 														'label' => $this->l('Import States'),
+														'table' => 'state',
 														'identifier' => 'id_state',
 														'foreign_key' => array('id_zone', 'id_country'),
 														'alterTable' => array('id_state' => 'int(10)'),
@@ -63,6 +66,7 @@ class shopImporter extends ImportModule
 									'group' => array('methodName' => 'getGroups',
 														'name' => $this->l('Group'),
 														'label' => $this->l('Import Groups'),
+														'table' => 'group',
 														'identifier' => 'id_group',
 														'alterTable' => array('id_group' => 'int(10)'),
 														'delete' => true,
@@ -70,13 +74,23 @@ class shopImporter extends ImportModule
 									'customer' => array('methodName' => 'getCustomers',
 														'name' => $this->l('Customer'),
 														'label' => $this->l('Import Customers'),
+														'table' => 'customer',
 														'identifier' => 'id_customer',
+														'foreign_key' => array('id_group'),
 														'alterTable' => array('id_customer' => 'int(10)', 'passwd' => 'varchar(100)'),
-														'delete' => true
+														'delete' => true,
+														'association' => array(
+															array(
+																'table' => 'customer_group',
+																'fields' => array('id_customer', 'id_group'),
+																'matchTable' => array('customer', 'group'),
+																)
+															)
 														),
 									'address' => array('methodName' => 'getAddresses',
 														'name' => $this->l('Address'),
 														'label' => $this->l('Import Addresses'),
+														'table' => 'address',
 														'identifier' => 'id_address',
 														'foreign_key' => array('id_country', 'id_state', 'id_customer'),
 														'alterTable' => array('id_address' => 'int(10)'),
@@ -85,6 +99,7 @@ class shopImporter extends ImportModule
 									'order' => array('methodName' => 'getOrders',
 													 'name' => $this->l('Order'),
 													 'label' => $this->l('Import Orders'),
+													 'table' => 'order',
 													 'identifier' => 'id_order',
 													 'alterTable' => array('id_order' => 'int(10)'),
 													 'delete' => true
@@ -92,6 +107,7 @@ class shopImporter extends ImportModule
 									'manufacturer' => array('methodName' => 'getManufacturers',
 														'name' => $this->l('Manufacturer'),
 														'label' => $this->l('Import Manufacturers'),
+														'table' => 'manufacturer',
 														'identifier' => 'id_manufacturer',
 														'delete' => true,
 														'alterTable' => array('id_manufacturer' => 'int(10)'),
@@ -99,6 +115,7 @@ class shopImporter extends ImportModule
 									'supplier' => array('methodName' => 'getSuppliers',
 														'name' => $this->l('Supplier'),
 														'label' => $this->l('Import Suppliers'),
+														'table' => 'supplier',
 														'identifier' => 'id_supplier',
 														'delete' => true,
 														'alterTable' => array('id_supplier' => 'int(10)'),
@@ -106,27 +123,59 @@ class shopImporter extends ImportModule
 									'category' => array('methodName' => 'getCategories',
 														'name' => $this->l('Category'),
 														'label' => $this->l('Import Categories'),
+														'table' => 'category',
 														'identifier' => 'id_category',
 														'alterTable' => array('id_category' => 'int(10)'),
+														'delete' => true
+														),
+									'attributegroup' => array('methodName' => 'getAttributesGroups',
+														'name' => $this->l('AttributeGroup'),
+														'label' => $this->l('Import Attributes Groups'),
+														'table' => 'attribute_group',
+														'identifier' => 'id_attribute_group',
+														'alterTable' => array('id_attribute_group' => 'int(10)'),
+														'delete' => true
+														),
+									'attribute' => array('methodName' => 'getAttributes',
+														'name' => $this->l('Attribute'),
+														'label' => $this->l('Import Attributes'),
+														'table' => 'attribute',
+														'identifier' => 'id_attribute',
+														'alterTable' => array('id_attribute' => 'int(10)'),
+														'foreign_key' => array('id_attribute_group'),
 														'delete' => true
 														),
 									'product' => array('methodName' => 'getProducts',
 														'name' => $this->l('Product'),
 														'label' => $this->l('Import Products'),
+														'table' => 'product',
 														'identifier' => 'id_product',
 														'alterTable' => array('id_product' => 'int(10)'),
 														'foreign_key' => array('id_category'),
 														'delete' => true,
-														'association' => array('table' => 'category_product',
-																			   'foreign_key' => array('id_category', 'id_product')
-																			   )
+														'association' => array(
+															array(
+																'table' => 'category_product',
+																'fields' => array('id_category', 'id_product'),
+																'matchTable' =>  array('category', 'product')
+																)
+															)
 														),
-									'productCombination' => array('methodName' => 'getProductsCombination',
-														'name' => $this->l('Products Combinations'),
+									'combination' => array('methodName' => 'getProductsCombination',
+														'name' => $this->l('Combination'),
 														'label' => $this->l('Import Products Combinations'),
-														'identifier' => 'id_attribute',
-														'alterTable' => array('id_attribute' => 'int(10)'),
-														'delete' => true
+														'table' => 'product_attribute',
+														'identifier' => 'id_product_attribute',
+														'alterTable' => array('id_product_attribute' => 'int(10)', 'id_product' => 'int(10)'),
+														'foreign_key' => array('id_product'),
+														'delete' => true,
+														'association' => array(
+															array(
+																'table' => 'product_attribute_combination',
+																'fields' => array('id_attribute', 'id_product_attribute'),
+																'matchTable' =>  array('attribute', 'product_attribute')
+																)
+															)
 														),
 									);
 	}
@@ -146,6 +195,7 @@ class shopImporter extends ImportModule
 			global $cookie;
 		$exportModules = parent::getImportModulesOnDisk();
 		$html = '<script type="text/javascript" src="../modules/shopImporter/shopImporter.js"></script>
+				<script src="'._PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js"></script> 
 				 <script type="text/javascript">
 					var conf = new Array();';
 		$i = 0;
@@ -160,7 +210,7 @@ class shopImporter extends ImportModule
 					var showErrors = "'.$this->l('Show errors').'";
 					var testImport = "'.$this->l('Test import process').'";
 					var import = "'.$this->l('Import').'";
-					var importHasErrors = "'.$this->l('Please fix errors before continuing').'"
+					var importHasErrors = "'.$this->l('Errors occurred during import. For more details click on "Show errors"').'"
 					var importFinish = "'.$this->l('The import is completed').'"
 					var truncateTable = "'.$this->l('Remove data').'"
 					var oneThing = "'.$this->l('Please choose one thing to import').'"
@@ -191,6 +241,7 @@ class shopImporter extends ImportModule
 		$html .= '</select><input type="submit" class="button" id="choose_module_name" value="'.$this->l('Choose').'">
 				</div>
 				<div id="db_config" style="display:none;width:420px;padding-right:20px">
+				<div id="db_input">
 					<label>'.$this->l('Server').' : </label>
 						<div class="margin-form">
 							<input type="text" name="server" id="server" value="localhost">
@@ -201,7 +252,7 @@ class shopImporter extends ImportModule
 						</div>
 					<label>'.$this->l('Password').' : </label>
 						<div class="margin-form">
-							<input type="password" name="password" id="password" value="MA1ej2mt3">
+							<input type="password" name="password" id="password" value="">
 						</div>
 					<label>'.$this->l('Database').' : </label>
 						<div class="margin-form" style="">
@@ -211,6 +262,7 @@ class shopImporter extends ImportModule
 						<div class="margin-form" style="">
 							<input type="text" name="prefix" id="prefix" value="">
 						</div>
+					</div>
 					<div class="margin-form">
 						<input type="submit" name="displayOptions" id="displayOptions" class="button" value="'.$this->l('Next Step').'">
 					</div>
@@ -279,40 +331,58 @@ class shopImporter extends ImportModule
 		$json['datas'] = $fields;
 		$languages = array();
 		$defaultLanguage = '';
+		$table = $this->supportedImports[strtolower($className)]['table'];
 
 		$object = new $className();
 		$rules = call_user_func(array($className, 'getValidationRules'), $className);
 
-		if ((sizeof($rules['requiredLang']) OR sizeof($rules['sizeLang']) OR sizeof($rules['validateLang'])))
+		if ((sizeof($rules['requiredLang']) OR sizeof($rules['sizeLang']) OR sizeof($rules['validateLang']) OR Tools::isSubmit('syncLang') OR  Tools::isSubmit('syncCurrency')))
 		{
 			$moduleName = Tools::getValue('moduleName');
 			if (file_exists('../../modules/'.$moduleName.'/'.$moduleName.'.php'))
 			{
 				require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
 				$importModule = new $moduleName();
-				$server = Tools::getValue('server');
-				$user = Tools::getValue('user');
-				$password = Tools::getValue('password');
-				$database = Tools::getValue('database');
-				$prefix = Tools::getValue('prefix');
-				$importModule->prefix = $prefix;
-				$importModule->initDatabaseConnection($server, $user, $password, $database);
-				$languages = $importModule->getLangagues(0);
-				$this->initDatabaseConnection(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
-				$defaultLanguage = new Language((int)$importModule->getDefaultIdLang());
+				$importModule->server = Tools::getValue('server');
+				$importModule->user = Tools::getValue('user');
+				$importModule->password = Tools::getValue('password');
+				$importModule->database = Tools::getValue('database');
+				$importModule->prefix = Tools::getValue('prefix');
+				$defaultLanguage = new Language((int)Configuration::get('PS_LANG_DEFAULT'));
+				if (Tools::isSubmit('syncLang'))
+				{
+					$defaultIdLand = $importModule->getDefaultIdLang();
+					$languages = $importModule->getLangagues(0);
+					$defaultLanguageImport = new Language(Language::getIdByIso($languages[$defaultIdLand]['iso_code']));
+					if ($defaultLanguage->iso_code != $defaultLanguageImport->iso_code)
+						$errors[] = $this->l('Delault lang don\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultLanguage->name.' ≠ '.$importModule->displayName.' : '.$defaultLanguageImport->name.'<br>'.$this->l('Please change default language in your configuration');
+				}
+				
+				if (Tools::isSubmit('syncCurrency'))
+				{
+					$defaultIdCurrency = $importModule->getDefaultIdCurrency();
+					$currencies = $importModule->getCurrencies(0);
+					if(!empty($currencies[$defaultIdCurrency]['iso_code']))
+						$defaultCurrencyImport = new Currency((int)Currency::getIdByIsoCode($currencies[$defaultIdCurrency]['iso_code']));
+					else
+						$defaultCurrencyImport = new Currency((int)Currency::getIdByIsoCodeNum($currencies[$defaultIdCurrency]['iso_code_num']));
+					
+					
+					$defaultCurrency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
+					if ($defaultCurrency->iso_code != $defaultCurrencyImport->iso_code)
+						$errors[] = $this->l('Delault Currency don\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultCurrency->name.' ≠ '.$importModule->displayName.' : '.$defaultCurrencyImport->name.'<br>'.$this->l('Please change default currency in your configuration');
+				}
+				if (!empty($errors))
+					die('{"hasError" : true, "error" : '.Tools::jsonEncode($errors).'}');
+				
 			}
 			else
 				die('{"hasError" : true, "error" : ["FATAL ERROR"], "datas" : []}');
 		}
-
+		
 		foreach($fields as $key => $field)
 		{
-			//check if id name is not generic (ex: id_lang)
-			if (array_key_exists('id_'.strtolower($className), $this->match_id))
-				$id = $this->match_id['id_'.strtolower($className)];
-			else
-				$id = 'id_'.strtolower($className);
-
+			$id = $this->supportedImports[strtolower($className)]['identifier'];
 			//remove wrong fields (ex : id_toto in Customer)
 			foreach($field as $name => $value)
 				if (!array_key_exists($name, get_object_vars($object)) AND ($name != $id))
@@ -333,183 +403,138 @@ class shopImporter extends ImportModule
 			$json['hasError'] = true;
 			$json['error'] = $errors;
 		}
-
-		if ($save)
+		
+		
+		if ($save OR Tools::isSubmit('syncLang'))
 		{
 			//add language if not exist in prestashop
 			if ($className == 'Language')
-				$this->checkAndAddLang($fields);
+			{
+				if (Tools::isSubmit('syncLang'))
+					$add = true;
+				else
+					$add = false;
+				$this->checkAndAddLang($fields, $add);
+			}
 			else
-				$this->autoInsert(strtolower($className), $fields);
-
+			{
+				$return = $this->saveObject($className, $fields);
+				$this->cleanPositions($table);
+				//insert association
+				if (array_key_exists('association', $this->supportedImports[strtolower($className)]))
+					$this->insertAssociation(strtolower($className), $fields);
+				if (!empty($return))
+				{
+					$json['hasError'] = true;
+					$json['error'] = $return;
+				}
+			}
+			if ($className == 'Category')
+				$this->updateCat();
 		}
 		die(Tools::jsonEncode($json));
 	}
-
-	private function autoInsert($table, $items)
+	
+	private function saveObject($className, $items)
 	{
-		if (!sizeof($items))
-			return true;
-		$identifier = $this->supportedImports[$table]['identifier'];
-		$this->initDatabaseConnection(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
-		$query = '';
-		$queryValue = '';
-		$queryFields = '';
-		$queryLang = '';
-		$queryValueLangTab = array();
-		$queryValueLang = '';
-		$queryFieldsLang = array();
-		$multiLangFields = array();
-		$queryValueAssocTab = array();
-		$queryValueAssoc = '';
-		$hasLang = false;
-		$hasAssociation = false;
-		$foreignKey = array();
-		$moduleName = Tools::getValue('moduleName');
-
-		//get foreign key
-		if (array_key_exists('foreign_key', $this->supportedImports[$table]))
-		{
-			//get default id
-			(array_key_exists('defaultId', $this->supportedImports[$table]) ? $defaultId = Configuration::get( $this->supportedImports[$table]['defaultId']) :  $defaultId = 0);
-
-			$foreign_key = $this->getForeignKey($table);
-			foreach($items as $k => $val)
-				foreach($foreign_key as $f_key => $match)
-				{
-					if ($table == 'product' AND $f_key == 'id_category')
-						$f_key = 'id_category_default';
-					if($items[$k][$f_key] != 0)
-						$items[$k][$f_key] = $match[$val[$f_key]];
-					else
-						$items[$k][$f_key] = $defaultId;
-				}
-		}
+		$return = array();
+		$table = $this->supportedImports[strtolower($className)]['table'];
 		//creating temporary fields for identifiers matching and password
-		if (array_key_exists('alterTable', $this->supportedImports[$table]))
-		{
-			$this->alterTable($table);
-			foreach($items as $k => $val)
-					foreach($this->supportedImports[$table]['alterTable'] as $key => $value)
-					{
-						$items[$k][$key.'_'.$moduleName] = $items[$k][$key];
-						$items[$k][$key] = 'NULL';
-					}
-		}
+		if (array_key_exists('alterTable', $this->supportedImports[strtolower($className)]))
+			$this->alterTable(strtolower($className));
 		foreach($items as $item)
 		{
-			$queryValue .= '(';
-			if (empty($queryFields))
+			$object = new $className;
+			$id = $item[$this->supportedImports[strtolower($className)]['identifier']];
+			if (array_key_exists('foreign_key', $this->supportedImports[strtolower($className)]))			
+				$this->replaceForeignKey(&$item, $table);
+			foreach($item as $key => $val)
 			{
-				$queryFields = implode(',', array_keys($items[key($items)]));
-				$queryFields = '`'.str_replace(',', '`,`', $queryFields).'`';
+				if ($key == 'passwd')
+					$val = substr($val,0,29);
+				$object->$key = $val;
 			}
-
-			foreach ($item AS $key => $value)
-				if (is_array($value))
-				{
-					if ($key != 'association')
-					{
-						$hasLang = true;
-						$multiLangFields[$item[$identifier.'_'.$moduleName]][$key] = $value;
-						if (!array_key_exists($key, $queryFieldsLang))
-							$queryFieldsLang[$key] = '`'.pSQL($key).'`';
-
-						//remove field name multi lang
-						$queryFields = str_replace(',`'.$key.'`', '', $queryFields);
-					}
-					else
-					{
-						$hasAssociation = true;
-						$queryValueAssocTab[] = $value;
-						//remove field name association
-						$queryFields = str_replace(',`'.$key.'`', '', $queryFields);
-					}
-				}
-				elseif($identifier == $key)
-					$queryValue .= 'NULL,' ;
-				elseif (!empty($foreignKey) AND array_key_exists($key, $foreignKey))
-						$queryValue .='\''.$foreignKey[$key][$value].'\',';
-					else
-						$queryValue .=($value == 'NULL' ? 'NULL,' : '\''.pSQL($value).'\',');
-
-			$queryValue = rtrim($queryValue, ',').'),';
-			$queryFields = rtrim($queryFields, ',');
+		if (!$object->add())
+			$return[] = array($item[$this->supportedImports[strtolower($className)]['identifier']], $this->l('An error occurred when adding the object'));
+		else
+			$this->saveMatchId(strtolower($className), (int)$object->id, (int)$id);
 		}
-
-		$queryValue = rtrim($queryValue, ',');
-		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.pSQL($table).'` ('.$queryFields.') VALUES '.rtrim($queryValue, ','));
-
-		//clean position
-		$this->cleanPositions($table);
-
-		if ($hasLang)
-		{
-			$queryFieldsLang = '`'.pSQL($identifier).'`, `id_lang`, '.implode(',', $queryFieldsLang);
-			$tmpTab = array();
-			//get foreign key for lang table
-			$foreignKeyLang =  $this->getForeignKeyLang($table);
-			$idsMatchLang = $this->getMatchIdLang();
-			//TODO a mettre dans la methode formatInsertLang
-			$tmpTab = array();
-			foreach($multiLangFields AS $multiLang => $val)
-				foreach($val AS $field)
-					foreach($field AS $lang => $value)
-						if (array_key_exists($multiLang, $tmpTab) AND array_key_exists($lang, $tmpTab[$multiLang]))
-							$tmpTab[$multiLang][$lang] .= '\''.pSQL($value).'\', ';
-						else
-							$tmpTab[$multiLang][$lang] = '\''.pSQL($foreignKeyLang[$multiLang]).'\', \''.pSQL($idsMatchLang[$lang]).'\', \''.pSQL($value).'\', ';
-			foreach($tmpTab AS $tmp)
-				foreach($tmp AS $t)
-					$queryValueLang .= '('.rtrim($t , ', ').'), ';
-
-			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.pSQL($table).'_lang` ('.$queryFieldsLang.')
-										VALUES '.rtrim($queryValueLang, ', '));
-		}
-		if($hasAssociation)
-		{
-			$tmpTab = array();
-			$foreignKeyId = $this->supportedImports[$table]['association']['foreign_key'];
-			$foreignKey =  $this->getForeignKey($table, $this->supportedImports[$table]['association']['foreign_key']);
-			foreach($queryValueAssocTab AS $key => $val)
-				$tmpTab[$foreignKey[$foreignKeyId[0]][key($val)]] = $foreignKey[$foreignKeyId[1]][$val[key($val)]];
-			$this->autoInsertAssociation($table, $this->supportedImports[$table]['association']['table'], $tmpTab);
-		}
+		return $return;
 	}
-
-	private function autoInsertAssociation($table, $tableAssociation,  $fields)
+	
+	private function insertAssociation($table, $items)
 	{
+		foreach($this->supportedImports[$table]['association'] AS $association)
+		{
 			$associatFields = '';
-
-			foreach($fields AS $key => $val)
-				$associatFields .= ' ('.(int)$key.', '.(int)$val.'), ';
-			$associatFields = rtrim($associatFields, ', ');
-			$fieldName = implode('`, `', $this->supportedImports[$table]['association']['foreign_key']);
-			if ($associatFields != '')
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.pSQL($tableAssociation).'` (`'.$fieldName.'`) VALUES '.$associatFields.' ');
+			$associatFieldsName = implode('`, `', $association['fields']);
+			$tableAssociation = $association['table'];
+			$matchTable = $association['matchTable'];
+			if (!empty($items))
+			{
+				$match = array();
+				foreach($matchTable as $mTable)
+				{
+					$tmp = $this->getForeignKey($mTable, array('id_'.$mTable));
+					$match['id_'.$mTable] = $tmp['id_'.$mTable];
+				}
+				foreach($items AS $item)
+					foreach($item AS $key => $val)
+						if ($key == 'association' AND !empty($key))
+							foreach($val[$tableAssociation] AS $k => $v)
+								$associatFields .= ' ('.(int)$match[$association['fields'][0]][$k].', '.(int)$match[$association['fields'][1]][$v].'), ';
+				if ($associatFields != '')
+					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.pSQL($tableAssociation).'` (`'.$associatFieldsName.'`) VALUES '.rtrim($associatFields, ', '));
+			}
+		}
 	}
-
-	/*
-private function formatInsertLang($table, $fields, $identifier)
+	
+	private function saveMatchId($className, $psId, $matchId)
 	{
-		$query = '';
-		return $query;
+		$table = $this->supportedImports[$className]['table'];
+		$moduleName = Tools::getValue('moduleName');
+		$identifier = $this->supportedImports[$className]['identifier'];
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.pSQL($table).' SET `'.pSQL($identifier).'_'.pSQL($moduleName).'` =  '.(int)$matchId.' WHERE `'.pSQL($identifier).'` = '.(int)$psId);
 	}
-*/
-
-	private function alterTable($table)
+	
+	private function replaceForeignKey($item, $table)
+	{
+		if ($table == 'product_attribute')
+			$table2 = 'combination';
+		else
+			$table2 = $table;
+		
+		$foreingKey = $this->supportedImports[$table2]['foreign_key'];
+		$foreingKeyValue = $this->getForeignKey($table, $foreingKey);
+		foreach($foreingKey as $key)
+		{
+			if ($table == 'product' AND $key == 'id_category')
+				$key2 = 'id_category_default';
+			else if ($table == 'customer' AND $key == 'id_group')
+				$key2 = 'id_default_group';
+			else
+				$key2 = $key;
+			if ($item[$key2] != 0)
+				$item[$key2] = $foreingKeyValue[$key][$item[$key2]];
+			elseif (array_key_exists('defaultId', $this->supportedImports[$table]))
+			{
+				//get default id
+				(array_key_exists('defaultId', $this->supportedImports[$table]) ? $defaultId = Configuration::get($this->supportedImports[$table]['defaultId']) :  $defaultId = 0);
+				$item[$key] = $defaultId;
+			}
+		}
+	}
+	
+	private function alterTable($className)
 	{
 		$query ='';
 		$queryTmp = '';
-		$from = $table;
-		$result = array();
-		//change table name nonstandard
-		($table == 'language' ? $from = 'lang' : ($table == 'order' ?  $from = 'orders' : '' ));
-		$this->initDatabaseConnection(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_);
+		$from = $this->supportedImports[$className]['table'];
+		$result = array();		
 		$result = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.pSQL($from).'`');
 		if (!$result)
 			$result = array();
-		foreach ($this->supportedImports[$table]['alterTable'] AS $name => $type)
+		foreach ($this->supportedImports[$className]['alterTable'] AS $name => $type)
 		{
 			$moduleName = Tools::getValue('moduleName');
 			if (!array_key_exists($name.'_'.$moduleName, $result))
@@ -523,19 +548,34 @@ private function formatInsertLang($table, $fields, $identifier)
 			Db::getInstance()->Execute($query);
 		}
 	}
-
-	private function getForeignKey($table, $foreign_key = null)
+	
+	private function updateCat()
 	{
 		$moduleName = Tools::getValue('moduleName');
+		Db::getInstance()->Execute('UPDATE
+									'._DB_PREFIX_.'category c
+									INNER JOIN
+									'._DB_PREFIX_.'category c2
+									ON
+									c.id_parent = c2.id_category_'.pSQL($moduleName).' 
+									SET
+									c.id_parent = c2.id_category
+									WHERE c.id_category_'.pSQL($moduleName).' != 0');
+	}
+	
+	private function getForeignKey($className, $foreign_key = null)
+	{
+		
+		$moduleName = Tools::getValue('moduleName');
 		if (is_null($foreign_key))
-			$foreign_key = $this->supportedImports[$table]['foreign_key'];
+			$foreign_key = $this->supportedImports[$className]['foreign_key'];
 		$match = array();
 		foreach($foreign_key AS $key)
 		{
 			foreach($this->supportedImports AS $table => $conf)
 				if ($conf['identifier'] == $key)
-					$from = $table;
-			$return = Db::getInstance()->ExecuteS('SELECT `'.$key.'_'.$moduleName.'`, `'.$key.'` FROM `'._DB_PREFIX_.$from.'` WHERE `'.$key.'_'.$moduleName.'` != 0');
+					$from = $this->supportedImports[$table]['table'];
+			$return = Db::getInstance()->ExecuteS('SELECT `'.pSQL($key).'_'.pSQL($moduleName).'`, `'.pSQL($key).'` FROM `'._DB_PREFIX_.pSQL($from).'` WHERE `'.pSQL($key).'_'.pSQL($moduleName).'` != 0');
 			foreach($return AS $name => $val)
 				$match[$key][$val[$key.'_'.$moduleName]] = $val[$key];
 		}
@@ -594,6 +634,7 @@ private function formatInsertLang($table, $fields, $identifier)
 							$todo;//TODO remplire avec des données par default
 						else
 							$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is invalid');
+		
 		if ((sizeof($rules['requiredLang']) OR sizeof($rules['sizeLang']) OR sizeof($rules['validateLang'])))
 		{
 
@@ -628,7 +669,7 @@ private function formatInsertLang($table, $fields, $identifier)
 		return $returnErrors;
 	}
 
-	public function checkAndAddLang ($languages)
+	public function checkAndAddLang ($languages, $add = true)
 	{
 		$errors = array();
 		$moduleName = Tools::getValue('moduleName');
@@ -638,7 +679,7 @@ private function formatInsertLang($table, $fields, $identifier)
 			$iso = $language['iso_code'];
 			if (!Language::getIdByIso($iso))
 			{
-				if (Validate::isLangIsoCode($iso))
+				if ($add && Validate::isLangIsoCode($iso))
 				{
 					if (@fsockopen('www.prestashop.com', 80))
 					{
@@ -689,7 +730,6 @@ private function formatInsertLang($table, $fields, $identifier)
 											WHERE  `id_lang` = '.$newId);
 			}
 		}
-
 	}
 
 	public function truncateTable($table)
@@ -781,6 +821,19 @@ private function formatInsertLang($table, $fields, $identifier)
 			$cat = Category::getCategories(1, false, false);
 			foreach($cat AS $i => $categ)
 				Product::cleanPositions((int)($categ['id_category']));
+		}
+	}
+	
+	public function regenerateLevelDepth() {
+		
+		global $cookie;
+		$categories = Category::getCategories(1, false, false);
+		$cat = new Category();
+		foreach($categories as $category)
+		{
+			$cat = new Category((int)$category['id_category']);
+			$subCat = $cat->getSubCategories((int)$category['id_category']);
+			d($subCat);
 		}
 	}
 
