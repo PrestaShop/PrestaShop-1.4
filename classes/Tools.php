@@ -1673,8 +1673,10 @@ FileETag INode MTime Size
 	{
 		global $smarty;
 
-		$smarty->force_compile = (int)(self::$_forceCompile);
-		$smarty->caching = (int)(self::$_caching);
+		if (isset(self::$_forceCompile))
+			$smarty->force_compile = (int)(self::$_forceCompile);
+		if (isset(self::$_caching))
+			$smarty->caching = (int)(self::$_caching);
 	}
 
 	public static function isCallable($function)
