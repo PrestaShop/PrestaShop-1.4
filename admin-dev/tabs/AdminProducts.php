@@ -1313,8 +1313,9 @@ class AdminProducts extends AdminTab
 			$id_category = 1;
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('No products found')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('products') : $this->l('product')))).' '.
 		$this->l('in category').' "'.stripslashes($this->_category->getName()).'"</h3>';
-		echo '<a href="'.$currentIndex.'&id_category='.$id_category.'&add'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new product').'</a>
-		<div style="margin:10px;">';
+		if ($this->tabAccess['add'] === '1')
+			echo '<a href="'.$currentIndex.'&id_category='.$id_category.'&add'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new product').'</a>';
+		echo '<div style="margin:10px;">';
 		$this->displayList($token);
 		echo '</div>';
 	}
