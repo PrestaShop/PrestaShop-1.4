@@ -53,7 +53,7 @@ class GraphArtichow extends ModuleGraphEngine
 	        Module::__construct();
 			
 	        $this->displayName = $this->l('Artichow');
-	        $this->description = $this->l('Artichow is a library which enable the display of simple picture-based graphs using PHP and GD.');
+	        $this->description = $this->l('Artichow is a library which enables the display of simple picture-based graphs using PHP and GD.');
 		}
 	}
 

@@ -35,7 +35,7 @@ class AdminPPreferences extends AdminPreferences
 		$this->table = 'configuration';
  		
  		$this->_fieldsProduct = array(
-			'PS_CATALOG_MODE' => array('title' => $this->l('Catalogue mode:'), 'desc' => $this->l('When active, all features for shopping will be disabled'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
+			'PS_CATALOG_MODE' => array('title' => $this->l('Catalog mode:'), 'desc' => $this->l('When active, all features for shopping will be disabled'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
  			'PS_ORDER_OUT_OF_STOCK' => array('title' => $this->l('Allow ordering out-of-stock product:'), 'desc' => $this->l('Add to cart button is hidden when product is unavailable'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
 			'PS_STOCK_MANAGEMENT' => array('title' => $this->l('Enable stock management:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool', 'js' => array('on' => 'onchange="stockManagementActivationAuthorization()"', 'off' => 'onchange="stockManagementActivationAuthorization()"')),
 			'PS_DISPLAY_QTIES' => array('title' => $this->l('Display available quantities on product page:'), 'desc' => '', 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),

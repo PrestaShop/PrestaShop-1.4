@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd30254803e8db32521d3390131a44da'] = 'Alertes email';
-$_MODULE['<{mailalerts}prestashop>mailalerts_c6ba5355c465de317197693762c97e74'] = 'Envoit des notifications par e-mail aux clients et marchands';
+$_MODULE['<{mailalerts}prestashop>mailalerts_2d51f4a7ab8a12c4f35b507019523b8c'] = 'Envoit des notifications par e-mail aux clients et aux marchands.';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c5a847354ae407403ec0b589e5bcc89e'] = 'Etes-vous sûr de vouloir supprimer toutes les notifications clients ?';
 $_MODULE['<{mailalerts}prestashop>mailalerts_7cb9a154f101c674c945f88dad5c5e28'] = 'Aucun message';
 $_MODULE['<{mailalerts}prestashop>mailalerts_9137796c15dd92e5553c3f29574d0968'] = 'Code de réduction :';
@@ -20,7 +20,7 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_c009546071b59092716ba006f307c6af'] = 'Recevoir une notification si la quantité du produit est en dessous du seuil d\'alerte';
 $_MODULE['<{mailalerts}prestashop>mailalerts_af097c4096dc45754451f6f656dd1ee0'] = 'Seuil d\'alerte:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_65d0578157fd293e96f55f2d9228c07b'] = 'Quantité pour laquelle le produit est considéré hors stock';
-$_MODULE['<{mailalerts}prestashop>mailalerts_6d219dad708e4358c90d1ae2572abcb5'] = 'Envoyer ces emails : ';
+$_MODULE['<{mailalerts}prestashop>mailalerts_4cf0e54bd20f173efae53b6b4d3d8d9a'] = 'Envoyer aux adresses e-mail suivantes :';
 $_MODULE['<{mailalerts}prestashop>mailalerts_16a0cf0a0304df1b8ce3cb363eff0847'] = 'Une adresse email par ligne';
 $_MODULE['<{mailalerts}prestashop>mailalerts_f77ed609e48d550f0166dfbafc102710'] = 'ex :';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c1ee76f076a5b97e3b4b0c0e5703246e'] = 'Mise à jour des réglages impossible';

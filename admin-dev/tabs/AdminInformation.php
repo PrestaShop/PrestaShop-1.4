@@ -77,7 +77,7 @@ class AdminInformation extends AdminTab
 			'customizable_products_dir' => $this->l('Set write permissions on upload folder and subfolders/recursively'),
 			'virtual_products_dir' => $this->l('Set write permissions on download folder and subfolders/recursively'),
 			'fopen' => $this->l('Activate fopen on your server'),
-			'register_globals' => $this->l('Set PHP register global option at off'),
+			'register_globals' => $this->l('Set PHP register global option to off'),
 			'gz' => $this->l('Activate GZIP compression on your server')
 		);
 

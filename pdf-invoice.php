@@ -32,7 +32,7 @@ $cookie = new Cookie('ps');
 if (!$cookie->isLogged() AND !Tools::getValue('secure_key'))
 	Tools::redirect('authentication.php?back=pdf-invoice.php');
 if (!(int)(Configuration::get('PS_INVOICE')))
-	die(Tools::displayError('invoices are disabled on this shop'));
+	die(Tools::displayError('invoices are disabled in this shop'));
 if (isset($_GET['id_order']) AND Validate::isUnsignedId($_GET['id_order']))
 	$order = new Order((int)($_GET['id_order']));
 if (!isset($order) OR !Validate::isLoadedObject($order))

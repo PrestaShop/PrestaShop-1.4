@@ -322,12 +322,12 @@ class Fianetfraud extends Module
 				$this->paymentModules[] = $module;
 			}
 
-			$this->_html .= '<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Payement Configuration').'</legend>
-				<label>'.$this->l('Payement Detail').'</label>
+			$this->_html .= '<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Payment Configuration').'</legend>
+				<label>'.$this->l('Payment Detail').'</label>
 				<div class="margin-form">
 					<table cellspacing="0" cellpadding="0" class="table" ><thead><tr>
 						<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'payementBox[]\', this.checked)" /></th>	
-						<th>'.$this->l('Payement Module').'</th><th>'.$this->l('Payement Type').'</th></tr></thead><tbody>';
+						<th>'.$this->l('Payment Module').'</th><th>'.$this->l('Payment Type').'</th></tr></thead><tbody>';
 
 			foreach ($this->paymentModules as $module)
 			{
@@ -419,7 +419,7 @@ class Fianetfraud extends Module
 		else
 			$orderFianet->billing_user->set_quality_professional();
 
-		$orderFianet->billing_user->titre = (($customer->id_gender == 1) ? $this->l('monsieur') : (($customer->id_gender == 2 ) ? $this->l('madame') : $this->l('monsieur')));
+		$orderFianet->billing_user->titre = (($customer->id_gender == 1) ? $this->l('Mr.') : (($customer->id_gender == 2 ) ? $this->l('Mrs') : $this->l('Mr.')));
 		$orderFianet->billing_user->nom = utf8_decode($address_invoice->lastname);
 		$orderFianet->billing_user->prenom = utf8_decode($address_invoice->firstname);
 		$orderFianet->billing_user->societe = utf8_decode($address_invoice->company);
@@ -457,7 +457,7 @@ class Fianetfraud extends Module
 			else
 				$orderFianet->delivery_user->set_quality_professional();
 				
-			$orderFianet->delivery_user->titre = (($customer->id_gender == 1) ? $this->l('Monsieur') : (($customer->id_gender == 2 ) ? $this->l('Madame') : $this->l('Unknown')));
+			$orderFianet->delivery_user->titre = (($customer->id_gender == 1) ? $this->l('Mr.') : (($customer->id_gender == 2) ? $this->l('Mrs') : $this->l('Unknown')));
 		
 			$orderFianet->delivery_user->nom = utf8_decode($address_delivery->lastname);
 			$orderFianet->delivery_user->prenom = utf8_decode($address_delivery->firstname);

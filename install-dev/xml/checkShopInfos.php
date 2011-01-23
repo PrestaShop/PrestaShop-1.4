@@ -193,8 +193,8 @@ if (isFormValid())
 	
 	$context = stream_context_create(array('http' => array('timeout' => 5)));
 	$localization_file = @file_get_contents('http://www.prestashop.com/download/localization_pack.php?country='.$_GET['countryName'], false, $context);
-	if (!$localization_file)
-		$localization_file = file_get_contents(dirname(__FILE__).'/../../localization/'.strtolower($_GET['countryName']).'.xml');
+	if (!$localization_file AND file_exists(dirname(__FILE__).'/../../localization/'.strtolower($_GET['countryName']).'.xml'))
+		$localization_file = @file_get_contents(dirname(__FILE__).'/../../localization/'.strtolower($_GET['countryName']).'.xml');
 	if ($localization_file)
 	{
 		$localizationPack = new LocalizationPackCore();

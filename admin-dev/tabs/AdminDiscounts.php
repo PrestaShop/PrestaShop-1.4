@@ -245,7 +245,7 @@ class AdminDiscounts extends AdminTab
 					<label>'.$this->l('Behavior not exhausted:').'</label>
 					<div class="margin-form">
 						<select name="behavior_not_exhausted">
-							<option value="1" '.($obj->behavior_not_exhausted === 1 ? 'selected="selected"' : '').'>'.$this->l('Shrunk the voucher to the total order amount').'</option>
+							<option value="1" '.($obj->behavior_not_exhausted === 1 ? 'selected="selected"' : '').'>'.$this->l('Reduce the voucher to the total order amount').'</option>
 							<option value="2" '.($obj->behavior_not_exhausted == 2 ? 'selected="selected"' : '').'>'.$this->l('Create a new voucher with remaining amount').'</option>
 							<option value="3" '.($obj->behavior_not_exhausted == 3 ? 'selected="selected"' : '').'>'.$this->l('Create negative invoice').'</option>
 						</select>

@@ -113,7 +113,7 @@ class AdminMessages extends AdminTab
 					font-family: Arial,Verdana,Helvetica,sans-serif;
 				}
 			</style>
-			<p style="color: #CC0000; font-weight: bold;">'.$this->l('This customer has not finalized its order, however here are its messages:').'</p>';
+			<p style="color: #CC0000; font-weight: bold;">'.$this->l('This customer has not finalized their order, however here are their messages:').'</p>';
 			
 			foreach ($messages AS $message)
 			{				

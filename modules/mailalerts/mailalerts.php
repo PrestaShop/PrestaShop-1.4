@@ -52,7 +52,7 @@ class MailAlerts extends Module
 			$this->_refreshProperties();
 
 		$this->displayName = $this->l('Mail alerts');
-		$this->description = $this->l('Sends e-mails notifications to customers and merchants');
+		$this->description = $this->l('Sends e-mail notifications to customers and merchants.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all customers notifications ?');
 	}
 
@@ -384,10 +384,10 @@ class MailAlerts extends Module
 					<input type="text" name="MA_LAST_QTIES" value="'.(Tools::getValue('MA_LAST_QTIES') != NULL ? (int)(Tools::getValue('MA_LAST_QTIES')) : Configuration::get('MA_LAST_QTIES')).'" size="3" />
 					<p>'.$this->l('Quantity for which a product is regarded as out of stock').'</p>
 				</div>
-				<label>'.$this->l('Send to these emails:').' </label>
+				<label>'.$this->l('Send to these e-mail addresses:').' </label>
 				<div class="margin-form">
 					<div style="float:left; margin-right:10px;">
-						<textarea name="mA_merchant_mails" rows="10" cols="30">'.Tools::getValue('mA_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails)).'</textarea>
+						<textarea name="ma_merchant_mails" rows="10" cols="30">'.Tools::getValue('ma_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails)).'</textarea>
 					</div>
 					<div style="float:left;">
 						'.$this->l('One email address per line').'<br />
@@ -413,7 +413,7 @@ class MailAlerts extends Module
 		}
 		elseif (Tools::isSubmit('submitMAMerchant'))
 		{
-			$emails = strval(Tools::getValue('mA_merchant_mails'));
+			$emails = strval(Tools::getValue('ma_merchant_mails'));
 			if (!$emails OR empty($emails))
 				$this->_html .= '<div class="alert error">'.$this->l('Please type one (or more) email address').'</div>';
 			else

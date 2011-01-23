@@ -31,14 +31,13 @@ $_MODULE['<{shopImporter}prestashop>shopImporter_3adbdb3ac060038aa0e6e6c138ef987
 $_MODULE['<{shopImporter}prestashop>shopImporter_1db7ae20c24e257b6f1a7def365da1ad'] = 'Importation des Categories';
 $_MODULE['<{shopImporter}prestashop>shopImporter_deb10517653c255364175796ace3553f'] = 'Produit';
 $_MODULE['<{shopImporter}prestashop>shopImporter_4bfc4a7632bae0877b798dbd9efc4f70'] = 'Importation des Produits';
-$_MODULE['<{shopImporter}prestashop>shopImporter_d6dd5b5b36770c26db3e12c02c2a37db'] = 'Déclinaisons de Produits';
+$_MODULE['<{shopImporter}prestashop>shopImporter_47ac923d219501859fb68fed8c8db77b'] = 'Déclinaison';
 $_MODULE['<{shopImporter}prestashop>shopImporter_58e2fcec5e04716c627b3e8b9d2955b1'] = 'Importation des Déclinaisons de Produits';
 $_MODULE['<{shopImporter}prestashop>shopImporter_32a6deec3cca312a54d6b8769c9b8dd7'] = 'n\'est pas disponible dans ce module';
 $_MODULE['<{shopImporter}prestashop>shopImporter_1e411d25230ba738b9ae583bcb9b0b57'] = 'Connexion à la base OK';
 $_MODULE['<{shopImporter}prestashop>shopImporter_3596c777cbc8b72d678f34daabc9148b'] = 'Voir les erreurs';
 $_MODULE['<{shopImporter}prestashop>shopImporter_89a399eee52b2a6daaea92eba3e14cad'] = 'Lancer le test d\'import';
 $_MODULE['<{shopImporter}prestashop>shopImporter_72d6d7a1885885bb55a565fd1070581a'] = 'Importer';
-$_MODULE['<{shopImporter}prestashop>shopImporter_e08d2dad1fcd8a0d89e242939b2475bb'] = 'Merci de corriger les erreurs avant de continuer';
 $_MODULE['<{shopImporter}prestashop>shopImporter_a4376f284662da6f3997514ca74597c9'] = 'L\'import est terminé';
 $_MODULE['<{shopImporter}prestashop>shopImporter_596403b61367ca30d6de75812275f9cd'] = 'Suppression des données';
 $_MODULE['<{shopImporter}prestashop>shopImporter_edc186cbc5cc897a79312880ec16c621'] = 'Merci de choisir quelquechose à importer';

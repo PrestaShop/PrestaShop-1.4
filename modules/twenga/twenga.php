@@ -423,7 +423,7 @@ class Twenga extends PaymentModule
 				<p style="text-align:center;"><a href="#" title="'.$this->l('Increase your traffic - 500 offered clicks').'" onclick="$(\'#submitTwengaSubscription\').click(); return false;" ><img src="'.self::$base_path.'/bt_500_clicks.gif" width="364" height="45" /></a></p>
 				<p style="text-align:center;"><a href="'.$tarifs_link.'" class="link" id="twenga_tarif">'.$this->l('Twenga Tarifs').'</a></p>
 				<p>'
-					.$this->l('Your catalogue will be referenced under tens days. After your 500 clicks are used, you will be charged per click by category from 0.05€ to 0.15€. You will access to a complete management panel. You can leave anytime, dealt 1 month notice.')
+					.$this->l('Your catalog will be referenced under tens days. After your 500 clicks are used, you will be charged per click by category from 0.05€ to 0.15€. You will access to a complete management panel. You can leave anytime, dealt 1 month notice.')
 				.'</p>
 			</fieldset>
 			
@@ -455,7 +455,7 @@ class Twenga extends PaymentModule
 				<div class="margin-form">
 					<input type="password" size="38" maxlength="32" name="twenga_password" value="'.self::$obj_twenga->getPassword().'"/>&nbsp;
 				</div><!-- .margin-form -->
-				<div class="margin-form">' .$this->l('Your catalogue will be referenced under tens days on Twenga.').'</div>'
+				<div class="margin-form">' .$this->l('Your catalog will be referenced under tens days on Twenga.').'</div>'
 			.'<input type="submit" value="'.$this->l('save').'" name="submitTwengaLogin" class="button"/>
 			</fieldset>
 			</form><br />';

@@ -61,7 +61,7 @@ class ParentOrderControllerCore extends FrontController
 		}
 		
 		if (Configuration::get('PS_CATALOG_MODE'))
-			$this->errors[] = Tools::displayError('This store not accept new order');
+			$this->errors[] = Tools::displayError('This store has not accepted your new order');
 		
 		if (Tools::isSubmit('submitReorder') AND $id_order = (int)Tools::getValue('id_order'))
 		{

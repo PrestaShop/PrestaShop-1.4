@@ -151,7 +151,7 @@ else /* Else display homepage */
 			</li>
 			<li id="second_block">
 				<h4><a href="index.php?tab=AdminCatalog&id_category=1&addproduct&token='.Tools::getAdminTokenLite('AdminCatalog').'">'.translate('New product').'</a></h4>
-				<p>'.translate('Fill up your catalogue with new articles and attributes.').'</p>
+				<p>'.translate('Fill up your catalog with new articles and attributes.').'</p>
 			</li>
 			<li id="third_block">
 				<h4><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('Statistics').'</a></h4>
@@ -328,7 +328,7 @@ else /* Else display homepage */
 				<li>
 					<p>'.translate('Discover the latest official guide :').'</p>
 					<a href="http://www.prestashop.com/download/Userguide_'.(in_array($isoUser, array('en', 'es', 'fr')) ? $isoUser : 'en').'.pdf" target="_blank">'.translate('User Guide PrestaShop 1.3').'</a>
-					<a href="http://www.prestashop.com/download/Techguide_'.(in_array($isoUser, array('fr', 'es')) ? $isoUser : 'fr').'.pdf" target="_blank">'.translate('Technical Docummentation').'</a>
+					<a href="http://www.prestashop.com/download/Techguide_'.(in_array($isoUser, array('fr', 'es')) ? $isoUser : 'fr').'.pdf" target="_blank">'.translate('Technical Documentation').'</a>
 				</li>
 				<li>
 					<p>'.translate('Use the PrestaShop forum & discover a great community').'</p>

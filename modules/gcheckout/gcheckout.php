@@ -141,7 +141,7 @@ class GCheckout extends PaymentModule
 				<b>'.Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/gcheckout/validation.php</b>
 			</p>
 			<p>- '.$this->l('The callback method must be set to').' <b>XML</b>.</p>
-			<p>- '.$this->l('The orders must be placed with the same currency as your seller account. Carts in other currencies will be converted if the customer choose to pay with this module.').'<p>
+			<p>- '.$this->l('The orders must be placed with the same currency as your seller account. Carts in other currencies will be converted if the customer chooses to pay with this module.').'<p>
 		</fieldset>';
 		
 		return $html;

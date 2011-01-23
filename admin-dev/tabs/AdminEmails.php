@@ -98,7 +98,7 @@ class AdminEmails extends AdminPreferences
 					<input type="hidden" id="PS_MAIL_PASSWD" name="PS_MAIL_PASSWD" value="'.Configuration::get('PS_MAIL_PASSWD').'" />
 					<input type="hidden" id="PS_MAIL_SMTP_PORT" name="PS_MAIL_SMTP_PORT" value="'.Configuration::get('PS_MAIL_SMTP_PORT').'" />
 					<input type="hidden" id="PS_MAIL_SMTP_ENCRYPTION" name="PS_MAIL_SMTP_ENCRYPTION" value="'.Configuration::get('PS_MAIL_SMTP_ENCRYPTION').'" />
-					<input type="button" class="button" name="btEmailTest" id="btEmailTest" value="'.$this->l('Send a e-mail test').'" onClick="verifyMail();" /><br />
+					<input type="button" class="button" name="btEmailTest" id="btEmailTest" value="'.$this->l('Send an e-mail test').'" onClick="verifyMail();" /><br />
 					<p id="mailResultCheck" style="display:none;"></p>
 				</div>
 			</div>

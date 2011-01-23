@@ -431,7 +431,7 @@ class AdminPerformance extends AdminTab
 						<th style="width: 20px; text-align: center">'.$this->l('Id').'</th>
 						<th style="width: 200px; text-align: center">'.$this->l('Ip').'</th>
 						<th style="width: 50px; text-align: center">'.$this->l('Port').'</th>
-						<th style="width: 30px; text-align: right; font-weight:bold;">'.$this->l('Weight').'</th>
+						<th style="width: 30px; text-align: right; font-weight: bold;">'.$this->l('Weight').'</th>
 						<th style="width: 20px; text-align: right;">&nbsp;</th>
 					</tr>';
 				foreach($servers AS $server)
@@ -450,8 +450,7 @@ class AdminPerformance extends AdminTab
 			}
 			echo '
 				</div>
-			</fieldset>
-			';
+			</fieldset>';
 	}
 }
 

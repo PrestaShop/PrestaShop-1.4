@@ -53,7 +53,7 @@ class AdminFeatures extends AdminTab
 			OR isset($_GET['updatefeature_value']) OR isset($_GET['addfeature_value']))
 		{
 			$this->adminFeaturesValues->displayForm($this->token);
-			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back the features list').'</a><br />';
+			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" alt="" /> '.$this->l('Back to the features list').'</a><br />';
 		}
 		else
 			parent::display();

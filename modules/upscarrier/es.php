@@ -48,14 +48,13 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_5b179e75d464a04d8a04111131b3a3ca'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_281b2def1a9737b33f88013c94fdfeb8'] = 'Su dirección (línea 2)';
 $_MODULE['<{upscarrier}prestashop>upscarrier_d30f507473129e70c4b962ceccf175cf'] = 'Código postal';
 $_MODULE['<{upscarrier}prestashop>upscarrier_d0585aac6bb77bb49423b2effca0e067'] = 'Ciudad';
-$_MODULE['<{upscarrier}prestashop>upscarrier_46a2a41cc6e552044816a2d04634545d'] = 'Estado';
-$_MODULE['<{upscarrier}prestashop>upscarrier_cf1580798f7aba85d519afadf1ffd886'] = 'Elija un estado...';
-$_MODULE['<{upscarrier}prestashop>upscarrier_b71d999941ab3d82b9feaf5866e52dff'] = 'Elija un estado entre los de la lista.';
-$_MODULE['<{upscarrier}prestashop>upscarrier_38d6e10572d75aea8ca654b2f42018b5'] = 'No ha especificado el estado';
 $_MODULE['<{upscarrier}prestashop>upscarrier_59716c97497eb9694541f7c3d37b1a4d'] = 'País';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f8f5a972333ee726fbe5bb52409c0ed0'] = 'Elija un país…';
 $_MODULE['<{upscarrier}prestashop>upscarrier_4e9863cf5326e6714388045321665d07'] = 'Elija un país de entre los de la lista.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_459ca2567643baae304008e3bcd44656'] = 'El país no está especificado';
+$_MODULE['<{upscarrier}prestashop>upscarrier_46a2a41cc6e552044816a2d04634545d'] = 'Estado';
+$_MODULE['<{upscarrier}prestashop>upscarrier_cf1580798f7aba85d519afadf1ffd886'] = 'Elija un estado...';
+$_MODULE['<{upscarrier}prestashop>upscarrier_b71d999941ab3d82b9feaf5866e52dff'] = 'Elija un estado entre los de la lista.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_90c59d1697bf80e75304bdde4eb9b65e'] = 'Zona de tarifas';
 $_MODULE['<{upscarrier}prestashop>upscarrier_9b940a1dd2cac4f70b0c7ccf1ceb899c'] = 'Elija una zona de tarifas';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f417d3451d41f1f307b1c6e24491cb57'] = 'Elija una zona de tarifas en la lista';
@@ -88,10 +87,6 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_da42caf26ef85de3d7e48e16ca60b891'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d2ee0603dfce09b57d60db628cde269'] = 'Elija el tipo de paquete…';
 $_MODULE['<{upscarrier}prestashop>upscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Elija en la lista de tipos de paquete el que desea seleccionar por defecto.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_40f0f6eb6565e02a620081e26e0dcd3c'] = 'El tipo de paquete no está configurado';
-$_MODULE['<{upscarrier}prestashop>upscarrier_fe90a2570e05b9e370e84447aa624ea6'] = 'Servicio por defecto';
-$_MODULE['<{upscarrier}prestashop>upscarrier_b69032683fc79e9367334c73a76644f3'] = 'Seleccione un servicio por defecto...';
-$_MODULE['<{upscarrier}prestashop>upscarrier_28c3093c643e2bfb19620f43ea9da39e'] = 'El servicio por defecto se utilizará para probar su configuración (compruebe que su tipo de paquete es compatible con el servicio y con su ublicación)';
-$_MODULE['<{upscarrier}prestashop>upscarrier_bda4a0acbb8787befb7f4f922c2445f8'] = 'El servicio por defecto no está especificado';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servicio de entrega';
 $_MODULE['<{upscarrier}prestashop>upscarrier_d63e135774e62574e2a1921267dad142'] = 'Elija los servicios de entrega que sus clientes activarán por defecto.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_1f045d1181f0066f43b177f8916af0e4'] = 'No ha introducido su login UPS';
@@ -103,7 +98,6 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_e794e452ed4d2cfa13083693a2c8810e'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_805353d2862ea0e658c9ddda871540fa'] = 'No ha introducido el código postal';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5ecc7697a320f93f3ee8fb4048dbd64c'] = 'No ha introducido el país';
 $_MODULE['<{upscarrier}prestashop>upscarrier_ef9bd955e165dfb0207877e9fe180aeb'] = 'No ha introducido la ciudad';
-$_MODULE['<{upscarrier}prestashop>upscarrier_235c3d460f850c74aefbb0972dc6df50'] = 'No ha introducido su servicio por defecto';
 $_MODULE['<{upscarrier}prestashop>upscarrier_47e299a1a983c22c0ac4c3a696e54e1b'] = 'PrestaShop no ha podido conectarse a los webservicios de UPS';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a37b48e8684078c0620a997b3baeee9f'] = 'En esta sección, puede especificar una configuración para cada categoría.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'ID Config';

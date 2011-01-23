@@ -1819,7 +1819,7 @@ class AdminTranslations extends AdminTab
 			$this->displayToggleButton();
 			$this->displayAutoTranslate();
 			echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-			echo '<h3 style="padding:0;margin:0;">'.$this->l('Click to acces of theme translation:').'</h3>';
+			echo '<h3 style="padding:0;margin:0;">'.$this->l('Click to access theme translation:').'</h3>';
 			echo '<ul style="list-style-type:none;padding:0;margin:0 0 10px 0;">';
 			foreach (array_keys($this->modules_translations) as $theme)
 			{

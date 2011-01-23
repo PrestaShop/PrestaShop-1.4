@@ -11,7 +11,6 @@ $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_97d4e28297c641ed0dbe3f0172f17
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_98db77c121d8acdba66ec89626ae896c'] = 'Se ha producido un error durante el proceso.';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_22c4733a9ceb239bf825a0cecd1cfaec'] = 'Un amigo';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_ffa719e6b8863717a9e86579249c7d9b'] = 'te ha enviado un enlace a';
-$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_bc8f7bbaaf366a6e4e174fd80dfece40'] = 'se ha enviado con éxito un email a';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_2107f6398c37b4b9ee1e1b5afb5d3b2a'] = 'Enviar a un amigo';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_20589174124c25654cac3736e737d2a3'] = 'Enviar esta página a un amigo al que podía interesarle este artículo.';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_cc5fd9b9f1cad59fcff97a1f21f34304'] = 'Enviar un mensaje';

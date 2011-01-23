@@ -190,7 +190,7 @@ class AdminGroups extends AdminTab
 
 		if (isset($customers) AND !empty($customers) AND $nbCustomers = sizeof($customers))
 		{
-			echo '<h2>'.$this->l('Customers member of this group').' ('.$nbCustomers.')</h2>
+			echo '<h2>'.$this->l('Customer members of this group').' ('.$nbCustomers.')</h2>
 			<table cellspacing="0" cellpadding="0" class="table widthfull">
 				<tr>';
 			foreach ($this->fieldsDisplay AS $field)
