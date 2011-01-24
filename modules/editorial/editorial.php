@@ -339,10 +339,10 @@ class Editorial extends Module
 	{
 		global $cookie, $smarty;
 		
-		$editorial = new EditorialClass(1, Configuration::get('PS_LANG_DEFAULT'));
+		$editorial = new EditorialClass(1, (int)$cookie->id_lang);
 		$smarty->assign(array(
 			'editorial' => $editorial,
-			'default_lang' => Configuration::get('PS_LANG_DEFAULT'),
+			'default_lang' => (int)$cookie->id_lang,
 			'image_width' => Configuration::get('EDITORIAL_IMAGE_WIDTH'),
 			'image_height' => Configuration::get('EDITORIAL_IMAGE_HEIGHT'),
 			'id_lang' => $cookie->id_lang,
