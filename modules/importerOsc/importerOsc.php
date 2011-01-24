@@ -36,13 +36,13 @@ class importerOsc extends ImportModule
 		$langagues = $this->ExecuteS('SELECT * FROM  `'.addslashes($this->prefix).'languages`');
 		$curencies = $this->ExecuteS('SELECT * FROM  `'.addslashes($this->prefix).'currencies`');
 		
-		$html = '<label style="width:200px">'.$this->l('Default osCommerce language').' : </label>
+		$html = '<label style="width:220px">'.$this->l('Default osCommerce language').' : </label>
 				<div class="margin-form">
 				<select name="defaultOscLang"><option value="------">------</option>';
 				foreach($langagues AS $lang)
 					$html .= '<option value="'.$lang['languages_id'].'">'.$lang['name'].'</option>';
 		$html .= '</select></div>
-				<label style="width:200px">'.$this->l('Default osCommerce currency').' : </label>
+				<label style="width:220px">'.$this->l('Default osCommerce currency').' : </label>
 				<div class="margin-form">
 				<select name="defaultOscCurrency"><option value="------">------</option>';
 				foreach($curencies AS $curency)

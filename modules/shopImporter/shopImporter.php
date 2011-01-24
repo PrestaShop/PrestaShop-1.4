@@ -209,7 +209,7 @@ class shopImporter extends ImportModule
 					var databaseOk = "'.$this->l('Connection to the database OK').'";
 					var showErrors = "'.$this->l('Show errors').'";
 					var testImport = "'.$this->l('Test import process').'";
-					var import = "'.$this->l('Import').'";
+					var runImport = "'.$this->l('Run Import').'";
 					var importHasErrors = "'.$this->l('Errors occurred during import. For more details click on "Show errors"').'"
 					var importFinish = "'.$this->l('The import is completed').'"
 					var truncateTable = "'.$this->l('Remove data').'"
@@ -345,7 +345,7 @@ class shopImporter extends ImportModule
 				$importModule = new $moduleName();
 				$importModule->server = Tools::getValue('server');
 				$importModule->user = Tools::getValue('user');
-				$importModule->password = Tools::getValue('password');
+				$importModule->passwd = Tools::getValue('password');
 				$importModule->database = Tools::getValue('database');
 				$importModule->prefix = Tools::getValue('prefix');
 				$defaultLanguage = new Language((int)Configuration::get('PS_LANG_DEFAULT'));

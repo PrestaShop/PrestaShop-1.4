@@ -305,7 +305,7 @@ var shopImporter = {
 			}
 			else
 			{
-				$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="submitImport" id="submitImport" class="button" value="'+import+'">');
+				$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="submitImport" id="submitImport" class="button" value="'+runImport+'">');
 				$('#submitImport').fadeIn('slow', function() {
 					$(this).unbind('click').click(function() {
 					$.scrollTo($("#steps"), 300 , {
