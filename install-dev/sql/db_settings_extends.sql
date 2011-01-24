@@ -8,67 +8,6 @@ INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (2, 1),(2, 2)
 
 UPDATE `PREFIX_configuration` SET `value` = '2' WHERE `name` = 'PS_CARRIER_DEFAULT';
 
-/* Taxes */
-
-INSERT INTO `PREFIX_tax` (`id_tax`, `rate`, `active`) VALUES
-(1, 19.6, 0),(2, 5.5, 0),(3, 17.5, 0),(4, 19, 0),(5, 22, 0),(6, 18, 0),(7, 19, 0),(8, 20, 0),(9, 24, 0),(10, 20, 0),
-(11, 25, 0),(12, 23, 0),(13, 25, 0),(14, 20, 0),(15, 19, 0),(16, 25, 0),(17, 21, 0),(18, 21, 0),(19, 20, 0),(20, 20, 0),
-(21, 23, 0),(22, 21, 0),(23, 23, 0),(24, 18, 0),(25, 7.6, 0),(26, 10, 0),(27, 21, 0),(28, 19, 0),(29, 20, 0),(30, 16, 0),
-(31, 18, 0),(32, 5, 0),(33, 12.5, 0),(34, 3, 0),(35, 10, 0),(36, 14, 0),(37, 12.5, 0),(38, 10, 0),(39, 20, 0),(40, 16, 0),
-(41, 10, 0),(42, 17, 0),(43, 25, 0),(44, 7, 0),(45, 17, 0),(46, 12, 0),(47, 21, 0),(48, 7, 0), (49, 2.1, 1);
-
-INSERT INTO `PREFIX_tax_lang` (`id_tax`, `id_lang`, `name`) VALUES
-(1, 1, 'VAT FR 19.6%'),(1, 2, 'TVA FR 19.6%'),(1, 3, 'IVA FR 19.6%'),
-(2, 1, 'VAT FR 5.5%'),(2, 2, 'TVA FR 5.5%'),(2, 3, 'IVA FR 5.5%'),
-(3, 1, 'VAT UK 17.5%'),(3, 2, 'TVA UK 17.5%'),(3, 3, 'IVA UK 17.5%'),
-(4, 1, 'VAT DE 19%'),(4, 2, 'TVA DE 19%'),(4, 3, 'IVA DE 19%'),
-(5, 1, 'VAT PL 22%'),(5, 2, 'TVA PL 22%'),(5, 3, 'IVA PL 22%'),
-(6, 1, 'VAT ES 18%'),(6, 2, 'TVA ES 18%'),(6, 3, 'IVA ES 18%'),
-(7, 1, 'VAT NL 19%'),(7, 2, 'TVA NL 19%'),(7, 3, 'IVA NL 19%'),
-(8, 1, 'VAT CZ 20%'),(8, 2, 'TVA CZ 20%'),(8, 3, 'IVA CZ 20%'),
-(9, 1, 'VAT RO 24%'),(9, 2, 'TVA RO 24%'),(9, 3, 'IVA RO 24%'),
-(10, 1, 'VAT IT 20%'),(10, 2, 'TVA IT 20%'),(10, 3, 'IVA IT 20%'),
-(11, 1, 'VAT HU 25%'),(11, 2, 'TVA HU 25%'),(11, 3, 'IVA HU 25%'),
-(12, 1, 'VAT PT 23%'),(12, 2, 'TVA PT 23%'),(12, 3, 'IVA PT 23%'),
-(13, 1, 'VAT SE 25%'),(13, 2, 'TVA SE 25%'),(13, 3, 'IVA SE 25%'),
-(14, 1, 'VAT BG 20%'),(14, 2, 'TVA BG 20%'),(14, 3, 'IVA BG 20%'),
-(15, 1, 'VAT SK 19%'),(15, 2, 'TVA SK 19%'),(15, 3, 'IVA SK 19%'),
-(16, 1, 'VAT DK 25%'),(16, 2, 'TVA DK 25%'),(16, 3, 'IVA DK 25%'),
-(17, 1, 'VAT BE 21%'),(17, 2, 'TVA BE 21%'),(17, 3, 'IVA BE 21%'),
-(18, 1, 'VAT LT 21%'),(18, 2, 'TVA LT 21%'),(18, 3, 'IVA LT 21%'),
-(19, 1, 'VAT SI 20%'),(19, 2, 'TVA SI 20%'),(19, 3, 'IVA SI 20%'),
-(20, 1, 'VAT EE 20%'),(20, 2, 'TVA EE 20%'),(20, 3, 'IVA EE 20%'),
-(21, 1, 'VAT GR 23%'),(21, 2, 'TVA GR 23%'),(21, 3, 'IVA GR 23%'),
-(22, 1, 'VAT LV 21%'),(22, 2, 'TVA LV 21%'),(22, 3, 'IVA LV 21%'),
-(23, 1, 'VAT FI 23%'),(23, 2, 'TVA FI 23%'),(23, 3, 'IVA FI 23%'),
-(24, 1, 'VAT RU 18%'),(24, 2, 'TVA RU 18%'),(24, 3, 'IVA RU 18%'),
-(25, 1, 'VAT CH 7.6%'),(25, 2, 'TVA CH 7.6%'),(25, 3, 'IVA CH 7.6%'),
-(26, 1, 'VAT AU 10%'),(26, 2, 'TVA AU 10%'),(26, 3, 'IVA AU 10%'),
-(27, 1, 'VAT AR 21%'),(27, 2, 'TVA AR 21%'),(27, 3, 'IVA AR 21%'),
-(28, 1, 'VAT CL 19%'),(28, 2, 'TVA CL 19%'),(28, 3, 'IVA CL 19%'),
-(29, 1, 'VAT UA 20%'),(29, 2, 'TVA UA 20%'),(29, 3, 'IVA UA 20%'),
-(30, 1, 'VAT MX 16%'),(30, 2, 'TVA MX 16%'),(30, 3, 'IVA MX 16%'),
-(31, 1, 'VAT TR 18%'),(31, 2, 'TVA TR 18%'),(31, 3, 'IVA TR 18%'),
-(32, 1, 'VAT CA 5%'),(32, 2, 'TVA CA 5%'),(32, 3, 'IVA CA 5%'),
-(33, 1, 'VAT IN 12.5%'),(33, 2, 'TVA IN 12.5%'),(33, 3, 'IVA IN 12.5%'),
-(34, 1, 'VAT IR 3%'),(34, 2, 'TVA IR 3%'),(34, 3, 'IVA IR 3%'),
-(35, 1, 'VAT ID 10%'),(35, 2, 'TVA ID 10%'),(35, 3, 'IVA ID 10%'),
-(36, 1, 'VAT ZA 14%'),(36, 2, 'TVA ZA 14%'),(36, 3, 'IVA ZA 14%'),
-(37, 1, 'VAT NZ 12.5%'),(37, 2, 'TVA NZ 12.5%'),(37, 3, 'IVA NZ 12.5%'),
-(38, 1, 'VAT MY 10%'),(38, 2, 'TVA MY 10%'),(38, 3, 'IVA MY 10%'),
-(39, 1, 'VAT AT 20%'),(39, 2, 'TVA AT 20%'),(39, 3, 'IVA AT 20%'),
-(40, 1, 'VAT IL 16%'),(40, 2, 'TVA IL 16%'),(40, 3, 'IVA IL 16%'),
-(41, 1, 'VAT VN 10%'),(41, 2, 'TVA VN 10%'),(41, 3, 'IVA VN 10%'),
-(42, 1, 'VAT ME 17%'),(42, 2, 'TVA ME 17%'),(42, 3, 'IVA ME 17%'),
-(43, 1, 'VAT NO 25%'),(43, 2, 'TVA NO 25%'),(43, 3, 'IVA NO 25%'),
-(44, 1, 'VAT TH 7%'),(44, 2, 'TVA TH 7%'),(44, 3, 'IVA TH 7%'),
-(45, 1, 'VAT CN 17%'),(45, 2, 'TVA CN 17%'),(45, 3, 'IVA CN 17%'),
-(46, 1, 'VAT VE 12%'),(46, 2, 'TVA VE 12%'),(46, 3, 'IVA VE 12%'),
-(47, 1, 'VAT IE 21%'),(47, 2, 'TVA IE 21%'),(47, 3, 'IVA IE 21%'),
-(48, 1, 'VAT SG 7%'),(48, 2, 'TVA SG 7%'),(48, 3, 'IVA SG 7%'),
-(49, 1, 'VAT SG 2.1%'),(49, 2, 'TVA FR 2.1%'),(49, 3, 'IVA FR 2.1%');
-
-
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 	('MB_PAY_TO_EMAIL', 'testmerchant@moneybookers.com', NOW(), NOW()),
 	('MB_SECRET_WORD', 'mbtest', NOW(), NOW()),
@@ -269,8 +208,8 @@ INSERT INTO `PREFIX_product_lang` (`id_product`, `id_lang`, `description`, `desc
 (8, 3, '<p><strong>Características</strong></p>\r\n<ul>\r\n<li> Cuero suave resistente</li>\r\n<li>Acceso a la tecla Hold</li>\r\n<li>Cierre magnético</li>\r\n<li>Acceso al Dock Conector</li>\r\n<li>Salva pantallas</li>\r\n</ul>', '<p>Este estuche de cuero de última moda garantiza una completa protección contra los arañazos y los pequeños contratiempos de la vida diaria. Su diseño elegante y compacto te permite meter tu Ipod directamente en tu bolsillo o en tu bolso.</p>', 'funda-cuero-ipod-nano-negro-chocolate', '', '', '', 'Leather Case (iPod nano) - Negro / Chocolate', 'Disponible', ''),
 (9, 3, '<p>Los auriculares SE210, ligeros y elegantes, están basados en la tecnología de los monitores personales que los músicos profesionales utilizan en carretera y que los ingenieros de Shure han perfeccionado. También están provistos de una salida audio de gama extendida exenta de todo ruido exterior. <br /> <br /> <strong>Creado para un aislamiento sonoro</strong></p>\r\n<p>Las almohadillas provistas de un aislamiento sonoro bloquean más del 90% del ruido ambiente. Combinadas con un diseño ergonómico atractivo y un cable modular, minimizan las intrusiones del mundo exterior y te permiten concentrarte en tu música. Creados para los apasionados por la música que quieren que su aparato audio móvil evolucione, los auriculares  SE210 te permitirán llevar la tecnología allí donde tú vayas. <br /> <br /> <strong>Micro-transductor alta definición </strong><br /> Desarrollados para poder tener una audición de calidad durante los desplazamientos, los auriculares SE210 utilizan un único transductor con un armazón equilibrado para poder disfrutar de una gama audio extendida. ¿El resultado ? Un confort audio increíble que restituye cada detalle de un espectáculo en directo. <br /> <br /> <strong>El kit universal Deluxe incluye los siguientes elementos :</strong><br /> - Almohadillas para aislamiento sonoro<br /> Las almohadillas para el aislamiento sonoro tienen una doble función : bloquear el ruido ambiente y garantizar una estabilidad y un confort personalizados. Como cada oreja es diferente el kit universal Deluxe incluye tres tallas (S, M, L) de almohadillas de espuma y flexibles. Elige la talla y el estilo de almohadilla que mejor te convenga : un buen aislamiento es un factor clave tanto para optimizar el aislamiento sonoro y la respuesta de los bajos como para aumentar el confort durante una audición prolongada. <br /> <br /> - Cable modular</p>\r\n<p>Basándose en los comentarios de los numerosos usuarios, los ingenieros de Shure han creado una solución de cable separable para permitir un grado de personalización sin precedentes. El cable de 1 metro te permite adaptar el confort en función de la actividad del momento y de la aplicación. <br /> <br /> - Estuche para el transporte</p>\r\n<p>Además de las almohadillas de aislamiento sonoro y del cable modular, los auriculares SE210 están provistos de un estuche de transporte compacto y resistente para guardar los auriculares de manera práctica y sin dificultad. <br /> - Garantía límite de dos años <br /> Cada solución SE210 tiene una garantía piezas y mano de obra de dos años.</p>\r\n<p><br /> <em><strong>Características técnicas</strong></em></p>\r\n<ul>\r\n<li>Tipo de transductor : micro-transductor alta definición</li>\r\n<li>Sensibilidad (1 mW) : presión acústica de 114 dB/mW</li>\r\n<li>Impedancia : (à 1 kHz) : 26 W</li>\r\n<li>Gama de frecuencias : 25 Hz ˆ 18,5 kHz</li>\r\n<li>Longitud del cable / con alargador : 45 cm / 136 cm</li>\r\n</ul>\r\n<p><br /> <strong><em>Contenido de la caja</em></strong></p>\r\n<ul>\r\n<li>Altavoces Shure SE210</li>\r\n<li>Kit universal Deluxe (almohadillas de aislamiento sonoro, cable modular, estuche de transporte)</li>\r\n</ul>', '<p>Los auriculares con aislamiento ergonómicos y ligeros ofrecen la reproducción más fiel proveniente de fuentes audio estéreo móviles o de salón.</p>', 'auriculares-aislantes-del-sonido-shure-se210', '', '', '', 'Auriculares aislantes del sonido Shure SE210', 'Disponible', '');
 
-INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `priority`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`) VALUES
-(1, 0, 0, 0, 0, 0, 0, 1, 0.05, 'percentage', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `price`, `from_quantity`, `reduction`, `reduction_type`, `from`, `to`) VALUES
+(1, 0, 0, 0, 0, 0, 1, 0.05, 'percentage', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES
 (2, 1, 1, 2, 3, 1, NOW(), NOW(), 0),(3, 1, 1, 3, 4, 1, NOW(), NOW(), 1),(4, 1, 1, 4, 5, 1, NOW(), NOW(), 2);
