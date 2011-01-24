@@ -88,6 +88,8 @@ else /* Else display homepage */
 	$protocol = (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') ? 'https' : 'http';
 	$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
 	$isoUser = Language::getIsoById(intval($cookie->id_lang));
+	$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+
 	echo '<div id="adminHeader">';
 	echo '<div class="path_bar"><a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>';
 	echo ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />'.translate('Dashboard');
@@ -182,7 +184,6 @@ else /* Else display homepage */
 		AND dr.`time_start` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'
 		AND dr.`time_end` BETWEEN \''.date('Y-m').'-01 00:00:00\' AND \''.date('Y-m').'-31 23:59:59\'');
 		$results = array_merge($result, array_merge($result2, $result3));
-		$currency = Currency::getCurrency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 		echo '
 		<div class="table_info">
 			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.translate('View more').'</a> '.translate('Month Statistics').' </h5>
@@ -271,7 +272,6 @@ else /* Else display homepage */
 
 	define('PS_BASE_URI', __PS_BASE_URI__);
 	$chart = new Chart();
-	$currency = new Currency(1);
 	$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT total_paid / conversion_rate as total_converted, invoice_date
 		FROM '._DB_PREFIX_.'orders o
