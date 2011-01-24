@@ -666,6 +666,7 @@ function verifyShopInfos()
 		"&infosNotification="+ ( ($("#infosNotification:checked").length > 0) ? "on" : "off" )+
 		"&countryName="+encodeURIComponent($("select#infosCountry option:selected").attr('rel'))+
 		urlLanguages+
+		"&catalogMode="+ encodeURIComponent($("input[name=catalogMode]:checked").val())+
 		"&infosMailMethod=" + ((smtpChecked) ? "smtp" : "native")+
 		"&smtpSrv="+ encodeURIComponent($("input#smtpSrv").val())+
 		"&smtpLogin="+ encodeURIComponent($("input#smtpLogin").val())+
@@ -692,6 +693,7 @@ function verifyShopInfos()
 			else if (!ajaxRefreshField(10, "resultInfosNotification", fieldsList, "infosNotification")) validShopInfos = false;
 			else if (!ajaxRefreshField(5, "resultInfosFirstname", fieldsList, "validateFirstname")) validShopInfos = false;
 			else if (!ajaxRefreshField(6, "resultInfosName", fieldsList, "validateName")) validShopInfos = false;
+			else if (!ajaxRefreshField(12, "resultCatalogMode", fieldsList, "validateCatalogMode")) validCatalogMode = false;
 			else
 			{
 				$('#endShopName').html($('input#infosShop').val());

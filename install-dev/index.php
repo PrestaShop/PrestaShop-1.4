@@ -67,11 +67,13 @@ define('PS_BASE_URI_ABSOLUTE', 'http://'.ToolsInstall::getHttpHost(false, true).
 $oldversion = false;
 $sameVersions = false;
 $tooOld = true;
+$installOfOldVersion = false;
 if(file_exists(INSTALL_PATH.'/../config/settings.inc.php')){
 	include(INSTALL_PATH.'/../config/settings.inc.php');
 	$oldversion =_PS_VERSION_;
 	$tooOld = (version_compare($oldversion, MINIMUM_VERSION_TO_UPDATE) == -1);
 	$sameVersions = (version_compare($oldversion, INSTALL_VERSION) == 0);
+	$installOfOldVersion = (version_compare($oldversion, INSTALL_VERSION) == 1);
 }
 
 include(INSTALL_PATH.'/classes/LanguagesManager.php');
@@ -186,6 +188,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[49] = "<?php echo lang('Your database server does not support the utf-8 charset.'); ?>";
 		txtError[50] = "<?php echo lang('Your MySQL server doesn\'t support this engine, please use another one like MyISAM'); ?>";
 		txtError[51] = "<?php echo lang('The file /img/logo.jpg is not writable, please CHMOD 777 this file'); ?>";
+		txtError[52] = "<?php echo lang('Invalid catalog mode'); ?>";
 		txtError[999] = "<?php echo lang('No error code available.'); ?>";
 		//upgrader
 		txtError[27] = "<?php echo lang('This installer is too old.'); ?>";
@@ -282,8 +285,8 @@ if ($lm->getIncludeTradFilename())
 		
 		<h3><?php echo lang('Installation method')?></h3>
 		<form id="formSetMethod" action="<?php $_SERVER['REQUEST_URI']; ?>" method="post">
-			<p><input <?php echo (!($oldversion AND !$tooOld AND !$sameVersions)) ? 'checked="checked"' : '' ?> type="radio" value="install" name="typeInstall" id="typeInstallInstall"/><label for="typeInstallInstall"><?php echo lang('Installation : complete install of the PrestaShop Solution')?></label></p>
-			<p <?php echo ($oldversion AND !$tooOld AND !$sameVersions) ? '' : 'class="disabled"'; ?>><input <?php echo ($oldversion AND !$tooOld AND !$sameVersions) ? 'checked="checked"' : 'disabled="disabled"'; ?> type="radio" value="upgrade" name="typeInstall" id="typeInstallUpgrade"/><label <?php echo ($oldversion === false) ? 'class="disabled"' : ''; ?> for="typeInstallUpgrade"><?php echo lang('Upgrade: get the latest stable version!')?> <?php echo ($oldversion === false) ? lang('(no old version detected)') : ("(".(  ($tooOld) ? lang('the already installed version detected is too old, no more update available') : lang('installed version detected').' : '.$oldversion    ).")") ?></label></p>
+			<p><input <?php echo (!($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion)) ? 'checked="checked"' : '' ?> type="radio" value="install" name="typeInstall" id="typeInstallInstall"/><label for="typeInstallInstall"><?php echo lang('Installation : complete install of the PrestaShop Solution')?></label></p>
+			<p <?php echo ($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion) ? '' : 'class="disabled"'; ?>><input <?php echo ($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion) ? 'checked="checked"' : 'disabled="disabled"'; ?> type="radio" value="upgrade" name="typeInstall" id="typeInstallUpgrade"/><label <?php echo ($oldversion === false) ? 'class="disabled"' : ''; ?> for="typeInstallUpgrade"><?php echo lang('Upgrade: get the latest stable version!')?> <?php echo ($oldversion === false) ? lang('(no old version detected)') : ("(".(  ($tooOld) ? lang('the already installed version detected is too old, no more update available') : ($installOfOldVersion ? lang('the already installed version detected is too recent, no update available') : lang('installed version detected').' : '.$oldversion    )).")") ?></label></p>
 		</form>
 		<h2><?php echo lang('License Agreement')?></h2>
 		<div style="height:200px; border:1px solid #ccc; margin-bottom:8px; padding:5px; background:#fff; overflow: auto; overflow-x:hidden; overflow-y:scroll;">
@@ -515,6 +518,14 @@ if ($lm->getIncludeTradFilename())
 					<span id="resultInfosLogo" class="result"></span>
 					<p class="userInfos aligned"><?php echo lang('recommended dimensions: 230px X 75px'); ?></p>
 					<p id="alignedLogo"><img id="uploadedImage" src="<?php echo PS_BASE_URI ?>img/logo.jpg" alt="Logo" /></p>
+				</div>
+				<div class="field">
+					<label for="catalogMode" class="aligned"><?php echo lang('Catalog mode:'); ?></label>
+					<input type="radio" name="catalogMode" id="catalogMode_1" value="1" />
+					<label for="catalogMode_1"><?php echo lang('Yes'); ?></label>
+					<input type="radio" name="catalogMode" id="catalogMode_0" value="0" checked="checked"/>
+					<label for="catalogMode_0"><?php echo lang('No'); ?></label>
+					<p class="userInfos aligned"><?php echo lang('If you activate this feature, all purchases features are going to be disabled. You can activate this feature later in your back office'); ?></p>
 				</div>
 				
 				<div class="field">
