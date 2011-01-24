@@ -275,6 +275,7 @@ class ProductCore extends ObjectModel
 			$this->tax_name = 'deprecated'; // The applicable tax may be BOTH the product one AND the state one (moreover this variable is some deadcode)
 			$this->manufacturer_name = Manufacturer::getNameById((int)($this->id_manufacturer));
 			$this->supplier_name = Supplier::getNameById((int)($this->id_supplier));
+			self::$_tax_rules_group[$this->id] = $this->id_tax_rules_group;
 			if (is_object($cart) AND $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != NULL)
 				$this->tax_rate = Tax::getProductTaxRate($this->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 			else
@@ -2841,9 +2842,6 @@ class ProductCore extends ObjectModel
 
 	}
 
-
-
-
 	public static function getIdTaxRulesGroupByIdProduct($id_product)
 	{
         if (!isset(self::$_tax_rules_group[$id_product]))
@@ -2859,6 +2857,4 @@ class ProductCore extends ObjectModel
 
 	    return self::$_tax_rules_group[$id_product];
 	}
-
 }
-
