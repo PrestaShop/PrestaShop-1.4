@@ -827,7 +827,7 @@ class ValidateCore
 		-3 : CIF error
 		-4 : NIE error
 		*/
-		
+
 		if (!$dni)
 			return 1;
 		
@@ -836,8 +836,8 @@ class ValidateCore
 			return 0;
 		
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT id_customer
-		FROM `'._DB_PREFIX_.'customer` 
+		SELECT `id_address`
+		FROM `'._DB_PREFIX_.'address` 
 		WHERE `dni` = \''.pSQL($dni).'\'');
 		if($result)
 			return -1;

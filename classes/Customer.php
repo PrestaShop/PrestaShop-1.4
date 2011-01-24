@@ -53,9 +53,6 @@ class CustomerCore extends ObjectModel
 	/** @var string e-mail */
 	public 		$email;
 
-	/** @var string dni */
-	public		$dni;
-
 	/** @var boolean Newsletter subscription */
 	public 		$newsletter;
 
@@ -96,9 +93,9 @@ class CustomerCore extends ObjectModel
 	protected $tables = array ('customer');
 
  	protected 	$fieldsRequired = array('lastname', 'passwd', 'firstname', 'email');
- 	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'dni' => 16, 'note' => 65000);
+ 	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'note' => 65000);
  	protected 	$fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
-		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'dni' => 'isDniBool', 'note' => 'isCleanHtml', 'is_guest' => 'isBool');
+		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'note' => 'isCleanHtml', 'is_guest' => 'isBool');
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
@@ -129,7 +126,6 @@ class CustomerCore extends ObjectModel
 		$fields['firstname'] = pSQL($this->firstname);
 		$fields['birthday'] = pSQL($this->birthday);
 		$fields['email'] = pSQL($this->email);
-		$fields['dni'] = pSQL($this->dni);
 		$fields['newsletter'] = (int)($this->newsletter);
 		$fields['newsletter_date_add'] = pSQL($this->newsletter_date_add);
 		$fields['ip_registration_newsletter'] = pSQL($this->ip_registration_newsletter);
@@ -166,8 +162,6 @@ class CustomerCore extends ObjectModel
 		$this->birthday = (empty($this->years) ? $this->birthday : (int)$this->years.'-'.(int)$this->months.'-'.(int)$this->days);
 		if ($this->newsletter AND !$this->newsletter_date_add)
 			$this->newsletter_date_add = date('Y-m-d H:i:s');
-		if ($this->dni === 0)
-			$this->dni = NULL;
 	 	return parent::update(true);
 	}
 
@@ -565,18 +559,14 @@ class CustomerCore extends ObjectModel
 		WHERE o.valid = 1 AND o.`id_customer` = '.(int)($this->id));
 	}
 
+	/**
+	 * @deprecated
+	 * @return bool
+	 */
 	public function getNeedDNI()
 	{
-		$countries = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT `id_country`
-		FROM `'._DB_PREFIX_.'address`
-		WHERE `id_customer` = '.(int)($this->id).'
-		AND `deleted` = 0
-		');
-
-		foreach($countries AS $country)
-			if (Country::getNeedIdentifcationNumber((int)($country['id_country'])))
-				return true;
+		Tools::displayAsDeprecated();
+		
 		return false;
 	}
 

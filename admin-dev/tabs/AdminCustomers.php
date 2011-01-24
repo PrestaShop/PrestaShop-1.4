@@ -101,9 +101,6 @@ class AdminCustomers extends AdminTab
 									$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
 							}
 							
-							if ($object->getNeedDNI() AND Tools::getValue('dni') != NULL AND Validate::isDni(Tools::getValue('dni')) <= 0)
-								$this->_errors[] = Tools::displayError('identification number is incorrect or already used');
-							
 							if (!is_array($groupList) OR sizeof($groupList) == 0)
 								$this->_errors[] = Tools::displayError('customer must be in at least one group');
 							else
@@ -206,7 +203,7 @@ class AdminCustomers extends AdminTab
 			<span style="font-weight: bold; font-size: 14px;">'.$customer->firstname.' '.$customer->lastname.'</span>
 			<img src="../img/admin/'.($customer->id_gender == 2 ? 'female' : ($customer->id_gender == 1 ? 'male' : 'unknown')).'.gif" style="margin-bottom: 5px" /><br />
 			<a href="mailto:'.$customer->email.'" style="text-decoration: underline; color: blue">'.$customer->email.'</a><br /><br />
-			'.$this->l('ID:').' '.sprintf('%06d', $customer->id).($customer->dni != NULL ? ' | '.$this->l('DNI:').' '.$customer->dni : '').'<br />
+			'.$this->l('ID:').' '.sprintf('%06d', $customer->id).'<br />
 			'.$this->l('Registration date:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
 			'.$this->l('Last visit:').' '.($customerStats['last_visit'] ? Tools::displayDate($customerStats['last_visit'], (int)($cookie->id_lang), true) : $this->l('never')).'<br />
 			'.($countBetterCustomers != '-' ? $this->l('Rank: #').' '.(int)$countBetterCustomers.'<br />' : '').'
@@ -582,7 +579,6 @@ class AdminCustomers extends AdminTab
 		
 		$obj = $this->loadObject(true);
 		
-		if ($obj->id) $need_identifcation_number = $obj->getNeedDNI();
 		$birthday = explode('-', $this->getFieldValue($obj, 'birthday'));
 		$customer_groups = Tools::getValue('groupBox', $obj->getGroups());
 		$groups = Group::getGroups($this->_defaultFormLanguage, true);
@@ -657,12 +653,6 @@ class AdminCustomers extends AdminTab
 						foreach ($years as $v)
 							echo '<option value="'.$v.'" '.($sl_year == $v ? 'selected="selected"' : '').'>'.$v.'</option>';
 					echo '</select>
-				</div>';
-				if (isset($need_identifcation_number) AND $need_identifcation_number) 
-					echo '<label for="dni">'.$this->l('Identification Number').'</label>
-				<div class="margin-form">
-					<input type="text" name="dni" id="dni" value="'.htmlentities($this->getFieldValue($obj, 'dni'), ENT_COMPAT, 'UTF-8').'" />
-					<p>'.$this->l('DNI / NIF / NIE').'</p>
 				</div>';
 				echo '<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">

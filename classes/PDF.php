@@ -451,8 +451,8 @@ class PDFCore extends PDF_PageGroupCore
 		}
 
 		$pdf->Cell($width, 10, $delivery_address->phone, 0, 'L');
-		if($invoice_customer->dni != NULL)
-			$pdf->Cell($width, 10, self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), $invoice_customer->dni), 0, 'L');
+		if($invoice_address->dni != NULL)
+			$pdf->Cell($width, 10, self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), $invoice_address->dni), 0, 'L');
 		if (!empty($delivery_address->phone_mobile))
 		{
 			$pdf->Ln(5);

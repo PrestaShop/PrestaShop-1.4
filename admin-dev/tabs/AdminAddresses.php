@@ -292,6 +292,11 @@ class AdminAddresses extends AdminTab
 					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 				</div>
+				<label for="dni">'.$this->l('Identification Number').'</label>
+				<div class="margin-form">
+					<input type="text" name="dni" id="dni" value="'.htmlentities($this->getFieldValue($obj, 'dni'), ENT_COMPAT, 'UTF-8').'" />
+					<p>'.$this->l('DNI / NIF / NIE').'</p>
+				</div>
 				<label>'.$this->l('Address').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="address1" value="'.htmlentities($this->getFieldValue($obj, 'address1'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>

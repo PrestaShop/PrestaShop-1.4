@@ -78,9 +78,12 @@ class AddressCore extends ObjectModel
 	/** @var string Mobile phone number */
 	public 		$phone_mobile;
 	
-	/** @var string Mobile phone number */
+	/** @var string VAT number */
 	public 		$vat_number;
 
+	/** @var string DNI number */
+	public		$dni;
+	
 	/** @var string Object creation date */
 	public 		$date_add;
 
@@ -96,13 +99,13 @@ class AddressCore extends ObjectModel
 	protected	$fieldsRequired = array('id_country', 'alias', 'lastname', 'firstname', 'address1', 'city');
 	protected	$fieldsSize = array('alias' => 32, 'company' => 32, 'lastname' => 32, 'firstname' => 32,
 									'address1' => 128, 'address2' => 128, 'postcode' => 12, 'city' => 64,
-									'other' => 300, 'phone' => 16, 'phone_mobile' => 16);
+									'other' => 300, 'phone' => 16, 'phone_mobile' => 16, 'dni' => 16);
 	protected	$fieldsValidate = array('id_customer' => 'isNullOrUnsignedId', 'id_manufacturer' => 'isNullOrUnsignedId',
 										'id_supplier' => 'isNullOrUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isNullOrUnsignedId',
 										'alias' => 'isGenericName', 'company' => 'isGenericName', 'lastname' => 'isName','vat_number' => 'isGenericName',
 										'firstname' => 'isName', 'address1' => 'isAddress', 'address2' => 'isAddress',
 										'postcode' => 'isPostCode', 'city' => 'isCityName', 'other' => 'isMessage',
-										'phone' => 'isPhoneNumber', 'phone_mobile' => 'isPhoneNumber', 'deleted' => 'isBool');
+										'phone' => 'isPhoneNumber', 'phone_mobile' => 'isPhoneNumber', 'deleted' => 'isBool', 'dni' => 'isDniBool');
 
 	protected 	$table = 'address';
 	protected 	$identifier = 'id_address';
@@ -187,6 +190,7 @@ class AddressCore extends ObjectModel
 		$fields['phone'] = pSQL($this->phone);
 		$fields['phone_mobile'] = pSQL($this->phone_mobile);
 		$fields['vat_number'] = pSQL($this->vat_number);
+		$fields['dni'] = pSQL($this->dni);
 		$fields['deleted'] = (int)($this->deleted);
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);

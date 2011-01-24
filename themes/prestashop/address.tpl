@@ -43,6 +43,9 @@ countriesNeedZipCode = new Array();
 			countries[{$country.id_country|intval}].push({ldelim}'id' : '{$state.id_state}', 'name' : '{$state.name|escape:'htmlall':'UTF-8'}'{rdelim});
 		{/foreach}
 	{/if}
+	{if $country.need_identification_number}
+		countriesNeedIDNumber.push({$country.id_country|intval});
+	{/if}	
 	{if isset($country.need_zip_code)}
 		countriesNeedZipCode[{$country.id_country|intval}] = {$country.need_zip_code};
 	{/if}
@@ -102,6 +105,11 @@ $(function(){ldelim}
 			<label for="lastname">{l s='Last name'}</label>
 			<input type="text" id="lastname" name="lastname" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname}{else}{if isset($address->lastname)}{$address->lastname|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 			<sup>*</sup>
+		</p>
+		<p class="required text dni">
+			<label for="dni">{l s='Identification number'}</label>
+			<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{else}{if isset($address->dni)}{$address->dni|escape:'htmlall':'UTF-8'}{/if}{/if}" />
+			<span class="form_info">{l s='DNI / NIF / NIE'}</span>
 		</p>
 		<p class="required text">
 			<label for="address1">{l s='Address'}</label>

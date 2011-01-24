@@ -42,7 +42,6 @@ class IdentityControllerCore extends FrontController
 		parent::preProcess();
 		
 		$customer = new Customer((int)($this->cookie->id_customer));
-		$need_identification_number = $customer->getNeedDNI();
 
 		if (sizeof($_POST))
 		{
@@ -70,8 +69,6 @@ class IdentityControllerCore extends FrontController
 					$this->errors[] = Tools::displayError('your current password is not that one');
 				elseif ($_POST['passwd'] != $_POST['confirmation'])
 					$this->errors[] = Tools::displayError('password and confirmation do not match');
-				elseif ($need_identification_number AND Tools::getValue('dni') != NULL AND Validate::isDni(Tools::getValue('dni')) <= 0)
-					$this->errors[] = Tools::displayError('identification number is incorrect or already used');
 				else
 				{
 					$prev_id_default_group = $customer->id_default_group;
@@ -104,7 +101,6 @@ class IdentityControllerCore extends FrontController
 
 		/* Generate years, months and days */
 		$this->smarty->assign(array(
-			'need_identification_number' => $need_identification_number,
 			'years' => Tools::dateYears(),
 			'sl_year' => $birthday[0],
 			'months' => Tools::dateMonths(),

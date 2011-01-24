@@ -42,9 +42,9 @@ function updateNeedIDNumber(suffix)
 	var idCountry = parseInt($('select#id_country'+(suffix !== undefined ? '_'+suffix : '')).val());
 	
 	if ($.inArray(idCountry, countriesNeedIDNumber) >= 0)
-		$('fieldset.dni').slideDown('slow');
+		$('.dni').slideDown('slow');
 	else
-		$('fieldset.dni').slideUp('fast');
+		$('.dni').slideUp('fast');
 }
 
 function updateZipCode(suffix)
