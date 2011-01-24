@@ -77,9 +77,19 @@ else
 
 	$cookie = new Cookie('ps');
 	Tools::setCookieLanguage();
-	if (!$cookie->isLogged())
+	if (!$cookie->isLogged() AND !Tools::getValue('secure_key') AND !Tools::getValue('id_order'))
 		Tools::redirect('authentication.php?back=get-file.php&key='.$key);
-
+	elseif (Tools::getValue('secure_key') AND Tools::getValue('id_order'))
+	{
+		$order = new Order((int)Tools::getValue('id_order'));
+		if (!Validate::isLoadedObject($order))
+			displayError('Invalid key.');
+		if ($order->secure_key != Tools::getValue('secure_key'))
+			displayError('Invalid key.');
+	}
+	else
+		Tools::redirect('authentication.php?back=get-file.php&key='.$key);
+	
 	/* Key format: <sha1-filename>-<hashOrder> */
 	$tmp = explode('-', $key);
 	if (sizeof($tmp) != 2)
