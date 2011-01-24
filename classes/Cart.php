@@ -1504,11 +1504,27 @@ class CartCore extends ObjectModel
 		return $result;
 	}
 
-
 	public function deleteAssociations()
 	{
 		return (Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'cart_product`
 				WHERE `id_cart` = '.(int)($this->id)) !== false);
+	}
+
+	/**
+	 * isGuestCartByCartId
+	 * 
+	 * @param int $id_cart
+	 * @return bool true if cart has been made by a guest customer
+	 */
+	static public function isGuestCartByCartId($id_cart)
+	{
+		if (!(int)$id_cart)
+			return false;
+		return (bool)Db::getInstance()->getValue('
+			SELECT `is_guest` 
+			FROM `'._DB_PREFIX_.'customer` cu 
+			LEFT JOIN `'._DB_PREFIX_.'cart` ca ON (ca.`id_customer` = cu.`id_customer`)
+			WHERE ca.`id_cart` = '.(int)$id_cart);
 	}
 }
