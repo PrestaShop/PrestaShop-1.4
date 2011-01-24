@@ -115,6 +115,25 @@ class AdminGeolocalization extends AdminTab
 				</div>
 			</fieldset>
 		</form>
+		
+		<form method="POST" action="'.$currentIndex.'&token='.Tools::getValue('token').'">
+			<fieldset style="margin-top:10px;">
+				<legend><img src="../img/admin/world.gif" alt="" /> '.$this->l('Whitelist of IP address').'</legend>
+				
+				<div class="hint" style="display:block;margin-bottom:20px;">
+					'.$this->l('You can add many IP addresses, these addresses will be allowed to see your shop forever (e.g. Google bots IP).').'
+				</div>
+				
+				<label for="PS_GEOLOCALIZATION_WHITELIST">'.$this->l('Allowed IP addresses:').'</label>
+				<div class="margin-form">
+					<textarea name="PS_GEOLOCALIZATION_WHITELIST" id="PS_GEOLOCALIZATION_WHITELIST" cols="80" rows="30">'.Tools::htmlentitiesUTF8(str_replace(';', "\n", Configuration::get('PS_GEOLOCALIZATION_WHITELIST'))).'</textarea>
+				</div>
+				
+				<div class="margin-form">
+					<input type="submit" class="button" name="submitGeolocalizationWhitelist" value="'.$this->l('Save').'" />
+				</div>
+			</fieldset>
+		</form>
 		';
 	}
 	
@@ -142,6 +161,17 @@ class AdminGeolocalization extends AdminTab
 				Configuration::updateValue('PS_GEOLOCALIZATION_BEHAVIOR', (!(int)(Tools::getValue('PS_GEOLOCALIZATION_BEHAVIOR')) ? _PS_GEOLOCALIZATION_NO_CATALOG_ : _PS_GEOLOCALIZATION_NO_ORDER_));
 				Configuration::updateValue('PS_GEOLOCALIZATION_NA_BEHAVIOR', (int)Tools::getValue('PS_GEOLOCALIZATION_NA_BEHAVIOR'));
 				Configuration::updateValue('PS_ALLOWED_COUNTRIES', implode(';', Tools::getValue('countries')));
+				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			}
+		}
+		
+		if (Tools::isSubmit('submitGeolocalizationWhitelist'))
+		{
+			if (!Validate::isCleanHtml(Tools::getValue('PS_GEOLOCALIZATION_WHITELIST')))
+				$this->_errors[] = Tools::displayError('Invalid whitelist');
+			else
+			{	
+				Configuration::updateValue('PS_GEOLOCALIZATION_WHITELIST', str_replace("\n", ';', str_replace("\r", '', Tools::getValue('PS_GEOLOCALIZATION_WHITELIST'))));
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 		}

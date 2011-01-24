@@ -104,7 +104,7 @@ class FrontControllerCore
 					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
 					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
 					
-					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))))
+					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND !self::isInWhitelistForGeolocalization())
 					{
 						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
 							$restricted_country = true;
@@ -121,7 +121,7 @@ class FrontControllerCore
 					}
 				}
 				
-				if (is_object($record) AND (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
+				if (isset($record) AND isset($cookie->iso_code_country) AND is_object($record) AND (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
 				{
 					/* Update defaultCountry */
 					$defaultCountry = new Country($id_country);
@@ -493,5 +493,17 @@ class FrontControllerCore
 			$smarty->registerPlugin($type, $function, $params); // Use Smarty 3 API calls, only if PHP version > 5.1.2
 		else
 			$smarty->{'register_'.$type}($function, $params); // or keep a backward compatibility if PHP version < 5.1.2
+	}
+	
+	private static function isInWhitelistForGeolocalization()
+	{
+		$allowed = false;
+		$userIp = Tools::getRemoteAddr();
+		$ips = explode(';', Configuration::get('PS_GEOLOCALIZATION_WHITELIST'));
+		if (is_array($ips) AND sizeof($ips))
+			foreach ($ips AS $ip)
+				if (!empty($ip) AND strpos($userIp, $ip) === 0)
+					$allowed = true;
+		return $allowed;
 	}
 }
