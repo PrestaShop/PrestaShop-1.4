@@ -69,6 +69,7 @@ class CartCore extends ObjectModel
 	public 		$date_upd;
 
 	private static $_nbProducts = NULL;
+	private static $_isVirtualCart = array();
 
 	protected	$fieldsRequired = array('id_currency', 'id_lang');
 	protected	$fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
@@ -76,7 +77,7 @@ class CartCore extends ObjectModel
 		'id_carrier' => 'isUnsignedId', 'recyclable' => 'isBool', 'gift' => 'isBool', 'gift_message' => 'isMessage');
 
 	private		$_products = NULL;
-	private		$_totalWeight = NULL;
+	private static $_totalWeight = array();
 	private		$_taxCalculationMethod = PS_TAX_EXC;
 	private	static $_discounts = NULL;
 	private	static $_discountsLite = NULL;
@@ -460,6 +461,8 @@ class CartCore extends ObjectModel
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
 		self::$_nbProducts = NULL;
+		if (array_key_exists($this->id, self::$_totalWeight))
+			unset(self::$_totalWeight[$this->id]);
 		if ((int)$quantity <= 0)
 			return $this->deleteProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
 		elseif (!$product->available_for_order OR Configuration::get('PS_CATALOG_MODE'))
@@ -1084,31 +1087,26 @@ class CartCore extends ObjectModel
 	*/
 	public function getTotalWeight()
 	{
-		if (!$this->id)
-			return 0;
-
-		if ($this->_totalWeight)
-			return $this->_totalWeight;
-
-		$result = Db::getInstance()->getRow('
-		SELECT SUM((p.`weight` + pa.`weight`) * cp.`quantity`) as nb
-		FROM `'._DB_PREFIX_.'cart_product` cp
-		LEFT JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
-		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON cp.`id_product_attribute` = pa.`id_product_attribute`
-		WHERE (cp.`id_product_attribute` IS NOT NULL AND cp.`id_product_attribute` != 0)
-		AND cp.`id_cart` = '.(int)($this->id));
-		$result2 = Db::getInstance()->getRow('
-		SELECT SUM(p.`weight` * cp.`quantity`) as nb
-		FROM `'._DB_PREFIX_.'cart_product` cp
-		LEFT JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
-		WHERE (cp.`id_product_attribute` IS NULL OR cp.`id_product_attribute` = 0)
-		AND cp.`id_cart` = '.(int)($this->id));
-
-		$this->_totalWeight = round((float)($result['nb']) + (float)($result2['nb']), 3);
-
-		return $this->_totalWeight;
+		if (!array_key_exists($this->id, self::$_totalWeight))
+		{
+			$result = Db::getInstance()->getRow('
+			SELECT SUM((p.`weight` + pa.`weight`) * cp.`quantity`) as nb
+			FROM `'._DB_PREFIX_.'cart_product` cp
+			LEFT JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
+			LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON cp.`id_product_attribute` = pa.`id_product_attribute`
+			WHERE (cp.`id_product_attribute` IS NOT NULL AND cp.`id_product_attribute` != 0)
+			AND cp.`id_cart` = '.(int)($this->id));
+			$result2 = Db::getInstance()->getRow('
+			SELECT SUM(p.`weight` * cp.`quantity`) as nb
+			FROM `'._DB_PREFIX_.'cart_product` cp
+			LEFT JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
+			WHERE (cp.`id_product_attribute` IS NULL OR cp.`id_product_attribute` = 0)
+			AND cp.`id_cart` = '.(int)($this->id));
+			self::$_totalWeight[$this->id] = round((float)($result['nb']) + (float)($result2['nb']), 3); 
+		}
+		return self::$_totalWeight[$this->id];
 	}
-
+	
 	/**
 	* Check discount validity
 	*
@@ -1306,25 +1304,26 @@ class CartCore extends ObjectModel
 	*/
 	public function isVirtualCart()
 	{
-		$products = $this->getProducts();
+		if (!isset(self::$_isVirtualCart[$this->id]))
+		{
+			$products = $this->getProducts();
 
-		if (!sizeof($products))
-			return false;
+			if (!sizeof($products))
+				return false;
 
-		$list = '';
-		foreach ($products AS $product)
-			$list .= (int)($product['id_product']).',';
-		$list = rtrim($list, ',');
+			$list = '';
+			foreach ($products AS $product)
+				$list .= (int)($product['id_product']).',';
+			$list = rtrim($list, ',');
 
-		$n = (int)Db::getInstance()->getValue('
-		SELECT COUNT(`id_product_download`) n
-		FROM `'._DB_PREFIX_.'product_download`
-		WHERE `id_product` IN ('.pSQL($list).') AND `active` = 1');
-
-		if ($n < sizeof($products))
-			return false;
-
-		return true;
+			$n = (int)Db::getInstance()->getValue('
+			SELECT COUNT(`id_product_download`) n
+			FROM `'._DB_PREFIX_.'product_download`
+			WHERE `id_product` IN ('.pSQL($list).') AND `active` = 1');
+			
+			self::$_isVirtualCart[$this->id] = ($n == sizeof($products));
+		}
+		return self::$_isVirtualCart[$this->id];
 	}
 
 	static public function getCartByOrderId($id_order)
@@ -1513,4 +1512,3 @@ class CartCore extends ObjectModel
 				WHERE `id_cart` = '.(int)($this->id)) !== false);
 	}
 }
-
