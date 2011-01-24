@@ -300,7 +300,7 @@ abstract class PrepaidServices extends PaymentModule
 		{
 			$currencies_configuration .= '
 			<tr>
-				<td class="currency_label">'.$this->getL('configuration_in').$currency['name'].' '.$currency['sign'].'</td>
+				<td class="currency_label">'.$this->getL('configuration_in').' '.$currency['name'].' '.$currency['sign'].'</td>
 				<td>
 					<label>'.$this->getL('merchant_id').'</label>
 					<div class="margin-form">
@@ -398,7 +398,7 @@ abstract class PrepaidServices extends PaymentModule
 						}
 					}
 
-					if ($mid_certificat['type'] != 'application/octet-stream' || substr($mid_certificat['name'], -4) != '.pem')
+					if (substr($mid_certificat['name'], -4) != '.pem')
 						$errors .= $this->displayError($this->getL('invalid_file').' ['.$currency['iso_code'].']');
 				}
 			}

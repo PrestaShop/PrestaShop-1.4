@@ -300,7 +300,7 @@ abstract class PrepaidServices extends PaymentModule
 		{
 			$currencies_configuration .= '
 			<tr>
-				<td class="currency_label">'.$this->getL('configuration_in').$currency['name'].' '.$currency['sign'].'</td>
+				<td class="currency_label">'.$this->getL('configuration_in').' '.$currency['name'].' '.$currency['sign'].'</td>
 				<td>
 					<label>'.$this->getL('merchant_id').'</label>
 					<div class="margin-form">
