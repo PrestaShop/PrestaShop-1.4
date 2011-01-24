@@ -1689,7 +1689,7 @@ class AdminProducts extends AdminTab
 		<h4>'.$this->l('Add a new specific price').'</h4>
 
 		<input type="hidden" name="sp_id_shop" value="0" />
-		<label>'.$this->l('Currency:').'</label>
+		<label>'.$this->l('For:').'</label>
 		<div class="margin-form">
 			<select name="sp_id_currency" id="spm_currency_0" onchange="changeCurrencySpecificPrice(0);">
 				<option value="0">'.$this->l('All currencies').'</option>';
@@ -1697,20 +1697,14 @@ class AdminProducts extends AdminTab
 				echo '<option value="'.(int)($currency['id_currency']).'">'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
 			echo '
 			</select>
-		</div>
-
-		<label>'.$this->l('Country:').'</label>
-		<div class="margin-form">
+            &gt;
 			<select name="sp_id_country">
 				<option value="0">'.$this->l('All countries').'</option>';
 			foreach ($countries as $country)
 				echo '<option value="'.(int)($country['id_country']).'">'.Tools::htmlentitiesUTF8($country['name']).'</option>';
 			echo '
 			</select>
-		</div>
-
-		<label>'.$this->l('Group:').'</label>
-		<div class="margin-form">
+            &gt;
 			<select name="sp_id_group">
 				<option value="0">'.$this->l('All groups').'</option>';
 			foreach ($groups as $group)
@@ -1719,24 +1713,31 @@ class AdminProducts extends AdminTab
 			</select>
 		</div>
 
-		<label>'.$this->l('Price (tax excl.):').'</label>
+		<label>'.$this->l('Available from:').'</label>
 		<div class="margin-form">
-			<span id="spm_currency_sign_pre_0">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span>
+			<input type="text" name="sp_from" value="" style="text-align: center" id="sp_from" /><span style="font-weight:bold; color:#000000; font-size:12px"> '.$this->l('to').'</span>
+			<input type="text" name="sp_to" value="" style="text-align: center" id="sp_to" />
+		</div>
+
+		<label>'.$this->l('Starting at').'</label>
+		<div class="margin-form">
+			<input type="text" name="sp_from_quantity" value="1" size="3" /> <span style="font-weight:bold; color:#000000; font-size:12px">'.$this->l('unity').'</span>
+		</div>
+
+		<label>'.$this->l('Product price (tax excl.):').'</label>
+		<div class="margin-form">
+			<span id="spm_currency_sign_pre_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span>
 			<input type="text" name="sp_price" value="0" size="11" />
-			<span id="spm_currency_sign_post_0">'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</span>
-			<span id="sp_current_ht_price"> ('.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').(float)($product->price).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').')</span>
+			<span id="spm_currency_sign_post_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</span>
+			<span id="sp_current_ht_price" > ('.$this->l('Current:').' '.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').(float)($product->price).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').')</span>
 			<div class="hint clear" style="display:block;">
 				'.$this->l('You can set this value at 0 in order to apply the default price').'
 			</div>
 		</div>
 
-		<label>'.$this->l('Quantity:').'</label>
+		<label>'.$this->l('Apply a discount of:').'</label>
 		<div class="margin-form">
-			<input type="text" name="sp_from_quantity" value="1" size="3" />
-		</div>
-
-		<label>'.$this->l('Discount type:').'</label>
-		<div class="margin-form">
+    		<input type="text" name="sp_reduction" value="0.00" size="11" />
 			<select name="sp_reduction_type">
 				<option selected="selected">---</option>
 				<option value="amount">'.$this->l('Amount').'</option>
@@ -1745,24 +1746,15 @@ class AdminProducts extends AdminTab
 			'.$this->l('(if set to "amount", the tax is included)').'
 		</div>
 
-		<label>'.$this->l('Discount value:').'</label>
 		<div class="margin-form">
-			<input type="text" name="sp_reduction" value="0.00" size="11" />
+			<input type="submit" name="submitPriceAddition" value="'.$this->l('Add').'" class="button" />
 		</div>
 
 		';
 		include_once('functions.php');
 		includeDatepicker(array('sp_from', 'sp_to'), true);
 		echo '
-		<label>'.$this->l('Available from:').'</label>
-		<div class="margin-form">
-			<input type="text" name="sp_from" value="" style="text-align: center" id="sp_from" /> '.$this->l('to').'
-			<input type="text" name="sp_to" value="" style="text-align: center" id="sp_to" />
-		</div>
 
-		<div class="margin-form">
-			<input type="submit" name="submitPriceAddition" value="'.$this->l('Add').'" class="button" />
-		</div>
 		';
 	}
 
