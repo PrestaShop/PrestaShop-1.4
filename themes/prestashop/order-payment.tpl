@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -40,6 +40,10 @@
 
 {include file="$tpl_dir./errors.tpl"}
 
+
+{$HOOK_TOP_PAYMENT}
+
+
 {if $HOOK_PAYMENT}
 	<h4>{l s='Please select your preferred payment method to pay the amount of'}&nbsp;<span class="price">{convertPrice price=$total_price}</span> {if $taxes_enabled}{l s='(tax incl.)'}{/if}</h4><br />
 	{$HOOK_PAYMENT}
@@ -48,3 +52,4 @@
 {/if}
 
 <p class="cart_navigation"><a href="{$link->getPageLink('order.php', true)}?step=2" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a></p>
+

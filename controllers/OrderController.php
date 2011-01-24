@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -37,13 +37,13 @@ class OrderControllerCore extends ParentOrderController
 		if (!$this->nbProducts)
 			$this->step = -1;
 	}
-	
+
 	public function preProcess()
 	{
 		global $isVirtualCart, $orderTotal;
 
 		parent::preProcess();
-			
+
 		/* If some products have disappear */
 		if (!$this->cart->checkQuantities())
 		{
@@ -53,10 +53,10 @@ class OrderControllerCore extends ParentOrderController
 
 		/* Check minimal amount */
 		$currency = Currency::getCurrency((int)$this->cart->id_currency);
-		
+
 		$orderTotal = $this->cart->getOrderTotal();
 		$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
-		
+
 		if ($orderTotal < $minimalPurchase)
 		{
 			$this->step = 0;
@@ -68,17 +68,17 @@ class OrderControllerCore extends ParentOrderController
 			Tools::redirect('authentication.php?back=order.php?step='.$this->step);
 
 		$this->smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
-		
+
 		if ($this->nbProducts)
 			$this->smarty->assign('virtual_cart', $isVirtualCart);
 	}
-	
+
 	public function displayHeader()
 	{
 		if (!Tools::getValue('ajax'))
 			parent::displayHeader();
 	}
-	
+
 	public function process()
 	{
 		parent::process();
@@ -121,11 +121,11 @@ class OrderControllerCore extends ParentOrderController
 				break;
 		}
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
-		
+
 		switch ((int)($this->step))
 		{
 			case -1:
@@ -145,13 +145,13 @@ class OrderControllerCore extends ParentOrderController
 				break;
 		}
 	}
-	
+
 	public function displayFooter()
 	{
 		if (!Tools::getValue('ajax'))
 			parent::displayFooter();
 	}
-	
+
 	/* Order process controller */
 	public function autoStep()
 	{
@@ -204,15 +204,15 @@ class OrderControllerCore extends ParentOrderController
 	protected function processCarrier()
 	{
 		global $orderTotal;
-		
+
 		parent::_processCarrier();
-		
+
 		if (sizeof($this->errors))
 		{
 			$this->smarty->assign('errors', $this->errors);
 			$this->_assignCarrier();
 			$this->step = 2;
-			$this->displayContent(); 
+			$this->displayContent();
 			include(dirname(__FILE__).'/../footer.php');
 			exit;
 		}
@@ -223,7 +223,7 @@ class OrderControllerCore extends ParentOrderController
 	protected function _assignAddress()
 	{
 		parent::_assignAddress();
-		
+
 		$this->smarty->assign('cart', $this->cart);
 		if ($this->cookie->is_guest)
 			Tools::redirect('order.php?step=2');
@@ -242,7 +242,7 @@ class OrderControllerCore extends ParentOrderController
 		parent::_assignCarrier();
 		// Assign wrapping and TOS
 		$this->_assignWrappingAndTOS();
-		
+
 		$this->smarty->assign('is_guest' ,(isset($this->cookie->is_guest) ? $this->cookie->is_guest : 0));
 	}
 
@@ -259,7 +259,8 @@ class OrderControllerCore extends ParentOrderController
 
 		$this->cookie->checkedTOS = '1';
 		$this->smarty->assign(array(
-			'HOOK_PAYMENT' => Module::hookExecPayment(), 
+		    'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
+			'HOOK_PAYMENT' => Module::hookExecPayment(),
 			'total_price' => (float)($orderTotal),
 			'taxes_enabled' => (int)(Configuration::get('PS_TAX'))
 		));
