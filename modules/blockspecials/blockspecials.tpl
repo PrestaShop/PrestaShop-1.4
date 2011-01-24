@@ -44,8 +44,6 @@
 	        			<span class="reduction">(-{$specific_prices.reduction * 100|floatval}%)</span>
 	            	{/if}
 	            {/if}
-
-	            {if isset($special.reduction_percent) && $special.reduction_percent > 0}<span class="reduction">(-{$special.reduction_percent}%)</span>{/if}
 				<span class="price">{if !$priceDisplay}{displayWtPrice p=$special.price}{else}{displayWtPrice p=$special.price_tax_exc}{/if}</span>
 			</li>
 		</ul>
