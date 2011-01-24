@@ -25,7 +25,7 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-class MemcachedCore extends Cache
+class MCachedCore extends Cache
 {
 	private $_memcacheObj;
 	private $_isConnected = false;
