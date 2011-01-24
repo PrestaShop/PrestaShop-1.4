@@ -32,7 +32,6 @@ class SpecificPriceCore extends ObjectModel
 	public	$id_currency;
 	public	$id_country;
 	public	$id_group;
-	public	$priority;
 	public	$price;
 	public	$from_quantity;
 	public	$reduction;
@@ -41,7 +40,7 @@ class SpecificPriceCore extends ObjectModel
 	public	$to;
 
  	protected 	$fieldsRequired = array('id_product', 'id_shop', 'id_currency', 'id_country', 'id_group', 'price', 'from_quantity', 'reduction', 'reduction_type', 'from', 'to');
- 	protected 	$fieldsValidate = array('id_product' => 'isUnsignedId', 'id_shop' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_group' => 'isUnsignedId', 'priority' => 'isUnsignedInt', 'price' => 'isPrice', 'from_quantity' => 'isUnsignedInt', 'reduction' => 'isPrice', 'reduction_type' => 'isReductionType', 'from' => 'isDateFormat', 'to' => 'isDateFormat');
+ 	protected 	$fieldsValidate = array('id_product' => 'isUnsignedId', 'id_shop' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_group' => 'isUnsignedId', 'price' => 'isPrice', 'from_quantity' => 'isUnsignedInt', 'reduction' => 'isPrice', 'reduction_type' => 'isReductionType', 'from' => 'isDateFormat', 'to' => 'isDateFormat');
 
 	protected 	$table = 'specific_price';
 	protected 	$identifier = 'id_specific_price';
@@ -56,7 +55,6 @@ class SpecificPriceCore extends ObjectModel
 		$fields['id_currency'] = (int)($this->id_currency);
 		$fields['id_country'] = (int)($this->id_country);
 		$fields['id_group'] = (int)($this->id_group);
-		$fields['priority'] = (int)($this->priority);
 		$fields['price'] = (float)($this->price);
 		$fields['from_quantity'] = (int)($this->from_quantity);
 		$fields['reduction'] = (float)($this->reduction);
@@ -66,18 +64,11 @@ class SpecificPriceCore extends ObjectModel
 		return $fields;
 	}
 
-	public function add($autodate = true, $nullValues = false)
-	{
-		$maxPriority = (int)DB::getInstance()->getValue('SELECT MAX(`priority`) FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$this->id_product);
-		$this->priority = $maxPriority == 0 ? 0 : $maxPriority + 1;
-		return parent::add($autodate, $nullValues);
-	}
-
 	static public function getByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
-			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product.' ORDER BY `priority`
-		');
+			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product)
+		);
 	}
 
 	static public function getIdsByProductId($id_product)
@@ -150,7 +141,7 @@ class SpecificPriceCore extends ObjectModel
 	public static function deletePriorities()
 	{
 	    return Db::getInstance()->Execute('
-	    DELETE FROM `'._DB_PREFIX_.'specific_price_priority`
+	    TRUNCATE `'._DB_PREFIX_.'specific_price_priority`
 	    ');
 	}
 
@@ -249,3 +240,4 @@ class SpecificPriceCore extends ObjectModel
 		return $this->add();
 	}
 }
+
