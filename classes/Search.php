@@ -375,10 +375,11 @@ class SearchCore
 					Search::saveIndex($queryArray, $queryArray2);
 			}
 			
-			$productsArray[] = (int)$product['id_product'];
+			if (!in_array($product['id_product'], $productsArray))
+				$productsArray[] = (int)$product['id_product'];
 
-			// Force save every 10 products in order to avoid overloading MySQL
-			if (++$countProducts % 10 == 0) // If you change "10" here, you must change the limit in setProductsAsIndexed()
+			// Force save every 20 products in order to avoid overloading MySQL
+			if (++$countProducts % 20 == 0) // If you change "20" here, you must change the limit in setProductsAsIndexed()
 				Search::setProductsAsIndexed($productsArray);
 		}
 		// One last save is done at the end in order to save what's left
@@ -392,7 +393,7 @@ class SearchCore
 	private static function setProductsAsIndexed(array &$products)
 	{
 		if (count($products))
-			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT 10');
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT 20');
 	}
 
 	// $queryArray and $queryArray2 are automatically emptied in order to be reused immediatly

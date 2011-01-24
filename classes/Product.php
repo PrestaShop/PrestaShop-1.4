@@ -1800,20 +1800,19 @@ class ProductCore extends ObjectModel
 	* @param integer $id_product_attribute Product attribute id (optional)
 	* @return integer Available quantities
 	*/
-	public static function getQuantity($id_product, $id_product_attribute = NULL)
+	public static function getQuantity($id_product, $id_product_attribute = NULL, $cache_is_pack = NULL)
 	{
 		$lang = Configuration::get('PS_LANG_DEFAULT');
-		if (Pack::isPack((int)($id_product), (int)($lang)) AND !Pack::isInStock((int)($id_product), (int)($lang)))
+		if (((int)$cache_is_pack OR ($cache_is_pack === NULL AND Pack::isPack((int)$id_product, (int)$lang))) AND !Pack::isInStock((int)$id_product, (int)$lang))
 			return 0;
 
-		$result = Db::getInstance()->getRow('
+		return Db::getInstance()->getValue('
 		SELECT IF(COUNT(id_product_attribute), SUM(pa.`quantity`), p.`quantity`) as total
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` AS pa ON pa.`id_product` = p.`id_product`
 		WHERE p.`id_product` = '.(int)($id_product).'
 		'.(isset($id_product_attribute) ? 'AND `id_product_attribute` = '.(int)($id_product_attribute) : '').'
 		GROUP BY p.`id_product`');
-		return $result['total'];
 	}
 
 	/**
@@ -2101,7 +2100,7 @@ class ProductCore extends ObjectModel
 	static public function searchByName($id_lang, $query)
 	{
 		$result = Db::getInstance()->ExecuteS('
-		SELECT p.`id_product`, pl.`name`, pl.`link_rewrite`, p.`weight`, p.`active`, p.`ecotax`, i.`id_image`, p.`reference`,
+		SELECT p.`id_product`, pl.`name`, pl.`link_rewrite`, p.`weight`, p.`active`, p.`ecotax`, i.`id_image`, p.`reference`, p.`cache_is_pack`
 		il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
@@ -2125,7 +2124,7 @@ class ProductCore extends ObjectModel
 		foreach ($result AS $k => $row)
 		{
 			$row['price'] = Product::getPriceStatic($row['id_product'], true, NULL, 2);
-			$row['quantity'] = Product::getQuantity($row['id_product']);
+			$row['quantity'] = Product::getQuantity($row['id_product'], NULL, $row['cache_is_pack']);
 			$resultsArray[] = $row;
 		}
 		return $resultsArray;
@@ -2413,12 +2412,11 @@ class ProductCore extends ObjectModel
 		else
 			$row['price'] = Tools::ps_round(Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6), 2);
 
-
 		$row['reduction'] = Product::getPriceStatic((int)($row['id_product']), (bool)$usetax, (int)($row['id_product_attribute']), 6, NULL, true, true, 1, true, NULL, NULL, NULL, $specific_prices);
         $row['specific_prices'] = $specific_prices;
 		$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		if ($row['id_product_attribute'])
-			$row['quantity'] = Product::getQuantity((int)$row['id_product']);
+			$row['quantity'] = Product::getQuantity((int)$row['id_product'], $row['id_product_attribute'], isset($row['cache_is_pack']) ? $row['cache_is_pack'] : NULL);
 		$row['id_image'] = Product::defineProductImage($row);
 		$row['features'] = Product::getFrontFeaturesStatic((int)($id_lang), $row['id_product']);
 		$row['attachments'] = ((!isset($row['cache_has_attachments']) OR $row['cache_has_attachments']) ? Product::getAttachmentsStatic((int)($id_lang), $row['id_product']) : array());
@@ -2783,15 +2781,16 @@ class ProductCore extends ObjectModel
 
 	public function getStockMvts($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('SELECT sm.id_stock_mvt, sm.date_add, sm.quantity, sm.id_order, CONCAT(pl.name, \' \', GROUP_CONCAT(IFNULL(al.name, \'\'), \'\')) product_name, CONCAT(e.lastname, \' \', e.firstname) employee, mrl.name reason
-														FROM `'._DB_PREFIX_.'stock_mvt` sm
-														LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (sm.id_product = pl.id_product AND pl.id_lang = '.(int)$id_lang.')
-														LEFT JOIN `'._DB_PREFIX_.'stock_mvt_reason_lang` mrl ON (sm.id_stock_mvt_reason = mrl.id_stock_mvt_reason AND mrl.id_lang = '.(int)$id_lang.')
-														LEFT JOIN `'._DB_PREFIX_.'employee` e ON (e.id_employee = sm.id_employee)
-														LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON (pac.id_product_attribute = sm.id_product_attribute)
-														LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (al.id_attribute = pac.id_attribute AND al.id_lang = '.(int)$id_lang.')
-														WHERE sm.id_product='.(int)$this->id.'
-														GROUP BY sm.id_stock_mvt');
+		return Db::getInstance()->ExecuteS('
+		SELECT sm.id_stock_mvt, sm.date_add, sm.quantity, sm.id_order, CONCAT(pl.name, \' \', GROUP_CONCAT(IFNULL(al.name, \'\'), \'\')) product_name, CONCAT(e.lastname, \' \', e.firstname) employee, mrl.name reason
+		FROM `'._DB_PREFIX_.'stock_mvt` sm
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (sm.id_product = pl.id_product AND pl.id_lang = '.(int)$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'stock_mvt_reason_lang` mrl ON (sm.id_stock_mvt_reason = mrl.id_stock_mvt_reason AND mrl.id_lang = '.(int)$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'employee` e ON (e.id_employee = sm.id_employee)
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON (pac.id_product_attribute = sm.id_product_attribute)
+		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (al.id_attribute = pac.id_attribute AND al.id_lang = '.(int)$id_lang.')
+		WHERE sm.id_product='.(int)$this->id.'
+		GROUP BY sm.id_stock_mvt');
 	}
 
 	public function setWsCategories($values)
@@ -2819,42 +2818,37 @@ class ProductCore extends ObjectModel
 
 	public function getWsCategories()
 	{
-		$result = Db::getInstance()->executeS('SELECT `id_category` AS id FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)$this->id);
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_category` AS id FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)$this->id);
 		return $result;
 	}
 
 	public function getBasicPrice()
 	{
-		return Db::getInstance()->getValue('SELECT `price` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)($this->id));
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `price` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)($this->id));
 	}
 
 	public static function getUrlRewriteInformations($id_product)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT pl.`id_lang`, pl.`link_rewrite`, p.`ean13`, cl.`link_rewrite` AS category_rewrite
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'lang` l ON (pl.`id_lang` = l.`id_lang`)
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (cl.`id_category` = p.`id_category_default`  AND cl.`id_lang` = pl.`id_lang`)
 		WHERE p.`id_product` = '.(int)$id_product. '
-		AND l.`active` = 1'
-		);
-
+		AND l.`active` = 1');
 	}
 
 	public static function getIdTaxRulesGroupByIdProduct($id_product)
 	{
         if (!isset(self::$_tax_rules_group[$id_product]))
         {
-	        $id_group = Db::getInstance()->getValue('
+	        $id_group = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 	        SELECT `id_tax_rules_group`
 	        FROM `'._DB_PREFIX_.'product`
-	        WHERE `id_product` = '.(int)$id_product
-	        );
-
+	        WHERE `id_product` = '.(int)$id_product);
 	        self::$_tax_rules_group[$id_product] = $id_group;
         }
-
 	    return self::$_tax_rules_group[$id_product];
 	}
 }
