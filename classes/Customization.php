@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -66,61 +66,60 @@ class CustomizationCore
 			return false;
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `name` 
-		FROM `'._DB_PREFIX_.'customization_field_lang` 
-		WHERE `id_customization_field` = '.(int)($id_customization).' 
+		SELECT `name`
+		FROM `'._DB_PREFIX_.'customization_field_lang`
+		WHERE `id_customization_field` = '.(int)($id_customization).'
 		AND `id_lang` = '.(int)($id_lang)
 		);
 
 		return $result['name'];
 	}
-	
+
 	public static function retrieveQuantitiesFromIds(array $ids_customizations)
 	{
 		$quantities = array();
-	
+
 		$in_values  = '';
 		foreach($ids_customizations as $key => $id_customization)
 		{
 			if ($key > 0) $in_values += ',';
 			$in_values += (int)($id_customization);
 		}
-		
+
 		if (!empty($in_values))
 		{
 			$results =  Db::getInstance()->ExecuteS(
 							'SELECT `id_customization`, `id_product`, `quantity`, `quantity_refunded`, `quantity_returned`
 							 FROM `'._DB_PREFIX_.'customization`
 							 WHERE `id_customization` IN ('.$in_values.')');
-							 
+
 			foreach($results as $row)
 			{
 				$quantities[$row['id_customization']] = $row;
 			}
 		}
-		
+
 		return $quantities;
 	}
-	
+
 	public static function countQuantityByCart($id_cart)
 	{
 		$quantity = array();
-		
+
 		$results =  Db::getInstance()->executeS('
-					SELECT `id_product`, SUM(`quantity`) AS quantity 
-					FROM `'._DB_PREFIX_.'customization` 
+					SELECT `id_product`, `id_product_attribute`, SUM(`quantity`) AS quantity
+					FROM `'._DB_PREFIX_.'customization`
 					WHERE `id_cart` = '.(int)($id_cart).'
-					GROUP BY `id_cart`, `id_product`'
+					GROUP BY `id_cart`, `id_product`, `id_product_attribute`'
 					);
-					
+
 		foreach($results as $row)
 		{
-			$quantity[$row['id_product']] = $row['quantity'];
+			$quantity[$row['id_product']][$row['product_attribute_id']] = $row['quantity'];
 		}
-		
+
 		return $quantity;
 	}
 
 }
-
 

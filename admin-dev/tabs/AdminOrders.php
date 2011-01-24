@@ -233,7 +233,9 @@ class AdminOrders extends AdminTab
 
 							// check actionable quantity
 							$order_detail = new OrderDetail($id_order_detail);
-							$customization_quantity = array_key_exists($order_detail->product_id, $customization_quantities) ? $customization_quantities[$order_detail->product_id] : 0;
+							$customization_quantity = 0;
+							if (array_key_exists($order_detail->product_id, $customization_quantities) && array_key_exists($order_detail->product_attribute_id, $customization_quantities[$order_detail->product_id]))
+								$customization_quantity =  (int) $customization_quantities[$order_detail->product_id][$order_detail->product_attribute_id];
 
 							if (($order_detail->product_quantity - $customization_quantity - $order_detail->product_quantity_refunded - $order_detail->product_quantity_return) < $qtyCancelProduct)
 								$this->_errors[] = Tools::displayError('Invalid quantity selected for product.');
@@ -374,7 +376,7 @@ class AdminOrders extends AdminTab
 				'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityRefunded'].'</td>' : '').'
 				'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityReturned'].'</td>' : '').'
 				<td align="center" class="productQuantity"> - </td>
-				<td align="center">OK: '.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $product['customizationQuantityTotal'], $currency, false, false).'</td>
+				<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $product['customizationQuantityTotal'], $currency, false, false).'</td>
 				<td align="center" class="cancelCheck">--</td>
 			</tr>';
 			foreach ($customizedDatas[(int)($product['product_id'])][(int)($product['product_attribute_id'])] AS $customizationId => $customization)
@@ -407,7 +409,7 @@ class AdminOrders extends AdminTab
 					'.($order->hasBeenPaid() ? '<td align="center">'.$customization['quantity_refunded'].'</td>' : '').'
 					'.($order->hasBeenDelivered() ? '<td align="center">'.$customization['quantity_returned'].'</td>' : '').'
 					<td align="center">-</td>
-					<td align="center">KO: '.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $customization['quantity'], $currency, false, false).'</td>
+					<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $customization['quantity'], $currency, false, false).'</td>
 					<td align="center" class="cancelCheck">
 						<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.(int)($customization['quantity_returned']).'" />
 						<input type="hidden" name="totalQty" id="totalQty" value="'.(int)($customization['quantity']).'" />
@@ -958,3 +960,4 @@ class AdminOrders extends AdminTab
 		return $total;
 	}
 }
+
