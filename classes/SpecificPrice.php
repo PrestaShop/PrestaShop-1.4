@@ -45,6 +45,8 @@ class SpecificPriceCore extends ObjectModel
 
 	protected 	$table = 'specific_price';
 	protected 	$identifier = 'id_specific_price';
+	
+	private static $_specificPriceCache = array();
 
 	public function getFields()
 	{
@@ -66,7 +68,7 @@ class SpecificPriceCore extends ObjectModel
 
 	public function add($autodate = true, $nullValues = false)
 	{
-		$maxPriority = (int)(DB::getInstance()->getValue('SELECT MAX(`priority`) FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($this->id_product)));
+		$maxPriority = (int)DB::getInstance()->getValue('SELECT MAX(`priority`) FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$this->id_product);
 		$this->priority = $maxPriority == 0 ? 0 : $maxPriority + 1;
 		return parent::add($autodate, $nullValues);
 	}
@@ -74,65 +76,64 @@ class SpecificPriceCore extends ObjectModel
 	static public function getByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
-			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product).' ORDER BY `priority`
+			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product.' ORDER BY `priority`
 		');
 	}
 
 	static public function getIdsByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
-			SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product).'
+			SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product.'
 		');
 	}
 
+       // score generation for quantity discount
 	private static function _getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group)
 	{
-	    $priority = SpecificPrice::getPriority($id_product);
-
 	    $select = '(';
-
-        // score generation for quantity discount
-	    foreach(array_reverse($priority) AS $k => $field)
-	        $select .= ' IF (`'.$field.'` = '.(int)(${$field}).', '.pow(2,$k).', 0) +';
-
-	    $select = substr($select, 0, -1).') AS `score`';
-
-	    return $select;
+	    $priority = SpecificPrice::getPriority($id_product);
+	    foreach (array_reverse($priority) AS $k => $field)
+	        $select .= ' IF (`'.$field.'` = '.(int)(${$field}).', '.pow(2,$k).', 0) + ';
+	    return rtrim($select, ' +').') AS `score`';
 	}
 
     public static function getPriority($id_product)
     {
         $priority = Db::getInstance()->getValue('
-	    SELECT `priority` FROM `'._DB_PREFIX_.'specific_price_priority`
-	    WHERE `id_product` = '.(int)$id_product
-	    );
+	    SELECT `priority`
+		FROM `'._DB_PREFIX_.'specific_price_priority`
+	    WHERE `id_product` = '.(int)$id_product);
 
 	    if (!$priority)
 	        $priority = Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES');
 
-	    $fields = preg_split('/;/', $priority);
-
-	    return $fields;
+	    return preg_split('/;/', $priority);
     }
 
 	static public function getSpecificPrice($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
 	{
-
-		$now = date('Y-m-d H:i:s');
-
-		return Db::getInstance()->getRow('
-			SELECT *,
-					'.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
-			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
-					`id_shop` IN(0, '.(int)($id_shop).') AND
-					`id_currency` IN(0, '.(int)($id_currency).') AND
-					`id_country` IN(0, '.(int)($id_country).') AND
-					`id_group` IN(0, '.(int)($id_group).') AND
-					`from_quantity` <= '.(int)($quantity).' AND
-					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
-			ORDER BY `score` DESC, `from_quantity` DESC
-		');
+		/*
+		** The date is not taken into account for the cache, but this is for the better because it keeps the consistency for the whole script.
+		** The price must not change between the top and the bottom of the page
+		*/
+		
+		$key = ((int)$id_product.'-'.(int)$id_shop.'-'.(int)$id_currency.'-'.(int)$id_country.'-'.(int)$id_group.'-'.(int)$quantity);
+		if (!array_key_exists($key, self::$_specificPriceCache))
+		{	
+			$now = date('Y-m-d H:i:s');
+			self::$_specificPriceCache[$key] = Db::getInstance()->getRow('
+				SELECT *, '.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
+				FROM `'._DB_PREFIX_.'specific_price`
+				WHERE `id_product` IN (0, '.(int)$id_product.')
+				AND `id_shop` IN (0, '.(int)$id_shop.')
+				AND `id_currency` IN (0, '.(int)$id_currency.')
+				AND `id_country` IN (0, '.(int)$id_country.')
+				AND `id_group` IN (0, '.(int)$id_group.')
+				AND `from_quantity` <= '.(int)$quantity.'
+				AND	(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
+				ORDER BY `score` DESC, `from_quantity` DESC');
+		}
+		return self::$_specificPriceCache[$key];
 	}
 
 	static public function setPriorities($priorities)

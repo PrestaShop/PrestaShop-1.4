@@ -139,8 +139,21 @@ class AddressCore extends ObjectModel
 		}
 	}
 
+	public function add($autodate = true, $nullValues = false)
+	{
+		if (!parent::add($autodate, $nullValues))
+			return false;
+		
+		if (Validate::isUnsignedId($this->id_customer))
+			Customer::resetAddressCache($this->id_customer);
+		return true;
+	}
+
 	public function delete()
 	{
+		if (Validate::isUnsignedId($this->id_customer))
+			Customer::resetAddressCache($this->id_customer);
+			
 		if (!$this->isUsed())
 			return parent::delete();
 		else

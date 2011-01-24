@@ -114,6 +114,7 @@ class CustomerCore extends ObjectModel
 	protected 	$identifier = 'id_customer';
 
 	private static $_defaultGroupId = array();
+	private static $_customerHasAddress = array();
 
 	public function getFields()
 	{
@@ -297,14 +298,22 @@ class CustomerCore extends ObjectModel
 	  */
 	static public function customerHasAddress($id_customer, $id_address)
 	{
-		$result = Db::getInstance()->getRow('
-		SELECT COUNT(`id_address`) AS ok
-		FROM `'._DB_PREFIX_.'address`
-		WHERE `id_customer` = '.(int)($id_customer).'
-		AND `id_address` = '.(int)($id_address).'
-		AND `deleted` = 0');
-
-		return $result['ok'];
+		if (!array_key_exists($id_customer, self::$_customerHasAddress))
+		{
+			self::$_customerHasAddress[$id_customer] = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `id_address`
+			FROM `'._DB_PREFIX_.'address`
+			WHERE `id_customer` = '.(int)($id_customer).'
+			AND `id_address` = '.(int)($id_address).'
+			AND `deleted` = 0');
+		}
+		return self::$_customerHasAddress[$id_customer];
+	}
+	
+	static public function resetAddressCache($id_customer)
+	{
+		if (array_key_exists($id_customer, self::$_customerHasAddress))
+			unset(self::$_customerHasAddress[$id_customer]);
 	}
 
 	/**
@@ -315,7 +324,7 @@ class CustomerCore extends ObjectModel
 	  */
 	public function getAddresses($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT a.*, cl.`name` AS country, s.name AS state
 		FROM `'._DB_PREFIX_.'address` a
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON (a.`id_country` = c.`id_country`)
@@ -349,13 +358,11 @@ class CustomerCore extends ObjectModel
 	  */
 	public static function getAddressesTotalById($id_customer)
 	{
-		$result = Db::getInstance()->getRow('
-		SELECT COUNT(a.`id_address`) AS total
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT COUNT(a.`id_address`)
 		FROM `'._DB_PREFIX_.'address` a
 		WHERE a.`id_customer` = '.(int)($id_customer).'
 		AND a.`deleted` = 0');
-
-		return $result['total'];
 	}
 
 	/**
@@ -369,12 +376,11 @@ class CustomerCore extends ObjectModel
 	 	if (!Validate::isUnsignedId($id_customer) OR !Validate::isMd5($passwd))
 	 		die (Tools::displayError());
 
-		$result = Db::getInstance()->getRow('
+		return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `id_customer` = '.(int)($id_customer).' AND `passwd` = \''.pSQL($passwd).'\'');
-
-		return isset($result['id_customer']) ? $result['id_customer'] : false;
+		WHERE `id_customer` = '.(int)($id_customer).'
+		AND `passwd` = \''.pSQL($passwd).'\'');
 	}
 
 	/**
