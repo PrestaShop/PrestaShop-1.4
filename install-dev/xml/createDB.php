@@ -71,7 +71,7 @@ $datas = array(
 	array('_DB_PREFIX_', $_GET['tablePrefix']),
 	array('_MYSQL_ENGINE_', $_GET['engine']),
 	array('__PS_BASE_URI__', $__PS_BASE_URI__),
-	array('_PS_CACHING_SYSTEM_', 'MemCached'),
+	array('_PS_CACHING_SYSTEM_', 'MCached'),
 	array('_PS_CACHE_ENABLED_', '0'),
 	array('_MEDIA_SERVER_1_', ''),
 	array('_MEDIA_SERVER_2_', ''),
