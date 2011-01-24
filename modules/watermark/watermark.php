@@ -114,7 +114,7 @@ class Watermark extends Module
 		if (isset($_FILES['PS_WATERMARK']['tmp_name']) AND !empty($_FILES['PS_WATERMARK']['tmp_name']))
 		{
 			if (!isPicture($_FILES['PS_WATERMARK'], array('image/gif')))
-				$this->_postErrors[] = $this->l('image must be at GIF format');
+				$this->_postErrors[] = $this->l('image must be in GIF format');
 		}
 		
 		return !sizeof($this->_postErrors) ? true : false;
@@ -157,7 +157,7 @@ class Watermark extends Module
 						<td>'.$this->l('Watermark file').'</td>
 						<td>
 							<input type="file" name="PS_WATERMARK" />
-							<p style="color:#7F7F7F;font-size:0.85em;margin:0;padding:0;">'.$this->l('Must be at format GIF').'</p>
+							<p style="color:#7F7F7F; font-size:0.85em; margin:0; padding:0;">'.$this->l('Must be in GIF format').'</p>
 						</td>
 					</tr>
 					<tr>

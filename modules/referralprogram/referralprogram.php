@@ -241,7 +241,7 @@ class ReferralProgram extends Module
 		<fieldset class="width3">
 			<legend><img src="'._PS_ADMIN_IMG_.'prefs.gif" alt="'.$this->l('Settings').'" />'.$this->l('Settings').'</legend>
 			<p>
-				<label class="t" for="order_quantity">'.$this->l('Minimal number of orders a sponsored friend have to place to get its voucher:').'</label>
+				<label class="t" for="order_quantity">'.$this->l('Minimal number of orders a sponsored friend must place to get their voucher:').'</label>
 				<input type="text" name="order_quantity" id="order_quantity" value="'.Tools::getValue('order_quantity', Configuration::get('REFERRAL_ORDER_QUANTITY')).'" style="width: 50px; text-align: right;" />
 			</p>
 			<p>

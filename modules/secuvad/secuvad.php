@@ -513,7 +513,7 @@ class Secuvad extends Module
 			if (Tools::getValue('prenom') == NULL OR !Validate::isName(Tools::getValue('prenom')))
 				$errors[] = $this->l('First name is invalid');
 			if (Tools::getValue('fonction') != NULL AND !Validate::isGenericName(Tools::getValue('fonction')))
-				$errors[] = $this->l('Fonction name is invalid');
+				$errors[] = $this->l('Function name is invalid');
 			if (Tools::getValue('email') == NULL OR !Validate::isEmail(Tools::getValue('email')))
 				$errors[] = $this->l('E-mail name is invalid');
 			if (Tools::getValue('telephone') == NULL OR !Validate::isPhoneNumber(Tools::getValue('telephone')))
@@ -695,7 +695,7 @@ class Secuvad extends Module
 						<td>'.htmlentities($payment['module_name'], ENT_QUOTES, 'UTF-8').'</td>
 						<td>
 						<select name="secuvad_payment_'.(int)($payment['id_module']).'">
-							<option>'.$this->l('Unknow').'</option>';
+							<option>'.$this->l('Unknown').'</option>';
 				foreach ($this->_secuvad_code_payment as $code)
 					$this->_html .= '<option value="'.htmlentities($code['code'], ENT_QUOTES, 'UTF-8').'" '.(strtolower($payment['code']) == strtolower($code['code']) ? 'selected="selected"' : '').'>'.htmlentities($code['name'], ENT_QUOTES, 'UTF-8').'</option>';
 				$this->_html .= '
@@ -1200,7 +1200,7 @@ class Secuvad extends Module
 				echo '<div class="alert error" style="width:400px;">
 				<h3>'.$this->l('Error').'</h3>
 				<ol>
-					<li>'.$this->l('Impossible to report fraud before submiting the associated order').'</li>
+					<li>'.$this->l('Impossible to report fraud before submitting the associated order').'</li>
 				</ol>
 			  	</div>';
 				return 0;
@@ -1306,10 +1306,10 @@ class Secuvad extends Module
 				return '<img src="../img/admin/blank.gif" alt="'.$this->l('Not sent to Secuvad').'" /> '.$this->l('Not sent to Secuvad');
 				break;
 			case 1 : 	
-				return '<img src="../img/admin/ok.gif" alt="'.$this->l('Valide').'" /> '.$this->l('Valide');
+				return '<img src="../img/admin/ok.gif" alt="'.$this->l('Validated by Secuvad').'" /> '.$this->l('Validated by Secuvad');
 				break;
 			case 2 : 	
-				return '<img src="../img/admin/manufacturers.gif" alt="'.$this->l('Analysing').'" /> '.$this->l('Analysing');
+				return '<img src="../img/admin/manufacturers.gif" alt="'.$this->l('Analyzing').'" /> '.$this->l('Analyzing');
 				break;
 			case 3 : 	
 				return '<img src="../img/admin/forbbiden.gif" alt="'.$this->l('Suspect order').'" /> '.$this->l('Suspect order');
@@ -1321,7 +1321,7 @@ class Secuvad extends Module
 				return '<img src="../img/admin/manufacturers.gif" alt="'.$this->l('To be checked by CUSTOMER').'" /> '.$this->l('To be checked by CUSTOMER');
 				break;
 			case 7 : 	
-				return '<img src="../img/admin/manufacturers.gif" alt="'.$this->l('To be checked by SECUVAD').'" /> '.$this->l('To be checked by SECUVAD');
+				return '<img src="../img/admin/manufacturers.gif" alt="'.$this->l('To be checked by Secuvad').'" /> '.$this->l('To be checked by Secuvad');
 				break;
 			default:	
 				return '<img src="../img/admin/blank.gif" alt="'.$this->l('Not sent to Secuvad').'" /> '.$this->l('Not sent to Secuvad');

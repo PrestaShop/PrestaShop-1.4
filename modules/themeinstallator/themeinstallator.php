@@ -641,7 +641,7 @@ class ThemeInstallator extends Module
 			}
 			$this->_html .= '
 			<fieldset>
-				<legend>'.$this->l('Choose the variations that you with to import').'</legend>
+				<legend>'.$this->l('Choose the variations that you wish to import').'</legend>
 				<label for="nomain">'.$this->l('Main theme').'</label>
 				<div class="margin-form">
 					<input type="checkbox" name="variation[]" id="nomain" value="'.$xml->variations->variation[0]['directory'].'" checked />

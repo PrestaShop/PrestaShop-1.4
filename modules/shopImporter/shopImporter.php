@@ -355,7 +355,7 @@ class shopImporter extends ImportModule
 					$languages = $importModule->getLangagues(0);
 					$defaultLanguageImport = new Language(Language::getIdByIso($languages[$defaultIdLand]['iso_code']));
 					if ($defaultLanguage->iso_code != $defaultLanguageImport->iso_code)
-						$errors[] = $this->l('Delault lang don\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultLanguage->name.' ≠ '.$importModule->displayName.' : '.$defaultLanguageImport->name.'<br>'.$this->l('Please change default language in your configuration');
+						$errors[] = $this->l('Default language doesn\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultLanguage->name.' ≠ '.$importModule->displayName.' : '.$defaultLanguageImport->name.'<br>'.$this->l('Please change default language in your configuration');
 				}
 				
 				if (Tools::isSubmit('syncCurrency'))
@@ -370,7 +370,7 @@ class shopImporter extends ImportModule
 					
 					$defaultCurrency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 					if ($defaultCurrency->iso_code != $defaultCurrencyImport->iso_code)
-						$errors[] = $this->l('Delault Currency don\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultCurrency->name.' ≠ '.$importModule->displayName.' : '.$defaultCurrencyImport->name.'<br>'.$this->l('Please change default currency in your configuration');
+						$errors[] = $this->l('Default currency doesn\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultCurrency->name.' ≠ '.$importModule->displayName.' : '.$defaultCurrencyImport->name.'<br>'.$this->l('Please change default currency in your configuration');
 				}
 				if (!empty($errors))
 					die('{"hasError" : true, "error" : '.Tools::jsonEncode($errors).'}');

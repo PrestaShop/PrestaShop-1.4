@@ -64,9 +64,9 @@
 {if $invitation_sent}
 	<p class="success">
 	{if $nbInvitation > 1}
-		{l s='E-mails have been sent to your friends !' mod='referralprogram'}
+		{l s='E-mails have been sent to your friends!' mod='referralprogram'}
 	{else}
-		{l s='An e-mail has been sent to your friend !' mod='referralprogram'}
+		{l s='An e-mail has been sent to your friend!' mod='referralprogram'}
 	{/if}
 	</p>
 {/if}
@@ -74,9 +74,9 @@
 {if $revive_sent}
 	<p class="success">
 	{if $nbRevive > 1}
-		{l s='Reminder e-mails have been sent to your friends !' mod='referralprogram'}
+		{l s='Reminder e-mails have been sent to your friends!' mod='referralprogram'}
 	{else}
-		{l s='Reminder e-mail have been sent to your friend !' mod='referralprogram'}
+		{l s='A reminder e-mail has been sent to your friend!' mod='referralprogram'}
 	{/if}
 	</p>
 {/if}

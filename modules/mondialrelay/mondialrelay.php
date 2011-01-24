@@ -35,7 +35,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.2 rev C';
+		$this->version	= '1.3';
 
 		parent::__construct();
 
@@ -125,8 +125,7 @@ class MondialRelay extends Module
 		if (!parent::uninstall())
 			return false;
 		
-		/*tab uninstall	*/
-
+		/* Tab uninstallation */
 		$rpos = Db::getInstance()->ExecuteS('SELECT id_tab  FROM `' . _DB_PREFIX_ . 'tab` WHERE  class_name="AdminMondialRelay"   LIMIT 0 , 1');
 		$id_tab = $rpos[0]['id_tab'];
 		if (isset($id_tab) AND !empty($id_tab))
@@ -162,7 +161,7 @@ class MondialRelay extends Module
 		if (Tools::isSubmit('submitMR'))
 		{
 			if (Tools::getValue('mr_Enseigne_WebService') != '' AND !preg_match("#^[0-9A-Z]{2}[0-9A-Z ]{6}$#", Tools::getValue('mr_Enseigne_WebService')))
-				$this->_postErrors[] = $this->l('Invalid Enseigne');
+				$this->_postErrors[] = $this->l('Invalid Shop');
 			if (Tools::getValue('mr_code_marque') != '' AND !preg_match("#^[0-9]{2}$#", Tools::getValue('mr_code_marque')))
 				$this->_postErrors[] = $this->l('Invalid Mark code');
 			if (Tools::getValue('mr_Key_WebService') != '' AND !preg_match("#^[0-9A-Za-z_\'., /\-]{2,32}$#", Tools::getValue('mr_Key_WebService')))
@@ -182,7 +181,7 @@ class MondialRelay extends Module
 			if (Tools::getValue('mr_ModeCol') != 'CCC')
 				$this->_postErrors[] = $this->l('Invalid Col mode');
 			if (!preg_match("#^REL|24R|ESP|DRI|LDS|LDR|LD1$#", Tools::getValue('mr_ModeLiv')))
-				$this->_postErrors[] = $this->l('Invalid Livraison mode');
+				$this->_postErrors[] = $this->l('Invalid delivery mode');
 			if (!Validate::isInt(Tools::getValue('mr_ModeAss')) OR Tools::getValue('mr_ModeAss') > 5 OR Tools::getValue('mr_ModeAss') < 0)
 				$this->_postErrors[] = $this->l('Invalid Assurance mode');
 			if (!Tools::getValue('mr_Pays_list'))
@@ -218,7 +217,7 @@ class MondialRelay extends Module
 			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', Tools::getValue('id_order_state'));
 			Configuration::updateValue('MR_GOOGLE_MAP', Tools::getValue('mr_google_key'));
 			if (!Tools::isSubmit('updatesuccess'))
-				$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'</div>';
+				$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated successfully').'</div>';
 		}
 	}
 	
@@ -456,12 +455,13 @@ class MondialRelay extends Module
 
 		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>'.
 		'<style> . "\n" . ' . file_get_contents(_MR_CSS_) . "\n" . '</style>
-		<fieldset><legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('To create a Mondial Relay carrier').'</legend>
-		- '.$this->l('Registrate first the Mondial Relay Account Settings').'<br />
+		<fieldset>
+			<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('To create a Mondial Relay carrier').'</legend>
+		- '.$this->l('Fill and save your Mondial Relay account settings').'<br />
 		- '.$this->l('Create a Carrier').'<br />
 		- '.$this->l('Define a price for your carrier on').' <a href="index.php?tab=AdminCarriers&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'" class="green">'.$this->l('The Carrier page').'</a><br />
-		- '.$this->l('To generate sticks, you must have register a correct address of your store on').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.$this->l('The contact page').'</a><br />
-		- '.$this->l('Go see the front office').'<br /><br class="clear" />
+		- '.$this->l('To generate labels, you must have a valid and registered address of your store on your').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.$this->l('contact page').'</a><br />
+		- '.$this->l('Go to the front office').'<br /><br class="clear" />
 		<p>'.$this->l('URL Cron Task:').' '.Tools::getHttpHost(true, true)._MODULE_DIR_.$this->name.'/cron.php?secure_key='.Configuration::get('MONDIAL_RELAY_SECURE_KEY').'</p></fieldset>
 		<br class="clear" />'.self::settingsForm().self::settingsstateorderForm().self::addMethodForm().self::shippingForm().
 		'<br class="clear" />';
@@ -473,7 +473,7 @@ class MondialRelay extends Module
 	{
 		$id = Db::getInstance()->getValue('SELECT `id_carrier` FROM `'._DB_PREFIX_ .'mr_method` WHERE `id_mr_method` = "'.(int)($id).'"');
 		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_ .'carrier` SET `active` = 0, `deleted` = 1 WHERE `id_carrier` = "'.(int)($id).'"');
-		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Delete succesfull').'</div>';
+		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Delete successful').'</div>';
 	}
 	
 	public function mrUpdate($type, Array $array, Array $keyArray)
@@ -575,9 +575,9 @@ class MondialRelay extends Module
 	{
 		$zones = Db::getInstance()->ExecuteS("SELECT * FROM " . _DB_PREFIX_ . "zone WHERE active = 1");
 		$output = '
-		<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" >
+		<form action="'.$_SERVER['REQUEST_URI'].'" method="post" >
 			<fieldset class="shippingList addMethodForm">
-				<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Add a Shipping Method').'</legend>
+				<legend><img src="../modules/mondialrelay/logo.gif" alt="" />'.$this->l('Add a Shipping Method').'</legend>
 				<ol>
 					<li>
 						<label for="mr_Name" class="shipLabel">'.$this->l('Carrier\'s name').'<sup>*</sup></label>
@@ -587,21 +587,17 @@ class MondialRelay extends Module
 					<li>
 						<label for="mr_ModeCol" class="shipLabel">'.$this->l('Collection Mode').'<sup>*</sup></label>
 						<select name="mr_ModeCol" id="mr_ModeCol" style="width:200px">
-						<option value="CCC" selected >CCC : '.$this->l('Collection at the store').'</option>
-						<!--<option value="CDR" >CDR : '.$this->l('Collection at home for standards expeditions').'</option>
-						<option value="CDS" >CDS : '.$this->l('Collection at home for heavy or voluminous expeditions').'</option>
-						<option value="REL" >REL : '.$this->l('Collection at a Relay Point').'</option>-->
+							<option value="CCC" selected >CCC : '.$this->l('Collection at the store').'</option>
 						</select> 
 					</li>
 
 					<li>
-						<label for="mr_ModeLiv" class="shipLabel">'.$this->l('Livraison Mode').'<sup>*</sup></label>
+						<label for="mr_ModeLiv" class="shipLabel">'.$this->l('Delivery mode').'<sup>*</sup></label>
 						<select name="mr_ModeLiv" id="mr_ModeLiv" style="width:200px">
-						<!--<option value="LCC" >LCC : '.$this->l('Livraison chez le client chargeur / l\'enseigne').'</option>-->
-						<option value="24R" selected >24R : '.$this->l('Livraison at a Relay Point').'</option>
-						<option value="DRI" >DRI : '.$this->l('Colis Drive Livraison').'</option>
-						<option value="LD1" >LD1 : '.$this->l('Home Livraison RDC (1 person)').'</option>
-						<option value="LDS" >LDS : '.$this->l('Special Home Livraison (2 persons)').'</option>
+						<option value="24R" selected >24R : '.$this->l('Delivery to a relay point').'</option>
+						<option value="DRI" >DRI : '.$this->l('Colis Drive delivery').'</option>
+						<option value="LD1" >LD1 : '.$this->l('Home delivery RDC (1 person)').'</option>
+						<option value="LDS" >LDS : '.$this->l('Special Home delivery (2 persons)').'</option>
 						</select>
 					</li>
 					
@@ -618,24 +614,14 @@ class MondialRelay extends Module
 					</li>
 
 					<li>	
-						<label for="mr_Pays_list" class="shipLabel">'.$this->l('Livraison Countries:').'<sup>*</sup></label>	
-						<SELECT NAME="mr_Pays_list[]" id="mr_Pays_list"  MULTIPLE SIZE=5>
-						<OPTION VALUE="FR">'.$this->l('France').'</option>
-						<OPTION VALUE="BE">'.$this->l('Belgium').'</option>
-						<OPTION VALUE="LU">'.$this->l('Luxembourg').'</option>
-						<OPTION VALUE="ES">'.$this->l('Spain').'</option>
-						</SELECT>
-					</li>
-
-					<!--<li>
-						<label for="zones" class="shipLabel">Zone:<sup>*</sup></label>
-						<select id="zones" name="zone">';
-	  			  foreach($zones AS $zone) {
-							$output .= '<option value="' . $zone['id_zone'] . '">' . $zone['name'] . '</option>';
-						}
-		$output .= '				
+						<label for="mr_Pays_list" class="shipLabel">'.$this->l('Delivery countries:').'<sup>*</sup></label>	
+						<select name="mr_Pays_list[]" id="mr_Pays_list" multiple size="5">
+							<option value="FR">'.$this->l('France').'</option>
+							<option value="BE">'.$this->l('Belgium').'</option>
+							<option value="LU">'.$this->l('Luxembourg').'</option>
+							<option value="ES">'.$this->l('Spain').'</option>
 						</select>
-					</li>-->
+					</li>			
 					<li class="mrSubmit">
 						<input type="submit" name="submitMethod" value="' . $this->l('Add a Shipping Method') . '" class="button" />
 					</li>
@@ -654,10 +640,10 @@ class MondialRelay extends Module
 		global $cookie;
 
 		$query = Db::getInstance()->ExecuteS('
-			SELECT m.*
-			FROM `'._DB_PREFIX_.'mr_method` m
-			JOIN `'._DB_PREFIX_.'carrier` c ON (c.`id_carrier` = m.`id_carrier`)
-			WHERE c.`deleted` = 0');
+		SELECT m.*
+		FROM `'._DB_PREFIX_.'mr_method` m
+		JOIN `'._DB_PREFIX_.'carrier` c ON (c.`id_carrier` = m.`id_carrier`)
+		WHERE c.`deleted` = 0');
 			
 		$output = '
 		<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
@@ -703,7 +689,7 @@ class MondialRelay extends Module
 			$output  .= '>' . $order_state['name'] . '</option>';
 		}
 		$output .= '</select>';
-		$output .= '<p>' . $this->l('Choose the order state for sticks. You can administrate the sticks on').' ';
+		$output .= '<p>' . $this->l('Choose the order state for labels. You can manage the labels on').' ';
 		$output .= '<a href="index.php?tab=AdminMondialRelay&token='.Tools::getAdminToken('AdminMondialRelay'.(int)(Tab::getIdFromClassName('AdminMondialRelay')).(int)($cookie->id_employee)).'" class="green">'.
 		$this->l('the Mondial Relay administration page').'</a></p>';
 		$output .= '</div>
@@ -783,9 +769,9 @@ class MondialRelay extends Module
 		if (trim($simpleresul[0]['exp_number']) != '0') 
 			@$sortie .= $this->l('Nb expedition:').$simpleresul[0]['exp_number']."<br>";
 		if (trim($simpleresul[0]['url_etiquette']) != '0') 
-			@$sortie .= "<a href='".$simpleresul[0]['url_etiquette']."' target='etiquette".$simpleresul[0]['url_etiquette']."'>".$this->l('Url etiquette')."</a><br>";
+			@$sortie .= "<a href='".$simpleresul[0]['url_etiquette']."' target='etiquette".$simpleresul[0]['url_etiquette']."'>".$this->l('Label URL')."</a><br>";
 		if (trim($simpleresul[0]['url_suivi']) != '0')
-			@$sortie .= "<a href='".$simpleresul[0]['url_suivi']."' target='suivi".$simpleresul[0]['exp_number']."'>".$this->l('Url de suivi')."</a><br>";
+			@$sortie .= "<a href='".$simpleresul[0]['url_suivi']."' target='suivi".$simpleresul[0]['exp_number']."'>".$this->l('Follow-up URL')."</a><br>";
 		if (trim($simpleresul[0]['MR_Selected_Num']) != '')
 			@$sortie .= $this->l('Nb Point Relay :').$simpleresul[0]['MR_Selected_Num']."<br>";
 		if (trim($simpleresul[0]['MR_Selected_LgAdr1']) != '')
@@ -826,8 +812,8 @@ class MondialRelay extends Module
 			'List of orders recognized' => $this->l('List of orders recognized'),
 			'Order number' => $this->l('Order number'),
 			'Email send to' => $this->l('Email send to'),
-			'Print stick A4' => $this->l('Print stick A4'),
-			'Print stick A5' => $this->l('Print stick A5'),
+			'Print A4 Label' => $this->l('Print A4 Label'),
+			'Print A5 Label' => $this->l('Print A5 Label'),
 			'return' => $this->l('return'),
 			'All orders which have the state' => $this->l('All orders which have the state'),
 			'Change configuration' => $this->l('Change configuration'),
@@ -847,7 +833,7 @@ class MondialRelay extends Module
 			'Detail' => $this->l('Detail'),
 			'View' => $this->l('View'),
 			'Generate' => $this->l('Generate'),
-			'History of sticks creation' => $this->l('History of sticks creation'),
+			'Label creation history' => $this->l('Label creation history'),
 			'Orders ID' => $this->l('Orders ID'),
 			'Exps num' => $this->l('Exps num'),
 			'Delete selected history' => $this->l('Delete selected history'),
@@ -863,9 +849,8 @@ class MondialRelay extends Module
 			'To generate sticks, you must have register a correct address of your store on' => $this->l('To generate sticks, you must have register a correct address of your store on'),
 			'The contact page' => $this->l('The contact page'),
 			'Settings updated succesfull' => $this->l('Settings updated succesfull'),
-			'Empty adress : Are you sure you\'ve set a validate address in the Contact page?' => $this->l('Empty adress : Are you sure you\'ve set a validate address in the Contact page?')
+			'Empty address : Are you sure you\'ve set a valid address on the contact page?' => $this->l('Empty address : Are you sure you\'ve set a valid address on the contact page?')
 		);
 		return $trad[$key];
 	}
 }
-?>

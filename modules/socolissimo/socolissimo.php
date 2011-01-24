@@ -94,10 +94,10 @@ class Socolissimo extends CarrierModule
 			if (count($warning))
 				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly').' ';
 		}
-			$this->errorMessage = array('998' => $this->l('Invalide key'), '999' => $this->l('an error occurred during shipping step'), '001' => $this->l('Login FO missing'),
-			 '002' => $this->l('Lofin FO incorrect '), '003' => $this->l('Customer unauthorized'),'004' => $this->l('Required field missing'), '006' => $this->l('Missing signature'),
+			$this->errorMessage = array('998' => $this->l('Invalid key'), '999' => $this->l('an error occurred during shipping step'), '001' => $this->l('Login FO missing'),
+			 '002' => $this->l('Login FO incorrect'), '003' => $this->l('Customer unauthorized'),'004' => $this->l('Required field missing'), '006' => $this->l('Missing signature'),
 			  '007' => $this->l('Invalid signature'), '008' => $this->l('Zip Code invalid'), '009' => $this->l('Incorrect url format return validation'), '010' => $this->l('Incorrect url format return error'),
-			   '011' => $this->l('Numéro de transaction non valide'), '012' => $this->l('Format incorrect shipping costs'), '015' => $this->l('Socolissimo server unavailable'),
+			   '011' => $this->l('Invalid transaction ID'), '012' => $this->l('Format incorrect shipping costs'), '015' => $this->l('Socolissimo server unavailable'),
 			    '016' => $this->l('Socolissimo server unavailable'), '004' => $this->l('Required field missing'), '004' => $this->l('Required field missing'));
 
 	}
@@ -227,18 +227,18 @@ class Socolissimo extends CarrierModule
 		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Settings').'</legend>
 		<label style="color:#CC0000;text-decoration : underline;">'.$this->l('Important').': </label>
 		<div class="margin-form">
-		<p  style="width:500px">'.$this->l('To open your account Colissimo So, please contact your local Trading Post or the usual 36.34').'</p>
+		<p  style="width:500px">'.$this->l('To open your SoColissimo account, please contact "La Poste" at this phone number: 3634 (French phone number)').'</p>
 		</div>
 		
 		<label>'.$this->l('ID So').' : </label>
 		<div class="margin-form">
-		<input type="text" name="id_user" value="'.Tools::getValue('id_user',Configuration::get('SOCOLISSIMO_ID')).'" />
+		<input type="text" name="id_user" value="'.Tools::getValue('id_user', Configuration::get('SOCOLISSIMO_ID')).'" />
 		<p>' . $this->l('Id user for back office SoColissimo.') . '</p>
 		</div>
 
 		<label>'.$this->l('Key').' : </label>
 		<div class="margin-form">
-		<input type="text" name="key" value="'.Tools::getValue('key',Configuration::get('SOCOLISSIMO_KEY')).'" />
+		<input type="text" name="key" value="'.Tools::getValue('key', Configuration::get('SOCOLISSIMO_KEY')).'" />
 		<p>'.$this->l('Secure key for back office SoColissimo.').'</p>
 		</div>
 		
@@ -290,7 +290,7 @@ class Socolissimo extends CarrierModule
 
 		<div class="clear">&nbsp;</div>
 
-		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Informations').'</legend>
+		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Information').'</legend>
 		<p>'.$this->l('Here are two addresses that you must fill in your Back Office SoColissimo').' : </p><br>
 		<label>'.$this->l('Validation url').' : </label>
 		<div class="margin-form">
@@ -306,20 +306,20 @@ class Socolissimo extends CarrierModule
 	private function _postValidation()
 	{
 		if (Tools::getValue('id_user') == NULL)
-			$this->_postErrors[]  = $this->l('ID SO not specified');
+			$this->_postErrors[] = $this->l('ID SO not specified');
 
 		if (Tools::getValue('key') == NULL)
-			$this->_postErrors[]  = $this->l('Key SO not specified');
+			$this->_postErrors[] = $this->l('Key SO not specified');
 
 		if (Tools::getValue('dypreparationtime') == NULL)
-			$this->_postErrors[]  = $this->l('Preparation time not specified');
+			$this->_postErrors[] = $this->l('Preparation time not specified');
 		elseif (!Validate::isInt(Tools::getValue('dypreparationtime')))
-				$this->_postErrors[]  = $this->l('Preparation time invalide');
+				$this->_postErrors[] = $this->l('Invalid preparation time');
 
 		if (Tools::getValue('overcost') == NULL)
-			$this->_postErrors[]  = $this->l('overcost not specified');
+			$this->_postErrors[] = $this->l('overcost not specified');
 		elseif (!Validate::isFloat(Tools::getValue('overcost')))
-				$this->_postErrors[]  = $this->l('Overcost is invalide');
+				$this->_postErrors[] = $this->l('Invalid overcost');
 	}
 
 	private function _postProcess()
@@ -342,8 +342,9 @@ class Socolissimo extends CarrierModule
 				? '<img src="http://www.prestashop.com/modules/socolissimo.png?ps_id='.urlencode($so_login).'" style="float:right" />' : '');
 			$this->_html .= $this->displayConfirmation($this->l('Configuration updated').$dataSync);
 
-		}else
-			$this->_html .= '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$this->l('Settings faild').'</div>';
+		}
+		else
+			$this->_html .= '<div class="alert error"><img src="'._PS_IMG_.'admin/forbbiden.gif" alt="nok" /> '.$this->l('Cannot save settings').'</div>';
 	}
 
 	public function hookExtraCarrier($params)
@@ -393,8 +394,7 @@ class Socolissimo extends CarrierModule
 			$serialsInput = ltrim($serialsInput, '&');
 			$row['id_carrier'] = (int)($carrierSo->id);
 			$smarty->assign(array('urlSo' => Configuration::get('SOCOLISSIMO_URL').'?trReturnUrlKo='.htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'),'id_carrier' => (int)($row['id_carrier']),
-								  'inputs' => $inputs, 'serialsInput' => $serialsInput, 'finishProcess' => $this->l('To choose So colissimo, thank you to choose a delivery method in the box'))
-							);
+								  'inputs' => $inputs, 'serialsInput' => $serialsInput, 'finishProcess' => $this->l('To choose SoColissimo, tick a delivery method')));
 
 			$country = new Country((int)($params['address']->id_country));
 			$carriers = Carrier::getCarriers($cookie->id_lang,  true , false,false, NULL, ALL_CARRIERS);
@@ -450,10 +450,10 @@ class Socolissimo extends CarrierModule
 				case 'RDV':
 				$html .= $deliveryMode[$deliveryInfos['delivery_mode']].'<br /><br />';
 				$html .='<b>'.$this->l('Customer').' : </b>'.Tools::htmlentitiesUTF8($addressDelivery->firstname).' '.Tools::htmlentitiesUTF8($addressDelivery->lastname).'<br />'.
-						(!empty($deliveryInfos['cecompanyname']) ? '<b>'.$this->l('Societe').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cecompanyname']).'<br/>' : '' ).
-						(!empty($deliveryInfos['ceemail']) ? '<b>'.$this->l('Email').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['ceemail']).'<br/>' : '' ).
-						(!empty($deliveryInfos['cephonenumber']) ? '<b>'.$this->l('Tel').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cephonenumber']).'<br/><br/>' : '' ).
-						'<b>'.$this->l('Customer adresse').' : </b><br/>'
+						(!empty($deliveryInfos['cecompanyname']) ? '<b>'.$this->l('Company').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cecompanyname']).'<br/>' : '' ).
+						(!empty($deliveryInfos['ceemail']) ? '<b>'.$this->l('E-mail address').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['ceemail']).'<br/>' : '' ).
+						(!empty($deliveryInfos['cephonenumber']) ? '<b>'.$this->l('Phone').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cephonenumber']).'<br/><br/>' : '' ).
+						'<b>'.$this->l('Customer address').' : </b><br/>'
 						.(Tools::htmlentitiesUTF8($addressDelivery->address1) ? Tools::htmlentitiesUTF8($addressDelivery->address1).'<br />' : '')
 						.(!empty($addressDelivery->address2) ? Tools::htmlentitiesUTF8($addressDelivery->address2).'<br />' : '')
 						.(!empty($addressDelivery->postcode) ? Tools::htmlentitiesUTF8($addressDelivery->postcode).'<br />' : '')
@@ -462,13 +462,13 @@ class Socolissimo extends CarrierModule
 						.(!empty($addressDelivery->other) ? '<hr><b>'.$this->l('Other').' : </b>'.Tools::htmlentitiesUTF8($addressDelivery->other).'<br /><br />' : '')
 						.(!empty($deliveryInfos['cedoorcode1']) ? '<b>'.$this->l('Door code').' 1 : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cedoorcode1']).'<br/>' : '' )
 						.(!empty($deliveryInfos['cedoorcode2']) ? '<b>'.$this->l('Door code').' 2 : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cedoorcode2']).'<br/>' : '' )
-						.(!empty($deliveryInfos['cedeliveryinformation']) ? '<b>'.$this->l('Delivery informations').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cedeliveryinformation']).'<br/><br/>' : '' );
+						.(!empty($deliveryInfos['cedeliveryinformation']) ? '<b>'.$this->l('Delivery information').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cedeliveryinformation']).'<br/><br/>' : '' );
 				break;
 				default:
 				$html .=  str_replace('+',' ',$deliveryMode[$deliveryInfos['delivery_mode']]).'<br/>'
-				.(!empty($deliveryInfos['prid']) ? '<b>'.$this->l('Pic up point id').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['prid']).'<br/>' : '' )
-				.(!empty($deliveryInfos['prname']) ? '<b>'.$this->l('Pic up point').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['prname']).'<br/>' : '' )
-				.'<b>'.$this->l('Pic up point adresse').' : </b><br/>'
+				.(!empty($deliveryInfos['prid']) ? '<b>'.$this->l('Pick up point ID').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['prid']).'<br/>' : '' )
+				.(!empty($deliveryInfos['prname']) ? '<b>'.$this->l('Pick up point').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['prname']).'<br/>' : '' )
+				.'<b>'.$this->l('Pick up point address').' : </b><br/>'
 				.(!empty($deliveryInfos['pradress1']) ? Tools::htmlentitiesUTF8($deliveryInfos['pradress1']).'<br/>' : '' )
 				.(!empty($deliveryInfos['pradress2']) ? Tools::htmlentitiesUTF8($deliveryInfos['pradress2']).'<br/>' : '' )
 				.(!empty($deliveryInfos['pradress3']) ? Tools::htmlentitiesUTF8($deliveryInfos['pradress3']).'<br/>' : '' )

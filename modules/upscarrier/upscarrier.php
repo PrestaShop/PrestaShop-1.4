@@ -594,7 +594,7 @@ class UpsCarrier extends CarrierModule
 								$idstates[] = $v['id_state'];
 							}
 						$html .= '</select>
-						<p>' . $this->l('Choose in state list the one.') . '</p>
+						<p>' . $this->l('Select state from within the list.') . '</p>
 					</div>
 					<label>'.$this->l('Country').' : </label>
 					<div class="margin-form">
@@ -607,7 +607,7 @@ class UpsCarrier extends CarrierModule
 								$idcountries[] = $v['id_country'];
 							}
 						$html .= '</select>
-						<p>' . $this->l('Choose in country list the one.') . '</p>
+						<p>' . $this->l('Select country from within the list.') . '</p>
 						'.(!in_array((int)(Configuration::get('UPS_CARRIER_COUNTRY')), $idcountries) ? '<div class="warning">'.$this->l('Country is not set').'</div>' : '').'
 					</div>
 				</fieldset>

@@ -379,7 +379,7 @@ class Twenga extends PaymentModule
 		}
 		if (!empty($errors))
 		{
-			$str_error = $this->l('While Twenga API get subscriptiopn link some errors occurred:');
+			$str_error = $this->l('Some errors occurred with the Twenga API get subscription link:');
 			$str_error .=  '<ol>'; 
 			foreach ($errors as $error)
 				$str_error .= '<li><em>'.$error.'</em></li>';
@@ -404,26 +404,26 @@ class Twenga extends PaymentModule
 			});
 			</script>
 			<fieldset>
-				<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('Reference your products on Twenga : 500 clicks offered from Prestashop!').'</legend>'
+				<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('Reference your products on Twenga: 500 clicks offered from Prestashop!').'</legend>'
 				.'<div style="float:left; width:80px; height:100px">
-					<img src="../modules/'.$this->name.'/logo_big.jpg" class="middle" style="margin:20px 0 0 0;"/>
+					<img src="../modules/'.$this->name.'/logo_big.jpg" alt="" class="middle" style="margin: 20px 0 0 0;" />
 				</div>'
-				.'<p>'.$this->l('How to test Twenga and benefit to your 500 firsts offered clicks:').'</p>'
+				.'<p>'.$this->l('How to test Twenga and benefit from your first 500 offered clicks:').'</p>'
 				.'<ul>'
-					.'<li>'.$this->l('Step 1: Clic on this special link to subscribe on "Twenga Ready to Sell":');
+					.'<li>'.$this->l('Step 1: Click on this special link to subscribe to "Twenga Ready to Sell":');
 		if ($this->inscription_url !== NULL)
 			$str_return .= '&nbsp;<a href="'.$this->inscription_url.'" target="_blank" class="link">&raquo;'.$this->l('subscribe').'&laquo;</a>'.'</li>';
 		else
 			$str_return .= '&nbsp;<em style="color:red;">'.$this->l('(Error(s) occurred: please contact Twenga)').'</em>';
 			
 				$str_return .='
-					<li>'.$this->l('Step 2: Completed the subscription formular of Twenga').'</li>
-					<li>'.$this->l('Step 3: After receive your Twenga key, go to the next formular and paste the key in "hash key" field with your Twenga "Ready to Sell" login/password. Save').'</li>
+					<li>'.$this->l('Step 2: Complete the Twenga subscription form').'</li>
+					<li>'.$this->l('Step 3: After receiving your Twenga key, go to the next form and paste the key in "hash key" field beside your Twenga "Ready to Sell" login/password. Save').'</li>
 				</ul>
 				<p style="text-align:center;"><a href="#" title="'.$this->l('Increase your traffic - 500 offered clicks').'" onclick="$(\'#submitTwengaSubscription\').click(); return false;" ><img src="'.self::$base_path.'/bt_500_clicks.gif" width="364" height="45" /></a></p>
-				<p style="text-align:center;"><a href="'.$tarifs_link.'" class="link" id="twenga_tarif">'.$this->l('Twenga Tarifs').'</a></p>
+				<p style="text-align:center;"><a href="'.$tarifs_link.'" class="link" id="twenga_tarif">'.$this->l('Twenga Prices').'</a></p>
 				<p>'
-					.$this->l('Your catalog will be referenced under tens days. After your 500 clicks are used, you will be charged per click by category from 0.05€ to 0.15€. You will access to a complete management panel. You can leave anytime, dealt 1 month notice.')
+					.$this->l('Your catalog will be referenced under tens days. After your 500 clicks are used, you will be charged per click by category from 0.05€ to 0.15€. You will have access to a complete management panel. You can leave anytime, with 1 month\'s notice.')
 				.'</p>
 			</fieldset>
 			
@@ -441,7 +441,7 @@ class Twenga extends PaymentModule
 			<fieldset>
 				<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('Twenga Authentication').'</legend>'
 				.((self::$obj_twenga->getHashKey() === NULL || self::$obj_twenga->getHashKey() === '') ?
-					'<p>'.$this->l('After performs step 1 and 2, filled next fields with your Twenga key and your "Twenga Ready To Sell" login:').'</p>' :
+					'<p>'.$this->l('After performing steps 1 and 2, fill the next fields with your Twenga key and your "Twenga Ready To Sell" login:').'</p>' :
 					'<label>'.$this->l('Feed\'s url').' : </label><div class="margin-form">'.$this->feed_url.'</div><!-- .margin-form -->')
 				.'<label>'.$this->l('HashKey').' <sup>*</sup> : </label>
 				<div class="margin-form">
@@ -478,8 +478,8 @@ class Twenga extends PaymentModule
 	 	return '
 	 	<form name="form_subscription_twenga" id="form_subscription_twenga" method="post" action="">
 		<fieldset>
-			<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('This informations pre filled Twenga subscription formular').'</legend>
-			<p>'.$this->l('The following informations will be pre filled while your "Twenga Ready to Sell" subscription. Please check values validity').'</p><br />
+			<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('This information pre-fills Twenga subscription form').'</legend>
+			<p>'.$this->l('The following information will pre-fill your "Twenga Ready to Sell" subscription. Please check values validity').'</p><br />
 			<label>'.$this->l('Site\'s url').' <sup>*</sup> : </label>
 			<div class="margin-form">'
 				.'<div class="simulate-disable-input" >'.$this->site_url.'</div>
