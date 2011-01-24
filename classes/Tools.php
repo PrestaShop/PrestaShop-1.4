@@ -79,7 +79,7 @@ class ToolsCore
 	*/
 	static public function redirectLink($url)
 	{
-		if (strpos($url, 'http://') === FALSE)
+		if (!preg_match('@^https?://@i', $url))
 		{
 			global $link;
 			if (strpos($url, __PS_BASE_URI__) !== FALSE && strpos($url, __PS_BASE_URI__) == 0)
