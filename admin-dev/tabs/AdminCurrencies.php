@@ -78,6 +78,25 @@ class AdminCurrencies extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
+		elseif ((isset($_GET['status'.$this->table]) OR isset($_GET['status'])) AND Tools::getValue($this->identifier))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+				if (Validate::isLoadedObject($object = $this->loadObject()))
+				{
+					if ($object->active AND $object->id == Configuration::get('PS_CURRENCY_DEFAULT'))
+						$this->_errors[] = $this->l('You can\'t disable the default currency');
+					elseif ($object->toggleStatus())
+						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_category = (int)(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$this->token);
+					else
+						$this->_errors[] = Tools::displayError('an error occurred while updating status');
+				}
+				else
+					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+		}
 		elseif (Tools::getValue('submitOptions'.$this->table))
 		{
 			foreach ($this->_fieldsOptions as $key => $field)
