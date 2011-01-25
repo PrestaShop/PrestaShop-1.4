@@ -483,6 +483,11 @@
 									<input type="text" class="text" name="vat_number" id="vat_number" value="{if isset($guestInformations) && $guestInformations.vat_number}{$guestInformations.vat_number}{/if}" />
 								</p>
 							</div>
+							<p class="required text dni">
+								<label for="dni">{l s='Identification number'}</label>
+								<input type="text" class="text" name="dni" id="dni" value="{if isset($guestInformations) && $guestInformations.dni}{$guestInformations.dni}{/if}" />
+								<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+							</p>
 							<p class="required text">
 								<label for="address1">{l s='Address'}</label>
 								<input type="text" class="text" name="address1" id="address1" value="{if isset($guestInformations) && $guestInformations.address1}{$guestInformations.address1}{/if}" />
@@ -550,6 +555,11 @@
 										<input type="text" class="text" id="vat_number_invoice" name="vat_number_invoice" value="" />
 									</p>
 								</div>
+								<p class="required text dni_invoice">
+									<label for="dni">{l s='Identification number'}</label>
+									<input type="text" class="text" name="dni" id="dni" value="{if isset($guestInformations) && $guestInformations.dni}{$guestInformations.dni}{/if}" />
+									<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+								</p>
 								<p class="required text">
 									<label for="address1_invoice">{l s='Address'}</label>
 									<input type="text" class="text" name="address1_invoice" id="address1_invoice" value="" />

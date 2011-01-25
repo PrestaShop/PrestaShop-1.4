@@ -15,9 +15,12 @@ $(document).ready(function(){
 			updateNeedIDNumber('invoice');
 			updateZipCode();
 		});
-		updateState('invoice');
-		updateNeedIDNumber('invoice');
-		updateZipCode('invoice');
+		if ($('select#id_country_invoice:visible').length != 0)
+		{
+			updateState('invoice');
+			updateNeedIDNumber('invoice');
+			updateZipCode('invoice');
+		}
 	}
 });
 
@@ -40,11 +43,11 @@ function updateState(suffix)
 function updateNeedIDNumber(suffix)
 {
 	var idCountry = parseInt($('select#id_country'+(suffix !== undefined ? '_'+suffix : '')).val());
-	
+
 	if ($.inArray(idCountry, countriesNeedIDNumber) >= 0)
-		$('.dni').slideDown('slow');
+		$('.dni'+(suffix !== undefined ? '_'+suffix : '')).slideDown('slow');
 	else
-		$('.dni').slideUp('fast');
+		$('.dni'+(suffix !== undefined ? '_'+suffix : '')).slideUp('fast');
 }
 
 function updateZipCode(suffix)

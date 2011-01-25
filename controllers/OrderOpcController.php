@@ -331,6 +331,7 @@ class OrderOpcControllerCore extends ParentOrderController
 			'id_address_delivery' => (int)$this->cart->id_address_delivery,
 			'company' => Tools::htmlentitiesUTF8($address_delivery->company),
 			'vat_number' => Tools::htmlentitiesUTF8($address_delivery->vat_number),
+			'dni' => Tools::htmlentitiesUTF8($address_delivery->dni),
 			'address1' => Tools::htmlentitiesUTF8($address_delivery->address1),
 			'postcode' => Tools::htmlentitiesUTF8($address_delivery->postcode),
 			'city' => Tools::htmlentitiesUTF8($address_delivery->city),

@@ -422,6 +422,9 @@ $(function() {
 				$('#is_new_customer').val('1');
 				$('#opc_account_choice').hide();
 				$('#opc_invoice_address').hide();
+				updateState();
+				updateNeedIDNumber();
+				updateZipCode();
 			});
 			$('#opc_guestCheckout').click(function() {
 				$('.is_customer_param').hide();
@@ -430,6 +433,9 @@ $(function() {
 				$('#opc_account_choice').hide();
 				$('#opc_invoice_address').hide();
 				$('#new_account_title').html(txtInstantCheckout);
+				updateState();
+				updateNeedIDNumber();
+				updateZipCode();
 			});
 		}
 		else if (isGuest)
@@ -440,6 +446,9 @@ $(function() {
 			$('#opc_account_choice').hide();
 			$('#opc_invoice_address').hide();
 			$('#new_account_title').html(txtInstantCheckout);
+			updateState();
+			updateNeedIDNumber();
+			updateZipCode();
 		}
 		else
 		{
@@ -448,6 +457,9 @@ $(function() {
 			$('.is_customer_param').show();
 			$('#opc_account_form').show();
 			$('#opc_invoice_address').hide();
+			updateState();
+			updateNeedIDNumber();
+			updateZipCode();
 		}
 		
 		// LOGIN FORM
@@ -515,6 +527,9 @@ $(function() {
 				$('#opc_invoice_address').slideDown('slow');
 				if ($('#company_invoice').val() == '')
 					$('#vat_number_block_invoice').hide();
+				updateState('invoice');
+				updateNeedIDNumber('invoice');
+				updateZipCode('invoice');
 			}
 			else
 				$('#opc_invoice_address').slideUp('slow');
