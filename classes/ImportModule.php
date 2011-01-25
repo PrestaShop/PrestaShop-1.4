@@ -45,6 +45,8 @@ abstract class ImportModuleCore extends Module
 		{
 			if(!mysql_select_db($this->database, $this->_link))
 				die(Tools::displayError('The database selection cannot be made.'));
+			if (!mysql_query('SET NAMES \'utf8\'', $this->_link))
+				die(Tools::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
 		}
 		else
 			die(Tools::displayError('Link to database cannot be established.'));
