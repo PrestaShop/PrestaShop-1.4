@@ -2,7 +2,7 @@
 
 include_once('../../config/config.inc.php');
 include_once('../../init.php');
-include_once('../../modules/shopImporter/shopImporter.php');
+include_once('../../modules/shopimporter/shopimporter.php');
 
 if (!Tools::getValue('ajax'))
 	die('');

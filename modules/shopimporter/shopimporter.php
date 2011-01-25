@@ -194,14 +194,14 @@ class shopimporter extends ImportModule
 	{
 			global $cookie;
 		$exportModules = parent::getImportModulesOnDisk();
-		$html = '<script type="text/javascript" src="../modules/shopImporter/shopImporter.js"></script>
+		$html = '<script type="text/javascript" src="../modules/shopimporter/shopimporter.js"></script>
 				<script src="'._PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js"></script> 
 				 <script type="text/javascript">
 					var conf = new Array();';
 		$i = 0;
 		foreach($this->supportedImports as $import)
 		{
-			$html .= 'conf['.$i.'] = new Array(\''.$import['methodName'].'\', \''.$import['label'].'\', \''.$import['name'].'\');';
+			$html .= 'conf['.$i.'] = new Array(\''.addslashes($import['methodName']).'\', \''.addslashes($import['label']).'\', \''.addslashes($import['name']).'\');';
 			$i++;
 		}
 
@@ -280,12 +280,16 @@ class shopimporter extends ImportModule
 										<label class="t"><img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;"></label>
 										<input type="radio" id="'.$import['identifier'].'_off'.'" name="'.$import['methodName'].'" class="'.$key.'" value="0">
 										<label class="t" for="'.$import['identifier'].'_off'.'">'.$this->l('No').'</label>&nbsp;&nbsp;
-										'.(array_key_exists('delete', $import) ? '
-										<label class="t"><img src="../img/admin/delete.gif" alt="Delete" title="Delete"></label>
-										<input type="checkbox" class="truncateTable" id="'.$key.'" name="delete_'.$import['name'].'">
-										<label class="t" for="'.$key.'">'.$this->l('Delete').'</label>' : '' ).
-										(array_key_exists('info', $import) ? '<p>'.$import['info'].'</p>' : '').'
-									</div>';
+									</div>
+									
+									'.(array_key_exists('delete', $import) ? '
+										<label for="'.$key.'">'.$this->l('Delete').' :</label>
+										<div class="margin-form">
+											<label class="t"><img src="../img/admin/delete.gif" alt="Delete" title="Delete"></label>
+											<input type="checkbox" class="truncateTable" id="'.$key.'" name="delete_'.$import['name'].'">' : '' ).
+											(array_key_exists('info', $import) ? '<p>'.$import['info'].'</p>' : '').'
+										</div>
+									<hr>';
 					}
 					$html .= '</div><hr>
 					<h2>'.$this->l('Advanced Options').'</h2>
