@@ -388,7 +388,7 @@ class PayPal extends PaymentModule
 		{
 			$country = new Country((int)($address->id_country));
 			$state = new State((int)($address->id_state));
-			$requestAddress = '&SHIPTONAME='.urlencode($address->company.' '.$address->lastname.' '.$address->firstname).'&SHIPTOSTREET='.urlencode($address->address1.' '.$address->address2).'&SHIPTOCITY='.urlencode($address->city).'&SHIPTOSTATE='.urlencode($state->iso_code).'&SHIPTOCOUNTRYCODE='.urlencode($country->iso_code).'&SHIPTOZIP='.urlencode($address->postcode);
+			$requestAddress = '&SHIPTONAME='.urlencode($address->company.' '.$address->firstname.' '.$address->lastname).'&SHIPTOSTREET='.urlencode($address->address1.' '.$address->address2).'&SHIPTOCITY='.urlencode($address->city).'&SHIPTOSTATE='.urlencode($state->iso_code).'&SHIPTOCOUNTRYCODE='.urlencode($country->iso_code).'&SHIPTOZIP='.urlencode($address->postcode);
 		}
 
 		// Making request
