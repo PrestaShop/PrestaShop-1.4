@@ -861,7 +861,7 @@ abstract class AdminTabCore
 			return $this->uploadImage($id, $this->fieldImageSettings['name'], $this->fieldImageSettings['dir'].'/');
 		elseif (!empty($this->fieldImageSettings))
 			foreach ($this->fieldImageSettings AS $image)
-				if (isset($image['name']) AND isset($image['dir']))
+				if (isset($image['name']) AND isset($image['dir']) AND ($this->table == 'lang' AND $image['name'] != 'no-picture'))
 					$this->uploadImage($id, $image['name'], $image['dir'].'/');
 		return !sizeof($this->_errors) ? true : false;
 	}

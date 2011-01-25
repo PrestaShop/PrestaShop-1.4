@@ -381,13 +381,6 @@ class AdminLanguages extends AdminTab
 			echo '<br />';
 		}
 	}
-	
-	/* In order to prevent multiple image uploads */
-	protected function postImage()
-	{
-		return true;
-	}
-
 }
 
 
