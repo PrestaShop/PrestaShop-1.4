@@ -19,7 +19,7 @@ class importerosc extends ImportModule
 	
 	public function install()
 	{
-		if (!$this->registerHook('beforeAuthentication') OR !parent::install())
+		if (!parent::install() OR !$this->registerHook('beforeAuthentication'))
 			return false;
 		return true; 					
 	}
