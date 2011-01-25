@@ -38,6 +38,7 @@ if (!isset($cookie->id_lang))
 	$cookie->id_lang = Configuration::get('PS_LANG_DEFAULT');
 $iso = strtolower(Language::getIsoById((int)($cookie->id_lang)));
 include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
+include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
 /* Cookie creation and redirection */
 if (Tools::isSubmit('Submit'))

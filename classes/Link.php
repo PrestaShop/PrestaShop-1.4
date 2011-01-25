@@ -245,7 +245,7 @@ class LinkCore
 		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&amp;').'p='.(int)($p));
 	}
 
-	public function getPaginationLink($type, $id_object, $nb = FALSE, $sort = FALSE, $pagination = FALSE, $array = FALSE)
+	public function getPaginationLink($type, $id_object, $nb = false, $sort = false, $pagination = false, $array = false)
 	{
 		if ($type AND $id_object)
 			$url = $this->{'get'.$type.'Link'}($id_object, NULL);
@@ -277,7 +277,7 @@ class LinkCore
 			return $url.$vars;
 		$vars['requestUrl'] = $url;
 		if ($type AND $id_object)
-			$vars['id_'.$type] = (is_object($id_object) ? (int)($id_object->id) : (int)($id_object));
+			$vars['id_'.$type] = (is_object($id_object) ? (int)$id_object->id : (int)$id_object);
 		return $vars;
 	}
 

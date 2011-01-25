@@ -29,7 +29,6 @@
 	var baseDir = '{$base_dir_ssl}';
 -->
 </script>
-<script type="text/javascript" src="{$js_dir}layer.js"></script>
 <script type="text/javascript">
 var msg = "{l s='You must agree to the terms of service before continuing.' js=1}";
 {literal}

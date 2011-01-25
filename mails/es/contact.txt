@@ -1,5 +1,3 @@
-Hola {firstname} {lastname},
-
 Has recibido un mensaje de un cliente desde tu tienda: {shop_name}
 
 Detalles del mensaje:
@@ -10,6 +8,4 @@ Mensaje:
 
 {message}
 
-
-
-{shop_url} desarrollado por PrestaShop®
+{shop_url} desarrollado por PrestaShop™

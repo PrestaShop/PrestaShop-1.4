@@ -239,7 +239,7 @@ class AdminProducts extends AdminTab
 			if ($this->tabAccess['edit'] === '1')
 				if ($id = (int)(Tools::getValue($this->identifier)))
 					if (Attachment::attachToProduct($id, $_POST['attachments']))
-						Tools::redirectAdmin($currentIndex.'&id_product='.$id.'&conf=4&add'.$this->table.'&tabs=6&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.'&id_product='.(int)$id.(isset($_POST['id_category']) ? '&id_category='.(int)$_POST['id_category'] : '').'&conf=4&add'.$this->table.'&tabs=6&token='.($token ? $token : $this->token));
 		}
 
 		/* Product duplication */
@@ -584,11 +584,12 @@ class AdminProducts extends AdminTab
 					$languages = Language::getLanguages(false);
 					foreach ($_POST AS $key => $val)
 					{
-						if (preg_match("/^feature_([0-9]+)_value/i", $key, $match))
+						if (preg_match('/^feature_([0-9]+)_value/i', $key, $match))
 						{
 							if ($val)
 								$product->addFeaturesToDB($match[1], $val);
-							else {
+							else
+							{
 								if ($default_value = $this->checkFeatures($languages, $match[1]))
 								{
 									$id_value = $product->addFeaturesToDB($match[1], 0, 1, $language['id_lang']);
@@ -1920,29 +1921,31 @@ class AdminProducts extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		<div class="clear">&nbsp;</div>
-		<table><tr>
-			<td>
-				<p>'.$this->l('Attachments for this product:').'</p>
-				<select multiple id="selectAttachment1" name="attachments[]" style="width:300px;height:160px;">';
-		foreach ($attach1 as $attach)
-			echo '	<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
-		echo '	</select><br /><br />
-				<a href="#" id="addAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
-					'.$this->l('Remove').' &gt;&gt;
-				</a>
-			</td>
-			<td style="padding-left:20px;">
-				<p>'.$this->l('Available attachments:').'</p>
-				<select multiple id="selectAttachment2" style="width:300px;height:160px;">';
-		foreach ($attach2 as $attach)
-			echo '	<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
-		echo '	</select><br /><br />
-				<a href="#" id="removeAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
-					&lt;&lt; '.$this->l('Add').'
-				</a>
-			</div>
-			</td>
-		</tr></table>
+		<table>
+			<tr>
+				<td>
+					<p>'.$this->l('Attachments for this product:').'</p>
+					<select multiple id="selectAttachment1" name="attachments[]" style="width:300px;height:160px;">';
+			foreach ($attach1 AS $attach)
+				echo '<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
+			echo '	</select><br /><br />
+					<a href="#" id="addAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+						'.$this->l('Remove').' &gt;&gt;
+					</a>
+				</td>
+				<td style="padding-left:20px;">
+					<p>'.$this->l('Available attachments:').'</p>
+					<select multiple id="selectAttachment2" style="width:300px;height:160px;">';
+			foreach ($attach2 AS $attach)
+				echo '<option value="'.$attach['id_attachment'].'">'.$attach['name'].'</option>';
+			echo '	</select><br /><br />
+					<a href="#" id="removeAttachment" style="text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px">
+						&lt;&lt; '.$this->l('Add').'
+					</a>
+				</div>
+				</td>
+			</tr>
+		</table>
 		<div class="clear">&nbsp;</div>
 		<input type="submit" name="submitAttachments" id="submitAttachments" value="'.$this->l('Update attachments').'" class="button" />';
 	}
@@ -3351,7 +3354,7 @@ class AdminProducts extends AdminTab
 						echo '</select>';
 					}
 					else
-						echo '<span style="font-size: 10px; color: #666;">'.$this->l('N/A').' - <a href="index.php?tab=AdminFeatures&addfeature_value&id_feature='.(int)$tab_features['id_feature'].'&token='.Tools::getAdminToken('AdminFeatures'.(int)(Tab::getIdFromClassName('AdminFeatures')).(int)($cookie->id_employee)).'" style="color: #666; text-decoration: underline;">'.$this->l('Add pre-defined values first').'</a></span>';
+						echo '<input type="hidden" name="feature_'.$tab_features['id_feature'].'_value" value="0" /><span style="font-size: 10px; color: #666;">'.$this->l('N/A').' - <a href="index.php?tab=AdminFeatures&addfeature_value&id_feature='.(int)$tab_features['id_feature'].'&token='.Tools::getAdminToken('AdminFeatures'.(int)(Tab::getIdFromClassName('AdminFeatures')).(int)($cookie->id_employee)).'" style="color: #666; text-decoration: underline;">'.$this->l('Add pre-defined values first').'</a></span>';
 
 					echo '
 						</td>

@@ -322,9 +322,13 @@ class AdminAddresses extends AdminTab
 		foreach ($this->countriesArray AS $id_country => $name)
 			echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
 		echo '		</select> <sup>*</sup>
-				</div>
+				</div>';
+		
+				$id_country_ajax = (int)$this->getFieldValue($obj, 'id_country');
+		
+		echo '
 				<script type="text/javascript">
-					populateStates('.(int)($this->getFieldValue($obj, 'id_country')).', '.(int)($this->getFieldValue($obj, 'id_state')).');
+					populateStates('.(empty($id_country_ajax) ? (int)Configuration::get('PS_COUNTRY_DEFAULT') : (int)$id_country_ajax).', '.(int)($this->getFieldValue($obj, 'id_state')).');
 				</script>
 				<label>'.$this->l('State').'</label>
 				<div class="margin-form">

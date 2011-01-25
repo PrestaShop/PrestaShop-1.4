@@ -8,6 +8,4 @@ Message
 
 {message}
 
-
-
 {shop_url} réalisé par PrestaShop™

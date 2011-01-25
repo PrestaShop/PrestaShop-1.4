@@ -456,4 +456,3 @@ if (Tools::isSubmit('submitTrackClickOnHelp'))
     if (!empty($label) && !empty($version))
         HelpAccess::trackClick($label, $version);
 }
-

@@ -156,5 +156,3 @@ class iAdvize extends Module
 		<!-- /End - iAdvize - Live chat -->'."\n";
 	}
 }
-
-

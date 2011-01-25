@@ -68,9 +68,14 @@ require(dirname(__FILE__).'/autoload.php');
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 {
-	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-	if (isset($_SERVER['QUERY_STRING']) AND !empty($_SERVER['QUERY_STRING']))
-		$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+	if (substr($_SERVER['SCRIPT_NAME'], -9) == 'index.php')
+		$_SERVER['REQUEST_URI'] = dirname($_SERVER['SCRIPT_NAME']).'/';
+	else
+	{
+		$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+		if (isset($_SERVER['QUERY_STRING']) AND !empty($_SERVER['QUERY_STRING']))
+			$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+	}
 }
 
 /* aliases */

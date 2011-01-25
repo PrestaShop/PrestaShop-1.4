@@ -565,15 +565,16 @@ class ProductComments extends Module
 		$averageTotal = count($averages) ? ($averageTotal / count($averages)) : 0;
 		
 		$smarty->assign(array(
-			'logged' => (int)$cookie->id_customer,
-			'action_url' => Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'],
-			'comments' => ProductComment::getByProduct((int)Tools::getValue('id_product')),
-			'criterions' => ProductCommentCriterion::getByProduct((int)Tools::getValue('id_product'), (int)$cookie->id_lang),
-			'averages' => $averages,
-			'product_comment_path' => $this->_path,
-			'averageTotal' => $averageTotal,
-			'too_early' => ($customerComment AND (strtotime($customerComment['date_add']) + Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME')) > time()),
-			'delay' => Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME')));
+		'logged' => (int)$cookie->id_customer,
+		'action_url' => Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'],
+		'comments' => ProductComment::getByProduct((int)Tools::getValue('id_product')),
+		'criterions' => ProductCommentCriterion::getByProduct((int)Tools::getValue('id_product'), (int)$cookie->id_lang),
+		'averages' => $averages,
+		'product_comment_path' => $this->_path,
+		'averageTotal' => $averageTotal,
+		'allow_guests' => (int)Configuration::get('PRODUCT_COMMENTS_ALLOW_GUESTS'),
+		'too_early' => ($customerComment AND (strtotime($customerComment['date_add']) + Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME')) > time()),
+		'delay' => Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME')));
 
 		$controller = new FrontController();
 		$controller->pagination((int)ProductComment::getCommentNumber((int)Tools::getValue('id_product')));
