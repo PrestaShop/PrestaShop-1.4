@@ -489,7 +489,8 @@ INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active
 (44, 6, 'Tucumán', 'T', 1);
 
 INSERT INTO `PREFIX_currency` (`name`, `iso_code`, `iso_code_num`, `sign`, `blank`, `conversion_rate`, `format`, `deleted`, `active`) VALUES
-('Euro', 'EUR', '978', '€', 1, 1, 2, 0, 1), ('Dollar', 'USD', '840', '$', 0, 1.32, 1, 0, 1), ('Pound', 'GBP', '826', '£', 0, 0.8, 1, 0, 1), ('Yen', 'JPY', '392', '¥', 0, 113.14, 2, 0, 0),
+('Euro', 'EUR', '978', '€', 1, 1, 2, 0, 1), ('Dollar', 'USD', '840', '$', 0, 1.32, 1, 0, 1), ('Pound', 'GBP', '826', '£', 0, 0.8, 1, 0, 1);
+/*('Yen', 'JPY', '392', '¥', 0, 113.14, 2, 0, 0),
 ('Lev', 'BGN', '975', 'лв', 1, 1.96, 2, 0, 0), ('Couronne', 'CZK', '203', 'Kč', 1, 24.58, 2, 0, 0), ('Couronne', 'DKK', '208', 'kr', 1, 7.45, 2, 0, 0),
 ('Couronne', 'EEK', '233', 'kr', 1, 15.65, 2, 0, 0), ('Forint', 'HUF', '348', 'Ft', 1, 279.65, 2, 0, 0), ('Litas', 'LTL', '440', 'Lt', 1, 3.45, 2, 0, 0),
 ('Lats letton', 'LVL', '428', 'Ls', 1, 0.71, 2, 0, 0), ('Zloty', 'PLN', '985', 'zł', 1, 3.94, 2, 0, 0), ('Leu', 'RON', '946', 'lei', 1, 4.26, 2, 0, 0),
@@ -499,7 +500,7 @@ INSERT INTO `PREFIX_currency` (`name`, `iso_code`, `iso_code_num`, `sign`, `blan
 ('Yuan renminbi', 'CNY', '156', '¥', 1, 8.96, 2, 0, 0), ('Hong Kong Dollar', 'HKD', '344', '$', 1, 10.37, 2, 0, 0), ('Rupiah', 'IDR', '360', 'Rp', 1, 11956.81, 2, 0, 0),
 ('Rupees', 'INR', '356', 'rupees', 1, 60.93, 2, 0, 0), ('Won', 'KRW', '410', '₩', 1, 1537.58, 2, 0, 0), ('Mexican Peso', 'MXN', '484', '$', 1, 16.96, 2, 0, 0),
 ('Ringgit', 'MYR', '458', 'RM', 1, 4.13, 2, 0, 0), ('New-Zeland Dollar', 'NZD', '554', '$', 1, 1.81, 2, 0, 0), ('Peso Phillipin', 'PHP', '608', 'Php', 1, 58.61, 2, 0, 0),
-('Singapour Dollar', 'SGD', '702', '$', 1, 1.77, 2, 0, 0), ('Baht', 'THB', '764', '฿', 1, 40.96, 2, 0, 0), ('Rand', 'ZAR', '710', 'R', 1, 9.38, 2, 0, 0);
+('Singapour Dollar', 'SGD', '702', '$', 1, 1.77, 2, 0, 0), ('Baht', 'THB', '764', '฿', 1, 40.96, 2, 0, 0), ('Rand', 'ZAR', '710', 'R', 1, 9.38, 2, 0, 0);*/
 
 INSERT INTO `PREFIX_image_type` (`id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes`) VALUES
 (1, 'small', 45, 45, 1, 1, 1, 1, 0),
