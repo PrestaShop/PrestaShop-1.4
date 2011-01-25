@@ -2104,7 +2104,7 @@ class ProductCore extends ObjectModel
 	static public function searchByName($id_lang, $query)
 	{
 		$result = Db::getInstance()->ExecuteS('
-		SELECT p.`id_product`, pl.`name`, pl.`link_rewrite`, p.`weight`, p.`active`, p.`ecotax`, i.`id_image`, p.`reference`, p.`cache_is_pack`
+		SELECT p.`id_product`, pl.`name`, pl.`link_rewrite`, p.`weight`, p.`active`, p.`ecotax`, i.`id_image`, p.`reference`, p.`cache_is_pack`,
 		il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
