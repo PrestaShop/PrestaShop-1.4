@@ -686,7 +686,6 @@
 		</div>
 		
 		{if $giftAllowed}
-			<script type="text/javascript" src="{$js_dir}layer.js"></script>
 			{if isset($virtual_cart) && !$virtual_cart && $giftAllowed && $cart->gift == 1}
 			<script type="text/javascript">{literal}
 			// <![CDATA[
