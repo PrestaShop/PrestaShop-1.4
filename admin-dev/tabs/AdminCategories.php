@@ -232,7 +232,7 @@ class AdminCategories extends AdminTab
 		return $ret;
 	}
 
-	public function displayForm($token=NULL)
+	public function displayForm($token = NULL)
 	{
 		global $currentIndex, $cookie;
 		parent::displayForm();

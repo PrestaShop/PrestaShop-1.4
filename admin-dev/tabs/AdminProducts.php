@@ -1808,7 +1808,7 @@ class AdminProducts extends AdminTab
 
 	function displayFormCustomization($obj, $languages, $defaultLanguage)
 	{
-		parent::displayForm(false);
+		parent::displayForm();
 		$labels = $obj->getCustomizationFields();
 		$defaultIso = Language::getIsoById($defaultLanguage);
 
@@ -1952,7 +1952,7 @@ class AdminProducts extends AdminTab
 
 	function displayFormInformations($obj, $currency)
 	{
-		parent::displayForm();
+		parent::displayForm(false);
 		global $currentIndex, $cookie, $link;
 		$iso = Language::getIsoById((int)($cookie->id_lang));
 		$has_attribute = false;
@@ -3280,7 +3280,7 @@ class AdminProducts extends AdminTab
 	function displayFormFeatures($obj)
 	{
 		global $cookie, $currentIndex;
-		parent::displayForm(false);
+		parent::displayForm();
 
 		if ($obj->id)
 		{

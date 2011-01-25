@@ -1587,7 +1587,7 @@ abstract class AdminTabCore
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayForm($isMainTab = true)
+	public function displayForm($firstCall = true)
 	{
 		global $cookie;
 
@@ -1605,29 +1605,26 @@ abstract class AdminTabCore
 		else
 			$this->_defaultFormLanguage = (int)($cookie->employee_form_lang);
 
-		$output = '
-		<script type="text/javascript">
-			$(document).ready(function() {';
-		// If current tab is main/first tab
-		// Otherwise form_id_language has already been defined
-		if ($isMainTab)
-			$output .= '
-				id_language = '.$this->_defaultFormLanguage.';';
-		$output .= '
-				languages = new Array();';
-		foreach ($this->_languages AS $k => $language)
-			$output .= '
-				languages['.$k.'] = {
-					id_lang: '.(int)$language['id_lang'].',
-					iso_code: \''.$language['iso_code'].'\',
-					name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
-				};';
-		$output .= '
-				displayFlags(languages, id_language, '.$allowEmployeeFormLang.');
-			});
-		</script>';
-
-		echo $output;
+		// Only if it is the first call to displayForm, otherwise it has already been defined
+		if ($firstCall)
+		{
+			echo '
+			<script type="text/javascript">
+				$(document).ready(function() {
+					id_language = '.$this->_defaultFormLanguage.';
+					languages = new Array();';
+			foreach ($this->_languages AS $k => $language)
+				echo '
+					languages['.$k.'] = {
+						id_lang: '.(int)$language['id_lang'].',
+						iso_code: \''.$language['iso_code'].'\',
+						name: \''.htmlentities($language['name'], ENT_COMPAT, 'UTF-8').'\'
+					};';
+			echo '
+					displayFlags(languages, id_language, '.$allowEmployeeFormLang.');
+				});
+			</script>';
+		}
 	}
 
 	/**
