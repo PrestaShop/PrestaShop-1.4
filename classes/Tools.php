@@ -1472,9 +1472,6 @@ class ToolsCore
 
 	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '')
 	{
-		if (!file_exists($path) || !is_writable($path)) // do nothing
-			return true;
-
 		$tab = array('ErrorDocument' => array(), 'RewriteEngine' => array(), 'RewriteRule' => array());
 
 		// ErrorDocument

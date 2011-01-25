@@ -54,8 +54,14 @@ class AdminGenerator extends AdminTab
 			<div class="clear">&nbsp;</div>
 			<label for="imageCacheControl">'.$this->l('Optimization').'</label>
 			<div class="margin-form">
-				<input type="checkbox" name="cacheControl" id="cacheControl" value="1" '.(Configuration::get('PS_HTACCESS_CACHE_CONTROL') == 1 ? 'checked="checked"' : '').' />
+				<input type="checkbox" name="PS_HTACCESS_CACHE_CONTROL" id="PS_HTACCESS_CACHE_CONTROL" value="1" '.(Configuration::get('PS_HTACCESS_CACHE_CONTROL') == 1 ? 'checked="checked"' : '').' />
 				<p>'.$this->l('This will add directives to your .htaccess file which should improve cache and compression.').'</p>
+			</div>
+			<div class="clear">&nbsp;</div>
+			<label for="imageCacheControl">'.$this->l('Friendly URL').'</label>
+			<div class="margin-form">
+				<input type="checkbox" name="PS_REWRITING_SETTINGS" id="PS_REWRITING_SETTINGS" value="1" '.(Configuration::get('PS_REWRITING_SETTINGS') ? 'checked="checked"' : '').' />
+				<p>'.$this->l('Enable only if your server allows URL rewriting.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<label for="specific_configuration">'.$this->l('Specific configuration').'</label>
@@ -108,18 +114,14 @@ class AdminGenerator extends AdminTab
 		{
 			if ($this->tabAccess['edit'] === '1')
 			{		
-				Configuration::updateValue('PS_HTACCESS_CACHE_CONTROL', (int)(Tools::getValue('cacheControl')));						
+				Configuration::updateValue('PS_HTACCESS_CACHE_CONTROL', (int)Tools::getValue('PS_HTACCESS_CACHE_CONTROL'));
+				Configuration::updateValue('PS_REWRITING_SETTINGS', (int)Tools::getValue('PS_REWRITING_SETTINGS'));
 				Configuration::updateValue('PS_HTACCESS_SPECIFIC',  Tools::getValue('ps_htaccess_specific'));
-
-				if (!Tools::generateHtaccess($this->_htFile, 
-											 (int)(Configuration::get('PS_REWRITING_SETTINGS')),
-											 (int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
-											 Configuration::get('PS_HTACCESS_SPECIFIC')
-											 ))
-						die ($this->l('Cannot write into file:').' <b>'.$this->_htFile.'</b><br />'.$this->l('Please check write permissions.'));
-
-				Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
-			} else
+				if (Tools::generateHtaccess($this->_htFile, Configuration::get('PS_REWRITING_SETTINGS'), Configuration::get('PS_HTACCESS_CACHE_CONTROL'), Configuration::get('PS_HTACCESS_SPECIFIC')))
+					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
+				$this->_errors[] = $this->l('Cannot write into file:').' <b>'.$this->_htFile.'</b><br />'.$this->l('Please check write permissions.');
+			}
+			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 
