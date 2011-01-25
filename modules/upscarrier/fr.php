@@ -142,4 +142,5 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_90dc39cb4d212ee6e6e8c1ea45453019'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_2ce756272bcdd41712b4de841a3bd370'] = 'Cette section vous permettre de définir des configurations UPS spécifiques pour chaque produit (tels que le type de colis et les frais additionnels).';
 $_MODULE['<{upscarrier}prestashop>upscarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Erreur';
 $_MODULE['<{upscarrier}prestashop>upscarrier_bbb1730944c8f495534aa125411687af'] = 'Les webservices UPS semblent inaccessibles, veuillez patientez quelques minutes et réessayez';
+$_MODULE['<{upscarrier}prestashop>upscarrier_da603f01f9ef4785e2aed2b3a2619e99'] = 'UPS timed out !';
 $_MODULE['<{upscarrier}prestashop>upscarrier_755549828deba234f771ea065e24c115'] = 'N\'a pas pu se connecter à UPS.com';
