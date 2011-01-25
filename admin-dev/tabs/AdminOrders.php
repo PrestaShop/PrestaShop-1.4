@@ -851,9 +851,9 @@ class AdminOrders extends AdminTab
 		<div style="float: left">
 			<form action="'.$_SERVER['REQUEST_URI'].'&token='.$this->token.'" method="post" onsubmit="if (getE(\'visibility\').checked == true) return confirm(\''.$this->l('Do you want to send this message to the customer?', __CLASS__, true, false).'\');">
 			<fieldset style="width: 400px;">
-				<legend style="cursor: pointer;" onclick="openCloseLayer(\'message\');openCloseLayer(\'message_m\');"><img src="../img/admin/email_edit.gif" /> '.$this->l('New message').'</legend>
+				<legend style="cursor: pointer;" onclick="$(\'#message\').slideToggle();$(\'#message_m\').slideToggle();return false"><img src="../img/admin/email_edit.gif" /> '.$this->l('New message').'</legend>
 				<div id="message_m" style="display: '.(Tools::getValue('message') ? 'none' : 'block').'">
-					<a href="javascript:openCloseLayer(\'message\');openCloseLayer(\'message_m\');"><b>'.$this->l('Click here').'</b> '.$this->l('to add a comment or send a message to the customer').'</a>
+					<a href="#" onclick="$(\'#message\').slideToggle();$(\'#message_m\').slideToggle();return false"><b>'.$this->l('Click here').'</b> '.$this->l('to add a comment or send a message to the customer').'</a>
 				</div>
 				<div id="message" style="display: '.(Tools::getValue('message') ? 'block' : 'none').'">
 					<select name="order_message" id="order_message" onchange="orderOverwriteMessage(this, \''.$this->l('Do you want to overwrite your existing message?').'\')">
