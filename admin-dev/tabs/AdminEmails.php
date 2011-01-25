@@ -44,6 +44,7 @@ class AdminEmails extends AdminPreferences
 		'PS_MAIL_METHOD' => array('title' => '', 'validation' => 'isGenericName', 'required' => true, 'type' => 'radio', 'choices' => array(1 => $this->l('Use PHP mail() function.  Recommended; works in most cases'), 2 => $this->l('Set my own SMTP parameters. For advanced users ONLY')), 'js' => array(1 => 'onclick="javascript:toggleLayer(\'SMTP_CONTAINER\', 0);"', 2 => 'onclick="toggleLayer(\'SMTP_CONTAINER\', 1);"')),
 		'PS_MAIL_TYPE' => array('title' => '', 'validation' => 'isGenericName', 'required' => true, 'type' => 'radio', 'choices' => array(1 => $this->l('Send e-mail as HTML'), 2 => $this->l('Send e-mail as Text'), 3 => $this->l('Both'))),
 		'SMTP_CONTAINER' => array('title' => '', 'type' => 'container'),
+		'PS_MAIL_DOMAIN' => array('title' => $this->l('Mail domain:'), 'desc' => $this->l('Fully qualified domain name (keep it empty if you do not know)'), 'validation' => 'isUrl', 'size' => 30, 'type' => 'text'),
 		'PS_MAIL_SERVER' => array('title' => $this->l('SMTP server:'), 'desc' => $this->l('IP or server name (e.g., smtp.mydomain.com)'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
 		'PS_MAIL_USER' => array('title' => $this->l('SMTP user:'), 'desc' => $this->l('Leave blank if not applicable'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
 		'PS_MAIL_PASSWD' => array('title' => $this->l('SMTP password:'), 'desc' => $this->l('Leave blank if not applicable'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'password'),

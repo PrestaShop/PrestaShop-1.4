@@ -105,7 +105,7 @@ class MailCore
 
 			if (!$connection)
 				return false;
-			$swift = new Swift($connection);
+			$swift = new Swift($connection, Configuration::get('PS_MAIL_DOMAIN'));
 			/* Get templates content */
 			$iso = Language::getIsoById((int)($id_lang));
 			if (!$iso)
@@ -175,10 +175,10 @@ class MailCore
 				$smtp->setUsername($smtpLogin);
 				$smtp->setpassword($smtpPassword);
 				$smtp->setTimeout(5);
-				$swift = new Swift($smtp);
+				$swift = new Swift($smtp, Configuration::get('PS_MAIL_DOMAIN'));
 			}
 			else
-				$swift = new Swift(new Swift_Connection_NativeMail());
+				$swift = new Swift(new Swift_Connection_NativeMail(), Configuration::get('PS_MAIL_DOMAIN'));
 
 			$message = new Swift_Message($subject, $content, $type);
 
