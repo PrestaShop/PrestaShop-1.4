@@ -2792,6 +2792,7 @@ $_LANGADM['index57747250ec23a658f7a227ac9241aeef'] = 'Ne plus me remontrer';
 $_LANGADM['index52015afb6ec8b940ef903ff73f4c4058'] = 'Nouvelle catégorie';
 $_LANGADM['index830faa39d4dffcb14f4f514c9342e5d1'] = 'Créez une nouvelle catégorie et organisez vos produits sur votre boutique.';
 $_LANGADM['index656c3be690ee43df4b845bd2a2ebe587'] = 'Nouveau produit';
+$_LANGADM['index2c3b06b32caf673175832aeb3833f32a'] = 'Remplissez votre catalogue avec de nouveaux produits.';
 $_LANGADM['indexc33e404a441c6ba9648f88af3c68a1ca'] = 'Statistiques';
 $_LANGADM['indexc0eef64157eb4bb621577e628f595beb'] = 'Pilotez votre activité grâce à une analyse complète de votre boutique.';
 $_LANGADM['index4b08baa69304b6f4cd7ee5453beeea5e'] = 'Nouvel employé';
