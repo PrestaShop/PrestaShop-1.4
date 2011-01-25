@@ -1562,6 +1562,9 @@ class ProductCore extends ObjectModel
    		global $cookie, $cart;
         $cur_cart = $cart;
 
+        if (isset($divisor))
+            Tools::displayParameterAsDeprecated('divisor');
+
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
 		// Initializations
@@ -1630,6 +1633,8 @@ class ProductCore extends ObjectModel
 		$specific_price = self::$_pricesLevel3[$cacheId3];
 
 		$price = (float)(!$specific_price OR $specific_price['price'] == 0) ? $result['price'] : $specific_price['price'];
+
+		// convert only if the specific price is in the default currency (id_currency = 0)
 	    if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
 
@@ -1665,22 +1670,21 @@ class ProductCore extends ObjectModel
 			return $reduc;
 
 		if ($usereduc)
-		{
-			if ($reduc)
-				$price = Tools::ps_round($price, 2);
 			$price -= $reduc;
-		}
 
 		// Group reduction
 		if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
-		if ($usereduc)
+		else if ($usereduc) // apply group reduction if there is no group reduction for this category
 			$price *= ((100 - Group::getReduction($id_customer)) / 100);
+
 		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
 
 		if($result['ecotax'] AND $with_ecotax)
    			self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
+
+		$price = Tools::ps_round($price, $decimals);
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
@@ -1718,7 +1722,7 @@ class ProductCore extends ObjectModel
 	* @param boolean $tax With taxes or not (optional)
 	* @param integer $id_product_attribute Product attribute id (optional)
 	* @param integer $decimals Number of decimals (optional)
-	* @param integer $divisor Util when paying many time without frais (optional)
+	* @param integer $divisor Util when paying many time without fees (optional)
 	* @return float Product price in euros
 	*/
 	public function getPrice($tax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1)

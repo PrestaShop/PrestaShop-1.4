@@ -712,11 +712,11 @@ class ToolsCore
 
 		if ($id_category == 1)
 			return '<span class="navigation_end">'.$path.'</span>';
-		
+
 		$pipe = Configuration::get('PS_NAVIGATION_PIPE');
 		if (empty($pipe))
 			$pipe = '>';
-		
+
 		if ($categoryType === 'products')
 		{
 			$category = Db::getInstance()->getRow('
@@ -733,19 +733,19 @@ class ToolsCore
 				WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($cookie->id_lang).' AND c.id_category != 1
 				ORDER BY c.level_depth ASC
 				LIMIT '.(int)$category['level_depth']);
-				
+
 				$fullPath = '';
 				$n = 1;
 				$nCategories = (int)sizeof($categories);
 				foreach ($categories AS $category)
 				{
-					$fullPath .= 
+					$fullPath .=
 					(($n < $nCategories OR $linkOntheLastItem) ? '<a href="'.self::safeOutput($link->getCategoryLink((int)$category['id_category'], $category['link_rewrite'])).'" title="'.htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').'">' : '').
 					htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').
 					(($n < $nCategories OR $linkOntheLastItem) ? '</a>' : '').
 					(($n++ != $nCategories OR !empty($path)) ? '<span class="navigation-pipe">'.$pipe.'</span>' : '');
 				}
-					
+
 				return $fullPath.$path;
 			}
 		}
@@ -764,7 +764,7 @@ class ToolsCore
 			return self::getPath((int)($category->id_parent), $fullPath, $linkOntheLastItem, $categoryType);
 		}
 	}
-	
+
 	/**
 	* @param string [optionnal] $type_cat defined what type of categories is used (products or cms)
 	*/
@@ -1268,7 +1268,7 @@ class ToolsCore
 		// detect mass add
 		if (!is_array($js_uri))
 			$js_uri = array($js_uri);
-			
+
 		//overriding of modules js files
 		foreach ($js_uri AS &$file)
 		{
@@ -1500,7 +1500,7 @@ class ToolsCore
 		$tab['RewriteRule']['content']['^([a-z]{2})/content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms_category=$2 [QSA,L]';
 		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)__([a-zA-Z0-9-]*)'] = 'supplier.php?isolang=$1&id_supplier=$2 [QSA,L]';
 		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?isolang=$1&id_manufacturer=$2 [QSA,L]';
-		
+
 		// Compatibility with the old URLs
 		if (!Configuration::get('PS_INSTALL_VERSION') OR version_compare(Configuration::get('PS_INSTALL_VERSION'), '1.4.0.7') == -1)
 		{
@@ -1651,7 +1651,20 @@ FileETag INode MTime Size
 		{
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
-	   		trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong>', E_USER_WARNING);
+	   		trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
+		}
+	}
+
+	/**
+	 * Display a warning message indicating that the parameter is deprecated
+	 */
+	public static function displayParameterAsDeprecated($parameter)
+	{
+		if (_PS_DISPLAY_COMPATIBILITY_WARNING_)
+		{
+			$backtrace = debug_backtrace();
+			$callee = next($backtrace);
+	   		trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
 		}
 	}
 
@@ -1684,7 +1697,7 @@ FileETag INode MTime Size
 		$disabled = explode(',', ini_get('disable_functions'));
 		return (!in_array($function, $disabled) AND is_callable($function));
 	}
-	
+
 	public static function pRegexp($s, $delim)
 	{
 		$s = str_replace($delim, '\\'.$delim, $s);
@@ -1719,4 +1732,3 @@ function cmpPriceDesc($a,$b)
 		return (-1);
 	return (0);
 }
-
