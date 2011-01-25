@@ -112,7 +112,8 @@ class AddressControllerCore extends FrontController
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
 					$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
 			}
-
+			if ($country->isNeedDni() AND !Tools::getValue('dni'))
+				$this->errors[] = Tools::displayError('identification number is incorrect or already used');
 			if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 				strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 				$this->cookie->isLogged(true) === true)

@@ -92,6 +92,8 @@ class AdminAddresses extends AdminTab
 				}
 				else
 					$this->_errors[] = Tools::displayError('unknown customer');
+				if (Country::isNeedDniByCountryId(Tools::getValue('id_country')) AND !Tools::getValue('dni'))
+					$this->_errors[] = Tools::displayError('identification number is incorrect or already used');
 			}
 
 			// Check manufacturer selected

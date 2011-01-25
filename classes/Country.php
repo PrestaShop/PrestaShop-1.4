@@ -302,5 +302,18 @@ class CountryCore extends ObjectModel
         AND `id_lang` = '.(int)$id_lang
         );
     }
+    
+	public function isNeedDni()
+	{
+		return (bool)self::isNeedDniByCountryId($this->id);
+	}
+	
+	static public function isNeedDniByCountryId($id_country)
+	{
+		return (bool)Db::getInstance()->getValue('
+			SELECT `need_identification_number` 
+			FROM `'._DB_PREFIX_.'country`
+			WHERE `id_country` = '.(int)$id_country);
+	}
 }
 
