@@ -153,4 +153,3 @@ class StoresControllerCore extends FrontController
 		$this->smarty->display(_PS_THEME_DIR_.'stores.tpl');
 	}
 }
-
