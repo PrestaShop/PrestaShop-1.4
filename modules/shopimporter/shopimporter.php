@@ -687,9 +687,9 @@ class shopimporter extends ImportModule
 				{
 					if (@fsockopen('www.prestashop.com', 80))
 					{
-						if ($lang_pack = json_decode(@file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso)))
+						if ($lang_pack = json_decode(Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso)))
 						{
-							if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$iso.'.gzip'))
+							if ($content = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$iso.'.gzip'))
 							{
 								$file = _PS_TRANSLATIONS_DIR_.$iso.'.gzip';
 								if (file_put_contents($file, $content))

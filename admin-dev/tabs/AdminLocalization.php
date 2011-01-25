@@ -63,7 +63,7 @@ class AdminLocalization extends AdminPreferences
 		}
 		elseif (Tools::isSubmit('submitLocalizationPack'))
 		{
-			if (!$pack = file_get_contents('http://www.prestashop.com/download/localization/'.Tools::getValue('iso_localization_pack').'.xml'))
+			if (!$pack = Tools::file_get_contents('http://www.prestashop.com/download/localization/'.Tools::getValue('iso_localization_pack').'.xml'))
 				$this->_errors[] = Tools::displayError('Cannot connect to prestashop.com.');
 			elseif (!$selection = Tools::getValue('selection'))
 				$this->_errors[] = Tools::displayError('Please select at least one content to import.');

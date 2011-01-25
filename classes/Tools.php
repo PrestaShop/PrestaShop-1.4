@@ -37,7 +37,7 @@ class ToolsCore
 	* @param integer $length Desired length (optional)
 	* @return string Password
 	*/
-	static public function passwdGen($length = 8)
+	public static function passwdGen($length = 8)
 	{
 		$str = 'abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		for ($i = 0, $passwd = ''; $i < $length; $i++)
@@ -51,7 +51,7 @@ class ToolsCore
 	* @param string $url Desired URL
 	* @param string $baseUri Base URI (optional)
 	*/
-	static public function redirect($url, $baseUri = __PS_BASE_URI__)
+	public static function redirect($url, $baseUri = __PS_BASE_URI__)
 	{
 		if (strpos($url, 'http://') === FALSE)
 		{
@@ -77,7 +77,7 @@ class ToolsCore
 	*
 	* @param string $url Desired URL
 	*/
-	static public function redirectLink($url)
+	public static function redirectLink($url)
 	{
 		if (!preg_match('@^https?://@i', $url))
 		{
@@ -99,13 +99,13 @@ class ToolsCore
 	*
 	* @param string $url Desired URL
 	*/
-	static public function redirectAdmin($url)
+	public static function redirectAdmin($url)
 	{
 		header('Location: '.$url);
 		exit;
 	}
 
-	static public function getHttpHost($http = false, $entities = false)
+	public static function getHttpHost($http = false, $entities = false)
 	{
 		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
 		if ($entities)
@@ -115,7 +115,7 @@ class ToolsCore
 		return $host;
 	}
 
-	static public function getShopDomain($http = false, $entities = false)
+	public static function getShopDomain($http = false, $entities = false)
 	{
 		if (!($domain = Configuration::get('PS_SHOP_DOMAIN')))
 			$domain = self::getHttpHost();
@@ -126,7 +126,7 @@ class ToolsCore
 		return $domain;
 	}
 
-	static public function getShopDomainSsl($http = false, $entities = false)
+	public static function getShopDomainSsl($http = false, $entities = false)
 	{
 		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SLL')))
 			$domain = self::getHttpHost();
@@ -174,7 +174,7 @@ class ToolsCore
 	*
 	* @param string $referrer URL referrer
 	*/
-	static public function secureReferrer($referrer)
+	public static function secureReferrer($referrer)
 	{
 		if (preg_match('/^http[s]?:\/\/'.self::getServerName().'(:'._PS_SSL_PORT_.')?\/.*$/Ui', $referrer))
 			return $referrer;
@@ -189,7 +189,7 @@ class ToolsCore
 	* @param mixed $defaultValue (optional)
 	* @return mixed Value
 	*/
-	static public function getValue($key, $defaultValue = false)
+	public static function getValue($key, $defaultValue = false)
 	{
 	 	if (!isset($key) OR empty($key) OR !is_string($key))
 			return false;
@@ -200,7 +200,7 @@ class ToolsCore
 		return !is_string($ret)? $ret : stripslashes($ret);
 	}
 
-	static public function getIsset($key)
+	public static function getIsset($key)
 	{
 	 	if (!isset($key) OR empty($key) OR !is_string($key))
 			return false;
@@ -210,7 +210,7 @@ class ToolsCore
 	/**
 	* Change language in cookie while clicking on a flag
 	*/
-	static public function setCookieLanguage()
+	public static function setCookieLanguage()
 	{
 		global $cookie;
 
@@ -253,7 +253,7 @@ class ToolsCore
 		return $iso;
 	}
 
-	static public function switchLanguage()
+	public static function switchLanguage()
 	{
 		global $cookie;
 
@@ -261,7 +261,7 @@ class ToolsCore
 			$cookie->id_lang = $id_lang;
 	}
 
-	static public function setCurrency()
+	public static function setCurrency()
 	{
 		global $cookie;
 
@@ -292,7 +292,7 @@ class ToolsCore
 	* @param object $currency Current currency (object, id_currency, NULL => getCurrent())
 	* @return string Price correctly formated (sign, decimal separator...)
 	*/
-	static public function displayPrice($price, $currency = NULL, $no_utf8 = false)
+	public static function displayPrice($price, $currency = NULL, $no_utf8 = false)
 	{
 		if ($currency === NULL)
 			$currency = Currency::getCurrent();
@@ -334,7 +334,7 @@ class ToolsCore
 		return $ret;
 	}
 
-	static public function displayPriceSmarty($params, &$smarty)
+	public static function displayPriceSmarty($params, &$smarty)
 	{
 		if (array_key_exists('currency', $params))
 		{
@@ -352,7 +352,7 @@ class ToolsCore
 	* @param object $currency Current currency object
 	* @param boolean $to_currency convert to currency or from currency to default currency
 	*/
-	static public function convertPrice($price, $currency = NULL, $to_currency = true)
+	public static function convertPrice($price, $currency = NULL, $to_currency = true)
 	{
 		if ($currency === NULL)
 			$currency = Currency::getCurrent();
@@ -382,7 +382,7 @@ class ToolsCore
 	* @param object $smarty Smarty object for language preferences
 	* @return string Date
 	*/
-	static public function dateFormat($params, &$smarty)
+	public static function dateFormat($params, &$smarty)
 	{
 		return self::displayDate($params['date'], $smarty->ps_language->id, (isset($params['full']) ? $params['full'] : false));
 	}
@@ -395,7 +395,7 @@ class ToolsCore
 	* @param boolean $full With time or not (optional)
 	* @return string Date
 	*/
-	static public function displayDate($date, $id_lang, $full = false, $separator='-')
+	public static function displayDate($date, $id_lang, $full = false, $separator='-')
 	{
 	 	if (!$date OR !strtotime($date))
 	 		return $date;
@@ -418,28 +418,28 @@ class ToolsCore
 	* @param boolean $full String contains HTML or not (optional)
 	* @return string Sanitized string
 	*/
-	static public function safeOutput($string, $html = false)
+	public static function safeOutput($string, $html = false)
 	{
 	 	if (!$html)
 			$string = @htmlentities(strip_tags($string), ENT_QUOTES, 'utf-8');
 		return $string;
 	}
 
-	static public function htmlentitiesUTF8($string, $type = ENT_QUOTES)
+	public static function htmlentitiesUTF8($string, $type = ENT_QUOTES)
 	{
 		if (is_array($string))
 			return array_map(array('Tools', 'htmlentitiesUTF8'), $string);
 		return htmlentities($string, $type, 'utf-8');
 	}
 
-	static public function htmlentitiesDecodeUTF8($string)
+	public static function htmlentitiesDecodeUTF8($string)
 	{
 		if (is_array($string))
 			return array_map(array('Tools', 'htmlentitiesDecodeUTF8'), $string);
 		return html_entity_decode($string, ENT_QUOTES, 'utf-8');
 	}
 
-	static public function safePostVars()
+	public static function safePostVars()
 	{
 		$_POST = array_map(array('Tools', 'htmlentitiesUTF8'), $_POST);
 	}
@@ -449,7 +449,7 @@ class ToolsCore
 	*
 	* @param string $dirname Directory name
 	*/
-	static public function deleteDirectory($dirname, $delete_self = true)
+	public static function deleteDirectory($dirname, $delete_self = true)
 	{
 		$dirname = rtrim($dirname, '/').'/';
 		$files = scandir($dirname);
@@ -472,7 +472,7 @@ class ToolsCore
 	*
 	* @param integer $code Error code
 	*/
-	static public function displayError($string = 'Fatal error', $htmlentities = true)
+	public static function displayError($string = 'Fatal error', $htmlentities = true)
 	{
 		global $_ERRORS;
 
@@ -490,7 +490,7 @@ class ToolsCore
 	*
 	* @param object $object Object to display
 	*/
-	static public function dieObject($object, $kill = true)
+	public static function dieObject($object, $kill = true)
 	{
 		echo '<pre style="text-align: left;">';
 		print_r($object);
@@ -505,7 +505,7 @@ class ToolsCore
 	*
 	* @param object $object Object to display
 	*/
-	static public function d($object, $kill = true)
+	public static function d($object, $kill = true)
 	{
 		return (self::dieObject($object, $kill = true));
 	}
@@ -515,7 +515,7 @@ class ToolsCore
 	*
 	* @param object $object Object to display
 	*/
-	static public function p($object)
+	public static function p($object)
 	{
 		return (self::dieObject($object, false));
 	}
@@ -525,7 +525,7 @@ class ToolsCore
 	*
 	* @param string $submit submit name
 	*/
-	static public function isSubmit($submit)
+	public static function isSubmit($submit)
 	{
 		return (
 			isset($_POST[$submit]) OR isset($_POST[$submit.'_x']) OR isset($_POST[$submit.'_y'])
@@ -539,7 +539,7 @@ class ToolsCore
 	* @param integer $id_lang Language id
 	* @return array Meta tags
 	*/
-	static public function getMetaTags($id_lang)
+	public static function getMetaTags($id_lang)
 	{
 		global $maintenance;
 
@@ -633,7 +633,7 @@ class ToolsCore
 	* @param integer $id_lang Language id
 	* @return array Meta tags
 	*/
-	static public function getHomeMetaTags($id_lang)
+	public static function getHomeMetaTags($id_lang)
 	{
 		global $cookie, $page_name;
 
@@ -646,7 +646,7 @@ class ToolsCore
 	}
 
 
-	static public function completeMetaTags($metaTags, $defaultValue)
+	public static function completeMetaTags($metaTags, $defaultValue)
 	{
 		global $cookie;
 
@@ -664,7 +664,7 @@ class ToolsCore
 	*
 	* @param object $object Object to display
 	*/
-	static public function encrypt($passwd)
+	public static function encrypt($passwd)
 	{
 		return md5(pSQL(_COOKIE_KEY_.$passwd));
 	}
@@ -674,7 +674,7 @@ class ToolsCore
 	*
 	* @param string $token token to encrypt
 	*/
-	static public function getToken($page = true)
+	public static function getToken($page = true)
 	{
 		global $cookie;
 		if ($page === true)
@@ -688,11 +688,11 @@ class ToolsCore
 	*
 	* @param object $object Object to display
 	*/
-	static public function getAdminToken($string)
+	public static function getAdminToken($string)
 	{
 		return !empty($string) ? self::encrypt($string) : false;
 	}
-	static public function getAdminTokenLite($tab)
+	public static function getAdminTokenLite($tab)
 	{
 		global $cookie;
 		return Tools::getAdminToken($tab.(int)(Tab::getIdFromClassName($tab)).(int)($cookie->id_employee));
@@ -706,7 +706,7 @@ class ToolsCore
 	* @param boolean $linkOntheLastItem Put or not a link on the current category
 	* @param string [optionnal] $categoryType defined what type of categories is used (products or cms)
 	*/
-	static public function getPath($id_category, $path = '', $linkOntheLastItem = false, $categoryType = 'products')
+	public static function getPath($id_category, $path = '', $linkOntheLastItem = false, $categoryType = 'products')
 	{
 		global $link, $cookie;
 
@@ -768,7 +768,7 @@ class ToolsCore
 	/**
 	* @param string [optionnal] $type_cat defined what type of categories is used (products or cms)
 	*/
-	static public function getFullPath($id_category, $end, $type_cat = 'products')
+	public static function getFullPath($id_category, $end, $type_cat = 'products')
 	{
 		global $cookie;
 
@@ -793,7 +793,7 @@ class ToolsCore
 	* @return integer Categories total
 	*/
 
-	static public function getCategoriesTotal()
+	public static function getCategoriesTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_category`) AS total FROM `'._DB_PREFIX_.'category`');
 		return (int)($row['total']);
@@ -805,7 +805,7 @@ class ToolsCore
 	* @return integer Products total
 	*/
 
-	static public function getProductsTotal()
+	public static function getProductsTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_product`) AS total FROM `'._DB_PREFIX_.'product`');
 		return (int)($row['total']);
@@ -817,7 +817,7 @@ class ToolsCore
 	* @return integer Customers total
 	*/
 
-	static public function getCustomersTotal()
+	public static function getCustomersTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_customer`) AS total FROM `'._DB_PREFIX_.'customer`');
 		return (int)($row['total']);
@@ -829,7 +829,7 @@ class ToolsCore
 	* @return integer Orders total
 	*/
 
-	static public function getOrdersTotal()
+	public static function getOrdersTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order`) AS total FROM `'._DB_PREFIX_.'orders`');
 		return (int)($row['total']);
@@ -839,7 +839,7 @@ class ToolsCore
 	** Historyc translation function kept for compatibility
 	** Removing soon
 	*/
-	static public function historyc_l($key, $translations)
+	public static function historyc_l($key, $translations)
 	{
 		global $cookie;
 		if (!$translations OR !is_array($translations))
@@ -849,7 +849,7 @@ class ToolsCore
 		return (($lang AND is_array($lang) AND key_exists($key, $lang)) ? stripslashes($lang[$key]) : $key);
 	}
 
-	static public function link_rewrite($str, $utf8_decode = false)
+	public static function link_rewrite($str, $utf8_decode = false)
 	{
 		$purified = '';
 		$length = self::strlen($str);
@@ -885,7 +885,7 @@ class ToolsCore
 	*/
 	/* CAUTION : Use it only on module hookEvents.
 	** For other purposes use the smarty function instead */
-	static public function truncate($str, $maxLen, $suffix = '...')
+	public static function truncate($str, $maxLen, $suffix = '...')
 	{
 	 	if (self::strlen($str) <= $maxLen)
 	 		return $str;
@@ -902,33 +902,33 @@ class ToolsCore
 	* @return array $tab html data with 3 cells :['days'], ['months'], ['years']
 	*
 	*/
-	static public function dateYears()
+	public static function dateYears()
 	{
 		for ($i = date('Y') - 10; $i >= 1900; $i--)
 			$tab[] = $i;
 		return $tab;
 	}
 
-	static public function dateDays()
+	public static function dateDays()
 	{
 		for ($i = 1; $i != 32; $i++)
 			$tab[] = $i;
 		return $tab;
 	}
 
-	static public function dateMonths()
+	public static function dateMonths()
 	{
 		for ($i = 1; $i != 13; $i++)
 			$tab[$i] = date('F', mktime(0, 0, 0, $i, date('m'), date('Y')));
 		return $tab;
 	}
 
-	static public function hourGenerate($hours, $minutes, $seconds)
+	public static function hourGenerate($hours, $minutes, $seconds)
 	{
 	    return implode(':', array($hours, $minutes, $seconds));
 	}
 
-	static public function dateFrom($date)
+	public static function dateFrom($date)
 	{
 		$tab = explode(' ', $date);
 		if (!isset($tab[1]))
@@ -936,7 +936,7 @@ class ToolsCore
 		return $date;
 	}
 
-	static public function dateTo($date)
+	public static function dateTo($date)
 	{
 		$tab = explode(' ', $date);
 		if (!isset($tab[1]))
@@ -944,7 +944,7 @@ class ToolsCore
 		return $date;
 	}
 
-	static public function getExactTime()
+	public static function getExactTime()
 	{
 		return time()+microtime();
 	}
@@ -998,7 +998,7 @@ class ToolsCore
 		return self::strtoupper(self::substr($str, 0, 1)).self::substr($str, 1);
 	}
 
-	static public function orderbyPrice(&$array, $orderWay)
+	public static function orderbyPrice(&$array, $orderWay)
 	{
 		foreach($array as &$row)
 			$row['price_tmp'] =  Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 2);
@@ -1010,14 +1010,14 @@ class ToolsCore
 			unset($row['price_tmp']);
 	}
 
-	static public function iconv($from, $to, $string)
+	public static function iconv($from, $to, $string)
 	{
 		if (function_exists('iconv'))
 			return iconv($from, $to.'//TRANSLIT', str_replace('¥', '&yen;', str_replace('£', '&pound;', str_replace('€', '&euro;', $string))));
 		return html_entity_decode(htmlentities($string, ENT_NOQUOTES, $from), ENT_NOQUOTES, $to);
 	}
 
-	static public function isEmpty($field)
+	public static function isEmpty($field)
 	{
 		return ($field === '' OR $field === NULL);
 	}
@@ -1026,7 +1026,7 @@ class ToolsCore
 	* DEPRECATED FUNCTION
 	* DO NOT USE IT
 	**/
-	static public function getTimezones($select = false)
+	public static function getTimezones($select = false)
 	{
 		static $_cache = 0;
 
@@ -1054,13 +1054,13 @@ class ToolsCore
 	* DEPRECATED FUNCTION
 	* DO NOT USE IT
 	**/
-	static public function ps_set_magic_quotes_runtime($var)
+	public static function ps_set_magic_quotes_runtime($var)
 	{
 		if (function_exists('set_magic_quotes_runtime'))
 			@set_magic_quotes_runtime($var);
 	}
 
-	static public function ps_round($value, $precision = 0)
+	public static function ps_round($value, $precision = 0)
 	{
 		$method = (int)(Configuration::get('PS_PRICE_ROUND_MODE'));
 		if ($method == PS_ROUND_UP)
@@ -1070,7 +1070,7 @@ class ToolsCore
 		return round($value, $precision);
 	}
 
-	static public function ceilf($value, $precision = 0)
+	public static function ceilf($value, $precision = 0)
 	{
 		$precisionFactor = $precision == 0 ? 1 : pow(10, $precision);
 		$tmp = $value * $precisionFactor;
@@ -1083,7 +1083,7 @@ class ToolsCore
 		return ceil($tmp) / $precisionFactor;
 	}
 
-	static public function floorf($value, $precision = 0)
+	public static function floorf($value, $precision = 0)
 	{
 		$precisionFactor = $precision == 0 ? 1 : pow(10, $precision);
 		$tmp = $value * $precisionFactor;
@@ -1102,14 +1102,31 @@ class ToolsCore
 	 * @param string $filename File name
 	 * @return boolean Cached result of file_exists($filename)
 	 */
-	static public function file_exists_cache($filename)
+	public static function file_exists_cache($filename)
 	{
 		if (!isset(self::$file_exists_cache[$filename]))
 			self::$file_exists_cache[$filename] = file_exists($filename);
 		return self::$file_exists_cache[$filename];
 	}
+	
+	public static function file_get_contents($url)
+    {
+		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
+			return file_get_contents($url);
+		else*/ if (function_exists('curl_init'))
+		{
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($curl, CURLOPT_URL, $url);
+			$content = curl_exec($curl);
+			curl_close($curl);
+			return $content;
+		}
+		else
+			trigger_error('Unable to retrieve "'.htmlentities($url).'": PHP directive allow_url_fopen is disabled and PHP cURL is not installed', E_USER_WARNING);
+    }
 
-	static public function minifyHTML ($html_content)
+	public static function minifyHTML($html_content)
 	{
 		if (strlen($html_content) > 0)
 		{
@@ -1156,7 +1173,7 @@ class ToolsCore
 		return preg_replace_callback('/_([a-z])/', create_function('$c', 'return strtoupper($c[1]);'), $str);
 	}
 
-	static public function getBrightness($hex)
+	public static function getBrightness($hex)
 	{
 		$hex = str_replace('#', '', $hex);
 		$r = hexdec(substr($hex, 0, 2));
@@ -1164,7 +1181,7 @@ class ToolsCore
 		$b = hexdec(substr($hex, 4, 2));
 		return (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
 	}
-	static public function minifyHTMLpregCallback ($preg_matches)
+	public static function minifyHTMLpregCallback($preg_matches)
 	{
 		$args = array();
 		preg_match_all('/[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']/is', $preg_matches[2], $args);
@@ -1174,7 +1191,7 @@ class ToolsCore
 		return $output;
 	}
 
-	static public function packJSinHTML ($html_content)
+	public static function packJSinHTML($html_content)
 	{
 		if (strlen($html_content) > 0)
 		{
@@ -1187,7 +1204,7 @@ class ToolsCore
 		return false;
 	}
 
-	static public function packJSinHTMLpregCallback ($preg_matches)
+	public static function packJSinHTMLpregCallback($preg_matches)
 	{
 		$preg_matches[1] = $preg_matches[1].'/* <![CDATA[ */';
 		$preg_matches[2] = self::packJS($preg_matches[2]);
@@ -1198,7 +1215,7 @@ class ToolsCore
 	}
 
 
-	static public function packJS ($js_content)
+	public static function packJS($js_content)
 	{
 		if (strlen($js_content) > 0)
 		{
@@ -1208,7 +1225,7 @@ class ToolsCore
 		return false;
 	}
 
-	static public function minifyCSS($css_content, $fileuri = false)
+	public static function minifyCSS($css_content, $fileuri = false)
 	{
 		global $current_css_file;
 
@@ -1245,7 +1262,7 @@ class ToolsCore
 		return false;
 	}
 
-	static public function replaceByAbsoluteURL($matches)
+	public static function replaceByAbsoluteURL($matches)
 	{
 		global $current_css_file, $protocol_link;
 
@@ -1257,7 +1274,7 @@ class ToolsCore
 		return false;
 	}
 
-	static public function addJS($js_uri)
+	public static function addJS($js_uri)
 	{
 		global $js_files;
 
@@ -1284,7 +1301,7 @@ class ToolsCore
 		return true;
 	}
 
-	static public function addCSS($css_uri, $css_media_type = 'all')
+	public static function addCSS($css_uri, $css_media_type = 'all')
 	{
 		global $css_files;
 
@@ -1313,7 +1330,7 @@ class ToolsCore
 	* Combine Compress and Cache CSS (ccc) calls
 	*
 	*/
-	static public function cccCss() {
+	public static function cccCss() {
 		global $css_files, $protocol_link;
 		//inits
 		$css_files_by_media = array();
@@ -1393,7 +1410,7 @@ class ToolsCore
 	* Combine Compress and Cache (ccc) JS calls
 	*
 	*/
-	static public function cccJS() {
+	public static function cccJS() {
 		global $js_files, $protocol_link;
 		//inits
 		$compressed_js_files_not_found = array();
@@ -1454,7 +1471,7 @@ class ToolsCore
 		$js_files = array($protocol_link.Tools::getMediaServer($url).$url);
 	}
 
-	static public function getMediaServer($filename)
+	public static function getMediaServer($filename)
 	{
 		$filename = mb_convert_encoding(md5(strtoupper($filename)),"UCS-4BE",'UTF-8');
 		$intvalue = 0;
@@ -1591,7 +1608,7 @@ FileETag INode MTime Size
 	}
 
 
-	static public function jsonEncode($json)
+	public static function jsonEncode($json)
 	{
 		if (function_exists('json_encode'))
 			return json_encode($json);

@@ -257,7 +257,7 @@ class AdminTranslations extends AdminTab
 		{
 			if (@fsockopen('www.prestashop.com', 80))
 			{
-				if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$arr_import_lang[1].'/'.$arr_import_lang[0].'.gzip'))
+				if ($content = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$arr_import_lang[1].'/'.$arr_import_lang[0].'.gzip'))
 				{
 					$file = _PS_TRANSLATIONS_DIR_.$arr_import_lang[0].'.gzip';
 					if (file_put_contents($file, $content))
@@ -783,7 +783,7 @@ class AdminTranslations extends AdminTab
 			// Get all iso code available
 			if(@fsockopen('www.prestashop.com', 80))
 			{
-				$lang_packs = file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
+				$lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
 				if ($lang_packs != '' && $lang_packs = json_decode($lang_packs))
 				{
 					echo 	'<select id="params_import_language" name="params_import_language">';

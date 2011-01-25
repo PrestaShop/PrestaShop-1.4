@@ -762,7 +762,7 @@ class AdminModules extends AdminTab
 	
 	public function refresh()
 	{
-		return file_put_contents($this->_moduleCacheFile, file_get_contents('http://www.prestashop.com/xml/modules_list.xml'));
+		return file_put_contents($this->_moduleCacheFile, Tools::file_get_contents('http://www.prestashop.com/xml/modules_list.xml'));
 	}
 	
 }
