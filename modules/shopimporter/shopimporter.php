@@ -8,7 +8,7 @@ class shopimporter extends ImportModule
 	{
 		global $cookie;
 
-		$this->name = 'shopImporter';
+		$this->name = 'shopimporter';
 		$this->tab = 'migration_tools';
 		$this->version = '1.0';
 
