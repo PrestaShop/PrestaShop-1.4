@@ -1688,7 +1688,7 @@ class UpsCarrier extends CarrierModule
 				$this->_webserviceError = $this->l('Error').' '.$resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORCODE'].' : '.$resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
 			else
 			{
-				$this->_webserviceError = 'UPS Webservice seems to be down, please wait a few minutes and wait again';
+				$this->_webserviceError = $this->l('UPS Webservice seems to be down, please wait a few minutes and try again');
 				return false;
 			}
 		}
@@ -1720,7 +1720,7 @@ class UpsCarrier extends CarrierModule
 		if (isset($resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION']))
 			$this->_webserviceError = $resultTab['RATINGSERVICESELECTIONRESPONSE']['RESPONSE']['ERROR']['ERRORDESCRIPTION'];
 		else
-			$this->_webserviceError = 'UPS Webservice seems to be down, please wait a few minutes and wait again';
+			$this->_webserviceError = $this->l('UPS Webservice seems to be down, please wait a few minutes and try again');
 
 		return array('connect' => false, 'cost' => 0);
 	}
@@ -1730,20 +1730,56 @@ class UpsCarrier extends CarrierModule
 		// POST Request
 		$errno = $errstr = $result = '';
 		$xml = $this->getXml($wsParams);
-	        $fp = fsockopen("ssl://www.ups.com", "443", $errno, $errstr, $timeout=60);
-		if(!$fp)
-			die($errstr.$errno);
+
+		if (is_callable('curl_exec'))
+		{
+			// Curl Request
+			$ch = curl_init("https://www.ups.com/ups.app/xml/Rate");
+			curl_setopt($ch, CURLOPT_HEADER, 1);
+			curl_setopt($ch,CURLOPT_POST,1);
+			curl_setopt($ch,CURLOPT_TIMEOUT, 60);
+			curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+			curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+			curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+			curl_setopt($ch,CURLOPT_POSTFIELDS,$xml);
+			$result = curl_exec ($ch);
+		}
 		else
 		{
-			$request = "POST /ups.app/xml/Rate HTTP/1.1\r\n";
-			$request .= "Host: ssl://www.ups.com\r\n";
-			$request .= "Content-type: application/x-www-form-urlencoded\r\n";
-			$request .= "Content-length: ".strlen($xml)."\r\n";
-			$request .= "Connection: close\r\n\r\n";
-			$request .= $xml."\r\n\r\n";
-			fputs($fp, $request);
-			while(!feof($fp)) $result .= fgets($fp,4096);
-	  		fclose($fp);
+			// FsockOpen Request
+			$timeout = 5;
+			$fp = fsockopen("ssl://www.ups.com", "443", $errno, $errstr, $timeout); 
+			if ($fp)
+			{
+				$request = "POST /ups.app/xml/Rate HTTP/1.1\r\n";
+				$request .= "Host: www.ups.com\r\n";
+				$request .= "Content-type: application/x-www-form-urlencoded\r\n";
+				$request .= "Connection: Close\r\n";
+				$request .= "Content-length: ".strlen($xml)."\r\n\r\n";
+				$request .= $xml."\r\n\r\n";
+				fwrite($fp, $request);
+
+				stream_set_blocking($fp, TRUE);
+				stream_set_timeout($fp,$timeout);
+				$info = stream_get_meta_data($fp);
+
+				$result = '';
+				while ((!feof($fp)) && (!$info['timed_out']))
+				{
+					$result .= fgets($fp, 4096);
+					$info = stream_get_meta_data($fp);
+				}
+				if ($info['timed_out'])
+				{
+					$this->_webserviceError = $this->l('UPS Webservice timed out.');
+					return false;
+				}
+			}
+			else
+			{
+				$this->_webserviceError = $this->l('Could not connect to UPS.com');
+				return false;
+			}
 		}
 
 		// Get xml from HTTP Result
