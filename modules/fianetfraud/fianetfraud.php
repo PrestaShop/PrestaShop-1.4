@@ -112,7 +112,7 @@ class Fianetfraud extends Module
 		$orderState->color = '#FF9999';
 		$orderState->hidden = true;
 		$orderState->save();
-		Configuration::updateValue('SAC_ID_WAITING', (int)($ordeState->id));
+		Configuration::updateValue('SAC_ID_WAITING', (int)($orderState->id));
 
 		$orderState = new OrderState();
 		foreach ($langs AS $lang)
@@ -124,7 +124,7 @@ class Fianetfraud extends Module
 		$orderState->color = '#FF6666';
 		$orderState->hidden = true;
 		$orderState->save();
-		Configuration::updateValue('SAC_ID_FRAUD', (int)($ordeState->id));
+		Configuration::updateValue('SAC_ID_FRAUD', (int)($orderState->id));
 
 		if (!$this->registerHook('updateCarrier'))
 			return false;
