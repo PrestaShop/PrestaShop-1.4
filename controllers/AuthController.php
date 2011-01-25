@@ -70,7 +70,7 @@ class AuthControllerCore extends FrontController
 			$create_account = 1;
 			if (Tools::isSubmit('submitAccount'))
 				$this->smarty->assign('email_create', 1);
-			$validateDni = Validate::isDni(Tools::getValue('dni'));
+			$validateDni = Validate::isDniLite(Tools::getValue('dni'));
 
 			/* New Guest customer */
 			if (!Tools::getValue('is_new_customer') AND !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))

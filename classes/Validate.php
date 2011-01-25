@@ -811,10 +811,20 @@ class ValidateCore
 	}
 	
 	/**
+	 * @param string $dni to validate
+	 * @return bool
+	 */
+	static public function isDniLite($dni)
+	{
+		return (bool)preg_match('/^[0-9a-z-.]{1,16}$/Ui', $dni);
+	}
+	
+	/**
 	* Check for Dni validity
 	*
 	* @param string $dni to validate
 	* @return int
+	* @deprecated
 	*/
 	static public function isDni($dni)
 	{
@@ -828,6 +838,8 @@ class ValidateCore
 		-4 : NIE error
 		*/
 
+		Tools::displayAsDeprecated();
+		
 		if (!$dni)
 			return 1;
 		
@@ -889,9 +901,11 @@ class ValidateCore
 	*
 	* @param string $dni to validate
 	* @return bool
+	* @deprecated
 	*/
 	static public function isDniBool($dni)
 	{
+		Tools::displayAsDeprecated();
 		return (self::isDni($dni) > 0 ? 1 : 0); 
 	}
 
