@@ -13,18 +13,18 @@ var shopImporter = {
 	idMethod: 0,
 	nbrMethod: 0,
 	save : 0,
-	srcError : '../modules/shopImporter/img/error.png',
-	srcConf : '../modules/shopImporter/img/ok.png',
-	srcImport : '../modules/shopImporter/img/ajax-loader.gif',
-	srcWarn : '../modules/shopImporter/img/warn.png',
-	srcDelete : '../modules/shopImporter/img/delete.gif',
+	srcError : '../modules/shopimporter/img/error.png',
+	srcConf : '../modules/shopimporter/img/ok.png',
+	srcImport : '../modules/shopimporter/img/ajax-loader.gif',
+	srcWarn : '../modules/shopimporter/img/warn.png',
+	srcDelete : '../modules/shopimporter/img/delete.gif',
 	
 	
 	syncLang : function ()
 	{
 		$.ajax({
 	       type: 'GET',
-	       url: '../modules/shopImporter/ajax.php',
+	       url: '../modules/shopimporter/ajax.php',
 	       async: false,
 	       cache: false,
 	       dataType : "json",
@@ -55,7 +55,7 @@ var shopImporter = {
 	{
 		$.ajax({
 	       type: 'GET',
-	       url: '../modules/shopImporter/ajax.php',
+	       url: '../modules/shopimporter/ajax.php',
 	       async: false,
 	       cache: false,
 	       dataType : "json",
@@ -88,7 +88,7 @@ var shopImporter = {
 		if (this.syncLang() && this.syncCurrency())
 		$.ajax({
 	       type: 'GET',
-	       url: '../modules/shopImporter/ajax.php',
+	       url: '../modules/shopimporter/ajax.php',
 	       async: true,
 	       cache: false,
 	       dataType : "json",
@@ -163,7 +163,7 @@ var shopImporter = {
 		$('#checkAndSaveConfig').fadeIn('slow');
 		$.ajax({
 	       type: 'GET',
-	       url: '../modules/shopImporter/ajax.php',
+	       url: '../modules/shopimporter/ajax.php',
 	       async: true,
 	       cache: false,
 	       dataType : "json",
@@ -251,7 +251,7 @@ var shopImporter = {
 		
 		$.ajax({
 	       type: 'GET',
-	       url: '../modules/shopImporter/ajax.php',
+	       url: '../modules/shopimporter/ajax.php',
 	       async: false,
 	       cache: false,
 	       dataType : "json",
@@ -347,7 +347,7 @@ function displaySpecificOptions(moduleName, server, user, password, database, pr
 	console.log(password);
 	$.ajax({
 	       type: 'GET',
-	       url: '../modules/shopImporter/ajax.php',
+	       url: '../modules/shopimporter/ajax.php',
 	       async: false,
 	       cache: false,
 	       dataType : "html",
