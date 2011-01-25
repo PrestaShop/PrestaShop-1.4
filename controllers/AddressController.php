@@ -114,6 +114,8 @@ class AddressControllerCore extends FrontController
 			}
 			if ($country->isNeedDni() AND !Tools::getValue('dni'))
 				$this->errors[] = Tools::displayError('identification number is incorrect or already used');
+			elseif (!$country->isNeedDni())
+				$address->dni = NULL;
 			if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 				strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 				$this->cookie->isLogged(true) === true)
