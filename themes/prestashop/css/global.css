@@ -1169,12 +1169,12 @@ tr.cart_total_price { font-weight: bold }
 /* views block */
 #views_block {
 	margin: 0 auto;
-	width: 274px
+	width: 290px
 }
 #thumbs_list {
 	overflow: hidden;
 	float: left;
-	width: 240px
+	width: 255px
 }
 #thumbs_list ul {
 	padding-left: 0;
@@ -1186,7 +1186,7 @@ tr.cart_total_price { font-weight: bold }
 	cursor: pointer;
 	width: 80px;
 	height: 80px;
-	margin-right: 10px;
+	margin-right: 5px;
 }
 #view_scroll_left, #view_scroll_right {
 	background: url('../img/thumbs_left.gif') no-repeat center;
