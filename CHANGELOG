@@ -23,6 +23,124 @@ International Registred Trademark & Property of PrestaShop SA
 
 Release Notes for PrestaShop 1.4
 --------------------------------
+####################################
+#   v1.4.0.10 - 4640 (2011-01-26)   #
+####################################
+
+	Improved/changed features:
+	
+	[*] Project : adding Catalog mode, for disable easly all shopping features
+	
+	[*] Installer : adding catalog mode option in Installer
+	
+	[*] FO : New hook Payment Top
+	[*] FO : a few things related to the cart are now cached (~= 46 less queries when there is a product in the cart)
+	[*] FO : Can't cumulate group reduction + category group reduction + Function Tools::displayParameterAsDeprecated()
+	[*] FO : performance improvement on packs
+	
+	[*] BO / FO : fixed bug #6707 - improved geolocalization feature with adding of whitelist of IP (e.g. for SEO purpose)
+	
+	[*] BO : added test for pagespeed module for apache in AdminInformation (this module can cause prestashop to be unstable)
+	
+	[*] BO : htaccess generation and friendly URL activation simplified
+	[*] BO : Specific price form improvement
+	[*] BO : you can now fill in your domain name for e-mails (sometimes required by tightly configured mail server)
+	[*] BO : you can now use Tools::file_get_contents which will switch to curl if allow_url_fopen is disabled
+	
+	[*] Core: If SSL is enabled, now you can not access to pages without HTTPS
+	
+	[*] MO : add link to Twenga tarifs grid.
+	[*] MO : shopImporter is now using object to add entity
+	[*] MO : UPS module upgrade - easier to configure and get it working
+	[*] MO : UPS Webservices connections method is stronger now
+	[*] MO : USPS module was updated (almost same options as UPS module)
+	
+	Fixed bugs:
+	
+	[-] Project : Now the dni check is compatible with more format
+	[-] Project : Fixed bug #7170 (completed) - Bad translations & typos
+	[-] Project : Fixed bug #7170 - Fixed a lot of typos everywhere
+	
+	[-] Installer : installer now drop every compile and cache files of smarty when installing or updating
+	[-] Installer : fix bug on checking of version in Installer
+	
+	[-] FO : abusive 301 redirect fixed
+	[-] FO : adding missing check for DNI field
+	[-] FO : BUG:7114 Modified css blockmanufacturer.css.
+	[-] FO : Bug fixed #7149 - unnecessary code in blockspecials.tpl
+	[-] FO : fixed bug #6989 - Advanced parameters… not appear in One page checkout and guest checkout
+	[-] FO : Fixed bug #7095 - Rewrote $_SERVER['REQUEST_URI'] on IIS 6.0 on homepage
+	[-] FO : fixed bug #7108 - Other payment method button raise an error when ssl is used
+	[-] FO : fixed bug #7109 - Carrier default not checked
+	[-] FO : fixed bug #7112 - Can’t login on OPC
+	[-] FO : fixed bug #7146 - fixed free order with guest checkout
+	[-] FO : fixed bug #7147 - fixed bug on order-confirmation with redirection and guest account
+	[-] FO : Fixed bug #7187 - Deleted layer.js
+	[-] FO : fixed bug #7193 - Guest checkout / Download link issue
+	[-] FO : fixed bug #7221
+	[-] FO : fixed bug #7224
+	[-] FO : fixed bug #7225
+	[-] FO : fixed bug #7227
+	[-] FO : fixed links in RMA
+	[-] FO : fixed parkinson click on add to cart
+	[-] FO : performance improvements 
+	[-] FO : Tools::redirectLink fixed for https
+	
+	[-] BO / FO : adding Behviour for no reconnized country on Geolocalization feature
+	[-] BO / FO : fixed bug #4711 - VAT Problem
+	
+	[-] BO : Bug fixed #5699 - When employee had no adding right in catalog, add button is not displayed
+	[-] BO : Bug Fixed #6874 - Can't refund if there is a customization 
+	[-] BO : Bug Fixed #7205 - During installation if a localization pack is installed, the "localized" data (currency, taxes etc ..)  don't have a default name and other i18n field
+	[-] BO : bug fix on search indexation
+	[-] BO : currency fixed on back office homepage
+	[-] BO : Fixed bug #7125
+	[-] BO : fixed bug #7131
+	[-] BO : Fixed bug #7142 - Errors were not translated on the login page
+	[-] BO : fixed bug #7144 - Disallow: /prestashop/order-opc.php not in robots.txt
+	[-] BO : Fixed bug #7194 - The features tab was broken in the product edition page
+	[-] BO : Fixed bug #7198 - Fixed the link "Back to the category" on "Attachments" tab
+	[-] BO : fixed bug #7202
+	[-] BO : Fixed bug #7204 - States were not showing up when default country was USA
+	[-] BO : fixed bug #7219
+	[-] BO : fixed bug #7222
+	[-] BO : priority field in import & adminproduct tab
+	[-] BO : some javascript script was called twice on adminproducts
+	[-] BO : you can't disable the default currency anymore
+	
+	[-] Core : Rename Memcached class to MCached to fix #7163 bug
+	
+	[-] MO : Bug Fixed #5298 - Mass email sending
+	[-] Mo : Bug fixed #7116 - Bug fixed on Usps and Fedex carrier
+	[-] MO : Bug fixed #7129 - Block newsletter is now working when url rewriting is enabled
+	[-] MO : Bug fixed #7139 - Editorial module translations is now working
+	[-] MO : Bug fixed #7159 - Send To Friend can have two hooks at the same time
+	[-] MO : Fixed blockcategories turns off force compile #7128
+	[-] MO : fixed bug #7115 - Paypal 2.1 module - multiple ‘authorization accepted from Paypal’ order statuses
+	[-] MO : Fixed bug #7199 - Added 'allow_guests' var in .tpl for productscomments module
+	[-] MO : fixed bug #7208 - Customer Name Transposed in PayPal
+	[-] MO : Fixed bug #7214 - "Your name" couldn't be translated in productcomments module
+	[-] MO : fixed bug #7217 - typo in variable name in fianetfraud module
+	[-] MO : fixed bug download product redirect
+	[-] MO : fixed bug on wishlist
+	[-] MO : fixed bug on wishlist
+	[-] MO : fixed bugs on shopImporter
+	[-] MO : fixed bugs on shopImporter and oscommerImport
+	[-] MO : fixed bugs on shopImporter & import ocs
+	[-] MO : fixed install bug
+	[-] MO : TrustedShops Strict Standard (mktime)
+	
+	[-] Mails : Fixed bug #7157 - Fixed a typo in the contact mail template
+	
+	[-] TR : Bug fixed #7155 - Translation correction
+	[-] TR : fixed bug #7231 - Translation in Cart
+	
+	[-] LO : US - Missing taxes
+	
+	Deprecated methods:
+	
+	[~] Deprecated : Parameter divisor in getPriceStatic
+	
 
 ####################################
 #   v1.4.0.9 - 4517 (2011-01-19)   #
