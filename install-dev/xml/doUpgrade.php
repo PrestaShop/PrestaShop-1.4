@@ -141,7 +141,7 @@ if ($handle = opendir(INSTALL_PATH.'/sql/upgrade'))
 }
 if (empty($upgradeFiles))
 	die('<action result="fail" error="31" />'."\n");
-asort($upgradeFiles);
+natcasesort($upgradeFiles);
 $neededUpgradeFiles = array();
 foreach ($upgradeFiles AS $version)
 	if (version_compare($version, _PS_VERSION_) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
