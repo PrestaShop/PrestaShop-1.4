@@ -29,13 +29,9 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
 //delete settings file if it exist
-if(file_exists(SETTINGS_FILE))
-{
+if (file_exists(SETTINGS_FILE))
 	if (!unlink(SETTINGS_FILE))
-	{
-	die('<action result="fail" error="17" />'."\n");
-	}
-}
+		die('<action result="fail" error="17" />'."\n");
 
 include(INSTALL_PATH.'/classes/AddConfToFile.php');
 include(INSTALL_PATH.'/../classes/Validate.php');
@@ -91,6 +87,13 @@ foreach ($datas AS $data){
 	$confFile->writeInFile($data[0], $data[1]);
 }
 $confFile->writeEndTagPhp();
+
+// Settings updated, compile and cache directories must be emptied
+foreach (array(INSTALL_PATH.'/../tools/smarty/cache/', INSTALL_PATH.'/../tools/smarty/compile/', INSTALL_PATH.'/../tools/smarty_v2/cache/', INSTALL_PATH.'/../tools/smarty_v2/compile/') as $dir)
+	if (file_exists($dir))
+		foreach (scandir($dir) as $file)
+			if ($file[0] != '.' AND $file != 'index.php')
+				unlink($dir.$file);
 
 if ($confFile->error != false)
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");

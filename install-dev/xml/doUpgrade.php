@@ -208,6 +208,13 @@ $confFile->writeEndTagPhp();
 if ($confFile->error != false)
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
 
+// Settings updated, compile and cache directories must be emptied
+foreach (array(INSTALL_PATH.'/../tools/smarty/cache/', INSTALL_PATH.'/../tools/smarty/compile/', INSTALL_PATH.'/../tools/smarty_v2/cache/', INSTALL_PATH.'/../tools/smarty_v2/compile/') as $dir)
+	if (file_exists($dir))
+		foreach (scandir($dir) as $file)
+			if ($file[0] != '.' AND $file != 'index.php')
+				unlink($dir.$file);
+	
 //sql file execution
 global $requests, $warningExist;
 $requests = '';

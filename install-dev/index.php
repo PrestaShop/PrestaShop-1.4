@@ -68,7 +68,8 @@ $oldversion = false;
 $sameVersions = false;
 $tooOld = true;
 $installOfOldVersion = false;
-if(file_exists(INSTALL_PATH.'/../config/settings.inc.php')){
+if (file_exists(INSTALL_PATH.'/../config/settings.inc.php'))
+{
 	include(INSTALL_PATH.'/../config/settings.inc.php');
 	$oldversion =_PS_VERSION_;
 	$tooOld = (version_compare($oldversion, MINIMUM_VERSION_TO_UPDATE) == -1);
