@@ -28,6 +28,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_abfc836cd1df9d6d2bdfd2fc98e6fa9
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b962d8fb95f5a439f50502152f3bad71'] = 'Deafina un precio para sus transportista en';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_faf1247ae6846a9955a466d4f301bbe4'] = 'La página de transportistas';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_10d78806b84b97ebc774e9f6277af6ac'] = 'Para generar sus etiquetas, debe haber introducido una dirección correcta de su tienda en';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_af5efea250326c1c34d69aa9364b482c'] = 'página contacto';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ddcd6a653f661fd7d219d9102528b917'] = 'Ir a ver en el Front Office';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_fcf5b2122da1d5a5f5c7253b96a3f9d9'] = 'URL del cron para lanzar la actualización de los pedidos';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_362dff77f7403550e886db901404856c'] = 'Borrado con éxito';

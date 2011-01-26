@@ -18,11 +18,11 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_83fc792f687bc45d7
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_1019072b9e450c8652590cda2db45e49'] = '¡El nombre o los apellidos no son válidos!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ff2d2e45b90b4426c3bb14bd56b95a2d'] = '¡Alguien con este e-mail ya se ha registrado!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3f8a4c7f93945fea0d951fa402ee4272'] = 'Por favor, marque al menos una casilla';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_dcc99d8715486f570db3ec5ee469a828'] = 'No puede agregar a amigos a la base de datos';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_29f6b8d24a8e9f0ef706730486d62527'] = 'Se han enviado emails a sus amigos';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_4e9b9778b9c650b4406b9ab00a9c48f7'] = 'Se ha enviado un email a su amigo';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_62f222ea6fd88a5344e27ea2b1c9029d'] = 'Se han enviado emails recordatorias a sus amigos';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_e64c082d7c71b0feab76f348291eba6a'] = 'Se ha enviado un email recordatorio a su amigo';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_dcc99d8715486f570db3ec5ee469a828'] = 'No puede añadir amigos a la base de datos';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_f6cb78f0afcf7c3a06048a7a5855d6a1'] = 'Emails enviados a sus amigos';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_79cd362fc64832faa0a2079f1142aa12'] = 'Se ha enviado un email a su amigo';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_2b90ca4a7b1c83e0a3bb65899725cd65'] = 'Se han enviado emails recordatorios a sus amigos';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_819e52b3c6ca4db131dcfea19188a0c3'] = 'Se ha enviado un email recordatorio a su amigo';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_46ee2fe8845962d24bf5178a26e109f3'] = 'Patrocinar a mis amigos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_c56567bc42584de1a7ac430039b3a87e'] = 'En espera de amigos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_58c7f2542ab2e2c3e4e39e851ea0f225'] = 'Amigos que he patrocinado';
@@ -76,7 +76,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_36bad0c5050aa8681926523cb
 $_MODULE['<{referralprogram}prestashop>referralprogram_21cc1fccae3b04bb8cd2719cc5269e1e'] = 'No se puede actualizar el archivo xml. Por favor, compruebe el archivo XML de los permisos de escritura.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_5be920293db3e38c81330fd0798336b1'] = 'Campo Html no válido, javascript está prohibido';
 $_MODULE['<{referralprogram}prestashop>referralprogram_f4f70727dc34561dfde1a3c529b6205c'] = 'Ajustes';
-$_MODULE['<{referralprogram}prestashop>referralprogram_87f3872b168fb8622b653c526a94a575'] = 'Número mínimo de pedidos que un amigo debe realizar apara recibir un vale descuento:';
+$_MODULE['<{referralprogram}prestashop>referralprogram_744ac890f8f9439d8cb0d256d05e92d5'] = 'Número mínimo de pedidos que un amigo debe hacer para recibir un vale descuento';
 $_MODULE['<{referralprogram}prestashop>referralprogram_624f983eb0713e10faf35ff3889e8d68'] = 'Número de amigos en el formulario de invitación por apadrinamiento ( cuenta cliente, apartado apadrinamiento):';
 $_MODULE['<{referralprogram}prestashop>referralprogram_9ad4f790c8bb9be21a2fa388c7730353'] = 'Tipo vale:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_46da7ad7d01e209241016d308f9fafce'] = 'Vale descuento con un porcentaje';

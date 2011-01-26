@@ -29,6 +29,17 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_687009f2bc600c25a005b26f4cb4ab0
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_6e8cf654ec68d7391f5d673331e2c212'] = 'Fedex flete';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_1497c5bee4dd896e0b84c442be1e8760'] = 'Fedex ground';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_23044a6996eda8ad80874f5bdd72a0bc'] = 'Fedex flete nacional';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4cee621e07c270fb1031f231e592a8cd'] = 'First overnight';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e1416870eb1cf36849393bf6ef6f6966'] = 'Ground home delivery';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_124dd98ba09563af1900c14885e97d6e'] = 'International economy';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_2751413ff6e957a3b6894929b008b123'] = 'International economy freight';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_cebbbe47be59307e1751e2febe44fdc6'] = 'International first';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f3f9ee160906e71040b437410459ec79'] = 'International ground';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_759d99c1c032d4171c2f142af4f79436'] = 'International priority';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a8c786474d046ba2b2b90b78a7b498cf'] = 'International priority freight';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ec25bbf3daf58ec08920a781e25a3f3d'] = 'Priority overnight';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e889962a8517669ba4ac839afa6384df'] = 'Smart post';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0a7bd01967a1874144b1b4fab2ee6a6f'] = 'Standard overnight';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Descripción';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c076e1515534794deeaec631560ae598'] = 'Configuración del transportista Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_685abc1e0806b2e9b2a801cd9929b91a'] = 'En esta versión el módulo Fedex va a elegir automáticamente el servicio de entrega disponible más económico.';

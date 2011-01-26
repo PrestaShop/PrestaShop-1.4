@@ -54,6 +54,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_4e9863cf5326e6714388045321665d07'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_459ca2567643baae304008e3bcd44656'] = 'El país no está especificado';
 $_MODULE['<{upscarrier}prestashop>upscarrier_46a2a41cc6e552044816a2d04634545d'] = 'Estado';
 $_MODULE['<{upscarrier}prestashop>upscarrier_cf1580798f7aba85d519afadf1ffd886'] = 'Elija un estado...';
+$_MODULE['<{upscarrier}prestashop>upscarrier_02546d525ab356bd43c91e6b07447496'] = 'No hay ninguna configuración de estado para este país.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_b71d999941ab3d82b9feaf5866e52dff'] = 'Elija un estado entre los de la lista.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_90c59d1697bf80e75304bdde4eb9b65e'] = 'Zona de tarifas';
 $_MODULE['<{upscarrier}prestashop>upscarrier_9b940a1dd2cac4f70b0c7ccf1ceb899c'] = 'Elija una zona de tarifas';
@@ -74,9 +75,12 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_32b02316cc0c3e871dd2ba4451abbb23'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_c4906d203203052c2119c2c27e7cef65'] = 'Su login MyUps ID';
 $_MODULE['<{upscarrier}prestashop>upscarrier_e75761482891a9ad8c6a1339dd143119'] = 'Su UPS API key';
 $_MODULE['<{upscarrier}prestashop>upscarrier_bdfcb5fba4c72a81163a0b403a25338d'] = 'Pulse aquí para obtener su UPS API Key';
+$_MODULE['<{upscarrier}prestashop>upscarrier_83ad4fdaf06650e6d9d7ca18f82fb975'] = 'Configuración de localización';
+$_MODULE['<{upscarrier}prestashop>upscarrier_f489118ea95c746d648d36bb50c226f0'] = 'Unidad de peso';
+$_MODULE['<{upscarrier}prestashop>upscarrier_659c95668841b7d6602ead454b28d4ba'] = 'La unidad de peso de su tienda (ej: kg o Ibs)';
+$_MODULE['<{upscarrier}prestashop>upscarrier_cc13d156306185fd42a860da3049567c'] = 'Unidad de medida';
+$_MODULE['<{upscarrier}prestashop>upscarrier_f804c2bdebc117d9cde3cddad3b49845'] = 'La unidad de medida de su tienda (ej: cm o in)';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2481447d04ae756836d32e3ade240ff4'] = 'Configuración de la dirección';
-$_MODULE['<{upscarrier}prestashop>upscarrier_a5ff7bffd5b6c8eb62b3a1b06fa7755b'] = 'Seleccione su estado en la lista.';
-$_MODULE['<{upscarrier}prestashop>upscarrier_4d3b3b272dee180e562d1b04405f048c'] = 'Seleccione su país en la lista.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_0ddc2a5660f7d095fff34d6b93077c80'] = 'Configuración del servicio';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a3a751e1c5cc4e3024d2b58c50105a65'] = 'Procedencia de las entregas';
 $_MODULE['<{upscarrier}prestashop>upscarrier_1debf905ac528b3f0615cd379ced0d38'] = 'Tipo de entrega';
@@ -88,6 +92,8 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_8d2ee0603dfce09b57d60db628cde269'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Elija en la lista de tipos de paquete el que desea seleccionar por defecto.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_40f0f6eb6565e02a620081e26e0dcd3c'] = 'El tipo de paquete no está configurado';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servicio de entrega';
+$_MODULE['<{upscarrier}prestashop>upscarrier_78945de8de090e90045d299651a68a9b'] = 'Disponible ';
+$_MODULE['<{upscarrier}prestashop>upscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'No disponible';
 $_MODULE['<{upscarrier}prestashop>upscarrier_d63e135774e62574e2a1921267dad142'] = 'Elija los servicios de entrega que sus clientes activarán por defecto.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_1f045d1181f0066f43b177f8916af0e4'] = 'No ha introducido su login UPS';
 $_MODULE['<{upscarrier}prestashop>upscarrier_b7936fbaa426d140292267bcd461bc6d'] = 'No ha introducido su contraseña UPS';

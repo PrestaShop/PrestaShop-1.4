@@ -11,7 +11,7 @@ $_MODULE['<{statsvisits}prestashop>statsvisits_23e640d55e56db79971918936e95bf9d'
 $_MODULE['<{statsvisits}prestashop>statsvisits_998e4c5c80f27dec552e99dfed34889a'] = 'CSV Export';
 $_MODULE['<{statsvisits}prestashop>statsvisits_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guía';
 $_MODULE['<{statsvisits}prestashop>statsvisits_ffbee337f031c2282b311bac40bc8bb9'] = 'Determinar el interés de las visitas';
-$_MODULE['<{statsvisits}prestashop>statsvisits_f3345d3c7e9115262ee0b84c9323c020'] = 'El gráfico de evolución de los visitantes se parece mucho al de las visitas, pero le proporciona una información suplementaria: ¿sus vistantes vuelven?';
+$_MODULE['<{statsvisits}prestashop>statsvisits_e90d50ca1e68dc66c97bd62929dcbaf1'] = 'El gráfico de evolución visitantes es muy similar al gráfico de las visitas pero da información suplementaria';
 $_MODULE['<{statsvisits}prestashop>statsvisits_411d6cd9206f9f510c274dbec2e28b0e'] = 'Si es el caso, enhorabuena, su sitio está bien pensado y resulta agradable.';
 $_MODULE['<{statsvisits}prestashop>statsvisits_51ab590b150b00d5a64326d25a0320a4'] = 'En el caso contrario, la conclusión no es simple. El problema puede ser estético o ergonómico, o quizás la oferta sea insuficiente. También es posible que dichos visitantes hayan llegado a su sitio por error, sin interés particular por su tienda; este fenómeno ocurre con frecuencia con los motores de búsqueda.';
 $_MODULE['<{statsvisits}prestashop>statsvisits_4793db9717cc512af1406b09766a0a1f'] = 'Esta información es sobre todo cualitativa.  Usted deberá determinar el interés de este tipo de visitas.';

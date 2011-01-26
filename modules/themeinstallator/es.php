@@ -38,7 +38,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_f364da141450380ae79d7a4
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ac85d9784348dc8f0c2db93f4a095eb0'] = '(Atención: ya existe un tema con ese nombre)';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_8f3ea15c5b87db00561ccde5067310a5'] = 'para PrestaShop';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_caeedb303068f9915e8e5ce091c9c02f'] = '(Atención: ya existe una carpeta con ese nombre)';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_5d564386a24d0fee8ed2b90c67458545'] = 'Elija las variaciones que desee importar';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_2dd99d7426b4fe6dd04d7a98f5e32a62'] = 'Elija la declinación que desea importar';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_f956917da1716add289f33a8869b85d4'] = 'Tema principal';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_8dc46c3ac999c5e88272294b52f24478'] = 'Desmarque este campo si no quiere instalar el tema principa';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c49fbf2b822fd14929fd1fd76cdb0c96'] = 'Seleccione las variaciones que desee importar';
