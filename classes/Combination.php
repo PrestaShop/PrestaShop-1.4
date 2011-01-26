@@ -83,6 +83,7 @@ class CombinationCore extends ObjectModel
 	
 	protected	$webserviceParameters = array(
 		'objectNodeName' => 'combination',
+		'objectsNodeName' => 'combinations',
 		'fields' => array(
 			'id_product' => array('required' => true, 'xlink_resource'=> 'products'),
 		),
@@ -135,14 +136,14 @@ class CombinationCore extends ObjectModel
 	{
 		if ($this->deleteAssociations())
 		{
-				$sqlValues = array();
-				foreach ($values as $id)
-					$sqlValues[] = '('.(int)$id.', '.(int)$this->id.')';
-				$result = Db::getInstance()->Execute('
-					INSERT INTO `'._DB_PREFIX_.'product_attribute_combination` (`id_attribute`, `id_product_attribute`)
-					VALUES '.implode(',', $sqlValues)
-				);
-				return $result;
+			$sqlValues = array();
+			foreach ($values as $value)
+				$sqlValues[] = '('.(int)$value['id'].', '.(int)$this->id.')';
+			$result = Db::getInstance()->Execute('
+				INSERT INTO `'._DB_PREFIX_.'product_attribute_combination` (`id_attribute`, `id_product_attribute`)
+				VALUES '.implode(',', $sqlValues)
+			);
+			return $result;
 		}
 		return false;
 	}

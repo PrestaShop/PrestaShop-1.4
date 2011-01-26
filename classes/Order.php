@@ -147,6 +147,7 @@ class OrderCore extends ObjectModel
 	);
 
 	protected	$webserviceParameters = array(
+		'objectMethods' => array('add' => 'addWs'),
 		'objectNodeName' => 'order',
 		'objectsNodeName' => 'orders',
 		'fields' => array(
@@ -157,16 +158,28 @@ class OrderCore extends ObjectModel
 			'id_lang' => array('xlink_resource'=> 'languages'),
 			'id_customer' => array('xlink_resource'=> 'customers'),
 			'id_carrier' => array('xlink_resource'=> 'carriers'),
-			'module' => array(),
+			'module' => array(), // mettre en requis
 			'invoice_number' => array(),
 			'delivery_number' => array(),
 			'invoice_date' => array(),
 			'delivery_date' => array(),
 			'valid' => array(),
-			'current_state' => array('getter' => 'getCurrentState', 'setter' => null, 'xlink_resource'=> 'order_states'),
+			'current_state' => array('getter' => 'getCurrentState', 'setter' => 'setCurrentState', 'xlink_resource'=> 'order_states'),
 			'date_add' => array(),
 			'date_upd' => array(),
 		),
+		'associations' => array(
+			'order_rows' => array('resource' => 'order_row', 'setter' => null,
+				'fields' => array(
+					'id' =>  array(),
+					'product_id' => array('required' => true),
+					'product_attribute_id' => array('required' => true),
+					'product_quantity' => array('required' => true),
+					'product_name' => array('setter' => null),
+					'product_price' => array('setter' => null),
+			)),
+		),
+		
 	);
 
 	/* MySQL does not allow 'order' for a table name */
@@ -960,5 +973,37 @@ class OrderCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'orders`
 			WHERE `id_order` = '.(int)$id_order.'
 			'.($id_customer ? 'AND `id_customer` = '.(int)$id_customer : ''));
+	}
+	
+	public function getWsOrderRows()
+	{
+		$query = 'SELECT id_order_detail as `id`, id_order, product_attribute_id, product_quantity, product_name
+		FROM `'._DB_PREFIX_.'order_detail`
+		WHERE id_order = '.(int)$this->id;
+		$result = Db::getInstance()->executeS($query);
+		return $result;
+	}
+
+	public function setCurrentState($id_order_state)
+	{
+		$history = new OrderHistory();
+		$history->id_order = (int)($this->id);
+		$history->changeIdOrderState((int)$id_order_state, (int)($this->id));
+	}
+	
+	public function addWs($autodate = true, $nullValues = false)
+	{
+		$paymentModule = Module::getInstanceByName($this->module);
+		$id_order_state = 1; // TODO
+		$customer = new Customer($this->id_customer);
+		$paymentModule->validateOrder($this->id_cart, $id_order_state, $this->total_paid,	$this->payment,	NULL, array(), null, false, $customer->secure_key);
+		return true;
+	}
+	
+	public function deleteAssociations()
+	{
+		return (Db::getInstance()->Execute('
+				DELETE FROM `'._DB_PREFIX_.'order_detail`
+				WHERE `id_order` = '.(int)($this->id)) !== false);
 	}
 }

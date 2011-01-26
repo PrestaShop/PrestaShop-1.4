@@ -85,16 +85,15 @@ abstract class PaymentModuleCore extends Module
 	* @param integer $id_cart Value
 	* @param integer $id_order_state Value
 	* @param float $amountPaid Amount really paid by customer (in the default currency)
-	* @param string $paymentMethod Payment method (eg. 'Credit cart')
+	* @param string $paymentMethod Payment method (eg. 'Credit card')
 	* @param string $message Message to attach to order
 	*/
 
 	public function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, $secure_key = false)
 	{
 		global $cart;
-
+	
 		$cart = new Cart((int)($id_cart));
-
 		// Does order already exists ?
 		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() === 0)
 		{

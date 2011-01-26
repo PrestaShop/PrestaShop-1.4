@@ -47,6 +47,9 @@ class AttributeGroupCore extends ObjectModel
 		'objectsNodeName' => 'product_options',
 		'objectNodeName' => 'product_option',
 		'fields' => array(),
+		'associations' => array(
+			'product_option_values' => array('resource' => 'product_option_value'),
+		),
 	);
 
 	public function getFields()
@@ -153,6 +156,36 @@ class AttributeGroupCore extends ObjectModel
 				return false;
 		}
 		return true;
+	}
+	
+	public function setWsProductOptionValues($values)
+	{
+		$ids = array();
+		foreach ($values as $value)
+			$ids[] = intval($value['id']);
+		$result = Db::getInstance()->Execute('
+			DELETE FROM `'._DB_PREFIX_.'attribute`
+			WHERE `id_attribute_group` = '.(int)$this->id.'
+			AND `id_attribute` NOT IN ('.implode(',', $ids).')'
+		);
+		$ok = true;
+		foreach ($values as $value)
+		{
+			$result = Db::getInstance()->Execute('
+				UPDATE `'._DB_PREFIX_.'attribute`
+				SET `id_attribute_group` = '.(int)$this->id.'
+				WHERE `id_attribute` = '.(int)$value['id']
+			);
+			if ($result === false)
+				$ok = false;
+		}
+		return $ok;
+	}
+	
+	public function getWsProductOptionValues()
+	{
+		$result = Db::getInstance()->executeS('SELECT id_attribute AS id from `'._DB_PREFIX_.'attribute` WHERE id_attribute_group = '.(int)$this->id);
+		return $result;
 	}
 }
 

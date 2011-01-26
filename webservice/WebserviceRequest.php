@@ -785,8 +785,15 @@ class WebserviceRequest
 		$object = new $this->_resourceConfiguration['retrieveData']['className'](intval($this->_urlSegment[1]));
 		if (!$object->id)
 			$this->setStatus(404);
-		elseif (!$object->delete())
-			$this->setStatus(500);
+		else
+		{
+			if (isset($this->_resourceConfiguration['objectMethods']) && isset($this->_resourceConfiguration['objectMethods']['delete']))
+				$result = $object->{$this->_resourceConfiguration['objectMethods']['delete']}();
+			else
+				$result = $object->delete();
+			if (!$result)
+				$this->setStatus(500);
+		}
 		$output = false;
 	}
 	
@@ -900,7 +907,7 @@ class WebserviceRequest
 						return false;
 					}
 					else
-						$this->_object->$fieldProperties['sqlId']((string)$attributes->$fieldName);
+						$this->_object->$fieldProperties['setter']((string)$attributes->$fieldName);
 				}
 				else
 					$this->_object->$sqlId = (string)$attributes->$fieldName;
@@ -935,8 +942,12 @@ class WebserviceRequest
 			}
 			else
 			{
-				//d($this->_object);
-				if($this->_object->save())
+				// Call alternative method for add/update
+				$objectMethod = ($this->_method == 'POST' ? 'add' : 'update');
+				if (isset($this->_resourceConfiguration['objectMethods']) && array_key_exists($objectMethod, $this->_resourceConfiguration['objectMethods']))
+					$objectMethod = $this->_resourceConfiguration['objectMethods'][$objectMethod];
+				$result = $this->_object->{$objectMethod}();
+				if($result)
 				{
 					if (isset($attributes->associations))
 						foreach ($attributes->associations->children() as $association)
@@ -955,7 +966,7 @@ class WebserviceRequest
 									$values[] = $entry;
 								}
 								$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
-								if (!$this->_object->$setter($values))
+								if (!is_null($setter) && !$this->_object->$setter($values))
 								{
 									$this->setError(500, 'Error occurred while setting the '.$association->getName().' value');
 									return false;
@@ -1129,14 +1140,13 @@ class WebserviceRequest
 				$getter = $this->_resourceConfiguration['associations'][$assocName]['getter'];
 				
 				// if we are not in schema
-				$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>';
 				if (method_exists($object, $getter))
 				{
 					$associationResources = $object->$getter();
 					if (is_array($associationResources))
 						foreach ($associationResources as $associationResource)
 						{
-							$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].(in_array($assocName, $this->_resourceList) ? ' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationResource['id'].'"' : '').'>'."\n";
+							$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].(isset($this->_resourceList[$assocName]) ? ' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationResource['id'].'"' : '').'>'."\n";
 							foreach ($associationResource as $fieldName => $fieldValue)
 								$ret .= '<'.$fieldName.'><![CDATA['.$fieldValue.']]></'.$fieldName.'>'."\n";
 							$ret .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
@@ -1144,20 +1154,27 @@ class WebserviceRequest
 				}
 				if (!is_null($this->_schemaToDisplay))
 				{
-					
+					$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
 					foreach ($this->_resourceConfiguration['associations'][$assocName]['fields'] as $fieldName => $fieldAttributes)
 					{
-						$ret .= '<'.$fieldName.
-						(isset($fieldAttributes['required']) && $fieldAttributes['required'] ? ' required="true"' : '');
-						if (isset($fieldAttributes['required']))
-							unset($fieldAttributes['required']);
-						if (count($fieldAttributes) > 0)
-							$ret .= ' format="'.explode(',', $fieldAttributes).'"';
-						$ret .= '/>'."\n";
+						// if shouldn't be modified (calculated fields etc..)
+						if (!array_key_exists('setter',$fieldAttributes) && $fieldName != 'id')
+						{
+							$ret .= '<'.$fieldName.
+							(isset($fieldAttributes['required']) && $fieldAttributes['required'] ? ' required="true"' : '');
+							if (isset($fieldAttributes['required']))
+								unset($fieldAttributes['required']);
+							if (count($fieldAttributes) > 0)
+							{
+								$ret .= ' format="'.explode(',', $fieldAttributes).'"';
+								echo $fieldName.'^'.$fieldAttributes;
+							}
+							$ret .= '/>'."\n";
+						}
 					}
+					$ret .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
 					
 				}
-				$ret .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>';
 				$ret .= '</'.$assocName.'>'."\n";
 			}
 			$ret .= '</associations>'."\n";

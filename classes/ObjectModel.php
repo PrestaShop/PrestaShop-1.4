@@ -497,12 +497,12 @@ abstract class ObjectModelCore
 			$defaultResourceParameters['objectsNodeName'] = $this->table.'s';
 		
 		if (isset($this->{$wsParamsAttributeName}['associations']))
-			foreach ($this->{$wsParamsAttributeName}['associations'] as $assocName => &$associations)
+			foreach ($this->{$wsParamsAttributeName}['associations'] as $assocName => &$association)
 			{
-				if (!isset($associations['setter']))
-					$associations['setter'] = Tools::toCamelCase('set_ws_'.$assocName);
-				if (!isset($associations['getter']))
-					$associations['getter'] = Tools::toCamelCase('get_ws_'.$assocName);
+				if (!array_key_exists('setter', $association))
+					$association['setter'] = Tools::toCamelCase('set_ws_'.$assocName);
+				if (!array_key_exists('getter', $association))
+					$association['getter'] = Tools::toCamelCase('get_ws_'.$assocName);
 			}
 		
 		$resourceParameters = array_merge_recursive($defaultResourceParameters, $this->{$wsParamsAttributeName});

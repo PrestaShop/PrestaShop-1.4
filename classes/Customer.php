@@ -104,7 +104,7 @@ class CustomerCore extends ObjectModel
 			'ip_registration_newsletter' => array(),
 			'last_passwd_gen' => array(),
 			'deleted' => array()
-		)
+		),
 	);
 
 	protected 	$table = 'customer';
@@ -619,5 +619,6 @@ class CustomerCore extends ObjectModel
 		}
 		return false;
 	}
+	
 }
 
