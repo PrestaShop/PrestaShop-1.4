@@ -78,7 +78,7 @@ class FrontControllerCore
 		if (self::$initialized)
 			return;
 		self::$initialized = true;
-		if ($this->ssl AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) 
+		if ($this->ssl AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') AND Configuration::get('PS_SSL_ENABLED')) 
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
