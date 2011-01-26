@@ -74,7 +74,7 @@ class StatsStock extends Module
 		'.$filter);
 		
 		echo '
-		<script type="text/javascript">openCloseLayer(\'calendar\');</script>
+		<script type="text/javascript">$(\'#calendar\').slideToggle();</script>
 		<h2 style="float:left">'.$this->l('Stock value').'</h2>
 		<form action="'.$ru.'" method="post" style="float:right">
 			<input type="hidden" name="submitCategory" value="1" />

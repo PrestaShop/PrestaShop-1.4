@@ -161,7 +161,7 @@ class AdminOrdersStates extends AdminTab
 				</div>
 				<div class="margin-form">
 					<p>
-						<input type="checkbox" style="vertical-align: text-bottom;" id="send_email" name="send_email" onclick="javascript:openCloseLayer(\'tpl\');"'.
+						<input type="checkbox" style="vertical-align: text-bottom;" id="send_email" name="send_email" onclick="$(\'#tpl\').slideToggle();"'.
 					(($this->getFieldValue($obj, 'send_email')) ? 'checked="checked"' : '').' value="1" />
 						<label class="t" for="send_email"> '.$this->l('Send e-mail to customer when order is changed to this status').'</label>
 					</p>

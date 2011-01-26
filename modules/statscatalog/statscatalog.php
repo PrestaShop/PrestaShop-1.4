@@ -166,7 +166,7 @@ class StatsCatalog extends Module
 		$totalNV = $total - $this->getTotalProductViewed();
 		
 		$html = '
-		<script type="text/javascript" language="javascript">openCloseLayer(\'calendar\');</script>
+		<script type="text/javascript" language="javascript">$(\'#calendar\').slideToggle();</script>
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<label>
 				'.$this->l('Choose a category').'
@@ -192,7 +192,7 @@ class StatsCatalog extends Module
 				'.$this->returnLine($this->l('Images available:'), (int)($totalPictures)).'
 				'.$this->returnLine($this->l('Average number of images:'), number_format((float)($averagePictures), 2, '.', '')).'
 				'.$this->returnLine($this->l('Products never viewed:'), (int)($totalNV).' / '.(int)($total)).'
-				'.$this->returnLine('<a style="cursor : pointer" onclick="openCloseLayer(\'pnb\')">'.$this->l('Products never bought:').'</a>', (int)($totalNB).' / '.(int)($total)).'
+				'.$this->returnLine('<a style="cursor : pointer" onclick="$(\'#pnb\').slideToggle();">'.$this->l('Products never bought:').'</a>', (int)($totalNB).' / '.(int)($total)).'
 				'.$this->returnLine($this->l('Conversion rate*:'), $conversion).'
 			</table>
 			<div style="margin-top: 20px;">

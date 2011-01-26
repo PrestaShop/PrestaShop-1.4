@@ -1030,7 +1030,7 @@ class AdminTranslations extends AdminTab
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
 			 	echo '
-				<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$k.'\')">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="front_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
@@ -1100,7 +1100,7 @@ class AdminTranslations extends AdminTab
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
 			 	echo '
-				<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$k.'\')">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="back_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
@@ -1213,7 +1213,7 @@ class AdminTranslations extends AdminTab
 				foreach ($rules['validateLang'] AS $key => $value)
 					(array_key_exists($className.'_'.md5($key), $_FIELDS)) ? ++$translated : ++$toTranslate;
 			echo '
-			<fieldset><legend style="cursor : pointer" onclick="openCloseLayer(\''.$className.'\')">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
+			<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$className.'\').slideToggle();">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
 			<div name="fields_div" id="'.$className.'" style="display: '.($toTranslate ? 'block' : 'none').';">
 				<table cellpadding="2">';
 			if (isset($rules['validate']))
@@ -1434,7 +1434,7 @@ class AdminTranslations extends AdminTab
 
 		echo'
 		<div class="mails_field" >
-			<h3 style="cursor : pointer" onclick="openCloseLayer(\'core\')">Core e-mails - <font color="blue">'.$nbr.'</font> templates for '.$mylang->name.':</h3>
+			<h3 style="cursor : pointer" onclick="$(\'#core\').slideToggle();">Core e-mails - <font color="blue">'.$nbr.'</font> templates for '.$mylang->name.':</h3>
 			<div name="mails_div" id="core">';
 		
 		// @todo : Need to be factorised
@@ -1488,7 +1488,7 @@ class AdminTranslations extends AdminTab
 		{
 			echo '
 			<div class="mails_field" >
-				<h3 style="cursor : pointer" onclick="openCloseLayer(\''.$key33.'\')">Module "'.$key33.'" - <font color="blue">'.(count($moduleMailTpls2,COUNT_RECURSIVE)/2).'</font> templates for '.$mylang->name.':</h3>
+				<h3 style="cursor : pointer" onclick="$(\'#'.$key33.'\').slideToggle();">Module "'.$key33.'" - <font color="blue">'.(count($moduleMailTpls2,COUNT_RECURSIVE)/2).'</font> templates for '.$mylang->name.':</h3>
 				<div name="mails_div" id="'.$key33.'">';
 			foreach ($moduleMailTpls2 AS $mailTplName => $mailTpl)
 			{
@@ -1553,7 +1553,7 @@ class AdminTranslations extends AdminTab
 
 				echo '
 				<div class="mails_field" >
-					<h3 style="cursor : pointer" onclick="openCloseLayer(\''.$theme_dir.'\')">Theme : '.$theme_dir.' - <font color="blue">'.$nb.'</font> templates for '.$mylang->name.' :</h3>
+					<h3 style="cursor : pointer" onclick="$(\'#'.$theme_dir.'\').slideToggle();">Theme : '.$theme_dir.' - <font color="blue">'.$nb.'</font> templates for '.$mylang->name.' :</h3>
 					<div name="mails_div" id="'.$theme_dir.'">';
 
 				// core mail theme
@@ -1596,12 +1596,12 @@ class AdminTranslations extends AdminTab
 				}
 
 				// module mail theme
-				echo '<span class="style-themeModuleMail" onclick="openCloseLayer(\'div'.$theme_dir.'\')">Modules - <font color="blue">'.count($themeModuleMailTpls[$theme_dir]).'</font> templates for '.$mylang->name.' :</span>';
+				echo '<span class="style-themeModuleMail" onclick="$(\'#div'.$theme_dir.'\').slideToggle();">Modules - <font color="blue">'.count($themeModuleMailTpls[$theme_dir]).'</font> templates for '.$mylang->name.' :</span>';
 				echo '<div style="margin: 0; padding: 1em; border: 1px solid #DFD5C3; background: #FFFFF0;" id="div'.$theme_dir.'">';
 
 				foreach ($themeModuleMailTpls[$theme_dir] AS $themeModuleName => $themeModule)
 				{
-					echo '<span class="style-themeModuleName" onclick="openCloseLayer(\''.$theme_dir.$themeModuleName.'\')">'.$themeModuleName.' - <font color="blue">'.count($themeModule).'</font> templates for '.$mylang->name.' :</span>';
+					echo '<span class="style-themeModuleName" onclick="$(\'#'.$theme_dir.$themeModuleName.'\').slideToggle();">'.$themeModuleName.' - <font color="blue">'.count($themeModule).'</font> templates for '.$mylang->name.' :</span>';
 					echo '<div style="margin: 0; padding: 1em; border: 1px solid #DFD5C3; background: #FFFFF0;" id="'.$theme_dir.$themeModuleName.'">';
 					foreach ($themeModule AS $themeModuleMailTplName => $themeModuleMailTpl)
 					{
@@ -1838,7 +1838,7 @@ class AdminTranslations extends AdminTab
 							$countValues = array_count_values($newLang);
 							$empty = isset($countValues['']) ? $countValues[''] : 0;
 							echo '
-							<fieldset style="margin-top:5px"><legend style="cursor : pointer" onclick="openCloseLayer(\''.$theme_name.'_'.$module_name.'_'.$template_name.'\')">'.($theme_name === 'default' ? $this->l('default') : $theme_name ).' - '.$template_name.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+							<fieldset style="margin-top:5px"><legend style="cursor : pointer" onclick="$(\'#'.$theme_name.'_'.$module_name.'_'.$template_name.'\').slideToggle();">'.($theme_name === 'default' ? $this->l('default') : $theme_name ).' - '.$template_name.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 								<div name="modules_div" id="'.$theme_name.'_'.$module_name.'_'.$template_name.'" style="display: '.($empty ? 'block' : 'none').';">
 									<table cellpadding="2">';
 							foreach ($newLang AS $key => $value)
@@ -1912,7 +1912,7 @@ class AdminTranslations extends AdminTab
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
 			 	echo '
-				<fieldset style="width: 700px"><legend style="cursor : pointer" onclick="openCloseLayer(\''.$k.'\')">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+				<fieldset style="width: 700px"><legend style="cursor : pointer" onclick="$(\''.$k.'\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="pdf_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)

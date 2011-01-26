@@ -265,7 +265,7 @@ class AdminReferrers extends AdminTab
 				</div>
 			</fieldset>
 			<br class="clear" />
-			<fieldset><legend onclick="openCloseLayer(\'tracking_help\')" style="cursor: pointer;"><img src="../img/admin/help.png" /> '.$this->l('Help').'</legend>
+			<fieldset><legend onclick="$(\'#tracking_help\').slideToggle();" style="cursor: pointer;"><img src="../img/admin/help.png" /> '.$this->l('Help').'</legend>
 			<div id="tracking_help" style="display: none;">
 				<p>'.$this->l('Definitions:').'</p>
 				<ul style="list-style: disc; margin-left: 20px;">
@@ -308,7 +308,7 @@ class AdminReferrers extends AdminTab
 			</fieldset>
 			<br class="clear" />
 			<fieldset><legend><img src="../img/admin/affiliation.png" /> '.$this->l('Technical information - Simple mode').'</legend>
-				<a style="cursor: pointer; font-style: italic;" onclick="openCloseLayer(\'tracking_help\');"><img src="../img/admin/help.png" /> '.$this->l('Get help!').'</a><br />
+				<a style="cursor: pointer; font-style: italic;" onclick="$(\'#tracking_help\').slideToggle();"><img src="../img/admin/help.png" /> '.$this->l('Get help!').'</a><br />
 				<br class="clear" />
 				<h3>'.$this->l('HTTP referrer').'</h3>
 				<label>'.$this->l('Include').'</label>
@@ -333,10 +333,10 @@ class AdminReferrers extends AdminTab
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
 				<br class="clear" />
-				'.$this->l('If you know how to use MySQL regular expressions, you can use the').' <a style="cursor: pointer; font-weight: bold;" onclick="openCloseLayer(\'tracking_expert\');">'.$this->l('expert mode').'.</a>
+				'.$this->l('If you know how to use MySQL regular expressions, you can use the').' <a style="cursor: pointer; font-weight: bold;" onclick="$(\'#tracking_expert\').slideToggle();">'.$this->l('expert mode').'.</a>
 			</fieldset>
 			<br class="clear" />
-			<fieldset><legend onclick="openCloseLayer(\'tracking_expert\')" style="cursor: pointer;"><img src="../img/admin/affiliation.png" /> '.$this->l('Technical information - Expert mode').'</legend>
+			<fieldset><legend onclick="$(\'#tracking_expert\').slideToggle();" style="cursor: pointer;"><img src="../img/admin/affiliation.png" /> '.$this->l('Technical information - Expert mode').'</legend>
 			<div id="tracking_expert" style="display: none;">
 				<h3>'.$this->l('HTTP referrer').'</h3>
 				<label>'.$this->l('Include').'</label>

@@ -121,7 +121,7 @@ class AdminAttributesGroups extends AdminTab
 		 	echo '
 			<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
 				<td style="vertical-align: top; padding: 4px 0 4px 0" class="center"><input type="checkbox" name="'.$this->table.'Box[]" value="'.$id.'" class="noborder" /></td>
-				<td style="width: 140px; vertical-align: top; padding: 4px 0 4px 0; cursor: pointer" onclick="openCloseLayer(\'attributes_'.$id.'\');">'.$tr['name'].'</td>
+				<td style="width: 140px; vertical-align: top; padding: 4px 0 4px 0; cursor: pointer" onclick="$(\'#attributes_'.$id.'\').slideToggle();">'.$tr['name'].'</td>
 				<td style="vertical-align: top; padding: 4px 0 4px 0; width: 340px">
 					<div id="attributes_'.$id.'" style="display: none">
 					<table class="table" cellpadding="0" cellspacing="0">

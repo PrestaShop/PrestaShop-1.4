@@ -2531,7 +2531,7 @@ class AdminProducts extends AdminTab
 					<tr id="tr_categories"></tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr><td colspan="2">
-						<span onclick="javascript:openCloseLayer(\'seo\');" style="cursor: pointer"><img src="../img/admin/arrow.gif" alt="'.$this->l('SEO').'" title="'.$this->l('SEO').'" style="float:left; margin-right:5px;"/>'.$this->l('Click here to improve product\'s rank in search engines (SEO)').'</span><br />
+						<span onclick="$(\'#seo\').slideToggle();" style="cursor: pointer"><img src="../img/admin/arrow.gif" alt="'.$this->l('SEO').'" title="'.$this->l('SEO').'" style="float:left; margin-right:5px;"/>'.$this->l('Click here to improve product\'s rank in search engines (SEO)').'</span><br />
 						<div id="seo" style="display: none; padding-top: 15px;">
 							<table>
 								<tr>
@@ -3136,7 +3136,7 @@ class AdminProducts extends AdminTab
 				<span style="float: left;"><input type="submit" name="submitProductAttribute" id="submitProductAttribute" value="'.$this->l('Add this combination').'" class="button" onclick="attr_selectall(); this.form.action += \'&addproduct&tabs=3\';" /> </span>
 				<span id="ResetSpan" style="float: left; margin-left: 8px; display: none;">
 				  <input type="reset" name="ResetBtn" id="ResetBtn" onclick="init_elems(); getE(\'submitProductAttribute\').value = \''.$this->l('Add this attributes group', __CLASS__, true).'\';
-				  getE(\'id_product_attribute\').value = 0; openCloseLayer(\'ResetSpan\');" class="button" value="'.$this->l('Cancel modification').'" /></span><span class="clear"></span>
+				  getE(\'id_product_attribute\').value = 0; $(\'#ResetSpan\').slideToggle();" class="button" value="'.$this->l('Cancel modification').'" /></span><span class="clear"></span>
 			  </td>
 		  </tr>
 		  <tr><td colspan="2"><hr style="width:100%;" /></td></tr>
@@ -3398,7 +3398,7 @@ class AdminProducts extends AdminTab
 		echo '
 		<tr>
 			<td>
-				<input type="checkbox" name="ppack" id="ppack" value="1"'.($boolPack ? ' checked="checked"' : '').' onclick="openCloseLayer(\'ppackdiv\');" />
+				<input type="checkbox" name="ppack" id="ppack" value="1"'.($boolPack ? ' checked="checked"' : '').' onclick="$(\'#ppackdiv\').slideToggle();" />
 				<label class="t" for="ppack">'.$this->l('Pack').'</label>
 			</td>
 			<td>
