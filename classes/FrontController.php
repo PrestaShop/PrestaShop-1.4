@@ -78,7 +78,12 @@ class FrontControllerCore
 		if (self::$initialized)
 			return;
 		self::$initialized = true;
-			
+		if ($this->ssl AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) 
+		{
+			header('HTTP/1.1 301 Moved Permanently');
+			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
+			exit();
+		}
 		global $_CONF, $cookie, $smarty, $cart, $iso, $defaultCountry, $page_name;
 		if (!isset($smarty))
 			exit;

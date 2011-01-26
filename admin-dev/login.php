@@ -31,6 +31,13 @@ define('PS_ADMIN_DIR', getcwd());
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 
+if (Configuration::get('PS_SSL_ENABLED') AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) 
+{
+	header('HTTP/1.1 301 Moved Permanently');
+	header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
+	exit();
+}
+
 $errors = array();
 
 $cookie = new Cookie('psAdmin', substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__), -10));
