@@ -79,7 +79,7 @@ else
 	Tools::setCookieLanguage();
 	if (!$cookie->isLogged() AND !Tools::getValue('secure_key') AND !Tools::getValue('id_order'))
 		Tools::redirect('authentication.php?back=get-file.php&key='.$key);
-	elseif (Tools::getValue('secure_key') AND Tools::getValue('id_order'))
+	elseif (!$cookie->isLogged() AND Tools::getValue('secure_key') AND Tools::getValue('id_order'))
 	{
 		$order = new Order((int)Tools::getValue('id_order'));
 		if (!Validate::isLoadedObject($order))
@@ -87,9 +87,7 @@ else
 		if ($order->secure_key != Tools::getValue('secure_key'))
 			displayError('Invalid key.');
 	}
-	else
-		Tools::redirect('authentication.php?back=get-file.php&key='.$key);
-	
+		
 	/* Key format: <sha1-filename>-<hashOrder> */
 	$tmp = explode('-', $key);
 	if (sizeof($tmp) != 2)
@@ -287,6 +285,7 @@ if (empty($mimeType))
 	else
 		$mimeType = 'application/octet-stream';
 }
+
 
 /* Set headers for download */
 header('Content-Transfer-Encoding: binary');
