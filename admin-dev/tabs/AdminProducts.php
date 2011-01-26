@@ -1591,7 +1591,6 @@ class AdminProducts extends AdminTab
 
 		<table style="text-align: center;width:100%">
 			<tr>
-				<th class="cell border"></th>
 				<th class="cell border">'.$this->l('Currency').'</th>
 				<th class="cell border">'.$this->l('Country').'</th>
 				<th class="cell border">'.$this->l('Group').'</th>
@@ -1606,10 +1605,6 @@ class AdminProducts extends AdminTab
 			$id_specific_price = (int)($specificPrice['id_specific_price']);
 			echo '
 			<tr>
-				<td class="cell bpriority" rowspan="2" valign="top">
-					<b>'.($specificPrice['priority'] ? (int)($specificPrice['priority']) : $index).'</b><input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'>
-					<input type="hidden" name="spm_id_shop[]" value="0" />
-				</td>
 				<td class="cell br btt">
 					<select id="spm_currency_'.$index.'" name="spm_id_currency[]" onchange="changeCurrencySpecificPrice('.$index.');">
 						<option value="0">'.$this->l('All currencies').'</option>';

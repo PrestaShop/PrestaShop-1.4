@@ -521,7 +521,7 @@ class AdminImport extends AdminTab
 					$catMoved[$category->id] = (int)($categoryAlreadyCreated['id_category']);
 					$category->id =	(int)($categoryAlreadyCreated['id_category']);
 				}
-				
+
 				/* No automatic nTree regeneration for import */
 				$category->doNotRegenerateNTree = true;
 
@@ -540,10 +540,10 @@ class AdminImport extends AdminTab
 				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
 			}
 		}
-		
+
 		/* Import has finished, we can regenerate the categories nested tree */
 		Category::regenerateEntireNtree();
-		
+
 		$this->closeCsvFile($handle);
 	}
 
@@ -734,7 +734,6 @@ class AdminImport extends AdminTab
 					$specificPrice->id_currency = 0;
 					$specificPrice->id_country = 0;
 					$specificPrice->id_group = 0;
-					$specificPrice->priority = 0;
 					$specificPrice->price = 0.00;
 					$specificPrice->from_quantity = 1;
 					$specificPrice->reduction = (isset($info['reduction_price']) AND $info['reduction_price']) ? $info['reduction_price'] : $info['reduction_percent'] / 100;
@@ -1154,15 +1153,15 @@ class AdminImport extends AdminTab
 				</div>
 			</form>
 		</fieldset>';
-		
+
 		$filesToImport = scandir(dirname(__FILE__).'/../import');
 		uasort($filesToImport, array('AdminImport', '_usortFiles'));
 		foreach ($filesToImport AS $k => &$filename)
 			if (in_array($filename, array('.', '..', '.svn', '.htaccess', 'index.php')))
 				unset($filesToImport[$k]);
-				
+
 		if (sizeof($filesToImport))
-		{			
+		{
 			echo '
 			<div class="space">
 					<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
@@ -1246,7 +1245,7 @@ class AdminImport extends AdminTab
 						}
 					);
 				</script>';
-				
+
 				if (Tools::getValue('entity'))
 					echo' <script type="text/javascript">$("select#entity").change();</script>';
 		}
@@ -1266,12 +1265,12 @@ class AdminImport extends AdminTab
 		fseek($handle, 0);
 		return sizeof($tmp);
 	}
-	
+
 	private function _usortFiles($a, $b)
 	{
 		$a = strrev(substr(strrev($a), 0, 14));
 		$b = strrev(substr(strrev($b), 0, 14));
-		
+
 		if ($a == $b)
 			return 0;
 
@@ -1521,7 +1520,7 @@ class AdminImport extends AdminTab
 					$this->_errors[] = $this->l('no entity selected');
 			}
 		}
-		
+
 		parent::postProcess();
 	}
 
