@@ -48,6 +48,8 @@ class AdminImport extends AdminTab
 
 	public static $default_values = array();
 
+	public $_warnings = array();
+
 	public static $validators = array(
 		'active' => array('AdminImport', 'getBoolean'),
 		'tax_rate' => array('AdminImport', 'getPrice'),
@@ -248,6 +250,7 @@ class AdminImport extends AdminTab
 				$this->available_fields = array(
 				'no' => $this->l('Ignore this column'),
 				'id' => $this->l('ID'),
+				'active' => $this->l('Active (0/1)'),
 				'name' => $this->l('Name *'),
 				'description' => $this->l('Description'),
 				'short_description' => $this->l('Short description'),
