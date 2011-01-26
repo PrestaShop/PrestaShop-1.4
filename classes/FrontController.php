@@ -270,7 +270,7 @@ class FrontControllerCore
 			$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
-				header("HTTP/1.0 301 Moved");
+				header('HTTP/1.0 301 Moved');
 				if (_PS_MODE_DEV_ AND $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
 				Tools::redirectLink($canonicalURL);

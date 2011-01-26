@@ -586,12 +586,8 @@ abstract class ObjectModelCore
 				);
 			}
 		foreach ($resourceParameters['fields'] as $key => &$resourceParametersField)
-		{
 			if (!isset($resourceParametersField['sqlId']))
-			{
 				$resourceParametersField['sqlId'] = $key;
-			}
-		}
 		return $resourceParameters;
 	}
 		
@@ -609,9 +605,10 @@ abstract class ObjectModelCore
 	
 	public function getFieldsRequiredDatabase($all = false)
 	{
-		return Db::getInstance()->ExecuteS('SELECT id_required_field, object_name, field_name
-														FROM '._DB_PREFIX_.'required_field
-														WHERE 1 '.(!$all ? ' AND object_name=\''.pSQL(get_class($this)).'\'' : ''));
+		return Db::getInstance()->ExecuteS('
+		SELECT id_required_field, object_name, field_name
+		FROM '._DB_PREFIX_.'required_field
+		WHERE 1 '.(!$all ? ' AND object_name = \''.pSQL(get_class($this)).'\'' : ''));
 	}
 	
 	public function addFieldsRequiredDatabase($fields)
@@ -619,12 +616,13 @@ abstract class ObjectModelCore
 		if (!is_array($fields))
 			return false;
 
-		if (!Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'required_field WHERE object_name=\''.pSQL(get_class($this)).'\''))
+		if (!Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'required_field WHERE object_name = \''.pSQL(get_class($this)).'\''))
 			return false;
 
 		foreach ($fields AS $field)
-			if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'required_field (id_required_field, object_name, field_name)
-																VALUES(\'\', \''.pSQL(get_class($this)).'\', \''.pSQL($field).'\')'))
+			if (!Db::getInstance()->Execute('
+				INSERT INTO '._DB_PREFIX_.'required_field (id_required_field, object_name, field_name)
+				VALUES(\'\', \''.pSQL(get_class($this)).'\', \''.pSQL($field).'\')'))
 				return false;
 
 		return true;
@@ -634,8 +632,8 @@ abstract class ObjectModelCore
 	{
 		if ($all AND isset(self::$_cache[$this->table]))
 			unset(self::$_cache[$this->table]);
-		elseif (isset(self::$_cache[$this->table][(int)($this->id)]))
-			unset(self::$_cache[$this->table][$this->id]);
+		elseif ($this->id AND isset(self::$_cache[$this->table][(int)$this->id]))
+			unset(self::$_cache[$this->table][(int)$this->id]);
 	}
 }
 

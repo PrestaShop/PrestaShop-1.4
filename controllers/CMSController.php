@@ -43,7 +43,7 @@ class CmsControllerCore extends FrontController
 		if ($this->cms AND $canonicalURL = $this->link->getCMSLink($this->cms))
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
-				header("HTTP/1.0 301 Moved");
+				header('HTTP/1.0 301 Moved');
 				if (_PS_MODE_DEV_ )
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
 				Tools::redirectLink($canonicalURL);
@@ -51,7 +51,7 @@ class CmsControllerCore extends FrontController
 		if ($this->cms_category AND $canonicalURL = $this->link->getCMSCategoryLink($this->cms_category))
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
-				header("HTTP/1.0 301 Moved");
+				header('HTTP/1.0 301 Moved');
 				if (_PS_MODE_DEV_ )
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
 				Tools::redirectLink($canonicalURL);

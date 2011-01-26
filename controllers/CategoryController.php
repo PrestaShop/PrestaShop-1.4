@@ -55,13 +55,14 @@ class CategoryControllerCore extends FrontController
 			
 		// Automatically redirect to the canonical URL if the current in is the right one
 		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-		$canonicalURL = $this->link->getCategoryLink($this->category);
-		if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+		$currentURL = $this->link->getCategoryLink($this->category);
+		$currentURL = preg_replace('/[?&].*$/', '', $currentURL);
+		if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 		{
-			header("HTTP/1.0 301 Moved");
+			header('HTTP/1.0 301 Moved');
 			if (_PS_MODE_DEV_ )
-				die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-			Tools::redirectLink($canonicalURL);
+				die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$currentURL.'">'.$currentURL.'</a>');
+			Tools::redirectLink($currentURL);
 		}
 	
 		parent::preProcess();
