@@ -458,6 +458,8 @@ $(document).ready(function()
 	//init the price in relation of the selected attributes
 	if (typeof productHasAttributes != 'undefined' && productHasAttributes)
 		findCombination(true);
+	else
+		refreshProductImages(0);
 
 	//
 	$('a#resetImages').click(function() {
