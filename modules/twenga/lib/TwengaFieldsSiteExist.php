@@ -21,7 +21,7 @@
  *  @author Prestashop SA <contact@prestashop.com>
  *  @copyright 2007-2010 Prestashop SA : 6 rue lacepede, 75005 PARIS
  *  @version  Release: $Revision: 1.4 $
- *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *  @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  **/
 
@@ -31,13 +31,13 @@
  */
 class TwengaFieldsSiteExist extends TwengaFields
 {
-    public function __construct()
-    {
-        if(!is_array($this->fields) AND empty($this->fields))
-        {
-            $this->fields['key'] = array(32, array('isString', 'isCleanHtml'), true);
-//            $this->fields['PARTNER_AUTH_KEY'] = array(56, array('isString', 'isCleanHtml'), true);
-        }
-        parent::__construct();
-    }   
+	public function __construct()
+	{
+		if(!is_array($this->fields) AND empty($this->fields))
+		{
+			$this->fields['key'] = array(32, array('is_string', 'isCleanHtml'), true);
+//			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);
+		}
+		parent::__construct();
+	}   
 }

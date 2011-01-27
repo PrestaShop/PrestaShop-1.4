@@ -21,7 +21,7 @@
  *  @author Prestashop SA <contact@prestashop.com>
  *  @copyright 2007-2010 Prestashop SA : 6 rue lacepede, 75005 PARIS
  *  @version  Release: $Revision: 1.4 $
- *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *  @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  **/
 
@@ -34,180 +34,186 @@
  */
 class TwengaObj
 {
-    /**
-     * path to load each needed files
-     * @var string
-     */
-    public static $base_dir;
-    
-    /** 
-     * @var string for authentication on Twenga API
-     */
-    private static $user_name;
-    
-    /**
-     * @var string for authentication on Twenga API
-     */
-    private static $password;
-    
-    /**
-     * This partner_id is the same for each prestashop/twenga module.
-     * You don't have to change it.
-     */
-    const PARTNER_AUTH_KEY = 'NTM3YTU1MTJjNTZhODg3OWI2Y2FhNDgyZjU4Njc0ZWU5NDMyNjgxNA==';
-    
-    /**
-     * @var array is build in constructor, save all url method of twenga API
-     */
-    private static $arr_api_url;
-    
-    /**
-     * @var string is the twenga hashkey, use to identify the merchant.
-     * 		this value is saved in the configuration table in database.
-     * @see TwengaObj::saveMerchantLogin()
-     * @see TwengaObj::__constructor()
-     */
-    public static $hashkey;
-    
-    public function getUserName()
-    {
-        return self::$user_name;
-    }
-    public function setUserName($user_name)
-    {
-        if($user_name !== '' && Validate::isString($user_name))
-        {
-            self::$user_name = $user_name;
-            return true;
-        }
-        else 
-            return false;
-    }
-    public function getPassword()
-    {
-        return self::$password;
-    }
-    public function setPassword($password)
-    {
-        if($password !== '' && Validate::isCleanHtml($password) && Validate::isString($password) && strlen($password) <= 32)
-        {
-            self::$password = $password;
-            return true;
-        }
-        else 
-            return false;
-    }
-    public function getHashkey()
-    {
-        return self::$hashkey;
-    }
-    /**
-     * Set the hashkey
-     * @param string $hashkey
-     * @return boolean true if it's a valid key false otherwise.
-     */
-    public function setHashkey($hashkey)
-    {
-        if($hashkey !== '' && Validate::isCleanHtml($hashkey) && Validate::isString($hashkey) && strlen($hashkey) <= 32)
-        {
-           self::$hashkey = $hashkey;
-           return true;
-        }
-        else 
-            return false;
-    }
-    public static function deleteMerchantLogin()
-    {
-        Configuration::deleteByName('TWENGA_USER_NAME');
-        self::$user_name = null;
-        Configuration::deleteByName('TWENGA_PASSWORD');
-        self::$password = null;
-        Configuration::deleteByName('TWENGA_HASHKEY');
-        self::$hashkey = null;
-        return true;
-    }
-    /**
-     * Save the Login access and hashkey in database
-     * Use TwengaObj::siteExist() method to check the hashkey validity and login
-     */
-    public function saveMerchantLogin()
-    {
-        if(self::$user_name !== NULL
-        && self::$password !== NULL
-        && self::$hashkey !== NULL)
-        {
-            $site_exist = false;
-            
-            try {
-               $site_exist = $this->siteExist();
-            } catch (Exception $e) {
-                self::deleteMerchantLogin();
-                throw $e;
-            }
-            if (!$site_exist)
-            {
-                self::deleteMerchantLogin();
-                return false;
-            }
-            else
-            {
-                Configuration::updateValue('TWENGA_USER_NAME', self::$user_name);
-                Configuration::updateValue('TWENGA_PASSWORD', self::$password);
-                Configuration::updateValue('TWENGA_HASHKEY', self::$hashkey);
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-    public function getArrApiUrl ()
-    {
-        return self::$arr_api_url;
-    }
-    
-    /**
-     * Constructor get all necessary infos for the API.
-     * - urls for API methods
-     * - the hashkey, login & password for authentication
-     * Else method check 
-     */
-    public function __construct()
-    {
-        require_once realpath(self::$base_dir.'/TwengaFields.php');
-        
-        if (self::$arr_api_url === NULL)
-        {
-            self::$arr_api_url = array();
-            self::$arr_api_url['getSubscriptionLink'] = 'http://rts.twenga.com/api/Site/GetSubscriptionLink';
-            self::$arr_api_url['siteExist'] = 'http://rts.twenga.com/api/Site/Exist';
-            self::$arr_api_url['siteActivate'] = 'http://rts.twenga.com/api/Site/Activate';
-            self::$arr_api_url['getTrackingScript'] = 'http://rts.twenga.com/api/Site/GetTrackingScript';
-            self::$arr_api_url['orderExist'] = 'http://rts.twenga.com/api/Order/Exist';
-            self::$arr_api_url['orderValidate'] = 'http://rts.twenga.com/api/Order/Validate';
-            self::$arr_api_url['orderCancel'] = 'http://rts.twenga.com/api/Order/Cancel';
-            
-            if(self::PARTNER_AUTH_KEY === NULL)
-                throw new TwengaException($this->l('To activate the Twenga plugin, "PARTNER_AUTH_KEY" contant must be set. Default installation of Prestashop contains this value.'));
-            
-            if (Configuration::get('TWENGA_HASHKEY') !== false && self::$hashkey === NULL)
-                self::$hashkey = Configuration::get('TWENGA_HASHKEY');
-            if (Configuration::get('TWENGA_USER_NAME') !== false && self::$user_name === NULL)
-                self::$user_name = Configuration::get('TWENGA_USER_NAME');
-            if (Configuration::get('TWENGA_PASSWORD') !== false && self::$password === NULL)
-                self::$password = Configuration::get('TWENGA_PASSWORD');
-        }
-    }
-    
-    /**
-     * Build correct URl for cURL, using array of params 
-     * @param string $url
-     * @param array $params
-     */
+	/**
+	 * path to load each needed files
+	 * @var string
+	 */
+	public static $base_dir;
+	
+	/**
+	 * Set the object which use the translation method for the specific module.
+	 * @var AbsTrustedShops
+	 */
+	private static $translation_object;
+	
+	/** 
+	 * @var string for authentication on Twenga API
+	 */
+	private static $user_name;
+	
+	/**
+	 * @var string for authentication on Twenga API
+	 */
+	private static $password;
+	
+	/**
+	 * This partner_id is the same for each prestashop/twenga module.
+	 * You don't have to change it.
+	 */
+	const PARTNER_AUTH_KEY = 'NTM3YTU1MTJjNTZhODg3OWI2Y2FhNDgyZjU4Njc0ZWU5NDMyNjgxNA==';
+	
+	/**
+	 * @var array is build in constructor, save all url method of twenga API
+	 */
+	private static $arr_api_url;
+	
+	/**
+	 * @var string is the twenga hashkey, use to identify the merchant.
+	 * 		this value is saved in the configuration table in database.
+	 * @see TwengaObj::saveMerchantLogin()
+	 * @see TwengaObj::__constructor()
+	 */
+	public static $hashkey;
+	
+	public function getUserName()
+	{
+		return self::$user_name;
+	}
+	public function setUserName($user_name)
+	{
+		if($user_name !== '' && is_string($user_name))
+		{
+			self::$user_name = $user_name;
+			return true;
+		}
+		else 
+			return false;
+	}
+	public function getPassword()
+	{
+		return self::$password;
+	}
+	public function setPassword($password)
+	{
+		if($password !== '' && Validate::isCleanHtml($password) && is_string($password) && strlen($password) <= 32)
+		{
+			self::$password = $password;
+			return true;
+		}
+		else 
+			return false;
+	}
+	public function getHashkey()
+	{
+		return self::$hashkey;
+	}
+	/**
+	 * Set the hashkey
+	 * @param string $hashkey
+	 * @return boolean true if it's a valid key false otherwise.
+	 */
+	public function setHashkey($hashkey)
+	{
+		if($hashkey !== '' && Validate::isCleanHtml($hashkey) && is_string($hashkey) && strlen($hashkey) <= 32)
+		{
+		   self::$hashkey = $hashkey;
+		   return true;
+		}
+		else 
+			return false;
+	}
+	public static function deleteMerchantLogin()
+	{
+		Configuration::deleteByName('TWENGA_USER_NAME');
+		self::$user_name = null;
+		Configuration::deleteByName('TWENGA_PASSWORD');
+		self::$password = null;
+		Configuration::deleteByName('TWENGA_HASHKEY');
+		self::$hashkey = null;
+		return true;
+	}
+	/**
+	 * Save the Login access and hashkey in database
+	 * Use TwengaObj::siteExist() method to check the hashkey validity and login
+	 */
+	public function saveMerchantLogin()
+	{
+		if(self::$user_name !== NULL
+		&& self::$password !== NULL
+		&& self::$hashkey !== NULL)
+		{
+			$site_exist = false;
+			
+			try {
+			   $site_exist = $this->siteExist();
+			} catch (Exception $e) {
+				self::deleteMerchantLogin();
+				throw $e;
+			}
+			if (!$site_exist)
+			{
+				self::deleteMerchantLogin();
+				return false;
+			}
+			else
+			{
+				Configuration::updateValue('TWENGA_USER_NAME', self::$user_name);
+				Configuration::updateValue('TWENGA_PASSWORD', self::$password);
+				Configuration::updateValue('TWENGA_HASHKEY', self::$hashkey);
+				return true;
+			}
+		} else {
+			return false;
+		}
+	}
+	public function getArrApiUrl ()
+	{
+		return self::$arr_api_url;
+	}
+	
+	/**
+	 * Constructor get all necessary infos for the API.
+	 * - urls for API methods
+	 * - the hashkey, login & password for authentication
+	 * Else method check 
+	 */
+	public function __construct()
+	{
+		require_once realpath(self::$base_dir.'/TwengaFields.php');
+		
+		if (self::$arr_api_url === NULL)
+		{
+			self::$arr_api_url = array();
+			self::$arr_api_url['getSubscriptionLink'] = 'http://rts.twenga.com/api/Site/GetSubscriptionLink';
+			self::$arr_api_url['siteExist'] = 'http://rts.twenga.com/api/Site/Exist';
+			self::$arr_api_url['siteActivate'] = 'http://rts.twenga.com/api/Site/Activate';
+			self::$arr_api_url['getTrackingScript'] = 'http://rts.twenga.com/api/Site/GetTrackingScript';
+			self::$arr_api_url['orderExist'] = 'http://rts.twenga.com/api/Order/Exist';
+			self::$arr_api_url['orderValidate'] = 'http://rts.twenga.com/api/Order/Validate';
+			self::$arr_api_url['orderCancel'] = 'http://rts.twenga.com/api/Order/Cancel';
+			
+			if(self::PARTNER_AUTH_KEY === NULL)
+				throw new TwengaException(self::$translation_object->l('To activate the Twenga plugin, "PARTNER_AUTH_KEY" contant must be set. Default installation of Prestashop contains this value.', basename(__FILE__, '.php')));
+			
+			if (Configuration::get('TWENGA_HASHKEY') !== false && self::$hashkey === NULL)
+				self::$hashkey = Configuration::get('TWENGA_HASHKEY');
+			if (Configuration::get('TWENGA_USER_NAME') !== false && self::$user_name === NULL)
+				self::$user_name = Configuration::get('TWENGA_USER_NAME');
+			if (Configuration::get('TWENGA_PASSWORD') !== false && self::$password === NULL)
+				self::$password = Configuration::get('TWENGA_PASSWORD');
+		}
+	}
+	
+	/**
+	 * Build correct URl for cURL, using array of params 
+	 * @param string $url
+	 * @param array $params
+	 */
 	private static function buildUrlToQuery($url, array $params)
 	{
-	    $str_params = http_build_query($params);
-	    $str_url = $url.(($str_params !== '') ? '?'.$str_params : ''); 
-	    return $str_url;
+		$str_params = http_build_query($params);
+		$str_url = $url.(($str_params !== '') ? '?'.$str_params : ''); 
+		return $str_url;
 	}
 	
 	/**
@@ -220,15 +226,15 @@ class TwengaObj
 	 */
 	private static function executeQuery($query, array $params = array(), $authentication = true)
 	{
-	    $defaultParams = array(
+		$defaultParams = array(
 			CURLOPT_HEADER => TRUE,
 			CURLOPT_RETURNTRANSFER => TRUE,
 			CURLINFO_HEADER_OUT => TRUE,
 			CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
 		);
 		if($authentication)
-		    $defaultParams[CURLOPT_USERPWD] = md5(self::$user_name).':'.md5(self::$password);
-	    $session = curl_init($query);
+			$defaultParams[CURLOPT_USERPWD] = md5(self::$user_name).':'.md5(self::$password);
+		$session = curl_init($query);
 		$arr_opt = $defaultParams + $params;
 		curl_setopt_array($session, $arr_opt);
 		$response = curl_exec($session);
@@ -241,7 +247,7 @@ class TwengaObj
 		if ($status_code === 0)
 			throw new TwengaException('CURL Error: '.curl_error($session));
 		curl_close($session);
-        
+		
 		return array('status_code' => $status_code, 'response' => $response);
 	}
 	
@@ -253,18 +259,18 @@ class TwengaObj
 	 */
 	public static function checkParams($method_name, array $params)
 	{
-	    $classname = 'TwengaFields'.ucfirst($method_name);
-	    if(class_exists($classname))
-	    {
-	        $fields = new $classname();
-	        if(!$fields instanceof TwengaFields)
-	            throw new TwengaException($this->l('Object for validate fields must be an instance of TwengaFields class'));
-	        try {
-	            $fields->setParams($params)->checkParams();
-	        } catch (TwengaFieldsException $e) {
-	            throw $e;
-	        }
-	    }
+		$classname = 'TwengaFields'.ucfirst($method_name);
+		if(class_exists($classname))
+		{
+			$fields = new $classname();
+			if(!$fields instanceof TwengaFields)
+				throw new TwengaException(self::$translation_object->l('Object for validate fields must be an instance of TwengaFields class', basename(__FILE__, '.php')));
+			try {
+				$fields->setParams($params)->checkParams();
+			} catch (TwengaFieldsException $e) {
+				throw $e;
+			}
+		}
 	}
 	
 	/**
@@ -272,29 +278,29 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-    public function getSubscriptionLink(array $params = array())
+	public function getSubscriptionLink(array $params = array())
 	{
-	    require_once realpath(self::$base_dir.'/TwengaFieldsGetSubscriptionLink.php');
-//	    $params['site_id'] = self::$site_id;
-	    $params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
-	    try {
-            self::checkParams(__FUNCTION__, $params);
-        } catch (TwengaFieldsException $e) {
-            throw $e;
-        }
-        $str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
-        
-        try {
-            $response = self::executeQuery($str_params, array(), false);
-            self::checkStatusCode($response['status_code']);
-            $obj_xml = self::parseXml($response['response']);
-        } catch (TwengaException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new TwengaException($e->getMessage(), $e->getCode());
-        }
-            
-        return (array)$obj_xml;
+		require_once realpath(self::$base_dir.'/TwengaFieldsGetSubscriptionLink.php');
+//		$params['site_id'] = self::$site_id;
+		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
+		try {
+			self::checkParams(__FUNCTION__, $params);
+		} catch (TwengaFieldsException $e) {
+			throw $e;
+		}
+		$str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
+		
+		try {
+			$response = self::executeQuery($str_params, array(), false);
+			self::checkStatusCode($response['status_code']);
+			$obj_xml = self::parseXml($response['response']);
+		} catch (TwengaException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			throw new TwengaException($e->getMessage(), $e->getCode());
+		}
+			
+		return (array)$obj_xml;
 	}
 	
 	/**
@@ -304,25 +310,25 @@ class TwengaObj
 	 */
 	public function siteExist(array $params = array())
 	{
-	    require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
-	    $params['key'] = self::$hashkey;
-	    
-	    try {
-            self::checkParams(__FUNCTION__, $params);
-        } catch (TwengaFieldsException $e) {
-            throw $e;
-        }
-        $str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
-        try {
-            $response = self::executeQuery($str_params);
-            self::checkStatusCode($response['status_code']);
-            $obj_xml = self::parseXml($response['response']);
-        } catch (TwengaException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new TwengaException($e->getMessage(), $e->getCode());
-        }
-        return ((string)$obj_xml->message === 'true') ? true : false;
+		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
+		$params['key'] = self::$hashkey;
+		
+		try {
+			self::checkParams(__FUNCTION__, $params);
+		} catch (TwengaFieldsException $e) {
+			throw $e;
+		}
+		$str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
+		try {
+			$response = self::executeQuery($str_params);
+			self::checkStatusCode($response['status_code']);
+			$obj_xml = self::parseXml($response['response']);
+		} catch (TwengaException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			throw new TwengaException($e->getMessage(), $e->getCode());
+		}
+		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
 	
 	/**
@@ -330,28 +336,28 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-    public function siteActivate(array $params = array())
+	public function siteActivate(array $params = array())
 	{
-	    require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
-	    require_once realpath(self::$base_dir.'/TwengaFieldsSiteActivate.php');
-	    $params['key'] = self::$hashkey;
-	    try {
-            self::checkParams(__FUNCTION__, $params);
-        } catch (TwengaFieldsException $e) {
-            throw $e;
-        }
-        $str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
-         
-        try {
-            $response = self::executeQuery($str_params);
-            self::checkStatusCode($response['status_code']);
-            $obj_xml = self::parseXml($response['response']);
-        } catch (TwengaException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new TwengaException($e->getMessage(), $e->getCode());
-        }
-        return ((string)$obj_xml->message === 'true') ? true : false;
+		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
+		require_once realpath(self::$base_dir.'/TwengaFieldsSiteActivate.php');
+		$params['key'] = self::$hashkey;
+		try {
+			self::checkParams(__FUNCTION__, $params);
+		} catch (TwengaFieldsException $e) {
+			throw $e;
+		}
+		$str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
+		 
+		try {
+			$response = self::executeQuery($str_params);
+			self::checkStatusCode($response['status_code']);
+			$obj_xml = self::parseXml($response['response']);
+		} catch (TwengaException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			throw new TwengaException($e->getMessage(), $e->getCode());
+		}
+		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
 	
 	/**
@@ -361,24 +367,24 @@ class TwengaObj
 	 */
 	public function getTrackingScript(array $params = array())
 	{
-	    require_once realpath(self::$base_dir.'/TwengaFieldsGetTrackingScript.php');
-	    $params['key'] = self::$hashkey;
-	    try {
-            self::checkParams(__FUNCTION__, $params);
-        } catch (TwengaFieldsException $e) {
-            throw $e;
-        }
-        $str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
-        try {
-            $response = self::executeQuery($str_params);
-            self::checkStatusCode($response['status_code']);
-            $obj_xml = self::parseXml($response['response']);
-        } catch (TwengaException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new TwengaException($e->getMessage(), $e->getCode());
-        }
-        return (string)$obj_xml->message;
+		require_once realpath(self::$base_dir.'/TwengaFieldsGetTrackingScript.php');
+		$params['key'] = self::$hashkey;
+		try {
+			self::checkParams(__FUNCTION__, $params);
+		} catch (TwengaFieldsException $e) {
+			throw $e;
+		}
+		$str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
+		try {
+			$response = self::executeQuery($str_params);
+			self::checkStatusCode($response['status_code']);
+			$obj_xml = self::parseXml($response['response']);
+		} catch (TwengaException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			throw new TwengaException($e->getMessage(), $e->getCode());
+		}
+		return (string)$obj_xml->message;
 	}
 	
 	/**
@@ -386,27 +392,27 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-    public function orderExist(array $params = array())
+	public function orderExist(array $params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
-	    require_once realpath(self::$base_dir.'/TwengaFieldsOrderExist.php');
-	    $params['key'] = self::$hashkey;
-	    try {
-            self::checkParams(__FUNCTION__, $params);
-        } catch (TwengaFieldsException $e) {
-            throw $e;
-        }
-        $str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
-        try {
-            $response = self::executeQuery($str_params);
-            self::checkStatusCode($response['status_code']);
-            $obj_xml = self::parseXml($response['response']);
-        } catch (TwengaException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new TwengaException($e->getMessage(), $e->getCode());
-        }
-        return ((string)$obj_xml->message === 'true') ? true : false;
+		require_once realpath(self::$base_dir.'/TwengaFieldsOrderExist.php');
+		$params['key'] = self::$hashkey;
+		try {
+			self::checkParams(__FUNCTION__, $params);
+		} catch (TwengaFieldsException $e) {
+			throw $e;
+		}
+		$str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
+		try {
+			$response = self::executeQuery($str_params);
+			self::checkStatusCode($response['status_code']);
+			$obj_xml = self::parseXml($response['response']);
+		} catch (TwengaException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			throw new TwengaException($e->getMessage(), $e->getCode());
+		}
+		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
 	
 	/**
@@ -416,24 +422,24 @@ class TwengaObj
 	 */
 	public function orderValidate(array $params = array())
 	{
-	    require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
-	    $params['key'] = self::$hashkey;
-	    try {
-            self::checkParams(__FUNCTION__, $params);
-        } catch (TwengaFieldsException $e) {
-            throw $e;
-        }
-        $str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
-        try {
-            $response = self::executeQuery($str_params);
-            self::checkStatusCode($response['status_code']);
-            $obj_xml = self::parseXml($response['response']);
-        } catch (TwengaException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new TwengaException($e->getMessage(), $e->getCode());
-        }
-        return ((string)$obj_xml->message === 'true') ? true : false;
+		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
+		$params['key'] = self::$hashkey;
+		try {
+			self::checkParams(__FUNCTION__, $params);
+		} catch (TwengaFieldsException $e) {
+			throw $e;
+		}
+		$str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
+		try {
+			$response = self::executeQuery($str_params);
+			self::checkStatusCode($response['status_code']);
+			$obj_xml = self::parseXml($response['response']);
+		} catch (TwengaException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			throw new TwengaException($e->getMessage(), $e->getCode());
+		}
+		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
 	
 	/**
@@ -443,25 +449,25 @@ class TwengaObj
 	 */
 	public function orderCancel(array $params = array())
 	{
-	    require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
-	    require_once realpath(self::$base_dir.'/TwengaFieldsOrderCancel.php');
-	    $params['key'] = self::$hashkey;
-	    try {
-            self::checkParams(__FUNCTION__, $params);
-        } catch (TwengaFieldsException $e) {
-            throw $e;
-        }
-        $str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
-        try {
-            $response = self::executeQuery($str_params);
-            self::checkStatusCode($response['status_code']);
-            $obj_xml = self::parseXml($response['response']);
-        } catch (TwengaException $e) {
-            throw $e;
-        } catch (Exception $e) {
-            throw new TwengaException($e->getMessage(), $e->getCode());
-        }
-        return ((string)$obj_xml->message === 'true') ? true : false;
+		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
+		require_once realpath(self::$base_dir.'/TwengaFieldsOrderCancel.php');
+		$params['key'] = self::$hashkey;
+		try {
+			self::checkParams(__FUNCTION__, $params);
+		} catch (TwengaFieldsException $e) {
+			throw $e;
+		}
+		$str_params = self::buildUrlToQuery(self::$arr_api_url[__FUNCTION__],$params);
+		try {
+			$response = self::executeQuery($str_params);
+			self::checkStatusCode($response['status_code']);
+			$obj_xml = self::parseXml($response['response']);
+		} catch (TwengaException $e) {
+			throw $e;
+		} catch (Exception $e) {
+			throw new TwengaException($e->getMessage(), $e->getCode());
+		}
+		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
 	
 	/**
@@ -470,24 +476,24 @@ class TwengaObj
 	 */
 	public static function parseXml($resource)
 	{
-	    if ($resource != '')
+		if ($resource != '')
 		{
 			libxml_use_internal_errors(true);
 			$xml = simplexml_load_string($resource);
 			if (libxml_get_errors())
-				throw new TwengaException($this->l('HTTP XML response is not parsable : ').'<br />'.var_export(libxml_get_errors(), true));
-		    if($xml->getName() === 'error')
-		        throw new TwengaException((string)$xml->message, (int)$xml->code);
+				throw new TwengaException(self::$translation_object->l('HTTP XML response is not parsable : ', basename(__FILE__, '.php')).'<br />'.var_export(libxml_get_errors(), true));
+			if($xml->getName() === 'error')
+				throw new TwengaException((string)$xml->message, (int)$xml->code);
 			return $xml;
 		}
 		else
-			throw new TwengaException($this->l('HTTP response is empty'));
+			throw new TwengaException(self::$translation_object->l('HTTP response is empty'));
 	}
 	/**
 	 * @param int $status_code
 	 * @throws TwengaException message depends on the error code
 	 */
-    protected static function checkStatusCode($status_code)
+	protected static function checkStatusCode($status_code)
 	{
 		switch($status_code)
 		{
@@ -495,96 +501,49 @@ class TwengaObj
 			default: throw new TwengaException('', (int)$status_code);
 		}
 	}
-	/**
-	 * Get translation for a given module text
-	 *
-	 * @param string $string String to translate
-	 * @return string Translation
-	 */
-	public function l($string, $specific = false)
+	
+	static public function setTranslationObject(Module $object)
 	{
-		global $_MODULES, $_MODULE, $cookie;
-
-		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
-		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
-		if (Tools::file_exists_cache($file) AND include_once($file))
-			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
-
-		if (!is_array($_MODULES))
-			return (str_replace('"', '&quot;', $string));
-
-		$source = Tools::strtolower($specific ? $specific : get_class($this));
-		$string2 = str_replace('\'', '\\\'', $string);
-		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
-		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
-
-		if (key_exists($currentKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$currentKey]);
-		elseif (key_exists($defaultKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$defaultKey]);
-		else
-			$ret = $string;
-		return str_replace('"', '&quot;', $ret);
+		self::$translation_object = $object;
 	}
 }
-class TwengaException extends Exception {
-    public function __construct($message, $code = 0)
-    {
-        if($code !== 0)
-        {
-            $error_label = $this->l('This call to Twenga Web Services failed and returned an HTTP status of %d. That means:')."\n";
-            $error_label = sprintf($error_label, $code);
-            if($message === '' || empty($message) || $message === NULL)
-            {
-                switch ($code)
-                {
-                    case 11: $message .= $this->l('The function you tried to access does not exist');break;
-        			case 12: $message .= $this->l('A required field is empty');break;
-        			case 13: $message .= $this->l('The type of the parameter that has been sent is different from parameter expected type');break;
-        			case 21: $message .= $this->l('Hash key is not valid');break;
-        			case 24: $message .= $this->l('Hash key is required');break;
-        			case 31: $message .= $this->l('No order found. Please check parameters you sent');break;
-        			case 401: $message .= $this->l('Authentication is required.');break;
-        			case 403: $message .= $this->l('Authentication failed.');break;
-        			case 404: $message .= $this->l('Invalid url.');break;
-        			case 500: $message .= $this->l('The server encountered an internal server error');break;
-        			case 503: $message .= $this->l('The server is unavailable for the moment');break;
-        			default:  $message .= $this->l('This call to PrestaShop Web Services returned an unexpected HTTP status of:').$code;
-                }
-            }
-            $message = $this->l('Error #').$code." : \n".$error_label.$message.'';
-        }
-        parent::__construct($message, $code);
-    }
+class TwengaException extends Exception
+{
 	/**
-	 * Get translation for a given module text
-	 *
-	 * @param string $string String to translate
-	 * @return string Translation
+	 * Set the object which use the translation method for the specific module.
+	 * @var AbsTrustedShops
 	 */
-	public function l($string, $specific = false)
+	private static $translation_object; 
+	static public function setTranslationObject(Module $object)
 	{
-		global $_MODULES, $_MODULE, $cookie;
-
-		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
-		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
-		if (Tools::file_exists_cache($file) AND include_once($file))
-			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
-
-		if (!is_array($_MODULES))
-			return (str_replace('"', '&quot;', $string));
-
-		$source = Tools::strtolower($specific ? $specific : get_class($this));
-		$string2 = str_replace('\'', '\\\'', $string);
-		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
-		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
-
-		if (key_exists($currentKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$currentKey]);
-		elseif (key_exists($defaultKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$defaultKey]);
-		else
-			$ret = $string;
-		return str_replace('"', '&quot;', $ret);
+		self::$translation_object = $object;
+	}
+	public function __construct($message, $code = 0)
+	{
+		if($code !== 0)
+		{
+			$error_label = self::$translation_object->l('This call to Twenga Web Services failed and returned an HTTP status of %d. That means:', basename(__FILE__, '.php'))."\n";
+			$error_label = sprintf($error_label, $code);
+			if($message === '' || empty($message) || $message === NULL)
+			{
+				switch ($code)
+				{
+					case 11: $message .= self::$translation_object->l('The function you tried to access does not exist', basename(__FILE__, '.php'));break;
+					case 12: $message .= self::$translation_object->l('A required field is empty', basename(__FILE__, '.php'));break;
+					case 13: $message .= self::$translation_object->l('The type of the parameter that has been sent is different from parameter expected type', basename(__FILE__, '.php'));break;
+					case 21: $message .= self::$translation_object->l('Hash key is not valid', basename(__FILE__, '.php'));break;
+					case 24: $message .= self::$translation_object->l('Hash key is required', basename(__FILE__, '.php'));break;
+					case 31: $message .= self::$translation_object->l('No order found. Please check parameters you sent', basename(__FILE__, '.php'));break;
+					case 401: $message .= self::$translation_object->l('Authentication is required.', basename(__FILE__, '.php'));break;
+					case 403: $message .= self::$translation_object->l('Authentication failed.', basename(__FILE__, '.php'));break;
+					case 404: $message .= self::$translation_object->l('Invalid url.', basename(__FILE__, '.php'));break;
+					case 500: $message .= self::$translation_object->l('The server encountered an internal server error', basename(__FILE__, '.php'));break;
+					case 503: $message .= self::$translation_object->l('The server is unavailable for the moment', basename(__FILE__, '.php'));break;
+					default:  $message .= self::$translation_object->l('This call to PrestaShop Web Services returned an unexpected HTTP status of:', basename(__FILE__, '.php')).$code;
+				}
+			}
+			$message = self::$translation_object->l('Error #', basename(__FILE__, '.php')).$code." : \n".$error_label.$message.'';
+		}
+		parent::__construct($message, $code);
 	}
 }

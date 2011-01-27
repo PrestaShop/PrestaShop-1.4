@@ -128,6 +128,9 @@ class Twenga extends PaymentModule
 		// set the base dir to load files needed for the TwengaObj class 
 		TwengaObj::$base_dir = self::$base_dir.'/lib';
 		
+		TwengaObj::setTranslationObject($this);
+		TwengaException::setTranslationObject($this);
+		
 		// instanciate (just once) the TwengaObj and PrestashopStats
 		if (self::$obj_twenga === NULL)
 			self::$obj_twenga = new TwengaObj();

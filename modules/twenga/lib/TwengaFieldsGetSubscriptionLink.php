@@ -21,7 +21,7 @@
  *  @author Prestashop SA <contact@prestashop.com>
  *  @copyright 2007-2010 Prestashop SA : 6 rue lacepede, 75005 PARIS
  *  @version  Release: $Revision: 1.4 $
- *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *  @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *  International Registered Trademark & Property of PrestaShop SA
  **/
 
@@ -31,29 +31,29 @@
  */
 class TwengaFieldsGetSubscriptionLink extends TwengaFields
 {
-    public function __construct()
-    {
-        if(!is_array($this->fields) AND empty($this->fields))
-        {
-            $this->fields['PARTNER_AUTH_KEY'] = array(56, array('isString', 'isCleanHtml'), true);
-            $this->fields['site_url'] = array(200, array('isString', 'isUrl'), true);
-            $this->fields['feed_url'] = array(200, array('isString', 'isUrl'), true);
-            $this->fields['country'] = array(2, array('isString', 'isCountryName'), true);
-            $this->fields['site_id'] = array(32, array('isString', 'isCleanHtml'));
-            $this->fields['site_name'] = array(100, array('isString', 'isCleanHtml'));
-            $this->fields['firstname'] = array(100, array('isString', 'isCleanHtml'));
-            $this->fields['lastname'] = array(100, array('isString', 'isCleanHtml'));
-            $this->fields['civility'] = array(40, array('isString', 'isCleanHtml'));
-            $this->fields['position'] = array(100, array('isString', 'isCleanHtml'));
-            $this->fields['email'] = array(100, array('isString', 'isEmail'));
-            $this->fields['phone'] = array(30, array('isString', 'isPhoneNumber'));
-            $this->fields['mobile'] = array(30, array('isString', 'isPhoneNumber'));
-            $this->fields['organisation_name'] = array(100, array('isString', 'isCleanHtml'));
-            $this->fields['legaltype'] = array(30, array('isString', 'isCleanHtml'));
-            $this->fields['address'] = array(100, array('isString', 'isCleanHtml'));
-            $this->fields['postal_code'] = array(10, array('isString', 'isCleanHtml'));
-            $this->fields['city'] = array(30, array('isString', 'isCityName'));
-        }
-        parent::__construct();
-    }   
+	public function __construct()
+	{
+		if(!is_array($this->fields) AND empty($this->fields))
+		{
+			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);
+			$this->fields['site_url'] = array(200, array('is_string', 'isUrl'), true);
+			$this->fields['feed_url'] = array(200, array('is_string', 'isUrl'), true);
+			$this->fields['country'] = array(2, array('is_string', 'isCountryName'), true);
+			$this->fields['site_id'] = array(32, array('is_string', 'isCleanHtml'));
+			$this->fields['site_name'] = array(100, array('is_string', 'isCleanHtml'));
+			$this->fields['firstname'] = array(100, array('is_string', 'isCleanHtml'));
+			$this->fields['lastname'] = array(100, array('is_string', 'isCleanHtml'));
+			$this->fields['civility'] = array(40, array('is_string', 'isCleanHtml'));
+			$this->fields['position'] = array(100, array('is_string', 'isCleanHtml'));
+			$this->fields['email'] = array(100, array('is_string', 'isEmail'));
+			$this->fields['phone'] = array(30, array('is_string', 'isPhoneNumber'));
+			$this->fields['mobile'] = array(30, array('is_string', 'isPhoneNumber'));
+			$this->fields['organisation_name'] = array(100, array('is_string', 'isCleanHtml'));
+			$this->fields['legaltype'] = array(30, array('is_string', 'isCleanHtml'));
+			$this->fields['address'] = array(100, array('is_string', 'isCleanHtml'));
+			$this->fields['postal_code'] = array(10, array('is_string', 'isCleanHtml'));
+			$this->fields['city'] = array(30, array('is_string', 'isCityName'));
+		}
+		parent::__construct();
+	}   
 }
