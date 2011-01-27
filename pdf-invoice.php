@@ -42,5 +42,4 @@ elseif ((isset($cookie->id_customer) AND $order->id_customer != $cookie->id_cust
 elseif (!OrderState::invoiceAvailable($order->getCurrentState()) AND !$order->invoice_number)
 	die(Tools::displayError('No invoice available'));
 else
-		PDF::invoice($order);
-
+	PDF::invoice($order);

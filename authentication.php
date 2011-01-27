@@ -26,5 +26,4 @@
 */
 
 require(dirname(__FILE__).'/config/config.inc.php');
-$controller = ControllerFactory::getController('AuthController');
-$controller->run();
+ControllerFactory::getController('AuthController')->run();

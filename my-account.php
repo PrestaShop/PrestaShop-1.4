@@ -26,6 +26,4 @@
 */
 
 require(dirname(__FILE__).'/config/config.inc.php');
-$controller = ControllerFactory::getController('MyAccountController');
-$controller->run();
-
+ControllerFactory::getController('MyAccountController')->run();

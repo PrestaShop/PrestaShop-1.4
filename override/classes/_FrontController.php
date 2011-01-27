@@ -196,6 +196,14 @@ class FrontController extends FrontControllerCore
 				return (bool)(int)$b;
 		}
 	}
+
+	private function sizeofvar($var)
+	{
+		$start_memory = memory_get_usage();   
+		$tmp = unserialize(serialize($var));   
+		$size = memory_get_usage() - $start_memory;
+		return $size;
+	}
 	
 	public function displayFooter()
 	{
@@ -222,6 +230,17 @@ class FrontController extends FrontControllerCore
 		$totalHookTime = 0;
 		foreach ($hooktime as $time)
 			$totalHookTime += $time;
+			
+		$globalSize = array();
+		$totalGlobalSize = 0;
+		foreach ($GLOBALS as $key => $value)
+			if ($key != 'GLOBALS')
+			{
+				$totalGlobalSize += ($size = $this->sizeofvar($value));
+				if ($size > 1024)
+					$globalSize[$key] = round($size / 1024, 1);
+			}
+		arsort($globalSize);
 			
 		echo '<br /><br />
 		<div class="rte" style="text-align:left;padding:8px;float:left">
@@ -273,6 +292,15 @@ class FrontController extends FrontControllerCore
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
 			<b>Included files</b>: '.sizeof(get_included_files()).'
 		</div>
+		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
+			<b>Globals (&gt; 1 Ko only): '.round($totalGlobalSize / 1024).' Ko</b>
+			<ul>';
+		foreach ($globalSize as $global => $size)
+			echo '<li>'.$global.' &asymp; '.$size.' Ko</li>';
+		echo '</ul>
+		</div>';
+		
+		echo '
 		<div class="rte" style="text-align:left;padding:8px;clear:both;margin-top:20px">
 			<ul>
 				<li><a href="#stopwatch">Go to Stopwatch</a></li>
@@ -301,6 +329,5 @@ class FrontController extends FrontControllerCore
 		foreach ($tables as $table => $nb)
 			echo $hr.'<b '.$this->getTableColor($nb).'>'.$nb.'</b> '.$table;
 		echo '</div>';
-		
 	}
 }
