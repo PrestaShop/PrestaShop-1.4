@@ -51,36 +51,46 @@ if ($tab)
 			 '</div>';
 
 		if (Validate::isLoadedObject($adminObj))
-			if (!$adminObj->checkToken())
-				return;
-
-		/* Filter memorization */
-		if (isset($_POST) AND !empty($_POST) AND isset($adminObj->table))
-			foreach ($_POST AS $key => $value)
-				if (is_array($adminObj->table))
-				{
-					foreach ($adminObj->table AS $table)
-						if (strncmp($key, $table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
+		{
+			if ($adminObj->checkToken())
+			{
+				/* Filter memorization */
+				if (isset($_POST) AND !empty($_POST) AND isset($adminObj->table))
+					foreach ($_POST AS $key => $value)
+						if (is_array($adminObj->table))
+						{
+							foreach ($adminObj->table AS $table)
+								if (strncmp($key, $table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
+									$cookie->$key = !is_array($value) ? $value : serialize($value);
+						}
+						elseif (strncmp($key, $adminObj->table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
 							$cookie->$key = !is_array($value) ? $value : serialize($value);
-				}
-				elseif (strncmp($key, $adminObj->table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
-					$cookie->$key = !is_array($value) ? $value : serialize($value);
 
-		if (isset($_GET) AND !empty($_GET) AND isset($adminObj->table))
-			foreach ($_GET AS $key => $value)
-				if (is_array($adminObj->table))
-				{
-					foreach ($adminObj->table AS $table)
-						if (strncmp($key, $table.'OrderBy', 7) === 0 OR strncmp($key, $table.'Orderway', 8) === 0)
+				if (isset($_GET) AND !empty($_GET) AND isset($adminObj->table))
+					foreach ($_GET AS $key => $value)
+						if (is_array($adminObj->table))
+						{
+							foreach ($adminObj->table AS $table)
+								if (strncmp($key, $table.'OrderBy', 7) === 0 OR strncmp($key, $table.'Orderway', 8) === 0)
+									$cookie->$key = $value;
+						}
+						elseif (strncmp($key, $adminObj->table.'OrderBy', 7) === 0 OR strncmp($key, $adminObj->table.'Orderway', 12) === 0)
 							$cookie->$key = $value;
-				}
-				elseif (strncmp($key, $adminObj->table.'OrderBy', 7) === 0 OR strncmp($key, $adminObj->table.'Orderway', 12) === 0)
-					$cookie->$key = $value;
 
-		$adminObj->displayConf();
-		$adminObj->postProcess();
-		$adminObj->displayErrors();
-		$adminObj->display();
+				$adminObj->displayConf();
+				$adminObj->postProcess();
+				$adminObj->displayErrors();
+				$adminObj->display();
+			}
+			else
+			{
+				// ${1} in the replacement string of the regexp is required, because the token may begin with a number and mix up with it (e.g. $17)
+				echo '<a href="'.htmlentities(preg_replace('/([&?]token=)[^&]*(&.*)?$/', '${1}'.$adminObj->token.'$2', $_SERVER['REQUEST_URI'])).'"
+						style="text-decoration:underline">
+					'.translate('Don\'t worry, I understand the risks but I really want to display this page.').'
+				</a>';
+			}
+		}
 	}
 }
 else /* Else display homepage */

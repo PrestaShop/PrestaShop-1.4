@@ -2785,6 +2785,7 @@ $_LANGADM['index53cd939ae14e33855274e17a3c411fdd'] = 'Pour des raisons de sécur
 $_LANGADM['index362b56674d07160fab60725a927bbf13'] = 'supprimer le dossier /install';
 $_LANGADM['index7286baef44d09300636a4b99c533523c'] = 'Temps de chargement :';
 $_LANGADM['indexeed2839c1e3e5f7069ed03b2f6d4c6dd'] = 'Panneau d\'administration';
+$_LANGADM['index84e79fa931ad18b7934c7930a2e0388c'] = 'Ce n\'est pas grave, je comprends les risques et souhaite tout de même afficher la page.';
 $_LANGADM['index2938c7f7e560ed972f8a4f68e80ff834'] = 'Tableau de bord';
 $_LANGADM['index486389453cfc7006870efa54fb7f6df9'] = 'Nouvelle version de PrestaShop disponible';
 $_LANGADM['index801ab24683a4a8c433c6eb40c48bcd9d'] = 'Téléchargement';
