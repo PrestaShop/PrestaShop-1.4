@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,12 +32,12 @@ class AdminInvoices extends AdminTab
 		global $cookie;
 
 		$this->table = 'invoice';
-		
+
 		$this->optionTitle = $this->l('Invoice options');
 		$this->_fieldsOptions = array(
 			'PS_INVOICE' => array('title' => $this->l('Enable invoices:'), 'desc' => $this->l('Select whether or not to activate invoices for your shop'), 'cast' => 'intval', 'type' => 'bool'),
 			'PS_INVOICE_PREFIX' => array('title' => $this->l('Invoice prefix:'), 'desc' => $this->l('Prefix used for invoices'), 'size' => 6, 'type' => 'textLang'),
-			'PS_INVOICE_NUMBER' => array('title' => $this->l('Invoice number:'), 'desc' => $this->l('The next invoice will begin with this number, and then increase with each additional invoice'), 'size' => 6, 'type' => 'text', 'cast' => 'intval')
+			'PS_INVOICE_START_NUMBER' => array('title' => $this->l('Invoice number:'), 'desc' => $this->l('The next invoice will begin with this number, and then increase with each additional invoice. Set to 0 if you wan\'t to keep the current number (#').(Order::getLastInvoiceNumber() + 1).').', 'size' => 6, 'type' => 'text', 'cast' => 'intval')
 		);
 
 		parent::__construct();
@@ -46,7 +46,7 @@ class AdminInvoices extends AdminTab
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
-		
+
 		$statuses = OrderState::getOrderStates($cookie->id_lang);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT COUNT(*) as nbOrders, (
@@ -56,12 +56,12 @@ class AdminInvoices extends AdminTab
 			ORDER BY oh.date_add DESC, oh.id_order_history DESC
 			LIMIT 1
 		) id_order_state
-		FROM '._DB_PREFIX_.'orders o			
+		FROM '._DB_PREFIX_.'orders o
 		GROUP BY id_order_state');
 		$statusStats = array();
 		foreach ($result as $row)
 			$statusStats[$row['id_order_state']] = $row['nbOrders'];
-		
+
 		echo '
 		<h2>'.$this->l('Print PDF invoices').'</h2>
 		<fieldset style="float:left;width:300px"><legend><img src="../img/admin/pdf.gif" alt="" /> '.$this->l('By date').'</legend>
@@ -104,20 +104,20 @@ class AdminInvoices extends AdminTab
 			</form>
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
-		
+
 		return parent::displayForm();
 	}
-	
+
 	public function display()
 	{
 		$this->displayForm();
 		$this->displayOptionsList();
 	}
-	
+
 	public function postProcess()
 	{
 		global $currentIndex;
-		
+
 		if (Tools::isSubmit('submitPrint'))
 		{
 			if (!Validate::isDate(Tools::getValue('date_from')))
@@ -146,8 +146,8 @@ class AdminInvoices extends AdminTab
 		}
 		elseif (Tools::isSubmit('submitOptionsinvoice'))
 		{
-			if ((int)(Tools::getValue('PS_INVOICE_NUMBER')) == 0)
-				$this->_errors[] = $this->l('Invalid invoice number');
+			if ((int)(Tools::getValue('PS_INVOICE_START_NUMBER')) != 0 AND (int)(Tools::getValue('PS_INVOICE_START_NUMBER')) <= Order::getLastInvoiceNumber())
+				$this->_errors[] = $this->l('Invalid invoice number (must be > ').Order::getLastInvoiceNumber() .')';
 			else
 				parent::postProcess();
 		}
@@ -155,5 +155,4 @@ class AdminInvoices extends AdminTab
 			parent::postProcess();
 	}
 }
-
 

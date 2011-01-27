@@ -868,20 +868,43 @@ class OrderCore extends ObjectModel
 		return ((int)(Configuration::get('PS_ORDER_RETURN')) == 1 AND (int)($this->getCurrentState()) == _PS_OS_DELIVERED_ AND $this->getNumberOfDays());
 	}
 
+
+    public static function getLastInvoiceNumber()
+    {
+        return (int)Db::getInstance()->getValue('
+        SELECT MAX(`invoice_number`) AS `invoice_number`
+		FROM `'._DB_PREFIX_.'orders`
+        ');
+    }
+
 	public function setInvoice()
 	{
-		// Set invoice number
-		$number = (int)(Configuration::get('PS_INVOICE_NUMBER'));
-		if (!(int)($number))
-			die(Tools::displayError('Invalid invoice number'));
-		$this->invoice_number = $number;
-		Configuration::updateValue('PS_INVOICE_NUMBER', $number + 1);
+		$number = (int)Configuration::get('PS_INVOICE_START_NUMBER');
 
-		// Set invoice date
-		$this->invoice_date = date('Y-m-d H:i:s');
+		if ($number)
+ 		    Configuration::updateValue('PS_INVOICE_START_NUMBER', false);
+ 		else
+		    $number = '(SELECT `invoice_number`
+		                 FROM (
+		                    SELECT MAX(`invoice_number`) + 1 AS `invoice_number`
+		                    FROM `'._DB_PREFIX_.'orders`)
+		                 tmp )';
 
-		// Save
-		$this->update();
+        // a way to avoid duplicate invoice number
+		Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'orders`
+		SET `invoice_number` = '.$number.', `invoice_date` = \''.date('Y-m-d H:i:s').'\'
+		WHERE `id_order` = '.(int)$this->id
+		);
+
+        $res = Db::getInstance()->ExecuteS('
+        SELECT `invoice_number`, `invoice_date`
+        FROM `'._DB_PREFIX_.'orders`
+		WHERE `id_order` = '.(int)$this->id
+        );
+
+        $this->invoice_date = $res['invoice_date'];
+        $this->invoice_number = $res['invoice_number'];
 	}
 
 	public function setDelivery()
