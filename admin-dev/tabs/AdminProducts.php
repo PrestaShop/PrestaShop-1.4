@@ -1717,7 +1717,7 @@ class AdminProducts extends AdminTab
 
 		<label>'.$this->l('Starting at').'</label>
 		<div class="margin-form">
-			<input type="text" name="sp_from_quantity" value="1" size="3" /> <span style="font-weight:bold; color:#000000; font-size:12px">'.$this->l('unity').'</span>
+			<input type="text" name="sp_from_quantity" value="1" size="3" /> <span style="font-weight:bold; color:#000000; font-size:12px">'.$this->l('unit').'</span>
 		</div>
 
 		<label>'.$this->l('Product price (tax excl.):').'</label>
