@@ -324,13 +324,19 @@ class CartCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($this->id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.(int)($this->id_lang).')
 		WHERE cp.`id_cart` = '.(int)($this->id).'
-		'.($id_product ? ' AND cp.`id_product` = '.(int)($id_product) : '').'
+		'.($id_product ? ' AND cp.`id_product` = '.(int)$id_product : '').'
 		AND p.`id_product` IS NOT NULL
 		GROUP BY unique_id
 		ORDER BY cp.date_add ASC';
 		$result = Db::getInstance()->ExecuteS($sql);
 		// Reset the cache before the following return, or else an empty cart will add dozens of queries
 
+		$productsIds = array();
+		foreach ($result as $row)
+			$productsIds[] = $row['id_product'];
+		// Thus you can avoid one query per product, because there will be only one query for all the products of the cart
+		Product::cacheProductsFeatures($productsIds);
+		
 		$this->_products = array();
 		if (empty($result))
 			return array();
@@ -348,15 +354,15 @@ class CartCore extends ObjectModel
 				$row['weight'] = $row['weight_attribute'];
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
-				$row['price'] = Product::getPriceStatic((int)($row['id_product']), false, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput); // Here taxes are computed only once the quantity has been applied to the product price
-				$row['price_wt'] = Product::getPriceStatic((int)($row['id_product']), true, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
-				$row['total_wt'] = Tools::ps_round($row['price'] * (float)($row['cart_quantity']) * (1 + (float)($row['rate']) / 100), 2);
+				$row['price'] = Product::getPriceStatic((int)$row['id_product'], false, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput); // Here taxes are computed only once the quantity has been applied to the product price
+				$row['price_wt'] = Product::getPriceStatic((int)$row['id_product'], true, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+				$row['total_wt'] = Tools::ps_round($row['price'] * (float)$row['cart_quantity'] * (1 + (float)($row['rate']) / 100), 2);
 				$row['total'] = $row['price'] * (int)($row['cart_quantity']);
 			}
 			else
 			{
-				$row['price'] = Product::getPriceStatic((int)($row['id_product']), false, (int)($row['id_product_attribute']), 6, NULL, false, true, $row['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput);
-				$row['price_wt'] = Product::getPriceStatic((int)($row['id_product']), true, (int)($row['id_product_attribute']), 2, NULL, false, true, $row['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+				$row['price'] = Product::getPriceStatic((int)$row['id_product'], false, (int)$row['id_product_attribute'], 6, NULL, false, true, $row['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput);
+				$row['price_wt'] = Product::getPriceStatic((int)$row['id_product'], true, (int)$row['id_product_attribute'], 2, NULL, false, true, $row['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
 				/* In case when you use QuantityDiscount, getPriceStatic() can be return more of 2 decimals */
 				$row['price_wt'] = Tools::ps_round($row['price_wt'], 2);
 				$row['total_wt'] = $row['price_wt'] * (int)($row['cart_quantity']);
@@ -365,10 +371,10 @@ class CartCore extends ObjectModel
 			$row['reduction_applies'] = $specificPriceOutput AND (float)($specificPriceOutput['reduction']);
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
-			$row['features'] = Product::getFeaturesStatic((int)($row['id_product']));
+			$row['features'] = Product::getFeaturesStatic((int)$row['id_product']);
 
 			/* Add attributes to the SQL result if needed */
-			if (isset($row['id_product_attribute']) AND (int)($row['id_product_attribute']))
+			if (isset($row['id_product_attribute']) AND (int)$row['id_product_attribute'])
 			{
 				$result2 = Db::getInstance()->ExecuteS('
 				SELECT agl.`public_name` AS public_group_name, al.`name` AS attribute_name

@@ -197,6 +197,7 @@ class ProductCore extends ObjectModel
 	private static $_incat = array();
 	private static $_cart_quantity = array();
 	private static $_tax_rules_group = array();
+	private static $_cacheFeatures = array();
 
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
@@ -2083,15 +2084,38 @@ class ProductCore extends ObjectModel
 	*/
 	public function getFeatures()
 	{
-		return self::getFeaturesStatic((int)($this->id));
+		return self::getFeaturesStatic((int)$this->id);
 	}
 
 	static public function getFeaturesStatic($id_product)
 	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		if (!array_key_exists($id_product, self::$_cacheFeatures))
+			self::$_cacheFeatures[$id_product] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT id_feature, id_product, id_feature_value
+			FROM `'._DB_PREFIX_.'feature_product`
+			WHERE `id_product` = '.(int)$id_product);
+		return self::$_cacheFeatures[$id_product];
+	}
+
+	static public function cacheProductsFeatures(array $productIds)
+	{
+		$productImplode = array();
+		foreach ($productIds as $id_product)
+			if ((int)$id_product AND !array_key_exists($id_product, self::$_cacheFeatures))
+				$productImplode[] = (int)$id_product;
+		if (!count($productImplode))
+			return;
+				
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT id_feature, id_product, id_feature_value
 		FROM `'._DB_PREFIX_.'feature_product`
-		WHERE `id_product` = '.(int)($id_product));
+		WHERE `id_product` IN ('.implode($productImplode, ',').')');
+		foreach ($result as $row)
+		{
+			if (!array_key_exists($row['id_product'], self::$_cacheFeatures))
+				self::$_cacheFeatures[$row['id_product']] = array();
+			self::$_cacheFeatures[$row['id_product']][] = $row;
+		}
 	}
 
 	/**

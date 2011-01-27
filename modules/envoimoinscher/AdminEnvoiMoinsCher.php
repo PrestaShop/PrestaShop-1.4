@@ -234,7 +234,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 		global $cookie;
 		$featuresTab = array();
 		$confs = Configuration::getMultiple(array('EMC_WIDTH', 'EMC_HEIGHT', 'EMC_DEPTH'));
-		$features = Product::getFeaturesStatic((int)($id));
+		$features = Product::getFeaturesStatic((int)$id);
 		foreach($features as $feature)
 		{
 			switch ($feature['id_feature'])
