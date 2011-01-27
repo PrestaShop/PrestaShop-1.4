@@ -274,8 +274,8 @@ class ProductCore extends ObjectModel
 		if ($full AND $this->id)
 		{
 			$this->tax_name = 'deprecated'; // The applicable tax may be BOTH the product one AND the state one (moreover this variable is some deadcode)
-			$this->manufacturer_name = Manufacturer::getNameById((int)($this->id_manufacturer));
-			$this->supplier_name = Supplier::getNameById((int)($this->id_supplier));
+			$this->manufacturer_name = Manufacturer::getNameById((int)$this->id_manufacturer);
+			$this->supplier_name = Supplier::getNameById((int)$this->id_supplier);
 			self::$_tax_rules_group[$this->id] = $this->id_tax_rules_group;
 			if (is_object($cart) AND $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')} != NULL)
 				$this->tax_rate = Tax::getProductTaxRate($this->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
@@ -284,12 +284,12 @@ class ProductCore extends ObjectModel
 			$this->new = $this->isNew();
 			$this->price = Product::getPriceStatic((int)($this->id), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $this->specificPrice);
 			$this->unit_price = ($this->unit_price_ratio != 0 ) ? $this->price / $this->unit_price_ratio : 0;
+			if ($this->id)
+				$this->tags = Tag::getProductTags((int)$this->id);
 		}
 
 		if ($this->id_category_default)
-			$this->category = Category::getLinkRewrite((int)($this->id_category_default), (int)($id_lang));
-		if ($this->id)
-			$this->tags = Tag::getProductTags((int)($this->id));
+			$this->category = Category::getLinkRewrite((int)$this->id_category_default, (int)$id_lang);
 	}
 
 	public function getFields()
