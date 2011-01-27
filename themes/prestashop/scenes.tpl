@@ -46,6 +46,7 @@ $(function () {ldelim}
 				</a>
 				<div id="scene_products_cluetip_{$scene_key}_{$product_key}_{$product.id_product}" style="display:none;">
 					<h4><span class="product_name">{$product.details->name}</span>{if isset($product.details->new) AND $product.details->new}<span class="new">{l s='New'}</span>{/if}</h4>
+					{if !$PS_CATALOG_MODE AND $product.details->show_price}
 					<div class="prices">
 						<p class="price">{if $priceDisplay}{convertPrice price=$product.details->getPrice(false, $product.details->getDefaultAttribute($product.id_product))}{else}{convertPrice price=$product.details->getPrice(true, $product.details->getDefaultAttribute($product.id_product))}{/if}</p>
 							{if $product.details->on_sale}
@@ -54,6 +55,7 @@ $(function () {ldelim}
 							<span class="discount">{l s='Reduced price!'}</span>
 						{/if}
 					</div>
+					{/if}
 					<div class="clear">
 						<a href="{$product.link|escape:'htmlall':'UTF-8'}" title="{$product.details->name|escape:'htmlall':'UTF-8'}">
 							<img src="{$link->getImageLink($product.id_product, $imageIds, 'medium')}" alt="" width="{$mediumSize.width}" height="{$mediumSize.height}" />
