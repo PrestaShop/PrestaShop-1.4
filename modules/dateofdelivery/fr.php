@@ -2,9 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{dateofdelivery}prestashop>beforeCarrier_75261aaef97717dda0ca98743b24f8f3'] = 'Date approximative de livraison avec ce transporteur entre';
-$_MODULE['<{dateofdelivery}prestashop>beforeCarrier_be5d5d37542d75f93a87094459f76678'] = 'et';
-$_MODULE['<{dateofdelivery}prestashop>beforeCarrier_b7ab10d227790bd29e51c1845153f126'] = 'avec les méthodes de paiement directes (exemple: carte de crédit)';
+$_MODULE['<{dateofdelivery}prestashop>beforecarrier_75261aaef97717dda0ca98743b24f8f3'] = 'Date approximative de livraison avec ce transporteur entre';
+$_MODULE['<{dateofdelivery}prestashop>beforecarrier_be5d5d37542d75f93a87094459f76678'] = 'et';
+$_MODULE['<{dateofdelivery}prestashop>beforecarrier_b7ab10d227790bd29e51c1845153f126'] = 'avec les méthodes de paiement directes (exemple: carte de crédit)';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_b0f76e26cffaf27784d901a64f39593e'] = 'Date de livraison';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_98110868b266d63c3bacdac4430169cf'] = 'Afficher une date approximative de livraison';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_a39df5444246aeb081729db7e17f51bc'] = 'Configuration: Date de livraison';
@@ -68,6 +68,6 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_cc5d90569e1c8313c2b1c2aab14
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_eca60ae8611369fe28a02e2ab8c5d12e'] = 'Octobre';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7e823b37564da492ca1629b4732289a8'] = 'Novembre';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_82331503174acbae012b2004f6431fa5'] = 'Décembre';
-$_MODULE['<{dateofdelivery}prestashop>orderDetail_8e8fe67c419e34287373a91cc6cab1de'] = 'Date approximative de livraison entre';
-$_MODULE['<{dateofdelivery}prestashop>orderDetail_be5d5d37542d75f93a87094459f76678'] = 'et';
-$_MODULE['<{dateofdelivery}prestashop>orderDetail_b7ab10d227790bd29e51c1845153f126'] = 'avec les méthodes de paiement directes (exemple: carte de crédit)';
+$_MODULE['<{dateofdelivery}prestashop>orderdetail_8e8fe67c419e34287373a91cc6cab1de'] = 'Date approximative de livraison entre';
+$_MODULE['<{dateofdelivery}prestashop>orderdetail_be5d5d37542d75f93a87094459f76678'] = 'et';
+$_MODULE['<{dateofdelivery}prestashop>orderdetail_b7ab10d227790bd29e51c1845153f126'] = 'avec les méthodes de paiement directes (exemple: carte de crédit)';

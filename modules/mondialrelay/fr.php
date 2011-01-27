@@ -125,4 +125,4 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_cd417a6ee21711e864f25bf53694fbd
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = 'HT';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = 'TTC';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Gratuit !';
-$_MODULE['<{mondialrelay}prestashop>orderDetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Livré à';
+$_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Livré à';

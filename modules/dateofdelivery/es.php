@@ -2,9 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{dateofdelivery}prestashop>beforeCarrier_75261aaef97717dda0ca98743b24f8f3'] = 'Fecha aproximada de entraga con este transportista entre';
-$_MODULE['<{dateofdelivery}prestashop>beforeCarrier_be5d5d37542d75f93a87094459f76678'] = 'y';
-$_MODULE['<{dateofdelivery}prestashop>beforeCarrier_b7ab10d227790bd29e51c1845153f126'] = 'con los modos de pago directos (ejemplo: tarjeta de crédito)';
+$_MODULE['<{dateofdelivery}prestashop>beforecarrier_75261aaef97717dda0ca98743b24f8f3'] = 'Fecha aproximada de entraga con este transportista entre';
+$_MODULE['<{dateofdelivery}prestashop>beforecarrier_be5d5d37542d75f93a87094459f76678'] = 'y';
+$_MODULE['<{dateofdelivery}prestashop>beforecarrier_b7ab10d227790bd29e51c1845153f126'] = 'con los modos de pago directos (ejemplo: tarjeta de crédito)';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_b0f76e26cffaf27784d901a64f39593e'] = 'Fecha de entraga';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_98110868b266d63c3bacdac4430169cf'] = 'Mostrar una fecha aproximada de entraga';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_a39df5444246aeb081729db7e17f51bc'] = 'Configuración de la fecha de entraga';
@@ -68,6 +68,6 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_cc5d90569e1c8313c2b1c2aab14
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_eca60ae8611369fe28a02e2ab8c5d12e'] = 'Octubre';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7e823b37564da492ca1629b4732289a8'] = 'Noviembre';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_82331503174acbae012b2004f6431fa5'] = 'Diciembre';
-$_MODULE['<{dateofdelivery}prestashop>orderDetail_8e8fe67c419e34287373a91cc6cab1de'] = 'Fecha aproximada de entrega entre';
-$_MODULE['<{dateofdelivery}prestashop>orderDetail_be5d5d37542d75f93a87094459f76678'] = 'y';
-$_MODULE['<{dateofdelivery}prestashop>orderDetail_b7ab10d227790bd29e51c1845153f126'] = 'con los modos de pago directo (ejemplo: tarjeta de crédito)';
+$_MODULE['<{dateofdelivery}prestashop>orderdetail_8e8fe67c419e34287373a91cc6cab1de'] = 'Fecha aproximada de entrega entre';
+$_MODULE['<{dateofdelivery}prestashop>orderdetail_be5d5d37542d75f93a87094459f76678'] = 'y';
+$_MODULE['<{dateofdelivery}prestashop>orderdetail_b7ab10d227790bd29e51c1845153f126'] = 'con los modos de pago directo (ejemplo: tarjeta de crédito)';
