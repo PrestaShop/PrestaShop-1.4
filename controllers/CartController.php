@@ -54,14 +54,7 @@ class CartControllerCore extends FrontController
 				die(Tools::jsonEncode($result));
 			}
 			else
-			{
-				$moduleBlockCart = '';
-				if (Tools::getIsset('module'))
-					$moduleBlockCart = Db::getInstance()->getValue('SELECT `name` FROM `ps_module` WHERE name LIKE \'%'.pSQL(Tools::getValue('module')).'%\'');
-				if (empty($moduleBlockCart))
-					$moduleBlockCart = 'blockcart';
-				require_once(_PS_MODULE_DIR_.'/'.$moduleBlockCart.'/'.$moduleBlockCart.'-ajax.php');
-			}
+				$this->includeCartModule();
 		}
 		else
 		{
@@ -71,6 +64,11 @@ class CartControllerCore extends FrontController
 			$this->displayContent();
 			$this->displayFooter();
 		}
+	}
+
+	public function includeCartModule()
+	{
+		require_once(_PS_MODULE_DIR_.'/blockcart/blockcart-ajax.php'); 
 	}
 
 	public function preProcess()
