@@ -283,7 +283,7 @@ class ProductCore extends ObjectModel
 				$this->tax_rate = Tax::getProductTaxRate($this->id, NULL);
 			$this->new = $this->isNew();
 			$this->price = Product::getPriceStatic((int)($this->id), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $this->specificPrice);
-			$this->unit_price = ($this->unit_price_ratio != 0 ) ? $this->price / $this->unit_price_ratio : 0;
+			$this->unit_price = ($this->unit_price_ratio != 0  ? $this->price / $this->unit_price_ratio : 0);
 			if ($this->id)
 				$this->tags = Tag::getProductTags((int)$this->id);
 		}
