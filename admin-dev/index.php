@@ -84,11 +84,20 @@ if ($tab)
 			}
 			else
 			{
+				// If this is an XSS attempt, then we should only display a simple, secure page
+				ob_clean();
+				$message = translate('Invalid security token');
+				echo '<html><head><title>'.$message.'</title></head><body style="font-family:Arial,Verdana,Helvetica,sans-serif;background-color:#EC8686">				
+					<div style="background-color:#FAE2E3;border:1px solid #000000;color:#383838;font-weight:700;line-height:20px;margin:0 0 10px;padding:10px 15px;width:400px">
+						<img src="../img/admin/error2.png" style="margin:-4px 5px 0 0;vertical-align:middle">
+						'.$message.'
+					</div>';
 				// ${1} in the replacement string of the regexp is required, because the token may begin with a number and mix up with it (e.g. $17)
-				echo '<a href="'.htmlentities(preg_replace('/([&?]token=)[^&]*(&.*)?$/', '${1}'.$adminObj->token.'$2', $_SERVER['REQUEST_URI'])).'"
-						style="text-decoration:underline">
-					'.translate('Don\'t worry, I understand the risks but I really want to display this page.').'
-				</a>';
+				echo '<a href="'.htmlentities(preg_replace('/([&?]token=)[^&]*(&.*)?$/', '${1}'.$adminObj->token.'$2', $_SERVER['REQUEST_URI'])).'" style="color:#000000">
+						'.translate('Don\'t worry, I understand the risks but I really want to display this page.').'
+					</a>
+				</body></html>';
+				die;
 			}
 		}
 	}

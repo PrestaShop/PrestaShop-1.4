@@ -1690,13 +1690,7 @@ abstract class AdminTabCore
 	public function checkToken()
 	{
 		$token = Tools::getValue('token');
-		if (!$token OR empty($token) OR ($token != $this->token))
-		{
-			$this->_errors = array(Tools::displayError('Invalid security token'));
-			$this->displayErrors();
-			return false;
-		}
-		return true;
+		return (!empty($token) AND $token === $this->token);
 	}
 
 	/**
