@@ -428,7 +428,10 @@ abstract class ObjectModelCore
 
 	static public function displayFieldName($field, $className = __CLASS__, $htmlentities = true)
 	{
-		global $_FIELDS;
+		global $_FIELDS, $cookie;
+		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
+		@include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
+		
 		$key = $className.'_'.md5($field);
 		return ((is_array($_FIELDS) AND array_key_exists($key, $_FIELDS)) ? ($htmlentities ? htmlentities($_FIELDS[$key], ENT_QUOTES, 'utf-8') : $_FIELDS[$key]) : $field);
 	}

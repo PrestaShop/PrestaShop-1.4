@@ -179,13 +179,10 @@ class FrontControllerCore
 			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
 		}
 
-		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)($cookie->id_lang) : 1));
-		@include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
-		@include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
-		$_MODULES = array();
-
 		global $currency;
 		$currency = Tools::setCurrency();
+		
+		$_MODULES = array();
 
 		if ((int)($cookie->id_cart))
 		{

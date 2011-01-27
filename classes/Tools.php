@@ -246,8 +246,6 @@ class ToolsCore
 			$cookie->id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
 
 		$iso = Language::getIsoById((int)$cookie->id_lang);
-		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
-		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 		@include_once(_PS_THEME_DIR_.'lang/'.$iso.'.php');
 
 		return $iso;
@@ -474,7 +472,10 @@ class ToolsCore
 	*/
 	public static function displayError($string = 'Fatal error', $htmlentities = true)
 	{
-		global $_ERRORS;
+		global $_ERRORS, $cookie;
+
+		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
+		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
 		if (_PS_MODE_DEV_ AND $string == 'Fatal error')
 			return ('<pre>'.print_r(debug_backtrace(), true).'</pre>');
