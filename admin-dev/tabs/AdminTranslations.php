@@ -342,8 +342,8 @@ class AdminTranslations extends AdminTab
 				
 				foreach ($matches[1] AS $key)
 				{
-					$post_key = md5($module_name.'_'.($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'_'.$template_name.'_'.md5($key));
-					$pattern = '\'<{'.$module_name.'}'.($is_default ? 'prestashop' : $theme_name).'>'.$template_name.'_'.md5($key).'\'';
+					$post_key = md5($module_name.'_'.($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'_'.Tools::strtolower($template_name).'_'.md5($key));
+					$pattern = '\'<{'.$module_name.'}'.($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key).'\'';
 					
 					if (array_key_exists($post_key, $_POST) AND !empty($_POST[$post_key]) AND !in_array($pattern, $_tmp))
 					{
@@ -412,7 +412,7 @@ class AdminTranslations extends AdminTab
 				
 				foreach ($matches[1] AS $key)
 				{
-					$module_key = ($is_default ? self::DEFAULT_THEME_NAME : '').'<{'.$module_name.'}'.($is_default ? 'prestashop' : $theme_name).'>'.$template_name.'_'.md5($key);
+					$module_key = ($is_default ? self::DEFAULT_THEME_NAME : '').'<{'.$module_name.'}'.($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key);
 					
 					// to avoid duplicate entry
 					if (!in_array($module_key, $_tmp))
