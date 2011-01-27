@@ -542,8 +542,8 @@ abstract class ModuleCore
 		$reflection_class = new ReflectionClass(get_class($this));
 		$source = Tools::strtolower($specific ? $specific : substr(basename($reflection_class->getFileName()), 0, -4));
 		$string2 = str_replace('\'', '\\\'', $string);
-		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
-		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
+		$currentKey = '<{'.Tools::strtolower($this->name).'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
+		$defaultKey = '<{'.Tools::strtolower($this->name).'}prestashop>'.$source.'_'.md5($string2);
 
 		if (key_exists($currentKey, $_MODULES))
 			$ret = stripslashes($_MODULES[$currentKey]);
