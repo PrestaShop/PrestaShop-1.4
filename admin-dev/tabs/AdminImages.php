@@ -371,7 +371,7 @@ class AdminImages extends AdminTab
 						$this->_errors[] = Tools::displayError('Server timed out, the watermark may not have been applied on all your images.');
 				if (!count($this->_errors))
 					if ($this->_regenerateNoPictureImages($proc['dir'], $formats, $languages))
-						$this->_errors[] = Tools::displayError('Cannot write no-picture image to (').$proc['type'].Tools::displayError(') images folder. Please check the folder\'s writing permissions.');
+						$this->_errors[] = Tools::displayError('Cannot write no-picture image to').' ('.$proc['type'].') '.Tools::displayError('images folder. Please check the folder\'s writing permissions.');
 			}
 		}
 		return (sizeof($this->_errors) > 0 ? false : true);

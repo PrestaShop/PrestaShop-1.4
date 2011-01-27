@@ -133,7 +133,8 @@ class StateCore extends ObjectModel
 	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 	 		die(Tools::displayError());
 
-		if ($this->isUsed()) die(Tools::displayError());
+		if ($this->isUsed())
+			die(Tools::displayError());
 
 		/* Database deletion */
 		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
