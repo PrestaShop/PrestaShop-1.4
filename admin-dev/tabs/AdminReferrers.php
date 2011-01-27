@@ -223,7 +223,8 @@ class AdminReferrers extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		foreach (array('http_referer_like', 'http_referer_regexp', 'request_uri_like', 'request_uri_regexp') as $field)
 			$obj->{$field} = str_replace('\\', '\\\\', $obj->{$field});
 		$uri = Tools::getHttpHost(true, true).__PS_BASE_URI__;

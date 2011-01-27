@@ -49,7 +49,8 @@ class AdminTaxRulesGroup extends AdminTab
     {
         global $cookie, $currentIndex;
 		parent::displayForm();
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$tax_rules = isset($obj->id) ? $tax_rules = TaxRule::getTaxRulesByGroupId($obj->id) : array();
 
         $param_product = Tools::getValue('id_product') ? '&id_product='.Tools::getValue('id_product') : '';

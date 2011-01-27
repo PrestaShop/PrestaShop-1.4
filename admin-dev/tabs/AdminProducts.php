@@ -695,7 +695,8 @@ class AdminProducts extends AdminTab
 		{
 			if ($this->tabAccess['delete'] === '1')
 			{
-				$obj = $this->loadObject();
+				if (!($obj = $this->loadObject()))
+					return;
 				if (!$id_specific_price = Tools::getValue('id_specific_price') OR !Validate::isUnsignedId($id_specific_price))
 					$this->_errors[] = Tools::displayError('Invalid specific price ID');
 				else
@@ -712,7 +713,8 @@ class AdminProducts extends AdminTab
 		}
 		elseif (Tools::isSubmit('submitSpecificPricePriorities'))
 		{
-			$obj = $this->loadObject();
+			if (!($obj = $this->loadObject()))
+				return;
 			if (!$priorities = Tools::getValue('specificPricePriority'))
 				$this->_errors[] = Tools::displayError('Please specify priorities');
 			elseif (Tools::isSubmit('specificPricePriorityToAll'))
@@ -1423,7 +1425,8 @@ class AdminProducts extends AdminTab
 		if ($id_category_back = (int)(Tools::getValue('id_category')))
 			$currentIndex .= '&id_category='.$id_category_back;
 
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 
 		if ($obj->id)
@@ -1542,7 +1545,8 @@ class AdminProducts extends AdminTab
 	{
 		global $currentIndex;
 
-		$obj = $this->loadObject();
+		if (!($obj = $this->loadObject()))
+			return;
 		$specificPrices = SpecificPrice::getByProductId((int)($obj->id));
 		$specificPricePriorities = SpecificPrice::getPriority((int)($obj->id));
 
@@ -1679,7 +1683,8 @@ class AdminProducts extends AdminTab
 
 	protected function _displaySpecificPriceAdditionForm($defaultCurrency, $shops, $currencies, $countries, $groups)
 	{
-		$product = $this->loadObject();
+		if (!($product = $this->loadObject()))
+			return;
 		echo '
 		<hr />
 		<h4>'.$this->l('Add a new specific price').'</h4>
@@ -1878,7 +1883,8 @@ class AdminProducts extends AdminTab
 	function displayFormAttachments($obj, $languages, $defaultLanguage)
 	{
 		global $currentIndex, $cookie;
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$languages = Language::getLanguages(false);
 		$attach1 = Attachment::getAttachments($cookie->id_lang, $obj->id, true);
 		$attach2 = Attachment::getAttachments($cookie->id_lang, $obj->id, false);
@@ -2947,8 +2953,11 @@ class AdminProducts extends AdminTab
 	{
 		global $cookie;
 
+		if (!($obj = $this->loadObject(true)))
+			return;
+			
 		$content = 'var combination_images = new Array();';
-		if (!$allCombinationImages = $this->loadObject(true)->getCombinationImages((int)($cookie->id_lang)))
+		if (!$allCombinationImages = $obj->getCombinationImages((int)($cookie->id_lang)))
 			return $content;
 		foreach ($allCombinationImages AS $id_product_attribute => $combinationImages)
 		{

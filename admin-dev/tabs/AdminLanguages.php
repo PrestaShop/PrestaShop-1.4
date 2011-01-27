@@ -283,7 +283,8 @@ class AdminLanguages extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 
 		echo '
 		<script type="text/javascript">

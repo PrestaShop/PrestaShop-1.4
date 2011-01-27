@@ -1548,9 +1548,9 @@ abstract class AdminTabCore
 		{
 			if (!$this->_object)
 				$this->_object = new $this->className($id);
-			if (!Validate::isLoadedObject($this->_object))
-				die (Tools::displayError('object cannot be loaded'));
-			return $this->_object;
+			if (Validate::isLoadedObject($this->_object))
+				return $this->_object;
+			$this->_errors[] = Tools::displayError('object cannot be loaded (not found)');
 		}
 		elseif ($opt)
 		{
@@ -1558,7 +1558,9 @@ abstract class AdminTabCore
 			return $this->_object;
 		}
 		else
-			die(Tools::displayError('object cannot be loaded'));
+			$this->_errors[] = Tools::displayError('object cannot be loaded (identifier missing or invalid)');
+		
+		$this->displayErrors();
 	}
 
 	/**

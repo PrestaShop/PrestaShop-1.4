@@ -58,7 +58,8 @@ class AdminCarts extends AdminTab
 	{
 		global $currentIndex, $cookie;
 
-		$cart = $this->loadObject();
+		if (!($cart = $this->loadObject(true)))
+			return;
 		$customer = new Customer($cart->id_customer);
 		$customerStats = $customer->getStats();
 		$products = $cart->getProducts();
@@ -224,7 +225,8 @@ class AdminCarts extends AdminTab
 	
 	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, &$stock)
 	{
-		$order = $this->loadObject();
+		if (!($order = $this->loadObject(true)))
+			return;
 
 		if (is_array($customizedDatas) AND isset($customizedDatas[(int)($product['id_product'])][(int)($product['id_product_attribute'])]))
 		{

@@ -61,7 +61,8 @@ class AdminGroups extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$groupReductions = $obj->id ? GroupReduction::getGroupReductions($obj->id, (int)($cookie->id_lang)) : array();
 		$categories = Category::getSimpleCategories((int)($cookie->id_lang));
 
@@ -162,7 +163,8 @@ class AdminGroups extends AdminTab
 		global $cookie;
 		
 		$currentIndex = 'index.php?tab=AdminGroups';
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$group = new Group((int)($obj->id));
 		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		
@@ -255,7 +257,8 @@ class AdminGroups extends AdminTab
 		{
 			if ($this->tabAccess['add'] === '1')
 			{
-				$obj = $this->loadObject();
+				if (!($obj = $this->loadObject()))
+					return;
 				$groupReduction = new GroupReduction();
 				if (!$id_category = Tools::getValue('id_category') OR !Validate::isUnsignedId($id_category))
 					$this->_errors[] = Tools::displayError('Wrong category ID');

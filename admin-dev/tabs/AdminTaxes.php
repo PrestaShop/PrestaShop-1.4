@@ -58,7 +58,8 @@ class AdminTaxes extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$zones = Zone::getZones(true);
 		$states = State::getStates((int)$cookie->id_lang);
 

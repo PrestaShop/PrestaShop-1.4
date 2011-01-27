@@ -56,7 +56,8 @@ class AdminSuppliers extends AdminTab
 	public function viewsupplier()
 	{
 		global $cookie;
-		$supplier = $this->loadObject();		
+		if (!($supplier = $this->loadObject()))
+			return;	
 		echo '<h2>'.$supplier->name.'</h2>';
 		
 		$products = $supplier->getProductsLite((int)($cookie->id_lang));
@@ -127,7 +128,8 @@ class AdminSuppliers extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 		
-		$supplier = $this->loadObject(true);
+		if (!($supplier = $this->loadObject(true)))
+			return;
 
 		$langtags = 'description¤smeta_title¤smeta_keywords¤smeta_description';
 		echo '

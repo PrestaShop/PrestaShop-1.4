@@ -358,7 +358,8 @@ class AdminOrders extends AdminTab
 
 	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, $id_order_detail)
 	{
-		$order = $this->loadObject();
+		if (!($order = $this->loadObject()))
+			return;
 
 		if (is_array($customizedDatas) AND isset($customizedDatas[(int)($product['product_id'])][(int)($product['product_attribute_id'])]))
 		{
@@ -452,7 +453,8 @@ class AdminOrders extends AdminTab
 	{
 		global $currentIndex, $cookie, $link;
 		$irow = 0;
-		$order = $this->loadObject();
+		if (!($order = $this->loadObject()))
+			return;
 
 		$customer = new Customer($order->id_customer);
 		$customerStats = $customer->getStats();
@@ -501,7 +503,7 @@ class AdminOrders extends AdminTab
 		<div style="float:left" style="width:440px">';
 		echo '<h2>
 				'.$prevOrder.'
-				'.$customer->firstname.' '.$customer->lastname.' - '.$this->l('Order #').sprintf('%06d', $order->id).'
+				'.(Validate::isLoadedObject($customer) ? $customer->firstname.' '.$customer->lastname.' - ' : '').$this->l('Order #').sprintf('%06d', $order->id).'
 				'.$nextOrder.'
 			</h2>
 			<div>
@@ -553,31 +555,31 @@ class AdminOrders extends AdminTab
 			</form>';
 
 		/* Display customer information */
-		echo '
-		<br />
-		<fieldset style="width: 400px">
-			<legend><img src="../img/admin/tab-customers.gif" /> '.$this->l('Customer information').'</legend>
-			<span style="font-weight: bold; font-size: 14px;"><a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span> ('.$this->l('#').$customer->id.')<br />
-			(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />
-		';
-		if ($customer->isGuest())
+		if (Validate::isLoadedObject($customer))
 		{
-			echo '
-			'.$this->l('This order has been placed by a').' <b>'.$this->l('guest').'</b>
-			<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
-				<input type="hidden" name="id_lang" value="'.(int)$order->id_lang.'" />
-				<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
-				'.$this->l('This feature will generate a random password and send an e-mail to the customer').'
-			</form>
-			';
+			echo '<br />
+			<fieldset style="width: 400px">
+				<legend><img src="../img/admin/tab-customers.gif" /> '.$this->l('Customer information').'</legend>
+				<span style="font-weight: bold; font-size: 14px;"><a href="?tab=AdminCustomers&id_customer='.$customer->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'"> '.$customer->firstname.' '.$customer->lastname.'</a></span> ('.$this->l('#').$customer->id.')<br />
+				(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />';
+			if ($customer->isGuest())
+			{
+				echo '
+				'.$this->l('This order has been placed by a').' <b>'.$this->l('guest').'</b>
+				<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
+					<input type="hidden" name="id_lang" value="'.(int)$order->id_lang.'" />
+					<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
+					'.$this->l('This feature will generate a random password and send an e-mail to the customer').'
+				</form>';
+			}
+			else
+			{
+				echo $this->l('Account registered:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
+				'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
+				'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round(Tools::convertPrice($customerStats['total_orders'], $currency), 2), $currency, false, false).'</b><br />';
+			}
+			echo '</fieldset>';
 		}
-		else
-		{
-			echo $this->l('Account registered:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
-			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
-			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round(Tools::convertPrice($customerStats['total_orders'], $currency), 2), $currency, false, false).'</b><br />';
-		}
-		echo '</fieldset>';
 
 		/* Display sources */
 		if (sizeof($sources))

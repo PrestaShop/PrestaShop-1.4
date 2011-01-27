@@ -64,7 +64,8 @@ class AdminTags extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$products1 = $obj->getProducts(true);
 		$products2 = $obj->getProducts(false);
 		

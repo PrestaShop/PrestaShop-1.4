@@ -60,7 +60,8 @@ class AdminScenes extends AdminTab
 	function afterImageUpload()
 	{
 		/* Generate image with differents size */
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		if ($obj->id AND (isset($_FILES['image']) OR isset($_FILES['thumb'])))
 		{
 			$imagesTypes = ImageType::getImagesTypes('scenes');
@@ -136,7 +137,8 @@ class AdminScenes extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		
 		$langtags = 'name';
 		$active = $this->getFieldValue($obj, 'active');

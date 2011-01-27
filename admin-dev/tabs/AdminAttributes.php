@@ -52,7 +52,8 @@ class AdminAttributes extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$color = ($obj->color ? $obj->color : 0);
 		$attributes_groups = AttributeGroup::getAttributesGroups($this->_defaultFormLanguage);
 		

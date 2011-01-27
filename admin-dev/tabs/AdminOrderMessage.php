@@ -48,7 +48,8 @@ class AdminOrderMessage extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'&submitAdd'.$this->table.'=1" method="post">

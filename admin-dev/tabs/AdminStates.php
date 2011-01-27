@@ -103,7 +103,8 @@ class AdminStates extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">

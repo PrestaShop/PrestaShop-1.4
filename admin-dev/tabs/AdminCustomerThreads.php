@@ -400,7 +400,8 @@ class AdminCustomerThreads extends AdminTab
 	{
 		global $cookie, $currentIndex;	
 		
-		$thread = $this->loadObject();
+		if (!($thread = $this->loadObject()))
+			return;
 		$cookie->{'customer_threadFilter_cl!id_contact'} = $thread->id_contact;
 		
 		$employees = Db::getInstance()->ExecuteS('

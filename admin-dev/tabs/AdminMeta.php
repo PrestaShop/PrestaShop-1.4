@@ -50,7 +50,8 @@ class AdminMeta extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 		
-		$meta = $this->loadObject(true);
+		if (!($meta = $this->loadObject(true)))
+			return;
 		$files = Meta::getPages(true, ($meta->page ? $meta->page : false));
 
 		echo '

@@ -100,7 +100,8 @@ class AdminManufacturers extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 		
-		$manufacturer = $this->loadObject(true);
+		if (!($manufacturer = $this->loadObject(true)))
+			return;
 		$langtags = 'cdesc2¤cdesc¤mmeta_title¤mmeta_keywords¤mmeta_description';
 
 		echo '
@@ -252,7 +253,8 @@ class AdminManufacturers extends AdminTab
 	public function viewmanufacturer()
 	{
 		global $cookie;
-		$manufacturer = $this->loadObject();
+		if (!($manufacturer = $this->loadObject()))
+			return;
 		echo '<h2>'.$manufacturer->name.'</h2>';
 
 		$products = $manufacturer->getProductsLite((int)($cookie->id_lang));

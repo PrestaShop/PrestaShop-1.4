@@ -237,7 +237,8 @@ class AdminCategories extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$active = $this->getFieldValue($obj, 'active');
 		$customer_groups = $obj->getGroups();
 

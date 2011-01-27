@@ -136,7 +136,8 @@ class AdminFeatures extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 
 		echo '
 		<h2>'.$this->l('Add a new feature').'</h2>

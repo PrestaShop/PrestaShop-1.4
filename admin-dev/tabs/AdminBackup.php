@@ -80,7 +80,8 @@ class AdminBackup extends AdminTab
 	{
 		if(is_writable(PS_ADMIN_DIR.'/backups/'))
 		{
-			$object = $this->loadObject();
+		if (!($object = $this->loadObject()))
+			return;
 			if ($object->add())
 			{
 				echo '<div class="conf confirm"><img src="../img/admin/ok.gif" />&nbsp;'.$this->l('Back-up Creation successful').' !</div>';
@@ -103,7 +104,8 @@ class AdminBackup extends AdminTab
 	{
 		global $currentIndex;
 
-		$object = $this->loadObject();
+		if (!($object = $this->loadObject()))
+			return;
 		if ($object->id)
 		{
 			$url = $object->getBackupURL();

@@ -72,7 +72,9 @@ class AdminEmployees extends AdminTab
 	
 	protected function _childValidation() 
 	{
-		$email = $this->getFieldValue($this->loadObject(true), 'email');
+		if (!($obj = $this->loadObject(true)))
+			return false;
+		$email = $this->getFieldValue($obj, 'email');
 		if (!Validate::isEmail($email))
 	 		$this->_errors[] = Tools::displayError('Invalid e-mail');
 		else if (Employee::employeeExists($email) AND !Tools::getValue('id_employee'))
@@ -84,7 +86,8 @@ class AdminEmployees extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$profiles = Profile::getProfiles((int)($cookie->id_lang));
 
 		echo '<script type="text/javascript" src="../js/jquery/jquery-colorpicker.js"></script>

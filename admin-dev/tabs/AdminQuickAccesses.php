@@ -49,7 +49,8 @@ class AdminQuickAccesses extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		$new_window = $this->getFieldValue($obj, 'new_window');
 		
 		echo '

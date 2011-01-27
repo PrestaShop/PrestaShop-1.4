@@ -241,7 +241,8 @@ class AdminCustomers extends AdminTab
 		$configurations = Configuration::getMultiple(array('PS_LANG_DEFAULT', 'PS_CURRENCY_DEFAULT'));
 		$defaultLanguage = (int)($configurations['PS_LANG_DEFAULT']);
 		$defaultCurrency = (int)($configurations['PS_CURRENCY_DEFAULT']);
-		$customer = $this->loadObject();
+		if (!($customer = $this->loadObject()))
+			return;
 		$customerStats = $customer->getStats();
 		$addresses = $customer->getAddresses($defaultLanguage);
 		$products = $customer->getBoughtProducts();
@@ -638,7 +639,8 @@ class AdminCustomers extends AdminTab
 		global $currentIndex;
 		parent::displayForm();
 		
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		
 		$birthday = explode('-', $this->getFieldValue($obj, 'birthday'));
 		$customer_groups = Tools::getValue('groupBox', $obj->getGroups());

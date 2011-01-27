@@ -431,7 +431,7 @@ class CustomerCore extends ObjectModel
 	  * @return array Stats
 	  */
 	public function getStats()
-	{
+	{			
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid` / o.`conversion_rate`) AS total_orders
 		FROM `'._DB_PREFIX_.'orders` o
@@ -450,7 +450,7 @@ class CustomerCore extends ObjectModel
 		WHERE c.`id_customer` = '.(int)($this->id));
 
 		$result['last_visit'] = $result2['last_visit'];
-		$result['age'] = $result3['age'] != date('Y') ? $result3['age'] : '--';
+		$result['age'] = ($result3['age'] != date('Y') ? $result3['age'] : '--');
 		return $result;
 	}
 

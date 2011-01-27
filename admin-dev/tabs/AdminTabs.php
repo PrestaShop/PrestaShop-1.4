@@ -114,7 +114,8 @@ class AdminTabs extends AdminTab
 		global $currentIndex, $cookie;
 		parent::displayForm();
 
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
@@ -170,7 +171,8 @@ class AdminTabs extends AdminTab
 
 	public function afterImageUpload()
 	{
-		$obj = $this->loadObject(true);
+		if (!($obj = $this->loadObject(true)))
+			return;
 		@rename(_PS_IMG_DIR_.'t/'.$obj->id.'.gif', _PS_IMG_DIR_.'t/'.$obj->class_name.'.gif');
 	}
 }
