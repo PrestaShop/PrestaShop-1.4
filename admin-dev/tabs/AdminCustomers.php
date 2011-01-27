@@ -37,7 +37,6 @@ class AdminCustomers extends AdminTab
 	 	$this->delete = true;
 		$this->deleted = true;
 		$this->requiredDatabase = true;
-		$this->specificConfirmDelete = $this->l('If you delete this customer, he will not be able to create a new account with this email. However, you can temporarily disable it.');
 		
 		$this->_select = '(YEAR(CURRENT_DATE)-YEAR(`birthday`)) - (RIGHT(CURRENT_DATE, 5)<RIGHT(`birthday`, 5)) as age, (
 			SELECT c.date_add FROM '._DB_PREFIX_.'guest g
@@ -71,6 +70,32 @@ class AdminCustomers extends AdminTab
 	public function postProcess()
 	{
 		global $currentIndex;
+		
+		if (Tools::isSubmit('submitDel'.$this->table) OR Tools::isSubmit('delete'.$this->table))
+		{
+			$deleteForm = '
+			<form action="'.htmlentities($_SERVER['REQUEST_URI']).'" method="post">
+				<fieldset><legend>'.$this->l('How do you want to delete your customer(s)?').'</legend>
+					'.$this->l('You have two ways to delete a customer, please choose what do you want to do.').'
+					<p>
+						<input type="radio" name="deleteMode" value="real" id="deleteMode_real" />
+						<label for="deleteMode_real" style="float:none">'.$this->l('I want to delete my customer(s) for real, all data will be removed from the database. A customer with the same e-mail address will be able to register again.').'</label>
+					</p>
+					<p>
+						<input type="radio" name="deleteMode" value="deleted" id="deleteMode_deleted" />
+						<label for="deleteMode_deleted" style="float:none">'.$this->l('I don\'t want my customer(s) to register again. The customer(s) will be removed from this list but all data will be kept in the database.').'</label>
+					</p>';
+			foreach ($_POST as $key => $value)
+				if (is_array($value))
+					foreach ($value as $val)
+						$deleteForm .= '<input type="hidden" name="'.htmlentities($key).'[]" value="'.htmlentities($val).'" />';
+				else
+					$deleteForm .= '<input type="hidden" name="'.htmlentities($key).'" value="'.htmlentities($value).'" />';
+			$deleteForm .= '	<br /><input type="submit" class="button" value="'.$this->l('   Delete   ').'" />
+				</fieldset>
+			</form>
+			<div class="clear">&nbsp;</div>';
+		}
 		
 		if (Tools::getValue('submitAdd'.$this->table))
 		{
@@ -150,10 +175,46 @@ class AdminCustomers extends AdminTab
 			}
 		}
 		elseif (Tools::isSubmit('delete'.$this->table) AND $this->tabAccess['delete'] === '1')
-			Discount::deleteByIdCustomer((int)(Tools::getValue('id_customer')));
+		{
+			switch (Tools::getValue('deleteMode'))
+			{
+				case 'real':
+					$this->deleted = false;
+					Discount::deleteByIdCustomer((int)(Tools::getValue('id_customer')));
+					break;
+				case 'deleted':
+					$this->deleted = true;
+					break;
+				default:
+					echo $deleteForm;
+					if (isset($_POST['delete'.$this->table]))
+						unset($_POST['delete'.$this->table]);
+					if (isset($_GET['delete'.$this->table]))
+						unset($_GET['delete'.$this->table]);
+					break;
+			}
+		}
 		elseif (Tools::isSubmit('submitDel'.$this->table) AND $this->tabAccess['delete'] === '1')
-			foreach (Tools::getValue('customerBox') as $id_customer)
-				Discount::deleteByIdCustomer((int)($id_customer));
+		{
+			switch (Tools::getValue('deleteMode'))
+			{
+				case 'real':
+					$this->deleted = false;
+					foreach (Tools::getValue('customerBox') as $id_customer)
+						Discount::deleteByIdCustomer((int)($id_customer));
+					break;
+				case 'deleted':
+					$this->deleted = true;
+					break;
+				default:
+					echo $deleteForm;
+					if (isset($_POST['submitDel'.$this->table]))
+						unset($_POST['submitDel'.$this->table]);
+					if (isset($_GET['submitDel'.$this->table]))
+						unset($_GET['submitDel'.$this->table]);
+					break;
+			}
+		}
 		elseif (Tools::isSubmit('submitGuestToCustomer') AND Tools::getValue('id_customer'))
 		{
 			if ($this->tabAccess['edit'] === '1')
