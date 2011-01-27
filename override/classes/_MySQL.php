@@ -42,7 +42,7 @@ class MySQL extends MySQLCore
 	{
 		$this->count++;
 		$this->countTypes['getRow']++;
-		$query2 = preg_replace('/[0-9]+/', 'XX', $query);
+		$query2 = preg_replace('/[0-9]+/', '<span style="color:blue">XX</span>', $query);
 		if (!isset($this->queries[$query2]))
 			$this->queries[$query2] = 0;
 		$this->queries[$query2]++;
@@ -69,7 +69,7 @@ class MySQL extends MySQLCore
 	{
 		$this->count++;
 		$this->countTypes['getValue']++;
-		$query2 = preg_replace('/[0-9]+/', 'XX', $query);
+		$query2 = preg_replace('/[0-9]+/', '<span style="color:blue">XX</span>', $query);
 		if (!isset($this->queries[$query2]))
 			$this->queries[$query2] = 0;
 		$this->queries[$query2]++;
@@ -96,7 +96,7 @@ class MySQL extends MySQLCore
 	{
 		$this->count++;
 		$this->countTypes['Execute']++;
-		$query2 = preg_replace('/[0-9]+/', 'XX', $query);
+		$query2 = preg_replace('/[0-9]+/', '<span style="color:blue">XX</span>', $query);
 		if (!isset($this->queries[$query2]))
 			$this->queries[$query2] = 0;
 		$this->queries[$query2]++;
@@ -123,7 +123,7 @@ class MySQL extends MySQLCore
 	{
 		$this->count++;
 		$this->countTypes['ExecuteS']++;
-		$query2 = preg_replace('/[0-9]+/', 'XX', $query);
+		$query2 = preg_replace('/[0-9]+/', '<span style="color:blue">XX</span>', $query);
 		if (!isset($this->queries[$query2]))
 			$this->queries[$query2] = 0;
 		$this->queries[$query2]++;
@@ -155,7 +155,7 @@ class MySQL extends MySQLCore
 
 			$this->count++;
 			$this->countTypes['delete']++;
-			$query2 = preg_replace('/[0-9]+/', 'XX', $query);
+			$query2 = preg_replace('/[0-9]+/', '<span style="color:blue">XX</span>', $query);
 			if (!isset($this->queries[$query2]))
 				$this->queries[$query2] = 0;
 			$this->queries[$query2]++;
@@ -184,7 +184,7 @@ class MySQL extends MySQLCore
 	{
 		$this->count++;
 		$this->countTypes['q']++;
-		$query2 = preg_replace('/[0-9]+/', 'XX', $query);
+		$query2 = preg_replace('/[0-9]+/', '<span style="color:blue">XX</span>', $query);
 		if (!isset($this->queries[$query2]))
 			$this->queries[$query2] = 0;
 		$this->queries[$query2]++;
