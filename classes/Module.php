@@ -151,6 +151,28 @@ abstract class ModuleCore
 	}
 
 	/**
+	 * Called when module is set to active
+	 */
+	public function enable()
+	{
+		return Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'module`
+		SET `active`= 1
+		WHERE `name` = \''.pSQL($this->name).'\'');
+	}
+	
+	/**
+	 * Called when module is set to deactive
+	 */
+	public function disable() 
+	{
+		return Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'module`
+		SET `active`= 0
+		WHERE `name` = \''.pSQL($this->name).'\'');
+	}
+
+	/**
 	 * Connect module to a hook
 	 *
 	 * @param string $hook_name Hook name

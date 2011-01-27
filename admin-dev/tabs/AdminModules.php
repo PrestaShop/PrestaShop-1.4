@@ -97,13 +97,10 @@ class AdminModules extends AdminTab
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 			{
-				$module = Module::getInstanceByName(strval(Tools::getValue('module_name')));
+				$module = Module::getInstanceByName(Tools::getValue('module_name'));
 				if (Validate::isLoadedObject($module))
 				{
-					Db::getInstance()->Execute('
-					UPDATE `'._DB_PREFIX_.'module`
-					SET `active`= 1
-					WHERE `name` = \''.pSQL(Tools::getValue('module_name')).'\'');
+					$module->enable();
 					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name);
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
@@ -117,10 +114,7 @@ class AdminModules extends AdminTab
 				$module = Module::getInstanceByName(Tools::getValue('module_name'));
 				if (Validate::isLoadedObject($module))
 				{
-					Db::getInstance()->Execute('
-					UPDATE `'._DB_PREFIX_.'module`
-					SET `active`= 0
-					WHERE `name` = \''.pSQL(Tools::getValue('module_name')).'\'');
+					$module->disable();
 					Tools::redirectAdmin($currentIndex.'&conf=5'.'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name);
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');

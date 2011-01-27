@@ -49,6 +49,18 @@ class VatNumber extends Module
 		return (parent::uninstall() AND Configuration::updateValue('VATNUMBER_MANAGEMENT', 0));
 	}
 	
+	public function enable()
+	{
+		parent::enable();
+		Configuration::updateValue('VATNUMBER_MANAGEMENT', 1);
+	}
+	
+	public function disable()
+	{
+		parent::disable();
+		Configuration::updateValue('VATNUMBER_MANAGEMENT', 0);
+	}
+	
 	private static function getPrefixIntracomVAT()
 	{
 		$intracom_array = array('AT'=>'AT',	//Austria
