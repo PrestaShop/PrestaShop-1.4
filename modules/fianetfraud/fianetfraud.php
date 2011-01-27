@@ -209,7 +209,7 @@ class Fianetfraud extends Module
 		$categories = Category::getSimpleCategories($id_lang);
 
 		$carriers = Carrier::getCarriers($id_lang);
-		$this->_html .= '<div class="warning">'.$this->l('Phone number is required').'</div>
+		$this->_html .= '
 		<fieldset><legend>FIA-NET - Système d\'Analyse des Commandes</legend>
 			<img src="../modules/'.$this->name.'/logo.jpg" style="float:right;margin:5px 10px 5px 0" />
 			FIA-NET, le leader français de la lutte contre la fraude à la carte bancaire sur internet !<br /><br />
