@@ -69,17 +69,18 @@ function  addNotification() {
 		}
 	});
 	return false;
-}{/literal}
+}
 
 $(document).ready(function() {
 	$('#oos_customer_email').bind('keypress', function(e) {
-		if(e.keyCode == 13) 
+		if(e.keyCode == 13)
 		{
 			addNotification();
 			return false;
 		}
 	});
 });
+{/literal}
 //]]>
 </script>
 
