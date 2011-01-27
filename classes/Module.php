@@ -535,8 +535,12 @@ abstract class ModuleCore
 
 		if (!is_array($_MODULES))
 			return (str_replace('"', '&quot;', $string));
-
-		$source = Tools::strtolower($specific ? $specific : get_class($this));
+		
+		// Need to get the file name to get the good translation key
+		// according to AdminTranslations::findAndFillTranslations() 
+		// and AdminTranslations::findAndWriteTranslationsIntoFile() methods
+		$reflection_class = new ReflectionClass(get_class($this));
+		$source = Tools::strtolower($specific ? $specific : substr(basename($reflection_class->getFileName()), 0, -4));
 		$string2 = str_replace('\'', '\\\'', $string);
 		$currentKey = '<{'.$this->name.'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
 		$defaultKey = '<{'.$this->name.'}prestashop>'.$source.'_'.md5($string2);
