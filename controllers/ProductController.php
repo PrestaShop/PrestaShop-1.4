@@ -53,19 +53,24 @@ class ProductControllerCore extends FrontController
 	public function preProcess()
 	{
 		if ($id_product = (int)Tools::getValue('id_product'))
+		{
 			$this->product = new Product($id_product, true, $this->cookie->id_lang);
 
-		// Automatically redirect to the canonical URL if the current in is the right one
-		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-		$canonicalURL = $this->link->getProductLink($this->product);
-		if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
-		{
-			header('HTTP/1.0 301 Moved');
-			if (_PS_MODE_DEV_ )
-				die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-			Tools::redirectLink($canonicalURL);
+			// Automatically redirect to the canonical URL if the current in is the right one
+			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
+			if (Validate::isLoadedObject($this->product))
+			{
+				$canonicalURL = $this->link->getProductLink($this->product);
+				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				{
+					header('HTTP/1.0 301 Moved');
+					if (_PS_MODE_DEV_ )
+						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+					Tools::redirectLink($canonicalURL);
+				}
+			}
 		}
-
+		
 		parent::preProcess();
 
 		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
