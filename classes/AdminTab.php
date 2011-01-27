@@ -240,17 +240,17 @@ abstract class AdminTabCore
 
 
 		echo '<br />
-						<a href="#" onclick="if ($(\'.requiredFieldsParameters:visible\').length == 0) $(\'.requiredFieldsParameters\').slideDown(\'slow\'); else $(\'.requiredFieldsParameters\').slideUp(\'slow\'); return false;"><img src="../img/admin/duplicate.gif" alt="" /> '.$this->l('Advanced parameters...').'</a>
-						<fieldset style="display:none;" class="width1 requiredFieldsParameters">
-						<legend>'.$this->l('Required Fields').'</legend>
-						<form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
-						<p><b>'.$this->l('Select the fields you require.').'<br />
-						'.$this->l('Be careful in using this feature, a misuse can alter your store.').'<b></p>
-						<table cellspacing="0" cellpadding="0" class="table width1 clear">
-						<tr>
-							<th><input type="checkbox" onclick="checkDelBoxes(this.form, \'tablesBox[]\', this.checked)" class="noborder" name="checkme"></th>
-							<th>'.$this->l('Field Name').'</th>
-						</tr>';
+		<a href="#" onclick="if ($(\'.requiredFieldsParameters:visible\').length == 0) $(\'.requiredFieldsParameters\').slideDown(\'slow\'); else $(\'.requiredFieldsParameters\').slideUp(\'slow\'); return false;"><img src="../img/admin/duplicate.gif" alt="" /> '.$this->l('Advanced parameters...').'</a>
+		<fieldset style="display:none" class="width1 requiredFieldsParameters">
+		<legend>'.$this->l('Required Fields').'</legend>
+		<form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
+		<p><b>'.$this->l('Select the fields you require.').'<br />
+		'.$this->l('Be careful in using this feature, a misuse can alter your store.').'<b></p>
+		<table cellspacing="0" cellpadding="0" class="table width1 clear">
+		<tr>
+			<th><input type="checkbox" onclick="checkDelBoxes(this.form, \'tablesBox[]\', this.checked)" class="noborder" name="checkme"></th>
+			<th>'.$this->l('Field Name').'</th>
+		</tr>';
 
 		$object = new $this->className();
 		$res = $object->getFieldsRequiredDatabase();
@@ -1461,7 +1461,7 @@ abstract class AdminTabCore
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
 		</script>
-		<form action="'.$currentIndex.'" id="'.$tab['name'].'" name="'.$tab['name'].'" method="post" class="width3">
+		<form action="'.$currentIndex.'" id="'.$tab['name'].'" name="'.$tab['name'].'" method="post">
 			<fieldset>';
 				echo (isset($this->optionTitle) ? '<legend><img src="../img/t/'.$tab['class_name'].'.gif" />'.$this->optionTitle.'</legend>' : '');
 		foreach ($this->_fieldsOptions AS $key => $field)

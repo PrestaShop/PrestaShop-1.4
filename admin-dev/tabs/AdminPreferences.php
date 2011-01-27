@@ -344,7 +344,7 @@ class AdminPreferences extends AdminTab
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
 		</script>
-		<form action="'.$currentIndex.'&submit'.$name.$this->table.'=1&token='.$this->token.'" method="post" class="'.$size.'" enctype="multipart/form-data">
+		<form action="'.$currentIndex.'&submit'.$name.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 			<fieldset><legend><img src="../img/admin/'.strval($icon).'.gif" />'.$tabname.'</legend>';
 		foreach ($fields AS $key => $field)
 		{
