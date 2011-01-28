@@ -897,7 +897,7 @@ class OrderCore extends ObjectModel
 		WHERE `id_order` = '.(int)$this->id
 		);
 
-        $res = Db::getInstance()->ExecuteS('
+        $res = Db::getInstance()->getRow('
         SELECT `invoice_number`, `invoice_date`
         FROM `'._DB_PREFIX_.'orders`
 		WHERE `id_order` = '.(int)$this->id
