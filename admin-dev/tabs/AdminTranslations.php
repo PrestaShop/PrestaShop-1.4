@@ -1030,8 +1030,8 @@ class AdminTranslations extends AdminTab
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
 			 	echo '
-				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
-					<div name="front_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
+				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+					<div name="front_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
 				{
@@ -1100,8 +1100,8 @@ class AdminTranslations extends AdminTab
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
 			 	echo '
-				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
-					<div name="back_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
+				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+					<div name="back_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
 				{
@@ -1213,8 +1213,8 @@ class AdminTranslations extends AdminTab
 				foreach ($rules['validateLang'] AS $key => $value)
 					(array_key_exists($className.'_'.md5($key), $_FIELDS)) ? ++$translated : ++$toTranslate;
 			echo '
-			<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$className.'\').slideToggle();">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
-			<div name="fields_div" id="'.$className.'" style="display: '.($toTranslate ? 'block' : 'none').';">
+			<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$className.'-tpl\').slideToggle();">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
+			<div name="fields_div" id="'.$className.'-tpl" style="display: '.($toTranslate ? 'block' : 'none').';">
 				<table cellpadding="2">';
 			if (isset($rules['validate']))
 				foreach ($rules['validate'] AS $key => $value)
@@ -1912,8 +1912,8 @@ class AdminTranslations extends AdminTab
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
 			 	echo '
-				<fieldset style="width: 700px"><legend style="cursor : pointer" onclick="$(\''.$k.'\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
-					<div name="pdf_div" id="'.$k.'" style="display: '.($empty ? 'block' : 'none').';">
+				<fieldset style="width: 700px"><legend style="cursor : pointer" onclick="$(\''.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+					<div name="pdf_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
 				{
