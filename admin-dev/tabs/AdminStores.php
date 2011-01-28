@@ -96,6 +96,10 @@ class AdminStores extends AdminTab
 	{
 		if (isset($_POST['submitAdd'.$this->table]))
 		{
+			/* Cleaning fields */
+			foreach ($_POST as $kp => $vp)
+				$_POST[$kp] = trim($vp);
+
 			/* If the selected country does not contain states */
 			$id_state = (int)(Tools::getValue('id_state'));
 			if ($id_country = Tools::getValue('id_country') AND $country = new Country((int)($id_country)) AND !(int)($country->contains_states) AND $id_state)
