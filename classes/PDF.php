@@ -223,7 +223,7 @@ class PDFCore extends PDF_PageGroupCore
 		}
 		return $pdf->Output('invoices.pdf', 'D');
 	}
-	
+
 	public static function multipleOrderSlips($orderSlips)
 	{
 		$pdf = new PDF('P', 'mm', 'A4');
@@ -824,7 +824,7 @@ g	* Discount table with value, quantities...
 				$priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += $product['priceWithTax'];
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
 			}
-			$priceBreakDown['totalsEcotax'][$product['tax_rate']] += $product['priceEcotax'];
+			$priceBreakDown['totalsEcotax'][$product['tax_rate']] += ($product['priceEcotax']  * $product['product_quantity']);
 			if ($priceBreakDown['totalsEcotax'][$product['tax_rate']])
 				$priceBreakDown['hasEcotax'] = 1;
 			$taxes[$product['tax_rate']] += $vat;
