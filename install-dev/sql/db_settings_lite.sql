@@ -178,18 +178,22 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
-(36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),
-(38, 1, 'DE', NOW()),(38, 2, 'LI', NOW()),(38, 3, 'EN', NOW()),
-(46, 1, 'a|the|of|on|in|and|to', NOW()),(46, 2, 'le|les|de|et|en|des|les|une', NOW()),(46, 3, 'de|los|las|lo|la|en|de|y|el|a', NOW()),
-(68, 1, 0, NOW()),(68, 2, 0, NOW()),(68, 3, 0, NOW()),
-(74, 1, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW()),(74, 2, 'Cher client,\r\n\r\nCordialement,\r\nLe service client', NOW()),(74, 3, 'Estimado cliente,\r\n\r\nUn cordial saludo,\r\nAtención al cliente', NOW());
+(36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),(36, 4, 'IN', NOW()),(36, 5, 'IN', NOW()),
+(38, 1, 'DE', NOW()),(38, 2, 'LI', NOW()),(38, 3, 'EN', NOW()),(38, 4, 'DE', NOW()),(38, 5, 'DE', NOW()),
+(46, 1, 'a|the|of|on|in|and|to', NOW()),(46, 2, 'le|les|de|et|en|des|les|une', NOW()),(46, 3, 'de|los|las|lo|la|en|de|y|el|a', NOW()),(46, 4, '', NOW()),(46, 5, '', NOW()),
+(68, 1, 0, NOW()),(68, 2, 0, NOW()),(68, 3, 0, NOW()),(68, 4, 0, NOW()),(68, 5, 0, NOW()),
+(74, 1, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW()),
+(74, 2, 'Cher client,\r\n\r\nCordialement,\r\nLe service client', NOW()),
+(74, 3, 'Estimado cliente,\r\n\r\nUn cordial saludo,\r\nAtención al cliente', NOW()),
+(74, 4, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW()),
+(74, 5, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW());
 
 INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`, `language_code`) VALUES
-(1, 'English (English)', 1, 'en', 'en-us'),(2, 'Français (French)', 1, 'fr', 'fr'),(3, 'Español (Spanish)', 1, 'es', 'es');
+(1, 'English (English)', 1, 'en', 'en-us'),(2, 'Français (French)', 1, 'fr', 'fr'),(3, 'Español (Spanish)', 1, 'es', 'es'),(4, 'Deutsch (German)', 1, 'de', 'de'),(5, 'Italiano (Italian)', 1, 'it', 'it');
 
 INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES (1, 0, 0, 1, 8, 1, NOW(), NOW(), 0);
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
-(1, 1, 'Home', '', 'home', NULL, NULL, NULL),(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
+(1, 1, 'Home', '', 'home', NULL, NULL, NULL),(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL),(1, 4, 'Home', '', 'home', NULL, NULL, NULL),(1, 5, 'Home', '', 'home', NULL, NULL, NULL);
 
 INSERT INTO `PREFIX_order_state` (`id_order_state`, `invoice`, `send_email`, `color`, `unremovable`, `logable`, `delivery`) VALUES
 (1, 0, 1, 'lightblue', 1, 0, 0),(2, 1, 1, '#DDEEFF', 1, 1, 0),(3, 1, 1, '#FFDD99', 1, 1, 1),(4, 1, 1, '#EEDDFF', 1, 1, 1),(5, 1, 0, '#DDFFAA', 1, 1, 1),
@@ -516,18 +520,24 @@ INSERT INTO `PREFIX_contact_lang` (`id_contact`, `id_lang`, `name`, `description
 (1, 1, 'Webmaster', 'If a technical problem occurs on this website'),
 (1, 2, 'Webmaster', 'Si un problème technique survient sur le site'),
 (1, 3, 'Webmaster', 'Si se produce un problema técnico en el sitio'),
+(1, 4, 'Webmaster', 'If a technical problem occurs on this website'),
+(1, 5, 'Webmaster', 'If a technical problem occurs on this website'),
 (2, 1, 'Customer service', 'For any question about a product, an order'),
 (2, 2, 'Service client', 'Pour toute question ou réclamation sur une commande'),
-(2, 3, 'Service client', 'Para cualquier pregunta o queja acerca de un pedido');
+(2, 3, 'Service client', 'Para cualquier pregunta o queja acerca de un pedido'),
+(2, 4, 'Customer service', 'For any question about a product, an order'),
+(2, 5, 'Customer service', 'For any question about a product, an order');
 
 INSERT INTO `PREFIX_discount_type` (`id_discount_type`) VALUES (1),(2),(3);
 INSERT INTO `PREFIX_discount_type_lang` (`id_discount_type`, `id_lang`, `name`) VALUES
 (1, 1, 'Discount on order (%)'),(2, 1, 'Discount on order (amount)'),(3, 1, 'Free shipping'),
 (1, 2, 'Réduction sur la commande (%)'),(2, 2, 'Réduction sur la commande (montant)'),(3, 2, 'Frais de port gratuits'),
-(1, 3, 'Descuento orden (%)'),(2, 3, 'Descuento (el orden de cantidad)'),(3, 3, 'Gastos de envío gratis');
+(1, 3, 'Descuento orden (%)'),(2, 3, 'Descuento (el orden de cantidad)'),(3, 3, 'Gastos de envío gratis'),
+(1, 4, 'Discount on order (%)'),(2, 4, 'Discount on order (amount)'),(3, 4, 'Free shipping'),
+(1, 5, 'Discount on order (%)'),(2, 5, 'Discount on order (amount)'),(3, 5, 'Free shipping');
 
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (1);
-INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES (1, 1, 'Administrator'),(1, 2, 'Administrateur'),(1, 3, 'Administrador');
+INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES (1, 1, 'Administrator'),(1, 2, 'Administrateur'),(1, 3, 'Administrador'),(1, 4, 'Administrator'),(1, 5, 'Administrator');
 
 INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES (1, 'AdminCatalog', 0, 1),(2, 'AdminCustomers', 0, 2),(3, 'AdminOrders', 0, 3),
 (4, 'AdminPayment', 0, 4),(5, 'AdminShipping', 0, 5),(6, 'AdminStats', 0, 6),(7, 'AdminModules', 0, 7),(29, 'AdminEmployees', 0, 8),(8, 'AdminPreferences', 0, 9),
@@ -614,7 +624,11 @@ INSERT INTO `PREFIX_order_return_state_lang` (`id_order_return_state`, `id_lang`
 (4, 1, 'Return denied'),(5, 1, 'Return completed'),(1, 2, 'En attente de confirmation'),
 (2, 2, 'En attente du colis'),(3, 2, 'Colis reçu'),(4, 2, 'Retour refusé'),
 (5, 2, 'Retour terminé'),(1, 3, 'Pendiente de confirmación'),(2, 3, 'En espera de paquetes'),
-(3, 3, 'Paquetes recibidos'),(4, 3, 'Volver negó'),(5, 3, 'Diligenciados');
+(3, 3, 'Paquetes recibidos'),(4, 3, 'Volver negó'),(5, 3, 'Diligenciados'),
+(1, 4, 'Waiting for confirmation'),(2, 4, 'Waiting for package'),(3, 4, 'Package received'),
+(4, 4, 'Return denied'),(5, 4, 'Return completed'),
+(1, 5, 'Waiting for confirmation'),(2, 5, 'Waiting for package'),(3, 5, 'Package received'),
+(4, 5, 'Return denied'),(5, 5, 'Return completed');
 
 INSERT INTO `PREFIX_meta` (`id_meta`, `page`) VALUES
 (1, '404'),

@@ -10,8 +10,6 @@
 		</isos>
 		<idLangPS>en</idLangPS>
 	</lang>
-	
-	
 	<lang id="1" label="Français (French)" trad_file="/../langs/fr.php" >
 		<flags>
 			<url>../img/l/2.jpg</url>
@@ -22,7 +20,6 @@
 		</isos>
 		<idLangPS>fr</idLangPS>
 	</lang>
-	
 	<lang id="2" label="Español (Spanish)" trad_file="/../langs/es.php" >
 		<flags>
 			<url>../img/l/3.jpg</url>
@@ -33,5 +30,24 @@
 		</isos>
 		<idLangPS>es</idLangPS>
 	</lang>
-	
+	<lang id="3" label="Deutsch (German)" trad_file="/../langs/de.php" >
+		<flags>
+			<url>../img/l/4.jpg</url>
+		</flags>
+		<isos>
+			<iso>de-de-</iso>
+			<iso>de</iso>
+		</isos>
+		<idLangPS>de</idLangPS>
+	</lang>
+	<lang id="4" label="Italiano (Italian)" trad_file="/../langs/it.php" >
+		<flags>
+			<url>../img/l/5.jpg</url>
+		</flags>
+		<isos>
+			<iso>it-it</iso>
+			<iso>it</iso>
+		</isos>
+		<idLangPS>it</idLangPS>
+	</lang>
 </languages>
