@@ -115,7 +115,7 @@ class CartControllerCore extends FrontController
 					/* Check the quantity availability */
 					if ($idProductAttribute AND is_numeric($idProductAttribute))
 					{
-						if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)($idProductAttribute), (int)($qty)))
+						if (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)$idProductAttribute, (int)$qty))
 							if (Tools::getValue('ajax') == 'true')
 								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock', false).'"]}');
 							else
@@ -123,16 +123,16 @@ class CartControllerCore extends FrontController
 					}
 					elseif ($producToAdd->hasAttributes() AND !$delete)
 					{
-						$idProductAttribute = Product::getDefaultAttribute((int)($producToAdd->id), (int)($producToAdd->out_of_stock) == 2 ? !(int)(Configuration::get('PS_ORDER_OUT_OF_STOCK')) : !(int)($producToAdd->out_of_stock));
+						$idProductAttribute = Product::getDefaultAttribute((int)$producToAdd->id, (int)$producToAdd->out_of_stock == 2 ? !(int)Configuration::get('PS_ORDER_OUT_OF_STOCK') : !(int)$producToAdd->out_of_stock);
 						if (!$idProductAttribute)
 							Tools::redirectAdmin($link->getProductLink($producToAdd));
-						elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)($idProductAttribute), (int)($qty)))
+						elseif (!$delete AND !$producToAdd->isAvailableWhenOutOfStock($producToAdd->out_of_stock) AND !Attribute::checkAttributeQty((int)$idProductAttribute, (int)$qty))
 							if (Tools::getValue('ajax') == 'true')
 								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock', false).'"]}');
 							else
 								$this->errors[] = Tools::displayError('there is not enough product in stock');
 					}
-					elseif (!$delete AND !$producToAdd->checkQty((int)($qty)))
+					elseif (!$delete AND !$producToAdd->checkQty((int)$qty))
 						if (Tools::getValue('ajax') == 'true')
 								die('{"hasError" : true, "errors" : ["'.Tools::displayError('there is not enough product in stock').'"]}');
 							else
