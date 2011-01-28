@@ -34,7 +34,7 @@ if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 $_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
-define('INSTALL_VERSION', '1.4.0.10');
+define('INSTALL_VERSION', '1.4.0.11');
 define('INSTALL_PATH', dirname(__FILE__));
 define('PS_INSTALLATION_IN_PROGRESS', true);
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
