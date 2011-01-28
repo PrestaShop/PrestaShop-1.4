@@ -1819,13 +1819,17 @@ class AdminTranslations extends AdminTab
 			$this->displayToggleButton();
 			$this->displayAutoTranslate();
 			echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-			echo '<h3 style="padding:0;margin:0;">'.$this->l('Click to access theme translation:').'</h3>';
-			echo '<ul style="list-style-type:none;padding:0;margin:0 0 10px 0;">';
-			foreach (array_keys($this->modules_translations) as $theme)
+			
+			if (count($this->modules_translations) > 1) 
 			{
-				echo '<li><a href="#'.$theme.'" class="link">- '.($theme === 'default' ? $this->l('default') : $theme ).'</a></li>';
+				echo '<h3 style="padding:0;margin:0;">'.$this->l('List of Themes : Click to access theme translation:').'</h3>';
+				echo '<ul style="list-style-type:none;padding:0;margin:0 0 10px 0;">';
+				foreach (array_keys($this->modules_translations) as $theme)
+				{
+					echo '<li><a href="#'.$theme.'" class="link">- '.($theme === 'default' ? $this->l('default') : $theme ).'</a></li>';
+				}
+				echo '</ul>';
 			}
-			echo '</ul>';
 			foreach ($this->modules_translations AS $theme_name => $theme)
 			{
 				echo '<h2>&gt;'.$this->l('Theme:').' <a name="'.$theme_name.'">'.($theme_name === self::DEFAULT_THEME_NAME ? $this->l('default') : $theme_name ).'</h2>';
