@@ -182,9 +182,7 @@ class OrderHistoryCore extends ObjectModel
 			if (Validate::isLoadedObject($order))
 				Mail::Send((int)($order->id_lang), $result['template'], $topic, $data, $result['email'], $result['firstname'].' '.$result['lastname']);
 		}
-		
-		if (!$lastOrderState OR $lastOrderState->id !== $this->id_order_state)
-			Hook::postUpdateOrderStatus($this->id_order_state, (int)$this->id_order);
+
 		return true;
 	}
 	
