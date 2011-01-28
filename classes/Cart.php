@@ -83,6 +83,7 @@ class CartCore extends ObjectModel
 	private	static $_discountsLite = NULL;
 	private	static $_carriers = NULL;
 	private	static $_taxes_rate = NULL;
+	private static $_attributesLists = array();
 	protected 	$table = 'cart';
 	protected 	$identifier = 'id_cart';
 
@@ -330,10 +331,15 @@ class CartCore extends ObjectModel
 		// Reset the cache before the following return, or else an empty cart will add dozens of queries
 
 		$productsIds = array();
+		$paIds = array();
 		foreach ($result as $row)
+		{
 			$productsIds[] = $row['id_product'];
+			$paIds[] = $row['id_product_attribute'];
+		}
 		// Thus you can avoid one query per product, because there will be only one query for all the products of the cart
 		Product::cacheProductsFeatures($productsIds);
+		self::cacheSomeAttributesLists($paIds, $this->id_lang);
 		
 		$this->_products = array();
 		if (empty($result))
@@ -367,36 +373,49 @@ class CartCore extends ObjectModel
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic((int)$row['id_product']);
-
-			/* Add attributes to the SQL result if needed */
-			if (isset($row['id_product_attribute']) AND (int)$row['id_product_attribute'])
-			{
-				$result2 = Db::getInstance()->ExecuteS('
-				SELECT agl.`public_name` AS public_group_name, al.`name` AS attribute_name
-				FROM `'._DB_PREFIX_.'product_attribute_combination` pac
-				LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`
-				LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON ag.`id_attribute_group` = a.`id_attribute_group`
-				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)$this->id_lang.')
-				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)$this->id_lang.')
-				WHERE pac.`id_product_attribute` = '.(int)$row['id_product_attribute']);
-
-				$attributesList = '';
-				$attributesListSmall = '';
-				if ($result2)
-					foreach ($result2 AS $k2 => $row2)
-					{
-						$attributesList .= $row2['public_group_name'].' : '.$row2['attribute_name'].', ';
-						$attributesListSmall .= $row2['attribute_name'].', ';
-					}
-				$attributesList = rtrim($attributesList, ', ');
-				$attributesListSmall = rtrim($attributesListSmall, ', ');
-				$row['attributes'] = $attributesList;
-				$row['attributes_small'] = $attributesListSmall;
-				$row['stock_quantity'] = $row['quantity_attribute'];
-			}
+			$row['stock_quantity'] = $row['quantity_attribute'];
+			if (array_key_exists($row['id_product_attribute'].'-'.$this->id_lang, self::$_attributesLists))
+				$row = array_merge($row, self::$_attributesLists[$row['id_product_attribute'].'-'.$this->id_lang]);
+				
 			$this->_products[] = $row;
 		}
 		return $this->_products;
+	}
+	
+	public static function cacheSomeAttributesLists($ipaList, $id_lang)
+	{
+		$paImplode = array();
+		$attributesList = array();
+		$attributesListSmall = array();
+		foreach ($ipaList as $id_product_attribute)
+			if ((int)$id_product_attribute AND !array_key_exists($id_product_attribute.'-'.$id_lang, self::$_attributesLists))
+			{
+				$paImplode[] = (int)$id_product_attribute;
+				self::$_attributesLists[(int)$id_product_attribute.'-'.$id_lang] = array('attributes' => '', 'attributes_small' => '');
+			}
+		if (!count($paImplode))
+			return;
+		
+		$result = Db::getInstance()->ExecuteS('
+		SELECT pac.`id_product_attribute`, agl.`public_name` AS public_group_name, al.`name` AS attribute_name
+		FROM `'._DB_PREFIX_.'product_attribute_combination` pac
+		LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`
+		LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON ag.`id_attribute_group` = a.`id_attribute_group`
+		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)$id_lang.')
+		WHERE pac.`id_product_attribute` IN ('.implode($paImplode, ',').')');
+
+		foreach ($result as $row)
+		{
+			self::$_attributesLists[$row['id_product_attribute'].'-'.$id_lang]['attributes'] .= $row['public_group_name'].' : '.$row['attribute_name'].', ';
+			self::$_attributesLists[$row['id_product_attribute'].'-'.$id_lang]['attributes_small'] .= $row['attribute_name'].', ';
+		}
+		
+		foreach ($paImplode as $id_product_attribute)
+		{
+			self::$_attributesLists[$id_product_attribute.'-'.$id_lang]['attributes'] = rtrim(self::$_attributesLists[$id_product_attribute.'-'.$id_lang]['attributes'], ', ');
+			self::$_attributesLists[$id_product_attribute.'-'.$id_lang]['attributes_small'] = rtrim(self::$_attributesLists[$id_product_attribute.'-'.$id_lang]['attributes_small'], ', ');
+		}
 	}
 
 	/**
