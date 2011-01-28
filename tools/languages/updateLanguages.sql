@@ -10,13 +10,15 @@ INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
             WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_tab`=`PREFIX_tab`.`id_tab`)
     FROM `PREFIX_lang` CROSS JOIN `PREFIX_tab`);
 
-INSERT IGNORE INTO `PREFIX_country_lang` (`id_country`, `id_lang`, `name`)
-    (SELECT `id_country`, id_lang, (SELECT tl.`name`
-        FROM `PREFIX_country_lang` tl
-        WHERE tl.`id_lang` = (SELECT c.`value`
-            FROM `PREFIX_configuration` c
-            WHERE c.`name` = 'PS_LANG_DEFAULT' LIMIT 1) AND tl.`id_country`=`PREFIX_country`.`id_country`)
-    FROM `PREFIX_lang` CROSS JOIN `PREFIX_country`);
+INSERT IGNORE INTO `ps_country_lang` (`id_country`, `id_lang`, `name`)
+	(SELECT `id_country`, id_lang, (SELECT tl.`name`
+			FROM `ps_country_lang` tl
+			WHERE tl.`id_lang` = (SELECT c.`id_lang`
+				FROM `ps_lang` c
+				WHERE c.`iso_code` = 'en' LIMIT 1)
+			AND tl.`id_country`=`ps_country`.`id_country`)
+		FROM `ps_lang` CROSS JOIN `ps_country`
+	);
 
 INSERT IGNORE INTO `PREFIX_quick_access_lang` (`id_quick_access`, `id_lang`, `name`)
     (SELECT `id_quick_access`, id_lang, (SELECT tl.`name`
