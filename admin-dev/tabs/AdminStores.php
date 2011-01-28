@@ -108,7 +108,28 @@ class AdminStores extends AdminTab
 			/* If the selected country contains states, then a state have to be selected */
 			if ((int)($country->contains_states) AND !$id_state)
 				$this->_errors[] = Tools::displayError('an address which is located in a country containing states must have a state selected');
-				
+
+			/* Check zip code */
+			if ($country->need_zip_code)
+			{
+				$zip_code_format = $country->zip_code_format;
+				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
+				{
+					$zip_regexp = '/^'.$zip_code_format.'$/ui';
+					$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
+					$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
+					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
+					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
+					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
+					if (!preg_match($zip_regexp, $postcode))
+						$this->_errors[] = Tools::displayError('Your postal code/zip code is incorrect.').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+				}
+				elseif ($zip_code_format)
+					$this->_errors[] = Tools::displayError('postcode is required.');
+				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
+					$this->_errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+			}
+
 			/* Store hours */
 			$_POST['hours'] = array();
 			for ($i = 1; $i < 8; $i++)
@@ -162,7 +183,7 @@ class AdminStores extends AdminTab
 					</div>
 					<label>'.$this->l('Postcode/ Zip Code:').'</label>
 					<div class="margin-form">
-						<input type="text" size="6" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+						<input type="text" size="6" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" />
 					</div>
 					<label>'.$this->l('City:').'</label>
 					<div class="margin-form">

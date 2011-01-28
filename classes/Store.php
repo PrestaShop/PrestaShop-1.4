@@ -78,10 +78,10 @@ class StoreCore extends ObjectModel
 	/** @var boolean Store status */
 	public 		$active = true;
 	
- 	protected 	$fieldsRequired = array('id_country', 'name', 'address1', 'postcode', 'city', 'active');
+ 	protected 	$fieldsRequired = array('id_country', 'name', 'address1', 'city', 'active');
  	protected 	$fieldsSize = array('name' => 128, 'address1' => 128, 'address2' => 128, 'postcode' => 12, 'city' => 64, 'latitude' => 10, 'longitude' => 10, 'hours' => 254, 'phone' => 16, 'fax' => 16, 'email' => 128, 'note' => 65000);
  	protected 	$fieldsValidate = array('id_country' => 'isUnsignedId', 'id_state' => 'isNullOrUnsignedId', 'name' => 'isGenericName', 'address1' => 'isAddress', 'address2' => 'isAddress',
-	'postcode' => 'isPostCode', 'city' => 'isCityName', 'latitude' => 'isCoordinate', 'longitude' => 'isCoordinate', 'hours' => 'isSerializedArray', 'phone' => 'isPhoneNumber', 'fax' => 'isPhoneNumber',
+	'city' => 'isCityName', 'latitude' => 'isCoordinate', 'longitude' => 'isCoordinate', 'hours' => 'isSerializedArray', 'phone' => 'isPhoneNumber', 'fax' => 'isPhoneNumber',
 	'note' => 'isCleanHtml', 'email' => 'isEmail', 'active' => 'isBool');
 
 	protected 	$table = 'store';
