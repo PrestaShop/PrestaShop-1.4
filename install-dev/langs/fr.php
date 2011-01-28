@@ -228,5 +228,5 @@ $_LANG['Invalid catalog mode'] = 'Champ mode catalog invalide';
 $_LANG['Catalog mode:'] = 'Mode Catalogue :';
 $_LANG['Yes'] = 'Oui';
 $_LANG['No'] = 'Non';
-$_LANG['If you activate this feature, all purchases features are going to be disabled. You can activate this feature later in your back office'] = 'Si vous activez cette option, toutes les fonctionnalités d\'achats vont être désactivées. Vous pouvez activer cette option plus tard dans votre back-office';
+$_LANG['If you activate this feature, all purchases features will be disabled. You can activate this feature later in your back office'] = 'Si vous activez cette option, toutes les fonctionnalités d\'achats vont être désactivées. Vous pouvez activer cette option plus tard dans votre back-office';
 $_LANG['the already installed version detected is too recent, no update available'] = 'la version déjà installée qui a été détectée est trop récente, aucune mise à jour disponible';

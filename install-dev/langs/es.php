@@ -203,5 +203,5 @@ $_LANG['Invalid catalog mode'] = 'Campo modo catálogo no válido';
 $_LANG['Catalog mode:'] = 'Modo Catálogo:';
 $_LANG['Yes'] = 'Sí';
 $_LANG['No'] = 'No';
-$_LANG['If you activate this feature, all purchases features are going to be disabled. You can activate this feature later in your back office'] = 'Si activa esta opción, se desactivarán todas las aplicaciones de compra. Puede activar dicha opción posteriormente en el panel de administración.';
+$_LANG['If you activate this feature, all purchases features will be disabled. You can activate this feature later in your back office'] = 'Si activa esta opción, se desactivarán todas las aplicaciones de compra. Puede activar dicha opción posteriormente en el panel de administración.';
 $_LANG['the already installed version detected is too recent, no update available'] = 'la versión instalada que se ha detectado es demasiado reciente, no hay ninguna actualización disponible';
