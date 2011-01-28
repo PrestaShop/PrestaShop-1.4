@@ -1822,7 +1822,7 @@ class AdminTranslations extends AdminTab
 			
 			if (count($this->modules_translations) > 1) 
 			{
-				echo '<h3 style="padding:0;margin:0;">'.$this->l('List of Themes : Click to access theme translation:').'</h3>';
+				echo '<h3 style="padding:0;margin:0;">'.$this->l('List of Themes - Click to access theme translation:').'</h3>';
 				echo '<ul style="list-style-type:none;padding:0;margin:0 0 10px 0;">';
 				foreach (array_keys($this->modules_translations) as $theme)
 				{
