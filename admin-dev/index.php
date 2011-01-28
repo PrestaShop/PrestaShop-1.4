@@ -166,7 +166,14 @@ else /* Else display homepage */
 			<a href="#">'.translate('View more video tutorials').'</a>
 			<input type="checkbox" value="" name="" id="dont_show_again"><label for="dont_show_again">'.translate('don\'t show again').'</label>
 		</div>
-	</div>-->
+	</div>-->';
+	
+	if (Tools::isSubmit('hideOptimizationTips'))
+		Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 1);
+	elseif (!Configuration::get('PS_HIDE_OPTIMIZATION_TIPS'))
+		displayOptimizationTips();
+	
+	echo '
 	<div id="column_left">
 		<ul class="F_list clearfix">
 			<li id="first_block">

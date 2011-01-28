@@ -276,3 +276,74 @@ function checkTabRights($id_tab)
 		return ($tabAccesses[(int)($id_tab)]['view'] === '1');
 	return false;
 }
+
+function displayOptimizationTips()
+{
+	$rewrite = 0;
+	if (Configuration::get('PS_REWRITING_SETTINGS'))
+	{
+		$rewrite = 2;
+		if (!file_exists(dirname(__FILE__).'/../.htaccess'))
+			$rewrite = 1;
+		else
+		{
+			$stat = stat(dirname(__FILE__).'/../.htaccess');
+			if (strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_REWRITING_SETTINGS"')) > $stat['mtime'])
+				$rewrite = 1;
+		}
+	}
+	
+	$htaccessOptimized = 0;
+	if (Configuration::get('PS_HTACCESS_CACHE_CONTROL'))
+	{
+		$htaccessOptimized = 2;
+		if (!file_exists(dirname(__FILE__).'/../.htaccess'))
+			$htaccessOptimized = 1;
+		else
+		{
+			$stat = stat(dirname(__FILE__).'/../.htaccess');
+			if (strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_HTACCESS_CACHE_CONTROL"')) > $stat['mtime'])
+				$htaccessOptimized = 1;
+		}
+	}
+	
+	$smartyOptimized = 0;
+	if (!Configuration::get('PS_SMARTY_FORCE_COMPILE'))
+		++$smartyOptimized;
+	if (Configuration::get('PS_SMARTY_CACHE'))
+		++$smartyOptimized;
+
+	$cccOptimized = Configuration::get('PS_CSS_THEME_CACHE')
+	+ Configuration::get('PS_JS_THEME_CACHE')
+	+ Configuration::get('PS_HTML_THEME_COMPRESSION')
+	+ Configuration::get('PS_JS_HTML_THEME_COMPRESSION')
+	+ Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION');
+	if ($cccOptimized == 5)
+		$cccOptimized = 2;
+	else
+		$cccOptimized = 1;
+		
+	$shopEnabled = (Configuration::get('PS_SHOP_ENABLE') ? 2 : 1);
+	
+	$lights = array(0 => 'red', 1 => 'orange', 2 => 'green');
+	
+	if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled != 10)	
+		echo '
+		<div class="warn">
+			<span style="float:right"><a href="?hideOptimizationTips"><img alt="X" src="../img/admin/close.png" /></a></span>
+			<img src="../img/admin/status_'.$lights[$rewrite].'.gif" />
+			<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.translate('URL rewriting').'</a>
+			&nbsp;&nbsp;
+			<img src="../img/admin/status_'.$lights[$htaccessOptimized].'.gif" />
+			<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.translate('Browser cache & compression').'</a>
+			&nbsp;&nbsp;
+			<img src="../img/admin/status_'.$lights[$smartyOptimized].'.gif" />
+			<a href="index.php?tab=AdminPerformance&token='.Tools::getAdminTokenLite('AdminPerformance').'">'.translate('Smarty optimization').'</a>
+			&nbsp;&nbsp;
+			<img src="../img/admin/status_'.$lights[$cccOptimized].'.gif" />
+			<a href="index.php?tab=AdminPerformance&token='.Tools::getAdminTokenLite('AdminPerformance').'">'.translate('Combine, Compress & Cache').'</a>
+			&nbsp;&nbsp;
+			<img src="../img/admin/status_'.$lights[$shopEnabled].'.gif" />
+			<a href="index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'">'.translate('Shop enabled').'</a>
+		</div>';
+}

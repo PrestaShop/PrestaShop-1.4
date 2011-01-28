@@ -2652,7 +2652,6 @@ $_LANGADM['AdminTranslationsd05b6ed7d2345020440df396d6da7f73'] = 'champs';
 $_LANGADM['AdminTranslations47a0be8d1015d526a1fbaa56c3102135'] = 'Sujet :';
 $_LANGADM['AdminTranslationsc7892ebbb139886662c6f2fc8c450710'] = 'Sujet';
 $_LANGADM['AdminTranslations8a09d048735283dbc609ba0f9f705ed1'] = 'Traductions des modules';
-$_LANGADM['AdminTranslationsece74e3db44f65b1a79bd2279dad8fb7'] = 'Cliquez pour accéder aux traductions du thème :';
 $_LANGADM['AdminTranslationsc21f969b5f03d33d43e04f8f136e7682'] = 'defaut';
 $_LANGADM['AdminTranslationsa9e4402481bd9b8e36752bf731f67eb6'] = 'Thème';
 $_LANGADM['AdminTranslations53b3cae42737979c884275593a01f468'] = 'Module :';
@@ -2857,5 +2856,10 @@ $_LANGADM['indexfb080b51680e721b19b6af4293264b6c'] = 'retour à la page d\'ident
 $_LANGADM['index1928895508822da82ce5c4932a114044'] = 'Indiquez votre adresse e-mail';
 $_LANGADM['index449d3718fc3a9e9bf3f3fc0254bb5625'] = '(celle que vous avez indiquée durant l\'installation) afin de recevoir vos nouveaux codes d\'accès par e-mail';
 $_LANGADM['index94966d90747b97d1f0f206c98a8b1ac3'] = 'Envoyer';
+$_LANGADM['indexecd188c0a9e0913f062d22331411158a'] = 'URLs simplifiées';
+$_LANGADM['index4d92a8b44ec205ea708bd3f3a8926b2d'] = 'Cache & compression navigateur';
+$_LANGADM['index5ad483f10dec94a21c78d89edc1fef94'] = 'Optimisations Smarty';
+$_LANGADM['index202460d68b46910927f17628291fdd61'] = 'Concaténation, Compression & Cache';
+$_LANGADM['index73a910e532bbbc17742ac1ad88189026'] = 'Boutique activée';
 
 ?>

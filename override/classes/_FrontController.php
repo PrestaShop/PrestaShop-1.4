@@ -106,10 +106,10 @@ class FrontController extends FrontControllerCore
 	private function displayLoadTimeColor($n, $kikoo = false)
 	{
 		if ($n > 1)
-			return '<span style="color:red">'.round($n, 3).'s</span>'.($kikoo ? ' - You\'d better run your shop on a toaster' : '');
+			return '<span style="color:red">'.round($n, 3).'s</span>'.($kikoo ? '<br />You\'d better run your shop on a toaster' : '');
 		if ($n > 0.5)
-			return '<span style="color:orange">'.round($n * 1000).'ms</span>'.($kikoo ? ' - Alright if you\'re on a shared hosting platform' : '');
-		return '<span style="color:green">'.round($n * 1000).'ms</span>'.($kikoo ? ' - Good boy! That\'s what I call a webserver!' : '');
+			return '<span style="color:orange">'.round($n * 1000).'ms</span>'.($kikoo ? '<br />I hope it is a shared hosting' : '');
+		return '<span style="color:green">'.round($n * 1000).'ms</span>'.($kikoo ? '<br />Good boy! That\'s what I call a webserver!' : '');
 	}
 	
 	private function getTimeColor($n)
@@ -264,7 +264,7 @@ class FrontController extends FrontControllerCore
 		echo '</ul>
 		</div>
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
-			<b>Memory usage</b>: '.$this->displayMemoryColor($this->_memory[6]).', including '.$this->displayMemoryColor($totalSize).' of files
+			<b>Memory peak usage</b>: '.$this->displayMemoryColor(memory_get_peak_usage()).'
 			<ul>
 				<li>Config: '.$this->displayMemoryColor($this->_memory[-2]).'</li>
 				<li>Constructor: '.$this->displayMemoryColor(($this->_memory[-1] - $this->_memory[-2])).'</li>
@@ -290,7 +290,8 @@ class FrontController extends FrontControllerCore
 			<br /><b>Time spent querying</b>: '.$this->displayLoadTimeColor($totalQueryTime).'
 		</div>
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
-			<b>Included files</b>: '.sizeof(get_included_files()).'
+			<b>Included files</b>: '.sizeof(get_included_files()).'<br />
+			<b>Size of included files</b>: '.$this->displayMemoryColor($totalSize).'
 		</div>
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
 			<b>Globals (&gt; 1 Ko only): '.round($totalGlobalSize / 1024).' Ko</b>
