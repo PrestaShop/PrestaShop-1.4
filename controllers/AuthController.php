@@ -279,6 +279,11 @@ class AuthControllerCore extends FrontController
 			/* Select the most appropriate country */
 			if (isset($_POST['id_country']) AND is_numeric($_POST['id_country']))
 				$selectedCountry = (int)($_POST['id_country']);
+			/* FIXME : language iso and country iso are not similar, 
+			 * maybe an associative table with country an language can resolve it,
+			 * But for now it's a bug !
+			 * @see : bug #6968 
+			 * @link:http://www.prestashop.com/bug_tracker/view/6968/
 			elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
 			{
 				$array = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
@@ -288,7 +293,7 @@ class AuthControllerCore extends FrontController
 					if (!$selectedCountry)
 						$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 				}
-			}
+			}*/
 			if (!isset($selectedCountry))
 				$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 			$countries = Country::getCountries((int)($this->cookie->id_lang), true);
