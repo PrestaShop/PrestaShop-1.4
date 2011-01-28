@@ -2738,6 +2738,7 @@ $_LANGADM['AdminTab0a5fa53f3f20f67f98bd6c3b16df059d'] = 'est requis';
 $_LANGADM['AdminTab7e47a344b06d82a8836cbee2748a79e6'] = 'est requis au moins en';
 $_LANGADM['AdminTabf755e8b92cb8f02c24f6f539180d45b1'] = 'est trop long';
 $_LANGADM['AdminTab70f4b635847038d056e33959821a7a66'] = 'caractères maximum';
+$_LANGADM['AdminTabbee83fbebb6a50869091c78685f2b7f7'] = 'caractères maximum, caractères html compris';
 $_LANGADM['AdminTab998b344cff693ad388a14ba89b1523c7'] = 'est invalide';
 $_LANGADM['AdminTab07213a0161f52846ab198be103b5ab43'] = 'erreurs';
 $_LANGADM['AdminTab6357d3551190ec7e79371a8570121d3a'] = 'Il y a';
