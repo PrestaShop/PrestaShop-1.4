@@ -55,6 +55,8 @@ class BlockUserInfo extends Module
 	*/
 	public function hookTop($params)
 	{
+		if (!$this->active)
+			return;
 		global $smarty, $cookie, $cart;
 		$smarty->assign(array(
 			'cart' => $cart,

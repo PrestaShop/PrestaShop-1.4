@@ -498,12 +498,20 @@ $(function() {
 							url: orderOpcUrl,
 							async: true,
 							cache: false,
-							dataType : "html",
+							dataType : "json",
 							data: 'ajax=true&method=getAddressBlock&token=' + static_token ,
-							success: function(html)
+							success: function(json)
 							{
 								$('#opc_dynamic_block_1').fadeOut('fast', function() {
-									$('#opc_dynamic_block_1').html(html);
+									$('#opc_dynamic_block_1').html(json.order_opc_adress);
+									// update block user info
+									if (json.block_user_info != '' && $('#header_user').length == 1)
+									{
+										$('#header_user').fadeOut('slow', function() {
+											$(this).attr('id', 'header_user_old').after(json.block_user_info).fadeIn('slow');
+											$('#header_user_old').remove();
+										});
+									}
 									$('#opc_block_1_status').hide();
 									updateAddressesDisplay(true);
 									$('#opc_dynamic_block_1').fadeIn('fast');

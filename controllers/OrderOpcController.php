@@ -179,9 +179,18 @@ class OrderOpcControllerCore extends ParentOrderController
 						case 'getAddressBlock':
 							if ($this->cookie->isLogged())
 							{
+								if (file_exists(_PS_MODULE_DIR_.'blockuserinfo/blockuserinfo.php'))
+								{
+									include_once(_PS_MODULE_DIR_.'blockuserinfo/blockuserinfo.php');
+									$blockUserInfo = new BlockUserInfo();
+								}
 								$this->smarty->assign('isVirtualCart', $this->cart->isVirtualCart());
 								$this->_assignAddress();
-								die($this->smarty->display(_PS_THEME_DIR_.'order-opc-address.tpl'));
+								$return = array(
+									'order_opc_adress' => $this->smarty->fetch(_PS_THEME_DIR_.'order-opc-address.tpl'),
+									'block_user_info' => (isset($blockUserInfo) ? $blockUserInfo->hookTop(array()) : '')
+								);
+								die(Tools::jsonEncode($return));
 							}
 							die(Tools::displayError());
 							break;
