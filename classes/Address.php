@@ -104,7 +104,7 @@ class AddressCore extends ObjectModel
 										'id_supplier' => 'isNullOrUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isNullOrUnsignedId',
 										'alias' => 'isGenericName', 'company' => 'isGenericName', 'lastname' => 'isName','vat_number' => 'isGenericName',
 										'firstname' => 'isName', 'address1' => 'isAddress', 'address2' => 'isAddress',
-										'postcode' => 'isPostCode', 'city' => 'isCityName', 'other' => 'isMessage',
+										'city' => 'isCityName', 'other' => 'isMessage',
 										'phone' => 'isPhoneNumber', 'phone_mobile' => 'isPhoneNumber', 'deleted' => 'isBool', 'dni' => 'isDniLite');
 
 	protected 	$table = 'address';
