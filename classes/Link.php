@@ -229,8 +229,8 @@ class LinkCore
 	public function getUrlWith($key, $val)
 	{
 		$n = 0;
-		$url = htmlentities($this->url, ENT_QUOTES, 'UTF-8');
-		
+		$url = str_replace('index.php', '', htmlentities($this->url, ENT_QUOTES, 'UTF-8'));
+
 		foreach ($_GET as $k => $value)
 			// adminlang is an hand-written param in BO
 			if ($k != 'adminlang')

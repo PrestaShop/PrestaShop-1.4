@@ -138,8 +138,12 @@ abstract class PaymentModuleCore extends Module
 			// Creating order
 			if ($cart->OrderExists() === 0)
 				$result = $order->add();
-			else
-				die(Tools::displayError('An order has already been placed using this cart'));
+			else 
+			{
+				$errorMessage = Tools::displayError('An order has already been placed using this cart');
+				Log::addLog($errorMessage, 4, '0000001', 'Cart', intval($order->id_cart));
+				die($errorMessage);
+			}
 
 			// Next !
 			if ($result AND isset($order->id))
@@ -420,10 +424,18 @@ abstract class PaymentModuleCore extends Module
 				return true;
 			}
 			else
-				die(Tools::displayError('Order creation failed'));
+			{
+				$errorMessage = Tools::displayError('Order creation failed');
+				Log::addLog($errorMessage, 4, '0000002', 'Cart', intval($order->id_cart));
+				die($errorMessage);
+			}
 		}
 		else
-			die(Tools::displayError('An order has already been placed using this cart'));
+		{
+			$errorMessage = Tools::displayError('An order has already been placed using this cart');
+			Log::addLog($errorMessage, 4, '0000001', 'Cart', intval($order->id_cart));
+			die($errorMessage);
+		}
 	}
 
 	public function getCurrency()

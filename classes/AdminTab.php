@@ -60,6 +60,9 @@ abstract class AdminTabCore
 	/** @var boolean Tab Automatically displays duplicate icon if true */
 	public $duplicate = false;
 
+	/** @var boolean Content line is clickable if true */
+	public $noLink = true;
+
 	/** @var boolean select other required fields */
 	public $requiredDatabase = false;
 
@@ -1338,8 +1341,8 @@ abstract class AdminTabCore
 					$tmp = explode('!', $key);
 					$key = isset($tmp[1]) ? $tmp[1] : $tmp[0];
 					echo '
-					<td '.(isset($params['position']) ? ' id="td_'.(isset($id_category) AND $id_category ? $id_category : 0).'_'.$id.'"' : '').' class="pointer'.((isset($params['position']) AND $this->_orderBy == 'position' AND $this->_orderWay != 'DESC')? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
-					if (!isset($params['position']))
+					<td '.(isset($params['position']) ? ' id="td_'.(isset($id_category) AND $id_category ? $id_category : 0).'_'.$id.'"' : '').' class="'.((!isset($this->noLink) OR !$this->noLink) ? 'pointer' : '').((isset($params['position']) AND $this->_orderBy == 'position')? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
+					if (!isset($params['position']) AND (!isset($this->noLink) OR !$this->noLink))
 						echo ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.($this->view? '&view' : '&update').$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'">'.(isset($params['prefix']) ? $params['prefix'] : '');
 					else
 						echo '>';

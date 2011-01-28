@@ -74,7 +74,7 @@ class CartControllerCore extends FrontController
 	public function preProcess()
 	{
 		parent::preProcess();
-
+Log::addLog('FUCK', 4, '009982', 'CartController');
 		$orderTotal = $this->cart->getOrderTotal(true, 1);
 
 		$this->cartDiscounts = $this->cart->getDiscounts();
