@@ -50,7 +50,7 @@ class FrontControllerCore
 	
 	public function __construct()
 	{
-		global $smarty, $cookie, $link, $cart, $useSSL, $iso;
+		global $smarty, $cookie, $link, $useSSL, $iso;
 
 		$useSSL = $this->ssl;
 
@@ -168,7 +168,7 @@ class FrontControllerCore
 		/* attribute id_lang is often needed, so we create a constant for performance reasons */
 		define('_USER_ID_LANG_', (int)($cookie->id_lang));
 
-		if (isset($_GET['logout']) OR ($cookie->logged AND Customer::isBanned((int)($cookie->id_customer))))
+		if (isset($_GET['logout']) OR ($cookie->logged AND Customer::isBanned((int)$cookie->id_customer)))
 		{
 			$cookie->logout();
 			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
@@ -370,8 +370,7 @@ class FrontControllerCore
 	
 	public function displayHeader()
 	{
-		global $css_files;
-		global $js_files;
+		global $css_files, $js_files;
 		
 		// P3P Policies (http://www.w3.org/TR/2002/REC-P3P-20020416/#compact_policies)
 		header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');

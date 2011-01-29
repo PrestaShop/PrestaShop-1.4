@@ -2549,6 +2549,9 @@ class ProductCore extends ObjectModel
 	public static function getAllCustomizedDatas($id_cart, $id_lang = null)
 	{
 		global $cookie;
+		// No need to query if there isn't any real cart!
+		if (!$id_cart)
+			return false;
 		if (!$id_lang AND $cookie->id_lang)
 			$id_lang = $cookie->id_lang;
 		else
@@ -2562,7 +2565,7 @@ class ProductCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'customized_data` cd
 			NATURAL JOIN `'._DB_PREFIX_.'customization` c
 			LEFT JOIN `'._DB_PREFIX_.'customization_field_lang` cfl ON (cfl.id_customization_field = cd.`index` AND id_lang = '.(int)($id_lang).')
-			WHERE c.`id_cart` = '.(int)($id_cart).'
+			WHERE c.`id_cart` = '.(int)$id_cart.'
 			ORDER BY `id_product`, `id_product_attribute`, `type`, `index`'))
 			return false;
 		$customizedDatas = array();
