@@ -253,7 +253,7 @@ class FrontController extends FrontControllerCore
 			<b>Load time</b>: '.$this->displayLoadTimeColor($this->_time[6] - $start_time, true).'
 			<ul>
 				<li>Config: '.$this->displayLoadTimeColor($this->_time[-3] - $start_time).'</li>
-				<li>Constructor: '.$this->displayLoadTimeColor(($this->_time[-2] - $this->_time[-3])).'</li>
+				<li>Init: '.$this->displayLoadTimeColor(($this->_time[-2] - $this->_time[-3])).'</li>
 				<li>Constructor: '.$this->displayLoadTimeColor(($this->_time[-1] - $this->_time[-2])).'</li>
 				<li>preProcess: '.$this->displayLoadTimeColor(($this->_time[1] - $this->_time[0])).'</li>
 				<li>setMedia: '.$this->displayLoadTimeColor(($this->_time[2] - $this->_time[1])).'</li>
@@ -273,7 +273,8 @@ class FrontController extends FrontControllerCore
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
 			<b>Memory peak usage</b>: '.$this->displayMemoryColor(memory_get_peak_usage()).'
 			<ul>
-				<li>Config: '.$this->displayMemoryColor($this->_memory[-2]).'</li>
+				<li>Config: '.$this->displayMemoryColor($this->_memory[-3]).'</li>
+				<li>Init: '.$this->displayMemoryColor(($this->_memory[-2] - $this->_memory[-3])).'</li>
 				<li>Constructor: '.$this->displayMemoryColor(($this->_memory[-1] - $this->_memory[-2])).'</li>
 				<li>preProcess: '.$this->displayMemoryColor(($this->_memory[1] - $this->_memory[0])).'</li>
 				<li>setMedia: '.$this->displayMemoryColor(($this->_memory[2] - $this->_memory[1])).'</li>
