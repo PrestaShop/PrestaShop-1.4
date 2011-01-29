@@ -150,6 +150,12 @@ class FrontController extends FrontControllerCore
 		$this->_memory = array_fill(0, 10, 0);
 		$this->_time = array_fill(0, 10, 0);
 
+		// Usually set in the parent constructor, but here I need it to evaluate init()
+		$useSSL = $this->ssl;
+		
+		$this->_memory[-3] = memory_get_usage();
+		$this->_time[-3] = microtime(true);
+		$this->init();
 		$this->_memory[-2] = memory_get_usage();
 		$this->_time[-2] = microtime(true);
 		parent::__construct();
@@ -246,7 +252,8 @@ class FrontController extends FrontControllerCore
 		<div class="rte" style="text-align:left;padding:8px;float:left">
 			<b>Load time</b>: '.$this->displayLoadTimeColor($this->_time[6] - $start_time, true).'
 			<ul>
-				<li>Config: '.$this->displayLoadTimeColor($this->_time[-2] - $start_time).'</li>
+				<li>Config: '.$this->displayLoadTimeColor($this->_time[-3] - $start_time).'</li>
+				<li>Constructor: '.$this->displayLoadTimeColor(($this->_time[-2] - $this->_time[-3])).'</li>
 				<li>Constructor: '.$this->displayLoadTimeColor(($this->_time[-1] - $this->_time[-2])).'</li>
 				<li>preProcess: '.$this->displayLoadTimeColor(($this->_time[1] - $this->_time[0])).'</li>
 				<li>setMedia: '.$this->displayLoadTimeColor(($this->_time[2] - $this->_time[1])).'</li>
