@@ -159,7 +159,7 @@ class LinkCore
 		LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
 		WHERE id_lang = '.(int)$cookie->id_lang);
 		foreach ($result as $row)
-			self::$cache['page'][$row['page'].'.php_'.$cookie->id_lang] = $this->getLangLink((int)$cookie->id_lang.$row['url_rewrite']);
+			self::$cache['page'][$row['page'].'.php_'.$cookie->id_lang] = $this->getLangLink((int)$cookie->id_lang).$row['url_rewrite'];
 	}
 	
 	public function getPageLink($filename, $ssl = false, $id_lang = NULL)
@@ -183,7 +183,7 @@ class LinkCore
 					FROM `'._DB_PREFIX_.'meta` m
 					LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
 					WHERE id_lang = '.(int)($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
-					$uri_path = $this->getLangLink((int)$id_lang.($url_rewrite ? $url_rewrite : $filename));
+					$uri_path = $this->getLangLink((int)$id_lang).($url_rewrite ? $url_rewrite : $filename);
 				}
 				else
 					$uri_path = $this->getLangLink((int)$id_lang);
@@ -311,6 +311,6 @@ class LinkCore
 		
 		if (!$this->allow)
 			return NULL;
-		return Language::getIsoById((int)($id_lang)).'/';
+		return Language::getIsoById((int)$id_lang).'/';
 	}
 }
