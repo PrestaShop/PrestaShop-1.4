@@ -146,6 +146,21 @@ class LinkCore
 	{
 		return 'http://'.Tools::getMediaServer($filepath).$filepath;
 	}
+
+	public function preloadPageLinks()
+	{
+		global $cookie;
+		if ($this->allow != 1)
+			return;
+
+		$result = Db::getInstance()->ExecuteS('
+		SELECT page, url_rewrite
+		FROM `'._DB_PREFIX_.'meta` m
+		LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
+		WHERE id_lang = '.(int)$cookie->id_lang);
+		foreach ($result as $row)
+			self::$cache['page'][$row['page'].'.php_'.$cookie->id_lang] = $this->getLangLink((int)$cookie->id_lang.$row['url_rewrite']);
+	}
 	
 	public function getPageLink($filename, $ssl = false, $id_lang = NULL)
 	{
@@ -168,7 +183,7 @@ class LinkCore
 					FROM `'._DB_PREFIX_.'meta` m
 					LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
 					WHERE id_lang = '.(int)($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
-					$uri_path = $this->getLangLink((int)$id_lang).($url_rewrite ? $url_rewrite : $filename);
+					$uri_path = $this->getLangLink((int)$id_lang.($url_rewrite ? $url_rewrite : $filename));
 				}
 				else
 					$uri_path = $this->getLangLink((int)$id_lang);
@@ -298,21 +313,4 @@ class LinkCore
 			return NULL;
 		return Language::getIsoById((int)($id_lang)).'/';
 	}
-	
-	public function preloadPageLinks()
-	{
-		global $cookie, $iso;
-		if ($this->allow)
-		{
-			$specific_pages = Db::getInstance()->ExecuteS('
-				SELECT url_rewrite, page
-				FROM `'._DB_PREFIX_.'meta` m
-				LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-				WHERE id_lang = '.(int)($cookie->id_lang));
-			foreach ($specific_pages as $specific_page)
-				self::$cache['page'][$specific_page['page'].'.php'] = $iso.'/'.$specific_page['url_rewrite'];
-		}
-	}
 }
-
-
