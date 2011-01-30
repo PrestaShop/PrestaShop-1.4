@@ -69,7 +69,7 @@ class ManufacturerCore extends ObjectModel
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 
-	protected	$fieldsSizeLang = array('short_description' => 100, 'meta_title' => 128, 'meta_description' => 255, 'meta_description' => 255);
+	protected	$fieldsSizeLang = array('short_description' => 254, 'meta_title' => 128, 'meta_description' => 255, 'meta_description' => 255);
 	protected	$fieldsValidateLang = array('description' => 'isString', 'short_description' => 'isString', 'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
 
 	protected 	$table = 'manufacturer';

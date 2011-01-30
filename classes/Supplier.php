@@ -63,7 +63,7 @@ class SupplierCore extends ObjectModel
  	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isCatalogName');
 
-	protected	$fieldsSizeLang = array('description' => 128, 'meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
+	protected	$fieldsSizeLang = array('meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
 	protected	$fieldsValidateLang = array('description' => 'isGenericName', 'meta_title' => 'isGenericName', 'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName');
 
 	protected 	$table = 'supplier';
