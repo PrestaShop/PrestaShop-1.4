@@ -41,7 +41,7 @@
 			<span class="ajax_cart_quantity{if $cart_qties == 0} hidden{/if}">{$cart_qties}</span>
 			<span class="ajax_cart_product_txt{if $cart_qties != 1} hidden{/if}">{l s='product' mod='blockuserinfo'}</span>
 			<span class="ajax_cart_product_txt_s{if $cart_qties < 2} hidden{/if}">{l s='products' mod='blockuserinfo'}</span>
-			{if $cart_qties > 0}
+			{if $cart_qties >= 0}
 				<span class="ajax_cart_total{if $cart_qties == 0} hidden{/if}">
 					{if $priceDisplay == 1}
 						{convertPrice price=$cart->getOrderTotal(false, 4)}
