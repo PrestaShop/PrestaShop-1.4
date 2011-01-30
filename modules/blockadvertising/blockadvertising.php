@@ -94,13 +94,15 @@ class BlockAdvertising extends Module
 
 	public function getContent()
 	{
+		global $protocol_content;
+		
 		$this->postProcess();
 		echo '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">
 <fieldset><legend>'.$this->l('Advertising block configuration').'</legend>
 <a href="'.$this->adv_link.'" target="_blank" title="'.$this->l('Advertising').'">';
 		if ($this->adv_img)
-			echo '<img src="'.$this->adv_img.'" alt="'.$this->l('Advertising image').'" style="margin-left: 100px;"/>';
+			echo '<img src="'.$protocol_content.$this->adv_img.'" alt="'.$this->l('Advertising image').'" style="margin-left: 100px;"/>';
 		else
 			echo $this->l('no image');
 		echo '
