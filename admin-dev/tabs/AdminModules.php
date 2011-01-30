@@ -440,9 +440,12 @@ class AdminModules extends AdminTab
 			if (!empty($filterName))
 				if (stristr($module->name, $filterName) === false AND stristr($module->displayName, $filterName) === false AND stristr($module->description, $filterName) === false)
 					unset($modules[$key]);
-			$autocompleteList .= '{ displayName : "'.$module->displayName.'", desc : "'.$module->description.'", name : "'.$module->name.'"}, ';
-		}
 
+			$autocompleteList .= Tools::jsonEncode(array(
+														'displayName' => (string)$module->displayName,
+														'desc' => (string)$module->description,
+														'name' => (string)$module->name)).', ';
+		}
 		$autocompleteList = rtrim($autocompleteList, ' ,').'];';
 		echo '<script type="text/javascript">'.$autocompleteList.'</script>';
 		$this->displayJavascript();
