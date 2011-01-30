@@ -35,8 +35,8 @@
 			<li><a href="{$link->getPageLink('new-products.php')}">{l s='New products'}</a></li>
 			<li><a href="{$link->getPageLink('best-sales.php')}">{l s='Top sellers'}</a></li>
 			<li><a href="{$link->getPageLink('prices-drop.php')}">{l s='Specials'}</a></li>
-			<li><a href="{$link->getPageLink('manufacturer.php')}">{l s='Manufacturers'}</a></li>
-			<li><a href="{$link->getPageLink('supplier.php')}">{l s='Suppliers'}</a></li>
+			{if $display_manufacturer_link OR $PS_DISPLAY_SUPPLIERS}<li><a href="{$link->getPageLink('manufacturer.php')}">{l s='Manufacturers'}</a></li>{/if}
+			{if $display_supplier_link OR $PS_DISPLAY_SUPPLIERS}<li><a href="{$link->getPageLink('supplier.php')}">{l s='Suppliers'}</a></li>{/if}
 		</ul>
 	</div>
 	<div class="sitemap_block">
