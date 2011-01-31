@@ -44,7 +44,7 @@ class SpecificPriceCore extends ObjectModel
 
 	protected 	$table = 'specific_price';
 	protected 	$identifier = 'id_specific_price';
-	
+
 	private static $_specificPriceCache = array();
 
 	public function getFields()
@@ -107,10 +107,10 @@ class SpecificPriceCore extends ObjectModel
 		** The date is not taken into account for the cache, but this is for the better because it keeps the consistency for the whole script.
 		** The price must not change between the top and the bottom of the page
 		*/
-		
+
 		$key = ((int)$id_product.'-'.(int)$id_shop.'-'.(int)$id_currency.'-'.(int)$id_country.'-'.(int)$id_group.'-'.(int)$quantity);
 		if (!array_key_exists($key, self::$_specificPriceCache))
-		{	
+		{
 			$now = date('Y-m-d H:i:s');
 			self::$_specificPriceCache[$key] = Db::getInstance()->getRow('
 				SELECT *, '.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
@@ -135,7 +135,7 @@ class SpecificPriceCore extends ObjectModel
 
         SpecificPrice::deletePriorities();
 
-		return Configuration::updateValue('PS_SPECIFIC_PRICE_PRIORITIES', rtrim($value, ';')) AND DB::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'specific_price` SET `priority` = 0');
+		return Configuration::updateValue('PS_SPECIFIC_PRICE_PRIORITIES', rtrim($value, ';'));
 	}
 
 	public static function deletePriorities()
