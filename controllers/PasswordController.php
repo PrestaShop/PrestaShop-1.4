@@ -60,8 +60,7 @@ class PasswordControllerCore extends FrontController
 						array('{email}' => $customer->email, 
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname,
-							  '{path_token}' => $customer->secure_key,
-							  '{id_customer}' => (int)$customer->id), 
+							  '{url}' => $this->link->getPageLink('password.php', true).'?token='.$customer->secure_key.'&id_customer='.(int)$customer->id),
 						$customer->email, 
 						$customer->firstname.' '.$customer->lastname))
 							$this->smarty->assign(array('confirmation' => 2, 'email' => $customer->email));
