@@ -373,7 +373,8 @@ class CartCore extends ObjectModel
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic((int)$row['id_product']);
-			$row['stock_quantity'] = $row['quantity_attribute'];
+			if (isset($row['id_product_attribute']) AND (int)$row['id_product_attribute'])
+				$row['stock_quantity'] = $row['quantity_attribute'];
 			if (array_key_exists($row['id_product_attribute'].'-'.$this->id_lang, self::$_attributesLists))
 				$row = array_merge($row, self::$_attributesLists[$row['id_product_attribute'].'-'.$this->id_lang]);
 				
