@@ -1570,7 +1570,7 @@ PRIMARY KEY ( `id_tax_rules_group`, `id_country` , `id_state` )
 
 CREATE TABLE `PREFIX_tax_rules_group` (
 `id_tax_rules_group` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
-`name` VARCHAR( 32 ) NOT NULL ,
+`name` VARCHAR( 50 ) NOT NULL ,
 `active` INT NOT NULL
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -1600,3 +1600,4 @@ CREATE TABLE `PREFIX_log` (
 	`date_upd` datetime NOT NULL,
 	PRIMARY KEY (`id_log`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+

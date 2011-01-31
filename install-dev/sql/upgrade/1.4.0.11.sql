@@ -47,3 +47,6 @@ CREATE TABLE `PREFIX_log` (
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_LOGS_BY_EMAIL', '5', NOW(), NOW());
+
+ALTER TABLE `PREFIX_tax_rules_group` CHANGE `name` `name` VARCHAR( 50 ) NOT NULL;
+
