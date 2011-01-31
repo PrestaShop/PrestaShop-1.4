@@ -748,11 +748,13 @@
 	<!-- Payment methods block -->
 	<h2>4. {l s='Payment methods'}</h2>
 	<div id="opc_block_4" class="opc_block_content">
-		<div id="opc_payment_list"></div>
+		<div id="opc_payment_list">{if $isVirtualCart}<p class="warning">{l s='Please wait... we are going to validate your order'}</p>{/if}</div>
 		
+		{if !$isVirtualCart}
 		<div>
 			<div style="float:left;"><a href="#opc_block_3" class="button opc_button">{l s='Back'}</a></div>
 		</div>
+		{/if}
 		<div class="clear"></div>
 	</div>
 	<!-- END Terms of service block -->

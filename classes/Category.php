@@ -797,14 +797,6 @@ class CategoryCore extends ObjectModel
 		');
 	}
 
-	public function replaceProductIds($products)
-	{
-		$parentCategory = new Category((int)($this->id_parent));
-		if (!$parentCategory)
-			die('parent category does not exist');
-		return $parentCategory->level_depth + 1;
-	}
-
 	public function updatePosition($way, $position)
 	{
 		if (!$res = Db::getInstance()->ExecuteS('
