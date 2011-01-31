@@ -351,8 +351,11 @@ class CartCore extends ObjectModel
 			$row['stock_quantity'] = (int)($row['quantity']);
 			// for compatibility with 1.2 themes
 			$row['quantity'] = (int)($row['cart_quantity']);
-			if ($row['id_product_attribute'])
+			if (isset($row['id_product_attribute']) AND (int)$row['id_product_attribute'])
+			{
 				$row['weight'] = $row['weight_attribute'];
+				$row['stock_quantity'] = $row['quantity_attribute'];
+			}
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 			{
 				$row['price'] = Product::getPriceStatic((int)$row['id_product'], false, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput); // Here taxes are computed only once the quantity has been applied to the product price
@@ -373,8 +376,6 @@ class CartCore extends ObjectModel
 			$row['id_image'] = Product::defineProductImage($row);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic((int)$row['id_product']);
-			if (isset($row['id_product_attribute']) AND (int)$row['id_product_attribute'])
-				$row['stock_quantity'] = $row['quantity_attribute'];
 			if (array_key_exists($row['id_product_attribute'].'-'.$this->id_lang, self::$_attributesLists))
 				$row = array_merge($row, self::$_attributesLists[$row['id_product_attribute'].'-'.$this->id_lang]);
 				
