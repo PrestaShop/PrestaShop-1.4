@@ -42,7 +42,8 @@ $smarty->caching = false;
 $smarty->force_compile = (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
 $smarty->compile_check = false;
 //$smarty->debugging		= true;
-$smarty->debug_tpl = _PS_ALL_THEMES_DIR_.'debug.tpl';
+if (Configuration::get('PS_FORCE_SMARTY_2'))
+	$smarty->debug_tpl = _PS_ALL_THEMES_DIR_.'debug.tpl';
 
 function smartyTranslate($params, &$smarty)
 {
