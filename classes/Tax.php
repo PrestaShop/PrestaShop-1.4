@@ -364,5 +364,29 @@ class TaxCore extends ObjectModel
 
 	   return TaxRulesGroup::getTaxesRate((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)$id_carrier), (int)$id_country, (int)$id_state);
 	}
+
+	public function toggleStatus()
+	{
+	    if (parent::toggleStatus())
+            return $this->_onStatusChange();
+
+        return false;
+	}
+
+	public function update($nullValues = false)
+	{
+	    if (parent::update($nullValues))
+            return $this->_onStatusChange();
+
+        return false;
+	}
+
+	protected function _onStatusChange()
+	{
+        if (!$this->active)
+            return TaxRule::deleteTaxRuleByIdTax($this->id);
+
+        return true;
+	}
 }
 

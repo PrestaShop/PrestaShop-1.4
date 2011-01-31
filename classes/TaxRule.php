@@ -88,5 +88,12 @@ class TaxRuleCore extends ObjectModel
         WHERE `id_tax` = '.(int)$id_tax
         );
     }
+
+    public static function isTaxInUse($id_tax)
+    {
+        return Db::getInstance()->getValue('
+        SELECT COUNT(*) FROM `'._DB_PREFIX_.'tax_rule` WHERE `id_tax` = '.(int)$id_tax
+        );
+    }
 }
 

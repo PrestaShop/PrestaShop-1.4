@@ -157,5 +157,32 @@ class AdminTaxes extends AdminTab
 		else
 			parent::postProcess();
 	}
+
+	protected function _displayDeleteLink($token = NULL, $id)
+	{
+	    global $currentIndex;
+
+		$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
+
+   		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?)';
+        if (TaxRule::isTaxInUse($id))
+            $_cacheLang['DeleteItem'] = $this->l('This tax is currently in use in a tax rule. Are you sure?');
+
+		echo '
+			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].'\');">
+			<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
+	}
+
+	protected function _displayEnableLink($token, $id, $value, $active,  $id_category = NULL, $id_product = NULL)
+	{
+	    global $currentIndex;
+
+        $confirm = ($value AND TaxRule::isTaxInUse($id)) ? 'onclick="return confirm(\''. $this->l('This tax is currently in use in a tax rule. If you continue this tax will be removed from the tax rule, are you sure?').'\')"' : '';
+
+	    echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$active.
+	        ((int)$id_category AND (int)$id_product ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'" '.$confirm.'>
+	        <img src="../img/admin/'.($value ? 'enabled.gif' : 'disabled.gif').'"
+	        alt="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" /></a>';
+	}
 }
 
