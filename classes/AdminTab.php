@@ -124,7 +124,7 @@ abstract class AdminTabCore
 	public $_errors = array();
 
 	/** @var array Confirmations displayed after post processing */
-	private $_conf;
+	protected $_conf;
 
 	/** @var object Object corresponding to the tab */
 	private $_object = false;
