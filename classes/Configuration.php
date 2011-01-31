@@ -226,7 +226,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param string $key Key
 	  * @param mixed $values $values is an array if the configuration is multilingual, a single string else.
 	  * @param boolean $html Specify if html is authorized in value
-	  * @eturn boolean Update result
+	  * @return boolean Update result
 	  */
 	static public function updateValue($key, $values, $html = false)
 	{

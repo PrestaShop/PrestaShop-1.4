@@ -302,7 +302,7 @@ function pSQL($string, $htmlOK = false)
 }
 
 /**
- * Convert \n to <br />
+ * Convert \n and \r\n and \r to <br />
  *
  * @param string $string String to transform
  * @return string New string
