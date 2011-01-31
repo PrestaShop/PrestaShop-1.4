@@ -93,7 +93,7 @@ class TagCore extends ObjectModel
 	 	if (!Validate::isUnsignedId($id_lang) OR !Validate::isTagsList($string))
 			return false;
 	 	
-	 	$tmpTab = array_unique(array_map('trim', explode(',', rtrim($string, ', '))));
+	 	$tmpTab = array_unique(array_map('trim', preg_split('/,/', $string, NULL, PREG_SPLIT_NO_EMPTY)));
 	 	$list = array();
 	 	foreach ($tmpTab AS $tag)
 	 	{
