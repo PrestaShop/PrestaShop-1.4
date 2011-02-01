@@ -53,7 +53,7 @@ class AuthControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('invalid e-mail address');
 			elseif (Customer::customerExists($email))
 			{
-				$this->errors[] = Tools::displayError('you already registered with this email, please fill in your password or ask for a new one');
+				$this->errors[] = Tools::displayError('an account is already registered with this e-mail, please fill in the password or request a new one'); 
 				$_POST['email'] = $_POST['email_create'];
 				unset($_POST['email_create']);
 			}
@@ -103,12 +103,12 @@ class AuthControllerCore extends FrontController
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+						$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
-					$this->errors[] = Tools::displayError('postcode is required.');
+					$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is required');
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-					$this->errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+					$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is invalid');
 			}
 			if (Tools::getValue('dni') != NULL AND $validateDni != 1)
 			{
