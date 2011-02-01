@@ -65,7 +65,6 @@ class EmployeeCore extends ObjectModel
 	/** @var boolean Status */
 	public 		$active = 1;
 	
-	
  	protected 	$fieldsRequired = array('lastname', 'firstname', 'email', 'passwd', 'id_profile', 'id_lang');
  	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32, 'bo_color' => 32, 'bo_theme' => 32);
  	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'id_lang' => 'isUnsignedInt', 
@@ -78,8 +77,8 @@ class EmployeeCore extends ObjectModel
 	{
 	 	parent::validateFields();
 		
-		$fields['id_profile'] = (int)($this->id_profile);
-		$fields['id_lang'] = (int)($this->id_lang);
+		$fields['id_profile'] = (int)$this->id_profile;
+		$fields['id_lang'] = (int)$this->id_lang;
 		$fields['lastname'] = pSQL($this->lastname);
 		$fields['firstname'] = pSQL(Tools::ucfirst($this->firstname));
 		$fields['email'] = pSQL($this->email);
@@ -90,7 +89,7 @@ class EmployeeCore extends ObjectModel
 		$fields['bo_color'] = pSQL($this->bo_color);
 		$fields['bo_theme'] = pSQL($this->bo_theme);
 		$fields['bo_uimode'] = pSQL($this->bo_uimode);
-		$fields['active'] = (int)($this->active);
+		$fields['active'] = (int)$this->active;
 		
 		return $fields;
 	}
@@ -102,11 +101,11 @@ class EmployeeCore extends ObjectModel
 	 */
 	static public function getEmployees()
 	{
-		return (Db::getInstance()->ExecuteS('
+		return Db::getInstance()->ExecuteS('
 		SELECT `id_employee`, CONCAT(`firstname`, \' \', `lastname`) AS "name"
 		FROM `'._DB_PREFIX_.'employee`
 		WHERE `active` = 1
-		ORDER BY `email`'));
+		ORDER BY `email`');
 	}
 	
 	public function add($autodate = true, $nullValues = true)
@@ -122,7 +121,7 @@ class EmployeeCore extends ObjectModel
 	  * @param string $passwd Password is also checked if specified
 	  * @return Employee instance
 	  */
-	public function getByemail($email, $passwd = NULL)
+	public function getByEmail($email, $passwd = NULL)
 	{
 	 	if (!Validate::isEmail($email) OR ($passwd != NULL AND !Validate::isPasswd($passwd)))
 	 		die(Tools::displayError());
@@ -148,12 +147,10 @@ class EmployeeCore extends ObjectModel
 	 	if (!Validate::isEmail($email))
 	 		die (Tools::displayError());
 	 	
-		$result = Db::getInstance()->getRow('
+		return (bool)Db::getInstance()->getValue('
 		SELECT `id_employee`
 		FROM `'._DB_PREFIX_.'employee`
 		WHERE `email` = \''.pSQL($email).'\'');
-
-		return isset($result['id_employee']);
 	}
 
 	/**
@@ -166,29 +163,30 @@ class EmployeeCore extends ObjectModel
 	{
 	 	if (!Validate::isUnsignedId($id_employee) OR !Validate::isPasswd($passwd, 8))
 	 		die (Tools::displayError());
-		$result = Db::getInstance()->getRow('
+			
+		return Db::getInstance()->getValue('
 		SELECT `id_employee`
 		FROM `'._DB_PREFIX_.'employee`
-		WHERE `id_employee` = '.(int)($id_employee).' AND `passwd` = \''.pSQL($passwd).'\'');
-
-		return isset($result['id_employee']) ? $result['id_employee'] : false;
+		WHERE `id_employee` = '.(int)$id_employee.'
+		AND `passwd` = \''.pSQL($passwd).'\'
+		AND active = 1');
 	}
 	
 	static public function countProfile($id_profile, $activeOnly = false)
 	{
-		$sql = 'SELECT COUNT(*) as nb
-				FROM `'._DB_PREFIX_.'employee`  				
-				WHERE `id_profile` = '.(int)($id_profile);
-		$sql .= ($activeOnly) ? ' AND `active` = 1 ' : '';
-		$result = Db::getInstance()->getValue($sql);
-		return $result['nb'];
+		return Db::getInstance()->getValue('
+		SELECT COUNT(*)
+		FROM `'._DB_PREFIX_.'employee`  				
+		WHERE `id_profile` = '.(int)$id_profile.'
+		'.($activeOnly ? ' AND `active` = 1' : ''));
 	}
 	
 	public function isLastAdmin()
 	{
-		return ($this->id_profile == (int)(_PS_ADMIN_PROFILE_)			
-			       AND Employee::countProfile($this->id_profile, true) == 1
-				   AND $this->active);
+		return ($this->id_profile == _PS_ADMIN_PROFILE_		
+			AND Employee::countProfile($this->id_profile, true) == 1
+			AND $this->active
+		);
 	}
 }
 
