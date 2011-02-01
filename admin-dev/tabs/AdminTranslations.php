@@ -342,9 +342,8 @@ class AdminTranslations extends AdminTab
 				
 				foreach ($matches[1] AS $key)
 				{
-					$post_key = md5($module_name.'_'.($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'_'.Tools::strtolower($template_name).'_'.md5($key));
+					$post_key = md5(Tools::strtolower($module_name).'_'.($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'_'.Tools::strtolower($template_name).'_'.md5($key));
 					$pattern = '\'<{'.Tools::strtolower($module_name).'}'.($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key).'\'';
-					
 					if (array_key_exists($post_key, $_POST) AND !empty($_POST[$post_key]) AND !in_array($pattern, $_tmp))
 					{
 						$_tmp[] = $pattern;
@@ -413,7 +412,6 @@ class AdminTranslations extends AdminTab
 				foreach ($matches[1] AS $key)
 				{
 					$module_key = ($is_default ? self::DEFAULT_THEME_NAME : '').'<{'.Tools::strtolower($module_name).'}'.($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key);
-					
 					// to avoid duplicate entry
 					if (!in_array($module_key, $_tmp))
 					{
@@ -680,7 +678,6 @@ class AdminTranslations extends AdminTab
 					
 					foreach ($arr_find_and_write as $key=>$value)
 						$this->findAndWriteTranslationsIntoFile($value['file_name'], $value['files'], $value['theme'], $value['module'], $value['dir']);
-					
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 				}
 			}
@@ -1778,7 +1775,7 @@ class AdminTranslations extends AdminTab
 							{
 								echo '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
 								if (strlen($key) < TEXTAREA_SIZED)
-									echo '<input type="text" style="width: 450px" name="'.md5($module_name.'_'.$theme_name.'_'.$template_name.'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
+									echo '<input type="text" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
 								else
 									echo '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5($module_name.'_'.$theme_name.'_'.$template_name.'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
 							}
