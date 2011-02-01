@@ -438,7 +438,9 @@ class FrontControllerCore
 		$this->smarty->assign(array(
 			'orderby' => $this->orderBy,
 			'orderway' => $this->orderWay,
-			'orderwayposition' => $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))],
+			'orderbydefault' => $orderByValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_BY'))],
+			'orderwayposition' => $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))], // Deprecated: orderwayposition
+			'orderwaydefault' => $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))],
 			'stock_management' => (int)($stock_management)));
 	}
 	
