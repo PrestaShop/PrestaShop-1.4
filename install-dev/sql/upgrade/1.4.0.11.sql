@@ -50,3 +50,10 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 
 ALTER TABLE `PREFIX_tax_rules_group` CHANGE `name` `name` VARCHAR( 50 ) NOT NULL;
 
+CREATE TABLE `PREFIX_import_match` (
+  `id_import_match` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `match` text NOT NULL,
+  `skip` int(2) NOT NULL,
+  PRIMARY KEY (`id_import_match`)
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;

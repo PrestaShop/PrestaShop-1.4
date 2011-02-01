@@ -1601,3 +1601,10 @@ CREATE TABLE `PREFIX_log` (
 	PRIMARY KEY (`id_log`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_import_match` (
+  `id_import_match` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `match` text NOT NULL,
+  `skip` int(2) NOT NULL,
+  PRIMARY KEY (`id_import_match`)
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
