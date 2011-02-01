@@ -519,20 +519,17 @@ class AdminTranslations extends AdminTab
 		 	if ($this->tabAccess['edit'] === '1' && ($id_lang = Language::getIdByIso(Tools::getValue('lang'))) > 0)
 		 	{
 		 		$content = Tools::getValue('mail');
-
+				// Magic Quotes shall... not.. PASS!
+				if (_PS_MAGIC_QUOTES_GPC_)
+					foreach ($content as $key => $value)
+						$content[$key] = array_map('stripslashes', $value);
+				
 		 		//core mails
-		 		foreach($content['html'] AS $filename => $file_content)
+		 		foreach ($content['html'] AS $filename => $file_content)
 		 		{
 					$filename = str_replace('..', '', $filename);
 					if (Validate::isCleanHTML($file_content))
-					{
-						$conn = @fopen(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, 'w+');
-						if ($conn)
-						{
-							fwrite($conn, $file_content);
-							fclose($conn);
-						}
-					}
+						file_put_contents(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, $file_content);
 					else
 						$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
 				}
@@ -551,22 +548,15 @@ class AdminTranslations extends AdminTab
 				foreach ($content['modules'] AS $module_dir => $versions)
 		 		{
 		 			if (!file_exists(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang')))
-		 			{
 		 				mkdir(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang'), 0777);
-		 			}
 		 			if (isset($versions['html']))
 						foreach ($versions['html'] AS $filename => $file_content)
 				 		{
 							$filename = str_replace('..', '', $filename);
 							if (Validate::isCleanHTML($file_content))
 							{
-								$conn = fopen(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
-								if ($conn)
-								{
-									fwrite($conn, $file_content);
-									fclose($conn);
-									@chmod(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 0777);
-								}
+								file_put_contents(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, $file_content);
+								chmod(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 0777);
 							}
 							else
 								$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
@@ -575,108 +565,73 @@ class AdminTranslations extends AdminTab
 				 		foreach ($versions['txt'] AS $filename => $file_content)
 				 		{
 							$filename = str_replace('..', '', $filename);
-							$conn = fopen(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
-							if ($conn)
-							{
-								fwrite($conn, $file_content);
-								fclose($conn);
-								@chmod(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 0777);
-							}
+							file_put_contents(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, $file_content);
+							chmod(_PS_MODULE_DIR_.$module_dir.'/mails/'.Tools::getValue('lang').'/'.$filename, 0777);
 						}
 				}
 
 				// themes mail
 				foreach ($content['themes'] AS $theme_dir_name => $theme_dir)
 				{
-				if (isset($theme_dir['html']))
-					foreach ($theme_dir['html'] AS $filename => $file_content)
-					{
-						$filename = str_replace('..', '', $filename);
-						if (Validate::isCleanHTML($file_content))
+					if (isset($theme_dir['html']))
+						foreach ($theme_dir['html'] AS $filename => $file_content)
 						{
-							$conn = @fopen(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
-							if ($conn)
-							{
-								fwrite($conn, $file_content);
-								fclose($conn);
-							}
+							$filename = str_replace('..', '', $filename);
+							if (Validate::isCleanHTML($file_content))
+								file_put_contents(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, $file_content);
+							else
+								$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
 						}
-						else
-							$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
-					}
-				if (isset($theme_dir['txt']))
-					foreach ($content['txt'] AS $filename => $file_content)
-					{
-						$filename = str_replace('..', '', $filename);
-						$conn = @fopen(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, 'w+');
-						if ($conn)
+					if (isset($theme_dir['txt']))
+						foreach ($content['txt'] AS $filename => $file_content)
 						{
-							fwrite($conn, $file_content);
-							fclose($conn);
+							$filename = str_replace('..', '', $filename);
+							file_put_contents(_PS_MAIL_DIR_.Tools::getValue('lang').'/'.$filename, $file_content);
 						}
-					}
 				}
 
 				// themes modules mails
 				foreach ($content['themes_module'] AS $theme_dir_name => $theme_dir)
-				foreach ($theme_dir AS $theme_module_dir_name => $theme_module_dir)
-				{
-					foreach ($theme_module_dir['html'] AS $filename => $file_content)
+					foreach ($theme_dir AS $theme_module_dir_name => $theme_module_dir)
 					{
-						$filename = str_replace('..', '', $filename);
-						if (Validate::isCleanHTML($file_content))
+						foreach ($theme_module_dir['html'] AS $filename => $file_content)
 						{
-							$conn = @fopen(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/modules/'.$theme_module_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
-							if ($conn)
+							$filename = str_replace('..', '', $filename);
+							if (Validate::isCleanHTML($file_content))
+								file_put_contents(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/modules/'.$theme_module_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, $file_content);
+							else
+								$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
+						}
+						if (isset($theme_module_dir['txt']))
+						foreach($theme_module_dir['txt'] AS $filename => $file_content)
+						{
+							$filename = str_replace('..', '', $filename);
+							file_put_contents(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/modules/'.$theme_module_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, $file_content);
+						}
+					}
+
+				if ($subjectTab = Tools::getValue('subject') AND is_array($subjectTab))
+				{
+					foreach ($subjectTab AS $key => $subjecttype)
+					{
+						if ($key == 'mails')
+						{
+							if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+								die(Tools::displayError());
+							$this->writeSubjectTranslationFile($subjecttype, _PS_MAIL_DIR_.Tools::strtolower(Tools::getValue('lang')).'/lang.php');
+						}
+						elseif ($key == 'themes')
+						{
+							foreach ($subjecttype AS $nametheme => $subtheme)
 							{
-								fwrite($conn, $file_content);
-								fclose($conn);
+								if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
+									die(Tools::displayError());
+								$this->writeSubjectTranslationFile($subtheme, _PS_ALL_THEMES_DIR_.$nametheme.'/mails/'.Tools::strtolower(Tools::getValue('lang')).'/lang.php');
 							}
 						}
-						else
-							$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
 					}
-					if (isset($theme_module_dir['txt']))
-					foreach($theme_module_dir['txt'] AS $filename => $file_content)
-					{
-						$filename = str_replace('..', '', $filename);
-						$conn = @fopen(_PS_ALL_THEMES_DIR_.$theme_dir_name.'/modules/'.$theme_module_dir_name.'/mails/'.Tools::getValue('lang').'/'.$filename, 'w+');
-						if ($conn)
-						{
-							fwrite($conn, $file_content);
-							fclose($conn);
-						}
-					}
+					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 				}
-
-				// subject mail
-				$subjecttab = Tools::getValue('subject');
-				//Tools::d($subjecttab['mails']);
-			if (isset($subjecttab))
-			{
-				foreach ($subjecttab AS $key => $subjecttype)
-				{
-
-					if ($key == 'mails')
-					{
-						if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
-							die(Tools::displayError());
-						$this->writeSubjectTranslationFile($subjecttype, _PS_MAIL_DIR_.Tools::strtolower(Tools::getValue('lang')).'/lang.php');
-					}
-					elseif ($key == 'themes')
-					{
-						//Tools::d($subjecttype);
-						foreach ($subjecttype AS $nametheme => $subtheme)
-						{
-						if (!Validate::isLanguageIsoCode(Tools::strtolower(Tools::getValue('lang'))))
-							die(Tools::displayError());
-						$this->writeSubjectTranslationFile($subtheme, _PS_ALL_THEMES_DIR_.$nametheme.'/mails/'.Tools::strtolower(Tools::getValue('lang')).'/lang.php');
-						}
-					}
-				}
-				Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
-			}
-				// end subject mail
 
 				if (count($this->_errors) == 0)
 				{
@@ -695,9 +650,7 @@ class AdminTranslations extends AdminTab
 				}
 			}
 			else
-			{
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
-			}
 		}
 		elseif (Tools::isSubmit('submitTranslationsModules'))
 		{
@@ -705,9 +658,7 @@ class AdminTranslations extends AdminTab
 			{
 				$array_lang_src = Language::getLanguages(false);
 				foreach ($array_lang_src as $language)
-				{
 					$this->all_iso_lang[] = $language['iso_code'];
-				}
 				
 				$lang = Tools::strtolower($_POST['lang']);
 				if (!Validate::isLanguageIsoCode($lang))
@@ -743,14 +694,14 @@ class AdminTranslations extends AdminTab
 		global $currentIndex, $cookie;
 
 		$translations = array(
-						'front' => $this->l('Front Office translations'),
-						'back' => $this->l('Back Office translations'),
-						'errors' => $this->l('Error message translations'),
-						'fields' => $this->l('Field name translations'),
-						'modules' => $this->l('Module translations'),
-						'pdf' => $this->l('PDF translations'),
-						'mails' => $this->l('Mails translations'),
-						);
+			'front' => $this->l('Front Office translations'),
+			'back' => $this->l('Back Office translations'),
+			'errors' => $this->l('Error message translations'),
+			'fields' => $this->l('Field name translations'),
+			'modules' => $this->l('Module translations'),
+			'pdf' => $this->l('PDF translations'),
+			'mails' => $this->l('Mails translations'),
+		);
 
 		if ($type = Tools::getValue('type'))
 			$this->{'displayForm'.$type}(Tools::strtolower(Tools::getValue('lang')));
@@ -781,7 +732,7 @@ class AdminTranslations extends AdminTab
 				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add a language directly from prestashop.com here').'</p>
 					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:').' ';
 			// Get all iso code available
-			if(@fsockopen('www.prestashop.com', 80))
+			if(fsockopen('www.prestashop.com', 80))
 			{
 				$lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
 				if ($lang_packs != '' && $lang_packs = json_decode($lang_packs))
@@ -793,10 +744,10 @@ class AdminTranslations extends AdminTab
 					echo 	'</select>';
 				}
 				else
-					echo '		<p>'.$this->l('Cannot connect to prestashop.com').'</p>';
+					echo '<p>'.$this->l('Cannot connect to prestashop.com').'</p>';
 			}
-			echo		'</div>
-					<div style="float:left;">
+			echo '	</div>
+					<div style="float:left">
 						<input type="submit" value="'.$this->l('Add the language').'" name="submitAddLanguage" class="button" style="margin:0px 0px 0px 25px;" />
 					</div>
 				</div>
@@ -1267,13 +1218,11 @@ class AdminTranslations extends AdminTab
 						}
 					}
 		foreach (scandir(_PS_MODULE_DIR_) AS $module_dir)
-			if ($module_dir != '.svn' && $module_dir != '.' && $module_dir != '..' && file_exists(_PS_MODULE_DIR_.$module_dir.'/mails'))
+			if ($module_dir[0] != '.' AND file_exists(_PS_MODULE_DIR_.$module_dir.'/mails'))
 				foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails') AS $mail_lang_dir)
-				{
 					if (in_array($mail_lang_dir, $langIds))
 					{
 						foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/'.$mail_lang_dir) AS $tpl_file)
-						{
 							if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
 							{
 								if (!isset($moduleMailTpls[$module_dir][$tpl_file]))
@@ -1287,29 +1236,19 @@ class AdminTranslations extends AdminTab
 									$subjectModuleMailContent = self::getSubjectMailContent(_PS_MAIL_DIR_.$mail_lang_dir);
 								}
 							}
-						}
 						if ($mail_lang_dir == $lang AND file_exists(_PS_MODULE_DIR_.$module_dir.'/mails/en'))
-						{
 							foreach (scandir(_PS_MODULE_DIR_.$module_dir.'/mails/en') AS $tpl_file)
-							{
 								if (strripos($tpl_file, '.html') > 0 || strripos($tpl_file, '.txt') > 0)
 								{
 									if (!isset($moduleMailTpls[$module_dir][$tpl_file]))
-									{
 										$moduleMailTpls[$module_dir][$tpl_file] = array();
-									}
 									if (!isset($moduleMailTpls[$module_dir][$tpl_file][$mail_lang_dir]))
-									{
 										$moduleMailTpls[$module_dir][$tpl_file][$mail_lang_dir] = '';
-									}
 								}
-							}
-						}
 					}
-				}
 		foreach (scandir(_PS_ALL_THEMES_DIR_) AS $theme_dir)
 		{
-			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails'))
+			if ($theme_dir[0] != '.' AND is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails'))
 			{
 				if (in_array($mail_lang_dir, $langIds) AND file_exists(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir))
 					foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/mails/'.$mail_lang_dir) AS $tpl_file)
@@ -1327,7 +1266,7 @@ class AdminTranslations extends AdminTab
 							}
 						}
 			}
-			if ($theme_dir != '.svn' && $theme_dir != '.' && $theme_dir != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules'))
+			if ($theme_dir[0] != '.' AND is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules'))
 			{
 				foreach (scandir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules') AS $theme_name_module)
 					if ($theme_name_module != '.svn' && $theme_name_module != '.' && $theme_name_module != '..' && is_dir(_PS_ALL_THEMES_DIR_.$theme_dir.'/modules/'.$theme_name_module.'/mails'))
@@ -1357,17 +1296,13 @@ class AdminTranslations extends AdminTab
 		{
 			$empty = 0;
 			foreach ($mailTpls AS $key => $tpl_file)
-			{
 				if (Tools::strlen($tpl_file[$lang]) == 0)
 					$empty++;
-			}
 
 			foreach ($moduleMailTpls AS $key => $tpl_file)
 				foreach ($tpl_file AS $key2 => $tpl_file2)
-				{
 					if (Tools::strlen($tpl_file[$key2][$lang]) == 0)
 						$empty++;
-				}
 
 			return array('total' => count($mailTpls)+count($moduleMailTpls,COUNT_RECURSIVE), 'empty' => $empty);
 		}
@@ -1407,8 +1342,7 @@ class AdminTranslations extends AdminTab
 					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
 					
 				});
-				function displayTiny(obj)
-				{
+				function displayTiny(obj) {
 					tinyMCE.get(obj.attr(\'name\')).show();
 				}
 			</script>
@@ -1442,7 +1376,7 @@ class AdminTranslations extends AdminTab
 		foreach ($mailTpls AS $mailTplName => $mailTpl)
 		{
 			if ((strripos($mailTplName, '.html') AND isset($subjectMail[substr($mailTplName, 0, -5)]))
-			OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
+				OR (strripos($mailTplName, '.txt') AND isset($subjectMail[substr($mailTplName, 0, -4)])))
 			{
 				$subject_mail = isset($subjectMail[substr($mailTplName, 0, -5)]) ? $subjectMail[substr($mailTplName, 0, -5)] : '' ; 
 				$subject_mail = ($subject_mail === '' AND isset($subjectMail[substr($mailTplName, 0, -4)])) ? $subjectMail[substr($mailTplName, 0, -4)] : $subject_mail ;
@@ -1454,13 +1388,11 @@ class AdminTranslations extends AdminTab
 				if (strripos($mailTplName, '.html'))
 				{
 					if ($subject_mail !== '')
-					{
 						echo '
 						<div class="label-subject">
 							<b>'.$this->l('Subject:').'</b>&nbsp;'.$subject_mail.'<br />
 							<input type="text" name="subject[mails]['.$subject_mail.']" value="'.(isset($subjectMailContent[$subject_mail]) ? $subjectMailContent[$subject_mail] : '').'" />
 						</div>';
-					}
 					echo '
 					<div>
 						<iframe style="background:white;border:1px solid #DFD5C3;" border="0" src ="'.__PS_BASE_URI__.'mails/'.$lang.'/'.$mailTplName.'?'.(rand(0,1000000000000)).'" width="565" height="497"></iframe>
@@ -1469,11 +1401,8 @@ class AdminTranslations extends AdminTab
 					<textarea style="display:none;" class="rte mailrte" cols="80" rows="30" name="mail[html]['.$mailTplName.']">'.(isset($mailTpl[$lang]) ? htmlentities(stripslashes($mailTpl[$lang]), ENT_COMPAT, 'UTF-8') : '').'</textarea>';
 				}
 				else
-				{
 					echo '<div><textarea class="rte mailrte noEditor" cols="80" rows="30" name="mail[txt]['.$mailTplName.']" style="width:560px;margin=0;">'.htmlentities(stripslashes(strip_tags($mailTpl[$lang])), ENT_COMPAT, 'UTF-8').'</textarea></div>';
-				}
-				echo '
-					</div><!-- .mail-form -->
+				echo '</div><!-- .mail-form -->
 				</div><!-- .block-mail -->';
 			}
 		}
