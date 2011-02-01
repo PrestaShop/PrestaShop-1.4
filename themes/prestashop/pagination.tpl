@@ -79,10 +79,12 @@
 				<input type="submit" class="button_mini" value="{l s='OK'}" />
 				<label for="nb_item">{l s='items:'}</label>
 				<select name="n" id="nb_item">
+				{assign var="lastnValue" value="0"}
 				{foreach from=$nArray item=nValue}
-					{if $nValue <= $nb_products}
+					{if $lastnValue <= $nb_products}
 						<option value="{$nValue|escape:'htmlall':'UTF-8'}" {if $n == $nValue}selected="selected"{/if}>{$nValue|escape:'htmlall':'UTF-8'}</option>
 					{/if}
+					{assign var="lastnValue" value=$nValue}
 				{/foreach}
 				</select>
 				{if is_array($requestNb)}
