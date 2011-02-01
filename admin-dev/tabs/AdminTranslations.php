@@ -680,6 +680,7 @@ class AdminTranslations extends AdminTab
 						$this->findAndWriteTranslationsIntoFile($value['file_name'], $value['files'], $value['theme'], $value['module'], $value['dir']);
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 				}
+				d('test');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
@@ -1777,7 +1778,7 @@ class AdminTranslations extends AdminTab
 								if (strlen($key) < TEXTAREA_SIZED)
 									echo '<input type="text" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
 								else
-									echo '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5($module_name.'_'.$theme_name.'_'.$template_name.'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
+									echo '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
 							}
 							echo '
 									</table>
