@@ -1313,7 +1313,7 @@ class AdminImport extends AdminTab
 			if (MAX_COLUMNS * (int)($current_table) <= $i AND (int)($i) < MAX_COLUMNS * ((int)($current_table) + 1))
 				echo '
 				<th style="width: '.(750 / MAX_COLUMNS).'px; vertical-align: top; padding: 4px">
-					<select onchange="askFeatureName(this, '.$i.');" style="width: '.(750 / MAX_COLUMNS).'px;" id="type_value['.$i.']" name="type_value['.$i.']">
+					<select onchange="askFeatureName(this, '.$i.');" style="width: '.(750 / MAX_COLUMNS).'px;" id="type_value['.$i.']" name="type_value['.$i.']" class="type_value">
 						'.$this->getTypeValuesOptions($i).'
 					</select>
 					<div id="features_'.$i.'" style="display: none;"><input style="width: 90px" type="text" name="" id="feature_name_'.$i.'"><input type="button" value="ok" onclick="replaceFeature($(\'#feature_name_'.$i.'\').attr(\'name\'), '.$i.');"></div>
@@ -1343,11 +1343,27 @@ class AdminImport extends AdminTab
 	public function displayCSV()
 	{
 		global $currentIndex;
-
-		echo '<h2>'.$this->l('Your data').'</h2>'.'
-		<h3>'.$this->l('Please set the value type of each column').'</h3>';
-
+		$importMatchs = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'import_match');
+		
 		echo '
+		<script src="'._PS_JS_DIR_.'adminImport.js"></script>
+		<script type="text/javascript">
+			var errorEmpty = "'.$this->l('Please enter a name to save.').'"
+		</script>
+		<h2>'.$this->l('Your data').'</h2>'.'
+		<div style="float:right">
+		<b>'.$this->l('Save and load your matching configuration').' : </b><br><br>
+		<input type="text" name="newImportMatchs" id="newImportMatchs"><a id="saveImportMatchs" class="button" href="#">'.$this->l('Save').'</a><br><br>
+		<div id="selectDivImportMatchs" '.(!$importMatchs ? 'style="display:none"' : '' ).'>';
+			echo '<select id="valueImportMatchs">';
+			foreach($importMatchs as $match)
+				echo '<option id="'.htmlentities($match['id_import_match'],ENT_NOQUOTES, 'UTF-8').'" value="'.htmlentities($match['match'],ENT_NOQUOTES, 'UTF-8').'">'.htmlentities($match['name'],ENT_NOQUOTES, 'UTF-8').'</option>';
+			echo '
+				</select>
+				<a class="button" id="loadImportMatchs" href="#">'.$this->l('Load').'</a>
+				<a class="button" id="deleteImportMatchs" href="#">'.$this->l('Delete').'</a>';
+		
+		echo '</div></div><h3>'.$this->l('Please set the value type of each column').'</h3>
 		<div id="error_duplicate_type" class="warning warn" style="display:none;">
 			<h3>'.$this->l('Columns cannot have the same value type').'</h3>
 		</div>
