@@ -60,8 +60,7 @@ class GroupCore extends ObjectModel
 	private static $_customerReduction = array();
 	private static $_groupPriceDisplayMethod = array();
 	
-	protected	$webserviceParameters = array(
-	);
+	protected	$webserviceParameters = array();
 	
 	public function getFields()
 	{

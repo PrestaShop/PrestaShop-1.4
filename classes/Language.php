@@ -52,8 +52,7 @@ class LanguageCore extends ObjectModel
 	private static $_checkedLangs;
 	private static $_LANGUAGES;
 	
-	protected	$webserviceParameters = array(
-	);
+	protected	$webserviceParameters = array();
 	
 	public	function __construct($id = NULL, $id_lang = NULL)
 	{

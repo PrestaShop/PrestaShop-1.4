@@ -100,6 +100,12 @@ class WebserviceRequest
 		'stores' => array()
 	);
 	
+	/** @var string The image type (product, category, general,...) */
+	private $_imageType = NULL;
+	
+	/** @var string The product image declination id */
+	private $_productImageDeclinationId = NULL;
+	
 	/** @var string The file path of the image to display. If not null, the image will be displayed, even if the XML output was not empty */
 	private $_imgToDisplay;
 	
@@ -1246,7 +1252,7 @@ class WebserviceRequest
 		if (strlen($this->_xmlOutput) > 0)
 		{
 			$xml_start = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-			$xml_start .= '<prestashop xmlns="'.$this->_docUrl.'" xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
+			$xml_start .= '<prestashop xmlns="'.$this->_docUrl.'" xmlns:xlink="http://www.w3.org/1999/xlink" access_time="'.time().'" shop_url="'.Tools::getHttpHost(true).__PS_BASE_URI__.'">'."\n";
 			$xml_end = '</prestashop>'."\n";
 			
 			$return['type'] = 'xml';
@@ -1337,6 +1343,8 @@ class WebserviceRequest
 			$this->_urlSegment[4] = '';
 		if (count($this->_urlSegment) == 5)
 			$this->_urlSegment[5] = '';
+		
+		$this->_imageType = $this->_urlSegment[1];
 		
 		switch ($this->_urlSegment[1])
 		{
@@ -1494,55 +1502,51 @@ class WebserviceRequest
 	 * @param string $directory the file path of the root of the images folder type
 	 * @return boolean
 	 */
-	private function manageDeclinatedImages($directory, $product = false)
+	private function manageDeclinatedImages($directory)
 	{
+		$product = ($this->_imageType == 'products');
+		$image_type = $this->_urlSegment[1];
 		if ($product)
 		{
-			$image_size = $this->_urlSegment[3];
+			$image_size = $this->_urlSegment[4];
+			$image_id = $this->_urlSegment[3];//TODO
 		}
-		else
-		{
-			$image_size = $this->_urlSegment[3];
-		}
-		$image_type = $this->_urlSegment[1];
 		
-		//d($image_size);
 		/*
-		 * 
-		 *      GET    (bin)
-		 *   images/product ("product_list")  (N-2)
-		 *   	GET    (xml) (list of image)
-		 *   images/product/[1,+] ("product_description")  (N-3)
+		 *ok    GET    (bin)
+		 *ok images/product ("product_list")  (N-2)
+		 *ok	GET    (xml) (list of image)
+		 *ok images/product/[1,+] ("product_description")  (N-3)
 		 *   	GET    (xml) (legend, declinations, xlink to images/product/[1,+]/bin)
-		 *   images/product/[1,+]/bin ("product_bin")  (N-4)
-		 *   	GET    (bin)
+		 *ok images/product/[1,+]/bin ("product_bin")  (N-4)
+		 *ok 	GET    (bin)
 		 *      POST   (bin) (if image does not exists)
-		 *   images/product/[1,+]/[1,+] ("product_declination")  (N-4)
-		 *   	GET    (bin)
+		 *ok images/product/[1,+]/[1,+] ("product_declination")  (N-4)
+		 *ok 	GET    (bin)
 		 *   	POST   (xml) (legend)
 		 *   	PUT    (xml) (legend)
 		 *      DELETE
-		 *   images/product/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
+		 *ok images/product/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
 		 *   	POST   (bin) (if image does not exists)
-		 *   	GET    (bin)
+		 *ok 	GET    (bin)
 		 *   	PUT    (bin)
 		 *   images/product/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
-		 *   	GET    (bin)
-		 *   images/product/default ("product_default") (N-3)
-		 *   	GET    (bin)
-		 *   images/product/default/[en,+] ("product_default_i18n") (N-4)
-		 *   	GET    (bin)
+		 *ok 	GET    (bin)
+		 *ok images/product/default ("product_default") (N-3)
+		 *ok 	GET    (bin)
+		 *ok images/product/default/[en,+] ("product_default_i18n") (N-4)
+		 *ok 	GET    (bin)
 		 *      POST   (bin)
 		 *      PUT   (bin)
 		 *      DELETE
-		 *   images/product/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
-		 * 		GET    (bin)
+		 *ok images/product/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
+		 *ok	GET    (bin)
 		 * 
 		 * */
 		
 		
 		// Get available image sizes for the current image type
-		$normalImageSizes = ImageType::getImagesTypes($this->_urlSegment[1]);
+		$normalImageSizes = ImageType::getImagesTypes($image_type);
 		$normalImageSizeNames = array();
 		foreach ($normalImageSizes as $normalImageSize)
 			$normalImageSizeNames[] = $normalImageSize['name'];
@@ -1568,16 +1572,18 @@ class WebserviceRequest
 				{
 					$this->_xmlOutput .= '<languages>'."\n";
 					foreach ($langList as $lang)
-						$this->_xmlOutput .= '<language iso="'.$lang['iso_code'].'" xlink:href="'.$this->_wsUrl.$this->_urlSegment[0].'/'.$this->_urlSegment[1].'/'.$this->_urlSegment[2].'/'.$lang['iso_code'].'" get="true" put="true" post="true" delete="true" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
+						$this->_xmlOutput .= '<language iso="'.$lang['iso_code'].'" xlink:href="'.$this->_wsUrl.'images/'.$image_type.'/default/'.$lang['iso_code'].'" get="true" put="true" post="true" delete="true" head="true" upload_allowed_mimetypes="'.implode(', ', $this->_acceptedImgMimeTypes).'" />'."\n";
 					$this->_xmlOutput .= '</languages>'."\n";
 					return true;
 				}
 				else
 				{
-					if ($this->_urlSegment[4] != '')
-						$filename = $directory.$this->_urlSegment[3].'-'.$this->_urlSegment[2].'-'.$this->_urlSegment[4].'.jpg';
+					$lang_iso = $this->_urlSegment[3];
+					$image_size = $this->_urlSegment[4];
+					if ($image_size != '')
+						$filename = $directory.$lang_iso.'-default-'.$image_size.'.jpg';
 					else
-						$filename = $directory.$this->_urlSegment[3].'.jpg';
+						$filename = $directory.$lang_iso.'.jpg';
 					$filename_exists = file_exists($filename);
 					return $this->manageDeclinatedImagesCRUD($filename_exists, $filename, $normalImageSizes, $directory);//TODO
 				}
@@ -1597,15 +1603,29 @@ class WebserviceRequest
 				$this->_xmlOutput .= '</image_types>'."\n";
 				$this->_xmlOutput .= '<images>'."\n";
 				$nodes = scandir($directory);
+				$lastId = 0;
 				foreach ($nodes as $node)
 					// avoid too much preg_match...
 					if ($node != '.' && $node != '..' && $node != '.svn')
 					{
-						preg_match('/^(\d)\.jpg*$/Ui', $node, $matches);
-						if (isset($matches[1]))
+						if ($product)
 						{
-							$id = $matches[1];
-							$this->_xmlOutput .= '<image id="'.$id.'" xlink:href="'.$this->_wsUrl.$this->_urlSegment[0].'/'.$this->_urlSegment[1].'/'.$id.'" />'."\n";
+							preg_match('/^(\d+)-(\d+)\.jpg*$/Ui', $node, $matches);
+							if (isset($matches[1]) && $matches[1] != $lastId)
+							{
+								$lastId = $matches[1];
+								$id = $matches[1];
+								$this->_xmlOutput .= '<image id="'.$id.'" xlink:href="'.$this->_wsUrl.'images/'.$image_type.'/'.$id.'" />'."\n";
+							}
+						}
+						else
+						{
+							preg_match('/^(\d+)\.jpg*$/Ui', $node, $matches);
+							if (isset($matches[1]))
+							{
+								$id = $matches[1];
+								$this->_xmlOutput .= '<image id="'.$id.'" xlink:href="'.$this->_wsUrl.'images/'.$image_type.'/'.$id.'" />'."\n";
+							}
 						}
 					}
 				$this->_xmlOutput .= '</images>'."\n";
@@ -1614,22 +1634,100 @@ class WebserviceRequest
 			
 			default:
 				// If id is detected
-				if (Validate::isUnsignedId($this->_urlSegment[2]))
+				$object_id = $this->_urlSegment[2];
+				if (Validate::isUnsignedId($object_id))
 				{
-					$orig_filename = $directory.$this->_urlSegment[2].'.jpg';
-					$orig_filename_exists = file_exists($directory.$this->_urlSegment[2].'.jpg');
-					
+					// For the product case
+					if ($product)
+					{
+						// Get available image ids
+						$available_image_ids = array();
+						$nodes = scandir($directory);
+						foreach ($nodes as $node)
+							// avoid too much preg_match...
+							if ($node != '.' && $node != '..' && $node != '.svn')
+							{
+								preg_match('/^'.intval($object_id).'-(\d+)\.jpg*$/Ui', $node, $matches);
+								if (isset($matches[1]))
+									$available_image_ids[] = $matches[1];
+							}
+						/*
+						if (!count($available_image_ids))
+						{
+							//$this->setError(400, 'This image id does not exist');
+							d('TODO');
+						}*/
+						
+						// If an image id is specified
+						if ($this->_urlSegment[3] != '')
+						{
+							if ($this->_urlSegment[3] == 'bin')
+							{
+								if ($this->_method == 'POST')
+								{
+									$orig_filename = $directory.$object_id.'-'.$this->_productImageDeclinationId.'-'.$available_image_ids[0].'.jpg';//TODO get the default one
+									$orig_filename_exists = file_exists($orig_filename);
+									
+								}
+								else
+								{
+									$orig_filename = $directory.$object_id.'-'.$available_image_ids[0].'.jpg';//TODO get the default one
+									$orig_filename_exists = file_exists($orig_filename);
+								}
+								return $this->manageDeclinatedImagesCRUD($orig_filename_exists, $orig_filename, $normalImageSizes, $directory);
+							}
+							elseif (!Validate::isUnsignedId($object_id) || !in_array($this->_urlSegment[3], $available_image_ids))
+							{
+								$this->setError(400, 'This image id does not exist');
+								return false;
+							}
+							$image_id = $this->_urlSegment[3];
+							$orig_filename = $directory.$object_id.'-'.$image_id.'.jpg';
+							$image_size = $this->_urlSegment[4];
+							$filename = $directory.$object_id.'-'.$image_id.'-'.$image_size.'.jpg';
+						}
+						else
+						{
+							if ($available_image_ids)
+							{
+								$this->_xmlOutput .= '<image id="'.$object_id.'">'."\n";
+								foreach ($available_image_ids as $available_image_id)
+									$this->_xmlOutput .= '<declination id="'.$available_image_id.'" xlink:href="'.$this->_wsUrl.'images/'.$image_type.'/'.$object_id.'/'.$available_image_id.'" />'."\n";
+								$this->_xmlOutput .= '</image>'."\n";
+								return true;
+							}
+							else
+							{
+								$this->setStatus(404);
+								return false;
+							}
+						}
+						
+					}
+					// for all other cases
+					else
+					{
+						$orig_filename = $directory.$object_id.'.jpg';
+						$image_size = $this->_urlSegment[3];
+						$filename = $directory.$object_id.'-'.$image_size.'.jpg';
+					}
+					$orig_filename_exists = file_exists($orig_filename);
+						
 					// If a size was given try to display it
-					if ($this->_urlSegment[3] != '')
+					if ($image_size != '')
 					{
 						// Check the given size
-						if (!in_array($this->_urlSegment[3], $normalImageSizeNames))
+						if ($product && $image_size == 'bin')
 						{
-							$this->setErrorDidYouMean(400, 'This image type does not exist', $this->_urlSegment[3], $normalImageSizeNames);
+							$this->_imgToDisplay = $directory.$object_id.'-'.$image_id.'.jpg';
+							return true;
+						}
+						elseif (!in_array($image_size, $normalImageSizeNames))
+						{
+							$this->setErrorDidYouMean(400, 'This image size does not exist', $image_size, $normalImageSizeNames);
 							return false;
 						}
-						$filename = $directory.$this->_urlSegment[2].'-'.$this->_urlSegment[3].'.jpg';
-						
+						//d($filename);
 						// Display the resized specific image
 						if (file_exists($filename))
 						{
@@ -1658,7 +1756,17 @@ class WebserviceRequest
 	
 	private function manageProductImages()
 	{
-		$this->manageDeclinatedImages(_PS_PROD_IMG_DIR_, true);
+		// add a new declinated image to the product
+		$max = 0;
+		foreach (scandir(_PS_PROD_IMG_DIR_) as $dir)
+		{
+			$matches = array();
+			preg_match('/^'.intval($this->_urlSegment[2]).'-(\d+)\.jpg*$/Ui', $dir, $matches);
+			if (isset($matches[1]))
+				$max = max($max, (int)($matches[1]));
+		}
+		$this->_productImageDeclinationId = $max++; 
+		$this->manageDeclinatedImages(_PS_PROD_IMG_DIR_);
 	}
 	
 	/**
@@ -1762,10 +1870,10 @@ class WebserviceRequest
 			{
 				foreach ($imageTypes as $imageType)
 				{
-					if ($this->_defaultImage)
+					if ($this->_defaultImage)// TODO products images too !!
 						$declination_path = $parentPath.$this->_urlSegment[3].'-default-'.$imageType['name'].'.jpg';
 					else
-					$declination_path = $parentPath.$this->_urlSegment[2].'-'.$imageType['name'].'.jpg';
+						$declination_path = $parentPath.$this->_urlSegment[2].'-'.$imageType['name'].'.jpg';
 					if (!@unlink($declination_path))
 					{
 						$this->setError(204);
@@ -1844,32 +1952,42 @@ class WebserviceRequest
 		$borderWidth = (int)(($destWidth - $nextWidth) / 2);
 		$borderHeight = (int)(($destHeight - $nextHeight) / 2);
 		
-		$destImage = imagecreatetruecolor($destWidth, $destHeight);
-	
-		$white = imagecolorallocate($destImage, 255, 255, 255);
-		imagefill($destImage, 0, 0, $white);
-	
-		imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
-		imagecolortransparent($destImage, $white);
-		$flag = false;
+		// Build the image
+		if (
+			!($destImage = imagecreatetruecolor($destWidth, $destHeight)) ||	
+			!($white = imagecolorallocate($destImage, 255, 255, 255)) ||
+			!imagefill($destImage, 0, 0, $white) ||
+			!imagecopyresampled($destImage, $sourceImage, $borderWidth, $borderHeight, 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight) ||
+			!imagecolortransparent($destImage, $white)
+		)
+		{
+			$this->setError(500, 'Unable to build the image "'.str_replace(_PS_ROOT_DIR_, '[SHOP_ROOT_DIR]', $newPath).'".');
+			return false;
+		}
+			
+		// Write it on disk
+		$imaged = false;
 		switch ($this->_imgExtension)
 		{
 			case 'gif':
-				$flag = imagegif($destImage, $newPath);
+				$imaged = imagegif($destImage, $newPath);
 				break;
 			case 'png':
-				$flag = imagepng($destImage, $newPath, 7);
+				$imaged = imagepng($destImage, $newPath, 7);
 				break;
 			case 'jpeg':
 			default:
-				$flag = imagejpeg($destImage, $newPath, 90);
+				$imaged = imagejpeg($destImage, $newPath, 90);
 				break;
 		}
 		imagedestroy($destImage);
-		if (!$flag)
+		if (!$imaged)
+		{
+			$this->setError(500, 'Unable to write the image "'.str_replace(_PS_ROOT_DIR_, '[SHOP_ROOT_DIR]', $newPath).'".');
 			return false;
+		}
 		
-		// Write image declinations if needed
+		// Write image declinations if present
 		if ($imageTypes)
 		{
 			foreach ($imageTypes as $imageType)
@@ -1877,7 +1995,14 @@ class WebserviceRequest
 				if ($this->_defaultImage)
 					$declination_path = $parentPath.$this->_urlSegment[3].'-default-'.$imageType['name'].'.jpg';
 				else
-					$declination_path = $parentPath.$this->_urlSegment[2].'-'.$imageType['name'].'.jpg';
+				{
+					if ($this->_imageType == 'products')
+					{
+						$declination_path = $parentPath.$this->_urlSegment[2].'-'.$this->_productImageDeclinationId.'-'.$imageType['name'].'.jpg';
+					}
+					else
+						$declination_path = $parentPath.$this->_urlSegment[2].'-'.$imageType['name'].'.jpg';
+				}
 				if (!$this->writeImageOnDisk($basePath, $declination_path, $imageType['width'], $imageType['height']))
 				{
 					$this->setError(500, 'Unable to save the declination "'.$imageType['name'].'" of this image.');
@@ -1885,7 +2010,6 @@ class WebserviceRequest
 				}
 			}
 		}
-		
 		return !$this->hasErrors() ? $newPath : false;
 	}
 	

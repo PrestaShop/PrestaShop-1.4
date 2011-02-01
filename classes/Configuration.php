@@ -55,9 +55,9 @@ class ConfigurationCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 			'fields' => array(
-			'value' => array(),
-			'date_add' => array(),
-			'date_upd' => array()
+				'value' => array(),
+				'date_add' => array(),
+				'date_upd' => array()
 		)
 	);
 	
@@ -65,7 +65,7 @@ class ConfigurationCore extends ObjectModel
 			'retrieveData' => array('retrieveMethod' => 'getI18nConfigurationList'),
 			'fields' => array(
 			'value' => array('i18n' => true),
-			'date_add' => array(),
+			'date_add' => array('i18n' => true),
 			'date_upd' => array('i18n' => true)
 		)
 	);

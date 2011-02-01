@@ -99,8 +99,8 @@ class CartCore extends ObjectModel
 		),
 		'associations' => array(
 			'cart_rows' => array('resource' => 'cart_row', 'fields' => array(
-				'id_product' => array('required' => true),
-				'id_product_attribute' => array('required' => true),
+				'id_product' => array('required' => true, 'xlink_resource' => 'products'),
+				'id_product_attribute' => array('required' => true, 'xlink_resource' => 'combinations'),
 				'quantity' => array('required' => true),
 				)
 			),

@@ -77,6 +77,8 @@ class ImageTypeCore extends ObjectModel
 	 * @var array Image types cache
 	 */
 	protected static $images_types_cache = array();
+	
+	protected	$webserviceParameters = array();
 
 	public function getFields()
 	{

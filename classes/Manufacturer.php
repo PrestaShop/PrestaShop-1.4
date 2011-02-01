@@ -30,7 +30,7 @@ class ManufacturerCore extends ObjectModel
 	public 		$id;
 
 	/** @var integer manufacturer ID */
-	public		$id_manufacturer;
+	public		$id_manufacturer;//FIXME is it really usefull...?
 
 	/** @var string Name */
 	public 		$name;
