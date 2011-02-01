@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -31,6 +31,7 @@ class UspsCarrier extends CarrierModule
 
 	private $_html = '';
 	private $_postErrors = array();
+	private $_webserviceTestResult = '';	
 	private $_webserviceError = '';
 	private $_fieldsList = array();
 	private $_packagingSizeList = array();
@@ -39,7 +40,7 @@ class UspsCarrier extends CarrierModule
 	private $_dimensionUnit = '';
 	private $_weightUnit = '';
 	private $_dimensionUnitList = array('CM' => 'CM', 'IN' => 'IN', 'CMS' => 'CM', 'INC' => 'IN');
-	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LB' => 'LBS', 'LBS' => 'LBS');
+	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LBS' => 'LBS', 'LB' => 'LBS');
 	private $_moduleName = 'uspscarrier';
 
 
@@ -52,10 +53,10 @@ class UspsCarrier extends CarrierModule
 	public function __construct()
 	{
 		global $cookie;
-		
+
 		$this->name = 'uspscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '0.8';
+		$this->version = '0.9c';
 
 		parent::__construct ();
 
@@ -70,23 +71,22 @@ class UspsCarrier extends CarrierModule
 
 			// Check Configuration Values
 			foreach ($this->_fieldsList as $keyConfiguration => $name)
-				if (!Configuration::get($keyConfiguration))
+				if (!Configuration::get($keyConfiguration) && !empty($name))
 					$warning[] = '\''.$name.'\' ';
 
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
 			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
 			if (!$this->_weightUnit || !$this->_weightUnitList[$this->_weightUnit])
-				$warning[] = $this->l('\'Weight Unit (LB or KG in Preferences > Localization Tab).\'').' ';
+				$warning[] = $this->l('\'Weight Unit (LB or KG).\'').' ';
 			if (!$this->_dimensionUnit || !$this->_dimensionUnitList[$this->_dimensionUnit])
-				$warning[] = $this->l('\'Dimension Unit (CM or IN in Preferences > Localization Tab).\'').' ';
+				$warning[] = $this->l('\'Dimension Unit (CM or IN).\'').' ';
 
 			// Generate Warnings
 			if (count($warning))
 				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly').' ';
 		}
 	}
-
 
 	public function loadingVar()
 	{
@@ -96,6 +96,12 @@ class UspsCarrier extends CarrierModule
 			'USPS_CARRIER_PACKAGING_SIZE' => $this->l('USPS Packaging Size'),
 			'USPS_CARRIER_PACKAGING_TYPE' => $this->l('USPS Packaging Type'),
 			'USPS_CARRIER_MACHINABLE' => $this->l('USPS Machinable'),
+			'USPS_CARRIER_ADDRESS1' => '',
+			'USPS_CARRIER_ADDRESS2' => '',
+			'USPS_CARRIER_POSTAL_CODE' => '',
+			'USPS_CARRIER_CITY' => '',
+			'USPS_CARRIER_STATE' => '',
+			'USPS_CARRIER_COUNTRY' => '',
 		);
 
 		// Loading packaging size list
@@ -142,23 +148,21 @@ class UspsCarrier extends CarrierModule
 				return false;
 
 		// Install Carriers
-		if (!Configuration::get('USPS_INSTALLED_FLAG'))
-			$this->installCarriers();
+		$this->installCarriers();
 
 		// Install Module
 		if (!parent::install() OR !$this->registerHook('updateCarrier'))
 			return false;
 
-		// Install Flag
-		if (!Configuration::updateValue('USPS_INSTALLED_FLAG', 1))
-			return false;
-
 		return true;
 	}
-	
+
 	public function uninstall()
 	{
 		global $cookie;
+
+		// Uninstall Carriers
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 1), 'UPDATE', '`external_module_name` = \'uspscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');
 
 		// Uninstall Config
 		foreach ($this->_fieldsList as $keyConfiguration => $name)
@@ -203,7 +207,7 @@ class UspsCarrier extends CarrierModule
 					'need_range' => true
 				);
 				$id_carrier = $this->installExternalCarrier($config);
-				Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('id_carrier' => (int)($id_carrier)), 'UPDATE', '`id_usps_rate_service_code` = '.(int)($rateService['id_usps_rate_service_code']));
+				Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('id_carrier' => (int)($id_carrier), 'id_carrier_history' => (int)($id_carrier)), 'UPDATE', '`id_usps_rate_service_code` = '.(int)($rateService['id_usps_rate_service_code']));
 			}
 	}
 	
@@ -236,7 +240,7 @@ class UspsCarrier extends CarrierModule
 		{
 			$groups = Group::getGroups(true);
 			foreach ($groups as $group)
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group VALUE (\''.(int)($carrier->id).'\',\''.(int)($group['id_group']).'\')');
+				Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier_group', array('id_carrier' => (int)($carrier->id), 'id_group' => (int)($group['id_group'])), 'INSERT');
 
 			$rangePrice = new RangePrice();
 			$rangePrice->id_carrier = $carrier->id;
@@ -253,9 +257,9 @@ class UspsCarrier extends CarrierModule
 			$zones = Zone::getZones(true);
 			foreach ($zones as $zone)
 			{
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_zone VALUE (\''.(int)($carrier->id).'\',\''.(int)($zone['id_zone']).'\')');
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'delivery VALUE (\'\',\''.(int)($carrier->id).'\',\''.(int)($rangePrice->id).'\',NULL,\''.(int)($zone['id_zone']).'\',\'1\')');
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'delivery VALUE (\'\',\''.(int)($carrier->id).'\',NULL,\''.(int)($rangeWeight->id).'\',\''.(int)($zone['id_zone']).'\',\'1\')');
+				Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier_zone', array('id_carrier' => (int)($carrier->id), 'id_zone' => (int)($zone['id_zone'])), 'INSERT');
+				Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.'delivery', array('id_carrier' => (int)($carrier->id), 'id_range_price' => (int)($rangePrice->id), 'id_range_weight' => NULL, 'id_zone' => (int)($zone['id_zone']), 'price' => '0'), 'INSERT');
+				Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.'delivery', array('id_carrier' => (int)($carrier->id), 'id_range_price' => NULL, 'id_range_weight' => (int)($rangeWeight->id), 'id_zone' => (int)($zone['id_zone']), 'price' => '0'), 'INSERT');
 			}
 
 			// Copy Logo
@@ -276,7 +280,6 @@ class UspsCarrier extends CarrierModule
 	**
 	*/
 
-
 	public function getContent()
 	{
 		$this->_html .= '<h2>' . $this->l('USPS Carrier').'</h2>';
@@ -287,7 +290,7 @@ class UspsCarrier extends CarrierModule
 				$this->_postProcess();
 			else
 				foreach ($this->_postErrors AS $err)
-					$this->_html .= '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$err.'</div>';
+					$this->_html .= '<div class="alert error"><img src="'._PS_IMG_.'admin/forbbiden.gif" alt="nok" />&nbsp;'.$err.'</div>';
 		}
 		$this->_displayForm();
 		return $this->_html;
@@ -295,7 +298,33 @@ class UspsCarrier extends CarrierModule
 
 	private function _displayForm()
 	{
-		$this->_html .= '<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Description').'</legend>'.$this->l('USPS Carrier Configurator.').'</fieldset><div class="clear">&nbsp;</div>';
+		$this->_html .= '<fieldset>
+		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Usps Module Status').'</legend>';
+
+		$alert = array();
+		$this->_webserviceTestResult = $this->webserviceTest();
+		if (!Configuration::get('USPS_CARRIER_USER_ID'))
+			$alert['generalSettings'] = 1;
+		if (Db::getInstance()->getValue('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `active` = 1') < 1)
+			$alert['deliveryServices'] = 1;
+		if (!$this->_webserviceTestResult)
+			$alert['webserviceTest'] = 1;
+
+
+		if (!count($alert))
+			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('USPS Carrier is well configured and online !').'</strong>';
+		else
+		{
+			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('USPS Carrier is not configured yet, you have to :').'</strong>';
+			$this->_html .= '<br />'.(isset($alert['generalSettings']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 1) '.$this->l('Fill the "General Settings" form');
+			$this->_html .= '<br />'.(isset($alert['deliveryServices']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 2) '.$this->l('Select your available delivery service');
+			$this->_html .= '<br />'.(isset($alert['webserviceTest']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Webservice test connection').($this->_webserviceError ? ' : '.$this->_webserviceError : '');
+		}
+
+		if (!is_callable('curl_exec'))
+			$this->_html .= '<br /><br />'.$this->l('cURL Extension is not enabled, USPS module can work without cURL but it would be better to enable it.');
+
+		$this->_html .= '</fieldset><div class="clear">&nbsp;</div>';
 		$this->_html .= $this->_displayFormConfig();
 	}
 
@@ -318,6 +347,7 @@ class UspsCarrier extends CarrierModule
 		elseif (Tools::getValue('section') == 'product')
 			$this->_postProcessProduct();
 	}
+
 
 
 
@@ -373,8 +403,33 @@ class UspsCarrier extends CarrierModule
 	private function _displayFormGeneral()
 	{
 		global $cookie;
-	
-		$html = '<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=1&section=general" method="post" class="form">
+
+		$html = '<script>
+			$(document).ready(function() {
+				var country = $("#usps_carrier_country");
+				country.change(function() {
+					if ($("#usps_carrier_state_" + country.val()))
+					{
+						$(".stateInput.selected").removeClass("selected");
+						if ($("#usps_carrier_state_" + country.val()).size())
+							$("#usps_carrier_state_" + country.val()).addClass("selected");
+						else
+							$("#usps_carrier_state_none").addClass("selected");
+					}
+				});
+
+				$("#configForm").submit(function() {
+					$("#usps_carrier_state").val($(".stateInput.selected").val());
+				});
+			});
+			</script>
+			<style>
+				.stateInput { display: none; }
+				.stateInput.selected { display: block; }
+			</style>
+
+
+			<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=1&section=general" method="post" class="form" id="configForm">
 
 				<fieldset style="border: 0px;">
 					<h4>'.$this->l('General configuration').' :</h4>
@@ -409,32 +464,40 @@ class UspsCarrier extends CarrierModule
 					<div class="margin-form"><input type="text" size="20" name="usps_carrier_postal_code" value="'.Tools::getValue('usps_carrier_postal_code', Configuration::get('USPS_CARRIER_POSTAL_CODE')).'" /></div><br />
 					<label>'.$this->l('Your City').' : </label>
 					<div class="margin-form"><input type="text" size="20" name="usps_carrier_city" value="'.Tools::getValue('usps_carrier_city', Configuration::get('USPS_CARRIER_CITY')).'" /></div>
-					<label>'.$this->l('State').' : </label>
-					<div class="margin-form">
-						<select name="usps_carrier_state">
-							<option value="0">'.$this->l('Select a state ...').'</option>';
-							$idstates = array();
-							foreach (State::getStates($cookie->id_lang) as $v)
-							{
-								$html .= '<option value="'.$v['id_state'].'" '.($v['id_state'] == (int)(Configuration::get('USPS_CARRIER_STATE')) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
-								$idstates[] = $v['id_state'];
-							}
-						$html .= '</select>
-						<p>' . $this->l('Select state from within the list.') . '</p>
-					</div>
 					<label>'.$this->l('Country').' : </label>
 					<div class="margin-form">
-						<select name="usps_carrier_country">
+						<select name="usps_carrier_country" id="usps_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
 							$idcountries = array();
 							foreach (Country::getCountries($cookie->id_lang) as $v)
 							{
-								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Configuration::get('USPS_CARRIER_COUNTRY')) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
+								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('usps_carrier_country', Configuration::get('USPS_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
 								$idcountries[] = $v['id_country'];
 							}
 						$html .= '</select>
 						<p>' . $this->l('Select country from within the list.') . '</p>
-						'.(!in_array((int)(Configuration::get('USPS_CARRIER_COUNTRY')), $idcountries) ? '<div class="warning">'.$this->l('Country is not set').'</div>' : '').'
+					</div>
+					<label>'.$this->l('State').' : </label>
+					<div class="margin-form">';
+						$id_country_current = 0;
+						$statesList = Db::getInstance()->ExecuteS('
+						SELECT `id_state`, `id_country`, `name`
+						FROM `'._DB_PREFIX_.'state` WHERE `active` = 1
+						ORDER BY `id_country`, `name` ASC');
+						foreach ($statesList as $v)
+						{
+							if ($id_country_current != $v['id_country'])
+							{
+								if ($id_country_current != 0)
+									$html .= '</select>';
+								$html .= '<select id="usps_carrier_state_'.$v['id_country'].'" class="stateInput">
+									<option value="0">'.$this->l('Select a state ...').'</option>';
+							}
+							$html .= '<option value="'.$v['id_state'].'" '.($v['id_state'] == (int)(Tools::getValue('usps_carrier_state', Configuration::get('USPS_CARRIER_STATE'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';		
+							$id_country_current = $v['id_country'];
+						}
+						$html .= '</select><div id="usps_carrier_state_none" class="stateInput selected">'.$this->l('There is no state configuration for this country').'</div>
+						<input type="hidden" id="usps_carrier_state" name="usps_carrier_state" value="s" />
 					</div>
 				</fieldset>
 
@@ -444,55 +507,53 @@ class UspsCarrier extends CarrierModule
 						<div class="margin-form">
 							<select name="usps_carrier_packaging_size">
 								<option value="0">'.$this->l('Select a packaging size ...').'</option>';
-								$idpackagingsizes = array();
-								foreach($this->_packagingSizeList as $kpackagingsize => $vpackagingsize)
-								{
-									$html .= '<option value="'.$kpackagingsize.'" '.($kpackagingsize == (Configuration::get('USPS_CARRIER_PACKAGING_SIZE')) ? 'selected="selected"' : '').'>'.$vpackagingsize.'</option>';
-									$idpackagingsizes[] = $kpackagingsize;
-								}
+								foreach($this->_packagingSizeList as $kpickup => $vpickup)
+									$html .= '<option value="'.$kpickup.'" '.($kpickup == (Tools::getValue('usps_carrier_packaging_size', Configuration::get('USPS_CARRIER_PACKAGING_SIZE'))) ? 'selected="selected"' : '').'>'.$vpickup.'</option>';
 					$html .= '</select>
 					<p>' . $this->l('Select packaging size from within the list.') . '</p>
-					'.(!in_array((int)(Configuration::get('USPS_CARRIER_PACKAGING_SIZE')), $idpackagingsizes) ? '<div class="warning">'.$this->l('Packaging Size is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Packaging Type').' : </label>
 						<div class="margin-form">
 							<select name="usps_carrier_packaging_type">
 								<option value="0">'.$this->l('Select a packaging type ...').'</option>';
-								$idpackagings = array();
 								foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-								{
-									$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (Configuration::get('USPS_CARRIER_PACKAGING_TYPE')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-									$idpackagings[] = $kpackaging;
-								}
+									$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (Tools::getValue('usps_carrier_packaging_type', Configuration::get('USPS_CARRIER_PACKAGING_TYPE'))) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 					$html .= '</select>
 					<p>' . $this->l('Select packaging type from within the list.') . '</p>
-					'.(!in_array((int)(Configuration::get('USPS_CARRIER_PACKAGING_TYPE')), $idpackagings) ? '<div class="warning">'.$this->l('Packaging Type is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Machinable').' : </label>
 						<div class="margin-form">
 							<select name="usps_carrier_machinable">';
 								$idmachinables = array();
 								foreach($this->_machinableList as $kmachinable => $vmachinable)
-								{
-									$html .= '<option value="'.$kmachinable.'" '.($kmachinable == (int)(Configuration::get('USPS_CARRIER_MACHINABLE')) ? 'selected="selected"' : '').'>'.$vmachinable.'</option>';
-									$idmachinables[] = $kmachinable;
-								}
+									$html .= '<option value="'.$kmachinable.'" '.($kmachinable == (Tools::getValue('usps_carrier_machinable', Configuration::get('USPS_CARRIER_MACHINABLE'))) ? 'selected="selected"' : '').'>'.$vmachinable.'</option>';
 					$html .= '</select>
 					<p>' . $this->l('Select if it is machinable or not by default.') . '</p>
-					'.(!in_array((int)(Configuration::get('USPS_CARRIER_MACHINABLE')), $idmachinables) ? '<div class="warning">'.$this->l('Machinable is not set').'</div>' : '').'
 					</div>
 					<label>'.$this->l('Delivery Service').' : </label>
-						<div class="margin-form">';
-							$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');	
-							foreach($rateServiceList as $rateService)
-								$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<br />';
+					<div class="margin-form">';
+						$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+						foreach($rateServiceList as $rateService)
+							$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<br />';
 					$html .= '
 					<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 					</div>
 				</fieldset>
 				
 				<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
-			</form>';
+			</form>
+
+			<script>
+				var id_country = '.(int)(Tools::getValue('usps_carrier_country', Configuration::get('USPS_CARRIER_COUNTRY'))).';
+				if ($("#usps_carrier_state_" + id_country))
+				{
+					$(".stateInput.selected").removeClass("selected");
+					if ($("#usps_carrier_state_" + id_country).size())
+						$("#usps_carrier_state_" + id_country).addClass("selected");
+					else
+						$("#usps_carrier_state_none").addClass("selected");
+				}
+			</script>';
 		return $html;
 	}
 
@@ -501,22 +562,40 @@ class UspsCarrier extends CarrierModule
 		// Check configuration values
 		if (Tools::getValue('usps_carrier_user_id') == NULL)
 			$this->_postErrors[]  = $this->l('Your USPS user ID is not specified');
-		elseif (Tools::getValue('usps_carrier_packaging_size') == NULL OR Tools::getValue('usps_carrier_packaging_size') == '0')
-			$this->_postErrors[]  = $this->l('Your packaging size is not specified');
-		elseif (Tools::getValue('usps_carrier_packaging_type') == NULL OR Tools::getValue('usps_carrier_packaging_type') == '0')
-			$this->_postErrors[]  = $this->l('Your packaging type is not specified');
-		elseif (Tools::getValue('usps_carrier_machinable') == NULL OR Tools::getValue('usps_carrier_machinable') == '0')
-			$this->_postErrors[]  = $this->l('Your machinable field is not set');
 		elseif (Tools::getValue('usps_carrier_postal_code') == NULL)
 			$this->_postErrors[]  = $this->l('Your Zip / Postal code is not specified');
-		elseif (Tools::getValue('usps_carrier_country') == NULL OR Tools::getValue('usps_carrier_country') == 0)
-			$this->_postErrors[]  = $this->l('Your country is not specified');
 		elseif (Tools::getValue('usps_carrier_city') == NULL)
 			$this->_postErrors[]  = $this->l('Your city is not specified');
+		elseif (Tools::getValue('usps_carrier_country') == NULL OR Tools::getValue('usps_carrier_country') == 0)
+			$this->_postErrors[]  = $this->l('Your country is not specified');
+		elseif (Tools::getValue('usps_carrier_packaging_size') == NULL OR Tools::getValue('usps_carrier_packaging_size') == '')
+			$this->_postErrors[]  = $this->l('Your packaging size is not specified');
+		elseif (Tools::getValue('usps_carrier_packaging_type') == NULL OR Tools::getValue('usps_carrier_packaging_type') == '')
+			$this->_postErrors[]  = $this->l('Your packaging type is not specified');
+		elseif (Tools::getValue('usps_carrier_machinable') == NULL OR Tools::getValue('usps_carrier_machinable') == '')
+			$this->_postErrors[]  = $this->l('Your machinable field is not set');
 
 		// Check usps webservice availibity
 		if (!$this->_postErrors)
 		{
+			// Unactive all USPS Carriers
+			Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('active' => 0), 'UPDATE');
+
+			// If no errors appear, the carrier is being activated, else, the carrier is being deactivated
+			if (!$this->_postErrors)
+			{
+				// Get available services
+				$serviceSelected = Tools::getValue('service');
+
+				// Active available carrier
+				if ($serviceSelected)
+					foreach ($serviceSelected as $ss)
+					{
+						$id_carrier = Db::getInstance()->getValue('SELECT `id_carrier` FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `id_usps_rate_service_code` = '.(int)($ss));
+						Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('active' => 1), 'UPDATE', '`id_usps_rate_service_code` = '.(int)($ss));
+					}
+			}
+
 			// All new configurations values are saved to be sure to test webservices with it
 			Configuration::updateValue('USPS_CARRIER_USER_ID', Tools::getValue('usps_carrier_user_id'));
 			Configuration::updateValue('USPS_CARRIER_PACKAGING_SIZE', Tools::getValue('usps_carrier_packaging_size'));
@@ -528,30 +607,14 @@ class UspsCarrier extends CarrierModule
 			Configuration::updateValue('USPS_CARRIER_CITY', Tools::getValue('usps_carrier_city'));
 			Configuration::updateValue('USPS_CARRIER_STATE', Tools::getValue('usps_carrier_state'));
 			Configuration::updateValue('USPS_CARRIER_COUNTRY', Tools::getValue('usps_carrier_country'));
-			Configuration::updateValue('PS_WEIGHT_UNIT', Tools::getValue('ps_weight_unit'));
-			Configuration::updateValue('PS_DIMENSION_UNIT', Tools::getValue('ps_dimension_unit'));
-			if (isset($this->_dimensionUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]))
-				$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_weight_unit'))];
-			if (isset($this->_weightUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]))
-				$this->_weightUnit = $this->_weightUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))];
+			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]);
+			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]);
+			if (isset($this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]))
+				$this->_weightUnit = $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))];
+			if (isset($this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]))
+				$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))];
 			if (!$this->webserviceTest())
-				$this->_postErrors[]  = $this->l('Prestashop could not connect to USPS webservices').($this->_webserviceError ? ' :<br />'.$this->_webserviceError : '');
-		}
-
-		// If no errors appear, the carrier is being activated, else, the carrier is being deactivated
-		Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('active' => 0), 'UPDATE', '`id_usps_rate_service_code`');
-		if (!$this->_postErrors)
-		{
-			// Get available services
-			$serviceSelected = Tools::getValue('service');
-
-			// Active available carrier
-			if ($serviceSelected)
-				foreach ($serviceSelected as $ss)
-				{
-					$id_carrier = Db::getInstance()->getValue('SELECT `id_carrier` FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `id_usps_rate_service_code` = '.(int)($ss));
-					Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('active' => 1), 'UPDATE', '`id_usps_rate_service_code` = '.(int)($ss));
-				}
+				$this->_postErrors[]  = $this->l('Prestashop could not connect to USPS webservices').' :<br />'.($this->_webserviceError ? $this->_webserviceError : $this->l('No error description found'));
 		}
 	}
 
@@ -562,17 +625,15 @@ class UspsCarrier extends CarrierModule
 			Configuration::updateValue('USPS_CARRIER_PACKAGING_SIZE', Tools::getValue('usps_carrier_packaging_size')) AND
 			Configuration::updateValue('USPS_CARRIER_PACKAGING_TYPE', Tools::getValue('usps_carrier_packaging_type')) AND
 			Configuration::updateValue('USPS_CARRIER_MACHINABLE', Tools::getValue('usps_carrier_machinable')) AND
-			Configuration::updateValue('USPS_CARRIER_ADDRESS1', Tools::getValue('usps_carrier_address1')) AND
-			Configuration::updateValue('USPS_CARRIER_ADDRESS2', Tools::getValue('usps_carrier_address2')) AND
 			Configuration::updateValue('USPS_CARRIER_POSTAL_CODE', Tools::getValue('usps_carrier_postal_code')) AND
 			Configuration::updateValue('USPS_CARRIER_CITY', Tools::getValue('usps_carrier_city')) AND
 			Configuration::updateValue('USPS_CARRIER_STATE', Tools::getValue('usps_carrier_state')) AND
 			Configuration::updateValue('USPS_CARRIER_COUNTRY', Tools::getValue('usps_carrier_country')) AND
-			Configuration::updateValue('PS_WEIGHT_UNIT', Tools::getValue('ps_weight_unit')) AND
-			Configuration::updateValue('PS_DIMENSION_UNIT', Tools::getValue('ps_dimension_unit')))
+			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]) AND
+			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]))
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 		else
-			$this->_html .= $this->displayError($this->l('Settings failed'));
+			$this->_html .= $this->displayErrors($this->l('Settings failed'));
 	}
 
 
@@ -644,6 +705,10 @@ class UspsCarrier extends CarrierModule
 	{
 		global $cookie;
 
+		// Check if the module is configured
+		if (!$this->_webserviceTestResult)
+			return '<p><b>'.$this->l('You have to configure "General Settings" tab before using this tab.').'</b></p><br />';
+
 		// Display header
 		$html = '<p><b>'.$this->l('In this tab, you can set a specific configuration for each category.').'</b></p><br />
 		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
@@ -651,8 +716,8 @@ class UspsCarrier extends CarrierModule
 				<tr class="nodrag nodrop">
 					<th>'.$this->l('ID Config').'</th>
 					<th>'.$this->l('Category').'</th>
-					<th>'.$this->l('Packaging size').'</th>
 					<th>'.$this->l('Packaging type').'</th>
+					<th>'.$this->l('Packaging size').'</th>
 					<th>'.$this->l('Machinable').'</th>
 					<th>'.$this->l('Additional charges').'</th>
 					<th>'.$this->l('Services').'</th>
@@ -664,7 +729,7 @@ class UspsCarrier extends CarrierModule
 		// Loading config list
 		$configCategoryList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_category` > 0');
 		if (!$configCategoryList)
-			$html .= '<tr><td colspan="8">'.$this->l('There is no specific USPS configuration for categories at this point.').'</td></tr>';
+			$html .= '<tr><td colspan="6">'.$this->l('There is no specific USPS configuration for categories at this point.').'</td></tr>';
 		foreach ($configCategoryList as $k => $c)
 		{
 			// Category Path
@@ -697,17 +762,17 @@ class UspsCarrier extends CarrierModule
 				<tr'.$alt.'>
 					<td>'.$c['id_usps_rate_config'].'</td>
 					<td>'.$path.'</td>
-					<td>'.(isset($this->_packagingSizeList[$c['packaging_size_code']]) ? $this->_packagingSizeList[$c['packaging_size_code']] : '-').'</td>
 					<td>'.(isset($this->_packagingTypeList[$c['packaging_type_code']]) ? $this->_packagingTypeList[$c['packaging_type_code']] : '-').'</td>
-					<td>'.(isset($this->_machinableList[$c['is_machinable']]) ? $this->_machinableList[$c['is_machinable']] : '-').'</td>
-					<td>'.$c['additionnal_charges'].' '.$configCurrency->sign.'</td>
+					<td>'.(isset($this->_packagingSizeList[$c['packaging_size_code']]) ? $this->_packagingSizeList[$c['packaging_size_code']] : '-').'</td>
+					<td>'.(isset($this->_machinableList[$c['machinable_code']]) ? $this->_machinableList[$c['machinable_code']] : '-').'</td>
+					<td>'.$c['additional_charges'].' '.$configCurrency->sign.'</td>
 					<td>'.$services.'</td>
 					<td>
 						<a href="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=edit&id_usps_rate_config='.(int)($c['id_usps_rate_config']).'" style="float: left;">
-							<img src="../img/admin/edit.gif" />
+							<img src="'._PS_IMG_.'admin/edit.gif" />
 						</a>
 						<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=delete&id_usps_rate_config='.(int)($c['id_usps_rate_config']).'&id_category='.(int)($c['id_category']).'" method="post" class="form" style="float: left;">
-							<input name="submitSave" type="image" src="../img/admin/delete.gif" OnClick="return confirm(\''.$this->l('Are you sure you want to delete this specific USPS configuration for this category ?').'\');" />
+							<input name="submitSave" type="image" src="'._PS_IMG_.'admin/delete.gif" OnClick="return confirm(\''.$this->l('Are you sure you want to delete this specific USPS configuration for this category ?').'\');" />
 						</form>
 					</td>
 				</tr>';
@@ -736,14 +801,6 @@ class UspsCarrier extends CarrierModule
 					<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=edit&id_usps_rate_config='.(int)(Tools::getValue('id_usps_rate_config')).'" method="post" class="form">
 						<label>'.$this->l('Category').' :</label>
 						<div class="margin-form" style="padding: 0.2em 0.5em 0 0; font-size: 12px;">'.$path.' <input type="hidden" name="id_category" value="'.(int)($configSelected['id_category']).'" /></div><br clear="left" />
-						<label>'.$this->l('Packaging Size').' : </label>
-							<div class="margin-form">
-								<select name="packaging_size_code">
-									<option value="0">'.$this->l('Select a packaging size ...').'</option>';
-									foreach($this->_packagingSizeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_size_code', $configSelected['packaging_size_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
-						</div>
 						<label>'.$this->l('Packaging Type').' : </label>
 							<div class="margin-form">
 								<select name="packaging_type_code">
@@ -752,19 +809,27 @@ class UspsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Is Machinable').' : </label>
+						<label>'.$this->l('Packaging Size').' : </label>
 							<div class="margin-form">
-								<select name="is_machinable">
-									<option value="0">'.$this->l('Select if is machinable or not ...').'</option>';
-									foreach($this->_machinableList as $km => $vm)
-										$html .= '<option value="'.$km.'" '.($km == pSQL(Tools::getValue('is_machinable', $configSelected['is_machinable'])) ? 'selected="selected"' : '').'>'.$vm.'</option>';
+								<select name="packaging_size_code">
+									<option value="0">'.$this->l('Select a packaging size ...').'</option>';
+									foreach($this->_packagingSizeList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_size_code', $configSelected['packaging_size_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+						$html .= '</select>
+						</div>
+						<label>'.$this->l('Machinable').' : </label>
+							<div class="margin-form">
+								<select name="machinable_code">
+									<option value="0">'.$this->l('Select a machinable ...').'</option>';
+									foreach($this->_machinableList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('machinable_code', $configSelected['machinable_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
-						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges', $configSelected['additionnal_charges']).'" /></div><br />
+						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges', $configSelected['additional_charges']).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');	
+								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 								{
 									$configServiceSelected = Db::getInstance()->getValue('SELECT `id_usps_rate_service_code` FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)(Tools::getValue('id_usps_rate_config')).' AND `id_usps_rate_service_code` = '.(int)($rateService['id_usps_rate_service_code']));
@@ -787,14 +852,6 @@ class UspsCarrier extends CarrierModule
 								'.$this->_getChildCategories(Category::getCategories($cookie->id_lang), 0).'
 							</select>
 						</div>
-						<label>'.$this->l('Packaging Size').' : </label>
-							<div class="margin-form">
-								<select name="packaging_size_code">
-									<option value="0">'.$this->l('Select a packaging size ...').'</option>';
-									foreach($this->_packagingSizeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_size_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
-						</div>
 						<label>'.$this->l('Packaging Type').' : </label>
 							<div class="margin-form">
 								<select name="packaging_type_code">
@@ -803,19 +860,27 @@ class UspsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Is Machinable').' : </label>
+						<label>'.$this->l('Packaging Size').' : </label>
 							<div class="margin-form">
-								<select name="is_machinable">
-									<option value="0">'.$this->l('Select if is machinable or not ...').'</option>';
-									foreach($this->_machinableList as $km => $vm)
-										$html .= '<option value="'.$km.'" '.($km == pSQL(Tools::getValue('is_machinable')) ? 'selected="selected"' : '').'>'.$vm.'</option>';
+								<select name="packaging_size_code">
+									<option value="0">'.$this->l('Select a packaging size ...').'</option>';
+									foreach($this->_packagingSizeList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_size_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+						$html .= '</select>
+						</div>
+						<label>'.$this->l('Machinable').' : </label>
+							<div class="margin-form">
+								<select name="machinable_code">
+									<option value="0">'.$this->l('Select a machinable ...').'</option>';
+									foreach($this->_machinableList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('machinable_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
-						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges').'" /></div><br />
+						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges').'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');	
+								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
@@ -865,10 +930,10 @@ class UspsCarrier extends CarrierModule
 				'id_product' => 0,
 				'id_category' => (int)(Tools::getValue('id_category')),
 				'id_currency' => (int)(Configuration::get('PS_CURRENCY_DEFAULT')),
-				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
 				'packaging_type_code' => pSQL(Tools::getValue('packaging_type_code')),
-				'is_machinable' => pSQL(Tools::getValue('is_machinable')),
-				'additionnal_charges' => pSQL(Tools::getValue('additionnal_charges')),
+				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
+				'machinable_code' => pSQL(Tools::getValue('machinable_code')),
+				'additional_charges' => pSQL(Tools::getValue('additional_charges')),
 				'date_add' => pSQL($date),
 				'date_upd' => pSQL($date)
 			);
@@ -884,7 +949,7 @@ class UspsCarrier extends CarrierModule
 			if ($id_usps_rate_config > 0)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Settings failed'));
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 
 		// Update Script
@@ -892,10 +957,10 @@ class UspsCarrier extends CarrierModule
 		{
 			$updTab = array(
 				'id_currency' => (int)(Configuration::get('PS_CURRENCY_DEFAULT')),
-				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
 				'packaging_type_code' => pSQL(Tools::getValue('packaging_type_code')),
-				'is_machinable' => pSQL(Tools::getValue('is_machinable')),
-				'additionnal_charges' => pSQL(Tools::getValue('additionnal_charges')),
+				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
+				'machinable_code' => pSQL(Tools::getValue('machinable_code')),
+				'additional_charges' => pSQL(Tools::getValue('additional_charges')),
 				'date_upd' => pSQL($date)
 			);
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_config', $updTab, 'UPDATE', '`id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
@@ -910,7 +975,7 @@ class UspsCarrier extends CarrierModule
 			if ($result)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Settings failed'));
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 
 		// Delete Script
@@ -923,7 +988,7 @@ class UspsCarrier extends CarrierModule
 			if ($result1)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Settings failed'));			
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));			
 		}
 	}
 
@@ -938,6 +1003,10 @@ class UspsCarrier extends CarrierModule
 	{
 		global $cookie;
 
+		// Check if the module is configured
+		if (!$this->_webserviceTestResult)
+			return '<p><b>'.$this->l('You have to configure "General Settings" tab before using this tab.').'</b></p><br />';
+
 		// Display header
 		$html = '<p><b>'.$this->l('In this tab, you can set a specific configuration for each product.').'</b></p><br />
 		<table class="table tableDnD" cellpadding="0" cellspacing="0" width="90%">
@@ -945,8 +1014,8 @@ class UspsCarrier extends CarrierModule
 				<tr class="nodrag nodrop">
 					<th>'.$this->l('ID Config').'</th>
 					<th>'.$this->l('Product').'</th>
-					<th>'.$this->l('Packaging size').'</th>
 					<th>'.$this->l('Packaging type').'</th>
+					<th>'.$this->l('Packaging size').'</th>
 					<th>'.$this->l('Machinable').'</th>
 					<th>'.$this->l('Additional charges').'</th>
 					<th>'.$this->l('Services').'</th>
@@ -985,17 +1054,17 @@ class UspsCarrier extends CarrierModule
 				<tr'.$alt.'>
 					<td>'.$c['id_usps_rate_config'].'</td>
 					<td>'.$product->name.'</td>
-					<td>'.(isset($this->_packagingSizeList[$c['packaging_size_code']]) ? $this->_packagingSizeList[$c['packaging_size_code']] : '-').'</td>
 					<td>'.(isset($this->_packagingTypeList[$c['packaging_type_code']]) ? $this->_packagingTypeList[$c['packaging_type_code']] : '-').'</td>
-					<td>'.(isset($this->_machinableList[$c['is_machinable']]) ? $this->_machinableList[$c['is_machinable']] : '-').'</td>
-					<td>'.$c['additionnal_charges'].' '.$configCurrency->sign.'</td>
+					<td>'.(isset($this->_packagingSizeList[$c['packaging_size_code']]) ? $this->_packagingSizeList[$c['packaging_size_code']] : '-').'</td>
+					<td>'.(isset($this->_machinableList[$c['machinable_code']]) ? $this->_machinableList[$c['machinable_code']] : '-').'</td>
+					<td>'.$c['additional_charges'].' '.$configCurrency->sign.'</td>
 					<td>'.$services.'</td>
 					<td>
 						<a href="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=edit&id_usps_rate_config='.(int)($c['id_usps_rate_config']).'" style="float: left;">
-							<img src="../img/admin/edit.gif" />
+							<img src="'._PS_IMG_.'admin/edit.gif" />
 						</a>
 						<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=delete&id_usps_rate_config='.(int)($c['id_usps_rate_config']).'&id_product='.(int)($c['id_product']).'" method="post" class="form" style="float: left;">
-							<input name="submitSave" type="image" src="../img/admin/delete.gif" OnClick="return confirm(\''.$this->l('Are you sure you want to delete this specific USPS configuration for this product ?').'\');" />
+							<input name="submitSave" type="image" src="'._PS_IMG_.'admin/delete.gif" OnClick="return confirm(\''.$this->l('Are you sure you want to delete this specific USPS configuration for this product ?').'\');" />
 						</form>
 					</td>
 				</tr>';
@@ -1016,6 +1085,14 @@ class UspsCarrier extends CarrierModule
 					<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=edit&id_usps_rate_config='.(int)(Tools::getValue('id_usps_rate_config')).'" method="post" class="form">
 						<label>'.$this->l('Product').' :</label>
 						<div class="margin-form" style="padding: 0.2em 0.5em 0 0; font-size: 12px;">'.$product->name.' <input type="hidden" name="id_product" value="'.(int)($configSelected['id_product']).'" /></div><br clear="left" />
+						<label>'.$this->l('Packaging Type').' : </label>
+							<div class="margin-form">
+								<select name="packaging_type_code">
+									<option value="0">'.$this->l('Select a packaging type ...').'</option>';
+									foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+						$html .= '</select>
+						</div>
 						<label>'.$this->l('Packaging Size').' : </label>
 							<div class="margin-form">
 								<select name="packaging_size_code">
@@ -1024,24 +1101,16 @@ class UspsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_size_code', $configSelected['packaging_size_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Packaging Type').' : </label>
+						<label>'.$this->l('Machinable').' : </label>
 							<div class="margin-form">
-								<select name="packaging_type_code">
-									<option value="0">'.$this->l('Select a packaging type ...').'</option>';
-									foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
-						</div>
-						<label>'.$this->l('Is Machinable').' : </label>
-							<div class="margin-form">
-								<select name="is_machinable">
-									<option value="0">'.$this->l('Select if is machinable or not ...').'</option>';
-									foreach($this->_machinableList as $km => $vm)
-										$html .= '<option value="'.$km.'" '.($km == pSQL(Tools::getValue('is_machinable', $configSelected['is_machinable'])) ? 'selected="selected"' : '').'>'.$vm.'</option>';
+								<select name="machinable_code">
+									<option value="0">'.$this->l('Select a machinable ...').'</option>';
+									foreach($this->_machinableList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('machinable_code', $configSelected['machinable_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
-						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges', $configSelected['additionnal_charges']).'" /></div><br />
+						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges', $configSelected['additional_charges']).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
 								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
@@ -1073,14 +1142,6 @@ class UspsCarrier extends CarrierModule
 							$html .= '<option value="'.$product['id_product'].'" '.($product['id_product'] == (int)(Tools::getValue('id_product')) ? 'selected="selected"' : '').'>'.$product['name'].'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Packaging Size').' : </label>
-							<div class="margin-form">
-								<select name="packaging_size_code">
-									<option value="0">'.$this->l('Select a packaging size ...').'</option>';
-									foreach($this->_packagingSizeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_size_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
-						</div>
 						<label>'.$this->l('Packaging Type').' : </label>
 							<div class="margin-form">
 								<select name="packaging_type_code">
@@ -1089,19 +1150,27 @@ class UspsCarrier extends CarrierModule
 										$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
-						<label>'.$this->l('Is Machinable').' : </label>
+						<label>'.$this->l('Packaging Size').' : </label>
 							<div class="margin-form">
-								<select name="is_machinable">
-									<option value="0">'.$this->l('Select if is machinable or not ...').'</option>';
-									foreach($this->_machinableList as $km => $vm)
-										$html .= '<option value="'.$km.'" '.($km == pSQL(Tools::getValue('is_machinable')) ? 'selected="selected"' : '').'>'.$vm.'</option>';
+								<select name="packaging_size_code">
+									<option value="0">'.$this->l('Select a packaging size ...').'</option>';
+									foreach($this->_packagingSizeList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_size_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+						$html .= '</select>
+						</div>
+						<label>'.$this->l('Machinable').' : </label>
+							<div class="margin-form">
+								<select name="machinable_code">
+									<option value="0">'.$this->l('Select a machinable ...').'</option>';
+									foreach($this->_machinableList as $kpackaging => $vpackaging)
+										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('machinable_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 						$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
-						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::getValue('additionnal_charges').'" /></div><br />
+						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges').'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');	
+								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
@@ -1151,10 +1220,10 @@ class UspsCarrier extends CarrierModule
 				'id_product' => (int)(Tools::getValue('id_product')),
 				'id_category' => 0,
 				'id_currency' => (int)(Configuration::get('PS_CURRENCY_DEFAULT')),
-				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
 				'packaging_type_code' => pSQL(Tools::getValue('packaging_type_code')),
-				'is_machinable' => pSQL(Tools::getValue('is_machinable')),
-				'additionnal_charges' => pSQL(Tools::getValue('additionnal_charges')),
+				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
+				'machinable_code' => pSQL(Tools::getValue('machinable_code')),
+				'additional_charges' => pSQL(Tools::getValue('additional_charges')),
 				'date_add' => pSQL($date),
 				'date_upd' => pSQL($date)
 			);
@@ -1170,7 +1239,7 @@ class UspsCarrier extends CarrierModule
 			if ($id_usps_rate_config > 0)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Settings failed'));
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 
 		// Update Script
@@ -1178,10 +1247,10 @@ class UspsCarrier extends CarrierModule
 		{
 			$updTab = array(
 				'id_currency' => (int)(Configuration::get('PS_CURRENCY_DEFAULT')),
-				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
 				'packaging_type_code' => pSQL(Tools::getValue('packaging_type_code')),
-				'is_machinable' => pSQL(Tools::getValue('is_machinable')),
-				'additionnal_charges' => pSQL(Tools::getValue('additionnal_charges')),
+				'packaging_size_code' => pSQL(Tools::getValue('packaging_size_code')),
+				'machinable_code' => pSQL(Tools::getValue('machinable_code')),
+				'additional_charges' => pSQL(Tools::getValue('additional_charges')),
 				'date_upd' => pSQL($date)
 			);
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_config', $updTab, 'UPDATE', '`id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
@@ -1196,7 +1265,7 @@ class UspsCarrier extends CarrierModule
 			if ($result)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Settings failed'));
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 
 		// Delete Script
@@ -1209,7 +1278,7 @@ class UspsCarrier extends CarrierModule
 			if ($result1)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Settings failed'));			
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));			
 		}
 	}
 
@@ -1244,13 +1313,12 @@ class UspsCarrier extends CarrierModule
 
 	public function hookupdateCarrier($params)
 	{
-		/*
-		if ((int)($params['id_carrier']) == (int)(Configuration::get('SOCOLISSIMO_CARRIER_ID')))
+		if ((int)($params['id_carrier']) != (int)($params['carrier']->id))
 		{
-			Configuration::updateValue('SOCOLISSIMO_CARRIER_ID', (int)($params['carrier']->id));
-			Configuration::updateValue('SOCOLISSIMO_CARRIER_ID_HIST', Configuration::get('SOCOLISSIMO_CARRIER_ID_HIST').'|'.(int)($params['carrier']->id));
+			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `id_carrier` = '.(int)$params['id_carrier']);
+			$update = array('id_carrier' => (int)($params['carrier']->id), 'id_carrier_history' => pSQL($serviceSelected['id_carrier_history'].'|'.(int)($params['carrier']->id)));
+			Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', $update, 'UPDATE', '`id_carrier` = '.(int)$params['id_carrier']);
 		}
-		*/
 	}
 
 	public function displayInfoByCart()
@@ -1400,32 +1468,32 @@ class UspsCarrier extends CarrierModule
 				return false;
 
 			// Load param product
-			if ($product['weight'] < '0.1')
-				$product['weight'] = '0.1';
-			$wsParams['width'] = $product['width'];
-			$wsParams['height'] = $product['height'];
-			$wsParams['depth'] = $product['depth'];
-			$wsParams['weight'] = $product['weight'];
-			$wsParams['servicetype'] = $serviceSelected['code'];
+			$wsParams['service'] = $serviceSelected['code'];
+			for ($qty = 0; $qty < $product['quantity']; $qty++)
+				$wsParams['package_list'][] = array(
+					'width' => ($product['width'] ? $product['width'] : 1),
+					'height' => ($product['height'] ? $product['height'] : 1),
+					'depth' => ($product['depth'] ? $product['depth'] : 1),
+					'weight' => ($product['weight'] ? $product['weight'] : 1),
+					'packaging_type' => (isset($config['packaging_type_code']) ? $config['packaging_type_code'] : Configuration::get('USPS_CARRIER_PACKAGING_TYPE')),
+					'packaging_size' => (isset($config['packaging_size_code']) ? $config['packaging_size_code'] : Configuration::get('USPS_CARRIER_PACKAGING_SIZE')),
+					'machinable' => (isset($config['machinable_code']) ? $config['machinable_code'] : Configuration::get('USPS_CARRIER_MACHINABLE')),
+				);
 
 			// If Additional charges
-			if (isset($config['id_currency']) && isset($config['additionnal_charges']))
+			if (isset($config['id_currency']) && isset($config['additional_charges']))
 			{
 				$conversionRate = 1;
 				$conversionRate = $this->getCookieCurrencyRate((int)($config['id_currency']));
-				$cost += ($config['additionnal_charges'] * $conversionRate);
+				$cost += ($config['additional_charges'] * $conversionRate);
 			}
-
-			// If webservice return a cost, we add it, else, we return the original shipping cost
-			$result = $this->getUspsShippingCost($wsParams);
-			if ($result['connect'] && $result['cost'] > 0)
-				$cost += $result['cost'];
-			else
-				return false;
 		}
 
-		if ($cost > 0)
-			return $cost;
+
+		// If webservice return a cost, we add it, else, we return the original shipping cost
+		$result = $this->getUspsShippingCost($wsParams);
+		if ($result['connect'] && $result['cost'] > 0)
+			return ($cost + $result['cost']);
 		return false;
 	}
 
@@ -1455,9 +1523,6 @@ class UspsCarrier extends CarrierModule
 			'shipper_city' => Configuration::get('USPS_CARRIER_CITY'),
 			'shipper_country_iso' => $shipper_country['iso_code'],
 			'shipper_state_iso' => $shipper_state['iso_code'],
-			'packagingsize' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'),
-			'packagingtype' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'),
-			'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE'),
 			'products' => $params->getProducts()
 		);
 		$wsParams['hash'] = $this->getOrderShippingCostHash($wsParams);
@@ -1475,7 +1540,10 @@ class UspsCarrier extends CarrierModule
 		// Get Webservices Cost and Cache it
 		$wscost = $this->getWebserviceShippingCost($wsParams);
 		$this->saveOrderShippingCostCache($wsParams, $wscost);
-		return $wscost;
+
+		if ($wscost > 0)
+			return $wscost + $shipping_cost;
+		return false;
 	}
 
 	public function getOrderShippingCostExternal($params)
@@ -1544,13 +1612,10 @@ class UspsCarrier extends CarrierModule
 			'shipper_city' => Configuration::get('USPS_CARRIER_CITY'),
 			'shipper_country_iso' => $shipper_country['iso_code'],
 			'shipper_state_iso' => $shipper_state['iso_code'],
-			'packagingsize' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'),
-			'packagingtype' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'),
-			'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE'),
-			'width' => 10,
-			'height' => 3,
-			'depth' => 10,
-			'weight' => 2.0
+			'package_list' => array(
+				array('width' => 10, 'height' => 3, 'depth' => 10, 'weight' => 2.0, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
+				array('width' => 3, 'height' => 3, 'depth' => 3, 'weight' => 1.0, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
+			),			
 		);
 
 		// Unit or Large Test
@@ -1563,20 +1628,19 @@ class UspsCarrier extends CarrierModule
 		foreach ($servicesList as $service)
 		{
 			// Sending Request
-			$wsParams['servicetype'] = $service['code'];
+			$wsParams['service'] = $service['code'];
 			$resultTab = Db::getInstance()->getValue('SELECT `result` FROM `'._DB_PREFIX_.'usps_cache_test` WHERE `hash` = \''.pSQL(md5($this->getXml($wsParams))).'\'');
 			if ($resultTab)
 				$resultTab = unserialize($resultTab);
 			else
-			{
 				$resultTab = $this->sendRequest($wsParams);
-				if ($resultTab)
-					Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_cache_test', array('hash' => pSQL(md5($this->getXml($wsParams))), 'result' => pSQL(serialize($resultTab)), 'date_add' => pSQL(date('Y-m-d H:i:s')), 'date_upd' => pSQL(date('Y-m-d H:i:s'))), 'INSERT');
-			}
 
 			// Return results
 			if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
+			{
+				Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_cache_test', array('hash' => pSQL(md5($this->getXml($wsParams))), 'result' => pSQL(serialize($resultTab)), 'date_add' => pSQL(date('Y-m-d H:i:s')), 'date_upd' => pSQL(date('Y-m-d H:i:s'))), 'INSERT');
 				return true;
+			}
 
 			if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT']))
 				$this->_webserviceError = $this->l('Error').' '.$resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT'].' : '.$resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
@@ -1696,54 +1760,66 @@ class UspsCarrier extends CarrierModule
 		return $resultTab;
 	}
 
+
 	public function getXml($wsParams = array())
 	{
-		// KG, LB, OU conversions
-		$wsParams['weight_pounds'] = $wsParams['weight'];
-		if ($this->_weightUnit == 'KG' || $this->_weightUnit == 'KGS')
-			$wsParams['weight_pounds'] = round($wsParams['weight'] * 2.20462262);
-		$wsParams['weight_ounces'] = $wsParams['weight_pounds'] * 16;
+		// Template Xml Package List
+		$xmlPackageList = '';
+		$xmlPackageTemplate = @file_get_contents(dirname(__FILE__).'/xml-package.tpl');
 
-		// Var assigns
-		$search = array(
-			'[[USERID]]',
-			'[[Service]]',
-			'[[ZipOrigination]]',
-			'[[ZipDestination]]',
-			'[[Pounds]]',
-			'[[Ounces]]',
-			'[[Container]]',
-			'[[Size]]',
-			'[[Width]]',
-			'[[Height]]',
-			'[[Length]]',
-			'[[Machinable]]'
-		);
-		$replace = array(
-			Configuration::get('USPS_CARRIER_USER_ID'),
-			$wsParams['servicetype'],
-			$wsParams['shipper_postalcode'],
-			$wsParams['recipient_postalcode'],
-			$wsParams['weight_pounds'],
-			$wsParams['weight_ounces'],
-			$wsParams['packagingtype'],
-			$wsParams['packagingsize'],
-			$wsParams['width'],
-			$wsParams['height'],
-			$wsParams['depth'],
-			$wsParams['machinable']
-		);
+		foreach ($wsParams['package_list'] as $k => $p)
+		{
+			// KG, LB, OU conversions
+			$p['weight_pounds'] = $p['weight'];
+			if ($this->_weightUnit == 'KG' || $this->_weightUnit == 'KGS')
+				$p['weight_pounds'] = round($p['weight'] * 2.20462262);
+			$p['weight_ounces'] = $p['weight_pounds'] * 16;
 
-		$dir = dirname(__FILE__);
-		if (preg_match('/classes/i', $dir))
-			$dir .= '/../modules/uspscarrier/';
-		$xml = @file_get_contents($dir.'/xml.tpl');
-		$xml = str_replace($search, $replace, $xml);
-		$xml = str_replace(array("\r\n", "\n", "\t"), array('', '', ''), $xml);
+			// Replace in template
+			$search = array(
+				'[[ID]]',
+				'[[Service]]',
+				'[[ZipOrigination]]',
+				'[[ZipDestination]]',
+				'[[Pounds]]',
+				'[[Ounces]]',
+				'[[Container]]',
+				'[[Size]]',
+				'[[Width]]',
+				'[[Height]]',
+				'[[Length]]',
+				'[[Machinable]]'
+			);
+			$replace = array(
+				$k + 1,
+				$wsParams['service'],
+				$wsParams['shipper_postalcode'],
+				$wsParams['recipient_postalcode'],
+				$p['weight_pounds'],
+				$p['weight_ounces'],
+ 				$p['packaging_type'],
+ 				$p['packaging_size'],
+				$p['width'],
+				$p['height'],
+				$p['depth'],
+				$p['machinable']
+			);
+			$xmlPackageList .= str_replace($search, $replace, $xmlPackageTemplate);
+		}
 
+
+		// Template Xml
+		$search = array('[[USERID]]', '[[PackageList]]');
+		$replace = array(Configuration::get('USPS_CARRIER_USER_ID'), $xmlPackageList);
+		$xmlTemplate = @file_get_contents(dirname(__FILE__).'/xml.tpl');
+		$xml = str_replace($search, $replace, $xmlTemplate);
+
+
+		// Return
 		return $xml;
 	}
 
 }
 
 ?>
+

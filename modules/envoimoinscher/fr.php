@@ -2,6 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_30601e382c183178fb63c7a4ca4d2c16'] = 'Aucune commande à exporter';
+$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_2525b2ada3736eb707b1484684b61d07'] = 'Merci de configurer le module pour pouvoir l\'utiliser';
+$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_2345e28c9b93f368968be4781ed70f5c'] = 'Change configuration';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e0b8a2c577580cb773bda0486acc4bf8'] = 'Envoimoinscher';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_416119891d1be4adf191fc454e3b76fa'] = 'Trouvez le meilleur prix pour votre envoi. Comparez et commandez les offres des transporteurs, à des tarifs négociés.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_cc89336eed19f4c3bef8ae484eb43109'] = '\'Largeur\'';
