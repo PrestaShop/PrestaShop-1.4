@@ -117,8 +117,7 @@ class AdminPreferences extends AdminTab
 
 		if (isset($_POST['submitGeneral'.$this->table]))
 		{
-			if (Tools::getValue('PS_REWRITING_SETTINGS') != Configuration::get('PS_REWRITING_SETTINGS'))
-				Module::hookExec('categoryUpdate'); // We call this hook, for regenerate cache of categories
+			Module::hookExec('categoryUpdate'); // We call this hook, for regenerate cache of categories
 			if (Tools::getValue('PS_CONDITIONS') == true AND (Tools::getValue('PS_CONDITIONS_CMS_ID') == 0 OR !Db::getInstance()->getValue('
 			SELECT `id_cms` FROM `'._DB_PREFIX_.'cms`
 			WHERE id_cms = '.(int)(Tools::getValue('PS_CONDITIONS_CMS_ID')))))
