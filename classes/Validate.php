@@ -702,7 +702,7 @@ class ValidateCore
 	*/
 	static public function isUrl($url)
 	{
-		return preg_match('/^([[:alnum:]]|[:#%&_=\(\)\.\? \+\-@\/])+$/ui', $url);
+		return preg_match('/^([[:alnum:]]|[~:#%&_=\(\)\.\? \+\-@\/])+$/ui', $url);
 	}
 
 	/**
