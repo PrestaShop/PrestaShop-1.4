@@ -303,14 +303,13 @@ class LinkCore
 	
 	private function getLangLink($id_lang = NULL)
 	{
+		if (!$this->allow OR Language::countActiveLanguages() <= 1)
+			return '';
+			
+		global $cookie;
 		if (!$id_lang)
-		{
-			global $cookie;
-			$id_lang = (int)($cookie->id_lang);
-		}
+			$id_lang = (int)$cookie->id_lang;
 		
-		if (!$this->allow)
-			return NULL;
 		return Language::getIsoById((int)$id_lang).'/';
 	}
 }

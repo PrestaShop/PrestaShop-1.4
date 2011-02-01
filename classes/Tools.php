@@ -1491,6 +1491,7 @@ class ToolsCore
 	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '')
 	{
 		$tab = array('ErrorDocument' => array(), 'RewriteEngine' => array(), 'RewriteRule' => array());
+		$multilang = (Language::countActiveLanguages() > 1);
 
 		// ErrorDocument
 		$tab['ErrorDocument']['comment'] = '# Catch 404 errors';
@@ -1500,22 +1501,29 @@ class ToolsCore
 		$tab['RewriteEngine']['comment'] = '# URL rewriting module activation';
 
 		// RewriteRules
-		//IMPORTANT : if you change the lines bellow, don"t forget to change the "urlcanonical" module too
 		$tab['RewriteRule']['comment'] = '# URL rewriting rules';
-		$tab['RewriteRule']['content']['^([a-z0-9]+)\-([a-z0-9]+)(\-[_a-zA-Z0-9-]*)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/p/$1-$2$3.jpg [L]';
-		$tab['RewriteRule']['content']['^([0-9]+)\-([0-9]+)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/p/$1-$2.jpg [L]';
-		$tab['RewriteRule']['content']['^([0-9]+)(\-[_a-zA-Z0-9-]*)/([_a-zA-Z0-9-]*)\.jpg$'] = 'img/c/$1$2.jpg [L]';
-		$tab['RewriteRule']['content']['^([a-z]{2})/([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$3&isolang=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$2&isolang=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'category.php?id_category=$2&isolang=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-zA-Z0-9-]*)/([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$2 [QSA,L]';
-		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)\.html'] = 'product.php?id_product=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^([0-9]+)\-([a-zA-Z0-9-]*)'] = 'category.php?id_category=$1 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-z]{2})/content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms=$2 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-z]{2})/content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms_category=$2 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)__([a-zA-Z0-9-]*)'] = 'supplier.php?isolang=$1&id_supplier=$2 [QSA,L]';
-		$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?isolang=$1&id_manufacturer=$2 [QSA,L]';
+		$tab['RewriteRule']['content']['^([a-z0-9]+)\-([a-z0-9]+)(\-[_a-zA-Z0-9-]*)/[_a-zA-Z0-9-]*\.jpg$'] = 'img/p/$1-$2$3.jpg [L]';
+		$tab['RewriteRule']['content']['^([0-9]+)\-([0-9]+)/[_a-zA-Z0-9-]*\.jpg$'] = 'img/p/$1-$2.jpg [L]';
+		$tab['RewriteRule']['content']['^([0-9]+)(\-[_a-zA-Z0-9-]*)/[_a-zA-Z0-9-]*\.jpg$'] = 'img/c/$1$2.jpg [L]';
+		$tab['RewriteRule']['content']['^([0-9]+)\-[a-zA-Z0-9-]*\.html'] = 'product.php?id_product=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([0-9]+)\-[a-zA-Z0-9-]*'] = 'category.php?id_category=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^[a-zA-Z0-9-]*/([0-9]+)\-[a-zA-Z0-9-]*\.html'] = 'product.php?id_product=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)'] = 'supplier.php?id_supplier=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?id_manufacturer=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms=$1 [QSA,L]';
+		$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms_category=$1 [QSA,L]';
 
+		if ($multilang)
+		{
+			$tab['RewriteRule']['content']['^([a-z]{2})/[a-zA-Z0-9-]*/([0-9]+)\-[a-zA-Z0-9-]*\.html'] = 'product.php?id_product=$2&isolang=$1 [QSA,L]';
+			$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)\-[a-zA-Z0-9-]*\.html'] = 'product.php?id_product=$2&isolang=$1 [QSA,L]';
+			$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)\-[a-zA-Z0-9-]*'] = 'category.php?id_category=$2&isolang=$1 [QSA,L]';
+			$tab['RewriteRule']['content']['^([a-z]{2})/content/([0-9]+)\-[a-zA-Z0-9-]*'] = 'cms.php?isolang=$1&id_cms=$2 [QSA,L]';
+			$tab['RewriteRule']['content']['^([a-z]{2})/content/category/([0-9]+)\-[a-zA-Z0-9-]*'] = 'cms.php?isolang=$1&id_cms_category=$2 [QSA,L]';
+			$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)__[a-zA-Z0-9-]*'] = 'supplier.php?isolang=$1&id_supplier=$2 [QSA,L]';
+			$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)_[a-zA-Z0-9-]*'] = 'manufacturer.php?isolang=$1&id_manufacturer=$2 [QSA,L]';
+		}
+		
 		// Compatibility with the old URLs
 		if (!Configuration::get('PS_INSTALL_VERSION') OR version_compare(Configuration::get('PS_INSTALL_VERSION'), '1.4.0.7') == -1)
 		{
@@ -1526,58 +1534,59 @@ class ToolsCore
 			$tab['RewriteRule']['content']['^lang-([a-z]{2})/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'category.php?id_category=$2&isolang=$1 [QSA,L]';
 			$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms=$2 [QSA,L]';
 			$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?isolang=$1&id_cms_category=$2 [QSA,L]';
-			$tab['RewriteRule']['content']['^([0-9]+)__([a-zA-Z0-9-]*)'] = 'supplier.php?isolang=$1&id_supplier=$2 [QSA,L]';
-			$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?isolang=$1&id_manufacturer=$2 [QSA,L]';
 		}
 
 		Language::loadLanguages();
-		$default_meta = Meta::getMetasByIdLang((int)(Configuration::get('PS_LANG_DEFAULT')));
+		$default_meta = Meta::getMetasByIdLang((int)Configuration::get('PS_LANG_DEFAULT'));
 
-		foreach (Language::getLanguages() AS $language)
-		{
-			foreach (Meta::getMetasByIdLang($language['id_lang']) AS $key => $meta)
+		if ($multilang)
+			foreach (Language::getLanguages() as $language)
 			{
-				//RewriteRule ^es/contacto$ contact-form.php [QSA,L]
-				if (!empty($meta['url_rewrite']))
-					$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
-				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
-					$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
+				foreach (Meta::getMetasByIdLang($language['id_lang']) as $key => $meta)
+					if (!empty($meta['url_rewrite']))
+						$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
+					else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
+						$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
+				$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';
 			}
-			$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';
-		}
+		else
+			foreach ($default_meta as $key => $meta)
+				if (!empty($meta['url_rewrite']))
+					$tab['RewriteRule']['content']['^'.$meta['url_rewrite'].'$'] = $meta['page'].'.php [QSA,L]';
+				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
+					$tab['RewriteRule']['content']['^'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php [QSA,L]';
 
 		if (!$writeFd = @fopen($path, 'w'))
 			return false;
-		else
+
+		// PS Comments
+		fwrite($writeFd, "# .htaccess automaticaly generated by PrestaShop e-commerce open-source solution\n");
+		fwrite($writeFd, "# WARNING: PLEASE DO NOT MODIFY THIS FILE MANUALLY. IF NECESSARY, ADD YOUR SPECIFIC CONFIGURATION WITH THE HTACCESS GENERATOR IN BACK OFFICE\n");
+		fwrite($writeFd, "# http://www.prestashop.com - http://www.prestashop.com/forums\n\n");
+		if (!empty($specific))
+			fwrite($writeFd, $specific);
+
+		// RewriteEngine
+		fwrite($writeFd, "\n<IfModule mod_rewrite.c>\n");
+		fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
+		fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
+		// Webservice
+		fwrite($writeFd, 'RewriteRule ^api/?(.*)$ '.__PS_BASE_URI__."webservice/dispatcher.php?url=$1 [QSA,L]\n");
+
+		// Classic URL rewriting
+		if ($rewrite_settings)
+			foreach ($tab['RewriteRule']['content'] as $rule => $url)
+				fwrite($writeFd, 'RewriteRule '.$rule.' '.__PS_BASE_URI__.$url."\n");
+
+		fwrite($writeFd, "</IfModule>\n\n");
+
+		// ErrorDocument
+		fwrite($writeFd, $tab['ErrorDocument']['comment']."\nErrorDocument ".$tab['ErrorDocument']['content']."\n");
+
+		// Cache control
+		if ($cache_control)
 		{
-			// PS Comments
-			fwrite($writeFd, "# .htaccess automaticaly generated by PrestaShop e-commerce open-source solution\n");
-			fwrite($writeFd, "# WARNING: PLEASE DO NOT MODIFY THIS FILE MANUALLY. IF NECESSARY, ADD YOUR SPECIFIC CONFIGURATION WITH THE HTACCESS GENERATOR IN BACK OFFICE\n");
-			fwrite($writeFd, "# http://www.prestashop.com - http://www.prestashop.com/forums\n\n");
-			if (!empty($specific))
-				fwrite($writeFd, $specific);
-
-			// RewriteEngine
-			fwrite($writeFd, "\n<IfModule mod_rewrite.c>\n");
-			fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
-			fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
-			// Webservice
-			fwrite($writeFd, 'RewriteRule ^api/?(.*)$ '.__PS_BASE_URI__."webservice/dispatcher.php?url=$1 [QSA,L]\n");
-
-			// Classic URL rewriting
-			if ($rewrite_settings)
-				foreach ($tab['RewriteRule']['content'] as $rule => $url)
-					fwrite($writeFd, 'RewriteRule '.$rule.' '.__PS_BASE_URI__.$url."\n");
-
-			fwrite($writeFd, "</IfModule>\n\n");
-
-			// ErrorDocument
-			fwrite($writeFd, $tab['ErrorDocument']['comment']."\nErrorDocument ".$tab['ErrorDocument']['content']."\n");
-
-			// Cache control
-			if ($cache_control)
-			{
-				$cacheControl = "
+			$cacheControl = "
 <IfModule mod_expires.c>
 	ExpiresActive On
 	ExpiresByType image/gif \"access plus 1 month\"
@@ -1598,16 +1607,12 @@ FileETag INode MTime Size
 	AddOutputFilterByType DEFLATE application/javascript
 	AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
-					";
-				fwrite($writeFd, $cacheControl);
-			}
-
-			fclose($writeFd);
-
-			return true;
+				";
+			fwrite($writeFd, $cacheControl);
 		}
+		fclose($writeFd);
+		return true;
 	}
-
 
 	public static function jsonEncode($json)
 	{

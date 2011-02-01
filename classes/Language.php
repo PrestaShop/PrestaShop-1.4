@@ -117,7 +117,7 @@ class LanguageCore extends ObjectModel
 	}
 	
 	
-	static public function checkFilesWithIsoCode($iso_code)
+	public static function checkFilesWithIsoCode($iso_code)
 	{
 		if (isset(self::$_checkedLangs[$iso_code]) AND self::$_checkedLangs[$iso_code])
 			return true;
@@ -128,7 +128,7 @@ class LanguageCore extends ObjectModel
 		return true;
 	}
 	
-	static public function getFilesList($iso_from, $theme_from, $iso_to = false, $theme_to = false, $select = false, $check = false, $modules = false)
+	public static function getFilesList($iso_from, $theme_from, $iso_to = false, $theme_to = false, $select = false, $check = false, $modules = false)
 	{
 		if (empty($iso_from))
 			die(Tools::displayError());
@@ -363,7 +363,7 @@ class LanguageCore extends ObjectModel
 	  * @param boolean $active Select only active languages
 	  * @return array Languages
 	  */
-	static public function getLanguages($active = true)
+	public static function getLanguages($active = true)
 	{
 		$languages = array();
 		foreach (self::$_LANGUAGES AS $language)
@@ -375,7 +375,7 @@ class LanguageCore extends ObjectModel
 		return $languages;
 	}
 
-	static public function getLanguage($id_lang)
+	public static function getLanguage($id_lang)
 	{
 		if (!array_key_exists((int)($id_lang), self::$_LANGUAGES))
 			return false;
@@ -388,7 +388,7 @@ class LanguageCore extends ObjectModel
 	  * @param integer $id_lang Language ID
 	  * @return string Iso code
 	  */
-	static public function getIsoById($id_lang)
+	public static function getIsoById($id_lang)
 	{
 		if (isset(self::$_LANGUAGES[(int)($id_lang)]['iso_code']))
 			return self::$_LANGUAGES[(int)($id_lang)]['iso_code'];
@@ -401,7 +401,7 @@ class LanguageCore extends ObjectModel
 	  * @param string $iso_code Iso code
 	  * @return integer Language ID
 	  */
-	static public function getIdByIso($iso_code)
+	public static function getIdByIso($iso_code)
 	{
 	 	if (!Validate::isLanguageIsoCode($iso_code))
 	 		die(Tools::displayError());
@@ -409,7 +409,7 @@ class LanguageCore extends ObjectModel
 		return Db::getInstance()->getValue('SELECT `id_lang` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = \''.pSQL(strtolower($iso_code)).'\'');
 	}
 	
-	static public function getLanguageCodeByIso($iso_code)
+	public static function getLanguageCodeByIso($iso_code)
 	{
 	 	if (!Validate::isLanguageIsoCode($iso_code))
 	 		die(Tools::displayError());
@@ -423,12 +423,12 @@ class LanguageCore extends ObjectModel
 	  * @param string $iso_code Iso code
 	  * @return array  Language (id_lang, iso_code)
 	  */
-	static public function getIsoIds($active = true) 
+	public static function getIsoIds($active = true) 
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang` '.($active ? 'WHERE active = 1' : ''));
 	}
 	
-	static public function copyLanguageData($from, $to)
+	public static function copyLanguageData($from, $to)
 	{
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
 		foreach ($result AS $row)
@@ -456,7 +456,7 @@ class LanguageCore extends ObjectModel
 	/**
 	  * Load all languages in memory for caching
 	  */
-	static public function loadLanguages()
+	public static function loadLanguages()
 	{
 		self::$_LANGUAGES = array();
 		
@@ -480,7 +480,7 @@ class LanguageCore extends ObjectModel
 							);
 	}	
 
-	static public function checkAndAddLanguage($iso_code)
+	public static function checkAndAddLanguage($iso_code)
 	{
 		if (Language::getIdByIso($iso_code))
 			return true;
@@ -538,14 +538,19 @@ class LanguageCore extends ObjectModel
 		}
 	}
 
-	static private function _copyNoneFlag($id)
+	private static function _copyNoneFlag($id)
 	{
 		return copy(dirname(__FILE__).'/../img/l/none.jpg', dirname(__FILE__).'/../img/l/'.$id.'.jpg');
 	}
 	
-	static public function isInstalled($iso_code)
+	public static function isInstalled($iso_code)
 	{
 		return Db::getInstance()->getValue('SELECT `id_lang` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = "'.pSQL($iso_code).'"');
+	}
+	
+	public static function countActiveLanguages()
+	{
+		return Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'lang` WHERE `active` = 1');
 	}
 }
 
