@@ -556,7 +556,7 @@ class ValidateCore
 	*/
 	static public function isPostCode($postcode)
 	{
-		return preg_match('/^[a-z 0-9-]+$/ui', $postcode);
+		return empty($postcode) OR preg_match('/^[a-z 0-9-]+$/ui', $postcode);
 	}
 	
 	/**
