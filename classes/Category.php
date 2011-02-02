@@ -135,12 +135,14 @@ class CategoryCore extends ObjectModel
 	public	function add($autodate = true, $nullValues = false)
 	{
 		$this->position = self::getLastPosition((int)(Tools::getValue('id_parent')));
-		$this->level_depth = $this->calcLevelDepth();
+		if ($this->level_depth != 0)
+			$this->level_depth = $this->calcLevelDepth();
 		$ret = parent::add($autodate);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
 		$this->updateGroup(Tools::getValue('groupBox'));
 		Module::hookExec('categoryAddition'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
+		file_put_contents('toto.txt', print_r($this, true), FILE_APPEND);
 		return $ret;
 	}
 
@@ -308,7 +310,6 @@ class CategoryCore extends ObjectModel
 		$parentCategory = new Category((int)($this->id_parent));
 		if (!Validate::isLoadedObject($parentCategory))
 			die('parent category does not exist');
-
 		return $parentCategory->level_depth + 1;
 	}
 

@@ -155,8 +155,9 @@ var shopImporter = {
 			shopImporter.getDatas(conf[shopImporter.idMethod]);
 			return;
 		}
-		if (typeof(methodName) != 'undefined' && !$('#ok_feedback_'+methodName[0]).length)
+		if (typeof(methodName) != 'undefined')
 		{
+			
 			$('#steps').html($('#steps').html()+'<div id="ok_feedback_'+methodName[0]+'" style="display:none;" class="import"><img src="'+this.srcImport+'">'+methodName[1]+'<span id="display_error_'+methodName[0]+'" style="display:none"><span><div id="feedback_'+methodName[0]+'_errors_list"></div></div>');
 			$('#ok_feedback_'+methodName[0]).css('display', '');
 		
@@ -169,22 +170,22 @@ var shopImporter = {
 	       dataType : "json",
 	       data: 'ajax=true&getData&className='+methodName[2]+'&getMethod='+methodName[0]+'&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&limit='+this.limit+'&save='+this.save+'&errors='+this.errors+'&hasErrors='+this.hasErrors+this.specificOptions ,
 	       success: function(jsonData)
-	       {		      
+	       {	
 		       	var jsonError;
 		       	if (jsonData.hasError)
 	    		{
 					jsonError = '';
 					if (jsonData.error == 'not_exist')
 					{
-						$('#ok_feedback_'+methodName[0]).removeClass('conf').addClass('warn');
-						$('#ok_feedback_'+methodName[0]).html('<img src="'+shopImporter.srcWarn+'">'+methodName[1]+' '+notExist);
+						$('#ok_feedback_'+methodName[0]).removeClass('conf').addClass(function() { 
+							$('#ok_feedback_'+methodName[0]).html('<img src="'+shopImporter.srcWarn+'">'+methodName[1]+' '+notExist);
+							return 'warn';
+						});
 					}
 					else
 					{
 						for (i=0;i<jsonData.error.length;i++)
 							jsonError = jsonError+'<li>Id : '+jsonData.error[i]+'</li>';
-						$('#ok_feedback_'+methodName[0]).removeClass('import').addClass('error');
-						$('#ok_feedback_'+methodName[0]+' >img:first').attr('src', shopImporter.srcError);
 									
 						if ($('#display_error_'+methodName[0]+'_link').length == 0)
 						{
@@ -198,14 +199,19 @@ var shopImporter = {
 							$('#feedback_'+methodName[0]+'_errors_list > ul').html($('#feedback_'+methodName[0]+'_errors_list > ul').html() + jsonError);
 						}
 					}
+					
 					if (jsonData.datas.length != 100)
 					{
+						if ($('#display_error_'+methodName[0]+'_link').length != 0)
+							$('#ok_feedback_'+methodName[0]).removeClass('import').addClass( function() {
+								$('#ok_feedback_'+methodName[0]+' >img:first').attr('src', shopImporter.srcError);
+								return 'error';
+							});
 						shopImporter.idMethod ++;
 						shopImporter.limit = 0;
 					}
 					else
 						shopImporter.limit += 100;
-						
 					if ((shopImporter.idMethod < shopImporter.nbrMethod))
 						shopImporter.getDatas(conf[shopImporter.idMethod]);
 					else
@@ -215,17 +221,28 @@ var shopImporter = {
 	    		{
     				if (jsonData.datas.length != 100)
     				{
-						$('#ok_feedback_'+methodName[0]).removeClass('import').addClass('conf');
-						$('#ok_feedback_'+methodName[0]+'>img:first').attr('src', shopImporter.srcConf);
+						if ($('#display_error_'+methodName[0]+'_link').length != 0)
+						{
+							$('#ok_feedback_'+methodName[0]).removeClass('import').addClass( function() {
+								$('#ok_feedback_'+methodName[0]+' >img:first').attr('src', shopImporter.srcError);
+								return 'error';
+							});
+						}else
+						{
+							$('#ok_feedback_'+methodName[0]).removeClass('import').addClass('conf');
+							$('#ok_feedback_'+methodName[0]+'>img:first').attr('src', shopImporter.srcConf);
+						}
 						shopImporter.idMethod ++;
 						shopImporter.limit = 0;
 						shopImporter.getDatas(conf[shopImporter.idMethod]);
 					}
 					else
 					{
-						shopImporter.limit += 100;
 						if (shopImporter.idMethod < shopImporter.nbrMethod)
+						{
+							shopImporter.limit += 100;
 							shopImporter.getDatas(conf[shopImporter.idMethod]);
+						}
 						else
 							shopImporter.displayEnd(true);
 					}	
@@ -344,7 +361,6 @@ function enableShowErrorsTruncate()
 
 function displaySpecificOptions(moduleName, server, user, password, database, prefix)
 {
-	console.log(password);
 	$.ajax({
 	       type: 'GET',
 	       url: '../modules/shopimporter/ajax.php',
@@ -366,6 +382,38 @@ function displaySpecificOptions(moduleName, server, user, password, database, pr
 		   }
 	   });
 }
+function validateSpecificOptions(moduleName, specificOptions)
+{
+	$.ajax({
+	       type: 'GET',
+	       url: '../modules/shopimporter/ajax.php',
+	       async: false,
+	       cache: false,
+	       dataType : "json",
+	       data: 'ajax=true&validateSpecificOptions&moduleName='+moduleName+specificOptions ,
+	       success: function(jsonData)
+	       {
+	       		var jsonError = '';
+	       		if (jsonData.hasError)
+	    		{
+	    			for (i=0;i<jsonData.error.length;i++)
+							jsonError = jsonError+'<li>'+jsonData.error[i]+'</li>';
+	    			$('#specificOptionsErrors').html('<ul>'+jsonError+'</ul>');
+	    			$('#specificOptionsErrors').fadeIn('slow');
+				}
+	       },
+	       error: function(XMLHttpRequest, textStatus, errorThrown)
+		   {
+		   		alert('TECHNICAL ERROR\nDetails:\nError thrown: ' + XMLHttpRequest + '\n' + 'Text status: ' + textStatus);
+		   }
+	   });
+	   
+	    if ($('#specificOptionsErrors').html().length != 0)
+	 		return false;
+		else
+	 		return true;
+}
+
 
 $(document).ready(function(){
 	
@@ -416,27 +464,37 @@ $(document).ready(function(){
 	});	
 	
 	$('#checkAndSaveConfig').unbind('click').click(function(){
-		$('#steps').html('');
-		$.scrollTo($("#steps"), 300 , {
-			onAfter:function(){
-							shopImporter.specificOptions = '';
-							$('#specificOptionsContent :input').each(function (){
-								shopImporter.specificOptions = shopImporter.specificOptions+'&'+$(this).attr('name')+'='+$(this).attr('value');
-							});
-								shopImporter.idMethod = 0;
-								shopImporter.limit = 0;
-								shopImporter.save = 0;
-								shopImporter.moduleName = $('#import_module_name').val();
-								shopImporter.server = $('#server').val();
-								shopImporter.user = $('#user').val();
-								shopImporter.password = $('#password').val();
-								shopImporter.database = $('#database').val();
-								shopImporter.prefix = $('#prefix').val();
-								shopImporter.hasErrors = $('input[name=hasErrors]:radio:checked').val();
-								shopImporter.checkAndSaveConfig(shopImporter.save);
-							return false;
-			}
+		$('#steps, #specificOptionsErrors').html('');
+		$('#specificOptionsErrors').hide();
+		shopImporter.specificOptions = '';
+		$('#specificOptionsContent :input').each(function (){
+			shopImporter.specificOptions = shopImporter.specificOptions+'&'+$(this).attr('name')+'='+$(this).attr('value');
 		});
+		moduleName = $('#import_module_name').val();
+		if (validateSpecificOptions(moduleName, shopImporter.specificOptions) == true)
+		{
+			$.scrollTo($("#steps"), 300 , {
+				onAfter:function(){
+								shopImporter.specificOptions = '';
+								$('#specificOptionsContent :input').each(function (){
+									shopImporter.specificOptions = shopImporter.specificOptions+'&'+$(this).attr('name')+'='+$(this).attr('value');
+								});
+									shopImporter.idMethod = 0;
+									shopImporter.limit = 0;
+									shopImporter.save = 0;
+									shopImporter.moduleName = $('#import_module_name').val();
+									shopImporter.server = $('#server').val();
+									shopImporter.user = $('#user').val();
+									shopImporter.password = $('#password').val();
+									shopImporter.database = $('#database').val();
+									shopImporter.prefix = $('#prefix').val();
+									shopImporter.hasErrors = $('input[name=hasErrors]:radio:checked').val();
+									shopImporter.checkAndSaveConfig(shopImporter.save);
+								return false;
+				}
+			});
+		}
+		
 	});	
 	
 	$('#importOptionsYesNo :radio').change( function () {
@@ -456,6 +514,4 @@ $(document).ready(function(){
 			$('#one_thing_error_feedback').fadeIn('slow');
 		}			
 	});
-	
-	
 });

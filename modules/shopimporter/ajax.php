@@ -7,6 +7,17 @@ include_once('../../modules/shopimporter/shopimporter.php');
 if (!Tools::getValue('ajax'))
 	die('');
 
+$moduleName = Tools::getValue('moduleName');
+$className =Tools::getValue('className');
+$getMethod = Tools::getValue('getMethod');
+$limit = Tools::getValue('limit');
+$server = Tools::getValue('server');
+$user = Tools::getValue('user');
+$password = Tools::getValue('password');
+$database = Tools::getValue('database');
+$prefix = Tools::getValue('prefix');
+$save = Tools::getValue('save');
+
 if (Tools::isSubmit('checkAndSaveConfig'))
 {
 	if ($link = @mysql_connect(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password')))
@@ -26,18 +37,6 @@ if (Tools::isSubmit('checkAndSaveConfig'))
 
 if (Tools::isSubmit('getData') || Tools::isSubmit('syncLang') || Tools::isSubmit('syncCurrency'))
 {		
-
-	$moduleName = Tools::getValue('moduleName');
-	$className =Tools::getValue('className');
-	$getMethod = Tools::getValue('getMethod');
-	$limit = Tools::getValue('limit');
-	$server = Tools::getValue('server');
-	$user = Tools::getValue('user');
-	$password = Tools::getValue('password');
-	$database = Tools::getValue('database');
-	$prefix = Tools::getValue('prefix');
-	$save = Tools::getValue('save');
-	
 	if (Tools::isSubmit('syncLang'))
 		$save = true;
 	
@@ -63,9 +62,6 @@ if (Tools::isSubmit('getData') || Tools::isSubmit('syncLang') || Tools::isSubmit
 
 if (Tools::isSubmit('truncatTable'))
 {	
-	$moduleName = Tools::getValue('moduleName');
-	$className =Tools::getValue('className');
-
 	$shopImporter = new shopImporter();
 	if ($shopImporter->truncateTable($className))
 		die('{"hasError" : false, "error" : []}');
@@ -75,14 +71,7 @@ if (Tools::isSubmit('truncatTable'))
 }
 
 if (Tools::isSubmit('displaySpecificOptions'))
-{
-	$moduleName = Tools::getValue('moduleName');
-	$server = Tools::getValue('server');
-	$user = Tools::getValue('user');
-	$password = Tools::getValue('password');
-	$database = Tools::getValue('database');
-	$prefix = Tools::getValue('prefix');
-	
+{	
 	if (file_exists('../../modules/'.$moduleName.'/'.$moduleName.'.php'))
 	{
 		require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
@@ -92,18 +81,30 @@ if (Tools::isSubmit('displaySpecificOptions'))
 		$importModule->passwd = $password;
 		$importModule->database = $database;
 		$importModule->prefix = $prefix;
-	if ($link = @mysql_connect(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password')))
-	{
-		if(!@mysql_select_db(Tools::getValue('database'), $link))
-			die(Tools::displayError('The database selection cannot be made.'));
-		elseif (method_exists($importModule, 'displaySpecificOptions'))
-			die($importModule->displaySpecificOptions());
+		if ($link = @mysql_connect(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password')))
+		{
+			if(!@mysql_select_db(Tools::getValue('database'), $link))
+				die(Tools::displayError('The database selection cannot be made.'));
+			elseif (method_exists($importModule, 'displaySpecificOptions'))
+				die($importModule->displaySpecificOptions());
+			else
+				die('not_exist');
+		}
 		else
-			die('not_exist');
+			die(Tools::displayError('Link to database cannot be established.'));
 	}
-	else
-		die(Tools::displayError('Link to database cannot be established.'));
-		
-	}	
 }
+if (Tools::isSubmit('validateSpecificOptions'))
+{
+	if (file_exists('../../modules/'.$moduleName.'/'.$moduleName.'.php'))
+	{
+		require_once('../../modules/'.$moduleName.'/'.$moduleName.'.php');
+		$importModule = new $moduleName();
+		if (!method_exists($importModule, 'validateSpecificOptions'))
+			die('{"hasError" : true, "error" : ["not_exist"]}');
+		else
+			die($importModule->validateSpecificOptions());
+	}
+}	
+
 ?>
