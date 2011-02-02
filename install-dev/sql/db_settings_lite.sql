@@ -179,22 +179,22 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
-(36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),(36, 4, 'IN', NOW()),(36, 5, 'IN', NOW()),
-(38, 1, 'DE', NOW()),(38, 2, 'LI', NOW()),(38, 3, 'EN', NOW()),(38, 4, 'DE', NOW()),(38, 5, 'DE', NOW()),
+(36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),(36, 4, 'FA', NOW()),(36, 5, 'FA', NOW()),
+(38, 1, 'DE', NOW()),(38, 2, 'LI', NOW()),(38, 3, 'EN', NOW()),(38, 4, 'LI', NOW()),(38, 5, 'BC', NOW()),
 (46, 1, 'a|the|of|on|in|and|to', NOW()),(46, 2, 'le|les|de|et|en|des|les|une', NOW()),(46, 3, 'de|los|las|lo|la|en|de|y|el|a', NOW()),(46, 4, '', NOW()),(46, 5, '', NOW()),
 (68, 1, 0, NOW()),(68, 2, 0, NOW()),(68, 3, 0, NOW()),(68, 4, 0, NOW()),(68, 5, 0, NOW()),
 (74, 1, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW()),
 (74, 2, 'Cher client,\r\n\r\nCordialement,\r\nLe service client', NOW()),
 (74, 3, 'Estimado cliente,\r\n\r\nUn cordial saludo,\r\nAtención al cliente', NOW()),
-(74, 4, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW()),
-(74, 5, 'Dear Customer,\r\n\r\nRegards,\r\nCustomer service', NOW());
+(74, 4, 'Lieber Kunde,\r\n\r\nMit freundlichen Grüßen,\r\nIhr Kundenservice', NOW()),
+(74, 5, 'Gentile Cliente,\r\n\r\nCordiali saluti,\r\nServizio Clienti', NOW());
 
 INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`, `language_code`) VALUES
 (1, 'English (English)', 1, 'en', 'en-us'),(2, 'Français (French)', 1, 'fr', 'fr'),(3, 'Español (Spanish)', 1, 'es', 'es'),(4, 'Deutsch (German)', 1, 'de', 'de'),(5, 'Italiano (Italian)', 1, 'it', 'it');
 
 INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES (1, 0, 0, 1, 8, 1, NOW(), NOW(), 0);
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
-(1, 1, 'Home', '', 'home', NULL, NULL, NULL),(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL),(1, 4, 'Home', '', 'home', NULL, NULL, NULL),(1, 5, 'Home', '', 'home', NULL, NULL, NULL);
+(1, 1, 'Home', '', 'home', NULL, NULL, NULL),(1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL),(1, 4, 'Start', '', 'home', NULL, NULL, NULL),(1, 5, 'Home page', '', 'home', NULL, NULL, NULL);
 
 INSERT INTO `PREFIX_order_state` (`id_order_state`, `invoice`, `send_email`, `color`, `unremovable`, `logable`, `delivery`) VALUES
 (1, 0, 1, 'lightblue', 1, 0, 0),(2, 1, 1, '#DDEEFF', 1, 1, 0),(3, 1, 1, '#FFDD99', 1, 1, 1),(4, 1, 1, '#EEDDFF', 1, 1, 1),(5, 1, 0, '#DDFFAA', 1, 1, 1),
@@ -233,7 +233,29 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (8, 3, 'Error de pago', 'payment_error'),
 (9, 3, 'Productos fuera de línea', 'outofstock'),
 (10, 3, 'En espera de pago por transferencia bancaria', 'bankwire'),
-(11, 3, 'En espera de pago por PayPal', '');
+(11, 3, 'En espera de pago por PayPal', ''),
+(1, 4, 'Scheckzahlung wird erwartet', 'cheque'),
+(2, 4, 'Zahlung angenommen', 'payment'),
+(3, 4, 'Vorbereitung im Gang', 'preparation'),
+(4, 4, 'Wird geliefert', 'shipped'),
+(5, 4, 'Geliefert', ''),
+(6, 4, 'Abgebrochen', 'order_canceled'),
+(7, 4, 'Erstattet', 'refund'),
+(8, 4, 'Zahlungsfehler', 'payment_error'),
+(9, 4, 'Auffüllung im Gang', 'outofstock'),
+(10, 4, 'Zahlung durch Banküberweisung wird erwartet', 'bankwire'),
+(11, 4, 'Zahlung per PayPal wird erwartet', ''),
+(1, 5, 'In attesa di pagamento con assegno', 'cheque'),
+(2, 5, 'Pagamento accettato', 'payment'),
+(3, 5, 'Preparazione in corso', 'preparation'),
+(4, 5, 'Consegna in corso', 'shipped'),
+(5, 5, 'Consegnato', ''),
+(6, 5, 'Annullato', 'order_canceled'),
+(7, 5, 'Rimborsato', 'refund'),
+(8, 5, 'Errore di pagamento', 'payment_error'),
+(9, 5, 'In attesa di rifornimento', 'outofstock'),
+(10, 5, 'In attesa di pagamento con bonifico bancario', 'bankwire'),
+(11, 5, 'In attesa di pagamento con PayPal', '');
 
 INSERT INTO `PREFIX_zone` (`id_zone`, `name`, `active`) VALUES
 (1, 'Europe', 1),(2, 'North America', 1),(3, 'Asia', 1),(4, 'Africa', 1),
@@ -521,21 +543,21 @@ INSERT INTO `PREFIX_contact_lang` (`id_contact`, `id_lang`, `name`, `description
 (1, 1, 'Webmaster', 'If a technical problem occurs on this website'),
 (1, 2, 'Webmaster', 'Si un problème technique survient sur le site'),
 (1, 3, 'Webmaster', 'Si se produce un problema técnico en el sitio'),
-(1, 4, 'Webmaster', 'If a technical problem occurs on this website'),
-(1, 5, 'Webmaster', 'If a technical problem occurs on this website'),
+(1, 4, 'Webmaster', 'Falls ein technisches Problem auf der Webseite auftritt'),
+(1, 5, 'Webmaster', 'Se nel sito interviene un problema tecnico'),
 (2, 1, 'Customer service', 'For any question about a product, an order'),
 (2, 2, 'Service client', 'Pour toute question ou réclamation sur une commande'),
 (2, 3, 'Service client', 'Para cualquier pregunta o queja acerca de un pedido'),
-(2, 4, 'Customer service', 'For any question about a product, an order'),
-(2, 5, 'Customer service', 'For any question about a product, an order');
+(2, 4, 'Kundenservice', 'Bei Fragen oder Reklamationen zu einer Bestellung'),
+(2, 5, 'Servizio clienti', 'Per qualsiasi domanda o reclamo riguardo ad un ordine');
 
 INSERT INTO `PREFIX_discount_type` (`id_discount_type`) VALUES (1),(2),(3);
 INSERT INTO `PREFIX_discount_type_lang` (`id_discount_type`, `id_lang`, `name`) VALUES
 (1, 1, 'Discount on order (%)'),(2, 1, 'Discount on order (amount)'),(3, 1, 'Free shipping'),
 (1, 2, 'Réduction sur la commande (%)'),(2, 2, 'Réduction sur la commande (montant)'),(3, 2, 'Frais de port gratuits'),
 (1, 3, 'Descuento orden (%)'),(2, 3, 'Descuento (el orden de cantidad)'),(3, 3, 'Gastos de envío gratis'),
-(1, 4, 'Discount on order (%)'),(2, 4, 'Discount on order (amount)'),(3, 4, 'Free shipping'),
-(1, 5, 'Discount on order (%)'),(2, 5, 'Discount on order (amount)'),(3, 5, 'Free shipping');
+(1, 4, 'Preisnachlass auf die Bestellung (%)'),(2, 4, 'Preisnachlass auf die Bestellung (Betrag)'),(3, 4, 'Versandkosten gratis'),
+(1, 5, 'Sconto sull’ordine (%)'),(2, 5, 'Sconto sull’ordine (importo)'),(3, 5, 'Spese di porto gratuite');
 
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (1);
 INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES (1, 1, 'Administrator'),(1, 2, 'Administrateur'),(1, 3, 'Administrador'),(1, 4, 'Administrator'),(1, 5, 'Administrator');
@@ -612,24 +634,20 @@ INSERT INTO `PREFIX_quick_access` (`id_quick_access`, `link`, `new_window`) VALU
 (1, 'index.php', 0),(2, '../', 1),(3, 'index.php?tab=AdminCatalog&addcategory', 0),(4, 'index.php?tab=AdminCatalog&addproduct', 0),(5, 'index.php?tab=AdminDiscounts&adddiscount', 0);
 
 INSERT INTO `PREFIX_quick_access_lang` (`id_quick_access`, `id_lang`, `name`) VALUES
-(1, 1, 'Home'),(1, 2, 'Accueil'),(1, 3, 'Inicio'),
-(2, 1, 'My Shop'),(2, 2, 'Ma boutique'),(2, 3, 'Mi tienda'),
-(3, 1, 'New category'),(3, 2, 'Nouvelle catégorie'),(3, 3, 'Nueva categoría'),
-(4, 1, 'New product'),(4, 2, 'Nouveau produit'),(4, 3, 'Nuevo producto'),
-(5, 1, 'New voucher'),(5, 2, 'Nouveau bon de réduction'),(5, 3, 'Nuevo cupón');
+(1, 1, 'Home'),(1, 2, 'Accueil'),(1, 3, 'Inicio'),(1, 4, 'Start'),(1, 5, 'Home page'),
+(2, 1, 'My Shop'),(2, 2, 'Ma boutique'),(2, 3, 'Mi tienda'),(2, 4, 'Mein Shop'),(2, 5, 'Il mio negozio'),
+(3, 1, 'New category'),(3, 2, 'Nouvelle catégorie'),(3, 3, 'Nueva categoría'),(3, 4, 'Neue Kategorie'),(3, 5, 'Nuova categoria'),
+(4, 1, 'New product'),(4, 2, 'Nouveau produit'),(4, 3, 'Nuevo producto'),(4, 4, 'Neues Produkt'),(4, 5, 'Nuovo prodotto'),
+(5, 1, 'New voucher'),(5, 2, 'Nouveau bon de réduction'),(5, 3, 'Nuevo cupón'),(5, 4, 'Neuer Ermäßigungsgutschein'),(5, 5, 'Nuovo buono sconto');
 
 INSERT INTO `PREFIX_order_return_state` (`id_order_return_state`, `color`) VALUES (1, '#ADD8E6'),(2, '#EEDDFF'),(3, '#DDFFAA'),(4, '#FFD3D3'),(5, '#FFFFBB');
 
 INSERT INTO `PREFIX_order_return_state_lang` (`id_order_return_state`, `id_lang`, `name`) VALUES
-(1, 1, 'Waiting for confirmation'),(2, 1, 'Waiting for package'),(3, 1, 'Package received'),
-(4, 1, 'Return denied'),(5, 1, 'Return completed'),(1, 2, 'En attente de confirmation'),
-(2, 2, 'En attente du colis'),(3, 2, 'Colis reçu'),(4, 2, 'Retour refusé'),
-(5, 2, 'Retour terminé'),(1, 3, 'Pendiente de confirmación'),(2, 3, 'En espera de paquetes'),
-(3, 3, 'Paquetes recibidos'),(4, 3, 'Volver negó'),(5, 3, 'Diligenciados'),
-(1, 4, 'Waiting for confirmation'),(2, 4, 'Waiting for package'),(3, 4, 'Package received'),
-(4, 4, 'Return denied'),(5, 4, 'Return completed'),
-(1, 5, 'Waiting for confirmation'),(2, 5, 'Waiting for package'),(3, 5, 'Package received'),
-(4, 5, 'Return denied'),(5, 5, 'Return completed');
+(1, 1, 'Waiting for confirmation'),(2, 1, 'Waiting for package'),(3, 1, 'Package received'),(4, 1, 'Return denied'),(5, 1, 'Return completed'),
+(1, 2, 'En attente de confirmation'),(2, 2, 'En attente du colis'),(3, 2, 'Colis reçu'),(4, 2, 'Retour refusé'),(5, 2, 'Retour terminé'),
+(1, 3, 'Pendiente de confirmación'),(2, 3, 'En espera de paquetes'),(3, 3, 'Paquetes recibidos'),(4, 3, 'Volver negó'),(5, 3, 'Diligenciados'),
+(1, 4, 'Bestätigung wird erwartet'),(2, 4, 'Paket wird erwartet'),(3, 4, 'Paket erhalten'),(4, 4, 'Rücksendung abgelehnt'),(5, 4, 'Rücksendung beendet'),
+(1, 5, 'In attesa di conferma'),(2, 5, 'In attesa del pacco'),(3, 5, 'Pacco ricevuto'),(4, 5, 'Restituzione non accettata'),(5, 5, 'Restituzione terminata');
 
 INSERT INTO `PREFIX_meta` (`id_meta`, `page`) VALUES
 (1, '404'),
@@ -776,7 +794,7 @@ INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax_rules_group`, `name`, `activ
 
 INSERT INTO `PREFIX_carrier_group` (`id_carrier`, `id_group`) VALUES (1, 1);
 
-INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (1, 1, 'Pick up in-store'),(1, 2, 'Retrait au magasin'),(1, 3, 'Recogida en la tienda');
+INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (1, 1, 'Pick up in-store'),(1, 2, 'Retrait au magasin'),(1, 3, 'Recogida en la tienda'),(1, 4, 'Abholung im Geschäft'),(1, 5, 'Ritiro in magazzino');
 
 INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (1, 1);
 
@@ -864,7 +882,7 @@ INSERT INTO `PREFIX_timezone` (`name`) VALUES ('Africa/Abidjan'),('Africa/Accra'
 
 INSERT INTO `PREFIX_group` (`id_group`, `reduction`, `date_add`, `date_upd`) VALUES	(1, 0, NOW(), NOW());
 
-INSERT INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`) VALUES	(1, 1, 'Default'),(1, 2, 'Défaut'),(1, 3, 'Predeterminado');
+INSERT INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`) VALUES	(1, 1, 'Default'),(1, 2, 'Défaut'),(1, 3, 'Predeterminado'),(1, 4, 'Fehler'),(1, 5, 'Default');
 
 INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES (1, 1);
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());
@@ -874,8 +892,17 @@ INSERT INTO `PREFIX_stock_mvt_reason` (`id_stock_mvt_reason`, `date_add`, `date_
 INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `name`) VALUES
 (1, 1, 'Order'),
 (1, 2, 'Commande'),
+(1, 3, 'Order'),
+(1, 4, 'Bestellung'),
+(1, 5, 'Ordine'),
 (2, 1, 'Missing Stock Movement'),
 (2, 2, 'Mouvement de stock manquant'),
+(2, 3, 'Missing Stock Movement'),
+(2, 4, 'Lagerbewegung nicht stattgefunden'),
+(2, 5, 'Movimento di merce mancante'),
 (3, 1, 'Restocking'),
-(3, 2, 'Réassort');
+(3, 2, 'Réassort'),
+(3, 3, 'Restocking'),
+(3, 4, 'Auffüllung'),
+(3, 5, 'Riassortimento');
 

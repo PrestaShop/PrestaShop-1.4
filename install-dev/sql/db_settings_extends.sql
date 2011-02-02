@@ -388,7 +388,7 @@ Saludos cordiales,');
 
 INSERT INTO `PREFIX_cms_block` (`id_block_cms`, `id_cms_category`, `name`, `location`, `position`) VALUES(1, 1, '', 0, 0);
 INSERT INTO `PREFIX_cms_block_page` (`id_block_cms_page`, `id_block_cms`, `id_cms`, `is_category`) VALUES(1, 1, 1, 0), (2, 1, 2, 0), (3, 1, 3, 0), (4, 1, 4, 0), (5, 1, 5, 0);
-INSERT INTO `PREFIX_cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES (1, 1, 'Information'),(1, 2, 'Informations'),(1, 3, 'Informaciónes'),(1, 4, 'Information'),(1, 5, 'Information');
+INSERT INTO `PREFIX_cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES (1, 1, 'Information'),(1, 2, 'Informations'),(1, 3, 'Informaciónes'),(1, 4, 'Information'),(1, 5, 'Informazioni');
 
 /* Currency/Country module */
 INSERT INTO `PREFIX_module_currency` (`id_module`, `id_currency`) VALUES (3, 1),(3, 2),(3, 3),(4, 1),(4, 2),(4, 3),(6, 1),(6, 2),(6, 3);
@@ -1007,9 +1007,9 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (2),(3),(4);
 INSERT INTO `PREFIX_profile_lang` (`id_lang`, `id_profile`, `name`) VALUES
-(1, 2, 'Logistician'),(2, 2, 'Logisticien'),(3, 2, 'Logistician'),(4, 2, 'Logistician'),(5, 2, 'Logistician'),
-(1, 3, 'Translator'),(2, 3, 'Traducteur'),(3, 3, 'Translator'),(4, 3, 'Translator'),(5, 3, 'Translator'),
-(1, 4, 'Salesman'),(2, 4, 'Commercial'),(3, 4, 'Salesman'),(4, 4, 'Salesman'),(5, 4, 'Salesman');
+(1, 2, 'Logistician'),(2, 2, 'Logisticien'),(3, 2, 'Logistician'),(4, 2, 'Logistiker'),(5, 2, 'Logista'),
+(1, 3, 'Translator'),(2, 3, 'Traducteur'),(3, 3, 'Translator'),(4, 3, 'Übersetzer'),(5, 3, 'Traduttore'),
+(1, 4, 'Salesman'),(2, 4, 'Commercial'),(3, 4, 'Salesman'),(4, 4, 'Verkäufer'),(5, 4, 'Venditore');
 
 INSERT INTO `PREFIX_stock_mvt` (`id_stock_mvt`, `id_product`, `id_product_attribute`, `id_order`, `id_stock_mvt_reason`, `id_employee`, `quantity`, `date_add`, `date_upd`) VALUES
 (1, 6, 0, 0, 2, 1, 250, NOW(), NOW()),(2, 8, 0, 0, 2, 1, 1, NOW(), NOW()),(3, 9, 0, 0, 2, 1, 1, NOW(), NOW()),(4, 2, 7, 0, 2, 1, 10, NOW(), NOW()),(5, 2, 8, 0, 2, 1, 20, NOW(), NOW()),(6, 2, 9, 0, 2, 1, 30, NOW(), NOW()),(7, 2, 10, 0, 2, 1, 40, NOW(), NOW()),(8, 5, 12, 0, 2, 1, 100, NOW(), NOW()),(9, 5, 13, 0, 2, 1, 99, NOW(), NOW()),(10, 5, 14, 0, 2, 1, 50, NOW(), NOW()),(11, 5, 15, 0, 2, 1, 25, NOW(), NOW()),(12, 7, 19, 0, 2, 1, 50, NOW(), NOW()),(13, 7, 22, 0, 2, 1, 60, NOW(), NOW()),(14, 7, 23, 0, 2, 1, 70, NOW(), NOW()),(15, 1, 25, 0, 2, 1, 50, NOW(), NOW()),(16, 1, 26, 0, 2, 1, 50, NOW(), NOW()),(17, 1, 27, 0, 2, 1, 50, NOW(), NOW()),(18, 1, 28, 0, 2, 1, 50, NOW(), NOW()),(19, 1, 29, 0, 2, 1, 50, NOW(), NOW()),(20, 1, 30, 0, 2, 1, 50, NOW(), NOW()),(21, 1, 31, 0, 2, 1, 50, NOW(), NOW()),(22, 1, 32, 0, 2, 1, 50, NOW(), NOW()),(23, 1, 33, 0, 2, 1, 50, NOW(), NOW()),(24, 1, 34, 0, 2, 1, 50, NOW(), NOW()),(25, 1, 35, 0, 2, 1, 50, NOW(), NOW()),(26, 1, 36, 0, 2, 1, 50, NOW(), NOW()),(27, 1, 39, 0, 2, 1, 50, NOW(), NOW()),(28, 1, 40, 0, 2, 1, 50, NOW(), NOW()),(29, 1, 41, 0, 2, 1, 50, NOW(), NOW()),(30, 1, 42, 0, 2, 1, 50, NOW(), NOW());
