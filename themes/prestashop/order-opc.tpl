@@ -137,18 +137,18 @@
 				{/if}
 				{if $use_taxes}
 				    {if $priceDisplay}
-				    	<tr {if $total_wrapping == 0}style="display:none;"{/if} class="cart_total_voucher">
+				    	<tr {if $total_wrapping == 0}style="display:none;"{/if} class="cart_total_wrapping">
 				    		<td colspan="6">{l s='Total gift-wrapping (tax excl.):'}</td>
 				    		<td id="total_wrapping" class="price-discount">{displayPrice price=$total_wrapping_tax_exc}</td>
 				    	</tr>
 				    {else}
-				    	<tr {if $total_wrapping == 0}style="display:none;"{/if} class="cart_total_voucher">
+				    	<tr {if $total_wrapping == 0}style="display:none;"{/if} class="cart_total_wrapping">
 				    		<td colspan="6">{l s='Total gift-wrapping (tax incl.):'}</td>
 				    		<td id="total_wrapping" class="price-discount">{displayPrice price=$total_wrapping}</td>
 				    	</tr>
 				    {/if}
 				{else}
-				    <tr {if $total_wrapping == 0}style="display:none;"{/if} class="cart_total_voucher">
+				    <tr {if $total_wrapping == 0}style="display:none;"{/if} class="cart_total_wrapping">
 				    	<td colspan="6">{l s='Total gift-wrapping:'}</td>
 				    	<td id="total_wrapping" class="price-discount">{displayPrice price=$total_wrapping_tax_exc}</td>
 				    </tr>
@@ -686,15 +686,6 @@
 		</div>
 		
 		{if $giftAllowed}
-			{if isset($virtual_cart) && !$virtual_cart && $giftAllowed && $cart->gift == 1}
-			<script type="text/javascript">{literal}
-			// <![CDATA[
-			    $(function(){
-			    	  $('#gift_div').toggle('slow');
-			    });
-			 //]]>
-			{/literal}</script>
-			{/if}
 			<h3 class="gift_title">{l s='Gift'}</h3>
 			<p class="checkbox">
 				<input type="checkbox" name="gift" id="gift" value="1" {if $cart->gift == 1}checked="checked"{/if} onclick="$('#gift_div').toggle('slow');updateCarrierSelectionAndGift();"/>
@@ -704,12 +695,12 @@
 				{if $gift_wrapping_price > 0}
 					({l s='Additional cost of'}
 					<span class="price">
-						{if $priceDisplay == 1}{convertPrice price=$total_wrapping_tax_exc}{else}{convertPrice price=$total_wrapping}{/if}
+						{if $priceDisplay == 1}{convertPrice price=$total_wrapping_tax_exc_cost}{else}{convertPrice price=$total_wrapping_cost}{/if}
 					</span>
 					{if $use_taxes}{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if}{/if})
 				{/if}
 			</p>
-			<p id="gift_div" class="textarea">
+			<p id="gift_div" {if $cart->gift == 0}style="display:none;"{/if} class="textarea">
 				<label for="gift_message">{l s='If you wish, you can add a note to the gift:'}</label>
 				<textarea rows="5" cols="35" id="gift_message" name="gift_message">{$cart->gift_message|escape:'htmlall':'UTF-8'}</textarea>
 			</p>

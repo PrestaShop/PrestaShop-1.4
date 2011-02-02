@@ -356,8 +356,8 @@ class ParentOrderControllerCore extends FrontController
 			'link_conditions' => $this->link_conditions,
 			'recyclable' => (int)($this->cart->recyclable),
 			'gift_wrapping_price' => (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
-			'total_wrapping' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency((int)($this->cookie->id_currency))),
-			'total_wrapping_tax_exc' => Tools::convertPrice($wrapping_fees, new Currency((int)($this->cookie->id_currency)))));
+			'total_wrapping_cost' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency((int)($this->cookie->id_currency))),
+			'total_wrapping_tax_exc_cost' => Tools::convertPrice($wrapping_fees, new Currency((int)($this->cookie->id_currency)))));
 	}
 	
 	/**

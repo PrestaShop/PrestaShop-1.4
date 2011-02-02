@@ -1159,7 +1159,7 @@ tr.cart_total_price { font-weight: bold }
 }
 #order-opc #order_carrier img { vertical-align: middle }
 #order-opc #order_carrier span { margin: 0 0.2em }
-#order-opc #gift_div { display: none }
+
 #order-opc #gift_div label, #order #gift_div textarea {
 	display: block;
 	width: 100%;

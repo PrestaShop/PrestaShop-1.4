@@ -144,7 +144,7 @@ function acceptCGV()
 			{if $gift_wrapping_price > 0}
 				({l s='Additional cost of'}
 				<span class="price">
-					{if $priceDisplay == 1}{convertPrice price=$total_wrapping_tax_exc}{else}{convertPrice price=$total_wrapping}{/if}
+					{if $priceDisplay == 1}{convertPrice price=$total_wrapping_tax_exc_cost}{else}{convertPrice price=$total_wrapping_cost}{/if}
 				</span>
 				{if $use_taxes}{if $priceDisplay == 1} {l s='(tax excl.)'}{else} {l s='(tax incl.)'}{/if}{/if})
 			{/if}
