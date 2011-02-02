@@ -308,7 +308,6 @@ function updateCartSummary(json)
 	}
 
 	// Block cart
-	console.log(json);
     if (priceDisplayMethod != 0)
 	{
     	$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping_tax_exc, currencyFormat, currencySign, currencyBlank));
@@ -316,7 +315,7 @@ function updateCartSummary(json)
     	$('#cart_block_total').html(formatCurrency(json.total_price_without_tax, currencyFormat, currencySign, currencyBlank));
     } else {
     	$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
-    	$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping_wt, currencyFormat, currencySign, currencyBlank));
+    	$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
     	$('#cart_block_total').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
     }
 
