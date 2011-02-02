@@ -27,10 +27,6 @@ abstract class ImportModuleCore extends Module
 	/** @var string Prefix database */
 	public $prefix;
 	
-	public function __construct()
-	{
-		parent::__construct ();
-	}	
 	
 	public function __destruct()
 	{

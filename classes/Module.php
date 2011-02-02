@@ -540,10 +540,15 @@ abstract class ModuleCore
 		return $output;
 	}
 
-	/*
+	/**
 	 * Get translation for a given module text
 	 *
+	 * Note: $specific parameter is mandatory for library files.
+	 * Otherwise, translation key will not match for Module library 
+	 * when module is loaded with eval() Module::getModulesOnDisk()
+	 *
 	 * @param string $string String to translate
+	 * @param boolean|string $specific Filename to use in translation key
 	 * @return string Translation
 	 */
 	public function l($string, $specific = false)
@@ -558,11 +563,7 @@ abstract class ModuleCore
 		if (!is_array($_MODULES))
 			return (str_replace('"', '&quot;', $string));
 		
-		// Need to get the file name to get the good translation key
-		// according to AdminTranslations::findAndFillTranslations() 
-		// and AdminTranslations::findAndWriteTranslationsIntoFile() methods
-		$reflection_class = new ReflectionClass(get_class($this));
-		$source = Tools::strtolower($specific ? $specific : substr(basename($reflection_class->getFileName()), 0, -4));
+		$source = Tools::strtolower($specific ? $specific : $this->name);
 		$string2 = str_replace('\'', '\\\'', $string);
 		$currentKey = '<{'.Tools::strtolower($this->name).'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
 		$defaultKey = '<{'.Tools::strtolower($this->name).'}prestashop>'.$source.'_'.md5($string2);
