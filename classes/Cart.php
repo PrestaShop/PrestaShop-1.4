@@ -718,22 +718,19 @@ class CartCore extends ObjectModel
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization));
 	}
 
-	static public function getTotalCart($id_cart)
+	static public function getTotalCart($id_cart, $use_tax_display = false)
 	{
 		$cart = new Cart((int)($id_cart));
 		if (!Validate::isLoadedObject($cart))
 			die(Tools::displayError());
-		return Tools::displayPrice($cart->getOrderTotal(), Currency::getCurrencyInstance((int)($cart->id_currency)), false, false);
+	    $with_taxes = $use_tax_display ? $cart->_taxCalculationMethod != PS_TAX_EXC : true;
+		return Tools::displayPrice($cart->getOrderTotal($with_taxes), Currency::getCurrencyInstance((int)($cart->id_currency)), false, false);
 	}
 
 
-    public static function getOrderTotalWeird($id_cart)
+    public static function getOrderTotalUsingTaxCalculationMethod($id_cart)
     {
-		$cart = new Cart((int)($id_cart));
-		if (!Validate::isLoadedObject($cart))
-			die(Tools::displayError());
-        $with_taxes = $cart->_taxCalculationMethod != PS_TAX_EXC;
-        return $cart->getOrderTotal($with_taxes);
+        return Cart::getTotalCart($id_cart, true);
     }
 
 	/**
