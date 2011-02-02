@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -44,11 +44,11 @@ class AdminCarts extends AdminTab
 		LEFT JOIN '._DB_PREFIX_.'currency cu on (cu.id_currency = a.id_currency)
 		LEFT JOIN '._DB_PREFIX_.'carrier ca on (ca.id_carrier = a.id_carrier)
 		';
-		
+
  		$this->fieldsDisplay = array(
 		'id_cart' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'customer' => array('title' => $this->l('Customer'), 'width' => 80, 'filter_key' => 'c!lastname'),
-		'total' => array('title' => $this->l('Total'), 'callback' => 'getTotalCart', 'orderby' => false, 'search' => false, 'width' => 50, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'currency' => true),
+		'total' => array('title' => $this->l('Total'), 'callback' => 'getOrderTotalWeird', 'orderby' => false, 'search' => false, 'width' => 50, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'currency' => true),
 		'carrier' => array('title' => $this->l('Carrier'), 'width' => 25, 'align' => 'center', 'callback' => 'replaceZeroByShopName'),
 		'date_add' => array('title' => $this->l('Date'), 'width' => 90, 'align' => 'right', 'type' => 'datetime', 'filter_key' => 'a!date_add'));
 		parent::__construct();
@@ -94,10 +94,24 @@ class AdminCarts extends AdminTab
 		echo '
 		</div>
 		<div style="float: left; margin-left: 40px">';
-		
+
 		/* Display order information */
 		$id_order = (int)(Order::getOrderByCartId($cart->id));
 		$order = new Order($id_order);
+
+		if ($order->getTaxCalculationMethod() == PS_TAX_EXC)
+		{
+		    $total_products = $summary['total_products'];
+		    $total_discount = $summary['total_discounts_tax_exc'];
+		    $total_wrapping = $summary['total_wrapping_tax_exc'];
+		    $total_price = $summary['total_price_without_tax'];
+		} else {
+		    $total_products = $summary['total_products_wt'];
+		    $total_discount = $summary['total_discounts'];
+		    $total_wrapping = $summary['total_wrapping'];
+		    $total_price = $summary['total_price'];
+		}
+
 		echo '
 		<fieldset style="width: 400px">
 			<legend><img src="../img/admin/cart.gif" /> '.$this->l('Order information').'</legend>
@@ -112,6 +126,7 @@ class AdminCarts extends AdminTab
 		echo '</fieldset>';
 		echo '
 		</div>';
+
 
 		// List of products
 		echo '
@@ -131,6 +146,16 @@ class AdminCarts extends AdminTab
 						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee));
 						foreach ($products as $k => $product)
 						{
+                   			if ($order->getTaxCalculationMethod() == PS_TAX_EXC)
+                			{
+                			    $product_price = $product['price'];
+                			    $product_total = $product['total'];
+                			} else {
+	            			    $product_price = $product['price_wt'];
+                			    $product_total = $product['total_wt'];
+                			}
+
+
 							$image = array();
 							if (isset($product['id_product_attribute']) AND (int)($product['id_product_attribute']))
 								$image = Db::getInstance()->getRow('
@@ -160,28 +185,29 @@ class AdminCarts extends AdminTab
 										'.($product['reference'] ? $this->l('Ref:').' '.$product['reference'] : '')
 										.(($product['reference'] AND $product['supplier_reference']) ? ' / '.$product['supplier_reference'] : '')
 										.'</a></td>
-									<td align="center">'.Tools::displayPrice($product['price_wt'], $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice($product_price, $currency, false, false).'</td>
 									<td align="center" class="productQuantity">'.((int)($product['cart_quantity']) - $product['customizationQuantityTotal']).'</td>
 									<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
-									<td align="right">'.Tools::displayPrice($product['total_wt'], $currency, false, false).'</td>
+									<td align="right">'.Tools::displayPrice($product_total, $currency, false, false).'</td>
 								</tr>';
 						}
 					echo '
 					<tr class="cart_total_product">
 				<td colspan="5">'.$this->l('Total products:').'</td>
-				<td class="price bold right">'.Tools::displayPrice($summary['total_products_wt'], $currency, false).'</td>
+				<td class="price bold right">'.Tools::displayPrice($total_products, $currency, false).'</td>
 			</tr>';
+
 			if ($summary['total_discounts'] != 0)
 			echo '
 			<tr class="cart_total_voucher">
 				<td colspan="5">'.$this->l('Total vouchers:').'</td>
-				<td class="price-discount bold right">'.Tools::displayPrice($summary['total_discounts'], $currency, false).'</td>
+				<td class="price-discount bold right">'.Tools::displayPrice($total_discount, $currency, false).'</td>
 			</tr>';
 			if ($summary['total_wrapping'] > 0)
 			 echo '
 			 <tr class="cart_total_voucher">
 				<td colspan="5">'.$this->l('Total gift-wrapping:').'</td>
-				<td class="price-discount bold right">'.Tools::displayPrice($summary['total_wrapping'], $currency, false).'</td>
+				<td class="price-discount bold right">'.Tools::displayPrice($total_wrapping, $currency, false).'</td>
 			</tr>';
 			if ($cart->getOrderTotal(true, 5) > 0)
 			echo '
@@ -192,7 +218,7 @@ class AdminCarts extends AdminTab
 			echo '
 			<tr class="cart_total_price">
 				<td colspan="5" class="bold">'.$this->l('Total:').'</td>
-				<td class="price bold right">'.Tools::displayPrice($summary['total_price'], $currency, false).'</td>
+				<td class="price bold right">'.Tools::displayPrice($total_price, $currency, false).'</td>
 			</tr>
 			</table>';
 
@@ -204,7 +230,7 @@ class AdminCarts extends AdminTab
 					<th><img src="../img/admin/coupon.gif" alt="'.$this->l('Discounts').'" />'.$this->l('Discount name').'</th>
 					<th align="center" style="width: 100px">'.$this->l('Value').'</th>
 				</tr>';
-				
+
 				foreach ($discounts as $discount)
 					echo '
 				<tr>
@@ -214,15 +240,16 @@ class AdminCarts extends AdminTab
 				echo '
 			</table>';
 			}
-				echo '
-				</div>';
+				echo '<div style="float:left; margin-top:15px;">'.
+				$this->l('According to the group of this customer, prices are printed:').' '.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).'
+				</div></div>';
 
 				// Cancel product
 				echo '
 			</fieldset>
 		<div class="clear" style="height:20px;">&nbsp;</div>';
 	}
-	
+
 	private function displayCustomizedDatas(&$customizedDatas, &$product, &$currency, &$image, $tokenCatalog, &$stock)
 	{
 		if (!($order = $this->loadObject(true)))
@@ -291,3 +318,4 @@ class AdminCarts extends AdminTab
 		}
 	}
 }
+

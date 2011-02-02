@@ -340,7 +340,7 @@ class CartCore extends ObjectModel
 		// Thus you can avoid one query per product, because there will be only one query for all the products of the cart
 		Product::cacheProductsFeatures($productsIds);
 		self::cacheSomeAttributesLists($paIds, $this->id_lang);
-		
+
 		$this->_products = array();
 		if (empty($result))
 			return array();
@@ -360,7 +360,8 @@ class CartCore extends ObjectModel
 			{
 				$row['price'] = Product::getPriceStatic((int)$row['id_product'], false, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput); // Here taxes are computed only once the quantity has been applied to the product price
 				$row['price_wt'] = Product::getPriceStatic((int)$row['id_product'], true, isset($row['id_product_attribute']) ? (int)($row['id_product_attribute']) : NULL, 2, NULL, false, true, (int)($row['cart_quantity']), false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
-				$row['total_wt'] = Tools::ps_round($row['price'] * (float)$row['cart_quantity'] * (1 + (float)($row['rate']) / 100), 2);
+                $tax_rate = Tax::getProductTaxRate((int)$id_product, (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+				$row['total_wt'] = Tools::ps_round($row['price'] * (float)$row['cart_quantity'] * (1 + (float)($tax_rate) / 100), 2);
 				$row['total'] = $row['price'] * (int)($row['cart_quantity']);
 			}
 			else
@@ -378,12 +379,12 @@ class CartCore extends ObjectModel
 			$row['features'] = Product::getFeaturesStatic((int)$row['id_product']);
 			if (array_key_exists($row['id_product_attribute'].'-'.$this->id_lang, self::$_attributesLists))
 				$row = array_merge($row, self::$_attributesLists[$row['id_product_attribute'].'-'.$this->id_lang]);
-				
+
 			$this->_products[] = $row;
 		}
 		return $this->_products;
 	}
-	
+
 	public static function cacheSomeAttributesLists($ipaList, $id_lang)
 	{
 		$paImplode = array();
@@ -397,7 +398,7 @@ class CartCore extends ObjectModel
 			}
 		if (!count($paImplode))
 			return;
-		
+
 		$result = Db::getInstance()->ExecuteS('
 		SELECT pac.`id_product_attribute`, agl.`public_name` AS public_group_name, al.`name` AS attribute_name
 		FROM `'._DB_PREFIX_.'product_attribute_combination` pac
@@ -412,7 +413,7 @@ class CartCore extends ObjectModel
 			self::$_attributesLists[$row['id_product_attribute'].'-'.$id_lang]['attributes'] .= $row['public_group_name'].' : '.$row['attribute_name'].', ';
 			self::$_attributesLists[$row['id_product_attribute'].'-'.$id_lang]['attributes_small'] .= $row['attribute_name'].', ';
 		}
-		
+
 		foreach ($paImplode as $id_product_attribute)
 		{
 			self::$_attributesLists[$id_product_attribute.'-'.$id_lang]['attributes'] = rtrim(self::$_attributesLists[$id_product_attribute.'-'.$id_lang]['attributes'], ', ');
@@ -724,6 +725,16 @@ class CartCore extends ObjectModel
 			die(Tools::displayError());
 		return Tools::displayPrice($cart->getOrderTotal(), Currency::getCurrencyInstance((int)($cart->id_currency)), false, false);
 	}
+
+
+    public static function getOrderTotalWeird($id_cart)
+    {
+		$cart = new Cart((int)($id_cart));
+		if (!Validate::isLoadedObject($cart))
+			die(Tools::displayError());
+        $with_taxes = $cart->_taxCalculationMethod != PS_TAX_EXC;
+        return $cart->getOrderTotal($with_taxes);
+    }
 
 	/**
 	* This function returns the total cart amount
@@ -1124,11 +1135,11 @@ class CartCore extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
 			WHERE (cp.`id_product_attribute` IS NULL OR cp.`id_product_attribute` = 0)
 			AND cp.`id_cart` = '.(int)($this->id));
-			self::$_totalWeight[$this->id] = round((float)($result['nb']) + (float)($result2['nb']), 3); 
+			self::$_totalWeight[$this->id] = round((float)($result['nb']) + (float)($result2['nb']), 3);
 		}
 		return self::$_totalWeight[$this->id];
 	}
-	
+
 	/**
 	* Check discount validity
 	*
@@ -1342,7 +1353,7 @@ class CartCore extends ObjectModel
 			SELECT COUNT(`id_product_download`) n
 			FROM `'._DB_PREFIX_.'product_download`
 			WHERE `id_product` IN ('.pSQL($list).') AND `active` = 1');
-			
+
 			self::$_isVirtualCart[$this->id] = ($n == sizeof($products));
 		}
 		return self::$_isVirtualCart[$this->id];
@@ -1535,7 +1546,7 @@ class CartCore extends ObjectModel
 
 	/**
 	 * isGuestCartByCartId
-	 * 
+	 *
 	 * @param int $id_cart
 	 * @return bool true if cart has been made by a guest customer
 	 */
@@ -1544,8 +1555,8 @@ class CartCore extends ObjectModel
 		if (!(int)$id_cart)
 			return false;
 		return (bool)Db::getInstance()->getValue('
-			SELECT `is_guest` 
-			FROM `'._DB_PREFIX_.'customer` cu 
+			SELECT `is_guest`
+			FROM `'._DB_PREFIX_.'customer` cu
 			LEFT JOIN `'._DB_PREFIX_.'cart` ca ON (ca.`id_customer` = cu.`id_customer`)
 			WHERE ca.`id_cart` = '.(int)$id_cart);
 	}
