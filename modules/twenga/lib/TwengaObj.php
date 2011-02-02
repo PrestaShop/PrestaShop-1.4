@@ -297,7 +297,7 @@ class TwengaObj
 		} catch (TwengaException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new TwengaException($e->getMessage(), $e->getCode());
+			throw new TwengaException(self::$translation_object->l($e->getMessage(),basename(__FILE__, '.php')), $e->getCode());
 		}
 			
 		return (array)$obj_xml;
@@ -326,7 +326,7 @@ class TwengaObj
 		} catch (TwengaException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new TwengaException($e->getMessage(), $e->getCode());
+			throw new TwengaException(self::$translation_object->l($e->getMessage(),basename(__FILE__, '.php')), $e->getCode());
 		}
 		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
@@ -355,7 +355,7 @@ class TwengaObj
 		} catch (TwengaException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new TwengaException($e->getMessage(), $e->getCode());
+			throw new TwengaException(self::$translation_object->l($e->getMessage(),basename(__FILE__, '.php')), $e->getCode());
 		}
 		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
@@ -382,7 +382,7 @@ class TwengaObj
 		} catch (TwengaException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new TwengaException($e->getMessage(), $e->getCode());
+			throw new TwengaException(self::$translation_object->l($e->getMessage(),basename(__FILE__, '.php')), $e->getCode());
 		}
 		return (string)$obj_xml->message;
 	}
@@ -410,7 +410,7 @@ class TwengaObj
 		} catch (TwengaException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new TwengaException($e->getMessage(), $e->getCode());
+			throw new TwengaException(self::$translation_object->l($e->getMessage(),basename(__FILE__, '.php')), $e->getCode());
 		}
 		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
@@ -437,7 +437,7 @@ class TwengaObj
 		} catch (TwengaException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new TwengaException($e->getMessage(), $e->getCode());
+			throw new TwengaException(self::$translation_object->l($e->getMessage(),basename(__FILE__, '.php')), $e->getCode());
 		}
 		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
@@ -465,7 +465,7 @@ class TwengaObj
 		} catch (TwengaException $e) {
 			throw $e;
 		} catch (Exception $e) {
-			throw new TwengaException($e->getMessage(), $e->getCode());
+			throw new TwengaException(self::$translation_object->l($e->getMessage(),basename(__FILE__, '.php')), $e->getCode());
 		}
 		return ((string)$obj_xml->message === 'true') ? true : false;
 	}
@@ -483,7 +483,7 @@ class TwengaObj
 			if (libxml_get_errors())
 				throw new TwengaException(self::$translation_object->l('HTTP XML response is not parsable : ', basename(__FILE__, '.php')).'<br />'.var_export(libxml_get_errors(), true));
 			if($xml->getName() === 'error')
-				throw new TwengaException((string)$xml->message, (int)$xml->code);
+				throw new TwengaException(self::$translation_object->l((string)$xml->message,basename(__FILE__, '.php')), (int)$xml->code);
 			return $xml;
 		}
 		else
