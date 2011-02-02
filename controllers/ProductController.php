@@ -255,7 +255,7 @@ class ProductControllerCore extends FrontController
 				{
 					$colors = array();
 					$attributesGroups = $this->product->getAttributesGroups((int)($this->cookie->id_lang));
-					if (Db::getInstance()->numRows())
+					if (is_array($attributesGroups) AND sizeof($attributesGroups))
 					{
 						$combinationImages = $this->product->getCombinationImages((int)($this->cookie->id_lang));
 						foreach ($attributesGroups AS $k => $row)
