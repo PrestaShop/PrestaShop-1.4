@@ -502,6 +502,7 @@ $_LANG['order-opc_e4045598261988d9988c594243a9434d'] = 'Condiciones generales de
 $_LANG['order-opc_605eef3cad421619ce034ab48415190f'] = 'He leido y acepto las condiciones generales de venta.';
 $_LANG['order-opc_674bb1e64d73fb88b873caf79ba06128'] = '(leer)';
 $_LANG['order-opc_0da8d9a75492046bea7f314521e07cae'] = 'Métodos de pago';
+$_LANG['order-opc_14fb8a859aebfa869d366a259acd6d15'] = 'Espere por favor, estamos validando su pedido';
 $_LANG['order-opc_879f6b8877752685a966564d072f498f'] = 'Su carrito está vacío';
 $_LANG['order-payment_59319ac504f7ad04ae16126cf49e7f7e'] = 'Su modo de pago';
 $_LANG['order-payment_9e6d9b3daa15e41d36806a289c42674d'] = 'Elija su modo de pago';
