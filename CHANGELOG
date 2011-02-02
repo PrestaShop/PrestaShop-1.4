@@ -24,6 +24,133 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.0.11 - 4774 (2011-02-02)  #
+####################################
+
+	Added Features:
+
+	[+] BO : added translation
+	[+] BO : column match in csv import (SQL)
+	[+] BO : now you can save column match in csv import ;-)
+	
+	[+] MO : Twenga module is now compatible with 1.3alpha version and some indentations has been replaced in well format.
+	
+	[+] TR : related to bug #6149 - change the way to copy country translations. Now it used EN language.
+
+	Improved/changed features:
+	
+	[*] FO : 300 Ko of memory saved for each page
+	[*] FO : Bug fixed #7278 - It is now possible to specify the module for cart ajax in cart controller
+	[*] FO : Bug fixed #7278 - Set new method to enable the possibility to override cart ajax module include
+	[*] FO : Complicated cache on cart product attributes
+	[*] FO : Friendly URL behavio(u)r changed when you have a unique active language
+	[*] FO : One more cache (product specs) and some cleaning
+	[*] FO : cache added to the product feature, which avoid a few queries when there are products in the cart
+	[*] FO : one less query when the cart is empty
+	[*] FO : too much queries for the same things, again and again
+	[*] FO : translations files inclusion deported to the right place, up to 150 Ko / page saved
+
+	[*] BO : Strict Standard - removed constructor which only calls its parents in classes/ImportModule
+	[*] BO : Token verification is now ugly, but REALLY secure
+	[*] BO : added tips on the back office homepage
+	[*] BO : adding log system
+	[*] BO : you are not stuck anymore with a bad token in the URL, you can choose to display the page if you trust it
+	[*] BO : you can now choose how do you want to delete your customers
+	[*] BO: Change  property from private to protected
+	
+	[*] WS : Order management optimizations
+	[*] WS : Support for combinations
+	[*] WS : Support for overriding object active record method
+	[*] WS : adding some xlinks and a part of product images support
+
+	Fixed bugs:
+
+	[-] Project : Bug fixed #7111 (1.4) - Hook postUpdateOrderStatus is called only in postUpdateOrderStatus now
+
+	[-] Installer : Bug Fixed #7319 - Tax rules group name 32 => 50 characters
+
+	[-] FO : Bug Fixed #7143 - Tax line vanish
+	[-] FO : Bug fixed #7332 - Selected sort on product-sort.tpl is now displayed when selected
+	[-] FO : Bug fixed #7355 - Pagination fix
+	[-] FO : Cart - Price is not refreshed on quantity discount + shipping is not displayed without tax on summary update (Thank you so much Vincent for your help)
+	[-] FO : Fixed #7379 better message when try to register with an e-mail already registered
+	[-] FO : Fixed #7379 postal code / zip code incorrect text when created new account or new address
+	[-] FO : Fixed #7414 replaced usage of Db->numRow in if statement by is_array() and sizeof() of getAttributesGroups result
+	[-] FO : Total not updated on cart summary
+	[-] FO : abusive redirection fixed on product page
+	[-] FO : fixed bug #6863 - svn4286 gift wrap not listed correctly in the cart
+	[-] FO : fixed bug #7265 - scenes don?\226?\128?\153t use catalog mode
+	[-] FO : fixed bug #7277 - User info block doesn?\226?\128?\153t update after logging in on one-page checkout
+	[-] FO : fixed bug #7347
+	[-] FO : fixed bug #7353
+	[-] FO : fixed bug #7361 - Reset password customer
+	[-] FO : fixed bug #7388 - category links dont get translated in SEO links in category block
+	[-] FO : fixed bug #7410 - Default Orderby and wrong Uppercase in product-sort.tpl
+	[-] FO : fixed display bug of supplier and manufacturer link when module is not installed
+	[-] FO : postcode is now allowed empty. It has to be tested in controllers
+	[-] FO : postcode is now saved when adding/modifiyng an address
+	[-] FO : preload of links fixed
+	[-] FO : related to bug #6968 - HTTP_ACCEPT_LANGUAGE server var is a language iso code not a country iso code.
+	[-] FO : Fix smarty debug with smarty3 #7306
+
+	[-] BO : Bug Fixed #5755 - Cart displayed tax included in Admin > Customers > Cart
+	[-] BO : Bug Fixed #7065 - Disable Tax = Tax removed from all the associated tax rules
+	[-] BO : Bug Fixed #7323 - Unkwnow column priority in field list
+	[-] BO : Bug Fixed #7384 - Translation now works when need_instance=1
+	[-] BO : Bug fixed #5970 - 2 invoices same number
+	[-] BO : Bug fixed #7263 - Postalcode required flag is now used for back office
+	[-] BO : Bug fixed #7275 - "unity" became "unit" on "3. Prices" tab
+	[-] BO : Bug fixed #7276 - Minor code formatting issue
+	[-] BO : Bug fixed #7282 - Spaces are removed when latitude store are posted
+	[-] BO : Bug fixed #7302 - Invoice date is now displayed
+	[-] BO : Bug fixed #7315 - Postalcode required flag is now used for back office (store tab)
+	[-] BO : Employee class cleaned and fixed (employee status wasn't checked enough, employee count was wrong...)
+	[-] BO : Fixed #7400 character "~" is now allowed in Urls
+	[-] BO : Magic Quotes shall... not.. PASS! Even in AdminTranslations!
+	[-] BO : error message "object cannot be loaded" is not an awful die anymore
+	[-] BO : fixed bug #7243
+	[-] BO : fixed bug #7343 - Tag parsing not robust enough
+	[-] BO : fixed bug #7358
+	[-] BO : fixed bug #7398
+	[-] BO : fixed toggle in adminEmail
+	[-] BO : flying language flag replaced in AdminMeta
+	[-] BO : related to bug #7294 - Add message concerning the rule sizeLang for a field ("html chars including")
+	[-] BO : related to bug #7303 - add a suffix for each translation panel id to avoid confused id (as "footer").
+	
+	[-] Classes : fixed bug #7336 - An item in your cart is no longer available, you cannot proceed with your order
+	
+	[-] MO : change method to get the post key, Tools::strtolower() function is used on template name and module name @see revision #4652
+	[-] MO : change method to get the post key, Tools::strtolower() function is used on template name and module name @see revision #4652
+	[-] MO : Bug fixed #7268 (1.4) - ProductToolTip module is now showing the good date
+	[-] MO : Bug fixed #7296 - Major fix on USPS module
+	[-] MO : Bug fixed #7373 - UPS Module : Improved shipping cost calcul, edit carrier fixed, compliant carrier configuration tab, alert system configuration
+	[-] MO : If just one theme is displayed, don't display list of theme.
+	[-] MO : fixed bug #7257
+	[-] MO : fixed bug #7261 - VAT number not use
+	[-] MO : fixed bug #7285 - hardcoded warning in fianetfraud module
+	[-] MO : fixed bug #7317
+	[-] MO : fixed bug #7329
+	[-] MO : fixed bug #7352 - Search Engine Keywords Stats Module
+	[-] MO : fixed bug and improvement of shopImporter
+	[-] MO : fixed error translation message in TwengaException class
+	[-] MO blockwishlist : fixed error message : invalid 1st email display correct message + added 2nd parameter htmlentities=false
+	[-] MO referralprogram : Fixed translation to match referralprogram.php
+	[-] MO : Fixed bug #7283
+	
+	[-] WS : Minor WS bugs fixed
+	
+	[-] PDF : Bug fixed #7312 - Ecotax * product quantity
+	
+	[-] TR : change method to get the translation key, no more class name is used but file name, as AdminTranslation do.
+	[-] TR : change method to get the translation key, strtolower() function is used on module name
+	[-] TR : change method to get the translation key, strtolower() function is used on module name
+	[-] TR : change method to get the translation key, strtolower() function is used on template name
+	[-] TR : correct a text
+	[-] TR : related to bug #7301 - change a translation
+	[-] TR : set "PREFIX_" instead of "ps_" in request translations for country_lang table
+	[-] TR : some errors where not appropriately formatted
+	
+####################################
 #   v1.4.0.10 - 4640 (2011-01-26)   #
 ####################################
 
