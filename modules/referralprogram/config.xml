@@ -3,7 +3,7 @@
 	<name>referralprogram</name>
     <displayName>Customer referral program</displayName>
     <version>1.4</version>
-    <description>Integrate a referral program system to your shop.</description>
+    <description>Integrate a referral program system into your shop.</description>
     <tab>advertising_marketing</tab>
     <confirmUninstall>All sponsor and friends would be deleted. Do you really want to uninstall this module ?</confirmUninstall>
     <is_configurable>1</is_configurable>
