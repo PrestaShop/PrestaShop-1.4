@@ -488,9 +488,8 @@ class		WishList extends ObjectModel
 	 */
 	static public function addEmail($id_wishlist, $email)
 	{
-		if (!Validate::isUnsignedId($id_wishlist) OR
-			!Validate::isEmail($email))
-			die (Tools::displayError());
+		if (!Validate::isUnsignedId($id_wishlist) OR empty($email) OR !Validate::isEmail($email))
+			return false;
 		return (Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'wishlist_email` (`id_wishlist`, `email`, `date_add`) VALUES(
 		'.(int)($id_wishlist).',

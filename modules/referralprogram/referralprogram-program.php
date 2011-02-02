@@ -67,7 +67,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 
 			if (empty($friendEmail) AND empty($friendLastName) AND empty($friendFirstName))
 				continue;
-			elseif (!Validate::isEmail($friendEmail))
+			elseif (empty($friendEmail) OR !Validate::isEmail($friendEmail))
 				$error = 'email invalid';
 			elseif (empty($friendFirstName) OR empty($friendLastName) OR !Validate::isName($friendLastName) OR !Validate::isName($friendFirstName))
 				$error = 'name invalid';

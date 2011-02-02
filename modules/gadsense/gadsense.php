@@ -41,7 +41,7 @@ class GAdsense extends Module
 		
 		if ($this->id AND !Configuration::get('GADSENSE_ID'))
 			$this->warning = $this->l('You have not yet set your Google Adsense code');
-        $this->description = $this->l('Integrate the Google Adsense script into your shop');
+    $this->description = $this->l('Integrate the Google Adsense script into your shop');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
 	}
 	

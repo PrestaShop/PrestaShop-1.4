@@ -138,8 +138,8 @@ function submitConfirm()
 function submitAccount()
 {
 	global $cookie, $errors, $smarty;
-
-	if (!Validate::isEmail($email = Tools::getValue('email')))
+	$email = Tools::getValue('email');
+	if (empty($email) OR !Validate::isEmail($email))
 		$errors[] = Tools::displayError('e-mail not valid');
 	elseif (!Validate::isPasswd(Tools::getValue('passwd')))
 		$errors[] = Tools::displayError('invalid password');
@@ -204,7 +204,7 @@ function submitLogin()
 	$email = trim(Tools::getValue('email'));
 	if (empty($email))
 		$errors[] = Tools::displayError('e-mail address is required');
-	elseif (!Validate::isEmail($email))
+	elseif (empty($email) OR !Validate::isEmail($email))
 		$errors[] = Tools::displayError('invalid e-mail address');
 	elseif (empty($passwd))
 		$errors[] = Tools::displayError('password is required');

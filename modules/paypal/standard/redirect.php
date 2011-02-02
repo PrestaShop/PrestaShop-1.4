@@ -43,7 +43,7 @@ $header = Configuration::get('PAYPAL_HEADER');
 $currency_order = new Currency((int)($cart->id_currency));
 $currency_module = $paypal->getCurrency();
 
-if (!Validate::isEmail($business))
+if (empty($business) OR !Validate::isEmail($business))
 	die($paypal->getL('Paypal error: (invalid or undefined business account email)'));
 
 if (!Validate::isLoadedObject($address) OR !Validate::isLoadedObject($customer) OR !Validate::isLoadedObject($currency_module))

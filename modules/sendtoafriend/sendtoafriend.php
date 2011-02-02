@@ -72,7 +72,7 @@ class sendToAFriend extends Module
 			/* Fields verifications */
 			if (empty($_POST['email']) OR empty($_POST['name']))
 				$error = $this->l('You must fill all fields.');
-			elseif (!Validate::isEmail($_POST['email']))
+			elseif (empty($_POST['email']) OR !Validate::isEmail($_POST['email']))
 				$error = $this->l('Your friend\'s email is invalid.');
 			elseif (!Validate::isName($_POST['name']))
 				$error = $this->l('Your friend\'s name is invalid.');

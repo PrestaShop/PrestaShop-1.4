@@ -139,7 +139,7 @@ class Blocknewsletter extends Module
  	
  	private function newsletterRegistration()
  	{
-	 	if (!Validate::isEmail(pSQL($_POST['email'])))
+	 	if (empty($_POST['email']) OR !Validate::isEmail(pSQL($_POST['email'])))
 			return $this->error = $this->l('Invalid e-mail address');
 	 	/* Unsubscription */
 	 	elseif ($_POST['action'] == '1')

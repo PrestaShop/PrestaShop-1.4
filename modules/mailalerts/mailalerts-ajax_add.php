@@ -36,7 +36,7 @@ if (!$cookie->isLogged())
 {
 	$customer_email = Tools::getValue('customer_email');
 	
-	if (!Validate::isEmail($customer_email))
+	if (empty($customer_email) OR !Validate::isEmail($customer_email))
 		die ('0');
 	if ($customer_email == 'your@email.com')
 		die ('0');

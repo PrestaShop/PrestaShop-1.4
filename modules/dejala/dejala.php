@@ -164,7 +164,7 @@ class Dejala extends CarrierModule
 		{
 			if (empty($_POST['login']))
 				$errors[] = $this->l('login is required.');
-			if (!Validate::isEmail($_POST['login']))
+			if (empty($_POST['login']) OR !Validate::isEmail($_POST['login']))
 				$errors[] = $this->l('login must be a valid e-mail address.');
 			if (empty($_POST['password']))
 				$errors[] = $this->l('password is required.');
