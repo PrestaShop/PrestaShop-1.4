@@ -52,6 +52,9 @@ class OrderDiscountCore extends ObjectModel
 	protected 	$identifier = 'id_order_discount';
 
 	protected	$webserviceParameters = array(
+		'fields' => array(
+			'id_order' => array('xlink_resource' => 'orders'),
+		),
 	);
 	
 	public function getFields()

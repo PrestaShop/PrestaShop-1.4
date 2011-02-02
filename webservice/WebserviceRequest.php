@@ -198,11 +198,9 @@ class WebserviceRequest
 					if ($this->_urlSegment[0] != '')
 					{
 						$object = new $this->_resourceList[$this->_urlSegment[0]]['class']();
-						if ($this->_urlSegment[0] === 'translated_configurations')
-						{
-							$this->_resourceConfiguration = $object->getWebserviceParameters('webserviceParametersI18n');
-							$this->_resourceConfiguration['retrieveData']['retrieveMethod'] = 'getI18nConfigurationList';
-						}
+
+						if (isset($this->_resourceList[$this->_urlSegment[0]]['parameters_attribute']))
+							$this->_resourceConfiguration = $object->getWebserviceParameters($this->_resourceList[$this->_urlSegment[0]]['parameters_attribute']);
 						else
 							$this->_resourceConfiguration = $object->getWebserviceParameters();
 					}
@@ -650,12 +648,27 @@ class WebserviceRequest
 					if (count($matches))
 					{
 						$fieldsToTest = explode(',', $matches[1]);
+						
+						// looks for synthax errors...
 						foreach ($fieldsToTest as $fieldToDisplay)
-							if (!isset($this->_resourceConfiguration['fields'][$fieldToDisplay]))
+						{
+							preg_match('#^associations\[([^\]]+)\]$#Ui', $fieldToDisplay, $matches2);
+							$error = false;
+							if (isset($matches2[1]))// if it's an association
+							{
+								if (!array_key_exists($matches2[1], $this->_resourceConfiguration['associations'])) // if this association does not exists
+									$error = true;
+							}
+							elseif (!isset($this->_resourceConfiguration['fields'][$fieldToDisplay]) && $fieldToDisplay != 'associations') // if it's a field and this field does not exists OR if it's the associations
+							{
+								$error = true;
+							}
+							if ($error)
 							{
 								$this->setError(400,'Unable to display this field. However, these are available: '.implode(', ', array_keys($this->_resourceConfiguration['fields'])));
 								return false;
 							}
+						}
 							$this->_fieldsToDisplay = !$this->hasErrors() ? $fieldsToTest : 'minimal';
 					}
 					else
@@ -665,7 +678,6 @@ class WebserviceRequest
 					}
 				}
 			}
-	
 			// construct SQL Sort
 			$sql_sort = '';
 			$available_filters = array_keys($this->_resourceConfiguration['fields']);
@@ -678,23 +690,28 @@ class WebserviceRequest
 					$sorts = array($this->_urlFragments['sort']);
 		
 				$sql_sort .= ' ORDER BY ';
-		
+				
 				foreach ($sorts as $sort)
 				{
-					$sortArgs = explode('_', $sort);
-					if (count($sortArgs) != 2 || (strtoupper($sortArgs[1]) != 'ASC' && strtoupper($sortArgs[1]) != 'DESC'))
+					$delimiterPosition = strrpos($sort, '_');
+					if ($delimiterPosition !== false)
 					{
-						$this->setError(400, 'The "sort" value has to be formed as this example: "field_ASC" ("field" has to be an available field)');
+						$fieldName = substr($sort, 0, $delimiterPosition);
+						$direction = strtoupper(substr($sort, $delimiterPosition + 1));
+					}
+					if ($delimiterPosition === false || !in_array($direction, array('ASC', 'DESC')))
+					{
+						$this->setError(400, 'The "sort" value has to be formed as this example: "field_ASC" or \'[field_1_DESC,field_2_ASC,field_3_ASC,...]\' ("field" has to be an available field)');
 						return false;
 					}
-					elseif (!in_array($sortArgs[0], $available_filters))
+					elseif (!in_array($fieldName, $available_filters))
 					{
 						$this->setError(400, 'Unable to filter by this field. However, these are available: '.implode(', ', $available_filters));
 						return false;
 					}
 					else
 					{
-						$sql_sort .= (isset($this->_resourceConfiguration['retrieveData']['tableAlias']) ? $this->_resourceConfiguration['retrieveData']['tableAlias'].'.' : '').'`'.pSQL($this->_resourceConfiguration['fields'][$sortArgs[0]]['sqlId']).'` '.strtoupper($sortArgs[1]).', ';// ORDER BY `field` ASC|DESC
+						$sql_sort .= (isset($this->_resourceConfiguration['retrieveData']['tableAlias']) ? $this->_resourceConfiguration['retrieveData']['tableAlias'].'.' : '').'`'.pSQL($this->_resourceConfiguration['fields'][$fieldName]['sqlId']).'` '.$direction.', ';// ORDER BY `field` ASC|DESC
 					}
 				}
 				$sql_sort = rtrim($sql_sort, ', ')."\n";
@@ -1007,6 +1024,7 @@ class WebserviceRequest
 	private function getSQLRetrieveFilter($sqlId, $filterValue, $tableAlias = 'main.')
 	{
 		$ret = '';
+		// "LIKE" case (=%[foo]%, =%[foo], =[foo]%)
 		preg_match('/^(.*)\[(.*)\](.*)$/', $filterValue, $matches);
 		if (count($matches) > 1)
 		{
@@ -1014,8 +1032,9 @@ class WebserviceRequest
 				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` LIKE "'.$matches[1].pSQL($matches[2]).$matches[3]."\"\n";// AND field LIKE %value%
 			elseif ($matches[1] == '' && $matches[3] == '')
 			{
-				preg_match('/^(\d+)(\|(\d+))+$/', $matches[2], $matches2);
-				preg_match('/^(\d+)$/', $matches[2], $matches4);
+				// "OR" case
+				preg_match('/^([^\|]+)(\|([^\|]+))+$/', $matches[2], $matches2);
+				preg_match('/^(.+)$/', $matches[2], $matches4);
 				if (count($matches2) > 0 || count($matches4) > 1)
 				{
 					$values = explode('|', $matches[2]);
@@ -1025,7 +1044,7 @@ class WebserviceRequest
 						$temp .= $tableAlias.'`'.pSQL($sqlId).'` = "'.pSQL($value).'" OR ';// AND (field = value3 OR field = value7 OR field = value9)
 					$ret .= rtrim($temp, 'OR ').')'."\n";
 				}
-				else
+				else // "AND" case
 				{
 					preg_match('/^(\d+),(\d+)$/', $matches[2], $matches3);
 					if (count($matches3) > 0)
@@ -1080,7 +1099,7 @@ class WebserviceRequest
 							if (array_key_exists('maxSize', $field) && $field['maxSize'])
 								$ret .= ' maxSize="'.$field['maxSize'].'"';
 							if (array_key_exists('validateMethod', $field) && $field['validateMethod'])
-								$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
+								$ret .= ' format="'.implode(' ', $field['validateMethod']).'" ';
 						}
 						$ret .= ">\n";
 						
@@ -1090,7 +1109,7 @@ class WebserviceRequest
 						{
 							$languages = Language::getLanguages();
 							foreach ($languages as $language)
-								$ret .= '<language id="'.$language['id_lang'].'" '.($this->_schemaToDisplay == 'synopsis' ? 'format="isUnsignedId"' : '').'></language>'."\n";
+								$ret .= '<language id="'.$language['id_lang'].'" '.($this->_schemaToDisplay == 'synopsis' ? 'format="isUnsignedId" xlink:href="'.$this->_wsUrl.'languages/'.$language['id_lang'].'"' : '').'></language>'."\n";
 						}
 						else
 						{
@@ -1136,54 +1155,58 @@ class WebserviceRequest
 			}
 		}
 	
+		
 		// display associations
+		$associationsRet = '';
 		if (isset($this->_resourceConfiguration['associations']))
 		{
-			$ret .= '<associations>'."\n";
 			foreach ($this->_resourceConfiguration['associations'] as $assocName => $association)
 			{
-				$ret .= '<'.$assocName.' node_type="'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'">'."\n";
-				$getter = $this->_resourceConfiguration['associations'][$assocName]['getter'];
-				
-				// if we are not in schema
-				if (method_exists($object, $getter))
+				if ($this->_fieldsToDisplay == 'full' || is_array($this->_fieldsToDisplay) && (in_array('associations['.$assocName.']', $this->_fieldsToDisplay) || in_array('associations', $this->_fieldsToDisplay)))
 				{
-					$associationResources = $object->$getter();
-					if (is_array($associationResources))
-						foreach ($associationResources as $associationResource)
-						{
-							$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].(isset($this->_resourceList[$assocName]) ? ' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationResource['id'].'"' : '').'>'."\n";
-							foreach ($associationResource as $fieldName => $fieldValue)
-								$ret .= '<'.$fieldName.'><![CDATA['.$fieldValue.']]></'.$fieldName.'>'."\n";
-							$ret .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
-						}
-				}
-				if (!is_null($this->_schemaToDisplay))
-				{
-					$ret .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
-					foreach ($this->_resourceConfiguration['associations'][$assocName]['fields'] as $fieldName => $fieldAttributes)
-					{
-						// if shouldn't be modified (calculated fields etc..)
-						if (!array_key_exists('setter',$fieldAttributes) && $fieldName != 'id')
-						{
-							$ret .= '<'.$fieldName.
-							(isset($fieldAttributes['required']) && $fieldAttributes['required'] ? ' required="true"' : '');
-							if (isset($fieldAttributes['required']))
-								unset($fieldAttributes['required']);
-							if (count($fieldAttributes) > 0)
-							{
-								$ret .= ' format="'.explode(',', $fieldAttributes).'"';
-								echo $fieldName.'^'.$fieldAttributes;
-							}
-							$ret .= '/>'."\n";
-						}
-					}
-					$ret .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
+					$associationsRet .= '<'.$assocName.' node_type="'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'">'."\n";
+					$getter = $this->_resourceConfiguration['associations'][$assocName]['getter'];
 					
+					// if we are not in schema
+					if (method_exists($object, $getter))
+					{
+						$associationResources = $object->$getter();
+						if (is_array($associationResources))
+							foreach ($associationResources as $associationResource)
+							{
+								$associationsRet .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].(isset($this->_resourceList[$assocName]) ? ' xlink:href="'.$this->_wsUrl.$assocName.'/'.$associationResource['id'].'"' : '').'>'."\n";
+								foreach ($associationResource as $fieldName => $fieldValue)
+									$associationsRet .= '<'.$fieldName.'><![CDATA['.$fieldValue.']]></'.$fieldName.'>'."\n";
+								$associationsRet .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
+							}
+					}
+					if (!is_null($this->_schemaToDisplay))
+					{
+						$associationsRet .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
+						foreach ($this->_resourceConfiguration['associations'][$assocName]['fields'] as $fieldName => $fieldAttributes)
+						{
+							// if shouldn't be modified (calculated fields etc..)
+							if (!array_key_exists('setter',$fieldAttributes) && $fieldName != 'id')
+							{
+								$associationsRet .= '<'.$fieldName.
+								(isset($fieldAttributes['required']) && $fieldAttributes['required'] ? ' required="true"' : '');
+								if (isset($fieldAttributes['required']))
+									unset($fieldAttributes['required']);
+								if (count($fieldAttributes) > 0)
+								{
+									$associationsRet .= ' format="'.explode(',', $fieldAttributes).'"';
+									echo $fieldName.'^'.$fieldAttributes;
+								}
+								$associationsRet .= '/>'."\n";
+							}
+						}
+						$associationsRet .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
+					}
+					$associationsRet .= '</'.$assocName.'>'."\n";
 				}
-				$ret .= '</'.$assocName.'>'."\n";
 			}
-			$ret .= '</associations>'."\n";
+			if ($associationsRet != '')
+				$ret .= '<associations>'."\n".$associationsRet.'</associations>'."\n";
 		}
 		$ret .= '</'.$this->_resourceConfiguration['objectNodeName'].'>'."\n";
 		return $ret;

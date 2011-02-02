@@ -73,6 +73,17 @@ class EmployeeCore extends ObjectModel
 	protected 	$table = 'employee';
 	protected 	$identifier = 'id_employee';
 
+	protected	$webserviceParameters = array(
+		'objectMethods' => array('add' => 'addWs'),
+		'fields' => array(
+			'id_lang' => array('xlink_resource' => 'languages'),
+			'last_passwd_gen' => array('setter' => null),
+			'stats_date_from' => array('setter' => null),
+			'stats_date_to' => array('setter' => null),
+		),
+	);
+	
+	
 	public	function getFields()
 	{
 	 	parent::validateFields();
@@ -188,6 +199,12 @@ class EmployeeCore extends ObjectModel
 			AND $this->active
 		);
 	}
+	
+	
+	public function addWs($autodate = true, $nullValues = false)
+	{
+		$this->passwd = Tools::encrypt($this->passwd);
+		return $this->add($autodate, $nullValues);
+	}
+
 }
-
-

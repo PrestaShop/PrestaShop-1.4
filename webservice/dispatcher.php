@@ -62,7 +62,10 @@ unset($params['url']);
 // fetch the request
 $result = WebserviceRequest::getInstance()->fetch($key, $method, $_GET['url'], $params, $input_xml);
 // display result
-header($result['content_type']);
+if (ob_get_length() == 0)
+	header($result['content_type']);
+else
+	header('Content-Type: application/javascript'); // Useful for debug...
 header($result['status']);
 header($result['x_powered_by']);
 header($result['execution_time']);

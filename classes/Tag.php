@@ -40,6 +40,9 @@ class TagCore extends ObjectModel
 	protected 	$identifier = 'id_tag';
 	
 	protected	$webserviceParameters = array(
+	'fields' => array(
+	'id_lang' => array('xlink_resource' => 'languages'),
+	),
 	);
 	
 	public function __construct($id = NULL, $name = NULL, $id_lang = NULL)

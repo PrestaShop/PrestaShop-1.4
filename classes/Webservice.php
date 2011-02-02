@@ -101,6 +101,7 @@ class WebserviceCore extends ObjectModel
 			'translated_configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration', 'parameters_attribute' => 'webserviceParametersI18n'),
 			'weight_ranges' => array('description' => 'Weight ranges', 'class' => 'RangeWeight'),
 			'zones' => array('description' => 'The Countries zones','class' => 'Zone'),
+			'employees' => array('description' => 'The Employees', 'class' => 'Employee'),
 		);
 		ksort($resources);
 		return $resources;

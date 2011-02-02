@@ -508,6 +508,10 @@ abstract class ObjectModelCore
 					$association['getter'] = Tools::toCamelCase('get_ws_'.$assocName);
 			}
 		
+		
+		if (isset($this->{$wsParamsAttributeName}['retrieveData']) && isset($this->{$wsParamsAttributeName}['retrieveData']['retrieveMethod']))
+			unset($defaultResourceParameters['retrieveData']['retrieveMethod']);
+
 		$resourceParameters = array_merge_recursive($defaultResourceParameters, $this->{$wsParamsAttributeName});
 		if (isset($this->fieldsSize))
 			foreach ($this->fieldsSize as $fieldName => $maxSize)
