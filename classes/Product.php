@@ -574,6 +574,8 @@ class ProductCore extends ObjectModel
 	*/
 	public function updateCategories($categories, $keepingCurrentPos = false)
 	{
+		if (empty($categories))
+			return false;
 		$positions = array();
 		$result = Db::getInstance()->ExecuteS('SELECT IFNULL(MAX(`position`), 0) + 1 AS max, `id_category`
 				FROM `'._DB_PREFIX_.'category_product`
