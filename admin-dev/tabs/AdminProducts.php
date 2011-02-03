@@ -90,8 +90,8 @@ class AdminProducts extends AdminTab
 			$object->unit_price = str_replace(',', '.', $_POST['unit_price']);
 		if ($_POST['ecotax'] != NULL)
 			$object->ecotax = str_replace(',', '.', $_POST['ecotax']);
-		$object->available_for_order = $object->active ? (int)(Tools::isSubmit('available_for_order')) : 1;
-		$object->show_price = $object->active ? ($object->available_for_order ? 1 : (int)(Tools::isSubmit('show_price'))) : 1;
+		$object->available_for_order = (int)(Tools::isSubmit('available_for_order'));
+		$object->show_price = $object->available_for_order ? 1 : (int)(Tools::isSubmit('show_price'));
 		$object->on_sale = Tools::isSubmit('on_sale');
 		$object->online_only = Tools::isSubmit('online_only');
 	}
@@ -2112,7 +2112,7 @@ class AdminProducts extends AdminTab
 							<label for="active_off" class="t"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('Disabled').($obj->active ? '' : ' (<a href="'.$preview_url.'" alt="" target="_blank">'.$this->l('View product in shop').'</a>)').'</label>
 						</td>
 					</tr>
-					<tr id="product_options">
+					<tr id="product_options" '.(!$obj->active ? 'style="display:none"' : '').'>
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Options:').'</td>
 						<td style="padding-bottom:5px;">
 							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
