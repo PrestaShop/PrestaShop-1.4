@@ -61,7 +61,7 @@ abstract class AdminTabCore
 	public $duplicate = false;
 
 	/** @var boolean Content line is clickable if true */
-	public $noLink = true;
+	public $noLink = false;
 
 	/** @var boolean select other required fields */
 	public $requiredDatabase = false;
