@@ -2,9 +2,10 @@
 <module>
 	<name>productcomments</name>
     <displayName>Product Comments</displayName>
-    <version>2.0</version>
+    <version>2.1</version>
     <description>Allow users to post comment about a product</description>
     <tab>front_office_features</tab>
     <is_configurable>1</is_configurable>
     <need_instance>0</need_instance>
+    
 </module>

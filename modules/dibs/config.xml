@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>dibs</name>
     <displayName>DIBS</displayName>
@@ -7,4 +7,5 @@
     <tab>payments_gateways</tab>
     <is_configurable>1</is_configurable>
     <need_instance>1</need_instance>
+    
 </module>

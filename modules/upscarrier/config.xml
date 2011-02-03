@@ -2,9 +2,10 @@
 <module>
 	<name>upscarrier</name>
     <displayName>UPS Carrier</displayName>
-    <version>0.8</version>
+    <version>1.0</version>
     <description>Offer to your customers, different delivery methods with UPS</description>
     <tab>shipping_logistics</tab>
     <is_configurable>1</is_configurable>
     <need_instance>1</need_instance>
+    
 </module>

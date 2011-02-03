@@ -2,9 +2,10 @@
 <module>
 	<name>vatnumber</name>
     <displayName>European VAT number</displayName>
-    <version>1.0</version>
+    <version>1</version>
     <description>Enable the management of VAT number</description>
     <tab>billing_invoicing</tab>
     <is_configurable>1</is_configurable>
     <need_instance>0</need_instance>
+    
 </module>

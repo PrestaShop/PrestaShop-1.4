@@ -2,7 +2,7 @@
 <module>
 	<name>fianetfraud</name>
     <displayName>FIA-NET - Système d\'Analyse des Commandes</displayName>
-    <version>1.0</version>
+    <version>1.1</version>
     <description>Protégez vous contre la fraude à la carte bancaire sans perturber l\'acte d\'achat</description>
     <tab>payment_security</tab>
     <is_configurable>1</is_configurable>

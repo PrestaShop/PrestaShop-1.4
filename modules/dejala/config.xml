@@ -2,9 +2,10 @@
 <module>
 	<name>dejala</name>
     <displayName>Dejala.com : Courier delivery</displayName>
-    <version>1.3</version>
+    <version>1.4</version>
     <description>Lets Dejala.com handle your deliveries by courier</description>
     <tab>shipping_logistics</tab>
     <is_configurable>1</is_configurable>
     <need_instance>1</need_instance>
+    
 </module>
