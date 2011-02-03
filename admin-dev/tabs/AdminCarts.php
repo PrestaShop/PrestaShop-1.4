@@ -105,11 +105,13 @@ class AdminCarts extends AdminTab
 		    $total_discount = $summary['total_discounts_tax_exc'];
 		    $total_wrapping = $summary['total_wrapping_tax_exc'];
 		    $total_price = $summary['total_price_without_tax'];
+   		    $total_shipping = $summary['total_shipping_tax_exc'];
 		} else {
 		    $total_products = $summary['total_products_wt'];
 		    $total_discount = $summary['total_discounts'];
 		    $total_wrapping = $summary['total_wrapping'];
 		    $total_price = $summary['total_price'];
+  		    $total_shipping = $summary['total_shipping'];
 		}
 
 		echo '
@@ -213,7 +215,7 @@ class AdminCarts extends AdminTab
 			echo '
 			<tr class="cart_total_delivery">
 				<td colspan="5">'.$this->l('Total shipping:').'</td>
-				<td class="price bold right">'.Tools::displayPrice($cart->getOrderTotal(true, 5), $currency, false).'</td>
+				<td class="price bold right">'.Tools::displayPrice($total_shipping, $currency, false).'</td>
 			</tr>';
 			echo '
 			<tr class="cart_total_price">
