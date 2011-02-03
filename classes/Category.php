@@ -135,7 +135,7 @@ class CategoryCore extends ObjectModel
 	public	function add($autodate = true, $nullValues = false)
 	{
 		$this->position = self::getLastPosition((int)(Tools::getValue('id_parent')));
-		if ($this->level_depth != 0)
+		if (!isset($this->level_depth) OR $this->level_depth != 0)
 			$this->level_depth = $this->calcLevelDepth();
 		$ret = parent::add($autodate);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
