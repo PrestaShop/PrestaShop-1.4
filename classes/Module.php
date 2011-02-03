@@ -78,6 +78,8 @@ abstract class ModuleCore
 	
 	private static $_INSTANCE = array();
 	
+	private static $_generateConfigXmlMode = false;
+	
 	public function __construct($name = NULL)
 	{
 		global $cookie;
@@ -360,14 +362,20 @@ abstract class ModuleCore
 		$modules_dir = self::getModulesDirOnDisk();
 		foreach ($modules_dir AS $module)
 		{
-			if ($useConfig AND $xml_exist = file_exists(_PS_MODULE_DIR_.'/'.$module.'/config.xml'))
+			$configFile = _PS_MODULE_DIR_.$module.'/config.xml';
+			$xml_exist = file_exists($configFile);
+			if ($xml_exist)
+				$needNewConfigFile = (filemtime($configFile) < filemtime(_PS_MODULE_DIR_.$module.'/'.$module.'.php'));
+			else
+				$needNewConfigFile = true;
+			if ($useConfig AND $xml_exist)
 			{
-				$xml_module = simplexml_load_file(_PS_MODULE_DIR_.'/'.$module.'/config.xml');
-				if ((int)$xml_module->need_instance == 0)
+				$xml_module = simplexml_load_file($configFile);
+				if ((int)$xml_module->need_instance == 0 AND !$needNewConfigFile)
 				{
-					if (file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.Language::getIsoById($cookie->id_lang).'.php'))
+					if (file_exists(_PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php'))
 					{
-						include(_PS_MODULE_DIR_.'/'.$module.'/'.Language::getIsoById($cookie->id_lang).'.php');
+						include(_PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php');
 						$key = '<{'.strval($xml_module->name).'}'._THEME_NAME_.'>'.strval($xml_module->name).'_'.md5(strval($xml_module->displayName));
 						if (is_array($_MODULE) AND isset($_MODULE[$key]))
 							$xml_module->displayName = $_MODULE[$key];
@@ -389,15 +397,24 @@ abstract class ModuleCore
 					$moduleList[] = $xml_module;
 				}
 			}
-			if (!$useConfig OR !$xml_exist OR (isset($xml_module->need_instance) AND (int)$xml_module->need_instance == 1))
+			if (!$useConfig OR !$xml_exist OR (isset($xml_module->need_instance) AND (int)$xml_module->need_instance == 1) OR $needNewConfigFile)
 			{
-				$file = trim(file_get_contents(_PS_MODULE_DIR_.'/'.$module.'/'.$module.'.php'));
+				$file = trim(file_get_contents(_PS_MODULE_DIR_.$module.'/'.$module.'.php'));
 				if (substr($file, 0, 5) == '<?php')
 					$file = substr($file, 5);
 				if (substr($file, -2) == '?>')
 					$file = substr($file, 0, -2);
 				if (class_exists($module, false) OR eval($file) !== false)
+				{
 					$moduleList[] = new $module;
+					if (!$xml_exist OR $needNewConfigFile)
+					{
+						self::$_generateConfigXmlMode = true;
+						$tmpModule = new $module;
+						$tmpModule->_generateConfigXml((isset($xml_module->need_instance) ? (int)$xml_module->need_instance : 1));
+						self::$_generateConfigXmlMode = false;
+					}
+				}
 				else
 					$errors[] = $module;
 			}
@@ -553,6 +570,9 @@ abstract class ModuleCore
 	 */
 	public function l($string, $specific = false)
 	{
+		if (self::$_generateConfigXmlMode)
+			return $string;
+		
 		global $_MODULES, $_MODULE, $cookie;
 
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
@@ -787,6 +807,23 @@ abstract class ModuleCore
 		/* or keep a backward compatibility if PHP version < 5.1.2 */
 		else
 			return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
+	}
+	
+	protected function _generateConfigXml($need_instance = 1)
+	{	
+		$xml = '<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>'.$this->name.'</name>
+    <displayName>'.addslashes($this->displayName).'</displayName>
+    <version>'.$this->version.'</version>
+    <description>'.addslashes($this->description).'</description>
+    <tab>'.$this->tab.'</tab>
+    <is_configurable>'.(int)method_exists($this, 'getContent').'</is_configurable>
+    <need_instance>'.$need_instance.'</need_instance>
+    '.(isset($this->limited_countries) ? '<limited_countries>'.(sizeof($this->limited_countries) == 1 ? $this->limited_countries[0] : '').'</limited_countries>' : '').'
+</module>';
+		if (is_writable(_PS_MODULE_DIR_.$this->name.'/'))
+			file_put_contents(_PS_MODULE_DIR_.$this->name.'/config.xml', $xml);
 	}
 }
 
