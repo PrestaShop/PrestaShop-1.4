@@ -30,7 +30,6 @@
 </div>
 <br />
 {/if}
-	
 {if $display_rating_link}
 <div style="text-align: center">
 	<a target="_blank" href="{$rating_url}" title="Rate this shop"><img alt="Rate this shop" border="0" src="{$module_dir}/img/apply_{$language}.gif" /></a>
