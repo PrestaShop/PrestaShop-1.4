@@ -41,9 +41,9 @@ class AdminGeolocalization extends AdminTab
 		echo '
 		<form method="POST" action="'.$currentIndex.'&token='.Tools::getValue('token').'">
 			<fieldset>
-				<legend><img src="../img/admin/world.gif" alt="" /> '.$this->l('Geolocalization by IP').'</legend>
+				<legend><img src="../img/admin/world.gif" alt="" /> '.$this->l('Geolocation by IP').'</legend>
 				
-				<label>'.$this->l('Geolocalization by IP:').'</label>
+				<label>'.$this->l('Geolocation by IP:').'</label>
 				<div class="margin-form">
 					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_1" value="1" '.(Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_1"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Enabled').'</label>
 					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_0" value="0" '.(!Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_0"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('Disabled').'</label>
@@ -63,7 +63,7 @@ class AdminGeolocalization extends AdminTab
 				<legend><img src="../img/admin/world.gif" alt="" /> '.$this->l('Options').'</legend>
 				
 				<div class="hint" style="display:block;margin-bottom:20px;">
-					'.$this->l('The following features are only available if you enabled the Geolocation by IP feature.').'
+					'.$this->l('The following features are only available if you enable the Geolocation by IP feature.').'
 				</div>
 				
 				<label>'.$this->l('Geolocation behavior for restricted countries:').'</label>
@@ -149,7 +149,7 @@ class AdminGeolocalization extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
-				$this->_errors[] = Tools::displayError('Geolocalization database isn\'t available');
+				$this->_errors[] = Tools::displayError('Geolocation database isn\'t available');
 		}
 		
 		if (Tools::isSubmit('submitGeolocalizationCountries'))
