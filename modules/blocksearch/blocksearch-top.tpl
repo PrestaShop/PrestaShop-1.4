@@ -26,18 +26,17 @@
 
 <!-- Block search module TOP -->
 <div id="search_block_top">
-
 	<form method="get" action="{$link->getPageLink('search.php')}" id="searchbox">
-		<p>
-			<label for="search_query"><!-- image on background --></label>
-			<input type="hidden" name="orderby" value="position" />
-			<input type="hidden" name="orderway" value="desc" />
-			<input type="text" id="search_query" name="search_query" value="{if isset($smarty.get.search_query)}{$smarty.get.search_query|htmlentities:$ENT_QUOTES:'utf-8'|stripslashes}{/if}" />
-			<input type="submit" name="submit_search" value="{l s='Search' mod='blocksearch'}" class="button" />
-		</p>
+	<p>
+		<label for="search_query"><!-- image on background --></label>
+		<input type="hidden" name="orderby" value="position" />
+		<input type="hidden" name="orderway" value="desc" />
+		<input type="text" id="search_query" name="search_query" value="{if isset($smarty.get.search_query)}{$smarty.get.search_query|htmlentities:$ENT_QUOTES:'utf-8'|stripslashes}{/if}" />
+		<input type="submit" name="submit_search" value="{l s='Search' mod='blocksearch'}" class="button" />
+	</p>
 	</form>
 </div>
-{if $instantsearch AND !$ajaxsearch}
+{if $instantsearch}
 	<script type="text/javascript">
 	// <![CDATA[
 		{literal}
@@ -59,7 +58,7 @@
 		}
 		
 		$("#search_query").keyup(function(){
-			if($(this).val().length > 2){
+			if($(this).val().length > 0){
 				stopInstantSearchQueries();
 				instantSearchQuery = $.ajax({
 				url: '{/literal}{if $search_ssl == 1}{$link->getPageLink('search.php', true)}{else}{$link->getPageLink('search.php')}{/if}{literal}',
@@ -89,8 +88,7 @@
 	// ]]>
 	{/literal}
 	</script>
-{/if}
-{if $ajaxsearch AND !$instantsearch}
+{elseif $ajaxsearch}
 	<script type="text/javascript">{literal}
 	// <![CDATA[
 		$('document').ready( function() {
