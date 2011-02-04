@@ -227,6 +227,7 @@ class AdminThemes extends AdminPreferences
 	public function postProcess()
 	{
 		// new check compatibility theme feature (1.4) :
+		$val = Tools::getValue('PS_THEME');
 		if (!$this->isThemeCompatible($val))
 		{
 			$this->_errors[] = Tools::displayError('theme may not be fully compatible with this Prestashop version ');
