@@ -285,7 +285,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 					<br class="clear" />
 				{/if}
 				{if $product->ecotax != 0}
-					<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{$ecotax_tax_inc|convertAndFormatPrice}</span> {l s='for green tax'}</p>
+					<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{if $priceDisplay == 2}{$ecotax_tax_exc|convertAndFormatPrice}{else}{$ecotax_tax_inc|convertAndFormatPrice}{/if}</span> {l s='for green tax'}</p>
 				{/if}
 				{if !empty($product->unity) && $product->unit_price_ratio > 0.000000}
 				    {math equation="pprice / punit_price"  pprice=$productPrice  punit_price=$product->unit_price_ratio assign=unit_price}

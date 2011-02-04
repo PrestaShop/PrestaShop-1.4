@@ -70,7 +70,7 @@ class ProductControllerCore extends FrontController
 				}
 			}
 		}
-		
+
 		parent::preProcess();
 
 		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
@@ -192,17 +192,18 @@ class ProductControllerCore extends FrontController
 				$tax = (float)(Tax::getProductTaxRate((int)($this->product->id), $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 				$this->smarty->assign('tax_rate', $tax);
 
-				$ecotaxTaxAmount = $this->product->ecotax;
 				$ecotax_rate = (float) Tax::getProductEcotaxRate($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
-
+                $ecotaxTaxAmount = Tools::ps_round($this->product->ecotax, 2);
 				if (Product::$_taxCalculationMethod == PS_TAX_INC)
 					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + $ecotax_rate / 100), 2);
+
 				/* /Quantity discount management */
 
 				$this->smarty->assign(array(
 					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($this->product->id), (int)(Shop::getCurrentShop()), (int)($this->cookie->id_currency), $id_country, $id_group), $this->product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)($tax)),
 					'product' => $this->product,
 					'ecotax_tax_inc' => $ecotaxTaxAmount,
+					'ecotax_tax_exc' => Tools::ps_round($this->product->ecotax, 2),
 					'ecotaxTax_rate' => $ecotax_rate,
 					'homeSize' => Image::getSize('home'),
 					'product_manufacturer' => new Manufacturer((int)($this->product->id_manufacturer), Configuration::get('PS_LANG_DEFAULT')),

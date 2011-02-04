@@ -734,6 +734,11 @@ class AdminOrders extends AdminTab
 						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee));
 						foreach ($products as $k => $product)
 						{
+					        if ($order->getTaxCalculationMethod() == PS_TAX_EXC)
+                                $product_price = $product['product_price'] + $product['ecotax'];
+                            else
+                                $product_price = $product['product_price_wt'];
+
 							$image = array();
 							if (isset($product['product_attribute_id']) AND (int)($product['product_attribute_id']))
 								$image = Db::getInstance()->getRow('
@@ -772,12 +777,12 @@ class AdminOrders extends AdminTab
 										'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'].'<br />' : '')
 										.($product['product_supplier_reference'] ? $this->l('Ref Supplier:').' '.$product['product_supplier_reference'] : '')
 										.'</a></td>
-									<td align="center">'.Tools::displayPrice($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice($product_price, $currency, false, false).'</td>
 									<td align="center" class="productQuantity">'.((int)($product['product_quantity']) - $product['customizationQuantityTotal']).'</td>
 									'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.(int)($product['product_quantity_refunded']).'</td>' : '').'
 									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.(int)($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
-									<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * ((int)($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice(Tools::ps_round($product_price, 2) * ((int)($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
 									<td align="center" class="cancelCheck">
 										<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.(int)($product['product_quantity_return']).'" />
 										<input type="hidden" name="totalQty" id="totalQty" value="'.(int)($product['product_quantity']).'" />
