@@ -5,6 +5,8 @@
     <version>1.0</version>
     <description>Adds a block displaying an RSS feed</description>
     <tab>front_office_features</tab>
+    
     <is_configurable>1</is_configurable>
     <need_instance>0</need_instance>
+    
 </module>

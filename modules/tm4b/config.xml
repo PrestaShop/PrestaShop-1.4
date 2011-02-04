@@ -8,4 +8,5 @@
     <confirmUninstall>Are you sure you want to delete your info?</confirmUninstall>
     <is_configurable>1</is_configurable>
     <need_instance>0</need_instance>
+    
 </module>

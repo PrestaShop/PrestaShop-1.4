@@ -5,7 +5,8 @@
     <version>2.3</version>
     <description>Module for accepting payments by cheque</description>
     <tab>payments_gateways</tab>
+    <confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>
     <is_configurable>1</is_configurable>
     <need_instance>1</need_instance>
-    <confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>
+    
 </module>

@@ -2,9 +2,11 @@
 <module>
 	<name>birthdaypresent</name>
     <displayName>Birthday Present</displayName>
-    <version>1.0</version>
+    <version>1</version>
     <description>Offer your clients birthday presents automatically</description>
     <tab>pricing_promotion</tab>
+    
     <is_configurable>1</is_configurable>
     <need_instance>0</need_instance>
+    
 </module>

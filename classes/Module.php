@@ -810,14 +810,15 @@ abstract class ModuleCore
 	}
 	
 	protected function _generateConfigXml($need_instance = 1)
-	{	
+	{
 		$xml = '<?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>'.$this->name.'</name>
     <displayName>'.addslashes($this->displayName).'</displayName>
     <version>'.$this->version.'</version>
-    <description>'.addslashes($this->description).'</description>
+    <description>'.html_entity_decode(addslashes($this->description), ENT_COMPAT, 'UTF-8').'</description>
     <tab>'.$this->tab.'</tab>
+    '.(isset($this->confirmUninstall) ? '<confirmUninstall>'.$this->confirmUninstall.'</confirmUninstall>' : '').'
     <is_configurable>'.(int)method_exists($this, 'getContent').'</is_configurable>
     <need_instance>'.$need_instance.'</need_instance>
     '.(isset($this->limited_countries) ? '<limited_countries>'.(sizeof($this->limited_countries) == 1 ? $this->limited_countries[0] : '').'</limited_countries>' : '').'

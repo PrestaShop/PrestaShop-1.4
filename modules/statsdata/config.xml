@@ -5,6 +5,7 @@
     <version>1</version>
     <description>This module must be enabled if you want to use Statistics</description>
     <tab>analytics_stats</tab>
+    
     <is_configurable>1</is_configurable>
     <need_instance>0</need_instance>
     

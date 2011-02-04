@@ -2,9 +2,11 @@
 <module>
 	<name>graphgooglechart</name>
     <displayName>Google Chart</displayName>
-    <version>1.0</version>
+    <version>1</version>
     <description>The Google Chart API lets you dynamically generate charts.</description>
     <tab>administration</tab>
+    
     <is_configurable>0</is_configurable>
     <need_instance>0</need_instance>
+    
 </module>

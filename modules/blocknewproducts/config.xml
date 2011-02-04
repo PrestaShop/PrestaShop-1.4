@@ -5,6 +5,7 @@
     <version>0.9</version>
     <description>Displays a block featuring newly added products</description>
     <tab>front_office_features</tab>
+    
     <is_configurable>1</is_configurable>
     <need_instance>0</need_instance>
     

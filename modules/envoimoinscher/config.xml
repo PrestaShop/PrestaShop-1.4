@@ -5,6 +5,7 @@
     <version>1.0</version>
     <description>Find the best price for your shipment. Compare and order offerings of carriers, negotiated rates.</description>
     <tab>shipping_logistics</tab>
+    
     <is_configurable>1</is_configurable>
     <need_instance>1</need_instance>
     <limited_countries>fr</limited_countries>
