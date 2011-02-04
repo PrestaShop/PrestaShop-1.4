@@ -1,0 +1,2 @@
+ALTER TABLE `PREFIX_product` CHANGE `ecotax` `ecotax` DECIMAL( 17, 6 ) NOT NULL DEFAULT '0.00';
+

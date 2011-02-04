@@ -58,5 +58,3 @@ CREATE TABLE `PREFIX_import_match` (
   PRIMARY KEY (`id_import_match`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
-ALTER TABLE `PREFIX_product` CHANGE `ecotax` `ecotax` DECIMAL( 17, 6 ) NOT NULL DEFAULT '0.00';
-
