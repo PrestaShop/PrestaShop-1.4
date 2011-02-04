@@ -163,7 +163,7 @@
 				<td colspan="6">{l s='Total (tax excl.):'}</td>
 				<td class="price" id="total_price_without_tax">{displayPrice price=$total_price_without_tax}</td>
 			</tr>
-			<tr class="cart_total_delivery">
+			<tr class="cart_total_tax">
 				<td colspan="6">{l s='Total tax:'}</td>
 				<td class="price" id="total_tax">{displayPrice price=$total_tax}</td>
 			</tr>
