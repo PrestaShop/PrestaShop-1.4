@@ -136,7 +136,7 @@ abstract class AbsTrustedShops
 	}
 	/**
 	 * Template management (display, overload, cache)
-	 * @see 
+	 * @see Module::_isTemplateOverloadedStatic()
 	 */
 	protected static function _isTemplateOverloadedStatic($moduleName, $template)
 	{
