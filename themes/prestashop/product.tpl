@@ -288,7 +288,8 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 					<p class="price-ecotax">{l s='include'} <span id="ecotax_price_display">{$ecotax_tax_inc|convertAndFormatPrice}</span> {l s='for green tax'}</p>
 				{/if}
 				{if !empty($product->unity) && $product->unit_price_ratio > 0.000000}
-					<p class="unit-price"><span id="unit_price_display">{convertPrice price=($productPrice / $product->unit_price_ratio)}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
+				    {math equation="pprice / punit_price"  pprice=$productPrice  punit_price=$product->unit_price_ratio assign=unit_price}
+					<p class="unit-price"><span id="unit_price_display">{convertPrice price=$unit_price}</span> {l s='per'} {$product->unity|escape:'htmlall':'UTF-8'}</p>
 				{/if}
 				{*close if for show price*}
 			{/if}
