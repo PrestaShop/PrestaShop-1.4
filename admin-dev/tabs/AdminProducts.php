@@ -2617,6 +2617,8 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Tags:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
+				if ($obj->id)
+					$obj->tags = Tag::getProductTags((int)$this->id);
 				foreach ($this->_languages as $language)
 				{
 					echo '<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
