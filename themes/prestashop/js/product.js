@@ -458,7 +458,7 @@ $(document).ready(function()
 	//init the price in relation of the selected attributes
 	if (typeof productHasAttributes != 'undefined' && productHasAttributes)
 		findCombination(true);
-	else
+	else if (typeof productHasAttributes != 'undefined' && !productHasAttributes)
 		refreshProductImages(0);
 
 	//
