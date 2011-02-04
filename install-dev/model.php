@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -34,7 +34,7 @@ if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 $_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
-define('INSTALL_VERSION', '1.4.0.11');
+define('INSTALL_VERSION', '1.4.0.12');
 define('INSTALL_PATH', dirname(__FILE__));
 define('PS_INSTALLATION_IN_PROGRESS', true);
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
@@ -51,29 +51,30 @@ if(isset($_GET['method']))
 {
 	switch ($_GET['method'])
 	{
-		
+
 		case 'checkConfig' :
 			include_once('xml/checkConfig.php');
 		break;
-	
+
 		case 'checkDB' :
 			include_once('xml/checkDB.php');
 		break;
-		
+
 		case 'createDB' :
 			include_once('xml/createDB.php');
 		break;
-	
+
 		case 'checkMail' :
 			include_once('xml/checkMail.php');
 		break;
-	
+
 		case 'checkShopInfos' :
 			include_once('xml/checkShopInfos.php');
 		break;
-		
+
 		case 'doUpgrade' :
 			include_once('xml/doUpgrade.php');
 		break;
 	}
 }
+
