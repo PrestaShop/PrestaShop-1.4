@@ -816,7 +816,7 @@ class ValidateCore
 	 */
 	static public function isDniLite($dni)
 	{
-		return (bool)preg_match('/^[0-9a-z-.]{1,16}$/Ui', $dni);
+		return empty($dni) OR (bool)preg_match('/^[0-9a-z-.]{1,16}$/Ui', $dni);
 	}
 	
 	/**
