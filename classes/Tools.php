@@ -1109,7 +1109,7 @@ class ToolsCore
 			self::$file_exists_cache[$filename] = file_exists($filename);
 		return self::$file_exists_cache[$filename];
 	}
-	
+
 	public static function file_get_contents($url)
     {
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
@@ -1523,7 +1523,7 @@ class ToolsCore
 			$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)__[a-zA-Z0-9-]*'] = 'supplier.php?isolang=$1&id_supplier=$2 [QSA,L]';
 			$tab['RewriteRule']['content']['^([a-z]{2})/([0-9]+)_[a-zA-Z0-9-]*'] = 'manufacturer.php?isolang=$1&id_manufacturer=$2 [QSA,L]';
 		}
-		
+
 		// Compatibility with the old URLs
 		if (!Configuration::get('PS_INSTALL_VERSION') OR version_compare(Configuration::get('PS_INSTALL_VERSION'), '1.4.0.7') == -1)
 		{
@@ -1672,6 +1672,11 @@ FileETag INode MTime Size
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
 	   		trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
+
+            $message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+
+            if (!Log::isAlreadyPresent($message))
+                Log::addLog($message, 3, $callee['class']);
 		}
 	}
 
@@ -1685,6 +1690,10 @@ FileETag INode MTime Size
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
 	   		trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
+
+            $message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+            if (!Log::isAlreadyPresent($message))
+                Log::addLog($message, 3, $callee['class']);
 		}
 	}
 
@@ -1752,3 +1761,4 @@ function cmpPriceDesc($a,$b)
 		return (-1);
 	return (0);
 }
+

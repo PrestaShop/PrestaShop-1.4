@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -29,36 +29,38 @@ class	LogCore extends ObjectModel
 {
 	/** @var integer Log id */
 	public		$id_log;
-	
+
 	/** @var integer Log severity */
 	public		$severity;
-	
+
 	/** @var integer Error code */
 	public		$error_code;
-	
+
 	/** @var string Message */
 	public 		$message;
-	
+
 	/** @var string Object type (eg. Order, Customer...) */
 	public		$object_type;
-	
+
 	/** @var integer Object ID */
 	public 		$object_id;
-	
+
 	/** @var string Object creation date */
 	public 		$date_add;
 
 	/** @var string Object last modification date */
 	public 		$date_upd;
-	
+
 	protected	$fieldsRequired = array('severity', 'message');
 	protected	$fieldsSize = array();
-	protected	$fieldsValidate = array('id_log' => 'isUnsignedId', 'severity' => 'isInt', 'error_code' => 'isUnsignedInt', 
+	protected	$fieldsValidate = array('id_log' => 'isUnsignedId', 'severity' => 'isInt', 'error_code' => 'isUnsignedInt',
 	'message' => 'isMessage', 'object_id' => 'isUnsignedInt', 'object_type' => 'isName');
 
 	protected 	$table = 'log';
 	protected 	$identifier = 'id_log';
-	
+
+	private static $_is_present = array();
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -73,14 +75,14 @@ class	LogCore extends ObjectModel
 
 		return $fields;
 	}
-	
+
 	static public function sendByMail($log)
-	{	
+	{
 		/* Send e-mail to the shop owner only if the minimal severity level has been reached */
 		if (intval(Configuration::get('PS_LOGS_BY_EMAIL')) <= intval($log->severity))
 			Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'log_alert', Mail::l('[Log] You have a new alert from your shop'), array(), Configuration::get('PS_SHOP_EMAIL'));
 	}
-	
+
 	static public function addLog($message, $severity = 1, $errorCode = NULL, $objectType = NULL, $objectId = NULL)
 	{
 		$log = new Log();
@@ -96,9 +98,23 @@ class	LogCore extends ObjectModel
 		}
 
 		self::sendByMail($log);
-		
+
 		return $log->add();
 	}
-}
 
-?>
+	static public function isAlreadyPresent($message)
+	{
+	    if (isset(self::$_is_present[md5($message)]))
+        {
+    	    $res = Db::getInstance()->getValue('
+	        SELECT COUNT(*) FROM `'._DB_PREFIX_.'log`
+	        WHERE `message` = \''.pSQL($message).'\''
+	        );
+
+    	    self::$_is_present[md5($message)] = $res;
+        }
+
+	    return self::$_is_present[md5($message)];
+	}
+
+}
