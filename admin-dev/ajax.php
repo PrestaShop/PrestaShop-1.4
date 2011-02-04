@@ -487,8 +487,4 @@ if (Tools::isSubmit('loadImportMatchs'))
    die('{"id" : "'.$return[0]['id_import_match'].'", "matchs" : "'.$return[0]['match'].'", "skip" : "'.$return[0]['skip'].'"}');
 }
 
-if (Tools::isSubmit('toggleScreencast'))
-{
-	global $cookie;
-	$cookie->show_screencast = (int)(!(bool)$cookie->show_screencast);
-}
+
