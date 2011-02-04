@@ -142,7 +142,6 @@ class CategoryCore extends ObjectModel
 			self::regenerateEntireNtree();
 		$this->updateGroup(Tools::getValue('groupBox'));
 		Module::hookExec('categoryAddition'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
-		file_put_contents('toto.txt', print_r($this, true), FILE_APPEND);
 		return $ret;
 	}
 
