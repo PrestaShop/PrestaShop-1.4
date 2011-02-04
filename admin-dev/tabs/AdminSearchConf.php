@@ -29,6 +29,9 @@ include_once(PS_ADMIN_DIR.'/tabs/AdminPreferences.php');
 
 class AdminSearchConf extends AdminPreferences
 {
+	const PS_SEARCH_NONE=1;
+	const PS_SEARCH_AUTOCOMPLETE=2;
+	const PS_SEARCH_INSTANT=3;
 	public function __construct()
 	{
 		global $cookie;
@@ -36,8 +39,17 @@ class AdminSearchConf extends AdminPreferences
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
 
- 		$this->_fieldsSearch = array(
-			'PS_SEARCH_AJAX' => array('title' => $this->l('Ajax search'), 'desc' => $this->l('Enable the ajax search for your visitors.'), 'validation' => 'isBool', 'type' => 'bool', 'cast' => 'intval'),
+ 		$this->_fieldsSearch = array( // PS_SEARCH_AJAX_INSTANT
+			'PS_SEARCH_AJAX' => array('title' => $this->l('Ajax search type'), 'validation' => 'isInt', 'type' => 'radio', 'cast' => 'intval',
+'choices'=>array(
+	AdminSearchConf::PS_SEARCH_AUTOCOMPLETE=>"auto",
+	AdminSearchConf::PS_SEARCH_INSTANT=>"instant",
+	AdminSearchConf::PS_SEARCH_NONE=>"none ",
+				),
+	'desc'=>$this->l('You can enable ajax search "auto-complete" or "instant" for your blocksearch'),
+	'required'=>true,
+	'show'=>true,
+			),
 			'PS_INSTANT_SEARCH' => array('title' => $this->l('Instant search:'), 'desc' => $this->l('The fastest search solution for your shop'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_SEARCH_MINWORDLEN' => array('title' => $this->l('Minimum word length'), 'desc' => $this->l('Only words from this size will be indexed.'), 'size' => 4, 'validation' => 'isUnsignedInt', 'type' => 'text', 'cast' => 'intval'),
 			'PS_SEARCH_BLACKLIST' => array('title' => $this->l('Blacklisted words'), 'size' => 35, 'validation' => 'isGenericName', 'desc' => $this->l('Please enter the words separated by a "|".'), 'type' => 'textLang'),

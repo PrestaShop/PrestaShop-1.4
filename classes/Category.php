@@ -28,7 +28,6 @@
 class CategoryCore extends ObjectModel
 {
 	public 		$id;
-
 	/** @var integer category ID */
 	public 		$id_category;
 
@@ -469,7 +468,19 @@ class CategoryCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'product` p
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON p.`id_product` = cp.`id_product`
 			WHERE cp.`id_category` = '.(int)($this->id).($active ? ' AND p.`active` = 1' : '').'
-			'.($id_supplier ? 'AND p.id_supplier = '.(int)($id_supplier) : ''));
+			'.($id_supplier ? 'AND p.id_supplier = '.(int)($id_supplier) : '')
+
+.'
+			AND cp.`id_category` IN ('
+
+// @TODO : faire la requete avant pour récupérer une première fois
+// la liste des catégories autorisées
+// puis faire le IN en question
+.'			SELECT cg.`id_category`
+			FROM `'._DB_PREFIX_.'category_group` cg
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
+			WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')')
+.')');
 			return isset($result) ? $result['total'] : 0;
 		}
 
@@ -490,7 +501,12 @@ class CategoryCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
 		WHERE cp.`id_category` = '.(int)($this->id).($active ? ' AND p.`active` = 1' : '').'
-		'.($id_supplier ? 'AND p.id_supplier = '.$id_supplier : '');
+		'.($id_supplier ? 'AND p.id_supplier = '.$id_supplier : '').'
+		AND cp.`id_category` IN (
+		SELECT cg.`id_category`
+		FROM `'._DB_PREFIX_.'category_group` cg
+		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
+		WHERE cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)($cookie->id_customer).')').')';
 
 		if ($random === true)
 		{

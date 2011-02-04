@@ -111,16 +111,7 @@ class AuthControllerCore extends FrontController
 					$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is invalid');
 			}
 			if (Tools::getValue('dni') != NULL AND $validateDni != 1)
-			{
-				$error = array(
-				0 => Tools::displayError('DNI isn\'t valid'),
-				-1 => Tools::displayError('this DNI has been already used'),
-				-2 => Tools::displayError('NIF isn\'t valid'),
-				-3 => Tools::displayError('CIF isn\'t valid'),
-				-4 => Tools::displayError('NIE isn\'t valid')
-				);
-				$this->errors[] = $error[$validateDni];
-			}
+				$this->errors[] = Tools::displayError('DNI isn\'t valid');
 			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
 				$this->errors[] = Tools::displayError('invalid birthday');
 			if (!sizeof($this->errors))

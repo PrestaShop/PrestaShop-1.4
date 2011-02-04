@@ -224,12 +224,17 @@ class ThemeInstallator extends Module
 		else if (Tools::isSubmit('submitImport2'))
 		{
 			$zip = new ZipArchive();
-			if (!Validate::isModuleUrl($url = Tools::getValue('linkurl'), null))
+			$errors=array();
+			if (!Validate::isModuleUrl($url = Tools::getValue('linkurl'), $errors)){
+				FB::warn($errors);
 				$this->errors .= parent::displayError($this->l('Only zip files are allowed'));
+			}
 			else if (!copy($url, ARCHIVE_NAME))
 				$this->errors .= parent::displayError($this->l('Error during the file download'));
-			else if ($zip->open(ARCHIVE_NAME, ZIPARCHIVE::CHECKCONS) !== true)
+			else if ($zip->open(ARCHIVE_NAME, ZIPARCHIVE::CHECKCONS) !== true){
+FB::error($zip);
 				$this->errors .= parent::displayError($this->l('Zip file seems to be broken'));
+			}
 			else
 				$this->page = 2;
 		}
