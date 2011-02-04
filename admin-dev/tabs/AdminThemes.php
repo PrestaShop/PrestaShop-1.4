@@ -29,6 +29,67 @@ include_once(PS_ADMIN_DIR.'/tabs/AdminPreferences.php');
 
 class AdminThemes extends AdminPreferences
 {
+	/** This value is used in isThemeCompatible method. only version node with an 
+	  * higher version number will be used in [theme]/config.xml
+		*	@since 1.4.0.11, check theme compatibility 1.4
+		* @static
+	  */
+	static public $check_features_version='1.4';
+	/** $check_features is a multidimensional array used to check [theme]/config.xml values, 
+	 * and also checks prestashop current configuration if not match.
+	 * @static
+	 */
+	static public $check_features=array(
+		'ccc'=>array( // feature key name
+			'attributes'=>array(
+				'available'=>array( 
+					'value'=>'true', // accepted attribute value
+					// if value doesnt match, 
+					// prestashop configuration value must have thoses values
+					'check_if_not_valid'=>array( 
+						'PS_CSS_THEME_CACHE'=>0,
+						'PS_JS_THEME_CACHE'=>0,
+						'PS_HTML_THEME_COMPRESSION'=>0,
+						'PS_JS_HTML_THEME_COMPRESSION'=>0,
+						'PS_HIGH_HMTL_THEME_COMPRESSION'=>0,
+					),
+				),
+			),
+			'error'=>'This theme may not correctly use "combine, compress and cache"',
+			'tab' => 'AdminPerformance',
+		),
+		'guest_checkout'=>array(
+			'attributes'=>array(
+				'available'=>array(
+				'value'=>'true',
+				'check_if_not_valid'=>array('PS_GUEST_CHECKOUT_ENABLED'=>0)
+				),
+			), 
+			'error'=>'This theme may not correctly use "guest checkout". Please desactivate it',
+			'tab' => 'AdminPreferences',
+		),
+		'one_page_checkout'=>array(
+			'attributes'=>array(
+				'available'=>array(
+					'value'=>'true',
+					'check_if_not_valid'=>array('PS_ORDER_PROCESS_TYPE'=>0),
+				),
+			),
+			'error'=>'This theme may not correctly use "one page checkout. Please desactivate it',
+			'tab' => 'AdminPreferences',
+		),
+		'store_locator'=>array(
+			'attributes'=>array(
+				'available'=>array(
+				'value'=>'true',
+				'check_if_not_valid'=>array('PS_STORES_SIMPLIFIED'=>0,'PS_STORES_DISPLAY_FOOTER'=>0),
+				)
+			),
+			'error'=>'This theme may not correctly use "display store location". Please desactivate it',
+			'tab' => 'AdminStores',
+		)
+	);
+
 	public function __construct()
 	{
 		$this->className = 'Configuration';
@@ -87,6 +148,91 @@ class AdminThemes extends AdminPreferences
 				$themes[$folder]['name'] = $folder;
 		closedir($dir);	
 		return isset($themes) ? $themes : array();
+	}
+
+	/** This function checks if the theme designer has thunk to make his theme compatible 1.4, 
+	* and noticed it on the $theme_dir/config.xml file. If not, some new functionnalities has
+	* to be desactivated
+	*
+	* @since 1.4
+	* @param string $theme_dir theme directory
+	* @param array $errors reference to controller->_errors
+	* @return boolean Validity is ok or not
+	*/
+	private function isThemeCompatible($theme_dir)
+	{
+		global $cookie;
+		$errors='';
+		$all_errors='';
+		$return=true;
+		$to_check=AdminThemes::$check_features;
+		$check_version=AdminThemes::$check_features_version;
+		
+		$xml=@simplexml_load_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml');
+		if(!$xml)
+		{
+			$all_errors .= Tools::displayError('config.xml missing in theme path');
+			return false;
+		}
+		// will be set to false if any version node in xml is correct
+		$xml_version_too_old=true;
+		foreach($xml as $version)
+		{
+			if (isset($version['value']) AND version_compare($version['value']->__toString() , $check_version) >0)
+			{
+				// if xml file is too old, don't use it
+			}
+			else
+			{
+				// foreach version in xml file, 
+				// node means feature, attributes has to match 
+				// the corresponding value in AdminThemes::$check_features[feature] array
+				foreach($version as $feature=>$xmlAttributes){
+					$attribute=$xmlAttributes->__toString();
+					$feature_c=$to_check[$feature];
+					if (isset($feature_c))
+					{
+						// is there at least one attribute (like available) to check ?
+						foreach($feature_c['attributes'] as $attribute=>$attr_config)
+						{
+							if ($xmlAttributes[$attribute]->__toString() != $attr_config['value'])
+							{
+								// check if current configuration is ok
+								if (isset($attr_config['check_if_not_valid']) AND !empty($attr_config['check_if_not_valid']))
+									foreach($attr_config['check_if_not_valid'] as $config_key=>$config_val)
+									{
+										$config_get=Configuration::get($config_key);
+										if (Configuration::get($config_key)!=="$config_val")
+										{
+											$all_errors .= Tools::displayError($feature_c['error']).(!empty($feature_c['tab'])?' <a href="?tab='.$feature_c['tab'].'&amp;token='.Tools::getAdminToken($feature_c['tab'].(int)(Tab::getIdFromClassName($feature_c['tab'])).(int)($cookie->id_employee)).'" >'.Tools::displayError('click here to fix').'</a>':'').'<br/>' ;
+											$return=false;
+											break; // display only one time the same error message.
+										}
+									}
+							}
+						}
+					} // else, it's not a feature to check (config.xml has extra info ?)
+				}
+				$xml_version_too_old=false;
+			}
+		}
+		$this->_errors[] = $all_errors;
+		return $return;
+	}
+
+	/** this functions make checks about AdminThemes configuration edition only.
+		* 
+		* @since 1.4
+		*/
+	public function postProcess()
+	{
+		// new check compatibility theme feature (1.4) :
+		if (!$this->isThemeCompatible($val))
+		{
+			$this->_errors[] = Tools::displayError('theme may not be fully compatible with this Prestashop version ');
+			unset($_POST['submitThemes'.$this->table]);
+		}
+		parent::postProcess();
 	}
 }
 
