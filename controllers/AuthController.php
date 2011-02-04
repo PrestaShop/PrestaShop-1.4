@@ -103,7 +103,7 @@ class AuthControllerCore extends FrontController
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
 					$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is required');
