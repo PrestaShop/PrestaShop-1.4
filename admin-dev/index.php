@@ -131,35 +131,42 @@ else /* Else display homepage */
 	}
   echo '</div>';
 
-  	if (!isset($cookie->show_screencast))
-  		$cookie->show_screencast = true;
-  	if ($cookie->show_screencast)
-		echo'
-		<div id="adminpresentation">
-			<iframe src="http://192.168.10.27/screencast/screencast.php?iso_lang='.Tools::strtolower($isoUser).'" style="border:none;width:100%;height:420px;" scrolling="no"></iframe>
-			<div id="footer_iframe_home">
-				<!--<a href="#">'.translate('View more video tutorials').'</a>-->
-				<input type="checkbox" id="screencast_dont_show_again"><label for="screencast_dont_show_again">'.translate('don\'t show again').'</label>
-			</div>
+	echo'
+	<!--<div id="adminpresentation">
+		<div id="iframe">
+
 		</div>
-		<script type="text/javascript">
-		$(document).ready(function() {
-			$(\'#screencast_dont_show_again\').click(function() {
-				if ($(this).is(\':checked\'))
-				{
-					$.ajax({
-						type: \'POST\',
-						async: true,
-						url: \'ajax.php?toggleScreencast\',
-						success: function(data) {
-							$(\'#adminpresentation\').slideUp(\'slow\');
-						}
-					});
-				}
-			});
-		});
-		</script>
-		<div class="clear"></div><br />';
+		<div id="list_video">
+			<h3>Chapter 1</h3>
+			<ul class="clearfix">
+				<li class="viewed"><a href="#">Video loreem video loreem</a></li>
+				<li class="viewed"><a href="#">video loreem video </a></li>
+				<li><a href="#">Video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+				<li><a href="#">video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+			</ul>
+		</div>
+		<div id="list_video">
+			<h3>Chapter 2</h3>
+			<ul class="clearfix">
+				<li class="viewed"><a href="#">Video loreem video loreem</a></li>
+				<li class="viewed"><a href="#">video loreem video </a></li>
+				<li><a href="#">video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+				<li><a href="#">video loreemvideo loreem</a></li>
+				<li><a href="#">video loreem video loreem</a></li>
+				<li><a href="#">video loreemvideo </a></li>
+			</ul>
+		</div>
+		<div id="footer_iframe_home">
+			<a href="#">'.translate('View more video tutorials').'</a>
+			<input type="checkbox" value="" name="" id="dont_show_again"><label for="dont_show_again">'.translate('don\'t show again').'</label>
+		</div>
+	</div>-->';
 	
 	if (Tools::isSubmit('hideOptimizationTips'))
 		Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 1);
