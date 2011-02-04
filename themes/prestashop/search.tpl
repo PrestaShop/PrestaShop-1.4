@@ -46,6 +46,6 @@
 {else}
 	<h3><span class="big">{$nbProducts|intval}</span>&nbsp;{if $nbProducts == 1}{l s='result has been found.'}{else}{l s='results have been found.'}{/if}</h3>
 	{if !isset($instantSearch) || (isset($instantSearch) && !$instantSearch)}{include file="$tpl_dir./product-sort.tpl"}{/if}
-	{include file="$tpl_dir./product-list.tpl" products=$products}
+	{include file="$tpl_dir./product-list.tpl" products=$search_products}
 	{if !isset($instantSearch) || (isset($instantSearch) && !$instantSearch)}{include file="$tpl_dir./pagination.tpl"}{/if}
 {/if}

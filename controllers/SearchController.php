@@ -63,7 +63,8 @@ class SearchControllerCore extends FrontController
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
-			'products' => $search['result'],
+			'products' => $search['result'], // DEPRECATED (since to 1.4), not use this: conflict with block_cart module
+			'search_products' => $search['result'],
 			'nbProducts' => $search['total'],
 			'search_query' => $query,
 			'instantSearch' => $this->instantSearch,
@@ -78,7 +79,8 @@ class SearchControllerCore extends FrontController
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
 			$this->smarty->assign(array(
-			'products' => $search['result'],
+			'products' => $search['result'], // DEPRECATED (since to 1.4), not use this: conflict with block_cart module
+			'search_products' => $search['result'],
 			'nbProducts' => $search['total'],
 			'search_query' => $query,
 			'homeSize' => Image::getSize('home')));
@@ -87,9 +89,11 @@ class SearchControllerCore extends FrontController
 		{
 			$nbProducts = (int)(Search::searchTag((int)($this->cookie->id_lang), $tag, true));
 			$this->pagination($nbProducts);
+			$result = Search::searchTag((int)($this->cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$this->smarty->assign(array(
 			'search_tag' => $tag,
-			'products' => Search::searchTag((int)($this->cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay),
+			'products' => $result, // DEPRECATED (since to 1.4), not use this: conflict with block_cart module
+			'search_products' => $result,
 			'nbProducts' => $nbProducts,
 			'homeSize' => Image::getSize('home')));
 		}
@@ -97,6 +101,7 @@ class SearchControllerCore extends FrontController
 		{
 			$this->smarty->assign(array(
 			'products' => array(),
+			'search_products' => array(),
 			'pages_nb' => 1,
 			'nbProducts' => 0));
 		}
