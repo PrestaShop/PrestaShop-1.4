@@ -25,15 +25,9 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-require_once(_PS_CONTROLLER_DIR_.'ParentOrderController.php');
-if (file_exists(_PS_ROOT_DIR_.'/override/controllers/ParentOrderController.php'))
-	require_once(_PS_ROOT_DIR_.'/override/controllers/ParentOrderController.php');
-else
-	eval('class ParentOrderController extends ParentOrderControllerCore {}');
-
 class ControllerFactoryCore
 {
-	public static function getController($className, $auth = false, $ssl = false)
+	public static function includeController($className)
 	{
 		if (!class_exists($className, false))
 		{	
@@ -49,7 +43,11 @@ class ControllerFactoryCore
 					eval('class '.$className.' extends '.$className.'Core {}');
 			}
 		}
+	}
+
+	public static function getController($className, $auth = false, $ssl = false)
+	{
+		ControllerFactory::includeController($className);
 		return new $className($auth, $ssl);
 	}
 }
-

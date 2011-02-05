@@ -25,6 +25,8 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
+ControllerFactory::includeController('ParentOrderController');
+
 class OrderOpcControllerCore extends ParentOrderController
 {
 	public $isLogged;

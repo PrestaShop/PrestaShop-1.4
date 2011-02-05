@@ -1265,8 +1265,7 @@ class ProductCore extends ObjectModel
 				FROM `'._DB_PREFIX_.'category_group` cg
 				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 				WHERE cg.`id_group` '.$sqlGroups.'
-			)
-			');
+			)');
 			return (int)($result['nb']);
 		}
 
