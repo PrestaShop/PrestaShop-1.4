@@ -51,6 +51,7 @@ class LanguageCore extends ObjectModel
 	/** @var array Languages cache */
 	private static $_checkedLangs;
 	private static $_LANGUAGES;
+	private static $countActiveLanguages;
 	
 	protected	$webserviceParameters = array();
 	
@@ -549,7 +550,9 @@ class LanguageCore extends ObjectModel
 	
 	public static function countActiveLanguages()
 	{
-		return Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'lang` WHERE `active` = 1');
+		if (!self::$countActiveLanguages)
+			self::$countActiveLanguages = Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'lang` WHERE `active` = 1');
+		return self::$countActiveLanguages;
 	}
 }
 
