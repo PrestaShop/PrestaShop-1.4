@@ -205,7 +205,7 @@ class AdminModules extends AdminTab
 				if ($modules)
 					foreach ($modules AS $name)
 					{
-						if (!($module = @Module::getInstanceByName(urldecode($name))))
+						if (!($module = Module::getInstanceByName(urldecode($name))))
 							$this->_errors[] = $this->l('module not found');
 						elseif ($key == 'install' AND $this->tabAccess['add'] !== '1')
 							$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
@@ -344,7 +344,7 @@ class AdminModules extends AdminTab
 			
 		</script>';
 	}
-	public function sortModule($a, $b)
+	public static function sortModule($a, $b)
 	{
 	    if (sizeof($a) == sizeof($b)) {
 	        return 0;
@@ -442,9 +442,10 @@ class AdminModules extends AdminTab
 					unset($modules[$key]);
 
 			$autocompleteList .= Tools::jsonEncode(array(
-														'displayName' => (string)$module->displayName,
-														'desc' => (string)$module->description,
-														'name' => (string)$module->name)).', ';
+				'displayName' => (string)$module->displayName,
+				'desc' => (string)$module->description,
+				'name' => (string)$module->name
+			)).', ';
 		}
 		$autocompleteList = rtrim($autocompleteList, ' ,').'];';
 		echo '<script type="text/javascript">'.$autocompleteList.'</script>';
@@ -613,20 +614,19 @@ class AdminModules extends AdminTab
 		 	}
 		 	return false;
 		 });
-			 			'.(!$goto ? '' : '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 300 , 
-						{onAfter:function(){
-							$("#modgo_'.Tools::getValue('module_name').'").fadeTo(100, 0, function (){
-								$(this).fadeTo(100, 0, function (){
-									$(this).fadeTo(50, 1, function (){
-										$(this).fadeTo(50, 0, function (){
-											$(this).fadeTo(50, 1 )}
-												)}
-											)}
-										)}
-									)}
-								});').'
+		'.(!$goto ? '' : '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 300 , 
+		{onAfter:function(){
+			$("#modgo_'.Tools::getValue('module_name').'").fadeTo(100, 0, function (){
+				$(this).fadeTo(100, 0, function (){
+					$(this).fadeTo(50, 1, function (){
+						$(this).fadeTo(50, 0, function (){
+							$(this).fadeTo(50, 1 )}
+								)}
+							)}
+						)}
+					)}
+				});').'
 			});
-			
 		 </script>';
 		if (!empty($orderModule))
 		{
@@ -706,28 +706,26 @@ class AdminModules extends AdminTab
 			<div style="clear:both">&nbsp;</div>';
 		}
 		else
-			echo '
-				<table cellpadding="0" cellspacing="0" class="table" style="width:100%;">
-					<tr>
-						<td align="center">'.$this->l('No module found').'</td>
-					</tr>
-				  </table>
-			';
+			echo '<table cellpadding="0" cellspacing="0" class="table" style="width:100%;"><tr><td align="center">'.$this->l('No module found').'</td></tr></table>';
 	}
 	
 	
-	public function recursiveDeleteOnDisk($dir) {
-	   if (is_dir($dir)) 
-	   {
-	     $objects = scandir($dir);
-	     foreach ($objects as $object) {
-	       if ($object != "." && $object != "..") {
-	         if (filetype($dir."/".$object) == "dir") $this->recursiveDeleteOnDisk($dir."/".$object); else unlink($dir."/".$object);
-	       }
-	     }
-	     reset($objects);
-	     rmdir($dir);
-	   }
+	public function recursiveDeleteOnDisk($dir)
+	{
+		if (is_dir($dir)) 
+		{
+			$objects = scandir($dir);
+			foreach ($objects as $object)
+				if ($object != "." && $object != "..")
+				{
+					if (filetype($dir."/".$object) == "dir")
+						$this->recursiveDeleteOnDisk($dir."/".$object);
+					else
+						unlink($dir."/".$object);
+				}
+			reset($objects);
+			rmdir($dir);
+		}
 	}
 	
 	public function displayOptions($module)

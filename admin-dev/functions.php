@@ -337,20 +337,22 @@ function displayOptimizationTips()
 	if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled != 10)	
 		echo '
 		<div class="warn">
+			'.translate('Optimizations needed before going live:').'
+			&nbsp;&nbsp;
 			<span style="float:right"><a href="?hideOptimizationTips"><img alt="X" src="../img/admin/close.png" /></a></span>
-			<img src="../img/admin/status_'.$lights[$rewrite].'.gif" />
+			<img src="../img/admin/status_'.$lights[$rewrite].'.gif" class="pico" />
 			<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.translate('URL rewriting').'</a>
 			&nbsp;&nbsp;
-			<img src="../img/admin/status_'.$lights[$htaccessOptimized].'.gif" />
+			<img src="../img/admin/status_'.$lights[$htaccessOptimized].'.gif" class="pico" />
 			<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.translate('Browser cache & compression').'</a>
 			&nbsp;&nbsp;
-			<img src="../img/admin/status_'.$lights[$smartyOptimized].'.gif" />
+			<img src="../img/admin/status_'.$lights[$smartyOptimized].'.gif" class="pico" />
 			<a href="index.php?tab=AdminPerformance&token='.Tools::getAdminTokenLite('AdminPerformance').'">'.translate('Smarty optimization').'</a>
 			&nbsp;&nbsp;
-			<img src="../img/admin/status_'.$lights[$cccOptimized].'.gif" />
+			<img src="../img/admin/status_'.$lights[$cccOptimized].'.gif" class="pico" />
 			<a href="index.php?tab=AdminPerformance&token='.Tools::getAdminTokenLite('AdminPerformance').'">'.translate('Combine, Compress & Cache').'</a>
 			&nbsp;&nbsp;
-			<img src="../img/admin/status_'.$lights[$shopEnabled].'.gif" />
+			<img src="../img/admin/status_'.$lights[$shopEnabled].'.gif" class="pico" />
 			<a href="index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'">'.translate('Shop enabled').'</a>
 		</div>';
 }

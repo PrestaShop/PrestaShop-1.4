@@ -397,6 +397,12 @@ select optgroup option {
 	vertical-align: bottom;
 }
 
+.warn .pico {
+	vertical-align: middle;
+	padding: 0;
+	margin: 0
+}
+
 #content .alert {
 	width: 500px;
 	margin: 0 0 15px 0;
