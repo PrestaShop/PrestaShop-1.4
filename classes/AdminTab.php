@@ -146,6 +146,20 @@ abstract class AdminTabCore
 	private $_includeObj = array();
 	protected $_includeVars = false;
 	protected $_includeContainer = true;
+	
+	public static $tabParenting = array(
+		'AdminProducts' => 'AdminCatalog',
+		'AdminCategories' => 'AdminCatalog',
+		'AdminImageResize' => 'AdminImages',
+		'AdminCMS' => 'AdminCMSContent',
+		'AdminCMSCategories' => 'AdminCMSContent',
+		'AdminOrdersStates' => 'AdminStatuses',
+		'AdminAttributeGenerator' => 'AdminProducts',
+		'AdminAttributes' => 'AdminAttributesGroups',
+		'AdminFeaturesValues' => 'AdminFeatures',
+		'AdminReturnStates' => 'AdminStatuses',
+		'AdminStatsTab' => 'AdminStats'
+	); 
 
 	public function __construct()
 	{

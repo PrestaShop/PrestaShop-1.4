@@ -69,6 +69,50 @@ class AdminSearch extends AdminTab
 		{
 			echo '<h2>'.$this->l('Search results').'</h2>';
 			
+			if (!$searchType and strlen($query) > 1)
+			{
+				global $_LANGADM;
+				$tabs = array();
+				$result = Db::getInstance()->ExecuteS('SELECT class_name, name FROM '._DB_PREFIX_.'tab t INNER JOIN '._DB_PREFIX_.'tab_lang tl ON t.id_tab = tl.id_tab AND tl.id_lang = '.(int)$cookie->id_lang);
+				foreach ($result as $row)
+					$tabs[$row['class_name']] = $row['name'];
+				foreach (AdminTab::$tabParenting as $key => $value)
+					$tabs[$key] = $tabs[$value];
+				$matchingResults = array();
+
+				foreach ($_LANGADM as $key => $value)
+					if (stripos($value, $query) !== false)
+					{
+						$key = substr($key, 0, -32);
+						if (in_array($key, array('AdminTab', 'index')))
+							continue;
+						if (!isset($matchingResults[$tabs[$key]]))
+							$matchingResults[$tabs[$key]] = array();
+						$matchingResults[$tabs[$key]][] = array('tab' => $key, 'value' => $value);
+					}
+				
+				if (count($matchingResults))
+				{
+					arsort($matchingResults);
+					echo '<h3>'.$this->l('Features matching your query:').' '.count($matchingResults).'</h3>
+					<table class="table" cellpadding="0" cellspacing="0">';
+					foreach ($matchingResults as $key => $tab)
+					{
+						for ($i = 0; isset($tab[$i]); ++$i)
+							echo '<tr>
+							<th>'.($i == 0 ? htmlentities($key, ENT_COMPAT, 'utf-8') : '&nbsp;').'</th>
+							<td>
+								<a href="?tab='.$tab[$i]['tab'].'&token='.Tools::getAdminTokenLite($tab[$i]['tab']).'">
+									'.htmlentities(stripslashes($tab[$i]['value']), ENT_COMPAT, 'utf-8').'
+								</a>
+							</td>
+						</tr>';
+					}
+					echo '</table><div class="clear">&nbsp;</div>';
+				}
+			}
+			
+			
 			/* Product research */
 			if (!$searchType OR $searchType == 1)
 			{
@@ -242,5 +286,3 @@ class AdminSearch extends AdminTab
 			echo '<h3>'.$this->l('Nothing found for').' "'.Tools::htmlentitiesUTF8($query).'"</h3>';
 	}
 }
-
-

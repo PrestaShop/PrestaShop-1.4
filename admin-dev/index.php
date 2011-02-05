@@ -44,11 +44,17 @@ if ($tab)
 		$country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
 
 		foreach ($tabs AS $key => $item)
-			$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />'.((sizeof($tabs) - 1 > $key) ? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">' : '').$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
+			$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />
+			'.((sizeof($tabs) - 1 > $key)
+				? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">'
+				: '').'
+			'.$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
 
-		echo '<div class="path_bar">'.HelpAccess::displayHelp($item['class_name'], $isoUser,  $country->iso_code, '').'<a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>'
-			 .$bread.
-			 '</div>';
+		echo '<div class="path_bar">
+			'.HelpAccess::displayHelp($item['class_name'], $isoUser,  $country->iso_code, '').'
+			<a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>
+			'.$bread.'
+		</div>';
 
 		if (Validate::isLoadedObject($adminObj))
 		{

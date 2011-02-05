@@ -244,14 +244,21 @@ function checkingTab($tab)
 	$tab = trim($tab);
 	if (!Validate::isTabName($tab))
 		return false;
+	if (!($id_tab = Tab::getIdFromClassName($tab)))
+	{
+		if (isset(AdminTab::$tabParenting[$tab]))
+			Tools::redirectAdmin('?tab='.AdminTab::$tabParenting[$tab].'&token='.Tools::getAdminTokenLite(AdminTab::$tabParenting[$tab]));
+		echo Tools::displayError('Tab cannot be found');
+		return false;
+	}
 	if ($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($tab).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php'))
 		include_once(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php');
 	elseif (file_exists(PS_ADMIN_DIR.'/tabs/'.$tab.'.php'))
 		include_once(PS_ADMIN_DIR.'/tabs/'.$tab.'.php');
-	$id_tab = Tab::getIdFromClassName($tab);
+
 	if (!class_exists($tab, false) OR !$id_tab)
 	{
-		echo Tools::displayError('Tab does not exist');
+		echo Tools::displayError('Tab file cannot be found');
 		return false;
 	}
 	$adminObj = new $tab;

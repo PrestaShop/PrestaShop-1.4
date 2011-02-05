@@ -168,31 +168,27 @@ class TabCore extends ObjectModel
 	static public function getIdFromClassName($class_name)
 	{
 		if (isset(self::$_getIdFromClassName[$class_name]) AND self::$_getIdFromClassName[$class_name])
-			return (int)(self::$_getIdFromClassName[$class_name]['id']);
+			return (int)self::$_getIdFromClassName[$class_name]['id'];
 			
 		self::$_getIdFromClassName[$class_name] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT id_tab AS id 
 		FROM `'._DB_PREFIX_.'tab` t 
 		WHERE LOWER(t.`class_name`) = \''.pSQL($class_name).'\'');
 		
-		return (int)(self::$_getIdFromClassName[$class_name]['id']);
+		return (int)self::$_getIdFromClassName[$class_name]['id'];
 	}
 
 	static public function getClassNameFromID($id_tab)
 	{
-		$sql = 'SELECT class_name AS name FROM `'._DB_PREFIX_.'tab` t WHERE t.`id_tab` = \''.(int)($id_tab).'\'';
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
-		return strval($result['name']);
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT class_name FROM `'._DB_PREFIX_.'tab` t WHERE t.`id_tab` = \''.(int)$id_tab.'\'');
 	}
 
 	static public function getNbTabs($id_parent = NULL)
 	{
-		/* Tabs selection */
-		$result = Db::getInstance()->getRow('
-		SELECT COUNT(id_tab) AS nb
+		return (int)Db::getInstance()->getValue('
+		SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'tab` t
-		'.($id_parent !== NULL ? 'WHERE t.`id_parent` = '.(int)($id_parent) : ''));
-		return (int)($result['nb']);
+		'.($id_parent !== NULL ? 'WHERE t.`id_parent` = '.(int)$id_parent : ''));
 	}
 
 	public function move($direction)
