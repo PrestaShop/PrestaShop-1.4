@@ -69,7 +69,7 @@
 			<input type="hidden" name="payer_email" value="{$customer->email}" />
 			<input type="hidden" name="custom" value="{$cart_id}" />
 			<input type="hidden" name="return" value="{$url}order-confirmation.php?key={$customer->secure_key}&amp;id_cart={$cart_id}&amp;id_module={$paypal_id}&amp;slowvalidation" />
-			<input type="hidden" name="cancel_return" value="{$url}index.php" />
+			<input type="hidden" name="cancel_return" value="{$url}" />
 			<input type="hidden" name="notify_url" value="{$url}modules/paypal/validation.php" />
 			{if $header != NULL}
 			<input type="hidden" name="cpp_header_image" value="{$header}" />
