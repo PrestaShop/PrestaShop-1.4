@@ -72,7 +72,7 @@ class AdminInformation extends AdminTab
 			'img_dir' => $this->l('Set write permissions on img folder and subfolders/recursively'),
 			'mails_dir' => $this->l('Set write permissions on mails folder and subfolders/recursively'),
 			'module_dir' => $this->l('Set write permissions on modules folder and subfolders/recursively'),
-			'theme_lang_dir' => $this->l('Set write permissions on theme/')._THEME_NAME_.$this->l('/lang/ folder and subfolders/recursively'),
+			'theme_lang_dir' => $this->l('Set write permissions on themes/')._THEME_NAME_.$this->l('/lang/ folder and subfolders/recursively'),
 			'translations_dir' => $this->l('Set write permissions on translations folder and subfolders/recursively'),
 			'customizable_products_dir' => $this->l('Set write permissions on upload folder and subfolders/recursively'),
 			'virtual_products_dir' => $this->l('Set write permissions on download folder and subfolders/recursively'),
