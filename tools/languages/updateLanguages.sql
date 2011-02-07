@@ -62,19 +62,6 @@ INSERT IGNORE INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`)
         WHERE tl.`id_lang` = @id_lang_default AND tl.`id_profile` = `PREFIX_profile`.`id_profile`)
     FROM `PREFIX_lang` CROSS JOIN `PREFIX_profile`);
 
-INSERT IGNORE INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `keywords`)
-    (SELECT `id_meta`, id_lang,
-	(SELECT tl.`title`
-        FROM `PREFIX_meta_lang` tl
-        WHERE tl.`id_lang` = @id_lang_default AND tl.`id_meta` = `PREFIX_meta`.`id_meta`),
-	(SELECT tl.`description`
-        FROM `PREFIX_meta_lang` tl
-        WHERE tl.`id_lang` = @id_lang_default AND tl.`id_meta` = `PREFIX_meta`.`id_meta`),
-	(SELECT tl.`keywords`
-        FROM `PREFIX_meta_lang` tl
-        WHERE tl.`id_lang` = @id_lang_default AND tl.`id_meta` = `PREFIX_meta`.`id_meta`)
-    FROM `PREFIX_lang` CROSS JOIN `PREFIX_meta`);
-
 INSERT IGNORE INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `description`, `link_rewrite`, `meta_description`, `meta_keywords`, `meta_title`, `name`)
     (SELECT `id_category`, id_lang,
 	(SELECT tl.`description`
@@ -226,7 +213,7 @@ INSERT IGNORE INTO `PREFIX_tax_lang` (`id_tax`, `id_lang`, `name`)
         WHERE tl.`id_lang` = @id_lang_default AND tl.`id_tax` = `PREFIX_tax`.`id_tax`)
     FROM `PREFIX_lang` CROSS JOIN `PREFIX_tax`);
 	
-INSERT IGNORE INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `description`, `keywords`, `title`)
+INSERT IGNORE INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `description`, `keywords`, `title`, `url_rewrite`)
     (SELECT `id_meta`, id_lang,
 	(SELECT tl.`description`
         FROM `PREFIX_meta_lang` tl
@@ -235,6 +222,9 @@ INSERT IGNORE INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `description`, `key
         FROM `PREFIX_meta_lang` tl
         WHERE tl.`id_lang` = @id_lang_default AND tl.`id_meta` = `PREFIX_meta`.`id_meta`),
 	(SELECT tl.`title`
+        FROM `PREFIX_meta_lang` tl
+        WHERE tl.`id_lang` = @id_lang_default AND tl.`id_meta` = `PREFIX_meta`.`id_meta`),
+	(SELECT tl.`url_rewrite`
         FROM `PREFIX_meta_lang` tl
         WHERE tl.`id_lang` = @id_lang_default AND tl.`id_meta` = `PREFIX_meta`.`id_meta`)
 	FROM `PREFIX_lang` CROSS JOIN `PREFIX_meta`);
