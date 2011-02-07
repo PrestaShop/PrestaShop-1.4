@@ -1275,6 +1275,12 @@ class ToolsCore
 		return false;
 	}
 
+	/**
+	 * addJS load a javascript file in the header
+	 * 
+	 * @param mixed $js_uri 
+	 * @return void
+	 */
 	public static function addJS($js_uri)
 	{
 		global $js_files;
@@ -1302,6 +1308,13 @@ class ToolsCore
 		return true;
 	}
 
+	/**
+	 * addCSS allows you to add stylesheet at any time.
+	 * 
+	 * @param mixed $css_uri 
+	 * @param string $css_media_type 
+	 * @return true
+	 */
 	public static function addCSS($css_uri, $css_media_type = 'all')
 	{
 		global $css_files;
