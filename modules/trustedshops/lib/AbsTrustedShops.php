@@ -54,6 +54,7 @@ abstract class AbsTrustedShops
 	public static $smarty;
 	public $tab_name;
 	public $id_tab;
+	
 	/**
 	 * Set the object which use the translation method for the specific module.
 	 * @var Module
@@ -134,6 +135,7 @@ abstract class AbsTrustedShops
 			$smarty->currentTemplate = $previousTemplate;
 		return $result;
 	}
+	
 	/**
 	 * Template management (display, overload, cache)
 	 * @see Module::_isTemplateOverloadedStatic()
