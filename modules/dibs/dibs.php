@@ -76,6 +76,16 @@ class dibs extends PaymentModule
 	 */
 	private static $accepted_lang = array('da','en','es','fi','fo','fr','it','nl','no','pl','sv');
 	
+	/**
+	 * Formular link to DIBS subscription
+	 * @var array
+	 */
+	public static $dibs_subscription_link = array(
+		'en'	=> 'http://www.dibspayment.com/order/uk_request/',
+		'da'	=> 'http://www.dibs.dk/bestil/step1/?productid=234&producttype=240',
+		'sv'	=> 'http://www.dibs.se/bestall/step1/?productid=339&producttype=340',
+		'no'	=> 'http://www.dibs.no/bestill/step1/?productid=349&producttype=350',
+	);
 	public function __construct()
 	{
 		global $smarty;
@@ -166,14 +176,41 @@ class dibs extends PaymentModule
 			echo '<div class="conf confirm"><img src="../img/admin/ok.gif"/>'.$this->l('Configuration updated').$data_sync.'</div>';
 		}
 	}
+	private function _displayPresentation()
+	{
+		$href = '';
+		if (isset(dibs::$dibs_subscription_link[Configuration::get('PS_LANG_DEFAULT')]))
+			$href = dibs::$dibs_subscription_link[Configuration::get('PS_LANG_DEFAULT')];
+		else
+			$href = dibs::$dibs_subscription_link['en'];
+		$out = '
+		<fieldset class="width2">
+			<legend><img src="../img/admin/contact.gif" />'.$this->l('Get a DIBS account').'</legend>
+			<p>
+				'.$this->l('Please click on the following link to access of DIBS formular subscription:')
+				.' <a href="'.$href.'" class="link" target="_blank" >&raquo; '.$this->l('the link').' &laquo;</a>
+			</p>
+			<p>'
+				.$this->l('Depending on your language and countries rules, formular subscription could be different.').'<br />'
+				.$this->l('Please click on the appropriate flags:').'&nbsp;';
+		foreach (dibs::$dibs_subscription_link as $lang=>$url)
+		{
+			$out .= '<a href="'.$url.'" title="'.$lang.'" class="link" target="_blank" ><img src="'.dibs::$site_url.'modules/dibs/img/'.$lang.'.jpg" /></a>';
+		}
+		$out .= '
+			</p>
+		</fieldset>';
+		return $out;
+	}
 	public function getContent()
 	{
 		$this->preProcess();
 		
 		$flexwin_colors = array('sand', 'grey', 'blue');
 		$logo_colors = array('yellow', 'grey', 'blue', 'black', 'purple', 'green');
-		
-		$str = '<h2>'.$this->displayName.'</h2>
+		$str = '<h2>'.$this->displayName.'</h2>'
+		.$this->_displayPresentation()
+		.'<br />
 		<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset class="width2">
 				<legend><img src="../img/admin/contact.gif" />'.$this->l('Settings').'</legend>
