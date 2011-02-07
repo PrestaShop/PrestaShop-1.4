@@ -914,7 +914,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				<div class="margin-form">
 					<input type="radio" name="env_api" value="'.TSBuyerProtection::ENV_TEST.'"'.(TSBuyerProtection::$ENV_API === TSBuyerProtection::ENV_TEST ? ' checked="checked"' : '').' />
 				</div>
-				<label>'.$this->l('Producing Environement').'</label>
+				<label>'.$this->l('Producing Environment').'</label>
 				<div class="margin-form">
 					<input type="radio" name="env_api" value="'.TSBuyerProtection::ENV_PROD.'"'.(TSBuyerProtection::$ENV_API === TSBuyerProtection::ENV_PROD ? ' checked="checked"' : '').' />
 				</div>
@@ -1003,7 +1003,7 @@ class TSBuyerProtection extends AbsTrustedShops
 							<th>'.$this->l('Language').'</th>
 							<th>'.$this->l('State').'</th>
 							<th>'.$this->l('Type').'</th>
-							<th>'.$this->l('Shop Url').'</th>
+							<th>'.$this->l('Shop url').'</th>
 							<th>'.$this->l('Edit').'</th>
 							<th>'.$this->l('Delete').'</th>
 						</tr>
@@ -1307,7 +1307,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		if (!empty($this->errors))
 			$return = '<p style="color:red">'.implode('<br />', $this->errors).'</p>';
 		else
-			$return = '<p>'.$this->l('You will receive a mail by TrustedShops about your garantie number.').'</p>'; 
+			$return = '<p>'.$this->l('You will receive a mail by Trusted Shops about your garantie number.').'</p>'; 
 		return $return;
 	}
 	
