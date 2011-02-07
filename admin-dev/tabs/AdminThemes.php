@@ -65,7 +65,7 @@ class AdminThemes extends AdminPreferences
 				'check_if_not_valid'=>array('PS_GUEST_CHECKOUT_ENABLED'=>0)
 				),
 			), 
-			'error'=>'This theme may not correctly use "guest checkout". Please desactivate it',
+			'error'=>'This theme may not correctly use "guest checkout"',
 			'tab' => 'AdminPreferences',
 		),
 		'one_page_checkout'=>array(
@@ -75,7 +75,7 @@ class AdminThemes extends AdminPreferences
 					'check_if_not_valid'=>array('PS_ORDER_PROCESS_TYPE'=>0),
 				),
 			),
-			'error'=>'This theme may not correctly use "one page checkout. Please desactivate it',
+			'error'=>'This theme may not correctly use "one page checkout"',
 			'tab' => 'AdminPreferences',
 		),
 		'store_locator'=>array(
@@ -85,7 +85,7 @@ class AdminThemes extends AdminPreferences
 				'check_if_not_valid'=>array('PS_STORES_SIMPLIFIED'=>0,'PS_STORES_DISPLAY_FOOTER'=>0),
 				)
 			),
-			'error'=>'This theme may not correctly use "display store location". Please desactivate it',
+			'error'=>'This theme may not correctly use "display store location"',
 			'tab' => 'AdminStores',
 		)
 	);
@@ -167,11 +167,17 @@ class AdminThemes extends AdminPreferences
 		$return=true;
 		$to_check=AdminThemes::$check_features;
 		$check_version=AdminThemes::$check_features_version;
-		
-		$xml=@simplexml_load_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml');
-		if(!$xml)
+
+		if (!is_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml'))
 		{
-			$all_errors .= Tools::displayError('config.xml missing in theme path');
+			$this->_errors[] .= Tools::displayError('config.xml is missing in your theme path.');
+			return false;
+		}
+
+		$xml=@simplexml_load_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml');
+		if (!$xml)
+		{
+			$this->_errors[] .= Tools::displayError('config.xml in your theme path is not a valid xml file').'.';
 			return false;
 		}
 		// will be set to false if any version node in xml is correct
@@ -181,6 +187,7 @@ class AdminThemes extends AdminPreferences
 			if (isset($version['value']) AND version_compare($version['value']->__toString() , $check_version) >0)
 			{
 				// if xml file is too old, don't use it
+				$this->_errors[] .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.').'.';
 			}
 			else
 			{
@@ -204,7 +211,7 @@ class AdminThemes extends AdminPreferences
 										$config_get=Configuration::get($config_key);
 										if (Configuration::get($config_key)!=="$config_val")
 										{
-											$all_errors .= Tools::displayError($feature_c['error']).(!empty($feature_c['tab'])?' <a href="?tab='.$feature_c['tab'].'&amp;token='.Tools::getAdminToken($feature_c['tab'].(int)(Tab::getIdFromClassName($feature_c['tab'])).(int)($cookie->id_employee)).'" >'.Tools::displayError('click here to fix').'</a>':'').'<br/>' ;
+											$all_errors .= Tools::displayError($feature_c['error']).'.'.(!empty($feature_c['tab'])?' <a href="?tab='.$feature_c['tab'].'&amp;token='.Tools::getAdminTokenLite($feature_c['tab']).'" >'.Tools::displayError('You can disable this function by clicking here').'</a>':'').'<br/>' ;
 											$return=false;
 											break; // display only one time the same error message.
 										}
@@ -228,9 +235,9 @@ class AdminThemes extends AdminPreferences
 	{
 		// new check compatibility theme feature (1.4) :
 		$val = Tools::getValue('PS_THEME');
-		if (!$this->isThemeCompatible($val))
+		if (!empty($val) AND !$this->isThemeCompatible($val))
 		{
-			$this->_errors[] = Tools::displayError('theme may not be fully compatible with this Prestashop version ');
+			$this->_errors[] = Tools::displayError('theme may not be fully compatible with this Prestashop version, according to the config.xml theme file.');
 			unset($_POST['submitThemes'.$this->table]);
 		}
 		parent::postProcess();
