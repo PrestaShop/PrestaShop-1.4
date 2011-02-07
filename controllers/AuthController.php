@@ -70,7 +70,6 @@ class AuthControllerCore extends FrontController
 			$create_account = 1;
 			if (Tools::isSubmit('submitAccount'))
 				$this->smarty->assign('email_create', 1);
-			$validateDni = Validate::isDniLite(Tools::getValue('dni'));
 
 			/* New Guest customer */
 			if (!Tools::getValue('is_new_customer') AND !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))
@@ -110,8 +109,10 @@ class AuthControllerCore extends FrontController
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
 					$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is invalid');
 			}
-			if (Tools::getValue('dni') != NULL AND $validateDni != 1)
-				$this->errors[] = Tools::displayError('DNI isn\'t valid');
+			if (Country::isNeedDniByCountryId($address->id_country) AND !Tools::getValue('dni') AND !Validate::isDniLite(Tools::getValue('dni')))
+				$this->errors[] = Tools::displayError('identification number is incorrect or already used');
+			elseif (!Country::isNeedDniByCountryId($address->id_country))
+				$address->dni = NULL;
 			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
 				$this->errors[] = Tools::displayError('invalid birthday');
 			if (!sizeof($this->errors))

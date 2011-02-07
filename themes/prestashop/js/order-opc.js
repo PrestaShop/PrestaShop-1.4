@@ -272,6 +272,7 @@ function saveAddress(type)
 	var params = 'firstname='+encodeURI($('#firstname').val())+'&lastname='+encodeURI($('#lastname').val())+'&';
 	params += 'company='+encodeURI($('#company'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
 	params += 'vat_number='+encodeURI($('#vat_number'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'dni='+encodeURI($('#dni'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
 	params += 'address1='+encodeURI($('#address1'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
 	params += 'address2='+encodeURI($('#address2'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
 	params += 'postcode='+encodeURI($('#postcode'+(type == 'invoice' ? '_invoice' : '')).val())+'&';

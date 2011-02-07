@@ -112,7 +112,7 @@ class AddressControllerCore extends FrontController
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
 						$this->errors[] = '<strong>'.Tools::displayError('Postal code / zip code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 			}
-			if ($country->isNeedDni() AND !Tools::getValue('dni'))
+			if ($country->isNeedDni() AND !Tools::getValue('dni') AND !Validate::isDniLite(Tools::getValue('dni')))
 				$this->errors[] = Tools::displayError('identification number is incorrect or already used');
 			elseif (!$country->isNeedDni())
 				$address->dni = NULL;
