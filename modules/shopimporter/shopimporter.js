@@ -7,6 +7,7 @@ var shopImporter = {
 	database: $('#database').val(),
 	prefix: $('#prefix').val(),
 	specificOptions : '',
+	imagesOptions : '',
 	output : 1,
 	hasErrors : 0,
 	limit: 0,
@@ -168,7 +169,7 @@ var shopImporter = {
 	       async: true,
 	       cache: false,
 	       dataType : "json",
-	       data: 'ajax=true&getData&className='+methodName[2]+'&getMethod='+methodName[0]+'&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&limit='+this.limit+'&save='+this.save+'&errors='+this.errors+'&hasErrors='+this.hasErrors+this.specificOptions ,
+	       data: 'ajax=true&getData&className='+methodName[2]+'&getMethod='+methodName[0]+'&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&limit='+this.limit+'&save='+this.save+'&errors='+this.errors+'&hasErrors='+this.hasErrors+this.specificOptions+this.imagesOptions ,
 	       success: function(jsonData)
 	       {	
 		       	var jsonError;
@@ -469,6 +470,10 @@ $(document).ready(function(){
 		shopImporter.specificOptions = '';
 		$('#specificOptionsContent :input').each(function (){
 			shopImporter.specificOptions = shopImporter.specificOptions+'&'+$(this).attr('name')+'='+$(this).attr('value');
+		});
+		shopImporter.imagesOptions = '';
+		$('.importImages:input:checked').each(function (){
+			shopImporter.imagesOptions = shopImporter.imagesOptions+'&'+$(this).attr('name');
 		});
 		moduleName = $('#import_module_name').val();
 		if (validateSpecificOptions(moduleName, shopImporter.specificOptions) == true)

@@ -109,7 +109,7 @@ class shopimporter extends ImportModule
 													 'name' => $this->l('Order'),
 													 'className' => 'Order',
 													 'label' => $this->l('Import Orders'),
-													 'table' => 'order',
+													 'table' => 'orders',
 													 'identifier' => 'id_order',
 													 'alterTable' => array('id_order' => 'int(10)'),
 													 'delete' => true
@@ -123,6 +123,7 @@ class shopimporter extends ImportModule
 														'identifier' => 'id_manufacturer',
 														'delete' => true,
 														'alterTable' => array('id_manufacturer' => 'int(10)'),
+														'hasImage' => true
 														),
 									'supplier' => array('methodName' => 'getSuppliers',
 														'name' => $this->l('Supplier'),
@@ -132,6 +133,7 @@ class shopimporter extends ImportModule
 														'identifier' => 'id_supplier',
 														'delete' => true,
 														'alterTable' => array('id_supplier' => 'int(10)'),
+														'hasImage' => true
 														),
 									'category' => array('methodName' => 'getCategories',
 														'name' => $this->l('Category'),
@@ -140,7 +142,8 @@ class shopimporter extends ImportModule
 														'table' => 'category',
 														'identifier' => 'id_category',
 														'alterTable' => array('id_category' => 'int(10)'),
-														'delete' => true
+														'delete' => true,
+														'hasImage' => true,
 														),
 									'attributegroup' => array('methodName' => 'getAttributesGroups',
 														'name' => $this->l('AttributeGroup'),
@@ -176,7 +179,8 @@ class shopimporter extends ImportModule
 																'fields' => array('id_category', 'id_product'),
 																'matchTable' =>  array('category', 'product')
 																)
-															)
+															),
+														'hasImage' => true
 														),
 									'combination' => array('methodName' => 'getProductsCombination',
 														'name' => $this->l('Combination'),
@@ -292,22 +296,18 @@ class shopimporter extends ImportModule
 					{
 						$html .= '<label>'.$import['name'].' : </label>
 									<div class="margin-form">
-										<label class="t"><img src="../img/admin/enabled.gif" alt="Yes" title="Yes"></label>
+										<label class="t" for="'.$import['identifier'].'_on'.'"><img src="../img/admin/enabled.gif" alt="Yes" title="Yes"></label>
 										<input type="radio" id="'.$import['identifier'].'_on'.'" name="'.$import['methodName'].'" class="'.$key.'" value="1" checked="checked">
-										<label class="t" for="'.$import['identifier'].'_on'.'">'.$this->l('Yes').'</label>&nbsp;&nbsp;
-										<label class="t"><img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;"></label>
+										<label class="t" for="'.$import['identifier'].'_off'.'"><img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;"></label>
 										<input type="radio" id="'.$import['identifier'].'_off'.'" name="'.$import['methodName'].'" class="'.$key.'" value="0">
-										<label class="t" for="'.$import['identifier'].'_off'.'">'.$this->l('No').'</label>&nbsp;&nbsp;
-									</div>
-									
-									'.(array_key_exists('delete', $import) ? '
-										<label for="'.$key.'">'.$this->l('Delete').' :</label>
-										<div class="margin-form">
-											<label class="t"><img src="../img/admin/delete.gif" alt="Delete" title="Delete"></label>
-											<input type="checkbox" class="truncateTable" id="'.$key.'" name="delete_'.$import['name'].'">' : '' ).
-											(array_key_exists('info', $import) ? '<p>'.$import['info'].'</p>' : '').'
-										</div>
-									<hr>';
+										'.(array_key_exists('delete', $import) ? '
+										<label class="t"><img src="../img/admin/delete.gif" alt="Delete" title="Delete"></label>
+										<input type="checkbox" class="truncateTable" id="'.$key.'" name="delete_'.$import['className'].'">' : '' ).
+										(array_key_exists('hasImage', $import) ? '
+										<label class="t"><img src="../img/admin/picture.gif" alt="Images" title="Images"></label>
+										<input type="checkbox" class="importImages" id="'.$key.'" name="images_'.$import['className'].'">' : '' ).
+										(array_key_exists('info', $import) ? '<p>'.$import['info'].'</p>' : '').'
+									</div>';
 					}
 					$html .= '</div><hr>
 					<h2>'.$this->l('Advanced Options').'</h2>
@@ -407,7 +407,7 @@ class shopimporter extends ImportModule
 			$id = $this->supportedImports[strtolower($className)]['identifier'];
 			//remove wrong fields (ex : id_toto in Customer)
 			foreach($field as $name => $value)
-				if (!array_key_exists($name, get_object_vars($object)) AND ($name != $id) AND ($name != 'association'))
+				if (!array_key_exists($name, get_object_vars($object)) AND ($name != $id) AND ($name != 'association') AND ($name != 'images'))
 					unset($field[$name]);
 			$return = $this->validateRules($rules, $field, $className, $languages, $defaultLanguage);
 			//save field in fields because it is modified in validateRules();
@@ -439,6 +439,10 @@ class shopimporter extends ImportModule
 				else
 					$add = false;
 				$this->checkAndAddLang($fields, $add);
+			}
+			elseif ($className == 'Order')
+			{
+				$toto;
 			}
 			else
 			{
@@ -490,10 +494,14 @@ class shopimporter extends ImportModule
 				}
 				$object->$key = $val;
 			}
-		if (!$object->save())
-			$return[] = array($item[$this->supportedImports[strtolower($className)]['identifier']], $this->l('An error occurred when adding the object'));
-		else
-			$this->saveMatchId(strtolower($className), (int)$object->id, (int)$id);
+			if (!$object->save())
+				$return[] = array($item[$this->supportedImports[strtolower($className)]['identifier']], $this->l('An error occurred when adding the object'));
+			else
+			{
+				$this->saveMatchId(strtolower($className), (int)$object->id, (int)$id);
+				if (array_key_exists('hasImage', $this->supportedImports[strtolower($className)]) AND Tools::isSubmit('images_'.$className))
+					$this->copyImg($item, $className);
+			}
 		}
 		return $return;
 	}
@@ -531,6 +539,79 @@ class shopimporter extends ImportModule
 		$moduleName = Tools::getValue('moduleName');
 		$identifier = $this->supportedImports[$className]['identifier'];
 		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.pSQL($table).' SET `'.pSQL($identifier).'_'.pSQL($moduleName).'` =  '.(int)$matchId.' WHERE `'.pSQL($identifier).'` = '.(int)$psId);
+	}
+	
+	private function getMatchId($className)
+	{
+		$table = $this->supportedImports[$className]['table'];
+		$moduleName = Tools::getValue('moduleName');
+		$identifier = $this->supportedImports[$className]['identifier'];
+		$returns = Db::getInstance()->ExecuteS('SELECT `'.pSQL($identifier).'_'.pSQL($moduleName).'`, `'.pSQL($identifier).'` FROM '._DB_PREFIX_.pSQL($table).' WHERE `'.pSQL($identifier).'_'.pSQL($moduleName).'` != 0 ');
+		$match = array();
+		foreach($returns as $return)
+			$match[$return[$identifier.'_'.$moduleName]] = $return[$identifier];
+		return $match;
+	}
+	
+	private function copyImg($item, $className)
+	{
+		require_once('../../images.inc.php');
+		$identifier = $this->supportedImports[strtolower($className)]['identifier'];
+		$matchId = $this->getMatchId(strtolower($className));
+		$matchIdLang = $this->getMatchIdLang();
+		switch($className)
+		{
+			default:
+			case 'Product':
+				$path = _PS_PROD_IMG_DIR_;
+				$type = 'products';
+			break;
+			case 'Category':
+				$path = _PS_CAT_IMG_DIR_;
+				$type = 'categories';
+			break;
+			case 'Manufacturer':
+				$path = _PS_MANU_IMG_DIR_;
+				$type = 'manufacturers';
+			break;
+			case 'Supplier':
+				$path = _PS_SUPP_IMG_DIR_;
+				$type = 'suppliers';
+			break;
+		}
+		$cover = 1;
+		foreach($item['images'] as $key => $image)
+		{
+			$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'import');
+			if (@copy($image, $tmpfile))
+			{
+				$imagesTypes = ImageType::getImagesTypes($type);
+				imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'.jpg');
+				if ($className == 'Product')
+				{
+					$image = new Image();
+					$image->id_product = (int)($matchId[$item[$identifier]]);
+					$image->cover = $cover;
+					$image->position = Image::getHighestPosition((int)$matchId[$item[$identifier]]) + 1;
+					$legend = array();
+					foreach($item['name'] as $key => $val)
+						$legend[$matchIdLang[$key]] = Tools::link_rewrite($val);
+					$image->legend = $legend;
+					$image->add();
+					imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.(int)$image->id.'.jpg');
+					foreach ($imagesTypes AS $k => $imageType)
+						imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.(int)$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
+				}
+				else
+					foreach ($imagesTypes AS $k => $imageType)
+						imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
+			}
+			else
+				@unlink($tmpfile);
+			@unlink($tmpfile);
+			$cover = 0;
+		}
+		
 	}
 	
 	private function replaceForeignKey(&$item, $table)

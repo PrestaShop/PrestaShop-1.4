@@ -48,6 +48,9 @@ class importerosc extends ImportModule
 				foreach($curencies AS $curency)
 					$html .= '<option value="'.$curency['currencies_id'].'">'.$curency['title'].'</option>';
 		$html .= '</select></div>';
+		$html .= '<label style="width:220px">'.$this->l('Shop url').' : </label>
+				<div class="margin-form">
+				http://<input type="text" name="shop_url">';
 		return $html;
 	}
 	
@@ -59,6 +62,8 @@ class importerosc extends ImportModule
 			$errors[] = $this->l('Please select a default langue');
 		if (Tools::getValue('defaultOscCurrency') == 0)
 			$errors[] = $this->l('Please select a default currency');
+		if (Tools::getValue('shop_url') == '')
+			$errors[] = $this->l('Please set your shop url');
 		if (!sizeof($errors))
 			die('{"hasError" : false, "error" : []}');
 		else
@@ -183,6 +188,15 @@ class importerosc extends ImportModule
 									FROM  `'.addslashes($this->prefix).'address_book` LIMIT '.(int)($limit).' , 100');
 		return $this->autoFormat($addresses, $identifier);
 	}
+	
+/*
+	public function getOrders($limit = 0)
+	{
+	
+		
+	
+	}
+*/
 
 	
 	public function getCategories($limit = 0)
@@ -192,15 +206,17 @@ class importerosc extends ImportModule
 		$identifier = 'id_category';
 
 		$categories = $this->ExecuteS('
-									SELECT c.categories_id as id_category, c.parent_id as id_parent, 0 as level_depth, cd.language_id as id_lang, cd.categories_name as name , 1 as active
+									SELECT c.categories_id as id_category, c.parent_id as id_parent, 0 as level_depth, cd.language_id as id_lang, cd.categories_name as name , 1 as active, categories_image as images
 									FROM `'.addslashes($this->prefix).'categories` c 
 									LEFT JOIN `'.addslashes($this->prefix).'categories_description` cd ON (c.categories_id = cd.categories_id)
 									WHERE cd.categories_name IS NOT NULL AND cd.language_id IS NOT NULL
 									ORDER BY c.categories_id, cd.language_id
 									LIMIT '.(int)($limit).' , 100');
 		foreach($categories as& $cat)
+		{
 			$cat['link_rewrite'] = Tools::link_rewrite($cat['name']);
-		
+			$cat['images'] = array('http://'.Tools::getValue('shop_url').'/images/'.$cat['images']);
+		}
 		return $this->autoFormat($categories, $identifier, $keyLanguage, $multiLangFields);
 	}
 	
@@ -236,13 +252,19 @@ class importerosc extends ImportModule
 		$identifier = 'id_product';
 		$products = $this->ExecuteS('
 									SELECT p.`products_id` as id_product, p.`products_quantity` as quantity, p.`products_model` as reference, p.`products_price` as price, p.`products_weight` as weight,
-									1 as active, p.`manufacturers_id` as id_manufacturer, pd.language_id as id_lang, pd.products_name as name, pd.products_description as description,
+									1 as active, p.`manufacturers_id` as id_manufacturer, pd.language_id as id_lang, pd.products_name as name, pd.products_description as description, 
+									CONCAT(\'http://'.Tools::getValue('shop_url').'\/images/\',p.`products_image`) as images,
 									(SELECT ptc.categories_id FROM `'.addslashes($this->prefix).'products_to_categories` ptc WHERE ptc.`products_id` = p.`products_id` LIMIT 1) as id_category_default
 									FROM	`'.addslashes($this->prefix).'products` p LEFT JOIN `'.addslashes($this->prefix).'products_description` pd ON (p.products_id = pd.products_id)
 									WHERE pd.products_name IS NOT NULL AND pd.language_id IS NOT NULL
 									LIMIT '.(int)($limit).' , 100');
 		foreach($products as& $product)
 		{
+			$result = $this->ExecuteS('SELECT `image` FROM `'.addslashes($this->prefix).'products_images` WHERE products_id = '.(int)$product['id_product']);
+			$images = array();
+			foreach($result as $res)
+				$images[] = 'http://'.Tools::getValue('shop_url').'/images/'.$res['image'];
+			$product['images'] = array_merge(array($product['images']), $images);
 			$product['link_rewrite'] = Tools::link_rewrite($product['name']);
 			$product['association'] = array('category_product' => array($product['id_category_default'] => $product['id_product']));
 		}
@@ -271,8 +293,13 @@ $combinations = $this->ExecuteS('
 	public function getManufacturers($limit = 0)
 	{
 		$identifier = 'id_manufacturer';
-		$customers = $this->ExecuteS('SELECT manufacturers_id as id_manufacturer, manufacturers_name as name, 1 as active FROM  `'.addslashes($this->prefix).'manufacturers` LIMIT '.(int)($limit).' , 100');
-		return $this->autoFormat($customers, $identifier);
+		$manufacturers = $this->ExecuteS('
+										SELECT manufacturers_id as id_manufacturer, manufacturers_name as name, 1 as active, manufacturers_image as images
+										FROM  `'.addslashes($this->prefix).'manufacturers` LIMIT '.(int)($limit).' , 100');
+		foreach($manufacturers as& $manufacturer)
+			$manufacturer['images'] = array('http://'.Tools::getValue('shop_url').'/images/'.$manufacturer['images']);
+		
+		return $this->autoFormat($manufacturers, $identifier);
 	}
 	
 	private function autoFormat($items, $identifier, $keyLanguage = NULL, $multiLangFields = array())
