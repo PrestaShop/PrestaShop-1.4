@@ -49,7 +49,7 @@
 		<li class="address_title"><a href="{$link->getProductLink($product.id_product,
 		$product.link_rewrite, $product.category_rewrite)}" title="{l s='View' mod='blockwishlist'}">{$product.name|truncate:30:'...'|escape:'htmlall':'UTF-8'}</a></li>
 		<li class="address_name">
-			<a	href="{$link->getProductlink($product.id_product, $product.link_rewrite, $product.category_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">
+			<a	href="{$link->getProductlink($product.id_product, $product.link_rewrite, $product.category_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}" class="product_image">
 				<img src="{$img_prod_dir}{$product.cover}-medium.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" />
 			</a>
 		<span class="wishlist_product_detail">
