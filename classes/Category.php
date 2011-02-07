@@ -424,11 +424,14 @@ class CategoryCore extends ObjectModel
 	  * @param boolean $active return only active products
 	  * @param boolean $random active a random filter for returned products
 	  * @param int $randomNumberProducts number of products to return if random is activated
+	  * @param boolean $checkAccess set to false to return all products (even if customer hasn't access)
 	  * @return mixed Products or number of products
 	  */
-	public function getProducts($id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $random = false, $randomNumberProducts = 1)
+	public function getProducts($id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $random = false, $randomNumberProducts = 1, $checkAccess = true)
 	{
 		global $cookie;
+		if (!$checkAccess OR !$this->checkAccess($cookie->id_customer))
+			return false;	
 		
 		if ($p < 1) $p = 1;
 
@@ -758,6 +761,13 @@ class CategoryCore extends ObjectModel
 		return $groups;
 	}
 
+	/**
+	 * checkAccess return true if id_customer is in a group allowed to see this category.
+	 * 
+	 * @param mixed $id_customer 
+	 * @access public
+	 * @return boolean true if access allowed for customer $id_customer
+	 */
 	public function checkAccess($id_customer)
 	{
 		if (!$id_customer)
