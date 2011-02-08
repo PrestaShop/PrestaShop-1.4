@@ -5,7 +5,7 @@ VALUES
 ( SELECT `invoice_number` FROM (SELECT GREATEST(`value`, (SELECT CAST(MAX(`invoice_number`) AS CHAR) FROM `PREFIX_orders`)) AS `invoice_number`  FROM `PREFIX_configuration`  WHERE `name` = 'PREFIX_INVOICE_NUMBER' ) as tmp),
 NOW(),
 NOW()
-)
+);
 
 DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_INVOICE_NUMBER';
 
