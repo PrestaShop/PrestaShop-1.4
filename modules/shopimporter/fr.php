@@ -58,9 +58,6 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_e307db07b3975fef922a80d07455ee5
 $_MODULE['<{shopimporter}prestashop>shopimporter_dac130bdd2c5492a8108a4145bd9f04a'] = 'Prefix de base de données';
 $_MODULE['<{shopimporter}prestashop>shopimporter_2bb4cbbf4c51025867d47131e79ad05f'] = 'Etape suivante';
 $_MODULE['<{shopimporter}prestashop>shopimporter_72dd98a453e92ccc01697f29bb5dbeb9'] = 'Option d\'import';
-$_MODULE['<{shopimporter}prestashop>shopimporter_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
-$_MODULE['<{shopimporter}prestashop>shopimporter_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
-$_MODULE['<{shopimporter}prestashop>shopimporter_f2a6c498fb90ee345d997f888fce3b18'] = 'Suppression';
 $_MODULE['<{shopimporter}prestashop>shopimporter_9dfc5d5738312210c3c75e68a468691d'] = 'Options avancées ';
 $_MODULE['<{shopimporter}prestashop>shopimporter_c195d4db1be0d349d21f236f0a6400ff'] = 'Ce mode n\'est pas recommandé';
 $_MODULE['<{shopimporter}prestashop>shopimporter_1404aa04467659fbadad2a7dd1a279b3'] = 'Si il y a des erreurs';
