@@ -355,7 +355,7 @@ abstract class ModuleCore
 	  */
 	public static function getModulesOnDisk($useConfig = false)
 	{
-		global $cookie, $_MODULE;
+		global $cookie, $_MODULES;
 
 		$moduleList = array();
 		$errors = array();
@@ -373,22 +373,17 @@ abstract class ModuleCore
 				$xml_module = simplexml_load_file($configFile);
 				if ((int)$xml_module->need_instance == 0 AND !$needNewConfigFile)
 				{
-					if (file_exists(_PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php'))
-					{
-						include(_PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php');
-						$key = '<{'.strval($xml_module->name).'}'._THEME_NAME_.'>'.strval($xml_module->name).'_'.md5(strval($xml_module->displayName));
-						if (is_array($_MODULE) AND isset($_MODULE[$key]))
-							$xml_module->displayName = $_MODULE[$key];
-						$key = '<{'.strval($xml_module->name).'}'._THEME_NAME_.'>'.strval($xml_module->name).'_'.md5(strval($xml_module->description));
-						if (is_array($_MODULE) AND isset($_MODULE[$key]))
-							$xml_module->description = $_MODULE[$key];
-						if (isset($xml_module->confirmUninstall))
-						{
-							$key = '<{'.strval($xml_module->name).'}'._THEME_NAME_.'>'.strval($xml_module->name).'_'.md5(strval($xml_module->confirmUninstall));
-							if (is_array($_MODULE) AND isset($_MODULE[$key]))
-								$xml_module->confirmUninstall = $_MODULE[$key];
-						}
-					}
+					$file = _PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php';
+					if (Tools::file_exists_cache($file) AND include_once($file))
+						$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
+
+					$xml_module->displayName = Module::_findTranslation($xml_module->name, $xml_module->displayName, (string)$xml_module->name);
+					$xml_module->description = Module::_findTranslation($xml_module->name, $xml_module->description, (string)$xml_module->name);
+
+					if(isset($xml_module->confirmUninstall))
+						$xml_module->confirmUninstall = Module::_findTranslation($xml_module->name, $xml_module->confirmUninstall, (string)$xml_module->name);
+
+
 					$result = Db::getInstance()->getRow('SELECT `id_module`, `active` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.strval($xml_module->name).'\'');
 					if (isset($result['active']) AND $result['active'])
 						$xml_module->active = $result['active'];
@@ -557,6 +552,26 @@ abstract class ModuleCore
 		return $output;
 	}
 
+	public static function _findTranslation($name, $string, $source)
+	{
+		global $_MODULES;
+
+		if (!is_array($_MODULES))
+			return str_replace('"', '&quot;', $string);
+		
+		$currentKey = '<{'.Tools::strtolower($name).'}'._THEME_NAME_.'>'.$source.'_'.md5($string);
+		$defaultKey = '<{'.Tools::strtolower($name).'}prestashop>'.$source.'_'.md5($string);
+
+		if (key_exists($currentKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$currentKey]);
+		elseif (key_exists($defaultKey, $_MODULES))
+			$ret = stripslashes($_MODULES[$defaultKey]);
+		else
+			$ret = $string;
+
+		$ret = str_replace('"', '&quot;', $ret);
+	return $ret;
+}
 	/**
 	 * Get translation for a given module text
 	 *
@@ -579,22 +594,11 @@ abstract class ModuleCore
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
 		if (Tools::file_exists_cache($file) AND include_once($file))
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
-
-		if (!is_array($_MODULES))
-			return (str_replace('"', '&quot;', $string));
 		
 		$source = Tools::strtolower($specific ? $specific : $this->name);
-		$string2 = str_replace('\'', '\\\'', $string);
-		$currentKey = '<{'.Tools::strtolower($this->name).'}'._THEME_NAME_.'>'.$source.'_'.md5($string2);
-		$defaultKey = '<{'.Tools::strtolower($this->name).'}prestashop>'.$source.'_'.md5($string2);
-
-		if (key_exists($currentKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$currentKey]);
-		elseif (key_exists($defaultKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$defaultKey]);
-		else
-			$ret = $string;
-		return str_replace('"', '&quot;', $ret);
+		$string = str_replace('\'', '\\\'', $string);
+		$ret = $this->_findTranslation($this->name, $string, $source);
+		return $ret;
 	}
 
 	/*
