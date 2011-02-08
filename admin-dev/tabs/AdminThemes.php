@@ -194,7 +194,7 @@ class AdminThemes extends AdminPreferences
 					foreach($arrConfigToCheck['attributes'] as $attr => $v)
 					{
 						if (!isset($version[$codeFeature])
-							OR !in_array($attr,array_keys($version[$codeFeature]))
+							OR !isset($version[$codeFeature][$attr])
 							OR $version[$codeFeature][$attr] != $v['value'] 
 						)
 						{
