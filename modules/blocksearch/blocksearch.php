@@ -30,7 +30,7 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class BlockSearch extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'blocksearch';
 		$this->tab = 'search_filter';
@@ -42,63 +42,58 @@ class BlockSearch extends Module
 		$this->description = $this->l('Adds a block with a quick search field');
 	}
 
-	function install()
+	public function install()
 	{
-		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('header'))
+		if (!parent::install() OR !$this->registerHook('top') 
+				OR !$this->registerHook('leftColumn') 
+				OR !$this->registerHook('rightColumn')
+			)
 			return false;
 		return true;
 	}
 
-	function hookLeftColumn($params)
+
+	public function hookLeftColumn($params)
 	{
-		global $smarty;
-		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
-		$smarty->assign('search_ssl', (int)(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'));
-		// check if library javascript load in header hook
-		$this->_disabledSearchAjax();
-		$smarty->assign('ajaxsearch', (int)(Configuration::get('PS_SEARCH_AJAX')));
+		return $this->hookRightColumn($params);
+	}
+
+	public function hookRightColumn($params)
+	{
+		$this->_hookCommon($params);
 		return $this->display(__FILE__, 'blocksearch.tpl');
 	}
 
-	function hookRightColumn($params)
+	public function hookTop($params)
 	{
-		global $smarty;
-		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
-		$smarty->assign('search_ssl', (int)(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'));
-		// check if library javascript load in header hook
-		$this->_disabledSearchAjax();
-		$smarty->assign('ajaxsearch', (int)(Configuration::get('PS_SEARCH_AJAX')));
-		return $this->display(__FILE__, 'blocksearch.tpl');
-	}
-
-	function hookTop($params)
-	{
-		global $smarty;
-		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
-		$smarty->assign('search_ssl', (int)(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'));
-		// check if library javascript load in header hook
-		$this->_disabledSearchAjax();
-		$smarty->assign('ajaxsearch', (int)(Configuration::get('PS_SEARCH_AJAX')));
+		$this->_hookCommon($params);
 		return $this->display(__FILE__, 'blocksearch-top.tpl');
 	}
 
-	function hookHeader($params)
+	/**
+	 * _hookAll has to be called in each hookXXX methods. This is made to avoid code duplication.
+	 * 
+	 * @param mixed $params 
+	 * @return void
+	 */
+	private function _hookCommon($params)
 	{
 		global $smarty;
+		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
+		$smarty->assign('search_ssl', (int)(isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off'));
+		
+		$ajaxSearch=(int)(Configuration::get('PS_SEARCH_AJAX'));
+		$smarty->assign('ajaxsearch', $ajaxSearch);
+
 		$instantSearch = (int)(Configuration::get('PS_INSTANT_SEARCH'));
 		$smarty->assign('instantsearch', $instantSearch);
-		if (Configuration::get('PS_SEARCH_AJAX'))
+		if ($ajaxSearch)
 		{
 			Tools::addCSS(_PS_CSS_DIR_.'jquery.autocomplete.css');
 			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.autocomplete.js');
 		}
 		Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 		Tools::addCSS(($this->_path).'blocksearch.css', 'all');
-	}
-	
-	private function _disabledSearchAjax()
-	{
-		if (!$this->isRegisteredInHook('header'))
-			Configuration::updateValue('PS_SEARCH_AJAX', 0);
+		return true;
 	}
 }
