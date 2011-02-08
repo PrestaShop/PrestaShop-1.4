@@ -156,74 +156,81 @@ class AdminThemes extends AdminPreferences
 	*
 	* @since 1.4
 	* @param string $theme_dir theme directory
-	* @param array $errors reference to controller->_errors
 	* @return boolean Validity is ok or not
 	*/
 	private function isThemeCompatible($theme_dir)
 	{
 		global $cookie;
-		$errors='';
 		$all_errors='';
 		$return=true;
-		$to_check=AdminThemes::$check_features;
 		$check_version=AdminThemes::$check_features_version;
 
 		if (!is_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml'))
 		{
-			$this->_errors[] .= Tools::displayError('config.xml is missing in your theme path.');
+			$this->_errors[] = Tools::displayError('config.xml is missing in your theme path.').'<br/>';
 			return false;
 		}
 
 		$xml=@simplexml_load_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml');
 		if (!$xml)
 		{
-			$this->_errors[] .= Tools::displayError('config.xml in your theme path is not a valid xml file').'.';
+			$this->_errors[] = Tools::displayError('config.xml in your theme path is not a valid xml file').'<br/>';
 			return false;
 		}
 		// will be set to false if any version node in xml is correct
 		$xml_version_too_old=true;
-		foreach($xml as $version)
+
+		// foreach version in xml file, 
+		// node means feature, attributes has to match 
+		// the corresponding value in AdminThemes::$check_features[feature] array
+		$xmlArray=simpleXMLToArray($xml);
+		foreach($xmlArray as $version)
 		{
-			if (isset($version['value']) AND version_compare($version['value']->__toString() , $check_version) >0)
+			if (isset($version['value']) AND version_compare($version['value'], $check_version) <=0)
 			{
-				// if xml file is too old, don't use it
-				$this->_errors[] .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.').'.';
-			}
-			else
-			{
-				// foreach version in xml file, 
-				// node means feature, attributes has to match 
-				// the corresponding value in AdminThemes::$check_features[feature] array
-				foreach($version as $feature=>$xmlAttributes){
-					$attribute=$xmlAttributes->__toString();
-					$feature_c=$to_check[$feature];
-					if (isset($feature_c))
+				$checkedFeature=array();
+				foreach(AdminThemes::$check_features as $codeFeature=>$arrConfigToCheck)
+				{
+					foreach($arrConfigToCheck['attributes'] as $attr => $v)
 					{
-						// is there at least one attribute (like available) to check ?
-						foreach($feature_c['attributes'] as $attribute=>$attr_config)
+						if (!isset($version[$codeFeature])
+							OR !in_array($attr,array_keys($version[$codeFeature]))
+							OR $version[$codeFeature][$attr] != $v['value'] 
+						)
 						{
-							if ($xmlAttributes[$attribute]->__toString() != $attr_config['value'])
-							{
-								// check if current configuration is ok
-								if (isset($attr_config['check_if_not_valid']) AND !empty($attr_config['check_if_not_valid']))
-									foreach($attr_config['check_if_not_valid'] as $config_key=>$config_val)
-									{
-										$config_get=Configuration::get($config_key);
-										if (Configuration::get($config_key)!=="$config_val")
-										{
-											$all_errors .= Tools::displayError($feature_c['error']).'.'.(!empty($feature_c['tab'])?' <a href="?tab='.$feature_c['tab'].'&amp;token='.Tools::getAdminTokenLite($feature_c['tab']).'" >'.Tools::displayError('You can disable this function by clicking here').'</a>':'').'<br/>' ;
-											$return=false;
-											break; // display only one time the same error message.
-										}
-									}
+							// feature missing in config.xml file, or wrong attribute value
+							foreach($v['check_if_not_valid'] as $config_key=>$config_val){
+								$config_get=Configuration::get($config_key);
+								if (Configuration::get($config_key)!=="$config_val")
+								{
+									$all_errors .= Tools::displayError($arrConfigToCheck['error']).'.'.
+									(!empty($arrConfigToCheck['tab'])
+										?' <a href="?tab='.$arrConfigToCheck['tab'].'&amp;token='
+										.Tools::getAdminTokenLite($arrConfigToCheck['tab']).'" ><u>'
+										.Tools::displayError('You can disable this function on this page')
+										.'</u></a>':'')
+									.'<br/>' ;
+									// to not return directly will allow us to 
+									// give all necessary error messages
+									$return = false;
+									// break the feature look 
+									// to display only one time the same error message
+									break;
+								}
 							}
 						}
-					} // else, it's not a feature to check (config.xml has extra info ?)
+					}
 				}
 				$xml_version_too_old=false;
 			}
 		}
-		$this->_errors[] = $all_errors;
+		if($xml_version_too_old)
+			$all_errors .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.').'.';
+
+		if(!empty($all_errors)){
+			$this->_errors[] = $all_errors;
+			return false;
+		}
 		return $return;
 	}
 
