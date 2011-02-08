@@ -26,13 +26,14 @@
 
 <!-- Block search module TOP -->
 <div id="search_block_top">
+
 	<form method="get" action="{$link->getPageLink('search.php')}" id="searchbox">
-	<p>
-		<label for="search_query"><!-- image on background --></label>
-		<input type="hidden" name="orderby" value="position" />
-		<input type="hidden" name="orderway" value="desc" />
-		<input type="text" id="search_query" name="search_query" value="{if isset($smarty.get.search_query)}{$smarty.get.search_query|htmlentities:$ENT_QUOTES:'utf-8'|stripslashes}{/if}" />
-		<input type="submit" name="submit_search" value="{l s='Search' mod='blocksearch'}" class="button" />
+		<p>
+			<label for="search_query_top"><!-- image on background --></label>
+			<input type="hidden" name="orderby" value="position" />
+			<input type="hidden" name="orderway" value="desc" />
+			<input class="search_query" type="text" id="search_query_top" name="search_query" value="{if isset($smarty.get.search_query)}{$smarty.get.search_query|htmlentities:$ENT_QUOTES:'utf-8'|stripslashes}{/if}" />
+			<input type="submit" name="submit_search" value="{l s='Search' mod='blocksearch'}" class="button" />
 	</p>
 	</form>
 </div>
@@ -57,7 +58,7 @@
 			instantSearchQueries = new Array();
 		}
 		
-		$("#search_query").keyup(function(){
+		$("#search_query_top").keyup(function(){
 			if($(this).val().length > 0){
 				stopInstantSearchQueries();
 				instantSearchQuery = $.ajax({
@@ -65,13 +66,13 @@
 				data: 'instantSearch=1&id_lang={/literal}{$cookie->id_lang}{literal}&q='+$(this).val(),
 				dataType: 'html',
 				success: function(data){
-					if($("#search_query").val().length > 0)
+					if($("#search_query_top").val().length > 0)
 					{
 						tryToCloseInstantSearch();
 						$('#center_column').attr('id', 'old_center_column');
 						$('#old_center_column').after('<div id="center_column">'+data+'</div>');
 						$("#instant_search_results a.close").click(function() {
-							$("#search_query").val('');
+							$("#search_query_top").val('');
 							return tryToCloseInstantSearch();
 						});
 						return false;
@@ -88,11 +89,14 @@
 	// ]]>
 	{/literal}
 	</script>
-{elseif $ajaxsearch}
-	<script type="text/javascript">{literal}
+{/if}
+
+{if $ajaxsearch}
+	<script type="text/javascript">
 	// <![CDATA[
+	{literal}
 		$('document').ready( function() {
-			$("#search_query")
+			$("#search_query_top")
 				.autocomplete(
 					'{/literal}{if $search_ssl == 1}{$link->getPageLink('search.php', true)}{else}{$link->getPageLink('search.php')}{/if}{literal}', {
 						minChars: 3,
@@ -117,7 +121,7 @@
 					}
 				)
 				.result(function(event, data, formatted) {
-					$('#search_query').val(data.pname);
+					$('#search_query_top').val(data.pname);
 					document.location.href = data.product_link;
 				})
 		});
