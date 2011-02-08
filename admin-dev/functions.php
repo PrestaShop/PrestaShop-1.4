@@ -406,7 +406,7 @@ function displayOptimizationTips()
             *                            false. Defaults to "@children"
      * @return array the resulting array.
      */
-function simpleXMLToArray($xml,$flattenValues=true,$flattenAttributes = true,$flattenChildren=true,$valueKey='@value',$attributesKey='@attributes',$childrenKey='@children')
+function simpleXMLToArray ($xml, $flattenValues = true, $flattenAttributes = true, $flattenChildren = true, $valueKey = '@value', $attributesKey = '@attributes', $childrenKey = '@children')
 {
 	$return = array();
 	if (!($xml instanceof SimpleXMLElement))
@@ -414,56 +414,56 @@ function simpleXMLToArray($xml,$flattenValues=true,$flattenAttributes = true,$fl
 
 	$name = $xml->getName();
 	$_value = trim((string)$xml);
-	if (strlen($_value)==0)
+	if (strlen($_value) == 0)
 		$_value = null;
 
-	if($_value!==null)
+	if ($_value !== null)
 	{
-			if(!$flattenValues){$return[$valueKey] = $_value;}
-			else{$return = $_value;}
+		if (!$flattenValues)
+			$return[$valueKey] = $_value;
+		else
+			$return = $_value;
 	}
 
 	$children = array();
 	$first = true;
 	foreach($xml->children() as $elementName => $child)
 	{
-			$value = simpleXMLToArray($child, $flattenValues, $flattenAttributes, $flattenChildren, $valueKey, $attributesKey, $childrenKey);
-			if (isset($children[$elementName]))
+		$value = simpleXMLToArray($child, $flattenValues, $flattenAttributes, $flattenChildren, $valueKey, $attributesKey, $childrenKey);
+		if (isset($children[$elementName]))
+		{
+			if ($first)
 			{
-					if($first)
-					{
-							$temp = $children[$elementName];
-							unset($children[$elementName]);
-							$children[$elementName][] = $temp;
-							$first=false;
-					}
-					$children[$elementName][] = $value;
+				$temp = $children[$elementName];
+				unset($children[$elementName]);
+				$children[$elementName][] = $temp;
+				$first=false;
 			}
-			else
-			{
-					$children[$elementName] = $value;
-			}
+			$children[$elementName][] = $value;
+		}
+		else
+			$children[$elementName] = $value;
 	}
-	if (count($children)>0)
+
+	if (count($children) > 0 )
 	{
-			if (!$flattenChildren)
-				$return[$childrenKey] = $children;
-			else
-				$return = array_merge($return,$children);
+		if (!$flattenChildren)
+			$return[$childrenKey] = $children;
+		else
+			$return = array_merge($return, $children);
 	}
 
 	$attributes = array();
-	foreach($xml->attributes() as $name=>$value)
+	foreach($xml->attributes() as $name => $value)
+		$attributes[$name] = trim($value);
+
+	if (count($attributes) > 0)
 	{
-			$attributes[$name] = trim($value);
+		if (!$flattenAttributes)
+			$return[$attributesKey] = $attributes;
+		else
+			$return = array_merge($return, $attributes);
 	}
-	if (count($attributes)>0)
-	{
-			if(!$flattenAttributes)
-				$return[$attributesKey] = $attributes;
-			else
-				$return = array_merge($return, $attributes);
-	}
- 
+
 	return $return;
 }
