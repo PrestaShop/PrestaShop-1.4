@@ -2,7 +2,7 @@
 <module>
 	<name>fedexcarrier</name>
     <displayName>Fedex Carrier</displayName>
-    <version>0.3</version>
+    <version>0.9c</version>
     <description>Offer to your customers, different delivery methods with Fedex</description>
     <tab>shipping_logistics</tab>
     
