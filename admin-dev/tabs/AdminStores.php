@@ -68,7 +68,10 @@ class AdminStores extends AdminTab
 		$this->optionTitle = $this->l('Parameters');
 		$this->_fieldsOptions = array(
 			'PS_STORES_DISPLAY_FOOTER' => array('title' => $this->l('Display in the footer:'), 'desc' => $this->l('Display a link to the store locator in the footer'), 'cast' => 'intval', 'type' => 'bool'),
+			'PS_STORES_DISPLAY_SITEMAP' => array('title' => $this->l('Display in the sitemap page:'), 'desc' => $this->l('Display a link to the store locator in the sitemap page'), 'cast' => 'intval', 'type' => 'bool'),
 			'PS_STORES_SIMPLIFIED' => array('title' => $this->l('Show a simplified store locator:'), 'desc' => $this->l('No map, no search, only a store directory'), 'cast' => 'intval', 'type' => 'bool'));
+		
+		
 		
 		parent::__construct();
 	}

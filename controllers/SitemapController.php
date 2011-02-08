@@ -53,6 +53,7 @@ class SitemapControllerCore extends FrontController
 		$this->smarty->assign('display_manufacturer_link', ((int)$blockmanufacturer->id ? true : false));
 		$this->smarty->assign('display_supplier_link', ((int)$blocksupplier->id ? true : false));
 		$this->smarty->assign('PS_DISPLAY_SUPPLIERS', Configuration::get('PS_DISPLAY_SUPPLIERS'));
+		$this->smarty->assign('display_store', Configuration::get('PS_STORES_DISPLAY_SITEMAP'));
 	}
 	
 	public function displayContent()

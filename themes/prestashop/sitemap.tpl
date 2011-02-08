@@ -82,7 +82,7 @@
 				<li><a href="{$cms.link|escape:'htmlall':'UTF-8'}" title="{$cms.meta_title|escape:'htmlall':'UTF-8'}">{$cms.meta_title|escape:'htmlall':'UTF-8'}</a></li>
 			{/foreach}
 			<li><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Contact'}</a></li>
-			<li class="last"><a href="{$link->getPageLink('stores.php')}" title="{l s='Our stores'}">{l s='Our stores'}</a></li>
+			{if $display_store}<li class="last"><a href="{$link->getPageLink('stores.php')}" title="{l s='Our stores'}">{l s='Our stores'}</a></li>{/if}
 		</ul>
 	</div>
 </div>
