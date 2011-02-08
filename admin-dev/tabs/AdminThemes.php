@@ -168,14 +168,15 @@ class AdminThemes extends AdminPreferences
 		if (!is_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml'))
 		{
 			$this->_errors[] = Tools::displayError('config.xml is missing in your theme path.').'<br/>';
-			return false;
+			$xml=null;
 		}
-
-		$xml=@simplexml_load_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml');
-		if (!$xml)
+		else
 		{
-			$this->_errors[] = Tools::displayError('config.xml in your theme path is not a valid xml file').'<br/>';
-			return false;
+			$xml=@simplexml_load_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml');
+			if (!$xml)
+			{
+				$this->_errors[] = Tools::displayError('config.xml in your theme path is not a valid xml file').'<br/>';
+			}
 		}
 		// will be set to false if any version node in xml is correct
 		$xml_version_too_old=true;
@@ -189,47 +190,78 @@ class AdminThemes extends AdminPreferences
 			if (isset($version['value']) AND version_compare($version['value'], $check_version) <=0)
 			{
 				$checkedFeature=array();
-				foreach(AdminThemes::$check_features as $codeFeature=>$arrConfigToCheck)
+				foreach (AdminThemes::$check_features as $codeFeature=>$arrConfigToCheck)
 				{
-					foreach($arrConfigToCheck['attributes'] as $attr => $v)
+					foreach ($arrConfigToCheck['attributes'] as $attr => $v)
 					{
 						if (!isset($version[$codeFeature])
 							OR !isset($version[$codeFeature][$attr])
 							OR $version[$codeFeature][$attr] != $v['value'] 
 						)
 						{
+							if (!$this->checkConfigForFeatures($codeFeature,$attr))
+								$return=false;
 							// feature missing in config.xml file, or wrong attribute value
-							foreach($v['check_if_not_valid'] as $config_key=>$config_val){
-								$config_get=Configuration::get($config_key);
-								if (Configuration::get($config_key)!=="$config_val")
-								{
-									$all_errors .= Tools::displayError($arrConfigToCheck['error']).'.'.
-									(!empty($arrConfigToCheck['tab'])
-										?' <a href="?tab='.$arrConfigToCheck['tab'].'&amp;token='
-										.Tools::getAdminTokenLite($arrConfigToCheck['tab']).'" ><u>'
-										.Tools::displayError('You can disable this function on this page')
-										.'</u></a>':'')
-									.'<br/>' ;
-									// to not return directly will allow us to 
-									// give all necessary error messages
-									$return = false;
-									// break the feature look 
-									// to display only one time the same error message
-									break;
-								}
-							}
 						}
 					}
 				}
 				$xml_version_too_old=false;
 			}
 		}
-		if($xml_version_too_old)
-			$all_errors .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.').'.';
+		if ($xml_version_too_old AND !$this->checkConfigForFeatures(array_keys($this::$check_features)))
+		{
+			$this->_errors[] .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.');
+			$return=false;
+		}
+		return $return;
+	}
 
-		if(!empty($all_errors)){
-			$this->_errors[] = $all_errors;
-			return false;
+	/**
+	 * checkConfigForFeatures
+	 * 
+	 * @param array $arrFeature array of feature code to check
+	 * @param mixed $configItem will precise the attribute which not matches. If empty, will check every attributes
+	 * @return error message, or null if disabled
+	 */
+	private function checkConfigForFeatures($arrFeatures,$configItem=array())
+	{
+		$return = true;
+		if (is_array($configItem))
+		{
+			foreach ($arrFeatures as $feature)
+				if (!sizeof($configItem))
+				{
+					$configItem=array_keys($this::$check_features[$feature]['attributes']);
+				}
+			foreach ($configItem as $attr)
+			{
+				$check=$this->checkConfigForFeatures($arrFeatures,$attr);
+				if($check==false)
+					$return = false;
+			}
+			return $return;
+		}
+
+		$return = true;
+		foreach ($arrFeatures as $feature)
+			{
+			$arrConfigToCheck=$this::$check_features[$feature]['attributes'][$configItem]['check_if_not_valid'];
+			foreach ($arrConfigToCheck as $config_key=>$config_val)
+			{
+				$config_get=Configuration::get($config_key);
+				if (Configuration::get($config_key)!=$config_val)
+				{
+					$this->_errors[] = Tools::displayError($this::$check_features[$feature]['error']).'.'
+					.(!empty($this::$check_features[$feature]['tab'])
+						?' <a href="?tab='.$this::$check_features[$feature]['tab'].'&amp;token='
+						.Tools::getAdminTokenLite($this::$check_features[$feature]['tab']).'" ><u>'
+						.Tools::displayError('You can disable this function on this page')
+						.'</u></a>':''
+					).'<br/>' ;
+					$return = false;
+					break; // break for this attributes
+				}
+			}
 		}
 		return $return;
 	}
@@ -242,11 +274,8 @@ class AdminThemes extends AdminPreferences
 	{
 		// new check compatibility theme feature (1.4) :
 		$val = Tools::getValue('PS_THEME');
-		if (!empty($val) AND !$this->isThemeCompatible($val))
-		{
-			$this->_errors[] = Tools::displayError('theme may not be fully compatible with this Prestashop version, according to the config.xml theme file.');
+		if (!empty($val) AND !$this->isThemeCompatible($val)) // don't submit if errors
 			unset($_POST['submitThemes'.$this->table]);
-		}
 		parent::postProcess();
 	}
 }
