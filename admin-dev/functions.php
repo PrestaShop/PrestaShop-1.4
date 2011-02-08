@@ -300,18 +300,23 @@ function displayOptimizationTips()
 		}
 	}
 	
-	$htaccessOptimized = 0;
-	if (Configuration::get('PS_HTACCESS_CACHE_CONTROL'))
+	$htaccessAfterUpdate = 2;
+	$htaccessOptimized = (Configuration::get('PS_HTACCESS_CACHE_CONTROL') ? 2 : 0);
+	if (!file_exists(dirname(__FILE__).'/../.htaccess'))
 	{
-		$htaccessOptimized = 2;
-		if (!file_exists(dirname(__FILE__).'/../.htaccess'))
+		if (Configuration::get('PS_HTACCESS_CACHE_CONTROL'))
 			$htaccessOptimized = 1;
-		else
-		{
-			$stat = stat(dirname(__FILE__).'/../.htaccess');
-			if (strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_HTACCESS_CACHE_CONTROL"')) > $stat['mtime'])
-				$htaccessOptimized = 1;
-		}
+	}
+	else
+	{
+		$stat = stat(dirname(__FILE__).'/../.htaccess');
+		$dateUpdHtaccess = Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_HTACCESS_CACHE_CONTROL"');
+		if (Configuration::get('PS_HTACCESS_CACHE_CONTROL') AND strtotime($dateUpdHtaccess) > $stat['mtime'])
+			$htaccessOptimized = 1;
+			
+		$dateUpdate = Configuration::get('PS_LAST_SHOP_UPDATE');
+		if ($dateUpdate AND strtotime($dateUpdate) > $stat['mtime'])
+			$htaccessAfterUpdate = 0;
 	}
 	
 	$smartyOptimized = 0;
@@ -334,7 +339,7 @@ function displayOptimizationTips()
 	
 	$lights = array(0 => 'red', 1 => 'orange', 2 => 'green');
 	
-	if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled != 10)	
+	if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled + $htaccessAfterUpdate != 12)	
 		echo '
 		<div class="warn">
 			'.translate('Optimizations needed before going live:').'
@@ -354,6 +359,9 @@ function displayOptimizationTips()
 			&nbsp;&nbsp;
 			<img src="../img/admin/status_'.$lights[$shopEnabled].'.gif" class="pico" />
 			<a href="index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'">'.translate('Shop enabled').'</a>
+			&nbsp;&nbsp;
+			<img src="../img/admin/status_'.$lights[$htaccessAfterUpdate].'.gif" class="pico" />
+			<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.translate('.htaccess up-to-date').'</a>
 		</div>';
 }
 
