@@ -51,7 +51,7 @@ class AdminThemes extends AdminPreferences
 						'PS_JS_THEME_CACHE'=>0,
 						'PS_HTML_THEME_COMPRESSION'=>0,
 						'PS_JS_HTML_THEME_COMPRESSION'=>0,
-						'PS_HIGH_HMTL_THEME_COMPRESSION'=>0,
+						'PS_HIGH_HTML_THEME_COMPRESSION'=>0,
 					),
 				),
 			),
@@ -158,14 +158,14 @@ class AdminThemes extends AdminPreferences
 	* @param string $theme_dir theme directory
 	* @return boolean Validity is ok or not
 	*/
-	private function isThemeCompatible($theme_dir)
+	private function _isThemeCompatible($theme_dir)
 	{
 		global $cookie;
 		$all_errors='';
 		$return=true;
 		$check_version=AdminThemes::$check_features_version;
 
-		if (!is_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml'))
+		if (!is_file(_PS_ALL_THEMES_DIR_ . $theme_dir . '/config.xml'))
 		{
 			$this->_errors[] = Tools::displayError('config.xml is missing in your theme path.').'<br/>';
 			$xml=null;
@@ -187,7 +187,7 @@ class AdminThemes extends AdminPreferences
 		$xmlArray=simpleXMLToArray($xml);
 		foreach($xmlArray as $version)
 		{
-			if (isset($version['value']) AND version_compare($version['value'], $check_version) <=0)
+			if (isset($version['value']) AND version_compare($version['value'], $check_version) >=0)
 			{
 				$checkedFeature=array();
 				foreach (AdminThemes::$check_features as $codeFeature=>$arrConfigToCheck)
@@ -199,7 +199,7 @@ class AdminThemes extends AdminPreferences
 							OR $version[$codeFeature][$attr] != $v['value'] 
 						)
 						{
-							if (!$this->checkConfigForFeatures($codeFeature,$attr))
+							if (!$this->_checkConfigForFeatures($codeFeature,$attr))
 								$return=false;
 							// feature missing in config.xml file, or wrong attribute value
 						}
@@ -208,7 +208,7 @@ class AdminThemes extends AdminPreferences
 				$xml_version_too_old=false;
 			}
 		}
-		if ($xml_version_too_old AND !$this->checkConfigForFeatures(array_keys($this::$check_features)))
+		if ($xml_version_too_old AND !$this->_checkConfigForFeatures(array_keys($this::$check_features)))
 		{
 			$this->_errors[] .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.');
 			$return=false;
@@ -217,13 +217,13 @@ class AdminThemes extends AdminPreferences
 	}
 
 	/**
-	 * checkConfigForFeatures
+	 * _checkConfigForFeatures
 	 * 
 	 * @param array $arrFeature array of feature code to check
 	 * @param mixed $configItem will precise the attribute which not matches. If empty, will check every attributes
 	 * @return error message, or null if disabled
 	 */
-	private function checkConfigForFeatures($arrFeatures,$configItem=array())
+	private function _checkConfigForFeatures($arrFeatures, $configItem = array())
 	{
 		$return = true;
 		if (is_array($configItem))
@@ -235,7 +235,7 @@ class AdminThemes extends AdminPreferences
 				}
 			foreach ($configItem as $attr)
 			{
-				$check=$this->checkConfigForFeatures($arrFeatures,$attr);
+				$check=$this->_checkConfigForFeatures($arrFeatures,$attr);
 				if($check==false)
 					$return = false;
 			}
@@ -243,13 +243,16 @@ class AdminThemes extends AdminPreferences
 		}
 
 		$return = true;
+		if (!is_array($arrFeatures))
+			$arrFeatures = array($arrFeatures);
+
 		foreach ($arrFeatures as $feature)
 			{
 			$arrConfigToCheck=$this::$check_features[$feature]['attributes'][$configItem]['check_if_not_valid'];
-			foreach ($arrConfigToCheck as $config_key=>$config_val)
+			foreach ($arrConfigToCheck as $config_key => $config_val)
 			{
 				$config_get=Configuration::get($config_key);
-				if (Configuration::get($config_key)!=$config_val)
+				if ($config_get != $config_val)
 				{
 					$this->_errors[] = Tools::displayError($this::$check_features[$feature]['error']).'.'
 					.(!empty($this::$check_features[$feature]['tab'])
@@ -274,7 +277,7 @@ class AdminThemes extends AdminPreferences
 	{
 		// new check compatibility theme feature (1.4) :
 		$val = Tools::getValue('PS_THEME');
-		if (!empty($val) AND !$this->isThemeCompatible($val)) // don't submit if errors
+		if (!empty($val) AND !$this->_isThemeCompatible($val)) // don't submit if errors
 			unset($_POST['submitThemes'.$this->table]);
 		parent::postProcess();
 	}
