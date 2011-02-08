@@ -1172,6 +1172,23 @@ class AdminProducts extends AdminTab
 						{
 							Hook::addProduct($object);
 							Search::indexation(false);
+
+							// Save and preview
+							if (Tools::isSubmit('submitAddProductAndPreview'))
+							{
+								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), (int)($cookie->id_lang))));
+								if (!$obj->active)
+								{
+									$admin_dir = dirname($_SERVER['PHP_SELF']);
+									$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
+									$token = Tools::encrypt('PreviewProduct'.$object->id);
+
+									$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+								}
+
+								Tools::redirectAdmin($preview_url);
+							}
+
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.(int)(Tools::getValue('id_category')).'&id_image='.$id_image.'&imageresize&toconf=3&submitAddAndStay='.(Tools::isSubmit('submitAdd'.$this->table.'AndStay') ? 'on' : 'off').'&token='.(($token ? $token : $this->token)));
 							// Save and stay on same form
@@ -2957,7 +2974,7 @@ class AdminProducts extends AdminTab
 
 		if (!($obj = $this->loadObject(true)))
 			return;
-			
+
 		$content = 'var combination_images = new Array();';
 		if (!$allCombinationImages = $obj->getCombinationImages((int)($cookie->id_lang)))
 			return $content;
