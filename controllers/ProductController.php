@@ -27,7 +27,7 @@
 
 class ProductControllerCore extends FrontController
 {
-	private $product;
+	protected $product;
 
 	public function setMedia()
 	{

@@ -27,7 +27,7 @@
 
 class CategoryControllerCore extends FrontController
 {
-	private $category;
+	protected $category;
 
 	public function setMedia()
 	{
