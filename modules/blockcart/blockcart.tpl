@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -94,7 +94,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 		</dl>
 	{/if}
 		<p {if $products}class="hidden"{/if} id="cart_block_no_products">{l s='No products' mod='blockcart'}</p>
-		
+
 		{if $discounts|@count > 0}<table id="vouchers">
 			<tbody>
 			{foreach from=$discounts item=discount}
@@ -107,7 +107,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			</tbody>
 		</table>
 		{/if}
-		
+
 		<p id="cart-prices">
 			<span>{l s='Shipping' mod='blockcart'}</span>
 			<span id="cart_block_shipping_cost" class="price ajax_cart_shipping_cost">{$shipping_cost}</span>
@@ -125,7 +125,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			<span>{l s='Total' mod='blockcart'}</span>
 			<span id="cart_block_total" class="price ajax_block_cart_total">{$total}</span>
 		</p>
-		{if $priceDisplay == 2}
+		{if $priceDisplay == 0}
 			<p id="cart-price-precisions">
 				{l s='Prices are tax included' mod='blockcart'}
 			</p>
@@ -143,3 +143,4 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 	</div>
 </div>
 <!-- /MODULE Block cart -->
+
