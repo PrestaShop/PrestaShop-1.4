@@ -490,10 +490,6 @@ class AdminImport extends AdminTab
 					}
 				}
 			}
-
-			if (isset($category->image) AND !empty($category->image))
-				if (!(self::copyImg($category->id, NULL, $category->image, 'categories')))
-					$this->_warnings[] = $category->image.' '.Tools::displayError('cannot be copied');
 			if (isset($category->link_rewrite) AND !empty($category->link_rewrite[$defaultLanguageId]))
 				$valid_link = Validate::isLinkRewrite($category->link_rewrite[$defaultLanguageId]);
 			else
@@ -536,6 +532,10 @@ class AdminImport extends AdminTab
 				if (!$res AND $res = $category->add())
 					$category->addGroups(array(1));
 			}
+			//copying images of categories
+			if (isset($category->image) AND !empty($category->image))
+				if (!(self::copyImg($category->id, NULL, $category->image, 'categories')))
+					$this->_warnings[] = $category->image.' '.Tools::displayError('cannot be copied');
 			// If both failed, mysql error
 			if (!$res)
 			{
