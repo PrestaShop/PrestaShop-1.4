@@ -59,12 +59,12 @@ foreach ($data_check AS $data)
 $oldLevel = error_reporting(E_ALL);
 $__PS_BASE_URI__ = str_replace(' ', '%20', INSTALLER__PS_BASE_URI);
 $datas = array(
-	array('_DB_SERVER_', $_GET['server']),
-	array('_DB_TYPE_', $_GET['type']),
-	array('_DB_NAME_', $_GET['name']),
-	array('_DB_USER_', $_GET['login']),
-	array('_DB_PASSWD_', $_GET['password']),
-	array('_DB_PREFIX_', $_GET['tablePrefix']),
+	array('_DB_SERVER_', trim($_GET['server'])),
+	array('_DB_TYPE_', trim($_GET['type'])),
+	array('_DB_NAME_', trim($_GET['name'])),
+	array('_DB_USER_', trim($_GET['login'])),
+	array('_DB_PASSWD_', trim($_GET['password'])),
+	array('_DB_PREFIX_', trim($_GET['tablePrefix'])),
 	array('_MYSQL_ENGINE_', $_GET['engine']),
 	array('__PS_BASE_URI__', $__PS_BASE_URI__),
 	array('_PS_CACHING_SYSTEM_', 'MCached'),
@@ -120,9 +120,9 @@ switch (_DB_TYPE_) {
 		$db_structure_settings = preg_split("/;\s*[\r\n]+/",$db_structure_settings);
 		if (isset($_GET['dropAndCreate']) && $_GET['dropAndCreate'] == 'true')
 		{
-			array_unshift($db_structure_settings, 'USE `'.$_GET['name'].'`;');
-			array_unshift($db_structure_settings, 'CREATE DATABASE `'.$_GET['name'].'`;');
-			array_unshift($db_structure_settings, 'DROP DATABASE `'.$_GET['name'].'`;');
+			array_unshift($db_structure_settings, 'USE `'.trim($_GET['name']).'`;');
+			array_unshift($db_structure_settings, 'CREATE DATABASE `'.trim($_GET['name']).'`;');
+			array_unshift($db_structure_settings, 'DROP DATABASE `'.trim($_GET['name']).'`;');
 		}
 		foreach($db_structure_settings as $query){
 			$query = trim($query);

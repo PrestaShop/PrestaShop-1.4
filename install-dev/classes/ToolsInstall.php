@@ -51,10 +51,10 @@ class ToolsInstall
 					return 8;
 		}
 
-		switch(MySQL::tryToConnect($srv, $login, $password, $name, $engine))
+		switch(MySQL::tryToConnect(trim($srv), trim($login), trim($password), trim($name), trim($engine)))
 		{
 			case 0:
-				if (MySQL::tryUTF8($srv, $login, $password))
+				if (MySQL::tryUTF8(trim($srv), trim($login), trim($password)))
 					return true;
 				return 49;
 			break;
