@@ -223,7 +223,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 
 		{if ($product->show_price AND !isset($restricted_country_mode)) OR isset($groups) OR $product->reference OR (isset($HOOK_PRODUCT_ACTIONS) && $HOOK_PRODUCT_ACTIONS)}
 		<!-- add to cart form-->
-		<form id="buy_block" action="{$link->getPageLink('cart.php')}" method="post">
+		<form id="buy_block" class="{if $PS_CATALOG_MODE AND !isset($groups) AND $product->quantity > 0}hidden{/if}" action="{$link->getPageLink('cart.php')}" method="post">
 
 			<!-- hidden datas -->
 			<p class="hidden">
