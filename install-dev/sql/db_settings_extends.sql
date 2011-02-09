@@ -322,11 +322,11 @@ INSERT INTO `PREFIX_feature_value` (`id_feature_value`, `id_feature`, `custom`) 
 INSERT INTO `PREFIX_feature_value` (`id_feature_value`, `id_feature`, `custom`) VALUES (9, 5, NULL), (10, 5, NULL);
 
 INSERT INTO `PREFIX_feature_value_lang` (`id_feature_value`, `id_lang`, `value`) VALUES
-(13, 1, '49.2 grams'),(13, 2, '49,2 grammes'),(13, 3, '49,2 g'),(12, 2, '52,3 mm'),(12, 1, '52.3 mm'),(12, 3, '52.3 mm'),(11, 2, '69,8 mm'),(11, 1, '69.8 mm'),(11, 3, '69.8 mm'),
-(17, 2, '15,5 g'),(17, 1, '15.5 g'),(17, 3, '15.5 g'),(16, 2, '41,2 mm'),(16, 1, '41.2 mm'),(16, 3, '41.2 mm'),(15, 2, '27,3 mm'),(15, 1, '27.3 mm'),(15, 3, '27.3 mm'),(9, 1, 'Jack stereo'),
-(9, 2, 'Jack stéréo'),(9, 3, 'Jack stereo'),(10, 1, 'Mini-jack stereo'),(10, 2, 'Mini-jack stéréo'),(10, 3, 'Mini-jack stéréo'),(14, 1, '6,5 mm'),(14, 2, '6,5 mm'),(14, 3, '6,5 mm'),
-(18, 1, '10,5 mm (clip included)'),(18, 2, '10,5 mm (clip compris)'),(18, 3, '10,5 mm (clip incluyendo)'),(26, 2, '8mm'),(26, 1, '8mm'),(26, 3, '8mm'),(25, 2, '120g'),(25, 3, '120g'),
-(25, 1, '120g'),(24, 2, '70mm'),(24, 1, '70mm'),(24, 3, '70mm'),(23, 2, '110mm'),(23, 3, '110mm'),(23, 1, '110mm');
+(13, 1, '49.2 g'),(13, 2, '49,2 g'),(13, 3, '49,2 g'),(12, 2, '52,3 mm'),(12, 1, '2.06 in'),(12, 3, '52.3 mm'),(11, 2, '69,8 mm'),(11, 1, '2.75 in'),(11, 3, '69.8 mm'),
+(17, 2, '15,5 g'),(17, 1, '15.5 g'),(17, 3, '15.5 g'),(16, 2, '41,2 mm'),(16, 1, '1.62 in'),(16, 3, '41.2 mm'),(15, 2, '27,3 mm'),(15, 1, '1.07 in'),(15, 3, '27.3 mm'),(9, 1, 'Jack stereo'),
+(9, 2, 'Jack stéréo'),(9, 3, 'Jack stereo'),(10, 1, 'Mini-jack stereo'),(10, 2, 'Mini-jack stéréo'),(10, 3, 'Mini-jack stéréo'),(14, 1, '0.26 in'),(14, 2, '6,5 mm'),(14, 3, '6,5 mm'),
+(18, 1, '0.41 in (clip included)'),(18, 2, '10,5 mm (clip compris)'),(18, 3, '10,5 mm (clip incluyendo)'),(26, 2, '8 mm'),(26, 1, '0.31 in'),(26, 3, '8 mm'),(25, 2, '120g'),(25, 3, '120g'),
+(25, 1, '120g'),(24, 2, '70 mm'),(24, 1, '2.76 in'),(24, 3, '70 mm'),(23, 2, '110 mm'),(23, 3, '110 mm'),(23, 1, '4.33 in');
 
 INSERT INTO `PREFIX_image` (`id_image`, `id_product`, `position`, `cover`) VALUES
 (40, 1, 4, 0),(39, 1, 3, 0),(38, 1, 2, 0),(37, 1, 1, 1),(48, 2, 3, 0),(47, 2, 2, 0),(49, 2, 4, 0),(46, 2, 1, 1),(15, 5, 1, 1),(16, 5, 2, 0),(17, 5, 3, 0),(18, 6, 4, 0),(19, 6, 5, 0),
@@ -573,7 +573,7 @@ INSERT INTO `PREFIX_search_word` (`id_word`, `id_lang`, `word`) VALUES (1, 1, 'i
 (46, 1, 'library'),(47, 1, 'that'),(48, 1, 'together'),(49, 1, 'made'),(50, 1, 'move'),(51, 1, 'with'),(52, 1, 'moves'),(53, 1, 'accelerometer'),
 (54, 1, 'comes'),(55, 1, 'shake'),(56, 1, 'shuffle'),(57, 1, 'music'),(58, 1, 'turn'),(59, 1, 'sideways'),(60, 1, 'view'),(61, 1, 'cover'),(62, 1, 'flow'),
 (63, 1, 'play'),(64, 1, 'games'),(65, 1, 'designed'),(66, 1, 'mind'),(67, 1, 'ipods'),(68, 1, 'apple'),(69, 1, 'computer,'),(70, 1, 'metal'),
-(71, 1, '16go'),(72, 1, 'yellow'),(73, 1, 'blue'),(74, 1, 'black'),(75, 1, 'orange'),(76, 1, 'pink'),(77, 1, 'green'),(78, 1, 'purple'),(79, 1, 'grams'),
+(71, 1, '16go'),(72, 1, 'yellow'),(73, 1, 'blue'),(74, 1, 'black'),(75, 1, 'orange'),(76, 1, 'pink'),(77, 1, 'green'),(78, 1, 'purple'),(79, 1, 'g'),
 (80, 1, 'minijack'),(81, 1, 'stereo'),(82, 2, 'ipod'),(83, 2, 'nano'),(84, 2, 'nouveau'),(85, 2, 'design'),(86, 2, 'nouvelles'),(87, 2, 'fonctionnalité'),
 (88, 2, 'désormais'),(89, 2, 'nano,'),(90, 2, 'plus'),(91, 2, 'rock'),(92, 2, 'jamais'),(93, 2, 'courbes'),(94, 2, 'avantageuses'),(95, 2, 'pour'),
 (96, 2, 'amateurs'),(97, 2, 'sensations,'),(98, 2, 'voici'),(99, 2, 'neuf'),(100, 2, 'nouveaux'),(101, 2, 'coloris'),(102, 2, 'n''est'),(103, 2, 'tout'),
@@ -584,7 +584,7 @@ INSERT INTO `PREFIX_search_word` (`id_word`, `id_lang`, `word`) VALUES (1, 1, 'i
 (134, 2, 'secouezle'),(135, 2, 'mélanger'),(136, 2, 'musique'),(137, 2, 'basculezle'),(138, 2, 'afficher'),(139, 2, 'cover'),(140, 2, 'flow'),
 (141, 2, 'découvrez'),(142, 2, 'jeux'),(143, 2, 'adaptés'),(144, 2, 'mouvements'),(145, 2, 'ipods'),(146, 2, 'apple'),(147, 2, 'computer,'),(148, 2, 'metal'),
 (149, 2, '16go'),(150, 2, 'jaune'),(151, 2, 'bleu'),(152, 2, 'noir'),(153, 2, 'orange'),(154, 2, 'rose'),(155, 2, 'vert'),(156, 2, 'violet'),
-(157, 2, 'grammes'),(158, 2, 'minijack'),(159, 2, 'stéréo'),(160, 3, 'ipod'),(161, 3, 'nano'),(162, 3, 'nuevo'),(163, 3, 'diseño'),(164, 3, 'nuevas'),
+(157, 2, 'g'),(158, 2, 'minijack'),(159, 2, 'stéréo'),(160, 3, 'ipod'),(161, 3, 'nano'),(162, 3, 'nuevo'),(163, 3, 'diseño'),(164, 3, 'nuevas'),
 (165, 3, 'aplicaciones'),(166, 3, 'ahora'),(167, 3, 'disponible'),(168, 3, 'nano,'),(169, 3, 'rock'),(170, 3, 'nunca'),(171, 3, 'curvas'),
 (172, 3, 'aerodinámicas'),(173, 3, 'para'),(174, 3, 'aficionados'),(175, 3, 'sensaciones'),(176, 3, 'fuertes,'),(177, 3, 'presentamos'),(178, 3, 'nueve'),
 (179, 3, 'nuevos'),(180, 3, 'colores'),(181, 3, 'todo'),(182, 3, 'experimenta'),(183, 3, 'elíptico'),(184, 3, 'aluminio'),(185, 3, 'vidrio'),
