@@ -32,7 +32,7 @@
 			{assign var='liHeight' value=342}
 			{assign var='nbItemsPerLine' value=4}
 			{assign var='nbLi' value=$products|@count}
-			{assign var='nbLines' value=$nbLi/$nbItemsPerLine|ceil}
+			{assign var='nbLines' value=($nbLi/$nbItemsPerLine)|ceil}
 			{assign var='ulHeight' value=$nbLines*$liHeight}
 			<ul style="height:{$ulHeight}px;">
 			{foreach from=$products item=product name=homeFeaturedProducts}
