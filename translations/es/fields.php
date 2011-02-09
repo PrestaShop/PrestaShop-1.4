@@ -14,6 +14,7 @@ $_FIELDS['Address_eec0a9661213354fa7a52519eea3f827'] = 'número de IVA';
 $_FIELDS['Address_342f5c77ed008542e78094607ce1f7f3'] = 'nombre';
 $_FIELDS['Address_81e70cb16ec45f5ab19bb6638e8e6c2d'] = 'dirección 1';
 $_FIELDS['Address_f669f8e9f6599d0dfcd613bc6e2f347e'] = 'dirección 2';
+$_FIELDS['Address_e90ebd9556fa4031171f043013794b61'] = 'código postal';
 $_FIELDS['Address_4ed5d2eaed1a1fadcc41ad1d58ed603e'] = 'ciudad';
 $_FIELDS['Address_795f3202b17cb6bc3d4b771d8c6c9eaf'] = 'otros';
 $_FIELDS['Address_f7a42fe7211f98ac7a60a285ac3a9e87'] = 'teléfono';

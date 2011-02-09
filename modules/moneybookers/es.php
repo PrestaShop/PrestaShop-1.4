@@ -8,7 +8,7 @@ $_MODULE['<{moneybookers}prestashop>confirmation_15d18c17d7aef219c342bb0d81e823a
 $_MODULE['<{moneybookers}prestashop>confirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier duda o para más información, póngase en contacto con nuestro servicio de atención al cliente';
 $_MODULE['<{moneybookers}prestashop>confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = ' servicio clientela';
 $_MODULE['<{moneybookers}prestashop>confirmation_df194447dfecf36bb8043bd8d94feed3'] = 'está en espera.';
-$_MODULE['<{moneybookers}prestashop>confirmation_047e219d25b398033511b18041dbfd7a'] = 'Su pedido será enviado en cuanto recibamos su transferencia bancaria';
+$_MODULE['<{moneybookers}prestashop>confirmation_4d38b9287e1f32228233b0115806ec32'] = 'Su pedido será enviado en cuanto recibamos su transferencia bancaria';
 $_MODULE['<{moneybookers}prestashop>confirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nos hemos dado cuenta de un problema con su pedido.  Si usted piensa que esto es un error, puede contactar con nuestro';
 $_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'rnNo puede efectuar el pago de su pedido con Moneybookers ya que su divisa actual no está autorizada. Por favor, elija otra.';
 $_MODULE['<{moneybookers}prestashop>moneybookers-form_25065e3ef9274f9b0e3088340f6d79e6'] = 'Pagar con tarjeta de crédito';

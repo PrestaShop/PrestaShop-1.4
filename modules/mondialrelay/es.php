@@ -18,11 +18,12 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_b0b0ea0ef5dba98c93df35509abf5f6
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b9a85d87ae6dd77f2107734a4cd0bb15'] = 'Clave Google no válida';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_979c6094728c14aac1b66d544dc5cebd'] = 'Estado de pedido no válido';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_462390017ab0938911d2d4e964c0cab7'] = 'Se ha actualizado con éxito';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_2cd86c170d0c2fcdeed38cb9f8729bc7'] = 'Se ha actualizado con éxito';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_07213a0161f52846ab198be103b5ab43'] = 'errores';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_cb5e100e5a9a3e7f6d1fd97512215282'] = 'error';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_350c1cc4343826a89f08a33bb49c6d98'] = 'Configuración del módulo Relay Rate';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d21a9f93917604d5490ad529a7cf1ff9'] = 'Para crear un transportista Mondial Relay';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Guarde sus parámetros de cuenta Mondial Relay';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_4052b79981e6c88e41b061167748406b'] = 'Guarde sus parámetros de cuenta Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_abfc836cd1df9d6d2bdfd2fc98e6fa93'] = 'Crear un transportista';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b962d8fb95f5a439f50502152f3bad71'] = 'Deafina un precio para sus transportista en';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_faf1247ae6846a9955a466d4f301bbe4'] = 'La página de transportistas';
@@ -116,10 +117,10 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_c33b138a163847cdb6caeeb7c9a126b
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_8b7051187b9191cdcdae6ed5a10e5adc'] = 'Sábado';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_9d1a0949c39e66a0cd65240bc0ac9177'] = 'Domingo';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_621895c388c9bb22abbbc69fad001846'] = 'Seleccionar este punto de recogida';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_6c530987d533793b0f25fb18807b69cd'] = 'Para generar sus etiquetas, debe haber introducido una dirección correcta de su tienda en';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_69084dc4aa58c6977257fcbb0b47f269'] = 'Para generar sus etiquetas, debe haber introducido una dirección correcta de su tienda en';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_3d2da0d2e731d59465a92f13216cf82d'] = 'La página señas';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_a29fdbc82bfaf8015f44a53426e6e976'] = 'Dirección vacía: ¿está seguro de haber introducio una dirección válida en la página Señas?';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_2f84f9d5731852c4d07d52ef0badc42e'] = 'Imposible acceder a Mondial Relay';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_bc5b014775e63c95d66dd0255a25bacf'] = 'Imposible acceder a Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_cd417a6ee21711e864f25bf53694fbde'] = 'No hay ningún punto de recogida para su dirección';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = '(sin IVA)';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = '(IVA incluido)';
