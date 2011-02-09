@@ -394,7 +394,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->StartPageGroup();
 
 		self::$currency = Currency::getCurrencyInstance((int)(self::$order->id_currency));
-
+		
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
 		/* Display address information */
@@ -971,7 +971,9 @@ g	* Discount table with value, quantities...
 
 	static private function convertSign($s)
 	{
-		return str_replace('¥', chr(165), str_replace('£', chr(163), str_replace('€', chr(128), $s)));
+		$arr['before'] = array('€', '£', '¥');
+		$arr['after'] = array(chr(128), chr(163), chr(165));
+		return str_replace($arr['before'], $arr['after'], $s);
 	}
 
 	static protected function l($string)
