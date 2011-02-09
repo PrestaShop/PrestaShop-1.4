@@ -65,6 +65,7 @@ class BlockSupplier extends Module
 			'text_list' => Configuration::get('SUPPLIER_DISPLAY_TEXT'),
 			'text_list_nb' => Configuration::get('SUPPLIER_DISPLAY_TEXT_NB'),
 			'form_list' => Configuration::get('SUPPLIER_DISPLAY_FORM'),
+			'display_link_supplier' => Configuration::get('PS_DISPLAY_SUPPLIERS')
 		));
 		return $this->display(__FILE__, 'blocksupplier.tpl');
 	}

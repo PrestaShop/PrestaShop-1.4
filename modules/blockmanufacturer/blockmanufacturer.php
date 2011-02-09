@@ -60,6 +60,7 @@ class BlockManufacturer extends Module
 			'text_list' => Configuration::get('MANUFACTURER_DISPLAY_TEXT'),
 			'text_list_nb' => Configuration::get('MANUFACTURER_DISPLAY_TEXT_NB'),
 			'form_list' => Configuration::get('MANUFACTURER_DISPLAY_FORM'),
+			'display_link_manufacturer' => Configuration::get('PS_DISPLAY_SUPPLIERS'),
 		));
 		return $this->display(__FILE__, 'blockmanufacturer.tpl');
 	}

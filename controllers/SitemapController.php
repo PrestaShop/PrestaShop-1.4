@@ -50,8 +50,8 @@ class SitemapControllerCore extends FrontController
 		$this->smarty->assign('voucherAllowed', (int)(Configuration::get('PS_VOUCHERS')));
 		$blockmanufacturer = Module::getInstanceByName('blockmanufacturer');
 		$blocksupplier = Module::getInstanceByName('blocksupplier');
-		$this->smarty->assign('display_manufacturer_link', ((int)$blockmanufacturer->id ? true : false));
-		$this->smarty->assign('display_supplier_link', ((int)$blocksupplier->id ? true : false));
+		$this->smarty->assign('display_manufacturer_link', (((int)$blockmanufacturer->id AND Configuration::get('PS_DISPLAY_SUPPLIERS')) ? true : false));
+		$this->smarty->assign('display_supplier_link', (((int)$blocksupplier->id AND Configuration::get('PS_DISPLAY_SUPPLIERS')) ? true : false));
 		$this->smarty->assign('PS_DISPLAY_SUPPLIERS', Configuration::get('PS_DISPLAY_SUPPLIERS'));
 		$this->smarty->assign('display_store', Configuration::get('PS_STORES_DISPLAY_SITEMAP'));
 	}
