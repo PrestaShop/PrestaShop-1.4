@@ -21,7 +21,7 @@
 *  @author Prestashop SA <contact@prestashop.com>
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
-*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*  @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
@@ -32,7 +32,8 @@ class LocalizationPackCore
 	public	$name;
 	public	$version;
 
-    private $iso_code_lang;
+	private $iso_code_lang;
+	private $iso_currency;
 	private	$_errors = array();
 
 	public function loadLocalisationPack($file, $selection, $install_mode = false)
@@ -44,18 +45,21 @@ class LocalizationPackCore
 		$this->version = strval($mainAttributes['version']);
 		if (empty($selection))
 		{
-			$res = NULL;
+			$res = true;
 			$res &= $this->_installStates($xml);
 			$res &= $this->_installTaxes($xml);
-			$res &= $this->_installCurrencies($xml);
+			$res &= $this->_installCurrencies($xml, $install_mode);
 			$res &= $this->_installUnits($xml);
 
 			if (!_PS_MODE_DEV_)
-				$res = $this->_installLanguages($xml, $install_mode);
+				$res &= $this->_installLanguages($xml, $install_mode);
 
-    		if ($res AND isset($this->iso_code_lang))
-        		Configuration::updateValue('PS_LANG_DEFAULT', (int)Language::getIdByIso($this->iso_code_lang));
-
+			if ($res AND isset($this->iso_code_lang))
+				Configuration::updateValue('PS_LANG_DEFAULT', (int)Language::getIdByIso($this->iso_code_lang));
+				
+			if ($install_mode AND $res AND isset($this->iso_currency))
+				$res &= Configuration::updateValue('PS_CURRENCY_DEFAULT', (int)Currency::getIdByIsoCode($this->iso_currency));
+			
 			return $res;
 		}
 		foreach ($selection AS $selected)
@@ -104,8 +108,8 @@ class LocalizationPackCore
 	{
 		if (isset($xml->taxes->tax))
 		{
-		    $available_behavior = array(PS_PRODUCT_TAX, PS_STATE_TAX, PS_BOTH_TAX);
-		    $assoc_taxes = array();
+			$available_behavior = array(PS_PRODUCT_TAX, PS_STATE_TAX, PS_BOTH_TAX);
+			$assoc_taxes = array();
 			foreach ($xml->taxes->tax AS $taxData)
 			{
 				$attributes = $taxData->attributes();
@@ -132,57 +136,57 @@ class LocalizationPackCore
 
 			foreach ($xml->taxes->taxRulesGroup AS $group)
 			{
-			    $group_attributes = $group->attributes();
-			    if (!Validate::isGenericName($group_attributes['name']))
-			        continue;
+				$group_attributes = $group->attributes();
+				if (!Validate::isGenericName($group_attributes['name']))
+					continue;
 				 if (TaxRulesGroup::getIdByName($group['name']))
 					continue;
-			    $trg = new TaxRulesGroup();
-			    $trg->name = $group['name'];
-			    $trg->active = 1;
+				$trg = new TaxRulesGroup();
+				$trg->name = $group['name'];
+				$trg->active = 1;
 
-			    if (!$trg->save())
-			    {
-    			    $this->_errors = 'cant save';
-			        return false;
-			    }
+				if (!$trg->save())
+				{
+					$this->_errors = 'cant save';
+					return false;
+				}
 
-			    foreach($group->taxRule as $rule)
-			    {
-			        $rule_attributes = $rule->attributes();
+				foreach($group->taxRule as $rule)
+				{
+					$rule_attributes = $rule->attributes();
 
-			        // Validation
-			        if (!isset($rule_attributes['iso_code_country']))
-			            continue;
+					// Validation
+					if (!isset($rule_attributes['iso_code_country']))
+						continue;
 
-			        $id_country = Country::getByIso(strtoupper($rule_attributes['iso_code_country']));
+					$id_country = Country::getByIso(strtoupper($rule_attributes['iso_code_country']));
 
-			        if (!isset($rule_attributes['id_tax']) || !array_key_exists(strval($rule_attributes['id_tax']), $assoc_taxes))
-			            continue;
+					if (!isset($rule_attributes['id_tax']) || !array_key_exists(strval($rule_attributes['id_tax']), $assoc_taxes))
+						continue;
 
-			        // Default values
-			        $id_state = (int) isset($rule_attributes['iso_code_state']) ? State::getIdByIso(strtoupper($rule_attributes['iso_code_state'])) : 0;
+					// Default values
+					$id_state = (int) isset($rule_attributes['iso_code_state']) ? State::getIdByIso(strtoupper($rule_attributes['iso_code_state'])) : 0;
 
-                    $state_behavior = 0;
-                    if (isset($rule_attributes['state_behavior']) && in_array($rule_attributes['state_behavior'], $available_behavior))
-                        $state_behavior = (int)$rule_attributes['state_behavior'];
+					$state_behavior = 0;
+					if (isset($rule_attributes['state_behavior']) && in_array($rule_attributes['state_behavior'], $available_behavior))
+						$state_behavior = (int)$rule_attributes['state_behavior'];
 
-			        // Creation
-			        $tr = new TaxRule();
-			        $tr->id_tax_rules_group = $trg->id;
-			        $tr->id_country = $id_country;
-			        $tr->id_state = $id_state;
-			        $tr->state_behavior = $state_behavior;
-			        $tr->id_tax = $assoc_taxes[strval($rule_attributes['id_tax'])];
-			        $tr->save();
-			    }
+					// Creation
+					$tr = new TaxRule();
+					$tr->id_tax_rules_group = $trg->id;
+					$tr->id_country = $id_country;
+					$tr->id_state = $id_state;
+					$tr->state_behavior = $state_behavior;
+					$tr->id_tax = $assoc_taxes[strval($rule_attributes['id_tax'])];
+					$tr->save();
+				}
 			}
 		}
 
 		return true;
 	}
 
-	private function _installCurrencies($xml)
+	private function _installCurrencies($xml, $install_mode = false)
 	{
 		if (isset($xml->currencies->currency))
 		{
@@ -228,6 +232,10 @@ class LocalizationPackCore
 				$currency->refreshCurrency($feed->list, $isoCodeSource, $defaultCurrency);
 			}
 		}
+		
+		if (!sizeof($this->_errors) AND $install_mode AND isset($attributes['iso_code']) AND sizeof($xml->currencies->currency) == 1)
+			$this->iso_currency = $attributes['iso_code'];
+			
 		return true;
 	}
 
@@ -249,31 +257,31 @@ class LocalizationPackCore
 					{
 						if ($lang_pack = json_decode(Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$attributes['iso_code'])))
 						{
-                            if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$attributes['iso_code'].'.gzip'))
-				            {
-					            $file = _PS_TRANSLATIONS_DIR_.$attributes['iso_code'].'.gzip';
-					            if (file_put_contents($file, $content))
-					            {
-						            $gz = new Archive_Tar($file, true);
-						            $files_list = $gz->listContent();
+							if ($content = file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$attributes['iso_code'].'.gzip'))
+							{
+								$file = _PS_TRANSLATIONS_DIR_.$attributes['iso_code'].'.gzip';
+								if (file_put_contents($file, $content))
+								{
+									$gz = new Archive_Tar($file, true);
+									$files_list = $gz->listContent();
 
-						            if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
-        							{
-		        						$this->_errors[] = Tools::displayError('Cannot decompress the translation file of the language: ').(string)$attributes['iso_code'];
-		        						return false;
-		        					}
+									if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
+									{
+										$this->_errors[] = Tools::displayError('Cannot decompress the translation file of the language: ').(string)$attributes['iso_code'];
+										return false;
+									}
 
-						            if (!Language::checkAndAddLanguage((string)$attributes['iso_code']))
-						            {
-							            $this->_errors[] = Tools::displayError('An error occurred while creating the language: ').(string)$attributes['iso_code'];
-							            return false;
-						            }
+									if (!Language::checkAndAddLanguage((string)$attributes['iso_code']))
+									{
+										$this->_errors[] = Tools::displayError('An error occurred while creating the language: ').(string)$attributes['iso_code'];
+										return false;
+									}
 
-						            @unlink($file);
-					            }
-					            else
-						            $this->_errors[] = Tools::displayError('Server does not have permissions for writing');
-                            }
+									@unlink($file);
+								}
+								else
+									$this->_errors[] = Tools::displayError('Server does not have permissions for writing');
+							}
 						}
 						else
 							$this->_errors[] = Tools::displayError('Error occurred from prestashop.com when language was checked according to your Prestashop version.');
@@ -282,16 +290,16 @@ class LocalizationPackCore
 						$this->_errors[] = Tools::displayError('Archive cannot be downloaded from prestashop.com');
 			}
 
-	    // change the default language if there is only one language in the localization pack
+		// change the default language if there is only one language in the localization pack
 		if (!sizeof($this->_errors) AND $install_mode AND isset($attributes['iso_code']) AND sizeof($xml->languages->language) == 1)
-		    $this->iso_code_lang = $attributes['iso_code'];
+			$this->iso_code_lang = $attributes['iso_code'];
 
 		return true;
 	}
 
 	private function _installUnits($xml)
 	{
-		$varNames = array('weight' => 'PS_WEIGHT_UNIT', 'volume' => 'PS_VOLUME_UNIT', 'short_distance' => 'PS_SHORT_DISTANCE_UNIT', 'base_distance' => 'PS_BASE_DISTANCE_UNIT', 'long_distance' => 'PS_LONG_DISTANCE_UNIT');
+		$varNames = array('weight' => 'PS_WEIGHT_UNIT', 'volume' => 'PS_VOLUME_UNIT', 'short_distance' => 'PS_DIMENSION_UNIT', 'base_distance' => 'PS_BASE_DISTANCE_UNIT', 'long_distance' => 'PS_DISTANCE_UNIT');
 		if (isset($xml->units->unit))
 			foreach ($xml->units->unit AS $data)
 			{
