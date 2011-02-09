@@ -179,39 +179,29 @@ class AdminThemes extends AdminPreferences
 			}
 		}
 		// will be set to false if any version node in xml is correct
-		$xml_version_too_old=true;
+		$xml_version_too_old = true;
 
 		// foreach version in xml file, 
 		// node means feature, attributes has to match 
 		// the corresponding value in AdminThemes::$check_features[feature] array
-		$xmlArray=simpleXMLToArray($xml);
-		foreach($xmlArray as $version)
+		$xmlArray= simpleXMLToArray($xml);
+		foreach($xmlArray AS $version)
 		{
-			if (isset($version['value']) AND version_compare($version['value'], $check_version) >=0)
+			if (isset($version['value']) AND version_compare($version['value'], $check_version) >= 0)
 			{
-				$checkedFeature=array();
-				foreach (AdminThemes::$check_features as $codeFeature=>$arrConfigToCheck)
-				{
-					foreach ($arrConfigToCheck['attributes'] as $attr => $v)
-					{
-						if (!isset($version[$codeFeature])
-							OR !isset($version[$codeFeature][$attr])
-							OR $version[$codeFeature][$attr] != $v['value'] 
-						)
-						{
-							if (!$this->_checkConfigForFeatures($codeFeature,$attr))
-								$return=false;
-							// feature missing in config.xml file, or wrong attribute value
-						}
-					}
-				}
-				$xml_version_too_old=false;
+				$checkedFeature = array();
+				foreach (AdminThemes::$check_features AS $codeFeature => $arrConfigToCheck)
+					foreach ($arrConfigToCheck['attributes'] AS $attr => $v)
+						if (!isset($version[$codeFeature]) OR !isset($version[$codeFeature][$attr]) OR $version[$codeFeature][$attr] != $v['value'])
+							if (!$this->_checkConfigForFeatures($codeFeature, $attr)) // feature missing in config.xml file, or wrong attribute value
+								$return = false;
+				$xml_version_too_old = false;
 			}
 		}
-		if ($xml_version_too_old AND !$this->_checkConfigForFeatures(array_keys($this::$check_features)))
+		if ($xml_version_too_old AND !$this->_checkConfigForFeatures(array_keys($this->check_features)))
 		{
 			$this->_errors[] .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.');
-			$return=false;
+			$return = false;
 		}
 		return $return;
 	}
@@ -230,13 +220,11 @@ class AdminThemes extends AdminPreferences
 		{
 			foreach ($arrFeatures as $feature)
 				if (!sizeof($configItem))
-				{
-					$configItem=array_keys($this::$check_features[$feature]['attributes']);
-				}
+					$configItem = array_keys($this->check_features[$feature]['attributes']);
 			foreach ($configItem as $attr)
 			{
-				$check=$this->_checkConfigForFeatures($arrFeatures,$attr);
-				if($check==false)
+				$check = $this->_checkConfigForFeatures($arrFeatures,$attr);
+				if($check == false)
 					$return = false;
 			}
 			return $return;
@@ -247,17 +235,17 @@ class AdminThemes extends AdminPreferences
 			$arrFeatures = array($arrFeatures);
 
 		foreach ($arrFeatures as $feature)
+		{
+			$arrConfigToCheck = $this->check_features[$feature]['attributes'][$configItem]['check_if_not_valid'];
+			foreach ($arrConfigToCheck AS $config_key => $config_val)
 			{
-			$arrConfigToCheck=$this::$check_features[$feature]['attributes'][$configItem]['check_if_not_valid'];
-			foreach ($arrConfigToCheck as $config_key => $config_val)
-			{
-				$config_get=Configuration::get($config_key);
+				$config_get = Configuration::get($config_key);
 				if ($config_get != $config_val)
 				{
-					$this->_errors[] = Tools::displayError($this::$check_features[$feature]['error']).'.'
-					.(!empty($this::$check_features[$feature]['tab'])
-						?' <a href="?tab='.$this::$check_features[$feature]['tab'].'&amp;token='
-						.Tools::getAdminTokenLite($this::$check_features[$feature]['tab']).'" ><u>'
+					$this->_errors[] = Tools::displayError($this->check_features[$feature]['error']).'.'
+					.(!empty($this->check_features[$feature]['tab'])
+						?' <a href="?tab='.$this->check_features[$feature]['tab'].'&amp;token='
+						.Tools::getAdminTokenLite($this->check_features[$feature]['tab']).'" ><u>'
 						.Tools::displayError('You can disable this function on this page')
 						.'</u></a>':''
 					).'<br/>' ;

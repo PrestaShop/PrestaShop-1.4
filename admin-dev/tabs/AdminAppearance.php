@@ -34,5 +34,3 @@ class AdminAppearance extends AdminThemes // extends AdminThemes only for retro-
 		Tools::redirectAdmin('index.php?tab=AdminThemes&token='.Tools::getAdminTokenLite('AdminThemes'));
 	}
 }
-
-
