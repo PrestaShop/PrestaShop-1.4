@@ -325,7 +325,7 @@ INSERT INTO `PREFIX_feature_value_lang` (`id_feature_value`, `id_lang`, `value`)
 (13, 1, '49.2 grams'),(13, 2, '49,2 grammes'),(13, 3, '49,2 g'),(12, 2, '52,3 mm'),(12, 1, '52.3 mm'),(12, 3, '52.3 mm'),(11, 2, '69,8 mm'),(11, 1, '69.8 mm'),(11, 3, '69.8 mm'),
 (17, 2, '15,5 g'),(17, 1, '15.5 g'),(17, 3, '15.5 g'),(16, 2, '41,2 mm'),(16, 1, '41.2 mm'),(16, 3, '41.2 mm'),(15, 2, '27,3 mm'),(15, 1, '27.3 mm'),(15, 3, '27.3 mm'),(9, 1, 'Jack stereo'),
 (9, 2, 'Jack stéréo'),(9, 3, 'Jack stereo'),(10, 1, 'Mini-jack stereo'),(10, 2, 'Mini-jack stéréo'),(10, 3, 'Mini-jack stéréo'),(14, 1, '6,5 mm'),(14, 2, '6,5 mm'),(14, 3, '6,5 mm'),
-(18, 1, '10,5 mm (clip compris)'),(18, 2, '10,5 mm (clip compris)'),(18, 3, '10,5 mm (clip incluyendo)'),(26, 2, '8mm'),(26, 1, '8mm'),(26, 3, '8mm'),(25, 2, '120g'),(25, 3, '120g'),
+(18, 1, '10,5 mm (clip included)'),(18, 2, '10,5 mm (clip compris)'),(18, 3, '10,5 mm (clip incluyendo)'),(26, 2, '8mm'),(26, 1, '8mm'),(26, 3, '8mm'),(25, 2, '120g'),(25, 3, '120g'),
 (25, 1, '120g'),(24, 2, '70mm'),(24, 1, '70mm'),(24, 3, '70mm'),(23, 2, '110mm'),(23, 3, '110mm'),(23, 1, '110mm');
 
 INSERT INTO `PREFIX_image` (`id_image`, `id_product`, `position`, `cover`) VALUES
