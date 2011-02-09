@@ -78,7 +78,8 @@
 					<input type="text" id="email" name="from" value="{$email}" />
 				{/if}
 			</p>
-		{if !isset($customerThread.id_order) || $customerThread.id_order > 0}
+		{if !$PS_CATALOG_MODE}
+			{if (!isset($customerThread.id_order) || $customerThread.id_order > 0)}
 			<p class="text">
 				<label for="id_order">{l s='Order ID'}</label>
 				{if !isset($customerThread.id_order) && isset($isLogged) && $isLogged == 1}
@@ -89,8 +90,8 @@
 					<input type="text" name="id_order" id="id_order" value="{$customerThread.id_order|intval}" readonly="readonly" />
 				{/if}
 			</p>
-		{/if}
-		{if isset($isLogged) && $isLogged}
+			{/if}
+			{if isset($isLogged) && $isLogged}
 			<p class="text">
 			<label for="id_product">{l s='Product'}</label>
 				{if !isset($customerThread.id_product)}
@@ -99,6 +100,7 @@
 					<input type="text" name="id_product" id="id_product" value="{$customerThread.id_product|intval}" readonly="readonly" />
 				{/if}
 			</p>
+			{/if}
 		{/if}
 		{if $fileupload == 1}
 			<p class="text">
