@@ -132,9 +132,8 @@ class ConfigurationCore extends ObjectModel
 	  *
 	  * @param string $key Key wanted
 	  * @param mixed $values $values is an array if the configuration is multilingual, a single string else.
-	  * @param boolean $html Specify if html is authorized in value
 	  */
-	static public function set($key, $values, $html = false)
+	static public function set($key, $values)
 	{
 		if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
@@ -237,11 +236,12 @@ class ConfigurationCore extends ObjectModel
 		/* Update classic values */
 		if (!is_array($values))
 		{
+			$values = pSQL($values, $html);
 		 	if (Configuration::get($key) !== false)
 		 	{
 				$result = $db->AutoExecute(
 					_DB_PREFIX_.'configuration',
-					array('value' => pSQL($values, $html), 'date_upd' => date('Y-m-d H:i:s')),
+					array('value' => $values, 'date_upd' => date('Y-m-d H:i:s')),
 					'UPDATE', '`name` = \''.pSQL($key).'\'', true, true);
 				self::$_CONF[$key] = $values;
 			}
@@ -270,9 +270,10 @@ class ConfigurationCore extends ObjectModel
 				return false;
 			foreach ($values as $id_lang => $value)
 			{
+				$value = pSQL($value, $html);
 				$result &= $db->Execute('INSERT INTO `'._DB_PREFIX_.'configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`)
-										VALUES ('.$conf['id_configuration'].', '.(int)($id_lang).', \''.pSQL($value, $html).'\', NOW())
-										ON DUPLICATE KEY UPDATE `value` = \''.pSQL($value, $html).'\', `date_upd` = NOW()');
+										VALUES ('.$conf['id_configuration'].', '.(int)($id_lang).', \''.$value.'\', NOW())
+										ON DUPLICATE KEY UPDATE `value` = \''.$value.'\', `date_upd` = NOW()');
 				self::$_CONF_LANG[(int)($id_lang)][$key] = $value;
 			}
 		}
