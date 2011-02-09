@@ -1057,7 +1057,7 @@ class WebserviceRequest
 			elseif ($matches[1] == '>')
 				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` > "'.pSQL($matches[2])."\"\n";// AND field > value3
 			elseif ($matches[1] == '<')
-				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` > "'.pSQL($matches[2])."\"\n";// AND field < value3
+				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` < "'.pSQL($matches[2])."\"\n";// AND field < value3
 			elseif ($matches[1] == '!')
 				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` != "'.pSQL($matches[2])."\"\n";// AND field IS NOT value3
 		}
