@@ -76,7 +76,7 @@ class AdminCustomers extends AdminTab
 			$deleteForm = '
 			<form action="'.htmlentities($_SERVER['REQUEST_URI']).'" method="post">
 				<fieldset><legend>'.$this->l('How do you want to delete your customer(s)?').'</legend>
-					'.$this->l('You have two ways to delete a customer, please choose what do you want to do.').'
+					'.$this->l('You have two ways to delete a customer, please choose what you want to do.').'
 					<p>
 						<input type="radio" name="deleteMode" value="real" id="deleteMode_real" />
 						<label for="deleteMode_real" style="float:none">'.$this->l('I want to delete my customer(s) for real, all data will be removed from the database. A customer with the same e-mail address will be able to register again.').'</label>

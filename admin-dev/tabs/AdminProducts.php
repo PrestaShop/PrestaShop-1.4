@@ -199,7 +199,7 @@ class AdminProducts extends AdminTab
 						$max_upload = (int)(ini_get('upload_max_filesize'));
 						$max_post = (int)(ini_get('post_max_size'));
 						$upload_mb = min($max_upload, $max_post);
-						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceeds the weight allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
+						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceeds the size allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 					}
 
 					if(empty($this->_errors) && isset($uniqid))

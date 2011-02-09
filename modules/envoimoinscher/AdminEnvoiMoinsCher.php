@@ -64,7 +64,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 			}
 			else echo '<div class="alert error">
 					   <img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />
-					   '.$this->l('Aucune commande à exporter').'</div>
+					   '.$this->l('No order to export').'</div>
 					   <p><a class="button" href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI'].'">Retour</a></p>';
 		}
 		else
@@ -80,7 +80,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 						</form>';
 			}
 			else
-			echo '<h2 style="color:red">'.$this->l('Merci de configurer le module pour pouvoir l\'utiliser').'</h2>';
+			echo '<h2 style="color:red">'.$this->l('Please configure this module in order').'</h2>';
 		}
 		echo '<br><p><a href="index.php?tab=AdminModules&configure=envoimoinscher&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)).'" class="button">
 			 ' . $this->l('Change configuration') . '</a></p>';
@@ -117,12 +117,12 @@ class AdminEnvoiMoinsCher extends AdminTab
 					<tr>
 						<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'ordersBox[]\', this.checked)" /></th>
 						<th>'.$this->l('ID').'</th>
-						<th>'.$this->l('Nom').'</th>
-						<th>'.$this->l('Prix Total').'</th>
-						<th>'.$this->l('Total expedition').'</th>
+						<th>'.$this->l('Name').'</th>
+						<th>'.$this->l('Total Cost').'</th>
+						<th>'.$this->l('Total shipment').'</th>
 						<th>'.$this->l('Date').'</th>
-						<th>'.$this->l('Conditionnement').'</th>
-						<th>'.$this->l('Nature du contenu').'</th>
+						<th>'.$this->l('Packaging').'</th>
+						<th>'.$this->l('Nature of contents').'</th>
 						<th>'.$this->l('Detail').'</th>		
 					</tr>';
 		if (!empty($orders))

@@ -2,10 +2,10 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{fianetsceau}prestashop>fianetsceau_72517ac17e72188b4043e77a151920d0'] = 'FIA-NET signo de confianza';
-$_MODULE['<{fianetsceau}prestashop>fianetsceau_79841d454ebed67000c0c982796c6b9d'] = 'Transforme sus visitantes en compradores haciendo que confien en su sitio Web';
-$_MODULE['<{fianetsceau}prestashop>fianetsceau_f9d62663cd34b0675f1fd34a0e8da283'] = 'Por favor, introduzca su Clave Privada';
-$_MODULE['<{fianetsceau}prestashop>fianetsceau_42d90cf6237830c7d1aae4c35a5211a1'] = 'Por favor, introduzca la ID de su sitio';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_21d574c0b27fc6bebc399be75502d84d'] = 'FIA-NET signo de confianza';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_3d04481e152cf36857cd46940292538d'] = 'Transforme sus visitantes en compradores haciendo que confien en su sitio Web';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_76fce32fafef13ba9873162ff31c8f40'] = 'Por favor, introduzca su Clave Privada';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_694d3e94c2df0ed386bdac95406e019d'] = 'Por favor, introduzca la ID de su sitio';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Parámetros actualizados con éxito';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_380b4179d36bce6ca862459a43b217b5'] = 'Para conectarse, visite:';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_592fcfe937f6d58f70d0918ef6373afa'] = 'Web de FIA-net';

@@ -32,7 +32,7 @@
 {else}
 	{if $status == 'pending'}
 		<p>{l s='Your order on' mod='moneybookers'} <span class="bold">{$shop_name}</span> {l s='is pending.' mod='moneybookers'}
-			<br /><br /><span class="bold">{l s='Your order will be shipped as soon as we will receive your bankwire.' mod='moneybookers'}</span>
+			<br /><br /><span class="bold">{l s='Your order will be shipped as soon as we receive your bankwire.' mod='moneybookers'}</span>
 			<br /><br />{l s='For any questions or for further information, please contact our' mod='moneybookers'} <a href="{$link->getPageLink('contact-form.php', true)}">{l s='customer support' mod='moneybookers'}</a>.
 		</p>
 	{else}

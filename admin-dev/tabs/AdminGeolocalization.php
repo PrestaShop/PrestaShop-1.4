@@ -118,10 +118,10 @@ class AdminGeolocalization extends AdminTab
 		
 		<form method="POST" action="'.$currentIndex.'&token='.Tools::getValue('token').'">
 			<fieldset style="margin-top:10px;">
-				<legend><img src="../img/admin/world.gif" alt="" /> '.$this->l('Whitelist of IP address').'</legend>
+				<legend><img src="../img/admin/world.gif" alt="" /> '.$this->l('Whitelist of IP addresses').'</legend>
 				
 				<div class="hint" style="display:block;margin-bottom:20px;">
-					'.$this->l('You can add many IP addresses, these addresses will be allowed to see your shop forever (e.g. Google bots IP).').'
+					'.$this->l('You can add many IP addresses, these addresses will always be allowed to access your shop (e.g. Google bots IP).').'
 				</div>
 				
 				<label for="PS_GEOLOCALIZATION_WHITELIST">'.$this->l('Allowed IP addresses:').'</label>

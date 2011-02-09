@@ -34,7 +34,7 @@
 				<label class="clear">{l s='Keep Dejala active when cart is out of stock' mod='dejala'}:</label>
 				<div class="margin-form">
 					<input type="checkbox" name="delivery_partial" value="1" {if ($delivery_partial)}checked="checked"{/if}>
-					{l s='Enable customers to choose Dejala even if a product is out of stock (The customer will choose the date of the delivery when its order will be ready)' mod='dejala'}
+					{l s='Enable customers to choose Dejala even if a product is out of stock (The customer will choose the date of the delivery when their order will be ready)' mod='dejala'}
 				</div>
 
 				<br/>

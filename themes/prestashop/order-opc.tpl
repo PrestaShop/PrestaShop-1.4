@@ -566,7 +566,7 @@
 									<sup>*</sup>
 								</p>
 								<p class="text is_customer_param">
-									<label for="address2_invoice">{l s='Address (2)'}</label>
+									<label for="address2_invoice">{l s='Address (Line 2)'}</label>
 									<input type="text" class="text" name="address2_invoice" id="address2_invoice" value="" />
 								</p>
 								<p class="required postcode text">
@@ -681,7 +681,7 @@
 		
 		<h3>{l s='Leave a message'}</h3>
 		<div>
-			<p>{l s='If you would like to comment on your order, please write it below.'}</p>
+			<p>{l s='If you would like add a comment about your order, please write it below.'}</p>
 			<p><textarea cols="120" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
 		</div>
 		
@@ -739,7 +739,7 @@
 	<!-- Payment methods block -->
 	<h2>4. {l s='Payment methods'}</h2>
 	<div id="opc_block_4" class="opc_block_content">
-		<div id="opc_payment_list">{if $isVirtualCart}<p class="warning">{l s='Please wait... we are going to validate your order'}</p>{/if}</div>
+		<div id="opc_payment_list">{if $isVirtualCart}<p class="warning">{l s='Please wait while we validate your order.'}</p>{/if}</div>
 		
 		{if !$isVirtualCart}
 		<div>

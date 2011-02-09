@@ -2,7 +2,7 @@
 	<div style="float:left">
 		<input type="hidden" name="method" value="contact">
 		<fieldset style="width:250px;">
-				<legend><img src="../img/t/AdminCustomers.gif" />{l s='Responsable boutique (signataire)' mod='dejala'}</legend>
+				<legend><img src="../img/t/AdminCustomers.gif" />{l s='Shop owner' mod='dejala'}</legend>
 					<p>{l s='Name:' mod='dejala'} <input type="text" name="contact_owner_name" id="contact_owner_name" value="{$contact_owner_name|default:''}"></p>
 					<p>{l s='Firstname:' mod='dejala'} <input type="text" name="contact_owner_firstname" id="contact_owner_firstname" value="{$contact_owner_firstname|default:''}"></p>
 					<p>{l s='Phone:' mod='dejala'} <input type="text" name="contact_owner_phone" id="contact_owner_phone" value="{$contact_owner_phone|default:''}"></p>
@@ -11,7 +11,7 @@
 		</fieldset>
 
 		<fieldset class="clear space" style="width:250px;">
-			<legend><img src="../img/t/AdminCustomers.gif" />{l s='Contact logistique (stock)' mod='dejala'}</legend>
+			<legend><img src="../img/t/AdminCustomers.gif" />{l s='Stock Control Contact' mod='dejala'}</legend>
 				<p>{l s='Name:' mod='dejala'} <input type="text" name="contact_stock_name" id="contact_stock_name" value="{$contact_stock_name|default:''}"></p>
 				<p>{l s='Firstname:' mod='dejala'} <input type="text" name="contact_stock_firstname" id="contact_stock_firstname" value="{$contact_stock_firstname|default:''}"></p>
 				<p>{l s='Phone:' mod='dejala'} <input type="text" name="contact_stock_phone" id="contact_stock_phone" value="{$contact_stock_phone|default:''}"></p>
@@ -21,7 +21,7 @@
 </div>
 <div style="float:left; margin-left:5px;">
 		<fieldset style="width:250px;">
-			<legend><img src="../img/t/AdminCustomers.gif" />{l s='Contact administratif' mod='dejala'}</legend>
+			<legend><img src="../img/t/AdminCustomers.gif" />{l s='Administration Contact' mod='dejala'}</legend>
 				<p>{l s='Name:' mod='dejala'} <input type="text" name="contact_administrative_name" id="contact_administrative_name" value="{$contact_administrative_name|default:''}"></p>
 				<p>{l s='Firstname:' mod='dejala'} <input type="text" name="contact_administrative_firstname" id="contact_administrative_firstname" value="{$contact_administrative_firstname|default:''}"></p>
 				<p>{l s='Phone:' mod='dejala'} <input type="text" name="contact_administrative_phone" id="contact_administrative_phone" value="{$contact_administrative_phone|default:''}"></p>
@@ -30,7 +30,7 @@
 		</fieldset>
 
 		<fieldset class="clear space" style="width:250px">
-			<legend><img src="../img/t/AdminCustomers.gif" />{l s='Contact logistique (web)' mod='dejala'}</legend>
+			<legend><img src="../img/t/AdminCustomers.gif" />{l s='Website Maintenance Contact' mod='dejala'}</legend>
 				<p>{l s='Name:' mod='dejala'} <input type="text" name="contact_web_name" id="contact_web_name" value="{$contact_web_name|default:''}"></p>
 				<p>{l s='Firstname:' mod='dejala'} <input type="text" name="contact_web_firstname" id="contact_web_firstname" value="{$contact_web_firstname|default:''}"></p>
 				<p>{l s='Phone:' mod='dejala'} <input type="text" name="contact_web_phone" id="contact_web_phone" value="{$contact_web_phone|default:''}"></p>

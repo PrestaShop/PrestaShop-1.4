@@ -9,4 +9,5 @@ $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_7ccf58c950043c9fbfed668
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_d16dbbe71a327e22461456cfc5e7dfb2'] = 'Aucune page CMS est disponible';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_f1206f9fadc5ce41694f69129aecac26'] = 'Configurer';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_4b3c34d991275b9fdb0facfcea561be9'] = 'Page CMS pour le lien';
+$_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_889e29f23cb71bf6f419de0ad81b05c8'] = 'Choisir une page';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_d4dccb8ca2dac4e53c01bd9954755332'] = 'Enregistrer';

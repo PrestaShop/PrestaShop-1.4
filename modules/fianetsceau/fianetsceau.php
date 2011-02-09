@@ -38,12 +38,12 @@ class FianetSceau extends Module
 		
 	 	parent::__construct();
 		
-		$this->displayName = $this->l('FIA-NET Sceau de Confiance');
-		$this->description = $this->l('Transformez vos visiteurs en acheteurs en cr&eacute;ant la confiance sur votre site');
+		$this->displayName = $this->l('FIA-NET Seal of Confidence');
+		$this->description = $this->l('Turn your visitors into buyers by creating confidence in your site');
 		if (!Configuration::get('FIANET_SCEAU_PRIVATEKEY'))
-			$this->warning = $this->l('Please fill your Private Key field');
+			$this->warning = $this->l('Please enter your Private Key field');
 		if (!Configuration::get('FIANET_SCEAU_SITEID'))
-			$this->warning = $this->l('Please fill your site id');
+			$this->warning = $this->l('Please enter your site id');
 	}
 	
 	public function install()

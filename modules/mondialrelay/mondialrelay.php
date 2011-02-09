@@ -435,7 +435,7 @@ class MondialRelay extends Module
 		$error = null;
 		
 		if (isset($_GET['updatesuccess']))
-			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'</div>';
+			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated successfully').'</div>';
 		if (!empty($_POST))
 		{
 			$this->_postValidation();
@@ -458,7 +458,7 @@ class MondialRelay extends Module
 		'<style> . "\n" . ' . file_get_contents(_MR_CSS_) . "\n" . '</style>
 		<fieldset>
 			<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('To create a Mondial Relay carrier').'</legend>
-		- '.$this->l('Fill and save your Mondial Relay account settings').'<br />
+		- '.$this->l('Enter and save your Mondial Relay account settings').'<br />
 		- '.$this->l('Create a Carrier').'<br />
 		- '.$this->l('Define a price for your carrier on').' <a href="index.php?tab=AdminCarriers&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'" class="green">'.$this->l('The Carrier page').'</a><br />
 		- '.$this->l('To generate labels, you must have a valid and registered address of your store on your').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.$this->l('contact page').'</a><br />
@@ -568,7 +568,7 @@ class MondialRelay extends Module
 		else 
 			return false;
 
-		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated succesfull').'<img src="http://www.prestashop.com/modules/mondialrelay.png?enseigne='.urlencode(Tools::getValue('mr_Enseigne_WebService')).'" style="float:right" /></div>';
+		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated successfully').'<img src="http://www.prestashop.com/modules/mondialrelay.png?enseigne='.urlencode(Tools::getValue('mr_Enseigne_WebService')).'" style="float:right" /></div>';
 		return true;
 	}
 	
@@ -847,9 +847,11 @@ class MondialRelay extends Module
 			'Saturday' => $this->l('Saturday'),
 			'Sunday' => $this->l('Sunday'),
 			'Select this Relay Point' => $this->l('Select this Relay Point'),
-			'To generate sticks, you must have register a correct address of your store on' => $this->l('To generate sticks, you must have register a correct address of your store on'),
+			'To generate sticks, you must have register a correct address of your store on' => $this->l('To generate labels, you must have registered a correct address of your store on'),
+			'To generate labels, you must have registered a correct address of your store on' => $this->l('To generate labels, you must have registered a correct address of your store on'),
 			'The contact page' => $this->l('The contact page'),
-			'Settings updated succesfull' => $this->l('Settings updated succesfull'),
+			'Settings updated succesfull' => $this->l('Settings updated successfully'),
+			'Settings updated successfully' => $this->l('Settings updated successfully'),
 			'Empty address : Are you sure you\'ve set a valid address on the contact page?' => $this->l('Empty address : Are you sure you\'ve set a valid address on the contact page?')
 		);
 		return $trad[$key];

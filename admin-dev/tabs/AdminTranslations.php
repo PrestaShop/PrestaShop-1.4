@@ -698,7 +698,7 @@ class AdminTranslations extends AdminTab
 			'fields' => $this->l('Field name translations'),
 			'modules' => $this->l('Module translations'),
 			'pdf' => $this->l('PDF translations'),
-			'mails' => $this->l('Mails translations'),
+			'mails' => $this->l('E-mail template translations'),
 		);
 
 		if ($type = Tools::getValue('type'))
@@ -1348,7 +1348,7 @@ class AdminTranslations extends AdminTab
 		$mylang = new Language(Language::getIdByIso($lang));
 			echo '<!--'.$this->l('Language').'-->';
 		echo '
-		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Mails translations').'</h2>'
+		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('E-mail template translations').'</h2>'
 		.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
 
 		// display form

@@ -234,7 +234,7 @@ class dibs extends PaymentModule
 				<label>'.$this->l('Secure Key #2').' <sup>*</sup></label>
 				<div class="margin-form">
 					<input type="text" size="20" name="k2" value="'.self::$MORE_SETTINGS['k2'].'" />
-					<p>'.$this->l('These keys are used for security improvement.').'<br />'.$this->l('To get this keys go to the DIBS administration interface and into Integration > MD5 Keys menu. Please ensure the MD5 control is activated, otherwise the module will not work.').'</p>
+					<p>'.$this->l('These keys are used for security improvement.').'<br />'.$this->l('To get these keys go to the DIBS administration interface and into Integration > MD5 Keys menu. Please ensure the MD5 control is activated, otherwise the module will not work.').'</p>
 				</div>
 				<label>'.$this->l('Use DIBS test module').'</label>
 				<div class="margin-form">

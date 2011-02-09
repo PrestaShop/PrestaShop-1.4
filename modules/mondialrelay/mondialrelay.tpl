@@ -29,7 +29,7 @@
 <script type="text/javascript" src="{$base_dir}modules/mondialrelay/kit_mondialrelay/js/ressources_MR.js"></script>
 <script type="text/javascript">
 	var one_page_checkout = {$one_page_checkout};
-	var server_error = "{l s='Problem getting addresses from MondialRelay Webservice : Mondial Relay servers\' maybe down' mod='mondialrelay'}";
+	var server_error = "{l s='Problem getting addresses from MondialRelay Webservice : Mondial Relay servers\' may be down' mod='mondialrelay'}";
 	var address_error = "{l s='There is no Relay Point close to your address' mod='mondialrelay'}";
 </script>
 

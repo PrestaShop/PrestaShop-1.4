@@ -273,7 +273,7 @@ class AdminReferrers extends AdminTab
 					<li>
 						'.$this->l('The field `http_referer` is the website from which your customers arrive.').'<br />
 						'.$this->l('For example, visitors coming from Google will have a `http_referer` like this one: "http://www.google.com/search?q=prestashop".').'<br />
-						'.$this->l('If the visitor arrives directly (by typing the URL of your shop or by using its bookmarks, for example), `http_referer` will be empty.').'<br />
+						'.$this->l('If the visitor arrives directly (by typing the URL of your shop or by using their bookmarks, for example), `http_referer` will be empty.').'<br />
 						'.$this->l('So if you want all the visitors coming from google, you can type "%google%" in this field, or "%google.fr%" if you want the visitors coming from Google France only.').'<br />
 					</li>
 					<br />

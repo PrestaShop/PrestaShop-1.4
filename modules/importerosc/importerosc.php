@@ -59,7 +59,7 @@ class importerosc extends ImportModule
 	{		
 		$errors = array();
 		if (Tools::getValue('defaultOscLang') == 0)
-			$errors[] = $this->l('Please select a default langue');
+			$errors[] = $this->l('Please select a default language');
 		if (Tools::getValue('defaultOscCurrency') == 0)
 			$errors[] = $this->l('Please select a default currency');
 		if (Tools::getValue('shop_url') == '')

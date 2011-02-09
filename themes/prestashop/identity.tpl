@@ -67,7 +67,7 @@
 				<input type="text" name="email" id="email" value="{$smarty.post.email}" /> <sup>*</sup>
 			</p>
 			<p class="required text">
-				<label for="old_passwd">{l s='Current password'}</label>
+				<label for="old_passwd">{l s='Current Password'}</label>
 				<input type="password" name="old_passwd" id="old_passwd" /> <sup>*</sup>
 			</p>
 			<p class="password">

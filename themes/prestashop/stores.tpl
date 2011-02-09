@@ -68,7 +68,7 @@
 		//]]>
 	</script>
 
-	<p>{l s='Enter a location (eg.: a zip/postal code, an address, a city or a country) in order to find the closest stores.'}</p>
+	<p>{l s='Enter a location (eg.: a zip/postal code, an address, a city or a country) in order to find the nearest stores.'}</p>
 	<p>{l s='Your location:'} <input type="text" name="location" id="addressInput" value="{l s='Address, zip/postal code, city, state or country'}" onclick="this.value='';" /></p>
 	<p style="margin-top: 15px;">
 		{l s='Radius:'} 

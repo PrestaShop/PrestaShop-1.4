@@ -177,8 +177,8 @@ class Envoimoinscher extends Module
 			<img src="'.$this->_path.'/ps_emc.png" alt="" /></a>
 		</div>
 		<fieldset style="width:420px;float:left"><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Description').'</legend>
-		<img style="float:left;margin-right:10px" src="'.$this->_path.'logocarre.png" alt="" /><p style="text-align:justify"><b>'.$this->l('This module allows you to compare offers carriers and online ordering services delivery rates négiciés.').'</b></p>
-		<p style="text-align:justify">'.$this->l('You must enter your username Envoimoinscher below. If you are not yet a customer Envoimoinscher, you can easily create an account by clicking').$link.'
+		<img style="float:left;margin-right:10px" src="'.$this->_path.'logocarre.png" alt="" /><p style="text-align:justify"><b>'.$this->l('This module allows you to compare carrier offers and online ordering services negotiated delivery rates.').'</b></p>
+		<p style="text-align:justify">'.$this->l('You must enter your Envoimoinscher username below. If you are not yet a customer Envoimoinscher, you can easily create an account by clicking').$link.'
 		'.$this->l('here').'.</a></p><br>
 		<h3 style="text-align:center"><a href="http://www.prestashop.com/download/partner_modules/docs/doc_emc.pdf">'.$this->l('Download Documentation').'</a></h3>
 		</fieldset>
@@ -242,10 +242,10 @@ class Envoimoinscher extends Module
 		</div>
 		<div class="clear">&nbsp;</div>
 		
-		<label for="id_order_state">'.$this->l('Nature content').' :</label>
+		<label for="id_order_state">'.$this->l('Nature of content').' :</label>
 		<div class="margin-form">'.
 		self::selectNature(Tools::getValue('type_objet', Configuration::get('EMC_CONTENT'))).
-		'<p>'. $this->l('Choose the Nature content by default.').'</p>
+		'<p>'. $this->l('Choose the Nature of content by default.').'</p>
 		</div>
 		<div class="clear">&nbsp;</div>
 
@@ -329,7 +329,7 @@ class Envoimoinscher extends Module
 		<div class="clear">&nbsp;</div>	';
 		
 		$this->_html .= '
-		<label>'.$this->l('Mails').' : </label>
+		<label>'.$this->l('E-mail').' : </label>
 		<div class="margin-form">
 			<input type="radio" name="EMC_EMAILS" id="active_on" value="7" '.(Tools::getValue('EMC_EMAILS', Configuration::get('EMC_EMAILS')) ? 'checked="checked" ' : '').'/>
 			<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
@@ -348,7 +348,7 @@ class Envoimoinscher extends Module
 		<div class="clear">&nbsp;</div>
 		
 		<p>----------------------------------------------------------------------------------------</p>
-		<h2>'.$this->l('Sender Informations').' : </h2>
+		<h2>'.$this->l('Sender Information').' : </h2>
 		<label>'.$this->l('Gender').' : </label>
 		<div class="margin-form">
 		<input name="EMC_GENDER" id="id_gender1" value="1" '.(Tools::getValue('EMC_GENDER', Configuration::get('EMC_GENDER')) == 1 ? 'checked="checked"' : '').' type="radio"> M.
@@ -493,7 +493,7 @@ class Envoimoinscher extends Module
 			$this->_html .= $this->displayConfirmation($this->l('Configuration updated').$dataSync);
 		}
 		else
-			$this->_html .= '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$this->l('Settings faild').'</div>';			
+			$this->_html .= '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$this->l('Settings failed').'</div>';			
 	}
 	
 	static function selectNature($selected = '', $id = '')
@@ -529,7 +529,7 @@ class Envoimoinscher extends Module
 			if (isset($return[0]['shipping_number']))
 			{
 				$html = '<br><br><fieldset style="width: 400px;"><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Envoimoinscher').'</legend>';
-				$html .= '<b>'.$this->l('Delivery Informations').' : </b><br>			
+				$html .= '<b>'.$this->l('Delivery Information').' : </b><br>			
 				'.(isset($return[0]['shipping_number']) ? '<p>--> <a href="http://www.envoimoinscher.com/suivre_vos_envois.html?reference='.$return[0]['shipping_number'].'" style="text-decoration:underline">
 				'.$this->l('Follow shipping').'</a>' : '<p style="color:red">'.$this->l('No shipping number')).'</p>'
 				.(isset($return[0]['shipping_number']) ?' <p>--> <a href="http://www.envoimoinscher.com/documents?type=bordereau&envoi='.$return[0]['shipping_number'].'" style="text-decoration:underline">
