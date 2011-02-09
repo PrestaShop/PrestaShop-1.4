@@ -24,6 +24,110 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.0.12 - 4900 (2011-02-09)  #
+####################################
+
+	Added Features:
+
+	[+] Installer : Now shipping and Security payment pages are deleted in catalog mode.
+	[+] Installer : set default currency depends on localization
+
+	[+] FO : Don't display some element if catalog mode is setted
+	
+	[+] BO : new feature check theme compatibility : now changing theme will check if guest_checkout, one_page_checkout, ccc and store_locator has been validated by the theme designer before changing it. If not, theses functions must be desactivated.
+
+	[+] MO : DIBS module - the introduction text is added
+	[+] MO : Trusted Shops adding functionality : Buyer protection and seal of approval
+	[+] MO : Trusted Shops adding functionality : Buyer protection and seal of approval
+	[+] MO : adding new native module: Criteo
+	[+] MO : adding the automaticaly generation of config.xml files for modules
+	
+	[+] WS : Add entity Employee
+	
+	[+] PDF : method PDF::convertSign() is changed for more lisibility.
+
+	Improved/changed features:
+
+	[*] BO : $validateDni is a boolean, but was compared to integer for display error message
+	[*] BO : Check the IP of the cookie is now optional
+	[*] BO : Deprecated function add a log message
+	[*] BO : added warning after the update: you must regenerate your htaccess file
+	[*] BO : adding screencast at home of backoffice
+	[*] BO : you can now search for back office features with the "search everywhere" feature
+	
+	[*] Core : some variables are now protected instead of private
+	
+	[*] MO : Shop Import now support images import
+	[*] MO : You can now import images from oscommerce
+	[*] MO : blocksearch module is no longer hooked in header
+	[*] MO blockpaymentlogo : added empty option for select box
+	
+	[*] WS : Improve debug in Webservice
+	[*] WS : add support for i18n synopsis
+
+	Fixed bugs:
+
+	[-] Project : Fixed bug #7365 on Configuration
+
+	[-] Installer : Fixed bug during install
+	[-] Installer : Bug Fixed #7526 - temporary table
+	[-] Installer : change localization values for english
+
+	[-] FO : Bug Fixed #7477 - Total tax line disapear
+	[-] FO : Bug Fixed #7520 - Tax included text is not visible in blockcart.tpl
+	[-] FO : Bug Fixed #7545 - Accessories always displayed tax incl
+	[-] FO : Fixed #7429, #7496 - now getProducts() will call checkAccess, except if you call it with  = false in your controller
+	[-] FO : Fixed #7495 removed extra html tag
+	[-] FO : Fixed bug #7476
+	[-] FO : Fixed bug to get iso_code from country in preProcess()
+	[-] FO : Price display in cart is not refreshed on quantity discount
+	[-] FO : When you activate blocksearch on top and on left (or right), autocomplete AND instantsearch works properly (input id changed)
+	[-] FO : When you activate blocksearch on top and on left (or right), autocomplete AND instantsearch works properly (input id changed)
+	[-] FO : fixed bug #7418 - Blockcart breaks search results
+	[-] FO : fixed bug #7492 - Not valid DNI raises two errors instead of one
+	[-] FO : fixed bug #7550 - Only one ?\226?\128?\152position?\226?\128?\153 was changed to $orderbydefault in product-sort.tpl
+	[-] FO : fixed bug #7551 - Another code formatting issue
+	[-] FO : fixed javascript error on product page
+	[-] FO : if catalog mode is actived and no combination exists, the form #buy_block is hidden.
+	[-] FO : now Validate::isDni() return true for empty value
+
+	[-] BO / FO : Ecotax - with or without tax
+
+	[-] BO : Added fr translation errors for AdminThemes new function
+	[-] BO : AdminCarts shipping price displayed Tax Inc. when user is in Tax Exc. group
+	[-] BO : Bug Fixed #7549 - Preview and new product
+	[-] BO : Fixed #7508 error on preferences/appearance tab
+	[-] BO : Fixed #7552 error in config.xml default theme file
+	[-] BO : Fixed #7557 in admin module tab, items are now displayed in correct language
+	[-] BO : Fixed an error in AdminThemes
+	[-] BO : Fixed theme compatible functions when config file is missing or malformatted
+	[-] BO : controller friendly URL are not set with a default value when you add a new language
+	[-] BO : fixed bug #7452 - then i editing an existing product tags is missing
+	[-] BO : fixed bug #7453
+	[-] BO : fixed bug #7464
+	[-] BO : fixed bug #7472
+	[-] BO : fixed bug #7490 //Fail importing image category from CSV
+	[-] BO : fixed bug #7541 - Bad Conf message when updating a form in the Back-Office
+	[-] BO : fixed bug #7576 //in sitemap template, store link even if you dont have any shops
+	[-] BO : fixed bug on back office with noLink parameters
+	[-] BO : fixed bug on import csv
+	
+	[-] MO : Bug fixed #7099 - Upgrade fedex module
+	[-] MO : Bug fixed #7467 - Shared Wishlist items is now working
+	[-] MO : Fixed bug #7563
+	[-] MO : TrustedShops Spanish
+	[-] MO : fixed bug #7503 - Typo error in email templates
+	[-] MO : fixed bug #7525 - [Debug] This page has moved
+	[-] MO : fixed bug #7535 - paypal logos
+	[-] MO : set flags for language (needed to choose the link to subscribe)
+
+	[-] TR : Bug fixed #5348 - Little translation fixed in the cart - 2011-02-07 10:37
+	[-] TR : Fixed some english translations
+	[-] TR : New english translations fixed
+	[-] TR : fixed bug #7486 - Typo error
+	[-] TR : fixed bug #7518 - Typo error
+
+####################################
 #   v1.4.0.11 - 4774 (2011-02-02)  #
 ####################################
 
