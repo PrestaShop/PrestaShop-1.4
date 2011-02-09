@@ -245,6 +245,12 @@ if (isFormValid())
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = '.(int)round($width).' WHERE name = \'SHOP_LOGO_WIDTH\'';
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = '.(int)round($height).' WHERE name = \'SHOP_LOGO_HEIGHT\'';
 	}
+
+	if ((int)$_GET['catalogMode'] == 1)
+	{
+		$sqlParams[] = 'DELETE c, cl FROM `'._DB_PREFIX_.'cms` AS c LEFT JOIN `'._DB_PREFIX_.'cms_lang` AS cl ON c.id_cms = cl.id_cms WHERE 1 AND c.`id_cms` IN (1, 5)';
+	}
+
 	$dbInstance = Db::getInstance();
 	foreach($sqlParams as $query)
 		if(!$dbInstance->Execute($query))
