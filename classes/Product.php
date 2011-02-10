@@ -1298,7 +1298,7 @@ class ProductCore extends ObjectModel
 			Tools::orderbyPrice($result, $orderWay);
 		if (!$result)
 			return false;
-		
+
 		$productsIds = array();
 		foreach ($result as $row)
 			$productsIds[] = $row['id_product'];
@@ -1695,6 +1695,10 @@ class ProductCore extends ObjectModel
    			self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
 
 		$price = Tools::ps_round($price, $decimals);
+
+		if ($price < 0)
+			$price = 0;
+
 		self::$_prices[$cacheId] = $price;
 		return self::$_prices[$cacheId];
 	}
@@ -2135,14 +2139,14 @@ class ProductCore extends ObjectModel
 				$productImplode[] = (int)$id_product;
 		if (!count($productImplode))
 			return;
-		
+
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT id_product, name, value, pf.id_feature
 		FROM '._DB_PREFIX_.'feature_product pf
 		LEFT JOIN '._DB_PREFIX_.'feature_lang fl ON (fl.id_feature = pf.id_feature AND fl.id_lang = '.(int)$id_lang.')
 		LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = pf.id_feature_value AND fvl.id_lang = '.(int)$id_lang.')
 		WHERE `id_product` IN ('.implode($productImplode, ',').')');
-		
+
 		foreach ($result as $row)
 		{
 			if (!array_key_exists($row['id_product'].'-'.$id_lang, self::$_frontFeaturesCache))
@@ -2921,3 +2925,4 @@ class ProductCore extends ObjectModel
 	    return self::$_tax_rules_group[$id_product];
 	}
 }
+
