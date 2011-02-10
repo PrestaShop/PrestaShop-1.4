@@ -296,7 +296,7 @@
 	{/if}
 	<form action="{$link->getPageLink('order-detail.php', true)}" method="post" class="std" id="sendOrderMessage">
 		<p class="bold">{l s='Add a message:'}</p>
-		<p>{l s='If you would like add a comment about your order, please write it below.'}</p>
+		<p>{l s='If you would like to add a comment about your order, please write it below.'}</p>
 		<p class="textarea">
 			<textarea cols="67" rows="3" name="msgText"></textarea>
 		</p>
