@@ -47,7 +47,7 @@ class AdminEmails extends AdminPreferences
 		'PS_MAIL_DOMAIN' => array('title' => $this->l('Mail domain:'), 'desc' => $this->l('Fully qualified domain name (keep it empty if you do not know)'), 'validation' => 'isUrl', 'size' => 30, 'type' => 'text'),
 		'PS_MAIL_SERVER' => array('title' => $this->l('SMTP server:'), 'desc' => $this->l('IP or server name (e.g., smtp.mydomain.com)'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
 		'PS_MAIL_USER' => array('title' => $this->l('SMTP user:'), 'desc' => $this->l('Leave blank if not applicable'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
-		'PS_MAIL_PASSWD' => array('title' => $this->l('SMTP password:'), 'desc' => $this->l('Leave blank if not applicable'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'password'),
+		'PS_MAIL_PASSWD' => array('title' => $this->l('SMTP password:'), 'desc' => $this->l('Leave blank if not applicable'), 'validation' => 'isPasswd', 'size' => 30, 'type' => 'password'),
 		'PS_MAIL_SMTP_ENCRYPTION' => array('title' => $this->l('Encryption:'), 'desc' => $this->l('Use an encrypt protocol'), 'type' => 'select', 'cast' => 'strval', 'identifier' => 'mode', 'list' => array(array('mode' => 'off', 'name' => $this->l('None')), array('mode' => 'tls', 'name' => $this->l('TLS')), array('mode' => 'ssl', 'name' => $this->l('SSL')))),
 		'PS_MAIL_SMTP_PORT' => array('title' => $this->l('Port:'), 'desc' => $this->l('Number of port to use'), 'validation' => 'isInt', 'size' => 5, 'type' => 'text', 'cast' => 'intval'),
 		'SMTP_CONTAINER_END' => array('title' => '', 'type' => 'container_end', 'content' => '<script type="text/javascript">if (getE("PS_MAIL_METHOD2_on").checked == false) { $(\'#SMTP_CONTAINER\').hide(); }</script>'));
