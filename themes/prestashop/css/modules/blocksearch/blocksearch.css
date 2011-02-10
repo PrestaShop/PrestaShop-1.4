@@ -15,10 +15,10 @@
 	height: 18px;
 	display: block
 }
-#header_right #search_block_top input#search_query { width: 12em }
+#header_right #search_block_top input.search_query { width: 12em }
 
 
 /* block left column "Quick search" */
 #search_block_left input { margin: 2px 0 0 0 }
-#search_block_left #search_query { width: 11em }
+#search_block_left .search_query { width: 11em }
 #search_button { display: inline }
