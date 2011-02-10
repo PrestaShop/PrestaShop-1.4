@@ -192,7 +192,7 @@ class	CookieCore
 	 	return ($this->id_employee
 			AND Validate::isUnsignedId($this->id_employee)
 			AND Employee::checkPassword((int)$this->id_employee, $this->passwd)
-			AND (!isset($this->_content['remote_addr']) OR $this->_content['remote_addr'] == ip2long(Tools::getRemoteAddr()) OR Configuration::get('PS_COOKIE_CHECKIP'))
+			AND (!isset($this->_content['remote_addr']) OR $this->_content['remote_addr'] == ip2long(Tools::getRemoteAddr()) OR !Configuration::get('PS_COOKIE_CHECKIP'))
 		);
 	}
 
