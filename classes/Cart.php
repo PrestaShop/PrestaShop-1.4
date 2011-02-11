@@ -407,7 +407,7 @@ class CartCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)$id_lang.')
 		WHERE pac.`id_product_attribute` IN ('.implode($paImplode, ',').')
-		ORDER BY agl.`public_name`');
+		ORDER BY agl.`public_name` ASC');
 
 		foreach ($result as $row)
 		{
