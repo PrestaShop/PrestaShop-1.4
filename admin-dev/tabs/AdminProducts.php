@@ -2634,7 +2634,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Tags:').'</td>
 						<td style="padding-bottom:5px;" class="translatable">';
-				if ($obj->id)
+				if ((int)$obj->id)
 					$obj->tags = Tag::getProductTags((int)$this->id);
 				foreach ($this->_languages as $language)
 				{
