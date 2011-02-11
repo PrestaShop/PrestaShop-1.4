@@ -2,7 +2,7 @@
 <module>
 	<name>blockadvertising</name>
     <displayName>Block advertising</displayName>
-    <version>0.1</version>
+    <version>0.2</version>
     <description>Adds a block to display an advertisement</description>
     <tab>advertising_marketing</tab>
     
