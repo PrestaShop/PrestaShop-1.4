@@ -412,6 +412,17 @@ class AdminImport extends AdminTab
 
 
 
+	/**
+	 * copyImg copy an image located in $url and save it in a path
+	 * according to $entity->$id_entity . 
+	 * $id_image is used if we need to add a watermark
+	 * 
+	 * @param int $id_entity id of product or category (set in entity)
+	 * @param int $id_image (default null) id of the image if watermark enabled. 
+	 * @param string $url path or url to use
+	 * @param string entity 'products' or 'categories'
+	 * @return void
+	 */
 	private static function copyImg($id_entity, $id_image = NULL, $url, $entity = 'products')
 	{
 		$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'ps_import');
@@ -428,7 +439,7 @@ class AdminImport extends AdminTab
 			break;
 		}
 
-		if (@copy($url, $tmpfile))
+		if (copy(trim($url), $tmpfile))
 		{
 			imageResize($tmpfile, $path.'.jpg');
 			$imagesTypes = ImageType::getImagesTypes($entity);
