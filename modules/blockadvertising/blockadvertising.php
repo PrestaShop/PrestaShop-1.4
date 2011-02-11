@@ -31,45 +31,77 @@ if (!defined('_CAN_LOAD_FILES_'))
 class BlockAdvertising extends Module
 {
 	public $adv_link;
+	/**
+	 * adv_img contains url to the image to display.
+	 * 
+	 * @var mixed
+	 */
 	public $adv_img;
-	public $adv_imgname;
 
-	function __construct()
+	/**
+	 * adv_imgname is the filename of the image to display
+	 * @TODO make it configurable for SEO, but need a function to clean filename
+	 * @var string
+	 */
+	public $adv_imgname = 'advertising_custom';
+
+	public function __construct()
 	{
 		$this->name = 'blockadvertising';
 		$this->tab = 'advertising_marketing';
-		$this->version = 0.1;
+		$this->version = 0.2;
 
 		parent::__construct();
 
 		$this->displayName = $this->l('Block advertising');
 		$this->description = $this->l('Adds a block to display an advertisement');
 
-		$this->adv_imgname = 'advertising_custom.jpg';
-
-		if (!file_exists(dirname(__FILE__).'/'.$this->adv_imgname))
+		$current_dir = defined('__DIR__')?__DIR__:dirname(__FILE__);
+		if (!file_exists($current_dir.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT')))
 			$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/advertising.jpg';
 		else
-			$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.$this->adv_imgname;
+			$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT');
 		$this->adv_link = htmlentities(Configuration::get('BLOCKADVERT_LINK'), ENT_QUOTES, 'UTF-8');
 	}
 
 
-	function install()
+	public function install()
 	{
 		Configuration::updateValue('BLOCKADVERT_LINK', 'http://www.prestashop.com');
 		if (!parent::install())
 			return false;
-		if (!$this->registerHook('leftColumn') OR !$this->registerHook('header'))
+		if (!$this->registerHook('leftColumn') OR !$this->registerHook('rightColumn'))
 			return false;
 		return true;
 	}
 
+	/**
+	 * _deleteCurrentImg delete current image, (so this will use default image)
+	 * 
+	 * @return void
+	 */
+	private function _deleteCurrentImg()
+	{
+		// can work before 5.3
+		$current_dir=defined(__DIR__)?__DIR__:dirname(__FILE__);
+
+		if(file_exists($current_dir.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT')))
+			unlink($current_dir.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT'));
+	}
+	/**
+	 * postProcess update configuration
+	 * @TODO adding alt and title attributes for <img> and <a>
+	 * @var string
+	 * @return void
+	 */
 	public function postProcess()
 	{
 		global $currentIndex;
 
-		$errors = false;
+		$errors = '';
+		if (Tools::isSubmit('submitDeleteImgConf'))
+			$this->_deleteCurrentImg();	
+
 		if (Tools::isSubmit('submitAdvConf'))
 		{
 			$file = false;
@@ -77,11 +109,24 @@ class BlockAdvertising extends Module
 			{
 				if ($error = checkImage($_FILES['adv_img'], 4000000))
 					$errors .= $error;
-				elseif (!move_uploaded_file($_FILES['adv_img']['tmp_name'], dirname(__FILE__).'/'.$this->adv_imgname))
-					$errors .= $this->l('Error move uploaded file');
+				elseif ($dot_pos = strrpos($_FILES['adv_img']['name'],'.'))
+				{
+					// __DIR__ exists since php 5.3
+					$current_dir = defined(__DIR__)?__DIR__:dirname(__FILE__);
+					// as checkImage tell us it's a good image, we'll just copy the extension
+					$ext=substr($_FILES['adv_img']['name'], $dot_pos+1);
+					$newname=$this->adv_imgname.'.'.$ext;
 
-				$this->adv_img = _MODULE_DIR_.$this->name.'/'.$this->adv_imgname;
+					$this->_deleteCurrentImg();
+
+					if (!move_uploaded_file($_FILES['adv_img']['tmp_name'], $current_dir.'/'.$newname))
+						$errors .= $this->l('Error move uploaded file');
+
+					Configuration::updateValue('BLOCKADVERT_IMG_EXT',$ext);
+					$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT');
+				}
 			}
+
 			if ($link = Tools::getValue('adv_link'))
 			{
 				Configuration::updateValue('BLOCKADVERT_LINK', $link);
@@ -92,6 +137,11 @@ class BlockAdvertising extends Module
 			echo $this->displayError($errors);
 	}
 
+	/**
+	 * getContent used to display admin module form
+	 * 
+	 * @return void
+	 */
 	public function getContent()
 	{
 		global $protocol_content;
@@ -102,14 +152,16 @@ class BlockAdvertising extends Module
 <fieldset><legend>'.$this->l('Advertising block configuration').'</legend>
 <a href="'.$this->adv_link.'" target="_blank" title="'.$this->l('Advertising').'">';
 		if ($this->adv_img)
-			echo '<img src="'.$protocol_content.$this->adv_img.'" alt="'.$this->l('Advertising image').'" style="margin-left: 100px;"/>';
+			echo '<img src="'.$protocol_content.$this->adv_img.'" alt="'.$this->l('Advertising image').'" style="height:163px;margin-left: 100px;width:163px"/>';
 		else
 			echo $this->l('no image');
-		echo '
-</a>
-<br/>
+		echo '</a>';
+		if ($this->adv_img)
+			echo '<input class="button" type="submit" name="submitDeleteImgConf" value="'.$this->l('delete image').'" style=""/>';
+		echo '<br/>
 <br/>
 <label for="adv_img">'.$this->l('Change image').'&nbsp;&nbsp;</label><input id="adv_img" type="file" name="adv_img" />
+( '.$this->l('image will be displayed as 155x163').' )
 <br/>
 <br class="clear"/>
 <label for="adv_link">'.$this->l('Image link').'&nbsp;&nbsp;</label><input id="adv_link" type="text" name="adv_link" value="'.$this->adv_link.'" />
@@ -131,6 +183,7 @@ class BlockAdvertising extends Module
 	{
 		global $smarty, $protocol_content;
 
+		Tools::addCSS(($this->_path).'blockadvertising.css', 'all');
 		$smarty->assign('image', $protocol_content.$this->adv_img);
 		$smarty->assign('adv_link', $this->adv_link);
 
@@ -140,11 +193,6 @@ class BlockAdvertising extends Module
 	function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
-	}
-	
-	function hookHeader($params)
-	{
-		Tools::addCSS(($this->_path).'blockadvertising.css', 'all');
 	}
 
 }
