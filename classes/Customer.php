@@ -338,11 +338,13 @@ class CustomerCore extends ObjectModel
 	  */
 	public function getConnections($nb = 10)
 	{
+		Tools::displayAsDeprecated();
+
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT `ip_address`, `date`
+		SELECT `ip_address`, `date_add`
 		FROM `'._DB_PREFIX_.'connections`
-		WHERE `id_customer` = '.(int)($this->id).'
-		ORDER BY `date` DESC
+		WHERE `id_guest` IN (SELECT `id_guest` FROM `'._DB_PREFIX_.'guest` WHERE `id_customer` = '.(int)($this->id).')
+		ORDER BY `date_add` DESC
 		LIMIT 0,'.(int)($nb));
 	}
 
