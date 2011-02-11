@@ -89,21 +89,29 @@ class AdminLanguages extends AdminTab
 		}
 	}
 	
+	/**
+	 * deleteNoPictureImages will delete all default image created for the language id_language
+	 * 
+	 * @param string $id_language 
+	 * @return boolean true if no error
+	 */
 	private function deleteNoPictureImages($id_language)
 	{
 	 	$language = Language::getIsoById($id_language);
 		$imagesTypes = ImageType::getImagesTypes('products');
-		$dirs = array(_PS_PROD_IMG_DIR_, _PS_CAT_IMG_DIR_, _PS_MANU_IMG_DIR_);
+		$dirs = array(_PS_PROD_IMG_DIR_, _PS_CAT_IMG_DIR_, _PS_MANU_IMG_DIR_, _PS_SUPP_IMG_DIR_, _PS_MANU_IMG_DIR_);
 		foreach ($dirs AS $dir)
 		{
 			foreach ($imagesTypes AS $k => $imageType)
 				if (file_exists($dir.$language.'-default-'.stripslashes($imageType['name']).'.jpg'))
 					if (!unlink($dir.$language.'-default-'.stripslashes($imageType['name']).'.jpg'))
 						$this->_errors[] = Tools::displayError('an error occurred during the image deletion');
+
 			if (file_exists($dir.$language.'.jpg'))
 				if (!unlink($dir.$language.'.jpg'))
 					$this->_errors[] = Tools::displayError('an error occurred during the image deletion');
 		}
+
 		return !sizeof($this->_errors) ? true : false;
 	}
 
