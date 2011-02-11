@@ -88,7 +88,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_ntree.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_products_ecotax_v133.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'shop_url.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'gridextjs_deprecated.php');
-
+// generate level depth
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'regenerate_level_depth.php');
 
 //old version detection
 $oldversion = false;

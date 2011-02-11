@@ -5,3 +5,5 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_STORES_DISPLAY_SITEMAP', 1, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_COOKIE_CHECKIP', 1, NOW(), NOW());
+
+/* PHP:regenerate_level_depth(); */;
