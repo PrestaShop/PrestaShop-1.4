@@ -566,7 +566,7 @@ class ProductComments extends Module
 		
 		$smarty->assign(array(
 		'logged' => (int)$cookie->id_customer,
-		'action_url' => Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'],
+		'action_url' => Tools::getPath((int)Tools::getValue('id_product')),
 		'comments' => ProductComment::getByProduct((int)Tools::getValue('id_product')),
 		'criterions' => ProductCommentCriterion::getByProduct((int)Tools::getValue('id_product'), (int)$cookie->id_lang),
 		'averages' => $averages,
