@@ -19,49 +19,49 @@ needs please refer to http://www.prestashop.com for more information.
 @author Prestashop SA <contact@prestashop.com>
 @copyright 2007-2010 Prestashop SA
 @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-International Registred Trademark & Property of PrestaShop SA
+International Registered Trademark & Property of PrestaShop SA
 
-VERSIÓN: Prestashop 1.4 RC 3
+VERSIï¿½N: Prestashop 1.4 RC 3
 
-PREPARACIÓN
+PREPARACIï¿½N
 ===========
 
 Para instalar PrestaShop, necesita un servidor web remoto o en su ordenador (MAMP), con acceso a una base de datos como MySQL.
-Tendrá acceso a phpMyAdmin para crear una base de datos y para indicar la información en la base de datos en el instalador.
+Tendrï¿½ acceso a phpMyAdmin para crear una base de datos y para indicar la informaciï¿½n en la base de datos en el instalador.
 
-Si no de acogida y no puede crear su tienda, le ofrecemos una tienda "llave en mano, que le permite crear su tienda en línea en menos de 10 minutos sin ningún conocimiento técnico.
+Si no de acogida y no puede crear su tienda, le ofrecemos una tienda "llave en mano, que le permite crear su tienda en lï¿½nea en menos de 10 minutos sin ningï¿½n conocimiento tï¿½cnico.
 Le invitamos a visitar: 
 	http://www.prestabox.com/
 
-INSTALACIÓN
+INSTALACIï¿½N
 ============
 
 Simplemente vaya a su directorio web y el uso PrestaShop instalador :-)
 
 Si usted tiene cualquier error de PHP, tal vez usted no tiene PHP5 o necesitas activarlo en su web host.
-Por favor, vaya a nuestro foro para encontrar la configuración de la instalación pre-(PHP 5, htaccess) para determinados servicios de hospedaje (1 & 1, gratis, Lycos, OVH, Infomaniak, Amén, GoDaddy, etc.)
+Por favor, vaya a nuestro foro para encontrar la configuraciï¿½n de la instalaciï¿½n pre-(PHP 5, htaccess) para determinados servicios de hospedaje (1 & 1, gratis, Lycos, OVH, Infomaniak, Amï¿½n, GoDaddy, etc.)
 
-Inglés webhost ajustes específicos:
+Inglï¿½s webhost ajustes especï¿½ficos:
 	http://www.prestashop.com/forums/viewthread/2946/installation_configuration___upgrade/preinstallation_settings_php_5_htaccess_for_certain_hosting_services
 
-Si usted no encuentra ninguna solución para lanzar el instalador, por favor enviar en nuestro foro:
+Si usted no encuentra ninguna soluciï¿½n para lanzar el instalador, por favor enviar en nuestro foro:
 	http://www.prestashop.com/forums/viewforum/7/installation_configuration___upgrade
 
 Siempre hay soluciones para sus problemas ;-)
 
-DOCUMENTACIÓN
+DOCUMENTACIï¿½N
 =============
 
-Para cualquier documentación adicional (procedimientos), por favor lea nuestra wiki:
+Para cualquier documentaciï¿½n adicional (procedimientos), por favor lea nuestra wiki:
 	http://www.prestashop.com/wiki/
 
 FOROS
 ======
 
-Usted puede también discute, ayudar y contribuir con la comunidad PrestaShop en nuestros foros:
+Usted puede tambiï¿½n discute, ayudar y contribuir con la comunidad PrestaShop en nuestros foros:
 	http://www.prestashop.com/forums/
 
-Gracias por descargar y utilizar el comercio electrónico PrestaShop solución de código abierto!
+Gracias por descargar y utilizar el comercio electrï¿½nico PrestaShop soluciï¿½n de cï¿½digo abierto!
 
 ==========================
 =     The PrestaTeam'    =

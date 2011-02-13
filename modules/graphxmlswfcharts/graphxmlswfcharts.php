@@ -22,7 +22,7 @@
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
+*  International Registered Trademark & Property of PrestaShop SA
 */
 
 /**
@@ -233,7 +233,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 		{
 			$this->_xml .= '<row><string>'.$this->_titles['main'].'</string>';
 			foreach ($this->_values as $value)
-				$this->_xml .= '<number>'. (($value > 0) ? $value : -$value) .'</number>'; //si jamais la valeur est négative... logiquement ne devrait jamais arriver
+				$this->_xml .= '<number>'. (($value > 0) ? $value : -$value) .'</number>'; //si jamais la valeur est nï¿½gative... logiquement ne devrait jamais arriver
 			$this->_xml .= '</row>';
 		}
 		else

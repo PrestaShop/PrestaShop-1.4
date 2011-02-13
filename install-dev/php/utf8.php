@@ -22,7 +22,7 @@
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
+*  International Registered Trademark & Property of PrestaShop SA
 */
 define('_PS_MAGIC_QUOTES_GPC_', get_magic_quotes_gpc());
 define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));

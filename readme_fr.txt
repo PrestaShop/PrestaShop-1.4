@@ -19,32 +19,32 @@ needs please refer to http://www.prestashop.com for more information.
 @author Prestashop SA <contact@prestashop.com>
 @copyright 2007-2010 Prestashop SA
 @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-International Registred Trademark & Property of PrestaShop SA
+International Registered Trademark & Property of PrestaShop SA
 
 VERSION: Prestashop 1.4 RC 3
 
 PREPARATION
 ===========
 
-Pour installer PrestaShop, vous avez besoin d'un serveur web distant ou sur votre ordinateur (MAMP), avec un accés à une base de données de type MySQL.
-Vous aurez besoin d'un accés à PhpMyAdmin afin de créer un base de données, et d'indiquer les informations de la base de données dans l'installeur.
+Pour installer PrestaShop, vous avez besoin d'un serveur web distant ou sur votre ordinateur (MAMP), avec un accï¿½s ï¿½ une base de donnï¿½es de type MySQL.
+Vous aurez besoin d'un accï¿½s ï¿½ PhpMyAdmin afin de crï¿½er un base de donnï¿½es, et d'indiquer les informations de la base de donnï¿½es dans l'installeur.
 
-Si vous n'avez pas d'hébergeur et pas la possibilité de créer votre boutique, nous vous proposons un service de boutique clé en main, qui vous permet de créer votre boutique en ligne en moins de 10 minutes sans aucunes notions techniques.
-Nous vous invitons à vous rendre sur: 
+Si vous n'avez pas d'hï¿½bergeur et pas la possibilitï¿½ de crï¿½er votre boutique, nous vous proposons un service de boutique clï¿½ en main, qui vous permet de crï¿½er votre boutique en ligne en moins de 10 minutes sans aucunes notions techniques.
+Nous vous invitons ï¿½ vous rendre sur: 
 	http://www.prestabox.com/
 
 INSTALLATION
 ============
 
-Il suffit d'aller dans votre répertoire web PrestaShop et de lancer l'installateur (dans /install) :-)
+Il suffit d'aller dans votre rï¿½pertoire web PrestaShop et de lancer l'installateur (dans /install) :-)
 
-Si vous avez des erreurs de PHP, peut-être que vous n'avez pas PHP5 ou peut être devez vous l'activer via votre hébergeur.
-Merci de vous rendre sur notre forum pour trouver les paramètres de pré-installation (PHP 5, htaccess) pour certains services d'hébergement (1 & 1, Free, Lycos, OVH, Infomaniak, Amen, GoDaddy, etc.)
+Si vous avez des erreurs de PHP, peut-ï¿½tre que vous n'avez pas PHP5 ou peut ï¿½tre devez vous l'activer via votre hï¿½bergeur.
+Merci de vous rendre sur notre forum pour trouver les paramï¿½tres de prï¿½-installation (PHP 5, htaccess) pour certains services d'hï¿½bergement (1 & 1, Free, Lycos, OVH, Infomaniak, Amen, GoDaddy, etc.)
 
-Topic français sur notre forum officiel :
+Topic franï¿½ais sur notre forum officiel :
 	http://www.prestashop.com/forums/viewthread/446/installation_configuration_et_mise_a_jour/preinstallation_settings_php_5_htaccess_for_certain_hosting_services
 
-Si vous ne trouvez pas de solution pour lancer l'installateur, merci de vous rendre à cette adresse:
+Si vous ne trouvez pas de solution pour lancer l'installateur, merci de vous rendre ï¿½ cette adresse:
 	http://www.prestashop.com/forums/viewforum/7/installation_configuration___upgrade
 
 Il ya toujours des solutions pour vos questions ;-)
@@ -52,16 +52,16 @@ Il ya toujours des solutions pour vos questions ;-)
 DOCUMENTATION
 =============
 
-Pour toute documentation supplémentaire (how-to), vous trouverez notre wiki à cette adresse:
+Pour toute documentation supplï¿½mentaire (how-to), vous trouverez notre wiki ï¿½ cette adresse:
 	http://www.prestashop.com/wiki/
 
 FORUMS
 ======
 
-Vous pouvez également discuter, aider et contribuer avec la communauté PrestaShop sur nos forums:
+Vous pouvez ï¿½galement discuter, aider et contribuer avec la communautï¿½ PrestaShop sur nos forums:
 	http://www.prestashop.com/forums/
 
-Merci d'avoir télécharger et d'utiliser PrestaShop, solution e-commerce open-source !
+Merci d'avoir tï¿½lï¿½charger et d'utiliser PrestaShop, solution e-commerce open-source !
 
 ==========================
 =     The PrestaTeam'    =

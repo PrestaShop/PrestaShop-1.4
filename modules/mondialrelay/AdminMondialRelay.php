@@ -22,7 +22,7 @@
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
+*  International Registered Trademark & Property of PrestaShop SA
 */
 @set_time_limit(0);
 
@@ -72,9 +72,9 @@ function free_MR_chaine($mystring)
 	$mystring = str_replace('\'', ' ', $mystring);
 	$mystring = str_replace('"', ' ', $mystring);
 
-	$OldPattern0 = array("¡","¢","£","¤","¥","¦","§","¨","©","ª","\"","­","®",
-		                "¯","°","±","²","³","´","µ","·","¸","¹","º","¼","½",
-						"¾","¿","×","÷","€");
+	$OldPattern0 = array("ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","\"","ï¿½","ï¿½",
+		                "ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½","ï¿½",
+						"ï¿½","ï¿½","ï¿½","ï¿½","ï¿½");
 	$mystring = str_replace($OldPattern0 , ' ',$mystring);
 	return $mystring;
 }

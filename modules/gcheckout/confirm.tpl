@@ -21,7 +21,7 @@
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
+*  International Registered Trademark & Property of PrestaShop SA
 *}
 
 {capture name=path}<a href="{$link->getPageLink('order.php', true)}">{l s='Your shopping cart' mod='gcheckout'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Google Checkout' mod='gcheckout'}{/capture}

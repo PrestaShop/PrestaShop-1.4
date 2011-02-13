@@ -22,7 +22,7 @@
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registred Trademark & Property of PrestaShop SA
+*  International Registered Trademark & Property of PrestaShop SA
 */
 
 include('../../config/config.inc.php');
@@ -51,7 +51,7 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 	{
 		switch($return['etat'])
 		{
-			//commande passe
+			//commande passï¿½e
 			case 'CMD' :
 				$history = new OrderHistory();
 				$history->id_order = (int)($id_order);
@@ -72,7 +72,7 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 				}
 			
 			break;
-			//colis (ou autre objet) envoy
+			//colis (ou autre objet) envoyï¿½
 			case 'ENV' :
 				$history = new OrderHistory();
 				$history->id_order = (int)($id_order);
@@ -80,16 +80,16 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 				$history->id_employee = (int)($cookie->id_employee);
 				$history->addWithemail();
 			break;
-			//envoi annul
+			//envoi annulï¿½
 			case 'ANN' :
 				$message = new Message();
-				$texte = 'Envoi Moins cher : envoi annul';
+				$texte = 'Envoi Moins cher : envoi annulï¿½';
 				$message->message = htmlentities($texte, ENT_COMPAT, 'UTF-8');
 				$message->id_order = (int)($id_order);
 				$message->private = 1;
 				$message->add();
 			break;
-			//objet livr (pas gr actuellement)
+			//objet livrï¿½ (pas gï¿½rï¿½ actuellement)
 				case 'LIV' :
 				$history = new OrderHistory();
 				$history->id_order = (int)($id_order);
