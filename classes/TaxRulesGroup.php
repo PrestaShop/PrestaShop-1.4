@@ -34,7 +34,7 @@ class TaxRulesGroupCore extends ObjectModel
     public 		$active;
 
  	protected 	$fieldsRequired = array('name');
- 	protected 	$fieldsSize = array('name' => 32);
+ 	protected 	$fieldsSize = array('name' => 64);
  	protected 	$fieldsValidate = array('name' => 'isGenericName');
 
 	protected 	$table = 'tax_rules_group';
