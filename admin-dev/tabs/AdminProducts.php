@@ -1644,6 +1644,8 @@ class AdminProducts extends AdminTab
 			echo '
 			<tr>
 				<td class="cell br btt">
+					<input type="hidden" name="spm_id_specific_price[]" value='.$id_specific_price.'>
+					<input type="hidden" name="spm_id_shop[]" value="0" />
 					<select id="spm_currency_'.$index.'" name="spm_id_currency[]" onchange="changeCurrencySpecificPrice('.$index.');">
 						<option value="0">'.$this->l('All currencies').'</option>';
 			foreach ($currencies as $currency)
