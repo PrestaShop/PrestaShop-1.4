@@ -1222,11 +1222,10 @@ class ProductCore extends ObjectModel
 	*/
 	public function hasAttributes()
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(`id_product_attribute`) AS nb
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT COUNT(`id_product_attribute`)
 		FROM `'._DB_PREFIX_.'product_attribute`
 		WHERE `id_product` = '.(int)($this->id));
-		return $result['nb'];
 	}
 
 	/**

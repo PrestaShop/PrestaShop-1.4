@@ -521,7 +521,14 @@ class AdminProducts extends AdminTab
 						$product->checkDefaultAttributes();
 					}
 					if (!sizeof($this->_errors))
+					{
+						if (!$product->cache_defaut_attribute)
+						{
+							$product->cache_defaut_attribute = 1;
+							$product->update();
+						}
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(int)(Tools::getValue('id_category')).'&add'.$this->table.'&tabs=3&token='.($token ? $token : $this->token));
+					}
 				}
 			}
 		}
@@ -534,6 +541,11 @@ class AdminProducts extends AdminTab
 					$product->deleteAttributeCombinaison((int)(Tools::getValue('id_product_attribute')));
 					$product->checkDefaultAttributes();
 					$product->updateQuantityProductWithAttributeQuantity();
+					if (!$product->hasAttributes())
+					{
+						$product->cache_defaut_attribute = 0;
+						$product->update();
+					}
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.(int)(Tools::getValue('id_category')).'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
@@ -550,6 +562,11 @@ class AdminProducts extends AdminTab
 				{
 					$product->deleteProductAttributes();
 					$product->updateQuantityProductWithAttributeQuantity();
+					if ($product->cache_defaut_attribute)
+					{
+						$product->cache_defaut_attribute = 0;
+						$product->update();
+					}
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.(int)(Tools::getValue('id_category')).'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
