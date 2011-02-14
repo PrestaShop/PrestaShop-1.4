@@ -879,7 +879,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		
 		$bool_display_certificats = false;
 		foreach (self::$CERTIFICATE as $certif)
-			$bool_display_certificats = ($certif['tsID'] != '')? true : $bool_display_certificats;
+			$bool_display_certificats = (isset($certif['tsID']) && $certif['tsID'] != '')? true : $bool_display_certificats;
 		
 		if ($bool_display_certificats)
 			$out .= $this->_displayFormCertificatesList();
