@@ -189,7 +189,7 @@ class AuthControllerCore extends FrontController
 					}
 				}
 			}
-			if (sizeOf($this->errors))
+			if (sizeof($this->errors))
 			{
 				if (!Tools::getValue('is_new_customer'))
 					unset($_POST['passwd']);
