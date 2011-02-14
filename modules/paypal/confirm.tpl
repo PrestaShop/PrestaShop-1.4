@@ -48,7 +48,7 @@
 	</p>
 	<p>
 		- {l s='We accept the following currency to be sent by PayPal:' mod='paypal'}&nbsp;<b>{$currency->name}</b>
-			<input type="hidden" name="currency_payement" value="{$currency->id}">
+			<input type="hidden" name="currency_payement" value="{$currency->id}" />
 	</p>
 	<p>
 		<b>{l s='Please confirm your order by clicking \'I confirm my order\'' mod='paypal'}.</b>

@@ -72,7 +72,7 @@
 				</td>
 				<td class="history_detail">
 					<a class="color-myaccount" href="javascript:showOrder(1, {$order.id_order|intval}, 'order-detail');">{l s='details'}</a>
-					<a href="{$base_dir_ssl}{if isset($opc) && $opc}order-opc{else}order{/if}.php?submitReorder&id_order={$order.id_order|intval}">
+					<a href="{$base_dir_ssl}{if isset($opc) && $opc}order-opc{else}order{/if}.php?submitReorder&id_order={$order.id_order|intval}" title="{l s='Reorder'}">
 						<img src="{$img_dir}arrow_rotate_anticlockwise.png" alt="{l s='Reorder'}" title="{l s='Reorder'}" class="icon" />
 					</a>
 				</td>
