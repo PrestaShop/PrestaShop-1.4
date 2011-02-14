@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -41,7 +41,7 @@ abstract class ObjectModelCore
 
 	/** @var fieldsRequiredDatabase */
 	protected static $fieldsRequiredDatabase = NULL;
-	
+
  	/** @var array Maximum fields size for admin panel forms */
  	protected $fieldsSize = array();
 
@@ -59,12 +59,12 @@ abstract class ObjectModelCore
 
 	/** @var array tables */
  	protected $tables = array();
- 	
+
  	/** @var array tables */
  	protected $webserviceParameters = array();
 
 	protected static $_cache = array();
-	
+
 	/**
 	 * Returns object validation rules (fields validity)
 	 *
@@ -133,12 +133,12 @@ abstract class ObjectModelCore
 							{
 								if (!is_array($this->{$key}))
 									$this->{$key} = array();
-								$this->{$key}[$row['id_lang']] = stripslashes($value);	
+								$this->{$key}[$row['id_lang']] = stripslashes($value);
 							}
 						}
 			}
 		}
-		
+
 		if (!is_array(self::$fieldsRequiredDatabase))
 		{
 			$fields = $this->getfieldsRequiredDatabase(true);
@@ -170,8 +170,6 @@ abstract class ObjectModelCore
 	 	if (!Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 
-		$this->clearCache();
-		
 		/* Automatically fill dates */
 		if ($autodate AND key_exists('date_add', $this))
 			$this->date_add = date('Y-m-d H:i:s');
@@ -215,7 +213,7 @@ abstract class ObjectModelCore
 			die(Tools::displayError());
 
 		$this->clearCache();
-		
+
 		/* Automatically fill dates */
 		if (key_exists('date_upd', $this))
 			$this->date_upd = date('Y-m-d H:i:s');
@@ -260,7 +258,7 @@ abstract class ObjectModelCore
 	 		die(Tools::displayError());
 
 		$this->clearCache();
-		
+
 		/* Database deletion */
 		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 		if (!$result)
@@ -306,7 +304,7 @@ abstract class ObjectModelCore
 
 	 	/* Update active status on object */
 	 	$this->active = (int)(!$this->active);
-	 	
+
 		/* Change status to active/inactive */
 		return Db::getInstance()->Execute('
 		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
@@ -431,7 +429,7 @@ abstract class ObjectModelCore
 		global $_FIELDS, $cookie;
 		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
 		@include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
-		
+
 		$key = $className.'_'.md5($field);
 		return ((is_array($_FIELDS) AND array_key_exists($key, $_FIELDS)) ? ($htmlentities ? htmlentities($_FIELDS[$key], ENT_QUOTES, 'utf-8') : $_FIELDS[$key]) : $field);
 	}
@@ -468,14 +466,14 @@ abstract class ObjectModelCore
 						if ($value = Tools::getValue($field))
 							$this->{$field} = Tools::encrypt($value);
 					}
-					else	
+					else
 						$this->{$field} = $value;
 				}
 			}
 		}
 		return $errors;
 	}
-	
+
 	public function getWebserviceParameters($wsParamsAttributeName = NULL)
 	{
 		$defaultResourceParameters = array(
@@ -489,16 +487,16 @@ abstract class ObjectModelCore
 				'id' => array('sqlId' => $this->identifier, 'i18n' => false),
 			),
 		);
-		
+
 		if (is_null($wsParamsAttributeName))
 			$wsParamsAttributeName = 'webserviceParameters';
-		
-		
+
+
 		if (!isset($this->{$wsParamsAttributeName}['objectNodeName']))
 			$defaultResourceParameters['objectNodeName'] = $this->table;
 		if (!isset($this->{$wsParamsAttributeName}['objectsNodeName']))
 			$defaultResourceParameters['objectsNodeName'] = $this->table.'s';
-		
+
 		if (isset($this->{$wsParamsAttributeName}['associations']))
 			foreach ($this->{$wsParamsAttributeName}['associations'] as $assocName => &$association)
 			{
@@ -507,8 +505,8 @@ abstract class ObjectModelCore
 				if (!array_key_exists('getter', $association))
 					$association['getter'] = Tools::toCamelCase('get_ws_'.$assocName);
 			}
-		
-		
+
+
 		if (isset($this->{$wsParamsAttributeName}['retrieveData']) && isset($this->{$wsParamsAttributeName}['retrieveData']['retrieveMethod']))
 			unset($defaultResourceParameters['retrieveData']['retrieveMethod']);
 
@@ -533,7 +531,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array(
 						'sqlId' => $fieldName,
 						'validateMethod' => (
-								array_key_exists('validateMethod', $resourceParameters['fields'][$fieldName]) ? 
+								array_key_exists('validateMethod', $resourceParameters['fields'][$fieldName]) ?
 								array_merge($resourceParameters['fields'][$fieldName]['validateMethod'], array($validateMethod)) :
 								array($validateMethod)
 							),
@@ -574,7 +572,7 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$fieldName] = array(
 						'sqlId' => $fieldName,
 						'validateMethod' => (
-								array_key_exists('validateMethod', $resourceParameters['fields'][$fieldName]) ? 
+								array_key_exists('validateMethod', $resourceParameters['fields'][$fieldName]) ?
 								array_merge($resourceParameters['fields'][$fieldName]['validateMethod'], array($validateMethod)) :
 								array($validateMethod)
 							),
@@ -597,7 +595,7 @@ abstract class ObjectModelCore
 				$resourceParametersField['sqlId'] = $key;
 		return $resourceParameters;
 	}
-		
+
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
 		$query = '
@@ -609,7 +607,7 @@ abstract class ObjectModelCore
 		';
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 	}
-	
+
 	public function getFieldsRequiredDatabase($all = false)
 	{
 		return Db::getInstance()->ExecuteS('
@@ -617,7 +615,7 @@ abstract class ObjectModelCore
 		FROM '._DB_PREFIX_.'required_field
 		WHERE 1 '.(!$all ? ' AND object_name = \''.pSQL(get_class($this)).'\'' : ''));
 	}
-	
+
 	public function addFieldsRequiredDatabase($fields)
 	{
 		if (!is_array($fields))
@@ -634,7 +632,7 @@ abstract class ObjectModelCore
 
 		return true;
 	}
-	
+
 	public function clearCache($all = false)
 	{
 		if ($all AND isset(self::$_cache[$this->table]))
@@ -643,5 +641,4 @@ abstract class ObjectModelCore
 			unset(self::$_cache[$this->table][(int)$this->id]);
 	}
 }
-
 
