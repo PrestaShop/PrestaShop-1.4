@@ -1609,14 +1609,10 @@ class ProductCore extends ObjectModel
 			$usetax = false;
 
         $id_country = (int)Country::getDefaultCountryId();
-        $id_state = 0;
 
 		$address_infos = Address::getCountryAndState($id_address);
 		if ($address_infos['id_country'])
-		{
 			$id_country = (int)($address_infos['id_country']);
-		    $id_state = (int)$address_infos['id_state'];
-		}
 
 		$id_shop = (int)(Shop::getCurrentShop());
 		// END Initialization
@@ -1857,17 +1853,8 @@ class ProductCore extends ObjectModel
 			}
 		}
 
-		if (!$product['id_product_attribute'])
-			$qty = Db::getInstance()->getValue('SELECT quantity
-															FROM '._DB_PREFIX_.'product
-															WHERE id_product='.(int)$product['id_product']);
-		else
-			$qty = Db::getInstance()->getValue('SELECT quantity
-															FROM '._DB_PREFIX_.'product_attribute
-															WHERE id_product_attribute='.(int)$product['id_product_attribute']);
-		$productObj = new Product((int)$product['id_product'], false, Configuration::get('PS_LANG_DEFAULT'));
-
-		return $productObj->addStockMvt(-(int)$product['cart_quantity'], (int)_STOCK_MOVEMENT_ORDER_REASON_, $product['id_product_attribute'], $id_order, NULL);
+		$productObj = new Product((int)$product['id_product'], false, (int)Configuration::get('PS_LANG_DEFAULT'));
+		return $productObj->addStockMvt(-(int)$product['cart_quantity'], (int)_STOCK_MOVEMENT_ORDER_REASON_, (int)$product['id_product_attribute'], (int)$id_order, NULL);
 	}
 
 	public static function reinjectQuantities(&$orderDetail, $quantity)
@@ -2062,7 +2049,7 @@ class ProductCore extends ObjectModel
 	public function addFeaturesCustomToDB($id_value, $lang, $cust)
 	{
 		$row = array('id_feature_value' => (int)($id_value), 'id_lang' => (int)($lang), 'value' => pSQL($cust));
-		$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'feature_value_lang', $row, 'INSERT');
+		return Db::getInstance()->autoExecute(_DB_PREFIX_.'feature_value_lang', $row, 'INSERT');
 	}
 
 	public function addFeaturesToDB($id_feature, $id_value, $cust = 0)
@@ -2070,11 +2057,11 @@ class ProductCore extends ObjectModel
 		if ($cust)
 		{
 			$row = array('id_feature' => (int)($id_feature), 'custom' => 1);
-			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'feature_value', $row, 'INSERT');
+			Db::getInstance()->autoExecute(_DB_PREFIX_.'feature_value', $row, 'INSERT');
 			$id_value = Db::getInstance()->Insert_ID();
 		}
 		$row = array('id_feature' => (int)($id_feature), 'id_product' => (int)($this->id), 'id_feature_value' => (int)($id_value));
-		$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'feature_product', $row, 'INSERT');
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'feature_product', $row, 'INSERT');
 		if ($id_value)
 			return ($id_value);
 	}
@@ -2579,8 +2566,15 @@ class ProductCore extends ObjectModel
 		return $customizedDatas;
 	}
 
+	
+	/**
+	 * @param int $id_customization
+	 * @return bool
+	 * @deprecated
+	 */
 	public function deleteCustomizedDatas($id_customization)
 	{
+		Tools::displayAsDeprecated();
 		if (Pack::isPack((int)($product['id_product'])))
 		{
 			$products_pack = Pack::getItems((int)($product['id_product']), (int)(Configuration::get('PS_LANG_DEFAULT')));

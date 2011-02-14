@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>fianetsceau</name>
-    <displayName>FIA-NET Sceau de Confiance</displayName>
+    <displayName>FIA-NET Seal of Confidence</displayName>
     <version>1.0</version>
-    <description>Transformez vos visiteurs en acheteurs en créant la confiance sur votre site</description>
+    <description>Turn your visitors into buyers by creating confidence in your site</description>
     <tab>seo</tab>
     
     <is_configurable>1</is_configurable>
