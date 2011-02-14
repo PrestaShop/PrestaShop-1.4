@@ -110,7 +110,6 @@ class TrustedShops extends Module
 		foreach (self::$objects_list as $key=>$object)
 		{
 			$object->id_tab = $key;
-			FB::log($object->tab_name.'--');
 			$tabs['title'][] = $object->tab_name;
 			$tabs['content'][] = $object->getContent();
 		}
