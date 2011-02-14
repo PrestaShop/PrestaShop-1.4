@@ -193,7 +193,6 @@ class ProductCore extends ObjectModel
 	private static $_prices = array();
 	private static $_pricesLevel2 = array();
 	private static $_pricesLevel3 = array();
-	private static $_currencies = array();
 	private static $_incat = array();
 	private static $_cart_quantity = array();
 	private static $_tax_rules_group = array();
