@@ -147,18 +147,19 @@ class BlockAdvertising extends Module
 		global $protocol_content;
 		
 		$this->postProcess();
-		echo '
+		$output = '';
+		$output .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">
 <fieldset><legend>'.$this->l('Advertising block configuration').'</legend>
 <a href="'.$this->adv_link.'" target="_blank" title="'.$this->l('Advertising').'">';
 		if ($this->adv_img)
-			echo '<img src="'.$protocol_content.$this->adv_img.'" alt="'.$this->l('Advertising image').'" style="height:163px;margin-left: 100px;width:163px"/>';
+			$output .= '<img src="'.$protocol_content.$this->adv_img.'" alt="'.$this->l('Advertising image').'" style="height:163px;margin-left: 100px;width:163px"/>';
 		else
-			echo $this->l('no image');
-		echo '</a>';
+			$output .= $this->l('no image');
+		$output .= '</a>';
 		if ($this->adv_img)
-			echo '<input class="button" type="submit" name="submitDeleteImgConf" value="'.$this->l('delete image').'" style=""/>';
-		echo '<br/>
+			$output .= '<input class="button" type="submit" name="submitDeleteImgConf" value="'.$this->l('delete image').'" style=""/>';
+		$output .= '<br/>
 <br/>
 <label for="adv_img">'.$this->l('Change image').'&nbsp;&nbsp;</label><input id="adv_img" type="file" name="adv_img" />
 ( '.$this->l('image will be displayed as 155x163').' )
@@ -171,6 +172,7 @@ class BlockAdvertising extends Module
 </fieldset>
 </form>
 ';
+		return $output;
 	}
 
 	/**
