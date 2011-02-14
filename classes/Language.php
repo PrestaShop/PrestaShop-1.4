@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,33 +28,33 @@
 class LanguageCore extends ObjectModel
 {
 	public 		$id;
-	
+
 	/** @var string Name */
 	public 		$name;
-	
+
 	/** @var string 2-letter iso code */
 	public 		$iso_code;
-	
+
 	/** @var string 5-letter iso code */
 	public 		$language_code;
-	
+
 	/** @var boolean Status */
 	public 		$active = true;
-	
+
 	protected 	$fieldsRequired = array('name', 'iso_code');
 	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 2, 'language_code' => 5);
 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'language_code' => 'isLanguageCode', 'active' => 'isBool');
-	
+
 	protected 	$table = 'lang';
 	protected 	$identifier = 'id_lang';
-	
+
 	/** @var array Languages cache */
 	private static $_checkedLangs;
 	private static $_LANGUAGES;
 	private static $countActiveLanguages;
-	
+
 	protected	$webserviceParameters = array();
-	
+
 	public	function __construct($id = NULL, $id_lang = NULL)
 	{
 		parent::__construct($id);
@@ -71,12 +71,12 @@ class LanguageCore extends ObjectModel
 		$fields['active'] = (int)($this->active);
 		return $fields;
 	}
-	
+
 	public function add($autodate = true, $nullValues = false)
 	{
 		if (!parent::add($autodate))
 			return false;
-		
+
 		$translationsFiles = array(
 			'fields' => '_FIELDS',
 			'errors' => '_ERRORS',
@@ -91,10 +91,10 @@ class LanguageCore extends ObjectModel
 	global $'.$var.';
 	$'.$var.' = array();
 ?>');
-		
+
 		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
-			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
+			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 			Configuration::get('PS_HTACCESS_SPECIFIC')
 		));
 	}
@@ -103,20 +103,20 @@ class LanguageCore extends ObjectModel
 	{
 		if (!parent::toggleStatus())
 			return false;
-			
+
 		return (Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-			(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
-			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
+			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 			Configuration::get('PS_HTACCESS_SPECIFIC')
 		));
 	}
-	
+
 	public function checkFiles()
 	{
 		return self::checkFilesWithIsoCode($this->iso_code);
 	}
-	
-	
+
+
 	public static function checkFilesWithIsoCode($iso_code)
 	{
 		if (isset(self::$_checkedLangs[$iso_code]) AND self::$_checkedLangs[$iso_code])
@@ -127,25 +127,25 @@ class LanguageCore extends ObjectModel
 		self::$_checkedLangs[$iso_code] = true;
 		return true;
 	}
-	
+
 	public static function getFilesList($iso_from, $theme_from, $iso_to = false, $theme_to = false, $select = false, $check = false, $modules = false)
 	{
 		if (empty($iso_from))
 			die(Tools::displayError());
-		
+
 		$copy = ($iso_to AND $theme_to) ? true : false;
-		
+
 		$lPath_from = _PS_TRANSLATIONS_DIR_.(string)$iso_from.'/';
 		$tPath_from = _PS_ROOT_DIR_.'/themes/'.(string)$theme_from.'/';
 		$mPath_from = _PS_MAIL_DIR_.(string)$iso_from.'/';
-		
+
 		if ($copy)
 		{
 			$lPath_to = _PS_TRANSLATIONS_DIR_.(string)$iso_to.'/';
 			$tPath_to = _PS_ROOT_DIR_.'/themes/'.(string)$theme_to.'/';
 			$mPath_to = _PS_MAIL_DIR_.(string)$iso_to.'/';
 		}
-		
+
 		$lFiles = array('admin'.'.php', 'errors'.'.php', 'fields'.'.php', 'pdf'.'.php');
 		$mFiles =  array(
 			'account.html',					'account.txt',
@@ -180,15 +180,15 @@ class LanguageCore extends ObjectModel
 		);
 
 		$number = -1;
-		
+
 		$files = array();
 		$files_tr = array();
 		$files_theme = array();
 		$files_mail = array();
 		$files_modules = array();
-		
-		
-		// When a copy is made from a theme in specific language 
+
+
+		// When a copy is made from a theme in specific language
 		// to an other theme for the same language,
 		// it's avoid to copy Translations, Mails files
 		// and modules files which are not override by theme.
@@ -201,7 +201,7 @@ class LanguageCore extends ObjectModel
 			if ($select == 'tr')
 				return $files_tr;
 			$files = array_merge($files, $files_tr);
-			
+
 			// Mail files
 			if (!$check OR ($check AND (string)$iso_from != 'en'))
 				$files_mail[$mPath_from.'lang.php'] = ($copy ? $mPath_to.'lang.php' : ++$number);
@@ -210,7 +210,7 @@ class LanguageCore extends ObjectModel
 			if ($select == 'mail')
 				return $files_mail;
 			$files = array_merge($files, $files_mail);
-			
+
 			// Modules
 			if ($modules)
 			{
@@ -241,7 +241,7 @@ class LanguageCore extends ObjectModel
 		{
 			return $files;
 		}
-		
+
 		// Theme files
 		if (!$check OR ($check AND (string)$iso_from != 'en'))
 		{
@@ -254,11 +254,11 @@ class LanguageCore extends ObjectModel
 		if ($select == 'theme')
 			return $files_theme;
 		$files = array_merge($files, $files_theme);
-		
+
 		// Return
 		return $files;
 	}
-	
+
 	public function loadUpdateSQL()
 	{
 		$file = _PS_TOOL_DIR_.'/languages/updateLanguages.sql';
@@ -278,7 +278,7 @@ class LanguageCore extends ObjectModel
 		}
 		return true;
 	}
-	
+
 	public static function recurseDeleteDir($dir)
 	{
 		if (!is_dir($dir))
@@ -297,22 +297,22 @@ class LanguageCore extends ObjectModel
 		}
 		rmdir($dir);
 	}
-	
+
 	public function delete()
 	{
-		if (empty($this->iso_code)) 
-			$this->iso_code = self::getIsoById($this->id);		
-		
+		if (empty($this->iso_code))
+			$this->iso_code = self::getIsoById($this->id);
+
 		/* Database translations deletion */
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
 		foreach ($result AS $row)
 			if (preg_match('/_lang/', $row['Tables_in_'._DB_NAME_]))
 				if (!Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)($this->id)))
 					return false;
-					
+
 		/* Delete tags */
 		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'tag WHERE id_lang = '.(int)($this->id));
-		
+
 		/* Delete search words */
 		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_lang = '.(int)($this->id));
 
@@ -328,15 +328,15 @@ class LanguageCore extends ObjectModel
 			self::recurseDeleteDir(_PS_TRANSLATIONS_DIR_.$this->iso_code);
 		if (!parent::delete())
 			return false;
-		
+
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
-									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+									(int)(Configuration::get('PS_REWRITING_SETTINGS')),
+									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 									Configuration::get('PS_HTACCESS_SPECIFIC')
-								);		
+								);
 	}
-	
-	
+
+
 	public function deleteSelection($selection)
 	{
 		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
@@ -347,16 +347,16 @@ class LanguageCore extends ObjectModel
 			$this->id = (int)($id);
 			$result = $result AND $this->delete();
 		}
-		
+
 		Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-								(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
-								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+								(int)(Configuration::get('PS_REWRITING_SETTINGS')),
+								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 								Configuration::get('PS_HTACCESS_SPECIFIC')
-							);	
-		
+							);
+
 		return $result;
 	}
-	
+
 	/**
 	  * Return available languages
 	  *
@@ -394,7 +394,7 @@ class LanguageCore extends ObjectModel
 			return self::$_LANGUAGES[(int)($id_lang)]['iso_code'];
 		return false;
 	}
-	
+
 	/**
 	  * Return id from iso code
 	  *
@@ -408,7 +408,7 @@ class LanguageCore extends ObjectModel
 
 		return Db::getInstance()->getValue('SELECT `id_lang` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = \''.pSQL(strtolower($iso_code)).'\'');
 	}
-	
+
 	public static function getLanguageCodeByIso($iso_code)
 	{
 	 	if (!Validate::isLanguageIsoCode($iso_code))
@@ -423,11 +423,11 @@ class LanguageCore extends ObjectModel
 	  * @param string $iso_code Iso code
 	  * @return array  Language (id_lang, iso_code)
 	  */
-	public static function getIsoIds($active = true) 
+	public static function getIsoIds($active = true)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang` '.($active ? 'WHERE active = 1' : ''));
 	}
-	
+
 	public static function copyLanguageData($from, $to)
 	{
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
@@ -452,33 +452,33 @@ class LanguageCore extends ObjectModel
 			}
 		return true;
 	}
-	
+
 	/**
 	  * Load all languages in memory for caching
 	  */
 	public static function loadLanguages()
 	{
 		self::$_LANGUAGES = array();
-		
+
 		$result = Db::getInstance()->ExecuteS('
-		SELECT `id_lang`, `name`, `iso_code`, `active` 
+		SELECT `id_lang`, `name`, `iso_code`, `active`
 		FROM `'._DB_PREFIX_.'lang`');
-		
+
 		foreach ($result AS $row)
 			self::$_LANGUAGES[(int)($row['id_lang'])] = array('id_lang' => (int)($row['id_lang']), 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => (int)($row['active']));
 	}
-		
+
 	public function update($nullValues = false)
 	{
 		if (!parent::update($nullValues))
 			return false;
-			
+
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
-							(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
-							(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
+							(int)(Configuration::get('PS_REWRITING_SETTINGS')),
+							(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 							Configuration::get('PS_HTACCESS_SPECIFIC')
 							);
-	}	
+	}
 
 	public static function checkAndAddLanguage($iso_code)
 	{
@@ -502,7 +502,7 @@ class LanguageCore extends ObjectModel
 				if (!$lang->name OR !$lang->add())
 					return false;
 				$insert_id = (int)($lang->id);
-				
+
 				if ($lang_pack)
 				{
 					$flag = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
@@ -522,14 +522,14 @@ class LanguageCore extends ObjectModel
 				}
 				else
 					self::_copyNoneFlag($insert_id);
-				
+
 				$files_copy = array('/en.jpg', '/en-default-thickbox.jpg', '/en-default-home.jpg', '/en-default-large.jpg', '/en-default-medium.jpg', '/en-default-small.jpg', '/en-default-large_scene.jpg');
 				$tos = array(_PS_CAT_IMG_DIR_, _PS_MANU_IMG_DIR_, _PS_PROD_IMG_DIR_, _PS_SUPP_IMG_DIR_);
 				foreach($tos AS $to)
 					foreach($files_copy AS $file)
 					{
 						$name = str_replace('/en', '/'.$iso_code, $file);
-						copy(dirname(__FILE__).'/../img/l/'.$file, $to.$name);
+						copy(dirname(__FILE__).'/../img/l'.$file, $to.$name);
 					}
 				return true;
 			}
@@ -542,12 +542,12 @@ class LanguageCore extends ObjectModel
 	{
 		return copy(dirname(__FILE__).'/../img/l/none.jpg', dirname(__FILE__).'/../img/l/'.$id.'.jpg');
 	}
-	
+
 	public static function isInstalled($iso_code)
 	{
 		return Db::getInstance()->getValue('SELECT `id_lang` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = "'.pSQL($iso_code).'"');
 	}
-	
+
 	public static function countActiveLanguages()
 	{
 		if (!self::$countActiveLanguages)
@@ -555,5 +555,4 @@ class LanguageCore extends ObjectModel
 		return self::$countActiveLanguages;
 	}
 }
-
 
