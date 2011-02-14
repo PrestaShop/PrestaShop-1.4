@@ -145,7 +145,7 @@ class ProductSaleCore
 		foreach ($result AS &$row)
 		{
 		 	$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
-		 	$row['id_image'] = Product::defineProductImage($row);
+		 	$row['id_image'] = Product::defineProductImage($row, $id_lang);
 		}
 		return $result;
 	}

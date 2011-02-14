@@ -2426,17 +2426,11 @@ class ProductCore extends ObjectModel
 		return rtrim($result, ', ');
 	}
 
-	public static function defineProductImage($row)
+	public static function defineProductImage($row, $id_lang)
 	{
-		global $cookie;
-		if (!$row['id_image'])
-		{
-			$row['id_image'] = Language::getIsoById($cookie->id_lang).'-default';
-			$row['legend'] = 'no picture';
-		}
-		else
-			$row['id_image'] = $row['id_product'].'-'.$row['id_image'];
-		return $row['id_image'];
+		if ($row['id_image'])
+			return $row['id_product'].'-'.$row['id_image'];
+		return Language::getIsoById((int)$id_lang).'-default';
 	}
 
 	private static $producPropertiesCache = array();
@@ -2482,7 +2476,7 @@ class ProductCore extends ObjectModel
 		$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		if ($row['id_product_attribute'])
 			$row['quantity'] = Product::getQuantity((int)$row['id_product'], $row['id_product_attribute'], isset($row['cache_is_pack']) ? $row['cache_is_pack'] : NULL);
-		$row['id_image'] = Product::defineProductImage($row);
+		$row['id_image'] = Product::defineProductImage($row, $id_lang);
 		$row['features'] = Product::getFrontFeaturesStatic((int)$id_lang, $row['id_product']);
 		$row['attachments'] = ((!isset($row['cache_has_attachments']) OR $row['cache_has_attachments']) ? Product::getAttachmentsStatic((int)($id_lang), $row['id_product']) : array());
 

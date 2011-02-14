@@ -374,7 +374,7 @@ class CartCore extends ObjectModel
 				$row['total'] = Tools::ps_round($row['price'] * (int)($row['cart_quantity']), 2);
 			}
 			$row['reduction_applies'] = $specificPriceOutput AND (float)($specificPriceOutput['reduction']);
-			$row['id_image'] = Product::defineProductImage($row);
+			$row['id_image'] = Product::defineProductImage($row,$this->id_lang);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
 			$row['features'] = Product::getFeaturesStatic((int)$row['id_product']);
 			if (array_key_exists($row['id_product_attribute'].'-'.$this->id_lang, self::$_attributesLists))
