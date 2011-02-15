@@ -145,11 +145,17 @@ class CategoryCore extends ObjectModel
 		return $ret;
 	}
 
-	public	function update($nullValues = false)
+	/**
+	 * update category positions in parent
+	 * 
+	 * @param mixed $nullValues 
+	 * @return void
+	 */
+	public function update($nullValues = false)
 	{
 		$this->level_depth = $this->calcLevelDepth();
 		$this->cleanPositions((int)$this->id_parent);
-		$ret = parent::update();
+		$ret = parent::update($nullValues);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
 		Module::hookExec('categoryUpdate'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
@@ -587,8 +593,10 @@ class CategoryCore extends ObjectModel
 	}
 
 	/**
-	  * Check if category can be moved in another one
+	  * Check if category can be moved in another one.
+		* The category cannot be moved in a child category.
 	  *
+		* @param integer $id_category current category
 	  * @param integer $id_parent Parent candidate
 	  * @return boolean Parent validity
 	  */
@@ -842,23 +850,33 @@ class CategoryCore extends ObjectModel
 		return $result;
 	}
 
+	/**
+	 * cleanPositions keep order of category in $id_category_parent,
+	 * but remove duplicate position. Should not be used if positions
+	 * are clean at the beginning !
+	 * 
+	 * @param mixed $id_category_parent 
+	 * @return boolean true if succeed
+	 */
 	static public function cleanPositions($id_category_parent)
 	{
+		$return = true;
+
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category`
 		WHERE `id_parent` = '.(int)($id_category_parent).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
-		for ($i = 0; $i < $sizeof; ++$i){
+		for ($i = 0; $i < $sizeof; $i++){
 				$sql = '
 				UPDATE `'._DB_PREFIX_.'category`
 				SET `position` = '.(int)($i).'
 				WHERE `id_parent` = '.(int)($id_category_parent).'
 				AND `id_category` = '.(int)($result[$i]['id_category']);
-				Db::getInstance()->Execute($sql);
+				$return &= Db::getInstance()->Execute($sql);
 			}
-		return true;
+		return $return;
 	}
 
 	static public function getLastPosition($id_category_parent)

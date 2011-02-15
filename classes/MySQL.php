@@ -122,6 +122,15 @@ class MySQLCore extends Db
 		return false;
 	}
 	
+	/**
+	 * ExecuteS return the result of $query as array, 
+	 * or as mysqli_result if $array set to false
+	 * 
+	 * @param string $query query to execute
+	 * @param boolean $array return an array instead of a mysql_result object
+	 * @param int $use_cache if query has been already executed, use its result
+	 * @return array or result object 
+	 */
 	public function	ExecuteS($query, $array = true, $use_cache = 1)
 	{
 		$this->_result = false;

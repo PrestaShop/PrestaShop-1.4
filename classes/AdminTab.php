@@ -1324,7 +1324,7 @@ abstract class AdminTabCore
 		global $currentIndex, $cookie;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 
-		$id_category = 0;
+		$id_category = 1; // default categ
 
 		$irow = 0;
 		if ($this->_list AND isset($this->fieldsDisplay['position']))

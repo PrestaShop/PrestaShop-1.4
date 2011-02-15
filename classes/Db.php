@@ -268,9 +268,22 @@ abstract class DbCore
 	}
 
 	/**
-	 * Get Row and get value
+	 * getRow return an associative array containing the first row of the query
+	 * This function automatically add "limit 1" to the query
+	 * 
+	 * @param mixed $query the select query (without "LIMIT 1")
+	 * @param int $use_cache find it in cache first
+	 * @return array associative array of (field=>value)
 	 */
 	abstract public function getRow($query, $use_cache = 1);
+
+	/**
+	 * getValue return the first item of a select query.
+	 * 
+	 * @param mixed $query 
+	 * @param int $use_cache 
+	 * @return void
+	 */
 	abstract public function getValue($query, $use_cache = 1);
 
 	/**

@@ -297,6 +297,7 @@ if (array_key_exists('ajaxCMSPositions', $_POST))
 		die('{"hasError" : true, "errors" : "This cms can not be loaded"}');
 }
 
+/* Modify product position in catalog */
 if (array_key_exists('ajaxProductsPositions', $_POST))
 {
 	$way = (int)(Tools::getValue('way'));
@@ -305,26 +306,24 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 	$positions = Tools::getValue('product');
 
 	if (is_array($positions))
-		foreach ($positions AS $key => $value)
+		foreach ($positions AS $position => $value)
 		{
+			// pos[1] = id_categ, pos[2] = id_product, pos[3]=old position
 			$pos = explode('_', $value);
-			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category AND $pos[2] == $id_product))
+
+			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category AND (int)$pos[2] === $id_product))
 			{
-				$position = $key;
+				if ($product = new Product((int)$pos[2]))
+					if (isset($position) && $product->updatePosition($way, $position))
+						echo "ok position $position for product $pos[2]\r\n";
+					else
+						echo '{"hasError" : true, "errors" : "Can not update product '. $id_product . ' to position '.$position.' "}';
+				else
+					echo '{"hasError" : true, "errors" : "This product ('.$id_product.') can t be loaded"}';
+
 				break;
 			}
 		}
-
-	$product = new Product($id_product);
-	if (Validate::isLoadedObject($product))
-	{
-		if (isset($position) && $product->updatePosition($way, $position))
-			die(true);
-		else
-			die('{"hasError" : true, "errors" : "Can not update product position"}');
-	}
-	else
-		die('{"hasError" : true, "errors" : "This product can not be loaded"}');
 }
 
 if (isset($_GET['ajaxProductPackItems']))

@@ -77,11 +77,7 @@
 					$index[] = $row;
 			}
 			elseif ((int)Tools::getValue('id_product'))
-			{
-				$indexedCategories = Product::getIndexedCategories((int)Tools::getValue('id_product'));
-				foreach ($indexedCategories AS $k => $row)
-					$index[] = (int)$row['id_category'];
-			}
+				$index = Product::getProductCategories((int)Tools::getValue('id_product'));
 			$adminProducts->recurseCategoryForInclude((int)(Tools::getValue('id_product')), $index, $categories, $categories[0][1], 1, (int)(Tools::getValue('id_category_default')));
 			echo '				</table>
 								<p style="padding:0px; margin:0px 0px 10px 0px;">'.$adminProducts->getL('Mark all checkbox(es) of categories in which product is to appear').'<sup> *</sup></p>

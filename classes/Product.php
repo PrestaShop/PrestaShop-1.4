@@ -409,7 +409,7 @@ class ProductCore extends ObjectModel
 	/**
 	 * Move a product inside its category
 	 * @param boolean $way Up (1)  or Down (0)
-	 * * @param intger $position*
+	 * @param integer $position
 	 * return boolean Update result
 	 */
 	public function updatePosition($way, $position)
@@ -447,25 +447,29 @@ class ProductCore extends ObjectModel
 	}
 
 	/*
-	 * Reorder product position
+	 * Reorder product position in category $id_category.
+	 * Call it after deleting a product from a category.
 	 *
-	 * @param boolean $id_hook Hook ID
+	 * @param int $id_category 
 	 */
 	public static function cleanPositions($id_category)
 	{
+    $return = true;
+
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_product`
 		FROM `'._DB_PREFIX_.'category_product`
 		WHERE `id_category` = '.(int)($id_category).'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
-		for ($i = 0; $i < $sizeof; ++$i)
-			Db::getInstance()->Execute('
+
+		for ($i = 0; $i < $sizeof; $i++)
+			$return &= Db::getInstance()->Execute($sql='
 			UPDATE `'._DB_PREFIX_.'category_product`
 			SET `position` = '.(int)($i).'
 			WHERE `id_category` = '.(int)($id_category).'
 			AND `id_product` = '.(int)($result[$i]['id_product']));
-		return true;
+		return $return;
 	}
 
 	/**
@@ -566,9 +570,56 @@ class ProductCore extends ObjectModel
 	}
 
 	/**
+	 * addToCategories add this product to the category/ies if not exists.
+	 * 
+	 * @param mixed $categories id_category or array of id_category
+	 * @return boolean true if succeed
+	 */
+	public function addToCategories($categories = array())
+	{
+		if (empty($categories))
+			return false;
+
+		if (!is_array($categories))
+			$categories=array($categories);
+
+		if (!sizeof($categories))
+			return false;
+
+		$currentCategories = $this->getCategories();
+
+		// for new categ, put product at last position
+		$resCategNewPos = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql='SELECT id_category, MAX(position)+1 newPos
+			FROM `'._DB_PREFIX_.'category_product` 
+			WHERE `id_category` IN('.implode(',', array_map('intval', $categories)).') 
+			GROUP BY id_category');
+		foreach ($resCategNewPos as $array)
+		{
+			$newCategories[$array['id_category']] = $array['newPos'];
+		}
+
+		$newCategPos=array();
+		foreach ($categories as $id_category)
+			$newCategPos[$id_category] = isset($newCategories[$id_category])?$newCategories[$id_category]['newPos']:0;
+
+		$productCats = array();
+
+		foreach ($categories as $newIdCateg)
+			if (!in_array($newIdCateg,$currentCategories))
+				$productCats[] = '('. $newIdCateg.', '. $this->id.', '. $newCategPos[$newIdCateg].')';
+		if (sizeof($productCats))
+			return Db::getInstance()->Execute('
+			INSERT INTO `'._DB_PREFIX_.'category_product` (`id_category`, `id_product`, `position`)
+			VALUES '.implode(',', $productCats));
+
+		return true;
+	}
+
+	/**
 	* Update categories to index product into
 	*
 	* @param string $productCategories Categories list to index product into
+	* @param boolean keepingCurrentPos (deprecated, no more used)
 	* @return array Update/insertion result
 	*/
 	public function updateCategories($categories, $keepingCurrentPos = false)
@@ -576,39 +627,43 @@ class ProductCore extends ObjectModel
 		if (empty($categories))
 			return false;
 		$positions = array();
-		$result = Db::getInstance()->ExecuteS('SELECT IFNULL(MAX(`position`), 0) + 1 AS max, `id_category`
+		// get max position in each categories
+		$result = Db::getInstance()->ExecuteS('SELECT `id_category`
 				FROM `'._DB_PREFIX_.'category_product`
-				WHERE `id_category` IN('.implode(',', array_map('intval', $categories)).')
-				GROUP BY `id_category`
-			');
+				WHERE `id_category` NOT IN('.implode(',', array_map('intval', $categories)).')
+				AND id_product = '. $this->id .'');
+		foreach ($result as $categToDelete){
+			$this->deleteCategory($categToDelete['id_category']);
+		}
+		// if none are found, it's an error
 		if (!is_array($result))
 			return (false);
-		foreach ($result AS $position)
-			$positions[$position['id_category']] = $position;
-		/* Product Update, so saving current positions */
-		if ($keepingCurrentPos)
-		{
-			if (!is_array($oldPositions = Db::getInstance()->ExecuteS('SELECT `id_category`, `id_product`, `position` AS max FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id))))
-				return false;
-			foreach ($oldPositions AS $position)
-				$positions[$position['id_category']] = $position;
-		}
-		$this->deleteCategories(true);
-        $productCats = array();
-		foreach ($categories AS &$categorie)
-			$categorie = (int)($categorie);
-		foreach ($categories AS $k => $productCategory)
-			$productCats[] = '('.$productCategory.','.$this->id.','.(isset($positions[$productCategory]) ? $positions[$productCategory]['max'] : 0).')';
 
-		$result = Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'category_product` (`id_category`, `id_product`, `position`)
-		VALUES '.implode(',', $productCats));
+		if (!$this->addToCategories($categories))
+			return false;
 
-		return ($result);
+		return true;
 	}
 
 	/**
-	* Delete categories where product is indexed
+	 * deleteCategory delete this product from the category $id_category
+	 * 
+	 * @param mixed $id_category 
+	 * @param mixed $cleanPositions 
+	 * @return boolean
+	 */
+	public function deleteCategory($id_category, $cleanPositions = true)
+	{
+		$result = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id) . ' AND id_category = '.(int)$id_category .'');
+		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id).' AND id_category = '.(int)$id_category .'' );
+		if ($cleanPositions === true)
+			foreach ($result AS $row)
+				$this->cleanPositions((int)$row['id_category']);
+		return $return;
+	}
+
+	/**
+	* Delete all association to category where product is indexed
 	*
 	* @param boolean $cleanPositions clean category positions after deletion
 	* @return array Deletion result
@@ -618,7 +673,7 @@ class ProductCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));
 		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));
 		if ($cleanPositions === true)
-			foreach($result AS $row)
+			foreach ($result AS $row)
 				$this->cleanPositions((int)($row['id_category']));
 		return $return;
 	}
@@ -1446,14 +1501,46 @@ class ProductCore extends ObjectModel
 		return Product::getProductsProperties($id_lang, $result);
 	}
 
+	
+	/**
+	 * getProductCategories return an array of categories which this product belongs to
+	 * 
+	 * @return array of categories
+	 */
+	public static function getProductCategories($id_product = '')
+	{
+		$ret = array();
+		if ($row = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT `id_category` FROM `'._DB_PREFIX_.'category_product`
+		WHERE `id_product` = '.(int)$id_product)
+		)
+			foreach ($row as $val)
+			{
+				$ret[] = $val['id_category'];
+			}
+		return $ret;
+	}
+
+	/**
+	 * getCategories return an array of categories which this product belongs to
+	 * 
+	 * @return array of categories
+	 */
+	public function getCategories()
+	{
+		return Product::getProductCategories($this->id);
+	}
+
 	/**
 	* Get categories where product is indexed
 	*
 	* @param integer $id_product Product id
 	* @return array Categories where product is indexed
+	* @deprecated
 	*/
 	public static function getIndexedCategories($id_product)
 	{
+		Tools::displayAsDeprecated();
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category_product`
