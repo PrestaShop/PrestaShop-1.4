@@ -37,7 +37,6 @@ $(function()
 			dropShadow: false,
 			onShow : function(ct, c_inner)
 			{
-				console.log(gg_current_bt);
 				current_translate = '';
 				var button = gg_current_bt;
 				if (button.parent("td").prev().html())
