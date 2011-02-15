@@ -1406,14 +1406,14 @@ a.blue:hover {
 
 /* help cluetip */
 .cluetip-help-button {
-        width: auto;
-		text-align:left;
-		background-color:white;
-		padding:10px;
-		border:1px solid gray;
-		background:#F1F2F4 url(../img/admin/block_bg.jpg) repeat-x scroll left bottom;
-		opacity:0.75;
-	}
+	width: auto;
+	text-align:left;
+	background-color:white;
+	padding:10px;
+	border:1px solid gray;
+	background:#F1F2F4 url(../img/admin/block_bg.jpg) repeat-x scroll left bottom;
+	opacity:0.75;
+}
 
 .ac_results ul {
 	list-style: none;
@@ -1429,4 +1429,16 @@ a.blue:hover {
 }
 .ac_over {
 	background: #ECEADE;
+}
+.button-translate {
+	display:inline-block;
+	position:relative;
+	top:7px;
+	padding:2px;
+	margin : 0 0 0 10px;
+	height:15px;
+	width:15px;
+	cursor:pointer;
+	background-image: url(../img/admin/page_world.png);
+	background-repeat: no-repeat;
 }

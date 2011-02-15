@@ -875,49 +875,17 @@ class AdminTranslations extends AdminTab
 	
 	public function displayAutoTranslate()
 	{
-		$languageCode = Tools::htmlentitiesUTF8(Language::getLanguageCodeByIso(Tools::getValue('lang')));
+		$language_code = Tools::htmlentitiesUTF8(Language::getLanguageCodeByIso(Tools::getValue('lang')));
 		echo '
-		<input type="button" class="button" onclick="translateAll();" value="'.$this->l('Translate with Google').'" />
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
-			var displayOnce = 0;
-			google.load("language", "1");
-			function translateAll() {
-				if (!google.language.isTranslatable("'.$languageCode.'"))
-					alert(\'"'.$languageCode.'" : '.addslashes($this->l('this language is not available on Google Translate API')).'\');
-				else
-				{
-					$.each($(\'input[type="text"]\'), function() {
-						var tdinput = $(this);
-						if (tdinput.attr("value") == "" && tdinput.parent("td").prev().html()) {
-							google.language.translate(tdinput.parent("td").prev().html(), "en", "'.$languageCode.'", function(result) {
-								if (!result.error)
-									tdinput.val(result.translation);
-								else if (displayOnce == 0)
-								{
-									displayOnce = 1;
-									alert(result.error.message);
-								}
-							});
-						}
-					});
-					$.each($("textarea"), function() {
-						var tdtextarea = $(this);
-						if (tdtextarea.html() == "" && tdtextarea.parent("td").prev().html()) {
-							google.language.translate(tdtextarea.parent("td").prev().html(), "en", "'.$languageCode.'", function(result) {
-								if (!result.error)
-									tdtextarea.html(result.translation);
-								else if (displayOnce == 0)
-								{
-									displayOnce = 1;
-									alert(result.error.message);
-								}
-							});
-						}
-					});
-				}
-			}
-		</script>';
+		var gg_translate = {
+			language_code	: \''.$language_code.'\',
+			not_available	: \''.addslashes(html_entity_decode($this->l('this language is not available on Google Translate API'), ENT_QUOTES, 'utf-8')).'\',
+			tooltip_title	: \''.addslashes(html_entity_decode($this->l('Google translate suggests :'), ENT_QUOTES, 'utf-8')).'\'
+		};
+		</script>
+		<script type="text/javascript" src="../js/gg-translate.js"></script>';
 	}
 
 

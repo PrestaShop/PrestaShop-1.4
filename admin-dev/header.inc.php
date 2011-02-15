@@ -40,6 +40,7 @@ echo '
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link type="text/css" rel="stylesheet" href="'._PS_JS_DIR_.'jquery/datepicker/datepicker.css" />
 		<link type="text/css" rel="stylesheet" href="'._PS_CSS_DIR_.'admin.css" />
+		<link type="text/css" rel="stylesheet" href="'._PS_CSS_DIR_.'jquery.cluetip.css" />
 		<link type="text/css" rel="stylesheet" href="themes/'.$employee->bo_theme.'/admin.css" />
 		<title>PrestaShop&trade; - '.translate('Administration panel').'</title>
 		<script type="text/javascript">
