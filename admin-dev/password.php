@@ -30,6 +30,8 @@ define('PS_ADMIN_DIR', getcwd());
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 
+
+
 $errors = array();
 
 $id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
