@@ -29,7 +29,7 @@ require_once ('../../config/config.inc.php');
 
 echo '<form name="form" action="'.Configuration::get('SOCOLISSIMO_URL').'" method="POST">';
 foreach($_GET as $key => $val)
-	echo '<input type="hidden" name="'.$key.'" value="'.$val.'"/>';
+	echo '<input type="hidden" name="'.htmlentities($key,ENT_NOQUOTES, 'UTF-8').'" value="'.htmlentities($val,ENT_NOQUOTES, 'UTF-8').'"/>';
 
 echo '<script type="text/javascript">
 	
