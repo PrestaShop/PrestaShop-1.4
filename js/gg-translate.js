@@ -46,6 +46,7 @@ $(function()
 						if (!result.error)
 						{
 							current_translate = result.translation.replace('&#39;', '\'');
+							while (current_translate != (current_translate = current_translate.replace('&#39;', '\'')));
 							$('#cluetip-inner').html(current_translate);
 						}
 						else if (display_once == 0)
