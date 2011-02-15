@@ -61,12 +61,8 @@ var post = '';
 			       success: function(jsonData)
 			       {
 			       		if (jsonData.result)
-			       		{
-			       			alert('submit');
 			       			$('#form').submit();
-			       		}
-			       		else
-			       			alert('pas cool');
+			       		
 			       },
 			       error: function(XMLHttpRequest, textStatus, errorThrown)
 				   {
