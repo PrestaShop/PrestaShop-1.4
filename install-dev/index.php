@@ -188,7 +188,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[48] = "<?php echo lang('Your lastname contains some invalid characters'); ?>";
 		txtError[49] = "<?php echo lang('Your database server does not support the utf-8 charset.'); ?>";
 		txtError[50] = "<?php echo lang('Your MySQL server doesn\'t support this engine, please use another one like MyISAM'); ?>";
-		txtError[51] = "<?php echo lang('The file /img/logo.jpg is not writable, please CHMOD 777 this file'); ?>";
+		txtError[51] = "<?php echo lang('The file /img/logo.jpg is not writable, please CHMOD 755 this file'); ?>";
 		txtError[52] = "<?php echo lang('Invalid catalog mode'); ?>";
 		txtError[999] = "<?php echo lang('No error code available.'); ?>";
 		//upgrader
