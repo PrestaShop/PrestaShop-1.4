@@ -398,7 +398,7 @@ class PrestaFraud extends Module
 	
 	public function hookCart($params)
 	{
-		if ($_SERVER['REMOTE_ADDR'] == '0.0.0.0' OR $_SERVER['REMOTE_ADDR'] == '' OR $_SERVER['REMOTE_ADDR'] === false)
+		if ($_SERVER['REMOTE_ADDR'] == '0.0.0.0' OR $_SERVER['REMOTE_ADDR'] == '' OR $_SERVER['REMOTE_ADDR'] === false OR $_SERVER['REMOTE_ADDR'] === '::1')
 			return;
 		$res = Db::getInstance()->getValue('
 		SELECT `id_cart`
