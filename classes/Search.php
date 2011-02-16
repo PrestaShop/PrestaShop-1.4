@@ -380,7 +380,10 @@ class SearchCore
 
 			// Force save every 20 products in order to avoid overloading MySQL
 			if (++$countProducts % 20 == 0) // If you change "20" here, you must change the limit in setProductsAsIndexed()
+			{
 				Search::setProductsAsIndexed($productsArray);
+				$productsArray = array();
+			}
 		}
 		// One last save is done at the end in order to save what's left
 		Search::saveIndex($queryArray, $queryArray2);
