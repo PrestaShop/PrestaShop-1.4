@@ -45,15 +45,15 @@ $_MODULE['<{dejala}prestashop>dejala_carrier_e7a6ca4e744870d455a57b644f696457'] 
 $_MODULE['<{dejala}prestashop>dejala_carrier_nostock_21034ae6d01a83e702839a72ba8a77b0'] = '(sin IVA)';
 $_MODULE['<{dejala}prestashop>dejala_carrier_nostock_1f87346a16cf80c372065de3c54c86d9'] = '(IVA inc.)';
 $_MODULE['<{dejala}prestashop>dejala_carrier_nostock_e7a6ca4e744870d455a57b644f696457'] = '¡ Gratis !';
-$_MODULE['<{dejala}prestashop>dejala_contacts_39d4c3b5a6f82e4ee77356e3df68f940'] = 'Gerente de la tienda (signatario)';
+$_MODULE['<{dejala}prestashop>dejala_contacts_a766dcf63862aaaa1625a45169aeb37a'] = 'Dueño de la tienda';
 $_MODULE['<{dejala}prestashop>dejala_contacts_4e140ba723a03baa6948340bf90e2ef6'] = 'Apellido:';
 $_MODULE['<{dejala}prestashop>dejala_contacts_d2cacc542d8dd31bd89f8defed1b55ad'] = 'Nombre:';
 $_MODULE['<{dejala}prestashop>dejala_contacts_673ae02fffb72f0fe68a66f096a01347'] = 'Teléfono:';
 $_MODULE['<{dejala}prestashop>dejala_contacts_7a31464d87d555a1d5a7d2afdeb64d4e'] = 'Teléfono móvil:';
 $_MODULE['<{dejala}prestashop>dejala_contacts_01401fe9a93df81d28637e5218597b76'] = 'E-Mail:';
-$_MODULE['<{dejala}prestashop>dejala_contacts_876e849074d52fb408a700e8c9b6bdd0'] = 'Contacto Stock (punto de salida)';
-$_MODULE['<{dejala}prestashop>dejala_contacts_41226e77837a91aa9e1c96374282daf8'] = 'Contacto Administrativo y Financiero';
-$_MODULE['<{dejala}prestashop>dejala_contacts_af8b9b39801f06e0b032e9db8252a706'] = 'Contacto Envios (seguimiento de entregas)';
+$_MODULE['<{dejala}prestashop>dejala_contacts_7e2121a0b71ccc33c5eeaf11999fdbcd'] = 'Contacto de control de stock';
+$_MODULE['<{dejala}prestashop>dejala_contacts_23e44d356bfc0d17f904cb743b4d247c'] = 'Contacto con la Administración';
+$_MODULE['<{dejala}prestashop>dejala_contacts_527a0a71d5684695421ec3375ec6dba8'] = 'Contacto con Mantenimiento del Sitio web ';
 $_MODULE['<{dejala}prestashop>dejala_contacts_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{dejala}prestashop>dejala_deliveries_9c8a7900448628ee2978be9a3945d148'] = 'Su crédito';
 $_MODULE['<{dejala}prestashop>dejala_deliveries_b0ee4c529eda15bdecda8bf189a3c813'] = 'Su crédito virtual (para simulación)';
@@ -89,7 +89,7 @@ $_MODULE['<{dejala}prestashop>dejala_deliveries_csv_5c5c8fc67b523e638e0a904d6165
 $_MODULE['<{dejala}prestashop>dejala_deliveries_csv_8e659923776b8706dbf4636c408e987c'] = 'Hora máxima de Entrega';
 $_MODULE['<{dejala}prestashop>dejala_deliveries_csv_ba402b48292a61e4d82f85eeaa0904dc'] = 'Fecha de Entrega';
 $_MODULE['<{dejala}prestashop>dejala_deliveries_csv_7c7f9f48d29519e8cb47ac606a431a65'] = 'Hora de Entrega';
-$_MODULE['<{dejala}prestashop>dejala_delivery_options_617283f39e91b6ead659cef3c722cabc'] = ' ';
+$_MODULE['<{dejala}prestashop>dejala_delivery_options_617283f39e91b6ead659cef3c722cabc'] = 'Preferencias de envío';
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_11d783488db0c358bd9077a2e1a250e7'] = 'Su plazo de preparación de pedidos ';
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_ffe181130430aff6386df37df36347f8'] = 'inmediato ( < 20 mn )';
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_a3cb1f2ebeda6fa36b27598f1d096f60'] = 'medio dia';
@@ -100,7 +100,7 @@ $_MODULE['<{dejala}prestashop>dejala_delivery_options_48b4a9d141bcbb3911caa5caf4
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_7877adcb96eb8221c075f0008093bbf7'] = 'dias';
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_b4f86cbc11cb9565374c08c61372f3ad'] = 'Franja en dias dentro de la cual su cliente podrá elejir ser entregado. De forma general, DEJALA vendrá recojer el pedido el dia de la entrega.';
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_44a33a70398318da91b789b33152dafa'] = 'Activar si fuera de stock';
-$_MODULE['<{dejala}prestashop>dejala_delivery_options_f33bfc6538f6c67fc90a882feca7faa5'] = 'Para permitir a sus clientes la entrega por mensajero aunque un producto no esté disponible en el stock. Su cliente elejirá luego su franja de entrega cuando el pedido esté listo.';
+$_MODULE['<{dejala}prestashop>dejala_delivery_options_767cd99c2f2b9fb9e5aa531c37b45f87'] = 'Permite a los clientes elegir Dejala, incluso si un producto está agotadok (El cliente elegirá la fecha de la entrega cuando su pedido esté listo)';
 $_MODULE['<{dejala}prestashop>dejala_delivery_options_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{dejala}prestashop>dejala_header_c45abd6f2b5f3b3a954c97f008ccb52c'] = 'Entregue sus pedidos por mensajero con ';
 $_MODULE['<{dejala}prestashop>dejala_header_20e846b603a0b7f1c00b1fc457308fb7'] = 'DEJALA';
