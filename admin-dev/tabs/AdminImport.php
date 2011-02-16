@@ -752,8 +752,8 @@ class AdminImport extends AdminTab
 					$specificPrice->from_quantity = 1;
 					$specificPrice->reduction = (isset($info['reduction_price']) AND $info['reduction_price']) ? $info['reduction_price'] : $info['reduction_percent'] / 100;
 					$specificPrice->reduction_type = (isset($info['reduction_price']) AND $info['reduction_price']) ? 'amount' : 'percentage';
-					$specificPrice->from = isset($info['reduction_from']) ? $info['reduction_from'] : '0000-00-00 00:00:00';
-					$specificPrice->to = isset($info['reduction_to']) ? $info['reduction_to'] : '0000-00-00 00:00:00';
+					$specificPrice->from = (isset($info['reduction_from']) AND Validate::isDate($info['reduction_from'])) ? $info['reduction_from'] : '0000-00-00 00:00:00';
+					$specificPrice->to = (isset($info['reduction_to']) AND Validate::isDate($info['reduction_to']))  ? $info['reduction_to'] : '0000-00-00 00:00:00';
 					if (!$specificPrice->add())
 						$this->_addProductWarning($info['name'], $product->id, $this->l('Discount is invalid'));
 				}
