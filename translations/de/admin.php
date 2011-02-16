@@ -2627,7 +2627,6 @@ $_LANGADM['AdminTranslations00d9fe3a4ab9297f69c46d645fa8ca7c'] = 'Kopieren';
 $_LANGADM['AdminTranslations0ce7ca290969bc360efbabe90ff19741'] = 'Die Dateien der Ausgangssprache müssen vollständig sein (wie in Tools >> Sprachen >> Bearbeiten angegeben), um die Übersetzungen kopieren zu können.';
 $_LANGADM['AdminTranslations6e4fd86b4ea240672daa3c2fe1118fe0'] = 'Öffnen Sie alle Blöcke';
 $_LANGADM['AdminTranslationse1686cbdbfefdc838c58469866922b6c'] = 'Schließen Sie alle Blöcke';
-$_LANGADM['AdminTranslations76fb7c4afb2525a206dd30029a96ad38'] = 'Mit Google übersetzen';
 $_LANGADM['AdminTranslations24995bf641e65d70246d77d013e1dbeb'] = 'Diese Sprache wird von der Google Translate API nicht zur Verfügung gestellt';
 $_LANGADM['AdminTranslations0ee4952629fd0444458d6109ced430f5'] = 'Vorsicht, Ihr Provider verwendet den Suhosin-Patch für PHP, der die Felder, die zugeordnet werden könnten, maximal begrenzt';
 $_LANGADM['AdminTranslations82c5f79664554de067bbb2511dd5585d'] = '. Daher können Ihre Übersetzungen teilweise gespeichert werden. Bitten Sie Ihren Provider, dieses Grenze auf';

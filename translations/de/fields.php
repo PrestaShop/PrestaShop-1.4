@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 global $_FIELDS;
 $_FIELDS = array();
@@ -124,7 +124,6 @@ $_FIELDS['Customer_cf673f7ee88828c9fb8f6acf2cb08403'] = 'Geburtsdatum';
 $_FIELDS['Customer_9e438d8a7b036ea9b8d4375377d47e1a'] = 'Newsletter';
 $_FIELDS['Customer_0402462205c4fb9cd425c0a04afaf737'] = 'Partnerangebote';
 $_FIELDS['Customer_c76a5e84e4bdee527e274ea30c680d79'] = 'aktiv';
-$_FIELDS['Customer_d56f5e97524d5d1ad77ec197ae11dad0'] = 'dni';
 $_FIELDS['Customer_aad653ca3ee669635f2938b73098b6d7'] = 'Hinweis';
 $_FIELDS['CustomerMessage_78e731027d8fd50ed642340b7c9a63b3'] = 'Nachricht';
 $_FIELDS['CustomerMessage_958c11507403f88248678579d5739af3'] = 'Mitarbeiter-ID';
@@ -428,7 +427,6 @@ $_FIELDS['SpecificPrice_120faea10923bec533179a806fa925c3'] = 'Produkt-ID';
 $_FIELDS['SpecificPrice_5a0971a207e75dd040db8b6a3425a8bf'] = 'Shop-ID';
 $_FIELDS['SpecificPrice_e42112710fe4f0cf86411aabc028e7d9'] = 'Länder-ID';
 $_FIELDS['SpecificPrice_6d03c13d90dae15f3dafe865b0fbfded'] = 'Gruppen-ID';
-$_FIELDS['SpecificPrice_b988295c268025b49dfb3df26171ddc3'] = 'Priorität';
 $_FIELDS['SpecificPrice_78a5eb43deef9a7b5b9ce157b9d52ac4'] = 'Preis';
 $_FIELDS['SpecificPrice_dc99776458b68786a9e903854e23a483'] = 'der Menge';
 $_FIELDS['SpecificPrice_9477e24c78f1ca8ee9b03111f6227fc2'] = 'Ermäßigung';
@@ -452,7 +450,6 @@ $_FIELDS['Store_c4da098c369f77a70643fa52972677be'] = 'Staaten-ID';
 $_FIELDS['Store_b068931cc450442b63f5b3d276ea4297'] = 'Name';
 $_FIELDS['Store_81e70cb16ec45f5ab19bb6638e8e6c2d'] = 'Adresse 1';
 $_FIELDS['Store_f669f8e9f6599d0dfcd613bc6e2f347e'] = 'Adresse 2';
-$_FIELDS['Store_e90ebd9556fa4031171f043013794b61'] = 'Postleitzahl';
 $_FIELDS['Store_4ed5d2eaed1a1fadcc41ad1d58ed603e'] = 'Stadt';
 $_FIELDS['Store_28c1e37e317b935a387dbe232bc9f803'] = 'Breitengrad';
 $_FIELDS['Store_ba569b80f7bb7762f073f1be57cc36aa'] = 'Längengrad';

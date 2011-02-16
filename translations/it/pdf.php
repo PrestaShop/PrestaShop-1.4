@@ -1,9 +1,9 @@
-﻿<?php
+<?php
 
 global $_LANGPDF;
 $_LANGPDF = array();
 $_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Restituzione n.';
-$_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] =  'Nota di credito n.';
+$_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] = 'Nota di credito n.';
 $_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Buono di consegna n.';
 $_LANGPDF['PDF_invoicefe4da50838bb10dcbf1bf8dcd9b12ab5'] = 'Fattura n.';
 $_LANGPDF['PDF_invoiceba160acb58001c904c57507da3689265'] = 'Ordine n.';
