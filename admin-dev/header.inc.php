@@ -101,7 +101,7 @@ echo '
 				}
 				</script>
 				<select onchange="quickSelect(this);" id="quick_select">
-					<option value="0">'.translate('Quick access').'</option>';
+					<option value="0">'.translate('Quick Access').'</option>';
 foreach (QuickAccess::getQuickAccesses((int)($cookie->id_lang)) AS $quick)
 {
 	preg_match('/tab=(.+)(&.+)?$/', $quick['link'], $adminTab);

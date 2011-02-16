@@ -584,17 +584,17 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 1, 'Catalog'),(1, 2, 'Customers'),(1, 3, 'Orders'),(1, 4, 'Payment'),
-(1, 5, 'Shipping'),(1, 6, 'Stats'),(1, 7, 'Modules'),(1, 8, 'Preferences'),(1, 9, 'Tools'),(1, 10, 'Manufacturers'),(1, 11, 'Attributes and groups'),
+(1, 5, 'Shipping'),(1, 6, 'Stats'),(1, 7, 'Modules'),(1, 8, 'Preferences'),(1, 9, 'Tools'),(1, 10, 'Manufacturers'),(1, 11, 'Attributes and Groups'),
 (1, 12, 'Addresses'),(1, 13, 'Statuses'),(1, 14, 'Vouchers'),(1, 15, 'Currencies'),(1, 16, 'Taxes'),(1, 17, 'Carriers'),(1, 18, 'Countries'),
-(1, 19, 'Zones'),(1, 20, 'Price ranges'),(1, 21, 'Weight ranges'),(1, 22, 'Positions'),(1, 23, 'Database'),(1, 24, 'Email'),(1, 26, 'Image'),
+(1, 19, 'Zones'),(1, 20, 'Price Ranges'),(1, 21, 'Weight Ranges'),(1, 22, 'Positions'),(1, 23, 'Database'),(1, 24, 'E-mail'),(1, 26, 'Image'),
 (1, 27, 'Products'),(1, 28, 'Contacts'),(1, 29, 'Employees'),(1, 30, 'Profiles'),(1, 31, 'Permissions'),(1, 32, 'Languages'),(1, 33, 'Translations'),
-(1, 34, 'Suppliers'),(1, 35, 'Tabs'),(1, 36, 'Features'),(1, 37, 'Quick Accesses'),(1, 38, 'Appearance'),(1, 39, 'Contact'),(1, 40, 'Aliases'),
-(1, 41, 'Import'),(1, 42, 'Invoices'),(1, 43, 'Search'),(1, 44, 'Localization'),(1, 46, 'States'),(1, 47, 'Merchandise return'),(1, 48, 'PDF'),
-(1, 49, 'Credit slips'),(1, 51, 'Settings'),(1, 52, 'Subdomains'),(1, 53, 'DB backup'),(1, 54, 'Order Messages'),
-(1, 55, 'Delivery slips'),(1, 56, 'SEO'),(1, 57, 'CMS'),(1, 58, 'Image mapping'),(1, 59, 'Customer messages'),(1, 60, 'Tracking'),
-(1, 61, 'Search engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
-(1, 68, 'Attachments'),(1, 69, 'Information'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
-(1, 80, 'Modules & themes catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocalization'),(1, 85, 'Tax Rules'),(1, 86, 'Log');
+(1, 34, 'Suppliers'),(1, 35, 'Tabs'),(1, 36, 'Features'),(1, 37, 'Quick Access'),(1, 38, 'Appearance'),(1, 39, 'Contact Information'),(1, 40, 'Aliases'),
+(1, 41, 'Import'),(1, 42, 'Invoices'),(1, 43, 'Search'),(1, 44, 'Localization'),(1, 46, 'States'),(1, 47, 'Merchandise Returns'),(1, 48, 'PDF'),
+(1, 49, 'Credit Slips'),(1, 51, 'Settings'),(1, 52, 'Subdomains'),(1, 53, 'DB backup'),(1, 54, 'Order Messages'),
+(1, 55, 'Delivery Slips'),(1, 56, 'SEO'),(1, 57, 'CMS'),(1, 58, 'Image Mapping'),(1, 59, 'Customer Messages'),(1, 60, 'Tracking'),
+(1, 61, 'Search Engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Shopping Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
+(1, 68, 'Attachments'),(1, 69, 'Configuration Information'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
+(1, 80, 'Modules & Themes Catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocalization'),(1, 85, 'Tax Rules'),(1, 86, 'Log');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 1, 'Catalogue'),(2, 2, 'Clients'),(2, 3, 'Commandes'),(2, 4, 'Paiement'),(2, 5, 'Transport'),
