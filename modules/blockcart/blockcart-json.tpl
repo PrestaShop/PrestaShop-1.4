@@ -94,7 +94,9 @@
 ],
 
 "shippingCost": "{$shipping_cost|html_entity_decode:2:'UTF-8'}",
+{if isset($tax_cost)}
 "taxCost": "{$tax_cost|html_entity_decode:2:'UTF-8'}",
+{/if}
 "wrappingCost": "{$wrapping_cost|html_entity_decode:2:'UTF-8'}",
 "nbTotalProducts": "{$nb_total_products}",
 "total": "{$total|html_entity_decode:2:'UTF-8'}",
