@@ -77,7 +77,6 @@ class Secuvad extends Module
 			die(Tools::displayError('File install.sql is missing'));
 		elseif (!$sql = file_get_contents(dirname(__FILE__).'/install.sql'))
 			die(Tools::displayError('File install.sql isn\'t readable'));
-		$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
 		$sql = str_replace(array('PREFIX_', 'ENGINE_TYPE'), array(_DB_PREFIX_, _MYSQL_ENGINE_), $sql);
 		
 		$sql = preg_split("/;\s*[\r\n]+/", $sql);
