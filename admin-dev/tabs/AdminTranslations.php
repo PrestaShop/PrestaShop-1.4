@@ -1811,7 +1811,7 @@ class AdminTranslations extends AdminTab
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
 			 	echo '
-				<fieldset style="width: 700px"><legend style="cursor : pointer" onclick="$(\''.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+				<fieldset style="width: 700px"><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="pdf_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
