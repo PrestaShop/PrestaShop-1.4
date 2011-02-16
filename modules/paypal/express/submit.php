@@ -52,6 +52,7 @@ function getAuthorization()
 				$cookie->paypal_token = strval($result['TOKEN']);
 				$cookie->paypal_token_date = time();
 				header('Location: https://'.$ppExpress->getPayPalURL().'/webscr&cmd=_express-checkout&token='.urldecode(strval($cookie->paypal_token)));
+        exit;
 			}
 			else
 				$logs[] = '<b>'.$ppExpress->l('No token given by PayPal', 'submit').'</b>';
