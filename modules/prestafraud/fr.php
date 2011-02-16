@@ -52,9 +52,9 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_cb18f4dc13847e2ed5d69cb936f9b26c'
 $_MODULE['<{prestafraud}prestashop>prestafraud_2d9f684cd217d62388ac3f4d0345da23'] = 'Presta fraude';
 $_MODULE['<{prestafraud}prestashop>prestafraud_438858fbee224aae7b35d9ac18c554c0'] = 'Cette commande n\'a pas été envoyé à Presta fraude.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_d0c6a2fa938df84c0ce628de99c97e16'] = 'Notation:';
-$_MODULE['<{prestafraud}prestashop>prestafraud_01ae2e552c349bd5608af0f670f8ebc2'] = 'inconnu';
+$_MODULE['<{prestafraud}prestashop>prestafraud_01ae2e552c349bd5608af0f670f8ebc2'] = 'N/A';
 $_MODULE['<{prestafraud}prestashop>prestafraud_240f3031f25601fa128bd4e15f0a37de'] = 'Commentaire:';
-$_MODULE['<{prestafraud}prestashop>prestafraud_b88011726eba59d6bf37f0fdec202edc'] = 'Rapport cet commande comme une fraude à PrestaShop';
+$_MODULE['<{prestafraud}prestashop>prestafraud_b88011726eba59d6bf37f0fdec202edc'] = 'Rapporter cette commande comme une fraude à PrestaShop';
 $_MODULE['<{prestafraud}prestashop>prestafraud_a8bbb000124c9697aa5d63e7e758b64d'] = 'Retrait en magasin';
 $_MODULE['<{prestafraud}prestashop>prestafraud_08eb31af908e2244867f6e812f82e935'] = 'Point de retrait, point relais';
 $_MODULE['<{prestafraud}prestashop>prestafraud_880f973e4ddae42c6bebd2c31bb977f8'] = 'Livraison lente de plus de 3 jours';
