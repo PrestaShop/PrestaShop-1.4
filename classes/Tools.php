@@ -473,8 +473,8 @@ class ToolsCore
 	public static function displayError($string = 'Fatal error', $htmlentities = true)
 	{
 		global $_ERRORS, $cookie;
-
-		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
+		
+		$iso = strtolower(Language::getIsoById((is_object($cookie) AND $cookie->id_lang) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT')));
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
 		if (_PS_MODE_DEV_ AND $string == 'Fatal error')
@@ -1110,10 +1110,10 @@ class ToolsCore
 		return self::$file_exists_cache[$filename];
 	}
 
-	public static function file_get_contents($url)
+	public static function file_get_contents($url, $useIncludePath = false, $streamContext = NULL)
     {
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
-			return file_get_contents($url);
+			return file_get_contents($url, $useIncludePath, $streamContext);
 		else if (function_exists('curl_init'))
 		{
 			$curl = curl_init();
@@ -1124,7 +1124,7 @@ class ToolsCore
 			return $content;
 		}
 		else
-			trigger_error('Unable to retrieve "'.htmlentities($url).'": PHP directive allow_url_fopen is disabled and PHP cURL is not installed', E_USER_WARNING);
+			return false;
     }
 
 	public static function minifyHTML($html_content)
