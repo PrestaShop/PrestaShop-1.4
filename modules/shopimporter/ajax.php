@@ -3,6 +3,7 @@
 include_once('../../config/config.inc.php');
 include_once('../../init.php');
 include_once('../../modules/shopimporter/shopimporter.php');
+ini_set('display_errors', 'off');
 
 if (!Tools::getValue('ajax'))
 	die('');
@@ -11,6 +12,7 @@ $moduleName = Tools::getValue('moduleName');
 $className =Tools::getValue('className');
 $getMethod = Tools::getValue('getMethod');
 $limit = Tools::getValue('limit');
+$nbr_import = Tools::getValue('nbr_import');
 $server = Tools::getValue('server');
 $user = Tools::getValue('user');
 $password = Tools::getValue('password');
@@ -53,7 +55,7 @@ if (Tools::isSubmit('getData') || Tools::isSubmit('syncLang') || Tools::isSubmit
 			die('{"hasError" : true, "error" : ["not_exist"], "datas" : []}');
 		else
 		{
-			$return = call_user_func_array(array($importModule, $getMethod), array($limit));
+			$return = call_user_func_array(array($importModule, $getMethod), array($limit, $nbr_import));
 			$shopImporter = new shopImporter();
 			$shopImporter->generiqueImport($className, $return, (bool)$save);
 		}
@@ -64,6 +66,16 @@ if (Tools::isSubmit('truncatTable'))
 {	
 	$shopImporter = new shopImporter();
 	if ($shopImporter->truncateTable($className))
+		die('{"hasError" : false, "error" : []}');
+	else
+		die('{"hasError" : true, "error" : ["'.$className.'"]}');
+
+}
+
+if (Tools::isSubmit('alterTable'))
+{	
+	$shopImporter = new shopImporter();
+	if ($shopImporter->alterTable($className))
 		die('{"hasError" : false, "error" : []}');
 	else
 		die('{"hasError" : true, "error" : ["'.$className.'"]}');

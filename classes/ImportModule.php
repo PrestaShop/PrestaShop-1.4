@@ -49,7 +49,7 @@ abstract class ImportModuleCore extends Module
 		return $this->_link;
 	}
 	
-	public function executeS($query)
+	public function ExecuteS($query)
 	{
 		$this->initDatabaseConnection();
 		$result = mysql_query($query, $this->_link);
@@ -58,6 +58,22 @@ abstract class ImportModuleCore extends Module
 			while ($row = mysql_fetch_assoc($result))
 				$resultArray[] = $row;
 		return $resultArray;
+	}
+	
+	public function Execute($query)
+	{
+		$this->initDatabaseConnection();
+		return mysql_query($query, $this->_link);
+	}
+	
+	public function getValue($query)
+	{
+		$this->initDatabaseConnection();
+		$result = $this->ExecuteS($query);
+		if (!sizeof($result))
+			return 0;
+		else
+			return array_shift($result[0]);
 	}
 	
 	public static function getImportModulesOnDisk ()
