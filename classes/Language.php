@@ -319,13 +319,23 @@ class LanguageCore extends ObjectModel
 		// Files deletion
 		foreach (self::getFilesList($this->iso_code, _THEME_NAME_, false, false, false, true, true) as $key => $file)
 			unlink($key);
-		$modList = Module::getModulesDirOnDisk();
+		$modList = scandir(_PS_MODULE_DIR_);
 		foreach ($modList as $k => $mod)
 		{
-			if(file_exists(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php'))
-				unlink(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php');
 			self::recurseDeleteDir(_PS_MODULE_DIR_.$mod.'/mails/'.$this->iso_code);
+			$files = @scandir(_PS_MODULE_DIR_.$mod.'/mails/');
+			if (count($files) <= 2)
+				self::recurseDeleteDir(_PS_MODULE_DIR_.$mod.'/mails/');
+			
+			if(file_exists(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php'))
+			{
+				$return = unlink(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php');
+				$files = @scandir(_PS_MODULE_DIR_.$mod);
+				if (count($files) <= 2)
+					self::recurseDeleteDir(_PS_MODULE_DIR_.$mod);
+			}
 		}
+		
 		if (file_exists(_PS_MAIL_DIR_.$this->iso_code))
 			self::recurseDeleteDir(_PS_MAIL_DIR_.$this->iso_code);
 		if (file_exists(_PS_TRANSLATIONS_DIR_.$this->iso_code))
