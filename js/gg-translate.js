@@ -14,7 +14,7 @@ $(function()
 	{
 		$('#content').find('input[type="text"], textarea').each(function()
 		{
-			$(this).after('<a class="button-translate" title="'+gg_translate['tooltip_title']+'|wait..." ></a>');
+			$(this).after('<a class="button-translate" title="'+gg_translate['tooltip_title']+'|wait..." ><img src="../img/admin/page_world.png" alt="'+gg_translate['tooltip_title']+'"></a>');
 		});
 		$('.button-translate').mouseover(function()
 		{
@@ -38,6 +38,7 @@ $(function()
 			onShow : function(ct, c_inner)
 			{
 				current_translate = '';
+				$('#cluetip-inner').html('<img src="../img/loader.gif" alt="loader" />');
 				var button = gg_current_bt;
 				if (button.parent("td").prev().html())
 				{

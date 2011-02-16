@@ -1431,14 +1431,9 @@ a.blue:hover {
 	background: #ECEADE;
 }
 .button-translate {
-	display:inline-block;
-	position:relative;
-	top:7px;
-	padding:2px;
+	padding:0px;
 	margin : 0 0 0 10px;
 	height:15px;
 	width:15px;
 	cursor:pointer;
-	background-image: url(../img/admin/page_world.png);
-	background-repeat: no-repeat;
 }
