@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_assoc_category`
 	`id_category` int default NULL,
 	`category_id` int default NULL,
 	PRIMARY KEY  (`id_secuvad_assoc_category`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_assoc_payment`
 (
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_assoc_payment`
 	`id_module` int default NULL,
 	`code` varchar(45) default NULL,
 	PRIMARY KEY  (`id_secuvad_assoc_payment`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_assoc_transport`
 (
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_assoc_transport`
 	`transport_id` int default NULL,
 	`transport_delay_id` int default NULL,
 	PRIMARY KEY  (`id_secuvad_assoc_transport`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_category`
 (
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_category`
 	`sort_num` int default NULL,
 	`id_lang` int default '1',
 	PRIMARY KEY  (`category_id`,`id_lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_logs`
 (
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_logs`
 	`message` text default NULL,
 	`date` timestamp NOT NULL default CURRENT_TIMESTAMP,
 	PRIMARY KEY  (`id_secuvad_logs`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_order`
 (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_order`
 	`ip` varchar(16) default NULL,
 	`ip_time` timestamp NULL default NULL,
 	PRIMARY KEY  (`id_secuvad_order`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_payment`
 (
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_payment`
 	`name` varchar(255) default NULL,
 	`id_lang` int(11) NOT NULL,
 	PRIMARY KEY  USING BTREE (`code`,`id_lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_transport`
 (
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_transport`
 	`transport_name` varchar(150) character set latin1 default NULL,
 	`id_lang` int(11) NOT NULL,
 	PRIMARY KEY  USING BTREE (`transport_id`,`id_lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_transport_delay`
 (
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_secuvad_transport_delay`
 	`transport_delay_name` varchar(45) character set latin1 default NULL,
 	`id_lang` int(11) NOT NULL,
 	PRIMARY KEY  USING BTREE (`transport_delay_id`,`id_lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_payment_cc` (
   `id_payment_cc` int(11) NOT NULL AUTO_INCREMENT,
@@ -90,4 +90,4 @@ CREATE TABLE IF NOT EXISTS `PREFIX_payment_cc` (
   `date_add` datetime NOT NULL,
   PRIMARY KEY (`id_payment_cc`),
   KEY `id_order` (`id_order`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
