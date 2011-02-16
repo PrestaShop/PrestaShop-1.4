@@ -58,9 +58,8 @@ function smartyTranslate($params, &$smarty)
 	if (!isset($params['js'])) $params['js'] = 0;
 	if (!isset($params['mod'])) $params['mod'] = false;
 	
-	$msg = false;
 	$string = str_replace('\'', '\\\'', $params['s']);
-	
+	$key = '';
 	if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
 		$key = $smarty->currentTemplate.'_'.md5($string);
 	else
@@ -68,7 +67,7 @@ function smartyTranslate($params, &$smarty)
 		$filename = ((!isset($smarty->compiler_object) OR !is_object($smarty->compiler_object->template)) ? $smarty->template_filepath : $smarty->compiler_object->template->getTemplateFilepath());
 		$key = Tools::substr(basename($filename), 0, -4).'_'.md5($string);
 	}
-	
+	$lang_array = $_LANG;
 	if ($params['mod'])
 	{
 		$iso = Language::getIsoById($cookie->id_lang);
@@ -76,12 +75,12 @@ function smartyTranslate($params, &$smarty)
 		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php'))
 		{
 			$translationsFile = _PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php';
-			$modKey = '<{'.$params['mod'].'}'._THEME_NAME_.'>'.$key;
+			$key = '<{'.$params['mod'].'}'._THEME_NAME_.'>'.$key;
 		}
 		else
 		{
 			$translationsFile = _PS_MODULE_DIR_.$params['mod'].'/'.$iso.'.php';
-			$modKey = '<{'.$params['mod'].'}prestashop>'.$key;
+			$key = '<{'.$params['mod'].'}prestashop>'.$key;
 		}
 		
 		if(!is_array($_MODULES))
@@ -89,12 +88,19 @@ function smartyTranslate($params, &$smarty)
 		if (@include_once($translationsFile))
 			if(is_array($_MODULE))
 				$_MODULES = array_merge($_MODULES, $_MODULE);
-		
-		$msg = (is_array($_MODULES) AND key_exists($modKey, $_MODULES)) ? ($params['js'] ? addslashes($_MODULES[$modKey]) : stripslashes($_MODULES[$modKey])) : false;
+		$lang_array = $_MODULES;
 	}
-	if (!$msg)
-		$msg = (is_array($_LANG) AND key_exists($key, $_LANG)) ? ($params['js'] ? addslashes($_LANG[$key]) : stripslashes($_LANG[$key])) : $params['s'];
-	return ($params['js'] ? $msg : Tools::htmlentitiesUTF8($msg));
+	
+	if (is_array($lang_array) AND key_exists($key, $lang_array))
+		$msg = $lang_array[$key];
+	elseif (is_array($lang_array) AND key_exists(Tools::strtolower($key), $lang_array))
+		$msg = $lang_array[Tools::strtolower($key)];
+	else
+		$msg = $params['s'];
+	
+	if ($msg != $params['s'])
+		$msg = $params['js'] ? addslashes($msg) : stripslashes($msg);
+	return $params['js'] ? $msg : Tools::htmlentitiesUTF8($msg);
 }
 
 function smartyDieObject($params, &$smarty)

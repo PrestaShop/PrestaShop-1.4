@@ -564,8 +564,12 @@ abstract class ModuleCore
 
 		if (key_exists($currentKey, $_MODULES))
 			$ret = stripslashes($_MODULES[$currentKey]);
+		else if (key_exists(Tools::strtolower($currentKey), $_MODULES))
+			$ret = stripslashes($_MODULES[Tools::strtolower($currentKey)]);
 		elseif (key_exists($defaultKey, $_MODULES))
 			$ret = stripslashes($_MODULES[$defaultKey]);
+		elseif (key_exists(Tools::strtolower($defaultKey), $_MODULES))
+			$ret = stripslashes($_MODULES[Tools::strtolower($defaultKey)]);
 		else
 			$ret = $string;
 
@@ -595,7 +599,7 @@ abstract class ModuleCore
 		if (Tools::file_exists_cache($file) AND include_once($file))
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 		
-		$source = Tools::strtolower($specific ? $specific : $this->name);
+		$source = $specific ? $specific : $this->name;
 		$string = str_replace('\'', '\\\'', $string);
 		$ret = $this->_findTranslation($this->name, $string, $source);
 		return $ret;
