@@ -1774,6 +1774,7 @@ class UspsCarrier extends CarrierModule
 			if ($this->_weightUnit == 'KG' || $this->_weightUnit == 'KGS')
 				$p['weight_pounds'] = round($p['weight'] * 2.20462262);
 			$p['weight_ounces'] = $p['weight_pounds'] * 16;
+			$p['weight_pounds'] = 0;
 
 			// Replace in template
 			$search = array(
