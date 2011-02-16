@@ -114,7 +114,17 @@ class PrestaFraud extends Module
 	private function _displayConfiguration()
 	{
 		global $cookie;
-		$this->_html .= '
+		$this->_html .= '<script type="text/javascript">
+									$(document).ready(function() {
+										$(\'#submitCreateAccount\').unbind(\'click\').click(function() {
+										if (!$(\'#terms_and_conditions\').attr(\'checked\'))
+										{
+											alert(\''.$this->l('Please accept the terms of service.').'\');
+											return false;
+										}
+									});										
+									});
+								</script>
 		<fieldset><legend>'.$this->l('Presta-Fraud configuration').'</legend>
 			<div id="choose_account">
 				<center>
@@ -129,17 +139,21 @@ class PrestaFraud extends Module
 				<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post" name="prestashop_trust" id="prestashop_trust">
 					<label>'.$this->l('Your email:').'</label>
 					<div class="margin-form">
-						<input type="text" name="email" />
+						<input type="text" style="width:200px;" name="email" />
 					</div>
 					<label>'.$this->l('Shop Url:').'</label>
 					<div class="margin-form">
 						<input type="text" style="width:400px;" name="shop_url" value="http://www.'.Tools::getHttpHost().__PS_BASE_URI__.'"/>
 					</div>
 					<div class="margin-form">
-					<input id="cgv" type="checkbox" value="1" />'.$this->l('I agree with the terms of Presta-Fraud service and i adhere to them unconditionally.').'</label>
+						<input id="terms_and_conditions" type="checkbox" value="1" />'.$this->l('I agree with the terms of Presta-Fraud service and i adhere to them unconditionally.').'</label>
 					</div>
+					<div id="terms" class="margin-form">';
+					$terms = file_get_contents(self::$_trustUrl.'terms.php?lang='.Language::getIsoById((int)$cookie->id_lang));
+					$this->_html .= $terms;
+					$this->_html .= '</div>
 					<div class="margin-form">
-						<input class="button" type="submit" name="submitCreateAccount" value="'.$this->l('Create account').'"/>
+						<input class="button" type="submit" id="submitCreateAccount" name="submitCreateAccount" value="'.$this->l('Create account').'"/>
 					</div>
 				</form>
 				<div class="clear">&nbsp;</div>
