@@ -405,7 +405,7 @@ class PrestaFraud extends Module
 		$carriers_type = $this->_getConfiguredCarriers();
 
 		$carrier_infos->addChild('type', $carriers_type[$carrier->id]);
-		if (self::_pushDatas($root->asXml()))
+		if (self::_pushDatas($root->asXml()) !== false)
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'prestafraud_orders (id_order) VALUES('.(int)$params['order']->id.')');
 		return true;
 	}
@@ -413,6 +413,8 @@ class PrestaFraud extends Module
 	public function hookCart($params)
 	{
 		if ($_SERVER['REMOTE_ADDR'] == '0.0.0.0' OR $_SERVER['REMOTE_ADDR'] == '' OR $_SERVER['REMOTE_ADDR'] === false OR $_SERVER['REMOTE_ADDR'] === '::1')
+			return;
+		if (!$params['cart']->id)
 			return;
 		$res = Db::getInstance()->getValue('
 		SELECT `id_cart`
