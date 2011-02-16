@@ -2253,6 +2253,7 @@ class AdminProducts extends AdminTab
 		if (elt.checked)
 		{
 			$('#virtual_good').show('slow');
+			$('#virtual_good_more').show('slow');
 			getE('out_of_stock_1').checked = 'checked';
 			getE('out_of_stock_2').disabled = 'disabled';
 			getE('out_of_stock_3').disabled = 'disabled';
@@ -2262,6 +2263,7 @@ class AdminProducts extends AdminTab
 		else
 		{
 			$('#virtual_good').hide('slow');
+			$('#virtual_good_more').hide('slow');
 			getE('out_of_stock_2').disabled = false;
 			getE('out_of_stock_3').disabled = false;
 			getE('label_out_of_stock_2').setAttribute('for', 'out_of_stock_2');
@@ -2366,7 +2368,7 @@ class AdminProducts extends AdminTab
 				</p>
 
 				</div>
-				<div style="padding:5px;width:40%;float:left;margin-left:10px">
+				<div id="virtual_good_more" style="<?php if(!$productDownload->id OR !$productDownload->active) echo 'display:none;' ?>padding:5px;width:40%;float:left;margin-left:10px">
 
 				<p class="block">
 					<label for="virtual_product_nb_downloable" class="t"><?php echo $this->l('Number of downloads') ?></label>
@@ -2392,7 +2394,10 @@ class AdminProducts extends AdminTab
 	<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 	<script type="text/javascript">
 		if ($('#is_virtual_good').attr('checked'))
+		{
 			$('#virtual_good').show('slow');
+			$('#virtual_good_more').show('slow');
+		}
 	</script>
 
 <?php
