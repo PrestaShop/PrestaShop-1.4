@@ -272,10 +272,12 @@ class CustomerCore extends ObjectModel
 	  * Check if, except current customer, someone else registered this e-email
 	  *
 	  * @return integer Number of customers who have also this e-mail
+	  * @deprecated
 	  */
 	public function cantChangeemail()
 	{
-	 	if (!Validate::isEmail($this->email))
+	 	Tools::displayAsDeprecated();
+		if (!Validate::isEmail($this->email))
 	 		die (Tools::displayError());
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_customer`) AS total
