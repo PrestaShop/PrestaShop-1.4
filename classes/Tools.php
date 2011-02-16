@@ -1277,8 +1277,8 @@ class ToolsCore
 
 	/**
 	 * addJS load a javascript file in the header
-	 * 
-	 * @param mixed $js_uri 
+	 *
+	 * @param mixed $js_uri
 	 * @return void
 	 */
 	public static function addJS($js_uri)
@@ -1310,9 +1310,9 @@ class ToolsCore
 
 	/**
 	 * addCSS allows you to add stylesheet at any time.
-	 * 
-	 * @param mixed $css_uri 
-	 * @param string $css_media_type 
+	 *
+	 * @param mixed $css_uri
+	 * @param string $css_media_type
 	 * @return true
 	 */
 	public static function addCSS($css_uri, $css_media_type = 'all')
@@ -1688,7 +1688,7 @@ FileETag INode MTime Size
 
             $message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
 
-            if (!Log::isAlreadyPresent($message))
+            if (!Log::isPresent($message))
                 Log::addLog($message, 3, $callee['class']);
 		}
 	}
@@ -1705,7 +1705,7 @@ FileETag INode MTime Size
 	   		trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
 
             $message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
-            if (!Log::isAlreadyPresent($message))
+            if (!Log::isPresent($message))
                 Log::addLog($message, 3, $callee['class']);
 		}
 	}

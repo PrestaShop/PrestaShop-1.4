@@ -102,7 +102,7 @@ class	LogCore extends ObjectModel
 		return $log->add();
 	}
 
-	static public function isAlreadyPresent($message)
+	static public function isPresent($message)
 	{
 	    if (isset(self::$_is_present[md5($message)]))
         {
@@ -118,3 +118,4 @@ class	LogCore extends ObjectModel
 	}
 
 }
+
