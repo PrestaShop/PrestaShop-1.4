@@ -458,13 +458,14 @@ class PrestaFraud extends Module
 	
 	public function hookAdminOrder($params)
 	{
+		global $cookie;
 		$id_order = Db::getInstance()->getValue('SELECT id_order FROM '._DB_PREFIX_.'prestafraud_orders WHERE id_order='.(int)$params['id_order']);
 		$this->_html .= '<br /><fieldset><legend>'.$this->l('Presta Fraud').'</legend>';
 		if (!$id_order)
 			$this->_html .= $this->l('This order has not been sent to Presta Fraud.');
 		else
 		{
-			$scoring = $this->_getScoring((int)$id_order);
+			$scoring = $this->_getScoring((int)$id_order, $cookie->id_lang);
 			$this->_html .= '<p><b>'.$this->l('Scoring:').'</b> '.($scoring['scoring'] < 0 ? $this->l('Unknow') : $scoring['scoring']).'</p>
 									<p><b>'.$this->l('Comment:').'</b> '.$scoring['comment'].'</p>
 									<p><center><a target="_BLANK" href="'.self::$_trustUrl.'fraud_report.php?shop_id='.Configuration::get('PS_TRUST_SHOP_ID').'&shop_key='.Configuration::get('PS_TRUST_SHOP_KEY').'&order_id='.$id_order.'">'.$this->l('Report this order as a fraud to PrestaShop').'</a></center></p>';
@@ -475,7 +476,7 @@ class PrestaFraud extends Module
 	
 	
 		
-	private function _getScoring($id_order)
+	private function _getScoring($id_order, $id_lang)
 	{
 		if (!$scoring = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'prestafraud_orders WHERE scoring IS NOT NULL AND id_order='.(int)$id_order))
 		{
@@ -484,6 +485,7 @@ class PrestaFraud extends Module
 			$xml->addChild('shop_id', Configuration::get('PS_TRUST_SHOP_ID'));
 			$xml->addChild('shop_password', Configuration::get('PS_TRUST_SHOP_KEY'));
 			$xml->addChild('id_order', (int)$id_order);
+			$xml->addChild('lang', Language::getIsoById((int)$id_lang));
 			$result = self::_pushDatas($root->asXml());
 			if (!$result)
 				return false;
