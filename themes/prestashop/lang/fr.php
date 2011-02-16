@@ -721,6 +721,7 @@ $_LANG['sitemap_5813ce0ec7196c492c97596718f71969'] = 'Plan du site';
 $_LANG['sitemap_24cc85476cb8ec1a03192f09231e742b'] = 'Nos offres';
 $_LANG['sitemap_9ff0635f5737513b1a6f559ac2bff745'] = 'Nouveaux produits';
 $_LANG['sitemap_3cb29f0ccc5fd220a97df89dafe46290'] = 'Meilleures ventes';
+$_LANG['sitemap_c8f312df214e2295809027c6ca79d232'] = 'Promotions';
 $_LANG['sitemap_2377be3c2ad9b435ba277a73f0f1ca76'] = 'Fabricants';
 $_LANG['sitemap_1814d65a76028fdfbadab64a5a8076df'] = 'Fournisseurs';
 $_LANG['sitemap_a0623b78a5f2cfe415d9dbbd4428ea40'] = 'Votre Compte';
