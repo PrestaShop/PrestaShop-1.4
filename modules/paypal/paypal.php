@@ -436,7 +436,7 @@ class PayPal extends PaymentModule
 		}
 
 		// Call payment validation method
-		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, 3)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false);
+		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, 3)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false, $cart->secure_key);
 		
 		// Clean cookie
 		unset($cookie->paypal_token);
