@@ -793,6 +793,7 @@ class ToolsCore
 	 */
 	public static function getCategoriesTotal()
 	{
+		Tools::displayAsDeprecated();
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_category`) AS total FROM `'._DB_PREFIX_.'category`');
 		return (int)($row['total']);
 	}
@@ -802,6 +803,7 @@ class ToolsCore
 	 */
 	public static function getProductsTotal()
 	{
+		Tools::displayAsDeprecated();
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_product`) AS total FROM `'._DB_PREFIX_.'product`');
 		return (int)($row['total']);
 	}
@@ -811,6 +813,7 @@ class ToolsCore
 	 */
 	public static function getCustomersTotal()
 	{
+		Tools::displayAsDeprecated();
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_customer`) AS total FROM `'._DB_PREFIX_.'customer`');
 		return (int)($row['total']);
 	}
@@ -820,6 +823,7 @@ class ToolsCore
 	 */
 	public static function getOrdersTotal()
 	{
+		Tools::displayAsDeprecated();
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order`) AS total FROM `'._DB_PREFIX_.'orders`');
 		return (int)($row['total']);
 	}
@@ -938,6 +942,7 @@ class ToolsCore
 	 */
 	public static function getExactTime()
 	{
+		Tools::displayAsDeprecated();
 		return time()+microtime();
 	}
 
@@ -1015,11 +1020,12 @@ class ToolsCore
 	}
 
 	/**
-	* DEPRECATED FUNCTION
-	* DO NOT USE IT
+	* @deprecated
 	**/
 	public static function getTimezones($select = false)
 	{
+		Tools::displayAsDeprecated();
+		
 		static $_cache = 0;
 
 		// One select
@@ -1043,11 +1049,12 @@ class ToolsCore
 	}
 
 	/**
-	* DEPRECATED FUNCTION
-	* DO NOT USE IT
+	* @deprecated
 	**/
 	public static function ps_set_magic_quotes_runtime($var)
 	{
+		Tools::displayAsDeprecated();
+		
 		if (function_exists('set_magic_quotes_runtime'))
 			@set_magic_quotes_runtime($var);
 	}

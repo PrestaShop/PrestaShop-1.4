@@ -160,6 +160,8 @@ class PackCore extends Product
 	 */
 	public static function addItems($id_product, $ids)
 	{
+		Tools::displayAsDeprecated();
+
 		array_pop($ids);
 		foreach ($ids as $id_product_item)
 		{
