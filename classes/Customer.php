@@ -387,9 +387,11 @@ class CustomerCore extends ObjectModel
 	  * Return customers who have subscribed to the newsletter
 	  *
 	  * @return array Customers
+	  * @deprecated
 	  */
 	public static function getNewsletteremails()
 	{
+		Tools::displayAsDeprecated();
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `email`, `firstname`, `lastname`, `newsletter`, `ip_registration_newsletter`, `newsletter_date_add`
 		FROM `'._DB_PREFIX_.'customer`
@@ -401,9 +403,11 @@ class CustomerCore extends ObjectModel
 	  * Return the number of customers who registered today
 	  *
 	  * @return integer number of customers who registered today
+	  * @deprecated
 	  */
 	public static function getTodaysRegistration()
 	{
+		Tools::displayAsDeprecated();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_customer`) as nb
 		FROM `'._DB_PREFIX_.'customer`
@@ -477,9 +481,11 @@ class CustomerCore extends ObjectModel
 	  * Return last cart ID for this customer
 	  *
 	  * @return integer Cart ID
+	  * @deprecated
 	  */
 	public function getLastCart()
 	{
+		Tools::displayAsDeprecated();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT MAX(c.`id_cart`) AS id_cart
 		FROM `'._DB_PREFIX_.'cart` c
@@ -546,8 +552,14 @@ class CustomerCore extends ObjectModel
 		return false;
 	}
 
+	/**
+	 * @param int $id_group
+	 * @return int
+	 * @deprecated
+	 */
 	public function isMemberOfGroup($id_group)
 	{
+		Tools::displayAsDeprecated();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT count(cg.`id_group`) as nb
 		FROM '._DB_PREFIX_.'customer_group cg

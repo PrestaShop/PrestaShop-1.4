@@ -121,8 +121,12 @@ class LinkCore
 		return _PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)($id_manufacturer);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function getCustomLink($id_custom, $page, $prefix = '~', $alias = NULL, $id_lang = NULL)
 	{
+		Tools::displayAsDeprecated();
 		if (is_object($id_custom))
 			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_custom->id).$prefix.$id_custom->link_rewrite) :
 			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom->id));
@@ -236,8 +240,12 @@ class LinkCore
 			return $this->getUrlWith('id_lang', (int)($id_lang));
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function getLanguageLinkAdmin($id_lang)
 	{
+		Tools::displayAsDeprecated();
 		return $this->getUrlWith('id_lang', (int)($id_lang));
 	}
 

@@ -237,7 +237,6 @@ class ProductDownloadCore extends ObjectModel
 	 */
 	public function getDeadline()
 	{
-		// TODO check if deadline is inferior than date_expiration
 		if (!(int)($this->nb_days_accessible))
 			return '0000-00-00 00:00:00';
 		$timestamp = strtotime('+'.(int)($this->nb_days_accessible).' day');

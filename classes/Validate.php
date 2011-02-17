@@ -145,8 +145,13 @@ class ValidateCore
 		return preg_match('/^[0-9]{1,4}$/ui', $size);
 	}
 
+	/**
+	 * @deprecated
+	 * @param int $id
+	 */
 	static public function isOptId($id)
 	{
+		Tools::displayAsDeprecated();
 		return empty($id) OR self::isUnsignedId($id);
 	}
 
@@ -216,8 +221,14 @@ class ValidateCore
 		return preg_match('/^[a-z0-9_-]+$/ui', $tplName);
 	}
 
+	/**
+	 * @deprecated
+	 * @param string $tplFileName
+	 * @return bool
+	 */
 	static public function isTplFileName($tplFileName)
 	{
+		Tools::displayAsDeprecated();
 		return preg_match('/^[a-zA-Z0-9\/_.-]+/ui', $tplFileName);
 	}
 
@@ -226,9 +237,11 @@ class ValidateCore
 	*
 	* @param string $icon Icon filename to validate
 	* @return boolean Validity is ok or not
+	* @deprecated
 	*/
 	static public function isIconFile($icon)
 	{
+		Tools::displayAsDeprecated();
 		return preg_match('/^[a-z0-9_-]+\.[gif|jpg|jpeg|png]$/ui', $icon);
 	}
 
@@ -237,9 +250,11 @@ class ValidateCore
 	*
 	* @param string $icon Icon filename to validate
 	* @return boolean Validity is ok or not
+	* @deprecated
 	*/
 	static public function isIcoFile($icon)
 	{
+		Tools::displayAsDeprecated();
 		return preg_match('/^[a-z0-9_-]+\.ico$/ui', $icon);
 	}
 
@@ -296,9 +311,11 @@ class ValidateCore
 	*
 	* @param string $isoCode Gender code (ISO) to validate
 	* @return boolean Validity is ok or not
+	* @deprecated
 	*/
 	static public function isGenderIsoCode($isoCode)
 	{
+		Tools::displayAsDeprecated();
 		return preg_match('/^[0|1|2|9]$/ui', $isoCode);
 	}
 
@@ -307,9 +324,11 @@ class ValidateCore
 	*
 	* @param string $isoCode Gender code (ISO) to validate
 	* @return boolean Validity is ok or not
+	* @deprecated
 	*/
 	static public function isGenderName($genderName)
 	{
+		Tools::displayAsDeprecated();
 		return preg_match('/^[a-z.]+$/ui', $genderName);
 	}
 
@@ -373,9 +392,11 @@ class ValidateCore
 	*
 	* @param string $name Zone name to validate
 	* @return boolean Validity is ok or not
+	* @deprecated
 	*/
 	static public function isZoneName($name)
 	{
+		Tools::displayAsDeprecated();
 		return preg_match('/^[a-z -()]+$/ui', $name);
 	}
 
@@ -750,8 +771,13 @@ class ValidateCore
 		return preg_match('/^[[:alpha:]]{1,2}$/ui', $unit);
 	}
 
+	/**
+	 * @deprecated
+	 * @param string $protocol
+	 */
 	static public function isProtocol($protocol)
 	{
+		Tools::displayAsDeprecated();
 		return preg_match('/^http(s?):\/\/$/ui', $protocol);
 	}
 
@@ -771,9 +797,11 @@ class ValidateCore
 	*
 	* @param char $value
 	* @return boolean Validity is ok or not
+	* @deprecated
 	*/
 	static public function isGranularityValue($value)
 	{
+		Tools::displayAsDeprecated();
 		return (!is_null($value) AND ($value === 'd' OR $value === 'm' OR $value === 'y'));
 	}
 	

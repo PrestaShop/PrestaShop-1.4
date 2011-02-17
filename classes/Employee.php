@@ -109,9 +109,11 @@ class EmployeeCore extends ObjectModel
 	 * Return all employee id and email
 	 *
 	 * @return array Employees
+	 * @deprecated
 	 */
 	static public function getEmployees()
 	{
+		Tools::displayAsDeprecated();
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_employee`, CONCAT(`firstname`, \' \', `lastname`) AS "name"
 		FROM `'._DB_PREFIX_.'employee`

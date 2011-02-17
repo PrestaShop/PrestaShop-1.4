@@ -553,9 +553,13 @@ class ProductCore extends ObjectModel
 		return $return;
 	}
 
-
+	/**
+	 * @deprecated
+	 * @param string $reference
+	 */
 	public static function getByReference($reference)
 	{
+		Tools::displayAsDeprecated();
 		if (!Validate::isReference($reference))
 			die(Tools::displayError());
 
@@ -783,9 +787,11 @@ class ProductCore extends ObjectModel
 	  *
 	  * @param integer $id_lang Language ID
 	  * @return array Products
+	  * @deprecated
 	  */
 	public function getDefaultCategoryProducts($idLang = NULL, $limit = NULL)
 	{
+		Tools::displayAsDeprecated();
 		//get idLang
 		$idLang = is_null($idLang) ? _USER_ID_LANG_ : (int)($idLang);
 
@@ -1090,9 +1096,11 @@ class ProductCore extends ObjectModel
 	* Delete product quantity discounts
 	*
 	* @return array Deletion result
+	* @deprecated
 	*/
 	public function deleteQuantityDiscounts()
 	{
+		Tools::displayAsDeprecated();
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_quantity` WHERE `id_product` = '.(int)($this->id));
 	}
 
@@ -2968,8 +2976,12 @@ class ProductCore extends ObjectModel
 		return $result;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public function getBasicPrice()
 	{
+		Tools::displayAsDeprecated();
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `price` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)($this->id));
 	}
 

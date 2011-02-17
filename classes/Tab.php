@@ -178,8 +178,13 @@ class TabCore extends ObjectModel
 		return (int)self::$_getIdFromClassName[$class_name]['id'];
 	}
 
+	/**
+	 * @deprecated
+	 * @param int $id_tab
+	 */
 	static public function getClassNameFromID($id_tab)
 	{
+		Tools::displayAsDeprecated();
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT class_name FROM `'._DB_PREFIX_.'tab` t WHERE t.`id_tab` = \''.(int)$id_tab.'\'');
 	}
 

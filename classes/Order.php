@@ -384,8 +384,14 @@ class OrderCore extends ObjectModel
 		WHERE od.`id_order` = '.(int)($this->id));
 	}
 
+	
+	/**
+	 * @return string
+	 * @deprecated
+	 */
 	public function getLastMessage()
 	{
+		Tools::displayAsDeprecated();
 		$sql = 'SELECT `message` FROM `'._DB_PREFIX_.'message` WHERE `id_order` = '.(int)($this->id).' ORDER BY `id_message` desc';
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
 		return $result['message'];
@@ -577,9 +583,12 @@ class OrderCore extends ObjectModel
 		ORDER BY `date_add` DESC, `id_order_history` DESC');
 	}
 
-
+	/**
+	 * @deprecated
+	 */
 	public function isLogable()
 	{
+		Tools::displayAsDeprecated();
 		return $this->valid;
 	}
 
@@ -822,9 +831,11 @@ class OrderCore extends ObjectModel
 	 * Get orders number last week
 	 *
 	 * @return integer Orders number last week
+	 * @deprecated
 	 */
 	public static function getWeeklyOrders()
 	{
+		Tools::displayAsDeprecated();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT COUNT(`id_order`) as nb
 		FROM `'._DB_PREFIX_.'orders`
@@ -837,9 +848,11 @@ class OrderCore extends ObjectModel
 	 * Get sales amount last month
 	 *
 	 * @return float Sales amount last month
+	 * @deprecated
 	 */
 	public static function getMonthlySales()
 	{
+		Tools::displayAsDeprecated();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT SUM(`total_paid`) as nb
 		FROM `'._DB_PREFIX_.'orders`

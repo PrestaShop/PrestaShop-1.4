@@ -1215,14 +1215,20 @@ class CartCore extends ObjectModel
 		return false;
 	}
 
+	/**
+	 * @param Discount $discountObj
+	 * @return bool
+	 * @deprecated
+	 */
 	public function hasProductInCategory($discountObj)
 	{
+		Tools::displayAsDeprecated();
 		$products = $this->getProducts();
 		$categories = Discount::getCategories($discountObj->id);
 		foreach ($products AS $product)
 		{
-				if (Product::idIsOnCategoryId($product['id_product'], $categories))
-					return true;
+			if (Product::idIsOnCategoryId($product['id_product'], $categories))
+				return true;
 		}
 		return false;
 	}
@@ -1285,9 +1291,11 @@ class CartCore extends ObjectModel
 	* @param string $dateFrom Select only cart updated after this date
 	* @param string $dateTo Select only cart updated before this date
 	* @return array Carts
+	* @deprecated
 	*/
 	static function getNonOrderedCarts($dateFrom, $dateTo)
 	{
+		Tools::displayAsDeprecated();
 		if (!Validate::isDate($dateFrom) OR !Validate::isDate($dateTo))
 			die (Tools::displayError());
 

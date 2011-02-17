@@ -138,17 +138,25 @@ class CMSCore extends ObjectModel
 		ORDER BY c.`position`');
 	}
 	
+	/**
+	 * @deprecated
+	 */
 	public static function isInBlock($id_cms, $id_block)
 	{
+		Tools::displayAsDeprecated();
 		Db::getInstance()->getRow('
 		SELECT id_cms FROM '._DB_PREFIX_.'block_cms
 		WHERE id_block = '.(int)($id_block).' AND id_cms = '.(int)($id_cms));
 		
 		return (Db::getInstance()->NumRows());
 	}
-		
+	
+	/**
+	 * @deprecated
+	 */
 	public static function updateCmsToBlock($cms, $id_block)
 	{
+		Tools::displayAsDeprecated();
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_block` = '.(int)($id_block));
 
 		$list = '';

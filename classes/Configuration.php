@@ -193,9 +193,11 @@ class ConfigurationCore extends ObjectModel
 	  *
 	  * @param array $keys Keys wanted
 	  * @return array Values in multiple languages
+	  * @deprecated
 	  */
 	static public function getMultipleInt($keys)
 	{
+		Tools::displayAsDeprecated();
 		$languages = Language::getLanguages();
 		$resultsArray = array();
 		foreach($languages as $language)
