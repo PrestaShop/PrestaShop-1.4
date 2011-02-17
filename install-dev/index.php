@@ -188,7 +188,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[48] = "<?php echo lang('Your lastname contains some invalid characters'); ?>";
 		txtError[49] = "<?php echo lang('Your database server does not support the utf-8 charset.'); ?>";
 		txtError[50] = "<?php echo lang('Your MySQL server doesn\'t support this engine, please use another one like MyISAM'); ?>";
-		txtError[51] = "<?php echo lang('The file /img/logo.jpg is not writable, please CHMOD 755 this file'); ?>";
+		txtError[51] = "<?php echo lang('The file /img/logo.jpg is not writable, please CHMOD 755 this file or CHMOD 777'); ?>";
 		txtError[52] = "<?php echo lang('Invalid catalog mode'); ?>";
 		txtError[999] = "<?php echo lang('No error code available.'); ?>";
 		//upgrader
@@ -502,6 +502,7 @@ if ($lm->getIncludeTradFilename())
 						<option value="19"><?php echo lang('Sport and Entertainment'); ?></option>
 						<option value="20"><?php echo lang('Travel'); ?></option>
 					</select>
+					<p class="userInfos aligned"><?php echo lang('This information isn\'t required, it will be used for statistical purposes. This information doesn\'t change anything in your store.'); ?></p>
 				</div>
 				<div class="field">
 					<label for="infosCountry" class="aligned"><?php echo lang('Default country:'); ?></label>

@@ -93,7 +93,7 @@ class AdminBackup extends AdminTab
 				$this->_errors[] = $object->error;
 		}
 		else
-			$this->_errors[] = $this->l('"Backups" Directory in admin directory must be writeable (CHMOD 777)');
+			$this->_errors[] = $this->l('"Backups" Directory in admin directory must be writeable (CHMOD 755 / 777)');
 		$this->displayErrors();
 	}
 
@@ -126,7 +126,7 @@ class AdminBackup extends AdminTab
 
 		// Test if the backup dir is writable
 		if(!is_writable(PS_ADMIN_DIR.'/backups/'))
-			$this->displayWarning($this->l('"Backups" Directory in admin directory must be writeable (CHMOD 777)'));
+			$this->displayWarning($this->l('"Backups" Directory in admin directory must be writeable (CHMOD 755 / 777)'));
 
 		$this->displayErrors();
 		echo '<br /><a href="'.$currentIndex.'&add'.$this->table.'&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Create new back-up').'</a><br /><br />';

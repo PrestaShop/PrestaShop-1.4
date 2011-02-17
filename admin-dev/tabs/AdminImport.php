@@ -1141,7 +1141,7 @@ class AdminImport extends AdminTab
 			echo '<div class="module_confirmation conf confirm"><img src="../img/admin/ok.gif" alt="" title="" style="margin-right:5px; float:left;" />'.$this->l('The .CSV file has been imported into your shop.').'</div>';
 
 		if(!is_writable(PS_ADMIN_DIR.'/import/'))
-			$this->displayWarning($this->l('directory import on admin directory must be writable (CHMOD 777)'));
+			$this->displayWarning($this->l('directory import on admin directory must be writable (CHMOD 755 / 777)'));
 
 		if(isset($this->_warnings) AND sizeof($this->_warnings))
 		{
