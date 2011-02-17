@@ -789,11 +789,8 @@ class ToolsCore
 	}
 
 	/**
-	* Stats for admin panel
-	*
-	* @return integer Categories total
-	*/
-
+	 * @deprecated
+	 */
 	public static function getCategoriesTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_category`) AS total FROM `'._DB_PREFIX_.'category`');
@@ -801,11 +798,8 @@ class ToolsCore
 	}
 
 	/**
-	* Stats for admin panel
-	*
-	* @return integer Products total
-	*/
-
+	 * @deprecated
+	 */
 	public static function getProductsTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_product`) AS total FROM `'._DB_PREFIX_.'product`');
@@ -813,11 +807,8 @@ class ToolsCore
 	}
 
 	/**
-	* Stats for admin panel
-	*
-	* @return integer Customers total
-	*/
-
+	 * @deprecated
+	 */
 	public static function getCustomersTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_customer`) AS total FROM `'._DB_PREFIX_.'customer`');
@@ -825,11 +816,8 @@ class ToolsCore
 	}
 
 	/**
-	* Stats for admin panel
-	*
-	* @return integer Orders total
-	*/
-
+	 * @deprecated
+	 */
 	public static function getOrdersTotal()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT COUNT(`id_order`) AS total FROM `'._DB_PREFIX_.'orders`');
@@ -945,6 +933,9 @@ class ToolsCore
 		return $date;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static function getExactTime()
 	{
 		return time()+microtime();
@@ -1422,7 +1413,6 @@ class ToolsCore
 
 	/**
 	* Combine Compress and Cache (ccc) JS calls
-	*
 	*/
 	public static function cccJS() {
 		global $js_files, $protocol_link;

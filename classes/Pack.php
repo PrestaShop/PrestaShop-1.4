@@ -155,6 +155,9 @@ class PackCore extends Product
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'pack` WHERE `id_product_pack` = '.(int)($id_product));
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static function addItems($id_product, $ids)
 	{
 		array_pop($ids);
