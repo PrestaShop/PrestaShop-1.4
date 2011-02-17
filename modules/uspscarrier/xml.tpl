@@ -1,3 +1,4 @@
-<RateV3Request USERID="[[USERID]]">
+<RateV4Request USERID="[[USERID]]">
+<Revision>2</Revision>
 [[PackageList]]
-</RateV3Request>
+</RateV4Request>

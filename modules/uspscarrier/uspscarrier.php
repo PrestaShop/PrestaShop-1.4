@@ -1636,14 +1636,14 @@ class UspsCarrier extends CarrierModule
 				$resultTab = $this->sendRequest($wsParams);
 
 			// Return results
-			if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
+			if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
 			{
 				Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_cache_test', array('hash' => pSQL(md5($this->getXml($wsParams))), 'result' => pSQL(serialize($resultTab)), 'date_add' => pSQL(date('Y-m-d H:i:s')), 'date_upd' => pSQL(date('Y-m-d H:i:s'))), 'INSERT');
 				return true;
 			}
 
-			if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT']))
-				$this->_webserviceError = $this->l('Error').' '.$resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT'].' : '.$resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
+			if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT']))
+				$this->_webserviceError = $this->l('Error').' '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT'].' : '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
 			else
 			{
 				$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again');
@@ -1666,7 +1666,7 @@ class UspsCarrier extends CarrierModule
 		// Check currency
 		global $cookie;
 		$conversionRate = 1;
-		if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
+		if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
 		{
 			$id_currency_return = 2;
 			if ($cookie->id_currency != $id_currency_return)
@@ -1679,11 +1679,11 @@ class UspsCarrier extends CarrierModule
 		}
 
 		// Return results
-		if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
-			return array('connect' => true, 'cost' => $resultTab['RATEV3RESPONSE']['PACKAGE']['POSTAGE']['RATE'] * $conversionRate);
+		if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
+			return array('connect' => true, 'cost' => $resultTab['RATEV4RESPONSE']['PACKAGE']['POSTAGE']['RATE'] * $conversionRate);
 
-		if (isset($resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT']))
-			$this->_webserviceError = $this->l('Error').' '.$resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT'].' : '.$resultTab['RATEV3RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
+		if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT']))
+			$this->_webserviceError = $this->l('Error').' '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT'].' : '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
 		else
 			$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again');
 
@@ -1706,7 +1706,7 @@ class UspsCarrier extends CarrierModule
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, 'API=RateV3&XML='.$xml);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, 'API=RateV4&XML='.$xml);
 			$result = curl_exec($ch);
 		}
 		else
@@ -1716,7 +1716,7 @@ class UspsCarrier extends CarrierModule
 			$fp = fsockopen("http://production.shippingapis.com", "80", $errno, $errstr, $timeout); 
 			if ($fp)
 			{
-				$xml = 'API=RateV3&XML='.$xml;
+				$xml = 'API=RateV4&XML='.$xml;
 				$request = "POST /ShippingAPI.dll HTTP/1.1\r\n";
 				$request .= "Host: production.shippingapis.com\r\n";
 				$request .= "Content-type: application/x-www-form-urlencoded\r\n";
@@ -1756,7 +1756,6 @@ class UspsCarrier extends CarrierModule
 
 		// Parsing XML
 		$resultTab = $this->parseXML($valTab);
-
 		return $resultTab;
 	}
 
