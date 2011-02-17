@@ -38,6 +38,26 @@ class shopimporter extends ImportModule
 														'delete' => true,
 														'defaultId' => 'PS_CURRENCY_DEFAULT'
 														),
+							/*
+		'tax' => array('methodName' => 'getTaxes',
+														'name' => $this->l('Taxes'),
+														'className' => 'Tax',
+														'label' => $this->l('Import Taxes'),
+														'table' => 'tax',
+														'identifier' => 'id_tax',
+														'alterTable' => array('id_tax' => 'int(10)'),
+														'delete' => true
+														),
+									'tax_rule' => array('methodName' => 'getTaxesRules',
+														'name' => $this->l('TaxesRules'),
+														'className' => 'TaxRule',
+														'label' => $this->l('Import Taxes Rules'),
+														'table' => 'tax',
+														'identifier' => 'id_tax',
+														'alterTable' => array('id_tax' => 'int(10)'),
+														'delete' => true
+														),
+*/
 									'zone' => array('methodName' => 'getZones',
 														'name' => $this->l('Zone'),
 														'className' => 'Zone',
@@ -416,9 +436,15 @@ class shopimporter extends ImportModule
 				if (Tools::isSubmit('syncLang'))
 				{
 					$defaultIdLand = $importModule->getDefaultIdLang();
-					$defaultLanguageImport = new Language(Language::getIdByIso($languages[$defaultIdLand]['iso_code']));
-					if ($defaultLanguage->iso_code != $defaultLanguageImport->iso_code)
-						$errors[] = $this->l('Default language doesn\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultLanguage->name.' ≠ '.$importModule->displayName.' : '.$defaultLanguageImport->name.'<br>'.$this->l('Please change default language in your configuration');
+					if (!Validate::isLangIsoCode($iso))
+					{
+						$defaultLanguageImport = new Language(Language::getIdByIso($languages[$defaultIdLand]['iso_code']));
+						if ($defaultLanguage->iso_code != $defaultLanguageImport->iso_code)
+							$errors[] = $this->l('Default language doesn\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultLanguage->name.' ≠ 
+												'.$importModule->displayName.' : '.$defaultLanguageImport->name.'<br>'.$this->l('Please change default language in your configuration');
+					}
+					else
+						$errors[] = Tools::displayError('Iso code is not correct : ').$iso;
 				}
 				
 				if (Tools::isSubmit('syncCurrency'))
@@ -460,13 +486,11 @@ class shopimporter extends ImportModule
 				array_unshift($errors[sizeof($errors)-1], $field[$id]);
 			}
 		}
-		if (sizeof($errors) > 0)
+		if (sizeof($errors) > 0) 
 		{
 			$json['hasError'] = true;
 			$json['error'] = $errors;
 		}
-		
-		
 		if ($save OR Tools::isSubmit('syncLang'))
 		{
 			//add language if not exist in prestashop
@@ -476,7 +500,7 @@ class shopimporter extends ImportModule
 					$add = true;
 				else
 					$add = false;
-				$this->checkAndAddLang($fields, $add);
+				$errors = $this->checkAndAddLang($fields, $add);
 			}
 			elseif ($className == 'Cart')
 			{
@@ -497,6 +521,11 @@ class shopimporter extends ImportModule
 			}
 			if ($className == 'Category')
 				$this->updateCat();
+		}
+		if (sizeof($errors) > 0 AND is_array($errors)) 
+		{
+			$json['hasError'] = true;
+			$json['error'] = $errors;
 		}
 		die(Tools::jsonEncode($json));
 	}
@@ -940,15 +969,15 @@ class shopimporter extends ImportModule
 
 	public function checkAndAddLang ($languages, $add = true)
 	{
-		$errors = array();
+		$errors = '';
 		$moduleName = Tools::getValue('moduleName');
 		$this->alterTable('language');
 		foreach($languages as $language)
 		{
 			$iso = $language['iso_code'];
-			if (!Language::getIdByIso($iso))
+			if (!Validate::isLangIsoCode($iso))
 			{
-				if ($add && Validate::isLangIsoCode($iso))
+				if ($add)
 				{
 					if (@fsockopen('www.prestashop.com', 80))
 					{
@@ -969,9 +998,8 @@ class shopimporter extends ImportModule
 										{
 											$newId = Language::getIdByIso($iso);
 											Db::getInstance()->Execute('UPDATE  `'._DB_PREFIX_.'lang`
-																		SET  `id_lang_'.$moduleName.'` =  '.$language['id_lang'].'
-																		WHERE  `id_lang` = '.$newId);
-											$errors[] = true;
+																		SET  `id_lang_'.pSQL($moduleName).'` =  '.(int)$language['id_lang'].'
+																		WHERE  `id_lang` = '.(int)$newId);
 										}
 									}
 									$errors[] = Tools::displayError('archive cannot be extracted');
@@ -989,15 +1017,15 @@ class shopimporter extends ImportModule
 						$errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com');
 				}
 				else
-					$errors[] = Tools::displayError('Invalid parameter');
+				{
+					$newId = Language::getIdByIso($iso);
+					Db::getInstance()->Execute('UPDATE  `'._DB_PREFIX_.'lang`
+												SET  `id_lang_'.pSQL($moduleName).'` =  '.(int)$language['id_lang'].'
+												WHERE  `id_lang` = '.(int)$newId);
 				}
-			else
-			{
-				$newId = Language::getIdByIso($iso);
-				Db::getInstance()->Execute('UPDATE  `'._DB_PREFIX_.'lang`
-											SET  `id_lang_'.$moduleName.'` =  '.$language['id_lang'].'
-											WHERE  `id_lang` = '.$newId);
 			}
+			else
+				$errors[] = Tools::displayError('Iso code is not correct : ').$iso;
 		}
 	}
 
