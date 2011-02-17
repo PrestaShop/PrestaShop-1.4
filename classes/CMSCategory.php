@@ -401,6 +401,7 @@ class CMSCategoryCore extends ObjectModel
 
 	static public function getRootCMSCategory($id_lang = NULL)
 	{
+		Tools::displayAsDeprecated();
 		//get idLang
 		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)($id_lang);
 		return new CMSCategory (1, $id_lang);
@@ -524,6 +525,7 @@ class CMSCategoryCore extends ObjectModel
 	  */
 	static public function searchByNameAndParentCMSCategoryId($id_lang, $CMSCategory_name, $id_parent_CMSCategory)
 	{
+		Tools::displayAsDeprecated();
 		return Db::getInstance()->getRow('
 		SELECT c.*, cl.*
 	    FROM `'._DB_PREFIX_.'cms_category` c
@@ -570,6 +572,7 @@ class CMSCategoryCore extends ObjectModel
 	*/
 	static public function CMSCategoryExists($id_cms_category)
 	{
+		Tools::displayAsDeprecated();
 		$row = Db::getInstance()->getRow('
 		SELECT `id_cms_category`
 		FROM '._DB_PREFIX_.'cms_category c
