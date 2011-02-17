@@ -1559,13 +1559,17 @@ CREATE TABLE IF NOT EXISTS `PREFIX_product_country_tax` (
   UNIQUE KEY `id_product` (`id_product`,`id_country`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
-CREATE TABLE `PREFIX_tax_rule` (
-`id_tax_rules_group` INT NOT NULL ,
-`id_country` INT NOT NULL ,
-`id_state` INT NOT NULL ,
-`id_tax` INT NOT NULL ,
-`state_behavior` INT NOT NULL ,
-PRIMARY KEY ( `id_tax_rules_group`, `id_country` , `id_state` )
+
+CREATE TABLE IF NOT EXISTS `PREFIX_tax_rule` (
+  `id_tax_rule` int(11) NOT NULL AUTO_INCREMENT,
+  `id_tax_rules_group` int(11) NOT NULL,
+  `id_country` int(11) NOT NULL,
+  `id_state` int(11) NOT NULL,
+  `id_tax` int(11) NOT NULL,
+  `state_behavior` int(11) NOT NULL,
+  PRIMARY KEY (`id_tax_rule`),
+  KEY `id_tax_rules_group` (`id_tax_rules_group`),
+  KEY `id_tax` (`id_tax`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_tax_rules_group` (
@@ -1608,3 +1612,4 @@ CREATE TABLE `PREFIX_import_match` (
   `skip` int(2) NOT NULL,
   PRIMARY KEY (`id_import_match`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+
