@@ -652,7 +652,10 @@ class shopimporter extends ImportModule
 					foreach($item AS $key => $val)
 						if ($key == 'association' AND !empty($key))
 							foreach($val[$tableAssociation] AS $k => $v)
-								$associatFields .= ' ('.(int)$match[$association['fields'][0]][$k].', '.(int)$match[$association['fields'][1]][$v].'), ';
+							{
+								$associatFields .= ' ('.((array_key_exists($k, $match[$association['fields'][0]])) ? (int)$match[$association['fields'][0]][$k] : '1').', ';
+								$associatFields .= (int)$match[$association['fields'][1]][$v].'), ';
+							}
 				if ($associatFields != '')
 					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.pSQL($tableAssociation).'` (`'.$associatFieldsName.'`) VALUES '.rtrim($associatFields, ', '));
 			}
@@ -681,7 +684,7 @@ class shopimporter extends ImportModule
 	
 	private function getDefaultId($table)
 	{
-		$defaultId = 0;
+		$defaultId = 1;
 		if (array_key_exists('defaultId', $this->supportedImports[strtolower($table)]))
 				$defaultId = Configuration::get($this->supportedImports[strtolower($table)]['defaultId']);
 		return $defaultId;
@@ -770,10 +773,10 @@ class shopimporter extends ImportModule
 				$key2 = 'id_default_group';
 			else
 				$key2 = $key;
-			if (array_key_exists($key2, $foreingKeyValue) && $item[$key2] != 0)
+			if (array_key_exists($key, $foreingKeyValue) && $item[$key2] != 0)
 				$item[$key2] = (array_key_exists($item[$key2], $foreingKeyValue[$key]) ? $item[$key2] = $foreingKeyValue[$key][$item[$key2]] : $item[$key2] = 0);
 			else
-				$key2 = $this->getDefaultId($table);
+				$item[$key2] = $this->getDefaultId($table);
 		}
 	}
 	
@@ -832,6 +835,8 @@ class shopimporter extends ImportModule
 		{
 			if (in_array($key , array('id_address_invoice', 'id_address_delivery')))
 				$key2 = 'id_address';
+			elseif (in_array($key , array('id_category_default')))
+				$key2 = 'id_category';
 			else
 				$key2 = $key;
 			foreach($this->supportedImports AS $table => $conf)
@@ -839,8 +844,8 @@ class shopimporter extends ImportModule
 					$from = $this->supportedImports[$table]['table'];
 			$return = Db::getInstance()->ExecuteS('SELECT `'.pSQL($key2).'_'.pSQL($moduleName).'`, `'.pSQL($key2).'` FROM `'._DB_PREFIX_.pSQL($from).'` WHERE `'.pSQL($key2).'_'.pSQL($moduleName).'` != 0');
 			if (!empty($return))
-			foreach($return AS $name => $val)
-				$match[$key][$val[$key2.'_'.$moduleName]] = $val[$key2];
+				foreach($return AS $name => $val)
+					$match[$key][$val[$key2.'_'.$moduleName]] = $val[$key2];				
 		}
 		return $match;
 	}
