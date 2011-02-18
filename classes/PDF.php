@@ -264,7 +264,6 @@ class PDFCore extends PDF_PageGroupCore
 		/* Display address information */
 		$delivery_address = new Address((int)($order->id_address_delivery));
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
-		$shop_country = Configuration::get('PS_SHOP_COUNTRY');
 		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
 		$conf = Configuration::getMultiple($arrayConf);
 		foreach ($conf as $key => $value)
@@ -402,8 +401,6 @@ class PDFCore extends PDF_PageGroupCore
 		$invoiceState = $invoice_address->id_state ? new State($invoice_address->id_state) : false;
 		$delivery_address = new Address((int)($order->id_address_delivery));
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
-		$shop_country = Configuration::get('PS_SHOP_COUNTRY');
-		$invoice_customer = new Customer((int)($invoice_address->id_customer));
 
 		$width = 100;
 
@@ -650,7 +647,6 @@ class PDFCore extends PDF_PageGroupCore
 		$lineSize = 0;
 		$line = 0;
 
-		$isInPreparation = self::$order->isInPreparation();
 
 		foreach($products AS $product)
 			if (!$delivery OR ((int)($product['product_quantity']) - (int)($product['product_quantity_refunded']) > 0))
@@ -759,8 +755,6 @@ g	* Discount table with value, quantities...
 
 	public function priceBreakDownCalculation(array &$priceBreakDown)
 	{
-		if (!$id_zone = Address::getZoneById((int)(self::$order->id_address_invoice)))
-			die(Tools::displayError());
 		$priceBreakDown['totalsWithoutTax'] = array();
 		$priceBreakDown['totalsWithTax'] = array();
 		$priceBreakDown['totalsEcotax'] = array();
@@ -867,9 +861,8 @@ g	* Discount table with value, quantities...
 	*/
 	public function TaxTab(array &$priceBreakDown)
 	{
-		if (!$id_zone = Address::getZoneById((int)(self::$order->id_address_invoice)))
-			die(Tools::displayError());
 
+     $invoiceAddress = new Address(self::$order->id_address_invoice);
 		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoiceAddress->vat_number) AND $invoiceAddress->id_country != Configuration::get('VATNUMBER_COUNTRY'))
 		{
 			$this->Ln();
@@ -880,13 +873,6 @@ g	* Discount table with value, quantities...
 		if (self::$order->total_paid == '0.00' OR (!(int)(Configuration::get('PS_TAX')) AND self::$order->total_products == self::$order->total_products_wt))
 			return ;
 
-		// Setting products tax
-		if (isset(self::$order->products) AND sizeof(self::$order->products))
-			$products = self::$order->products;
-		else
-			$products = self::$order->getProducts();
-
-		$carrier = new Carrier(self::$order->id_carrier);
     	$carrier_tax_rate = (float)self::$order->carrier_tax_rate;
 		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrier_tax_rate OR $carrier_tax_rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
 			return ;
@@ -910,7 +896,7 @@ g	* Discount table with value, quantities...
 		$this->SetFont(self::fontname(), '', 7);
 
 		$nb_tax = 0;
-		$total = 0;
+
 		// Display product tax
 		foreach ($priceBreakDown['taxes'] AS $tax_rate => $vat)
 		{
@@ -984,7 +970,7 @@ g	* Discount table with value, quantities...
 		if (@!include(_PS_TRANSLATIONS_DIR_.$iso.'/pdf.php'))
 			die('Cannot include PDF translation language file : '._PS_TRANSLATIONS_DIR_.$iso.'/pdf.php');
 
-		if (!is_array($_LANGPDF))
+		if (!isset($_LANGPDF) OR !is_array($_LANGPDF))
 			return str_replace('"', '&quot;', $string);
 		$key = md5(str_replace('\'', '\\\'', $string));
 		$str = (key_exists('PDF_invoice'.$key, $_LANGPDF) ? $_LANGPDF['PDF_invoice'.$key] : $string);
