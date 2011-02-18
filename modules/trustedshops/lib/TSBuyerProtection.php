@@ -153,6 +153,11 @@ class TSBuyerProtection extends AbsTrustedShops
 		$this->tab_name = $this->l('Seal of Approval and Buyer Protection');
 		$this->site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		TSBPException::setTranslationObject($this);
+		if (!function_exists('json_decode'))
+		{
+			$this->warning[] = $this->l('Json function must be implemented in your php version');
+			return false;
+		}
 		foreach ($this->available_languages as $iso=>&$lang)
 		{
 			if($lang === '')
