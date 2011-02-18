@@ -181,6 +181,8 @@ if (defined('_RIJNDAEL_IV_'))
 	$datas[] = array('_RIJNDAEL_IV_', _RIJNDAEL_IV_);
 if(!defined('_PS_CACHE_ENABLED_'))
 	define('_PS_CACHE_ENABLED_', '0');
+if(!defined('_MYSQL_ENGINE_'))
+	define('_MYSQL_ENGINE_', 'MyISAM');
 
 $sqlContent = '';
 foreach($neededUpgradeFiles AS $version)
@@ -204,7 +206,6 @@ if ($confFile->error)
 foreach ($datas AS $data){
 	$confFile->writeInFile($data[0], $data[1]);
 }
-$confFile->writeEndTagPhp();
 
 if ($confFile->error != false)
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
