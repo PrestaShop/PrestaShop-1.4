@@ -175,6 +175,7 @@ class CustomerCore extends ObjectModel
 			$obj = new Address((int)($address['id_address']));
 			$obj->delete();
 		}
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)($this->id));
 		Discount::deleteByIdCustomer((int)($this->id));
 		return parent::delete();
 	}
