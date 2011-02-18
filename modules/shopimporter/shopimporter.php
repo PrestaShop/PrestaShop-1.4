@@ -2,7 +2,7 @@
 
 class shopimporter extends ImportModule
 {
-	private $supportedImports = array();
+	public $supportedImports = array();
 
 	public function __construct()
 	{
@@ -25,7 +25,6 @@ class shopimporter extends ImportModule
 														'identifier' => 'id_lang',
 														'alterTable' => array('id_lang' => 'int(10)'),
 														'info' => $this->l('New languages will automatically add translations!'),
-														'delete' => true,
 														'defaultId' => 'PS_LANG_DEFAULT'
 														),
 									'currency' => array('methodName' => 'getCurrencies',
@@ -199,7 +198,7 @@ class shopimporter extends ImportModule
 														'identifier' => 'id_product_attribute',
 														'alterTable' => array('id_product_attribute' => 'int(10)', 'id_product' => 'int(10)'),
 														'foreign_key' => array('id_product'),
-														'delete' => true,
+														'delete' => false,
 														'association' => array(
 															array(
 																'table' => 'product_attribute_combination',
@@ -214,8 +213,7 @@ class shopimporter extends ImportModule
 													 'label' => $this->l('Import Orders States'),
 													 'table' => 'order_state',
 													 'identifier' => 'id_order_state',
-													 'alterTable' => array('id_order_state' => 'int(10)'),
-													 'delete' => true
+													 'alterTable' => array('id_order_state' => 'int(10)')
 													 ),
 									'cart' => array('methodName' => 'getOrders',
 													 'name' => $this->l('Order'),
@@ -224,8 +222,7 @@ class shopimporter extends ImportModule
 													 'table' => 'cart',
 													 'identifier' => 'id_cart',
 													 'foreign_key' => array('id_address_delivery', 'id_address_invoice', 'id_customer'),
-													 'alterTable' => array('id_cart' => 'int(10)'),
-													 'delete' => true
+													 'alterTable' => array('id_cart' => 'int(10)')
 													 ),
 									'orderhistory' => array('methodName' => 'getOrdersHistory',
 													 'name' => $this->l('OrderHistory'),
@@ -436,15 +433,10 @@ class shopimporter extends ImportModule
 				if (Tools::isSubmit('syncLang'))
 				{
 					$defaultIdLand = $importModule->getDefaultIdLang();
-					if (!Validate::isLangIsoCode($iso))
-					{
-						$defaultLanguageImport = new Language(Language::getIdByIso($languages[$defaultIdLand]['iso_code']));
-						if ($defaultLanguage->iso_code != $defaultLanguageImport->iso_code)
-							$errors[] = $this->l('Default language doesn\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultLanguage->name.' ≠ 
-												'.$importModule->displayName.' : '.$defaultLanguageImport->name.'<br>'.$this->l('Please change default language in your configuration');
-					}
-					else
-						$errors[] = Tools::displayError('Iso code is not correct : ').$iso;
+					$defaultLanguageImport = new Language(Language::getIdByIso($languages[$defaultIdLand]['iso_code']));
+					if ($defaultLanguage->iso_code != $defaultLanguageImport->iso_code)
+						$errors[] = $this->l('Default language doesn\'t match : ').'<br>'.Configuration::get('PS_SHOP_NAME').' : '.$defaultLanguage->name.' ≠ 
+											'.$importModule->displayName.' : '.$defaultLanguageImport->name.'<br>'.$this->l('Please change default language in your configuration');
 				}
 				
 				if (Tools::isSubmit('syncCurrency'))
@@ -519,7 +511,7 @@ class shopimporter extends ImportModule
 					$json['error'] = $return;
 				}
 			}
-			if ($className == 'Category')
+			if ($className == 'Category' AND (sizeof($fields) != (int)Tools::getValue('nbr_import')))
 				$this->updateCat();
 		}
 		if (sizeof($errors) > 0 AND is_array($errors)) 
@@ -722,37 +714,42 @@ class shopimporter extends ImportModule
 			break;
 		}
 		$cover = 1;
-		foreach($item['images'] as $key => $image)
-		{
-			$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'import');
-			if (@copy($image, $tmpfile))
+		if (array_key_exists($item[$identifier], $matchId))
+			foreach($item['images'] as $key => $image)
 			{
-				$imagesTypes = ImageType::getImagesTypes($type);
-				imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'.jpg');
-				if ($className == 'Product')
+				$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'import');
+				if (@copy($image, $tmpfile))
 				{
-					$image = new Image();
-					$image->id_product = (int)($matchId[$item[$identifier]]);
-					$image->cover = $cover;
-					$image->position = Image::getHighestPosition((int)$matchId[$item[$identifier]]) + 1;
-					$legend = array();
-					foreach($item['name'] as $key => $val)
-						$legend[$matchIdLang[$key]] = Tools::link_rewrite($val);
-					$image->legend = $legend;
-					$image->add();
-					imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.(int)$image->id.'.jpg');
-					foreach ($imagesTypes AS $k => $imageType)
-						imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.(int)$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
+					
+					$imagesTypes = ImageType::getImagesTypes($type);
+					imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'.jpg');
+					if ($className == 'Product')
+					{
+						$image = new Image();
+						$image->id_product = (int)($matchId[$item[$identifier]]);
+						$image->cover = $cover;
+						$image->position = Image::getHighestPosition((int)$matchId[$item[$identifier]]) + 1;
+						$legend = array();
+						foreach($item['name'] as $key => $val)
+							if (array_key_exists($key, $matchIdLang))
+								$legend[$matchIdLang[$key]] = Tools::link_rewrite($val);
+							else
+								$legend[Configuration::get('PS_LANG_DEFAULT')] = Tools::link_rewrite($val);
+						$image->legend = $legend;
+						$image->add();
+						imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.(int)$image->id.'.jpg');
+						foreach ($imagesTypes AS $k => $imageType)
+							imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.(int)$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
+					}
+					else
+						foreach ($imagesTypes AS $k => $imageType)
+							imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
 				}
 				else
-					foreach ($imagesTypes AS $k => $imageType)
-						imageResize($tmpfile, $path.(int)$matchId[$item[$identifier]].'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']);
-			}
-			else
+					@unlink($tmpfile);
 				@unlink($tmpfile);
-			@unlink($tmpfile);
-			$cover = 0;
-		}
+				$cover = 0;
+			}
 		
 	}
 	
@@ -946,7 +943,7 @@ class shopimporter extends ImportModule
 		foreach ($rules['validateLang'] AS $fieldLang => $function)
 			foreach ($languages AS $language)
 			{
-				if (($value = $fields[$fieldLang][$language['id_lang']]) !== false AND !empty($value))
+				if (array_key_exists($fieldLang, $fields) AND ($value = $fields[$fieldLang][$language['id_lang']]) !== false AND !empty($value))
 				{
 					if (!Validate::$function($value))
 					{
@@ -975,7 +972,7 @@ class shopimporter extends ImportModule
 		foreach($languages as $language)
 		{
 			$iso = $language['iso_code'];
-			if (!Validate::isLangIsoCode($iso))
+			if (!Language::isInstalled($iso))
 			{
 				if ($add)
 				{
@@ -1016,16 +1013,14 @@ class shopimporter extends ImportModule
 					else
 						$errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com');
 				}
-				else
-				{
-					$newId = Language::getIdByIso($iso);
-					Db::getInstance()->Execute('UPDATE  `'._DB_PREFIX_.'lang`
-												SET  `id_lang_'.pSQL($moduleName).'` =  '.(int)$language['id_lang'].'
-												WHERE  `id_lang` = '.(int)$newId);
-				}
 			}
 			else
-				$errors[] = Tools::displayError('Iso code is not correct : ').$iso;
+			{
+				$newId = Language::getIdByIso($iso);
+				Db::getInstance()->Execute('UPDATE  `'._DB_PREFIX_.'lang`
+											SET  `id_lang_'.pSQL($moduleName).'` =  '.(int)$language['id_lang'].'
+											WHERE  `id_lang` = '.(int)$newId);
+			}		
 		}
 	}
 
@@ -1033,16 +1028,6 @@ class shopimporter extends ImportModule
 	{
 		switch ($table)
 		{
-			case 'language' :
-				$languages = Language::getLanguages();
-				$defaultIdLang = Configuration::get('PS_LANG_DEFAULT');
-				$tmp = array();
-				foreach($languages as $lang)
-					if ($lang['id_lang'] != $defaultIdLang)
-						$tmp[] = $lang['id_lang'];
-				$language = new Language();
-				$language->deleteSelection($tmp);
-			break;
 			case 'customer' :
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'customer');
 				break;
@@ -1053,6 +1038,10 @@ class shopimporter extends ImportModule
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE id_category != 1');
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE id_category != 1');
 				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'category` AUTO_INCREMENT = 2 ');
+				foreach (scandir(_PS_CAT_IMG_DIR_) AS $d)
+						if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
+							unlink(_PS_CAT_IMG_DIR_.$d);
+				Image::clearTmpDir();
 			break;
 			case 'product' :
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product');
@@ -1062,15 +1051,28 @@ class shopimporter extends ImportModule
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_tag');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination');   
+				foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
+					if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d))
+						unlink(_PS_PROD_IMG_DIR_.$d);
+				Image::clearTmpDir();
 				break;
 			case 'Manufacturers' :
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'manufacturer');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'manufacturer_lang');
+				foreach (scandir(_PS_MANU_IMG_DIR_) AS $d)
+					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
+						unlink(_PS_MANU_IMG_DIR_.$d);
+				Image::clearTmpDir();
 				break;
 			case 'Suppliers' :
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'supplier');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'supplier_lang');
 				foreach (scandir(_PS_SUPP_IMG_DIR_) AS $d)
+					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
+						unlink(_PS_SUPP_IMG_DIR_.$d);
+				Image::clearTmpDir();
 				break;
 			case 'currency' :
 			case 'customer' :

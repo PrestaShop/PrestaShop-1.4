@@ -89,66 +89,69 @@ var shopImporter = {
 			if (isOk)
 			{
 				shopImporter.syncCurrency(function(isOk) {
-					$.ajax({
-					       type: 'GET',
-					       url: '../modules/shopimporter/ajax.php',
-					       async: true,
-					       cache: false,
-					       dataType : "json",
-					       data: 'ajax=true&checkAndSaveConfig&moduleName='+shopImporter.moduleName+'&server='+shopImporter.server+'&user='+shopImporter.user+'&password='+shopImporter.password+'&database='+shopImporter.database+shopImporter.specificOptions+'&nbr_import='+shopImporter.nbr_import ,
-					       success: function(jsonData)
-					       {
-						       	if ($('#technical_error_feedback').length)
-						       		$('#technical_error_feedback').fadeIn('slow');
-						       
-						       	if (!jsonData.hasError)
-					    		{
-							       	$('#checkAndSaveConfig').fadeOut('slow');
-							       	$('#steps').html($('#steps').html()+'<div id="database_feedback" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+databaseOk+'</div>');
-							    	$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="next" id="next" class="button" value="'+testImport+'">');
-							    	$('#database_feedback').fadeIn('slow', function() {
-					    			if (save)
-							    	{
-							    		shopImporter.idMethod = 0;
-							    		shopImporter.limit = 0;
-							    		shopImporter.nbrMethod = conf.length;
-							    		$('.truncateTable:checked').each(function (){ 
-							    			shopImporter.truncatTable(this.id, 'add'); 
-							    		});
-										
-										if($('#truncat_feedback').length != 0)
-											$('#truncat_feedback').removeClass('import').addClass('conf');
-										
-							    		shopImporter.getDatas(conf[shopImporter.idMethod]);
-							    	}
-							    	else
-							    	{
-								    	$('#next').fadeIn('slow', function () { 
-									    	$('#next').unbind('click').click(function(){
-												$('#next').fadeOut('fast', function() {
-													shopImporter.nbrMethod = conf.length;
-													shopImporter.getDatas(conf[shopImporter.idMethod]);
+					if (isOk)
+					{
+						$.ajax({
+						       type: 'GET',
+						       url: '../modules/shopimporter/ajax.php',
+						       async: true,
+						       cache: false,
+						       dataType : "json",
+						       data: 'ajax=true&checkAndSaveConfig&moduleName='+shopImporter.moduleName+'&server='+shopImporter.server+'&user='+shopImporter.user+'&password='+shopImporter.password+'&database='+shopImporter.database+shopImporter.specificOptions+'&nbr_import='+shopImporter.nbr_import ,
+						       success: function(jsonData)
+						       {
+							       	if ($('#technical_error_feedback').length)
+							       		$('#technical_error_feedback').fadeIn('slow');
+							       
+							       	if (!jsonData.hasError)
+						    		{
+								       	$('#checkAndSaveConfig').fadeOut('slow');
+								       	$('#steps').html($('#steps').html()+'<div id="database_feedback" style="display:none;" class="conf"><img src="'+shopImporter.srcConf+'">'+databaseOk+'</div>');
+								    	$('#steps').html($('#steps').html()+'<input style="display:none" type="submit" name="next" id="next" class="button" value="'+testImport+'">');
+								    	$('#database_feedback').fadeIn('slow', function() {
+						    			if (save)
+								    	{
+								    		shopImporter.idMethod = 0;
+								    		shopImporter.limit = 0;
+								    		shopImporter.nbrMethod = conf.length;
+								    		$('.truncateTable:checked').each(function (){ 
+								    			shopImporter.truncatTable(this.id, 'add'); 
+								    		});
+											
+											if($('#truncat_feedback').length != 0)
+												$('#truncat_feedback').removeClass('import').addClass('conf');
+											
+								    		shopImporter.getDatas(conf[shopImporter.idMethod]);
+								    	}
+								    	else
+								    	{
+									    	$('#next').fadeIn('slow', function () { 
+										    	$('#next').unbind('click').click(function(){
+													$('#next').fadeOut('fast', function() {
+														shopImporter.nbrMethod = conf.length;
+														shopImporter.getDatas(conf[shopImporter.idMethod]);
+													});
+													return false;
 												});
-												return false;
 											});
-										});
-									}
-						    	});		    	
-						    }
-						    else
-						    {
-						    	console.log(jsonData);
-						    	$('#steps').html('<div id="database_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+jsonData.error+'</div>');
-						    	$('#database_feedback').fadeIn('slow');
-						    }
-					       },
-					      error: function(XMLHttpRequest, textStatus, errorThrown) 
-					       {
-					       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR<br><br>Details: '+XMLHttpRequest.responseText+'</div>');
-					       		$('#technical_error_feedback').fadeIn('slow');
-					       		
-					       }
-					   });
+										}
+							    	});		    	
+							    }
+							    else
+							    {
+							    	console.log(jsonData);
+							    	$('#steps').html('<div id="database_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+jsonData.error+'</div>');
+							    	$('#database_feedback').fadeIn('slow');
+							    }
+						       },
+						      error: function(XMLHttpRequest, textStatus, errorThrown) 
+						       {
+						       		$('#steps').html($('#steps').html()+'<div id="technical_error_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">TECHNICAL ERROR<br><br>Details: '+XMLHttpRequest.responseText+'</div>');
+						       		$('#technical_error_feedback').fadeIn('slow');
+						       		
+						       }
+						   });
+					}
 				});
 			}
 		});
@@ -431,9 +434,16 @@ $(document).ready(function(){
 	
 	$('#db_input input').each(function () {
 		$(this).keyup(function () {
+			$('#steps').fadeOut(200, function () {
+				$(this).html('');
+				$('#steps').fadeIn();
+			});
+			
+			
+			
+			$('#importOptions').fadeOut('slow');
 			$('#displayOptions').show();
 			$('#checkAndSaveConfig').show();
-			
 		})
 	});
 	

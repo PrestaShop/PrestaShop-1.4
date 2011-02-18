@@ -50,7 +50,7 @@ class importerosc extends ImportModule
 		$html .= '</select></div>';
 		$html .= '<label style="width:220px">'.$this->l('Shop url').' : </label>
 				<div class="margin-form">
-					http://<input type="text" name="shop_url">
+					http://<input type="text" name="shop_url">/
 				</div>';
 		
 		
