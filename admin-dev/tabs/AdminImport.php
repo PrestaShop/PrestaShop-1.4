@@ -1455,7 +1455,7 @@ class AdminImport extends AdminTab
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE id_category != 1');
 				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'category` AUTO_INCREMENT = 2');
 				foreach (scandir(_PS_CAT_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d))
+					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
 						unlink(_PS_CAT_IMG_DIR_.$d);
 				break;
 			case $this->entities[$this->l('Products')]:
@@ -1467,7 +1467,7 @@ class AdminImport extends AdminTab
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
 				foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-[0-9]+\-(.*)\.jpg$/', $d) OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
+					if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d) OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
 						unlink(_PS_PROD_IMG_DIR_.$d);
 				break;
 			case $this->entities[$this->l('Customers')]:
@@ -1489,14 +1489,14 @@ class AdminImport extends AdminTab
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'manufacturer');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'manufacturer_lang');
 				foreach (scandir(_PS_MANU_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d))
+					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
 						unlink(_PS_MANU_IMG_DIR_.$d);
 				break;
 			case $this->entities[$this->l('Suppliers')]:
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'supplier');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'supplier_lang');
 				foreach (scandir(_PS_SUPP_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+\-(.*)\.jpg$/', $d))
+					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
 						unlink(_PS_SUPP_IMG_DIR_.$d);
 				break;
 		}
