@@ -2544,7 +2544,7 @@ class AdminProducts extends AdminTab
 				if ($obj->id)
 					echo '
 						<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
-							<td style="padding-bottom:5px;"><b>'.$qty.'</b>
+							<td style="padding-bottom:5px;"><b>'.$qty.'</b><input type="hidden" name="quantity" value="'.$qty.'" /></td>
 						</tr>
 					';
 				if ($has_attribute)
