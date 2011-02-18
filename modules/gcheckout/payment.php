@@ -31,7 +31,7 @@ include(dirname(__FILE__).'/gcheckout.php');
 
 if (!$cookie->isLogged(true))
     Tools::redirect('authentication.php?back=order.php');
-elseif (!$cart->getOrderTotal(true, 3))
+elseif (!$cart->getOrderTotal(true, Cart::BOTH))
 	Tools::displayError('Error: Empty cart');
 
 $gcheckout = new GCheckout();

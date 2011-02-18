@@ -69,7 +69,7 @@ class BlockCart extends Module
 		foreach ($products AS $product)
 			$nbTotalProducts += (int)$product['cart_quantity'];
 
-		$wrappingCost = (float)($params['cart']->getOrderTotal($useTax, 6));
+		$wrappingCost = (float)($params['cart']->getOrderTotal($useTax, Cart::ONLY_WRAPPING));
 		$totalToPay = $params['cart']->getOrderTotal($useTax);
 		
 		if ($useTax AND Configuration::get('PS_TAX_DISPLAY') == 1)
@@ -85,11 +85,11 @@ class BlockCart extends Module
 			'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			'discounts' => $params['cart']->getDiscounts(false, Tools::isSubmit('id_product')),
 			'nb_total_products' => (int)($nbTotalProducts),
-			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, 5), $currency),
+			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, Cart::ONLY_SHIPPING), $currency),
 			'show_wrapping' => $wrappingCost > 0 ? true : false,
 			'show_tax' => (int)(Configuration::get('PS_TAX_DISPLAY')) == 1 ? true : false,
 			'wrapping_cost' => Tools::displayPrice($wrappingCost, $currency),
-			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, 4), $currency),
+			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, Cart::BOTH_WITHOUT_SHIPPING), $currency),
 			'total' => Tools::displayPrice($totalToPay, $currency),
 			'id_carrier' => (int)($params['cart']->id_carrier),
 			'order_process' => Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc' : 'order',

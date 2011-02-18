@@ -37,7 +37,7 @@ $currency = new Currency($cart->id_currency);
 if (!$module->isCurrencyActive($currency->iso_code))
 	Tools::redirect('order.php?step=3');
 
-$amount = number_format((float)($cart->getOrderTotal(true, 3)), 2, '.','');
+$amount = number_format((float)($cart->getOrderTotal(true, Cart::BOTH)), 2, '.','');
 if (Tools::getValue('hash') != md5(Configuration::get($module->prefix.'SALT') + $amount + $currency->iso_code)) 
 	die(Tools::displayError());
 
@@ -87,7 +87,7 @@ if ($state != _PS_OS_ERROR_)
 }
 
 
-$module->validateOrder((int)($cart->id), $state, (float)($cart->getOrderTotal(true, 3)), $module->displayName, $message, NULL, (int)($currency->id), false, $cart->secure_key);
+$module->validateOrder((int)($cart->id), $state, (float)($cart->getOrderTotal(true, Cart::BOTH)), $module->displayName, $message, NULL, (int)($currency->id), false, $cart->secure_key);
 
 if ($state == _PS_OS_ERROR_) 
 {

@@ -44,9 +44,9 @@
 			{if $cart_qties >= 0}
 				<span class="ajax_cart_total{if $cart_qties == 0} hidden{/if}">
 					{if $priceDisplay == 1}
-						{convertPrice price=$cart->getOrderTotal(false, 4)}
+						{convertPrice price=$cart->getOrderTotal(false, Cart::BOTH_WITHOUT_SHIPPING)}
 					{else}
-						{convertPrice price=$cart->getOrderTotal(true, 4)}
+						{convertPrice price=$cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING)}
 					{/if}
 				</span>
 			{/if}

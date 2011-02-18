@@ -1216,7 +1216,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			SELECT * FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'`
 			WHERE 1 
 			AND ts_id ="'.TSBuyerProtection::$CERTIFICATE[$lang]['tsID'].'"
-			AND `protected_amount_decimal` >= "'.$params['cart']->getOrderTotal(true, 3).'"
+			AND `protected_amount_decimal` >= "'.$params['cart']->getOrderTotal(true, Cart::BOTH).'"
 			AND `currency` = "'.$currency->iso_code.'"
 			ORDER BY `protected_amount_decimal`
 			LIMIT 0,1';
@@ -1227,7 +1227,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				SELECT * FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'`
 				WHERE 1 
 				AND ts_id ="'.TSBuyerProtection::$CERTIFICATE[$lang]['tsID'].'"
-				AND `protected_amount_decimal` <= "'.$params['cart']->getOrderTotal(true, 3).'"
+				AND `protected_amount_decimal` <= "'.$params['cart']->getOrderTotal(true, Cart::BOTH).'"
 				AND `currency` = "'.$currency->iso_code.'"
 				ORDER BY `protected_amount_decimal`
 				LIMIT 0,1';

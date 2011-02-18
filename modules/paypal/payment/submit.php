@@ -87,7 +87,7 @@ function displayConfirm()
 		'logo' => $ppPayment->getLogo(),
 		'cust_currency' => $cart->id_currency,
 		'currency' => $ppPayment->getCurrency(),
-		'total' => $cart->getOrderTotal(true, 3),
+		'total' => $cart->getOrderTotal(true, Cart::BOTH),
 		'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
 		'mode' => 'payment/'
 	));
@@ -105,7 +105,7 @@ function submitConfirm()
 		die('Not logged');
 	elseif (!$id_currency = (int)(Tools::getValue('currency_payement')))
 		die('No currency');
-	elseif (!$cart->getOrderTotal(true, 3))
+	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
 		die('Empty cart');
 	$currency = new Currency((int)($id_currency));
 	if (!Validate::isLoadedObject($currency))
@@ -119,7 +119,7 @@ function validOrder()
 	global $cookie, $cart, $ppPayment;
 	if (!$cookie->isLogged(true))
 		die('Not logged');
-	elseif (!$cart->getOrderTotal(true, 3))
+	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
 		die('Empty cart');
 	if (!$token = Tools::htmlentitiesUTF8(strval(Tools::getValue('token'))))
 		die('Invalid token');

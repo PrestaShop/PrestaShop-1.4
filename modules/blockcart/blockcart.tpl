@@ -114,7 +114,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			<br/>
 			{if $show_wrapping}
 				<span>{l s='Wrapping' mod='blockcart'}</span>
-				<span id="cart_block_wrapping_cost" class="price cart_block_wrapping_cost">{if $priceDisplay == 1}{convertPrice price=$cart->getOrderTotal(false, 6)}{else}{convertPrice price=$cart->getOrderTotal(true, 6)}{/if}</span>
+				<span id="cart_block_wrapping_cost" class="price cart_block_wrapping_cost">{if $priceDisplay == 1}{convertPrice price=$cart->getOrderTotal(false, Cart::ONLY_WRAPPING)}{else}{convertPrice price=$cart->getOrderTotal(true, Cart::ONLY_WRAPPING)}{/if}</span>
 				<br/>
 			{/if}
 			{if $show_tax}

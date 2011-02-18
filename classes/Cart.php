@@ -106,6 +106,14 @@ class CartCore extends ObjectModel
 			),
 		),
 	);
+	
+	const ONLY_PRODUCTS = 1;
+	const ONLY_DISCOUNTS = 2;
+	const BOTH = 3;
+	const BOTH_WITHOUT_SHIPPING = 4;
+	const ONLY_SHIPPING = 5;
+	const ONLY_WRAPPING = 6;
+	const ONLY_PRODUCTS_WITHOUT_SHIPPING = 7;
 
 	public function getFields()
 	{
@@ -236,8 +244,8 @@ class CartCore extends ObjectModel
 			return $result;
 		}
 
-		$total_products_wt = $this->getOrderTotal(true, 1);
-		$total_products = $this->getOrderTotal(false, 1);
+		$total_products_wt = $this->getOrderTotal(true, Cart::ONLY_PRODUCTS);
+		$total_products = $this->getOrderTotal(false, Cart::ONLY_PRODUCTS);
 		$shipping_wt = $this->getOrderShippingCost();
 		$shipping = $this->getOrderShippingCost(NULL, false);
 		self::$_discounts[$this->id] = array();
@@ -737,35 +745,36 @@ class CartCore extends ObjectModel
 	/**
 	* This function returns the total cart amount
 	*
-	* type = 1 : only products
-	* type = 2 : only discounts
-	* type = 3 : both
-	* type = 4 : both but without shipping
-	* type = 5 : only shipping
-	* type = 6 : only wrapping
-	* type = 7 : only products without shipping
-	*
+	* Possible values for $type:
+	* Cart::ONLY_PRODUCTS
+	* Cart::ONLY_DISCOUNTS
+	* Cart::BOTH
+	* Cart::BOTH_WITHOUT_SHIPPING
+	* Cart::ONLY_SHIPPING
+	* Cart::ONLY_WRAPPING
+	* Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING
+	* 
 	* @param boolean $withTaxes With or without taxes
 	* @param integer $type Total type
 	* @return float Order total
 	*/
-	public function getOrderTotal($withTaxes = true, $type = 3)
+	public function getOrderTotal($withTaxes = true, $type = Cart::BOTH)
 	{
 		if (!$this->id)
 			return 0;
 		$type = (int)($type);
-		if (!in_array($type, array(1, 2, 3, 4, 5, 6, 7)))
+		if (!in_array($type, array(Cart::ONLY_PRODUCTS, Cart::ONLY_DISCOUNTS, Cart::BOTH, Cart::BOTH_WITHOUT_SHIPPING, Cart::ONLY_SHIPPING, Cart::ONLY_WRAPPING, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING)))
 			die(Tools::displayError());
 
 		// no shipping cost if is a cart with only virtuals products
 		$virtual = $this->isVirtualCart();
-		if ($virtual AND $type == 5)
+		if ($virtual AND $type == Cart::ONLY_SHIPPING)
 			return 0;
-		if ($virtual AND $type == 3)
-			$type = 4;
-		$shipping_fees = ($type != 4 AND $type != 7) ? $this->getOrderShippingCost(NULL, (int)($withTaxes)) : 0;
-		if ($type == 7)
-			$type = 1;
+		if ($virtual AND $type == Cart::BOTH)
+			$type = Cart::BOTH_WITHOUT_SHIPPING;
+		$shipping_fees = ($type != Cart::BOTH_WITHOUT_SHIPPING AND $type != Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING) ? $this->getOrderShippingCost(NULL, (int)($withTaxes)) : 0;
+		if ($type == Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING)
+			$type = Cart::ONLY_PRODUCTS;
 
 		$products = $this->getProducts();
 		$order_total = 0;
@@ -799,7 +808,7 @@ class CartCore extends ObjectModel
 			$order_total += $total_price;
 		}
 		$order_total_products = $order_total;
-		if ($type == 2)
+		if ($type == Cart::ONLY_DISCOUNTS)
 			$order_total = 0;
 		// Wrapping Fees
 		$wrapping_fees = 0;
@@ -814,7 +823,7 @@ class CartCore extends ObjectModel
 			$wrapping_fees = Tools::convertPrice(Tools::ps_round($wrapping_fees, 2), Currency::getCurrencyInstance((int)($this->id_currency)));
 		}
 
-		if ($type != 1)
+		if ($type != Cart::ONLY_PRODUCTS)
 		{
 			$discounts = array();
 			/* Firstly get all discounts, looking for a free shipping one (in order to substract shipping fees to the total amount) */
@@ -832,7 +841,7 @@ class CartCore extends ObjectModel
 								$categories = Discount::getCategories($discount->id);
 								if (count($categories) AND Product::idIsOnCategoryId($product['id_product'], $categories))
 								{
-									if($type == 2)
+									if($type == Cart::ONLY_DISCOUNTS)
 										$order_total -= $shipping_fees;
 									$shipping_fees = 0;
 									break;
@@ -859,11 +868,11 @@ class CartCore extends ObjectModel
 			}
 		}
 
-		if ($type == 5) return $shipping_fees;
-		if ($type == 6) return $wrapping_fees;
-		if ($type == 3) $order_total += $shipping_fees + $wrapping_fees;
-		if ($order_total < 0 AND $type != 2) return 0;
-		if ($type == 2 AND isset($order_total_discount))
+		if ($type == Cart::ONLY_SHIPPING) return $shipping_fees;
+		if ($type == Cart::ONLY_WRAPPING) return $wrapping_fees;
+		if ($type == Cart::BOTH) $order_total += $shipping_fees + $wrapping_fees;
+		if ($order_total < 0 AND $type != Cart::ONLY_DISCOUNTS) return 0;
+		if ($type == Cart::ONLY_DISCOUNTS AND isset($order_total_discount))
 			return Tools::ps_round((float)($order_total_discount), 2);
 		return Tools::ps_round((float)($order_total), 2);
 	}
@@ -906,7 +915,7 @@ class CartCore extends ObjectModel
 				}
 
 		// Order total in default currency without fees
-		$order_total = $this->getOrderTotal(true, 7);
+		$order_total = $this->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING);
 
 		// Start with shipping cost at 0
         $shipping_cost = 0;
@@ -933,7 +942,7 @@ class CartCore extends ObjectModel
 			$carrier = new Carrier((int)(Configuration::get('PS_CARRIER_DEFAULT')), Configuration::get('PS_LANG_DEFAULT'));
 
 			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (Carrier::checkDeliveryPriceByWeight((int)(Configuration::get('PS_CARRIER_DEFAULT')), $this->getTotalWeight(), $id_zone)))
-			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (Carrier::checkDeliveryPriceByPrice((int)(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, 4), $id_zone, (int)($this->id_currency)))))
+			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (Carrier::checkDeliveryPriceByPrice((int)(Configuration::get('PS_CARRIER_DEFAULT')), $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, (int)($this->id_currency)))))
 			{
 				$id_carrier = (int)(Configuration::get('PS_CARRIER_DEFAULT'));
 			}
@@ -976,7 +985,7 @@ class CartCore extends ObjectModel
 				{
 					// Get only carriers that have a range compatible with cart
 					if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $this->getTotalWeight(), $id_zone)))
-					OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, 4), $id_zone, (int)($this->id_currency)))))
+					OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, (int)($this->id_currency)))))
 					{
 						unset($result[$k]);
 						continue ;
@@ -1040,7 +1049,7 @@ class CartCore extends ObjectModel
 		$free_fees_price = 0;
 		if (isset($configuration['PS_SHIPPING_FREE_PRICE']))
 			$free_fees_price = Tools::convertPrice((float)($configuration['PS_SHIPPING_FREE_PRICE']), Currency::getCurrencyInstance((int)($this->id_currency)));
-		$orderTotalwithDiscounts = $this->getOrderTotal(true, 4);
+		$orderTotalwithDiscounts = $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING);
 		if ($orderTotalwithDiscounts >= (float)($free_fees_price) AND (float)($free_fees_price) > 0)
 			return $shipping_cost;
 		if (isset($configuration['PS_SHIPPING_FREE_WEIGHT']) AND $this->getTotalWeight() >= (float)($configuration['PS_SHIPPING_FREE_WEIGHT']) AND (float)($configuration['PS_SHIPPING_FREE_WEIGHT']) > 0)
@@ -1060,7 +1069,7 @@ class CartCore extends ObjectModel
 				else
 					$id_zone = (int)($defaultCountry->id_zone);
 				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $this->getTotalWeight(), $id_zone)))
-						OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, 4), $id_zone, (int)($this->id_currency)))))
+						OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, (int)($this->id_currency)))))
 						$shipping_cost += 0;
 					else {
 							if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
@@ -1253,7 +1262,7 @@ class CartCore extends ObjectModel
 		if ($free_ship = Tools::convertPrice((float)(Configuration::get('PS_SHIPPING_FREE_PRICE')), new Currency((int)($this->id_currency))))
 		{
 		    $discounts = $this->getDiscounts();
-		    $total_free_ship =  $free_ship - ($this->getOrderTotal(true, 1) + $this->getOrderTotal(true, 2));
+		    $total_free_ship =  $free_ship - ($this->getOrderTotal(true, Cart::ONLY_PRODUCTS) + $this->getOrderTotal(true, Cart::ONLY_DISCOUNTS));
 		    foreach ($discounts as $discount)
 		    	if ($discount['id_discount_type'] == 3)
 		    	{
@@ -1271,14 +1280,14 @@ class CartCore extends ObjectModel
 			'products' => $this->getProducts(false),
 			'discounts' => $this->getDiscounts(false, true),
 			'is_virtual_cart' => (int)$this->isVirtualCart(),
-			'total_discounts' => $this->getOrderTotal(true, 2),
-			'total_discounts_tax_exc' => $this->getOrderTotal(false, 2),
-			'total_wrapping' => $this->getOrderTotal(true, 6),
-			'total_wrapping_tax_exc' => $this->getOrderTotal(false, 6),
+			'total_discounts' => $this->getOrderTotal(true, Cart::ONLY_DISCOUNTS),
+			'total_discounts_tax_exc' => $this->getOrderTotal(false, Cart::ONLY_DISCOUNTS),
+			'total_wrapping' => $this->getOrderTotal(true, Cart::ONLY_WRAPPING),
+			'total_wrapping_tax_exc' => $this->getOrderTotal(false, Cart::ONLY_WRAPPING),
 			'total_shipping' => $this->getOrderShippingCost(),
 			'total_shipping_tax_exc' => $this->getOrderShippingCost(NULL, false),
-			'total_products_wt' => $this->getOrderTotal(true, 1),
-			'total_products' => $this->getOrderTotal(false, 1),
+			'total_products_wt' => $this->getOrderTotal(true, Cart::ONLY_PRODUCTS),
+			'total_products' => $this->getOrderTotal(false, Cart::ONLY_PRODUCTS),
 			'total_price' => $this->getOrderTotal(),
 			'total_tax' => $total_tax,
 			'total_price_without_tax' => $this->getOrderTotal(false),

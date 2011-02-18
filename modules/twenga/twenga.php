@@ -295,18 +295,18 @@ class Twenga extends PaymentModule
 		$currency = new Currency($params['cart']->id_currency);
 		$address = $customer->getAddresses($params['cart']->id_lang);
 		$address = $address[0];
-		$tva = $params['cart']->getOrderTotal(true, 3)-$params['cart']->getOrderTotal(false, 3);
-		$tax = ($tva * 100) / $params['cart']->getOrderTotal(true, 3);
+		$tva = $params['cart']->getOrderTotal(true, Cart::BOTH)-$params['cart']->getOrderTotal(false, Cart::BOTH);
+		$tax = ($tva * 100) / $params['cart']->getOrderTotal(true, Cart::BOTH);
 		
 		$params_to_twenga = array();
 		// @todo delete or not ??
 //		$params_to_twenga['user_id'] = $customer->id;
 //		$params_to_twenga['cli_email'] = $customer->email;
-		$params_to_twenga['total_ht'] = $params['cart']->getOrderTotal(false, 3);
+		$params_to_twenga['total_ht'] = $params['cart']->getOrderTotal(false, Cart::BOTH);
 		$params_to_twenga['basket_id'] = $params['cart']->id;
 		$params_to_twenga['currency'] = $currency->iso_code;
-		$params_to_twenga['total_ttc'] = $params['cart']->getOrderTotal(true, 3);
-		$params_to_twenga['shipping'] = $params['cart']->getOrderTotal(true, 5);
+		$params_to_twenga['total_ttc'] = $params['cart']->getOrderTotal(true, Cart::BOTH);
+		$params_to_twenga['shipping'] = $params['cart']->getOrderTotal(true, Cart::ONLY_SHIPPING);
 		$params_to_twenga['tax'] = Tools::ps_round($tax, 2);
 		$params_to_twenga['tva'] = $tva;
 		$params_to_twenga['cli_firstname'] = $customer->firstname;

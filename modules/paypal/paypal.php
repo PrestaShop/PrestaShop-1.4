@@ -372,7 +372,7 @@ class PayPal extends PaymentModule
 		$currency = new Currency((int)($id_currency));
 		$iso_currency = $currency->iso_code;
 		$token = $cookie->paypal_token;
-		$total = (float)($cart->getOrderTotal(true, 3));
+		$total = (float)($cart->getOrderTotal(true, Cart::BOTH));
 		$paymentType = Configuration::get('PAYPAL_CAPTURE') == 1 ? 'Authorization' : 'Sale';
 		$serverName = urlencode($_SERVER['SERVER_NAME']);
 		$bn = ($type == 'express' ? 'ECS' : 'ECM');
@@ -436,7 +436,7 @@ class PayPal extends PaymentModule
 		}
 
 		// Call payment validation method
-		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, 3)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false, $cart->secure_key);
+		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, Cart::BOTH)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false, $cart->secure_key);
 		
 		// Clean cookie
 		unset($cookie->paypal_token);

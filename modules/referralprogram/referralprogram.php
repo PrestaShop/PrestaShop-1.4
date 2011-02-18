@@ -403,7 +403,7 @@ class ReferralProgram extends Module
 		$discount = new Discount($referralprogram->id_discount);
 		if (!Validate::isLoadedObject($discount))
 			return false;
-		if ($params['cart']->checkDiscountValidity($discount, $params['cart']->getDiscounts(), $params['cart']->getOrderTotal(true, 1), $params['cart']->getProducts())===false)
+		if ($params['cart']->checkDiscountValidity($discount, $params['cart']->getDiscounts(), $params['cart']->getOrderTotal(true, Cart::ONLY_PRODUCTS), $params['cart']->getProducts())===false)
 		{
 			global $smarty;
 			$smarty->assign(array('discount_display' => Discount::display($discount->value, $discount->id_discount_type, new Currency($params['cookie']->id_currency)), 'discount' => $discount));

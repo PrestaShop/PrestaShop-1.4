@@ -211,7 +211,7 @@ class AdminCarts extends AdminTab
 				<td colspan="5">'.$this->l('Total gift-wrapping:').'</td>
 				<td class="price-discount bold right">'.Tools::displayPrice($total_wrapping, $currency, false).'</td>
 			</tr>';
-			if ($cart->getOrderTotal(true, 5) > 0)
+			if ($cart->getOrderTotal(true, Cart::ONLY_SHIPPING) > 0)
 			echo '
 			<tr class="cart_total_delivery">
 				<td colspan="5">'.$this->l('Total shipping:').'</td>

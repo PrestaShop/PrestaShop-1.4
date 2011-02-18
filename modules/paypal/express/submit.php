@@ -109,7 +109,7 @@ function displayConfirm()
 		'ppToken' => strval($cookie->paypal_token),
 		'cust_currency' => $cookie->id_currency,
 		'currencies' => $ppExpress->getCurrency(),
-		'total' => $cart->getOrderTotal(true, 3),
+		'total' => $cart->getOrderTotal(true, Cart::BOTH),
 		'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppExpress->name.'/',
 		'payerID' => $payerID,
 		'mode' => 'express/'
@@ -130,7 +130,7 @@ function submitConfirm()
 		die('No currency');
 	elseif (!$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('payerID'))))
 		die('No payer ID');
-	elseif (!$cart->getOrderTotal(true, 3))
+	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
 		die('Empty cart');
 
 	$ppExpress->makePayPalAPIValidation($cookie, $cart, $currency, $payerID, 'express');

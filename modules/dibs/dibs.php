@@ -285,7 +285,7 @@ class dibs extends PaymentModule
 			
 		// don't cast to int !! It has strange behaviour (really strange) 
 		// for example : When calculate a total amount of 557.05, the result is 55704 after casting !!
-		$dibsParams['amount']		= $params['cart']->getOrderTotal(true, 3) * 100; // The smallest unit of an amount, cent for EUR
+		$dibsParams['amount']		= $params['cart']->getOrderTotal(true, Cart::BOTH) * 100; // The smallest unit of an amount, cent for EUR
 		$dibsParams['accepturl']	= self::$ACCEPTED_URL.'?id_cart='.(int)($params['cart']->id).'&id_module='.(int)($this->id).'&key='.$customer->secure_key; // The URL of the page to be displayed if the purchase is approved.
 		$dibsParams['orderid']		= $params['cart']->id.'_'.date('YmdHis'); // The shop's order number for this particular puchase. It can be seen later when payment is captured, and will in some instances appear on the customer's bank statement (max. 50 characters, both numerals and letters may be used).
 		$currency_num = 0;
@@ -381,10 +381,10 @@ class dibs extends PaymentModule
 		}
 		
 		// Price info
-		$dibsParams['priceinfo1.Deliverycosts'] = $params['cart']->getOrderTotal(true, 5);
-		$dibsParams['priceinfo2.ProductsAmount'] = $params['cart']->getOrderTotal(true, 4);
-		$dibsParams['priceinfo3.AmountWithoutTax'] = $params['cart']->getOrderTotal(false, 3);
-		$dibsParams['priceinfo4.AmountTotalTax'] = (float)($params['cart']->getOrderTotal(true, 3) - $params['cart']->getOrderTotal(false, 3));
+		$dibsParams['priceinfo1.Deliverycosts'] = $params['cart']->getOrderTotal(true, Cart::ONLY_SHIPPING);
+		$dibsParams['priceinfo2.ProductsAmount'] = $params['cart']->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING);
+		$dibsParams['priceinfo3.AmountWithoutTax'] = $params['cart']->getOrderTotal(false, Cart::BOTH);
+		$dibsParams['priceinfo4.AmountTotalTax'] = (float)($params['cart']->getOrderTotal(true, Cart::BOTH) - $params['cart']->getOrderTotal(false, Cart::BOTH));
 		$this->smarty->assign('p', $dibsParams);
 		$this->smarty->assign('logo_color', self::$MORE_SETTINGS['logo_color']);
 		return $this->display(__FILE__, 'dibs.tpl');

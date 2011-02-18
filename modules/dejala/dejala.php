@@ -1245,7 +1245,7 @@ class Dejala extends CarrierModule
 		$quotation["receiver_comments"] = $address->other;
 		$quotation["timelimit"] = 10;
 		$quotation["weight"] = (float)($cart->getTotalWeight());
-		$quotation["price"] = $cart->getOrderTotal(true, 4) ;
+		$quotation["price"] = $cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING) ;
 		$quotation["module_version"] = $this->internal_version ;
 		$quotation["platform"] = "PS " . _PS_VERSION_ ;
 

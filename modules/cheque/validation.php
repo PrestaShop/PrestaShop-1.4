@@ -40,7 +40,7 @@ if (!Validate::isLoadedObject($customer))
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
 $currency = new Currency((int)(isset($_POST['currency_payement']) ? $_POST['currency_payement'] : $cookie->id_currency));
-$total = (float)($cart->getOrderTotal(true, 3));
+$total = (float)($cart->getOrderTotal(true, Cart::BOTH));
 
 $mailVars =	array(
 	'{cheque_name}' => Configuration::get('CHEQUE_NAME'),

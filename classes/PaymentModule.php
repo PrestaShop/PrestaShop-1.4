@@ -123,13 +123,13 @@ abstract class PaymentModuleCore extends Module
 			$order->conversion_rate = $currency->conversion_rate;
 			$amountPaid = !$dont_touch_amount ? Tools::ps_round((float)($amountPaid), 2) : $amountPaid;
 			$order->total_paid_real = $amountPaid;
-			$order->total_products = (float)($cart->getOrderTotal(false, 1));
-			$order->total_products_wt = (float)($cart->getOrderTotal(true, 1));
-			$order->total_discounts = (float)(abs($cart->getOrderTotal(true, 2)));
+			$order->total_products = (float)($cart->getOrderTotal(false, Cart::ONLY_PRODUCTS));
+			$order->total_products_wt = (float)($cart->getOrderTotal(true, Cart::ONLY_PRODUCTS));
+			$order->total_discounts = (float)(abs($cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS)));
 			$order->total_shipping = (float)($cart->getOrderShippingCost());
 			$order->carrier_tax_rate = (float)Tax::getCarrierTaxRate($cart->id_carrier, (int)$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
-			$order->total_wrapping = (float)(abs($cart->getOrderTotal(true, 6)));
-			$order->total_paid = (float)(Tools::ps_round((float)($cart->getOrderTotal(true, 3)), 2));
+			$order->total_wrapping = (float)(abs($cart->getOrderTotal(true, Cart::ONLY_WRAPPING)));
+			$order->total_paid = (float)(Tools::ps_round((float)($cart->getOrderTotal(true, Cart::BOTH)), 2));
 			$order->invoice_date = '0000-00-00 00:00:00';
 			$order->delivery_date = '0000-00-00 00:00:00';
 			// Amount paid by customer is not the right one -> Status = payment error
@@ -284,7 +284,7 @@ abstract class PaymentModuleCore extends Module
 				foreach ($discounts AS $discount)
 				{
 					$objDiscount = new Discount((int)$discount['id_discount'], $order->id_lang);
-					$value = $objDiscount->getValue(sizeof($discounts), $cart->getOrderTotal(true, 1), $order->total_shipping, $cart->id);
+					$value = $objDiscount->getValue(sizeof($discounts), $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS), $order->total_shipping, $cart->id);
 					if ($objDiscount->id_discount_type == 2 AND in_array($objDiscount->behavior_not_exhausted, array(1,2)))
 						$shrunk = true;
 					

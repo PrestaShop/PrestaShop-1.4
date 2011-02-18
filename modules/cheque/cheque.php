@@ -160,7 +160,7 @@ class Cheque extends PaymentModule
 			'nbProducts' => $cart->nbProducts(),
 			'cust_currency' => $cart->id_currency,
 			'currencies' => $this->getCurrency(),
-			'total' => $cart->getOrderTotal(true, 3),
+			'total' => $cart->getOrderTotal(true, Cart::BOTH),
 			'isoCode' => Language::getIsoById((int)($cookie->id_lang)),
 			'chequeName' => $this->chequeName,
 			'chequeAddress' => nl2br2($this->address),

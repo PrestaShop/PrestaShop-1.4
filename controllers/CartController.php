@@ -75,7 +75,7 @@ class CartControllerCore extends FrontController
 	{
 		parent::preProcess();
 
-		$orderTotal = $this->cart->getOrderTotal(true, 1);
+		$orderTotal = $this->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS);
 
 		$this->cartDiscounts = $this->cart->getDiscounts();
 		foreach ($this->cartDiscounts AS $k => $this->cartDiscount)
@@ -203,7 +203,7 @@ class CartControllerCore extends FrontController
 					foreach($discounts AS $discount)
 					{
 						$discountObj = new Discount((int)($discount['id_discount']), (int)($this->cookie->id_lang));
-						if ($error = $this->cart->checkDiscountValidity($discountObj, $discounts, $this->cart->getOrderTotal(true, 1), $this->cart->getProducts()))
+						if ($error = $this->cart->checkDiscountValidity($discountObj, $discounts, $this->cart->getOrderTotal(true, Cart::ONLY_PRODUCTS), $this->cart->getProducts()))
 						{
 							$this->cart->deleteDiscount((int)($discount['id_discount']));
 							$this->cart->update();
