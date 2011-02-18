@@ -226,7 +226,7 @@ abstract class ObjectModelCore
 		if (!$result)
 			return false;
 
-		/* Database update for multilingual fields related to the object */
+		// Database update for multilingual fields related to the object 
 		if (method_exists($this, 'getTranslationsFieldsChild'))
 		{
 			$fields = $this->getTranslationsFieldsChild();
@@ -236,12 +236,16 @@ abstract class ObjectModelCore
 					foreach ($field as $key => $value)
 						if (!Validate::isTableOrIdentifier($key))
 							die(Tools::displayError());
-					// useless ?
-					$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).
-					'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
-					$result *= (!Db::getInstance()->NumRows()) ? Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') :
-					Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', '`'.
-					pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
+
+					// used to insert missing lang entries
+					$where_lang = '`'.pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']);
+
+					$lang_found = Db::getInstance()->getRow('SELECT COUNT(*) FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE '. $where_lang)->getValue();
+
+					if ($lang_found)
+						$result &= Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT');
+					else
+						$result &= Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', $where_lang);
 				}
 		}
 		return $result;

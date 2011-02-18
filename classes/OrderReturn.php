@@ -114,7 +114,7 @@ class OrderReturnCore extends ObjectModel
 					$customizationId = (int)($customizationId);
 					if (!isset($orderedCustomizations[$customizationId]))
 						return false;
-					$quantity = (isset($returnedCustomizations[$customizationId]) ? $returnedCustomizations[$customizationId]['product_quantity'] : 0) + (isset($customizationQtyInput[$customizationId]) ? (int)($customizationQtyInput[$customizationId]) : 0);
+					$quantity =  (isset($customizationQtyInput[$customizationId]) ? (int)($customizationQtyInput[$customizationId]) : 0);
 					if ((int)($orderedCustomizations[$customizationId]['quantity']) - $quantity < 0)
 						return false;
 				}

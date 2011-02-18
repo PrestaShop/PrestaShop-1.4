@@ -197,7 +197,7 @@ class MailCore
 
 	static public function l($string)
 	{
-		global $_LANGMAIL;
+		global $_LANGMAIL, $cookie;
 
 		$key = str_replace('\'', '\\\'', $string);
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang;

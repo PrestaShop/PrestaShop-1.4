@@ -263,7 +263,6 @@ class LocalizationPackCore
 								if (file_put_contents($file, $content))
 								{
 									$gz = new Archive_Tar($file, true);
-									$files_list = $gz->listContent();
 
 									if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 									{

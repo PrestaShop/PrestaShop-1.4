@@ -277,7 +277,6 @@ class OrderCore extends ObjectModel
 			$price = Tools::ps_round($price - $reduction_amount, 2);
 		$productPriceWithoutTax = number_format($price / (1 + $orderDetail->tax_rate * 0.01), 2, '.', '');
 		$price += Tools::ps_round($orderDetail->ecotax * (1 + $orderDetail->ecotax_tax_rate / 100), 2);
-		$unitPrice = number_format($price, 2, '.', '');
 		$productPrice = number_format($quantity * $price, 2, '.', '');
 		/* Update cart */
 		$cart = new Cart($this->id_cart);
@@ -545,13 +544,11 @@ class OrderCore extends ObjectModel
 
 	static public function getDiscountsCustomer($id_customer, $id_discount)
 	{
-		$result = Db::getInstance()->ExecuteS('
-				SELECT od.id_discount FROM `'._DB_PREFIX_.'orders` o
-		LEFT JOIN '._DB_PREFIX_.'order_discount od ON (od.id_order = o.id_order)
-		WHERE o.id_customer = '.(int)($id_customer).'
-		AND od.id_discount = '.(int)($id_discount));
-
-		return Db::getInstance()->NumRows();
+		return Db::getInstance()->ExecuteS('
+			SELECT COUNT(*) FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN '._DB_PREFIX_.'order_discount od ON (od.id_order = o.id_order)
+			WHERE o.id_customer = '.(int)($id_customer).'
+			AND od.id_discount = '.(int)($id_discount))->getValue();
 	}
 
 	/**

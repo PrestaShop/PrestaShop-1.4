@@ -80,8 +80,6 @@ class OrderSlipCore extends ObjectModel
 
 	static public function getOrdersSlip($customer_id, $order_id = false)
 	{
-		global $cookie;
-
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_slip`

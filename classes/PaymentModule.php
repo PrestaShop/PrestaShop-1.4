@@ -107,7 +107,6 @@ abstract class PaymentModuleCore extends Module
 			$order->id_address_invoice = (int)($cart->id_address_invoice);
 			$order->id_address_delivery = (int)($cart->id_address_delivery);
 			$vat_address = new Address((int)($order->id_address_delivery));
-			$id_zone = Address::getZoneById((int)($vat_address->id));
 			$order->id_currency = ($currency_special ? (int)($currency_special) : (int)($cart->id_currency));
 			$order->id_lang = (int)($cart->id_lang);
 			$order->id_cart = (int)($cart->id);
@@ -226,7 +225,7 @@ abstract class PaymentModuleCore extends Module
 						'.$quantityInStock.',
 						'.(float)(Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod((int)($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice, FALSE)).',
 						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
-						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (!$specificPrice['id_currency'] ? Tools::convertPrice($specificPrice['reduction'], $id_currency) : $specificPrice['reduction']) : 0.00).',
+						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (!$specificPrice['id_currency'] ? Tools::convertPrice($specificPrice['reduction'], $specificPrice['id_currency']) : $specificPrice['reduction']) : 0.00).',
 						'.(float)(Group::getReduction((int)($order->id_customer))).',
 						'.$quantityDiscountValue.',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',

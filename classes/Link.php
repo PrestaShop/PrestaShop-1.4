@@ -282,7 +282,6 @@ class LinkCore
 		$varsNb = array('n', 'search_query');
 		$varsSort = array('orderby', 'orderway');
 		$varsPagination = array('p');
-		$varsVarious = array('search_query');
 
 		$n = 0;
 		foreach ($_GET AS $k => $value)

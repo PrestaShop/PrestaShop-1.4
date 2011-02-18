@@ -237,7 +237,6 @@ abstract class ModuleCore
 	{
 		if (sizeof($languages) == 1)
 			return false;
-		$defaultIso = Language::getIsoById($defaultLanguage);
 		$output = '
 		<div class="displayed_flag">
 			<img src="../img/l/'.$defaultLanguage.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="toggleLanguageFlags(this);" alt="" />
@@ -491,13 +490,14 @@ abstract class ModuleCore
 			AND m.`active` = 1
 			ORDER BY hm.`position`', false);
 			self::$_hookModulesCache = array();
-			while ($row = $db->nextRow())
-			{
-				$row['hook'] = strtolower($row['hook']);
-				if (!isset(self::$_hookModulesCache[$row['hook']]))
-					self::$_hookModulesCache[$row['hook']] = array();
-				self::$_hookModulesCache[$row['hook']][] = array('id_hook' => $row['id_hook'], 'module' => $row['module'], 'id_module' => $row['id_module']);
-			}
+			if ($result)
+				while ($row = $db->nextRow())
+				{
+					$row['hook'] = strtolower($row['hook']);
+					if (!isset(self::$_hookModulesCache[$row['hook']]))
+						self::$_hookModulesCache[$row['hook']] = array();
+					self::$_hookModulesCache[$row['hook']][] = array('id_hook' => $row['id_hook'], 'module' => $row['module'], 'id_module' => $row['id_module']);
+				}
 		}
 
 		if (!isset(self::$_hookModulesCache[$hook_name]))

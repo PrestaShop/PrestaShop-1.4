@@ -158,7 +158,6 @@ class OrderHistoryCore extends ObjectModel
 			if ($virtualProducts = $order->getVirtualProducts() AND (!$lastOrderState OR !$lastOrderState->logable) AND $newOrderState = new OrderState($this->id_order_state, Configuration::get('PS_LANG_DEFAULT')) AND $newOrderState->logable)
 			{
 				global $smarty;
-				$display = '';
 				$assign = array();
 				foreach ($virtualProducts AS $key => $virtualProduct)
 				{
