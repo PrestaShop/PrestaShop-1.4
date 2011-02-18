@@ -398,7 +398,9 @@ class CMSCategoryCore extends ObjectModel
 	{
 		return self::getChildren(1, $id_lang, $active);
 	}
-
+	/**
+	 * @deprecated
+	**/
 	static public function getRootCMSCategory($id_lang = NULL)
 	{
 		Tools::displayAsDeprecated();
@@ -522,6 +524,7 @@ class CMSCategoryCore extends ObjectModel
 	  * @param string  $CMSCategory_name Searched CMSCategory name
 	  * @param integer $id_parent_CMSCategory parent CMSCategory ID
 	  * @return array Corresponding CMSCategory
+	  *	@deprecated
 	  */
 	static public function searchByNameAndParentCMSCategoryId($id_lang, $CMSCategory_name, $id_parent_CMSCategory)
 	{
@@ -569,6 +572,7 @@ class CMSCategoryCore extends ObjectModel
 	*
 	* @param $id_cms_category CMSCategory id
 	* @return boolean
+	*	@deprecated
 	*/
 	static public function CMSCategoryExists($id_cms_category)
 	{
