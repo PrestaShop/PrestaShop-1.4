@@ -59,7 +59,7 @@ class CountryCore extends ObjectModel
 	/** @var boolean Status for delivery */
 	public		$active = true;
 
-	private static $_idZones = array();
+	protected static $_idZones = array();
 
 	protected 	$tables = array ('country', 'country_lang');
 

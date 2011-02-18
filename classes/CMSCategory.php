@@ -68,7 +68,7 @@ class CMSCategoryCore extends ObjectModel
 	/** @var string Object last modification date */
 	public 		$date_upd;
 
-	private static $_links = array();
+	protected static $_links = array();
 
 
 	protected $tables = array ('cms_category', 'cms_category_lang');
@@ -230,7 +230,7 @@ class CMSCategoryCore extends ObjectModel
 	  * @param array &$toDelete Array reference where categories ID will be saved
 	  * @param array $id_cms_category Parent CMSCategory ID
 	  */
-	private function recursiveDelete(&$toDelete, $id_cms_category)
+	protected function recursiveDelete(&$toDelete, $id_cms_category)
 	{
 	 	if (!is_array($toDelete) OR !$id_cms_category)
 	 		die(Tools::displayError());

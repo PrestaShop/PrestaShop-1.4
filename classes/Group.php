@@ -57,8 +57,8 @@ class GroupCore extends ObjectModel
 	protected 	$table = 'group';
 	protected 	$identifier = 'id_group';
 
-	private static $_customerReduction = array();
-	private static $_groupPriceDisplayMethod = array();
+	protected static $_customerReduction = array();
+	protected static $_groupPriceDisplayMethod = array();
 	
 	protected	$webserviceParameters = array();
 	

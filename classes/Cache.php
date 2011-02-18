@@ -28,7 +28,7 @@
 abstract class CacheCore
 {
 	
-	private static $_instance;
+	protected static $_instance;
 	protected $_keysCached;
 	protected $_tablesCached = array();
 	

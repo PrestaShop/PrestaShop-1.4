@@ -32,7 +32,7 @@ class CustomerCore extends ObjectModel
 	/** @var string Secure key */
 	public		$secure_key;
 
-	/** @var string private note */
+	/** @var string protected note */
 	public		$note;
 
 	/** @var integer Gender ID */
@@ -112,8 +112,8 @@ class CustomerCore extends ObjectModel
 	protected 	$table = 'customer';
 	protected 	$identifier = 'id_customer';
 
-	private static $_defaultGroupId = array();
-	private static $_customerHasAddress = array();
+	protected static $_defaultGroupId = array();
+	protected static $_customerHasAddress = array();
 
 	public function getFields()
 	{

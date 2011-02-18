@@ -33,7 +33,7 @@ abstract class ImportModuleCore extends Module
 		@mysql_close($this->_link);
 	}
 	
-	private function initDatabaseConnection()
+	protected function initDatabaseConnection()
 	{
 		if ($this->_link != NULL)
 			return $this->_link;

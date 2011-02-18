@@ -93,8 +93,8 @@ class AddressCore extends ObjectModel
 	/** @var boolean True if address has been deleted (staying in database as deleted) */
 	public 		$deleted = 0;
 	
-	private static $_idZones = array();
-	private static $_idCountries = array();
+	protected static $_idZones = array();
+	protected static $_idCountries = array();
 
 	protected	$fieldsRequired = array('id_country', 'alias', 'lastname', 'firstname', 'address1', 'city');
 	protected	$fieldsSize = array('alias' => 32, 'company' => 32, 'lastname' => 32, 'firstname' => 32,

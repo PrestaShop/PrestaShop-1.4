@@ -46,7 +46,7 @@ class FrontControllerCore
 	
 	public static $initialized = false;
 	
-	private static $currentCustomerGroups;
+	protected static $currentCustomerGroups;
 	
 	public function __construct()
 	{
@@ -506,7 +506,7 @@ class FrontControllerCore
 			$smarty->{'register_'.$type}($function, $params); // or keep a backward compatibility if PHP version < 5.1.2
 	}
 	
-	private static function isInWhitelistForGeolocalization()
+	protected static function isInWhitelistForGeolocalization()
 	{
 		$allowed = false;
 		$userIp = Tools::getRemoteAddr();

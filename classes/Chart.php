@@ -27,19 +27,19 @@
 
 class ChartCore
 {
-	private static $poolId = 0;
+	protected static $poolId = 0;
 	
-	private $width = 600;
-	private $height = 300;
+	protected $width = 600;
+	protected $height = 300;
 	
 	// Time mode
-	private $timeMode = false;
-	private $from;
-	private $to;
-	private $format;
-	private $granularity;
+	protected $timeMode = false;
+	protected $from;
+	protected $to;
+	protected $format;
+	protected $granularity;
 	
-	private $curves = array();
+	protected $curves = array();
 	
 	/** @prototype void public static function init(void) */
 	public static function init()
@@ -131,9 +131,9 @@ class ChartCore
 
 class Curve
 {
-	private $values = array();
-	private $label;
-	private $type;
+	protected $values = array();
+	protected $label;
+	protected $type;
 
 	/** @prototype void public function setValues(array $values) */
 	public function setValues(array $values)

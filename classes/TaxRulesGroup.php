@@ -40,7 +40,7 @@ class TaxRulesGroupCore extends ObjectModel
 	protected 	$table = 'tax_rules_group';
 	protected 	$identifier = 'id_tax_rules_group';
 
-    private static $_taxes = array();
+    protected static $_taxes = array();
 
 	public function getFields()
 	{

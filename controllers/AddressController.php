@@ -27,7 +27,7 @@
 
 class AddressControllerCore extends FrontController
 {
-	private $_address;
+	protected $_address;
 
 	public function __construct()
 	{

@@ -169,7 +169,7 @@ abstract class ModuleGraphCore extends Module
 		$this->_displayCsv();
 	}
 	
-	private function _displayCsv()
+	protected function _displayCsv()
 	{
 		ob_end_clean();
 		header('Content-Type: application/octet-stream');
@@ -227,7 +227,7 @@ abstract class ModuleGraphCore extends Module
 		return call_user_func(array($render, 'hookGraphEngine'), $params, $drawer);
 	}
 	
-	private static function getEmployee($employee = null)
+	protected static function getEmployee($employee = null)
 	{
 		if (!$employee)
 		{

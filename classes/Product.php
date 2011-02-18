@@ -190,14 +190,14 @@ class ProductCore extends ObjectModel
 	public $cache_default_attribute;
 
 	public	static $_taxCalculationMethod = PS_TAX_EXC;
-	private static $_prices = array();
-	private static $_pricesLevel2 = array();
-	private static $_pricesLevel3 = array();
-	private static $_incat = array();
-	private static $_cart_quantity = array();
-	private static $_tax_rules_group = array();
-	private static $_cacheFeatures = array();
-	private static $_frontFeaturesCache = array();
+	protected static $_prices = array();
+	protected static $_pricesLevel2 = array();
+	protected static $_pricesLevel3 = array();
+	protected static $_incat = array();
+	protected static $_cart_quantity = array();
+	protected static $_tax_rules_group = array();
+	protected static $_cacheFeatures = array();
+	protected static $_frontFeaturesCache = array();
 
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
@@ -1369,7 +1369,7 @@ class ProductCore extends ObjectModel
 		return Product::getProductsProperties((int)$id_lang, $result);
 	}
 
-	static private function _getProductIdByDate($beginning, $ending)
+	static protected function _getProductIdByDate($beginning, $ending)
 	{
 		global $cookie, $cart;
 
@@ -2425,7 +2425,7 @@ class ProductCore extends ObjectModel
 		return $return;
 	}
 
-	static private function _getCustomizationFieldsNLabels($productId)
+	static protected function _getCustomizationFieldsNLabels($productId)
 	{
 		$customizations = array();
 		if (($customizations['fields'] = Db::getInstance()->ExecuteS('
@@ -2514,7 +2514,7 @@ class ProductCore extends ObjectModel
 		return Language::getIsoById((int)$id_lang).'-default';
 	}
 
-	private static $producPropertiesCache = array();
+	protected static $producPropertiesCache = array();
 
 	public static function getProductProperties($id_lang, $row)
 	{
@@ -2726,7 +2726,7 @@ class ProductCore extends ObjectModel
 	** Customization fields' label management
 	*/
 
-	private function _checkLabelField($field, $value)
+	protected function _checkLabelField($field, $value)
 	{
 		if (!Validate::isLabel($value))
 			return false;
@@ -2736,7 +2736,7 @@ class ProductCore extends ObjectModel
 		return $tmp;
 	}
 
-	private function _deleteOldLabels()
+	protected function _deleteOldLabels()
 	{
 		$max = array(_CUSTOMIZE_FILE_ => (int)(Tools::getValue('uploadable_files')), _CUSTOMIZE_TEXTFIELD_ => (int)(Tools::getValue('text_fields')));
 		/* Get customization field ids */
@@ -2763,7 +2763,7 @@ class ProductCore extends ObjectModel
 		return true;
 	}
 
-	private function _createLabel(&$languages, $type)
+	protected function _createLabel(&$languages, $type)
 	{
 		/* Label insertion */
 		if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'customization_field` (`id_product`, `type`, `required`) VALUES ('.(int)($this->id).', '.(int)($type).', 0)') OR !$id_customization_field = (int)(Db::getInstance()->Insert_ID()))

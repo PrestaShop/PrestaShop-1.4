@@ -127,7 +127,7 @@ abstract class AdminTabCore
 	protected $_conf;
 
 	/** @var object Object corresponding to the tab */
-	private $_object = false;
+	protected $_object = false;
 
 	/** @var array tabAccess */
 	public $tabAccess;
@@ -135,7 +135,7 @@ abstract class AdminTabCore
 	/** @var string specificConfirmDelete */
 	public $specificConfirmDelete = NULL;
 
-	private $identifiersDnd = array('id_product' => 'id_product', 'id_category' => 'id_category_to_move','id_cms_category' => 'id_cms_category_to_move', 'id_cms' => 'id_cms');
+	protected $identifiersDnd = array('id_product' => 'id_product', 'id_category' => 'id_category_to_move','id_cms_category' => 'id_cms_category_to_move', 'id_cms' => 'id_cms');
 
 	/** @var bool Redirect or not ater a creation */
 	protected $_redirect = true;
@@ -143,7 +143,7 @@ abstract class AdminTabCore
 	protected	$_languages = NULL;
 	protected	$_defaultFormLanguage = NULL;
 
-	private $_includeObj = array();
+	protected $_includeObj = array();
 	protected $_includeVars = false;
 	protected $_includeContainer = true;
 	
@@ -1784,7 +1784,7 @@ abstract class AdminTabCore
 		echo $output;
 	}
 
-	private function filterToField($key, $filter)
+	protected function filterToField($key, $filter)
 	{
 		foreach ($this->fieldsDisplay AS $field)
 			if (array_key_exists('filter_key', $field) AND $field['filter_key'] == $key)

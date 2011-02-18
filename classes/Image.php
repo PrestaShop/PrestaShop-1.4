@@ -55,7 +55,7 @@ class ImageCore extends ObjectModel
 	protected 	$table = 'image';
 	protected 	$identifier = 'id_image';	
 	
-	private	static $_cacheGetSize = array();
+	protected	static $_cacheGetSize = array();
 	
 	public function getFields()
 	{
@@ -220,7 +220,7 @@ class ImageCore extends ObjectModel
 		return self::duplicateAttributeImageAssociations($combinationImages);
 	}
 
-	static private function replaceAttributeImageAssociationId(&$combinationImages, $saved_id, $id_image)
+	static protected function replaceAttributeImageAssociationId(&$combinationImages, $saved_id, $id_image)
 	{
 		if (!isset($combinationImages['new']) OR !is_array($combinationImages['new']))
 			return ;

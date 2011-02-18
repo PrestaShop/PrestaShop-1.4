@@ -30,7 +30,7 @@ class HelpAccessCore
 {
     const URL = 'http://help.prestashop.com';
 
-    private static $_images = array(0 => 'none',
+    protected static $_images = array(0 => 'none',
                              1 => 'help2.png',
                              2 => 'help-new.png');
 

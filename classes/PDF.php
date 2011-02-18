@@ -83,21 +83,21 @@ class PDF_PageGroupCore extends FPDF
 
 class PDFCore extends PDF_PageGroupCore
 {
-	private static $order = NULL;
-	private static $orderReturn = NULL;
-	private static $orderSlip = NULL;
-	private static $delivery = NULL;
-	private static $_priceDisplayMethod;
+	protected static $order = NULL;
+	protected static $orderReturn = NULL;
+	protected static $orderSlip = NULL;
+	protected static $delivery = NULL;
+	protected static $_priceDisplayMethod;
 
 	/** @var object Order currency object */
-	private static $currency = NULL;
+	protected static $currency = NULL;
 
-	private static $_iso;
+	protected static $_iso;
 
 	/** @var array Special PDF params such encoding and font */
 
-	private static $_pdfparams = array();
-	private static $_fpdf_core_fonts = array('courier', 'helvetica', 'helveticab', 'helveticabi', 'helveticai', 'symbol', 'times', 'timesb', 'timesbi', 'timesi', 'zapfdingbats');
+	protected static $_pdfparams = array();
+	protected static $_fpdf_core_fonts = array('courier', 'helvetica', 'helveticab', 'helveticabi', 'helveticai', 'symbol', 'times', 'timesb', 'timesbi', 'timesi', 'zapfdingbats');
 
 	/**
 	* Constructor
@@ -113,7 +113,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->_initPDFFonts();
 	}
 
-	private function _initPDFFonts()
+	protected function _initPDFFonts()
 	{
 		if (!$languages = Language::getLanguages())
 			die(Tools::displayError());
@@ -969,7 +969,7 @@ g	* Discount table with value, quantities...
 			$this->Cell(190, 10, self::l('No tax'), 0, 0, 'C');
 	}
 
-	static private function convertSign($s)
+	static protected function convertSign($s)
 	{
 		$arr['before'] = array('€', '£', '¥');
 		$arr['after'] = array(chr(128), chr(163), chr(165));
@@ -992,17 +992,17 @@ g	* Discount table with value, quantities...
 		return (Tools::iconv('utf-8', self::encoding(), $str));
 	}
 
-	static private function encoding()
+	static protected function encoding()
 	{
 		return (isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['encoding']) ? self::$_pdfparams[self::$_iso]['encoding'] : 'iso-8859-1';
 	}
 
-	static private function embedfont()
+	static protected function embedfont()
 	{
 		return (((isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['font']) AND !in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts)) ? self::$_pdfparams[self::$_iso]['font'] : false);
 	}
 
-	static private function fontname()
+	static protected function fontname()
 	{
 		$font = self::embedfont();
 		if (in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts))

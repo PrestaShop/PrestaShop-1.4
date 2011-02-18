@@ -162,7 +162,7 @@ abstract class ModuleGridCore extends Module
 		$this->_displayCsv();
 	}
 	
-	private function _displayCsv()
+	protected function _displayCsv()
 	{
 		ob_end_clean();
 		header('Content-Type: application/octet-stream');

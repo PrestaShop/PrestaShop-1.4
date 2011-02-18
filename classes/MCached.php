@@ -27,8 +27,8 @@
 
 class MCachedCore extends Cache
 {
-	private $_memcacheObj;
-	private $_isConnected = false;
+	protected $_memcacheObj;
+	protected $_isConnected = false;
 
 	protected function __construct()
 	{
@@ -77,7 +77,7 @@ class MCachedCore extends Cache
 		return $this->_memcacheObj->get($key);
 	}
 	
-	private function _setKeys()
+	protected function _setKeys()
 	{
 		if (!$this->_isConnected)
 			return false;

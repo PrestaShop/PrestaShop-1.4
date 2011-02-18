@@ -49,9 +49,9 @@ class ConfigurationCore extends ObjectModel
 	protected 	$identifier = 'id_configuration';
 
 	/** @var array Configuration cache */
-	private static $_CONF;
+	protected static $_CONF;
 	/** @var array Configuration multilang cache */
-	private static $_CONF_LANG;
+	protected static $_CONF_LANG;
 
 	protected	$webserviceParameters = array(
 			'fields' => array(
@@ -212,7 +212,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param string $value Value
 	  * @eturn boolean Insert result
 	  */
-	static private function _addConfiguration($key, $value = NULL)
+	static protected function _addConfiguration($key, $value = NULL)
 	{
 		$newConfig = new Configuration();
 		$newConfig->name = $key;

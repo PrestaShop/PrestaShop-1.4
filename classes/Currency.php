@@ -68,9 +68,9 @@ class CurrencyCore extends ObjectModel
 	protected 	$identifier = 'id_currency';
 	
 	/** @var Currency Current currency */
-	static private	$current = NULL;
+	static protected	$current = NULL;
 	/** @var array Currency cache */
-	static private	$currencies = array();
+	static protected	$currencies = array();
 	
 	protected	$webserviceParameters = array(
 		'fields' => array(

@@ -45,7 +45,7 @@ class SpecificPriceCore extends ObjectModel
 	protected 	$table = 'specific_price';
 	protected 	$identifier = 'id_specific_price';
 
-	private static $_specificPriceCache = array();
+	protected static $_specificPriceCache = array();
 
 	public function getFields()
 	{
@@ -79,7 +79,7 @@ class SpecificPriceCore extends ObjectModel
 	}
 
        // score generation for quantity discount
-	private static function _getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group)
+	protected static function _getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group)
 	{
 	    $select = '(';
 	    $priority = SpecificPrice::getPriority($id_product);

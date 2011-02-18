@@ -28,8 +28,8 @@
 class LinkCore
 {
 	/** @var boolean Rewriting activation */
-	private $allow;
-	private $url;
+	protected $allow;
+	protected $url;
 	public static $cache = array('page' => array());
 
 	/**
@@ -309,7 +309,7 @@ class LinkCore
 		return $url.(!strstr($url, '?') ? '?' : '&').'orderby='.urlencode($orderby).'&orderway='.urlencode($orderway);
 	}
 	
-	private function getLangLink($id_lang = NULL)
+	protected function getLangLink($id_lang = NULL)
 	{
 		if (!$this->allow OR Language::countActiveLanguages() <= 1)
 			return '';

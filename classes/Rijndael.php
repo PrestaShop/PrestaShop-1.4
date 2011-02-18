@@ -27,8 +27,8 @@
 
 class RijndaelCore
 {
-	private $_key;
-	private $_iv;
+	protected $_key;
+	protected $_iv;
 	
 	public function __construct($key, $iv)
 	{

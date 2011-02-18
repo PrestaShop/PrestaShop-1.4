@@ -165,7 +165,7 @@ class SupplierCore extends ObjectModel
 	  * @param integer $id_supplier Supplier ID
 	  * @return string name
 	  */
-	static private $cacheName = array();
+	static protected $cacheName = array();
 	static public function getNameById($id_supplier)
 	{
 		if (!isset(self::$cacheName[$id_supplier]))

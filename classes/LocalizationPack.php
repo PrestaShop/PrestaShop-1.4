@@ -32,9 +32,9 @@ class LocalizationPackCore
 	public	$name;
 	public	$version;
 
-	private $iso_code_lang;
-	private $iso_currency;
-	private	$_errors = array();
+	protected $iso_code_lang;
+	protected $iso_currency;
+	protected	$_errors = array();
 
 	public function loadLocalisationPack($file, $selection, $install_mode = false)
 	{
@@ -68,7 +68,7 @@ class LocalizationPackCore
 		return true;
 	}
 
-	private function _installStates($xml)
+	protected function _installStates($xml)
 	{
 		if (isset($xml->states->state))
 			foreach ($xml->states->state AS $data)
@@ -104,7 +104,7 @@ class LocalizationPackCore
 		return true;
 	}
 
-	private function _installTaxes($xml)
+	protected function _installTaxes($xml)
 	{
 		if (isset($xml->taxes->tax))
 		{
@@ -186,7 +186,7 @@ class LocalizationPackCore
 		return true;
 	}
 
-	private function _installCurrencies($xml, $install_mode = false)
+	protected function _installCurrencies($xml, $install_mode = false)
 	{
 		if (isset($xml->currencies->currency))
 		{
@@ -239,7 +239,7 @@ class LocalizationPackCore
 		return true;
 	}
 
-	private function _installLanguages($xml, $install_mode = false)
+	protected function _installLanguages($xml, $install_mode = false)
 	{
 		$attributes = array();
 		if (isset($xml->languages->language))
@@ -297,7 +297,7 @@ class LocalizationPackCore
 		return true;
 	}
 
-	private function _installUnits($xml)
+	protected function _installUnits($xml)
 	{
 		$varNames = array('weight' => 'PS_WEIGHT_UNIT', 'volume' => 'PS_VOLUME_UNIT', 'short_distance' => 'PS_DIMENSION_UNIT', 'base_distance' => 'PS_BASE_DISTANCE_UNIT', 'long_distance' => 'PS_DISTANCE_UNIT');
 		if (isset($xml->units->unit))

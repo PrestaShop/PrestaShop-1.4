@@ -308,7 +308,7 @@ class Crypt_Blowfish
 	
     var $_iv = NULL;
 	
-	private $_unpackMode = PS_UNPACK_NATIVE;
+	protected $_unpackMode = PS_UNPACK_NATIVE;
 
     function __construct($key, $iv)
     {

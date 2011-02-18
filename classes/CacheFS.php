@@ -27,7 +27,7 @@
 
 class CacheFSCore extends Cache {
 	
-	private $_depth;
+	protected $_depth;
 	
 	protected function __construct()
 	{
@@ -35,7 +35,7 @@ class CacheFSCore extends Cache {
 		return $this->_init();
 	}
 	
-	private function _init()
+	protected function _init()
 	{
 		$this->_depth = Db::getInstance()->getValue('SELECT value FROM '._DB_PREFIX_.'configuration WHERE name=\'PS_CACHEFS_DIRECTORY_DEPTH\'', false);
 		return $this->_setKeys();
@@ -78,7 +78,7 @@ class CacheFSCore extends Cache {
 		return unserialize($file);
 	}
 
-	private function _setKeys()
+	protected function _setKeys()
 	{
 		if (file_exists(_PS_CACHEFS_DIRECTORY_.'keysCached'))
 		{

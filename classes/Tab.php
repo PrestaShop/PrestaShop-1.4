@@ -52,7 +52,7 @@ class TabCore extends ObjectModel
 	protected 	$table = 'tab';
 	protected 	$identifier = 'id_tab';
 	
-	private static $_getIdFromClassName = array();
+	protected static $_getIdFromClassName = array();
 	
 	public function getFields()
 	{

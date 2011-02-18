@@ -49,7 +49,7 @@ abstract class ModuleCore
 	public $active = false;
 
 	/** @var array current language translations */
-	private $_lang = array();
+	protected $_lang = array();
 
 	/** @var string Module web path (eg. '/shop/modules/modulename/')  */
 	protected $_path = NULL;
@@ -73,14 +73,14 @@ abstract class ModuleCore
 	 *
 	 * @param string $name Module unique name
 	 */
-	private static $modulesCache;
-	private static $_hookModulesCache;
+	protected static $modulesCache;
+	protected static $_hookModulesCache;
 	
-	private static $_INSTANCE = array();
+	protected static $_INSTANCE = array();
 	
-	private static $_generateConfigXmlMode = false;
+	protected static $_generateConfigXmlMode = false;
 	
-	private static $l_cache = array();
+	protected static $l_cache = array();
 	
 	public function __construct($name = NULL)
 	{
@@ -716,7 +716,7 @@ abstract class ModuleCore
 	 * @param int $id_hook Hook ID
 	 * @return array Exceptions
 	 */
-	private static $exceptionsCache = NULL;
+	protected static $exceptionsCache = NULL;
 	public function getExceptions($id_hook)
 	{
 		if (self::$exceptionsCache == NULL AND !is_array(self::$exceptionsCache))

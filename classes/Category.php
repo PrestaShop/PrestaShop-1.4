@@ -74,7 +74,7 @@ class CategoryCore extends ObjectModel
 	/** @var string Object last modification date */
 	public 		$date_upd;
 
-	private static $_links = array();
+	protected static $_links = array();
 
 	protected $tables = array ('category', 'category_lang');
 
@@ -217,7 +217,7 @@ class CategoryCore extends ObjectModel
 	  * @param array &$toDelete Array reference where categories ID will be saved
 	  * @param array $id_category Parent category ID
 	  */
-	private function recursiveDelete(&$toDelete, $id_category)
+	protected function recursiveDelete(&$toDelete, $id_category)
 	{
 	 	if (!is_array($toDelete) OR !$id_category)
 	 		die(Tools::displayError());
@@ -331,7 +331,7 @@ class CategoryCore extends ObjectModel
 		self::_subTree($categoriesArray, 1, $n);
 	}
 
-	private static function _subTree(&$categories, $id_category, &$n)
+	protected static function _subTree(&$categories, $id_category, &$n)
 	{
 		$left = (int)$n++;
 		if (isset($categories[(int)$id_category]['subcategories']))

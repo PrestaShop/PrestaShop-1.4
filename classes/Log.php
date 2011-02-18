@@ -59,7 +59,7 @@ class	LogCore extends ObjectModel
 	protected 	$table = 'log';
 	protected 	$identifier = 'id_log';
 
-	private static $_is_present = array();
+	protected static $_is_present = array();
 
 	public function getFields()
 	{

@@ -51,7 +51,7 @@ class ProductDownloadCore extends ObjectModel
 	/** @var boolean Active if file is accessible or not */
 	public $active = 1;
 
-	private static $_productIds = array();
+	protected static $_productIds = array();
 
 	protected	$fieldsRequired = array(
 		'id_product',

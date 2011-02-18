@@ -101,7 +101,7 @@ class GuestCore extends ObjectModel
 		$this->accept_language = $this->getLanguage($acceptLanguage);
 	}
 	
-	private function getLanguage($acceptLanguage)
+	protected function getLanguage($acceptLanguage)
 	{
 		// $langsArray is filled with all the languages accepted, ordered by priority
 		$langsArray = array();
@@ -119,7 +119,7 @@ class GuestCore extends ObjectModel
 		return (sizeof($langsArray) ? key($langsArray) : '');
 	}
 
-	private function getBrowser($userAgent)
+	protected function getBrowser($userAgent)
 	{
 		$browserArray = array(
 			'Google Chrome' => 'Chrome/',
@@ -144,7 +144,7 @@ class GuestCore extends ObjectModel
 		return NULL;
 	}
 	
-	private function getOs($userAgent)
+	protected function getOs($userAgent)
 	{
 		$osArray = array(
 			'Windows Vista' => 'Windows NT 6',

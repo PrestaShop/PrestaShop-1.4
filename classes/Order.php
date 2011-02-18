@@ -185,9 +185,9 @@ class OrderCore extends ObjectModel
 	/* MySQL does not allow 'order' for a table name */
 	protected 	$table = 'orders';
 	protected 	$identifier = 'id_order';
-	private		$_taxCalculationMethod = PS_TAX_EXC;
+	protected		$_taxCalculationMethod = PS_TAX_EXC;
 
-	private static $_historyCache = array();
+	protected static $_historyCache = array();
 
 	public function getFields()
 	{
@@ -266,7 +266,7 @@ class OrderCore extends ObjectModel
 	}
 
 	/* DOES delete the product */
-	private function _deleteProduct($orderDetail, $quantity)
+	protected function _deleteProduct($orderDetail, $quantity)
 	{
 		$price = $orderDetail->product_price * (1 + $orderDetail->tax_rate * 0.01);
 		if ($orderDetail->reduction_percent != 0.00)

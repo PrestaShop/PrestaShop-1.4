@@ -240,7 +240,7 @@ class ManufacturerCore extends ObjectModel
 	  * @param integer $id_manufacturer Manufacturer ID
 	  * @return string name
 	  */
-	static private $cacheName = array();
+	static protected $cacheName = array();
 	static public function getNameById($id_manufacturer)
 	{
 		if (!isset(self::$cacheName[$id_manufacturer]))

@@ -28,30 +28,30 @@
 class	CookieCore
 {
 	/** @var array Contain cookie content in a key => value format */
-	private $_content;
+	protected $_content;
 
 	/** @var array Crypted cookie name for setcookie() */
-	private $_name;
+	protected $_name;
 
 	/** @var array expiration date for setcookie() */
-	private $_expire;
+	protected $_expire;
 
 	/** @var array Website domain for setcookie() */
-	private $_domain;
+	protected $_domain;
 
 	/** @var array Path for setcookie() */
-	private $_path;
+	protected $_path;
 
 	/** @var array cipher tool instance */
-	private $_cipherTool;
+	protected $_cipherTool;
 
 	/** @var array cipher tool initialization key */
-	private $_key;
+	protected $_key;
 
 	/** @var array cipher tool initilization vector */
-	private $_iv;
+	protected $_iv;
 	
-	private $_modified = false;
+	protected $_modified = false;
 
 	/**
 	  * Get data if the cookie exists and else initialize an new one
@@ -79,7 +79,7 @@ class	CookieCore
 		$this->update();
 	}
 	
-	private function getDomain()
+	protected function getDomain()
 	{
 		$r = '!(?:(\w+)://)?(?:(\w+)\:(\w+)@)?([^/:]+)?(?:\:(\d*))?([^#?]+)?(?:\?([^#]+))?(?:#(.+$))?!i';
 	    preg_match ($r, Tools::getHttpHost(false, false), $out);
@@ -279,7 +279,7 @@ class	CookieCore
 	/**
 	  * Setcookie according to php version
 	  */
-	private function _setcookie($cookie = NULL)
+	protected function _setcookie($cookie = NULL)
 	{
 		if ($cookie)
 		{

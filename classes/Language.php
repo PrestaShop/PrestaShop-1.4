@@ -49,9 +49,9 @@ class LanguageCore extends ObjectModel
 	protected 	$identifier = 'id_lang';
 
 	/** @var array Languages cache */
-	private static $_checkedLangs;
-	private static $_LANGUAGES;
-	private static $countActiveLanguages;
+	protected static $_checkedLangs;
+	protected static $_LANGUAGES;
+	protected static $countActiveLanguages;
 
 	protected	$webserviceParameters = array();
 
@@ -567,7 +567,7 @@ class LanguageCore extends ObjectModel
 		}
 	}
 
-	private static function _copyNoneFlag($id)
+	protected static function _copyNoneFlag($id)
 	{
 		return copy(dirname(__FILE__).'/../img/l/none.jpg', dirname(__FILE__).'/../img/l/'.$id.'.jpg');
 	}

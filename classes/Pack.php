@@ -27,9 +27,9 @@
 
 class PackCore extends Product
 {
-	private static $cachePackItems = array();
-	private static $cacheIsPack = array();
-	private static $cacheIsPacked = array();
+	protected static $cachePackItems = array();
+	protected static $cacheIsPack = array();
+	protected static $cacheIsPacked = array();
 
 	public static function isPack($id_product)
 	{

@@ -37,7 +37,7 @@ class GroupReductionCore extends ObjectModel
 	protected 	$table = 'group_reduction';
 	protected 	$identifier = 'id_group_reduction';
 
-	private static $reductionCache = array();
+	protected static $reductionCache = array();
 	
 	public function getFields()
 	{
@@ -63,12 +63,12 @@ class GroupReductionCore extends ObjectModel
 		return $this->_clearCache() AND parent::delete();
 	}
 
-	private function _clearCache()
+	protected function _clearCache()
 	{
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_group` = '.(int)($this->id_group));
 	}
 
-	private function _setCache()
+	protected function _setCache()
 	{
 		$resource = Db::getInstance()->ExecuteS('
 			SELECT cp.`id_product`

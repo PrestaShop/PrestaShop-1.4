@@ -56,9 +56,9 @@ abstract class DbCore
 	protected static $_db;
 
 	/** @var mixed Object instance for singleton */
-	private static $_instance = array();
+	protected static $_instance = array();
 
-	private static $_servers = array(	
+	protected static $_servers = array(	
 	array('server' => _DB_SERVER_, 'user' => _DB_USER_, 'password' => _DB_PASSWD_, 'database' => _DB_NAME_), /* MySQL Master server */
 	/* Add here your slave(s) server(s)*/
 	/*array('server' => '192.168.0.15', 'user' => 'rep', 'password' => '123456', 'database' => 'rep'),
@@ -69,7 +69,7 @@ abstract class DbCore
 	protected $_lastQuery;
 	protected $_lastCached;
 	
-	private static $_idServer;
+	protected static $_idServer;
 
 	/**
 	 * Get Db object instance (Singleton)

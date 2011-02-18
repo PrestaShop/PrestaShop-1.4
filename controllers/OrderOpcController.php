@@ -322,7 +322,7 @@ class OrderOpcControllerCore extends ParentOrderController
 			parent::displayFooter();
 	}
 	
-	private function _getGuestInformations()
+	protected function _getGuestInformations()
 	{
 		$customer = new Customer((int)($this->cookie->id_customer));
 		$address_delivery = new Address((int)$this->cart->id_address_delivery);

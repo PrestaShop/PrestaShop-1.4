@@ -68,22 +68,22 @@ class CartCore extends ObjectModel
 	/** @var string Object last modification date */
 	public 		$date_upd;
 
-	private static $_nbProducts = NULL;
-	private static $_isVirtualCart = array();
+	protected static $_nbProducts = NULL;
+	protected static $_isVirtualCart = array();
 
 	protected	$fieldsRequired = array('id_currency', 'id_lang');
 	protected	$fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
 		'id_currency' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'id_guest' => 'isUnsignedId', 'id_lang' => 'isUnsignedId',
 		'id_carrier' => 'isUnsignedId', 'recyclable' => 'isBool', 'gift' => 'isBool', 'gift_message' => 'isMessage');
 
-	private		$_products = NULL;
-	private static $_totalWeight = array();
-	private		$_taxCalculationMethod = PS_TAX_EXC;
-	private	static $_discounts = NULL;
-	private	static $_discountsLite = NULL;
-	private	static $_carriers = NULL;
-	private	static $_taxes_rate = NULL;
-	private static $_attributesLists = array();
+	protected	$_products = NULL;
+	protected 	static $_totalWeight = array();
+	protected	$_taxCalculationMethod = PS_TAX_EXC;
+	protected	static $_discounts = NULL;
+	protected	static $_discountsLite = NULL;
+	protected	static $_carriers = NULL;
+	protected	static $_taxes_rate = NULL;
+	protected 	static $_attributesLists = array();
 	protected 	$table = 'cart';
 	protected 	$identifier = 'id_cart';
 
@@ -584,7 +584,7 @@ class CartCore extends ObjectModel
 	/*
 	** Customization management
 	*/
-	private function _updateCustomizationQuantity($quantity, $id_customization, $id_product, $id_product_attribute, $operator = 'up')
+	protected function _updateCustomizationQuantity($quantity, $id_customization, $id_product, $id_product_attribute, $operator = 'up')
 	{
 		global $cookie;
 
@@ -716,7 +716,7 @@ class CartCore extends ObjectModel
 	 * @param integer $id_customization
 	 * @return boolean result
 	 */
-	private	function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
+	protected	function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
 	{
 		if (!$result = Db::getInstance()->getRow('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization)) OR
 			!Db::getInstance()->Execute('
