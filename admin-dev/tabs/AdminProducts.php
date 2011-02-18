@@ -147,8 +147,8 @@ class AdminProducts extends AdminTab
 
 	/**
 	 * postProcess handle every checks before saving products information
-	 * 
-	 * @param mixed $token 
+	 *
+	 * @param mixed $token
 	 * @return void
 	 */
 	public function postProcess($token = NULL)
@@ -1137,7 +1137,7 @@ class AdminProducts extends AdminTab
 						}
 						$this->updateAccessories($object);
 						$this->updateDownloadProduct($object);
-						
+
 						if (!$this->updatePackItems($object))
 							$this->_errors[] = Tools::displayError('an error occurred while adding products to the pack');
 						elseif (!$object->updateCategories($_POST['categoryBox'], true))
@@ -1373,8 +1373,8 @@ class AdminProducts extends AdminTab
 
 	/**
 	 * displayList show ordered list of current category
-	 * 
-	 * @param mixed $token 
+	 *
+	 * @param mixed $token
 	 * @return void
 	 */
 	public function displayList($token = NULL)
@@ -1610,29 +1610,29 @@ class AdminProducts extends AdminTab
 		foreach ($shops as $shop)
 			$tmp[$shop['id_shop']] = $shop;
 		$shops = $tmp;
-		
+
 		$tmp = array();
 		foreach ($currencies as $currency)
 			$tmp[$currency['id_currency']] = $currency;
 		$currencies = $tmp;
-		
+
 		$tmp = array();
 		foreach ($countries as $country)
 			$tmp[$country['id_country']] = $country;
 		$countries = $tmp;
-		
+
 		$tmp = array();
 		foreach ($groups as $group)
 			$tmp[$group['id_group']] = $group;
 		$groups = $tmp;
-		
+
 		echo '
 		<h4>'.$this->l('Current specific prices').'</h4>
 
 		<table style="text-align: center;width:100%" class="table" cellpadding="0" cellspacing="0">
 			<thead>
 				<tr>
-					<th class="cell border" style="width: 12%;">'.$this->l('Currency').'</th>	
+					<th class="cell border" style="width: 12%;">'.$this->l('Currency').'</th>
 					<th class="cell border" style="width: 11%;">'.$this->l('Country').'</th>
 					<th class="cell border" style="width: 13%;">'.$this->l('Group').'</th>
 					<th class="cell border" style="width: 12%;">'.$this->l('Price (tax excl.)').'</th>
@@ -1659,14 +1659,14 @@ class AdminProducts extends AdminTab
 					$reduction = ($specificPrice['reduction'] * 100).' %';
 				else
 					$reduction = ($current_specific_currency['format'] == 1 ? $current_specific_currency['sign'].' ' : '').Tools::ps_round($specificPrice['reduction'], 2).($current_specific_currency['format'] == 2 ? ' '.$current_specific_currency['sign'] : '');
-				
+
 				if ($specificPrice['from'] == '0000-00-00 00:00:00' AND $specificPrice['to'] == '0000-00-00 00:00:00')
 					$period = $this->l('Unlimited');
 				else
 					$period = $this->l('From').' '.($specificPrice['from'] != '0000-00-00 00:00:00' ? $specificPrice['from'] : '0000-00-00 00:00:00').'<br />'.$this->l('To').' '.($specificPrice['to'] != '0000-00-00 00:00:00' ? $specificPrice['to'] : '0000-00-00 00:00:00');
 				echo '
 				<tr '.($i%2 ? 'class="alt_row"' : '').'>
-					<td class="cell border">'.($specificPrice['id_currency'] ? $currencies[$specificPrice['id_currency']]['name'] : $this->l('All currencies')).'</td>	
+					<td class="cell border">'.($specificPrice['id_currency'] ? $currencies[$specificPrice['id_currency']]['name'] : $this->l('All currencies')).'</td>
 					<td class="cell border">'.($specificPrice['id_country'] ? $countries[$specificPrice['id_country']]['name'] : $this->l('All countries')).'</td>
 					<td class="cell border">'.($specificPrice['id_group'] ? $groups[$specificPrice['id_group']]['name'] : $this->l('All groups')).'</td>
 					<td class="cell border">'.($current_specific_currency['format'] == 1 ? $current_specific_currency['sign'].' ' : '').''.(float)($specificPrice['price']).''.($current_specific_currency['format'] == 2 ? ' '.$current_specific_currency['sign'] : '').'</td>
@@ -1682,7 +1682,7 @@ class AdminProducts extends AdminTab
 		echo '
 			</tbody>
 		</table>';
-		
+
 		echo '
 		<script type="text/javascript">
 			var currencies = new Array();
@@ -1701,11 +1701,15 @@ class AdminProducts extends AdminTab
 			echo '
 		</script>
 		';
-		
+
 		echo '
 		<hr />
 		<h4>'.$this->l('Priorities management').'</h4>
 
+		<div class="hint clear" style="display:block;">
+				'.$this->l('Sometimes one customer could fit in multiple rules, priorities allows you to define which rule to apply.').'
+		</div>
+	<br />
 		<label>'.$this->l('Priorities:').'</label>
 		<div class="margin-form">
 			<input type="hidden" name="specificPricePriority[]" value="id_shop" />
@@ -1742,10 +1746,10 @@ class AdminProducts extends AdminTab
 	{
 		if (!($product = $this->loadObject()))
 			return;
-		
+
 		echo '
 		<a href="#" onclick="$(\'#add_specific_price\').slideToggle();return false;"><img src="../img/admin/add.gif" alt="" /> '.$this->l('Add a new specific price').'</a>
-		
+
 		<div id="add_specific_price" style="display: none;">
 			<input type="hidden" name="sp_id_shop" value="0" />
 			<label>'.$this->l('For:').'</label>
@@ -1771,18 +1775,18 @@ class AdminProducts extends AdminTab
 				echo '
 				</select>
 			</div>
-	
+
 			<label>'.$this->l('Available from:').'</label>
 			<div class="margin-form">
 				<input type="text" name="sp_from" value="" style="text-align: center" id="sp_from" /><span style="font-weight:bold; color:#000000; font-size:12px"> '.$this->l('to').'</span>
 				<input type="text" name="sp_to" value="" style="text-align: center" id="sp_to" />
 			</div>
-	
+
 			<label>'.$this->l('Starting at').'</label>
 			<div class="margin-form">
 				<input type="text" name="sp_from_quantity" value="1" size="3" /> <span style="font-weight:bold; color:#000000; font-size:12px">'.$this->l('unit').'</span>
 			</div>
-	
+
 			<label>'.$this->l('Product price (tax excl.):').'</label>
 			<div class="margin-form">
 				<span id="spm_currency_sign_pre_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span>
@@ -1793,7 +1797,7 @@ class AdminProducts extends AdminTab
 					'.$this->l('You can set this value at 0 in order to apply the default price').'
 				</div>
 			</div>
-	
+
 			<label>'.$this->l('Apply a discount of:').'</label>
 			<div class="margin-form">
 	    		<input type="text" name="sp_reduction" value="0.00" size="11" />
@@ -1804,7 +1808,7 @@ class AdminProducts extends AdminTab
 				</select>
 				'.$this->l('(if set to "amount", the tax is included)').'
 			</div>
-	
+
 			<div class="margin-form">
 				<input type="submit" name="submitPriceAddition" value="'.$this->l('Add').'" class="button" />
 			</div>

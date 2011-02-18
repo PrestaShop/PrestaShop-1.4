@@ -59,6 +59,9 @@ class AdminTaxRulesGroup extends AdminTab
 		        '.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
     			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>
     			<input type="hidden" name="tabs" id="tabs" value="0" />
+    			<div class="hint clear" style="display:block;">
+					'.$this->l('Tax Rules allows you to define for one product or carrier various taxes in function of different places (Country, States etc ..)').'
+				</div><br />
     			';
 
         echo '<label>'.$this->l('Name').'</label>
