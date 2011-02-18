@@ -80,6 +80,8 @@ abstract class ModuleCore
 	
 	private static $_generateConfigXmlMode = false;
 	
+	private static $l_cache = array();
+	
 	public function __construct($name = NULL)
 	{
 		global $cookie;
@@ -555,27 +557,31 @@ abstract class ModuleCore
 	public static function _findTranslation($name, $string, $source)
 	{
 		global $_MODULES;
-
-		if (!is_array($_MODULES))
-			return str_replace('"', '&quot;', $string);
 		
-		$currentKey = '<{'.Tools::strtolower($name).'}'._THEME_NAME_.'>'.$source.'_'.md5($string);
-		$defaultKey = '<{'.Tools::strtolower($name).'}prestashop>'.$source.'_'.md5($string);
-
-		if (key_exists($currentKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$currentKey]);
-		else if (key_exists(Tools::strtolower($currentKey), $_MODULES))
-			$ret = stripslashes($_MODULES[Tools::strtolower($currentKey)]);
-		elseif (key_exists($defaultKey, $_MODULES))
-			$ret = stripslashes($_MODULES[$defaultKey]);
-		elseif (key_exists(Tools::strtolower($defaultKey), $_MODULES))
-			$ret = stripslashes($_MODULES[Tools::strtolower($defaultKey)]);
-		else
-			$ret = $string;
-
-		$ret = str_replace('"', '&quot;', $ret);
-	return $ret;
-}
+		$cache_key = $name . '|' . $string . '|' . $source;
+		
+		if (!isset(self::$l_cache[$cache_key]))
+		{
+			if (!is_array($_MODULES))
+				return str_replace('"', '&quot;', $string);
+			$currentKey = '<{'.Tools::strtolower($name).'}'._THEME_NAME_.'>'.$source.'_'.md5($string);
+			$defaultKey = '<{'.Tools::strtolower($name).'}prestashop>'.$source.'_'.md5($string);
+			
+			if (isset($_MODULES[$currentKey]))
+				$ret = stripslashes($_MODULES[$currentKey]);
+			elseif (isset($_MODULES[Tools::strtolower($currentKey)]))
+				$ret = stripslashes($_MODULES[Tools::strtolower($currentKey)]);
+			elseif (isset($_MODULES[$defaultKey]))
+				$ret = stripslashes($_MODULES[$defaultKey]);
+			elseif (isset($_MODULES[Tools::strtolower($defaultKey)]))
+				$ret = stripslashes($_MODULES[Tools::strtolower($defaultKey)]);
+			else
+				$ret = $string;
+			
+			self::$l_cache[$cache_key] = str_replace('"', '&quot;', $ret);
+		} 
+		return self::$l_cache[$cache_key];
+	}
 	/**
 	 * Get translation for a given module text
 	 *
