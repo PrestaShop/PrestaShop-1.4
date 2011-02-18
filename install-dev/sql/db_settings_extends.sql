@@ -322,31 +322,30 @@ INSERT INTO `PREFIX_feature_value` (`id_feature_value`, `id_feature`, `custom`) 
 INSERT INTO `PREFIX_feature_value` (`id_feature_value`, `id_feature`, `custom`) VALUES (9, 5, NULL), (10, 5, NULL);
 
 INSERT INTO `PREFIX_feature_value_lang` (`id_feature_value`, `id_lang`, `value`) VALUES
-(13, 1, '49.2 g'),(13, 2, '49,2 g'),(13, 3, '49,2 g'),(12, 2, '52,3 mm'),(12, 1, '2.06 in'),(12, 3, '52.3 mm'),(11, 2, '69,8 mm'),(11, 1, '2.75 in'),(11, 3, '69.8 mm'),
-(17, 2, '15,5 g'),(17, 1, '15.5 g'),(17, 3, '15.5 g'),(16, 2, '41,2 mm'),(16, 1, '1.62 in'),(16, 3, '41.2 mm'),(15, 2, '27,3 mm'),(15, 1, '1.07 in'),(15, 3, '27.3 mm'),(9, 1, 'Jack stereo'),
-(9, 2, 'Jack stéréo'),(9, 3, 'Jack stereo'),(10, 1, 'Mini-jack stereo'),(10, 2, 'Mini-jack stéréo'),(10, 3, 'Mini-jack stéréo'),(14, 1, '0.26 in'),(14, 2, '6,5 mm'),(14, 3, '6,5 mm'),
-(18, 1, '0.41 in (clip included)'),(18, 2, '10,5 mm (clip compris)'),(18, 3, '10,5 mm (clip incluyendo)'),(26, 2, '8 mm'),(26, 1, '0.31 in'),(26, 3, '8 mm'),(25, 2, '120g'),(25, 3, '120g'),
-(25, 1, '120g'),(24, 2, '70 mm'),(24, 1, '2.76 in'),(24, 3, '70 mm'),(23, 2, '110 mm'),(23, 3, '110 mm'),(23, 1, '4.33 in');
+(13, 1, '49.2 g'),(13, 2, '49,2 g'),(13, 3, '49,2 g'),(13, 4, '49.2 g'),(13, 5, '49.2 g'),(12, 2, '52,3 mm'),(12, 1, '2.06 in'),(12, 3, '52.3 mm'),(12, 4, '52.3 mm'),(12, 5, '52.3 mm'),(11, 2, '69,8 mm'),(11, 1, '2.75 in'),(11, 3, '69.8 mm'),(11, 4, '69.8 mm'),(11, 5, '69.8 mm'),
+(17, 2, '15,5 g'),(17, 1, '15.5 g'),(17, 3, '15.5 g'),(17, 4, '15.5 g'),(17, 5, '15.5 g'),(16, 2, '41,2 mm'),(16, 1, '1.62 in'),(16, 3, '41.2 mm'),(16, 4, '41.2 mm'),(16, 5, '41.2 mm'),(15, 2, '27,3 mm'),(15, 1, '1.07 in'),(15, 3, '27.3 mm'),(15, 4, '27.3 mm'),(15, 5, '27.3 mm'),(9, 1, 'Jack stereo'),(9, 4, 'Jack stereo'),(9, 5, 'Jack stereo'),
+(9, 2, 'Jack stéréo'),(9, 3, 'Jack stereo'),(10, 1, 'Mini-jack stereo'),(10, 2, 'Mini-jack stéréo'),(10, 3, 'Mini-jack stéréo'),(10, 4, 'Mini-jack stéréo'),(10, 5, 'Mini-jack stéréo'),(14, 1, '0.26 in'),(14, 2, '6,5 mm'),(14, 3, '6,5 mm'),(14, 4, '6,5 mm'),(14, 5, '6,5 mm'),(18, 4, '10,5 mm'),(18, 5, '10,5 mm)'),
+(18, 1, '0.41 in (clip included)'),(18, 2, '10,5 mm (clip compris)'),(18, 3, '10,5 mm (clip incluyendo)'),(26, 2, '8 mm'),(26, 1, '0.31 in'),(26, 3, '8 mm'),(26, 4, '8 mm'),(26, 5, '8 mm'),(25, 2, '120g'),(25, 3, '120g'),(25, 4, '120g'),(25, 5, '120g'),(25, 1, '120g'),(24, 2, '70 mm'),(24, 1, '2.76 in'),(24, 3, '70 mm'),(24, 4, '70 mm'),(24, 5, '70 mm'),
+(23, 2, '110 mm'),(23, 3, '110 mm'),(23, 1, '4.33 in'),(23, 4, '4.33 in'),(23, 5, '4.33 in');
 
 INSERT INTO `PREFIX_image` (`id_image`, `id_product`, `position`, `cover`) VALUES
 (40, 1, 4, 0),(39, 1, 3, 0),(38, 1, 2, 0),(37, 1, 1, 1),(48, 2, 3, 0),(47, 2, 2, 0),(49, 2, 4, 0),(46, 2, 1, 1),(15, 5, 1, 1),(16, 5, 2, 0),(17, 5, 3, 0),(18, 6, 4, 0),(19, 6, 5, 0),
 (20, 6, 1, 1),(24, 7, 1, 1),(33, 8, 1, 1),(27, 7, 3, 0),(26, 7, 2, 0),(29, 7, 4, 0),(30, 7, 5, 0),(32, 7, 6, 0),(36, 9, 1, 1),(41, 1, 5, 0),(42, 1, 6, 0),(44, 1, 7, 0),(45, 1, 8, 0);
 
 INSERT INTO `PREFIX_image_lang` (`id_image`, `id_lang`, `legend`) VALUES
-(40, 2, 'iPod Nano'),(40, 3, 'iPod Nano'),(40, 1, 'iPod Nano'),(39, 2, 'iPod Nano'),(39, 3, 'iPod Nano'),(39, 1, 'iPod Nano'),(38, 2, 'iPod Nano'),(38, 3, 'iPod Nano'),(38, 1, 'iPod Nano'),
-(37, 2, 'iPod Nano'),(37, 3, 'iPod Nano'),(37, 1, 'iPod Nano'),(48, 2, 'iPod shuffle'),(48, 3, 'iPod shuffle'),(48, 1, 'iPod shuffle'),(47, 2, 'iPod shuffle'),(47, 3, 'iPod shuffle'),
-(47, 1, 'iPod shuffle'),(49, 2, 'iPod shuffle'),(49, 3, 'iPod shuffle'),(49, 1, 'iPod shuffle'),(46, 2, 'iPod shuffle'),(46, 3, 'iPod shuffle'),(46, 1, 'iPod shuffle'),
-(10, 1, 'luxury-cover-for-ipod-video'),(10, 3, 'luxury-cover-for-ipod-video'),(10, 2, 'housse-luxe-pour-ipod-video'),(11, 1, 'cover'),(11, 2, 'housse'),(11, 3, 'cubrir'),
-(12, 1, 'myglove-ipod-nano'),(12, 2, 'myglove-ipod-nano'),(12, 3, 'myglove-ipod-nano'),(13, 1, 'myglove-ipod-nano'),(13, 2, 'myglove-ipod-nano'),(13, 3, 'myglove-ipod-nano'),
-(14, 1, 'myglove-ipod-nano'),(14, 2, 'myglove-ipod-nano'),(14, 3, 'myglove-ipod-nano'),(15, 1, 'MacBook Air'),(15, 2, 'macbook-air-1'),(15, 3, 'macbook-air-1'),(16, 1, 'MacBook Air'),
-(16, 2, 'macbook-air-2'),(16, 3, 'macbook-air-2'),(17, 1, 'MacBook Air'),(17, 2, 'macbook-air-3'),(17, 3, 'macbook-air-3'),(18, 1, 'MacBook Air'),(18, 2, 'macbook-air-4'),
-(18, 3, 'macbook-air-4'),(19, 1, 'MacBook Air'),(19, 2, 'macbook-air-5'),(19, 3, 'macbook-air-5'),(20, 1, ' MacBook Air SuperDrive'),(20, 2, 'superdrive-pour-macbook-air-1'),
-(20, 3, 'superdrive-pour-macbook-air-1'),(24, 2, 'iPod touch'),(24, 1, 'iPod touch'),(24, 3, 'iPod touch'),(33, 1, 'housse-portefeuille-en-cuir'),(33, 3, 'housse-portefeuille-en-cuir'),
-(26, 1, 'iPod touch'),(26, 2, 'iPod touch'),(26, 3, 'iPod touch'),(27, 1, 'iPod touch'),(27, 2, 'iPod touch'),(27, 3, 'iPod touch'),(29, 1, 'iPod touch'),(29, 2, 'iPod touch'),
-(29, 3, 'iPod touch'),(30, 1, 'iPod touch'),(30, 2, 'iPod touch'),(30, 3, 'iPod touch'),(32, 1, 'iPod touch'),(32, 2, 'iPod touch'),(32, 3, 'iPod touch'),
+(40, 2, 'iPod Nano'),(40, 3, 'iPod Nano'),(40, 4, 'iPod Nano'),(40, 5, 'iPod Nano'),(40, 1, 'iPod Nano'),(39, 2, 'iPod Nano'),(39, 3, 'iPod Nano'),(39, 1, 'iPod Nano'),(39, 4, 'iPod Nano'),(39, 5, 'iPod Nano'),
+(38, 2, 'iPod Nano'),(38, 3, 'iPod Nano'),(38, 1, 'iPod Nano'),(38, 4, 'iPod Nano'),(38, 5, 'iPod Nano'),
+(37, 2, 'iPod Nano'),(37, 3, 'iPod Nano'),(37, 1, 'iPod Nano'),(37, 4, 'iPod Nano'),(37, 5, 'iPod Nano'),(48, 2, 'iPod shuffle'),(48, 3, 'iPod shuffle'),(48, 1, 'iPod shuffle'),(48, 4, 'iPod shuffle'),(48, 5, 'iPod shuffle'),(47, 2, 'iPod shuffle'),(47, 3, 'iPod shuffle'),(47, 4, 'iPod shuffle'),(47, 5, 'iPod shuffle'),
+(47, 1, 'iPod shuffle'),(49, 2, 'iPod shuffle'),(49, 3, 'iPod shuffle'),(49, 1, 'iPod shuffle'),(49, 4, 'iPod shuffle'),(49, 5, 'iPod shuffle'),(46, 2, 'iPod shuffle'),(46, 3, 'iPod shuffle'),(46, 1, 'iPod shuffle'),(46, 4, 'iPod shuffle'),(46, 5, 'iPod shuffle'),
+(10, 1, 'luxury-cover-for-ipod-video'),(10, 3, 'luxury-cover-for-ipod-video'),(10, 4, 'luxury-cover-for-ipod-video'),(10, 5, 'luxury-cover-for-ipod-video'),(10, 2, 'housse-luxe-pour-ipod-video'),(11, 1, 'cover'),(11, 2, 'housse'),(11, 3, 'cubrir'),(11, 4, 'cover'),(11, 5, 'cover'),
+(12, 1, 'myglove-ipod-nano'),(12, 2, 'myglove-ipod-nano'),(12, 3, 'myglove-ipod-nano'),(12, 4, 'myglove-ipod-nano'),(12, 5, 'myglove-ipod-nano'),(13, 1, 'myglove-ipod-nano'),(13, 2, 'myglove-ipod-nano'),(13, 3, 'myglove-ipod-nano'),(13, 4, 'myglove-ipod-nano'),(13, 5, 'myglove-ipod-nano'),
+(14, 1, 'myglove-ipod-nano'),(14, 2, 'myglove-ipod-nano'),(14, 3, 'myglove-ipod-nano'),(14, 4, 'myglove-ipod-nano'),(14, 5, 'myglove-ipod-nano'),(15, 1, 'MacBook Air'),(15, 2, 'macbook-air-1'),(15, 3, 'macbook-air-1'),(15, 4, 'macbook-air-1'),(15, 5, 'macbook-air-1'),(16, 1, 'MacBook Air'),(16, 2, 'macbook-air-2'),(16, 3, 'macbook-air-2'),(16, 4, 'macbook-air-2'),(16, 5, 'macbook-air-2'),(17, 1, 'MacBook Air'),(17, 2, 'macbook-air-3'),(17, 3, 'macbook-air-3'),(17, 4, 'macbook-air-3'),(17, 5, 'macbook-air-3'),(18, 1, 'MacBook Air'),(18, 2, 'macbook-air-4'),
+(18, 3, 'macbook-air-4'),(18, 4, 'macbook-air-4'),(18, 5, 'macbook-air-4'),(19, 1, 'MacBook Air'),(19, 2, 'macbook-air-5'),(19, 3, 'macbook-air-5'),(19, 4, 'macbook-air-5'),(19, 5, 'macbook-air-5'),(20, 1, ' MacBook Air SuperDrive'),(20, 2, 'superdrive-pour-macbook-air-1'),
+(20, 3, 'superdrive-pour-macbook-air-1'),(20, 4, 'superdrive-pour-macbook-air-1'),(20, 5, 'superdrive-pour-macbook-air-1'),(24, 2, 'iPod touch'),(24, 1, 'iPod touch'),(24, 3, 'iPod touch'),(24, 4, 'iPod touch'),(24, 5, 'iPod touch'),(33, 1, 'housse-portefeuille-en-cuir'),(33, 3, 'housse-portefeuille-en-cuir'),(33, 4, 'housse-portefeuille-en-cuir'),(33, 5, 'housse-portefeuille-en-cuir'),
+(26, 1, 'iPod touch'),(26, 2, 'iPod touch'),(26, 3, 'iPod touch'),(26, 4, 'iPod touch'),(26, 5, 'iPod touch'),(27, 1, 'iPod touch'),(27, 2, 'iPod touch'),(27, 3, 'iPod touch'),(27, 4, 'iPod touch'),(27, 5, 'iPod touch'),(29, 1, 'iPod touch'),(29, 2, 'iPod touch'),(29, 3, 'iPod touch'),(29, 4, 'iPod touch'),(29, 5, 'iPod touch'),(30, 1, 'iPod touch'),(30, 2, 'iPod touch'),(30, 3, 'iPod touch'),(30, 4, 'iPod touch'),(30, 5, 'iPod touch'),(32, 1, 'iPod touch'),(32, 2, 'iPod touch'),(32, 3, 'iPod touch'),(32, 4, 'iPod touch'),(32, 5, 'iPod touch'),
 (33, 2, 'housse-portefeuille-en-cuir-ipod-nano'),(36, 2, 'Écouteurs à isolation sonore Shure SE210'),(36, 3, 'Auriculares aislantes del sonido Shure SE210'),
-(36, 1, 'Shure SE210 Sound-Isolating Earphones for iPod and iPhone'),(41, 1, 'iPod Nano'),(41, 2, 'iPod Nano'),(41, 3, 'iPod Nano'),(42, 1, 'iPod Nano'),(42, 2, 'iPod Nano'),
-(42, 3, 'iPod Nano'),(44, 1, 'iPod Nano'),(44, 2, 'iPod Nano'),(44, 3, 'iPod Nano'),(45, 1, 'iPod Nano'),(45, 2, 'iPod Nano'),(45, 3, 'iPod Nano');
+(36, 1, 'Shure SE210 Sound-Isolating Earphones for iPod and iPhone'),(36, 4, 'Shure SE210 Sound-Isolating Earphones for iPod and iPhone'),(36, 5, 'Shure SE210 Sound-Isolating Earphones for iPod and iPhone'),(41, 1, 'iPod Nano'),(41, 2, 'iPod Nano'),(41, 3, 'iPod Nano'),(41, 4, 'iPod Nano'),(41, 5, 'iPod Nano'),(42, 1, 'iPod Nano'),(42, 2, 'iPod Nano'),
+(42, 3, 'iPod Nano'),(42, 4, 'iPod Nano'),(42, 5, 'iPod Nano'),(44, 1, 'iPod Nano'),(44, 2, 'iPod Nano'),(44, 3, 'iPod Nano'),(44, 4, 'iPod Nano'),(44, 5, 'iPod Nano'),(45, 1, 'iPod Nano'),(45, 2, 'iPod Nano'),(45, 3, 'iPod Nano'),(45, 4, 'iPod Nano'),(45, 5, 'iPod Nano');
 
 INSERT INTO `PREFIX_tag` (`id_tag`, `id_lang`, `name`) VALUES (5, 1, 'apple'),(6, 2, 'ipod'),(7, 2, 'nano'),(8, 2, 'apple'),(18, 2, 'shuffle'),
 (19, 2, 'macbook'),(20, 2, 'macbookair'),(21, 2, 'air'),(22, 1, 'superdrive'),(27, 2, 'marche'),(26, 2, 'casque'),(25, 2, 'écouteurs'),
