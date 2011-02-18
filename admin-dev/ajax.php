@@ -491,3 +491,16 @@ if (Tools::isSubmit('toggleScreencast'))
 	global $cookie;
 	$cookie->show_screencast = (int)(!(bool)$cookie->show_screencast);
 }
+
+if (Tools::isSubmit('helpAccess'))
+{
+	$item = Tools::getValue('item');
+	$isoUser = Tools::getValue('isoUser');
+	$country = Tools::getValue('country');
+	
+	
+	
+	if (isset($item) AND isset($isoUser) AND isset($country))
+		die(HelpAccess::displayHelp($item, $isoUser,  $country, ''));
+	die();
+}

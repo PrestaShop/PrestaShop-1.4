@@ -56,10 +56,9 @@ class HelpAccessCore
 	    $tooltip = '';
         $version = '';
    	    $url = HelpAccess::URL.'/documentation/renderIcon?label='.$label.'&iso_lang='.$iso_lang.'&country='.$country;
-
    	    $ctx = stream_context_create(array(
                     'http' => array(
-                    'timeout' => 1
+                    'timeout' => 10
                     )
                 ));
 
@@ -91,11 +90,10 @@ class HelpAccessCore
         $infos = HelpAccess::retrieveInfos($label, $iso_lang, $country);
         if (array_key_exists('image', $infos) && $infos['image'] != 'none')
         {
-	        echo '<div class="floatr" style="font-family: Verdana; font-size: 10px; margin-right: 4px; margin-top: 4px;">
+	        echo '
 			        <a class="help-button" href="#" onclick="showHelp(\''.HelpAccess::URL.'\',\''.$label.'\',\''.$iso_lang.'\',\''.$ps_version.'\',\''.$infos['version'].'\',\''.$country.'\');" title="'.Tools::htmlentitiesUTF8($infos['tooltip']).'">
-			        <img id="help-'.$label.'" src="../img/admin/'.Tools::htmlentitiesUTF8($infos['image']).'" alt="" class="middle" />
+			        <img id="help-'.$label.'" src="../img/admin/'.Tools::htmlentitiesUTF8($infos['image']).'" alt="" class="middle" style="margin-top: -5px"/>
 			        </a>
-		          </div>
 
 		          ';
 

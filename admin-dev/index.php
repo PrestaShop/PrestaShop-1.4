@@ -49,9 +49,23 @@ if ($tab)
 				? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">'
 				: '').'
 			'.$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
-
+		
+		echo'<script type="text/javascript">
+	  
+		$(function() {
+			$.ajax({
+				type: \'POST\',
+				url: \'ajax.php\',
+				data: \'helpAccess=1&item='.$item['class_name'].'&isoUser='.$isoUser.'&country='.$country->iso_code.'\',
+				async : true,
+				success: function(msg) { $("#help-button").html(msg); }
+			});
+		});</script>';
+				
+				
 		echo '<div class="path_bar">
-			'.HelpAccess::displayHelp($item['class_name'], $isoUser,  $country->iso_code, '').'
+		<div id="help-button" class="floatr" style="font-family: Verdana; font-size: 10px; margin-right: 4px; margin-top: 4px;">
+		</div>
 			<a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>
 			'.$bread.'
 		</div>';
