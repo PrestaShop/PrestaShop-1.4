@@ -350,8 +350,6 @@ class LanguageCore extends ObjectModel
 			foreach($files_copy AS $file)
 			{
 				$name = str_replace('/en', ''.$this->iso_code, $file);
-				if (file_exists($to.$name))
-					FB::log($to.$name);
 					
 				if (file_exists($to.$name))
 					unlink($to.$name);
