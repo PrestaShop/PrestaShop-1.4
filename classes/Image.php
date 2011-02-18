@@ -22,7 +22,7 @@
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*  International Registered Trademark & Property of PrestaShop SA 
 */
 
 class ImageCore extends ObjectModel
@@ -285,6 +285,17 @@ class ImageCore extends ObjectModel
 			self::$_cacheGetSize[$type] = Db::getInstance()->getRow('SELECT `width`, `height` FROM '._DB_PREFIX_.'image_type WHERE `name` = \''.pSQL($type).'\'');
 	 	return self::$_cacheGetSize[$type];
 	}
+	
+	/**
+	  * Clear all images in tmp dir
+	  */
+	static public function clearTmpDir()
+	{
+		foreach (scandir(_PS_TMP_IMG_DIR_) AS $d)
+			if (preg_match('/(.*)\.jpg$/', $d))
+				unlink(_PS_TMP_IMG_DIR_.$d);
+	}
+	
 }
 
 
