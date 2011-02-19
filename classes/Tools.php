@@ -1053,7 +1053,7 @@ class ToolsCore
 	**/
 	public static function ps_set_magic_quotes_runtime($var)
 	{
-		Tools::displayAsDeprecated();
+		//Tools::displayAsDeprecated();
 		
 		if (function_exists('set_magic_quotes_runtime'))
 			@set_magic_quotes_runtime($var);
