@@ -238,9 +238,9 @@
 	</table>
 </div>
 <br />
-<p class="bold">{l s='Merchandise return'}</p>
 {if !$is_guest}
 	{if $return_allowed}
+	<p class="bold">{l s='Merchandise return'}</p>
 	<p>{l s='If you wish to return one or more products, please mark the corresponding boxes and provide an explanation for the return. Then click the button below.'}</p>
 	<p class="textarea">
 		<textarea cols="67" rows="3" name="returnText"></textarea>
