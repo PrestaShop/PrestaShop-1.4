@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>fedexcarrier</name>
-    <displayName>Fedex Carrier</displayName>
-    <version>0.9c</version>
-    <description>Offer to your customers, different delivery methods with Fedex</description>
-    <tab>shipping_logistics</tab>
-    
-    <is_configurable>1</is_configurable>
-    <need_instance>1</need_instance>
-    
+	<displayName>Fedex Carrier</displayName>
+	<version>0.9c</version>
+	<description>Offer to your customers, different delivery methods with Fedex</description>
+	<tab>shipping_logistics</tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
 </module>

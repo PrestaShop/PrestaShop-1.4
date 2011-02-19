@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>crossselling</name>
-    <displayName>Cross selling</displayName>
-    <version>0.1</version>
-    <description>Customers who bought this product also bought...</description>
-    <tab>front_office_features</tab>
-    
-    <is_configurable>1</is_configurable>
-    <need_instance>0</need_instance>
-    
+	<displayName>Cross selling</displayName>
+	<version>0.1</version>
+	<description>Customers who bought this product also bought...</description>
+	<tab>front_office_features</tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
 </module>

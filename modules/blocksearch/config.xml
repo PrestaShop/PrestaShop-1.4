@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>blocksearch</name>
-    <displayName>Quick Search block</displayName>
-    <version>1</version>
-    <description>Adds a block with a quick search field</description>
-    <tab>search_filter</tab>
-    
-    <is_configurable>0</is_configurable>
-    <need_instance>0</need_instance>
-    
+	<displayName>Quick Search block</displayName>
+	<version>1</version>
+	<description>Adds a block with a quick search field</description>
+	<tab>search_filter</tab>
+	<is_configurable>0</is_configurable>
+	<need_instance>1</need_instance>
 </module>

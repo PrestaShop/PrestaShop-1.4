@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>blockspecials</name>
-    <displayName>Specials block</displayName>
-    <version>0.8</version>
-    <description>Adds a block with current product Specials</description>
-    <tab>pricing_promotion</tab>
-    
-    <is_configurable>1</is_configurable>
-    <need_instance>0</need_instance>
-    
+	<displayName>Specials block</displayName>
+	<version>0.8</version>
+	<description>Adds a block with current product Specials</description>
+	<tab>pricing_promotion</tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
 </module>

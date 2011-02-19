@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>newsletter</name>
-    <displayName>Newsletter</displayName>
-    <version>2</version>
-    <description>Generates a .CSV file for mass mailings</description>
-    <tab>administration</tab>
-    
-    <is_configurable>1</is_configurable>
-    <need_instance>0</need_instance>
-    
+	<displayName>Newsletter</displayName>
+	<version>2</version>
+	<description>Generates a .CSV file for mass mailings</description>
+	<tab>administration</tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
 </module>
