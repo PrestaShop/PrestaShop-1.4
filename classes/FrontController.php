@@ -398,7 +398,7 @@ class FrontControllerCore
 			'HOOK_TOP' => Module::hookExec('top')
 		));
 
-		if (is_writable(_PS_THEME_DIR_.'cache'))
+		if ((Configuration::get('PS_CSS_THEME_CACHE') OR Configuration::get('PS_JS_THEME_CACHE')) AND is_writable(_PS_THEME_DIR_.'cache'))
 		{
 			// CSS compressor management
 			if (Configuration::get('PS_CSS_THEME_CACHE'))
