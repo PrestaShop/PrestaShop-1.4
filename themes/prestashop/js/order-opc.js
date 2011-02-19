@@ -299,12 +299,17 @@ function saveAddress(type)
        {
 			if (jsonData.hasError)
 			{
-       			var errors = '<b>'+txtThereis+' '+jsonData.errors.length+' '+txtErrors+':</b><ol>';
+       			var tmp = '';
+       			var i = 0;
 				for(error in jsonData.errors)
 					//IE6 bug fix
 					if(error != 'indexOf')
-						errors += '<li>'+jsonData.errors[error]+'</li>';
-				errors += '</ol>';
+					{
+						i = i+1;
+						tmp += '<li>'+jsonData.errors[error]+'</li>';
+					}
+				tmp += '</ol>';
+				var errors = '<b>'+txtThereis+' '+i+' '+txtErrors+':</b><ol>';
 				$('#opc_account_errors').html(errors).slideDown('slow');
 				result = false;
 			}
@@ -595,12 +600,17 @@ $(function() {
 				{
 					if (jsonData.hasError)
 					{
-						var errors = '<b>'+txtThereis+' '+jsonData.errors.length+' '+txtErrors+':</b><ol>';
+						var tmp = '';
+						var i = 0;
 						for(error in jsonData.errors)
 							//IE6 bug fix
 							if(error != 'indexOf')
-								errors += '<li>'+jsonData.errors[error]+'</li>';
-						errors += '</ol>';
+							{
+								i = i+1;
+								tmp += '<li>'+jsonData.errors[error]+'</li>';
+							}
+						tmp += '</ol>';
+						var errors = '<b>'+txtThereis+' '+i+' '+txtErrors+':</b><ol>'+tmp;
 						$('#opc_account_errors').html(errors).slideDown('slow');
 					}
 
