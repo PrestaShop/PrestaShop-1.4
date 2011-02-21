@@ -768,7 +768,7 @@ class Smarty extends Smarty_Internal_Data {
         // external Smarty methods ?
         foreach(array('filter','register') as $external) {
         /* PrestaShop */
-        	if (method_exists("Smarty_Internal_{$external}",$name)) {
+        	if ((PHP_VERSION_ID <= 50100  AND is_callable(array("Smarty_Internal_{$external}", $name))) OR method_exists("Smarty_Internal_{$external}",$name)) {
         		if (!isset($this->$external)) {
         			$class = "Smarty_Internal_{$external}";
             		$this->$external = new $class($this);
