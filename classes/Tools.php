@@ -1056,7 +1056,7 @@ class ToolsCore
 		//Tools::displayAsDeprecated();
 		
 		if (function_exists('set_magic_quotes_runtime'))
-			@set_magic_quotes_runtime($var);
+			set_magic_quotes_runtime($var);
 	}
 
 	public static function ps_round($value, $precision = 0)
