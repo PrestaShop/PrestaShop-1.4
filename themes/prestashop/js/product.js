@@ -312,6 +312,7 @@ function updateDisplay()
 			productPrice *= group_reduction;
 		var ecotaxAmount = !displayPrice ? ps_round(selectedCombination['ecotax'] * (1 + ecotaxTax_rate / 100), 2) : selectedCombination['ecotax'];
 		productPrice += ecotaxAmount;
+		productPriceWithoutReduction += ecotaxAmount;
 
 		//productPrice = ps_round(productPrice * currencyRate, 2);
 		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
@@ -513,3 +514,4 @@ function checkMinimalQuantity(minimal_quantity)
 		$('#minimal_quantity_wanted_p').css('color', '#374853');
 	}
 }
+
