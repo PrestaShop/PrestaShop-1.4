@@ -44,7 +44,8 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('CHECKUP_STOCK_GT', '3', NOW(), NOW()),
 	('FOOTER_CMS', '0_3|0_4', NOW(), NOW()),
 	('FOOTER_BLOCK_ACTIVATION', '0_3|0_4', NOW(), NOW()),
-	('BLOCKADVERT_LINK', 0, NOW(), NOW());
+	('BLOCKADVERT_LINK', 0, NOW(), NOW()),
+	('BLOCKSTORE_IMG', 'store.jpg', NOW(), NOW());
 
 INSERT INTO `PREFIX_module` (`id_module`, `name`, `active`) VALUES (1, 'homefeatured', 1),(2, 'gsitemap', 1),(3, 'cheque', 1),(4, 'moneybookers', 1),(5, 'editorial', 1),
 (6, 'bankwire', 1),(7, 'blockadvertising', 1),(8, 'blockbestsellers', 1),(9, 'blockcart', 1),(10, 'blockcategories', 1),(11, 'blockcurrencies', 1),(12, 'blockcms', 1),
