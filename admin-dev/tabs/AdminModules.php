@@ -635,7 +635,7 @@ class AdminModules extends AdminTab
 			{
 				echo '
 				<div id="'.$tab.'" class="header_module">
-				<div class="nbr_module">'.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</div>
+				<span class="nbr_module" style="width:100px;text-align:right">'.sizeof($tabModule).' '.((sizeof($tabModule) > 1) ? $this->l('modules') : $this->l('module')).'</span>
 					<a class="header_module_toggle" id="'.$tab.'" href="modgo_'.$tab.'" style="margin-left: 5px;">
 						<span style="padding-right:0.5em">
 						<img class="header_module_img" id="'.$tab.'_img" src="../img/admin/more.png" alt="" />
@@ -645,7 +645,7 @@ class AdminModules extends AdminTab
 				/* Display modules for each tab type */
 				foreach ($tabModule as $module)
 				{
-					echo '<div id="modgo_'.$module->name.'">';
+					echo '<div id="modgo_'.$module->name.'" >';
 					if ($module->id)
 					{
 						$img = '<img src="../img/admin/module_install.png" alt="'.$this->l('Module enabled').'" title="'.$this->l('Module enabled').'" />';
