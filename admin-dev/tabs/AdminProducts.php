@@ -1658,7 +1658,7 @@ class AdminProducts extends AdminTab
 				if ($specificPrice['reduction_type'] == 'percentage')
 					$reduction = ($specificPrice['reduction'] * 100).' %';
 				else
-					$reduction = ($current_specific_currency['format'] == 1 ? $current_specific_currency['sign'].' ' : '').Tools::ps_round($specificPrice['reduction'], 2).($current_specific_currency['format'] == 2 ? ' '.$current_specific_currency['sign'] : '');
+					$reduction = Tools::displayPrice(Tools::ps_round($specificPrice['reduction'], 2), $current_specific_currency);
 
 				if ($specificPrice['from'] == '0000-00-00 00:00:00' AND $specificPrice['to'] == '0000-00-00 00:00:00')
 					$period = $this->l('Unlimited');
@@ -1669,11 +1669,11 @@ class AdminProducts extends AdminTab
 					<td class="cell border">'.($specificPrice['id_currency'] ? $currencies[$specificPrice['id_currency']]['name'] : $this->l('All currencies')).'</td>
 					<td class="cell border">'.($specificPrice['id_country'] ? $countries[$specificPrice['id_country']]['name'] : $this->l('All countries')).'</td>
 					<td class="cell border">'.($specificPrice['id_group'] ? $groups[$specificPrice['id_group']]['name'] : $this->l('All groups')).'</td>
-					<td class="cell border">'.($current_specific_currency['format'] == 1 ? $current_specific_currency['sign'].' ' : '').''.(float)($specificPrice['price']).''.($current_specific_currency['format'] == 2 ? ' '.$current_specific_currency['sign'] : '').'</td>
+					<td class="cell border">'.Tools::displayPrice((float)$specificPrice['price'], $current_specific_currency).'</td>
 					<td class="cell border">'.$reduction.'</td>
 					<td class="cell border">'.$period.'</td>
 					<td class="cell border">'.$specificPrice['from_quantity'].'</th>
-					<td class="cell border"><b>'.($current_specific_currency['format'] == 1 ? $current_specific_currency['sign'].' ' : '').Tools::ps_round((float)($this->_getFinalPrice($specificPrice, (float)($obj->price), $taxRate)), 2).($current_specific_currency['format'] == 2 ? ' '.$current_specific_currency['sign'] : '').'</b></td>
+					<td class="cell border"><b>'.Tools::displayPrice(Tools::ps_round((float)($this->_getFinalPrice($specificPrice, (float)($obj->price), $taxRate)), 2), $current_specific_currency).'</b></td>
 					<td class="cell border"><a href="'.$currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
 				</tr>';
 				$i++;
@@ -1792,7 +1792,7 @@ class AdminProducts extends AdminTab
 				<span id="spm_currency_sign_pre_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span>
 				<input type="text" name="sp_price" value="0" size="11" />
 				<span id="spm_currency_sign_post_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</span>
-				<span id="sp_current_ht_price" > ('.$this->l('Current:').' '.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').(float)($product->price).($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').')</span>
+				<span id="sp_current_ht_price" > ('.$this->l('Current:').' '.Tools::displayPrice((float)($product->price), $defaultCurrency).')</span>
 				<div class="hint clear" style="display:block;">
 					'.$this->l('You can set this value at 0 in order to apply the default price').'
 				</div>
