@@ -192,7 +192,7 @@ function doNothing() {}
 $(document).ready(function()
 {
 	map = new google.maps.Map(document.getElementById('map'), {
-		center: new google.maps.LatLng(25.948969, -80.226439),
+		center: new google.maps.LatLng(defaultLat, defaultLong),
 		zoom: 10,
 		mapTypeId: 'roadmap',
 		mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}

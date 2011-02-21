@@ -53,6 +53,9 @@
 		var markers = [];
 		var infoWindow;
 		var locationSelect;
+
+		var defaultLat = '{$defaultLat}';
+		var defaultLong = '{$defaultLong}';
 		
 		var translation_1 = '{l s='No store found, try to select a wider radius' js=1}';
 		var translation_2 = '{l s='store found - see details:' js=1}';
