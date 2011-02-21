@@ -128,7 +128,7 @@ class ToolsCore
 
 	public static function getShopDomainSsl($http = false, $entities = false)
 	{
-		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SLL')))
+		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SSL')))
 			$domain = self::getHttpHost();
 		if ($entities)
 			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
