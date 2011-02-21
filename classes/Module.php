@@ -378,11 +378,11 @@ abstract class ModuleCore
 					if (Tools::file_exists_cache($file) AND include_once($file))
 						$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 
-					$xml_module->displayName = Module::_findTranslation($xml_module->name, $xml_module->displayName, (string)$xml_module->name);
-					$xml_module->description = Module::_findTranslation($xml_module->name, $xml_module->description, (string)$xml_module->name);
+					$xml_module->displayName = Module::findTranslation($xml_module->name, $xml_module->displayName, (string)$xml_module->name);
+					$xml_module->description = Module::findTranslation($xml_module->name, $xml_module->description, (string)$xml_module->name);
 
 					if(isset($xml_module->confirmUninstall))
-						$xml_module->confirmUninstall = Module::_findTranslation($xml_module->name, $xml_module->confirmUninstall, (string)$xml_module->name);
+						$xml_module->confirmUninstall = Module::findTranslation($xml_module->name, $xml_module->confirmUninstall, (string)$xml_module->name);
 
 
 					$result = Db::getInstance()->getRow('SELECT `id_module`, `active` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.strval($xml_module->name).'\'');
@@ -554,7 +554,7 @@ abstract class ModuleCore
 		return $output;
 	}
 
-	public static function _findTranslation($name, $string, $source)
+	public static function findTranslation($name, $string, $source)
 	{
 		global $_MODULES;
 		
@@ -576,7 +576,7 @@ abstract class ModuleCore
 			elseif (isset($_MODULES[Tools::strtolower($defaultKey)]))
 				$ret = stripslashes($_MODULES[Tools::strtolower($defaultKey)]);
 			else
-				$ret = $string;
+				$ret = stripslashes($string);
 			
 			self::$l_cache[$cache_key] = str_replace('"', '&quot;', $ret);
 		} 
@@ -607,7 +607,7 @@ abstract class ModuleCore
 		
 		$source = $specific ? $specific : $this->name;
 		$string = str_replace('\'', '\\\'', $string);
-		$ret = $this->_findTranslation($this->name, $string, $source);
+		$ret = $this->findTranslation($this->name, $string, $source);
 		return $ret;
 	}
 
