@@ -978,17 +978,17 @@ g	* Discount table with value, quantities...
 		return (Tools::iconv('utf-8', self::encoding(), $str));
 	}
 
-	static protected function encoding()
+	static public function encoding()
 	{
 		return (isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['encoding']) ? self::$_pdfparams[self::$_iso]['encoding'] : 'iso-8859-1';
 	}
 
-	static protected function embedfont()
+	static public function embedfont()
 	{
 		return (((isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['font']) AND !in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts)) ? self::$_pdfparams[self::$_iso]['font'] : false);
 	}
 
-	static protected function fontname()
+	static public function fontname()
 	{
 		$font = self::embedfont();
 		if (in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts))
