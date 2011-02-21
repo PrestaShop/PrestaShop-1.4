@@ -30,7 +30,6 @@
  * 1. subscribe to their Ready to Sell engine,
  * 2. activate a tracking for order process if user has been used twenga engine,
  * 3. submit a xml feed of shop products to Twenga. 
- * @todo test on 1.3 version
  * @author Nans Pellicari - Prestashop
  * @version 1.0
  */
@@ -90,11 +89,13 @@ class Twenga extends PaymentModule
 	
 	/**
 	 * Countries where Twenga works.
+	 * need to be in lowercase
 	 * @var array
 	 */
-	public static $limited_countries = array('FR');
+	public $limited_countries = array('fr', 'de', 'gb', 'uk');
 	
 	/**
+	 * The current country iso code for the shop.
 	 * @var string
 	 */
 	private static $shop_country;
@@ -130,7 +131,11 @@ class Twenga extends PaymentModule
 		
 		TwengaObj::setTranslationObject($this);
 		TwengaException::setTranslationObject($this);
-		
+		if (!in_array(strtolower(self::$shop_country), $this->limited_countries))
+		{
+			$this->warning = $this->l('Twenga module works only in specific countries (iso code list:').' '.implode(', ',$this->limited_countries).').';
+			return false;
+		}
 		// instanciate (just once) the TwengaObj and PrestashopStats
 		if (self::$obj_twenga === NULL)
 			self::$obj_twenga = new TwengaObj();
@@ -500,7 +505,7 @@ class Twenga extends PaymentModule
 			</div><!-- .margin-form -->
 			<label>'.$this->l('Country').' <sup>*</sup> : </label>
 			<div class="margin-form">
-				<div class="simulate-disable-input" >'.self::$shop_country.'</div>
+				<div class="simulate-disable-input" >'.(self::$shop_country == 'GB' ? 'UK' : self::$shop_country).'</div>
 				<input type="hidden" name="country" value="'.self::$shop_country.'"/>
 				<p>'
 				.$this->l('E-Merchant’s society country. Use the ISO_3166-1 Alpha-2 country code format.')
