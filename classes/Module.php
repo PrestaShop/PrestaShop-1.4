@@ -783,7 +783,7 @@ abstract class ModuleCore
 		}
 		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
 		if (($overloaded = self::_isTemplateOverloadedStatic(basename($file, '.php'), $template)) === NULL)
-			$result = Tools::displayError('No template found');
+			$result = Tools::displayError('No template found for module').' '.basename($file,'.php');
 		else
 		{
 			$smarty->assign('module_template_dir', ($overloaded ? _THEME_DIR_ : __PS_BASE_URI__).'modules/'.basename($file, '.php').'/');
