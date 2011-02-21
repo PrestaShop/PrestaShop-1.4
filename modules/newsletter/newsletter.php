@@ -166,11 +166,11 @@ class Newsletter extends Module
 		'.$this->l('There are two sorts for this module:').'
 		<p><ol>
 			<li>
-				1. '.$this->l('Persons who have subscribed using the BlockNewsletter block in the front office.').'<br />
+				'.$this->l('Persons who have subscribed using the BlockNewsletter block in the front office.').'<br />
                 '.$this->l('This will be a list of email addresses for persons coming to your store and not becoming a customer but wanting to get your newsletter. Using the "Export Newsletter Subscribers" below will generate a .CSV file based on the BlockNewsletter subscribers data.').'<br /><br />'.'
             </li>
             <li>
-                2. '.$this->l('Customers that have checked "yes" to receive a newsletter in their customer profile.').'<br />
+                '.$this->l('Customers that have checked "yes" to receive a newsletter in their customer profile.').'<br />
                 '.$this->l('The "Export Customers" section below filters which customers you want to send a newsletter.').'
             </li>
         </ol>
