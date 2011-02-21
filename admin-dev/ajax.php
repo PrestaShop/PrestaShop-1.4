@@ -497,10 +497,9 @@ if (Tools::isSubmit('helpAccess'))
 	$item = Tools::getValue('item');
 	$isoUser = Tools::getValue('isoUser');
 	$country = Tools::getValue('country');
-	
-	
-	
+	$version = Tools::getValue('version');
+
 	if (isset($item) AND isset($isoUser) AND isset($country))
-		die(HelpAccess::displayHelp($item, $isoUser,  $country, ''));
+		die(HelpAccess::displayHelp($item, $isoUser,  $country, $version));
 	die();
 }

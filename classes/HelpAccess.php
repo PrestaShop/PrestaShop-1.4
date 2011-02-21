@@ -50,12 +50,12 @@ class HelpAccessCore
         ');
     }
 
-    public static function retrieveInfos($label, $iso_lang, $country)
+    public static function retrieveInfos($label, $iso_lang, $country, $version)
     {
    	    $image = self::$_images[0];
-	    $tooltip = '';
-        $version = '';
-   	    $url = HelpAccess::URL.'/documentation/renderIcon?label='.$label.'&iso_lang='.$iso_lang.'&country='.$country;
+	       $tooltip = '';
+   	    $url = HelpAccess::URL.'/documentation/renderIcon?label='.$label.'&iso_lang='.$iso_lang.'&country='.$country.'&version='.$version;
+
    	    $ctx = stream_context_create(array(
                     'http' => array(
                     'timeout' => 10
@@ -87,7 +87,7 @@ class HelpAccessCore
 
     public static function displayHelp($label, $iso_lang, $country, $ps_version)
     {
-        $infos = HelpAccess::retrieveInfos($label, $iso_lang, $country);
+        $infos = HelpAccess::retrieveInfos($label, $iso_lang, $country, $ps_version);
         if (array_key_exists('image', $infos) && $infos['image'] != 'none')
         {
 	        echo '
