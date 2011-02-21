@@ -47,18 +47,20 @@
 		<module name="gridhtml"/>
 		<module name="gsitemap"/>
 		<module name="homefeatured"/>
-		<module name="importerOsc"/>
+		<module name="importerosc"/>
+		<module name="livezilla"/>
 		<module name="loyalty"/>
 		<module name="mailalerts"/>
 		<module name="newsletter"/>
 		<module name="pagesnotfound"/>
+		<module name="prestafraud"/>
 		<module name="productcomments"/>
 		<module name="productscategory"/>
 		<module name="producttooltip"/>
 		<module name="referralprogram"/>
 		<module name="sekeywords"/>
 		<module name="sendtoafriend"/>
-		<module name="shopImporter"/>
+		<module name="shopimporter"/>
 		<module name="statsbestcategories"/>
 		<module name="statsbestcustomers"/>
 		<module name="statsbestmanufacturers"/>
@@ -92,6 +94,7 @@
 	</modules>
 	<modules type="partner">
 		<module name="cashticket"/>
+		<module name="criteo"/>
 		<module name="dejala"/>
 		<module name="dibs"/>
 		<module name="envoimoinscher"/>
