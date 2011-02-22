@@ -350,17 +350,25 @@ class Followup extends Module
 	}
 	
 	/* For all customers with no orders since more than x days */
+
+	/**
+	 * badCustomer send mails to all customers with no orders since more than x days, 
+	 * with at least one valid order in history
+	 * 
+	 * @param boolean $count if set to true, will return number of customer (default : false, will send mails, no return value)
+	 * @return void
+	 */
 	private function badCustomer($count = false)
 	{
 		$emails = Db::getInstance()->ExecuteS('
-		SELECT c.id_lang, c.id_cart, cu.id_customer, cu.firstname, cu.lastname, cu.email, (SELECT COUNT(o.id_order) FROM '._DB_PREFIX_.'orders o WHERE o.id_customer = cu.id_customer) nb_orders
-		FROM '._DB_PREFIX_.'customer cu
-		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_customer = cu.id_customer)
-		LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
-		WHERE cu.id_customer NOT IN
-		(SELECT o.id_customer FROM '._DB_PREFIX_.'orders o WHERE DATE_SUB(CURDATE(),INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY) <= o.date_add)
-		AND cu.id_customer NOT IN
-		(SELECT id_customer FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 4 AND date_add >= DATE_SUB(date_add,INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY))
+			SELECT c.id_lang, c.id_cart, cu.id_customer, cu.firstname, cu.lastname, cu.email, (SELECT COUNT(o.id_order) FROM '._DB_PREFIX_.'orders o WHERE o.id_customer = cu.id_customer and o.valid = 1) nb_orders
+			FROM '._DB_PREFIX_.'customer cu
+			LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_customer = cu.id_customer)
+			LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
+			WHERE cu.id_customer NOT IN
+			(SELECT o.id_customer FROM '._DB_PREFIX_.'orders o WHERE DATE_SUB(CURDATE(),INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY) <= o.date_add)
+			AND cu.id_customer NOT IN
+			(SELECT id_customer FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 4 AND date_add >= DATE_SUB(date_add,INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY))
 		GROUP BY cu.id_customer
 		HAVING nb_orders >= 1');
 	
