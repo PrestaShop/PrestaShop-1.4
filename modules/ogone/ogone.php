@@ -148,7 +148,7 @@ class Ogone extends PaymentModule
 		$ogoneParams = array();
 		$ogoneParams['PSPID'] = Configuration::get('OGONE_PSPID');
 		$ogoneParams['OPERATION'] = 'SAL';
-		$ogoneParams['ORDERID'] = pSQL($params['cart']->id.'_'.$params['cart']->secure_key);
+		$ogoneParams['ORDERID'] = pSQL($params['cart']->id);
 		$ogoneParams['AMOUNT'] = number_format(Tools::convertPrice((float)(number_format($params['cart']->getOrderTotal(true, Cart::BOTH), 2, '.', '')), $currency), 2, '.', '') * 100;
 		$ogoneParams['CURRENCY'] = $currency->iso_code;
 		$ogoneParams['LANGUAGE'] = $lang->iso_code.'_'.strtoupper($lang->iso_code);
@@ -158,6 +158,7 @@ class Ogone extends PaymentModule
 		$ogoneParams['OWNERADDRESS'] = ($address->address1);
 		$ogoneParams['OWNERCTY'] = $country->iso_code;
 		$ogoneParams['OWNERTOWN'] = $address->city;
+		$ogoneParams['paramplus'] = 'secure_key='.$params['cart']->secure_key;
 		if (!empty($address->phone))
 			$ogoneParams['OWNERTELNO'] = $address->phone;
 
@@ -189,11 +190,9 @@ class Ogone extends PaymentModule
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
 	
-	public function validate($id_order_state, $amount, $message = '')
+	public function validate($id_cart, $id_order_state, $amount, $message = '', $secure_key)
 	{
-		$secure_cart = explode('_', Tools::getValue('orderID'));
-		$this->validateOrder((int)$secure_cart[0], $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true, pSQL($secure_cart[1]));
-		
+		$this->validateOrder((int)$id_cart, $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true, pSQL($secure_key));
 		if ($amount > 0 AND class_exists('PaymentCC'))
 		{
 			$pcc = new PaymentCC();
