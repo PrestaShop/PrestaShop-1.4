@@ -44,9 +44,11 @@
 			{if $cart_qties >= 0}
 				<span class="ajax_cart_total{if $cart_qties == 0} hidden{/if}">
 					{if $priceDisplay == 1}
-						{convertPrice price=$cart->getOrderTotal(false, Cart::BOTH_WITHOUT_SHIPPING)}
+						{assign var='blockuser_cart_flag' value='Cart::BOTH_WITHOUT_SHIPPING'|constant}
+						{convertPrice price=$cart->getOrderTotal(false, $blockuser_cart_flag)}
 					{else}
-						{convertPrice price=$cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING)}
+						{assign var='blockuser_cart_flag' value='Cart::BOTH_WITHOUT_SHIPPING'|constant}
+						{convertPrice price=$cart->getOrderTotal(true, $blockuser_cart_flag)}
 					{/if}
 				</span>
 			{/if}
