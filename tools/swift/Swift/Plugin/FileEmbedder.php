@@ -336,10 +336,7 @@ class Swift_Plugin_FileEmbedder implements Swift_Events_BeforeSendListener
       $this->registerFile($url, $cid, $registered["obj"]);
       return $matches[1] . $cid . $matches[4];
     }
-    $magic_quotes = get_magic_quotes_runtime();
-    Tools::ps_set_magic_quotes_runtime(0);
     $filedata = @file_get_contents($url);
-    Tools::ps_set_magic_quotes_runtime($magic_quotes);
     if (!$filedata)
     {
       return $matches[1] . $matches[3] . $matches[4];

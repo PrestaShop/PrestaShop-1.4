@@ -38,8 +38,9 @@ define('_PS_DISPLAY_COMPATIBILITY_WARNING_', true);
 define('_PS_SSL_PORT_', 443);
 
 /* Improve PHP configuration to prevent issues */
-@ini_set('upload_max_filesize', '100M');
-@ini_set('default_charset', 'utf-8');
+ini_set('upload_max_filesize', '100M');
+ini_set('default_charset', 'utf-8');
+ini_set('magic_quotes_runtime', 0);
 
 /* Correct Apache charset */
 header('Content-Type: text/html; charset=utf-8');
