@@ -53,7 +53,7 @@ class PaypalLib extends Paypal
 	public function makeSimpleCall($host, $script, $request)
 	{
 		// Making connection
-		include_once(_PS_MODULE_DIR_.'paypalapi/api/paypalconnect.php');
+		include_once(_PS_MODULE_DIR_.'paypal/api/paypalconnect.php');
 		$ppConnect = new PaypalConnect();
 		$result = $ppConnect->makeConnection($host, $script, $request);
 		$this->_logs = $ppConnect->getLogs();

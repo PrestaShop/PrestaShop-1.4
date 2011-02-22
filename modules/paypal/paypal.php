@@ -37,7 +37,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.3';
+		$this->version = '2.4';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -1216,5 +1216,14 @@ class PayPal extends PaymentModule
 			return $ok;
 		}
 		return false;
+	}
+	
+	public function getOrder($id_transaction)
+	{
+		return Db::getInstance()->getValue('
+		SELECT `id_order` 
+		FROM `'._DB_PREFIX_.'paypal_order` 
+		WHERE `id_transaction` = \''.pSQL($id_transaction).'\'
+		');
 	}
 }
