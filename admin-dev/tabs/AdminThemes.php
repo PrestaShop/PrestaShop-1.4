@@ -198,7 +198,7 @@ class AdminThemes extends AdminPreferences
 				$xml_version_too_old = false;
 			}
 		}
-		if ($xml_version_too_old AND !$this->_checkConfigForFeatures(array_keys($this->check_features)))
+		if ($xml_version_too_old AND !$this->_checkConfigForFeatures(array_keys(AdminThemes::$check_features)))
 		{
 			$this->_errors[] .= Tools::displayError('config.xml theme file has not been created for this version of prestashop.');
 			$return = false;
@@ -220,7 +220,7 @@ class AdminThemes extends AdminPreferences
 		{
 			foreach ($arrFeatures as $feature)
 				if (!sizeof($configItem))
-					$configItem = array_keys($this->check_features[$feature]['attributes']);
+					$configItem = array_keys(AdminThemes::$check_features[$feature]['attributes']);
 			foreach ($configItem as $attr)
 			{
 				$check = $this->_checkConfigForFeatures($arrFeatures,$attr);
@@ -236,16 +236,16 @@ class AdminThemes extends AdminPreferences
 
 		foreach ($arrFeatures as $feature)
 		{
-			$arrConfigToCheck = $this->check_features[$feature]['attributes'][$configItem]['check_if_not_valid'];
-			foreach ($arrConfigToCheck AS $config_key => $config_val)
+			$arrConfigToCheck = AdminThemes::$check_features[$feature]['attributes'][$configItem]['check_if_not_valid'];
+			foreach ($arrConfigToCheck as $config_key => $config_val)
 			{
 				$config_get = Configuration::get($config_key);
 				if ($config_get != $config_val)
 				{
-					$this->_errors[] = Tools::displayError($this->check_features[$feature]['error']).'.'
-					.(!empty($this->check_features[$feature]['tab'])
-						?' <a href="?tab='.$this->check_features[$feature]['tab'].'&amp;token='
-						.Tools::getAdminTokenLite($this->check_features[$feature]['tab']).'" ><u>'
+					$this->_errors[] = Tools::displayError(AdminThemes::$check_features[$feature]['error']).'.'
+					.(!empty(AdminThemes::$check_features[$feature]['tab'])
+						?' <a href="?tab='.AdminThemes::$check_features[$feature]['tab'].'&amp;token='
+						.Tools::getAdminTokenLite(AdminThemes::$check_features[$feature]['tab']).'" ><u>'
 						.Tools::displayError('You can disable this function on this page')
 						.'</u></a>':''
 					).'<br/>' ;
