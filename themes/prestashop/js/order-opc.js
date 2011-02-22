@@ -309,7 +309,7 @@ function saveAddress(type)
 						tmp += '<li>'+jsonData.errors[error]+'</li>';
 					}
 				tmp += '</ol>';
-				var errors = '<b>'+txtThereis+' '+i+' '+txtErrors+':</b><ol>';
+				var errors = '<b>'+txtThereis+' '+i+' '+txtErrors+':</b><ol>'+tmp;
 				$('#opc_account_errors').html(errors).slideDown('slow');
 				result = false;
 			}
