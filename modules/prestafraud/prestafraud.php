@@ -435,33 +435,38 @@ class PrestaFraud extends Module
 	private function _getCustomerInfos($order)
 	{
 		$last_order = Db::getInstance()->getValue('SELECT date_add
-																FROM '._DB_PREFIX_.'orders
-																WHERE id_customer='.(int)$order->id_customer.' AND id_order != '.(int)$order->id.'
-																ORDER BY date_add DESC');
+		FROM '._DB_PREFIX_.'orders
+		WHERE id_customer='.(int)$order->id_customer.' AND id_order != '.(int)$order->id.'
+		ORDER BY date_add DESC');
 
-		$orders_valid = Db::getInstance()->getRow('SELECT COUNT(*) nb_valid, SUM(total_paid) sum_valid
-																FROM '._DB_PREFIX_.'orders
-																WHERE valid=1 AND id_order!='.(int)$order->id.' AND id_customer = '.(int)$order->id_customer);
+		$orders_valid = Db::getInstance()->getRow('
+		SELECT COUNT(*) nb_valid, SUM(total_paid) sum_valid
+		FROM '._DB_PREFIX_.'orders
+		WHERE valid=1 AND id_order!='.(int)$order->id.' AND id_customer = '.(int)$order->id_customer);
 
-		$orders_unvalid  = Db::getInstance()->getRow('SELECT COUNT(*) nb_unvalid, SUM(total_paid) sum_unvalid
-																FROM '._DB_PREFIX_.'orders
-																WHERE valid=0 AND id_order!='.(int)$order->id.' AND id_customer = '.(int)$order->id_customer);
+		$orders_unvalid  = Db::getInstance()->getRow('
+		SELECT COUNT(*) nb_unvalid, SUM(total_paid) sum_unvalid
+		FROM '._DB_PREFIX_.'orders
+		WHERE valid=0 AND id_order!='.(int)$order->id.' AND id_customer = '.(int)$order->id_customer);
 
-		$ip_addresses = Db::getInstance()->ExecuteS('SELECT c.ip_address
-																	FROM '._DB_PREFIX_.'guest g
-																	LEFT JOIN '._DB_PREFIX_.'connections c ON (c.id_guest = g.id_guest)
-																	WHERE g.id_customer='.(int)$order->id_customer.'
-																	ORDER BY c.id_connections DESC');
+		$ip_addresses = Db::getInstance()->ExecuteS('
+		SELECT c.ip_address
+		FROM '._DB_PREFIX_.'guest g
+		LEFT JOIN '._DB_PREFIX_.'connections c ON (c.id_guest = g.id_guest)
+		WHERE g.id_customer='.(int)$order->id_customer.'
+		ORDER BY c.id_connections DESC');
 		$address_list = array();
 		foreach ($ip_addresses AS $ip)
 			$address_list[] = $ip['ip_address'];
 
-		return array('customer_date_last_order' => $last_order,
-						'customer_orders_valid_count' => $orders_valid['nb_valid'],
-						'customer_orders_valid_sum' => $orders_valid['sum_valid'],
-						'customer_orders_unvalid_count' => $orders_unvalid['nb_unvalid'],
-						'customer_orders_unvalid_sum' => $orders_unvalid['sum_unvalid'],
-						'customer_ip_addresses_history' => serialize($address_list));	
+		return array(
+			'customer_date_last_order' => $last_order,
+			'customer_orders_valid_count' => $orders_valid['nb_valid'],
+			'customer_orders_valid_sum' => $orders_valid['sum_valid'],
+			'customer_orders_unvalid_count' => $orders_unvalid['nb_unvalid'],
+			'customer_orders_unvalid_sum' => $orders_unvalid['sum_unvalid'],
+			'customer_ip_addresses_history' => serialize($address_list)
+		);	
 	}
 	
 	private static function _getIpByCart($id_cart)
@@ -475,18 +480,18 @@ class PrestaFraud extends Module
 	public function hookAdminOrder($params)
 	{
 		global $cookie;
-		$id_order = Db::getInstance()->getValue('SELECT id_order FROM '._DB_PREFIX_.'prestafraud_orders WHERE id_order='.(int)$params['id_order']);
+		$id_order = Db::getInstance()->getValue('SELECT id_order FROM '._DB_PREFIX_.'prestafraud_orders WHERE id_order = '.(int)$params['id_order']);
 		$this->_html .= '<br /><fieldset><legend>'.$this->l('Presta Fraud').'</legend>';
 		if (!$id_order)
 			$this->_html .= $this->l('This order has not been sent to Presta Fraud.');
 		else
 		{
 			$scoring = $this->_getScoring((int)$id_order, $cookie->id_lang);
-			$this->_html .= '<p><b>'.$this->l('Scoring:').'</b> '.($scoring['scoring'] < 0 ? $this->l('Unknow') : $scoring['scoring']).'</p>
-									<p><b>'.$this->l('Comment:').'</b> '.$scoring['comment'].'</p>
-									<p><center><a target="_BLANK" href="'.self::$_trustUrl.'fraud_report.php?shop_id='.Configuration::get('PS_TRUST_SHOP_ID').'&shop_key='.Configuration::get('PS_TRUST_SHOP_KEY').'&order_id='.$id_order.'">'.$this->l('Report this order as a fraud to PrestaShop').'</a></center></p>';
+			$this->_html .= '<p><b>'.$this->l('Scoring:').'</b> '.($scoring['scoring'] < 0 ? $this->l('Unknown') : (float)$scoring['scoring']).'</p>
+			<p><b>'.$this->l('Comment:').'</b> '.htmlentities($scoring['comment']).'</p>
+			<p><center><a target="_BLANK" href="'.self::$_trustUrl.'fraud_report.php?shop_id='.Configuration::get('PS_TRUST_SHOP_ID').'&shop_key='.Configuration::get('PS_TRUST_SHOP_KEY').'&order_id='.$id_order.'">'.$this->l('Report this order as a fraud to PrestaShop').'</a></center></p>';
 		}
-			$this->_html .= '</fieldset>';
+		$this->_html .= '</fieldset>';
 		return $this->_html;
 	}
 	
@@ -494,7 +499,7 @@ class PrestaFraud extends Module
 		
 	private function _getScoring($id_order, $id_lang)
 	{
-		if (!$scoring = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'prestafraud_orders WHERE scoring IS NOT NULL AND id_order='.(int)$id_order))
+		if (!$scoring = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'prestafraud_orders WHERE scoring IS NOT NULL AND id_order = '.(int)$id_order))
 		{
 			$root = new SimpleXMLElement("<?xml version=\"1.0\"?><trust></trust>"); 
 			$xml = $root->addChild('get_scoring');
@@ -507,9 +512,8 @@ class PrestaFraud extends Module
 				return false;
 			$xml = simplexml_load_string($result);
 			if ((int)$xml->check_scoring->status != -1)
-				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'prestafraud_orders SET scoring='.(int)$xml->check_scoring->scoring.', comment=\''.pSQL($xml->check_scoring->comment).'\' WHERE id_order='.(int)$id_order);
-			$scoring = 	array('scoring' => (int)$xml->check_scoring->scoring,
-									'comment' => (string)$xml->check_scoring->comment);
+				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'prestafraud_orders SET scoring = '.(float)$xml->check_scoring->scoring.', comment = \''.pSQL($xml->check_scoring->comment).'\' WHERE id_order='.(int)$id_order);
+			$scoring = 	array('scoring' => (float)$xml->check_scoring->scoring, 'comment' => (string)$xml->check_scoring->comment);
 		}
 		return $scoring;
 	}
@@ -525,8 +529,7 @@ class PrestaFraud extends Module
 	
 	private function _getConfiguredCarriers()
 	{
-		$res =  Db::getInstance()->ExecuteS('SELECT *
-														FROM '._DB_PREFIX_.'prestafraud_carrier');
+		$res =  Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'prestafraud_carrier');
 		$carriers = array();
 		foreach ($res AS $row)
 			$carriers[$row['id_carrier']] = $row['id_prestafraud_carrier_type'];
@@ -536,8 +539,7 @@ class PrestaFraud extends Module
 	
 	private function _getConfiguredPayments()
 	{
-		$res =  Db::getInstance()->ExecuteS('SELECT *
-														FROM '._DB_PREFIX_.'prestafraud_payment');
+		$res =  Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'prestafraud_payment');
 		$payments = array();
 		foreach ($res AS $row)
 			$payments[$row['id_module']] = $row['id_prestafraud_payment_type'];
