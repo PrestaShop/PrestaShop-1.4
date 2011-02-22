@@ -625,6 +625,34 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
 (3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log');
 
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
+(4, 1, 'Katalog'),(4, 2, 'Kunden'),(4, 3, 'Bestellungen'),(4, 4, 'Zahlung'),
+(4, 5, 'Versandkosten'),(4, 6, 'Statistik'),(4, 7, 'Module'),(4, 8, 'Voreinstellungen'),(4, 9, 'Tools'),(4, 10, 'Hersteller'),(4, 11, 'Attribute und Gruppen'),
+(4, 12, 'Adressen'),(4, 13, 'Status'),(4, 14, 'Gutscheine'),(4, 15, 'Währungen'),(4, 16, 'Steuern'),(4, 17, 'Lieferanten'),(4, 18, 'Länder'),
+(4, 19, 'Zonen'),(4, 20, 'Preislagen'),(4, 21, 'Gewichtsklassen'),(4, 22, 'Positionen'),(4, 23, 'Datenbank'),(4, 24, 'E-Mail'),(4, 26, 'Bild'),
+(4, 27, 'Produkte'),(4, 28, 'Kontakte'),(4, 29, 'Mitarbeiter'),(4, 30, 'Profile'),(4, 31, 'Berechtigungen'),(4, 32, 'Sprachen'),(4, 33, 'Übersetzungen'),
+(4, 34, 'Zulieferer'),(4, 35, 'Tabs'),(4, 36, 'Funktionen'),(4, 37, 'Schnellzugriff'),(4, 38, 'Aussehen'),(4, 39, 'Kontaktinformation'),(4, 40, 'Alias'),
+(4, 41, 'Import'),(4, 42, 'Rechnungen'),(4, 43, 'Suche'),(4, 44, 'Lokalisierung'),(4, 46, 'Staaten'),(4, 47, 'Warenrücksendungen'),(4, 48, 'PDF'),
+(4, 49, 'Gutscheine'),(4, 51, 'Einstellungen'),(4, 52, 'Subdomains'),(4, 53, 'DB-Backup'),(4, 54, 'Bestellnachrichten'),
+(4, 55, 'Lieferscheine'),(4, 56, 'SEO'),(4, 57, 'CMS'),(4, 58, 'Image Mapping'),(4, 59, 'Kundennachrichten'),(4, 60, 'Tracking'),
+(4, 61, 'Suchmaschinen'),(4, 62, 'Referrer'),(4, 63, 'Gruppen'),(4, 64, 'Generatoren'),(4, 65, 'Warenkörbe'),(4, 66, 'Tags'),(4, 67, 'Suche'),
+(4, 68, 'Anhänge'),(4, 69, 'Konfigurationsinformationen'),(4, 70, 'Leistung'),(4, 71, 'Kundenservice'),(4, 72, 'Webservice'),(4, 73, 'Lagerbewegungen'),
+(4, 80, 'Module und Themenkatalog'),(4, 81, 'Mein Konto'),(4, 82, 'Shops'),(4, 83, 'Themen'),(4, 84, 'Geotargeting'),(4, 85, 'Steuerregeln'),(4, 86, 'Log');
+
+INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
+(5, 1, 'Catalogo'),(5, 2, 'Clienti'),(5, 3, 'Ordini'),(5, 4, 'Pagamento'),
+(5, 5, 'Spedizione'),(5, 6, 'Stat'),(5, 7, 'Moduli'),(5, 8, 'Preferenze'),(5, 9, 'Strumenti'),(5, 10, 'Produttori'),(5, 11, 'Attributi e Gruppi'),
+(5, 12, 'Indirizzi'),(5, 13, 'Status'),(5, 14, 'Voucher'),(5, 15, 'Valute'),(5, 16, 'Tasse'),(5, 17, 'Corrieri'),(5, 18, 'Nazioni'),
+(5, 19, 'Zone'),(5, 20, 'Fasce di prezzo'),(5, 21, 'Fasce di peso'),(5, 22, 'Posizioni'),(5, 23, 'Database'),(5, 24, 'E-mail'),(5, 26, 'Immagine'),
+(5, 27, 'Prodotti'),(5, 28, 'Contatti'),(5, 29, 'Impiegati'),(5, 30, 'Profili'),(5, 31, 'Permessi'),(5, 32, 'Lingue'),(5, 33, 'Traduzioni'),
+(5, 34, 'Fornitori'),(5, 35, 'Tab'),(5, 36, 'Caratteristiche'),(5, 37, 'Accesso rapido'),(5, 38, 'Aspetto'),(5, 39, 'Informazioni di contatto'),(5, 40, 'Alias'),
+(5, 41, 'Importa'),(5, 42, 'Fatture'),(5, 43, 'Cerca'),(5, 44, 'Localizzazione'),(5, 46, 'Stati'),(5, 47, 'Resi merci'),(5, 48, 'PDF'),
+(5, 49, 'Note di credito'),(5, 51, 'Impostazioni'),(5, 52, 'Sottodomini'),(5, 53, 'DB backup'),(5, 54, 'Messaggi ordine'),
+(5, 55, 'Note di consegna'),(5, 56, 'SEO'),(5, 57, 'CMS'),(5, 58, 'Mappatura immagine'),(5, 59, 'Messaggi cliente'),(5, 60, 'Rintracciare'),
+(5, 61, 'Motori di ricerca'),(5, 62, 'Referenti'),(5, 63, 'Gruppi'),(5, 64, 'Generatori'),(5, 65, 'Carrelli shopping'),(5, 66, 'Tag'),(5, 67, 'Cerca'),
+(5, 68, 'Allegati'),(5, 69, 'Informazioni di configurazione'),(5, 70, 'Performance'),(5, 71, 'Servizio clienti'),(5, 72, 'Webservice'),(5, 73, 'Movimenti magazzino'),
+(5, 80, 'Moduli & Temi catalogo'),(5, 81, 'Il mio Account'),(5, 82, 'Negozi'),(5, 83, 'Temi'),(5, 84, 'Geolocalizzazione'),(5, 85, 'Regimi fiscali'),(5, 86, 'Log');
+
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`
         FROM `PREFIX_tab_lang` tl
@@ -676,8 +704,6 @@ INSERT INTO `PREFIX_meta` (`id_meta`, `page`) VALUES
 (21, 'order'),
 (22, 'search'),
 (23, 'stores');
-
-
 
 INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `keywords`, `url_rewrite`) VALUES
 (1, 1, '404 error', 'This page cannot be found', 'error, 404, not found', 'page-not-found'),
@@ -748,7 +774,53 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (22, 3, 'Buscar', '', '', 'buscar'),
 (23, 1, 'Stores', '', '', 'stores'),
 (23, 2, 'Magasins', '', '', 'magasins'),
-(23, 3, 'Tiendas', '', '', 'tiendas');
+(23, 3, 'Tiendas', '', '', 'tiendas'),
+(1, 4, 'Fehler 404', 'Seite wurde nicht gefunden', 'Fehler 404, nicht gefunden', 'Seite-nicht-gefunden'),
+(2, 4, 'Verkaufshits', 'Unsere Verkaufshits', 'Verkaufshits', 'Verkaufshits'),
+(3, 4, 'Kontaktieren Sie uns', 'Nutzen Sie unser Kontaktformular', 'Kontakt, Formular, E-Mail', 'Kontaktieren Sie uns'),
+(4, 4, '', 'Shop powered by PrestaShop', 'Shop, prestashop', ''),
+(5, 4, 'Hersteller', 'Herstellerliste', 'Hersteller', 'Hersteller'),
+(6, 4, 'Neue Produkte', 'Unsere neuen Produkte', 'neu, Produkte', 'Neue-Produkte'),
+(7, 4, 'Kennwort vergessen', 'Geben Sie die E-Mailadresse ein, die Sie zum Einloggen benutzen, damit Sie eine E-Mail mit dem neuen Kennwort erhalt', 'vergessen, Kennwort, E-Mail, neu, Reset', 'Kennwort Wiederherstellung'),
+(8, 4, 'Preise fallen', 'Unsere Sonderangebote', 'besonders, Preise fallen', 'Preise-fallen'),
+(9, 4, 'Sitemap', 'Verloren? Finden Sie, was Sie suchen', 'sitemap', 'sitemap'),
+(10, 4, 'Zulieferer', 'Zuliefererliste', 'Zulieferer', 'Zulieferer'),
+(11, 4, 'Adresse', '', '', 'Adresse'),
+(12, 4, 'Adressen', '', '', 'Adressen'),
+(13, 4, 'Authentifizierung', '', '', 'Authentifizierung'),
+(14, 4, 'Warenkorb', '', '', 'Warenkorb'),
+(15, 4, 'Discount', '', '', 'Discount'),
+(16, 4, 'Bestellungsverlauf', '', '', 'Bestellungsverlauf'),
+(17, 4, 'Kennung', '', '', 'Kennung'),
+(18, 4, 'Mein Konto', '', '', 'mein-Konto'),
+(19, 4, 'Bestellungsverfolgung', '', '', 'Bestellungsverfolgung'),
+(20, 4, 'Bestellschein', '', '', 'Bestellschein'),
+(21, 4, 'Bestellung', '', '', 'Bestellung'),
+(22, 4, 'Suche', '', '', 'Suche'),
+(23, 4, 'Shops', '', '', 'Shops'),
+(1, 5, 'errore 404', 'Impossibile trovare questa pagina', 'errore, 404, non trovato', 'pagina-non-trovata'),
+(2, 5, 'Vendite migliori', 'Le nostre vendite migliori', 'vendite migliori', 'vendite-migliori'),
+(3, 5, 'Contattaci', 'Usa il nostro modulo per contattarci', 'contatto, modulo, e-mail', 'contattaci'),
+(4, 5, '', 'Negozio powered by PrestaShop', 'negozio, prestashop', ''),
+(5, 5, 'Produttori', 'Elenco produttori', 'produttore', 'produttori'),
+(6, 5, 'Nuovi prodotti', 'I nostri nuovi prodotti', 'nuovi, prodotti', 'nuovi-prodotti'),
+(7, 5, 'Hai dimenticato la password', 'Inserisci l\'indirizzo e-mail usato per registrarti per poter ottenere una e-mail with con la tua nuova password', 'dimenticato, password, e-mail, nuovo, reset', 'password-recupero'),
+(8, 5, 'Riduzioni prezzi', 'I nostri prodotti speciali', 'speciali, riduzione prezzi', 'riduzione-prezzi'),
+(9, 5, 'Mappa del sito', 'Ti sei perso? Trova quello che stai cercando', 'sitemap', 'sitemap'),
+(10, 5, 'Fornitori', 'Elenco fornitori', 'fornitori', 'fornitore'),
+(11, 5, 'Indirizzo', '', '', 'indirizzo'),
+(12, 5, 'Indirizzi', '', '', 'indirizzi'),
+(13, 5, 'Autenticazione', '', '', 'autenticazione'),
+(14, 5, 'Carrello', '', '', 'carrello'),
+(15, 5, 'Sconto', '', '', 'sconto'),
+(16, 5, 'Storico ordine', '', '', 'storico-ordine'),
+(17, 5, 'Identità', '', '', 'identità'),
+(18, 5, 'Il mio account', '', '', 'il mio-account'),
+(19, 5, 'Seguito ordine', '', '', 'seguito-ordine'),
+(20, 5, 'Nota di ordine', '', '', 'nota di-ordine'),
+(21, 5, 'Ordine', '', '', 'ordine'),
+(22, 5, 'Cerca', '', '', 'cerca'),
+(23, 5, 'Negozi', '', '', 'negozi');
 
 /* Stats */
 INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('MacOsX'),('Linux');
@@ -783,12 +855,24 @@ INSERT INTO `PREFIX_cms_lang` (`id_cms`, `id_lang`, `meta_title`, `meta_descript
 (2, 3, 'Aviso legal', 'Aviso legal', 'términos, condiciones y créditos fotográficos', '<h2><span id="result_box"><span style="background-color: #ffffff;" title="Mentions légales">Pie de imprenta</span></span></h2>\r\n<h2><span id="result_box"><span style="background-color: #ffffff;" title="Mentions légales"> </span></span><span id="result_box"><span style="background-color: #ffffff;" title="Crédits">Créditos</span></span></h2>\r\n<h3><span id="result_box"></span></h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="Crédits"><br /></span><span style="background-color: #ffffff;" title="Concept et production :">Concepto y producción:<br /><br /></span><span style="background-color: #ffffff;" title="Ce site internet a été réalisé en utilisant la solution open-source PrestaShop™ .">Este sitio web fue creado utilizando la solución de código abierto <a href="http://www.prestashop.com" target="_blank">PrestaShop</a>™.</span></span></p>', 'aviso-legal'),
 (3, 3, 'Condiciones de uso', 'Condiciones de uso', 'condiciones, el consumo, las ventas generales', '<h2><span id="result_box"><span style="background-color: #ffffff;" title="Vos conditions de ventes">Sus condiciones de venta</span></span></h2>\r\n<h3>Regla N º 1</h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="Contenu de la règle numéro 1">Contenido de la Regla Número 1</span></span></p>\r\n<h3><span id="result_box"></span>Regla N º 2</h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="Contenu de la règle numéro 2">Contenido de la Regla N º 2</span></span></p>\r\n<h3><span id="result_box"></span>Regla N º 3</h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="Contenu de la règle numéro 3">Contenido de la Regla Número 3</span></span></p>', 'condiciones-de-uso'),
 (4, 3, 'Sobre', 'Conozca más sobre nosotros', 'sobre, información', '<h2>Sobre</h2>', 'sobre'),
-(5, 3, 'Pago seguro', 'Ofrecemos pago seguro', 'pago seguro, ssl, visa, mastercard, paypal', '<h2><span id="result_box"><span style="background-color: #ffffff;" title="Paiement sécurisé">Pago seguro</span></span></h2>\r\n<h3><span id="result_box"><span style="background-color: #ffffff;" title="Notre offre de paiement sécurisé">Ofrecemos pago seguro</span></span></h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="Avec SSL">SSL</span></span></p>\r\n<h3><span id="result_box"><span style="background-color: #ffffff;" title="Utilisation de Visa/Mastercard/Paypal">Utilice Visa / Mastercard / Paypal</span></span></h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="A propos de ces services">Acerca de estos servicios</span></span></p>', 'pago-seguro');
+(5, 3, 'Pago seguro', 'Ofrecemos pago seguro', 'pago seguro, ssl, visa, mastercard, paypal', '<h2><span id="result_box"><span style="background-color: #ffffff;" title="Paiement sécurisé">Pago seguro</span></span></h2>\r\n<h3><span id="result_box"><span style="background-color: #ffffff;" title="Notre offre de paiement sécurisé">Ofrecemos pago seguro</span></span></h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="Avec SSL">SSL</span></span></p>\r\n<h3><span id="result_box"><span style="background-color: #ffffff;" title="Utilisation de Visa/Mastercard/Paypal">Utilice Visa / Mastercard / Paypal</span></span></h3>\r\n<p><span id="result_box"><span style="background-color: #ffffff;" title="A propos de ces services">Acerca de estos servicios</span></span></p>', 'pago-seguro'),
+(1, 4, 'Lieferung', 'Unsere Lieferbedingungen', 'Bedingungen, Lieferung, Frist, Versand, Verpackung', '<h2>Versand und Rücknahme</h2><h3>Ihre Versandverpackung</h3><p>Pakete werden normalerweise 2 Tage nach Zahlungseingang mit UPS mit Bestellverfolgemöglichkeit und Ablieferung ohne Unterschrift geliefert. Wenn Sie lieber eine UPS-Sendung per Einschreiben erhalten möchten, entstehen zusätzliche Kosten. Bitte kontaktieren Sie uns, bevor Sie dieses Liefermethode wählen. Wir senden Ihnen einen Link für die Bestellverfolgung unabhängig davon, welche Liefermethode Sie wählen.</p><p>Die Versandkosten beinhalten Lade- und Verpackungsgebühren sowie die Portokosten. Die Verladegebühren stehen fest, wobei Transportkosten schwanken, je nach Gesamtgewicht des Pakets. Wir raten Ihnen, mehrere Artikel in einer Bestellung zusammenzufassen. Wir können zwei verschiedene Bestellungen nicht zusammenlegen, und die Versandkosten werden separat für jede Bestellung gerechnet. Ihr Paket wird auf Ihr Risiko versandt, aber zerbrechliche Ware wird besonders sorgsam behandelt.<br /><br />Die Versandschachteln sind weit geschnitten und ihre Ware wird gut geschützt verpackt.</p>', 'Lieferung'),
+(2, 4, 'Rechtliche Hinweise', 'Rechtliche Hinweise', 'Hinweise, rechtlich, Gutscheine', '<h2>Legal</h2><h3>Credits</h3><p>Konzept und Gestaltung:</p><p>Diese Webseite wurde hergestellt unter Verwendung von <a href="http://www.prestashop.com">PrestaShop</a>&trade; open-source software.</p>', 'Rechtliche Hinweise'),
+(3, 4, 'Allgemeine Nutzungsbedingungen', 'Unsere allgemeinen Nutzungsbedingungen', 'Voraussetzungen, Bedingungen, nutzen, verkaufen', '<h2>Your terms and conditions of use</h2><h3>Rule 1</h3><p>Here is the rule 1 content</p>\r\n<h3>Rule 2</h3><p>Here is the rule 2 content</p>\r\n<h3>Rule 3</h3><p>Here is the rule 3 content</p>', 'Allgemeine Nutzungsbedingungen'),
+(4, 4, 'Über uns', 'Learn more about us', 'über uns, Informationen', '<h2>About us</h2>\r\n<h3>Our company</h3><p>Our company</p>\r\n<h3>Our team</h3><p>Our team</p>\r\n<h3>Informations</h3><p>Informations</p>', 'über-uns'),
+(5, 4, 'Sichere Zahlung', 'Unsere Sicherheits-Zahlungsmethoden', 'Sichere Zahlung, SSL, Visa, MasterCard, PayPal', '<h2>Secure payment</h2>\r\n<h3>Our secure payment</h3><p>With SSL</p>\r\n<h3>Using Visa/Mastercard/Paypal</h3><p>About this services</p>', 'sichere-Zahlung'),
+(1, 5, 'Consegna', 'I nostri termini e condizioni di consegna', 'condizioni, consegna, tempo, spedizione, pacco', '<h2>Spedizioni e resi</h2><h3>Spedizione del tuo pacco</h3><p>I pacchi sono solitamente spediti entro 2 giorni dopo il ricevimento del pagamento e inviati tramite UPS con controllo e consegna senza firma. Se preferisci una consegna con UPS Extra con richiesta di firma, sarà applicato un costo aggiuntivo, pertanto contattaci prima di scegliere questo mezzo. Qualunque tipo di spedizione tu scelga, ti garantiremo un link per controllare online il percorso del tuo pacco.</p><p>Le spese di spedizione comprendono le spese di imballaggio e affrancatura. Le spese di imballaggio sono fisse, mentre quelle di trasporto variano in base al peso totale della spedizione. Ti consigliamo di raggruppare i tuoi articoli in un unico ordine. Non possiamo raggruppare due ordini distinti eseguiti separatamente, e ad ognuno di esso saranno applicate le spese di spedizione. Il tuo pacco sarà inviato sotto la tua responsabilità, ma un\'attenzione particolare è riservata agli oggetti fragili.<br /><br />Le scatole hanno dimensioni ragionevoli e i tuoi articoli sono ben protetti.</p>', 'consegna'),
+(2, 5, 'Nota Legale', 'Nota legale', 'nota, legale, crediti', '<h2>Legale</h2><h3>Crediti</h3><p>Creazione e produzione:</p><p>Questo sito web è stato realizzato usando un software open-source<a href="http://www.prestashop.com">PrestaShop</a>&trade;.</p>', 'nota-legale'),
+(3, 5, 'Termini e condizioni d\'uso', 'I nostri termini e condizioni d\'uso', 'condizioni, termini, uso, vendi', '<h2>I tuoi termini e condizioni d\'uso</h2><h3>Regola 1</h3><p>Ecco il contenuto della regola 1</p>\r\n<h3>Regola 2</h3><p>Ecco il contenuto della regola 2</p>\r\n<h3>Regola 3</h3><p>Ecco il contenuto della regola 3</p>', 'termini-e-condizioni-di-uso'),
+(4, 5, 'Chi siamo', 'Per sapere chi siamo', 'chi siamo, informazioni', '<h2>Chi siamo</h2>\r\n<h3>La nostra azienda</h3><p>La nostra azienda</p>\r\n<h3>Il nostro team</h3><p>Il nostro team</p>\r\n<h3>Informazioni</h3><p>Informazioni</p>', 'chi-siamo'),
+(5, 5, 'Pagamento sicuro', 'Il nostro mezzo di pagamento sicuro', 'pagamento sicuro, ssl, visa, mastercard, paypal', '<h2>Pagamento sicuro</h2>\r\n<h3>Il nostro pagamento sicuro</h3><p>Con SSL</p>\r\n<h3>Usando Visa/Mastercard/Paypal</h3><p>Cosa sono questi servizi</p>', 'pagamento-sicuro');
 
 INSERT INTO `PREFIX_cms_category_lang` (`id_cms_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
 (1, 1, 'Home', '', 'home', NULL, NULL, NULL),
 (1, 2, 'Accueil', '', 'home', NULL, NULL, NULL),
-(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL);
+(1, 3, 'Inicio', '', 'home', NULL, NULL, NULL),
+(1, 4, 'Start', '', 'Start', NULL, NULL, NULL),
+(1, 5, 'Home', '', 'home', NULL, NULL, NULL);
 
 INSERT INTO `PREFIX_cms_category` (`id_cms_category`, `id_parent`, `level_depth`, `active`, `date_add`, `date_upd`) VALUES(1, 0, 0, 1, NOW(), NOW());
 
