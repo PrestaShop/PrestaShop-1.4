@@ -164,7 +164,6 @@ class WebserviceRequest
 	 */
 	public function fetch($key, $method, $url, $params, $inputXml = NULL)
 	{
-		$this->_objects = array();
 		// Time logger
 		$this->_startTime = microtime(true);
 		
@@ -215,7 +214,9 @@ class WebserviceRequest
 								$this->writeXmlAfterGet();
 							break;
 						case 'POST':
-							if ($this->executeEntityPost())
+							if (array_key_exists(1, $this->_urlSegment))
+								$this->setError(400, 'id is forbidden when adding a new resource');
+							elseif ($this->executeEntityPost())
 								$this->writeXmlAfterModification();
 							break;
 						case 'PUT':
@@ -492,8 +493,8 @@ class WebserviceRequest
 	{
 		if (!in_array($this->_method, array('GET', 'POST', 'PUT', 'DELETE', 'HEAD')))
 			$this->setError(405, 'Method '.$this->_method.' is not valid');
-		// elseif (($this->_method == 'PUT' || $this->_method == 'DELETE') && !array_key_exists(1, $this->_urlSegment))
-			// $this->setError(401, 'Method '.$this->_method.' need you to specify an id');
+		elseif (($this->_method == 'PUT' || $this->_method == 'DELETE') && !array_key_exists(1, $this->_urlSegment))
+			$this->setError(401, 'Method '.$this->_method.' need you to specify an id');
 		elseif ($this->_urlSegment[0] && !in_array($this->_method, $this->_keyPermissions[$this->_urlSegment[0]]))
 			$this->setError(405, 'Method '.$this->_method.' is not allowed for the resource '.$this->_urlSegment[0].' with this authentication key');
 		else
@@ -773,7 +774,7 @@ class WebserviceRequest
 	private function executeEntityPost()
 	{
 		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']();
-		return $this->saveEntityFromXml(201);
+		return $this->saveEntityFromXml($this->_inputXml, 201);
 	}
 	
 	/**
@@ -783,9 +784,18 @@ class WebserviceRequest
 	 */
 	private function executeEntityPut()
 	{
-		return $this->saveEntityFromXml(200);
 		$this->_object = new $this->_resourceConfiguration['retrieveData']['className']($this->_urlSegment[1]);
 
+		if ($this->_object->id)
+		{
+			return $this->saveEntityFromXml($this->_inputXml, 200);
+		}
+		else
+		{
+			$this->setStatus(404);
+			$this->_outputEnabled = false;
+			return false;
+		}
 	}
 	
 	/**
@@ -889,169 +899,117 @@ class WebserviceRequest
 	private function writeXmlAfterModification()
 	{
 		$this->_fieldsToDisplay = 'full';
-		if (count($this->_objects) > 0)
-			foreach ($this->_objects as $element)
-				$this->_xmlOutput .= $this->getXmlFromEntity($element);
-		else
-			$this->_xmlOutput .= $this->getXmlFromEntity($this->_object);
+		$this->_xmlOutput .= $this->getXmlFromEntity($this->_object);
 	}
 	
 	/**
 	 * save Entity Object from XML
 	 * 
+	 * @param string $xmlString
 	 * @param int $successReturnCode
 	 * @return boolean
 	 */
-	private function saveEntityFromXml($successReturnCode)
+	private function saveEntityFromXml($xmlString, $successReturnCode)
 	{
-		$xml = new SimpleXMLElement($this->_inputXml);
-		$xmlEntities = $xml->children();
-		
-		$ids = array();
-		foreach ($xmlEntities as $entity) 
+		$xml = new SimpleXMLElement($xmlString);
+		$attributes = $xml->children()->{$this->_resourceConfiguration['objectNodeName']}->children();
+		$i18n = false;
+		// attributes
+		foreach ($this->_resourceConfiguration['fields'] as $fieldName => $fieldProperties)
 		{
-			// To cast in string allow to check null values
-			if ((string)$entity->id != '')
-				$ids[] = (int)$entity->id;
-		}
-		if ($this->_method == 'PUT')
-		{
-			$ids2 = array();
-			$ids2 = array_unique($ids);
-			if (count($ids2) != count($ids))
+			$sqlId = $fieldProperties['sqlId'];
+			if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && (!isset($fieldProperties['i18n']) || !$fieldProperties['i18n']))
 			{
-				$this->setError(400, 'id is duplicate in request');
-				return false;
-			}
-			if ($xmlEntities->count() != count($ids))
-			{
-				$this->setError(400, 'id is required when modifying a resource');
-				return false;
-			}
-		}
-		elseif ($this->_method == 'POST' && count($ids) > 0)
-		{
-			$this->setError(400, 'id is forbidden when adding a new resource');
-			return false;
-		}
-		
-		
-		
-		foreach ($xmlEntities as $xmlEntity)
-		{
-			$attributes = $xmlEntity->children();
-			
-			if ($this->_method == 'POST')
-				$this->_object = new $this->_resourceConfiguration['retrieveData']['className']();
-			elseif ($this->_method == 'PUT')
-			{
-				$this->_object = new $this->_resourceConfiguration['retrieveData']['className']((int)$attributes->id);
-				if (!$this->_object->id)
+				if (isset($fieldProperties['setter']))
 				{
-					$this->setError(404, 'Invalid ID');
-					return false;
-				}
-			}
-			$this->_objects[] = $this->_object;
-			$i18n = false;
-			// attributes
-			foreach ($this->_resourceConfiguration['fields'] as $fieldName => $fieldProperties)
-			{
-				$sqlId = $fieldProperties['sqlId'];
-				if (isset($attributes->$fieldName) && isset($fieldProperties['sqlId']) && (!isset($fieldProperties['i18n']) || !$fieldProperties['i18n']))
-				{
-					if (isset($fieldProperties['setter']))
+					// if we have to use a specific setter
+					if (!$fieldProperties['setter'])
 					{
-						// if we have to use a specific setter
-						if (!$fieldProperties['setter'])
-						{
-							// if it's forbidden to set this field
-							$this->setError(400, 'parameter "'.$fieldName.'" not writable. Please remove this attribute of this XML');
-							return false;
-						}
-						else
-							$this->_object->$fieldProperties['setter']((string)$attributes->$fieldName);
+						// if it's forbidden to set this field
+						$this->setError(400, 'parameter "'.$fieldName.'" not writable. Please remove this attribute of this XML');
+						return false;
 					}
 					else
-						$this->_object->$sqlId = (string)$attributes->$fieldName;
-				}
-				elseif (isset($fieldProperties['required']) && $fieldProperties['required'] && !$fieldProperties['i18n'])
-				{
-					$this->setError(400, 'parameter "'.$fieldName.'" required');
-					return false;
-				}
-				elseif (!isset($fieldProperties['required']) || !$fieldProperties['required'])
-					$this->_object->$sqlId = null;
-				
-				if (isset($fieldProperties['i18n']) && $fieldProperties['i18n'])
-				{
-					$i18n = true;
-					foreach ($attributes->$fieldName->language as $lang)
-						$this->_object->{$fieldName}[(int)$lang->attributes()->id] = (string)$lang;
-				}
-			}
-					
-			if (!$this->hasErrors())
-			{
-				if ($i18n && ($retValidateFieldsLang = $this->_object->validateFieldsLang(false, true)) !== true)
-				{
-					$this->setError(400, 'Validation error: "'.$retValidateFieldsLang.'"');
-					return false;
-				}
-				elseif (($retValidateFields = $this->_object->validateFields(false, true)) !== true)
-				{
-					$this->setError(400, 'Validation error: "'.$retValidateFields.'"');
-					return false;
+						$this->_object->$fieldProperties['setter']((string)$attributes->$fieldName);
 				}
 				else
+					$this->_object->$sqlId = (string)$attributes->$fieldName;
+			}
+			elseif (isset($fieldProperties['required']) && $fieldProperties['required'] && !$fieldProperties['i18n'])
+			{
+				$this->setError(400, 'parameter "'.$fieldName.'" required');
+				return false;
+			}
+			elseif (!isset($fieldProperties['required']) || !$fieldProperties['required'])
+				$this->_object->$sqlId = null;
+			
+			if (isset($fieldProperties['i18n']) && $fieldProperties['i18n'])
+			{
+				$i18n = true;
+				foreach ($attributes->$fieldName->language as $lang)
+					$this->_object->{$fieldName}[(int)$lang->attributes()->id] = (string)$lang;
+			}
+		}
+				
+		if (!$this->hasErrors())
+		{
+			if ($i18n && ($retValidateFieldsLang = $this->_object->validateFieldsLang(false, true)) !== true)
+			{
+				$this->setError(400, 'Validation error: "'.$retValidateFieldsLang.'"');
+				return false;
+			}
+			elseif (($retValidateFields = $this->_object->validateFields(false, true)) !== true)
+			{
+				$this->setError(400, 'Validation error: "'.$retValidateFields.'"');
+				return false;
+			}
+			else
+			{
+				// Call alternative method for add/update
+				$objectMethod = ($this->_method == 'POST' ? 'add' : 'update');
+				if (isset($this->_resourceConfiguration['objectMethods']) && array_key_exists($objectMethod, $this->_resourceConfiguration['objectMethods']))
+					$objectMethod = $this->_resourceConfiguration['objectMethods'][$objectMethod];
+				$result = $this->_object->{$objectMethod}();
+				if($result)
 				{
-					// Call alternative method for add/update
-					$objectMethod = ($this->_method == 'POST' ? 'add' : 'update');
-					if (isset($this->_resourceConfiguration['objectMethods']) && array_key_exists($objectMethod, $this->_resourceConfiguration['objectMethods']))
-						$objectMethod = $this->_resourceConfiguration['objectMethods'][$objectMethod];
-					$result = $this->_object->{$objectMethod}();
-					if($result)
-					{
-						if (isset($attributes->associations))
-							foreach ($attributes->associations->children() as $association)
+					if (isset($attributes->associations))
+						foreach ($attributes->associations->children() as $association)
+						{
+							// associations
+							if (isset($this->_resourceConfiguration['associations'][$association->getName()]))
 							{
-								// associations
-								if (isset($this->_resourceConfiguration['associations'][$association->getName()]))
+								$assocItems = $association->children();
+								$values = array();
+								foreach ($assocItems as $assocItem)
 								{
-									$assocItems = $association->children();
-									$values = array();
-									foreach ($assocItems as $assocItem)
-									{
-										$fields = $assocItem->children();
-										$entry = array();
-										foreach ($fields as $fieldName => $fieldValue)
-											$entry[$fieldName] = (string)$fieldValue;
-										$values[] = $entry;
-									}
-									$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
-									if (!is_null($setter) && !$this->_object->$setter($values))
-									{
-										$this->setError(500, 'Error occurred while setting the '.$association->getName().' value');
-										return false;
-									}
+									$fields = $assocItem->children();
+									$entry = array();
+									foreach ($fields as $fieldName => $fieldValue)
+										$entry[$fieldName] = (string)$fieldValue;
+									$values[] = $entry;
 								}
-								elseif ($association->getName() != 'i18n')
+								$setter = $this->_resourceConfiguration['associations'][$association->getName()]['setter'];
+								if (!is_null($setter) && !$this->_object->$setter($values))
 								{
-									$this->setError(400, 'The association "'.$association->getName().'" does not exists');
+									$this->setError(500, 'Error occurred while setting the '.$association->getName().' value');
 									return false;
 								}
 							}
-
+							elseif ($association->getName() != 'i18n')
+							{
+								$this->setError(400, 'The association "'.$association->getName().'" does not exists');
+								return false;
+							}
+						}
+					if (!$this->hasErrors())
+					{
+						$this->setStatus($successReturnCode);
+						return true;
 					}
-					else
-						$this->setError(500, 'Unable to save resource');
 				}
+				else
+					$this->setError(500, 'Unable to save resource');
 			}
-		}
-		if (!$this->hasErrors())
-		{
-			$this->setStatus($successReturnCode);
-			return true;
 		}
 	}
 	
@@ -1124,7 +1082,7 @@ class WebserviceRequest
 		{
 			if ($this->_fieldsToDisplay == 'full' || in_array($key, $this->_fieldsToDisplay))
 			{
-				if ($key != 'id')// && !isset($field['virtual']))//TODO remove this condition
+				if ($key != 'id')//TODO remove this condition
 				{
 					// get the field value with a specific getter
 					if (isset($field['getter']) && $this->_schemaToDisplay != 'blank' && $object != null)
@@ -1163,6 +1121,8 @@ class WebserviceRequest
 							}
 						}
 						
+						
+						
 						$ret .= '</'.$field['sqlId'].'>'."\n";
 					}
 					else
@@ -1170,12 +1130,7 @@ class WebserviceRequest
 						// display not i18n field value
 						$ret .= '<'.$field['sqlId'];
 						if (array_key_exists('xlink_resource', $field) && $this->_schemaToDisplay != 'blank')
-						{
-							if (!is_array($field['xlink_resource']))
-								$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource'].'/'.($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
-							else
-								$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource']['resourceName'].'/'.(isset($field['xlink_resource']['subResourceName']) ? $field['xlink_resource']['subResourceName'].'/'.$object->id.'/' : '').($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
-						}
+							$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource'].'/'.($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
 						if (isset($field['getter']) && $this->_schemaToDisplay != 'blank')
 							$ret .= ' not_filterable="true"';
 						if ($this->_schemaToDisplay == 'synopsis')
@@ -1199,37 +1154,7 @@ class WebserviceRequest
 						$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
 			}
 		}
-		
-		// display virtual fields
-		
-		
-		
-		// specific display virtual fields for product
-		if ($this->_resourceConfiguration['objectNodeName'] == 'product' && isset($this->_urlFragments['price']))
-		{
-			foreach ($this->_urlFragments['price'] as $name => $value)
-			{
-				$id_shop = Shop::getCurrentShop();
-				$id_country = (isset($value['id_country']) ? $value['id_country'] : (int)(Configuration::get('PS_COUNTRY_DEFAULT')));
-				$id_state = (isset($value['id_state']) ? $value['id_state'] : 0);
- 				$id_currency = (isset($value['currency']) ? $value['currency'] : Configuration::get('PS_CURRENCY_DEFAULT'));
-				$id_group = (isset($value['id_group']) ? $value['id_group'] : Configuration::get('_PS_DEFAULT_CUSTOMER_GROUP_'));
-				$quantity = (isset($value['quantity']) ? $value['quantity'] : 1);
-				$use_tax = (isset($value['use_tax']) ? $value['use_tax'] : false);
-				$decimals = (isset($value['decimals']) ? $value['decimals'] : 6);
-				$id_product_attribute = (isset($value['id_product_attribute']) ? $value['id_product_attribute'] : 1);
-				$only_reduc = false;
-				$use_reduc = true; // ?
-				$with_ecotax = true; // ?
-				$specific_price_output = NULL; // ?
-				$divisor = null;
-				$price = Product::priceCalculation($id_shop, $object->id, $id_product_attribute, $id_country, $id_state, $id_currency, $id_group, $quantity, 
-					$use_tax, $decimals, $only_reduc, $use_reduc, $with_ecotax, $specific_price_output, $divisor);
-
-				$price = Tools::ps_round($price, 2);
-				$ret .= '<'.$name.'>'.$price.'</'.$name.'>'."\n";
-			}
-		}
+	
 		
 		// display associations
 		$associationsRet = '';
