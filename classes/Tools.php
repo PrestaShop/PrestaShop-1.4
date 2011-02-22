@@ -1623,7 +1623,35 @@ FileETag INode MTime Size
 		fclose($writeFd);
 		return true;
 	}
-
+	public static function jsonDecode($json)
+	{
+		if (function_exists('json_decode'))
+			return json_decode($json);
+		else
+		{
+			$comment = false;
+			$out = '$x=';
+			
+			for ($i=0; $i<strlen($json); $i++)
+			{
+				if (!$comment)
+				{
+					if (($json[$i] == '{') || ($json[$i] == '['))
+						$out .= ' array(';
+					else if (($json[$i] == '}') || ($json[$i] == ']'))
+						$out .= ')';
+					else if ($json[$i] == ':')
+						$out .= '=>';
+					else
+						$out .= $json[$i];
+				}
+				else $out .= $json[$i];
+				if ($json[$i] == '"' && $json[($i-1)]!="\\")	$comment = !$comment;
+			}
+			eval($out . ';');
+			return $x;
+		}
+	}
 	public static function jsonEncode($json)
 	{
 		if (function_exists('json_encode'))
