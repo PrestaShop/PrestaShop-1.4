@@ -90,6 +90,9 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'shop_url.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'gridextjs_deprecated.php');
 // generate level depth
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'regenerate_level_depth.php');
+// add a new tab
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_new_tab.php');
+
 
 //old version detection
 $oldversion = false;
