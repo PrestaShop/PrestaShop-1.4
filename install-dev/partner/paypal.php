@@ -80,7 +80,7 @@
 	{
 		$url = 'https://www.prestashop.com/partner/preactivation-actions.php?version=1.0&partner=paypal';
 		foreach ($_GET as $key => $val)
-			$url .= '&'.$key.'='.$val;
+			$url .= '&'.$key.'='.urlencode($val);
 		$content = @file_get_contents($url);
 		if ($content)
 			echo $content;
