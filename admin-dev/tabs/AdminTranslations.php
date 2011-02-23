@@ -934,7 +934,8 @@ class AdminTranslations extends AdminTab
 	{
 		global $currentIndex;
 		$_LANG = $this->fileExists(_PS_THEME_DIR_.'lang', Tools::strtolower($lang).'.php', '_LANG');
-
+		$string_output = '';
+		
 		/* List templates to parse */
 		$templates = scandir(_PS_THEME_DIR_);
 		$count = 0;
@@ -942,7 +943,7 @@ class AdminTranslations extends AdminTab
 		foreach ($templates AS $template)
 			if (preg_match('/^(.*).tpl$/', $template) AND file_exists($tpl = _PS_THEME_DIR_.$template))
 			{
-				$template = substr(basename($template), 0, -4);
+				$template2 = substr(basename($template), 0, -4);
 				$newLang = array();
 				$fd = fopen($tpl, 'r');
 				$content = fread($fd, filesize($tpl));
@@ -954,45 +955,59 @@ class AdminTranslations extends AdminTab
 				/* Get string translation */
 				foreach($matches[1] AS $key)
 				{
-					$key2 = $template.'_'.md5($key);
-					$newLang[$key] = (key_exists($key2, $_LANG)) ? html_entity_decode($_LANG[$key2], ENT_COMPAT, 'UTF-8') : '';
+					if(empty($key))
+					{
+						$this->_errors[] = $this->l('Empty string found, please edit:').' <br />'._PS_THEME_DIR_.''.$template;
+						$newLang[$key] = '';
+					}
+					else
+					{
+						$key2 = $template2.'_'.md5($key);
+						$newLang[$key] = (key_exists($key2, $_LANG)) ? html_entity_decode($_LANG[$key2], ENT_COMPAT, 'UTF-8') : '';
+					}
 				}
-				$files[$template] = $newLang;
+				$files[$template2] = $newLang;
 				$count += sizeof($newLang);
 			}
 
-		echo '
+		$string_output .= '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Front-Office translations').'</h2>
 		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />';
 		$this->displayLimitPostWarning($count);
-		echo '
+		$string_output .= '
 		<form method="post" action="'.$currentIndex.'&submitTranslationsFront=1&token='.$this->token.'" class="form">';
-		echo $this->displayToggleButton(sizeof($_LANG) >= $count);
-		echo $this->displayAutoTranslate();
-		echo '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
+		$string_output .= $this->displayToggleButton(sizeof($_LANG) >= $count);
+		$string_output .= $this->displayAutoTranslate();
+		$string_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 		foreach ($files AS $k => $newLang)
 			if (sizeof($newLang))
 			{
 				$countValues = array_count_values($newLang);
 				$empty = isset($countValues['']) ? $countValues[''] : 0;
-			 	echo '
+			 	$string_output .= '
 				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
 					<div name="front_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
 				{
-					echo '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
-					if (strlen($key) < TEXTAREA_SIZED)
-						echo '<input type="text" style="width: 450px" name="'.$k.'_'.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
+					$string_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>';
+					if (strlen($key) != 0 && strlen($key) < TEXTAREA_SIZED)
+						$string_output .= '= <input type="text" style="width: 450px" name="'.$k.'_'.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" />';
+					elseif(strlen($key))
+						$string_output .= '= <textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.'_'.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea>';
 					else
-						echo '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.'_'.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
+						$string_output .= '<span class="error-inline">'.implode(', ', $this->_errors).'</span>';
+					$string_output .= '</td></tr>';
 				}
-				echo '
+				$string_output .= '
 						</table>
 					</div>
 				</fieldset><br />';
 			}
-		echo '<br /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /></form>';
+		$string_output .= '<br /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /></form>';
+		if (!empty($this->_errors))
+			$this->displayErrors();
+		echo $string_output;
 	}
 
 	public function displayFormBack($lang)
@@ -1404,11 +1419,52 @@ class AdminTranslations extends AdminTab
 		{
 			if ($module_dir[0] != '.' AND file_exists(_PS_MODULE_DIR_.$module_dir.'/mails'))
 			{
-				$arr_modules[$module_dir] = _PS_MODULE_DIR_.$module_dir.'/';
+				$arr_modules[$module_dir] = _PS_MODULE_DIR_.$module_dir;
 			}
 			
 		}
 		return $arr_modules;
+	}
+	protected function getTinyMCEForMails($iso_lang)
+	{
+		return '
+			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript">
+				tinyMCE.init({
+					mode : "specific_textareas",
+					editor_deselector : "noEditor",
+					theme : "advanced",
+					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+					// Theme options
+					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
+					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
+					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
+					theme_advanced_toolbar_location : "top",
+					theme_advanced_toolbar_align : "left",
+					theme_advanced_statusbar_location : "bottom",
+					theme_advanced_resizing : false,
+					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+					document_base_url : "'.__PS_BASE_URI__.'",
+					width: "600",
+					height: "600",
+					font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
+					// Drop lists for link/image/media/template dialogs
+					template_external_list_url : "lists/template_list.js",
+					external_link_list_url : "lists/link_list.js",
+					external_image_list_url : "lists/image_list.js",
+					media_external_list_url : "lists/media_list.js",
+					elements : "nourlconvert",
+					entity_encoding: "raw",
+					convert_urls : false,
+					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso_lang.'.js') ? $iso_lang : 'en').'"
+					
+				});
+				function displayTiny(obj) {
+					tinyMCE.get(obj.attr(\'name\')).show();
+				}
+			</script>
+		';
 	}
 	public function displayFormMails($lang, $noDisplay = false)
 	{
@@ -1423,9 +1479,9 @@ class AdminTranslations extends AdminTab
 		$subject_mail = array();
 		$modules_has_mails = $this->getModulesHasMails();
 		$arr_files_to_parse = array(
-			_PS_ROOT_DIR_.'/controllers/',
-			_PS_ROOT_DIR_.'/classes/',
-			PS_ADMIN_DIR.'/tabs/',
+			_PS_ROOT_DIR_.'/controllers',
+			_PS_ROOT_DIR_.'/classes',
+			PS_ADMIN_DIR.'/tabs',
 		);
 		$arr_files_to_parse = array_merge($arr_files_to_parse, $modules_has_mails);
 		foreach ($arr_files_to_parse as $path) {
@@ -1482,47 +1538,11 @@ class AdminTranslations extends AdminTab
 			return array('total' => $total, 'empty' => $empty);
 		}
 
-		// TinyMCE
-		$iso = Language::getIsoById((int)($cookie->id_lang));
-		$str_output .= '
-			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-			<script type="text/javascript">
-				tinyMCE.init({
-					mode : "specific_textareas",
-					editor_deselector : "noEditor",
-					theme : "advanced",
-					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
-					// Theme options
-					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
-					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
-					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
-					theme_advanced_toolbar_location : "top",
-					theme_advanced_toolbar_align : "left",
-					theme_advanced_statusbar_location : "bottom",
-					theme_advanced_resizing : false,
-					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
-					document_base_url : "'.__PS_BASE_URI__.'",
-					width: "600",
-					height: "600",
-					font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
-					// Drop lists for link/image/media/template dialogs
-					template_external_list_url : "lists/template_list.js",
-					external_link_list_url : "lists/link_list.js",
-					external_image_list_url : "lists/image_list.js",
-					media_external_list_url : "lists/media_list.js",
-					elements : "nourlconvert",
-					entity_encoding: "raw",
-					convert_urls : false,
-					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
-					
-				});
-				function displayTiny(obj) {
-					tinyMCE.get(obj.attr(\'name\')).show();
-				}
-			</script>
-		';
 		$obj_lang = new Language(Language::getIdByIso($lang));
+		
+		// TinyMCE
+		$this->getTinyMCEForMails($obj_lang->iso_code);
+		
 		$str_output .= '<!--'.$this->l('Language').'-->';
 		$str_output .= '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('E-mail template translations').'</h2>'
@@ -1580,14 +1600,17 @@ class AdminTranslations extends AdminTab
 				{
 					for ($i = 0 ; isset($tab[1][$i]) ; $i++)
 					{
-							$tab2 = explode(',', $tab[1][$i]);
-							if (is_array($tab2))
+						$tab2 = explode(',', $tab[1][$i]);
+						if (is_array($tab2))
+						{
+							if ($tab2 && isset($tab2[1]))
 							{
 								$tab2[1] = trim(str_replace('\'', '', $tab2[1]));
-								if (preg_match('/Mail::l\(\'(.*)\'\)/s', $tab2[2], $tab3))
+								if (preg_match('/Mail::l\(\''._PS_TRANS_PATTERN_.'\'\)/s', $tab2[2], $tab3))
 									$tab2[2] = $tab3[1];
 								$subject_mail[$tab2[1]] = $tab2[2];
 							}
+						}
 					}
 				}
 			}
