@@ -92,7 +92,7 @@ abstract class PaymentModuleCore extends Module
 	public function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, $secure_key = false)
 	{
 		global $cart;
-	
+
 		$cart = new Cart((int)($id_cart));
 		// Does order already exists ?
 		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() === 0)
@@ -137,7 +137,7 @@ abstract class PaymentModuleCore extends Module
 			// Creating order
 			if ($cart->OrderExists() === 0)
 				$result = $order->add();
-			else 
+			else
 			{
 				$errorMessage = Tools::displayError('An order has already been placed using this cart');
 				Log::addLog($errorMessage, 4, '0000001', 'Cart', intval($order->id_cart));
@@ -225,7 +225,7 @@ abstract class PaymentModuleCore extends Module
 						'.$quantityInStock.',
 						'.(float)(Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod((int)($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice, FALSE)).',
 						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00).',
-						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (!$specificPrice['id_currency'] ? Tools::convertPrice($specificPrice['reduction'], $specificPrice['id_currency']) : $specificPrice['reduction']) : 0.00).',
+						'.(float)(($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (!$specificPrice['id_currency'] ? Tools::convertPrice($specificPrice['reduction'], $order->id_currency) : $specificPrice['reduction']) : 0.00).',
 						'.(float)(Group::getReduction((int)($order->id_customer))).',
 						'.$quantityDiscountValue.',
 						'.(empty($product['ean13']) ? 'NULL' : '\''.pSQL($product['ean13']).'\'').',
@@ -286,13 +286,13 @@ abstract class PaymentModuleCore extends Module
 					$value = $objDiscount->getValue(sizeof($discounts), $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS), $order->total_shipping, $cart->id);
 					if ($objDiscount->id_discount_type == 2 AND in_array($objDiscount->behavior_not_exhausted, array(1,2)))
 						$shrunk = true;
-					
+
 					if ($shrunk AND ($total_discount_value + $value) > ($order->total_products + $order->total_shipping + $order->total_wrapping))
 					{
 						$amount_to_add = ($order->total_products + $order->total_shipping + $order->total_wrapping) - $total_discount_value;
 						if ($objDiscount->id_discount_type == 2 AND $objDiscount->behavior_not_exhausted == 2)
 						{
-							$voucher = new Discount();	
+							$voucher = new Discount();
 							foreach ($objDiscount AS $key => $discountValue)
 								$voucher->$key = $discountValue;
 							$voucher->name = 'VSRK'.(int)$order->id_customer.'O'.(int)$order->id;
@@ -437,7 +437,7 @@ abstract class PaymentModuleCore extends Module
 		}
 	}
 
-	
+
 	/**
 	 * @param int $id_currency : this parameter is optionnal but on 1.5 version of Prestashop, it will be REQUIRED
 	 * @return Currency
@@ -476,3 +476,4 @@ abstract class PaymentModuleCore extends Module
 		return (new Currency($id_currency));
 	}
 }
+
