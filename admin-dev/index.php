@@ -49,20 +49,20 @@ if ($tab)
 				? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">'
 				: '').'
 			'.$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
-		
+
 		echo'<script type="text/javascript">
-	  
+
 		$(function() {
 			$.ajax({
 				type: \'POST\',
 				url: \'ajax.php\',
-				data: \'helpAccess=1&item='.$item['class_name'].'&isoUser='.$isoUser.'&country='.$country->iso_code.'\',
+				data: \'helpAccess=1&item='.$item['class_name'].'&isoUser='.$isoUser.'&country='.$country->iso_code.'&version='._PS_VERSION_.'\',
 				async : true,
 				success: function(msg) { $("#help-button").html(msg); }
 			});
 		});</script>';
-				
-				
+
+
 		echo '<div class="path_bar">
 		<div id="help-button" class="floatr" style="font-family: Verdana; font-size: 10px; margin-right: 4px; margin-top: 4px;">
 		</div>
@@ -106,14 +106,14 @@ if ($tab)
 			{
 				// If this is an XSS attempt, then we should only display a simple, secure page
 				ob_clean();
-				
+
 				// ${1} in the replacement string of the regexp is required, because the token may begin with a number and mix up with it (e.g. $17)
 				$url = preg_replace('/([&?]token=)[^&]*(&.*)?$/', '${1}'.$adminObj->token.'$2', $_SERVER['REQUEST_URI']);
 				if (false === strpos($url, '?token=') AND false === strpos($url, '&token='))
 					$url .= '&token='.$adminObj->token;
-				
+
 				$message = translate('Invalid security token');
-				echo '<html><head><title>'.$message.'</title></head><body style="font-family:Arial,Verdana,Helvetica,sans-serif;background-color:#EC8686">				
+				echo '<html><head><title>'.$message.'</title></head><body style="font-family:Arial,Verdana,Helvetica,sans-serif;background-color:#EC8686">
 					<div style="background-color:#FAE2E3;border:1px solid #000000;color:#383838;font-weight:700;line-height:20px;margin:0 0 10px;padding:10px 15px;width:500px">
 						<img src="../img/admin/error2.png" style="margin:-4px 5px 0 0;vertical-align:middle">
 						'.$message.'
@@ -185,12 +185,12 @@ else /* Else display homepage */
 		});
 		</script>
 		<div class="clear"></div><br />';
-	
+
 	if (Tools::isSubmit('hideOptimizationTips'))
 		Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 1);
 	elseif (!Configuration::get('PS_HIDE_OPTIMIZATION_TIPS'))
 		displayOptimizationTips();
-	
+
 	echo '
 	<div id="column_left">
 		<ul class="F_list clearfix">
@@ -396,3 +396,4 @@ else /* Else display homepage */
 }
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
+
