@@ -92,7 +92,7 @@ define('_PS_FPDF_PATH_',            _PS_TOOL_DIR_.'fpdf/');
 define('_PS_PEAR_XML_PARSER_PATH_', _PS_TOOL_DIR_.'pear_xml_parser/');
 
 /* settings php */
-define('_PS_TRANS_PATTERN_',            '(.*[^\\\\])');
+define('_PS_TRANS_PATTERN_',            '(.*[^\\\\]?)');
 define('_PS_MIN_TIME_GENERATE_PASSWD_', '360');
 
 define('_CAN_LOAD_FILES_', 1);
