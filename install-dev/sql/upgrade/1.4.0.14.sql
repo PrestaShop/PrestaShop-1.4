@@ -9,3 +9,14 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 ('BLOCKSTORE_IMG', 'store.jpg', NOW(), NOW()),
 ('PS_STORES_CENTER_LAT', '25.948969', NOW(), NOW()),
 ('PS_STORES_CENTER_LONG', '-80.226439', NOW(), NOW());
+
+/* PHP:add_new_tab(AdminInformation, Informations, 9); */;
+/* PHP:add_new_tab(AdminPerformance, Performance, 8); */;
+/* PHP:add_new_tab(AdminCustomerThreads, Customer Service, 29); */;
+/* PHP:add_new_tab(AdminWebservice, Web service, 8); */;
+/* PHP:add_new_tab(AdminAddonsCatalog, Modules & themes catalog, 7); */;
+/* PHP:add_new_tab(AdminAddonsMyAccount, My Account, 7); */;
+/* PHP:add_new_tab(AdminThemes, Themes, 7); */;
+/* PHP:add_new_tab(AdminGeolocalization, Geolocalization, 8); */;
+/* PHP:add_new_tab(AdminTaxRulesGroup, Taxes Rules, 4); */;
+/* PHP:add_new_tab(AdminLogs, Log, 9); */;

@@ -28,21 +28,21 @@
 function add_new_tab($className, $name, $id_parent)
 {
 	
-	Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tab` (`id_parent`, `class_name`, `module`, `position`) VALUES ('.(int)$id_parent.', \''.pSQL($className).'\', \'\', 
-								(SELECT MAX(t.position)+ 1 FROM `'._DB_PREFIX_.'tab` t WHERE t.id_parent = '.(int)$id_parent.'))');
-	
-	
-	Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tab_lang` (`id_lang`, `id_tab`, `name`) 
+	if (!(int)Db::getInstance()->getValue('SELECT count(id_tab) FROM `'._DB_PREFIX_.'tab` WHERE `class_name` = \''.pSQL($className).'\' '))
+		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tab` (`id_parent`, `class_name`, `module`, `position`) VALUES ('.(int)$id_parent.', \''.pSQL($className).'\', \'\', 
+									(SELECT MAX(t.position)+ 1 FROM `'._DB_PREFIX_.'tab` t WHERE t.id_parent = '.(int)$id_parent.'))');
+		
+	Db::getInstance()->Execute('INSERT IGNORE INTO `'._DB_PREFIX_.'tab_lang` (`id_lang`, `id_tab`, `name`) 
 								(SELECT `id_lang`, (
 								SELECT `id_tab`
 								FROM `'._DB_PREFIX_.'tab`
 								WHERE `class_name` = \''.pSQL($className).'\' LIMIT 0,1
-								), \''.pSQL($name).'\' FROM `'._DB_PREFIX_.'lang`)');
-	
-	Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) 
+								), \''.pSQL($name).'\' FROM `'._DB_PREFIX_.'lang`) ');
+								
+	Db::getInstance()->Execute('INSERT IGNORE INTO `'._DB_PREFIX_.'access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) 
 								(SELECT `id_profile`, (
-									SELECT `id_tab`
-									FROM `'._DB_PREFIX_.'tab`
-									WHERE `class_name` = \''.pSQL($className).'\' LIMIT 0,1
+								SELECT `id_tab`
+								FROM `'._DB_PREFIX_.'tab`
+								WHERE `class_name` = \''.pSQL($className).'\' LIMIT 0,1
 								), 1, 1, 1, 1 FROM `'._DB_PREFIX_.'profile` )');
 }

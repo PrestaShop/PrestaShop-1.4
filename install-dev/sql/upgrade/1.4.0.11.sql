@@ -9,31 +9,6 @@ NOW()
 
 DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_INVOICE_NUMBER';
 
-INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (9, 'AdminLogs', '', 13);
-INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
-	SELECT `id_tab`
-	FROM `PREFIX_tab`
-	WHERE `class_name` = 'AdminLogs'
-), 'Log');
-INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
-	SELECT `id_tab`
-	FROM `PREFIX_tab`
-	WHERE `class_name` = 'AdminLogs'
-), 'Log');
-INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
-	SELECT `id_tab`
-	FROM `PREFIX_tab`
-	WHERE `class_name` = 'AdminLogs'
-), 'Log');
-
-INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
-	SELECT `id_profile`, (
-		SELECT `id_tab`
-		FROM `PREFIX_tab`
-		WHERE `class_name` = 'AdminLogs'
-	), 1, 1, 1, 1 FROM `PREFIX_profile`
-);
-
 CREATE TABLE `PREFIX_log` (
 	`id_log` int(10) unsigned NOT NULL AUTO_INCREMENT,
 	`severity` tinyint(1) NOT NULL,
@@ -58,3 +33,4 @@ CREATE TABLE `PREFIX_import_match` (
   PRIMARY KEY (`id_import_match`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
+/* PHP:add_new_tab(AdminLogs, Log, 9); */;

@@ -27,31 +27,6 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 'AF;ZA;AX;AL;DZ;DE;AD;AO;AI;AQ;AG;AN;SA;AR;AM;AW;AU;AT;AZ;BS;BH;BD;BB;BY;BE;BZ;BJ;BM;BT;BO;BA;BW;BV;BR;BN;BG;BF;MM;BI;KY;KH;CM;CA;CV;CF;CL;CN;CX;CY;CC;CO;KM;CG;CD;CK;KR;KP;CR;CI;HR;CU;DK;DJ;DM;EG;IE;SV;AE;EC;ER;ES;EE;ET;FK;FO;FJ;FI;FR;GA;GM;GE;GS;GH;GI;GR;GD;GL;GP;GU;GT;GG;GN;GQ;GW;GY;GF;HT;HM;HN;HK;HU;IM;MU;VG;VI;IN;ID;IR;IQ;IS;IL;IT;JM;JP;JE;JO;KZ;KE;KG;KI;KW;LA;LS;LV;LB;LR;LY;LI;LT;LU;MO;MK;MG;MY;MW;MV;ML;MT;MP;MA;MH;MQ;MR;YT;MX;FM;MD;MC;MN;ME;MS;MZ;NA;NR;NP;NI;NE;NG;NU;NF;NO;NC;NZ;IO;OM;UG;UZ;PK;PW;PS;PA;PG;PY;NL;PE;PH;PN;PL;PF;PR;PT;QA;DO;CZ;RE;RO;UK;RU;RW;EH;BL;KN;SM;MF;PM;VA;VC;LC;SB;WS;AS;ST;SN;RS;SC;SL;SG;SK;SI;SO;SD;LK;SE;CH;SR;SJ;SZ;SY;TJ;TW;TZ;TD;TF;TH;TL;TG;TK;TO;TT;TN;TM;TC;TR;TV;UA;UY;US;VU;VE;VN;WF;YE;ZM;ZW', NOW(), NOW()),
 ('PS_GEOLOCALIZATION_BEHAVIOR', '0', NOW(), NOW());
 
-INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (8, 'AdminGeolocalization', '', 12);
-INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (1, (
-	SELECT `id_tab`
-	FROM `PREFIX_tab`
-	WHERE `class_name` = 'AdminGeolocalization'
-), 'Geolocalization');
-INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (2, (
-	SELECT `id_tab`
-	FROM `PREFIX_tab`
-	WHERE `class_name` = 'AdminGeolocalization'
-), 'Geolocalisation');
-INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES (3, (
-	SELECT `id_tab`
-	FROM `PREFIX_tab`
-	WHERE `class_name` = 'AdminGeolocalization'
-), 'Geolocalización');
-
-INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (
-	SELECT `id_profile`, (
-		SELECT `id_tab`
-		FROM `PREFIX_tab`
-		WHERE `class_name` = 'AdminGeolocalization'
-	), 1, 1, 1, 1 FROM `PREFIX_profile`
-);
-
 ALTER TABLE `PREFIX_orders` ADD `conversion_rate` decimal(13,6) NOT NULL default 1 AFTER `payment`;
 UPDATE `PREFIX_orders` o SET o.`conversion_rate` = (
 	SELECT c.`conversion_rate`
@@ -89,3 +64,4 @@ ALTER TABLE `PREFIX_country` ADD `id_currency` INT NOT NULL DEFAULT '0' AFTER `i
 /* PHP:group_reduction_column_fix(); */;
 /* PHP:ecotax_tax_application_fix(); */;
 /* PHP:alter_cms_block(); */;
+/* PHP:add_new_tab(AdminGeolocalization, Geolocalization, 8); */;

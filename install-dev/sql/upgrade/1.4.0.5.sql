@@ -57,30 +57,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_help_access` (
   UNIQUE KEY `label` (`label`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
-
-INSERT INTO `PREFIX_tab` (id_parent, class_name, position)
-VALUES
-(
-(SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPayment' LIMIT 1) AS tmp), 'AdminTaxRulesGroup', (SELECT tmp.max FROM (SELECT MAX(position) + 1  max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPayment' LIMIT 1) AS tmp )) AS tmp)
-);
-
-
-INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
-	SELECT id_lang,
-	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminTaxRulesGroup' LIMIT 1),
-	'Taxes Rules' FROM PREFIX_lang);
-
-UPDATE `PREFIX_tab_lang` SET `name` = 'Règles de taxes'
-	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminTaxRulesGroup')
-	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
-
-UPDATE `PREFIX_tab_lang` SET `name` = 'Reglas de Impuestos'
-	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminTaxRulesGroup')
-	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'es');
-
-INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) VALUES (1,(SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminTaxRulesGroup'),1,1,1,1);
-
-
+/* PHP:add_new_tab(AdminTaxRulesGroup, Taxes Rules, 4); */;
 /* PHP:generate_ntree(); */;
 /* PHP:generate_tax_rules(); */;
 /* PHP:id_currency_country_fix(); */;
