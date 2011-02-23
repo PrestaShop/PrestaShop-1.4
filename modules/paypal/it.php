@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{paypal}prestashop>column_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Paga con PayPal';
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
 $_MODULE['<{paypal}prestashop>paypal_1a17a28936876aa0f3bb4bf98c35be38'] = 'Si accettano pagamenti con carte di credito e prepagate (Visa, MasterCard, Amex, Aurora) associate al conto PayPal';
 $_MODULE['<{paypal}prestashop>paypal_9cf03969a2efb05f3a671fc87c7d2203'] = 'Per RIMUOVERE questo avviso, disinstalla e rimuovi il modulo PayPalAPI';

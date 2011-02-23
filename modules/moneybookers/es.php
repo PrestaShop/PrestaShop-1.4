@@ -11,8 +11,6 @@ $_MODULE['<{moneybookers}prestashop>confirmation_df194447dfecf36bb8043bd8d94feed
 $_MODULE['<{moneybookers}prestashop>confirmation_047e219d25b398033511b18041dbfd7a'] = 'Su pedido será enviado tan pronto como recibamos su transferencia bancaria.';
 $_MODULE['<{moneybookers}prestashop>confirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nos hemos dado cuenta de un problema con su pedido.  Si usted piensa que esto es un error, puede contactar con nuestro';
 $_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'rnNo puede efectuar el pago de su pedido con Moneybookers ya que su divisa actual no está autorizada. Por favor, elija otra.';
-$_MODULE['<{moneybookers}prestashop>moneybookers-form_25065e3ef9274f9b0e3088340f6d79e6'] = 'Pagar con tarjeta de crédito';
-$_MODULE['<{moneybookers}prestashop>moneybookers-form_2cc66b7b26e92326afa76a021442330e'] = 'Pagar con el monedero electrónico MoneyBookers (eWallet)';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28c'] = 'Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_07bf11ff6eaf27b8aa91f42d7fb4200c'] = 'Acepta pagos por Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de que quiere eliminar sus datos?';

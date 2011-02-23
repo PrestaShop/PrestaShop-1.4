@@ -9,6 +9,10 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_a9db6adcdafc85c5830439401fd866f
 $_MODULE['<{shopimporter}prestashop>shopimporter_5c9ada346bd1c8b1adae50aec0e7437c'] = 'Los nuevos idiomas añadirán automáticamente las traducciones';
 $_MODULE['<{shopimporter}prestashop>shopimporter_386c339d37e737a436499d423a77df0c'] = 'Divisa';
 $_MODULE['<{shopimporter}prestashop>shopimporter_4234c64201820401dfa04eeb449c1bbc'] = 'Import de las divisas';
+$_MODULE['<{shopimporter}prestashop>shopimporter_719fec04166d6fa75f89cd29ad61fa8c'] = 'Impuestos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_94c5ffc9d364127b232f58b4cfd8c88a'] = 'Importar los impuestos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_d3352014303b292984466bbb1da371db'] = 'TaxesRules';
+$_MODULE['<{shopimporter}prestashop>shopimporter_6ec25fc9cc7df7b0d1fce57923f46ec1'] = 'Importar Taxes Rules';
 $_MODULE['<{shopimporter}prestashop>shopimporter_b3ff996fe5c77610359114835baf9b38'] = 'Zona';
 $_MODULE['<{shopimporter}prestashop>shopimporter_21d250d17e35e3e02db9f1a618bad913'] = 'Import de las zonas';
 $_MODULE['<{shopimporter}prestashop>shopimporter_59716c97497eb9694541f7c3d37b1a4d'] = 'País';
@@ -21,8 +25,6 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_ce26601dac0dea138b7295f02b7620a
 $_MODULE['<{shopimporter}prestashop>shopimporter_22c34564e80ce8adab6a235061d277f4'] = 'Import de los clientes';
 $_MODULE['<{shopimporter}prestashop>shopimporter_dd7bf230fde8d4836917806aff6a6b27'] = 'Dirección';
 $_MODULE['<{shopimporter}prestashop>shopimporter_77497d022aeb4cdd78ec394ca8d223b4'] = 'Import de las direcciones';
-$_MODULE['<{shopimporter}prestashop>shopimporter_a240fa27925a635b08dc28c9e4f9216d'] = 'Pedido';
-$_MODULE['<{shopimporter}prestashop>shopimporter_3b7e768ebab2171baa41d5ea13017b02'] = 'Import de los pedidos';
 $_MODULE['<{shopimporter}prestashop>shopimporter_c0bd7654d5b278e65f21cf4e9153fdb4'] = 'Fabricante';
 $_MODULE['<{shopimporter}prestashop>shopimporter_ed4cbbbeb3d575ccfeb405ae5c5c4d43'] = 'Import de los fabricantes';
 $_MODULE['<{shopimporter}prestashop>shopimporter_ec136b444eede3bc85639fac0dd06229'] = 'Proveedor';
@@ -37,6 +39,12 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_deb10517653c255364175796ace3553
 $_MODULE['<{shopimporter}prestashop>shopimporter_4bfc4a7632bae0877b798dbd9efc4f70'] = 'Import de los productos';
 $_MODULE['<{shopimporter}prestashop>shopimporter_47ac923d219501859fb68fed8c8db77b'] = 'Combinación';
 $_MODULE['<{shopimporter}prestashop>shopimporter_58e2fcec5e04716c627b3e8b9d2955b1'] = 'Import de las declinaciones de los productos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_b3df6b363e7979ce81b71d92961fc672'] = 'Estados de los pedidos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_6b24bd15b10bc10de9687f16ebe728e4'] = 'Import des estado de los pedidos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_a240fa27925a635b08dc28c9e4f9216d'] = 'Pedido';
+$_MODULE['<{shopimporter}prestashop>shopimporter_3b7e768ebab2171baa41d5ea13017b02'] = 'Import de los pedidos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_582602d7c6762c923cf7fce178b94e1a'] = 'Historial de los pedidos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_f2931b8b1622867fcc461d7de388e319'] = 'Import del historial de los pedidos';
 $_MODULE['<{shopimporter}prestashop>shopimporter_32a6deec3cca312a54d6b8769c9b8dd7'] = 'no se encuentra disponible en este módulo';
 $_MODULE['<{shopimporter}prestashop>shopimporter_1e411d25230ba738b9ae583bcb9b0b57'] = 'Connexión a la base de datos OK';
 $_MODULE['<{shopimporter}prestashop>shopimporter_3596c777cbc8b72d678f34daabc9148b'] = 'Mostrar los errores';
@@ -60,6 +68,8 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_2bb4cbbf4c51025867d47131e79ad05
 $_MODULE['<{shopimporter}prestashop>shopimporter_72dd98a453e92ccc01697f29bb5dbeb9'] = 'Opción de import';
 $_MODULE['<{shopimporter}prestashop>shopimporter_9dfc5d5738312210c3c75e68a468691d'] = 'Opciones avanzadas';
 $_MODULE['<{shopimporter}prestashop>shopimporter_c195d4db1be0d349d21f236f0a6400ff'] = 'Este modo no es aconsejable';
+$_MODULE['<{shopimporter}prestashop>shopimporter_11e9fa925cb444a223769edd53334f13'] = 'Importar para';
+$_MODULE['<{shopimporter}prestashop>shopimporter_70fda5850e8d8946a340c55bf985fd39'] = 'Seleccionar el número de ocurrencias para cada consulta para importar';
 $_MODULE['<{shopimporter}prestashop>shopimporter_1404aa04467659fbadad2a7dd1a279b3'] = 'Si hay errores';
 $_MODULE['<{shopimporter}prestashop>shopimporter_11a755d598c0c417f9a36758c3da7481'] = 'Stop';
 $_MODULE['<{shopimporter}prestashop>shopimporter_72ef2b9b6965d078e3c7f95487a82d1c'] = 'Saltar';

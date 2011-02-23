@@ -90,6 +90,7 @@ $_ERRORS['7d3f071e2825ec56f80c881d56fb3c7c'] = 'Error: esta pedido ya está vali
 $_ERRORS['45ebc64529137a007889ee445d64611c'] = 'Falló la actualización de posición';
 $_ERRORS['5fe3a5b7465abb742a1b93a6037384fa'] = 'Error fatal: id_transacción es nulo';
 $_ERRORS['d18dd4bd1531c9c45a85d757e1b4641b'] = 'Error fatal: ';
+$_ERRORS['d194b022bc5a1a01657823aaccd45e9b'] = 'Error fatal: el código iso no es correcto:';
 $_ERRORS['9b3261577a34cd7c48ad83d80295ff09'] = 'Error fatal: “Ningún transportador por defecto”';
 $_ERRORS['411ec6016c7845e0c49fb51160a12677'] = 'Error fatal: el directorio de módulos no se encuentra aquí';
 $_ERRORS['6f268ac84ce6195ecf4e3dfe437e2aee'] = 'Error fatal: No hay clientes';
