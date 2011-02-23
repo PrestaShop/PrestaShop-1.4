@@ -246,10 +246,10 @@ class CategoryCore extends ObjectModel
 
 		/* Delete category and its child from database */
 		$list = sizeof($toDelete) > 1 ? implode(',', $toDelete) : (int)($this->id);
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE `id_category` IN ('.$list.')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.$list.')');
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` IN ('.$list.')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.pSQL($list).')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE `id_category` IN ('.pSQL($list).')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.pSQL($list).')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` IN ('.pSQL($list).')');
 
 		self::cleanPositions($this->id_parent);
 
@@ -498,7 +498,7 @@ class CategoryCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
 		WHERE cp.`id_category` = '.(int)($this->id).($active ? ' AND p.`active` = 1' : '').'
-		'.($id_supplier ? 'AND p.id_supplier = '.$id_supplier : '');
+		'.($id_supplier ? 'AND p.id_supplier = '.(int)$id_supplier : '');
 
 		if ($random === true)
 		{
@@ -712,13 +712,12 @@ class CategoryCore extends ObjectModel
 		$idCurrent = (int)($this->id);
 		while (true)
 		{
-			$query = '
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT c.*, cl.*
 				FROM `'._DB_PREFIX_.'category` c
 				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($idLang).')
-				WHERE c.`id_category` = '.$idCurrent.' AND c.`id_parent` != 0
-			';
-			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
+				WHERE c.`id_category` = '.(int)$idCurrent.' AND c.`id_parent` != 0
+			');
 
 			$categories[] = $result[0];
 			if(!$result OR $result[0]['id_parent'] == 1)
