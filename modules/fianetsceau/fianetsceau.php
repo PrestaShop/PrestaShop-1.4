@@ -32,7 +32,7 @@ class FianetSceau extends Module
 	function __construct()
 	{
 	 	$this->name = 'fianetsceau';
-	 	$this->tab = 'seo';
+	 	$this->tab = 'front_office_features';
 	 	$this->version = '1.0';
 		$this->limited_countries = array('fr');
 		
