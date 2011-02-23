@@ -57,7 +57,7 @@ class GroupCore extends ObjectModel
 	protected 	$table = 'group';
 	protected 	$identifier = 'id_group';
 
-	protected static $_customerReduction = array();
+	protected static $_cacheReduction = array();
 	protected static $_groupPriceDisplayMethod = array();
 	
 	protected	$webserviceParameters = array();
@@ -106,16 +106,28 @@ class GroupCore extends ObjectModel
 	{
 		if ($id_customer === NULL)
 			$id_customer = 0;
-		if (!isset(self::$_customerReduction[$id_customer]))
+		if (!isset(self::$_cacheReduction['customer'][$id_customer]))
 		{
 			if ($id_customer)
 				$customer = new Customer((int)($id_customer));
-			self::$_customerReduction[$id_customer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			self::$_cacheReduction['customer'][$id_customer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT `reduction`
 			FROM `'._DB_PREFIX_.'group`
 			WHERE `id_group` = '.((isset($customer) AND Validate::isLoadedObject($customer)) ? (int)($customer->id_default_group) : 1));
 		}
-		return self::$_customerReduction[$id_customer];
+		return self::$_cacheReduction['customer'][$id_customer];
+	}
+
+	public static function getReductionByIdGroup($id_group)
+	{
+		if (!isset(self::$_cacheReduction['group'][$id_group]))
+		{
+			self::$_cacheReduction['group'][$id_group] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `reduction`
+			FROM `'._DB_PREFIX_.'group`
+			WHERE `id_group` = '.$id_group);
+		}
+		return self::$_cacheReduction['group'][$id_group];
 	}
 
 	static public function getPriceDisplayMethod($id_group)

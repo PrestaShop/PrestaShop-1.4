@@ -255,13 +255,16 @@ class ProductCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
+			'id_manufacturer' => array('xlink_resource' => 'manufacturers'),
+			'id_supplier' => array('xlink_resource' => 'suppliers'),
+			'id_category_default' => array('xlink_resource' => 'categories'),
 			'out_of_stock' => array('required' => true),
 			'new' => array(),
 			'cache_default_attribute' => array(),
 		),
 		'associations' => array(
-			'categories' => array('resource' => 'category', 'fields' => array('id' =>
-				array('required' => true),
+			'categories' => array('resource' => 'category', 'fields' => array(
+				'id' => array('required' => true),
 			)),
 		),
 	);
@@ -450,7 +453,7 @@ class ProductCore extends ObjectModel
 	 * Reorder product position in category $id_category.
 	 * Call it after deleting a product from a category.
 	 *
-	 * @param int $id_category 
+	 * @param int $id_category
 	 */
 	public static function cleanPositions($id_category)
 	{
@@ -575,7 +578,7 @@ class ProductCore extends ObjectModel
 
 	/**
 	 * addToCategories add this product to the category/ies if not exists.
-	 * 
+	 *
 	 * @param mixed $categories id_category or array of id_category
 	 * @return boolean true if succeed
 	 */
@@ -594,8 +597,8 @@ class ProductCore extends ObjectModel
 
 		// for new categ, put product at last position
 		$resCategNewPos = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql='SELECT id_category, MAX(position)+1 newPos
-			FROM `'._DB_PREFIX_.'category_product` 
-			WHERE `id_category` IN('.implode(',', array_map('intval', $categories)).') 
+			FROM `'._DB_PREFIX_.'category_product`
+			WHERE `id_category` IN('.implode(',', array_map('intval', $categories)).')
 			GROUP BY id_category');
 		foreach ($resCategNewPos as $array)
 		{
@@ -651,9 +654,9 @@ class ProductCore extends ObjectModel
 
 	/**
 	 * deleteCategory delete this product from the category $id_category
-	 * 
-	 * @param mixed $id_category 
-	 * @param mixed $cleanPositions 
+	 *
+	 * @param mixed $id_category
+	 * @param mixed $cleanPositions
 	 * @return boolean
 	 */
 	public function deleteCategory($id_category, $cleanPositions = true)
@@ -674,11 +677,13 @@ class ProductCore extends ObjectModel
 	*/
 	public function deleteCategories($cleanPositions = false)
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));
 		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));
 		if ($cleanPositions === true)
-			foreach ($result AS $row)
+		{
+			$result = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));
+			foreach($result AS $row)
 				$this->cleanPositions((int)($row['id_category']));
+		}
 		return $return;
 	}
 
@@ -1509,10 +1514,10 @@ class ProductCore extends ObjectModel
 		return Product::getProductsProperties($id_lang, $result);
 	}
 
-	
+
 	/**
 	 * getProductCategories return an array of categories which this product belongs to
-	 * 
+	 *
 	 * @return array of categories
 	 */
 	public static function getProductCategories($id_product = '')
@@ -1531,7 +1536,7 @@ class ProductCore extends ObjectModel
 
 	/**
 	 * getCategories return an array of categories which this product belongs to
-	 * 
+	 *
 	 * @return array of categories
 	 */
 	public function getCategories()
@@ -1630,17 +1635,6 @@ class ProductCore extends ObjectModel
 		return isset($ret) ? $ret : 0;
 	}
 
-	public static function applyEcotax(&$price, $ecotax, $usetax, $id_address, $currency = NULL)
-	{
-		if ($currency)
-			$ecotax = Tools::convertPrice($ecotax, $currency);
-
-		if ($usetax AND $taxRate = Tax::getProductEcotaxRate($id_address))
-			$price += $ecotax * (1 + $taxRate / 100);
-		else
-			$price += $ecotax;
-	}
-
 	/**
 	* Get product price
 	*
@@ -1660,7 +1654,8 @@ class ProductCore extends ObjectModel
 	* @param boolean $with_ecotax insert ecotax in price output.
 	* @return float Product price
 	*/
-	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false, $usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = TRUE)
+	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false,
+	$usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = TRUE)
 	{
    		global $cookie, $cart;
         $cur_cart = $cart;
@@ -1704,14 +1699,53 @@ class ProductCore extends ObjectModel
 			$usetax = false;
 
         $id_country = (int)Country::getDefaultCountryId();
+		$id_state = 0;
+
 
 		$address_infos = Address::getCountryAndState($id_address);
 		if ($address_infos['id_country'])
+		{
 			$id_country = (int)($address_infos['id_country']);
+			$id_state = (int)($address_infos['id_state']);
+		}
+
+		if ($usetax != false AND !empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
+			$usetax = false;
 
 		$id_shop = (int)(Shop::getCurrentShop());
-		// END Initialization
-		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity.'-'.($id_product_attribute === NULL ? 'NULL' : ($id_product_attribute === false ? 'false' : $id_product_attribute)).'-'.($usetax?'1':'0').'-'.$decimals.'-'.$divisor.'-'.($only_reduc?'1':'0').'-'.($usereduc?'1':'0');
+
+		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, 0, $id_state, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
+		$usereduc, $with_ecotax, $specificPriceOutput);
+	}
+
+	/**
+	* Price calculation / Get product price
+	*
+	* @param integer $id_shop Shop id
+	* @param integer $id_product Product id
+	* @param integer $id_product_attribute Product attribute id
+	* @param integer $id_country Country id
+	* @param integer $id_state State id
+	* @param integer $id_currency Currency id
+	* @param integer $id_group Group id
+	* @param integer $quantity Quantity Required for Specific prices : quantity discount application
+	* @param boolean $use_tax with (1) or without (0) tax
+	* @param integer $decimals Number of decimals returned
+	* @param boolean $only_reduc Returns only the reduction amount
+	* @param boolean $use_reduc Set if the returned amount will include reduction
+	* @param boolean $with_ecotax insert ecotax in price output.
+	* @param variable_reference $specific_price_output If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object
+	* @return float Product price
+	**/
+	public static function priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $use_tax, $decimals, $only_reduc, $use_reduc, $with_ecotax, &$specific_price_output)
+	{
+		// Caching
+		if ($id_product_attribute === NULL)
+			$product_attribute_label = 'NULL';
+		else
+			$product_attribute_label = ($id_product_attribute === false ? 'false' : $id_product_attribute);
+		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity.'-'.$product_attribute_label.'-'.($use_tax?'1':'0').'-'.$decimals.'-'.($only_reduc?'1':'0').'-'.($use_reduc?'1':'0');
+
 		if (isset(self::$_prices[$cacheId]))
 			return self::$_prices[$cacheId];
 
@@ -1725,6 +1759,9 @@ class ProductCore extends ObjectModel
 			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.(int)($id_product_attribute) : '').'
 			WHERE p.`id_product` = '.(int)($id_product));
 		$result = self::$_pricesLevel2[$cacheId2];
+
+
+		// Cache for specific prices
 		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
 
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
@@ -1737,20 +1774,26 @@ class ProductCore extends ObjectModel
 	    if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
 
-		$specificPriceOutput = $specific_price;
+		// Parameter passed by ref
+		$specific_price_output = $specific_price;
 		// Attribute price
 		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0, $id_currency);
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
-		$tax_rate = Tax::getProductTaxRate((int)$id_product, $id_address);
 
-		if ($usetax)
+		// TaxRate calculation
+		$tax_rate = Tax::getProductTaxRateViaRules((int)$id_product, (int)$id_country, (int)$id_state, (int)$id_county);
+		if ($tax_rate === false)
+			$tax_rate = 0;
+
+		// Add Tax
+		if ($use_tax)
 			$price = $price * (1 + ($tax_rate / 100));
 		$price = Tools::ps_round($price, $decimals);
 
 		// Reduction
 		$reduc = 0;
-		if (($only_reduc OR $usereduc) AND $specific_price)
+		if (($only_reduc OR $use_reduc) AND $specific_price)
 		{
 		    if ($specific_price['reduction_type'] == 'amount')
 		    {
@@ -1758,30 +1801,40 @@ class ProductCore extends ObjectModel
 
 		        if (!$specific_price['id_currency'])
 		            $reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
-
-		        $reduc = Tools::ps_round((self::$_taxCalculationMethod == PS_TAX_EXC OR !$usetax) ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, 2);
-		    } else {
-		        $reduc = Tools::ps_round($price * $specific_price['reduction'], 2);
+		        $reduc = Tools::ps_round(!$use_tax ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, 2);
 		    }
+			else
+		        $reduc = Tools::ps_round($price * $specific_price['reduction'], 2);
 		}
 
 		if ($only_reduc)
 			return $reduc;
 
-		if ($usereduc)
+		if ($use_reduc)
 			$price -= $reduc;
 
 		// Group reduction
 		if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
-		else if ($usereduc) // apply group reduction if there is no group reduction for this category
-			$price *= ((100 - Group::getReduction($id_customer)) / 100);
+		else if ($use_reduc) // apply group reduction if there is no group reduction for this category
+			$price *= ((100 - Group::getReductionByIdGroup($id_group)) / 100);
 
-		$price = ($divisor AND $divisor != NULL) ? $price/$divisor : $price;
 		$price = Tools::ps_round($price, $decimals);
 
-		if($result['ecotax'] AND $with_ecotax)
-   			self::applyEcotax($price, $result['ecotax'], $usetax, $id_address ? (int)$id_address : NULL, Currency::getCurrencyInstance($id_currency));
+		// Eco Tax
+		if ($result['ecotax'] AND $with_ecotax)
+		{
+			$ecotax = $result['ecotax'];
+			if ($id_currency)
+				$ecotax = Tools::convertPrice($ecotax, $id_currency);
+			if ($use_tax)
+			{
+				$taxRate = TaxRulesGroup::getTaxesRate((int)Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID'), (int)$id_country, (int)$id_state, (int)$id_county);
+				$price += $ecotax * (1 + ($taxRate / 100));
+			}
+			else
+				$price += $ecotax;
+		}
 
 		$price = Tools::ps_round($price, $decimals);
 
@@ -2631,7 +2684,7 @@ class ProductCore extends ObjectModel
 		// No need to query if there isn't any real cart!
 		if (!$id_cart)
 			return false;
-		if (!$id_lang AND $cookie->id_lang)
+		if (!$id_lang AND !is_null($cookie) AND $cookie->id_lang)
 			$id_lang = $cookie->id_lang;
 		else
 		{
@@ -2661,7 +2714,7 @@ class ProductCore extends ObjectModel
 		return $customizedDatas;
 	}
 
-	
+
 	/**
 	 * @param int $id_customization
 	 * @return bool
