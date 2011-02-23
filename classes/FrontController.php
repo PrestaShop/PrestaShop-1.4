@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -33,24 +33,24 @@ class FrontControllerCore
 	public $link;
 	public $cart;
 	public $iso;
-	
+
 	public $orderBy;
 	public $orderWay;
 	public $p;
 	public $n;
-	
+
 	public $auth = false;
 	public $guestAllowed = false;
 	public $authRedirection = false;
 	public $ssl = false;
-	
+
 	protected $restrictedCountry = false;
 	protected $maintenance = false;
-	
+
 	public static $initialized = false;
-	
+
 	protected static $currentCustomerGroups;
-	
+
 	public function __construct()
 	{
 		global $cookie, $link, $css_files, $js_files, $useSSL;
@@ -59,7 +59,7 @@ class FrontControllerCore
 		$css_files = array();
 		$js_files = array();
 	}
-	
+
 	public function run()
 	{
 		$this->init();
@@ -70,30 +70,30 @@ class FrontControllerCore
 		$this->displayContent();
 		$this->displayFooter();
 	}
-	
+
 	public function init()
 	{
 		global $cookie, $smarty, $cart, $iso, $defaultCountry, $protocol_link, $protocol_content, $link, $css_files, $js_files;
-		
+
 		if (self::$initialized)
 			return;
 		self::$initialized = true;
-		
-		if ($this->ssl AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') AND Configuration::get('PS_SSL_ENABLED')) 
+
+		if ($this->ssl AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') AND Configuration::get('PS_SSL_ENABLED'))
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
 			exit();
 		}
-			
+
 		ob_start();
 
 		$cookie = new Cookie('ps');
 		$link = new Link();
-		
+
 		if ($this->auth AND !$cookie->isLogged($this->guestAllowed))
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
-		
+
 		/* Theme is missing or maintenance */
 		if (!is_dir(_PS_THEME_DIR_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
@@ -125,7 +125,7 @@ class FrontControllerCore
 
 		global $currency;
 		$currency = Tools::setCurrency();
-		
+
 		$_MODULES = array();
 
 		if ((int)$cookie->id_cart)
@@ -189,7 +189,7 @@ class FrontControllerCore
 		/* Breadcrumb */
 		$navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 		$smarty->assign('navigationPipe', $navigationPipe);
-		
+
 		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
 		$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
 		define('_PS_BASE_URL_', Tools::getShopDomain(true));
@@ -225,14 +225,14 @@ class FrontControllerCore
 			'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE'),
 			'PS_CATALOG_MODE' => (bool)Configuration::get('PS_CATALOG_MODE')
 		));
-		
+
 		// Deprecated
 		$smarty->assign(array(
 			'id_currency_cookie' => (int)$currency->id,
 			'logged' => $cookie->isLogged(),
 			'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false)
 		));
-		
+
 		// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
 		$assignArray = array(
 			'img_ps_dir' => _PS_IMG_,
@@ -255,19 +255,19 @@ class FrontControllerCore
 				$smarty->assign($assignKey, $protocol_content.Tools::getMediaServer($assignValue).$assignValue);
 			else
 				$smarty->assign($assignKey, $assignValue);
-				
+
 		if ($this->maintenance)
 			$this->displayMaintenancePage();
 		if ($this->restrictedCountry)
 			$this->displayRestrictedCountryPage();
-		
+
 		$this->cookie = $cookie;
 		$this->cart = $cart;
 		$this->smarty = $smarty;
 		$this->link = $link;
 		$this->iso = $iso;
 	}
-	
+
 	/* Display a maintenance page if shop is closed */
 	protected function displayMaintenancePage()
 	{
@@ -278,7 +278,7 @@ class FrontControllerCore
 			exit;
 		}
 	}
-	
+
 	/* Display a specific page if the user country is not allowed */
 	protected function displayRestrictedCountryPage()
 	{
@@ -286,11 +286,11 @@ class FrontControllerCore
 		$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
 		exit;
 	}
-	
+
 	protected function canonicalRedirection()
 	{
 		global $link, $cookie;
-		
+
 		// Automatically redirect to the canonical URL if needed
 		if (isset($this->php_self) AND !empty($this->php_self))
 		{
@@ -310,11 +310,11 @@ class FrontControllerCore
 			}
 		}
 	}
-	
+
 	protected function geolocationManagement()
 	{
 		global $cookie, $smarty;
-		
+
 		if (!in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1')))
 		{
 			/* Check if Maxmind Database exists */
@@ -324,10 +324,10 @@ class FrontControllerCore
 				{
 					include_once(_PS_GEOIP_DIR_.'geoipcity.inc');
 					include_once(_PS_GEOIP_DIR_.'geoipregionvars.php');
-					
+
 					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
 					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
-					
+
 					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND !self::isInWhitelistForGeolocalization())
 					{
 						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
@@ -344,7 +344,7 @@ class FrontControllerCore
 						$hasBeenSet = true;
 					}
 				}
-				
+
 				if (isset($record) AND isset($cookie->iso_code_country) AND is_object($record) AND (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
 				{
 					/* Update defaultCountry */
@@ -369,27 +369,30 @@ class FrontControllerCore
 	public function preProcess()
 	{
 	}
-	
+
 	public function setMedia()
 	{
 		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
 		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
 	}
-	
+
 	public function process()
 	{
 	}
-	
+
 	public function displayContent()
 	{
 		Tools::safePostVars();
 		$this->smarty->assign('errors', $this->errors);
 	}
-	
+
 	public function displayHeader()
 	{
 		global $css_files, $js_files;
-		
+
+		if (!self::$initialized)
+			$this->init();
+
 		// P3P Policies (http://www.w3.org/TR/2002/REC-P3P-20020416/#compact_policies)
 		header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
@@ -424,21 +427,24 @@ class FrontControllerCore
 		$this->smarty->assign('js_files', $js_files);
 		$this->smarty->display(_PS_THEME_DIR_.'header.tpl');
 	}
-	
+
 	public function displayFooter()
 	{
+		if (!self::$initialized)
+			$this->init();
+
 		$this->smarty->assign(array(
 			'HOOK_RIGHT_COLUMN' => Module::hookExec('rightColumn', array('cart' => $this->cart)),
 			'HOOK_FOOTER' => Module::hookExec('footer'),
 			'content_only' => (int)(Tools::getValue('content_only'))));
 		$this->smarty->display(_PS_THEME_DIR_.'footer.tpl');
 	}
-	
+
 	public function productSort()
 	{
 		if (!self::$initialized)
 			$this->init();
-			
+
 		$stock_management = (int)(Configuration::get('PS_STOCK_MANAGEMENT')) ? true : false; // no display quantity order if stock management disabled
 		$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
 		$orderWayValues = array(0 => 'asc', 1 => 'desc');
@@ -457,12 +463,12 @@ class FrontControllerCore
 			'orderwaydefault' => $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))],
 			'stock_management' => (int)($stock_management)));
 	}
-	
+
 	public function pagination($nbProducts = 10)
 	{
 		if (!self::$initialized)
 			$this->init();
-			
+
 		$nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 		asort($nArray);
 		$this->n = abs((int)(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
@@ -474,7 +480,7 @@ class FrontControllerCore
 
 		if (isset($this->cookie->nb_item_per_page) AND $this->n != $this->cookie->nb_item_per_page AND in_array($this->n, $nArray))
 			$this->cookie->nb_item_per_page = $this->n;
-			
+
 		if ($this->p > ($nbProducts / $this->n))
 			$this->p = ceil($nbProducts / $this->n);
 		$pages_nb = ceil($nbProducts / (int)($this->n));
@@ -497,7 +503,7 @@ class FrontControllerCore
 		);
 		$this->smarty->assign($pagination_infos);
 	}
-	
+
 	public static function getCurrentCustomerGroups()
 	{
 	 	global $cookie; // Cannot use $this->cookie in a static method
@@ -512,7 +518,7 @@ class FrontControllerCore
 		}
 		return self::$currentCustomerGroups;
 	}
-	
+
 	protected static function isInWhitelistForGeolocalization()
 	{
 		$allowed = false;
@@ -525,3 +531,4 @@ class FrontControllerCore
 		return $allowed;
 	}
 }
+
