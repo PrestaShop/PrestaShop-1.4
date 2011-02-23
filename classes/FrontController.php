@@ -58,9 +58,6 @@ class FrontControllerCore
 		$useSSL = $this->ssl;
 		$css_files = array();
 		$js_files = array();
-
-		if ($this->auth AND !$cookie->isLogged($this->guestAllowed))
-			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 	}
 	
 	public function run()
@@ -93,6 +90,9 @@ class FrontControllerCore
 
 		$cookie = new Cookie('ps');
 		$link = new Link();
+		
+		if ($this->auth AND !$cookie->isLogged($this->guestAllowed))
+			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 		
 		/* Theme is missing or maintenance */
 		if (!is_dir(_PS_THEME_DIR_))
