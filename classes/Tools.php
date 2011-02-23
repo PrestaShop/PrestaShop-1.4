@@ -105,6 +105,15 @@ class ToolsCore
 		exit;
 	}
 
+	/**
+	 * getHttpHost return the <b>current</b> host used, with the protocol (http or https) if $http is true
+	 * This function should not be used to choose http or https domain name. 
+	 * Use Tools::getShopDomain() or Tools::getShopDomainSsl instead
+	 *
+	 * @param boolean $http 
+	 * @param boolean $entities 
+	 * @return void
+	 */
 	public static function getHttpHost($http = false, $entities = false)
 	{
 		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
@@ -115,6 +124,13 @@ class ToolsCore
 		return $host;
 	}
 
+	/**
+	 * getShopDomain return domain name according to configuration
+	 * 
+	 * @param boolean $http if true, return domain name with protocol
+	 * @param boolean $entities if true, 
+	 * @return void
+	 */
 	public static function getShopDomain($http = false, $entities = false)
 	{
 		if (!($domain = Configuration::get('PS_SHOP_DOMAIN')))
