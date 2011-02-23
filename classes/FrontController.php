@@ -59,7 +59,7 @@ class FrontControllerCore
 		$css_files = array();
 		$js_files = array();
 
-		if ($this->auth AND !$this->cookie->isLogged($this->guestAllowed))
+		if ($this->auth AND !$cookie->isLogged($this->guestAllowed))
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 	}
 	
@@ -436,6 +436,9 @@ class FrontControllerCore
 	
 	public function productSort()
 	{
+		if (!self::$initialized)
+			$this->init();
+			
 		$stock_management = (int)(Configuration::get('PS_STOCK_MANAGEMENT')) ? true : false; // no display quantity order if stock management disabled
 		$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
 		$orderWayValues = array(0 => 'asc', 1 => 'desc');
@@ -457,6 +460,9 @@ class FrontControllerCore
 	
 	public function pagination($nbProducts = 10)
 	{
+		if (!self::$initialized)
+			$this->init();
+			
 		$nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 		asort($nArray);
 		$this->n = abs((int)(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
