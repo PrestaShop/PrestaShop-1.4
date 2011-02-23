@@ -540,7 +540,7 @@ class ToolsCore
 	* @param integer $id_lang Language id
 	* @return array Meta tags
 	*/
-	public static function getMetaTags($id_lang)
+	public static function getMetaTags($id_lang, $page_name)
 	{
 		global $maintenance;
 
@@ -625,7 +625,7 @@ class ToolsCore
 		}
 
 		/* Default meta tags */
-		return self::getHomeMetaTags($id_lang);
+		return self::getHomeMetaTags($id_lang, $page_name);
 	}
 
 	/**
@@ -634,9 +634,9 @@ class ToolsCore
 	* @param integer $id_lang Language id
 	* @return array Meta tags
 	*/
-	public static function getHomeMetaTags($id_lang)
+	public static function getHomeMetaTags($id_lang, $page_name)
 	{
-		global $cookie, $page_name;
+		global $cookie;
 
 		/* Metas-tags */
 		$metas = Meta::getMetaByPage($page_name, $id_lang);

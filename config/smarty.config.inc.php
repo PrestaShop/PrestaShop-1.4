@@ -41,9 +41,42 @@ $smarty->config_dir = _PS_SMARTY_DIR_.'configs';
 $smarty->caching = false;
 $smarty->force_compile = (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
 $smarty->compile_check = false;
-//$smarty->debugging		= true;
-if (Configuration::get('PS_FORCE_SMARTY_2'))
+
+if (Configuration::get('PS_FORCE_SMARTY_2')) 
+{	
 	$smarty->debug_tpl = _PS_ALL_THEMES_DIR_.'debug.tpl';
+	
+	if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
+		$smarty->register_outputfilter('smartyMinifyHTML');
+	if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
+		$smarty->register_outputfilter('smartyPackJSinHTML');
+}
+else
+{
+	if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
+		$smarty->registerFilter('output', 'smartyMinifyHTML');
+	if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
+		$smarty->registerFilter('output', 'smartyPackJSinHTML');
+}
+
+smartyRegisterFunction($smarty, 'modifier', 'truncate', 'smarty_modifier_truncate');
+smartyRegisterFunction($smarty, 'modifier', 'secureReferrer', array('Tools', 'secureReferrer'));
+
+smartyRegisterFunction($smarty, 'function', 't', 'smartyTruncate');
+smartyRegisterFunction($smarty, 'function', 'm', 'smartyMaxWords');
+smartyRegisterFunction($smarty, 'function', 'p', 'smartyShowObject');
+smartyRegisterFunction($smarty, 'function', 'd', 'smartyDieObject');
+smartyRegisterFunction($smarty, 'function', 'l', 'smartyTranslate');
+
+smartyRegisterFunction($smarty, 'function', 'dateFormat', array('Tools', 'dateFormat'));
+smartyRegisterFunction($smarty, 'function', 'productPrice', array('Product', 'productPrice'));
+smartyRegisterFunction($smarty, 'function', 'convertPrice', array('Product', 'convertPrice'));
+smartyRegisterFunction($smarty, 'function', 'convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
+smartyRegisterFunction($smarty, 'function', 'convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
+smartyRegisterFunction($smarty, 'function', 'displayWtPrice', array('Product', 'displayWtPrice'));
+smartyRegisterFunction($smarty, 'function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
+smartyRegisterFunction($smarty, 'function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
+smartyRegisterFunction($smarty, 'modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
 
 function smartyTranslate($params, &$smarty)
 {
@@ -165,34 +198,12 @@ function smartyPackJSinHTML($tpl_output, &$smarty)
     return $tpl_output;
 }
 
-/* Use Smarty 3 API calls */
-if (!Configuration::get('PS_FORCE_SMARTY_2')) 
+function smartyRegisterFunction($smarty, $type, $function, $params)
 {
-	$smarty->registerPlugin('modifier', 'truncate', 'smarty_modifier_truncate');
-	$smarty->registerPlugin('modifier', 'secureReferrer', array('Tools', 'secureReferrer'));
-	$smarty->registerPlugin('function', 't', 'smartyTruncate');
-	$smarty->registerPlugin('function', 'm', 'smartyMaxWords');
-	$smarty->registerPlugin('function', 'p', 'smartyShowObject');
-	$smarty->registerPlugin('function', 'd', 'smartyDieObject');
-	$smarty->registerPlugin('function', 'l', 'smartyTranslate');
-	
-	if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
-		$smarty->registerFilter('output', 'smartyMinifyHTML');
-	if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
-		$smarty->registerFilter('output', 'smartyPackJSinHTML');
-}
-else
-{
-	$smarty->register_modifier('truncate', 'smarty_modifier_truncate');
-	$smarty->register_modifier('secureReferrer', array('Tools', 'secureReferrer'));
-	$smarty->register_function('t', 'smartyTruncate');
-	$smarty->register_function('m', 'smartyMaxWords');
-	$smarty->register_function('p', 'smartyShowObject');
-	$smarty->register_function('d', 'smartyDieObject');
-	$smarty->register_function('l', 'smartyTranslate');
-	
-	if (Configuration::get('PS_HTML_THEME_COMPRESSION'))
-		$smarty->register_outputfilter('smartyMinifyHTML');
-	if (Configuration::get('PS_JS_HTML_THEME_COMPRESSION'))
-		$smarty->register_outputfilter('smartyPackJSinHTML');
+	if (!in_array($type, array('function', 'modifier')))
+		return false;
+	if (!Configuration::get('PS_FORCE_SMARTY_2'))
+		$smarty->registerPlugin($type, $function, $params); // Use Smarty 3 API calls, only if PHP version > 5.1.2
+	else
+		$smarty->{'register_'.$type}($function, $params); // or keep a backward compatibility if PHP version < 5.1.2
 }

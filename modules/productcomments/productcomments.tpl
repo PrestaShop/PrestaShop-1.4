@@ -96,7 +96,7 @@
 
 {if $too_early == true}
 	<p class="align_center">{l s='You should wait' mod='productcomments'} {$delay} {l s='second(s) before posting a new comment' mod='productcomments'}</p>
-{elseif $logged == true || $allow_guests == true}
+{elseif $cookie->isLogged() == true || $allow_guests == true}
 <p class="align_center"><input style="margin:auto;" class="button_large" type="button" id="addCommentButton" value="{l s='Add a comment' mod='productcomments'}" onclick="$('#sendComment').slideDown('slow');$(this).slideUp('slow');" /></p>
 <form action="{$action_url}" method="post" class="std" id="sendComment" style="display:none;">
 	<fieldset>
@@ -123,7 +123,7 @@
 		{/section}
 		</table>
 		{/if}
-		{if $allow_guests == true && $logged == false}<p><label for="customer_name">{l s='Your name:' mod='productcomments'}</label><input type="text" name="customer_name" id="customer_name" /></p>{/if}
+		{if $allow_guests == true && $cookie->isLogged() == false}<p><label for="customer_name">{l s='Your name:' mod='productcomments'}</label><input type="text" name="customer_name" id="customer_name" /></p>{/if}
 		<p><label for="comment_title">{l s='Title:' mod='productcomments'}</label><input type="text" name="title" id="comment_title" /></p>
 		<p><label for="content">{l s='Comment:' mod='productcomments'}</label><textarea cols="46" rows="5" name="content" id="content"></textarea></p>
 		<p class="submit">

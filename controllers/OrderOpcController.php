@@ -31,16 +31,11 @@ class OrderOpcControllerCore extends ParentOrderController
 {
 	public $isLogged;
 	
-	public function __construct()
-	{
-		parent::__construct();
-		
-		$this->isLogged = (bool)((int)($this->cookie->id_customer) AND Customer::customerIdExistsStatic((int)($this->cookie->id_customer)));
-	}
-	
 	public function preProcess()
 	{
 		parent::preProcess();
+		
+		$this->isLogged = (bool)((int)($this->cookie->id_customer) AND Customer::customerIdExistsStatic((int)($this->cookie->id_customer)));
 		
 		if ($this->cart->nbProducts())
 		{

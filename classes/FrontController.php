@@ -44,20 +44,20 @@ class FrontControllerCore
 	public $authRedirection = false;
 	public $ssl = false;
 	
+	protected $restrictedCountry = false;
+	protected $maintenance = false;
+	
 	public static $initialized = false;
 	
 	protected static $currentCustomerGroups;
 	
 	public function __construct()
 	{
-		global $smarty, $cookie, $link, $useSSL, $iso;
+		global $cookie, $link, $css_files, $js_files, $useSSL;
 
 		$useSSL = $this->ssl;
-
-		$this->init();
-		$this->smarty = $smarty;
-		$this->link = $link;
-		$this->iso = &$iso;
+		$css_files = array();
+		$js_files = array();
 
 		if ($this->auth AND !$this->cookie->isLogged($this->guestAllowed))
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
@@ -65,6 +65,7 @@ class FrontControllerCore
 	
 	public function run()
 	{
+		$this->init();
 		$this->preProcess();
 		$this->setMedia();
 		$this->displayHeader();
@@ -75,88 +76,31 @@ class FrontControllerCore
 	
 	public function init()
 	{
+		global $cookie, $smarty, $cart, $iso, $defaultCountry, $protocol_link, $protocol_content, $link, $css_files, $js_files;
+		
 		if (self::$initialized)
 			return;
 		self::$initialized = true;
+		
 		if ($this->ssl AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') AND Configuration::get('PS_SSL_ENABLED')) 
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
 			exit();
 		}
-		global $_CONF, $cookie, $smarty, $cart, $iso, $defaultCountry, $page_name;
-		if (!isset($smarty))
-			exit;
+			
+		ob_start();
 
-		// Init Cookie
 		$cookie = new Cookie('ps');
+		$link = new Link();
 		
 		/* Theme is missing or maintenance */
 		if (!is_dir(_PS_THEME_DIR_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
 		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !(int)(Configuration::get('PS_SHOP_ENABLE')))
-			$maintenance = true;
-		elseif (intval(Configuration::get('PS_GEOLOCALIZATION_ENABLED')) AND $_SERVER['SERVER_NAME'] != 'localhost' AND $_SERVER['SERVER_NAME'] != '127.0.0.1')
-		{
-			/* Check if Maxmind Database exists */
-			if (file_exists(_PS_GEOIP_DIR_.'GeoLiteCity.dat'))
-			{
-				if (!isset($cookie->iso_code_country) OR (isset($cookie->iso_code_country) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES')))))
-				{
-					include_once(_PS_GEOIP_DIR_.'geoipcity.inc');
-					include_once(_PS_GEOIP_DIR_.'geoipregionvars.php');
-					
-					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
-					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
-					
-					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND !self::isInWhitelistForGeolocalization())
-					{
-						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
-							$restricted_country = true;
-						elseif (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
-							$smarty->assign(array(
-								'restricted_country_mode' => true,
-								'geolocalization_country' => $record->country_name
-							));
-					}
-					elseif (is_object($record))
-					{
-						$cookie->iso_code_country = strtoupper($record->country_code);
-						$hasBeenSet = true;
-					}
-				}
-				
-				if (isset($record) AND isset($cookie->iso_code_country) AND is_object($record) AND (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
-				{
-					/* Update defaultCountry */
-					$defaultCountry = new Country($id_country);
-					if (isset($hasBeenSet) AND $hasBeenSet)
-						$cookie->id_currency = (int)(Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)($defaultCountry->id_currency) : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
-				}
-				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
-					$restricted_country = true;
-				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
-					$smarty->assign(array(
-						'restricted_country_mode' => true,
-						'geolocalization_country' => 'Undefined'
-					));
-			}
-			/* If not exists we disabled the geolocalization feature */
-			else
-				Configuration::updateValue('PS_GEOLOCALIZATION_ENABLED', 0);
-		}
-
-		ob_start();
-
-		/* get page name to display it in body id */
-		$pathinfo = pathinfo(__FILE__);
-		$page_name = basename($_SERVER['PHP_SELF'], '.'.$pathinfo['extension']);
-		$page_name = (preg_match('/^[0-9]/', $page_name)) ? 'page_'.$page_name : $page_name;
-
-		// Init rewrited links
-		global $link;
-		$link = new Link();
-		$smarty->assign('link', $link);
+			$this->maintenance = true;
+		elseif (Configuration::get('PS_GEOLOCALIZATION_ENABLED'))
+			$this->geolocationManagement();
 
 		// Switch language if needed and init cookie language
 		if ($iso = Tools::getValue('isolang') AND Validate::isLanguageIsoCode($iso) AND ($id_lang = (int)(Language::getIdByIso($iso))))
@@ -166,7 +110,7 @@ class FrontControllerCore
 		Tools::setCookieLanguage();
 
 		/* attribute id_lang is often needed, so we create a constant for performance reasons */
-		define('_USER_ID_LANG_', (int)($cookie->id_lang));
+		define('_USER_ID_LANG_', (int)$cookie->id_lang);
 
 		if (isset($_GET['logout']) OR ($cookie->logged AND Customer::isBanned((int)$cookie->id_customer)))
 		{
@@ -184,9 +128,9 @@ class FrontControllerCore
 		
 		$_MODULES = array();
 
-		if ((int)($cookie->id_cart))
+		if ((int)$cookie->id_cart)
 		{
-			$cart = new Cart((int)($cookie->id_cart));
+			$cart = new Cart((int)$cookie->id_cart);
 			if ($cart->OrderExists())
 				unset($cookie->id_cart, $cart);
 			/* Delete product of cart, if user can't make an order from his country */
@@ -230,61 +174,38 @@ class FrontControllerCore
 		setlocale(LC_TIME, $locale);
 		setlocale(LC_NUMERIC, 'en_US.UTF-8');
 
-		if (is_object($currency))
+		if (Validate::isLoadedObject($currency))
 			$smarty->ps_currency = $currency;
-		$ps_language = new Language((int)($cookie->id_lang));
-		if (is_object($ps_language))
+		if (Validate::isLoadedObject($ps_language = new Language((int)$cookie->id_lang)))
 			$smarty->ps_language = $ps_language;
 
-		self::registerSmartyFunction($smarty, 'function', 'dateFormat', array('Tools', 'dateFormat'));
-		self::registerSmartyFunction($smarty, 'function', 'productPrice', array('Product', 'productPrice'));
-		self::registerSmartyFunction($smarty, 'function', 'convertPrice', array('Product', 'convertPrice'));
-		self::registerSmartyFunction($smarty, 'function', 'convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
-		self::registerSmartyFunction($smarty, 'function', 'convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
-		self::registerSmartyFunction($smarty, 'function', 'displayWtPrice', array('Product', 'displayWtPrice'));
-		self::registerSmartyFunction($smarty, 'function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
-		self::registerSmartyFunction($smarty, 'function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
-		self::registerSmartyFunction($smarty, 'modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
-
-		$smarty->assign(Tools::getMetaTags($cookie->id_lang));
+		/* get page name to display it in body id */
+		$pathinfo = pathinfo(__FILE__);
+		$page_name = basename($_SERVER['PHP_SELF'], '.'.$pathinfo['extension']);
+		$page_name = (preg_match('/^[0-9]/', $page_name)) ? 'page_'.$page_name : $page_name;
+		$smarty->assign(Tools::getMetaTags($cookie->id_lang, $page_name));
 		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
 
 		/* Breadcrumb */
 		$navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 		$smarty->assign('navigationPipe', $navigationPipe);
 		
-		global $protocol_link, $protocol_content;
 		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
 		$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
 		define('_PS_BASE_URL_', Tools::getShopDomain(true));
 		define('_PS_BASE_URL_SSL_', Tools::getShopDomainSsl(true));
 
 		$link->preloadPageLinks();
-		// Automatically redirect to the canonical URL if the current in is the right one
-		if (isset($this->php_self) AND !empty($this->php_self))
-		{
-			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-			$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
-			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
-			{
-				header('HTTP/1.0 301 Moved');
-				$params = '';
-				$excludedKey = array(
-					'isolang',
-					'id_lang',
-				);
-				foreach ($_GET as $key => $value)
-					if (!in_array($key, $excludedKey))
-						$params .= ($params == '' ? '?' : '&').$key.'='.$value;
-				if (_PS_MODE_DEV_ AND $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
-					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.$params.'">'.$canonicalURL.$params.'</a>');
-				Tools::redirectLink($canonicalURL.$params);
-			}
-		}
+		$this->canonicalRedirection();
 
 		Product::initPricesComputation();
 
 		$smarty->assign(array(
+			'link' => $link,
+			'cart' => $cart,
+			'currency' => $currency,
+			'cookie' => $cookie,
+			'page_name' => $page_name,
 			'base_dir' => _PS_BASE_URL_.__PS_BASE_URI__,
 			'base_dir_ssl' => $protocol_link.Tools::getShopDomainSsl().__PS_BASE_URI__,
 			'content_dir' => $protocol_content.Tools::getShopDomain().__PS_BASE_URI__,
@@ -293,23 +214,26 @@ class FrontControllerCore
 			'mail_dir' => _MAIL_DIR_,
 			'lang_iso' => $ps_language->iso_code,
 			'come_from' => Tools::getHttpHost(true, true).Tools::htmlentitiesUTF8(str_replace('\'', '', urldecode($_SERVER['REQUEST_URI']))),
-			'shop_name' => Configuration::get('PS_SHOP_NAME'),
 			'cart_qties' => (int)$cart->nbProducts(),
-			'cart' => $cart,
 			'currencies' => Currency::getCurrencies(),
-			'id_currency_cookie' => (int)$currency->id,
-			'currency' => $currency,
-			'cookie' => $cookie,
 			'languages' => Language::getLanguages(),
-			'logged' => $cookie->isLogged(),
-			'page_name' => $page_name,
-			'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false),
 			'priceDisplay' => Product::getTaxCalculationMethod(),
+			'shop_name' => Configuration::get('PS_SHOP_NAME'),
 			'roundMode' => (int)Configuration::get('PS_PRICE_ROUND_MODE'),
 			'use_taxes' => (int)Configuration::get('PS_TAX'),
 			'vat_management' => (int)Configuration::get('VATNUMBER_MANAGEMENT'),
 			'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE'),
-			'PS_CATALOG_MODE' => (bool)Configuration::get('PS_CATALOG_MODE')));
+			'PS_CATALOG_MODE' => (bool)Configuration::get('PS_CATALOG_MODE')
+		));
+		
+		// Deprecated
+		$smarty->assign(array(
+			'id_currency_cookie' => (int)$currency->id,
+			'logged' => $cookie->isLogged(),
+			'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false)
+		));
+		
+		// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
 		$assignArray = array(
 			'img_ps_dir' => _PS_IMG_,
 			'img_cat_dir' => _THEME_CAT_DIR_,
@@ -324,37 +248,122 @@ class FrontControllerCore
 			'css_dir' => _THEME_CSS_DIR_,
 			'js_dir' => _THEME_JS_DIR_,
 			'pic_dir' => _THEME_PROD_PIC_DIR_
-		);// TODO for better performances (cache usage), remove these assign and use a smarty function to get the right media server in relation to the full ressource name
+		);
 
 		foreach ($assignArray as $assignKey => $assignValue)
 			if (substr($assignValue, 0, 1) == '/' OR $protocol_content == 'https://')
 				$smarty->assign($assignKey, $protocol_content.Tools::getMediaServer($assignValue).$assignValue);
 			else
 				$smarty->assign($assignKey, $assignValue);
-
-		/* Display a maintenance page if shop is closed */
-		if (isset($maintenance) AND (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP')))))
+				
+		if ($this->maintenance)
+			$this->displayMaintenancePage();
+		if ($this->restrictedCountry)
+			$this->displayRestrictedCountryPage();
+		
+		$this->cookie = $cookie;
+		$this->cart = $cart;
+		$this->smarty = $smarty;
+		$this->link = $link;
+		$this->iso = $iso;
+	}
+	
+	/* Display a maintenance page if shop is closed */
+	protected function displayMaintenancePage()
+	{
+		if (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))
 		{
 			header('HTTP/1.1 503 temporarily overloaded');
 			$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
 			exit;
 		}
-		elseif (isset($restricted_country) AND $restricted_country)
+	}
+	
+	/* Display a specific page if the user country is not allowed */
+	protected function displayRestrictedCountryPage()
+	{
+		header('HTTP/1.1 503 temporarily overloaded');
+		$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
+		exit;
+	}
+	
+	protected function canonicalRedirection()
+	{
+		global $link, $cookie;
+		
+		// Automatically redirect to the canonical URL if needed
+		if (isset($this->php_self) AND !empty($this->php_self))
 		{
-			header('HTTP/1.1 503 temporarily overloaded');
-			$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
-			exit;
+			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
+			$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			{
+				header('HTTP/1.0 301 Moved');
+				$params = '';
+				$excludedKey = array('isolang', 'id_lang');
+				foreach ($_GET as $key => $value)
+					if (!in_array($key, $excludedKey))
+						$params .= ($params == '' ? '?' : '&').$key.'='.$value;
+				if (_PS_MODE_DEV_ AND $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.$params.'">'.$canonicalURL.$params.'</a>');
+				Tools::redirectLink($canonicalURL.$params);
+			}
 		}
-
-		global $css_files, $js_files, $iso;
-		$css_files = array();
-		$js_files = array();
+	}
+	
+	protected function geolocationManagement()
+	{
+		global $cookie, $smarty;
 		
-		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
-		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
-		
-		$this->cookie = $cookie;
-		$this->cart = $cart;
+		if (!in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1')))
+		{
+			/* Check if Maxmind Database exists */
+			if (file_exists(_PS_GEOIP_DIR_.'GeoLiteCity.dat'))
+			{
+				if (!isset($cookie->iso_code_country) OR (isset($cookie->iso_code_country) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES')))))
+				{
+					include_once(_PS_GEOIP_DIR_.'geoipcity.inc');
+					include_once(_PS_GEOIP_DIR_.'geoipregionvars.php');
+					
+					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
+					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
+					
+					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND !self::isInWhitelistForGeolocalization())
+					{
+						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
+							$this->restrictedCountry = true;
+						elseif (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
+							$smarty->assign(array(
+								'restricted_country_mode' => true,
+								'geolocalization_country' => $record->country_name
+							));
+					}
+					elseif (is_object($record))
+					{
+						$cookie->iso_code_country = strtoupper($record->country_code);
+						$hasBeenSet = true;
+					}
+				}
+				
+				if (isset($record) AND isset($cookie->iso_code_country) AND is_object($record) AND (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
+				{
+					/* Update defaultCountry */
+					$defaultCountry = new Country($id_country);
+					if (isset($hasBeenSet) AND $hasBeenSet)
+						$cookie->id_currency = (int)(Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
+				}
+				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
+					$this->restrictedCountry = true;
+				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
+					$smarty->assign(array(
+						'restricted_country_mode' => true,
+						'geolocalization_country' => 'Undefined'
+					));
+			}
+			/* If not exists we disabled the geolocalization feature */
+			else
+				Configuration::updateValue('PS_GEOLOCALIZATION_ENABLED', 0);
+		}
 	}
 
 	public function preProcess()
@@ -363,7 +372,8 @@ class FrontControllerCore
 	
 	public function setMedia()
 	{
-
+		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
+		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
 	}
 	
 	public function process()
@@ -384,8 +394,8 @@ class FrontControllerCore
 		header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
 		/* Hooks are volontary out the initialize array (need those variables already assigned) */
-		$this->smarty->assign('time',time());
 		$this->smarty->assign(array(
+			'time' => time(),
 			'static_token' => Tools::getToken(false),
 			'token' => Tools::getToken(),
 			'logo_image_width' => Configuration::get('SHOP_LOGO_WIDTH'),
@@ -495,16 +505,6 @@ class FrontControllerCore
 				self::$currentCustomerGroups[] = $row['id_group'];
 		}
 		return self::$currentCustomerGroups;
-	}
-	
-	public static function registerSmartyFunction($smarty, $type, $function, $params)
-	{
-		if (!in_array($type, array('function', 'modifier')))
-			return false;
-		if (!Configuration::get('PS_FORCE_SMARTY_2'))
-			$smarty->registerPlugin($type, $function, $params); // Use Smarty 3 API calls, only if PHP version > 5.1.2
-		else
-			$smarty->{'register_'.$type}($function, $params); // or keep a backward compatibility if PHP version < 5.1.2
 	}
 	
 	protected static function isInWhitelistForGeolocalization()

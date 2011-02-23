@@ -40,7 +40,11 @@ class ParentOrderControllerCore extends FrontController
 		/* Disable some cache related bugs on the cart/order */
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-		
+	}
+	
+	public function init()
+	{
+		parent::init();
 		$this->nbProducts = $this->cart->nbProducts();
 	}
 	

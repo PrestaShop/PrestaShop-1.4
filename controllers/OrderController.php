@@ -31,9 +31,9 @@ class OrderControllerCore extends ParentOrderController
 {
 	public $step;
 
-	public function __construct()
+	public function init()
 	{
-		parent::__construct();
+		parent::init();
 
 		$this->step = (int)(Tools::getValue('step'));
 		if (!$this->nbProducts)
@@ -86,7 +86,7 @@ class OrderControllerCore extends ParentOrderController
 		parent::process();
 
 		/* 4 steps to the order */
-		switch ((int)($this->step))
+		switch ((int)$this->step)
 		{
 			case -1;
 				$this->smarty->assign('empty', 1);
@@ -128,7 +128,7 @@ class OrderControllerCore extends ParentOrderController
 	{
 		parent::displayContent();
 
-		switch ((int)($this->step))
+		switch ((int)$this->step)
 		{
 			case -1:
 				$this->smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
