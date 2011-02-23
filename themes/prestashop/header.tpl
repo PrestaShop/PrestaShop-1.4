@@ -37,8 +37,8 @@
 		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 		<meta name="generator" content="PrestaShop" />
 		<meta name="robots" content="{if isset($nobots)}no{/if}index,follow" />
-		<link rel="icon" type="image/vnd.microsoft.icon" href="{$img_ps_dir}favicon.ico" />
-		<link rel="shortcut icon" type="image/x-icon" href="{$img_ps_dir}favicon.ico" />
+		<link rel="icon" type="image/vnd.microsoft.icon" href="{$img_ps_dir}favicon.ico?{$time}" />
+		<link rel="shortcut icon" type="image/x-icon" href="{$img_ps_dir}favicon.ico?{$time}" />
 		<script type="text/javascript">
 			var baseDir = '{$content_dir}';
 			var static_token = '{$static_token}';
@@ -72,7 +72,7 @@
 			<!-- Header -->
 			<div id="header">
 				<a id="header_logo" href="{$base_dir}" title="{$shop_name|escape:'htmlall':'UTF-8'}">
-					<img class="logo" src="{$img_ps_dir}logo.jpg" alt="{$shop_name|escape:'htmlall':'UTF-8'}" {if $logo_image_width}width="{$logo_image_width}"{/if} {if $logo_image_height}height="{$logo_image_height}" {/if} />
+					<img class="logo" src="{$img_ps_dir}logo.jpg?{$time}" alt="{$shop_name|escape:'htmlall':'UTF-8'}" {if $logo_image_width}width="{$logo_image_width}"{/if} {if $logo_image_height}height="{$logo_image_height}" {/if} />
 				</a>
 				<div id="header_right">
 					{$HOOK_TOP}

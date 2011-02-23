@@ -384,6 +384,7 @@ class FrontControllerCore
 		header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
 		/* Hooks are volontary out the initialize array (need those variables already assigned) */
+		$this->smarty->assign('time',time());
 		$this->smarty->assign(array(
 			'static_token' => Tools::getToken(false),
 			'token' => Tools::getToken(),
