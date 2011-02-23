@@ -50,20 +50,6 @@ class WebserviceCore extends ObjectModel
 		return $fields;
 	}
 	
-	/**
-	* Get all webservice accounts back
-	*
-	* @return array Webservice Accounts
-	*/
-	static public function getWebserviceAccounts($active = false)
-	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT *
-		FROM `'._DB_PREFIX_.'webservice_account`
-		'.($active ? 'WHERE active = 1' : '').'
-		ORDER BY `key` ASC');
-	}
-	
 	static public function getResources()
 	{
 		$resources = array(
@@ -157,19 +143,6 @@ class WebserviceCore extends ObjectModel
 		{
 			return isset($result[0]['active']) && $result[0]['active'];
 		}
-	}
-	
-	static public function getAuthenticationKeys()
-	{
-		$result2 = array();
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT `key`
-			FROM `'._DB_PREFIX_.'webservice_account`
-		');
-		if ($result)
-			foreach ($result as $row)
-				$result2[] = $row['key'];
-		return $result2;
 	}
 	
 	static public function setPermissionForAccount($idAccount, $permissionsToSet)
