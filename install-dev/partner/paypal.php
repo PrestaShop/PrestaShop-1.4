@@ -14,7 +14,7 @@
 				{
 					echo '<div style="float: left; width: 150px; height: 35px;">'.$field->label.' : </div><div style="float: left; height: 35px;">';
 					if ($field->type == 'text' || $field->type == 'password')
-						echo '<input type="'.$field->type.'" id="paypalform_'.$field->key.'" name="paypalform_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" /><br />';
+						echo '<input type="'.$field->type.'" class="text required" id="paypalform_'.$field->key.'" name="paypalform_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" /><br />';
 					elseif ($field->type == 'radio')
 					{
 						foreach ($field->values as $key => $value)
