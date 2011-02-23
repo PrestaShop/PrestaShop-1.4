@@ -31,13 +31,25 @@ abstract class CacheCore
 	protected static $_instance;
 	protected $_keysCached;
 	protected $_tablesCached = array();
-	
+	protected $_blackList = array('cart',
+												'cart_discount',
+												'cart_product',
+												'connections',
+												'connections_source',
+												'connections_page',
+												'customer',
+												'customer_group',
+												'customized_data',
+												'guest',
+												'pagenotfound',
+												'page_viewed');
 	public static function getInstance()
 	{	
 		if(!isset(self::$_instance))
 		{
 			$caching_system =  _PS_CACHING_SYSTEM_;
 			self::$_instance = new $caching_system();
+			
 		}
 		return self::$_instance;
 	}
@@ -48,6 +60,14 @@ abstract class CacheCore
 	
 	protected function __destruct()
 	{
+	}
+	
+	protected function isBlacklist($query)
+	{
+		foreach ($this->_blackList AS $find)
+			if (strpos($query, $find))
+				return true;
+		return false;
 	}
 
 	abstract public function get($key);

@@ -91,7 +91,12 @@ class MCachedCore extends Cache
 	{
 		if (!$this->_isConnected)
 			return false;
-		$key = $this->set(md5($query), $result);
+		if ($this->isBlacklist($query))
+			return true;
+		$md5_query = md5($query);
+		if (isset($this->_keysCached[$md5_query]))
+			return true;
+		$key = $this->set($md5_query, $result);
 		if(preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach($res[1] AS $table)
 				if(!isset($this->_tablesCached[$table][$key]))

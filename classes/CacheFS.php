@@ -73,7 +73,11 @@ class CacheFSCore extends Cache {
 		$path = _PS_CACHEFS_DIRECTORY_;
 		for ($i = 0; $i < $this->_depth; $i++)
 			$path.=$key[$i].'/';
-		
+		if (!file_exists($path.$key))
+		{
+			unset($this->_keysCached[$key]);
+			return false;
+		}
 		$file = file_get_contents($path.$key);
 		return unserialize($file);
 	}
@@ -95,9 +99,12 @@ class CacheFSCore extends Cache {
 
 	public function setQuery($query, $result)
 	{
-		if (isset($this->_keysCached[md5($query)]))
+		$md5_query = md5($query);
+		if (isset($this->_keysCached[$md5_query]))
 			return true;
-		$key = $this->set(md5($query), $result);
+		if ($this->isBlacklist($query))
+			return true;
+		$key = $this->set($md5_query, $result);
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach($res[1] AS $table)
 				if(!isset($this->_tablesCached[$table][$key]))
@@ -111,6 +118,8 @@ class CacheFSCore extends Cache {
 			return;
 		for ($i = 0; $i < $this->_depth; $i++)
 			$path.=$key[$i].'/';
+		if (!file_exists($path.$key))
+			return true;
 		if (!unlink($path.$key))
 			return false;
 		unset($this->_keysCached[$key]);
