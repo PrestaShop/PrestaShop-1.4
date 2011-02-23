@@ -29,6 +29,7 @@ class CartControllerCore extends FrontController
 {
 	public function run()
 	{
+		$this->init();
 		$this->preProcess();
 
 		if (Tools::getValue('ajax') == 'true')
