@@ -442,6 +442,11 @@ select optgroup option {
 	padding: 10px 15px;
 }
 
+#content .error-inline {
+	color:#ff0000;
+	font-weight:bold;
+}
+
 #content .conf {
 	border: 1px solid #72CB67;
 	background-color: #DFFAD3;
