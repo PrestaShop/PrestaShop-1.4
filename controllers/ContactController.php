@@ -39,10 +39,10 @@ class ContactControllerCore extends FrontController
 	{
 		parent::preProcess();
 
-		if ($this->cookie->isLogged())
+		if (self::$cookie->isLogged())
 		{
-			$this->smarty->assign('isLogged', 1);
-			$customer = new Customer((int)($this->cookie->id_customer));
+			self::$smarty->assign('isLogged', 1);
+			$customer = new Customer((int)(self::$cookie->id_customer));
 			if (!Validate::isLoadedObject($customer))
 				die(Tools::displayError('customer not found'));
 			$products = array();
@@ -55,7 +55,7 @@ class ContactControllerCore extends FrontController
 			{
 				$order = new Order($row['id_order']);
 				$date = explode(' ', $order->date_add);
-				$orders[$row['id_order']] = Tools::displayDate($date[0], $this->cookie->id_lang);
+				$orders[$row['id_order']] = Tools::displayDate($date[0], self::$cookie->id_lang);
 				$tmp = $order->getProducts();
 				foreach ($tmp as $key => $val)
 					$products[$val['product_id']] = $val['product_name'];
@@ -68,8 +68,8 @@ class ContactControllerCore extends FrontController
 
 			foreach ($products as $key => $val)
 				$orderedProductList .= '<option value="'.$key.'" '.((int)(Tools::getValue('id_product')) == $key ? 'selected' : '').' >'.$val.'</option>';
-			$this->smarty->assign('orderList', $orderList);
-			$this->smarty->assign('orderedProductList', $orderedProductList);
+			self::$smarty->assign('orderList', $orderList);
+			self::$smarty->assign('orderedProductList', $orderedProductList);
 		}
 
 		if (Tools::isSubmit('submitMessage'))
@@ -90,7 +90,7 @@ class ContactControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('message cannot be blank');
 			elseif (!Validate::isMessage($message))
 				$this->errors[] = Tools::displayError('invalid message');
-			elseif (!($id_contact = (int)(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact((int)($id_contact), (int)($this->cookie->id_lang)))))
+			elseif (!($id_contact = (int)(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact((int)($id_contact), (int)(self::$cookie->id_lang)))))
 				$this->errors[] = Tools::displayError('please select a subject in the list');
 			elseif (!empty($_FILES['fileUpload']['name']) AND $_FILES['fileUpload']['error'] != 0)
 				$this->errors[] = Tools::displayError('An error occurred during the file upload');
@@ -98,15 +98,15 @@ class ContactControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('Bad file extension');
 			else
 			{
-				if ((int)($this->cookie->id_customer))
-					$customer = new Customer((int)($this->cookie->id_customer));
+				if ((int)(self::$cookie->id_customer))
+					$customer = new Customer((int)(self::$cookie->id_customer));
 				else
 				{
 					$customer = new Customer();
 					$customer->getByEmail($from);
 				}
 
-				$contact = new Contact($id_contact, $this->cookie->id_lang);
+				$contact = new Contact($id_contact, self::$cookie->id_lang);
 
 				if (!((
 						$id_customer_thread = (int)Tools::getValue('id_customer_thread')
@@ -152,15 +152,15 @@ class ContactControllerCore extends FrontController
 					ORDER BY date_add DESC');
 				if ($old_message == htmlentities($message, ENT_COMPAT, 'UTF-8'))
 				{
-					$this->smarty->assign('alreadySent', 1);
+					self::$smarty->assign('alreadySent', 1);
 					$contact->email = '';
 					$contact->customer_service = 0;
 				}
 				if (!empty($contact->email))
 				{
-					if (Mail::Send((int)($this->cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)($this->cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : ''), $fileAttachment)
-						AND Mail::Send((int)($this->cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
-						$this->smarty->assign('confirmation', 1);
+					if (Mail::Send((int)(self::$cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)(self::$cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : ''), $fileAttachment)
+						AND Mail::Send((int)(self::$cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
+						self::$smarty->assign('confirmation', 1);
 					else
 						$this->errors[] = Tools::displayError('an error occurred while sending message');
 				}
@@ -171,7 +171,7 @@ class ContactControllerCore extends FrontController
 					{
 						$ct = new CustomerThread($id_customer_thread);
 						$ct->status = 'open';
-						$ct->id_lang = (int)$this->cookie->id_lang;
+						$ct->id_lang = (int)self::$cookie->id_lang;
 						$ct->id_contact = (int)($id_contact);
 						if ($id_order = (int)Tools::getValue('id_order'))
 							$ct->id_order = $id_order;
@@ -189,7 +189,7 @@ class ContactControllerCore extends FrontController
 						if ($id_product = (int)Tools::getValue('id_product'))
 							$ct->id_product = $id_product;
 						$ct->id_contact = (int)($id_contact);
-						$ct->id_lang = (int)$this->cookie->id_lang;
+						$ct->id_lang = (int)self::$cookie->id_lang;
 						$ct->email = $from;
 						$ct->status = 'open';
 						$ct->token = Tools::passwdGen(12);
@@ -208,8 +208,8 @@ class ContactControllerCore extends FrontController
 						if ($cm->add())
 						{
 							if (empty($contact->email))
-								Mail::Send((int)($this->cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from);
-							$this->smarty->assign('confirmation', 1);
+								Mail::Send((int)(self::$cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from);
+							self::$smarty->assign('confirmation', 1);
 						}
 						else
 							$this->errors[] = Tools::displayError('an error occurred while sending message');
@@ -233,8 +233,8 @@ class ContactControllerCore extends FrontController
 	{
 		parent::process();
 
-		$email = Tools::safeOutput(Tools::getValue('from', ((isset($this->cookie) AND isset($this->cookie->email) AND Validate::isEmail($this->cookie->email)) ? $this->cookie->email : '')));
-		$this->smarty->assign(array(
+		$email = Tools::safeOutput(Tools::getValue('from', ((isset(self::$cookie) AND isset(self::$cookie->email) AND Validate::isEmail(self::$cookie->email)) ? self::$cookie->email : '')));
+		self::$smarty->assign(array(
 			'errors' => $this->errors,
 			'email' => $email,
 			'fileupload' => Configuration::get('PS_CUSTOMER_SERVICE_FILE_UPLOAD')
@@ -246,10 +246,10 @@ class ContactControllerCore extends FrontController
 			$customerThread = Db::getInstance()->getRow('
 			SELECT cm.* FROM '._DB_PREFIX_.'customer_thread cm
 			WHERE cm.id_customer_thread = '.(int)$id_customer_thread.' AND token = \''.pSQL($token).'\'');
-			$this->smarty->assign('customerThread', $customerThread);
+			self::$smarty->assign('customerThread', $customerThread);
 		}
 
-		$this->smarty->assign(array('contacts' => Contact::getContacts((int)($this->cookie->id_lang)),
+		self::$smarty->assign(array('contacts' => Contact::getContacts((int)(self::$cookie->id_lang)),
 		'message' => html_entity_decode(Tools::getValue('message'))
 		));
 	}
@@ -258,7 +258,7 @@ class ContactControllerCore extends FrontController
 	{
 		$_POST = array_merge($_POST, $_GET);
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'contact-form.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'contact-form.tpl');
 	}
 }
 

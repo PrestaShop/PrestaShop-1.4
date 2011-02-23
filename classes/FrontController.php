@@ -28,10 +28,10 @@
 class FrontControllerCore
 {
 	public $errors = array();
-	public $smarty;
-	public $cookie;
-	public $link;
-	public $cart;
+	protected static $smarty;
+	protected static $cookie;
+	protected static $link;
+	protected static $cart;
 	public $iso;
 
 	public $orderBy;
@@ -53,7 +53,7 @@ class FrontControllerCore
 
 	public function __construct()
 	{
-		global $cookie, $link, $css_files, $js_files, $useSSL;
+		global $css_files, $js_files, $useSSL;
 
 		$useSSL = $this->ssl;
 		$css_files = array();
@@ -261,10 +261,11 @@ class FrontControllerCore
 		if ($this->restrictedCountry)
 			$this->displayRestrictedCountryPage();
 
-		$this->cookie = $cookie;
-		$this->cart = $cart;
-		$this->smarty = $smarty;
-		$this->link = $link;
+		self::$cookie = $cookie;
+		self::$cart = $cart;
+		self::$smarty = $smarty;
+		self::$link = $link;
+
 		$this->iso = $iso;
 	}
 
@@ -383,7 +384,7 @@ class FrontControllerCore
 	public function displayContent()
 	{
 		Tools::safePostVars();
-		$this->smarty->assign('errors', $this->errors);
+		self::$smarty->assign('errors', $this->errors);
 	}
 
 	public function displayHeader()
@@ -397,7 +398,7 @@ class FrontControllerCore
 		header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 
 		/* Hooks are volontary out the initialize array (need those variables already assigned) */
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'time' => time(),
 			'static_token' => Tools::getToken(false),
 			'token' => Tools::getToken(),
@@ -406,7 +407,7 @@ class FrontControllerCore
 			'priceDisplayPrecision' => _PS_PRICE_DISPLAY_PRECISION_,
 			'content_only' => (int)(Tools::getValue('content_only'))
 		));
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'HOOK_HEADER' => Module::hookExec('header'),
 			'HOOK_LEFT_COLUMN' => Module::hookExec('leftColumn'),
 			'HOOK_TOP' => Module::hookExec('top')
@@ -423,9 +424,9 @@ class FrontControllerCore
 				Tools::cccJs();
 		}
 
-		$this->smarty->assign('css_files', $css_files);
-		$this->smarty->assign('js_files', $js_files);
-		$this->smarty->display(_PS_THEME_DIR_.'header.tpl');
+		self::$smarty->assign('css_files', $css_files);
+		self::$smarty->assign('js_files', $js_files);
+		self::$smarty->display(_PS_THEME_DIR_.'header.tpl');
 	}
 
 	public function displayFooter()
@@ -433,11 +434,11 @@ class FrontControllerCore
 		if (!self::$initialized)
 			$this->init();
 
-		$this->smarty->assign(array(
-			'HOOK_RIGHT_COLUMN' => Module::hookExec('rightColumn', array('cart' => $this->cart)),
+		self::$smarty->assign(array(
+			'HOOK_RIGHT_COLUMN' => Module::hookExec('rightColumn', array('cart' => self::$cart)),
 			'HOOK_FOOTER' => Module::hookExec('footer'),
 			'content_only' => (int)(Tools::getValue('content_only'))));
-		$this->smarty->display(_PS_THEME_DIR_.'footer.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'footer.tpl');
 	}
 
 	public function productSort()
@@ -455,7 +456,7 @@ class FrontControllerCore
 		if (!in_array($this->orderWay, $orderWayValues))
 			$this->orderWay = $orderWayValues[0];
 
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'orderby' => $this->orderBy,
 			'orderway' => $this->orderWay,
 			'orderbydefault' => $orderByValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_BY'))],
@@ -471,15 +472,15 @@ class FrontControllerCore
 
 		$nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
 		asort($nArray);
-		$this->n = abs((int)(Tools::getValue('n', ((isset($this->cookie->nb_item_per_page) AND $this->cookie->nb_item_per_page >= 10) ? $this->cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
+		$this->n = abs((int)(Tools::getValue('n', ((isset(self::$cookie->nb_item_per_page) AND self::$cookie->nb_item_per_page >= 10) ? self::$cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
 		$this->p = abs((int)(Tools::getValue('p', 1)));
 		$range = 2; /* how many pages around page selected */
 
 		if ($this->p < 0)
 			$this->p = 0;
 
-		if (isset($this->cookie->nb_item_per_page) AND $this->n != $this->cookie->nb_item_per_page AND in_array($this->n, $nArray))
-			$this->cookie->nb_item_per_page = $this->n;
+		if (isset(self::$cookie->nb_item_per_page) AND $this->n != self::$cookie->nb_item_per_page AND in_array($this->n, $nArray))
+			self::$cookie->nb_item_per_page = $this->n;
 
 		if ($this->p > ($nbProducts / $this->n))
 			$this->p = ceil($nbProducts / $this->n);
@@ -491,7 +492,7 @@ class FrontControllerCore
 		$stop = (int)($this->p + $range);
 		if ($stop > $pages_nb)
 			$stop = (int)($pages_nb);
-		$this->smarty->assign('nb_products', $nbProducts);
+		self::$smarty->assign('nb_products', $nbProducts);
 		$pagination_infos = array(
 			'pages_nb' => (int)($pages_nb),
 			'p' => (int)($this->p),
@@ -501,18 +502,17 @@ class FrontControllerCore
 			'start' => (int)($start),
 			'stop' => (int)($stop)
 		);
-		$this->smarty->assign($pagination_infos);
+		self::$smarty->assign($pagination_infos);
 	}
 
 	public static function getCurrentCustomerGroups()
 	{
-	 	global $cookie; // Cannot use $this->cookie in a static method
-		if (!$cookie->id_customer)
+		if (!self::$cookie->id_customer)
 			return array();
 		if (!is_array(self::$currentCustomerGroups))
 		{
 			self::$currentCustomerGroups = array();
-			$result = Db::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)$cookie->id_customer);
+			$result = Db::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)self::$cookie->id_customer);
 			foreach ($result as $row)
 				self::$currentCustomerGroups[] = $row['id_group'];
 		}

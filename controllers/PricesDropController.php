@@ -45,11 +45,11 @@ class PricesDropControllerCore extends FrontController
 		parent::process();
 		
 		$this->productSort();
-		$nbProducts = Product::getPricesDrop((int)($this->cookie->id_lang), NULL, NULL, true);
+		$nbProducts = Product::getPricesDrop((int)(self::$cookie->id_lang), NULL, NULL, true);
 		$this->pagination($nbProducts);
 		
-		$this->smarty->assign(array(
-			'products' => Product::getPricesDrop((int)($this->cookie->id_lang), (int)($this->p) - 1, (int)($this->n), false, $this->orderBy, $this->orderWay),
+		self::$smarty->assign(array(
+			'products' => Product::getPricesDrop((int)(self::$cookie->id_lang), (int)($this->p) - 1, (int)($this->n), false, $this->orderBy, $this->orderWay),
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'nbProducts' => $nbProducts,
 			'homeSize' => Image::getSize('home')
@@ -59,7 +59,7 @@ class PricesDropControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'prices-drop.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'prices-drop.tpl');
 	}
 }
 

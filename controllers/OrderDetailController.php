@@ -57,10 +57,10 @@ class OrderDetailControllerCore extends FrontController
 			if(!sizeof($this->errors))
 			{
 				$order = new Order((int)($idOrder));
-				if (Validate::isLoadedObject($order) AND $order->id_customer == $this->cookie->id_customer)
+				if (Validate::isLoadedObject($order) AND $order->id_customer == self::$cookie->id_customer)
 				{
 					$message = new Message();
-					$message->id_customer = (int)($this->cookie->id_customer);
+					$message->id_customer = (int)(self::$cookie->id_customer);
 					$message->message = $msgText;
 					$message->id_order = (int)($idOrder);
 					$message->private = false;
@@ -73,9 +73,9 @@ class OrderDetailControllerCore extends FrontController
 						$to = strval($to->email);
 					}
 					$toName = strval(Configuration::get('PS_SHOP_NAME'));
-					$customer = new Customer((int)($this->cookie->id_customer));
+					$customer = new Customer((int)(self::$cookie->id_customer));
 					if (Validate::isLoadedObject($customer))
-						Mail::Send((int)($this->cookie->id_lang), 'order_customer_comment', Mail::l('Message from a customer'),
+						Mail::Send((int)(self::$cookie->id_lang), 'order_customer_comment', Mail::l('Message from a customer'),
 						array(
 						'{lastname}' => $customer->lastname, 
 						'{firstname}' => $customer->firstname, 
@@ -98,19 +98,19 @@ class OrderDetailControllerCore extends FrontController
 		else
 		{
 			$order = new Order($id_order);
-			if (Validate::isLoadedObject($order) AND $order->id_customer == $this->cookie->id_customer)
+			if (Validate::isLoadedObject($order) AND $order->id_customer == self::$cookie->id_customer)
 			{
 				$id_order_state = (int)($order->getCurrentState());
 				$carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
 				$addressInvoice = new Address((int)($order->id_address_invoice));
 				$addressDelivery = new Address((int)($order->id_address_delivery));
 				if ($order->total_discounts > 0)
-					$this->smarty->assign('total_old', (float)($order->total_paid - $order->total_discounts));
+					self::$smarty->assign('total_old', (float)($order->total_paid - $order->total_discounts));
 				$products = $order->getProducts();
 				$customizedDatas = Product::getAllCustomizedDatas((int)($order->id_cart));
 				Product::addCustomizationPrice($products, $customizedDatas);
 
-				$this->smarty->assign(array(
+				self::$smarty->assign(array(
 					'shop_name' => strval(Configuration::get('PS_SHOP_NAME')),
 					'order' => $order,
 					'return_allowed' => (int)($order->isReturnable()),
@@ -118,7 +118,7 @@ class OrderDetailControllerCore extends FrontController
 					'order_state' => (int)($id_order_state),
 					'invoiceAllowed' => (int)(Configuration::get('PS_INVOICE')),
 					'invoice' => (OrderState::invoiceAvailable((int)($id_order_state)) AND $order->invoice_number),
-					'order_history' => $order->getHistory((int)($this->cookie->id_lang), false, true),
+					'order_history' => $order->getHistory((int)(self::$cookie->id_lang), false, true),
 					'products' => $products,
 					'discounts' => $order->getDiscounts(),
 					'carrier' => $carrier,
@@ -133,8 +133,8 @@ class OrderDetailControllerCore extends FrontController
 					'use_tax' => Configuration::get('PS_TAX'),
 					'customizedDatas' => $customizedDatas));
 				if ($carrier->url AND $order->shipping_number)
-					$this->smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
-				$this->smarty->assign('HOOK_ORDERDETAILDISPLAYED', Module::hookExec('orderDetailDisplayed', array('order' => $order)));
+					self::$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
+				self::$smarty->assign('HOOK_ORDERDETAILDISPLAYED', Module::hookExec('orderDetailDisplayed', array('order' => $order)));
 				Module::hookExec('OrderDetail', array('carrier' => $carrier, 'order' => $order));
 			}
 			else
@@ -151,7 +151,7 @@ class OrderDetailControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'order-detail.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'order-detail.tpl');
 	}
 	
 	public function displayFooter()

@@ -56,10 +56,10 @@ class OrderFollowControllerCore extends FrontController
 
 			$order = new Order((int)($id_order));
 			if (!$order->isReturnable()) Tools::redirect('order-follow.php?errorNotReturnable');
-			if ($order->id_customer != $this->cookie->id_customer)
+			if ($order->id_customer != self::$cookie->id_customer)
 				die(Tools::displayError());
 			$orderReturn = new OrderReturn();
-			$orderReturn->id_customer = (int)($this->cookie->id_customer);
+			$orderReturn->id_customer = (int)(self::$cookie->id_customer);
 			$orderReturn->id_order = $id_order;
 			$orderReturn->question = strval(Tools::getValue('returnText'));
 			if (empty($orderReturn->question))
@@ -74,19 +74,19 @@ class OrderFollowControllerCore extends FrontController
 			Tools::redirect('order-follow.php');
 		}
 
-		$ordersReturn = OrderReturn::getOrdersReturn((int)($this->cookie->id_customer));
+		$ordersReturn = OrderReturn::getOrdersReturn((int)(self::$cookie->id_customer));
 		if (Tools::isSubmit('errorQuantity'))
-			$this->smarty->assign('errorQuantity', true);
+			self::$smarty->assign('errorQuantity', true);
 		elseif (Tools::isSubmit('errorMsg'))
-			$this->smarty->assign('errorMsg', true);
+			self::$smarty->assign('errorMsg', true);
 		elseif (Tools::isSubmit('errorDetail1'))
-			$this->smarty->assign('errorDetail1', true);
+			self::$smarty->assign('errorDetail1', true);
 		elseif (Tools::isSubmit('errorDetail2'))
-			$this->smarty->assign('errorDetail2', true);
+			self::$smarty->assign('errorDetail2', true);
 		elseif (Tools::isSubmit('errorNotReturnable'))
-			$this->smarty->assign('errorNotReturnable',true);
+			self::$smarty->assign('errorNotReturnable',true);
 
-		$this->smarty->assign('ordersReturn', $ordersReturn);
+		self::$smarty->assign('ordersReturn', $ordersReturn);
 	}
 	
 	public function setMedia()
@@ -98,7 +98,7 @@ class OrderFollowControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'order-follow.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'order-follow.tpl');
 	}
 }
 

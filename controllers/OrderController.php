@@ -47,16 +47,16 @@ class OrderControllerCore extends ParentOrderController
 		parent::preProcess();
 
 		/* If some products have disappear */
-		if (!$this->cart->checkQuantities())
+		if (!self::$cart->checkQuantities())
 		{
 			$this->step = 0;
 			$this->errors[] = Tools::displayError('An item in your cart is no longer available for this quantity, you cannot proceed with your order');
 		}
 
 		/* Check minimal amount */
-		$currency = Currency::getCurrency((int)$this->cart->id_currency);
+		$currency = Currency::getCurrency((int)self::$cart->id_currency);
 
-		$orderTotal = $this->cart->getOrderTotal();
+		$orderTotal = self::$cart->getOrderTotal();
 		$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
 
 		if ($orderTotal < $minimalPurchase)
@@ -66,13 +66,13 @@ class OrderControllerCore extends ParentOrderController
 			' '.Tools::displayError('is required in order to validate your order');
 		}
 
-		if (!$this->cookie->isLogged(true) AND in_array($this->step, array(1, 2, 3)))
+		if (!self::$cookie->isLogged(true) AND in_array($this->step, array(1, 2, 3)))
 			Tools::redirect('authentication.php?back=order.php?step='.$this->step);
 
-		$this->smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
+		self::$smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
 
 		if ($this->nbProducts)
-			$this->smarty->assign('virtual_cart', $isVirtualCart);
+			self::$smarty->assign('virtual_cart', $isVirtualCart);
 	}
 
 	public function displayHeader()
@@ -89,7 +89,7 @@ class OrderControllerCore extends ParentOrderController
 		switch ((int)$this->step)
 		{
 			case -1;
-				$this->smarty->assign('empty', 1);
+				self::$smarty->assign('empty', 1);
 				break;
 			case 1:
 				$this->_assignAddress();
@@ -107,10 +107,10 @@ class OrderControllerCore extends ParentOrderController
 				/* Bypass payment step if total is 0 */
 				if (($id_order = $this->_checkFreeOrder()) AND $id_order)
 				{
-					if ($this->cookie->is_guest)
+					if (self::$cookie->is_guest)
 					{
-						$email = $this->cookie->email;
-						$this->cookie->logout(); // If guest we clear the cookie for security reason
+						$email = self::$cookie->email;
+						self::$cookie->logout(); // If guest we clear the cookie for security reason
 						Tools::redirect('guest-tracking.php?id_order='.(int)$id_order.'&email='.urlencode($email));
 					}
 					else
@@ -131,19 +131,19 @@ class OrderControllerCore extends ParentOrderController
 		switch ((int)$this->step)
 		{
 			case -1:
-				$this->smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
+				self::$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
 				break;
 			case 1:
-				$this->smarty->display(_PS_THEME_DIR_.'order-address.tpl');
+				self::$smarty->display(_PS_THEME_DIR_.'order-address.tpl');
 				break;
 			case 2:
-				$this->smarty->display(_PS_THEME_DIR_.'order-carrier.tpl');
+				self::$smarty->display(_PS_THEME_DIR_.'order-carrier.tpl');
 				break;
 			case 3:
-				$this->smarty->display(_PS_THEME_DIR_.'order-payment.tpl');
+				self::$smarty->display(_PS_THEME_DIR_.'order-payment.tpl');
 				break;
 			default:
-				$this->smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
+				self::$smarty->display(_PS_THEME_DIR_.'shopping-cart.tpl');
 				break;
 		}
 	}
@@ -159,19 +159,19 @@ class OrderControllerCore extends ParentOrderController
 	{
 		global $isVirtualCart;
 
-		if ($this->step >= 2 AND (!$this->cart->id_address_delivery OR !$this->cart->id_address_invoice))
+		if ($this->step >= 2 AND (!self::$cart->id_address_delivery OR !self::$cart->id_address_invoice))
 			Tools::redirect('order.php?step=1');
-		$delivery = new Address((int)($this->cart->id_address_delivery));
-		$invoice = new Address((int)($this->cart->id_address_invoice));
+		$delivery = new Address((int)(self::$cart->id_address_delivery));
+		$invoice = new Address((int)(self::$cart->id_address_invoice));
 		if ($delivery->deleted OR $invoice->deleted)
 		{
 			if ($delivery->deleted)
-				unset($this->cart->id_address_delivery);
+				unset(self::$cart->id_address_delivery);
 			if ($invoice->deleted)
-				unset($this->cart->id_address_invoice);
+				unset(self::$cart->id_address_invoice);
 			Tools::redirect('order.php?step=1');
 		}
-		elseif ($this->step >= 3 AND !$this->cart->id_carrier AND !$isVirtualCart)
+		elseif ($this->step >= 3 AND !self::$cart->id_carrier AND !$isVirtualCart)
 			Tools::redirect('order.php?step=2');
 	}
 
@@ -184,9 +184,9 @@ class OrderControllerCore extends ParentOrderController
 			$this->errors[] = Tools::displayError('this address is not in a valid area');
 		else
 		{
-			$this->cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
-			$this->cart->id_address_invoice = Tools::isSubmit('same') ? $this->cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
-			if (!$this->cart->update())
+			self::$cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
+			self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
+			if (!self::$cart->update())
 				$this->errors[] = Tools::displayError('an error occurred while updating your cart');
 
 			if (Tools::isSubmit('message'))
@@ -211,14 +211,14 @@ class OrderControllerCore extends ParentOrderController
 
 		if (sizeof($this->errors))
 		{
-			$this->smarty->assign('errors', $this->errors);
+			self::$smarty->assign('errors', $this->errors);
 			$this->_assignCarrier();
 			$this->step = 2;
 			$this->displayContent();
 			include(dirname(__FILE__).'/../footer.php');
 			exit;
 		}
-		$orderTotal = $this->cart->getOrderTotal();
+		$orderTotal = self::$cart->getOrderTotal();
 	}
 
 	/* Address step */
@@ -226,8 +226,8 @@ class OrderControllerCore extends ParentOrderController
 	{
 		parent::_assignAddress();
 
-		$this->smarty->assign('cart', $this->cart);
-		if ($this->cookie->is_guest)
+		self::$smarty->assign('cart', self::$cart);
+		if (self::$cookie->is_guest)
 			Tools::redirect('order.php?step=2');
 	}
 
@@ -236,8 +236,8 @@ class OrderControllerCore extends ParentOrderController
 	{
 		global $defaultCountry;
 
-		if (isset($this->cookie->id_customer))
-			$customer = new Customer((int)($this->cookie->id_customer));
+		if (isset(self::$cookie->id_customer))
+			$customer = new Customer((int)(self::$cookie->id_customer));
 		else
 			die(Tools::displayError('Fatal error: No customer'));
 		// Assign carrier
@@ -245,7 +245,7 @@ class OrderControllerCore extends ParentOrderController
 		// Assign wrapping and TOS
 		$this->_assignWrappingAndTOS();
 
-		$this->smarty->assign('is_guest' ,(isset($this->cookie->is_guest) ? $this->cookie->is_guest : 0));
+		self::$smarty->assign('is_guest' ,(isset(self::$cookie->is_guest) ? self::$cookie->is_guest : 0));
 	}
 
 	/* Payment step */
@@ -257,10 +257,10 @@ class OrderControllerCore extends ParentOrderController
 		Hook::backBeforePayment('order.php?step=3');
 
 		/* We may need to display an order summary */
-		$this->smarty->assign($this->cart->getSummaryDetails());
+		self::$smarty->assign(self::$cart->getSummaryDetails());
 
-		$this->cookie->checkedTOS = '1';
-		$this->smarty->assign(array(
+		self::$cookie->checkedTOS = '1';
+		self::$smarty->assign(array(
 		    'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
 			'HOOK_PAYMENT' => Module::hookExecPayment(),
 			'total_price' => (float)($orderTotal),

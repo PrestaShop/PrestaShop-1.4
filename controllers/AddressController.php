@@ -45,16 +45,16 @@ class AddressControllerCore extends FrontController
 		parent::preProcess();
 		
 		if ($back = Tools::getValue('back'))
-			$this->smarty->assign('back', Tools::safeOutput($back));
+			self::$smarty->assign('back', Tools::safeOutput($back));
 		if ($mod = Tools::getValue('mod'))
-			$this->smarty->assign('mod', Tools::safeOutput($mod));
+			self::$smarty->assign('mod', Tools::safeOutput($mod));
 		
 		if (Tools::isSubmit('ajax') AND Tools::isSubmit('type'))
 		{
 			if (Tools::getValue('type') == 'delivery')
-				$id_address = isset($this->cart->id_address_delivery) ? (int)$this->cart->id_address_delivery : 0;
+				$id_address = isset(self::$cart->id_address_delivery) ? (int)self::$cart->id_address_delivery : 0;
 			elseif (Tools::getValue('type') == 'invoice')
-				$id_address = (isset($this->cart->id_address_invoice) AND $this->cart->id_address_invoice != $this->cart->id_address_delivery) ? (int)$this->cart->id_address_invoice : 0;
+				$id_address = (isset(self::$cart->id_address_invoice) AND self::$cart->id_address_invoice != self::$cart->id_address_delivery) ? (int)self::$cart->id_address_invoice : 0;
 			else
 				exit;
 		}
@@ -64,19 +64,19 @@ class AddressControllerCore extends FrontController
 		if ($id_address)
 		{
 			$this->_address = new Address((int)$id_address);
-			if (Validate::isLoadedObject($this->_address) AND Customer::customerHasAddress((int)($this->cookie->id_customer), (int)($id_address)))
+			if (Validate::isLoadedObject($this->_address) AND Customer::customerHasAddress((int)(self::$cookie->id_customer), (int)($id_address)))
 			{
 				if (Tools::isSubmit('delete'))
 				{
-					if ($this->cart->id_address_invoice == $this->_address->id)
-						unset($this->cart->id_address_invoice);
-					if ($this->cart->id_address_delivery == $this->_address->id)
-						unset($this->cart->id_address_delivery);
+					if (self::$cart->id_address_invoice == $this->_address->id)
+						unset(self::$cart->id_address_invoice);
+					if (self::$cart->id_address_delivery == $this->_address->id)
+						unset(self::$cart->id_address_delivery);
 					if ($this->_address->delete())
 						Tools::redirect('addresses.php');
 					$this->errors[] = Tools::displayError('this address cannot be deleted');
 				}
-				$this->smarty->assign(array('address' => $this->_address, 'id_address' => (int)$id_address));
+				self::$smarty->assign(array('address' => $this->_address, 'id_address' => (int)$id_address));
 			}
 			elseif (Tools::isSubmit('ajax'))
 				exit;
@@ -87,7 +87,7 @@ class AddressControllerCore extends FrontController
 		{
 			$address = new Address();
 			$this->errors = $address->validateControler();
-			$address->id_customer = (int)($this->cookie->id_customer);
+			$address->id_customer = (int)(self::$cookie->id_customer);
 
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
@@ -118,7 +118,7 @@ class AddressControllerCore extends FrontController
 				$address->dni = NULL;
 			if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 				strcmp(Tools::getToken(false), Tools::getValue('token')) AND
-				$this->cookie->isLogged(true) === true)
+				self::$cookie->isLogged(true) === true)
 				$this->errors[] = Tools::displayError('invalid token');
 
 			if ((int)($country->contains_states) AND !(int)($address->id_state))
@@ -132,14 +132,14 @@ class AddressControllerCore extends FrontController
 					if (Validate::isLoadedObject($country) AND !$country->contains_states)
 						$address->id_state = 0;
 					$address_old = new Address((int)$id_address);
-					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress((int)$this->cookie->id_customer, (int)$address_old->id))
+					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress((int)self::$cookie->id_customer, (int)$address_old->id))
 					{
 						if (!Tools::isSubmit('ajax'))
 						{
-							if ($this->cart->id_address_invoice == $address_old->id)
-								unset($this->cart->id_address_invoice);
-							if ($this->cart->id_address_delivery == $address_old->id)
-								unset($this->cart->id_address_delivery);
+							if (self::$cart->id_address_invoice == $address_old->id)
+								unset(self::$cart->id_address_invoice);
+							if (self::$cart->id_address_delivery == $address_old->id)
+								unset(self::$cart->id_address_delivery);
 						}
 						
 						if ($address_old->isUsed())
@@ -151,7 +151,7 @@ class AddressControllerCore extends FrontController
 						}
 					}
 				}
-				elseif ($this->cookie->is_guest)
+				elseif (self::$cookie->is_guest)
 					Tools::redirect('addresses.php');
 				
 				if ($result = $address->save())
@@ -159,16 +159,16 @@ class AddressControllerCore extends FrontController
 					if ((bool)(Tools::getValue('select_address', false)) == true OR (Tools::isSubmit('ajax') AND Tools::getValue('type') == 'invoice'))
 					{
 						/* This new adress is for invoice_adress, select it */
-						$this->cart->id_address_invoice = (int)($address->id);
-						$this->cart->update();
+						self::$cart->id_address_invoice = (int)($address->id);
+						self::$cart->update();
 					}
 					if (Tools::isSubmit('ajax'))
 					{
 						$return = array(
 							'hasError' => !empty($this->errors), 
 							'errors' => $this->errors,
-							'id_address_delivery' => $this->cart->id_address_delivery,
-							'id_address_invoice' => $this->cart->id_address_invoice
+							'id_address_delivery' => self::$cart->id_address_delivery,
+							'id_address_invoice' => self::$cart->id_address_invoice
 						);
 						die(Tools::jsonEncode($return));
 					}
@@ -179,7 +179,7 @@ class AddressControllerCore extends FrontController
 		}
 		elseif (!$id_address)
 		{
-			$customer = new Customer((int)($this->cookie->id_customer));
+			$customer = new Customer((int)(self::$cookie->id_customer));
 			if (Validate::isLoadedObject($customer))
 			{
 				$_POST['firstname'] = $customer->firstname;
@@ -207,7 +207,7 @@ class AddressControllerCore extends FrontController
 		parent::process();
 
 		/* Secure restriction for guest */
-		if ($this->cookie->is_guest)
+		if (self::$cookie->is_guest)
 			Tools::redirect('addresses.php');
 
 		if (Tools::isSubmit('id_country') AND Tools::getValue('id_country') != NULL AND is_numeric(Tools::getValue('id_country')))
@@ -223,12 +223,12 @@ class AddressControllerCore extends FrontController
 		else
 			$selectedCountry = (int)Configuration::get('PS_COUNTRY_DEFAULT');
 			
-		$countries = Country::getCountries((int)$this->cookie->id_lang, true);
+		$countries = Country::getCountries((int)self::$cookie->id_lang, true);
 		$countriesList = '';
 		foreach ($countries AS $country)
 			$countriesList .= '<option value="'.(int)($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'countries_list' => $countriesList,
 			'countries' => $countries,
 			'errors' => $this->errors,
@@ -246,7 +246,7 @@ class AddressControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'address.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'address.tpl');
 	}
 	
 	public function displayFooter()

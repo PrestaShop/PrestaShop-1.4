@@ -41,7 +41,7 @@ class IdentityControllerCore extends FrontController
 	{
 		parent::preProcess();
 		
-		$customer = new Customer((int)($this->cookie->id_customer));
+		$customer = new Customer((int)(self::$cookie->id_customer));
 
 		if (sizeof($_POST))
 		{
@@ -65,7 +65,7 @@ class IdentityControllerCore extends FrontController
 				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 
 				$_POST['old_passwd'] = trim($_POST['old_passwd']);
-				if (empty($_POST['old_passwd']) OR (Tools::encrypt($_POST['old_passwd']) != $this->cookie->passwd))
+				if (empty($_POST['old_passwd']) OR (Tools::encrypt($_POST['old_passwd']) != self::$cookie->passwd))
 					$this->errors[] = Tools::displayError('your current password is not that one');
 				elseif ($_POST['passwd'] != $_POST['confirmation'])
 					$this->errors[] = Tools::displayError('password and confirmation do not match');
@@ -79,12 +79,12 @@ class IdentityControllerCore extends FrontController
 					$customer->id_default_group = (int)($prev_id_default_group);
 					$customer->firstname = Tools::ucfirst(Tools::strtolower($customer->firstname));
 					if (Tools::getValue('passwd'))
-						$this->cookie->passwd = $customer->passwd;
+						self::$cookie->passwd = $customer->passwd;
 					if ($customer->update())
 					{
-						$this->cookie->customer_lastname = $customer->lastname;
-						$this->cookie->customer_firstname = $customer->firstname;
-						$this->smarty->assign('confirmation', 1);
+						self::$cookie->customer_lastname = $customer->lastname;
+						self::$cookie->customer_firstname = $customer->firstname;
+						self::$smarty->assign('confirmation', 1);
 					}
 					else
 						$this->errors[] = Tools::displayError('impossible to update information');
@@ -100,7 +100,7 @@ class IdentityControllerCore extends FrontController
 			$birthday = array('-', '-', '-');
 
 		/* Generate years, months and days */
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'years' => Tools::dateYears(),
 			'sl_year' => $birthday[0],
 			'months' => Tools::dateMonths(),
@@ -120,7 +120,7 @@ class IdentityControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'identity.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'identity.tpl');
 	}
 }
 

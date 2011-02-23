@@ -49,16 +49,16 @@ class OrderReturnControllerCore extends FrontController
 		else
 		{
 			$orderRet = new OrderReturn((int)($_GET['id_order_return']));
-			if (Validate::isLoadedObject($orderRet) AND $orderRet->id_customer == $this->cookie->id_customer)
+			if (Validate::isLoadedObject($orderRet) AND $orderRet->id_customer == self::$cookie->id_customer)
 			{
 				$order = new Order((int)($orderRet->id_order));
 				if (Validate::isLoadedObject($order))
 				{
 					$state = new OrderReturnState((int)($orderRet->state));
-					$this->smarty->assign(array(
+					self::$smarty->assign(array(
 						'orderRet' => $orderRet,
 						'order' => $order,
-						'state_name' => $state->name[(int)($this->cookie->id_lang)],
+						'state_name' => $state->name[(int)(self::$cookie->id_lang)],
 						'return_allowed' => false,
 						'products' => OrderReturn::getOrdersReturnProducts((int)($orderRet->id), $order),
 						'returnedCustomizations' => OrderReturn::getReturnedCustomizedProducts((int)($orderRet->id_order)),
@@ -72,7 +72,7 @@ class OrderReturnControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('cannot find this order return');
 		}
 
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'errors' => $this->errors,
 			'nbdaysreturn' => (int)(Configuration::get('PS_ORDER_RETURN_NB_DAYS'))
 		));
@@ -87,7 +87,7 @@ class OrderReturnControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'order-return.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'order-return.tpl');
 	}
 	
 	public function displayFooter()

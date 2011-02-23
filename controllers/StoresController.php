@@ -142,7 +142,7 @@ class StoresControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'defaultLat' => (float)Configuration::get('PS_STORES_CENTER_LAT'),
 			'defaultLong' => (float)Configuration::get('PS_STORES_CENTER_LONG')
 		));
@@ -160,6 +160,6 @@ class StoresControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'stores.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'stores.tpl');
 	}
 }

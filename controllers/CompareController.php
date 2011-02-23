@@ -58,11 +58,11 @@ class CompareControllerCore extends FrontController
 			
 				foreach ($ids AS $id)
 				{			
-					$curProduct = new Product((int)($id), true, (int)($this->cookie->id_lang));
+					$curProduct = new Product((int)($id), true, (int)(self::$cookie->id_lang));
 					if (!Validate::isLoadedObject($curProduct))
 						continue;
 						
-					foreach ($curProduct->getFrontFeatures($this->cookie->id_lang) AS $feature)
+					foreach ($curProduct->getFrontFeatures(self::$cookie->id_lang) AS $feature)
 						$listFeatures[$curProduct->id][$feature['id_feature']] = $feature['value'];
 
 					$cover = Product::getCover($id);			
@@ -75,8 +75,8 @@ class CompareControllerCore extends FrontController
 					$width = 80 / sizeof($listProducts);
 
 					$hasProduct = true;
-					$ordered_features = Feature::getFeaturesForComparison($ids, $this->cookie->id_lang);
-					$this->smarty->assign(array(
+					$ordered_features = Feature::getFeaturesForComparison($ids, self::$cookie->id_lang);
+					self::$smarty->assign(array(
 						'ordered_features' => $ordered_features,
 						'product_features' => $listFeatures,
 						'products' => $listProducts,
@@ -84,17 +84,17 @@ class CompareControllerCore extends FrontController
 						'width' => $width,
 						'homeSize' => Image::getSize('home')
 					));
-					$this->smarty->assign('HOOK_EXTRA_PRODUCT_COMPARISON', Module::hookExec('extraProductComparison', array('list_ids_product' => $ids)));
+					self::$smarty->assign('HOOK_EXTRA_PRODUCT_COMPARISON', Module::hookExec('extraProductComparison', array('list_ids_product' => $ids)));
 				}
 			}
 		} 
-		$this->smarty->assign('hasProduct', $hasProduct);
+		self::$smarty->assign('hasProduct', $hasProduct);
 	}
 	
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'products-comparison.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'products-comparison.tpl');
 	}
 }
 

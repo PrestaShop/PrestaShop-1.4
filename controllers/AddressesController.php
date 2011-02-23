@@ -47,16 +47,16 @@ class AddressesControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$customer = new Customer((int)($this->cookie->id_customer));
+		$customer = new Customer((int)(self::$cookie->id_customer));
 		if (!Validate::isLoadedObject($customer))
 			die(Tools::displayError('customer not found'));
-		$this->smarty->assign('addresses', $customer->getAddresses((int)($this->cookie->id_lang)));
+		self::$smarty->assign('addresses', $customer->getAddresses((int)(self::$cookie->id_lang)));
 	}
 	
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'addresses.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'addresses.tpl');
 	}
 }
 

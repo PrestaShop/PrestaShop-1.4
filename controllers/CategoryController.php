@@ -51,11 +51,11 @@ class CategoryControllerCore extends FrontController
 	public function preProcess()
 	{
 		if ($id_category = (int)Tools::getValue('id_category'))
-			$this->category = new Category($id_category, $this->cookie->id_lang);
+			$this->category = new Category($id_category, self::$cookie->id_lang);
 			
 		// Automatically redirect to the canonical URL if the current in is the right one
 		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-		$currentURL = $this->link->getCategoryLink($this->category);
+		$currentURL = self::$link->getCategoryLink($this->category);
 		$currentURL = preg_replace('/[?&].*$/', '', $currentURL);
 		if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 		{
@@ -74,9 +74,9 @@ class CategoryControllerCore extends FrontController
 
 				$default_rewrite = array();
 				foreach ($rewrite_infos AS $infos)
-					$default_rewrite[$infos['id_lang']] = $this->link->getCategoryLink((int)$id_category, $infos['link_rewrite'], $infos['id_lang']);
+					$default_rewrite[$infos['id_lang']] = self::$link->getCategoryLink((int)$id_category, $infos['link_rewrite'], $infos['id_lang']);
 
-				$this->smarty->assign('lang_rewrite_urls', $default_rewrite);
+				self::$smarty->assign('lang_rewrite_urls', $default_rewrite);
 			}
 	}
 	
@@ -89,16 +89,16 @@ class CategoryControllerCore extends FrontController
 		{
 			if (!Validate::isLoadedObject($this->category))
 				$this->errors[] = Tools::displayError('category does not exist');
-			elseif (!$this->category->checkAccess((int)($this->cookie->id_customer)))
+			elseif (!$this->category->checkAccess((int)(self::$cookie->id_customer)))
 				$this->errors[] = Tools::displayError('you do not have access to this category');
 			elseif (!$this->category->active)
-				$this->smarty->assign('category', $this->category);
+				self::$smarty->assign('category', $this->category);
 			else
 			{
-				$rewrited_url = $this->link->getCategoryLink((int)$this->category->id, $this->category->link_rewrite);
+				$rewrited_url = self::$link->getCategoryLink((int)$this->category->id, $this->category->link_rewrite);
 
 				/* Scenes  (could be externalised to another controler if you need them */
-				$this->smarty->assign('scenes', Scene::getScenes((int)($this->category->id), (int)($this->cookie->id_lang), true, false));
+				self::$smarty->assign('scenes', Scene::getScenes((int)($this->category->id), (int)(self::$cookie->id_lang), true, false));
 				
 				/* Scenes images formats */
 				if ($sceneImageTypes = ImageType::getImagesTypes('scenes'))
@@ -110,17 +110,17 @@ class CategoryControllerCore extends FrontController
 						elseif ($sceneImageType['name'] == 'large_scene')
 							$largeSceneImageType = $sceneImageType;
 					}
-					$this->smarty->assign('thumbSceneImageType', isset($thumbSceneImageType) ? $thumbSceneImageType : NULL);
-					$this->smarty->assign('largeSceneImageType', isset($largeSceneImageType) ? $largeSceneImageType : NULL);
+					self::$smarty->assign('thumbSceneImageType', isset($thumbSceneImageType) ? $thumbSceneImageType : NULL);
+					self::$smarty->assign('largeSceneImageType', isset($largeSceneImageType) ? $largeSceneImageType : NULL);
 				}
 
 				$this->category->description = nl2br2($this->category->description);
-				$subCategories = $this->category->getSubCategories((int)($this->cookie->id_lang));
-				$this->smarty->assign('category', $this->category);
+				$subCategories = $this->category->getSubCategories((int)(self::$cookie->id_lang));
+				self::$smarty->assign('category', $this->category);
 				if (Db::getInstance()->numRows())
 				{
-					$this->smarty->assign('subcategories', $subCategories);
-					$this->smarty->assign(array(
+					self::$smarty->assign('subcategories', $subCategories);
+					self::$smarty->assign(array(
 						'subcategories_nb_total' => sizeof($subCategories),
 						'subcategories_nb_half' => ceil(sizeof($subCategories) / 2)));
 				}
@@ -128,10 +128,10 @@ class CategoryControllerCore extends FrontController
 				{
 					$nbProducts = $this->category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
 					$this->pagination((int)$nbProducts);
-					$this->smarty->assign('nb_products', (int)$nbProducts);
-					$cat_products = $this->category->getProducts((int)($this->cookie->id_lang), (int)($this->p), (int)($this->n), $this->orderBy, $this->orderWay);
+					self::$smarty->assign('nb_products', (int)$nbProducts);
+					$cat_products = $this->category->getProducts((int)(self::$cookie->id_lang), (int)($this->p), (int)($this->n), $this->orderBy, $this->orderWay);
 				}
-				$this->smarty->assign(array(
+				self::$smarty->assign(array(
 					'products' => (isset($cat_products) AND $cat_products) ? $cat_products : NULL,
 					'id_category' => (int)($this->category->id),
 					'id_category_parent' => (int)($this->category->id_parent),
@@ -146,7 +146,7 @@ class CategoryControllerCore extends FrontController
 			}
 		}
 
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'allow_oosp' => (int)(Configuration::get('PS_ORDER_OUT_OF_STOCK')),
 			'comparator_max_item' => (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')),
 			'suppliers' => Supplier::getSuppliers()
@@ -156,7 +156,7 @@ class CategoryControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'category.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'category.tpl');
 	}
 }
 

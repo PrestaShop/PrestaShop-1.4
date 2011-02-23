@@ -47,10 +47,10 @@ class SearchControllerCore extends FrontController
 		$query = urldecode(Tools::getValue('q'));
 		if ($this->ajaxSearch)
 		{
-			$this->link = new Link();
+			self::$link = new Link();
 			$searchResults = Search::find((int)(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
 			foreach ($searchResults AS &$product)
-				$product['product_link'] = $this->link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
+				$product['product_link'] = self::$link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
 			die(Tools::jsonEncode($searchResults));
 		}
 		
@@ -59,10 +59,10 @@ class SearchControllerCore extends FrontController
 			$this->productSort();
 			$this->n = abs((int)(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
 			$this->p = abs((int)(Tools::getValue('p', 1)));
-			$search = Search::find((int)($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			$search = Search::find((int)(self::$cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
-			$this->smarty->assign(array(
+			self::$smarty->assign(array(
 			'products' => $search['result'], // DEPRECATED (since to 1.4), not use this: conflict with block_cart module
 			'search_products' => $search['result'],
 			'nbProducts' => $search['total'],
@@ -75,10 +75,10 @@ class SearchControllerCore extends FrontController
 			$this->productSort();
 			$this->n = abs((int)(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
 			$this->p = abs((int)(Tools::getValue('p', 1)));
-			$search = Search::find((int)($this->cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			$search = Search::find((int)(self::$cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
-			$this->smarty->assign(array(
+			self::$smarty->assign(array(
 			'products' => $search['result'], // DEPRECATED (since to 1.4), not use this: conflict with block_cart module
 			'search_products' => $search['result'],
 			'nbProducts' => $search['total'],
@@ -87,10 +87,10 @@ class SearchControllerCore extends FrontController
 		}
 		elseif ($tag = Tools::getValue('tag') AND !is_array($tag))
 		{
-			$nbProducts = (int)(Search::searchTag((int)($this->cookie->id_lang), $tag, true));
+			$nbProducts = (int)(Search::searchTag((int)(self::$cookie->id_lang), $tag, true));
 			$this->pagination($nbProducts);
-			$result = Search::searchTag((int)($this->cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay);
-			$this->smarty->assign(array(
+			$result = Search::searchTag((int)(self::$cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			self::$smarty->assign(array(
 			'search_tag' => $tag,
 			'products' => $result, // DEPRECATED (since to 1.4), not use this: conflict with block_cart module
 			'search_products' => $result,
@@ -99,13 +99,13 @@ class SearchControllerCore extends FrontController
 		}
 		else
 		{
-			$this->smarty->assign(array(
+			self::$smarty->assign(array(
 			'products' => array(),
 			'search_products' => array(),
 			'pages_nb' => 1,
 			'nbProducts' => 0));
 		}
-		$this->smarty->assign('add_prod_display', Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'));
+		self::$smarty->assign('add_prod_display', Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'));
 	}
 	
 	public function displayHeader()
@@ -117,7 +117,7 @@ class SearchControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'search.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'search.tpl');
 	}
 	
 	public function displayFooter()

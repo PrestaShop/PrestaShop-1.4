@@ -45,20 +45,20 @@ class SitemapControllerCore extends FrontController
 	{
 		parent::process();
 		
-		$this->smarty->assign('categoriesTree', Category::getRootCategory()->recurseLiteCategTree(0));
-		$this->smarty->assign('categoriescmsTree', CMSCategory::getRecurseCategory(_USER_ID_LANG_, 1, 1, 1));
-		$this->smarty->assign('voucherAllowed', (int)(Configuration::get('PS_VOUCHERS')));
+		self::$smarty->assign('categoriesTree', Category::getRootCategory()->recurseLiteCategTree(0));
+		self::$smarty->assign('categoriescmsTree', CMSCategory::getRecurseCategory(_USER_ID_LANG_, 1, 1, 1));
+		self::$smarty->assign('voucherAllowed', (int)(Configuration::get('PS_VOUCHERS')));
 		$blockmanufacturer = Module::getInstanceByName('blockmanufacturer');
 		$blocksupplier = Module::getInstanceByName('blocksupplier');
-		$this->smarty->assign('display_manufacturer_link', (((int)$blockmanufacturer->id AND Configuration::get('PS_DISPLAY_SUPPLIERS')) ? true : false));
-		$this->smarty->assign('display_supplier_link', (((int)$blocksupplier->id AND Configuration::get('PS_DISPLAY_SUPPLIERS')) ? true : false));
-		$this->smarty->assign('PS_DISPLAY_SUPPLIERS', Configuration::get('PS_DISPLAY_SUPPLIERS'));
-		$this->smarty->assign('display_store', Configuration::get('PS_STORES_DISPLAY_SITEMAP'));
+		self::$smarty->assign('display_manufacturer_link', (((int)$blockmanufacturer->id AND Configuration::get('PS_DISPLAY_SUPPLIERS')) ? true : false));
+		self::$smarty->assign('display_supplier_link', (((int)$blocksupplier->id AND Configuration::get('PS_DISPLAY_SUPPLIERS')) ? true : false));
+		self::$smarty->assign('PS_DISPLAY_SUPPLIERS', Configuration::get('PS_DISPLAY_SUPPLIERS'));
+		self::$smarty->assign('display_store', Configuration::get('PS_STORES_DISPLAY_SITEMAP'));
 	}
 	
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'sitemap.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'sitemap.tpl');
 	}
 }

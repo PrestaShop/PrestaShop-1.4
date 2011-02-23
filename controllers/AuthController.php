@@ -38,13 +38,13 @@ class AuthControllerCore extends FrontController
 	{
 		parent::preProcess();
 		
-		if ($this->cookie->isLogged() AND !Tools::isSubmit('ajax'))
+		if (self::$cookie->isLogged() AND !Tools::isSubmit('ajax'))
 			Tools::redirect('my-account.php');
 		
 		if (Tools::getValue('create_account'))
 		{
 			$create_account = 1;
-			$this->smarty->assign('email_create', 1);
+			self::$smarty->assign('email_create', 1);
 		}
 
 		if (Tools::isSubmit('SubmitCreate'))
@@ -60,7 +60,7 @@ class AuthControllerCore extends FrontController
 			else
 			{
 				$create_account = 1;
-				$this->smarty->assign('email_create', Tools::safeOutput($email));
+				self::$smarty->assign('email_create', Tools::safeOutput($email));
 				$_POST['email'] = $email;
 			}
 		}
@@ -69,7 +69,7 @@ class AuthControllerCore extends FrontController
 		{
 			$create_account = 1;
 			if (Tools::isSubmit('submitAccount'))
-				$this->smarty->assign('email_create', 1);
+				self::$smarty->assign('email_create', 1);
 			if (Customer::customerExists(Tools::getValue('email')))
 				$this->errors[] = Tools::displayError('an account is already registered with this e-mail, please fill in the password or request a new one'); 
 			/* New Guest customer */
@@ -148,23 +148,23 @@ class AuthControllerCore extends FrontController
 							{
 								if (!$customer->is_guest)
 								{
-									if (!Mail::Send((int)($this->cookie->id_lang), 'account', Mail::l('Welcome!'),
+									if (!Mail::Send((int)(self::$cookie->id_lang), 'account', Mail::l('Welcome!'),
 									array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
 										$this->errors[] = Tools::displayError('cannot send email');
 								}
-								$this->smarty->assign('confirmation', 1);
-								$this->cookie->id_customer = (int)($customer->id);
-								$this->cookie->customer_lastname = $customer->lastname;
-								$this->cookie->customer_firstname = $customer->firstname;
-								$this->cookie->passwd = $customer->passwd;
-								$this->cookie->logged = 1;
-								$this->cookie->email = $customer->email;
-								$this->cookie->is_guest = !Tools::getValue('is_new_customer', 1);
+								self::$smarty->assign('confirmation', 1);
+								self::$cookie->id_customer = (int)($customer->id);
+								self::$cookie->customer_lastname = $customer->lastname;
+								self::$cookie->customer_firstname = $customer->firstname;
+								self::$cookie->passwd = $customer->passwd;
+								self::$cookie->logged = 1;
+								self::$cookie->email = $customer->email;
+								self::$cookie->is_guest = !Tools::getValue('is_new_customer', 1);
 								/* Update cart address */
-								$this->cart->secure_key = $customer->secure_key;
-								$this->cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
-								$this->cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
-								$this->cart->update();
+								self::$cart->secure_key = $customer->secure_key;
+								self::$cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
+								self::$cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
+								self::$cart->update();
 								Module::hookExec('createAccount', array(
 									'_POST' => $_POST,
 									'newCustomer' => $customer
@@ -175,9 +175,9 @@ class AuthControllerCore extends FrontController
 										'hasError' => !empty($this->errors), 
 										'errors' => $this->errors,
 										'isSaved' => true,
-										'id_customer' => (int)$this->cookie->id_customer,
-										'id_address_delivery' => $this->cart->id_address_delivery,
-										'id_address_invoice' => $this->cart->id_address_invoice,
+										'id_customer' => (int)self::$cookie->id_customer,
+										'id_address_delivery' => self::$cart->id_address_delivery,
+										'id_address_invoice' => self::$cart->id_address_invoice,
 										'token' => Tools::getToken(false)
 									);
 									die(Tools::jsonEncode($return));
@@ -234,19 +234,19 @@ class AuthControllerCore extends FrontController
 				}
 				else
 				{
-					$this->cookie->id_customer = (int)($customer->id);
-					$this->cookie->customer_lastname = $customer->lastname;
-					$this->cookie->customer_firstname = $customer->firstname;
-					$this->cookie->logged = 1;
-					$this->cookie->is_guest = $customer->isGuest();
-					$this->cookie->passwd = $customer->passwd;
-					$this->cookie->email = $customer->email;
-					if (Configuration::get('PS_CART_FOLLOWING') AND (empty($this->cookie->id_cart) OR Cart::getNbProducts($this->cookie->id_cart) == 0))
-						$this->cookie->id_cart = (int)(Cart::lastNoneOrderedCart((int)($customer->id)));
+					self::$cookie->id_customer = (int)($customer->id);
+					self::$cookie->customer_lastname = $customer->lastname;
+					self::$cookie->customer_firstname = $customer->firstname;
+					self::$cookie->logged = 1;
+					self::$cookie->is_guest = $customer->isGuest();
+					self::$cookie->passwd = $customer->passwd;
+					self::$cookie->email = $customer->email;
+					if (Configuration::get('PS_CART_FOLLOWING') AND (empty(self::$cookie->id_cart) OR Cart::getNbProducts(self::$cookie->id_cart) == 0))
+						self::$cookie->id_cart = (int)(Cart::lastNoneOrderedCart((int)($customer->id)));
 					/* Update cart address */
-					$this->cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
-					$this->cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
-					$this->cart->update();
+					self::$cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
+					self::$cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
+					self::$cart->update();
 					Module::hookExec('authentication');
 					if (!Tools::isSubmit('ajax'))
 					{
@@ -289,16 +289,16 @@ class AuthControllerCore extends FrontController
 			}*/
 			if (!isset($selectedCountry))
 				$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-			$countries = Country::getCountries((int)($this->cookie->id_lang), true);
+			$countries = Country::getCountries((int)(self::$cookie->id_lang), true);
 
-			$this->smarty->assign(array(
+			self::$smarty->assign(array(
 				'countries' => $countries,
 				'sl_country' => (isset($selectedCountry) ? $selectedCountry : 0),
 				'vat_management' => Configuration::get('VATNUMBER_MANAGEMENT')
 			));
 
 			/* Call a hook to display more information on form */
-			$this->smarty->assign(array(
+			self::$smarty->assign(array(
 				'HOOK_CREATE_ACCOUNT_FORM' => Module::hookExec('createAccountForm'),
 				'HOOK_CREATE_ACCOUNT_TOP' => Module::hookExec('createAccountTop')
 			));
@@ -316,7 +316,7 @@ class AuthControllerCore extends FrontController
 			$selectedDays = (int)($_POST['days']);
 		$days = Tools::dateDays();
 		
-		$this->smarty->assign(array(
+		self::$smarty->assign(array(
 			'years' => $years,
 			'sl_year' => (isset($selectedYears) ? $selectedYears : 0),
 			'months' => $months,
@@ -343,11 +343,11 @@ class AuthControllerCore extends FrontController
 			$back .= (strpos($back, '?') !== false ? '&' : '?').'key='.$key;
 		if (!empty($back))
 		{
-			$this->smarty->assign('back', Tools::safeOutput($back));
+			self::$smarty->assign('back', Tools::safeOutput($back));
 			if (strpos($back, 'order.php') !== false)
 			{
-				$countries = Country::getCountries((int)($this->cookie->id_lang), true);
-				$this->smarty->assign(array(
+				$countries = Country::getCountries((int)(self::$cookie->id_lang), true);
+				self::$smarty->assign(array(
 					'inOrderProcess' => true, 
 					'PS_GUEST_CHECKOUT_ENABLED' => Configuration::get('PS_GUEST_CHECKOUT_ENABLED'),
 					'sl_country' => (int)Tools::getValue('id_country', Configuration::get('PS_COUNTRY_DEFAULT')),
@@ -360,7 +360,7 @@ class AuthControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		$this->smarty->display(_PS_THEME_DIR_.'authentication.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'authentication.tpl');
 	}
 }
 
