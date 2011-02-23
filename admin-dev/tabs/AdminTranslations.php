@@ -855,28 +855,69 @@ class AdminTranslations extends AdminTab
 		<script type="text/javascript">toggleElemValue(\'buttonall\', '.($closed ? 'openAll' : 'closeAll').', '.($closed ? 'closeAll' : 'openAll').');</script>';
 		return $str_output;
 	}
+	
 	protected function displaySubmitButtons($name)
 	{
 		return '
 			<input type="submit" name="submitTranslations'.ucfirst($name).'" value="'.$this->l('Update translations').'" class="button" />
 			<input type="submit" name="submitTranslations'.ucfirst($name).'AndStay" value="'.$this->l('Update and stay').'" class="button" />';
 	}
+	
 	public function displayAutoTranslate()
 	{
-		$language_code = Tools::htmlentitiesUTF8(Language::getLanguageCodeByIso(Tools::getValue('lang')));
+		$languageCode = Tools::htmlentitiesUTF8(Language::getLanguageCodeByIso(Tools::getValue('lang')));
 		return '
+		<input type="button" class="button" onclick="translateAll();" value="'.$this->l('Translate with Google (experimental)').'" />
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">
-		var gg_translate = {
-			language_code	: \''.$language_code.'\',
-			not_available	: \''.addslashes(html_entity_decode($this->l('this language is not available on Google Translate API'), ENT_QUOTES, 'utf-8')).'\',
-			tooltip_title	: \''.addslashes(html_entity_decode($this->l('Google translate suggests :'), ENT_QUOTES, 'utf-8')).'\'
-		};
+			var gg_translate = {
+				language_code : \''.$languageCode.'\',
+				not_available : \''.addslashes(html_entity_decode($this->l('this language is not available on Google Translate API'), ENT_QUOTES, 'utf-8')).'\',
+				tooltip_title : \''.addslashes(html_entity_decode($this->l('Google translate suggests :'), ENT_QUOTES, 'utf-8')).'\'
+			};
 		</script>
-		<script type="text/javascript" src="../js/gg-translate.js"></script>';
+		<script type="text/javascript" src="../js/gg-translate.js"></script>
+		<script type="text/javascript">
+			var displayOnce = 0;
+			google.load("language", "1");
+			function translateAll() {
+				if (!google.language.isTranslatable("'.$languageCode.'"))
+					alert(\'"'.$languageCode.'" : '.addslashes($this->l('this language is not available on Google Translate API')).'\');
+				else
+				{
+					$.each($(\'input[type="text"]\'), function() {
+						var tdinput = $(this);
+						if (tdinput.attr("value") == "" && tdinput.parent("td").prev().html()) {
+							google.language.translate(tdinput.parent("td").prev().html(), "en", "'.$languageCode.'", function(result) {
+								if (!result.error)
+									tdinput.val(result.translation);
+								else if (displayOnce == 0)
+								{
+									displayOnce = 1;
+									alert(result.error.message);
+								}
+							});
+						}
+					});
+					$.each($("textarea"), function() {
+						var tdtextarea = $(this);
+						if (tdtextarea.html() == "" && tdtextarea.parent("td").prev().html()) {
+							google.language.translate(tdtextarea.parent("td").prev().html(), "en", "'.$languageCode.'", function(result) {
+								if (!result.error)
+									tdtextarea.html(result.translation);
+								else if (displayOnce == 0)
+								{
+									displayOnce = 1;
+									alert(result.error.message);
+								}
+							});
+						}
+					});
+				}
+			}
+		</script>';
 	}
-
-
+	
 	public function displayLimitPostWarning($count)
 	{
 		if (ini_get('suhosin.post.max_vars') AND ini_get('suhosin.post.max_vars') < $count) 
