@@ -72,9 +72,9 @@ function displayConfirm()
 		die('Not logged');
 	unset($cookie->paypal_token);
 
-	if ($cart->id_currency != $ppPayment->getCurrency()->id)
+	if ($cart->id_currency != $ppPayment->getCurrency((int)$cart->id_currency)->id)
 	{
-		$cart->id_currency = (int)($ppPayment->getCurrency()->id);
+		$cart->id_currency = (int)($ppPayment->getCurrency((int)$cart->id_currency)->id);
 		$cookie->id_currency = (int)($cart->id_currency);
 		$cart->update();
 		Tools::redirect('modules/'.$ppPayment->name.'/payment/submit.php');
@@ -86,7 +86,7 @@ function displayConfirm()
 	$smarty->assign(array(
 		'logo' => $ppPayment->getLogo(),
 		'cust_currency' => $cart->id_currency,
-		'currency' => $ppPayment->getCurrency(),
+		'currency' => $ppPayment->getCurrency((int)$cart->id_currency),
 		'total' => $cart->getOrderTotal(true, Cart::BOTH),
 		'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
 		'mode' => 'payment/'

@@ -404,7 +404,7 @@ class MoneyBookers extends PaymentModule
 			return;
 
 		$flag = false;
-		$allowedCurrencies = $this->getCurrency();
+		$allowedCurrencies = $this->getCurrency((int)$params['cart']->id_currency);
 		foreach ($allowedCurrencies AS $allowedCurrency)
 			if ($allowedCurrency['id_currency'] == $params['cart']->id_currency)
 			{

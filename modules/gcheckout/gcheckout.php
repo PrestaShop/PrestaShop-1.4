@@ -174,7 +174,7 @@ class GCheckout extends PaymentModule
 		require_once(dirname(__FILE__).'/library/googleitem.php');
 		require_once(dirname(__FILE__).'/library/googleshipping.php');
 		
-		$currency = $this->getCurrency();
+		$currency = $this->getCurrency((int)$cart->id_currency);
 		if ($cart->id_currency != $currency->id)
 		{
 			$cart->id_currency = (int)$currency->id;

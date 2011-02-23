@@ -37,7 +37,9 @@ $gcheckout = new GCheckout();
 $merchant_id = Configuration::get('GCHECKOUT_MERCHANT_ID');
 $merchant_key = Configuration::get('GCHECKOUT_MERCHANT_KEY');
 $server_type = Configuration::get('GCHECKOUT_MODE');
-$currency = $gcheckout->getCurrency();
+$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
+$cart = new Cart((int)$secure_cart[0]);
+$currency = $gcheckout->getCurrency((int)$cart->id_currency);
 
 $Gresponse = new GoogleResponse($merchant_id, $merchant_key);
 $Grequest = new GoogleRequest($merchant_id, $merchant_key, $server_type, $currency);
@@ -89,10 +91,8 @@ if(!$status)
     }
     case "new-order-notification": {
 		$gcheckout = new GCheckout();
-		$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
-		$cart = new Cart((int)$secure_cart[0]);
 		$orderTotal = (float)($data[$root]['order-total']['VALUE']);
-		$gcheckout->validateOrder($id_cart, _PS_OS_PAYMENT_, (float)$orderTotal, $gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
+		$gcheckout->validateOrder((int)$secure_cart[0], _PS_OS_PAYMENT_, (float)$orderTotal, $gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
 		$Gresponse->SendAck();
 		break;
     }

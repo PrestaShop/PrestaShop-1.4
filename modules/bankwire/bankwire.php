@@ -172,8 +172,8 @@ class BankWire extends PaymentModule
 
 		$smarty->assign(array(
 			'nbProducts' => $cart->nbProducts(),
-			'cust_currency' => $cookie->id_currency,
-			'currencies' => $this->getCurrency(),
+			'cust_currency' => $cart->id_currency,
+			'currencies' => $this->getCurrency((int)$cart->id_currency),
 			'total' => $cart->getOrderTotal(true, Cart::BOTH),
 			'isoCode' => Language::getIsoById((int)($cookie->id_lang)),
 			'bankwireDetails' => nl2br2($this->details),
@@ -226,7 +226,7 @@ class BankWire extends PaymentModule
 	private function _checkCurrency($cart)
 	{
 		$currency_order = new Currency((int)($cart->id_currency));
-		$currencies_module = $this->getCurrency();
+		$currencies_module = $this->getCurrency((int)$cart->id_currency);
 		$currency_default = Configuration::get('PS_CURRENCY_DEFAULT');
 		
 		if (is_array($currencies_module))

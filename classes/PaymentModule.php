@@ -437,9 +437,15 @@ abstract class PaymentModuleCore extends Module
 		}
 	}
 
-	public function getCurrency()
+	
+	/**
+	 * @param int $id_currency : this parameter is optionnal but on 1.5 version of Prestashop, it will be REQUIRED
+	 * @return Currency
+	 */
+	public function getCurrency($current_id_currency = NULL)
 	{
-		global $cookie;
+		if (!(int)$current_id_currency)
+			global $cookie;
 
 		if (!$this->currencies)
 			return false;
@@ -453,7 +459,13 @@ abstract class PaymentModuleCore extends Module
 			$currencies = Currency::getPaymentCurrenciesSpecial($this->id);
 			$currency = $currencies['id_currency'];
 			if ($currency == -1)
-				$id_currency = (int)($cookie->id_currency);
+			{
+				// not use $cookie if $current_id_currency is set
+				if ((int)$current_id_currency)
+					$id_currency = (int)$current_id_currency;
+				else
+					$id_currency = (int)($cookie->id_currency);
+			}
 			elseif ($currency == -2)
 				$id_currency = (int)(Configuration::get('PS_CURRENCY_DEFAULT'));
 			else
