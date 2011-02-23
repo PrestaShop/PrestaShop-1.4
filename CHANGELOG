@@ -24,6 +24,149 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.0.14 - 5144 (2011-02-23)  #
+####################################
+
+	Added Features:
+
+	[+] BO : Add Tools::jsonDecode() method for php5.0.0 version.
+	[+] BO : A nex error class for inline error
+	[+] BO : fixed bug delete images on import
+
+	[+] MO : fixed bug shopImport clean database fields before run import
+	[+] MO : fixed bug shopImport update categories only when all are import
+	[+] MO : new module Authorize AIM
+
+	Improved/changed features:
+
+	[*] FO : now smarty, cart, link and cookie are static and protected properties in FrontController.
+
+	[*] BO : improve specific price system
+	[*] BO : you can now define the center of the map
+
+	[*] Classes : adding constant on Cart class for getOrderTotal method
+	[*] Classes : all private attributes and methods are now protected
+	[*] Classes : getPriceCalculation return the price without any dependances to others objects
+	[*] Classes : improvement of findTranslations method on Module class
+
+	[*] Core : code cleaning
+
+	[*] MO : improve blockstore module
+
+	Fixed bugs:
+
+	[-] PROJECT : thickbox.tpl has been removed (not use anymore)
+
+	[-] Installer : change the english title of Leather folio product in english !
+	[-] Installer : Fixed #6914 - now _MYSQL_ENGINE is defined in doUpgrade if not exists
+	[-] Installer : fixed alter table address dni can be null
+	[-] Installer : fixed bug #7835
+	[-] Installer : fixed bug #7848
+	[-] Installer : fix update 1.4.0.10 (dni field can be null)
+	[-] INSTALLER : Preactivation Paypal
+
+	[-] FO : Combination + EcoTax
+	[-] FO : Fixed #7759 - cleaning code
+	[-] FO : Fixed #7761 removed not used variable
+	[-] FO : Fixed #7819 - typo (SLL is now SSL)
+	[-] FO : fixed bug #7780 - “There is undefined error” in one page checkout
+	[-] FO : fixed bug #7801 - Merchandie return
+	[-] FO : fixed bug #7834
+	[-] FO : fixed bug on compatibilty of theme with smarty v2
+	[-] FO : fixed bug on error feedback on One page checkout
+	[-] FO : fixed class not exists
+	[-] FO : fixed log message when cart is not set
+	[-] FO : now id_currency is correctly used in PaymentModule->ValidateOrder()
+	[-] FO : when a tpl file is missing for a module, error message now display module name
+
+	[-] BO : Bug fixed #7717 - Quantity field error won't display anymore when editing product (movement stock)
+	[-] BO : Bug fixed #7723 - Fixing clean function of product metakeywords
+	[-] BO : Bug fixed #7773 - Delete customer group relation when deleting customer
+	[-] BO : Bug fixed reduction amount is not updated in order details
+	[-] BO : Fixed #7846 - correct image for mail and invoice logo
+	[-] BO : Fixed AdminThemes checks feature in change appearance
+	[-] BO : Fixed all the typos in the installer tool and made the texts easier to understand
+	[-] BO : Fixed all the typos in the tab names
+	[-] BO : fixed bug #5908 - PS rewrite images if edit category! and delete previous
+	[-] BO : fixed bug #7238 - Automatic filter on list with select type now returns error
+	[-] BO : fixed bug #7750 - typo: cache_defaut_attribute AdminProducts.php
+	[-] BO : fixed bug #7804 //Admin Module bad display in IE7
+	[-] BO : fixed bug #7809 - Currency symbol not shown in admin/products
+	[-] BO : Unit price on cart & orders
+
+	[-] Classes : fixed bug #7790 - Small bug in config.xml
+	[-] Classes : fixed bug #7797 - Cannot update cms pages
+	[-] Classes : fixed bug #7831 #7830 - two method are in PDF class are on public visibility
+	[-] Classes : fixed bug #7864 - PaymentModule::getCurrency uses $cookie
+
+	[-] Core : fixed bug #7791 - unnecessary is_writable() check
+	[-] Core : set_magic_quotes_runtime is deprecated
+	[-] Core : set_magic_quotes_runtime is deprecated
+
+	[-] MO : Add limited countries for Twenga module (FR, DE, UK, GB)
+	[-] MO : Check if Json functions are enabled, otherwise a warning occured.
+	[-] MO : fixed #7815 translation bug when quotes
+	[-] MO : fixed bug #7849 - Paypal Module - IPN Notifications
+	[-] MO : fixed bug check language in import
+	[-] MO : fixed bug on Blockstore
+	[-] MO : import oscommerce product status
+	[-] MO : shopImport : now when import product only they are added to home category by default
+	[-] MO : USPS module is now using RateV4 API
+
+	[-] WS : Added check for POST/PUT multiple
+
+	[-] TR : Bug fixed #7691 - Little translation fix
+	[-] TR : Change the PS_TRANS_PATTERN for allow empty string (and don't get a wrong sentence)
+	[-] TR : Fixed french translation
+
+	Deprecated methods:
+
+	[~] Deprecated : added comment
+	[~] Deprecated : AddressCore::getManufacturerIdByAddress([...])
+	[~] Deprecated : CartCore::getNonOrderedCarts([...])
+	[~] Deprecated : CartCore::hasProductInCategory([...])
+	[~] Deprecated : CMSCategory::CMSCategoryExists()
+	[~] Deprecated : CMSCategory::getRootCMSCategory()
+	[~] Deprecated : CMSCategory::searchByNameAndParentCMSCategoryId()
+	[~] Deprecated : CMSCore::isInBlock([...])
+	[~] Deprecated : CMSCore::updateCmsToBlock([...])
+	[~] Deprecated : ConfigurationCore::getMultipleInt([...])
+	[~] Deprecated : CountryCore::getNeedIdentifcationNumber([...])
+	[~] Deprecated : CustomerCore::cantChangeemail([...])
+	[~] Deprecated : CustomerCore::getLastCart([...])
+	[~] Deprecated : CustomerCore::getNeedDNI([...])
+	[~] Deprecated : CustomerCore::getNewsletteremails([...])
+	[~] Deprecated : CustomerCore::getTodaysRegistration([...])
+	[~] Deprecated : CustomerCore::isMemberOfGroup([...])
+	[~] Deprecated : DiscountCore::isParentCategoryProductDiscount([...])
+	[~] Deprecated : EmployeeCore::getEmployees([...])
+	[~] Deprecated : LinkCore::getCustomLink([...])
+	[~] Deprecated : LinkCore::getLanguageLinkAdmin([...])
+	[~] Deprecated : ManufacturerCore::getManufacturersWithoutAddress([...])
+	[~] Deprecated : OrderCore::getLastMessage([...])
+	[~] Deprecated : OrderCore::getMonthlySales([...])
+	[~] Deprecated : OrderCore::getWeeklyOrders([...])
+	[~] Deprecated : OrderCore::isLogable([...])
+	[~] Deprecated : ProductCore::deleteCustomizedDatas([...])
+	[~] Deprecated : ProductCore::deleteQuantityDiscounts([...])
+	[~] Deprecated : ProductCore::getBasicPrice([...])
+	[~] Deprecated : ProductCore::getByReference([...])
+	[~] Deprecated : ProductCore::getDefaultCategoryProducts([...])
+	[~] Deprecated : TabCore::getClassNameFromID([...])
+	[~] Deprecated : TaxCore::getRateByState([...])
+	[~] Deprecated : ValidateCore::isDniBool([...])
+	[~] Deprecated : ValidateCore::isGenderIsoCode([...])
+	[~] Deprecated : ValidateCore::isGenderName([...])
+	[~] Deprecated : ValidateCore::isGranularityValue([...])
+	[~] Deprecated : ValidateCore::isIcoFile([...])
+	[~] Deprecated : ValidateCore::isIconFile([...])
+	[~] Deprecated : ValidateCore::isOptId([...])
+	[~] Deprecated : ValidateCore::isProtocol([...])
+	[~] Deprecated : ValidateCore::isTplFileName([...])
+	[~] Deprecated : ValidateCore::isZoneName([...])
+
+
+####################################
 #   v1.4.0.13 - 5003 (2011-02-16)  #
 ####################################
 
