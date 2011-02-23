@@ -223,7 +223,7 @@ class AdminCategories extends AdminTab
 	protected function postImage($id)
 	{
 		$ret = parent::postImage($id);
-		if (($id_category = (int)(Tools::getValue('id_category'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
+		if (($id_category = (int)(Tools::getValue('id_category'))) AND isset($_FILES) AND sizeof($_FILES) AND $_FILES['image']['name'] != NULL AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('categories');
 			foreach ($imagesTypes AS $k => $imageType)
