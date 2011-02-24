@@ -63,6 +63,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_7e1795d054242cf7c546c1491a
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_37554cc43c645833d6713b9cddda909b'] = 'moneybookers.com';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_9203aec73d2ea1770f66f065c4069816'] = 'Autre mode de paiement';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_068ce643ff39bf2189935d14736fd10b'] = 'Sceau Trusted Shops et protection acheteur';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f51dabfce0c8ccc01734ed38d8afe27a'] = 'Les fonctions Json doivent être installées sur votre version de PHP';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b1801eaadecfddd04529313a1e929262'] = 'Le certificat est valide';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_ce323cb3453812434f9abc007ba7a952'] = 'le certificat à expiré';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_98121ffd0d2a0b4bed569a726632f402'] = 'le certificat à été annulé';

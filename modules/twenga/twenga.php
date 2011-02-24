@@ -144,7 +144,7 @@ class Twenga extends PaymentModule
 	}
 	/**
 	 * For uninstall just need to delete the Merchant Login.
-	 * @return see parent class.
+	 * @return bool see parent class.
 	 */
 	public function uninstall()
 	{
@@ -161,7 +161,7 @@ class Twenga extends PaymentModule
 	{
 		echo '<script type="text/javascript" language="javascript">window.open("'.$link.'");</script>';
 	}
-	private function submitTwengaSubscription ()
+	private function submitTwengaSubscription()
 	{
 		 unset($_POST['submitTwengaSubscription']);
 		$params = array_filter($_POST);
@@ -611,8 +611,8 @@ class Twenga extends PaymentModule
 	 */
 	public function buildXML()
 	{
-		if(self::$obj_twenga->getHashkey() === NULL && !self::$obj_twenga->siteExist())
-			return '';
+//		if(self::$obj_twenga->getHashkey() === NULL && !self::$obj_twenga->siteExist())
+//			return '';
 		$xmlstr = '<?xml version="1.0" encoding="utf-8"?><catalog></catalog>';
 		$xml = new SimpleXMLElement($xmlstr);
 		
@@ -644,7 +644,7 @@ class Twenga extends PaymentModule
 				{
 					// prepared values before insert it in node structure.
 					// In this way we can structure code with checking method and displaying method for more lisibility.
-					$product_values = $this->preparedValues ($product, $combination, $lang, $link, $carrier);
+					$product_values = $this->preparedValues($product, $combination, $lang, $link, $carrier);
 					
 					// create the product node for each products and declinations
 					$product_node = $xml->addChild('product', '');
@@ -683,7 +683,7 @@ class Twenga extends PaymentModule
 	 * 		  But for now it's not sure enough.
 	 * @return array with good value for the XML.
 	 */
-	private function preparedValues (Product $product, array $combination, $lang, Link $link, Carrier $carrier)
+	private function preparedValues(Product $product, array $combination, $lang, Link $link, Carrier $carrier)
 	{
 		$arr_return = array();
 		$str_features = array();

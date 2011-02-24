@@ -155,7 +155,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		TSBPException::setTranslationObject($this);
 		if (!function_exists('json_decode'))
 		{
-			$this->warning[] = $this->l('Json function must be implemented in your php version');
+			$this->warning[] = $this->l('Json functions must be implemented in your php version');
 			return false;
 		}
 		foreach ($this->available_languages as $iso=>&$lang)
