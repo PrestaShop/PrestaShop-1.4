@@ -1714,7 +1714,7 @@ class ProductCore extends ObjectModel
 
 		$id_shop = (int)(Shop::getCurrentShop());
 
-		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, 0, $id_state, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
+		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, 0, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
 		$usereduc, $with_ecotax, $specificPriceOutput);
 	}
 
