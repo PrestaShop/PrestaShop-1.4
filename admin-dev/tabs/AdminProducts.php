@@ -2049,11 +2049,11 @@ class AdminProducts extends AdminTab
 								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 							$("select#id_manufacturer").html(options);
 						},
-						error: function(XMLHttpRequest, textStatus, errorThrown) 
+						error: function(XMLHttpRequest, textStatus, errorThrown)
 						{
-							alert(\'Manufacturer ajax error: \'+textStatus);  	
+							alert(\'Manufacturer ajax error: \'+textStatus);
 						}
-					
+
 					});
 					$.ajax({
 						url: "'.dirname($currentIndex).'/ajax.php",
@@ -2066,11 +2066,11 @@ class AdminProducts extends AdminTab
 								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 							$("select#id_supplier").html(options);
 						},
-						error: function(XMLHttpRequest, textStatus, errorThrown) 
+						error: function(XMLHttpRequest, textStatus, errorThrown)
 						{
-							alert(\'Supplier ajax error: \'+textStatus);  	
+							alert(\'Supplier ajax error: \'+textStatus);
 						}
-					
+
 					});
 					if($(\'#available_for_order\').is(\':checked\')){
 						$(\'#show_price\').attr(\'checked\', \'checked\');
@@ -2458,7 +2458,7 @@ class AdminProducts extends AdminTab
 					</script>';
 					echo '
 					<tr>
-						<td class="col-left">'.$this->l('Tax:').'</td>
+						<td class="col-left">'.$this->l('Tax rule:').'</td>
 						<td style="padding-bottom:5px;">
 					 <select onChange="javascript:calcPriceTI(); unitPriceWithTax(\'unit\');" name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
 					     <option value="0">'.$this->l('No Tax').'</option>';
