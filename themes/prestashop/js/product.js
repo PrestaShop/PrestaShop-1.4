@@ -302,7 +302,13 @@ function updateDisplay()
 				productPriceWithoutReduction = ps_round(productPriceWithoutReduction, 2);
 		}
 
-		var reduction = ps_round(!(reduction_price || reduction_percent) ? 0 : (productPrice * (parseFloat(reduction_percent) / 100) + reduction_price), 2);
+		var reduction = 0;
+		if (reduction_price || reduction_percent)
+		{
+			reduction = productPrice * (parseFloat(reduction_percent) / 100) + reduction_price;
+			if (reduction_price && (displayPrice || noTaxForThisProduct))
+				reduction = reduction / tax;
+		}
 
 		if (!specific_price)
 			productPriceWithoutReduction = productPrice;
