@@ -99,19 +99,6 @@ class AdminTaxRulesGroup extends AdminTab
                     return false;
             }
 
-            function openStates(id_country)
-            {
-                if ($("#states_"+id_country+":hidden").length)
-                {
-                    $("#states_"+id_country).show();
-                    $("#open_states_"+id_country).attr("src","../img/admin/less.png");
-                }
-                else
-                {
-                    $("#states_"+id_country).hide();
-                    $("#open_states_"+id_country).attr("src","../img/admin/more.png");
-                }
-            }
 
             function disableStateTaxRate(id_country, id_state)
             {
@@ -120,6 +107,25 @@ class AdminTaxRulesGroup extends AdminTab
                 else
                     $("#tax_"+id_country+"_"+id_state).attr("disabled", false);
             }
+
+			$(\'document\').ready(function (){
+				$(\'.states\').hide();
+
+				$(\'.open_state\').click(function (){
+					if ($(\'.\'+$(this).attr(\'id\')).is(\':hidden\'))
+					{
+						$(\'.\'+$(this).attr(\'id\')).show();
+						$(\'#\'+$(this).attr(\'id\')+\'_button\').attr("src","../img/admin/less.png");
+					}
+					else
+					{
+						$(\'.\'+$(this).attr(\'id\')).hide();
+						$(\'.county_\'+$(this).attr(\'id\')).hide();
+						$(\'.county_\'+$(this).attr(\'id\')+\'_button\').attr("src","../img/admin/more.png");
+						$(\'#\'+$(this).attr(\'id\')+\'_button\').attr("src","../img/admin/more.png");
+					}
+				});
+			});
             </script>
             <script src="../js/tabpane.js" type="text/javascript"></script>
             <script type="text/javascript">
@@ -159,15 +165,28 @@ class AdminTaxRulesGroup extends AdminTab
     public function renderCountries($tax_rules, $id_zone, $id_lang)
     {
 
-        $html = '<table>
-                 <tr>
-                     <td width="260px" style="font-weight:bold">'.$this->l('All').'</td>
-                     <td >'.$this->renderTaxesSelect($id_lang, '', array('id' => 'zone_'.(int)$id_zone)).' <input type="submit" onclick="return applyTax(\''.(int)$id_zone.'\')" class="button" value="'.$this->l('Apply').'"/></td>
-                </tr>
-                <tr><td></td><td>&nbsp;</td></tr>';
+        $html = '
+        <table>
+			<tr>
+				<td width="260px" style="font-weight:bold">'.$this->l('All').'</td>
+				<td>'.$this->renderTaxesSelect($id_lang, '', array('id' => 'zone_'.(int)$id_zone)).' <input type="submit" onclick="return applyTax(\''.(int)$id_zone.'\')" class="button" value="'.$this->l('Apply').'"/></td>
+			</tr>
+		</table><hr />';
 
-        $countries = Country::getCountriesByZoneId((int)$id_zone, (int)$id_lang);
-
+		$html .= '
+		<table class="table" cellpadding="0" cellspacing="0" style="width: 100%;">
+			<thead>
+				<tr>
+					<th style="width: 3%;"></th>
+					<th style="width: 40%;">'.$this->l('Country / State').'</th>
+					<th style="width: 57%;">'.$this->l('Tax to apply').'</th>
+				</tr>
+			</thead>
+			<tbody>
+		';
+		$countries = Country::getCountriesByZoneId((int)$id_zone, (int)$id_lang);
+		$countCountries = sizeof($countries);
+		$i = 1;
         foreach ($countries AS $country)
         {
             $id_tax =  0;
@@ -175,44 +194,38 @@ class AdminTaxRulesGroup extends AdminTab
             if (array_key_exists($country['id_country'], $tax_rules) AND array_key_exists(0, $tax_rules[$country['id_country']]))
                 $id_tax = (int)$tax_rules[$country['id_country']][0]['id_tax'];
 
-            $html .= '<tr>
-                            <td valign="top" width="260px"><span style="padding-right:0.5em">'
-                            .($country['contains_states'] ?
-							'<a id="open_'.(int)$country['id_country'].'" onclick="openStates(\''.(int)$country['id_country'].'\')"><img id="open_states_'.(int)$country['id_country'].'" src="../img/admin/more.png" alt="" /></a>' : '').
-                            Tools::htmlentitiesUTF8($country['name']).'
-							</span>
-                            </td>
-                            <td  valign="top" >'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone, 'id' => 'tax_'.$country['id_country'].'_0', 'name' => 'tax_'.$country['id_country'].'_0' )).
-                            '</td>
-                      </tr>';
+			$html .= '
+				<tr>
+					<td>'.($country['contains_states'] ? '<a class="open_state" id="state_'.(int)$country['id_country'].'"><img id="state_'.(int)$country['id_country'].'_button" src="../img/admin/more.png" alt="" style="vertical-align:middle;padding:0;" /></a>' : '').'</td>
+					<td>
+						<img src="../img/admin/lv2_'.($i == $countCountries ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($country['name']).'</label>
+					</td>
+					<td>'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone, 'id' => 'tax_'.$country['id_country'].'_0', 'name' => 'tax_'.$country['id_country'].'_0' )).'</td>
+				</tr>
+			';
+			if ($country['contains_states'])
+				$html .= $this->renderStates($tax_rules, (int)$id_zone, (int)$country['id_country'], (int)$id_lang);
 
-                      if ($country['contains_states'])
-                          $html .= '<tr class="states_row" "id="states_'.(int)$country['id_country'].'" >
-                                <td colspan="2">
-
-
-                                '.
-                                     $this->renderStates($tax_rules, (int)$id_zone, (int)$country['id_country'], (int)$id_lang).
-                                '
-                                </td>
-                          </tr>
-                                                              <script type="text/javascript">
-                                        $("#states_'.(int)$country['id_country'].'").hide();
-                                    </script>';
+			$i++;
         }
-        $html .= '</table>';
+        $html .= '
+			</tbody>
+		</table>
+		';
 
         return $html;
     }
 
     public function renderStates($tax_rules, $id_zone, $id_country, $id_lang)
     {
-        $html = '<table style="padding-left: 20px"id="states_'.$id_country.'">';
         $states = State::getStatesByIdCountryAndIdZone((int)$id_country, (int)$id_zone);
-        foreach ($states AS $state)
-        {
-            $id_tax = 0;
-            $selected = PS_PRODUCT_TAX;
+		$countStates = sizeof($states);
+		$i = 1;
+		$html = '';
+		foreach ($states AS $state)
+		{
+			$id_tax = 0;
+			$selected = PS_PRODUCT_TAX;
 
             if (array_key_exists($id_country, $tax_rules) AND array_key_exists($state['id_state'], $tax_rules[$id_country]))
             {
@@ -220,25 +233,28 @@ class AdminTaxRulesGroup extends AdminTab
               $selected = (int)$tax_rules[$id_country][$state['id_state']]['state_behavior'];
             }
 
-            $disable = (PS_PRODUCT_TAX == $selected ? 'disabled' : '');
-            $html .= '<tr>
-                        <td width="170px">'.Tools::htmlentitiesUTF8($state['name']).'</td>
-                        <td>
-                            <select id="behavior_state_'.$state['id_state'].'" name="behavior_state_'.$state['id_state'].'" onchange="disableStateTaxRate(\''.$id_country.'\',\''.$state['id_state'].'\')">
-                                <option value="'.(int)PS_PRODUCT_TAX.'" '.($selected  == PS_PRODUCT_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply country tax only').'</option>
-                                <option value="'.(int)PS_STATE_TAX.'" '.($selected == PS_STATE_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply state tax only').'</option>
-                                <option value="'.(int)PS_BOTH_TAX.'" '.($selected == PS_BOTH_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply both taxes').'</option>
-                            </select>
-                        </td>
-                        <td>
-                            '.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone,
-                                                                                  'id' => 'tax_'.$id_country.'_'.$state['id_state'],
-                                                                                  'name' => 'tax_'.$id_country.'_'.$state['id_state'],
-                                                                                  'disabled' => $disable )).'
-                        </td>
-                      </tr>';
+			$disable = (PS_PRODUCT_TAX == $selected ? 'disabled' : '');
+			$html .= '
+			<tr class="states state_'.(int)$id_country.' alt_row">
+				<td>'.(false ? '<a class="open_county" id="county_'.(int)$state['id_state'].'"><img id="county_'.(int)$state['id_state'].'_button" class="county_state_'.(int)$id_country.'_button" src="../img/admin/more.png" alt="" /></a>' : '').'</td>
+				<td><img src="../img/admin/lv3_'.($i == $countStates ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($state['name']).'</label></td>
+				<td>
+					'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone,
+ 																	'id' => 'tax_'.$id_country.'_'.$state['id_state'],
+ 																	'name' => 'tax_'.$id_country.'_'.$state['id_state'],
+ 																	'disabled' => $disable )).'&nbsp;-&nbsp;
+ 					<select id="behavior_state_'.$state['id_state'].'" name="behavior_state_'.$state['id_state'].'" onchange="disableStateTaxRate(\''.$id_country.'\',\''.$state['id_state'].'\')">
+						<option value="'.(int)PS_PRODUCT_TAX.'" '.($selected  == PS_PRODUCT_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply country tax only').'</option>
+						<option value="'.(int)PS_STATE_TAX.'" '.($selected == PS_STATE_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply state tax only').'</option>
+						<option value="'.(int)PS_BOTH_TAX.'" '.($selected == PS_BOTH_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply both taxes').'</option>
+					</select>
+				</td>
+			</tr>
+			';
+
+			$i++;
         }
-        $html .= '</table>';
+
         return $html;
     }
 
