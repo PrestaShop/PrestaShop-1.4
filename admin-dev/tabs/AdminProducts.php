@@ -2868,7 +2868,7 @@ class AdminProducts extends AdminTab
 				<h4 class="tab">2. '.$this->l('Images').' ('.$countImages.')</h4>
 				<table cellpadding="5">
 				<tr>
-					<td><b>'.$this->l('Add a new image to this product').'</b></td>
+					<td><b>'.(Tools::getValue('id_image')?$this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
 				</tr>
 				</table>
 				<hr style="width: 100%;" /><br />';
