@@ -2038,25 +2038,40 @@ class AdminProducts extends AdminTab
 				$(document).ready(function() {
 					updateCurrentText();
 					updateFriendlyURL();
-					$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductManufacturers:1},
-						function(j) {
+					$.ajax({
+						url: "'.dirname($currentIndex).'/ajax.php",
+						dataType: "json",
+						data: "ajaxProductManufacturers=1",
+						success: function(j) {
 							var options = $("select#id_manufacturer").html();
 							if (j)
-								for (var i = 0; i < j.length; i++)
-									options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
+							for (var i = 0; i < j.length; i++)
+								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 							$("select#id_manufacturer").html(options);
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) 
+						{
+							alert(\'Manufacturer ajax error: \'+textStatus);  	
 						}
-					);
-					$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxProductSuppliers:1},
-						function(j) {
+					
+					});
+					$.ajax({
+						url: "'.dirname($currentIndex).'/ajax.php",
+						dataType: "json",
+						data: "ajaxProductSuppliers=1",
+						success: function(j) {
 							var options = $("select#id_supplier").html();
 							if (j)
-								for (var i = 0; i < j.length; i++)
-									options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
+							for (var i = 0; i < j.length; i++)
+								options += \'<option value="\' + j[i].optionValue + \'">\' + j[i].optionDisplay + \'</option>\';
 							$("select#id_supplier").html(options);
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) 
+						{
+							alert(\'Supplier ajax error: \'+textStatus);  	
 						}
-					);
-
+					
+					});
 					if($(\'#available_for_order\').is(\':checked\')){
 						$(\'#show_price\').attr(\'checked\', \'checked\');
 						$(\'#show_price\').attr(\'disabled\', \'disabled\');
