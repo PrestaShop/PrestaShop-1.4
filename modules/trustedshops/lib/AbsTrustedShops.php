@@ -31,19 +31,19 @@ abstract class AbsTrustedShops
 	 * Saved errors messages.
 	 * @var array
 	 */
-	private $errors = array();
+	public $errors = array();
 	
 	/**
 	 * Saved warning messages.
 	 * @var array
 	 */
-	private $warnings = array();
+	public $warnings = array();
 	
 	/**
 	 * Saved confirmations messages.
 	 * @var array
 	 */
-	private $confirmations = array();
+	public $confirmations = array();
 	
 	/**
 	 * @var string
