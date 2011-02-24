@@ -25,5 +25,5 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-$objectType = 'manufacturer';
-include('./supplier.php');
+require(dirname(__FILE__).'/config/config.inc.php');
+ControllerFactory::getController('ManufacturerController')->run();
