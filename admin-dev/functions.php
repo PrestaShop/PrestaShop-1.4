@@ -328,9 +328,8 @@ function displayOptimizationTips()
 	$cccOptimized = Configuration::get('PS_CSS_THEME_CACHE')
 	+ Configuration::get('PS_JS_THEME_CACHE')
 	+ Configuration::get('PS_HTML_THEME_COMPRESSION')
-	+ Configuration::get('PS_JS_HTML_THEME_COMPRESSION')
-	+ Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION');
-	if ($cccOptimized == 5)
+	+ Configuration::get('PS_JS_HTML_THEME_COMPRESSION');
+	if ($cccOptimized == 4)
 		$cccOptimized = 2;
 	else
 		$cccOptimized = 1;
