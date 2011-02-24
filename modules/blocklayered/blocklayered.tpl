@@ -21,7 +21,7 @@
 *  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*  International Registred Trademark & Property of PrestaShop SA
 *}
 
 <!-- Block layered navigation module -->
@@ -30,7 +30,7 @@
 	<div class="block_content">
 		<form action="#" id="layered_form">
 			<div>
-				{if isset($layered_subcategories)}
+				{if isset($layered_subcategories) && $layered_subcategories|@count > 1}
 				<span class="layered_subtitle">{l s='Shop by category:' mod='blocklayered'}</span>
 				<ul id="layered_subcategories">
 				{foreach from=$layered_subcategories item=layered_subcategory}
@@ -40,9 +40,32 @@
 				{/foreach}
 				</ul>
 				{/if}
+				{if isset($layered_manufacturers) && $layered_manufacturers|@count > 1}
+				<span class="layered_subtitle">{l s='Shop by manufacturer:' mod='blocklayered'}</span>
+				<ul id="layered_manufacturers">
+				{foreach from=$layered_manufacturers item=layered_manufacturer}
+					<li{if $layered_use_checkboxes} class="nomargin"{/if}>
+					{if $layered_use_checkboxes}<input type="checkbox" class="checkbox" name="layered_manufacturer_{$layered_manufacturer.id_manufacturer}" id="layered_manufacturer_{$layered_manufacturer.id_manufacturer}" value="{$layered_manufacturer.id_manufacturer}" /> {/if}
+					{$layered_manufacturer.name|escape:html:'UTF-8'} ({$layered_manufacturer.n})</li>
+				{/foreach}
+				</ul>
+				{/if}
+				{if isset($layered_conditions) && $layered_conditions|@count > 1}
+				<span class="layered_subtitle">{l s='Shop by condition:' mod='blocklayered'}</span>
+				<ul id="layered_conditions">
+				{foreach from=$layered_conditions key=layered_value item=layered_condition}
+					<li{if $layered_use_checkboxes} class="nomargin"{/if}>
+					{if $layered_use_checkboxes}<input type="checkbox" class="checkbox" name="layered_condition_{$layered_value}" id="layered_condition_{$layered_value}" value="{$layered_value}" /> {/if}
+					{$layered_condition.name|escape:html:'UTF-8'} ({$layered_condition.n})</li>
+				{/foreach}
+				</ul>
+				{/if}
 				<p><input type="hidden" name="id_category_layered" value="{$id_category_layered}" /></p>
 			</div>
 		</form>
 	</div>
+</div>
+<div id="layered_ajax_loader" style="display: none;">
+	<p style="margin: 20px 0; text-align: center;"><img src="{$img_ps_dir}loader.gif" alt="" /><br />{l s='Loading...' mod='blocklayered'}</p>
 </div>
 <!-- /Block layered navigation module -->

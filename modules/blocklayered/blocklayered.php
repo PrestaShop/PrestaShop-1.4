@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -19,10 +19,10 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author Prestashop SA <contact@prestashop.com>
-*  @copyright  2007-2010 Prestashop SA
+*  @copyright  2007-2011 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*  International Registred Trademark & Property of PrestaShop SA
 */
 
 if (!defined('_CAN_LOAD_FILES_'))
@@ -34,7 +34,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = 1.0;
+		$this->version = 1.1;
 
 		parent::__construct();
 
@@ -86,13 +86,14 @@ class BlockLayered extends Module
 		
 		/* If we have no results, we should get one level higher */
 		if (!sizeof($layeredSubcategories))
-		{
+			$layeredSubcategories[0] = array('id_category' => (int)$id_parent, 'subcategories' => '', 'subcategoriesArray' => array(), 'n' => 0);
+		/*{
 			$id_parent_parent = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT id_parent FROM '._DB_PREFIX_.'category WHERE id_category = '.(int)$id_parent);
 			if ($id_parent_parent)
 				$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_parent_parent);
 			else
 				return;
-		}
+		}*/
 		
 		$categoriesId = (int)$id_parent;
 		foreach ($layeredSubcategories AS &$layeredSubcategory)
@@ -104,22 +105,49 @@ class BlockLayered extends Module
 				$layeredSubcategory['subcategoriesArray'][(int)$id_category] = 1;
 		}
 		
+		/* Product condition (New, Used, Refurbished) */
+		$layeredConditions = array('new' => array('name' => $this->l('New'), 'n' => 0), 'used' => array('name' => $this->l('Used'), 'n' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'n' => 0));
+		
 		/* Then, we can now retrieve all the associated products */
 		$layeredProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT cp.id_product, cp.id_category
+		SELECT cp.id_product, cp.id_category, p.id_manufacturer, p.condition
 		FROM '._DB_PREFIX_.'category_product cp
 		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
 		WHERE p.active = 1 AND cp.id_category IN ('.pSQL(ltrim($categoriesId, ',')).')');
 		
+		$countManufacturers = array();
+		$countManufacturers[0] = 0; /* Prevent from no manufacturers case */
 		foreach ($layeredProducts AS $layeredProduct)
+		{
+			/* Count manufacturers */
+			if (!isset($countManufacturers[(int)$layeredProduct['id_manufacturer']]))
+				$countManufacturers[(int)$layeredProduct['id_manufacturer']] = 1;
+			else
+				$countManufacturers[(int)$layeredProduct['id_manufacturer']]++;
+				
+			/* Count conditions */
+			$layeredConditions[$layeredProduct['condition']]['n']++;
+			
 			foreach ($layeredSubcategories AS &$layeredSubcategory)
 				if (isset($layeredSubcategory['subcategoriesArray'][(int)$layeredProduct['id_category']]))
 					$layeredSubcategory['n']++;
+		}
+		
+		/* Get manufacturers names */
+		$layeredManufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT m.id_manufacturer, m.name
+		FROM '._DB_PREFIX_.'manufacturer m
+		WHERE m.id_manufacturer IN ('.implode(',', array_keys($countManufacturers)).')');
+		
+		foreach ($layeredManufacturers AS &$layeredManufacturer)
+			$layeredManufacturer['n'] = (int)$countManufacturers[(int)$layeredManufacturer['id_manufacturer']];
 		
 		$smarty->assign(array(
-			'id_category_layered' => (int)$id_parent,
-			'layered_subcategories' => $layeredSubcategories,
-			'layered_use_checkboxes' => 1)); /* We need to add this option in the admin panel (int)Configuration::get('PS_LAYERED_NAVIGATION_CHECKBOXES'))); */
+		'id_category_layered' => (int)$id_parent,
+		'layered_subcategories' => $layeredSubcategories,
+		'layered_manufacturers' => $layeredManufacturers,
+		'layered_conditions' => $layeredConditions,
+		'layered_use_checkboxes' => 1)); /* We need to add this option in the admin panel (int)Configuration::get('PS_LAYERED_NAVIGATION_CHECKBOXES'))); */
 
 		return $this->display(__FILE__, 'blocklayered.tpl');
 	}
@@ -129,7 +157,8 @@ class BlockLayered extends Module
 		global $smarty, $cookie;
 		
 		$filterByCategory = array();
-		
+		$filterByManufacturer = array();
+		$filterByCondition = array();
 		foreach ($_GET AS $key => $value)
 			if (substr($key, 0, 8) == 'layered_')
 			{
@@ -142,6 +171,15 @@ class BlockLayered extends Module
 							$filterByCategory[] = (int)$value;
 							break;
 							
+						case 'manufacturer':
+							$filterByManufacturer[] = (int)$value;
+							break;
+							
+						case 'condition':
+							if (in_array($value, array('new', 'used', 'refurbished')))
+								$filterByCondition[] = '\''.$value.'\'';
+							break;
+							
 						default:
 							continue(2);
 					}
@@ -151,12 +189,13 @@ class BlockLayered extends Module
 			}
 		
 		$categoriesID = '';
-		if (sizeof($filterByCategory))
-			$categoriesID .= implode($filterByCategory, ',').',';
+		if (empty($filterByCategory))
+			$filterByCategory[] = (int)Tools::getValue('id_category_layered', 0);
+		$categoriesID .= implode($filterByCategory, ',').',';
 
 		foreach ($filterByCategory AS $id_category)
 		{
-			$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_category);			
+			$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_category);
 			if (sizeof($layeredSubcategories))
 				foreach ($layeredSubcategories AS $layeredSubcategory)
 				{
@@ -167,22 +206,22 @@ class BlockLayered extends Module
 		}
 		$categoriesID = rtrim($categoriesID, ',');
 		
-		if (empty($categoriesID))
-			$categoriesID = (int)Tools::getValue('id_category_layered', 0);
-		
 		/*
 		*
 		* Todo:
 		*
 		* - Add a check on the category_group table
-		* - Add other filters (manufacturers, prices, attributes & colors, features, conditions, weight)
-		* - Add an ajax loader during refresh
+		* - Add other filters (prices, attributes & colors, features, weight)
 		* - Manage products sort & pagination
 		* - Manage SEO links (no ajax actions in JS disabled, real links instead)
 		* - Test on a large catalog & improve performances
 		* - Add admin panel options
+		* - Update in real time the list inside the block when a criterion is choosen
+		* - Manage the breadcrumb (+ ability to delete a selected filter)
+		* - Real time URL building + ability to give the URL to someone
 		* 
 		*/
+		
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cp.id_product, pa.id_product_attribute, p.*, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend, m.name manufacturer_name,
 		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
@@ -194,6 +233,8 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (p.id_product = pa.id_product AND default_on = 1)
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE p.active = 1 AND pl.id_lang = '.(int)$cookie->id_lang.' AND cp.id_category IN ('.$categoriesID.')
+		'.(sizeof($filterByManufacturer) ? ' AND p.id_manufacturer IN ('.implode($filterByManufacturer, ',').')' : '').'
+		'.(sizeof($filterByCondition) ? ' AND p.condition IN ('.implode($filterByCondition, ',').')' : '').'
 		GROUP BY cp.id_product');
 
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
