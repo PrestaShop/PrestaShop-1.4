@@ -277,7 +277,7 @@ class FrontControllerCore
 		if (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))
 		{
 			header('HTTP/1.1 503 temporarily overloaded');
-			$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
+			self::$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
 			exit;
 		}
 	}
@@ -288,7 +288,7 @@ class FrontControllerCore
 		global $smarty;
 		
 		header('HTTP/1.1 503 temporarily overloaded');
-		$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
+		self::$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
 		exit;
 	}
 
@@ -338,7 +338,7 @@ class FrontControllerCore
 						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
 							$this->restrictedCountry = true;
 						elseif (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
-							$smarty->assign(array(
+							self::$smarty->assign(array(
 								'restricted_country_mode' => true,
 								'geolocalization_country' => $record->country_name
 							));
@@ -360,7 +360,7 @@ class FrontControllerCore
 				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
 					$this->restrictedCountry = true;
 				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
-					$smarty->assign(array(
+					self::$smarty->assign(array(
 						'restricted_country_mode' => true,
 						'geolocalization_country' => 'Undefined'
 					));
