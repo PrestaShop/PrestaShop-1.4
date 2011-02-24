@@ -351,10 +351,9 @@ function displayImage(domAAroundImgThumb)
     {
         var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
         if ($('#bigpic').attr('src') != newSrc)
-	{
+        {
             $('#bigpic').fadeOut('fast', function(){
                 $(this).attr('src', newSrc).show();
-		$(this).attr('href', newSrc);
                 if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
 	                $(this).attr('alt', domAAroundImgThumb.attr('href'));
             });
