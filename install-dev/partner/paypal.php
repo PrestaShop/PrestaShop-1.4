@@ -9,10 +9,10 @@
 			if ($result)
 			{
 				$varList = "";
-				echo '<div id="paypalform_div" style="width: 600px; height: 650px;"><fieldset><legend><img src="partner/paypal-fancybox.png" /></legend><div id="paypalform_msg">';
+				echo '<div id="paypalform_div" style="width: 600px; height: 650px;"><img src="partner/paypal-fancybox.png" /><br /><br /><div id="paypalform_msg" style="padding-left: 50px;">';
 				foreach ($result->field as $field)
 				{
-					echo '<div style="float: left; width: 150px; height: 35px;">'.$field->label.' : </div><div style="float: left; height: 35px;">';
+					echo '<div style="float: left; width: 150px; height: 35px; font-size: 0.8em;">'.$field->label.' : </div><div style="float: left; height: 35px;">';
 					if ($field->type == 'text' || $field->type == 'password')
 						echo '<input type="'.$field->type.'" class="text required" id="paypalform_'.$field->key.'" name="paypalform_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" /><br />';
 					elseif ($field->type == 'radio')
@@ -46,10 +46,9 @@
 					echo '</div><br clear="left" />';
 					$varList .= "'&".$field->key."='+$('#paypalform_".$field->key."').val()+\n";
 				}
-				echo '<input type="button" value="Subscribe" id="paypalform_button" /><br />
-				<div style="color: red;" id="paypalform_error"></div>
+				echo '<p align="right"><input id="paypalform_button" class="button little" type="button" value="Next" style="font-size: 0.8em;" /></p>
+				<div style="color: red; font-size: 0.8em;" id="paypalform_error"></div>
 				</div>
-				</fieldset>
 				<script>'."
 					$('#paypalform_button').click(function() {
 						$.ajax({
