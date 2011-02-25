@@ -277,7 +277,7 @@ class FrontControllerCore
 		if (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))
 		{
 			header('HTTP/1.1 503 temporarily overloaded');
-			self::$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
+			$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
 			exit;
 		}
 	}
@@ -288,7 +288,7 @@ class FrontControllerCore
 		global $smarty;
 		
 		header('HTTP/1.1 503 temporarily overloaded');
-		self::$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
+		$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
 		exit;
 	}
 
