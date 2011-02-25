@@ -32,4 +32,5 @@ include(dirname(__FILE__).'/../../init.php');
 include(dirname(__FILE__).'/blocklayered.php');
 
 $blockLayered = new BlockLayered();
+
 echo $blockLayered->ajaxCall();

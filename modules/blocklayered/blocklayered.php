@@ -71,13 +71,13 @@ class BlockLayered extends Module
 		WHERE c.id_parent = '.(int)$id_category.' AND c.active = 1 AND cl.id_lang = '.(int)$cookie->id_lang.'
 		ORDER BY c.position ASC');
 	}
-   
-	public function hookLeftColumn($params)
+	
+	public function generateFilters($products = NULL, $filters = NULL)
 	{
 		global $smarty, $link, $cookie;
-
+		
 		/* If the current category isn't defined of if it's homepage, we have nothing to display */
-		$id_parent = (int)Tools::getValue('id_category', 1);
+		$id_parent = (int)Tools::getValue('id_category', Tools::getValue('id_category_layered', 1));
 		if ($id_parent == 1)
 			return;
 		
@@ -109,11 +109,14 @@ class BlockLayered extends Module
 		$layeredConditions = array('new' => array('name' => $this->l('New'), 'n' => 0), 'used' => array('name' => $this->l('Used'), 'n' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'n' => 0));
 		
 		/* Then, we can now retrieve all the associated products */
-		$layeredProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT cp.id_product, cp.id_category, p.id_manufacturer, p.condition
-		FROM '._DB_PREFIX_.'category_product cp
-		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
-		WHERE p.active = 1 AND cp.id_category IN ('.pSQL(ltrim($categoriesId, ',')).')');
+		if (isset($products))
+			$layeredProducts = $products;
+		else
+			$layeredProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT cp.id_product, cp.id_category, p.id_manufacturer, p.condition
+			FROM '._DB_PREFIX_.'category_product cp
+			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
+			WHERE p.active = 1 AND cp.id_category IN ('.pSQL(ltrim($categoriesId, ',')).')');
 		
 		$countManufacturers = array();
 		$countManufacturers[0] = 0; /* Prevent from no manufacturers case */
@@ -127,10 +130,19 @@ class BlockLayered extends Module
 				
 			/* Count conditions */
 			$layeredConditions[$layeredProduct['condition']]['n']++;
+			foreach ($layeredConditions AS $key => &$layeredCondition)
+			{
+				if (isset($filters['condition']) AND sizeof($filters['condition']))
+					$layeredCondition['checked'] = in_array('\''.$key.'\'', $filters['condition']) ? 1 : 0;
+			}
 			
 			foreach ($layeredSubcategories AS &$layeredSubcategory)
+			{
 				if (isset($layeredSubcategory['subcategoriesArray'][(int)$layeredProduct['id_category']]))
 					$layeredSubcategory['n']++;
+				if (isset($filters['category']) AND sizeof($filters['category']))
+					$layeredSubcategory['checked'] = in_array($layeredSubcategory['id_category'], $filters['category']) ? 1 : 0;
+			}
 		}
 		
 		/* Get manufacturers names */
@@ -140,7 +152,11 @@ class BlockLayered extends Module
 		WHERE m.id_manufacturer IN ('.implode(',', array_keys($countManufacturers)).')');
 		
 		foreach ($layeredManufacturers AS &$layeredManufacturer)
+		{
 			$layeredManufacturer['n'] = (int)$countManufacturers[(int)$layeredManufacturer['id_manufacturer']];
+			if (isset($filters['manufacturer']) AND sizeof($filters['manufacturer']))
+				$layeredManufacturer['checked'] = in_array($layeredManufacturer['id_manufacturer'], $filters['manufacturer']) ? 1 : 0;
+		}
 		
 		$smarty->assign(array(
 		'id_category_layered' => (int)$id_parent,
@@ -149,16 +165,20 @@ class BlockLayered extends Module
 		'layered_conditions' => $layeredConditions,
 		'layered_use_checkboxes' => 1)); /* We need to add this option in the admin panel (int)Configuration::get('PS_LAYERED_NAVIGATION_CHECKBOXES'))); */
 
-		return $this->display(__FILE__, 'blocklayered.tpl');
+		return $smarty->fetch(_PS_MODULE_DIR_.$this->name.'/blocklayered.tpl');
+	}
+   
+	public function hookLeftColumn($params)
+	{
+		return $this->generateFilters();
 	}
 	
 	public function ajaxCall()
 	{
 		global $smarty, $cookie;
 		
-		$filterByCategory = array();
-		$filterByManufacturer = array();
-		$filterByCondition = array();
+		$output = array();
+		$filters = array('category' => array(), 'manufacturer' => array(), 'condition' => array());
 		foreach ($_GET AS $key => $value)
 			if (substr($key, 0, 8) == 'layered_')
 			{
@@ -168,16 +188,16 @@ class BlockLayered extends Module
 					switch ($tmpTab[1])
 					{
 						case 'category':
-							$filterByCategory[] = (int)$value;
+							$filters['category'][] = (int)$value;
 							break;
 							
 						case 'manufacturer':
-							$filterByManufacturer[] = (int)$value;
+							$filters['manufacturer'][] = (int)$value;
 							break;
 							
 						case 'condition':
 							if (in_array($value, array('new', 'used', 'refurbished')))
-								$filterByCondition[] = '\''.$value.'\'';
+								$filters['condition'][] = '\''.$value.'\'';
 							break;
 							
 						default:
@@ -189,11 +209,11 @@ class BlockLayered extends Module
 			}
 		
 		$categoriesID = '';
-		if (empty($filterByCategory))
-			$filterByCategory[] = (int)Tools::getValue('id_category_layered', 0);
-		$categoriesID .= implode($filterByCategory, ',').',';
+		if (empty($filters['category']))
+			$filters['category'][] = (int)Tools::getValue('id_category_layered', 0);
+		$categoriesID .= implode($filters['category'], ',').',';
 
-		foreach ($filterByCategory AS $id_category)
+		foreach ($filters['category'] AS $id_category)
 		{
 			$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_category);
 			if (sizeof($layeredSubcategories))
@@ -224,7 +244,8 @@ class BlockLayered extends Module
 		
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cp.id_product, pa.id_product_attribute, p.*, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend, m.name manufacturer_name,
-		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
+		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new,
+		cp.id_category
 		FROM '._DB_PREFIX_.'category_product cp
 		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
@@ -233,8 +254,8 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (p.id_product = pa.id_product AND default_on = 1)
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE p.active = 1 AND pl.id_lang = '.(int)$cookie->id_lang.' AND cp.id_category IN ('.$categoriesID.')
-		'.(sizeof($filterByManufacturer) ? ' AND p.id_manufacturer IN ('.implode($filterByManufacturer, ',').')' : '').'
-		'.(sizeof($filterByCondition) ? ' AND p.condition IN ('.implode($filterByCondition, ',').')' : '').'
+		'.(sizeof($filters['manufacturer']) ? ' AND p.id_manufacturer IN ('.implode($filters['manufacturer'], ',').')' : '').'
+		'.(sizeof($filters['condition']) ? ' AND p.condition IN ('.implode($filters['condition'], ',').')' : '').'
 		GROUP BY cp.id_product');
 
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
@@ -242,8 +263,11 @@ class BlockLayered extends Module
 		$smarty->assign(array(
 			'products' => $products,
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY')));
-		
-		return $smarty->display(_PS_THEME_DIR_.'product-list.tpl');
+
+		$output['layered_block_left'] = $this->generateFilters($products, $filters);
+		$output['product_list'] = $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl');
+
+		return Tools::jsonEncode($output);
 	}
 	
 	public function hookRightColumn($params)
