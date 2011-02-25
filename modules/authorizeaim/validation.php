@@ -54,7 +54,7 @@ curl_close($request);
 $response = explode('|', $postResponse);
 if (!isset($response[7]) OR !isset($response[3]) OR !isset($response[9]))
 {
-		Log::addLog('Authorize.net returned a malformed response, aborted.', 4);
+		Logger::addLog('Authorize.net returned a malformed response for cart '.$response[7], 4);
 		die('Authorize.net returned a malformed response, aborted.');
 }
 
@@ -66,7 +66,7 @@ else
 	$cart = new Cart((int)$response[7]);
 	if (!Validate::isLoadedObject($cart))
 	{
-		Log::addLog('Cart loading failed.', 4);
+		Logger::addLog('Cart loading failed for cart '.$response[7], 4);
 		exit;
 	}
 

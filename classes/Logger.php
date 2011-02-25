@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class	LogCore extends ObjectModel
+class	LoggerCore extends ObjectModel
 {
 	/** @var integer Log id */
 	public		$id_log;
@@ -61,6 +61,15 @@ class	LogCore extends ObjectModel
 
 	protected static $_is_present = array();
 
+	/**
+	 * this class should not be instanciated directly. Use addLog
+	 * 
+	 * @return void
+	 */
+	private function __construct(){
+			
+	}
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -83,9 +92,20 @@ class	LogCore extends ObjectModel
 			Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'log_alert', Mail::l('[Log] You have a new alert from your shop'), array(), Configuration::get('PS_SHOP_EMAIL'));
 	}
 
-	static public function addLog($message, $severity = 1, $errorCode = NULL, $objectType = NULL, $objectId = NULL)
+	/**
+	 * add a log item to the database and send a mail if configured for this $severity 
+	 * 
+	 * @param string $message the log message
+	 * @param int $severity 
+	 * @param int $errorCode 
+	 * @param string $objectType 
+	 * @param int $objectId 
+	 * @param boolean $allowDuplicate if set to true, can log several time the same information (not recommended)
+	 * @return boolean true if succeed
+	 */
+	static public function addLog($message, $severity = 1, $errorCode = NULL, $objectType = NULL, $objectId = NULL, $allowDuplicate = false)
 	{
-		$log = new Log();
+		$log = new Logger();
 		$log->severity = intval($severity);
 		$log->error_code = intval($errorCode);
 		$log->message = pSQL($message);
@@ -99,22 +119,50 @@ class	LogCore extends ObjectModel
 
 		self::sendByMail($log);
 
-		return $log->add();
+		if ($allowDuplicate or !$log->_isPresent() )
+		{
+			$res = $log->add();
+			if ($res)
+			{
+				self::$_is_present[$log->getHash()] = isset(self::$_is_present[$log->getHash()])?self::$_is_present[$log->getHash()] + 1:1;
+				return true;
+			}
+		}
+		return false;
 	}
 
-	static public function isPresent($message)
+	/**
+	 * this function md5($this->message.$this->severity.$this->error_code.$this->object_type.$this->object_id)
+	 * 
+	 * @return string hash
+	 */
+	public function getHash(){
+		if (empty($this->hash))
+			$this->hash = md5($this->message.$this->severity.$this->error_code.$this->object_type.$this->object_id);
+
+		return $this->hash;
+	}
+
+	/**
+	 * check if this log message already exists in database.
+	 * 
+	 * @param mixed $message 
+	 * @return true if exists
+	 */
+	private function _isPresent()
 	{
-	    if (isset(self::$_is_present[md5($message)]))
-        {
-    	    $res = Db::getInstance()->getValue('
-	        SELECT COUNT(*) FROM `'._DB_PREFIX_.'log`
-	        WHERE `message` = \''.pSQL($message).'\''
-	        );
+		if (!isset(self::$_is_present[md5($this->message)]))
+			self::$_is_present[$this->getHash()] = Db::getInstance()->getValue('SELECT COUNT(*) 
+				FROM `'._DB_PREFIX_.'log`
+				WHERE 
+					`message` = \''.$this->message.'\'
+					AND `severity` = \''.$this->severity.'\'
+					AND `error_code` = \''.$this->error_code.'\'
+					AND `object_type` = \''.$this->object_type.'\'
+					AND `object_id` = \''.$this->object_id.'\'
+				');
 
-    	    self::$_is_present[md5($message)] = $res;
-        }
-
-	    return self::$_is_present[md5($message)];
+		return self::$_is_present[$this->getHash()];
 	}
 
 }

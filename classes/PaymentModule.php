@@ -140,7 +140,7 @@ abstract class PaymentModuleCore extends Module
 			else
 			{
 				$errorMessage = Tools::displayError('An order has already been placed using this cart');
-				Log::addLog($errorMessage, 4, '0000001', 'Cart', intval($order->id_cart));
+				Logger::addLog($errorMessage, 4, '0000001', 'Cart', intval($order->id_cart));
 				die($errorMessage);
 			}
 
@@ -425,14 +425,14 @@ abstract class PaymentModuleCore extends Module
 			else
 			{
 				$errorMessage = Tools::displayError('Order creation failed');
-				Log::addLog($errorMessage, 4, '0000002', 'Cart', intval($order->id_cart));
+				Logger::addLog($errorMessage, 4, '0000002', 'Cart', intval($order->id_cart));
 				die($errorMessage);
 			}
 		}
 		else
 		{
 			$errorMessage = Tools::displayError('Cart can\'t be loaded or an order has already been placed using this cart');
-			Log::addLog($errorMessage, 4, '0000001', 'Cart', intval($cart->id));
+			Logger::addLog($errorMessage, 4, '0000001', 'Cart', intval($cart->id));
 			die($errorMessage);
 		}
 	}
