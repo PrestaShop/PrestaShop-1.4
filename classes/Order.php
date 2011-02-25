@@ -544,11 +544,11 @@ class OrderCore extends ObjectModel
 
 	static public function getDiscountsCustomer($id_customer, $id_discount)
 	{
-		return Db::getInstance()->ExecuteS('
+		return Db::getInstance()->getValue('
 			SELECT COUNT(*) FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN '._DB_PREFIX_.'order_discount od ON (od.id_order = o.id_order)
 			WHERE o.id_customer = '.(int)($id_customer).'
-			AND od.id_discount = '.(int)($id_discount))->getValue();
+			AND od.id_discount = '.(int)($id_discount));
 	}
 
 	/**
