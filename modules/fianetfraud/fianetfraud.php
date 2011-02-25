@@ -389,7 +389,7 @@ class Fianetfraud extends Module
 		elseif ($params['newOrderStatus']->id == _PS_OS_REFUND_)
 			$order_status = 6;
 		if ($order_status != false)
-			return file_get_contents('https://secure.fia-net.com/'.($conf['SAC_PRODUCTION'] ? 'fscreener' : 'pprod').'/engine/delivery.cgi?SiteID='.$conf['SAC_SITEID'].'&Pwd='.urlencode($conf['SAC_PASSWORD']).'&RefID='.(int)($params['id_order']).'&Status='.$order_status);
+			return file_get_contents('https://secure.fia-net.com/'.($conf['SAC_PRODUCTION'] ? 'fscreener' : 'pprod').'/engine/delivery.cgi?SiteID='.$conf['SAC_SITEID'].'&Pwd='.urlencode($conf['SAC_PASSWORD']).'&RefID='.(int)$params['id_order'].'&Status='.$order_status);
 		else
 			return true;
 	}
@@ -406,6 +406,9 @@ class Fianetfraud extends Module
 
 	public function hookNewOrder($params)
 	{
+		if ($params['order']->total_paid <= 0)
+			return;
+			
 		if (!$this->needCheck($params['order']->module, $params['order']->total_paid))
 			return false;
 			
