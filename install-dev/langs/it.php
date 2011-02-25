@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $_LANG['Installer'] = 'Installazione';
 $_LANG['Updater'] = 'Aggiornamento';
