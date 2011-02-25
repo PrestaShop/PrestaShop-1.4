@@ -61,14 +61,6 @@ class	LoggerCore extends ObjectModel
 
 	protected static $_is_present = array();
 
-	/**
-	 * this class should not be instanciated directly. Use addLog
-	 * 
-	 * @return void
-	 */
-	private function __construct(){
-			
-	}
 
 	public function getFields()
 	{
