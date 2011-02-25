@@ -126,15 +126,17 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			<span>{l s='Total' mod='blockcart'}</span>
 			<span id="cart_block_total" class="price ajax_block_cart_total">{$total}</span>
 		</p>
-		{if $priceDisplay == 0}
-			<p id="cart-price-precisions">
-				{l s='Prices are tax included' mod='blockcart'}
-			</p>
-		{/if}
-		{if $priceDisplay == 1}
-			<p id="cart-price-precisions">
-				{l s='Prices are tax excluded' mod='blockcart'}
-			</p>
+		{if $use_taxes}
+			{if $priceDisplay == 0}
+				<p id="cart-price-precisions">
+					{l s='Prices are tax included' mod='blockcart'}
+				</p>
+			{/if}
+			{if $priceDisplay == 1}
+				<p id="cart-price-precisions">
+					{l s='Prices are tax excluded' mod='blockcart'}
+				</p>
+			{/if}
 		{/if}
 		<p id="cart-buttons">
 			{if $order_process == 'order'}<a href="{$link->getPageLink("$order_process.php", true)}" class="button_small" title="{l s='Cart' mod='blockcart'}">{l s='Cart' mod='blockcart'}</a>{/if}
