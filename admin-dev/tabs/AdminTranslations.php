@@ -711,26 +711,38 @@ class AdminTranslations extends AdminTab
 				</legend>
 				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add a language directly from prestashop.com here').'</p>
 					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:').' ';
-			// Get all iso code available
-			if(fsockopen('www.prestashop.com', 80))
+			
+			// create a context to test www.prestashop.com connection 
+			$opts = array(
+				'http'=>array(
+					'protocol_version'=>'1.1',
+					'method'=>'GET',
+				)
+			);
+			$context = stream_context_create($opts);
+			if (@file_get_contents('http://www.prestashop.com', false, $context))
 			{
-				$lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
-				if ($lang_packs != '' && $lang_packs = Tools::jsonDecode($lang_packs))
+				// Get all iso code available
+				if(fsockopen('www.prestashop.com', 80))
 				{
-					echo 	'<select id="params_import_language" name="params_import_language">';
-					foreach($lang_packs AS $lang_pack)
-						if (!Language::isInstalled($lang_pack->iso_code))
-							echo '<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
-					echo 	'</select>';
-				}
-				else
-					echo '<p>'.$this->l('Cannot connect to prestashop.com').'</p>';
-			}
-			echo '	</div>
+					$lang_packs = ToolsCore::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
+					if ($lang_packs!== false && $lang_packs != '' && $lang_packs = Tools::jsonDecode($lang_packs))
+					{
+						echo 	'<select id="params_import_language" name="params_import_language">';
+						foreach($lang_packs AS $lang_pack)
+							if (!Language::isInstalled($lang_pack->iso_code))
+								echo '<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
+						echo 	'</select>';
+					}
+					echo '	</div>
 					<div style="float:left">
 						<input type="submit" value="'.$this->l('Add the language').'" name="submitAddLanguage" class="button" style="margin:0px 0px 0px 25px;" />
-					</div>
-				</div>
+					</div>';
+				}
+			}
+			else
+				echo '<br /><br /><p class="error">'.$this->l('Cannot connect to prestashop.com to get languages list.').'</p>';
+			echo '	</div>
 			</fieldset>
 			</form><br />';
 			echo '<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
