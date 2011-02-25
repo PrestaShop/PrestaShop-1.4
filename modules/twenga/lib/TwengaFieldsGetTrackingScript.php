@@ -76,11 +76,11 @@ class TwengaFieldsGetTrackingScript extends TwengaFields
 				throw new TwengaFieldsException($str_error.Tools::displayError('The total HT must be a float value.'));
 			if(isset($item['quantity']) && !Validate::isInt($item['quantity']))
 				throw new TwengaFieldsException($str_error.Tools::displayError('The quantity must be a integer value.'));
-			if(isset($item['sku']) && !Validate::is_string($item['sku']) && strlen($item['sku']) > 40)
+			if(isset($item['sku']) && !is_string($item['sku']) && strlen($item['sku']) > 40)
 				throw new TwengaFieldsException($str_error.Tools::displayError('The sku must be a string with length less than 40 chars.'));
-			if(isset($item['name']) && !Validate::is_string($item['name']))
+			if(isset($item['name']) && !is_string($item['name']))
 				throw new TwengaFieldsException($str_error.Tools::displayError('The name must be a string with length less than 100 chars.'));
-			if(isset($item['category_name']) && !Validate::is_string($item['category_name']))
+			if(isset($item['category_name']) && !is_string($item['category_name']))
 				throw new TwengaFieldsException($str_error.Tools::displayError('The category name must be a string with length less than 100 chars.'));
 		}
 		return true;

@@ -300,18 +300,24 @@ class Twenga extends PaymentModule
 		$currency = new Currency($params['cart']->id_currency);
 		$address = $customer->getAddresses($params['cart']->id_lang);
 		$address = $address[0];
-		$tva = $params['cart']->getOrderTotal(true, Cart::BOTH)-$params['cart']->getOrderTotal(false, Cart::BOTH);
-		$tax = ($tva * 100) / $params['cart']->getOrderTotal(true, Cart::BOTH);
+		
+		// for 1.3 compatibility
+		$type_both = 3;
+		$type_only_shipping = 5;
+		
+		
+		$tva = $params['cart']->getOrderTotal(true, $type_both)-$params['cart']->getOrderTotal(false, $type_both);
+		$tax = ($tva * 100) / $params['cart']->getOrderTotal(true, $type_both);
 		
 		$params_to_twenga = array();
 		// @todo delete or not ??
 //		$params_to_twenga['user_id'] = $customer->id;
 //		$params_to_twenga['cli_email'] = $customer->email;
-		$params_to_twenga['total_ht'] = $params['cart']->getOrderTotal(false, Cart::BOTH);
+		$params_to_twenga['total_ht'] = $params['cart']->getOrderTotal(false, $type_both);
 		$params_to_twenga['basket_id'] = $params['cart']->id;
 		$params_to_twenga['currency'] = $currency->iso_code;
-		$params_to_twenga['total_ttc'] = $params['cart']->getOrderTotal(true, Cart::BOTH);
-		$params_to_twenga['shipping'] = $params['cart']->getOrderTotal(true, Cart::ONLY_SHIPPING);
+		$params_to_twenga['total_ttc'] = $params['cart']->getOrderTotal(true, $type_both);
+		$params_to_twenga['shipping'] = $params['cart']->getOrderTotal(true, $type_only_shipping);
 		$params_to_twenga['tax'] = Tools::ps_round($tax, 2);
 		$params_to_twenga['tva'] = $tva;
 		$params_to_twenga['cli_firstname'] = $customer->firstname;
@@ -776,7 +782,8 @@ class Twenga extends PaymentModule
 				$combinations[$row['id_product_attribute']]['weight'] = (float)($row['weight']);
 				$combinations[$row['id_product_attribute']]['quantity'] = (int)($row['quantity']);
 				$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
-				$combinations[$row['id_product_attribute']]['unit_impact'] = $row['unit_price_impact'];
+				if (isset($row['unit_price_impact']))
+					$combinations[$row['id_product_attribute']]['unit_impact'] = $row['unit_price_impact'];
 				$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
 			}
 		}
