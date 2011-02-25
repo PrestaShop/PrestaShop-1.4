@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,13 +32,13 @@ class OrderDetailControllerCore extends FrontController
 		$this->auth = true;
 		$this->authRedirection = 'history.php';
 		$this->ssl = true;
-		
+
 		parent::__construct();
-		
+
 		header("Cache-Control: no-cache, must-revalidate");
 		header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 	}
-	
+
 	public function preProcess()
 	{
 		parent::preProcess();
@@ -77,10 +77,10 @@ class OrderDetailControllerCore extends FrontController
 					if (Validate::isLoadedObject($customer))
 						Mail::Send((int)(self::$cookie->id_lang), 'order_customer_comment', Mail::l('Message from a customer'),
 						array(
-						'{lastname}' => $customer->lastname, 
-						'{firstname}' => $customer->firstname, 
-						'{email}' => $customer->email, 
-						'{id_order}' => (int)($message->id_order), 
+						'{lastname}' => $customer->lastname,
+						'{firstname}' => $customer->firstname,
+						'{email}' => $customer->email,
+						'{id_order}' => (int)($message->id_order),
 						'{message}' => $message->message),
 						$to, $toName, $customer->email, $customer->firstname.' '.$customer->lastname);
 					if (Tools::getValue('ajax') != 'true')
@@ -107,8 +107,11 @@ class OrderDetailControllerCore extends FrontController
 				if ($order->total_discounts > 0)
 					self::$smarty->assign('total_old', (float)($order->total_paid - $order->total_discounts));
 				$products = $order->getProducts();
+
 				$customizedDatas = Product::getAllCustomizedDatas((int)($order->id_cart));
 				Product::addCustomizationPrice($products, $customizedDatas);
+
+				$customer = new Customer($order->id_customer);
 
 				self::$smarty->assign(array(
 					'shop_name' => strval(Configuration::get('PS_SHOP_NAME')),
@@ -131,6 +134,7 @@ class OrderDetailControllerCore extends FrontController
 					'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 					'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 					'use_tax' => Configuration::get('PS_TAX'),
+					'group_use_tax' => (Group::getPriceDisplayMethod($customer->id_default_group) == PS_TAX_INC),
 					'customizedDatas' => $customizedDatas));
 				if ($carrier->url AND $order->shipping_number)
 					self::$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
@@ -141,19 +145,19 @@ class OrderDetailControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('cannot find this order');
 		}
 	}
-	
+
 	public function displayHeader()
 	{
 		if (Tools::getValue('ajax') != 'true')
 			parent::displayHeader();
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
 		self::$smarty->display(_PS_THEME_DIR_.'order-detail.tpl');
 	}
-	
+
 	public function displayFooter()
 	{
 		if (Tools::getValue('ajax') != 'true')

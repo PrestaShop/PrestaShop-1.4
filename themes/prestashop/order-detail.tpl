@@ -1,5 +1,5 @@
 {*
-* 2007-2010 PrestaShop 
+* 2007-2010 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -165,8 +165,32 @@
 							<label for="cb_{$product.id_order_detail|intval}">{$product.product_name|escape:'htmlall':'UTF-8'}</label>
 						</td>
 						<td><input class="order_qte_input"  name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$customizationQuantityTotal|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$product.customizationQuantityTotal|intval}</span></label></td>
-						<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}</label></td>
-						<td><label for="cb_{$product.id_order_detail|intval}">{if isset($customizedDatas.$productId.$productAttributeId)}{convertPriceWithCurrency price=$product.total_customization_wt currency=$currency convert=0}{else}{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}{/if}</label></td>
+						<td>
+							<label for="cb_{$product.id_order_detail|intval}">
+								{if $group_use_tax}
+									{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}
+								{else}
+									{convertPriceWithCurrency price=$product.product_price currency=$currency convert=0}
+								{/if}
+							</label>
+						</td>
+						<td>
+							<label for="cb_{$product.id_order_detail|intval}">
+								{if isset($customizedDatas.$productId.$productAttributeId)}
+									{if $group_use_tax}
+										{convertPriceWithCurrency price=$product.total_customization_wt currency=$currency convert=0}
+									{else}
+										{convertPriceWithCurrency price=$product.total_customization currency=$currency convert=0}
+									{/if}
+								{else}
+									{if $group_use_tax}
+										{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}
+									{else}
+										{convertPriceWithCurrency price=$product.total_price currency=$currency convert=0}
+									{/if}
+								{/if}
+							</label>
+						</td>
 					</tr>
 					{foreach from=$customizedDatas.$productId.$productAttributeId item='customization' key='customizationId'}
 					<tr class="alternate_item">
@@ -216,8 +240,24 @@
 							</label>
 						</td>
 						<td><input class="order_qte_input" name="order_qte_input[{$product.id_order_detail|intval}]" type="text" size="2" value="{$productQuantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$productQuantity|intval}</span></label></td>
-						<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}</label></td>
-						<td><label for="cb_{$product.id_order_detail|intval}">{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}</label></td>
+						<td>
+							<label for="cb_{$product.id_order_detail|intval}">
+							{if $group_use_tax}
+								{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}
+							{else}
+								{convertPriceWithCurrency price=$product.product_price currency=$currency convert=0}
+							{/if}
+							</label>
+						</td>
+						<td>
+							<label for="cb_{$product.id_order_detail|intval}">
+							{if $group_use_tax}
+								{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}
+							{else}
+								{convertPriceWithCurrency price=$product.total_price currency=$currency convert=0}
+							{/if}
+							</label>
+						</td>
 					</tr>
 				{/if}
 			{/if}

@@ -179,7 +179,7 @@ class OrderCore extends ObjectModel
 					'product_price' => array('setter' => null),
 			)),
 		),
-		
+
 	);
 
 	/* MySQL does not allow 'order' for a table name */
@@ -383,7 +383,7 @@ class OrderCore extends ObjectModel
 		WHERE od.`id_order` = '.(int)($this->id));
 	}
 
-	
+
 	/**
 	 * @return string
 	 * @deprecated
@@ -446,7 +446,7 @@ class OrderCore extends ObjectModel
 		}
 
 		$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
-		$row['total_price'] = $row['product_quantity'] * $row['product_price_wt'];
+		$row['total_price'] = $row['product_quantity'] * $row['product_price'];
 	}
 
 	/**
@@ -1007,7 +1007,7 @@ class OrderCore extends ObjectModel
 			WHERE `id_order` = '.(int)$id_order.'
 			'.($id_customer ? 'AND `id_customer` = '.(int)$id_customer : ''));
 	}
-	
+
 	public function getWsOrderRows()
 	{
 		$query = 'SELECT id_order_detail as `id`, id_order, product_attribute_id, product_quantity, product_name
@@ -1023,7 +1023,7 @@ class OrderCore extends ObjectModel
 		$history->id_order = (int)($this->id);
 		$history->changeIdOrderState((int)$id_order_state, (int)($this->id));
 	}
-	
+
 	public function addWs($autodate = true, $nullValues = false)
 	{
 		$paymentModule = Module::getInstanceByName($this->module);
@@ -1032,7 +1032,7 @@ class OrderCore extends ObjectModel
 		$paymentModule->validateOrder($this->id_cart, $id_order_state, $this->total_paid,	$this->payment,	NULL, array(), null, false, $customer->secure_key);
 		return true;
 	}
-	
+
 	public function deleteAssociations()
 	{
 		return (Db::getInstance()->Execute('
