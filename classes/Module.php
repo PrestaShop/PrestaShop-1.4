@@ -376,7 +376,8 @@ abstract class ModuleCore
 				{
 					$file = _PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php';
 					if (Tools::file_exists_cache($file) AND include_once($file))
-						$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
+						if(isset($_MODULE) AND is_array($_MODULE))
+							$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 
 					$xml_module->displayName = Module::findTranslation($xml_module->name, $xml_module->displayName, (string)$xml_module->name);
 					$xml_module->description = Module::findTranslation($xml_module->name, $xml_module->description, (string)$xml_module->name);
