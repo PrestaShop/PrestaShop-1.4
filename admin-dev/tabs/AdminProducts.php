@@ -2479,13 +2479,18 @@ class AdminProducts extends AdminTab
 
 				echo '</td>
 					</tr>
+				';
+				if (Configuration::get('PS_ECOTAX_APPLY'))
+					echo '
 					<tr>
 						<td class="col-left">'.$this->l('Eco-tax (tax incl.):').'</td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="ecotax" name="ecotax" type="text" value="'.$this->getFieldValue($obj, 'ecotax').'" onkeyup="calcPriceTE(); this.value = this.value.replace(/,/g, \'.\'); if (parseInt(this.value) > getE(\'priceTE\').value) this.value = getE(\'priceTE\').value; if (isNaN(this.value)) this.value = 0;" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
 							<span style="margin-left:10px">('.$this->l('already included in price').')</span>
 						</td>
-					</tr>
+					</tr>';
+
+				echo '
 					<tr>
 						<td class="col-left">'.$this->l('Retail price with tax:').'</td>
 						<td style="padding-bottom:5px;">
@@ -2498,7 +2503,7 @@ class AdminProducts extends AdminTab
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="unit_price" name="unit_price" type="text" value="'.($this->getFieldValue($obj, 'unit_price_ratio') != 0 ? Tools::ps_round($this->getFieldValue($obj, 'price') / $this->getFieldValue($obj, 'unit_price_ratio'), 2) : 0).'" onkeyup="this.value = this.value.replace(/,/g, \'.\'); unitPriceWithTax(\'unit\');"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <input size="6" maxlength="10" id="unity" name="unity" type="text" value="'.htmlentities($this->getFieldValue($obj, 'unity'), ENT_QUOTES, 'UTF-8').'" onkeyup="unitySecond();" onchange="unitySecond();"/>'.
 							(Configuration::get('PS_TAX') ? '<span style="margin-left:15px">'.$this->l('or').' '.($currency->format == 1 ? ' '.$currency->sign : '').'<span id="unit_price_with_tax">0.00</span>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('per').' <span id="unity_second">'.$this->getFieldValue($obj, 'unity').'</span> '.$this->l('with tax') : '').'</span>
-							<p>'.$this->l('For example: 15 € per Kg').'</p>
+							<p>'.$this->l('Eg. $15 per Lb').'</p>
 						</td>
 					</tr>
 					<tr>
@@ -3160,11 +3165,15 @@ class AdminProducts extends AdminTab
 			  <span id="span_unit_impact">&nbsp;&nbsp;'.$this->l('of').'&nbsp;&nbsp;'.($currency->format == 1 ? $currency->sign.' ' : '').'
 				<input type="text" size="6" name="attribute_unity" id="attribute_unity" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' / <span id="unity_third">'.$this->getFieldValue($obj, 'unity').'</span>
 			</span></td>
-		  </tr>
-		  <tr>
-			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
-			  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
-		  </tr>
+		  </tr>';
+		if (Configuration::get('PS_ECOTAX_APPLY'))
+			echo'
+				  <tr>
+					  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
+					  <td style="padding-bottom:5px;">'.($currency->format == 1 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
+				  </tr>';
+
+		echo'
 		  <tr id="initial_stock_attribute">
 				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Initial stock:').'</td>
 				<td><input type="text" name="attribute_quantity" size="3" maxlength="6" value="1"/></td>

@@ -246,6 +246,8 @@ class OrderControllerCore extends ParentOrderController
 		$this->_assignWrappingAndTOS();
 
 		self::$smarty->assign('is_guest' ,(isset(self::$cookie->is_guest) ? self::$cookie->is_guest : 0));
+		self::$smarty->assign('displayVouchers', Discount::getVouchersToCartDisplay((int)(self::$cookie->id_lang), (isset(self::$cookie->id_customer) ? (int)(self::$cookie->id_customer) : 0)));
+		self::$smarty->assign('voucherAllowed', Configuration::get('PS_VOUCHERS'));
 	}
 
 	/* Payment step */

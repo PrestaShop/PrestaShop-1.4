@@ -90,11 +90,19 @@ $(function(){ldelim}
 			<label for="company">{l s='Company'}</label>
 			<input type="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{else}{if isset($address->company)}{$address->company|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 		</p>
+	{if $vat_display == 2}
+		<div id="vat_area">
+	{elseif $vat_display == 1}
+		<div id="vat_area" style="display: none;">
+	{else}
+		<div style="display: none;">
+	{/if}
 		<div id="vat_number">
 			<p class="text">
 				<label for="vat_number">{l s='VAT number'}</label>
 				<input type="text" class="text" name="vat_number" value="{if isset($smarty.post.vat_number)}{$smarty.post.vat_number}{else}{if isset($address->vat_number)}{$address->vat_number|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 			</p>
+		</div>
 		</div>
 		<p class="required text">
 			<label for="firstname">{l s='First name'}</label>
@@ -135,6 +143,33 @@ $(function(){ldelim}
 			<select id="id_country" name="id_country">{$countries_list}</select>
 			<sup>*</sup>
 		</p>
+		<script type="text/javascript">
+				$(document).ready(function(){
+					var ajaxurl = "{$ajaxurl}";
+					{literal}
+					$('#id_country').change(function() {
+						$.ajax({
+							type: "GET",
+							url: ajaxurl+"vatnumber/ajax.php?id_country="+$('#id_country').val(),
+							success: function(isApplicable){
+ console.log(isApplicable);
+								if(isApplicable == "1")
+								{
+ console.log("c'est applicable");
+									$('#vat_area').show();
+									$('#vat_number').show();
+								}
+								else
+								{
+ console.log("ou pas");
+									$('#vat_area').hide();
+								}
+							}
+						});
+					});
+					{/literal}
+				});
+		</script>
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
 			<select name="id_state" id="id_state">

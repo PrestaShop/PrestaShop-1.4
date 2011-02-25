@@ -24,6 +24,7 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
+include_once(PS_ADMIN_DIR.'/../modules/vatnumber/vatnumber.php');
 
 class AddressControllerCore extends FrontController
 {
@@ -93,6 +94,16 @@ class AddressControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
 			if (!$country = new Country((int)$address->id_country) OR !Validate::isLoadedObject($country))
 				die(Tools::displayError());
+
+			/* US customer: normalize the address */
+			if($address->id_country == Country::getByIso('US'))
+			{
+				include_once(_PS_TAASC_PATH_.'AddressStandardizationSolution.php');
+				$normalize = new AddressStandardizationSolution;
+				$address->address1 = $normalize->AddressLineStandardization($address->address1);
+				$address->address2 = $normalize->AddressLineStandardization($address->address2);
+			}
+
 			$zip_code_format = $country->zip_code_format;
 			if ($country->need_zip_code)
 			{
@@ -228,6 +239,14 @@ class AddressControllerCore extends FrontController
 		foreach ($countries AS $country)
 			$countriesList .= '<option value="'.(int)($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
+		if(Configuration::get('VATNUMBER_MANAGEMENT') && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
+			self::$smarty->assign('vat_display', 2);
+		else if(Configuration::get('VATNUMBER_MANAGEMENT'))
+			self::$smarty->assign('vat_display', 1);
+		else
+			self::$smarty->assign('vat_display', 0);
+
+		self::$smarty->assign('ajaxurl', _MODULE_DIR_);
 		self::$smarty->assign(array(
 			'countries_list' => $countriesList,
 			'countries' => $countries,

@@ -61,7 +61,7 @@ class VatNumber extends Module
 		Configuration::updateValue('VATNUMBER_MANAGEMENT', 0);
 	}
 	
-	private static function getPrefixIntracomVAT()
+	public static function getPrefixIntracomVAT()
 	{
 		$intracom_array = array('AT'=>'AT',	//Austria
 			'BE'=>'BE',	//Belgium
@@ -93,6 +93,16 @@ class VatNumber extends Module
 			'BG'=>'BG'	//Bulgaria   
 		);
 		return $intracom_array;
+	}
+
+	public static function isApplicable($id_country) 
+	{
+		$isApplicable = in_array(Country::getIsoById((int)$id_country), VatNumber::getPrefixIntracomVAT());
+		if ($isApplicable == "")
+		{
+			return 0;
+		}
+		return 1;
 	}
 
 	public static function WebServiceCheck($vatNumber)

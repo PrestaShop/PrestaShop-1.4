@@ -576,6 +576,13 @@ if ($lm->getIncludeTradFilename())
 							$(".installModuleList.selected").removeClass("selected");
 							if ($("#modulesList" + $('#infosCountry').val()))
 								$("#modulesList" + $('#infosCountry').val()).addClass("selected");
+							$.ajax({
+								type: "GET",
+								url: "./php/country_to_timezone.php?country="+$("select#infosCountry option:selected").attr('rel'),
+								success: function(timezone){
+									$("select#infosTimezone").val(timezone);
+								}
+							});
 						});
 						$('.paypal').click(function() {						
 							if ($(this).attr('checked'))

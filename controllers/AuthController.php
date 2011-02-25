@@ -90,7 +90,16 @@ class AuthControllerCore extends FrontController
 			$address = new Address();
 			$address->id_customer = 1;
 			$this->errors = array_unique(array_merge($this->errors, $address->validateControler()));
-			
+
+			/* US customer: normalize the address */
+			if($address->id_country == Country::getByIso('US'))
+			{
+				include_once(_PS_TAASC_PATH_.'AddressStandardizationSolution.php');
+				$normalize = new AddressStandardizationSolution;
+				$address->address1 = $normalize->AddressLineStandardization($address->address1);
+				$address->address2 = $normalize->AddressLineStandardization($address->address2);
+			}
+
 			$zip_code_format = Country::getZipCodeFormat((int)(Tools::getValue('id_country')));
 			if (Country::getNeedZipCode((int)(Tools::getValue('id_country'))))
 			{

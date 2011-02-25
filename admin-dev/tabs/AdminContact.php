@@ -77,12 +77,12 @@ class AdminContact extends AdminPreferences
 		global $cookie;
 		if (!$this->_errors && isset($_POST['PS_SHOP_COUNTRY_ID']))
 		{
-			$country = new Country(intval($_POST['PS_SHOP_COUNTRY_ID']), intval($cookie->id_lang));
+			$country = new Country((int)($_POST['PS_SHOP_COUNTRY_ID']), intval($cookie->id_lang));
 			Configuration::updateValue('PS_SHOP_COUNTRY', pSQL($country->name));
 		}
 		if (!$this->_errors && isset($_POST['PS_SHOP_STATE_ID']))
 		{
-			$state = new State(intval($_POST['PS_SHOP_STATE_ID']));
+			$state = new State((int)($_POST['PS_SHOP_STATE_ID']));
 			Configuration::updateValue('PS_SHOP_STATE', pSQL($state->name));
 		}
 		parent::_postConfig($fields);

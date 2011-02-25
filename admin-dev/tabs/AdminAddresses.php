@@ -26,6 +26,7 @@
 */
 
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
+include_once(PS_ADMIN_DIR.'/../modules/vatnumber/vatnumber.php');
 
 class AdminAddresses extends AdminTab
 {
@@ -232,19 +233,6 @@ class AdminAddresses extends AdminTab
 			return;
 
 		echo '
-		<script type="text/javascript">
-			function populateStates(id_country, id_state)
-			{
-				$.ajax({
-				  url: "ajax.php",
-				  cache: false,
-				  data: "ajaxStates=1&id_country="+id_country+"&id_state="+id_state,
-				  success: function(html){
-					$("#id_state").html(html);
-				  }
-				});
-			}
-		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.((int)($obj->id) ? '<input type="hidden" name="id_'.$this->table.'" value="'.(int)($obj->id).'" />' : '').'
 		'.(($id_order = (int)(Tools::getValue('id_order'))) ? '<input type="hidden" name="id_order" value="'.(int)($id_order).'" />' : '').'
@@ -301,10 +289,19 @@ class AdminAddresses extends AdminTab
 					<input type="text" size="33" name="company" value="'.htmlentities($this->getFieldValue($obj, 'company'), ENT_COMPAT, 'UTF-8').'" />
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
-				echo '<label>'.$this->l('VAT number').'</label>
-				<div class="margin-form">
-					<input type="text" size="33" name="vat_number" value="'.htmlentities($this->getFieldValue($obj, 'vat_number'), ENT_COMPAT, 'UTF-8').'" />
-				</div>';
+
+				if(Configuration::get('VATNUMBER_MANAGEMENT') && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
+					echo '<div id="vat_area" style="display: visible">';
+				else if(Configuration::get('VATNUMBER_MANAGEMENT'))
+					echo '<div id="vat_area" style="display: hidden">';
+				else
+					echo'<div style="display: none;">';
+
+					echo '<label>'.$this->l('VAT number').'</label>
+					<div class="margin-form">
+						<input type="text" size="33" name="vat_number" value="'.htmlentities($this->getFieldValue($obj, 'vat_number'), ENT_COMPAT, 'UTF-8').'" />
+					</div>
+					</div>';
 		}
 				echo '
 				<label>'.$this->l('Last name').'</label>
@@ -340,7 +337,7 @@ class AdminAddresses extends AdminTab
 				</div>
 				<label>'.$this->l('Country').'</label>
 				<div class="margin-form">
-					<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.(int)($this->getFieldValue($obj, 'id_state')).');" />';
+					<select name="id_country" id="id_country" />';
 		$selectedCountry = $this->getFieldValue($obj, 'id_country');
 		foreach ($this->countriesArray AS $id_country => $name)
 			echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
@@ -351,7 +348,33 @@ class AdminAddresses extends AdminTab
 		
 		echo '
 				<script type="text/javascript">
-					populateStates('.(empty($id_country_ajax) ? (int)Configuration::get('PS_COUNTRY_DEFAULT') : (int)$id_country_ajax).', '.(int)($this->getFieldValue($obj, 'id_state')).');
+				$(document).ready(function(){
+					$(\'#id_country\').change(function() {
+						$.ajax({
+						  url: "ajax.php",
+						  cache: false,
+						  data: "ajaxStates=1&id_country="+$(\'#id_country\').val()+"&id_state="+$(\'#id_state\').val(),
+						  success: function(html){
+							$("#id_state").html(html);
+						  }
+						});
+
+						$.ajax({
+							type: "GET",
+							url: "'._MODULE_DIR_.'vatnumber/ajax.php?id_country="+$(\'#id_country\').val(),
+							success: function(isApplicable){
+								if(isApplicable == 1)
+								{
+									$(\'#vat_area\').show();
+								}
+								else
+								{
+									$(\'#vat_area\').hide();
+								}
+							}
+						});
+					});
+				});
 				</script>
 				<label>'.$this->l('State').'</label>
 				<div class="margin-form">

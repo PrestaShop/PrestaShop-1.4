@@ -935,6 +935,15 @@ $(document).ready(
 			}
 		);
 		
+		//Enable only USD if us
+		$('#infosCountry').change(function() {
+			if ($("select#infosCountry option:selected").attr('rel') == "US")
+			$.ajax({
+				type: "GET",
+				url: "./php/usd_currency.php"
+			});
+		});
+
 		//set SMTP pannels states
 		$("#set_stmp").bind("click",
 			function()
