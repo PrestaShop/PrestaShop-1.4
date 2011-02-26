@@ -120,6 +120,7 @@ class BlockLayered extends Module
 		
 		$countManufacturers = array();
 		$countManufacturers[0] = 0; /* Prevent from no manufacturers case */
+		$productIds = array(0);
 		foreach ($layeredProducts AS $layeredProduct)
 		{
 			/* Count manufacturers */
@@ -136,6 +137,7 @@ class BlockLayered extends Module
 					$layeredCondition['checked'] = in_array('\''.$key.'\'', $filters['condition']) ? 1 : 0;
 			}
 			
+			/* Count categories */
 			foreach ($layeredSubcategories AS &$layeredSubcategory)
 			{
 				if (isset($layeredSubcategory['subcategoriesArray'][(int)$layeredProduct['id_category']]))
@@ -143,6 +145,43 @@ class BlockLayered extends Module
 				if (isset($filters['category']) AND sizeof($filters['category']))
 					$layeredSubcategory['checked'] = in_array($layeredSubcategory['id_category'], $filters['category']) ? 1 : 0;
 			}
+			
+			/* Build product IDs list */
+			$productIds[] = (int)$layeredProduct['id_product'];
+		}
+		
+		/* Get features names */
+		$layeredFeatures = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT fp.id_feature
+		FROM '._DB_PREFIX_.'feature_product fp
+		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value)
+		WHERE fv.custom = 0 AND fp.id_product IN ('.implode(',', $productIds).')
+		GROUP BY fp.id_feature');
+		
+		$layeredFeaturesIds = array();
+		foreach ($layeredFeatures AS $layeredFeature)
+			$layeredFeaturesIds[] = (int)$layeredFeature['id_feature'];
+		
+		$layeredFeatures = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT fl.id_feature, fl.name, fvl.id_feature_value, fvl.value, fp.id_product
+		FROM '._DB_PREFIX_.'feature_lang fl
+		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature = fl.id_feature)
+		LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
+		LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_feature_value = fv.id_feature_value)
+		WHERE fv.custom = 0 AND fl.id_feature IN ('.implode(',', $layeredFeaturesIds).') AND fl.id_lang = '.(int)$cookie->id_lang.' AND fvl.id_lang = '.(int)$cookie->id_lang);
+		
+		$sortedLayeredFeatures = array();
+		foreach ($layeredFeatures AS $layeredFeature)
+		{
+			$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['name'] = $layeredFeature['name'];
+			$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['name'] = $layeredFeature['value'];
+			
+			/* Count product for feach feature value */
+			if (!isset($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']))
+					$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n'] = 0;
+					
+			if (!empty($layeredFeature['id_product']))
+				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']++;
 		}
 		
 		/* Get manufacturers names */
@@ -152,14 +191,15 @@ class BlockLayered extends Module
 		WHERE m.id_manufacturer IN ('.implode(',', array_keys($countManufacturers)).')');
 		
 		foreach ($layeredManufacturers AS &$layeredManufacturer)
-		{
-			$layeredManufacturer['n'] = (int)$countManufacturers[(int)$layeredManufacturer['id_manufacturer']];
+		{			
+			$layeredManufacturer['n'] = (int)$countManufacturers[(int)$layeredManufacturer['id_manufacturer']];			
 			if (isset($filters['manufacturer']) AND sizeof($filters['manufacturer']))
 				$layeredManufacturer['checked'] = in_array($layeredManufacturer['id_manufacturer'], $filters['manufacturer']) ? 1 : 0;
 		}
 		
 		$smarty->assign(array(
 		'id_category_layered' => (int)$id_parent,
+		'layered_features' => $sortedLayeredFeatures,
 		'layered_subcategories' => $layeredSubcategories,
 		'layered_manufacturers' => $layeredManufacturers,
 		'layered_conditions' => $layeredConditions,
@@ -231,12 +271,11 @@ class BlockLayered extends Module
 		* Todo:
 		*
 		* - Add a check on the category_group table
-		* - Add other filters (prices, attributes & colors, features, weight)
+		* - Add other filters (prices, attributes & colors, weight)
 		* - Manage products sort & pagination
 		* - Manage SEO links (no ajax actions in JS disabled, real links instead)
 		* - Test on a large catalog & improve performances
 		* - Add admin panel options
-		* - Update in real time the list inside the block when a criterion is choosen
 		* - Manage the breadcrumb (+ ability to delete a selected filter)
 		* - Real time URL building + ability to give the URL to someone
 		* 
@@ -264,7 +303,13 @@ class BlockLayered extends Module
 			'products' => $products,
 			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY')));
 
-		$output['layered_block_left'] = $this->generateFilters($products, $filters);
+		$filterProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT cp.id_product, p.condition, p.id_manufacturer, cp.id_category
+		FROM '._DB_PREFIX_.'category_product cp
+		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
+		WHERE p.active = 1 AND cp.id_category IN ('.$categoriesID.')');
+			
+		$output['layered_block_left'] = $this->generateFilters($filterProducts, $filters);		
 		$output['product_list'] = $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl');
 
 		return Tools::jsonEncode($output);
@@ -279,5 +324,5 @@ class BlockLayered extends Module
 	{
 		Tools::addJS(($this->_path).'blocklayered.js');
 		Tools::addCSS(($this->_path).'blocklayered.css', 'all');
-	}	
+	}
 }

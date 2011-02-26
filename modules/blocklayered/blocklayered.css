@@ -21,3 +21,7 @@
 	vertical-align: text-bottom;
 	margin-left: 2px;
 }
+
+#layered_block_left ul li .disabled {
+	color: #666;
+}
