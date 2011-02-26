@@ -4,6 +4,25 @@
 
 #layered_block_left ul li {
 	margin-left: 15px;
+	padding-left: 2px;
+}
+
+#layered_block_left #enabled_filters {
+	font-size: 10px;
+}
+
+#layered_block_left #enabled_filters a {
+	text-decoration: none;
+	color: red;
+}
+
+#layered_block_left ul li:hover {
+	background: #71BF47;
+	color: #FFF;
+}
+
+#layered_block_left ul li label {
+	cursor: pointer;
 }
 
 #layered_block_left ul li.nomargin {
@@ -11,6 +30,17 @@
 }
 
 #layered_block_left span.layered_subtitle {
+	float: left;
+	font-weight: bold;
+	font-size: 12px;
+	display: block;
+	margin-bottom: 4px;
+}
+
+#layered_block_left span.layered_close a { text-decoration: none; }
+
+#layered_block_left span.layered_close {
+	float: right;
 	font-weight: bold;
 	font-size: 12px;
 	display: block;

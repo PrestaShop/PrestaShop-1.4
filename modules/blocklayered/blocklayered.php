@@ -150,7 +150,49 @@ class BlockLayered extends Module
 			$productIds[] = (int)$layeredProduct['id_product'];
 		}
 		
-		/* Get features names */
+		/* Get attribute names */
+		$layeredAttributes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT ag.id_attribute_group
+		FROM '._DB_PREFIX_.'attribute_group ag
+		LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
+		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_attribute = a.id_attribute)
+		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
+		WHERE pa.id_product IN ('.implode(',', $productIds).')
+		GROUP BY ag.id_attribute_group');
+		
+		$layeredAttributesIds = array();
+		foreach ($layeredAttributes AS $layeredAttribute)
+			$layeredAttributesIds[] = (int)$layeredAttribute['id_attribute_group'];
+			
+		$layeredAttributes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT a.id_attribute_group, ag.is_color_group, a.id_attribute, al.name, agl.name name_group, a.color, pa.id_product
+		FROM '._DB_PREFIX_.'attribute_group ag
+		LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
+		LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
+		LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (agl.id_attribute_group = ag.id_attribute_group)
+		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_attribute = a.id_attribute)
+		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute AND pa.id_product IN ('.implode(',', $productIds).'))
+		WHERE ag.id_attribute_group IN ('.implode(',', $layeredAttributesIds).') 
+		AND al.id_lang = '.(int)$cookie->id_lang.' AND agl.id_lang = '.(int)$cookie->id_lang);
+		
+		$sortedLayeredAttributes = array();
+		foreach ($layeredAttributes AS $layeredAttribute)
+		{
+			$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['name'] = $layeredAttribute['name_group'];
+			$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['is_color_group'] = $layeredAttribute['is_color_group'];
+			$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['name'] = $layeredAttribute['name'];			
+			if ($layeredAttribute['is_color_group'])
+				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['color'] = $layeredAttribute['color'];			
+			
+			/* Count product for each attribute value */
+			if (!isset($sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['n']))
+					$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['n'] = 0;
+					
+			if (!empty($layeredAttribute['id_product']))
+				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['n']++;
+		}
+		
+		/* Get feature names */
 		$layeredFeatures = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT fp.id_feature
 		FROM '._DB_PREFIX_.'feature_product fp
@@ -167,8 +209,9 @@ class BlockLayered extends Module
 		FROM '._DB_PREFIX_.'feature_lang fl
 		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature = fl.id_feature)
 		LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
-		LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_feature_value = fv.id_feature_value)
-		WHERE fv.custom = 0 AND fl.id_feature IN ('.implode(',', $layeredFeaturesIds).') AND fl.id_lang = '.(int)$cookie->id_lang.' AND fvl.id_lang = '.(int)$cookie->id_lang);
+		LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_feature_value = fv.id_feature_value AND fp.id_product IN ('.implode(',', $productIds).'))
+		WHERE fv.custom = 0 AND fl.id_feature IN ('.implode(',', $layeredFeaturesIds).') 
+		AND fl.id_lang = '.(int)$cookie->id_lang.' AND fvl.id_lang = '.(int)$cookie->id_lang);
 		
 		$sortedLayeredFeatures = array();
 		foreach ($layeredFeatures AS $layeredFeature)
@@ -176,7 +219,7 @@ class BlockLayered extends Module
 			$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['name'] = $layeredFeature['name'];
 			$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['name'] = $layeredFeature['value'];
 			
-			/* Count product for feach feature value */
+			/* Count product for each feature value */
 			if (!isset($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']))
 					$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n'] = 0;
 					
@@ -200,6 +243,7 @@ class BlockLayered extends Module
 		$smarty->assign(array(
 		'id_category_layered' => (int)$id_parent,
 		'layered_features' => $sortedLayeredFeatures,
+		'layered_attributes' => $sortedLayeredAttributes,
 		'layered_subcategories' => $layeredSubcategories,
 		'layered_manufacturers' => $layeredManufacturers,
 		'layered_conditions' => $layeredConditions,
