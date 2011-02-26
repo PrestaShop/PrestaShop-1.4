@@ -527,7 +527,7 @@ if ($lm->getIncludeTradFilename())
 					<label for="catalogMode_1"><?php echo lang('Yes'); ?></label>
 					<input type="radio" name="catalogMode" id="catalogMode_0" value="0" checked="checked"/>
 					<label for="catalogMode_0"><?php echo lang('No'); ?></label>
-					<p class="userInfos aligned"><?php echo lang('If you activate this feature, all purchases features will be disabled. You can activate this feature later in your back office'); ?></p>
+					<p class="userInfos aligned"><?php echo lang('If you activate this feature, all purchase features will be disabled. You can activate this feature later in your back office'); ?></p>
 				</div>
 
 				<div class="field">

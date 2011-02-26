@@ -225,6 +225,6 @@ $_LANG['Invalid catalog mode'] = 'Feld Katalog-Modus ungültig';
 $_LANG['Catalog mode:'] = 'Katalog-Modus:';
 $_LANG['Yes'] = 'Ja';
 $_LANG['No'] = 'Nein';
-$_LANG['If you activate this feature, all purchases features will be disabled. You can activate this feature later in your back office'] = 'Wenn Sie diese Option aktivieren, werden alle Kauf-Funktionen deaktiviert. Sie können diese Option später in Ihrem Back-Office aktivieren';
+$_LANG['If you activate this feature, all purchase features will be disabled. You can activate this feature later in your back office'] = 'Wenn Sie diese Option aktivieren, werden alle Kauf-Funktionen deaktiviert. Sie können diese Option später in Ihrem Back-Office aktivieren';
 $_LANG['the already installed version detected is too recent, no update available'] = 'Die bereits installierte Version, die erkannt wurde, ist neu, keine Updates verfügbar';
 $_LANG['This information isn\'t required, it will be used for statistical purposes. This information doesn\'t change anything in your store.'] = 'Diese Information ist nicht erforderlich, sie wird zu statistischen Zwecken verwendet. Diese Information ändert nichts in Ihrem Shop.';
