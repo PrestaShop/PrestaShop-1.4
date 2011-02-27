@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2010 PrestaShop
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,8 +18,8 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author Prestashop SA <contact@prestashop.com>
-*  @copyright  2007-2010 Prestashop SA
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
@@ -1569,9 +1569,9 @@ class ToolsCore
 			foreach (Language::getLanguages() as $language)
 			{
 				foreach (Meta::getMetasByIdLang($language['id_lang']) as $key => $meta)
-					if (!empty($meta['url_rewrite']) AND Validate::isLinkRewrite($meta['url_rewrite']))
+					if (!empty($meta['url_rewrite']))
 						$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
-					elseif (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
+					else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
 						$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 				$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';
 			}
@@ -1725,11 +1725,12 @@ FileETag INode MTime Size
 		{
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
-			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
-			
-			$message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
-			
-			Logger::addLog($message, 3, $callee['class']);
+	   		trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
+
+            $message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+
+            if (!Log::isPresent($message))
+                Log::addLog($message, 3, $callee['class']);
 		}
 	}
 
@@ -1742,10 +1743,11 @@ FileETag INode MTime Size
 		{
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
-			trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
-			
-			$message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
-			Logger::addLog($message, 3, $callee['class']);
+	   		trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
+
+            $message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+            if (!Log::isPresent($message))
+                Log::addLog($message, 3, $callee['class']);
 		}
 	}
 

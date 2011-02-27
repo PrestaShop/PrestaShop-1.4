@@ -18,8 +18,8 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author Prestashop SA <contact@prestashop.com>
-*  @copyright  2007-2011 Prestashop SA
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
@@ -315,7 +315,7 @@ class BlockLayered extends Module
 		* Todo:
 		*
 		* - Add a check on the category_group table
-		* - Add other filters (prices, attributes & colors, weight)
+		* - Add other filters (prices, weight)
 		* - Manage products sort & pagination
 		* - Manage SEO links (no ajax actions in JS disabled, real links instead)
 		* - Test on a large catalog & improve performances

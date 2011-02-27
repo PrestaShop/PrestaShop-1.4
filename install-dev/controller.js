@@ -1,5 +1,5 @@
 /*
-* 2007-2010 PrestaShop 
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -17,8 +17,8 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author Prestashop SA <contact@prestashop.com>
-*  @copyright  2007-2010 Prestashop SA
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
