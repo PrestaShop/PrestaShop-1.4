@@ -75,26 +75,19 @@ class BlockLayered extends Module
 	public function generateFilters($products = NULL, $filters = NULL)
 	{
 		global $smarty, $link, $cookie;
-		
+
 		/* If the current category isn't defined of if it's homepage, we have nothing to display */
 		$id_parent = (int)Tools::getValue('id_category', Tools::getValue('id_category_layered', 1));
 		if ($id_parent == 1)
 			return;
-		
+
 		/* First we need to get all subcategories of current category */
 		$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_parent);
-		
+
 		/* If we have no results, we should get one level higher */
 		if (!sizeof($layeredSubcategories))
 			$layeredSubcategories[0] = array('id_category' => (int)$id_parent, 'subcategories' => '', 'subcategoriesArray' => array(), 'n' => 0);
-		/*{
-			$id_parent_parent = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT id_parent FROM '._DB_PREFIX_.'category WHERE id_category = '.(int)$id_parent);
-			if ($id_parent_parent)
-				$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_parent_parent);
-			else
-				return;
-		}*/
-		
+
 		$categoriesId = (int)$id_parent;
 		foreach ($layeredSubcategories AS &$layeredSubcategory)
 		{
@@ -104,10 +97,10 @@ class BlockLayered extends Module
 			foreach ($tmpTab AS $id_category)
 				$layeredSubcategory['subcategoriesArray'][(int)$id_category] = 1;
 		}
-		
+
 		/* Product condition (New, Used, Refurbished) */
 		$layeredConditions = array('new' => array('name' => $this->l('New'), 'n' => 0), 'used' => array('name' => $this->l('Used'), 'n' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'n' => 0));
-		
+
 		/* Then, we can now retrieve all the associated products */
 		if (isset($products))
 			$layeredProducts = $products;
@@ -117,7 +110,7 @@ class BlockLayered extends Module
 			FROM '._DB_PREFIX_.'category_product cp
 			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
 			WHERE p.active = 1 AND cp.id_category IN ('.pSQL(ltrim($categoriesId, ',')).')');
-		
+
 		$countManufacturers = array();
 		$countManufacturers[0] = 0; /* Prevent from no manufacturers case */
 		$productIds = array(0);
@@ -201,7 +194,7 @@ class BlockLayered extends Module
 			{
 				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['checked'] = in_array((int)$layeredAttribute['id_attribute'], $filters['attribute']) ? 1 : 0;
 				if ($sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['checked'])
-					$layeredFilters['attribute']['layered_attribute_'.(int)$layeredAttribute['id_attribute']] = $layeredAttribute['name_group'].' '.$layeredAttribute['name'];
+					$layeredFilters['attribute']['layered_attribute_'.(int)$layeredAttribute['id_attribute']] = $layeredAttribute['name_group'].$this->l(':').' '.$layeredAttribute['name'];
 			}
 		}
 		
@@ -242,7 +235,7 @@ class BlockLayered extends Module
 			{
 				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'] = in_array((int)$layeredFeature['id_feature_value'], $filters['feature']) ? 1 : 0;
 				if ($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'])
-					$layeredFilters['feature']['layered_feature_'.(int)$layeredFeature['id_feature_value']] = $layeredFeature['name'].' '.$layeredFeature['value'];
+					$layeredFilters['feature']['layered_feature_'.(int)$layeredFeature['id_feature_value']] = $layeredFeature['name'].$this->l(':').' '.$layeredFeature['value'];
 			}
 		}
 		
@@ -343,7 +336,6 @@ class BlockLayered extends Module
 		* - Manage SEO links (no ajax actions in JS disabled, real links instead)
 		* - Test on a large catalog & improve performances
 		* - Add admin panel options
-		* - Manage the breadcrumb (+ ability to delete a selected filter)
 		* - Real time URL building + ability to give the URL to someone
 		* 
 		*/
@@ -357,9 +349,14 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
 		LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product AND i.cover = 1)
 		LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image AND il.id_lang = '.(int)($cookie->id_lang).')
-		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (p.id_product = pa.id_product AND default_on = 1)
+		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (p.id_product = pa.id_product)
+		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_product_attribute = pa.id_product_attribute)		
+		LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_product = p.id_product)		
+		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value)
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE p.active = 1 AND pl.id_lang = '.(int)$cookie->id_lang.' AND cp.id_category IN ('.$categoriesID.')
+		'.(sizeof($filters['attribute']) ? ' AND pac.id_attribute IN ('.implode($filters['attribute'], ',').')' : '').'
+		'.(sizeof($filters['feature']) ? ' AND fv.id_feature_value IN ('.implode($filters['feature'], ',').')' : '').'
 		'.(sizeof($filters['manufacturer']) ? ' AND p.id_manufacturer IN ('.implode($filters['manufacturer'], ',').')' : '').'
 		'.(sizeof($filters['condition']) ? ' AND p.condition IN ('.implode($filters['condition'], ',').')' : '').'
 		GROUP BY cp.id_product');

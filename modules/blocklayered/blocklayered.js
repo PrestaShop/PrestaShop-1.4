@@ -24,10 +24,19 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
+var ajaxQueries = new Array();
+
 $(document).ready(function()
 {
 	cancelFilter();
 	openCloseFilter();
+	
+	$('#layered_form input[type=button]').live('click', function()
+	{
+		$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
+		$(this).attr('name', 'null');
+		reloadContent();
+	});
 	
 	$('#layered_form input[type=checkbox]').live('click', function()
 	{
@@ -63,9 +72,14 @@ function openCloseFilter()
 
 function reloadContent()
 {
-	$('#product_list').empty().html($('#layered_ajax_loader').html());
+	for(i = 0; i < ajaxQueries.length; i++)
+		ajaxQueries[i].abort();
+	ajaxQueries = new Array();
+
+	$('#product_list').prepend($('#layered_ajax_loader').html());
+	$('#product_list').css('opacity', '0.7');
 	
-	$.ajax(
+	ajaxQuery = $.ajax(
 	{
 		type: 'GET',
 		url: baseDir + 'modules/blocklayered/blocklayered-ajax.php',
@@ -75,6 +89,9 @@ function reloadContent()
 		{
 			$('#layered_block_left').after(data.layered_block_left).remove();
 			$('#product_list').html(data.product_list);
+			$('#product_list').css('opacity', '1');
 		}
 	});
+	
+	ajaxQueries.push(ajaxQuery);
 }

@@ -80,7 +80,7 @@
 					{foreach from=$layered_attribute_group.values key=id_attribute item=layered_attribute_value}
 						<li{if $layered_use_checkboxes} class="nomargin"{/if}>
 						{if $layered_attribute_group.is_color_group}
-							<input type="button" name="layered_attribute_{$id_attribute}" id="layered_attribute_{$id_attribute}" {if !$layered_attribute_value.n} value="X" disabled="disabled"{/if} style="background: {$layered_attribute_value.color}; margin-left: 0; width: 16px; height: 16px; padding:0; border: 1px solid {if isset($layered_attribute_value.checked) && $layered_attribute_value.checked}red{else}#666{/if};" />
+							<input type="button" name="layered_attribute_{$id_attribute}" rel="{$id_attribute}" id="layered_attribute_{$id_attribute}" {if !$layered_attribute_value.n} value="X" disabled="disabled"{/if} style="background: {$layered_attribute_value.color}; margin-left: 0; width: 16px; height: 16px; padding:0; border: 1px solid {if isset($layered_attribute_value.checked) && $layered_attribute_value.checked}red{else}#666{/if};" />
 						{else}
 							{if $layered_use_checkboxes}<input type="checkbox" class="checkbox" name="layered_attribute_{$id_attribute}" id="layered_attribute_{$id_attribute}" value="{$id_attribute}"{if isset($layered_attribute_value.checked) && $layered_attribute_value.checked} checked="checked"{/if}{if !$layered_attribute_value.n} disabled="disabled"{/if} /> {/if}							
 						{/if}
@@ -120,7 +120,17 @@
 					</ul>
 				</div>
 				{/if}
-				<p><input type="hidden" name="id_category_layered" value="{$id_category_layered}" /></p>
+				<p>					
+					<input type="hidden" name="id_category_layered" value="{$id_category_layered}" />
+					{foreach from=$layered_attributes key=id_attribute_group item=layered_attribute_group}
+						{foreach from=$layered_attribute_group.values key=id_attribute item=layered_attribute_value}
+							{if $layered_attribute_group.is_color_group && $layered_attribute_value.n && isset($layered_attribute_value.checked) && $layered_attribute_value.checked}
+								<input type="hidden" name="layered_attribute_{$id_attribute}" value="{$id_attribute}" />
+							{/if}
+						{/foreach}
+						</ul>
+					{/foreach}
+				</p>
 			</div>
 		</form>
 	</div>
