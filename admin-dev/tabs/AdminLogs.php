@@ -32,7 +32,7 @@ class AdminLogs extends AdminTab
 	public function __construct()
 	{
 	 	$this->table = 'log';
-	 	$this->className = 'Log';
+	 	$this->className = 'Logger';
 	 	$this->lang = false;
 	 	$this->edit = false;
 	 	$this->delete = true;
