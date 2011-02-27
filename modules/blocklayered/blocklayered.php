@@ -25,6 +25,20 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
+/*
+*
+* @todo
+*
+* - Add a check on the category_group table
+* - Add other filters (prices, weight)
+* - Manage products sort & pagination
+* - Manage SEO links (no ajax actions in JS disabled, real links instead)
+* - Test on a large catalog & improve performances
+* - Add admin panel options
+* - Real time URL building + ability to give the URL to someone
+* 
+*/
+
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
@@ -101,9 +115,30 @@ class BlockLayered extends Module
 		/* Product condition (New, Used, Refurbished) */
 		$layeredConditions = array('new' => array('name' => $this->l('New'), 'n' => 0), 'used' => array('name' => $this->l('Used'), 'n' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'n' => 0));
 
+		$countManufacturers = array();
+		$countManufacturers[0] = 0; /* Prevent from no manufacturers case */		
+		
 		/* Then, we can now retrieve all the associated products */
-		if (isset($products))
+		if (isset($products) AND sizeof($products))
+		{
 			$layeredProducts = $products;
+			
+			$layeredProducts4Categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT cp.id_product, cp.id_category, p.id_manufacturer, p.condition
+			FROM '._DB_PREFIX_.'category_product cp
+			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
+			WHERE p.active = 1 AND cp.id_category IN ('.pSQL(ltrim($categoriesId, ',')).')');
+			
+			foreach ($layeredProducts4Categories AS $layeredProducts4Category)
+			{
+				$countManufacturers[(int)$layeredProducts4Category['id_manufacturer']] = 0;
+				foreach ($layeredSubcategories AS &$layeredSubcategory)
+				{
+					if (isset($layeredSubcategory['subcategoriesArray'][(int)$layeredProducts4Category['id_category']]))
+						$layeredSubcategory['n']++;
+				}
+			}
+		}
 		else
 			$layeredProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT cp.id_product, cp.id_category, p.id_manufacturer, p.condition
@@ -111,10 +146,9 @@ class BlockLayered extends Module
 			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
 			WHERE p.active = 1 AND cp.id_category IN ('.pSQL(ltrim($categoriesId, ',')).')');
 
-		$countManufacturers = array();
-		$countManufacturers[0] = 0; /* Prevent from no manufacturers case */
 		$productIds = array(0);
 		$layeredFilters = array();
+		
 		foreach ($layeredProducts AS $layeredProduct)
 		{
 			/* Count manufacturers */
@@ -136,7 +170,7 @@ class BlockLayered extends Module
 			/* Count categories */
 			foreach ($layeredSubcategories AS &$layeredSubcategory)
 			{
-				if (isset($layeredSubcategory['subcategoriesArray'][(int)$layeredProduct['id_category']]))
+				if (isset($layeredSubcategory['subcategoriesArray'][(int)$layeredProduct['id_category']]) AND !isset($layeredProducts4Categories))
 					$layeredSubcategory['n']++;
 				if (isset($filters['category']) AND sizeof($filters['category']))
 				{
@@ -160,41 +194,44 @@ class BlockLayered extends Module
 		WHERE pa.id_product IN ('.implode(',', $productIds).')
 		GROUP BY ag.id_attribute_group');
 		
-		$layeredAttributesIds = array();
-		foreach ($layeredAttributes AS $layeredAttribute)
-			$layeredAttributesIds[] = (int)$layeredAttribute['id_attribute_group'];
-			
-		$layeredAttributes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT a.id_attribute_group, ag.is_color_group, a.id_attribute, al.name, agl.name name_group, a.color, pa.id_product
-		FROM '._DB_PREFIX_.'attribute_group ag
-		LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
-		LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
-		LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (agl.id_attribute_group = ag.id_attribute_group)
-		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_attribute = a.id_attribute)
-		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute AND pa.id_product IN ('.implode(',', $productIds).'))
-		WHERE ag.id_attribute_group IN ('.implode(',', $layeredAttributesIds).') 
-		AND al.id_lang = '.(int)$cookie->id_lang.' AND agl.id_lang = '.(int)$cookie->id_lang);
-		
 		$sortedLayeredAttributes = array();
-		foreach ($layeredAttributes AS $layeredAttribute)
+		if (sizeof($layeredAttributes))
 		{
-			$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['name'] = $layeredAttribute['name_group'];
-			$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['is_color_group'] = $layeredAttribute['is_color_group'];
-			$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['name'] = $layeredAttribute['name'];			
-			if ($layeredAttribute['is_color_group'])
-				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['color'] = $layeredAttribute['color'];			
+			$layeredAttributesIds = array();
+			foreach ($layeredAttributes AS $layeredAttribute)
+				$layeredAttributesIds[] = (int)$layeredAttribute['id_attribute_group'];
 			
-			/* Count product for each attribute value */
-			if (!isset($sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['n']))
-					$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['n'] = 0;
-					
-			if (!empty($layeredAttribute['id_product']))
-				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['n']++;
-			if (isset($filters['attribute']) AND sizeof($filters['attribute']))
+			$layeredAttributeGroups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT a.id_attribute_group, ag.is_color_group, a.id_attribute, al.name, agl.name name_group, a.color, pa.id_product
+			FROM '._DB_PREFIX_.'attribute_group ag
+			LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
+			LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
+			LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (agl.id_attribute_group = ag.id_attribute_group)
+			LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_attribute = a.id_attribute)
+			LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute AND pa.id_product IN ('.implode(',', $productIds).'))
+			WHERE ag.id_attribute_group IN ('.implode(',', $layeredAttributesIds).') 
+			AND al.id_lang = '.(int)$cookie->id_lang.' AND agl.id_lang = '.(int)$cookie->id_lang);
+
+			foreach ($layeredAttributeGroups AS $layeredAttributeGroup)
 			{
-				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['checked'] = in_array((int)$layeredAttribute['id_attribute'], $filters['attribute']) ? 1 : 0;
-				if ($sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['checked'])
-					$layeredFilters['attribute']['layered_attribute_'.(int)$layeredAttribute['id_attribute']] = $layeredAttribute['name_group'].$this->l(':').' '.$layeredAttribute['name'];
+				$sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['name'] = $layeredAttributeGroup['name_group'];
+				$sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['is_color_group'] = $layeredAttributeGroup['is_color_group'];
+				$sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['values'][(int)$layeredAttributeGroup['id_attribute']]['name'] = $layeredAttributeGroup['name'];			
+				if ($layeredAttributeGroup['is_color_group'])
+					$sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['values'][(int)$layeredAttributeGroup['id_attribute']]['color'] = $layeredAttributeGroup['color'];			
+				
+				/* Count product for each attribute value */
+				if (!isset($sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['values'][(int)$layeredAttributeGroup['id_attribute']]['n']))
+						$sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['values'][(int)$layeredAttributeGroup['id_attribute']]['n'] = 0;
+						
+				if (!empty($layeredAttributeGroup['id_product']))
+					$sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['values'][(int)$layeredAttributeGroup['id_attribute']]['n']++;
+				if (isset($filters['attribute']) AND sizeof($filters['attribute']))
+				{
+					$sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['values'][(int)$layeredAttributeGroup['id_attribute']]['checked'] = in_array((int)$layeredAttributeGroup['id_attribute'], $filters['attribute']) ? 1 : 0;
+					if ($sortedLayeredAttributes[(int)$layeredAttributeGroup['id_attribute_group']]['values'][(int)$layeredAttributeGroup['id_attribute']]['checked'])
+						$layeredFilters['attribute']['layered_attribute_'.(int)$layeredAttributeGroup['id_attribute']] = $layeredAttributeGroup['name_group'].$this->l(':').' '.$layeredAttributeGroup['name'];
+				}
 			}
 		}
 		
@@ -206,36 +243,39 @@ class BlockLayered extends Module
 		WHERE fv.custom = 0 AND fp.id_product IN ('.implode(',', $productIds).')
 		GROUP BY fp.id_feature');
 		
-		$layeredFeaturesIds = array();
-		foreach ($layeredFeatures AS $layeredFeature)
-			$layeredFeaturesIds[] = (int)$layeredFeature['id_feature'];
-		
-		$layeredFeatures = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT fl.id_feature, fl.name, fvl.id_feature_value, fvl.value, fp.id_product
-		FROM '._DB_PREFIX_.'feature_lang fl
-		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature = fl.id_feature)
-		LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
-		LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_feature_value = fv.id_feature_value AND fp.id_product IN ('.implode(',', $productIds).'))
-		WHERE fv.custom = 0 AND fl.id_feature IN ('.implode(',', $layeredFeaturesIds).') 
-		AND fl.id_lang = '.(int)$cookie->id_lang.' AND fvl.id_lang = '.(int)$cookie->id_lang);
-		
 		$sortedLayeredFeatures = array();
-		foreach ($layeredFeatures AS $layeredFeature)
+		if (sizeof($layeredFeatures))
 		{
-			$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['name'] = $layeredFeature['name'];
-			$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['name'] = $layeredFeature['value'];
+			$layeredFeaturesIds = array();
+			foreach ($layeredFeatures AS $layeredFeature)
+				$layeredFeaturesIds[] = (int)$layeredFeature['id_feature'];
 			
-			/* Count product for each feature value */
-			if (!isset($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']))
-					$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n'] = 0;
-					
-			if (!empty($layeredFeature['id_product']))
-				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']++;
-			if (isset($filters['feature']) AND sizeof($filters['feature']))
+			$layeredFeatures = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT fl.id_feature, fl.name, fvl.id_feature_value, fvl.value, fp.id_product
+			FROM '._DB_PREFIX_.'feature_lang fl
+			LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature = fl.id_feature)
+			LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
+			LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_feature_value = fv.id_feature_value AND fp.id_product IN ('.implode(',', $productIds).'))
+			WHERE fv.custom = 0 AND fl.id_feature IN ('.implode(',', $layeredFeaturesIds).') 
+			AND fl.id_lang = '.(int)$cookie->id_lang.' AND fvl.id_lang = '.(int)$cookie->id_lang);
+			
+			foreach ($layeredFeatures AS $layeredFeature)
 			{
-				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'] = in_array((int)$layeredFeature['id_feature_value'], $filters['feature']) ? 1 : 0;
-				if ($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'])
-					$layeredFilters['feature']['layered_feature_'.(int)$layeredFeature['id_feature_value']] = $layeredFeature['name'].$this->l(':').' '.$layeredFeature['value'];
+				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['name'] = $layeredFeature['name'];
+				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['name'] = $layeredFeature['value'];
+				
+				/* Count product for each feature value */
+				if (!isset($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']))
+						$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n'] = 0;
+						
+				if (!empty($layeredFeature['id_product']))
+					$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']++;
+				if (isset($filters['feature']) AND sizeof($filters['feature']))
+				{
+					$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'] = in_array((int)$layeredFeature['id_feature_value'], $filters['feature']) ? 1 : 0;
+					if ($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'])
+						$layeredFilters['feature']['layered_feature_'.(int)$layeredFeature['id_feature_value']] = $layeredFeature['name'].$this->l(':').' '.$layeredFeature['value'];
+				}
 			}
 		}
 		
@@ -277,73 +317,45 @@ class BlockLayered extends Module
 	public function ajaxCall()
 	{
 		global $smarty, $cookie;
-		
-		$output = array();
+
+		/* Analyze all the filters selected by the user and store them into a tab */
 		$filters = array('attribute' => array(), 'category' => array(), 'feature' => array(), 'manufacturer' => array(), 'condition' => array());
 		foreach ($_GET AS $key => $value)
-			if (substr($key, 0, 8) == 'layered_')
+			if (substr($key, 0, 8) == 'layered_' AND $tmpTab = explode('_', $key) AND isset($tmpTab[1]))
 			{
-				$tmpTab = explode('_', $key);
-				if (isset($tmpTab[1]))
-				{
-					switch ($tmpTab[1])
-					{
-						case 'attribute':
-						case 'category':
-						case 'feature':
-						case 'manufacturer':
-							$filters[$tmpTab[1]][] = (int)$value;
-							break;
-							
-						case 'condition':
-							if (in_array($value, array('new', 'used', 'refurbished')))
-								$filters['condition'][] = '\''.$value.'\'';
-							break;
-							
-						default:
-							continue(2);
-					}
-				}
-				else
-					continue;
+				if (in_array($tmpTab[1], array('attribute', 'category', 'feature', 'manufacturer')))
+					$filters[$tmpTab[1]][] = (int)$value;
+				elseif ($tmpTab[1] == 'condition' AND in_array($value, array('new', 'used', 'refurbished')))
+					$filters['condition'][] = '\''.$value.'\'';
 			}
-		
+
+		/* Build the categories list */
 		$categoriesID = '';
-		if (empty($filters['category']))
+		if (!sizeof($filters['category']))
 			$filters['category'][] = (int)Tools::getValue('id_category_layered', 0);
 		$categoriesID .= implode($filters['category'], ',').',';
 
 		foreach ($filters['category'] AS $id_category)
-		{
-			$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_category);
-			if (sizeof($layeredSubcategories))
-				foreach ($layeredSubcategories AS $layeredSubcategory)
-				{
-					$categoriesID .= (int)$layeredSubcategory['id_category'].',';
-					if (isset($layeredSubcategory['subcategories']))
-						$categoriesID .= $layeredSubcategory['subcategories'].',';
-				}
-		}
+			if ($id_category)
+			{
+				$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_category);
+				if (sizeof($layeredSubcategories))
+					foreach ($layeredSubcategories AS $layeredSubcategory)
+					{
+						$categoriesID .= (int)$layeredSubcategory['id_category'].',';
+						if (isset($layeredSubcategory['subcategories']))
+							$categoriesID .= $layeredSubcategory['subcategories'].',';
+					}
+			}
 		$categoriesID = rtrim($categoriesID, ',');
 		
-		/*
-		*
-		* Todo:
-		*
-		* - Add a check on the category_group table
-		* - Add other filters (prices, weight)
-		* - Manage products sort & pagination
-		* - Manage SEO links (no ajax actions in JS disabled, real links instead)
-		* - Test on a large catalog & improve performances
-		* - Add admin panel options
-		* - Real time URL building + ability to give the URL to someone
-		* 
-		*/
-		
+		/* Get all the products by applying all the selected filters */
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cp.id_product, pa.id_product_attribute, p.*, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend, m.name manufacturer_name,
 		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new,
 		cp.id_category
+		'.(sizeof($filters['feature']) ? ', GROUP_CONCAT(fp.id_feature) features' : '').'
+		'.(sizeof($filters['attribute']) ? ', GROUP_CONCAT(a.id_attribute_group) attribute_groups' : '').'
 		FROM '._DB_PREFIX_.'category_product cp
 		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
@@ -351,8 +363,11 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image AND il.id_lang = '.(int)($cookie->id_lang).')
 		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (p.id_product = pa.id_product)
 		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_product_attribute = pa.id_product_attribute)		
+		'.(sizeof($filters['attribute']) ? '
+		LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute = pac.id_attribute)' : '').'
+		'.(sizeof($filters['feature']) ? '
 		LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_product = p.id_product)		
-		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value)
+		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value)' : '').'
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE p.active = 1 AND pl.id_lang = '.(int)$cookie->id_lang.' AND cp.id_category IN ('.$categoriesID.')
 		'.(sizeof($filters['attribute']) ? ' AND pac.id_attribute IN ('.implode($filters['attribute'], ',').')' : '').'
@@ -360,23 +375,47 @@ class BlockLayered extends Module
 		'.(sizeof($filters['manufacturer']) ? ' AND p.id_manufacturer IN ('.implode($filters['manufacturer'], ',').')' : '').'
 		'.(sizeof($filters['condition']) ? ' AND p.condition IN ('.implode($filters['condition'], ',').')' : '').'
 		GROUP BY cp.id_product');
-
+		
+		/* Exclude products which don't have all the selected features */
+		if (sizeof($filters['feature']))
+		{
+			$features = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT fv.id_feature
+			FROM '._DB_PREFIX_.'feature_value fv
+			WHERE fv.id_feature_value IN ('.implode($filters['feature'], ',').')');
+				
+			foreach ($products AS $key => $product)
+			{
+				$tmpTab = array_unique(explode(',', $product['features']));
+				foreach ($features AS $feature)
+					if (!in_array((int)$feature['id_feature'], $tmpTab))
+						unset($products[$key]);
+			}
+		}
+		
+		/* Exclude products which don't have all the selected attributes */
+		if (sizeof($filters['attribute']))
+		{
+			$attributes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT a.id_attribute_group
+			FROM '._DB_PREFIX_.'attribute a
+			WHERE a.id_attribute IN ('.implode($filters['attribute'], ',').')');
+				
+			foreach ($products AS $key => $product)
+			{
+				$tmpTab = array_unique(explode(',', $product['attribute_groups']));
+				foreach ($attributes AS $attribute)
+					if (!in_array((int)$attribute['id_attribute_group'], $tmpTab))
+						unset($products[$key]);
+			}
+		}
+			
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
 
-		$smarty->assign(array(
-			'products' => $products,
-			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY')));
+		$smarty->assign('products', $products);
 
-		$filterProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT cp.id_product, p.condition, p.id_manufacturer, cp.id_category
-		FROM '._DB_PREFIX_.'category_product cp
-		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
-		WHERE p.active = 1 AND cp.id_category IN ('.$categoriesID.')');
-			
-		$output['layered_block_left'] = $this->generateFilters($filterProducts, $filters);		
-		$output['product_list'] = $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl');
-
-		return Tools::jsonEncode($output);
+		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
+		return Tools::jsonEncode(array('layered_block_left' => $this->generateFilters($products, $filters), 'product_list' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl')));
 	}
 	
 	public function hookRightColumn($params)
