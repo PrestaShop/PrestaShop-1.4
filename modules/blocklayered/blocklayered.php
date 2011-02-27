@@ -121,6 +121,7 @@ class BlockLayered extends Module
 		$countManufacturers = array();
 		$countManufacturers[0] = 0; /* Prevent from no manufacturers case */
 		$productIds = array(0);
+		$layeredFilters = array();
 		foreach ($layeredProducts AS $layeredProduct)
 		{
 			/* Count manufacturers */
@@ -132,10 +133,12 @@ class BlockLayered extends Module
 			/* Count conditions */
 			$layeredConditions[$layeredProduct['condition']]['n']++;
 			foreach ($layeredConditions AS $key => &$layeredCondition)
-			{
 				if (isset($filters['condition']) AND sizeof($filters['condition']))
+				{
 					$layeredCondition['checked'] = in_array('\''.$key.'\'', $filters['condition']) ? 1 : 0;
-			}
+					if ($layeredCondition['checked'])
+						$layeredFilters['condition']['layered_condition_'.$key] = $this->l('Condition:').' '.$layeredCondition['name'];
+				}
 			
 			/* Count categories */
 			foreach ($layeredSubcategories AS &$layeredSubcategory)
@@ -143,7 +146,11 @@ class BlockLayered extends Module
 				if (isset($layeredSubcategory['subcategoriesArray'][(int)$layeredProduct['id_category']]))
 					$layeredSubcategory['n']++;
 				if (isset($filters['category']) AND sizeof($filters['category']))
-					$layeredSubcategory['checked'] = in_array($layeredSubcategory['id_category'], $filters['category']) ? 1 : 0;
+				{
+					$layeredSubcategory['checked'] = in_array((int)$layeredSubcategory['id_category'], $filters['category']) ? 1 : 0;
+					if ($layeredSubcategory['checked'])
+						$layeredFilters['category']['layered_category_'.(int)$layeredSubcategory['id_category']] = $this->l('Category:').' '.$layeredSubcategory['name'];
+				}
 			}
 			
 			/* Build product IDs list */
@@ -190,6 +197,12 @@ class BlockLayered extends Module
 					
 			if (!empty($layeredAttribute['id_product']))
 				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['n']++;
+			if (isset($filters['attribute']) AND sizeof($filters['attribute']))
+			{
+				$sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['checked'] = in_array((int)$layeredAttribute['id_attribute'], $filters['attribute']) ? 1 : 0;
+				if ($sortedLayeredAttributes[(int)$layeredAttribute['id_attribute_group']]['values'][(int)$layeredAttribute['id_attribute']]['checked'])
+					$layeredFilters['attribute']['layered_attribute_'.(int)$layeredAttribute['id_attribute']] = $layeredAttribute['name_group'].' '.$layeredAttribute['name'];
+			}
 		}
 		
 		/* Get feature names */
@@ -225,6 +238,12 @@ class BlockLayered extends Module
 					
 			if (!empty($layeredFeature['id_product']))
 				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['n']++;
+			if (isset($filters['feature']) AND sizeof($filters['feature']))
+			{
+				$sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'] = in_array((int)$layeredFeature['id_feature_value'], $filters['feature']) ? 1 : 0;
+				if ($sortedLayeredFeatures[(int)$layeredFeature['id_feature']]['values'][(int)$layeredFeature['id_feature_value']]['checked'])
+					$layeredFilters['feature']['layered_feature_'.(int)$layeredFeature['id_feature_value']] = $layeredFeature['name'].' '.$layeredFeature['value'];
+			}
 		}
 		
 		/* Get manufacturers names */
@@ -237,16 +256,21 @@ class BlockLayered extends Module
 		{			
 			$layeredManufacturer['n'] = (int)$countManufacturers[(int)$layeredManufacturer['id_manufacturer']];			
 			if (isset($filters['manufacturer']) AND sizeof($filters['manufacturer']))
-				$layeredManufacturer['checked'] = in_array($layeredManufacturer['id_manufacturer'], $filters['manufacturer']) ? 1 : 0;
+			{
+				$layeredManufacturer['checked'] = in_array((int)$layeredManufacturer['id_manufacturer'], $filters['manufacturer']) ? 1 : 0;
+				if ($layeredManufacturer['checked'])
+					$layeredFilters['manufacturer']['layered_manufacturer_'.(int)$layeredManufacturer['id_manufacturer']] = $this->l('Manufacturer:').' '.$layeredManufacturer['name'];
+			}
 		}
 		
 		$smarty->assign(array(
 		'id_category_layered' => (int)$id_parent,
-		'layered_features' => $sortedLayeredFeatures,
 		'layered_attributes' => $sortedLayeredAttributes,
-		'layered_subcategories' => $layeredSubcategories,
-		'layered_manufacturers' => $layeredManufacturers,
 		'layered_conditions' => $layeredConditions,
+		'layered_features' => $sortedLayeredFeatures,
+		'layered_filters' => $layeredFilters,
+		'layered_manufacturers' => $layeredManufacturers,
+		'layered_subcategories' => $layeredSubcategories,
 		'layered_use_checkboxes' => 1)); /* We need to add this option in the admin panel (int)Configuration::get('PS_LAYERED_NAVIGATION_CHECKBOXES'))); */
 
 		return $smarty->fetch(_PS_MODULE_DIR_.$this->name.'/blocklayered.tpl');
@@ -262,7 +286,7 @@ class BlockLayered extends Module
 		global $smarty, $cookie;
 		
 		$output = array();
-		$filters = array('category' => array(), 'manufacturer' => array(), 'condition' => array());
+		$filters = array('attribute' => array(), 'category' => array(), 'feature' => array(), 'manufacturer' => array(), 'condition' => array());
 		foreach ($_GET AS $key => $value)
 			if (substr($key, 0, 8) == 'layered_')
 			{
@@ -271,12 +295,11 @@ class BlockLayered extends Module
 				{
 					switch ($tmpTab[1])
 					{
+						case 'attribute':
 						case 'category':
-							$filters['category'][] = (int)$value;
-							break;
-							
+						case 'feature':
 						case 'manufacturer':
-							$filters['manufacturer'][] = (int)$value;
+							$filters[$tmpTab[1]][] = (int)$value;
 							break;
 							
 						case 'condition':

@@ -9,6 +9,19 @@
 
 #layered_block_left #enabled_filters {
 	font-size: 10px;
+	padding-bottom: 10px;
+	margin-bottom: 5px;
+	border-bottom: 1px dotted #CCC;
+}
+
+#layered_block_left #enabled_filters ul li {
+	margin-left: 0;
+	padding-left: 0;
+}
+
+#layered_block_left #enabled_filters ul li:hover {
+	background: inherit;
+	color: inherit;
 }
 
 #layered_block_left #enabled_filters a {

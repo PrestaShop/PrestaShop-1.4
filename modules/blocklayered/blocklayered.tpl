@@ -30,10 +30,18 @@
 	<div class="block_content">
 		<form action="#" id="layered_form">
 			<div>
-				<div id="enabled_filters" style="display: none;">
+				{if isset($layered_filters) && sizeof($layered_filters)}
+				<div id="enabled_filters">
 					<span class="layered_subtitle" style="float: none;">{l s='Enabled filters:' mod='blocklayered'}</span>
-					<ul><li></li></ul>
+					<ul>					
+					{foreach from=$layered_filters item=layered_filter}
+						{foreach from=$layered_filter key=layered_dom_id item=layered_filter_value}
+							<li><a href="#" rel="{$layered_dom_id}" title="{l s='Cancel this filter' mod='blocklayered'}">x</a> {$layered_filter_value|escape:html:'UTF-8'}</li>
+						{/foreach}
+					{/foreach}
+					</ul>
 				</div>
+				{/if}
 				{if isset($layered_subcategories) && sizeof($layered_subcategories)}
 				<div>
 					<span class="layered_subtitle">{l s='Category' mod='blocklayered'}</span>
