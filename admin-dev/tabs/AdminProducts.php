@@ -2204,9 +2204,9 @@ class AdminProducts extends AdminTab
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Condition:').'</td>
 						<td style="padding-bottom:5px;">
 							<select name="condition" id="condition">
-								<option value="new">'.$this->l('New').'</option>
-								<option value="used">'.$this->l('Used').'</option>
-								<option value="refurbished">'.$this->l('Refurbished').'</option>
+								<option value="new" '.($obj->condition == 'new' ? 'selected="selected"' : '').'>'.$this->l('New').'</option>
+								<option value="used" '.($obj->condition == 'used' ? 'selected="selected"' : '').'>'.$this->l('Used').'</option>
+								<option value="refurbished" '.($obj->condition == 'refurbished' ? 'selected="selected"' : '').'>'.$this->l('Refurbished').'</option>
 							</select>
 						</td>
 					</tr>
