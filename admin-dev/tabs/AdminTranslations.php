@@ -583,17 +583,25 @@ class AdminTranslations extends AdminTab
 		global $currentIndex;
 		$obj_lang = new Language($id_lang);
 		$params_redirect = (Tools::isSubmit('submitTranslationsMailsAndStay') ? '&lang='.Tools::getValue('lang').'&type='.Tools::getValue('type') : '');
-		$arr_mail_content = array();
-		$arr_mail_content['core_mail'] = ToolsCore::getValue('core_mail');
-		$arr_mail_content['module_mail'] = ToolsCore::getValue('module_mail');
-		$arr_mail_content['theme_mail'] = ToolsCore::getValue('theme_mail');
-		$arr_mail_content['theme_module_mail'] = ToolsCore::getValue('theme_module_mail');
 		
+		$arr_mail_content = array();
 		$arr_mail_path = array();
-		$arr_mail_path['core_mail'] = _PS_MAIL_DIR_.$obj_lang->iso_code.'/';
-		$arr_mail_path['module_mail'] = _PS_MODULE_DIR_.'{module}'.'/mails/'.$obj_lang->iso_code.'/';
-		$arr_mail_path['theme_mail'] = _PS_THEME_DIR_.'mails/'.$obj_lang->iso_code.'/';
-		$arr_mail_path['theme_module_mail'] = _PS_THEME_DIR_.'modules/{module}'.'/mails/'.$obj_lang->iso_code.'/';
+		if (ToolsCore::getValue('core_mail')) {
+			$arr_mail_content['core_mail'] = ToolsCore::getValue('core_mail');
+			$arr_mail_path['core_mail'] = _PS_MAIL_DIR_.$obj_lang->iso_code.'/';
+		}
+		if (ToolsCore::getValue('module_mail')) {
+			$arr_mail_content['module_mail'] = ToolsCore::getValue('module_mail');
+			$arr_mail_path['module_mail'] = _PS_MODULE_DIR_.'{module}'.'/mails/'.$obj_lang->iso_code.'/';
+		}
+		if (ToolsCore::getValue('theme_mail')) {
+			$arr_mail_content['theme_mail'] = ToolsCore::getValue('theme_mail');
+			$arr_mail_path['theme_mail'] = _PS_THEME_DIR_.'mails/'.$obj_lang->iso_code.'/';
+		}
+		if (ToolsCore::getValue('theme_module_mail')) {
+			$arr_mail_content['theme_module_mail'] = ToolsCore::getValue('theme_module_mail');
+			$arr_mail_path['theme_module_mail'] = _PS_THEME_DIR_.'modules/{module}'.'/mails/'.$obj_lang->iso_code.'/';
+		}
 		
 		// Save each mail content
 		foreach ($arr_mail_content as $group_name=>$all_content)
@@ -647,16 +655,16 @@ class AdminTranslations extends AdminTab
 		$array_subjects = array();
 		if ($subjects = Tools::getValue('subject') AND is_array($subjects))
 		{
-			$array_subjects = array(
-				'core_and_modules' => array('translations'=>array(), 'path'=>$arr_mail_path['core_mail'].'lang.php'),
-				'themes_and_modules' => array('translations'=>array(), 'path'=>$arr_mail_path['theme_mail'].'lang.php')
-			); 
+			$array_subjects['core_and_modules'] = array('translations'=>array(), 'path'=>$arr_mail_path['core_mail'].'lang.php');
+			if (isset($arr_mail_path['theme_mail']))
+				$array_subjects['themes_and_modules'] = array('translations'=>array(), 'path'=>$arr_mail_path['theme_mail'].'lang.php');
+			
 			foreach ($subjects AS $group => $subject_translation)
 			{
 				if ($group == 'core_mail' || $group == 'module_mail') {
 					$array_subjects['core_and_modules']['translations'] = array_merge($array_subjects['core_and_modules']['translations'], $subject_translation);
 				}
-				elseif ($group == 'theme_mail' || $group == 'theme_module_mail') {
+				elseif ( isset($array_subjects['themes_and_modules']) && ($group == 'theme_mail' || $group == 'theme_module_mail')) {
 					$array_subjects['themes_and_modules']['translations'] = array_merge($array_subjects['themes_and_modules']['translations'], $subject_translation);
 				}
 			}
@@ -1393,7 +1401,9 @@ class AdminTranslations extends AdminTab
 		// Because TinyMCE don't work correctly with <DOCTYPE>, <html> and <body> tags
 		if (stripos($content[$lang], '<body'))
 		{
-			foreach (array('en', $lang) as $language)
+			$array_lang = $lang != 'en' ? array('en', $lang) : array($lang);
+			
+			foreach ($array_lang as $language)
 			{
 				$title[$language] = substr($content[$language], 0, stripos($content[$language], '<body'));
 				preg_match('#<title>([^<]+)</title>#Ui', $title[$language], $matches);
@@ -1562,7 +1572,7 @@ class AdminTranslations extends AdminTab
 		$obj_lang = new Language(Language::getIdByIso($lang));
 		
 		// TinyMCE
-		$this->getTinyMCEForMails($obj_lang->iso_code);
+		$str_output .= $this->getTinyMCEForMails($obj_lang->iso_code);
 		
 		$str_output .= '<!--'.$this->l('Language').'-->';
 		$str_output .= '
@@ -1666,7 +1676,7 @@ class AdminTranslations extends AdminTab
 	{
 		global $currentIndex;
 
-		if ($fd = fopen($path, 'w'))
+		if ($fd = @fopen($path, 'w'))
 		{
 			//$tab = ($fullmark ? Tools::strtoupper($fullmark) : 'LANG').($mark ? Tools::strtoupper($mark) : '');
 			$tab = 'LANGMAIL';
@@ -1679,7 +1689,7 @@ class AdminTranslations extends AdminTab
 
 		}
 		else
-			die('Cannot write language file');
+			die($this->l('Cannot write language file for mails subjects, path is:').$path);
 	}
 	
 	/**

@@ -2707,6 +2707,7 @@ $_LANGADM['AdminTranslationsd946d62db22cb9f9323968f8aac95e3f'] = 'E-mails pour l
 $_LANGADM['AdminTranslations25b5edb5545ada0f1b14e96fa8cd8743'] = 'E-mails des Thèmes :';
 $_LANGADM['AdminTranslations46e89640babbc6a0e52599a92a6c13b4'] = 'e-mails';
 $_LANGADM['AdminTranslations5ded3a65f6bb72028722f9d904ffb3cc'] = 'E-mails des modules dans le thème :';
+$_LANGADM['AdminTranslations8520f9009d0bf191644cdd52e3a5f329'] = 'Impossible d\'écrire le fichier de langue pour les objets de mails, le chemin d\'accès est :';
 $_LANGADM['AdminTranslations8a09d048735283dbc609ba0f9f705ed1'] = 'Traductions des modules';
 $_LANGADM['AdminTranslations52d83d7ed502b33d300a8c0af2c5b455'] = 'Liste des themes - Cliquez pour accéder aux traductions du thème:';
 $_LANGADM['AdminTranslationsc21f969b5f03d33d43e04f8f136e7682'] = 'defaut';
