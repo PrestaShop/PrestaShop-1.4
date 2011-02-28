@@ -1088,6 +1088,8 @@ class AdminTranslations extends AdminTab
 						<table cellpadding="2">';
 				foreach ($newLang AS $key => $value)
 				{
+					// if (empty($value))
+						// $value = stripslashes($key);
 					$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
 					if (strlen($key) < TEXTAREA_SIZED)
 						$str_output .= '<input type="text" style="width: 450px" name="'.$k.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'" /></td></tr>';
