@@ -321,7 +321,11 @@ function updateDisplay()
 		productPriceWithoutReduction += ecotaxAmount;
 
 		//productPrice = ps_round(productPrice * currencyRate, 2);
-		$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
+		if (productPrice > 0)
+			$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
+		else
+			$('#our_price_display').text(formatCurrency(0, currencyFormat, currencySign, currencyBlank));
+		
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction, currencyFormat, currencySign, currencyBlank));
 
 		/* Special feature: "Display product price tax excluded on product page" */
