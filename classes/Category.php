@@ -97,6 +97,11 @@ class CategoryCore extends ObjectModel
 		'fields' => array(
 			'id_parent' => array('xlink_resource'=> 'categories'),
 		),
+		'associations' => array(
+				'categories' => array('getter' => 'getChildrenWs', 'resource' => 'category', 
+			),
+			
+		),
 	);
 
 	public function __construct($id_category = NULL, $id_lang = NULL)
@@ -882,6 +887,7 @@ class CategoryCore extends ObjectModel
 	{
 		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
+	
     public static function getUrlRewriteInformations($id_category)
 	{
 		return Db::getInstance()->ExecuteS('
@@ -893,6 +899,15 @@ class CategoryCore extends ObjectModel
 		);
 
 	}
-
+	
+	public function getChildrenWs()
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT c.`id_category` as id
+		FROM `'._DB_PREFIX_.'category` c
+		WHERE c.`id_parent` = '.(int)($this->id).'
+		AND `active` = 1
+		ORDER BY `position` ASC');
+		return $result;
+	}
 }
-
