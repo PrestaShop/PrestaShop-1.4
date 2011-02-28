@@ -106,7 +106,7 @@ class CartCore extends ObjectModel
 			),
 		),
 	);
-	
+
 	const ONLY_PRODUCTS = 1;
 	const ONLY_DISCOUNTS = 2;
 	const BOTH = 3;
@@ -753,7 +753,7 @@ class CartCore extends ObjectModel
 	* Cart::ONLY_SHIPPING
 	* Cart::ONLY_WRAPPING
 	* Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING
-	* 
+	*
 	* @param boolean $withTaxes With or without taxes
 	* @param integer $type Total type
 	* @return float Order total
@@ -799,11 +799,9 @@ class CartCore extends ObjectModel
 			}
 			else
 			{
+
 				$price = Product::getPriceStatic((int)($product['id_product']), $withTaxes, (int)($product['id_product_attribute']), 6, NULL, false, true, $product['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
-				if (!$withTaxes)
-					$total_price = Tools::ps_round($price * (int)($product['cart_quantity']), 2);
-				else
-					$total_price = Tools::ps_round($price, 2) * (int)($product['cart_quantity']);
+				$total_price = Tools::ps_round($price, 2) * (int)($product['cart_quantity']);
 			}
 			$order_total += $total_price;
 		}
@@ -1576,3 +1574,4 @@ class CartCore extends ObjectModel
 			WHERE ca.`id_cart` = '.(int)$id_cart);
 	}
 }
+
