@@ -194,7 +194,6 @@ var ajaxCart = {
 
 				// add the picture to the cart
 				var $element = $(callerElement).parent().parent().find('a.product_image img,a.product_img_link img');
-				console.log($element);
 				if (!$element.length)
 					$element = $('#bigpic');
 				var $picture = $element.clone();
