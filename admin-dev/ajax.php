@@ -350,10 +350,15 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 	LEFT JOIN '._DB_PREFIX_.'country c ON (s.`id_country` = c.`id_country`)
 	WHERE s.id_country = '.(int)(Tools::getValue('id_country')).' AND s.active = 1 AND c.`contains_states` = 1
 	ORDER BY s.`name` ASC');
-
-	$list = '<option value="0">-----------</option>'."\n";
-	foreach ($states AS $state)
-		$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
+	
+	if (is_array($states) AND !empty($states))
+	{
+		$list = '<option value="0">-----------</option>'."\n";
+		foreach ($states AS $state)
+			$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
+	}
+	else
+		$list = 'false';
 
 	die($list);
 }
