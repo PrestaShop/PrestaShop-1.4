@@ -133,6 +133,33 @@ class AdminMeta extends AdminTab
 			</fieldset>
 		</form>';
 	}
+	
+	public function postProcess()
+	{
+		if (count($_POST) > 0)
+		{
+			$langs = Language::getLanguages(true);
+			$default_language = Configuration::get('PS_LANG_DEFAULT');
+			$defaultLangIsValidated = Validate::isLinkRewrite(Tools::getValue('url_rewrite_'.$default_language));
+			$englishLangIsValidated = Validate::isLinkRewrite(Tools::getValue('url_rewrite_1'));
+			if (!$defaultLangIsValidated AND !$englishLangIsValidated)
+			{
+				$this->_errors[] = Tools::displayError('Url rewrite field must be filed at least in default language or English.');
+				return false;
+			}
+			foreach($langs as $lang)
+			{
+				$current = Tools::getValue('url_rewrite_'.$lang['id_lang']);
+				if (strlen($current) == 0)
+					// Prioritize default language first
+					if ($defaultLangIsValidated)
+						$_POST['url_rewrite_'.$lang['id_lang']] = Tools::getValue('url_rewrite_'.$default_language);
+					else
+						$_POST['url_rewrite_'.$lang['id_lang']] = Tools::getValue('url_rewrite_1');
+			}
+		}
+		return parent::postProcess();
+	}
 }
 
 

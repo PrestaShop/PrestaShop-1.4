@@ -384,7 +384,7 @@ class ValidateCore
 	*/
 	static public function isLinkRewrite($link)
 	{
-		return empty($link) OR preg_match('/^[_a-z0-9-]+$/ui', $link);
+		return (boolean)preg_match('/^[_a-z0-9-]+$/ui', $link);
 	}
 
 	/**
