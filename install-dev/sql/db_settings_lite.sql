@@ -179,7 +179,9 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (109, 'PS_COOKIE_CHECKIP', '1', NOW(), NOW()),
 (110, 'PS_STORES_CENTER_LAT', '25.948969', NOW(), NOW()),
 (111, 'PS_STORES_CENTER_LONG', '-80.226439', NOW(), NOW(),
-(112, 'PS_HOMEPAGE_PHP_SELF', 'index.php', NOW(), NOW());
+(112, 'PS_HOMEPAGE_PHP_SELF', 'index.php', NOW(), NOW(),
+(113, 'PS_USE_ECOTAX', '0', NOW(), NOW());
+
 
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
@@ -826,7 +828,7 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 /* Stats */
 INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('MacOsX'),('Linux');
 INSERT INTO `PREFIX_web_browser` (`name`) VALUES ('Safari'),('Firefox 2.x'),('Firefox 3.x'),('Opera'),('IE 6.x'),('IE 7.x'),('IE 8.x'),('Google Chrome');
-INSERT INTO `PREFIX_page_type` (`id_page_type`, `name`) VALUES 
+INSERT INTO `PREFIX_page_type` (`id_page_type`, `name`) VALUES
 (13, 'authentication.php'),(11, 'best-sales.php'),(2, 'category.php'),(7, 'cms.php'),(12, 'contact-form.php'),(5, 'index.php'),(4, 'manufacturer.php'),
 (3, 'order.php'),(10, 'prices-drop.php'),(1, 'product.php'),(8, 'search.php'),(14, 'sitemap.php'),(9, 'stores.php'),(6, 'supplier.php');
 INSERT INTO `PREFIX_search_engine` (`server`,`getvar`)

@@ -2481,7 +2481,7 @@ class AdminProducts extends AdminTab
 				echo '</td>
 					</tr>
 				';
-				if (Configuration::get('PS_ECOTAX_APPLY'))
+				if (Configuration::get('PS_USE_ECOTAX'))
 					echo '
 					<tr>
 						<td class="col-left">'.$this->l('Eco-tax (tax incl.):').'</td>
@@ -3167,7 +3167,7 @@ class AdminProducts extends AdminTab
 				<input type="text" size="6" name="attribute_unity" id="attribute_unity" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format == 2 ? ' '.$currency->sign : '').' / <span id="unity_third">'.$this->getFieldValue($obj, 'unity').'</span>
 			</span></td>
 		  </tr>';
-		if (Configuration::get('PS_ECOTAX_APPLY'))
+		if (Configuration::get('PS_USE_ECOTAX'))
 			echo'
 				  <tr>
 					  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>

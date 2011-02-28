@@ -59,6 +59,12 @@ class TaxRulesGroupCore extends ObjectModel
 	    );
 	}
 
+	public static function getTaxRulesGroupsForOptions()
+	{
+		$tax_rules[] = array('id_tax_rules_group' => 0, 'name' => Tools::displayError('No tax'));
+		return array_merge($tax_rules, TaxRulesGroup::getTaxRulesGroups());
+	}
+
 
 	public static function getTaxes($id_tax_rules_group, $id_country, $id_state)
 	{

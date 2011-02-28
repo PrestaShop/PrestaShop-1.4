@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -33,12 +33,12 @@ class AdminPreferences extends AdminTab
 
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
-		
+
 		$timezones = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT name FROM '._DB_PREFIX_.'timezone');
 		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
 		foreach (Tax::getTaxes((int)($cookie->id_lang)) as $tax)
 			$taxes[] = array('id' => $tax['id_tax'], 'name' => $tax['name']);
-		
+
 		$order_process_type = array(
 			array(
 				'value' => PS_ORDER_PROCESS_STANDARD,
@@ -49,7 +49,7 @@ class AdminPreferences extends AdminTab
 				'name' => $this->l('One page checkout')
 			)
 		);
-		
+
 		$round_mode = array(
 			array(
 				'value' => PS_ROUND_UP,
@@ -65,7 +65,7 @@ class AdminPreferences extends AdminTab
 			)
 		);
 
-		$cms_tab = array(0 => 
+		$cms_tab = array(0 =>
 			array(
 				'id' => 0,
 				'name' => $this->l('None')
@@ -90,7 +90,6 @@ class AdminPreferences extends AdminTab
 			'PS_GIFT_WRAPPING_TAX' => array('title' => $this->l('Gift-wrapping tax'), 'desc' => $this->l('Set a tax for gift-wrapping'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $taxes, 'identifier' => 'id'),
 			'PS_ATTACHMENT_MAXIMUM_SIZE' => array('title' => $this->l('Attachment maximum size'), 'desc' => $this->l('Set the maximum size of attachment files (in MegaBytes)'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'text'),
 			'PS_RECYCLABLE_PACK' => array('title' => $this->l('Offer recycled packaging'), 'desc' => $this->l('Suggest recycled packaging to customer'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_ECOTAX_APPLY' => array('title' => $this->l('Use ecotax'), 'desc' => $this->l('Use ecotax (EU tax)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_PRICE_ROUND_MODE' => array('title' => $this->l('Round mode'), 'desc' => $this->l('You can choose how to round prices: always round superior; always round inferior, or classic rounding'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $round_mode, 'identifier' => 'value'),
 			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check for module updates'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
@@ -469,10 +468,9 @@ class AdminPreferences extends AdminTab
 				'.($required ? '<div class="small"><sup>*</sup> '.$this->l('Required field', 'AdminPreferences').'</div>' : '').'
 			</fieldset>
 		</form>';
-		
+
 		if (get_class($this) == 'AdminPreferences')
 			echo '<script type="text/javascript">changeCMSActivationAuthorization();</script>';
 	}
 }
-
 
