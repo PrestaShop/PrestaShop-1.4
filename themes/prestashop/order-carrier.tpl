@@ -156,32 +156,30 @@ function acceptCGV()
 	{/if}
 
 	{if $voucherAllowed}
-		<div id="cart_voucher" class="table_block" style="margin-left:  -0px;">
-			{if isset($errors_discount) && $errors_discount}
-				<ul class="error">
-				{foreach from=$errors_discount key=k item=error}
-					<li>{$error|escape:'htmlall':'UTF-8'}</li>
+	<div id="cart_voucher" class="table_block" style="margin-left:  -0px;">
+		{if isset($errors_discount) && $errors_discount}
+			<ul class="error">
+			{foreach from=$errors_discount key=k item=error}
+				<li>{$error|escape:'htmlall':'UTF-8'}</li>
+			{/foreach}
+			</ul>
+		{/if}
+			<fieldset style="border: 0px;">
+				<h3>{l s='Vouchers'}</h3>
+				<p style="float: left;margin-right: 7px; margin-left: 10px; margin-top: 3px; ">
+					<label for="discount_name">{l s='Code:'}</label>
+					<input type="text" id="discount_name" name="discount_name" value="{if isset($discount_name) && $discount_name}{$discount_name}{/if}" />
+				</p>
+				<p class="submit"><input type="hidden" name="submitDiscount" /><input type="submit" name="submitAddDiscount" value="{l s='Add'}" class="button" /></p>
+			{if $displayVouchers}
+				<h4>{l s='Take advantage of our offers:'}</h4>
+				<div id="display_cart_vouchers">
+				{foreach from=$displayVouchers item=voucher}
+					<span onclick="$('#discount_name').val('{$voucher.name}');return false;" class="voucher_name">{$voucher.name}</span> - {$voucher.description} <br />
 				{/foreach}
-				</ul>
+				</div>
 			{/if}
-			<form action="{$link->getPageLink('order.php', true)}" method="post" id="voucher">
-				<fieldset style="border: 0px;">
-					<h3>{l s='Vouchers'}</h3>
-					<p style="float: left;margin-right: 7px; margin-left: 10px; margin-top: 3px; ">
-						<label for="discount_name">{l s='Code:'}</label>
-						<input type="text" id="discount_name" name="discount_name" value="{if isset($discount_name) && $discount_name}{$discount_name}{/if}" />
-					</p>
-					<p class="submit"><input type="hidden" name="submitDiscount" /><input type="submit" name="submitAddDiscount" value="{l s='Add'}" class="button" /></p>
-				{if $displayVouchers}
-					<h4>{l s='Take advantage of our offers:'}</h4>
-					<div id="display_cart_vouchers">
-					{foreach from=$displayVouchers item=voucher}
-						<span onclick="$('#discount_name').val('{$voucher.name}');return false;" class="voucher_name">{$voucher.name}</span> - {$voucher.description} <br />
-					{/foreach}
-					</div>
-				{/if}
-				</fieldset>
-			</form>
+			</fieldset>
 		</div>
 	{/if}
 {/if}
