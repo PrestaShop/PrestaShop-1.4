@@ -315,5 +315,14 @@ class CountryCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'country`
 			WHERE `id_country` = '.(int)$id_country);
 	}
+	
+	static public function containsStates($id_country)
+	{
+		return (bool)Db::getInstance()->getValue('
+			SELECT `contains_states` 
+			FROM `'._DB_PREFIX_.'country`
+			WHERE `id_country` = '.(int)$id_country);
+	}
+	
 }
 

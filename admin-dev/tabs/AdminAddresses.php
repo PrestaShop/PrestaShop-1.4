@@ -356,7 +356,14 @@ class AdminAddresses extends AdminTab
 						  cache: false,
 						  data: "ajaxStates=1&id_country="+$(\'#id_country\').val()+"&id_state="+$(\'#id_state\').val(),
 						  success: function(html){
-							$("#id_state").html(html);
+						  	if (html == \'false\')
+						  		$("#contains_states").fadeOut();
+						  	else
+						  	{
+						  		$("#id_state").html(html);
+						  		$("#contains_states").fadeIn();
+						  	}
+								
 						  }
 						});
 
@@ -377,10 +384,12 @@ class AdminAddresses extends AdminTab
 					});
 				});
 				</script>
-				<label>'.$this->l('State').'</label>
-				<div class="margin-form">
-					<select name="id_state" id="id_state">
-					</select>
+				<div id="contains_states" '.(!Country::containsStates((int)$selectedCountry) ? 'style="display:none;"' : '').'>
+					<label>'.$this->l('State').'</label>
+					<div class="margin-form">
+						<select name="id_state" id="id_state">
+						</select>
+					</div>
 				</div>
 				<label>'.$this->l('Home phone').'</label>
 				<div class="margin-form">

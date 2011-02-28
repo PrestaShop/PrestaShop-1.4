@@ -157,7 +157,7 @@ class StateCore extends ObjectModel
 		return ($this->countUsed() > 0);
 	}
 
-		/**
+	/**
 	 * Returns the number of utilisation of a state
 	 *
 	 * @return integer count for this state
