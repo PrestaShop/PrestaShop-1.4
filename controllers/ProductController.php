@@ -197,7 +197,10 @@ class ProductControllerCore extends FrontController
 				if (Product::$_taxCalculationMethod == PS_TAX_INC)
 					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + $ecotax_rate / 100), 2);
 
-				/* /Quantity discount management */
+				// Specific price reduction is added first, then group reduction. These lines compute the final reduction percent value.
+				$sp_reduction_percent = $this->product->specificPrice['reduction_type'] == 'percentage' ? $this->product->specificPrice['reduction'] : 0;
+				$grp_reduction_percent = Group::getReduction((int)(self::$cookie->id_customer)) / 100;
+				$reduction_percent = $sp_reduction_percent + $grp_reduction_percent - $sp_reduction_percent * $grp_reduction_percent;
 
 				self::$smarty->assign(array(
 					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($this->product->id), (int)(Shop::getCurrentShop()), (int)(self::$cookie->id_currency), $id_country, $id_group), $this->product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)($tax)),
@@ -214,6 +217,7 @@ class ProductControllerCore extends FrontController
 					'allow_oosp' => $this->product->isAvailableWhenOutOfStock((int)($this->product->out_of_stock)),
 					'last_qties' =>  (int)($configs['PS_LAST_QTIES']),
 					'group_reduction' => $group_reduction,
+					'reduction_percent' => Tools::ps_round($reduction_percent, 2),
 					'col_img_dir' => _PS_COL_IMG_DIR_,
 				));
 				self::$smarty->assign(array(
