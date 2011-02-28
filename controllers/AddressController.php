@@ -24,7 +24,8 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-include_once(PS_ADMIN_DIR.'/../modules/vatnumber/vatnumber.php');
+if(Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_MODULE_DIR_.'/../modules/vatnumber/vatnumber.php'))
+	include_once(_MODULE_DIR_.'/../modules/vatnumber/vatnumber.php');
 
 class AddressControllerCore extends FrontController
 {
@@ -239,7 +240,7 @@ class AddressControllerCore extends FrontController
 		foreach ($countries AS $country)
 			$countriesList .= '<option value="'.(int)($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
-		if(Configuration::get('VATNUMBER_MANAGEMENT') && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
+		if ((Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_MODULE_DIR_.'/../modules/vatnumber/vatnumber.php')) && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
 			self::$smarty->assign('vat_display', 2);
 		else if(Configuration::get('VATNUMBER_MANAGEMENT'))
 			self::$smarty->assign('vat_display', 1);

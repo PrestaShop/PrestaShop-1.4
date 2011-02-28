@@ -26,7 +26,8 @@
 */
 
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-include_once(PS_ADMIN_DIR.'/../modules/vatnumber/vatnumber.php');
+if(Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_MODULE_DIR_.'/../modules/vatnumber/vatnumber.php'))
+	include_once(_MODULE_DIR_.'/../modules/vatnumber/vatnumber.php');
 
 class AdminAddresses extends AdminTab
 {
@@ -290,7 +291,7 @@ class AdminAddresses extends AdminTab
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 
-				if(Configuration::get('VATNUMBER_MANAGEMENT') && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
+				if ((Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_MODULE_DIR_.'/../modules/vatnumber/vatnumber.php')) && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
 					echo '<div id="vat_area" style="display: visible">';
 				else if(Configuration::get('VATNUMBER_MANAGEMENT'))
 					echo '<div id="vat_area" style="display: hidden">';
