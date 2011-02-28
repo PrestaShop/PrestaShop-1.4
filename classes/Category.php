@@ -98,8 +98,9 @@ class CategoryCore extends ObjectModel
 			'id_parent' => array('xlink_resource'=> 'categories'),
 		),
 		'associations' => array(
-				'categories' => array('getter' => 'getChildrenWs', 'resource' => 'category', 
-			),
+				'categories' => array('getter' => 'getChildrenWs', 'resource' => 'category', ),
+				'products' => array('getter' => 'getProductsWs', 'resource' => 'product', ),
+				
 			
 		),
 	);
@@ -907,6 +908,16 @@ class CategoryCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'category` c
 		WHERE c.`id_parent` = '.(int)($this->id).'
 		AND `active` = 1
+		ORDER BY `position` ASC');
+		return $result;
+	}
+	
+	public function getProductsWs()
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT cp.`id_product` as id
+		FROM `'._DB_PREFIX_.'category_product` cp
+		WHERE cp.`id_category` = '.(int)($this->id).'
 		ORDER BY `position` ASC');
 		return $result;
 	}
