@@ -314,8 +314,6 @@ function updateDisplay()
 			productPriceWithoutReduction = productPrice;
 		productPrice -= reduction;
 
-		if (group_reduction)
-			productPrice *= group_reduction;
 		var ecotaxAmount = !displayPrice ? ps_round(selectedCombination['ecotax'] * (1 + ecotaxTax_rate / 100), 2) : selectedCombination['ecotax'];
 		productPrice += ecotaxAmount;
 		productPriceWithoutReduction += ecotaxAmount;

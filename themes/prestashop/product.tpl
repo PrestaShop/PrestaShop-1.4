@@ -278,7 +278,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 					</p>
 				{/if}
 				{if $product->specificPrice AND $product->specificPrice.reduction_type == 'percentage'}
-					<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$reduction_percent*100}</span> %{l s=')'}</p>
+					<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$product->specificPrice.reduction*100}</span> %{l s=')'}</p>
 				{/if}
 				{if $packItems|@count}
 					<p class="pack_price">{l s='instead of'} <span style="text-decoration: line-through;">{convertPrice price=$product->getNoPackPrice()}</span></p>

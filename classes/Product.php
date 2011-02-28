@@ -1816,7 +1816,7 @@ class ProductCore extends ObjectModel
 		// Group reduction
 		if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
 			$price -= $price * $reductionFromCategory;
-		else if ($use_reduc) // apply group reduction if there is no group reduction for this category
+		else // apply group reduction if there is no group reduction for this category
 			$price *= ((100 - Group::getReductionByIdGroup($id_group)) / 100);
 
 		$price = Tools::ps_round($price, $decimals);
