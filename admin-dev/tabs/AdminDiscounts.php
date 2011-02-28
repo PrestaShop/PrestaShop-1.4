@@ -297,7 +297,7 @@ class AdminDiscounts extends AdminTab
 				<label>'.$this->l('Minimum amount').'</label>
 				<div class="margin-form">
 					<input type="text" size="15" name="minimal" value="'.($this->getFieldValue($obj, 'minimal') ? (float)($this->getFieldValue($obj, 'minimal')) : '0').'" onkeyup="javascript:this.value = this.value.replace(/,/g, \'.\'); " /> <sup>*</sup>
-					<p class="clear">'.$this->l('Leave blank or 0 if not applicable').'</p>
+					<p class="clear">'.$this->l('0 if not applicable').'</p>
 				</div>
 				<div class="margin-form">
 					<p>
