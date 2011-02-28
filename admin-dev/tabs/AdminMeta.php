@@ -56,20 +56,7 @@ class AdminMeta extends AdminTab
 	
 		parent::__construct();
 	}
-	
-	public function postProcess()
-	{
-		if (Tools::isSubmit('submitOptions'.$this->table))
-		{
-			$baseUrls = array();
-			if ($__PS_BASE_URI__ = Tools::getValue('__PS_BASE_URI__'))
-				$baseUrls['__PS_BASE_URI__'] = $__PS_BASE_URI__;
-			rewriteSettingsFile($baseUrls, NULL, NULL);
-			unset($this->_fieldsGeneral['__PS_BASE_URI__']);
-		}
-		parent::postProcess();
-	}
-	
+
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex;
@@ -183,6 +170,16 @@ class AdminMeta extends AdminTab
 						$_POST['url_rewrite_'.$lang['id_lang']] = Tools::getValue('url_rewrite_1');
 			}
 		}
+		
+		if (Tools::isSubmit('submitOptions'.$this->table))
+		{
+			$baseUrls = array();
+			if ($__PS_BASE_URI__ = Tools::getValue('__PS_BASE_URI__'))
+				$baseUrls['__PS_BASE_URI__'] = $__PS_BASE_URI__;
+			rewriteSettingsFile($baseUrls, NULL, NULL);
+			unset($this->_fieldsGeneral['__PS_BASE_URI__']);
+		}
+		
 		return parent::postProcess();
 	}
 }
