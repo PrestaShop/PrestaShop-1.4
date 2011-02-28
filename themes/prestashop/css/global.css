@@ -214,14 +214,13 @@ h4 { font-size: 1em }
 #header_logo {
 	float: left;
 	width: 264px;
-	display:block;
+	display:block
 }
-
 img.logo {
 	float: left;
 	margin-top: 0.5em;
 	font-size: 2em;
-	font-weight: bold;
+	font-weight: bold
 }
 #header_right {
 	float: left;
@@ -254,7 +253,6 @@ img.logo {
 	padding-right: 21px;
 	text-transform: none
 }
-
 #right_column {
 	width: 191px;
 	margin-left: 21px;

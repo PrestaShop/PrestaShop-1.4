@@ -45,6 +45,6 @@
 	margin-bottom: 0.3em;
 }
 
-#order-opc textarea#message { width: 42em; }
+#order-opc textarea#message { width: 42em }
 
 #order-opc sup { color: red; }
