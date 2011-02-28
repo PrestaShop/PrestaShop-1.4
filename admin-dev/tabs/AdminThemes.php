@@ -30,62 +30,63 @@ include_once(PS_ADMIN_DIR.'/tabs/AdminPreferences.php');
 class AdminThemes extends AdminPreferences
 {
 	/** This value is used in isThemeCompatible method. only version node with an 
-	  * higher version number will be used in [theme]/config.xml
-		*	@since 1.4.0.11, check theme compatibility 1.4
-		* @static
-	  */
-	static public $check_features_version='1.4';
+	 * higher version number will be used in [theme]/config.xml
+	 * @since 1.4.0.11, check theme compatibility 1.4
+	 * @static
+		*/
+	static public $check_features_version = '1.4';
+	
 	/** $check_features is a multidimensional array used to check [theme]/config.xml values, 
 	 * and also checks prestashop current configuration if not match.
 	 * @static
 	 */
-	static public $check_features=array(
-		'ccc'=>array( // feature key name
-			'attributes'=>array(
-				'available'=>array( 
-					'value'=>'true', // accepted attribute value
+	static public $check_features = array(
+		'ccc' => array( // feature key name
+			'attributes' => array(
+				'available' => array( 
+					'value' => 'true', // accepted attribute value
 					// if value doesnt match, 
 					// prestashop configuration value must have thoses values
-					'check_if_not_valid'=>array( 
-						'PS_CSS_THEME_CACHE'=>0,
-						'PS_JS_THEME_CACHE'=>0,
-						'PS_HTML_THEME_COMPRESSION'=>0,
-						'PS_JS_HTML_THEME_COMPRESSION'=>0,
-						'PS_HIGH_HTML_THEME_COMPRESSION'=>0,
+					'check_if_not_valid' => array( 
+						'PS_CSS_THEME_CACHE' => 0,
+						'PS_JS_THEME_CACHE' => 0,
+						'PS_HTML_THEME_COMPRESSION' => 0,
+						'PS_JS_HTML_THEME_COMPRESSION' => 0,
+						'PS_HIGH_HTML_THEME_COMPRESSION' => 0,
 					),
 				),
 			),
-			'error'=>'This theme may not correctly use "combine, compress and cache"',
+			'error' => 'This theme may not correctly use "combine, compress and cache"',
 			'tab' => 'AdminPerformance',
 		),
-		'guest_checkout'=>array(
-			'attributes'=>array(
-				'available'=>array(
-				'value'=>'true',
-				'check_if_not_valid'=>array('PS_GUEST_CHECKOUT_ENABLED'=>0)
+		'guest_checkout' => array(
+			'attributes' => array(
+				'available' => array(
+				'value' => 'true',
+				'check_if_not_valid' => array('PS_GUEST_CHECKOUT_ENABLED' => 0)
 				),
 			), 
-			'error'=>'This theme may not correctly use "guest checkout"',
+			'error' => 'This theme may not correctly use "guest checkout"',
 			'tab' => 'AdminPreferences',
 		),
-		'one_page_checkout'=>array(
-			'attributes'=>array(
-				'available'=>array(
-					'value'=>'true',
-					'check_if_not_valid'=>array('PS_ORDER_PROCESS_TYPE'=>0),
+		'one_page_checkout' => array(
+			'attributes' => array(
+				'available' => array(
+					'value' => 'true',
+					'check_if_not_valid' => array('PS_ORDER_PROCESS_TYPE' => 0),
 				),
 			),
-			'error'=>'This theme may not correctly use "one page checkout"',
+			'error' => 'This theme may not correctly use "one page checkout"',
 			'tab' => 'AdminPreferences',
 		),
-		'store_locator'=>array(
-			'attributes'=>array(
-				'available'=>array(
-				'value'=>'true',
-				'check_if_not_valid'=>array('PS_STORES_SIMPLIFIED'=>0,'PS_STORES_DISPLAY_FOOTER'=>0),
+		'store_locator' => array(
+			'attributes' => array(
+				'available' => array(
+				'value' => 'true',
+				'check_if_not_valid' => array('PS_STORES_SIMPLIFIED' => 0,'PS_STORES_DISPLAY_FOOTER' => 0),
 				)
 			),
-			'error'=>'This theme may not correctly use "display store location"',
+			'error' => 'This theme may not correctly use "display store location"',
 			'tab' => 'AdminStores',
 		)
 	);
@@ -184,7 +185,7 @@ class AdminThemes extends AdminPreferences
 		// foreach version in xml file, 
 		// node means feature, attributes has to match 
 		// the corresponding value in AdminThemes::$check_features[feature] array
-		$xmlArray= simpleXMLToArray($xml);
+		$xmlArray = simpleXMLToArray($xml);
 		foreach($xmlArray AS $version)
 		{
 			if (isset($version['value']) AND version_compare($version['value'], $check_version) >= 0)
@@ -258,9 +259,9 @@ class AdminThemes extends AdminPreferences
 	}
 
 	/** this functions make checks about AdminThemes configuration edition only.
-		* 
-		* @since 1.4
-		*/
+	 * 
+	 * @since 1.4
+	 */
 	public function postProcess()
 	{
 		// new check compatibility theme feature (1.4) :

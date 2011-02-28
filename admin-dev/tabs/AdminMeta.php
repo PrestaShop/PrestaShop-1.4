@@ -41,8 +41,33 @@ class AdminMeta extends AdminTab
 			'title' => array('title' => $this->l('Title'), 'width' => 120),
 			'url_rewrite' => array('title' => $this->l('Friendly URL'), 'width' => 120)
 		);
+		
+		global $cookie;
+		$this->optionTitle = $this->l('URLs Setup');
+		$this->_fieldsOptions = array(
+			'__PS_BASE_URI__' => array('title' => $this->l('PS directory'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 20, 'default' => __PS_BASE_URI__),
+			'PS_HOMEPAGE_PHP_SELF' => array('title' => $this->l('Homepage file'), 'desc' => $this->l('Usually "index.php", but may be different for a few hosts.'), 'type' => 'string', 'size' => 50),
+			'PS_SHOP_DOMAIN' => array('title' => $this->l('Shop domain name'), 'desc' => $this->l('Domain name of your shop, used as a canonical URL (e.g., www.myshop.com). Keep it blank if you don\'t know what to do.'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 30, 'default' => ''),
+			'PS_SHOP_DOMAIN_SSL' => array('title' => $this->l('Shop domain name for SSL'), 'desc' => $this->l('Domain name for the secured area of your shop, used as a canonical URL (e.g., secure.myshop.com). Keep it blank if you don\'t know what to do.'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 30, 'default' => ''),
+			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.(int)(Tab::getIdFromClassName('AdminGenerator')).(int)$cookie->id_employee).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+		);
+		if (!Tools::getValue('__PS_BASE_URI__'))
+			$_POST['__PS_BASE_URI__'] = __PS_BASE_URI__;
 	
 		parent::__construct();
+	}
+	
+	public function postProcess()
+	{
+		if (Tools::isSubmit('submitOptions'.$this->table))
+		{
+			$baseUrls = array();
+			if ($__PS_BASE_URI__ = Tools::getValue('__PS_BASE_URI__'))
+				$baseUrls['__PS_BASE_URI__'] = $__PS_BASE_URI__;
+			rewriteSettingsFile($baseUrls, NULL, NULL);
+			unset($this->_fieldsGeneral['__PS_BASE_URI__']);
+		}
+		parent::postProcess();
 	}
 	
 	public function displayForm($isMainTab = true)

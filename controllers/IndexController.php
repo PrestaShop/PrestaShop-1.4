@@ -29,7 +29,7 @@ class IndexControllerCore extends FrontController
 {
 	public function __construct()
 	{
-		$this->php_self = 'index.php';
+		$this->php_self = Configuration::get('PS_HOMEPAGE_PHP_SELF');
 	
 		parent::__construct();
 	}

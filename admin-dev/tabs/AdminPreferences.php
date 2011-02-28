@@ -75,15 +75,11 @@ class AdminPreferences extends AdminTab
 			$cms_tab[] = array('id' => $cms_file['id_cms'], 'name' => $cms_file['meta_title']);
 
 		$this->_fieldsGeneral = array(
-			'PS_SHOP_DOMAIN' => array('title' => $this->l('Shop domain name'), 'desc' => $this->l('Domain name of your shop, used as a canonical URL (e.g., www.myshop.com). Keep it blank if you don\'t know what to do.'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 30, 'default' => ''),
-			'PS_SHOP_DOMAIN_SSL' => array('title' => $this->l('Shop domain name for SSL'), 'desc' => $this->l('Domain name for the secured area of your shop, used as a canonical URL (e.g., secure.myshop.com). Keep it blank if you don\'t know what to do.'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 30, 'default' => ''),
-			'__PS_BASE_URI__' => array('title' => $this->l('PS directory'), 'desc' => $this->l('Name of the PrestaShop directory on your Web server, bracketed by forward slashes (e.g., /shop/)'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 20, 'default' => __PS_BASE_URI__),
 			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use a comma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
 			'PS_SSL_ENABLED' => array('title' => $this->l('Enable SSL'), 'desc' => $this->l('If your hosting provider allows SSL, you can activate SSL encryption (https://) for customer account identification and order processing'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
 			'PS_COOKIE_CHECKIP' => array('title' => $this->l('Check IP on the cookie'), 'desc' => $this->l('Check the IP address of the cookie in order to avoid your cookie being stolen'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
 			'PS_TOKEN_ENABLE' => array('title' => $this->l('Increase Front Office security'), 'desc' => $this->l('Enable or disable token on the Front Office in order to improve PrestaShop security'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
-			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.(int)(Tab::getIdFromClassName('AdminGenerator')).(int)($cookie->id_employee)).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_HELPBOX' => array('title' => $this->l('Back Office help boxes'), 'desc' => $this->l('Enable yellow help boxes which are displayed under form fields in the Back Office'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_ORDER_PROCESS_TYPE' => array('title' => $this->l('Order process type'), 'desc' => $this->l('You can choose the order process type as either standard (5 steps) or One Page Checkout'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $order_process_type, 'identifier' => 'value'),
 			'PS_GUEST_CHECKOUT_ENABLED' => array('title' => $this->l('Enable guest checkout'), 'desc' => $this->l('Your guest can make an order without registering'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
@@ -216,15 +212,7 @@ class AdminPreferences extends AdminTab
 		/* Save process */
 		if (!sizeof($this->_errors))
 		{
-			if (isset($_POST['submitGeneral'.$this->table]))
-			{
-				$baseUrls = array();
-				if ($__PS_BASE_URI__ = Tools::getValue('__PS_BASE_URI__'))
-					$baseUrls['__PS_BASE_URI__'] = $__PS_BASE_URI__;
-				rewriteSettingsFile($baseUrls, NULL, NULL);
-				unset($this->_fieldsGeneral['__PS_BASE_URI__']);
-			}
-			elseif (isset($_POST['submitAppearance'.$this->table]))
+			if (Tools::isSubmit('submitAppearanceconfiguration'))
 			{
 				if (isset($_FILES['PS_LOGO']['tmp_name']) AND $_FILES['PS_LOGO']['tmp_name'])
 				{

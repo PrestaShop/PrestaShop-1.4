@@ -1523,9 +1523,9 @@ abstract class AdminTabCore
 		if (!isset($this->_fieldsOptions) OR !sizeof($this->_fieldsOptions))
 			return ;
 
-		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)Configuration::get('PS_LANG_DEFAULT');
 		$this->_languages = Language::getLanguages(false);
-		$tab = Tab::getTab((int)($cookie->id_lang), Tab::getIdFromClassName($tab));
+		$tab = Tab::getTab((int)$cookie->id_lang, Tab::getIdFromClassName($tab));
 		echo '<br /><br />';
 		echo (isset($this->optionTitle) ? '<h2>'.$this->optionTitle.'</h2>' : '');
 		echo '
@@ -1538,10 +1538,8 @@ abstract class AdminTabCore
 		foreach ($this->_fieldsOptions AS $key => $field)
 		{
 			$val = Tools::getValue($key, Configuration::get($key));
-			echo'
-				<label>'.$field['title'].' </label>
-				<div class="margin-form">';
-
+			echo '<label>'.$field['title'].' </label>
+			<div class="margin-form">';
 			switch ($field['type'])
 			{
 				case 'select':
@@ -1550,8 +1548,7 @@ abstract class AdminTabCore
 						echo '<option
 							value="'.(isset($field['cast']) ? $field['cast']($value[$field['identifier']]) : $value[$field['identifier']]).'"'.($val == $value[$field['identifier']] ? ' selected="selected"' : '').'>'.$value['name'].'</option>';
 					echo '</select>';
-				break ;
-
+					break;
 				case 'bool':
 					echo '<label class="t" for="'.$key.'_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
 					<input type="radio" name="'.$key.'" id="'.$key.'_on" value="1"'.($val ? ' checked="checked"' : '').' />
@@ -1559,8 +1556,7 @@ abstract class AdminTabCore
 					<label class="t" for="'.$key.'_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" /></label>
 					<input type="radio" name="'.$key.'" id="'.$key.'_off" value="0" '.(!$val ? 'checked="checked"' : '').'/>
 					<label class="t" for="'.$key.'_off"> '.$this->l('No').'</label>';
-				break ;
-
+					break;
 				case 'textLang':
 					foreach ($this->_languages as $language)
 					{
@@ -1572,8 +1568,7 @@ abstract class AdminTabCore
 					}
 					$this->displayFlags($this->_languages, $defaultLanguage, $key, $key);
 					echo '<br style="clear:both">';
-				break ;
-
+					break;
 				case 'textareaLang':
 					foreach ($this->_languages as $language)
 					{
@@ -1585,8 +1580,7 @@ abstract class AdminTabCore
 					}
 					$this->displayFlags($this->_languages, $defaultLanguage, $key, $key);
 					echo '<br style="clear:both">';
-				break ;
-
+					break;
 				case 'text':
 				default:
 					echo '<input type="text" name="'.$key.'" value="'.$val.'" size="'.$field['size'].'" />'.(isset($field['suffix']) ? $field['suffix'] : '');
