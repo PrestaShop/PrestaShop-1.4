@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5947e2ae63c0a33524cf81c44a1db580'] = 'Transporteur USPS';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_1e0b0c7e24daa6ca969a9b9debf93053'] = 'Propose à vos clients le transporteur UPS';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_1e0b0c7e24daa6ca969a9b9debf93053'] = 'Propose à vos clients le transporteur USPS (US Postal)';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_883fa0069f4b0454e2277dd567ab3991'] = '\'Unité de poids (LB ou KG)\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\'Unité de mesure (CM ou IN)\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'doit être configuré pour fonctionner correctement';
