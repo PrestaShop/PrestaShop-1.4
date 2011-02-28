@@ -140,7 +140,7 @@ class AdminCategories extends AdminTab
 							if (preg_match('/id_category=(\d+)/', $referrer, $matches))
 								$target = '&id_category='.(int)($matches[1]);
 						}
-						
+						Module::hookExec('categoryUpdate');
 						Tools::redirectAdmin($currentIndex.'&conf=5'.$target.'&token='.Tools::getValue('token'));
 					}
 					else
