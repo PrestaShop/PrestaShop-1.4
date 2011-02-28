@@ -144,7 +144,7 @@ class AdminMeta extends AdminTab
 			$englishLangIsValidated = Validate::isLinkRewrite(Tools::getValue('url_rewrite_1'));
 			if (!$defaultLangIsValidated AND !$englishLangIsValidated)
 			{
-				$this->_errors[] = Tools::displayError('Url rewrite field must be filed at least in default language or English.');
+				$this->_errors[] = Tools::displayError('Url rewrite field must be filled at least in default or english language.');
 				return false;
 			}
 			foreach($langs as $lang)
