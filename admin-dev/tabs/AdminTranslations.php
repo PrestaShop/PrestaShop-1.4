@@ -38,6 +38,13 @@ class AdminTranslations extends AdminTab
 	const DEFAULT_THEME_NAME = 'default';
 	protected static $tpl_regexp = '';
 	protected static $php_regexp = '';
+
+	/**
+	 * Is true if number of var exceed the suhosin request or post limit 
+	 * 
+	 * @var boolean
+	 */
+	protected $suhosin_limit_exceed = false;
 	
 	public function __construct()
 	{
@@ -941,13 +948,18 @@ class AdminTranslations extends AdminTab
 	public function displayLimitPostWarning($count)
 	{
 		$str_output = '';
-		if (ini_get('suhosin.post.max_vars') AND ini_get('suhosin.post.max_vars') < $count) 
-		{ 
-			ini_set('suhosin.post.max_vars', $count + 100); 
-			if (ini_get('suhosin.post.max_vars') < $count) 
-				$str_output .= '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, and is limiting the maximum fields which could be posted to') 
-				.' <b>'.ini_get('suhosin.post.max_vars').'</b>'.$this->l('. As a result, your translations will be partially saved. Please ask your hosting provider to increase this limit to') 
-				.' <u><b>'.((int)$count + 100).' '.$this->l('at least.').'</b></u></div>'; 
+		if ((ini_get('suhosin.post.max_vars') AND ini_get('suhosin.post.max_vars') < $count)
+		 OR (ini_get('suhosin.request.max_vars') AND ini_get('suhosin.request.max_vars') < $count))
+		{
+			if (ini_get('suhosin.post.max_vars') < $count OR ini_get('suhosin.request.max_vars') < $count)
+			{
+				$this->suhosin_limit_exceed = true;
+				$str_output .= '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, and is limiting the maximum fields which could be posted to :').'<br/>'
+				.'<b>'.ini_get('suhosin.post.max_vars').'</b> '.$this->l('for suhosin.post.max_vars.').'<br/>'
+				.'<b>'.ini_get('suhosin.request.max_vars').'</b> '.$this->l('for suhosin.request.max_vars.').'<br/>'
+				.$this->l('Please ask your hosting provider to increase the suhosin post and request limit to')
+				.' <u><b>'.((int)$count + 100).'</b></u> '.$this->l('at least.').' '.$this->l('or edit the translation file manually.').'</div>'; 
+			}
 		}
 		return $str_output;
 	}
@@ -996,37 +1008,40 @@ class AdminTranslations extends AdminTab
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Front-Office translations').'</h2>
 		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />';
 		$str_output .= $this->displayLimitPostWarning($count);
-		$str_output .= '
-		<form method="post" action="'.$currentIndex.'&submitTranslationsFront=1&token='.$this->token.'" class="form">';
-		$str_output .= $this->displayToggleButton(sizeof($_LANG) >= $count);
-		$str_output .= $this->displayAutoTranslate();
-		$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-		foreach ($files AS $k => $newLang)
-			if (sizeof($newLang))
-			{
-				$countValues = array_count_values($newLang);
-				$empty = isset($countValues['']) ? $countValues[''] : 0;
-			 	$str_output .= '
-				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
-					<div name="front_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
-						<table cellpadding="2">';
-				foreach ($newLang AS $key => $value)
+		if (!$this->suhosin_limit_exceed)
+		{
+			$str_output .= '
+			<form method="post" action="'.$currentIndex.'&submitTranslationsFront=1&token='.$this->token.'" class="form">';
+			$str_output .= $this->displayToggleButton(sizeof($_LANG) >= $count);
+			$str_output .= $this->displayAutoTranslate();
+			$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
+			foreach ($files AS $k => $newLang)
+				if (sizeof($newLang))
 				{
-					$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>';
-					if (strlen($key) != 0 && strlen($key) < TEXTAREA_SIZED)
-						$str_output .= '= <input type="text" style="width: 450px" name="'.$k.'_'.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" />';
-					elseif(strlen($key))
-						$str_output .= '= <textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.'_'.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea>';
-					else
-						$str_output .= '<span class="error-inline">'.implode(', ', $this->_errors).'</span>';
-					$str_output .= '</td></tr>';
+					$countValues = array_count_values($newLang);
+					$empty = isset($countValues['']) ? $countValues[''] : 0;
+					$str_output .= '
+					<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+						<div name="front_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
+							<table cellpadding="2">';
+					foreach ($newLang AS $key => $value)
+					{
+						$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>';
+						if (strlen($key) != 0 && strlen($key) < TEXTAREA_SIZED)
+							$str_output .= '= <input type="text" style="width: 450px" name="'.$k.'_'.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" />';
+						elseif(strlen($key))
+							$str_output .= '= <textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.'_'.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea>';
+						else
+							$str_output .= '<span class="error-inline">'.implode(', ', $this->_errors).'</span>';
+						$str_output .= '</td></tr>';
+					}
+					$str_output .= '
+							</table>
+						</div>
+					</fieldset><br />';
 				}
-				$str_output .= '
-						</table>
-					</div>
-				</fieldset><br />';
-			}
-		$str_output .= '<br /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /></form>';
+			$str_output .= '<br /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /></form>';
+		}
 		if (!empty($this->_errors))
 			$this->displayErrors();
 		echo $str_output;
@@ -1072,36 +1087,37 @@ class AdminTranslations extends AdminTab
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Back-Office translations').'</h2>
 		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
 		$str_output .= $this->displayLimitPostWarning($count);
-		$str_output .= '
-		<form method="post" action="'.$currentIndex.'&submitTranslationsBack=1&token='.$this->token.'" class="form">';
-		$str_output .= $this->displayToggleButton();
-		$str_output .= $this->displayAutoTranslate();
-		$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsBack" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-		foreach ($tabsArray AS $k => $newLang)
-			if (sizeof($newLang))
-			{
-				$countValues = array_count_values($newLang);
-				$empty = isset($countValues['']) ? $countValues[''] : 0;
-			 	$str_output .= '
-				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
-					<div name="back_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
-						<table cellpadding="2">';
-				foreach ($newLang AS $key => $value)
+		if (!$this->suhosin_limit_exceed)
+		{
+			$str_output .= '
+			<form method="post" action="'.$currentIndex.'&submitTranslationsBack=1&token='.$this->token.'" class="form">';
+			$str_output .= $this->displayToggleButton();
+			$str_output .= $this->displayAutoTranslate();
+			$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsBack" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
+			foreach ($tabsArray AS $k => $newLang)
+				if (sizeof($newLang))
 				{
-					// if (empty($value))
-						// $value = stripslashes($key);
-					$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
-					if (strlen($key) < TEXTAREA_SIZED)
-						$str_output .= '<input type="text" style="width: 450px" name="'.$k.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'" /></td></tr>';
-					else
-						$str_output .= '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'</textarea></td></tr>';
+					$countValues = array_count_values($newLang);
+					$empty = isset($countValues['']) ? $countValues[''] : 0;
+					$str_output .= '
+					<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+						<div name="back_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
+							<table cellpadding="2">';
+					foreach ($newLang AS $key => $value)
+					{
+						$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
+						if (strlen($key) < TEXTAREA_SIZED)
+							$str_output .= '<input type="text" style="width: 450px" name="'.$k.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'" /></td></tr>';
+						else
+							$str_output .= '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'</textarea></td></tr>';
+					}
+					$str_output .= '
+							</table>
+						</div>
+					</fieldset><br />';
 				}
-				$str_output .= '
-						</table>
-					</div>
-				</fieldset><br />';
-			}
-		$str_output .= '<br /><input type="submit" name="submitTranslationsBack" value="'.$this->l('Update translations').'" class="button" /></form>';
+			$str_output .= '<br /><input type="submit" name="submitTranslationsBack" value="'.$this->l('Update translations').'" class="button" /></form>';
+		}
 		echo $str_output;
 	}
 
@@ -1150,14 +1166,17 @@ class AdminTranslations extends AdminTab
 		$str_output .= '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Errors translations').'</h2>'
 		.$this->l('Errors to translate').' : <b>'.sizeof($stringToTranslate).'</b><br /><br />';
 		$str_output .= $this->displayLimitPostWarning(sizeof($stringToTranslate));
-		$str_output .= '
-		<form method="post" action="'.$currentIndex.'&submitTranslationsErrors=1&lang='.$lang.'&token='.$this->token.'" class="form">
-		<input type="submit" name="submitTranslationsErrors" value="'.$this->l('Update translations').'" class="button" /><br /><br />
-		<table cellpadding="0" cellspacing="0" class="table">';
-		ksort($stringToTranslate);
-		foreach ($stringToTranslate AS $key => $value)
-			$str_output .= '<tr '.(empty($value) ? 'style="background-color:#FBB"' : (++$irow % 2 ? 'class="alt_row"' : '')).'><td>'.stripslashes($key).'</td><td style="width: 430px">= <input type="text" name="'.md5($key).'" value="'.preg_replace('/"/', '&quot;', stripslashes($value)).'" style="width: 380px"></td></tr>';
-		$str_output .= '</table><br /><input type="submit" name="submitTranslationsErrors" value="'.$this->l('Update translations').'" class="button" /></form>';
+		if (!$this->suhosin_limit_exceed)
+		{
+			$str_output .= '
+			<form method="post" action="'.$currentIndex.'&submitTranslationsErrors=1&lang='.$lang.'&token='.$this->token.'" class="form">
+			<input type="submit" name="submitTranslationsErrors" value="'.$this->l('Update translations').'" class="button" /><br /><br />
+			<table cellpadding="0" cellspacing="0" class="table">';
+			ksort($stringToTranslate);
+			foreach ($stringToTranslate AS $key => $value)
+				$str_output .= '<tr '.(empty($value) ? 'style="background-color:#FBB"' : (++$irow % 2 ? 'class="alt_row"' : '')).'><td>'.stripslashes($key).'</td><td style="width: 430px">= <input type="text" name="'.md5($key).'" value="'.preg_replace('/"/', '&quot;', stripslashes($value)).'" style="width: 380px"></td></tr>';
+			$str_output .= '</table><br /><input type="submit" name="submitTranslationsErrors" value="'.$this->l('Update translations').'" class="button" /></form>';
+		}
 		echo $str_output;
 	}
 
@@ -1188,37 +1207,41 @@ class AdminTranslations extends AdminTab
 
 		$str_output .= $this->displayAutoTranslate();
 		$str_output .= '
-		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Fields translations').'</h2>
-		'.$this->l('Fields to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />
-		<form method="post" action="'.$currentIndex.'&submitTranslationsFields=1&token='.$this->token.'" class="form">';
-		$str_output .= $this->displayToggleButton();
-		$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFields" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-		foreach ($classArray AS $className => $rules)
+		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Fields translations').'</h2>';
+		$str_output .= $this->displayLimitPostWarning($count);
+		if (!$this->suhosin_limit_exceed)
 		{
-			$translated = 0;
-			$toTranslate = 0;
-			if (isset($rules['validate']))
-				foreach ($rules['validate'] AS $key => $value)
-					(array_key_exists($className.'_'.md5($key), $_FIELDS)) ? ++$translated : ++$toTranslate;
-			if (isset($rules['validateLang']))
-				foreach ($rules['validateLang'] AS $key => $value)
-					(array_key_exists($className.'_'.md5($key), $_FIELDS)) ? ++$translated : ++$toTranslate;
-			$str_output .= '
-			<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$className.'-tpl\').slideToggle();">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
-			<div name="fields_div" id="'.$className.'-tpl" style="display: '.($toTranslate ? 'block' : 'none').';">
-				<table cellpadding="2">';
-			if (isset($rules['validate']))
-				foreach ($rules['validate'] AS $key => $value)
-					$str_output .= '<tr><td style="text-align:right;width:200px;">'.stripslashes($key).'</td><td style="width: 680px">= <input type="text" name="'.$className.'_'.md5(addslashes($key)).'" value="'.(array_key_exists($className.'_'.md5(addslashes($key)), $_FIELDS) ? html_entity_decode($_FIELDS[$className.'_'.md5(addslashes($key))], ENT_NOQUOTES, 'UTF-8') : '').'" style="width: 620px"></td></tr>';
-			if (isset($rules['validateLang']))
-				foreach ($rules['validateLang'] AS $key => $value)
-					$str_output .= '<tr><td style="text-align:right;width:200px;">'.stripslashes($key).'</td><td style="width: 680px">= <input type="text" name="'.$className.'_'.md5(addslashes($key)).'" value="'.(array_key_exists($className.'_'.md5(addslashes($key)), $_FIELDS) ? html_entity_decode($_FIELDS[$className.'_'.md5(addslashes($key))], ENT_COMPAT, 'UTF-8') : '').'" style="width: 620px"></td></tr>';
-			$str_output .= '
-				</table>
-			</div>
-			</fieldset><br />';
+			$str_output .= $this->l('Fields to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />
+			<form method="post" action="'.$currentIndex.'&submitTranslationsFields=1&token='.$this->token.'" class="form">';
+			$str_output .= $this->displayToggleButton();
+			$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFields" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
+			foreach ($classArray AS $className => $rules)
+			{
+				$translated = 0;
+				$toTranslate = 0;
+				if (isset($rules['validate']))
+					foreach ($rules['validate'] AS $key => $value)
+						(array_key_exists($className.'_'.md5($key), $_FIELDS)) ? ++$translated : ++$toTranslate;
+				if (isset($rules['validateLang']))
+					foreach ($rules['validateLang'] AS $key => $value)
+						(array_key_exists($className.'_'.md5($key), $_FIELDS)) ? ++$translated : ++$toTranslate;
+				$str_output .= '
+				<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$className.'-tpl\').slideToggle();">'.$className.' - <font color="blue">'.($toTranslate + $translated).'</font> '.$this->l('fields').' (<font color="red">'.$toTranslate.'</font>)</legend>
+				<div name="fields_div" id="'.$className.'-tpl" style="display: '.($toTranslate ? 'block' : 'none').';">
+					<table cellpadding="2">';
+				if (isset($rules['validate']))
+					foreach ($rules['validate'] AS $key => $value)
+						$str_output .= '<tr><td style="text-align:right;width:200px;">'.stripslashes($key).'</td><td style="width: 680px">= <input type="text" name="'.$className.'_'.md5(addslashes($key)).'" value="'.(array_key_exists($className.'_'.md5(addslashes($key)), $_FIELDS) ? html_entity_decode($_FIELDS[$className.'_'.md5(addslashes($key))], ENT_NOQUOTES, 'UTF-8') : '').'" style="width: 620px"></td></tr>';
+				if (isset($rules['validateLang']))
+					foreach ($rules['validateLang'] AS $key => $value)
+						$str_output .= '<tr><td style="text-align:right;width:200px;">'.stripslashes($key).'</td><td style="width: 680px">= <input type="text" name="'.$className.'_'.md5(addslashes($key)).'" value="'.(array_key_exists($className.'_'.md5(addslashes($key)), $_FIELDS) ? html_entity_decode($_FIELDS[$className.'_'.md5(addslashes($key))], ENT_COMPAT, 'UTF-8') : '').'" style="width: 620px"></td></tr>';
+				$str_output .= '
+					</table>
+				</div>
+				</fieldset><br />';
+			}
+			$str_output .= '<br /><input type="submit" name="submitTranslationsFields" value="'.$this->l('Update translations').'" class="button" /></form>';
 		}
-		$str_output .= '<br /><input type="submit" name="submitTranslationsFields" value="'.$this->l('Update translations').'" class="button" /></form>';
 		echo $str_output;
 	}
 	
@@ -1790,53 +1813,55 @@ class AdminTranslations extends AdminTab
 			<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Modules translations').'</h2>
 			'.$this->l('Total expressions').' : <b>'.$this->total_expression.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />';
 			$str_output .= $this->displayLimitPostWarning($this->total_expression);
-			$str_output .= '
-			<form method="post" action="'.$currentIndex.'&submitTranslationsModules=1&token='.$this->token.'" class="form">';
-			$str_output .= $this->displayToggleButton();
-			$str_output .= $this->displayAutoTranslate();
-			$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-			
-			if (count($this->modules_translations) > 1) 
+			if (!$this->suhosin_limit_exceed)
 			{
-				$str_output .= '<h3 style="padding:0;margin:0;">'.$this->l('List of Themes - Click to access theme translation:').'</h3>';
-				$str_output .= '<ul style="list-style-type:none;padding:0;margin:0 0 10px 0;">';
-				foreach (array_keys($this->modules_translations) as $theme)
+				$str_output .= '
+				<form method="post" action="'.$currentIndex.'&submitTranslationsModules=1&token='.$this->token.'" class="form">';
+				$str_output .= $this->displayToggleButton();
+				$str_output .= $this->displayAutoTranslate();
+				$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
+				
+				if (count($this->modules_translations) > 1) 
 				{
-					$str_output .= '<li><a href="#'.$theme.'" class="link">- '.($theme === 'default' ? $this->l('default') : $theme ).'</a></li>';
+					$str_output .= '<h3 style="padding:0;margin:0;">'.$this->l('List of Themes - Click to access theme translation:').'</h3>';
+					$str_output .= '<ul style="list-style-type:none;padding:0;margin:0 0 10px 0;">';
+					foreach (array_keys($this->modules_translations) as $theme)
+						$str_output .= '<li><a href="#'.$theme.'" class="link">- '.($theme === 'default' ? $this->l('default') : $theme ).'</a></li>';
+					$str_output .= '</ul>';
 				}
-				$str_output .= '</ul>';
-			}
-			foreach ($this->modules_translations AS $theme_name => $theme)
-			{
-				$str_output .= '<h2>&gt;'.$this->l('Theme:').' <a name="'.$theme_name.'">'.($theme_name === self::DEFAULT_THEME_NAME ? $this->l('default') : $theme_name ).'</h2>';
-				foreach ($theme AS $module_name => $module)
+
+				foreach ($this->modules_translations AS $theme_name => $theme)
 				{
-					$str_output .= ''.$this->l('Module:').' <a name="'.$module_name.'" style="font-style:italic">'.$module_name.'</a>';
-					foreach ($module AS $template_name => $newLang)
-						if (sizeof($newLang))
-						{
-							$countValues = array_count_values($newLang);
-							$empty = isset($countValues['']) ? $countValues[''] : 0;
-							$str_output .= '
-							<fieldset style="margin-top:5px"><legend style="cursor : pointer" onclick="$(\'#'.$theme_name.'_'.$module_name.'_'.$template_name.'\').slideToggle();">'.($theme_name === 'default' ? $this->l('default') : $theme_name ).' - '.$template_name.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
-								<div name="modules_div" id="'.$theme_name.'_'.$module_name.'_'.$template_name.'" style="display: '.($empty ? 'block' : 'none').';">
-									<table cellpadding="2">';
-							foreach ($newLang AS $key => $value)
+					$str_output .= '<h2>&gt;'.$this->l('Theme:').' <a name="'.$theme_name.'">'.($theme_name === self::DEFAULT_THEME_NAME ? $this->l('default') : $theme_name ).'</h2>';
+					foreach ($theme AS $module_name => $module)
+					{
+						$str_output .= ''.$this->l('Module:').' <a name="'.$module_name.'" style="font-style:italic">'.$module_name.'</a>';
+						foreach ($module AS $template_name => $newLang)
+							if (sizeof($newLang))
 							{
-								$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
-								if (strlen($key) < TEXTAREA_SIZED)
-									$str_output .= '<input type="text" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
-								else
-									$str_output .= '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
+								$countValues = array_count_values($newLang);
+								$empty = isset($countValues['']) ? $countValues[''] : 0;
+								$str_output .= '
+								<fieldset style="margin-top:5px"><legend style="cursor : pointer" onclick="$(\'#'.$theme_name.'_'.$module_name.'_'.$template_name.'\').slideToggle();">'.($theme_name === 'default' ? $this->l('default') : $theme_name ).' - '.$template_name.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+									<div name="modules_div" id="'.$theme_name.'_'.$module_name.'_'.$template_name.'" style="display: '.($empty ? 'block' : 'none').';">
+										<table cellpadding="2">';
+								foreach ($newLang AS $key => $value)
+								{
+									$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
+									if (strlen($key) < TEXTAREA_SIZED)
+										$str_output .= '<input type="text" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
+									else
+										$str_output .= '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
+								}
+								$str_output .= '
+										</table>
+									</div>
+								</fieldset><br />';
 							}
-							$str_output .= '
-									</table>
-								</div>
-							</fieldset><br />';
-						}
+					}
 				}
+				$str_output .= '<br /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /></form>';
 			}
-			$str_output .= '<br /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /></form>';
 		}
 		echo $str_output;
 	}
@@ -1873,46 +1898,46 @@ class AdminTranslations extends AdminTab
 		$closed = sizeof($_LANGPDF) >= $count;
 		
 		$str_output .= $this->displayAutoTranslate();
-		$str_output .= '
-		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>
-		'.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
+		$str_output .= '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>'
+			.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
 		$str_output .= $this->displayLimitPostWarning($count);
-		$str_output .= '
-		<form method="post" action="'.$currentIndex.'&submitTranslationsPDF=1&token='.$this->token.'" class="form">
-				<script type="text/javascript">
-					var openAll = \''.html_entity_decode($this->l('Expand all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
-					var closeAll = \''.html_entity_decode($this->l('Close all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
-				</script>
-				<input type="hidden" name="lang" value="'.$lang.'" />
-				<input type="button" class="button" id="buttonall" onclick="openCloseAllDiv(\'pdf_div\', this.value == openAll); toggleElemValue(this.id, openAll, closeAll);" />
-				<script type="text/javascript">
-					toggleElemValue(\'buttonall\', '.($closed ? 'openAll' : 'closeAll').', '.($closed ? 'closeAll' : 'openAll').');
-				</script>';
-		$str_output .= '<input type="submit" name="submitTranslationsPDF" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
-		foreach ($tabsArray AS $k => $newLang)
-			if (sizeof($newLang))
-			{
-				$countValues = array_count_values($newLang);
-				$empty = isset($countValues['']) ? $countValues[''] : 0;
-				$str_output .= '<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
-					<div name="pdf_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
-						<table cellpadding="2">';
-				foreach ($newLang AS $key => $value)
+		if (!$this->suhosin_limit_exceed)
+		{
+			$str_output .= '
+			<form method="post" action="'.$currentIndex.'&submitTranslationsPDF=1&token='.$this->token.'" class="form">
+					<script type="text/javascript">
+						var openAll = \''.html_entity_decode($this->l('Expand all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
+						var closeAll = \''.html_entity_decode($this->l('Close all fieldsets'), ENT_NOQUOTES, 'UTF-8').'\';
+					</script>
+					<input type="hidden" name="lang" value="'.$lang.'" />
+					<input type="button" class="button" id="buttonall" onclick="openCloseAllDiv(\'pdf_div\', this.value == openAll); toggleElemValue(this.id, openAll, closeAll);" />
+					<script type="text/javascript">
+						toggleElemValue(\'buttonall\', '.($closed ? 'openAll' : 'closeAll').', '.($closed ? 'closeAll' : 'openAll').');
+					</script>';
+			$str_output .= '<input type="submit" name="submitTranslationsPDF" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
+			foreach ($tabsArray AS $k => $newLang)
+				if (sizeof($newLang))
 				{
-					$str_output .= '
-					<tr>
-						<td>'.stripslashes($key).'</td>
-						<td style="width: 580px">
-							= <input type="text" name="'.$k.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'" style="width: 515px">
-						</td>
-					</tr>';
+					$countValues = array_count_values($newLang);
+					$empty = isset($countValues['']) ? $countValues[''] : 0;
+					$str_output .= '<fieldset><legend style="cursor : pointer" onclick="$(\'#'.$k.'-tpl\').slideToggle();">'.$k.' - <font color="blue">'.sizeof($newLang).'</font> '.$this->l('expressions').' (<font color="red">'.$empty.'</font>)</legend>
+						<div name="pdf_div" id="'.$k.'-tpl" style="display: '.($empty ? 'block' : 'none').';">
+							<table cellpadding="2">';
+					foreach ($newLang AS $key => $value)
+					{
+						$str_output .= '<tr>
+							<td>'.stripslashes($key).'</td>
+							<td style="width: 580px">
+								= <input type="text" name="'.$k.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', $value)).'" style="width: 515px">
+							</td>
+						</tr>';
+					}
+					$str_output .= '</table>
+						</div>
+					</fieldset><br />';
 				}
-				$str_output .= '
-						</table>
-					</div>
-				</fieldset><br />';
-			}
-		$str_output .= '<br /><input type="submit" name="submitTranslationsPDF" value="'.$this->l('Update translations').'" class="button" /></form>';
+			$str_output .= '<br /><input type="submit" name="submitTranslationsPDF" value="'.$this->l('Update translations').'" class="button" /></form>';
+		}
 		echo $str_output;
 	}
 
