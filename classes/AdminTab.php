@@ -748,7 +748,6 @@ abstract class AdminTabCore
 		/* Manage list filtering */
 		elseif (Tools::isSubmit('submitFilter'.$this->table) OR $cookie->{'submitFilter'.$this->table} !== false)
 		{
-			$object = new $this->className();
 			$_POST = array_merge($cookie->getFamily($this->table.'Filter_'), (isset($_POST) ? $_POST : array()));
 			foreach ($_POST AS $key => $value)
 			{
