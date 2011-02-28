@@ -2460,6 +2460,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Tax rule:').'</td>
 						<td style="padding-bottom:5px;">
+					<span '.(Tax::excludeTaxeOption() ? 'style="display:none;"' : '' ).'>
 					 <select onChange="javascript:calcPriceTI(); unitPriceWithTax(\'unit\');" name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
 					     <option value="0">'.$this->l('No Tax').'</option>';
 
@@ -2468,7 +2469,7 @@ class AdminProducts extends AdminTab
 
 				echo '</select>
 
-				<a href="?tab=AdminTaxRulesGroup&addtax_rules_group&token='.Tools::getAdminToken('AdminTaxRulesGroup'.(int)(Tab::getIdFromClassName('AdminTaxRulesGroup')).(int)($cookie->id_employee)).'&id_product='.(int)$obj->id.'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a>
+				<a href="?tab=AdminTaxRulesGroup&addtax_rules_group&token='.Tools::getAdminToken('AdminTaxRulesGroup'.(int)(Tab::getIdFromClassName('AdminTaxRulesGroup')).(int)($cookie->id_employee)).'&id_product='.(int)$obj->id.'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a></span>
 				';
 				if (Tax::excludeTaxeOption())
 				{
@@ -2491,7 +2492,7 @@ class AdminProducts extends AdminTab
 					</tr>';
 
 				echo '
-					<tr>
+					<tr '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'>
 						<td class="col-left">'.$this->l('Retail price with tax:').'</td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="priceTI" type="text" value="" onchange="noComma(\'priceTI\');" onkeyup="calcPriceTE();" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
@@ -3140,8 +3141,8 @@ class AdminProducts extends AdminTab
 				  <option value="-1">'.$this->l('Reduction').'</option>
 				</select>
 				<span id="span_impact">&nbsp;&nbsp;'.$this->l('of').'&nbsp;&nbsp;'.($currency->format == 1 ? $currency->sign.' ' : '').'
-					<input type="text" size="6" name="attribute_price" id="attribute_price" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTI();"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('(tax excl.)').' '.$this->l('or').' '.($currency->format == 1 ? $currency->sign.' ' : '').'
-					<input type="text" size="6" name="attribute_priceTI" id="attribute_priceTI" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTE();"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('(tax incl.)').' '.$this->l('final product price will be set to').' '.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="attribute_new_total_price">0.00</span>'.($currency->format == 2 ? $currency->sign.' ' : '').'
+					<input type="text" size="6" name="attribute_price" id="attribute_price" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTI();"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('(tax excl.)').'<span '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'> '.$this->l('or').' '.($currency->format == 1 ? $currency->sign.' ' : '').'
+					<input type="text" size="6" name="attribute_priceTI" id="attribute_priceTI" value="0.00" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTE();"/>'.($currency->format == 2 ? ' '.$currency->sign : '').' '.$this->l('(tax incl.)').'</span> '.$this->l('final product price will be set to').' '.($currency->format == 1 ? $currency->sign.' ' : '').'<span id="attribute_new_total_price">0.00</span>'.($currency->format == 2 ? $currency->sign.' ' : '').'
 				</span>
 			</td>
 		  </tr>
