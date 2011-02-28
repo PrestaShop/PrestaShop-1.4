@@ -35,7 +35,7 @@ function getTax()
 
 function getEcotaxTaxIncluded()
 {
-	return parseFloat(document.getElementById('ecotax').value != '' ? document.getElementById('ecotax').value : 0);
+	return ($('#ecotax').length && $('#ecotax').val()  != '') ? parseFloat($('#ecotax').val()) : 0;
 }
 
 function getEcotaxTaxExcluded()
@@ -221,3 +221,4 @@ function changeCurrencySpecificPrice(index)
 		$('#spm_currency_sign_pre_' + index).html(currencies[id_currency]["sign"] + ' ');
 	}
 }
+
