@@ -129,7 +129,7 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					Mail::Send((int)($cookie->id_lang), 'forward_msg', 'Fwd: Customer message', $params,
+					Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
 						$employee->email, $employee->firstname.' '.$employee->lastname,
 						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname);
 					$cm->message = $this->l('Message forwarded to').' '.$employee->firstname.' '.$employee->lastname."\n".$this->l('Comment:').' '.$_POST['message_forward'];
@@ -141,7 +141,7 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					Mail::Send((int)($cookie->id_lang), 'forward_msg', 'Fwd: Customer message', $params,
+					Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
 						$email, NULL,
 						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname);
 					$cm->message = $this->l('Message forwarded to').' '.$email."\n".$this->l('Comment:').' '.$_POST['message_forward'];
@@ -172,7 +172,7 @@ class AdminCustomerThreads extends AdminTab
 					$params = array(
 					'{reply}' => nl2br2(Tools::getValue('reply_message')),
 					'{link}' => Tools::getHttpHost(true).__PS_BASE_URI__.'contact-form.php?id_customer_thread='.(int)($ct->id).'&token='.$ct->token);
-					Mail::Send($ct->id_lang, 'reply_msg','An answer to your message is available', $params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment);
+					Mail::Send($ct->id_lang, 'reply_msg', Mail::l('An answer to your message is available'), $params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment);
 					$ct->status = 'closed';
 					$ct->update();
 					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.(int)$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));

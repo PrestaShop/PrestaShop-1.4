@@ -103,7 +103,7 @@ class AdminReturn extends AdminTab
 						'{firstname}' => $customer->firstname,
 						'{id_order_return}' => $id_order_return,
 						'{state_order_return}' => $orderReturnState->name[(int)(Configuration::get('PS_LANG_DEFAULT'))]);
-						Mail::Send((int)($cookie->id_lang), 'order_return_state', html_entity_decode(Mail::l('Your order return state has changed'), ENT_NOQUOTES, 'UTF-8'), $vars, $customer->email, $customer->firstname.' '.$customer->lastname);
+						Mail::Send((int)($cookie->id_lang), 'order_return_state', Mail::l('Your order return state has changed'), $vars, $customer->email, $customer->firstname.' '.$customer->lastname);
 						Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 					}
 				}

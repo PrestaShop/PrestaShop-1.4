@@ -140,9 +140,8 @@ class MailCore
 			else
 				include_once(dirname(__FILE__).'/../mails/'.$iso.'/lang.php');
 
-			global $_LANGMAIL;
 			/* Create mail and attach differents parts */
-			$message = new Swift_Message('['.Configuration::get('PS_SHOP_NAME').'] '.((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject));
+			$message = new Swift_Message('['.Configuration::get('PS_SHOP_NAME').'] '. $subject);
 			$templateVars['{shop_logo}'] = (file_exists(_PS_IMG_DIR_.'logo_mail.jpg')) ? $message->attach(new Swift_Message_Image(new Swift_File(_PS_IMG_DIR_.'logo_mail.jpg'))) : ((file_exists(_PS_IMG_DIR_.'logo.jpg')) ? $message->attach(new Swift_Message_Image(new Swift_File(_PS_IMG_DIR_.'logo.jpg'))) : '');
 			$templateVars['{shop_name}'] = Tools::safeOutput(Configuration::get('PS_SHOP_NAME'));
 			$templateVars['{shop_url}'] = Tools::getShopDomain(true, true).__PS_BASE_URI__;
@@ -195,26 +194,34 @@ class MailCore
 		return $result;
 	}
 
+	/**
+	 * This method is used to get the translation for email Object.
+	 * For an object is forbidden to use htmlentities,
+	 * we have to return a sentence with accents.
+	 * 
+	 * @param string $string raw sentence (write directly in file)
+	 */
 	static public function l($string)
 	{
 		global $_LANGMAIL, $cookie;
-
+		
 		$key = str_replace('\'', '\\\'', $string);
 		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang;
 
-		$file = _PS_THEME_DIR_.'mails/'.Language::getIsoById((int)$id_lang).'/lang.php';
-		if (file_exists($file) && is_empty($_LANGMAIL))
-			include_once($file);
+		$file_core = _PS_ROOT_DIR_.'/mails/'.Language::getIsoById((int)$id_lang).'/lang.php';
+		if (Tools::file_exists_cache($file_core) && empty($_LANGMAIL))
+			include_once($file_core);
+
+		$file_theme = _PS_THEME_DIR_.'mails/'.Language::getIsoById((int)$id_lang).'/lang.php';
+		if (Tools::file_exists_cache($file_theme))
+			include_once($file_theme);
 
 		if (!is_array($_LANGMAIL))
 			return (str_replace('"', '&quot;', $string));
-
 		if (key_exists($key, $_LANGMAIL))
 			$str = $_LANGMAIL[$key];
 		else
 			$str = $string;
-			
-		$str = htmlentities($str, ENT_QUOTES, 'utf-8');
 
 		return str_replace('"', '&quot;', addslashes($str));
 	}

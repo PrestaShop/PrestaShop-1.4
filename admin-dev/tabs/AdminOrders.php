@@ -97,8 +97,7 @@ class AdminOrders extends AdminTab
 						'{lastname}' => $customer->lastname,
 						'{id_order}' => (int)($order->id)
 					);
-					$subject = 'Package in transit';
-					@Mail::Send((int)($order->id_lang), 'in_transit', ((is_array($_LANGMAIL) AND key_exists($subject, $_LANGMAIL)) ? $_LANGMAIL[$subject] : $subject), $templateVars, $customer->email, $customer->firstname.' '.$customer->lastname);
+					@Mail::Send((int)($order->id_lang), 'in_transit', Mail::l('Package in transit'), $templateVars, $customer->email, $customer->firstname.' '.$customer->lastname);
 				}
 			}
 			else

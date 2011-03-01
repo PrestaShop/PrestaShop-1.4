@@ -300,7 +300,7 @@ abstract class PaymentModuleCore extends Module
 							$voucher->add();
 							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false, false);
 							$params['{voucher_num}'] = $voucher->name;
-							@Mail::Send((int)$order->id_lang, 'voucher', html_entity_decode(Mail::l('New voucher regarding your order #').$order->id, ENT_NOQUOTES, 'UTF-8'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+							@Mail::Send((int)$order->id_lang, 'voucher', Mail::l('New voucher regarding your order #').$order->id, $params, $customer->email, $customer->firstname.' '.$customer->lastname);
 						}
 					}
 					else
