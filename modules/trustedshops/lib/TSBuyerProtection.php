@@ -1176,7 +1176,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	{
 		$lang = Language::getIsoById($params['cookie']->id_lang);
 		$lang = strtoupper($lang);
-		if (array_key_exists($lang, $this->available_languages))
+		if (array_key_exists($lang, $this->available_languages) AND isset(TSBuyerProtection::$CERTIFICATE[$lang]['tsID']))
 		{
 			TSBuyerProtection::$smarty->assign('trusted_shops_id', TSBuyerProtection::$CERTIFICATE[$lang]['tsID']);
 			TSBuyerProtection::$smarty->assign('onlineshop_name', ConfigurationCore::get('PS_SHOP_NAME'));
