@@ -149,7 +149,6 @@ class TrustedShops extends Module
 			});
 			$(".menuTabButton").click(function ()
 			{
-				console.log("lalal");
 				$(".menuTabButton.selected").removeClass("selected");
 				$(this).addClass("selected");
 				$(".tabItem.selected").removeClass("selected");
