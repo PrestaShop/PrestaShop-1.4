@@ -56,8 +56,6 @@ class FrontControllerCore
 		global $css_files, $js_files, $useSSL;
 
 		$useSSL = $this->ssl;
-		$css_files = array();
-		$js_files = array();
 	}
 
 	public function run()
@@ -74,7 +72,10 @@ class FrontControllerCore
 	public function init()
 	{
 		global $cookie, $smarty, $cart, $iso, $defaultCountry, $protocol_link, $protocol_content, $link, $css_files, $js_files;
-
+		
+		$css_files = array();
+		$js_files = array();
+		
 		if (self::$initialized)
 			return;
 		self::$initialized = true;
@@ -267,6 +268,8 @@ class FrontControllerCore
 		self::$link = $link;
 
 		$this->iso = $iso;
+
+		self::setMedia();
 	}
 
 	/* Display a maintenance page if shop is closed */
