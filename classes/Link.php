@@ -84,7 +84,7 @@ class LinkCore
 
 	public function getCMSLink($cms, $alias = null, $ssl = false, $id_lang = NULL)
 	{
-		$base = ($ssl ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true));
+		$base = (($ssl AND Configuration::get('PS_SSL_ENABLED')) ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true));
 	
 		if (is_object($cms))
 		{
@@ -200,7 +200,7 @@ class LinkCore
 			}
 			self::$cache['page'][$filename.'_'.$id_lang] = $uri_path;
 		}
-		return ($ssl ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true)).__PS_BASE_URI__.ltrim($uri_path, '/');
+		return (($ssl AND Configuration::get('PS_SSL_ENABLED')) ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true)).__PS_BASE_URI__.ltrim($uri_path, '/');
 	}
 
 	public function getCatImageLink($name, $id_category, $type = null)
