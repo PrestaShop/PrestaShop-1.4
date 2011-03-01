@@ -189,6 +189,7 @@ $_ERRORS['7f575e6d328c7dc215e127dc531cf599'] = 'L\'onglet ne peut être trouvé'
 $_ERRORS['dffd0d0742a28e2ced613ccf1d7229a2'] = 'Le fichier de l\'onglet ne peut être trouvé';
 $_ERRORS['e9192643ed3b0619fcd8347015806e2a'] = 'Nom de table invalide :';
 $_ERRORS['10f237be40b3205ba97da9b89d290c30'] = 'Impossible de sélectionner la base de données.';
+$_ERRORS['723c870c1b443e052e290bd96f46e977'] = 'Le champ suivant est invalide, selon la méthode Validate::';
 $_ERRORS['59e3d45dc17f2e9fc4caac2f887bd075'] = 'La fonction';
 $_ERRORS['8227e4867a9388488b04ea32665bcc18'] = 'Le répertoire du module doit avoir les droits d\'écriture';
 $_ERRORS['2031a6bfe5f5bed90694c02868ebf2ed'] = 'Le paramètre';

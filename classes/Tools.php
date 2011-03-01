@@ -493,7 +493,7 @@ class ToolsCore
 		$iso = strtolower(Language::getIsoById((is_object($cookie) AND $cookie->id_lang) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT')));
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
-		if (_PS_MODE_DEV_ AND $string == 'Fatal error')
+		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $string == 'Fatal error')
 			return ('<pre>'.print_r(debug_backtrace(), true).'</pre>');
 		if (!is_array($_ERRORS))
 			return str_replace('"', '&quot;', $string);
@@ -503,18 +503,23 @@ class ToolsCore
 	}
 
 	/**
-	* Display an error with detailed object
-	*
-	* @param object $object Object to display
-	*/
+	 * Display an error with detailed object
+	 * 
+	 * @param mixed $object 
+	 * @param boolean $kill 
+	 * @return $object if $kill = false;
+	 */
 	public static function dieObject($object, $kill = true)
 	{
-		echo '<pre style="text-align: left;">';
-		print_r($object);
-		echo '</pre><br />';
-		if ($kill)
-			die('END');
-		return ($object);
+		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $string == 'Fatal error')
+		{
+			echo '<pre style="text-align: left;">';
+			print_r($object);
+			echo '</pre><br />';
+			if ($kill)
+				die('END');
+		}
+		return $object;
 	}
 
 	/**

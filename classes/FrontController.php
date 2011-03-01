@@ -312,7 +312,7 @@ class FrontControllerCore
 				foreach ($_GET as $key => $value)
 					if (!in_array($key, $excludedKey))
 						$params .= ($params == '' ? '?' : '&').$key.'='.$value;
-				if (_PS_MODE_DEV_ AND $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
+				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.$params.'">'.$canonicalURL.$params.'</a>');
 				Tools::redirectLink($canonicalURL.$params);
 			}

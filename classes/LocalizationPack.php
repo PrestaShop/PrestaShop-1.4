@@ -51,7 +51,7 @@ class LocalizationPackCore
 			$res &= $this->_installCurrencies($xml, $install_mode);
 			$res &= $this->_installUnits($xml);
 
-			if (!_PS_MODE_DEV_)
+			if (!defined('_PS_MODE_DEV_') OR !_PS_MODE_DEV_)
 				$res &= $this->_installLanguages($xml, $install_mode);
 
 			if ($res AND isset($this->iso_code_lang))

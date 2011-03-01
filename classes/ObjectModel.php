@@ -421,8 +421,8 @@ abstract class ObjectModelCore
 					die (Tools::displayError('validation function not found').' '.$method);
 				elseif (!empty($value) AND !call_user_func(array('Validate', $method), $value))
 				{
-					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
-					return $errorReturn ? get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k : false;
+					if ($die) die (Tools::displayError('The following field is invalid according to the validate method ').'<b>'.$method.'</b>:<br/> ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
+					return $errorReturn ? Tools::displayError('The following field is invalid according to the validate method ').'<b>'.$method.'</b>:<br/> ('. get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k : false;
 				}
 		}
 		return true;
