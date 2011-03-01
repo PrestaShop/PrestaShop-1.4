@@ -275,8 +275,8 @@ class	CookieCore
 			$this->_content['date_add'] = date('Y-m-d H:i:s');
 		
 		//checks if the language exists, if not choose the default language
-		if (!Language::getLanguage((int)$this->_content['id_lang']))
-			$this->_content['id_lang'] = Configuration::get('PS_LANG_DEFAULT');
+		if (!Language::getLanguage((int)$this->id_lang))
+			$this->id_lang = Configuration::get('PS_LANG_DEFAULT');
 		
 	}
 
