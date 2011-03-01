@@ -28,6 +28,7 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_35b4b09d5d0686ec5c2e2cc9f3d9039c'
 $_MODULE['<{prestafraud}prestashop>prestafraud_e7f9e382dc50889098cbe56f2554c77b'] = 'Carte de crédit';
 $_MODULE['<{prestafraud}prestashop>prestafraud_1cf575079afed29675c47e822bc3d493'] = 'Carte de crédit en plusieurs fois';
 $_MODULE['<{prestafraud}prestashop>prestafraud_75b95ea268cb6b5baf7483aafa80d5ad'] = 'Compte prépayé (MoneyBookers, PayPal ...)';
+$_MODULE['<{prestafraud}prestashop>prestafraud_688000bea2f79c9ca3d2d1755456024f'] = 'Merci d\'accepter les termes du service.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_79d728437ce932b8194528d10a4e6fe4'] = 'Configuration de Presta-fraude';
 $_MODULE['<{prestafraud}prestashop>prestafraud_0fdc6609a76f83fb2def6a9409cc0f38'] = 'Mon magasin n\'a pas encore de compte sur Presta-fraude';
 $_MODULE['<{prestafraud}prestashop>prestafraud_3b2aee63259f6dc9b94914884474f8de'] = 'J\'ai déjà un compte';
@@ -52,6 +53,7 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_cb18f4dc13847e2ed5d69cb936f9b26c'
 $_MODULE['<{prestafraud}prestashop>prestafraud_2d9f684cd217d62388ac3f4d0345da23'] = 'Presta fraude';
 $_MODULE['<{prestafraud}prestashop>prestafraud_438858fbee224aae7b35d9ac18c554c0'] = 'Cette commande n\'a pas été envoyé à Presta fraude.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_d0c6a2fa938df84c0ce628de99c97e16'] = 'Notation:';
+$_MODULE['<{prestafraud}prestashop>prestafraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Inconnu';
 $_MODULE['<{prestafraud}prestashop>prestafraud_240f3031f25601fa128bd4e15f0a37de'] = 'Commentaire:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_b88011726eba59d6bf37f0fdec202edc'] = 'Rapporter cette commande comme une fraude à PrestaShop';
 $_MODULE['<{prestafraud}prestashop>prestafraud_a8bbb000124c9697aa5d63e7e758b64d'] = 'Retrait en magasin';

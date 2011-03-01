@@ -9,6 +9,10 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_a9db6adcdafc85c5830439401fd866f
 $_MODULE['<{shopimporter}prestashop>shopimporter_5c9ada346bd1c8b1adae50aec0e7437c'] = 'Les nouveaux langages ajouterons automatiquement les traductions';
 $_MODULE['<{shopimporter}prestashop>shopimporter_386c339d37e737a436499d423a77df0c'] = 'Devise';
 $_MODULE['<{shopimporter}prestashop>shopimporter_4234c64201820401dfa04eeb449c1bbc'] = 'Import des devises';
+$_MODULE['<{shopimporter}prestashop>shopimporter_719fec04166d6fa75f89cd29ad61fa8c'] = 'Taxes';
+$_MODULE['<{shopimporter}prestashop>shopimporter_94c5ffc9d364127b232f58b4cfd8c88a'] = 'Importer les taxes';
+$_MODULE['<{shopimporter}prestashop>shopimporter_d3352014303b292984466bbb1da371db'] = 'Règle de taxes';
+$_MODULE['<{shopimporter}prestashop>shopimporter_6ec25fc9cc7df7b0d1fce57923f46ec1'] = 'Importer les règles de taxes';
 $_MODULE['<{shopimporter}prestashop>shopimporter_b3ff996fe5c77610359114835baf9b38'] = 'Zone';
 $_MODULE['<{shopimporter}prestashop>shopimporter_21d250d17e35e3e02db9f1a618bad913'] = 'Import des zones';
 $_MODULE['<{shopimporter}prestashop>shopimporter_59716c97497eb9694541f7c3d37b1a4d'] = 'Pays';
