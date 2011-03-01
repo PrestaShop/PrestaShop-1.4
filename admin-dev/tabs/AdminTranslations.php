@@ -954,7 +954,7 @@ class AdminTranslations extends AdminTab
 			if (ini_get('suhosin.post.max_vars') < $count OR ini_get('suhosin.request.max_vars') < $count)
 			{
 				$this->suhosin_limit_exceed = true;
-				$str_output .= '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, and is limiting the maximum fields which could be posted to :').'<br/>'
+				$str_output .= '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, which limit the maximum number of fields to post in a form :').'<br/>'
 				.'<b>'.ini_get('suhosin.post.max_vars').'</b> '.$this->l('for suhosin.post.max_vars.').'<br/>'
 				.'<b>'.ini_get('suhosin.request.max_vars').'</b> '.$this->l('for suhosin.request.max_vars.').'<br/>'
 				.$this->l('Please ask your hosting provider to increase the suhosin post and request limit to')
