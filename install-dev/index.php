@@ -616,18 +616,19 @@ if ($lm->getIncludeTradFilename())
 				<?php
 
 					$modulesHelpInstall = array();
-					$modulesHelpInstall[1] = array('paypal'); // DE - Germany
-					$modulesHelpInstall[6] = array('paypal'); // ES - Spain
+					$modulesDescription = array();
+					//$modulesHelpInstall[1] = array('paypal'); // DE - Germany
+					//$modulesHelpInstall[6] = array('paypal'); // ES - Spain
 					//$modulesHelpInstall[8] = array('moneybookers', 'socolissimo'); // FR - France
-					$modulesHelpInstall[10] = array('paypal'); // IT - Italy
-					$modulesHelpInstall[17] = array('paypal'); // UK / GB - United Kingdom / Great Britain
-					$modulesHelpInstall[18] = array('paypal'); // SE - Sweden
-					$modulesHelpInstall[21] = array('paypal'); // US - USA
-					$modulesDescription = array(
-						'moneybookers' => array('name' => 'MoneyBookers', 'description' => lang('Votre solution pour accepter les paiement en ligne sans frais d\'installation, des frais bancaires réduits, déjà utilisée par plus de 13 Millions d’utilisateurs dans le monde, recevez dès maintenant vos paiements...')),
-						'socolissimo' => array('name' => 'SoColissimo', 'description' => lang('Avec So Colissimo, faites livrer vos colis là où vous le souhaitez, choisissez parmi les 5 solutions de livraison proposées pour satisfaire pleinement vos clients et leur apporter la garantie de la Poste !')),
-						'paypal' => array('name' => 'PayPal', 'description' => lang('The leading worldwide provider of internet payment solutions, no setup fee, your customers make their purchase in complete confidence. Install now (five minutes only) and be ready to start selling'), 'check' => 'http://www.prestashop.com/partner/preactivation-xml.php'),
-					);
+					//$modulesHelpInstall[10] = array('paypal'); // IT - Italy
+					//$modulesHelpInstall[17] = array('paypal'); // UK / GB - United Kingdom / Great Britain
+					//$modulesHelpInstall[18] = array('paypal'); // SE - Sweden
+					//$modulesHelpInstall[21] = array('paypal'); // US - USA
+					//$modulesDescription = array(
+					//	'moneybookers' => array('name' => 'MoneyBookers', 'description' => lang('Votre solution pour accepter les paiement en ligne sans frais d\'installation, des frais bancaires réduits, déjà utilisée par plus de 13 Millions d’utilisateurs dans le monde, recevez dès maintenant vos paiements...')),
+					//	'socolissimo' => array('name' => 'SoColissimo', 'description' => lang('Avec So Colissimo, faites livrer vos colis là où vous le souhaitez, choisissez parmi les 5 solutions de livraison proposées pour satisfaire pleinement vos clients et leur apporter la garantie de la Poste !')),
+					//	'paypal' => array('name' => 'PayPal', 'description' => lang('The leading worldwide provider of internet payment solutions, no setup fee, your customers make their purchase in complete confidence. Install now (five minutes only) and be ready to start selling'), 'check' => 'http://www.prestashop.com/partner/preactivation-xml.php'),
+					//);
 
 					foreach ($modulesDescription as $k => $v)
 						if (file_exists('partner/'.$k.'.png'))
