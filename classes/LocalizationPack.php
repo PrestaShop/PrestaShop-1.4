@@ -56,10 +56,13 @@ class LocalizationPackCore
 
 			if ($res AND isset($this->iso_code_lang))
 				Configuration::updateValue('PS_LANG_DEFAULT', (int)Language::getIdByIso($this->iso_code_lang));
-				
+
 			if ($install_mode AND $res AND isset($this->iso_currency))
+			{
 				$res &= Configuration::updateValue('PS_CURRENCY_DEFAULT', (int)Currency::getIdByIsoCode($this->iso_currency));
-			
+				Currency::refreshCurrencies();
+			}
+
 			return $res;
 		}
 		foreach ($selection AS $selected)
@@ -195,13 +198,7 @@ class LocalizationPackCore
 				$this->_errors[] = Tools::displayError('Cannot parse feed!');
 				return false;
 			}
-			if (!$defaultCurrency = (int)(Configuration::get('PS_CURRENCY_DEFAULT')))
-			{
-				$this->_errors[] = Tools::displayError('Cannot parse feed!');
-				return false;
-			}
-			$isoCodeSource = strval($feed->source['iso_code']);
-			$defaultCurrency = Currency::refreshCurrenciesGetDefault($feed->list, $isoCodeSource, $defaultCurrency);
+
 			foreach ($xml->currencies->currency AS $data)
 			{
 				$attributes = $data->attributes();
@@ -216,6 +213,7 @@ class LocalizationPackCore
 				$currency->conversion_rate = 1; // This value will be updated if the store is online
 				$currency->format = (int)($attributes['format']);
 				$currency->decimals = (int)($attributes['decimals']);
+				$currency->active = $install_mode;
 				if (!$currency->validateFields())
 				{
 					$this->_errors[] = Tools::displayError('Invalid currency properties.');
@@ -229,13 +227,14 @@ class LocalizationPackCore
 						return false;
 					}
 				}
-				$currency->refreshCurrency($feed->list, $isoCodeSource, $defaultCurrency);
 			}
+
+			Currency::refreshCurrencies();
+
+			if (!sizeof($this->_errors) AND $install_mode AND isset($attributes['iso_code']) AND sizeof($xml->currencies->currency) == 1)
+				$this->iso_currency = $attributes['iso_code'];
 		}
-		
-		if (!sizeof($this->_errors) AND $install_mode AND isset($attributes['iso_code']) AND sizeof($xml->currencies->currency) == 1)
-			$this->iso_currency = $attributes['iso_code'];
-			
+
 		return true;
 	}
 

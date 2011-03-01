@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -40,7 +40,7 @@ class CurrencyCore extends ObjectModel
 
 	/** @var string Symbol for short display */
 	public 		$sign;
-	
+
 	/** @var int bool used for displaying blank between sign and price */
 	public		$blank;
 
@@ -55,7 +55,7 @@ class CurrencyCore extends ObjectModel
 
 	/** @var int bool Display decimals on prices */
 	public		$decimals;
-	
+
 	/** @var int bool active */
 	public		$active;
 
@@ -63,35 +63,35 @@ class CurrencyCore extends ObjectModel
  	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'iso_code_num' => 3, 'sign' => 8);
  	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'iso_code_num' => 'isNumericIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
 		'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool', 'active' => 'isBool');
-	
+
 	protected 	$table = 'currency';
 	protected 	$identifier = 'id_currency';
-	
+
 	/** @var Currency Current currency */
 	static protected	$current = NULL;
 	/** @var array Currency cache */
 	static protected	$currencies = array();
-	
+
 	protected	$webserviceParameters = array(
 		'fields' => array(
 		),
 	);
 
-	
+
 	/**
 	 * Overriding check if currency with the same iso code already exists.
 	 * If it's true, currency is doesn't added.
-	 * 
+	 *
 	 * @see ObjectModelCore::add()
 	 */
 	public function add($autodate = true, $nullValues = false)
 	{
 		return Currency::exists($this->iso_code) ? false : parent::add();
 	}
-	
+
 	/**
 	 * Check if a curency already exists.
-	 * 
+	 *
 	 * @param int|string $iso_code int for iso code number string for iso code
 	 * @return boolean
 	 */
@@ -101,7 +101,7 @@ class CurrencyCore extends ObjectModel
 			$id_currency_exists = Currency::getIdByIsoCodeNum($iso_code);
 		else
 			$id_currency_exists = Currency::getIdByIsoCode($iso_code);
-		
+
 		if ($id_currency_exists){
 			return true;
 		} else {
@@ -196,7 +196,7 @@ class CurrencyCore extends ObjectModel
 				$tab[$key] = Currency::getCurrencyInstance($currency['id_currency']);
 		return $tab;
 	}
-	
+
 	static public function getPaymentCurrenciesSpecial($id_module)
 	{
 		return Db::getInstance()->getRow('
@@ -204,7 +204,7 @@ class CurrencyCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'module_currency` mc
 		WHERE mc.`id_module` = '.(int)($id_module));
 	}
-	
+
 	static public function getPaymentCurrencies($id_module)
 	{
 		return Db::getInstance()->ExecuteS('
@@ -215,7 +215,7 @@ class CurrencyCore extends ObjectModel
 		AND mc.`id_module` = '.(int)($id_module).'
 		ORDER BY c.`name` ASC');
 	}
-	
+
 	static public function checkPaymentCurrencies($id_module)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -232,7 +232,7 @@ class CurrencyCore extends ObjectModel
 		WHERE `deleted` = 0
 		AND `id_currency` = '.(int)($id_currency));
 	}
-	
+
 	static public function getIdByIsoCode($iso_code)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -252,25 +252,56 @@ class CurrencyCore extends ObjectModel
 		return (int)$result['id_currency'];
 	}
 
+	/**
+	* Refresh the currency conversion rate
+	* The XML file define conversion rate for each from a default currency ($isoCodeSource).
+	*
+	* @param $data XML content which contains all the conversion rates
+	* @param $isoCodeSource The default currency used in the XML file
+	* @param $defaultCurrency The default currency object
+	*/
 	public function refreshCurrency($data, $isoCodeSource, $defaultCurrency)
 	{
-		if ($this->iso_code != $isoCodeSource)
+		// fetch the conversion rate of the default currency
+		$conversion_rate = 1;
+		if ($defaultCurrency->iso_code != $isoCodeSource)
 		{
-			/* Seeking for rate in feed */
-			foreach ($data->currency AS $obj)
-				if ($this->iso_code == strval($obj['iso_code']))
-					$this->conversion_rate = round((float)($obj['rate']) /  $defaultCurrency->conversion_rate, 6);
+			foreach ($data->currency AS $currency)
+				if ($currency['iso_code'] == $defaultCurrency->iso_code)
+				{
+					$conversion_rate = round((float)$currency['rate'], 6);
+					break;
+				}
 		}
+
+		if ($defaultCurrency->iso_code == $this->iso_code)
+			$this->conversion_rate = 1;
 		else
 		{
-			/* If currency is like isoCodeSource, setting it to default conversion rate */
-			$this->conversion_rate = round(1 / (float)($defaultCurrency->conversion_rate), 6);
+			if ($this->iso_code == $isoCodeSource)
+				$rate = 1;
+			else
+			{
+				foreach ($data->currency AS $obj)
+					if ($this->iso_code == strval($obj['iso_code']))
+					{
+						$rate = (float) $obj['rate'];
+						break;
+					}
+			}
+
+			$this->conversion_rate = round($rate /  $conversion_rate, 6);
 		}
 		$this->update();
 	}
 
+	/**
+ 	* @deprecated
+	**/
 	static public function refreshCurrenciesGetDefault($data, $isoCodeSource, $idCurrency)
 	{
+		Tools::displayAsDeprecated();
+
 		$defaultCurrency = new Currency($idCurrency);
 
 		/* Change defaultCurrency rate if not as currency of feed source */
@@ -278,27 +309,41 @@ class CurrencyCore extends ObjectModel
 			foreach ($data->currency AS $obj)
 				if ($defaultCurrency->iso_code == strval($obj['iso_code']))
 					$defaultCurrency->conversion_rate = round((float)($obj['rate']), 6);
+
 		return $defaultCurrency;
+	}
+
+	public static function getDefaultCurrency()
+	{
+		$id_currency = (int)Configuration::get('PS_CURRENCY_DEFAULT');
+		if ($id_currency == 0)
+			return false;
+
+		return new Currency($id_currency);
 	}
 
 	static public function refreshCurrencies()
 	{
+		// Parse
 		if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml'))
 			return Tools::displayError('Cannot parse feed!');
-		if (!$defaultCurrency = (int)(Configuration::get('PS_CURRENCY_DEFAULT')))
-			return Tools::displayError('No default currency!');
+
+		// Default feed currency (EUR)
 		$isoCodeSource = strval($feed->source['iso_code']);
+
+		if (!$default_currency = self::getDefaultCurrency())
+			return Tools::displayError('No default currency!');
+
 		$currencies = self::getCurrencies(true);
-		$defaultCurrency = self::refreshCurrenciesGetDefault($feed->list, $isoCodeSource, $defaultCurrency);
 		foreach ($currencies as $currency)
-			if ($currency->iso_code != $defaultCurrency->iso_code)
-				$currency->refreshCurrency($feed->list, $isoCodeSource, $defaultCurrency);
+			$currency->refreshCurrency($feed->list, $isoCodeSource, $default_currency);
+
 	}
 
 	static public function getCurrent()
 	{
 		global $cookie;
-		
+
 		if (!self::$current)
 		{
 			if (isset($cookie->id_currency) AND $cookie->id_currency)
@@ -316,5 +361,4 @@ class CurrencyCore extends ObjectModel
 		return self::$currencies[(int)($id)];
 	}
 }
-
 

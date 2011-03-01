@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -111,12 +111,7 @@ class AdminCurrencies extends AdminTab
 			{
 				Configuration::updateValue($key, $field['cast'](Tools::getValue($key)));
 				if ($key == 'PS_CURRENCY_DEFAULT')
-				{
-					// @Todo: update the former default currency conversion rate and every cached conversion_rate in tables orders and order_slip
-					$currency = new Currency($field['cast'](Tools::getValue($key)));
-					$currency->conversion_rate = 1;
-					$currency->update();
-				}
+					Currency::refreshCurrencies();
 			}
 			Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
 		}
@@ -235,5 +230,4 @@ class AdminCurrencies extends AdminTab
 		</form>';
 	}
 }
-
 
