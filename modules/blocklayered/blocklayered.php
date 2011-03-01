@@ -97,10 +97,10 @@ class BlockLayered extends Module
 
 		/* First we need to get all subcategories of current category */
 		$layeredSubcategories = $this->_getLayeredSubcategories((int)$id_parent);
-
+		
 		/* If we have no results, we should get one level higher */
-		if (!sizeof($layeredSubcategories))
-			$layeredSubcategories[0] = array('id_category' => (int)$id_parent, 'subcategories' => '', 'subcategoriesArray' => array(), 'n' => 0);
+		/* if (!sizeof($layeredSubcategories))
+			$layeredSubcategories[0] = array('id_category' => (int)$id_parent, 'subcategories' => '', 'subcategoriesArray' => array(), 'n' => 0); */
 
 		$categoriesId = (int)$id_parent;
 		foreach ($layeredSubcategories AS &$layeredSubcategory)
@@ -202,7 +202,7 @@ class BlockLayered extends Module
 				$layeredAttributesIds[] = (int)$layeredAttribute['id_attribute_group'];
 			
 			$layeredAttributeGroups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT a.id_attribute_group, ag.is_color_group, a.id_attribute, al.name, agl.name name_group, a.color, pa.id_product
+			SELECT a.id_attribute_group, ag.is_color_group, a.id_attribute, al.name, agl.public_name name_group, a.color, pa.id_product
 			FROM '._DB_PREFIX_.'attribute_group ag
 			LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
 			LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
@@ -240,7 +240,7 @@ class BlockLayered extends Module
 		SELECT fp.id_feature
 		FROM '._DB_PREFIX_.'feature_product fp
 		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value)
-		WHERE fv.custom = 0 AND fp.id_product IN ('.implode(',', $productIds).')
+		WHERE (fv.custom = 0 OR fv.custom IS NULL) AND fp.id_product IN ('.implode(',', $productIds).')
 		GROUP BY fp.id_feature');
 		
 		$sortedLayeredFeatures = array();
@@ -256,7 +256,7 @@ class BlockLayered extends Module
 			LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature = fl.id_feature)
 			LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
 			LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_feature_value = fv.id_feature_value AND fp.id_product IN ('.implode(',', $productIds).'))
-			WHERE fv.custom = 0 AND fl.id_feature IN ('.implode(',', $layeredFeaturesIds).') 
+			WHERE (fv.custom = 0 OR fv.custom IS NULL) AND fl.id_feature IN ('.implode(',', $layeredFeaturesIds).') 
 			AND fl.id_lang = '.(int)$cookie->id_lang.' AND fvl.id_lang = '.(int)$cookie->id_lang);
 			
 			foreach ($layeredFeatures AS $layeredFeature)

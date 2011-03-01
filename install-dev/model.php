@@ -25,6 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+max_execution_time(0);
 require(dirname(__FILE__).'/../config/autoload.php');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */

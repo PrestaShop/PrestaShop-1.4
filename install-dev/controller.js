@@ -879,8 +879,8 @@ function doUpgrade()
 		},
 		error: function (data, status, e)
 		{
-			$("#resultUpdate").html("Ajax error: " + status);
-			$("#detailsError").html(data);
+			$('#resultUpdate').html('<p>Error during install/upgrade: <b style="color: #D41958; font-weight: bold;">'+data.responseText.replace(/<\/?[^>]+>/gi, '')+'</b><br /><br />You may have to:<br /><ol><li>Fix the error(s) displayed</li><li>Put your database backup</li><li>Modify the file settings.inc.php to put the old version for the line with _PS_VERSION_</li><li>Restart the upgrade process from the begining</li></ol></p>');
+			$('#detailsError').html(data);
 			showStep(8);
 		}
 	});
