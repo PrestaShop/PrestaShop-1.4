@@ -34,7 +34,7 @@ class BestSalesControllerCore extends FrontController
 		parent::__construct();
 	}
 	
-	public function preProcess()
+	public function process()
 	{
 		$this->productSort();
 		$nbProducts = (int)(ProductSale::getNbSales());
