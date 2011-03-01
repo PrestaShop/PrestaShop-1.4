@@ -243,6 +243,7 @@ class	CookieCore
 	  */
 	function update($nullValues = false)
 	{
+		
 		if (isset($_COOKIE[$this->_name]))
 		{
 			/* Decrypt cookie content */
@@ -253,14 +254,12 @@ class	CookieCore
 
 			/* Unserialize cookie content */
 			$tmpTab = explode('¤', $content);
-
 			foreach ($tmpTab AS $keyAndValue)
 			{
 				$tmpTab2 = explode('|', $keyAndValue);
 				if (sizeof($tmpTab2) == 2)
 					 $this->_content[$tmpTab2[0]] = $tmpTab2[1];
 			 }
-
 			/* Blowfish fix */
 			if (isset($this->_content['checksum']))
 				$this->_content['checksum'] = (int)($this->_content['checksum']);
@@ -274,6 +273,11 @@ class	CookieCore
 		}
 		else
 			$this->_content['date_add'] = date('Y-m-d H:i:s');
+		
+		//checks if the language exists, if not choose the default language
+		if (!Language::getLanguage((int)$this->_content['id_lang']))
+			$this->_content['id_lang'] = Configuration::get('PS_LANG_DEFAULT');
+		
 	}
 
 	/**
