@@ -409,6 +409,7 @@ $_LANGADM['AdminCurrencies00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
 $_LANGADM['AdminCurrenciesb67536699de7bf5ddd53bd913e87758a'] = 'Préférences devises';
 $_LANGADM['AdminCurrencies8e10808175a8d945d13bab31fb2e2663'] = 'Devise par défaut:';
 $_LANGADM['AdminCurrencies36144ac2644548932977cc36677c1698'] = 'Devise par défaut utilisée dans la boutique';
+$_LANGADM['AdminCurrenciescc2f0a18cb0448ca2101f93be765e487'] = 'Si vous changez la monnaie par défaut, vous devrez éditer manuellement le prix de chaque produit.';
 $_LANGADM['AdminCurrencies795b18173b4ddc7ea79c606ccd0f3feb'] = 'Vous ne pouvez pas supprimer la devise par défaut';
 $_LANGADM['AdminCurrenciese7e915ec26ac2be5f5730752e5fc3b78'] = 'Vous ne pouvez pas désactiver la devise par défaut';
 $_LANGADM['AdminCurrencies77428b04a1847555eb9bc52422a377b0'] = 'Taux de change';

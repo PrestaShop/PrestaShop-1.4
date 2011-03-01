@@ -48,7 +48,15 @@ class AdminCurrencies extends AdminTab
 
 		$this->optionTitle = $this->l('Currencies options');
 		$this->_fieldsOptions = array(
-			'PS_CURRENCY_DEFAULT' => array('title' => $this->l('Default currency:'), 'desc' => $this->l('The default currency used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_currency', 'list' => Currency::getCurrencies()),
+			'PS_CURRENCY_DEFAULT' => array(
+				'title' => $this->l('Default currency:'),
+				'desc' => $this->l('The default currency used in shop')
+					.'<div class=warn"><img src="../img/admin/warn2.png" />'.$this->l('If you change default currency, you will have to manually edit every product price.').'</div>',
+					'cast' => 'intval',
+					'type' => 'select',
+					'identifier' => 'id_currency',
+					'list' => Currency::getCurrencies()
+				),
 		);
 		$this->_where = 'AND a.`deleted` = 0';
 
@@ -104,7 +112,7 @@ class AdminCurrencies extends AdminTab
 				Configuration::updateValue($key, $field['cast'](Tools::getValue($key)));
 				if ($key == 'PS_CURRENCY_DEFAULT')
 				{
-					// Todo: update the former default currency conversion rate and every cached conversion_rate in tables orders and order_slip
+					// @Todo: update the former default currency conversion rate and every cached conversion_rate in tables orders and order_slip
 					$currency = new Currency($field['cast'](Tools::getValue($key)));
 					$currency->conversion_rate = 1;
 					$currency->update();
