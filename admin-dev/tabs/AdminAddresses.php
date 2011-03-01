@@ -350,12 +350,18 @@ class AdminAddresses extends AdminTab
 		echo '
 				<script type="text/javascript">
 				$(document).ready(function(){
+					ajaxStates ();
 					$(\'#id_country\').change(function() {
+						ajaxStates ();
+					});
+					function ajaxStates ()
+					{
 						$.ajax({
 						  url: "ajax.php",
 						  cache: false,
 						  data: "ajaxStates=1&id_country="+$(\'#id_country\').val()+"&id_state="+$(\'#id_state\').val(),
-						  success: function(html){
+						  success: function(html)
+						  {
 						  	if (html == \'false\')
 						  		$("#contains_states").fadeOut();
 						  	else
@@ -363,25 +369,20 @@ class AdminAddresses extends AdminTab
 						  		$("#id_state").html(html);
 						  		$("#contains_states").fadeIn();
 						  	}
-								
 						  }
 						});
-
 						$.ajax({
 							type: "GET",
 							url: "'._MODULE_DIR_.'vatnumber/ajax.php?id_country="+$(\'#id_country\').val(),
-							success: function(isApplicable){
+							success: function(isApplicable)
+							{
 								if(isApplicable == 1)
-								{
 									$(\'#vat_area\').show();
-								}
 								else
-								{
 									$(\'#vat_area\').hide();
-								}
 							}
 						});
-					});
+					};
 				});
 				</script>
 				<div id="contains_states" '.(!Country::containsStates((int)$selectedCountry) ? 'style="display:none;"' : '').'>
