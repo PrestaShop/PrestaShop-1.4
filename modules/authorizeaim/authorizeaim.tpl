@@ -61,7 +61,7 @@
 				{/foreach}
 
 				<label style="margin-left: 50px;display: block;width: 85px;float: left;">{l s='Full name' mod='authorizeaim'}</label> <input type="text" name="name" size="20" maxlength="25S" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
-				<label style="margin-left: 50px;display: block;width: 85px;float: left;">{l s='Card number' mod='authorizeaim'}</label> <input type="text" id="ccn" name="x_card_num" size="14" maxlength="14" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
+				<label style="margin-left: 50px;display: block;width: 85px;float: left;">{l s='Card number' mod='authorizeaim'}</label> <input type="text" id="ccn" name="x_card_num" size="16" maxlength="16" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
 				<label style="margin-left: 50px;display: block;width: 85px;float: left;">{l s='Expiration date' mod='authorizeaim'}</label> 
 				<select name="x_exp_date_m" style="width: 40px;">{section name=date_m start=01 loop=32}
 					<option value="{$smarty.section.date_m.index}">{$smarty.section.date_m.index}</option>{/section}
