@@ -153,18 +153,31 @@ class AdminStores extends AdminTab
 			return;
 		echo '
 		<script type="text/javascript">
-			function populateStates(id_country, id_state)
-			{
-				$.ajax({
-				  url: "ajax.php",
-				  cache: false,
-				  data: "ajaxStates=1&id_country="+id_country+"&id_state="+id_state,
-				  success: function(html){
-					$("#id_state").html(html);
-				  }
+				$(document).ready(function(){
+					ajaxStates ();
+					$(\'#id_country\').change(function() {
+						ajaxStates ();
+					});
+					function ajaxStates ()
+					{
+						$.ajax({
+						  url: "ajax.php",
+						  cache: false,
+						  data: "ajaxStates=1&id_country="+$(\'#id_country\').val()+"&id_state="+$(\'#id_state\').val(),
+						  success: function(html)
+						  {
+						  	if (html == \'false\')
+						  		$("#contains_states").fadeOut();
+						  	else
+						  	{
+						  		$("#id_state").html(html);
+						  		$("#contains_states").fadeIn();
+						  	}
+						  }
+						});
+					};
 				});
-			}
-		</script>
+				</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset>
@@ -194,19 +207,18 @@ class AdminStores extends AdminTab
 					</div>
 					<label>'.$this->l('Country:').'</label>
 					<div class="margin-form">
-						<select name="id_country" id="id_country" onchange="populateStates($(this).val(), '.(int)($this->getFieldValue($obj, 'id_state')).');" />';
+						<select name="id_country" id="id_country"/>';
 			$selectedCountry = $this->getFieldValue($obj, 'id_country');
 			foreach ($this->countriesArray AS $id_country => $name)
 				echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
 			echo '		</select> <sup>*</sup>
 					</div>
-					<script type="text/javascript">
-						populateStates('.(int)($this->getFieldValue($obj, 'id_country')).', '.(int)($this->getFieldValue($obj, 'id_state')).');
-					</script>
-					<label>'.$this->l('State:').'</label>
-					<div class="margin-form">
-						<select name="id_state" id="id_state">
-						</select> <sup>*</sup>
+					<div id="contains_states">
+						<label>'.$this->l('State:').'</label>
+						<div class="margin-form">
+							<select name="id_state" id="id_state">
+							</select> <sup>*</sup>
+						</div>
 					</div>
 					<label>'.$this->l('Latitude / Longitude:').'</label>
 					<div class="margin-form">
