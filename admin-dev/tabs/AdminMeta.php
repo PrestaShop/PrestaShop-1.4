@@ -148,7 +148,7 @@ class AdminMeta extends AdminTab
 	
 	public function postProcess()
 	{
-		if (count($_POST) > 0)
+		if (Tools::isSubmit('submitAddmeta'))
 		{
 			$langs = Language::getLanguages(true);
 			$default_language = Configuration::get('PS_LANG_DEFAULT');
