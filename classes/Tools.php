@@ -107,11 +107,11 @@ class ToolsCore
 
 	/**
 	 * getHttpHost return the <b>current</b> host used, with the protocol (http or https) if $http is true
-	 * This function should not be used to choose http or https domain name. 
+	 * This function should not be used to choose http or https domain name.
 	 * Use Tools::getShopDomain() or Tools::getShopDomainSsl instead
 	 *
-	 * @param boolean $http 
-	 * @param boolean $entities 
+	 * @param boolean $http
+	 * @param boolean $entities
 	 * @return void
 	 */
 	public static function getHttpHost($http = false, $entities = false)
@@ -126,9 +126,9 @@ class ToolsCore
 
 	/**
 	 * getShopDomain return domain name according to configuration
-	 * 
+	 *
 	 * @param boolean $http if true, return domain name with protocol
-	 * @param boolean $entities if true, 
+	 * @param boolean $entities if true,
 	 * @return void
 	 */
 	public static function getShopDomain($http = false, $entities = false)
@@ -489,7 +489,7 @@ class ToolsCore
 	public static function displayError($string = 'Fatal error', $htmlentities = true)
 	{
 		global $_ERRORS, $cookie;
-		
+
 		$iso = strtolower(Language::getIsoById((is_object($cookie) AND $cookie->id_lang) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT')));
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
@@ -504,14 +504,14 @@ class ToolsCore
 
 	/**
 	 * Display an error with detailed object
-	 * 
-	 * @param mixed $object 
-	 * @param boolean $kill 
+	 *
+	 * @param mixed $object
+	 * @param boolean $kill
 	 * @return $object if $kill = false;
 	 */
 	public static function dieObject($object, $kill = true)
 	{
-		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $string == 'Fatal error')
+		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
 		{
 			echo '<pre style="text-align: left;">';
 			print_r($object);
@@ -1046,7 +1046,7 @@ class ToolsCore
 	public static function getTimezones($select = false)
 	{
 		Tools::displayAsDeprecated();
-		
+
 		static $_cache = 0;
 
 		// One select
@@ -1075,7 +1075,7 @@ class ToolsCore
 	public static function ps_set_magic_quotes_runtime($var)
 	{
 		Tools::displayAsDeprecated();
-		
+
 		if (function_exists('set_magic_quotes_runtime'))
 			set_magic_quotes_runtime($var);
 	}
@@ -1652,7 +1652,7 @@ FileETag INode MTime Size
 		{
 			$comment = false;
 			$out = '$x=';
-			
+
 			for ($i=0; $i<strlen($json); $i++)
 			{
 				if (!$comment)
@@ -1731,9 +1731,9 @@ FileETag INode MTime Size
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
 			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
-			
+
 			$message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
-			
+
 			Logger::addLog($message, 3, $callee['class']);
 		}
 	}
@@ -1748,7 +1748,7 @@ FileETag INode MTime Size
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
 			trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
-			
+
 			$message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
 			Logger::addLog($message, 3, $callee['class']);
 		}
