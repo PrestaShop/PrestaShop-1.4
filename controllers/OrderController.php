@@ -69,8 +69,6 @@ class OrderControllerCore extends ParentOrderController
 		if (!self::$cookie->isLogged(true) AND in_array($this->step, array(1, 2, 3)))
 			Tools::redirect('authentication.php?back=order.php?step='.$this->step);
 
-		self::$smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
-
 		if ($this->nbProducts)
 			self::$smarty->assign('virtual_cart', $isVirtualCart);
 	}
@@ -246,8 +244,6 @@ class OrderControllerCore extends ParentOrderController
 		$this->_assignWrappingAndTOS();
 
 		self::$smarty->assign('is_guest' ,(isset(self::$cookie->is_guest) ? self::$cookie->is_guest : 0));
-		self::$smarty->assign('displayVouchers', Discount::getVouchersToCartDisplay((int)(self::$cookie->id_lang), (isset(self::$cookie->id_customer) ? (int)(self::$cookie->id_customer) : 0)));
-		self::$smarty->assign('voucherAllowed', Configuration::get('PS_VOUCHERS'));
 	}
 
 	/* Payment step */
@@ -257,17 +253,16 @@ class OrderControllerCore extends ParentOrderController
 
 		// Redirect instead of displaying payment modules if any module are grefted on
 		Hook::backBeforePayment('order.php?step=3');
-
+		
 		/* We may need to display an order summary */
 		self::$smarty->assign(self::$cart->getSummaryDetails());
-
-		self::$cookie->checkedTOS = '1';
 		self::$smarty->assign(array(
-		    'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
-			'HOOK_PAYMENT' => Module::hookExecPayment(),
 			'total_price' => (float)($orderTotal),
 			'taxes_enabled' => (int)(Configuration::get('PS_TAX'))
 		));
+		self::$cookie->checkedTOS = '1';
+		
+		parent::_assignPayment();
 	}
 }
 

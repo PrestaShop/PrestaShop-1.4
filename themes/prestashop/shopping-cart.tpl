@@ -285,7 +285,7 @@
 </div>
 {/if}
 <div id="HOOK_SHOPPING_CART">{$HOOK_SHOPPING_CART}</div>
-{if ($carrier->id AND !isset($virtualCart)) OR $delivery->id OR $invoice->id}
+{if (($carrier->id AND !isset($virtualCart)) OR $delivery->id OR $invoice->id) AND !$opc}
 <div class="order_delivery">
 	{if $delivery->id}
 	<ul id="delivery_address" class="address item">
@@ -319,7 +319,7 @@
 </div>
 {/if}
 <p class="cart_navigation">
-	<a href="{$link->getPageLink('order.php', true)}?step=1{if $back}&amp;back={$back}{/if}" class="exclusive" title="{l s='Next'}">{l s='Next'} &raquo;</a>
+	{if !$opc}<a href="{$link->getPageLink('order.php', true)}?step=1{if $back}&amp;back={$back}{/if}" class="exclusive" title="{l s='Next'}">{l s='Next'} &raquo;</a>{/if}
 	<a href="{if (isset($smarty.server.HTTP_REFERER) && strstr($smarty.server.HTTP_REFERER, 'order.php')) || !isset($smarty.server.HTTP_REFERER)}{$link->getPageLink('index.php')}{else}{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|secureReferrer}{/if}" class="button_large" title="{l s='Continue shopping'}">&laquo; {l s='Continue shopping'}</a>
 </p>
 <p class="clear"><br /><br /></p>

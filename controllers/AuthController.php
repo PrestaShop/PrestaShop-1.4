@@ -82,12 +82,18 @@ class AuthControllerCore extends FrontController
 
 			/* Preparing customer */
 			$customer = new Customer();
+			$lastnameAddress = $_POST['lastname'];
+			$firstnameAddress = $_POST['firstname'];
+			$_POST['lastname'] = $_POST['customer_lastname'];
+			$_POST['firstname'] = $_POST['customer_firstname'];
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
 			$this->errors = array_unique(array_merge($this->errors, $customer->validateControler()));
 			
 			/* Preparing address */
 			$address = new Address();
+			$_POST['lastname'] = $lastnameAddress;
+			$_POST['firstname'] = $firstnameAddress;
 			$address->id_customer = 1;
 			$this->errors = array_unique(array_merge($this->errors, $address->validateControler()));
 

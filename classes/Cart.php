@@ -163,6 +163,7 @@ class CartCore extends ObjectModel
 	public function update($nullValues = false)
 	{
 		self::$_nbProducts = NULL;
+		$this->_products = NULL;
 		$return = parent::update();
 		Module::hookExec('cart');
 		return $return;

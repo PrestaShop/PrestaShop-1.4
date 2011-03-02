@@ -123,6 +123,8 @@ class ParentOrderControllerCore extends FrontController
 			if ($isVirtualCart = self::$cart->isVirtualCart())
 				$this->_setNoCarrier();
 		}
+		
+		self::$smarty->assign('back', Tools::safeOutput(Tools::getValue('back')));
 	}
 	
 	public function setMedia()
@@ -205,9 +207,14 @@ class ParentOrderControllerCore extends FrontController
 				self::$cart->gift_message = strip_tags($_POST['gift_message']);
 		}
 		
-		$address = new Address((int)(self::$cart->id_address_delivery));
-		if (!($id_zone = Address::getZoneById($address->id)))
-			$this->errors[] = Tools::displayError('no zone match with your address');
+		if (isset(self::$cookie->id_customer) AND self::$cookie->id_customer)
+		{
+			$address = new Address((int)(self::$cart->id_address_delivery));
+			if (!($id_zone = Address::getZoneById($address->id)))
+				$this->errors[] = Tools::displayError('no zone match with your address');
+		}
+		else
+			$id_zone = Country::getIdZone((int)Configuration::get('PS_COUNTRY_DEFAULT'));
 			
 		if (Validate::isInt(Tools::getValue('id_carrier')) AND sizeof(Carrier::checkCarrierZone((int)(Tools::getValue('id_carrier')), (int)($id_zone))))
 			self::$cart->id_carrier = (int)(Tools::getValue('id_carrier'));
@@ -362,6 +369,14 @@ class ParentOrderControllerCore extends FrontController
 			'gift_wrapping_price' => (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE')),
 			'total_wrapping_cost' => Tools::convertPrice($wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))),
 			'total_wrapping_tax_exc_cost' => Tools::convertPrice($wrapping_fees, new Currency((int)(self::$cookie->id_currency)))));
+	}
+	
+	protected function _assignPayment()
+	{
+		self::$smarty->assign(array(
+		    'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
+			'HOOK_PAYMENT' => Module::hookExecPayment()
+		));
 	}
 	
 	/**
