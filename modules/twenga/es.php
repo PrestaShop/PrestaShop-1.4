@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{twenga}prestashop>twenga_400b0c914f01bcecf50b936e652695b2'] = 'El API de Twenga';
 $_MODULE['<{twenga}prestashop>twenga_aa2bebad4fe3e659723e56cc7fcc6b1c'] = 'Exporte sus productos en Twenga.com y utilice el Tracker de Twenga para los pedidos de sus consumidores.';
+$_MODULE['<{twenga}prestashop>twenga_2034864b8a4fce12f3621b7ec8912e95'] = 'El módulo Twenga sólo funciona en determinados países (lista de códigos ISO:';
 $_MODULE['<{twenga}prestashop>twenga_69e591b18e717d483dbaa8e3ce89ce59'] = 'Los parámetros no son autorizados (ver detalles):';
 $_MODULE['<{twenga}prestashop>twenga_75a462904fadc0cc16d084efaef4a9d0'] = 'Se ha producido un error con un método de API Twenga (ver detalles):';
 $_MODULE['<{twenga}prestashop>twenga_cecc441ee7cb4cbbf1953d44018706de'] = 'Su “Haskell” no es válido: Compruebe el email enviado por Twenga.';

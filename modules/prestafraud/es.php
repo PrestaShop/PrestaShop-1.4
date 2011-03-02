@@ -53,7 +53,7 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_cb18f4dc13847e2ed5d69cb936f9b26c'
 $_MODULE['<{prestafraud}prestashop>prestafraud_2d9f684cd217d62388ac3f4d0345da23'] = 'Presta fraude';
 $_MODULE['<{prestafraud}prestashop>prestafraud_438858fbee224aae7b35d9ac18c554c0'] = 'Este pedido no se ha enviado a Presta fraude.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_d0c6a2fa938df84c0ce628de99c97e16'] = 'Nota:';
-$_MODULE['<{prestafraud}prestashop>prestafraud_01ae2e552c349bd5608af0f670f8ebc2'] = 'N/A';
+$_MODULE['<{prestafraud}prestashop>prestafraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Desconocido';
 $_MODULE['<{prestafraud}prestashop>prestafraud_240f3031f25601fa128bd4e15f0a37de'] = 'Comentario:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_b88011726eba59d6bf37f0fdec202edc'] = 'Notificar este pedido como un fraude a PrestaShop';
 $_MODULE['<{prestafraud}prestashop>prestafraud_a8bbb000124c9697aa5d63e7e758b64d'] = 'Recoger en tienda';
