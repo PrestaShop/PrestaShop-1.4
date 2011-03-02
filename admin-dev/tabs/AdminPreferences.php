@@ -177,6 +177,8 @@ class AdminPreferences extends AdminTab
 				if (!preg_match('/^\..*/', $file))
 						$smarty->clearCache($file);
 		}
+		else
+			$smarty->clear_all_cache();
 
 		/* Check required fields */
 		foreach ($fields AS $field => $values)
