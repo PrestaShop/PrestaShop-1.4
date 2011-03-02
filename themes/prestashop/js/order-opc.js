@@ -176,7 +176,7 @@ function updateCarrierSelectionAndGift()
 	if ($('input#gift:checked').length)
 	{
 		gift = 1;
-		giftMessage = encodeURI($('textarea#gift_message').val());
+		giftMessage = encodeURIComponent($('textarea#gift_message').val());
 	}
 	
 	if ($('input[name=id_carrier]:checked').length)
@@ -240,7 +240,7 @@ function confirmFreeOrder()
 			if (array_split[0] === 'freeorder')
 	   		{
 	   			if (isGuest)
-	   				document.location.href = guestTrackingUrl+'?id_order='+encodeURI(array_split[1])+'&email='+encodeURI(array_split[2]);
+	   				document.location.href = guestTrackingUrl+'?id_order='+encodeURIComponent(array_split[1])+'&email='+encodeURIComponent(array_split[2]);
 	   			else
 	   				document.location.href = historyUrl;
 	   		}
@@ -254,20 +254,20 @@ function saveAddress(type)
 	if (type != 'delivery' && type != 'invoice')
 		return false;
 	
-	var params = 'firstname='+encodeURI($('#firstname'+(type == 'invoice' ? '_invoice' : '')).val())+'&lastname='+encodeURI($('#lastname'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'company='+encodeURI($('#company'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'vat_number='+encodeURI($('#vat_number'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'dni='+encodeURI($('#dni'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'address1='+encodeURI($('#address1'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'address2='+encodeURI($('#address2'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'postcode='+encodeURI($('#postcode'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'city='+encodeURI($('#city'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'id_country='+encodeURI($('#id_country'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'id_state='+encodeURI($('#id_state'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'other='+encodeURI($('#other'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'phone='+encodeURI($('#phone'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'phone_mobile='+encodeURI($('#phone_mobile'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
-	params += 'alias='+encodeURI($('#alias'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	var params = 'firstname='+encodeURIComponent($('#firstname'+(type == 'invoice' ? '_invoice' : '')).val())+'&lastname='+encodeURIComponent($('#lastname'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'company='+encodeURIComponent($('#company'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'vat_number='+encodeURIComponent($('#vat_number'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'dni='+encodeURIComponent($('#dni'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'address1='+encodeURIComponent($('#address1'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'address2='+encodeURIComponent($('#address2'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'postcode='+encodeURIComponent($('#postcode'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'city='+encodeURIComponent($('#city'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'id_country='+encodeURIComponent($('#id_country'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'id_state='+encodeURIComponent($('#id_state'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'other='+encodeURIComponent($('#other'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'phone='+encodeURIComponent($('#phone'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'phone_mobile='+encodeURIComponent($('#phone_mobile'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
+	params += 'alias='+encodeURIComponent($('#alias'+(type == 'invoice' ? '_invoice' : '')).val())+'&';
 	// Clean the last &
 	params = params.substr(0, params.length-1);
 
@@ -385,7 +385,7 @@ $(function() {
 				async: false,
 				cache: false,
 				dataType : "json",
-				data: 'SubmitLogin=true&ajax=true&email='+encodeURI($('#login_email').val())+'&passwd='+encodeURI($('#passwd').val())+'&token=' + static_token ,
+				data: 'SubmitLogin=true&ajax=true&email='+encodeURIComponent($('#login_email').val())+'&passwd='+encodeURIComponent($('#passwd').val())+'&token=' + static_token ,
 				success: function(jsonData)
 				{
 					if (jsonData.hasError)
@@ -486,23 +486,23 @@ $(function() {
 				if ($(this).is('input[type=checkbox]'))
 				{
 					if ($(this).is(':checked'))
-						params += encodeURI($(this).attr('name'))+'=1&';
+						params += encodeURIComponent($(this).attr('name'))+'=1&';
 				}
 				else if ($(this).is('input[type=radio]'))
 				{
 					if ($(this).is(':checked'))
-						params += encodeURI($(this).attr('name'))+'='+encodeURI($(this).val())+'&';
+						params += encodeURIComponent($(this).attr('name'))+'='+encodeURIComponent($(this).val())+'&';
 				}
 				else
-					params += encodeURI($(this).attr('name'))+'='+encodeURI($(this).val())+'&';
+					params += encodeURIComponent($(this).attr('name'))+'='+encodeURIComponent($(this).val())+'&';
 			});
 			$('#opc_account_form select:visible').each(function() {
-				params += encodeURI($(this).attr('name'))+'='+encodeURI($(this).val())+'&';
+				params += encodeURIComponent($(this).attr('name'))+'='+encodeURIComponent($(this).val())+'&';
 			});
-			params += 'customer_lastname='+encodeURI($('#customer_lastname').val())+'&';
-			params += 'customer_firstname='+encodeURI($('#customer_firstname').val())+'&';
-			params += 'alias='+encodeURI($('#alias').val())+'&';
-			params += 'is_new_customer='+encodeURI($('#is_new_customer').val())+'&';
+			params += 'customer_lastname='+encodeURIComponent($('#customer_lastname').val())+'&';
+			params += 'customer_firstname='+encodeURIComponent($('#customer_firstname').val())+'&';
+			params += 'alias='+encodeURIComponent($('#alias').val())+'&';
+			params += 'is_new_customer='+encodeURIComponent($('#is_new_customer').val())+'&';
 			// Clean the last &
 			params = params.substr(0, params.length-1);
 			
@@ -587,7 +587,7 @@ $(function() {
            async: true,
            cache: false,
            dataType : "json",
-           data: 'ajax=true&method=updateMessage&message=' + encodeURI($('#message').val()) + '&token=' + static_token ,
+           data: 'ajax=true&method=updateMessage&message=' + encodeURIComponent($('#message').val()) + '&token=' + static_token ,
            success: function(jsonData)
            {
            		if (jsonData.hasError)
