@@ -268,7 +268,7 @@ class FrontControllerCore
 				$cookie->live_edit = true;
 			else
 				die(Tools::displayError());
-		elseif (Tools::isSubmit('close_live_edit'))
+		else
 			unset($cookie->live_edit);
 		
 		self::$cookie = $cookie;
@@ -277,7 +277,6 @@ class FrontControllerCore
 		self::$link = $link;
 
 		$this->iso = $iso;
-
 		self::setMedia();
 	}
 
