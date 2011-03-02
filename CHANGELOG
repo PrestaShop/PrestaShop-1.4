@@ -24,6 +24,121 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.0.15 - 5283 (2011-03-02)  #
+####################################
+
+	Added Features:
+
+	[+] Project : added live edit module position
+
+	[+] MO : Module Ekomi
+
+	Improved/changed features:
+
+	[*] INSTALLER : Preactivation Module is now generic
+	[*] INSTALLER : Preactivation Paypal (new theme and field check)
+	[*] installer : timezone bugfix
+
+	[*] FO : Log.php renamed to Logger.php, modified addLog() prototype to add allowDuplicate arguments
+	[*] FO : better integration of vat
+	[*] FO : many improvements on One Page Checkout
+
+	[*] BO : Counties
+	[*] BO : Ecotax options is now in the tax tab + ecotax without tax
+	[*] BO : eco-tax
+	[*] BO : now you can't translate with AdminTranslation if php suhosin configuration does not allow it
+	[*] BO : you can now define your own default page instead of "index.php"
+
+	[*] Core : Manufacturer and supplier controllers are Object now
+
+	[*] MO : Added an "Enabled filters" zone in the layered navigation
+	[*] MO : Added real time criterions refresh for the layered navigation block (still in progress)
+	[*] MO : Added some modifications for the layered navigation block (still in progress)
+	[*] MO : Fixed small bugs in the layered navigation
+	[*] MO : Instead of not showing them, empty values for layered navigation are now displayed and disabled (like on Target.com)
+	[*] MO : Layered navigation module updated
+	[*] MO : Layered navigation module updated
+	[*] MO : Layered navigation module updated
+	[*] MO : You can now filter by attribute and color (+ color picker!) in the layered navigation
+	[*] MO : You can now filter by feature in the layered navigation
+	[*] Mo : Hipay - Little fixes
+
+	[*] WS : Added associated product of a category
+	[*] WS : Category entity now contain children's ids
+
+	Fixed bugs:
+
+	[-] INSTALLER : Bug fixed #7643 - Missing default picture
+	[-] INSTALLER : Fix on Preactivation
+	[-] Installer : Fixed sql query malformed
+	[-] Installer : auto-timezone for installer with special rules for Usa and Russia
+	[-] Installer : fixed bug #7950 - typo error
+	[-] Installer : fixed url-rewrite for cms default data
+	[-] Installer : removed auto select currency
+
+	[-] FO : Bug Fixed #7939 - Discount percentage displayed is incorrect
+	[-] FO : Bug Fixed #7939 - Group discount and product reduction
+	[-] FO : Bug Fixed #7958 - Cart Error with more 2 than decimal (eg. 0.001)
+	[-] FO : Bug Fixed Combination + % discount + tax excluded
+	[-] FO : Ecotax is not impacted by the discount
+	[-] FO : Fixed #7712 - now free shipping is displayed on the cart summary and can be deleted
+	[-] FO : Fixed #7897  is now self::$smarty
+	[-] FO : Fixed #7901 BestSalesController uses now process instead of preProcess()
+	[-] FO : Fixed #7989 - when ssl is not activated, getlink will not return ssl domain name
+	[-] FO : Taxes by country fixed!
+	[-] FO : fixed bug #7933 - Disable shop for maintenance not work
+	[-] FO : fixed bug #7935 - same category “-” which drags
+	[-] FO : fixed bug #7944 //Error on Checkout orders step 2
+	[-] FO : fixed bug #7946 //VAT include file
+	[-] FO : fixed bug #7947 //States not showing BO edit address
+	[-] FO : fixed bug #7984 - Product compare
+
+	[-] BO : AdminTaxRulesGroup Apply Country Tax Only (not product tax)
+	[-] BO : Fixed #7722 - when you edit a product image, it's now displayed edit and not add
+	[-] BO : Fixed #7919 - htaccess generation will ignore meta_rewrite from db if they are not valid
+	[-] BO : Fixed #7969 - className
+	[-] BO : Fixed #7970 - now pdf footer allow registration information multiline (set in Preferences contact)
+	[-] BO : Fixed #7985 added warning message when change default currency
+	[-] BO : Fixed bug #7655
+	[-] BO : Fixed email translation
+	[-] BO : Fixed warning about missing or unvalid module file translation
+	[-] BO : Tax label become Tax Rule on the product page
+	[-] BO : Thanks to aFolletete the AdminTaxRules form is beautifull!
+	[-] BO : bug fixed #7771
+	[-] BO : clear error message for AdminTranslations when suhosin
+	[-] BO : ecotax id not found if ecotax is desactivated
+	[-] BO : fixed bug #6448 //No manufacturers in drop down list with creating new product
+	[-] BO : fixed bug #7949 //BO edit product JS errors
+	[-] BO : fixed bug #7981 - Edit Product page always displays ‘condition’ as ‘New’
+	[-] BO : fixed bug #8023 - Backoffice store locator, state selection issue
+	[-] BO : some sentences are changed.
+
+	[-] Classes : Incorrect test in dieObject
+	[-] Classes : fixed bug #7930 - Add a discount voucher : Fatal error / White page
+	[-] Classes : fixed bug #7994 - Unusefull object instanciation in AdminTab::postprocess()
+	[-] Classes : fixed bug #7999 - deleted language and cookie don’t go along very well
+	[-] Classes : fixed bug #7999 part 2 ;)
+
+	[-] Core : bug fixed on FrontController with the geolocation
+	[-] Core : fixed bug on FrontController with Geoloaction
+
+	[-] MO : allow displaying warning message.
+	[-] MO : check if a tsID value is set before display the seal of approval.
+	[-] MO : delete a "console" object in javascript.
+	[-] MO : fia-net must not be called when the order is free
+	[-] MO : fixed bug #7934 - tax disable but cart display tax included
+	[-] MO : fixed bug #7976 - Module USPS
+	[-] MO : fully compatible 1.3
+	[-] MO : use Tools::jsonEncode() rather than json_encode (same for json_decode)
+
+	[-] TR : Add translation according to #7655
+	[-] TR : change the method Mail::l(), now don't use htmlentities for output translation (don't working for email subject)
+	[-] TR : change the subject parameter for each Mail::send() method.
+	[-] TR : little translations corrections.
+	[-] TR : use google translate button for Errors, PDF and fields translations.
+
+
+####################################
 #   v1.4.0.14 - 5144 (2011-02-23)  #
 ####################################
 
