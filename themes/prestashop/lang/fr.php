@@ -419,6 +419,7 @@ $_LANG['order-opc-new-account_601d8c4b9f72fc1862013c19b677a499'] = 'Adresse de f
 $_LANG['order-opc-new-account_d30f507473129e70c4b962ceccf175cf'] = 'Code postal';
 $_LANG['order-opc-new-account_2eac22e71eedb5bdb8f94a1354964017'] = 'Mon adresse de facturation';
 $_LANG['order-opc-new-account_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
+$_LANG['order-opc-new-account_7258c3cf348e04aafd905bd566ed8bd3'] = 'Les informations de compte ont été enregistrées avec succès';
 $_LANG['order-opc-new-account_19f823c6453c2b1ffd09cb715214813d'] = 'Champs obligatoires';
 $_LANG['order-opc_a40cab5994f36d4c48103a22ca082e8f'] = 'Votre panier';
 $_LANG['order-opc_5af5f631f774a71445e3028253874394'] = 'Cette boutique n\'a pas accepté votre nouvelle commande.';
