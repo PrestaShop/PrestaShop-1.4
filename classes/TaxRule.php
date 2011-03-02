@@ -27,28 +27,32 @@
 
 class TaxRuleCore extends ObjectModel
 {
- 	 public $id;
     public $id_tax_rules_group;
     public $id_country;
     public $id_state;
+    public $id_county;
     public $id_tax;
     public $state_behavior;
+    public $county_behavior;
 
  	protected 	$fieldsRequired = array('id_tax_rules_group', 'id_country', 'id_tax');
- 	protected 	$fieldsValidate = array('id_tax_rules_group' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isUnsignedId', 'id_tax' => 'isUnsignedId', 'state_behavior' => 'isUnsignedInt');
+ 	protected 	$fieldsValidate = array('id_tax_rules_group' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isUnsignedId', 'id_county' => 'isUnsignedId', 'id_tax' => 'isUnsignedId', 'state_behavior' => 'isUnsignedInt', 'county_behavior' => 'isUnsignedInt');
 
 	protected 	$table = 'tax_rule';
 	protected 	$identifier = 'id_tax_rule';
 
 	public function getFields()
 	{
-		parent::validateFields();
- 		$fields['id_tax_rules_group'] = (int)($this->id_tax_rules_group);
+	  parent::validateFields();
+      $fields['id_tax_rules_group'] = (int)($this->id_tax_rules_group);
       $fields['id_country'] = (int)$this->id_country;
       $fields['id_state'] = (int)$this->id_state;
+      $fields['id_county'] = (int)$this->id_county;
       $fields['state_behavior'] = (int)$this->state_behavior;
-		$fields['id_tax'] = (int)($this->id_tax);
-		return $fields;
+      $fields['county_behavior'] = (int)$this->county_behavior;
+	  $fields['id_tax'] = (int)($this->id_tax);
+
+	  return $fields;
 	}
 
     public static function deleteByGroupId($id_group)
@@ -75,9 +79,7 @@ class TaxRuleCore extends ObjectModel
 
         $res = array();
         foreach ($results AS $row)
-        {
-            $res[$row['id_country']][$row['id_state']] = array('state_behavior' => $row['state_behavior'], 'id_tax' => $row['id_tax']);
-        }
+            $res[$row['id_country']][$row['id_state']][$row['id_county']] = array('id_tax' => $row['id_tax'], 'state_behavior' => $row['state_behavior'], 'county_behavior' => $row['county_behavior']);
 
         return $res;
     }
@@ -89,6 +91,15 @@ class TaxRuleCore extends ObjectModel
         WHERE `id_tax` = '.(int)$id_tax
         );
     }
+
+
+	public static function deleteTaxRuleByIdCounty($id_county)
+	{
+		return Db::getInstance()->Execute('
+		DELETE FROM `'._DB_PREFIX_.'tax_rule`
+		WHERE `id_county` = '.(int)$id_county
+		);
+	}
 
     public static function isTaxInUse($id_tax)
     {

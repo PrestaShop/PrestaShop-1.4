@@ -99,7 +99,6 @@ class AdminTaxRulesGroup extends AdminTab
                     return false;
             }
 
-
             function disableStateTaxRate(id_country, id_state)
             {
                 if ($("#behavior_state_"+id_state).val() == '.PS_PRODUCT_TAX.')
@@ -108,8 +107,21 @@ class AdminTaxRulesGroup extends AdminTab
                     $("#tax_"+id_country+"_"+id_state).attr("disabled", false);
             }
 
+            function disableCountyTaxRate(id_country, id_state, id_county)
+            {
+
+                if ($("#behavior_county_"+id_county).val() == '.County::USE_STATE_TAX.')
+                    $("#tax_"+id_country+"_"+id_state+"_"+id_county).attr("disabled", true);
+                else
+                {
+
+                    $("#tax_"+id_country+"_"+id_state+"_"+id_county).attr("disabled", false);
+                }
+            }
+
 			$(\'document\').ready(function (){
 				$(\'.states\').hide();
+				$(\'.counties\').hide();
 
 				$(\'.open_state\').click(function (){
 					if ($(\'.\'+$(this).attr(\'id\')).is(\':hidden\'))
@@ -125,22 +137,33 @@ class AdminTaxRulesGroup extends AdminTab
 						$(\'#\'+$(this).attr(\'id\')+\'_button\').attr("src","../img/admin/more.png");
 					}
 				});
+
+				$(\'.open_county\').click(function (){
+					if ($(\'.\'+$(this).attr(\'id\')).is(\':hidden\'))
+					{
+						$(\'.\'+$(this).attr(\'id\')).show();
+						$(\'#\'+$(this).attr(\'id\')+\'_button\').attr("src","../img/admin/less.png");
+					}
+					else
+					{
+						$(\'.\'+$(this).attr(\'id\')).hide();
+						$(\'#\'+$(this).attr(\'id\')+\'_button\').attr("src","../img/admin/more.png");
+					}
+				});
 			});
-            </script>
-            <script src="../js/tabpane.js" type="text/javascript"></script>
-            <script type="text/javascript">
-            var tabPane1 = new WebFXTabPane( document.getElementById( "tab-pane-1" ) );
-		    </script>
-               <link type="text/css" rel="stylesheet" href="../css/tabpane.css" />'
-                .$this->renderZones($tax_rules, (int)$cookie->id_lang).
-             '</div>';
+			</script>
+			<script src="../js/tabpane.js" type="text/javascript"></script>
+			<script type="text/javascript">
+				var tabPane1 = new WebFXTabPane( document.getElementById( "tab-pane-1" ) );
+			</script>
+			<link type="text/css" rel="stylesheet" href="../css/tabpane.css" />'.$this->renderZones($tax_rules, (int)$cookie->id_lang);
         echo '
-    		<div class="margin-form" style="margin-top: 10px">
-				<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;&nbsp;
-				<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" />
-			</div>
+				<div class="margin-form" style="margin-top: 10px">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;&nbsp;
+					<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" />
+				</div>
             </fieldset>
-            </form>';
+		</form>';
     }
 
 
@@ -178,7 +201,7 @@ class AdminTaxRulesGroup extends AdminTab
 			<thead>
 				<tr>
 					<th style="width: 3%;"></th>
-					<th style="width: 40%;">'.$this->l('Country / State').'</th>
+					<th style="width: 40%;">'.$this->l('Country / State / County').'</th>
 					<th style="width: 57%;">'.$this->l('Tax to apply').'</th>
 				</tr>
 			</thead>
@@ -187,12 +210,13 @@ class AdminTaxRulesGroup extends AdminTab
 		$countries = Country::getCountriesByZoneId((int)$id_zone, (int)$id_lang);
 		$countCountries = sizeof($countries);
 		$i = 1;
+
         foreach ($countries AS $country)
         {
             $id_tax =  0;
 
             if (array_key_exists($country['id_country'], $tax_rules) AND array_key_exists(0, $tax_rules[$country['id_country']]))
-                $id_tax = (int)$tax_rules[$country['id_country']][0]['id_tax'];
+                $id_tax = (int)$tax_rules[$country['id_country']][0][0]['id_tax'];
 
 			$html .= '
 				<tr>
@@ -213,12 +237,12 @@ class AdminTaxRulesGroup extends AdminTab
 		</table>
 		';
 
-        return $html;
+		return $html;
     }
 
     public function renderStates($tax_rules, $id_zone, $id_country, $id_lang)
     {
-        $states = State::getStatesByIdCountryAndIdZone((int)$id_country, (int)$id_zone);
+		$states = State::getStatesByIdCountry((int)$id_country);
 		$countStates = sizeof($states);
 		$i = 1;
 		$html = '';
@@ -227,16 +251,18 @@ class AdminTaxRulesGroup extends AdminTab
 			$id_tax = 0;
 			$selected = PS_PRODUCT_TAX;
 
-            if (array_key_exists($id_country, $tax_rules) AND array_key_exists($state['id_state'], $tax_rules[$id_country]))
-            {
-              $id_tax = (int)$tax_rules[$id_country][$state['id_state']]['id_tax'];
-              $selected = (int)$tax_rules[$id_country][$state['id_state']]['state_behavior'];
-            }
+			if (array_key_exists($id_country, $tax_rules)
+				AND array_key_exists($state['id_state'], $tax_rules[$id_country])
+				AND array_key_exists(0, $tax_rules[$id_country][$state['id_state']]))
+			{
+				$id_tax = (int)$tax_rules[$id_country][$state['id_state']][0]['id_tax'];
+				$selected = (int)$tax_rules[$id_country][$state['id_state']][0]['state_behavior'];
+			}
 
 			$disable = (PS_PRODUCT_TAX == $selected ? 'disabled' : '');
 			$html .= '
 			<tr class="states state_'.(int)$id_country.' alt_row">
-				<td>'.(false ? '<a class="open_county" id="county_'.(int)$state['id_state'].'"><img id="county_'.(int)$state['id_state'].'_button" class="county_state_'.(int)$id_country.'_button" src="../img/admin/more.png" alt="" /></a>' : '').'</td>
+				<td>'.(State::hasCounties($state['id_state']) ? '<a class="open_county" id="county_'.(int)$state['id_state'].'"><img id="county_'.(int)$state['id_state'].'_button" class="county_state_'.(int)$id_country.'_button" src="../img/admin/more.png" alt="" /></a>' : '').'</td>
 				<td><img src="../img/admin/lv3_'.($i == $countStates ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($state['name']).'</label></td>
 				<td>
 					'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone,
@@ -252,11 +278,55 @@ class AdminTaxRulesGroup extends AdminTab
 			</tr>
 			';
 
+			if (State::hasCounties($state['id_state']))
+				$html .= $this->renderCounties($tax_rules, $id_zone, $id_country, $state['id_state'], $id_lang);
+
 			$i++;
-        }
+		}
 
         return $html;
     }
+
+    public function renderCounties($tax_rules, $id_zone, $id_country, $id_state, $id_lang)
+    {
+		$counties = County::getCounties((int)$id_state);
+		$countCounties = sizeof($counties);
+		$i = 1;
+		$html = '';
+		foreach ($counties AS $county)
+		{
+			$id_tax = 0;
+			$selected = County::USE_STATE_TAX;
+			if (array_key_exists($id_country, $tax_rules)
+				AND array_key_exists($id_state, $tax_rules[$id_country])
+				AND array_key_exists($county['id_county'], $tax_rules[$id_country][$id_state]))
+			{
+				$id_tax = (int)$tax_rules[$id_country][$id_state][$county['id_county']]['id_tax'];
+				$selected = (int)$tax_rules[$id_country][$id_state][$county['id_county']]['county_behavior'];
+			}
+
+			$disable = (County::USE_STATE_TAX == $selected ? 'disabled' : '');
+			$html .= '
+			<tr class="counties county_state_'.(int)$id_country.' county_'.(int)$id_state.'">
+				<td></td>
+				<td><img src="../img/admin/lv4_'.($i == $countCounties ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($county['name']).'</label></td>
+				<td>
+					'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone,
+																		'id' => 'tax_'.$id_country.'_'.$id_state.'_'.$county['id_county'],
+																		'name' => 'tax_'.$id_country.'_'.$id_state.'_'.$county['id_county'],
+																		'disabled' => $disable )).'&nbsp;-&nbsp;
+ 					<select id="behavior_county_'.$county['id_county'].'" name="behavior_county_'.$county['id_county'].'" onchange="disableCountyTaxRate(\''.$id_country.'\',\''.$id_state.'\',\''.$county['id_county'].'\')">
+						<option value="'.(int)County::USE_STATE_TAX.'" '.($selected  == County::USE_STATE_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply state tax only').'</option>
+						<option value="'.(int)County::USE_COUNTY_TAX.'" '.($selected == County::USE_COUNTY_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply county tax only').'</option>
+						<option value="'.(int)County::USE_BOTH_TAX.'" '.($selected == County::USE_BOTH_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply both taxes').'</option>
+					</select>
+				</td>
+			</tr>
+			';
+		}
+
+    	return $html;
+  	 }
 
     public function renderTaxesSelect($id_lang, $default_value, array $html_options)
     {
@@ -303,8 +373,10 @@ class AdminTaxRulesGroup extends AdminTab
                 $tr->id_tax_rules_group = $object->id;
                 $tr->id_country = (int)$country['id_country'];
                 $tr->id_state = 0;
+                $tr->id_county = 0;
                 $tr->id_tax = $id_tax;
-                $tr->id_state_behavior = 0;
+                $tr->state_behavior = 0;
+                $tr->county_behavior = 0;
                 $tr->save();
             }
 
@@ -320,9 +392,34 @@ class AdminTaxRulesGroup extends AdminTab
                         $tr->id_tax_rules_group = $object->id;
                         $tr->id_country = (int)$country['id_country'];
                         $tr->id_state = (int)$state['id_state'];
+			               $tr->id_county = 0;
                         $tr->id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_'.$state['id_state']);
                         $tr->state_behavior = $state_behavior;
+			               $tr->county_behavior = 0;
                         $tr->save();
+                    }
+
+                    // county specific rule
+                    if (State::hasCounties($state['id_state']))
+                    {
+                    		$counties = County::getCounties($state['id_state']);
+                    		foreach ($counties AS $county)
+                    		{
+   	                    	  $county_behavior = (int)Tools::getValue('behavior_county_'.$county['id_county']);
+
+				              if ($county_behavior != County::USE_STATE_TAX)
+				              {
+				                  $tr = new TaxRule();
+				                  $tr->id_tax_rules_group = $object->id;
+				                  $tr->id_country = (int)$country['id_country'];
+				                  $tr->id_state = (int)$state['id_state'];
+						          $tr->id_county = (int)$county['id_county'];
+				                  $tr->id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_'.$state['id_state'].'_'.$county['id_county']);
+	      		                  $tr->state_behavior = 0;
+					              $tr->county_behavior = $county_behavior;
+								  $tr->save();
+				              }
+                    		}
                     }
                 }
             }

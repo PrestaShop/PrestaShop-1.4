@@ -1604,7 +1604,7 @@ class AdminProducts extends AdminTab
 		$specificPrices = SpecificPrice::getByProductId((int)($obj->id));
 		$specificPricePriorities = SpecificPrice::getPriority((int)($obj->id));
 
-		$taxRate = TaxRulesGroup::getTaxesRate($obj->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0);
+		$taxRate = TaxRulesGroup::getTaxesRate($obj->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
 
 		$tmp = array();
 		foreach ($shops as $shop)

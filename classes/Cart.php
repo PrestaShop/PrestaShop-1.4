@@ -376,6 +376,7 @@ class CartCore extends ObjectModel
 			{
 				$row['price'] = Product::getPriceStatic((int)$row['id_product'], false, (int)$row['id_product_attribute'], 6, NULL, false, true, $row['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL), $specificPriceOutput);
 				$row['price_wt'] = Product::getPriceStatic((int)$row['id_product'], true, (int)$row['id_product_attribute'], 2, NULL, false, true, $row['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
+
 				/* In case when you use QuantityDiscount, getPriceStatic() can be return more of 2 decimals */
 				$row['price_wt'] = Tools::ps_round($row['price_wt'], 2);
 				$row['total_wt'] = $row['price_wt'] * (int)($row['cart_quantity']);
@@ -1026,21 +1027,22 @@ class CartCore extends ObjectModel
 		// Select carrier tax
 		if ($useTax AND !Tax::excludeTaxeOption())
 		{
-		    // TODO: refactor
-		     $id_address = $this->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
-		     $id_country = (int)Country::getDefaultCountryId();
+		     	 $id_address = $this->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+ 		     	 $id_country = (int)Country::getDefaultCountryId();
              $id_state = 0;
+             $id_county = 0;
              if (!empty($id_address))
              {
-                 $address_infos = Address::getCountryAndState($id_address);
+                $address_infos = Address::getCountryAndState($id_address);
              	 if ($address_infos['id_country'])
-                 {
-	          		$id_country = (int)($address_infos['id_country']);
-	           	    $id_state = (int)$address_infos['id_state'];
-                 }
+                {
+	          		 $id_country = (int)($address_infos['id_country']);
+	          	    $id_state = (int)$address_infos['id_state'];
+	          	    $id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
+                }
             }
 
-		    $carrierTax = TaxRulesGroup::getTaxesRate((int)$carrier->id_tax_rules_group, (int)$id_country, (int)$id_state);
+		    $carrierTax = TaxRulesGroup::getTaxesRate((int)$carrier->id_tax_rules_group, (int)$id_country, (int)$id_state, (int)$id_county);
 		}
 		$configuration = Configuration::getMultiple(array('PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_HANDLING', 'PS_SHIPPING_METHOD', 'PS_SHIPPING_FREE_WEIGHT'));
 		// Free fees

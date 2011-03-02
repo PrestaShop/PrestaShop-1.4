@@ -1552,7 +1552,7 @@ CREATE TABLE `PREFIX_memcached_servers` (
 `weight` INT(11) UNSIGNED NOT NULL
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `PREFIX_product_country_tax` (
+CREATE TABLE `PREFIX_product_country_tax` (
   `id_product` int(11) NOT NULL,
   `id_country` int(11) NOT NULL,
   `id_tax` int(11) NOT NULL,
@@ -1560,16 +1560,19 @@ CREATE TABLE IF NOT EXISTS `PREFIX_product_country_tax` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE IF NOT EXISTS `PREFIX_tax_rule` (
+CREATE TABLE `PREFIX_tax_rule` (
   `id_tax_rule` int(11) NOT NULL AUTO_INCREMENT,
   `id_tax_rules_group` int(11) NOT NULL,
   `id_country` int(11) NOT NULL,
   `id_state` int(11) NOT NULL,
+  `id_county` int(11) NOT NULL,
   `id_tax` int(11) NOT NULL,
   `state_behavior` int(11) NOT NULL,
+  `county_behavior` int(11) NOT NULL,
   PRIMARY KEY (`id_tax_rule`),
   KEY `id_tax_rules_group` (`id_tax_rules_group`),
-  KEY `id_tax` (`id_tax`)
+  KEY `id_tax` (`id_tax`),
+  UNIQUE KEY `tax_rule` (`id_tax_rules_group`, `id_country`, `id_state`, `id_county`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_tax_rules_group` (
@@ -1578,7 +1581,7 @@ CREATE TABLE `PREFIX_tax_rules_group` (
 `active` INT NOT NULL
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `PREFIX_help_access` (
+CREATE TABLE `PREFIX_help_access` (
   `id_help_access` int(11) NOT NULL AUTO_INCREMENT,
   `label` varchar(45) NOT NULL,
   `version` varchar(8) NOT NULL,
@@ -1611,5 +1614,22 @@ CREATE TABLE `PREFIX_import_match` (
   `match` text NOT NULL,
   `skip` int(2) NOT NULL,
   PRIMARY KEY (`id_import_match`)
+) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `PREFIX_county` (
+  `id_county` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL,
+  `id_state` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id_county`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 ;
+
+
+CREATE TABLE `PREFIX_county_zip_code` (
+	`id_county` INT NOT NULL ,
+	`from_zip_code` INT NOT NULL ,
+	`to_zip_code` INT NOT NULL ,
+	PRIMARY KEY ( `id_county` , `from_zip_code` , `to_zip_code` )
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 

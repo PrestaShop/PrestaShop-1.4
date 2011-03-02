@@ -269,7 +269,7 @@ INSERT INTO `PREFIX_zone` (`id_zone`, `name`, `active`) VALUES
 
 INSERT INTO `PREFIX_country` (`id_country`, `id_zone`, `iso_code`, `call_prefix`, `active`, `contains_states`, `need_identification_number`, `need_zip_code`, `zip_code_format`) VALUES
 (1, 1, 'DE', 49, 1, 0, 0, 1, 'NNNNN'),(2, 1, 'AT', 43, 1, 0, 0, 1, 'NNNN'),(3, 1, 'BE', 32, 1, 0, 0, 1, 'NNNN'),(4, 2, 'CA', 1, 1, 1, 0, 1, 'LNL NLN'),(5, 3, 'CN', 86, 1, 0, 0, 1, 'NNNNNN'),
-(6, 1, 'ES', 34, 1, 0, 1, 1, 'NNNNN'),(7, 1, 'FI', 358, 1, 0, 0, 1, 'NNNNN'),(8, 1, 'FR', 33, 1, 0, 0, 1, 'NNNNN'),(9, 1, 'GR', 30, 1, 0, 0, 1, 'NNNNN'),(10, 1, 'IT', 39, 1, 1, 0, 1, 'NNNNN'),
+(6, 1, 'ES', 34, 1, 0, 1, 1, 'NNNNN'),(7, 1, 'FI', 358, 1, 0, 0, 1, 'NNNNN'),(8, 1, 'FR', 33, 1, 0, 0, 1, 'NNNNN'),(9, 1, 'GR', 30, 1, 0, 0, 1, 'NNNNN'),(10, 1, 'IT', 39, 1, 0, 0, 1, 'NNNNN'),
 (11, 3, 'JP', 81, 1, 0, 0, 1, 'NNN-NNNN'),(12, 1, 'LU', 352, 1, 0, 0, 1, 'NNNN'),(13, 1, 'NL', 31, 1, 0, 0, 1, 'NNNN LL'),(14, 1, 'PL', 48, 1, 0, 0, 1, 'NN-NNN'),
 (15, 1, 'PT', 351, 1, 0, 0, 1, 'NNNN NNN'),(16, 1, 'CZ', 420, 1, 0, 0, 1, 'NNN NN'),(17, 1, 'UK', 44, 1, 0, 0, 1, ''),(18, 1, 'SE', 46, 1, 0, 0, 1, 'NNN NN'),
 (19, 7, 'CH', 41, 1, 0, 0, 1, 'NNNN'),(20, 1, 'DK', 45, 1, 0, 0, 1, 'NNNN'),(21, 2, 'US', 1, 1, 1, 0, 1, 'NNNNN'),(22, 3, 'HK', 852, 1, 0, 0, 0, ''),(23, 1, 'NO', 47, 1, 0, 0, 1, 'NNNN'),
@@ -574,8 +574,8 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (36, 'AdminFeatures', 1, 5),(58, 'AdminScenes', 1, 6),(66, 'AdminTags', 1, 7),(68, 'AdminAttachments', 1, 7),(12, 'AdminAddresses', 2, 1),(63, 'AdminGroups', 2, 2),
 (65, 'AdminCarts', 2, 3),(42, 'AdminInvoices', 3, 1),(55, 'AdminDeliverySlip', 3, 2),(47, 'AdminReturn', 3, 3),(49, 'AdminSlip', 3, 4),(59, 'AdminMessages', 3, 5),
 (13, 'AdminStatuses', 3, 6),(54, 'AdminOrderMessage', 3, 7),(14, 'AdminDiscounts', 4, 4),(15, 'AdminCurrencies', 4, 1),(16, 'AdminTaxes', 4, 2),
-(17, 'AdminCarriers', 5, 1),(46, 'AdminStates', 5, 2),(18, 'AdminCountries', 5, 3),(19, 'AdminZones', 5, 4),(20, 'AdminRangePrice', 5, 5),
-(21, 'AdminRangeWeight', 5, 6),(51, 'AdminStatsConf', 6, 1),(61, 'AdminSearchEngines', 6, 2),(62, 'AdminReferrers', 6, 3),
+(17, 'AdminCarriers', 5, 1),(46, 'AdminStates', 5, 2),(18, 'AdminCountries', 5, 3),(19, 'AdminZones', 5, 5),(20, 'AdminRangePrice', 5, 6),
+(21, 'AdminRangeWeight', 5, 7),(51, 'AdminStatsConf', 6, 1),(61, 'AdminSearchEngines', 6, 2),(62, 'AdminReferrers', 6, 3),
 (22, 'AdminModulesPositions', 7, 4),(30, 'AdminProfiles', 29, 1),(31, 'AdminAccess', 29, 2),(28, 'AdminContacts', 29, 3),(39, 'AdminContact', 8, 1),
 (38, 'AdminAppearance', 8, 2),(56, 'AdminMeta', 8, 3),(27, 'AdminPPreferences', 8, 4),(24, 'AdminEmails', 8, 5),(26, 'AdminImages', 8, 6),(23, 'AdminDb', 8, 7),
 (48, 'AdminPDF', 3, 8),(44, 'AdminLocalization', 8, 9),(67, 'AdminSearchConf', 8, 10),(32, 'AdminLanguages', 9, 1),(33, 'AdminTranslations', 9, 2),
@@ -583,7 +583,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (53, 'AdminBackup', 9, 8),(57, 'AdminCMSContent', 9, 9),(64, 'AdminGenerator', 9, 10),(43, 'AdminSearch', -1, 0),(69, 'AdminInformation', 9, 11),
 (70, 'AdminPerformance', 8, 11),(71, 'AdminCustomerThreads', 29, 4),(72, 'AdminWebservice', 9, 12),(73, 'AdminStockMvt', 1, 9),
 (80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3),(84, 'AdminGeolocalization', 8, 12),
-(85, 'AdminTaxRulesGroup', 4, 3),(86, 'AdminLogs', 9, 13);
+(85, 'AdminTaxRulesGroup', 4, 3),(86, 'AdminLogs', 9, 13), (87, 'AdminCounty', 5, 4);
 
 INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (SELECT 1, id_tab, 1, 1, 1, 1 FROM PREFIX_tab);
 
@@ -599,7 +599,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 55, 'Delivery Slips'),(1, 56, 'SEO & URLs'),(1, 57, 'CMS'),(1, 58, 'Image Mapping'),(1, 59, 'Customer Messages'),(1, 60, 'Tracking'),
 (1, 61, 'Search Engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Shopping Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
 (1, 68, 'Attachments'),(1, 69, 'Configuration Information'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
-(1, 80, 'Modules & Themes Catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocalization'),(1, 85, 'Tax Rules'),(1, 86, 'Log');
+(1, 80, 'Modules & Themes Catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocalization'),(1, 85, 'Tax Rules'),(1, 86, 'Log'),
+(1, 87, 'Counties');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 1, 'Catalogue'),(2, 2, 'Clients'),(2, 3, 'Commandes'),(2, 4, 'Paiement'),(2, 5, 'Transport'),
@@ -613,7 +614,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 56, 'SEO & URLs'),(2, 57, 'CMS'),(2, 58, 'Scènes'),(2, 59, 'Messages clients'),(2, 60, 'Suivi'),(2, 61, 'Moteurs de recherche'),
 (2, 62, 'Sites affluents'),(2, 63, 'Groupes'),(2, 64, 'Générateurs'),(2, 65, 'Paniers'),(2, 66, 'Tags'),(2, 67, 'Recherche'),
 (2, 68, 'Documents joints'),(2, 69, 'Informations'),(2, 70, 'Performances'),(2, 71, 'SAV'),(2, 72, 'Service web'),(2, 73, 'Mouvements de Stock'),
-(2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte'),(2, 82, 'Magasins'),(2, 83, 'Thèmes'),(2, 84, 'Géolocalisation'),(2, 85, 'Règles de taxes'),(2, 86, 'Log');
+(2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte'),(2, 82, 'Magasins'),(2, 83, 'Thèmes'),(2, 84, 'Géolocalisation'),(2, 85, 'Règles de taxes'),(2, 86, 'Log'),
+(2, 87, 'Comtés');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 1, 'Catálogo'),(3, 2, 'Clientes'),(3, 3, 'Pedidos'),(3, 4, 'Pago'),(3, 5, 'Transporte'),
@@ -626,7 +628,8 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 49, 'Vales'),(3, 51, 'Configuración'),(3, 52, 'Subcampos'),(3, 53, 'Copia de seguridad'),(3, 54, 'Mensajes de Orden'),
 (3, 55, 'Albaranes de entrega'),(3, 56, 'SEO & URLs'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
-(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log');
+(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log'),
+(3, 87, 'Condados');;
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (4, 1, 'Katalog'),(4, 2, 'Kunden'),(4, 3, 'Bestellungen'),(4, 4, 'Zahlung'),

@@ -68,6 +68,7 @@ class LocalizationPackCore
 		foreach ($selection AS $selected)
 			if (!Validate::isLocalizationPackSelection($selected) OR !$this->{'_install'.ucfirst($selected)}($xml))
 				return false;
+
 		return true;
 	}
 
@@ -77,32 +78,95 @@ class LocalizationPackCore
 			foreach ($xml->states->state AS $data)
 			{
 				$attributes = $data->attributes();
-				if (State::getIdByName($attributes['name']))
-					continue;
-				$state = new State();
-				$state->name = strval($attributes['name']);
-				$state->iso_code = strval($attributes['iso_code']);
-				$state->id_country = Country::getByIso(strval($attributes['country']));
-				$state->id_zone = (int)(Zone::getIdByName(strval($attributes['zone'])));
 
-				if (!$state->validateFields())
+				if (!$id_state = State::getIdByName($attributes['name']))
 				{
-					$this->_errors[] = Tools::displayError('Invalid state properties.');
-					return false;
+					$state = new State();
+					$state->name = strval($attributes['name']);
+					$state->iso_code = strval($attributes['iso_code']);
+					$state->id_country = Country::getByIso(strval($attributes['country']));
+					$state->id_zone = (int)(Zone::getIdByName(strval($attributes['zone'])));
+
+					if (!$state->validateFields())
+					{
+						$this->_errors[] = Tools::displayError('Invalid state properties.');
+						return false;
+					}
+
+					$country = new Country($state->id_country);
+					if (!$country->contains_states)
+					{
+						$country->contains_states = 1;
+						if (!$country->update())
+							$this->_errors[] = Tools::displayError('Impossible to update the associated country: ').$country->name;
+					}
+
+					if (!$state->add())
+					{
+						$this->_errors[] = Tools::displayError('An error occurred while adding the state.');
+						return false;
+					}
+				} else {
+					$state = new State($id_state);
+					if (!Validate::isLoadedObject($state))
+					{
+						$this->_errors[] = Tools::displayError('An error occurred while fetching the state.');
+						return false;
+					}
 				}
-				$country = new Country($state->id_country);
-				if (!$country->contains_states)
+
+				// Add counties
+				foreach ($data->county AS $xml_county)
 				{
-					$country->contains_states = 1;
-					if (!$country->update())
-						$this->_errors[] = Tools::displayError('Impossible to update the associated country: ').$country->name;
-				}
-				if (!$state->add())
-				{
-					$this->_errors[] = Tools::displayError('An error occurred while adding the state.');
-					return false;
+					$county_attributes = $xml_county->attributes();
+					if (!$id_county = County::getIdCountyByNameAndIdState($county_attributes['name'], $state->id))
+					{
+						$county = new County();
+						$county->name = $county_attributes['name'];
+						$county->id_state = (int)$state->id;
+						$county->active = 1;
+
+						if (!$county->validateFields())
+						{
+							$this->_errors[] = Tools::displayError('Invalid County properties');
+							return false;
+						}
+
+						if (!$county->save())
+						{
+							$this->_errors[] = Tools::displayError('An error has occured while adding the county');
+							return false;
+						}
+					} else {
+						$county = new County((int)$id_county);
+						if (!Validate::isLoadedObject($county))
+						{
+							$this->_errors[] = Tools::displayError('An error occurred while fetching the county.');
+							return false;
+						}
+					}
+
+					// add zip codes
+					foreach ($xml_county->zipcode AS $xml_zipcode)
+					{
+							$zipcode_attributes = $xml_zipcode->attributes();
+
+							$zipcodes = $zipcode_attributes['from'];
+							if (isset($zipcode_attributes['to']))
+								$zipcodes .= '-'.$zipcode_attributes['to'];
+
+							if ($county->isZipCodeRangePresent($zipcodes))
+								continue;
+
+							if (!$county->addZipCodes($zipcodes))
+							{
+								$this->_errors[] = Tools::displayError('An error has occured while adding zipcodes');
+								return false;
+							}
+					}
 				}
 			}
+
 
 		return true;
 	}
@@ -128,6 +192,7 @@ class LocalizationPackCore
 					$this->_errors[] = Tools::displayError('Invalid tax properties.');
 					return false;
 				}
+
 				if (!$tax->add())
 				{
 					$this->_errors[] = Tools::displayError('An error occurred while importing the tax: ').strval($attributes['name']);
@@ -142,15 +207,17 @@ class LocalizationPackCore
 				$group_attributes = $group->attributes();
 				if (!Validate::isGenericName($group_attributes['name']))
 					continue;
+
 				 if (TaxRulesGroup::getIdByName($group['name']))
 					continue;
+
 				$trg = new TaxRulesGroup();
 				$trg->name = $group['name'];
 				$trg->active = 1;
 
 				if (!$trg->save())
 				{
-					$this->_errors = 'cant save';
+					$this->_errors = Tools::displayError('This tax rule can\'t be saved.');
 					return false;
 				}
 
@@ -163,23 +230,43 @@ class LocalizationPackCore
 						continue;
 
 					$id_country = Country::getByIso(strtoupper($rule_attributes['iso_code_country']));
+					if (!$id_country)
+						continue;
 
 					if (!isset($rule_attributes['id_tax']) || !array_key_exists(strval($rule_attributes['id_tax']), $assoc_taxes))
 						continue;
 
 					// Default values
 					$id_state = (int) isset($rule_attributes['iso_code_state']) ? State::getIdByIso(strtoupper($rule_attributes['iso_code_state'])) : 0;
-
+					$id_county = 0;
 					$state_behavior = 0;
-					if (isset($rule_attributes['state_behavior']) && in_array($rule_attributes['state_behavior'], $available_behavior))
-						$state_behavior = (int)$rule_attributes['state_behavior'];
+					$county_behavior = 0;
+
+					if ($id_state)
+					{
+						if (isset($rule_attributes['state_behavior']) && in_array($rule_attributes['state_behavior'], $available_behavior))
+							$state_behavior = (int)$rule_attributes['state_behavior'];
+
+						if (isset($rule_attributes['county_name']))
+						{
+							$id_county = County::getIdCountyByNameAndIdState($rule_attributes['county_name'], (int)$id_state);
+							if (!$id_county)
+								continue;
+						}
+
+						if (isset($rule_attributes['county_behavior']) && in_array($rule_attributes['state_behavior'], $available_behavior))
+							$county_behavior = (int)$rule_attributes['county_behavior'];
+					}
+
 
 					// Creation
 					$tr = new TaxRule();
 					$tr->id_tax_rules_group = $trg->id;
 					$tr->id_country = $id_country;
 					$tr->id_state = $id_state;
+					$tr->id_county = $id_county;
 					$tr->state_behavior = $state_behavior;
+					$tr->county_behavior = $county_behavior;
 					$tr->id_tax = $assoc_taxes[strval($rule_attributes['id_tax'])];
 					$tr->save();
 				}

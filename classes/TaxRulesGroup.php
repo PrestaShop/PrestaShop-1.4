@@ -65,14 +65,13 @@ class TaxRulesGroupCore extends ObjectModel
 		return array_merge($tax_rules, TaxRulesGroup::getTaxRulesGroups());
 	}
 
-
-	public static function getTaxes($id_tax_rules_group, $id_country, $id_state)
+	public static function getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county)
 	{
 	    if (empty($id_tax_rules_group) OR empty($id_country))
 	        return array(new Tax()); // No Tax
 
-        if (isset(self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state]))
-            return self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state];
+       if (isset(self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state.'-'.$id_county]))
+            return self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state.'-'.$id_county];
 
 	    $rows = Db::getInstance()->ExecuteS('
 	    SELECT *
@@ -80,13 +79,30 @@ class TaxRulesGroupCore extends ObjectModel
 	    WHERE `id_country` = '.(int)$id_country.'
 	    AND `id_tax_rules_group` = '.(int)$id_tax_rules_group.'
 	    AND `id_state` IN (0, '.(int)$id_state.')
+	    AND `id_county` IN (0, '.(int)$id_county.')
 	    ORDER BY `id_state` DESC'
 	    );
 
 	    $taxes = array();
 	    foreach ($rows AS $row)
 	    {
-	       if ($row['id_state'] != 0)
+          if ($row['id_county'] != 0)
+          {
+          	switch($row['county_behavior'])
+          	{
+          		case County::USE_BOTH_TAX:
+                 $taxes[] = new Tax($row['id_tax']);
+          		break;
+
+          		case County::USE_COUNTY_TAX:
+                  $taxes = array(new Tax($row['id_tax']));
+          		break 2;
+
+          		case County::USE_STATE_TAX: // do nothing
+          		break;
+          	}
+          }
+	       else if ($row['id_state'] != 0)
 	       {
 	            switch($row['state_behavior'])
 	            {
@@ -106,9 +122,8 @@ class TaxRulesGroupCore extends ObjectModel
 	            $taxes[] = new Tax((int)$row['id_tax']);
 	    }
 
-	    self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state] = $taxes;
-
-        return $taxes;
+	    self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state.'-'.$id_county] = $taxes;
+       return $taxes;
 	}
 
 	public static function getAssociatedTaxRatesByIdCountry($id_country)
@@ -118,7 +133,9 @@ class TaxRulesGroupCore extends ObjectModel
 	    FROM `'._DB_PREFIX_.'tax_rules_group` rg
    	    LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.`id_tax_rules_group` = rg.`id_tax_rules_group`)
 	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
-	    WHERE tr.`id_country` = '.(int)$id_country.' AND tr.`id_state` = 0'
+	    WHERE tr.`id_country` = '.(int)$id_country.'
+	    AND tr.`id_state` = 0
+	    AND tr.`id_county` = 0'
 	    );
 
 	    $res = array();
@@ -128,10 +145,10 @@ class TaxRulesGroupCore extends ObjectModel
 	    return $res;
 	}
 
-	public static function getTaxesRate($id_tax_rules_group, $id_country, $id_state)
+	public static function getTaxesRate($id_tax_rules_group, $id_country, $id_state, $id_county)
 	{
 	    $rate = 0;
-	    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state) AS $tax)
+	    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) AS $tax)
 	        $rate += (float)$tax->rate;
 
 	    return $rate;
@@ -145,9 +162,4 @@ class TaxRulesGroupCore extends ObjectModel
 	    WHERE `name` = \''.pSQL($name).'\''
 	    );
 	}
-
-
-
-
 }
-

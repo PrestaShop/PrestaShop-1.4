@@ -1698,7 +1698,9 @@ class ProductCore extends ObjectModel
 		if (Tax::excludeTaxeOption())
 			$usetax = false;
 
-        $id_country = (int)Country::getDefaultCountryId();
+      $id_country = (int)Country::getDefaultCountryId();
+		$id_state = 0;
+		$id_county = 0;
 		$id_state = 0;
 
 
@@ -1707,6 +1709,8 @@ class ProductCore extends ObjectModel
 		{
 			$id_country = (int)($address_infos['id_country']);
 			$id_state = (int)($address_infos['id_state']);
+			$id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
+
 		}
 
 		if ($usetax != false AND !empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
@@ -1714,7 +1718,7 @@ class ProductCore extends ObjectModel
 
 		$id_shop = (int)(Shop::getCurrentShop());
 
-		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, 0, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
+		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_county, $id_state, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
 		$usereduc, $with_ecotax, $specificPriceOutput);
 	}
 
@@ -1769,7 +1773,6 @@ class ProductCore extends ObjectModel
 		$specific_price = self::$_pricesLevel3[$cacheId3];
 
 		$price = (float)(!$specific_price OR $specific_price['price'] == 0) ? $result['price'] : $specific_price['price'];
-
 		// convert only if the specific price is in the default currency (id_currency = 0)
 	    if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);

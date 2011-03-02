@@ -171,7 +171,7 @@ class StateCore extends ObjectModel
 		return $row['nb_used'];
 	}
 
-    public static function getStatesByIdCountryAndIdZone($id_country, $id_zone)
+    public static function getStatesByIdCountry($id_country)
     {
         if (empty($id_country))
             die(Tools::displayError());
@@ -179,9 +179,13 @@ class StateCore extends ObjectModel
         return Db::getInstance()->ExecuteS('
         SELECT *
         FROM `'._DB_PREFIX_.'state` s
-        WHERE s.`id_country` = '.(int)$id_country.'
-        AND s.`id_zone` = '.(int)$id_zone
+        WHERE s.`id_country` = '.(int)$id_country
         );
     }
+
+   public static function hasCounties($id_state)
+   {
+   	return sizeof(County::getCounties((int)$id_state));
+  	}
 }
 

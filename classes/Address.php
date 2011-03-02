@@ -77,13 +77,13 @@ class AddressCore extends ObjectModel
 
 	/** @var string Mobile phone number */
 	public 		$phone_mobile;
-	
+
 	/** @var string VAT number */
 	public 		$vat_number;
 
 	/** @var string DNI number */
 	public		$dni;
-	
+
 	/** @var string Object creation date */
 	public 		$date_add;
 
@@ -92,7 +92,7 @@ class AddressCore extends ObjectModel
 
 	/** @var boolean True if address has been deleted (staying in database as deleted) */
 	public 		$deleted = 0;
-	
+
 	protected static $_idZones = array();
 	protected static $_idCountries = array();
 
@@ -146,7 +146,7 @@ class AddressCore extends ObjectModel
 	{
 		if (!parent::add($autodate, $nullValues))
 			return false;
-		
+
 		if (Validate::isUnsignedId($this->id_customer))
 			Customer::resetAddressCache($this->id_customer);
 		return true;
@@ -156,7 +156,7 @@ class AddressCore extends ObjectModel
 	{
 		if (Validate::isUnsignedId($this->id_customer))
 			Customer::resetAddressCache($this->id_customer);
-			
+
 		if (!$this->isUsed())
 			return parent::delete();
 		else
@@ -196,7 +196,7 @@ class AddressCore extends ObjectModel
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
 	}
-	
+
 	public function validateControler($htmlentities = true)
 	{
 		$errors = parent::validateControler($htmlentities);
@@ -217,7 +217,7 @@ class AddressCore extends ObjectModel
 	{
 		if (isset(self::$_idZones[$id_address]))
 			return self::$_idZones[$id_address];
-	
+
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT s.`id_zone` AS id_zone_state, c.`id_zone`
 		FROM `'._DB_PREFIX_.'address` a
@@ -275,31 +275,31 @@ class AddressCore extends ObjectModel
 			WHERE `id_address` = '.(int)($id_address));
 		return isset($result['id_manufacturer']) ? $result['id_manufacturer'] : false;
 	}
-	
+
 	static public function getCountryAndState($id_address)
 	{
 		if (isset(self::$_idCountries[$id_address]))
 			return self::$_idCountries[$id_address];
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `id_country`, `id_state`, `vat_number` FROM `'._DB_PREFIX_.'address`
+		SELECT `id_country`, `id_state`, `vat_number`, `postcode` FROM `'._DB_PREFIX_.'address`
 		WHERE `id_address` = '.(int)($id_address));
 		self::$_idCountries[$id_address] = $result;
 		return $result;
 	}
-	
+
 	/**
 	* Specify if an address is already in base
 	*
 	* @param $id_address Address id
 	* @return boolean
-	*/	
+	*/
 	static public function addressExists($id_address)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_address`
 		FROM '._DB_PREFIX_.'address a
 		WHERE a.`id_address` = '.(int)($id_address));
-		
+
 		return isset($row['id_address']);
 	}
 
@@ -312,5 +312,4 @@ class AddressCore extends ObjectModel
 		);
 	}
 }
-
 

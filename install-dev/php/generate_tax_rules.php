@@ -23,18 +23,20 @@ function generate_tax_rules()
         LEFT JOIN `'._DB_PREFIX_.'tax_zone` tz ON (tz.`id_zone` = z.`id_zone`)
         WHERE `id_tax` = '.(int)$id_tax
         );
-
         if ($countries)
         {
             foreach ($countries AS $country)
             {
-                $tr = new TaxRule();
-                $tr->id_tax_rules_group = $group->id;
-                $tr->id_country = (int)$country['id_country'];
-                $tr->id_state = 0;
-                $tr->state_behavior = 0;
-                $tr->id_tax = $id_tax;
-                $tr->save();
+					 $res = Db::getInstance()->Execute('
+					 INSERT INTO `'._DB_PREFIX_.'tax_rule` (`id_tax_rules_group`, `id_country`, `id_state`, `state_behavior`, `id_tax`)
+					 VALUES (
+					 '.(int)$group->id.',
+					 '.(int)$country['id_country'].',
+					 0,
+					 0,
+					 '.(int)$id_tax.
+					 ')');
+
             }
         }
 
@@ -53,13 +55,15 @@ function generate_tax_rules()
                 else
                     $tax_behavior = $state['tax_behavior'];
 
-                $tr = new TaxRule();
-                $tr->id_tax_rules_group = $group->id;
-                $tr->id_country = (int)$state['id_country'];
-                $tr->id_state = (int)$state['id_state'];
-                $tr->state_behavior = $tax_behavior;
-                $tr->id_tax = $id_tax;
-                $tr->save();
+					 $res = Db::getInstance()->Execute('
+					 INSERT INTO `'._DB_PREFIX_.'tax_rule` (`id_tax_rules_group`, `id_country`, `id_state`, `state_behavior`, `id_tax`)
+					 VALUES (
+					 '.(int)$group->id.',
+					 '.(int)$state['id_country'].',
+					 '.(int)$state['id_state'].',
+					 '.(int)$tax_behavior.',
+					 '.(int)$id_tax.
+					 ')');
             }
         }
 

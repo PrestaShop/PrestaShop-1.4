@@ -30,6 +30,8 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 /* Getting cookie or logout */
 require_once(dirname(__FILE__).'/init.php');
 
+require_once(PS_ADMIN_DIR.'/tabs/AdminCounty.php');
+
 if (isset($_GET['changeParentUrl']))
 	echo '<script type="text/javascript">parent.parent.document.location.href = "'.addslashes(urldecode(Tools::getValue('changeParentUrl'))).'";</script>';
 if (isset($_GET['installBoughtModule']))
@@ -238,7 +240,7 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 	}
 	else
 		die('{"hasError" : true, "errors" : "This category can not be loaded"}');
-	
+
 }
 
 if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
@@ -353,7 +355,10 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 	
 	if (is_array($states) AND !empty($states))
 	{
-		$list = '<option value="0">-----------</option>'."\n";
+		$list = '';
+		if (Tools::getValue('no_empty') != true)
+			$list = '<option value="0">-----------</option>'."\n";
+
 		foreach ($states AS $state)
 			$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
 	}
@@ -476,7 +481,7 @@ if (Tools::isSubmit('saveImportMatchs'))
 								\''.pSQL($match).'\',
 								\''.pSQL(Tools::getValue('skip')).'\'
 								)');
-	
+
 	die('{"id" : "'.Db::getInstance()->Insert_ID().'"}');
 }
 
@@ -495,6 +500,28 @@ if (Tools::isSubmit('toggleScreencast'))
 {
 	global $cookie;
 	$cookie->show_screencast = (int)(!(bool)$cookie->show_screencast);
+}
+
+if (Tools::isSubmit('ajaxAddZipCode') OR Tools::isSubmit('ajaxRemoveZipCode'))
+{
+	$zipcodes = Tools::getValue('zipcodes');
+	$id_county = (int)Tools::getValue('id_county');
+
+	$county = new County($id_county);
+	if (!Validate::isLoadedObject($county))
+		die('error');
+
+	if (Tools::isSubmit('ajaxAddZipCode'))
+	{
+		if ($county->isZipCodeRangePresent($zipcodes))
+			die('error:'.Tools::displayError('This Zip Code is already in use.'));
+		if ($county->addZipCodes($zipcodes))
+			die(AdminCounty::renderZipCodeList($county->getZipCodes()));
+	}
+	else if (Tools::isSubmit('ajaxRemoveZipCode') AND $county->removeZipCodes($zipcodes))
+			die(AdminCounty::renderZipCodeList($county->getZipCodes()));
+
+	die('error');
 }
 
 if (Tools::isSubmit('helpAccess'))
