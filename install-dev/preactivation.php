@@ -68,6 +68,7 @@
 						$.ajax({
 						  url: 'preactivation.php?request=send'+
 							".$varList."
+							'&email='+$('input#infosEmail').val()+
 							'&country_iso_code=".$_GET['country_iso_code']."',
 						  context: document.body,
 						  success: function(data) {

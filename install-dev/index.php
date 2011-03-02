@@ -653,7 +653,7 @@ if ($lm->getIncludeTradFilename())
 									echo '<div class="field">
 										<div style="float: left; height: 35px; width: 275px; padding-top: 6px;"><input type="checkbox" id="preInstallModules'.$id_country.$module.'" value="'.$module.'" class="aligned '.$module.' preInstallModules'.$id_country.'" style="vertical-align: middle;" /></div>
 										<div style="float: left; height: 35px; width: 40px;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'" /></div>
-										<div style="float: left; height: 35px; width: 200px;"><label for="preInstallModules'.$id_country.$module.'">'.lang('Check this box to preactivate your account').' '.$modulesDescription[$module]['name'].'</label></div>
+										<div style="float: left; height: 35px; width: 200px;"><label for="preInstallModules'.$id_country.$module.'">'.lang('Cocher cette case pour préactiver votre compte').' '.$modulesDescription[$module]['name'].'</label></div>
 										<br clear="left" />
 										<span id="resultInfosNotification" class="result aligned"></span>
 										<p class="userInfos aligned">'.$modulesDescription[$module]['description'].'</p>
