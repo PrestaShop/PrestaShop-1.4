@@ -1432,7 +1432,7 @@ class AdminTranslations extends AdminTab
 			{
 				$title[$language] = substr($content[$language], 0, stripos($content[$language], '<body'));
 				preg_match('#<title>([^<]+)</title>#Ui', $title[$language], $matches);
-				$title[$language] = $matches[1];
+				$title[$language] = empty($matches[1])?'':$matches[1];
 				
 				// The 2 lines below allow to exlude <body> tag from the content.
 				// This allow to exclude body tag even if attributs are setted.
