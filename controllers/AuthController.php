@@ -69,9 +69,7 @@ class AuthControllerCore extends FrontController
 		{
 			$create_account = 1;
 			if (Tools::isSubmit('submitAccount'))
-				self::$smarty->assign('email_create', 1);
-			if (Customer::customerExists(Tools::getValue('email')))
-				$this->errors[] = Tools::displayError('an account is already registered with this e-mail, please fill in the password or request a new one'); 
+				self::$smarty->assign('email_create', 1); 
 			/* New Guest customer */
 			if (!Tools::getValue('is_new_customer') AND !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))
 				$this->errors[] = Tools::displayError('you can\'t create a guest account');
@@ -89,7 +87,6 @@ class AuthControllerCore extends FrontController
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
 			$this->errors = array_unique(array_merge($this->errors, $customer->validateControler()));
-			
 			/* Preparing address */
 			$address = new Address();
 			$_POST['lastname'] = $lastnameAddress;
@@ -133,6 +130,8 @@ class AuthControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('invalid birthday');
 			if (!sizeof($this->errors))
 			{
+				if (Customer::customerExists(Tools::getValue('email')))
+					$this->errors[] = Tools::displayError('an account is already registered with this e-mail, please fill in the password or request a new one');
 				if (Tools::isSubmit('newsletter'))
 				{
 					$customer->ip_registration_newsletter = pSQL(Tools::getRemoteAddr());
