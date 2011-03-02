@@ -25,10 +25,15 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-	$country =  DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, $_GET['country']);
-	if ($_GET['country'] == 'USA')
-		$countrt[0] = 'US/Eastern';
-	elseif ($_GET['country'] == 'RU')
-		$countrt[0] = 'Europe/Moscow';
+$country =  DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, $_GET['country']);
 
+$special = array(
+	'US' => 'US/Eastern',
+	'RU' => 'Europe/Moscow'
+);
+
+if (!empty($_GET['country']) AND !empty($special[$_GET['country']]))
+		$country[0] = $special[$_GET['country']];
+
+if(isset($country[0]))
 	echo $country[0];
