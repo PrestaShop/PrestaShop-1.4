@@ -1,10 +1,10 @@
-Hi {firstname} {lastname},
+Hallo {firstname} {lastname},
 
-This is to inform you about the generation of a credit slip in your name from your order #{id_order}.
+Damit werden Sie über die Erstellung eines Gutscheins auf Ihren Namen nach Ihrer Bestellung Nr. informiert.{id_order}.
 
-You can review this credit slip and download the invoice from the "Order follow" section of your account by clicking "My account" on our Website.
+Sie können diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverfolgung" Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
 
-Thank you for shopping at {shop_name}.
+Danke für Ihren Einkauf bei {shop_name}.
 
 {shop_name} - {shop_url}
 

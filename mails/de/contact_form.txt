@@ -1,12 +1,12 @@
-Your message has been correctly sent to our Customer Service.
+Ihre Nachricht wurde korrekt an unseren Kundendienst weitergeleitet.
 
-Your message:
+Ihre Nachricht:
 
 {message}
 
 
-We will answer as soon as possible.
+Wir werden so schnell wie möglich antworten.
 
-Regards,
+Mit freundlichen Grüßen,
 
 {shop_url} powered by PrestaShopâ„¢

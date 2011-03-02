@@ -1,11 +1,11 @@
-Hi {firstname} {lastname},
+Hallo {firstname} {lastname},
 
-There is a problem with your payment for order #{id_order}. Please contact us at your earliest convenience.
+Es ist ein Problem bei Ihrer Zahlung der Bestellung Nr. {id_order} aufgetreten. Bitte kontaktieren Sie uns so bald wie möglich.
 
-Your order will not be shipped until we have resolved this problem. 
+Ihre Bestellung wird nicht versandt, bis wir dieses Problem gelöst haben. 
 
-You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website.
-If you have guest account, you can follow your order at this page: {shop_url}guest-tracking.php
+Sie können diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverlauf"Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
+Wenn Sie ein Gast-Konto haben, können Sie Ihre Bestellung auf dieser Webseite verfolgen. {shop_url}gast-bestellverfolgung.php
 
 {shop_name} - {shop_url}
 

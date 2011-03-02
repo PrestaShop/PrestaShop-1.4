@@ -1,20 +1,20 @@
-Hi {firstname} {lastname},
+Hallo {firstname} {lastname},
 
-Thank you for creating your account at {shop_name}.
+Danke für Ihre Kontoeröffnung {shop_name}.
 
-Your account login details :
+Ihre Konto-Login-Details:
 
-E-mail address: {email}
-Password: {passwd}
+E-Mail-Adresse: {email}
+Kennwort: {passwd}
  
-You can now place orders on our Website: {shop_url}
+Sie können nun Bestellungen auf unserer Webseite vornehmen: {shop_url}
 
-Safety Tips:
+Sicherheitstipps:
 
-* Keep your account details safe.
-* Do not disclose your login details to anyone.
-* Change your password regularly.
-* Should you suspect someone is using your account illegally, please notify us immediately.
+* Schützen Sie Ihre Kontodetails.
+* Geben Sie Ihre Login-Details nicht an Dritte weiter.
+* Ändern Sie Ihr Kennwort regelmäßig.
+* Falls Sie vermuten, dass jemand Ihr Konto unerlaubt benutzt, benachrichtigen Sie uns bitte sofort.
 
 
 {shop_url} powered by PrestaShopâ„¢

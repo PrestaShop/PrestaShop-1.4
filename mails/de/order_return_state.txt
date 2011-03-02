@@ -1,8 +1,8 @@
-Hi {firstname} {lastname},
+Hallo {firstname} {lastname},
 
-Your return order #{id_order_return} history has changed in "{state_order_return}".
+Der Verlauf Ihrer Bestellrücksendung Nr. "{id_order_return}" wurde zu "{state_order_return}" geändert.
 
-You can review this order return in the "Order history" section of your account by clicking "My account" on our Website.
+Sie können diese Bestellrücksendung im Abschnitt "Bestellverlauf" Ihres Kontos ansehen, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
 
 {shop_name} - {shop_url}
 

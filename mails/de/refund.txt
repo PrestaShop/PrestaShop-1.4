@@ -1,9 +1,9 @@
-	Hi {firstname} {lastname},
+	Hallo {firstname} {lastname},
 
-	Your order payment has been refunded.
+	Ihr Bestellbetrag wurde rückerstattet.
 
-	You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website.
-	If you have guest account, you can follow your order at this page: {shop_url}guest-tracking.php
+	Sie können diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverlauf" Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
+	Wenn Sie ein Gast-Konto haben, können Sie Ihre Bestellung auf dieser Webseite verfolgen. {shop_url}gast-bestellverfolgung.php
 
 	{shop_name} - {shop_url}
 

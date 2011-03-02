@@ -1,11 +1,11 @@
-{firstname} {lastname}, thank you for your order on {shop_name}!
+{firstname} {lastname}, vielen Dank für Ihre Bestellung auf {shop_name}!
 
-You have {nbProducts} product(s) to download.
+Sie haben {nbProducts} Produkt (e) zum Download bereit.
 
-Below are direct links to these products:
+Hier sind direkte Links zu diesen Produkten:
 {virtualProducts}
 
-You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website. 
-If you have a guest account, you can follow your order at this page: {shop_url}guest-tracking.php
+Sie können diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverlauf" Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken. 
+Wenn Sie ein Gast-Konto haben, können Sie Ihre Bestellung auf dieser Webseite verfolgen: {shop_url}gast-bestellverfolgung.php
 
 {shop_url} powered by PrestaShopâ„¢

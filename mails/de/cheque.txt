@@ -1,19 +1,19 @@
-Hi {firstname} {lastname},
+Hallo {firstname} {lastname},
 
-Your order {order_name} has been placed successfully. Your order will be shipped as soon as payment is received.
+Ihre Bestellung {order_name} wurde erfolgreich aufgenommen. Ihre Bestellung wird versendet, sobald die Zahlung eingegangen ist.
 
-Please note that you have selected to pay by cheque. Please include on your cheque:
+Bitte beachten Sie, dass Sie die Zahlung per Scheck gewählt haben. Bitte tragen Sie auf Ihrem Scheck ein:
 
-- an amount of {total_paid}
+- einen Betrag über {total_paid}
 
-- payable to the order of {cheque_name}
+- zahlbar an {cheque_name}
 
-- mail to {cheque_address}
+- Adresse {cheque_address}
 
-You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website.
-If you have guest account, you can follow your order at this page: {shop_url}guest-tracking.php
+Sie können diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverlauf" Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
+Wenn Sie ein Gast-Konto haben, können Sie Ihre Bestellung auf dieser Webseite verfolgen. {shop_url}gast-bestellverfolgung.php
 
-Thank you for shopping at {shop_name}.
+Danke für Ihren Einkauf bei {shop_name}.
 
 {shop_name} - {shop_url}
 

@@ -1,8 +1,8 @@
-Message from {shop_name}
+Nachricht von {shop_name}
 
-Hi {firstname} {lastname},
+Hallo {firstname} {lastname},
 
-You have received a new message regarding order #{id_order}:
+Sie haben eine neue Nachricht zur Bestellung Nr. {id_order} erhalten:
 {message}
 
 
