@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
-$_MODULE['<{hipay}prestashop>hipay_fda8a145cc01a90626304a3a4fe525d5'] = 'Permet les paiements avec Hipay';
+$_MODULE['<{hipay}prestashop>hipay_3a630598b9817a76dbb984ba467f6400'] = 'Paiement sécurisé Visa Mastercard et solutions européennes.';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Erreur: impossible de créer PaymentParams';
 $_MODULE['<{hipay}prestashop>hipay_a85eba4c6c699122b2bb1387ea4813ad'] = 'Panier';
 $_MODULE['<{hipay}prestashop>hipay_d4126d0b64579211d37151ef9b5af754'] = '[Hipay] Erreur : impossible de créer le produit \"panier\"';

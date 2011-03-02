@@ -45,7 +45,7 @@ class Hipay extends PaymentModule
 		parent::__construct();
 		
 		$this->displayName = $this->l('Hipay');
-		$this->description = $this->l('Accepts payments by Hipay');
+		$this->description = $this->l('Secure payement Visa Mastercard and european solutions.');
 
 		if ($this->id)
 		{
@@ -313,14 +313,9 @@ class Hipay extends PaymentModule
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Hipay').'</legend>
 			'.$this->l('Hipay is a secure electronic wallet which provides, to the merchants, a complete service package for online business transactions: whether for digital contents, software, music, subscriptions, physical goods…without having to negotiate with a bank and without technical charges.').'<br />'.$this->l('Free & Easy, Hipay implementation is a real asset to an e-commerce website that wants to expand in Europe: secure payments by international cards, local payment solutions, bank transfers…').'
 			<br /><br />
-			<ul>
 			'.(Configuration::get('HIPAY_SITEID')
-				? '<li><a href="https://www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your merchant account').'</a></li>'
-				: '<li><a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700">'.$this->l('Create a hipay account').'</a></li>').'
-			'.(Configuration::get('HIPAY_SITEID_TEST')
-				? '<li><a href="https://test.www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your test account').'</a></li>'
-				: '<li><a href="https://test.www.hipay.com/registration/register" style="color:#D9263F">'.$this->l('Create a test account').'</a></li>').'
-			</ul>
+				? '<a href="https://www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your merchant account').'</a><br />'
+				: '<a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700"><img src="../modules/'.$this->name.'/create.jpg" alt="'.$this->l('Create a hipay account').'" title="'.$this->l('Create a hipay account').'" border="0" /></a><br />').'
 			<br />'.$this->l('Notice: if you want to refund a payment, please log in to your Hipay account then go to Merchant Management > Sales management.').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>
