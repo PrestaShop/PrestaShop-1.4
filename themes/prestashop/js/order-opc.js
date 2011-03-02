@@ -72,7 +72,7 @@ function updateCarrierList(json)
 			html = html + '</td>'+
 			'</tr>';
 		}
-		if (json.HOOK_EXTRACARRIER !== null) html += json.HOOK_EXTRACARRIER;
+		if (json.HOOK_EXTRACARRIER !== null && json.HOOK_EXTRACARRIER != undefined) html += json.HOOK_EXTRACARRIER;
 		$('#noCarrierWarning').hide();
 		$('#extra_carrier:hidden').show();
 		$('table#carrierTable tbody').html(html);
