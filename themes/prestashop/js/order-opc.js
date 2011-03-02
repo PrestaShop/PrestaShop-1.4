@@ -313,6 +313,48 @@ function saveAddress(type)
 	return result;
 }
 
+function updateNewAccountToAddressBlock()
+{
+	var overlay = setTimeout(function() {
+		$('#opc_new_account-overlay').fadeIn('fast');
+		$('#opc_delivery_methods-overlay').fadeIn('fast');
+		$('#opc_payment_methods-overlay').fadeIn('fast');
+	}, 500);
+	$.ajax({
+		type: 'POST',
+		url: orderOpcUrl,
+		async: true,
+		cache: false,
+		dataType : "json",
+		data: 'ajax=true&method=getAddressBlockAndCarriersAndPayments&token=' + static_token ,
+		success: function(json)
+		{
+			$('#opc_new_account').fadeOut('fast', function() {
+				$('#opc_new_account').html(json.order_opc_adress);
+				// update block user info
+				if (json.block_user_info != '' && $('#header_user').length == 1)
+				{
+					$('#header_user').fadeOut('slow', function() {
+						$(this).attr('id', 'header_user_old').after(json.block_user_info).fadeIn('slow');
+						$('#header_user_old').remove();
+					});
+				}
+				$('#opc_new_account').fadeIn('fast', function() {
+					updateAddressesDisplay(true);
+					updateCarrierList(json.carrier_list);
+					updatePaymentMethods(json);
+					if ($('#gift-price').length == 1)
+						$('#gift-price').html(jsonData.gift_price);
+					clearTimeout(overlay);
+					$('#opc_delivery_methods-overlay').fadeOut('fast');
+					$('#opc_payment_methods-overlay').fadeOut('fast');
+				});
+			});
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to send login informations \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+	});
+}
+
 $(function() {
 	// GUEST CHECKOUT / NEW ACCOUNT MANAGEMENT
 	if ((!isLogged) || (isGuest))
@@ -399,46 +441,7 @@ $(function() {
 						$('#opc_login_errors').html(errors).slideDown('slow');
 					}
 					else
-					{
-						var overlay = setTimeout(function() {
-							$('#opc_new_account-overlay').fadeIn('fast');
-							$('#opc_delivery_methods-overlay').fadeIn('fast');
-							$('#opc_payment_methods-overlay').fadeIn('fast');
-						}, 500);
-						$.ajax({
-							type: 'POST',
-							url: orderOpcUrl,
-							async: true,
-							cache: false,
-							dataType : "json",
-							data: 'ajax=true&method=getAddressBlockAndCarriersAndPayments&token=' + static_token ,
-							success: function(json)
-							{
-								$('#opc_new_account').fadeOut('fast', function() {
-									$('#opc_new_account').html(json.order_opc_adress);
-									// update block user info
-									if (json.block_user_info != '' && $('#header_user').length == 1)
-									{
-										$('#header_user').fadeOut('slow', function() {
-											$(this).attr('id', 'header_user_old').after(json.block_user_info).fadeIn('slow');
-											$('#header_user_old').remove();
-										});
-									}
-									$('#opc_new_account').fadeIn('fast', function() {
-										updateAddressesDisplay(true);
-										updateCarrierList(json.carrier_list);
-										updatePaymentMethods(json);
-										if ($('#gift-price').length == 1)
-											$('#gift-price').html(jsonData.gift_price);
-										clearTimeout(overlay);
-										$('#opc_delivery_methods-overlay').fadeOut('fast');
-										$('#opc_payment_methods-overlay').fadeOut('fast');
-									});
-								});
-							},
-							error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to send login informations \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
-						});
-					}
+						updateNewAccountToAddressBlock();
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to send login informations \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
 			});
@@ -562,8 +565,14 @@ $(function() {
 						$('input#opc_id_customer').val(jsonData.id_customer);
 						
 						// force to refresh carrier list
-						updateAddressSelection();
-						$('#submitAccount').hide();
+						if (isGuest)
+						{
+							$('#opc_account_saved').fadeIn('slow');
+							$('#submitAccount').hide();
+							updateAddressSelection();
+						}
+						else
+							updateNewAccountToAddressBlock();
 					}
 					clearTimeout(overlayAccount);
 					$('#opc_new_account-overlay').fadeOut('fast');
@@ -662,7 +671,10 @@ $(function() {
 	
 	$('#opc_account_form input,select,textarea').change(function() {
 		if ($(this).is(':visible'))
+		{
+			$('#opc_account_saved').fadeOut('slow');
 			$('#submitAccount').show();
+		}
 	});
 	
 });
