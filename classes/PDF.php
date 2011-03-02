@@ -173,7 +173,11 @@ class PDFCore extends PDF_PageGroupCore
 	*/
 	public function Footer()
 	{
-		$this->SetY(-33);
+		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
+		$conf = Configuration::getMultiple($arrayConf);
+		$conf['PS_SHOP_NAME_UPPER'] = Tools::strtoupper($conf['PS_SHOP_NAME']);
+		$y_delta = substr_count($conf['PS_SHOP_DETAILS'],"\n");
+		$this->SetY( -33 - ($y_delta * 7));
 		$this->SetFont(self::fontname(), '', 7);
 		$this->Cell(190, 5, ' '."\n".Tools::iconv('utf-8', self::encoding(), 'P. ').$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
 
@@ -194,9 +198,6 @@ class PDFCore extends PDF_PageGroupCore
 		else
 			$this->Ln(4);
 		$this->Ln(9);
-		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
-		$conf = Configuration::getMultiple($arrayConf);
-		$conf['PS_SHOP_NAME_UPPER'] = Tools::strtoupper($conf['PS_SHOP_NAME']);
 		foreach($conf as $key => $value)
 			$conf[$key] = Tools::iconv('utf-8', self::encoding(), $value);
 		foreach ($arrayConf as $key)
@@ -207,7 +208,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetFont(self::fontname(), '', 8);
 		$this->Cell(0, 5, $conf['PS_SHOP_NAME_UPPER'].
 		(!empty($conf['PS_SHOP_ADDR1']) ? ' - '.self::l('Headquarters:').' '.$conf['PS_SHOP_ADDR1'].(!empty($conf['PS_SHOP_ADDR2']) ? ' '.$conf['PS_SHOP_ADDR2'] : '').' '.$conf['PS_SHOP_CODE'].' '.$conf['PS_SHOP_CITY'].((isset($conf['PS_SHOP_STATE']) AND !empty($conf['PS_SHOP_STATE'])) ? (', '.$conf['PS_SHOP_STATE']) : '').' '.$conf['PS_SHOP_COUNTRY'] : ''), 0, 1, 'C', 1);
-		$this->Cell(0, 5,
+		$this->Multicell(0, 5,
 		(!empty($conf['PS_SHOP_DETAILS']) ? self::l('Details:').' '.$conf['PS_SHOP_DETAILS'].' - ' : '').
 		(!empty($conf['PS_SHOP_PHONE']) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : ''), 0, 1, 'C', 1);
 	}
