@@ -564,6 +564,10 @@ if ($lm->getIncludeTradFilename())
 
 
 				<!-- Partner Modules -->
+				<?php
+					if (!isset($_GET['language']))
+						$_GET['language'] = 0;
+				?>
 				<link href="../css/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />
 				<script src="../js/jquery/jquery.fancybox-1.3.4.js" type="text/javascript"></script>
 				<style>
@@ -584,30 +588,29 @@ if ($lm->getIncludeTradFilename())
 								}
 							});
 						});
-						$('.paypal').click(function() {						
+						$('.paypal').change(function() {				
 							if ($(this).attr('checked'))
 							{
-								$.fancybox({
-									'href': 'partner/paypal.php?request=form'+
-										"&language_iso_code="+isoCodeLocalLanguage+
-										"&country_iso_code="+encodeURIComponent($("select#infosCountry option:selected").attr('rel'))+
-										"&activity="+ encodeURIComponent($("select#infosActivity").val())+
-										"&timezone="+ encodeURIComponent($("select#infosTimezone").val())+
-										"&shop="+ encodeURIComponent($("input#infosShop").val())+
-										"&firstName="+ encodeURIComponent($("input#infosFirstname").val())+
-										"&lastName="+ encodeURIComponent($("input#infosName").val())+
-										"&email="+ encodeURIComponent($("input#infosEmail").val()),
-									'zoomSpeedIn': 800,
-									'zoomSpeedOut': 700,
-									'imageScale' : true,
-									'centerOnScroll': true,
-									'hideOnContentClick' : false,
-									'overlayShow': false,
-									'overlayOpacity': 0.2,
-									'zoomOpacity': true,
-									'easingIn' : 'easeOutBack',
-									'hideOnContentClick': false
+								$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).css({'display' : 'block'});
+								$.ajax({
+								  url: 'preactivation.php?request=form&partner=paypal&language=<?php echo $_GET['language'] ?>'+
+									"&language_iso_code="+isoCodeLocalLanguage+
+									"&country_iso_code="+encodeURIComponent($("select#infosCountry option:selected").attr('rel'))+
+									"&activity="+ encodeURIComponent($("select#infosActivity").val())+
+									"&timezone="+ encodeURIComponent($("select#infosTimezone").val())+
+									"&shop="+ encodeURIComponent($("input#infosShop").val())+
+									"&firstName="+ encodeURIComponent($("input#infosFirstname").val())+
+									"&lastName="+ encodeURIComponent($("input#infosName").val())+
+									"&email="+ encodeURIComponent($("input#infosEmail").val()),
+								  	success: function(data) {
+								    		$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).html(data);
+								  	}
 								});
+							}
+							else
+							{
+								$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).css({'display' : 'none'});
+								$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).html('');
 							}
 						});
 					});
@@ -615,41 +618,51 @@ if ($lm->getIncludeTradFilename())
 
 				<?php
 
-					$modulesHelpInstall = array();
-					$modulesDescription = array();
-					//$modulesHelpInstall[1] = array('paypal'); // DE - Germany
-					//$modulesHelpInstall[6] = array('paypal'); // ES - Spain
-					//$modulesHelpInstall[8] = array('moneybookers', 'socolissimo'); // FR - France
-					//$modulesHelpInstall[10] = array('paypal'); // IT - Italy
-					//$modulesHelpInstall[17] = array('paypal'); // UK / GB - United Kingdom / Great Britain
-					//$modulesHelpInstall[18] = array('paypal'); // SE - Sweden
-					//$modulesHelpInstall[21] = array('paypal'); // US - USA
-					//$modulesDescription = array(
-					//	'moneybookers' => array('name' => 'MoneyBookers', 'description' => lang('Votre solution pour accepter les paiement en ligne sans frais d\'installation, des frais bancaires réduits, déjà utilisée par plus de 13 Millions d’utilisateurs dans le monde, recevez dès maintenant vos paiements...')),
-					//	'socolissimo' => array('name' => 'SoColissimo', 'description' => lang('Avec So Colissimo, faites livrer vos colis là où vous le souhaitez, choisissez parmi les 5 solutions de livraison proposées pour satisfaire pleinement vos clients et leur apporter la garantie de la Poste !')),
-					//	'paypal' => array('name' => 'PayPal', 'description' => lang('The leading worldwide provider of internet payment solutions, no setup fee, your customers make their purchase in complete confidence. Install now (five minutes only) and be ready to start selling'), 'check' => 'http://www.prestashop.com/partner/preactivation-xml.php'),
-					//);
+					if (!isset($_GET['language']))
+						$_GET['language'] = 0;
 
-					foreach ($modulesDescription as $k => $v)
-						if (file_exists('partner/'.$k.'.png'))
-							$modulesDescription[$k]['logo'] = 'partner/'.$k.'.png';
-
-					foreach ($modulesHelpInstall as $id_country => $modulesList)
+					function getPreinstallXmlLang($object, $field)
 					{
-						echo '<div class="installModuleList'.($id_country == 8 ? ' selected' : '').'" id="modulesList'.$id_country.'">';
-						foreach ($modulesList as $module)
-							if (empty($modulesDescription[$module]['check']) || @file_get_contents($modulesDescription[$module]['check']))
+						if (property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
+							return trim($object->{$field.'_'.((int)($_GET['language'])+1)});
+						if (property_exists($object, $field.'_1'))
+							return trim($object->{$field.'_1'});
+						return '';
+					}
+
+					$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/partners.php?version=1.0');
+					if ($content && $content[0] == '<')
+					{
+						$result = simplexml_load_string($content);
+						if ($result->partner)
+						{
+							$modulesHelpInstall = array();
+							$modulesDescription = array();
+							foreach ($result->partner as $p)
 							{
-								echo '<div class="field">
-									<div style="float: left; height: 35px; width: 275px; padding-top: 6px;"><input type="checkbox" id="preInstallModules'.$id_country.$module.'" value="'.$module.'" class="aligned '.$module.' preInstallModules'.$id_country.'" style="vertical-align: middle;" /></div>
-									<div style="float: left; height: 35px; width: 40px;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'" /></div>
-									<div style="float: left; height: 35px; width: 200px;"><label for="preInstallModules'.$id_country.$module.'">'.lang('Check this box to preactivate your account').' '.$modulesDescription[$module]['name'].'</label></div>
-									<br clear="left" />
-									<span id="resultInfosNotification" class="result aligned"></span>
-									<p class="userInfos aligned">'.$modulesDescription[$module]['description'].'</p>
-								</div>';
+								$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo), 'description' => getPreinstallXmlLang($p, 'description'));
+								foreach ($p->countries as $country)
+									$modulesHelpInstall[trim($country)][] = trim($p->key);
 							}
-						echo '</div>';
+
+							foreach ($modulesHelpInstall as $id_country => $modulesList)
+							{
+								echo '<div class="installModuleList'.($id_country == 8 ? ' selected' : '').'" id="modulesList'.$id_country.'">';
+								foreach ($modulesList as $module)
+								{
+									echo '<div class="field">
+										<div style="float: left; height: 35px; width: 275px; padding-top: 6px;"><input type="checkbox" id="preInstallModules'.$id_country.$module.'" value="'.$module.'" class="aligned '.$module.' preInstallModules'.$id_country.'" style="vertical-align: middle;" /></div>
+										<div style="float: left; height: 35px; width: 40px;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'" /></div>
+										<div style="float: left; height: 35px; width: 200px;"><label for="preInstallModules'.$id_country.$module.'">'.lang('Check this box to preactivate your account').' '.$modulesDescription[$module]['name'].'</label></div>
+										<br clear="left" />
+										<span id="resultInfosNotification" class="result aligned"></span>
+										<p class="userInfos aligned">'.$modulesDescription[$module]['description'].'</p>
+										<div id="'.$module.'FormDiv'.$id_country.'" style="display: none;"></div>
+									</div>';
+								}
+								echo '</div>';
+							}
+						}
 					}
 
 				?>
