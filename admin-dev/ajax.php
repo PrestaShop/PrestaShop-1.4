@@ -535,3 +535,47 @@ if (Tools::isSubmit('helpAccess'))
 		die(HelpAccess::displayHelp($item, $isoUser,  $country, $version));
 	die();
 }
+
+if (Tools::isSubmit('getHookableList'))
+{
+	$modules_list = explode(',', Tools::getValue('modules_list'));
+	$hooks_list = explode(',', Tools::getValue('hooks_list'));
+	$hookableList = array();
+	
+	foreach ($modules_list as $module)
+	{
+		$moduleInstance = Module::getInstanceByName($module);
+		foreach($hooks_list as $hook_name)
+		{
+			if (!array_key_exists($hook_name, $hookableList))
+				$hookableList[$hook_name] = array();
+			if (is_callable(array($moduleInstance, 'hook'.$hook_name)))
+				array_push($hookableList[$hook_name], $module);
+		}
+			
+	}
+	die(Tools::jsonEncode($hookableList));
+}
+
+if (Tools::isSubmit('saveHook'))
+{
+	$hooks_list = explode(',', Tools::getValue('hooks_list'));
+	$hookableList = array();
+	foreach ($hooks_list as $hook)
+	{
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_hook` = (SELECT id_hook FROM `'._DB_PREFIX_.'hook` WHERE `name` = \''.pSQL($hook).'\' LIMIT 0, 1)');
+		$hookedModules = explode(',', Tools::getValue($hook));
+		$i = 1;
+		$value = '';
+		foreach($hookedModules as $module)
+		{
+			$ids = explode('_', $module);
+			$value .= '('.$ids[1].', (SELECT id_hook FROM `'._DB_PREFIX_.'hook` WHERE `name` = \''.pSQL($hook).'\' LIMIT 0, 1), '.$i.'),';
+			$i ++;
+		}
+		$value = rtrim($value, ',');
+		Db::getInstance()->Execute('INSERT INTO  `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`) VALUES '.$value);
+			
+	}
+	die('{"hasError" : false, "errors" : ""}');
+}

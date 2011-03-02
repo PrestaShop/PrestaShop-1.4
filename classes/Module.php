@@ -469,11 +469,12 @@ abstract class ModuleCore
 	 */
 	public static function hookExec($hook_name, $hookArgs = array(), $id_module = NULL)
 	{
+		global $cookie;
 		if ((!empty($id_module) AND !Validate::isUnsignedId($id_module)) OR !Validate::isHookName($hook_name))
 			die(Tools::displayError());
 
 		global $cart, $cookie;
-
+		$live_edit = false;
 		if (!isset($hookArgs['cookie']) OR !$hookArgs['cookie'])
 			$hookArgs['cookie'] = $cookie;
 		if (!isset($hookArgs['cart']) OR !$hookArgs['cart'])
@@ -484,7 +485,7 @@ abstract class ModuleCore
 		{
 			$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
 			$result = $db->ExecuteS('
-			SELECT h.`name` as hook, m.`id_module`, h.`id_hook`, m.`name` as module
+			SELECT h.`name` as hook, m.`id_module`, h.`id_hook`, m.`name` as module, h.`live_edit`
 			FROM `'._DB_PREFIX_.'module` m
 			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
 			LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
@@ -497,7 +498,7 @@ abstract class ModuleCore
 					$row['hook'] = strtolower($row['hook']);
 					if (!isset(self::$_hookModulesCache[$row['hook']]))
 						self::$_hookModulesCache[$row['hook']] = array();
-					self::$_hookModulesCache[$row['hook']][] = array('id_hook' => $row['id_hook'], 'module' => $row['module'], 'id_module' => $row['id_module']);
+					self::$_hookModulesCache[$row['hook']][] = array('id_hook' => $row['id_hook'], 'module' => $row['module'], 'id_module' => $row['id_module'], 'live_edit' => $row['live_edit']);
 				}
 		}
 
@@ -520,11 +521,26 @@ abstract class ModuleCore
 			if (is_callable(array($moduleInstance, 'hook'.$hook_name)))
 			{
 				$hookArgs['altern'] = ++$altern;
-				$output .= call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
+				$display = call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
+				if ($array['live_edit'] && $cookie->live_edit && $ad = Tools::getValue('ad'))
+				{
+					$live_edit = true;
+					$output .= '<script type="text/javascript"> modules_list.push(\''.$moduleInstance->name.'\');</script>
+								<div id="hook_'.$array['id_hook'].'_module_'.$moduleInstance->id.'_moduleName_'.$moduleInstance->name.'" 
+								class="dndModule" style="border: 1px dotted red;'.(!strlen($display) ? 'height:50px;' : '').'">
+								<span><img src="'.$moduleInstance->_path.'/logo.gif">'
+							 	.$moduleInstance->displayName.'<span style="float:right">
+							 	<a href="#" id="'.$array['id_hook'].'_'.$moduleInstance->id.'" class="moveModule">
+							 		<img src="'._PS_ADMIN_IMG_.'arrow_out.png"></a>
+							 	<a href="#" id="'.$array['id_hook'].'_'.$moduleInstance->id.'" class="unregisterHook">
+							 		<img src="'._PS_ADMIN_IMG_.'delete.gif"></span></a>
+							 	</span>'.$display.'</div>';
+				}
+				else
+					$output .= $display;
 			}
 		}
-
-		return $output;
+		return ($live_edit ? '<script type="text/javascript">hooks_list.push(\''.$hook_name.'\'); </script><div id="'.$hook_name.'" class="dndHook">' : '').$output.($live_edit ? '</div>' : '');
 	}
 
 	public static function hookExecPayment()

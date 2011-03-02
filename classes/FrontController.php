@@ -262,6 +262,15 @@ class FrontControllerCore
 		if ($this->restrictedCountry)
 			$this->displayRestrictedCountryPage();
 
+		//live edit
+		if (Tools::isSubmit('live_edit') && $ad = Tools::getValue('ad'))
+			if (is_dir($_SERVER['DOCUMENT_ROOT'].__PS_BASE_URI__.$ad))
+				$cookie->live_edit = true;
+			else
+				die(Tools::displayError());
+		elseif (Tools::isSubmit('close_live_edit'))
+			unset($cookie->live_edit);
+		
 		self::$cookie = $cookie;
 		self::$cart = $cart;
 		self::$smarty = $smarty;
@@ -380,8 +389,12 @@ class FrontControllerCore
 
 	public function setMedia()
 	{
+		global $cookie;
+		
 		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
 		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
+		if ($cookie->live_edit)
+			Tools::addJS(array(_PS_JS_DIR_.'hookLiveEdit.js', _PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js'));
 	}
 
 	public function process()
@@ -396,7 +409,7 @@ class FrontControllerCore
 
 	public function displayHeader()
 	{
-		global $css_files, $js_files;
+		global $css_files, $js_files, $cookie;
 
 		if (!self::$initialized)
 			$this->init();
@@ -430,7 +443,13 @@ class FrontControllerCore
 			if (Configuration::get('PS_JS_THEME_CACHE'))
 				Tools::cccJs();
 		}
-
+		//live edit
+		if ($cookie->live_edit && $ad = Tools::getValue('ad'))
+			self::$smarty->assign(array('ad' => $ad, 'live_edit' => true));
+		else
+			Tools::displayError();
+				
+		
 		self::$smarty->assign('css_files', $css_files);
 		self::$smarty->assign('js_files', $js_files);
 		self::$smarty->display(_PS_THEME_DIR_.'header.tpl');

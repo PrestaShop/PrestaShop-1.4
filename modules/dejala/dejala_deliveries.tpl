@@ -45,7 +45,7 @@
 				<form action="{$formAction}" method="post">
 					<input type="hidden" name="method" value="accounting"/>
 					<div id="calendar">
-					<script type="text/javascript" src="{$module_dir}../../js/jquery/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script>
+					<script type="text/javascript" src="{$module_dir}../../js/jquery/jquery-ui-1.8.10.custom.min.js"></script>
 					<script type="text/javascript" src="{$module_dir}../../js/jquery/datepicker/ui/i18n/ui.datepicker-fr.js"></script>
 					{literal}
 					<script type="text/javascript">

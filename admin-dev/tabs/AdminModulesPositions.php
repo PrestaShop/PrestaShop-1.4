@@ -194,6 +194,9 @@ class AdminModulesPositions extends AdminTab
 	public function displayList()
 	{
 		global $currentIndex;
+		$link = new Link();
+		$admin_dir = dirname($_SERVER['PHP_SELF']);
+		$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
 		
 		echo '
 		<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
@@ -224,7 +227,14 @@ class AdminModulesPositions extends AdminTab
 			echo '
 			</select><br /><br />
 			<input type="checkbox" id="hook_position" onclick="autoUrlNoList(\'hook_position\', \''.$currentIndex.'&token='.$this->token.'&show_modules='.(int)(Tools::getValue('show_modules')).'&hook_position=\')" '.(Tools::getValue('hook_position') ? 'checked="checked" ' : '').' />&nbsp;<label class="t" for="hook_position">'.$this->l('Display non-positionable hook').'</label>
-		</form>';
+		</form>
+		
+		<fieldset style="width:250px;float:right"><legend>'.$this->l('Live edit').'</legend>
+				<p>'.$this->l('By clicking here you will be redirected to the front office of your shop to move and delete modules directly.').'</p>
+				<br>
+				<a href="'.$link->getPageLink('index.php').'?live_edit&ad='.$admin_dir.'" target="_blank" class="button">'.$this->l('Go go go !!').'</a>
+		</fieldset>
+		';
 
 		// Print hook list
 		echo '<form method="post" action="'.$currentIndex.'&token='.$this->token.'">';

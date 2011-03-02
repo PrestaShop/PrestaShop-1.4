@@ -53,7 +53,7 @@ function bindDatepicker($id, $time)
 function includeDatepicker($id, $time = false)
 {
 	global $cookie;
-	echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/jquery-ui-personalized-1.6rc4.packed.js"></script>';
+	echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery-ui-1.8.10.custom.min.js"></script>';
 	$iso = Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.(int)($cookie->id_lang));
 	if ($iso != 'en')
 		echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/ui/i18n/ui.datepicker-'.$iso.'.js"></script>';

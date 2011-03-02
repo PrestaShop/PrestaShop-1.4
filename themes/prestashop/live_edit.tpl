@@ -23,14 +23,18 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<title>PrestaShop&trade; - {l s='Affiliation' mod='trackingfront'}</title>
-		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery-1.4.4.min.js"></script>
-		<script type="text/javascript" src="{$smarty.const._PS_JS_DIR_}jquery/jquery-ui-1.8.10.custom.min.js"></script>
-		<link type="text/css" rel="stylesheet" href="{$smarty.const._PS_JS_DIR_}jquery/datepicker/datepicker.css" />
-	</head>
-	<body>
+<script type="text/javascript">
+	{if isset($ad) && isset($live_edit)}
+	var ad = "{$smarty.get.ad}";
+	var modules_list = new Array();
+	var hooks_list = new Array();
+	var hookable_list = new Array();
+	{/if}
+	var lastMove = '';
+	var saveOK = '{l s='Module position save'}';
+</script>
+<div style="100%;height:20px;background-color:#D0D3D8;">
+	<a href="#" id="cancelMove">{l s='Cancel'}</a>&nbsp;
+	<a href="#" id="saveLiveEdit">{l s='Save'}</a>&nbsp;
+	<a href="?close_live_edit" id="closeLiveEdit">{l s='Close Live edit'}</a>
+</div>

@@ -36,3 +36,6 @@ VALUES ('PS_USE_ECOTAX',
         NOW(),
         NOW());
 
+ALTER TABLE `PREFIX_hook` ADD `live_edit` TINYINT NOT NULL DEFAULT '0';
+
+UPDATE  `PREFIX_hook` SET  `live_edit` =  '1' WHERE  `PREFIX_hook`.`name` IN ('rightColumn', 'leftColumn', 'home');

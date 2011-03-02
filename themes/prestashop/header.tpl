@@ -61,6 +61,9 @@
 	</head>
 	
 	<body {if $page_name}id="{$page_name|escape:'htmlall':'UTF-8'}"{/if}>
+	{if isset($ad) && isset($live_edit)}
+		{include file="$tpl_dir./live_edit.tpl"}
+	{/if}
 	{if !$content_only}
 		{if isset($restricted_country_mode) && $restricted_country_mode}
 		<div id="restricted-country">
