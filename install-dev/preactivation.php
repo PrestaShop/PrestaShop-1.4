@@ -15,7 +15,8 @@
 
 	if ($_GET['request'] == 'form')
 	{
-		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.addslashes($_GET['partner']).'&country_iso_code='.addslashes($_GET['country_iso_code']));
+		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.addslashes($_GET['partner']).'&country_iso_code='.addslashes($_GET['country_iso_code']), false, $context);
 		if ($content && $content[0] == '<')
 		{
 			$result = simplexml_load_string($content);

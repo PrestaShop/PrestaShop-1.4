@@ -630,7 +630,8 @@ if ($lm->getIncludeTradFilename())
 						return '';
 					}
 
-					$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/partners.php?version=1.0');
+					$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+					$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/partners.php?version=1.0', false, $context);
 					if ($content && $content[0] == '<')
 					{
 						$result = simplexml_load_string($content);
