@@ -1534,7 +1534,9 @@ abstract class AdminTabCore
 		</script>
 		<form action="'.$currentIndex.'" id="'.$tab['name'].'" name="'.$tab['name'].'" method="post">
 			<fieldset>';
-				echo (isset($this->optionTitle) ? '<legend><img src="../img/t/'.$tab['class_name'].'.gif" />'.$this->optionTitle.'</legend>' : '');
+				echo (isset($this->optionTitle) ? '<legend>
+					<img src="'.(!empty($tab['module']) && file_exists($_SERVER['DOCUMENT_ROOT']._MODULE_DIR_.$tab['module'].'/'.$tab['class_name'].'.gif') ? _MODULE_DIR_.$tab['module'].'/' : '../img/t/').$tab['class_name'].'.gif" />'
+					.$this->optionTitle.'</legend>' : '');
 		foreach ($this->_fieldsOptions AS $key => $field)
 		{
 			$val = Tools::getValue($key, Configuration::get($key));
