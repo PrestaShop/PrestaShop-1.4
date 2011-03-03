@@ -152,16 +152,13 @@ $(function(){ldelim}
 							type: "GET",
 							url: ajaxurl+"vatnumber/ajax.php?id_country="+$('#id_country').val(),
 							success: function(isApplicable){
- console.log(isApplicable);
 								if(isApplicable == "1")
 								{
- console.log("c'est applicable");
 									$('#vat_area').show();
 									$('#vat_number').show();
 								}
 								else
 								{
- console.log("ou pas");
 									$('#vat_area').hide();
 								}
 							}
