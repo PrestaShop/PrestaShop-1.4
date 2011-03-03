@@ -1718,7 +1718,7 @@ class ProductCore extends ObjectModel
 
 		$id_shop = (int)(Shop::getCurrentShop());
 
-		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_county, $id_state, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
+		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country,  $id_state, $id_county, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
 		$usereduc, $with_ecotax, $specificPriceOutput);
 	}
 
@@ -1789,6 +1789,9 @@ class ProductCore extends ObjectModel
 		if ($tax_rate === false)
 			$tax_rate = 0;
 
+
+		if ($id_product == 1)
+			p($tax_rate);
 		// Add Tax
 		if ($use_tax)
 			$price = $price * (1 + ($tax_rate / 100));
