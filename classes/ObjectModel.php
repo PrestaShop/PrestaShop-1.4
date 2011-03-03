@@ -312,7 +312,7 @@ abstract class ObjectModelCore
 		/* Change status to active/inactive */
 		return Db::getInstance()->Execute('
 		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
-		SET `active` = !`active`
+		SET `active` = !`active`,`date_upd` = NOW()
 		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
 	}
 
