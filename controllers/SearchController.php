@@ -60,6 +60,7 @@ class SearchControllerCore extends FrontController
 			$this->n = abs((int)(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
 			$this->p = abs((int)(Tools::getValue('p', 1)));
 			$search = Search::find((int)(self::$cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			Module::hookExec('search', array('expr' => $query, 'total' => $search['total']));
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
 			self::$smarty->assign(array(
@@ -76,6 +77,7 @@ class SearchControllerCore extends FrontController
 			$this->n = abs((int)(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
 			$this->p = abs((int)(Tools::getValue('p', 1)));
 			$search = Search::find((int)(self::$cookie->id_lang), $query, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			Module::hookExec('search', array('expr' => $query, 'total' => $search['total']));
 			$nbProducts = $search['total'];
 			$this->pagination($nbProducts);
 			self::$smarty->assign(array(
@@ -90,6 +92,7 @@ class SearchControllerCore extends FrontController
 			$nbProducts = (int)(Search::searchTag((int)(self::$cookie->id_lang), $tag, true));
 			$this->pagination($nbProducts);
 			$result = Search::searchTag((int)(self::$cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay);
+			Module::hookExec('search', array('expr' => $tag, 'total' => sizeof($result)));
 			self::$smarty->assign(array(
 			'search_tag' => $tag,
 			'products' => $result, // DEPRECATED (since to 1.4), not use this: conflict with block_cart module

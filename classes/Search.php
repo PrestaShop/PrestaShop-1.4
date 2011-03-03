@@ -260,9 +260,7 @@ class SearchCore
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)$id_lang.')
 		WHERE p.`id_product` '.$productPool);
-
-		Module::hookExec('search', array('expr' => $expr, 'total' => $total));
-
+		
 		return array('total' => $total,'result' => Product::getProductsProperties($id_lang, $result));
 	}
 
