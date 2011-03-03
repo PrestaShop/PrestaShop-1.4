@@ -99,6 +99,7 @@ class CmsControllerCore extends FrontController
 		$parent_cat = new CMSCategory(1, (int)(self::$cookie->id_lang));
 		self::$smarty->assign('id_current_lang', self::$cookie->id_lang);
 		self::$smarty->assign('home_title', $parent_cat->name);
+		self::$smarty->assign('cgv_id', Configuration::get('PS_CONDITIONS_CMS_ID'));
 		if ($this->assignCase == 1)
 		{
 			self::$smarty->assign(array(

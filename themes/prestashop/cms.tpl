@@ -23,9 +23,9 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
-{include file="$tpl_dir./breadcrumb.tpl"}
-
+{if $cms->id != $cgv_id}
+	{include file="$tpl_dir./breadcrumb.tpl"}
+{/if}
 {if isset($cms) && !isset($category)}
 	{if !$cms->active}
 		<br />
