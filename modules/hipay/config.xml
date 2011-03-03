@@ -3,7 +3,7 @@
 	<name>hipay</name>
 	<displayName>Hipay</displayName>
 	<version>1</version>
-	<description>Accepts payments by Hipay</description>
+	<description>Secure payement Visa Mastercard and european solutions.</description>
 	<tab>payments_gateways</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

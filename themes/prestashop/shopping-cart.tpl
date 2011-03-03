@@ -32,8 +32,6 @@
 {assign var='current_step' value='summary'}
 {include file="$tpl_dir./order-steps.tpl"}
 
-{include file="$tpl_dir./errors.tpl"}
-
 {if isset($empty)}
 	<p class="warning">{l s='Your shopping cart is empty.'}</p>
 {elseif $PS_CATALOG_MODE}
@@ -99,46 +97,54 @@
 					<td class="price" id="total_product">{displayPrice price=$total_products}</td>
 				</tr>
 			{/if}
-			{if $total_discounts != 0}
+			<tr class="cart_total_voucher" {if $total_discounts == 0}style="display: none;"{/if}>
+				<td colspan="6">
 				{if $use_taxes}
 					{if $priceDisplay}
-						<tr class="cart_total_voucher">
-							<td colspan="6">{l s='Total vouchers (tax excl.):'}</td>
-							<td class="price-discount" id="total_discount">{displayPrice price=$total_discounts_tax_exc}</td>
-						</tr>
+						{l s='Total vouchers (tax excl.):'}
 					{else}
-						<tr class="cart_total_voucher">
-							<td colspan="6">{l s='Total vouchers (tax incl.):'}</td>
-							<td class="price-discount" id="total_discount">{displayPrice price=$total_discounts}</td>
-						</tr>
+						{l s='Total vouchers (tax incl.):'}
 					{/if}
 				{else}
-					<tr class="cart_total_voucher">
-						<td colspan="6">{l s='Total vouchers:'}</td>
-						<td class="price-discount" id="total_discount">{displayPrice price=$total_discounts_tax_exc}</td>
-					</tr>
+					{l s='Total vouchers:'}
 				{/if}
-			{/if}
-			{if $total_wrapping > 0}
+				</td>
+				<td class="price-discount" id="total_discount">
 				{if $use_taxes}
 					{if $priceDisplay}
-						<tr class="cart_total_voucher">
-							<td colspan="6">{l s='Total gift-wrapping (tax excl.):'}</td>
-							<td class="price-discount" id="total_wrapping">{displayPrice price=$total_wrapping_tax_exc}</td>
-						</tr>
+						{displayPrice price=$total_discounts_tax_exc}
 					{else}
-						<tr class="cart_total_voucher">
-							<td colspan="6">{l s='Total gift-wrapping (tax incl.):'}</td>
-							<td class="price-discount" id="total_wrapping">{displayPrice price=$total_wrapping}</td>
-						</tr>
+						{displayPrice price=$total_discounts}
 					{/if}
 				{else}
-					<tr class="cart_total_voucher">
-						<td colspan="6">{l s='Total gift-wrapping:'}</td>
-						<td class="price-discount" id="total_wrapping">{displayPrice price=$total_wrapping_tax_exc}</td>
-					</tr>
+					{displayPrice price=$total_discounts_tax_exc}
 				{/if}
-			{/if}
+				</td>
+			</tr>
+			<tr class="cart_total_voucher" {if $total_wrapping == 0}style="display: none;"{/if}>
+				<td colspan="6">
+				{if $use_taxes}
+					{if $priceDisplay}
+						{l s='Total gift-wrapping (tax excl.):'}
+					{else}
+						{l s='Total gift-wrapping (tax incl.):'}
+					{/if}
+				{else}
+					{l s='Total gift-wrapping:'}
+				{/if}
+				</td>
+				<td class="price-discount" id="total_wrapping">
+				{if $use_taxes}
+					{if $priceDisplay}
+						{displayPrice price=$total_wrapping_tax_exc}
+					{else}
+						{displayPrice price=$total_wrapping}
+					{/if}
+				{else}
+					{displayPrice price=$total_wrapping_tax_exc}
+				{/if}
+				</td>
+			</tr>
 			{if $use_taxes}
 				{if $priceDisplay}
 					<tr class="cart_total_delivery" {if $shippingCost <= 0} style="display:none;"{/if}>
@@ -242,7 +248,7 @@
 			<tr class="cart_discount {if $smarty.foreach.discountLoop.last}last_item{elseif $smarty.foreach.discountLoop.first}first_item{else}item{/if}" id="cart_discount_{$discount.id_discount}">
 				<td class="cart_discount_name" colspan="2">{$discount.name}</td>
 				<td class="cart_discount_description" colspan="3">{$discount.description}</td>
-				<td class="cart_discount_delete"><a href="{$link->getPageLink('order.php', true)}?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" width="11" height="13" /></a></td>
+				<td class="cart_discount_delete"><a href="{if $opc}{$link->getPageLink('order-opc.php', true)}{else}{$link->getPageLink('order.php', true)}{/if}?deleteDiscount={$discount.id_discount}" title="{l s='Delete'}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="icon" width="11" height="13" /></a></td>
 				<td class="cart_discount_price"><span class="price-discount">
 					{if $discount.value_real > 0}
 						{if !$priceDisplay}{displayPrice price=$discount.value_real*-1}{else}{displayPrice price=$discount.value_tax_exc*-1}{/if}
@@ -264,7 +270,7 @@
 		{/foreach}
 		</ul>
 	{/if}
-	<form action="{$link->getPageLink('order.php', true)}" method="post" id="voucher">
+	<form action="{if $opc}{$link->getPageLink('order-opc.php', true)}{else}{$link->getPageLink('order.php', true)}{/if}" method="post" id="voucher">
 		<fieldset>
 			<h4>{l s='Vouchers'}</h4>
 			<p>
