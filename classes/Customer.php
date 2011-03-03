@@ -607,6 +607,18 @@ class CustomerCore extends ObjectModel
 		$ids = Address::getCountryAndState($id_address);
 		return (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
 	}
+	
+	public function toggleStatus()
+	{
+		parent::toggleStatus();
+
+		/* Change status to active/inactive */
+		return Db::getInstance()->Execute('
+		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
+		SET `date_upd` = NOW()
+		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+	}
+
 
 	public function isGuest()
 	{
