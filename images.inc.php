@@ -198,7 +198,7 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 	$destImage = imagecreatetruecolor($destWidth, $destHeight);
 
 	$white = imagecolorallocate($destImage, 255, 255, 255);
-	imagefill($destImage, 0, 0, $white);
+	imagefilledrectangle ($destImage, 0, 0, $destWidth, $destHeight, $white);
 
 	imagecopyresampled($destImage, $sourceImage, (int)(($destWidth - $nextWidth) / 2), (int)(($destHeight - $nextHeight) / 2), 0, 0, $nextWidth, $nextHeight, $sourceWidth, $sourceHeight);
 	imagecolortransparent($destImage, $white);
