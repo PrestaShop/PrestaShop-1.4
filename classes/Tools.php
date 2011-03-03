@@ -1309,8 +1309,12 @@ class ToolsCore
 			return true;
 
 		// detect mass add
-		if (!is_array($js_uri))
+		if (!is_array($js_uri) && !in_array($js_uri, $js_files))
 			$js_uri = array($js_uri);
+		else
+			foreach($js_uri as $key => $js)
+				if (in_array($js, $js_files))
+					unset($js_uri[$key]);
 
 		//overriding of modules js files
 		foreach ($js_uri AS &$file)
