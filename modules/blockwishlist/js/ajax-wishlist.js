@@ -99,6 +99,7 @@ function WishlistBuyProduct(token, id_product, id_product_attribute, id_quantity
 		ajaxCart.add(id_product, id_product_attribute, false, button, 1, [token, id_quantity]);
 	else
 	{
+		$('#' + id_quantity).val(0);
 		WishlistAddProductCart(token, id_product, id_product_attribute, id_quantity)
 		document.forms['addtocart' + '_' + id_product  + '_' + id_product_attribute].method='POST';
 		document.forms['addtocart' + '_' + id_product  + '_' + id_product_attribute].action=baseDir + 'cart.php';
