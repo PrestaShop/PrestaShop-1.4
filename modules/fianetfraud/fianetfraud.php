@@ -117,7 +117,7 @@ class Fianetfraud extends Module
 		$orderState = new OrderState();
 		foreach ($langs AS $lang)
 			$orderState->name[$lang['id_lang']] = 'Fraud Detected By FIA-NET';
-		$orderState->name[2] = 'Fraude détécté par FIA-NET';
+		$orderState->name[2] = 'Fraude détectée par FIA-NET';
 		$orderState->invoice = false;
 		$orderState->send_email = false;
 		$orderState->logable = false;
