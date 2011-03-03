@@ -1788,10 +1788,6 @@ class ProductCore extends ObjectModel
 		$tax_rate = Tax::getProductTaxRateViaRules((int)$id_product, (int)$id_country, (int)$id_state, (int)$id_county);
 		if ($tax_rate === false)
 			$tax_rate = 0;
-
-
-		if ($id_product == 1)
-			p($tax_rate);
 		// Add Tax
 		if ($use_tax)
 			$price = $price * (1 + ($tax_rate / 100));
