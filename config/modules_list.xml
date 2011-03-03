@@ -93,11 +93,13 @@
 		<module name="watermark"/>
 	</modules>
 	<modules type="partner">
+		<module name="authorizeaim"/>
 		<module name="cashticket"/>
 		<module name="criteo"/>
 		<module name="dejala"/>
 		<module name="dibs"/>
 		<module name="envoimoinscher"/>
+		<module name="ekomi"/>
 		<module name="fedexcarrier"/>
 		<module name="fianetfraud"/>
 		<module name="fianetsceau"/>
