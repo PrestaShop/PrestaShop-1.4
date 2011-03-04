@@ -27,7 +27,7 @@
 
 /**
  * @author Nans Pellicari - Prestashop
- * @version 1.0
+ * @version 1.1
  */
 class TwengaFieldsGetTrackingScript extends TwengaFields
 {

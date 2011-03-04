@@ -2,7 +2,7 @@
 <module>
 	<name>twenga</name>
 	<displayName>Twenga API</displayName>
-	<version>1.0</version>
+	<version>1.1</version>
 	<description>Export your products to Twenga.com and use the Twenga tracker for customer\'s order.</description>
 	<tab>smart_shopping</tab>
 	<is_configurable>1</is_configurable>
