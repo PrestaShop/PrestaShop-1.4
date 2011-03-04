@@ -24,45 +24,57 @@ International Registered Trademark & Property of PrestaShop SA
 NAME: Prestashop 1.4 RC 6
 VERSION: 1.4.0.15
 
-PREPARATION
+VORBEREITUNG
 ===========
 
-To install PrestaShop, you need a remote web server or on your computer (MAMP), with access to a database like MySQL.
-You'll need access to phpMyAdmin to create a database and to indicate the information in the database in the installer.
+Zur Installation von PrestaShop benötigen Sie einen Remote-Web-Server oder
+Ihren Computer (MAMP) mit Zugriff auf eine Datenbank wie MySQL.
+Sie benötigen Zugriff auf phpMyAdmin, um eine Datenbank zu erstellen und die
+Informationen in der Datenbank im Installer anzuzeigen.
 
-If you do not host and unable to create your store, we offer a turnkey store, which lets you create your online store in less than 10 minutes without any technical knowledge.
-We invite you to visit: 
+Wenn Sie keinen Hosting-Provider haben und Ihren Shop selbst nicht erstellen
+können, bieten wir einen schlüsselfertigen Shop, mit dem Sie Ihren eigenen
+Online-Shop in weniger als 10 Minuten ohne jegliche technische Kenntnisse
+erstellen können.
+Besuchen Sie:
 	http://www.prestabox.com/
 
 INSTALLATION
 ============
 
-Simply go to your PrestaShop web directory and use installer :-)
+Gehen Sie einfach zu Ihrem PrestaShop Web-Verzeichnis und verwenden Sie den
+Installer :-)
 
-If you have any PHP error, perhaps you don't have PHP5 or you need to activate it on your web host.
-Please go to our forum to find pre-installation settings (PHP 5, htaccess) for certain hosting services (1&1, Free, Lycos, OVH, Infomaniak, Amen, GoDaddy, etc).
+Falls ein PHP-Fehler auftritt, haben Sie vielleicht kein PHP5 oder müssen es
+auf Ihrem Web-Host aktivieren.
+Die Vorinstallationseinstellungen (PHP 5, htaccess) für bestimmte
+Hosting-Dienste (1&1, Free, Lycos, OVH, Infomaniak, Amen, GoDaddy, etc.)
+finden Sie in unserem Forum.
 
-English webhost specifics settings :
-	http://www.prestashop.com/forums/viewthread/2946/installation_configuration___upgrade/preinstallation_settings_php_5_htaccess_for_certain_hosting_services
+Spezifische englische Webhosting-Einstellungen:
+	http://www.prestashop.com/forums/viewthread/2946/installation_configuration___upgrade/preinstallation_settings_php_5_htaccess_for_certain_hosting_servi
+ces
 
-If you don't find any solution to launch installer, please post on our forum :
+Wenn Sie keine Lösung zum Starten des Installers finden, posten Sie bitte
+Ihr Problem in unserem Forum:
 	http://www.prestashop.com/forums/viewforum/7/installation_configuration___upgrade
 
-There are always solutions for your issues ;-)
+Es gibt immer Lösungen für Ihre Fragen ;-)
 
-DOCUMENTATION
+DOKUMENTATION
 =============
 
-For any extra documentation (how-to), please read our wiki :
+Für zusätzliche Benutzerhinweise (how-to), lesen Sie bitte unser Wiki:
 	http://www.prestashop.com/wiki/
 
-FORUMS
+FOREN
 ======
 
-You can also discute, help and contribute with PrestaShop community on our forums :
+Sie können außerdem mit der PrestaShop Community in unseren Foren
+diskutieren, Hilfe finden und eigene Beiträge liefern unter:
 	http://www.prestashop.com/forums/
 
-Thanks for downloading and using PrestaShop e-commerce open-source solution !
+Danke für Ihren Download und die Nutzung der PrestaShop E-Commerce-Open-Source-Lösung!
 
 ==========================
 =     The PrestaTeam'    =
