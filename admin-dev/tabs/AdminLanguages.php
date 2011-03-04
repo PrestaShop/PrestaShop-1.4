@@ -213,8 +213,16 @@ class AdminLanguages extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
+		elseif (Tools::isSubmit('submitOptions'.$this->table))
+		{
+			$lang = new Language((int)Tools::getValue('PS_LANG_DEFAULT'));
+			if (!$lang->active)
+				$this->_errors[] = Tools::displayError('You cannot set this language as default language because it\'s disabled');
+			else
+				return parent::postProcess();
+		}
 		else
-			parent::postProcess();
+			return parent::postProcess();
 	}
 	
 	public function displayList()
