@@ -370,8 +370,9 @@ class AdminAddresses extends AdminTab
 						  		$("#contains_states").fadeIn();
 						  	}
 						  }
-						});
-						$.ajax({
+						});';
+					if (file_exists(_MODULE_DIR_.'vatnumber/ajax.php'))
+					echo '	$.ajax({
 							type: "GET",
 							url: "'._MODULE_DIR_.'vatnumber/ajax.php?id_country="+$(\'#id_country\').val(),
 							success: function(isApplicable)
@@ -381,9 +382,10 @@ class AdminAddresses extends AdminTab
 								else
 									$(\'#vat_area\').hide();
 							}
-						});
-					};
+						});';
+			echo '	};
 				});
+				
 				</script>
 				<div id="contains_states" '.(!Country::containsStates((int)$selectedCountry) ? 'style="display:none;"' : '').'>
 					<label>'.$this->l('State').'</label>
