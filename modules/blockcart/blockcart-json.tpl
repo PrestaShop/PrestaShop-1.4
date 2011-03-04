@@ -104,7 +104,7 @@
 
 {if isset($errors) && $errors}
 "hasError" : true,
-errors : [
+"errors" : [
 {foreach from=$errors key=k item=error name='errors'}
 	"{$error|addslashes|html_entity_decode:2:'UTF-8'}"
 	{if !$smarty.foreach.errors.last},{/if}
