@@ -341,7 +341,7 @@ class OrderOpcControllerCore extends ParentOrderController
 	protected function _getPaymentMethods()
 	{
 		if (!$this->isLogged)
-			return '<p class="warning">'.Tools::displayError('Please to sign in in order to see payment methods').'</p>';
+			return '<p class="warning">'.Tools::displayError('Please sign in to see payment methods').'</p>';
 		if (self::$cart->OrderExists())
 			return '<p class="warning">'.Tools::displayError('Error: this order is already validated').'</p>';
 		if (!self::$cart->id_customer OR !Customer::customerIdExistsStatic(self::$cart->id_customer) OR Customer::isBanned(self::$cart->id_customer))
