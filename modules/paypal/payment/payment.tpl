@@ -29,9 +29,9 @@
 			<img src="{$logo}" alt="{l s='Pay with PayPal' mod='paypal'}" style="float:left;" />
 		<br />
 		{if $integral}
-			{l s='Pay with your account PayPal, credit card (CB, Visa, Mastercard...), or private credit card' mod='paypal'}
+			{l s='Pay with your PayPal account, credit card (CB, Visa, Mastercard...), or private credit card' mod='paypal'}
 		{else}
-			{l s='Pay with your account PayPal' mod='paypal'}
+			{l s='Pay with your PayPal account' mod='paypal'}
 		{/if}
 	<br style="clear:both" />
 	</a>
