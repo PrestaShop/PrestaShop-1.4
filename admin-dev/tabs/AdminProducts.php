@@ -2152,25 +2152,25 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr>
-						<td class="col-left">'.$this->l('Width:').'</td>
+						<td class="col-left">'.$this->l('Width ( package ) :').'</td>
 						<td style="padding-bottom:5px;">
 							<input size="6" maxlength="6" name="width" type="text" value="'.htmlentities($this->getFieldValue($obj, 'width'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_DIMENSION_UNIT').'
 						</td>
 					</tr>
 					<tr>
-						<td class="col-left">'.$this->l('Height:').'</td>
+						<td class="col-left">'.$this->l('Height ( package ) :').'</td>
 						<td style="padding-bottom:5px;">
 							<input size="6" maxlength="6" name="height" type="text" value="'.htmlentities($this->getFieldValue($obj, 'height'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_DIMENSION_UNIT').'
 						</td>
 					</tr>
 					<tr>
-						<td class="col-left">'.$this->l('Depth:').'</td>
+						<td class="col-left">'.$this->l('Deep ( package ) :').'</td>
 						<td style="padding-bottom:5px;">
 							<input size="6" maxlength="6" name="depth" type="text" value="'.htmlentities($this->getFieldValue($obj, 'depth'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_DIMENSION_UNIT').'
 						</td>
 					</tr>
 					<tr>
-						<td class="col-left">'.$this->l('Weight:').'</td>
+						<td class="col-left">'.$this->l('Weight ( package ) :').'</td>
 						<td style="padding-bottom:5px;">
 							<input size="6" maxlength="6" name="weight" type="text" value="'.htmlentities($this->getFieldValue($obj, 'weight'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> '.Configuration::get('PS_WEIGHT_UNIT').'
 						</td>
