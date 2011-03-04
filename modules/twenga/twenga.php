@@ -31,7 +31,7 @@
  * 2. activate a tracking for order process if user has been used twenga engine,
  * 3. submit a xml feed of shop products to Twenga. 
  * @author Nans Pellicari - Prestashop
- * @version 1.0
+ * @version 1.1
  */
 
 class Twenga extends PaymentModule
@@ -617,8 +617,28 @@ class Twenga extends PaymentModule
 	 */
 	public function buildXML()
 	{
-//		if(self::$obj_twenga->getHashkey() === NULL && !self::$obj_twenga->siteExist())
-//			return '';
+		// this check if the module is installed and if the site is registered at Twenga
+		$bool_site_exists = true;
+		if (self::$obj_twenga->getHashkey() === NULL)
+		{
+			$this->_errors[] = $this->l('The hash key must be set for used Twenga API.');
+			$bool_site_exists = false;
+		}
+		if ($bool_site_exists)
+		{
+			try {
+				$bool_site_exists = self::$obj_twenga->siteExist();
+			} catch (Exception $e) {
+				$this->_errors[] = $e->getMessage().$this->l('Some parameters missing, or the site doesn\'t exist');
+				$bool_site_exists = false;
+			}
+		}
+		if(!$bool_site_exists)
+		{
+			return $this->displayErrors();
+		}
+		
+		// Now method build the XML
 		$xmlstr = '<?xml version="1.0" encoding="utf-8"?><catalog></catalog>';
 		$xml = new SimpleXMLElement($xmlstr);
 		
@@ -743,7 +763,10 @@ class Twenga extends PaymentModule
 		$arr_return['price'] = $price;
 		$arr_return['category'] = htmlspecialchars(strip_tags($category_path), ENT_QUOTES, 'utf-8');
 		$arr_return['image_url'] = $link->getImageLink($product->link_rewrite[$lang], $product->id.'-'.$id_image, 'large');
-		$arr_return['description'] = strip_tags(implode(', ', $str_features));
+		
+		// Must description added since Twenga-module v1.1
+		$arr_return['description'] = is_array($product->description) ? strip_tags($product->description[$lang]) : strip_tags($product->description);
+		$arr_return['description'] = trim($arr_return['description'].' '.strip_tags(implode(', ', $str_features)));
 		$arr_return['brand'] = Manufacturer::getNameById($product->id_manufacturer);
 		$arr_return['merchant_id'] = $product->id;
 		$arr_return['manufacturer_id'] = $product->id_manufacturer;
@@ -790,4 +813,3 @@ class Twenga extends PaymentModule
 		return $combinations;
 	}
 }
-

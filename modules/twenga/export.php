@@ -27,13 +27,14 @@
 
 /**
  * @author Nans Pellicari - Prestashop
- * @version 1.0
+ * @version 1.1
  */
 
 include_once('../../config/config.inc.php');
 include_once('../../init.php');
 include_once(dirname(__FILE__).'/twenga.php');
-header("Content-type: text/xml");
 $export = new Twenga();
-echo $export->buildXML();
-?>
+$output = $export->buildXML();
+if (empty($export->_errors))
+	header("Content-type: text/xml");
+echo $output;
