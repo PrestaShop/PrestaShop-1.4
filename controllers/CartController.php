@@ -45,8 +45,9 @@ class CartControllerCore extends FrontController
 					}
 					else
 						$groups = array(1);
-					$deliveryAddress = new Address((int)(self::$cart->id_address_delivery));
-					$result = array('carriers' => Carrier::getCarriersForOrder((int)Address::getZoneById((int)($deliveryAddress->id)), $groups));
+					if ((int)self::$cart->id_address_delivery)
+						$deliveryAddress = new Address((int)self::$cart->id_address_delivery);
+					$result = array('carriers' => Carrier::getCarriersForOrder((int)Country::getIdZone((isset($deliveryAddress) AND (int)$deliveryAddress->id) ? (int)$deliveryAddress->id_country : (int)Configuration::get('PS_COUNTRY_DEFAULT')), $groups));
 				}
 				$result['summary'] = self::$cart->getSummaryDetails();
 				$result['customizedDatas'] = Product::getAllCustomizedDatas((int)(self::$cart->id));

@@ -95,11 +95,9 @@ function updateAddressSelection()
 	var idAddress_delivery = ($('input#opc_id_address_delivery').length == 1 ? $('input#opc_id_address_delivery').val() : $('select#id_address_delivery').val());
 	var idAddress_invoice = ($('input#opc_id_address_invoice').length == 1 ? $('input#opc_id_address_invoice').val() : ($('input[type=checkbox]#addressesAreEquals:checked').length == 1 ? idAddress_delivery : ($('select#id_address_invoice').length == 1 ? $('select#id_address_invoice').val() : idAddress_delivery)));
 	
-	var overlay = setTimeout(function() {
-		$('#opc_account-overlay').fadeIn('fast');
-		$('#opc_delivery_methods-overlay').fadeIn('fast');
-		$('#opc_payment_methods-overlay').fadeIn('fast');
-	}, 500);
+	$('#opc_account-overlay').fadeIn('slow');
+	$('#opc_delivery_methods-overlay').fadeIn('slow');
+	$('#opc_payment_methods-overlay').fadeIn('slow');
 	
 	$.ajax({
            type: 'POST',
@@ -128,10 +126,9 @@ function updateAddressSelection()
 					updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 					if ($('#gift-price').length == 1)
 						$('#gift-price').html(jsonData.gift_price);
-					clearTimeout(overlay);
-					$('#opc_account-overlay').fadeOut('fast');
-					$('#opc_delivery_methods-overlay').fadeOut('fast');
-					$('#opc_payment_methods-overlay').fadeOut('fast');
+					$('#opc_account-overlay').fadeOut('slow');
+					$('#opc_delivery_methods-overlay').fadeOut('slow');
+					$('#opc_payment_methods-overlay').fadeOut('slow');
 				}
 			},
            error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
@@ -140,6 +137,7 @@ function updateAddressSelection()
 
 function getCarrierListAndUpdate()
 {
+	$('#opc_delivery_methods-overlay').fadeIn('slow');
 	$.ajax({
         type: 'POST',
         url: orderOpcUrl,
@@ -160,6 +158,7 @@ function getCarrierListAndUpdate()
 				}
 				else
 					updateCarrierList(jsonData);
+				$('#opc_delivery_methods-overlay').fadeOut('slow');
 			}
 	});
 }
@@ -185,8 +184,8 @@ function updateCarrierSelectionAndGift()
 		checkedCarrier = idCarrier;
 	}
 	
-	$('#opc_payment_methods-overlay').fadeIn('fast');
-	$('#opc_delivery_methods-overlay').fadeIn('fast');
+	$('#opc_payment_methods-overlay').fadeIn('slow');
+	$('#opc_delivery_methods-overlay').fadeIn('slow');
 	$.ajax({
        type: 'POST',
        url: orderOpcUrl,
@@ -211,8 +210,8 @@ function updateCarrierSelectionAndGift()
     			updatePaymentMethods(jsonData);
     			updateHookShoppingCart(jsonData.summary.HOOK_SHOPPING_CART);
 				updateHookShoppingCartExtra(jsonData.summary.HOOK_SHOPPING_CART_EXTRA);
-				$('#opc_payment_methods-overlay').fadeOut('fast');
-				$('#opc_delivery_methods-overlay').fadeOut('fast');
+				$('#opc_payment_methods-overlay').fadeOut('slow');
+				$('#opc_delivery_methods-overlay').fadeOut('slow');
     		}
     	},
        error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save carrier \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
@@ -222,11 +221,11 @@ function updateCarrierSelectionAndGift()
 function confirmFreeOrder()
 {
 	if ($('#opc_new_account-overlay').length != 0)
-		$('#opc_new_account-overlay').fadeIn('fast');
+		$('#opc_new_account-overlay').fadeIn('slow');
 	else
-		$('#opc_account-overlay').fadeIn('fast');
-	$('#opc_delivery_methods-overlay').fadeIn('fast');
-	$('#opc_payment_methods-overlay').fadeIn('fast');
+		$('#opc_account-overlay').fadeIn('slow');
+	$('#opc_delivery_methods-overlay').fadeIn('slow');
+	$('#opc_payment_methods-overlay').fadeIn('slow');
 	$.ajax({
 		type: 'POST',
 		url: orderOpcUrl,
@@ -315,11 +314,9 @@ function saveAddress(type)
 
 function updateNewAccountToAddressBlock()
 {
-	var overlay = setTimeout(function() {
-		$('#opc_new_account-overlay').fadeIn('fast');
-		$('#opc_delivery_methods-overlay').fadeIn('fast');
-		$('#opc_payment_methods-overlay').fadeIn('fast');
-	}, 500);
+	$('#opc_new_account-overlay').fadeIn('slow');
+	$('#opc_delivery_methods-overlay').fadeIn('slow');
+	$('#opc_payment_methods-overlay').fadeIn('slow');
 	$.ajax({
 		type: 'POST',
 		url: orderOpcUrl,
@@ -344,10 +341,9 @@ function updateNewAccountToAddressBlock()
 					updateCarrierList(json.carrier_list);
 					updatePaymentMethods(json);
 					if ($('#gift-price').length == 1)
-						$('#gift-price').html(jsonData.gift_price);
-					clearTimeout(overlay);
-					$('#opc_delivery_methods-overlay').fadeOut('fast');
-					$('#opc_payment_methods-overlay').fadeOut('fast');
+						$('#gift-price').html(json.gift_price);
+					$('#opc_delivery_methods-overlay').fadeOut('slow');
+					$('#opc_payment_methods-overlay').fadeOut('slow');
 				});
 			});
 		},
@@ -465,11 +461,9 @@ $(function() {
 		
 		// VALIDATION / CREATION AJAX
 		$('#submitAccount').click(function() {
-			var overlayAccount = setTimeout(function() {
-				$('#opc_new_account-overlay').fadeIn('fast');
-				$('#opc_delivery_methods-overlay').fadeIn('fast');
-				$('#opc_payment_methods-overlay').fadeIn('fast');
-			}, 500);
+			$('#opc_new_account-overlay').fadeIn('slow');
+			$('#opc_delivery_methods-overlay').fadeIn('slow');
+			$('#opc_payment_methods-overlay').fadeIn('slow');
 			
 			// RESET ERROR(S) MESSAGE(S)
 			$('#opc_account_errors').html('').slideUp('slow');
@@ -574,10 +568,9 @@ $(function() {
 						else
 							updateNewAccountToAddressBlock();
 					}
-					clearTimeout(overlayAccount);
-					$('#opc_new_account-overlay').fadeOut('fast');
-					$('#opc_delivery_methods-overlay').fadeOut('fast');
-					$('#opc_payment_methods-overlay').fadeOut('fast');
+					$('#opc_new_account-overlay').fadeOut('slow');
+					$('#opc_delivery_methods-overlay').fadeOut('slow');
+					$('#opc_payment_methods-overlay').fadeOut('slow');
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save account \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
 			});
@@ -587,9 +580,7 @@ $(function() {
 	
 	// Order message update
 	$('#message').blur(function() {
-		var overlay = setTimeout(function() {
-			$('#opc_delivery_methods-overlay').fadeIn('fast');
-		}, 500);
+		$('#opc_delivery_methods-overlay').fadeIn('slow');
 		$.ajax({
            type: 'POST',
            url: orderOpcUrl,
@@ -609,10 +600,7 @@ $(function() {
 					alert(errors);
 				}
            		else
-           		{
-           			clearTimeout(overlay);
-           			$('#opc_delivery_methods-overlay').fadeOut('fast');
-           		}
+           			$('#opc_delivery_methods-overlay').fadeOut('slow');
 			},
            error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save message \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
        });
@@ -649,9 +637,7 @@ $(function() {
 		else
 			var checked = 0;
 		
-		var overlay = setTimeout(function() {
-			$('#opc_payment_methods-overlay').fadeIn('fast');
-		}, 500);
+		$('#opc_payment_methods-overlay').fadeIn('slow');
 		$.ajax({
            type: 'POST',
            url: orderOpcUrl,
@@ -663,8 +649,7 @@ $(function() {
            {
 				$('div#HOOK_TOP_PAYMENT').html(json.HOOK_TOP_PAYMENT);
 				$('#opc_payment_methods-content div#HOOK_PAYMENT').html(json.HOOK_PAYMENT);
-           		clearTimeout(overlay);
-				$('#opc_payment_methods-overlay').fadeOut('fast');
+				$('#opc_payment_methods-overlay').fadeOut('slow');
            }
        });
 	});
