@@ -588,31 +588,6 @@ if ($lm->getIncludeTradFilename())
 								}
 							});
 						});
-						$('.paypal').change(function() {				
-							if ($(this).attr('checked'))
-							{
-								$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).css({'display' : 'block'});
-								$.ajax({
-								  url: 'preactivation.php?request=form&partner=paypal&language=<?php echo $_GET['language'] ?>'+
-									"&language_iso_code="+isoCodeLocalLanguage+
-									"&country_iso_code="+encodeURIComponent($("select#infosCountry option:selected").attr('rel'))+
-									"&activity="+ encodeURIComponent($("select#infosActivity").val())+
-									"&timezone="+ encodeURIComponent($("select#infosTimezone").val())+
-									"&shop="+ encodeURIComponent($("input#infosShop").val())+
-									"&firstName="+ encodeURIComponent($("input#infosFirstname").val())+
-									"&lastName="+ encodeURIComponent($("input#infosName").val())+
-									"&email="+ encodeURIComponent($("input#infosEmail").val()),
-								  	success: function(data) {
-								    		$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).html(data);
-								  	}
-								});
-							}
-							else
-							{
-								$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).css({'display' : 'none'});
-								$('#paypalFormDiv'+$("select#infosCountry option:selected").attr('value')).html('');
-							}
-						});
 					});
 				</script>
 
@@ -660,6 +635,35 @@ if ($lm->getIncludeTradFilename())
 										<p class="userInfos aligned">'.$modulesDescription[$module]['description'].'</p>
 										<div id="'.$module.'FormDiv'.$id_country.'" style="display: none;"></div>
 									</div>';
+									echo "<script>
+										$(document).ready(function() {
+											$('#preInstallModules".$id_country.$module."').change(function() {
+												if ($(this).attr('checked'))
+												{
+													$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).css({'display' : 'block'});
+													$.ajax({
+													  url: 'preactivation.php?request=form&partner=".$module."&language=".$_GET['language']."'+
+														'&language_iso_code='+isoCodeLocalLanguage+
+														'&country_iso_code='+encodeURIComponent($('select#infosCountry option:selected').attr('rel'))+
+														'&activity='+ encodeURIComponent($('select#infosActivity').val())+
+														'&timezone='+ encodeURIComponent($('select#infosTimezone').val())+
+														'&shop='+ encodeURIComponent($('input#infosShop').val())+
+														'&firstName='+ encodeURIComponent($('input#infosFirstname').val())+
+														'&lastName='+ encodeURIComponent($('input#infosName').val())+
+														'&email='+ encodeURIComponent($('input#infosEmail').val()),
+													  	success: function(data) {
+													    		$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).html(data);
+													  	}
+													});
+												}
+												else
+												{
+													$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).css({'display' : 'none'});
+													$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).html('');
+												}
+											});
+										});
+										</script>";
 								}
 								echo '</div>';
 							}
