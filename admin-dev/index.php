@@ -367,8 +367,32 @@ else /* Else display homepage */
 			</tbody>
 		</table>
 
-	</div>
-	<div id="column_right">
+	</div>';
+
+	echo '
+	<div id="column_right">';
+
+	$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation.php?version=1.0&email='.Configuration::get('PS_SHOP_EMAIL'), false, $context);
+	$preactivation = explode('|', $content);
+	if ($preactivation[0] == 'OK')
+	{
+		echo '<div id="table_info_news" style="margin-top: 0px; margin-bottom: 20px;"><h5>Prestashop Preactivation</h5>';
+		for ($i = 1; isset($preactivation[$i]); $i++)
+		{
+			$tmp = explode(';', $preactivation[$i]);
+			echo '<a href="#" OnClick="window.open(\''.$tmp[1].'\', \''.ucfirst($tmp[0]).' preactivation\', \'status = 1, height = 550, width = 400, resizable = 0\'); return false;"><img src="'.$tmp[2].'" alt="'.ucfirst($tmp[0]).'" title="'.ucfirst($tmp[0]).'" /></a>';
+			if (!Configuration::get('PS_PREACTIVATION_'.strtoupper($tmp[0])))
+			{
+				echo '<script>window.open(\''.$tmp[1].'\', \''.ucfirst($tmp[0]).' preactivation\', \'status = 1, height = 550, width = 400, resizable = 0\');</script>';
+				Configuration::updateValue('PS_PREACTIVATION_'.strtoupper($tmp[0]), 'TRUE');
+			}
+		}
+		echo '</div>';
+	}
+
+
+	echo '
 		<div id="table_info_link">
 			<h5>'.translate('PrestaShop Link').'</h5>
 			<ul id="prestashop_link">

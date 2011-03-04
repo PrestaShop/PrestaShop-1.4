@@ -69,8 +69,14 @@
 						$.ajax({
 						  url: 'preactivation.php?request=send'+
 							".$varList."
-							'&email='+$('input#infosEmail').val()+
-							'&country_iso_code=".$_GET['country_iso_code']."',
+							'&language_iso_code='+isoCodeLocalLanguage+
+							'&country_iso_code='+encodeURIComponent($('select#infosCountry option:selected').attr('rel'))+
+							'&activity='+ encodeURIComponent($('select#infosActivity').val())+
+							'&timezone='+ encodeURIComponent($('select#infosTimezone').val())+
+							'&shop='+ encodeURIComponent($('input#infosShop').val())+
+							'&firstName='+ encodeURIComponent($('input#infosFirstname').val())+
+							'&lastName='+ encodeURIComponent($('input#infosName').val())+
+							'&email='+ encodeURIComponent($('input#infosEmail').val()),
 						  context: document.body,
 						  success: function(data) {
 						  }
