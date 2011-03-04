@@ -368,9 +368,12 @@ class AdminAddresses extends AdminTab
 						  	{
 						  		$("#id_state").html(html);
 						  		$("#contains_states").fadeIn();
+						  		$(\'#id_state option[value='.(int)$obj->id_state.']\').attr("selected", "selected");
 						  	}
 						  }
-						});';
+						});
+						
+						';
 					if (file_exists(_MODULE_DIR_.'vatnumber/ajax.php'))
 					echo '	$.ajax({
 							type: "GET",
