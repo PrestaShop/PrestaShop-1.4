@@ -1341,48 +1341,6 @@ ul.typedText {
 	padding-left: 6px;
 	list-style-type: none
 }
-
-/* crosselling block */
-#crossselling {
-	margin: 0 auto 0;
-	height: 120px;
-	width: 100%
-}
-#crossselling_noscroll {
-	margin: 0 auto 0;
-	height: 120px;
-	width: 100%
-}
-#crossselling_list {
-	overflow: hidden;
-	float: left;
-	width: 96%
-}
-#crossselling_list ul {
-	padding-left: 0;
-	list-style-type: none
-}
-#crossselling_list li {
-	float: left;
-	margin: 0 3px;
-	cursor: pointer;
-	text-align: center;
-	width: 100px;
-	overflow: hidden
-}
-#crossselling_list li a { margin: auto }
-#crossselling_scroll_left,
- #crossselling_scroll_right {
-	background: url('../img/thumbs_left.gif') no-repeat center;
-	text-indent: -3000px;
-	display: block;
-	width: 9px;
-	height: 18px;
-	float: left;
-	margin-top: 30px
-}
-#crossselling_scroll_right { background-image: url('../img/thumbs_right.gif') }
-
 /* mywishlist */
 #mywishlist div#block-order-detail form.wl_send fieldset p input { margin-left: 60px }
 #mywishlist div#block-order-detail {
@@ -1516,4 +1474,16 @@ div.star_hover a, div.star a:hover { background-position: 0 -32px }
 #cms div.content_only { 
 	text-align: left; 
 	padding: 10px 
+}
+.live_edit_feed_back_ok {
+    color: #374853; 
+    background-color: #DFFAD3; 
+    padding: 4px; 
+    border: 2px solid #72CB67
+}
+.live_edit_feed_back_ko {
+    color: #374853; 
+    background-color: #DFFAD3; 
+    padding: 4px; 
+    border: 2px solid #72CB67
 }
