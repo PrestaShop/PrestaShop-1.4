@@ -1,3 +1,7 @@
+var modules_list = new Array();
+var hooks_list = new Array();
+var hookable_list = new Array();	
+	
 $(document).ready(function(){
 	
 	getHookableList();
@@ -20,7 +24,9 @@ $(document).ready(function(){
 		return false;
 	});
 	
-	
+	$('#fancy').fancybox({
+			modal : true
+			});
 	
 	$('.dndHook').each(function () {
 		var id_hook = $(this).attr('id');
@@ -31,7 +37,7 @@ $(document).ready(function(){
 		$('#'+id_hook+'').sortable({
 			opacity : 0.5,
 			cursor : 'move',
-			handle : '.moveModule',
+
 			connectWith: '.dndHook',
 			receive: function(event, ui) {
 				if (new_target == '')
@@ -72,6 +78,8 @@ $(document).ready(function(){
 });
 function getHookableList()
 {
+	$("#fancy").attr('href', '#live_edit_load');
+	$("#fancy").trigger("click");
 	$.ajax({
        type: 'GET',
        url: baseDir + ad +'/ajax.php',
@@ -81,6 +89,7 @@ function getHookableList()
        success: function(jsonData)
        {
 			hookable_list = jsonData;
+			//$("#fancy").close();
 		},
   		error: function(XMLHttpRequest, textStatus, errorThrown) {
   			alert("TECHNICAL ERROR: unable to unregister hook \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
@@ -107,13 +116,22 @@ function saveModulePosition()
        data: 'ajax=true&saveHook&hooks_list='+hooks_list+str ,
        success: function(jsonData)
        {
-			alert(saveOK);	
+			$('#live_edit_feed_back').html('<div class="live_edit_feed_back_ok">'+saveOK+'</div>');
+			$('#live_edit_feed_back').fadeIn('slow');
+			setTimeout("hideFeedback()",5000);
 		},
   		error: function(XMLHttpRequest, textStatus, errorThrown) {
   			alert("TECHNICAL ERROR: unable to unregister hook \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
 	});
 
 }
+
+function hideFeedback()
+{
+	$('#live_edit_feed_back').fadeOut('slow', function (){
+		$(this).html('')
+		});
+};
 
 function in_array (tab, val) {
 	for(var i = 0, l = tab.length; i < l; i++) {

@@ -26,15 +26,20 @@
 <script type="text/javascript">
 	{if isset($ad) && isset($live_edit)}
 	var ad = "{$smarty.get.ad}";
-	var modules_list = new Array();
-	var hooks_list = new Array();
-	var hookable_list = new Array();
 	{/if}
 	var lastMove = '';
 	var saveOK = '{l s='Module position save'}';
 </script>
-<div style="100%;height:20px;background-color:#D0D3D8;">
-	<a href="#" id="cancelMove">{l s='Cancel'}</a>&nbsp;
-	<a href="#" id="saveLiveEdit">{l s='Save'}</a>&nbsp;
-	<a href="?close_live_edit" id="closeLiveEdit">{l s='Close Live edit'}</a>
+
+<div style="width:100%;height:30px;padding-top:10px;background-color:#D0D3D8;border:solid 1px gray;position:fixed;bottom:0;opacity:0.7" onmouseover="$(this).css('opacity', 1);" onmouseout="$(this).css('opacity', 0.7);">
+	<!--<input type="submit" value="{l s='Undo'}" id="cancelMove" class="button" style="float:left"> -->
+	<input type="submit" value="{l s='Save'}" id="saveLiveEdit" class="exclusive" style="float:left">
+	<input type="submit" value="{l s='Close Live edit'}" id="closeLiveEdit" class="button" style="float:left" onclick="window.close();">
+	<div style="float:right;margin-right:20px;" id="live_edit_feed_back"></div>
 </div>
+<a href="#" style="display:none;" id="fancy"></a>
+<div id="live_edit_feedback" style="display:none;"> 
+	<p> 
+		<!-- <a href="javascript:;" onclick="$.fancybox.close();">{l s='Close'}</a> --> 
+	</p> 
+</div>	

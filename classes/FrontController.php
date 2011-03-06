@@ -393,7 +393,14 @@ class FrontControllerCore
 		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
 		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
 		if ($cookie->live_edit)
-			Tools::addJS(array(_PS_JS_DIR_.'hookLiveEdit.js', _PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js'));
+		{
+			Tools::addJS(array(
+							_PS_JS_DIR_.'hookLiveEdit.js',
+							_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js', 
+							_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js')
+							);
+			Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css');
+		}
 	}
 
 	public function process()
@@ -408,7 +415,7 @@ class FrontControllerCore
 
 	public function displayHeader()
 	{
-		global $css_files, $js_files, $cookie;
+		global $css_files, $js_files;
 
 		if (!self::$initialized)
 			$this->init();
@@ -442,12 +449,6 @@ class FrontControllerCore
 			if (Configuration::get('PS_JS_THEME_CACHE'))
 				Tools::cccJs();
 		}
-		//live edit
-		if ($cookie->live_edit && $ad = Tools::getValue('ad'))
-			self::$smarty->assign(array('ad' => $ad, 'live_edit' => true));
-		else
-			Tools::displayError();
-				
 		
 		self::$smarty->assign('css_files', $css_files);
 		self::$smarty->assign('js_files', $js_files);
@@ -456,6 +457,7 @@ class FrontControllerCore
 
 	public function displayFooter()
 	{
+		global $cookie;
 		if (!self::$initialized)
 			$this->init();
 
@@ -464,6 +466,14 @@ class FrontControllerCore
 			'HOOK_FOOTER' => Module::hookExec('footer'),
 			'content_only' => (int)(Tools::getValue('content_only'))));
 		self::$smarty->display(_PS_THEME_DIR_.'footer.tpl');
+		//live edit
+		if ($cookie->live_edit AND $ad = Tools::getValue('ad'))
+		{
+			self::$smarty->assign(array('ad' => $ad, 'live_edit' => true));
+			self::$smarty->display(_PS_ALL_THEMES_DIR_.'live_edit.tpl');
+		}
+		else
+			Tools::displayError();
 	}
 
 	public function productSort()
