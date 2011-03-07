@@ -1303,7 +1303,8 @@ class ToolsCore
 	public static function addJS($js_uri)
 	{
 		global $js_files;
-
+		if(!isset($js_files))
+			$js_files = array();
 		// avoid useless operation...
 		if (in_array($js_uri, $js_files))
 			return true;
@@ -1357,7 +1358,11 @@ class ToolsCore
 			$css_uri = array($css_uri => $css_media_type);
 
 		// adding file to the big array...
-		$css_files = array_merge($css_files, $css_uri);
+		if(is_array($css_files))
+			$css_files = array_merge($css_files, $css_uri);
+		else
+			$css_files = $css_uri;
+
 
 		return true;
 	}
