@@ -373,7 +373,7 @@ else /* Else display homepage */
 	<div id="column_right">';
 
 	$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation.php?version=1.0&email='.Configuration::get('PS_SHOP_EMAIL'), false, $context);
+	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation.php?version=1.0&email='.Configuration::get('PS_SHOP_EMAIL').'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
 	$preactivation = explode('|', $content);
 	if ($preactivation[0] == 'OK')
 	{
@@ -384,6 +384,9 @@ else /* Else display homepage */
 
 			$width = 800; $height = 600;
 			if ($tmp[0] == 'paypal') { $width = 400; $height = 550; }
+
+			if ($tmp['1'] == 'CompleteForm')
+				$tmp['1'] = 'https://www.prestashop.com/partner/preactivation/preactivation-complete.php?version=1.0&partner='.$tmp[0].'&email='.Configuration::get('PS_SHOP_EMAIL').'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_);
 
 			echo '<a href="#" OnClick="window.open(\''.$tmp[1].'\', \''.ucfirst($tmp[0]).' preactivation\', \'status = 1, height = '.$height.', width = '.$width.', resizable = 0, scrollbars = 1\'); return false;"><img src="'.$tmp[2].'" alt="'.ucfirst($tmp[0]).'" title="'.ucfirst($tmp[0]).'" /></a>';
 			if (!Configuration::get('PS_PREACTIVATION_'.strtoupper($tmp[0])))

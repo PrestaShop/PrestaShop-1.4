@@ -95,6 +95,7 @@
 
 	if ($_GET['request'] == 'send')
 	{
+		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
 		$url = 'https://www.prestashop.com/partner/preactivation/actions.php?version=1.0&partner='.addslashes($_GET['partner']);
 
 		// Protect fields
@@ -102,36 +103,20 @@
 			$_GET[$key] = strip_tags(str_replace(array('\'', '"'), '', trim($value)));
 
 		// Get validation method for fields
-		require_once('../classes/Validate.php');
-		$result = simplexml_load_file('https://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.addslashes($_GET['partner']).'&request=validate&country_iso_code='.addslashes($_GET['country_iso_code']));
+		$xml = file_get_contents('https://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.addslashes($_GET['partner']).'&request=validate&country_iso_code='.addslashes($_GET['country_iso_code']), false, $context);
+		$result = simplexml_load_string($xml);
 		if (!$result)
 		{
 			echo 'KO|Could not connect with Prestashop.com';
 			exit;
 		}
 
-		// Check errors
-		$error = '';
-		foreach ($result->field as $field)
-			if (isset($field->required) && trim($field->required) == 'yes' && empty($error))
-			{
-				if (empty($_GET[trim($field->key)]))
-					$error = 'Field "'.trim(getPreinstallXmlLang($field, 'label')).'" is empty.';
-				else if (isset($field->validate) && !call_user_func('ValidateCore::'.trim($field->validate), $_GET[trim($field->key)]))
-					$error = 'Field "'.trim(getPreinstallXmlLang($field, 'label')).'" is invalid.';
-			}
-
-		if (!empty($error))
-		{
-			echo 'KO|'.$error;
-			exit;
-		}
-
-
 		// Encore Get, Send It and Get Answers
+		@require_once('../config/settings.inc.php');
 		foreach ($_GET as $key => $val)
 			$url .= '&'.$key.'='.urlencode($val);
-		$content = @file_get_contents($url);
+		$url .= '&security='.md5($_GET['email']._COOKIE_IV_);
+		$content = @file_get_contents($url, false, $context);
 		if ($content)
 			echo $content;
 		else
