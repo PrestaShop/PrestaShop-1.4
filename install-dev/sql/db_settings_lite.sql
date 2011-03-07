@@ -64,7 +64,8 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (61, 'categoryUpdate', 'Category modification', '', 0, 0),
 (62, 'categoryDeletion', 'Category removal', '', 0, 0),
 (63, 'beforeAuthentication', 'Before Authentication', 'Before authentication', 0, 0),
-(64, 'paymentTop', 'Top of payment page', 'Top of payment page', 0, 0)
+(64, 'paymentTop', 'Top of payment page', 'Top of payment page', 0, 0),
+(65, 'afterCreateHtaccess', 'After htaccess creation', 'After htaccess creation', 0, 0);
 ;
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -51,12 +51,13 @@ class BlockCategories extends Module
 			!$this->registerHook('categoryAddition') OR
 			!$this->registerHook('categoryUpdate') OR
 			!$this->registerHook('categoryDeletion') OR
+			!$this->registerHook('afterCreateHtaccess') OR
 			!Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', 3) OR
 			!Configuration::updateValue('BLOCK_CATEG_DHTML', 1))
 			return false;
 		return true;
 	}
-	
+
 	public function uninstall()
 	{
 		if (!parent::uninstall() OR
@@ -116,7 +117,7 @@ class BlockCategories extends Module
 	public function getTree($resultParents, $resultIds, $maxDepth, $id_category = 1, $currentDepth = 0)
 	{
 		global $link;
-		
+
 		$children = array();
 		if (isset($resultParents[$id_category]) AND sizeof($resultParents[$id_category]) AND ($maxDepth == 0 OR $currentDepth < $maxDepth))
 			foreach ($resultParents[$id_category] as $subcat)
@@ -143,10 +144,10 @@ class BlockCategories extends Module
 		if (!$this->isCached('blockcategories.tpl', $smartyCacheId))
 		{
 			$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
-			
+
 			if (!$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT DISTINCT c.*, cl.*
-				FROM `'._DB_PREFIX_.'category` c 
+				FROM `'._DB_PREFIX_.'category` c
 				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.$id_lang.')
 				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
 				WHERE 1'
@@ -168,7 +169,7 @@ class BlockCategories extends Module
 			unset($resultParents);
 			unset($resultIds);
 			$isDhtml = (Configuration::get('BLOCK_CATEG_DHTML') == 1 ? true : false);
-	
+
 			if (Tools::isSubmit('id_category'))
 			{
 				$cookie->last_visited_category = $id_category;
@@ -183,9 +184,9 @@ class BlockCategories extends Module
 						$cookie->last_visited_category = (int)($product->id_category_default);
 				}
 				$smarty->assign('currentCategoryId', (int)($cookie->last_visited_category));
-			}	
+			}
 			$smarty->assign('blockCategTree', $blockCategTree);
-			
+
 			if (file_exists(_PS_THEME_DIR_.'modules/blockcategories/blockcategories.tpl'))
 				$smarty->assign('branche_tpl_path', _PS_THEME_DIR_.'modules/blockcategories/category-tree-branch.tpl');
 			else
@@ -202,7 +203,7 @@ class BlockCategories extends Module
 	{
 		return $this->hookLeftColumn($params);
 	}
-	
+
 	public function hookHeader()
 	{
 		Tools::addJS(_THEME_JS_DIR_.'tools/treeManagement.js');
@@ -229,6 +230,10 @@ class BlockCategories extends Module
 	{
 		$this->_clearBlockcategoriesCache();
 	}
-}
 
+	public function hookAfterCreateHtaccess($params)
+	{
+		$this->_clearBlockcategoriesCache();
+	}
+}
 

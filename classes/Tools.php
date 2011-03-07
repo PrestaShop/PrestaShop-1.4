@@ -1651,6 +1651,9 @@ FileETag INode MTime Size
 			fwrite($writeFd, $cacheControl);
 		}
 		fclose($writeFd);
+
+		Module::hookExec('afterCreateHtaccess');
+
 		return true;
 	}
 	public static function jsonDecode($json)
