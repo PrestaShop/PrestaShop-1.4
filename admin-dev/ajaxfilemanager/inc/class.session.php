@@ -33,7 +33,8 @@ class Session
     function __construct()
     {
     	//check if the session folder read and writable
-    		$dir = new file();
+    	/*
+	$dir = new file();
 	        if(!file_exists(CONFIG_SYS_DIR_SESSION_PATH))
 	        {
 	           if(!$dir->mkdir(CONFIG_SYS_DIR_SESSION_PATH))
@@ -54,6 +55,7 @@ class Session
         $this->gcCounterFile = $this->dir . $this->gcCounterFileName; 
         $this->gcLogFile = $this->dir  . $this->gcLogFileName;
        	$this->sessionDir = backslashToSlash($this->dir.session_id().DIRECTORY_SEPARATOR);
+*/
         $this->init();    	
     }
      /**
@@ -99,10 +101,7 @@ class Session
         }   	
     }
 
-    /**
-     * garbage collection function
-     *
-     */
+
     function _gc() 
     {
 			//remove expired file from session folder

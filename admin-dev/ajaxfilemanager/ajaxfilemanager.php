@@ -9,7 +9,7 @@
 	 *
 	 */
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
-	$session->gc();
+	//$session->gc();
 	require_once(CLASS_SESSION_ACTION);
 	$sessionAction = new SessionAction();	
 	if(CONFIG_LOAD_DOC_LATTER)
