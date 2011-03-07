@@ -38,7 +38,8 @@ class AdminEnvoiMoinsCher extends AdminTab
 	public function display()
 	{
 		global $cookie;
-		echo '<h2>Liste des commandes à envoyer</h2>';
+		$emc = new Envoimoinscher();
+		echo '<h2>'.$emc->lang('List of orders to export').'</h2>';
 		if (Tools::isSubmit('submitExport'))
 		{
 			$orderToExport = array();
@@ -64,7 +65,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 			}
 			else echo '<div class="alert error">
 					   <img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />
-					   '.$this->l('No order to export').'</div>
+					   '.$emc->lang('No order to export').'</div>
 					   <p><a class="button" href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI'].'">Retour</a></p>';
 		}
 		else
@@ -76,14 +77,14 @@ class AdminEnvoiMoinsCher extends AdminTab
 				echo '<form action="'.$_SERVER['REQUEST_URI'].'" method="POST">';
 				$orders = self::getOrders();
 				self::displayOrders($orders);
-				echo '<p><input type="submit" value="Envoyer" name="submitExport" class="button" style="margin:10px 0px 0px 25px;"></p>
+				echo '<p><input type="submit" value="'.$emc->lang('Send').'" name="submitExport" class="button" style="margin:10px 0px 0px 25px;"></p>
 						</form>';
 			}
 			else
-			echo '<h2 style="color:red">'.$this->l('Please configure this module in order').'</h2>';
+			echo '<h2 style="color:red">'.$emc->lang('Please configure this module in order').'</h2>';
 		}
 		echo '<br><p><a href="index.php?tab=AdminModules&configure=envoimoinscher&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)).'" class="button">
-			 ' . $this->l('Change configuration') . '</a></p>';
+			 ' . $emc->lang('Change configuration') . '</a></p>';
 	}
 	
 	private function getOrders()
@@ -116,14 +117,14 @@ class AdminEnvoiMoinsCher extends AdminTab
 		echo '<table cellspacing="0" cellpadding="0" class="table" align="center" style="margin:10px 0px 0px 25px;">
 					<tr>
 						<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'ordersBox[]\', this.checked)" /></th>
-						<th>'.$this->l('ID').'</th>
-						<th>'.$this->l('Name').'</th>
-						<th>'.$this->l('Total Cost').'</th>
-						<th>'.$this->l('Total shipment').'</th>
-						<th>'.$this->l('Date').'</th>
-						<th>'.$this->l('Packaging').'</th>
-						<th>'.$this->l('Nature of contents').'</th>
-						<th>'.$this->l('Detail').'</th>		
+						<th>'.$emc->lang('ID').'</th>
+						<th>'.$emc->lang('Name').'</th>
+						<th>'.$emc->lang('Total Cost').'</th>
+						<th>'.$emc->lang('Total shipment').'</th>
+						<th>'.$emc->lang('Date').'</th>
+						<th>'.$emc->lang('Packaging').'</th>
+						<th>'.$emc->lang('Nature of contents').'</th>
+						<th>'.$emc->lang('Detail').'</th>		
 					</tr>';
 		if (!empty($orders))
 		{
@@ -148,12 +149,12 @@ class AdminEnvoiMoinsCher extends AdminTab
 							  </td>
 							  <td>'.envoimoinscher::selectNature(Configuration::get('EMC_CONTENT'),(int)($order['id_order'])).'</td>
 							  <td align="center"><a href="index.php?tab=AdminOrders&id_order='.(int)($order['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'">
-					<img border="0" title="'.$this->l('View').'" alt="'.$this->l('View').'" src="'._PS_IMG_.'admin/details.gif"/></a></td>
+					<img border="0" title="'.$emc->lang('View').'" alt="'.$emc->lang('View').'" src="'._PS_IMG_.'admin/details.gif"/></a></td>
 						  </tr>';
 			}
 		}
 		else
-		echo   '<tr><td colspan="4" align="center">'.$this->l('No Order to export').'</td></tr>';
+		echo   '<tr><td colspan="4" align="center">'.$emc->lang('No order to export').'</td></tr>';
 		
 	echo '</table>';
 	}

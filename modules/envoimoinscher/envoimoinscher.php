@@ -538,10 +538,55 @@ class Envoimoinscher extends Module
 				return $html;
 			}
 		}
-
-
+	}
+	
+	public function lang($str)
+	{
+		switch($str)
+		{
+		case 'No order to export':
+			return $this->l('No order to export');
+		break;
+		case 'Please configure this module in order':
+			return $this->l('Please configure this module in order');
+		break;
+		case 'Change configuration':
+			return $this->l('Change configuration');
+		break;
+		case 'ID':
+			return $this->l('ID');
+		break;
+		case 'Name':
+			return $this->l('Name');
+		break;
+		case 'Total Cost':
+			return $this->l('Total Cost');
+		break;
+		case 'Total shipment':
+			return $this->l('Total shipment');
+		break;
+		case 'Date':
+			return $this->l('Date');
+		break;
+		case 'Packaging':
+			return $this->l('Packaging');
+		break;
+		case 'Nature of contents':
+			return $this->l('Nature of contents');
+		break;
+		case 'Detail':
+			return $this->l('Detail');
+		break;
+		case 'View':
+			return $this->l('View');
+		break;
+		case 'Send':
+			return $this->l('Send');
+		break;
+		case 'List of orders to export':
+			return $this->l('List of orders to export');
+		break;
+		}
 	}	
-
-
 }
 
