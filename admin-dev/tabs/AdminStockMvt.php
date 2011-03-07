@@ -99,7 +99,14 @@ class AdminStockMvt extends AdminTab
 
 			echo '<h2>'.$this->l('Stock Movements for').' '.$product->name.'</h2>
 			<table cellspacing="0" cellpadding="0" class="table widthfull">
-				<tr><th>ID</th><th>Product Name</th><th>Quantity</th><th>Reason</th><th>Employee</th><th>Order</th><th>Date</th>
+				<tr>
+					<th>'.$this->l('ID').'</th>
+					<th>'.$this->l('Product Name').'</th>
+					<th>'.$this->l('Quantity').'</th>
+					<th>'.$this->l('Reason').'</th>
+					<th>'.$this->l('Employee').'</th>
+					<th>'.$this->l('Order').'</th>
+					<th>'.$this->l('Date').'</th>
 				</tr>';
 			$irow = 0;
 			foreach ($movements AS $k => $mvt)
