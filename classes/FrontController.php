@@ -395,9 +395,9 @@ class FrontControllerCore
 		if ($cookie->live_edit)
 		{
 			Tools::addJS(array(
-							_PS_JS_DIR_.'hookLiveEdit.js',
 							_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js', 
-							_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js')
+							_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js',
+							_PS_JS_DIR_.'hookLiveEdit.js')
 							);
 			Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css');
 		}
@@ -435,8 +435,8 @@ class FrontControllerCore
 		));
 		self::$smarty->assign(array(
 			'HOOK_HEADER' => Module::hookExec('header'),
-			'HOOK_LEFT_COLUMN' => Module::hookExec('leftColumn'),
-			'HOOK_TOP' => Module::hookExec('top')
+			'HOOK_TOP' => Module::hookExec('top'),
+			'HOOK_LEFT_COLUMN' => Module::hookExec('leftColumn')
 		));
 
 		if ((Configuration::get('PS_CSS_THEME_CACHE') OR Configuration::get('PS_JS_THEME_CACHE')) AND is_writable(_PS_THEME_DIR_.'cache'))
