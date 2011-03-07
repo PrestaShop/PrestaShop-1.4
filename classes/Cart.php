@@ -1027,24 +1027,8 @@ class CartCore extends ObjectModel
 			return $shipping_cost;
 		// Select carrier tax
 		if ($useTax AND !Tax::excludeTaxeOption())
-		{
-		     	 $id_address = $this->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
- 		     	 $id_country = (int)Country::getDefaultCountryId();
-             $id_state = 0;
-             $id_county = 0;
-             if (!empty($id_address))
-             {
-                $address_infos = Address::getCountryAndState($id_address);
-             	 if ($address_infos['id_country'])
-                {
-	          		 $id_country = (int)($address_infos['id_country']);
-	          	    $id_state = (int)$address_infos['id_state'];
-	          	    $id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
-                }
-            }
+			 $carrierTax = Tax::getCarrierTaxRate((int)$carrier->id, (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 
-		    $carrierTax = TaxRulesGroup::getTaxesRate((int)$carrier->id_tax_rules_group, (int)$id_country, (int)$id_state, (int)$id_county);
-		}
 		$configuration = Configuration::getMultiple(array('PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_HANDLING', 'PS_SHIPPING_METHOD', 'PS_SHIPPING_FREE_WEIGHT'));
 		// Free fees
 		$free_fees_price = 0;
@@ -1056,8 +1040,7 @@ class CartCore extends ObjectModel
 		if (isset($configuration['PS_SHIPPING_FREE_WEIGHT']) AND $this->getTotalWeight() >= (float)($configuration['PS_SHIPPING_FREE_WEIGHT']) AND (float)($configuration['PS_SHIPPING_FREE_WEIGHT']) > 0)
 			return $shipping_cost;
 
-		// Get shipping cost using correct method
-
+			// Get shipping cost using correct method
 			if ($carrier->range_behavior)
 			{
 				// Get id zone

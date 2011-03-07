@@ -364,6 +364,9 @@ class TaxCore extends ObjectModel
              	    $id_state = (int)$address_infos['id_state'];
  	                $id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
              }
+
+			    if (!empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
+				    return 0;
 	   }
 
 	   return TaxRulesGroup::getTaxesRate((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)$id_carrier), (int)$id_country, (int)$id_state, (int)$id_county);
