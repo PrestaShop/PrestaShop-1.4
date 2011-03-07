@@ -6,7 +6,7 @@ var current_translate = '';
 $(function()
 {
 	// @see gg_language_code declaration in AdminTranslations::displayAutoTranslate() method.
-	if (!google.language.isTranslatable(gg_translate['language_code']))
+	if (!ggIsTranslatable(gg_translate['language_code']))
 	{
 		setErrorMessage('"'+gg_translate['language_code']+'" : '+gg_translate['not_available']);
 	}
@@ -61,6 +61,17 @@ $(function()
 		});
 	}
 });
+function ggIsTranslatable(iso_lang)
+{
+	if(iso_lang.length == 2)
+		return google.language.isTranslatable(iso_lang);
+	else if (iso_lang.length > 2)
+	{
+		iso_lang = iso_lang.substring(0, 2);
+		gg_translate['language_code'] = iso_lang;
+		return ggIsTranslatable(iso_lang);
+	}
+}
 function setErrorMessage(string)
 {
 	$('#content .path_bar').after(output_error);
