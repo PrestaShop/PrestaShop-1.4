@@ -444,25 +444,24 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES ('
 ALTER TABLE `PREFIX_address` ADD `vat_number` varchar(32) NULL DEFAULT NULL AFTER `phone_mobile`;
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());
 
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (17, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (18, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (24, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (9, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (15, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (5, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (8, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (10, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (20, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (11, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (16, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (23, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (22, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (13, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (14, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (12, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (7, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES (21, 9, (SELECT max_position from (SELECT MAX(position)+1 as max_position FROM `PREFIX_hook_module` WHERE `id_hook` = 9) tmp));
 
+/* PHP:add_module_to_hook(blockpaymentlogo, header); */;
+/* PHP:add_module_to_hook(blockpermanentlinks, header); */;
+/* PHP:add_module_to_hook(blockviewed, header); */;
+/* PHP:add_module_to_hook(blockcart, header); */;
+/* PHP:add_module_to_hook(editorial, header); */;
+/* PHP:add_module_to_hook(blockbestsellers, header); */;
+/* PHP:add_module_to_hook(blockcategories, header); */;
+/* PHP:add_module_to_hook(blockspecials, header); */;
+/* PHP:add_module_to_hook(blockcurrencies, header); */;
+/* PHP:add_module_to_hook(blocknewproducts, header); */;
+/* PHP:add_module_to_hook(blockuserinfo, header); */;
+/* PHP:add_module_to_hook(blockcms, header); */;
+/* PHP:add_module_to_hook(blocklanguages, header); */;
+/* PHP:add_module_to_hook(blockmanufacturer, header); */;
+/* PHP:add_module_to_hook(blockadvertising, header); */;
+/* PHP:add_module_to_hook(blocktags, header); */;
+/* PHP:add_module_to_hook(blockmyaccount, header); */;
 
 ALTER TABLE `PREFIX_product` ADD `additional_shipping_cost` DECIMAL(20,2) NOT NULL DEFAULT '0.000000' AFTER `unit_price`;
 
@@ -632,13 +631,10 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 ('categoryUpdate', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0),
 ('categoryDeletion', '', 'Temporary hook. Must NEVER be used. Will soon be replaced by a generic CRUD hook system.', 0);
 
-INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
-((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
-(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryAddition'), 1),
-((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
-(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryUpdate'), 1),
-((SELECT IFNULL((SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 0)),
-(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'categoryDeletion'), 1);
+
+/* PHP:add_module_to_hook(blockcategories, categoryAddition); */;
+/* PHP:add_module_to_hook(blockcategories, categoryUpdate); */;
+/* PHP:add_module_to_hook(blockcategories, categoryDeletion); */;
 
 DELETE FROM `PREFIX_hook_module` WHERE `id_module` = 0;
 
@@ -690,3 +686,4 @@ CREATE TABLE `PREFIX_webservice_permission` (
 /* PHP:add_new_tab(AdminAddonsCatalog, Modules & themes catalog, 7); */;
 /* PHP:add_new_tab(AdminAddonsMyAccount, My Account, 7); */;
 /* PHP:add_new_tab(AdminThemes, Themes, 7); */;
+

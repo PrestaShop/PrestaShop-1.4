@@ -92,6 +92,7 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'gridextjs_deprecated.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'regenerate_level_depth.php');
 // add a new tab
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_new_tab.php');
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_module_to_hook.php');
 
 
 //old version detection
@@ -219,7 +220,7 @@ foreach (array(INSTALL_PATH.'/../tools/smarty/cache/', INSTALL_PATH.'/../tools/s
 		foreach (scandir($dir) as $file)
 			if ($file[0] != '.' AND $file != 'index.php')
 				unlink($dir.$file);
-	
+
 //sql file execution
 global $requests, $warningExist;
 $requests = '';
