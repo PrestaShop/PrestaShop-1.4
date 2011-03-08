@@ -91,7 +91,7 @@ class AdminProducts extends AdminTab
 		$_POST['weight'] = empty($_POST['weight']) ? '0' : str_replace(',', '.', $_POST['weight']);
 		if ($_POST['unit_price'] != NULL)
 			$object->unit_price = str_replace(',', '.', $_POST['unit_price']);
-		if ($_POST['ecotax'] != NULL)
+		if (array_key_exists('ecotax', $_POST) && $_POST['ecotax'] != NULL)
 			$object->ecotax = str_replace(',', '.', $_POST['ecotax']);
 		$object->available_for_order = (int)(Tools::isSubmit('available_for_order'));
 		$object->show_price = $object->available_for_order ? 1 : (int)(Tools::isSubmit('show_price'));
@@ -866,6 +866,7 @@ class AdminProducts extends AdminTab
 		/* Updating an existing product image */
 		if ($id_image = ((int)(Tools::getValue('id_image'))))
 		{
+
 			$image = new Image($id_image);
 			if (!Validate::isLoadedObject($image))
 				$this->_errors[] = Tools::displayError('an error occurred while loading object image');
@@ -884,30 +885,36 @@ class AdminProducts extends AdminTab
 		}
 
 		/* Adding a new product image */
-		elseif (isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
+		else
 		{
-			if (!Validate::isLoadedObject($product))
-				$this->_errors[] = Tools::displayError('cannot add image because product add failed');
-			elseif (substr($_FILES['image_product']['name'], -4) == '.zip' AND class_exists('ZipArchive', false))
-				return $this->uploadImageZip($product);
-			else
+			if ($error = checkImageUploadError($_FILES['image_product']))
+				$this->_errors[] = $error;
+
+			if (!sizeof($this->_errors) AND isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
 			{
-				$image = new Image();
-				$image->id_product = (int)($product->id);
-				$_POST['id_product'] = $image->id_product;
-				$image->position = Image::getHighestPosition($product->id) + 1;
-				if (($cover = Tools::getValue('cover')) == 1)
-					Image::deleteCover($product->id);
-				$image->cover = !$cover ? !sizeof($product->getImages(Configuration::get('PS_LANG_DEFAULT'))) : true;
-				$this->validateRules('Image', 'image');
-				$this->copyFromPost($image, 'image');
-				if (!sizeof($this->_errors))
+				if (!Validate::isLoadedObject($product))
+					$this->_errors[] = Tools::displayError('cannot add image because product add failed');
+				elseif (substr($_FILES['image_product']['name'], -4) == '.zip' AND class_exists('ZipArchive', false))
+					return $this->uploadImageZip($product);
+				else
 				{
-					if (!$image->add())
-						$this->_errors[] = Tools::displayError('error while creating additional image');
-					else
-						$this->copyImage($product->id, $image->id, $method);
-					$id_image = $image->id;
+					$image = new Image();
+					$image->id_product = (int)($product->id);
+					$_POST['id_product'] = $image->id_product;
+					$image->position = Image::getHighestPosition($product->id) + 1;
+					if (($cover = Tools::getValue('cover')) == 1)
+						Image::deleteCover($product->id);
+					$image->cover = !$cover ? !sizeof($product->getImages(Configuration::get('PS_LANG_DEFAULT'))) : true;
+					$this->validateRules('Image', 'image');
+					$this->copyFromPost($image, 'image');
+					if (!sizeof($this->_errors))
+					{
+						if (!$image->add())
+							$this->_errors[] = Tools::displayError('error while creating additional image');
+						else
+							$this->copyImage($product->id, $image->id, $method);
+						$id_image = $image->id;
+					}
 				}
 			}
 		}

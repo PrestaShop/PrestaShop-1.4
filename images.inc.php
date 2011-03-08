@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -43,7 +43,7 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg')
 			$y = imagesy($imageGd);
 			$max_x = ((int)$size)*3;
 			/* Size is already ok */
-			if ($y < $size && $x <= $max_x ) 
+			if ($y < $size && $x <= $max_x )
 				copy($image, _PS_TMP_IMG_DIR_.$cacheImage);
 
 			/* We need to resize */
@@ -56,7 +56,7 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg')
 				    $size = $y / ($x / $max_x);
 				}
 				$newImage = ($imageType == 'gif' ? imagecreate($ratioX, $size) : imagecreatetruecolor($ratioX, $size));
-				
+
 				/* Allow to keep nice look even if resized */
 				$white = imagecolorallocate($newImage, 255, 255, 255);
 				imagefill($newImage, 0, 0, $white);
@@ -92,6 +92,33 @@ function checkImage($file, $maxFileSize)
 	return false;
 }
 
+
+
+function checkImageUploadError($file)
+{
+	if ($file['error'])
+	{
+		switch ($file['error'])
+		{
+			case 1:
+				return Tools::displayError('The file is too large.');
+				break;
+
+         case 2:
+				return Tools::displayError('The file is too large.');
+				break;
+
+			case 3:
+				return Tools::displayError('The file was partialy uploaded');
+				break;
+
+			case 4:
+				return Tools::displayError('The file is empty');
+				break;
+		}
+	}
+}
+
 /**
   * Check image MIME type
   *
@@ -125,12 +152,12 @@ function isPicture($file, $types = NULL)
     }
     if (empty($mimeType) OR $mimeType == 'regular file')
         $mimeType = $file['type'];
-    
+
     /* For each allowed MIME type, we are looking for it inside the current MIME type */
     foreach ($types AS $type)
         if (strstr($mimeType, $type))
             return true;
-    
+
     return false;
 }
 
@@ -173,7 +200,7 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 
 	$widthDiff = $destWidth / $sourceWidth;
 	$heightDiff = $destHeight / $sourceHeight;
-	
+
 	if ($widthDiff > 1 AND $heightDiff > 1)
 	{
 		$nextWidth = $sourceWidth;
@@ -194,7 +221,7 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 			$destHeight = (int)(!Configuration::get('PS_IMAGE_GENERATION_METHOD') ? $destHeight : $nextHeight);
 		}
 	}
-	
+
 	$destImage = imagecreatetruecolor($destWidth, $destHeight);
 
 	$white = imagecolorallocate($destImage, 255, 255, 255);
@@ -225,14 +252,14 @@ function imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $f
 	$src['width'] = $srcInfos[0];
 	$src['height'] = $srcInfos[1];
 	$src['ressource'] = createSrcImage($srcInfos[2], $srcFile['tmp_name']);
-	
+
 	// Destination infos
 	$dest['x'] = $destX;
 	$dest['y'] = $destY;
 	$dest['width'] = $destWidth != NULL ? $destWidth : $src['width'];
 	$dest['height'] = $destHeight != NULL ? $destHeight : $src['height'];
 	$dest['ressource'] = createDestImage($dest['width'], $dest['height']);
-	
+
 	$white = imagecolorallocate($dest['ressource'], 255, 255, 255);
 	imagecopyresampled($dest['ressource'], $src['ressource'], 0, 0, $dest['x'], $dest['y'], $dest['width'], $dest['height'], $dest['width'], $dest['height']);
 	imagecolortransparent($dest['ressource'], $white);
@@ -295,10 +322,10 @@ function deleteImage($id_item, $id_image = NULL)
 {
 	$path = ($id_image) ? _PS_PROD_IMG_DIR_ : _PS_CAT_IMG_DIR_;
 	$table = ($id_image) ? 'product' : 'category';
-	
+
 	if (file_exists(_PS_TMP_IMG_DIR_.$table.'_'.$id_item.'.jpg'))
 		unlink(_PS_TMP_IMG_DIR_.$table.'_'.$id_item.'.jpg');
-	
+
 	if ($id_image AND file_exists($path.$id_item.'-'.$id_image.'.jpg'))
 		unlink($path.$id_item.'-'.$id_image.'.jpg');
 	elseif (!$id_image AND file_exists($path.$id_item.'.jpg'))
@@ -315,3 +342,4 @@ function deleteImage($id_item, $id_image = NULL)
 		unlink(_PS_TMP_IMG_DIR_.$table.'_mini_'.$id_item.'.jpg');
 	return true;
 }
+
