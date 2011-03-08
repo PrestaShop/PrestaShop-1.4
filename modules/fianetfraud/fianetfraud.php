@@ -571,21 +571,10 @@ class Fianetfraud extends Module
 		{
 			$orderHistory = new OrderHistory();
 			$orderHistory->id_order = (int)($id_order);
-			$orderHistory->id_order_state = Configuration::get('SAC_ID_BLOCKED');
+			$orderHistory->id_order_state = Configuration::get('SAC_ID_FRAUD');
 			$orderHistory->save();
 			return true;
 		}
-		/*
-		elseif (self::getEval((int)($id_order)) < 0)
-		{
-			$orderHistory = new OrderHistory();
-			$orderHistory->id_order = (int)($id_order);
-			$orderHistory->id_order_state = Configuration::get('SAC_ID_BLOCKED');
-			$orderHistory->save();
-			return true;
-		}
-		return false;
-		*/
 	}
 
 	private static function getEval($id_order)
@@ -599,24 +588,20 @@ class Fianetfraud extends Module
 
 	public static function reEvaluateOrder()
 	{
-		$conf = Configuration::getMultiple(array('SAC_ID_BLOCKED', 'SAC_ID_UNKNOWN'));
 		$sender = new fianet_sender();
 		if (Configuration::get('SAC_PRODUCTION'))
-				$sender->mode = 'production';
+			$sender->mode = 'production';
 		$result = $sender->get_reevaluated_order();
 
 		foreach ($result AS $row)
 			if ($row['eval'] > 0)
-			{
-				$last_history = OrderHistory::getLastOrderState($row['refid']);
-				if (in_array($last_history, $conf))
+				if (OrderHistory::getLastOrderState($row['refid']) == Configuration::get('SAC_ID_WAITING')))
 				{
 					$orderHistory = new OrderHistory();
 					$orderHistory->id_order = (int)($row['refid']);
 					$orderHistory->id_order_state = _PS_OS_PAYMENT_;
 					$orderHistory->save();
 				}
-			}
 		return true;
 	}
 
