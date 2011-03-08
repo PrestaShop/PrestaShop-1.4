@@ -261,13 +261,21 @@ class ProductCore extends ObjectModel
 			'out_of_stock' => array('required' => true),
 			'new' => array(),
 			'cache_default_attribute' => array(),
-		),
-		'associations' => array(
+			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => '', 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
+			//'id_default_image' => array('virtual' => array('getter' => '', 'setter' => '')),
+			),
+			'associations' => array(
 			'categories' => array('resource' => 'category', 'fields' => array(
-				'id' => array('required' => true),
+			'id' => array('required' => true),
 			)),
 		),
 	);
+
+	public function getCoverWs()
+	{
+		$result = $this->getCover($this->id);
+		return $result['id_image'];
+	}
 
 	public	function __construct($id_product = NULL, $full = false, $id_lang = NULL)
 	{
