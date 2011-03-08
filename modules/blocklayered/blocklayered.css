@@ -2,9 +2,14 @@
 	padding: 6px;
 }
 
+#layered_block_left ul {
+	padding-left: 0;
+}
+
 #layered_block_left ul li {
 	margin-left: 15px;
 	padding-left: 2px;
+	list-style-type: none;
 }
 
 #layered_block_left #enabled_filters {
@@ -61,7 +66,7 @@
 }
 
 #layered_block_left ul li input.checkbox {
-	vertical-align: text-bottom;
+	vertical-align: middle;
 	margin-left: 2px;
 }
 

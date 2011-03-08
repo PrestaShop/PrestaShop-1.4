@@ -31,7 +31,7 @@ $(document).ready(function()
 	cancelFilter();
 	openCloseFilter();
 	
-	$('#layered_form input[type=button]').live('click', function()
+	$('#layered_form input[type=button], #layered_form label.layered_color').live('click', function()
 	{
 		$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
 		$(this).attr('name', 'null');
@@ -84,11 +84,10 @@ function reloadContent()
 		type: 'GET',
 		url: baseDir + 'modules/blocklayered/blocklayered-ajax.php',
 		data: $('#layered_form').serialize(),
-		dataType: 'json',
-		success: function(data)
+		success: function(result)
 		{
-			$('#layered_block_left').after(data.layered_block_left).remove();
-			$('#product_list').html(data.product_list);
+			$('#layered_block_left').after($(result)[0]).remove();
+			$('#product_list').html($(result)[1]);
 			$('#product_list').css('opacity', '1');
 		}
 	});
