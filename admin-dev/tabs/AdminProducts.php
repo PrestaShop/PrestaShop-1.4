@@ -885,7 +885,7 @@ class AdminProducts extends AdminTab
 		}
 
 		/* Adding a new product image */
-		else
+		elseif (isset($_FILES['image_product']['name']) && $_FILES['image_product']['name'] != NULL )
 		{
 			if ($error = checkImageUploadError($_FILES['image_product']))
 				$this->_errors[] = $error;
