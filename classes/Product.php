@@ -254,6 +254,7 @@ class ProductCore extends ObjectModel
 	protected 	$identifier = 'id_product';
 
 	protected	$webserviceParameters = array(
+		'objectNodeNames' => 'products',
 		'fields' => array(
 			'id_manufacturer' => array('xlink_resource' => 'manufacturers'),
 			'id_supplier' => array('xlink_resource' => 'suppliers'),
@@ -262,12 +263,13 @@ class ProductCore extends ObjectModel
 			'new' => array(),
 			'cache_default_attribute' => array(),
 			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => '', 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
-			//'id_default_image' => array('virtual' => array('getter' => '', 'setter' => '')),
 			),
-			'associations' => array(
+		'associations' => array(
 			'categories' => array('resource' => 'category', 'fields' => array(
-			'id' => array('required' => true),
+				'id' => array('required' => true),
 			)),
+			'images' => array('resource' => 'image','fields' => array('id' => array())
+			),
 		),
 	);
 
@@ -277,6 +279,18 @@ class ProductCore extends ObjectModel
 		return $result['id_image'];
 	}
 
+	public function	getWsImages()
+	{
+		//d('a');
+		return Db::getInstance()->ExecuteS('
+		SELECT `id_image` as id
+		FROM `'._DB_PREFIX_.'image` 
+		WHERE `id_product` = '.(int)($this->id).'
+		ORDER BY `position`');
+	}
+	
+	
+	
 	public	function __construct($id_product = NULL, $full = false, $id_lang = NULL)
 	{
 		global $cart;
