@@ -595,7 +595,7 @@ class Fianetfraud extends Module
 
 		foreach ($result AS $row)
 			if ($row['eval'] > 0)
-				if (OrderHistory::getLastOrderState($row['refid']) == Configuration::get('SAC_ID_WAITING')))
+				if (OrderHistory::getLastOrderState($row['refid']) == Configuration::get('SAC_ID_WAITING'))
 				{
 					$orderHistory = new OrderHistory();
 					$orderHistory->id_order = (int)($row['refid']);
