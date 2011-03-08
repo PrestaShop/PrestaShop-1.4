@@ -295,6 +295,10 @@ function saveAddress(type)
 				tmp += '</ol>';
 				var errors = '<b>'+txtThereis+' '+i+' '+txtErrors+':</b><ol>'+tmp;
 				$('#opc_account_errors').html(errors).slideDown('slow');
+				$.scrollTo('#opc_account_errors', 800);
+				$('#opc_new_account-overlay').fadeOut('slow');
+				$('#opc_delivery_methods-overlay').fadeOut('slow');
+				$('#opc_payment_methods-overlay').fadeOut('slow');
 				result = false;
 			}
 			else
@@ -526,6 +530,7 @@ $(function() {
 						tmp += '</ol>';
 						var errors = '<b>'+txtThereis+' '+i+' '+txtErrors+':</b><ol>'+tmp;
 						$('#opc_account_errors').html(errors).slideDown('slow');
+						$.scrollTo('#opc_account_errors', 800);
 					}
 
 					isGuest = ($('#is_new_customer').val() == 1 ? 0 : 1);
