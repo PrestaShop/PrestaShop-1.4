@@ -48,6 +48,7 @@ class GuestTrackingControllerCore extends FrontController
 			    $this->errors[] = Tools::displayError('invalid order');
 			else
 			{
+				$customer = new Customer((int)$order->id_customer);
 			    $id_order_state = (int)($order->getCurrentState());
 			    $carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
 			    $addressInvoice = new Address((int)($order->id_address_invoice));
@@ -75,6 +76,7 @@ class GuestTrackingControllerCore extends FrontController
 			    	'address_delivery' => $addressDelivery,
 			    	'deliveryState' => (Validate::isLoadedObject($addressDelivery) AND $addressDelivery->id_state) ? new State((int)($addressDelivery->id_state)) : false,
 			    	'is_guest' => true,
+			    	'group_use_tax' => (Group::getPriceDisplayMethod($customer->id_default_group) == PS_TAX_INC),
 			    	'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			    	'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			    	'use_tax' => Configuration::get('PS_TAX'),
