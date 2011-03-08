@@ -710,7 +710,9 @@ INSERT INTO `PREFIX_meta` (`id_meta`, `page`) VALUES
 (20, 'order-slip'),
 (21, 'order'),
 (22, 'search'),
-(23, 'stores');
+(23, 'stores'),
+(24, 'order-opc'),
+(25, 'guest-tracking');
 
 INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `keywords`, `url_rewrite`) VALUES
 (1, 1, '404 error', 'This page cannot be found', 'error, 404, not found', 'page-not-found'),
@@ -782,6 +784,12 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (23, 1, 'Stores', '', '', 'stores'),
 (23, 2, 'Magasins', '', '', 'magasins'),
 (23, 3, 'Tiendas', '', '', 'tiendas'),
+(24, 1, 'Order', '', '', 'quick-order'),
+(24, 2, 'Commande', '', '', 'commande-rapide'),
+(24, 3, 'Carrito', '', '', 'pedido-rapido'),
+(25, 1, 'Guest tracking', '', '', 'guest-tracking'),
+(25, 2, 'Suivi de commande invité', '', '', 'suivi-commande-invite'),
+(25, 3, 'Estado del pedido', '', '', 'estado-pedido'),
 (1, 4, 'Fehler 404', 'Seite wurde nicht gefunden', 'Fehler 404, nicht gefunden', 'Seite-nicht-gefunden'),
 (2, 4, 'Verkaufshits', 'Unsere Verkaufshits', 'Verkaufshits', 'Verkaufshits'),
 (3, 4, 'Kontaktieren Sie uns', 'Nutzen Sie unser Kontaktformular', 'Kontakt, Formular, E-Mail', 'kontaktieren-sie-uns'),
@@ -805,6 +813,8 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (21, 4, 'Bestellung', '', '', 'Bestellung'),
 (22, 4, 'Suche', '', '', 'Suche'),
 (23, 4, 'Shops', '', '', 'Shops'),
+(24, 4, 'Bestellung', '', '', 'schnell-bestellung'),
+(25, 4, 'Auftragsverfolgung Gast', '', '', 'auftragsverfolgung-gast'),
 (1, 5, 'errore 404', 'Impossibile trovare questa pagina', 'errore, 404, non trovato', 'pagina-non-trovata'),
 (2, 5, 'Vendite migliori', 'Le nostre vendite migliori', 'vendite migliori', 'vendite-migliori'),
 (3, 5, 'Contattaci', 'Usa il nostro modulo per contattarci', 'contatto, modulo, e-mail', 'contattaci'),
@@ -827,7 +837,9 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (20, 5, 'Nota di ordine', '', '', 'nota-di-ordine'),
 (21, 5, 'Ordine', '', '', 'ordine'),
 (22, 5, 'Cerca', '', '', 'cerca'),
-(23, 5, 'Negozi', '', '', 'negozi');
+(23, 5, 'Negozi', '', '', 'negozi'),
+(24, 5, 'Ordine', '', '', 'ordine-veloce'),
+(25, 5, 'Ospite di monitoraggio', '', '', 'ospite-monitoraggio');
 
 /* Stats */
 INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('MacOsX'),('Linux');
