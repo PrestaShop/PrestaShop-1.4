@@ -278,7 +278,7 @@ foreach($sqlContent as $query)
 	</request>'."\n";
 	}
 }
-
+Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 0);
 $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action result="ok" error="">'."\n";
 $result .= $requests;
 die($result.'</action>'."\n");
