@@ -38,8 +38,8 @@ class Ekomi extends Module
 
 		parent::__construct();
 
-		$this->displayName = $this->l('Ekomi');
-		$this->description = $this->l('Adds a Ekomi block');
+		$this->displayName = $this->l('eKomi');
+		$this->description = $this->l('Adds a eKomi block');
 	}
 
 	public function install()
@@ -69,14 +69,14 @@ class Ekomi extends Module
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset>
 				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
-				<label>'.$this->l('Ekomi configuration').'</label>
+				<label>'.$this->l('eKomi configuration').'</label>
 				<div class="margin-form">
 					<br class="clear"/>
-					<label for="ekomi_script">'.$this->l('Ekomi script').'&nbsp;&nbsp;</label><textarea id="ekomi_script" name="ekomi_script">'.stripslashes(html_entity_decode(Configuration::get('PS_EKOMI_SCRIPT'))).'</textarea>
+					<label for="ekomi_script">'.$this->l('eKomi script').'&nbsp;&nbsp;</label><textarea id="ekomi_script" name="ekomi_script">'.stripslashes(html_entity_decode(Configuration::get('PS_EKOMI_SCRIPT'))).'</textarea>
 					<br class="clear"/><br />
-					<label for="ekomi_email">'.$this->l('Ekomi e-mail').'&nbsp;&nbsp;</label><input id="ekomi_email" type="text" name="ekomi_email" value="'.Configuration::get('PS_EKOMI_EMAIL').'" />
+					<label for="ekomi_email">'.$this->l('eKomi e-mail').'&nbsp;&nbsp;</label><input id="ekomi_email" type="text" name="ekomi_email" value="'.Configuration::get('PS_EKOMI_EMAIL').'" />
 					<br class="clear"/>
-					<p class="clear">'.$this->l('Please, fill the form with the datas that Ekomi gives you.').'</p>
+					<p class="clear">'.$this->l('Please, fill the form with the datas that eKomi gives you.').'</p>
 				</div>
 				<center><input type="submit" name="submitEkomi" value="'.$this->l('Save').'" class="button" /></center>
 			</fieldset>

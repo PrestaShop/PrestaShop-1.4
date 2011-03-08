@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>ekomi</name>
-	<displayName>Ekomi</displayName>
+	<displayName>eKomi</displayName>
 	<version>0.8</version>
-	<description>Adds a Ekomi block</description>
+	<description>Adds a eKomi block</description>
 	<tab>advertising_marketing</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
