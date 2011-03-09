@@ -107,7 +107,7 @@ class HelpAccessCore
 				                showTitle: false,
 				                arrows: true,
 				                dropShadow: false,
-				                positionBy: "bottomTop"
+				                positionBy: "auto"
 			                  });
 			            });
 		              </script>';
