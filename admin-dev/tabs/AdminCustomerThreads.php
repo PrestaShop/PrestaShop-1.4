@@ -245,12 +245,12 @@ class AdminCustomerThreads extends AdminTab
 		echo '</div>';
 		
 		$params = array(
-			$this->l('Total thread') => $all = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread'),
-			$this->l('Thread pending') => $pending = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status LIKE "%pending%"'),
+			$this->l('Total threads') => $all = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread'),
+			$this->l('Threads pending') => $pending = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status LIKE "%pending%"'),
 			$this->l('Total customer messages') => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_message WHERE id_employee = 0'),
 			$this->l('Total employee messages') => Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_message WHERE id_employee != 0'),
-			$this->l('Thread unread') => $unread = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status = "open"'),
-			$this->l('Thread closed') => $all - ($unread + $pending));
+			$this->l('Threads unread') => $unread = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer_thread WHERE status = "open"'),
+			$this->l('Threads closed') => $all - ($unread + $pending));
 
 		echo '<div style="float:right;padding 0px;border:1px solid #CFCFCF;width:280px;">
 				<h3 class="button" style="margin:0;line-height:23px;height:23px;border:0;padding:0 5px;">'.$this->l('Customer service').' : '.$this->l('Statistics').'</h3>
