@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <localizationPack name="Australia" version="1.0">
 	<currencies>
-		<currency name="Dollar" iso_code="AUD" iso_code_num="036" sign="$" blank="1" conversion_rate="1.40554" format="2" decimals="1" />
+		<currency name="Dollar" iso_code="AUD" iso_code_num="036" sign="$" blank="1" conversion_rate="1.40554" format="1" decimals="1" />
 	</currencies>
 	<taxes>
 		<tax id="1" name="GST AU 10%" rate="10" />
@@ -27,3 +27,11 @@
 		<unit type="long_distance" value="km" />
 	</units>
 </localizationPack>
+
+<currency name="Dollar" iso_code="AUD" iso_code_num="036" sign="$" blank="1" conversion_rate="1.40554" format="2" decimals="1" />
+ <currency name="Dollar" iso_code="AUD" iso_code_num="036" sign="$" blank="0" conversion_rate="1.40554" format="2" decimals="1" />
+to:
+
+ <currency name="Dollar" iso_code="AUD" iso_code_num="036" sign="$" blank="1" conversion_rate="1.40554" format="2" decimals="1" />
+ <currency name="Dollar" iso_code="AUD" iso_code_num="036" sign="$" blank="0" conversion_rate="1.40554" format="1" decimals="1" />
+
