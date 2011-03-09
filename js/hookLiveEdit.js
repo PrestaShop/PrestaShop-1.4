@@ -49,7 +49,7 @@ $(document).ready(function() {
     });
 
     $('#closeLiveEdit').unbind('click').click(function() {
-        $("#live_edit_feedback_str").html('<div style="padding:10px;"><p style="margin-bottom:10px;">' + confirmClose + '</p><p style="height:1.6em;display:block"><a style="margin:auto;float:left" class="button" href="#" onclick="window.close();">' + confirm + '</a><a style="margin:auto;float:right;" class="button" href="#" onclick="closeFancybox();">' + cancel + '</a></p></div>');
+        $("#live_edit_feedback_str").html('<div style="padding:10px;"><p style="margin-bottom:10px;">' + confirmClose + '</p><p style="height:1.6em;display:block"><a style="margin:auto;float:left" class="button" href="#" onclick="closeLiveEdit();">' + confirm + '</a><a style="margin:auto;float:right;" class="button" href="#" onclick="closeFancybox();">' + cancel + '</a></p></div>');
         $("#fancy").attr('href', '#live_edit_feedback');
         $("#fancy").trigger("click");
     });
@@ -194,6 +194,11 @@ function closeFancybox() {
     $('#live_edit_feedback_str').html('');
 }
 
+function closeLiveEdit(){
+
+	window.location.href = window.location.origin+window.location.pathname
+
+}
 
 function hideFeedback() {
     $('#live_edit_feed_back').fadeOut('slow', function() {
