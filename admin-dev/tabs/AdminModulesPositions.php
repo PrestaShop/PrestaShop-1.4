@@ -232,7 +232,7 @@ class AdminModulesPositions extends AdminTab
 		<fieldset style="width:250px;float:right"><legend>'.$this->l('Live edit').'</legend>
 				<p>'.$this->l('By clicking here you will be redirected to the front office of your shop to move and delete modules directly.').'</p>
 				<br>
-				<a href="'.$link->getPageLink('index.php').'?live_edit&ad='.$admin_dir.'&liveToken='.sha1($admin_dir._COOKIE_KEY_).'" target="_blank" class="button">'.$this->l('Go go go !!').'</a>
+				<a href="'.$link->getPageLink('index.php').'?live_edit&ad='.$admin_dir.'&liveToken='.sha1($admin_dir._COOKIE_KEY_).'" target="_blank" class="button">'.$this->l('Run LiveEdit').'</a>
 		</fieldset>
 		';
 
