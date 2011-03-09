@@ -48,7 +48,7 @@
 					elseif ($field->type == 'date')
 					{
 						echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_year" name="'.$p.'_'.$c.'_form_'.$field->key.'_year" style="border:1px solid #D41958">';
-						for ($i = 81; (date('Y') - $i) < date('Y'); $i--)
+						for ($i = 81; (date('Y') - $i) <= date('Y'); $i--)
 							echo '<option value="'.(date('Y') - $i).'">'.(date('Y') - $i).'</option>';
 						echo '</select>';
 						echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_month" name="'.$p.'_'.$c.'_form_'.$field->key.'_month" style="border:1px solid #D41958">';

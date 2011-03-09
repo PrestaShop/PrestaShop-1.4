@@ -271,7 +271,7 @@ class AdminHome extends AdminTab
 	<div id="column_right">';
 
 	$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-block.php?version=1.0&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
+	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-block.php?version=1.0&shop='.urlencode(Configuration::get('PS_SHOP_NAME')).'&url='.urlencode($_SERVER['HTTP_HOST']).'&id_lang='.$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
 	$content = explode('|', $content);
 	if ($content[0] == 'OK')
 	{
