@@ -20,6 +20,7 @@
 
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
 		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.$p.'&country_iso_code='.$c, false, $context);
+
 		if ($content && $content[0] == '<')
 		{
 			$result = simplexml_load_string($content);
@@ -31,19 +32,18 @@
 				{
 					echo '<div class="field"><label class="aligned">'.getPreinstallXmlLang($field, 'label').' :</label>';
 					if ($field->type == 'text' || $field->type == 'password')
-						echo '<input type="'.$field->type.'" class="text required" id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" /><br />';
+						echo '<input type="'.$field->type.'" class="text required" id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" />';
 					elseif ($field->type == 'radio')
 					{
 						foreach ($field->values as $key => $value)
 							echo getPreinstallXmlLang($value, 'label').' <input type="radio" id="'.$p.'_'.$c.'_form_'.$field->key.'_'.$key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" value="'.$value->value.'" '.($value->value == $field->default ? 'checked="checked"' : '').' />';
-						echo '<br />';
 					}
 					elseif ($field->type == 'select')
 					{
 						echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" style="width:175px;border:1px solid #D41958">';
 						foreach ($field->values as $key => $value)
 							echo '<option id="'.$p.'_'.$c.'_form_'.$field->key.'_'.$key.'" value="'.$value->value.'" '.(trim($value->value) == trim($field->default) ? 'selected="selected"' : '').'>'.getPreinstallXmlLang($value, 'label').'</option>';
-						echo '</select><br />';
+						echo '</select>';
 					}
 					elseif ($field->type == 'date')
 					{
@@ -60,11 +60,13 @@
 							echo '<option value="'.($i < 10 ? '0'.$i : $i).'">'.($i < 10 ? '0'.$i : $i).'</option>';
 						echo '</select>';
 					}
-					echo '</div><br clear="left" />';
+					if (getPreinstallXmlLang($field, 'help'))
+						echo ' '.getPreinstallXmlLang($field, 'help');
+					echo '<br /></div><br clear="left" />';
 					if ($field->type == 'date')
 						$varList .= "'&".$field->key."='+$('#".$p."_".$c."_form_".$field->key."_year').val()+'-'+$('#".$p."_".$c."_form_".$field->key."_month').val()+'-'+$('#".$p."_".$c."_form_".$field->key."_day').val()+\n";
 					else
-						$varList .= "'&".$field->key."='+$('#".$p."_".$c."_form_".$field->key."').val()+\n";
+						$varList .= "'&".$field->key."='+ encodeURIComponent($('#".$p."_".$c."_form_".$field->key."').val())+\n";
 				}
 				echo '
 				<script>'."
@@ -101,15 +103,6 @@
 		// Protect fields
 		foreach ($_GET as $key => $value)
 			$_GET[$key] = strip_tags(str_replace(array('\'', '"'), '', trim($value)));
-
-		// Get validation method for fields
-		$xml = file_get_contents('https://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.addslashes($_GET['partner']).'&request=validate&country_iso_code='.addslashes($_GET['country_iso_code']), false, $context);
-		$result = simplexml_load_string($xml);
-		if (!$result)
-		{
-			echo 'KO|Could not connect with Prestashop.com';
-			exit;
-		}
 
 		// Encore Get, Send It and Get Answers
 		@require_once('../config/settings.inc.php');

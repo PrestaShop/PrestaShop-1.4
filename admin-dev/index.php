@@ -373,29 +373,22 @@ else /* Else display homepage */
 	<div id="column_right">';
 
 	$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation.php?version=1.0&email='.Configuration::get('PS_SHOP_EMAIL').'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
-	$preactivation = explode('|', $content);
-	if ($preactivation[0] == 'OK')
+	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-block.php?version=1.0&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
+	$content = explode('|', $content);
+	if ($content[0] == 'OK')
 	{
-		echo '<div id="table_info_news" style="margin-top: 0px; margin-bottom: 20px;"><h5>Prestashop Preactivation</h5><p align="center">';
-		for ($i = 1; isset($preactivation[$i]); $i++)
-		{
-			$tmp = explode(';', $preactivation[$i]);
-
-			$width = 800; $height = 600;
-			if ($tmp[0] == 'paypal') { $width = 400; $height = 550; }
-
-			if ($tmp['1'] == 'CompleteForm')
-				$tmp['1'] = 'https://www.prestashop.com/partner/preactivation/preactivation-complete.php?version=1.0&partner='.$tmp[0].'&email='.Configuration::get('PS_SHOP_EMAIL').'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_);
-
-			echo '<a href="#" OnClick="window.open(\''.$tmp[1].'\', \''.ucfirst($tmp[0]).' preactivation\', \'status = 1, height = '.$height.', width = '.$width.', resizable = 0, scrollbars = 1\'); return false;"><img src="'.$tmp[2].'" alt="'.ucfirst($tmp[0]).'" title="'.ucfirst($tmp[0]).'" /></a>';
-			if (!Configuration::get('PS_PREACTIVATION_'.strtoupper($tmp[0])))
+		echo $content[2];
+		$content[1] = explode('#%#', $content[1]);
+		foreach ($content[1] as $partnerPopUp)
+			if ($partnerPopUp)
 			{
-				echo '<script>window.open(\''.$tmp[1].'\', \''.ucfirst($tmp[0]).' preactivation\', \'status = 1, height = '.$height.', width = '.$width.', resizable = 0, scrollbars = 1\');</script>';
-				Configuration::updateValue('PS_PREACTIVATION_'.strtoupper($tmp[0]), 'TRUE');
+				$partnerPopUp = explode('%%', $partnerPopUp);
+				if (!Configuration::get('PS_PREACTIVATION_'.strtoupper($partnerPopUp[0])))
+				{
+					echo $partnerPopUp[1];
+					Configuration::updateValue('PS_PREACTIVATION_'.strtoupper($partnerPopUp[0]), 'TRUE');
+				}
 			}
-		}
-		echo '</p></div>';
 	}
 
 
