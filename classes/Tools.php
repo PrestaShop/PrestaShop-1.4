@@ -1448,6 +1448,7 @@ class ToolsCore
 		}
 	}
 
+	
 	/**
 	* Combine Compress and Cache (ccc) JS calls
 	*/
@@ -1459,21 +1460,29 @@ class ToolsCore
 		$js_files_date = 0;
 		$compressed_js_file_date = 0;
 		$compressed_js_filename = '';
+		$js_external_files = array();
 
 		// get js files infos
 		foreach ($js_files as $filename)
 		{
-			$infos = array();
-			$infos['uri'] = $filename;
-			$url_data = parse_url($filename);
-			$infos['path'] =_PS_ROOT_DIR_.str_replace(__PS_BASE_URI__, '/', $url_data['path']);
-			$js_files_infos[] = $infos;
-
-			$js_files_date = max(
-				file_exists($infos['path']) ? filemtime($infos['path']) : 0,
-				$js_files_date
-			);
-			$compressed_js_filename .= $filename;
+			$expr = explode(':', $filename);
+			
+			if ($expr[0] == 'http')
+				$js_external_files[] = $filename;	
+			else 
+			{
+				$infos = array();
+				$infos['uri'] = $filename;
+				$url_data = parse_url($filename);
+				$infos['path'] =_PS_ROOT_DIR_.str_replace(__PS_BASE_URI__, '/', $url_data['path']);
+				$js_files_infos[] = $infos;
+	
+				$js_files_date = max(
+					file_exists($infos['path']) ? filemtime($infos['path']) : 0,
+					$js_files_date
+				);
+				$compressed_js_filename .= $filename;
+			}
 		}
 
 		// get compressed js file infos
@@ -1481,7 +1490,6 @@ class ToolsCore
 
 		$compressed_js_path = _PS_THEME_DIR_.'cache/'.$compressed_js_filename.'.js';
 		$compressed_js_file_date = file_exists($compressed_js_path) ? filemtime($compressed_js_path) : 0;
-
 
 		// aggregate and compress js files content, write new caches files
 		if ($js_files_date > $compressed_js_file_date)
@@ -1500,16 +1508,15 @@ class ToolsCore
 				$content = '/* WARNING ! file(s) not found : "'.
 					implode(',', $compressed_js_files_not_found).
 					'" */'."\n".$content;
-			else
-				$content = $content;
+
 			file_put_contents($compressed_js_path, $content);
 			chmod($compressed_js_path, 0777);
 		}
 
 		// rebuild the original js_files array
-		//$css_files[$protocol_link.Tools::getMediaServer($url).$url] = $media;
 		$url = str_replace(_PS_ROOT_DIR_.'/', __PS_BASE_URI__, $compressed_js_path);
-		$js_files = array($protocol_link.Tools::getMediaServer($url).$url);
+		$js_files = array_merge(array($protocol_link.Tools::getMediaServer($url).$url), $js_external_files);
+		
 	}
 
 	public static function getMediaServer($filename)
