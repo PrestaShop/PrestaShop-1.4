@@ -1041,15 +1041,14 @@ class ProductCore extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'product`
-		SET `quantity` =
-			(
+		SET `quantity` = IFNULL(
+		(
 			SELECT SUM(`quantity`)
 			FROM `'._DB_PREFIX_.'product_attribute`
 			WHERE `id_product` = '.(int)($this->id).'
-			)
+		), \'0\' )
 		WHERE `id_product` = '.(int)($this->id));
 	}
-
 	/**
 	* Delete product attributes
 	*
