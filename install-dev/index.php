@@ -49,7 +49,7 @@ if (version_compare(phpversion(), '5.0.0', '<'))
 			</head>
 			<body>
 				<p id="php5_nok">PrestaShop requires <b>PHP5 or later</b>, you are currently running: <b>'.phpversion().'</b><br />
-				If you do not know how to enable it, use our turnkey solution PrestaBox at <a href="http://www.prestabox.com">http://www.prestabox.com</a>.</p>
+				'.lang('If you do not know how to enable it, use our turnkey solution PrestaBox at').' <a href="http://www.prestabox.com">http://www.prestabox.com</a>.</p>
 	</body></html>';
 	die;
 }
@@ -367,7 +367,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="optional"><?php echo lang('GZIP compression is on (recommended)')?></li>
 				<li class="optional"><?php echo lang('Mcrypt is available (recommended)')?></li>
 			</ul>
-			<h3 style="display:none;" id="resultConfigHelper"><?php echo lang('If you do not know how to fix these issues,<br />use turnkey solution PrestaBox at');?> <a href="http://www.prestabox.com">http://www.prestabox.com</a></h3>
+			<h3 style="display:none;" id="resultConfigHelper"><?php echo lang('If you do not know how to fix these issues, use turnkey solution PrestaBox at');?> <a href="http://www.prestabox.com">http://www.prestabox.com</a></h3>
 			<p><input class="button" value="<?php echo lang('Refresh these settings')?>" type="button" id="req_bt_refresh"/></p>
 
 		</div>
@@ -410,6 +410,7 @@ if ($lm->getIncludeTradFilename())
 			<div id="dbTableParam">
 				<form action="#" method="post" onsubmit="createDB(); return false;">
 				<p><label for="db_prefix"><?php echo lang('Tables prefix:')?> </label><input class="text" type="text" id="db_prefix" value="ps_"/></p>
+				<h2><?php echo lang('Installation type')?></h2>
 				<p id="dbModeSetter" style="line-height: 20px;">
 					<input value="lite" type="radio" name="db_mode" id="db_mode_simple" style="vertical-align: middle;" /><label for="db_mode_simple"><?php echo lang('Simple mode: Basic installation')?> <span style="color: #CC0000; font-weight: bold;"><?php echo lang('(FREE)'); ?></span></label><br />
 					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet" style="vertical-align: middle;" /><label for="db_mode_complet"><?php echo lang('Full mode: includes').' <b>'.lang('100+ additional modules').'</b> '.lang('and demo products'); ?> <span style="color: #CC0000; font-weight: bold;"><?php echo lang('(FREE too!)'); ?></span></label>
