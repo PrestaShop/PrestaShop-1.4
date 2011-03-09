@@ -540,7 +540,8 @@ abstract class ModuleCore
 					$output .= $display;
 			}
 		}
-		return ($live_edit ? '<script type="text/javascript">hooks_list.push(\''.$hook_name.'\'); </script><div id="'.$hook_name.'" class="dndHook">' : '').$output.($live_edit ? '</div>' : '');
+		return ($live_edit ? '<script type="text/javascript">hooks_list.push(\''.$hook_name.'\'); </script><!--<div id="add_'.$hook_name.'" class="add_module_live_edit">
+				<a class="exclusive" href="#">Add a module</a></div>--><div id="'.$hook_name.'" class="dndHook">' : '').$output.($live_edit ? '</div>' : '');
 	}
 
 	public static function hookExecPayment()

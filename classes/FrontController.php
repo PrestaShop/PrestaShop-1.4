@@ -111,7 +111,8 @@ class FrontControllerCore
 		Tools::setCookieLanguage();
 
 		/* attribute id_lang is often needed, so we create a constant for performance reasons */
-		define('_USER_ID_LANG_', (int)$cookie->id_lang);
+		if (!defined('_USER_ID_LANG_'))
+			define('_USER_ID_LANG_', (int)$cookie->id_lang);
 
 		if (isset($_GET['logout']) OR ($cookie->logged AND Customer::isBanned((int)$cookie->id_customer)))
 		{
@@ -193,8 +194,10 @@ class FrontControllerCore
 
 		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
 		$protocol_content = ((isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) OR (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) ? 'https://' : 'http://';
-		define('_PS_BASE_URL_', Tools::getShopDomain(true));
-		define('_PS_BASE_URL_SSL_', Tools::getShopDomainSsl(true));
+		if (!defined('_PS_BASE_URL_'))
+			define('_PS_BASE_URL_', Tools::getShopDomain(true));
+		if (!defined('_PS_BASE_URL_SSL_'))
+			define('_PS_BASE_URL_SSL_', Tools::getShopDomainSsl(true));
 
 		$link->preloadPageLinks();
 		$this->canonicalRedirection();

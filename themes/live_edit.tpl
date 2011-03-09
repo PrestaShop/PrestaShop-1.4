@@ -29,17 +29,26 @@
 	{/if}
 	var lastMove = '';
 	var saveOK = '{l s='Module position save'}';
+	var confirmClose = '{l s='Are you sure ? If you close this window, position wont be save'}';
+	var close = '{l s='Close'}';
+	var cancel = '{l s='Cancel'}';
+	var confirm = '{l s='Confirm'}';
+	var add = '{l s='Add this module'}';
+	var unableToUnregisterHook = '{l s='Unable to unregister hook'}';
+	var unableToSaveModulePosition = '{l s='Unable to save module position'}';
+	var loadFail = '{l s='Failed to load module list'}';
+	var baseDir = '{$base_dir}';
 </script>
 
-<div style="width:100%;height:30px;padding-top:10px;background-color:#D0D3D8;border:solid 1px gray;position:fixed;bottom:0;opacity:0.7" onmouseover="$(this).css('opacity', 1);" onmouseout="$(this).css('opacity', 0.7);">
+<div style="width:100%;height:30px;padding-top:10px;background-color:#D0D3D8;border:solid 1px gray;position:fixed;bottom:0;left:0;opacity:0.7" onmouseover="$(this).css('opacity', 1);" onmouseout="$(this).css('opacity', 0.7);">
 	<!--<input type="submit" value="{l s='Undo'}" id="cancelMove" class="button" style="float:left"> -->
 	<input type="submit" value="{l s='Save'}" id="saveLiveEdit" class="exclusive" style="float:left">
-	<input type="submit" value="{l s='Close Live edit'}" id="closeLiveEdit" class="button" style="float:left" onclick="window.close();">
+	<input type="submit" value="{l s='Close Live edit'}" id="closeLiveEdit" class="button" style="float:left">
 	<div style="float:right;margin-right:20px;" id="live_edit_feed_back"></div>
 </div>
 <a href="#" style="display:none;" id="fancy"></a>
-<div id="live_edit_feedback" style="display:none;"> 
-	<p> 
-		<!-- <a href="javascript:;" onclick="$.fancybox.close();">{l s='Close'}</a> --> 
+<div id="live_edit_feedback" style="width:400px"> 
+	<p id="live_edit_feedback_str">
 	</p> 
+	<!-- <a href="javascript:;" onclick="$.fancybox.close();">{l s='Close'}</a> --> 
 </div>	

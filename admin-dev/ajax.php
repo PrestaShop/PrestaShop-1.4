@@ -557,6 +557,26 @@ if (Tools::isSubmit('getHookableList'))
 	die(Tools::jsonEncode($hookableList));
 }
 
+if (Tools::isSubmit('getHookableModuleList'))
+{
+	
+	include('../init.php');
+	$hook_name = Tools::getValue('hook');
+	$hookableModulesList = array();
+	$modules = Db::getInstance()->ExecuteS('SELECT id_module, name FROM `'._DB_PREFIX_.'module` ');
+	foreach ($modules as $module)
+	{
+		if (file_exists(_PS_MODULE_DIR_.$module['name'].'/'.$module['name'].'.php'))
+		{
+			include_once(_PS_MODULE_DIR_.$module['name'].'/'.$module['name'].'.php');
+			$mod = new $module['name']();
+			if (is_callable(array($mod, 'hook'.$hook_name)))
+				$hookableModulesList[] = array('id' => (int)$mod->id, 'name' => $mod->displayName, 'display' => Module::hookExec($hook_name, array(), (int)$mod->id));
+		}		
+	}
+	die(Tools::jsonEncode($hookableModulesList));			
+}
+
 if (Tools::isSubmit('saveHook'))
 {
 	$hooks_list = explode(',', Tools::getValue('hooks_list'));

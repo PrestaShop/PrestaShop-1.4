@@ -1,7 +1,7 @@
 SET NAMES 'utf8';
 
 INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`, `live_edit`) VALUES
-(1, 'payment', 'Payment', NULL, 1, 0),
+(1, 'payment', 'Payment', NULL, 1, 1),
 (2, 'newOrder', 'New orders', NULL, 0, 0),
 (3, 'paymentConfirm', 'Payment confirmation', NULL, 0, 0),
 (4, 'paymentReturn', 'Payment return', NULL, 0, 0),
@@ -17,7 +17,7 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (14, 'top', 'Top of pages', 'A hook which allow you to do things a the top of each pages.', 1, 0),
 (15, 'extraRight', 'Extra actions on the product page (right column).', NULL, 0, 0),
 (16, 'deleteproduct', 'Product deletion', 'This hook is called when a product is deleted', 0, 0),
-(17, 'productfooter', 'Product footer', 'Add new blocks under the product description', 1, 0),
+(17, 'productfooter', 'Product footer', 'Add new blocks under the product description', 1, 1),
 (18, 'invoice', 'Invoice', 'Add blocks to invoice (order)', 1, 0),
 (19, 'updateOrderStatus', 'Order''s status update event', 'Launch modules when the order''s status of an order change.', 0, 0),
 (20, 'adminOrder', 'Display in Back-Office, tab AdminOrder', 'Launch modules when the tab AdminOrder is displayed on back-office.', 0, 0),

@@ -1483,7 +1483,12 @@ div.star_hover a, div.star a:hover { background-position: 0 -32px }
 }
 .live_edit_feed_back_ko {
     color: #374853; 
-    background-color: #DFFAD3; 
+    background-color: #FAE2E3; 
     padding: 4px; 
-    border: 2px solid #72CB67
+    border: 2px solid #EC9B9B
+}
+.add_module_live_edit {
+    background-color: #F1F2F4; 
+    padding: 4px; 
+    border: 2px solid #D0D3D8;
 }

@@ -19,5 +19,7 @@ INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`)
 	FROM `PREFIX_lang`
 );
 
+UPDATE  `PREFIX_hook` SET  `live_edit` =  '1' WHERE  `PREFIX_hook`.`name` IN ('productfooter', 'payment');
+
 /* PHP:add_module_to_hook(blockcategories, afterCreateHtaccess); */;
 
