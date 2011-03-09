@@ -176,7 +176,7 @@ class PDFCore extends PDF_PageGroupCore
 		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
 		$conf = Configuration::getMultiple($arrayConf);
 		$conf['PS_SHOP_NAME_UPPER'] = Tools::strtoupper($conf['PS_SHOP_NAME']);
-		$y_delta = substr_count($conf['PS_SHOP_DETAILS'],"\n");
+		$y_delta = array_key_exists('PS_SHOP_DETAILS', $conf) ? substr_count($conf['PS_SHOP_DETAILS'],"\n") : 0;
 		$this->SetY( -33 - ($y_delta * 7));
 		$this->SetFont(self::fontname(), '', 7);
 		$this->Cell(190, 5, ' '."\n".Tools::iconv('utf-8', self::encoding(), 'P. ').$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
@@ -394,7 +394,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->StartPageGroup();
 
 		self::$currency = Currency::getCurrencyInstance((int)(self::$order->id_currency));
-		
+
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
 		/* Display address information */
