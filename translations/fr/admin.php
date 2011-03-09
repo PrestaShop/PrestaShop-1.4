@@ -929,6 +929,13 @@ $_LANGADM['AdminGroups424b1a913da3df93e2366d28f29e1893'] = 'Modifier ce client';
 $_LANGADM['AdminGroups729a51874fe901b092899e9e8b31c97a'] = 'Etes-vous sûr ?';
 $_LANGADM['AdminGroupsc3b0525bb0516119f4233bc8f78ec05e'] = 'Supprimer ce client';
 $_LANGADM['AdminGroups3987833f7cb48f6bd0cf402d6994d346'] = 'Aucun utilisateur dans ce groupe.';
+$_LANGADM['AdminHomeafd87eb38820c73315688a7cab2571d4'] = 'Pour bien commencer...';
+$_LANGADM['AdminHomeecd188c0a9e0913f062d22331411158a'] = 'URLs simplifiées';
+$_LANGADM['AdminHome4d92a8b44ec205ea708bd3f3a8926b2d'] = 'Cache & compression navigateur';
+$_LANGADM['AdminHome5ad483f10dec94a21c78d89edc1fef94'] = 'Optimisation smarty';
+$_LANGADM['AdminHome202460d68b46910927f17628291fdd61'] = 'Concaténation, Compression & Cache';
+$_LANGADM['AdminHome73a910e532bbbc17742ac1ad88189026'] = 'Boutique activée';
+$_LANGADM['AdminHome6cf148afcc6acae611cf5f65ddf074f9'] = '.htaccess mis à jour';
 $_LANGADM['AdminHome2938c7f7e560ed972f8a4f68e80ff834'] = 'Tableau de bord';
 $_LANGADM['AdminHome486389453cfc7006870efa54fb7f6df9'] = 'Nouvelle version de PrestaShop disponible';
 $_LANGADM['AdminHome801ab24683a4a8c433c6eb40c48bcd9d'] = 'Téléchargement';
@@ -2946,12 +2953,5 @@ $_LANGADM['indexfb080b51680e721b19b6af4293264b6c'] = 'retour à la page d\'ident
 $_LANGADM['index1928895508822da82ce5c4932a114044'] = 'Indiquez votre adresse e-mail';
 $_LANGADM['index449d3718fc3a9e9bf3f3fc0254bb5625'] = '(celle que vous avez indiquée durant l\'installation) afin de recevoir vos nouveaux codes d\'accès par e-mail';
 $_LANGADM['index94966d90747b97d1f0f206c98a8b1ac3'] = 'Envoyer';
-$_LANGADM['indexeed170652360c67f3df5701722a799e3'] = 'Optimisation conseillées avant la mise en production :';
-$_LANGADM['indexecd188c0a9e0913f062d22331411158a'] = 'URLs simplifiées';
-$_LANGADM['index4d92a8b44ec205ea708bd3f3a8926b2d'] = 'Cache & compression navigateur';
-$_LANGADM['index5ad483f10dec94a21c78d89edc1fef94'] = 'Optimisations Smarty';
-$_LANGADM['index202460d68b46910927f17628291fdd61'] = 'Concaténation, Compression & Cache';
-$_LANGADM['index73a910e532bbbc17742ac1ad88189026'] = 'Boutique activée';
-$_LANGADM['index6cf148afcc6acae611cf5f65ddf074f9'] = '.htaccess mis à jour';
 
 ?>

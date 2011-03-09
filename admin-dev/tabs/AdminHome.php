@@ -31,6 +31,116 @@ class AdminHome extends AdminTab
 	{
 	}
 	
+
+	private function _displayOptimizationTips()
+	{
+		$rewrite = 0;
+		if (Configuration::get('PS_REWRITING_SETTINGS'))
+		{
+			$rewrite = 2;
+			if (!file_exists(dirname(__FILE__).'/../.htaccess'))
+				$rewrite = 1;
+			else
+			{
+				$stat = stat(dirname(__FILE__).'/../.htaccess');
+				if (strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_REWRITING_SETTINGS"')) > $stat['mtime'])
+					$rewrite = 1;
+			}
+		}
+		
+		$htaccessAfterUpdate = 2;
+		$htaccessOptimized = (Configuration::get('PS_HTACCESS_CACHE_CONTROL') ? 2 : 0);
+		if (!file_exists(dirname(__FILE__).'/../.htaccess'))
+		{
+			if (Configuration::get('PS_HTACCESS_CACHE_CONTROL'))
+				$htaccessOptimized = 1;
+		}
+		else
+		{
+			$stat = stat(dirname(__FILE__).'/../.htaccess');
+			$dateUpdHtaccess = Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_HTACCESS_CACHE_CONTROL"');
+			if (Configuration::get('PS_HTACCESS_CACHE_CONTROL') AND strtotime($dateUpdHtaccess) > $stat['mtime'])
+				$htaccessOptimized = 1;
+				
+			$dateUpdate = Configuration::get('PS_LAST_SHOP_UPDATE');
+			if ($dateUpdate AND strtotime($dateUpdate) > $stat['mtime'])
+				$htaccessAfterUpdate = 0;
+		}
+		
+		$smartyOptimized = 0;
+		if (!Configuration::get('PS_SMARTY_FORCE_COMPILE'))
+			++$smartyOptimized;
+		if (Configuration::get('PS_SMARTY_CACHE'))
+			++$smartyOptimized;
+
+		$cccOptimized = Configuration::get('PS_CSS_THEME_CACHE')
+		+ Configuration::get('PS_JS_THEME_CACHE')
+		+ Configuration::get('PS_HTML_THEME_COMPRESSION')
+		+ Configuration::get('PS_JS_HTML_THEME_COMPRESSION');
+		if ($cccOptimized == 4)
+			$cccOptimized = 2;
+		else
+			$cccOptimized = 1;
+			
+		$shopEnabled = (Configuration::get('PS_SHOP_ENABLE') ? 2 : 1);
+		
+		$lights = array(
+		0 => array('image'=>'error2.png','color'=>'#fbe8e8'), 
+		1 => array('image'=>'warn2.png','color'=>'#fffac6'),
+		2 => array('image'=>'ok2.png','color'=>'#dffad3'));
+		
+		
+		if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled + $htaccessAfterUpdate != 12)	
+			echo '
+			<div class="admin-box">
+				<h5>'.$this->l('A good beginning...')
+				.'
+					<span style="float:right">
+						<a id="optimizationTipsFold"'.
+						(Configuration::get('PS_HIDE_OPTIMIZATION_TIPS')
+						?'" href="#"><img alt="v" style="padding-top:5px" src="../img/admin/down.gif" /></a>':'href="?hideOptimizationTips" >
+						<img alt="X" style="padding-top:5px" src="../img/admin/close.png" />
+						</a>').'</span></h5>';
+echo <<<FIN_SCRIPT
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#optimizationTipsFold").click(function(e){
+		$("#list-optimization-tips").toggle(function(){
+
+			if($("#optimizationTipsFold").children("img").attr("src") == "../img/admin/down.gif")
+				$("#optimizationTipsFold").children("img").attr("src","../img/admin/close.png");
+			else
+				$("#optimizationTipsFold").children("img").attr("src","../img/admin/down.gif");
+		});
+	})
+});
+			</script>
+FIN_SCRIPT;
+			echo '<ul id="list-optimization-tips" class="admin-home-box-list" '
+				.(Configuration::get('PS_HIDE_OPTIMIZATION_TIPS')?'style="display:none"':'').'>
+				<li style="background-color:'.$lights[$rewrite]['color'].'">
+				<img src="../img/admin/'.$lights[$rewrite]['image'].'" class="pico" />
+					<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.$this->l('URL rewriting').'</a>
+				</li>
+				<li style="background-color:'.$lights[$htaccessOptimized]['color'].'">
+				<img src="../img/admin/'.$lights[$htaccessOptimized]['image'].'" class="pico" />
+				<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.$this->l('Browser cache & compression').'</a>
+				</li>
+				<li style="background-color:'.$lights[$smartyOptimized]['color'].'">
+				<img src="../img/admin/'.$lights[$smartyOptimized]['image'].'" class="pico" />
+				<a href="index.php?tab=AdminPerformance&token='.Tools::getAdminTokenLite('AdminPerformance').'">'.$this->l('Smarty optimization').'</a></li>
+				<li style="background-color:'.$lights[$cccOptimized]['color'].'">
+				<img src="../img/admin/'.$lights[$cccOptimized]['image'].'" class="pico" />
+				<a href="index.php?tab=AdminPerformance&token='.Tools::getAdminTokenLite('AdminPerformance').'">'.$this->l('Combine, Compress & Cache').'</a></li>
+				<li style="background-color:'.$lights[$shopEnabled]['color'].'">
+				<img src="../img/admin/'.$lights[$shopEnabled]['image'].'" class="pico" />
+				<a href="index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'">'.$this->l('Shop enabled').'</a></li>
+				<li style="background-color:'.$lights[$htaccessAfterUpdate]['color'].'">
+					<img src="../img/admin/'.$lights[$htaccessAfterUpdate]['image'].'" class="pico" />
+		<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.$this->l('.htaccess up-to-date').'</a></li>
+					</ul>
+			</div>';
+	}
 	public function display()
 	{
 		global $cookie;
@@ -84,10 +194,6 @@ class AdminHome extends AdminTab
 		</script>
 		<div class="clear"></div><br />';
 
-	if (Tools::isSubmit('hideOptimizationTips'))
-		Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 1);
-	elseif (!Configuration::get('PS_HIDE_OPTIMIZATION_TIPS'))
-		displayOptimizationTips();
 
 	echo '
 	<div id="column_left">
@@ -131,7 +237,7 @@ class AdminHome extends AdminTab
 		$results = array_merge($result, array_merge($result2, $result3));
 		echo '
 		<div class="table_info">
-			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.$this->l('View more').'</a> '.$this->l('Month Statistics').' </h5>
+			<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.$this->l('View more').'</a> '.$this->l('Monthly Statistics').' </h5>
 			<table class="table_info_details">
 				<tr class="tr_odd">
 					<td class="td_align_left">
@@ -289,11 +395,15 @@ class AdminHome extends AdminTab
 			}
 	}
 
+	if (Tools::isSubmit('hideOptimizationTips'))
+		Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 1);
+		
+	$this->_displayOptimizationTips();
 
 	echo '
-		<div id="table_info_link">
+		<div id="table_info_link" class="admin-box">
 			<h5>'.$this->l('PrestaShop Link').'</h5>
-			<ul id="prestashop_link">
+			<ul id="prestashop_link" class="admin-home-box-list">
 				<li>
 					<p>'.$this->l('Discover the latest official guide :').'</p>
 					<a href="http://www.prestashop.com/download/Userguide_'.(in_array($isoUser, array('en', 'es', 'fr')) ? $isoUser : 'en').'.pdf" target="_blank">'.$this->l('User Guide PrestaShop 1.3').'</a>

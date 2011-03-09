@@ -1102,7 +1102,8 @@ html[xmlns] .clearfix {
 	font-size: 12pt;
 }
 
-.table_info h5 a{
+.table_info h5 a,
+.admin-box h5 a{
 	color: #FFFFFF;
 	float: right;
 	font-size: 8pt;
@@ -1180,7 +1181,7 @@ html[xmlns] .clearfix {
 	background-color: #DEDEDE;
 }
 
-#table_info_link{
+.admin-box{
 	width: 310px;
 	float: left;
 	padding: 1px;
@@ -1189,7 +1190,7 @@ html[xmlns] .clearfix {
 	margin-bottom: 20px;
 }
 
-#table_info_link h5{
+.admin-box h5{
 	background-color: #7Ab51D;
 	color: #FFFFFF;
 	margin: 0;
@@ -1198,11 +1199,22 @@ html[xmlns] .clearfix {
 	font-size: 12pt;
 }
 
+.admin-home-box-list li img{
+	margin: 0 15px 0 5px;
+}
+.admin-home-box-list{
+	padding-left:0;
+	margin: 0px;
+	list-style: none;
+}
+
 #prestashop_link{
 	background: url('../img/admin/bg_pslink.png') no-repeat 0px 0px;
-	padding: 0;
-	margin: 0;
-	list-style: none;
+}
+
+.admin-home-box-list li{
+	margin: 1px;
+	padding:5px 0;
 }
 
 #prestashop_link li{
@@ -1210,8 +1222,16 @@ html[xmlns] .clearfix {
 	margin: 1px;
 }
 
-#prestashop_link li p{
+.admin-home-box-list li p{
 	padding: 5px 5px 0px 90px;
+}
+.admin-home-box-list li a{
+	color: #812143;
+	font-weight: bold;
+	text-decoration: underline;
+	line-height: 18px;
+	font-size: 8.5pt;
+	text-align: left;
 }
 
 #prestashop_link li a{

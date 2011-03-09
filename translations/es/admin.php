@@ -2916,12 +2916,11 @@ $_LANGADM['indexfb080b51680e721b19b6af4293264b6c'] = 'Regresar a la página de r
 $_LANGADM['index1928895508822da82ce5c4932a114044'] = 'Por favor, introduzca su cuenta de correo electrónico';
 $_LANGADM['index449d3718fc3a9e9bf3f3fc0254bb5625'] = '(La  que escribió durante su registro) para poder recibir su código de acceso por correo electrónico';
 $_LANGADM['index94966d90747b97d1f0f206c98a8b1ac3'] = 'Enviar';
-$_LANGADM['indexeed170652360c67f3df5701722a799e3'] = 'Optimización recomendada antes del momento de la producción';
-$_LANGADM['indexecd188c0a9e0913f062d22331411158a'] = 'URLs amigables';
-$_LANGADM['index4d92a8b44ec205ea708bd3f3a8926b2d'] = 'Cache y compresión navegador';
-$_LANGADM['index5ad483f10dec94a21c78d89edc1fef94'] = 'Optimización Smarty';
-$_LANGADM['index202460d68b46910927f17628291fdd61'] = 'Concatenación, compresión y cache';
-$_LANGADM['index73a910e532bbbc17742ac1ad88189026'] = 'Tienda activada';
-$_LANGADM['index6cf148afcc6acae611cf5f65ddf074f9'] = '. Htaccess hasta la fecha actual';
-
+$_LANGADM['AdminHomeafd87eb38820c73315688a7cab2571d4'] = '';
+$_LANGADM['AdminHomeecd188c0a9e0913f062d22331411158a'] = 'URLs amigables';
+$_LANGADM['AdminHome4d92a8b44ec205ea708bd3f3a8926b2d'] = 'Cache y compresión navegador';
+$_LANGADM['AdminHome5ad483f10dec94a21c78d89edc1fef94'] = '';
+$_LANGADM['AdminHome202460d68b46910927f17628291fdd61'] = 'Concatenación, compresión y cache';
+$_LANGADM['AdminHome73a910e532bbbc17742ac1ad88189026'] = 'Tienda activada';
+$_LANGADM['AdminHome6cf148afcc6acae611cf5f65ddf074f9'] = '. Htaccess hasta la fecha actual';
 ?>
