@@ -45,7 +45,7 @@ class LiveZilla extends Module
 	public function install()
 	{
 		if (!Configuration::get('LIVEZILLA_URL'))
-			Configuration::updateValue('LIVEZILLA_URL', 'http://'.Tools::htmlentitiesUTF8($_SERVER['HTTP_HOST']).'/LiveZilla/');
+			Configuration::updateValue('LIVEZILLA_URL', Tools::htmlentitiesUTF8($_SERVER['HTTP_HOST']).'/LiveZilla/');
 		return (parent::install() AND $this->registerHook('rightColumn'));
 	}
 
@@ -53,7 +53,7 @@ class LiveZilla extends Module
 	{
 		if (Tools::isSubmit('submitLiveZilla'))
 		{
-			Configuration::updateValue('LIVEZILLA_URL', Tools::getValue('LIVEZILLA_URL'));
+			Configuration::updateValue('LIVEZILLA_URL', Tools::getValue('LIVEZILLA_URL_TYPE').Tools::getValue('LIVEZILLA_URL'));
 			Configuration::updateValue('LIVEZILLA_SCRIPT', Tools::getValue('LIVEZILLA_SCRIPT'), true);
 			echo $this->displayConfirmation($this->l('Settings updated'));
 		}
@@ -75,6 +75,10 @@ class LiveZilla extends Module
 			<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
 				<label>'.$this->l('Enter the URL to your LiveZilla installation').'</label>
 				<div class="margin-form">
+					<select name="LIVEZILLA_URL_TYPE">
+						<option '.(Tools::getValue('LIVEZILLA_URL_TYPE') == 'http://' ? ' selected="selected" ' : '' ).' value="http://">http://</option>
+						<option '.(Tools::getValue('LIVEZILLA_URL_TYPE') == 'https://' ? ' selected="selected" ' : '' ).' value="https://">https://</option>
+					</select>
 					<input type="text" name="LIVEZILLA_URL" style="width:300px" value="'.Tools::htmlentitiesUTF8(Tools::getValue('LIVEZILLA_URL', Configuration::get('LIVEZILLA_URL'))).'" />
 					<p>'.$this->l('Absolute URL with the trailing slash, e.g.,').' http://'.Tools::htmlentitiesUTF8($_SERVER['HTTP_HOST']).'/LiveZilla/</p>
 				</div>
