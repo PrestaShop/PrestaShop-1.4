@@ -313,7 +313,7 @@ class AdminTranslations extends AdminTab
 		// These static vars allow to use file to write just one time.
 		static $_cache_file = array();
 		static $str_write = '';
-		static $_tmp = array();
+		static $array_check_duplicate = array();
 		
 		// Default translations and Prestashop overriding themes are distinguish
 		$is_default = $theme_name === self::DEFAULT_THEME_NAME ? true : false;
@@ -330,7 +330,7 @@ class AdminTranslations extends AdminTab
 				
 			// this string is initialized one time for a file
 			$str_write .= "<?php\n\nglobal \$_MODULE;\n\$_MODULE = array();\n";
-			$_tmp = array();
+			$array_check_duplicate = array();
 		}
 			
 		if (!$dir)
@@ -349,11 +349,11 @@ class AdminTranslations extends AdminTab
 				
 				foreach ($matches[1] AS $key)
 				{
-					$post_key = md5(Tools::strtolower($module_name).'_'.($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'_'.Tools::strtolower($template_name).'_'.md5($key));
-					$pattern = '\'<{'.Tools::strtolower($module_name).'}'.($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key).'\'';
-					if (array_key_exists($post_key, $_POST) AND !empty($_POST[$post_key]) AND !in_array($pattern, $_tmp))
+					$post_key = md5(strtolower($module_name).'_'.($is_default ? self::DEFAULT_THEME_NAME : strtolower($theme_name)).'_'.strtolower($template_name).'_'.md5($key));
+					$pattern = '\'<{'.strtolower($module_name).'}'.($is_default ? 'prestashop' : strtolower($theme_name)).'>'.strtolower($template_name).'_'.md5($key).'\'';
+					if (array_key_exists($post_key, $_POST) AND !empty($_POST[$post_key]) AND !in_array($pattern, $array_check_duplicate))
 					{
-						$_tmp[] = $pattern;
+						$array_check_duplicate[] = $pattern;
 						$str_write .= '$_MODULE['.$pattern.'] = \''.pSQL($_POST[$post_key]).'\';'."\n";
 						$this->total_expression++;
 					}
@@ -404,7 +404,7 @@ class AdminTranslations extends AdminTab
 		// Thank to this var similar keys are not duplicate 
 		// in AndminTranslation::modules_translations array
 		// see below
-		$_tmp = array();
+		$array_check_duplicate = array();
 		foreach ($files AS $template_file)
 		{
 			if ((preg_match('/^(.*).tpl$/', $template_file) OR ($is_default AND preg_match('/^(.*).php$/', $template_file))) AND file_exists($tpl = $dir.$template_file))
@@ -420,9 +420,9 @@ class AdminTranslations extends AdminTab
 				{
 					$module_key = ($is_default ? self::DEFAULT_THEME_NAME : '').'<{'.Tools::strtolower($module_name).'}'.($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key);
 					// to avoid duplicate entry
-					if (!in_array($module_key, $_tmp))
+					if (!in_array($module_key, $array_check_duplicate))
 					{
-						$_tmp[] = $module_key;
+						$array_check_duplicate[] = $module_key;
 						$this->modules_translations[($is_default ? self::DEFAULT_THEME_NAME : $theme_name)][$module_name][$template_name][$key] = key_exists($module_key, $_MODULES) ? html_entity_decode($_MODULES[$module_key], ENT_COMPAT, 'UTF-8') : '';
 						$this->total_expression++;
 					}
@@ -593,20 +593,20 @@ class AdminTranslations extends AdminTab
 		
 		$arr_mail_content = array();
 		$arr_mail_path = array();
-		if (ToolsCore::getValue('core_mail')) {
-			$arr_mail_content['core_mail'] = ToolsCore::getValue('core_mail');
+		if (Tools::getValue('core_mail')) {
+			$arr_mail_content['core_mail'] = Tools::getValue('core_mail');
 			$arr_mail_path['core_mail'] = _PS_MAIL_DIR_.$obj_lang->iso_code.'/';
 		}
-		if (ToolsCore::getValue('module_mail')) {
-			$arr_mail_content['module_mail'] = ToolsCore::getValue('module_mail');
+		if (Tools::getValue('module_mail')) {
+			$arr_mail_content['module_mail'] = Tools::getValue('module_mail');
 			$arr_mail_path['module_mail'] = _PS_MODULE_DIR_.'{module}'.'/mails/'.$obj_lang->iso_code.'/';
 		}
-		if (ToolsCore::getValue('theme_mail')) {
-			$arr_mail_content['theme_mail'] = ToolsCore::getValue('theme_mail');
+		if (Tools::getValue('theme_mail')) {
+			$arr_mail_content['theme_mail'] = Tools::getValue('theme_mail');
 			$arr_mail_path['theme_mail'] = _PS_THEME_DIR_.'mails/'.$obj_lang->iso_code.'/';
 		}
-		if (ToolsCore::getValue('theme_module_mail')) {
-			$arr_mail_content['theme_module_mail'] = ToolsCore::getValue('theme_module_mail');
+		if (Tools::getValue('theme_module_mail')) {
+			$arr_mail_content['theme_module_mail'] = Tools::getValue('theme_module_mail');
 			$arr_mail_path['theme_module_mail'] = _PS_THEME_DIR_.'modules/{module}'.'/mails/'.$obj_lang->iso_code.'/';
 		}
 		
@@ -740,7 +740,7 @@ class AdminTranslations extends AdminTab
 				// Get all iso code available
 				if(fsockopen('www.prestashop.com', 80))
 				{
-					$lang_packs = ToolsCore::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
+					$lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
 					if ($lang_packs!== false && $lang_packs != '' && $lang_packs = Tools::jsonDecode($lang_packs))
 					{
 						echo 	'<select id="params_import_language" name="params_import_language">';
@@ -1844,9 +1844,9 @@ class AdminTranslations extends AdminTab
 								{
 									$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>= ';
 									if (strlen($key) < TEXTAREA_SIZED)
-										$str_output .= '<input type="text" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
+										$str_output .= '<input type="text" style="width: 450px" name="'.md5(strtolower($module_name).'_'.strtolower($theme_name).'_'.strtolower($template_name).'_'.md5($key)).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" /></td></tr>';
 									else
-										$str_output .= '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5(ToolsCore::strtolower($module_name).'_'.$theme_name.'_'.ToolsCore::strtolower($template_name).'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
+										$str_output .= '<textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.md5(strtolower($module_name).'_'.strtolower($theme_name).'_'.strtolower($template_name).'_'.md5($key)).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea></td></tr>';
 								}
 								$str_output .= '
 										</table>

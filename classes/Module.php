@@ -576,6 +576,15 @@ abstract class ModuleCore
 		return $output;
 	}
 
+	/**
+	 * find translation from $_MODULES and put it in self::$l_cache if not already exist
+	 * and return it.
+	 * 
+	 * @param string $name name of the module
+	 * @param string $string term to find
+	 * @param string $source additional param for building translation key
+	 * @return string
+	 */
 	public static function findTranslation($name, $string, $source)
 	{
 		global $_MODULES;
@@ -586,8 +595,10 @@ abstract class ModuleCore
 		{
 			if (!is_array($_MODULES))
 				return str_replace('"', '&quot;', $string);
-			$currentKey = '<{'.Tools::strtolower($name).'}'._THEME_NAME_.'>'.$source.'_'.md5($string);
-			$defaultKey = '<{'.Tools::strtolower($name).'}prestashop>'.$source.'_'.md5($string);
+			// set array key to lowercase for 1.3 compatibility
+			$_MODULES = array_change_key_case($_MODULES);
+			$currentKey = '<{'.strtolower($name).'}'.strtolower(_THEME_NAME_).'>'.strtolower($source).'_'.md5($string);
+			$defaultKey = '<{'.strtolower($name).'}prestashop>'.strtolower($source).'_'.md5($string);
 			
 			if (isset($_MODULES[$currentKey]))
 				$ret = stripslashes($_MODULES[$currentKey]);
@@ -612,7 +623,7 @@ abstract class ModuleCore
 	 * when module is loaded with eval() Module::getModulesOnDisk()
 	 *
 	 * @param string $string String to translate
-	 * @param boolean|string $specific Filename to use in translation key
+	 * @param boolean|string $specific filename to use in translation key
 	 * @return string Translation
 	 */
 	public function l($string, $specific = false)
