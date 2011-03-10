@@ -49,6 +49,7 @@ class AdminModules extends AdminTab
 		
 		$this->_moduleCacheFile = _PS_ROOT_DIR_.'/config/modules_list.xml';
 		
+		//refresh modules_list.xml every week
 		if (!$this->isFresh()) 
 			$this->refresh();
 		
