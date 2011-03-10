@@ -335,7 +335,7 @@ class AdminModules extends AdminTab
 					matchContains: true,
 					highlightItem: true,
 					formatItem: function(row, i, max, term) {
-						return "<img src=\"../modules/"+row.name+"/logo.gif\" style=\"float:left;margin:5px\"><strong>" + row.displayName + "</strong>" + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
+						return "<img src=\"../modules/"+row.name+"/logo.gif\" style=\"float:left;margin:5px\"><strong>" + row.displayName + "</strong>"+((row.author != \'\') ? " '.$this->l("by").' "+ row.author :"") + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
 					},
 					formatResult: function(row) {
 						return row.displayName;
