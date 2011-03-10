@@ -351,10 +351,47 @@ class AdminModules extends AdminTab
 	    }
 	    return (sizeof($a) < sizeof($b)) ? -1 : 1;
 	}
+	
+
+	/**
+	 * Used for retreiving author name from submited field authorModules[name]
+	 * @param String $value value to be clean
+	 *
+	 * @return String cleant value: name
+	 */
+	private function _getSubmitedModuleAuthor($value)
+	{
+		$value = str_replace('authorModules[', '', $value);
+		$value = str_replace("\'", "'", $value);
+
+		$value = substr($value, 0, -1);
+		return $value;
+	}
+
+	/**
+	 * Used for building option group
+	 * @param Array $authors contains modules authors
+	 * @param String $fieldName name of optiongroup 
+	 * @return String built comp
+	 */
+
+	private function _buildModuleAuthorsOptGroup(Array $authors, $fieldName = "UNDEFINED")
+	{
+		$out = '<optgroup label="'.$this->l('Authors').'">';
+		foreach($authors as $author_item => $status)
+		{
+			$author_item = Tools::htmlentitiesUTF8($author_item);
+			$out .= '<option value="'.$fieldName.'['.$author_item. ']"'. (($status === "selected") ? ' selected>' : '>').$author_item .'</option>';
+		}
+		$out .= '</optgroup>';
+		return $out;
+	}
+
 	public function displayList()
 	{
 		global $currentIndex, $cookie;
-		
+	
+		$modulesAuthors = array();	
 		$autocompleteList = 'var moduleList = [';
 		
 		$showTypeModules = Configuration::get('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee));
@@ -367,9 +404,17 @@ class AdminModules extends AdminTab
 		
 		$serialModules = '';
 		$modules = Module::getModulesOnDisk(true);
+
 		foreach ($modules AS $module)
+		{
 			if (!in_array($module->name, $this->listNativeModules))
 				$serialModules .= $module->name.' '.$module->version.'-'.($module->active ? 'a' : 'i')."\n";
+
+			$moduleAuthor = $module->author;
+			if (!empty($moduleAuthor))
+				$modulesAuthors[$moduleAuthor] = true;
+		}
+
 		$serialModules = urlencode($serialModules);
 		
 		$filterName = Tools::getValue('filtername');
@@ -407,6 +452,17 @@ class AdminModules extends AdminTab
 					if (in_array($module->name, $this->listPartnerModules) OR in_array($module->name, $this->listNativeModules))
 						unset($modules[$key]);
 				break;
+				default:
+					if (strpos($showTypeModules, 'authorModules[') !== false)
+					{
+						$author_selected = $this->_getSubmitedModuleAuthor($showTypeModules);
+						$modulesAuthors[$author_selected] = 'selected';		// setting selected author in authors set
+						if (empty($module->author) || $module->author != $author_selected)
+							unset($modules[$key]);
+					}
+
+				break;
+
 			}
 					
 			switch ($showInstalledModules)
@@ -444,7 +500,8 @@ class AdminModules extends AdminTab
 			$autocompleteList .= Tools::jsonEncode(array(
 				'displayName' => (string)$module->displayName,
 				'desc' => (string)$module->description,
-				'name' => (string)$module->name
+				'name' => (string)$module->name,
+				'author' => (string)$module->author
 			)).', ';
 		}
 		$autocompleteList = rtrim($autocompleteList, ' ,').'];';
@@ -538,7 +595,9 @@ class AdminModules extends AdminTab
 						<select name="module_type">
 							<option value="allModules" '.($showTypeModules == 'allModules' ? 'selected="selected"' : '').'>'.$this->l('All Modules').'</option>
 							<option value="nativeModules" '.($showTypeModules == 'nativeModules' ? 'selected="selected"' : '').'>'.$this->l('Native Modules').'</option>
-							<option value="partnerModules" '.($showTypeModules == 'partnerModules' ? 'selected="selected"' : '').'>'.$this->l('Partners Modules').'</option>
+							<option value="partnerModules" '.($showTypeModules == 'partnerModules' ? 'selected="selected"' : '').'>'.$this->l('Partners Modules').'</option>'
+.$this->_buildModuleAuthorsOptGroup($modulesAuthors, 'authorModules')
+.'
 							<option value="otherModules" '.($showTypeModules == 'otherModules' ? 'selected="selected"' : '').'>'.$this->l('Others Modules').'</option>
 						</select>
 						&nbsp;
@@ -655,12 +714,14 @@ class AdminModules extends AdminTab
 							$img = '<img src="../img/admin/module_disabled.png" alt="'.$this->l('Module disabled').'" title="'.$this->l('Module disabled').'" />';
 					} else
 						$img = '<img src="../img/admin/module_notinstall.png" alt="'.$this->l('Module not installed').'" title="'.$this->l('Module not installed').'" />';
+					$disp_author = $module->author;
+					$disp_author = (empty($disp_author)) ? '' :  ' '.$this->l('by').' <i>'.Tools::htmlentitiesUTF8($disp_author).'</i>';
 					echo '<table style="width:100%" cellpadding="0" cellspacing="0" >
 					<tr'.($irow % 2 ? ' class="alt_row"' : '').' style="height: 42px;">
 						<td style="padding-right: 10px;padding-left:10px;width:30px">
 							<input type="checkbox" name="modules" value="'.urlencode($module->name).'" '.(empty($module->confirmUninstall) ? 'rel="false"' : 'rel="'.addslashes($module->confirmUninstall).'"').' />
 						</td>
-						<td style="padding:2px 4px 2px 10px;width:500px"><img src="../modules/'.$module->name.'/logo.gif" alt="" /> <b>'.stripslashes($module->displayName).'</b>'.($module->version ? ' v'.$module->version.(strpos($module->version, '.') !== false ? '' : '.0') : '').'<br />'.stripslashes($module->description).'</td>
+						<td style="padding:2px 4px 2px 10px;width:500px"><img src="../modules/'.$module->name.'/logo.gif" alt="" /> <b>'.stripslashes($module->displayName).'</b>'.($module->version ? ' v'.$module->version.(strpos($module->version, '.') !== false ? '' : '.0') : '').$disp_author.'<br />'.stripslashes($module->description).'</td>
 						<td rowspan="2">';
 						if (Tools::getValue('module_name') == $module->name)
 							$this->displayConf();

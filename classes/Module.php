@@ -42,6 +42,9 @@ abstract class ModuleCore
 	/** @var string A little description of the module */
 	public $description;
 
+	/** @var string author of the module */
+	public $author;
+
 	/** @var string Admin tab correponding to the module */
 	public $tab = NULL;
 
@@ -381,6 +384,7 @@ abstract class ModuleCore
 
 					$xml_module->displayName = Module::findTranslation($xml_module->name, $xml_module->displayName, (string)$xml_module->name);
 					$xml_module->description = Module::findTranslation($xml_module->name, $xml_module->description, (string)$xml_module->name);
+					$xml_module->author = Module::findTranslation($xml_module->name, $xml_module->author, (string)$xml_module->name);
 
 					if(isset($xml_module->confirmUninstall))
 						$xml_module->confirmUninstall = Module::findTranslation($xml_module->name, $xml_module->confirmUninstall, (string)$xml_module->name);
@@ -849,6 +853,7 @@ abstract class ModuleCore
 	<displayName>'.addslashes($this->displayName).'</displayName>
 	<version>'.$this->version.'</version>
 	<description>'.html_entity_decode(addslashes($this->description), ENT_COMPAT, 'UTF-8').'</description>
+	<author>'.html_entity_decode(addslashes($this->author), ENT_COMPAT, 'UTF-8').'</author>
 	<tab>'.$this->tab.'</tab>'.(isset($this->confirmUninstall) ? "\n\t".'<confirmUninstall>'.$this->confirmUninstall.'</confirmUninstall>' : '').'
 	<is_configurable>'.(int)method_exists($this, 'getContent').'</is_configurable>
 	<need_instance>'.$need_instance.'</need_instance>'.(isset($this->limited_countries) ? "\n\t".'<limited_countries>'.(sizeof($this->limited_countries) == 1 ? $this->limited_countries[0] : '').'</limited_countries>' : '').'
