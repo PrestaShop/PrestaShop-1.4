@@ -38,10 +38,10 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_3dcb5dddc6b7c11d4ea76a60dc1a0466'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_a39f026ca75c6279ac9487265c00e3f5'] = 'Fai clic su Salva modifiche per creare l\'obiettivo e la canalizzazione o su Annulla per uscire senza salvare.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_cd4952b65560a1242c68ffc980a6e515'] = 'Dimostrazione: Il processo di ordinazione';
 $_MODULE['<{ganalytics}prestashop>ganalytics_85a80bed9b602a460c1200efeb4e1226'] = 'Dopo aver attivato i rapporti e-commerce e selezionato il profilo inserire \'order-confirmation.php\'  come pagina obiettivo';
-$_MODULE['<{ganalytics}prestashop>ganalytics_f998ec1dfa8e74de1d051dda94a1d689'] = 'Nomina questo obiettivo (per esempio, \'processo di ordinazione';
+$_MODULE['<{ganalytics}prestashop>ganalytics_68db264effa9364901183d9d12fac500'] = 'Nome di questo obiettivo (per esempio \'elaborazione ordine\')';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9b8bc3519c65da8fac122f91ac5b7673'] = 'Attiva l\'obiettivo';
 $_MODULE['<{ganalytics}prestashop>ganalytics_86a358dd6df1ba0cb3565b88380ba7a6'] = 'Aggiungi \'Product.php\' come prima pagina della tua conversione ';
-$_MODULE['<{ganalytics}prestashop>ganalytics_35a589ada34c30dcf09a2879179aa110'] = 'Dagli un nome (ad esempio \'pagina del prodotto,';
+$_MODULE['<{ganalytics}prestashop>ganalytics_b7f896191caad09b5fc34e79f1cefa76'] = 'Dagli un nome (ad esempio, \'pagina del prodotto\')';
 $_MODULE['<{ganalytics}prestashop>ganalytics_53c84fd10cf8f7a912a13f582a75c8a7'] = 'Non segnare la casella \'richiesta\' perché il cliente potrebbe essere visitato direttamente da un tasto \"aggiungi al carrello\', come nel blocco homefeatured sulla homepage';
 $_MODULE['<{ganalytics}prestashop>ganalytics_3bab28a0105361c49ca261ca08a19bf7'] = 'Proseguire inserendo i seguenti URL come fasi:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = '(Obbligatorio)';

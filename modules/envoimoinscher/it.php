@@ -2,19 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_9ab3e83b1071d09ca62e4cd258686f6b'] = 'Nessun ordine da esportare';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_8c193493d8e4a97dc6da02d9809be530'] = 'Configura questo modulo, al fine';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_2345e28c9b93f368968be4781ed70f5c'] = 'Modifica la configurazione';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_49ee3087348e8d44e1feda1917443987'] = 'Nome';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_50e91dab2a063bc8c1dbc383b0c8e71c'] = 'Costo totale';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_5e8ff31378107b80ae8a9e7cd93eb1bc'] = 'totale della spedizione';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_44749712dbec183e983dcd78a7736c41'] = 'Data';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_a669003ea35aa39ca280b83bd259a032'] = 'Confezione';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_403ddddf1f3eecc1a2566b3d81e12993'] = 'Natura del contenuto';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_a254c25adc7d10d7e9c4889484f875a5'] = 'Dettaglio';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_4351cfebe4b61d8aa5efa1d020710005'] = 'Visualizza';
-$_MODULE['<{envoimoinscher}prestashop>adminenvoimoinscher_1a812d0994ff5fa37fef813d3dd5ca6f'] = 'Nessun ordine da esportare';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e0b8a2c577580cb773bda0486acc4bf8'] = 'Envoimoinscher';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_416119891d1be4adf191fc454e3b76fa'] = 'Trova la tariffa migliore per la tua spedizione. Confronta e metti in ordine le offerte di corrieri, a tariffe negoziate.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_cc89336eed19f4c3bef8ae484eb43109'] = '\'Larghezza\'';
@@ -115,3 +102,16 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_fad2b83dc128dfb793fa8ee944d
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_d668e43f1d8b0584ed4f896de031d921'] = 'Nessun numero di spedizione ';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_bee4b55285d16e5fe85fc3474e343c51'] = 'Stampa note di consegna';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_10f0b7273755ee4117c1517010e18c23'] = 'Nessun numero di note di consegna';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_9ab3e83b1071d09ca62e4cd258686f6b'] = 'Nessun ordine da esportare';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_8c193493d8e4a97dc6da02d9809be530'] = 'Si prega di configurare questo modulo, al fine';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_2345e28c9b93f368968be4781ed70f5c'] = 'Modifica la configurazione';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_49ee3087348e8d44e1feda1917443987'] = 'Nome';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_50e91dab2a063bc8c1dbc383b0c8e71c'] = 'Costo totale';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_5e8ff31378107b80ae8a9e7cd93eb1bc'] = 'totale della spedizione';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_44749712dbec183e983dcd78a7736c41'] = 'Data';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_403ddddf1f3eecc1a2566b3d81e12993'] = 'Natura del contenuto';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_a254c25adc7d10d7e9c4889484f875a5'] = 'Dettaglio';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_4351cfebe4b61d8aa5efa1d020710005'] = 'Visualizza';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_94966d90747b97d1f0f206c98a8b1ac3'] = 'Invia';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_eae21050d83c239d047c9eb0d3bc930e'] = 'Elenco degli ordini per l\'esportazione';

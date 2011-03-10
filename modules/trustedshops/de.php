@@ -63,7 +63,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_7e1795d054242cf7c546c1491a
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_37554cc43c645833d6713b9cddda909b'] = 'moneybookers.com';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_9203aec73d2ea1770f66f065c4069816'] = 'Andere Zahlungsart';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_068ce643ff39bf2189935d14736fd10b'] = 'Gütesiegel und Käuferschutz';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_205904ccd420393bd00ee638aac7fade'] = 'Json Funktion muss in Ihrer PHP-Version implementiert werden';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f51dabfce0c8ccc01734ed38d8afe27a'] = 'JSON Funktionen müssen in Ihrer PHP-Version implementiert sein';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b1801eaadecfddd04529313a1e929262'] = 'Das Zertifikat ist gültig';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_ce323cb3453812434f9abc007ba7a952'] = 'Das Zertifikat ist abgelaufen';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_98121ffd0d2a0b4bed569a726632f402'] = 'Das Zertifikat wurde deaktiviert';

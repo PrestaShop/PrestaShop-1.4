@@ -38,10 +38,10 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_3dcb5dddc6b7c11d4ea76a60dc1a0466'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_a39f026ca75c6279ac9487265c00e3f5'] = 'Klicken Sie auf Änderungen speichern, um dieses Ziel und diesen Trichter zu erstellen , oder Abbrechen, um ohne Speichern zu beenden.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_cd4952b65560a1242c68ffc980a6e515'] = 'Demonstration: Der Bestellvorgang';
 $_MODULE['<{ganalytics}prestashop>ganalytics_85a80bed9b602a460c1200efeb4e1226'] = 'Nachdem Sie Ihre E-Commerce-Berichte aktiviert und das jeweilige Profil ausgewählt haben, geben Sie \'bestellung-bestätigung.php\' ein, als gewünschte URL-Seite';
-$_MODULE['<{ganalytics}prestashop>ganalytics_f998ec1dfa8e74de1d051dda94a1d689'] = 'Name dieses Ziels (z. B. \'Bestellvorgang';
+$_MODULE['<{ganalytics}prestashop>ganalytics_68db264effa9364901183d9d12fac500'] = 'Dieses Ziel benennen (zum Beispiel \'Bestellvorgang\')';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9b8bc3519c65da8fac122f91ac5b7673'] = 'Aktivieren Sie das Ziel';
 $_MODULE['<{ganalytics}prestashop>ganalytics_86a358dd6df1ba0cb3565b88380ba7a6'] = 'Fügen Sie \'product.php\' als erste Seite Ihres Umwandlungstrichters hinzu';
-$_MODULE['<{ganalytics}prestashop>ganalytics_35a589ada34c30dcf09a2879179aa110'] = 'Geben Sie ihm einen Namen (z.B. \'Produktseite';
+$_MODULE['<{ganalytics}prestashop>ganalytics_b7f896191caad09b5fc34e79f1cefa76'] = 'Benennen Sie sie (zum Beispiel \'Produktseite\')';
 $_MODULE['<{ganalytics}prestashop>ganalytics_53c84fd10cf8f7a912a13f582a75c8a7'] = 'Markieren Sie das Kontrollkästchen nicht als \"erforderlich\", denn der Kunde kann direkt von einer \"In den Warenkorb\"-Schaltfläche gekommen sein wie etwa auf dem Startseitenblock ';
 $_MODULE['<{ganalytics}prestashop>ganalytics_3bab28a0105361c49ca261ca08a19bf7'] = 'Fahren Sie fort, indem Sie die folgenden URLs als Zielschritte eingeben:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = '(Erforderlich)';

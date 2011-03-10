@@ -1,12 +1,12 @@
-Your message has been correctly sent to our Customer Service.
+Tu mensaje ha sido enviado correctamenta a nuestro Servicio Cliente. 
 
-Your message:
+Tu mensaje:
 
 {message}
 
 
-We will answer as soon as possible.
+Te responderemos cuanto antes. 
 
-Regards,
+Saludos,
 
-{shop_url} powered by PrestaShop™
+{shop_url} desarrollado por PrestaShop™

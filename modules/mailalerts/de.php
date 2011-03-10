@@ -8,7 +8,6 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_c5a847354ae407403ec0b589e5bcc89e'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_7cb9a154f101c674c945f88dad5c5e28'] = 'Keine Nachricht';
 $_MODULE['<{mailalerts}prestashop>mailalerts_9137796c15dd92e5553c3f29574d0968'] = 'Gutschein-Code:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_4c9120f1a5947445c0e9620254ceb30b'] = 'Neue Bestellung';
-$_MODULE['<{mailalerts}prestashop>mailalerts_644f9c907ef5a8315916bd1e2f61f783'] = 'Produkt nicht auf Lager';
 $_MODULE['<{mailalerts}prestashop>mailalerts_7a608706e248c21437882f5d1a8ece3a'] = 'Kundennachricht';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ea379dd90c33c1345f40aa0afa6688d8'] = 'Produktverfügbarkeit:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_0fe15591b4ee3412815c9aa0128af02f'] = 'Gibt dem Kunden die Möglichkeit, eine Nachricht zu einem verfügbaren Produkt zu erhalten, wenn dieses vorher nicht auf Lager war';

@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
-$_MODULE['<{hipay}prestashop>hipay_fda8a145cc01a90626304a3a4fe525d5'] = 'Si accettano pagamenti da Hipay';
+$_MODULE['<{hipay}prestashop>hipay_3a630598b9817a76dbb984ba467f6400'] = 'Pagamento sicuro Visa Mastercard e soluzioni europee.';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Errore: non è possibile creare PaymentParams';
 $_MODULE['<{hipay}prestashop>hipay_a85eba4c6c699122b2bb1387ea4813ad'] = 'Carrello';
 $_MODULE['<{hipay}prestashop>hipay_d4126d0b64579211d37151ef9b5af754'] = '[Hipay] Errore: non è possibile creare prodotti \"Carrello\"';
@@ -23,8 +23,6 @@ $_MODULE['<{hipay}prestashop>hipay_db1ffc046733b8213810c21909f296e7'] = 'Hipay �
 $_MODULE['<{hipay}prestashop>hipay_5f93fe3bf0a19507740f488b557d3814'] = 'Free & Easy, l\'attuazione Hipay è un bene reale per un sito di e-commerce che vuole espandersi in Europa: pagamenti sicuri con carte internazionali, soluzioni di pagamento locali, bonifici ...';
 $_MODULE['<{hipay}prestashop>hipay_f21850b58e4866b30f7d3724cc29edb1'] = 'Accedi al tuo account commerciante';
 $_MODULE['<{hipay}prestashop>hipay_c30f8c01128510707a89bc158b7c3c63'] = 'Crea un account hipay';
-$_MODULE['<{hipay}prestashop>hipay_e459ee8f6b9b0286be15e729a56303b6'] = 'Accedi al tuo account di prova';
-$_MODULE['<{hipay}prestashop>hipay_f1e8a254452e696734e90e4bbe539113'] = 'Crea un account di prova';
 $_MODULE['<{hipay}prestashop>hipay_01ad06b7c5887516f56ff824278feb67'] = 'Avviso: se vuoi rimborsare un pagamento, accedi al tuo account Hipay poi vai a Merchant Management > Sales management.';
 $_MODULE['<{hipay}prestashop>hipay_254f642527b45bc260048e30704edb39'] = 'Configurazione';
 $_MODULE['<{hipay}prestashop>hipay_08bd40c7543007ad06e4fce31618f6ec'] = 'Account';

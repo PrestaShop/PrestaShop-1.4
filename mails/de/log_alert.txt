@@ -1,11 +1,10 @@
-Hi,
+Hallo,
 		
-New log alert
+Neue Log-Warnung
 	
-Unfortunately, new log alert message has been saved.
+Leider wurde eine neue Log-Warnung gespeichert.
 
-You can check this on your Back office > Tools > Log on our Website.
-		
+Sie können sie einsehen in Ihrem Back Office > Tools > Anmeldung auf Ihrer Website.		
 {shop_name} - {shop_url}
 
 {shop_url} powered by PrestaShop™
