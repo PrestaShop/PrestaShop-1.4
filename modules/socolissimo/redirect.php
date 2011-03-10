@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2010 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -18,21 +18,27 @@
 * versions in the future. If you wish to customize PrestaShop for your
 * needs please refer to http://www.prestashop.com for more information.
 *
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
+*  @author Prestashop SA <contact@prestashop.com>
+*  @copyright  2007-2010 Prestashop SA
 *  @version  Release: $Revision: 1.4 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
+*  International Registred Trademark & Property of PrestaShop SA
 */
 
 require_once ('../../config/config.inc.php');
 
-echo '<form name="form" action="'.Configuration::get('SOCOLISSIMO_URL').'" method="POST">';
-foreach($_GET as $key => $val)
-	echo '<input type="hidden" name="'.htmlentities($key,ENT_NOQUOTES, 'UTF-8').'" value="'.htmlentities($val,ENT_NOQUOTES, 'UTF-8').'"/>';
-
-echo '<script type="text/javascript">
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr"> 
+	<head>
+	</head>
 	
-	document.form.submit();
-</script>
-</form>';
+	<body onload="document.getElementById('socoForm').submit();">
+		<?php
+		echo '<form id="socoForm" name="form" action="'.Configuration::get('SOCOLISSIMO_URL').'" method="POST">';
+		foreach($_GET as $key => $val)
+			echo '<input type="hidden" name="'.$key.'" value="'.$val.'"/>';
+		?>
+	</body>
+</html>
+</form>
