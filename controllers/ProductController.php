@@ -53,9 +53,15 @@ class ProductControllerCore extends FrontController
 	public function preProcess()
 	{
 		if ($id_product = (int)Tools::getValue('id_product'))
-		{
 			$this->product = new Product($id_product, true, self::$cookie->id_lang);
-
+			
+		if (!Validate::isLoadedObject($this->product))
+		{
+			header('HTTP/1.1 404 Not Found');
+			header('Status: 404 Not Found');
+		}
+		else
+		{
 			// Automatically redirect to the canonical URL if the current in is the right one
 			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 			if (Validate::isLoadedObject($this->product))
