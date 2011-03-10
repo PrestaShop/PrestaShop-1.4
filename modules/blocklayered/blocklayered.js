@@ -25,6 +25,7 @@
 */
 
 var ajaxQueries = new Array();
+var ajaxLoaderOn = 0;
 
 $(document).ready(function()
 {
@@ -34,7 +35,6 @@ $(document).ready(function()
 	$('#layered_form input[type=button], #layered_form label.layered_color').live('click', function()
 	{
 		$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
-		$(this).attr('name', 'null');
 		reloadContent();
 	});
 	
@@ -49,6 +49,7 @@ function cancelFilter()
 	$('#enabled_filters a').live('click', function()
 	{
 		$('#'+$(this).attr('rel')).attr('checked', false);
+		$('#layered_form input[name='+$(this).attr('rel')+']').remove();
 		reloadContent();
 	});
 }
@@ -76,8 +77,12 @@ function reloadContent()
 		ajaxQueries[i].abort();
 	ajaxQueries = new Array();
 
-	$('#product_list').prepend($('#layered_ajax_loader').html());
-	$('#product_list').css('opacity', '0.7');
+	if (!ajaxLoaderOn)
+	{
+		$('#product_list').prepend($('#layered_ajax_loader').html());	
+		$('#product_list').css('opacity', '0.7');
+		ajaxLoaderOn = 1;
+	}
 	
 	ajaxQuery = $.ajax(
 	{
@@ -89,6 +94,7 @@ function reloadContent()
 			$('#layered_block_left').after($(result)[0]).remove();
 			$('#product_list').html($(result)[1]);
 			$('#product_list').css('opacity', '1');
+			ajaxLoaderOn = 0;
 		}
 	});
 	

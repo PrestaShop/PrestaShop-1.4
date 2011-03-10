@@ -30,22 +30,22 @@
 	<div class="block_content">
 		<form action="#" id="layered_form">
 			<div>
-				{if isset($selected_filters) && $n_filters > 1}
+				{if isset($selected_filters) && $n_filters > 0}
 				<div id="enabled_filters">
 					<span class="layered_subtitle" style="float: none;">{l s='Enabled filters:' mod='blocklayered'}</span>
 					<ul>
 					{foreach from=$selected_filters key=filter_type item=filter_values}
-						{foreach from=$filter_values item=filter_value}
-							{foreach from=$filters item=filter}
-								{if $filter.type == $filter_type && isset($filter.values)}
-									{foreach from=$filter.values key=id_value item=value}
-										{if $id_value == $filter_value}
-											<li><a href="#" rel="layered_{$filter.type_lite}_{$id_value}" title="{l s='Cancel' mod='blocklayered'}">x</a> {$value.name|escape:html:'UTF-8'}</li>
-										{/if}
-									{/foreach}
-								{/if}
-							{/foreach}
-						{/foreach}
+					{foreach from=$filter_values item=filter_value}
+					{foreach from=$filters item=filter}
+					{if $filter.type == $filter_type && isset($filter.values)}
+					{foreach from=$filter.values key=id_value item=value}
+					{if $id_value == $filter_value}
+						<li><a href="#" rel="layered_{$filter.type_lite}_{$id_value}" title="{l s='Cancel' mod='blocklayered'}">x</a> {$filter.name|escape:html:'UTF-8'}{l s=':'} {$value.name|escape:html:'UTF-8'}</li>
+					{/if}
+					{/foreach}
+					{/if}
+					{/foreach}
+					{/foreach}
 					{/foreach}
 					</ul>
 				</div>
@@ -63,7 +63,7 @@
 								<input type="button" name="layered_{$filter.type_lite}_{$id_value}" rel="{$id_value}_{$filter.id_key}" id="layered_attribute_{$id_value}" {if !$value.n} value="X" disabled="disabled"{/if} style="background: {$value.color}; margin-left: 0; width: 16px; height: 16px; padding:0; border: 1px solid {if isset($value.checked) && $value.checked}red{else}#666{/if};" />
 								{if isset($value.checked) && $value.checked}<input type="hidden" name="layered_{$filter.type_lite}_{$id_value}" value="{$id_value}" />{/if}
 							{else}
-								{if $layered_use_checkboxes}<input type="checkbox" class="checkbox" name="layered_{$filter.type_lite}_{if $filter.type != 'condition'}{$id_value}{else}0{/if}" id="layered_{$filter.type_lite}{if $id_value}_{$id_value}{/if}" value="{$id_value}{if $filter.id_key}_{$filter.id_key}{/if}"{if isset($value.checked)} checked="checked"{/if}{if !$value.n} disabled="disabled"{/if} /> {/if}
+								{if $layered_use_checkboxes}<input type="checkbox" class="checkbox" name="layered_{$filter.type_lite}_{$id_value}" id="layered_{$filter.type_lite}{if $id_value || $filter.type == 'quantity'}_{$id_value}{/if}" value="{$id_value}{if $filter.id_key}_{$filter.id_key}{/if}"{if isset($value.checked)} checked="checked"{/if}{if !$value.n} disabled="disabled"{/if} /> {/if}
 							{/if}
 							<label for="layered_{$filter.type_lite}_{$id_value}"{if !$value.n} class="disabled"{else}{if isset($filter.is_color_group) && $filter.is_color_group} name="layered_{$filter.type_lite}_{$id_value}" class="layered_color" rel="{$id_value}_{$filter.id_key}"{/if}{/if}>{$value.name|escape:html:'UTF-8'}<span> ({$value.n})</span></label>
 							</li>
