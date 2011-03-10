@@ -222,6 +222,7 @@ class FrontControllerCore
 			'currencies' => Currency::getCurrencies(),
 			'languages' => Language::getLanguages(),
 			'priceDisplay' => Product::getTaxCalculationMethod(),
+			'add_prod_display' => (int)Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'shop_name' => Configuration::get('PS_SHOP_NAME'),
 			'roundMode' => (int)Configuration::get('PS_PRICE_ROUND_MODE'),
 			'use_taxes' => (int)Configuration::get('PS_TAX'),

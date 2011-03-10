@@ -497,7 +497,7 @@ class BlockLayered extends Module
 		if (!sizeof($filters['category']))
 			$queryFilters .= ' AND (lc.c'.(int)Tools::getValue('id_category_layered').' = 1)';
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.id_category_default, p.customizable,
+		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.id_category_default, p.customizable, p.show_price,
 		p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name,
 		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM '._DB_PREFIX_.'layered_cache lc
@@ -525,6 +525,11 @@ class BlockLayered extends Module
 	{
 		Tools::addJS(($this->_path).'blocklayered.js');
 		Tools::addCSS(($this->_path).'blocklayered.css', 'all');
+	}
+	
+	public function hookUpdateProduct($params)
+	{
+		
 	}
 	
 	public function rebuildLayeredStructure()

@@ -341,7 +341,6 @@ class ProductControllerCore extends FrontController
 			'have_image' => Product::getCover((int)(Tools::getValue('id_product'))),
 			'tax_enabled' => Configuration::get('PS_TAX'),
 			'display_qties' => (int)(Configuration::get('PS_DISPLAY_QTIES')),
-			'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 			'display_ht' => !Tax::excludeTaxeOption(),
 			'ecotax' => (!sizeof($this->errors) AND $this->product->ecotax > 0 ? Tools::convertPrice((float)($this->product->ecotax)) : 0),
 		));
