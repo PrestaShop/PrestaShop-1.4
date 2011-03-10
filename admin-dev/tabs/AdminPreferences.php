@@ -396,6 +396,18 @@ class AdminPreferences extends AdminTab
 					echo '
 					<table cellspacing="0" cellpadding="0">
 						<tr>';
+					if ($name == 'themes')
+						echo '
+						<td colspan="'.sizeof($field['list']).'">
+							<b>'.$this->l('In order to use a new theme, please follow this steps:').'</b>
+							<ul>
+								<li>'.$this->l('Import your theme with using this module:').' <a href="index.php?tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules').'&filtername=themeinstallator" style="text-decoration: underline;">'.$this->l('Theme installator').'</a></li>
+								<li>'.$this->l('When your theme is imported, please select the theme in this page').'</li>
+							</ul>
+						</td>
+						</tr>
+						<tr>
+						';
 					$i = 0;
 					foreach ($field['list'] AS $theme)
 					{
