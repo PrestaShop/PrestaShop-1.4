@@ -51,7 +51,11 @@ class SupplierControllerCore extends FrontController
 					'supplier' => $this->supplier));
 			}
 			else
+			{
+				header('HTTP/1.1 404 Not Found');
+				header('Status: 404 Not Found');			
 				$this->errors[] = Tools::displayError('supplier does not exist');
+			}
 		}
 		else
 		{
