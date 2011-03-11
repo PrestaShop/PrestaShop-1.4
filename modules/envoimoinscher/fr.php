@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e0b8a2c577580cb773bda0486acc4bf8'] = 'Envoimoinscher';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_c4ca4238a0b923820dcc509a6f75849b'] = 'Trouvez le meilleur prix pour votre envoi. Comparez et commandez les offres des transporteurs, à des tarifs négociés.';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_bbd983fbdc5928ce36d6edce53639718'] = 'Trouvez le meilleur prix pour votre envoi. Comparez et commandez les offres des transporteurs, à des tarifs négociés.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_cc89336eed19f4c3bef8ae484eb43109'] = '\'Largeur\'';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_fab811cb477e7794389f16624ac9aff9'] = '\'Hauteur\'';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_7854da902d5f2ad746fe1b6f950da08e'] = '\'Profondeur\'';

@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{twenga}prestashop>twenga_400b0c914f01bcecf50b936e652695b2'] = 'Twenga API';
-$_MODULE['<{twenga}prestashop>twenga_c4ca4238a0b923820dcc509a6f75849b'] = 'Exportieren Sie Ihre Produkte auf Twenga.com und nutzen Sie den Twenga-Tracker für Kundenbestellungen.';
+$_MODULE['<{twenga}prestashop>twenga_ef538d017142a890fc8b8248813b272e'] = 'Exportieren Sie Ihre Produkte auf Twenga.com und nutzen Sie den Twenga-Tracker für Kundenbestellungen.';
 $_MODULE['<{twenga}prestashop>twenga_2034864b8a4fce12f3621b7ec8912e95'] = 'Das Twenga-Modul funktioniert nur in bestimmten Ländern (ISO-Code-Liste:';
 $_MODULE['<{twenga}prestashop>twenga_69e591b18e717d483dbaa8e3ce89ce59'] = 'Parameter sind nicht erlaubt (siehe Details):';
 $_MODULE['<{twenga}prestashop>twenga_75a462904fadc0cc16d084efaef4a9d0'] = 'Ein Fehler ist bei der Twenga API-Methode aufgetreten (siehe Details):';

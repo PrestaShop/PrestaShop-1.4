@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{secuvad}prestashop>secuvad_980755daf8a750c0b0f50a735ad57048'] = 'Módulo Secuvad';
-$_MODULE['<{secuvad}prestashop>secuvad_c4ca4238a0b923820dcc509a6f75849b'] = 'Solución de lucha contra el fraude en línea';
+$_MODULE['<{secuvad}prestashop>secuvad_ebedf7d0e130dbb2afd22987ff22708b'] = 'Solución de lucha contra el fraude en línea';
 $_MODULE['<{secuvad}prestashop>secuvad_d6f47e627cb8b9186caa435aba1c32ae'] = '¿Está seguro de querer suprimir este módulo?';
 $_MODULE['<{secuvad}prestashop>secuvad_307bfa08da823ee566ce867b563eb223'] = 'Secuvad';
 $_MODULE['<{secuvad}prestashop>secuvad_8fbc70c37e2deff790fe4e95fce7c9d8'] = 'Para utilizar el módulo Secuvad, configúrelo.';

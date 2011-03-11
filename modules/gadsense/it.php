@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{gadsense}prestashop>gadsense_8a41674922e424cde4dd47c91f9d62e8'] = 'Google Adsense';
 $_MODULE['<{gadsense}prestashop>gadsense_4148996483a2cfeed90c66dc539c8f1a'] = 'Non hai ancora impostato il codice di Google Adsense';
-$_MODULE['<{gadsense}prestashop>gadsense_c4ca4238a0b923820dcc509a6f75849b'] = 'Integrare lo script di Google Adsense nel tuo negozio';
+$_MODULE['<{gadsense}prestashop>gadsense_e32c2b519ed33ed45a4c0a4b1b359447'] = 'Integrare lo script di Google Adsense nel tuo negozio';
 $_MODULE['<{gadsense}prestashop>gadsense_fa214007826415a21a8456e3e09f999d'] = 'Sei sicuro di voler cancellare i tuoi dati?';
 $_MODULE['<{gadsense}prestashop>gadsense_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
 $_MODULE['<{gadsense}prestashop>gadsense_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';

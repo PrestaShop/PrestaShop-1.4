@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{ganalytics}prestashop>ganalytics_7510f8b22dd3e10476096425f78d4239'] = 'Vous n\'avez pas encore renseigné votre ID Google Analytics';
-$_MODULE['<{ganalytics}prestashop>ganalytics_c81e728d9d4c2f636f067f89cc14862c'] = 'Intègre le script de Google Analytics à votre boutique';
+$_MODULE['<{ganalytics}prestashop>ganalytics_aba1a7971f85c725ba4aed21343eeb4b'] = 'Intègre le script de Google Analytics à votre boutique';
 $_MODULE['<{ganalytics}prestashop>ganalytics_fa214007826415a21a8456e3e09f999d'] = 'Etes-vous sûr de vouloir supprimer vos paramètres ?';
 $_MODULE['<{ganalytics}prestashop>ganalytics_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
 $_MODULE['<{ganalytics}prestashop>ganalytics_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';

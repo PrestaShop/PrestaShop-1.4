@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'La Poste';
-$_MODULE['<{socolissimo}prestashop>socolissimo_c81e728d9d4c2f636f067f89cc14862c'] = 'Proponga a sus clientes cinco modos de entraga a través de la Poste.';
+$_MODULE['<{socolissimo}prestashop>socolissimo_27d52fec98c204daecd4c4df2b8e11fa'] = 'Proponga a sus clientes cinco modos de entraga a través de la Poste.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = 'Zona(s) transportista';
 $_MODULE['<{socolissimo}prestashop>socolissimo_690c1c6abf905b88281a7cd324af9942'] = 'Grupo del transportista';
 $_MODULE['<{socolissimo}prestashop>socolissimo_6c32f43085785c00dc7062017d365ca5'] = 'Franja del transportista';

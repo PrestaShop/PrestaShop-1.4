@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{upscarrier}prestashop>upscarrier_ada23a988e5bab7c573cc51ec8a62ba2'] = 'UPS Lieferung';
-$_MODULE['<{upscarrier}prestashop>upscarrier_eccbc87e4b5ce2fe28308fd9f2a7baf3'] = 'Bieten Sie Ihren Kunden unterschiedliche Liefermethoden mit UPS';
+$_MODULE['<{upscarrier}prestashop>upscarrier_2b0b9fe2cf477c3e8c78cc5fd59fb77e'] = 'Bieten Sie Ihren Kunden unterschiedliche Liefermethoden mit UPS';
 $_MODULE['<{upscarrier}prestashop>upscarrier_883fa0069f4b0454e2277dd567ab3991'] = '\'Gewichtseinheit (lb oder kg).\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\'Maßeinheit (cm oder in).\'';
 $_MODULE['<{upscarrier}prestashop>upscarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'muss konfiguriert sein, um dieses Modul richtig zu nutzen';
