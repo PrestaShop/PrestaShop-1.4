@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,11 +32,11 @@ class CompareControllerCore extends FrontController
 		parent::setMedia();
 		Tools::addCSS(_THEME_CSS_DIR_.'/comparator.css');
 	}
-	
+
 	public function process()
 	{
 		parent::process();
-		
+
 		$hasProduct = false;
 		$product_list = Tools::getValue('compare_product_list');
 		$postProducts = isset($product_list) ? rtrim($product_list,'|') : '';
@@ -55,23 +55,23 @@ class CompareControllerCore extends FrontController
 
 				$listProducts = array();
 				$listFeatures = array();
-			
+
 				foreach ($ids AS $id)
-				{			
+				{
 					$curProduct = new Product((int)($id), true, (int)(self::$cookie->id_lang));
 					if (!Validate::isLoadedObject($curProduct))
 						continue;
-						
+
 					foreach ($curProduct->getFrontFeatures(self::$cookie->id_lang) AS $feature)
 						$listFeatures[$curProduct->id][$feature['id_feature']] = $feature['value'];
 
-					$cover = Product::getCover($id);			
-					$curProduct->id_image = $id.'-'.$cover['id_image'];		
+					$cover = Product::getCover($id);
+					$curProduct->id_image = Tools::htmlentitiesUTF8($id.'-'.$cover['id_image']);
 					$listProducts[] = $curProduct;
 				}
-				
+
 				if (sizeof($listProducts) > 0)
-				{	
+				{
 					$width = 80 / sizeof($listProducts);
 
 					$hasProduct = true;
@@ -87,10 +87,10 @@ class CompareControllerCore extends FrontController
 					self::$smarty->assign('HOOK_EXTRA_PRODUCT_COMPARISON', Module::hookExec('extraProductComparison', array('list_ids_product' => $ids)));
 				}
 			}
-		} 
+		}
 		self::$smarty->assign('hasProduct', $hasProduct);
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
