@@ -36,7 +36,7 @@ class TwengaFieldsOrderValidate extends TwengaFields
 		if(!is_array($this->fields) AND empty($this->fields))
 		{
 			$this->fields['key'] = array(32, array('is_string','isCleanHtml'), true);
-//			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);
+			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);
 			$this->fields['order_id'] = array(40, array('isInt'));
 			$this->fields['user_id'] = array(40, array('isInt'));
 			$this->fields['cli_email'] = array(100, array('isEmail'));

@@ -36,7 +36,7 @@ class TwengaFieldsGetTrackingScript extends TwengaFields
 		if(!is_array($this->fields) AND empty($this->fields))
 		{
 			// required
-//			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);
+			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);
 			$this->fields['key'] = array(32, array('is_string','isCleanHtml'), true);
 			$this->fields['total_ht'] = array(0, array('isFloat'), true);
 			$this->fields['order_id'] = array(40, array('isInt'));
