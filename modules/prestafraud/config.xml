@@ -4,6 +4,7 @@
 	<displayName>Presta-Fraud</displayName>
 	<version>0.99</version>
 	<description>Protect your store from fraudulent payments</description>
+	<author></author>
 	<tab>payment_security</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

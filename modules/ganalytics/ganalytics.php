@@ -16,7 +16,7 @@ class GAnalytics extends Module
 		
 		if ($this->id AND !Configuration::get('GANALYTICS_ID'))
 			$this->warning = $this->l('You have not yet set your Google Analytics ID');
-        $this->description = $this->l('Integrate the Google Analytics script into your shop');
+        $this->description = $this->l('Integrate Google Analytics script into your shop');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
 	}
 	
