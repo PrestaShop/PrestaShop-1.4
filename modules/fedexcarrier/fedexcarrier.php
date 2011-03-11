@@ -62,7 +62,7 @@ class FedexCarrier extends CarrierModule
 		parent::__construct ();
 
 		$this->displayName = $this->l('Fedex Carrier');
-		$this->description = $this->l('Offer to your customers, different delivery methods with Fedex');
+		$this->description = $this->l('Offer your customers, different delivery methods with Fedex');
 
 		if (self::isInstalled($this->name))
 		{

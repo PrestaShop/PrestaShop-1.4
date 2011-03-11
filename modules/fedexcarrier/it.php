@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c0d00fcb670ada42dad4698b865f40cd'] = 'Corriere Fedex ';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_6aed16278d24c6e5b8cb32fb75b115a0'] = 'Offri ai tuoi clienti modalità di consegna differenti con Fedex';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c4ca4238a0b923820dcc509a6f75849b'] = 'Offri ai tuoi clienti modalità di consegna differenti con Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ff86cba2f7fe4a2dec854d107a4d99d2'] = 'Class Soap';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_883fa0069f4b0454e2277dd567ab3991'] = 'Unita \'di peso (LB o KG).\'';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\'Unità di Dimensione (CM o IN).\'';

@@ -61,7 +61,7 @@ class UspsCarrier extends CarrierModule
 		parent::__construct ();
 
 		$this->displayName = $this->l('USPS Carrier');
-		$this->description = $this->l('Offer to your customers, different delivery methods with USPS');
+		$this->description = $this->l('Offer your customers, different delivery methods with USPS');
 
 		if (self::isInstalled($this->name))
 		{

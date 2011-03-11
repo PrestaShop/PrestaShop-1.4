@@ -60,7 +60,7 @@ class UpsCarrier extends CarrierModule
 		parent::__construct ();
 
 		$this->displayName = $this->l('UPS Carrier');
-		$this->description = $this->l('Offer to your customers, different delivery methods with UPS');
+		$this->description = $this->l('Offer your customers, different delivery methods with UPS');
 
 		if (self::isInstalled($this->name))
 		{
