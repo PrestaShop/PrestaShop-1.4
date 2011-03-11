@@ -229,8 +229,8 @@ class AdminModules extends AdminTab
 								<tr>
 									<th>'.$this->l('Module').' <span style="color: green;">'.$module->name.'</span></th>
 									<th><a href="'.$backlink.'" style="padding:5px 10px">'.$this->l('Back').'</a></th>
-									<th><a href="'.$hooklink.'" style="padding:5px 10px">'.$this->l('Manage its hooks').'</a></th>
-									<th style="padding:5px 10px">'.$this->l('Manage its translations:').' ';
+									<th><a href="'.$hooklink.'" style="padding:5px 10px">'.$this->l('Manage hooks').'</a></th>
+									<th style="padding:5px 10px">'.$this->l('Manage translations:').' ';
 									foreach (Language::getLanguages(false) AS $language)
 										$toolbar .= '<a href="'.$tradlink.$language['iso_code'].'#'.$module->name.'" style="margin-left:5px"><img src="'._THEME_LANG_DIR_.$language['id_lang'].'.jpg" alt="'.$language['iso_code'].'" title="'.$language['iso_code'].'" /></a>';
 							$toolbar .= '

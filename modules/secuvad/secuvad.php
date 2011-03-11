@@ -46,7 +46,7 @@ class Secuvad extends Module
 		
 		parent::__construct();
   		$this->displayName = $this->l('Secuvad Module');
-  		$this->description = $this->l('Solution struggling against online fraud');
+  		$this->description = $this->l('Solution fighting against online fraud');
   		$this->confirmUninstall = $this->l('Are you sure you want to delete this module ?');
 	}
 	
