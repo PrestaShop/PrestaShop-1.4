@@ -211,7 +211,6 @@ class TwengaObj
 	 */
 	private static function buildUrlToQuery($url, array $params)
 	{
-		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		$str_params = http_build_query($params);
 		$str_url = $url.(($str_params !== '') ? '?'.$str_params : ''); 
 		return $str_url;
@@ -283,6 +282,7 @@ class TwengaObj
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsGetSubscriptionLink.php');
 //		$params['site_id'] = self::$site_id;
+		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
 			self::checkParams(__FUNCTION__, $params);
 		} catch (TwengaFieldsException $e) {
@@ -312,6 +312,7 @@ class TwengaObj
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
 		$params['key'] = self::$hashkey;
+		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		
 		try {
 			self::checkParams(__FUNCTION__, $params);
@@ -341,6 +342,7 @@ class TwengaObj
 		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
 		require_once realpath(self::$base_dir.'/TwengaFieldsSiteActivate.php');
 		$params['key'] = self::$hashkey;
+		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
 			self::checkParams(__FUNCTION__, $params);
 		} catch (TwengaFieldsException $e) {
@@ -369,6 +371,7 @@ class TwengaObj
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsGetTrackingScript.php');
 		$params['key'] = self::$hashkey;
+		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
 			self::checkParams(__FUNCTION__, $params);
 		} catch (TwengaFieldsException $e) {
@@ -397,6 +400,7 @@ class TwengaObj
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderExist.php');
 		$params['key'] = self::$hashkey;
+		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
 			self::checkParams(__FUNCTION__, $params);
 		} catch (TwengaFieldsException $e) {
@@ -424,6 +428,7 @@ class TwengaObj
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
 		$params['key'] = self::$hashkey;
+		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
 			self::checkParams(__FUNCTION__, $params);
 		} catch (TwengaFieldsException $e) {
