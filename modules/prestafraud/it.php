@@ -30,7 +30,7 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_1cf575079afed29675c47e822bc3d493'
 $_MODULE['<{prestafraud}prestashop>prestafraud_75b95ea268cb6b5baf7483aafa80d5ad'] = 'Conto prepagato (Moneybookers, PayPal ...)';
 $_MODULE['<{prestafraud}prestashop>prestafraud_688000bea2f79c9ca3d2d1755456024f'] = 'Si prega di accettare i termini del servizio.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_79d728437ce932b8194528d10a4e6fe4'] = 'Configurazione Presta-fraud';
-$_MODULE['<{prestafraud}prestashop>prestafraud_0fdc6609a76f83fb2def6a9409cc0f38'] = 'Il mio negozio non ha ancora account su Presta-fraud ';
+$_MODULE['<{prestafraud}prestashop>prestafraud_c4ca4238a0b923820dcc509a6f75849b'] = 'Il mio negozio non ha ancora account su Presta-fraud ';
 $_MODULE['<{prestafraud}prestashop>prestafraud_3b2aee63259f6dc9b94914884474f8de'] = 'Ho già un account';
 $_MODULE['<{prestafraud}prestashop>prestafraud_9d5c4ae518b30bacdb69912d87b3406a'] = 'Il tuo indirizzo email:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_6c3b9b51615d1d57773f25903da2018c'] = 'Url negozio';

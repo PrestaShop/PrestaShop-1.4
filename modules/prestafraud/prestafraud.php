@@ -129,7 +129,7 @@ class PrestaFraud extends Module
 			<div id="choose_account">
 				<center>
 				<form>
-					<input type="radio" '.(!Configuration::get('PS_TRUST_SHOP_ID') ? 'checked="checked"' : '').' onclick="$(\'#create_account\').show(); $(\'#module_configuration\').hide();" id="trust_account_on" name="trust_account" value="0"/> <b>'.$this->l('My shop do not have account on Presta-Fraud yet').'</b>&nbsp;&nbsp;&nbsp;
+					<input type="radio" '.(!Configuration::get('PS_TRUST_SHOP_ID') ? 'checked="checked"' : '').' onclick="$(\'#create_account\').show(); $(\'#module_configuration\').hide();" id="trust_account_on" name="trust_account" value="0"/> <b>'.$this->l('My shop does not have a PrestaFraud account yet').'</b>&nbsp;&nbsp;&nbsp;
 					<input type="radio" '.(Configuration::get('PS_TRUST_SHOP_ID') ? 'checked="checked"' : '').' onclick="$(\'#create_account\').hide(); $(\'#module_configuration\').show();"  id="trust_account_off" name="trust_account" value="1" /> <b>'.$this->l('I already have an account').'</b>
 				</form>
 				</center>
