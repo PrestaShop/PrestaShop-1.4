@@ -187,6 +187,7 @@ class BlockLayered extends Module
 				<div class="warning">
 					<p style="font-weight: bold;"><img src="../img/admin/warning.gif" alt="" /> '.$this->l('When do you have to initialize the cache?').'</p>					
 					<ul>
+						<li style="color: red; font-weight: bold;">'.$this->l('Before using this module for the first time').'</li>
 						<li>'.$this->l('You add/update/delete').' '.$this->l('a feature or a feature value').'</li>
 						<li>'.$this->l('You add/update/delete').' '.$this->l('an attribute group or an attribute value').'</li>
 						<li>'.$this->l('You update one or more feature values for a product').'</li>
