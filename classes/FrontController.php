@@ -100,7 +100,7 @@ class FrontControllerCore
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
 		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !(int)(Configuration::get('PS_SHOP_ENABLE')))
 			$this->maintenance = true;
-		elseif (Configuration::get('PS_GEOLOCALIZATION_ENABLED'))
+		elseif (Configuration::get('PS_GEOLOCATION_ENABLED'))
 			$this->geolocationManagement();
 
 		// Switch language if needed and init cookie language
@@ -136,7 +136,7 @@ class FrontControllerCore
 			if ($cart->OrderExists())
 				unset($cookie->id_cart, $cart);
 			/* Delete product of cart, if user can't make an order from his country */
-			elseif (intval(Configuration::get('PS_GEOLOCALIZATION_ENABLED')) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND $cart->nbProducts())
+			elseif (intval(Configuration::get('PS_GEOLOCATION_ENABLED')) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND $cart->nbProducts())
 				unset($cookie->id_cart, $cart);
 			elseif ($cookie->id_customer != $cart->id_customer OR $cookie->id_lang != $cart->id_lang OR $cookie->id_currency != $cart->id_currency)
 			{
@@ -348,14 +348,14 @@ class FrontControllerCore
 					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
 					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
 
-					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND !self::isInWhitelistForGeolocalization())
+					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND !self::isInWhitelistForGeolocation())
 					{
-						if (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
+						if (Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
 							$this->restrictedCountry = true;
-						elseif (Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
+						elseif (Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_)
 							self::$smarty->assign(array(
 								'restricted_country_mode' => true,
-								'geolocalization_country' => $record->country_name
+								'geolocation_country' => $record->country_name
 							));
 					}
 					elseif (is_object($record))
@@ -372,17 +372,17 @@ class FrontControllerCore
 					if (isset($hasBeenSet) AND $hasBeenSet)
 						$cookie->id_currency = (int)(Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
 				}
-				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_)
+				elseif (Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
 					$this->restrictedCountry = true;
-				elseif (Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_)
+				elseif (Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_)
 					self::$smarty->assign(array(
 						'restricted_country_mode' => true,
-						'geolocalization_country' => 'Undefined'
+						'geolocation_country' => 'Undefined'
 					));
 			}
-			/* If not exists we disabled the geolocalization feature */
+			/* If not exists we disabled the geolocation feature */
 			else
-				Configuration::updateValue('PS_GEOLOCALIZATION_ENABLED', 0);
+				Configuration::updateValue('PS_GEOLOCATION_ENABLED', 0);
 		}
 	}
 
@@ -558,11 +558,11 @@ class FrontControllerCore
 		return self::$currentCustomerGroups;
 	}
 
-	protected static function isInWhitelistForGeolocalization()
+	protected static function isInWhitelistForGeolocation()
 	{
 		$allowed = false;
 		$userIp = Tools::getRemoteAddr();
-		$ips = explode(';', Configuration::get('PS_GEOLOCALIZATION_WHITELIST'));
+		$ips = explode(';', Configuration::get('PS_GEOLOCATION_WHITELIST'));
 		if (is_array($ips) AND sizeof($ips))
 			foreach ($ips AS $ip)
 				if (!empty($ip) AND strpos($userIp, $ip) === 0)

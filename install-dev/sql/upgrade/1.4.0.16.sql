@@ -21,6 +21,12 @@ INSERT INTO `PREFIX_meta_lang` (`id_lang`, `id_meta`, `title`, `url_rewrite`)
 
 UPDATE  `PREFIX_hook` SET  `live_edit` =  '1' WHERE  `PREFIX_hook`.`name` IN ('productfooter', 'payment');
 
+UPDATE `PREFIX_configuration` SET name = 'PS_GEOLOCATION_ENABLED' WHERE name = 'PS_GEOLOCALIZATION_ENABLED';
+UPDATE `PREFIX_configuration` SET name = 'PS_GEOLOCATION_BEHAVIOR' WHERE name = 'PS_GEOLOCALIZATION_BEHAVIOR';
+UPDATE `PREFIX_configuration` SET name = 'PS_GEOLOCATION_WHITELIST' WHERE name = 'PS_GEOLOCALIZATION_WHITELIST';
+UPDATE `PREFIX_tab` SET class_name = 'AdminGeolocation' WHERE class_name = 'AdminGeolocalization';
+
+
 /* PHP:add_module_to_hook(blockcategories, afterCreateHtaccess); */;
-/* PHP:add_new_tab(AdminHome, Home, -1); */
+/* PHP:add_new_tab(AdminHome, Home, -1); */;
 

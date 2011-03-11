@@ -67,7 +67,7 @@
 	{if !$content_only}
 		{if isset($restricted_country_mode) && $restricted_country_mode}
 		<div id="restricted-country">
-			<p>{l s='You cannot place a new order from your country.'} <span class="bold">{$geolocalization_country}</span></p>
+			<p>{l s='You cannot place a new order from your country.'} <span class="bold">{$geolocation_country}</span></p>
 		</div>
 		{/if}
 		<div id="page">

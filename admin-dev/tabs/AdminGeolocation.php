@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */ 
 
-class AdminGeolocalization extends AdminTab
+class AdminGeolocation extends AdminTab
 {
 	public function display()
 	{
@@ -45,13 +45,13 @@ class AdminGeolocalization extends AdminTab
 				
 				<label>'.$this->l('Geolocation by IP:').'</label>
 				<div class="margin-form">
-					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_1" value="1" '.(Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_1"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Enabled').'</label>
-					<input type="radio" name="PS_GEOLOCALIZATION_ENABLED" id="PS_GEOLOCALIZATION_ENABLED_0" value="0" '.(!Configuration::get('PS_GEOLOCALIZATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCALIZATION_ENABLED_0"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('Disabled').'</label>
+					<input type="radio" name="PS_GEOLOCATION_ENABLED" id="PS_GEOLOCATION_ENABLED_1" value="1" '.(Configuration::get('PS_GEOLOCATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCATION_ENABLED_1"><img src="../img/admin/enabled.gif" alt="" /> '.$this->l('Enabled').'</label>
+					<input type="radio" name="PS_GEOLOCATION_ENABLED" id="PS_GEOLOCATION_ENABLED_0" value="0" '.(!Configuration::get('PS_GEOLOCATION_ENABLED') ? 'checked="checked"' : '').' /> <label class="t" for="PS_GEOLOCATION_ENABLED_0"><img src="../img/admin/disabled.gif" alt="" /> '.$this->l('Disabled').'</label>
 					<p>'.$this->l('This option allows you, among other things, to restrict access to your shop for many countries. See below.').'</p>
 				</div>
 				
 				<div class="margin-form">
-					<input type="submit" class="button" name="submitGeolocalizationConfiguration" value="'.$this->l('Save').'" />
+					<input type="submit" class="button" name="submitGeolocationConfiguration" value="'.$this->l('Save').'" />
 				</div>
 			</fieldset>
 		</form>
@@ -68,9 +68,9 @@ class AdminGeolocalization extends AdminTab
 				
 				<label>'.$this->l('Geolocation behavior for restricted countries:').'</label>
 				<div class="margin-form">
-					<select name="PS_GEOLOCALIZATION_BEHAVIOR">
-						<option value="'._PS_GEOLOCALIZATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors can\'t see your catalog').'</option>
-						<option value="'._PS_GEOLOCALIZATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCALIZATION_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but can\'t make an order').'</option>
+					<select name="PS_GEOLOCATION_BEHAVIOR">
+						<option value="'._PS_GEOLOCATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors can\'t see your catalog').'</option>
+						<option value="'._PS_GEOLOCATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but can\'t make an order').'</option>
 					</select>	
 				</div>
 				
@@ -78,10 +78,10 @@ class AdminGeolocalization extends AdminTab
 				
 				<label>'.$this->l('Geolocation behavior for undefined countries:').'</label>
 				<div class="margin-form">
-					<select name="PS_GEOLOCALIZATION_NA_BEHAVIOR">
-						<option value="-1" '.(Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == -1 ? 'selected' : '').'>'.$this->l('All features are available').'</option>
-						<option value="'._PS_GEOLOCALIZATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors can\'t see your catalog').'</option>
-						<option value="'._PS_GEOLOCALIZATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCALIZATION_NA_BEHAVIOR') == _PS_GEOLOCALIZATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but can\'t make an order').'</option>
+					<select name="PS_GEOLOCATION_NA_BEHAVIOR">
+						<option value="-1" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == -1 ? 'selected' : '').'>'.$this->l('All features are available').'</option>
+						<option value="'._PS_GEOLOCATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors can\'t see your catalog').'</option>
+						<option value="'._PS_GEOLOCATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but can\'t make an order').'</option>
 					</select>	
 				</div>
 				
@@ -111,7 +111,7 @@ class AdminGeolocalization extends AdminTab
 				</div>
 				
 				<div class="margin-form">
-					<input type="submit" class="button" name="submitGeolocalizationCountries" value="'.$this->l('Save').'" />
+					<input type="submit" class="button" name="submitGeolocationCountries" value="'.$this->l('Save').'" />
 				</div>
 			</fieldset>
 		</form>
@@ -124,13 +124,13 @@ class AdminGeolocalization extends AdminTab
 					'.$this->l('You can add many IP addresses, these addresses will always be allowed to access your shop (e.g. Google bots IP).').'
 				</div>
 				
-				<label for="PS_GEOLOCALIZATION_WHITELIST">'.$this->l('Allowed IP addresses:').'</label>
+				<label for="PS_GEOLOCATION_WHITELIST">'.$this->l('Allowed IP addresses:').'</label>
 				<div class="margin-form">
-					<textarea name="PS_GEOLOCALIZATION_WHITELIST" id="PS_GEOLOCALIZATION_WHITELIST" cols="80" rows="30">'.Tools::htmlentitiesUTF8(str_replace(';', "\n", Configuration::get('PS_GEOLOCALIZATION_WHITELIST'))).'</textarea>
+					<textarea name="PS_GEOLOCATION_WHITELIST" id="PS_GEOLOCATION_WHITELIST" cols="80" rows="30">'.Tools::htmlentitiesUTF8(str_replace(';', "\n", Configuration::get('PS_GEOLOCATION_WHITELIST'))).'</textarea>
 				</div>
 				
 				<div class="margin-form">
-					<input type="submit" class="button" name="submitGeolocalizationWhitelist" value="'.$this->l('Save').'" />
+					<input type="submit" class="button" name="submitGeolocationWhitelist" value="'.$this->l('Save').'" />
 				</div>
 			</fieldset>
 		</form>
@@ -141,37 +141,37 @@ class AdminGeolocalization extends AdminTab
 	{
 		global $currentIndex;
 		
-		if (Tools::isSubmit('submitGeolocalizationConfiguration'))
+		if (Tools::isSubmit('submitGeolocationConfiguration'))
 		{
 			if ($this->_isGeoLiteCityAvailable())
 			{
-				Configuration::updateValue('PS_GEOLOCALIZATION_ENABLED', intval(Tools::getValue('PS_GEOLOCALIZATION_ENABLED')));
+				Configuration::updateValue('PS_GEOLOCATION_ENABLED', intval(Tools::getValue('PS_GEOLOCATION_ENABLED')));
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
 				$this->_errors[] = Tools::displayError('Geolocation database isn\'t available');
 		}
 		
-		if (Tools::isSubmit('submitGeolocalizationCountries'))
+		if (Tools::isSubmit('submitGeolocationCountries'))
 		{
 			if (!is_array(Tools::getValue('countries')) OR !sizeof(Tools::getValue('countries')))
 				$this->_errors[] = Tools::displayError('Countries selection is invalid');
 			else
 			{
-				Configuration::updateValue('PS_GEOLOCALIZATION_BEHAVIOR', (!(int)(Tools::getValue('PS_GEOLOCALIZATION_BEHAVIOR')) ? _PS_GEOLOCALIZATION_NO_CATALOG_ : _PS_GEOLOCALIZATION_NO_ORDER_));
-				Configuration::updateValue('PS_GEOLOCALIZATION_NA_BEHAVIOR', (int)Tools::getValue('PS_GEOLOCALIZATION_NA_BEHAVIOR'));
+				Configuration::updateValue('PS_GEOLOCATION_BEHAVIOR', (!(int)(Tools::getValue('PS_GEOLOCATION_BEHAVIOR')) ? _PS_GEOLOCATION_NO_CATALOG_ : _PS_GEOLOCATION_NO_ORDER_));
+				Configuration::updateValue('PS_GEOLOCATION_NA_BEHAVIOR', (int)Tools::getValue('PS_GEOLOCATION_NA_BEHAVIOR'));
 				Configuration::updateValue('PS_ALLOWED_COUNTRIES', implode(';', Tools::getValue('countries')));
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 		}
 		
-		if (Tools::isSubmit('submitGeolocalizationWhitelist'))
+		if (Tools::isSubmit('submitGeolocationWhitelist'))
 		{
-			if (!Validate::isCleanHtml(Tools::getValue('PS_GEOLOCALIZATION_WHITELIST')))
+			if (!Validate::isCleanHtml(Tools::getValue('PS_GEOLOCATION_WHITELIST')))
 				$this->_errors[] = Tools::displayError('Invalid whitelist');
 			else
 			{	
-				Configuration::updateValue('PS_GEOLOCALIZATION_WHITELIST', str_replace("\n", ';', str_replace("\r", '', Tools::getValue('PS_GEOLOCALIZATION_WHITELIST'))));
+				Configuration::updateValue('PS_GEOLOCATION_WHITELIST', str_replace("\n", ';', str_replace("\r", '', Tools::getValue('PS_GEOLOCATION_WHITELIST'))));
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 		}

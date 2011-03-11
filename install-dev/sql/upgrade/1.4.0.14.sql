@@ -19,6 +19,6 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 /* PHP:add_new_tab(AdminAddonsCatalog, Modules & Themes catalog, 7); */;
 /* PHP:add_new_tab(AdminAddonsMyAccount, My Account, 7); */;
 /* PHP:add_new_tab(AdminThemes, Themes, 7); */;
-/* PHP:add_new_tab(AdminGeolocalization, Geolocalization, 8); */;
+/* PHP:add_new_tab(AdminGeolocation, Geolocation, 8); */;
 /* PHP:add_new_tab(AdminTaxRulesGroup, Tax Rules, 4); */;
 /* PHP:add_new_tab(AdminLogs, Log, 9); */;
