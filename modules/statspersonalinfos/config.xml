@@ -4,6 +4,7 @@
 	<displayName>Registered Customer Info</displayName>
 	<version>1</version>
 	<description>Display characteristics such as gender and age</description>
+	<author>Prestashop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

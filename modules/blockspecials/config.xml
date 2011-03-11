@@ -4,6 +4,7 @@
 	<displayName>Specials block</displayName>
 	<version>0.8</version>
 	<description>Adds a block with current product Specials</description>
+	<author>Prestashop</author>
 	<tab>pricing_promotion</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

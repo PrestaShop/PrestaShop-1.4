@@ -4,6 +4,7 @@
 	<displayName>Shop search</displayName>
 	<version>1</version>
 	<description>Display which keywords have been searched by your visitors</description>
+	<author>Prestashop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

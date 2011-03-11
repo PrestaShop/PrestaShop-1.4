@@ -4,6 +4,7 @@
 	<displayName>Home text editor</displayName>
 	<version>1.6</version>
 	<description>A text editor module for your homepage</description>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

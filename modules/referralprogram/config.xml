@@ -4,7 +4,7 @@
 	<displayName>Customer referral program</displayName>
 	<version>1.5</version>
 	<description>Integrate a referral program system into your shop.</description>
-	<author></author>
+	<author>Prestashop</author>
 	<tab>advertising_marketing</tab>
 	<confirmUninstall>All sponsors and friends will be deleted. Do you really want to uninstall this module ?</confirmUninstall>
 	<is_configurable>1</is_configurable>

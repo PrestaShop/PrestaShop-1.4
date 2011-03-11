@@ -4,6 +4,7 @@
 	<displayName>SMS Tm4b</displayName>
 	<version>1.1</version>
 	<description>Sends an SMS for each new order</description>
+	<author>Prestashop</author>
 	<tab>administration</tab>
 	<confirmUninstall>Are you sure you want to delete your info?</confirmUninstall>
 	<is_configurable>1</is_configurable>

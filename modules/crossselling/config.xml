@@ -4,6 +4,7 @@
 	<displayName>Cross selling</displayName>
 	<version>0.1</version>
 	<description>Customers who bought this product also bought...</description>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

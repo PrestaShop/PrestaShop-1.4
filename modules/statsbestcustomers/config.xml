@@ -4,6 +4,7 @@
 	<displayName>Best customers</displayName>
 	<version>1</version>
 	<description>A list of the best customers</description>
+	<author>Prestashop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

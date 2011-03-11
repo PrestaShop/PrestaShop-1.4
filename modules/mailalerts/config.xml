@@ -4,6 +4,7 @@
 	<displayName>Mail alerts</displayName>
 	<version>2.2</version>
 	<description>Sends e-mail notifications to customers and merchants.</description>
+	<author>Prestashop</author>
 	<tab>administration</tab>
 	<confirmUninstall>Are you sure you want to delete all customers notifications ?</confirmUninstall>
 	<is_configurable>1</is_configurable>

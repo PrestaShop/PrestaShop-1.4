@@ -4,6 +4,7 @@
 	<displayName>Import/export a theme</displayName>
 	<version>1.3</version>
 	<description>Export or Install a theme and its modules on your shop</description>
+	<author>Prestashop</author>
 	<tab>administration</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

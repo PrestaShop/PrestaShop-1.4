@@ -4,6 +4,7 @@
 	<displayName>Newsletter</displayName>
 	<version>2</version>
 	<description>Generates a .CSV file for mass mailings</description>
+	<author>Prestashop</author>
 	<tab>administration</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

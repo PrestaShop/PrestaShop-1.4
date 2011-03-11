@@ -4,6 +4,7 @@
 	<displayName>Pages not found</displayName>
 	<version>1</version>
 	<description>Display the pages requested by your visitors but not found</description>
+	<author>Prestashop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

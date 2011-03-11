@@ -4,6 +4,7 @@
 	<displayName>Carrier distribution</displayName>
 	<version>1</version>
 	<description>Display the carriers distribution</description>
+	<author>Prestashop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

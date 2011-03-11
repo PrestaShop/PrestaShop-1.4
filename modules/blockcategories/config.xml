@@ -4,7 +4,7 @@
 	<displayName>Categories block</displayName>
 	<version>2.0</version>
 	<description>Adds a block featuring product categories</description>
-	<author></author>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

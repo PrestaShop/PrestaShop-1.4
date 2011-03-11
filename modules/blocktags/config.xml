@@ -4,6 +4,7 @@
 	<displayName>Tags block</displayName>
 	<version>1</version>
 	<description>Adds a block containing a tag cloud</description>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

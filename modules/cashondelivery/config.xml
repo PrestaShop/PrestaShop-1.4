@@ -4,6 +4,7 @@
 	<displayName>Cash on delivery (COD)</displayName>
 	<version>0.3</version>
 	<description>Accept cash on delivery payments</description>
+	<author>Prestashop</author>
 	<tab>payments_gateways</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

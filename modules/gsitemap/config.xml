@@ -4,6 +4,7 @@
 	<displayName>Google sitemap</displayName>
 	<version>1.6</version>
 	<description>Generate your Google sitemap file</description>
+	<author>Prestashop</author>
 	<tab>seo</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

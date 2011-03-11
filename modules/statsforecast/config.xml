@@ -4,6 +4,7 @@
 	<displayName>Stats Dashboard</displayName>
 	<version>1</version>
 	<description></description>
+	<author>Prestashop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

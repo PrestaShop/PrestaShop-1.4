@@ -4,6 +4,7 @@
 	<displayName>Newsletter block</displayName>
 	<version>1.4</version>
 	<description>Adds a block for newsletter subscription</description>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<confirmUninstall>Are you sure you want to delete all your contacts ?</confirmUninstall>
 	<is_configurable>1</is_configurable>

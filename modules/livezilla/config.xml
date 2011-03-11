@@ -4,7 +4,7 @@
 	<displayName>LiveZilla</displayName>
 	<version>1</version>
 	<description>Live support chat</description>
-	<author></author>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

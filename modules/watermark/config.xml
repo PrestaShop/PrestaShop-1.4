@@ -4,6 +4,7 @@
 	<displayName>Watermark</displayName>
 	<version>0.1</version>
 	<description>Protect image by watermark</description>
+	<author>Prestashop</author>
 	<tab>administration</tab>
 	<confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>
 	<is_configurable>1</is_configurable>

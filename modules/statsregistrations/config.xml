@@ -4,6 +4,7 @@
 	<displayName>Customer accounts</displayName>
 	<version>1</version>
 	<description>Display the progress of customer registration</description>
+	<author>Prestashop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

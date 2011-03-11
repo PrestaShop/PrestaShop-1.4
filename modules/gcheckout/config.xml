@@ -4,6 +4,7 @@
 	<displayName>Google Checkout</displayName>
 	<version>1.1</version>
 	<description>Google Checkout API implementation</description>
+	<author>Prestashop</author>
 	<tab>payments_gateways</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

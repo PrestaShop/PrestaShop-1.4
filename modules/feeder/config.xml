@@ -4,6 +4,7 @@
 	<displayName>RSS products feed</displayName>
 	<version>0.2</version>
 	<description>Generate a RSS products feed</description>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

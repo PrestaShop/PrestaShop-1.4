@@ -4,6 +4,7 @@
 	<displayName>Shop Importer</displayName>
 	<version>1.0</version>
 	<description>This module allows you to import your shop from another system into prestashop</description>
+	<author>Prestashop</author>
 	<tab>migration_tools</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

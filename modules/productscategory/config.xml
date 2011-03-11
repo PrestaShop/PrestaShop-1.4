@@ -4,6 +4,7 @@
 	<displayName>Products Category</displayName>
 	<version>1.3</version>
 	<description>Display products of the same category on the product page</description>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

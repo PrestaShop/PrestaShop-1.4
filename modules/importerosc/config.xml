@@ -4,6 +4,7 @@
 	<displayName>Importer osCommerce</displayName>
 	<version>1.0</version>
 	<description>This module allows you to import from osCommerce to Prestashop</description>
+	<author>Prestashop</author>
 	<tab>migration_tools</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

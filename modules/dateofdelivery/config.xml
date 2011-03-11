@@ -4,6 +4,7 @@
 	<displayName>Date of delivery</displayName>
 	<version>1.0</version>
 	<description>Displays an approximate date of delivery</description>
+	<author>Prestashop</author>
 	<tab>shipping_logistics</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

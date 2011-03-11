@@ -4,6 +4,7 @@
 	<displayName>Customer loyalty and rewards</displayName>
 	<version>1.8</version>
 	<description>Provide a loyalty program to your customers</description>
+	<author>Prestashop</author>
 	<tab>pricing_promotion</tab>
 	<confirmUninstall>This will delete all loyalty points and history of your customers, are you sure?</confirmUninstall>
 	<is_configurable>1</is_configurable>

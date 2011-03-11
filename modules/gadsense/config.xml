@@ -4,7 +4,7 @@
 	<displayName>Google Adsense</displayName>
 	<version>1.1</version>
 	<description>Integrate Google Adsense script into your shop</description>
-	<author></author>
+	<author>Prestashop</author>
 	<tab>advertising_marketing</tab>
 	<confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>
 	<is_configurable>1</is_configurable>

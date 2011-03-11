@@ -4,6 +4,7 @@
 	<displayName>My Account block</displayName>
 	<version>1.2</version>
 	<description>Displays a block with links relative to user account</description>
+	<author>Prestashop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>
