@@ -804,7 +804,7 @@ function showHelp(url, label, iso_lang, ps_version, doc_version, country)
 {
     trackClickOnHelp(label, doc_version);
     $('#help-'+label).attr('src','../img/admin/help2.png');
-    window.open(url +'/'+iso_lang+'/doc/'+label+'?version='+ps_version+'&country='+country+'#', '_blank', 'scrollbars=yes,menubar=no,toolbar=no,location=no,width=500,height=600');
+    window.open(url +'/'+iso_lang+'/doc/'+label+'?version='+ps_version+'&country='+country+'#', '_blank', 'scrollbars=yes,menubar=no,toolbar=no,location=no,width=517,height=600');
     return false;
 }
 
