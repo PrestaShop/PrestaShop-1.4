@@ -3,7 +3,8 @@
 	<name>twenga</name>
 	<displayName>Twenga API</displayName>
 	<version>1.3</version>
-	<description>Export your products to Twenga.com and use the Twenga tracker for customer\'s order.</description>
+	<description>Export your products to Twenga.com and use the Twenga tracker for customers\' order.</description>
+	<author></author>
 	<tab>smart_shopping</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

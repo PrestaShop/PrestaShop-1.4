@@ -113,7 +113,7 @@ class Twenga extends PaymentModule
 	 	parent::__construct();
 		
 		$this->displayName = $this->l('Twenga API');
-		$this->description = $this->l('Export your products to Twenga.com and use the Twenga tracker for customer\'s order.');
+		$this->description = $this->l('Export your products to Twenga.com and use the Twenga tracker for customers\' order.');
 		
 		// For Twenga subscription
 		$this->site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
