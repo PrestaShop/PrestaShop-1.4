@@ -236,4 +236,3 @@ class BlockCategories extends Module
 		$this->_clearBlockcategoriesCache();
 	}
 }
-

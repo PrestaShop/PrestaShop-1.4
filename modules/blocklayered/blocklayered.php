@@ -25,20 +25,6 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-/*
-*
-* @todo
-*
-* - Add a check on the category_group table
-* - Add other filters (prices, weight)
-* - Manage products sort & pagination
-* - Manage SEO links (no ajax actions in JS disabled, real links instead)
-* - Test on a large catalog & improve performances
-* - Add admin panel options
-* - Real time URL building + ability to give the URL to someone
-* 
-*/
-
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
@@ -58,8 +44,13 @@ class BlockLayered extends Module
 
 	public function install()
 	{		
-		if ($result = parent::install() AND $this->registerHook('leftColumn') AND $this->registerHook('header'))
+		if ($result = parent::install() AND $this->registerHook('leftColumn') AND $this->registerHook('header')
+		AND $this->registerHook('addProduct') AND $this->registerHook('updateProduct') AND $this->registerHook('deleteProduct')
+		AND $this->registerHook('categoryAddition') AND $this->registerHook('categoryUpdate') AND $this->registerHook('categoryDeletion'))
+		{
 			Configuration::updateValue('PS_LAYERED_NAVIGATION_CHECKBOXES', 1);
+			$this->rebuildLayeredStructure();
+		}
 
 		return $result;
 	}
@@ -72,9 +63,77 @@ class BlockLayered extends Module
 		return parent::uninstall();
 	}
 	
+	public function hookLeftColumn($params)
+	{
+		return $this->generateFilters();
+	}
+	
+	public function hookRightColumn($params)
+	{
+		return $this->hookLeftColumn($params);
+	}
+	
+	public function hookHeader($params)
+	{
+		Tools::addJS(($this->_path).'blocklayered.js');
+		Tools::addCSS(($this->_path).'blocklayered.css', 'all');
+	}
+	
+	public function hookAddProduct($params)
+	{
+		$this->rebuildLayeredCache(array((int)$params['product']->id));
+	}
+	
+	public function hookUpdateProduct($params)
+	{
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_cache WHERE id_product = '.(int)$params['product']->id.' LIMIT 1');		
+		$this->rebuildLayeredCache(array((int)$params['product']->id));
+	}
+	
+	public function hookDeleteProduct($params)
+	{
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_cache WHERE id_product = '.(int)$params['product']->id.' LIMIT 1');
+	}
+	
+	public function hookCategoryAddition($params)
+	{
+		Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'layered_cache` ADD `c'.(int)$params['category']->id.'` TINYINT UNSIGNED NOT NULL DEFAULT \'0\'');
+		Configuration::updateValue('PS_LAYERED_COLUMNS', Configuration::get('PS_LAYERED_COLUMNS').',c'.(int)$params['category']->id);
+		$this->rebuildLayeredCache(array(), array((int)$params['category']->id));
+	}
+	
+	public function hookCategoryUpdate($params)
+	{
+		/* The category status might (active, inactive) have changed, we have to update the layered cache table structure */
+		if (!$params['category']->active)
+			$this->hookCategoryDeletion($params);
+		else
+		{
+			$oneRow = Db::getInstance()->getRow('SELECT c'.(int)$params['category']->id.' FROM `'._DB_PREFIX_.'layered_cache`');
+			if (!isset($oneRow['c'.(int)$params['category']->id]))
+			{
+				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'layered_cache` ADD `c'.(int)$params['category']->id.'` TINYINT UNSIGNED NOT NULL DEFAULT \'0\'');
+				Configuration::updateValue('PS_LAYERED_COLUMNS', Configuration::get('PS_LAYERED_COLUMNS').',c'.(int)$params['category']->id);
+			}
+			if (!Db::getInstance()->getRow('SELECT id_layered_category FROM `'._DB_PREFIX_.'layered_category` WHERE id_category = '.(int)$params['category']->id))
+				$this->rebuildLayeredCache(array(), array((int)$params['category']->id));
+		}
+	}
+	
+	public function hookCategoryDeletion($params)
+	{
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_category WHERE id_category = '.(int)$params['category']->id);
+		$oneRow = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'layered_cache`');
+		if (isset($oneRow['c'.(int)$params['category']->id]))
+		{
+			Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'layered_cache` DROP `c'.(int)$params['category']->id.'`');
+			Configuration::updateValue('PS_LAYERED_COLUMNS', str_replace(',c'.(int)$params['category']->id, '', Configuration::get('PS_LAYERED_COLUMNS')));
+		}
+	}
+	
 	public function getContent()
 	{
-		if (Tools::isSubmit('submitLayered'))
+		if (Tools::isSubmit('submitLayeredCache'))
 		{
 			$this->rebuildLayeredStructure();
 			$this->rebuildLayeredCache();
@@ -85,18 +144,57 @@ class BlockLayered extends Module
 				'.$this->l('Layered navigation database was initialized successfully').'
 			</div>';
 		}
+		elseif (Tools::isSubmit('submitLayeredSettings'))
+		{
+			echo '
+			<div class="conf confirm">
+				<img src="../img/admin/ok.gif" alt="" title="" />
+				'.$this->l('Settings saved successfully').'
+			</div>';
+		}
 		
 		echo '
 		<h2>'.$this->l('Layered navigation').'</h2>
 		
+		<p class="warning" style="font-weight: bold;"><img src="../img/admin/information.png" alt="" /> '.$this->l('This module is in beta version and will be improved in PrestaShop v1.4.1').'</p><br />
 		<fieldset class="width2">
-			<legend>'.$this->l('Initialization').'</legend>
-			<form action="" method="post">
-				<p class="warning" style="font-weight: bold;"><img src="../img/admin/warning.gif" alt="" /> 
-				'.$this->l('Warning: This could take several minutes.').'<br /><br />
-				'.$this->l('This module is in beta version, therefore you will have to press this button each time you add/modify/delete a category, a product, a manufacturer, a feature or an attribute.').'
-				</p>
-				<p><input type="submit" class="button" name="submitLayered" value="'.$this->l('Initialize the layered navigation database').'" /></p>				
+			<legend><img src="../img/admin/asterisk.gif" alt="" />'.$this->l('10 upcoming improvements in PrestaShop v1.4.1').'</legend>
+			<ol>				
+				<li>'.$this->l('Real-time refresh of the cache table').'</li>
+				<li>'.$this->l('Additional filters (prices, weight)').'</li>
+				<li>'.$this->l('Ability to manage filters by category in the module configuration').'</li>
+				<li>'.$this->l('Ability to hide filter groups with no values and filter values with 0 products').'</li>
+				<li>'.$this->l('Statistics and analysis').'</li>
+				<li>'.$this->l('Manage products sort & pagination').'</li>
+				<li>'.$this->l('Add a check on the category_group table').'</li>
+				<li>'.$this->l('SEO links & real time URL building (ability to give the URL to someone)').'</li>
+				<li>'.$this->l('Add more options in the module configuration').'</li>
+				<li>'.$this->l('Performances improvements').'</li>
+			</ol>
+		</fieldset><br />
+		<!--
+		<fieldset class="width2">
+			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Settings').'</legend>
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">				
+				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredSettings" value="'.$this->l('Update settings').'" /></p>
+			</form>
+		</fieldset>
+		<br />
+		-->
+		<fieldset class="width2">
+			<legend><img src="../img/admin/database_gear.gif" alt="" />'.$this->l('Cache initialization').'</legend>
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+				<div class="warning">
+					<p style="font-weight: bold;"><img src="../img/admin/warning.gif" alt="" /> '.$this->l('When do you have to initialize the cache?').'</p>					
+					<ul>
+						<li>'.$this->l('You add/update/delete').' '.$this->l('a feature or a feature value').'</li>
+						<li>'.$this->l('You add/update/delete').' '.$this->l('an attribute group or an attribute value').'</li>
+						<li>'.$this->l('You update one or more feature values for a product').'</li>
+					</ul>
+					<p><b>'.$this->l('Warning: This could take several minutes.').'</b><br /><br />
+					'.$this->l('If you do not, this cache table might become larger and larger (less efficient), and all the new choices (attributes, features) will not be offered to your visitors.').'</p>
+				</div>
+				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredCache" value="'.$this->l('Initialize the layered navigation database').'" /></p>
 			</form>
 		</fieldset>';
 	}
@@ -122,6 +220,9 @@ class BlockLayered extends Module
 		ORDER BY c.position ASC');
 		
 		$oneRow = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'layered_cache');
+		if (!$oneRow)
+			return;		
+		
 		$whereC = ' AND (c'.(int)$id_parent.' = 1 OR ';
 		$queryProduct = ', c'.(int)$id_parent;
 		foreach ($subCategories AS $subcategory)
@@ -392,11 +493,6 @@ class BlockLayered extends Module
 		
 		return $smarty->fetch(_PS_MODULE_DIR_.$this->name.'/blocklayered.tpl');
 	}
-   
-	public function hookLeftColumn($params)
-	{
-		return $this->generateFilters();
-	}
 	
 	public function ajaxCall()
 	{
@@ -516,22 +612,6 @@ class BlockLayered extends Module
 		return '<div id="layered_ajax_column">'.$this->generateFilters($filters).'</div><div id="layered_ajax_products">'.$smarty->fetch(_PS_THEME_DIR_.'product-list.tpl').'</div>';
 	}
 	
-	public function hookRightColumn($params)
-	{
-		return $this->hookLeftColumn($params);
-	}
-	
-	public function hookHeader($params)
-	{
-		Tools::addJS(($this->_path).'blocklayered.js');
-		Tools::addCSS(($this->_path).'blocklayered.css', 'all');
-	}
-	
-	public function hookUpdateProduct($params)
-	{
-		
-	}
-	
 	public function rebuildLayeredStructure()
 	{
 		@set_time_limit(0);
@@ -604,7 +684,7 @@ class BlockLayered extends Module
 		) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;');
 	}
 	
-	public function rebuildLayeredCache()
+	public function rebuildLayeredCache($productsIds = array(), $categoriesIds = array())
 	{
 		@set_time_limit(0);
 		@ini_set('memory_limit', '64M');		
@@ -620,7 +700,7 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = pa.id_product)
 		LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
 		LEFT JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category)
-		WHERE c.active = 1 AND p.active = 1', false);
+		WHERE c.active = 1'.(sizeof($categoriesIds) ? ' AND cp.id_category IN ('.implode(',', $categoriesIds).')' : '').' AND p.active = 1'.(sizeof($productsIds) ? ' AND p.id_product IN ('.implode(',', $productsIds).')' : ''), false);
 		
 		$attributeGroupsById = array();
 		while ($row = $db->nextRow($attributeGroups))
@@ -633,7 +713,7 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = fp.id_product)
 		LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
 		LEFT JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category)
-		WHERE (fv.custom IS NULL OR fv.custom = 0) AND c.active = 1 AND p.active = 1', false);
+		WHERE (fv.custom IS NULL OR fv.custom = 0) AND c.active = 1'.(sizeof($categoriesIds) ? ' AND cp.id_category IN ('.implode(',', $categoriesIds).')' : '').' AND p.active = 1'.(sizeof($productsIds) ? ' AND p.id_product IN ('.implode(',', $productsIds).')' : ''), false);
 		
 		$featuresById = array();
 		while ($row = $db->nextRow($features))
@@ -648,14 +728,18 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value)
 		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product = p.id_product)
 		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_product_attribute = pa.id_product_attribute)
-		WHERE c.active = 1 AND p.active = 1 AND (fv.custom IS NULL OR fv.custom = 0)
+		WHERE c.active = 1'.(sizeof($categoriesIds) ? ' AND cp.id_category IN ('.implode(',', $categoriesIds).')' : '').' AND p.active = 1'.(sizeof($productsIds) ? ' AND p.id_product IN ('.implode(',', $productsIds).')' : '').' AND (fv.custom IS NULL OR fv.custom = 0)
 		GROUP BY p.id_product', false);
 		
 		/* Get all the columns to fill */
 		$columns = explode(',', Configuration::get('PS_LAYERED_COLUMNS'));
 
-		$query = 'INSERT INTO `'._DB_PREFIX_.'layered_cache` VALUES ';
-		$values = '';
+		/* We do not need to build the query for products when we are just updating the layered_category table */
+		if (!sizeof($categoriesIds))
+		{
+			$query = 'INSERT INTO `'._DB_PREFIX_.'layered_cache` VALUES ';
+			$values = '';
+		}
 		while ($product = $db->nextRow($result))
 		{
 			$a = $c = $f = array();
@@ -666,22 +750,26 @@ class BlockLayered extends Module
 			if (!empty($product['features']))
 				$f = array_flip(explode(',', $product['features']));
 
-			$values .= '(';
-			$n = 0;
-			foreach ($columns AS $column)
+			/* We do not need to build the query for products when we are just updating the layered_category table */
+			if (!sizeof($categoriesIds))
 			{
-				if (!$n)
-					$values .= (int)$product['id_product'].',';
-				else
+				$values .= '(';
+				$n = 0;
+				foreach ($columns AS $column)
 				{
-					if (isset(${$column{0}}[ltrim($column, $column{0})]))
-						$values .= '1,';
+					if (!$n)
+						$values .= (int)$product['id_product'].',';
 					else
-						$values .= '0,';
+					{
+						if (isset(${$column{0}}[ltrim($column, $column{0})]))
+							$values .= '1,';
+						else
+							$values .= '0,';
+					}
+					$n++;
 				}
-				$n++;
+				$values = rtrim($values, ',').'),';
 			}
-			$values = rtrim($values, ',').'),';
 
 			$queryCategory = 'INSERT INTO '._DB_PREFIX_.'layered_category (id_category, id_value, type, position) VALUES ';
 			$toInsert = false;
@@ -732,11 +820,13 @@ class BlockLayered extends Module
 				Db::getInstance()->Execute(rtrim($queryCategory, ','));
 		}
 		
-		$db->Execute($query.rtrim($values, ','));
+		/* We do not need to build the query for products when we are just updating the layered_category table */
+		if (!sizeof($categoriesIds))
+			$db->Execute($query.rtrim($values, ','));
 	}
 	
 	function filterProducts($products, $selectedFilters, $excludeType = false)
-	{		
+	{
 		$productsToKeep = array();
 		$filterByLetter = array('id_attribute_group' => 'a', 'id_feature' => 'f', 'category' => 'c', 'manufacturer' => 'id_manufacturer', 'quantity' => 'quantity', 'condition' => 'condition');
 		foreach ($selectedFilters AS $type => $filters)

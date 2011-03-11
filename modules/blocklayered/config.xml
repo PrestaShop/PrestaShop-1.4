@@ -4,6 +4,7 @@
 	<displayName>Layered navigation block</displayName>
 	<version>1.3</version>
 	<description>Displays a block with layered navigation filters</description>
+	<author></author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

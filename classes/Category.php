@@ -147,7 +147,7 @@ class CategoryCore extends ObjectModel
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
 		$this->updateGroup(Tools::getValue('groupBox'));
-		Module::hookExec('categoryAddition'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
+		Module::hookExec('categoryAddition', array('category' => $this));
 		return $ret;
 	}
 
@@ -164,7 +164,7 @@ class CategoryCore extends ObjectModel
 		$ret = parent::update($nullValues);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
-		Module::hookExec('categoryUpdate'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
+		Module::hookExec('categoryUpdate', array('category' => $this));
 		return $ret;
 	}
 
@@ -262,7 +262,7 @@ class CategoryCore extends ObjectModel
 		/* Delete categories images */
 		require_once(_PS_ROOT_DIR_.'/images.inc.php');
 		foreach ($toDelete AS $id_category)
-			deleteImage((int)($id_category));
+			deleteImage((int)$id_category);
 
 		/* Delete products which were not in others categories */
 		$result = Db::getInstance()->ExecuteS('
@@ -271,7 +271,7 @@ class CategoryCore extends ObjectModel
 		WHERE `id_product` NOT IN (SELECT `id_product` FROM `'._DB_PREFIX_.'category_product`)');
 		foreach ($result as $p)
 		{
-			$product = new Product((int)($p['id_product']));
+			$product = new Product((int)$p['id_product']);
 			if (Validate::isLoadedObject($product))
 				$product->delete();
 		}
@@ -287,7 +287,7 @@ class CategoryCore extends ObjectModel
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
 
-		Module::hookExec('categoryDeletion'); // Do NOT use this temporary hook! A new CRUD hook system will replace it as soon as possible.
+		Module::hookExec('categoryDeletion', array('category' => $this));
 		return true;
 	}
 

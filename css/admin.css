@@ -420,7 +420,6 @@ select optgroup option {
 	border-top: 1px solid #FF9900;
 	border-bottom: 1px solid #FF9900;
 	background-color: #FFEBCC;
-	/*background: #FFEBCC url('../img/admin/warning.gif') no-repeat 5px 10px;*/
 }
 
 #unhook_button_position_bottom {

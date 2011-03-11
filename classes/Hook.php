@@ -157,8 +157,8 @@ class HookCore extends ObjectModel
 	    if (Validate::isUnsignedId($id_order))
 	    {
 			$params = array();
-			$order = new Order((int)($id_order));
-			$currency = new Currency((int)($order->id_currency));
+			$order = new Order((int)$id_order);
+			$currency = new Currency((int)$order->id_currency);
 	    
 	    	if (Validate::isLoadedObject($order))
 	    	{
@@ -168,7 +168,7 @@ class HookCore extends ObjectModel
 				$params['currencyObj'] = $currency;
 				
 				return Module::hookExec('orderConfirmation', $params);
-			}
+		}
 	    }
 	    return false;
 	}

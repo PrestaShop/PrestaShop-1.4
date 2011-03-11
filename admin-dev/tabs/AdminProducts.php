@@ -618,20 +618,20 @@ class AdminProducts extends AdminTab
 							{
 								if ($default_value = $this->checkFeatures($languages, $match[1]))
 								{
-									$id_value = $product->addFeaturesToDB($match[1], 0, 1, $language['id_lang']);
+									$id_value = $product->addFeaturesToDB($match[1], 0, 1, (int)$language['id_lang']);
 									foreach ($languages AS $language)
 									{
-										if ($cust = Tools::getValue('custom_'.$match[1].'_'.$language['id_lang']))
-											$product->addFeaturesCustomToDB($id_value, $language['id_lang'], $cust);
+										if ($cust = Tools::getValue('custom_'.$match[1].'_'.(int)$language['id_lang']))
+											$product->addFeaturesCustomToDB($id_value, (int)$language['id_lang'], $cust);
 										else
-											$product->addFeaturesCustomToDB($id_value, $language['id_lang'], $default_value);
+											$product->addFeaturesCustomToDB($id_value, (int)$language['id_lang'], $default_value);
 									}
 								}
 							}
 						}
 					}
 					if (!sizeof($this->_errors))
-						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=4&conf=4&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.'&id_product='.(int)$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=4&conf=4&token='.($token ? $token : $this->token));
 				}
 				else
 					$this->_errors[] = Tools::displayError('product must be created before adding features');
