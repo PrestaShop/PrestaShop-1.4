@@ -3,7 +3,8 @@
 	<name>upscarrier</name>
 	<displayName>UPS Carrier</displayName>
 	<version>1.0</version>
-	<description>Offer to your customers, different delivery methods with UPS</description>
+	<description>Offer your customers, different delivery methods with UPS</description>
+	<author></author>
 	<tab>shipping_logistics</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

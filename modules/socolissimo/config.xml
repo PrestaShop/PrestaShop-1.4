@@ -3,7 +3,8 @@
 	<name>socolissimo</name>
 	<displayName>So Colissimo</displayName>
 	<version>2.0</version>
-	<description>Offer to your customers, different delivery methods with LaPoste.</description>
+	<description>Offer your customers, different delivery methods with LaPoste.</description>
+	<author></author>
 	<tab>shipping_logistics</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
