@@ -10,9 +10,9 @@
 	font-size: 1.1em;
     margin: 1em 0;
 	text-transform: none;
-	height: 14px;
 	line-height: 1.2em;
 	padding: 0;
+	padding-bottom: 10px;
 	background: none;
 	color: #5D717E
 }
@@ -27,3 +27,4 @@
     padding-left: 0;
     text-align: center;
 }
+
