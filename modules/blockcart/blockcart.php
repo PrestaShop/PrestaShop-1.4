@@ -35,6 +35,7 @@ class BlockCart extends Module
 		$this->name = 'blockcart';
 		$this->tab = 'front_office_features';
 		$this->version = '1.2';
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 

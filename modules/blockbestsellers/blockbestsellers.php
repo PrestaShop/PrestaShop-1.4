@@ -38,6 +38,7 @@ class BlockBestSellers extends Module
 			$this->name = 'blockbestsellers';
 			$this->tab = 'front_office_features';
 			$this->version = '1.1';
+		$this->author = 'Prestashop';
 			parent::__construct();
 
 			$this->displayName = $this->l('Top seller block');

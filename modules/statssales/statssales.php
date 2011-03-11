@@ -41,6 +41,7 @@ class StatsSales extends ModuleGraph
         $this->name = 'statssales';
         $this->tab = 'analytics_stats';
         $this->version = 1.0;
+		$this->author = 'Prestashop';
 		
 		parent::__construct();
 		

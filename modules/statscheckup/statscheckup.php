@@ -35,6 +35,7 @@ class StatsCheckUp extends Module
         $this->name = 'statscheckup';
         $this->tab = 'analytics_stats';
         $this->version = 1.0;
+		$this->author = 'Prestashop';
 
         parent::__construct();
 		

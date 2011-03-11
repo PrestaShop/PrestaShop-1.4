@@ -43,6 +43,7 @@ class StatsBestVouchers extends ModuleGrid
 		$this->name = 'statsbestvouchers';
 		$this->tab = 'analytics_stats';
 		$this->version = 1.0;
+		$this->author = 'Prestashop';
 		
 		$this->_defaultSortColumn = 'ca';
 		$this->_defaultSortDirection = 'DESC';

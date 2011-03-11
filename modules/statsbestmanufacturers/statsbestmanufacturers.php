@@ -43,6 +43,7 @@ class StatsBestManufacturers extends ModuleGrid
 		$this->name = 'statsbestmanufacturers';
 		$this->tab = 'analytics_stats';
 		$this->version = '1.0';
+		$this->author = 'Prestashop';
 		
 		$this->_defaultSortColumn = 'sales';
 		$this->_emptyMessage = $this->l('Empty recordset returned');

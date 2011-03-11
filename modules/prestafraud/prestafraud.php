@@ -42,7 +42,8 @@ class PrestaFraud extends Module
 		$this->name = 'prestafraud';
 	 	$this->tab = 'payment_security';
 		$this->version = '0.99';
-		
+		$this->author = 'Prestashop';
+	
 		parent::__construct();
 
 		$this->displayName = 'Presta-Fraud';

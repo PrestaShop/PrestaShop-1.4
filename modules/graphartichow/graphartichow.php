@@ -49,6 +49,7 @@ class GraphArtichow extends ModuleGraphEngine
 	        $this->name = 'graphartichow';
 	        $this->tab = 'administration';
 	        $this->version = 1.0;
+		$this->author = 'Prestashop';
 			
 	        Module::__construct();
 			

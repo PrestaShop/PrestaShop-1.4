@@ -67,6 +67,7 @@ class Tm4b extends Module
 		$this->description = $this->l('Sends an SMS for each new order');
 		$this->tab = 'administration';
 		$this->version = 1.1;
+		$this->author = 'Prestashop';
 		
 		parent::__construct();
 		

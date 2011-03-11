@@ -36,6 +36,7 @@ class productsCategory extends Module
  	{
  	 	$this->name = 'productscategory';
  	 	$this->version = '1.3';
+		$this->author = 'Prestashop';
  	 	$this->tab = 'front_office_features';
 		
 		parent::__construct();

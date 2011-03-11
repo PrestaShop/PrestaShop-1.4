@@ -32,6 +32,7 @@ class VatNumber extends Module
 		$this->name = 'vatnumber';
 		$this->tab = 'billing_invoicing';
 		$this->version = 1.0;
+		$this->author = 'Prestashop';
 		
 		parent::__construct();
 		

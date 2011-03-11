@@ -35,6 +35,7 @@ class BlockPaymentLogo extends Module
 		$this->name = 'blockpaymentlogo';
 		$this->tab = 'front_office_features';
 		$this->version = 0.2;
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 		

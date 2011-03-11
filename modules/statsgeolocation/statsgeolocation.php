@@ -38,6 +38,7 @@ class StatsGeoLocation extends Module
 		$this->name = 'statsgeolocation';
 		$this->tab = 'analytics_stats';
 		$this->version = 1.0;
+		$this->author = 'Prestashop';
 		
 		parent::__construct();
 		

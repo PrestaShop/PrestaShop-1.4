@@ -38,6 +38,7 @@ class BlockViewed extends Module
 		$this->name = 'blockviewed';
 		$this->tab = 'front_office_features';
 		$this->version = 0.9;
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 

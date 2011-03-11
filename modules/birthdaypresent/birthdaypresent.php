@@ -37,6 +37,7 @@ class BirthdayPresent extends Module
         $this->name = 'birthdaypresent';
         $this->tab = 'pricing_promotion';
         $this->version = 1.0;
+		$this->author = 'Prestashop';
 		
 		parent::__construct();
 		

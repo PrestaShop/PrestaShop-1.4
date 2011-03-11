@@ -10,6 +10,7 @@ class GAnalytics extends Module
 	 	$this->name = 'ganalytics';
 	 	$this->tab = 'analytics_stats';
 	 	$this->version = '1.3';
+		$this->author = 'Prestashop';
         $this->displayName = 'Google Analytics';
 		
 	 	parent::__construct();

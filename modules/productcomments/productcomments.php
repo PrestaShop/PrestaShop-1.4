@@ -43,6 +43,7 @@ class ProductComments extends Module
 		$this->name = 'productcomments';
 		$this->tab = 'front_office_features';
 		$this->version = '2.1';
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 

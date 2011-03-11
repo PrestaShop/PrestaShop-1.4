@@ -35,6 +35,7 @@ class BlockMyAccount extends Module
 		$this->name = 'blockmyaccount';
 		$this->tab = 'front_office_features';
 		$this->version = '1.2';
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 

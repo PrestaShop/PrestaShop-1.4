@@ -50,6 +50,7 @@ class BlockAdvertising extends Module
 		$this->name = 'blockadvertising';
 		$this->tab = 'advertising_marketing';
 		$this->version = 0.2;
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 

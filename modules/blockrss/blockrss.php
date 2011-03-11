@@ -44,6 +44,7 @@ class Blockrss extends Module
 		$this->description = $this->l('Adds a block displaying an RSS feed');
 
 		$this->version = '1.0';
+		$this->author = 'Prestashop';
 		$this->error = false;
 		$this->valid = false;
  	}

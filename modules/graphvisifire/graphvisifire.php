@@ -52,6 +52,7 @@ class GraphVisifire extends ModuleGraphEngine
 	        $this->name = 'graphvisifire';
 	        $this->tab = 'administration';
 	        $this->version = 1.0;
+		$this->author = 'Prestashop';
 
 	        Module::__construct();
 			

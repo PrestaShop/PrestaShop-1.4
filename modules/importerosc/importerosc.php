@@ -9,6 +9,7 @@ class importerosc extends ImportModule
 		$this->name = 'importerosc';
 		$this->tab = 'migration_tools';
 		$this->version = '1.0';
+		$this->author = 'Prestashop';
 		$this->theImporter = 1;
 
 		parent::__construct ();

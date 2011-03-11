@@ -38,6 +38,7 @@ class StatsRegistrations extends ModuleGraph
         $this->name = 'statsregistrations';
         $this->tab = 'analytics_stats';
         $this->version = 1.0;
+		$this->author = 'Prestashop';
 			
 		parent::__construct();
 		

@@ -49,6 +49,7 @@ class ThemeInstallator extends Module
 	{
 		$this->name = 'themeinstallator';
 		$this->version = '1.3';
+		$this->author = 'Prestashop';
 		if (version_compare(_PS_VERSION_, 1.4) >= 0)
 			$this->tab = 'administration';
 		else

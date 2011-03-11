@@ -34,6 +34,7 @@ class BlockCms extends Module
 		$this->name = 'blockcms';
 		$this->tab = 'front_office_features';
 		$this->version = 1.1;
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 

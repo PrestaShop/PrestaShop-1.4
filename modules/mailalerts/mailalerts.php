@@ -45,6 +45,7 @@ class MailAlerts extends Module
 		$this->name = 'mailalerts';
 		$this->tab = 'administration';
 		$this->version = '2.2';
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 		

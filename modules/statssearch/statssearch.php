@@ -39,6 +39,7 @@ class StatsSearch extends ModuleGraph
         $this->name = 'statssearch';
         $this->tab = 'analytics_stats';
         $this->version = 1.0;
+		$this->author = 'Prestashop';
 		
 		$this->_query = '
 		SELECT ss.`keywords`, COUNT(TRIM(ss.`keywords`)) as occurences, MAX(results) as total

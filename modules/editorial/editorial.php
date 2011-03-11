@@ -38,6 +38,7 @@ class Editorial extends Module
 		$this->name = 'editorial';
 		$this->tab = 'front_office_features';
 		$this->version = '1.6';
+		$this->author = 'Prestashop';
 		
 		parent::__construct();
 

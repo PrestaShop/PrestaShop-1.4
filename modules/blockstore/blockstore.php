@@ -35,6 +35,7 @@ class BlockStore extends Module
         $this->name = 'blockstore';
         $this->tab = 'front_office_features';
         $this->version = 1.0;
+		$this->author = 'Prestashop';
 
         parent::__construct();
 

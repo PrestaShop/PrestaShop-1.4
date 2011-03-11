@@ -11,6 +11,7 @@ class shopimporter extends ImportModule
 		$this->name = 'shopimporter';
 		$this->tab = 'migration_tools';
 		$this->version = '1.0';
+		$this->author = 'Prestashop';
 
 		parent::__construct ();
 

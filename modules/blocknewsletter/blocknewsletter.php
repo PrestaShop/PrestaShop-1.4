@@ -42,6 +42,7 @@ class Blocknewsletter extends Module
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your contacts ?');
 
 		$this->version = '1.4';
+		$this->author = 'Prestashop';
 		$this->error = false;
 		$this->valid = false;
 		$this->_files = array(

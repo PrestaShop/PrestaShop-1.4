@@ -35,6 +35,7 @@ class BlockCategories extends Module
 		$this->name = 'blockcategories';
 		$this->tab = 'front_office_features';
 		$this->version = '2.0';
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 

@@ -35,6 +35,7 @@ class BlockSpecials extends Module
         $this->name = 'blockspecials';
         $this->tab = 'pricing_promotion';
         $this->version = 0.8;
+		$this->author = 'Prestashop';
 
 		parent::__construct();
 
