@@ -27,7 +27,7 @@
 
 /**
  * @author Nans Pellicari - Prestashop
- * @version 1.1
+ * @version 1.3
  */
 class TwengaFieldsOrderExist extends TwengaFieldsOrderValidate
 {}

@@ -30,7 +30,7 @@
  * See details for more infos.
  * 
  * @author Nans Pellicari - Prestashop
- * @version 1.1
+ * @version 1.3
  */
 class TwengaObj
 {

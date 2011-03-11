@@ -31,7 +31,7 @@
  * 2. activate a tracking for order process if user has been used twenga engine,
  * 3. submit a xml feed of shop products to Twenga. 
  * @author Nans Pellicari - Prestashop
- * @version 1.1
+ * @version 1.3
  */
 
 class Twenga extends PaymentModule
@@ -108,7 +108,7 @@ class Twenga extends PaymentModule
 		$this->token = Tools::getValue('token');
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.1';
+	 	$this->version = '1.3';
 		
 	 	parent::__construct();
 		
@@ -677,11 +677,11 @@ class Twenga extends PaymentModule
 					
 					// required Fields
 					$product_node->addChild('product_url', $product_values['product_url']);
-					$product_node->addChild('designation', $product_values['designation']);
+					$product_node->addChild('designation', '<![CDATA['.$product_values['designation'].']]>');
 					$product_node->addChild('price', $product_values['price']);
-					$product_node->addChild('category', $product_values['category']);
+					$product_node->addChild('category', '<![CDATA['.$product_values['category'].']]>');
 					$product_node->addChild('image_url', $product_values['image_url']);
-					$product_node->addChild('description', $product_values['description']);
+					$product_node->addChild('description', '<![CDATA['.$product_values['description'].']]>');
 					$product_node->addChild('brand', $product_values['brand']);
 					
 					// optionnals fields
@@ -698,7 +698,9 @@ class Twenga extends PaymentModule
 				}
 			}
 		}
-		return $xml->asXML();
+		$str_xml = $xml->asXML();
+		$str_xml = str_replace(array('&lt;![CDATA[', ']]&gt;', '&#13;'), array('<![CDATA[', ']]>', ''), $str_xml);
+		return $str_xml;
 	}
 	/**
 	 * @param Product $product to get the product properties
@@ -738,7 +740,6 @@ class Twenga extends PaymentModule
 		$category = new Category((int)$product->id_category_default, $lang);
 		$category_path = ((isset($category->id) AND $category->id) ? Tools::getFullPath((int)($category->id), $product->name[$lang]) : Tools::getFullPath((int)($product->id_category_default), $product->name[$lang]));
 		$category_path = (Configuration::get('PS_NAVIGATION_PIPE') != false && Configuration::get('PS_NAVIGATION_PIPE') !== '>' ) ? str_replace(Configuration::get('PS_NAVIGATION_PIPE'), '>', $category_path) : $category_path;
-		
 		// image tag
 		$id_image = (isset($combination['id_image'])) ? $combination['id_image'] : 0;
 		if($id_image === 0)
@@ -759,14 +760,15 @@ class Twenga extends PaymentModule
 		$upc_ean = strlen((string)$product->ean13) == 13 ? $product->ean13 : '';
 		
 		$arr_return['product_url'] = $link->getProductLink((int)$product->id, $product->link_rewrite[$lang], $product->ean13, $lang);
-		$arr_return['designation'] = $product->name[$lang].' '.Manufacturer::getNameById($product->id_manufacturer).' '.implode(' ', $model);
+		$arr_return['designation'] = Tools::htmlentitiesUTF8($product->name[$lang].' '.Manufacturer::getNameById($product->id_manufacturer).' '.implode(' ', $model));
 		$arr_return['price'] = $price;
-		$arr_return['category'] = htmlspecialchars(strip_tags($category_path), ENT_QUOTES, 'utf-8');
+		$arr_return['category'] = Tools::htmlentitiesUTF8(strip_tags($category_path));
 		$arr_return['image_url'] = $link->getImageLink($product->link_rewrite[$lang], $product->id.'-'.$id_image, 'large');
 		
 		// Must description added since Twenga-module v1.1
 		$arr_return['description'] = is_array($product->description) ? strip_tags($product->description[$lang]) : strip_tags($product->description);
 		$arr_return['description'] = trim($arr_return['description'].' '.strip_tags(implode(', ', $str_features)));
+		$arr_return['description'] = Tools::htmlentitiesUTF8($arr_return['description']);
 		$arr_return['brand'] = Manufacturer::getNameById($product->id_manufacturer);
 		$arr_return['merchant_id'] = $product->id;
 		$arr_return['manufacturer_id'] = $product->id_manufacturer;

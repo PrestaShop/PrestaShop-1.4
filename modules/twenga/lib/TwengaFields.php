@@ -36,7 +36,7 @@
  * - use the twenga API method and throw exceptions if error or exceptions occurred.
  * - Transform the xml response into PHP values.
  * @author Nans Pellicari - Prestashop
- * @version 1.1
+ * @version 1.3
  */
 abstract class TwengaFields
 {
