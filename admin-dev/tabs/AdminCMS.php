@@ -264,7 +264,7 @@ class AdminCMS extends AdminTab
 			{
 				$admin_dir = dirname($_SERVER['PHP_SELF']);
 				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
-				$redir .= '&adtoken='.Tools::encrypt('PreviewCMS'.$cms->id).'&ad='.$admin_dir;
+				$redir .= '?adtoken='.Tools::encrypt('PreviewCMS'.$cms->id).'&ad='.$admin_dir;
 			}
 			Tools::redirectAdmin($redir);
 		}
