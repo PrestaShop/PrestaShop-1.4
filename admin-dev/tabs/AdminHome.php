@@ -420,7 +420,15 @@ class AdminHome extends AdminTab
 				</ul>
 			</div>';
 			if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))
-				echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 450px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
+				echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 300px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
+
+		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+		$content = @file_get_contents('https://www.prestashop.com/partner/paypal-advise.php?id_lang='.$cookie->id_lang, false, $context);
+		$content = explode('|', $content);
+		if ($content[0] == 'OK')
+			echo $content[1];
+
+
 		echo '</div>
 		<div class="clear"></div>';
 	
