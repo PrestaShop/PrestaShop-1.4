@@ -990,7 +990,7 @@ INSERT INTO `PREFIX_timezone` (`name`) VALUES ('Africa/Abidjan'),('Africa/Accra'
 
 INSERT INTO `PREFIX_group` (`id_group`, `reduction`, `date_add`, `date_upd`) VALUES	(1, 0, NOW(), NOW());
 
-INSERT INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`) VALUES	(1, 1, 'Default'),(1, 2, 'Défaut'),(1, 3, 'Predeterminado'),(1, 4, 'Fehler'),(1, 5, 'Default');
+INSERT INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`) VALUES	(1, 1, 'Default'),(1, 2, 'Défaut'),(1, 3, 'Predeterminado'),(1, 4, 'Default'),(1, 5, 'Default');
 
 INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES (1, 1);
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());
