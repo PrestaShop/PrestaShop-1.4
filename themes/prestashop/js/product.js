@@ -190,18 +190,9 @@ function updateDisplay()
 		{
 			//display the 'last quantities' message
 			$('#last_quantities').show('slow');
-		}
-		else
-		{
-			//hide the 'last quantities' message
-			$('#last_quantities').hide('slow');
-		}
-
-		//display the quantities of pieces (only if allowed)
-		if (quantitiesDisplayAllowed)
-		{
 			$('#pQuantityAvailable:hidden').show('slow');
 			$('#quantityAvailable').text(quantityAvailable);
+			
 			if(quantityAvailable < 2)
 			{
 				$('#quantityAvailableTxt').show();
@@ -212,6 +203,12 @@ function updateDisplay()
 				$('#quantityAvailableTxt').hide();
 				$('#quantityAvailableTxtMultiple').show();
 			}
+		}
+		else
+		{
+			//hide the 'last quantities' message
+			$('#last_quantities').hide('slow');
+			$('#pQuantityAvailable:visible').hide('slow');
 		}
 	}
 	else
