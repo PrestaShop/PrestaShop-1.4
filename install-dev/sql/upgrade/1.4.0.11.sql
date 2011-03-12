@@ -33,4 +33,4 @@ CREATE TABLE `PREFIX_import_match` (
   PRIMARY KEY (`id_import_match`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
-/* PHP:add_new_tab(AdminLogs, Log, 9); */;
+/* PHP:add_new_tab(AdminLogs, en:Log|fr:Log|es:Log|de:Log|it:Log,  9); */;

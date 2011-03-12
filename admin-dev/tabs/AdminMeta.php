@@ -50,6 +50,7 @@ class AdminMeta extends AdminTab
 			'PS_SHOP_DOMAIN' => array('title' => $this->l('Shop domain name'), 'desc' => $this->l('Domain name of your shop, used as a canonical URL (e.g., www.myshop.com). Keep it blank if you don\'t know what to do.'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 30, 'default' => ''),
 			'PS_SHOP_DOMAIN_SSL' => array('title' => $this->l('Shop domain name for SSL'), 'desc' => $this->l('Domain name for the secured area of your shop, used as a canonical URL (e.g., secure.myshop.com). Keep it blank if you don\'t know what to do.'), 'validation' => 'isUrl', 'type' => 'text', 'size' => 30, 'default' => ''),
 			'PS_REWRITING_SETTINGS' => array('title' => $this->l('Friendly URL'), 'desc' => $this->l('Enable only if your server allows URL rewriting (recommended)').'<p class="hint clear" style="display: block;">'.$this->l('If you turn on this feature, you must').' <a href="?tab=AdminGenerator&token='.Tools::getAdminToken('AdminGenerator'.(int)(Tab::getIdFromClassName('AdminGenerator')).(int)$cookie->id_employee).'">'.$this->l('generate a .htaccess file').'</a></p><div class="clear"></div>', 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_CANONICAL_REDIRECT' => array('title' => $this->l('Automatically redirect to Canonical url'), 'desc' => $this->l('Recommended but your theme must be compliant'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 		);
 		if (!Tools::getValue('__PS_BASE_URI__'))
 			$_POST['__PS_BASE_URI__'] = __PS_BASE_URI__;

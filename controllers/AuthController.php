@@ -150,7 +150,10 @@ class AuthControllerCore extends FrontController
 					{
 						$customer->active = 1;
 						/* New Guest customer */
-						$customer->is_guest = !Tools::getValue('is_new_customer', 1);
+						if (Tools::isSubmit('is_new_customer'))
+							$customer->is_guest = !Tools::getValue('is_new_customer', 1);
+						else
+							$customer->is_guest = 0;
 						if (!$customer->add())
 							$this->errors[] = Tools::displayError('an error occurred while creating your account');
 						else

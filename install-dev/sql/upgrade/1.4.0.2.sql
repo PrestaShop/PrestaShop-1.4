@@ -679,11 +679,10 @@ CREATE TABLE `PREFIX_webservice_permission` (
 /* PHP:reorderpositions(); */;
 /* PHP:update_image_size_in_db(); */;
 /* PHP:update_order_details(); */;
-/* PHP:add_new_tab(AdminInformation, Informations, 9); */;
-/* PHP:add_new_tab(AdminPerformance, Performance, 8); */;
-/* PHP:add_new_tab(AdminCustomerThreads, Customer Service, 29); */;
-/* PHP:add_new_tab(AdminWebservice, Web service, 8); */;
-/* PHP:add_new_tab(AdminAddonsCatalog, Modules & themes catalog, 7); */;
-/* PHP:add_new_tab(AdminAddonsMyAccount, My Account, 7); */;
-/* PHP:add_new_tab(AdminThemes, Themes, 7); */;
-
+/* PHP:add_new_tab(AdminInformation, en:Configuration Information|fr:Informations|es:Informations|it:Informazioni di configurazione|de:Konfigurationsinformationen,  9); */;
+/* PHP:add_new_tab(AdminCustomerThreads, en:Customer Service|de:Kundenservice|fr:SAV|es:Servicio al cliente|it:Servizio clienti,  29); */;
+/* PHP:add_new_tab(AdminAddonsCatalog, fr:Catalogue de modules et thèmes|de:Module und Themenkatalog|en:Modules & Themes Catalog|it:Moduli & Temi catalogo,  7); */;
+/* PHP:add_new_tab(AdminAddonsMyAccount, it:Il mio Account|de:Mein Konto|fr:Mon compte|en:My Account,  7); */;
+/* PHP:add_new_tab(AdminPerformance, de:Leistung|en:Performance|it:Performance|fr:Performances|es:Rendimiento,  8); */;
+/* PHP:add_new_tab(AdminThemes, es:Temas|it:Temi|de:Themen|en:Themes|fr:Thèmes,  7); */;
+/* PHP:add_new_tab(AdminWebservice, fr:Service web|es:Web service|en:Webservice|de:Webservice|it:Webservice,  8); */;

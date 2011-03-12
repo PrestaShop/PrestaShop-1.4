@@ -93,9 +93,10 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'regenerate_level_depth.php');
 // add a new tab
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_new_tab.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_module_to_hook.php');
-
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_for_13version.php');
 
 //old version detection
+global $oldversion;
 $oldversion = false;
 if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
 {

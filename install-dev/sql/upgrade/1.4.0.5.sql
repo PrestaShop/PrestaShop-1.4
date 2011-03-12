@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_help_access` (
   UNIQUE KEY `label` (`label`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
-/* PHP:add_new_tab(AdminTaxRulesGroup, Taxes Rules, 4); */;
+/* PHP:add_new_tab(AdminTaxRulesGroup, it:Regimi fiscali|es:Reglas de Impuestos|fr:Règles de taxes|de:Steuerregeln|en:Tax Rules,  4); */;
 /* PHP:generate_ntree(); */;
 /* PHP:generate_tax_rules(); */;
 /* PHP:id_currency_country_fix(); */;

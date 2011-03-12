@@ -64,4 +64,4 @@ ALTER TABLE `PREFIX_country` ADD `id_currency` INT NOT NULL DEFAULT '0' AFTER `i
 /* PHP:group_reduction_column_fix(); */;
 /* PHP:ecotax_tax_application_fix(); */;
 /* PHP:alter_cms_block(); */;
-/* PHP:add_new_tab(AdminGeolocation, Geolocation, 8); */;
+/* PHP:add_new_tab(AdminGeolocation, es:Geolocalización|it:Geolocalizzazione|en:Geolocation|de:Geotargeting|fr:Géolocalisation,  8); */;

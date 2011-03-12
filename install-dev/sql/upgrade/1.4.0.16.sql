@@ -26,7 +26,11 @@ UPDATE `PREFIX_configuration` SET name = 'PS_GEOLOCATION_BEHAVIOR' WHERE name = 
 UPDATE `PREFIX_configuration` SET name = 'PS_GEOLOCATION_WHITELIST' WHERE name = 'PS_GEOLOCALIZATION_WHITELIST';
 UPDATE `PREFIX_tab` SET class_name = 'AdminGeolocation' WHERE class_name = 'AdminGeolocalization';
 
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PS_CANONICAL_REDIRECT', '0', NOW(), NOW());
 
 /* PHP:add_module_to_hook(blockcategories, afterCreateHtaccess); */;
-/* PHP:add_new_tab(AdminHome, Home, -1); */;
+/* PHP:add_new_tab(AdminHome, en:Home|fr:Accueil|es:Home|de:Home|it:Home,  -1); */;
+/* PHP:add_new_tab(AdminStockMvt, de:Lagerbewegungen|fr:Mouvements de Stock|it:Movimenti magazzino|en:Stock Movements,  1); */;
+/* PHP:update_for_13version(); */;
 
