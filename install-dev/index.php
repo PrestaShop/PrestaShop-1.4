@@ -218,6 +218,9 @@ if ($lm->getIncludeTradFilename())
 <div id="loaderSpace">
 	<div id="loader">&nbsp;</div>
 </div>
+<div id="upgradeDetails" style="display: none; font-size: 10px; color: #FFF; text-align: right;"><b><?php echo lang('Upgrade in progress').'</b> - '.lang('Current query:').' '; ?>
+	<span id="upgradeDetailsContent"></span>
+</div>
 
 <div id="leftpannel">
 	<h1>
@@ -779,8 +782,134 @@ if ($lm->getIncludeTradFilename())
 			<p><?php echo lang('Please backup the database and application files.'); ?></p>
 			<p><?php echo lang('When your files and database are saving in an other support, please certify that your shop is really backed up.'); ?><br /><br /></p>
 			<div id="disclaimerDivCertify">
-				<input id="btDisclaimerOk" type="checkbox" value="1" style="vertical-align: middle;" />
+				<input id="btDisclaimerOk" type="checkbox" value="1" style="vertical-align: middle; width: 16px; height: 16px;" />
 				<label for="btDisclaimerOk" style="font-weight: bold; color: #CC0000;"><?php echo lang('I certify that I backed up my database and application files. I assume all responsibility for any data loss or damage related to this upgrade.'); ?></label>
+			</div>
+			<div id="upgradeProcess" style="display: none;">
+				<?php 
+				
+				function sortnatversion($a, $b)
+				{
+					return strnatcmp($a['version'], $b['version']);
+				}
+				
+				echo '<br /><br />
+				<h2>'.lang('Details about this upgrade').' (v'.INSTALL_VERSION.')</h2>
+				<p>'.
+				lang('Thank you, you will be able to continue the upgrade process by clicking on the "Next" button.').'<br /><br />'.
+				lang('PrestaShop is upgrading your shop one version after the other, the following upgrade files will be processed:').'
+				</p>';
+				
+				$upgradeFiles = array();
+				$upgradePath = INSTALL_PATH.'/sql/upgrade';
+				$majorReleases = 0;
+				if ($handle = opendir($upgradePath))
+				{					
+					while (false !== ($file = readdir($handle)))
+						if ($file != '.' AND $file != '..')
+						{
+							$version = str_replace('.sql', '', $file);							
+							if (version_compare($version, _PS_VERSION_) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
+							{
+								$major = false;
+								if (in_array($version, array('0.9.7.2', '1.0.0.8', '1.1.0.5', '1.2.5.0', '1.3.0.10', '1.4.0.16')))
+								{
+									$majorReleases++;
+									$major = true;
+								}
+							
+								$upgradeFiles[] = array('instructions' => (int)substr_count(file_get_contents($upgradePath.'/'.$file), ';'), 
+								'version' => str_replace('.sql', '', $file), 'is_major' => $major);
+							}
+						}
+					closedir($handle);
+					
+					if (sizeof($upgradeFiles))
+					{
+						echo '
+						<table cellpadding="5" border="1" style="font-size: 11px; margin-top: 10px;">
+							<tr>
+								<th>'.lang('Upgrade file').'</th>
+								<th style="width: 100px;">'.lang('Modifications to process').'</th>
+							</tr>';					
+						
+						uasort($upgradeFiles, 'sortnatversion');
+						$totalInstructions = 0;
+						foreach ($upgradeFiles AS $file)
+						{
+							echo '<tr><td style="'.($file['is_major'] ? 'font-weight: bold;' : 'padding-left: 12px;').'">v'.$file['version'].($file['is_major'] ? ' '.lang('(major)') : '').'</td><td style="text-align: right; padding-right: 5px;">'.(int)$file['instructions'].'</td></tr>';
+							$totalInstructions += (int)$file['instructions'];
+						}
+						echo '<tr style="font-weight: bold;"><td>'.lang('TOTAL').'</td><td style="text-align: right; padding-right: 5px;">'.(int)$totalInstructions.'</td></tr>';
+						echo '
+						</table>';
+						
+						$upgradeTime = $totalInstructions * 0.05;
+						$minutes = (int)($upgradeTime / 60);
+						$seconds = (int)($upgradeTime - ($minutes * 60));
+						
+						echo '<p><img src="../img/admin/time.gif" alt="" style="vertical-align: middle;" /> '.lang('Estimated time to complete the').' '.(int)$totalInstructions.' '.lang('modifications:').' <b style="font-size: 14px;">'.(int)$minutes.' '.($minutes > 1 ? lang('minutes') : lang('minute')).' '.(int)$seconds.' '.($seconds > 1 ? lang('seconds') : lang('second')).'</b><br />
+						<i style="font-size: 11px;">'.lang('Depending on your server and the size of your shop').'</i></p>';
+						
+						if ($majorReleases > 1)
+							echo '<p style="margin-top: 8px;"><b>'.lang('You did not update your shop for a while,').' '.(int)$majorReleases.' '.lang('stable releases have been made ​​available since.').'</b> '.lang('This is not a problem however the update may take several minutes, try to update your shop more frequently.').'</p>';
+					}
+					else
+						echo '<p>'.lang('No files to process, this might be an error.').'</p>';				
+				}
+				
+				$maxMemory = @ini_get('memory_limit');
+				$maxTime = @ini_get('max_execution_time');
+				$color = '#D9F2D0';
+				$textColor = 'green';
+				
+				if (str_replace('M', '', $maxMemory) < 16)
+					$color = '#FFDEB7';
+				if (str_replace('M', '', $maxMemory) < 8)
+					$color = '#FAE2E3';
+				if ($maxTime AND $maxTime <= 30)
+					$color = '#FFDEB7';
+				if ($maxTime AND $maxTime <= 20)
+					$color = '#FAE2E3';
+				$color = '#FFDEB7';
+				
+				echo '
+				<br />
+				<h2>'.lang('Hosting parameters').'</h2>
+				<p>'.lang('PrestaShop tries to automatically set the best settings for your server in order the update to be successful.').'</p>
+				<table cellpadding="5" border="1" style="font-size: 11px;">
+					<tr>
+						<th>'.lang('PHP parameter').'</th>
+						<th>'.lang('Description').'</th>
+						<th>'.lang('Current value').'</th>
+					</tr>
+					<tr>
+						<td>max_execution_time</td>
+						<td>'.lang('Maximum allowed time for the upgrade').'</td>
+						<td style="text-align: right;">'.ini_get('max_execution_time').' '.lang('seconds').'</td>
+					</tr>
+					<tr>
+						<td>memory_limit</td>
+						<td>'.lang('Maximum memory allowed for the upgrade').'</td>
+						<td style="text-align: right;">'.ini_get('memory_limit').'</td>
+					</tr>
+				</table>
+				<div style="font-weight: bold; background: '.$color.'; color: #000; padding: 10px; border: 1px solid #999; margin-top: 10px;">';
+				
+				if ($color == '#D9F2D0')
+					echo '<img src="../img/admin/ok.gif" alt="" style="vertical-align: middle;" /> '.lang('All your settings seem to be OK, go for it!');
+				elseif ($color == '#FFDEB7')
+					echo '<img src="../img/admin/warning.gif" alt="" style="vertical-align: middle;" /> '.lang('Beware, your settings look correct but are not optimal, if you encounter problems (upgrade too long, memory error...), please ask your hosting provider to increase the values of these parameters (max_execution_time & memory_limit).');
+				elseif ($color == '#FAE2E3')
+					echo '<img src="../img/admin/error2.png" alt="" style="vertical-align: middle;" /> '.lang('We strongly recommend that you inform your hosting provider to modify the settings before process to the update.');
+					
+				echo '
+				</div><br />
+				
+				<h2>'.lang('Let\'s go!').'</h2>
+				<p>'.lang('Click on the "Next" button to start the upgrade, this can take several minutes,').' <u style="font-weight: bold; text-decoration: underline;">'.lang('do not close the window and be patient.').'</u></p>';
+				
+				?>
 			</div>
 		</div>
 
@@ -792,9 +921,9 @@ if ($lm->getIncludeTradFilename())
 
 			<p>
 				<?php echo lang('If you have any questions, please visit our '); ?>
-				<a href="http://www.prestashop.com/doc/doku.php" target="_blank"><?php echo lang('Documentation Wiki'); ?></a>
+				<a href="http://www.prestashop.com/wiki" target="_blank"><?php echo lang('Documentation Wiki'); ?></a>
 				<?php echo lang('and/or'); ?>
-				<a href="http://www.prestashop.com/forum/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
+				<a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 
 			<h3 id="resultConfig_update" style="font-size: 20px; text-align: center; padding: 0px; display: none;"></h3>
@@ -841,13 +970,27 @@ if ($lm->getIncludeTradFilename())
 
 		<div class="sheet" id="sheet_end_update" style="padding:0px;">
 			<div style="padding:1em;">
-				<h2><?php echo lang('PrestaShop is ready!'); ?></h2>
-				<h3><?php echo lang('Your update is finished!'); ?></h3>
+				<h1><?php echo lang('Your update is completed!'); ?></h1>
+				<h3><?php echo lang('Your shop version is now').' '.INSTALL_VERSION; ?></h3>
 				<p class="fail" id="txtErrorUpdateSQL"></p>
 				<p><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
 				<div id="updateLog"></div>
-				<p><?php echo lang('You have just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
-				<h3><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
+				<p><?php echo lang('You have just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p><br />
+				
+				<?php
+				
+					if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))
+					{
+						echo '
+						<h2>'.lang('New features in PrestaShop v').INSTALL_VERSION.'</h2>
+						<iframe style="width: 595px; margin-top: 5px; padding: 5px; border: 1px solid #BBB;" src="http://www.prestashop.com/download/features.php?lang='.$lm->getIsoCodeSelectedLang().'&version='.INSTALL_VERSION.'">
+							<p>Your browser does not support iframes.</p>
+						</iframe>';
+					}
+
+				?>
+				
+				<h3 style="margin-top: 15px;"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
 				<a href="../" id="access_update" target="_blank">
 					<span class="title"><?php echo lang('Front Office'); ?></span>
 					<span class="description"><?php echo lang('Find your store as your future customers will see!'); ?></span>
@@ -856,8 +999,7 @@ if ($lm->getIncludeTradFilename())
 			</div>
 			<?php
 			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)): ?>
-
-			<iframe src="http://addons.prestashop.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore_update">
+			<iframe src="http://addons.prestashop.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang(); ?>" scrolling="no" id="prestastore_update">
 				<p>Your browser does not support iframes.</p>
 			</iframe>
 			<?php
@@ -881,4 +1023,3 @@ if ($lm->getIncludeTradFilename())
 </ul>
 </body>
 </html>
-

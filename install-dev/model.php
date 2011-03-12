@@ -26,6 +26,8 @@
 */
 
 @set_time_limit(0);
+@ini_set('max_execution_time', '0');
+@ini_set('memory_limit', '64M');
 require(dirname(__FILE__).'/../config/autoload.php');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
@@ -52,7 +54,6 @@ if(isset($_GET['method']))
 {
 	switch ($_GET['method'])
 	{
-
 		case 'checkConfig' :
 			include_once('xml/checkConfig.php');
 		break;
@@ -78,4 +79,3 @@ if(isset($_GET['method']))
 		break;
 	}
 }
-

@@ -895,6 +895,14 @@ function showUpdateLog(){
 // end upgrader
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //when ready....
+
+function updateUpgradeDetails(){
+	$('#upgradeDetailsContent').load('details.php');
+}
+
+var upgradeInProgress = 0;
+var refreshIntervalId = 0;
+
 $(document).ready(
 	function()
 	{
@@ -905,16 +913,41 @@ $(document).ready(
 		//ajax animation
 		$("#loader").ajaxStart(
 			function()
-			{
-				$(this).fadeIn();
-				$("#btNext[disabled!=1], #btBack[disabled!=1]").attr("disabled", "disabled").addClass("disabled").addClass("lockedForAjax");
+			{				
+				if (!upgradeInProgress)
+				{
+					$(this).fadeIn();
+					$("#btNext[disabled!=1], #btBack[disabled!=1]").attr("disabled", "disabled").addClass("disabled").addClass("lockedForAjax");
+				}
+				
+				// Show details about the upgrade
+				if (step == 7 && !upgradeInProgress)
+				{
+					upgradeInProgress = 1;
+					$('#upgradeDetails').show();
+					var refreshIntervalId = setInterval('updateUpgradeDetails()', 1000);
+					return;
+				}
 			}
 		);
 		$("#loader").ajaxComplete(
 			function()
 			{
-				$(this).fadeOut();
-				$(".lockedForAjax").removeAttr("disabled").removeClass("disabled").removeClass("lockedForAjax");
+				// Hide details about the upgrade
+				if (step == 9)
+				{
+					$('#upgradeDetails').hide();
+					$(this).fadeOut();
+					$(".lockedForAjax").removeAttr("disabled").removeClass("disabled").removeClass("lockedForAjax");
+					clearInterval(refreshIntervalId);
+					return;
+				}
+				
+				if (!upgradeInProgress)
+				{
+					$(this).fadeOut();
+					$(".lockedForAjax").removeAttr("disabled").removeClass("disabled").removeClass("lockedForAjax");
+				}
 			}
 		);
 		//set actions on clicks
@@ -965,12 +998,20 @@ $(document).ready(
 		);
 		
 		//certification needed for upgrade
-		$("#btDisclaimerOk").click(function ()
+		$('#btDisclaimerOk').click(function()
 		{
-			upgradeCertify = true;
-			$("#btNext")
-				.removeAttr("disabled")
-				.removeClass("disabled");
+			if ($(this).attr('checked'))
+			{
+				upgradeCertify = true;
+				$('#btNext').removeAttr('disabled').removeClass('disabled');
+				$('#upgradeProcess').show(500);
+			}
+			else
+			{
+				upgradeCertify = false;
+				$('#btNext').attr('disabled', 'disabled').addClass('disabled');
+				$('#upgradeProcess').hide(500);
+			}
 		});
 		
 		//autocheck fields

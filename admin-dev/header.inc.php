@@ -73,6 +73,7 @@ echo '
 				'.Tools::substr($employee->firstname, 0, 1).'.&nbsp;'.htmlentities($employee->lastname, ENT_COMPAT, 'UTF-8').'
 				[ <a href="index.php?logout" id="header_logout"><span>'.translate('logout').'</span></a> ]
 				- <a href="'.__PS_BASE_URI__.'" id="header_foaccess" target="_blank" title="'.translate('View my shop').'"><span>'.translate('View my shop').'</span></a>
+				- <a href="index.php?tab=AdminEmployees&id_employee='.(int)$cookie->id_employee.'&updateemployee&token='.Tools::getAdminTokenLite('AdminEmployees').'" style="font-size: 10px;"><img src="../img/admin/employee.gif" alt="" /> '.translate('My preferences').'</a>
 			</span></div>
 			<div id="header_search">
 				<form method="post" action="index.php?tab=AdminSearch&token='.Tools::getAdminTokenLite('AdminSearch').'">
@@ -115,9 +116,6 @@ foreach (QuickAccess::getQuickAccesses((int)($cookie->id_lang)) AS $quick)
 }
 echo '			</select>
 			</div>
-			<a id="header_myaccount" href="index.php?tab=AdminEmployees&id_employee='.$cookie->id_employee.'&updateemployee&token='.Tools::getAdminTokenLite('AdminEmployees').'">
-				&nbsp;
-			</a>
 			<div class="flatclear">&nbsp;</div>
 			'.Module::hookExec('backOfficeTop').'
 			<ul id="menu">';

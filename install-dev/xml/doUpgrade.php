@@ -44,9 +44,9 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'invoicenumber.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'deliverynumber.php');
 // Set all groups for home category
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setallgroupsonhomecategory.php');
-// Set paiement module for each currency/country
+// Set payment module for each currency/country
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodule.php');
-// Set paiement module for each group
+// Set payment module for each group
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodulegroup.php');
 // Set discount for all categories
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setdiscountcategory.php');
@@ -233,6 +233,8 @@ foreach($sqlContent as $query)
 	$query = trim($query);
 	if(!empty($query))
 	{
+		Configuration::updateValue('PS_UPGRADE_CURRENT_SQL', $query);
+		
 		/* If php code have to be executed */
 		if (strpos($query, '/* PHP:') !== false)
 		{
@@ -279,8 +281,8 @@ foreach($sqlContent as $query)
 	</request>'."\n";
 	}
 }
+Configuration::deleteByName('PS_UPGRADE_CURRENT_SQL');
 Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 0);
 $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action result="ok" error="">'."\n";
 $result .= $requests;
 die($result.'</action>'."\n");
-

@@ -235,34 +235,34 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 
 			<!-- prices -->
 			{if $product->show_price AND !isset($restricted_country_mode) AND !$PS_CATALOG_MODE}
-			<p class="price">
-				{if !$priceDisplay || $priceDisplay == 2}
-					{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL)}
-					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(false, $smarty.const.NULL)}
-				{elseif $priceDisplay == 1}
-					{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL)}
-					{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(true, $smarty.const.NULL)}
-				{/if}
-				{if $product->on_sale}
-					<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
-					<span class="on_sale">{l s='On sale!'}</span>
-				{elseif $product->specificPrice AND $product->specificPrice.reduction AND $productPriceWithoutRedution > $productPrice}
-					<span class="discount">{l s='Reduced price!'}</span>
-				{/if}
-				<br />
-				<span class="our_price_display">
-				{if $priceDisplay >= 0 && $priceDisplay <= 2}
-					<span id="our_price_display">{convertPrice price=$productPrice}</span>
-						{if $tax_enabled}
-							{if $priceDisplay == 1}{l s='tax excl.'}{else}{l s='tax incl.'}{/if}
-						{/if}
-				{/if}
-				</span>
-				{if $priceDisplay == 2}
+				<p class="price">
+					{if !$priceDisplay || $priceDisplay == 2}
+						{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL)}
+						{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(false, $smarty.const.NULL)}
+					{elseif $priceDisplay == 1}
+						{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL)}
+						{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(true, $smarty.const.NULL)}
+					{/if}
+					{if $product->on_sale}
+						<img src="{$img_dir}onsale_{$lang_iso}.gif" alt="{l s='On sale'}" class="on_sale_img"/>
+						<span class="on_sale">{l s='On sale!'}</span>
+					{elseif $product->specificPrice AND $product->specificPrice.reduction AND $productPriceWithoutRedution > $productPrice}
+						<span class="discount">{l s='Reduced price!'}</span>
+					{/if}
 					<br />
-					<span id="pretaxe_price"><span id="pretaxe_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL)}</span>&nbsp;{l s='tax excl.'}</span>
-				{/if}
-				<br />
+					<span class="our_price_display">
+					{if $priceDisplay >= 0 && $priceDisplay <= 2}
+						<span id="our_price_display">{convertPrice price=$productPrice}</span>
+							{if $tax_enabled}
+								{if $priceDisplay == 1}{l s='tax excl.'}{else}{l s='tax incl.'}{/if}
+							{/if}
+					{/if}
+					</span>
+					{if $priceDisplay == 2}
+						<br />
+						<span id="pretaxe_price"><span id="pretaxe_price_display">{convertPrice price=$product->getPrice(false, $smarty.const.NULL)}</span>&nbsp;{l s='tax excl.'}</span>
+					{/if}
+					<br />
 				</p>
 				{if $product->specificPrice AND $product->specificPrice.reduction}
 					<p id="old_price"><span class="bold">
