@@ -925,7 +925,7 @@ $(document).ready(
 				{
 					upgradeInProgress = 1;
 					$('#upgradeDetails').show();
-					var refreshIntervalId = setInterval('updateUpgradeDetails()', 1000);
+					var refreshIntervalId = setInterval('updateUpgradeDetails()', 3000);
 					return;
 				}
 			}

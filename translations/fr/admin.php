@@ -2925,6 +2925,7 @@ $_LANGADM['AdminTabcc3787ca78f445f481069a4c047f7e7a'] = 'Choisissez une langue :
 $_LANGADM['index86bbc77fd75ac02c21b84a37b260eadd'] = 'Panneau d\'administration';
 $_LANGADM['index4236a440a662cc8253d7536e5aa17942'] = 'déconnexion';
 $_LANGADM['indexd70861cbe7f8c9a1241c39b3e7ef5ef2'] = 'Voir mon magasin';
+$_LANGADM['indexf84b4e2770ec98e3db2926cd49864d2f'] = 'Mes préférences';
 $_LANGADM['indexcbebc850f5f849e8956b5f8075f48f69'] = 'tout';
 $_LANGADM['index46f22f2a56ddd091f4b2b2c35c5ca989'] = 'catalogue';
 $_LANGADM['index4b6f7d34a58ba399f077685951d06738'] = 'clients';

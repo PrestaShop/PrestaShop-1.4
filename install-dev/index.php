@@ -852,7 +852,7 @@ if ($lm->getIncludeTradFilename())
 						<i style="font-size: 11px;">'.lang('Depending on your server and the size of your shop').'</i></p>';
 						
 						if ($majorReleases > 1)
-							echo '<p style="margin-top: 8px;"><b>'.lang('You did not update your shop for a while,').' '.(int)$majorReleases.' '.lang('stable releases have been made ​​available since.').'</b> '.lang('This is not a problem however the update may take several minutes, try to update your shop more frequently.').'</p>';
+							echo '<p style="margin-top: 8px;"><b>'.lang('You did not update your shop for a while,').' '.(int)$majorReleases.' '.lang('major releases have been made ​​available since.').'</b> '.lang('This is not a problem however the update may take several minutes, try to update your shop more frequently.').'</p>';
 					}
 					else
 						echo '<p>'.lang('No files to process, this might be an error.').'</p>';				
