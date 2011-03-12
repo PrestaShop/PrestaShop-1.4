@@ -861,16 +861,16 @@ abstract class ModuleCore
 		$xml = '<?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>'.$this->name.'</name>
-	<displayName>'.addslashes($this->displayName).'</displayName>
+	<displayName>'.html_entity_decode(addslashes($this->displayName), ENT_COMPAT, 'UTF-8').'</displayName>
 	<version>'.$this->version.'</version>
-	<description>'.html_entity_decode(addslashes($this->description), ENT_COMPAT, 'UTF-8').'</description>
-	<author>'.html_entity_decode(addslashes($this->author), ENT_COMPAT, 'UTF-8').'</author>
-	<tab>'.$this->tab.'</tab>'.(isset($this->confirmUninstall) ? "\n\t".'<confirmUninstall>'.$this->confirmUninstall.'</confirmUninstall>' : '').'
+	<description>'.html_entity_decode(addslashes(strip_tags($this->description)), ENT_COMPAT, 'UTF-8').'</description>
+	<author>'.html_entity_decode(addslashes(strip_tags($this->author)), ENT_COMPAT, 'UTF-8').'</author>
+	<tab>'.html_entity_decode(addslashes($this->tab), ENT_COMPAT, 'UTF-8').'</tab>'.(isset($this->confirmUninstall) ? "\n\t".'<confirmUninstall>'.$this->confirmUninstall.'</confirmUninstall>' : '').'
 	<is_configurable>'.(int)method_exists($this, 'getContent').'</is_configurable>
 	<need_instance>'.$need_instance.'</need_instance>'.(isset($this->limited_countries) ? "\n\t".'<limited_countries>'.(sizeof($this->limited_countries) == 1 ? $this->limited_countries[0] : '').'</limited_countries>' : '').'
 </module>';
 		if (is_writable(_PS_MODULE_DIR_.$this->name.'/'))
-			file_put_contents(_PS_MODULE_DIR_.$this->name.'/config.xml', $xml);
+			file_put_contents(_PS_MODULE_DIR_.$this->name.'/config.xml', utf8_encode($xml));
 	}
 }
 

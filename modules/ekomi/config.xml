@@ -4,6 +4,7 @@
 	<displayName>eKomi</displayName>
 	<version>0.8</version>
 	<description>Adds a eKomi block</description>
+	<author></author>
 	<tab>advertising_marketing</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
