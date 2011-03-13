@@ -323,7 +323,7 @@ function updateCartSummary(json)
 	$('.ajax_cart_quantity').html(nbrProducts);
 
 	// Cart summary
-	$('#summary_products_quantity').html(nbrProducts);
+	$('#summary_products_quantity').html(nbrProducts+' '+(nbrProducts > 1 ? txtProducts : txtProduct));
 	if (priceDisplayMethod != 0)
     	$('#total_product').html(formatCurrency(json.total_products, currencyFormat, currencySign, currencyBlank));
     else

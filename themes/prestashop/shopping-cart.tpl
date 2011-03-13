@@ -38,13 +38,15 @@
 	<p class="warning">{l s='This store has not accepted your new order.'}</p>
 {else}
 	<script type="text/javascript">
-<!--
+	// <![CDATA[
 	var baseDir = '{$base_dir_ssl}';
 	var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
 	var currencyRate = '{$currencyRate|floatval}';
 	var currencyFormat = '{$currencyFormat|intval}';
 	var currencyBlank = '{$currencyBlank|intval}';
--->
+	var txtProduct = "{l s='product'}";
+	var txtProducts = "{l s='products'}";
+	// ]]>
 	</script>
 	<p style="display:none" id="emptyCartWarning" class="warning">{l s='Your shopping cart is empty.'}</p>
 {if isset($lastProductAdded) AND $lastProductAdded}
@@ -64,7 +66,7 @@
 		{/if}
 	{/foreach}
 {/if}
-<p>{l s='Your shopping cart contains'} {$productNumber} {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</p>
+<p>{l s='Your shopping cart contains'} <span id="summary_products_quantity">{$productNumber} {if $productNumber == 1}{l s='product'}{else}{l s='products'}{/if}</span></p>
 <div id="order-detail-content" class="table_block">
 	<table id="cart_summary" class="std">
 		<thead>
