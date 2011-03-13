@@ -458,7 +458,7 @@ class FrontControllerCore
 		}
 		
 		self::$smarty->assign('css_files', $css_files);
-		self::$smarty->assign('js_files', $js_files);
+		self::$smarty->assign('js_files', array_unique($js_files));
 		self::$smarty->display(_PS_THEME_DIR_.'header.tpl');
 	}
 
