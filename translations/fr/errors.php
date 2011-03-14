@@ -105,6 +105,7 @@ $_ERRORS['71754079aaeefc5c6e745ddd59f8a35f'] = 'Commande gratuite';
 $_ERRORS['5184c06b447b8190fb16aa924b8dcc44'] = 'La base de données de géolocalisation n\'est pas disponible';
 $_ERRORS['fa91076b9d541478b7b21ccfb5a21c67'] = 'Le moteur de rendu choisi est indisponible';
 $_ERRORS['a3da36737ba25a2adeb7d7eacd47f319'] = 'Le moteur de tableau choisi est indisponible';
+$_ERRORS['4fc963e213bba362778f5c175eb4d5ff'] = 'AIDE';
 $_ERRORS['2a40dee7db23119fb502de3bd167b900'] = 'Les modèles HTML des mails ne peuvent pas contenir du code JavaScript. ';
 $_ERRORS['8657f8ff412ea8fc3135946769d64c13'] = 'Tentative de piratage';
 $_ERRORS['46b9e3665f187c739c55983f757ccda0'] = 'Je confirme ma commande';
