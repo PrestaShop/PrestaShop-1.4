@@ -65,10 +65,10 @@ else
 	$path = dirname(__FILE__).'/themes/';
 	if (empty($employee->bo_theme) OR !file_exists($path.$employee->bo_theme.'/admin.css'))
 	{
-		if (file_exists($path.'oldschool/admin.css'))
-			$employee->bo_theme = 'oldschool';
-		elseif (file_exists($path.'origins/admin.css'))
+		if (file_exists($path.'origins/admin.css'))
 			$employee->bo_theme = 'origins';
+		elseif (file_exists($path.'oldschool/admin.css'))
+			$employee->bo_theme = 'oldschool';
 		else
 			foreach (scandir($path) as $theme)
 				if ($theme[0] != '.' AND file_exists($path.$theme.'/admin.css'))
