@@ -505,6 +505,7 @@ $_FIELDS['TaxRule_c4da098c369f77a70643fa52972677be'] = 'id_estado';
 $_FIELDS['TaxRule_40d02093c848d33e14061b92e8a8fc94'] = 'id_condado';
 $_FIELDS['TaxRule_4fa58935f89ba281fd16309ceff69571'] = 'id_impuesto';
 $_FIELDS['TaxRule_4d69e396aeb3f372cbcead6c5c72c295'] = 'comportamiento_estado';
+$_FIELDS['TaxRule_2784d0e1605d73000473b7fe51adfe2f'] = 'comportamiento_condado';
 $_FIELDS['TaxRulesGroup_b068931cc450442b63f5b3d276ea4297'] = 'nombre';
 $_FIELDS['Webservice_c76a5e84e4bdee527e274ea30c680d79'] = 'activación';
 $_FIELDS['Zone_b068931cc450442b63f5b3d276ea4297'] = 'nombre';
