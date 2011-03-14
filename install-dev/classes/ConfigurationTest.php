@@ -159,6 +159,16 @@ class	ConfigurationTest
 		return self::test_dir($dir);
 	}
 	
+	static function		test_tools_v2_dir($dir)
+	{
+		return self::test_dir($dir);
+	}
+	
+	static function		test_cache_v2_dir($dir)
+	{
+		return self::test_dir($dir);
+	}
+	
 	static function		test_download_dir($dir)
 	{
 		return self::test_dir($dir);

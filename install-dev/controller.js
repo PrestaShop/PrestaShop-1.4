@@ -289,8 +289,7 @@ function verifyAndSetRequire(firsttime)
 			}
 			
 			if (!configIsOk) {
-				$('#btNext').attr('disabled', 'disabled');
-				$('#btNext').addClass('disabled');
+				$('#btNext').attr({'disabled':'disabled','class':'button little disabled'});
 				$('h3#resultConfig'+isUpdate).html(txtConfigIsNotOk).slideDown('slow');
 				$('h3#resultConfigHelper').show();
 				$("div#sheet_require"+isUpdate+" > ul").slideDown("1500");
