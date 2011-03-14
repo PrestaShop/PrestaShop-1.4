@@ -69,7 +69,7 @@ class OrderOpcControllerCore extends ParentOrderController
 									die(Tools::jsonEncode($return));
 								}
 								else
-									$this->errors[] = Tools::displayError('Error occurred updating cart.');
+									$this->errors[] = Tools::displayError('error occurred on update of cart');
 								if (sizeof($this->errors))
 									die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 								exit;
@@ -155,15 +155,15 @@ class OrderOpcControllerCore extends ParentOrderController
 							$address_invoice = ((int)(Tools::getValue('id_address_delivery')) == (int)(Tools::getValue('id_address_invoice')) ? $address_delivery : new Address((int)(Tools::getValue('id_address_invoice'))));
 							
 							if (!Address::isCountryActiveById((int)(Tools::getValue('id_address_delivery'))))
-								$this->errors[] = Tools::displayError('This address is not in a valid area.');
+								$this->errors[] = Tools::displayError('this address is not in a valid area');
 							elseif (!Validate::isLoadedObject($address_delivery) OR !Validate::isLoadedObject($address_invoice) OR $address_invoice->deleted OR $address_delivery->deleted)
-								$this->errors[] = Tools::displayError('This address is invalid.');
+								$this->errors[] = Tools::displayError('this address is not valid');
 							else
 							{
 								self::$cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
 								self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
 								if (!self::$cart->update())
-									$this->errors[] = Tools::displayError('An error occurred while updating your cart.');
+									$this->errors[] = Tools::displayError('an error occurred while updating your cart');
 								if (!sizeof($this->errors))
 								{
 									if (self::$cookie->id_customer)
@@ -366,7 +366,7 @@ class OrderOpcControllerCore extends ParentOrderController
 		
 		/* If some products have disappear */
 		if (!self::$cart->checkQuantities())
-			return '<p class="warning">'.Tools::displayError('An item in your cart is no longer available, you cannot proceed with your order.').'</p>';
+			return '<p class="warning">'.Tools::displayError('An item in your cart is no longer available, you cannot proceed with your order').'</p>';
 		
 		/* Check minimal amount */
 		$currency = Currency::getCurrency((int)self::$cart->id_currency);
@@ -375,7 +375,7 @@ class OrderOpcControllerCore extends ParentOrderController
 		$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
 		if ($orderTotal < $minimalPurchase)
 			return '<p class="warning">'.Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
-			' '.Tools::displayError('is required in order to validate your order.').'</p>';
+			' '.Tools::displayError('is required in order to validate your order').'</p>';
 		
 		/* Bypass payment step if total is 0 */
 		if (self::$cart->getOrderTotal() <= 0)
@@ -398,9 +398,9 @@ class OrderOpcControllerCore extends ParentOrderController
 		else
 			$groups = array(1);
 		if (!Address::isCountryActiveById((int)(self::$cart->id_address_delivery)))
-			$this->errors[] = Tools::displayError('This address is not in a valid area.');
+			$this->errors[] = Tools::displayError('this address is not in a valid area');
 		elseif (!Validate::isLoadedObject($address_delivery) OR $address_delivery->deleted)
-			$this->errors[] = Tools::displayError('This address is invalid.');
+			$this->errors[] = Tools::displayError('this address is not valid');
 		else
 		{
 			$carriers = Carrier::getCarriersForOrder((int)Address::getZoneById((int)($address_delivery->id)), $groups);

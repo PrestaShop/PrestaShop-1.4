@@ -72,16 +72,16 @@ class AdminReturn extends AdminTab
 							if (OrderReturn::deleteOrderReturnDetail($id_order_return, $id_order_detail, (int)(Tools::getValue('id_customization', 0))))
 								Tools::redirectAdmin($currentIndex.'&conf=4token='.$this->token);
 							else
-								$this->_errors[] = Tools::displayError('An error occurred while deleting an order return detail.');
+								$this->_errors[] = Tools::displayError('an error occurred while deleting an order return detail');
 						}
 						else
-							$this->_errors[] = Tools::displayError('You need at least one product.');
+							$this->_errors[] = Tools::displayError('you need at least one product');
 					}
 					else
-						$this->_errors[] = Tools::displayError('The order return is invalid.');
+						$this->_errors[] = Tools::displayError('the order return is invalid');
 				}
 				else
-					$this->_errors[] = Tools::displayError('The order return detail is invalid.');
+					$this->_errors[] = Tools::displayError('the order return detail is invalid');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -108,7 +108,7 @@ class AdminReturn extends AdminTab
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('No order return ID.');
+					$this->_errors[] = Tools::displayError('no order return ID.');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');

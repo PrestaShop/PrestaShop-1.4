@@ -123,21 +123,21 @@ class AdminPreferences extends AdminTab
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsGeneral);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (isset($_POST['submitShop'.$this->table]))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsShop);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (isset($_POST['submitAppearance'.$this->table]))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsAppearance);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (isset($_POST['submitThemes'.$this->table]))
 		{
@@ -148,13 +148,13 @@ class AdminPreferences extends AdminTab
 					if (rewriteSettingsFile(NULL, $val, NULL))
 						Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
 					else
-						$this->_errors[] = Tools::displayError('Cannot access settings file.');
+						$this->_errors[] = Tools::displayError('cannot access settings file');
 				}
 				else
-					$this->_errors[] = Tools::displayError('You must choose a graphical theme.');
+					$this->_errors[] = Tools::displayError('you must choose a graphical theme');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		parent::postProcess();
 	}
@@ -188,10 +188,10 @@ class AdminPreferences extends AdminTab
 				{
 					foreach ($languages as $language)
 						if (($value = Tools::getValue($field.'_'.$language['id_lang'])) == false AND (string)$value != '0')
-							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required');
 				}
 				elseif (($value = Tools::getValue($field)) == false AND (string)$value != '0')
-					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
+					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required');
 
 		/* Check fields validity */
 		foreach ($fields AS $field => $values)
@@ -200,11 +200,11 @@ class AdminPreferences extends AdminTab
 				foreach ($languages as $language)
 					if (Tools::getValue($field.'_'.$language['id_lang']) AND isset($values['validation']))
 						if (!Validate::$values['validation'](Tools::getValue($field.'_'.$language['id_lang'])))
-							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid.');
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid');
 			}
 			elseif (Tools::getValue($field) AND isset($values['validation']))
 				if (!Validate::$values['validation'](Tools::getValue($field)))
-					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid.');
+					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid');
 
 		/* Default value if null */
 		foreach ($fields AS $field => $values)

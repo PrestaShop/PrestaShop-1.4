@@ -35,12 +35,12 @@ if (!$cookie->isLogged())
 if (isset($_GET['id_order_slip']) AND Validate::isUnsignedId($_GET['id_order_slip']))
 	$orderSlip = new OrderSlip((int)($_GET['id_order_slip']));
 if (!isset($orderSlip) OR !Validate::isLoadedObject($orderSlip))
-    die(Tools::displayError('Order return not found'));
+    die(Tools::displayError('order return not found'));
 elseif ($orderSlip->id_customer != $cookie->id_customer)
-    die(Tools::displayError('Order return not found'));
+    die(Tools::displayError('order return not found'));
 $order = new Order((int)($orderSlip->id_order));
 if (!Validate::isLoadedObject($order))
-    die(Tools::displayError('Order not found'));
+    die(Tools::displayError('order not found'));
 $order->products = OrderSlip::getOrdersSlipProducts((int)($orderSlip->id), $order);
 $ref = NULL;
 PDF::invoice($order, 'D', false, $ref, $orderSlip);

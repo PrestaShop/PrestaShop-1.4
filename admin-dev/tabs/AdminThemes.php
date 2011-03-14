@@ -176,7 +176,7 @@ class AdminThemes extends AdminPreferences
 			$xml=@simplexml_load_file(_PS_ALL_THEMES_DIR_.$theme_dir.'/config.xml');
 			if (!$xml)
 			{
-				$this->_errors[] = Tools::displayError('config.xml is not a valid xml file in your theme path.').'<br/>';
+				$this->_errors[] = Tools::displayError('config.xml in your theme path is not a valid xml file').'<br/>';
 			}
 		}
 		// will be set to false if any version node in xml is correct

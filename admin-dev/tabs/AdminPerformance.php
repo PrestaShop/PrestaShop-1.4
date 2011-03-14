@@ -45,7 +45,7 @@ class AdminPerformance extends AdminTab
 				else
 					$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
 				if ($cache_active AND $caching_system == 'MCached' AND !extension_loaded('memcache'))
-					$this->_errors[] = Tools::displayError('To use Memcached, you must to install the Memcache PECL extension on your server.').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
+					$this->_errors[] = Tools::displayError('To use Memcached, you need to install the Memcache PECL extension on your server:').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
 				elseif ($cache_active AND $caching_system == 'CacheFS' AND !is_writable(_PS_CACHEFS_DIRECTORY_))
 					$this->_errors[] = Tools::displayError('To use CacheFS the directory').' '.realpath(_PS_CACHEFS_DIRECTORY_).' '.Tools::displayError('must be writable');
 
@@ -66,11 +66,11 @@ class AdminPerformance extends AdminTab
 					if (file_put_contents(dirname(__FILE__).'/../../config/settings.inc.php', $settings))
 						Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 					else
-						$this->_errors[] = Tools::displayError('Cannot overwrite settings file.');
+						$this->_errors[] = Tools::displayError('Cannot overwrite settings file');
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		if (Tools::isSubmit('submitAddServer'))
 		{
@@ -91,7 +91,7 @@ class AdminPerformance extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
 		if (Tools::getValue('deleteMemcachedServer'))
 		{
@@ -103,7 +103,7 @@ class AdminPerformance extends AdminTab
 					$this->_errors[] = Tools::displayError('Error in deleting Memcached server');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to delete anything here.');
 		}
 		
 		if (Tools::isSubmit('submitCiphering') AND Configuration::get('PS_CIPHER_ALGORITHM') != (int)Tools::getValue('PS_CIPHER_ALGORITHM'))
@@ -115,7 +115,7 @@ class AdminPerformance extends AdminTab
 				if ($algo)
 				{
 					if (!function_exists('mcrypt_encrypt'))
-						$this->_errors[] = Tools::displayError('Mcrypt is not activated on this server.');
+						$this->_errors[] = Tools::displayError('mcrypt is not activated on this server');
 					else
 					{
 						if (!strstr($settings, '_RIJNDAEL_KEY_'))
@@ -140,11 +140,11 @@ class AdminPerformance extends AdminTab
 						Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 					}
 					else
-						$this->_errors[] = Tools::displayError('Cannot overwrite settings file.');
+						$this->_errors[] = Tools::displayError('Cannot overwrite settings file');
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		
 		if (Tools::isSubmit('submitCCC'))
@@ -163,7 +163,7 @@ class AdminPerformance extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		if (Tools::isSubmit('submitMediaServers'))
 		{
@@ -189,7 +189,7 @@ class AdminPerformance extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		if (Tools::isSubmit('submitSmartyConfig'))
 		{
@@ -200,7 +200,7 @@ class AdminPerformance extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		return parent::postProcess();
 	}
@@ -211,7 +211,7 @@ class AdminPerformance extends AdminTab
 
 		$warnings = array();
 		if (!extension_loaded('memcache'))
-			$warnings[] = $this->l('To use Memcached, you must to install the Memcache PECL extension on your server.').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
+			$warnings[] = $this->l('To use Memcached, you need to install the Memcache PECL extension on your server:').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
 		if(!is_writable(_PS_CACHEFS_DIRECTORY_))
 			$warnings[] = $this->l('To use CacheFS the directory').' '.realpath(_PS_CACHEFS_DIRECTORY_).' '.$this->l('must be writable');
 	

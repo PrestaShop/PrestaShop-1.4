@@ -186,10 +186,10 @@ class AdminFeatures extends AdminTab
 					$object = new $this->className();
 					if ($object->deleteSelection($_POST[$this->table.'Box']))
 						Tools::redirectAdmin($currentIndex.'&conf=2'.'&token='.$this->token);
-					$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
 				}
 				else
-					$this->_errors[] = Tools::displayError('You must select at least one element to delete.');
+					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');

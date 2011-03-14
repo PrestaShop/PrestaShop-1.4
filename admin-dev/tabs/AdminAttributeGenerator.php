@@ -77,7 +77,7 @@ class AdminAttributeGenerator extends AdminTab
 		if (isset($_POST['generate']))
 		{
 			if (!is_array(Tools::getValue('options')))
-				$this->_errors[] = Tools::displayError('Please choose at least 1 attribute.');
+				$this->_errors[] = Tools::displayError('You need to choose at least 1 attribute.');
 			else
 			{
 				$tab = array_values($_POST['options']);

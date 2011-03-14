@@ -44,7 +44,7 @@ class ContactControllerCore extends FrontController
 			self::$smarty->assign('isLogged', 1);
 			$customer = new Customer((int)(self::$cookie->id_customer));
 			if (!Validate::isLoadedObject($customer))
-				die(Tools::displayError('Customer not found'));
+				die(Tools::displayError('customer not found'));
 			$products = array();
 			$orders = array();
 			$getOrders = Db::getInstance()->ExecuteS('
@@ -85,13 +85,13 @@ class ContactControllerCore extends FrontController
 			}
 			$message = Tools::htmlentitiesUTF8(Tools::getValue('message'));
 			if (!($from = trim(Tools::getValue('from'))) OR !Validate::isEmail($from))
-				$this->errors[] = Tools::displayError('Invalid e-mail address');
+				$this->errors[] = Tools::displayError('invalid e-mail address');
 			elseif (!($message = nl2br2($message)))
-				$this->errors[] = Tools::displayError('Message cannot be blank');
+				$this->errors[] = Tools::displayError('message cannot be blank');
 			elseif (!Validate::isMessage($message))
-				$this->errors[] = Tools::displayError('Invalid message');
+				$this->errors[] = Tools::displayError('invalid message');
 			elseif (!($id_contact = (int)(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact((int)($id_contact), (int)(self::$cookie->id_lang)))))
-				$this->errors[] = Tools::displayError('Please select a subject on the list.');
+				$this->errors[] = Tools::displayError('please select a subject in the list');
 			elseif (!empty($_FILES['fileUpload']['name']) AND $_FILES['fileUpload']['error'] != 0)
 				$this->errors[] = Tools::displayError('An error occurred during the file upload');
 			elseif (!empty($_FILES['fileUpload']['name']) AND !in_array(substr($_FILES['fileUpload']['name'], -4), $extension) AND !in_array(substr($_FILES['fileUpload']['name'], -5), $extension))
@@ -162,7 +162,7 @@ class ContactControllerCore extends FrontController
 						AND Mail::Send((int)(self::$cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
 						self::$smarty->assign('confirmation', 1);
 					else
-						$this->errors[] = Tools::displayError('An error occurred while sending message.');
+						$this->errors[] = Tools::displayError('an error occurred while sending message');
 				}
 
 				if ($contact->customer_service)
@@ -212,10 +212,10 @@ class ContactControllerCore extends FrontController
 							self::$smarty->assign('confirmation', 1);
 						}
 						else
-							$this->errors[] = Tools::displayError('An error occurred while sending message.');
+							$this->errors[] = Tools::displayError('an error occurred while sending message');
 					}
 					else
-						$this->errors[] = Tools::displayError('An error occurred while sending message.');
+						$this->errors[] = Tools::displayError('an error occurred while sending message');
 				}
 				if (count($this->errors) > 1)
 					array_unique($this->errors);

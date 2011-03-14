@@ -91,13 +91,13 @@ class CategoryControllerCore extends FrontController
 	{
 		parent::process();
 		if (!($id_category = (int)Tools::getValue('id_category')) OR !Validate::isUnsignedId($id_category))
-			$this->errors[] = Tools::displayError('Missing category ID');
+			$this->errors[] = Tools::displayError('category ID is missing');
 		else
 		{
 			if (!Validate::isLoadedObject($this->category))
-				$this->errors[] = Tools::displayError('Category does not exist');
+				$this->errors[] = Tools::displayError('category does not exist');
 			elseif (!$this->category->checkAccess((int)(self::$cookie->id_customer)))
-				$this->errors[] = Tools::displayError('You do not have access to this category.');
+				$this->errors[] = Tools::displayError('you do not have access to this category');
 			elseif (!$this->category->active)
 				self::$smarty->assign('category', $this->category);
 			else

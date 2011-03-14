@@ -106,11 +106,11 @@ class AdminStores extends AdminTab
 			/* If the selected country does not contain states */
 			$id_state = (int)(Tools::getValue('id_state'));
 			if ($id_country = Tools::getValue('id_country') AND $country = new Country((int)($id_country)) AND !(int)($country->contains_states) AND $id_state)
-				$this->_errors[] = Tools::displayError('You have selected a state for a country that does not contain states.');
+				$this->_errors[] = Tools::displayError('you have selected a state for a country that does not contain states');
 
 			/* If the selected country contains states, then a state have to be selected */
 			if ((int)($country->contains_states) AND !$id_state)
-				$this->_errors[] = Tools::displayError('An address located in a country containing states must have a state selected.');
+				$this->_errors[] = Tools::displayError('an address which is located in a country containing states must have a state selected');
 
 			/* Check zip code */
 			if ($country->need_zip_code)
@@ -125,12 +125,12 @@ class AdminStores extends AdminTab
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->_errors[] = Tools::displayError('Your postal code/zip code is incorrect.').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
-					$this->_errors[] = Tools::displayError('Postcode required.');
+					$this->_errors[] = Tools::displayError('postcode is required.');
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-					$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.');
+					$this->_errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
 			}
 
 			/* Store hours */

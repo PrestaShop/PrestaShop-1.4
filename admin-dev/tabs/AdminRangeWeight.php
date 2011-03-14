@@ -59,7 +59,7 @@ class AdminRangeWeight extends AdminTab
 	public function postProcess()
 	{
 		if (isset($_POST['submitAdd'.$this->table]) AND Tools::getValue('delimiter1') >= Tools::getValue('delimiter2'))
-			$this->_errors[] = Tools::displayError('Invalid range');
+			$this->_errors[] = Tools::displayError('invalid range');
 		else
 			parent::postProcess();
 	}

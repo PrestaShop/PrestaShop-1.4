@@ -43,13 +43,13 @@ class PasswordControllerCore extends FrontController
 		if (Tools::isSubmit('email'))
 		{
 			if (!($email = Tools::getValue('email')) OR !Validate::isEmail($email))
-				$this->errors[] = Tools::displayError('Invalid e-mail address');
+				$this->errors[] = Tools::displayError('invalid e-mail address');
 			else
 			{
 				$customer = new Customer();
 				$customer->getByemail($email);
 				if (!Validate::isLoadedObject($customer))
-					$this->errors[] = Tools::displayError('There is no account registered to this e-mail address.');
+					$this->errors[] = Tools::displayError('there is no account registered to this e-mail address');
 				else
 				{
 					if ((strtotime($customer->last_passwd_gen.'+'.(int)($min_time = Configuration::get('PS_PASSWD_TIME_FRONT')).' minutes') - time()) > 0)
@@ -65,7 +65,7 @@ class PasswordControllerCore extends FrontController
 						$customer->firstname.' '.$customer->lastname))
 							self::$smarty->assign(array('confirmation' => 2, 'email' => $customer->email));
 						else
-							$this->errors[] = Tools::displayError('Error occured when sending the e-mail.');
+							$this->errors[] = Tools::displayError('error occured when sending the email');
 					}
 				}
 			}
@@ -94,10 +94,10 @@ class PasswordControllerCore extends FrontController
 						$customer->firstname.' '.$customer->lastname)) 
 							self::$smarty->assign(array('confirmation' => 1, 'email' => $customer->email));
 						else
-							$this->errors[] = Tools::displayError('Error occured when sending the e-mail.');
+							$this->errors[] = Tools::displayError('error occured when sending the email');
 					}
 					else
-						$this->errors[] = Tools::displayError('An error occurred with your account and your new password cannot be sent to your e-mail. Please report your problem using the contact form.');
+						$this->errors[] = Tools::displayError('error with your account and your new password cannot be sent to your e-mail; please report your problem using the contact form');
 				}
 			}
 			else

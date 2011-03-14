@@ -49,11 +49,11 @@ class OrderDetailControllerCore extends FrontController
 			$msgText = htmlentities(Tools::getValue('msgText'), ENT_COMPAT, 'UTF-8');
 
 			if (!$idOrder OR !Validate::isUnsignedId($idOrder))
-				$this->errors[] = Tools::displayError('Order is no longer valid');
+				$this->errors[] = Tools::displayError('order is no longer valid');
 			elseif (empty($msgText))
-				$this->errors[] = Tools::displayError('Message cannot be blank');
+				$this->errors[] = Tools::displayError('message cannot be blank');
 			elseif (!Validate::isMessage($msgText))
-				$this->errors[] = Tools::displayError('Message is invalid (HTML is not allowed)');
+				$this->errors[] = Tools::displayError('message is not valid (HTML is not allowed)');
 			if(!sizeof($this->errors))
 			{
 				$order = new Order((int)($idOrder));
@@ -88,13 +88,13 @@ class OrderDetailControllerCore extends FrontController
 				}
 				else
 				{
-					$this->errors[] = Tools::displayError('Order not found');
+					$this->errors[] = Tools::displayError('order not found');
 				}
 			}
 		}
 
 		if (!$id_order = (int)(Tools::getValue('id_order')) OR !Validate::isUnsignedId($id_order))
-			$this->errors[] = Tools::displayError('Order ID required');
+			$this->errors[] = Tools::displayError('order ID is required');
 		else
 		{
 			$order = new Order($id_order);
@@ -142,7 +142,7 @@ class OrderDetailControllerCore extends FrontController
 				Module::hookExec('OrderDetail', array('carrier' => $carrier, 'order' => $order));
 			}
 			else
-				$this->errors[] = Tools::displayError('Cannot find this order');
+				$this->errors[] = Tools::displayError('cannot find this order');
 		}
 	}
 

@@ -161,7 +161,7 @@ class AdminProducts extends AdminTab
 			if ((Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1') OR ($this->tabAccess['add'] === '1' AND !Tools::isSubmit('id_product')))
 				$this->submitAddproduct($token);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
 
 		/* Delete a product in the download folder */
@@ -170,7 +170,7 @@ class AdminProducts extends AdminTab
 			if ($this->tabAccess['delete'] === '1')
 				$this->deleteVirtualProduct();
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to delete anything here.');
 		}
 
 		/* Update attachments */
@@ -185,7 +185,7 @@ class AdminProducts extends AdminTab
 					if (!Validate::isGenericName(Tools::getValue('attachment_name_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid Name');
 					elseif (Tools::strlen(Tools::getValue('attachment_name_'.(int)($language['id_lang']))) > 32)
-						$this->_errors[] = Tools::displayError('Name is too long');
+						$this->_errors[] = Tools::displayError('Name too long');
 					if (!Validate::isCleanHtml(Tools::getValue('attachment_description_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid description');
 				}
@@ -241,7 +241,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
 		elseif (Tools::isSubmit('submitAttachments'))
 		{
@@ -276,7 +276,7 @@ class AdminProducts extends AdminTab
 					AND Product::duplicateDownload($id_product_old, $product->id))
 					{
 						if (!Tools::getValue('noimage') AND !Image::duplicateProductImages($id_product_old, $product->id, $combinationImages))
-							$this->_errors[] = Tools::displayError('An error occurred while copying image.s');
+							$this->_errors[] = Tools::displayError('an error occurred while copying images');
 						else
 						{
 							Hook::addProduct($product);
@@ -285,11 +285,11 @@ class AdminProducts extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('An error occurred while creating object.');
+						$this->_errors[] = Tools::displayError('an error occurred while creating object');
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
 		/* Change object statuts (active, inactive) */
 		elseif (isset($_GET['status']) AND Tools::getValue($this->identifier))
@@ -301,13 +301,13 @@ class AdminProducts extends AdminTab
 					if ($object->toggleStatus())
 						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_category = (!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1')) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$token);
 					else
-						$this->_errors[] = Tools::displayError('An error occurred while updating status.');
+						$this->_errors[] = Tools::displayError('an error occurred while updating status');
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
+					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		/* Delete object */
 		elseif (isset($_GET['delete'.$this->table]))
@@ -318,7 +318,7 @@ class AdminProducts extends AdminTab
 				{
 					// check if request at least one object with noZeroObject
 					if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
-						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
 					else
 					{
 						$id_category = Tools::getValue('id_category');
@@ -333,11 +333,11 @@ class AdminProducts extends AdminTab
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
-						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
+						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
+					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -355,7 +355,7 @@ class AdminProducts extends AdminTab
 					if (isset($object->noZeroObject) AND
 						// Check if all object will be deleted
 						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
-						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
 					else
 					{
 						$result = true;
@@ -378,11 +378,11 @@ class AdminProducts extends AdminTab
 
 							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token.$category_url);
 						}
-						$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+						$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('You must select at least one element to delete.');
+					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -432,7 +432,7 @@ class AdminProducts extends AdminTab
 					Image::deleteCover($image->id_product);
 					$image->cover = 1;
 					if (!$image->update())
-						$this->_errors[] = Tools::displayError('Cannot change the product cover');
+						$this->_errors[] = Tools::displayError('Impossible to change the product cover');
 					else
 					{
 						$productId = (int)(Tools::getValue('id_product'));
@@ -450,7 +450,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 
 		/* Product attributes management */
@@ -459,9 +459,9 @@ class AdminProducts extends AdminTab
 			if (Validate::isLoadedObject($product = new Product((int)(Tools::getValue('id_product')))))
 			{
 				if (!isset($_POST['attribute_price']) OR $_POST['attribute_price'] == NULL)
-					$this->_errors[] = Tools::displayError('Attribute price required.');
+					$this->_errors[] = Tools::displayError('attribute price is required');
 				if (!isset($_POST['attribute_combinaison_list']) OR !sizeof($_POST['attribute_combinaison_list']))
-					$this->_errors[] = Tools::displayError('You must add at least one attribute.');
+					$this->_errors[] = Tools::displayError('you must add at least one attribute');
 
 				if (!sizeof($this->_errors))
 				{
@@ -499,13 +499,13 @@ class AdminProducts extends AdminTab
 								{
 									$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
 									if (!$product->addStockMvt($qty, (int)(Tools::getValue('id_mvt_reason')), (int)$id_product_attribute, NULL, $cookie->id_employee))
-										$this->_errors[] = Tools::displayError('An error occurred while updating qty.');
+										$this->_errors[] = Tools::displayError('an error occurred while updating qty');
 								}
 								Hook::updateProductAttribute((int)$id_product_attribute);
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+							$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 					}
 					// Add new
 					else
@@ -522,7 +522,7 @@ class AdminProducts extends AdminTab
                                 Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'));
 						}
 						else
-							$this->_errors[] = Tools::displayError('You do not have permission to').'<hr>'.Tools::displayError('Edit here.');
+							$this->_errors[] = Tools::displayError('You do not have permission to').'<hr>'.Tools::displayError('edit something here.');
 					}
 					if (!sizeof($this->_errors))
 					{
@@ -558,7 +558,7 @@ class AdminProducts extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
-					$this->_errors[] = Tools::displayError('Cannot delete attribute');
+					$this->_errors[] = Tools::displayError('impossible to delete attribute');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -579,7 +579,7 @@ class AdminProducts extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
-					$this->_errors[] = Tools::displayError('Cannot delete attributes');
+					$this->_errors[] = Tools::displayError('impossible to delete attributes');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -593,7 +593,7 @@ class AdminProducts extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 			}
 			else
-				$this->_errors[] = Tools::displayError('Cannot make default attribute');
+				$this->_errors[] = Tools::displayError('impossible to make default attribute');
 		}
 
 		/* Product features management */
@@ -634,9 +634,9 @@ class AdminProducts extends AdminTab
 						Tools::redirectAdmin($currentIndex.'&id_product='.(int)$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=4&conf=4&token='.($token ? $token : $this->token));
 				}
 				else
-					$this->_errors[] = Tools::displayError('Product must be created before adding features.');
+					$this->_errors[] = Tools::displayError('product must be created before adding features');
 			}
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		/* Product specific prices management */
 		elseif (Tools::isSubmit('submitPricesModification'))
@@ -671,13 +671,13 @@ class AdminProducts extends AdminTab
 						$specificPrice->from = !$froms[$key] ? '0000-00-00 00:00:00' : $froms[$key];
 						$specificPrice->to = !$tos[$key] ? '0000-00-00 00:00:00' : $tos[$key];
 						if (!$specificPrice->update())
-							$this->_errors = Tools::displayError('An error occurred while updating the specific price.');
+							$this->_errors = Tools::displayError('An error occurred while updating the specific price');
 					}
 				if (!sizeof($this->_errors))
 					Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&update'.$this->table.'&tabs=2&token='.($token ? $token : $this->token));
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
 		elseif (Tools::isSubmit('submitPriceAddition'))
 		{
@@ -709,13 +709,13 @@ class AdminProducts extends AdminTab
 					$specificPrice->from = !$from ? '0000-00-00 00:00:00' : $from;
 					$specificPrice->to = !$to ? '0000-00-00 00:00:00' : $to;
 					if (!$specificPrice->add())
-						$this->_errors = Tools::displayError('An error occurred while updating the specific price.');
+						$this->_errors = Tools::displayError('An error occurred while updating the specific price');
 					else
 						Tools::redirectAdmin($currentIndex.'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 		}
 		elseif (Tools::isSubmit('deleteSpecificPrice'))
 		{
@@ -763,22 +763,22 @@ class AdminProducts extends AdminTab
 				if (Validate::isLoadedObject($product = new Product((int)(Tools::getValue('id_product')))))
 				{
 					if (!$product->createLabels((int)($_POST['uploadable_files']) - (int)($product->uploadable_files), (int)($_POST['text_fields']) - (int)($product->text_fields)))
-						$this->_errors[] = Tools::displayError('An error occurred while creating customization fields.');
+						$this->_errors[] = Tools::displayError('an error occurred while creating customization fields');
 					if (!sizeof($this->_errors) AND !$product->updateLabels())
-						$this->_errors[] = Tools::displayError('An error occurred while updating customization.');
+						$this->_errors[] = Tools::displayError('an error occurred while updating customization');
 					$product->uploadable_files = (int)($_POST['uploadable_files']);
 					$product->text_fields = (int)($_POST['text_fields']);
 					$product->customizable = ((int)($_POST['uploadable_files']) > 0 OR (int)($_POST['text_fields']) > 0) ? 1 : 0;
 					if (!sizeof($this->_errors) AND !$product->update())
-						$this->_errors[] = Tools::displayError('An error occurred while updating customization. configuration');
+						$this->_errors[] = Tools::displayError('an error occurred while updating customization configuration');
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=5&token='.($token ? $token : $this->token));
 				}
 				else
-					$this->_errors[] = Tools::displayError('Product must be created before adding customization possibilities.');
+					$this->_errors[] = Tools::displayError('product must be created before adding customization possibilities');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (Tools::isSubmit('submitProductCustomization'))
 		{
@@ -788,24 +788,24 @@ class AdminProducts extends AdminTab
 				{
 					foreach ($_POST AS $field => $value)
 						if (strncmp($field, 'label_', 6) == 0 AND !Validate::isLabel($value))
-							$this->_errors[] = Tools::displayError('Label fields are invalid');
+							$this->_errors[] = Tools::displayError('label fields are invalid');
 					if (!sizeof($this->_errors) AND !$product->updateLabels())
-						$this->_errors[] = Tools::displayError('An error occurred while updating customization.');
+						$this->_errors[] = Tools::displayError('an error occurred while updating customization');
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=5&token='.($token ? $token : $this->token));
 				}
 				else
-					$this->_errors[] = Tools::displayError('Product must be created before adding customization possibilities.');
+					$this->_errors[] = Tools::displayError('product must be created before adding customization possibilities');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		elseif (isset($_GET['position']))
 		{
 			if ($this->tabAccess['edit'] !== '1')
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
-				$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
+				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
@@ -818,7 +818,7 @@ class AdminProducts extends AdminTab
 	protected function _validateSpecificPrice($id_shop, $id_currency, $id_country, $id_group, $price, $from_quantity, $reduction, $reduction_type, $from, $to)
 	{
 		if (!Validate::isUnsignedId($id_shop) OR !Validate::isUnsignedId($id_currency) OR !Validate::isUnsignedId($id_country) OR !Validate::isUnsignedId($id_group))
-			$this->_errors[] = Tools::displayError('Wrong ID\'s');
+			$this->_errors[] = Tools::displayError('Wrong ids!');
 		elseif ((empty($price) AND empty($reduction)) OR (!empty($price) AND !Validate::isPrice($price)) OR (!empty($reduction) AND !Validate::isPrice($reduction)))
 			$this->_errors[] = Tools::displayError('Invalid price/reduction amount');
 		elseif (!Validate::isUnsignedInt($from_quantity))
@@ -845,7 +845,7 @@ class AdminProducts extends AdminTab
 				if (Tools::strlen($val) > $rules['sizeLang']['value'])
 					$this->_errors[] = Tools::displayError('name for feature').' <b>'.$feature['name'].'</b> '.Tools::displayError('is too long in').' '.$currentLanguage->name;
 				elseif (!call_user_func(array('Validate', $rules['validateLang']['value']), $val))
-					$this->_errors[] = Tools::displayError('Valid name required for feature.').' <b>'.$feature['name'].'</b> '.Tools::displayError('in').' '.$currentLanguage->name;
+					$this->_errors[] = Tools::displayError('valid name required for feature').' <b>'.$feature['name'].'</b> '.Tools::displayError('in').' '.$currentLanguage->name;
 				if (sizeof($this->_errors))
 					return (0);
 				// Getting default language
@@ -869,7 +869,7 @@ class AdminProducts extends AdminTab
 
 			$image = new Image($id_image);
 			if (!Validate::isLoadedObject($image))
-				$this->_errors[] = Tools::displayError('An error occurred while loading object image.');
+				$this->_errors[] = Tools::displayError('an error occurred while loading object image');
 			else
 			{
 				if (($cover = Tools::getValue('cover')) == 1)
@@ -878,7 +878,7 @@ class AdminProducts extends AdminTab
 				$this->validateRules('Image');
 				$this->copyFromPost($image, 'image');
 				if (sizeof($this->_errors) OR !$image->update())
-					$this->_errors[] = Tools::displayError('An error occurred while updating image.');
+					$this->_errors[] = Tools::displayError('an error occurred while updating image');
 				elseif (isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
 					$this->copyImage($product->id, $image->id, $method);
 			}
@@ -893,7 +893,7 @@ class AdminProducts extends AdminTab
 			if (!sizeof($this->_errors) AND isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
 			{
 				if (!Validate::isLoadedObject($product))
-					$this->_errors[] = Tools::displayError('Cannot add image because product add failed.');
+					$this->_errors[] = Tools::displayError('cannot add image because product add failed');
 				elseif (substr($_FILES['image_product']['name'], -4) == '.zip' AND class_exists('ZipArchive', false))
 					return $this->uploadImageZip($product);
 				else
@@ -910,7 +910,7 @@ class AdminProducts extends AdminTab
 					if (!sizeof($this->_errors))
 					{
 						if (!$image->add())
-							$this->_errors[] = Tools::displayError('Error while creating additional image');
+							$this->_errors[] = Tools::displayError('error while creating additional image');
 						else
 							$this->copyImage($product->id, $image->id, $method);
 						$id_image = $image->id;
@@ -932,7 +932,7 @@ class AdminProducts extends AdminTab
 		// Move the ZIP file to the img/tmp directory
 		if (!$zipfile = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $zipfile))
 		{
-			$this->_errors[] = Tools::displayError('An error occurred during the ZIP file upload.');
+			$this->_errors[] = Tools::displayError('An error occurred during the ZIP file upload');
 			return false;
 		}
 
@@ -943,7 +943,7 @@ class AdminProducts extends AdminTab
 		try
 		{
 			if ($zip->open($zipfile) !== true OR !mkdir($subdir, 0777) OR !$zip->extractTo($subdir) OR !$zip->close())
-				throw new Exception(Tools::displayError('An error occurred while unzipping your file.'));
+				throw new Exception(Tools::displayError('An error occurred while unzipping your file'));
 
 			$types = array('.gif' => 'image/gif', '.jpeg' => 'image/jpeg', '.jpg' => 'image/jpg', '.png' => 'image/png');
 			$_POST['id_product'] = (int)$product->id;
@@ -968,12 +968,12 @@ class AdminProducts extends AdminTab
 					throw new Exception('');
 
 				if (!$image->add())
-					throw new Exception(Tools::displayError('Error while creating additional image'));
+					throw new Exception(Tools::displayError('error while creating additional image'));
 
 				if (filesize($subdir.$file) > $this->maxImageSize)
 				{
 					$image->delete();
-					throw new Exception(Tools::displayError('Image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('KB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('KB'));
+					throw new Exception(Tools::displayError('image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('KB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('KB'));
 				}
 
 				$ext = substr($file, -4);
@@ -981,20 +981,20 @@ class AdminProducts extends AdminTab
 				if (!isPicture(array('tmp_name' => $subdir.$file, 'type' => $type)))
 				{
 					$image->delete();
-					throw new Exception(Tools::displayError('Image format not recognized, allowed formats are: .gif, .jpg, .png'));
+					throw new Exception(Tools::displayError('image format not recognized, allowed formats are: .gif, .jpg, .png'));
 				}
 
 				if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'.jpg'))
 				{
 					$image->delete();
-					throw new Exception(Tools::displayError('An error occurred while resizing image.'));
+					throw new Exception(Tools::displayError('an error occurred while resizing image'));
 				}
 
 				foreach ($imagesTypes AS $k => $imageType)
 					if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 					{
 						$image->delete();
-						throw new Exception(Tools::displayError('An error occurred while copying image.').' '.stripslashes($imageType['name']));
+						throw new Exception(Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']));
 					}
 
 				Module::hookExec('watermark', array('id_image' => $image->id, 'id_product' => $image->id_product));
@@ -1029,13 +1029,13 @@ class AdminProducts extends AdminTab
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $tmpName))
 				$this->_errors[] = Tools::displayError('An error occurred during the image upload');
 			elseif (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$id_product.'-'.$id_image.'.jpg'))
-				$this->_errors[] = Tools::displayError('An error occurred while copying image.');
+				$this->_errors[] = Tools::displayError('an error occurred while copying image');
 			elseif($method == 'auto')
 			{
 				$imagesTypes = ImageType::getImagesTypes('products');
 				foreach ($imagesTypes AS $k => $imageType)
 					if (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$id_product.'-'.$id_image.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('An error occurred while copying image.').' '.stripslashes($imageType['name']);
+						$this->_errors[] = Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']);
 			}
 			@unlink($tmpName);
 			Module::hookExec('watermark', array('id_image' => $id_image, 'id_product' => $id_product));
@@ -1140,17 +1140,17 @@ class AdminProducts extends AdminTab
 						{
 							$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
 							if (!$object->addStockMvt($qty, (int)Tools::getValue('id_mvt_reason'), NULL, NULL, (int)$cookie->id_employee))
-								$this->_errors[] = Tools::displayError('An error occurred while updating qty.');
+								$this->_errors[] = Tools::displayError('an error occurred while updating qty');
 						}
 						$this->updateAccessories($object);
 						$this->updateDownloadProduct($object);
 
 						if (!$this->updatePackItems($object))
-							$this->_errors[] = Tools::displayError('An error occurred while adding products to the pack.');
+							$this->_errors[] = Tools::displayError('an error occurred while adding products to the pack');
 						elseif (!$object->updateCategories($_POST['categoryBox'], true))
-							$this->_errors[] = Tools::displayError('An error occurred while linking object.').' <b>'.$this->table.'</b> '.Tools::displayError('To categories');
+							$this->_errors[] = Tools::displayError('an error occurred while linking object').' <b>'.$this->table.'</b> '.Tools::displayError('to categories');
 						elseif (!$this->updateTags($languages, $object))
-							$this->_errors[] = Tools::displayError('An error occurred while adding tags.');
+							$this->_errors[] = Tools::displayError('an error occurred while adding tags');
 						elseif ($id_image = $this->addProductImage($object, Tools::getValue('resizer')))
 						{
 							$currentIndex .= '&image_updated='.(int)(Tools::getValue('id_image'));
@@ -1183,10 +1183,10 @@ class AdminProducts extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
+						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> ('.Tools::displayError('Cannot load object').')';
+					$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Tools::displayError('cannot load object').')';
 			}
 
 			/* Add a new product */
@@ -1198,14 +1198,14 @@ class AdminProducts extends AdminTab
 				{
 					$this->updateAccessories($object);
 					if (!$this->updatePackItems($object))
-						$this->_errors[] = Tools::displayError('An error occurred while adding products to the pack.');
+						$this->_errors[] = Tools::displayError('an error occurred while adding products to the pack');
 					$this->updateDownloadProduct($object);
 					if (!sizeof($this->_errors))
 					{
 						if (!$object->updateCategories($_POST['categoryBox']))
-							$this->_errors[] = Tools::displayError('An error occurred while linking object.').' <b>'.$this->table.'</b> '.Tools::displayError('To categories');
+							$this->_errors[] = Tools::displayError('an error occurred while linking object').' <b>'.$this->table.'</b> '.Tools::displayError('to categories');
 						else if (!$this->updateTags($languages, $object))
-							$this->_errors[] = Tools::displayError('An error occurred while adding tags.');
+							$this->_errors[] = Tools::displayError('an error occurred while adding tags');
 						elseif ($id_image = $this->addProductImage($object))
 						{
 							Hook::addProduct($object);
@@ -1240,7 +1240,7 @@ class AdminProducts extends AdminTab
 						$object->delete();
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.'</b>';
+					$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.'</b>';
 			}
 		}
 

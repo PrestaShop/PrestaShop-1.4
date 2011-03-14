@@ -42,10 +42,10 @@ if ($tabAccess['view'] !== '1')
 $backupdir = realpath( PS_ADMIN_DIR . '/backups/');
 
 if ($backupdir === false)
-	die (Tools::displayError('Backups directory does not exist.'));
+	die (Tools::displayError('Backups directory does not exist'));
 	
 if (!$backupfile = Tools::getValue('filename'))
-	die (Tools::displayError('No file specified'));
+	die (Tools::displayError('no file specified'));
 
 // Check the realpath so we can validate the backup file is under the backup directory
 $backupfile = realpath($backupdir.'/'.$backupfile);

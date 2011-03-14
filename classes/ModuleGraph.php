@@ -202,7 +202,7 @@ abstract class ModuleGraphCore extends Module
 		if (!($render = Configuration::get('PS_STATS_RENDER')))
 			return Tools::displayError('No graph engine selected');
 		if (!file_exists(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
-			return Tools::displayError('Graph engine selected is unavailable.');
+			return Tools::displayError('Graph engine selected unavailable');
 			
 		global $cookie;
 		$id_employee = (int)($cookie->id_employee);

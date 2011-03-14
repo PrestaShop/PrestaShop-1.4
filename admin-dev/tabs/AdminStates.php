@@ -69,7 +69,7 @@ class AdminStates extends AdminTab
 							{
 								// check if request at least one object with noZeroObject
 								if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
-									$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
+									$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
 								else
 								{
 									$this->deleteImage($object->id);
@@ -82,14 +82,14 @@ class AdminStates extends AdminTab
 									{
 										Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
 									}
-									$this->_errors[] = Tools::displayError('An error occurred during deletion.');
+									$this->_errors[] = Tools::displayError('an error occurred during deletion');
 								}
 							} else {
 								$this->_errors[] = Tools::displayError('This state is currently in use');
 							}
 					}
 					else
-						$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+						$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');

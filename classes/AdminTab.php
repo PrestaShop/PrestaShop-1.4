@@ -354,7 +354,7 @@ abstract class AdminTabCore
 			{
 				if (!$adminTab->viewAccess())
 				{
-					echo Tools::displayError('Access denied');
+					echo Tools::displayError('access denied');
 					return false;
 				}
 				if (!sizeof($actions))
@@ -495,7 +495,7 @@ abstract class AdminTabCore
 			if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
 				if ($this->deleteImage($object->id))
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&'.$this->identifier.'='.Tools::getValue($this->identifier).'&conf=7&token='.$token);
-			$this->_errors[] = Tools::displayError('An error occurred during image deletion (cannot load object).');
+			$this->_errors[] = Tools::displayError('an error occurred during image deletion (cannot load object)');
 		}
 
 		/* Delete object */
@@ -507,7 +507,7 @@ abstract class AdminTabCore
 				{
 					// check if request at least one object with noZeroObject
 					if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
-						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
 					else
 					{
 						$this->deleteImage($object->id);
@@ -519,11 +519,11 @@ abstract class AdminTabCore
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
-						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
+						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -539,21 +539,21 @@ abstract class AdminTabCore
 					if ($object->toggleStatus())
 						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_category = (int)(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$token);
 					else
-						$this->_errors[] = Tools::displayError('An error occurred while updating status.');
+						$this->_errors[] = Tools::displayError('an error occurred while updating status');
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		/* Move an object */
 		elseif (isset($_GET['position']))
 		{
 			if ($this->tabAccess['edit'] !== '1')
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
-				$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			elseif (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
@@ -571,7 +571,7 @@ abstract class AdminTabCore
 					if (isset($object->noZeroObject) AND
 						// Check if all object will be deleted
 						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
-						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
 					else
 					{
 						$result = true;
@@ -589,11 +589,11 @@ abstract class AdminTabCore
 
 						if ($result)
 							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token);
-						$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+						$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('You must select at least one element to delete.');
+					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -642,7 +642,7 @@ abstract class AdminTabCore
 								$this->afterUpdate($object);
 							}
 							if (!$result)
-								$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
+								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
 							elseif ($this->postImage($object->id) AND !sizeof($this->_errors))
 							{
 								$parent_id = (int)(Tools::getValue('id_parent', 1));
@@ -663,10 +663,10 @@ abstract class AdminTabCore
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 				}
 
 				/* Object creation */
@@ -677,7 +677,7 @@ abstract class AdminTabCore
 						$object = new $this->className();
 						$this->copyFromPost($object, $this->table);
 						if (!$object->add())
-							$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
+							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
 						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
 						{
 							$parent_id = (int)(Tools::getValue('id_parent', 1));
@@ -693,7 +693,7 @@ abstract class AdminTabCore
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 				}
 			}
 			$this->_errors = array_unique($this->_errors);
@@ -742,7 +742,7 @@ abstract class AdminTabCore
 				Tools::redirectAdmin($currentIndex.'&conf=6&token='.$token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 
 		/* Manage list filtering */
@@ -836,7 +836,7 @@ abstract class AdminTabCore
 				$_FILES[$name]['tmp_name'] = $tmpName;
 				// Copy new image
 				if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
-					$this->_errors[] = Tools::displayError('An error occurred while uploading image.');
+					$this->_errors[] = Tools::displayError('an error occurred while uploading image');
 				if (sizeof($this->_errors))
 					return false;
 				if ($this->afterImageUpload())
@@ -1623,7 +1623,7 @@ abstract class AdminTabCore
 				$this->_object = new $this->className($id);
 			if (Validate::isLoadedObject($this->_object))
 				return $this->_object;
-			$this->_errors[] = Tools::displayError('Object cannot be loaded (not found)');
+			$this->_errors[] = Tools::displayError('object cannot be loaded (not found)');
 		}
 		elseif ($opt)
 		{
@@ -1631,7 +1631,7 @@ abstract class AdminTabCore
 			return $this->_object;
 		}
 		else
-			$this->_errors[] = Tools::displayError('Object cannot be loaded (identifier missing or invalid)');
+			$this->_errors[] = Tools::displayError('object cannot be loaded (identifier missing or invalid)');
 
 		$this->displayErrors();
 	}

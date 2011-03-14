@@ -326,13 +326,13 @@ class CurrencyCore extends ObjectModel
 	{
 		// Parse
 		if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml'))
-			return Tools::displayError('Cannot parse feed.');
+			return Tools::displayError('Cannot parse feed!');
 
 		// Default feed currency (EUR)
 		$isoCodeSource = strval($feed->source['iso_code']);
 
 		if (!$default_currency = self::getDefaultCurrency())
-			return Tools::displayError('No default currency');
+			return Tools::displayError('No default currency!');
 
 		$currencies = self::getCurrencies(true);
 		foreach ($currencies as $currency)

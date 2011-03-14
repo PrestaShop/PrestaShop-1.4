@@ -86,9 +86,9 @@ class AdminDiscounts extends AdminTab
 		if (Tools::getValue('submitAdd'.$this->table))
 		{
 			if (Tools::getValue('id_discount_type') == 2 AND Tools::getValue('id_currency') == 0)
-				$this->_errors[] = Tools::displayError('Please set a currency for this voucher.');
+				$this->_errors[] = Tools::displayError('You need to set a currency for this voucher');
 			if (!Validate::isBool_Id(Tools::getValue('id_target')))
-				$this->_errors[] = Tools::displayError('Invalid customer or group ID field');
+				$this->_errors[] = Tools::displayError('Invalid customer or group id field');
 			else
 			{
 				$rules = explode('_', Tools::getValue('id_target'));
@@ -128,7 +128,7 @@ class AdminDiscounts extends AdminTab
 								$result = $object->update(true, false, $categories);
 							}
 							if (!$result)
-								$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b>';
+								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
 							elseif ($this->postImage($object->id))
 							{
 								if ($back = Tools::getValue('back'))
@@ -140,10 +140,10 @@ class AdminDiscounts extends AdminTab
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 				}
 
 				/* Object creation */
@@ -155,12 +155,12 @@ class AdminDiscounts extends AdminTab
 						$this->copyFromPost($object, $this->table);
 						$categories = Tools::getValue('categoryBox', null);
 						if (!$object->add(true, false, $categories))
-							$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.'</b>';
+							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.'</b>';
 						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND $this->_redirect)
 							Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&token='.$token);
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 				}
 			}
 			$this->_errors = array_unique($this->_errors);

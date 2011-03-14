@@ -98,7 +98,7 @@ class LocalizationPackCore
 					{
 						$country->contains_states = 1;
 						if (!$country->update())
-							$this->_errors[] = Tools::displayError('Cannot update the associated country: ').$country->name;
+							$this->_errors[] = Tools::displayError('Impossible to update the associated country: ').$country->name;
 					}
 
 					if (!$state->add())
@@ -282,7 +282,7 @@ class LocalizationPackCore
 		{
 			if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml'))
 			{
-				$this->_errors[] = Tools::displayError('Cannot parse feed.');
+				$this->_errors[] = Tools::displayError('Cannot parse feed!');
 				return false;
 			}
 
@@ -365,14 +365,14 @@ class LocalizationPackCore
 									@unlink($file);
 								}
 								else
-									$this->_errors[] = Tools::displayError('Server does not have permissions for writing.');
+									$this->_errors[] = Tools::displayError('Server does not have permissions for writing');
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('Error occurred when language was checked according to your Prestashop version.');
+							$this->_errors[] = Tools::displayError('Error occurred from prestashop.com when language was checked according to your Prestashop version.');
 					}
 					else
-						$this->_errors[] = Tools::displayError('Archive cannot be downloaded from prestashop.com.');
+						$this->_errors[] = Tools::displayError('Archive cannot be downloaded from prestashop.com');
 			}
 
 		// change the default language if there is only one language in the localization pack

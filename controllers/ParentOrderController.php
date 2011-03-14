@@ -65,16 +65,16 @@ class ParentOrderControllerCore extends FrontController
 		}
 		
 		if (Configuration::get('PS_CATALOG_MODE'))
-			$this->errors[] = Tools::displayError('This store has not accepted your new order.');
+			$this->errors[] = Tools::displayError('This store has not accepted your new order');
 		
 		if (Tools::isSubmit('submitReorder') AND $id_order = (int)Tools::getValue('id_order'))
 		{
 			$oldCart = new Cart(Order::getCartIdStatic((int)$id_order, (int)self::$cookie->id_customer));
 			$duplication = $oldCart->duplicate();
 			if (!$duplication OR !Validate::isLoadedObject($duplication['cart']))
-				$this->errors[] = Tools::displayError('Sorry, we cannot renew your order.');
+				$this->errors[] = Tools::displayError('Sorry, we cannot renew your order');
 			elseif (!$duplication['success'])
-				$this->errors[] = Tools::displayError('Missing items - we are unable renew your order');
+				$this->errors[] = Tools::displayError('Some items are missing and we cannot renew your order');
 			else
 			{
 				self::$cookie->id_cart = $duplication['cart']->id;
@@ -91,7 +91,7 @@ class ParentOrderControllerCore extends FrontController
 			{
 				$discountName = Tools::getValue('discount_name');
 				if (!Validate::isDiscountName($discountName))
-					$this->errors[] = Tools::displayError('Voucher name invalid.');
+					$this->errors[] = Tools::displayError('voucher name not valid');
 				else
 				{
 					$discount = new Discount((int)(Discount::getIdByName($discountName)));
@@ -101,7 +101,7 @@ class ParentOrderControllerCore extends FrontController
 							$this->errors[] = $tmpError;
 					}
 					else
-						$this->errors[] = Tools::displayError('Voucher name invalid.');
+						$this->errors[] = Tools::displayError('voucher name not valid');
 					if (!sizeof($this->errors))
 					{
 						self::$cart->addDiscount((int)($discount->id));
@@ -168,7 +168,7 @@ class ParentOrderControllerCore extends FrontController
 		if ($messageContent)
 		{
 			if (!Validate::isMessage($messageContent))
-    			$this->errors[] = Tools::displayError('Invalid message');
+    			$this->errors[] = Tools::displayError('invalid message');
     		elseif ($oldMessage = Message::getMessageByCartId((int)(self::$cart->id)))
     		{
     			$message = new Message((int)($oldMessage['id_message']));
@@ -202,7 +202,7 @@ class ParentOrderControllerCore extends FrontController
 		if ((int)(Tools::getValue('gift')))
 		{
 			if (!Validate::isMessage($_POST['gift_message']))
-				$this->errors[] = Tools::displayError('Invalid gift message');
+				$this->errors[] = Tools::displayError('invalid gift message');
 			else
 				self::$cart->gift_message = strip_tags($_POST['gift_message']);
 		}
@@ -211,7 +211,7 @@ class ParentOrderControllerCore extends FrontController
 		{
 			$address = new Address((int)(self::$cart->id_address_delivery));
 			if (!($id_zone = Address::getZoneById($address->id)))
-				$this->errors[] = Tools::displayError('No zone match with your address');
+				$this->errors[] = Tools::displayError('no zone match with your address');
 		}
 		else
 			$id_zone = Country::getIdZone((int)Configuration::get('PS_COUNTRY_DEFAULT'));
@@ -219,7 +219,7 @@ class ParentOrderControllerCore extends FrontController
 		if (Validate::isInt(Tools::getValue('id_carrier')) AND sizeof(Carrier::checkCarrierZone((int)(Tools::getValue('id_carrier')), (int)($id_zone))))
 			self::$cart->id_carrier = (int)(Tools::getValue('id_carrier'));
 		elseif (!self::$cart->isVirtualCart() AND (int)(Tools::getValue('id_carrier')) != 0)
-			$this->errors[] = Tools::displayError('Invalid carrier or no carrier selected');
+			$this->errors[] = Tools::displayError('invalid carrier or no carrier selected');
 		
 		Module::hookExec('processCarrier', array('cart' => self::$cart));
 		

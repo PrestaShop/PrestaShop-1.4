@@ -45,14 +45,14 @@ if ($cookie->isLogged())
 	{
 		if (Configuration::get('PS_TOKEN_ACTIVATED') == 1 AND
 			strcmp(Tools::getToken(), Tools::getValue('token')))
-			$errors[] = Tools::displayError('Invalid token');
+			$errors[] = Tools::displayError('invalid token');
 		if (!sizeof($errors))
 		{
 			$name = Tools::getValue('name');
 			if (empty($name))
-				$errors[] = Tools::displayError('You must specify a name.');
+				$errors[] = Tools::displayError('you must specify a name');
 			if (WishList::isExistsByNameForUser($name))
-				$errors[] = Tools::displayError('This name is already used by another list.');
+				$errors[] = Tools::displayError('this name is already used by another list');
 			
 			if(!sizeof($errors))
 			{
@@ -79,7 +79,7 @@ if ($cookie->isLogged())
 		if (Validate::isLoadedObject($wishlist))
 			$wishlist->delete();
 		else
-			$errors[] = Tools::displayError('Cannot delete this wishlist');
+			$errors[] = Tools::displayError('cannot delete this wishlist');
 	}
 	$smarty->assign('wishlists', WishList::getByIdCustomer((int)($cookie->id_customer)));
 	$smarty->assign('nbProducts', WishList::getInfosByIdCustomer((int)($cookie->id_customer)));

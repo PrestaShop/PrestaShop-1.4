@@ -78,7 +78,7 @@ class AdminOrders extends AdminTab
 			if ($this->tabAccess['edit'] === '1')
 			{
 				if (!$order->hasBeenShipped())
-					die(Tools::displayError('The shipping number can only be set once the order has been shipped.'));
+					die(Tools::displayError('The shipping number can only be set once the order has been shipped!'));
 				$_GET['view'.$this->table] = true;
 
 				$shipping_number = pSQL(Tools::getValue('shipping_number'));
@@ -101,7 +101,7 @@ class AdminOrders extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 
 		/* Change order state, add a new entry in order history and send an e-mail to the customer if needed */
@@ -111,7 +111,7 @@ class AdminOrders extends AdminTab
 			{
 				$_GET['view'.$this->table] = true;
 				if (!$newOrderStatusId = (int)(Tools::getValue('id_order_state')))
-					$this->_errors[] = Tools::displayError('Invalid new order status');
+					$this->_errors[] = Tools::displayError('Invalid new order status!');
 				else
 				{
 					$history = new OrderHistory();
@@ -134,11 +134,11 @@ class AdminOrders extends AdminTab
 							'{bankwire_address}' => (Configuration::get('BANK_WIRE_ADDRESS') ? nl2br(Configuration::get('BANK_WIRE_ADDRESS')) : ''));
 					if ($history->addWithemail(true, $templateVars))
 						Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder'.'&token='.$this->token);
-					$this->_errors[] = Tools::displayError('An error occurred while changing the status or was unable to send e-mail to the customer.');
+					$this->_errors[] = Tools::displayError('an error occurred while changing status or was unable to send e-mail to the customer');
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 
 		/* Add a new message for the current order and send an e-mail to the customer if needed */
@@ -148,9 +148,9 @@ class AdminOrders extends AdminTab
 		 	if ($this->tabAccess['edit'] === '1')
 			{
 				if (!($id_order = (int)(Tools::getValue('id_order'))) OR !($id_customer = (int)(Tools::getValue('id_customer'))))
-					$this->_errors[] = Tools::displayError('An error occurred before sending message');
+					$this->_errors[] = Tools::displayError('an error occurred before sending message');
 				elseif (!Tools::getValue('message'))
-					$this->_errors[] = Tools::displayError('Message cannot be blank');
+					$this->_errors[] = Tools::displayError('message cannot be blank');
 				else
 				{
 					/* Get message rules and and check fields validity */
@@ -158,14 +158,14 @@ class AdminOrders extends AdminTab
 					foreach ($rules['required'] AS $field)
 						if (($value = Tools::getValue($field)) == false AND (string)$value != '0')
 							if (!Tools::getValue('id_'.$this->table) OR $field != 'passwd')
-								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is required.');
+								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is required');
 					foreach ($rules['size'] AS $field => $maxLength)
 						if (Tools::getValue($field) AND Tools::strlen(Tools::getValue($field)) > $maxLength)
-							$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is too long.').' ('.$maxLength.' '.Tools::displayError('chars max').')';
+							$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is too long').' ('.$maxLength.' '.Tools::displayError('chars max').')';
 					foreach ($rules['validate'] AS $field => $function)
 						if (Tools::getValue($field))
 							if (!Validate::$function(htmlentities(Tools::getValue($field), ENT_COMPAT, 'UTF-8')))
-								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is invalid.');
+								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is invalid');
 					if (!sizeof($this->_errors))
 					{
 						$message = new Message();
@@ -174,7 +174,7 @@ class AdminOrders extends AdminTab
 						$message->id_order = $id_order;
 						$message->private = Tools::getValue('visibility');
 						if (!$message->add())
-							$this->_errors[] = Tools::displayError('An error occurred while sending message.');
+							$this->_errors[] = Tools::displayError('an error occurred while sending message');
 						elseif ($message->private)
 							Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder&conf=11'.'&token='.$this->token);
 						elseif (Validate::isLoadedObject($customer = new Customer($id_customer)))
@@ -187,7 +187,7 @@ class AdminOrders extends AdminTab
 									Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder&conf=11'.'&token='.$this->token);
 							}
 						}
-						$this->_errors[] = Tools::displayError('An error occurred while sending e-mail to customer.');
+						$this->_errors[] = Tools::displayError('an error occurred while sending e-mail to the customer');
 					}
 				}
 			}
@@ -292,7 +292,7 @@ class AdminOrders extends AdminTab
 
 							// Delete product
 							if (!$order->deleteProduct($order, $orderDetail, $qtyCancelProduct))
-								$this->_errors[] = Tools::displayError('An error occurred during deletion of the product.').' <span class="bold">'.$orderDetail->product_name.'</span>';
+								$this->_errors[] = Tools::displayError('an error occurred during deletion for the product').' <span class="bold">'.$orderDetail->product_name.'</span>';
 							Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => $id_order_detail));
 						}
 					if (!sizeof($this->_errors) AND $customizationList)
@@ -301,7 +301,7 @@ class AdminOrders extends AdminTab
 							$orderDetail = new OrderDetail((int)($id_order_detail));
 							$qtyCancelProduct = abs($customizationQtyList[$id_customization]);
 							if (!$order->deleteCustomization($id_customization, $qtyCancelProduct, $orderDetail))
-								$this->_errors[] = Tools::displayError('An error occurred during deletion of the product. customization').' '.$id_customization;
+								$this->_errors[] = Tools::displayError('an error occurred during deletion for the product customization').' '.$id_customization;
 						}
 					// E-mail params
 					if ((isset($_POST['generateCreditSlip']) OR isset($_POST['generateDiscount'])) AND !sizeof($this->_errors))

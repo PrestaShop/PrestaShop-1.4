@@ -612,7 +612,7 @@ class ReferralProgram extends Module
 	public function hookUpdateOrderStatus($params)
 	{
 		if (!Validate::isLoadedObject($params['newOrderStatus']))
-			die (Tools::displayError('Missing parameters'));
+			die (Tools::displayError('Some parameters are missing.'));
 		$orderState = $params['newOrderStatus'];
 		$order = new Order((int)($params['id_order']));
 		if ($order AND !Validate::isLoadedObject($order))

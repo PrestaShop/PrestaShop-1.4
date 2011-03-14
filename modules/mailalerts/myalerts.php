@@ -40,7 +40,7 @@ if ($cookie->isLogged())
 	{
 		$id_customer = (int)($cookie->id_customer);
 		if (!$id_product = (int)(Tools::getValue('id_product')))
-			$errors[] = Tools::displayError('You must have a product to delete an alert.'); 
+			$errors[] = Tools::displayError('You need a product to delete an alert'); 
 		$id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 		$customer = new Customer((int)($id_customer));
 		MailAlerts::deleteAlert((int)($id_customer), 0, (int)($id_product), (int)($id_product_attribute));
@@ -48,7 +48,7 @@ if ($cookie->isLogged())
 	$smarty->assign('alerts', MailAlerts::getProductsAlerts((int)($cookie->id_customer), (int)($cookie->id_lang)));
 }
 else
-	$errors[] = Tools::displayError('You must be logged in to manage your alerts.'); 
+	$errors[] = Tools::displayError('You need to be logged in to manage your alerts'); 
 
 $smarty->assign(array(
 	'id_customer' => (int)($cookie->id_customer),

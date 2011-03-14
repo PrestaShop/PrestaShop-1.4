@@ -41,7 +41,7 @@ $id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 	strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 	$cookie->isLogged() === true)
-	$errors[] = Tools::displayError('Invalid token');
+	$errors[] = Tools::displayError('invalid token');
 if ($cookie->isLogged())
 {
 	if ($id_wishlist AND WishList::exists($id_wishlist, $cookie->id_customer) === true)
@@ -76,7 +76,7 @@ if ($cookie->isLogged())
 		echo Tools::displayError('No template found');
 }
 else
-	$errors[] = Tools::displayError('You must be logged in to manage your wishlist.');
+	$errors[] = Tools::displayError('You need to be logged in to manage your wishlist');
 	
 if (sizeof($errors))
 {

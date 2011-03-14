@@ -100,13 +100,13 @@ class AdminCategories extends AdminTab
 			{
 				if (!Category::checkBeforeMove($id_category, (int)(Tools::getValue('id_parent'))))
 				{
-					$this->_errors[] = Tools::displayError('Category cannot be moved here');
+					$this->_errors[] = Tools::displayError('category cannot be moved here');
 					return false;
 				}
 
 				// Updating customer's group
 				if ($this->tabAccess['edit'] !== '1')
-					$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+					$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 				else
 				{
 					$object = new $this->className($id_category);
@@ -115,10 +115,10 @@ class AdminCategories extends AdminTab
 						if (Validate::isLoadedObject($object))
 							$object->updateGroup(Tools::getValue('groupBox'));
 						else
-							$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 					else
-						$this->_errors[] = Tools::displayError('You must select at least one group.');
+						$this->_errors[] = Tools::displayError('you must select at least one group');
 				}
 			}
 		}
@@ -144,13 +144,13 @@ class AdminCategories extends AdminTab
 						Tools::redirectAdmin($currentIndex.'&conf=5'.$target.'&token='.Tools::getValue('token'));
 					}
 					else
-						$this->_errors[] = Tools::displayError('An error occurred while updating status.');
+						$this->_errors[] = Tools::displayError('an error occurred while updating status');
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 		/* Delete object */
 		elseif (isset($_GET['delete'.$this->table]))
@@ -161,7 +161,7 @@ class AdminCategories extends AdminTab
 				{
 					// check if request at least one object with noZeroObject
 					if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
-						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
+						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
 					else
 					{
 						$this->deleteImage($object->id);
@@ -173,11 +173,11 @@ class AdminCategories extends AdminTab
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.(int)($object->id_parent));
-						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
+						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -185,9 +185,9 @@ class AdminCategories extends AdminTab
 		elseif (isset($_GET['position']))
 		{
 			if ($this->tabAccess['edit'] !== '1')
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 			elseif (!Validate::isLoadedObject($object = new Category((int)(Tools::getValue($this->identifier, Tools::getValue('id_category_to_move', 1))))))
-				$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
@@ -208,11 +208,11 @@ class AdminCategories extends AdminTab
 						$category->cleanPositions((int)(Tools::getValue('id_category')));
 						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCatalog').'&id_category='.(int)(Tools::getValue('id_category')));
 					}
-					$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
 
 				}
 				else
-					$this->_errors[] = Tools::displayError('You must select at least one element to delete.');
+					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');

@@ -258,7 +258,7 @@ class AdminCarriers extends AdminTab
 							}
 							$this->changeGroups($objectNew->id);
 							if (!$result)
-								$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b>';
+								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b>';
 							elseif ($this->postImage($objectNew->id))
 								{
 									$this->changeZones($objectNew->id);
@@ -266,10 +266,10 @@ class AdminCarriers extends AdminTab
 								}
 						}
 						else
-							$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 				}
 
 				/* Object creation */
@@ -280,7 +280,7 @@ class AdminCarriers extends AdminTab
 						$object = new $this->className();
 						$this->copyFromPost($object, $this->table);
 						if (!$object->add())
-							$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.'</b>';
+							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.'</b>';
 						elseif (($_POST['id_'.$this->table] = $object->id /* voluntary */) AND $this->postImage($object->id) AND $this->_redirect)
 						{
 							$this->changeZones($object->id);
@@ -289,7 +289,7 @@ class AdminCarriers extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to add here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
 				}
 			}
 		}
@@ -308,7 +308,7 @@ class AdminCarriers extends AdminTab
 	{
 		$carrier = new $this->className($id);
 		if (!Validate::isLoadedObject($carrier))
-			die (Tools::displayError('Object cannot be loaded'));
+			die (Tools::displayError('object cannot be loaded'));
 		$zones = Zone::getZones(true);
 		foreach ($zones as $zone)
 			if (sizeof($carrier->getZone($zone['id_zone'])))

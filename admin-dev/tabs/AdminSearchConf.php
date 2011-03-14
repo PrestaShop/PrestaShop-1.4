@@ -62,7 +62,7 @@ class AdminSearchConf extends AdminPreferences
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsSearch);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 	}
 	

@@ -122,7 +122,7 @@ class AdminGenerator extends AdminTab
 				$this->_errors[] = $this->l('Cannot write into file:').' <b>'.$this->_htFile.'</b><br />'.$this->l('Please check write permissions.');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 
 		if (Tools::isSubmit('submitRobots'))
@@ -169,7 +169,7 @@ class AdminGenerator extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 				}
 			} else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 		}
 	}
 

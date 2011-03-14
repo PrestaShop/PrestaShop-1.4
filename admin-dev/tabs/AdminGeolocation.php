@@ -149,13 +149,13 @@ class AdminGeolocation extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
-				$this->_errors[] = Tools::displayError('Geolocation database is unavailable.');
+				$this->_errors[] = Tools::displayError('Geolocation database isn\'t available');
 		}
 		
 		if (Tools::isSubmit('submitGeolocationCountries'))
 		{
 			if (!is_array(Tools::getValue('countries')) OR !sizeof(Tools::getValue('countries')))
-				$this->_errors[] = Tools::displayError('Country selection is invalid');
+				$this->_errors[] = Tools::displayError('Countries selection is invalid');
 			else
 			{
 				Configuration::updateValue('PS_GEOLOCATION_BEHAVIOR', (!(int)(Tools::getValue('PS_GEOLOCATION_BEHAVIOR')) ? _PS_GEOLOCATION_NO_CATALOG_ : _PS_GEOLOCATION_NO_ORDER_));

@@ -98,7 +98,7 @@ class ProductControllerCore extends FrontController
 		global $cart;
 
 		if (!$id_product = (int)(Tools::getValue('id_product')) OR !Validate::isUnsignedId($id_product))
-			$this->errors[] = Tools::displayError('Product not found');
+			$this->errors[] = Tools::displayError('product not found');
 		else
 		{
 			if (!Validate::isLoadedObject($this->product)
@@ -106,10 +106,10 @@ class ProductControllerCore extends FrontController
 				|| !file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php')))
 			{
 				header('HTTP/1.1 404 page not found');
-				$this->errors[] = Tools::displayError('Pproduct is no longer available.');
+				$this->errors[] = Tools::displayError('product is no longer available');
 			}
 			elseif (!$this->product->checkAccess((int)(self::$cookie->id_customer)))
-				$this->errors[] = Tools::displayError('You do not have access to this product.');
+				$this->errors[] = Tools::displayError('you do not have access to this product');
 			else
 			{
 				self::$smarty->assign('virtual', ProductDownload::getIdFromIdProduct((int)($this->product->id)));

@@ -44,7 +44,7 @@ class AdminImageResize extends AdminTab
 				'jpg',
 				$_POST[$imageType['id_image_type'].'_x1'],
 				$_POST[$imageType['id_image_type'].'_y1']))
-					$this->_errors = Tools::displayError('An error occurred while copying image.').' '.stripslashes($imageType['name']);
+					$this->_errors = Tools::displayError('an error occurred while copying image').' '.stripslashes($imageType['name']);
 				// Save and stay on same form
 				if (Tools::getValue('saveandstay') == 'on')
 					Tools::redirectAdmin($currentIndex.'&id_product='.Tools::getValue('id_product').'&id_category='.(int)(Tools::getValue('id_category')).'&addproduct&conf=4&tabs=1&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));

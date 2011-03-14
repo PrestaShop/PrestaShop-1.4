@@ -184,7 +184,7 @@ class AdminBackup extends AdminTab
 		$dh = @opendir(PS_ADMIN_DIR.'/backups/');
 		if ($dh === false)
 		{
-			$this->_errors[] = Tools::displayError('Unable to open backup directory .').addslashes(PS_ADMIN_DIR.'/backups/').'"';
+			$this->_errors[] = Tools::displayError('Unable to open backup directory "').addslashes(PS_ADMIN_DIR.'/backups/').'"';
 			return;
 		}
 		while (($file = readdir($dh)) !== false)

@@ -98,7 +98,7 @@ abstract class ModuleGridCore extends Module
 		if (!($render = Configuration::get('PS_STATS_GRID_RENDER')))
 			return Tools::displayError('No grid engine selected');
 		if (!file_exists(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
-			return Tools::displayError('Grid engine selected is unavailable.');
+			return Tools::displayError('Grid engine selected unavailable');
 			
 		$grider = 'grider.php?render='.$render.'&module='.Tools::getValue('module');
 		

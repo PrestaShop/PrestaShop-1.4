@@ -272,7 +272,7 @@ class AdminGroups extends AdminTab
 					$groupReduction->id_group = (int)($obj->id);
 					$groupReduction->reduction = (float)($reduction) / 100;
 					if (!$groupReduction->add())
-						$this->_errors[] = Tools::displayError('An error occurred while adding a category group reduction.');
+						$this->_errors[] = Tools::displayError('An error occurred while adding a category group reduction');
 					else
 						Tools::redirectAdmin($currentIndex.'&update'.$this->table.'&id_group='.(int)(Tools::getValue('id_group')).'&conf=3&token='.$this->token);
 				}
@@ -285,7 +285,7 @@ class AdminGroups extends AdminTab
 			if ($this->tabAccess['add'] === '1')
 			{
 				if (Tools::getValue('reduction') > 100 OR Tools::getValue('reduction') < 0)
-					$this->_errors[] = Tools::displayError('Reduction value is incorrect');
+					$this->_errors[] = Tools::displayError('reduction value is incorrect');
 				else
 				{
 					$id_group_reductions = Tools::getValue('gr_id_group_reduction');
@@ -299,7 +299,7 @@ class AdminGroups extends AdminTab
 								$groupReduction = new GroupReduction((int)($id_group_reductions[$key]));
 								$groupReduction->reduction = $reductions[$key] / 100;
 								if (!$groupReduction->update())
-									$this->errors[] = Tools::displayError('Cannot update group reductions');
+									$this->errors[] = Tools::displayError('Impossible to update group reductions');
 							}
 					if (!sizeof($this->_errors))
 						parent::postProcess();
@@ -315,16 +315,16 @@ class AdminGroups extends AdminTab
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
 					if ($object->id == 1)
-						$this->_errors[] = Tools::displayError('You cannot delete default group.');
+						$this->_errors[] = Tools::displayError('You cannot delete default group');
 					else
 					{
 						if ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
-						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
+						$this->_errors[] = Tools::displayError('an error occurred during deletion');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');

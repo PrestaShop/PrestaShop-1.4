@@ -148,7 +148,7 @@ class AdminCustomerThreads extends AdminTab
 					$cm->add();
 				}
 				else
-					echo '<div class="alert error">'.Tools::displayError('Email invalid.').'</div>';
+					echo '<div class="alert error">'.Tools::displayError('E-mail not valid').'</div>';
 			}
 			if (Tools::isSubmit('submitReply'))
 			{
@@ -159,7 +159,7 @@ class AdminCustomerThreads extends AdminTab
 				$cm->message = Tools::htmlentitiesutf8(nl2br2(Tools::getValue('reply_message')));
 				$cm->ip_address = ip2long($_SERVER['REMOTE_ADDR']);
 				if (isset($_FILES) AND !empty($_FILES['joinFile']['name']) AND $_FILES['joinFile']['error'] != 0)
-					$this->_errors[] = Tools::displayError('An error occurred with the file upload.');
+					$this->_errors[] = Tools::displayError('an error occurred with the file upload');
 				else if ($cm->add())
 				{
 					$fileAttachment = NULL;
@@ -178,7 +178,7 @@ class AdminCustomerThreads extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.(int)$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred, your message was not sent.  Please contact your system administrator.');
+					$this->_errors[] = Tools::displayError('an error occurred, your message wasn\'t sent, please contact your system administrator');
 			}
 		}
 
