@@ -235,7 +235,7 @@ class AdminCustomers extends AdminTab
 
 	public function viewcustomer()
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex, $cookie, $link;
 
 		$irow = 0;
 		$configurations = Configuration::getMultiple(array('PS_LANG_DEFAULT', 'PS_CURRENCY_DEFAULT'));
@@ -582,10 +582,10 @@ class AdminCustomers extends AdminTab
 			{
 				$product = new Product((int)$p['id_product'], false, $cookie->id_lang);
 				echo '
-				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'/product.php?id_product='.$product->id.'\'">
+				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \''.$link->getProductLink((int)$product->id, $product->link_rewrite, Category::getLinkRewrite($product->id_category_default, (int)($cookie->id_lang))).'\'">
 					<td>'.(int)$product->id.'</td>
 					<td>'.Tools::htmlentitiesUTF8($product->name).'</td>
-					<td align="center"><a href="'.__PS_BASE_URI__.'product.php?id_product='.$product->id.'"><img src="../img/admin/details.gif" /></a></td>
+					<td align="center"><a href="'.$link->getProductLink((int)$product->id, $product->link_rewrite, Category::getLinkRewrite($product->id_category_default, (int)($cookie->id_lang))).'"><img src="../img/admin/details.gif" /></a></td>
 				</tr>';
 			}
 			echo '</table></div>';
