@@ -589,7 +589,11 @@ class AdminImport extends AdminTab
 			if ($product->id_tax_rules_group == 0 || !Validate::isLoadedObject(new TaxRulesGroup($trg_id)))
 				$this->_addProductWarning('id_tax_rules_group', $product->id_tax_rules_group, Tools::displayError('invalid tax rule group ID, you first need a group with this ID'));
 			else
-			    $product->id_tax_rules_group = $trg_id;
+			{
+			    $product->tax_rate = TaxRulesGroup::getTaxesRate((int)$product->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
+				
+			}
+			
 
 			if (isset($product->manufacturer) AND is_numeric($product->manufacturer) AND Manufacturer::manufacturerExists((int)($product->manufacturer)))
 				$product->id_manufacturer = (int)($product->manufacturer);
