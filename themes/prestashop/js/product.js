@@ -79,9 +79,9 @@ function findCombination(firstTime)
 		choice.push($(this).val());
 	});
 	var nbAttributesEquals = 0;
+	
 	//testing every combination to find the conbination's attributes' case of the user
-
-	for (combination in combinations)
+	for (var combination = 0; combination < combinations.length; ++combination)
 	{
 		//verify if this combinaison is the same that the user's choice
 		nbAttributesEquals = 0;
