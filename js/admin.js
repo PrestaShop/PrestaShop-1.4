@@ -685,9 +685,9 @@ function showAttributeColorGroup(name, container)
 	id_list = document.getElementById(name);
 	value = id_list.options[id_list.selectedIndex].value;
 	if (attributesGroups[value])
-		openCloseLayer(container, 'open');
+		$('#colorAttributeProperties').fadeIn();
 	else
-		openCloseLayer(container, 'close');
+		$('#colorAttributeProperties').fadeOut();
 }
 
 function orderOverwriteMessage(sl, text)

@@ -56,14 +56,13 @@ class AdminAttributes extends AdminTab
 			return;
 		$color = ($obj->color ? $obj->color : 0);
 		$attributes_groups = AttributeGroup::getAttributesGroups($this->_defaultFormLanguage);
-		
+		$strAttributesGroups = '';
 		echo '
 		<script type="text/javascript">
-			var attributesGroups = new Array();
-		';
+			var attributesGroups = {';
 		foreach ($attributes_groups AS $attribute_group)
-			echo 'attributesGroups['.$attribute_group['id_attribute_group'].'] = '.$attribute_group['is_color_group'].';'."\n";
-		echo '
+			$strAttributesGroups .= '"'.$attribute_group['id_attribute_group'].'" : '.$attribute_group['is_color_group'].',';
+		echo $strAttributesGroups.'};
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.($token ? $token : $this->token).'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_attribute" value="'.$obj->id.'" />' : '').'
