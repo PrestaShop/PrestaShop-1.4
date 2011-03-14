@@ -21,8 +21,8 @@ a:hover{
 
 #container{
 	margin:1em auto 0 auto;
-	width:910px;
-	padding:30px 30px 0px 30px;
+	width:930px;
+	padding:10px 30px 0px 30px;
 	font-size:0.8em;
 	background : #456d01 url(img/bg-ctnr.png) top repeat-x;
 	display:none;
@@ -42,7 +42,8 @@ div#loader{
 
 div#leftpannel{
 	float:left;
-	width:230px;
+	width:250px;
+	margin-top: 15px;
 }
 
 div#leftpannel div#help{
@@ -507,8 +508,8 @@ div.request{
 }
 div#PrestaShopLogo{
 	background:none;
-	width:167px;
-	height:57px;
+	width:233px;
+	height:68px;
 	text-indent:-1000px;
 	margin:0 auto;
 	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/logo.png', sizingMethod='crop');
