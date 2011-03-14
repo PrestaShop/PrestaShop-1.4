@@ -81,7 +81,7 @@ class AdminPPreferences extends AdminPreferences
 					$this->_postConfig($this->_fieldsProduct);
 				}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 	}
 

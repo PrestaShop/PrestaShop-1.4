@@ -117,12 +117,12 @@ class AddressControllerCore extends FrontController
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
-					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required');
+					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required.');
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 			}
 			if ($country->isNeedDni() AND !Tools::getValue('dni') AND !Validate::isDniLite(Tools::getValue('dni')))
 				$this->errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
@@ -131,7 +131,7 @@ class AddressControllerCore extends FrontController
 			if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 				strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 				self::$cookie->isLogged(true) === true)
-				$this->errors[] = Tools::displayError('invalid token');
+				$this->errors[] = Tools::displayError('Invalid token');
 
 			if ((int)($country->contains_states) AND !(int)($address->id_state))
 				$this->errors[] = Tools::displayError('This country requires a state selection.');

@@ -178,7 +178,7 @@ class AdminLanguages extends AdminTab
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+					$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 			}
 			/* Language edition */
 			else
@@ -196,7 +196,7 @@ class AdminLanguages extends AdminTab
 					$this->validateRules();
 				}
 				else
-					$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+					$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			}
 		}
 		elseif (isset($_GET['status']) AND isset($_GET['id_lang']))
@@ -211,7 +211,7 @@ class AdminLanguages extends AdminTab
 					return parent::postProcess();
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitOptions'.$this->table))
 		{

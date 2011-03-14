@@ -80,7 +80,7 @@ class AdminShipping extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 
 		/* Shipping fees */
@@ -127,7 +127,7 @@ class AdminShipping extends AdminTab
 					$this->_errors[] = Tools::displayError('An error occurred while updating fees (cannot load carrier object).');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 	}
 

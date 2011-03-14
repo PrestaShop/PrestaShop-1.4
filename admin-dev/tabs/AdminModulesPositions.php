@@ -54,7 +54,7 @@ class AdminModulesPositions extends AdminTab
 					$this->_errors[] = Tools::displayError('module cannot be loaded');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 
 		// Add new module in hook
@@ -89,7 +89,7 @@ class AdminModulesPositions extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&conf=16'.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		
 		// Edit module from hook
@@ -120,7 +120,7 @@ class AdminModulesPositions extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&conf=16'.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 
 		// Delete module from hook

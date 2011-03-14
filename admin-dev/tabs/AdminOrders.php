@@ -101,7 +101,7 @@ class AdminOrders extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 
 		/* Change order state, add a new entry in order history and send an e-mail to the customer if needed */
@@ -138,7 +138,7 @@ class AdminOrders extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 
 		/* Add a new message for the current order and send an e-mail to the customer if needed */

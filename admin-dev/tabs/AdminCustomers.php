@@ -109,7 +109,7 @@ class AdminCustomers extends AdminTab
 				if (isset($id) AND !empty($id))
 				{
 					if ($this->tabAccess['edit'] !== '1')
-						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 					else
 					{
 						$object = new $this->className($id);
@@ -151,7 +151,7 @@ class AdminCustomers extends AdminTab
 						$object = new $this->className();
 						$this->copyFromPost($object, $this->table);
 						if (!$object->add())
-							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+							$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
 						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
 						{
 							// Add Associated groups
@@ -170,7 +170,7 @@ class AdminCustomers extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 				}
 			}
 		}
@@ -228,7 +228,7 @@ class AdminCustomers extends AdminTab
 					$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		return parent::postProcess();
 	}

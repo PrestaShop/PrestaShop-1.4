@@ -421,8 +421,8 @@ abstract class ObjectModelCore
 					die (Tools::displayError('Validation function not found.').' '.$method);
 				elseif (!empty($value) AND !call_user_func(array('Validate', $method), $value))
 				{
-					if ($die) die (Tools::displayError('The following field is invalid according to the validate method ').'<b>'.$method.'</b>:<br/> ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
-					return $errorReturn ? Tools::displayError('The following field is invalid according to the validate method ').'<b>'.$method.'</b>:<br/> ('. get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k : false;
+					if ($die) die (Tools::displayError('The following field is invalid. according to the validate method ').'<b>'.$method.'</b>:<br/> ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
+					return $errorReturn ? Tools::displayError('The following field is invalid. according to the validate method ').'<b>'.$method.'</b>:<br/> ('. get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k : false;
 				}
 		}
 		return true;
@@ -447,7 +447,7 @@ abstract class ObjectModelCore
 		foreach ($fieldsRequired AS $field)
 		if (($value = Tools::getValue($field, $this->{$field})) == false AND (string)$value != '0')
 			if (!$this->id OR $field != 'passwd')
-				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is required');
+				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is required.');
 
 
 		/* Checking for maximum fields sizes */
@@ -462,7 +462,7 @@ abstract class ObjectModelCore
 			if ($value = Tools::getValue($field, $this->{$field}) OR ($field == 'postcode' AND $value == '0'))
 			{
 				if (!Validate::$function($value))
-					$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is invalid');
+					$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is invalid.');
 				else
 				{
 					if ($field == 'passwd')

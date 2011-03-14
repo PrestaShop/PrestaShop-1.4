@@ -78,10 +78,10 @@ class AdminCurrencies extends AdminTab
 					elseif ($object->delete())
 						Tools::redirectAdmin($currentIndex.'&conf=1'.'&token='.$this->token);
 					else
-						$this->_errors[] = Tools::displayError('an error occurred during deletion');
+						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -103,7 +103,7 @@ class AdminCurrencies extends AdminTab
 					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::getValue('submitOptions'.$this->table))
 		{

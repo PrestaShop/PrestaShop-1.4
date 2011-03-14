@@ -65,7 +65,7 @@ class AdminImages extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&conf=9'.'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		else
 			parent::postProcess();

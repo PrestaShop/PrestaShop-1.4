@@ -123,21 +123,21 @@ class AdminPreferences extends AdminTab
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsGeneral);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (isset($_POST['submitShop'.$this->table]))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsShop);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (isset($_POST['submitAppearance'.$this->table]))
 		{
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsAppearance);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (isset($_POST['submitThemes'.$this->table]))
 		{
@@ -154,7 +154,7 @@ class AdminPreferences extends AdminTab
 					$this->_errors[] = Tools::displayError('You must choose a graphical theme.');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		parent::postProcess();
 	}

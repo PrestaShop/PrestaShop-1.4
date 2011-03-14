@@ -90,7 +90,7 @@ class CartControllerCore extends FrontController
 		if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 			strcasecmp(Tools::getToken(false), strval(Tools::getValue('token'))) &&
 			self::$cookie->isLogged() === true)
-			$this->errors[] = Tools::displayError('invalid token');
+			$this->errors[] = Tools::displayError('Invalid token');
 
 		// Update the cart ONLY if $this->cookies are available, in order to avoid ghost carts created by bots
 		if (($add OR Tools::getIsset('update') OR $delete) AND isset(self::$cookie->date_add))

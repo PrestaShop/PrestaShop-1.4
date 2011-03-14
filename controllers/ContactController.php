@@ -85,7 +85,7 @@ class ContactControllerCore extends FrontController
 			}
 			$message = Tools::htmlentitiesUTF8(Tools::getValue('message'));
 			if (!($from = trim(Tools::getValue('from'))) OR !Validate::isEmail($from))
-				$this->errors[] = Tools::displayError('invalid e-mail address');
+				$this->errors[] = Tools::displayError('Invalid e-mail address');
 			elseif (!($message = nl2br2($message)))
 				$this->errors[] = Tools::displayError('Message cannot be blank');
 			elseif (!Validate::isMessage($message))

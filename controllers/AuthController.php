@@ -50,7 +50,7 @@ class AuthControllerCore extends FrontController
 		if (Tools::isSubmit('SubmitCreate'))
 		{
 			if (!Validate::isEmail($email = Tools::getValue('email_create')) OR empty($email))
-				$this->errors[] = Tools::displayError('invalid e-mail address');
+				$this->errors[] = Tools::displayError('Invalid e-mail address');
 			elseif (Customer::customerExists($email))
 			{
 				$this->errors[] = Tools::displayError('An account is already registered with this e-mail, please fill in the password or request a new one.'); 
@@ -115,12 +115,12 @@ class AuthControllerCore extends FrontController
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
-					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required');
+					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required.');
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid');
+					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.');
 			}
 			if (Country::isNeedDniByCountryId($address->id_country) AND !Tools::getValue('dni') AND !Validate::isDniLite(Tools::getValue('dni')))
 				$this->errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
@@ -232,9 +232,9 @@ class AuthControllerCore extends FrontController
 			if (empty($email))
 				$this->errors[] = Tools::displayError('E-mail address required');
 			elseif (!Validate::isEmail($email))
-				$this->errors[] = Tools::displayError('invalid e-mail address');
+				$this->errors[] = Tools::displayError('Invalid e-mail address');
 			elseif (empty($passwd))
-				$this->errors[] = Tools::displayError('Password is required');
+				$this->errors[] = Tools::displayError('Password is required.');
 			elseif (Tools::strlen($passwd) > 32)
 				$this->errors[] = Tools::displayError('Password is too long');
 			elseif (!Validate::isPasswd($passwd))

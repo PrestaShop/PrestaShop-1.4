@@ -161,7 +161,7 @@ class AdminProducts extends AdminTab
 			if ((Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1') OR ($this->tabAccess['add'] === '1' AND !Tools::isSubmit('id_product')))
 				$this->submitAddproduct($token);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 
 		/* Delete a product in the download folder */
@@ -241,7 +241,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('submitAttachments'))
 		{
@@ -289,7 +289,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		/* Change object statuts (active, inactive) */
 		elseif (isset($_GET['status']) AND Tools::getValue($this->identifier))
@@ -307,7 +307,7 @@ class AdminProducts extends AdminTab
 					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		/* Delete object */
 		elseif (isset($_GET['delete'.$this->table]))
@@ -450,7 +450,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 
 		/* Product attributes management */
@@ -505,7 +505,7 @@ class AdminProducts extends AdminTab
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+							$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 					}
 					// Add new
 					else
@@ -636,7 +636,7 @@ class AdminProducts extends AdminTab
 				else
 					$this->_errors[] = Tools::displayError('Product must be created before adding features.');
 			}
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		/* Product specific prices management */
 		elseif (Tools::isSubmit('submitPricesModification'))
@@ -677,7 +677,7 @@ class AdminProducts extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&update'.$this->table.'&tabs=2&token='.($token ? $token : $this->token));
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('submitPriceAddition'))
 		{
@@ -715,7 +715,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('deleteSpecificPrice'))
 		{
@@ -778,7 +778,7 @@ class AdminProducts extends AdminTab
 					$this->_errors[] = Tools::displayError('Product must be created before adding customization possibilities.');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitProductCustomization'))
 		{
@@ -798,12 +798,12 @@ class AdminProducts extends AdminTab
 					$this->_errors[] = Tools::displayError('Product must be created before adding customization possibilities.');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (isset($_GET['position']))
 		{
 			if ($this->tabAccess['edit'] !== '1')
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
 				$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
 			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))

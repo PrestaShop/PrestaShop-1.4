@@ -98,7 +98,7 @@ class AdminPDF extends AdminPreferences
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($fieldLangPDF);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 	}	
 

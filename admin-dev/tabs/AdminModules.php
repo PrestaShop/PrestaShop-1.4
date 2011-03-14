@@ -105,7 +105,7 @@ class AdminModules extends AdminTab
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('desactive'))
 		{
@@ -119,7 +119,7 @@ class AdminModules extends AdminTab
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('reset'))
 		{
@@ -139,7 +139,7 @@ class AdminModules extends AdminTab
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 
 		}
 		/* Automatically copy a module from external URL and unarchive it in the appropriated directory */
@@ -156,7 +156,7 @@ class AdminModules extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		if (Tools::isSubmit('submitDownload2'))
 		{
@@ -172,7 +172,7 @@ class AdminModules extends AdminTab
 					$this->extractArchive(_PS_MODULE_DIR_.$_FILES['file']['name']);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		if (Tools::isSubmit('deleteModule'))
 		{
@@ -208,11 +208,11 @@ class AdminModules extends AdminTab
 						if (!($module = Module::getInstanceByName(urldecode($name))))
 							$this->_errors[] = $this->l('module not found');
 						elseif ($key == 'install' AND $this->tabAccess['add'] !== '1')
-							$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+							$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 						elseif ($key == 'uninstall' AND $this->tabAccess['delete'] !== '1')
 							$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 						elseif ($key == 'configure' AND $this->tabAccess['edit'] !== '1')
-							$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+							$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 						elseif ($key == 'install' AND Module::isInstalled($module->name))
 							$this->_errors[] = Tools::displayError('This module is already installed : ').$module->name;
 						elseif ($key == 'uninstall' AND !Module::isInstalled($module->name))

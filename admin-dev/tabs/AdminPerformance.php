@@ -70,7 +70,7 @@ class AdminPerformance extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		if (Tools::isSubmit('submitAddServer'))
 		{
@@ -91,7 +91,7 @@ class AdminPerformance extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		if (Tools::getValue('deleteMemcachedServer'))
 		{
@@ -144,7 +144,7 @@ class AdminPerformance extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		
 		if (Tools::isSubmit('submitCCC'))
@@ -163,7 +163,7 @@ class AdminPerformance extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		if (Tools::isSubmit('submitMediaServers'))
 		{
@@ -189,7 +189,7 @@ class AdminPerformance extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		if (Tools::isSubmit('submitSmartyConfig'))
 		{
@@ -200,7 +200,7 @@ class AdminPerformance extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		return parent::postProcess();
 	}
