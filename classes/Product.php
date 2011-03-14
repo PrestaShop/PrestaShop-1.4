@@ -1908,8 +1908,17 @@ class ProductCore extends ObjectModel
 	{
 		return self::getPriceStatic((int)($this->id), $tax, $id_product_attribute, $decimals, $divisor, $only_reduc, $usereduc, $quantity);
 	}
-
+	
+	/**
+	 * @deprecated
+	 */
 	public function getIdProductAttributeMostExpsensive()
+	{
+		Tools::displayAsDeprecated();
+		return $this->getIdProductAttributeMostExpensive();
+	}
+	
+	public function getIdProductAttributeMostExpensive()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_product_attribute`

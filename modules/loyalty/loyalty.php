@@ -461,7 +461,7 @@ class Loyalty extends Module
 					$smarty->assign('no_pts_discounted', 1);
 				}
 				else			
-					$points = (int)(LoyaltyModule::getNbPointsByPrice($product->getPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? false : true, (int)($product->getIdProductAttributeMostExpsensive()))));
+					$points = (int)(LoyaltyModule::getNbPointsByPrice($product->getPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? false : true, (int)($product->getIdProductAttributeMostExpensive()))));
 				$pointsAfter = $points;
 				$pointsBefore = 0;
 			}
