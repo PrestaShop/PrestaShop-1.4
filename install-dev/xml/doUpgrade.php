@@ -234,8 +234,6 @@ foreach($sqlContent as $query)
 	$query = trim($query);
 	if(!empty($query))
 	{
-		Configuration::updateValue('PS_UPGRADE_CURRENT_SQL', $query);
-		
 		/* If php code have to be executed */
 		if (strpos($query, '/* PHP:') !== false)
 		{
@@ -282,8 +280,8 @@ foreach($sqlContent as $query)
 	</request>'."\n";
 	}
 }
-Configuration::deleteByName('PS_UPGRADE_CURRENT_SQL');
 Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 0);
 $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action result="ok" error="">'."\n";
 $result .= $requests;
 die($result.'</action>'."\n");
+
