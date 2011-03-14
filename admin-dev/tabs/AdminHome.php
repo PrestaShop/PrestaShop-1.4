@@ -91,25 +91,24 @@ class AdminHome extends AdminTab
 		
 		if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled + $htaccessAfterUpdate != 12)	
 			echo '
-			<div class="admin-box">
+			<div class="admin-box1">
 				<h5>'.$this->l('A good beginning...')
 				.'
 					<span style="float:right">
 						<a id="optimizationTipsFold"'.
 						(Configuration::get('PS_HIDE_OPTIMIZATION_TIPS')
-						?'" href="#"><img alt="v" style="padding-top:5px" src="../img/admin/down.gif" /></a>':'href="?hideOptimizationTips" >
-						<img alt="X" style="padding-top:5px" src="../img/admin/close.png" />
+						?'" href="#"><img alt="v" style="padding-top:0px; padding-right: 5px;" src="../img/admin/down-white.gif" /></a>':'href="?hideOptimizationTips" >
+						<img alt="X" style="padding-top:0px; padding-right: 5px;" src="../img/admin/close-white.png" />
 						</a>').'</span></h5>';
 			echo '
 			<script type="text/javascript">
 			$(document).ready(function(){
 				$("#optimizationTipsFold").click(function(e){
 					$("#list-optimization-tips").toggle(function(){
-			
-						if($("#optimizationTipsFold").children("img").attr("src") == "../img/admin/down.gif")
-							$("#optimizationTipsFold").children("img").attr("src","../img/admin/close.png");
+						if($("#optimizationTipsFold").children("img").attr("src") == "../img/admin/down-white.gif")
+							$("#optimizationTipsFold").children("img").attr("src","../img/admin/close-white.png");
 						else
-							$("#optimizationTipsFold").children("img").attr("src","../img/admin/down.gif");
+							$("#optimizationTipsFold").children("img").attr("src","../img/admin/down-white.gif");
 					});
 				})
 			});
@@ -400,31 +399,38 @@ class AdminHome extends AdminTab
 			Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 1);
 			
 		$this->_displayOptimizationTips();
-	
-		echo '
-			<div id="table_info_link" class="admin-box">
-				<h5>'.$this->l('PrestaShop Link').'</h5>
-				<ul id="prestashop_link" class="admin-home-box-list">
-					<li>
-						<p>'.$this->l('Discover the latest official guide :').'</p>
-						<a href="http://www.prestashop.com/download/Userguide_'.(in_array($isoUser, array('en', 'es', 'fr')) ? $isoUser : 'en').'.pdf" target="_blank">'.$this->l('User Guide PrestaShop 1.3').'</a>
-						<a href="http://www.prestashop.com/download/Techguide_'.(in_array($isoUser, array('fr', 'es')) ? $isoUser : 'fr').'.pdf" target="_blank">'.$this->l('Technical Documentation').'</a>
-					</li>
-					<li>
-						<p>'.$this->l('Use the PrestaShop forum & discover a great community').'</p>
-						<a href="http://www.prestashop.com/forums/" target="_blank">'.$this->l('Go to forums.prestashop.com').'</a>
-					</li>
-					<li>
-						<p>'.$this->l('Enhance your Shop with new templates & modules').'</p>
-						<a href="http://addons.prestashop.com" target="_blank">'.$this->l('Go to addons.prestashop.com').'</a>
-					</li>
-				</ul>
-			</div>';
-			if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))
-				echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 300px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
 
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$content = @file_get_contents('https://www.prestashop.com/partner/paypal-advise/paypal-advise.php?isoCountry='.$isoCountry.'&id_lang='.$cookie->id_lang, false, $context);
+		$content = @file_get_contents('https://www.prestashop.com/partner/prestashop/prestashop-link.php?isoCountry='.$isoCountry.'&id_lang='.$cookie->id_lang, false, $context);
+		$content = explode('|', $content);
+		if ($content[0] == 'OK')
+			echo $content[1];
+		else
+			echo '
+				<div id="table_info_link" class="admin-box2">
+					<h5>'.$this->l('PrestaShop Link').'</h5>
+					<ul id="prestashop_link" class="admin-home-box-list">
+						<li>
+							<p>'.$this->l('Discover the latest official guide :').'</p>
+							<a href="http://www.prestashop.com/download/Userguide_'.(in_array($isoUser, array('en', 'es', 'fr')) ? $isoUser : 'en').'.pdf" target="_blank">'.$this->l('User Guide PrestaShop 1.3').'</a>
+							<a href="http://www.prestashop.com/download/Techguide_'.(in_array($isoUser, array('fr', 'es')) ? $isoUser : 'fr').'.pdf" target="_blank">'.$this->l('Technical Documentation').'</a>
+						</li>
+						<li>
+							<p>'.$this->l('Use the PrestaShop forum & discover a great community').'</p>
+							<a href="http://www.prestashop.com/forums/" target="_blank">'.$this->l('Go to forums.prestashop.com').'</a>
+						</li>
+						<li>
+							<p>'.$this->l('Enhance your Shop with new templates & modules').'</p>
+							<a href="http://addons.prestashop.com" target="_blank">'.$this->l('Go to addons.prestashop.com').'</a>
+						</li>
+					</ul>
+				</div>';
+
+		if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))
+			echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 300px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
+
+		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+		$content = @file_get_contents('https://www.prestashop.com/partner/paypal/paypal-tips.php?isoCountry='.$isoCountry.'&id_lang='.$cookie->id_lang, false, $context);
 		$content = explode('|', $content);
 		if ($content[0] == 'OK')
 			echo $content[1];

@@ -1093,7 +1093,7 @@ html[xmlns] .clearfix {
 }
 
 .table_info h5{
-	background-color: #7Ab51D;
+	background-image: url('../img/admin/green-gradient.png');
 	color: #FFFFFF;
 	margin: 0;
 	line-height: 29px;
@@ -1102,9 +1102,16 @@ html[xmlns] .clearfix {
 }
 
 .table_info h5 a,
-.admin-box h5 a{
+.admin-box1 h5 a{
 	color: #FFFFFF;
-	float: right;
+	font-size: 8pt;
+	text-decoration: underline;
+	font-weight: normal;
+	padding-right: 10px;
+}
+
+.admin-box2 h5 a{
+	color: #FFFFFF;
 	font-size: 8pt;
 	text-decoration: underline;
 	font-weight: normal;
@@ -1156,7 +1163,7 @@ html[xmlns] .clearfix {
 }
 
 #table_info_large h5{
-	background-color: #7Ab51D;
+	background-image: url('../img/admin/green-gradient.png');
 	color: #FFFFFF;
 	margin: 0;
 	line-height: 29px;
@@ -1180,7 +1187,7 @@ html[xmlns] .clearfix {
 	background-color: #DEDEDE;
 }
 
-.admin-box{
+.admin-box1{
 	width: 310px;
 	float: left;
 	padding: 1px;
@@ -1189,14 +1196,34 @@ html[xmlns] .clearfix {
 	margin-bottom: 20px;
 }
 
-.admin-box h5{
-	background-color: #7Ab51D;
+.admin-box1 h5{
+	background-image: url('../img/admin/orange-gradient.png');
 	color: #FFFFFF;
 	margin: 0;
 	line-height: 29px;
 	padding-left: 15px;
 	font-size: 12pt;
 }
+
+.admin-box2{
+	width: 310px;
+	float: left;
+	padding: 1px;
+	border: 1px solid #8E8E8E;
+	font-size: 8pt;
+	margin-bottom: 20px;
+	background-color: #f2f2f2;
+}
+
+.admin-box2 h5{
+	background-image: url('../img/admin/pink-gradient.png');
+	color: #FFFFFF;
+	margin: 0;
+	line-height: 29px;
+	padding-left: 15px;
+	font-size: 12pt;
+}
+
 
 .admin-home-box-list li img{
 	margin: 0 15px 0 5px;
@@ -1251,7 +1278,7 @@ html[xmlns] .clearfix {
 }
 
 #table_customer thead span{
-	background: url('../img/admin/thead.png');
+	background: url('../img/admin/greenlight-gradient.png');
 	color: #FFFFFF;
 	line-height: 35px;
 	border: 1px solid #416110;
