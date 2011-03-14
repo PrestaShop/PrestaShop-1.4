@@ -103,7 +103,7 @@ class AdminPerformance extends AdminTab
 					$this->_errors[] = Tools::displayError('Error in deleting Memcached server');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 		
 		if (Tools::isSubmit('submitCiphering') AND Configuration::get('PS_CIPHER_ALGORITHM') != (int)Tools::getValue('PS_CIPHER_ALGORITHM'))

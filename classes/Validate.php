@@ -60,7 +60,7 @@ class ValidateCore
 		if (!$url OR $url == 'http://')
 			$errors[] = Tools::displayError('Please specify module URL');
 		elseif (substr($url, -4) != '.tar' AND substr($url, -4) != '.zip' AND substr($url, -4) != '.tgz' AND substr($url, -7) != '.tar.gz')
-			$errors[] = Tools::displayError('unknown archive type');
+			$errors[] = Tools::displayError('Unknown archive type');
 		else
 		{
 			if ((strpos($url, 'http')) === false)

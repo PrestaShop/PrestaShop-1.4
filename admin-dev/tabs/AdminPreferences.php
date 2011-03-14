@@ -188,10 +188,10 @@ class AdminPreferences extends AdminTab
 				{
 					foreach ($languages as $language)
 						if (($value = Tools::getValue($field.'_'.$language['id_lang'])) == false AND (string)$value != '0')
-							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required');
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
 				}
 				elseif (($value = Tools::getValue($field)) == false AND (string)$value != '0')
-					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required');
+					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
 
 		/* Check fields validity */
 		foreach ($fields AS $field => $values)
@@ -200,11 +200,11 @@ class AdminPreferences extends AdminTab
 				foreach ($languages as $language)
 					if (Tools::getValue($field.'_'.$language['id_lang']) AND isset($values['validation']))
 						if (!Validate::$values['validation'](Tools::getValue($field.'_'.$language['id_lang'])))
-							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid');
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid.');
 			}
 			elseif (Tools::getValue($field) AND isset($values['validation']))
 				if (!Validate::$values['validation'](Tools::getValue($field)))
-					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid');
+					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid.');
 
 		/* Default value if null */
 		foreach ($fields AS $field => $values)

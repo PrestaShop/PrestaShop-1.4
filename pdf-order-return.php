@@ -35,9 +35,9 @@ if (!$cookie->isLogged())
 if (isset($_GET['id_order_return']) AND Validate::isUnsignedId($_GET['id_order_return']))
 	$orderReturn = new OrderReturn((int)($_GET['id_order_return']));
 if (!isset($orderReturn) OR !Validate::isLoadedObject($orderReturn))
-    die(Tools::displayError('order return not found'));
+    die(Tools::displayError('Order return not found'));
 elseif ($orderReturn->id_customer != $cookie->id_customer)
-    die(Tools::displayError('order return not found'));
+    die(Tools::displayError('Order return not found'));
 elseif ($orderReturn->state < 2)
     die(Tools::displayError('Order return not confirmed'));
 else

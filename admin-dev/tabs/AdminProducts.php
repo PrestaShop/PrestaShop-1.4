@@ -285,7 +285,7 @@ class AdminProducts extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('an error occurred while creating object');
+						$this->_errors[] = Tools::displayError('An error occurred while creating object.');
 				}
 			}
 			else
@@ -318,7 +318,7 @@ class AdminProducts extends AdminTab
 				{
 					// check if request at least one object with noZeroObject
 					if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
-						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
+						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
 					else
 					{
 						$id_category = Tools::getValue('id_category');
@@ -333,11 +333,11 @@ class AdminProducts extends AdminTab
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
-						$this->_errors[] = Tools::displayError('an error occurred during deletion');
+						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -355,7 +355,7 @@ class AdminProducts extends AdminTab
 					if (isset($object->noZeroObject) AND
 						// Check if all object will be deleted
 						(sizeof(call_user_func(array($this->className, $object->noZeroObject))) <= 1 OR sizeof($_POST[$this->table.'Box']) == sizeof(call_user_func(array($this->className, $object->noZeroObject)))))
-						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
+						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
 					else
 					{
 						$result = true;
@@ -1183,10 +1183,10 @@ class AdminProducts extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
+						$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Tools::displayError('Cannot load object').')';
+					$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> ('.Tools::displayError('Cannot load object').')';
 			}
 
 			/* Add a new product */
@@ -1240,7 +1240,7 @@ class AdminProducts extends AdminTab
 						$object->delete();
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.'</b>';
+					$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.'</b>';
 			}
 		}
 

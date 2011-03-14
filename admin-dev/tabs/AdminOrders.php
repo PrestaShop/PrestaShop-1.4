@@ -158,14 +158,14 @@ class AdminOrders extends AdminTab
 					foreach ($rules['required'] AS $field)
 						if (($value = Tools::getValue($field)) == false AND (string)$value != '0')
 							if (!Tools::getValue('id_'.$this->table) OR $field != 'passwd')
-								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is required');
+								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is required.');
 					foreach ($rules['size'] AS $field => $maxLength)
 						if (Tools::getValue($field) AND Tools::strlen(Tools::getValue($field)) > $maxLength)
 							$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is too long.').' ('.$maxLength.' '.Tools::displayError('chars max').')';
 					foreach ($rules['validate'] AS $field => $function)
 						if (Tools::getValue($field))
 							if (!Validate::$function(htmlentities(Tools::getValue($field), ENT_COMPAT, 'UTF-8')))
-								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is invalid');
+								$this->_errors[] = Tools::displayError('field').' <b>'.$field.'</b> '.Tools::displayError('is invalid.');
 					if (!sizeof($this->_errors))
 					{
 						$message = new Message();

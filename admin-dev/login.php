@@ -54,9 +54,9 @@ if (Tools::isSubmit('Submit'))
 	$passwd = trim(Tools::getValue('passwd'));
 	$email = trim(Tools::getValue('email'));
 	if (empty($email))
-		$errors[] = Tools::displayError('e-mail is empty');
+		$errors[] = Tools::displayError('E-mail is empty');
 	elseif (!Validate::isEmail($email))
-		$errors[] = Tools::displayError('invalid e-mail address');
+		$errors[] = Tools::displayError('Invalid e-mail address');
 	elseif (empty($passwd))
 		$errors[] = Tools::displayError('Password is blank');
 	elseif (!Validate::isPasswd($passwd))

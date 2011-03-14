@@ -248,7 +248,7 @@ class AdminTranslations extends AdminTab
 				}
 				Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 			}
-			$this->_errors[] = Tools::displayError('archive cannot be extracted');
+			$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
 		}
 	}
 	
@@ -280,18 +280,18 @@ class AdminTranslations extends AdminTab
 								$this->_errors[] = Tools::displayError('Cannot delete archive');
 							Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 						}
-						$this->_errors[] = Tools::displayError('archive cannot be extracted');
+						$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
 						if (!unlink($file))
 							$this->_errors[] = Tools::displayError('Cannot delete archive');
 					}
 					else
-						$this->_errors[] = Tools::displayError('Server does not have permissions for writing');
+						$this->_errors[] = Tools::displayError('Server does not have permissions for writing.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('language not found');
+					$this->_errors[] = Tools::displayError('Language not found');
 			}
 			else
-				$this->_errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com');
+				$this->_errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com.');
 		}
 		else
 			$this->_errors[] = Tools::displayError('Invalid parameter');

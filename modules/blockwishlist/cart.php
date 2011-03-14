@@ -41,7 +41,7 @@ $id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 AND
 	strcmp(Tools::getToken(false), Tools::getValue('token')) AND
 	$cookie->isLogged() === true)
-	$errors[] = Tools::displayError('invalid token');
+	$errors[] = Tools::displayError('Invalid token');
 if ($cookie->isLogged())
 {
 	if ($id_wishlist AND WishList::exists($id_wishlist, $cookie->id_customer) === true)

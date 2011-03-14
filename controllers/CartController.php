@@ -103,15 +103,15 @@ class CartControllerCore extends FrontController
 			if ($qty == 0)
 				$this->errors[] = Tools::displayError('Null quantity');
 			elseif (!$idProduct)
-				$this->errors[] = Tools::displayError('product not found');
+				$this->errors[] = Tools::displayError('Product not found');
 			else
 			{
 				$producToAdd = new Product((int)($idProduct), true, (int)(self::$cookie->id_lang));
 				if ((!$producToAdd->id OR !$producToAdd->active) AND !$delete)
 					if (Tools::getValue('ajax') == 'true')
-						die('{"hasError" : true, "errors" : ["'.Tools::displayError('product is no longer available', false).'"]}');
+						die('{"hasError" : true, "errors" : ["'.Tools::displayError('Pproduct is no longer available.', false).'"]}');
 					else
-						$this->errors[] = Tools::displayError('product is no longer available', false);
+						$this->errors[] = Tools::displayError('Pproduct is no longer available.', false);
 				else
 				{
 					/* Check the quantity availability */

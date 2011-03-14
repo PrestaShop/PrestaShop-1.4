@@ -134,7 +134,7 @@ class AdminLanguages extends AdminTab
 						Tools::redirectAdmin($currentIndex.'&conf=1'.'&token='.$this->token);
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');

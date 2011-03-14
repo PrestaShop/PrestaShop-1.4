@@ -115,7 +115,7 @@ class AuthControllerCore extends FrontController
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
 					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required');
@@ -123,11 +123,11 @@ class AuthControllerCore extends FrontController
 					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid');
 			}
 			if (Country::isNeedDniByCountryId($address->id_country) AND !Tools::getValue('dni') AND !Validate::isDniLite(Tools::getValue('dni')))
-				$this->errors[] = Tools::displayError('identification number is incorrect or already used');
+				$this->errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
 			elseif (!Country::isNeedDniByCountryId($address->id_country))
 				$address->dni = NULL;
 			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
-				$this->errors[] = Tools::displayError('invalid birthday');
+				$this->errors[] = Tools::displayError('Invalid date of birth');
 			if (!sizeof($this->errors))
 			{
 				if (Customer::customerExists(Tools::getValue('email')))
@@ -238,7 +238,7 @@ class AuthControllerCore extends FrontController
 			elseif (Tools::strlen($passwd) > 32)
 				$this->errors[] = Tools::displayError('Password is too long');
 			elseif (!Validate::isPasswd($passwd))
-				$this->errors[] = Tools::displayError('invalid password');
+				$this->errors[] = Tools::displayError('Invalid password');
 			else
 			{
 				$customer = new Customer();

@@ -187,7 +187,7 @@ class AdminModules extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 
 		/* Call appropriate module callback */

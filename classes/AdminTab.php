@@ -354,7 +354,7 @@ abstract class AdminTabCore
 			{
 				if (!$adminTab->viewAccess())
 				{
-					echo Tools::displayError('access denied');
+					echo Tools::displayError('Access denied');
 					return false;
 				}
 				if (!sizeof($actions))

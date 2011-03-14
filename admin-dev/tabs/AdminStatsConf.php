@@ -46,7 +46,7 @@ class AdminStatsConf extends AdminPreferences
 		 	if ($this->tabAccess['edit'] === '1')
 				$this->_postConfig($this->_fieldsSettings);
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit something here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 	}
 	

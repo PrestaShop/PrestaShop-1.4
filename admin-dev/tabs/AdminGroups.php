@@ -320,7 +320,7 @@ class AdminGroups extends AdminTab
 					{
 						if ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
-						$this->_errors[] = Tools::displayError('an error occurred during deletion');
+						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
 					}
 				}
 				else

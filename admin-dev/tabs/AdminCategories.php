@@ -144,10 +144,10 @@ class AdminCategories extends AdminTab
 						Tools::redirectAdmin($currentIndex.'&conf=5'.$target.'&token='.Tools::getValue('token'));
 					}
 					else
-						$this->_errors[] = Tools::displayError('an error occurred while updating status');
+						$this->_errors[] = Tools::displayError('An error occurred while updating status.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
@@ -161,7 +161,7 @@ class AdminCategories extends AdminTab
 				{
 					// check if request at least one object with noZeroObject
 					if (isset($object->noZeroObject) AND sizeof($taxes = call_user_func(array($this->className, $object->noZeroObject))) <= 1)
-						$this->_errors[] = Tools::displayError('you need at least one object').' <b>'.$this->table.'</b><br />'.Tools::displayError('you cannot delete them all');
+						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
 					else
 					{
 						$this->deleteImage($object->id);
@@ -187,7 +187,7 @@ class AdminCategories extends AdminTab
 			if ($this->tabAccess['edit'] !== '1')
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
 			elseif (!Validate::isLoadedObject($object = new Category((int)(Tools::getValue($this->identifier, Tools::getValue('id_category_to_move', 1))))))
-				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+				$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else

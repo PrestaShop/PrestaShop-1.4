@@ -51,7 +51,7 @@ class OrderDetailControllerCore extends FrontController
 			if (!$idOrder OR !Validate::isUnsignedId($idOrder))
 				$this->errors[] = Tools::displayError('Order is no longer valid');
 			elseif (empty($msgText))
-				$this->errors[] = Tools::displayError('message cannot be blank');
+				$this->errors[] = Tools::displayError('Message cannot be blank');
 			elseif (!Validate::isMessage($msgText))
 				$this->errors[] = Tools::displayError('Message is invalid (HTML is not allowed)');
 			if(!sizeof($this->errors))
@@ -94,7 +94,7 @@ class OrderDetailControllerCore extends FrontController
 		}
 
 		if (!$id_order = (int)(Tools::getValue('id_order')) OR !Validate::isUnsignedId($id_order))
-			$this->errors[] = Tools::displayError('order ID is required');
+			$this->errors[] = Tools::displayError('Order ID required');
 		else
 		{
 			$order = new Order($id_order);

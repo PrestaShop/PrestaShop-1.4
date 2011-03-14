@@ -36,7 +36,7 @@ $id_product = (int)(Tools::getValue('id_product'));
 $id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 strcmp(Tools::getToken(false), Tools::getValue('static_token')))
-	$error = Tools::displayError('invalid token');
+	$error = Tools::displayError('Invalid token');
 
 if (!strlen($error) &&
 	empty($token) === false &&

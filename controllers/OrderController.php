@@ -63,7 +63,7 @@ class OrderControllerCore extends ParentOrderController
 		{
 			$this->step = 0;
 			$this->errors[] = Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
-			' '.Tools::displayError('is required in order to validate your order');
+			' '.Tools::displayError('is required in order to validate your order.');
 		}
 
 		if (!self::$cookie->isLogged(true) AND in_array($this->step, array(1, 2, 3)))
@@ -179,13 +179,13 @@ class OrderControllerCore extends ParentOrderController
 	public function processAddress()
 	{
 		if (!Tools::isSubmit('id_address_delivery') OR !Address::isCountryActiveById((int)Tools::getValue('id_address_delivery')))
-			$this->errors[] = Tools::displayError('this address is not in a valid area');
+			$this->errors[] = Tools::displayError('This address is not in a valid area.');
 		else
 		{
 			self::$cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
 			self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
 			if (!self::$cart->update())
-				$this->errors[] = Tools::displayError('an error occurred while updating your cart');
+				$this->errors[] = Tools::displayError('An error occurred while updating your cart.');
 
 			if (Tools::isSubmit('message'))
 				$this->_updateMessage(Tools::getValue('message'));

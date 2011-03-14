@@ -453,7 +453,7 @@ abstract class ObjectModelCore
 		/* Checking for maximum fields sizes */
 		foreach ($this->fieldsSize AS $field => $maxLength)
 			if (($value = Tools::getValue($field, $this->{$field})) AND Tools::strlen($value) > $maxLength)
-				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is too long').' ('.Tools::displayError('Maximum length:').' '.$maxLength.')';
+				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is too long.').' ('.Tools::displayError('Maximum length:').' '.$maxLength.')';
 
 		/* Checking for fields validity */
 		foreach ($this->fieldsValidate AS $field => $function)

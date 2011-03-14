@@ -123,7 +123,7 @@ class AdminCustomers extends AdminTab
 								$customer = new Customer();
 								$customer->getByEmail($customer_email);
 								if ($customer->id)
-									$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$customer_email;
+									$this->_errors[] = Tools::displayError('An account already exists for this e-mail address:').' '.$customer_email;
 							}
 							
 							if (!is_array($groupList) OR sizeof($groupList) == 0)

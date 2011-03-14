@@ -365,7 +365,7 @@ class LocalizationPackCore
 									@unlink($file);
 								}
 								else
-									$this->_errors[] = Tools::displayError('Server does not have permissions for writing');
+									$this->_errors[] = Tools::displayError('Server does not have permissions for writing.');
 							}
 						}
 						else

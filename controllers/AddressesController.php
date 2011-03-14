@@ -49,7 +49,7 @@ class AddressesControllerCore extends FrontController
 		
 		$customer = new Customer((int)(self::$cookie->id_customer));
 		if (!Validate::isLoadedObject($customer))
-			die(Tools::displayError('customer not found'));
+			die(Tools::displayError('Customer not found'));
 		self::$smarty->assign('addresses', $customer->getAddresses((int)(self::$cookie->id_lang)));
 	}
 	

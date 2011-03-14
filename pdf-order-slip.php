@@ -40,7 +40,7 @@ elseif ($orderSlip->id_customer != $cookie->id_customer)
     die(Tools::displayError('Order return not found'));
 $order = new Order((int)($orderSlip->id_order));
 if (!Validate::isLoadedObject($order))
-    die(Tools::displayError('order not found'));
+    die(Tools::displayError('Order not found'));
 $order->products = OrderSlip::getOrdersSlipProducts((int)($orderSlip->id), $order);
 $ref = NULL;
 PDF::invoice($order, 'D', false, $ref, $orderSlip);
