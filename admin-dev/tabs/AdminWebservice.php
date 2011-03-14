@@ -42,7 +42,8 @@ class AdminWebservice extends AdminTab
 		
 		$this->fieldsDisplay = array(
 		'key' => array('title' => $this->l('Key'), 'align' => 'center', 'width' => 32),
-		'active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false)
+		'active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
+		'description' => array('title' => $this->l('Key description'), 'align' => 'center', 'orderby' => false)
 		);
 		
 		$this->optionTitle = $this->l('Configuration');
@@ -114,6 +115,11 @@ class AdminWebservice extends AdminTab
 					<input type="button" value="'.$this->l('   Generate!   ').'" class="button" onclick="gencode(32)" />
 					<sup>*</sup>
 					<p class="clear">'.$this->l('Webservice account key').'</p>
+				</div>
+				<label>'.$this->l('Key description').'</label>
+				<div class="margin-form">
+					<textarea rows="3" style="width:400px" name="description">'.htmlentities(Tools::getValue('description', $obj->description), ENT_COMPAT, 'UTF-8').'</textarea>
+					<p class="clear">'.$this->l('Key description').'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">

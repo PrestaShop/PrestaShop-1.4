@@ -1521,6 +1521,8 @@ CREATE TABLE `PREFIX_store` (
 CREATE TABLE `PREFIX_webservice_account` (
   `id_webservice_account` int(11) NOT NULL AUTO_INCREMENT,
   `key` varchar(32) NOT NULL,
+  `description` text NULL,
+  `class_name` VARCHAR( 50 ) NOT NULL DEFAULT 'WebserviceRequest',
   `active` tinyint(2) NOT NULL,
   PRIMARY KEY (`id_webservice_account`),
   KEY `key` (`key`)

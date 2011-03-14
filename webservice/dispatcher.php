@@ -56,8 +56,15 @@ else
 $params = $_GET;
 unset($params['url']);
 
+$class_name = WebserviceKey::getClassFromKey($key);
+$bad_class_name = false;
+if (!class_exists($class_name))
+{
+	$class_name = 'WebserviceRequest';
+	$bad_class_name = true;
+}
 // fetch the request
-$result = WebserviceRequest::getInstance()->fetch($key, $method, $_GET['url'], $params, $input_xml);
+$result = $class_name::getInstance()->fetch($key, $method, $_GET['url'], $params, $bad_class_name, $input_xml);
 // display result
 if (ob_get_length() == 0)
 	header($result['content_type']);

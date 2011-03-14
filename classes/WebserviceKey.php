@@ -33,6 +33,9 @@ class WebserviceKeyCore extends ObjectModel
 	/** @var boolean Webservice Account statuts */
 	public 		$active = true;
 	
+	/** @var string Webservice Account description */
+	public 		$description;
+	
  	protected 	$fieldsRequired = array('key');
  	protected 	$fieldsSize = array('key' => 32);
  	protected 	$fieldsValidate = array('active' => 'isBool');
@@ -46,7 +49,7 @@ class WebserviceKeyCore extends ObjectModel
 		
 		$fields['key'] = pSQL($this->key);
 		$fields['active'] = (int)($this->active);
-		
+		$fields['description'] = pSQL($this->description);
 		return $fields;
 	}
 	
@@ -99,6 +102,21 @@ class WebserviceKeyCore extends ObjectModel
 		else
 		{
 			return isset($result[0]['active']) && $result[0]['active'];
+		}
+	}
+	
+	static public function getClassFromKey($auth_key)
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT a.class_name as class
+			FROM `'._DB_PREFIX_.'webservice_account` a
+			WHERE a.key = \''.pSQL($auth_key).'\'
+		');
+		if (!isset($result[0]))
+			return null;
+		else
+		{
+			return $result[0]['class'];
 		}
 	}
 	

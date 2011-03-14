@@ -209,7 +209,7 @@ class WebserviceRequestCore
 	 *
 	 * @return array Returns an array of results (headers, content, type of resource...)
 	 */
-	public function fetch($key, $method, $url, $params, $inputXml = NULL)
+	public function fetch($key, $method, $url, $params, $bad_class_name, $inputXml = NULL)
 	{
 		// Time logger
 		$this->_startTime = microtime(true);
@@ -223,7 +223,11 @@ class WebserviceRequestCore
 		set_error_handler(array('WebserviceRequest', 'webserviceErrorHandler'));
 		ini_set('html_errors', 'off');
 		$this->_wsUrl = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
-
+		
+		if ($bad_class_name)
+		{
+			$this->setError(500, 'Bad override class name for this key. Please update class_name field');
+		}
 		$this->_key = trim($key);
 		
 		// Check webservice activation and request authentication

@@ -29,6 +29,9 @@ UPDATE `PREFIX_tab` SET class_name = 'AdminGeolocation' WHERE class_name = 'Admi
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PS_CANONICAL_REDIRECT', '0', NOW(), NOW());
 
+ALTER TABLE `PREFIX_webservice_account` ADD `class_name` VARCHAR( 50 ) NOT NULL DEFAULT 'WebserviceRequest' AFTER `key`;
+ALTER TABLE `PREFIX_webservice_account` ADD `description` text NULL AFTER `key`;
+
 /* PHP:add_module_to_hook(blockcategories, afterCreateHtaccess); */;
 /* PHP:add_new_tab(AdminHome, en:Home|fr:Accueil|es:Home|de:Home|it:Home,  -1); */;
 /* PHP:add_new_tab(AdminStockMvt, de:Lagerbewegungen|fr:Mouvements de Stock|it:Movimenti magazzino|en:Stock Movements,  1); */;
