@@ -1,4 +1,4 @@
-{shop_name}
+nombre de la tienda: {shop_name}
 Este producto es poco fuera de stock:
 Ref: {product_ref}
 Id: {product_id}
