@@ -60,7 +60,7 @@
 		<input type="hidden" name="cancel_url_target" value="2">
 		<input type="hidden" class="payment_methods" name="payment_methods" value="ACC">
 		<input type="hidden" name="merchant_fields" value="platform">
-		<input type="hidden" name="platform" value="prestashop">
+		<input type="hidden" name="platform" value="21445510">
 		{foreach from=$inter item=i}
 			<input type="image" src="modules/moneybookers/logos/international/{$inter_logos[$i].file}.gif" value="{$inter_logos[$i].code}" name="Submit" style="margin-right: 10px; border: none;" onclick="$('input.payment_methods').val($(this).val());" />
 		{/foreach}
@@ -107,7 +107,7 @@
 		<input type="hidden" name="return_url_target" value="2">
 		<input type="hidden" name="cancel_url_target" value="2">
 		<input type="hidden" name="merchant_fields" value="platform">
-		<input type="hidden" name="platform" value="prestashop">
+		<input type="hidden" name="platform" value="21445510">
 		<input type="image" src="modules/moneybookers/logos/international/{$inter_logos[$i].file}.gif" name="Submit" value="{$inter_logos[$i].code}" style="float: left; margin-right: 10px; border: none;" onclick="$('input.payment_methods').val($(this).val());" />
 		<span style="margin-top: 25px; display: block;">{l s='Pay by' mod='moneybookers'} {$inter_logos[$i].name}</span>
 	</p>
@@ -149,7 +149,7 @@
 		<input type="hidden" name="return_url_target" value="2">
 		<input type="hidden" name="cancel_url_target" value="2">
 		<input type="hidden" name="merchant_fields" value="platform">
-		<input type="hidden" name="platform" value="prestashop">
+		<input type="hidden" name="platform" value="21445510">
 		<input type="image" src="modules/moneybookers/logos/local/{$local_logos[$i].file}.gif" name="Submit" value="{$local_logos[$i].code}" style="float: left; margin-right: 10px; border: none;" onclick="$('input.payment_methods').val($(this).val());" />
 		<span style="margin-top: 25px; display: block;">{l s='Pay by' mod='moneybookers'} {$local_logos[$i].name}</span>
 		<br style="clear: both;" />
