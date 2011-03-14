@@ -457,7 +457,9 @@ $(document).ready(function()
 	// Hide the customization submit button and display some message
 	$('p#customizedDatas input').click(function() {
 		$('p#customizedDatas input').hide();
-		$('p#customizedDatas').append('<img src="' + img_ps_dir + 'loader.gif" alt="" /> ' + uploading_in_progress);
+		$('#ajax-loader').fadeIn();
+		$('p#customizedDatas').append(uploading_in_progress);
+		console.log(img_ps_dir + 'loader.gif');
 	});
 
 	//init the price in relation of the selected attributes

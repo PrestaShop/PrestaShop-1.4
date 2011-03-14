@@ -512,6 +512,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 				<input type="hidden" name="quantityBackup" id="quantityBackup" value="" />
 				<input type="hidden" name="submitCustomizedDatas" value="1" />
 				<input type="button" class="button" value="{l s='Save'}" onclick="javascript:saveCustomization()" />
+				<span id="ajax-loader" style="display:none"><img src="{$img_ps_dir}loader.gif" alt="loader" /></span>
 			</p>
 		</form>
 		<p class="clear required"><sup>*</sup> {l s='required fields'}</p>
