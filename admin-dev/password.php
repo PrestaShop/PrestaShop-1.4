@@ -42,14 +42,14 @@ if (isset($_POST['Submit']))
 {
 	$errors = array();
 	if (empty($_POST['email']))
-		$errors[] = Tools::displayError('e-mail is empty');
+		$errors[] = Tools::displayError('E-mail is empty');
 	elseif (!Validate::isEmail($_POST['email']))
-		$errors[] = Tools::displayError('invalid e-mail address');
+		$errors[] = Tools::displayError('Invalid e-mail address');
 	else
 	{
 		$employee = new Employee();
 		if (!$employee->getByemail($_POST['email']) OR !$employee)
-			$errors[] = Tools::displayError('this account doesn\'t exist');
+			$errors[] = Tools::displayError('This account does not exist');
 		else
 		{
 			if ((strtotime($employee->last_passwd_gen.'+'.Configuration::get('PS_PASSWD_TIME_BACK').' minutes') - time()) > 0 )
@@ -61,7 +61,7 @@ if (isset($_POST['Submit']))
 				$employee->last_passwd_gen = date('Y-m-d H:i:s', time());
 				$result = $employee->update();
 				if (!$result)
-					$errors[] = Tools::displayError('an error occurred during your password change');
+					$errors[] = Tools::displayError('An error occurred during your password change.');
 				else
 				{
 					Mail::Send((int)$id_lang, 'password', Mail::l('Your new admin password'), array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname);

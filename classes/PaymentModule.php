@@ -139,7 +139,7 @@ abstract class PaymentModuleCore extends Module
 				$result = $order->add();
 			else
 			{
-				$errorMessage = Tools::displayError('An order has already been placed using this cart');
+				$errorMessage = Tools::displayError('An order has already been placed using this cart.');
 				Logger::addLog($errorMessage, 4, '0000001', 'Cart', intval($order->id_cart));
 				die($errorMessage);
 			}

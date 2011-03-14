@@ -58,7 +58,7 @@ class ValidateCore
 	static public function isModuleUrl($url, &$errors)
 	{
 		if (!$url OR $url == 'http://')
-			$errors[] = Tools::displayError('please specify module URL');
+			$errors[] = Tools::displayError('Please specify module URL');
 		elseif (substr($url, -4) != '.tar' AND substr($url, -4) != '.zip' AND substr($url, -4) != '.tgz' AND substr($url, -7) != '.tar.gz')
 			$errors[] = Tools::displayError('unknown archive type');
 		else
@@ -66,7 +66,7 @@ class ValidateCore
 			if ((strpos($url, 'http')) === false)
 				$url = 'http://'.$url;
 			if (!is_array(@get_headers($url)))
-				$errors[] = Tools::displayError('invalid URL');
+				$errors[] = Tools::displayError('Invalid URL');
 		}
 		if (!sizeof($errors))
 			return true;

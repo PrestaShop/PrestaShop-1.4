@@ -44,7 +44,7 @@ class ContactControllerCore extends FrontController
 			self::$smarty->assign('isLogged', 1);
 			$customer = new Customer((int)(self::$cookie->id_customer));
 			if (!Validate::isLoadedObject($customer))
-				die(Tools::displayError('customer not found'));
+				die(Tools::displayError('Customer not found'));
 			$products = array();
 			$orders = array();
 			$getOrders = Db::getInstance()->ExecuteS('
@@ -91,7 +91,7 @@ class ContactControllerCore extends FrontController
 			elseif (!Validate::isMessage($message))
 				$this->errors[] = Tools::displayError('invalid message');
 			elseif (!($id_contact = (int)(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact((int)($id_contact), (int)(self::$cookie->id_lang)))))
-				$this->errors[] = Tools::displayError('please select a subject in the list');
+				$this->errors[] = Tools::displayError('Please select a subject on the list.');
 			elseif (!empty($_FILES['fileUpload']['name']) AND $_FILES['fileUpload']['error'] != 0)
 				$this->errors[] = Tools::displayError('An error occurred during the file upload');
 			elseif (!empty($_FILES['fileUpload']['name']) AND !in_array(substr($_FILES['fileUpload']['name'], -4), $extension) AND !in_array(substr($_FILES['fileUpload']['name'], -5), $extension))

@@ -47,7 +47,7 @@ if (!strlen($error) &&
 		WishList::addBoughtProduct($wishlist['id_wishlist'], $id_product, $id_product_attribute, $cart->id, 1);
 }
 else
-	$error = Tools::displayError('You need to log in');
+	$error = Tools::displayError('You must log in');
 
 if (empty($error) === false)
 	echo $error;

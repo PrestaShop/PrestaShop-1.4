@@ -332,7 +332,7 @@ class CurrencyCore extends ObjectModel
 		$isoCodeSource = strval($feed->source['iso_code']);
 
 		if (!$default_currency = self::getDefaultCurrency())
-			return Tools::displayError('No default currency!');
+			return Tools::displayError('No default currency');
 
 		$currencies = self::getCurrencies(true);
 		foreach ($currencies as $currency)

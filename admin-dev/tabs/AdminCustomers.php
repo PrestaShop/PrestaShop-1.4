@@ -127,10 +127,10 @@ class AdminCustomers extends AdminTab
 							}
 							
 							if (!is_array($groupList) OR sizeof($groupList) == 0)
-								$this->_errors[] = Tools::displayError('customer must be in at least one group');
+								$this->_errors[] = Tools::displayError('Customer must be in at least one group.');
 							else
 								if (!in_array(Tools::getValue('id_default_group'), $groupList))
-									$this->_errors[] = Tools::displayError('default customer group must be selected on group box');
+									$this->_errors[] = Tools::displayError('Default customer group must be selected in group box.');
 							
 							// Updating customer's group
 							if (!sizeof($this->_errors))
@@ -141,7 +141,7 @@ class AdminCustomers extends AdminTab
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('an error occurred while loading object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('An error occurred while loading object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 				}
 				else
@@ -221,11 +221,11 @@ class AdminCustomers extends AdminTab
 			{
 				$customer = new Customer((int)Tools::getValue('id_customer'));
 				if (!Validate::isLoadedObject($customer))
-					$this->_errors[] = Tools::displayError('This customer does not exist');
+					$this->_errors[] = Tools::displayError('This customer does not exist.');
 				if ($customer->transformToCustomer(Tools::getValue('id_lang', Configuration::get('PS_LANG_DEFAULT'))))
 					Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$customer->id.'&conf=3&token='.$this->token);
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while updating customer');
+					$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');

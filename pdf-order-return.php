@@ -39,7 +39,7 @@ if (!isset($orderReturn) OR !Validate::isLoadedObject($orderReturn))
 elseif ($orderReturn->id_customer != $cookie->id_customer)
     die(Tools::displayError('order return not found'));
 elseif ($orderReturn->state < 2)
-    die(Tools::displayError('order return not confirmed'));
+    die(Tools::displayError('Order return not confirmed'));
 else
 	PDF::orderReturn($orderReturn);
 

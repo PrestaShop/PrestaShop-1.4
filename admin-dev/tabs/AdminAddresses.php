@@ -82,7 +82,7 @@ class AdminAddresses extends AdminTab
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
-						$this->_errors[] = Tools::displayError('this e-mail address is not registered');
+						$this->_errors[] = Tools::displayError('This e-mail address is not registered.');
 				}
 				elseif ($id_customer = Tools::getValue('id_customer'))
 				{
@@ -90,12 +90,12 @@ class AdminAddresses extends AdminTab
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
-						$this->_errors[] = Tools::displayError('unknown customer');
+						$this->_errors[] = Tools::displayError('Unknown customer');
 				}
 				else
-					$this->_errors[] = Tools::displayError('unknown customer');
+					$this->_errors[] = Tools::displayError('Unknown customer');
 				if (Country::isNeedDniByCountryId(Tools::getValue('id_country')) AND !Tools::getValue('dni'))
-					$this->_errors[] = Tools::displayError('identification number is incorrect or already used');
+					$this->_errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
 			}
 
 			// Check manufacturer selected
@@ -103,7 +103,7 @@ class AdminAddresses extends AdminTab
 			{
 				$manufacturer = new Manufacturer((int)(Tools::getValue('id_manufacturer')));
 				if (!Validate::isLoadedObject($manufacturer))
-					$this->_errors[] = Tools::displayError('manufacturer selected is not valid');
+					$this->_errors[] = Tools::displayError('Manufacturer selected is not valid.');
 			}
 
 			/* If the selected country does not contain states */
@@ -154,7 +154,7 @@ class AdminAddresses extends AdminTab
 		if (isset($_POST['submitAdd'.$this->table]) AND ($id_order = (int)(Tools::getValue('id_order'))) AND !sizeof($this->_errors) AND !empty($address_type))
 		{
 			if(!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET `id_address_'.$address_type.'` = '.Db::getInstance()->Insert_ID().' WHERE `id_order` = '.$id_order))
-				$this->_errors[] = Tools::displayError('an error occurred while linking this address to its order');
+				$this->_errors[] = Tools::displayError('An error occurred while linking this address to its order.');
 			else
 				Tools::redirectAdmin(Tools::getValue('back').'&conf=4');
 		}

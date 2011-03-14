@@ -86,9 +86,9 @@ class AdminDiscounts extends AdminTab
 		if (Tools::getValue('submitAdd'.$this->table))
 		{
 			if (Tools::getValue('id_discount_type') == 2 AND Tools::getValue('id_currency') == 0)
-				$this->_errors[] = Tools::displayError('You need to set a currency for this voucher');
+				$this->_errors[] = Tools::displayError('Please set a currency for this voucher.');
 			if (!Validate::isBool_Id(Tools::getValue('id_target')))
-				$this->_errors[] = Tools::displayError('Invalid customer or group id field');
+				$this->_errors[] = Tools::displayError('Invalid customer or group ID field');
 			else
 			{
 				$rules = explode('_', Tools::getValue('id_target'));

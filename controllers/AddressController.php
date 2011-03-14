@@ -76,7 +76,7 @@ class AddressControllerCore extends FrontController
 						unset(self::$cart->id_address_delivery);
 					if ($this->_address->delete())
 						Tools::redirect('addresses.php');
-					$this->errors[] = Tools::displayError('this address cannot be deleted');
+					$this->errors[] = Tools::displayError('This address cannot be deleted.');
 				}
 				self::$smarty->assign(array('address' => $this->_address, 'id_address' => (int)$id_address));
 			}
@@ -186,7 +186,7 @@ class AddressControllerCore extends FrontController
 					}
 					Tools::redirect($back ? ($mod ? $back.'&back='.$mod : $back) : 'addresses.php');
 				}
-				$this->errors[] = Tools::displayError('an error occurred while updating your address');
+				$this->errors[] = Tools::displayError('An error occurred while updating your address.');
 			}
 		}
 		elseif (!$id_address)

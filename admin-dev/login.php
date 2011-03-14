@@ -58,9 +58,9 @@ if (Tools::isSubmit('Submit'))
 	elseif (!Validate::isEmail($email))
 		$errors[] = Tools::displayError('invalid e-mail address');
 	elseif (empty($passwd))
-		$errors[] = Tools::displayError('password is blank');
+		$errors[] = Tools::displayError('Password is blank');
 	elseif (!Validate::isPasswd($passwd))
-		$errors[] = Tools::displayError('invalid password');
+		$errors[] = Tools::displayError('Invalid password');
 	else
 	{
 	 	/* Seeking for employee */
@@ -68,7 +68,7 @@ if (Tools::isSubmit('Submit'))
 		$employee = $employee->getByemail($email, $passwd);
 		if (!$employee)
 		{
-			$errors[] = Tools::displayError('employee does not exist, or bad password');
+			$errors[] = Tools::displayError('Employee does not exist or password is incorrect.');
 			$cookie->logout();
 		}
 		else

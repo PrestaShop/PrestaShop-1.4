@@ -369,13 +369,13 @@ abstract class ObjectModelCore
 		foreach ($this->fieldsSize as $field => $size)
 			if (isset($this->{$field}) AND Tools::strlen($this->{$field}) > $size)
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' length > '.$size.')');
-				return $errorReturn ? get_class($this).' -> '.$field.' length > '.$size : false;
+				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' Length '.$size.')');
+				return $errorReturn ? get_class($this).' -> '.$field.' Length '.$size : false;
 			}
 		$validate = new Validate();
 		foreach ($this->fieldsValidate as $field => $method)
 			if (!method_exists($validate, $method))
-				die (Tools::displayError('validation function not found').' '.$method);
+				die (Tools::displayError('Validation function not found.').' '.$method);
 			elseif (!empty($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
 			{
 				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' = '.$this->{$field}.')');
@@ -396,8 +396,8 @@ abstract class ObjectModelCore
 				continue ;
 			if (!$this->{$fieldArray} OR !sizeof($this->{$fieldArray}) OR ($this->{$fieldArray}[$defaultLanguage] !== '0' AND empty($this->{$fieldArray}[$defaultLanguage])))
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language').')');
-				return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language') : false;
+				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language.').')');
+				return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language.') : false;
 			}
 		}
 		foreach ($this->fieldsSizeLang as $fieldArray => $size)
@@ -407,8 +407,8 @@ abstract class ObjectModelCore
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (Tools::strlen($value) > $size)
 				{
-					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('length >').' '.$size.' '.Tools::displayError('for language').')');
-					return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('length >').' '.$size.' '.Tools::displayError('for language') : false;
+					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('Length').' '.$size.' '.Tools::displayError('for language').')');
+					return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('Length').' '.$size.' '.Tools::displayError('for language') : false;
 				}
 		}
 		$validate = new Validate();
@@ -418,7 +418,7 @@ abstract class ObjectModelCore
 				continue ;
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (!method_exists($validate, $method))
-					die (Tools::displayError('validation function not found').' '.$method);
+					die (Tools::displayError('Validation function not found.').' '.$method);
 				elseif (!empty($value) AND !call_user_func(array('Validate', $method), $value))
 				{
 					if ($die) die (Tools::displayError('The following field is invalid according to the validate method ').'<b>'.$method.'</b>:<br/> ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
@@ -453,7 +453,7 @@ abstract class ObjectModelCore
 		/* Checking for maximum fields sizes */
 		foreach ($this->fieldsSize AS $field => $maxLength)
 			if (($value = Tools::getValue($field, $this->{$field})) AND Tools::strlen($value) > $maxLength)
-				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is too long').' ('.Tools::displayError('maximum length:').' '.$maxLength.')';
+				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is too long').' ('.Tools::displayError('Maximum length:').' '.$maxLength.')';
 
 		/* Checking for fields validity */
 		foreach ($this->fieldsValidate AS $field => $function)

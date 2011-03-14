@@ -78,7 +78,7 @@ class AdminEmployees extends AdminTab
 		if (!Validate::isEmail($email))
 	 		$this->_errors[] = Tools::displayError('Invalid e-mail');
 		else if (Employee::employeeExists($email) AND !Tools::getValue('id_employee'))
-			$this->_errors[] = Tools::displayError('an account already exists for this e-mail address:').' '.$email;
+			$this->_errors[] = Tools::displayError('An account already exists for this e-mail address:').' '.$email;
 	}
 
 	public function displayForm($isMainTab = true)
@@ -189,7 +189,7 @@ class AdminEmployees extends AdminTab
 			$employee = new Employee(Tools::getValue('id_employee'));
 			if ($employee->isLastAdmin()) 
 			{
-					$this->_errors[] = Tools::displayError('You can\'t disable or delete the last administrator account.');
+					$this->_errors[] = Tools::displayError('You cannot disable or delete the last administrator account.');
 					return false;
 			}
 

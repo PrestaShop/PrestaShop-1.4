@@ -92,7 +92,7 @@ class	CookieCore
 		$domain = $out[4];
 		$subDomains = SubDomain::getSubDomains();
 		if ($subDomains === false)
-			die(Tools::displayError('Bad SubDomain SQL query!'));
+			die(Tools::displayError('Bad SubDomain SQL query.'));
 		foreach ($subDomains AS $subDomain)
 		{
 			$subDomainLength = strlen($subDomain) + 1;

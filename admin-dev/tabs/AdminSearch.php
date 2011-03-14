@@ -64,7 +64,7 @@ class AdminSearch extends AdminTab
 		
 		/* Handle empty search field */
 		if (empty($query))
-			$this->_errors[] = Tools::displayError('please fill in search form first');
+			$this->_errors[] = Tools::displayError('Please fill in search form first.');
 		else
 		{
 			echo '<h2>'.$this->l('Search results').'</h2>';
@@ -167,7 +167,7 @@ class AdminSearch extends AdminTab
 			{
 				if ((int)$query AND Validate::isUnsignedInt((int)$query) AND $order = new Order((int)$query) AND Validate::isLoadedObject($order))
 					Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($order->id).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
-				$this->_errors[] = Tools::displayError('no order found with this ID:').' '.Tools::htmlentitiesUTF8($query);
+				$this->_errors[] = Tools::displayError('No order found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
 			
 			/* Invoices */
@@ -175,7 +175,7 @@ class AdminSearch extends AdminTab
 			{
 				if ((int)$query AND Validate::isUnsignedInt((int)$query) AND $invoice = Order::getInvoice((int)$query))
 					Tools::redirectAdmin('pdf.php?id_order='.(int)($invoice['id_order']).'&pdf');
-				$this->_errors[] = Tools::displayError('no invoice found with this ID:').' '.Tools::htmlentitiesUTF8($query);
+				$this->_errors[] = Tools::displayError('No invoice found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
 
 			/* Cart */
@@ -183,7 +183,7 @@ class AdminSearch extends AdminTab
 			{
 				if ((int)$query AND Validate::isUnsignedInt((int)$query) AND $cart = new Cart((int)$query) AND Validate::isLoadedObject($cart))
 					Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.(int)($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee)));
-				$this->_errors[] = Tools::displayError('no cart found with this ID:').' '.Tools::htmlentitiesUTF8($query);
+				$this->_errors[] = Tools::displayError('No cart found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
 		}
 	}

@@ -100,7 +100,7 @@ class AdminCategories extends AdminTab
 			{
 				if (!Category::checkBeforeMove($id_category, (int)(Tools::getValue('id_parent'))))
 				{
-					$this->_errors[] = Tools::displayError('category cannot be moved here');
+					$this->_errors[] = Tools::displayError('Category cannot be moved here');
 					return false;
 				}
 
@@ -118,7 +118,7 @@ class AdminCategories extends AdminTab
 							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 					else
-						$this->_errors[] = Tools::displayError('you must select at least one group');
+						$this->_errors[] = Tools::displayError('You must select at least one group.');
 				}
 			}
 		}

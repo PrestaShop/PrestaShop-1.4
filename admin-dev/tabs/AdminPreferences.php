@@ -148,10 +148,10 @@ class AdminPreferences extends AdminTab
 					if (rewriteSettingsFile(NULL, $val, NULL))
 						Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
 					else
-						$this->_errors[] = Tools::displayError('cannot access settings file');
+						$this->_errors[] = Tools::displayError('Cannot access settings file.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('you must choose a graphical theme');
+					$this->_errors[] = Tools::displayError('You must choose a graphical theme.');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');

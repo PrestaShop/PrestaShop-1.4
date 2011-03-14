@@ -88,7 +88,7 @@ function checkImage($file, $maxFileSize)
 	if (!isPicture($file))
 		return Tools::displayError('image format not recognized, allowed formats are: .gif, .jpg, .png');
 	if ($file['error'])
-		return Tools::displayError('error while uploading image; change your server\'s settings').'('.Tools::displayError('Error code: ').$file['error'].')';
+		return Tools::displayError('Error while uploading image; please change your server\'s settings.').'('.Tools::displayError('Error code: ').$file['error'].')';
 	return false;
 }
 
@@ -172,9 +172,9 @@ function checkIco($file, $maxFileSize)
 	if ($file['size'] > $maxFileSize)
 		return Tools::displayError('image is too large').' ('.($file['size'] / 1000).'ko). '.Tools::displayError('Maximum allowed:').' '.($maxFileSize / 1000).'ko';
 	if (substr($file['name'], -4) != '.ico')
-		return Tools::displayError('image format not recognized, allowed formats are: .ico');
+		return Tools::displayError('Image format not recognized, allowed formats are: .ico');
 	if ($file['error'])
-		return Tools::displayError('error while uploading image; change your server\'s settings');
+		return Tools::displayError('Error while uploading image; please change your server\'s settings.');
 	return false;
 }
 

@@ -495,7 +495,7 @@ abstract class AdminTabCore
 			if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
 				if ($this->deleteImage($object->id))
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&'.$this->identifier.'='.Tools::getValue($this->identifier).'&conf=7&token='.$token);
-			$this->_errors[] = Tools::displayError('an error occurred during image deletion (cannot load object)');
+			$this->_errors[] = Tools::displayError('An error occurred during image deletion (cannot load object).');
 		}
 
 		/* Delete object */
@@ -836,7 +836,7 @@ abstract class AdminTabCore
 				$_FILES[$name]['tmp_name'] = $tmpName;
 				// Copy new image
 				if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
-					$this->_errors[] = Tools::displayError('an error occurred while uploading image');
+					$this->_errors[] = Tools::displayError('An error occurred while uploading image.');
 				if (sizeof($this->_errors))
 					return false;
 				if ($this->afterImageUpload())
@@ -1623,7 +1623,7 @@ abstract class AdminTabCore
 				$this->_object = new $this->className($id);
 			if (Validate::isLoadedObject($this->_object))
 				return $this->_object;
-			$this->_errors[] = Tools::displayError('object cannot be loaded (not found)');
+			$this->_errors[] = Tools::displayError('Object cannot be loaded (not found)');
 		}
 		elseif ($opt)
 		{
@@ -1631,7 +1631,7 @@ abstract class AdminTabCore
 			return $this->_object;
 		}
 		else
-			$this->_errors[] = Tools::displayError('object cannot be loaded (identifier missing or invalid)');
+			$this->_errors[] = Tools::displayError('Object cannot be loaded (identifier missing or invalid)');
 
 		$this->displayErrors();
 	}
