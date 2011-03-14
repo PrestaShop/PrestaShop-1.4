@@ -146,7 +146,7 @@ abstract class AdminTabCore
 	protected $_includeObj = array();
 	protected $_includeVars = false;
 	protected $_includeContainer = true;
-	
+
 	public static $tabParenting = array(
 		'AdminProducts' => 'AdminCatalog',
 		'AdminCategories' => 'AdminCatalog',
@@ -159,7 +159,7 @@ abstract class AdminTabCore
 		'AdminFeaturesValues' => 'AdminFeatures',
 		'AdminReturnStates' => 'AdminStatuses',
 		'AdminStatsTab' => 'AdminStats'
-	); 
+	);
 
 	public function __construct()
 	{
@@ -1290,6 +1290,10 @@ abstract class AdminTabCore
 			</thead>';
 	}
 
+	public function displayTop()
+	{
+	}
+
 	/**
 	 * Display list
 	 *
@@ -1298,6 +1302,8 @@ abstract class AdminTabCore
 	public function displayList()
 	{
 		global $currentIndex;
+
+		$this->displayTop();
 
 		if ($this->edit AND (!isset($this->noAdd) OR !$this->noAdd))
 			echo '<br /><a href="'.$currentIndex.'&add'.$this->table.'&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add new').'</a><br /><br />';

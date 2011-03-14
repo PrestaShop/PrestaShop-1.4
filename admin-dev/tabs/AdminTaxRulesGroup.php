@@ -45,6 +45,29 @@ class AdminTaxRulesGroup extends AdminTab
 	}
 
 
+	public function displayTop()
+	{
+		echo '<div class="hint clear" style="display:block;">
+					'.$this->l('The tax rules allow you to define a product or a carrier with different taxes depending on their location (country, state, etc.).').'
+
+					<b>'.$this->l('In the majority of cases, the rules created by default by PrestaShop should be enough.').'</b> '.
+					$this->l('If, however, you need to change them, here is an example that will help you understand how it works:').
+					'<br /><br />'
+					.$this->l('You want to apply a tax of 19.6% to a product in France and Europe, but not apply this tax to other countries. Follow these steps:').'
+					<ul>
+					<li>'.$this->l('Click "Add New".').'</li>
+					<li>'.$this->l('Give a name to your tax rule (ex: "19.6% tax rule”).').'</li>
+					<li>'.$this->l('Move the current field to true.').'</li>
+					<li>'.$this->l('Edit its configuration by country by associating a 19.6% tax with France and with European countries, and a tax of 0% to other countries.').'</li>
+					<li>'.$this->l('Click on Save.').'</li>
+					<li>'.$this->l('Go to your product page (Catalog tab) and associate the "19.6% tax rule" to your product.').'</li>
+					</ul>
+					<br />
+ 				  '.$this->l('Later, if you need to apply a different tax to Spain, you can simply edit the rule "19.6% tax rule" and change the tax associated with Spain.').'<br />
+ 				  '.$this->l('Note: The default rate applied to your product will be based on your store’s default country.').'
+				</div><br />';
+	}
+
     public function displayForm($isMainTab = true)
     {
         global $cookie, $currentIndex;
@@ -59,9 +82,6 @@ class AdminTaxRulesGroup extends AdminTab
 		        '.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
     			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>
     			<input type="hidden" name="tabs" id="tabs" value="0" />
-    			<div class="hint clear" style="display:block;">
-					'.$this->l('Tax Rules allows you to define for one product or carrier various taxes in function of different places (Country, States etc ..)').'
-				</div><br />
     			';
 
         echo '<label>'.$this->l('Name').'</label>
