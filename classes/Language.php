@@ -392,7 +392,9 @@ class LanguageCore extends ObjectModel
 	  */
 	public static function getLanguages($active = true)
 	{
-		$languages = array();
+		if(!self::$_LANGUAGES)
+			self::loadLanguages();
+
 		foreach (self::$_LANGUAGES AS $language)
 		{
 			if ($active AND !$language['active'])
