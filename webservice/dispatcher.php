@@ -28,9 +28,6 @@
 ob_start();
 require_once(dirname(__FILE__).'/../config/config.inc.php');
 
-require_once(dirname(__FILE__).'/WebserviceRequest.php');
-
-
 // Use for image management (using the POST method of the browser to simulate the PUT method)
 $method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
 

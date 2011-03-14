@@ -47,6 +47,11 @@ class StockMvtCore extends ObjectModel
  	protected 	$fieldsValidate = array('id_product' => 'isUnsignedId', 'id_product_attribute' => 'isUnsignedId','id_order' => 'isUnsignedId','id_employee' => 'isUnsignedId',
  													'quantity' => 'isInt', 'id_stock_mvt_reason' => 'isUnsignedId');
 	
+	protected	$webserviceParameters = array(
+		'objectNodeNames' => 'stock_movements',
+	);
+	
+	
 	
 	public function getFields()
 	{

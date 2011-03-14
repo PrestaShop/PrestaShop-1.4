@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class WebserviceCore extends ObjectModel
+class WebserviceKeyCore extends ObjectModel
 {
  	/** @var string Key */
 	public 		$key;
@@ -48,49 +48,6 @@ class WebserviceCore extends ObjectModel
 		$fields['active'] = (int)($this->active);
 		
 		return $fields;
-	}
-	
-	static public function getResources()
-	{
-		$resources = array(
-			'addresses' => array('description' => 'The Customer, Manufacturer and Customer addresses','class' => 'Address'),
-			'carriers' => array('description' => 'The Carriers','class' => 'Carrier'),
-			'carts' => array('description' => 'Customer\'s carts', 'class' => 'Cart'),
-			'categories' => array('description' => 'The product categories','class' => 'Category'),
-			'combinations' => array('description' => 'The product combinations','class' => 'Combination'),
-			'configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration'),
-			'countries' => array('description' => 'The countries','class' => 'Country'),
-			'currencies' => array('description' => 'The currencies', 'class' => 'Currency'),
-			'customers' => array('description' => 'The e-shop\'s customers','class' => 'Customer'),
-			'deliveries' => array('description' => 'Product delivery', 'class' => 'Delivery'),
-			'groups' => array('description' => 'The customer\'s groups','class' => 'Group'),
-			'guests' => array('description' => 'The guests', 'class' => 'Guest'),
-			'images' => array('description' => 'The images', 'specific_management' => true),
-			'image_types' => array('description' => 'The image types', 'class' => 'ImageType'),
-			'languages' => array('description' => 'Shop languages', 'class' => 'Language'),
-			'manufacturers' => array('description' => 'The product manufacturers','class' => 'Manufacturer'),
-			'order_details' => array('description' => 'Details of an order', 'class' => 'OrderDetail'),
-			'order_discounts' => array('description' => 'Discounts of an order', 'class' => 'OrderDiscount'),
-			'order_histories' => array('description' => 'The Order histories','class' => 'OrderHistory'),
-			'orders' => array('description' => 'The Customers orders','class' => 'Order'),
-			'order_states' => array('description' => 'The Order states','class' => 'OrderState'),
-			'price_ranges' => array('description' => 'Price ranges', 'class' => 'RangePrice'),
-			'product_features' => array('description' => 'The product features','class' => 'Feature'),
-			'product_feature_values' => array('description' => 'The product feature values','class' => 'FeatureValue'),
-			'product_options' => array('description' => 'The product options','class' => 'AttributeGroup'),
-			'product_option_values' => array('description' => 'The product options value','class' => 'Attribute'),
-			'products' => array('description' => 'The products','class' => 'Product'),
-			'states' => array('description' => 'The available states of countries','class' => 'State'),
-			'stores' => array('description' => 'The stores', 'class' => 'Store'),
-			'suppliers' => array('description' => 'The product suppliers','class' => 'Supplier'),
-			'tags' => array('description' => 'The Products tags','class' => 'Tag'),
-			'translated_configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration', 'parameters_attribute' => 'webserviceParametersI18n'),
-			'weight_ranges' => array('description' => 'Weight ranges', 'class' => 'RangeWeight'),
-			'zones' => array('description' => 'The Countries zones','class' => 'Zone'),
-			'employees' => array('description' => 'The Employees', 'class' => 'Employee'),
-		);
-		ksort($resources);
-		return $resources;
 	}
 	
 	public function delete()
@@ -154,14 +111,14 @@ class WebserviceCore extends ObjectModel
 		if (isset($permissionsToSet))
 			{
 				$permissions = array();
-				$resources = Webservice::getResources();
+				$resources = WebserviceRequest::getResources();
 				$methods = array('GET', 'PUT', 'POST', 'DELETE', 'HEAD');
 				foreach ($permissionsToSet as $resourceName => $resource_methods)
 					if (in_array($resourceName, array_keys($resources)))
 						foreach ($resource_methods as $methodName => $value)
 							if (in_array($methodName, $methods))
 								$permissions[] = array($methodName, $resourceName);
-				$account = new Webservice($idAccount);
+				$account = new WebserviceKey($idAccount);
 				if ($account->deleteAssociations() && $permissions)
 				{
 					$sql = 'INSERT INTO `'._DB_PREFIX_.'webservice_permission` (`id_webservice_permission` ,`resource` ,`method` ,`id_webservice_account`) VALUES ';

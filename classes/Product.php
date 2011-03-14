@@ -500,7 +500,7 @@ class ProductCore extends ObjectModel
 	/**
 	* Get the default attribute for a product
 	*
-	* @return array Attributes list
+	* @return int Attributes list
 	*/
 	public static function getDefaultAttribute($id_product, $minimumQuantity = 0)
 	{

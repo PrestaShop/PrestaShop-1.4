@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class WebserviceRequest
+class WebserviceRequestCore
 {
 	/** @var array Errors triggered at execution */
 	private $_errors = array();
@@ -133,6 +133,51 @@ class WebserviceRequest
 	public $_imageResource = null;
 	
 	
+	static public function getResources()
+	{
+		$resources = array(
+			'addresses' => array('description' => 'The Customer, Manufacturer and Customer addresses','class' => 'Address'),
+			'carriers' => array('description' => 'The Carriers','class' => 'Carrier'),
+			'carts' => array('description' => 'Customer\'s carts', 'class' => 'Cart'),
+			'categories' => array('description' => 'The product categories','class' => 'Category'),
+			'combinations' => array('description' => 'The product combinations','class' => 'Combination'),
+			'configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration'),
+			'countries' => array('description' => 'The countries','class' => 'Country'),
+			'currencies' => array('description' => 'The currencies', 'class' => 'Currency'),
+			'customers' => array('description' => 'The e-shop\'s customers','class' => 'Customer'),
+			'deliveries' => array('description' => 'Product delivery', 'class' => 'Delivery'),
+			'groups' => array('description' => 'The customer\'s groups','class' => 'Group'),
+			'guests' => array('description' => 'The guests', 'class' => 'Guest'),
+			'images' => array('description' => 'The images', 'specific_management' => true),
+			'image_types' => array('description' => 'The image types', 'class' => 'ImageType'),
+			'languages' => array('description' => 'Shop languages', 'class' => 'Language'),
+			'manufacturers' => array('description' => 'The product manufacturers','class' => 'Manufacturer'),
+			'order_details' => array('description' => 'Details of an order', 'class' => 'OrderDetail'),
+			'order_discounts' => array('description' => 'Discounts of an order', 'class' => 'OrderDiscount'),
+			'order_histories' => array('description' => 'The Order histories','class' => 'OrderHistory'),
+			'orders' => array('description' => 'The Customers orders','class' => 'Order'),
+			'order_states' => array('description' => 'The Order states','class' => 'OrderState'),
+			'price_ranges' => array('description' => 'Price ranges', 'class' => 'RangePrice'),
+			'product_features' => array('description' => 'The product features','class' => 'Feature'),
+			'product_feature_values' => array('description' => 'The product feature values','class' => 'FeatureValue'),
+			'product_options' => array('description' => 'The product options','class' => 'AttributeGroup'),
+			'product_option_values' => array('description' => 'The product options value','class' => 'Attribute'),
+			'products' => array('description' => 'The products','class' => 'Product'),
+			'states' => array('description' => 'The available states of countries','class' => 'State'),
+			'stores' => array('description' => 'The stores', 'class' => 'Store'),
+			'suppliers' => array('description' => 'The product suppliers','class' => 'Supplier'),
+			'tags' => array('description' => 'The Products tags','class' => 'Tag'),
+			'translated_configurations' => array('description' => 'Shop configuration', 'class' => 'Configuration', 'parameters_attribute' => 'webserviceParametersI18n'),
+			'weight_ranges' => array('description' => 'Weight ranges', 'class' => 'RangeWeight'),
+			'zones' => array('description' => 'The Countries zones','class' => 'Zone'),
+			'employees' => array('description' => 'The Employees', 'class' => 'Employee'),
+			'stock_movements' => array('description' => 'Stock movements', 'class' => 'StockMvt'),
+			'stock_movement_reasons' => array('description' => 'The stock movement reason', 'class' => 'StockMvtReason'),
+		);
+		ksort($resources);
+		return $resources;
+	}
+	
 	/**
 	 * Get WebserviceRequest object instance (Singleton)
 	 *
@@ -145,6 +190,8 @@ class WebserviceRequest
 		return self::$_instance;
 	}
 	
+	
+
 	/**
 	 * Start Webservice request
 	 * 	Check webservice activation
@@ -434,14 +481,14 @@ class WebserviceRequest
 				}
 				else
 				{
-					$keyValidation = Webservice::isKeyActive($this->_key);
+					$keyValidation = WebserviceKey::isKeyActive($this->_key);
 					if (is_null($keyValidation))
 					{
 						$this->setError(401, 'Authentification key does not exist');
 					}
 					elseif($keyValidation === true)
 					{
-						$this->_keyPermissions = Webservice::getPermissionForAccount($this->_key);
+						$this->_keyPermissions = WebserviceKey::getPermissionForAccount($this->_key);
 					}
 					else
 					{
@@ -494,7 +541,7 @@ class WebserviceRequest
 		if (!in_array($this->_method, array('GET', 'POST', 'PUT', 'DELETE', 'HEAD')))
 			$this->setError(405, 'Method '.$this->_method.' is not valid');
 		elseif (($this->_method == 'PUT' || $this->_method == 'DELETE') && !array_key_exists(1, $this->_urlSegment))
-			$this->setError(401, 'Method '.$this->_method.' need you to specify an id');
+			$this->setError(401, 'Method '.$this->_method.' needs you to specify an id');
 		elseif ($this->_urlSegment[0] && !in_array($this->_method, $this->_keyPermissions[$this->_urlSegment[0]]))
 			$this->setError(405, 'Method '.$this->_method.' is not allowed for the resource '.$this->_urlSegment[0].' with this authentication key');
 		else
@@ -509,7 +556,7 @@ class WebserviceRequest
 	 */
 	private function checkResource()
 	{
-		$this->_resourceList = Webservice::getResources();
+		$this->_resourceList = WebserviceRequest::getResources();
 		$resourceNames = array_keys($this->_resourceList);
 		if ($this->_urlSegment[0] == '')
 			$this->_resourceConfiguration['objectsNodeName'] = 'resources';
@@ -1066,6 +1113,38 @@ class WebserviceRequest
 		return $ret;
 	}
 	
+	
+	public function getPrice($id_shop = null, $id_product, $id_product_attribute = null, $id_country = null, $id_state = null, $county = null, $id_currency = null, $id_group = null, $quantity = null, 
+		$use_tax = null, $decimals = null, $only_reduc = null, $use_reduc = null, $with_ecotax = null, $specific_price_output = null, $divisor = null)
+	{
+		$id_shop = (isset($id_shop) ? $id_shop : (int)Shop::getCurrentShop());
+
+		// TO CHECK
+		$id_product_attribute = (isset($id_product_attribute) ? $id_product_attribute : Product::getDefaultAttribute($id_product));// FIXME 
+
+
+		$id_country = (isset($id_country) ? $id_country : (int)(Configuration::get('PS_COUNTRY_DEFAULT')));
+		$id_state = (isset($id_state) ? $id_state : 0);
+		$id_currency = (isset($id_currency) ? $id_currency : Configuration::get('PS_CURRENCY_DEFAULT'));
+		$id_group = (isset($id_group) ? $id_group : Configuration::get('_PS_DEFAULT_CUSTOMER_GROUP_'));
+		$quantity = (isset($quantity) ? $quantity : 1);
+		$use_tax = (isset($use_tax) ? $use_tax : Configuration::get('PS_TAX'));
+		$decimals = (isset($decimals) ? $decimals : 6);
+
+				
+		$only_reduc = (isset($only_reduc) ? $only_reduc : false);
+		$use_reduc = (isset($use_reduc) ? $use_reduc : true);
+		$use_ecotax = (isset($use_ecotax) ? $use_ecotax : true);
+		$specific_price_output = null;
+ 		$county = (isset($county) ? $county : 0);
+		// UNUSED
+		$divisor = null;
+		$price = Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, $county, $id_currency, $id_group, $quantity, 
+			$use_tax, $decimals, $only_reduc, $use_reduc, $use_ecotax, $specific_price_output, $divisor);
+
+		return Tools::ps_round($price, 2);
+	}
+	
 	/**
 	 * get XML From Object Entity
 	 * 
@@ -1129,8 +1208,15 @@ class WebserviceRequest
 					{
 						// display not i18n field value
 						$ret .= '<'.$field['sqlId'];
+						
 						if (array_key_exists('xlink_resource', $field) && $this->_schemaToDisplay != 'blank')
-							$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource'].'/'.($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
+						{
+							if (!is_array($field['xlink_resource']))
+								$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource'].'/'.($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
+							else
+								$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource']['resourceName'].'/'.(isset($field['xlink_resource']['subResourceName']) ? $field['xlink_resource']['subResourceName'].'/'.$object->id.'/' : '').($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
+						}
+						
 						if (isset($field['getter']) && $this->_schemaToDisplay != 'blank')
 							$ret .= ' not_filterable="true"';
 						if ($this->_schemaToDisplay == 'synopsis')
@@ -1143,7 +1229,10 @@ class WebserviceRequest
 								$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
 						}
 						$ret .= '>';
-						if (is_null($this->_schemaToDisplay))
+						if ($this->_resourceConfiguration['objectNodeName'] == 'product' && $key == 'price')
+							$ret .= $this->getPrice(null, $object->id, null, null, null, null, null, null, 
+							null, null, null, null, null, null, null, null);
+						else if (is_null($this->_schemaToDisplay))
 							$ret .= '<![CDATA['.$object->$key.']]>';
 						$ret .= '</'.$field['sqlId'].'>'."\n";
 					}
@@ -1155,6 +1244,35 @@ class WebserviceRequest
 			}
 		}
 	
+		// specific display virtual fields for product
+		if ($this->_resourceConfiguration['objectNodeName'] == 'product' && isset($this->_urlFragments['price']))
+		{
+			foreach ($this->_urlFragments['price'] as $name => $value)
+			{
+				$id_country = (isset($value['country']) ? $value['country'] : (int)(Configuration::get('PS_COUNTRY_DEFAULT')));
+				$id_state = (isset($value['state']) ? $value['state'] : 0);
+				$id_currency = (isset($value['currency']) ? $value['currency'] : Configuration::get('PS_CURRENCY_DEFAULT'));
+				$id_group = (isset($value['group']) ? $value['group'] : Configuration::get('_PS_DEFAULT_CUSTOMER_GROUP_'));
+				$quantity = (isset($value['quantity']) ? $value['quantity'] : 1);
+				$use_tax = (isset($value['use_tax']) ? $value['use_tax'] : Configuration::get('PS_TAX'));
+				$decimals = (isset($value['decimals']) ? $value['decimals'] : 6);
+				$id_product_attribute = (isset($value['product_attribute']) ? $value['product_attribute'] : null);
+				$id_county = (isset($value['county']) ? $value['county'] : null);
+				
+				$only_reduc = (isset($value['only_reduction']) ? $value['only_reduction'] : false);
+				$use_reduc = (isset($value['use_reduction']) ? $value['use_reduction'] : true);
+				$use_ecotax = (isset($value['use_ecotax']) ? $value['use_ecotax'] : true);
+				$specific_price_output = null;
+				$county = (isset($value['county']) ? $value['county'] : 0);
+				
+				
+				
+				$price = $this->getPrice(null, $object->id, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
+									$use_tax, $decimals, $only_reduc, $use_reduc, $use_ecotax, null, null);
+				$name = strtolower($name);
+				$ret .= '<'.$name.'>'.$price.'</'.$name.'>'."\n";
+			}
+		}
 		
 		// display associations
 		$associationsRet = '';
@@ -1275,7 +1393,7 @@ class WebserviceRequest
 		if (strlen($this->_xmlOutput) > 0)
 		{
 			$xml_start = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-			$xml_start .= '<prestashop xmlns="'.$this->_docUrl.'" xmlns:xlink="http://www.w3.org/1999/xlink" access_time="'.time().'" shop_url="'.Tools::getHttpHost(true).__PS_BASE_URI__.'">'."\n";
+			$xml_start .= '<prestashop xmlns:xlink="http://www.w3.org/1999/xlink">'."\n";
 			$xml_end = '</prestashop>'."\n";
 			
 			$return['type'] = 'xml';

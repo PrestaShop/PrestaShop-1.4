@@ -75,7 +75,7 @@ class AdminPreferences extends AdminTab
 			$cms_tab[] = array('id' => $cms_file['id_cms'], 'name' => $cms_file['meta_title']);
 
 		$this->_fieldsGeneral = array(
-			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_SHOP_ENABLE' => array('title' => $this->l('Enable Shop'), 'desc' => $this->l('Activate or deactivate your shop. Deactivate your shop while you perform maintenance on it. Please note that the webservice will not be disabled'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_MAINTENANCE_IP' => array('title' => $this->l('Maintenance IP'), 'desc' => $this->l('IP addresses allowed to access the Front Office even if shop is disabled. Use a comma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)'), 'validation' => 'isGenericName', 'type' => 'text', 'size' => 15, 'default' => ''),
 			'PS_SSL_ENABLED' => array('title' => $this->l('Enable SSL'), 'desc' => $this->l('If your hosting provider allows SSL, you can activate SSL encryption (https://) for customer account identification and order processing'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),
 			'PS_COOKIE_CHECKIP' => array('title' => $this->l('Check IP on the cookie'), 'desc' => $this->l('Check the IP address of the cookie in order to avoid your cookie being stolen'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'default' => '0'),

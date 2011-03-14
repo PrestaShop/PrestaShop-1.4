@@ -33,7 +33,7 @@ class AdminWebservice extends AdminTab
 	public function __construct()
 	{
 	 	$this->table = 'webservice_account';
-	 	$this->className = 'Webservice';
+	 	$this->className = 'WebserviceKey';
 	 	$this->lang = false;
 	 	$this->edit = true;
 	 	$this->delete = true;
@@ -58,11 +58,11 @@ class AdminWebservice extends AdminTab
 	}
 	
 	protected function afterAdd($object) {
-		Webservice::setPermissionForAccount($object->id, Tools::getValue('resources', array()));
+		WebserviceKey::setPermissionForAccount($object->id, Tools::getValue('resources', array()));
 	}
 	
 	protected function afterUpdate($object) {
-		Webservice::setPermissionForAccount($object->id, Tools::getValue('resources', array()));
+		WebserviceKey::setPermissionForAccount($object->id, Tools::getValue('resources', array()));
 	}
 	
 	public function displayList()
@@ -149,8 +149,8 @@ class AdminWebservice extends AdminTab
 								<th><input type="checkbox" class="all_head head" /></th>
 							</tr>
 						';
-$ressources = Webservice::getResources();
-$permissions = Webservice::getPermissionForAccount($obj->key);
+$ressources = WebserviceRequest::getResources();
+$permissions = WebserviceKey::getPermissionForAccount($obj->key);
 foreach ($ressources as $resourceName => $resource)
 echo '
 							<tr>
