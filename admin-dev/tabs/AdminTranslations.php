@@ -119,7 +119,7 @@ class AdminTranslations extends AdminTab
 			$toInsert = array();
 			foreach($_POST AS $key => $value)
 				if (!empty($value))
-					$toInsert[$key] = /*htmlentities(*/$value/*, ENT_COMPAT, 'UTF-8')*/;
+					$toInsert[$key] = $value;
 
 			$tab = ($fullmark ? Tools::strtoupper($fullmark) : 'LANG').($mark ? Tools::strtoupper($mark) : '');
 			fwrite($fd, "<?php\n\nglobal \$_".$tab.";\n\$_".$tab." = array();\n");
