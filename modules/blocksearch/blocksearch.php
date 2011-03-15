@@ -35,7 +35,7 @@ class BlockSearch extends Module
 		$this->name = 'blocksearch';
 		$this->tab = 'search_filter';
 		$this->version = 1.0;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 		

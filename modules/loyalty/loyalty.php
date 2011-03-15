@@ -42,7 +42,7 @@ class Loyalty extends Module
 		$this->name = 'loyalty';
 		$this->tab = 'pricing_promotion';
 		$this->version = '1.8';
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 

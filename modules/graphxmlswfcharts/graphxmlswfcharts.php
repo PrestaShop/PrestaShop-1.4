@@ -58,7 +58,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 			$this->name = 'graphxmlswfcharts';
 			$this->tab = 'administration';
 			$this->version = 1.0;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
 			Module::__construct();
 			

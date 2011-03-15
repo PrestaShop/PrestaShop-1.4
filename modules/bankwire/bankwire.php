@@ -42,7 +42,7 @@ class BankWire extends PaymentModule
 		$this->name = 'bankwire';
 		$this->tab = 'payments_gateways';
 		$this->version = '0.5';
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'checkbox';

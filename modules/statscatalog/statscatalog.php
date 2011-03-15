@@ -38,7 +38,7 @@ class StatsCatalog extends Module
         $this->name = 'statscatalog';
         $this->tab = 'analytics_stats';
         $this->version = 1.0;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 		
         parent::__construct();
 		

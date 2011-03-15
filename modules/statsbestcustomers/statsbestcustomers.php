@@ -43,7 +43,7 @@ class StatsBestCustomers extends ModuleGrid
 		$this->name = 'statsbestcustomers';
 		$this->tab = 'analytics_stats';
 		$this->version = 1.0;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 		
 		$this->_defaultSortColumn = 'totalMoneySpent';
 		$this->_defaultSortDirection = 'DESC';

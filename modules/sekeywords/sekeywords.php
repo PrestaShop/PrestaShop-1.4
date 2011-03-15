@@ -39,7 +39,7 @@ class SEKeywords extends ModuleGraph
         $this->name = 'sekeywords';
         $this->tab = 'analytics_stats';
         $this->version = 1.0;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 		
 		$this->_query = '
 		SELECT sek.`keyword`, COUNT(TRIM(sek.`keyword`)) as occurences

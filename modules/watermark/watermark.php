@@ -46,7 +46,7 @@ class Watermark extends Module
 		$this->name = 'watermark';
 		$this->tab = 'administration';
 		$this->version = 0.1;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 		
 		parent::__construct();
 

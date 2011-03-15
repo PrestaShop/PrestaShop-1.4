@@ -35,7 +35,7 @@ class GCheckout extends PaymentModule
         $this->name = 'gcheckout';
         $this->tab = 'payments_gateways';
         $this->version = 1.1;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';

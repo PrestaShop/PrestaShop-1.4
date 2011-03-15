@@ -56,7 +56,7 @@ class UpsCarrier extends CarrierModule
 		$this->name = 'upscarrier';
 		$this->tab = 'shipping_logistics';
 		$this->version = '1.0';
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
 		parent::__construct ();
 

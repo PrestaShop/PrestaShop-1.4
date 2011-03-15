@@ -35,7 +35,7 @@ class BlockUserInfo extends Module
 		$this->name = 'blockuserinfo';
 		$this->tab = 'front_office_features';
 		$this->version = 0.1;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 		

@@ -32,7 +32,7 @@ class StatsStock extends Module
         $this->name = 'statsstock';
         $this->tab = 'analytics_stats';
         $this->version = 1.0;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
         parent::__construct();
 		

@@ -35,7 +35,7 @@ class GAdsense extends Module
 	 	$this->name = 'gadsense';
 	 	$this->tab = 'advertising_marketing';
 	 	$this->version = '1.1';
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
         $this->displayName = $this->l('Google Adsense');
 		
 	 	parent::__construct();

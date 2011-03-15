@@ -41,7 +41,7 @@ class Newsletter extends Module
         $this->name = 'newsletter';
         $this->tab = 'administration';
         $this->version = 2.0;
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
         parent::__construct();
 

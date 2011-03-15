@@ -38,7 +38,7 @@ class BlockLink extends Module
 	 	$this->name = 'blocklink';
 	 	$this->tab = 'front_office_features';
 	 	$this->version = '1.4';
-		$this->author = 'Prestashop';
+		$this->author = 'PrestaShop';
 
 	 	parent::__construct();
 
