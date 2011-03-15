@@ -54,13 +54,13 @@ if (Tools::isSubmit('Submit'))
 	$passwd = trim(Tools::getValue('passwd'));
 	$email = trim(Tools::getValue('email'));
 	if (empty($email))
-		$errors[] = Tools::displayError('e-mail is empty');
+		$errors[] = Tools::displayError('E-mail is empty');
 	elseif (!Validate::isEmail($email))
-		$errors[] = Tools::displayError('invalid e-mail address');
+		$errors[] = Tools::displayError('Invalid e-mail address');
 	elseif (empty($passwd))
-		$errors[] = Tools::displayError('password is blank');
+		$errors[] = Tools::displayError('Password is blank');
 	elseif (!Validate::isPasswd($passwd))
-		$errors[] = Tools::displayError('invalid password');
+		$errors[] = Tools::displayError('Invalid password');
 	else
 	{
 	 	/* Seeking for employee */
@@ -68,7 +68,7 @@ if (Tools::isSubmit('Submit'))
 		$employee = $employee->getByemail($email, $passwd);
 		if (!$employee)
 		{
-			$errors[] = Tools::displayError('employee does not exist, or bad password');
+			$errors[] = Tools::displayError('Employee does not exist or password is incorrect.');
 			$cookie->logout();
 		}
 		else

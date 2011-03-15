@@ -502,7 +502,7 @@ class AdminTaxRulesGroup extends AdminTab
 								$this->afterUpdate($object);
 							}
 							if (!$result)
-								$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
+								$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> ('.Db::getInstance()->getMsgError().')';
 							elseif ($this->postImage($object->id) AND !sizeof($this->_errors))
 							{
 								$parent_id = (int)(Tools::getValue('id_parent', 1));
@@ -520,10 +520,10 @@ class AdminTaxRulesGroup extends AdminTab
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 				}
 
 				/* Object creation */
@@ -534,7 +534,7 @@ class AdminTaxRulesGroup extends AdminTab
 						$object = new $this->className();
 						$this->copyFromPost($object, $this->table);
 						if (!$object->add())
-							$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+							$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
 						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
 						{
 							$parent_id = (int)(Tools::getValue('id_parent', 1));
@@ -554,7 +554,7 @@ class AdminTaxRulesGroup extends AdminTab
 						}
 					}
 					else
-						$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+						$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 				}
 			}
 			$this->_errors = array_unique($this->_errors);

@@ -248,7 +248,7 @@ function checkingTab($tab)
 	{
 		if (isset(AdminTab::$tabParenting[$tab]))
 			Tools::redirectAdmin('?tab='.AdminTab::$tabParenting[$tab].'&token='.Tools::getAdminTokenLite(AdminTab::$tabParenting[$tab]));
-		echo Tools::displayError('Tab cannot be found');
+		echo Tools::displayError('Tab cannot be found.');
 		return false;
 	}
 	if ($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($tab).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php'))
@@ -258,13 +258,13 @@ function checkingTab($tab)
 
 	if (!class_exists($tab, false) OR !$id_tab)
 	{
-		echo Tools::displayError('Tab file cannot be found');
+		echo Tools::displayError('Tab file cannot be found.');
 		return false;
 	}
 	$adminObj = new $tab;
 	if (!$adminObj->viewAccess() AND ($adminObj->table != 'employee' OR $cookie->id_employee != Tools::getValue('id_employee') OR !Tools::isSubmit('updateemployee')))
 	{
-		$adminObj->_errors = array(Tools::displayError('access denied'));
+		$adminObj->_errors = array(Tools::displayError('Access denied'));
 		echo $adminObj->displayErrors();
 		return false;
 	}

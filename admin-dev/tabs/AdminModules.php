@@ -105,7 +105,7 @@ class AdminModules extends AdminTab
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('desactive'))
 		{
@@ -119,7 +119,7 @@ class AdminModules extends AdminTab
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('reset'))
 		{
@@ -139,7 +139,7 @@ class AdminModules extends AdminTab
 				} else
 					$this->_errors[] = Tools::displayError('Cannot load module object');
 			} else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 
 		}
 		/* Automatically copy a module from external URL and unarchive it in the appropriated directory */
@@ -156,7 +156,7 @@ class AdminModules extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		if (Tools::isSubmit('submitDownload2'))
 		{
@@ -165,14 +165,14 @@ class AdminModules extends AdminTab
 				if (!isset($_FILES['file']['tmp_name']) OR empty($_FILES['file']['tmp_name']))
 					$this->_errors[] = $this->l('no file selected');
 				elseif (substr($_FILES['file']['name'], -4) != '.tar' AND substr($_FILES['file']['name'], -4) != '.zip' AND substr($_FILES['file']['name'], -4) != '.tgz' AND substr($_FILES['file']['name'], -7) != '.tar.gz')
-					$this->_errors[] = Tools::displayError('unknown archive type');
+					$this->_errors[] = Tools::displayError('Unknown archive type');
 				elseif (!@copy($_FILES['file']['tmp_name'], _PS_MODULE_DIR_.$_FILES['file']['name']))
-					$this->_errors[] = Tools::displayError('an error occurred while copying archive to module directory');
+					$this->_errors[] = Tools::displayError('An error occurred while copying archive to module directory.');
 				else
 					$this->extractArchive(_PS_MODULE_DIR_.$_FILES['file']['name']);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		if (Tools::isSubmit('deleteModule'))
 		{
@@ -187,7 +187,7 @@ class AdminModules extends AdminTab
 				Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to delete anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 
 		/* Call appropriate module callback */
@@ -208,11 +208,11 @@ class AdminModules extends AdminTab
 						if (!($module = Module::getInstanceByName(urldecode($name))))
 							$this->_errors[] = $this->l('module not found');
 						elseif ($key == 'install' AND $this->tabAccess['add'] !== '1')
-							$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+							$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 						elseif ($key == 'uninstall' AND $this->tabAccess['delete'] !== '1')
 							$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 						elseif ($key == 'configure' AND $this->tabAccess['edit'] !== '1')
-							$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+							$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 						elseif ($key == 'install' AND Module::isInstalled($module->name))
 							$this->_errors[] = Tools::displayError('This module is already installed : ').$module->name;
 						elseif ($key == 'uninstall' AND !Module::isInstalled($module->name))
@@ -276,10 +276,10 @@ class AdminModules extends AdminTab
 				if ($zip->open($file) === true AND $zip->extractTo(_PS_MODULE_DIR_) AND $zip->close())
 					$success = true;
 				else
-					$this->_errors[] = Tools::displayError('error while extracting module (file may be corrupted)');
+					$this->_errors[] = Tools::displayError('Error while extracting module (file may be corrupted).');
 			}
 			else
-				$this->_errors[] = Tools::displayError('zip is not installed on your server. Ask your host for further information.');
+				$this->_errors[] = Tools::displayError('Zip is not installed on your server. Ask your host for further information.');
 		}
 		else
 		{
@@ -287,7 +287,7 @@ class AdminModules extends AdminTab
 			if ($archive->extract(_PS_MODULE_DIR_))
 				$success = true;
 			else
-				$this->_errors[] = Tools::displayError('error while extracting module (file may be corrupted)');
+				$this->_errors[] = Tools::displayError('Error while extracting module (file may be corrupted).');
 		}
 		
 		@unlink($file);

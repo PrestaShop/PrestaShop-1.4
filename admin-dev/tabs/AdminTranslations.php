@@ -201,9 +201,9 @@ class AdminTranslations extends AdminTab
 			$gz = new Archive_Tar(_PS_TRANSLATIONS_DIR_.'/export/'.$lang.'.gzip', true);
 			if ($gz->createModify($items, NULL, _PS_ROOT_DIR_));
 				Tools::redirect('translations/export/'.$lang.'.gzip');
-			$this->_errors[] = Tools::displayError('an error occurred while creating archive');
+			$this->_errors[] = Tools::displayError('An error occurred while creating archive.');
 		}
-		$this->_errors[] = Tools::displayError('please choose a language and a theme');
+		$this->_errors[] = Tools::displayError('Please choose a language and theme.');
 	}
 	
 	public function checkAndAddMailsFiles ($iso_code, $files_list)
@@ -232,7 +232,7 @@ class AdminTranslations extends AdminTab
 		global $currentIndex;
 
 		if (!isset($_FILES['file']['tmp_name']) OR !$_FILES['file']['tmp_name'])
-			$this->_errors[] = Tools::displayError('no file selected');
+			$this->_errors[] = Tools::displayError('No file selected');
 		else
 		{
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
@@ -248,7 +248,7 @@ class AdminTranslations extends AdminTab
 				}
 				Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 			}
-			$this->_errors[] = Tools::displayError('archive cannot be extracted');
+			$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
 		}
 	}
 	
@@ -280,18 +280,18 @@ class AdminTranslations extends AdminTab
 								$this->_errors[] = Tools::displayError('Cannot delete archive');
 							Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 						}
-						$this->_errors[] = Tools::displayError('archive cannot be extracted');
+						$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
 						if (!unlink($file))
 							$this->_errors[] = Tools::displayError('Cannot delete archive');
 					}
 					else
-						$this->_errors[] = Tools::displayError('Server does not have permissions for writing');
+						$this->_errors[] = Tools::displayError('Server does not have permissions for writing.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('language not found');
+					$this->_errors[] = Tools::displayError('Language not found');
 			}
 			else
-				$this->_errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com');
+				$this->_errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com.');
 		}
 		else
 			$this->_errors[] = Tools::displayError('Invalid parameter');
@@ -440,28 +440,28 @@ class AdminTranslations extends AdminTab
 		 	if ($this->tabAccess['add'] === '1')
 				$this->submitCopyLang();
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('submitExport'))
 		{
 			if ($this->tabAccess['add'] === '1')
 				$this->submitExportLang();
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('submitImport'))
 		{
 		 	if ($this->tabAccess['add'] === '1')
 				$this->submitImportLang();
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('submitAddLanguage'))
 		{
 			if ($this->tabAccess['add'] === '1')
 				$this->submitAddLang();
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsFront'))
 		{
@@ -472,7 +472,7 @@ class AdminTranslations extends AdminTab
 				$this->writeTranslationFile('Front', _PS_THEME_DIR_.'lang/'.Tools::strtolower(Tools::getValue('lang')).'.php');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsPDF'))
 		{
@@ -483,7 +483,7 @@ class AdminTranslations extends AdminTab
 				$this->writeTranslationFile('PDF', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/pdf.php', 'PDF');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsBack'))
 		{
@@ -494,7 +494,7 @@ class AdminTranslations extends AdminTab
 				$this->writeTranslationFile('Back', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/admin.php', 'ADM');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsErrors'))
 		{
@@ -505,7 +505,7 @@ class AdminTranslations extends AdminTab
 				$this->writeTranslationFile('Errors', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/errors.php', false, 'ERRORS');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsFields'))
 		{
@@ -516,7 +516,7 @@ class AdminTranslations extends AdminTab
 				$this->writeTranslationFile('Fields', _PS_TRANSLATIONS_DIR_.Tools::strtolower(Tools::getValue('lang')).'/fields.php', false, 'FIELDS');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 
 		}
 		elseif (Tools::isSubmit('submitTranslationsMails') || Tools::isSubmit('submitTranslationsMailsAndStay'))
@@ -526,7 +526,7 @@ class AdminTranslations extends AdminTab
 		 		$this->submitTranslationsMails($id_lang);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitTranslationsModules'))
 		{
@@ -560,7 +560,7 @@ class AdminTranslations extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 	}
 	protected function getMailPattern()
@@ -652,7 +652,7 @@ class AdminTranslations extends AdminTab
 					}
 					else
 					{
-						$this->_errors[] = Tools::displayError('HTML mails templates can\'t contain JavaScript code.');
+						$this->_errors[] = Tools::displayError('HTML mails templates cannot contain JavaScript code.');
 					}
 				}
 			}
@@ -861,7 +861,7 @@ class AdminTranslations extends AdminTab
 			if (!file_put_contents($dir.'/'.$file, "<?php\n\nglobal \$".$var.";\n\$".$var." = array();\n\n?>"))
 				die('Please create a "'.$file.'" file in '.$dir);
 		if (!is_writable($dir.'/'.$file))
-			$this->displayWarning(Tools::displayError('This file has to be writable:').' '.$dir.'/'.$file);
+			$this->displayWarning(Tools::displayError('This file must be writable:').' '.$dir.'/'.$file);
 		include($dir.'/'.$file);
 		return ${$var};
 	}

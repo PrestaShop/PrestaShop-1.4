@@ -59,16 +59,16 @@ class IdentityControllerCore extends FrontController
 		{
 			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND
 			!(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
-				$this->errors[] = Tools::displayError('invalid birthday');
+				$this->errors[] = Tools::displayError('Invalid date of birth');
 			else
 			{
 				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 
 				$_POST['old_passwd'] = trim($_POST['old_passwd']);
 				if (empty($_POST['old_passwd']) OR (Tools::encrypt($_POST['old_passwd']) != self::$cookie->passwd))
-					$this->errors[] = Tools::displayError('your current password is not that one');
+					$this->errors[] = Tools::displayError('Your password is incorrect.');
 				elseif ($_POST['passwd'] != $_POST['confirmation'])
-					$this->errors[] = Tools::displayError('password and confirmation do not match');
+					$this->errors[] = Tools::displayError('Password and confirmation do not match');
 				else
 				{
 					$prev_id_default_group = $customer->id_default_group;
@@ -87,7 +87,7 @@ class IdentityControllerCore extends FrontController
 						self::$smarty->assign('confirmation', 1);
 					}
 					else
-						$this->errors[] = Tools::displayError('impossible to update information');
+						$this->errors[] = Tools::displayError('Cannot update information');
 				}
 			}
 		}

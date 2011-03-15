@@ -67,22 +67,22 @@ class AdminLanguages extends AdminTab
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['no-picture']['tmp_name'], $tmpName))
 				return false;
 			if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'.jpg'))
-				$this->_errors[] = Tools::displayError('an error occurred while copying no-picture image to your product folder');
+				$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your product folder.');
 			if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'.jpg'))
-				$this->_errors[] = Tools::displayError('an error occurred while copying no-picture image to your category folder');
+				$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your category folder.');
 			if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'.jpg'))
-				$this->_errors[] = Tools::displayError('an error occurred while copying no-picture image to your manufacturer folder');
+				$this->_errors[] = Tools::displayError('n error occurred while copying no-picture image to your manufacturer folder');
 			else
 			{	
 				$imagesTypes = ImageType::getImagesTypes('products');
 				foreach ($imagesTypes AS $k => $imageType)
 				{
 					if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('an error occurred while resizing no-picture image to your product directory');
+						$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your product directory.');
 					if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('an error occurred while resizing no-picture image to your category directory');
+						$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your category directory.');
 					if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('an error occurred while resizing no-picture image to your manufacturer directory');
+						$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your manufacturer directory.');
 				}
 			}
 			unlink($tmpName);
@@ -105,11 +105,11 @@ class AdminLanguages extends AdminTab
 			foreach ($imagesTypes AS $k => $imageType)
 				if (file_exists($dir.$language.'-default-'.stripslashes($imageType['name']).'.jpg'))
 					if (!unlink($dir.$language.'-default-'.stripslashes($imageType['name']).'.jpg'))
-						$this->_errors[] = Tools::displayError('an error occurred during the image deletion');
+						$this->_errors[] = Tools::displayError('An error occurred during image deletion.');
 
 			if (file_exists($dir.$language.'.jpg'))
 				if (!unlink($dir.$language.'.jpg'))
-					$this->_errors[] = Tools::displayError('an error occurred during the image deletion');
+					$this->_errors[] = Tools::displayError('An error occurred during image deletion.');
 		}
 
 		return !sizeof($this->_errors) ? true : false;
@@ -134,7 +134,7 @@ class AdminLanguages extends AdminTab
 						Tools::redirectAdmin($currentIndex.'&conf=1'.'&token='.$this->token);
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -165,7 +165,7 @@ class AdminLanguages extends AdminTab
 				if ($this->tabAccess['add'] === '1')
 				{
 					if (isset($_POST['iso_code']) AND !empty($_POST['iso_code']) AND Validate::isLanguageIsoCode(Tools::getValue('iso_code')) AND Language::getIdByIso($_POST['iso_code']))
-						$this->_errors[] = Tools::displayError('this ISO code is already linked to another language');
+						$this->_errors[] = Tools::displayError('This ISO code is already linked to another language.');
 					if (!empty($_FILES['no-picture']['tmp_name']) AND !empty($_FILES['flag']['tmp_name']) AND Validate::isLanguageIsoCode(Tools::getValue('iso_code')))
 					{
 						$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
@@ -174,11 +174,11 @@ class AdminLanguages extends AdminTab
 					else
 					{
 						$this->validateRules();
-						$this->_errors[] = Tools::displayError('the Flag and No-Picture image fields are required');
+						$this->_errors[] = Tools::displayError('Flag and No-Picture image fields are required.');
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+					$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 			}
 			/* Language edition */
 			else
@@ -196,7 +196,7 @@ class AdminLanguages extends AdminTab
 					$this->validateRules();
 				}
 				else
-					$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+					$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			}
 		}
 		elseif (isset($_GET['status']) AND isset($_GET['id_lang']))
@@ -211,7 +211,7 @@ class AdminLanguages extends AdminTab
 					return parent::postProcess();
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (Tools::isSubmit('submitOptions'.$this->table))
 		{

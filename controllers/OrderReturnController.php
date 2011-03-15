@@ -45,7 +45,7 @@ class OrderReturnControllerCore extends FrontController
 		parent::preProcess();
 		
 		if (!isset($_GET['id_order_return']) OR !Validate::isUnsignedId($_GET['id_order_return']))
-			$this->errors[] = Tools::displayError('order ID is required');
+			$this->errors[] = Tools::displayError('Order ID required');
 		else
 		{
 			$orderRet = new OrderReturn((int)($_GET['id_order_return']));
@@ -66,10 +66,10 @@ class OrderReturnControllerCore extends FrontController
 					));
 				}
 				else
-					$this->errors[] = Tools::displayError('cannot find this order return');
+					$this->errors[] = Tools::displayError('Cannot find this order return');
 			}
 			else
-				$this->errors[] = Tools::displayError('cannot find this order return');
+				$this->errors[] = Tools::displayError('Cannot find this order return');
 		}
 
 		self::$smarty->assign(array(

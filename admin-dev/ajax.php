@@ -171,7 +171,7 @@ if ($step = (int)(Tools::getValue('ajaxProductTab')))
 	$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 	$product = new Product((int)(Tools::getValue('id_product')));
 	if (!Validate::isLoadedObject($product))
-		die (Tools::displayError('product cannot be loaded'));
+		die (Tools::displayError('Product cannot be loaded'));
 
 	$switchArray = array(3 => 'displayFormPrices', 4 => 'displayFormAttributes', 5 => 'displayFormFeatures', 6 => 'displayFormCustomization', 7 => 'displayFormAttachments');
 	$currentIndex = 'index.php?tab=AdminCatalog';

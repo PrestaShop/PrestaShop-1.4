@@ -54,7 +54,7 @@ class AdminDb extends AdminPreferences
 				foreach ($this->_fieldsDatabase AS $field => $values)
 					if (isset($values['required']) AND $values['required'])
 						if (($value = Tools::getValue($field)) == false AND (string)$value != '0')
-							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required');
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
 	
 				if (!sizeof($this->_errors))
 				{
@@ -68,12 +68,12 @@ class AdminDb extends AdminPreferences
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		if (Tools::isSubmit('submitEngine'))
 		{
 			if (!isset($_POST['tablesBox']) OR !sizeof($_POST['tablesBox']))
-				$this->_errors[] = Tools::displayError('You don\'t have select tables');
+				$this->_errors[] = Tools::displayError('You do not have select tables');
 			else
 			{
 				$available_engines = $this->_getEngines();

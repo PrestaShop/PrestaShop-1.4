@@ -1749,9 +1749,9 @@ FileETag INode MTime Size
 		{
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
-			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
+			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on Line <strong>'.$callee['Line'].'</strong><br />', E_USER_WARNING);
 
-			$message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+			$message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('Line').' '.$callee['Line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
 
 			Logger::addLog($message, 3, $callee['class']);
 		}
@@ -1766,9 +1766,9 @@ FileETag INode MTime Size
 		{
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
-			trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
+			trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on Line <strong>'.$callee['Line'].'</strong><br />', E_USER_WARNING);
 
-			$message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+			$message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('Line').' '.$callee['Line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
 			Logger::addLog($message, 3, $callee['class']);
 		}
 	}

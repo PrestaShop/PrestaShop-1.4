@@ -36,7 +36,7 @@ $id_product = (int)(Tools::getValue('id_product'));
 $id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
 strcmp(Tools::getToken(false), Tools::getValue('static_token')))
-	$error = Tools::displayError('invalid token');
+	$error = Tools::displayError('Invalid token');
 
 if (!strlen($error) &&
 	empty($token) === false &&
@@ -47,7 +47,7 @@ if (!strlen($error) &&
 		WishList::addBoughtProduct($wishlist['id_wishlist'], $id_product, $id_product_attribute, $cart->id, 1);
 }
 else
-	$error = Tools::displayError('You need to log in');
+	$error = Tools::displayError('You must log in');
 
 if (empty($error) === false)
 	echo $error;

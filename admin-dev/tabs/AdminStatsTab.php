@@ -45,7 +45,7 @@ abstract class AdminStatsTab extends AdminPreferences
 		if (Tools::isSubmit('submitDatePicker'))
 		{
 			if (!Validate::isDate($from = Tools::getValue('datepickerFrom')) OR !Validate::isDate($to = Tools::getValue('datepickerTo')))
-				$this->_errors[] = Tools::displayError('date specified not valid');
+				$this->_errors[] = Tools::displayError('Date specified is invalid');
 		}
 		if (Tools::isSubmit('submitDateDay'))
 		{
@@ -96,7 +96,7 @@ abstract class AdminStatsTab extends AdminPreferences
 				$this->_postConfig($this->_fieldsSettings);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit something here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		if (sizeof($this->_errors))
 			AdminTab::displayErrors();

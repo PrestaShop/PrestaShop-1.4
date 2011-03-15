@@ -278,7 +278,7 @@ class AdminCMS extends AdminTab
 			$cms = new CMS((int)(Tools::getValue('id_cms')));
 			$cms->cleanPositions($cms->id_cms_category);
 			if (!$cms->delete())
-				$this->_errors[] = Tools::displayError('an error occurred while deleting object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+				$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
 			else
 				Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=1&token='.Tools::getAdminTokenLite('AdminCMSContent'));
 		}/* Delete multiple objects */
@@ -296,11 +296,11 @@ class AdminCMS extends AdminTab
 						$cms->cleanPositions((int)(Tools::getValue('id_cms_category')));
 						Tools::redirectAdmin($currentIndex.'&conf=2&token='.Tools::getAdminTokenLite('AdminCMSContent').'&id_category='.(int)(Tools::getValue('id_cms_category')));
 					}
-					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+					$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
 
 				}
 				else
-					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
+					$this->_errors[] = Tools::displayError('You must select at least one element to delete.');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -316,7 +316,7 @@ class AdminCMS extends AdminTab
 					$cms = new CMS();
 					$this->copyFromPost($cms, 'cms');
 					if (!$cms->add())
-						$this->_errors[] = Tools::displayError('an error occurred while creating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+						$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
 					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
 					{
 						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), (int)($cookie->id_lang));
@@ -338,7 +338,7 @@ class AdminCMS extends AdminTab
 					$cms = new CMS($id_cms);
 					$this->copyFromPost($cms, 'cms');
 					if (!$cms->update())
-						$this->_errors[] = Tools::displayError('an error occurred while updating object').' <b>'.$this->table.' ('.mysql_error().')</b>';
+						$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
 					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
 					{
 						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), (int)($cookie->id_lang));
@@ -360,9 +360,9 @@ class AdminCMS extends AdminTab
 		elseif (Tools::getValue('position'))
 		{
 			if ($this->tabAccess['edit'] !== '1')
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
-				$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+				$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			elseif (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
@@ -378,13 +378,13 @@ class AdminCMS extends AdminTab
 					if ($object->toggleStatus())
 						Tools::redirectAdmin($currentIndex.'&conf=5'.((int)Tools::getValue('id_cms_category') ? '&id_cms_category='.(int)Tools::getValue('id_cms_category') : '').'&token='.Tools::getValue('token'));
 					else
-						$this->_errors[] = Tools::displayError('an error occurred while updating status');
+						$this->_errors[] = Tools::displayError('An error occurred while updating status.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while updating status for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		else
 			parent::postProcess(true);

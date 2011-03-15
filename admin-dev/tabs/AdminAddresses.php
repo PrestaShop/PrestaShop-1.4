@@ -82,7 +82,7 @@ class AdminAddresses extends AdminTab
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
-						$this->_errors[] = Tools::displayError('this e-mail address is not registered');
+						$this->_errors[] = Tools::displayError('This e-mail address is not registered.');
 				}
 				elseif ($id_customer = Tools::getValue('id_customer'))
 				{
@@ -90,12 +90,12 @@ class AdminAddresses extends AdminTab
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
-						$this->_errors[] = Tools::displayError('unknown customer');
+						$this->_errors[] = Tools::displayError('Unknown customer');
 				}
 				else
-					$this->_errors[] = Tools::displayError('unknown customer');
+					$this->_errors[] = Tools::displayError('Unknown customer');
 				if (Country::isNeedDniByCountryId(Tools::getValue('id_country')) AND !Tools::getValue('dni'))
-					$this->_errors[] = Tools::displayError('identification number is incorrect or already used');
+					$this->_errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
 			}
 
 			// Check manufacturer selected
@@ -103,17 +103,17 @@ class AdminAddresses extends AdminTab
 			{
 				$manufacturer = new Manufacturer((int)(Tools::getValue('id_manufacturer')));
 				if (!Validate::isLoadedObject($manufacturer))
-					$this->_errors[] = Tools::displayError('manufacturer selected is not valid');
+					$this->_errors[] = Tools::displayError('Manufacturer selected is not valid.');
 			}
 
 			/* If the selected country does not contain states */
 			$id_state = (int)(Tools::getValue('id_state'));
 			if ($id_country = Tools::getValue('id_country') AND $country = new Country((int)($id_country)) AND !(int)($country->contains_states) AND $id_state)
-				$this->_errors[] = Tools::displayError('you have selected a state for a country that does not contain states');
+				$this->_errors[] = Tools::displayError('You have selected a state for a country that does not contain states.');
 
 			/* If the selected country contains states, then a state have to be selected */
 			if ((int)($country->contains_states) AND !$id_state)
-				$this->_errors[] = Tools::displayError('an address which is located in a country containing states must have a state selected');
+				$this->_errors[] = Tools::displayError('An address located in a country containing states must have a state selected.');
 
 			/* Check zip code */
 			if ($country->need_zip_code)
@@ -128,12 +128,12 @@ class AdminAddresses extends AdminTab
 					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
 					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
 					if (!preg_match($zip_regexp, $postcode))
-						$this->_errors[] = Tools::displayError('Your postal code/zip code is incorrect.').'<br />'.Tools::displayError('It must be typed as follows :').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
+						$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
 				}
 				elseif ($zip_code_format)
-					$this->_errors[] = Tools::displayError('postcode is required.');
+					$this->_errors[] = Tools::displayError('Postcode required.');
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-					$this->_errors[] = Tools::displayError('Your postal code/zip code is incorrect.');
+					$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.');
 			}
 
 
@@ -154,7 +154,7 @@ class AdminAddresses extends AdminTab
 		if (isset($_POST['submitAdd'.$this->table]) AND ($id_order = (int)(Tools::getValue('id_order'))) AND !sizeof($this->_errors) AND !empty($address_type))
 		{
 			if(!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET `id_address_'.$address_type.'` = '.Db::getInstance()->Insert_ID().' WHERE `id_order` = '.$id_order))
-				$this->_errors[] = Tools::displayError('an error occurred while linking this address to its order');
+				$this->_errors[] = Tools::displayError('An error occurred while linking this address to its order.');
 			else
 				Tools::redirectAdmin(Tools::getValue('back').'&conf=4');
 		}

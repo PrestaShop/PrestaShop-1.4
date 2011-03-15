@@ -54,7 +54,7 @@ class AdminModulesPositions extends AdminTab
 					$this->_errors[] = Tools::displayError('module cannot be loaded');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 
 		// Add new module in hook
@@ -72,24 +72,24 @@ class AdminModulesPositions extends AdminTab
 				// Checking vars...
 				foreach ($excepts AS $except)
 					if (!Validate::isFileName($except))
-						$this->_errors[] = Tools::displayError('no valid value for field exceptions');
+						$this->_errors[] = Tools::displayError('No valid value for field exceptions');
 				if (!$id_module OR !Validate::isLoadedObject($module))
 					$this->_errors[] = Tools::displayError('module cannot be loaded');
 				elseif (!$id_hook OR !Validate::isLoadedObject($hook))
-					$this->_errors[] = Tools::displayError('hook cannot be loaded');
+					$this->_errors[] = Tools::displayError('Hook cannot be loaded.');
 				elseif (Hook::getModuleFromHook($id_hook, $id_module))
-					$this->_errors[] = Tools::displayError('this module is already transplanted to this hook');
+					$this->_errors[] = Tools::displayError('This module is already transplanted to this hook.');
 
 				// Adding vars...
 				elseif (!$module->registerHook($hook->name))
-					$this->_errors[] = Tools::displayError('an error occurred while transplanting module to hook');
+					$this->_errors[] = Tools::displayError('An error occurred while transplanting module to hook.');
 				elseif (!$module->registerExceptions($id_hook, $excepts))
-					$this->_errors[] = Tools::displayError('an error occurred while transplanting module to hook');
+					$this->_errors[] = Tools::displayError('An error occurred while transplanting module to hook.');
 				else
 					Tools::redirectAdmin($currentIndex.'&conf=16'.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 		
 		// Edit module from hook
@@ -107,20 +107,20 @@ class AdminModulesPositions extends AdminTab
 				// Checking vars...
 				foreach ($excepts AS $except)
 					if (!Validate::isFileName($except))
-						$this->_errors[] = Tools::displayError('no valid value for field exceptions');
+						$this->_errors[] = Tools::displayError('No valid value for field exceptions');
 				if (!$id_module OR !Validate::isLoadedObject($module))
 					$this->_errors[] = Tools::displayError('module cannot be loaded');
 				elseif (!$id_hook OR !Validate::isLoadedObject($hook))
-					$this->_errors[] = Tools::displayError('hook cannot be loaded');
+					$this->_errors[] = Tools::displayError('Hook cannot be loaded.');
 
 				// Adding vars...
 				if (!$module->editExceptions($id_hook, $excepts))
-					$this->_errors[] = Tools::displayError('an error occurred while transplanting module to hook');
+					$this->_errors[] = Tools::displayError('An error occurred while transplanting module to hook.');
 				else
 					Tools::redirectAdmin($currentIndex.'&conf=16'.($this->displayKey ? '&show_modules='.$this->displayKey : '').'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to add anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
 		}
 
 		// Delete module from hook
@@ -135,12 +135,12 @@ class AdminModulesPositions extends AdminTab
 				if (!Validate::isLoadedObject($module))
 					$this->_errors[] = Tools::displayError('module cannot be loaded');
 				elseif (!$id_hook OR !Validate::isLoadedObject($hook))
-					$this->_errors[] = Tools::displayError('hook cannot be loaded');
+					$this->_errors[] = Tools::displayError('Hook cannot be loaded.');
 				else
 				{
 					$position = Db::getInstance()->getValue('SELECT `position` FROM `'._DB_PREFIX_.'hook_module` hm WHERE hm.`id_hook` = '.$id_hook.' AND hm.`id_module` = '.$id_module);
 					if (!$module->unregisterHook($id_hook) OR !$module->unregisterExceptions($id_hook))
-						$this->_errors[] = Tools::displayError('an error occurred while deleting module from hook');
+						$this->_errors[] = Tools::displayError('An error occurred while deleting module from hook.');
 					else
 					{
 						$this->placeCorrectlyOtherModules($id_hook, $position);
@@ -154,7 +154,7 @@ class AdminModulesPositions extends AdminTab
 		elseif (Tools::isSubmit('unhookform'))
 		{
 			if (!($unhooks = Tools::getValue('unhooks')) OR !is_array($unhooks))
-				$this->_errors[] = Tools::displayError('Select at least a module to unhook');
+				$this->_errors[] = Tools::displayError('Select a module to unhook.');
 			else
 			{
 				foreach ($unhooks as $unhook)
@@ -167,12 +167,12 @@ class AdminModulesPositions extends AdminTab
 					if (!Validate::isLoadedObject($module))
 						$this->_errors[] = Tools::displayError('module cannot be loaded');
 					elseif (!$id_hook OR !Validate::isLoadedObject($hook))
-						$this->_errors[] = Tools::displayError('hook cannot be loaded');
+						$this->_errors[] = Tools::displayError('Hook cannot be loaded.');
 					else
 					{
 						$position = Db::getInstance()->getValue('SELECT `position` FROM `'._DB_PREFIX_.'hook_module` hm WHERE hm.`id_hook` = '.(int)($id_hook).' AND hm.`id_module` = '.(int)($id_module));
 						if (!$module->unregisterHook((int)($id_hook)) OR !$module->unregisterExceptions((int)($id_hook)))
-							$this->_errors[] = Tools::displayError('an error occurred while deleting module from hook');
+							$this->_errors[] = Tools::displayError('An error occurred while deleting module from hook.');
 						else
 							$this->placeCorrectlyOtherModules((int)($id_hook), (int)($position));
 					}

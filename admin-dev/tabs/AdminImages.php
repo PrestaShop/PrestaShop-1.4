@@ -65,7 +65,7 @@ class AdminImages extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&conf=9'.'&token='.$this->token);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		else
 			parent::postProcess();
@@ -74,7 +74,7 @@ class AdminImages extends AdminTab
 	protected function _childValidation()
 	{
 		if (!Tools::getValue('id_image_type') AND Validate::isImageTypeName($typeName = Tools::getValue('name')) AND ImageType::typeAlreadyExists($typeName))
-			$this->_errors[] = Tools::displayError('this name already exists');
+			$this->_errors[] = Tools::displayError('This name already exists.');
 	}
 
 	public function displayForm($isMainTab = true)
@@ -363,7 +363,7 @@ class AdminImages extends AdminTab
 			if (($return = $this->_regenerateNewImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false))) === true)
 				$this->_errors[] = Tools::displayError('Cannot write ').$proc['type'].Tools::displayError(' images. Please check the folder\'s writing permissions.');
 			elseif ($return == 'timeout')
-				$this->_errors[] = Tools::displayError('Only part of the images have been regenerated, server timed out before the end.');
+				$this->_errors[] = Tools::displayError('Only part of the images have been regenerated, server timed out before finishing.');
 			else
 			{
 				if ($proc['type'] == 'products')

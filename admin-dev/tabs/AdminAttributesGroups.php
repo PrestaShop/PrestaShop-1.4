@@ -79,10 +79,10 @@ class AdminAttributesGroups extends AdminTab
 					$object = new $this->className();
 					if ($object->deleteSelection($_POST[$this->table.'Box']))
 						Tools::redirectAdmin($currentIndex.'&conf=2'.'&token='.$this->token);
-					$this->_errors[] = Tools::displayError('an error occurred while deleting selection');
+					$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('you must select at least one element to delete');
+					$this->_errors[] = Tools::displayError('You must select at least one element to delete.');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -106,7 +106,7 @@ class AdminAttributesGroups extends AdminTab
 		<a href="'.$currentIndex.'&addattribute&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add attribute').'</a><br /><br />
 		'.$this->l('Click on the group name to view its attributes. Click again to hide them.').'<br /><br />';
 		if ($this->_list === false)
-			Tools::displayError('no elements found');
+			Tools::displayError('No elements found');
 
 		$this->displayListHeader();
 		echo '<input type="hidden" name="groupid" value="0">';

@@ -36,7 +36,7 @@ function displayError($msg)
 	'This product has been deleted.' => Tools::displayError('This product has been deleted.'),
 	'This file no longer exists.'	=> Tools::displayError('This file no longer exists.'),
 	'The product deadline is in the past.' => Tools::displayError('The product deadline is in the past.'),
-	'Dear customer, you have exceeded the expiration date.' => Tools::displayError('Dear customer, you have exceeded the expiration date.'),
+	'Expiration date exceeded' => Tools::displayError('Expiration date exceeded'),
 	'You have reached the maximum number of allowed downloads.' => Tools::displayError('You have reached the maximum number of allowed downloads.'));
 ?>
 <script type="text/javascript">
@@ -114,7 +114,7 @@ else
 
 	$customer_deadline = strtotime($info['date_expiration']);
 	if ($now > $customer_deadline AND $info['date_expiration'] != '0000-00-00 00:00:00')
-		displayError('Dear customer, you have exceeded the expiration date.');
+		displayError('Expiration date exceeded');
 
 	if ($info['download_nb'] >= $info['nb_downloadable'] AND $info['nb_downloadable'])
 		displayError('You have reached the maximum number of allowed downloads.');

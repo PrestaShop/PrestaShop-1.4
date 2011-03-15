@@ -1141,13 +1141,13 @@ class CartCore extends ObjectModel
 		global $cookie;
 
 		if (!$order_total)
-			 return Tools::displayError('cannot add voucher if order is free');
+			 return Tools::displayError('Cannot add voucher if order is free.');
 		if (!$discountObj->active)
-			return Tools::displayError('this voucher has already been used or is disabled');
+			return Tools::displayError('This voucher has already been used or is disabled.');
 		if (!$discountObj->quantity)
-			return Tools::displayError('this voucher has expired (usage limit attained)');
+			return Tools::displayError('This voucher has expired (usage limit attained).');
 		if ($discountObj->id_discount_type == 2 AND $this->id_currency != $discountObj->id_currency)
-			return Tools::displayError('this voucher can only be used in the following currency:').'
+			return Tools::displayError('This voucher can only be used in the following currency:').'
 				'.Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `name` FROM `'._DB_PREFIX_.'currency` WHERE id_currency = '.(int)$discountObj->id_currency);
 		if ($checkCartDiscount
 			AND (
@@ -1155,28 +1155,28 @@ class CartCore extends ObjectModel
 				OR (Order::getDiscountsCustomer((int)($cookie->id_customer), $discountObj->id) + $this->getDiscountsCustomer($discountObj->id) >= $discountObj->quantity_per_user) >= $discountObj->quantity_per_user
 				)
 			)
-			return Tools::displayError('you cannot use this voucher anymore (usage limit attained)');
+			return Tools::displayError('You cannot use this voucher anymore (usage limit attained).');
 		if (strtotime($discountObj->date_from) > time())
-			return Tools::displayError('this voucher is not yet valid');
+			return Tools::displayError('This voucher is not yet valid');
 		if (strtotime($discountObj->date_to) < time())
-			return Tools::displayError('this voucher has expired');
+			return Tools::displayError('This voucher has expired.');
 		if (sizeof($discounts) >= 1 AND $checkCartDiscount)
 		{
 			if (!$discountObj->cumulable)
-				return Tools::displayError('this voucher isn\'t cumulative with other current discounts');
+				return Tools::displayError('This voucher is not valid with other current discounts.');
 			foreach ($discounts as $discount)
 				if (!$discount['cumulable'])
-					return Tools::displayError('previous voucher added isn\'t cumulative with other discounts');
+					return Tools::displayError('Voucher is not valid with other discounts.');
 		}
 		if (is_array($discounts) AND in_array($discountObj->id, $discounts))
-			return Tools::displayError('this voucher is already in your cart');
+			return Tools::displayError('This voucher is already in your cart');
 		$groups = Customer::getGroupsStatic($this->id_customer);
 
 		if (($discountObj->id_customer OR $discountObj->id_group) AND ($this->id_customer != $discountObj->id_customer AND !in_array($discountObj->id_group, $groups)))
 		{
 			if (!$cookie->isLogged())
-				return Tools::displayError('you cannot use this voucher').' - '.Tools::displayError('try to log in if you own it');
-			return Tools::displayError('you cannot use this voucher');
+				return Tools::displayError('You cannot use this voucher.').' - '.Tools::displayError('Please log in.');
+			return Tools::displayError('You cannot use this voucher.');
 		}
 		$currentDate = date('Y-m-d');
 		$onlyProductWithDiscount = true;
@@ -1187,7 +1187,7 @@ class CartCore extends ObjectModel
 					$onlyProductWithDiscount = false;
 		}
 		if (!$discountObj->cumulable_reduction AND $onlyProductWithDiscount)
-			return Tools::displayError('this voucher isn\'t cumulative on products with reduction or marked as on sale');
+			return Tools::displayError('This voucher is not valid for marked or reduced products.');
 		$total_cart = 0;
 		$categories = Discount::getCategories($discountObj->id);
 		$returnErrorNoProductCategory = true;
@@ -1202,9 +1202,9 @@ class CartCore extends ObjectModel
 				}
 		}
 		if ($returnErrorNoProductCategory)
-			return Tools::displayError('this discount isn\'t applicable to that product category');
+			return Tools::displayError('This discount does not apply to that product category.');
 		if ($total_cart < $discountObj->minimal)
-			return Tools::displayError('the total amount of your order isn\'t high enough or this voucher cannot be used with those products');
+			return Tools::displayError('The order total is not high enough or this voucher cannot be used with those products.');
 		return false;
 	}
 

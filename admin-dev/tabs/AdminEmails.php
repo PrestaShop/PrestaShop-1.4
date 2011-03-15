@@ -62,12 +62,12 @@ class AdminEmails extends AdminPreferences
 		 	if ($this->tabAccess['edit'] === '1')
 			{
 				if ($_POST['PS_MAIL_METHOD'] == 2 AND (empty($_POST['PS_MAIL_SERVER']) OR empty($_POST['PS_MAIL_SMTP_PORT'])))
-					$this->_errors[] = Tools::displayError('You must at least define a SMTP server and a SMTP port. If you don\'t know, use the PHP mail() function instead.');
+					$this->_errors[] = Tools::displayError('You must define a SMTP server and a SMTP port. If you do not know, use the PHP mail() function instead.');
 				else
 					$this->_postConfig($this->_fieldsEmail);
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 	}
 	

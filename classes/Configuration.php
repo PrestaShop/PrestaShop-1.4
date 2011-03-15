@@ -298,7 +298,7 @@ class ConfigurationCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'configuration_lang` cl
 		LEFT JOIN `'._DB_PREFIX_.'configuration` c ON c.id_configuration = cl.id_configuration');
 		if ($result === false)
-			die(Tools::displayError('Invalid loadConfiguration() SQL query!'));
+			die(Tools::displayError('Invalid loadConfiguration() SQL query'));
 		foreach ($result AS $row)
 			self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = $row['value'];
 	}

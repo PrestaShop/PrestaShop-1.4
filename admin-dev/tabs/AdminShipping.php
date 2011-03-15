@@ -56,7 +56,7 @@ class AdminShipping extends AdminTab
 			 	/* Check required fields */
 				foreach ($this->_fieldsHandling AS $field => $values)
 					if (($value = Tools::getValue($field)) == false AND (string)$value != '0')
-						$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required');
+						$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
 
 				/* Check field validity */
 				foreach ($this->_fieldsHandling AS $field => $values)
@@ -64,7 +64,7 @@ class AdminShipping extends AdminTab
 					{
 						$function = $values['validation'];
 						if (!Validate::$function(Tools::getValue($field)))
-							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid');
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid.');
 					}
 
 				/* Update configuration values */
@@ -80,7 +80,7 @@ class AdminShipping extends AdminTab
 				}
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 
 		/* Shipping fees */
@@ -117,17 +117,17 @@ class AdminShipping extends AdminTab
 						Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
 					}
 					else
-						$this->_errors[] = Tools::displayError('an error occurred while updating fees (cannot load carrier object)');
+						$this->_errors[] = Tools::displayError('An error occurred while updating fees (cannot load carrier object).');
 				}
 				elseif (isset($id_carrier2))
 				{
 					$_POST['id_carrier'] = $id_carrier2;
 				}
 				else
-					$this->_errors[] = Tools::displayError('an error occurred while updating fees (cannot load carrier object)');
+					$this->_errors[] = Tools::displayError('An error occurred while updating fees (cannot load carrier object).');
 			}
 			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit anything here.');
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 	}
 

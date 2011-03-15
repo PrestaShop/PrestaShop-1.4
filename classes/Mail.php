@@ -109,7 +109,7 @@ class MailCore
 			/* Get templates content */
 			$iso = Language::getIsoById((int)($id_lang));
 			if (!$iso)
-				die (Tools::displayError('Error - No iso code for email !'));
+				die (Tools::displayError('Error - No ISO code for email'));
 			$template = $iso.'/'.$template;
 
 			$moduleName = false;
