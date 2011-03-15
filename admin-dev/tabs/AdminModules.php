@@ -414,7 +414,7 @@ class AdminModules extends AdminTab
 				$serialModules .= $module->name.' '.$module->version.'-'.($module->active ? 'a' : 'i')."\n";
 
 			$moduleAuthor = $module->author;
-			if (!empty($moduleAuthor))
+			if (!empty($moduleAuthor)&& ($moduleAuthor != ""))
 				$modulesAuthors[$moduleAuthor] = true;
 		}
 
