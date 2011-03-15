@@ -276,7 +276,7 @@ class AdminProducts extends AdminTab
 					AND Product::duplicateDownload($id_product_old, $product->id))
 					{
 						if (!Tools::getValue('noimage') AND !Image::duplicateProductImages($id_product_old, $product->id, $combinationImages))
-							$this->_errors[] = Tools::displayError('An error occurred while copying image.s');
+							$this->_errors[] = Tools::displayError('An error occurred while copying images.');
 						else
 						{
 							Hook::addProduct($product);
@@ -304,7 +304,7 @@ class AdminProducts extends AdminTab
 						$this->_errors[] = Tools::displayError('An error occurred while updating status.');
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while updating status for object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
@@ -337,7 +337,7 @@ class AdminProducts extends AdminTab
 					}
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
+					$this->_errors[] = Tools::displayError('An error occurred while deleting object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -770,7 +770,7 @@ class AdminProducts extends AdminTab
 					$product->text_fields = (int)($_POST['text_fields']);
 					$product->customizable = ((int)($_POST['uploadable_files']) > 0 OR (int)($_POST['text_fields']) > 0) ? 1 : 0;
 					if (!sizeof($this->_errors) AND !$product->update())
-						$this->_errors[] = Tools::displayError('An error occurred while updating customization. configuration');
+						$this->_errors[] = Tools::displayError('An error occurred while updating customization configuration.');
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=5&token='.($token ? $token : $this->token));
 				}
@@ -805,7 +805,7 @@ class AdminProducts extends AdminTab
 			if ($this->tabAccess['edit'] !== '1')
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
-				$this->_errors[] = Tools::displayError('An error occurred while updating status. for object').' <b>'.$this->table.'</b> '.Tools::displayError('(Cannot load object)');
+				$this->_errors[] = Tools::displayError('An error occurred while updating status for object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
 			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else

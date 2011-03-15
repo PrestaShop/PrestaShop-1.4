@@ -301,7 +301,7 @@ class AdminOrders extends AdminTab
 							$orderDetail = new OrderDetail((int)($id_order_detail));
 							$qtyCancelProduct = abs($customizationQtyList[$id_customization]);
 							if (!$order->deleteCustomization($id_customization, $qtyCancelProduct, $orderDetail))
-								$this->_errors[] = Tools::displayError('An error occurred during deletion of the product. customization').' '.$id_customization;
+								$this->_errors[] = Tools::displayError('An error occurred during deletion of product customization.').' '.$id_customization;
 						}
 					// E-mail params
 					if ((isset($_POST['generateCreditSlip']) OR isset($_POST['generateDiscount'])) AND !sizeof($this->_errors))
