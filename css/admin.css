@@ -1105,6 +1105,7 @@ html[xmlns] .clearfix {
 .admin-box1 h5 a{
 	color: #FFFFFF;
 	font-size: 8pt;
+	float: right;
 	text-decoration: underline;
 	font-weight: normal;
 	padding-right: 10px;
@@ -1113,6 +1114,7 @@ html[xmlns] .clearfix {
 .admin-box2 h5 a{
 	color: #FFFFFF;
 	font-size: 8pt;
+	float: right;
 	text-decoration: underline;
 	font-weight: normal;
 	padding-right: 10px;

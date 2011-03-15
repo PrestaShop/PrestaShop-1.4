@@ -377,7 +377,7 @@ class AdminHome extends AdminTab
 		<div id="column_right">';
 	
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-block.php?version=1.0&shop='.urlencode(Configuration::get('PS_SHOP_NAME')).'&url='.urlencode($_SERVER['HTTP_HOST']).'&isoCountry='.$isoCountry.'&id_lang='.$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
+		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-block.php?version=1.0&shop='.urlencode(Configuration::get('PS_SHOP_NAME')).'&protocol='.$protocol.'&url='.urlencode($_SERVER['HTTP_HOST']).'&isoCountry='.$isoCountry.'&id_lang='.$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
 		$content = explode('|', $content);
 		if ($content[0] == 'OK')
 		{
@@ -427,10 +427,10 @@ class AdminHome extends AdminTab
 				</div>';
 
 		if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))
-			echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 300px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
+			echo '<iframe frameborder="no" style="margin: 0px; padding: 0px; width: 315px; height: 320px;" src="'.$protocol.'://www.prestashop.com/rss/news2.php?v='._PS_VERSION_.'&lang='.$isoUser.'"></iframe>';
 
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$content = @file_get_contents('https://www.prestashop.com/partner/paypal/paypal-tips.php?isoCountry='.$isoCountry.'&id_lang='.$cookie->id_lang, false, $context);
+		$content = @file_get_contents('https://www.prestashop.com/partner/paypal/paypal-tips.php?protocol='.$protocol.'&isoCountry='.$isoCountry.'&id_lang='.$cookie->id_lang, false, $context);
 		$content = explode('|', $content);
 		if ($content[0] == 'OK')
 			echo $content[1];
