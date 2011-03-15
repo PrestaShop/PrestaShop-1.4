@@ -36,7 +36,6 @@ function checkLangPack(){
 			dataType : 'json',
 			success: function(ret)
 			{
-				console.log(ret);
 				if(typeof ret == 'object')
 					$('p#resultCheckLangPack').html(langPackOk+' <b>'+ret.name+'</b>) :'+'<br />'+langPackVersion+''+ret.version+' <a href="http://www.prestashop.com/download/lang_packs/gzip/'+ret.version+'/'+$('#iso_code').val()+'.gzip" target="_blank" class="link">'+download+'</a><br />'+langPackInfo).show("slow");
 				else if (ret == "offline")

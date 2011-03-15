@@ -139,7 +139,6 @@ var shopImporter = {
 							    }
 							    else
 							    {
-							    	console.log(jsonData);
 							    	$('#steps').html('<div id="database_feedback" style="display:none;" class="error"><img src="'+shopImporter.srcError+'">'+jsonData.error+'</div>');
 							    	$('#database_feedback').fadeIn('slow');
 							    }

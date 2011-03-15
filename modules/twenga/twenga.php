@@ -412,7 +412,6 @@ class Twenga extends PaymentModule
 			{
 				$("#twenga_tarif").click(function(e){
 					e.preventDefault();
-					//console.log("hahaha");
 					window.open("'.$tarifs_link.'", "", "width='.$tarif_arr[0].', height='.$tarif_arr[1].', scrollbars=no, menubar=no, status=no" );
 				});
 			});

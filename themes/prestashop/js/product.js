@@ -459,7 +459,6 @@ $(document).ready(function()
 		$('p#customizedDatas input').hide();
 		$('#ajax-loader').fadeIn();
 		$('p#customizedDatas').append(uploading_in_progress);
-		console.log(img_ps_dir + 'loader.gif');
 	});
 
 	//init the price in relation of the selected attributes
