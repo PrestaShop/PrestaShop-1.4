@@ -234,7 +234,7 @@ class AuthControllerCore extends FrontController
 			elseif (!Validate::isEmail($email))
 				$this->errors[] = Tools::displayError('Invalid e-mail address');
 			elseif (empty($passwd))
-				$this->errors[] = Tools::displayError('Password is required.');
+				$this->errors[] = Tools::displayError('Password is required');
 			elseif (Tools::strlen($passwd) > 32)
 				$this->errors[] = Tools::displayError('Password is too long');
 			elseif (!Validate::isPasswd($passwd))
