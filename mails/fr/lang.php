@@ -2,7 +2,7 @@
 
 global $_LANGMAIL;
 $_LANGMAIL = array();
-$_LANGMAIL['Welcome!'] = '';
+$_LANGMAIL['Welcome!'] = 'Bienvenue !';
 $_LANGMAIL['Message from contact form'] = 'Message depuis le formulaire de contact';
 $_LANGMAIL['Your message has been correctly sent'] = 'Votre message a bien été envoyé';
 $_LANGMAIL['New credit slip regarding your order'] = 'Nouvel avoir concernant votre commande';
