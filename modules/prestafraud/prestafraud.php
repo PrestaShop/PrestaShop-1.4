@@ -5,7 +5,7 @@
 *
 * NOTICE OF LICENSE
 *
-* This source file is subject to the Open Software License (AFL 3.0)
+* This source file is subject to the Academic Free License (AFL 3.0)
 * that is bundled with this package in the file LICENSE.txt.
 * It is also available through the world-wide-web at this URL:
 * http://opensource.org/licenses/afl-3.0.php
@@ -22,7 +22,7 @@
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision: 1.4 $
-*  @license    http://opensource.org/licenses/afl-3.0.php  Open Software License (AFL 3.0)
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
