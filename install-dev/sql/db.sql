@@ -1483,6 +1483,7 @@ CREATE TABLE `PREFIX_stock_mvt` (
 
 CREATE TABLE `PREFIX_stock_mvt_reason` (
   `id_stock_mvt_reason` int(11) NOT NULL AUTO_INCREMENT,
+   `sign` tinyint(1) NOT NULL DEFAULT 1,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY (`id_stock_mvt_reason`)

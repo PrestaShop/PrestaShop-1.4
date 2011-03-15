@@ -30,6 +30,8 @@ class StockMvtReasonCore extends ObjectModel
 	public		$id;
 	public		$name;
 	
+	public		$sign;
+	
 	public		$date_add;
 	public		$date_upd;
 	
@@ -48,6 +50,7 @@ class StockMvtReasonCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
+		$fields['sign'] = (int)$this->sign;
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
@@ -61,7 +64,7 @@ class StockMvtReasonCore extends ObjectModel
 	
 	static public function getStockMvtReasons($id_lang)
 	{
-		return Db::getInstance()->ExecuteS('SELECT smrl.name, smr.id_stock_mvt_reason
+		return Db::getInstance()->ExecuteS('SELECT smrl.name, smr.id_stock_mvt_reason, smr.sign
 														FROM '._DB_PREFIX_.'stock_mvt_reason smr
 														LEFT JOIN '._DB_PREFIX_.'stock_mvt_reason_lang smrl ON (smr.id_stock_mvt_reason = smrl.id_stock_mvt_reason AND smrl.id_lang='.(int)$id_lang.')');
 	}

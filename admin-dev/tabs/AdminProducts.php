@@ -495,10 +495,11 @@ class AdminProducts extends AdminTab
 								Tools::getValue('attribute_location'),
 								Tools::getValue('attribute_upc'),
 								Tools::getValue('minimal_quantity'));
-								if (in_array($mvt_type = Tools::getValue('attribute_mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('attribute_mvt_quantity') AND $mvt_qty != 0))
+								if ($id_reason = (int)Tools::getValue('id_mvt_reason'))
 								{
-									$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
-									if (!$product->addStockMvt($qty, (int)(Tools::getValue('id_mvt_reason')), (int)$id_product_attribute, NULL, $cookie->id_employee))
+									$reason = new StockMvtReason((int)$id_reason);
+									$qty = Tools::getValue('attribute_mvt_quantity') * $reason->sign; 
+									if (!$product->addStockMvt($qty, $id_reason, (int)$id_product_attribute, NULL, $cookie->id_employee))
 										$this->_errors[] = Tools::displayError('An error occurred while updating qty.');
 								}
 								Hook::updateProductAttribute((int)$id_product_attribute);
@@ -1135,11 +1136,12 @@ class AdminProducts extends AdminTab
 					$this->_removeTaxFromEcotax();
 					$this->copyFromPost($object, $this->table);
 					if ($object->update())
-					{
-						if (in_array($mvt_type = Tools::getValue('mvt_type'), array(1,2)) == 1 AND Validate::isInt($mvt_qty = Tools::getValue('mvt_quantity') AND $mvt_qty != 0))
+					{					
+						if ($id_reason = (int)Tools::getValue('id_mvt_reason'))
 						{
-							$qty = ($mvt_type != 2 ? $mvt_qty : -$mvt_qty);
-							if (!$object->addStockMvt($qty, (int)Tools::getValue('id_mvt_reason'), NULL, NULL, (int)$cookie->id_employee))
+							$reason = new StockMvtReason((int)$id_reason);
+							$qty = Tools::getValue('mvt_quantity') * $reason->sign; 
+							if (!$object->addStockMvt($qty, (int)$id_reason, NULL, NULL, (int)$cookie->id_employee))
 								$this->_errors[] = Tools::displayError('An error occurred while updating qty.');
 						}
 						$this->updateAccessories($object);
@@ -1498,6 +1500,22 @@ class AdminProducts extends AdminTab
 		<script type="text/javascript">
 			var pos_select = '.(($tab = Tools::getValue('tabs')) ? $tab : '0').';
 			'.$this->initCombinationImagesJS().'
+			$(document).ready(function(){
+				$(\'#id_mvt_reason\').change(function(){
+					updateMvtStatus($(this).val());
+				});
+				updateMvtStatus($(this).val());
+			});
+			function updateMvtStatus(id_mvt_reason)
+			{
+				if(id_mvt_reason == -1)
+					return $(\'#mvt_sign\').hide();
+				if ($(\'#id_mvt_reason option:selected\').attr(\'rel\') == -1)
+					$(\'#mvt_sign\').html(\'<img src="../img/admin/decrease.gif" /> '.$this->l('Decrease your stock').'\');
+				else
+					$(\'#mvt_sign\').html(\'<img src="../img/admin/add.gif" /> '.$this->l('Increase your stock').'\');
+				$(\'#mvt_sign\').show();
+			}
 		</script>
 		<script src="../js/tabpane.js" type="text/javascript"></script>
 		<link type="text/css" rel="stylesheet" href="../css/tabpane.css" />
@@ -2541,17 +2559,20 @@ class AdminProducts extends AdminTab
 							echo '
 							<tr><td class="col-left">'.$this->l('Stock Movement:').'</td>
 								<td style="padding-bottom:5px;">
-									<select name="mvt_type">
-										<option value="--">--</option>
-										<option value="1">'.$this->l('Add').'</option>
-										<option value="2">'.$this->l('Delete').'</option>
-									</select>
-									<select name="id_mvt_reason">';
+									<select id="id_mvt_reason" name="id_mvt_reason">
+										<option value="-1">--</option>';
 							$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
 							foreach ($reasons AS $reason)
-								echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
+								echo '<option rel="'.$reason['sign'].'" value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
 							echo '</select>
-									<input type="text" name="mvt_quantity" size="3" maxlength="6" value="0"/>
+									<input id="mvt_quantity" type="text" name="mvt_quantity" size="3" maxlength="6" value="0"/>&nbsp;&nbsp;
+									<span style="display:none;" id="mvt_sign"></span>
+								</td>
+							</tr>
+							<tr>
+								<td class="col-left">&nbsp;</td>
+								<td>
+									<div class="hint clear" style="display: block;width: 70%;">'.$this->l('Choose the reason and fill the quantity that you want to increase or decrease in your stock').'</div>
 								</td>
 							</tr>';
 						}
@@ -3074,6 +3095,14 @@ class AdminProducts extends AdminTab
 		if ($obj->id)
 			{
 				echo '
+			<script type="text/javascript">
+				$(document).ready(function(){
+					$(\'#id_mvt_reason\').change(function(){
+						updateMvtStatus($(this).val());
+					});
+					updateMvtStatus($(this).val());
+				});
+			</script>
 			<table cellpadding="5">
 				<tr>
 					<td colspan="2"><b>'.$this->l('Add or modify combinations for this product').'</b> -
@@ -3185,20 +3214,18 @@ class AdminProducts extends AdminTab
 			<tr id="stock_mvt_attribute" style="display:none;">
 				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Stock movement:').'</td>
 				<td style="padding-bottom:5px;">
-					<select name="attribute_mvt_type">
-						<option value="--">--</option>
-						<option value="1">'.$this->l('Add').'</option>
-						<option value="2">'.$this->l('Delete').'</option>
-					</select>
-					<select name="id_mvt_reason">';
+					<select id="id_mvt_reason" name="id_mvt_reason">
+						<option value="-1">--</option>';
 			$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
 			foreach ($reasons AS $reason)
-				echo '<option value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
+				echo '<option rel="'.$reason['sign'].'" value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
 			echo '</select>
-					<input type="text" name="attribute_mvt_quantity" size="3" maxlength="6" value="0"/>
+					<input type="text" name="attribute_mvt_quantity" size="3" maxlength="6" value="0"/>&nbsp;&nbsp;
+					<span style="display:none;" id="mvt_sign"></span>
+					<br />
+					<div class="hint clear" style="display: block;width: 70%;">'.$this->l('Choose the reason and fill the quantity that you want to increase or decrease in your stock').'</div>
 				</td>
 			</tr>
-			<tr>
 			<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Minimum quantity:').'</td>
 				<td style="padding-bottom:5px;">
 					<input size="3" maxlength="6" name="minimal_quantity" id="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />

@@ -75,13 +75,23 @@ class AdminStockMvt extends AdminTab
 		echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/search.gif" />'.$this->l('Stock Movement').'</legend>
+				<label>'.$this->l('Name:').'</label>
 				<div class="margin-form">';
 		foreach ($this->_languages as $language)
 			echo '<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="40" type="text" name="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					</div>';
 		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, $dl, 'name');
-		echo '</div><div class="clear space">&nbsp;</div>';
+		echo '</div>
+				<div class="clear space">&nbsp;</div>
+				<label>'.$this->l('Action:').'</label>
+				<div class="margin-form">
+					<select name="sign">
+						<option value="1">'.$this->l('Increase stock').'</option>
+						<option value="-1">'.$this->l('Decrease stock').'</option>
+					</select>
+				</div>
+				<div class="clear space">&nbsp;</div>';
 		echo 	'<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
@@ -160,11 +170,12 @@ class AdminStockMvt extends AdminTab
 		$this->lang = true;
 		$this->add = true;
 		$this->view = false;
-		$this->_listSkipDelete = array(1,2);
+		$this->_listSkipDelete = array(1,2,3,4);
 		
 
 		$this->_defaultOrderBy = $this->identifier;
 		$this->fieldsDisplay = array('id_stock_mvt_reason' => array('title' => $this->l('ID'), 'width' => 40),
+												'sign' => array('title' => $this->l('Sign'), 'width' => 15, 'align' => 'center', 'type' => 'select',  'icon' => array(-1 => 'decrease.gif', 1 => 'add.gif'), 'orderby' => false),
 												'name' => array('title' => $this->l('Name'), 'width' => 500));
 		
 		$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);

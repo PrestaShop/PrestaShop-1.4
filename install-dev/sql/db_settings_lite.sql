@@ -996,22 +996,32 @@ INSERT INTO `PREFIX_group_lang` (`id_group`, `id_lang`, `name`) VALUES	(1, 1, 'D
 INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES (1, 1);
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_TAX_ADDRESS_TYPE', 'id_address_delivery', NOW(), NOW());
 
-INSERT INTO `PREFIX_stock_mvt_reason` (`id_stock_mvt_reason`, `date_add`, `date_upd`) VALUES
-(1, NOW(), NOW()), (2, NOW(), NOW()), (3, NOW(), NOW());
+INSERT INTO `PREFIX_stock_mvt_reason` (`id_stock_mvt_reason`, `sign`, `date_add`, `date_upd`) VALUES
+(1, 1, NOW(), NOW()), (2, -1, NOW(), NOW()), (3, -1, NOW(), NOW()), (4, -1, NOW(), NOW()), (5, 1, NOW(), NOW());
 INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `name`) VALUES
-(1, 1, 'Order'),
-(1, 2, 'Commande'),
-(1, 3, 'Order'),
-(1, 4, 'Bestellung'),
-(1, 5, 'Ordine'),
-(2, 1, 'Missing Stock Movement'),
-(2, 2, 'Mouvement de stock manquant'),
-(2, 3, 'Missing Stock Movement'),
-(2, 4, 'Lagerbewegung nicht stattgefunden'),
-(2, 5, 'Movimento di merce mancante'),
-(3, 1, 'Restocking'),
-(3, 2, 'Réassort'),
-(3, 3, 'Restocking'),
-(3, 4, 'Auffüllung'),
-(3, 5, 'Riassortimento');
+(1, 1, 'Increase'),
+(1, 2, 'Augmenter'),
+(1, 3, 'Increase'),
+(1, 4, 'Increase'),
+(1, 5, 'Increase'),
+(2, 1, 'Decrease'),
+(2, 2, 'Diminuer'),
+(2, 3, 'Decrease'),
+(2, 4, 'Decrease'),
+(2, 5, 'Decrease'),
+(3, 1, 'Order'),
+(3, 2, 'Commande'),
+(3, 3, 'Order'),
+(3, 4, 'Bestellung'),
+(3, 5, 'Ordine'),
+(4, 1, 'Missing Stock Movement'),
+(4, 2, 'Mouvement de stock manquant'),
+(4, 3, 'Missing Stock Movement'),
+(4, 4, 'Lagerbewegung nicht stattgefunden'),
+(4, 5, 'Movimento di merce mancante'),
+(5, 1, 'Restocking'),
+(5, 2, 'Réassort'),
+(5, 3, 'Restocking'),
+(5, 4, 'Auffüllung'),
+(5, 5, 'Riassortimento');
 

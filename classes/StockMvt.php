@@ -56,12 +56,12 @@ class StockMvtCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_product'] = (int)($this->id_product);
-		$fields['id_product_attribute'] = (int)($this->id_product_attribute);
-		$fields['id_order'] = (int)($this->id_order);
-		$fields['id_employee'] = (int)($this->id_employee);
-		$fields['id_stock_mvt_reason'] = (int)($this->id_stock_mvt_reason);
-		$fields['quantity'] = (int)($this->quantity);
+		$fields['id_product'] = (int)$this->id_product;
+		$fields['id_product_attribute'] = (int)$this->id_product_attribute;
+		$fields['id_order'] = (int)$this->id_order;
+		$fields['id_employee'] = (int)$this->id_employee;
+		$fields['id_stock_mvt_reason'] = (int)$this->id_stock_mvt_reason;
+		$fields['quantity'] = (int)$this->quantity;
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
