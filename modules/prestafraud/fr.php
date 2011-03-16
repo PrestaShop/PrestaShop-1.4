@@ -29,12 +29,12 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_e7f9e382dc50889098cbe56f2554c77b'
 $_MODULE['<{prestafraud}prestashop>prestafraud_1cf575079afed29675c47e822bc3d493'] = 'Carte de crédit en plusieurs fois';
 $_MODULE['<{prestafraud}prestashop>prestafraud_75b95ea268cb6b5baf7483aafa80d5ad'] = 'Compte prépayé (MoneyBookers, PayPal ...)';
 $_MODULE['<{prestafraud}prestashop>prestafraud_688000bea2f79c9ca3d2d1755456024f'] = 'Merci d\'accepter les termes du service.';
-$_MODULE['<{prestafraud}prestashop>prestafraud_79d728437ce932b8194528d10a4e6fe4'] = 'Configuration de Presta-fraude';
-$_MODULE['<{prestafraud}prestashop>prestafraud_c19b2145baa679e140968848af9bd1c6'] = 'Mon magasin n\'a pas encore de compte sur PrestaFraud';
+$_MODULE['<{prestafraud}prestashop>prestafraud_8dc42e0ea3bedd2c1cc400141540cf62'] = 'Configuration de PrestaShop Security';
+$_MODULE['<{prestafraud}prestashop>prestafraud_7e97953add2f27fce07653151ba3e862'] = 'Mon magasin n\'a pas encore de compte sur Prestashop Security';
 $_MODULE['<{prestafraud}prestashop>prestafraud_3b2aee63259f6dc9b94914884474f8de'] = 'J\'ai déjà un compte';
 $_MODULE['<{prestafraud}prestashop>prestafraud_9d5c4ae518b30bacdb69912d87b3406a'] = 'Votre email:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_6c3b9b51615d1d57773f25903da2018c'] = 'URL de la boutique:';
-$_MODULE['<{prestafraud}prestashop>prestafraud_f6618c3d8174d69a71c47ad556217fd7'] = 'Je suis d\'accord avec les conditions de service Presta-fraude et y adhére sans condition.';
+$_MODULE['<{prestafraud}prestashop>prestafraud_36380b31592ff6bf7be94513409871b6'] = 'Je suis d\'accord avec les conditions de service PrestaShop Security et y adhére sans condition.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_42369faa6a6b243aac58683f3874bf99'] = 'Créer un compte';
 $_MODULE['<{prestafraud}prestashop>prestafraud_212713efb37cd2f521ee584f1dbb5f0b'] = 'Shop ID:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_c6b84387320705147af2f9e79d72c6fc'] = 'Shop Key:';
@@ -50,8 +50,8 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_827638f0be5ae74be04ed494087de714'
 $_MODULE['<{prestafraud}prestashop>prestafraud_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{prestafraud}prestashop>prestafraud_16648260e58b4cf9d458e1a197ef43f1'] = 'Email est invalide';
 $_MODULE['<{prestafraud}prestashop>prestafraud_cb18f4dc13847e2ed5d69cb936f9b26c'] = 'URL de la boutique n\'est pas valide';
-$_MODULE['<{prestafraud}prestashop>prestafraud_2d9f684cd217d62388ac3f4d0345da23'] = 'Presta fraude';
-$_MODULE['<{prestafraud}prestashop>prestafraud_438858fbee224aae7b35d9ac18c554c0'] = 'Cette commande n\'a pas été envoyé à Presta fraude.';
+$_MODULE['<{prestafraud}prestashop>prestafraud_eed029a9cfe78c1230a654e58fe8b6f8'] = 'PrestaShop Security';
+$_MODULE['<{prestafraud}prestashop>prestafraud_950c093b260d7c7709f8ff96e10a6fe0'] = 'Cette commande n\'a pas été envoyé à PrestaShop Security.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_d0c6a2fa938df84c0ce628de99c97e16'] = 'Notation:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Inconnu';
 $_MODULE['<{prestafraud}prestashop>prestafraud_240f3031f25601fa128bd4e15f0a37de'] = 'Commentaire:';

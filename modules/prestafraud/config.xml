@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>prestafraud</name>
-	<displayName>Presta-Fraud</displayName>
+	<displayName>PrestaShop Security</displayName>
 	<version>0.99</version>
 	<description>Protect your store from fraudulent payments</description>
 	<author>PrestaShop</author>

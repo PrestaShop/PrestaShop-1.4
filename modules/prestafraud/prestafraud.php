@@ -46,7 +46,7 @@ class PrestaFraud extends Module
 	
 		parent::__construct();
 
-		$this->displayName = 'Presta-Fraud';
+		$this->displayName = 'PrestaShop Security';
 		$this->description = 'Protect your store from fraudulent payments';
 		
 		$this->_activities = array(0 => $this->l('-- Please choose your main activity --'),
@@ -126,11 +126,11 @@ class PrestaFraud extends Module
 									});										
 									});
 								</script>
-		<fieldset><legend>'.$this->l('Presta-Fraud configuration').'</legend>
+		<fieldset><legend>'.$this->l('PrestaShop Security configuration').'</legend>
 			<div id="choose_account">
 				<center>
 				<form>
-					<input type="radio" '.(!Configuration::get('PS_TRUST_SHOP_ID') ? 'checked="checked"' : '').' onclick="$(\'#create_account\').show(); $(\'#module_configuration\').hide();" id="trust_account_on" name="trust_account" value="0"/> <b>'.$this->l('My shop does not have a PrestaFraud account yet').'</b>&nbsp;&nbsp;&nbsp;
+					<input type="radio" '.(!Configuration::get('PS_TRUST_SHOP_ID') ? 'checked="checked"' : '').' onclick="$(\'#create_account\').show(); $(\'#module_configuration\').hide();" id="trust_account_on" name="trust_account" value="0"/> <b>'.$this->l('My shop does not have a PrestaShop Security account yet').'</b>&nbsp;&nbsp;&nbsp;
 					<input type="radio" '.(Configuration::get('PS_TRUST_SHOP_ID') ? 'checked="checked"' : '').' onclick="$(\'#create_account\').hide(); $(\'#module_configuration\').show();"  id="trust_account_off" name="trust_account" value="1" /> <b>'.$this->l('I already have an account').'</b>
 				</form>
 				</center>
@@ -147,7 +147,7 @@ class PrestaFraud extends Module
 						<input type="text" style="width:400px;" name="shop_url" value="http://www.'.Tools::getHttpHost().__PS_BASE_URI__.'"/>
 					</div>
 					<div class="margin-form">
-						<input id="terms_and_conditions" type="checkbox" value="1" />'.$this->l('I agree with the terms of Presta-Fraud service and i adhere to them unconditionally.').'</label>
+						<input id="terms_and_conditions" type="checkbox" value="1" />'.$this->l('I agree with the terms of PrestaShop Security service and i adhere to them unconditionally.').'</label>
 					</div>
 					<div id="terms" class="margin-form">';
 					$terms = file_get_contents(self::$_trustUrl.'terms.php?lang='.Language::getIsoById((int)$cookie->id_lang));
@@ -482,9 +482,9 @@ class PrestaFraud extends Module
 	{
 		global $cookie;
 		$id_order = Db::getInstance()->getValue('SELECT id_order FROM '._DB_PREFIX_.'prestafraud_orders WHERE id_order = '.(int)$params['id_order']);
-		$this->_html .= '<br /><fieldset><legend>'.$this->l('Presta Fraud').'</legend>';
+		$this->_html .= '<br /><fieldset><legend>'.$this->l('PrestaShop Security').'</legend>';
 		if (!$id_order)
-			$this->_html .= $this->l('This order has not been sent to Presta Fraud.');
+			$this->_html .= $this->l('This order has not been sent to PrestaShop Security.');
 		else
 		{
 			$scoring = $this->_getScoring((int)$id_order, $cookie->id_lang);
