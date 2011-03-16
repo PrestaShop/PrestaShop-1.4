@@ -949,6 +949,8 @@ if ($lm->getIncludeTradFilename())
 				<li class="required">/themes/prestashop/lang</li>
 				<li class="required">/themes/prestashop/cache</li>
 				<li class="required">/translations</li>
+				<li class="required">/upload</li>
+				<li class="required">/download</li>
 			</ul>
 
 			<h3><?php echo lang('Optional set-up')?></h3>
