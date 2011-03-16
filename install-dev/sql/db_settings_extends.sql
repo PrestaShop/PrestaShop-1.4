@@ -1,4 +1,4 @@
-SET NAMES 'utf8';
+r-ipodSET NAMES 'utf8';
 
 /* Carrier */
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax_rules_group`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (2, 1, 'My carrier', 1, 0, 1);
@@ -243,8 +243,8 @@ INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `descripti
 (4, 3, 'Portátiles', 'El último procesador Intel, un disco duro más grande, con profusión de memoria y otras novedades. Todo en sólo 2,59 cm libres de cualquier obstrucción. Las nuevas portátiles Mac cumplir rendimiento, potencia y conectividad de una computadora de escritorio. Sin la parte del escritorio.', 'portatiles-apple', 'Portátiles Apple', 'portátiles apple macbook air', 'portátiles apple poderoso y el diseño'),
 (3, 3, 'Accesorios', 'Todos los accesorios de moda para tu iPod', 'ipod-accesorios', '', '', ''),
 (2, 3, 'iPods', 'Es hora de que el mejor jugador de la música, al escenario para hacer un bis. Con el nuevo iPod, el mundo es tu escenario.', 'musica-ipods', '', '', ''),
-(2, 4, 'iPods', 'Now that you can buy movies from the iTunes Store and sync them to your iPod, the whole world is your theater.', 'Musik-iPods', '', '', ''),
-(3, 4, 'Zubehör', 'Wonderful accessories for your iPod', 'Zubehör-ipod', '', '', ''),
+(2, 4, 'iPods', 'Now that you can buy movies from the iTunes Store and sync them to your iPod, the whole world is your theater.', 'musik-iPods', '', '', ''),
+(3, 4, 'Zubehör', 'Wonderful accessories for your iPod', 'zubehor-ipod', '', '', ''),
 (4, 4, 'Laptops', 'The latest Intel processor, a bigger hard drive, plenty of memory, and even more new features all fit inside just one liberating inch. The new Mac laptops have the performance, power, and connectivity of a desktop computer. Without the desk part.', 'Laptops', 'Apple laptops', 'Apple MacBook Air-Laptops', 'Powerful and chic Apple laptops'),
 (2, 5, 'iPods', 'Adesso che puoi acquistare film dall\'iTunes Store e inserirli nel tuo iPod, il tuo mondo è un palcoscenico.', 'musica-ipods', '', '', ''),
 (3, 5, 'Accessori', 'Fantastici accessori per il tuo iPod', 'accessori-ipod', '', '', ''),
