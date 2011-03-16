@@ -54,6 +54,17 @@ class PayPal extends PaymentModule
 		$this->_checkAndUpdateFromOldVersion();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND $this->active)
 			$this->warning = $this->l('In order to REMOVE this warning, please uninstall and remove PayPalAPI module');
+
+		global $cookie;
+		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-warnings.php?version=1.0&partner=paypal&iso_country='.Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))).'&iso_lang='.Tools::strtolower(Language::getIsoById(intval($cookie->id_lang))).'&id_lang='.(int)$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
+		$content = explode('|', $content);
+		if ($content[0] == 'OK')
+		{
+			if (!empty($this->warning))
+				$this->warning .= ', ';
+			$this->warning .= $content[1];
+		}
 	}
 	
 	public function install()
