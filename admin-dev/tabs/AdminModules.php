@@ -41,6 +41,8 @@ class AdminModules extends AdminTab
 	private $listPartnerModules = array();
 	private $listNativeModules = array();
 	private $_moduleCacheFile;
+	static private $MAX_DISP_AUTHOR = 20;		// maximum length to display
+	
 
 	function __construct()
 	{
@@ -308,6 +310,10 @@ class AdminModules extends AdminTab
 		echo '<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery.autocomplete.js"></script>
 		<script type="text/javascript">
 			function getPrestaStore(){if (getE("prestastore").style.display!=\'block\')return;$.post("'.dirname($currentIndex).'/ajax.php",{page:"prestastore"},function(a){getE("prestastore-content").innerHTML=a;})}
+			function truncate_author(author)
+			{
+				return ((author.length > '.self::$MAX_DISP_AUTHOR.') ? author.substring(0, '.self::$MAX_DISP_AUTHOR.')+"..." : author);
+			}
 			function modules_management(action)
 			{
 				var modules = document.getElementsByName(\'modules\');
@@ -334,7 +340,7 @@ class AdminModules extends AdminTab
 					matchContains: true,
 					highlightItem: true,
 					formatItem: function(row, i, max, term) {
-						return "<img src=\"../modules/"+row.name+"/logo.gif\" style=\"float:left;margin:5px\"><strong>" + row.displayName + "</strong>"+((row.author != \'\') ? " '.$this->l("by").' "+ row.author :"") + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
+						return "<img src=\"../modules/"+row.name+"/logo.gif\" style=\"float:left;margin:5px\"><strong>" + row.displayName + "</strong>"+((row.author != \'\') ? " '.$this->l("by").' "+ truncate_author(row.author) :"") + "<br /><span style=\'font-size: 80%;\'>"+ row.desc +"</span>";
 					},
 					formatResult: function(row) {
 						return row.displayName;
@@ -384,11 +390,24 @@ class AdminModules extends AdminTab
 		foreach($authors as $author_item => $status)
 		{
 			$author_item = Tools::htmlentitiesUTF8($author_item);
-			$out .= '<option value="'.$fieldName.'['.$author_item. ']"'. (($status === "selected") ? ' selected>' : '>').$author_item .'</option>';
+			$disp_author = $this->_getDispAuthor($author_item);
+
+			$out .= '<option value="'.$fieldName.'['.$author_item. ']"'. (($status === "selected") ? ' selected>' : '>').$disp_author .'</option>';
 		}
 		$out .= '</optgroup>';
 		return $out;
 	}
+
+	/**
+	 * Used for truncating  author name to display it nicely
+	 * @param String $author original  author
+	 * @return String truncated author name
+	 */
+	private function _getDispAuthor($author)
+	{
+		return ((strlen($author) > self::$MAX_DISP_AUTHOR) ? substr($author, 0, self::$MAX_DISP_AUTHOR).'...' : $author);
+	}
+
 
 	public function displayList()
 	{
@@ -717,7 +736,7 @@ class AdminModules extends AdminTab
 							$img = '<img src="../img/admin/module_disabled.png" alt="'.$this->l('Module disabled').'" title="'.$this->l('Module disabled').'" />';
 					} else
 						$img = '<img src="../img/admin/module_notinstall.png" alt="'.$this->l('Module not installed').'" title="'.$this->l('Module not installed').'" />';
-					$disp_author = $module->author;
+					$disp_author = $this->_getDispAuthor($module->author);
 					$disp_author = (empty($disp_author)) ? '' :  ' '.$this->l('by').' <i>'.Tools::htmlentitiesUTF8($disp_author).'</i>';
 					echo '<table style="width:100%" cellpadding="0" cellspacing="0" >
 					<tr'.($irow % 2 ? ' class="alt_row"' : '').' style="height: 42px;">
