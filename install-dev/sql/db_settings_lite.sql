@@ -630,7 +630,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 49, 'Vales'),(3, 51, 'Configuración'),(3, 52, 'Subcampos'),(3, 53, 'Copia de seguridad'),(3, 54, 'Mensajes de Orden'),
 (3, 55, 'Albaranes de entrega'),(3, 56, 'SEO & URLs'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
-(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log'),
+(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 73, 'Movimiento de Stock'), (3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log'),
 (3, 87, 'Condados'),(3,88,'Home');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
