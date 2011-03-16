@@ -1,4 +1,4 @@
-r-ipodSET NAMES 'utf8';
+SET NAMES 'utf8';
 
 /* Carrier */
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax_rules_group`, `name`, `active`, `deleted`, `shipping_handling`) VALUES (2, 1, 'My carrier', 1, 0, 1);
