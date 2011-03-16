@@ -38,8 +38,9 @@ if (isset($_POST['x_exp_date']) && isset($_POST['x_exp_date_m']) && isset($_POST
 }
 $postString = '';
 foreach ($_POST AS $key => $value)
-	$postString .= $key.'='.urlencode($value).'&'; 
-$postString = rtrim($postString, '& ');
+	if ($key != "x_exp_date_m" OR $key != "x_exp_date_m")
+		$postString .= $key.'='.urlencode($value).'&';
+$postString .= 'x_exp_date='.str_pad($_POST["x_exp_date_m"], 2, "0",STR_PAD_LEFT).$_POST["x_exp_date_y"];
 
 /* Do the CURL request ro Authorize.net */
 $request = curl_init(
@@ -58,7 +59,7 @@ if (!isset($response[7]) OR !isset($response[3]) OR !isset($response[9]))
 		die('Authorize.net returned a malformed response, aborted.');
 }
 
-if ($response[0] == 3) 
+if ($response[0] == 3)
 	Tools::redirect('order.php?step=3&aimerror=1');
 else 
 {
