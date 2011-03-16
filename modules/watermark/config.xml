@@ -3,7 +3,7 @@
 	<name>watermark</name>
 	<displayName>Watermark</displayName>
 	<version>0.1</version>
-	<description>Protect image by watermark</description>
+	<description>Protect image by watermark.</description>
 	<author>PrestaShop</author>
 	<tab>administration</tab>
 	<confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>

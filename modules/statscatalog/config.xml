@@ -3,7 +3,7 @@
 	<name>statscatalog</name>
 	<displayName>Catalog statistics</displayName>
 	<version>1</version>
-	<description>General statistics about your catalog</description>
+	<description>General statistics about your catalog.</description>
 	<author>PrestaShop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>

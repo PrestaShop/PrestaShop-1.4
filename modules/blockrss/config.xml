@@ -3,7 +3,7 @@
 	<name>blockrss</name>
 	<displayName>RSS feed block</displayName>
 	<version>1.0</version>
-	<description>Adds a block displaying an RSS feed</description>
+	<description>Adds a block displaying an RSS feed.</description>
 	<author>PrestaShop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>

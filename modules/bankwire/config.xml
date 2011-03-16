@@ -3,7 +3,7 @@
 	<name>bankwire</name>
 	<displayName>Bank Wire</displayName>
 	<version>0.5</version>
-	<description>Accept payments by bank wire</description>
+	<description>Accept payments by bank wire.</description>
 	<author>PrestaShop</author>
 	<tab>payments_gateways</tab>
 	<confirmUninstall>Are you sure you want to delete your details?</confirmUninstall>

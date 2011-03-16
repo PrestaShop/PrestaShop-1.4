@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>cheque</name>
-	<displayName>Cheque</displayName>
+	<displayName>Check</displayName>
 	<version>2.3</version>
-	<description>Module for accepting payments by cheque</description>
+	<description>Module for accepting payments by check.</description>
 	<author>PrestaShop</author>
 	<tab>payments_gateways</tab>
 	<confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>

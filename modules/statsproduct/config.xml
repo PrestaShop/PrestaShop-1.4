@@ -3,7 +3,7 @@
 	<name>statsproduct</name>
 	<displayName>Product details</displayName>
 	<version>1</version>
-	<description>Get detailed statistics for each product</description>
+	<description>Get detailed statistics for each product.</description>
 	<author>PrestaShop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>

@@ -3,7 +3,7 @@
 	<name>statscheckup</name>
 	<displayName>Catalog evaluation</displayName>
 	<version>1</version>
-	<description>Catalog quality in a blink</description>
+	<description>Quick evaluation of your catalog quality.</description>
 	<author>PrestaShop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>

@@ -3,7 +3,7 @@
 	<name>blockmyaccount</name>
 	<displayName>My Account block</displayName>
 	<version>1.2</version>
-	<description>Displays a block with links relative to user account</description>
+	<description>Displays a block with links relative to user account.</description>
 	<author>PrestaShop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>0</is_configurable>

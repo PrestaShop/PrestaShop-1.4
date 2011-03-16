@@ -3,7 +3,7 @@
 	<name>moneybookers</name>
 	<displayName>Moneybookers</displayName>
 	<version>1.4</version>
-	<description>Accepts payments by Moneybookers</description>
+	<description>Accepts payments by Moneybookers.</description>
 	<author></author>
 	<tab>payments_gateways</tab>
 	<confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>

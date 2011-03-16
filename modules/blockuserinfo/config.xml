@@ -3,7 +3,7 @@
 	<name>blockuserinfo</name>
 	<displayName>User info block</displayName>
 	<version>0.1</version>
-	<description>Adds a block that displays information about the customer</description>
+	<description>Adds a block that displays information about the customer.</description>
 	<author>PrestaShop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>0</is_configurable>

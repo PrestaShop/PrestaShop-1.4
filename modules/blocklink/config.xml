@@ -3,7 +3,7 @@
 	<name>blocklink</name>
 	<displayName>Link block</displayName>
 	<version>1.4</version>
-	<description>Adds a block with additional links</description>
+	<description>Adds a block with additional links.</description>
 	<author>PrestaShop</author>
 	<tab>front_office_features</tab>
 	<confirmUninstall>Are you sure you want to delete all your links ?</confirmUninstall>

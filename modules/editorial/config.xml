@@ -3,7 +3,7 @@
 	<name>editorial</name>
 	<displayName>Home text editor</displayName>
 	<version>1.6</version>
-	<description>A text editor module for your homepage</description>
+	<description>A text editor module for your homepage.</description>
 	<author>PrestaShop</author>
 	<tab>front_office_features</tab>
 	<is_configurable>1</is_configurable>

@@ -3,7 +3,7 @@
 	<name>statsvisits</name>
 	<displayName>Visits and Visitors</displayName>
 	<version>1</version>
-	<description>Display statistics about your visits and visitors</description>
+	<description>Display statistics about your visits and visitors.</description>
 	<author>PrestaShop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>

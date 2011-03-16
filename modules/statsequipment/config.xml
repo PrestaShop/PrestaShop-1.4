@@ -3,7 +3,7 @@
 	<name>statsequipment</name>
 	<displayName>Software</displayName>
 	<version>1</version>
-	<description>Display the software used by your visitors</description>
+	<description>Display the software used by your visitors.</description>
 	<author>PrestaShop</author>
 	<tab>analytics_stats</tab>
 	<is_configurable>0</is_configurable>
