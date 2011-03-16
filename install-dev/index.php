@@ -503,6 +503,7 @@ if ($lm->getIncludeTradFilename())
 						<option value="18"><?php echo lang('Shoes and accessories'); ?></option>
 						<option value="19"><?php echo lang('Sport and Entertainment'); ?></option>
 						<option value="20"><?php echo lang('Travel'); ?></option>
+						<option value="0"><?php echo lang('Other activity...'); ?></option>
 					</select>
 					<p class="userInfos aligned"><?php echo lang('This information isn\'t required, it will be used for statistical purposes. This information doesn\'t change anything in your store.'); ?></p>
 				</div>
