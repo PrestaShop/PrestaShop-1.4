@@ -412,11 +412,11 @@ class AdminHome extends AdminTab
 					<ul id="prestashop_link" class="admin-home-box-list">
 						<li>
 							<p>'.$this->l('Discover the latest official guide :').'</p>
-							<a href="http://www.prestashop.com/download/Userguide_'.(in_array($isoUser, array('en', 'es', 'fr')) ? $isoUser : 'en').'.pdf" target="_blank">'.$this->l('User Guide PrestaShop 1.3').'</a>
+							<a href="http://www.prestashop.com/download/Userguide_'.(in_array($isoUser, array('en', 'es', 'fr')) ? $isoUser : 'en').'.pdf" target="_blank">'.$this->l('User Guide PrestaShop 1.4').'</a>
 							<a href="http://www.prestashop.com/download/Techguide_'.(in_array($isoUser, array('fr', 'es')) ? $isoUser : 'fr').'.pdf" target="_blank">'.$this->l('Technical Documentation').'</a>
 						</li>
 						<li>
-							<p>'.$this->l('Use the PrestaShop forum & discover a great community').'</p>
+							<p>'.$this->l('Use the PrestaShop forum & discover a great community').' !</p>
 							<a href="http://www.prestashop.com/forums/" target="_blank">'.$this->l('Go to forums.prestashop.com').'</a>
 						</li>
 						<li>
