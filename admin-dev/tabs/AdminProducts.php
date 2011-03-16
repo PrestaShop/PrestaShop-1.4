@@ -2521,7 +2521,6 @@ class AdminProducts extends AdminTab
 						<td class="col-left">'.$this->l('Retail price with tax:').'</td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format == 1 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="priceTI" type="text" value="" onchange="noComma(\'priceTI\');" onkeyup="calcPriceTE();" />'.($currency->format == 2 ? ' '.$currency->sign : '').'
-							<span style="margin-left:10px">
 						</td>
 					</tr>
 					<tr id="tr_unit_price">
