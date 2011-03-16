@@ -129,7 +129,7 @@ class BlockCart extends Module
 				<label>'.$this->l('Ajax cart').'</label>
 				<div class="margin-form">
 					<input type="radio" name="ajax" id="ajax_on" value="1" '.(Tools::getValue('ajax', Configuration::get('PS_BLOCK_CART_AJAX')) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="ajax_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l(').'" title="'.$this->l(').'" /></label>
+					<label class="t" for="ajax_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="ajax" id="ajax_off" value="0" '.(!Tools::getValue('ajax', Configuration::get('PS_BLOCK_CART_AJAX')) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="ajax_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p class="clear">'.$this->l('Activate AJAX mode for cart (compatible with the default theme)').'</p>
