@@ -173,12 +173,12 @@ class Envoimoinscher extends Module
 		$this->_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">
 		<div style="float: right; width: 440px; height: 165px; border: 1px dashed rgb(102, 102, 102); padding: 8px; margin-left: 12px;margin-top: 11px;">'.$link.'
 			<h3>'.$this->l('Create account Envoimoinscher :').'</h3>
-			<p style="text-align:justify">'.$this->l('To create your account Envoimoinscher click the image below. You will go to a dedicated personal space where you will find all the tools for easy management of your shipments.').'</p>
+			<p style="text-align:justify">'.$this->l('To create your account on Envoimoinscher, click the image below. You will go to a dedicated personal space where you will find the necessary tools for easy management of your shipments.').'</p>
 			<img src="'.$this->_path.'/ps_emc.png" alt="" /></a>
 		</div>
 		<fieldset style="width:420px;float:left"><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Description').'</legend>
-		<img style="float:left;margin-right:10px" src="'.$this->_path.'logocarre.png" alt="" /><p style="text-align:justify"><b>'.$this->l('This module allows you to compare carrier offers and online ordering services negotiated delivery rates.').'</b></p>
-		<p style="text-align:justify">'.$this->l('You must enter your Envoimoinscher username below. If you are not yet a customer Envoimoinscher, you can easily create an account by clicking').$link.'
+		<img style="float:left;margin-right:10px" src="'.$this->_path.'logocarre.png" alt="" /><p style="text-align:justify"><b>'.$this->l('This module allows you to compare carrier offers and online ordering services\' negotiated delivery rates.').'</b></p>
+		<p style="text-align:justify">'.$this->l('Please enter your Envoimoinscher username below. If you are not a customer Envoimoinscher, you can easily create an account by clicking').$link.'
 		'.$this->l('here').'.</a></p><br>
 		<h3 style="text-align:center"><a href="http://www.prestashop.com/download/partner_modules/docs/doc_emc.pdf">'.$this->l('Download Documentation').'</a></h3>
 		</fieldset>
@@ -335,7 +335,7 @@ class Envoimoinscher extends Module
 			<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 			<input type="radio" name="EMC_EMAILS" id="active_off" value="0" '.(!Tools::getValue('EMC_EMAILS', Configuration::get('EMC_EMAILS')) ? 'checked="checked" ' : '').'/>
 			<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-			<p>'.$this->l('Enables or disables sending mail from EMC');//.', '.$this->l('unless it informs the recipient that is sent by default').'</p>
+			<p>'.$this->l('Enables or disables sending mail from EMC');//.', '.$this->l('unless it informs the recipient that it is sent by default.').'</p>
 		$this->_html .= '</div>
 		<div class="clear">&nbsp;</div>
 		
@@ -357,7 +357,7 @@ class Envoimoinscher extends Module
 		</div>	
 		<div class="clear">&nbsp;</div>
 		
-		<label>'.$this->l('Last Name').' : </label>
+		<label>'.$this->l('Last name').' : </label>
 		<div class="margin-form">
 		<input type="text" name="EMC_LAST_NAME" value="'.htmlspecialchars(Tools::getValue('EMC_LAST_NAME', Configuration::get('EMC_LAST_NAME')), ENT_COMPAT, 'UTF-8').'">
 		<sup> *</sup>
@@ -385,7 +385,7 @@ class Envoimoinscher extends Module
 		<div class="margin-form">
 		<input type="text" name="EMC_ZIP_CODE" value="'.htmlspecialchars(Tools::getValue('EMC_ZIP_CODE', Configuration::get('EMC_ZIP_CODE')), ENT_COMPAT, 'UTF-8').'">
 		<sup> *</sup>
-		<p>' . $this->l('Set the Zip code of sender') . '</p>
+		<p>' . $this->l('Set the zip code of sender') . '</p>
 		</div>	
 		<div class="clear">&nbsp;</div>	
 		
@@ -393,7 +393,7 @@ class Envoimoinscher extends Module
 		<div class="margin-form">
 		<input type="text" name="EMC_CITY" value="'.htmlspecialchars(Tools::getValue('EMC_CITY', Configuration::get('EMC_CITY')), ENT_COMPAT, 'UTF-8').'">
 		<sup> *</sup>
-		<p>' . $this->l('Set the City name of sender') . '</p>
+		<p>' . $this->l('Set the city of sender') . '</p>
 		</div>	
 		<div class="clear">&nbsp;</div>	
 		
@@ -424,7 +424,7 @@ class Envoimoinscher extends Module
 		<div class="margin-form">
 		<input type="text" name="EMC_EMAIL" value="'.htmlspecialchars(Tools::getValue('EMC_EMAIL', Configuration::get('EMC_EMAIL')), ENT_COMPAT, 'UTF-8').'">
 		<sup> *</sup>
-		<p>' . $this->l('Set the Email of sender').'</p>
+		<p>' . $this->l('Set the e-mail of sender').'</p>
 		</div>	
 		<div class="clear">&nbsp;</div>		
 		
@@ -469,7 +469,7 @@ class Envoimoinscher extends Module
 		if (Tools::getValue('EMC_PHONE') == '')
 			$this->_postErrors[]  = $this->l('Phone not specified');
 		if (Tools::getValue('EMC_EMAIL') == '')
-			$this->_postErrors[]  = $this->l('Email not specified');
+			$this->_postErrors[]  = $this->l('E-mail not specified');
 		if (Tools::getValue('EMC_LOGIN') == '')
 			$this->_postErrors[]  = $this->l('Login not specified');			
 	}

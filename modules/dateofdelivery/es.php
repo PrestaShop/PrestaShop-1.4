@@ -13,9 +13,9 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7ccf58c950043c9fbfed668df13
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_ecfe3ba0ff66a97029088e8e90a3f051'] = 'Plazo mínimo incorrecto';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0245cd1cce5ecea8eb23b043be00d80a'] = 'Plazo máximo incorrecto';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_e6843321c8b0edea8cf333519316ed7b'] = 'Transportista no válido';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_064962f53fa7cb12b124d6a7c9486363'] = 'No puede utilizar ningún transportista, ya se ha registrado una regla.';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_4c17dd5a837bfe49a98fea2f9d00b78c'] = 'Se ha producido un error al añadir la regla';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_d0853b509396370c9f192e151b8d1096'] = 'Se ha producido un error al configurar la regla';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_17673c1595a3722522f581c854b8edc5'] = 'No puede utilizar ningún transportista, ya se ha registrado una regla.';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_50e1f1030812a9a8fd66dfff17099fcd'] = 'Se ha producido un error al añadir la regla';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_240276f48ff2e0e5fe620ff311e677b5'] = 'Se ha producido un error al configurar la regla';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_b9e3eda70ccb175c96a56bd79b89bd8b'] = 'La regla de transportista se ha suprimido con éxito';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_25e775663057cfc945da15827d972699'] = 'La regla de transportista se ha añadido con éxito';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_c20585756aa4f1b448a11ce77a054e32'] = 'La regla de transportista ha sido actualizada correctamente';
@@ -27,8 +27,8 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_1b9f5204ddf0881dc9f3a7bf65d
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_52f253c711cff509bd5e4df2b18b697a'] = 'Entrega los sábados';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_fcddbca356dee064438a399fc0c4c84e'] = 'Entrega los domingos';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_06df33001c1d7187fdd81ea1f5b277aa'] = 'Acciones';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_36d94061a0f0ed46a764204ab2be7889'] = 'días y';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_44fdec47036f482b68b748f9d786801b'] = 'días';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'días y';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'días';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_93cba07454f06a4a960172bbd6e2a435'] = 'Sí';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_bafd7322c6e97d25b6299b5d6fe8920b'] = 'No';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7dce122004969d56ae2e0245cb754d35'] = 'Modificar';
@@ -45,7 +45,7 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_168ee9f4820976c4f4055cd8179
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_8c5961161cc9ce6db81bf3be77091136'] = 'Modificar una regla de transportista';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_f8617a92ba0a0a4eabee724eab7c9f48'] = 'Transportista:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_961f2247a2070bedff9f9cd8d64e2650'] = 'Elegir';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_30b72f66d77a4975a331ce8e72076ce1'] = 'día(s) y';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'día(s) y';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'día(s)';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_d3e0fc43c22a6bb8e2d271a29b2f06fd'] = 'Opciones de entraga:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_ea4788705e6873b424c65e91c2846b19'] = 'Anular';

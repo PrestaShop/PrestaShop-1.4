@@ -40,7 +40,7 @@ class BlockSearch extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('Quick Search block');
-		$this->description = $this->l('Adds a block with a quick search field');
+		$this->description = $this->l('Adds a block with a quick search field.');
 	}
 
 	public function install()

@@ -40,7 +40,7 @@ class BlockSupplier extends Module
         parent::__construct();
 
 		$this->displayName = $this->l('Suppliers block');
-        $this->description = $this->l('Add a block displaying suppliers');
+        $this->description = $this->l('Adds a block displaying suppliers.');
     }
 
 	function install()
@@ -82,7 +82,7 @@ class BlockSupplier extends Module
 			if ($text_list AND !Validate::isUnsignedInt($text_nb))
 				$errors[] = $this->l('Invalid number of elements');
 			elseif (!$text_list AND !$form_list)
-				$errors[] = $this->l('Please activate at least one system list');
+				$errors[] = $this->l('Please activate at least one system list.');
 			else
 			{
 				Configuration::updateValue('SUPPLIER_DISPLAY_TEXT', $text_list);

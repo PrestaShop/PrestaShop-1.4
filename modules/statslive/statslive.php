@@ -40,7 +40,7 @@ class StatsLive extends Module
         parent::__construct();
 		
         $this->displayName = $this->l('Visitors online');
-        $this->description = $this->l('Display the list of customers and visitors currently online');
+        $this->description = $this->l('Display the list of customers and visitors currently online.');
     }
 	
 	public function install()
@@ -126,7 +126,7 @@ class StatsLive extends Module
 			echo '</table>';
 		}
 		else
-			echo $this->l('There is no customer online now.');
+			echo $this->l('There are no cusomers online.');
 		echo '</fieldset>
 		<fieldset class="width3 space"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Visitors online').'</legend>';
 		if ($totalVisitors)
@@ -146,7 +146,7 @@ class StatsLive extends Module
 			echo '</table></div>';
 		}
 		else
-			echo $this->l('There is no visitor online now.');
+			echo $this->l('There are no visitors online.');
 		echo '</fieldset>';
 	}
 }

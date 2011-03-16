@@ -299,7 +299,7 @@ class UspsCarrier extends CarrierModule
 	private function _displayForm()
 	{
 		$this->_html .= '<fieldset>
-		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Usps Module Status').'</legend>';
+		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('USPS Module Status').'</legend>';
 
 		$alert = array();
 		$this->_webserviceTestResult = $this->webserviceTest();
@@ -312,7 +312,7 @@ class UspsCarrier extends CarrierModule
 
 
 		if (!count($alert))
-			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('USPS Carrier is well configured and online !').'</strong>';
+			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('USPS Carrier is configured and online!').'</strong>';
 		else
 		{
 			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('USPS Carrier is not configured yet, you have to :').'</strong>';
@@ -456,13 +456,13 @@ class UspsCarrier extends CarrierModule
 
 				<fieldset style="border: 0px;">
 					<h4>'.$this->l('Address configuration').' :</h4>
-					<label>'.$this->l('Your address line 1').' : </label>
+					<label>'.$this->l('Address (Line 1)').' : </label>
 					<div class="margin-form"><input type="text" size="20" name="usps_carrier_address1" value="'.Tools::getValue('usps_carrier_address1', Configuration::get('USPS_CARRIER_ADDRESS1')).'" /></div>
-					<label>'.$this->l('Your address line 2').' : </label>
+					<label>'.$this->l('Address (Line 2)').' : </label>
 					<div class="margin-form"><input type="text" size="20" name="usps_carrier_address2" value="'.Tools::getValue('usps_carrier_address2', Configuration::get('USPS_CARRIER_ADDRESS2')).'" /></div>
 					<label>'.$this->l('Zip / Postal Code').' : </label>
 					<div class="margin-form"><input type="text" size="20" name="usps_carrier_postal_code" value="'.Tools::getValue('usps_carrier_postal_code', Configuration::get('USPS_CARRIER_POSTAL_CODE')).'" /></div><br />
-					<label>'.$this->l('Your City').' : </label>
+					<label>'.$this->l('City').' : </label>
 					<div class="margin-form"><input type="text" size="20" name="usps_carrier_city" value="'.Tools::getValue('usps_carrier_city', Configuration::get('USPS_CARRIER_CITY')).'" /></div>
 					<label>'.$this->l('Country').' : </label>
 					<div class="margin-form">
@@ -536,7 +536,7 @@ class UspsCarrier extends CarrierModule
 						foreach($rateServiceList as $rateService)
 							$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<br />';
 					$html .= '
-					<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+					<p>' . $this->l('Choose the delivery service available to your customers.') . '</p>
 					</div>
 				</fieldset>
 				
@@ -707,7 +707,7 @@ class UspsCarrier extends CarrierModule
 
 		// Check if the module is configured
 		if (!$this->_webserviceTestResult)
-			return '<p><b>'.$this->l('You have to configure "General Settings" tab before using this tab.').'</b></p><br />';
+			return '<p><b>'.$this->l('You must configure "General Settings" before using this tab.').'</b></p><br />';
 
 		// Display header
 		$html = '<p><b>'.$this->l('In this tab, you can set a specific configuration for each category.').'</b></p><br />
@@ -836,7 +836,7 @@ class UspsCarrier extends CarrierModule
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 								}
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available to your customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
 					</form>';
@@ -884,7 +884,7 @@ class UspsCarrier extends CarrierModule
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available to your customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
 					</form>';
@@ -1005,7 +1005,7 @@ class UspsCarrier extends CarrierModule
 
 		// Check if the module is configured
 		if (!$this->_webserviceTestResult)
-			return '<p><b>'.$this->l('You have to configure "General Settings" tab before using this tab.').'</b></p><br />';
+			return '<p><b>'.$this->l('You must configure "General Settings" before using this tab.').'</b></p><br />';
 
 		// Display header
 		$html = '<p><b>'.$this->l('In this tab, you can set a specific configuration for each product.').'</b></p><br />
@@ -1120,7 +1120,7 @@ class UspsCarrier extends CarrierModule
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 								}
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available to your customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
 					</form>';
@@ -1174,7 +1174,7 @@ class UspsCarrier extends CarrierModule
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available to your customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
 					</form>';
@@ -1291,16 +1291,16 @@ class UspsCarrier extends CarrierModule
 
 	private function _displayHelp()
 	{
-		return '<p><b>'.$this->l('Welcome to the PrestaShop USPS Module configurator !').'</b></p>
-		<p>'.$this->l('This section will help you to understand how to configure this module correctly.').'</p>
+		return '<p><b>'.$this->l('Welcome to the PrestaShop USPS Module configurator.').'</b></p>
+		<p>'.$this->l('This section will help you in understanding how to configure this module correctly.').'</p>
 		<br />
 		<p><b><u>1. '.$this->l('General Settings').'</u></b></p>
 		<p>'.$this->l('See below for the description of each field :').'</p>
-		<p><b>'.$this->l('Your USPS User ID').' :</b> '.$this->l('You have to subscribe on USPS website at this address').' <a href="http://www.usps.com/webtools/" target="_blank">http://www.usps.com/webtools/</a></p>
-		<p><b>'.$this->l('Zip / Postal Code').' :</b> '.$this->l('This field must be the Zip / Postal code of your package starting point.').'</p>
-		<p><b>'.$this->l('Country').' :</b> '.$this->l('This field must be the country of your package starting point.').'</p>
+		<p><b>'.$this->l('Your USPS User ID').' :</b> '.$this->l('You must subscribe to the USPS website at this address').' <a href="http://www.usps.com/webtools/" target="_blank">http://www.usps.com/webtools/</a></p>
+		<p><b>'.$this->l('Zip / Postal Code').' :</b> '.$this->l('This field identifies the Zip / Postal code of your package starting point.').'</p>
+		<p><b>'.$this->l('Country').' :</b> '.$this->l('This field identifies the country of origin of your package.').'</p>
 		<p><b>'.$this->l('Packaging Type').' :</b> '.$this->l('This field corresponds to the default packaging type (when there is no specific configuration for the product or the category product).').'</p>
-		<p><b>'.$this->l('Delivery Service').' :</b> '.$this->l('These checkboxes correspond to the delivery services you want to be available (when there is no specific configuration for the product or the category product).').'</p>
+		<p><b>'.$this->l('Delivery Service').' :</b> '.$this->l('These checkboxes correspond to the delivery services you want available (when there is no specific configuration for the product or the category product).').'</p>
 		<br />
 		<p><b><u>2. '.$this->l('Categories Settings').'</u></b></p>
 		<p>'.$this->l('This section allows you to define a specific USPS configuration for each product category (such as Packaging Type and Additional charges).').'</p>
@@ -1646,7 +1646,7 @@ class UspsCarrier extends CarrierModule
 				$this->_webserviceError = $this->l('Error').' '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT'].' : '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
 			else
 			{
-				$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again');
+				$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again.');
 				return false;
 			}
 		}
@@ -1685,7 +1685,7 @@ class UspsCarrier extends CarrierModule
 		if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT']))
 			$this->_webserviceError = $this->l('Error').' '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['HELPCONTEXT'].' : '.$resultTab['RATEV4RESPONSE']['PACKAGE']['ERROR']['DESCRIPTION'];
 		else
-			$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again');
+			$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again.');
 
 		return array('connect' => false, 'cost' => 0);
 	}

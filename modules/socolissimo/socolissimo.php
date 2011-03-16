@@ -78,7 +78,7 @@ class Socolissimo extends CarrierModule
 				if (!$this->checkGroup((int)($soCarrier->id)))
 					$warning[] .= $this->l('\'Carrier Group\'').' ';
 				if (!$this->checkRange((int)($soCarrier->id)))
-					$warning[] .= $this->l('\'Carrier Rage(s)\'').' ';
+					$warning[] .= $this->l('\'Carrier Range(s)\'').' ';
 				if (!$this->checkDelivery((int)($soCarrier->id)))
 					$warning[] .= $this->l('\'Carrier price delivery\'').' ';
 			}
@@ -94,11 +94,11 @@ class Socolissimo extends CarrierModule
 			if (count($warning))
 				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly').' ';
 		}
-			$this->errorMessage = array('998' => $this->l('Invalid key'), '999' => $this->l('an error occurred during shipping step'), '001' => $this->l('Login FO missing'),
+			$this->errorMessage = array('998' => $this->l('Invalid key'), '999' => $this->l('Error occurred during shipping step.'), '001' => $this->l('Login FO missing'),
 			 '002' => $this->l('Login FO incorrect'), '003' => $this->l('Customer unauthorized'),'004' => $this->l('Required field missing'), '006' => $this->l('Missing signature'),
-			  '007' => $this->l('Invalid signature'), '008' => $this->l('Zip Code invalid'), '009' => $this->l('Incorrect url format return validation'), '010' => $this->l('Incorrect url format return error'),
-			   '011' => $this->l('Invalid transaction ID'), '012' => $this->l('Format incorrect shipping costs'), '015' => $this->l('Socolissimo server unavailable'),
-			    '016' => $this->l('Socolissimo server unavailable'), '004' => $this->l('Required field missing'), '004' => $this->l('Required field missing'));
+			  '007' => $this->l('Invalid signature'), '008' => $this->l('Invalid Zip/ Postal code'), '009' => $this->l('Incorrect url format return validation.'), '010' => $this->l('Incorrect url format return error.'),
+			   '011' => $this->l('Invalid transaction ID.'), '012' => $this->l('Format incorrect shipping costs.'), '015' => $this->l('Socolissimo server unavailable.'),
+			    '016' => $this->l('Socolissimo server unavailable.'), '004' => $this->l('Required field missing'), '004' => $this->l('Required field missing'));
 
 	}
 
@@ -211,15 +211,15 @@ class Socolissimo extends CarrierModule
 
 		$this->_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">
 		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Description').'</legend>'.
-		$this->l('SoColissimo is a service offered by La Poste, which allows you to offer your buyer 5 modes of delivery').' :
+		$this->l('SoColissimo is a service offered by La Poste, which allows you to offer buyers 5 modes of delivery.').' :
 		<br/><br/><ul style ="list-style:disc outside none;margin-left:30px;">
-			<li>'.$this->l('At home').'.</li>
-			<li>'.$this->l('At home with appointments').'.</li>
-			<li>'.$this->l('In Cityssimo space').'.</li>
-			<li>'.$this->l('In their post office').'.</li>
-			<li>'.$this->l('In their merchant').'.</li>
+			<li>'.$this->l('To home').'.</li>
+			<li>'.$this->l('To home (with appointment)').'.</li>
+			<li>'.$this->l('To Cityssimo space').'.</li>
+			<li>'.$this->l('To post office').'.</li>
+			<li>'.$this->l('To merchant').'.</li>
 		</ul>
-		<p>'.$this->l('This module is free and allows you to activate this offer on your store.').'</p>
+		<p>'.$this->l('This module is free and allows you to activate the offer on your store.').'</p>
 		<p><a href="http://www.prestashop.com/download/partner_modules/docs/Intergation_socolissimo.pdf">
 		>'.$this->l('Documentation').'<</a></p>
 		</fieldset>
@@ -227,7 +227,7 @@ class Socolissimo extends CarrierModule
 		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Settings').'</legend>
 		<label style="color:#CC0000;text-decoration : underline;">'.$this->l('Important').': </label>
 		<div class="margin-form">
-		<p  style="width:500px">'.$this->l('To open your SoColissimo account, please contact "La Poste" at this phone number: 3634 (French phone number)').'</p>
+		<p  style="width:500px">'.$this->l('To open your SoColissimo account, please contact "La Poste" at this phone number: 3634 (French phone number).').'</p>
 		</div>
 		
 		<label>'.$this->l('ID So').' : </label>
@@ -245,8 +245,8 @@ class Socolissimo extends CarrierModule
 		<label>'.$this->l('Preparation time').' : </label>
 		<div class="margin-form">
 		<input type="text" size="5" name="dypreparationtime" value="'.(int)(Tools::getValue('dypreparationtime',Configuration::get('SOCOLISSIMO_PREPARATION_TIME'))).'" /> '.$this->l('Day(s)').'
-		<p>' . $this->l('Average time of preparation of Stuff.') . ' <br><span style="color:red">'
-		.$this->l('Average time must be the same in Coliposte Back office.').'</span></p>
+		<p>' . $this->l('Average time of preparation of materials.') . ' <br><span style="color:red">'
+		.$this->l('Average time must be the same in Coliposte back office.').'</span></p>
 		</div>
 		
 		<label>'.$this->l('Overcost').' : </label>
@@ -254,12 +254,12 @@ class Socolissimo extends CarrierModule
 		<input size="11" type="text" size="5" name="overcost" onkeyup="this.value = this.value.replace(/,/g, \'.\');"
 		value="'.(float)(Tools::getValue('overcost',number_format(Configuration::get('SOCOLISSIMO_OVERCOST'), 2, '.', ''))).'" /> € HT
 		<p>'. $this->l('Additional cost if making appointments.') . ' <br><span style="color:red">'
-		.$this->l('Additional cost must be the same in Coliposte Back office.').'</span></p>
+		.$this->l('Additional cost must be the same in Coliposte back office.').'</span></p>
 		</div>
 		<div class="margin-form">
 		<p>--------------------------------------------------------------------------------------------------------</p>
 		<span style="color:red">'
-		.$this->l('Be VERY CAREFUL with these settings, change may cause a malfunction of the module').
+		.$this->l('Be VERY CAREFUL with these settings, change may cause a malfunction of the module.').
 		'</span>
 		</div>
 		<label>'.$this->l('Url So').' : </label>
@@ -274,7 +274,7 @@ class Socolissimo extends CarrierModule
 			<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 			<input type="radio" name="sup_active" id="active_off" value="0" '.(!Configuration::get('SOCOLISSIMO_SUP') ? 'checked="checked" ' : '').'/>
 			<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-			<p>'.$this->l('Allow or disallow check availability of SoColissimo service').'</p>
+			<p>'.$this->l('Enable or disable the \'check availability\' of SoColissimo service.').'</p>
 		</div>
 
 		<label>'.$this->l('Url Supervision').' : </label>
@@ -291,7 +291,7 @@ class Socolissimo extends CarrierModule
 		<div class="clear">&nbsp;</div>
 
 		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Information').'</legend>
-		<p>'.$this->l('Here are two addresses that you must fill in your Back Office SoColissimo').' : </p><br>
+		<p>'.$this->l('Please fill in these two addresses in your Back Office SoColissimo.').' : </p><br>
 		<label>'.$this->l('Validation url').' : </label>
 		<div class="margin-form">
 		<p>'.htmlentities($this->url,ENT_NOQUOTES, 'UTF-8').'</p>
@@ -317,7 +317,7 @@ class Socolissimo extends CarrierModule
 				$this->_postErrors[] = $this->l('Invalid preparation time');
 
 		if (Tools::getValue('overcost') == NULL)
-			$this->_postErrors[] = $this->l('overcost not specified');
+			$this->_postErrors[] = $this->l('Overcost not specified');
 		elseif (!Validate::isFloat(Tools::getValue('overcost')))
 				$this->_postErrors[] = $this->l('Invalid overcost');
 	}
@@ -394,7 +394,7 @@ class Socolissimo extends CarrierModule
 			$serialsInput = ltrim($serialsInput, '&');
 			$row['id_carrier'] = (int)($carrierSo->id);
 			$smarty->assign(array('urlSo' => Configuration::get('SOCOLISSIMO_URL').'?trReturnUrlKo='.htmlentities($this->url,ENT_NOQUOTES, 'UTF-8'),'id_carrier' => (int)($row['id_carrier']),
-								  'inputs' => $inputs, 'serialsInput' => $serialsInput, 'finishProcess' => $this->l('To choose SoColissimo, tick a delivery method')));
+								  'inputs' => $inputs, 'serialsInput' => $serialsInput, 'finishProcess' => $this->l('To choose SoColissimo, click on a delivery method')));
 
 			$country = new Country((int)($params['address']->id_country));
 			$carriers = Carrier::getCarriers($cookie->id_lang,  true , false,false, NULL, ALL_CARRIERS);
@@ -476,7 +476,7 @@ class Socolissimo extends CarrierModule
 				.(!empty($deliveryInfos['przipcode']) ? Tools::htmlentitiesUTF8($deliveryInfos['przipcode']).'<br/>' : '' )
 				.(!empty($deliveryInfos['prtown']) ? Tools::htmlentitiesUTF8($deliveryInfos['prtown']).'<br/>' : '' )
 				.(!empty($deliveryInfos['ceemail']) ? '<b>'.$this->l('Email').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['ceemail']).'<br/>' : '' )
-				.(!empty($deliveryInfos['cephonenumber']) ? '<b>'.$this->l('Tel').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cephonenumber']).'<br/><br/>' : '' );
+				.(!empty($deliveryInfos['cephonenumber']) ? '<b>'.$this->l('Phone').' : </b>'.Tools::htmlentitiesUTF8($deliveryInfos['cephonenumber']).'<br/><br/>' : '' );
 
 				 break;
 			}

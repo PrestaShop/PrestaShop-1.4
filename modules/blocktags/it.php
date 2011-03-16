@@ -3,8 +3,8 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocktags}prestashop>blocktags_f2568a62d4ac8d1d5b532556379772ba'] = 'Blocco tags';
-$_MODULE['<{blocktags}prestashop>blocktags_b95abf236932a6bbd0f79867b9bf9308'] = 'Aggiunge un blocco contenente una nuvola di tag ';
-$_MODULE['<{blocktags}prestashop>blocktags_44c48afa1e8c0fe8bc629e2f93f3669f'] = 'È necessario compilare il campo \"tag visualizzati\"';
+$_MODULE['<{blocktags}prestashop>blocktags_a332910d45d955dad6c84817fe478e95'] = 'Aggiunge un blocco contenente una nuvola di tag ';
+$_MODULE['<{blocktags}prestashop>blocktags_63ae15823c6e20d9f02e65363b9d65ac'] = 'È necessario compilare il campo \"tag visualizzati\"';
 $_MODULE['<{blocktags}prestashop>blocktags_73293a024e644165e9bf48f270af63a0'] = 'Numero non valido.';
 $_MODULE['<{blocktags}prestashop>blocktags_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Conferma';
 $_MODULE['<{blocktags}prestashop>blocktags_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';

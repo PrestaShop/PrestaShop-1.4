@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockspecials}prestashop>blockspecials_c19ed4ea98cbf319735f6d09bde6c757'] = 'Bloc promotions';
-$_MODULE['<{blockspecials}prestashop>blockspecials_8878bd8e86a6f57aacd3f6962f07ad77'] = 'Ajoute un bloc proposant les produits en promotion actuellement';
+$_MODULE['<{blockspecials}prestashop>blockspecials_c2fb79a6eca86e519f938a1ef15c3e69'] = 'Ajoute un bloc proposant les produits en promotion actuellement';
 $_MODULE['<{blockspecials}prestashop>blockspecials_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmation';
 $_MODULE['<{blockspecials}prestashop>blockspecials_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
 $_MODULE['<{blockspecials}prestashop>blockspecials_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';

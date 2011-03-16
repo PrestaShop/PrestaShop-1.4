@@ -3,8 +3,8 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'Programme de fidélité';
-$_MODULE['<{loyalty}prestashop>loyalty_44c3144de5c433c8e7c9cbc66c906c01'] = 'Propose un programme de fidélité à vos clients';
-$_MODULE['<{loyalty}prestashop>loyalty_c1a15aea773888ee981e8a4b2b041664'] = 'Cette action effacera tous les points de fidélité et l\'historique des points de tous vos clients, êtes vous sûr ?';
+$_MODULE['<{loyalty}prestashop>loyalty_f8763c754ba455aa6e8ddf0e62911eb7'] = 'Propose un programme de fidélité à vos clients';
+$_MODULE['<{loyalty}prestashop>loyalty_f0338d5a7bbd642cc188ca69c8a97b12'] = 'Cette action effacera tous les points de fidélité et l\'historique des points de tous vos clients, êtes vous sûr ?';
 $_MODULE['<{loyalty}prestashop>loyalty_7307b68f93443d5863f1d3943c546b20'] = 'Récompense fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_e81b2826b5aebd9c92fb5d090f0cdc9d'] = 'Vous devez choisir au moins une catégorie pour la génération des bons de réductions';
 $_MODULE['<{loyalty}prestashop>loyalty_f38f5974cdc23279ffe6d203641a8bdf'] = 'Configuration mise à jour.';
@@ -15,7 +15,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_315eae70bcaee168f1654c0ceeeef357'] = '1 p
 $_MODULE['<{loyalty}prestashop>loyalty_e3ff7eaa9deb31e1e91178a7216135c0'] = '1 point =';
 $_MODULE['<{loyalty}prestashop>loyalty_46108358594124685e77e7d49f762b30'] = 'de réduction';
 $_MODULE['<{loyalty}prestashop>loyalty_98cf9475009d3c6e795ffac5d391cec4'] = 'Détails du bon';
-$_MODULE['<{loyalty}prestashop>loyalty_eb04c23cfad386678c6e5817f253b6aa'] = 'Montant minimal pour utiliser le bon';
+$_MODULE['<{loyalty}prestashop>loyalty_dd98e4d652530674f61201056fdbe9b4'] = 'Montant minimal pour utiliser le bon';
 $_MODULE['<{loyalty}prestashop>loyalty_51ab56dd5b46c7b5c8fdf22651ae0db6'] = 'Donner des points sur les produits en promotion';
 $_MODULE['<{loyalty}prestashop>loyalty_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
 $_MODULE['<{loyalty}prestashop>loyalty_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
@@ -26,7 +26,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_9611a682e61c503c32e2dc58fdbc8ddf'] = 'Poi
 $_MODULE['<{loyalty}prestashop>loyalty_2a46cccdea2f18fdfdfacf99a98b758d'] = 'Les bons de réductions crées par le système de fidélité peuvent être utilisés dans les catégories d\'articles suivantes :';
 $_MODULE['<{loyalty}prestashop>loyalty_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{loyalty}prestashop>loyalty_49ee3087348e8d44e1feda1917443987'] = 'Nom';
-$_MODULE['<{loyalty}prestashop>loyalty_ceae28295d1d6543f5f5fd7905a23b1f'] = 'Cocher pour quelle(s) catégorie(s) seront utilisables les bons de réductions fidélité';
+$_MODULE['<{loyalty}prestashop>loyalty_c2a7db7dec4de1bdb143ccd790f5a62c'] = 'Cocher pour quelle(s) catégorie(s) seront utilisables les bons de réductions fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_30e793698766edbaaf84a74d4c377f72'] = 'Statuts des points de fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_4f2a91e15af2631ff9424564b8a45fb2'] = 'Initial';
 $_MODULE['<{loyalty}prestashop>loyalty_453e6aa38d87b28ccae545967c53004f'] = 'Indisponibles';
@@ -48,7 +48,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_928666bdf20510dfa5c58393b77f1798'] = 'Val
 $_MODULE['<{loyalty}prestashop>loyalty_a9be824aae4f2381a27b7c699b1e041e'] = 'En attente de validation';
 $_MODULE['<{loyalty}prestashop>loyalty_78945de8de090e90045d299651a68a9b'] = 'Disponibles';
 $_MODULE['<{loyalty}prestashop>loyalty_4cb08bf5ad3d3c7b010dde725a078b28'] = 'Déjà convertis';
-$_MODULE['<{loyalty}prestashop>loyalty_df05c2db84dacb19b599b489bf3963db'] = 'Non valables sur les promotions';
+$_MODULE['<{loyalty}prestashop>loyalty_01371a1d58e9234c0b9dbc08cf54fa8b'] = 'Non valables sur les promotions';
 $_MODULE['<{loyalty}prestashop>loyalty_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mon compte';
 $_MODULE['<{loyalty}prestashop>loyalty_c540093e64d84440025b2d8201f04336'] = 'Mes points de fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_5acc2ceeb883ba07cef2d02ea382f242'] = 'Vous n\'avez passé aucune commande.';

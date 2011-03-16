@@ -62,7 +62,7 @@ class PaysafeCard extends PrepaidServices
 		parent::__construct();
 
 		$this->displayName = $this->l('PaysafeCard');
-		$this->description = $this->l('Accepts payments by PaysafeCard');
+		$this->description = $this->l('Accepts payments by PaysafeCard.');
 	}
 
 	public function getL($key)
@@ -73,10 +73,10 @@ class PaysafeCard extends PrepaidServices
 				'payment_error' => $this->l('An error has occurred during payment:'),
 				'payment_accepted' => $this->l('Payment accepted.'),
 				'curl_required' => $this->l('This module requires the curl PHP extension to function properly.'),
-				'not_writable' => $this->l('is not writable!'),
+				'not_writable' => $this->l('Not writable!'),
 				'currency_required' => $this->l('This module requires the currency: '),
 				'configure_currency' => $this->l('Configure each currency individually:'),
-				'payment_not_displayed' => $this->l('(The payment module won\'t be displayed for customers using non configured currency.)'),
+				'payment_not_displayed' => $this->l('(The payment module will not be displayed for customers using non configured currency.)'),
 				'configuration_in' => $this->l('Configuration in '),
 				'merchant_id' => $this->l('Merchant ID'),
 				'keyring_certificate' => $this->l('Keyring Certificate'),
@@ -92,13 +92,13 @@ class PaysafeCard extends PrepaidServices
 				'invalid_business_type' => $this->displayError('Invalid business type'),
 				'invalid_environment' => $this->displayError('Invalid environment'),
 				'settings_updated' => $this->l('Settings updated'),
-				'file_partialy_uploaded' => $this->l('The file was partially uploaded'),
-				'file_empty' => $this->l('The file is empty'),
-				'cant_create_dispo' => $this->l('Transaction could not be initiated due to connection problems. If the problem persists, please contact our support.'),
+				'file_partialy_uploaded' => $this->l('The file was partially uploaded.'),
+				'file_empty' => $this->l('The file is empty.'),
+				'cant_create_dispo' => $this->l('Transaction could not be initiated due to connection problems. If the problem persists, please contact support.'),
 				'disposition_consumed' => $this->l('Disposition consumed'),
 				'payment_released' => $this->l('Disposition released'),
 				'release_error' => $this->l('An error has occurred during the release'),
-				'introduction' => $this->l('paysafecard is Europe’s first prepaid solution for payments on the Internet to comply with banking laws.  Over the past years, paysafecard has become one of Europe’s leading alternative online payment solutions.'),
+				'introduction' => $this->l('Paysafecard is Europe’s first prepaid solution for payments over the Internet to comply with banking laws. Over the past years, paysafecard has become one of Europe’s leading alternative online payment solutions.'),
 				'register' => $this->l('Learn more')
 			);
 

@@ -16,7 +16,7 @@ class shopimporter extends ImportModule
 		parent::__construct ();
 
 		$this->displayName = $this->l('Shop Importer');
-		$this->description = $this->l('This module allows you to import your shop from another system into prestashop');
+		$this->description = $this->l('This module allows you to import your shop from another system into Prestashop.');
 		$this->supportedImports = array(
 									'language' => array('methodName' => 'getLangagues',
 														'name' => $this->l('Language'),
@@ -25,7 +25,7 @@ class shopimporter extends ImportModule
 														'table' => 'lang',
 														'identifier' => 'id_lang',
 														'alterTable' => array('id_lang' => 'int(10)'),
-														'info' => $this->l('New languages will automatically add translations!'),
+														'info' => $this->l('New languages will automatically add translations.'),
 														'defaultId' => 'PS_LANG_DEFAULT'
 														),
 									'currency' => array('methodName' => 'getCurrencies',
@@ -282,8 +282,8 @@ class shopimporter extends ImportModule
 					var showErrors = "'.$this->l('Show errors').'";
 					var testImport = "'.$this->l('Test import process').'";
 					var runImport = "'.$this->l('Run Import').'";
-					var importHasErrors = "'.$this->l('Errors occurred during import. For more details click on "Show errors"').'"
-					var importFinish = "'.$this->l('The import is completed').'"
+					var importHasErrors = "'.$this->l('Errors occurred during import. For more details click on "Show errors".').'"
+					var importFinish = "'.$this->l('Import is complete.').'"
 					var truncateTable = "'.$this->l('Remove data').'"
 					var oneThing = "'.$this->l('Please choose one thing to import').'"
 				</script>
@@ -379,7 +379,7 @@ class shopimporter extends ImportModule
 								</select>
 								<p>'.$this->l('Select the number of occurrences for each query to import').'</p>
 							</div>
-					<label>'.$this->l('If errors happen').' : </label>
+					<label>'.$this->l('If errors occur').' : </label>
 							<div class="margin-form">
 								<label class="t"><img src="'.$this->_path.'img/stop.png"></label>
 								<input type="radio" name="hasErrors" id="hasErrors" value="0" checked="checked">

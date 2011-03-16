@@ -45,9 +45,9 @@ class Secuvad extends Module
   		$this->currencies_mode = NULL;
 		
 		parent::__construct();
-  		$this->displayName = $this->l('Secuvad Module');
+  		$this->displayName = $this->l('Secuvad module');
   		$this->description = $this->l('Solution fighting against online fraud');
-  		$this->confirmUninstall = $this->l('Are you sure you want to delete this module ?');
+  		$this->confirmUninstall = $this->l('Are you sure you want to delete this module?');
 	}
 	
 	public function install()
@@ -277,7 +277,7 @@ class Secuvad extends Module
 					<p class="center">
 						<input type="hidden" name="id_secuvad_order" value="'.(int)($params['id_order']).'" />
 						<input type="submit" class="button" name="send_to_secuvad" value="'.$this->l('Update Secuvad status').'"> 
-						<input type="submit" class="button" name="report_fraud" value="'.$this->l('Transmit an unpaid transaction').'" onclick="if(!confirm(\''.$this->l('Please note, by delivery of such unpaid SECUVAD, you certify that your claim is certain, liquid and payable, and that you entrust to SECUVAD EXCLUSIVE recovery. Would you continue?').'\')) return false;">
+						<input type="submit" class="button" name="report_fraud" value="'.$this->l('Transmit an unpaid transaction').'" onclick="if(!confirm(\''.$this->l('Please note, by delivery of such unpaid SECUVAD, you certify that your claim is certain, liquid and payable, and that you entrust SECUVAD to EXCLUSIVE recovery. Do you wish to continue?').'\')) return false;">
 					</p>
 				</form>
 			</fieldset>
@@ -494,7 +494,7 @@ class Secuvad extends Module
 			if (Tools::getValue('address') != NULL AND !Validate::isAddress(Tools::getValue('address')))
 				$errors[] = $this->l('Address is invalid');
 			if (Tools::getValue('code_postal') != NULL AND !Validate::isPostCode(Tools::getValue('code_postal')))
-				$errors[] = $this->l('Zip code is invalid');
+				$errors[] = $this->l('Zip/ Postal Code is invalid');
 			if (Tools::getValue('ville') != NULL AND !Validate::isCityName(Tools::getValue('ville')))
 				$errors[] = $this->l('City is invalid');
 			if (Tools::getValue('pays') != NULL AND !Validate::isCountryName(Tools::getValue('pays')))
@@ -504,7 +504,7 @@ class Secuvad extends Module
 			if (Tools::getValue('siren') != NULL AND !Validate::isGenericName(Tools::getValue('siren')))
 				$errors[] = $this->l('Siren is invalid');
 			if (!is_array(Tools::getValue('categories')) OR !sizeof(Tools::getValue('categories')))
-				$errors[] = $this->l('you must select at least one category');
+				$errors[] = $this->l('You must select at least one category.');
 			if (Tools::getValue('civilite') != 'M'
 				AND Tools::getValue('civilite') != 'Mme'
 				AND Tools::getValue('civilite') != 'Mlle')
@@ -569,7 +569,7 @@ class Secuvad extends Module
 			if (Db::getInstance()->Execute($sql))
 				$this->_html .= $this->displayConfirmation($this->l('Settings are updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Error on update'));
+				$this->_html .= $this->displayError($this->l('Error during update'));
 		}
 		
 		if (Tools::isSubmit('submitSecuvadPayment'))
@@ -588,7 +588,7 @@ class Secuvad extends Module
 			if (Db::getInstance()->Execute($sql))
 				$this->_html .= $this->displayConfirmation($this->l('Settings are updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Error on update'));
+				$this->_html .= $this->displayError($this->l('Error during update'));
 		}
 		
 		if (Tools::isSubmit('submitSecuvadCarrier'))
@@ -607,7 +607,7 @@ class Secuvad extends Module
 			if (Db::getInstance()->Execute($sql))
 				$this->_html .= $this->displayConfirmation($this->l('Settings are updated'));
 			else
-				$this->_html .= $this->displayError($this->l('Error on update'));
+				$this->_html .= $this->displayError($this->l('Error during update'));
 		}
 	}
 	
@@ -680,7 +680,7 @@ class Secuvad extends Module
 			$this->_html .= '
 			<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
 				<fieldset style="width:430px;margin-right:10px;margin-bottom:10px;">
-					<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'/modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad payment').'</legend>
+					<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'/modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad Payment').'</legend>
 					
 					<table class="table" style="width:100%;" cellspacing="0" cellpadding="0">
 						<tr>
@@ -715,7 +715,7 @@ class Secuvad extends Module
 			$this->_html .= '
 			<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
 				<fieldset style="width:430px;margin-right:10px;margin-bottom:10px;">
-					<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'/modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad carrier').'</legend>
+					<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'/modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Secuvad Carrier').'</legend>
 					
 					<table class="table" style="width:100%;" cellspacing="0" cellpadding="0">
 						<tr>
@@ -799,7 +799,7 @@ class Secuvad extends Module
 	private function _setFormRegister($lock = false)
 	{
 		$this->_html .= '
-		<h3>'.$this->l('In order to use the Secuvad module, please fill in this form, then click on "Register"').'</h3>
+		<h3>'.$this->l('In order to use the Secuvad module, please fill in this form, then click "Register".').'</h3>
 		<form method="POST" action="'.($lock ? $this->_getSecuvadRegisterURL() : $_SERVER['REQUEST_URI']).'">';
 		if ($lock)
 		{
@@ -845,7 +845,7 @@ class Secuvad extends Module
 					<input type="text" name="address" id="address" value="'.htmlentities(Tools::getValue('address', Configuration::get('PS_SHOP_ADDR1').' '.Configuration::get('PS_SHOP_ADDR2')), ENT_QUOTES, 'UTF-8').'" size="30" '.($lock ? 'readonly="readonly"' : '').'/>
 				</div>
 				
-				<label for="code_postal">'.$this->l('Postal code:').'</label>
+				<label for="code_postal">'.$this->l('Zip/ Postal Code').'</label>
 				<div class="margin-form">
 					<input type="text" name="code_postal" id="code_postal" value="'.htmlentities(Tools::getValue('code_postal', Configuration::get('PS_SHOP_CODE')), ENT_QUOTES, 'UTF-8').'" size="5" '.($lock ? 'readonly="readonly"' : '').'/>
 				</div>
@@ -1055,7 +1055,7 @@ class Secuvad extends Module
 		');
 		if (sizeof($module_not_assoc) > 0)
 		{
-			$message = $this->l('Following payment modules aren\'t associated:');
+			$message = $this->l('Following payment modules are not associated:');
 			foreach($module_not_assoc as $mod)
 				$message .= "\n\t".$mod['id_module']."->".$mod['name'];
 			$this->secuvad_log($message);
@@ -1102,7 +1102,7 @@ class Secuvad extends Module
 		');
 		if (count($module_not_assoc) > 0)
 		{
-			$message = $this->l('Following shipping methods aren\'t associated:');
+			$message = $this->l('Following shipping methods are not associated:');
 			foreach($module_not_assoc as $mod)
 				$message .= "\n\t".$mod['id_carrier']."->".$mod['name'];
 			$this->secuvad_log($message);
@@ -1147,7 +1147,7 @@ class Secuvad extends Module
 		');
 		if(count($module_not_assoc)>0)
 		{
-			$message = $this->l('Following categories aren\'t associated:');
+			$message = $this->l('Following categories are not associated:');
 			foreach($module_not_assoc as $mod)
 				$message .= "\n\t".$mod['id_category']."->".$mod['name'];
 			$this->secuvad_log($message);
@@ -1163,7 +1163,7 @@ class Secuvad extends Module
 		
 		if ($this->check_assoc() != '' || Configuration::get('SECUVAD_ACTIVATION') != 1)
 		{
-			$this->secuvad_log('AdminOrders.php : '.$this->l('Error on activation'));
+			$this->secuvad_log('AdminOrders.php : '.$this->l('Error during activation'));
 			return 0;
 		}
 		include_once(_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_flux.php');
@@ -1188,7 +1188,7 @@ class Secuvad extends Module
 		
 		if ($this->check_assoc() != '' || Configuration::get('SECUVAD_ACTIVATION') != 1)
 		{
-			$this->secuvad_log('AdminOrders.php : '.$this->l('Error on activation'));
+			$this->secuvad_log('AdminOrders.php : '.$this->l('Error during activation'));
 			return 0;
 		}
 		include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_flux.php');

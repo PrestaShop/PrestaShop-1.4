@@ -54,7 +54,7 @@ class MailAlerts extends Module
 
 		$this->displayName = $this->l('Mail alerts');
 		$this->description = $this->l('Sends e-mail notifications to customers and merchants.');
-		$this->confirmUninstall = $this->l('Are you sure you want to delete all customers notifications ?');
+		$this->confirmUninstall = $this->l('Are you sure you want to delete all customer notifications?');
 	}
 
 	public function install()
@@ -360,7 +360,7 @@ class MailAlerts extends Module
 				<label>'.$this->l('Product availability:').' </label>
 				<div class="margin-form">
 					<input type="checkbox" value="1" id="mA_customer_qty" name="mA_customer_qty" '.(Tools::getValue('mA_customer_qty', $this->_customer_qty) == 1 ? 'checked' : '').'>
-					&nbsp;<label for="mA_customer_qty" class="t">'.$this->l('Gives the customer the possibility to receive a notification for an available product if this one is out of stock ').'</label>
+					&nbsp;<label for="mA_customer_qty" class="t">'.$this->l('Gives the customer the option of receiving a notification for an available product if this one is out of stock.').'</label>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitMACustomer" class="button" />
@@ -391,7 +391,7 @@ class MailAlerts extends Module
 						<textarea name="ma_merchant_mails" rows="10" cols="30">'.Tools::getValue('ma_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails)).'</textarea>
 					</div>
 					<div style="float:left;">
-						'.$this->l('One email address per line').'<br />
+						'.$this->l('One e-mail address per line').'<br />
 						'.$this->l('e.g.,').' bob@example.com
 					</div>
 				</div>
@@ -416,7 +416,7 @@ class MailAlerts extends Module
 		{
 			$emails = strval(Tools::getValue('ma_merchant_mails'));
 			if (!$emails OR empty($emails))
-				$this->_html .= '<div class="alert error">'.$this->l('Please type one (or more) email address').'</div>';
+				$this->_html .= '<div class="alert error">'.$this->l('Please type one (or more) e-mail address').'</div>';
 			else
 			{
 				$emails = explode("\n", $emails);

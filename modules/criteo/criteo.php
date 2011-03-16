@@ -39,7 +39,7 @@ class Criteo extends Module
 	 	parent::__construct();
 
 		$this->displayName = $this->l('Criteo');
-		$this->description = $this->l('Criteo product export and tag display');
+		$this->description = $this->l('Criteo product export and tag display.');
 	}
 
 	public function install()
@@ -94,9 +94,9 @@ class Criteo extends Module
                     <input type="text" value="'.Configuration::get('CRITEO_URL_WIDGET').'" name="url_widget_criteo" /><br /><br />
                     <center><input type="submit" class="button" name="submitCriteo" value="'.$this->l('Submit').'" /></center>
                 </form>
-              	'.$this->l('URL you have to communicate to Criteo:').'
+              	'.$this->l('URL to communicate to Criteo:').'
                 <a href="http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php">http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php</a><br />
-                '.$this->l('URL you have to communicate to Criteo:').'
+                '.$this->l('URL to communicate to Criteo:').'
                     <a href="http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php">http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php</a>
        	</fieldset>';
 	}

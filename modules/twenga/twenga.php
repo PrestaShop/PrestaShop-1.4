@@ -180,11 +180,11 @@ class Twenga extends PaymentModule
 	private function submitTwengaLogin()
 	{
 		if (!self::$obj_twenga->setHashkey($_POST['twenga_hashkey']))
-			$this->_errors[] = $this->l('Your hashkey is not valid. Please check the mail already sent by Twenga.');
+			$this->_errors[] = $this->l('Your hashkey is invalid. Please check the e-mail already sent by Twenga.');
 		if (!self::$obj_twenga->setUserName($_POST['twenga_user_name']))
-			$this->_errors[] = $this->l('Your user name is not valid. Please check the mail already sent by Twenga.');
+			$this->_errors[] = $this->l('Your user name is invalid. Please check the e-mail already sent by Twenga.');
 		if (!self::$obj_twenga->setPassword($_POST['twenga_password']))
-			$this->_errors[] = $this->l('Your password is not valid. Please check the mail already sent by Twenga.');
+			$this->_errors[] = $this->l('Your password is invalid. Please check the e-mail already sent by Twenga.');
 		
 		if(empty($this->_errors))
 		{
@@ -196,8 +196,8 @@ class Twenga extends PaymentModule
 				$this->_errors[] = nl2br($e->getMessage());
 			}
 			if(!$bool_save)
-				$this->_errors[] = $this->l('Your authentication failed.')."<br />\n"
-					.$this->l('Check the mail sent by Twenga after subscription. If an error still occurred, contact the Twenga service.');
+				$this->_errors[] = $this->l('Authentication failed.')."<br />\n"
+					.$this->l('Please review the e-mail sent by Twenga after subscription. If error still occurred, contact Twenga service.');
 		}
 	}
 	private function submitTwengaActivateTracking()
@@ -355,7 +355,7 @@ class Twenga extends PaymentModule
 		// API can't be call if curl extension is not installed on PHP config.
 		if (!extension_loaded('curl'))
 		{
-			$this->_errors[] = $this->l('Please activate the PHP extension \'curl\' to allow use of Twenga webservice library');
+			$this->_errors[] = $this->l('Please activate the PHP extension \'curl\' to allow use of Twenga webservice library.');
 			return $this->displayErrors();
 		}
 		$this->preProcess();
@@ -393,7 +393,7 @@ class Twenga extends PaymentModule
 		}
 		if (!empty($errors))
 		{
-			$str_error = $this->l('Some errors occurred with the Twenga API get subscription link:');
+			$str_error = $this->l('Errors occurred with the Twenga API subscription link:');
 			$str_error .=  '<ol>'; 
 			foreach ($errors as $error)
 				$str_error .= '<li><em>'.$error.'</em></li>';
@@ -438,9 +438,9 @@ class Twenga extends PaymentModule
 				<p>'.$this->l('How to list your product on Twenga.co.uk:').'</p>
 				<ul>'.'<li>'.$this->l('Step 1: Click on this link to sign up to Twenga Ready to Sell ');
 		if ($this->inscription_url !== NULL)
-			$str_return .= '&nbsp;<a href="'.$this->inscription_url.'" target="_blank" class="link">&raquo;'.$this->l('subscribe').'&laquo;</a>'.'</li>';
+			$str_return .= '&nbsp;<a href="'.$this->inscription_url.'" target="_blank" class="link">&raquo;'.$this->l('Subscribe').'&laquo;</a>'.'</li>';
 		else
-			$str_return .= '&nbsp;<em style="color:red;">'.$this->l('(Error(s) occurred: please contact Twenga)').'</em>';
+			$str_return .= '&nbsp;<em style="color:red;">'.$this->l('Error(s) occurred: please contact Twenga').'</em>';
 			
 				$str_return .='
 					<li>'.$this->l('Step 2: Fill up Twenga sign up form').'</li>
@@ -491,7 +491,7 @@ class Twenga extends PaymentModule
 					<input type="password" size="38" maxlength="32" name="twenga_password" value="'.self::$obj_twenga->getPassword().'"/>&nbsp;
 				</div><!-- .margin-form -->
 				<div class="margin-form">' .$this->l('If you forgot your login, retrieve it back here').' <a href="'.$lost_link.'" target="_blank">'.$lost_link.'</a></div>'
-			.'<input type="submit" value="'.$this->l('save').'" name="submitTwengaLogin" class="button"/>
+			.'<input type="submit" value="'.$this->l('Save').'" name="submitTwengaLogin" class="button"/>
 			</fieldset>
 			</form><br />';
 	}
@@ -513,8 +513,8 @@ class Twenga extends PaymentModule
 	 	return '
 	 	<form name="form_subscription_twenga" id="form_subscription_twenga" method="post" action="">
 		<fieldset>
-			<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('This information pre-fills Twenga subscription form').'</legend>
-			<p>'.$this->l('The following information will pre-fill your "Twenga Ready to Sell" subscription. Please check values validity').'</p><br />
+			<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('This information pre-fills the Twenga subscription form.').'</legend>
+			<p>'.$this->l('The following information will pre-fill your "Twenga Ready to Sell" subscription. Please check the validity of the values.').'</p><br />
 			<label>'.$this->l('Site\'s url').' <sup>*</sup> : </label>
 			<div class="margin-form">'
 				.'<div class="simulate-disable-input" >'.$this->site_url.'</div>
@@ -526,8 +526,8 @@ class Twenga extends PaymentModule
 				<div class="simulate-disable-input" >'.$this->feed_url.'</div>
 				<input type="hidden" name="feed_url" value="'.$this->feed_url.'"/>
 				<p>'
-					.$this->l('Feeds Url, the list of product in xml.').'<br />'
-					.$this->l('Value is automatically filled, don\'t change it.')
+					.$this->l('Feeds Url, the list of products in xml.').'<br />'
+					.$this->l('Value is automatically filled, please do not change.')
 				.'</p>
 			</div><!-- .margin-form -->
 			<label>'.$this->l('Country').' <sup>*</sup> : </label>
@@ -546,15 +546,15 @@ class Twenga extends PaymentModule
 				<input type="text" name="site_name" value="'.$site_name.'">
 				<p>'.$this->l('Site\'s name').'</p>
 			</div><!-- .margin-form -->
-			<label>'.$this->l('Lastname').' : </label>
+			<label>'.$this->l('Last Name').' : </label>
 			<div class="margin-form">
 				<input type="text" name="lastname" value="'.$employee->lastname.'">
 			</div><!-- .margin-form -->
-			<label>'.$this->l('Firstname').' : </label>
+			<label>'.$this->l('First Name').' : </label>
 			<div class="margin-form">
 				<input type="text" name="firstname" value="'.$employee->firstname.'">
 			</div><!-- .margin-form -->
-			<label>'.$this->l('Email').' : </label>
+			<label>'.$this->l('E-mail').' : </label>
 			<div class="margin-form">
 				<input type="text" name="email" value="'.$email.'">
 			</div><!-- .margin-form -->
@@ -569,13 +569,13 @@ class Twenga extends PaymentModule
 			<label>'.$this->l('Legal type').' : </label>
 			<div class="margin-form">
 				<input type="text" name="legaltype" value="'.$legaltype.'">
-				<p>'.$this->l('society legal type.').'</p>
+				<p>'.$this->l('society legal type').'</p>
 			</div><!-- .margin-form -->
 			<label>'.$this->l('Address').' : </label>
 			<div class="margin-form">
 				<textarea name="address" >'.$address.'</textarea>
 			</div><!-- .margin-form -->
-			<label>'.$this->l('Postal code').' : </label>
+			<label>'.$this->l('Zip/ Postal Code').' : </label>
 			<div class="margin-form">
 				<input type="text" name="postal_code" value="'.$postal_code.'">
 			</div><!-- .margin-form -->

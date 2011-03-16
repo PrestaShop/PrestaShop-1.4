@@ -40,7 +40,7 @@ class BlockUserInfo extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('User info block');
-		$this->description = $this->l('Adds a block that displays information about the customer');
+		$this->description = $this->l('Adds a block that displays information about the customer.');
 	}
 
 	public function install()

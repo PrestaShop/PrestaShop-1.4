@@ -42,7 +42,7 @@ class Pagesnotfound extends Module
         parent::__construct();
 		
         $this->displayName = $this->l('Pages not found');
-        $this->description = $this->l('Display the pages requested by your visitors but not found');
+        $this->description = $this->l('Display the pages requested by your visitors but not found.');
     }
 
 	function install()
@@ -93,7 +93,7 @@ class Pagesnotfound extends Module
 		if (Tools::isSubmit('submitTruncatePNF'))
 		{
 			Db::getInstance()->Execute('TRUNCATE `'._DB_PREFIX_.'pagenotfound`');
-			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" /> '.$this->l('Pages not found emptied').'</div>';
+			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" /> '.$this->l('Pages not found has been emptied.').'</div>';
 		}
 	
         $this->_html .= '<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>';
@@ -134,9 +134,9 @@ class Pagesnotfound extends Module
 		$this->_html .= '<div class="clear">&nbsp;</div>
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('404 errors').'</h2>
-			<p>'.$this->l('A <i>404 error</i> is an HTTP error code which means that the file requested by the user can\'t be found. In your case it means that one of your visitors entered a wrong URL in the address bar or that you or another website has a dead link somewhere. When it is available, the referrer is shown so you can find the page which contains the dead link. If not, it means generally that it is a direct access, so maybe someone has bookmarked a link which doesn\'t exist anymore.').'</p>
+			<p>'.$this->l('A 404 error is an HTTP error code which means that the file requested by the user cannot be found. In your case it means that one of your visitors entered a wrong URL in the address bar or that you or another website has a dead link. When it is available, the referrer is shown so you can find the page which contains the dead link. If not, it means generally that it is a direct access, so someone may have bookmarked a link which doesn\'t exist anymore.').'</p>
 			<h3>'.$this->l('How to catch these errors?').'</h3>
-			<p>'.$this->l('If your webhost supports the <i>.htaccess</i> file, you can create it in the root directory of PrestaShop and insert the following line inside:').' <i>ErrorDocument 404 '.__PS_BASE_URI__.'404.php</i>. '.$this->l('A user requesting a page which doesn\'t exist will be redirected to the page').' <i>'.__PS_BASE_URI__.'404.php</i>. '.$this->l('This module logs the accesses to this page: the page requested, the referrer and the number of times that it occurred.').'</p><br />
+			<p>'.$this->l('If your webhost supports the <i>.htaccess</i> file, you can create it in the root directory of PrestaShop and insert the following line inside:').' <i>ErrorDocument 404 '.__PS_BASE_URI__.'404.php</i>. '.$this->l('A user requesting a page which doesn\'t exist will be redirected to the page.').' <i>'.__PS_BASE_URI__.'404.php</i>. '.$this->l('This module logs the accesses to this page: the page requested, the referrer and the number of times that it occurred.').'</p><br />
 		</fieldset>';
 
         return $this->_html;

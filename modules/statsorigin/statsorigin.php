@@ -42,7 +42,7 @@ class StatsOrigin extends ModuleGraph
         parent::__construct();
 		
         $this->displayName = $this->l('Visitors origin');
-        $this->description = $this->l('Display the websites where your visitors come from');
+        $this->description = $this->l('Display the websites your visitors come from.');
     }
 
 	function install()
@@ -85,7 +85,7 @@ class StatsOrigin extends ModuleGraph
 		if (sizeof($websites))
 		{
 			$this->_html .= '
-			<center><p><img src="../img/admin/down.gif" />'. $this->l('Here is the percentage of the 10 most popular referrer websites by which visitors went to get to your shop.').'</p>
+			<center><p><img src="../img/admin/down.gif" />'. $this->l('Here is the percentage of the 10 most popular referrer websites by which visitors went through to get to your shop.').'</p>
 			'.ModuleGraph::engine(array('type' => 'pie')).'</center>
 			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=top"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
 			<div style="overflow-y: scroll; height: 600px;">
@@ -106,7 +106,7 @@ class StatsOrigin extends ModuleGraph
 		<h2>'.$this->l('What is a referrer website?').'</h2>
 			<p>
 				'.$this->l('When visiting a webpage, the referrer is the URL of the previous webpage from which a link was followed.').'<br />
-				'.$this->l('A referrer enables you to know which keywords are entered by visitors in search engines when they try to get on your shop; and also to optimize your web promotion.').'<br /><br />
+				'.$this->l('A referrer enables you to know which keywords are entered by visitors in search engines when getting to your shop and allows you to optimize web promotion.').'<br /><br />
 				'. $this->l('A referrer can be:').'
 				<ul>
 					<li class="bullet">'. $this->l('Someone who put a link on their website for your shop').'</li>
@@ -119,7 +119,7 @@ class StatsOrigin extends ModuleGraph
 		
 	protected function getData($layers)
 	{
-		$this->_titles['main'] = $this->l('10 first websites');
+		$this->_titles['main'] = $this->l('First 10 websites');
 		$websites = $this->getOrigins($this->getDate());
 		$total = 0;
 		$total2 = 0;

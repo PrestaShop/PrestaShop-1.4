@@ -40,7 +40,7 @@ class BlockLayered extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Layered navigation block');
-		$this->description = $this->l('Displays a block with layered navigation filters');
+		$this->description = $this->l('Displays a block with layered navigation filters.');
 	}
 
 	public function install()

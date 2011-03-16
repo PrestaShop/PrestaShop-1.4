@@ -47,8 +47,8 @@ class Loyalty extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Customer loyalty and rewards');
-		$this->description = $this->l('Provide a loyalty program to your customers');
-		$this->confirmUninstall = $this->l('This will delete all loyalty points and history of your customers, are you sure?');
+		$this->description = $this->l('Provide a loyalty program to your customers.');
+		$this->confirmUninstall = $this->l('Are you sure you want to delete all loyalty points and customer history?');
 	}
 
 	private function instanceDefaultStates()
@@ -283,7 +283,7 @@ class Loyalty extends Module
 		$html .= $this->displayFlags($languages, $defaultLanguage, $languageIds, 'voucher_details', true);
 		$html .= '	</div>
 				<div class="clear" style="margin-top: 20px"></div>
-				<label>'.$this->l('Minimal amount to use the voucher').'</label>
+				<label>'.$this->l('Minimum amount in which the voucher can be used').'</label>
 				<div class="margin-form">
 					<input type="text" size="2" name="minimal" value="'.(float)(Configuration::get('PS_LOYALTY_MINIMAL')).'" /> '.$currency->sign.'
 				</div>
@@ -337,7 +337,7 @@ class Loyalty extends Module
 		
 		$html .= $this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, NULL);
 		$html .= '				</table>
-				<p style="padding-left:200px;">'.$this->l('Mark all checkbox(es) of categories in which loyalty vouchers are usable').'</p>
+				<p style="padding-left:200px;">'.$this->l('Mark the box(es) of categories in which loyalty vouchers are usable.').'</p>
 				<div class="clear"></div>
 				<h3 style="margin-top:20px">'.$this->l('Loyalty points progression').'</h3>
 				<label>'.$this->l('Initial').'</label>
@@ -665,7 +665,7 @@ class Loyalty extends Module
 		'Available' => $this->l('Available'),
 		'Cancelled' => $this->l('Cancelled'),
 		'Already converted' => $this->l('Already converted'),
-		'Unavailable on discounts' => $this->l('Unavailable on discounts'));
+		'Not available on discounts.' => $this->l('Not available on discounts.'));
 
 		return $translations[$key];
 	}

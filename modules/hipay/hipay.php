@@ -290,7 +290,7 @@ class Hipay extends PaymentModule
 		{
 			echo '
 			<div class="warning warn">
-				'.($allow_url_fopen ? '' : '<h3>'.$this->l('You are not allowed to open external URLs (allow_url_fopen)').'</h3>').'
+				'.($allow_url_fopen ? '' : '<h3>'.$this->l('You are not allowed to open external URLs').'</h3>').'
 				'.($curl ? '' : '<h3>'.$this->l('cURL is not enabled').'</h3>').'
 				'.($openssl ? '' : '<h3>'.$this->l('OpenSSL is not enabled').'</h3>').'
 				'.(($allow_url_fopen AND $openssl AND !$ping) ? '<h3>'.$this->l('Cannot access payment gateway').' '.HIPAY_GATEWAY_URL.' ('.$this->l('check your firewall').')</h3>' : '').'
@@ -311,11 +311,11 @@ class Hipay extends PaymentModule
 			#hipay_table td.hipay_block {border-bottom:none}
 		</style>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Hipay').'</legend>
-			'.$this->l('Hipay is a secure electronic wallet which provides, to the merchants, a complete service package for online business transactions: whether for digital contents, software, music, subscriptions, physical goods…without having to negotiate with a bank and without technical charges.').'<br />'.$this->l('Free & Easy, Hipay implementation is a real asset to an e-commerce website that wants to expand in Europe: secure payments by international cards, local payment solutions, bank transfers…').'
+			'.$this->l('Hipay is a secure electronic wallet which provides merchants a complete service package for online business transactions (for digital contents, software, music, subscriptions, physical goods, etc.) without having to negotiate with a bank and without technical charges.rn').'<br />'.$this->l('Free & easy to use, Hipay implementation is a real asset to an e-commerce website that wants to expand in Europe. It provides secure payments by international cards, local payment solutions, bank transfers and more.').'
 			<br /><br />
 			'.(Configuration::get('HIPAY_SITEID')
 				? '<a href="https://www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your merchant account').'</a><br />'
-				: '<a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700"><img src="../modules/'.$this->name.'/create.jpg" alt="'.$this->l('Create a hipay account').'" title="'.$this->l('Create a hipay account').'" border="0" /></a><br />').'
+				: '<a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700"><img src="../modules/'.$this->name.'/create.jpg" alt="'.$this->l('Create a Hipay account').'" title="'.$this->l('Create a Hipay account').'" border="0" /></a><br />').'
 			<br />'.$this->l('Notice: if you want to refund a payment, please log in to your Hipay account then go to Merchant Management > Sales management.').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>
@@ -386,7 +386,7 @@ class Hipay extends PaymentModule
 					</select>
 				</div>
 				<hr class="clear" />
-				<p>'.$this->l('Notice: please verify that the currency mode you\'ve chosen in the payment tab is compatible with your Hipay account(s).').'</p>
+				<p>'.$this->l('Notice: please verify that the currency mode you have chosen in the payment tab is compatible with your Hipay account(s).').'</p>
 				<input type="submit" name="submitHipay" value="'.$this->l('Update configuration').'" class="button" />
         	</form>
 		</fieldset>

@@ -176,7 +176,7 @@ class MondialRelay extends Module
 		{
 			if (Configuration::get('MR_ENSEIGNE_WEBSERVICE') == '' OR Configuration::get('MR_CODE_MARQUE') == '' OR
 				Configuration::get('MR_KEY_WEBSERVICE') == '' OR Configuration::get('MR_LANGUAGE') == '')
-				$this->_postErrors[] = $this->l('Please configure your Mondial Relay account settings before creating a carrier');
+				$this->_postErrors[] = $this->l('Please configure your Mondial Relay account settings before creating a carrier.');
 			if (!preg_match("#^[0-9A-Za-z_\'., /\-]{2,32}$#", Tools::getValue('mr_Name')))
 				$this->_postErrors[] = $this->l('Invalid carrier name');
 			if (Tools::getValue('mr_ModeCol') != 'CCC')
@@ -186,7 +186,7 @@ class MondialRelay extends Module
 			if (!Validate::isInt(Tools::getValue('mr_ModeAss')) OR Tools::getValue('mr_ModeAss') > 5 OR Tools::getValue('mr_ModeAss') < 0)
 				$this->_postErrors[] = $this->l('Invalid Assurance mode');
 			if (!Tools::getValue('mr_Pays_list'))
-				$this->_postErrors[] = $this->l('You must choose at least one delivery country');
+				$this->_postErrors[] = $this->l('You must choose at least one delivery country.');
 		}
 		elseif (Tools::isSubmit('submit_order_state'))
 		{
@@ -218,7 +218,7 @@ class MondialRelay extends Module
 			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', Tools::getValue('id_order_state'));
 			Configuration::updateValue('MR_GOOGLE_MAP', Tools::getValue('mr_google_key'));
 			if (!Tools::isSubmit('updatesuccess'))
-				$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated successfully').'</div>';
+				$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated').'</div>';
 		}
 	}
 	
@@ -435,7 +435,7 @@ class MondialRelay extends Module
 		$error = null;
 		
 		if (isset($_GET['updatesuccess']))
-			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated successfully').'</div>';
+			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated').'</div>';
 		if (!empty($_POST))
 		{
 			$this->_postValidation();
@@ -568,7 +568,7 @@ class MondialRelay extends Module
 		else 
 			return false;
 
-		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated successfully').'<img src="http://www.prestashop.com/modules/mondialrelay.png?enseigne='.urlencode(Tools::getValue('mr_Enseigne_WebService')).'" style="float:right" /></div>';
+		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated').'<img src="http://www.prestashop.com/modules/mondialrelay.png?enseigne='.urlencode(Tools::getValue('mr_Enseigne_WebService')).'" style="float:right" /></div>';
 		return true;
 	}
 	
@@ -695,13 +695,13 @@ class MondialRelay extends Module
 		$this->l('the Mondial Relay administration page').'</a></p>';
 		$output .= '</div>
 		<div class="clear"></div>
-		<label>'.$this->l('Google map').' </label>
+		<label>'.$this->l('Google Map').' </label>
 		<div class="margin-form">
 			<input type="radio" name="mr_google_key" id="mr_google_key_on" value="1" '.(Configuration::get('MR_GOOGLE_MAP') ? 'checked="checked" ' : '').'/>
 			<label class="t" for="mr_google_key_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Yes').'" /></label>
 			<input type="radio" name="mr_google_key" id="mr_google_key_off" value="0" '.(!Configuration::get('MR_GOOGLE_MAP') ? 'checked="checked" ' : '').'/>
 			<label class="t" for="mr_google_key_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('No').'" /></label>
-			<p>'.$this->l('Display a google map on your Mondial Relay carrier, it may make carrier page loading slower').'</p>
+			<p>'.$this->l('Displaying a google map on your Mondial Relay carrier may make carrier page loading slower.').'</p>
 		</div>';
 		$output .= '<div class="margin-form"><input type="submit" name="submit_order_state"  value="' . $this->l('Save') . '" class="button" /></div>';
 		$output .= '</fieldset></form><br>';
@@ -720,22 +720,22 @@ class MondialRelay extends Module
 					<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Mondial Relay Account Settings').'</legend>
 					<ol>
 						<li>
-							<label style="float:none;" for="mr_Enseigne_WebService" class="mrLabel">' . $this->l('mr_Enseigne_WebService:') . '<sup>*</sup></label>
+							<label style="float:none;" for="mr_Enseigne_WebService" class="mrLabel">' . $this->l('Webservice Enseigne:') . '<sup>*</sup></label>
 							<input style="float:right;" id="mr_Enseigne_WebService" class="mrInput" type="text" name="mr_Enseigne_WebService" value="' .
 							(Tools::getValue('mr_Enseigne_WebService') ? Tools::getValue('mr_Enseigne_WebService') : Configuration::get('MR_ENSEIGNE_WEBSERVICE')) . '"/>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_code_marque" class="mrLabel">' . $this->l('mr_code_marque:') . '<sup>*</sup></label>
+							<label style="float:none;" for="mr_code_marque" class="mrLabel">' . $this->l('Code marque:') . '<sup>*</sup></label>
 							<input style="float:right;" id="mr_code_marque" class="mrInput" type="text" name="mr_code_marque" value="' .
 							(Tools::getValue('mr_code_marque') ? Tools::getValue('mr_code_marque') : Configuration::get('MR_CODE_MARQUE')) . '"/>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_Key_WebService" class="mrLabel">' . $this->l('mr_Key_WebService:') . '<sup>*</sup></label>
+							<label style="float:none;" for="mr_Key_WebService" class="mrLabel">' . $this->l('Webservice Key:') . '<sup>*</sup></label>
 							<input style="float:right;" id="mr_Key_WebService" class="mrInput" type="text" name="mr_Key_WebService" value="' .
 							(Tools::getValue('mr_Key_WebService') ? Tools::getValue('mr_Key_WebService') : Configuration::get('MR_KEY_WEBSERVICE')) . '"/>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_Langage" class="mrLabel">' . $this->l('mr_Langage:') . '<sup>*</sup></label>
+							<label style="float:none;" for="mr_Langage" class="mrLabel">' . $this->l('Etiquette\'s Language:') . '<sup>*</sup></label>
 							<select style="float:right;" id="mr_Langage" name="mr_Langage" value="'.
 							(Tools::getValue('mr_Langage') ? Tools::getValue('mr_Langage') : Configuration::get('MR_LANGUAGE')).'" >';
 		$languages = Language::getLanguages();
@@ -745,7 +745,7 @@ class MondialRelay extends Module
 				$output .= '</select>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_weight_coef" class="mrLabel">' . $this->l('mr_weight_coef:') . '<sup>*</sup></label>
+							<label style="float:none;" for="mr_weight_coef" class="mrLabel">' . $this->l('Weight Coefficient:') . '<sup>*</sup></label>
 							<input id="mr_weight_coef" class="mrInput" type="text" name="mr_weight_coef" value="' . 
 							(Tools::getValue('mr_weight_coef') ? Tools::getValue('mr_weight_coef') : Configuration::get('MR_WEIGHT_COEF')) . '"  style="width:45px;"/> ' . 
 							$this->l('grammes = 1 ') . Configuration::get('PS_WEIGHT_UNIT').'
@@ -810,9 +810,9 @@ class MondialRelay extends Module
 	public function getL($key)
 	{
 		$trad = array(
-			'List of orders recognized' => $this->l('List of orders recognized'),
+			'List of recognized orders' => $this->l('List of recognized orders'),
 			'Order number' => $this->l('Order number'),
-			'Email send to' => $this->l('Email send to'),
+			'Send e-mail to' => $this->l('Send e-mail to'),
 			'Print A4 Label' => $this->l('Print A4 Label'),
 			'Print A5 Label' => $this->l('Print A5 Label'),
 			'return' => $this->l('return'),
@@ -824,7 +824,7 @@ class MondialRelay extends Module
 			'Total price' => $this->l('Total price'),
 			'Total shipping' => $this->l('Total shipping'),
 			'Date' => $this->l('Date'),
-			'Put a Weight (grams)' => $this->l('Put a Weight (grams)'),
+			'Weight (in grams)' => $this->l('Weight (in grams)'),
 			'Selected' => $this->l('Selected'),
 			'All' => $this->l('All'),
 			'None' => $this->l('None'),
@@ -850,9 +850,9 @@ class MondialRelay extends Module
 			'To generate sticks, you must have register a correct address of your store on' => $this->l('To generate labels, you must have registered a correct address of your store on'),
 			'To generate labels, you must have registered a correct address of your store on' => $this->l('To generate labels, you must have registered a correct address of your store on'),
 			'The contact page' => $this->l('The contact page'),
-			'Settings updated succesfull' => $this->l('Settings updated successfully'),
-			'Settings updated successfully' => $this->l('Settings updated successfully'),
-			'Empty address : Are you sure you\'ve set a valid address on the contact page?' => $this->l('Empty address : Are you sure you\'ve set a valid address on the contact page?')
+			'Settings updated succesfull' => $this->l('Settings updated'),
+			'Settings updated' => $this->l('Settings updated'),
+			'Empty address : Are you sure you have set a valid address on the contact page?' => $this->l('Empty address : Are you sure you have set a valid address on the contact page?')
 		);
 		return $trad[$key];
 	}

@@ -3,8 +3,8 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_fff01a1de50e0559f82501a927654d1b'] = 'Import / Export eines Themas';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_bfcde10ae67f2cc02c256b069f8dae16'] = 'Exportieren oder installieren Sie ein Thema und seine Module auf Ihren Shop';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_cf734ccbed4888a2a0c3847dad46a2d7'] = 'zip ist nicht auf Ihrem Server installiert. Erkundigen Sie sich bei Ihrem Provider.';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_83ebbd7865677d356ffde5ad7e12784f'] = 'Exportieren oder installieren Sie ein Thema und seine Module auf Ihren Shop';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_e10ed1f81b51bd4c7f86eeb84bcd1359'] = 'zip ist nicht auf Ihrem Server installiert. Erkundigen Sie sich bei Ihrem Provider.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_25b9e1d82d8200d70be2b22a1a283957'] = 'Ein Fehler ist beim Hochladen der Datei aufgetreten.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_050991b5b76aad0be75563b7cb93a33e'] = 'Nur zip-Dateien sind erlaubt';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_57c1ed81b02e5d3361323c7930897295'] = 'Ein Fehler ist beim Kopieren der Datei aufgetreten.';
@@ -40,7 +40,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_8f3ea15c5b87db00561ccde
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_caeedb303068f9915e8e5ce091c9c02f'] = '(Achtung: Ein Ordner mit dem gleichen Namen ist bereits vorhanden)';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_2dd99d7426b4fe6dd04d7a98f5e32a62'] = 'Wählen Sie die Varianten, die Sie importieren möchten';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_f956917da1716add289f33a8869b85d4'] = 'Hauptthema';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_8dc46c3ac999c5e88272294b52f24478'] = 'Deaktivieren Sie dieses Feld, wenn Sie das Hauptthema nicht installieren möchten';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_1e3de51d693cd0c7e903bcf3769a0cdb'] = 'Deaktivieren Sie dieses Feld, wenn Sie das Hauptthema nicht installieren möchten';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c49fbf2b822fd14929fd1fd76cdb0c96'] = 'Wählen Sie die Variationen, die Sie importieren möchten';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_d1baba351b02042982a133c4df5d4924'] = 'Exportieren Sie ein Thema';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5092965125a28a17f49ee460fbc1f62c'] = 'Wählen Sie ein Thema';
@@ -80,7 +80,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_e12167aa0a7698e6ebc92b4
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a82cac3db0465cfc701f3765fd880019'] = 'Dokumentation hinzufügen';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_08e27f4e5511f4f6aa73557e6ad6df48'] = 'Geben Sie dem Benutzer eine Hilfe. Fügen Sie ein Feld hinzu, indem Sie hier klicken';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a508df4b049c5b044cb4568b76b6c7e6'] = 'Variation hinzufügen';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_6a7b29a06022b8e648ba29c3cff429d5'] = 'Anderes Thema und Kompatibilität zum Hinzufügen wählen';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_626bd6acdcd835a5d064ef6358124b6c'] = 'Anderes Thema und Kompatibilität zum Hinzufügen wählen';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ac70412e939d72a9234cdebb1af5867b'] = 'Pfad';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5da618e8e4b89c66fe86e32cdafde142'] = 'Von';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_3271e801d0a5db9dc2963a19ed9695d6'] = 'Wählen Sie ein Thema';

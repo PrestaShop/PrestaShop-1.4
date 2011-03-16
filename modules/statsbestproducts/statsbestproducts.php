@@ -67,7 +67,7 @@ class StatsBestProducts extends ModuleGrid
 			),
 			array(
 				'id' => 'totalQuantitySold',
-				'header' => $this->l('Qty sold'),
+				'header' => $this->l('Quantity sold'),
 				'dataIndex' => 'totalQuantitySold',
 				'width' => 50,
 				'align' => 'right'
@@ -88,7 +88,7 @@ class StatsBestProducts extends ModuleGrid
 			),
 			array(
 				'id' => 'averageQuantitySold',
-				'header' => $this->l('Qty sold / day'),
+				'header' => $this->l('Quantity sold/ day'),
 				'dataIndex' => 'averageQuantitySold',
 				'width' => 60,
 				'align' => 'right'

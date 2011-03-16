@@ -9,7 +9,7 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist-ajax_d037160cfb1fa5520563302d
 $_MODULE['<{blockwishlist}prestashop>blockwishlist-ajax_09dc02ecbb078868a3a86dded030076d'] = 'Keine Produkte';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist-extra_15b94c64c4d5a4f7172e5347a36b94fd'] = 'Zu meiner Wunschliste hinzufügen';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_2715a65604e1af3d6933b61704865daf'] = 'Wunschlistenblock';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_567f9c44ac5cb5d3cd85d4b4ac61090a'] = 'Fügt einen Block hinzu mit der Kundenwunschliste';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_7244141a5de030c4c882556f4fd70a8b'] = 'Fügt einen Block hinzu mit der Kundenwunschliste';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_5ef2d617096ae7b47a83f3d4de9c84bd'] = 'Modul Aktivieren: Ungültige Auswahl.';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Bestätigung';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
@@ -22,9 +22,9 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist_502996d9790340c5fd7b86a5b93b1
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_655d20c1ca69519ca647684edbb2db35'] = 'Hoch';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_87f8a6ab85c9ced3702b4ea641ad4bb5'] = 'Mittel';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_28d0edd045e05cf5af64e35ae0c4c6ef'] = 'Niedrig';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_81409371045072999a0a11bfb62b4578'] = 'hatte keine Wunschliste';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_862af8838fba380d3b30e63546a394e5'] = 'hatte keine Wunschliste';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_641254d77e7a473aa5910574f3f9453c'] = 'Wunschliste';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_4798abb3b616ca42337913ba52cb450b'] = 'Sie müssen eingeloggt sein, um Ihre Wunschlisten zu verwalten';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_88b589bbf6282a2e02f50ebe90aae6f1'] = 'Sie müssen eingeloggt sein, um Ihre Wunschlisten zu verwalten';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_4a84e5921e203aede886d04fc41a414b'] = 'Dieses Produkt von meiner Wunschliste nehmen';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_f2a6c498fb90ee345d997f888fce3b18'] = 'Löschen';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Produkt-Detail';

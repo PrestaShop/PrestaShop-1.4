@@ -40,7 +40,7 @@ class BlockSpecials extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Specials block');
-		$this->description = $this->l('Adds a block with current product Specials');
+		$this->description = $this->l('Adds a block with current product specials.');
 	}
 
 	public function install()

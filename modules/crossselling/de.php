@@ -2,8 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{crossselling}prestashop>crossselling_87017c9259838bb0918a2ab4f96016c0'] = 'Cross-Selling';
-$_MODULE['<{crossselling}prestashop>crossselling_7112af09e8e3594c4c71d241fe272ba9'] = 'Kunden, die dieses Produkt gekauft haben, kauften auch ...';
+$_MODULE['<{crossselling}prestashop>crossselling_a1892c39b2598b4f30f9cc92c59f1aa5'] = 'Cross-Selling';
+$_MODULE['<{crossselling}prestashop>crossselling_ef2b66b0b65479e08ff0cce29e19d006'] = 'Kunden, die dieses Produkt gekauft haben, kauften auch ...';
 $_MODULE['<{crossselling}prestashop>crossselling_e316b4398212d473f7f53c7728fe1c37'] = 'Einstellungen erfolgreich aktualisiert';
 $_MODULE['<{crossselling}prestashop>crossselling_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';
 $_MODULE['<{crossselling}prestashop>crossselling_b6bf131edd323320bac67303a3f4de8a'] = 'Preis auf Produkten anzeigen ';

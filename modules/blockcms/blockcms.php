@@ -39,7 +39,7 @@ class BlockCms extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('CMS Block');
-		$this->description = $this->l('Adds a block with several CMS links');
+		$this->description = $this->l('Adds a block with several CMS links.');
 		$this->secure_key = Tools::encrypt($this->name);
 	}
 
@@ -307,9 +307,9 @@ class BlockCms extends Module
 		<script type="text/javascript" src="../modules/blockcms/blockcms.js"></script>
 		<script type="text/javascript">CMSBlocksDnD(\''.$this->secure_key.'\');</script>
 		<fieldset>
-			<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('CMS blocks configuration').'</legend>
+			<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('CMS block configuration').'</legend>
 
-			<p><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&addBlockCMS"><img src="'._PS_ADMIN_IMG_.'add.gif" alt="" /> '.$this->l('Add a new block cms').'</a></p>';
+			<p><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&addBlockCMS"><img src="'._PS_ADMIN_IMG_.'add.gif" alt="" /> '.$this->l('Add a new CMS block').'</a></p>';
 			
 		$this->_html .= '<div style="width:440px; float:left; margin-right:10px;" ><h3>'.$this->l('List of Left CMS blocks').'</h3>';
 		if (sizeof($cms_blocks_left))
@@ -318,7 +318,7 @@ class BlockCms extends Module
 			<thead>
 			<tr class="nodrag nodrop">
 				<th width="10%"><b>'.$this->l('ID').'</b></th>
-				<th width="30%" class="center"><b>'.$this->l('Block\'s Name').'</b></th>
+				<th width="30%" class="center"><b>'.$this->l('Name of block').'</b></th>
 				<th width="30%" class="center"><b>'.$this->l('Category Name').'</b></th>
 				<th width="10%" class="center"><b>'.$this->l('Position').'</b></th>
 				<th width="10%" class="center"><b>'.$this->l('Actions').'</b></th>
@@ -361,7 +361,7 @@ class BlockCms extends Module
 			<thead>
 			<tr class="nodrag nodrop">
 				<th width="10%"><b>'.$this->l('ID').'</b></th>
-				<th width="30%" class="center"><b>'.$this->l('Block\'s Name').'</b></th>
+				<th width="30%" class="center"><b>'.$this->l('Name of block').'</b></th>
 				<th width="30%" class="center"><b>'.$this->l('Category Name').'</b></th>
 				<th width="10%" class="center"><b>'.$this->l('Position').'</b></th>
 				<th width="10%" class="center"><b>'.$this->l('Actions').'</b></th>
@@ -444,7 +444,7 @@ class BlockCms extends Module
 			$this->_html .= '<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Edit CMS block').'</legend>';
 		
 		$this->_html .= '
-			<label>'.$this->l('Block\'s name:').'</label>
+			<label>'.$this->l('Name of block:').'</label>
 			<div class="margin-form">';
 				
 				foreach ($languages as $language)
@@ -502,11 +502,11 @@ class BlockCms extends Module
 			$languages = Language::getLanguages(false);
 			$cmsBoxes = Tools::getValue('cmsBox');
 			if (!Validate::isInt(Tools::getValue('PS_STORES_DISPLAY_CMS')) OR (Tools::getValue('PS_STORES_DISPLAY_CMS') != 0 AND Tools::getValue('PS_STORES_DISPLAY_CMS') != 1))
-			    $errors[] = $this->l('Invalid store displaying');
+			    $errors[] = $this->l('Invalid store display');
 			if (!Validate::isInt(Tools::getValue('block_location')) OR (Tools::getValue('block_location') != 0 AND Tools::getValue('block_location') != 1))
 				$errors[] = $this->l('Invalid block location');
 			if (!is_array($cmsBoxes))
-				$errors[] = $this->l('You must choose at least one page or subcategory to create a CMS block');
+				$errors[] = $this->l('You must choose at least one page or subcategory to create a CMS block.');
 			else
 				foreach ($cmsBoxes as $cmsBox)
 					if (!preg_match("#^[01]_[0-9]+$#", $cmsBox))
@@ -624,7 +624,7 @@ class BlockCms extends Module
 				Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&deleteBlockCMSConfirmation');
 			}
 			else
-				$this->_html .= $this->displayError($this->l('Trying to delete a non-existent block cms'));
+				$this->_html .= $this->displayError($this->l('Error: you are trying to delete a non-existent block cms'));
 		}
 		elseif (Tools::isSubmit('submitFooterCMS'))
 		{
@@ -634,14 +634,14 @@ class BlockCms extends Module
 					$footer .= $box.'|';
 			Configuration::updateValue('FOOTER_CMS', rtrim($footer, '|'));
 			Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', Tools::getValue('footer_active'));
-			$this->_html = $this->displayConfirmation($this->l('Footer\'s CMS succesfully updated'));
+			$this->_html = $this->displayConfirmation($this->l('Footer\'s CMS updated'));
 		}
 		elseif (Tools::isSubmit('addBlockCMSConfirmation'))
-			$this->_html = $this->displayConfirmation($this->l('Block CMS succesfully added'));
+			$this->_html = $this->displayConfirmation($this->l('Block CMS added'));
 		elseif (Tools::isSubmit('editBlockCMSConfirmation'))
-			$this->_html = $this->displayConfirmation($this->l('Block CMS succesfully edited'));
+			$this->_html = $this->displayConfirmation($this->l('Block CMS edited'));
 		elseif (Tools::isSubmit('deleteBlockCMSConfirmation'))
-			$this->_html .= $this->displayConfirmation($this->l('Deletion succesfully done'));
+			$this->_html .= $this->displayConfirmation($this->l('Deletion succesfull'));
 		elseif (Tools::isSubmit('id_block_cms') AND Tools::isSubmit('way') AND Tools::isSubmit('position') AND Tools::isSubmit('location'))
 			$this->changePosition();
 	}

@@ -110,9 +110,9 @@ class dibs extends PaymentModule
 		
 		if (!isset(self::$MORE_SETTINGS['k1'])
 			OR (isset(self::$MORE_SETTINGS['k1']) AND (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '') ))
-			$this->warning = $this->l('For security reason you have to set key #1 and key #2 used by MD5 control of DIBS API.');
+			$this->warning = $this->l('For security reasons, you must set key #1 and key #2 used by MD5 control of DIBS API.');
 		if (!self::$ID_MERCHANT OR self::$ID_MERCHANT === '')
-			$this->warning = $this->l('You have to set your ID merchant to use DIBS API.');
+			$this->warning = $this->l('You have to set your merchant ID to use DIBS API.');
 	}
 	
 	public function install()
@@ -188,10 +188,10 @@ class dibs extends PaymentModule
 			<legend><img src="../img/admin/contact.gif" />'.$this->l('Get a DIBS account').'</legend>
 			<p>
 				'.$this->l('Please click on the following link to access of DIBS formular subscription:')
-				.' <a href="'.$href.'" class="link" target="_blank" >&raquo; '.$this->l('the link').' &laquo;</a>
+				.' <a href="'.$href.'" class="link" target="_blank" >&raquo; '.$this->l('Link').' &laquo;</a>
 			</p>
 			<p>'
-				.$this->l('Depending on your language and countries rules, formular subscription could be different.').'<br />'
+				.$this->l('Depending on language and country rules, formular subscription may be different.').'<br />'
 				.$this->l('Please click on the appropriate flags:').'&nbsp;';
 		foreach (dibs::$dibs_subscription_link as $lang=>$url)
 		{
@@ -222,7 +222,7 @@ class dibs extends PaymentModule
 			$str .= '<input type="radio" name="logo_color" '.(self::$MORE_SETTINGS['logo_color'] === $logo_color ? 'checked ' : '').'value="'.$logo_color.'" /> '.$logo_color.'<br />';
 		$str .= '	<p>'.$this->l('The basic color of the logo which appears on the payment page.').'</p>
 				</div>
-				<label>'.$this->l('Id merchant').' <sup>*</sup></label>
+				<label>'.$this->l('Merchant ID').' <sup>*</sup></label>
 				<div class="margin-form">
 					<input type="text" size="20" name="idMerchant" value="'.self::$ID_MERCHANT.'" />
 					<p>'.$this->l('See the e-mail sent by DIBS.').'</p>
@@ -234,7 +234,7 @@ class dibs extends PaymentModule
 				<label>'.$this->l('Secure Key #2').' <sup>*</sup></label>
 				<div class="margin-form">
 					<input type="text" size="20" name="k2" value="'.self::$MORE_SETTINGS['k2'].'" />
-					<p>'.$this->l('These keys are used for security improvement.').'<br />'.$this->l('To get these keys go to the DIBS administration interface and into Integration > MD5 Keys menu. Please ensure the MD5 control is activated, otherwise the module will not work.').'</p>
+					<p>'.$this->l('These keys are used for security improvement.').'<br />'.$this->l('To obtain these keys, go to the DIBS administration interface and under \'Integration\', select the MD5 Keys menu. Please ensure the MD5 control is activated, otherwise the module will not work.').'</p>
 				</div>
 				<label>'.$this->l('Use DIBS test module').'</label>
 				<div class="margin-form">
@@ -242,7 +242,7 @@ class dibs extends PaymentModule
 					<p>'.$this->l('When this field is declared, the transaction is not dispatched to the card issuer, but is instead handled by the DIBS test module.')
 					.$this->l('See also Step 5 of the 10 Step Guide for more information.')
 					.' <a href="http://tech.dibs.dk/10_step_guide/your_own_test/" title="'.$this->l('See also Step 5 of the 10 Step Guide for more information.').'" target="_blank">> '.$this->l('Link').'</a><br />'
-					.$this->l('During your initial integration with DIBS, there is no need to insert this parameter, since all default transactions will hit the DIBS test system until DIBS has approved integration. Should the test system be used at a later date, this will be activated at DIBS (contact DIBS support for reactivating the test mode of your shop).').'</p>
+					.$this->l('During the initial integration with DIBS, there is no need to insert this parameter, since all default transactions will reach the DIBS test system until DIBS has approved integration. Should the test system be used at a later date, this will be activated at DIBS (contact DIBS support for reactivating the test mode of your shop).').'</p>
 				</div>
 				<label>'.$this->l('Flexwin color').'</label>
 				<div class="margin-form">';
@@ -253,12 +253,12 @@ class dibs extends PaymentModule
 				<label>'.$this->l('Accepted url').' <sup>*</sup></label>
 				<div class="margin-form">
 					<input type="text" size="20" name="acceptedUrl" value="'.self::$ACCEPTED_URL.'" />
-					<p>'.$this->l('The URL of the page to be displayed if the purchase is approved.').'</p>
+					<p>'.$this->l('URL of the page to be displayed if the purchase is approved.').'</p>
 				</div>
 				<label>'.$this->l('Cancelled url').' <sup>*</sup></label>
 				<div class="margin-form">
 					<input type="text" size="20" name="cancelledUrl" value="'.self::$CANCELLED_URL.'" />
-					<p>'.$this->l('The URL of the page to be displayed if the customer cancels the payment.').'</p>
+					<p>'.$this->l('URL of the page to be displayed if the customer cancels the payment.').'</p>
 				</div>
 				<br /><center><input type="submit" name="submitModule" value="'.$this->l('Update settings').'" class="button" /></center>
 			</fieldset>

@@ -40,7 +40,7 @@ class BlockPaymentLogo extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('Block payment logo');
-		$this->description = $this->l('Adds a block to display all payment logos');
+		$this->description = $this->l('Adds a block to display all payment logos.');
 	}
 
 	public function install()
@@ -88,7 +88,7 @@ class BlockPaymentLogo extends Module
 					<legend><img src="'.$this->_path.'/logo.gif" alt="" /> '.$this->l('Configure').'</legend>
 					<label>'.$this->l('Page CMS for link').':</label>
 					<div class="margin-form">
-						<select name="id_cms"><option value="0">('.$this->l('select a page').')</option>';
+						<select name="id_cms"><option value="0">('.$this->l('Select a page').')</option>';
 			foreach ($cmss as $cms)
 				$html .= '<option value="'.$cms['id_cms'].'"'.(Configuration::get('PS_PAYMENT_LOGO_CMS_ID') == $cms['id_cms'] ? ' selected="selected"' : '').'>'.$cms['meta_title'].'</option>';
 			$html .= '</select>

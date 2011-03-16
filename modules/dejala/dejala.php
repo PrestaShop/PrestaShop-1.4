@@ -242,10 +242,10 @@ class Dejala extends CarrierModule
 			}
 			else {
 				if ($response['status'] == 401) {
-					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.com. Your credentials were not recognized');
+					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.com. Your credentials were not recognized.');
 				}
 				else {
-					$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
+					$errors[] = $this->l('Unable to process the action.') . '(' . $response['status'] . ')';
 				}
 				$this->dejalaConfig->login = null;
 				$this->dejalaConfig->password = null;
@@ -272,10 +272,10 @@ class Dejala extends CarrierModule
 			}
 			elseif ($response['status'] == 403)
 			{
-				$errors[] = $this->l('Dejala Server unreachable by your Prestashop server. This is most certainly due to a limit set by your hosting provider. Please contact their technical support and ask if your server is authorized to initiate outbound HTTP connections');
+				$errors[] = $this->l('Dejala Server cannot be reached by your Prestashop server. This is most likely due to a limit set by your hosting provider. Please contact their technical support and ask if your server is authorized to initiate outbound HTTP connections.');
 			}
 			else {
-				$errors[] = $this->l('Impossible to process the action') . '(' . $response['status'] . ')';
+				$errors[] = $this->l('Unable to process the action.') . '(' . $response['status'] . ')';
 			}
 			$this->dejalaConfig->loadConfig();
 		}
@@ -359,7 +359,7 @@ class Dejala extends CarrierModule
 					$this->dejalaConfig->visible_users_list = "";
 					$this->dejalaConfig->saveConfig();
 
-					$errors[] = $this->l('You must provide at least one email address to restrict Dejala\'s visibility');
+					$errors[] = $this->l('You must provide at least one email address to restrict Dejala\'s visibility.');
 				}
 				else {
 					$this->dejalaConfig->visibility_status = $l_active;
@@ -369,7 +369,7 @@ class Dejala extends CarrierModule
 			}
 		}
 		else {
-			$errors[] = $this->l('Impossible to process the action');
+			$errors[] = $this->l('Unable to process the action.');
 		}
 		return ($errors);
 	}
@@ -413,7 +413,7 @@ class Dejala extends CarrierModule
 		if ($this->dejalaConfig->mode == 'PROD')
 			$smarty->assign("disabled", 'disabled="disabled"');
 		if (true !== extension_loaded('curl')) {
-			$errors[] = $this->l('this module requires php extension cURL to function properly. Please install the php extension "cURL" first');
+			$errors[] = $this->l('This module requires php extension cURL to function properly. Please install the php extension "cURL" first.');
 			$smarty->assign("disabled", 'disabled="disabled"');
 		}
 
@@ -426,9 +426,9 @@ class Dejala extends CarrierModule
 			$responsePing = $djlUtil->ping($this->dejalaConfig, $this->dejalaConfig->mode);
 			if (200 != $responsePing['status']) {
 				if (401 == $responsePing['status'])
-					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.com. Your credentials were not recognized');
+					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.com. Your credentials were not recognized.');
 				else
-					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.com. This can be due to a temporary network or platform problem. Please try again later or contact Dejala.com');
+					$errors[] = $this->l('An error occurred while authenticating your account on Dejala.com. This may be due to a temporary network or platform problem. Please try again later or contact Dejala.com');
 				unset($_GET['cat']);
 				$registered= FALSE;
 			}
@@ -907,7 +907,7 @@ class Dejala extends CarrierModule
 		}
 		else
 		{
-			$smarty->assign('nostock_info', $this->l('I\'ll select my shipping date when my product is available'));
+			$smarty->assign('nostock_info', $this->l('I will select my shipping date when my product is available.'));
 			$buffer = $this->display(__FILE__, 'dejala_carrier_nostock.tpl');
 		}
 		return $buffer;

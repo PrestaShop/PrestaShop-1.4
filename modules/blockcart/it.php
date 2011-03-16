@@ -3,13 +3,13 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockcart}prestashop>blockcart_c2e1362a9710a3dd86f937c2ea1f336d'] = 'Blocco carrello';
-$_MODULE['<{blockcart}prestashop>blockcart_b3c2bf363aa5f1a47c4b1c718ec15a13'] = 'Aggiunge un blocco contenente il carrello del cliente';
+$_MODULE['<{blockcart}prestashop>blockcart_e03093a5753b436ee1de63b6e3e1bd02'] = 'Aggiunge un blocco contenente il carrello del cliente';
 $_MODULE['<{blockcart}prestashop>blockcart_eb4ae207521bbe6403f7fe9564d38cda'] = 'Ajax: scelta non valida.';
 $_MODULE['<{blockcart}prestashop>blockcart_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Conferma';
 $_MODULE['<{blockcart}prestashop>blockcart_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
 $_MODULE['<{blockcart}prestashop>blockcart_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';
 $_MODULE['<{blockcart}prestashop>blockcart_614a8820aa4ac08ce2ee398a41b10778'] = 'Carrello Ajax ';
-$_MODULE['<{blockcart}prestashop>blockcart_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Attivato';
+$_MODULE['<{blockcart}prestashop>blockcart_c4ca4238a0b923820dcc509a6f75849b'] = 'Attivato';
 $_MODULE['<{blockcart}prestashop>blockcart_b9f5c797ebbf55adccdd8539a65a0241'] = 'Disattivato';
 $_MODULE['<{blockcart}prestashop>blockcart_dba281afb9a38e654ea9dab4cd6cb0ca'] = 'Attivare la modalità di AJAX per il carrello (compatibile con il tema di default)';
 $_MODULE['<{blockcart}prestashop>blockcart_c9cc8cce247e49bae79f15173ce97354'] = 'Salva';

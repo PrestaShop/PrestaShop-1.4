@@ -73,7 +73,7 @@ class TrustedShops extends Module
 			$this->warning = implode(',<br />', $this->warnings).'.';
 			
 		$this->displayName = $this->l('Trusted Shops Customer Rating');
-		$this->description = $this->l('Boost consumer confidence and turn more shoppers into buyers');
+		$this->description = $this->l('Boost consumer confidence and turn more shoppers into buyers.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your settings?');
 	}
 	public function install()

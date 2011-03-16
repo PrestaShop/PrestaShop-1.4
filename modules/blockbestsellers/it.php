@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_6232eaff79c9ccb6c1a66e5a75a212d5'] = 'Blocco migliori vendite';
-$_MODULE['<{blockbestsellers}prestashop>blockbestsellers_56710978dfca4fcdf98977fcaa4a553f'] = 'Aggiungi un blocco che mostra le migliori vendite del negozio';
+$_MODULE['<{blockbestsellers}prestashop>blockbestsellers_95d17a0a1b5ea2de13a3565ed400ebbb'] = 'Aggiungi un blocco che mostra le migliori vendite del negozio';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Conferma';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';

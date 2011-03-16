@@ -2,20 +2,20 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{cheque}prestashop>cheque_3e0deb2f1df28a6a13c9c18cc0e1c755'] = 'Cheque';
-$_MODULE['<{cheque}prestashop>cheque_67061e9d57dec37dea3067df34829119'] = 'Módulo para aceptar pagos con cheques';
+$_MODULE['<{cheque}prestashop>cheque_060bf2d587991d8f090a1309b285291c'] = 'Cheque';
+$_MODULE['<{cheque}prestashop>cheque_44cd16893a0a7731735c02999cc81adc'] = 'Módulo para aceptar pagos con cheques';
 $_MODULE['<{cheque}prestashop>cheque_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de querer eliminar todos sus datos?';
-$_MODULE['<{cheque}prestashop>cheque_1c71e66a3588a1771042953e982a712c'] = '\'A nombre de\' y \'dirección\', deben configurarse en el pedido para usar el módulo correctamente';
+$_MODULE['<{cheque}prestashop>cheque_1fddeba3cee2a70b37a20889e124948a'] = '\'A nombre de\' y \'dirección\', deben configurarse en el pedido para usar el módulo correctamente';
 $_MODULE['<{cheque}prestashop>cheque_4402acab1c8f90dcf4a31dc96833bd86'] = 'No hay moneda establcida para este módulo';
 $_MODULE['<{cheque}prestashop>cheque_a0048063a9be52816b7fa7f17aa3a2b7'] = 'El campo \'a nombre de\' es obligatorio.rnrn';
 $_MODULE['<{cheque}prestashop>cheque_4b5e20a521d31cc44b9690bd35eaacfc'] = 'La dirección es obligatoria.';
 $_MODULE['<{cheque}prestashop>cheque_e0aa021e21dddbd6d8cecec71e9cf564'] = 'OK';
 $_MODULE['<{cheque}prestashop>cheque_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
-$_MODULE['<{cheque}prestashop>cheque_b33f9a50fd9a7bab5b0bfbd39b3b7183'] = 'Este módulo permite aceptar pagos con cheques.';
-$_MODULE['<{cheque}prestashop>cheque_b6af2d31afe71aedcceca73cc27fec29'] = 'Si el cliente selecciona este modo de pago, el pedido cambiará al estado de \'en espera de pago\'.';
-$_MODULE['<{cheque}prestashop>cheque_3a711c4011f44eaaae908743c5b0c24c'] = 'Por lo tanto, necesitarás confirmarlo manualmente cuando recibas el cheque.';
+$_MODULE['<{cheque}prestashop>cheque_14e41f4cfd99b10766cc15676d8cda66'] = 'Este módulo permite aceptar pagos con cheques.';
+$_MODULE['<{cheque}prestashop>cheque_3b39b241f115e5823eeca07df2949a35'] = 'Si el cliente selecciona este modo de pago, el pedido cambiará al estado de \'en espera de pago\'.';
+$_MODULE['<{cheque}prestashop>cheque_4d96735a584217fd2d8a4edec43935d6'] = 'Por lo tanto, necesitarás confirmarlo manualmente cuando recibas el cheque.';
 $_MODULE['<{cheque}prestashop>cheque_5dd532f0a63d89c5af0243b74732f63c'] = 'Detalles del contacto';
-$_MODULE['<{cheque}prestashop>cheque_66f3e2ce6fe03d9a2864edd5a8b91596'] = 'Por favor, especifique el nombre y la dirección a la que los clientes deben enviar el cheque';
+$_MODULE['<{cheque}prestashop>cheque_d75e7b0f61c58d5d1cef7b56322c8b21'] = 'Por favor, especifique el nombre y la dirección a la que los clientes deben enviar el cheque';
 $_MODULE['<{cheque}prestashop>cheque_75475839e69bef6ed57a8200a5a71d37'] = 'A nombre de ';
 $_MODULE['<{cheque}prestashop>cheque_dd7bf230fde8d4836917806aff6a6b27'] = 'Dirección';
 $_MODULE['<{cheque}prestashop>cheque_b17f3f4dcf653a5776792498a9b44d6a'] = 'Configuración actualizada';

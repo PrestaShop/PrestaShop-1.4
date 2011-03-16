@@ -43,7 +43,7 @@ class BlockLink extends Module
 	 	parent::__construct();
 
         $this->displayName = $this->l('Link block');
-        $this->description = $this->l('Adds a block with additional links');
+        $this->description = $this->l('Adds a block with additional links.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your links ?');
 	}
 	
@@ -200,9 +200,9 @@ class BlockLink extends Module
      	 			$this->_html .= $this->displayError($this->l('Bad URL'));
 	     	else
 	     	  	if ($this->addLink())
-	     	  		$this->_html .= $this->displayConfirmation($this->l('The link has been added successfully'));
+	     	  		$this->_html .= $this->displayConfirmation($this->l('The link has been added.'));
 	     	  	else
-	     	 		$this->_html .= $this->displayError($this->l('An error occurred during link creation'));
+	     	 		$this->_html .= $this->displayError($this->l('An error occurred during link creation.'));
      	}
      	/* Update a link */
      	elseif (isset($_POST['submitLinkUpdate']))
@@ -213,38 +213,38 @@ class BlockLink extends Module
      	 		$this->_html .= $this->displayError($this->l('Bad URL'));
 	     	else
 	     	 	if (empty($_POST['id']) OR !is_numeric($_POST['id']) OR !$this->updateLink())
-	     	 		$this->_html .= $this->displayError($this->l('An error occurred during link updating'));
+	     	 		$this->_html .= $this->displayError($this->l('An error occurred during link updating.'));
 	     	 	else
-	     	 		$this->_html .= $this->displayConfirmation($this->l('The link has been updated successfully'));
+	     	 		$this->_html .= $this->displayConfirmation($this->l('The link has been updated.'));
      	}
      	/* Update the block title */
      	elseif (isset($_POST['submitTitle']))
      	{
      	 	if (empty($_POST['title_'.Configuration::get('PS_LANG_DEFAULT')]))
-     	 		$this->_html .= $this->displayError($this->l('The field "title" can\'t be empty'));
+     	 		$this->_html .= $this->displayError($this->l('"title" field cannot be empty.'));
      	 	elseif (!empty($_POST['title_url']) AND !Validate::isUrl(str_replace('http://', '', $_POST['title_url'])))
-     	 		$this->_html .= $this->displayError($this->l('The field "title_url" is invalid'));
+     	 		$this->_html .= $this->displayError($this->l('The \'title\' field is invalid'));
      	 	elseif (!Validate::isGenericName($_POST['title_'.Configuration::get('PS_LANG_DEFAULT')]))
      	 		$this->_html .= $this->displayError($this->l('The \'title\' field is invalid'));
      	 	elseif (!$this->updateTitle())
-     	 		$this->_html .= $this->displayError($this->l('An error occurred during title updating'));
+     	 		$this->_html .= $this->displayError($this->l('An error occurred during title updating.'));
      	 	else
-     	 		$this->_html .= $this->displayConfirmation($this->l('The block title has been successfully updated'));
+     	 		$this->_html .= $this->displayConfirmation($this->l('The block title has been updated.'));
      	}
      	/* Delete a link*/
      	elseif (isset($_GET['id']))
      	{
      	 	if (!is_numeric($_GET['id']) OR !$this->deleteLink())
-     	 	 	$this->_html .= $this->displayError($this->l('An error occurred during link deletion'));
+     	 	 	$this->_html .= $this->displayError($this->l('An error occurred during link deletion.'));
      	 	else
-     	 	 	$this->_html .= $this->displayConfirmation($this->l('The link has been deleted successfully'));
+     	 	 	$this->_html .= $this->displayConfirmation($this->l('The link has been deleted.'));
      	}
 		elseif (isset($_POST['submitOrderWay']))
 		{
 			if (Configuration::updateValue('PS_BLOCKLINK_ORDERWAY', (int)($_POST['orderWay'])))
-				$this->_html .= $this->displayConfirmation($this->l('Sort order successfully updated'));
+				$this->_html .= $this->displayConfirmation($this->l('Sort order updated'));
 			else
-				$this->_html .= $this->displayError($this->l('An error occurred during sort order set-up'));
+				$this->_html .= $this->displayError($this->l('An error occurred during sort order set-up.'));
 		}
 
      	$this->_displayForm();
@@ -364,7 +364,7 @@ class BlockLink extends Module
 		if (!$links)
 			$this->_html .= '
 			<tr>
-				<td colspan="3">'.$this->l('There are no links yet').'</td>
+				<td colspan="3">'.$this->l('There are no links.').'</td>
 			</tr>';
 		else
 			foreach ($links AS $link)

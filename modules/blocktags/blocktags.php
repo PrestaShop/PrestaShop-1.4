@@ -42,7 +42,7 @@ class BlockTags extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('Tags block');
-		$this->description = $this->l('Adds a block containing a tag cloud');
+		$this->description = $this->l('Adds a block containing a tag cloud.');
 	}
 
 	function install()
@@ -61,7 +61,7 @@ class BlockTags extends Module
 		if (Tools::isSubmit('submitBlockTags'))
 		{
 			if (!$tagsNbr = Tools::getValue('tagsNbr') OR empty($tagsNbr))
-				$output .= '<div class="alert error">'.$this->l('You should fill the "tags displayed" field').'</div>';
+				$output .= '<div class="alert error">'.$this->l('Please fill in the "tags displayed" field.').'</div>';
 			elseif ((int)($tagsNbr) == 0)
 				$output .= '<div class="alert error">'.$this->l('Invalid number.').'</div>';
 			else

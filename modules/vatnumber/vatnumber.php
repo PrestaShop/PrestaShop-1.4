@@ -37,7 +37,7 @@ class VatNumber extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('European VAT number');
-		$this->description = $this->l('Enable the management of VAT number');
+		$this->description = $this->l('Enable the management of VAT number.');
 	}
    
 	public function	install()

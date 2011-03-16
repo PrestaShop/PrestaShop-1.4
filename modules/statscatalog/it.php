@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{statscatalog}prestashop>statscatalog_cf3aa21c6a2147ddbd86f34091daeccd'] = 'Catalogo statistiche';
-$_MODULE['<{statscatalog}prestashop>statscatalog_627672b26180c7f5a23e1086e3466039'] = 'Statistiche generali sul tuo catalogo';
+$_MODULE['<{statscatalog}prestashop>statscatalog_226ed1224c5b2db3d3e0716bb4f74da5'] = 'Statistiche generali sul tuo catalogo';
 $_MODULE['<{statscatalog}prestashop>statscatalog_85dbdb21fe502c4d7a1e81bca0aa396d'] = 'acquisto';
 $_MODULE['<{statscatalog}prestashop>statscatalog_233d48e63da77b092da350559d2f8382'] = 'visite';
 $_MODULE['<{statscatalog}prestashop>statscatalog_0173374ac20f5843d58b553d5b226ef6'] = 'Scegli una categoria';
@@ -17,10 +17,10 @@ $_MODULE['<{statscatalog}prestashop>statscatalog_05ff4bfc3baf0acd31a72f1ac754de0
 $_MODULE['<{statscatalog}prestashop>statscatalog_c09d09e371989d89847049c9574b6b8e'] = 'Immagini disponibili:';
 $_MODULE['<{statscatalog}prestashop>statscatalog_65275d1b04037d8c8e42425002110363'] = 'Numero medio di immagini:';
 $_MODULE['<{statscatalog}prestashop>statscatalog_51b8891d531ad91128ba58c8928322ab'] = 'I prodotti mai visti:';
-$_MODULE['<{statscatalog}prestashop>statscatalog_73f05e6b6588b79f32720dcffec54d6b'] = 'Prodotti mai comprati:';
+$_MODULE['<{statscatalog}prestashop>statscatalog_8725647ef741e5d48c1e6f652ce80b50'] = 'Prodotti mai comprati:';
 $_MODULE['<{statscatalog}prestashop>statscatalog_b86770bc713186bcf43dbb1164c5fd28'] = 'Tasso di conversione *:';
 $_MODULE['<{statscatalog}prestashop>statscatalog_64de80ec5f50aefd6ab2b9260a1f4055'] = 'Tasso medio di conversione per la pagina del prodotto. E\' possibile acquistare un prodotto senza visualizzare la pagina del prodotto, quindi questo tasso può essere maggiore di 1.';
-$_MODULE['<{statscatalog}prestashop>statscatalog_1e7541c7ad7abda4288ff8f0016ef27e'] = 'Prodotti mai comprati';
+$_MODULE['<{statscatalog}prestashop>statscatalog_58a714d3e9bb2902a5b688c99bd4d8e6'] = 'Prodotti mai comprati';
 $_MODULE['<{statscatalog}prestashop>statscatalog_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{statscatalog}prestashop>statscatalog_49ee3087348e8d44e1feda1917443987'] = 'Nome';
 $_MODULE['<{statscatalog}prestashop>statscatalog_8e7c9a35104a5a68199678bd6bc5d187'] = 'Modifica / Visualizza';

@@ -43,7 +43,7 @@ class StatsRegistrations extends ModuleGraph
 		parent::__construct();
 		
         $this->displayName = $this->l('Customer accounts');
-        $this->description = $this->l('Display the progress of customer registration');
+        $this->description = $this->l('Display the progress of customer registration.');
     }
 	
 	public function install()
@@ -98,7 +98,7 @@ class StatsRegistrations extends ModuleGraph
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<p>
 				'.$this->l('Visitors who have stopped at the registering step:').' '.(int)($totalBlocked).($totalRegistrations ? ' ('.number_format(100*$totalBlocked/($totalRegistrations+$totalBlocked), 2).'%)' : '').'<br />
-				'.$this->l('Visitors who have placed an order directly after the registration:').' '.(int)($totalBuyers).($totalRegistrations ? ' ('.number_format(100*$totalBuyers/($totalRegistrations), 2).'%)' : '').'
+				'.$this->l('Visitors who have placed an order directly after registration:').' '.(int)($totalBuyers).($totalRegistrations ? ' ('.number_format(100*$totalBuyers/($totalRegistrations), 2).'%)' : '').'
 			</p>
 			<p>'.$this->l('Total customer accounts:').' '.$totalRegistrations.'</p>
 			<center>'.ModuleGraph::engine(array('type' => 'line')).'</center>
@@ -106,16 +106,16 @@ class StatsRegistrations extends ModuleGraph
 		</fieldset><br />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('Number of customer accounts created').'</h2>
-			<p>'.$this->l('The total number of accounts created is not in itself important information. However, it is interesting to analyze the number created over time. This will indicate whether or not things are on the right track.').'</p>
+			<p>'.$this->l('The total number of accounts created is not in itself important information. However, it is beneficial to analyze the number created over time. This will indicate whether or not things are on the right track.').'</p>
 			<br /><h3>'.$this->l('How to act on the registrations\' evolution?').'</h3>
 			<p>
-				'.$this->l('If you let your shop run without changing anything, the number of customer registrations should stay stable or slightly decline.').'
-				'.$this->l('A significant increase or decrease shows that there has probably been a change to your shop; therefore, you have to identify it in order to backtrack if this change makes the number of registrations decrease, or continue with it if it is advantageous.').'<br />
-				'.$this->l('Here\'s a summary of what can affect the creation of customer accounts:').'
+				'.$this->l('If you let your shop run without changing anything, the number of customer registrations should stay stable or may slightly decline.').'
+				'.$this->l('A significant increase or decrease shows that there has probably been a change to your shop.Therefore, you have to identify it in order to backtrack if this change makes the number of registrations decrease, or continue with it if it increases registration.').'<br />
+				'.$this->l('Here is summary of what may affect the creation of customer accounts:').'
 				<ul>
-					<li>'.$this->l('An advertising campaign can attract a greater number of visitors. An increase in customer accounts which will ensue, which will depend on their \"quality\": well-targeted advertising can be more effective than large-scale advertising.').'</li>
-					<li>'.$this->l('Specials, sales, or contests create greater attention and curiosity, not only keeping your shop lively but also increasing its traffic. This way, you can push impulsive buyers to take the plunge.').'</li>
-					<li>'.$this->l('Design and user-friendliness are more important than ever: an ill-chosen or hard-to-follow graphical theme can turn off visitors. You have to strike the right balance between an innovative design and letting visitors move around easily. Proper spelling and clarity also inspire more customer confidence in your shop.').'</li>
+					<li>'.$this->l('An advertising campaign can attract a greater number of visitors. An increase in customer accounts will ensue, which will depend on their "quality". Well-targeted advertising can be more effective than large-scale advertising.').'</li>
+					<li>'.$this->l('Specials, sales, or contests draw greater attention and curiosity, not only keeping your shop lively but also increasing its traffic. This way, you can push impulsive buyers to take the plunge.').'</li>
+					<li>'.$this->l('Design and user-friendliness are more important than ever: an ill-chosen or hard-to-follow graphical theme can turn off visitors. You should strike the right balance between an innovative design and letting visitors move around easily. Proper spelling and clarity also inspire more customer confidence in your shop.').'</li>
 				</ul>
 			</p><br />
 		</fieldset>';

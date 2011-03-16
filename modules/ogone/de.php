@@ -10,11 +10,11 @@ $_MODULE['<{ogone}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Wir haben ein Problem bei Ihrer Bestellung festgestellt. Wenn Sie denken, dies sei ein Fehler, können Sie an unseren';
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Konfiguration aktualisiert';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Hilfe';
-$_MODULE['<{ogone}prestashop>ogone_e0358bb0b1682b667d67f99f9700448d'] = 'Folgen Sie zunächst diesen Schritten:';
+$_MODULE['<{ogone}prestashop>ogone_c3aace2676937d5cb50e536abbe9113d'] = 'Folgen Sie zunächst diesen Schritten:';
 $_MODULE['<{ogone}prestashop>ogone_0ad87dec5bc422a24ca801c473d44213'] = 'PrestaShop Seite';
 $_MODULE['<{ogone}prestashop>ogone_1d1f6896858b1bc96cecf995b1800a82'] = 'Füllen Sie Ihre Ogone-ID (PSPID) aus';
-$_MODULE['<{ogone}prestashop>ogone_2cb015dd290aae3e042bcb993772bd5f'] = 'Füllen Sie die Signaturen Ihrer Wahl aus (Sie müssen Sie dann in das Ogone Back-Office kopieren)';
-$_MODULE['<{ogone}prestashop>ogone_7dbfea013a8552af9a04c61f571cf686'] = 'Wählen Sie den Test-Modus, wenn Sie gerade Ihr Test-Konto auf Ogone erstellt haben (es funktioniert nicht mit dem Demo-Konto)';
+$_MODULE['<{ogone}prestashop>ogone_c76d97611c239318461a32e3ce151b83'] = 'Füllen Sie die Signaturen Ihrer Wahl aus (Sie müssen Sie dann in das Ogone Back-Office kopieren)';
+$_MODULE['<{ogone}prestashop>ogone_8c2fc0d78cab9c2bd9cef54931cc0808'] = 'Wählen Sie den Test-Modus, wenn Sie gerade Ihr Test-Konto auf Ogone erstellt haben (es funktioniert nicht mit dem Demo-Konto)';
 $_MODULE['<{ogone}prestashop>ogone_39963c4d14081a701198768d7b9b00d9'] = 'Ogone Seite';
 $_MODULE['<{ogone}prestashop>ogone_2ee3d80e1919fc84a184c727e3ccfa20'] = 'Test-Modus';
 $_MODULE['<{ogone}prestashop>ogone_20226890d13b230111fe30e1eb7a167b'] = 'Betriebsmodus';

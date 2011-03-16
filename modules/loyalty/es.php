@@ -3,8 +3,8 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'La fidelidad de los clientes y las recompensas';
-$_MODULE['<{loyalty}prestashop>loyalty_44c3144de5c433c8e7c9cbc66c906c01'] = 'Propone un programa de fidelización a sus clientes';
-$_MODULE['<{loyalty}prestashop>loyalty_c1a15aea773888ee981e8a4b2b041664'] = 'Esta acción suprimirá todos los puntos de fidelidad y el historial de los puntos de todos sus clientes, ¿está seguro de que desea continuar?';
+$_MODULE['<{loyalty}prestashop>loyalty_f8763c754ba455aa6e8ddf0e62911eb7'] = 'Propone un programa de fidelización a sus clientes';
+$_MODULE['<{loyalty}prestashop>loyalty_f0338d5a7bbd642cc188ca69c8a97b12'] = 'Esta acción suprimirá todos los puntos de fidelidad y el historial de los puntos de todos sus clientes, ¿está seguro de que desea continuar?';
 $_MODULE['<{loyalty}prestashop>loyalty_7307b68f93443d5863f1d3943c546b20'] = 'Recompensa fidelidad';
 $_MODULE['<{loyalty}prestashop>loyalty_e81b2826b5aebd9c92fb5d090f0cdc9d'] = 'Debe elegir al menos una categoría para generar vales descuento';
 $_MODULE['<{loyalty}prestashop>loyalty_f38f5974cdc23279ffe6d203641a8bdf'] = 'Ajustes actualizados.';
@@ -15,7 +15,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_315eae70bcaee168f1654c0ceeeef357'] = '1 p
 $_MODULE['<{loyalty}prestashop>loyalty_e3ff7eaa9deb31e1e91178a7216135c0'] = '1 punto =';
 $_MODULE['<{loyalty}prestashop>loyalty_46108358594124685e77e7d49f762b30'] = 'para el descuento';
 $_MODULE['<{loyalty}prestashop>loyalty_98cf9475009d3c6e795ffac5d391cec4'] = 'Detalles del vale';
-$_MODULE['<{loyalty}prestashop>loyalty_eb04c23cfad386678c6e5817f253b6aa'] = 'Importe mínimo para utilizar este vale';
+$_MODULE['<{loyalty}prestashop>loyalty_dd98e4d652530674f61201056fdbe9b4'] = 'Importe mínimo para utilizar este vale';
 $_MODULE['<{loyalty}prestashop>loyalty_51ab56dd5b46c7b5c8fdf22651ae0db6'] = 'Dar puntos por los productos en descuento';
 $_MODULE['<{loyalty}prestashop>loyalty_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
 $_MODULE['<{loyalty}prestashop>loyalty_93cba07454f06a4a960172bbd6e2a435'] = 'Sí';
@@ -26,7 +26,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_9611a682e61c503c32e2dc58fdbc8ddf'] = 'Los
 $_MODULE['<{loyalty}prestashop>loyalty_2a46cccdea2f18fdfdfacf99a98b758d'] = 'Los vales descuento creados por el sistema de fidelidad pueden utilizarse en las categorías de artículos siguientes:';
 $_MODULE['<{loyalty}prestashop>loyalty_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{loyalty}prestashop>loyalty_49ee3087348e8d44e1feda1917443987'] = 'Nombre';
-$_MODULE['<{loyalty}prestashop>loyalty_ceae28295d1d6543f5f5fd7905a23b1f'] = 'Marcar para qué categorías se utilizarán los vales descuento de fidelidad';
+$_MODULE['<{loyalty}prestashop>loyalty_c2a7db7dec4de1bdb143ccd790f5a62c'] = 'Marcar para qué categorías se utilizarán los vales descuento de fidelidad';
 $_MODULE['<{loyalty}prestashop>loyalty_30e793698766edbaaf84a74d4c377f72'] = 'Progresión de puntos de fidelidad';
 $_MODULE['<{loyalty}prestashop>loyalty_4f2a91e15af2631ff9424564b8a45fb2'] = 'Inicial';
 $_MODULE['<{loyalty}prestashop>loyalty_453e6aa38d87b28ccae545967c53004f'] = 'No disponible';
@@ -48,7 +48,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_928666bdf20510dfa5c58393b77f1798'] = 'Val
 $_MODULE['<{loyalty}prestashop>loyalty_a9be824aae4f2381a27b7c699b1e041e'] = 'En espera de validación';
 $_MODULE['<{loyalty}prestashop>loyalty_78945de8de090e90045d299651a68a9b'] = 'Disponibles';
 $_MODULE['<{loyalty}prestashop>loyalty_4cb08bf5ad3d3c7b010dde725a078b28'] = 'Convertidos';
-$_MODULE['<{loyalty}prestashop>loyalty_df05c2db84dacb19b599b489bf3963db'] = 'No válidos en descuentos';
+$_MODULE['<{loyalty}prestashop>loyalty_01371a1d58e9234c0b9dbc08cf54fa8b'] = 'No válidos en descuentos';
 $_MODULE['<{loyalty}prestashop>loyalty_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mi cuenta:';
 $_MODULE['<{loyalty}prestashop>loyalty_c540093e64d84440025b2d8201f04336'] = 'Mis puntos recompensa';
 $_MODULE['<{loyalty}prestashop>loyalty_5acc2ceeb883ba07cef2d02ea382f242'] = 'Usted no ha solicitado pedidos.';

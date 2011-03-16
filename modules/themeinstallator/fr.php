@@ -3,8 +3,8 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_fff01a1de50e0559f82501a927654d1b'] = 'Importer / Exporter un thème';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_bfcde10ae67f2cc02c256b069f8dae16'] = 'Exporter ou importer un thème et ses modules sur votre boutique';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_cf734ccbed4888a2a0c3847dad46a2d7'] = 'Zip n\'est pas installé sur votre serveur. Contactez votre hébergeur pour plus d\'informations.';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_83ebbd7865677d356ffde5ad7e12784f'] = 'Exporter ou importer un thème et ses modules sur votre boutique';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_e10ed1f81b51bd4c7f86eeb84bcd1359'] = 'Zip n\'est pas installé sur votre serveur. Contactez votre hébergeur pour plus d\'informations.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_25b9e1d82d8200d70be2b22a1a283957'] = 'Une erreur est survenue durant l\'envoi du fichier.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_050991b5b76aad0be75563b7cb93a33e'] = 'Seuls les fichiers zip sont autorisés';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_57c1ed81b02e5d3361323c7930897295'] = 'Une erreur est survenue durant la copie du fichier.';
@@ -40,7 +40,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_8f3ea15c5b87db00561ccde
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_caeedb303068f9915e8e5ce091c9c02f'] = '(Attention : un dossier avec le même nom existe déjà)';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_2dd99d7426b4fe6dd04d7a98f5e32a62'] = 'Choisissez la déclinaison que vous souhaitez importer';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_f956917da1716add289f33a8869b85d4'] = 'Thème principal';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_8dc46c3ac999c5e88272294b52f24478'] = 'Décochez ce champs si vous ne souhaitez pas installer le thème principal';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_1e3de51d693cd0c7e903bcf3769a0cdb'] = 'Décochez ce champs si vous ne souhaitez pas installer le thème principal';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c49fbf2b822fd14929fd1fd76cdb0c96'] = 'Sélectionnez les variations que vous souhaitez importer';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_d1baba351b02042982a133c4df5d4924'] = 'Exporter un thème';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5092965125a28a17f49ee460fbc1f62c'] = 'Selectionner un thème';
@@ -80,7 +80,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_e12167aa0a7698e6ebc92b4
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a82cac3db0465cfc701f3765fd880019'] = 'Ajouter une documentation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_08e27f4e5511f4f6aa73557e6ad6df48'] = 'Donnez un peu d\'aide à l\'utilisateur. Ajoutez un champs en cliquant ici';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a508df4b049c5b044cb4568b76b6c7e6'] = 'Ajouter une variation';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_6a7b29a06022b8e648ba29c3cff429d5'] = 'Selectionnez un autre thème à inclure et sa compatibilité';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_626bd6acdcd835a5d064ef6358124b6c'] = 'Selectionnez un autre thème à inclure et sa compatibilité';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ac70412e939d72a9234cdebb1af5867b'] = 'Chemin';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5da618e8e4b89c66fe86e32cdafde142'] = 'A partir de';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_3271e801d0a5db9dc2963a19ed9695d6'] = 'Choisissez un thème';

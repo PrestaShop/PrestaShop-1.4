@@ -51,9 +51,9 @@ $_MODULE['<{secuvad}prestashop>AdminSecuvadTransport_cfba8bb4d48ec796dfb51beff15
 $_MODULE['<{secuvad}prestashop>AdminSecuvadTransport_57865bf4056d8da5e67c992e84d91814'] = 'Associate the shipping';
 $_MODULE['<{secuvad}prestashop>AdminSecuvadTransport_c9759ceb6487a0bd2720ca98f2622d24'] = 'to';
 $_MODULE['<{secuvad}prestashop>AdminSecuvadTransport_c9cc8cce247e49bae79f15173ce97354'] = 'Save';
-$_MODULE['<{secuvad}prestashop>secuvad_980755daf8a750c0b0f50a735ad57048'] = 'Secuvad module';
+$_MODULE['<{secuvad}prestashop>secuvad_e4ba26360a7818a71d48addc3ea19078'] = 'Secuvad module';
 $_MODULE['<{secuvad}prestashop>secuvad_8dfaf37c512f96f126f30e0f5cfbf320'] = 'Solution fighting against online frauds';
-$_MODULE['<{secuvad}prestashop>secuvad_d6f47e627cb8b9186caa435aba1c32ae'] = 'Are you sure you want to delete this module ?';
+$_MODULE['<{secuvad}prestashop>secuvad_a9828808bf0dcd0b7af8e6f20b80ad85'] = 'Are you sure you want to delete this module ?';
 $_MODULE['<{secuvad}prestashop>secuvad_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Error';
 $_MODULE['<{secuvad}prestashop>secuvad_d3c779f2eff6d9bc3075bcbbabfd5afc'] = 'classes/PaymentModule.php missing';
 $_MODULE['<{secuvad}prestashop>secuvad_34d9eb70abf213ddff973fdff966ee88'] = 'Cannot read file classes/PaymentModule.php';

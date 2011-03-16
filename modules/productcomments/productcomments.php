@@ -48,7 +48,7 @@ class ProductComments extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Product Comments');
-		$this->description = $this->l('Allow users to post comment about a product');
+		$this->description = $this->l('Allow users to post comment about a product.');
 	}
 
 	public function install()
@@ -332,7 +332,7 @@ class ProductComments extends Module
 		$this->_html .= '
 		<fieldset class="width2">
 			<legend><img src="'.$this->_path.'img/note.png" alt="" />'.$this->l('Add a new comment criterion').'</legend>
-				<p style="margin-bottom: 20px;">'.$this->l('You can define several criterions in order to help your customers during their review. For instance: efficiency, lightness, design.').'<br />
+				<p style="margin-bottom: 20px;">'.$this->l('You can define several criterions to help your customers during their review. For instance: efficiency, lightness, design.').'<br />
 				<br />'.$this->l('You can add a new criterion below:').'</p>
 				<form action="'.$this->_baseUrl.'" method="post" name="criterion_form">
 				<label>'.$this->l('Name').'</label>
@@ -541,7 +541,7 @@ class ProductComments extends Module
 						if (!$comment->save())
 							$errors[] = $this->l('An error occurred while saving your comment.');
 						else
-							$smarty->assign('confirmation', $this->l('Comment posted successfully.').((int)(Configuration::get('PRODUCT_COMMENTS_MODERATE')) ? ' '.$this->l('Awaiting moderator validation.') : ''));
+							$smarty->assign('confirmation', $this->l('Comment posted.').((int)(Configuration::get('PRODUCT_COMMENTS_MODERATE')) ? ' '.$this->l('Awaiting moderator validation.') : ''));
 					}
 				}
 				else

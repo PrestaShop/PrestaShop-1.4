@@ -41,7 +41,7 @@ class Blockrss extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('RSS feed block');
-		$this->description = $this->l('Adds a block displaying an RSS feed');
+		$this->description = $this->l('Adds a block displaying an RSS feed.');
 
 		$this->version = '1.0';
 		$this->author = 'PrestaShop';
@@ -76,7 +76,7 @@ class Blockrss extends Module
 			else
 			{
 				if (stristr($urlfeed, $_SERVER['HTTP_HOST'].__PS_BASE_URI__))
-					$errors[] = $this->l('You have selected a feed URL on your own website, this is probably an error! Choose another URL (eg. http://news.google.com/?output=rss) until you know what you do');
+					$errors[] = $this->l('Error: You have selected a feed URL on your own website. Please choose another URL (eg. http://news.google.com/?output=rss).');
 				
 				Configuration::updateValue('RSS_FEED_URL', $urlfeed);
 				Configuration::updateValue('RSS_FEED_TITLE', $title);
@@ -91,7 +91,7 @@ class Blockrss extends Module
 		{
 			$errors = array();
 			if (stristr(Configuration::get('RSS_FEED_URL'), $_SERVER['HTTP_HOST'].__PS_BASE_URI__))
-				$errors[] = $this->l('You have selected a feed URL on your own website, this is probably an error! Choose another URL (eg. http://news.google.com/?output=rss) until you know what you do');
+				$errors[] = $this->l('Error: You have selected a feed URL on your own website. Please choose another URL (eg. http://news.google.com/?output=rss).');
 			
 			if (sizeof($errors))
 				$output .= $this->displayError(implode('<br />', $errors));
@@ -120,7 +120,7 @@ class Blockrss extends Module
 				<label>'.$this->l('Number of threads displayed').'</label>
 				<div class="margin-form">
 					<input type="text" size="5" name="nbr" value="'.Tools::getValue('nbr', Configuration::get('RSS_FEED_NBR')).'" />
-					<p class="clear">'.$this->l('The number of threads displayed by the block (default value: 5)').'</p>
+					<p class="clear">'.$this->l('Number of threads displayed by the block (default value: 5)').'</p>
 
 				</div>
 				<center><input type="submit" name="submitBlockRss" value="'.$this->l('Save').'" class="button" /></center>

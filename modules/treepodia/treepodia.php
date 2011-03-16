@@ -48,10 +48,10 @@ class Treepodia extends Module
 		$this->displayName = 'Treepodia';
 
 	 	parent::__construct();
-		$this->description = $this->l('Cover your entire catalog with product videos in 24 hours');
+		$this->description = $this->l('Cover your entire catalog with product videos in 24 hours.');
 
 		if ($this->active && !Configuration::get('TREEPODIA_ACCOUNT_CODE'))
-			$this->warning = $this->l('You have not set your Treepodia configuration');
+			$this->warning = $this->l('You have not set your Treepodia configuration.');
 	}
 
 	function install()
@@ -521,7 +521,7 @@ XML;
 
 		$output = $this->_displayCSSAndJS().'<h2>'.$this->displayName.'</h2>
 		<img id="treepodia-logo" src="'.__PS_BASE_URI__.'modules/'.$this->name.'/logo.png'.'" alt="" />
-		<p>'.$this->l('It is well known that product videos increase sales, customer engagement and loyalty, and enhance your shoppers experience dramatically. They also enhance your shoppers\' overall experience dramatically, and have a strong positive effect on your search engine visibility').'. <a target="_blank" class="link-trpd" href="http://www.prestashop.com/en/partner_treepodia">'.$this->l('Learn more').'</a></p><div class="clear" /><br />';
+		<p>'.$this->l('It is well known that product videos increase sales, customer engagement and loyalty, and enhance your shoppers experience dramatically. They also enhance your shoppers\' overall experience and have a strong positive effect on your search engine visibility.').'. <a target="_blank" class="link-trpd" href="http://www.prestashop.com/en/partner_treepodia">'.$this->l('Learn more').'</a></p><div class="clear" /><br />';
 
 
 		$output .= '<script type="text/javascript">
@@ -552,7 +552,7 @@ XML;
 			$output .= '<label>'.$this->l('Video Account Code').'</label>
 						<div class="margin-form">
 							<input type="text" style="width: 160px;" value="'.Tools::htmlentitiesUTF8(Configuration::get('TREEPODIA_ACCOUNT_CODE')).'" readonly/><br >'
-							.$this->l('Your video account code uniquely identifies your store, and was assigned to you automatically.').
+							.$this->l('Your video account code uniquely identifies your store and was assigned to you automatically.').
 						'</div><br />
 						<p>
 							'.$this->l('Sign in to your video account to change your preferences, settings and see your business performance reports.').' <input type="button" class="button" value="'.$this->l('Sign in').'" onclick="signInTripodia();" style="padding: 15px; font-weight: bold; font-size: 13px;">
@@ -568,13 +568,13 @@ XML;
 				<legend><img src="'.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" />'.$this->l('Settings').'</legend>
 				<form method="post" action="'.$_SERVER['REQUEST_URI'].'" enctype="multipart/form-data">
 					<input type="radio" name="trpd_integration_type" value="0" style="vertical-align: middle;" '.((int)(Configuration::get('TREEPODIA_INTEGRATION_TYPE')) == 0 ? 'checked' : '').'/> <label style="font-size: 14px; color: #268CCD; float: none;">'.$this->l('Use built-in integration').'</label>
-					<p>'.$this->l('The built-in integration automatically embeds Treepodia integration code into your store, and displays a link to the video on your product page').'</p><br />
+					<p>'.$this->l('The built-in integration automatically embeds Treepodia integration code into your store and displays a link to the video on your product page.').'</p><br />
 					<p id="current">'.$this->l('Current logo:').'<br />
 					<div id="preview-container">
 					<img id="preview-logo" alt="" src="'._MODULE_DIR_.$this->name.'/logos/'.Tools::htmlentitiesUTF8(Configuration::get('TREEPODIA_PLAY_LOGO')).'" /><br />
 
 					<input type="hidden" name="trpd_play_logo" id="trpd_play_logo" value="'.Configuration::get('TREEPODIA_PLAY_LOGO').'" /></div>
-					<a id="change-logo" href="" >'.$this->l('change logo').'</a></p>
+					<a id="change-logo" href="" >'.$this->l('Change logo').'</a></p>
 
 						'.$this->_displayImageSelector().'
 					<br /><br />
@@ -582,11 +582,11 @@ XML;
 					<div>
 				    <p id="current">'.$this->l('Display logo:').'<br />
 				    <select name="trpd_hook_position">
-				        <option value="0" '.(Configuration::get('TREEPODIA_HOOK') == 0 ? 'selected="selected"' : '' ).'>'.$this->l('Above useful links').'</option>
+				        <option value="0" '.(Configuration::get('TREEPODIA_HOOK') == 0 ? 'selected="selected"' : '' ).'>'.$this->l('Above Useful links').'</option>
   				        <option value="1" '.(Configuration::get('TREEPODIA_HOOK') == 1 ? 'selected="selected"' : '' ).'>'.$this->l('Above More-Info').'</option>
 				    </select>
-					<p class="position-title">'.$this->l('Place the logo here:').'</p>
-					<div id="fake-product-picture">'.$this->l('product picture').'</div>
+					<p class="position-title">'.$this->l('Place logo here:').'</p>
+					<div id="fake-product-picture">'.$this->l('Product picture').'</div>
 					<input type="radio" id="left" class="position" name="trpd_position" value="0" '.((int)(Configuration::get('TREEPODIA_POSITION')) == 0 ? 'checked' : '' ).'/><label class="position-label" for="left">'.$this->l('Left').'</label>
 					<input type="radio" id="center" class="position" name="trpd_position" value="1" '.((int)(Configuration::get('TREEPODIA_POSITION')) == 1 ? 'checked' : '' ).'/><label class="position-label" for="center">'.$this->l('Center').'</label>
 					<input type="radio" id="right" class="position" name="trpd_position" value="2" '.((int)(Configuration::get('TREEPODIA_POSITION')) == 2 ? 'checked' : '' ).'/><label class="position-label" for="right">'.$this->l('Right').'</label>
@@ -594,7 +594,7 @@ XML;
 					<div class="clear" />
 					<br />
 					<input type="radio" name="trpd_integration_type" value="1" style="vertical-align: middle;" '.((int)(Configuration::get('TREEPODIA_INTEGRATION_TYPE')) == 1 ? 'checked' : '').' /> <label style="font-size: 14px; color: #268CCD; float: none;">'.$this->l('Or, implement your own integration').'</label>
-					<p style="margin-bottom: 30px;">'.$this->l('Use this option if you wish to implement the Treepodia integration code on your own. The built-in integration code will be deactivated if you choose this option.').' <a target="_blank" href="https://www.treepodia.com/prestashop/api/alternative-integration" style="color: rgb(38, 140, 205); text-decoration: underline;">'.$this->l('Read here how to implement Treepodia integration code on your own').'</a></p>
+					<p style="margin-bottom: 30px;">'.$this->l('Use this option if you wish to implement the Treepodia integration code on your own. The built-in integration code will be deactivated if you choose this option.').' <a target="_blank" href="https://www.treepodia.com/prestashop/api/alternative-integration" style="color: rgb(38, 140, 205); text-decoration: underline;">'.$this->l('Read here how to implement Treepodia integration code on your own.').'</a></p>
 					<center><input type="submit" class="button" name="submitTreepodia" value="'.$this->l('Save settings').'" /></center>
 				</form>
 			</fieldset>';

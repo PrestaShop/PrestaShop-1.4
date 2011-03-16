@@ -48,8 +48,8 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e889962a8517669ba4ac839afa6384d
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0a7bd01967a1874144b1b4fab2ee6a6f'] = 'Strandard overnight';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d999f792aee7c730cdc95f6aff4aa436'] = 'FEDEX Carrier';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_99e509958c21ac35438651547a7bb035'] = 'Fedex Modulstatus';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_cfff148df347c164b78d8b6a2ecd7b80'] = 'FEDEX Carrier ist richtig konfiguriert und online!';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_1bfd913217dfa9def8a413538053237c'] = 'FEDEX Carrier ist noch nicht konfiguriert, Sie müssen:';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d23a9177c3c7256ede85643a19335afb'] = 'FEDEX Carrier ist richtig konfiguriert und online!';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5bc95bc43c48a735773d4182dcf526fb'] = 'FEDEX Carrier ist noch nicht konfiguriert, Sie müssen:';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3e203b9a16f360b88d90bba6eb61ce61'] = 'Das \"Allgemeine Einstellungen\"-Formular ausfüllen ';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8c0987b9315003df7dae7f130e3cf58e'] = 'Ihren verfügbaren Zustelldienst wählen';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice Testverbindung';
@@ -130,11 +130,11 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ceb0ede9c02d159aa2360a3d0694d9e
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3c4d710b56f4318dae775cff80619f84'] = 'Wählen Sie ein Produkt ...';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9c07640370e4681bf98638d0c458cd2e'] = 'Sie müssen ein Produkt auswählen.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8fc3abc76f5a163f81962a52fc5a3703'] = 'Dieses Produkt hat bereits eine bestimmte FEDEX Konfiguration.';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a2ef562d5476ef8a3c25665dc43ee6da'] = 'Willkommen im PrestaShop FEDEX Modul-Konfigurator!';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9c3eacca576fbfc5dca21b50d9f6ef8f'] = 'Willkommen im PrestaShop FEDEX Modul-Konfigurator!';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_92640c80a67da1782a18304336405dac'] = 'Dieser Abschnitt wird Ihnen helfen zu verstehen, wie dieses Modul richtig konfiguriert wird.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ec0e6948e8f34818d80f27c309f46661'] = 'Siehe unten für die Beschreibung der einzelnen Felder:';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b12c6f84e131ed2192e9d9c6c531f239'] = 'Ihr FedEx Konto';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a778d9070dfabff2bfad689f132eb056'] = 'Sie Mûssen sich auf der FEDEX Website unter folgender Adresse anmelden';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0ea2cd644fcacb9e8fe1d4c9c89a677b'] = 'Sie Mûssen sich auf der FEDEX Website unter folgender Adresse anmelden';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_35ba940948fa0ea163fd01281de10e2f'] = 'Dieses Feld muss die Postleitzahl Ihres Paketabsendeorts sein.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_81822348ace1ceabad5e9f8992ce9ea4'] = 'Dieses Feld muss das Land Ihres Paketabsendeorts sein.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_74395432668d0313b593712dfc40479a'] = 'Dieses Feld entspricht der Standard-Abholungsart (wenn keine spezielle Konfiguration für das Produkt oder die Produktkategorie vorhanden ist).';
@@ -142,4 +142,4 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b9bba478eb4348e49e672e944b072b6
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_71ffd676000b4ec8ea95f4096adc3d3c'] = 'Dieser Abschnitt ermöglicht es Ihnen, eine bestimmte FEDEX Konfiguration für jede Produktkategorie (z.B. Verpackungsart und Zusatzkosten) zu definieren.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_89a9eabc8fc9335d484dcb1eb7ef4ac5'] = 'Dieser Abschnitt ermöglicht es Ihnen, eine bestimmte FEDEX Konfiguration für jedes Produkt (z. B. Verpackungsart und Zusatzkosten) zu definieren.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Fehler';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b5d3d39779e5ed24116bcfa0f2586bdf'] = 'Fedex Webservice scheint abgeschaltet zu sein, warten Sie bitte ein paar Minuten und versuchen es dann erneut';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5e303843029d99ced59415005037969d'] = 'Fedex Webservice scheint abgeschaltet zu sein, warten Sie bitte ein paar Minuten und versuchen es dann erneut';

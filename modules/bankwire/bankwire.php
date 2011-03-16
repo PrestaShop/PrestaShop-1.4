@@ -58,10 +58,10 @@ class BankWire extends PaymentModule
 		parent::__construct();
 
 		$this->displayName = $this->l('Bank Wire');
-		$this->description = $this->l('Accept payments by bank wire');
+		$this->description = $this->l('Accept payments by bank wire.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 		if (!isset($this->owner) OR !isset($this->details) OR !isset($this->address))
-			$this->warning = $this->l('Account owner and details must be configured in order to use this module correctly');
+			$this->warning = $this->l('Account owner and details must be configured in order to use this module correctly.');
 		if (!sizeof(Currency::checkPaymentCurrencies($this->id)))
 			$this->warning = $this->l('No currency set for this module');
 	}
@@ -88,7 +88,7 @@ class BankWire extends PaymentModule
 		if (isset($_POST['btnSubmit']))
 		{
 			if (empty($_POST['details']))
-				$this->_postErrors[] = $this->l('account details are required.');
+				$this->_postErrors[] = $this->l('Account details are required.');
 			elseif (empty($_POST['owner']))
 				$this->_postErrors[] = $this->l('Account owner is required.');
 		}
@@ -109,7 +109,7 @@ class BankWire extends PaymentModule
 	{
 		$this->_html .= '<img src="../modules/bankwire/bankwire.jpg" style="float:left; margin-right:15px;"><b>'.$this->l('This module allows you to accept payments by bank wire.').'</b><br /><br />
 		'.$this->l('If the client chooses this payment mode, the order will change its status into a \'Waiting for payment\' status.').'<br />
-		'.$this->l('Therefore, you will need to manually confirm the order as soon as you receive a wire.').'<br /><br /><br />';
+		'.$this->l('Therefore, you must manually confirm the order as soon as you receive the wire.').'<br /><br /><br />';
 	}
 
 	private function _displayForm()

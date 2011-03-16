@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockstore}prestashop>blockstore_50d335623ef166aeea8da2a3c2c63a3e'] = 'Shop-Block';
-$_MODULE['<{blockstore}prestashop>blockstore_79f76d40155b84f2228d2568f174a356'] = 'Zeigt ein Block mit einem Link zu der Händlersuche';
+$_MODULE['<{blockstore}prestashop>blockstore_7118171dfc2981fd3d7f3aab97fb572d'] = 'Zeigt ein Block mit einem Link zu der Händlersuche';
 $_MODULE['<{blockstore}prestashop>blockstore_f32a6c9e15dd20152ee8b14c7f94b040'] = 'Bild ungültig';
 $_MODULE['<{blockstore}prestashop>blockstore_4dd95964f5b02106aeaa2dbf3e9d3c5e'] = 'ein Fehler ist beim Hochladen der Datei aufgetreten ';
 $_MODULE['<{blockstore}prestashop>blockstore_7ccf58c950043c9fbfed668df13ce608'] = 'Die Einstellungen werden aktualisiert';

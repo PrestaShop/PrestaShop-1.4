@@ -55,7 +55,7 @@ class BlockAdvertising extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Block advertising');
-		$this->description = $this->l('Adds a block to display an advertisement');
+		$this->description = $this->l('Adds a block to display an advertisement.');
 
 		$current_dir = defined('__DIR__')?__DIR__:dirname(__FILE__);
 		if (!file_exists($current_dir.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT')))
@@ -159,11 +159,11 @@ class BlockAdvertising extends Module
 			$output .= $this->l('no image');
 		$output .= '</a>';
 		if ($this->adv_img)
-			$output .= '<input class="button" type="submit" name="submitDeleteImgConf" value="'.$this->l('delete image').'" style=""/>';
+			$output .= '<input class="button" type="submit" name="submitDeleteImgConf" value="'.$this->l('Delete image').'" style=""/>';
 		$output .= '<br/>
 <br/>
 <label for="adv_img">'.$this->l('Change image').'&nbsp;&nbsp;</label><input id="adv_img" type="file" name="adv_img" />
-( '.$this->l('image will be displayed as 155x163').' )
+( '.$this->l('Image will be displayed as 155x163').' )
 <br/>
 <br class="clear"/>
 <label for="adv_link">'.$this->l('Image link').'&nbsp;&nbsp;</label><input id="adv_link" type="text" name="adv_link" value="'.$this->adv_link.'" />

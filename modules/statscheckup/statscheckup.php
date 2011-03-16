@@ -40,7 +40,7 @@ class StatsCheckUp extends Module
         parent::__construct();
 		
         $this->displayName = $this->l('Catalog evaluation');
-        $this->description = $this->l('Catalog quality in a blink');
+        $this->description = $this->l('Quick evaluation of your catalog quality.');
     }
 
 	public function install()

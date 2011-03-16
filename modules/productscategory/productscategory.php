@@ -42,7 +42,7 @@ class productsCategory extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('Products Category');
-		$this->description = $this->l('Display products of the same category on the product page');
+		$this->description = $this->l('Display products of the same category on the product page.');
  	}
 
 	public function install()

@@ -63,10 +63,10 @@ class Watermark extends Module
 		$this->transparency = isset($config['WATERMARK_TRANSPARENCY']) ? $config['WATERMARK_TRANSPARENCY'] : 60;
 
 		$this->displayName = $this->l('Watermark');
-		$this->description = $this->l('Protect image by watermark');
+		$this->description = $this->l('Protect image by watermark.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
 		if (!isset($this->transparency) OR !isset($this->xAlign) OR !isset($this->yAlign))
-			$this->warning = $this->l('Watermark image has to be uploaded in order for this module to work correctly');
+			$this->warning = $this->l('Watermark image must be uploaded in order for this module to work correctly.');
 	}
 
 	public function install()
@@ -96,7 +96,7 @@ class Watermark extends Module
 		$image_types = Tools::getValue('image_types');
 		
 		if (empty($transparency))
-			$this->_postErrors[] = $this->l('Transparency is required.');
+			$this->_postErrors[] = $this->l('Transparency required.');
 		elseif($transparency < 0 || $transparency > 100)
 			$this->_postErrors[] = $this->l('Transparency is not in allowed range.');
 
@@ -115,7 +115,7 @@ class Watermark extends Module
 		if (isset($_FILES['PS_WATERMARK']['tmp_name']) AND !empty($_FILES['PS_WATERMARK']['tmp_name']))
 		{
 			if (!isPicture($_FILES['PS_WATERMARK'], array('image/gif')))
-				$this->_postErrors[] = $this->l('image must be in GIF format');
+				$this->_postErrors[] = $this->l('Image must be in GIF format.');
 		}
 		
 		return !sizeof($this->_postErrors) ? true : false;
@@ -148,11 +148,11 @@ class Watermark extends Module
 		$this->_html .=
 		'<form action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">
 			<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" />'.$this->l('Watermark details').'</legend>
-				<p>'.$this->l('Once you\'ve set up the module, you have to regenerate the images using the tool in Preferences > Images. However, the watermark will be added automatically to the new images.').'</p>
+				<p>'.$this->l('Once you have set up the module, regenerate the images using the "Images" tool in Preferences. However, the watermark will be added automatically to new images.').'</p>
 				<table border="0" width="500" cellpadding="0" cellspacing="0" id="form">
 					<tr>
 						<td />
-						<td>'.(file_exists(dirname(__FILE__).'/watermark.gif') ? '<img src="../modules/'.$this->name.'/watermark.gif?t='.time().'" />' : $this->l('No watermark uploaded yet')).'</td>
+						<td>'.(file_exists(dirname(__FILE__).'/watermark.gif') ? '<img src="../modules/'.$this->name.'/watermark.gif?t='.time().'" />' : $this->l('No watermark uploaded.')).'</td>
 					</tr>
 					<tr>
 						<td>'.$this->l('Watermark file').'</td>
@@ -181,7 +181,7 @@ class Watermark extends Module
 					    $this->_html .= '</select>
 					    </td>
 					</tr>
-					<tr><td width="270" style="height: 35px;">'.$this->l('Choose image types for watermark protection').'</td><td>';
+					<tr><td width="270" style="height: 35px;">'.$this->l('Choose image types for watermark protection.').'</td><td>';
 					$selected_types = explode(',', Configuration::get('WATERMARK_TYPES'));
 					foreach(ImageType::getImagesTypes('products') as $type)
 					{
@@ -244,7 +244,7 @@ class Watermark extends Module
 		if (!$image = imagecreatefromjpeg($imagepath))
 			return false;
 		if (!$imagew = imagecreatefromgif($watermarkpath))
-			die ($this->l('the watermark image is not a real gif, please CONVERT and not rename it'));
+			die ($this->l('The watermark image is not a real gif, please CONVERT the image.'));
 		list($watermarkWidth, $watermarkHeight) = getimagesize($watermarkpath); 
 		list($imageWidth, $imageHeight) = getimagesize($imagepath); 
 		if ($this->xAlign == "middle") { $xpos = $imageWidth/2 - $watermarkWidth/2 + $Xoffset; } 

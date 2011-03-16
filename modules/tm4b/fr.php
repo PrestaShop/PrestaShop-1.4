@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{tm4b}prestashop>tm4b_599f02a21a8d80cfa87a3a42f9aef067'] = 'Envoyer un SMS à chaque nouvelle commande';
 $_MODULE['<{tm4b}prestashop>tm4b_2c8be96b677dc6b891a343193822fea4'] = 'Êtes-vous sûr de vouloir supprimer ces informations ?';
-$_MODULE['<{tm4b}prestashop>tm4b_0c478a7069ab13f446e9e765cffd1550'] = 'Message bien envoyé';
+$_MODULE['<{tm4b}prestashop>tm4b_088d3bfa945e4c27ac0fea363bb13d12'] = 'Message bien envoyé';
 $_MODULE['<{tm4b}prestashop>tm4b_0cda570a27de3fbd0940da019f759721'] = 'Erreur lors de l\'envoie du message';
 $_MODULE['<{tm4b}prestashop>tm4b_884b60418e2f1f9a6a40f12e8ca0a64d'] = 'Identifiant et numéro de téléphone';
 $_MODULE['<{tm4b}prestashop>tm4b_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Information';

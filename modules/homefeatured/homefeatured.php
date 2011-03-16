@@ -43,7 +43,7 @@ class HomeFeatured extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('Featured Products on the homepage');
-		$this->description = $this->l('Displays Featured Products in the middle of your homepage');
+		$this->description = $this->l('Displays Featured Products in the middle of your homepage.');
 	}
 
 	function install()
@@ -77,10 +77,10 @@ class HomeFeatured extends Module
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<p>'.$this->l('In order to add products to your homepage, just add them to the "home" category.').'</p><br />
-				<label>'.$this->l('Number of product displayed').'</label>
+				<label>'.$this->l('Number of products displayed').'</label>
 				<div class="margin-form">
 					<input type="text" size="5" name="nbr" value="'.Tools::getValue('nbr', (int)(Configuration::get('HOME_FEATURED_NBR'))).'" />
-					<p class="clear">'.$this->l('The number of products displayed on homepage (default: 10)').'</p>
+					<p class="clear">'.$this->l('The number of products displayed on homepage (default: 10).').'</p>
 					
 				</div>
 				<center><input type="submit" name="submitHomeFeatured" value="'.$this->l('Save').'" class="button" /></center>

@@ -41,10 +41,10 @@ $_MODULE['<{cashticket}prestashop>cashticket_d2bbf245e9591814fe994df3cae95964'] 
 $_MODULE['<{cashticket}prestashop>cashticket_ebbe99d835c79ead89db1b2b9e4fe70f'] = 'La transaction n\'a pu être initialisée du à des problèmes de connexions. Si le problème persiste, merci de nous contacter.';
 $_MODULE['<{cashticket}prestashop>cashticket_99f6765a05b697eb78e8c2e5e228f2fc'] = 'Disposition consommée';
 $_MODULE['<{cashticket}prestashop>cashticket_c3e260f43a99b6fd907538953fe700d0'] = 'Disposition relachée';
-$_MODULE['<{cashticket}prestashop>cashticket_f6a62a622cbba2c1b8cd0be062deff96'] = 'Une erreur est survenue au moment de la relache.';
-$_MODULE['<{cashticket}prestashop>cashticket_12f989194ad92e23c0eb3941db7f6720'] = 'Acceptez les paiements prépayés dans votre boutique en ligne. Cash-Ticket est une méthode de paiement simple et sécurisée pour l’internet. Cash-Ticket permet des paiements sans carte bancaires ni coordonnées bancaires personnelles. Tout ce qui est nécessaire pour payer dans une boutique en ligne est un code PIN de 16 chiffres. De cette façon les consommateurs peuvent réaliser des paiements en ligne sans carte de crédit ni même compte bancaire.';
+$_MODULE['<{cashticket}prestashop>cashticket_12879ec2c367483dd59ef7442178d124'] = 'Une erreur est survenue au moment de la relache.';
+$_MODULE['<{cashticket}prestashop>cashticket_d929c5e5e5643c622400e837914206da'] = 'Acceptez les paiements prépayés dans votre boutique en ligne. Cash-Ticket est une méthode de paiement simple et sécurisée pour l’internet. Cash-Ticket permet des paiements sans carte bancaires ni coordonnées bancaires personnelles. Tout ce qui est nécessaire pour payer dans une boutique en ligne est un code PIN de 16 chiffres. De cette façon les consommateurs peuvent réaliser des paiements en ligne sans carte de crédit ni même compte bancaire.';
 $_MODULE['<{cashticket}prestashop>cashticket_d59048f21fd887ad520398ce677be586'] = 'En savoir plus';
-$_MODULE['<{cashticket}prestashop>cashticket_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Une erreur est survenue. Consulter la partie \"Messages\" ci-dessous pour plus d\'informations';
+$_MODULE['<{cashticket}prestashop>cashticket_930320ced1b8c376237844049b570a7f'] = 'Une erreur est survenue. Consulter la partie \"Messages\" ci-dessous pour plus d\'informations';
 $_MODULE['<{cashticket}prestashop>cashticket_a9ced76f2dd6907220fa95b3a136b04a'] = 'Montant incorrect';
 $_MODULE['<{cashticket}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'La disposition est dans un état invalide';
 $_MODULE['<{cashticket}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = '. Vous n\'êtes pas authorisé à récupérer le paiement.';

@@ -161,7 +161,7 @@ class DateOfDelivery extends Module
 			if (($carrier = new Carrier((int)(Tools::getValue('id_carrier')))) AND !Validate::isLoadedObject($carrier))
 				$errors[] = $this->l('Carrier is invalid');
 			if ($this->_isAlreadyDefinedForCarrier((int)($carrier->id), (int)(Tools::getValue('id_carrier_rule', 0))))
-				$errors[] = $this->l('You cannot use this carrier, a rule has been already saved');
+				$errors[] = $this->l('You cannot use this carrier, a rule has already been saved.');
 			
 			if(!sizeof($errors))
 			{
@@ -173,7 +173,7 @@ class DateOfDelivery extends Module
 					'))
 						Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&confirmAddCarrierRule');
 					else
-						$this->_html .= $this->displayError($this->l('an error occurred on adding of carrier rule'));
+						$this->_html .= $this->displayError($this->l('An error occurred on adding of carrier rule.'));
 				}
 				else
 				{
@@ -184,7 +184,7 @@ class DateOfDelivery extends Module
 					))
 						Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&confirmEditCarrierRule');
 					else
-						$this->_html .= $this->displayError($this->l('an error occurred on updating of carrier rule'));
+						$this->_html .= $this->displayError($this->l('An error occurred on updating of carrier rule.'));
 				}
 				
 			}
@@ -236,7 +236,7 @@ class DateOfDelivery extends Module
 				$this->_html .= '
 				<tr>
 					<td width="30%">'.(!preg_match('/^0$/Ui', $rule['name']) ? htmlentities($rule['name'], ENT_QUOTES, 'UTF-8') : Configuration::get('PS_SHOP_NAME')).'</td>
-					<td width="40%" class="center"><b>'.(int)($rule['minimal_time']).'</b> '.$this->l('days and').' <b>'.(int)($rule['maximal_time']).'</b> '.$this->l('days').'</td>
+					<td width="40%" class="center"><b>'.(int)($rule['minimal_time']).'</b> '.$this->l('day(s) and').' <b>'.(int)($rule['maximal_time']).'</b> '.$this->l('day(s)').'</td>
 					<td width="10%" class="center">';
 				if ($rule['delivery_saturday'])
 					$this->_html .= '<img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/img/tick.png" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />';
@@ -272,12 +272,12 @@ class DateOfDelivery extends Module
 				
 				<label for="extra_time_product_oos">'.$this->l('Extra time when a product is out of stock').'</label>
 				<div class="margin-form">
-					<input type="text" name="extra_time_product_oos" id="extra_time_product_oos" value="'.(int)(Tools::getValue('extra_time_product_oos', Configuration::get('DOD_EXTRA_TIME_PRODUCT_OOS'))).'" size="2" /> '.$this->l('days').'
+					<input type="text" name="extra_time_product_oos" id="extra_time_product_oos" value="'.(int)(Tools::getValue('extra_time_product_oos', Configuration::get('DOD_EXTRA_TIME_PRODUCT_OOS'))).'" size="2" /> '.$this->l('day(s)').'
 				</div>
 				<div class="clear"></div>
 				<label for="extra_time_preparation">'.$this->l('Extra time for preparation of the order').'</label>
 				<div class="margin-form">
-					<input type="text" name="extra_time_preparation" id="extra_time_preparation" value="'.(int)(Tools::getValue('extra_time_preparation', Configuration::get('DOD_EXTRA_TIME_PREPARATION'))).'" size="2" /> '.$this->l('days').'
+					<input type="text" name="extra_time_preparation" id="extra_time_preparation" value="'.(int)(Tools::getValue('extra_time_preparation', Configuration::get('DOD_EXTRA_TIME_PREPARATION'))).'" size="2" /> '.$this->l('day(s)').'
 				</div>
 				<div class="clear"></div>
 				<label>'.$this->l('Preparation option').'</label>
@@ -333,7 +333,7 @@ class DateOfDelivery extends Module
 			
 			<label>'.$this->l('Delivery between').'</label>
 			<div class="margin-form">
-				<input type="text" name="minimal_time" value="'.htmlentities(Tools::getValue('minimal_time', ((isset($carrier_rule) AND $carrier_rule['minimal_time']) ? $carrier_rule['minimal_time'] : 0)), ENT_QUOTES, 'UTF-8').'" size="2" /> '.$this->l('day(s) AND').' 
+				<input type="text" name="minimal_time" value="'.htmlentities(Tools::getValue('minimal_time', ((isset($carrier_rule) AND $carrier_rule['minimal_time']) ? $carrier_rule['minimal_time'] : 0)), ENT_QUOTES, 'UTF-8').'" size="2" /> '.$this->l('day(s) and').' 
 				<input type="text" name="maximal_time" value="'.htmlentities(Tools::getValue('maximal_time', ((isset($carrier_rule) AND $carrier_rule['maximal_time']) ? $carrier_rule['maximal_time'] : 0)), ENT_QUOTES, 'UTF-8').'" size="2" /> '.$this->l('day(s)').'
 			</div>
 			

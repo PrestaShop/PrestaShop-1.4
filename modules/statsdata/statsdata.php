@@ -40,7 +40,7 @@ class StatsData extends Module
         parent::__construct();
 		
         $this->displayName = $this->l('Data mining for statistics');
-        $this->description = $this->l('This module must be enabled if you want to use Statistics');
+        $this->description = $this->l('This module must be enabled if you want to use Statistics.');
     }
 
 	public function install()
@@ -60,22 +60,22 @@ class StatsData extends Module
 	
 		return '<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Settings').'</legend>
-			<label>'.$this->l('Save pages views for each customer').'</label>
+			<label>'.$this->l('Save page views for each customer').'</label>
 			<div class="margin-form">
 				<input type="radio" name="PS_STATSDATA_CUSTOMER_PAGESVIEWS" id="PS_STATSDATA_CUSTOMER_PAGESVIEWS_on" value="1" '.(Tools::getValue('PS_STATSDATA_CUSTOMER_PAGESVIEWS', Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS')) ? 'checked="checked"' : '').' />
 				<label class="t" for="PS_STATSDATA_CUSTOMER_PAGESVIEWS_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
 				<input type="radio" name="PS_STATSDATA_CUSTOMER_PAGESVIEWS" id="PS_STATSDATA_CUSTOMER_PAGESVIEWS_off" value="0" '.(Tools::getValue('PS_STATSDATA_CUSTOMER_PAGESVIEWS', Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS')) ? '' : 'checked="checked"').' />
 				<label class="t" for="PS_STATSDATA_CUSTOMER_PAGESVIEWS_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" /></label>
-				<p>'.$this->l('Customer pages views uses a lot of CPU resources and database space.').'</p>
+				<p>'.$this->l('Customer page views uses a lot of CPU resources and database space.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
-			<label>'.$this->l('Save global pages views').'</label>
+			<label>'.$this->l('Save global page views').'</label>
 			<div class="margin-form">
 				<input type="radio" name="PS_STATSDATA_PAGESVIEWS" id="PS_STATSDATA_PAGESVIEWS_on" value="1" '.(Tools::getValue('PS_STATSDATA_PAGESVIEWS', Configuration::get('PS_STATSDATA_PAGESVIEWS')) ? 'checked="checked"' : '').' />
 				<label class="t" for="PS_STATSDATA_PAGESVIEWS_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
 				<input type="radio" name="PS_STATSDATA_PAGESVIEWS" id="PS_STATSDATA_PAGESVIEWS_off" value="0" '.(Tools::getValue('PS_STATSDATA_PAGESVIEWS', Configuration::get('PS_STATSDATA_PAGESVIEWS')) ? '' : 'checked="checked"').' />
 				<label class="t" for="PS_STATSDATA_PAGESVIEWS_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" /></label>
-				<p>'.$this->l('Global pages views uses less resources than customer\'s, but uses resources nonetheless').'</p>
+				<p>'.$this->l('Global page views uses less resources than customer\'s, but uses resources nonetheless.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<label>'.$this->l('Plug-ins detection').'</label>

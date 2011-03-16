@@ -40,10 +40,10 @@ class MoneyBookers extends PaymentModule
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Moneybookers');
-		$this->description = $this->l('Accepts payments by Moneybookers');
+		$this->description = $this->l('Accepts payments by Moneybookers.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
 		if (Configuration::get('MB_PAY_TO_EMAIL') == 'testmerchant@moneybookers.com')
-			$this->warning = $this->l('You are currently using the default Moneybookers email address, you need to use your own email address');
+			$this->warning = $this->l('You are currently using the default Moneybookers e-mail address, please use your own e-mail address.');
 
 		/* MoneyBookers payment methods */
 		$this->_internationalPaymentMethods = array(
@@ -154,12 +154,12 @@ class MoneyBookers extends PaymentModule
 			{
 				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__, 'r');
 				if (!$fp)
-					$errors[] = $this->l('Impossible to contact activation server, please try later');
+					$errors[] = $this->l('Unable to contact activation server, please try again later.');
 				else
 				{
 					$response = trim(strtolower(fgets($fp, 4096)));
 					if (!strstr('ok', $response))
-						$errors[] = $this->l('Account validation failed, your email might be wrong');
+						$errors[] = $this->l('Account validation failed, please check your e-mail.');
 					else
 					{
 						Configuration::updateValue('MB_PAY_TO_EMAIL', $_POST['mb_email_to_validate']);
@@ -167,14 +167,14 @@ class MoneyBookers extends PaymentModule
 
 						$output .= '
 						<ul style="color: green; font-weight: bold; margin-bottom: 30px; width: 506px; background: #E1FFE9; border: 1px dashed #BBB; padding: 10px;">
-							<li>'.$this->l('E-mail activation successful, you can now validate your secret word').'<img src="http://www.prestashop.com/modules/moneybookers.png?email='.urlencode($_POST['mb_email_to_validate']).'" style="float:right" /></li>
+							<li>'.$this->l('E-mail activation successful, you can now validate your secret word.').'<img src="http://www.prestashop.com/modules/moneybookers.png?email='.urlencode($_POST['mb_email_to_validate']).'" style="float:right" /></li>
 						</ul>';
 					}
 					fclose($fp);
 				}
 			}
 			else
-				$errors[] = $this->l('The email field is required');
+				$errors[] = $this->l('E-mail field is required');
 		}
 
 		/* Validate secret word */
@@ -184,14 +184,14 @@ class MoneyBookers extends PaymentModule
 			{
 				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']), 'r');
 				if (!$fp)
-					$errors[] = $this->l('Impossible to contact activation server, please try later');
+					$errors[] = $this->l('Unable to contact activation server, please try again later.');
 				else
 				{
 					$response = trim(strtolower(fgets($fp, 4096)));
 					if (strstr('velocity_check_exceeded', $response))
 						$errors[] = $this->l('Secret word validation failed, exceeded max tries (3 per hour)');
 					elseif (!strstr('ok', $response))
-						$errors[] = $this->l('Secret word validation failed, your secret word might be wrong');
+						$errors[] = $this->l('Secret word validation failed, please check your secret word.');
 					else
 					{
 						Configuration::updateValue('MB_SECRET_WORD', $_POST['mb_sw_to_validate']);
@@ -206,7 +206,7 @@ class MoneyBookers extends PaymentModule
 				}
 			}
 			else
-				$errors[] = $this->l('The secret word field is required');
+				$errors[] = $this->l('Secret word field is required');
 		}
 
 		/* Update configuration variables */
@@ -269,13 +269,13 @@ class MoneyBookers extends PaymentModule
 		/* Display settings form */
 		$output .= '
 		<b>'.$this->l('About Moneybookers').'</b><br /><br /><p style="font-size: 11px;">'.
-		$this->l('Moneybookers is one of Europe\'s largest online payments systems and among the world\'s leading eWallet providers, with over 14 million account holders. The simple eWallet enables any customer to conveniently and securely pay online without revealing personal financial data, as well as to send and receive money transfers cost-effectively by simply using an email address.').'<br /><br />'.
-		$this->l('Moneybookers worldwide payment network offers businesses access to over 80 local payment options in over 200 countries with just one integration. Already more than 60,000 merchants use Moneybookers payments service, including global partners such as eBay, Skype and Thomas Cook').'<br /><br />'.$this->l('Moneybookers was founded in 2001 in London and is regulated by the Financial Services Authority of the United Kingdom.').'</p>
+		$this->l('Moneybookers is one of Europe\'s largest online payment systems and among the world\'s leading eWallet providers, with over 14 million account holders. The simple eWallet enables customers to conveniently and securely pay online without revealing personal financial data, as well as to send and receive money transfers cost-effectively by using an e-mail address.').'<br /><br />'.
+		$this->l('Moneybookers worldwide payment network offers businesses access to over 80 local payment options in over 200 countries with just one integration. Already more than 60,000 merchants use the Moneybookers payment service, including global partners such as eBay, Skype and Thomas Cook.').'<br /><br />'.$this->l('Moneybookers was founded in 2001 in London and is regulated by the Financial Services Authority of the United Kingdom.').'</p>
                 <div style="clear: both;"></div>
 
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" id="form-opening">
 			<fieldset class="width2" style="margin: 20px 0;">
-				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Account opening').'</legend>
+				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Open Account').'</legend>
 				'.$this->l('Start by opening a').' <b>'.$this->l('free account').'</b> '.$this->l('with Moneybookers:').'
 				<p><a href="http://www.moneybookers.com/partners/prestashop/'.($lang->iso_code == 'fr' ? '' : strtolower($lang->iso_code).'/').'"><img src="../modules/moneybookers/prestashop_mb_'.$iso_img.'.gif" alt="PrestaShop & Moneybookers" /></a><br /><br />
 				<span style="color: #CC0000; font-weight: bold; line-height: 20px;"><img src="../img/admin/gold.gif" alt="" /> '.$this->l('Thanks to the PrestaShop/Moneybookers partnership,').'<br />'.$this->l('you will get a preferential commission rate!').'</span></p>
@@ -290,10 +290,10 @@ class MoneyBookers extends PaymentModule
 			<fieldset class="width2" style="margin: 20px 0;">
 				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Account validation').'</legend>
 				'.(Configuration::get('MB_PARAMETERS') == 1 ? '<p style="font-weight: bold; color: green;"><img src="../img/admin/ok.gif" alt="" /> '.$this->l('Your account has been activated').'</p>' : '').'
-				<p style="line-height: 20px;">'.$this->l('You need to').' <b>'.$this->l('validate your account').'</b>, '.$this->l('please type the email address you used to open your Moneybookers account:').'<br /><br />
+				<p style="line-height: 20px;">'.$this->l('You need to').' <b>'.$this->l('validate your account').'</b>, '.$this->l('please type the e-mail address used to open your Moneybookers account:').'<br /><br />
 				<input type="text" name="mb_email_to_validate" value="'.Configuration::get('MB_PAY_TO_EMAIL').'" style="width: 250px;" />
 				<input type="submit" name="SubmitValidation" class="button" value="'.$this->l('Validate my account').'" /></p>
-				<p style="font-size: 11px;"><a href="'.$manual_links[$iso_manual].'" target="_blank"><img src="../img/admin/pdf.gif" alt="" /></a><a href="'.$manual_links[$iso_manual].'" target="_blank">'.$this->l('If you need help, read the activation manual').'</a></p>
+				<p style="font-size: 11px;"><a href="'.$manual_links[$iso_manual].'" target="_blank"><img src="../img/admin/pdf.gif" alt="" /></a><a href="'.$manual_links[$iso_manual].'" target="_blank">'.$this->l('For help, refer to the activation manual.').'</a></p>
 			</fieldset>
 		</form>
 
@@ -301,7 +301,7 @@ class MoneyBookers extends PaymentModule
 			<fieldset class="width2" style="margin: 20px 0;">
 				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Secret word validation').'</legend>
 				'.(Configuration::get('MB_PARAMETERS_2') == 1 ? '<p style="font-weight: bold; color: green;"><img src="../img/admin/ok.gif" alt="" /> '.$this->l('Your secret word has been activated').'</p>' : '').'
-				<p style="line-height: 20px;">'.$this->l('You need to').' <b>'.$this->l('validate your secret word').'</b>, '.$this->l('please type the same secret word you entered on your Moneybookers account:').'<br /><br />
+				<p style="line-height: 20px;">'.$this->l('You need to').' <b>'.$this->l('validate your secret word').'</b>, '.$this->l('Please enter the secret word entered on your Moneybookers account:').'<br /><br />
 				<input type="password" name="mb_sw_to_validate" value="'.Configuration::get('MB_SECRET_WORD').'" style="width: 250px;" />
 				<input type="submit" name="SubmitSecret" class="button" value="'.$this->l('Validate my secret word').'" /></p>
 			</fieldset>
@@ -322,7 +322,7 @@ class MoneyBookers extends PaymentModule
 				$localActivated = Configuration::get('MB_LOCAL_METHODS') != '' ? explode('|', Configuration::get('MB_LOCAL_METHODS')) : array();
 
 				$output .= '
-				<p>'.$this->l('Tick the').' <b>'.$this->l('international payment methods').'</b> '.$this->l('that you want to enable:').'</p>
+				<p>'.$this->l('Click the').' <b>'.$this->l('international payment methods').'</b> '.$this->l('that you would like to enable:').'</p>
 				<div style="width: 200px; float: left; margin-right: 25px; line-height: 75px;">';
 
 				for ($i = 0; $i != 3; $i++)
@@ -346,7 +346,7 @@ class MoneyBookers extends PaymentModule
 				</div>
 				<div style="clear: both;"></div>
 				<hr size="1" noshade />
-				<p>'.$this->l('Tick the').' <b>'.$this->l('local payment methods').'</b> '.$this->l('that you want to enable:').'</p>
+				<p>'.$this->l('Click the').' <b>'.$this->l('local payment methods').'</b> '.$this->l('that you would like to enable:').'</p>
 				<div style="width: 200px; float: left; margin-right: 25px; line-height: 75px;">';
 
 				for ($i = 0; $i != 7; $i++)

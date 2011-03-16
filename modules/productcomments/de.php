@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{productcomments}prestashop>productcomments_b91c4e8b229a399a3bc911d352524a9b'] = 'Produkt-Kommentare';
-$_MODULE['<{productcomments}prestashop>productcomments_eb4783ce47d29a12b944635fc255893f'] = 'Benutzern erlauben, einen Kommentar zu einem Produkt zu posten';
+$_MODULE['<{productcomments}prestashop>productcomments_0c21532dfd3476791e5aab1aa7fa7405'] = 'Benutzern erlauben, einen Kommentar zu einem Produkt zu posten';
 $_MODULE['<{productcomments}prestashop>productcomments_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Bestätigung';
 $_MODULE['<{productcomments}prestashop>productcomments_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{productcomments}prestashop>productcomments_1bb54e382f7dbdb260f0aa6b42bb624b'] = 'Kriterium gelöscht';
@@ -27,7 +27,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_f2a6c498fb90ee345d997f888
 $_MODULE['<{productcomments}prestashop>productcomments_8bf0c707232d63bf83b4b2467d2df41a'] = 'Auswahl:';
 $_MODULE['<{productcomments}prestashop>productcomments_d00b7f656273a495f555bead0248d6f5'] = 'Zur Zeit keine Kommentare zum Bestätigen.';
 $_MODULE['<{productcomments}prestashop>productcomments_7799b301b44c329fc9ec6a3a9c1905e0'] = 'Ein neues Kriterium hinzufügen';
-$_MODULE['<{productcomments}prestashop>productcomments_d1b86e74352633799358873fd5485685'] = 'Sie können mehrere Kriterien definieren, um Ihren Kunden bei ihrem Beitrag zu helfen. Zum Beispiel: Effizienz, Leichtigkeit, Design.';
+$_MODULE['<{productcomments}prestashop>productcomments_7753ab38f8e113e8af65ab1241331625'] = 'Sie können mehrere Kriterien definieren, um Ihren Kunden bei ihrem Beitrag zu helfen. Zum Beispiel: Effizienz, Leichtigkeit, Design.';
 $_MODULE['<{productcomments}prestashop>productcomments_bc58d00e1e42de31a8e58f8dc7d9bdc7'] = 'Sie können hier unten ein neues Kriterium hinzufügen:';
 $_MODULE['<{productcomments}prestashop>productcomments_49ee3087348e8d44e1feda1917443987'] = 'Name';
 $_MODULE['<{productcomments}prestashop>productcomments_f255b686708be7c5082cd3f5bab872c1'] = 'Gilt für';
@@ -49,7 +49,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_99121ab27aaa7472cfada9071
 $_MODULE['<{productcomments}prestashop>productcomments_fd4b5401d4d3c7d32d158bfc1e552f3b'] = 'Bitte tragen Sie Ihren Namen ein';
 $_MODULE['<{productcomments}prestashop>productcomments_7b2f2ea0f690ef3c2fc9bba0e4bfbc4c'] = 'Ungültiger Kommentartext gepostet.';
 $_MODULE['<{productcomments}prestashop>productcomments_f88dc17737f7fdd4464b2eb922a8f133'] = 'Ein Fehler bist eim Speichern Ihres Kommentars aufgetreten.';
-$_MODULE['<{productcomments}prestashop>productcomments_ad4ec284804b5d44a3e6de6c851e2731'] = 'Kommentar erfolgreich geschrieben.';
+$_MODULE['<{productcomments}prestashop>productcomments_7fa4a3510dafd0eac6435c19861b2bb7'] = 'Kommentar erfolgreich geschrieben.';
 $_MODULE['<{productcomments}prestashop>productcomments_f8694a9aae2eb045920f613cfa7f1235'] = 'Wartet aufBestätigung durch Moderator.';
 $_MODULE['<{productcomments}prestashop>productcomments_6bf852d9850445291f5e9d4740ac7b50'] = 'Kommentartext ist erforderlich.';
 $_MODULE['<{productcomments}prestashop>productcomments_6d28f2900adb9e500868166f6d04da92'] = 'Sie sollten ';

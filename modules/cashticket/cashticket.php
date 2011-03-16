@@ -96,8 +96,8 @@ class CashTicket extends PrepaidServices
 				'cant_create_dispo' => $this->l('Transaction could not be initiated due to connection problems. If the problem persists, please contact our support.'),
 				'disposition_consumed' => $this->l('Disposition consumed'),
 				'payment_released' => $this->l('Disposition released'),
-				'release_error' => $this->l('An error has occurred during the release'),
-				'introduction' => $this->l('Accept prepaid payments in your webshop. All that is required to pay at a web-shop is the Cash-Ticket’s 16 digit pin code. This way, consumers can make online payments without a credit card or a bank account.'),
+				'release_error' => $this->l('An error has occurred during the release.'),
+				'introduction' => $this->l('Accept prepaid payments in your webshop. All that is required is the Cash-Ticket’s 16 digit pin code. This way, consumers can make online payments without a credit card or a bank account.'),
 				'register' => $this->l('Learn more')
 			);
 
@@ -106,7 +106,7 @@ class CashTicket extends PrepaidServices
 
 	protected function _getErrorMsgFromErrorCode($error_code)
 	{
-		$error_msg = array(1 => $this->l('An error has occurred, check Messages for more info'),
+		$error_msg = array(1 => $this->l('An error has occurred, check Messages for more info.'),
 						   2 => $this->l('Invalid amount'));
 
 		return $error_msg[$error_code];

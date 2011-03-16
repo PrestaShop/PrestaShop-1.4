@@ -56,7 +56,7 @@ class ThemeInstallator extends Module
 			$this->tab = 'Theme';
 		parent::__construct();
 		$this->displayName = $this->l('Import/export a theme');
-		$this->description = $this->l('Export or Install a theme and its modules on your shop');
+		$this->description = $this->l('Export or Install a theme and its modules on your shop.');
 	}
 	
 	private function getTheNativeModules()
@@ -205,7 +205,7 @@ class ThemeInstallator extends Module
 	{
 		if (!class_exists('ZipArchive', false))
 		{
-			$this->errors .= parent::displayError($this->l('zip is not installed on your server. Ask your host for further information.'));
+			$this->errors .= parent::displayError($this->l('Zip is not installed on your server. Ask your host for further information.'));
 			return ;
 		}
 		if (Tools::isSubmit('submitImport1'))
@@ -646,7 +646,7 @@ class ThemeInstallator extends Module
 				<label for="nomain">'.$this->l('Main theme').'</label>
 				<div class="margin-form">
 					<input type="checkbox" name="variation[]" id="nomain" value="'.$xml->variations->variation[0]['directory'].'" checked />
-					<p class="clear">'.$this->l('Uncheck this field if you don\'t want to install the main theme').'</p>
+					<p class="clear">'.$this->l('Uncheck this field if you do not want to install the main theme.').'</p>
 				</div>
 				<h3>'.$this->l('Select the variations you wish to import').'</h3>
 				<p class="margin-form">'.$var.'</p>
@@ -1225,7 +1225,7 @@ class ThemeInstallator extends Module
 			<label>'.$this->l('Add variation').'
 				<a href="javascript:addVariation(-1);"><img alt="add" title="add" src="'._MODULE_DIR_.$this->name.'/add.png'.'" /></a>
 			</label>
-			<p class="margin-form">'.$this->l('Select other theme to include and its compatibility').'</p>
+			<p class="margin-form">'.$this->l('Select theme to include and its compatibility.').'</p>
 			<script type="text/javascript">
 				var path = "'.$this->l('Path').'";
 				var delete_img = "'._MODULE_DIR_.$this->name.'/delete.png";

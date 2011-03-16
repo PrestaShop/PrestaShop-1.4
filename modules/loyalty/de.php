@@ -3,8 +3,8 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'Kundentreue und Belohnungen';
-$_MODULE['<{loyalty}prestashop>loyalty_44c3144de5c433c8e7c9cbc66c906c01'] = 'Bieten Sie Ihren Kunden ein Treueprogramm';
-$_MODULE['<{loyalty}prestashop>loyalty_c1a15aea773888ee981e8a4b2b041664'] = 'Dies löscht alle Treuepunkte und die Verlaufsgeschichte Ihrer Kunden, sind Sie sicher?';
+$_MODULE['<{loyalty}prestashop>loyalty_f8763c754ba455aa6e8ddf0e62911eb7'] = 'Bieten Sie Ihren Kunden ein Treueprogramm';
+$_MODULE['<{loyalty}prestashop>loyalty_f0338d5a7bbd642cc188ca69c8a97b12'] = 'Dies löscht alle Treuepunkte und die Verlaufsgeschichte Ihrer Kunden, sind Sie sicher?';
 $_MODULE['<{loyalty}prestashop>loyalty_7307b68f93443d5863f1d3943c546b20'] = 'Treuebonus';
 $_MODULE['<{loyalty}prestashop>loyalty_e81b2826b5aebd9c92fb5d090f0cdc9d'] = 'Sie müssen mindestens eine Kategorie für Gutschein-Aktionen wählen';
 $_MODULE['<{loyalty}prestashop>loyalty_f38f5974cdc23279ffe6d203641a8bdf'] = 'Einstellungen aktualisiert.';
@@ -15,7 +15,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_315eae70bcaee168f1654c0ceeeef357'] = '1 B
 $_MODULE['<{loyalty}prestashop>loyalty_e3ff7eaa9deb31e1e91178a7216135c0'] = '1 Punkt =';
 $_MODULE['<{loyalty}prestashop>loyalty_46108358594124685e77e7d49f762b30'] = 'für den Rabatt';
 $_MODULE['<{loyalty}prestashop>loyalty_98cf9475009d3c6e795ffac5d391cec4'] = 'Gutschein-Details';
-$_MODULE['<{loyalty}prestashop>loyalty_eb04c23cfad386678c6e5817f253b6aa'] = 'Minimalbetrag zur Benutzung des Gutscheins';
+$_MODULE['<{loyalty}prestashop>loyalty_dd98e4d652530674f61201056fdbe9b4'] = 'Minimalbetrag zur Benutzung des Gutscheins';
 $_MODULE['<{loyalty}prestashop>loyalty_51ab56dd5b46c7b5c8fdf22651ae0db6'] = 'Punkte auf herabgesetzte Produkte verteilen';
 $_MODULE['<{loyalty}prestashop>loyalty_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Aktiviert';
 $_MODULE['<{loyalty}prestashop>loyalty_93cba07454f06a4a960172bbd6e2a435'] = 'Ja';
@@ -26,7 +26,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_9611a682e61c503c32e2dc58fdbc8ddf'] = 'Pun
 $_MODULE['<{loyalty}prestashop>loyalty_2a46cccdea2f18fdfdfacf99a98b758d'] = 'Gutscheine, die vom Treue-System erstellt wurden, können in den folgenden Kategorien verwendet werden:';
 $_MODULE['<{loyalty}prestashop>loyalty_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{loyalty}prestashop>loyalty_49ee3087348e8d44e1feda1917443987'] = 'Name';
-$_MODULE['<{loyalty}prestashop>loyalty_ceae28295d1d6543f5f5fd7905a23b1f'] = 'Markieren Sie alle Kontrollkästchen der Kategorien, in denen Treue-Gutscheine nutzbar sind';
+$_MODULE['<{loyalty}prestashop>loyalty_c2a7db7dec4de1bdb143ccd790f5a62c'] = 'Markieren Sie alle Kontrollkästchen der Kategorien, in denen Treue-Gutscheine nutzbar sind';
 $_MODULE['<{loyalty}prestashop>loyalty_30e793698766edbaaf84a74d4c377f72'] = 'Treuepunkte-Fortschritt';
 $_MODULE['<{loyalty}prestashop>loyalty_4f2a91e15af2631ff9424564b8a45fb2'] = 'Ursprünglich';
 $_MODULE['<{loyalty}prestashop>loyalty_453e6aa38d87b28ccae545967c53004f'] = 'Nicht verfügbar';
@@ -48,7 +48,7 @@ $_MODULE['<{loyalty}prestashop>loyalty_928666bdf20510dfa5c58393b77f1798'] = 'Gut
 $_MODULE['<{loyalty}prestashop>loyalty_a9be824aae4f2381a27b7c699b1e041e'] = 'Warten auf Bestätigung';
 $_MODULE['<{loyalty}prestashop>loyalty_78945de8de090e90045d299651a68a9b'] = 'Verfügbar';
 $_MODULE['<{loyalty}prestashop>loyalty_4cb08bf5ad3d3c7b010dde725a078b28'] = 'Bereits eingelöst';
-$_MODULE['<{loyalty}prestashop>loyalty_df05c2db84dacb19b599b489bf3963db'] = 'Nicht für Rabatte zur Verfügung';
+$_MODULE['<{loyalty}prestashop>loyalty_01371a1d58e9234c0b9dbc08cf54fa8b'] = 'Nicht für Rabatte zur Verfügung';
 $_MODULE['<{loyalty}prestashop>loyalty_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mein Konto';
 $_MODULE['<{loyalty}prestashop>loyalty_c540093e64d84440025b2d8201f04336'] = 'Meine Treuepunkte';
 $_MODULE['<{loyalty}prestashop>loyalty_5acc2ceeb883ba07cef2d02ea382f242'] = 'Sie haben keine Bestellungen vorgenommen.';

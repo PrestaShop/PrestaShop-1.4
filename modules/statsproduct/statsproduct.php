@@ -45,7 +45,7 @@ class StatsProduct extends ModuleGraph
         parent::__construct();
 		
         $this->displayName = $this->l('Product details');
-        $this->description = $this->l('Get detailed statistics for each product');
+        $this->description = $this->l('Get detailed statistics for each product.');
     }
 	
 	public function install()
@@ -265,10 +265,10 @@ class StatsProduct extends ModuleGraph
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 		<h2>'.$this->l('Number of purchases compared to number of viewings').'</h2>
 			<p>
-				'.$this->l('After choosing a category and selecting a product available in this category, some graphs appear. Then, you can analyze them.').'
+				'.$this->l('After choosing a category and selecting a product, informational graphs will appear. Then, you will be able to analyze them.').'
 				<ul>
-					<li class="bullet">'.$this->l('If you notice that a product is successful, often purchased, but also viewed infrequently: you should put it more prominently on your webshop front-office.').'</li>
-					<li class="bullet">'.$this->l('On the other hand, if a product has a lot of viewings but is not really purchased: we advise you to check or modify this product\'s information, description and photography again.').'
+					<li class="bullet">'.$this->l('If you notice that a product is successful and often purchased, but viewed infrequently, you should put it more prominently on your webshop front-office.').'</li>
+					<li class="bullet">'.$this->l('On the other hand, if a product has many viewings but is not often purchased, we advise you to check or modify this product\'s information, description and photography again.').'
 					</li>
 				</ul>
 			</p>

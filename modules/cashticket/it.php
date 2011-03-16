@@ -41,10 +41,10 @@ $_MODULE['<{cashticket}prestashop>cashticket_d2bbf245e9591814fe994df3cae95964'] 
 $_MODULE['<{cashticket}prestashop>cashticket_ebbe99d835c79ead89db1b2b9e4fe70f'] = 'Operazione non avviata a causa di problemi di connessione. Se il problema persiste, si prega di contattare il nostro supporto.';
 $_MODULE['<{cashticket}prestashop>cashticket_99f6765a05b697eb78e8c2e5e228f2fc'] = 'Disposizione consumata';
 $_MODULE['<{cashticket}prestashop>cashticket_c3e260f43a99b6fd907538953fe700d0'] = 'Disposizione emessa';
-$_MODULE['<{cashticket}prestashop>cashticket_f6a62a622cbba2c1b8cd0be062deff96'] = 'Si è verificato un errore durante l\'emissione';
-$_MODULE['<{cashticket}prestashop>cashticket_12f989194ad92e23c0eb3941db7f6720'] = 'Accetta pagamenti prepagati nel tuo shop online. Tutto ciò che è richiesto per pagare in un negozio web è codice PIN a 16 cifre di Cash-Ticket. In questo modo, i consumatori possono effettuare pagamenti online senza carta di credito o un conto bancario.';
+$_MODULE['<{cashticket}prestashop>cashticket_12879ec2c367483dd59ef7442178d124'] = 'Si è verificato un errore durante l\'emissione';
+$_MODULE['<{cashticket}prestashop>cashticket_d929c5e5e5643c622400e837914206da'] = 'Accetta pagamenti prepagati nel tuo shop online. Tutto ciò che è richiesto per pagare in un negozio web è codice PIN a 16 cifre di Cash-Ticket. In questo modo, i consumatori possono effettuare pagamenti online senza carta di credito o un conto bancario.';
 $_MODULE['<{cashticket}prestashop>cashticket_d59048f21fd887ad520398ce677be586'] = 'Per saperne di più';
-$_MODULE['<{cashticket}prestashop>cashticket_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Si verificato un errore, controlla i messaggi per maggiori informazioni';
+$_MODULE['<{cashticket}prestashop>cashticket_930320ced1b8c376237844049b570a7f'] = 'Si verificato un errore, controlla i messaggi per maggiori informazioni';
 $_MODULE['<{cashticket}prestashop>cashticket_a9ced76f2dd6907220fa95b3a136b04a'] = 'Importo non valido';
 $_MODULE['<{cashticket}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'Stato della disposizione non valido';
 $_MODULE['<{cashticket}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = '. Non sei autorizzato ad effettuare il pagamento.';

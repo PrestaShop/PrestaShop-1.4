@@ -78,7 +78,7 @@ class StatsSales extends ModuleGraph
 				<input type="submit" name="submitCountry" value="'.$this->l('Filter').'" class="button" />
 			</form>
 			<p><center><img src="../img/admin/down.gif" />
-				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. It is not an advanced analysis tool, but at least you can overview the viability of your shop in a flash. You can also keep a watch on the difference with some periods like Christmas. Only valid orders are included in these two graphs.').'
+				'.$this->l('These graphs represent the evolution of your orders and sales turnover for a given period. This tool allows for quick overview of the viability of your shop. You can also keep watch on the difference between time periods (like the holiday season). Only valid orders are included in these two graphs.').'
 			</center></p>
 			<p>'.$this->l('Orders placed:').' '.(int)($totals['orderCount']).'</p>
 			<p>'.$this->l('Products bought:').' '.(int)($totals['products']).'</p>
@@ -90,15 +90,15 @@ class StatsSales extends ModuleGraph
 			<p class="space"><img src="../img/admin/down.gif" />
 				'.$this->l('You can see the order state distribution below.').'
 			</p><br />
-			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.(int)Tools::getValue('id_country'))) : $this->l('No order for this period')).'</center>
+			'.($totals['orderCount'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.(int)Tools::getValue('id_country'))) : $this->l('No orders for this period.')).'</center>
 			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=3"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 		</fieldset>
 		<br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 			<h2>'.$this->l('Various order statuses').'</h2>
 			<p>
-				'.$this->l('In your back-office, you can find many order statuses : Awaiting cheque payment, Payment accepted, Preparation in progress, Shipping, Delivered, Cancelled, Refund, Payment error, Out of stock, and Awaiting bank wire payment.').'<br />
-				'.$this->l('These statuses cannot be removed from the back-office, but you have the option to add some more.').'
+				'.$this->l('In your back-office, you can find the following order statuses : Awaiting check payment, Payment accepted, Preparation in progress, Shipping, Delivered, Cancelled, Refund, Payment error, Out of stock, and Awaiting bank wire payment.').'<br />
+				'.$this->l('Statuses cannot be removed from the back-office, but you have the option to add more.').'
 			</p>
 		</fieldset>';
 		return $this->_html;

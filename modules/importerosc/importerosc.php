@@ -15,7 +15,7 @@ class importerosc extends ImportModule
 		parent::__construct ();
 
 		$this->displayName = $this->l('Importer osCommerce');
-		$this->description = $this->l('This module allows you to import from osCommerce to Prestashop'); 
+		$this->description = $this->l('This module allows you to import from osCommerce to Prestashop.'); 
 	}
 	
 	public function install()
@@ -147,7 +147,7 @@ class importerosc extends ImportModule
 		return array( 1 => array(
 								'id_group' => 1,
 								'price_display_method' => 0,
-								'name' => array($idLang => $this->l('Default OS Commerce Group'))  
+								'name' => array($idLang => $this->l('Default osCommerce Group'))  
 								)
 					);
 	}

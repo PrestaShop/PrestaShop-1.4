@@ -53,7 +53,7 @@ class StatsSearch extends ModuleGraph
         parent::__construct();
 		
         $this->displayName = $this->l('Shop search');
-        $this->description = $this->l('Display which keywords have been searched by your visitors');
+        $this->description = $this->l('Display which keywords have been searched by your visitors.');
     }
 
 	function install()
@@ -94,7 +94,7 @@ class StatsSearch extends ModuleGraph
 		<table class="table" border="0" cellspacing="0" cellspacing="0">
 		<thead>
 			<tr>
-				<th style="width:400px;">'.$this->l('keywords').'</th>
+				<th style="width:400px;">'.$this->l('Keywords').'</th>
 				<th style="width:50px; text-align: right">'.$this->l('Occurrences').'</th>
 				<th style="width:50px; text-align: right">'.$this->l('Results').'</th>
 			</tr>
@@ -102,7 +102,7 @@ class StatsSearch extends ModuleGraph
 
 		foreach ($result as $row)
 			$table .= '<tr>
-				<td>'.$row['keywords'].'</td>
+				<td>'.$row['Keywords'].'</td>
 				<td style="text-align: right">'.$row['occurences'].'</td>
 				<td style="text-align: right">'.$row['total'].'</td>
 			</tr>';
@@ -120,7 +120,7 @@ class StatsSearch extends ModuleGraph
 	
 	protected function getData($layers)
 	{
-		$this->_titles['main'] = $this->l('10 first keywords');
+		$this->_titles['main'] = $this->l('First 10 keywords');
 		$totalResult = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
 		$total = 0;
 		$total2 = 0;
@@ -131,7 +131,7 @@ class StatsSearch extends ModuleGraph
 		{
 			if (!$row['occurences'])
 				continue;
-			$this->_legend[] = $row['keywords'];
+			$this->_legend[] = $row['Keywords'];
 			$this->_values[] = $row['occurences'];
 			$total2 += $row['occurences'];
 		}

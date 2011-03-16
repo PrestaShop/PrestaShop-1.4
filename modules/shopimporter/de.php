@@ -3,10 +3,10 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{shopimporter}prestashop>shopimporter_d714c742b360a8ecbb124c15e9a391a1'] = 'Shop Importeur';
-$_MODULE['<{shopimporter}prestashop>shopimporter_b51e3d770566c831063a131631e494c2'] = 'Dieses Modul ermöglicht es Ihnen, Ihren Shop aus einem anderen System zu prestashop zu importieren ';
+$_MODULE['<{shopimporter}prestashop>shopimporter_8c0fe18034f47d7d3dd3e58098e3ffdb'] = 'Dieses Modul ermöglicht es Ihnen, Ihren Shop aus einem anderen System zu prestashop zu importieren ';
 $_MODULE['<{shopimporter}prestashop>shopimporter_4994a8ffeba4ac3140beb89e8d41f174'] = 'Sprache';
 $_MODULE['<{shopimporter}prestashop>shopimporter_a9db6adcdafc85c5830439401fd866f6'] = 'Sprachen importieren';
-$_MODULE['<{shopimporter}prestashop>shopimporter_5c9ada346bd1c8b1adae50aec0e7437c'] = 'Neue Sprachen fügen automatisch Übersetzungen hinzu!';
+$_MODULE['<{shopimporter}prestashop>shopimporter_b8b8ca447e355455b8dc638993c41ae7'] = 'Neue Sprachen fügen automatisch Übersetzungen hinzu!';
 $_MODULE['<{shopimporter}prestashop>shopimporter_386c339d37e737a436499d423a77df0c'] = 'Währung';
 $_MODULE['<{shopimporter}prestashop>shopimporter_4234c64201820401dfa04eeb449c1bbc'] = 'Währungen importieren';
 $_MODULE['<{shopimporter}prestashop>shopimporter_719fec04166d6fa75f89cd29ad61fa8c'] = 'Steuern';
@@ -50,8 +50,8 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_1e411d25230ba738b9ae583bcb9b0b5
 $_MODULE['<{shopimporter}prestashop>shopimporter_3596c777cbc8b72d678f34daabc9148b'] = 'Fehler anzeigen';
 $_MODULE['<{shopimporter}prestashop>shopimporter_89a399eee52b2a6daaea92eba3e14cad'] = 'Importprozess testen';
 $_MODULE['<{shopimporter}prestashop>shopimporter_bf79359f8edda6f7df97ef57a4ee09b6'] = 'Import starten';
-$_MODULE['<{shopimporter}prestashop>shopimporter_b91c48bda04c3f2eda195ca390fabbbd'] = 'Beim Import sind Fehler aufgetreten. Weitere Details siehe unter \"Fehler anzeigen\"';
-$_MODULE['<{shopimporter}prestashop>shopimporter_a4376f284662da6f3997514ca74597c9'] = 'Der Import ist abgeschlossen.';
+$_MODULE['<{shopimporter}prestashop>shopimporter_7345e08ebda2a65fd552adb992952e16'] = 'Beim Import sind Fehler aufgetreten. Weitere Details siehe unter \"Fehler anzeigen\"';
+$_MODULE['<{shopimporter}prestashop>shopimporter_e905d0eb5204b761d8c0e3eebed4a0e0'] = 'Der Import ist abgeschlossen.';
 $_MODULE['<{shopimporter}prestashop>shopimporter_596403b61367ca30d6de75812275f9cd'] = 'Daten entfernen';
 $_MODULE['<{shopimporter}prestashop>shopimporter_edc186cbc5cc897a79312880ec16c621'] = 'Bitte wählen Sie etwas zum Importieren';
 $_MODULE['<{shopimporter}prestashop>shopimporter_81b33153f65252001fe132d74b658fbe'] = 'Aus einem anderen System importieren';
@@ -71,7 +71,7 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_9dfc5d5738312210c3c75e68a468691
 $_MODULE['<{shopimporter}prestashop>shopimporter_c195d4db1be0d349d21f236f0a6400ff'] = 'Dieser Modus ist gefährlich';
 $_MODULE['<{shopimporter}prestashop>shopimporter_11e9fa925cb444a223769edd53334f13'] = 'Import für jeden';
 $_MODULE['<{shopimporter}prestashop>shopimporter_70fda5850e8d8946a340c55bf985fd39'] = 'Wählen Sie die Vorkommenszahl für jede Import-Anfrage';
-$_MODULE['<{shopimporter}prestashop>shopimporter_1404aa04467659fbadad2a7dd1a279b3'] = 'Falls Fehler auftreten';
+$_MODULE['<{shopimporter}prestashop>shopimporter_35f178a340d9aa1a080d8cfaf0b57f36'] = 'Falls Fehler auftreten';
 $_MODULE['<{shopimporter}prestashop>shopimporter_11a755d598c0c417f9a36758c3da7481'] = 'Anhalten';
 $_MODULE['<{shopimporter}prestashop>shopimporter_72ef2b9b6965d078e3c7f95487a82d1c'] = 'Überspringen';
 $_MODULE['<{shopimporter}prestashop>shopimporter_9eb6b78a99cdb6ffd3d40d18621d9f80'] = 'Erzwingen';

@@ -42,7 +42,7 @@ class BlockBestSellers extends Module
 			parent::__construct();
 
 			$this->displayName = $this->l('Top seller block');
-			$this->description = $this->l('Add a block displaying the shop\'s top sellers');
+			$this->description = $this->l('Add a block displaying the shop\'s top sellers.');
 	}
 
 	public function install()

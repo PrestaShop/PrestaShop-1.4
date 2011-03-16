@@ -183,7 +183,7 @@ XML;
 
         $res = file_exists(GSITEMAP_FILE);
         $this->_html .= '<h3 class="'. ($res ? 'conf confirm' : 'alert error') .'" style="margin-bottom: 20px">';
-        $this->_html .= $res ? $this->l('Sitemap file successfully generated') : $this->l('Error while creating sitemap file');
+        $this->_html .= $res ? $this->l('Sitemap file generated') : $this->l('Error while creating sitemap file');
         $this->_html .= '</h3>';
     }
 	
@@ -233,11 +233,11 @@ XML;
 		'<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<div style="margin:0 0 20px 0;">
 				<input type="checkbox" name="GSITEMAP_ALL_PRODUCTS" id="GSITEMAP_ALL_PRODUCTS" style="vertical-align: middle;" value="1" '.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? 'checked="checked"' : '').' /> <label class="t" for="GSITEMAP_ALL_PRODUCTS">'.$this->l('Sitemap contains all products').'</label>
-				<p style="color:#7F7F7F;">'.$this->l('Default, only products in active categories are included on Sitemap').'</p>
+				<p style="color:#7F7F7F;">'.$this->l('Default: only products in active categories are included on Sitemap').'</p>
 			</div>
 			<div style="margin:0 0 20px 0;">
 				<input type="checkbox" name="GSITEMAP_ALL_CMS" id="GSITEMAP_ALL_CMS" style="vertical-align: middle;" value="1" '.(Configuration::get('GSITEMAP_ALL_CMS') ? 'checked="checked"' : '').' /> <label class="t" for="GSITEMAP_ALL_CMS">'.$this->l('Sitemap contains all CMS pages').'</label>
-				<p style="color:#7F7F7F;"><img src="'.__PS_BASE_URI__.'img/admin/information.png" alt="" style="float:left;vertical-align: middle;margin-right:5px;" /> '.$this->l('Default, only CMS pages on block CMS are included on Sitemap').'</p>
+				<p style="color:#7F7F7F;"><img src="'.__PS_BASE_URI__.'img/admin/information.png" alt="" style="float:left;vertical-align: middle;margin-right:5px;" /> '.$this->l('Default: only CMS pages on block CMS are included on Sitemap').'</p>
 			</div>
 			<input name="btnSubmit" class="button" type="submit"
 			value="'.((!file_exists(GSITEMAP_FILE)) ? $this->l('Generate sitemap file') : $this->l('Update sitemap file')).'" />

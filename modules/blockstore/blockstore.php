@@ -40,7 +40,7 @@ class BlockStore extends Module
         parent::__construct();
 
 		$this->displayName = $this->l('Stores block');
-        $this->description = $this->l('Displays a block with a link to the store locator');
+        $this->description = $this->l('Displays a block with a link to the store locator.');
     }
 
     function install()

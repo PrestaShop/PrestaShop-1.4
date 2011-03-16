@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockstore}prestashop>blockstore_50d335623ef166aeea8da2a3c2c63a3e'] = 'Blocco negozi ';
-$_MODULE['<{blockstore}prestashop>blockstore_79f76d40155b84f2228d2568f174a356'] = 'Visualizza un blocco con un link per il localizzatore del negozio';
+$_MODULE['<{blockstore}prestashop>blockstore_7118171dfc2981fd3d7f3aab97fb572d'] = 'Visualizza un blocco con un link per il localizzatore del negozio';
 $_MODULE['<{blockstore}prestashop>blockstore_f32a6c9e15dd20152ee8b14c7f94b040'] = 'immagine non valida';
 $_MODULE['<{blockstore}prestashop>blockstore_4dd95964f5b02106aeaa2dbf3e9d3c5e'] = 'errore nel caricamento del file';
 $_MODULE['<{blockstore}prestashop>blockstore_7ccf58c950043c9fbfed668df13ce608'] = 'Le impostazioni sono aggiornate';

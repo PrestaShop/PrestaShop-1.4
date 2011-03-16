@@ -45,7 +45,7 @@ class BlockWishList extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('Wishlist block');
-		$this->description = $this->l('Adds a block containing the customer\'s wishlists');
+		$this->description = $this->l('Adds a block containing the customer\'s wishlists.');
 	}
 	
 	public function install()
@@ -298,7 +298,7 @@ class BlockWishList extends Module
 		
 		$wishlists = WishList::getByIdCustomer((int)($customer->id));
 		if (!sizeof($wishlists))
-			$this->_html .= $customer->lastname.' '.$customer->firstname.' '.$this->l('had no wishlist');
+			$this->_html .= $customer->lastname.' '.$customer->firstname.' '.$this->l('No wishlist.');
 		else
 		{
 			$this->_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" id="listing">';
@@ -332,7 +332,7 @@ class BlockWishList extends Module
 	*/
 	public function errorLogged()
 	{
-		return $this->l('You need to be logged in to manage your wishlists');
+		return $this->l('You must be logged in to manage your wishlists.');
 	}
 }
 

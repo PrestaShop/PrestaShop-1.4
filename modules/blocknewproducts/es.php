@@ -3,8 +3,8 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_f7c34fc4a48bc683445c1e7bbc245508'] = 'Bloque de novedades';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_2dabfba3a3ebc0a7e4728f08ba165d1e'] = 'Mostrar el bloque con los nuevos productos añadidos';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_be3695bcf32c0086aa98108330d9bfa1'] = 'Debe rellenar el campo \"productos mostrados\"';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_cc68052332d758d991b64087c6e4352e'] = 'Mostrar el bloque con los nuevos productos añadidos';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_1e9c1045d2c7450a37f68e3ad7b56612'] = 'Debe rellenar el campo \"productos mostrados\"';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_73293a024e644165e9bf48f270af63a0'] = 'Número incorrecto';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
@@ -14,7 +14,7 @@ $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_cc4bbebd6a8d2fb633a1dd8
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_530c88f8210e022b39128e3f0409bbcf'] = 'Mostrar siempre este bloque';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_a8a670d89a6d2f3fa59942fc591011ef'] = 'Mostrar este bloque aunque no haya productos disponibles';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_53d61d1ac0507b1bd8cd99db8d64fb19'] = 'Mostrar este bloque aunque no haya productos disponibles';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_9ff0635f5737513b1a6f559ac2bff745'] = 'Novedades';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_60efcc704ef1456678f77eb9ee20847b'] = 'Todas las novedades';

@@ -43,7 +43,7 @@ class StatsCatalog extends Module
         parent::__construct();
 		
         $this->displayName = $this->l('Catalog statistics');
-        $this->description = $this->l('General statistics about your catalog');
+        $this->description = $this->l('General statistics about your catalog.');
     }
 	
 	public function install()
@@ -193,7 +193,7 @@ class StatsCatalog extends Module
 				'.$this->returnLine($this->l('Images available:'), (int)($totalPictures)).'
 				'.$this->returnLine($this->l('Average number of images:'), number_format((float)($averagePictures), 2, '.', '')).'
 				'.$this->returnLine($this->l('Products never viewed:'), (int)($totalNV).' / '.(int)($total)).'
-				'.$this->returnLine('<a style="cursor : pointer" onclick="$(\'#pnb\').slideToggle();">'.$this->l('Products never bought:').'</a>', (int)($totalNB).' / '.(int)($total)).'
+				'.$this->returnLine('<a style="cursor : pointer" onclick="$(\'#pnb\').slideToggle();">'.$this->l('Products never purchased:').'</a>', (int)($totalNB).' / '.(int)($total)).'
 				'.$this->returnLine($this->l('Conversion rate*:'), $conversion).'
 			</table>
 			<div style="margin-top: 20px;">
@@ -205,7 +205,7 @@ class StatsCatalog extends Module
 		if (sizeof($productsNB) AND sizeof($productsNB) < 50)
 		{
 			$html .= '
-			<fieldset class="width3 space"><legend><img src="../modules/'.$this->name.'/basket_delete.png" /> '.$this->l('Products never bought').'</legend>
+			<fieldset class="width3 space"><legend><img src="../modules/'.$this->name.'/basket_delete.png" /> '.$this->l('Products never purchased').'</legend>
 				<table cellpadding="0" cellspacing="0" class="table">
 					<tr><th>'.$this->l('ID').'</th><th>'.$this->l('Name').'</th><th>'.$this->l('Edit / View').'</th></tr>';
 			foreach ($productsNB as $product)

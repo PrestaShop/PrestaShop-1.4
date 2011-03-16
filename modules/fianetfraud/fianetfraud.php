@@ -247,8 +247,8 @@ class Fianetfraud extends Module
 		$this->_html .= '</select>
 				</div>
 			</fieldset><br />
-			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Category detail').'</legend>
-			<label>'.$this->l('Category detail').'</label>
+			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Category Detail').'</legend>
+			<label>'.$this->l('Category Detail').'</label>
 			<div class="margin-form">
 			<table cellspacing="0" cellpadding="0" class="table">
 						<thead><tr><th>'.$this->l('Category').'</th><th>'.$this->l('Category Type').'</th></tr></thead><tbody>';
@@ -548,7 +548,7 @@ class Fianetfraud extends Module
 			$this->_postProcess();
 		$html = '<br /><fieldset style="width:400px;"><legend>'.$this->l('Fianet Validation').'</legend>';
 		$html .= '<a href="https://secure.fia-net.com/'.($conf ? 'fscreener' : 'pprod').'/BO/visucheck_detail.php?sid='.Configuration::get('SAC_SITEID').'&log='.Configuration::get('SAC_LOGIN').'&pwd='.urlencode(Configuration::get('SAC_PASSWORD')).'&rid='.$params['id_order'].'">'.$this->l('See Detail').'</a><br />';
-		$html .= $this->l('Eval').': '.self::getEval((int)($order->id));
+		$html .= $this->l('Evaluate').': '.self::getEval((int)($order->id));
 		$html .= '</fieldset>';
 
 		return $html;

@@ -40,7 +40,7 @@ class BlockNewProducts extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('New products block');
-		$this->description = $this->l('Displays a block featuring newly added products');
+		$this->description = $this->l('Displays a block featuring newly added products.');
 	}
 
 	public function install()
@@ -56,7 +56,7 @@ class BlockNewProducts extends Module
 		if (Tools::isSubmit('submitBlockNewProducts'))
 		{
 			if (!$productNbr = Tools::getValue('productNbr') OR empty($productNbr))
-				$output .= '<div class="alert error">'.$this->l('You should fill the "products displayed" field').'</div>';
+				$output .= '<div class="alert error">'.$this->l('Please fill in the "products displayed" field.').'</div>';
 			elseif ((int)($productNbr) == 0)
 				$output .= '<div class="alert error">'.$this->l('Invalid number.').'</div>';
 			else
@@ -85,7 +85,7 @@ class BlockNewProducts extends Module
 						<label class="t" for="display_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 						<input type="radio" name="always_display" id="display_off" value="0" '.(!Tools::getValue('always_display', Configuration::get('PS_BLOCK_NEWPRODUCTS_DISPLAY')) ? 'checked="checked" ' : '').'/>
 						<label class="t" for="display_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-						<p class="clear">'.$this->l('Show the block even if no product is available.').'</p>
+						<p class="clear">'.$this->l('Show the block even if no products are available.').'</p>
 					</div>
 					<center><input type="submit" name="submitBlockNewProducts" value="'.$this->l('Save').'" class="button" /></center>
 				</fieldset>

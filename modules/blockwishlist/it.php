@@ -9,7 +9,7 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist-ajax_d037160cfb1fa5520563302d
 $_MODULE['<{blockwishlist}prestashop>blockwishlist-ajax_09dc02ecbb078868a3a86dded030076d'] = 'Nessun prodotto';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist-extra_15b94c64c4d5a4f7172e5347a36b94fd'] = 'Aggiungi alla mia lista dei desideri';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_2715a65604e1af3d6933b61704865daf'] = 'Blocco lista dei desideri ';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_567f9c44ac5cb5d3cd85d4b4ac61090a'] = 'Aggiunge un blocco contenente lista dei desideri del cliente';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_7244141a5de030c4c882556f4fd70a8b'] = 'Aggiunge un blocco contenente lista dei desideri del cliente';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_5ef2d617096ae7b47a83f3d4de9c84bd'] = 'Attiva il modulo: scelta non valida.';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Conferma';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
@@ -22,9 +22,9 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist_502996d9790340c5fd7b86a5b93b1
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_655d20c1ca69519ca647684edbb2db35'] = 'Alta';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_87f8a6ab85c9ced3702b4ea641ad4bb5'] = 'Media';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_28d0edd045e05cf5af64e35ae0c4c6ef'] = 'Bassa';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_81409371045072999a0a11bfb62b4578'] = 'non ha avuto lista dei desideri ';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_862af8838fba380d3b30e63546a394e5'] = 'non ha avuto lista dei desideri ';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_641254d77e7a473aa5910574f3f9453c'] = 'Lista dei Desideri';
-$_MODULE['<{blockwishlist}prestashop>blockwishlist_4798abb3b616ca42337913ba52cb450b'] = 'Devi essere registrato per gestire la tua lista dei desideri ';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_88b589bbf6282a2e02f50ebe90aae6f1'] = 'Devi essere registrato per gestire la tua lista dei desideri ';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_4a84e5921e203aede886d04fc41a414b'] = 'Rimuovi questo prodotto dalla mia lista dei desideri';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_f2a6c498fb90ee345d997f888fce3b18'] = 'Elimina';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Descrizione del prodotto';

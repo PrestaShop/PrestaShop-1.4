@@ -212,7 +212,7 @@ class Tm4b extends Module
 					$sms->addRecipient($_POST['test_number']);
 					$ret = $sms->Send($this->_simulation);
 					if ($sms->isSent())
-						$this->_html .= $this->displayConfirmation($this->l('Message successfully sent'));
+						$this->_html .= $this->displayConfirmation($this->l('Message sent'));
 					else
 						$this->_html .= $this->displayError($this->l('Error while sending message'));
 				}

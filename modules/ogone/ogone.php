@@ -61,14 +61,14 @@ class Ogone extends PaymentModule
 		
 		return '
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Help').'</legend>
-			<p>'.$this->l('First of all, you might follow these steps:').'</p>
+			<p>'.$this->l('Please follow these steps:').'</p>
 			<ol>
 				<li>
 					<h3>'.$this->l('PrestaShop side').'</h3>
 					<ol>
 						<li>'.$this->l('Fill in your Ogone ID (PSPID)').'</li>
-						<li>'.$this->l('Fill in the signatures of your choice (you will have to copy them to Ogone back office next)').'</li>
-						<li>'.$this->l('Choose the test mode if you just created your test account on Ogone (it does not work with the demo account)').'</li>
+						<li>'.$this->l('Fill in the signatures of your choice (you will have to copy them to Ogone back office).').'</li>
+						<li>'.$this->l('Select test mode if you just created your test account on Ogone (it does not work with the demo account).').'</li>
 					</ol>
 				</li>
 				<li>

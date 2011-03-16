@@ -123,7 +123,7 @@ class StatsGeoLocation extends Module
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="'.$this->_path.'logo.gif" alt="" title="" /> '.$this->displayName.'</legend>
 			<center>
-				<p><img src="../img/admin/down.gif" />'.$this->l('This module shows the country distribution of your customers by displaying different sized points on the worldmap below. See the fame of your website all around the world and which continent you\'ve not conquered yet.').'</p>
+				<p><img src="../img/admin/down.gif" />'.$this->l('This module shows the distribution of the countries of your customers by displaying different sized points on the worldmap below. See the fame of your website all around the world and which continent you have yet to conquer.').'</p>
 			</center>
 			<p class="space">
 				<img src="'.$this->_path.'drawer.php" alt="" title="" />
@@ -177,7 +177,7 @@ class StatsGeoLocation extends Module
 				<input type="hidden" id="opt" value="1" />
 				<input type="hidden" id="id_lang" value="'.$id_lang.'" />
 				<input type="hidden" id="lang_info" value="'.$this->l('Click on the map to set the position of:').'" />
-				<input type="hidden" id="lang_error" value="'.$this->l('Error: you should click on the map or on the cancel button').'" />
+				<input type="hidden" id="lang_error" value="'.$this->l('Error: click on the map or the cancel button').'" />
 				<input type="hidden" id="lang_cancel" value="'.$this->l('Cancel').'" />
 				<input type="hidden" id="lang_validate" value="'.$this->l('Validate').'" />
 				<input type="hidden" id="marker_size" value="'.$cross_size[0].'" />

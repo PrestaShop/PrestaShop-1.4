@@ -84,7 +84,7 @@ class UpsCarrier extends CarrierModule
 
 			// Generate Warnings
 			if (count($warning))
-				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly').' ';
+				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly.').' ';
 		}
 	}
 
@@ -313,7 +313,7 @@ class UpsCarrier extends CarrierModule
 	private function _displayForm()
 	{
 		$this->_html .= '<fieldset>
-		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Ups Module Status').'</legend>';
+		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('UPS Module Status').'</legend>';
 
 		$alert = array();
 		if (!Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))
@@ -325,13 +325,13 @@ class UpsCarrier extends CarrierModule
 
 
 		if (!count($alert))
-			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('UPS Carrier is well configured and online !').'</strong>';
+			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('UPS Carrier is configured and online!').'</strong>';
 		else
 		{
-			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('UPS Carrier is not configured yet, you have to :').'</strong>';
-			$this->_html .= '<br />'.(isset($alert['rateServiceGroup']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 1) '.$this->l('Fill the "General Settings" form and choose your rate service group');
+			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('UPS Carrier is not configured yet, please:').'</strong>';
+			$this->_html .= '<br />'.(isset($alert['rateServiceGroup']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 1) '.$this->l('Fill the "General Settings" form and choose your rate service group.');
 			$this->_html .= '<br />'.(isset($alert['webserviceTest']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 2) '.$this->l('Webservice test connection').($this->_webserviceError ? ' : '.$this->_webserviceError : '');
-			$this->_html .= '<br />'.(isset($alert['deliveryServices']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Select your available delivery service (you have to validate your rate service group first)');
+			$this->_html .= '<br />'.(isset($alert['deliveryServices']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Select your available delivery service (you must validate your rate service group first).');
 		}
 
 		if (!is_callable('curl_exec'))
@@ -1261,16 +1261,16 @@ class UpsCarrier extends CarrierModule
 
 	private function _displayHelp()
 	{
-		return '<p><b>'.$this->l('Welcome to the PrestaShop UPS Module configurator !').'</b></p>
+		return '<p><b>'.$this->l('Welcome to the PrestaShop UPS Module configurator!').'</b></p>
 		<p>'.$this->l('This section will help you to understand how to configure this module correctly.').'</p>
 		<br />
 		<p><b><u>1. '.$this->l('General Settings').'</u></b></p>
 		<p>'.$this->l('See below for the description of each field :').'</p>
-		<p><b>'.$this->l('Your UPS Login, UPS Password, MyUps ID, UPS API Key').' :</b> '.$this->l('You have to subscribe on UPS website at this address').' <a href="https://www.ups.com/upsdeveloperkit" target="_blank">https://www.ups.com/upsdeveloperkit</a></p>
+		<p><b>'.$this->l('Your UPS Login, UPS Password, MyUps ID, UPS API Key').' :</b> '.$this->l('Please subscribe to the UPS website at this address.').' <a href="https://www.ups.com/upsdeveloperkit" target="_blank">https://www.ups.com/upsdeveloperkit</a></p>
 		<p><b>'.$this->l('Zip / Postal Code').' :</b> '.$this->l('This field must be the Zip / Postal code of your package starting point.').'</p>
 		<p><b>'.$this->l('Country').' :</b> '.$this->l('This field must be the country of your package starting point.').'</p>
 		<p><b>'.$this->l('Rate service group').' :</b> '.$this->l('This field must be within the two fields above.').'</p>
-		<p><b>'.$this->l('Pickup Type').' :</b> '.$this->l('This field corresponds to the pickup type you want to have with UPS.').'</p>
+		<p><b>'.$this->l('Pickup Type').' :</b> '.$this->l('This field corresponds to the pickup type you prefer with UPS.').'</p>
 		<p><b>'.$this->l('Packaging Type').' :</b> '.$this->l('This field corresponds to the default packaging type (when there is no specific configuration for the product or the category product).').'</p>
 		<p><b>'.$this->l('Delivery Service').' :</b> '.$this->l('These checkboxes correspond to the delivery services you want to be available (when there is no specific configuration for the product or the category product).').'</p>
 		<br />

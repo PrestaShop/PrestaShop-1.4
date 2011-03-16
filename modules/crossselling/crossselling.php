@@ -41,8 +41,8 @@ class CrossSelling extends Module
 
 		parent::__construct();
 		
-		$this->displayName = $this->l('Cross selling');
-		$this->description = $this->l('Customers who bought this product also bought...');
+		$this->displayName = $this->l('Cross Selling');
+		$this->description = $this->l('Customers who bought this product also bought:');
 	}
 
 	public function install()

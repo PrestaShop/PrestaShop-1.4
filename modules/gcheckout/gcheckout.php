@@ -95,7 +95,7 @@ class GCheckout extends PaymentModule
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset>
 			<legend><img src="'.__PS_BASE_URI__.'modules/gcheckout/logo.gif" />'.$this->l('Settings').'</legend>
-				<p>'.$this->l('First use the sandbox to test out the module then you can use the real mode if everything\'s fine. Don\'t forget to change your merchant key and id according to the mode!').'</p>
+				<p>'.$this->l('Use the sandbox to test out the module then you can use the real mode if no problems arise. Remember to change your merchant key and ID according to the mode.').'</p>
 				<label>
 					'.$this->l('Mode').'
 				</label>
@@ -118,14 +118,14 @@ class GCheckout extends PaymentModule
 				<div class="margin-form">
 					<input type="text" name="gcheckout_merchant_key" value="'.Tools::getValue('gcheckout_merchant_key', Configuration::get('GCHECKOUT_MERCHANT_KEY')).'" />
 				</div>
-				<p>'.$this->l('If you tick this box, buyers will be able to see the shipping fees you have setup in Google Checkout on the purchase page.').'</p>
+				<p>'.$this->l('If you click this box, buyers will be able to see the shipping fees you have setup in Google Checkout on the purchase page.').'</p>
 				<label>
 					'.$this->l('Use Google shipping fees').'
 				</label>
 				<div class="margin-form" style="margin-top:5px">
 					<input type="checkbox" name="gcheckout_no_shipping"'.(Tools::getValue('gcheckout_no_shipping', Configuration::get('GCHECKOUT_NO_SHIPPING')) ? ' checked="checked"' : '').' />
 				</div>
-				<p>'.$this->l('You can log the server-to-server communication. The log files are').' '.__PS_BASE_URI__.'modules/gcheckout/googleerror.log '.$this->l('and').' '.__PS_BASE_URI__.'modules/gcheckout/googlemessage.log. '.$this->l('If you do activate it, be sure to protect them by putting a .htaccess file in the same directory. If you forget to do so, they will be readable by everyone').'</p>				
+				<p>'.$this->l('You can log the server-to-server communication. The log files are').' '.__PS_BASE_URI__.'modules/gcheckout/googleerror.log '.$this->l('and').' '.__PS_BASE_URI__.'modules/gcheckout/googlemessage.log. '.$this->l('If activated, be sure to protect them by putting a .htaccess file in the same directory. If not, they will be readable by everyone.').'</p>				
 				<label>
 					'.$this->l('Logs').'
 				</label>
@@ -138,11 +138,11 @@ class GCheckout extends PaymentModule
 		<br /><br />
 		<fieldset>
 			<legend><img src="../img/admin/warning.gif" />'.$this->l('Information').'</legend>
-			<p>- '.$this->l('In order to use your Google Checkout module, you have to configure your Google Checkout account (sandbox account as well as live account). Log in to Google Checkout then go to Settings > Integration. The API callback URL is:').'<br />
+			<p>- '.$this->l('In order to use your Google Checkout module, you must configure your Google Checkout account (sandbox account as well as live account). Log in to Google Checkout then go to Settings > Integration. The API callback URL is:').'<br />
 				<b>'.Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/gcheckout/validation.php</b>
 			</p>
 			<p>- '.$this->l('The callback method must be set to').' <b>XML</b>.</p>
-			<p>- '.$this->l('The orders must be placed with the same currency as your seller account. Carts in other currencies will be converted if the customer chooses to pay with this module.').'<p>
+			<p>- '.$this->l('Orders must be placed with the same currency as your seller account. Carts in other currencies will be converted if the customer chooses to pay with this module.').'<p>
 		</fieldset>';
 		
 		return $html;

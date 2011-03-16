@@ -10,11 +10,11 @@ $_MODULE['<{ogone}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nous avons constaté un problème avec votre commande. Si vous pensez que c\'est une erreur, merci de contacter notre';
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration enregistrée';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
-$_MODULE['<{ogone}prestashop>ogone_e0358bb0b1682b667d67f99f9700448d'] = 'Suivez tout d\'abord ces étapes :';
+$_MODULE['<{ogone}prestashop>ogone_c3aace2676937d5cb50e536abbe9113d'] = 'Suivez tout d\'abord ces étapes :';
 $_MODULE['<{ogone}prestashop>ogone_0ad87dec5bc422a24ca801c473d44213'] = 'Sur PrestaShop';
 $_MODULE['<{ogone}prestashop>ogone_1d1f6896858b1bc96cecf995b1800a82'] = 'Renseignez votre identifiant Ogone (PSPID)';
-$_MODULE['<{ogone}prestashop>ogone_2cb015dd290aae3e042bcb993772bd5f'] = 'Renseignez les signatures SHA-1 de votre choix (vous devrez les copier sur votre interface Ogone par la suite)';
-$_MODULE['<{ogone}prestashop>ogone_7dbfea013a8552af9a04c61f571cf686'] = 'Choisissez le mode de test si vous venez juste de créer votre compte de test sur Ogone (le module ne fonctionne pas avec un compte de demo)';
+$_MODULE['<{ogone}prestashop>ogone_c76d97611c239318461a32e3ce151b83'] = 'Renseignez les signatures SHA-1 de votre choix (vous devrez les copier sur votre interface Ogone par la suite)';
+$_MODULE['<{ogone}prestashop>ogone_8c2fc0d78cab9c2bd9cef54931cc0808'] = 'Choisissez le mode de test si vous venez juste de créer votre compte de test sur Ogone (le module ne fonctionne pas avec un compte de demo)';
 $_MODULE['<{ogone}prestashop>ogone_39963c4d14081a701198768d7b9b00d9'] = 'Sur Ogone';
 $_MODULE['<{ogone}prestashop>ogone_2ee3d80e1919fc84a184c727e3ccfa20'] = 'mode test';
 $_MODULE['<{ogone}prestashop>ogone_20226890d13b230111fe30e1eb7a167b'] = 'mode production';

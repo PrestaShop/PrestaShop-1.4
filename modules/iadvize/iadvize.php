@@ -81,7 +81,7 @@ class iAdvize extends Module
 			<p style="margin: 15px 0 30px 0; width: 540px; line-height: 18px; text-align: justify;">
 				<b>'.$this->l('iAdvize is an interactive live chat').'</b> '.$this->l('allowing you to respond directly to your visitors and direct them towards the product that meets their needs.').'
 				<br />
-				<a href="http://www.iadvize.com/offre_prestashop.html" target="_blank">'.$this->l('For more informations, click here').'</a>
+				<a href="http://www.iadvize.com/offre_prestashop.html" target="_blank">'.$this->l('For more information, click here').'</a>
 			</p>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<fieldset class="width2">
@@ -94,7 +94,7 @@ class iAdvize extends Module
 					<label>'.$this->l('iAdvize "Call button" ID:').'</label>
 					<div class="margin-form">
 						<input type="text" name="iadvize_bid" value="'.(int)(Tools::getValue('iadvize_bid', Configuration::get('IADVIZE_BID'))).'" />
-						<p class="clear">'.$this->l('Leave empty if you don\'t want to enable this feature').'</p>
+						<p class="clear">'.$this->l('Leave empty if you do not want to enable this feature.').'</p>
 					</div>
 					<label style="vertical-align: middle;">'.$this->l('"Call button" location:').'</label>
 					<div class="margin-form" style="margin-top: 5px;">

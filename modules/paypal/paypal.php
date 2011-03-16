@@ -47,13 +47,13 @@ class PayPal extends PaymentModule
         $this->_errors = array();
 		$this->page = basename(__FILE__, '.php');
         $this->displayName = $this->l('PayPal');
-        $this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal');
-		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
+        $this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
+		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 		if (Configuration::get('PAYPAL_BUSINESS') == 'paypal@prestashop.com')
-			$this->warning = $this->l('You are currently using the default PayPal email address, you need to use your own email address');
+			$this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.');
 		$this->_checkAndUpdateFromOldVersion();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND $this->active)
-			$this->warning = $this->l('In order to REMOVE this warning, please uninstall and remove PayPalAPI module');
+			$this->warning = $this->l('In order to REMOVE this warning, please uninstall and remove the PayPalAPI module.');
 
 		global $cookie;
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
@@ -261,19 +261,19 @@ class PayPal extends PaymentModule
 			switch (Tools::getValue('paypal'))
 			{
 				case 'captureOk':
-					$message = $this->l('Funds have been recovered');
+					$message = $this->l('Funds have been recovered.');
 					break;
 				case 'captureError':
-					$message = $this->l('The request for recovery of funds was made without success, please see log message!');
+					$message = $this->l('Recovery of funds request unsuccessful. Please see log message!');
 					break;
 				case 'validationOk':
-					$message = $this->l('Validation was done, please see log message!');
+					$message = $this->l('Validation successful. Please see log message!');
 					break;
 				case 'refundOk':
-					$message = $this->l('Refund has been made');
+					$message = $this->l('Refund has been made.');
 					break;
 				case 'refundError':
-					$message = $this->l('The request for refund was made without success, please see log message!');
+					$message = $this->l('Refund request unsuccessful. Please see log message!');
 					break;
 			}
 			if (isset($message) AND $message)
@@ -308,10 +308,10 @@ class PayPal extends PaymentModule
 			<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Capture').'</legend>
-				<p><b>'.$this->l('Information:').'</b> '.$this->l('Funds ready to be captured before shipping').'</p>
+				<p><b>'.$this->l('Information:').'</b> '.$this->l('Funds ready to be captured before shipping.').'</p>
 				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 					<input type="hidden" name="id_order" value="'.$params['id_order'].'" />
-					<p class="center"><input type="submit" class="button" name="submitPayPalCapture" value="'.$this->l('Get the money').'" /></p>
+					<p class="center"><input type="submit" class="button" name="submitPayPalCapture" value="'.$this->l('Get the money.').'" /></p>
 				</form>
 			';
 			$this->_postProcess();
@@ -326,7 +326,7 @@ class PayPal extends PaymentModule
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Refund').'</legend>
 				<p><b>'.$this->l('Information:').'</b> '.$this->l('Payment accepted').'</p>
-				<p><b>'.$this->l('Information:').'</b> '.$this->l('When you refund a product, a partial refund is made unless you check option "Generate a voucher"').'</p>
+				<p><b>'.$this->l('Information:').'</b> '.$this->l('When you refund a product, a partial refund is made unless you select "Generate a voucher".').'</p>
 				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 					<input type="hidden" name="id_order" value="'.(int)($params['id_order']).'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalRefund" value="'.$this->l('Refund total transaction').'" onclick="if(!confirm(\''.$this->l('Are you sure?').'\'))return false;" /></p>
@@ -413,19 +413,19 @@ class PayPal extends PaymentModule
 
 		// Checking PayPal result
 		if (!is_array($result) OR !sizeof($result))
-			$this->displayPayPalAPIError($this->l('Authorisation to PayPal failed'), $this->_logs);
+			$this->displayPayPalAPIError($this->l('Authorization to PayPal failed.'), $this->_logs);
 		elseif (!isset($result['ACK']) OR  strtoupper($result['ACK']) != 'SUCCESS')
-			$this->displayPayPalAPIError($this->l('PayPal returned error'), $this->_logs);
+			$this->displayPayPalAPIError($this->l('PayPal return error.'), $this->_logs);
 		elseif (!isset($result['TOKEN']) OR $result['TOKEN'] != $cookie->paypal_token)
 		{
 			$logs[] = '<b>'.$ppExpress->l('Token given by PayPal is not the same as the cookie token', 'submit').'</b>';
-			$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal returned error', 'submit'), $logs);
+			$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal return error.', 'submit'), $logs);
 		}
 
 		// Making log
 		$id_transaction = $result['TRANSACTIONID'];
 		if (Configuration::get('PAYPAL_CAPTURE'))
-			$this->_logs[] = $this->l('Authorization granted by PayPal for deferred payment');
+			$this->_logs[] = $this->l('Authorization for deferred payment granted by PayPal.');
 		else
 			$this->_logs[] = $this->l('Order finished with PayPal!');
 		$message = Tools::htmlentitiesUTF8(strip_tags(implode("\n", $this->_logs)));
@@ -517,7 +517,7 @@ class PayPal extends PaymentModule
 			'Cancel' => $this->l('Cancel'),
 			'My cart' => $this->l('My cart'),
 			'Return to shop' => $this->l('Return to shop'),
-			'Paypal error: (invalid or undefined business account email)' => $this->l('Paypal error: (invalid or undefined business account email)'),
+			'Paypal error: (invalid or undefined business account e-mail)' => $this->l('Paypal error: (invalid or undefined business account e-mail)'),
 			'Paypal error: (invalid address or customer)' => $this->l('Paypal error: (invalid address or customer)')
 		);
 		return $translations[$key];
@@ -731,7 +731,7 @@ class PayPal extends PaymentModule
 		<h3>'.$this->l('Option:').'</h3>
 		<ul style="list-style-type:none;">
 			<li><input type="checkbox" name="paypal_express" id="paypal_express" value="1" '.($paypalExpress ? 'checked="checked" ' : '').'/> <label for="paypal_express" class="t"><b>'.$this->l('PayPal Express : payment in 2 clicks').'</b> '.$this->l('with PayPal account directly from cart page').'</label></li>
-			<li><input type="checkbox" name="paypal_debug" id="paypal_debug" value="1" '.($paypalDebug ? 'checked="checked" ' : '').'/> <label for="paypal_express" class="t"><b>'.$this->l('Debug only:').'</b> '.$this->l('Active long log message').'</label></li>
+			<li><input type="checkbox" name="paypal_debug" id="paypal_debug" value="1" '.($paypalDebug ? 'checked="checked" ' : '').'/> <label for="paypal_express" class="t"><b>'.$this->l('Debug only:').'</b> '.$this->l('Activate long log message').'</label></li>
 		</ul>
 		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>
 		<div style="border:1px solid red;color:red;padding:15px;">
@@ -783,11 +783,11 @@ class PayPal extends PaymentModule
 		</div>
 		';
 		if ($lang->iso_code == 'fr')
-			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=P2OmzHzbpIA" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>';
+			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=P2OmzHzbpIA" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature.').'</a></p>';
 		elseif ($lang->iso_code == 'es')
-			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=5x_BXI4equo" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>';
+			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=5x_BXI4equo" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature.').'</a></p>';
 		else
-			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=ho1OefLKbM0" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature').'</a></p>';
+			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=ho1OefLKbM0" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature.').'</a></p>';
 		$html .= '<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>';
 		
 		return $html;
@@ -823,7 +823,7 @@ class PayPal extends PaymentModule
 		<div style="float: right; width: 440px; height: 150px; border: dashed 1px #666; padding: 8px; margin-left: 12px;">
 			<h2>'.$this->l('Opening your PayPal account').'</h2>
 			<div style="clear: both;"></div>
-			<p>'.$this->l('By opening your PayPal account by clicking on the following image you are helping us significantly to improve the PrestaShop software:').'</p>
+			<p>'.$this->l('When opening your PayPal account by clicking on the following image, you are helping us significantly to improve the PrestaShop software:').'</p>
 			<p style="text-align: center;"><a href="https://www.paypal.com/fr/mrb/pal=TWJHHUL9AEP9C"><img src="../modules/paypal/prestashop_paypal.png" alt="PrestaShop & PayPal" style="margin-top: 12px;" /></a></p>
 			<div style="clear: right;"></div>
 		</div>
@@ -842,23 +842,23 @@ class PayPal extends PaymentModule
 		{
 			$template_available = array('A', 'B', 'C');
 			if (!Validate::isUnsignedInt(Tools::getValue('payment_method')) OR (int)(Tools::getValue('payment_method')) > 2)
-				$this->_errors[] = $this->l('solution isn\'t valid');
+				$this->_errors[] = $this->l('Invalid solution');
 			if (Tools::getValue('email_paypal') == NULL AND Tools::getValue('api_username') == NULL AND Tools::getValue('api_signature') == NULL)
-				$this->_errors[] = $this->l('you must indicate at least account information');
+				$this->_errors[] = $this->l('Indicate account information.');
 			if (Tools::getValue('email_paypal') != NULL AND !Validate::isEmail(Tools::getValue('email_paypal')))
-				$this->_errors[] = $this->l('email isn\'t valid');
+				$this->_errors[] = $this->l('E-mail invalid');
 			if (Tools::getValue('banner_url') != NULL AND !Validate::isUrl(Tools::getValue('banner_url')))
-				$this->_errors[] = $this->l('URL for banner isn\'t valid');
+				$this->_errors[] = $this->l('URL for banner is invalid');
 			elseif (Tools::getValue('banner_url') != NULL AND strpos(Tools::getValue('banner_url'), 'https://') === false)	
 				$this->_errors[] = $this->l('URL for banner must use HTTPS protocol');
 			if (!in_array(Tools::getValue('template_paypal'), $template_available))
-				$this->_errors[] = $this->l('paypal template isn\'t valid');
+				$this->_errors[] = $this->l('PayPal template invalid.');
 			if (Tools::getValue('paypal_capture') == 1  AND (Tools::getValue('api_username') == NULL OR Tools::getValue('api_signature') == NULL))
-				$this->_errors[] = $this->l('you can\'t use Authorization / capture if you haven\'t API Credentials');
+				$this->_errors[] = $this->l('Cannot use Authorization / capture without API Credentials.');
 			if (Tools::getValue('payment_method') == _PAYPAL_INTEGRAL_EVOLUTION_  AND (Tools::getValue('api_username') == NULL OR Tools::getValue('api_signature') == NULL))
-				$this->_errors[] = $this->l('you can\'t use this solution if you haven\'t API Credentials');
+				$this->_errors[] = $this->l('Cannot use this solution without API Credentials.');
 			if (Tools::isSubmit('paypal_express') AND (Tools::getValue('api_username') == NULL OR Tools::getValue('api_signature') == NULL))
-				$this->_errors[] = $this->l('you can\'t use PayPal Express if you haven\'t API Credentials');
+				$this->_errors[] = $this->l('Cannot use PayPal Express without API Credentials.');
 			
 			if (!sizeof($this->_errors))
 			{
@@ -881,7 +881,7 @@ class PayPal extends PaymentModule
 					$method = 'Paypal Integrale';
 				else
 					$method = '';
-				$this->_html = $this->displayConfirmation($this->l('Settings are updated').'<img src="http://www.prestashop.com/modules/paypal.png?email='.urlencode(Tools::getValue('email_paypal')).'&mode='.(Tools::getValue('sandbox_mode') ? 0 : 1).'&method='.urlencode($method).'" style="float:right" />');
+				$this->_html = $this->displayConfirmation($this->l('Settings updated').'<img src="http://www.prestashop.com/modules/paypal.png?email='.urlencode(Tools::getValue('email_paypal')).'&mode='.(Tools::getValue('sandbox_mode') ? 0 : 1).'&method='.urlencode($method).'" style="float:right" />');
 			}
 			else
 			{
@@ -895,7 +895,7 @@ class PayPal extends PaymentModule
 		if (Tools::isSubmit('submitPayPalValidation'))
 		{
 			if (!($response = $this->_updatePaymentStatusOfOrder((int)(Tools::getValue('id_order')))) OR !sizeof($response))
-				$this->_html .= '<p style="color:red;">'.$this->l('Error when getting payment status').'</p>';
+				$this->_html .= '<p style="color:red;">'.$this->l('Error obtaining payment status.').'</p>';
 			else
 			{
 				if ($response['ACK'] == 'Success')
@@ -988,7 +988,7 @@ class PayPal extends PaymentModule
 		$msg = new Message();
 		$message = strip_tags($message, '<br>');
 		if (!Validate::isCleanHtml($message))
-			$message = $this->l('Payment message is not valid, please check your module!');
+			$message = $this->l('Payment message is not valid, please check your module.');
 		$msg->message = $message;
 		$msg->id_order = (int)($id_order);
 		$msg->private = 1;
@@ -1029,7 +1029,7 @@ class PayPal extends PaymentModule
 			$message .= $k.': '.$value.'<br>';
 		if (array_key_exists('ACK', $response) AND $response['ACK'] == 'Success' AND $response['REFUNDTRANSACTIONID'] != '')
 		{
-			$message .= $this->l('Refund finished with PayPal!');
+			$message .= $this->l('PayPal refund successful!');
 			if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'paypal_order` SET `payment_status` = \'Refunded\' WHERE `id_order` = '.(int)($id_order)))
 				die(Tools::displayError('Error when updating PayPal database'));
 			$history = new OrderHistory();
@@ -1038,7 +1038,7 @@ class PayPal extends PaymentModule
 			$history->addWithemail();
 		}
 		else
-			$message .= $this->l('Error on transaction!');
+			$message .= $this->l('Transaction error!');
 		$this->_addNewPrivateMessage((int)($id_order), $message);
 
 		return $response;
@@ -1076,7 +1076,7 @@ class PayPal extends PaymentModule
 			$message .= $this->l('Order finished with PayPal!');
 		}
 		elseif (isset($response['PAYMENTSTATUS']))
-			$message .= $this->l('Error on transaction!');
+			$message .= $this->l('Transaction error!');
 		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'paypal_order` SET `capture` = 0, `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).'\', `id_transaction` = \''.pSQL($response['TRANSACTIONID']).'\' WHERE `id_order` = '.(int)($id_order)))
 			die(Tools::displayError('Error when updating PayPal database'));
 		$this->_addNewPrivateMessage((int)($id_order), $message);

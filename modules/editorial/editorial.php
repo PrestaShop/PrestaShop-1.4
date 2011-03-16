@@ -43,7 +43,7 @@ class Editorial extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Home text editor');
-		$this->description = $this->l('A text editor module for your homepage');
+		$this->description = $this->l('A text editor module for your homepage.');
 		$path = dirname(__FILE__);
 		if (strpos(__FILE__, 'Module.php') !== false)
 			$path .= '/../modules/'.$this->name;
@@ -126,7 +126,7 @@ class Editorial extends Module
 		if (Tools::isSubmit('deleteImage'))
 		{
 			if (!file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
-				$errors .= $this->displayError($this->l('You can\'t make this action'));
+				$errors .= $this->displayError($this->l('This action cannot be taken.'));
 			else
 			{
 				unlink(dirname(__FILE__).'/homepage_logo.jpg');
@@ -288,9 +288,9 @@ class Editorial extends Module
 				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'cpara', true);
 				
 				$this->_html .= '
-					<p class="clear">'.$this->l('Text of your choice; for example, explain your mission, highlight a new product, or describe a recent event').'</p>
+					<p class="clear">'.$this->l('Text of your choice; for example, explain your mission, highlight a new product, or describe a recent event.').'</p>
 				</div>
-				<label>'.$this->l('Homepage\'s logo').' </label>
+				<label>'.$this->l('Homepage logo').' </label>
 				<div class="margin-form">';
 				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
 						$this->_html .= '<div id="image" >

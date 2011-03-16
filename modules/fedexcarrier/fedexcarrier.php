@@ -340,10 +340,10 @@ class FedexCarrier extends CarrierModule
 
 
 		if (!count($alert))
-			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('FEDEX Carrier is well configured and online !').'</strong>';
+			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('FEDEX Carrier is configured and online!').'</strong>';
 		else
 		{
-			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('FEDEX Carrier is not configured yet, you have to :').'</strong>';
+			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('FEDEX Carrier is not configured yet, you must:').'</strong>';
 			$this->_html .= '<br />'.(isset($alert['generalSettings']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 1) '.$this->l('Fill the "General Settings" form');
 			$this->_html .= '<br />'.(isset($alert['deliveryServices']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 2) '.$this->l('Select your available delivery service');
 			$this->_html .= '<br />'.(isset($alert['webserviceTest']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Webservice test connection').($this->_webserviceError ? ' : '.$this->_webserviceError : '');
@@ -1283,12 +1283,12 @@ class FedexCarrier extends CarrierModule
 
 	private function _displayHelp()
 	{
-		return '<p><b>'.$this->l('Welcome to the PrestaShop FEDEX Module configurator !').'</b></p>
+		return '<p><b>'.$this->l('Welcome to the PrestaShop FEDEX Module configurator.').'</b></p>
 		<p>'.$this->l('This section will help you to understand how to configure this module correctly.').'</p>
 		<br />
 		<p><b><u>1. '.$this->l('General Settings').'</u></b></p>
 		<p>'.$this->l('See below for the description of each field :').'</p>
-		<p><b>'.$this->l('Your FEDEX Account').' :</b> '.$this->l('You have to subscribe on FEDEX website at this address').' <a href="http://www.fedex.com/webtools/" target="_blank">http://www.fedex.com/webtools/</a></p>
+		<p><b>'.$this->l('Your FEDEX Account').' :</b> '.$this->l('You must subscribe to FEDEX website at this address').' <a href="http://www.fedex.com/webtools/" target="_blank">http://www.fedex.com/webtools/</a></p>
 		<p><b>'.$this->l('Zip / Postal Code').' :</b> '.$this->l('This field must be the Zip / Postal code of your package starting point.').'</p>
 		<p><b>'.$this->l('Country').' :</b> '.$this->l('This field must be the country of your package starting point.').'</p>
 		<p><b>'.$this->l('Pickup Type').' :</b> '.$this->l('This field corresponds to the default pickup type (when there is no specific configuration for the product or the category product).').'</p>
@@ -1626,7 +1626,7 @@ class FedexCarrier extends CarrierModule
 				$this->_webserviceError = $this->l('Error').' '.(isset($resultTab->Notifications->Code) ? $resultTab->Notifications->Code : '').' : '.(isset($resultTab->Notifications->Message) ? $resultTab->Notifications->Message : '');
 			else
 			{
-				$this->_webserviceError = $this->l('Fedex Webservice seems to be down, please wait a few minutes and try again');
+				$this->_webserviceError = $this->l('Fedex Webservice seems to be down, please wait a few minutes and try again.');
 				return false;
 			}
 		}
@@ -1699,7 +1699,7 @@ class FedexCarrier extends CarrierModule
 		if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity == 'ERROR')
 			$this->_webserviceError = $this->l('Error').' '.(isset($resultTab->Notifications->Code) ? $resultTab->Notifications->Code : '').' : '.(isset($resultTab->Notifications->Message) ? $resultTab->Notifications->Message : '');
 		else
-			$this->_webserviceError = $this->l('Fedex Webservice seems to be down, please wait a few minutes and try again');
+			$this->_webserviceError = $this->l('Fedex Webservice seems to be down, please wait a few minutes and try again.');
 
 		return array('connect' => false, 'cost' => 0);
 	}

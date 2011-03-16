@@ -38,7 +38,7 @@ class Blocknewsletter extends Module
 	 	parent::__construct();
 
  	 	$this->displayName = $this->l('Newsletter block');
- 	 	$this->description = $this->l('Adds a block for newsletter subscription');
+ 	 	$this->description = $this->l('Adds a block for newsletter subscription.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your contacts ?');
 
 		$this->version = '1.4';
@@ -91,7 +91,7 @@ class Blocknewsletter extends Module
 			else
 			{
 				Configuration::updateValue('NW_VOUCHER_CODE', pSQL($_POST['voucher']));
-				$this->_html .= '<div class="conf ok">'.$this->l('Updated successfully').'</div>';
+				$this->_html .= '<div class="conf ok">'.$this->l('Updated').'</div>';
 			}
 		}
 		return $this->_displayForm();
@@ -103,13 +103,13 @@ class Blocknewsletter extends Module
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 			<fieldset>
 				<legend><img src="'.$this->_path.'logo.gif" />'.$this->l('Settings').'</legend>
-				<label>'.$this->l('Displaying configuration in a new page?').'</label>
+				<label>'.$this->l('Display configuration in a new page?').'</label>
 				<div class="margin-form">
 					<input type="radio" name="new_page" value="1" '.(Configuration::get('NW_CONFIRMATION_NEW_PAGE') ? 'checked="checked" ' : '').'/>'.$this->l('yes').'
 					<input type="radio" name="new_page" value="0" '.(!Configuration::get('NW_CONFIRMATION_NEW_PAGE') ? 'checked="checked" ' : '').'/>'.$this->l('no').'
 				</div>
 				<div class="clear"></div>
-				<label>'.$this->l('Sending confirmation email after subscription?').'</label>
+				<label>'.$this->l('Send confirmation e-mail after subscription?').'</label>
 				<div class="margin-form">
 					<input type="radio" name="conf_email" value="1" '.(Configuration::get('NW_CONFIRMATION_EMAIL') ? 'checked="checked" ' : '').'/>'.$this->l('yes').'
 					<input type="radio" name="conf_email" value="0" '.(!Configuration::get('NW_CONFIRMATION_EMAIL') ? 'checked="checked" ' : '').'/>'.$this->l('no').'

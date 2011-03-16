@@ -71,7 +71,7 @@ class Newsletter extends Module
 				'value_default' => 0
 				),
 			'SUSCRIBERS' => array(
-				'title' => $this->l('Newsletter\'s suscribers'),
+				'title' => $this->l('Newsletter subscribers'),
 				'desc' => $this->l('Filter newsletter subscribers.'),
 				'type' => 'select',
 				'value' => array(0 => $this->l('All customers'), 2 => $this->l('Subscribers'), 1 => $this->l('Non-subscribers')),
@@ -107,23 +107,23 @@ class Newsletter extends Module
 					$result = $this->_getBlockNewsletter();
 			}
 			if (!$nb = (int)(Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows()))
-				$this->_html .= $this->displayError($this->l('No customers were found with these filters !'));
+				$this->_html .= $this->displayError($this->l('No customers found with these filters!'));
 			elseif ($fd = @fopen(dirname(__FILE__).'/'.strval(preg_replace('#\.{2,}#', '.', $_POST['action'])).'_'.$this->_file, 'w'))
 			{
 				foreach ($result AS $tab)
 					$this->_my_fputcsv($fd, $tab);
 				fclose($fd);
 				$this->_html .= $this->displayConfirmation(
-				$this->l('The .CSV file has been successfully exported').
+				$this->l('The .CSV file has been successfully exported.').
 				' ('.$nb.' '.$this->l('customers found').')<br />> 
 				<a href="../modules/newsletter/'.strval($_POST['action']).'_'.$this->_file.'"><b>'.$this->l('Download the file').' '.$this->_file.'</b></a>
 				<br />
 				<ol style="margin-top: 10px;">
-					<li style="color: red;">'.$this->l('WARNING: If you try to open this .csv file with Excel, do not forget to choose UTF-8 encoding or you may see strange characters').'</li>
+					<li style="color: red;">'.$this->l('WARNING: If opening this .csv file with Excel, remember to choose UTF-8 encoding or you may see strange characters.').'</li>
 				</ol>');
 			}
 			else
-				$this->_html .= $this->displayError($this->l('Error: cannot write to').' '.dirname(__FILE__).'/'.strval($_POST['action']).'_'.$this->_file.' !');
+				$this->_html .= $this->displayError($this->l('Error: cannot write').' '.dirname(__FILE__).'/'.strval($_POST['action']).'_'.$this->_file.' !');
 		}
     }
 
@@ -157,7 +157,7 @@ class Newsletter extends Module
 		$line = implode(';', $array);
 		$line .= "\n";
 		if (!fwrite($fd, $line, 4096))
-			$this->_postErrors[] = $this->l('Error: cannot write to').' '.dirname(__FILE__).'/'.$this->_file.' !';
+			$this->_postErrors[] = $this->l('Error: cannot write').' '.dirname(__FILE__).'/'.$this->_file.' !';
 	}
 
     private function _displayFormExport()
@@ -168,11 +168,11 @@ class Newsletter extends Module
 		<p><ol>
 			<li>
 				'.$this->l('Persons who have subscribed using the BlockNewsletter block in the front office.').'<br />
-                '.$this->l('This will be a list of email addresses for persons coming to your store and not becoming a customer but wanting to get your newsletter. Using the "Export Newsletter Subscribers" below will generate a .CSV file based on the BlockNewsletter subscribers data.').'<br /><br />'.'
+                '.$this->l('This is a list of e-mail addresses of persons who come to your store that do not become customers, but have subscribed to your newsletter. Using the "Export Newsletter Subscribers" below will generate a .CSV file based on the BlockNewsletter subscribers data.').'<br /><br />'.'
             </li>
             <li>
                 '.$this->l('Customers that have checked "yes" to receive a newsletter in their customer profile.').'<br />
-                '.$this->l('The "Export Customers" section below filters which customers you want to send a newsletter.').'
+                '.$this->l('The "Export Customers" section below filters which customers you want to send a newsletter to.').'
             </li>
         </ol>
 		</p>
@@ -187,7 +187,7 @@ class Newsletter extends Module
 		<fieldset class="width3"><legend>'.$this->l('Export customers').'</legend>
         <form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<input type="hidden" name="action" value="customers">
-			'.$this->l('Generate an .CSV file from customers account data').'.<br /><br />';
+			'.$this->l('Generate a .CSV file from customer account data').'.<br /><br />';
 		foreach ($this->_fieldsExport as $key => $field)
 		{
 			$this->_html .= '

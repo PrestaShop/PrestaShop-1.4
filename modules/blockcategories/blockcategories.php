@@ -40,7 +40,7 @@ class BlockCategories extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Categories block');
-		$this->description = $this->l('Adds a block featuring product categories');
+		$this->description = $this->l('Adds a block featuring product categories.');
 	}
 
 	public function install()

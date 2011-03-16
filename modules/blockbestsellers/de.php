@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_6232eaff79c9ccb6c1a66e5a75a212d5'] = 'Block Verkaufshits';
-$_MODULE['<{blockbestsellers}prestashop>blockbestsellers_56710978dfca4fcdf98977fcaa4a553f'] = 'Block mit Verkaufshits des Shops hinzufügen';
+$_MODULE['<{blockbestsellers}prestashop>blockbestsellers_95d17a0a1b5ea2de13a3565ed400ebbb'] = 'Block mit Verkaufshits des Shops hinzufügen';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Bestätigung';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_c888438d14855d7d96a2724ee9c306bd'] = 'Aktualisierte Einstellungen';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';

@@ -39,11 +39,11 @@ class ReferralProgram extends Module
 
 		parent::__construct();
 
-		$this->confirmUninstall = $this->l('All sponsors and friends will be deleted. Do you really want to uninstall this module ?');
+		$this->confirmUninstall = $this->l('All sponsors and friends will be deleted. Are you sure you want to uninstall this module?');
 		$this->displayName = $this->l('Customer referral program');
 		$this->description = $this->l('Integrate a referral program system into your shop.');
 		if (Configuration::get('REFERRAL_DISCOUNT_TYPE') == 1 AND !Configuration::get('REFERRAL_PERCENTAGE'))
-			$this->warning = $this->l('You must specify an amount for referral program vouchers');
+			$this->warning = $this->l('Please specify an amount for referral program vouchers.');
 			
 		if ($this->id)
 		{
@@ -183,7 +183,7 @@ class ReferralProgram extends Module
 			if (!@fwrite($fd, $newXml))
 				$this->_html .= $this->displayError($this->l('Unable to write to the xml file.'));
 			if (!@fclose($fd))
-				$this->_html .= $this->displayError($this->l('Can\'t close the xml file.'));
+				$this->_html .= $this->displayError($this->l('Cannot close the xml file.'));
 		}
 		else
 			$this->_html .= $this->displayError($this->l('Unable to update the xml file. Please check the xml file\'s writing permissions.'));
@@ -242,7 +242,7 @@ class ReferralProgram extends Module
 		<fieldset class="width3">
 			<legend><img src="'._PS_ADMIN_IMG_.'prefs.gif" alt="'.$this->l('Settings').'" />'.$this->l('Settings').'</legend>
 			<p>
-				<label class="t" for="order_quantity">'.$this->l('Minimal number of orders a sponsored friend must place to get their voucher:').'</label>
+				<label class="t" for="order_quantity">'.$this->l('Minimum number of orders a sponsored friend must place to get their voucher:').'</label>
 				<input type="text" name="order_quantity" id="order_quantity" value="'.Tools::getValue('order_quantity', Configuration::get('REFERRAL_ORDER_QUANTITY')).'" style="width: 50px; text-align: right;" />
 			</p>
 			<p>
@@ -375,7 +375,7 @@ class ReferralProgram extends Module
 		$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'cpara', true);
 
 		$this->_html .= '
-				<div class="clear center"><input type="submit" name="submitText" value="'.$this->l('Update the text').'" class="button" style="margin-top: 10px" /></div>
+				<div class="clear center"><input type="submit" name="submitText" value="'.$this->l('Update text').'" class="button" style="margin-top: 10px" /></div>
 			</fieldset>
 		</form>';
 	}
@@ -541,7 +541,7 @@ class ReferralProgram extends Module
 
 		if ($friends AND sizeof($friends))
 		{
-			$html.= '<h3>'.sizeof($friends).' '.(sizeof($friends) > 1 ? $this->l('sponsored customers:') : $this->l('sponsored customer:')).'</h3>';
+			$html.= '<h3>'.sizeof($friends).' '.(sizeof($friends) > 1 ? $this->l('Sponsored customers:') : $this->l('Sponsored customer:')).'</h3>';
 			$html.= '
 			<table cellspacing="0" cellpadding="0" class="table">
 				<tr>

@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Bloque navegación por facetas';
-$_MODULE['<{blocklayered}prestashop>blocklayered_d7df62361bd02e736cbf22913f2f507e'] = 'Muestra un bloque con los filtros de la navegación por facetas';
+$_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Muestra un bloque con los filtros de la navegación por facetas';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7ad3f384bcf30d783b5a6f6c810b4762'] = 'La base de datos por niveles de navegación se ha iniciado con éxito';
 $_MODULE['<{blocklayered}prestashop>blocklayered_fe016d3b990c2a9dd72ab6b45892f2ae'] = 'Configuración guardada con éxito';
 $_MODULE['<{blocklayered}prestashop>blocklayered_09da2b6f1217055bb22caa6ea08d9b80'] = 'Capas de navegación';

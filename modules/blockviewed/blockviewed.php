@@ -43,7 +43,7 @@ class BlockViewed extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Viewed products block');
-		$this->description = $this->l('Adds a block displaying last-viewed products');
+		$this->description = $this->l('Adds a block displaying last-viewed products.');
 	}
 
 	function install()
@@ -62,7 +62,7 @@ class BlockViewed extends Module
 		if (Tools::isSubmit('submitBlockViewed'))
 		{
 			if (!$productNbr = Tools::getValue('productNbr') OR empty($productNbr))
-				$output .= '<div class="alert error">'.$this->l('You must fill in the \'Products displayed\' field').'</div>';
+				$output .= '<div class="alert error">'.$this->l('You must fill in the \'Products displayed\' field.').'</div>';
 			elseif ((int)($productNbr) == 0)
 				$output .= '<div class="alert error">'.$this->l('Invalid number.').'</div>';
 			else

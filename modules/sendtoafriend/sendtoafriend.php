@@ -40,7 +40,7 @@ class sendToAFriend extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Send to a Friend module');
-		$this->description = $this->l('Allows customers to send a product link to a friend');
+		$this->description = $this->l('Allows customers to send a product link to a friend.');
  	}
 
 	function install()
@@ -72,11 +72,11 @@ class sendToAFriend extends Module
 
 			/* Fields verifications */
 			if (empty($_POST['email']) OR empty($_POST['name']))
-				$error = $this->l('You must fill all fields.');
+				$error = $this->l('You must fill in all fields.');
 			elseif (empty($_POST['email']) OR !Validate::isEmail($_POST['email']))
-				$error = $this->l('Your friend\'s email is invalid.');
+				$error = $this->l('The e-mail given is invalid.');
 			elseif (!Validate::isName($_POST['name']))
-				$error = $this->l('Your friend\'s name is invalid.');
+				$error = $this->l('The name given is invalid.');
 			elseif (!isset($_GET['id_product']) OR !is_numeric($_GET['id_product']))
 				$error = $this->l('An error occurred during the process.');
 			else

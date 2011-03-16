@@ -44,7 +44,7 @@ class StatsPersonalInfos extends ModuleGraph
 		parent::__construct();
 		
         $this->displayName = $this->l('Registered Customer Info');
-        $this->description = $this->l('Display characteristics such as gender and age');
+        $this->description = $this->l('Display characteristics such as gender and age.');
 	}
 	
 	public function install()
@@ -78,13 +78,13 @@ class StatsPersonalInfos extends ModuleGraph
 				<center><p><img src="../img/admin/down.gif" />'.$this->l('Age ranges allows you to determine in which age range your customers are.').'</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'age')).'<br /></center>
 				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=age"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
-				<center><p><img src="../img/admin/down.gif" />'.$this->l('Country distribution allows you to determine in which part of the world your customers are.').'</p>
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Country distribution allows you to determine in which part of the world your customers are shopping from.').'</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'country')).'<br /></center>
 				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=country"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
-				<center><p><img src="../img/admin/down.gif" />'.$this->l('Currency ranges allows you to determine with which currency your customers pay.').'</p>
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Currency ranges allows you to determine which currencies your customers are using.').'</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'currency')).'<br /></center>
 				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=currency"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br /><br />
-				<center><p><img src="../img/admin/down.gif" />'.$this->l('Language distribution allows you to determine the general language your customers use on your shop.').'</p>
+				<center><p><img src="../img/admin/down.gif" />'.$this->l('Language distribution allows you to determine the general languages your customers are using on your shop.').'</p>
 				'.ModuleGraph::engine(array('type' => 'pie', 'option' => 'language')).'<br /></center>
 				<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=language"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>
 			</center>';
@@ -97,14 +97,14 @@ class StatsPersonalInfos extends ModuleGraph
 			<h2>'.$this->l('Target your audience').'</h2>
 			<p>
 				'.$this->l('In order for each message to have an impact, you need to know to whom it should be addressed.').'
-				'.$this->l('Addressing the right audience is essential for choosing the right tools for winning them over.').'
-				'.$this->l('It\'s best to limit action to a group or groups of clients.').'
-				'.$this->l('Registered customer information lets you more accurately define the typical customer profile so that you can adapt your specials to various criteria.').'
+				'.$this->l('Addressing the right audience is essential for choosing the right tools to win them over.').'
+				'.$this->l('It is best to limit action to a group or groups of clients.').'
+				'.$this->l('Registered customer information allows you to accurately define the typical customer profile so that you can adapt your specials to various criteria.').'
 			</p><br />
 			<p>
-				'.$this->l('You should use this information for increasing your sales by:').'
+				'.$this->l('You should use this information to increase your sales by').'
 				<ul>
-					<li class="bullet">'.$this->l('Launching ad campaigns addressed to specific customers who might be interested in a particular offer, at specific dates and times').'</li>
+					<li class="bullet">'.$this->l('launching ad campaigns addressed to specific customers who might be interested in a particular offer at specific dates and times.').'</li>
 					<li class="bullet">'.$this->l('Contacting a group of clients by e-mail / newsletter.').'</li>
 				</ul>
 			</p><br />

@@ -40,7 +40,7 @@ class ProductToolTip extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Product tooltips');
-		$this->description = $this->l('Show how many people are watching a product page, last sale and last cart add');		
+		$this->description = $this->l('Show how many people are watching a product page, last sale and last cart add.');		
 	}
 	
 	public function install()
@@ -106,7 +106,7 @@ class ProductToolTip extends Module
 				&nbsp;<img src="'._PS_ADMIN_IMG_.'disabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_order" value="0"'.(!Configuration::get('PS_PTOOLTIP_DATE_ORDER') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('No').'<br /><br />
 			</p>
 			<p>
-				'.$this->l('If no order yet, display the last time the product has been added to cart?').'<br /><br />
+				'.$this->l('If not order yet, display the last time the product has been added to cart?').'<br /><br />
 				<img src="'._PS_ADMIN_IMG_.'enabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_cart" value="1"'.(Configuration::get('PS_PTOOLTIP_DATE_CART') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('Yes').' 
 				&nbsp;<img src="'._PS_ADMIN_IMG_.'disabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_cart" value="0"'.(!Configuration::get('PS_PTOOLTIP_DATE_CART') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('No').'<br /><br />
 				

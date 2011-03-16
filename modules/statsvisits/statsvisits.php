@@ -46,7 +46,7 @@ class StatsVisits extends ModuleGraph
 		parent::__construct();
 		
         $this->displayName = $this->l('Visits and Visitors');
-        $this->description = $this->l('Display statistics about your visits and visitors');
+        $this->description = $this->l('Display statistics about your visits and visitors.');
     }
 	
 	public function install()
@@ -80,7 +80,7 @@ class StatsVisits extends ModuleGraph
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
 			<p><center>
 				<img src="../img/admin/down.gif" />'.$this->l('A visit corresponds to an internet user coming to your shop. Until the end of their session, only one visit is counted.').'
-				'.$this->l('A visitor is an unknown person - who has not registered or logged on - surfing on your shop. A visitor can come and visit your shop many times.').'
+				'.$this->l('A visitor is an unknown person, who has not registered or logged on, surfing on your shop. A visitor can come and visit your shop many times.').'
 			</center></p>
 			<div style="margin-top:20px"></div>
 			<p>'.$this->l('Total visits:').' '.$totalVisits.'</p>
@@ -93,8 +93,8 @@ class StatsVisits extends ModuleGraph
 				<h2>'.$this->l('Determine the interest of a visit').'</h2>
 				'.$this->l('The visitors\' evolution graph strongly resembles the visits\' graph, but provides additional information:').'<br />
 				<ul>
-					<li>'.$this->l('If this is the case, congratulations, your website is well thought out and pleasing.').'</li>
-					<li>'.$this->l('Otherwise, the conclusion is not so simple. The problem can be aesthetic or ergonomic, or else the offer is not sufficient. It\'s also possible that these visitors mistakenly came here, without particular interest for your shop; this phenomenon often happens with the search engines.').'</li>
+					<li>'.$this->l('If this is the case, congratulations, your website is well planned and pleasing.').'</li>
+					<li>'.$this->l('Otherwise, the conclusion is not so simple. The problem can be aesthetic or ergonomic, or else the offer is not sufficient. It is also possible that these visitors mistakenly came here without particular interest for your shop; this phenomenon often happens with the search engines.').'</li>
 				</ul>
 				'.$this->l('This information is mostly qualitative: you have to determine the interest of a disjointed visit.').'<br />
 		</fieldset>';

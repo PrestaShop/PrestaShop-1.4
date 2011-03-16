@@ -3,9 +3,9 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_21d574c0b27fc6bebc399be75502d84d'] = 'FIA-NET Sceau de Confiance';
-$_MODULE['<{fianetsceau}prestashop>fianetsceau_3d04481e152cf36857cd46940292538d'] = 'Transformez vos visiteurs en acheteurs en créant la confiance sur votre site';
-$_MODULE['<{fianetsceau}prestashop>fianetsceau_76fce32fafef13ba9873162ff31c8f40'] = 'Veuillez renseigner votre clé privée';
-$_MODULE['<{fianetsceau}prestashop>fianetsceau_694d3e94c2df0ed386bdac95406e019d'] = 'Veuillez renseigner l\'ID de votre site';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_76c3b678f626c3858c3c98baac90c7ac'] = 'Transformez vos visiteurs en acheteurs en créant la confiance sur votre site';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_32c355617b8730b1603e31d144513890'] = 'Veuillez renseigner votre clé privée';
+$_MODULE['<{fianetsceau}prestashop>fianetsceau_59dd48942de548b075014fe901bfae1b'] = 'Veuillez renseigner l\'ID de votre site';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Paramètres mis à jour avec succès';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_380b4179d36bce6ca862459a43b217b5'] = 'Pour vous inscrire, rendez-vous sur:';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_592fcfe937f6d58f70d0918ef6373afa'] = 'le site internet de Fia-Net';

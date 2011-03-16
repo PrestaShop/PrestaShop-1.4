@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{productscategory}prestashop>productscategory_db33983df8ef521000b0ab60dcb5a83f'] = 'Categoria prodotti';
-$_MODULE['<{productscategory}prestashop>productscategory_c167dc9a6cdefdab35fb3b5e325cc815'] = 'Visualizza i prodotti della stessa categoria sulla pagina del prodotto';
+$_MODULE['<{productscategory}prestashop>productscategory_0157084bddd8b408e1cdaba00f54a009'] = 'Visualizza i prodotti della stessa categoria sulla pagina del prodotto';
 $_MODULE['<{productscategory}prestashop>productscategory_462390017ab0938911d2d4e964c0cab7'] = 'Impostazioni aggiornate con successo';
 $_MODULE['<{productscategory}prestashop>productscategory_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';
 $_MODULE['<{productscategory}prestashop>productscategory_b6bf131edd323320bac67303a3f4de8a'] = 'Mostra prezzo sui prodotti';
