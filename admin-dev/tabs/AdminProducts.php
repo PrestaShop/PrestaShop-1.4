@@ -3111,7 +3111,7 @@ class AdminProducts extends AdminTab
 				</tr>
 			</table>
 			<hr style="width:100%;" /><br />
-			<table cellpadding="5" style="width:100%" border="1">
+			<table cellpadding="5" style="width:100%">
 			<tr>
 			  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" valign="top">'.$this->l('Group:').'</td>
 			  <td style="padding-bottom:5px;"><select name="attribute_group" id="attribute_group" style="width: 200px;" onchange="populate_attrs();">';
