@@ -265,7 +265,7 @@ abstract class AdminTabCore
 		<legend>'.$this->l('Required Fields').'</legend>
 		<form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
 		<p><b>'.$this->l('Select the fields you require.').'<br />
-		'.$this->l('Be careful in using this feature, a misuse can alter your store.').'<b></p>
+		'.$this->l('Be careful in using this feature, a misuse can alter your store.').'</b></p>
 		<table cellspacing="0" cellpadding="0" class="table width1 clear">
 		<tr>
 			<th><input type="checkbox" onclick="checkDelBoxes(this.form, \'tablesBox[]\', this.checked)" class="noborder" name="checkme"></th>
