@@ -72,7 +72,7 @@ class AdminStockMvt extends AdminTab
 		if (!($obj = $this->loadObject(true)))
 			return;
 		$dl = 'name';
-		echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
+		echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'&addstock_mvt_reason" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/search.gif" />'.$this->l('Stock Movement').'</legend>
 				<label>'.$this->l('Name:').'</label>
@@ -141,7 +141,7 @@ class AdminStockMvt extends AdminTab
 		
 		$old_post = false;
 		
-		if (!isset($_GET['addstock_mvt_reason']) AND (Tools::isSubmit('submitAddstock_mvt_reason') OR !Tools::getValue('id_stock_mvt_reason')))
+		if (!isset($_GET['addstock_mvt_reason']) OR (Tools::isSubmit('submitAddstock_mvt_reason') AND Tools::getValue('id_stock_mvt_reason')))
 		{
 			$old_post = $_POST;
 			echo '<h2>'.$this->l('Stock movement history').'</h2>';
