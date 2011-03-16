@@ -59,6 +59,7 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_dd4c0c798ebbf8c6e15dcba8632f558
 $_MODULE['<{shopimporter}prestashop>shopimporter_60474e812295a5adc371de63dc62a164'] = 'Clicca qui per il backup';
 $_MODULE['<{shopimporter}prestashop>shopimporter_05f4be265d59ea66f3a1fb12ba103583'] = 'Scegli la tua importazione';
 $_MODULE['<{shopimporter}prestashop>shopimporter_961f2247a2070bedff9f9cd8d64e2650'] = 'Scegli';
+$_MODULE['<{shopimporter}prestashop>shopimporter_151a0fbfcc4894aa53335091c2512de5'] = 'Nessun modulo di importazione installato';
 $_MODULE['<{shopimporter}prestashop>shopimporter_9aa1b03934893d7134a660af4204f2a9'] = 'Server';
 $_MODULE['<{shopimporter}prestashop>shopimporter_8f9bfe9d1345237cb3b2b205864da075'] = 'Utente';
 $_MODULE['<{shopimporter}prestashop>shopimporter_dc647eb65e6711e155375218212b3964'] = 'Password';

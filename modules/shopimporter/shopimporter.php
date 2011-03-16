@@ -261,6 +261,10 @@ class shopimporter extends ImportModule
 	{
 		global $cookie;
 		$exportModules = parent::getImportModulesOnDisk();
+		//get installed module only
+		foreach($exportModules as $key => $module)
+			if ($module->name == $this->name OR !(bool)$module->id)
+				unset($exportModules[$key]);
 		$html = '<script type="text/javascript" src="../modules/shopimporter/shopimporter.js"></script>
 				<script src="'._PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js"></script> 
 				 <script type="text/javascript">
@@ -293,11 +297,11 @@ class shopimporter extends ImportModule
 					'.$this->l('Before starting the import please backup your database. ').'
 						<a href="index.php?tab=AdminBackup&token='.Tools::getAdminToken('AdminBackup'.intval(Tab::getIdFromClassName('AdminBackup')).intval($cookie->id_employee)).'"">'.$this->l(' Click here to backup').'</a>
 				</div>
-				<div class="warn" ><img src="../img/admin/warn2.png">
-					This module is in beta version
-				</div>
 				<br>
-				<div style="float:right;width:450px" id="steps"></div>
+				<div style="float:right;width:450px" id="steps"></div>';
+				if (sizeof($exportModules))
+				{
+				$html .= '
 				<label>'.$this->l('Choose your import').' : </label>
 				<div class="margin-form">
 					<select name="import_module_name" id="import_module_name">
@@ -307,7 +311,11 @@ class shopimporter extends ImportModule
 			(($module->name != $this->name AND $module->id) ? $html .= '<option value="'.$module->name.'">'.$module->displayName.'</option>' : '' );
 
 		$html .= '</select><input type="submit" class="button" id="choose_module_name" value="'.$this->l('Choose').'">
-				</div>
+				</div>';
+				}
+				else
+					$html .= '<div class="warn" ><img src="../img/admin/warn2.png">'.$this->l('No import module installed').'</div>';
+				$html .= '
 				<div id="db_config" style="display:none;width:420px;padding-right:20px">
 				<div id="db_input">
 					<label>'.$this->l('Server').' : </label>
