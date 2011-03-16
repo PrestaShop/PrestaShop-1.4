@@ -24,6 +24,196 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.0.17 - 5552 (2011-03-16)  #
+####################################
+
+	Improved/changed features:
+
+	[*] BO : #8322 Updating natives modules author to PrestaShop
+	[*] BO : Resolves spaces split in meta keywords
+	[*] BO : Truncating displayed author name
+	[*] BO : adding one more empty check cond
+
+	[*] MO : Warnings for preactivations in module section
+
+	Fixed bugs:
+
+	[-] FO : fixed bug #8317 - Carrier selection javascript bug
+	[-] FO : fixed bug #8318 - view credit slips error
+	[-] FO : fixed bug #8326 - Errors in mail templates
+	[-] FO : fixed bug with CSS missing calls
+
+	[-] BO : fixed bug #8321 - Incorrect translations in mails/fr/lang.php
+	[-] BO : fixed bug #8330 - Always have warning for “URL rewriting
+	[-] BO : fixed bug #8330 - Always have warning for “URL rewriting
+	[-] BO : fixed bug #8336 - Missing image
+	[-] BO : fixed bug #8338 - Product chooser for packs is buggy when product name ends with whitespace
+	[-] BO : fixed bug #8342 - missing opening table row tag
+	[-] BO : fixed bug #8344 - span not closed in AdminProducts
+
+	[-] MO : Fix on Twenga translations
+	[-] MO : Fix on css AdminHome Tab
+	[-] MO : fixed bug #8323 - Customer Mail Alerts
+	[-] MO : fixed little bug on Authorize.net module
+
+	[-] WS : Minor bug fixed
+	[-] WS : Small fix
+
+	[-] TR : english translation error message
+
+
+####################################
+#   v1.4.0.16 - 5477 (2011-03-14)  #
+####################################
+
+	Added Features:
+
+	[+] BO : Adding module author display and filter
+	[+] BO : Adding module author searching
+	[+] BO : Optimization tips integration
+	[+] BO : Setting natives modules author to Prestashop
+
+	[+] Core : Hooks for category add/upd/del are now including the object information in $params
+
+	Improved/changed features:
+
+	[*] INSTALLER : Preactivation can now be done in two parts
+	[*] INSTALLER : Preactivation can now manage several partners
+	[*] INSTALLER : Preactivation help context is now available
+	[*] INSTALLER : Update preinstallation module system
+
+	[*] FO : SpecificPrices score is now influenced by the date (Thanks Nik Chankov)
+	[*] FO : improvement of liveEdit - now you can navigate on your font-office staying on LiveEdit mode
+
+	[*] BO : Admin home page is now in tabs/AdminHome
+	[*] BO : AdminTaxRules help text
+	[*] BO : Help Access message
+	[*] BO : Home display improved
+	[*] BO : Paypal Advise Block
+	[*] BO : adding help on Theme fieldset
+	[*] BO : module search autocomplete improvement Now when you select the desired module search form is valid automaticaly
+	[*] BO : optimization tips can now be activated again
+
+	[*] Core : class AdminGeolocalization is now AdminGeolocation
+
+	[*] MO : Layered navigation module
+	[*] MO : Layered navigation module
+	[*] MO : Layered navigation module - missing French translations
+	[*] MO : Layered navigation module improvements (Cache table is updated automatically if possible,
+	[*] MO : Layered navigation module was re-done entirely, few features missing but already working well
+
+	[*] WS : 2 new entities managed: StockMvt and StockMvtReason
+	[*] WS : Add description for a key
+	[*] WS : Enhance WS Behavior
+	[*] WS : Move Webservice in classes
+	[*] WS : Refactoring for release
+
+	[*] TR : add translation
+	[*] TR : english traduction
+	[*] TR : english traduction
+	[*] TR : improved english translations
+	[*] TR : improved english translations
+	[*] TR : improved english translations
+
+	Fixed bugs:
+
+	[-] Project : many fixes for 1.3 to 1.4 upgrade
+
+	[-] INSTALLER : ISO Code UK was changed to GB
+	[-] Installer : Bug Fixed #8198 Upgrade from 1.1.0.5
+	[-] Installer : Fixed #8143 - url_rewrite corrected in ps_meta_lang
+	[-] Installer : fixed bug #8128 - guest-tracking.php doesn’t have friendly URL
+	[-] Installer : jqminmax removed - incompatibility between jquery + jqminmax + chrome
+
+	[-] FO : Bug Fixed #8154 - EU VAT module & Shipping taxes
+	[-] FO : Bug Fixed #8200 - Down button on the order page is not disabled for customized product with minimum quantity
+	[-] FO : Fixed #7859 - pre-order product displayed correctly when stock < 0
+	[-] FO : Fixed bug -  live edit js added when live edit mode is off
+	[-] FO : No taxes when using states & county
+	[-] FO : Price Comparison HTML entities
+	[-] FO : fixed a quantity bug in blockwishlist when a user add a gift to his cart
+	[-] FO : fixed bug #7816 - Error reporting on “one page checkout”
+	[-] FO : fixed bug #8020 - Folder /session permission problem
+	[-] FO : fixed bug #8052 - unexpected HOME link on the CGV window popup
+	[-] FO : fixed bug #8053 - Cart errors cause parsererror
+	[-] FO : fixed bug #8072 - Gift-wrapping Price is not added in cart_summary
+	[-] FO : fixed bug #8075 - no carriers available on opc page
+	[-] FO : fixed bug #8082 - Change status of default language
+	[-] FO : fixed bug #8119 - Another grammar issue: “Please to sign in in order to see payment methods”
+	[-] FO : fixed bug #8119 - Another grammar issue: “Please to sign in in order to see payment methods” part 2
+	[-] FO : fixed bug #8164 - Extra ‘-’ characters in the subcategory names when using Chrome
+	[-] FO : fixed bug #8169 - Wronng order assignment in header
+	[-] FO : fixed bug #8194 - Undefined variable tax_cost line 291
+	[-] FO : fixed bug #8237 - Undefined variable tax_cost line Filezilla breaks HTTPS
+	[-] FO : fixed bug #8244 - display not correct if supplier or manufacturer not exist
+	[-] FO : fixed bug #8245 - redirect inexistant category & product
+	[-] FO : fixed bug #8250 - User addresses not displayed with “Compress inline JavaScript”
+	[-] FO : fixed bug #8263 - Invoice footer align
+	[-] FO : fixed bug #8280 - “Your shopping cart contains # products: message not updated
+	[-] FO : fixed bug #8290 - setMedia called twice, JS files doubled
+	[-] FO : fixed bug compared to the map stores.php  with CCC activated
+	[-] FO : fixed bug upload.gif not show when save customized products
+	[-] FO : fixed bug when you close the mode live edit
+	[-] FO : fixed bug with “Compress inline JavaScript”
+	[-] FO : fixed but which display the number of product in stock whatever the number of last quantities chosen in BO
+	[-] FO : fixed but which display the number of product in stock whatever the number of last quantities chosen in BO, fixed bug in the last commit
+	[-] FO : fixed notice in Tools::addJs and addCss
+	[-] FO : getLanguages will now call loadLanguages if self:: is not set
+	[-] FO : improvement liveEdit
+	[-] FO :fixed bug #7875 - 1.4 legend icon in optionlist of admintab
+	[-] FO :fixed bug #7962 - same category and EAN13: bad link
+	[-] FO :fixed bug #8050 - Don´t order attribute groups by name
+	[-] FO :fixed bug #8055 - Stats shop search not work
+	[-] FO :fixed bug #8091 - Typo in french message in fianetfraud module
+
+	[-] BO : Bug Fixed #8158 - Htaccess generation => category block cache cleaned
+	[-] BO : Bug fixed #7987 : Labels size and weight were changed to be less ambiguous
+	[-] BO : HelpAccess popup size
+	[-] BO : Helpaccess cluetip
+	[-] BO : Little fix for by pass gd library bug
+	[-] BO : Try to upload a file too large as a product picture = no error message
+	[-] BO : added a update of the date when a customer is enabled or disabled
+	[-] BO : fixed a translation bug in customer groups. Changed "fehler" to "Default"
+	[-] BO : fixed bug #7800 - Delete all combinations
+	[-] BO : fixed bug #7961 - Chrome and password pages
+	[-] BO : fixed bug #8010 - svn5232 states not showing in admin-customers-addresses
+	[-] BO : fixed bug #8087 - BO let you set disabled language as default
+	[-] BO : fixed bug #8127 - bug on guest tracking
+	[-] BO : fixed bug #8177 - Not translatable
+	[-] BO : fixed bug #8258 - Broken link in BO
+	[-] BO : fixed bug #8288 - Counties tab is missing icon
+	[-] BO : fixed bug - if vatnumber module don't exist => don't make ajax in AdminAddresses
+	[-] BO : fixed bug save and preview bad redirect
+	[-] BO : no more strip_tags on htaccess specific tags
+
+	[-] Classes : fixed bug - bad duplicate check when Tools::addJs() is call with array params
+	[-] Classes : fixed bug on config xml generation for modules
+
+	[-] MO : Editorial - Text is cutoff
+	[-] MO : Module UPS, fix on xml file
+	[-] MO : Moneybookers, plaform variable has been changed
+	[-] MO : fianetfraud statuses ids fixed
+	[-] MO : fixed bug #8090 - soCollisimo under Firefox
+	[-] MO : fixed bug #8107 - Alignment issues productscategory and cross selling
+	[-] MO : fixed bug #8115 -Grammar error in PayPal payment description
+	[-] MO : fixed bug #8146 - Block bestsellers
+	[-] MO : fixed bug #8166 - Admin tab of module EnvoiMoinsCher not translated
+	[-] MO : fixed css path - crosselling
+
+	[-] PDF : Bug Fixed #7295 - Ecotax
+	[-] PDF : Undefined index PS_SHOP_DETAILS
+
+	[-] TR : BO Home english
+	[-] TR : Bug Fixed #8140 - Bad grammar in guest_to_customer mail template
+	[-] TR : fix minor english translation
+	[-] TR : fix minor english translation
+	[-] TR : fix minor english translation
+	[-] TR : presta-fraud english traduction
+
+	[-] LO : Bug Fixed #7972 - Australian price format
+	[-] LO : Missing english language
+
+####################################
 #   v1.4.0.15 - 5285 (2011-03-02)  #
 ####################################
 
