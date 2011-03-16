@@ -73,7 +73,7 @@ class AdminAttachments extends AdminTab
 						$_POST['mime'] = $_FILES['file']['type'];
 					}
 				}
-				else if ((int)$_FILES['attachment_file']['error'] === 1) 
+				else if (array_key_exists('attachment_file', $_FILES) && (int)$_FILES['attachment_file']['error'] === 1) 
 				{
 					$max_upload = (int)(ini_get('upload_max_filesize'));
 					$max_post = (int)(ini_get('post_max_size'));

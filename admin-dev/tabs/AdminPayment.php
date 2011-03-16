@@ -84,13 +84,13 @@ class AdminPayment extends AdminTab
 	private function saveRestrictions($type)
 	{
 		global $currentIndex;
-		
 		Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'module_'.$type.'');
 		foreach ($this->paymentModules as $module)
 			if ($module->active AND isset($_POST[$module->name.'_'.$type.'']))
 				foreach ($_POST[$module->name.'_'.$type.''] as $selected)
 					$values[] = '('.(int)($module->id).', '.(int)($selected).')';
-		Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_'.$type.' (`id_module`, `id_'.$type.'`) VALUES '.implode(',', $values));
+		if (sizeof($values))
+			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_'.$type.' (`id_module`, `id_'.$type.'`) VALUES '.implode(',', $values));
 		Tools::redirectAdmin($currentIndex.'&conf=4'.'&token='.$this->token);
 	}
 
@@ -174,7 +174,10 @@ class AdminPayment extends AdminTab
 			{
 				if ($module->active)
 				{
-					$value = $module->{$nameId};
+					if (isset($module->{$nameId}))
+						$value = $module->{$nameId};
+					else
+						$value = array();
 					echo '
 						<td style="text-align: center">';
 					if ($nameId != 'currency' OR ($nameId == 'currency' AND $module->currencies AND $module->currencies_mode == 'checkbox'))
