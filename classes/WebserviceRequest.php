@@ -224,15 +224,16 @@ class WebserviceRequestCore
 		ini_set('html_errors', 'off');
 		$this->_wsUrl = Tools::getHttpHost(true).__PS_BASE_URI__.'api/';
 		
-		if ($bad_class_name)
-		{
-			$this->setError(500, 'Bad override class name for this key. Please update class_name field');
-		}
 		$this->_key = trim($key);
 		
 		// Check webservice activation and request authentication
 		if ($this->isActivated() && $this->authenticate())
 		{
+			if ($bad_class_name)
+			{
+				$this->setError(500, 'Bad override class name for this key. Please update class_name field');
+			}
+			
 			//parse request url
 			$this->_method = $method;
 			$this->_urlSegment = explode('/', $url);
