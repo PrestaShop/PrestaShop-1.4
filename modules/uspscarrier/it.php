@@ -78,7 +78,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_f858ebce2deafd485f17522ca80bca2b'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Nessuna descrizione dell\'errore trovato';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Impostazioni non riuscite ';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_e37ef75c1fd8174aacc2d274236e9785'] = 'È necessario configurare il tab \"Impostazioni generali\" prima di utilizzare questo tab';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b01d4c0704016db61b3f4836d59f9bbe'] = 'È necessario configurare il tab \"Impostazioni generali\" prima di utilizzare questo tab';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_a37b48e8684078c0620a997b3baeee9f'] = 'In questo tab è possibile impostare una configurazione specifica per ogni categoria.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'ID Config';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoria';

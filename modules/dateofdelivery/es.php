@@ -27,8 +27,8 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_1b9f5204ddf0881dc9f3a7bf65d
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_52f253c711cff509bd5e4df2b18b697a'] = 'Entrega los sábados';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_fcddbca356dee064438a399fc0c4c84e'] = 'Entrega los domingos';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_06df33001c1d7187fdd81ea1f5b277aa'] = 'Acciones';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'días y';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'días';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'día(s) y';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'día(s)';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_93cba07454f06a4a960172bbd6e2a435'] = 'Sí';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_bafd7322c6e97d25b6299b5d6fe8920b'] = 'No';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7dce122004969d56ae2e0245cb754d35'] = 'Modificar';
@@ -45,8 +45,6 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_168ee9f4820976c4f4055cd8179
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_8c5961161cc9ce6db81bf3be77091136'] = 'Modificar una regla de transportista';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_f8617a92ba0a0a4eabee724eab7c9f48'] = 'Transportista:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_961f2247a2070bedff9f9cd8d64e2650'] = 'Elegir';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'día(s) y';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'día(s)';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_d3e0fc43c22a6bb8e2d271a29b2f06fd'] = 'Opciones de entraga:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_ea4788705e6873b424c65e91c2846b19'] = 'Anular';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_9d1a0949c39e66a0cd65240bc0ac9177'] = 'Domingo';

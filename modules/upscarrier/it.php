@@ -44,7 +44,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_39a6651a951bf99fa4c3198a271a9c27'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_ff00c491eedc4e610f8ec9d02a46cf1b'] = 'Status modulo Ups';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a6adb58e6abd44d96cec7996c0e38629'] = 'Corriere UPS  è ben configurato e online!';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3184c79dd129c671b26afaefd7614488'] = 'Corriere UPS  non è ancora configurato, quindi devi:';
-$_MODULE['<{upscarrier}prestashop>upscarrier_942589fb3a11fb3c7af2c82cd3f1549b'] = 'Riempire il modulo \'Impostazioni generali\' e scegliere la tua zona tariffaria';
+$_MODULE['<{upscarrier}prestashop>upscarrier_40840f8672ee1391fa005409a46475db'] = 'Riempire il modulo \'Impostazioni generali\' e scegliere la tua zona tariffaria';
 $_MODULE['<{upscarrier}prestashop>upscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test di connessione webservice';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5bcac5de5a4e77f92b02f00b88cae456'] = 'Seleziona il tuo servizio di consegna disponibile (devi convalidare la tua zona tariffaria)';
 $_MODULE['<{upscarrier}prestashop>upscarrier_6a79bb09adada5dc085e16148996425a'] = 'estensione cURL non abilitata, il modulo UPS può funzionare senza cURL ma sarebbe meglio attivarlo.';

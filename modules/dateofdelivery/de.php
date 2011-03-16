@@ -27,8 +27,8 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_1b9f5204ddf0881dc9f3a7bf65d
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_52f253c711cff509bd5e4df2b18b697a'] = 'Samstagslieferung';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_fcddbca356dee064438a399fc0c4c84e'] = 'Sonntagslieferung';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_06df33001c1d7187fdd81ea1f5b277aa'] = 'Handlungen';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'Tagen und';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'Tagen';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'Tag (e) UND';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'Tag (e)';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_93cba07454f06a4a960172bbd6e2a435'] = 'Ja';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Nein';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7dce122004969d56ae2e0245cb754d35'] = 'Bearbeiten';
@@ -45,8 +45,6 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_168ee9f4820976c4f4055cd8179
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_8c5961161cc9ce6db81bf3be77091136'] = 'Lieferanten-Regel bearbeiten';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_f8617a92ba0a0a4eabee724eab7c9f48'] = 'Lieferant:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_961f2247a2070bedff9f9cd8d64e2650'] = 'Wählen';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7b367091d009d1a4be71a6a72494894f'] = 'Tag (e) UND';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_225e75c29d32392d311f5dc94c792384'] = 'Tag (e)';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_d3e0fc43c22a6bb8e2d271a29b2f06fd'] = 'Liefermöglichkeiten:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_ea4788705e6873b424c65e91c2846b19'] = 'Abbrechen';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_9d1a0949c39e66a0cd65240bc0ac9177'] = 'Sonntag';

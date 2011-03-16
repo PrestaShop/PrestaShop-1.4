@@ -44,7 +44,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_39a6651a951bf99fa4c3198a271a9c27'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_ff00c491eedc4e610f8ec9d02a46cf1b'] = 'UPS Modulstatus';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a6adb58e6abd44d96cec7996c0e38629'] = 'UPS Carrier ist richtig konfiguriert und online!';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3184c79dd129c671b26afaefd7614488'] = 'UPS Carrier ist noch nicht konfiguriert, Sie müssen:';
-$_MODULE['<{upscarrier}prestashop>upscarrier_942589fb3a11fb3c7af2c82cd3f1549b'] = 'Füllen Sie das Formular \"Allgemeine Einstellungen\" aus und wählen Sie Ihre Bewertungsservice-Gruppe';
+$_MODULE['<{upscarrier}prestashop>upscarrier_40840f8672ee1391fa005409a46475db'] = 'Füllen Sie das Formular \"Allgemeine Einstellungen\" aus und wählen Sie Ihre Bewertungsservice-Gruppe';
 $_MODULE['<{upscarrier}prestashop>upscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice Testverbindung';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5bcac5de5a4e77f92b02f00b88cae456'] = 'Wählen Sie Ihren verfügbaren Zustelldienst (Sie müssen Sie Ihre Rate Service Gruppe zuerst bestätigen)';
 $_MODULE['<{upscarrier}prestashop>upscarrier_6a79bb09adada5dc085e16148996425a'] = 'cURL-Erweiterung ist nicht aktiviert, UPV-Modul kann ohne cURL arbeiten, aber es wäre besser, es zu aktivieren.';

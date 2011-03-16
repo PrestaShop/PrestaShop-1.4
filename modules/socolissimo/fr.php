@@ -37,7 +37,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_9fbff0971c06ee404f638e9abcbd9446'
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentation';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuration';
 $_MODULE['<{socolissimo}prestashop>socolissimo_0ab984d91ab0a037bdf692bf0e73c349'] = 'Important';
-$_MODULE['<{socolissimo}prestashop>socolissimo_236afee27540f3581f5a43b7b4378dbf'] = 'Pour ouvrir un compte SoColissimo, merci de contacter \"La poste\" à ce numéro: 3634.';
+$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Pour ouvrir un compte SoColissimo, merci de contacter \"La poste\" à ce numéro: 3634.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9c85d4c2bae6ab548fe23e57bd89ddc4'] = 'Identifiant FO';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7b95472e0575adc1e3d90a2d7b51e496'] = 'Utilisateur So Colissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_897356954c2cd3d41b221e3f24f99bba'] = 'Clé de cryptage';
@@ -76,7 +76,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_201bdb87f8e278b943d07ae924d5de6e'
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce26601dac0dea138b7295f02b7620a7'] = 'Client';
 $_MODULE['<{socolissimo}prestashop>socolissimo_1c76cbfe21c6f44c1d1e59d54f3e4420'] = 'Entreprise';
 $_MODULE['<{socolissimo}prestashop>socolissimo_8b5dd64ab8d0b8158906796b53a200e2'] = 'Adresse e-mail';
-$_MODULE['<{socolissimo}prestashop>socolissimo_bcc254b55c4a1babdf1dcb82c207506b'] = 'Téléphone';
+$_MODULE['<{socolissimo}prestashop>socolissimo_bcc254b55c4a1babdf1dcb82c207506b'] = 'Tel';
 $_MODULE['<{socolissimo}prestashop>socolissimo_e19726b466603bc3e444dd26fbcde074'] = 'Adresse du client';
 $_MODULE['<{socolissimo}prestashop>socolissimo_6311ae17c1ee52b36e68aaf4ad066387'] = 'Autre';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d676596f71fd0f73f735da4bb4225151'] = 'Code de la porte';
@@ -85,4 +85,3 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Point de retrait';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Adresse du point de retrait';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
-$_MODULE['<{socolissimo}prestashop>socolissimo_bcc254b55c4a1babdf1dcb82c207506b'] = 'Tel';

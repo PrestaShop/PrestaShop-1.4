@@ -37,7 +37,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_9fbff0971c06ee404f638e9abcbd9446'
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b6cf869265c13af8566f192b4ab3d2a'] = 'Dokumentation';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';
 $_MODULE['<{socolissimo}prestashop>socolissimo_0ab984d91ab0a037bdf692bf0e73c349'] = 'Wichtig';
-$_MODULE['<{socolissimo}prestashop>socolissimo_236afee27540f3581f5a43b7b4378dbf'] = 'Um Ihr SoColissimo-Konto zu eröffnen, kontaktieren Sie bitte \"La Poste\" unter dieser Rufnummer: 3634 (Französische Telefonnummer)';
+$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Um Ihr SoColissimo-Konto zu eröffnen, kontaktieren Sie bitte \"La Poste\" unter dieser Rufnummer: 3634 (Französische Telefonnummer)';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9c85d4c2bae6ab548fe23e57bd89ddc4'] = 'ID So';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7b95472e0575adc1e3d90a2d7b51e496'] = 'Benutzer-Id für das SoColissimo Backoffice.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_897356954c2cd3d41b221e3f24f99bba'] = 'Schlüssel';
@@ -76,7 +76,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_201bdb87f8e278b943d07ae924d5de6e'
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce26601dac0dea138b7295f02b7620a7'] = 'Kunde';
 $_MODULE['<{socolissimo}prestashop>socolissimo_1c76cbfe21c6f44c1d1e59d54f3e4420'] = 'Firma';
 $_MODULE['<{socolissimo}prestashop>socolissimo_8b5dd64ab8d0b8158906796b53a200e2'] = 'E-Mail-Adresse';
-$_MODULE['<{socolissimo}prestashop>socolissimo_bcc254b55c4a1babdf1dcb82c207506b'] = 'Telefon';
+$_MODULE['<{socolissimo}prestashop>socolissimo_bcc254b55c4a1babdf1dcb82c207506b'] = 'Tel';
 $_MODULE['<{socolissimo}prestashop>socolissimo_e19726b466603bc3e444dd26fbcde074'] = 'Kundenadresse';
 $_MODULE['<{socolissimo}prestashop>socolissimo_6311ae17c1ee52b36e68aaf4ad066387'] = 'Andere';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d676596f71fd0f73f735da4bb4225151'] = 'Tür-Code';
@@ -85,4 +85,3 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Abholpunkt';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Abholpunkt-Adresse';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'E-Mail';
-$_MODULE['<{socolissimo}prestashop>socolissimo_bcc254b55c4a1babdf1dcb82c207506b'] = 'Tel';

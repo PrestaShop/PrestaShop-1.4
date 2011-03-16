@@ -38,7 +38,7 @@ $_MODULE['<{twenga}prestashop>twenga_dc647eb65e6711e155375218212b3964'] = 'Mot d
 $_MODULE['<{twenga}prestashop>twenga_dcc247ef0aa275168664ec484511ccef'] = 'En cas d\'oubli de votre login, récupérez le ici';
 $_MODULE['<{twenga}prestashop>twenga_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{twenga}prestashop>twenga_aacdaeaf96cf431c6364b4dfe314b35c'] = 'Informations qui pré-rempliront le formulaire d\'inscription Twenga';
-$_MODULE['<{twenga}prestashop>twenga_9279a14be6d56d0929890ddd674ba6b1'] = 'Les informations suivantes seront pré remplies dans lors de votre inscription à Twenga Ready to Sell. Merci de vérifier si les informations sont correctes.';
+$_MODULE['<{twenga}prestashop>twenga_e4448edd2a6725ad3b1b7ca31eac1ff0'] = 'Les informations suivantes seront pré remplies dans lors de votre inscription à Twenga Ready to Sell. Merci de vérifier si les informations sont correctes.';
 $_MODULE['<{twenga}prestashop>twenga_87fa3060dcb794dee724d4cb59b13cd6'] = 'l\'url du site';
 $_MODULE['<{twenga}prestashop>twenga_49c0292b84058df9d4ee623efbd680d4'] = 'Flux Rss, la liste des produits en xml.';
 $_MODULE['<{twenga}prestashop>twenga_9217c70a13a5a37fdef90ed92d18ca1b'] = 'Valeur automatiquement remplie, ne la changer pas.';
@@ -55,7 +55,7 @@ $_MODULE['<{twenga}prestashop>twenga_fc0d317121f61eeb44ede30a6648b9be'] = 'Infos
 $_MODULE['<{twenga}prestashop>twenga_dd7bf230fde8d4836917806aff6a6b27'] = 'Adresse';
 $_MODULE['<{twenga}prestashop>twenga_8116ea5ccd73f945bb5e260861b0b570'] = 'Code postale';
 $_MODULE['<{twenga}prestashop>twenga_57d056ed0984166336b7879c2af3657f'] = 'Ville';
-$_MODULE['<{twenga}prestashop>twenga_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
+
 $_MODULE['<{twenga}prestashop>twenga_fcb0c2a30548efc7048ea4bdfa4eba05'] = 'Annuler le tracking';
 $_MODULE['<{twenga}prestashop>twenga_08473b95892d1cb8265ff2716cb81d54'] = 'Pour annuler le tracking, cliquez sur le lien suivant :';
 $_MODULE['<{twenga}prestashop>twenga_bcfaccebf745acfd5e75351095a5394a'] = 'Annuler';

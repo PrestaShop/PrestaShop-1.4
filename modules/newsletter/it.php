@@ -22,9 +22,9 @@ $_MODULE['<{newsletter}prestashop>newsletter_faa1115fbab933e7178ee43ce1590977'] 
 $_MODULE['<{newsletter}prestashop>newsletter_81573e0ea79138f02fd2cee94786d7e9'] = 'Errore: impossibile scrivere a';
 $_MODULE['<{newsletter}prestashop>newsletter_8d550e9bf69bfc7a09be6eeb1622ae23'] = 'Modulo diviso in due tipologie:';
 $_MODULE['<{newsletter}prestashop>newsletter_23e8f8a55548b88bfbdcd1f6ba26a010'] = 'Le persone che si sono iscritte usando il blocco BlockNewsletter nel front office.';
-$_MODULE['<{newsletter}prestashop>newsletter_dfd11367fb6ea9fd6ebd8ecb22ac8d10'] = 'Questo sarà un elenco di indirizzi email delle persone che si recano nel tuo negozio non per diventare un cliente, ma per ottenere la tua newsletter. Utilizzando il seguente \"Esporta iscritti alla newsletter\" genererà un file. CSV sulla base dei dati abbonati BlockNewsletter.';
+$_MODULE['<{newsletter}prestashop>newsletter_27d1ec406fd2baf49d03f81a4bb41122'] = 'Questo sarà un elenco di indirizzi email delle persone che si recano nel tuo negozio non per diventare un cliente, ma per ottenere la tua newsletter. Utilizzando il seguente \"Esporta iscritti alla newsletter\" genererà un file. CSV sulla base dei dati abbonati BlockNewsletter.';
 $_MODULE['<{newsletter}prestashop>newsletter_74ca54506cdbc82e3aa763ba91b8fa39'] = 'I clienti che hanno risposto \"sì\" per ricevere una newsletter nel loro profilo del cliente.';
-$_MODULE['<{newsletter}prestashop>newsletter_d907aca9944677ceb45816ff417fc873'] = 'La sezione seguente \"Esporta clienti\" filtra a quali clienti si desidera inviare una newsletter.';
+$_MODULE['<{newsletter}prestashop>newsletter_1aa14f5a6423dbde1ef2cfe4734980b4'] = 'La sezione seguente \"Esporta clienti\" filtra a quali clienti si desidera inviare una newsletter.';
 $_MODULE['<{newsletter}prestashop>newsletter_b192ab83a19105bbf1e2d1fab548249a'] = 'Export Newsletter Iscritti';
 $_MODULE['<{newsletter}prestashop>newsletter_a60401e616125189d78605b2ddd7ff45'] = 'Genera un file. CSV sulla base dei dati abbonati BlockNewsletter.';
 $_MODULE['<{newsletter}prestashop>newsletter_dbb392a2dc9b38722e69f6032faea73e'] = 'Esporta file. CSV';
