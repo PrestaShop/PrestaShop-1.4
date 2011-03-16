@@ -37,12 +37,12 @@ class AdminHome extends AdminTab
 		if (Configuration::get('PS_REWRITING_SETTINGS'))
 		{
 			$rewrite = 2;
-			if (!file_exists(dirname(__FILE__).'/../.htaccess'))
+			if (!file_exists(dirname(__FILE__).'/../../.htaccess'))
 				$rewrite = 1;
 			else
 			{
-				$stat = stat(dirname(__FILE__).'/../.htaccess');
-				if (strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_REWRITING_SETTINGS"')) > $stat['mtime'])
+				$stat = stat(dirname(__FILE__).'/../../.htaccess');
+				if (!strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_REWRITING_SETTINGS"')) > $stat['mtime'])
 					$rewrite = 1;
 			}
 		}
