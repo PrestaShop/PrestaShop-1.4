@@ -70,6 +70,24 @@ class AdminProducts extends AdminTab
 		parent::__construct();
 	}
 
+	private function _cleanMetaKeywords($keywords)
+	{
+		if (!empty($keywords) && $keywords != '')
+		{
+			$out = array();
+			$words = explode(',', $keywords);
+			foreach($words as $word_item)
+			{
+				$word_item = trim($word_item);
+				if (!empty($word_item) && $word_item != '')
+					$out[] = $word_item;
+			}
+			return ((count($out) > 0) ? implode(',', $out) : '');
+		}
+		else
+			return '';
+	}
+
 	protected function copyFromPost(&$object, $table)
 	{
 		parent::copyFromPost($object, $table);
@@ -82,7 +100,7 @@ class AdminProducts extends AdminTab
 		foreach ($languages as $language)
 			if (isset($_POST['meta_keywords_'.$language['id_lang']]))
 			{
-				$_POST['meta_keywords_'.$language['id_lang']] = preg_replace('/ *,? +,*/', ',', strtolower($_POST['meta_keywords_'.$language['id_lang']]));
+				$_POST['meta_keywords_'.$language['id_lang']] = $this->_cleanMetaKeywords(strtolower($_POST['meta_keywords_'.$language['id_lang']])); // preg_replace('/ *,? +,* /', ',', strtolower($_POST['meta_keywords_'.$language['id_lang']]));
 				$object->meta_keywords[$language['id_lang']] = $_POST['meta_keywords_'.$language['id_lang']];
 			}
 		$_POST['width'] = empty($_POST['width']) ? '0' : str_replace(',', '.', $_POST['width']);
