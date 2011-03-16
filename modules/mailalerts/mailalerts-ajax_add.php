@@ -34,8 +34,7 @@ $id_product_attribute = (int)(Tools::getValue('id_product_attribute'));
 
 if (!$cookie->isLogged())
 {
-	$customer_email = Tools::getValue('customer_email');
-	
+	$customer_email = trim(Tools::getValue('customer_email'));
 	if (empty($customer_email) OR !Validate::isEmail($customer_email))
 		die ('0');
 	if ($customer_email == 'your@email.com')
