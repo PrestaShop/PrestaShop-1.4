@@ -42,8 +42,8 @@ class AdminHome extends AdminTab
 			else
 			{
 				$stat = stat(dirname(__FILE__).'/../../.htaccess');
-				if (!strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_REWRITING_SETTINGS"')) > $stat['mtime'])
-					$rewrite = 1;
+				if (strtotime(Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_REWRITING_SETTINGS"')) > $stat['mtime'])
+					$rewrite = 0;
 			}
 		}
 		
