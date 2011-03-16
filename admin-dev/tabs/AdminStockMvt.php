@@ -175,7 +175,7 @@ class AdminStockMvt extends AdminTab
 
 		$this->_defaultOrderBy = $this->identifier;
 		$this->fieldsDisplay = array('id_stock_mvt_reason' => array('title' => $this->l('ID'), 'width' => 40),
-												'sign' => array('title' => $this->l('Sign'), 'width' => 15, 'align' => 'center', 'type' => 'select',  'icon' => array(-1 => 'decrease.gif', 1 => 'add.gif'), 'orderby' => false),
+												'sign' => array('title' => $this->l('Sign'), 'width' => 15, 'align' => 'center', 'type' => 'select',  'icon' => array(-1 => 'arrow_down.png', 1 => 'arrow_up.png'), 'orderby' => false),
 												'name' => array('title' => $this->l('Name'), 'width' => 500));
 		
 		$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);

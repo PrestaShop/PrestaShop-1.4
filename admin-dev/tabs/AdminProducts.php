@@ -1511,9 +1511,9 @@ class AdminProducts extends AdminTab
 				if(id_mvt_reason == -1)
 					return $(\'#mvt_sign\').hide();
 				if ($(\'#id_mvt_reason option:selected\').attr(\'rel\') == -1)
-					$(\'#mvt_sign\').html(\'<img src="../img/admin/decrease.gif" /> '.$this->l('Decrease your stock').'\');
+					$(\'#mvt_sign\').html(\'<img src="../img/admin/arrow_down.png" /> '.$this->l('Decrease your stock').'\');
 				else
-					$(\'#mvt_sign\').html(\'<img src="../img/admin/add.gif" /> '.$this->l('Increase your stock').'\');
+					$(\'#mvt_sign\').html(\'<img src="../img/admin/arrow_up.png" /> '.$this->l('Increase your stock').'\');
 				$(\'#mvt_sign\').show();
 			}
 		</script>
@@ -2562,6 +2562,7 @@ class AdminProducts extends AdminTab
 									<select id="id_mvt_reason" name="id_mvt_reason">
 										<option value="-1">--</option>';
 							$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
+							
 							foreach ($reasons AS $reason)
 								echo '<option rel="'.$reason['sign'].'" value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
 							echo '</select>
