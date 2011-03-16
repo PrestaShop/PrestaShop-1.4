@@ -1,5 +1,5 @@
 {shop_name}
-This product is soon out of stock:
-Ref: {product_ref}
+Questo prodotto sarà presto non disponibile:
+Rif: {product_ref}
 Id: {product_id}
-Qty: {qty}
+Qtà: {qty}

@@ -1,12 +1,12 @@
-Hi {firstname} {lastname},
+Salve {firstname} {lastname},
 
-This is to inform you about the creation of a voucher in your name as a result of your order #{id_order}.
+Vorremmo informarti della creazione di un buono sconto a tuo nome in seguito al tuo ordine n.{id_order}.
 
-Here is the code of your voucher : {voucher_num}, to the amount of {voucher_amount}.
+Ecco il codice del tuo buono: {voucher_num}, per l'importo di {voucher_amount}.
 
-Simply copy/paste this code during the payment process for your next order.
+Basta che durante il processo di pagamento del prossimo ordine tu copi/incolli questo codice.
 
-Thank you for shopping at {shop_name}.
+Grazie di aver acquistato a {shop_name}.
 
 {shop_name} - {shop_url}
 

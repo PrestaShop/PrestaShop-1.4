@@ -1,10 +1,10 @@
-Hi,
+Salve,
 		
-New log alert
+Nuovo messaggio di avviso 
 	
-Unfortunately, new log alert message has been saved.
+Purtroppo è stato registrato un nuovo messaggio di avviso.
 
-You can check this on your Back office > Tools > Log on our Website.
+Puoi controllarlo nel tuo Back office > Strumenti > Log del nostro sito.
 		
 {shop_name} - {shop_url}
 

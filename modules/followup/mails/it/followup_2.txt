@@ -1,9 +1,9 @@
-Hello {firstname} {lastname},
+Salve {firstname} {lastname},
  
-Thank you for your order at {shop_name}
+Grazie del tuo ordine su {shop_name}
  
-By way of saying thanks, we want to give you a discount of {amount}% off your next order! This offer is valid for {days} days, so do not waste a moment!
+Per ringraziarti, vogliamo offrirti uno sconto del {amount}% sul tuo prossimo ordine! Questa offerta è valida per {days} giorni, quindi approfittane subito!
  
-Here is your coupon: {voucher_num}
+Ecco il tuo buono: {voucher_num}
 
-Enter this code in your shopping cart to get your discount.
+Inserisci questo codice nel carrello per ottenere lo sconto.

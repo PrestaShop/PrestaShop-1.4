@@ -1,9 +1,9 @@
-Hello {firstname} {lastname},
+Salve {firstname} {lastname},
  
-You are one of our best customers and as such we want to thank you for the confidence you share.
+Sei uno dei nostri migliori clienti e per questo vogliamo ringraziarti per la fiducia che ci accordi.
 
-As appreciation for your loyalty, we want to give you a discount of {amount}% valid on your next order! This offer is valid for {days} days, so do not waste a moment!
+Come apprezzamento della tua fedeltà, vogliamo offrirti uno sconto del {amount}% valido per il tuo prossimo ordine! Questa offerta è valida per {days} giorni, quindi approfittane subito!
  
-Here is your coupon: {voucher_num}
+Ecco il tuo buono: {voucher_num}
 
-Enter this code in your shopping cart to get your discount.
+Inserisci questo codice nel tuo carrello per ottenere lo sconto.

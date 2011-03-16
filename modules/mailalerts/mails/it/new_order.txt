@@ -1,18 +1,18 @@
-Hi,
+Salve,
 
-You've a new order from {firstname} {lastname} on {shop_name}.
+Hai un nuovo ordine da parte di  {firstname} {lastname} su {shop_name}.
 
-Order: {order_name}
-Placed on : {date}
-Carrier : {carrier}
-Payment: {payment}
-Discounts: {total_discounts}
-Shipping: {total_shipping}
-Products: {total_products}
-Gift-wrapping: {total_wrapping}
-Total paid: {total_paid}
+Ordine: {order_name}
+Effettuato il: {date}
+Mezzo di spedizione: {carrier}
+Pagamento: {payment}
+Sconti: {total_discounts}
+Spedizione: {total_shipping}
+Prodotti: {total_products}
+Carta regalo: {total_wrapping}
+Totale pagato: {total_paid}
 
-Delivery address:
+Indirizzo di consegna:
 
 {delivery_company}
 {delivery_firstname} {delivery_lastname}
@@ -22,7 +22,7 @@ Delivery address:
 {delivery_country} {delivery_state}
 {delivery_other}
 
-Billing address:
+Indirizzo di fatturazione:
 
 {invoice_company}
 {invoice_firstname} {invoice_lastname}
@@ -32,7 +32,7 @@ Billing address:
 {invoice_country} {invoice_state}
 {invoice_other}
 
-Customer message:
+Messaggio del cliente:
 
 {message}
 

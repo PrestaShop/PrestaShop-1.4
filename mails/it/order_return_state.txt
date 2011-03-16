@@ -1,8 +1,8 @@
-Hi {firstname} {lastname},
+Salve {firstname} {lastname},
 
-Your return order #{id_order_return} history has changed in "{state_order_return}".
+La cronologia del tuo buono di restituzione n.{id_order_return} è cambiata in "{state_order_return}".
 
-You can review this order return in the "Order history" section of your account by clicking "My account" on our Website.
+Puoi rivedere questa restituzione dell'ordine nella sezione "Cronologia ordine" del tuo account cliccando su "Il mio account" nel nostro sito web.
 
 {shop_name} - {shop_url}
 

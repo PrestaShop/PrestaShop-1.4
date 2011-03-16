@@ -1,14 +1,14 @@
-	Hi {firstname} {lastname},
+	Salve {firstname} {lastname},
 		
-	Your guest account has been transformed into a customer account:
+	Il tuo account ospite è stato trasformato in account cliente:
 	
-	E-mail address: {email}
+	Indirizzo e-mail: {email}
 	Password: {passwd}
 	
 	
-	You can access at your account on our Website: {shop_url}
+	Puoi accedere al tuo account nel nostro sito web: {shop_url}
 
-	Please be careful when sharing these login details with others.
+	Fai attenzione a non condividere con altri i tuoi dati di login.
 
 
 

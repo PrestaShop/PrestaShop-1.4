@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>[{shop_name}] New order</title>
+	<title>[{shop_name}] Nuovo ordine</title>
 </head>
 <body>
 	<table style="font-family: Verdana,sans-serif; font-size: 11px; color: #374953; width: 550px;">
@@ -14,48 +14,48 @@
 <td></td>
 </tr>
 <tr>
-<td align="left">You&#039;ve a new order from <strong style="color: #db3484;">{firstname} {lastname}</strong>.</td>
+<td align="left">Hai un nuovo ordine da parte di <strong style="color: #db3484;">{firstname} {lastname}</strong>.</td>
 </tr>
 <tr>
 <td></td>
 </tr>
 <tr>
-<td style="background-color: #db3484; color: #fff; font-size: 12px; font-weight: bold; padding: 0.5em 1em;" align="left">Order details</td>
+<td style="background-color: #db3484; color: #fff; font-size: 12px; font-weight: bold; padding: 0.5em 1em;" align="left">Dati dell&#039;ordine</td>
 </tr>
 <tr>
 <td></td>
 </tr>
 <tr>
-<td align="left">Order: <strong><span style="color: #db3484;">{order_name}</span> placed on {date}</strong> <br />Payment: <strong>{payment}</strong></td>
+<td align="left">Ordine: <strong><span style="color: #db3484;">{order_name}</span> effettuato il {date}</strong> <br />Pagamento: <strong>{payment}</strong></td>
 </tr>
 <tr>
 <td></td>
 </tr>
 <tr>
-<td align="left">{items} 					
+<td align="left">{items} 					                          
 <table style="width: 100%; font-family: Verdana,sans-serif; font-size: 11px; color: #374953;">
 <tbody>
 <tr style="background-color: #b9babe; text-align: center;">
-<th style="width: 15%; padding: 0.6em 0;">Reference</th> <th>Product</th> <th style="width: 15%; padding: 0.6em 0;">Unit price</th> <th style="width: 15%; padding: 0.6em 0;">Quantity</th> <th style="width: 20%; padding: 0.6em 0;">Total price</th>
+<th style="width: 15%; padding: 0.6em 0;">Riferimento</th> <th>Prodotto</th> <th style="width: 15%; padding: 0.6em 0;">Prezzo unitario</th><th style="width: 15%; padding: 0.6em 0;">Quantit&agrave;</th> <th style="width: 20%; padding: 0.6em 0;">Prezzo totale</th>
 </tr>
 <tr style="text-align: right;">
-<td style="background-color: #b9babe; padding: 0.6em 0.4em;" colspan="4">Products</td>
+<td style="background-color: #b9babe; padding: 0.6em 0.4em;" colspan="4">Prodotti</td>
 <td style="background-color: #b9babe; padding: 0.6em 0.4em;">{total_products}</td>
 </tr>
 <tr style="text-align: right;">
-<td style="background-color: #ebecee; padding: 0.6em 0.4em;" colspan="4">Discounts</td>
+<td style="background-color: #ebecee; padding: 0.6em 0.4em;" colspan="4">Sconti</td>
 <td style="background-color: #ebecee; padding: 0.6em 0.4em;">{total_discounts}</td>
 </tr>
 <tr style="text-align: right;">
-<td style="background-color: #ebecee; padding: 0.6em 0.4em;" colspan="4">Gift-wrapping</td>
+<td style="background-color: #ebecee; padding: 0.6em 0.4em;" colspan="4">Carta regalo</td>
 <td style="background-color: #ebecee; padding: 0.6em 0.4em;">{total_wrapping}</td>
 </tr>
 <tr style="text-align: right;">
-<td style="background-color: #dde2e6; padding: 0.6em 0.4em;" colspan="4">Shipping</td>
+<td style="background-color: #dde2e6; padding: 0.6em 0.4em;" colspan="4">Spedizione</td>
 <td style="background-color: #dde2e6; padding: 0.6em 0.4em;">{total_shipping}</td>
 </tr>
 <tr style="text-align: right; font-weight: bold;">
-<td style="background-color: #f1aecf; padding: 0.6em 0.4em;" colspan="4">Total paid</td>
+<td style="background-color: #f1aecf; padding: 0.6em 0.4em;" colspan="4">Totale pagato</td>
 <td style="background-color: #f1aecf; padding: 0.6em 0.4em;">{total_paid}</td>
 </tr>
 </tbody>
@@ -66,13 +66,13 @@
 <td></td>
 </tr>
 <tr>
-<td style="background-color: #db3484; color: #fff; font-size: 12px; font-weight: bold; padding: 0.5em 1em;" align="left">Shipping</td>
+<td style="background-color: #db3484; color: #fff; font-size: 12px; font-weight: bold; padding: 0.5em 1em;" align="left">Spedizione</td>
 </tr>
 <tr>
 <td></td>
 </tr>
 <tr>
-<td align="left">Carrier: <strong>{carrier}</strong></td>
+<td align="left">Mezzo di spedizione: <strong>{carrier}</strong></td>
 </tr>
 <tr>
 <td></td>
@@ -82,7 +82,7 @@
 <table style="width: 100%; font-family: Verdana,sans-serif; font-size: 11px; color: #374953;">
 <tbody>
 <tr style="background-color: #b9babe; text-transform: uppercase;">
-<th style="text-align: left; padding: 0.3em 1em;">Delivery address</th> <th style="text-align: left; padding: 0.3em 1em;">Billing address</th>
+<th style="text-align: left; padding: 0.3em 1em;">INDIRIZZO DI CONSEGNA</th> <th style="text-align: left; padding: 0.3em 1em;">INDIRIZZO DI FATTURAZIONE</th>
 </tr>
 <tr>
 <td style="padding: 0.5em 0 0.5em 0.5em; background-color: #ebecee;">{delivery_company} 							<br /><span style="color: #db3484; font-weight: bold;">{delivery_firstname} {delivery_lastname}</span> <br />{delivery_address1} 							<br />{delivery_address2} 							<br />{delivery_city} {delivery_postal_code} 							<br />{delivery_country} {delivery_state} 							<br />{delivery_phone} 							<br />{delivery_other}</td>
@@ -96,7 +96,7 @@
 <td></td>
 </tr>
 <tr>
-<td style="background-color: #db3484; color: #fff; font-size: 12px; font-weight: bold; padding: 0.5em 1em;" align="left">Customer message</td>
+<td style="background-color: #db3484; color: #fff; font-size: 12px; font-weight: bold; padding: 0.5em 1em;" align="left">Messaggio cliente</td>
 </tr>
 <tr>
 <td></td>

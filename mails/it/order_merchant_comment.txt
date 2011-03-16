@@ -1,8 +1,8 @@
-Message from {shop_name}
+Messaggio da {shop_name}
 
-Hi {firstname} {lastname},
+Salve {firstname} {lastname},
 
-You have received a new message regarding order #{id_order}:
+Hai ricevuto un nuovo messaggio riguardo all'ordine n.{id_order}:
 {message}
 
 

@@ -1,13 +1,13 @@
-Hello {firstname} {lastname},
+Salve {firstname} {lastname},
  
-We noticed that during your last visit on {shop_name}, you did not validate the order you had started.
+Abbiamo notato che durante la tua ultima visita a {shop_name}, non hai convalidato un ordine che avevi iniziato.
 
-Your cart has been saved, you can resume your order by visiting our shop:
+Il tuo carrello è stato salvato, puoi riprendere l'ordine visitando il nostro negozio:
 
 {shop_url}
 
-As an incentive, we can give you a discount of {amount}% off your next order! This offer is valid for {days} days, so do not waste a moment!
+Come incentivo, possiamo offrirti uno sconto del {amount}% nel tuo prossimo ordine! Questa offerta è valida per {days} giorni, quindi approfittane subito!
  
-Here is your coupon: {voucher_num}
+Ecco il tuo buono: {voucher_num}
 
-Enter this code in your shopping cart to get your discount.
+Inserisci questo codice nel tuo carrello per ottenere lo sconto.

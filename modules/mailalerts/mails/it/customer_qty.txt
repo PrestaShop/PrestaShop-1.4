@@ -1,11 +1,11 @@
-Hi,
+Salve,
 
-Product {product} is now available.
-Indeed, the item is once again in-stock.
+Il prodotto {product} è ora disponibile.
+Infatti l'articolo è di nuovo in magazzino.
 
-You can access the product page on: {product_link}
+Puoi accedere alla pagina del prodotto su: {product_link}
 
-You can order it right now from our on-line shop.
+Puoi ordinarlo fin d'ora dal nostro negozio online.
 
 
 

@@ -1,13 +1,13 @@
-	Hi {firstname} {lastname},
+	Salve {firstname} {lastname},
 		
-	Your order #{id_order} history
+	La tua cronologia dell'ordine n.{id_order} 
 	
-	Payment for your order was successfully processed.
+	Il pagamento per il tuo ordine è stato elaborato.
 
-	You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website.
+	Puoi rivedere questo ordine e scaricare la fattura dalla sezione "Cronologia ordine" del tuo account cliccando su "Il mio account" nel nostro sito web.
 
 	{shop_name} - {shop_url}
 
-	Thank you for shopping with {shop_name}.
+	Grazie di aver acquistato con {shop_name}.
 
 	{shop_url} powered by PrestaShop™

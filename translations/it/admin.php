@@ -1696,6 +1696,7 @@ $_LANGADM['AdminPaymentcf7da676516ac041a93fd91755fa40f9'] = 'Nessun modulo di pa
 $_LANGADM['AdminPayment3e15057a39314e679d553bd9b6522ec8'] = 'Valuta del cliente';
 $_LANGADM['AdminPaymentcdf4c2da827655c1ea74209dd683c903'] = 'Valuta di default';
 $_LANGADM['AdminPaymente39a06ebd5bb473161c5dff3c79c80a5'] = 'Salva';
+$_LANGADM['AdminPerformance488d2e9e9b539c0ff188844a062afa48'] = 'Per utilizzare Memcached, è necessario installare l\'estensione PECL Memcache sul vostro server.';
 $_LANGADM['AdminPerformance3d064d5efb6cf2ed52cf72bfef7c7db2'] = 'Per usare CacheFS la directory';
 $_LANGADM['AdminPerformancea9b036d3e91d53892d6a67c31327e456'] = 'deve essere scrivibile';
 $_LANGADM['AdminPerformancef8d698aea36fcbead2b9d5359ffca76f'] = 'Smarty';

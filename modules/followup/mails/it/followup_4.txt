@@ -1,11 +1,11 @@
-We miss you at {shop_name}
+Ci manchi a {shop_name}
 
-Hello {firstname} {lastname},
+Salve {firstname} {lastname},
  
-You are one of our best customers, however you have not ordered for {days_threshold} days.
+Sei uno dei nostri clienti migliori, però sono {days_threshold} giorni che non effettui un ordine.
 
-We wish to thank you for the trust you have placed in us and want to give you a discount of {amount}% valid on your next order! This offer is valid for {days} days, so do not waste a moment!
+Vogliamo ringraziarti per la fiducia che ci hai accordato e vogliamo offrirti uno sconto del {amount}% valido sul tuo prossimo ordine! Questa offerta è valida per {days} giorni, quindi approfittane subito!
  
-Here is your coupon: {voucher_num}
+Ecco il tuo buono: {voucher_num}
 
-Enter this code in your shopping cart to get your discount.
+Inserisci questo codice nel tuo carrello per ottenere il tuo sconto.

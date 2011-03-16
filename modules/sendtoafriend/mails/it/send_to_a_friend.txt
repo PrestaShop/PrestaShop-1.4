@@ -1,7 +1,7 @@
-Hi {name},
+Salve {name},
 
 
-{customer} has sent you a link to a product that (s)he thinks may interest you.
+{customer} ti ha inviato un link per un prodotto che potrebbe interessarti.
 
 {product}: {product_link}
 

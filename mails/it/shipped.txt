@@ -1,13 +1,13 @@
-Hi {firstname} {lastname},
+Salve  {firstname} {lastname},
 
-Your order has just been shipped.
+Il tuo ordine è stato appena spedito.
 
-You will soon receive a URL to click on in order to track the delivery progress of your package.
+Riceverai presto un URL su cui cliccare per rintracciare i progressi di consegna del tuo pacco.
 
-You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website. 
-If you have guest account, you can follow your order at this page: {shop_url}guest-tracking.php
+Puoi rivedere questo ordine e scaricare la fattura dalla sezione "Cronologia ordine" del tuo account cliccando su "Il mio account" nel nostro sito web.
+	Se hai un account ospite, puoi seguire il tuo ordine in questa pagina: {shop_url}guest-tracking.php
 
-Thank you for shopping with {shop_name}!
+Grazie di aver acquistato con {shop_name}!
 
 {shop_name} - {shop_url}
 

@@ -1,6 +1,6 @@
-Newsletter from {shop_name}
+Newsletter da {shop_name}
 
-Message
+Messaggio
 
 {message}
 

@@ -1,10 +1,10 @@
-You have received a message from a customer via your shop: {shop_name}
+Hai ricevuto un messaggio da un cliente tramite il tuo negozio: {shop_name}
 
-Details of message:
+Dettagli del messaggio:
 
-E-mail address: {email}
+Indirizzo e-mail: {email}
 
-Message:
+Messaggio:
 
 {message}
 

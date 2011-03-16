@@ -1,4 +1,4 @@
 {reply}
 
-Please do not reply to this message using your e-mail client, we would not receive your message.
-In order to reply, please use exclusively the following link: {link}
+Non rispondere a questo messaggio usando la tua e-mail cliente, il tuo messaggio non ci arriverebbe.
+Per rispondere, usa esclusivamente il link seguente: {link}

@@ -1,20 +1,20 @@
-Hi {firstname} {lastname},
+Salve {firstname} {lastname},
 
-Thank you for creating your account at {shop_name}.
+Grazie di aver creato un account con {shop_name}.
 
-Your account login details :
+I tuoi dati di login dell'account:
 
-E-mail address: {email}
+Indirizzo e-mail: {email}
 Password: {passwd}
  
-You can now place orders on our Website: {shop_url}
+Adesso puoi effettuare ordini nel nostro sito web: {shop_url}
 
-Safety Tips:
+Consigli di sicurezza:
 
-* Keep your account details safe.
-* Do not disclose your login details to anyone.
-* Change your password regularly.
-* Should you suspect someone is using your account illegally, please notify us immediately.
+* Tieni al sicuro i dati del tuo account.
+* Non far sapere a nessuno i tuoi dati di login.
+* Cambia regolarmente la tua password.
+* Se sospetti che qualcuno stia utilizzando illegalmente il tuo account, avvertici immediatamente.
 
 
 {shop_url} powered by PrestaShop™

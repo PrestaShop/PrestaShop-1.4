@@ -1,11 +1,11 @@
-	Hi {firstname} {lastname},
+	Salve {firstname} {lastname},
 		
-	Your order #{id_order} history
+	La cronologia del tuo ordine n.{id_order}
 	
-	We are processing your order.
+	Stiamo elaborando il tuo ordine.
 
-	You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website.
-	If you have guest account, you can follow your order at this page: {shop_url}guest-tracking.php
+	Puoi rivedere questo ordine e scaricare la fattura dalla sezione "Cronologia ordine" del tuo account cliccando su "Il mio account" nel nostro sito web.
+	Se hai un account ospite, puoi seguire il tuo ordine in questa pagina: {shop_url}guest-tracking.php
 	
 	{shop_name} - {shop_url}
 
