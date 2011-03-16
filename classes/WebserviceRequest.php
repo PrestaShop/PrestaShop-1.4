@@ -84,7 +84,7 @@ class WebserviceRequestCore
 	/** @var string The fields to display. These fields will be displayed when retrieving objects */
 	private $_fieldsToDisplay = 'minimum';
 	
-	/** @var array The type of images (general, categories, manufacturers, suppliers, scenes, stores...) */
+	/** @var array The type of images (general, categories, manufacturers, suppliers, stores...) */
 	private $_imageTypes = array(
 		'general' => array(
 			'header' => array(),
@@ -96,7 +96,6 @@ class WebserviceRequestCore
 		'categories' => array(),
 		'manufacturers' => array(),
 		'suppliers' => array(),
-		'scenes' => array(),
 		'stores' => array()
 	);
 	
