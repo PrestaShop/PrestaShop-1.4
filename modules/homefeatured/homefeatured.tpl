@@ -32,8 +32,8 @@
 			{assign var='liHeight' value=342}
 			{assign var='nbItemsPerLine' value=4}
 			{assign var='nbLi' value=$products|@count}
-			{assign var='nbLines' value=($nbLi/$nbItemsPerLine)|ceil}
-			{assign var='ulHeight' value=$nbLines*$liHeight}
+			{math equation="nbLi/nbItemsPerLine" nbLi=$nbLi nbItemsPerLine=$nbItemsPerLine assign=nbLines}
+			{math equation="nbLines*liHeight" nbLines=$nbLines|ceil liHeight=$liHeight assign=ulHeight}
 			<ul style="height:{$ulHeight}px;">
 			{foreach from=$products item=product name=homeFeaturedProducts}
 				<li class="ajax_block_product {if $smarty.foreach.homeFeaturedProducts.first}first_item{elseif $smarty.foreach.homeFeaturedProducts.last}last_item{else}item{/if} {if $smarty.foreach.homeFeaturedProducts.iteration%$nbItemsPerLine == 0}last_item_of_line{elseif $smarty.foreach.homeFeaturedProducts.iteration%$nbItemsPerLine == 1}clear{/if} {if $smarty.foreach.homeFeaturedProducts.iteration > ($smarty.foreach.homeFeaturedProducts.total - ($smarty.foreach.homeFeaturedProducts.total % $nbItemsPerLine))}last_line{/if}">
