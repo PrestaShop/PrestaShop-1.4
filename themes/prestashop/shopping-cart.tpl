@@ -31,6 +31,7 @@
 
 {assign var='current_step' value='summary'}
 {include file="$tpl_dir./order-steps.tpl"}
+{include file="$tpl_dir./errors.tpl"}
 
 {if isset($empty)}
 	<p class="warning">{l s='Your shopping cart is empty.'}</p>
