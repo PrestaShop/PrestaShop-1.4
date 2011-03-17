@@ -55,7 +55,6 @@ $_MODULE['<{secuvad}prestashop>secuvad_7a0de9003696a0e833694b22a5ea6d91'] = 'Mé
 $_MODULE['<{secuvad}prestashop>secuvad_593bda837f8ae222993fc189457c92a0'] = 'Type de paiement';
 $_MODULE['<{secuvad}prestashop>secuvad_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Inconnu';
 $_MODULE['<{secuvad}prestashop>secuvad_68eb4e159f449c625edb23b2c35e7259'] = 'Transporteur Secuvad';
-
 $_MODULE['<{secuvad}prestashop>secuvad_7cc72fb5b56d882a4c34cb68dd4604aa'] = 'Délais Transporteur Secuvad';
 $_MODULE['<{secuvad}prestashop>secuvad_de5744adc681a40f1b0fe16f3707da5b'] = 'Pour activer votre module SECUVAD, merci de remplir le formulaire, de cliquer sur \"Enregistrer\"';
 $_MODULE['<{secuvad}prestashop>secuvad_6bf36964a57a5eaa5f46504ca9882cdb'] = 'Type de société :';

@@ -13,7 +13,6 @@ $_MODULE['<{blocklink}prestashop>blocklink_ce9beec1b47458523d46274adfd2acee'] = 
 $_MODULE['<{blocklink}prestashop>blocklink_7a7e3a8d8aefcb1d31b4fdfa1bdf9ee4'] = 'Le lien a été mis à jour avec succès';
 $_MODULE['<{blocklink}prestashop>blocklink_b18032737875f7947443c98824103a1f'] = 'Le champ \"titre\" ne peut être laissé vide.';
 $_MODULE['<{blocklink}prestashop>blocklink_43b38b9a2fe65059bed320bd284047e3'] = 'Le titre est invalide';
-
 $_MODULE['<{blocklink}prestashop>blocklink_eb74914f2759760be5c0a48f699f8541'] = 'Une erreur est survenue lors de la mise à jour du titre';
 $_MODULE['<{blocklink}prestashop>blocklink_5c0f7e2db8843204f422a369f2030b37'] = 'Le titre du bloc a été mis à jour avec succès';
 $_MODULE['<{blocklink}prestashop>blocklink_5d73d4c0bcb035a1405e066eb0cdf832'] = 'Une erreur est survenue lors de la suppression du lien';
