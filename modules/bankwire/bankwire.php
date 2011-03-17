@@ -176,10 +176,6 @@ class BankWire extends PaymentModule
 			'cust_currency' => $cart->id_currency,
 			'currencies' => $this->getCurrency((int)$cart->id_currency),
 			'total' => $cart->getOrderTotal(true, Cart::BOTH),
-			'isoCode' => Language::getIsoById((int)($cookie->id_lang)),
-			'bankwireDetails' => nl2br2($this->details),
-			'bankwireAddress' => nl2br2($this->address),
-			'bankwireOwner' => $this->owner,
 			'this_path' => $this->_path,
 			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
 		));
