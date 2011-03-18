@@ -116,7 +116,7 @@ class Pagesnotfound extends Module
 						$this->_html .= '
 						<tr>
 							<td><a href="'.$ru.'-admin404">'.wordwrap($ru, 30, '<br />', true).'</a></td>
-							<td><a href="http://'.$hr.'">'.wordwrap($hr, 40, '<br />', true).'</a></td>
+							<td><a href="'.Tools::getProtocol().$hr.'">'.wordwrap($hr, 40, '<br />', true).'</a></td>
 							<td align="right">'.$counter.'</td>
 						</tr>';
 			$this->_html .= '
