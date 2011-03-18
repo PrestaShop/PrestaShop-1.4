@@ -1,11 +1,12 @@
-Hi,
+Hallo,
 
-The product {product} is nearly out of stock.
+Das Produkt {product} ist fast ausverkauft.
 The remaining stock is now less than the specified minimum of {last_qty}.
 Remaining stock : {qty}
 
-You are advised to open the product's admin Product Page in order to replenish your inventory.
 
+Verbleibender Lagerbestand: {qty}
 
+Wir raten Ihnen, die Produktseite im Administrator zu öffnen, um Ihren Lagerbestand aufzufüllen.
 
 {shop_url} powered by PrestaShop™

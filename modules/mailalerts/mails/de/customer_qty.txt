@@ -1,12 +1,10 @@
-Hi,
+Hallo,
 
-Product {product} is now available.
-Indeed, the item is once again in-stock.
+Das Produkt {product} ist nun verfügbar.
+Der Artikel ist nun wieder auf Lager.
 
-You can access the product page on: {product_link}
+Gehen Sie auf die Produktseite, indem Sie auf diesen Link klicken: {product}
 
-You can order it right now from our on-line shop.
-
-
+Sie können ihn gleich in Ihrem Online-Shop bestellen.
 
 {shop_url} powered by PrestaShop™

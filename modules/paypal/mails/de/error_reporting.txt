@@ -1,8 +1,8 @@
-	Hi,
+	Hallo,
 
-	Error reporting from your PayPalAPI module
+	Fehlerbericht aus Ihrem PayPalAPI Modul
 
-	A client has encountered a problem with the module PayPalAPI, see the report:
+	Bei einem Kunden ist ein Problem mit dem PayPalAPI Modul aufgetreten, lesen Sie den Bericht:
 
 	{logs}
 

@@ -1,15 +1,12 @@
-{firstname_friend} {lastname_friend}, join us!
+{firstname_friend} {lastname_friend}, machen Sie mit!
 
-Your friend {firstname} {lastname} wants to sponsor you on {shop_url}.
+Ihr Freund {firstname} {lastname} möchte Sie empfehlen auf {shop_url}.
 
-Get sponsored and win a discount voucher of {discount}!
+Lassen Sie sich empfehlen und erhalten Sie einen Ermäßigungsgutschein {discount}!
 
-It's very easy to sign up. Just click on the following link:
-
+Klicken Sie einfach hier, um sich anzumelden!
 {shop_url}{link}
 
-When signing up, don't forget to provide the e-mail address of your sponsoring friend: {email}.
-
-
+Vergessen Sie bei der Anmeldung bitte nicht, die E-Mail-Adresse Ihres Freundes anzugeben: {email}.
 
 {shop_url} powered by PrestaShop™

@@ -1,9 +1,8 @@
-Congratulations!
+Herzlichen Glückwunsch!
 
-Your sponsored friend, {sponsored_firstname} {sponsored_lastname} has placed his or her first order on {shop_url} !
+Ihr empfohlener Freund,, {sponsored_firstname} {sponsored_lastname} hat seine erste Bestellung bei {shop_url} ausgeführt !
 
-We are pleased to offer you a voucher worth {discount_display} (voucher # {discount_name}) that you can use on your next order.
+Wir freuen uns, Ihnen einen Gutschein über {discount_display} (voucher # {discount_name}) schenken zu dürfen, den Sie bei Ihrer nächsten Bestellung einlösen können.
 
 
-
-{shop_url} réalisé par PrestaShop™
+{shop_url} realisiert durch PrestaShop™

@@ -1,6 +1,6 @@
-Hi,
+Hallo,
 
-{firstname} {lastname} indicated you may want to see his/her wishlist {wishlist} :
+{firstname} {lastname} hat angegeben, dass Sie seine/ ihr Wunschliste sehen möchten {wishlist} :
 {message}
 
 

@@ -1,7 +1,5 @@
-Hi {firstname} {lastname},
+Hallo {firstname} {lastname},
 
-{shop_name} wants to wish you a Happy Birthday and offers you a present.
-A surprise is waiting for you... log on to your account now to see your discount voucher!
-
+{shop_name} wünscht Ihnen alles Gute zum Geburtstag und möcht Ihnen ein Geschenk machen. Es wartet eine Überraschung auf Sie... melden Sie sich jetzt bei Ihrem Konto an, um Ihren Ermäßigungsgutschein zu sehen!
 
 {shop_url} Powered by PrestaShop™

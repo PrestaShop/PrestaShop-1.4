@@ -1,18 +1,18 @@
-Hi,
+Hallo,
 
-You've a new order from {firstname} {lastname} on {shop_name}.
+Sie haben eine neue Bestellung erhalten von {firstname} {lastname} auf {shop_name}.
 
-Order: {order_name}
-Placed on : {date}
-Carrier : {carrier}
-Payment: {payment}
-Discounts: {total_discounts}
-Shipping: {total_shipping}
-Products: {total_products}
-Gift-wrapping: {total_wrapping}
-Total paid: {total_paid}
+Bestellung: {order_name}
+Ausgeführt am: {date}
+Lieferer: {carrier}
+Zahlung: {payment}
+Ermäßigungen: {total_discounts}
+Versand: {total_shipping}
+Produkte: {total_products}
+Geschenkverpackung: {total_wrapping}
+Gesamt bezahlt: {total_paid}
 
-Delivery address:
+Lieferadresse:
 
 {delivery_company}
 {delivery_firstname} {delivery_lastname}
@@ -22,7 +22,7 @@ Delivery address:
 {delivery_country} {delivery_state}
 {delivery_other}
 
-Billing address:
+Rechnungsadresse:
 
 {invoice_company}
 {invoice_firstname} {invoice_lastname}
@@ -32,7 +32,7 @@ Billing address:
 {invoice_country} {invoice_state}
 {invoice_other}
 
-Customer message:
+Kundennachricht:
 
 {message}
 
