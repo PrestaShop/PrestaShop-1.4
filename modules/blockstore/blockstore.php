@@ -40,7 +40,7 @@ class BlockStore extends Module
         parent::__construct();
 
 		$this->displayName = $this->l('Stores block');
-        $this->description = $this->l('Displays a block with a link to the store locator.');
+        $this->description = $this->l('Displays a block with a link to the store locator');
     }
 
     function install()
@@ -105,7 +105,7 @@ class BlockStore extends Module
 			<fieldset>
 				<legend>'.$this->l('Store block configuration').'</legend>';
 		if (Configuration::get('BLOCKSTORE_IMG'))
-			$output .= '<div class="margin-form"><img src="http://'.Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.Configuration::get('BLOCKSTORE_IMG').'" alt="'.$this->l('Store image').'" style="height:115px;margin-left: 100px;width:174px"/></div>';
+			$output .= '<div class="margin-form"><img src="'.Tools::getProtocol().Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.Configuration::get('BLOCKSTORE_IMG').'" alt="'.$this->l('Store image').'" style="height:115px;margin-left: 100px;width:174px"/></div>';
 		$output .= '
 				<label for="store_img">'.$this->l('Change image').'</label>
 				<div class="margin-form">
