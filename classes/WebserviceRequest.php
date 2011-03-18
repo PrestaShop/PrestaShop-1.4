@@ -1305,21 +1305,24 @@ class WebserviceRequestCore
 					if (!is_null($this->_schemaToDisplay))
 					{
 						$associationsRet .= '<'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
-						foreach ($this->_resourceConfiguration['associations'][$assocName]['fields'] as $fieldName => $fieldAttributes)
+						if (isset($this->_resourceConfiguration['associations'][$assocName]['fields']))
 						{
-							// if shouldn't be modified (calculated fields etc..)
-							if (!array_key_exists('setter',$fieldAttributes) && $fieldName != 'id')
+							foreach ($this->_resourceConfiguration['associations'][$assocName]['fields'] as $fieldName => $fieldAttributes)
 							{
-								$associationsRet .= '<'.$fieldName.
-								(isset($fieldAttributes['required']) && $fieldAttributes['required'] ? ' required="true"' : '');
-								if (isset($fieldAttributes['required']))
-									unset($fieldAttributes['required']);
-								if (count($fieldAttributes) > 0)
+								// if shouldn't be modified (calculated fields etc..)
+								if (!array_key_exists('setter',$fieldAttributes) && $fieldName != 'id')
 								{
-									$associationsRet .= ' format="'.explode(',', $fieldAttributes).'"';
-									echo $fieldName.'^'.$fieldAttributes;
+									$associationsRet .= '<'.$fieldName.
+									(isset($fieldAttributes['required']) && $fieldAttributes['required'] ? ' required="true"' : '');
+									if (isset($fieldAttributes['required']))
+										unset($fieldAttributes['required']);
+									if (count($fieldAttributes) > 0)
+									{
+										$associationsRet .= ' format="'.explode(',', $fieldAttributes).'"';
+										echo $fieldName.'^'.$fieldAttributes;
+									}
+									$associationsRet .= '/>'."\n";
 								}
-								$associationsRet .= '/>'."\n";
 							}
 						}
 						$associationsRet .= '</'.$this->_resourceConfiguration['associations'][$assocName]['resource'].'>'."\n";
