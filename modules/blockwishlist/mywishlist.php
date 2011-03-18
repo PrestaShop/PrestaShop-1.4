@@ -66,7 +66,7 @@ if ($cookie->isLogged())
 				Mail::Send((int)($cookie->id_lang), 'wishlink', Mail::l('Your wishlist\'s link'), 
 					array(
 					'{wishlist}' => $wishlist->name,
-					'{message}' => 'http://'.htmlentities($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/blockwishlist/view.php?token='.$wishlist->token),
+					'{message}' => Tools::getProtocol().htmlentities($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/blockwishlist/view.php?token='.$wishlist->token),
 					$cookie->email, $cookie->firstname.' '.$cookie->lastname, NULL, strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			}
 		}
