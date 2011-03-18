@@ -148,7 +148,7 @@ class ToolsCore
 		if ($entities)
 			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
 		if ($http)
-			$domain = 'http://'.$domain;
+			$domain = Tools::getProtocol().$domain;
 		return $domain;
 	}
 
