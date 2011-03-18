@@ -152,7 +152,7 @@ class MoneyBookers extends PaymentModule
 		{
 			if (isset($_POST['mb_email_to_validate']) AND !empty($_POST['mb_email_to_validate']))
 			{
-				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__, 'r');
+				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url='.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__, 'r');
 				if (!$fp)
 					$errors[] = $this->l('Unable to contact activation server, please try again later.');
 				else
@@ -182,7 +182,7 @@ class MoneyBookers extends PaymentModule
 		{
 			if (isset($_POST['mb_sw_to_validate']) AND !empty($_POST['mb_sw_to_validate']))
 			{
-				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']), 'r');
+				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url='.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']), 'r');
 				if (!$fp)
 					$errors[] = $this->l('Unable to contact activation server, please try again later.');
 				else
