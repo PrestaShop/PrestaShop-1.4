@@ -74,7 +74,7 @@
 	{if $nb_products > 10}
 		<form action="{if !is_array($requestNb)}{$requestNb}{else}{$requestNb.requestUrl}{/if}" method="get" class="pagination">
 			<p>
-				{if isset($query) AND $query}<input type="hidden" name="search_query" value="{$query|escape:'htmlall':'UTF-8'}" />{/if}
+				{if isset($search_query) AND $search_query}<input type="hidden" name="search_query" value="{$search_query|escape:'htmlall':'UTF-8'}" />{/if}
 				{if isset($tag) AND $tag AND !is_array($tag)}<input type="hidden" name="tag" value="{$tag|escape:'htmlall':'UTF-8'}" />{/if}
 				<input type="submit" class="button_mini" value="{l s='OK'}" />
 				<label for="nb_item">{l s='items:'}</label>
