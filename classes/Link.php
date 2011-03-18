@@ -148,7 +148,7 @@ class LinkCore
 	
 	public function getMediaLink($filepath)
 	{
-		return 'http://'.Tools::getMediaServer($filepath).$filepath;
+		return Tools::getProtocol().Tools::getMediaServer($filepath).$filepath;
 	}
 
 	public function preloadPageLinks()
