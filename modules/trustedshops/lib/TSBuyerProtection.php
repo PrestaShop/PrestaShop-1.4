@@ -151,7 +151,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			'OTHER'				=> $this->l('Other method of payment'),
 		);
 		$this->tab_name = $this->l('Seal of Approval and Buyer Protection');
-		$this->site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+		$this->site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		TSBPException::setTranslationObject($this);
 		if (!method_exists('Tools', 'jsonDecode') || !method_exists('Tools', 'jsonEncode'))
 		{
