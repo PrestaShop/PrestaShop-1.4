@@ -178,11 +178,10 @@ abstract class PaymentModuleCore extends Module
 					$productQuantity = (int)(Product::getQuantity((int)($product['id_product']), ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL)));
 					$quantityInStock = ($productQuantity - (int)($product['cart_quantity']) < 0) ? $productQuantity : (int)($product['cart_quantity']);
 					if ($id_order_state != _PS_OS_CANCELED_ AND $id_order_state != _PS_OS_ERROR_)
-					{
+                                        {
 						if (Product::updateQuantity($product, (int)$order->id))
 							$product['stock_quantity'] -= $product['cart_quantity'];
-
-						if ($product['stock_quantity'] < 0)
+						if ($product['stock_quantity'] < 0 && Configuration::get('PS_STOCK_MANAGEMENT'))
 							$outOfStock = true;
 
 						Hook::updateQuantity($product, $order);
