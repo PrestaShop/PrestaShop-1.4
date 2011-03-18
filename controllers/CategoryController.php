@@ -63,7 +63,7 @@ class CategoryControllerCore extends FrontController
 			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 			$currentURL = self::$link->getCategoryLink($this->category);
 			$currentURL = preg_replace('/[?&].*$/', '', $currentURL);
-			if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');
 				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ )

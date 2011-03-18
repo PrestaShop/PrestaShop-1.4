@@ -67,7 +67,7 @@ class ProductControllerCore extends FrontController
 			if (Validate::isLoadedObject($this->product))
 			{
 				$canonicalURL = self::$link->getProductLink($this->product);
-				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 				{
 					header('HTTP/1.0 301 Moved');
 					if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)

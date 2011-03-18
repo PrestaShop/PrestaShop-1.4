@@ -41,7 +41,7 @@ class CmsControllerCore extends FrontController
 		// Automatically redirect to the canonical URL if the current in is the right one
 		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 		if ($this->cms AND $canonicalURL = self::$link->getCMSLink($this->cms))
-			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');
 				if (defined(_PS_MODE_DEV_) AND _PS_MODE_DEV_ )
@@ -49,7 +49,7 @@ class CmsControllerCore extends FrontController
 				Tools::redirectLink($canonicalURL);
 			}
 		if ($this->cms_category AND $canonicalURL = self::$link->getCMSCategoryLink($this->cms_category))
-			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');
 				if (_PS_MODE_DEV_ )
