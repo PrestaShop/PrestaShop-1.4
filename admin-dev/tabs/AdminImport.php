@@ -1177,7 +1177,7 @@ class AdminImport extends AdminTab
 		foreach ($filesToImport AS $k => &$filename)
 			if (in_array($filename, array('.', '..', '.svn', '.htaccess', 'index.php')))
 				unset($filesToImport[$k]);
-
+		unset($filename);
 		if (sizeof($filesToImport))
 		{
 			echo '
