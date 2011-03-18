@@ -95,9 +95,9 @@ class Criteo extends Module
                     <center><input type="submit" class="button" name="submitCriteo" value="'.$this->l('Submit').'" /></center>
                 </form>
               	'.$this->l('URL to communicate to Criteo:').'
-                <a href="http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php">http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php</a><br />
+                <a href="'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php">'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php</a><br />
                 '.$this->l('URL to communicate to Criteo:').'
-                    <a href="http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php">http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php</a>
+                    <a href="'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php">'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php</a>
        	</fieldset>';
 	}
 
@@ -162,8 +162,8 @@ class Criteo extends Module
 				$line = array();
 				$line[] = $product->id;
 				$line[] = $product->manufacturer_name.' - '.$product->name[intval($conf['PS_LANG_DEFAULT'])];
-				$line[] = 'http://'.$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-small.jpg';
-				$line[] = 'http://'.$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-thickbox.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-small.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-thickbox.jpg';
 				$line[] = $link->getProductLink(intval($product->id), $product->link_rewrite[intval($conf['PS_LANG_DEFAULT'])], $product->ean13).'&utm_source=criteo&aff=criteo';
 				$line[] = str_replace(array("\n", "\r", "\t", '|'), '', strip_tags(html_entity_decode($product->description_short[intval($conf['PS_LANG_DEFAULT'])], ENT_COMPAT, 'UTF-8')));
 
@@ -231,8 +231,8 @@ class Criteo extends Module
 				$line = array();
 				$line[] = $product->manufacturer_name.' - '.$product->name[intval($conf['PS_LANG_DEFAULT'])];
 
-				$line[] = 'http://'.$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-small.jpg';
-				$line[] = 'http://'.$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-thickbox.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-small.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-thickbox.jpg';
 				$line[] = $link->getProductLink(intval($product->id), $product->link_rewrite[intval($conf['PS_LANG_DEFAULT'])], $product->ean13).'&utm_source=criteo&aff=criteo';
 				$line[] = str_replace(array("\n", "\r", "\t", '|'), '', strip_tags(html_entity_decode($product->description_short[intval($conf['PS_LANG_DEFAULT'])], ENT_COMPAT, 'UTF-8')));
 
