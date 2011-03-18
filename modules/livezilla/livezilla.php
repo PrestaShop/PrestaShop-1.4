@@ -81,7 +81,7 @@ class LiveZilla extends Module
 						<option '.(Tools::getValue('LIVEZILLA_URL_TYPE') == 'https://' ? ' selected="selected" ' : '' ).' value="https://">https://</option>
 					</select>
 					<input type="text" name="LIVEZILLA_URL" style="width:300px" value="'.Tools::htmlentitiesUTF8(Tools::getValue('LIVEZILLA_URL', Configuration::get('LIVEZILLA_URL'))).'" />
-					<p>'.$this->l('Absolute URL with the trailing slash, e.g.,').' http://'.Tools::htmlentitiesUTF8($_SERVER['HTTP_HOST']).'/LiveZilla/</p>
+					<p>'.$this->l('Absolute URL with the trailing slash, e.g.,').' '.Tools::getProtocol().Tools::htmlentitiesUTF8($_SERVER['HTTP_HOST']).'/LiveZilla/</p>
 				</div>
 				<div class="clear">&nbsp;</div>
 				<div style="font-size:1.2em;font-weight:700;text-align:center">'.$this->l('-- OR --').'</div>
