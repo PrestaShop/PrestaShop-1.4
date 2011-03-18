@@ -209,7 +209,7 @@ class importerosc extends ImportModule
 		foreach($categories as& $cat)
 		{
 			$cat['link_rewrite'] = Tools::link_rewrite($cat['name']);
-			$cat['images'] = array('http://'.Tools::getValue('shop_url').'/images/'.$cat['images']);
+			$cat['images'] = array(Tools::getProtocol().Tools::getValue('shop_url').'/images/'.$cat['images']);
 		}
 		return $this->autoFormat($categories, $identifier, $keyLanguage, $multiLangFields);
 	}
@@ -247,7 +247,7 @@ class importerosc extends ImportModule
 		$products = $this->ExecuteS('
 									SELECT p.`products_id` as id_product, p.`products_quantity` as quantity, p.`products_model` as reference, p.`products_price` as price, p.`products_weight` as weight,
 									p.`products_status` as active, p.`manufacturers_id` as id_manufacturer, pd.language_id as id_lang, pd.products_name as name, pd.products_description as description, 
-									CONCAT(\'http://'.Tools::getValue('shop_url').'\/images/\',p.`products_image`) as images,
+									CONCAT(\''.Tools::getProtocol().Tools::getValue('shop_url').'\/images/\',p.`products_image`) as images,
 									(SELECT ptc.categories_id FROM `'.addslashes($this->prefix).'products_to_categories` ptc WHERE ptc.`products_id` = p.`products_id` LIMIT 1) as id_category_default
 									FROM	`'.addslashes($this->prefix).'products` p LEFT JOIN `'.addslashes($this->prefix).'products_description` pd ON (p.products_id = pd.products_id)
 									WHERE pd.products_name IS NOT NULL AND pd.language_id IS NOT NULL
@@ -267,7 +267,7 @@ class importerosc extends ImportModule
 			$result = $this->ExecuteS('SELECT `image` FROM `'.addslashes($this->prefix).'products_images` WHERE products_id = '.(int)$product['id_product']);
 			$images = array();
 			foreach($result as $res)
-				$images[] = 'http://'.Tools::getValue('shop_url').'/images/'.$res['image'];
+				$images[] = Tools::getProtocol().Tools::getValue('shop_url').'/images/'.$res['image'];
 			$product['images'] = array_merge(array($product['images']), $images);
 			$product['link_rewrite'] = Tools::link_rewrite($product['name']);
 			$product['association'] = array('category_product' => array($product['id_category_default'] => $product['id_product']));
@@ -296,7 +296,7 @@ class importerosc extends ImportModule
 										SELECT manufacturers_id as id_manufacturer, manufacturers_name as name, 1 as active, manufacturers_image as images
 										FROM  `'.addslashes($this->prefix).'manufacturers` LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 		foreach($manufacturers as& $manufacturer)
-			$manufacturer['images'] = array('http://'.Tools::getValue('shop_url').'/images/'.$manufacturer['images']);
+			$manufacturer['images'] = array(Tools::getProtocol().Tools::getValue('shop_url').'/images/'.$manufacturer['images']);
 		
 		return $this->autoFormat($manufacturers, $identifier);
 	}
