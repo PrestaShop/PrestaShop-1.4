@@ -106,6 +106,16 @@ class ToolsCore
 	}
 
 	/**
+	 * getProtocol return the set protocol according to configuration (http[s])
+	 *
+	 * @return String (http|https)
+	 */
+	public static function getProtocol()
+	{
+		return (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://');
+	}
+
+	/**
 	 * getHttpHost return the <b>current</b> host used, with the protocol (http or https) if $http is true
 	 * This function should not be used to choose http or https domain name.
 	 * Use Tools::getShopDomain() or Tools::getShopDomainSsl instead
@@ -1559,6 +1569,7 @@ class ToolsCore
 		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?id_manufacturer=$1 [QSA,L]';
 		$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms=$1 [QSA,L]';
 		$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms_category=$1 [QSA,L]';
+//		$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)'] = '/prestashop/cms.php?id_cms=$1 [QSA,L]';
 
 		if ($multilang)
 		{
