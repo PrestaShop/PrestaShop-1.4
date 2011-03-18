@@ -100,7 +100,7 @@ class dibs extends PaymentModule
 		$this->description = $this->l('DIBS payment API');
 		
 		if (self::$site_url === NULL)
-			self::$site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+			self::$site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		
 		self::$ID_MERCHANT = Configuration::get('DIBS_ID_MERCHANT');
 		self::$ACCEPTED_URL = Configuration::get('DIBS_ACCEPTED_URL');
