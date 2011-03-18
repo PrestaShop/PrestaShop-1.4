@@ -51,7 +51,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 					$orderToExport[] = self::getOrderDetails((int)($id));
 				}
 				echo '<form action="http://www.envoimoinscher.com/index.html" method="POST">
-						<input type="hidden" name="url_renvoi" value="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI'].'">
+						<input type="hidden" name="url_renvoi" value="'.Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI'].'">
 						<input type="hidden" name="login" value="'.htmlspecialchars(Configuration::get('EMC_LOGIN'), ENT_COMPAT, 'UTF-8').'">
 						<input type="hidden" name="tracking" value="prestashop_module_v1">';
 				self::inputMaker($orderToExport);
@@ -66,7 +66,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 			else echo '<div class="alert error">
 					   <img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />
 					   '.$emc->lang('No order to export').'</div>
-					   <p><a class="button" href="http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI'].'">Retour</a></p>';
+					   <p><a class="button" href="'.Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI'].'">Retour</a></p>';
 		}
 		else
 		{
@@ -170,7 +170,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 		$adresseDelivery = new Address((int)($order->id_address_delivery));
 		
 		$genderTab = array(1 => 'M.', 2 => 'Mme', 9 => '');
-		$orderDetails['url_suivi'] = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/envoimoinscher/tracking.php?token='.$customer->secure_key;
+		$orderDetails['url_suivi'] = Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/envoimoinscher/tracking.php?token='.$customer->secure_key;
 		$orderDetails['infoexterne'] = str_replace('.','_',str_replace('www.','',$_SERVER['HTTP_HOST'])).'_'.(int)($id_order);
 		$orderDetails['packaging'] =  Tools::getValue('packaging_'.(int)($id_order));
 		$orderDetails['type_objet'] =  Tools::getValue('type_objet_'.(int)($id_order));
