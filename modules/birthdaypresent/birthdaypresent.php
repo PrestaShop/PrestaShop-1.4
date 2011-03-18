@@ -42,7 +42,7 @@ class BirthdayPresent extends Module
 		parent::__construct();
 		
         $this->displayName = $this->l('Birthday Present');
-        $this->description = $this->l('Offer your clients automatic birthday gifts.');
+        $this->description = $this->l('Offer your clients birthday presents automatically');
 	}
 		
 	public function getContent()
@@ -60,13 +60,13 @@ class BirthdayPresent extends Module
 		
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-			<p>'.$this->l('Create a voucher for customers celebrating their birthday and having at least one valid order.').'</p>
+			<p>'.$this->l('Create a voucher for customers celebrating their birthday and having at least one valid order').'</p>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" style="margin-top: 15px;">
 				<label>'.$this->l('Active').'</label>
 				<div class="margin-form">
 					<img src="../img/admin/enabled.gif" /> <input type="radio" name="bp_active" value="1"'.(Configuration::get('BIRTHDAY_ACTIVE') ? ' checked="checked"' : '').' />
 					<img src="../img/admin/disabled.gif" /> <input type="radio" name="bp_active" value="0"'.(!Configuration::get('BIRTHDAY_ACTIVE') ? ' checked="checked"' : '').' />
-					<p style="clear: both;">'.$this->l('Additionally, you have to set a CRON rule which calls the file').'<br />http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/birthdaypresent/cron.php '.$this->l('every day').'</p>
+					<p style="clear: both;">'.$this->l('Additionally, you have to set a CRON rule which calls the file').'<br />'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/birthdaypresent/cron.php '.$this->l('every day').'</p>
 				</div>
 				<label>'.$this->l('Type').'</label>
 				<div class="margin-form">
@@ -98,14 +98,14 @@ class BirthdayPresent extends Module
 			<p>'.$this->l('Offering a present to a client is a means of securing their loyalty.').'</p>
 			<h3>'.$this->l('What should you do?').'</h3>
 			<p>
-				'.$this->l('Keeping a client is more profitable than gaining a new one. Thus, it is necessary to develop their loyalty, in other words to make them want to come back to your webshop.').' <br />
+				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop their loyalty, in other words to make them want to come back to your webshop.').' <br />
 				'.$this->l('Word of mouth is also a means to get new satisfied clients; a dissatisfied one won\'t attract new clients.').'<br />
 				'.$this->l('In order to achieve this goal you can organize: ').'
 				<ul>
 					<li>'.$this->l('Punctual operations: commercial rewards (personalized special offers, product or service offered), non commercial rewards (priority handling of an order or a product), pecuniary rewards (bonds, discount coupons, payback...).').'</li>
 					<li>'.$this->l('Sustainable operations: loyalty or points cards, which not only justify communication between merchant and client, but also offer advantages to clients (private offers, discounts).').'</li>
 				</ul>
-				'.$this->l('These operations encourage clients to buy products visit your webshop regularly.').' <br />
+				'.$this->l('These operations encourage clients to buy and also to come back to your webshop regularly.').' <br />
 			</p>
 		</fieldset>';
 		return $this->_html;
@@ -126,7 +126,7 @@ class BirthdayPresent extends Module
 			$voucher->id_customer = (int)($user['id_customer']);
 			$voucher->id_discount_type = (int)(Configuration::get('BIRTHDAY_DISCOUNT_TYPE'));
 			$voucher->name = 'BIRTHDAY-'.(int)($voucher->id_customer).'-'.date('Y');
-			$voucher->description[(int)(Configuration::get('PS_LANG_DEFAULT'))] = $this->l('Your birthday present!');
+			$voucher->description[(int)(Configuration::get('PS_LANG_DEFAULT'))] = $this->l('Your birthday present !');
 			$voucher->value = Configuration::get('BIRTHDAY_DISCOUNT_VALUE');
 			$voucher->quantity = 1;
 			$voucher->quantity_per_user = 1;
