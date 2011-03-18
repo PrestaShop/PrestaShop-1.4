@@ -167,7 +167,7 @@ class Envoimoinscher extends Module
 		&facturation.contact_ville='.(isset($confs['EMC_CITY']) ? htmlspecialchars($confs['EMC_CITY'], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_tel='.(isset($confs['EMC_PHONE']) ? htmlspecialchars($confs['EMC_PHONE'], ENT_COMPAT, 'UTF-8') : '' ).'
 		&facturation.contact_email='.(isset($confs['EMC_EMAIL']) ? htmlspecialchars($confs['EMC_EMAIL'], ENT_COMPAT, 'UTF-8') : '' ).'
-		&url_renvoi='.urlencode('http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI']).'">';
+		&url_renvoi='.urlencode(Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').$_SERVER['REQUEST_URI']).'">';
 		
 						
 		$this->_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">
