@@ -394,6 +394,8 @@ class AdminTranslations extends AdminTab
 	protected function findAndFillTranslations($files, $theme_name, $module_name, $dir = false, $iso_code = '')
 	{
 		global $_MODULES;
+		// added for compatibility
+		$_MODULES = array_change_key_case($_MODULES);
 		
 		// Default translations and Prestashop overriding themes are distinguish
 		$is_default = $theme_name === self::DEFAULT_THEME_NAME ? true : false;
