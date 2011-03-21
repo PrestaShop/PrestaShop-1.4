@@ -198,15 +198,23 @@ class AdminProducts extends AdminTab
 			{
 
 				$languages = Language::getLanguages(false);
+				$is_attachment_name_valid = false;
 				foreach ($languages AS $language)
 				{
-					if (!Validate::isGenericName(Tools::getValue('attachment_name_'.(int)($language['id_lang']))))
+					$attachment_name_lang = Tools::getValue('attachment_name_'.(int)($language['id_lang']));
+					if (strlen($attachment_name_lang ) > 0)
+						$is_attachment_name_valid = true;
+
+					if(!Validate::isGenericName(Tools::getValue('attachment_name_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid Name');
 					elseif (Tools::strlen(Tools::getValue('attachment_name_'.(int)($language['id_lang']))) > 32)
 						$this->_errors[] = Tools::displayError('Name is too long');
 					if (!Validate::isCleanHtml(Tools::getValue('attachment_description_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid description');
 				}
+				if (!$is_attachment_name_valid)
+					$this->_errors[] = Tools::displayError('Attachment Name Required');
+
 				if (empty($this->_errors))
 				{
 					if (isset($_FILES['attachment_file']) AND is_uploaded_file($_FILES['attachment_file']['tmp_name']))
