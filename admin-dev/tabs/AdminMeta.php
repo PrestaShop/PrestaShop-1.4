@@ -180,6 +180,8 @@ class AdminMeta extends AdminTab
 			rewriteSettingsFile($baseUrls, NULL, NULL);
 			unset($this->_fieldsGeneral['__PS_BASE_URI__']);
 		}
+		if (Tools::isSubmit('submitOptions'.$this->table) OR Tools::isSubmit('submitAddmeta'))
+			Module::hookExec('afterSaveAdminMeta');
 		
 		return parent::postProcess();
 	}

@@ -17,3 +17,5 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason` ,`id_lang` ,`n
 ('2', '3', 'Disminuir'), 
 ('2', '4', 'Reduzieren'), 
 ('2', '5', 'Diminuzione');
+
+INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edit`) VALUES ('afterSaveAdminMeta', 'After save configuration in AdminMeta', 'After save configuration in AdminMeta', 0, 0);
