@@ -665,8 +665,9 @@ class Loyalty extends Module
 		'Available' => $this->l('Available'),
 		'Cancelled' => $this->l('Cancelled'),
 		'Already converted' => $this->l('Already converted'),
+		'Unavailable on discounts' => $this->l('Unavailable on discounts'),
 		'Not available on discounts.' => $this->l('Not available on discounts.'));
 
-		return $translations[$key];
+		return (array_key_exists($key, $translations)) ? $translations[$key] : $key;
 	}
 }
