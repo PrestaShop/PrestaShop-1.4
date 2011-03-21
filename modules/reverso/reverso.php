@@ -140,7 +140,7 @@ class Reverso extends Module
 		$url_to_call = str_replace(array('{ARG_PHONE}', '{ARG_SERIAL}', '{ARG_ADDRESS}'), array($phone, $conf['REVERSO_SERIAL'], $conf['REVERSO_ADDRESS']), $this->_api_url);
 		$reverso = file_get_contents($url_to_call);
 
-		$address = json_decode($reverso, true);
+		$address = Tools::jsonDecode($reverso, true);
 		if ($address == 'NULL')
 			return (int)($conf['REVERSO_BAD_NUMBER']);
 	

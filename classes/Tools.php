@@ -1531,11 +1531,14 @@ class ToolsCore
 
 	public static function getMediaServer($filename)
 	{
-		$filename = mb_convert_encoding(md5(strtoupper($filename)),"UCS-4BE",'UTF-8');
+		if (function_exists('mb_convert_encoding'))
+			$filename = mb_convert_encoding(md5(strtoupper($filename)), "UCS-4BE", 'UTF-8');
+		else
+			$filename = iconv("UCS-4BE", 'UTF-8', md5(strtoupper($filename)));
 		$intvalue = 0;
-		for($i = 0; $i < mb_strlen($filename,"UCS-4BE"); $i++)
+		for($i = 0; $i < Tools::strlen($filename,"UCS-4BE"); $i++)
 		{
-			$s2 = mb_substr($filename,$i,1,"UCS-4BE");
+			$s2 = Tools::substr($filename,$i,1,"UCS-4BE");
 			$val = unpack("N",$s2);
 			$intvalue += ($val[1]+$i)*2;
 		}

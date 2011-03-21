@@ -521,7 +521,7 @@ class LanguageCore extends ObjectModel
 				$lang->iso_code = $iso_code;
 				$lang->active = true;
 
-				if ($lang_pack = json_decode(Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso_code)))
+				if ($lang_pack = Tools::jsonDecode(Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$iso_code)))
 				{
 					if (isset($lang_pack->name)
 					&& isset($lang_pack->version)

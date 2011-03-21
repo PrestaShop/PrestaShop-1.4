@@ -39,7 +39,7 @@ if(@fsockopen('www.prestashop.com', 80))
 	// Get all iso code available
 	$lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='.(string)$_GET['ps_version'].'&iso_lang='.(string)$_GET['iso_lang']);
 	
-	if ($lang_packs !== '' && json_decode($lang_packs) !== NULL)
+	if ($lang_packs !== '' && Tools::jsonDecode($lang_packs) !== NULL)
 	{
 		echo $lang_packs;
 	}
