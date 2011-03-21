@@ -225,7 +225,7 @@ class ThemeInstallator extends Module
 		else if (Tools::isSubmit('submitImport2'))
 		{
 			$zip = new ZipArchive();
-			if (!Validate::isModuleUrl($url = Tools::getValue('linkurl'), null))
+			if (!Validate::isModuleUrl($url = Tools::getValue('linkurl'), $this->errors))
 				$this->errors .= parent::displayError($this->l('Only zip files are allowed'));
 			else if (!copy($url, ARCHIVE_NAME))
 				$this->errors .= parent::displayError($this->l('Error during the file download'));
