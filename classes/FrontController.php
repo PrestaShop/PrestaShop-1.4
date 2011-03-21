@@ -268,12 +268,8 @@ class FrontControllerCore
 
 		//live edit
 		if (Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))
-			if (is_dir($_SERVER['DOCUMENT_ROOT'].__PS_BASE_URI__.$ad))
-				$cookie->live_edit = true;
-			else
+			if (!is_dir($_SERVER['DOCUMENT_ROOT'].__PS_BASE_URI__.$ad))
 				die(Tools::displayError());
-		else
-			unset($cookie->live_edit);
 		
 		self::$cookie = $cookie;
 		self::$cart = $cart;
