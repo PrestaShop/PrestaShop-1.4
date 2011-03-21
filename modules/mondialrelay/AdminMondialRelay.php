@@ -24,6 +24,9 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
+
+require_once('MondialRelayClass.php');
+
 @set_time_limit(0);
 
 function _get($type, $host, $port = '80', $path = '/', $data = '') 

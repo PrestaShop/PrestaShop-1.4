@@ -55,12 +55,22 @@ class MondialRelay extends Module
 	public function install()
 	{
 		global $cookie;
+		$name = "shipping";
+		$title = "Mondial Relay API";
+
 		if (!parent::install())
 			return false;
 
-		$rpos = Db::getInstance()->ExecuteS('SELECT `name` FROM `' . _DB_PREFIX_ . 'hook` WHERE `name` ="shipping"');
-		if ($rpos[0]['name'] != "shipping")
-			Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'hook (name, title, description, position) VALUES("shipping", "Mondial Relay API", NULL, 0)');
+		Db::getInstance()->ExecuteS(
+			'SELECT `name` 
+			FROM `' . _DB_PREFIX_ . 'hook` 
+			WHERE `name` = \''.$name.'\' 
+			AND `title` = \''.$title.'\'');
+
+		if (!Db::getInstance()->NumRows())
+			Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'hook 
+			(name, title, description, position) 
+			VALUES(\''.$name.'\', \''.$title.'\', NULL, 0)');
 
 		if (!$this->registerHook('shipping') OR
 			!$this->registerHook('extraCarrier') OR
@@ -128,12 +138,15 @@ class MondialRelay extends Module
 		
 		/* Tab uninstallation */
 		$rpos = Db::getInstance()->ExecuteS('SELECT id_tab  FROM `' . _DB_PREFIX_ . 'tab` WHERE  class_name="AdminMondialRelay"   LIMIT 0 , 1');
-		$id_tab = $rpos[0]['id_tab'];
-		if (isset($id_tab) AND !empty($id_tab))
-		{	
-			Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab WHERE id_tab = '.(int)($id_tab));
-			Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab_lang WHERE id_tab = '.(int)($id_tab));
-			Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'access WHERE id_tab = '.(int)($id_tab));
+		if (isset($rpos[0]['id_tab']))
+		{
+			$id_tab = $rpos[0]['id_tab'];
+			if (isset($id_tab) AND !empty($id_tab))
+			{	
+				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab WHERE id_tab = '.(int)($id_tab));
+				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab_lang WHERE id_tab = '.(int)($id_tab));
+				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'access WHERE id_tab = '.(int)($id_tab));
+			}
 		}
 
 		if (!Configuration::deleteByName('MONDIAL_RELAY_1_4') OR
@@ -854,6 +867,6 @@ class MondialRelay extends Module
 			'Settings updated' => $this->l('Settings updated'),
 			'Empty address : Are you sure you have set a valid address on the contact page?' => $this->l('Empty address : Are you sure you have set a valid address on the contact page?')
 		);
-		return $trad[$key];
+		return (array_key_exists($key, $trad)) ? $trad[$key] : $key;
 	}
 }
