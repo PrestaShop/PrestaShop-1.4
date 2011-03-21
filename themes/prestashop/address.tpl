@@ -144,9 +144,10 @@ $(function(){ldelim}
 			<sup>*</sup>
 		</p>
 		<script type="text/javascript">
+		{literal}
 				$(document).ready(function(){
 					var ajaxurl = "{$ajaxurl}";
-					{literal}
+					
 					$('#id_country').change(function() {
 						$.ajax({
 							type: "GET",
@@ -164,8 +165,9 @@ $(function(){ldelim}
 							}
 						});
 					});
-					{/literal}
+					
 				});
+		{/literal}
 		</script>
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
