@@ -986,13 +986,13 @@ class ToolsCore
 		return strtolower($str);
 	}
 
-	static function strlen($str)
+	static function strlen($str, $encoding = 'UTF-8')
 	{
 		if (is_array($str))
 			return false;
 		$str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
 		if (function_exists('mb_strlen'))
-			return mb_strlen($str, 'utf-8');
+			return mb_strlen($str, $encoding);
 		return strlen($str);
 	}
 
@@ -1536,9 +1536,9 @@ class ToolsCore
 		else
 			$filename = iconv("UCS-4BE", 'UTF-8', md5(strtoupper($filename)));
 		$intvalue = 0;
-		for($i = 0; $i < Tools::strlen($filename,"UCS-4BE"); $i++)
+		for($i = 0; $i < Tools::strlen($filename, 'UCS-4BE'); $i++)
 		{
-			$s2 = Tools::substr($filename,$i,1,"UCS-4BE");
+			$s2 = Tools::substr($filename, $i, 1, 'UCS-4BE');
 			$val = unpack("N",$s2);
 			$intvalue += ($val[1]+$i)*2;
 		}
