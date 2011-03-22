@@ -54,7 +54,7 @@ if (!$cookie->isLogged())
 else
 {
 	$id_customer = (int)($cookie->id_customer);
-	$customer_email = $cookie->email;
+	$customer_email = 0;
 }
 
 if (Db::getInstance()->Execute('
