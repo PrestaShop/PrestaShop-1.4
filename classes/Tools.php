@@ -107,12 +107,12 @@ class ToolsCore
 
 	/**
 	 * getProtocol return the set protocol according to configuration (http[s])
-	 *
+	 * @param Boolean true if require ssl
 	 * @return String (http|https)
 	 */
-	public static function getProtocol()
+	public static function getProtocol($use_ssl = null)
 	{
-		return (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://');
+		return (!is_null($use_ssl) && $use_ssl ? 'https://' : 'http://');
 	}
 
 	/**
@@ -148,7 +148,7 @@ class ToolsCore
 		if ($entities)
 			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
 		if ($http)
-			$domain = Tools::getProtocol().$domain;
+			$domain = 'http://'.$domain;
 		return $domain;
 	}
 
