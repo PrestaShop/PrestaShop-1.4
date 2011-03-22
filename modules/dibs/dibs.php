@@ -106,7 +106,7 @@ class dibs extends PaymentModule
 		self::$ACCEPTED_URL = Configuration::get('DIBS_ACCEPTED_URL');
 		self::$CANCELLED_URL = Configuration::get('DIBS_CANCELLED_URL');
 		self::$TESTING = (int)Configuration::get('DIBS_TESTING');
-		self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Configuration::get('DIBS_MORE_SETTINGS')) : array();
+		self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Tools::htmlentitiesDecodeUTF8(Configuration::get('DIBS_MORE_SETTINGS'))) : array();
 		
 		if (!isset(self::$MORE_SETTINGS['k1'])
 			OR (isset(self::$MORE_SETTINGS['k1']) AND (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '') ))
@@ -123,7 +123,7 @@ class dibs extends PaymentModule
 			AND Configuration::updateValue('DIBS_ACCEPTED_URL', self::$site_url.(substr(trim(self::$site_url), -1, 1) === '/' ? '' : '/').'order-confirmation.php')
 			AND Configuration::updateValue('DIBS_CANCELLED_URL', self::$site_url)
 			AND Configuration::updateValue('DIBS_TESTING', 1)
-			AND Configuration::updateValue('DIBS_MORE_SETTINGS', serialize(array('flexwin_color' => 'blue', 'logo_color' => 'black', 'k1' => '', 'k2' => ''))));
+			AND Configuration::updateValue('DIBS_MORE_SETTINGS', Tools::htmlentitiesUTF8(serialize(array('flexwin_color' => 'blue', 'logo_color' => 'black', 'k1' => '', 'k2' => ''))), true));
 	}
 	
 	public function uninstall()
@@ -167,7 +167,7 @@ class dibs extends PaymentModule
 			Configuration::updateValue('DIBS_ACCEPTED_URL', self::$ACCEPTED_URL);
 			Configuration::updateValue('DIBS_CANCELLED_URL', self::$CANCELLED_URL);
 			Configuration::updateValue('DIBS_TESTING', self::$TESTING);
-			Configuration::updateValue('DIBS_MORE_SETTINGS', serialize(self::$MORE_SETTINGS));
+			Configuration::updateValue('DIBS_MORE_SETTINGS', Tools::htmlentitiesUTF8(serialize(self::$MORE_SETTINGS)));
 			
 			$data_sync = '';
 			if(self::$ID_MERCHANT !== '' AND self::$TESTING !== 1 AND self::$MORE_SETTINGS['k1'] !== '' AND self::$MORE_SETTINGS['k2'] !== '')
