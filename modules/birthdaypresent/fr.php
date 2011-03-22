@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_c2796655c25e1b0b8582716036aece08'] = 'Cadeau d\'anniversaire';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_0a191c2703af810650313950e390186c'] = 'Offrez automatiquement à vos clients des cadeaux d\'anniversaire';
+$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d1f5899bf2af57ed816390d9d740daf6'] = 'Offrez automatiquement à vos clients des cadeaux d\'anniversaire';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_42f95f1b218dda65c23c52fcb205f1ed'] = 'Créé un bon de réduction pour les clients célébrant leur anniversaire et utilisable une seule fois';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Actif';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_52292d2f9c39936bc72fbd47a3060df3'] = 'De plus, vous devez installer une règle CRON qui appellera le fichier';
@@ -19,7 +19,7 @@ $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_6602bbeb2956c035fb4cb5e84
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_cb21e843b037359d0fb5b793fccf964f'] = 'Fidéliser le client';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d725bab433ae44aee759eb82a24b09de'] = 'Offrir un cadeau d\'anniversaire à un client est une manière comme une autre d\'agir sur sa fidélité.';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_0dc42f38b35e45090e1a1c94755c2d43'] = 'Que faire ?';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d29468c130aa9793f3af4aeab7573dfe'] = 'Garder un client est plus rentable que d’en conquérir un nouveau. Il est donc impératif de le fidéliser, c\'est-à-dire de le faire revenir sur votre boutique. ';
+$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_a3729d34db57cdeabe59a1fe78644458'] = 'Garder un client est plus rentable que d’en conquérir un nouveau. Il est donc impératif de le fidéliser, c\'est-à-dire de le faire revenir sur votre boutique. ';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_7b6ac3f2cdb42a4462ff7ca3c4358f71'] = 'Le bouche à oreille est également un moyen d\'avoir de nouveaux clients satisfaits ; car un client non satisfait n\'en attirera pas de nouveaux. ';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_410008089d5bb723438103a84d48a59c'] = 'Pour y parvenir, plusieurs moyens existent :';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_3e788301a1b0ce341aa5ce15bc520545'] = 'Les opérations ponctuelles : les récompenses marchandes (offres promotionnelles ciblées et personnalisées, cadeaux -produit ou service offert-), les récompenses non marchandes (traitement prioritaire d\'une commande ou d\'un produit), les récompenses pécuniaires (bons d\'achat, de réduction, de remboursement). ';

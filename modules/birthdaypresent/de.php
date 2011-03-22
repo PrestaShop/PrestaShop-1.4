@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_c2796655c25e1b0b8582716036aece08'] = 'Geburtstagsgeschenk';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_0a191c2703af810650313950e390186c'] = 'Senden Sie Ihren Kunden automatisch ein Geburtstagsgeschenk';
+$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d1f5899bf2af57ed816390d9d740daf6'] = 'Senden Sie Ihren Kunden automatisch ein Geburtstagsgeschenk';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_42f95f1b218dda65c23c52fcb205f1ed'] = 'Erstellen Sie einen Gutschein für Kunden, die Geburtstag haben und mindestens eine gültige Bestellung vorgenommen haben';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Aktiv';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_52292d2f9c39936bc72fbd47a3060df3'] = 'Sie müssen zusätzlich eine cron-Regel einstellen, die die Datei aufruft';
@@ -19,7 +19,7 @@ $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_6602bbeb2956c035fb4cb5e84
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_cb21e843b037359d0fb5b793fccf964f'] = 'Kundenbindung ausbauen';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d725bab433ae44aee759eb82a24b09de'] = 'Kundengeschenke sind ein Mittel zur Kundenbindung.';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_0dc42f38b35e45090e1a1c94755c2d43'] = 'Was müssen Sie tun?';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d29468c130aa9793f3af4aeab7573dfe'] = 'Einen Kunden zu behalten ist rentabler als einen Neukunden zu akquirieren. Dazyu ist es notwendig, ihre Loyalität auszubauen, oder anders gesagt, sie dazu zu bringen, dass sie zu Ihrem Webshop zurückkehren möchten.';
+$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_a3729d34db57cdeabe59a1fe78644458'] = 'Einen Kunden zu behalten ist rentabler als einen Neukunden zu akquirieren. Dazyu ist es notwendig, ihre Loyalität auszubauen, oder anders gesagt, sie dazu zu bringen, dass sie zu Ihrem Webshop zurückkehren möchten.';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_7b6ac3f2cdb42a4462ff7ca3c4358f71'] = 'Ein guter Ruf ist ebenso ein Mittel, zufriedene Kunden zu bekommen; ein unzufriedener Kunde zieht keine Neukunden an.';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_410008089d5bb723438103a84d48a59c'] = 'Um dieses Ziel zu erreichen, können Sie Folgendes organisieren:';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_3e788301a1b0ce341aa5ce15bc520545'] = 'Punktuelle Aktionen: kommerzielle Vergünstigungen (persönliche Sonderangebote, Gratis-Produkte oder -Services), nicht-kommerzielle Vergütungen (bevorzugte Behandlung einer Bestellung oder eines Produkts), geldliche Vergünstigungen (Gutscheine, Ermäßigungsgutscheine, PayBack...)';
