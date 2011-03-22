@@ -19,3 +19,9 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason` ,`id_lang` ,`n
 ('2', '5', 'Diminuzione');
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edit`) VALUES ('afterSaveAdminMeta', 'After save configuration in AdminMeta', 'After save configuration in AdminMeta', 0, 0);
+
+INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES 
+(
+(SELECT `id_module` FROM `PREFIX_module` WHERE `name` = 'blockcategories'), 
+(SELECT `id_hook` FROM `PREFIX_hook` WHERE `name` = 'afterSaveAdminMeta'), 1
+);
