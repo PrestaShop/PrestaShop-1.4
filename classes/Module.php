@@ -84,7 +84,12 @@ abstract class ModuleCore
 	protected static $_generateConfigXmlMode = false;
 	
 	protected static $l_cache = array();
-	
+
+	/**
+	 * @var array used by AdminTab to determine which lang file to use (admin.php or module lang file)
+	 */
+	public static $classInModule	= array();
+
 	public function __construct($name = NULL)
 	{
 		global $cookie;
@@ -315,6 +320,42 @@ abstract class ModuleCore
 				DELETE FROM `'._DB_PREFIX_.'hook_module_exceptions`
 				WHERE `id_module` = '.(int)($this->id).' AND `id_hook` ='.(int)($id_hook));
 		return $this->registerExceptions($id_hook, $excepts);
+	}
+
+
+	/**
+	 * This function is used to determine the module name 
+	 * of an AdminTab which belongs to a module, in order to keep translation
+	 * related to a module in its directory (instead of $_LANGADM)
+	 * 
+	 * @param mixed $currentClass the 
+	 * @return boolean|string if the class belongs to a module, will return the module name. Otherwise, return false.
+	 */
+	public static function getModuleNameFromClass($currentClass)
+	{
+		// Module can now define AdminTab keeping the module translations method,
+		// i.e. in modules/[module name]/[iso_code].php
+		if (!isset(self::$classInModule[$currentClass]))
+		{
+			global $_MODULES;
+			$_MODULE = array();
+			$reflectionClass = new ReflectionClass($currentClass);
+			$filePath = realpath($reflectionClass->getFileName());
+			$realpathModuleDir = realpath(_PS_MODULE_DIR_);
+			if (substr(realpath($filePath), 0, strlen($realpathModuleDir)) == $realpathModuleDir)
+			{
+				self::$classInModule[$currentClass] = substr(dirname($filePath), strlen($realpathModuleDir)+1);
+
+				$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
+				$file = _PS_MODULE_DIR_.self::$classInModule[$currentClass].'/'.Language::getIsoById($id_lang).'.php';
+				if (Tools::file_exists_cache($file) AND include_once($file))
+					$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
+			}
+			else 
+				self::$classInModule[$currentClass] = false;
+		}
+		// return name of the module, or false
+		return self::$classInModule[$currentClass];
 	}
 
 	/**

@@ -187,8 +187,25 @@ abstract class AdminTabCore
 		$this->token = Tools::getAdminToken($className.(int)($this->id).(int)($cookie->id_employee));
 	}
 
+
+	/**
+	 * use translations files to replace english expression.
+	 * 
+	 * @param mixed $string term or expression in english
+	 * @param string $class 
+	 * @param boolan $addslashes if set to true, the return value will pass through addslashes(). Otherwise, stripslashes().
+	 * @param boolean $htmlentities if set to true(default), the return value will pass through htmlentities($string, ENT_QUOTES, 'utf-8')
+	 * @return string the translation if available, or the english default text.
+	 */
 	protected function l($string, $class = 'AdminTab', $addslashes = FALSE, $htmlentities = TRUE)
 	{
+		// if the class is extended by a module, use modules/[module_name]/xx.php lang file
+		$currentClass = get_class($this);
+		if(Module::getModuleNameFromClass($currentClass))
+		{
+			$string = str_replace('\'', '\\\'', $string);
+			return Module::findTranslation(Module::$classInModule[$currentClass], $string, $currentClass);
+		}
 		global $_LANGADM;
 
         if ($class == __CLASS__)
