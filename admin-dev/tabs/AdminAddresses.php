@@ -363,7 +363,10 @@ class AdminAddresses extends AdminTab
 						  success: function(html)
 						  {
 						  	if (html == \'false\')
+						  	{
 						  		$("#contains_states").fadeOut();
+						  		$(\'#id_state option[value=0]\').attr("selected", "selected");
+						  	}
 						  	else
 						  	{
 						  		$("#id_state").html(html);
