@@ -662,8 +662,6 @@ class AdminModules extends AdminTab
 		<script>
 		 $(document).ready(function() {
 		 
-		 '.(!$goto ? '': '$(\'#'.$goto.'_content\').slideToggle();').'
-		 
 		 $(\'.header_module_toggle, .module_toggle_all\').unbind(\'click\').click(function(){
 		 	var id = $(this).attr(\'id\');
 			if (id == \'all_open\')
@@ -695,6 +693,7 @@ class AdminModules extends AdminTab
 		 	}
 		 	return false;
 		 });
+		'.(!$goto ? '': '$(\'#'.$goto.'_content\').slideToggle( function (){
 		'.(!$goto ? '' : '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 300 , 
 		{onAfter:function(){
 			$("#modgo_'.Tools::getValue('module_name').'").fadeTo(100, 0, function (){
@@ -707,6 +706,8 @@ class AdminModules extends AdminTab
 						)}
 					)}
 				});').'
+		});').'
+		
 			});
 		 </script>';
 		if (!empty($orderModule))
