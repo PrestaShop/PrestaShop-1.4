@@ -67,16 +67,16 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 				}
 				else
 					echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('999').'
-						 <p><br/><a href="'.Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
+						 <p><br/><a href="'.Tools::getProtocol(true).htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
 			}
 			else
 				echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('999').'
-						 <p><br/><a href="'.Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
+						 <p><br/><a href="'.Tools::getProtocol(true).htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
 		}
 		else
 		{
 			echo '<div class="alert error"><img src="' . _PS_IMG_ . 'admin/forbbiden.gif" alt="nok" />&nbsp;'.$so->displaySoError('998').'
-				  <p><br/><a href="'.Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
+				  <p><br/><a href="'.Tools::getProtocol(true).htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'order.php" class="button_small" title="Retour">« Retour</a></p></div>';
 		}
 	}
 	else
