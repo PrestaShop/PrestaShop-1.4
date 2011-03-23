@@ -434,7 +434,7 @@ class AdminModules extends AdminTab
 
 			$moduleAuthor = $module->author;
 			if (!empty($moduleAuthor)&& ($moduleAuthor != ""))
-				$modulesAuthors[$moduleAuthor] = true;
+				$modulesAuthors[(string)$moduleAuthor] = true;
 		}
 
 		$serialModules = urlencode($serialModules);
