@@ -545,7 +545,7 @@ class FrontControllerCore
 
 	public static function getCurrentCustomerGroups()
 	{
-		if (!self::$cookie->id_customer)
+		if (!isset(self::$cookie) || !self::$cookie->id_customer)
 			return array();
 		if (!is_array(self::$currentCustomerGroups))
 		{
