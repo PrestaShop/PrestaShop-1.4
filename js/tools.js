@@ -202,3 +202,12 @@ function setCurrency(id_currency)
 		}
 	});
 }
+
+function isArrowKey(k_ev)
+{
+	var unicode=k_ev.keyCode? k_ev.keyCode : k_ev.charCode;
+	if (unicode >= 37 && unicode <= 40)
+		return true;
+
+}
+
