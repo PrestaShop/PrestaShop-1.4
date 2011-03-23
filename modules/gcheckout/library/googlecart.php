@@ -189,6 +189,7 @@
 
     /**
      * Sets the continue shopping url, which allows the customer to return 
+die();
      * to the merchant's site after confirming an order.
      * 
      * GC tag: {@link http://code.google.com/apis/checkout/developer/index.html#tag_continue-shopping-url <continue-shopping-url>}
@@ -957,7 +958,8 @@
      * @return array with the returned http status code (200 if OK) in index 0 
      *               and the redirect url returned by the server in index 1
      */
-    function CheckoutServer2Server($proxy=array(), $certPath='') {
+		function CheckoutServer2Server($proxy=array(), $certPath='') 
+		{
       ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.'.');
       require_once('library/googlerequest.php');
       $GRequest = new GoogleRequest($this->merchant_id, 
@@ -967,9 +969,8 @@
                       $this->currency);
       $GRequest->SetProxy($proxy);
       $GRequest->SetCertificatePath($certPath);
-                      
       return $GRequest->SendServer2ServerCart($this->GetXML());
-    }
+		}
 
     /**
      * Get the Google Checkout button's html to be used in a server-to-server

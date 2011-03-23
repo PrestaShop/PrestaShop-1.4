@@ -49,7 +49,7 @@
     var $request_url;
     var $request_diagnose_url;
     var $merchant_checkout;
-    var $proxy = array();
+		var $proxy = array();
     
     var $certPath='';
     var $log;
@@ -116,8 +116,8 @@
      * 
      * @return array with the returned http status code (200 if OK) in index 0 
      *               and the redirect url returned by the server in index 1
-     */
-    function SendServer2ServerCart($xml_cart, $die=true) {
+		 */
+    public function SendServer2ServerCart($xml_cart, $die=true) {
       list($status, $body) = $this->SendReq($this->merchant_checkout, 
                    $this->GetAuthenticationHeaders(), $xml_cart);
       if($status != 200 ){
@@ -128,7 +128,7 @@
   
         $xml_parser = new gc_xmlparser($body);
         $root = $xml_parser->GetRoot();
-        $data = $xml_parser->GetData();
+				$data = $xml_parser->GetData();
         
         $this->log->logRequest("Redirecting to: ". 
                         $data[$root]['redirect-url']['VALUE']);
@@ -140,8 +140,8 @@
           return array(200, $data[$root]['redirect-url']['VALUE']);
         }
       }
-    }
-    
+		}
+
     /**
      * Send a <charge-order> command to the Google Checkout server
      * 

@@ -31,18 +31,15 @@ require_once(dirname(__FILE__).'/library/googleresponse.php');
 require_once(dirname(__FILE__).'/library/googlemerchantcalculations.php');
 require_once(dirname(__FILE__).'/library/googleresult.php');
 require_once(dirname(__FILE__).'/library/googlerequest.php');
+require_once(dirname(__FILE__).'/library/googlecart.php');
 
-$gcheckout = new GCheckout();
 
 $merchant_id = Configuration::get('GCHECKOUT_MERCHANT_ID');
 $merchant_key = Configuration::get('GCHECKOUT_MERCHANT_KEY');
 $server_type = Configuration::get('GCHECKOUT_MODE');
-$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
-$cart = new Cart((int)$secure_cart[0]);
-$currency = $gcheckout->getCurrency((int)$cart->id_currency);
 
 $Gresponse = new GoogleResponse($merchant_id, $merchant_key);
-$Grequest = new GoogleRequest($merchant_id, $merchant_key, $server_type, $currency);
+//$Grequest = new GoogleRequest($merchant_id, $merchant_key, $server_type, $currency);
 
 //Setup the log file
 if (Configuration::get('GCHECKOUT_LOGS'))
@@ -89,12 +86,21 @@ if(!$status)
     case "merchant-calculation-callback": {
       break;
     }
-    case "new-order-notification": {
-		$gcheckout = new GCheckout();
-		$orderTotal = (float)($data[$root]['order-total']['VALUE']);
-		$gcheckout->validateOrder((int)$secure_cart[0], _PS_OS_PAYMENT_, (float)$orderTotal, $gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
-		$Gresponse->SendAck();
-		break;
+		case "new-order-notification": {
+			// secure_cart[0] => id_cart
+			// secure_cart[1] => secure_key
+
+			$gcheckout = new GCheckout();
+			$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
+			$cart = new Cart((int)$secure_cart[0]);
+			$currency = $gcheckout->getCurrency((int)$cart->id_currency);
+			unset($cart);
+
+			$orderTotal = (float)($data[$root]['order-total']['VALUE']);
+			$gcheckout->validateOrder((int)$secure_cart[0], _PS_OS_PAYMENT_, (float)$orderTotal, 
+				$gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
+			$Gresponse->SendAck();
+			break;
     }
     case "order-state-change-notification": {
       $Gresponse->SendAck();

@@ -185,14 +185,14 @@ class GCheckout extends PaymentModule
 		}
 		$googleCart = new GoogleCart(Configuration::get('GCHECKOUT_MERCHANT_ID'), Configuration::get('GCHECKOUT_MERCHANT_KEY'), Configuration::get('GCHECKOUT_MODE'), $currency->iso_code);
 		foreach ($cart->getProducts() AS $product)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].((isset($product['attributes']) AND !empty($product['attributes'])) ? ' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), (int)$product['cart_quantity'], Tools::convertPrice($product['price_wt'], $currency), strtoupper(Configuration::get('PS_WEIGHT_UNIT')), (float)$product['weight'])); 
+			$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].((isset($product['attributes']) AND !empty($product['attributes'])) ? ' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), (int)$product['cart_quantity'], $product['price_wt'], strtoupper(Configuration::get('PS_WEIGHT_UNIT')), (float)$product['weight'])); 
 		if ($wrapping = $cart->getOrderTotal(true, Cart::ONLY_WRAPPING))
-			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, Tools::convertPrice($wrapping, $currency)));
+			$googleCart->AddItem(new GoogleItem(utf8_decode($this->l('Wrapping')), '', 1, $wrapping));
 		foreach ($cart->getDiscounts() AS $voucher)
-			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.Tools::convertPrice($voucher['value_real'], $currency)));
+			$googleCart->AddItem(new GoogleItem(utf8_decode($voucher['name']), utf8_decode($voucher['description']), 1, '-'.$voucher['value_real']));
 		
 		if (!Configuration::get('GCHECKOUT_NO_SHIPPING'))
-			$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), Tools::convertPrice($cart->getOrderShippingCost($cart->id_carrier), $currency)));
+			$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), $cart->getOrderShippingCost($cart->id_carrier)));
 
 		$googleCart->SetEditCartUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order.php');
 		$googleCart->SetContinueShoppingUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order-confirmation.php');
