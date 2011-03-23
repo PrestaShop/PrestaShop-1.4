@@ -248,8 +248,7 @@ class AdminTranslations extends AdminTab
 				}
 				Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 			}
-			else
-				$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
+			$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
 		}
 	}
 	
