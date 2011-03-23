@@ -621,7 +621,7 @@ class AdminTranslations extends AdminTab
 				{
 					// Magic Quotes shall... not.. PASS!
 					if (_PS_MAGIC_QUOTES_GPC_)
-						$content = array_map('stripslashes', $content);
+						$content = stripslashes($content);
 					
 					$module_name = false;
 					$module_name_pipe_pos = stripos($mail_name, '|');
