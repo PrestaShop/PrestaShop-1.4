@@ -123,7 +123,7 @@ INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id
 	SELECT
 		p.`id_product`,
 		1,
-		1,
+		0,
 		0,
 		1,
 		0,
@@ -686,3 +686,4 @@ CREATE TABLE `PREFIX_webservice_permission` (
 /* PHP:add_new_tab(AdminPerformance, de:Leistung|en:Performance|it:Performance|fr:Performances|es:Rendimiento,  8); */;
 /* PHP:add_new_tab(AdminThemes, es:Temas|it:Temi|de:Themen|en:Themes|fr:Thèmes,  7); */;
 /* PHP:add_new_tab(AdminWebservice, fr:Service web|es:Web service|en:Webservice|de:Webservice|it:Webservice,  8); */;
+
