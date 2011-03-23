@@ -127,7 +127,7 @@ class BlockLink extends Module
 	public function addLink()
 	{
 	 	/* Url registration */
-	 	if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'blocklink VALUES (\'\', \''.pSQL($_POST['url']).'\', '.((isset($_POST['newWindow']) AND $_POST['newWindow']) == 'on' ? 1 : 0).')') OR !$lastId = mysql_insert_id())
+	 	if (!Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'blocklink VALUES (NULL, \''.pSQL($_POST['url']).'\', '.((isset($_POST['newWindow']) AND $_POST['newWindow']) == 'on' ? 1 : 0).')') OR !$lastId = mysql_insert_id())
 	 		return false;
 	 	/* Multilingual text */
 	 	$languages = Language::getLanguages();
@@ -239,9 +239,9 @@ class BlockLink extends Module
      	 	else
      	 	 	$this->_html .= $this->displayConfirmation($this->l('The link has been deleted.'));
      	}
-		elseif (isset($_POST['submitOrderWay']))
+     	if (isset($_POST['submitOrderWay']))
 		{
-			if (Configuration::updateValue('PS_BLOCKLINK_ORDERWAY', (int)($_POST['orderWay'])))
+			if (Configuration::updateValue('PS_BLOCKLINK_ORDERWAY', (int)(Tools::getValue('orderWay'))))
 				$this->_html .= $this->displayConfirmation($this->l('Sort order updated'));
 			else
 				$this->_html .= $this->displayError($this->l('An error occurred during sort order set-up.'));
