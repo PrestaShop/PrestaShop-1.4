@@ -313,22 +313,19 @@ class OrderOpcControllerCore extends ParentOrderController
 	
 	protected function _assignCarrier()
 	{
-		$carriers = Carrier::getCarriersForOrder(Country::getIdZone((int)Configuration::get('PS_COUNTRY_DEFAULT')));
-		if ($this->isLogged)
+		if (!$this->isLogged)
 		{
-			$address_delivery = new Address((int)(self::$cart->id_address_delivery));
-			if (!Address::isCountryActiveById((int)(self::$cart->id_address_delivery)))
-				unset($address_delivery);
-			elseif (!Validate::isLoadedObject($address_delivery) OR $address_delivery->deleted)
-				unset($address_delivery);
+			$carriers = Carrier::getCarriersForOrder(Country::getIdZone((int)Configuration::get('PS_COUNTRY_DEFAULT')));
+			self::$smarty->assign(array(
+				'checked' => $this->_setDefaultCarrierSelection($carriers),
+				'carriers' => $carriers,
+				'default_carrier' => (int)(Configuration::get('PS_CARRIER_DEFAULT')),
+				'HOOK_EXTRACARRIER' => NULL,
+				'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $carriers))
+			));
 		}
-		self::$smarty->assign(array(
-			'checked' => $this->_setDefaultCarrierSelection($carriers),
-			'carriers' => $carriers,
-			'default_carrier' => (int)(Configuration::get('PS_CARRIER_DEFAULT')),
-			'HOOK_EXTRACARRIER' => (isset($address_delivery) ? Module::hookExec('extraCarrier', array('address' => $address_delivery)) : NULL),
-			'HOOK_BEFORECARRIER' => Module::hookExec('beforeCarrier', array('carriers' => $carriers))
-		));
+		else
+			parent::_assignCarrier();
 	}
 	
 	protected function _assignPayment()
