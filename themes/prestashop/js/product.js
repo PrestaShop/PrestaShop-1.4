@@ -208,7 +208,6 @@ function updateDisplay()
 		{
 			//hide the 'last quantities' message
 			$('#last_quantities').hide('slow');
-			$('#pQuantityAvailable:visible').hide('slow');
 		}
 	}
 	else
