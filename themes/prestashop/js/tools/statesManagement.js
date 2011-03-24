@@ -31,7 +31,7 @@ function updateState(suffix)
 	if(typeof(states) != 'undefined')
 	{
 		$(states).each(function (key, item){
-			$('select#id_state'+(suffix !== undefined ? '_'+suffix : '')).append('<option value="'+item.id+'"'+ (idSelectedCountry == item.id ? ' selected="selected' : '') + '">'+item.name+'</option>');
+			$('select#id_state'+(suffix !== undefined ? '_'+suffix : '')).append('<option value="'+item.id+'"'+ (idSelectedCountry == item.id ? ' selected="selected"' : '') + '>'+item.name+'</option>');
 		});
 		
 		$('p.id_state'+(suffix !== undefined ? '_'+suffix : '')+':hidden').slideDown('slow');
