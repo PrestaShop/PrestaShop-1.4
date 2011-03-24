@@ -395,7 +395,7 @@ class FrontControllerCore
 		
 		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
 		Tools::addJS(array(_PS_JS_DIR_.'tools.js', _PS_JS_DIR_.'jquery/jquery-1.4.4.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js'));
-		if ($cookie->live_edit)
+		if (Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))
 		{
 			Tools::addJS(array(
 							_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js', 
@@ -470,7 +470,7 @@ class FrontControllerCore
 			'content_only' => (int)(Tools::getValue('content_only'))));
 		self::$smarty->display(_PS_THEME_DIR_.'footer.tpl');
 		//live edit
-		if ($cookie->live_edit AND $ad = Tools::getValue('ad'))
+		if (Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))
 		{
 			self::$smarty->assign(array('ad' => $ad, 'live_edit' => true));
 			self::$smarty->display(_PS_ALL_THEMES_DIR_.'live_edit.tpl');
