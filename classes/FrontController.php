@@ -75,7 +75,7 @@ class FrontControllerCore
 		
 		$css_files = array();
 		$js_files = array();
-		
+
 		if (self::$initialized)
 			return;
 		self::$initialized = true;
@@ -352,7 +352,7 @@ class FrontControllerCore
 						if (Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
 							$this->restrictedCountry = true;
 						elseif (Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_)
-							self::$smarty->assign(array(
+							$smarty->assign(array(
 								'restricted_country_mode' => true,
 								'geolocation_country' => $record->country_name
 							));
@@ -374,7 +374,7 @@ class FrontControllerCore
 				elseif (Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
 					$this->restrictedCountry = true;
 				elseif (Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_)
-					self::$smarty->assign(array(
+					$smarty->assign(array(
 						'restricted_country_mode' => true,
 						'geolocation_country' => 'Undefined'
 					));
