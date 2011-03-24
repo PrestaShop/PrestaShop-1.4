@@ -619,9 +619,6 @@ class AdminTranslations extends AdminTab
 			{
 				foreach ($mails as $mail_name=>$content)
 				{
-					// Magic Quotes shall... not.. PASS!
-					if (_PS_MAGIC_QUOTES_GPC_)
-						$content = stripslashes($content);
 					
 					$module_name = false;
 					$module_name_pipe_pos = stripos($mail_name, '|');
@@ -643,6 +640,10 @@ class AdminTranslations extends AdminTab
 						}
 						$string_mail = $this->getMailPattern();
 						$content = str_replace(array('#title', '#content'), array($title, $content), $string_mail);
+
+						// Magic Quotes shall... not.. PASS!
+						if (_PS_MAGIC_QUOTES_GPC_)
+							$content = stripslashes($content);
 					}
 					if (Validate::isCleanHTML($content))
 					{
@@ -1679,18 +1680,18 @@ class AdminTranslations extends AdminTab
 		
 		if (Tools::file_exists_cache($directory.'/lang.php'))
 		{
-			if (($content = file_get_contents($directory.'/lang.php')))
+			// we need to include this even if already included
+			include($directory.'/lang.php');
+			foreach($_LANGMAIL as $key => $subject)
 			{
-				$content = str_replace("\n", " ", $content);
-				$content = str_replace("\\'", "\'", $content);
-				preg_match_all('/\$_LANGMAIL\[\'([^\']*)\'\] = \'([^;]*)\';/', $content, $matches);
-				for ($i = 0; isset($matches[1][$i]); $i++)
-				{
-					if (isset($matches[2][$i]))
-						$subject_mail_content[stripslashes($matches[1][$i])] = stripslashes($matches[2][$i]);
-				}
+				$subject = str_replace("\n", " ", $subject);
+				$subject = str_replace("\\'", "\'", $subject);
+
+				$subject_mail_content[$key] = htmlentities($subject,ENT_QUOTES,'UTF-8');
 			}
 		}
+		else
+			$this->_errors[] = $this->l('Subject mail translation file not found in').' '.$directory;
 		return $subject_mail_content;
 	}
 
@@ -1705,7 +1706,13 @@ class AdminTranslations extends AdminTab
 			fwrite($fd, "<?php\n\nglobal \$_".$tab.";\n\$_".$tab." = array();\n");
 
 			foreach($sub AS $key => $value)
-				fwrite($fd, '$_'.$tab.'[\''.pSQL($key, true).'\'] = \''.pSQL($value, true).'\';'."\n");
+			{
+				// Magic Quotes shall... not.. PASS!
+				if (_PS_MAGIC_QUOTES_GPC_)
+					$value = stripslashes($value);
+				fwrite($fd, '$_'.$tab.'[\''.pSQL($key).'\'] = \''.pSQL($value).'\';'."\n");
+			}
+
 			fwrite($fd, "\n?>");
 			fclose($fd);
 
