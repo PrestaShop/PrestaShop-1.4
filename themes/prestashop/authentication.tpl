@@ -397,7 +397,7 @@ $(function(){ldelim}
 			<input type="text" class="text" name="phone_mobile" id="phone_mobile" value="{if isset($smarty.post.phone_mobile)}{$smarty.post.phone_mobile}{/if}" />
 		</p>
 		<p class="required text" id="address_alias">
-			<label for="alias">{l s='Assign an address title for future reference'} !</label>
+			<label for="alias">{l s='Assign an address title for future reference'} </label>
 			<input type="text" class="text" name="alias" id="alias" value="{if isset($smarty.post.alias)}{$smarty.post.alias}{else}{l s='My address'}{/if}" />
 			<sup>*</sup>
 		</p>
