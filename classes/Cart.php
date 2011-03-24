@@ -684,8 +684,14 @@ class CartCore extends ObjectModel
 		self::$_nbProducts = NULL;
 		if ((int)($id_customization))
 		{
-			$productTotalQuantity = (int)(Db::getInstance()->getValue('SELECT `quantity` FROM `'._DB_PREFIX_.'cart_product` WHERE `id_product` = '.(int)($id_product).' AND `id_product_attribute` = '.(int)($id_product_attribute)));
-			$customizationQuantity = (int)(Db::getInstance()->getValue('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.(int)($this->id).' AND `id_product` = '.(int)($id_product).' AND `id_product_attribute` = '.(int)($id_product_attribute)));
+			$productTotalQuantity = (int)(Db::getInstance()->getValue('SELECT `quantity` 
+				FROM `'._DB_PREFIX_.'cart_product` 
+				WHERE `id_product` = '.(int)($id_product).' AND `id_product_attribute` = '.(int)($id_product_attribute)));
+			$customizationQuantity = (int)(Db::getInstance()->getValue('SELECT `quantity` 
+				FROM `'._DB_PREFIX_.'customization` 
+				WHERE `id_cart` = '.(int)($this->id).' 
+					AND `id_product` = '.(int)($id_product).' 
+					AND `id_product_attribute` = '.(int)($id_product_attribute)));
 			if (!$this->_deleteCustomization((int)($id_customization), (int)($id_product), (int)($id_product_attribute)))
 				return false;
 			// refresh cache of self::_products
@@ -720,13 +726,37 @@ class CartCore extends ObjectModel
 	 */
 	protected	function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
 	{
-		if (!$result = Db::getInstance()->getRow('SELECT `quantity` FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization)) OR
-			!Db::getInstance()->Execute('
-				UPDATE `'._DB_PREFIX_.'cart_product`
-				SET `quantity` = `quantity` - '.(int)($result['quantity']).'
-				WHERE `id_cart` = '.(int)($this->id).' AND `id_product` = '.(int)($id_product).((int)($id_product_attribute) ? ' AND `id_product_attribute` = '.(int)($id_product_attribute) : '')))
-			return false;
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization));
+		$customization = Db::getInstance()->getRow('SELECT *
+			FROM `'._DB_PREFIX_.'customization` 
+			WHERE `id_customization` = '.(int)($id_customization));
+
+		if ($customization)
+		{
+			$custData = Db::getInstance()->getRow('SELECT *
+				FROM `'._DB_PREFIX_.'customized_data`
+				WHERE `id_customization` = '.(int)($id_customization));
+			
+			if ($this->deletePictureToProduct($id_product,$custData['value']))
+				$result = Db::getInstance()->execute('DELETE
+					FROM `'._DB_PREFIX_.'customized_data`
+					WHERE `id_customization` = '.(int)($id_customization));
+			else
+				return false;
+
+			$result &= Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product`
+				SET `quantity` = `quantity` - '.(int)($customization['quantity']).'
+				WHERE `id_cart` = '.(int)($this->id).' 
+				AND `id_product` = '.(int)($id_product).((int)($id_product_attribute) ? ' 
+				AND `id_product_attribute` = '.(int)($id_product_attribute) : ''));
+
+			if (!$result)
+				return false;
+			return Db::getInstance()->Execute('DELETE 
+				FROM `'._DB_PREFIX_.'customization` 
+				WHERE `id_customization` = '.(int)($id_customization));
+		}
+
+		return true;
 	}
 
 	static public function getTotalCart($id_cart, $use_tax_display = false)
@@ -1432,7 +1462,9 @@ class CartCore extends ObjectModel
 		global $cookie;
 
 		$varName = 'pictures_'.(int)($id_product).'_'.(int)($index);
-		if ($picture = $cookie->$varName)
+		// if cookie->varName is empty, use index which is the name of the picture
+		$picture = !empty($cookie->$varName)?$cookie->$varName:$index;
+		if ($picture)
 		{
 			if (!@unlink(_PS_UPLOAD_DIR_.$picture) OR !@unlink(_PS_UPLOAD_DIR_.$picture.'_small'))
 				return false;
