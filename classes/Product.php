@@ -284,13 +284,13 @@ class ProductCore extends ObjectModel
 		//d('a');
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_image` as id
-		FROM `'._DB_PREFIX_.'image` 
+		FROM `'._DB_PREFIX_.'image`
 		WHERE `id_product` = '.(int)($this->id).'
 		ORDER BY `position`');
 	}
-	
-	
-	
+
+
+
 	public	function __construct($id_product = NULL, $full = false, $id_lang = NULL)
 	{
 		global $cart;
@@ -1824,10 +1824,10 @@ class ProductCore extends ObjectModel
 
 		        if (!$specific_price['id_currency'])
 		            $reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
-		        $reduc = Tools::ps_round(!$use_tax ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, 2);
+		        $reduc = Tools::ps_round(!$use_tax ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, $decimals);
 		    }
 			else
-		        $reduc = Tools::ps_round($price * $specific_price['reduction'], 2);
+		        $reduc = Tools::ps_round($price * $specific_price['reduction'], $decimals);
 		}
 
 		if ($only_reduc)
@@ -1908,7 +1908,7 @@ class ProductCore extends ObjectModel
 	{
 		return self::getPriceStatic((int)($this->id), $tax, $id_product_attribute, $decimals, $divisor, $only_reduc, $usereduc, $quantity);
 	}
-	
+
 	/**
 	 * @deprecated
 	 */
@@ -1917,7 +1917,7 @@ class ProductCore extends ObjectModel
 		Tools::displayAsDeprecated();
 		return $this->getIdProductAttributeMostExpensive();
 	}
-	
+
 	public function getIdProductAttributeMostExpensive()
 	{
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
