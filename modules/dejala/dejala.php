@@ -1270,7 +1270,12 @@ class Dejala extends CarrierModule
 		$djlCart->id_dejala_product = $electedProduct["id"];
 		$djlCart->id_delivery = NULL;
 		$djlCart->mode = $this->dejalaConfig->mode;
-		$djlCart->delivery_price = $electedProduct["price"] ;
+		
+		$vat_factor = (1+ ($electedProduct['vat'] / 100));
+		$priceTTC = round(($electedProduct['price']*$vat_factor) + $electedProduct['margin'], 2);
+		$priceHT = round($priceTTC/$vat_factor, 2);
+
+		$djlCart->delivery_price = $priceHT ;
 		$djlCart->cart_date_upd = $cart->date_upd ;
 		$djlCart->product = $electedProduct ;
 
