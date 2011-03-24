@@ -6,6 +6,7 @@ var geocoder;
 var map;
 var infowindow = new google.maps.InfoWindow();
 var markers = [];
+var json_addresses = null;
 
 function google_map_init() {
 	geocoder = new google.maps.Geocoder();
@@ -31,8 +32,6 @@ function google_map_init() {
 			infowindow.open(map,marker);
 		});
 	  }
-	  else
-		alert("Geocode was not successful for the following reason: " + status);
 	});
 }
 
@@ -53,8 +52,6 @@ function codeAddress(address, address_google)
 				infowindow.open(map,marker);
 			});
 		}
-		 else
-			alert("Geocode was not successful for the following reason: " + status);
 	});
 			
 }
@@ -71,10 +68,13 @@ function recherche_MR(args)
 			dataType: 'json',
 			async : false,
 			success: function(obj)
-				{
+			{
 					json_addresses = obj;
-				}
-			});
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown) 
+			{
+			},
+		});
 	}
 	else
 	{
@@ -88,20 +88,23 @@ function recherche_MR(args)
 <div id="map" style="height:300px; width:500px; border:1px;" ></div>
 
 <?php echo '<script type="text/javascript">
-var json_addresses;
 recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays'].'&Ville='.$_GET['Ville'].'&CP='.$_GET['CP'].'&Taille=&Poids='.$_GET['Poids'].'&Action='.$_GET['Action'].'&num='.$_GET['num'].'\');
 
 	window.onload = function()
 		{
 			var cpt = 0;
 			google_map_init();
-			while (json_addresses.addresses[cpt])
-			{
-				address_google = json_addresses.addresses[cpt].address3+\' \'+json_addresses.addresses[cpt].postcode+\' \'+json_addresses.addresses[cpt].city+\' \'+json_addresses.addresses[cpt].iso_country;
-				address = json_addresses.addresses[cpt].address1+\'<br />\'+json_addresses.addresses[cpt].address2+\' \'+json_addresses.addresses[cpt].address3+\'<br />\'+json_addresses.addresses[cpt].postcode+\' \'+json_addresses.addresses[cpt].city+\' \'+json_addresses.addresses[cpt].iso_country;
-				codeAddress(address, address_google);
-				cpt++;
-			}
+			if (json_addresses && json_addresses.addresses)
+				while (json_addresses.addresses[cpt])
+				{
+					if (json_addresses.addresses[cpt].address3.length)
+					{
+						address_google = json_addresses.addresses[cpt].address3+\' \'+json_addresses.addresses[cpt].postcode+\' \'+json_addresses.addresses[cpt].city+\' \'+json_addresses.addresses[cpt].iso_country;
+						address = json_addresses.addresses[cpt].address1+\'<br />\'+json_addresses.addresses[cpt].address2+\' \'+json_addresses.addresses[cpt].address3+\'<br />\'+json_addresses.addresses[cpt].postcode+\' \'+json_addresses.addresses[cpt].city+\' \'+json_addresses.addresses[cpt].iso_country;
+						codeAddress(address, address_google);
+					}
+						cpt++;
+				}
 		}
 </script>';
 

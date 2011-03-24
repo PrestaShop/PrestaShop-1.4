@@ -4,6 +4,7 @@
 include(dirname(__FILE__).'/../../../config/config.inc.php');
 include(dirname(__FILE__).'/../../../init.php');
 include(dirname(__FILE__).'/../mondialrelay.php');
+include(dirname(__FILE__).'/statCodeError.php');
 
 global $cookie;
 
@@ -46,7 +47,6 @@ $params = array(
 ); 
 
 $result_mr = $client_mr->call('WSI2_RecherchePointRelais', $params, 'http://www.mondialrelay.fr/webservice/', 'http://www.mondialrelay.fr/webservice/WSI2_RecherchePointRelais');
-
 if ($client_mr->fault)
 {
 	echo 'a|<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
@@ -58,8 +58,11 @@ else
 	$err = $client_mr->getError();
 	if ($err)
 		echo '{"error" : "'.$err.'"}';
+	else if (($code = $result_mr['WSI2_RecherchePointRelaisResult']['STAT']) != 0)
+		echo '{"statError": {"code": "'.$code.'", "msg": "'.
+		(array_key_exists($code, $statCode)) ? $statCode[$code] : 'Unknown error'.'}}';
 	else
-	{
+	{		
 		$tr = "";
 		echo '{';
 		for ($i = 1; $i <= 10; $i++)
@@ -72,10 +75,11 @@ else
 			$numWSI2 = $result_mr['WSI2_RecherchePointRelaisResult']['PR'.$l]['Num'];
 		}
 		
-		$last_item = end($result_mr['WSI2_RecherchePointRelaisResult']);
-
 		echo '"base_dir" : "'.$relativ_base_dir.'", ';
 		echo '"addresses" : [';
+		$i = 0;
+		$total = count($result_mr['WSI2_RecherchePointRelaisResult'] );
+
 		foreach ($result_mr['WSI2_RecherchePointRelaisResult'] as $key => $val)
 		{
 			if ($key != 'STAT')
@@ -88,8 +92,9 @@ else
 					"city" : "'.addslashes($val['Ville']).'", 
 					"iso_country" : "'.addslashes($val['Pays']).'", 
 					"num" : "'.$val['Num'].'",
-					"checked" : '.($val['Num'] == $id_cart_address ? 1 : 0).'}'.($last_item == $val ? '' : ', ');
+					"checked" : '.($val['Num'] == $id_cart_address ? 1 : 0).'}'.(($i + 1) == $total ? '' : ', ');
 			}
+			++$i;
 		}
 		echo ']}';
 	}

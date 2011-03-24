@@ -30,7 +30,7 @@
 <script type="text/javascript">
 	var one_page_checkout = {$one_page_checkout};
 	var server_error = "{l s='Problem getting addresses from MondialRelay Webservice : Mondial Relay servers\' may be down' mod='mondialrelay'}";
-	var address_error = "{l s='There is no Relay Point close to your address' mod='mondialrelay'}";
+	var address_error = "{l s='There is no Relay Point close to your address, please change your address or use another shipping' mod='mondialrelay'}";
 </script>
 
 {foreach from=$carriersextra item=carrier name=myLoop}
@@ -49,7 +49,7 @@
 					<td class="carrier_action radio">
 						<input type="radio" name="id_carrier" value="{$carrier.id_carrier|intval}" id="id_carrier_mr{$carrier.id_carrier|intval}" onchange="affiche_mydiv_mr({$carrier.id_carrier|intval}, 
    'relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}'
-						);" {if ($carrier.id_carrier == $checked)} checked="checked" {/if} {if $one_page_checkout}onclick="updateCarrierSelectionAndGift();" {/if} />{$carrierextra}
+						);" {if ($carrier.id_carrier == $checked)} checked="checked" {/if} {if $one_page_checkout}onclick="updateCarrierSelectionAndGift();" {/if} />
 					</td>
 					<td class="carrier_name">
 						<label for="id_carrier_mr{$carrier.id_carrier|intval}">
@@ -89,3 +89,5 @@
 		affiche_mydiv_mr({$carrier.id_carrier|intval}, 'relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}');
 	</script>
 {/foreach}
+
+

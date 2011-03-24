@@ -323,6 +323,7 @@ class MondialRelay extends Module
 			}
 			elseif (!Configuration::get('PS_ORDER_PROCESS_TYPE'))
 			{
+				
 				if (empty($_POST['MR_Selected_Num_'.$cart->id_carrier])) // Case error : the customer didn't choose a 'relais' but selected Relais Colis TNT as a carrier 
 					Tools::redirect('order.php?step=2&mr_null');
 				else
@@ -439,7 +440,7 @@ class MondialRelay extends Module
 							'carriersextra' => $resultsArray));
 			$nbcarriers = $nbcarriers + $i;
 			return $this->display(__FILE__, 'mondialrelay.tpl');
-		}	
+		}
 	}
 	
 	public function getContent()
