@@ -80,8 +80,9 @@ class TaxRulesGroupCore extends ObjectModel
 	    AND `id_tax_rules_group` = '.(int)$id_tax_rules_group.'
 	    AND `id_state` IN (0, '.(int)$id_state.')
 	    AND `id_county` IN (0, '.(int)$id_county.')
-	    ORDER BY `id_state` DESC'
+	    ORDER BY `id_county` DESC, `id_state` DESC'
 	    );
+
 
 	    $taxes = array();
 	    foreach ($rows AS $row)
@@ -107,7 +108,7 @@ class TaxRulesGroupCore extends ObjectModel
 	            switch($row['state_behavior'])
 	            {
 	                case PS_STATE_TAX: // use only product tax
-                        $taxes = array(new Tax($row['id_tax']));
+                        $taxes[] = new Tax($row['id_tax']);
     	                break 2; // switch + foreach
 
     	            case PS_BOTH_TAX:
