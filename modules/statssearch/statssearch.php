@@ -102,7 +102,7 @@ class StatsSearch extends ModuleGraph
 
 		foreach ($result as $row)
 			$table .= '<tr>
-				<td>'.$row['Keywords'].'</td>
+				<td>'.$row['keywords'].'</td>
 				<td style="text-align: right">'.$row['occurences'].'</td>
 				<td style="text-align: right">'.$row['total'].'</td>
 			</tr>';
@@ -131,7 +131,7 @@ class StatsSearch extends ModuleGraph
 		{
 			if (!$row['occurences'])
 				continue;
-			$this->_legend[] = $row['Keywords'];
+			$this->_legend[] = $row['keywords'];
 			$this->_values[] = $row['occurences'];
 			$total2 += $row['occurences'];
 		}
