@@ -941,6 +941,7 @@ class AdminImport extends AdminTab
 	public function addressImport()
 	{
 		$this->receiveTab();
+		$defaultLanguageId = (int)Configuration::get('PS_LANG_DEFAULT');
 		$handle = $this->openCsvFile();
 		self::setLocale();
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
@@ -970,6 +971,7 @@ class AdminImport extends AdminTab
 					$country->id_zone = 0; // Default zone for country to create
 					$country->iso_code = strtoupper(substr($address->country, 0, 2)); // Default iso for country to create
 					$country->contains_states = 0; // Default value for country to create
+					$langFieldError = $country->validateFieldsLang(UNFRIENDLY_ERROR, true);
 					if (($fieldError = $country->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $country->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $country->add())
 						$address->id_country = (int)($country->id);
 					else
@@ -1009,12 +1011,17 @@ class AdminImport extends AdminTab
 			}
 
 			if(isset($address->customer_email) and !empty($address->customer_email))
-			{
-				$customer = Customer::customerExists($address->customer_email, true);
-				if ($customer)
-					$address->id_customer = (int)($customer);
+			{	
+				if( Validate::isEmail($address->customer_email))
+				{
+					$customer = Customer::customerExists($address->customer_email, true);
+					if ($customer)
+						$address->id_customer = (int)($customer);
+					else
+						$this->_errors[] = mysql_error().' '.$address->customer_email.' '.Tools::displayError('does not exist in base').' '.(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
+				}
 				else
-					$this->_errors[] = mysql_error().' '.$address->customer_email.' '.Tools::displayError('does not exist in base').' '.(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
+					$this->_errors[] = '"'.$address->customer_email.'" :' .Tools::displayError('Is not a valid Email');
 			}
 
 			if (isset($address->manufacturer) AND is_numeric($address->manufacturer) AND Manufacturer::manufacturerExists((int)($address->manufacturer)))
