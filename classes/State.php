@@ -130,21 +130,23 @@ class StateCore extends ObjectModel
 	*/
 	public function delete()
 	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
-	 		die(Tools::displayError());
-
-		if ($this->isUsed())
+		if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 
-		/* Database deletion */
-		$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
-		if (!$result)
-			return false;
+		if (!$this->isUsed())
+		{
+			/* Database deletion */
+			$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+			if (!$result)
+				return false;
 
-		/* Database deletion for multilingual fields related to the object */
-		if (method_exists($this, 'getTranslationsFieldsChild'))
-			Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
-		return $result;
+			/* Database deletion for multilingual fields related to the object */
+			if (method_exists($this, 'getTranslationsFieldsChild'))
+				Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+			return $result;
+		}
+		else
+			return false;
 	}
 
 	/**
