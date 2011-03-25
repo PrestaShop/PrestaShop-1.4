@@ -30,7 +30,8 @@ abstract class ImportModuleCore extends Module
 	
 	public function __destruct()
 	{
-		@mysql_close($this->_link);
+		if($this->_link)
+			@mysql_close($this->_link);
 	}
 	
 	protected function initDatabaseConnection()
