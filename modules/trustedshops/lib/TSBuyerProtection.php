@@ -890,7 +890,8 @@ class TSBuyerProtection extends AbsTrustedShops
 		
 		if ($bool_display_certificats)
 			$out .= $this->_displayFormCertificatesList();
-		if (isset($posts_return['edit_certificate']))
+			if (isset($posts_return['edit_certificate']) && $posts_return['edit_certificate'] &&
+			is_array($posts_return['edit_certificate']))
 		{
 			$out .= '<br />';
 			$out .= $this->_displayFormEditCertificate($posts_return['edit_certificate']);

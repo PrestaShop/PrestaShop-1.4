@@ -76,6 +76,7 @@ class TrustedShops extends Module
 		$this->description = $this->l('Boost consumer confidence and turn more shoppers into buyers.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete all your settings?');
 	}
+
 	public function install()
 	{
 		$return = true;
@@ -90,6 +91,7 @@ class TrustedShops extends Module
 		$this->updatePosition($id_hook, 0, 1);
 		return $return;
 	}
+
 	public function uninstall()
 	{
 		$return = true;
@@ -102,11 +104,12 @@ class TrustedShops extends Module
 		$return = ($return) ? parent::uninstall() : $return;
 		return $return;
 	}
+
 	public function getContent()
 	{
 		$out = '<h2>'.$this->displayName.'</h2>';
 		$tabs = array();
-		
+
 		foreach (self::$objects_list as $key=>$object)
 		{
 			$object->id_tab = $key;
@@ -129,6 +132,7 @@ class TrustedShops extends Module
 		$this->checkObjectsErrorsOrConfirmations();
 		return ( !empty($this->errors) ? $this->displayErrors() : $this->displayConfirmations() ).$out;
 	}
+
 	private function displayCSSJSTab()
 	{
 		$id_tab = isset($_GET['id_tab']) ? (int)$_GET['id_tab'] : 0;
@@ -189,22 +193,27 @@ class TrustedShops extends Module
 				$html .= $this->displayError($error);
 		return $html;
 	}
+
 	public function hookOrderConfirmation($params)
 	{
 		return $this->dynamicHook($params, __FUNCTION__);
 	}
+
 	public function hookNewOrder($params)
 	{
 		return $this->dynamicHook($params, __FUNCTION__);
 	}
+
 	public function hookRightColumn($params)
 	{
 		return $this->dynamicHook($params, __FUNCTION__);
 	}
+
 	public function hookPaymentTop($params)
 	{
 		return $this->dynamicHook($params, __FUNCTION__);
 	}
+
 	private function dynamicHook($params, $hook_name)
 	{
 		if(!$this->active)
