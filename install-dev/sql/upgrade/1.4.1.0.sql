@@ -29,3 +29,6 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook`, `position`) VALUES
 
 ALTER TABLE `PREFIX_webservice_account` ADD `is_module` TINYINT( 2 ) NOT NULL DEFAULT '0' AFTER `class_name` ,
 ADD `module_name` VARCHAR( 50 ) NULL DEFAULT NULL AFTER `is_module`;
+
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
+('PS_IMG_UPDATE_TIME', UNIX_TIMESTAMP(), NOW(), NOW());

@@ -429,6 +429,7 @@ class FrontControllerCore
 		/* Hooks are volontary out the initialize array (need those variables already assigned) */
 		self::$smarty->assign(array(
 			'time' => time(),
+			'img_update_time' => Configuration::get('PS_IMG_UPDATE_TIME'),
 			'static_token' => Tools::getToken(false),
 			'token' => Tools::getToken(),
 			'logo_image_width' => Configuration::get('SHOP_LOGO_WIDTH'),
