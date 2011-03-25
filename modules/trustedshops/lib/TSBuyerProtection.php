@@ -151,7 +151,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			'OTHER'				=> $this->l('Other method of payment'),
 		);
 		$this->tab_name = $this->l('Seal of Approval and Buyer Protection');
-		$this->site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+		$this->site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		TSBPException::setTranslationObject($this);
 		if (!method_exists('Tools', 'jsonDecode') || !method_exists('Tools', 'jsonEncode'))
 		{
@@ -179,13 +179,16 @@ class TSBuyerProtection extends AbsTrustedShops
 	
 	public function install()
 	{
+		if (!method_exists('Tools', 'jsonDecode') || !method_exists('Tools', 'jsonEncode'))
+			return false;
+
 		foreach ($this->available_languages as $iso=>$lang)
 			Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($iso), Tools::jsonEncode(array('stateEnum'=>'', 'typeEnum'=>'', 'url'=>'', 'tsID'=>'', 'user'=>'', 'password'=>'')));
 		
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'SHOPSW', '');
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ET_CID', '');
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ET_LID', '');
-		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ENV_API', TSBuyerProtection::ENV_TEST);
+		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ENV_API', TSBuyerProtection::ENV_PROD);
 		$req = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` (
 			`id_item` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 			`id_product` INT NOT NULL,
@@ -836,6 +839,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	
 	/**
 	 * Change the environment for working.
+	 * Not use anymore but keeped
 	 * @return true
 	 */
 	private function _submitEnvironment()
@@ -843,6 +847,15 @@ class TSBuyerProtection extends AbsTrustedShops
 		TSBuyerProtection::$ENV_API = Tools::getValue('env_api');
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ENV_API', TSBuyerProtection::$ENV_API);
 		return true;
+	}
+
+	/*
+	 ** Update the env_api
+	 */
+	public function _setEnvApi($env_api)
+	{
+		TSBuyerProtection::$ENV_API = $env_api;
+		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ENV_API', TSBuyerProtection::$ENV_API);
 	}
 	
 	/**
@@ -853,10 +866,8 @@ class TSBuyerProtection extends AbsTrustedShops
 	private function _preProcess()
 	{
 		$posts_return = array();
-		if (Tools::isSubmit('submit_environment'))
-			$posts_return['environment'] = $this->_submitEnvironment();
-		if (Tools::isSubmit('submit_registration_link'))
-			$posts_return['registration_link'] = $this->_submitRegistrationLink();
+		/*if (Tools::isSubmit('submit_registration_link'))
+			$posts_return['registration_link'] = $this->_submitRegistrationLink();*/
 		if (Tools::isSubmit('submit_add_certificate'))
 			$posts_return['add_certificate'] = $this->_submitAddCertificate();
 		if (Tools::isSubmit('submit_edit_certificate'))
@@ -881,16 +892,16 @@ class TSBuyerProtection extends AbsTrustedShops
 			$out .= '';
 		}
 		$out .= $this->_displayPresentation();
-		$out .= $this->_displayFormEnvironment();
 		$out .= '<br />';
-		$out .= $this->_displayFormRegistrationLink(( isset($posts_return['registration_link']) ? $posts_return['registration_link'] : false ));
+		//$out .= $this->_displayFormRegistrationLink(( isset($posts_return['registration_link']) ? $posts_return['registration_link'] : false ));
 		$out .= '<br />';
 		$out .= $this->_displayFormAddCertificate();
 		$out .= '<br />';
 		
 		$bool_display_certificats = false;
-		foreach (self::$CERTIFICATE as $certif)
-			$bool_display_certificats = (isset($certif['tsID']) && $certif['tsID'] != '')? true : $bool_display_certificats;
+		if (is_array(self::$CERTIFICATE))
+			foreach (self::$CERTIFICATE as $certif)
+				$bool_display_certificats = (isset($certif['tsID']) && $certif['tsID'] != '')? true : $bool_display_certificats;
 		
 		if ($bool_display_certificats)
 			$out .= $this->_displayFormCertificatesList();
@@ -914,30 +925,11 @@ class TSBuyerProtection extends AbsTrustedShops
 		<h3>'.$this->l('Less abandoned purchases').'</h3>
 		<p>'.$this->l('Give your online customers a strong reason to buy proposing the Trusted Shops Buyer Protection. This additional security leads to less shopping basket abandonment').'</p>
 		<h3>'.$this->l('Profitable and long-term customer relationship').'</h3>
-		<p>'.$this->l('For many online shoppers, the Trusted Shops Seal of Approval with Buyer Protection is an effective sign of quality for safe shopping on the internet. One-time buyers become regular customers.').'</p><br />';
+		<p>'.$this->l('For many online shoppers, the Trusted Shops Seal of Approval with Buyer Protection is an effective sign of quality for safe shopping on the internet. One-time buyers become regular customers.').'</p><br />
+		<h3>'.$this->l('Environment type').'</h3>
+		<p>'.$this->l('You are currently using the mode :').' <b>'.TSBuyerProtection::$ENV_API.'</b></p><br />';
 	}
-	private function _displayFormEnvironment()
-	{
-		$out = '
-		<form action="'.$this->_makeFormAction($_SERVER['REQUEST_URI'], $this->id_tab).'" method="post">
-			<fieldset>
-				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Set your environment to use for TrustedShops Buyer Protection API.').'</legend>
-				<label>'.$this->l('Testing environment').'</label>
-				<div class="margin-form">
-					<input type="radio" name="env_api" value="'.TSBuyerProtection::ENV_TEST.'"'.(TSBuyerProtection::$ENV_API === TSBuyerProtection::ENV_TEST ? ' checked="checked"' : '').' />
-				</div>
-				<label>'.$this->l('Producing Environment').'</label>
-				<div class="margin-form">
-					<input type="radio" name="env_api" value="'.TSBuyerProtection::ENV_PROD.'"'.(TSBuyerProtection::$ENV_API === TSBuyerProtection::ENV_PROD ? ' checked="checked"' : '').' />
-				</div>
-				<div style="text-align:center;">
-				<input type="submit" name="submit_environment" class="button" value="'.$this->l('send').'"/>
-				</div>
-			</fieldset>
-		</form>
-		';
-		return $out;
-	}
+
 	private function _displayFormRegistrationLink($link = false)
 	{
 		$out = '
