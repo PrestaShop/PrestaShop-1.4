@@ -143,7 +143,10 @@ class AdminStockMvt extends AdminTab
 		
 		if (!isset($_GET['addstock_mvt_reason']) OR (Tools::isSubmit('submitAddstock_mvt_reason') AND Tools::getValue('id_stock_mvt_reason')))
 		{
-			$old_post = $_POST;
+			if (isset($_POST))
+			{
+				$old_post = $_POST;
+			}
 			echo '<h2>'.$this->l('Stock movement history').'</h2>';
 			parent::display();
 			if (!isset($_GET['view'.$this->table]))
