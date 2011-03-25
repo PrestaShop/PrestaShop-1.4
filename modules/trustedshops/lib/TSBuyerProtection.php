@@ -802,15 +802,16 @@ class TSBuyerProtection extends AbsTrustedShops
 		$user = Tools::getValue('user');
 		$password = Tools::getValue('password');
 		$all_payment_type = Tools::getValue('choosen_payment_type');
-		TSBuyerProtection::$CERTIFICATE[$iso_lang]['payment_type'] = array();
-		if ($all_payment_type)
-		{
-			if (is_array($all_payment_type))
-				foreach ($all_payment_type as $key=>$module_id)
-					TSBuyerProtection::$CERTIFICATE[$iso_lang]['payment_type'][(string)$key] = $module_id;
-		}
 		if($user != '' AND $password != '')
 		{
+			TSBuyerProtection::$CERTIFICATE[$iso_lang]['payment_type'] = array();
+			if ($all_payment_type)
+			{
+				if (is_array($all_payment_type))
+					foreach ($all_payment_type as $key=>$module_id)
+						TSBuyerProtection::$CERTIFICATE[$iso_lang]['payment_type'][(string)$key] = $module_id;
+			}
+		
 			$check_login = false;
 			try {
 				$check_login = $this->_checkLogin(TSBuyerProtection::$CERTIFICATE[$iso_lang]['tsID'], $user, $password);
@@ -826,7 +827,10 @@ class TSBuyerProtection extends AbsTrustedShops
 				
 			}
 		}
-				
+		else
+		{
+			$this->errors[] = $this->l('You have to set a username and a password before any change.');
+		}
 		return true;
 	}
 	
@@ -1121,22 +1125,23 @@ class TSBuyerProtection extends AbsTrustedShops
 				<div class="margin-form"><input type="text" name="user" value="'.$certificate['user'].'" style="width:300px;"/></div>
 				<label>'.$this->l('Password').' <sup>*</sup></label>
 				<div class="margin-form"><input type="text" name="password" value="'.$certificate['password'].'" style="width:300px;"/></div>
-				<label>'.$this->l('Payment type to edit').' <sup>*</sup></label>
-				<div class="margin-form">
-					<select name="payment_type">';
+				<div id="payment-type">
+					<label>'.$this->l('Payment type to edit').' <sup>*</sup></label>
+					<div class="margin-form">
+						<select name="payment_type">';
 		foreach (TSBuyerProtection::$payments_type as $type=>$translation)
 			$out .= '	<option value="'.$type.'" >'.$translation.'</option>';
-		$out .= '	</select>&nbsp;'
+		$out .= '		</select>&nbsp;'
 					.$this->l('with')
-					.'&nbsp;
-					<select name="payment_module">';
+						.'&nbsp;
+						<select name="payment_module">';
 		foreach ($payment_module_collection as $module_info)
-			$out .= '	<option value="'.$module_info['id_module'].'" >'.$module_info['name'].'</option>';
-		$out .= '	</select>&nbsp;'
+			$out .= '		<option value="'.$module_info['id_module'].'" >'.$module_info['name'].'</option>';
+		$out .= '		</select>&nbsp;'
 					.$this->l('payment module')
-				.'&nbsp;<input type="button" value="'.$this->l('Add it').'" class="button" name="add_payment_module" />
-				</div>
-				<div id="payment_type_list">';
+					.'&nbsp;<input type="button" value="'.$this->l('Add it').'" class="button" name="add_payment_module" />
+					</div><!-- .margin-form -->
+					<div id="payment_type_list">';
 		$input_output = '';
 		if (isset($certificate['payment_type']) AND !empty($certificate['payment_type']))
 		{
@@ -1149,14 +1154,15 @@ class TSBuyerProtection extends AbsTrustedShops
 					$out .= '<b class="payment-module-label" id="label-module-'.$module_id.'"></b>';
 					$input_output .= '<input type="hidden" value="'.$module_id.'" class="choosen_payment_type" name="choosen_payment_type['.$payment_type.'][]">';
 				}
-			$out .= '	</div>';
+			$out .= '	</div><!-- .margin-form -->';
 			}
 		}
-		$out .= '</div>
-				<p id="input-hidden-val" style="display:none;">'.$input_output.'</p>
-				<p style="text-align:center;">
-					<input type="submit" name="submit_change_certificate" class="button" value="'.$this->l('Update it').'"/>
-				</p>
+		$out .= '</div><!-- #payment_type_list -->
+			</div><!-- #payment-type -->
+			<p id="input-hidden-val" style="display:none;">'.$input_output.'</p>
+			<p style="text-align:center;">
+				<input type="submit" name="submit_change_certificate" class="button" value="'.$this->l('Update it').'"/>
+			</p>
 			</fieldset>
 		</form>';
 		return $out;
