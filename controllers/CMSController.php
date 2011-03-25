@@ -35,7 +35,7 @@ class CmsControllerCore extends FrontController
 	{
 		if ($id_cms = (int)Tools::getValue('id_cms'))
 		    $this->cms = new CMS($id_cms, self::$cookie->id_lang); 
-		if ($id_cms_category = (int)Tools::getValue('id_cms_category'))
+		elseif ($id_cms_category = (int)Tools::getValue('id_cms_category'))
 		    $this->cms_category = new CMSCategory($id_cms_category, self::$cookie->id_lang); 
 			
 		// Automatically redirect to the canonical URL if the current in is the right one
@@ -78,7 +78,6 @@ class CmsControllerCore extends FrontController
     		        self::$link->getCMSCategoryLink($id_cms_category, $infos['link_rewrite'], $infos['id_lang']);
     			$default_rewrite[$infos['id_lang']] = $arr_link;
     		}
-		
 		    self::$smarty->assign('lang_rewrite_urls', $default_rewrite);
 		}
 	}
