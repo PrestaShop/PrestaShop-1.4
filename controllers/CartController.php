@@ -191,14 +191,14 @@ class CartControllerCore extends FrontController
 						}
 						elseif ($delete)
 						{
-							self::$cart->deleteProduct((int)($idProduct), (int)($idProductAttribute), (int)($customizationId));
-							if (!Cart::getNbProducts((int)(self::$cart->id)))
-							{
-								self::$cart->id_carrier = 0;
-								self::$cart->gift = 0;
-								self::$cart->gift_message = '';
-								self::$cart->update();
-							}
+							if (self::$cart->deleteProduct((int)($idProduct), (int)($idProductAttribute), (int)($customizationId)))
+								if (!Cart::getNbProducts((int)(self::$cart->id)))
+								{
+									self::$cart->id_carrier = 0;
+									self::$cart->gift = 0;
+									self::$cart->gift_message = '';
+									self::$cart->update();
+								}
 						}
 					}
 					$discounts = self::$cart->getDiscounts();

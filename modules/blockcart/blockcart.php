@@ -177,7 +177,8 @@ class BlockCart extends Module
 		
 		global $smarty;
 		$this->smartyAssigns($smarty, $params);
-		return $this->display(__FILE__, 'blockcart-json.tpl');
+		$res = $this->display(__FILE__, 'blockcart-json.tpl');
+		return $res;
 	}
 	
 	public function hookHeader()

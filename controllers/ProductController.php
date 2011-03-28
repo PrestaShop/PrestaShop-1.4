@@ -376,7 +376,8 @@ class ProductControllerCore extends FrontController
 				$fileName = md5(uniqid(rand(), true));
 				if ($error = checkImage($file, (int)(Configuration::get('PS_PRODUCT_PICTURE_MAX_SIZE'))))
 					$this->errors[] = $error;
-				if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
+
+				if ($error OR (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName)))
 					return false;
 				/* Original file */
 				elseif (!imageResize($tmpName, _PS_UPLOAD_DIR_.$fileName))

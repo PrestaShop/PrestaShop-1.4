@@ -186,7 +186,7 @@ var ajaxCart = {
 			cache: false,
 			dataType : "json",
 			data: 'add=1&ajax=true&qty=' + ((quantity && quantity != null) ? quantity : '1') + '&id_product=' + idProduct + '&token=' + static_token + ( (parseInt(idCombination) && idCombination != null) ? '&ipa=' + parseInt(idCombination): ''),
-			success: function(jsonData)
+			success: function(jsonData,textStatus,jqXHR)
 			{
 				// add appliance to whishlist module
 				if (whishlist && !jsonData.errors)

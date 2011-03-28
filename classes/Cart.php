@@ -719,38 +719,42 @@ class CartCore extends ObjectModel
 	}
 
 	/**
-	 * Delete a customization from the cart
+	 * Delete a customization from the cart. If customization is a Picture (type=2), 
+	 * then the image is also deleted
 	 *
 	 * @param integer $id_customization
 	 * @return boolean result
 	 */
 	protected	function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
 	{
+		$result = true;
 		$customization = Db::getInstance()->getRow('SELECT *
 			FROM `'._DB_PREFIX_.'customization` 
 			WHERE `id_customization` = '.(int)($id_customization));
 
-		if ($customization)
+		if ($customization and sizeof($customization))
 		{
 			$custData = Db::getInstance()->getRow('SELECT *
 				FROM `'._DB_PREFIX_.'customized_data`
 				WHERE `id_customization` = '.(int)($id_customization));
 			
-			if ($this->deletePictureToProduct($id_product,$custData['value']))
-				$result = Db::getInstance()->execute('DELETE
-					FROM `'._DB_PREFIX_.'customized_data`
-					WHERE `id_customization` = '.(int)($id_customization));
-			else
-				return false;
+			if (isset($custData['type']) and $custData['type'] == 0)
+				$result &= $this->deletePictureToProduct($id_product,$custData['value']);
 
-			$result &= Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product`
-				SET `quantity` = `quantity` - '.(int)($customization['quantity']).'
-				WHERE `id_cart` = '.(int)($this->id).' 
-				AND `id_product` = '.(int)($id_product).((int)($id_product_attribute) ? ' 
-				AND `id_product_attribute` = '.(int)($id_product_attribute) : ''));
+			$result &= Db::getInstance()->execute('DELETE
+				FROM `'._DB_PREFIX_.'customized_data`
+				WHERE `id_customization` = '.(int)($id_customization));
+
+			if($result)
+				$result &= Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product`
+					SET `quantity` = `quantity` - '.(int)($customization['quantity']).'
+					WHERE `id_cart` = '.(int)($this->id).' 
+					AND `id_product` = '.(int)($id_product).((int)($id_product_attribute) ? ' 
+					AND `id_product_attribute` = '.(int)($id_product_attribute) : ''));
 
 			if (!$result)
 				return false;
+
 			return Db::getInstance()->Execute('DELETE 
 				FROM `'._DB_PREFIX_.'customization` 
 				WHERE `id_customization` = '.(int)($id_customization));

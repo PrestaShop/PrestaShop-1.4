@@ -52,11 +52,11 @@
 {* This empty line was made in purpose (product addition debug), please leave it here *}
 
 			"customizationId":	{$id_customization},
-			"quantity":			{$customization.quantity},
+			"quantity":			"{$customization.quantity}",
 			"datas": [
 				{foreach from=$customization.datas key='type' item='datas' name='customization'}
 				{ldelim}
-					"type":	{$type},
+					"type":	"{$type}",
 					"datas":
 					[
 					{foreach from=$datas key='index' item='data' name='datas'}
