@@ -259,7 +259,7 @@ class AdminProducts extends AdminTab
 						if (!sizeof($this->_errors))
 						{
 							$attachment->add();
-							Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue($this->identifier)).'&addproduct&conf=4&tabs=6&token='.($token ? $token : $this->token));
+							Tools::redirectAdmin($currentIndex.'&id_product='.(int)(Tools::getValue($this->identifier)).'&id_category='.(int)(Tools::getValue('id_category')).'&addproduct&conf=4&tabs=6&token='.($token ? $token : $this->token));
 						}
 						else
 							$this->_errors[] = Tools::displayError('Invalid file');
