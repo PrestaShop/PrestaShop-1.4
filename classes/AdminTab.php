@@ -1094,7 +1094,7 @@ abstract class AdminTabCore
 			LIMIT '.(int)($start).','.(int)($limit);
 
 		$this->_list = Db::getInstance()->ExecuteS($sql);
-		$this->_listTotal = Db::getInstance()->getValue('SELECT COUNT(*),
+		$this->_listTotal = count(Db::getInstance()->ExecuteS('SELECT 
 			'.($this->_tmpTableFilter ? ' * FROM (SELECT ' : '').'
 			'.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
 			FROM `'._DB_PREFIX_.$sqlTable.'` a
@@ -1104,7 +1104,9 @@ abstract class AdminTabCore
 			'.(isset($this->_group) ? $this->_group.' ' : '').'
 			'.((isset($this->_filterHaving) || isset($this->_having)) ? 'HAVING ' : '').(isset($this->_filterHaving) ? ltrim($this->_filterHaving, ' AND ') : '').(isset($this->_having) ? $this->_having.' ' : '').'
 			ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
-			($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : ''));
+			($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '')));
+			
+			
 	}
 
 	/**
