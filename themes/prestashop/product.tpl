@@ -455,6 +455,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 									<a class="exclusive button ajax_add_to_cart_button" href="{$link->getPageLink('cart.php')}?qty=1&amp;id_product={$accessory.id_product|intval}&amp;token={$static_token}&amp;add" rel="ajax_id_product_{$accessory.id_product|intval}" title="{l s='Add to cart'}">{l s='Add to cart'}</a>
 								{else}
 									<span class="exclusive">{l s='Add to cart'}</span>
+									<span class="availability">{if (isset($accessory.quantity_all_versions) && $accessory.quantity_all_versions > 0)}{l s='Product available with different options'}{else}{l s='Out of stock'}{/if}</span>
 								{/if}
 							</p>
 						</li>
