@@ -268,7 +268,7 @@ class FrontControllerCore
 
 		//live edit
 		if (Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))
-			if (!is_dir($_SERVER['DOCUMENT_ROOT'].__PS_BASE_URI__.$ad))
+			if (!is_dir(_PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$ad))
 				die(Tools::displayError());
 		
 		self::$cookie = $cookie;
