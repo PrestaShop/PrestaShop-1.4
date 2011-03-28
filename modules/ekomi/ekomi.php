@@ -53,6 +53,7 @@ class Ekomi extends Module
 		if (Tools::isSubmit('submitEkomi'))
 		{
 			$email = Tools::getValue('ekomi_email');
+			Configuration::updateValue('PS_EKOMI_DISPLAY', Tools::getValue('ekomi_display'));
 			Configuration::updateValue('PS_EKOMI_SCRIPT', htmlentities(str_replace(array("\r\n", "\n"), '', Tools::getValue('ekomi_script'))));
 			if (!empty($email) && !Validate::isEmail($email))
 				Configuration::updateValue('PS_EKOMI_EMAIL', '');
@@ -72,10 +73,18 @@ class Ekomi extends Module
 				<label>'.$this->l('eKomi configuration').'</label>
 				<div class="margin-form">
 					<br class="clear"/>
+					<label for="ekomi_email">'.$this->l('eKomi e-mail').'&nbsp;&nbsp;</label><input id="ekomi_email" type="text" name="ekomi_email" value="'.Configuration::get('PS_EKOMI_EMAIL').'" />
+					<br class="clear"/><br />
 					<label for="ekomi_script">'.$this->l('eKomi script').'&nbsp;&nbsp;</label><textarea id="ekomi_script" name="ekomi_script">'.stripslashes(html_entity_decode(Configuration::get('PS_EKOMI_SCRIPT'))).'</textarea>
 					<br class="clear"/><br />
-					<label for="ekomi_email">'.$this->l('eKomi e-mail').'&nbsp;&nbsp;</label><input id="ekomi_email" type="text" name="ekomi_email" value="'.Configuration::get('PS_EKOMI_EMAIL').'" />
-					<br class="clear"/>
+					<label>Display block</label>
+					<div class="margin-form">
+						<input type="radio" name="ekomi_display" id="ekomi_display_on" value="1" />
+						<label class="t" for="ekomi_display_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
+						<input type="radio" name="ekomi_display" id="ekomi_display_off" value="0" checked="checked" />
+						<label class="t" for="ekomi_display_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
+						<p class="clear">'.$this->l('Show or don\'t show the block (orders will be sent to eKomi either you choose to hide or display the block).').'</p>
+					</div>
 					<p class="clear">'.$this->l('Please, fill the form with the datas that eKomi gives you.').'</p>
 				</div>
 				<center><input type="submit" name="submitEkomi" value="'.$this->l('Save').'" class="button" /></center>
@@ -86,6 +95,8 @@ class Ekomi extends Module
 	public function hookRightColumn($params)
 	{
 		if (!Configuration::get('PS_EKOMI_SCRIPT'))
+			return ;
+		if (!Configuration::get('PS_EKOMI_DISPLAY'))
 			return ;
 		return stripslashes(html_entity_decode(Configuration::get('PS_EKOMI_SCRIPT'))).'<br clear="left" /><br />';
 	}
