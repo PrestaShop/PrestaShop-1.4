@@ -759,7 +759,7 @@ class AdminTranslations extends AdminTab
 				}
 			}
 			else
-				echo '<br /><br /><p class="error">'.$this->l('Cannot connect to prestashop.com to get languages list.').'</p>';
+				echo '<br /><br /><p class="error">'.$this->l('Cannot connect to prestashop.com to get languages list.').'</p></div>';
 			echo '	</div>
 			</fieldset>
 			</form><br />';
