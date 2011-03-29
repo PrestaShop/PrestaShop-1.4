@@ -82,7 +82,7 @@ class ValidateCore
 	*/
 	static public function isMd5($md5)
 	{
-		return preg_match('/^[a-z0-9]{32}$/ui', $md5);
+		return preg_match('/^[a-f0-9]{32}$/ui', $md5);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class ValidateCore
 	*/
 	static public function isSha1($sha1)
 	{
-		return preg_match('/^[a-z0-9]{40}$/ui', $sha1);
+		return preg_match('/^[a-f0-9]{40}$/ui', $sha1);
 	}
 
 	/**
