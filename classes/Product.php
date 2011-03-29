@@ -2611,8 +2611,8 @@ class ProductCore extends ObjectModel
 		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute'])
 			AND ((isset($row['cache_default_attribute']) AND ($ipa_default = $row['cache_default_attribute']) !== NULL)
 				OR ($ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp'])))
-		)
-			$row['id_product_attribute'] = $ipa_default;
+		){
+			$row['id_product_attribute'] = $ipa_default; echo "ALLALA".$ipa_default;}
 		if (!isset($row['id_product_attribute']))
 			$row['id_product_attribute'] = 0;
 
@@ -2641,8 +2641,10 @@ class ProductCore extends ObjectModel
         $row['specific_prices'] = $specific_prices;
 		$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		if ($row['id_product_attribute'])
+		{
 			$row['quantity_all_versions'] = $row['quantity'];
 			$row['quantity'] = Product::getQuantity((int)$row['id_product'], $row['id_product_attribute'], isset($row['cache_is_pack']) ? $row['cache_is_pack'] : NULL);
+		}
 		$row['id_image'] = Product::defineProductImage($row, $id_lang);
 		$row['features'] = Product::getFrontFeaturesStatic((int)$id_lang, $row['id_product']);
 		$row['attachments'] = ((!isset($row['cache_has_attachments']) OR $row['cache_has_attachments']) ? Product::getAttachmentsStatic((int)($id_lang), $row['id_product']) : array());
