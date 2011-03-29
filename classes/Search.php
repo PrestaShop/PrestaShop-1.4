@@ -261,7 +261,12 @@ class SearchCore
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)$id_lang.')
 		WHERE p.`id_product` '.$productPool);
 		
-		return array('total' => $total,'result' => Product::getProductsProperties($id_lang, $result));
+		if (!$result)
+			$resultProperties = false;
+		else
+			$resultProperties = Product::getProductsProperties($id_lang, $result);
+			
+		return array('total' => $total,'result' => $resultProperties);
 	}
 
 	public static function getTags($db, $id_product, $id_lang)
