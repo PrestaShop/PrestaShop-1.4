@@ -52,6 +52,14 @@ div.store-small {
 	display: none;
 }
 
+#store_hours {
+	font-weight: bold;
+	text-decoration: underline;
+	width: 80px; 
+	height: 15px;
+	display: block;
+}
+
 #addressInput {
 	width: 350px;
 }

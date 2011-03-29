@@ -41,7 +41,7 @@
 				{if $store.address2}{$store.address2|escape:'htmlall':'UTF-8'}{/if}<br />
 				{$store.postcode} {$store.city|escape:'htmlall':'UTF-8'}{if $store.state}, {$store.state}{/if}<br />
 				{$store.country|escape:'htmlall':'UTF-8'}<br />
-				{if $store.phone}Phone: {$store.phone}{/if}
+				{if $store.phone}{l s='Phone:' js=0} {$store.phone}{/if}
 			</p>
 		</div>
 	{/foreach}
