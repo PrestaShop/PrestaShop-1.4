@@ -91,7 +91,7 @@ class StoresControllerCore extends FrontController
 
 				$days[1] = 'Monday';
 				$days[2] = 'Tuesday';
-				$days[3] = 'Wenesday';
+				$days[3] = 'Wednesday';
 				$days[4] = 'Thursday';
 				$days[5] = 'Friday';
 				$days[6] = 'Saturday';
@@ -99,6 +99,7 @@ class StoresControllerCore extends FrontController
 				
 				foreach ($stores AS $store)
 				{
+					$days_datas = array();
 					$node = $dom->createElement('marker');
 					$newnode = $parnode->appendChild($node);
 					$newnode->setAttribute('name', $store['name']);
@@ -107,12 +108,16 @@ class StoresControllerCore extends FrontController
 					if (!empty($store['hours']))
 					{
 						$hours = unserialize($store['hours']);
-						$other .= '<br /><br /><span style="font-weight: bold; text-decoration: underline; width: 80px; height: 15px; display: block;">Hours:</span>
-						<table style="font-size: 9px;">';
+
 						for ($i = 1; $i < 8; $i++)
-							$other .= '<tr><td style="width: 70px;">'.$days[$i].'</td><td>'.$hours[(int)($i) - 1].'</td></tr>';
-						$other .= '
-						</table>';
+						{
+							$hours_datas = array();
+							$hours_datas['day'] = $days[$i];
+							$hours_datas['hours'] = $hours[(int)($i) - 1];
+							$days_datas[] = $hours_datas;
+						}
+						$smarty->assign('days_datas', $days_datas);
+						$other .= self::$smarty->fetch(_PS_THEME_DIR_.'store_infos.tpl');
 					}
 					
 					$newnode->setAttribute('addressNoHtml', strip_tags(str_replace('<br />', ' ', $address)));
