@@ -2611,8 +2611,8 @@ class ProductCore extends ObjectModel
 		if ((!isset($row['id_product_attribute']) OR !$row['id_product_attribute'])
 			AND ((isset($row['cache_default_attribute']) AND ($ipa_default = $row['cache_default_attribute']) !== NULL)
 				OR ($ipa_default = Product::getDefaultAttribute($row['id_product'], !$row['allow_oosp'])))
-		){
-			$row['id_product_attribute'] = $ipa_default; echo "ALLALA".$ipa_default;}
+		)
+			$row['id_product_attribute'] = $ipa_default;
 		if (!isset($row['id_product_attribute']))
 			$row['id_product_attribute'] = 0;
 
