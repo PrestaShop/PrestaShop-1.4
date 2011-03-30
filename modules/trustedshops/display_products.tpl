@@ -72,14 +72,14 @@ var TS = (function()
 <div class="payment_module" style="margin: 3px; width: 537px; border: 1px solid #595A5E; padding: 0.6em; margin-bottom: 30px;">
 	<h3>{l s='Trusted Shops Buyer Protection (recommended)' mod='trustedshops'}</h3>
 	<div style="float:left; width:100px;">
-		<img src="{$module_dir}/img/seal.png" />
+		<img style="margin-left:10px" alt="logo" src="{$module_dir}img/siegel.gif" />
 	</div>
 	<div id="ts-list-items" style="float:left;line-height:70px;">
 	{foreach from=$buyer_protection_items item=product}
-		<input id="ts-product-{$product.id_product}" type="checkbox" value="{$product.id_product}" name="item_product"> {l s='Buyer protection from' mod='trustedshops'} {$product.protected_amount_decimal} {l s='during' mod='trustedshops'} {$product.protection_duration_int} {l s='days' mod='trustedshops'} ({$product.net_fee} {$tax_label})<br />
+		<input id="ts-product-{$product.id_product}" type="checkbox" value="{$product.id_product}" name="item_product"> {l s='Buyer protection from' mod='trustedshops'} {$product.protected_amount_decimal} {l s='during' mod='trustedshops'} {$product.protection_duration_int} {l s='days' mod='trustedshops'} ({l s='gross fee:' mod='trustedshops'} {$product.gross_fee|round:2}, {l s='net fee:' mod='trustedshops'} {$product.net_fee|round:2})<br />
 	{/foreach}
 	</div>
 	<div class="clear"/></div>
-	<p>{l s='The Trusted Shops Buyer Protection secures your online purchase. I agree to my email address being transferred and saved for the purposes of Buyer Protection processing by Trusted Shops. Conditions for Buyer Protection.' mod='trustedshops'}</p>
+	<p>{l s='The Trusted Shops Buyer Protection secures your online purchase. I agree to my email address being transferred and' mod='trustedshops'} <b>{l s='saved' mod='trustedshops'}</b> {l s='for the purposes of Buyer Protection processing by Trusted Shops.' mod='trustedshops'} <b>{l s='Conditions' mod='trustedshops'}</b> {l s='for Buyer Protection.' mod='trustedshops'}</p>
 </div>
 

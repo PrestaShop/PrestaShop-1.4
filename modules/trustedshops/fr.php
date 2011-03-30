@@ -6,7 +6,10 @@ $_MODULE['<{trustedshops}prestashop>display_products_02ecb4a4709d9bcc590f1a25fc8
 $_MODULE['<{trustedshops}prestashop>display_products_b55aab8932a39ca85bb0a1b6eb83f83f'] = 'Protection acheteur jusqu\'à';
 $_MODULE['<{trustedshops}prestashop>display_products_bc500dd033a84b00ffd9f81a8a9d5372'] = 'pendant';
 $_MODULE['<{trustedshops}prestashop>display_products_44fdec47036f482b68b748f9d786801b'] = 'jours';
-$_MODULE['<{trustedshops}prestashop>display_products_ee430460ed8c2e7099df4947287e65c6'] = 'La protection acheteur Trusted Shops sécurise votre achat en ligne. J’accepte le transfert et la sauvegarde de mon adresse email pour le traitement de la protection acheteur par Trusted Shops. Conditions pour la protection acheteur.';
+$_MODULE['<{trustedshops}prestashop>display_products_b3c25d2f94cf87ece3dbb2907318520c'] = 'La protection acheteur Trusted Shops sécurise votre achat en ligne. J’accepte le transfert et la';
+$_MODULE['<{trustedshops}prestashop>display_products_536a056b710e94b16169efd17a4a657b'] = 'sauvegarde';
+$_MODULE['<{trustedshops}prestashop>display_products_2dc4be4d5564180e6df95d5a5a679195'] = 'de mon adresse email pour le traitement de la protection acheteur par Trusted Shops.';
+$_MODULE['<{trustedshops}prestashop>display_products_4ccaceceffe4b5e58f6a7a7ed3ced4c4'] = 'pour la protection acheteur.';
 $_MODULE['<{trustedshops}prestashop>order-confirmation-tsbp-classic_7b5406da2d5f15923d6b01d3264c5619'] = 'Sceau Trusted Shops - Cliquez pour le verifier.';
 $_MODULE['<{trustedshops}prestashop>order-confirmation-tsbp-classic_4052048c767f22e9071c3e6f404d00c6'] = 'En tant que membre Trusted Shops, nous vous offrons un service complémentaire exceptionnel: la garantie de remboursement Trusted Shops. Les frais relatifs à cette garantie sont entièrement à notre charge, alors n\'hésitez pas, il vous suffit de vous inscrire.';
 $_MODULE['<{trustedshops}prestashop>order-confirmation-tsbp-classic_f975f42362625cf21e592009ff4b3d7b'] = 'Enregistrez-vous pour la garantie de remboursement Trusted Shops';
@@ -172,3 +175,5 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_afe906fe9448ed1b480b3eec3
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_273769f3a3d91979bfdb5ca4909c517a'] = 'Créer un compte Trusted Shops';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Etes-vous satisfait de votre achat chez';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Donnez nous votre avis!';
+$_MODULE['<{trustedshops}prestashop>display_products_782fefb3c733ea4f3fc5d4d5a1a68745'] = 'honoraire brut';
+$_MODULE['<{trustedshops}prestashop>display_products_4a89ce99b9ddd4e2560b7b5e9a91c951'] = 'honoraire net';

@@ -918,6 +918,9 @@ class TSBuyerProtection extends AbsTrustedShops
 	private function _displayPresentation()
 	{
 		return '
+			<div style="text-align:right; margin:10px 20px 10px 0">
+				<img src="'.__PS_BASE_URI__.'modules/'.self::$module_name.'/img/siegel.gif" alt="logo"/>
+			</diV>
 		<h3>'.$this->l('Seal of Approval and Buyer Protection').'</h3>
 		<p>'.$this->l('Trusted Shops is the well-known internet Seal of Approval for online shops which also offers customers a Buyer Protection. During the audit, your online shop is subjected to extensive and thorough tests. This audit, consisting of over 100 individual criteria, is based on the requirements of consumer protection, national and European laws.').'</p>
 		<h3>'.$this->l('More trust leads to more sales!').'</h3>
@@ -1196,6 +1199,10 @@ class TSBuyerProtection extends AbsTrustedShops
 		$lang = Language::getIsoById($params['cookie']->id_lang);
 		$lang = strtoupper($lang);
 		
+		if (!isset(TSBuyerProtection::$CERTIFICATE[$lang]) || 
+			!isset(TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum']))
+			return '';
+		
 		// This hook is available only with EXCELLENCE certificate.
 		if(TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum'] == 'CLASSIC' OR (TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'PRODUCTION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'TEST'))
 			return '';
@@ -1235,6 +1242,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				LIMIT 0,1';
 				$items = Db::getInstance()->ExecuteS($sql);
 			}
+
 			TSBuyerProtection::$smarty->assign(array(
 				'tax_label' => 'TTC',
 				'buyer_protection_items' => $items)
