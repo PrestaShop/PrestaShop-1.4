@@ -26,18 +26,20 @@
 */
 
 ob_start();
-$timerStart = microtime(true);
 
-$currentFileName = array_reverse(explode("/", $_SERVER['SCRIPT_NAME']));
-$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -strlen($currentFileName['0'])));
+$timerStart = microtime(true);
+$pathItems = explode("/", $_SERVER['SCRIPT_NAME']);
+$currentFileName = array_reverse($pathItems);
+$login_dir = $pathItems[1];
+$cookie = new Cookie('psAdmin',$login_dir);
+
 if (isset($_GET['logout']))
 	$cookie->logout();
 
 if (!$cookie->isLoggedBack())
 {
-	
 	$destination = substr($_SERVER['REQUEST_URI'], strlen(dirname($_SERVER['SCRIPT_NAME'])) + 1);
-	Tools::redirectAdmin('login.php'.(empty($destination) || ($destination == 'index.php?logout') ? '' : '?redirect='.$destination));
+	Tools::redirectAdmin(((!empty($login_dir)) ? '/'.$login_dir.'/': '').'login.php'.(empty($destination) || ($destination == 'index.php?logout') ? '' : '?redirect='.$destination));
 }
 else
 {
