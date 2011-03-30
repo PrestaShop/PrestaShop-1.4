@@ -62,7 +62,6 @@ class FrontControllerCore
 	{
 		$this->init();
 		$this->preProcess();
-		$this->setMedia();
 		$this->displayHeader();
 		$this->process();
 		$this->displayContent();
