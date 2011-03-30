@@ -118,8 +118,12 @@
 				{foreach from=$products item=product name=for_products}
 					{assign var='product_id' value=$product->id}
 					{assign var='feature_id' value=$feature.id_feature}
-					{assign var='tab' value=$product_features[$product_id]}
-					<td  width="{$width}%" class="{$classname} comparison_infos">{$tab[$feature_id]|escape:'htmlall':'UTF-8'}</td>
+					{if isset($product_features[$product_id])}
+						{assign var='tab' value=$product_features[$product_id]}
+						<td  width="{$width}%" class="{$classname} comparison_infos">{$tab[$feature_id]|escape:'htmlall':'UTF-8'}</td>
+					{else}
+						<td  width="{$width}%" class="{$classname} comparison_infos"></td>
+					{/if}
 				{/foreach}
 		</tr>
 		{/foreach}
