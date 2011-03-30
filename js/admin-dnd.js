@@ -102,7 +102,7 @@ $(document).ready(function() {
 							tableDrag.find('td.dragHandle:last a:odd').hide();
 						}
 						else if (table.id == 'product') {
-							var reg = /_[0-9]$/g;
+							var reg = /_[0-9][0-9]*$/g;
 							tableDrag.find('tbody tr').each(function(i) {
 								$(this).attr('id', $(this).attr('id').replace(reg, '_' + i));
 								
