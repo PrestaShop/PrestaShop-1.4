@@ -114,7 +114,6 @@ var ajaxCart = {
 
 		}
 	},
-
 	// cart to fix display when using back and previous browsers buttons
 	refresh : function(){
 		//send the ajax request to the server
@@ -536,7 +535,6 @@ var ajaxCart = {
 		}
 		else
 		{
-			ajaxCart.expand();
 			ajaxCart.updateCartEverywhere(jsonData);
 			ajaxCart.hideOldProducts(jsonData);
 			ajaxCart.displayNewProducts(jsonData);
