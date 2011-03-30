@@ -153,6 +153,7 @@ class SpecificPriceCore extends ObjectModel
 	static public function setSpecificPriority($id_product, $priorities)
 	{
 		$fields = '';
+		$value = '';
 		foreach ($priorities as $priority)
 			$value .= pSQL($priority).';';
 
