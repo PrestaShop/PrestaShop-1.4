@@ -1,3 +1,5 @@
+SET NAMES 'utf8';
+
 ALTER TABLE `PREFIX_stock_mvt_reason` ADD `sign` TINYINT(1) NOT NULL AFTER `id_stock_mvt_reason`;
 UPDATE `PREFIX_stock_mvt_reason` SET `sign`=-1;
 UPDATE `PREFIX_stock_mvt_reason` SET `sign`=1 WHERE `id_stock_mvt_reason`=3;
@@ -17,3 +19,4 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason` ,`id_lang` ,`n
 ('2', '3', 'Disminuir'), 
 ('2', '4', 'Reduzieren'), 
 ('2', '5', 'Diminuzione');
+

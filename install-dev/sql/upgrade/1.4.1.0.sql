@@ -1,22 +1,4 @@
-ALTER TABLE `PREFIX_stock_mvt_reason` ADD `sign` TINYINT(1) NOT NULL AFTER `id_stock_mvt_reason`;
-UPDATE `PREFIX_stock_mvt_reason` SET `sign`=-1;
-UPDATE `PREFIX_stock_mvt_reason` SET `sign`=1 WHERE `id_stock_mvt_reason`=3;
-UPDATE `PREFIX_stock_mvt_reason` SET `id_stock_mvt_reason`=`id_stock_mvt_reason`+2 ORDER BY `id_stock_mvt_reason` DESC;
-UPDATE `PREFIX_stock_mvt` SET `id_stock_mvt_reason`=`id_stock_mvt_reason`+2;
-UPDATE `PREFIX_stock_mvt_reason_lang` SET `id_stock_mvt_reason`=`id_stock_mvt_reason`+2 ORDER BY `id_stock_mvt_reason` DESC;
-INSERT INTO `PREFIX_stock_mvt_reason` (`id_stock_mvt_reason` ,`sign` ,`date_add` ,`date_upd`) VALUES ('1', '1', NOW(), NOW()), ('2', '-1', NOW(), NOW());
-
-INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason` ,`id_lang` ,`name`) VALUES 
-('1', '1', 'Increase'), 
-('1', '2', 'Augmenter'), 
-('1', '3', 'Aumentar'), 
-('1', '4', 'Erhöhen'), 
-('1', '5', 'Aumento'), 
-('2', '1', 'Decrease'), 
-('2', '2', 'Diminuer'), 
-('2', '3', 'Disminuir'), 
-('2', '4', 'Reduzieren'), 
-('2', '5', 'Diminuzione');
+SET NAMES 'utf8';
 
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edit`) VALUES ('afterSaveAdminMeta', 'After save configuration in AdminMeta', 'After save configuration in AdminMeta', 0, 0);
 
@@ -32,3 +14,5 @@ ADD `module_name` VARCHAR( 50 ) NULL DEFAULT NULL AFTER `is_module`;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PS_IMG_UPDATE_TIME', UNIX_TIMESTAMP(), NOW(), NOW());
+
+UPDATE `PREFIX_cms_lang` set link_rewrite = "uber-uns" where link_rewrite like "%ber-uns";
