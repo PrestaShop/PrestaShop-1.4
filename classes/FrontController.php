@@ -62,7 +62,6 @@ class FrontControllerCore
 	{
 		$this->init();
 		$this->preProcess();
-		$this->setMedia();
 		$this->displayHeader();
 		$this->process();
 		$this->displayContent();
@@ -277,7 +276,7 @@ class FrontControllerCore
 		self::$link = $link;
 
 		$this->iso = $iso;
-		self::setMedia();
+		$this->setMedia();
 	}
 
 	/* Display a maintenance page if shop is closed */
