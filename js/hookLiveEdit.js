@@ -195,9 +195,7 @@ function closeFancybox() {
 }
 
 function closeLiveEdit(){
-
-	window.location.href = window.location.origin+window.location.pathname
-
+	window.location.href = window.location.protocol+'//'+window.location.host+window.location.pathname;
 }
 
 function hideFeedback() {
