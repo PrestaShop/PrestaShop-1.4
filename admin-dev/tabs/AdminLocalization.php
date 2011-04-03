@@ -63,13 +63,13 @@ class AdminLocalization extends AdminPreferences
 		}
 		elseif (Tools::isSubmit('submitLocalizationPack'))
 		{
-			if (!$pack = Tools::file_get_contents('http://www.prestashop.com/download/localization/'.Tools::getValue('iso_localization_pack').'.xml'))
-				$this->_errors[] = Tools::displayError('Cannot connect to prestashop.com.');
+			if (!$pack = @Tools::file_get_contents('http://www.prestashop.com/download/localization/'.Tools::getValue('iso_localization_pack').'.xml') AND !$pack = @Tools::file_get_contents(dirname(__FILE__).'/../../localization/'.Tools::getValue('iso_localization_pack').'.xml'))
+				$this->_errors[] = Tools::displayError('Cannot load localization pack (from prestashop.com and from your local folder "localization")');
 			elseif (!$selection = Tools::getValue('selection'))
 				$this->_errors[] = Tools::displayError('Please select at least one content item to import.');
 			else
 			{
-				foreach ($selection as $selected)
+				foreach ($selection AS $selected)
 					if (!Validate::isLocalizationPackSelection($selected))
 					{
 						$this->_errors[] = Tools::displayError('Invalid selection');
@@ -81,6 +81,8 @@ class AdminLocalization extends AdminPreferences
 				else
 					Tools::redirectAdmin($currentIndex.'&conf=23&token='.$this->token);
 			}
+			
+			
 		}
 		parent::postProcess();
 	}
@@ -98,7 +100,9 @@ class AdminLocalization extends AdminPreferences
 			<label>'.$this->l('Localization pack you want to import:').'</label>
 			<div class="margin-form">
 			<select id="iso_localization_pack" name="iso_localization_pack">';
-			$localization_packs = simplexml_load_file('http://www.prestashop.com/rss/localization.xml');
+			$localization_packs = @simplexml_load_file('http://www.prestashop.com/rss/localization.xml');
+			if (!$localization_packs)
+				$localization_packs = simplexml_load_file(dirname(__FILE__).'/../../localization/localization.xml');
 			if ($localization_packs)
 				foreach($localization_packs->pack as $pack)
 						echo '<option value="'.$pack->iso.'">'.$pack->name.'</option>';
@@ -108,11 +112,11 @@ class AdminLocalization extends AdminPreferences
 			<br />
 				<label>'.$this->l('Content to import:').'</label>
 				<div class="margin-form" style="padding-top: 5px;">
-					<input type="checkbox" name="selection[]" value="states" /> '.$this->l('States').'<br />
-					<input type="checkbox" name="selection[]" value="taxes" /> '.$this->l('Taxes').'<br />
-					<input type="checkbox" name="selection[]" value="currencies" /> '.$this->l('Currencies').'<br />
-					<input type="checkbox" name="selection[]" value="languages" /> '.$this->l('Languages').'<br />
-					<input type="checkbox" name="selection[]" value="units" /> '.$this->l('Units (e.g., weight, volume, distance)').'
+					<input type="checkbox" name="selection[]" value="states" checked="checked" /> '.$this->l('States').'<br />
+					<input type="checkbox" name="selection[]" value="taxes" checked="checked" /> '.$this->l('Taxes').'<br />
+					<input type="checkbox" name="selection[]" value="currencies" checked="checked" /> '.$this->l('Currencies').'<br />
+					<input type="checkbox" name="selection[]" value="languages" checked="checked" /> '.$this->l('Languages').'<br />
+					<input type="checkbox" name="selection[]" value="units" checked="checked" /> '.$this->l('Units (e.g., weight, volume, distance)').'
 				</div>
 				<div align="center" style="margin-top: 20px;">
 					<input type="submit" class="button" name="submitLocalizationPack" value="'.$this->l('   Import   ').'" />
@@ -124,4 +128,3 @@ class AdminLocalization extends AdminPreferences
 		$this->_displayForm('options', $this->_fieldsOptions, $this->l('Advanced'), 'width2', 'localization');
 	}
 }
-

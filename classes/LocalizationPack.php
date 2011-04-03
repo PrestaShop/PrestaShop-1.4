@@ -280,9 +280,9 @@ class LocalizationPackCore
 	{
 		if (isset($xml->currencies->currency))
 		{
-			if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml'))
+			if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml') AND !$feed = @simplexml_load_file(dirname(__FILE__).'/../localization/currencies.xml'))
 			{
-				$this->_errors[] = Tools::displayError('Cannot parse feed.');
+				$this->_errors[] = Tools::displayError('Cannot parse the currencies XML feed.');
 				return false;
 			}
 
