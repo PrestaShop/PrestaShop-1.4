@@ -21,10 +21,7 @@ class Dejala extends CarrierModule
 	public $id_lang ;
 	private $wday_labels ;
 	private static $INSTANCE = NULL ;
-	//TODO Iso code of countries where the module can be used, if none module available for all countries
-	public static $limited_countries = array('fr');
 	
-
 	static public function getInstance() {
 		if (!self::$INSTANCE) {
         	self::$INSTANCE = new Dejala();
@@ -36,6 +33,8 @@ class Dejala extends CarrierModule
 	{
 		global $cookie ;
 
+		//TODO Iso code of countries where the module can be used, if none module available for all countries
+		$this->limited_countries = array('fr');
 		$this->name = 'dejala';
 		$this->tab = 'shipping_logistics';
 		$this->version = 1.4;

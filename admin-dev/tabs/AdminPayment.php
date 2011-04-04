@@ -165,7 +165,7 @@ class AdminPayment extends AdminTab
 			}
 		}
 		echo '
-					</tr>'; 
+			</tr>';
 		foreach ($items as $item)
 		{
 			echo '<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
@@ -180,7 +180,20 @@ class AdminPayment extends AdminTab
 						$value = array();
 					echo '
 						<td style="text-align: center">';
-					if ($nameId != 'currency' OR ($nameId == 'currency' AND $module->currencies AND $module->currencies_mode == 'checkbox'))
+
+					if ($nameId == 'country' && isset($module->limited_countries) &&
+						count($module->limited_countries))
+					{
+						if (in_array($item['iso_code'], $module->limited_countries))
+							echo '<input  type="checkbox" name="'.$module->name.'_'.
+								$nameId.'[]" value="'.$item['id_'.$nameId].'"'.
+								(in_array($item['id_'.$nameId.''], $value) ? 
+								' checked="checked"' : '').' />';
+						else
+							echo '--';
+					}
+					else if ($nameId != 'currency' OR ($nameId == 'currency' AND $module->currencies AND $module->currencies_mode == 'checkbox'))
+						
 						echo '
 							<input type="checkbox" name="'.$module->name.'_'.$nameId.'[]" value="'.$item['id_'.$nameId].'"'.(in_array($item['id_'.$nameId.''], $value) ? ' checked="checked"' : '').' />';
 					elseif ($nameId == 'currency' AND $module->currencies AND $module->currencies_mode == 'radio')

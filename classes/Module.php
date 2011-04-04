@@ -71,6 +71,9 @@ abstract class ModuleCore
 
 	static public $_db;
 
+	/** @var array to store the limited country */
+	public $limited_countries = array();
+
 	/**
 	 * Constructor
 	 *
@@ -537,6 +540,7 @@ abstract class ModuleCore
 			AND m.`active` = 1
 			ORDER BY hm.`position`', false);
 			self::$_hookModulesCache = array();
+	
 			if ($result)
 				while ($row = $db->nextRow())
 				{
@@ -549,6 +553,7 @@ abstract class ModuleCore
 
 		if (!isset(self::$_hookModulesCache[$hook_name]))
 			return;
+
 		$altern = 0;
 		$output = '';
 		foreach (self::$_hookModulesCache[$hook_name] AS $array)
@@ -566,6 +571,7 @@ abstract class ModuleCore
 			if (is_callable(array($moduleInstance, 'hook'.$hook_name)))
 			{
 				$hookArgs['altern'] = ++$altern;
+
 				$display = call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
 				if ($array['live_edit'] && ((Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))))
 				{
