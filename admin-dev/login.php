@@ -31,7 +31,8 @@ define('PS_ADMIN_DIR', getcwd());
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 
-if (Configuration::get('PS_SSL_ENABLED') AND !(isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on')) 
+if ((empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
+	 AND Configuration::get('PS_SSL_ENABLED'))
 {
 	header('HTTP/1.1 301 Moved Permanently');
 	header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
