@@ -441,7 +441,11 @@ $(function() {
 						$('#opc_login_errors').html(errors).slideDown('slow');
 					}
 					else
+					{
+						// update token
+						static_token = jsonData.token;
 						updateNewAccountToAddressBlock();
+					}
 				},
 				error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to send login informations \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
 			});
