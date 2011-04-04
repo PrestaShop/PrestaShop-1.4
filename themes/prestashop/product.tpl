@@ -490,7 +490,12 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 				{foreach from=$customizationFields item='field' name='customizationFields'}
 					{if $field.type == 0}
 						<li class="customizationUploadLine{if $field.required} required{/if}">{assign var='key' value='pictures_'|cat:$product->id|cat:'_'|cat:$field.id_customization_field}
-							{if isset($pictures.$key)}<div class="customizationUploadBrowse"><img src="{$pic_dir}{$pictures.$key}_small" alt="" /><a href="{$link->getUrlWith('deletePicture', $field.id_customization_field)}"><img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="customization_delete_icon" width="11" height="13" /></a></div>{/if}
+							{if isset($pictures.$key)}<div class="customizationUploadBrowse">
+									<img src="{$pic_dir}{$pictures.$key}_small" alt="" />
+									<a href="{$link->getProductDeletePictureLink($product,{$field.id_customization_field})}" title="{l s='Delete'}" >
+										<img src="{$img_dir}icon/delete.gif" alt="{l s='Delete'}" class="customization_delete_icon" width="11" height="13" />
+									</a>
+								</div>{/if}
 							<div class="customizationUploadBrowse"><input type="file" name="file{$field.id_customization_field}" id="img{$customizationField}" class="customization_block_input {if isset($pictures.$key)}filled{/if}" />{if $field.required}<sup>*</sup>{/if}
 							<div class="customizationUploadBrowseDescription">{if !empty($field.name)}{$field.name}{else}{l s='Please select an image file from your hard drive'}{/if}</div></div>
 						</li>
