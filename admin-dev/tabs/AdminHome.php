@@ -144,7 +144,7 @@ class AdminHome extends AdminTab
 		global $cookie;
 		
 		$tab = get_class();
-		$protocol = (isset($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) == 'on') ? 'https' : 'http';
+		$protocol = (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')?'https':'http';
 		$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
 		$isoUser = Language::getIsoById(intval($cookie->id_lang));
 		$isoCountry = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));

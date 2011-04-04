@@ -131,7 +131,7 @@ class authorizeAIM extends PaymentModule
 	{
 		global $smarty;
 
-		if (isset($_SERVER['HTTPS']) AND $_SERVER['HTTPS'] == 'on')
+		if (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off' AND Configuration::get('PS_SSL_ENABLED'))
 		{
 			$invoiceAddress = new Address((int)$params['cart']->id_address_invoice);
 
