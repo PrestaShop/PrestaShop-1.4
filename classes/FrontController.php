@@ -260,6 +260,12 @@ class FrontControllerCore
 			else
 				$smarty->assign($assignKey, $assignValue);
 
+		// setting properties from global var
+		self::$cookie = $cookie;
+		self::$cart = $cart;
+		self::$smarty = $smarty;
+		self::$link = $link;
+
 		if ($this->maintenance)
 			$this->displayMaintenancePage();
 		if ($this->restrictedCountry)
@@ -270,10 +276,6 @@ class FrontControllerCore
 			if (!is_dir(_PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$ad))
 				die(Tools::displayError());
 		
-		self::$cookie = $cookie;
-		self::$cart = $cart;
-		self::$smarty = $smarty;
-		self::$link = $link;
 
 		$this->iso = $iso;
 		$this->setMedia();
@@ -282,12 +284,11 @@ class FrontControllerCore
 	/* Display a maintenance page if shop is closed */
 	protected function displayMaintenancePage()
 	{
-		global $smarty;
 		
 		if (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))
 		{
 			header('HTTP/1.1 503 temporarily overloaded');
-			$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
+			self::$smarty->display(_PS_THEME_DIR_.'maintenance.tpl');
 			exit;
 		}
 	}
