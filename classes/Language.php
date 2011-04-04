@@ -117,6 +117,14 @@ class LanguageCore extends ObjectModel
 	}
 
 
+	/**
+	 * This functions checks if every files exists for the language $iso_code. 
+	 * Concerned files are theses located in translations/$iso_code/ 
+	 * and translations/mails/$iso_code .
+	 * 
+	 * @param mixed $iso_code 
+	 * @returntrue if all files exists
+	 */
 	public static function checkFilesWithIsoCode($iso_code)
 	{
 		if (isset(self::$_checkedLangs[$iso_code]) AND self::$_checkedLangs[$iso_code])

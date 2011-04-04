@@ -60,33 +60,35 @@ class AdminLanguages extends AdminTab
 	 */
 	public function copyNoPictureImage($language)
 	{
-		if ($error = checkImage($_FILES['no-picture'], $this->maxImageSize))
-			$this->_errors[] = $error;
-		else
-		{
-			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['no-picture']['tmp_name'], $tmpName))
-				return false;
-			if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'.jpg'))
-				$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your product folder.');
-			if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'.jpg'))
-				$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your category folder.');
-			if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'.jpg'))
-				$this->_errors[] = Tools::displayError('n error occurred while copying no-picture image to your manufacturer folder');
+		if (isset($_FILES['no-picture']) and $_FILES['no-picture']['error'] === 0)
+			if ($error = checkImage($_FILES['no-picture'], $this->maxImageSize))
+				$this->_errors[] = $error;
 			else
-			{	
-				$imagesTypes = ImageType::getImagesTypes('products');
-				foreach ($imagesTypes AS $k => $imageType)
-				{
-					if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your product directory.');
-					if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your category directory.');
-					if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your manufacturer directory.');
+			{
+				if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['no-picture']['tmp_name'], $tmpName))
+					return false;
+				if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'.jpg'))
+					$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your product folder.');
+				if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'.jpg'))
+					$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your category folder.');
+				if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'.jpg'))
+					$this->_errors[] = Tools::displayError('n error occurred while copying no-picture image to your manufacturer folder');
+				else
+				{	
+					$imagesTypes = ImageType::getImagesTypes('products');
+					foreach ($imagesTypes AS $k => $imageType)
+					{
+						if (!imageResize($tmpName, _PS_IMG_DIR_.'p/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+							$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your product directory.');
+						if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+							$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your category directory.');
+						if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'-default-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+							$this->_errors[] = Tools::displayError('An error occurred while resizing no-picture image to your manufacturer directory.');
+					}
 				}
+				unlink($tmpName);
 			}
-			unlink($tmpName);
-		}
+
 	}
 	
 	/**
@@ -166,9 +168,10 @@ class AdminLanguages extends AdminTab
 				{
 					if (isset($_POST['iso_code']) AND !empty($_POST['iso_code']) AND Validate::isLanguageIsoCode(Tools::getValue('iso_code')) AND Language::getIdByIso($_POST['iso_code']))
 						$this->_errors[] = Tools::displayError('This ISO code is already linked to another language.');
-					if (!empty($_FILES['no-picture']['tmp_name']) AND !empty($_FILES['flag']['tmp_name']) AND Validate::isLanguageIsoCode(Tools::getValue('iso_code')))
+					if ((!empty($_FILES['no-picture']['tmp_name']) OR !empty($_FILES['flag']['tmp_name'])) AND Validate::isLanguageIsoCode(Tools::getValue('iso_code')))
 					{
-						$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
+						if ($_FILES['no-picture']['error'] == UPLOAD_ERR_OK)
+							$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
 						parent::postProcess();
 					}
 					else
@@ -185,14 +188,21 @@ class AdminLanguages extends AdminTab
 			{
 				if ($this->tabAccess['edit'] === '1')
 				{
-					if (!empty($_FILES['no-picture']['tmp_name']) AND Validate::isLanguageIsoCode(Tools::getValue('iso_code')))
-						$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
+					if (( isset($_FILES['no-picture']) AND !$_FILES['no-picture']['error'] OR isset($_FILES['flag']) AND !$_FILES['flag']['error'])
+						AND Validate::isLanguageIsoCode(Tools::getValue('iso_code')))
+					{
+						if ($_FILES['no-picture']['error'] == UPLOAD_ERR_OK)
+							$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
+						parent::postProcess();
+					}
+
 					if (!Validate::isLoadedObject($object = $this->loadObject()))
 						die(Tools::displayError());
 					if ((int)($object->id) == (int)(Configuration::get('PS_LANG_DEFAULT')) AND (int)($_POST['active']) != (int)($object->active))
 						$this->_errors[] = Tools::displayError('You cannot change the status of the default language.');
 					else
 						parent::postProcess();
+
 					$this->validateRules();
 				}
 				else
@@ -250,7 +260,7 @@ class AdminLanguages extends AdminTab
 					$active['img'] = "enabled";
 					if (!Language::checkFilesWithIsoCode($tr['iso_code']))
 					{
-						$active['title'] = "Warning";
+						$active['title'] = "Warning, some translations files are missing for that iso-code";
 						$active['img'] = "warning";
 					}
 				}
