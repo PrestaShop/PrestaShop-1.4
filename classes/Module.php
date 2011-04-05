@@ -919,5 +919,14 @@ abstract class ModuleCore
 		if (is_writable(_PS_MODULE_DIR_.$this->name.'/'))
 			file_put_contents(_PS_MODULE_DIR_.$this->name.'/config.xml', utf8_encode($xml));
 	}
+	
+	/**
+	 * @param string $hook_name
+	 * @return bool if module can be transplanted on hook
+	 */
+	public function isHookableOn($hook_name)
+	{
+		return is_callable(array($this, 'hook'.ucfirst($hook_name)));
+	}
 }
 

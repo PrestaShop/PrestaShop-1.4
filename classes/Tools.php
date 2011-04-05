@@ -297,10 +297,10 @@ class ToolsCore
 					$cookie->id_currency = (int)($currency->id);
 			}
 
-		if ($cookie->id_currency)
+		if ((int)$cookie->id_currency)
 		{
-			$currency = Currency::getCurrencyInstance((int)($cookie->id_currency));
-			if (is_object($currency) AND $currency->id AND (int)($currency->deleted) != 1)
+			$currency = Currency::getCurrencyInstance((int)$cookie->id_currency);
+			if (is_object($currency) AND (int)$currency->id AND (int)$currency->deleted != 1 AND $currency->active)
 				return $currency;
 		}
 		$currency = Currency::getCurrencyInstance((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
@@ -1328,12 +1328,20 @@ class ToolsCore
 					unset($js_uri[$key]);
 
 		//overriding of modules js files
-		foreach ($js_uri AS &$file)
+		foreach ($js_uri AS $key => &$file)
 		{
 			$different = 0;
 			$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/js/modules/', $file, $different);
 			if ($different && file_exists($override_path))
 				$file = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/js/modules/', $file, $different);
+			else
+			{
+				// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
+				$root_directory = str_replace(__PS_BASE_URI__, '', _PS_ROOT_DIR_.'/');
+				// check if js files exists
+				if (!file_exists($root_directory.$file))
+					unset($js_uri[$key]);
+			}
 		}
 
 		// adding file to the big array...
@@ -1356,12 +1364,20 @@ class ToolsCore
 		// avoid useless opération...
 		//if (is_array($css_files) && array_key_exists($css_uri, $css_files) && $css_files[$css_uri] == $css_media_type)
 		//	return true;
-
+		
 		//overriding of modules css files
 		$different = 0;
 		$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
 		if ($different && file_exists($override_path))
 			$css_uri = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
+		else
+		{
+			// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
+			$root_directory = str_replace(__PS_BASE_URI__, '', _PS_ROOT_DIR_.'/');
+			// check if css files exists
+			if (!file_exists($root_directory.$css_uri))
+				return true;
+		}
 
 		// detect mass add
 		if (!is_array($css_uri))
@@ -1372,7 +1388,6 @@ class ToolsCore
 			$css_files = array_merge($css_files, $css_uri);
 		else
 			$css_files = $css_uri;
-
 
 		return true;
 	}
