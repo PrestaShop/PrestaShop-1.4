@@ -303,7 +303,7 @@ CREATE TABLE `PREFIX_connections` (
   `id_connections` int(10) unsigned NOT NULL auto_increment,
   `id_guest` int(10) unsigned NOT NULL,
   `id_page` int(10) unsigned NOT NULL,
-  `ip_address` int NULL DEFAULT NULL,
+  `ip_address` BIGINT NULL DEFAULT NULL,
   `date_add` datetime NOT NULL,
   `http_referer` varchar(255) default NULL,
   PRIMARY KEY  (`id_connections`),

@@ -21,4 +21,6 @@ ALTER TABLE  `PREFIX__cms_block_lang` CHANGE  `id_block_cms`  `id_cms_block` INT
 
 ALTER TABLE  `PREFIX_cms_block` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL;
 
-ALTER TABLE  `PREFIX_cms_block_page` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL
+ALTER TABLE  `PREFIX_cms_block_page` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL;
+
+ALTER TABLE `PREFIX_connections` CHANGE `ip_address` `ip_address` BIGINT NULL DEFAULT NULL;
