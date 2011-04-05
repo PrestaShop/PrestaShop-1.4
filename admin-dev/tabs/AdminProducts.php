@@ -1191,7 +1191,7 @@ class AdminProducts extends AdminTab
 							if (Tools::isSubmit('submitAddProductAndPreview'))
 							{
 								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), (int)($cookie->id_lang))));
-								if (!$obj->active)
+								if (!$object->active)
 								{
 									$admin_dir = dirname($_SERVER['PHP_SELF']);
 									$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
