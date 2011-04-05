@@ -29,7 +29,7 @@ function CMSCategory_js(value, secure_key)
 	$.ajax({
 		type: "POST",
 		url: '../modules/blockcms/ajax_blockcms.php',
-		data: 'id_cms_category='+value+'&id_block_cms='+$('#id_block_cms').val()+'&action=getCms&secure_key='+secure_key,
+		data: 'id_cms_category='+value+'&id_cms_block='+$('#id_cms_block').val()+'&action=getCms&secure_key='+secure_key,
 		async : false,
 		success: function(msg)
 			{

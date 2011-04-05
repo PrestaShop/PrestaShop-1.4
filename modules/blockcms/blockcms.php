@@ -46,37 +46,37 @@ class BlockCms extends Module
 	public function install()
 	{
 		$languages = Language::getLanguages(false);
-		$queryLang = 'INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_block_cms`, `id_lang`) VALUES';
+		$queryLang = 'INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_cms_block`, `id_lang`) VALUES';
 		foreach ($languages AS $language)
 			$queryLang .= '(1, '.(int)($language['id_lang']).'),';
 	
 		if (!parent::install() OR !$this->registerHook('leftColumn') OR !$this->registerHook('rightColumn') OR !$this->registerHook('footer') OR !$this->registerHook('header') OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block`(
-		`id_block_cms` int(10) unsigned NOT NULL auto_increment,
+		`id_cms_block` int(10) unsigned NOT NULL auto_increment,
 		`id_cms_category` int(10) unsigned NOT NULL,
 		`location` tinyint(1) unsigned NOT NULL,
 		`position` int(10) unsigned NOT NULL default \'0\',
 		`display_store` tinyint(1) unsigned NOT NULL default \'1\',
-		PRIMARY KEY (`id_block_cms`)
+		PRIMARY KEY (`id_cms_block`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`) VALUES(1, 0, 0)') OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block_lang`(
-		`id_block_cms` int(10) unsigned NOT NULL,
+		`id_cms_block` int(10) unsigned NOT NULL,
 		`id_lang` int(10) unsigned NOT NULL,
 		`name` varchar(40) NOT NULL default \'\',
-		PRIMARY KEY (`id_block_cms`, `id_lang`)
+		PRIMARY KEY (`id_cms_block`, `id_lang`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Db::getInstance()->Execute(rtrim($queryLang, ',')) OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block_page`(
-		`id_block_cms_page` int(10) unsigned NOT NULL auto_increment,
-		`id_block_cms` int(10) unsigned NOT NULL,
+		`id_cms_block_page` int(10) unsigned NOT NULL auto_increment,
+		`id_cms_block` int(10) unsigned NOT NULL,
 		`id_cms` int(10) unsigned NOT NULL,
 		`is_category` tinyint(1) unsigned NOT NULL,
-		PRIMARY KEY (`id_block_cms_page`)
+		PRIMARY KEY (`id_cms_block_page`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
 		!Configuration::updateValue('FOOTER_CMS', '') OR
 		!Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', 1))
@@ -94,13 +94,13 @@ class BlockCms extends Module
 		return true;
 	}
 
-	public function getBlockCMS($id_block_cms)
+	public function getBlockCMS($id_cms_block)
 	{		
 		$cmsBlocks = Db::getInstance()->ExecuteS('
 		SELECT cb.`id_cms_category`, cb.`location`, cb.`display_store`, cbl.id_lang, cbl.name
 		FROM `'._DB_PREFIX_.'cms_block` cb
-		LEFT JOIN `'._DB_PREFIX_.'cms_block_lang` cbl ON (cbl.`id_block_cms` = cb.`id_block_cms`)
-		WHERE cb.`id_block_cms` = '.(int)($id_block_cms));
+		LEFT JOIN `'._DB_PREFIX_.'cms_block_lang` cbl ON (cbl.`id_cms_block` = cb.`id_cms_block`)
+		WHERE cb.`id_cms_block` = '.(int)($id_cms_block));
 
 		foreach ($cmsBlocks AS $cmsBlock)
 			$cmsBlocks['name'][(int)$cmsBlock['id_lang']] = $cmsBlock['name'];
@@ -112,10 +112,10 @@ class BlockCms extends Module
 		global $cookie;
 		
 		return Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bcl.`name` block_name, ccl.`name` category_name, bc.`position`, bc.`id_cms_category`, bc.`display_store`
+		SELECT bc.`id_cms_block`, bcl.`name` block_name, ccl.`name` category_name, bc.`position`, bc.`id_cms_category`, bc.`display_store`
 		FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
-		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
+		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_cms_block` = bcl.`id_cms_block`)
 		WHERE ccl.`id_lang` = '.(int)($cookie->id_lang).' AND bc.`location` = '.(int)($location).' AND bcl.`id_lang` = '.(int)($cookie->id_lang).'
 		ORDER BY bc.`position`');
 	}
@@ -172,10 +172,10 @@ class BlockCms extends Module
 		global $cookie;
 
 		$cmsCategories = Db::getInstance()->ExecuteS('
-		SELECT bc.`id_block_cms`, bc.`id_cms_category`, bc.`display_store`, ccl.`link_rewrite`, ccl.`name` category_name, bcl.`name` block_name
+		SELECT bc.`id_cms_block`, bc.`id_cms_category`, bc.`display_store`, ccl.`link_rewrite`, ccl.`name` category_name, bcl.`name` block_name
 		FROM `'._DB_PREFIX_.'cms_block` bc
 		INNER JOIN `'._DB_PREFIX_.'cms_category_lang` ccl ON (bc.`id_cms_category` = ccl.`id_cms_category`)
-		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_block_cms` = bcl.`id_block_cms`)
+		INNER JOIN `'._DB_PREFIX_.'cms_block_lang` bcl ON (bc.`id_cms_block` = bcl.`id_cms_block`)
 		WHERE bc.`location` = '.(int)($location).' AND ccl.`id_lang` = '.(int)($cookie->id_lang).' AND bcl.`id_lang` = '.(int)($cookie->id_lang).'
 		ORDER BY `position`');
 		
@@ -184,7 +184,7 @@ class BlockCms extends Module
 		if (is_array($cmsCategories) AND sizeof($cmsCategories))
 			foreach ($cmsCategories AS $cmsCategory)
 			{
-				$key = (int)$cmsCategory['id_block_cms'];
+				$key = (int)$cmsCategory['id_cms_block'];
 				$content[$key]['display_store'] = $cmsCategory['display_store'];
 				
 				$content[$key]['cms'] = Db::getInstance()->ExecuteS('
@@ -192,7 +192,7 @@ class BlockCms extends Module
 				FROM `'._DB_PREFIX_.'cms_block_page` bcp 
 				INNER JOIN `'._DB_PREFIX_.'cms_lang` cl ON (bcp.`id_cms` = cl.`id_cms`)
 				INNER JOIN `'._DB_PREFIX_.'cms` c ON (bcp.`id_cms` = c.`id_cms`)
-				WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).' AND cl.`id_lang` = '.(int)($cookie->id_lang).' AND bcp.`is_category` = 0 AND c.`active` = 1
+				WHERE bcp.`id_cms_block` = '.(int)($cmsCategory['id_cms_block']).' AND cl.`id_lang` = '.(int)($cookie->id_lang).' AND bcp.`is_category` = 0 AND c.`active` = 1
 				ORDER BY `position`');
 				
 				$links = array();
@@ -209,7 +209,7 @@ class BlockCms extends Module
 				SELECT bcp.`id_cms`, cl.`name`, cl.`link_rewrite`
 				FROM `'._DB_PREFIX_.'cms_block_page` bcp 
 				INNER JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON (bcp.`id_cms` = cl.`id_cms_category`)
-				WHERE bcp.`id_block_cms` = '.(int)($cmsCategory['id_block_cms']).'
+				WHERE bcp.`id_cms_block` = '.(int)($cmsCategory['id_cms_block']).'
 				AND cl.`id_lang` = '.(int)($cookie->id_lang).'
 				AND bcp.`is_category` = 1');
 				
@@ -330,19 +330,19 @@ class BlockCms extends Module
 			foreach ($cms_blocks_left as $cms_block)
 			{
 				$this->_html .= '
-					<tr id="tr_0_'.$cms_block['id_block_cms'].'_'.$cms_block['position'].'" '.($irow++ % 2 ? 'class="alt_row"' : '').'>
-						<td width="10%">'.$cms_block['id_block_cms'].'</td>
+					<tr id="tr_0_'.$cms_block['id_cms_block'].'_'.$cms_block['position'].'" '.($irow++ % 2 ? 'class="alt_row"' : '').'>
+						<td width="10%">'.$cms_block['id_cms_block'].'</td>
 						<td width="30%" class="center">'.(empty($cms_block['block_name']) ? $cms_block['category_name'] : $cms_block['block_name']).'</td>
 						<td width="30%" class="center">'.$cms_block['category_name'].'</td>
 						<td class="center pointer dragHandle">
-							<a'.(($cms_block['position'] == (sizeof($cms_blocks_left) - 1) OR sizeof($cms_blocks_left) == 1) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_block_cms='.$cms_block['id_block_cms'].'&way=1&position='.(int)($cms_block['position'] + 1).'&location=0&token='.Tools::getAdminTokenLite('AdminModules').'">
+							<a'.(($cms_block['position'] == (sizeof($cms_blocks_left) - 1) OR sizeof($cms_blocks_left) == 1) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_cms_block='.$cms_block['id_cms_block'].'&way=1&position='.(int)($cms_block['position'] + 1).'&location=0&token='.Tools::getAdminTokenLite('AdminModules').'">
 							<img src="../img/admin/down.gif" alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>
-							<a'.($cms_block['position'] == 0 ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_block_cms='.$cms_block['id_block_cms'].'&way=0&position='.(int)($cms_block['position'] - 1).'&location=0&token='.Tools::getAdminTokenLite('AdminModules').'">
+							<a'.($cms_block['position'] == 0 ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_cms_block='.$cms_block['id_cms_block'].'&way=0&position='.(int)($cms_block['position'] - 1).'&location=0&token='.Tools::getAdminTokenLite('AdminModules').'">
 							<img src="../img/admin/up.gif" alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a>
 						</td>
 						<td width="10%" class="center">
-							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&editBlockCMS&id_block_cms='.(int)($cms_block['id_block_cms']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a> 
-							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&deleteBlockCMS&id_block_cms='.(int)($cms_block['id_block_cms']).'" title="'.$this->l('Delete').'"><img src="'._PS_ADMIN_IMG_.'delete.gif" alt="" /></a>
+							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&editBlockCMS&id_cms_block='.(int)($cms_block['id_cms_block']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a> 
+							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&deleteBlockCMS&id_cms_block='.(int)($cms_block['id_cms_block']).'" title="'.$this->l('Delete').'"><img src="'._PS_ADMIN_IMG_.'delete.gif" alt="" /></a>
 						</td>
 					</tr>';
 			}
@@ -373,19 +373,19 @@ class BlockCms extends Module
 			foreach ($cms_blocks_right as $cms_block)
 			{
 				$this->_html .= '
-					<tr id="tr_1_'.$cms_block['id_block_cms'].'_'.$cms_block['position'].'" '.($irow++ % 2 ? 'class="alt_row"' : '').'>
-						<td width="10%">'.$cms_block['id_block_cms'].'</td>
+					<tr id="tr_1_'.$cms_block['id_cms_block'].'_'.$cms_block['position'].'" '.($irow++ % 2 ? 'class="alt_row"' : '').'>
+						<td width="10%">'.$cms_block['id_cms_block'].'</td>
 						<td width="30%" class="center">'.(empty($cms_block['block_name']) ? $cms_block['category_name'] : $cms_block['block_name']).'</td>
 						<td width="30%" class="center">'.$cms_block['category_name'].'</td>
 						<td class="center pointer dragHandle">
-							<a'.(($cms_block['position'] == (sizeof($cms_blocks_right) - 1) OR sizeof($cms_blocks_right) == 1) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_block_cms='.$cms_block['id_block_cms'].'&way=1&position='.(int)($cms_block['position'] + 1).'&location=1&token='.Tools::getAdminTokenLite('AdminModules').'">
+							<a'.(($cms_block['position'] == (sizeof($cms_blocks_right) - 1) OR sizeof($cms_blocks_right) == 1) ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_cms_block='.$cms_block['id_cms_block'].'&way=1&position='.(int)($cms_block['position'] + 1).'&location=1&token='.Tools::getAdminTokenLite('AdminModules').'">
 							<img src="../img/admin/down.gif" alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>
-							<a'.($cms_block['position'] == 0 ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_block_cms='.$cms_block['id_block_cms'].'&way=0&position='.(int)($cms_block['position'] - 1).'&location=1&token='.Tools::getAdminTokenLite('AdminModules').'">
+							<a'.($cms_block['position'] == 0 ? ' style="display: none;"' : '').' href="'.$currentIndex.'&configure=blockcms&id_cms_block='.$cms_block['id_cms_block'].'&way=0&position='.(int)($cms_block['position'] - 1).'&location=1&token='.Tools::getAdminTokenLite('AdminModules').'">
 							<img src="../img/admin/up.gif" alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a>
 						</td>
 						<td width="10%" class="center">
-							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&editBlockCMS&id_block_cms='.(int)($cms_block['id_block_cms']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a> 
-							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&deleteBlockCMS&id_block_cms='.(int)($cms_block['id_block_cms']).'" title="'.$this->l('Delete').'"><img src="'._PS_ADMIN_IMG_.'delete.gif" alt="" /></a>
+							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&editBlockCMS&id_cms_block='.(int)($cms_block['id_cms_block']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a> 
+							<a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&deleteBlockCMS&id_cms_block='.(int)($cms_block['id_cms_block']).'" title="'.$this->l('Delete').'"><img src="'._PS_ADMIN_IMG_.'delete.gif" alt="" /></a>
 						</td>
 					</tr>';
 			}
@@ -425,16 +425,16 @@ class BlockCms extends Module
 		$divLangName = 'name';
 
 		$cmsBlock = NULL;
-		if (Tools::isSubmit('editBlockCMS') AND Tools::getValue('id_block_cms'))
-			$cmsBlock = $this->getBlockCMS((int)(Tools::getValue('id_block_cms')));
+		if (Tools::isSubmit('editBlockCMS') AND Tools::getValue('id_cms_block'))
+			$cmsBlock = $this->getBlockCMS((int)(Tools::getValue('id_cms_block')));
 
 		$this->_html .= '
 		<script type="text/javascript" src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/'.$this->name.'.js"></script>
 		<script type="text/javascript">id_language = Number('.$defaultLanguage.');</script>
 		<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
 		';
-		if (Tools::getValue('id_block_cms'))
-			$this->_html .= '<input type="hidden" name="id_block_cms" value="'.(int)(Tools::getValue('id_block_cms')).'" id="id_block_cms" />';
+		if (Tools::getValue('id_cms_block'))
+			$this->_html .= '<input type="hidden" name="id_cms_block" value="'.(int)(Tools::getValue('id_cms_block')).'" id="id_cms_block" />';
 		$this->_html .= '
 		<fieldset>';
 		
@@ -515,8 +515,8 @@ class BlockCms extends Module
 				if (strlen(Tools::getValue('block_name_'.$language['id_lang'])) > 40)
 					$errors[] = $this->l('Block name is too long');
 		}
-		elseif (Tools::isSubmit('deleteBlockCMS') AND !Validate::isInt(Tools::getValue('id_block_cms')))
-			$errors[] = $this->l('Invalid id_block_cms');
+		elseif (Tools::isSubmit('deleteBlockCMS') AND !Validate::isInt(Tools::getValue('id_cms_block')))
+			$errors[] = $this->l('Invalid id_cms_block');
 		elseif (Tools::isSubmit('submitFooterCMS'))
 		{
 			if (Tools::getValue('footerBox'))
@@ -547,7 +547,7 @@ class BlockCms extends Module
 				Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'cms_block`
 				SET `position` = '.((int)(Tools::getValue('position'))).'
-				WHERE `id_block_cms` = '.(int)(Tools::getValue('id_block_cms')));
+				WHERE `id_cms_block` = '.(int)(Tools::getValue('id_cms_block')));
 		}
 		elseif (Tools::getValue('way') == 1)
 		{
@@ -559,7 +559,7 @@ class BlockCms extends Module
 				Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'cms_block`
 				SET `position` = '.((int)(Tools::getValue('position'))).'
-				WHERE `id_block_cms` = '.(int)(Tools::getValue('id_block_cms')));
+				WHERE `id_cms_block` = '.(int)(Tools::getValue('id_cms_block')));
 		}
 		Tools::redirectAdmin($currentIndex.'index.php?tab=AdminModules&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules'));
 	}
@@ -575,16 +575,16 @@ class BlockCms extends Module
 			if (Tools::isSubmit('addBlockCMS'))
 			{
 				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`, `display_store`) VALUES('.(int)(Tools::getValue('id_category')).', '.(int)(Tools::getValue('block_location')).', '.(int)($position).', '.(int)(Tools::getValue('PS_STORES_DISPLAY_CMS')).')');
-				$id_block_cms = Db::getInstance()->Insert_ID();
+				$id_cms_block = Db::getInstance()->Insert_ID();
 				foreach ($languages as $language)
-					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_block_cms`, `id_lang`, `name`) VALUES('.(int)($id_block_cms).', '.(int)($language['id_lang']).', "'.pSQL(Tools::getValue('block_name_'.$language['id_lang'])).'")');
+					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_cms_block`, `id_lang`, `name`) VALUES('.(int)($id_cms_block).', '.(int)($language['id_lang']).', "'.pSQL(Tools::getValue('block_name_'.$language['id_lang'])).'")');
 			}
 			elseif (Tools::isSubmit('editBlockCMS'))
 			{
-				$id_block_cms = Tools::getvalue('id_block_cms');
-				$old_block = Db::getInstance()->ExecuteS('SELECT `location`, `position` FROM `'._DB_PREFIX_.'cms_block` WHERE `id_block_cms` = '.(int)($id_block_cms));
+				$id_cms_block = Tools::getvalue('id_cms_block');
+				$old_block = Db::getInstance()->ExecuteS('SELECT `location`, `position` FROM `'._DB_PREFIX_.'cms_block` WHERE `id_cms_block` = '.(int)($id_cms_block));
 				$location_change = ($old_block[0]['location'] != (int)(Tools::getvalue('block_location')));
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_block_cms` = '.(int)($id_block_cms));
+				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_cms_block` = '.(int)($id_cms_block));
 				if ($location_change == true)
 					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = (`position` - 1) WHERE `position` > '.(int)($old_block[0]['position']).' AND `location` = '.(int)($old_block[0]['location']));
 				Db::getInstance()->Execute('
@@ -594,10 +594,10 @@ class BlockCms extends Module
 				'.($location_change == true ? ',
 				`position` = '.(int)($position) : '').',
 				`display_store` = '.(int)(Tools::getValue('PS_STORES_DISPLAY_CMS')).'
-				WHERE `id_block_cms` = '.(int)($id_block_cms));
+				WHERE `id_cms_block` = '.(int)($id_cms_block));
 				
 				foreach ($languages as $language)
-					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block_lang` SET `name` = "'.pSQL(Tools::getValue('block_name_'.$language['id_lang'])).'" WHERE `id_block_cms` = '.(int)($id_block_cms).' AND `id_lang`= '.(int)($language['id_lang']));
+					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block_lang` SET `name` = "'.pSQL(Tools::getValue('block_name_'.$language['id_lang'])).'" WHERE `id_cms_block` = '.(int)($id_cms_block).' AND `id_lang`= '.(int)($language['id_lang']));
 			}
 			$cmsBoxes = Tools::getValue('cmsBox');
 			if (sizeof($cmsBoxes))
@@ -605,22 +605,22 @@ class BlockCms extends Module
 				{
 					$cms_properties = explode('_', $cmsBox);
 					Db::getInstance()->Execute('
-					INSERT INTO `'._DB_PREFIX_.'cms_block_page` (`id_block_cms`, `id_cms`, `is_category`) 
-					VALUES('.(int)($id_block_cms).', '.(int)($cms_properties[1]).', '.(int)($cms_properties[0]).')');
+					INSERT INTO `'._DB_PREFIX_.'cms_block_page` (`id_cms_block`, `id_cms`, `is_category`) 
+					VALUES('.(int)($id_cms_block).', '.(int)($cms_properties[1]).', '.(int)($cms_properties[0]).')');
 				}
 			if (Tools::isSubmit('addBlockCMS'))
 				Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&addBlockCMSConfirmation');
 			elseif (Tools::isSubmit('editBlockCMS'))
 				Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&editBlockCMSConfirmation');
 		}
-		elseif (Tools::isSubmit('deleteBlockCMS') AND Tools::getValue('id_block_cms'))
+		elseif (Tools::isSubmit('deleteBlockCMS') AND Tools::getValue('id_cms_block'))
 		{
-			$old_block = Db::getInstance()->ExecuteS('SELECT `location`, `position` FROM `'._DB_PREFIX_.'cms_block` WHERE `id_block_cms` = '.Tools::getvalue('id_block_cms'));
+			$old_block = Db::getInstance()->ExecuteS('SELECT `location`, `position` FROM `'._DB_PREFIX_.'cms_block` WHERE `id_cms_block` = '.Tools::getvalue('id_cms_block'));
 			if (sizeof($old_block))
 			{
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = (`position` - 1) WHERE `position` > '.$old_block[0]['position'].' AND `location` = '.$old_block[0]['location']);
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block` WHERE `id_block_cms` = '.(int)(Tools::getValue('id_block_cms')));
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_block_cms` = '.(int)(Tools::getValue('id_block_cms')));
+				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block` WHERE `id_cms_block` = '.(int)(Tools::getValue('id_cms_block')));
+				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cms_block_page` WHERE `id_cms_block` = '.(int)(Tools::getValue('id_cms_block')));
 				Tools::redirectAdmin($currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&deleteBlockCMSConfirmation');
 			}
 			else
@@ -642,7 +642,7 @@ class BlockCms extends Module
 			$this->_html = $this->displayConfirmation($this->l('Block CMS edited'));
 		elseif (Tools::isSubmit('deleteBlockCMSConfirmation'))
 			$this->_html .= $this->displayConfirmation($this->l('Deletion succesfull'));
-		elseif (Tools::isSubmit('id_block_cms') AND Tools::isSubmit('way') AND Tools::isSubmit('position') AND Tools::isSubmit('location'))
+		elseif (Tools::isSubmit('id_cms_block') AND Tools::isSubmit('way') AND Tools::isSubmit('position') AND Tools::isSubmit('location'))
 			$this->changePosition();
 	}
 

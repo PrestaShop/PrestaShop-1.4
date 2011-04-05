@@ -51,10 +51,10 @@ if (Tools::getValue('action') == 'getCms')
 	AND c.`active` = 1 
 	AND cl.`id_lang` = '.(int)($cookie->id_lang).'
 	ORDER BY c.`id_cms`');
-	if (Tools::getValue('id_block_cms'))
+	if (Tools::getValue('id_cms_block'))
 		$cms_selected = Db::getInstance()->ExecuteS('
 		SELECT `is_category`, `id_cms` FROM `'._DB_PREFIX_.'cms_block_page`
-		WHERE `id_block_cms` = '.(int)(Tools::getValue('id_block_cms')));
+		WHERE `id_cms_block` = '.(int)(Tools::getValue('id_cms_block')));
 	$html = '';
 
 	if (sizeof($cms_categories) OR sizeof($cms_pages))
@@ -103,7 +103,7 @@ elseif (Tools::getValue('action') == 'dnd')
 		foreach ($table as $key =>$row)
 		{
 			$ids = explode('_', $row);
-			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = '.(int)($pos).' WHERE `id_block_cms` = '.(int)($ids[2]));
+			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = '.(int)($pos).' WHERE `id_cms_block` = '.(int)($ids[2]));
 			$pos++;
 		}
 	}
