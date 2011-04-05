@@ -109,6 +109,8 @@ class IdentityControllerCore extends FrontController
 			'sl_day' => $birthday[2],
 			'errors' => $this->errors
 		));
+		
+		self::$smarty->assign('newsletter', (int)Module::getInstanceByName('blocknewsletter')->active);
 	}
 	
 	public function setMedia()

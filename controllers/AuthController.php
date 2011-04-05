@@ -34,6 +34,7 @@ class AuthControllerCore extends FrontController
 	
 		parent::__construct();
 	}
+	
 	public function preProcess()
 	{
 		parent::preProcess();
@@ -341,6 +342,7 @@ class AuthControllerCore extends FrontController
 			'days' => $days,
 			'sl_day' => (isset($selectedDays) ? $selectedDays : 0)
 		));
+		self::$smarty->assign('newsletter', (int)Module::getInstanceByName('blocknewsletter')->active);
 	}
 	
 	public function setMedia()
@@ -373,7 +375,7 @@ class AuthControllerCore extends FrontController
 			}
 		}
 	}
-	
+		
 	public function displayContent()
 	{
 		parent::displayContent();
