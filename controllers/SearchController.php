@@ -87,7 +87,7 @@ class SearchControllerCore extends FrontController
 			'search_query' => $query,
 			'homeSize' => Image::getSize('home')));
 		}
-		elseif ($tag = Tools::getValue('tag') AND !is_array($tag))
+		elseif ($tag = urldecode(Tools::getValue('tag')) AND !is_array($tag))
 		{
 			$nbProducts = (int)(Search::searchTag((int)(self::$cookie->id_lang), $tag, true));
 			$this->pagination($nbProducts);
