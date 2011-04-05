@@ -17,7 +17,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 
 UPDATE `PREFIX_cms_lang` set link_rewrite = "uber-uns" where link_rewrite like "%ber-uns";
 
-ALTER TABLE  `PREFIX__cms_block_lang` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL ;
+ALTER TABLE  `PREFIX_cms_block_lang` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL ;
 
 ALTER TABLE  `PREFIX_cms_block` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL;
 
