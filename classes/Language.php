@@ -269,22 +269,32 @@ class LanguageCore extends ObjectModel
 
 	public function loadUpdateSQL()
 	{
-		$file = _PS_TOOL_DIR_.'/languages/updateLanguages.sql';
-		if (!file_exists($file))
-			Tools::dieObject($file);
-		if (!$sqlContent = file_get_contents($file))
-			Tools::dieObject(file_get_contents($file));
-		$sqlContent .= "\n";
-		$sqlContent = str_replace('PREFIX_', _DB_PREFIX_, $sqlContent);
-		$sqlContent = preg_split("/;\s*[\r\n]+/", $sqlContent);
-		foreach ($sqlContent as $query)
+		$tables = Db::getInstance()->ExecuteS('SHOW TABLES LIKE \''._DB_PREFIX_.'%_lang\' ');
+		$langTables = array();
+		
+		foreach($tables as $table)
+			foreach($table as $t)
+				$langTables[] = $t;
+		
+		Db::getInstance()->Execute('SET @id_lang_default = (SELECT c.`value` FROM `'._DB_PREFIX_.'configuration` c WHERE c.`name` = \'PS_LANG_DEFAULT\' LIMIT 1)');
+		foreach($langTables as $name)
 		{
-			$query = trim($query);
-			if (!empty($query))
-				if (!Db::getInstance()->Execute($query))
-					Tools::dieObject($query);
+			$fields = '';
+			$columns = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM `'.$name.'`');
+			foreach($columns as $column)
+				$fields .= $column['Field'].', ';
+			$fields = rtrim($fields, ', ');
+			$identifier = 'id_'.str_replace('_lang', '', str_replace(_DB_PREFIX_, '', $name));
+			
+			$sql = 'INSERT IGNORE INTO `'.$name.'` ('.$fields.') (SELECT ';
+			$sql .= '`'.$identifier.'`, `id_lang`, ';
+			foreach($columns as $column)
+				if ($identifier != $column['Field'] and $column['Field'] != 'id_lang')
+					$sql .= '(SELECT `'.$column['Field'].'` FROM `'.$name.'` tl WHERE tl.`id_lang` = @id_lang_default AND tl.`'.$identifier.'` = `'.str_replace('_lang', '', $name).'`.`'.$identifier.'`), ';
+				$sql = rtrim($sql, ', ');
+			$sql .= ' FROM `'._DB_PREFIX_.'lang` CROSS JOIN `'.str_replace('_lang', '', $name).'`) ;';
+			Db::getInstance()->Execute(pSQL($sql));
 		}
-		return true;
 	}
 
 	public static function recurseDeleteDir($dir)
