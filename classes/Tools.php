@@ -1337,7 +1337,7 @@ class ToolsCore
 			else
 			{
 				// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
-				$root_directory = str_replace(__PS_BASE_URI__, '', _PS_ROOT_DIR_.'/');
+				$root_directory = str_replace(str_replace('/', DIRECTORY_SEPARATOR, __PS_BASE_URI__), '', _PS_ROOT_DIR_.DIRECTORY_SEPARATOR);
 				// check if js files exists
 				if (!file_exists($root_directory.$file))
 					unset($js_uri[$key]);
@@ -1373,7 +1373,7 @@ class ToolsCore
 		else
 		{
 			// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
-			$root_directory = str_replace(__PS_BASE_URI__, '', _PS_ROOT_DIR_.'/');
+			$root_directory = str_replace(str_replace('/', DIRECTORY_SEPARATOR, __PS_BASE_URI__), '', _PS_ROOT_DIR_.DIRECTORY_SEPARATOR);
 			// check if css files exists
 			if (!file_exists($root_directory.$css_uri))
 				return true;
