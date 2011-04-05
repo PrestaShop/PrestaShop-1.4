@@ -171,3 +171,4 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_afe906fe9448ed1b480b3eec3
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_273769f3a3d91979bfdb5ca4909c517a'] = 'Registrati per la valutazione del cliente Trusted shops';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Sei soddisfatto di';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Scrivi una recensione!';
+$_MODULE['<{trustedshops}prestashop>display_products_a53a5a9f38f31d62a791717b943e02f3'] = 'EUR incl. IVA';

@@ -210,6 +210,11 @@ class TrustedShops extends Module
 		return $this->dynamicHook($params, __FUNCTION__);
 	}
 
+	public function hookLeftColumn($params)
+	{
+		return $this->hookRightColumn($params);
+	}
+
 	public function hookPaymentTop($params)
 	{
 		return $this->dynamicHook($params, __FUNCTION__);

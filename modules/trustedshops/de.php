@@ -177,3 +177,4 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca618473
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Bitte schreiben Sie eine Beurteilung!';
 $_MODULE['<{trustedshops}prestashop>display_products_782fefb3c733ea4f3fc5d4d5a1a68745'] = 'Brutto-Gebühr';
 $_MODULE['<{trustedshops}prestashop>display_products_4a89ce99b9ddd4e2560b7b5e9a91c951'] = 'Provisionsüberschuss';
+$_MODULE['<{trustedshops}prestashop>_a53a5a9f38f31d62a791717b943e02f3'] = 'EUR inkl. MwSt.';

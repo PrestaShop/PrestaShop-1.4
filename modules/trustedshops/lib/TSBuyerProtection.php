@@ -159,11 +159,12 @@ class TSBuyerProtection extends AbsTrustedShops
 		}
 		else
 		{
-			foreach ($this->available_languages as $iso=>&$lang)
+			foreach ($this->available_languages as $iso => $lang)
 			{
 				if($lang === '')
-					$lang = Language::getLanguage(Language::getIdByIso($iso));
-				TSBuyerProtection::$CERTIFICATE[strtoupper($iso)] = (array)Tools::jsonDecode(Configuration::get(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($iso)));
+					$this->available_languages[$iso] = Language::getLanguage(Language::getIdByIso($iso));
+				TSBuyerProtection::$CERTIFICATE[strtoupper($iso)] = (array)Tools::jsonDecode(
+					Tools::htmlentitiesDecodeUTF8(Configuration::get(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($iso))));
 			}
 			if(TSBuyerProtection::$SHOPSW === NULL)
 			{
@@ -183,7 +184,8 @@ class TSBuyerProtection extends AbsTrustedShops
 			return false;
 
 		foreach ($this->available_languages as $iso=>$lang)
-			Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($iso), Tools::jsonEncode(array('stateEnum'=>'', 'typeEnum'=>'', 'url'=>'', 'tsID'=>'', 'user'=>'', 'password'=>'')));
+			Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($iso), 
+			Tools::htmlentitiesUTF8(Tools::jsonEncode(array('stateEnum'=>'', 'typeEnum'=>'', 'url'=>'', 'tsID'=>'', 'user'=>'', 'password'=>''))));
 		
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'SHOPSW', '');
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ET_CID', '');
@@ -672,7 +674,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				$product->link_rewrite[(int)Configuration::get('PS_LANG_DEFAULT')] = 'trustedshops';
 			}
 			$product->quantity = 1000;
-			$product->price = ToolsCore::convertPrice($item->netFee,Currency::getIdByIsoCode($item->currency));
+			$product->price = ToolsCore::convertPrice($item->grossFee,Currency::getIdByIsoCode($item->currency));
 			$product->id_category_default = TSBuyerProtection::$CAT_ID;
 			$product->active = true;
 			$product->id_tax = 0;
@@ -734,7 +736,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			TSBuyerProtection::$CERTIFICATE[strtoupper($checked_certificate->certificationLanguage)] = array('stateEnum'=>$checked_certificate->stateEnum, 'typeEnum'=>$checked_certificate->typeEnum, 'url'=>$checked_certificate->url, 'tsID'=>$checked_certificate->tsID, 'user'=>'', 'password'=>'');
 			
 			// update the configuration var
-			Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($checked_certificate->certificationLanguage), Tools::jsonEncode(TSBuyerProtection::$CERTIFICATE[strtoupper($checked_certificate->certificationLanguage)]));
+			Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($checked_certificate->certificationLanguage), Tools::htmlentitiesUTF8(Tools::jsonEncode(TSBuyerProtection::$CERTIFICATE[strtoupper($checked_certificate->certificationLanguage)])));
 			$this->confirmations[] = $this->l('Certificate has been well added.');
 			if ($checked_certificate->typeEnum === 'EXCELLENCE')
 			{
@@ -825,7 +827,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			{
 				TSBuyerProtection::$CERTIFICATE[$iso_lang]['user'] = $user;
 				TSBuyerProtection::$CERTIFICATE[$iso_lang]['password'] = $password;
-				Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.$iso_lang, Tools::jsonEncode(TSBuyerProtection::$CERTIFICATE[$iso_lang]));
+				Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.$iso_lang, Tools::htmlentitiesUTF8(Tools::jsonEncode(TSBuyerProtection::$CERTIFICATE[$iso_lang])));
 				$this->confirmations[] = $this->l('Certificate login has been well added.');
 				
 			}

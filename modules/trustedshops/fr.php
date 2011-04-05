@@ -1,4 +1,4 @@
-<?php
+			<?php
 
 global $_MODULE;
 $_MODULE = array();
@@ -174,6 +174,5 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0fac19c0cc6e205682dd52d61
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_afe906fe9448ed1b480b3eec383461de'] = 'Vos clients diffusent avis et évaluations sur Facebook et Twitter directement à leurs amis et connaissances. Les évaluations sont intégrées automatiquement dans le Google-Index et prises en compte dans Google Shopping.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_273769f3a3d91979bfdb5ca4909c517a'] = 'Créer un compte Trusted Shops';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Etes-vous satisfait de votre achat chez';
+$_MODULE['<{trustedshops}prestashop>display_products_a53a5a9f38f31d62a791717b943e02f3'] = 'EUR TVA incluse';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Donnez nous votre avis!';
-$_MODULE['<{trustedshops}prestashop>display_products_782fefb3c733ea4f3fc5d4d5a1a68745'] = 'honoraire brut';
-$_MODULE['<{trustedshops}prestashop>display_products_4a89ce99b9ddd4e2560b7b5e9a91c951'] = 'honoraire net';
