@@ -182,7 +182,7 @@ class OrderOpcControllerCore extends ParentOrderController
 										'summary' => self::$cart->getSummaryDetails(),
 										'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
 										'HOOK_PAYMENT' => self::_getPaymentMethods(),
-										'gift_price' => Tools::displayPrice(Tools::convertPrice(Product::getTaxCalculationMethod() == 0 ? $wrapping_fees : $wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))))
+										'gift_price' => Tools::displayPrice(Tools::convertPrice(Product::getTaxCalculationMethod() == 1 ? $wrapping_fees : $wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))))
 									));
 									die(Tools::jsonEncode($result));
 								}
