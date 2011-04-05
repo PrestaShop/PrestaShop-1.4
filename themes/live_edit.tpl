@@ -41,7 +41,6 @@
 </script>
 
 <div style="width:100%;height:30px;padding-top:10px;background-color:#D0D3D8;border:solid 1px gray;position:fixed;bottom:0;left:0;opacity:0.7" onmouseover="$(this).css('opacity', 1);" onmouseout="$(this).css('opacity', 0.7);">
-	<!--<input type="submit" value="{l s='Undo'}" id="cancelMove" class="button" style="float:left"> -->
 	<input type="submit" value="{l s='Save'}" id="saveLiveEdit" class="exclusive" style="float:left">
 	<input type="submit" value="{l s='Close Live edit'}" id="closeLiveEdit" class="button" style="float:left">
 	<div style="float:right;margin-right:20px;" id="live_edit_feed_back"></div>

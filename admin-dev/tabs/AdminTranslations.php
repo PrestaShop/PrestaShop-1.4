@@ -974,11 +974,11 @@ class AdminTranslations extends AdminTab
 		$str_output = '';
 		
 		/* List templates to parse */
-		$templates = scandir(_PS_THEME_DIR_);
+		$templates = array_merge(scandir(_PS_THEME_DIR_), scandir(_PS_ALL_THEMES_DIR_));
 		$count = 0;
 		$files = array();
 		foreach ($templates AS $template)
-			if (preg_match('/^(.*).tpl$/', $template) AND file_exists($tpl = _PS_THEME_DIR_.$template))
+			if (preg_match('/^(.*).tpl$/', $template) AND (file_exists($tpl = _PS_THEME_DIR_.$template) OR file_exists($tpl = _PS_ALL_THEMES_DIR_.$template)))
 			{
 				$template2 = substr(basename($template), 0, -4);
 				$newLang = array();

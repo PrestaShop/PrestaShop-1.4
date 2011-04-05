@@ -568,6 +568,8 @@ $_LANG['product_801ab24683a4a8c433c6eb40c48bcd9d'] = 'Télécharger';
 $_LANG['product_98edb85b00d9527ad5acebe451b3fae6'] = 'Accessoires';
 $_LANG['product_d3da97e2d9aee5c8fbe03156ad051c99'] = 'Plus';
 $_LANG['product_4351cfebe4b61d8aa5efa1d020710005'] = 'Voir';
+$_LANG['product_cb3c718c905f00adbb6735f55bfb38ef'] = 'Disponible avec différentes options';
+$_LANG['product_b55197a49e8c4cd8c314bc2aa39d6feb'] = 'Rupture de stock';
 $_LANG['product_54c02ba7929b1fda4847991a45b58a48'] = 'Personnalisation';
 $_LANG['product_d5a90effea572da2df11559161c0930b'] = 'Après avoir enregistré votre personnalisation, n\'oubliez pas d\'ajouter le produit au panier.';
 $_LANG['product_e5a75e83f9fd2f5fdff337a46227b3c3'] = 'Formats acceptés : GIF, JPG, PNG';
@@ -707,5 +709,16 @@ $_LANG['supplier-list_86024cad1e83101d97359d7351051156'] = 'produits';
 $_LANG['supplier-list_3426bf3cca12b1f6550fd8bd36171e2f'] = 'voir les produits';
 $_LANG['supplier_4bbacadd33aff22ab7468fa4f9efd717'] = 'Liste des produits du fournisseur';
 $_LANG['supplier_71a863ca23a2b5d1dc82e60b908576b5'] = 'Pas de produit pour ce fournisseur.';
+$_LANG['live_edit_282f96c7d1ed98d24606d209dcad9842'] = 'Position des modules sauvé';
+$_LANG['live_edit_4c546e1b3dc31d2cdcd4d0c23fad2f4b'] = 'Etes-vous sûr? Si vous fermez cette fenêtre, la position ne sera pas enregistrer';
+$_LANG['live_edit_d3d2e617335f08df83599665eef8a418'] = 'Fermer';
+$_LANG['live_edit_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
+$_LANG['live_edit_70d9be9b139893aa6c69b5e77e614311'] = 'Confirmer';
+$_LANG['live_edit_1b7c6a7f9b72974ede874b8fba9547a0'] = 'Ajouter ce module';
+$_LANG['live_edit_da87eac3848a0d55560bdd129a0e134b'] = 'Impossible de supprimer le module de ce hook';
+$_LANG['live_edit_79030d996976f29a5e986a42d8f026e5'] = 'Impossible d\'enregistrer la position du module';
+$_LANG['live_edit_3c5b87f318f203adbfcc5d6a68959359'] = 'Impossible de charger la liste des modules';
+$_LANG['live_edit_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
+$_LANG['live_edit_d8dcfab18b3a6eba56d617dd1dcb1ba7'] = 'Fermer Live Edit';
 
 ?>
