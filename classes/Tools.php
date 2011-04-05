@@ -1777,7 +1777,7 @@ FileETag INode MTime Size
 		{
 			$backtrace = debug_backtrace();
 			$callee = next($backtrace);
-			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['Line'].'</strong><br />', E_USER_WARNING);
+			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
 
 			$message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('Line').' '.$callee['Line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
 
