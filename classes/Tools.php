@@ -1339,8 +1339,9 @@ class ToolsCore
 				// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
 				$url_data = parse_url($file);
 				$baseUriCleanned = str_replace('/', DIRECTORY_SEPARATOR, __PS_BASE_URI__);
+				$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once($baseUriCleanned, DIRECTORY_SEPARATOR, $url_data['path']);
 				// check if js files exists
-				if (!file_exists(_PS_ROOT_DIR_.str_replace($baseUriCleanned, DIRECTORY_SEPARATOR, $url_data['path'])))
+				if (!file_exists($file_uri))
 					unset($js_uri[$key]);
 			}
 		}
@@ -1376,8 +1377,9 @@ class ToolsCore
 			// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
 			$url_data = parse_url($css_uri);
 			$baseUriCleanned = str_replace('/', DIRECTORY_SEPARATOR, __PS_BASE_URI__);
-			// check if js files exists
-			if (!file_exists(_PS_ROOT_DIR_.str_replace($baseUriCleanned, DIRECTORY_SEPARATOR, $url_data['path'])))
+			$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once($baseUriCleanned, DIRECTORY_SEPARATOR, $url_data['path']);
+			// check if css files exists
+			if (!file_exists($file_uri))
 				return true;
 		}
 
@@ -1416,7 +1418,7 @@ class ToolsCore
 			$infos = array();
 			$infos['uri'] = $filename;
 			$url_data = parse_url($filename);
-			$infos['path'] = _PS_ROOT_DIR_.str_replace(__PS_BASE_URI__, '/', $url_data['path']);
+			$infos['path'] = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
 			$css_files_by_media[$media]['files'][] = $infos;
 			if (!array_key_exists('date', $css_files_by_media[$media]))
 				$css_files_by_media[$media]['date'] = 0;
@@ -1501,7 +1503,7 @@ class ToolsCore
 				$infos = array();
 				$infos['uri'] = $filename;
 				$url_data = parse_url($filename);
-				$infos['path'] =_PS_ROOT_DIR_.str_replace(__PS_BASE_URI__, '/', $url_data['path']);
+				$infos['path'] =_PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
 				$js_files_infos[] = $infos;
 	
 				$js_files_date = max(
@@ -1839,6 +1841,14 @@ FileETag INode MTime Size
 		foreach (array('?', '[', ']', '(', ')', '{', '}', '-', '.', '+', '*', '^', '$') as $char)
 			$s = str_replace($char, '\\'.$char, $s);
 		return $s;
+	}
+	
+	public static function str_replace_once($needle , $replace , $haystack)
+	{
+		$pos = strpos($haystack, $needle);
+		if ($pos === false)
+			return $haystack;
+		return substr_replace($haystack, $replace, $pos, strlen($needle));
 	}
 }
 
