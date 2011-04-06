@@ -1338,8 +1338,7 @@ class ToolsCore
 			{
 				// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
 				$url_data = parse_url($file);
-				$baseUriCleanned = str_replace('/', DIRECTORY_SEPARATOR, __PS_BASE_URI__);
-				$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once($baseUriCleanned, DIRECTORY_SEPARATOR, $url_data['path']);
+				$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 				// check if js files exists
 				if (!file_exists($file_uri))
 					unset($js_uri[$key]);
@@ -1376,8 +1375,7 @@ class ToolsCore
 		{
 			// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
 			$url_data = parse_url($css_uri);
-			$baseUriCleanned = str_replace('/', DIRECTORY_SEPARATOR, __PS_BASE_URI__);
-			$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once($baseUriCleanned, DIRECTORY_SEPARATOR, $url_data['path']);
+			$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 			// check if css files exists
 			if (!file_exists($file_uri))
 				return true;
