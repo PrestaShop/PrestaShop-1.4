@@ -224,13 +224,14 @@ class LinkCore
 	}
 
 	/**
-	  * Create link after language change
+	  * Create link after language change, for the change language block
 	  *
 	  * @param integer $id_lang Language ID
 	  * @return string link
 	  */
 	public function getLanguageLink($id_lang)
 	{
+		global $cookie;
 		$matches = array();
 		$request = $_SERVER['REQUEST_URI'];
 		preg_match('#^/([a-z]{2})/([^\?]*).*$#', $request, $matches);
@@ -246,10 +247,20 @@ class LinkCore
 		parse_str($_SERVER['QUERY_STRING'], $queryTab);
 		unset($queryTab['isolang']);
 		$query = http_build_query($queryTab);
-		if (!empty($query))
+		
+		if (!empty($query) OR !$this->allow)
 			$query = '?'.$query;
 
-		return $this->getPageLink(substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)), false, $id_lang).$query;
+		$switchLangLink = $this->getPageLink(substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)), false, $id_lang).$query;
+		if (!$this->allow)
+			if ($id_lang != $cookie->id_lang)
+			{
+				if (strpos($currentPageLink,'id_lang'))
+					$switchLangLink = preg_replace('`id_lang=[0-9]*`','id_lang='.$id_lang,$currentPageLink);
+				else
+					$switchLangLink = $currentPageLink.'id_lang='.$id_lang;
+			}
+		return $switchLangLink;
 	}
 
 	/**
