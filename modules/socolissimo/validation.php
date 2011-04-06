@@ -125,7 +125,7 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					'.(isset($soParams['PRTOWN']) ? '\''.pSQL($soParams['PRTOWN']).'\'' : '\'\'').',
 					'.(isset($soParams['CEPHONENUMBER']) ? '\''.pSQL($soParams['CEPHONENUMBER']).'\'' : '\'\'').',
 					'.(isset($soParams['CEEMAIL']) ? '\''.pSQL($soParams['CEEMAIL']).'\'' : '\'\'').',
-					'.(isset($soParams['TRADERCOMPANYNAME']) ? '\''.pSQL($soParams['TRADERCOMPANYNAME']).'\'' : '\'\'').',
+					'.(isset($soParams['CECOMPANYNAME']) ? '\''.pSQL($soParams['CECOMPANYNAME']).'\'' : '\'\'').',
 					'.(isset($soParams['CEDELIVERYINFORMATION']) ? '\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\'' : '\'\'').',
 					'.(isset($soParams['CEDOORCODE1']) ? '\''.pSQL($soParams['CEDOORCODE1']).'\'' : '\'\'').',
 					'.(isset($soParams['CEDOORCODE2']) ? '\''.pSQL($soParams['CEDOORCODE2']).'\'' : '\'\'').')';
@@ -142,7 +142,7 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					'.(isset($soParams['CETOWN']) ? '\''.pSQL($soParams['CETOWN']).'\'' : '\'\'').',
 					'.(isset($soParams['CEPHONENUMBER']) ? '\''.pSQL($soParams['CEPHONENUMBER']).'\'' : '\'\'').',
 					'.(isset($soParams['CEEMAIL']) ? '\''.pSQL($soParams['CEEMAIL']).'\'' : '\'\'').',
-					'.(isset($soParams['TRADERCOMPANYNAME']) ? '\''.pSQL($soParams['TRADERCOMPANYNAME']).'\'' : '\'\'').',
+					'.(isset($soParams['CECOMPANYNAME']) ? '\''.pSQL($soParams['CECOMPANYNAME']).'\'' : '\'\'').',
 					'.(isset($soParams['CEDELIVERYINFORMATION']) ? '\''.pSQL($soParams['CEDELIVERYINFORMATION']).'\'' : '\'\'').',
 					'.(isset($soParams['CEDOORCODE1']) ? '\''.pSQL($soParams['CEDOORCODE1']).'\'' : '\'\'').',
 					'.(isset($soParams['CEDOORCODE2']) ? '\''.pSQL($soParams['CEDOORCODE2']).'\'' : '\'\'').')';
@@ -173,7 +173,7 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					(isset($soParams['CEDELIVERYINFORMATION']) ? $values['cedeliveryinformation'] = pSQL($soParams['CEDELIVERYINFORMATION']) : '');
 					(isset($soParams['CEDOORCODE1']) ? $values['cedoorcode1'] = pSQL($soParams['CEDOORCODE1']) : '');
 					(isset($soParams['CEDOORCODE2']) ? $values['cedoorcode2'] = pSQL($soParams['CEDOORCODE2']) : '');
-					(isset($soParams['TRADERCOMPANYNAME']) ? $values['cecompanyname'] = pSQL($soParams['TRADERCOMPANYNAME']) : '');
+					(isset($soParams['CECOMPANYNAME']) ? $values['cecompanyname'] = pSQL($soParams['CECOMPANYNAME']) : '');
 		}
 		else
 		{
@@ -191,7 +191,7 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 					(isset($soParams['CEDELIVERYINFORMATION']) ? $values['cedeliveryinformation'] = pSQL($soParams['CEDELIVERYINFORMATION']) : '');
 					(isset($soParams['CEDOORCODE1']) ? $values['cedoorcode1'] = pSQL($soParams['CEDOORCODE1']) : '');
 					(isset($soParams['CEDOORCODE2']) ? $values['cedoorcode2'] = pSQL($soParams['CEDOORCODE2']) : '');
-					(isset($soParams['TRADERCOMPANYNAME']) ? $values['cecompanyname'] = pSQL($soParams['TRADERCOMPANYNAME']) : '');
+					(isset($soParams['CECOMPANYNAME']) ? $values['cecompanyname'] = pSQL($soParams['CECOMPANYNAME']) : '');
 		}
 		$where = ' `id_cart` =\''.(int)($idCart).'\' AND `id_customer` =\''.(int)($idCustomer).'\'';
 				
