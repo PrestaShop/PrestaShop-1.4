@@ -17,12 +17,6 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 
 UPDATE `PREFIX_cms_lang` set link_rewrite = "uber-uns" where link_rewrite like "%ber-uns";
 
-ALTER TABLE  `PREFIX_cms_block_lang` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL ;
-
-ALTER TABLE  `PREFIX_cms_block` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL;
-
-ALTER TABLE  `PREFIX_cms_block_page` CHANGE  `id_block_cms`  `id_cms_block` INT( 10 ) UNSIGNED NOT NULL;
-
-ALTER TABLE  `ps_cms_block_page` CHANGE  `id_block_cms_page`  `id_cms_block_page` INT( 10 ) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 ALTER TABLE `PREFIX_connections` CHANGE `ip_address` `ip_address` BIGINT NULL DEFAULT NULL;
+
+/* PHP:alter_cms_block(); */;
