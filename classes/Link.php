@@ -255,10 +255,10 @@ class LinkCore
 		if (!$this->allow)
 			if ($id_lang != $cookie->id_lang)
 			{
-				if (strpos($currentPageLink,'id_lang'))
-					$switchLangLink = preg_replace('`id_lang=[0-9]*`','id_lang='.$id_lang,$currentPageLink);
+				if (strpos($switchLangLink,'id_lang'))
+					$switchLangLink = preg_replace('`id_lang=[0-9]*`','id_lang='.$id_lang,$switchLangLink);
 				else
-					$switchLangLink = $currentPageLink.'id_lang='.$id_lang;
+					$switchLangLink = $switchLangLink.'&amp;id_lang='.$id_lang;
 			}
 		return $switchLangLink;
 	}
