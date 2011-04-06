@@ -1362,9 +1362,12 @@ class ToolsCore
 	{
 		global $css_files;
 
-		// avoid useless opération...
-		//if (is_array($css_files) && array_key_exists($css_uri, $css_files) && $css_files[$css_uri] == $css_media_type)
-		//	return true;
+		if (is_array($css_uri))
+		{
+			foreach ($css_uri as $file => $media_type)
+				Tools::addCSS($file, $media_type);
+			return true;
+		}
 		
 		//overriding of modules css files
 		$different = 0;
@@ -1382,11 +1385,10 @@ class ToolsCore
 		}
 
 		// detect mass add
-		if (!is_array($css_uri))
-			$css_uri = array($css_uri => $css_media_type);
+		$css_uri = array($css_uri => $css_media_type);
 
 		// adding file to the big array...
-		if(is_array($css_files))
+		if (is_array($css_files))
 			$css_files = array_merge($css_files, $css_uri);
 		else
 			$css_files = $css_uri;
