@@ -4,7 +4,6 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_c2796655c25e1b0b8582716036aece08'] = 'Geburtstagsgeschenk';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d1f5899bf2af57ed816390d9d740daf6'] = 'Senden Sie Ihren Kunden automatisch ein Geburtstagsgeschenk';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_42f95f1b218dda65c23c52fcb205f1ed'] = 'Erstellen Sie einen Gutschein für Kunden, die Geburtstag haben und mindestens eine gültige Bestellung vorgenommen haben';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Aktiv';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_52292d2f9c39936bc72fbd47a3060df3'] = 'Sie müssen zusätzlich eine cron-Regel einstellen, die die Datei aufruft';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_f7e78e04cba74c610354e91e622cc105'] = 'jeden Tag';
@@ -24,5 +23,3 @@ $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_7b6ac3f2cdb42a4462ff7ca3c
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_410008089d5bb723438103a84d48a59c'] = 'Um dieses Ziel zu erreichen, können Sie Folgendes organisieren:';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_3e788301a1b0ce341aa5ce15bc520545'] = 'Punktuelle Aktionen: kommerzielle Vergünstigungen (persönliche Sonderangebote, Gratis-Produkte oder -Services), nicht-kommerzielle Vergütungen (bevorzugte Behandlung einer Bestellung oder eines Produkts), geldliche Vergünstigungen (Gutscheine, Ermäßigungsgutscheine, PayBack...)';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_f299b58558601a85c98a2d1d7867d523'] = 'Nachhaltige Aktionen: Treue- oder Kundenkarte, die nicht nur der Kommunikation zwischen Händler und Kunden dient, sondern Kunden auch Vorteile bietet (Persönliche Angebote, Ermäßigungen).';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_2ac84f3e753fa299ebe4a6dfe57f1d9c'] = 'Diese Aktionen ermutigen Kunden zum Kauf und zu weiteren, regelmäßigen Besuchen Ihrer Webseite.';
-$_MODULE['<{birthdaypresent}prestashop>birthdaypresent_38241c5ab16ef8f1ba73460ecd0469e8'] = 'Ihr Geburtstagsgeschenk!';

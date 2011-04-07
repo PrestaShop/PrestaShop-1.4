@@ -120,7 +120,6 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_6c530987d533793b0f25fb18807b69c
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_3d2da0d2e731d59465a92f13216cf82d'] = 'Die Kontaktseite';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_06b3355cd8a61603396c7e453bdb1025'] = 'Leere Adresse: Sind Sie sicher, dass Sie eine gültige Adresse auf der Kontaktseite eingestellt haben?';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_2f84f9d5731852c4d07d52ef0badc42e'] = 'Problem beim Lesen der Adressen aus MondialRelay Webservice: Mondial Relay-Server kann abgeschaltet sein';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_cd417a6ee21711e864f25bf53694fbde'] = 'Es gibt keinen Abholpunkt in der Nähe Ihrer Adresse';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = '(zzgl. MwSt.).';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = '(Inkl. Mwst.)';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Kostenlos!';

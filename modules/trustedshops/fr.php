@@ -1,11 +1,10 @@
-			<?php
+<?php
 
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{trustedshops}prestashop>display_products_02ecb4a4709d9bcc590f1a25fc82c0e2'] = 'Trusted Shops protection acheteur (recommandée)';
 $_MODULE['<{trustedshops}prestashop>display_products_b55aab8932a39ca85bb0a1b6eb83f83f'] = 'Protection acheteur jusqu\'à';
-$_MODULE['<{trustedshops}prestashop>display_products_bc500dd033a84b00ffd9f81a8a9d5372'] = 'pendant';
-$_MODULE['<{trustedshops}prestashop>display_products_44fdec47036f482b68b748f9d786801b'] = 'jours';
+$_MODULE['<{trustedshops}prestashop>display_products_a53a5a9f38f31d62a791717b943e02f3'] = 'EUR TVA incluse';
 $_MODULE['<{trustedshops}prestashop>display_products_b3c25d2f94cf87ece3dbb2907318520c'] = 'La protection acheteur Trusted Shops sécurise votre achat en ligne. J’accepte le transfert et la';
 $_MODULE['<{trustedshops}prestashop>display_products_536a056b710e94b16169efd17a4a657b'] = 'sauvegarde';
 $_MODULE['<{trustedshops}prestashop>display_products_2dc4be4d5564180e6df95d5a5a679195'] = 'de mon adresse email pour le traitement de la protection acheteur par Trusted Shops.';
@@ -101,7 +100,6 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_710142158c105c01ef807ce959
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f7e15d97ad927ef705de61e787883ada'] = 'Pour de nombreux acheteurs en ligne, le label de qualité Trusted Shops avec protection acheteur est un critère de qualité durable pour des achats en ligne sécurisés . Vous transformez ainsi des clients uniques en clients loyaux.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_7442a1e0ab5e2e26ca9363d226b93d13'] = 'Type d\'environnement';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8e77e16312de3f95afdf5b92b10232a2'] = 'Vous utilisez actuellement le mode:';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f0cde20d5c44fde748db4e1e163981b7'] = 'Vous pouvez le modifier en éditant le fichier config.cfg';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_dc62561dd8d390e274487516e869fc93'] = 'Obtenir le lien d\'enregistrement';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_5c93149208b3885248b960eb22e6ba49'] = 'Cette variable a été envoyée via mail par Trusted Shops';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_233a96df2f68dbeafaa3126edadc1ce8'] = 'Identification interne de logiciel de la boutique chez Trusted Shops';
@@ -174,5 +172,4 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0fac19c0cc6e205682dd52d61
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_afe906fe9448ed1b480b3eec383461de'] = 'Vos clients diffusent avis et évaluations sur Facebook et Twitter directement à leurs amis et connaissances. Les évaluations sont intégrées automatiquement dans le Google-Index et prises en compte dans Google Shopping.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_273769f3a3d91979bfdb5ca4909c517a'] = 'Créer un compte Trusted Shops';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Etes-vous satisfait de votre achat chez';
-$_MODULE['<{trustedshops}prestashop>display_products_a53a5a9f38f31d62a791717b943e02f3'] = 'EUR TVA incluse';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Donnez nous votre avis!';
