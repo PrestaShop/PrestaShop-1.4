@@ -325,23 +325,49 @@ class Hipay extends PaymentModule
 		<style>
 			.hipay_label {float:none;font-weight:normal;padding:0;text-align:left;width:100%;line-height:30px}
 			.hipay_help {vertical-align:middle}
-			#hipay_table {border:1px solid #383838}
+			#hipay_table {border:1px solid #383838;}
 			#hipay_table td {border:1px solid #383838; width:250px; padding-left;8px; text-align:center;}
 			#hipay_table td.hipay_end {border-top:none}
 			#hipay_table td.hipay_block {border-bottom:none}
+			#hipay_steps_infos {border:none}
+			#hipay_steps_infos td {border:none; width:40px; height:60px;padding-left;8px; text-align:left;}
+			#hipay_steps_infos td.tab2 {border:none; width:700px;; height:60px;padding-left;8px; text-align:left;}
+			#hipay_steps_infos td.hipay_end {border-top:none}
+			#hipay_steps_infos td.hipay_block {border-bottom:none}
+
 		</style>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Hipay').'</legend>
 			'.$this->l('Hipay is a secure electronic wallet which provides merchants a complete service package for online business transactions (for digital contents, software, music, subscriptions, physical goods, etc.) without having to negotiate with a bank and without technical charges.rn').'<br />'.$this->l('Free & easy to use, Hipay implementation is a real asset to an e-commerce website that wants to expand in Europe. It provides secure payments by international cards, local payment solutions, bank transfers and more.').'
-			<br /><br />
-			'.(Configuration::get('HIPAY_SITEID')
-				? '<a href="https://www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your merchant account').'</a><br />'
-				: '<a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700"><img src="../modules/'.$this->name.'/create.jpg" alt="'.$this->l('Create a Hipay account').'" title="'.$this->l('Create a Hipay account').'" border="0" /></a><br />').'
+			<br />
 			<br />'.$this->l('Notice: if you want to refund a payment, please log in to your Hipay account then go to Merchant Management > Sales management.').'
 		</fieldset>
 		<div class="clear">&nbsp;</div>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
-			<form action="'.$link.'" method="post">
-				<table id="hipay_table" cellspacing="0" cellpadding="0">';
+		'.$this->l('The configuration of Hipay is really easy and runs into 3 steps').'<br /><br />
+		<table id="hipay_steps_infos" cellspacing="0" cellpadding="0">
+			<tr>
+				<td>1</td>
+				<td class="tab2">'.(Configuration::get('HIPAY_SITEID')
+					? '<a href="https://www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your merchant account').'</a><br />'
+					: '<a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700"><img src="../modules/'.$this->name.'/create.jpg" alt="'.$this->l('Create a Hipay account').'" title="'.$this->l('Create a Hipay account').'" border="0" /></a><br />').'
+				</td>
+			</tr>
+			<tr>
+				<td>2</td>
+				<td class="tab2">'.$this->l('Active theHipay solution in you Prestashop, it\'s free !').'</td>
+			</tr>
+			<tr>
+				<td>3</td> 
+				<td class="tab2">'.$this->l('Enjoy preferred pricing on transactions via Prestashop by').' <a href="">'
+				.$this->l('contacting our sales department').'</a></td>
+			</tr>
+		</table>	
+		<form action="'.$link.'" method="post">
+		<table id="hipay_table" cellspacing="0" cellpadding="0">
+			<tr>
+				<td style="">&nbsp;</td>	
+				<td style="height:40px;">Compte Hipay</td>
+			</tr>';
 					/*<tr style="height:40px">
 						<td style="padding-left:20px"><b>'.$this->l('Account').'</b></td>
 						<td class="hipay_prod" style="width:250px;padding-left:8px">
