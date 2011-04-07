@@ -245,13 +245,13 @@ class ConfigurationCore extends ObjectModel
 					_DB_PREFIX_.'configuration',
 					array('value' => $values, 'date_upd' => date('Y-m-d H:i:s')),
 					'UPDATE', '`name` = \''.pSQL($key).'\'', true, true);
-				self::$_CONF[$key] = $values;
+				self::$_CONF[$key] = stripslashes($values);
 			}
 			else
 			{
 				$result = self::_addConfiguration($key, $values);
 				if ($result)
-					self::$_CONF[$key] = $values;
+					self::$_CONF[$key] = stripslashes($values);
 				return $result;
 			}
 		}
@@ -276,7 +276,7 @@ class ConfigurationCore extends ObjectModel
 				$result &= $db->Execute('INSERT INTO `'._DB_PREFIX_.'configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`)
 										VALUES ('.$conf['id_configuration'].', '.(int)($id_lang).', \''.$value.'\', NOW())
 										ON DUPLICATE KEY UPDATE `value` = \''.$value.'\', `date_upd` = NOW()');
-				self::$_CONF_LANG[(int)($id_lang)][$key] = $value;
+				self::$_CONF_LANG[(int)($id_lang)][$key] = stripslashes($value);
 			}
 		}
 		return $result;
@@ -289,7 +289,7 @@ class ConfigurationCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('SELECT `name`, `value` FROM `'._DB_PREFIX_.'configuration`');
 		if ($result)
 			foreach ($result AS $row)
-				self::$_CONF[$row['name']] = $row['value'];
+				self::$_CONF[$row['name']] = stripslashes($row['value']);
 
 		/* Multilingual configuration */
 		self::$_CONF_LANG = array();
@@ -300,7 +300,7 @@ class ConfigurationCore extends ObjectModel
 		if ($result === false)
 			die(Tools::displayError('Invalid loadConfiguration() SQL query'));
 		foreach ($result AS $row)
-			self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = $row['value'];
+			self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = stripslashes($row['value']);
 	}
 	
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
