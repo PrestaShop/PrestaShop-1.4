@@ -104,9 +104,13 @@ class ConfigurationCore extends ObjectModel
 	 	if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
 
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration_lang` WHERE `id_configuration` =
-		(SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\')');
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\'');
+		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration_lang` WHERE `id_configuration` =
+		(SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\')') AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\''))
+		{
+			unset(self::$_CONF[$key]);
+			return true;
+		}
+		return false;
 	}
 
 	/**
