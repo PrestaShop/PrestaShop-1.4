@@ -37,6 +37,7 @@ class UspsCarrier extends CarrierModule
 	private $_packagingSizeList = array();
 	private $_packagingTypeList = array();
 	private $_machinableList = array();
+	private $_calculModeList = array();
 	private $_dimensionUnit = '';
 	private $_weightUnit = '';
 	private $_dimensionUnitList = array('CM' => 'CM', 'IN' => 'IN', 'CMS' => 'CM', 'INC' => 'IN');
@@ -69,6 +70,11 @@ class UspsCarrier extends CarrierModule
 				if (!Configuration::get($keyConfiguration) && !empty($name))
 					$warning[] = '\''.$name.'\' ';
 
+			// Check calcul mode
+			if (!Configuration::get('USPS_CARRIER_CALCUL_MODE'))
+				Configuration::updateValue('USPS_CARRIER_CALCUL_MODE', 'split');
+
+
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
 			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
@@ -97,6 +103,7 @@ class UspsCarrier extends CarrierModule
 			'USPS_CARRIER_CITY' => '',
 			'USPS_CARRIER_STATE' => '',
 			'USPS_CARRIER_COUNTRY' => '',
+			'USPS_CARRIER_CALCUL_MODE' => '',
 		);
 
 		// Loading packaging size list
@@ -122,6 +129,12 @@ class UspsCarrier extends CarrierModule
 		$this->_machinableList = array(
 			'FALSE' => $this->l('False'),
 			'TRUE' => $this->l('True')
+		);
+
+		// Loading calcul mode list
+		$this->_calculModeList = array(
+			'onepackage' => $this->l('All items in one package'),
+			'split' => $this->l('Split one item per package')
 		);
 	}
 
@@ -525,6 +538,15 @@ class UspsCarrier extends CarrierModule
 					$html .= '</select>
 					<p>' . $this->l('Select if it is machinable or not by default.') . '</p>
 					</div>
+					<label>'.$this->l('Calcul mode').' : </label>
+						<div class="margin-form">
+							<select name="usps_carrier_calcul_mode">';
+								$idcalculmode = array();
+								foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
+									$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('usps_carrier_calcul_mode', Configuration::get('USPS_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
+					$html .= '</select>
+					<p>' . $this->l('Using the calcul mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specifics configurations for categories or product won\'t be use.') . '</p>
+					</div>
 					<label>'.$this->l('Delivery Service').' : </label>
 					<div class="margin-form">';
 						$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
@@ -602,6 +624,7 @@ class UspsCarrier extends CarrierModule
 			Configuration::updateValue('USPS_CARRIER_CITY', Tools::getValue('usps_carrier_city'));
 			Configuration::updateValue('USPS_CARRIER_STATE', Tools::getValue('usps_carrier_state'));
 			Configuration::updateValue('USPS_CARRIER_COUNTRY', Tools::getValue('usps_carrier_country'));
+			Configuration::updateValue('USPS_CARRIER_CALCUL_MODE', Tools::getValue('usps_carrier_calcul_mode'));
 			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]);
 			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]);
 			if (isset($this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]))
@@ -624,6 +647,7 @@ class UspsCarrier extends CarrierModule
 			Configuration::updateValue('USPS_CARRIER_CITY', Tools::getValue('usps_carrier_city')) AND
 			Configuration::updateValue('USPS_CARRIER_STATE', Tools::getValue('usps_carrier_state')) AND
 			Configuration::updateValue('USPS_CARRIER_COUNTRY', Tools::getValue('usps_carrier_country')) AND
+			Configuration::updateValue('USPS_CARRIER_CALCUL_MODE', Tools::getValue('usps_carrier_calcul_mode')) AND
 			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]) AND
 			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]))
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
@@ -1353,7 +1377,7 @@ class UspsCarrier extends CarrierModule
 		}
 		foreach ($wsParams as $k => $v)
 			if ($k != 'products')
-			$paramHash .= '/'.$v;
+				$paramHash .= '/'.$v;
 		return md5($productHash.$paramHash);
 	}
 
@@ -1451,36 +1475,75 @@ class UspsCarrier extends CarrierModule
 		// Init var
 		$cost = 0;
 
-		// Getting shipping cost for each product
-		foreach ($wsParams['products'] as $product)
+		if (Configuration::get('USPS_CARRIER_CALCUL_MODE') == 'onepackage')
 		{
-			// Load specific configuration
-			$config = $this->loadShippingCostConfig($product);
+			$width = 0;
+			$height = 0;
+			$depth = 0;
+			$weight = 0;
+
+			foreach ($wsParams['products'] as $product)
+			{
+				if ($product['width'] && $product['width'] > $width) $width = $product['width'];
+				if ($product['height'] && $product['height'] > $height) $height = $product['height'];
+				if ($product['depth'] && $product['depth'] > $depth) $depth = $product['depth'];
+				if ($product['weight'])
+					$weight += ($product['weight'] * $product['quantity']);
+			}
 
 			// Get service in adequation with carrier and check if available
+			$servicesConfiguration = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `active` = 1');
+			foreach ($servicesConfiguration as $service)
+				$config['services'][$service['id_usps_rate_service_code']] = $service;
 			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
 			if (!isset($config['services'][$serviceSelected['id_usps_rate_service_code']]))
 				return false;
 
-			// Load param product
 			$wsParams['service'] = $serviceSelected['code'];
-			for ($qty = 0; $qty < $product['quantity']; $qty++)
-				$wsParams['package_list'][] = array(
-					'width' => ($product['width'] ? $product['width'] : 1),
-					'height' => ($product['height'] ? $product['height'] : 1),
-					'depth' => ($product['depth'] ? $product['depth'] : 1),
-					'weight' => ($product['weight'] ? $product['weight'] : 1),
-					'packaging_type' => (isset($config['packaging_type_code']) ? $config['packaging_type_code'] : Configuration::get('USPS_CARRIER_PACKAGING_TYPE')),
-					'packaging_size' => (isset($config['packaging_size_code']) ? $config['packaging_size_code'] : Configuration::get('USPS_CARRIER_PACKAGING_SIZE')),
-					'machinable' => (isset($config['machinable_code']) ? $config['machinable_code'] : Configuration::get('USPS_CARRIER_MACHINABLE')),
-				);
-
-			// If Additional charges
-			if (isset($config['id_currency']) && isset($config['additional_charges']))
+			$wsParams['package_list'] = array();
+			$wsParams['package_list'][] = array(
+				'width' => ($width > 0 ? $width : 1),
+				'height' => ($height > 0 ? $height : 1),
+				'depth' => ($depth > 0 ? $depth : 1),
+				'weight' => ($weight > 0 ? $weight : 0.5),
+				'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'),
+				'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'),
+				'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE'),
+			);
+		}
+		else
+		{
+			// Getting shipping cost for each product
+			foreach ($wsParams['products'] as $product)
 			{
-				$conversionRate = 1;
-				$conversionRate = $this->getCookieCurrencyRate((int)($config['id_currency']));
-				$cost += ($config['additional_charges'] * $conversionRate);
+				// Load specific configuration
+				$config = $this->loadShippingCostConfig($product);
+
+				// Get service in adequation with carrier and check if available
+				$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
+				if (!isset($config['services'][$serviceSelected['id_usps_rate_service_code']]))
+					return false;
+
+				// Load param product
+				$wsParams['service'] = $serviceSelected['code'];
+				for ($qty = 0; $qty < $product['quantity']; $qty++)
+					$wsParams['package_list'][] = array(
+						'width' => ($product['width'] ? $product['width'] : 1),
+						'height' => ($product['height'] ? $product['height'] : 1),
+						'depth' => ($product['depth'] ? $product['depth'] : 1),
+						'weight' => ($product['weight'] ? $product['weight'] : 1),
+						'packaging_type' => (isset($config['packaging_type_code']) ? $config['packaging_type_code'] : Configuration::get('USPS_CARRIER_PACKAGING_TYPE')),
+						'packaging_size' => (isset($config['packaging_size_code']) ? $config['packaging_size_code'] : Configuration::get('USPS_CARRIER_PACKAGING_SIZE')),
+						'machinable' => (isset($config['machinable_code']) ? $config['machinable_code'] : Configuration::get('USPS_CARRIER_MACHINABLE')),
+					);
+
+				// If Additional charges
+				if (isset($config['id_currency']) && isset($config['additional_charges']))
+				{
+					$conversionRate = 1;
+					$conversionRate = $this->getCookieCurrencyRate((int)($config['id_currency']));
+					$cost += ($config['additional_charges'] * $conversionRate);
+				}
 			}
 		}
 
@@ -1771,10 +1834,10 @@ class UspsCarrier extends CarrierModule
 			$p['weight_pounds'] = 0;
 
 			// First class management
-			if ($wsParams['service']=="FIRST CLASS")
-				$wsParams['firstclassmailtype'] = 'PARCEL';
+			if ($wsParams['service'] == 'FIRST CLASS')
+				$wsParams['firstclassmailtype'] = '<FirstClassMailType>PARCEL</FirstClassMailType>';
 			else
-				$wsParams['firstclassmailtype'] = ' ';
+				$wsParams['firstclassmailtype'] = '';
 
 			// Replace in template
 			$search = array(
