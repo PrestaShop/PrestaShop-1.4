@@ -1,5 +1,6 @@
     <Package ID="[[ID]]ST">
 	<Service>[[Service]]</Service>
+	<FirstClassMailType>[[FirstClassMailType]]</FirstClassMailType>
 	<ZipOrigination>[[ZipOrigination]]</ZipOrigination>
 	<ZipDestination>[[ZipDestination]]</ZipDestination>
 	<Pounds>[[Pounds]]</Pounds>

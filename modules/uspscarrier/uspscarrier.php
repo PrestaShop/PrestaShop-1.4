@@ -1775,10 +1775,17 @@ class UspsCarrier extends CarrierModule
 			$p['weight_ounces'] = $p['weight_pounds'] * 16;
 			$p['weight_pounds'] = 0;
 
+			// First class management
+			if ($wsParams['service']=="FIRST CLASS")
+				$wsParams['firstclassmailtype'] = 'PARCEL';
+			else
+				$wsParams['firstclassmailtype'] = ' ';
+
 			// Replace in template
 			$search = array(
 				'[[ID]]',
 				'[[Service]]',
+				'[[FirstClassMailType]]',
 				'[[ZipOrigination]]',
 				'[[ZipDestination]]',
 				'[[Pounds]]',
@@ -1793,6 +1800,7 @@ class UspsCarrier extends CarrierModule
 			$replace = array(
 				$k + 1,
 				$wsParams['service'],
+				$wsParams['firstclassmailtype'],
 				$wsParams['shipper_postalcode'],
 				$wsParams['recipient_postalcode'],
 				$p['weight_pounds'],
