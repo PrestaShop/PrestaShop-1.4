@@ -43,13 +43,6 @@ class UspsCarrier extends CarrierModule
 	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LBS' => 'LBS', 'LB' => 'LBS');
 	private $_moduleName = 'uspscarrier';
 
-
-
-	/*
-	** Construct Method
-	**
-	*/
-
 	public function __construct()
 	{
 		global $cookie;
@@ -57,6 +50,8 @@ class UspsCarrier extends CarrierModule
 		$this->name = 'uspscarrier';
 		$this->tab = 'shipping_logistics';
 		$this->version = '0.9c';
+		$this->author = 'PrestaShop';
+		$this->limited_countries = array('us');
 
 		parent::__construct ();
 

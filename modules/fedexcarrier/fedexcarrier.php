@@ -44,13 +44,6 @@ class FedexCarrier extends CarrierModule
 	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LBS' => 'LBS', 'LB' => 'LBS');
 	private $_moduleName = 'fedexcarrier';
 
-
-
-	/*
-	** Construct Method
-	**
-	*/
-
 	public function __construct()
 	{
 		global $cookie;
@@ -58,6 +51,8 @@ class FedexCarrier extends CarrierModule
 		$this->name = 'fedexcarrier';
 		$this->tab = 'shipping_logistics';
 		$this->version = '0.9c';
+		$this->author = 'PrestaShop';
+		$this->limited_countries = array('us');
 
 		parent::__construct ();
 

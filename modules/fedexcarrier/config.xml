@@ -4,8 +4,9 @@
 	<displayName>Fedex Carrier</displayName>
 	<version>0.9c</version>
 	<description>Offer your customers, different delivery methods with Fedex</description>
-	<author></author>
+	<author>PrestaShop</author>
 	<tab>shipping_logistics</tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
+	<limited_countries>us</limited_countries>
 </module>
