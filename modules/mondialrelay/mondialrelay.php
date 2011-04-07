@@ -629,7 +629,10 @@ class MondialRelay extends Module
 					</li>
 
 					<li>	
-						<label for="mr_Pays_list" class="shipLabel">'.$this->l('Delivery countries:').'<sup>*</sup></label>	
+					<label for="mr_Pays_list" class="shipLabel">'.$this->l('Delivery countries:').'<sup>*</sup><br /><br />
+					<span style="font-size:10px; width:200px;float:left; color:forestgreen">'.
+					$this->l('You can choose several countries by pressing Ctrl while selecting countries').'</span>
+					</label>	
 						<select name="mr_Pays_list[]" id="mr_Pays_list" multiple size="5">
 							<option value="FR">'.$this->l('France').'</option>
 							<option value="BE">'.$this->l('Belgium').'</option>

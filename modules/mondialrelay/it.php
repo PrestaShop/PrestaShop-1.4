@@ -120,7 +120,6 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_6c530987d533793b0f25fb18807b69c
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_3d2da0d2e731d59465a92f13216cf82d'] = 'La pagina contatti';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_06b3355cd8a61603396c7e453bdb1025'] = 'Svuotare indirizzo: Sei sicuro di aver impostato un indirizzo valido nella pagina di contatto?';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_2f84f9d5731852c4d07d52ef0badc42e'] = 'Problema per ottenere gli indirizzi da MondialRelay Webservice: i server di Mondial Relay potrebbero essere inattivi';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_cd417a6ee21711e864f25bf53694fbde'] = 'Non esiste un Relay Point vicino al tuo indirizzo';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = '(Tasse escl.)';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = '(Tasse incl.)';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Gratis!';
