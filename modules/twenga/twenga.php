@@ -99,7 +99,7 @@ class Twenga extends PaymentModule
 	 * @var string
 	 */
 	private static $shop_country;
-	
+
 	public function __construct()
 	{
 		// Basic vars
@@ -108,13 +108,13 @@ class Twenga extends PaymentModule
 		$this->token = Tools::getValue('token');
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.3';
+	 	$this->version = '1.4:';
 		
 	 	parent::__construct();
-		
+	
 		$this->displayName = $this->l('Twenga API');
-		$this->description = $this->l('Export your products to Twenga.com and use the Twenga tracker for customers\' order.');
-		
+		$this->description = $this->l('Module role : export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)');
+
 		// For Twenga subscription
 		$this->site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		self::$base_dir = _PS_ROOT_DIR_.'/modules/twenga/';
@@ -142,6 +142,7 @@ class Twenga extends PaymentModule
 		if (self::$obj_ps_stats === NULL)
 			self::$obj_ps_stats = new PrestashopStats($this->site_url);
 	}
+
 	/**
 	 * For uninstall just need to delete the Merchant Login.
 	 * @return bool see parent class.
@@ -153,6 +154,87 @@ class Twenga extends PaymentModule
 			return false;
 		return true;
 	}
+
+	public function ajaxRequestType()
+	{	
+		if (isset($_POST) && isset($_POST['type']) && isset($_POST['base']))
+		{
+			$link = 'http://addons.prestashop.com/'.Language::getIsoById($_POST['id_lang']).
+				'/2053-twenga-ready-to-sell.html';
+
+			$type = (($_POST['type'] == 'desactive') ? $this->l('Disable') : 
+				(($_POST['type'] == 'reset') ? $this->l('Reset') : 
+				(($_POST['type'] == 'uninstall') ? $this->l('Uninstall') : $this->l('Delete'))));
+
+			$url = $_POST['base'].'&token='.$_POST['token'].'&module_name='.
+				$_POST['module_name'].'&tab_module='.$_POST['tab_module'].'&'.
+				$_POST['type'].'='.$_POST['module_name'];
+
+			$msg = '<div style=""<p>'.$this->l('If you subscriber on Twenga, the activation of this module is mandatory.').
+				'<br /><br />'.$this->l('In case of dysfunction, uninstall this module, install the newer version here and fill up again Twenga hashkey and login.').'
+				<br /><br />'.$this->l('To unsubscribe or for any question, please contact Twenga on your account.').'
+				<div style="font-size:14px; text-align:center;">
+				<b><a '.(($_POST['type'] == 'uninstall') ? 
+				'onClick="$.fancybox.close(); window.location=\''.$url.'\' '. 
+				$this->_getAjaxScript('send_mail.php', $_POST['type'], $url, false).'"' : ' ') . 
+				'href="'.$url.'">'.$type.'</a></b>  - 
+				<b><a href="'.$link.'">'.
+				$this->l('Newer version').'</a></b> - 
+				<b><a href="javacript:void(0);"i onclick="$.fancybox.close(); return false;">'.
+				$this->l('Cancel').'</a></b>
+				</div></p>';
+			echo $msg;
+		}
+	}
+
+	/*
+	 ** Get the javascript code to fetch a distant file
+	 ** href will be automatically split cause of its '&'
+	 */
+	private function _getAjaxScript($file, $type, $href, $displayMsg = true)
+	{
+		global $cookie;
+
+		return '
+				$.ajax({
+						type: \'POST\',
+						url: \''._MODULE_DIR_.'twenga/'.$file.'\',
+						data: \'type='.$type.'&base='.$href.'&id_lang='.(int)$cookie->id_lang.'\',
+						success: function(msg) {
+							'.(($displayMsg) ? '
+							$.fancybox(msg, {
+								\'autoDimensions\'	: false,
+								\'width\'						: 350,
+								\'height\'					: \'auto\',
+								\'transitionIn\'		: \'none\',
+								\'transitionOut\'		: \'none\'	});'
+								: '') . '
+						}
+		});
+		return false;';
+	}
+
+	public function onclickOption($type, $href = false)
+	{
+		$content = '';
+
+		switch($type)
+		{
+		case 'desactive':
+			$content = $this->_getAjaxScript('infos_update.php', $type, $href);
+			break;
+		case 'reset':
+			$content = $this->_getAjaxScript('infos_update.php', $type, $href);
+			break;
+		case 'delete':
+			$content = $this->_getAjaxScript('infos_update.php', $type, $href);
+			break;
+		case 'uninstall':
+			$content = $this->_getAjaxScript('infos_update.php', $type, $href);
+		default:
+		}
+		return $content;
+	}
 	
 	/**
 	 * Method for beeing redirected to Twenga subscription
@@ -161,6 +243,7 @@ class Twenga extends PaymentModule
 	{
 		echo '<script type="text/javascript" language="javascript">window.open("'.$link.'");</script>';
 	}
+
 	private function submitTwengaSubscription()
 	{
 		 unset($_POST['submitTwengaSubscription']);
@@ -177,6 +260,7 @@ class Twenga extends PaymentModule
 			$this->_errors[] = $this->l('Error occurred with the Twenga API method (see details) : ').'<br /> '.nl2br($e->getMessage());
 		}
 	}
+
 	private function submitTwengaLogin()
 	{
 		if (!self::$obj_twenga->setHashkey($_POST['twenga_hashkey']))
@@ -200,6 +284,7 @@ class Twenga extends PaymentModule
 					.$this->l('Please review the e-mail sent by Twenga after subscription. If error still occurred, contact Twenga service.');
 		}
 	}
+
 	private function submitTwengaActivateTracking()
 	{
 		$activate = false;
@@ -217,6 +302,7 @@ class Twenga extends PaymentModule
 			$this->registerHook('cancelProduct');
 		}
 	}
+
 	private function submitTwengaDisableTracking()
 	{
 		$return = Db::getInstance()->ExecuteS('SELECT `id_hook` FROM `'._DB_PREFIX_.'hook_module` WHERE `id_module` = \''.pSQL($this->id).'\'');
@@ -225,6 +311,7 @@ class Twenga extends PaymentModule
 			$this->unregisterHook($hook['id_hook']);
 		}
 	}
+
 	public function preProcess()
 	{
 		if(isset($_POST['submitTwengaSubscription']))
@@ -244,6 +331,7 @@ class Twenga extends PaymentModule
 			$this->submitTwengaDisableTracking();
 		}
 	}
+
 	public function hookCancelProduct($params)
 	{
 		if((float)$params['order']->total_products_wt <= 0)
@@ -267,6 +355,7 @@ class Twenga extends PaymentModule
 			}
 		}
 	}
+
 	public function hookUpdateOrderStatus($params)
 	{
 		if( (int)$params['newOrderStatus']->unremovable === 1
@@ -294,6 +383,7 @@ class Twenga extends PaymentModule
 			}
 		}
 	}
+
 	public function hookPayment($params)
 	{
 		$customer = new Customer($params['cart']->id_customer);
@@ -673,7 +763,7 @@ class Twenga extends PaymentModule
 		
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `active` = 1');
-
+		
 		foreach ($result AS $k => $row)
 		{
 			$product = new Product((int)$row['id_product']);

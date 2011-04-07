@@ -2,8 +2,8 @@
 <module>
 	<name>twenga</name>
 	<displayName>Twenga API</displayName>
-	<version>1.3</version>
-	<description>Export your products to Twenga.com and use the Twenga tracker for customers\' order.</description>
+	<version>1.4:</version>
+	<description>Module roleÂ : export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)</description>
 	<author></author>
 	<tab>smart_shopping</tab>
 	<is_configurable>1</is_configurable>

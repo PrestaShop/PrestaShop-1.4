@@ -3,8 +3,17 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{twenga}prestashop>twenga_400b0c914f01bcecf50b936e652695b2'] = 'l\'API de Twenga';
-$_MODULE['<{twenga}prestashop>twenga_ef538d017142a890fc8b8248813b272e'] = 'Exportez vos produits sur twenga.com et utilisez le tracker de Twenga pour les commandes de vos consommateurs.';
+$_MODULE['<{twenga}prestashop>twenga_e3001d51081fa1a661a8b91834da1d77'] = 'Rôle du module : export de vos produits sur Twenga et installation du suivi des ventes apportées par Twenga (inscription sur Twenga requise)';
 $_MODULE['<{twenga}prestashop>twenga_2034864b8a4fce12f3621b7ec8912e95'] = 'Le module Twenga marche seulement dans certains pays (liste des iso codes :';
+$_MODULE['<{twenga}prestashop>twenga_bcfaccebf745acfd5e75351095a5394a'] = 'Désactiver';
+$_MODULE['<{twenga}prestashop>twenga_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
+$_MODULE['<{twenga}prestashop>twenga_a27dfe771799a09fd55fea73286eb6ab'] = 'Désinstaller';
+$_MODULE['<{twenga}prestashop>twenga_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
+$_MODULE['<{twenga}prestashop>twenga_bf4510198726bc0736e7705e10fffd8b'] = 'Si vous êtes inscrit sur Twenga, l’activation de ce module est obligatoire.';
+$_MODULE['<{twenga}prestashop>twenga_9d156e107098a77332f309c765b72b9c'] = 'En cas de dysfonctionnement, désinstallez ce module, installez la version la plus récente ici puis renseignez à nouveau votre hashkey et login Twenga.';
+$_MODULE['<{twenga}prestashop>twenga_a9d7299384e1f3fc346790328ffa8ac3'] = 'Pour vous désinscrire ou toute autre question, contactez Twenga sur votre compte.';
+$_MODULE['<{twenga}prestashop>twenga_fb3ecfb2800400fb01b0bfd39903e9fb'] = 'Version plus récente';
+$_MODULE['<{twenga}prestashop>twenga_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
 $_MODULE['<{twenga}prestashop>twenga_69e591b18e717d483dbaa8e3ce89ce59'] = 'Les paramètres ne sont pas autorisés (voir détails) :';
 $_MODULE['<{twenga}prestashop>twenga_75a462904fadc0cc16d084efaef4a9d0'] = 'Une erreur s\'est produite avec une méthode de l\'API Twenga (voir détails) :';
 $_MODULE['<{twenga}prestashop>twenga_7edef656ee9e8861e734336a7adba650'] = 'Votre \"hashkey\" n\'est pas valide. Veuillez vérifier l\'email envoyé par Twenga.';
@@ -57,7 +66,6 @@ $_MODULE['<{twenga}prestashop>twenga_8116ea5ccd73f945bb5e260861b0b570'] = 'Code 
 $_MODULE['<{twenga}prestashop>twenga_57d056ed0984166336b7879c2af3657f'] = 'Ville';
 $_MODULE['<{twenga}prestashop>twenga_fcb0c2a30548efc7048ea4bdfa4eba05'] = 'Annuler le tracking';
 $_MODULE['<{twenga}prestashop>twenga_08473b95892d1cb8265ff2716cb81d54'] = 'Pour annuler le tracking, cliquez sur le lien suivant :';
-$_MODULE['<{twenga}prestashop>twenga_bcfaccebf745acfd5e75351095a5394a'] = 'Annuler';
 $_MODULE['<{twenga}prestashop>twenga_2938a03ab100963b7349d83257fa9333'] = 'Activer le tracking';
 $_MODULE['<{twenga}prestashop>twenga_cd07439a0c70b97a595de73218094a36'] = 'Pour activer le tracking, cliquez sur le lien suivant :';
 $_MODULE['<{twenga}prestashop>twenga_a13367a8e2a3f3bf4f3409079e3fdf87'] = 'Activer';
