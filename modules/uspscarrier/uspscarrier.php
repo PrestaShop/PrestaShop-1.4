@@ -1613,8 +1613,8 @@ class UspsCarrier extends CarrierModule
 			'shipper_country_iso' => $shipper_country['iso_code'],
 			'shipper_state_iso' => $shipper_state['iso_code'],
 			'package_list' => array(
-				array('width' => 10, 'height' => 3, 'depth' => 10, 'weight' => 2.0, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
-				array('width' => 3, 'height' => 3, 'depth' => 3, 'weight' => 1.0, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
+				array('width' => 10, 'height' => 3, 'depth' => 10, 'weight' => 0.75, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
+				array('width' => 3, 'height' => 3, 'depth' => 3, 'weight' => 0.75, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
 			),			
 		);
 
