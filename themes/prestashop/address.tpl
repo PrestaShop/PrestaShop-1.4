@@ -144,10 +144,9 @@ $(function(){ldelim}
 			<sup>*</sup>
 		</p>
 		<script type="text/javascript">
+		var ajaxurl = '{$ajaxurl}';
 		{literal}
 				$(document).ready(function(){
-					var ajaxurl = "{$ajaxurl}";
-					
 					$('#id_country').change(function() {
 						$.ajax({
 							type: "GET",
