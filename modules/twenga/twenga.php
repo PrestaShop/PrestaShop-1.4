@@ -121,6 +121,8 @@ class Twenga extends PaymentModule
 		self::$base_path = $this->site_url.'/modules/twenga/';
 		$this->feed_url = self::$base_path.'export.php';
 		
+		echo '<link href="'._PS_CSS_DIR_.'fancybox/style.css" rel="stylesheet" type="text/css" media="screen" />';
+		
 		self::$shop_country = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 		
 		require_once realpath(self::$base_dir.'/lib/PrestashopStats.php');
@@ -169,11 +171,24 @@ class Twenga extends PaymentModule
 			$url = $_POST['base'].'&token='.$_POST['token'].'&module_name='.
 				$_POST['module_name'].'&tab_module='.$_POST['tab_module'].'&'.
 				$_POST['type'].'='.$_POST['module_name'];
+			
+			$msg = '
+				<style>
+					#mainContent {
+						border:1px solid #B0C4DE;
+						background-color:#E2EBEE;
+						-moz-border-radius:10px;
+						-webkit-border-radius:10px;
+						line-height:18px;
+						font-size:14px; }
 
-			$msg = '<div style=""<p>'.$this->l('If you subscriber on Twenga, the activation of this module is mandatory.').
+					#mainContent a { text-decoration:none; color:#268CCD;}
+			</style>
+			<div id="mainContent" >
+				<p>'.$this->l('If you subscriber on Twenga, the activation of this module is mandatory.').
 				'<br /><br />'.$this->l('In case of dysfunction, uninstall this module, install the newer version here and fill up again Twenga hashkey and login.').'
 				<br /><br />'.$this->l('To unsubscribe or for any question, please contact Twenga on your account.').'
-				<div style="font-size:14px; text-align:center;">
+				<div style="margin: 10px 0 5px 0; font-size:14px; color:#FFF; text-align:center;">
 				<b><a '.(($_POST['type'] == 'uninstall') ? 
 				'onClick="$.fancybox.close(); window.location=\''.$url.'\' '. 
 				$this->_getAjaxScript('send_mail.php', $_POST['type'], $url, false).'"' : ' ') . 
@@ -204,7 +219,7 @@ class Twenga extends PaymentModule
 							'.(($displayMsg) ? '
 							$.fancybox(msg, {
 								\'autoDimensions\'	: false,
-								\'width\'						: 350,
+								\'width\'						: 450,
 								\'height\'					: \'auto\',
 								\'transitionIn\'		: \'none\',
 								\'transitionOut\'		: \'none\'	});'
@@ -440,8 +455,84 @@ class Twenga extends PaymentModule
 		}
 	}
 	
+	/*
+	 ** Get the current country name used literaly
+	 */
+	static public function getCurrentCountryName()
+	{
+		global $cookie;
+
+		$id_lang = ((isset($cookie->id_lang)) ? $cookie->id_lang : 
+			((isset($_POST['id_lang'])) ? $_POST['id_lang'] : NULL));
+
+		if ($id_lang === NULL)
+			return 'Undefined id_lang';
+		$country = Db::getInstance()->ExecuteS('
+			SELECT c.name as name
+			FROM '._DB_PREFIX_.'country_lang as c
+			WHERE c.id_lang = '.$id_lang.' 
+			AND c.id_country = '.	Configuration::get('PS_COUNTRY_DEFAULT'));
+	
+		if (!isset($country[0]['name']))
+			$country[0]['name'] = 'Undefined';
+		return $country[0]['name'];
+	}
+
+	/*
+		 ** Check if the default country if available with the restricted ones
+	 */
+	private function _checkCurrentCountrie()
+	{
+		global $cookie;
+
+		$country = Db::getInstance()->ExecuteS('
+			SELECT c.iso_code as iso
+			FROM '._DB_PREFIX_.'country as c
+			LEFT JOIN '._DB_PREFIX_.'country_lang as c_l
+			ON c_l.id_country = c.id_country
+			WHERE c_l.id_lang = '.$cookie->id_lang.' 
+			AND c.id_country = '.	Configuration::get('PS_COUNTRY_DEFAULT'));
+		
+		if (!in_array(strtolower($country[0]['iso']), $this->limited_countries))
+		{
+			$query = '
+				SELECT c_l.name as name
+				FROM '._DB_PREFIX_.'country_lang as c_l
+				LEFT JOIN '._DB_PREFIX_.'country as c
+				ON c_l.id_country = c.id_country
+				WHERE c_l.id_lang = '.$cookie->id_lang.' 
+				AND c.iso_code IN ('; 
+			foreach($this->limited_countries as $iso)
+				$query .= "'".strtoupper($iso)."', ";
+			$query = rtrim($query, ', ').')';
+			$countriesName = Db::getInstance()->ExecuteS($query);
+			$htmlError = '
+				<div class="error">
+					<p>'.$this->l('Your default country is').' : '.Twenga::getCurrentCountryName().'</p>
+					<p>'.$this->l('Please select one of these available countries approved by Twenga').' :</p>
+					<ul>';
+			foreach($countriesName as $c)
+				$htmlError .= '<li>'.$c['name'].'</li>';
+			$url = Tools::getShopDomain(true).$_SERVER['PHP_SELF'].'?tab=AdminCountries&token='.
+				Tools::getAdminTokenLite('AdminCountries').'#Countries';
+			$htmlError .= '
+					</ul>
+					'.$this->l('Follow this link to change the country').
+					' : <a style="color:#0282dc;" href="'.$url.'">here</a>
+				</div>';
+			throw new Exception($htmlError);
+		}
+	}
+
 	public function getContent()
 	{
+		try {
+			$this->_checkCurrentCountrie();
+		}
+		catch (Exception $e)
+		{
+			return $e->getMessage();
+		}
 		// API can't be call if curl extension is not installed on PHP config.
 		if (!extension_loaded('curl'))
 		{
