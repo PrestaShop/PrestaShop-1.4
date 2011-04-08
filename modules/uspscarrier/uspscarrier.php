@@ -50,7 +50,7 @@ class UspsCarrier extends CarrierModule
 
 		$this->name = 'uspscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '0.9c';
+		$this->version = '1.0';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 
