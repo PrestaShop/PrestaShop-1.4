@@ -578,11 +578,12 @@ if ($lm->getIncludeTradFilename())
 					.installModuleList.selected { display: block; }
 				</style>
 				<script>
+					var moduleChecked = new Array();
 					$(document).ready(function() {
 						$('#infosCountry').change(function() {
 							$(".installModuleList.selected").removeClass("selected");
-							if ($("#modulesList" + $('#infosCountry').val()))
-								$("#modulesList" + $('#infosCountry').val()).addClass("selected");
+							if ($("#modulesList" + $('select#infosCountry option:selected').attr('rel')))
+								$("#modulesList" + $('select#infosCountry option:selected').attr('rel')).addClass("selected");
 							$.ajax({
 								type: "GET",
 								url: "./php/country_to_timezone.php?country="+$("select#infosCountry option:selected").attr('rel'),
@@ -617,37 +618,44 @@ if ($lm->getIncludeTradFilename())
 						{
 							$modulesHelpInstall = array();
 							$modulesDescription = array();
+							$modulesPrechecked = array();
 							foreach ($result->partner as $p)
 							{
 								$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo), 'label' => getPreinstallXmlLang($p, 'label'), 'description' => getPreinstallXmlLang($p, 'description'));
-								foreach ($p->countries as $country)
-									$modulesHelpInstall[trim($country)][] = trim($p->key);
+								foreach ($p->country as $country_iso_code)
+									$modulesHelpInstall[trim($country_iso_code)][] = trim($p->key);
+								if ($p->prechecked)
+									foreach ($p->prechecked as $country_iso_code)
+										$modulesPrechecked[trim($p->key)][trim($country_iso_code)] = 1;
 							}
 
-							foreach ($modulesHelpInstall as $id_country => $modulesList)
+							foreach ($modulesHelpInstall as $country_iso_code => $modulesList)
 							{
-								echo '<div class="installModuleList'.($id_country == 8 ? ' selected' : '').'" id="modulesList'.$id_country.'">';
+								echo '<div class="installModuleList'.($country_iso_code == 'FR' ? ' selected' : '').'" id="modulesList'.$country_iso_code.'">';
 								foreach ($modulesList as $module)
 								{
 									echo '<div class="field">
-										<div style="float: left; height: 35px; width: 275px; padding-top: 6px;"><input type="checkbox" id="preInstallModules'.$id_country.$module.'" value="'.$module.'" class="aligned '.$module.' preInstallModules'.$id_country.'" style="vertical-align: middle;" /></div>
+										<div style="float: left; height: 35px; width: 275px; padding-top: 6px;"><input type="checkbox" id="preInstallModules_'.$country_iso_code.'_'.$module.'" value="'.$module.'" class="aligned '.$module.' preInstallModules_'.$country_iso_code.'" style="vertical-align: middle;" /></div>
 										<div style="float: left; height: 35px; width: 40px;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'" /></div>
-										<div style="float: left; height: 35px; width: 300px;"><label for="preInstallModules'.$id_country.$module.'">'.$modulesDescription[$module]['label'].'</label></div>
+										<div style="float: left; height: 35px; width: 300px;"><label for="preInstallModules_'.$country_iso_code.'_'.$module.'">'.$modulesDescription[$module]['label'].'</label></div>
 										<br clear="left" />
 										<span id="resultInfosNotification" class="result aligned"></span>
 										<p class="userInfos aligned">'.$modulesDescription[$module]['description'].'</p>
-										<div id="'.$module.'FormDiv'.$id_country.'" style="display: none;"></div>
+										<div id="divForm_'.$country_iso_code.'_'.$module.'" style="display: none;"></div>
 									</div>';
 									echo "<script>
+										moduleChecked['".$country_iso_code.'_'.$module."'] = 0;
 										$(document).ready(function() {
-											$('#preInstallModules".$id_country.$module."').change(function() {
+											$('#preInstallModules_".$country_iso_code.'_'.$module."').change(function() {
+												var idDivForm = '#divForm_".$country_iso_code."_".$module."';
 												if ($(this).attr('checked'))
 												{
-													$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).css({'display' : 'block'});
+													moduleChecked['".$country_iso_code.'_'.$module."'] = 1;
+													$(idDivForm).css({'display' : 'block'});
 													$.ajax({
 													  url: 'preactivation.php?request=form&partner=".$module."&language=".$_GET['language']."'+
 														'&language_iso_code='+isoCodeLocalLanguage+
-														'&country_iso_code='+encodeURIComponent($('select#infosCountry option:selected').attr('rel'))+
+														'&country_iso_code=".$country_iso_code."'+
 														'&activity='+ encodeURIComponent($('select#infosActivity').val())+
 														'&timezone='+ encodeURIComponent($('select#infosTimezone').val())+
 														'&shop='+ encodeURIComponent($('input#infosShop').val())+
@@ -655,18 +663,43 @@ if ($lm->getIncludeTradFilename())
 														'&lastName='+ encodeURIComponent($('input#infosName').val())+
 														'&email='+ encodeURIComponent($('input#infosEmail').val()),
 													  	success: function(data) {
-													    		$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).html(data);
+													    		$(idDivForm).html(data);
 													  	}
 													});
 												}
 												else
 												{
-													$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).css({'display' : 'none'});
-													$('#".$module."FormDiv'+$('select#infosCountry option:selected').attr('value')).html('');
+													moduleChecked['".$country_iso_code.'_'.$module."'] = 0;
+													$(idDivForm).css({'display' : 'none'});
+													$(idDivForm).html('');
 												}
 											});
 										});
-										</script>";
+										";
+										if (isset($modulesPrechecked[$module][$country_iso_code]) && $modulesPrechecked[$module][$country_iso_code] == 1)
+										{
+											echo "$(document).ready(function() {
+												moduleChecked['".$country_iso_code.'_'.$module."'] = 1;
+												$('#preInstallModules_".$country_iso_code."_".$module."').attr('checked', true);
+												$('#divForm_".$country_iso_code."_".$module."').css({'display' : 'block'});
+												$.ajax({
+												  url: 'preactivation.php?request=form&partner=".$module."&language=".$_GET['language']."'+
+													'&language_iso_code='+isoCodeLocalLanguage+
+													'&country_iso_code=".$country_iso_code."'+
+													'&activity='+ encodeURIComponent($('select#infosActivity').val())+
+													'&timezone='+ encodeURIComponent($('select#infosTimezone').val())+
+													'&shop='+ encodeURIComponent($('input#infosShop').val())+
+													'&firstName='+ encodeURIComponent($('input#infosFirstname').val())+
+													'&lastName='+ encodeURIComponent($('input#infosName').val())+
+													'&email='+ encodeURIComponent($('input#infosEmail').val()),
+												  	success: function(data) {
+												    		$('#divForm_".$country_iso_code."_".$module."').html(data);
+												  	}
+												});
+											});";
+										}
+
+										echo "</script>";
 								}
 								echo '</div>';
 							}
