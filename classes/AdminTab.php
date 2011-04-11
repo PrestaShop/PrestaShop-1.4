@@ -1143,7 +1143,11 @@ abstract class AdminTabCore
 	public function displayListHeader($token = NULL)
 	{
 		global $currentIndex, $cookie;
-
+		$isCms = false;
+		if (preg_match('/cms/Ui', $this->identifier))
+			$isCms = true;	
+		$id_cat = Tools::getValue('id_'.($isCms ? 'cms_' : '').'category');
+		
 		if (!isset($token) OR empty($token))
 			$token = $this->token;
 
@@ -1225,8 +1229,8 @@ abstract class AdminTabCore
 				if (Tools::getValue($this->table.'Orderby') && Tools::getValue($this->table.'Orderway'))
 					$currentIndex = preg_replace('/&'.$this->table.'Orderby=([a-z _]*)&'.$this->table.'Orderway=([a-z]*)/i', '', $currentIndex);
 				echo '	<br />
-						<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=desc&token='.$token.'"><img border="0" src="../img/admin/down'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'DESC')) ? '_d' : '').'.gif" /></a>
-						<a href="'.$currentIndex.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=asc&token='.$token.'"><img border="0" src="../img/admin/up'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'ASC')) ? '_d' : '').'.gif" /></a>';
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id_cat.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=desc&token='.$token.'"><img border="0" src="../img/admin/down'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'DESC')) ? '_d' : '').'.gif" /></a>
+						<a href="'.$currentIndex.'&'.$this->identifier.'='.$id_cat.'&'.$this->table.'Orderby='.urlencode($key).'&'.$this->table.'Orderway=asc&token='.$token.'"><img border="0" src="../img/admin/up'.((isset($this->_orderBy) AND ($key == $this->_orderBy) AND ($this->_orderWay == 'ASC')) ? '_d' : '').'.gif" /></a>';
 			}
 			echo '	</th>';
 		}
