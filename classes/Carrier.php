@@ -85,6 +85,8 @@ class CarrierCore extends ObjectModel
 	protected static $priceByPrice = array();
 	protected static $priceByPrice2 = array();
 
+	protected static $_cache_tax_rule = array();
+
 	protected	$webserviceParameters = array(
 		'fields' => array(
 			'id_tax_rules_group' => array(),
@@ -384,7 +386,7 @@ class CarrierCore extends ObjectModel
 	public static function getCarriersForOrder($id_zone, $groups = NULL)
 	{
 		global $cookie, $cart;
-		
+
 		if (is_array($groups) AND !empty($groups))
 			$result = Carrier::getCarriers((int)($cookie->id_lang), true, false, (int)($id_zone), $groups, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		else
@@ -432,7 +434,7 @@ class CarrierCore extends ObjectModel
 		}
 		return $resultsArray;
 	}
-	
+
 	/**
 	 * @param int $id_country
 	 * @param array $groups
@@ -442,7 +444,7 @@ class CarrierCore extends ObjectModel
 	public static function getCarriersOpc($id_country, $groups = NULL)
 	{
 		Tools::displayAsDeprecated();
-		
+
 		return self::getCarriersForOrder((int)Country::getIdZone((int)($id_country)), $groups);
 	}
 
@@ -671,9 +673,15 @@ class CarrierCore extends ObjectModel
 
 	public static function getIdTaxRulesGroupByIdCarrier($id_carrier)
 	{
-	    return Db::getInstance()->getValue('
-	    SELECT `id_tax_rules_group`
-	    FROM `'._DB_PREFIX_.'carrier`
-	    WHERE `id_carrier` = '.(int)$id_carrier);
+		if (!isset(self::$_cache_tax_rule[(int)$id_carrier]))
+		{
+			 self::$_cache_tax_rule[$id_carrier] = Db::getInstance()->getValue('
+			 SELECT `id_tax_rules_group`
+			 FROM `'._DB_PREFIX_.'carrier`
+			 WHERE `id_carrier` = '.(int)$id_carrier);
+	   }
+
+	   return self::$_cache_tax_rule[$id_carrier];
 	}
 }
+

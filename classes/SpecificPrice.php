@@ -46,6 +46,7 @@ class SpecificPriceCore extends ObjectModel
 	protected 	$identifier = 'id_specific_price';
 
 	protected static $_specificPriceCache = array();
+	protected static $_cache_priorities = array();
 
 	public function getFields()
 	{
@@ -95,10 +96,16 @@ class SpecificPriceCore extends ObjectModel
 
     public static function getPriority($id_product)
     {
-        $priority = Db::getInstance()->getValue('
-	    SELECT `priority`
-		FROM `'._DB_PREFIX_.'specific_price_priority`
-	    WHERE `id_product` = '.(int)$id_product);
+
+    	if (!isset(self::$_cache_priorities[(int)$id_product]))
+    	{
+		   self::$_cache_priorities[(int)$id_product] = Db::getInstance()->getValue('
+		   SELECT `priority`
+			FROM `'._DB_PREFIX_.'specific_price_priority`
+			WHERE `id_product` = '.(int)$id_product);
+		}
+
+		$priority = self::$_cache_priorities[(int)$id_product];
 
 	    if (!$priority)
 	        $priority = Configuration::get('PS_SPECIFIC_PRICE_PRIORITIES');

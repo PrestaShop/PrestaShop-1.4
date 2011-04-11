@@ -39,7 +39,8 @@ class CountyCore extends ObjectModel
 	protected 	$table = 'county';
 	protected 	$identifier = 'id_county';
 
-	private $_cache_get_counties = array();
+	private static $_cache_get_counties = array();
+	private static $_cache_county_zipcode = array();
 
 	const USE_BOTH_TAX = 0;
 	const USE_COUNTY_TAX = 1;
@@ -71,15 +72,15 @@ class CountyCore extends ObjectModel
 
 	public static function getCounties($id_state)
 	{
-		if (!isset($_cache_get_counties[$id_state]))
+		if (!isset(self::$_cache_get_counties[$id_state]))
 		{
-			$_cache_get_counties[$id_state] = Db::getInstance()->ExecuteS('
+			self::$_cache_get_counties[$id_state] = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'county`
 			WHERE `id_state` = '.(int)$id_state
 			);
 		}
 
-		return $_cache_get_counties[$id_state];
+		return self::$_cache_get_counties[$id_state];
 	}
 
 	// return the list of associated zipcode
@@ -158,13 +159,18 @@ class CountyCore extends ObjectModel
 
 	public static function getIdCountyByZipCode($id_state, $zip_code)
 	{
-		return Db::getInstance()->getValue('
-		SELECT DISTINCT c.`id_county` FROM `'._DB_PREFIX_.'county` c
-		LEFT JOIN `'._DB_PREFIX_.'county_zip_code` cz ON (c.`id_county` = cz.`id_county`)
-		WHERE `id_state` = '.(int)$id_state.'
-		AND cz.`from_zip_code` >= '.(int)$zip_code.'
-		AND cz.`to_zip_code` <= '.(int)$zip_code
-		);
+		if (!isset(self::$_cache_county_zipcode[$id_state.'-'.$zip_code]))
+		{
+			self::$_cache_county_zipcode[$id_state.'-'.$zip_code] = Db::getInstance()->getValue('
+			SELECT DISTINCT c.`id_county` FROM `'._DB_PREFIX_.'county` c
+			LEFT JOIN `'._DB_PREFIX_.'county_zip_code` cz ON (c.`id_county` = cz.`id_county`)
+			WHERE `id_state` = '.(int)$id_state.'
+			AND cz.`from_zip_code` >= '.(int)$zip_code.'
+			AND cz.`to_zip_code` <= '.(int)$zip_code
+			);
+		}
+
+		return self::$_cache_county_zipcode[$id_state.'-'.$zip_code];
 	}
 
 	public function isZipCodeRangePresent($zip_codes)
