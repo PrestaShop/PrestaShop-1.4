@@ -73,7 +73,7 @@ function recherche_MR(args)
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) 
 			{
-			},
+			}
 		});
 	}
 	else
@@ -88,7 +88,8 @@ function recherche_MR(args)
 <div id="map" style="height:300px; width:500px; border:1px;" ></div>
 
 <?php echo '<script type="text/javascript">
-recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays'].'&Ville='.$_GET['Ville'].'&CP='.$_GET['CP'].'&Taille=&Poids='.$_GET['Poids'].'&Action='.$_GET['Action'].'&num='.$_GET['num'].'\');
+
+	recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays'].'&Ville='.$_GET['Ville'].'&CP='.$_GET['CP'].'&Taille=&Poids='.$_GET['Poids'].'&Action='.$_GET['Action'].'&num='.$_GET['num'].'\');
 
 	window.onload = function()
 		{
@@ -107,4 +108,4 @@ recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays
 				}
 		}
 </script>';
-
+?>
