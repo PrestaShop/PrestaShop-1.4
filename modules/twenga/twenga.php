@@ -93,6 +93,8 @@ class Twenga extends PaymentModule
 	 * @var array
 	 */
 	public $limited_countries = array('fr', 'de', 'gb', 'uk', 'it', 'es');
+
+	private $_currentIsoCodeCountry = NULL;
 	
 	/**
 	 * The current country iso code for the shop.
@@ -121,8 +123,6 @@ class Twenga extends PaymentModule
 		self::$base_path = $this->site_url.'/modules/twenga/';
 		$this->feed_url = self::$base_path.'export.php';
 		
-		echo '<link href="'._PS_CSS_DIR_.'fancybox/style.css" rel="stylesheet" type="text/css" media="screen" />';
-		
 		self::$shop_country = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 		
 		require_once realpath(self::$base_dir.'/lib/PrestashopStats.php');
@@ -143,6 +143,7 @@ class Twenga extends PaymentModule
 			self::$obj_twenga = new TwengaObj();
 		if (self::$obj_ps_stats === NULL)
 			self::$obj_ps_stats = new PrestashopStats($this->site_url);
+		$this->_initCurrentIsoCodeCountry();
 	}
 
 	/**
@@ -155,6 +156,22 @@ class Twenga extends PaymentModule
 		OR !self::$obj_twenga->deleteMerchantLogin())
 			return false;
 		return true;
+	}
+
+	private function _initCurrentIsoCodeCountry()
+	{
+		global $cookie;
+
+		$country = Db::getInstance()->ExecuteS('
+			SELECT c.iso_code as iso
+			FROM '._DB_PREFIX_.'country as c
+			LEFT JOIN '._DB_PREFIX_.'country_lang as c_l
+			ON c_l.id_country = c.id_country
+			WHERE c_l.id_lang = '.$cookie->id_lang.' 
+			AND c.id_country = '.	Configuration::get('PS_COUNTRY_DEFAULT'));
+
+		if (isset($country[0]['iso']))
+			$this->_currentIsoCodeCountry = $country[0]['iso'];
 	}
 
 	public function ajaxRequestType()
@@ -485,15 +502,7 @@ class Twenga extends PaymentModule
 	{
 		global $cookie;
 
-		$country = Db::getInstance()->ExecuteS('
-			SELECT c.iso_code as iso
-			FROM '._DB_PREFIX_.'country as c
-			LEFT JOIN '._DB_PREFIX_.'country_lang as c_l
-			ON c_l.id_country = c.id_country
-			WHERE c_l.id_lang = '.$cookie->id_lang.' 
-			AND c.id_country = '.	Configuration::get('PS_COUNTRY_DEFAULT'));
-		
-		if (!in_array(strtolower($country[0]['iso']), $this->limited_countries))
+		if (!in_array(strtolower($this->_currentIsoCodeCountry), $this->limited_countries))
 		{
 			$query = '
 				SELECT c_l.name as name
@@ -582,13 +591,15 @@ class Twenga extends PaymentModule
 			$this->_errors[] = $str_error;
 		}
 		
-		global $cookie;
-		$isoUser = strtolower(Language::getIsoById(intval($cookie->id_lang)));
-		if ($isoUser == 'fr' || $isoUser == 'de')
-			$tarifs_link = 'https://rts.twenga.com/media/prices_'.$isoUser.'.jpg';
-		else
+		$defaultIsoCountry = strtolower($this->_currentIsoCodeCountry);
+		if ($defaultIsoCountry == 'gb')
 			$tarifs_link = 'https://rts.twenga.com/media/prices_uk.jpg';
-
+		else
+			$tarifs_link = 'https://rts.twenga.com/media/prices_'.$defaultIsoCountry.'.jpg';
+		
+		global $cookie;
+		
+		$isoUser = strtolower(Language::getIsoById(intval($cookie->id_lang)));
 
 		$tarif_arr = array(950, 565);
 		if (file_exists($tarifs_link))
@@ -646,11 +657,12 @@ class Twenga extends PaymentModule
 	private function displayTwengaLogin()
 	{
 		global $cookie;
+
 		$isoUser = strtolower(Language::getIsoById(intval($cookie->id_lang)));
-		if ($isoUser == 'fr' || $isoUser == 'de')
-			$lost_link = 'https://rts.twenga.'.$isoUser.'/lost_password';
-		else
+		if ($isoUser == 'en')
 			$lost_link = 'https://rts.twenga.co.uk/lost_password';
+		else
+			$lost_link = 'https://rts.twenga.'.$isoUser.'/lost_password';
 
 		return '
 		<form name="form_set_hashkey" action="" method="post">	
