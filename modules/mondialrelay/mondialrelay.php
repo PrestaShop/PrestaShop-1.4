@@ -91,30 +91,42 @@ class MondialRelay extends Module
 			if (!empty($query))
 				Db::getInstance()->Execute(trim($query));
 
-		$rpos = Db::getInstance()->ExecuteS('SELECT id_tab  FROM `' . _DB_PREFIX_ . 'tab` WHERE  class_name="AdminMondialRelay"   LIMIT 0 , 1');
-		$id_tab = $rpos[0]['id_tab'];	
-		if ($id_tab <= 0)
+		$result = Db::getInstance()->getRow('
+			SELECT id_tab  
+			FROM `' . _DB_PREFIX_ . 'tab`
+			WHERE class_name="AdminMondialRelay"');
+
+		if (!$result)
 		{
 			/*tab install */
 
-			$rpos = Db::getInstance()->ExecuteS('SELECT position  FROM `' . _DB_PREFIX_ . 'tab` WHERE `id_parent` = 3 ORDER BY `'. _DB_PREFIX_ .'tab`.`position` DESC LIMIT 0 , 1');
-			$pos = $rpos[0]['position'];	
-			$pos++;
-		
-			Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'tab (id_parent, class_name, position, module) VALUES("3", "AdminMondialRelay",  "'.(int)($pos).'", "mondialrelay")');	 	
+			$result = Db::getInstance()->getRow('
+				SELECT position 
+				FROM `' . _DB_PREFIX_ . 'tab` 
+				WHERE `id_parent` = 3
+				ORDER BY `'. _DB_PREFIX_ .'tab`.`position` DESC');
 
-			$rpos = Db::getInstance()->ExecuteS('SELECT id_tab  FROM `' . _DB_PREFIX_ . 'tab` WHERE `id_parent`= 3 and class_name="AdminMondialRelay"   LIMIT 0 , 1');
-			$id_tab = $rpos[0]['id_tab'];		
+			$pos = (isset($result['position'])) ? $result['position'] + 1 : 0;
+
+			Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'tab 
+				(id_parent, class_name, position, module) 
+				VALUES(3, "AdminMondialRelay",  "'.(int)($pos).'", "mondialrelay")');	 	
+
+			$id_tab = Db::getInstance()->Insert_ID();		
 			
-        	$languages = Language::getLanguages();
+			$languages = Language::getLanguages();
 			foreach ($languages AS $language)
-		    	Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'tab_lang (id_lang,id_tab,name) VALUES("'.(int)($language['id_lang']).'", "'.(int)($id_tab).'", "Mondial Relay")');
+				Db::getInstance()->Execute('
+				INSERT INTO ' . _DB_PREFIX_ . 'tab_lang 
+				(id_lang, id_tab, name) 
+				VALUES("'.(int)($language['id_lang']).'", "'.(int)($id_tab).'", "Mondial Relay")');
 
 			$profiles = Profile::getProfiles(Configuration::get('PS_LANG_DEFAULT'));
 			foreach ($profiles as $profile)
-				Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'access (`id_profile`,`id_tab`,`view`,`add`,`edit`,`delete`)
-											VALUES('.$profile['id_profile'].', '.(int)($id_tab).', 1, 1, 1, 1)');
-			
+				Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'access 
+				(`id_profile`,`id_tab`,`view`,`add`,`edit`,`delete`)
+				VALUES('.$profile['id_profile'].', '.(int)($id_tab).', 1, 1, 1, 1)');
+
 			@copy(_PS_MODULE_DIR_.'mondialrelay/AdminMondialRelay.gif', _PS_IMG_DIR_.'t/AdminMondialRelay.gif');
 		}	
 
@@ -136,11 +148,14 @@ class MondialRelay extends Module
 		if (!parent::uninstall())
 			return false;
 		
-		/* Tab uninstallation */
-		$rpos = Db::getInstance()->ExecuteS('SELECT id_tab  FROM `' . _DB_PREFIX_ . 'tab` WHERE  class_name="AdminMondialRelay"   LIMIT 0 , 1');
-		if (isset($rpos[0]['id_tab']))
+	/* Tab uninstallation */
+		$result = Db::getInstance()->getRow('
+			SELECT id_tab  
+			FROM `' . _DB_PREFIX_ . 'tab`
+			WHERE class_name="AdminMondialRelay"');
+		if ($result)
 		{
-			$id_tab = $rpos[0]['id_tab'];
+			$id_tab = $result['id_tab'];
 			if (isset($id_tab) AND !empty($id_tab))
 			{	
 				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab WHERE id_tab = '.(int)($id_tab));
