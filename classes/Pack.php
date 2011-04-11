@@ -119,25 +119,28 @@ class PackCore extends Product
 
 	public static function getPacksTable($id_product, $id_lang, $full = false, $limit = NULL)
 	{
+		$packs = Db::getInstance()->getValue('
+		SELECT GROUP_CONCAT(a.`id_product_pack`, ",")
+		FROM `'._DB_PREFIX_.'pack` a
+		WHERE a.`id_product_item` = '.(int)$id_product.')');
+		if (!(int)$packs)
+			return array();
+		
 		$sql = '
 		SELECT p.*, pl.*, i.`id_image`, il.`legend`, t.`rate`
 		FROM `'._DB_PREFIX_.'product` p
 		NATURAL LEFT JOIN `'._DB_PREFIX_.'product_lang` pl
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
 		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
 	                                           	   AND tr.`id_state` = 0)
 	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
-		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
-		WHERE pl.`id_lang` = '.(int)($id_lang).'
-		AND p.`id_product` IN (
-			SELECT a.`id_product_pack`
-			FROM `'._DB_PREFIX_.'pack` a
-			WHERE a.`id_product_item` = '.(int)($id_product).')
-		';
+		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)$id_lang.')
+		WHERE pl.`id_lang` = '.(int)$id_lang.'
+		AND p.`id_product` IN ('.$packs.')';
 		if ($limit)
-			$sql .= ' LIMIT '.(int)($limit);
+			$sql .= ' LIMIT '.(int)$limit;
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if (!$full)
 			return $result;

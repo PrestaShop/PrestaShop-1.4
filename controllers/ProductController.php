@@ -328,7 +328,7 @@ class ProductControllerCore extends FrontController
 				));
 
 				// Pack management
-				self::$smarty->assign('packItems', Pack::getItemTable($this->product->id, (int)(self::$cookie->id_lang), true));
+				self::$smarty->assign('packItems', $this->product->cache_is_pack ? Pack::getItemTable($this->product->id, (int)(self::$cookie->id_lang), true) : array());
 				self::$smarty->assign('packs', Pack::getPacksTable($this->product->id, (int)(self::$cookie->id_lang), true, 1));
 			}
 		}
