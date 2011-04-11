@@ -329,8 +329,8 @@ class Hipay extends PaymentModule
 			#hipay_table td {border:1px solid #383838; width:250px; padding-left;8px; text-align:center;}
 			#hipay_table td.hipay_end {border-top:none}
 			#hipay_table td.hipay_block {border-bottom:none}
-			#hipay_steps_infos {border:none}
-			#hipay_steps_infos td {border:none; width:40px; height:60px;padding-left;8px; text-align:left;}
+			#hipay_steps_infos {border:none; margin-bottom:20px;}
+			#hipay_steps_infos td {border:none; width:70px; height:60px;padding-left;8px; text-align:left;}
 			#hipay_steps_infos td.tab2 {border:none; width:700px;; height:60px;padding-left;8px; text-align:left;}
 			#hipay_steps_infos td.hipay_end {border-top:none}
 			#hipay_steps_infos td.hipay_block {border-bottom:none}
@@ -346,19 +346,20 @@ class Hipay extends PaymentModule
 		'.$this->l('The configuration of Hipay is really easy and runs into 3 steps').'<br /><br />
 		<table id="hipay_steps_infos" cellspacing="0" cellpadding="0">
 			<tr>
-				<td>1</td>
+				<td><img src="../modules/'.$this->name.'/1.png" alt="step 1" /></td>
 				<td class="tab2">'.(Configuration::get('HIPAY_SITEID')
 					? '<a href="https://www.hipay.com/auth" style="color:#D9263F;font-weight:700">'.$this->l('Log in to your merchant account').'</a><br />'
 					: '<a href="https://www.hipay.com/registration/register" style="color:#D9263F;font-weight:700"><img src="../modules/'.$this->name.'/create.jpg" alt="'.$this->l('Create a Hipay account').'" title="'.$this->l('Create a Hipay account').'" border="0" /></a><br />').'
 				</td>
 			</tr>
 			<tr>
-				<td>2</td>
+				<td><img src="../modules/'.$this->name.'/2.png" alt="step 2" /></td>
 				<td class="tab2">'.$this->l('Active theHipay solution in you Prestashop, it\'s free !').'</td>
 			</tr>
 			<tr>
-				<td>3</td> 
-				<td class="tab2">'.$this->l('Enjoy preferred pricing on transactions via Prestashop by').' <a href="">'
+				<td><img src="../modules/'.$this->name.'/3.png" alt="step 3" /></td> 
+				<td class="tab2">'.$this->l('Enjoy preferred pricing on transactions via Prestashop by').' 
+				<a style="color:blue; text-decoration:underline;" href="mailto:commercial@hipay.com">'
 				.$this->l('contacting our sales department').'</a></td>
 			</tr>
 		</table>	
