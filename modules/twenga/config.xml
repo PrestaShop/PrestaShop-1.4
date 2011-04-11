@@ -3,7 +3,7 @@
 	<name>twenga</name>
 	<displayName>Twenga API</displayName>
 	<version>1.4:</version>
-	<description>Module roleÂ : export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)</description>
+	<description>Module role: export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)</description>
 	<author></author>
 	<tab>smart_shopping</tab>
 	<is_configurable>1</is_configurable>

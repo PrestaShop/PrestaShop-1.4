@@ -92,7 +92,7 @@ class Twenga extends PaymentModule
 	 * need to be in lowercase
 	 * @var array
 	 */
-	public $limited_countries = array('fr', 'de', 'gb', 'uk');
+	public $limited_countries = array('fr', 'de', 'gb', 'uk', 'it', 'es');
 	
 	/**
 	 * The current country iso code for the shop.
@@ -113,7 +113,7 @@ class Twenga extends PaymentModule
 	 	parent::__construct();
 	
 		$this->displayName = $this->l('Twenga API');
-		$this->description = $this->l('Module role : export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)');
+		$this->description = $this->l('Module role: export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)');
 
 		// For Twenga subscription
 		$this->site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
