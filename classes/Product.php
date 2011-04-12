@@ -629,7 +629,7 @@ class ProductCore extends ObjectModel
 
 		$newCategPos=array();
 		foreach ($categories as $id_category)
-			$newCategPos[$id_category] = isset($newCategories[$id_category])?$newCategories[$id_category]['newPos']:0;
+			$newCategPos[$id_category] = isset($newCategories[$id_category])?$newCategories[$id_category]:0;
 
 		$productCats = array();
 
