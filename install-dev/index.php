@@ -603,9 +603,9 @@ if ($lm->getIncludeTradFilename())
 					function getPreinstallXmlLang($object, $field)
 					{
 						if (property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
-							return trim($object->{$field.'_'.((int)($_GET['language'])+1)});
+							return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_'.((int)($_GET['language'])+1)}));
 						if (property_exists($object, $field.'_1'))
-							return trim($object->{$field.'_1'});
+							return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_1'}));
 						return '';
 					}
 
@@ -621,7 +621,7 @@ if ($lm->getIncludeTradFilename())
 							$modulesPrechecked = array();
 							foreach ($result->partner as $p)
 							{
-								$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo), 'label' => getPreinstallXmlLang($p, 'label'), 'description' => getPreinstallXmlLang($p, 'description'));
+								$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo), 'label' => getPreinstallXmlLang($p, 'label'), 'description' => getPreinstallXmlLang($p, 'description').getPreinstallXmlLang($p, 'more'));
 								foreach ($p->country as $country_iso_code)
 									$modulesHelpInstall[trim($country_iso_code)][] = trim($p->key);
 								if ($p->prechecked)
