@@ -64,7 +64,7 @@ define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
 define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
 /* Autoload */
-require(dirname(__FILE__).'/autoload.php');
+require_once(dirname(__FILE__).'/autoload.php');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
