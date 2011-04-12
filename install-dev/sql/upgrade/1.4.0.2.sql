@@ -125,7 +125,7 @@ INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id
 		1,
 		0,
 		0,
-		1,
+		0,
 		0,
 		0.00,
 		1,
