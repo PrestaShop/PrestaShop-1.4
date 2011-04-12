@@ -118,7 +118,10 @@ class Twenga extends PaymentModule
 		$this->description = $this->l('Module role: export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)');
 
 		// For Twenga subscription
-		$this->site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+		$protocol = 'http://';
+		if (isset($_SERVER['https']) && $_SERVER['https'] != 'off')
+			$protocol = 'http://';
+		$this->site_url = Tools::htmlentitiesutf8($protocol.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		self::$base_dir = _PS_ROOT_DIR_.'/modules/twenga/';
 		self::$base_path = $this->site_url.'/modules/twenga/';
 		$this->feed_url = self::$base_path.'export.php';
