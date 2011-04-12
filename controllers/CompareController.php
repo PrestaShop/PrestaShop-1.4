@@ -66,7 +66,8 @@ class CompareControllerCore extends FrontController
 						$listFeatures[$curProduct->id][$feature['id_feature']] = $feature['value'];
 
 					$cover = Product::getCover((int)$id);
-					$curProduct->id_image = Tools::htmlentitiesUTF8((int)$id.'-'.$cover['id_image']);
+
+					$curProduct->id_image = Tools::htmlentitiesUTF8(Product::defineProductImage(array('id_image' => $cover['id_image'], 'id_product' => $id), self::$cookie->id_lang));
 					$listProducts[] = $curProduct;
 				}
 
