@@ -62,8 +62,8 @@
 				<td class="bold">{dateFormat date=$return.date_add full=0}</td>
 				<td class="history_invoice">
 				{if $return.state == 2}
-					<a href="{$base_dir}pdf-order-return.php?id_order_return={$return.id_order_return|intval}" title="{l s='Order return'} {l s='#'}{$return.id_order_return|string_format:"%06d"}"><img src="{$img_dir}icon/pdf.gif" alt="{l s='Order return'} {l s='#'}{$return.id_order_return|string_format:"%06d"}" class="icon" /></a>
-					<a href="{$base_dir}pdf-order-return.php?id_order_return={$return.id_order_return|intval}" title="{l s='Order return'} {l s='#'}{$return.id_order_return|string_format:"%06d"}">{l s='Print out'}</a>
+					<a href="{$link->getPageLink('pdf-order-return.php', true)}?id_order_return={$return.id_order_return|intval}" title="{l s='Order return'} {l s='#'}{$return.id_order_return|string_format:"%06d"}"><img src="{$img_dir}icon/pdf.gif" alt="{l s='Order return'} {l s='#'}{$return.id_order_return|string_format:"%06d"}" class="icon" /></a>
+					<a href="{$link->getPageLink('pdf-order-return.php', true)}?id_order_return={$return.id_order_return|intval}" title="{l s='Order return'} {l s='#'}{$return.id_order_return|string_format:"%06d"}">{l s='Print out'}</a>
 				{else}
 					--
 				{/if}

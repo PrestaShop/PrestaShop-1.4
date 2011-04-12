@@ -430,7 +430,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 	{if $attachments}
 		<ul id="idTab9" class="bullet">
 		{foreach from=$attachments item=attachment}
-			<li><a href="{$base_dir}attachment.php?id_attachment={$attachment.id_attachment}">{$attachment.name|escape:'htmlall':'UTF-8'}</a><br />{$attachment.description|escape:'htmlall':'UTF-8'}</li>
+			<li><a href="{$link->getPageLink('attachment.php', true)}?id_attachment={$attachment.id_attachment}">{$attachment.name|escape:'htmlall':'UTF-8'}</a><br />{$attachment.description|escape:'htmlall':'UTF-8'}</li>
 		{/foreach}
 		</ul>
 	{/if}

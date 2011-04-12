@@ -53,8 +53,8 @@
 				<td class="history_method"><a class="color-myaccount" href="javascript:showOrder(1, {$slip.id_order|intval}, 'order-detail');">{l s='#'}{$slip.id_order|string_format:"%06d"}</a></td>
 				<td class="bold">{dateFormat date=$slip.date_add full=0}</td>
 				<td class="history_invoice">
-					<a href="{$base_dir}pdf-order-slip.php?id_order_slip={$slip.id_order_slip|intval}" title="{l s='Credit slip'} {l s='#'}{$slip.id_order_slip|string_format:"%06d"}"><img src="{$img_dir}icon/pdf.gif" alt="{l s='Order slip'} {l s='#'}{$slip.id_order_slip|string_format:"%06d"}" class="icon" /></a>
-					<a href="{$base_dir}pdf-order-slip.php?id_order_slip={$slip.id_order_slip|intval}" title="{l s='Credit slip'} {l s='#'}{$slip.id_order_slip|string_format:"%06d"}">{l s='PDF'}</a>
+					<a href="{$link->getPageLink('pdf-order-return.php', true)}?id_order_slip={$slip.id_order_slip|intval}" title="{l s='Credit slip'} {l s='#'}{$slip.id_order_slip|string_format:"%06d"}"><img src="{$img_dir}icon/pdf.gif" alt="{l s='Order slip'} {l s='#'}{$slip.id_order_slip|string_format:"%06d"}" class="icon" /></a>
+					<a href="{$link->getPageLink('pdf-order-return.php', true)}?id_order_slip={$slip.id_order_slip|intval}" title="{l s='Credit slip'} {l s='#'}{$slip.id_order_slip|string_format:"%06d"}">{l s='PDF'}</a>
 				</td>
 			</tr>
 		{/foreach}

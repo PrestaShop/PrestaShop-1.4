@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<form action="{$base_dir_ssl}{if isset($opc) && $opc}order-opc{else}order{/if}.php" method="post" class="submit">
+<form action="{if isset($opc) && $opc}{$link->getPageLink('order-opc.php', true)}{else}{$link->getPageLink('order.php', true)}{/if}" method="post" class="submit">
 	<input type="hidden" value="{$order->id}" name="id_order">
 	<h4>
 		{l s='Order placed on'} {dateFormat date=$order->date_add full=0}
@@ -65,7 +65,7 @@
 {if $invoice AND $invoiceAllowed}
 <p>
 	<img src="{$img_dir}icon/pdf.gif" alt="" class="icon" />
-	<a href="{$base_dir}pdf-invoice.php?id_order={$order->id|intval}{if $is_guest}&secure_key={$order->secure_key}{/if}">{l s='Download your invoice as a .PDF file'}</a>
+	<a href="{$link->getPageLink('pdf-invoice.php', true)}?id_order={$order->id|intval}{if $is_guest}&secure_key={$order->secure_key}{/if}">{l s='Download your invoice as a .PDF file'}</a>
 </p>
 {/if}
 {if $order->recyclable}
@@ -228,10 +228,10 @@
 						<td class="bold">
 							<label for="cb_{$product.id_order_detail|intval}">
 								{if $product.download_hash && $invoice}
-									<a href="{$base_dir}get-file.php?key={$product.filename|escape:'htmlall':'UTF-8'}-{$product.download_hash|escape:'htmlall':'UTF-8'}{if isset($is_guest) && $is_guest}&id_order={$order->id}&secure_key={$order->secure_key}{/if}" title="{l s='download this product'}">
+									<a href="{$link->getPageLink('get-file.php', true)}?key={$product.filename|escape:'htmlall':'UTF-8'}-{$product.download_hash|escape:'htmlall':'UTF-8'}{if isset($is_guest) && $is_guest}&id_order={$order->id}&secure_key={$order->secure_key}{/if}" title="{l s='download this product'}">
 										<img src="{$img_dir}icon/download_product.gif" class="icon" alt="{l s='Download product'}" />
 									</a>
-									<a href="{$base_dir}get-file.php?key={$product.filename|escape:'htmlall':'UTF-8'}-{$product.download_hash|escape:'htmlall':'UTF-8'}{if isset($is_guest) && $is_guest}&id_order={$order->id}&secure_key={$order->secure_key}{/if}" title="{l s='download this product'}">
+									<a href="{$link->getPageLink('get-file.php', true)}?key={$product.filename|escape:'htmlall':'UTF-8'}-{$product.download_hash|escape:'htmlall':'UTF-8'}{if isset($is_guest) && $is_guest}&id_order={$order->id}&secure_key={$order->secure_key}{/if}" title="{l s='download this product'}">
 										{$product.product_name|escape:'htmlall':'UTF-8'}
 									</a>
 								{else}
