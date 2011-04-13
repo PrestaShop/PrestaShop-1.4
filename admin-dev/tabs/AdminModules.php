@@ -80,20 +80,37 @@ class AdminModules extends AdminTab
 	public function postProcess()
 	{
 		global $currentIndex, $cookie;
+
+		$id_employee = (int)($cookie->id_employee);
+		$filter_conf = Configuration::getMultiple(array(
+												'PS_SHOW_TYPE_MODULES_'.$id_employee,
+												'PS_SHOW_COUNTRY_MODULES_'.$id_employee,
+												'PS_SHOW_INSTALLED_MODULES_'.$id_employee,
+												'PS_SHOW_ENABLED_MODULES_'.$id_employee
+												));
+		//reset filtre
+		if (Tools::isSubmit('desactive'))
+			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], $filter_conf['PS_SHOW_INSTALLED_MODULES_'.$id_employee], 'disabled');
 			
+		if (Tools::isSubmit('active'))
+			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], $filter_conf['PS_SHOW_INSTALLED_MODULES_'.$id_employee], 'enabled');
+			
+		if (Tools::isSubmit('uninstall'))
+			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], 'unistalled', $filter_conf['PS_SHOW_ENABLED_MODULES_'.$id_employee]);
+			
+		if (Tools::isSubmit('install'))
+			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], 'installed', $filter_conf['PS_SHOW_ENABLED_MODULES_'.$id_employee]);
+		
+		
 		if (Tools::isSubmit('filterModules'))
 		{
-			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee), Tools::getValue('module_type'));
-			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee), Tools::getValue('country_module_value'));
-			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee), Tools::getValue('module_install'));
-			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee), Tools::getValue('module_status'));
+			$this->setFilterModules(Tools::getValue('module_type'), Tools::getValue('country_module_value'), Tools::getValue('module_install'), Tools::getValue('module_status'));
+			Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 		}
 		elseif (Tools::isSubmit('resetFilterModules'))
 		{
-			Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee), 'allModules');
-			Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee), 0);
-			Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee), 'installedUninstalled');
-			Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee), 'enabledDisabled');
+			$this->resetFilterModules();
+			Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 		}
 		if (Tools::isSubmit('active'))
 		{
@@ -661,6 +678,7 @@ class AdminModules extends AdminTab
 				$goto = 'others';
 		else
 			$goto = false;
+			
 		echo '
   		<script src="'.__PS_BASE_URI__.'js/jquery/jquery.scrollTo-1.4.2-min.js"></script>
 		<script>
@@ -698,6 +716,7 @@ class AdminModules extends AdminTab
 		 	return false;
 		 });
 		'.(!$goto ? '': '$(\'#'.$goto.'_content\').slideToggle( function (){
+		$(\'#'.$goto.'_img\').attr(\'src\', \'../img/admin/less.png\');
 		'.(!$goto ? '' : '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 300 , 
 		{onAfter:function(){
 			$("#modgo_'.Tools::getValue('module_name').'").fadeTo(100, 0, function (){
@@ -849,6 +868,26 @@ class AdminModules extends AdminTab
 	public function refresh()
 	{
 		return file_put_contents($this->_moduleCacheFile, Tools::file_get_contents('http://www.prestashop.com/xml/modules_list.xml'));
+	}
+	
+	private function setFilterModules($module_type, $country_module_value, $module_install, $module_status)
+	{
+		global $cookie;
+		
+		Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee), $module_type);
+		Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee), $country_module_value);
+		Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee), $module_install);
+		Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee), $module_status);
+	}
+	
+	private function resetFilterModules()
+	{
+		global $cookie;
+		
+		Configuration::updateValue('PS_SHOW_TYPE_MODULES_'.(int)($cookie->id_employee), 'allModules');
+		Configuration::updateValue('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee), 0);
+		Configuration::updateValue('PS_SHOW_INSTALLED_MODULES_'.(int)($cookie->id_employee), 'installedUninstalled');
+		Configuration::updateValue('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee), 'enabledDisabled');
 	}
 	
 }
