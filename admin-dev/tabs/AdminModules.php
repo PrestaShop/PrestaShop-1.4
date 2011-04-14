@@ -89,16 +89,16 @@ class AdminModules extends AdminTab
 												'PS_SHOW_ENABLED_MODULES_'.$id_employee
 												));
 		//reset filtre
-		if (Tools::isSubmit('desactive'))
+		if (Tools::isSubmit('desactive') && $filter_conf['PS_SHOW_ENABLED_MODULES_'.$id_employee] != 'enabledDisabled')
 			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], $filter_conf['PS_SHOW_INSTALLED_MODULES_'.$id_employee], 'disabled');
 			
-		if (Tools::isSubmit('active'))
+		if (Tools::isSubmit('active') && $filter_conf['PS_SHOW_ENABLED_MODULES_'.$id_employee] != 'enabledDisabled')
 			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], $filter_conf['PS_SHOW_INSTALLED_MODULES_'.$id_employee], 'enabled');
 			
-		if (Tools::isSubmit('uninstall'))
+		if (Tools::isSubmit('uninstall') && $filter_conf['PS_SHOW_INSTALLED_MODULES_'.$id_employee] != 'installedUninstalled')
 			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], 'unistalled', $filter_conf['PS_SHOW_ENABLED_MODULES_'.$id_employee]);
 			
-		if (Tools::isSubmit('install'))
+		if (Tools::isSubmit('install') && $filter_conf['PS_SHOW_INSTALLED_MODULES_'.$id_employee] != 'installedUninstalled')
 			$this->setFilterModules($filter_conf['PS_SHOW_TYPE_MODULES_'.$id_employee], $filter_conf['PS_SHOW_COUNTRY_MODULES_'.$id_employee], 'installed', $filter_conf['PS_SHOW_ENABLED_MODULES_'.$id_employee]);
 		
 		
