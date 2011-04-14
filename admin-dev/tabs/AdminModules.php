@@ -537,16 +537,17 @@ class AdminModules extends AdminTab
 			if (!empty($filterName))
 				if (stristr($module->name, $filterName) === false AND stristr($module->displayName, $filterName) === false AND stristr($module->description, $filterName) === false)
 					unset($modules[$key]);
-
+		}
+		
+		foreach($modules as $module)
 			$autocompleteList .= Tools::jsonEncode(array(
 				'displayName' => (string)$module->displayName,
 				'desc' => (string)$module->description,
 				'name' => (string)$module->name,
 				'author' => (string)$module->author
 			)).', ';
-		}
-		$autocompleteList = rtrim($autocompleteList, ' ,').'];';
 		
+		$autocompleteList = rtrim($autocompleteList, ' ,').'];';
 		// Display CSS Fancy Box
 		echo '<link href="'._PS_CSS_DIR_.'jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />';
 		echo '<script type="text/javascript">'.$autocompleteList.'</script>';
