@@ -74,6 +74,8 @@ class CarrierCompare extends Module
 		$this->_userSession['id_state'] = '';
 		$this->_userSession['id_country'] = '';
 		$this->_userSession['zipcode'] = '';
+		$this->_userSession['id_zone'] = '';
+		$this->_userSession['id_carrier'] = '';
 
 		if ($cookie)
 		{
@@ -101,42 +103,75 @@ class CarrierCompare extends Module
 					font-size:10px;
 					font-weight:bold;
 				}
+				#submitForm {text-align:center; margin-top:10px;}
+				.warningCarrierCompare 
+				{
+					font-size:10px; 
+					height:20px; 
+					text-align:center; 
+					padding:0; 
+					padding-bottom:10px; 
+				}
 			</style>
 			';
 	}
 
 	private function _printJS()
 	{
-		global $cookie;
-
 		echo '
-			<script>
-				function updateStateProvince()
+			<script type="text/javascript" text="javascript">
+				function updateStateByIdCountry()
 				{
 					id_country = $("#id_country").val();
 					
 					$.ajax({
 						type: \'POST\',
-						url: \''._MODULE_DIR_.'carriercompare/ajax/getStateProvince.php\',
+						url: \''._MODULE_DIR_.'carriercompare/ajax/getStatesByIdCountry.php\',
 						data: "id_country=" + id_country + "&id_lang='.
-							(int)$cookie->id_lang.'&id_state='.$this->_userSession['id_state'].'",
+							(int)$this->_userSession['id_lang'].'&id_state='.$this->_userSession['id_state'].'",
 						success: function(msg) {
 							$("#availableStateProvince").html(msg);
+							updateCarriersList();
+
+							if ($("#id_country").length)
+							{
+								$("#id_state").change(function()
+								{
+									updateCarriersList();
+								});
+							}
 						}
 					});
+				}
+
+				function updateCarriersList()
+				{
+					id_zone = $("#id_zone").val();
+					id_state = $("#id_state").val();
+					
+					$.ajax({
+						type: \'POST\',
+						url: \''._MODULE_DIR_.'carriercompare/ajax/getCarriersListByZoneId.php\',
+						data: "id_zone=" + id_zone + "&id_state='.(($this->_userSession['id_state']) ? 
+						$this->_userSession['id_state'] : '" + id_state + "').'&id_lang='.
+							(int)$this->_userSession['id_lang'].'&id_carrier='.$this->_userSession['id_carrier'].'",
+						success: function(msg) {
+							$("#availableCarriers").html(msg);
+						}
+					});
+
 				}
 
 				$(document).ready(function()
 				{
 					$("#id_country").change(function()
 					{
-						updateStateProvince();
+						updateStateByIdCountry();
 					});
-					updateStateProvince();
+					updateStateByIdCountry();
 				});
-		</script>
-			';
-
+			</script>
+		';
 	}
 
 	/*
@@ -144,10 +179,8 @@ class CarrierCompare extends Module
 	*/
 	private function _getGuestFormInformation()
 	{
-		global $cookie;
-
 		$this->_html .= '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-		$countries = Country::getCountries($cookie->id_lang);
+		$countries = Country::getCountries($this->_userSession['id_lang']);
 		$this->_html .= '<div id="compare_shipping">
 			<h2>'.$this->l('Estimate your shipping').'</h2>';
 		if (count($this->_postErrors))
@@ -173,14 +206,17 @@ class CarrierCompare extends Module
 			<div id="availableStateProvince"></div>
 			<label for="zipcode">'.$this->l('Zipcode').'</label>
 			<input type="text" name="zipcode" id="zipcode" value="'.$this->_userSession['zipcode'].'"/>
-			<input type="submit" id="submit" name="submitFormInformation" value="'.$this->l('Submit').'"/>
+			<div id="availableCarriers"></div>
+			<div id="submitForm">
+				<input type="submit" id="submit" name="submitFormInformation" value="'.$this->l('Submit').'"/>
+			</div>
 		</div>';	
 	}
 
 	/*
 	** Store the guest form request
 	*/
-	private function _setGuestFormInformation()
+	private function _setGuestFormInformation(&$params)
 	{
 		if (Validate::isInt(Tools::getValue('id_state')))
 			$this->_userSession['id_state'] = Tools::getValue('id_state');
@@ -194,12 +230,23 @@ class CarrierCompare extends Module
 			$this->_userSession['zipcode'] = Tools::getValue('zipcode');
 		else
 			$this->_postErrors[] = $this->l('Please use a valid zipcode depending of your country selection');
+		if (Validate::isInt(Tools::getValue('id_carrier')))
+			$this->_userSession['id_carrier'] = Tools::getValue('id_carrier');
+		else
+			$this->_postErrors[] = $this->l('Please don\'t try to modify the value manually');
 
 		if (!count($this->_postErrors))
 		{
+			global $cookie;
+
 			$cookie->id_country = $this->_userSession['id_country'];
 			$cookie->id_state = $this->_userSession['id_state'];
 			$cookie->postcode = $this->_userSession['zipcode'];
+			if ($this->_userSession['id_carrier'])
+			{
+				$params['cart']->id_carrier = $this->_userSession['id_carrier'];
+				$params['cart']->update();
+			}
 		}
 	}
 
@@ -213,7 +260,7 @@ class CarrierCompare extends Module
 		if (!$this->_userSession['isLogged'])
 		{
 			if (Tools::getValue('submitFormInformation'))
-				$this->_setGuestFormInformation();
+				$this->_setGuestFormInformation($params);
 			$this->_getGuestFormInformation();
 		}
 		$this->_printJS();
@@ -221,7 +268,8 @@ class CarrierCompare extends Module
 	}
 
 	/*
-	** Get states by Country id, called by ajax process
+	** Get states by Country id, called by the ajax process
+	** id_state allow to preselect the selection option
 	*/
 	public function getStatesByIdCountry($id_country, $id_state = '')
 	{
@@ -232,6 +280,7 @@ class CarrierCompare extends Module
 		{
 			$html = '<label for="states">'.$this->l('Select your State/Province').'</label>';
 			$html .= '<select name="id_state" id="id_state">';
+
 			foreach($states as $state)
 			{
 				$selected = '';
@@ -242,15 +291,39 @@ class CarrierCompare extends Module
 			}
 			$html.= '</select>';
 		}
+		else
+			$html .= '<input type="hidden" name="id_zone" id="id_zone" value="'.
+				Country::getIdZone($id_country).'" />';;
 		return $html.'<div class="clear"></div>';
 	}
 
-	public function getContent()
+	/*
+	** Get carriers by country id, called by the ajax process
+	*/
+	public function getCarriersListByIdZone($id_zone, $id_carrier = '')
 	{
-		$this->_html = '<h2>'.$this->displayName.'</h2>';
-		$this->_html .= '<br />';
+		$html = '';
 
-		return $this->_html;
+		$carriers = Carrier::getCarriersForOrder($id_zone);
+		if ($carriers && count($carriers))
+		{
+			$html = '<label for="carriers">'.$this->l('Select your Carrier').'</label>';
+			$html .= '<select name="id_carrier" id="id_carrier">';
+
+			foreach($carriers as $carrier)
+			{
+				$selected = '';
+				if ($carrier['id_carrier'] == $id_carrier)
+					$selected = 'selected="selected"';
+				$html .= '<option value="'.$carrier['id_carrier'].'" '.$selected.'>'.
+					$carrier['name'].'</option>';
+			}
+			$html.= '</select>';
+		}
+		else
+			$html .= '<div class="warning warningCarrierCompare">'.
+				$this->l('There isn\'t carriers for this selection').'</div>';
+		return $html;
 	}
 
 	private function _checkZipcode($zipcode)

@@ -11,7 +11,7 @@ if (file_exists($configPath))
 	$carrier = new carrierCompare();
 
 	$controller->init();
-	echo $carrier->getStatesByIdCountry(Tools::getValue('id_country'), Tools::getValue('id_state'));
+	echo $carrier->getStatesByIdCountry();
 }
 else
 	echo 'Config file can\'t be included';
