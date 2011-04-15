@@ -609,7 +609,7 @@ if ($lm->getIncludeTradFilename())
 						return '';
 					}
 
-					$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+					$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 3)));
 					$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/partners.php?version=1.0', false, $context);
 					if ($content && $content[0] == '<')
 					{
