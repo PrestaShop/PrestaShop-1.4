@@ -42,8 +42,9 @@ ini_set('upload_max_filesize', '100M');
 ini_set('default_charset', 'utf-8');
 ini_set('magic_quotes_runtime', 0);
 
-/* Correct Apache charset */
-header('Content-Type: text/html; charset=utf-8');
+// correct Apache charset (except if it's too late 
+if(!headers_sent())
+	header('Content-Type: text/html; charset=utf-8');
 
 /* No settings file? goto installer...*/
 if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
