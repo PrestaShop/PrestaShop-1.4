@@ -24,6 +24,6 @@ UPDATE `PREFIX_meta_lang`
 SET `title` = 'Angebote', `keywords` = 'besonders, Angebote', `url_rewrite` = 'angebote' WHERE url_rewrite = 'preise-fallen';
 
 ALTER TABLE `PREFIX_order_detail` 
-CHANGE `product_quantity_in_stock` `product_quantity_in_stock` INT(10) NOT NULL DEFAULT '0'
+CHANGE `product_quantity_in_stock` `product_quantity_in_stock` INT(10) NOT NULL DEFAULT '0';
 
 /* PHP:alter_cms_block(); */;
