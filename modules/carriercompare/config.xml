@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>carriercompare</name>
+	<displayName>Carrier Compare</displayName>
+	<version>0.1</version>
+	<description>Module to Compare carrier possibilities before going under the checkout process</description>
+	<author>PrestaShop</author>
+	<tab>carrier_compare</tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
