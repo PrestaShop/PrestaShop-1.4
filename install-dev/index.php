@@ -826,26 +826,25 @@ if ($lm->getIncludeTradFilename())
 				{
 					return strnatcmp($a['version'], $b['version']);
 				}
-				
-				include_once(realpath(INSTALL_PATH.'/../config').'/settings.inc.php');
-				include_once(realpath(INSTALL_PATH.'/../config').'/config.inc.php');
-			 	$moduleList = Module::getNonNativeModuleList();
-				$moduleNonNativeLi = '<ul>';
-				$countNonNative = 0;
-				foreach($moduleList as $module)
-					if($module['active'])
-					{
-						$countNonNative++;
-						$moduleNonNativeLi .= '<li>'.$module['name'].'</li>';
-					}
-				$moduleNonNativeLi .= '</ul>';	
-
+			$countNonNative = 0;
+				if ($oldversion !== false)
+				{
+					include_once(realpath(INSTALL_PATH.'/../config').'/settings.inc.php');
+					include_once(realpath(INSTALL_PATH.'/../config').'/config.inc.php');
+					$moduleList = Module::getNonNativeModuleList();
+					$moduleNonNativeLi = '<ul>';
+					foreach($moduleList as $module)
+						if($module['active'])
+						{
+							$countNonNative++;
+							$moduleNonNativeLi .= '<li>'.$module['name'].'</li>';
+						}
+					$moduleNonNativeLi .= '</ul>';	
+				}
 				if($countNonNative)
 				{
-
 					echo '<br /><br />
 					<h2>'.lang('Module compatibility').'</h2>';
-	
 					echo '<div style="font-weight: bold; background-color: #ffdeb7; color: #000; padding: 10px; border: 1px solid #999; margin-top: 10px;">
 					<p><img src="../img/admin/warning.gif" alt="" style="vertical-align: middle;" /> '.lang('It\'s dangerous to keep non-native modules activated during the update. If you really want to take this risk, uncheck the following box.').'</p>
 					</div>
