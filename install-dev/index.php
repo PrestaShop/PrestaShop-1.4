@@ -827,7 +827,7 @@ if ($lm->getIncludeTradFilename())
 					return strnatcmp($a['version'], $b['version']);
 				}
 			$countNonNative = 0;
-				if ($oldversion !== false)
+				if ($oldversion !== false AND !$sameVersions)
 				{
 					include_once(realpath(INSTALL_PATH.'/../config').'/config.inc.php');
 					$moduleList = Module::getNonNativeModuleList();
