@@ -361,6 +361,7 @@ CREATE TABLE `PREFIX_country` (
   `need_identification_number` tinyint(1) NOT NULL default '0',
   `need_zip_code` tinyint(1) NOT NULL default '1',
   `zip_code_format` varchar(12) NOT NULL default '',
+  `display_tax_label` BOOLEAN NOT NULL,
   PRIMARY KEY  (`id_country`),
   KEY `country_iso_code` (`iso_code`),
   KEY `country_` (`id_zone`)
@@ -371,13 +372,6 @@ CREATE TABLE `PREFIX_country_lang` (
   `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(64) NOT NULL,
   UNIQUE KEY `country_lang_index` (`id_country`,`id_lang`)
-) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-
-CREATE TABLE `PREFIX_country_tax` (
-  `id_country_tax` int(11) NOT NULL AUTO_INCREMENT,
-  `id_country` int(11) NOT NULL,
-  `id_tax_rules_group` int(11) NOT NULL,
-  PRIMARY KEY (`id_country_tax`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_currency` (

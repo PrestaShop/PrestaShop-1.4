@@ -150,6 +150,13 @@ class AdminCountries extends AdminTab
 					<input type="radio" name="need_identification_number" id="need_identification_number_off" value="0" '.((!$this->getFieldValue($obj, 'need_identification_number') AND $obj->id) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="need_identification_number_off"> <img src="../img/admin/disabled.gif" alt="" title="" />'.$this->l('No').'</label>
 				</div>
+				<label>'.$this->l('Display tax label:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="display_tax_label" id="display_tax_label_on" value="1" '.((!$obj->id OR $this->getFieldValue($obj, 'display_tax_label')) ? 'checked="checked" ' : '').'/>
+					<label class="t" for="display_tax_label_on"> <img src="../img/admin/enabled.gif" alt="" title="" />'.$this->l('Yes').'</label>
+					<input type="radio" name="display_tax_label" id="display_tax_label_off" value="0" '.((!$this->getFieldValue($obj, 'display_tax_label') AND $obj->id) ? 'checked="checked" ' : '').'/>
+					<label class="t" for="display_tax_label_off"> <img src="../img/admin/disabled.gif" alt="" title="" />'.$this->l('No').'</label>
+				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
