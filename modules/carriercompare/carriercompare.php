@@ -179,7 +179,7 @@ class CarrierCompare extends Module
 	*/
 	private function _getGuestFormInformation()
 	{
-		$this->_html .= '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+		$this->_html .= '<form method="POST" action="'.$this->_path.'redirect.php?redirect='.$_SERVER['PHP_SELF'].'">';
 		$countries = Country::getCountries($this->_userSession['id_lang']);
 		$this->_html .= '<div id="compare_shipping">
 			<h2>'.$this->l('Estimate your shipping').'</h2>';
@@ -206,6 +206,7 @@ class CarrierCompare extends Module
 			<div id="availableStateProvince"></div>
 			<label for="zipcode">'.$this->l('Zipcode').'</label>
 			<input type="text" name="zipcode" id="zipcode" value="'.$this->_userSession['zipcode'].'"/>
+			<input type="hidden" name="redirect" id="redirect" value="'.$_SERVER['PHP_SELF'].'" />
 			<div id="availableCarriers"></div>
 			<div id="submitForm">
 				<input type="submit" id="submit" name="submitFormInformation" value="'.$this->l('Submit').'"/>
@@ -216,7 +217,7 @@ class CarrierCompare extends Module
 	/*
 	** Store the guest form request
 	*/
-	private function _setGuestFormInformation(&$params)
+	private function _setGuestFormInformation()
 	{
 		if (Validate::isInt(Tools::getValue('id_state')))
 			$this->_userSession['id_state'] = Tools::getValue('id_state');
@@ -234,37 +235,73 @@ class CarrierCompare extends Module
 			$this->_userSession['id_carrier'] = Tools::getValue('id_carrier');
 		else
 			$this->_postErrors[] = $this->l('Please don\'t try to modify the value manually');
+	}
 
-		if (!count($this->_postErrors))
+	/*
+	** Update the cart and cookie is none erros occured
+	*/
+	private function _updateCart($cart)
+	{
+		global $cookie;
+
+		$cookie->id_country = $this->_userSession['id_country'];
+		$cookie->id_state = $this->_userSession['id_state'];
+		$cookie->postcode = $this->_userSession['zipcode'];
+		if ($this->_userSession['id_carrier'])
 		{
-			global $cookie;
-
-			$cookie->id_country = $this->_userSession['id_country'];
-			$cookie->id_state = $this->_userSession['id_state'];
-			$cookie->postcode = $this->_userSession['zipcode'];
-			if ($this->_userSession['id_carrier'])
-			{
-				$params['cart']->id_carrier = $this->_userSession['id_carrier'];
-				$params['cart']->update();
-			}
+			$cart->id_carrier = $this->_userSession['id_carrier'];
+			$cart->update();
 		}
 	}
 
 	/*
-	** Hook Shopping Cart Process
-	*/
+	 ** Hook Shopping Cart Process
+	 */
 	public function hookShoppingCart($params)
 	{
 		$this->_printCss();
 		
 		if (!$this->_userSession['isLogged'])
 		{
-			if (Tools::getValue('submitFormInformation'))
-				$this->_setGuestFormInformation($params);
+			if (Tools::getIsset('result'))
+				$this->_setGuestFormInformation();
 			$this->_getGuestFormInformation();
 		}
 		$this->_printJS();
 		return $this->_html;
+	}
+
+	/*
+	** Build the redirect URL depending of the post keys
+	*/
+	private function _buildRedirectURL()
+	{
+		$redirect = Tools::getValue('redirect').'?id_country='.
+			$this->_userSession['id_country'];
+		if (strlen($this->_userSession['id_state']))
+			$redirect .= '&id_state='.$this->_userSession['id_state'];
+		if (strlen($this->_userSession['zipcode']))
+			$redirect .= '&zipcode='.$this->_userSession['zipcode'];
+		if (strlen($this->_userSession['id_carrier']))
+			$redirect .= '&id_carrier='.$this->_userSession['id_carrier'];
+		$redirect .= '&result='.count($this->_postErrors);
+		return $redirect;
+	}
+
+	/*
+	** Make the redirect process
+	*/
+	public function redirectProcess($cart)
+	{
+		if (!$this->_userSession['isLogged'] && 
+				Tools::getValue('submitFormInformation'))
+		{
+			$this->_setGuestFormInformation();
+			if (!count($this->_postErrors))
+				$this->_updateCart($cart);
+		}
+		$redirect = $this->_buildRedirectURL();
+		header('Location: '.$redirect);
 	}
 
 	/*
@@ -315,7 +352,7 @@ class CarrierCompare extends Module
 				$selected = '';
 				if ($carrier['id_carrier'] == $id_carrier)
 					$selected = 'selected="selected"';
-				$html .= '<option value="'.$carrier['id_carrier'].'" '.$selected.'>'.
+			$html .= '<option value="'.$carrier['id_carrier'].'" '.$selected.'>'.
 					$carrier['name'].'</option>';
 			}
 			$html.= '</select>';
