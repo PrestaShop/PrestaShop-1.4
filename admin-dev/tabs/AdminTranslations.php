@@ -420,12 +420,13 @@ class AdminTranslations extends AdminTab
 				
 				foreach ($matches[1] AS $key)
 				{
-					$module_key = ($is_default ? self::DEFAULT_THEME_NAME : '').'<{'.Tools::strtolower($module_name).'}'.($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key);
+					$module_key = ($is_default ? self::DEFAULT_THEME_NAME : '').'<{'.Tools::strtolower($module_name).'}'.strtolower($is_default ? 'prestashop' : $theme_name).'>'.Tools::strtolower($template_name).'_'.md5($key);
 					// to avoid duplicate entry
 					if (!in_array($module_key, $array_check_duplicate))
 					{
 						$array_check_duplicate[] = $module_key;
-						$this->modules_translations[($is_default ? self::DEFAULT_THEME_NAME : $theme_name)][$module_name][$template_name][$key] = key_exists($module_key, $_MODULES) ? html_entity_decode($_MODULES[$module_key], ENT_COMPAT, 'UTF-8') : '';
+						$this->modules_translations[strtolower($is_default ? self::DEFAULT_THEME_NAME : $theme_name)][$module_name][$template_name][$key]
+							 = key_exists($module_key, $_MODULES) ? html_entity_decode($_MODULES[$module_key], ENT_COMPAT, 'UTF-8') : '';
 						$this->total_expression++;
 					}
 				}
