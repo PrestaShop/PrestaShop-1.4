@@ -33,7 +33,7 @@
 				<th class="carrier_price last_item">{l s='Price'}</th>
 			</tr>
 		</thead>
-		<tbody style="line-height:40px;">
+		<tbody>
 		{if isset($carriers)}
 			{foreach from=$carriers item=carrier name=myLoop}
 				<tr class="{if $smarty.foreach.myLoop.first}first_item{elseif $smarty.foreach.myLoop.last}last_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">

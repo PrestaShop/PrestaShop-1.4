@@ -38,13 +38,13 @@ class CarrierCompare extends Module
 	public function __construct()
 	{
 		$this->name = 'carriercompare';
-		$this->tab = 'carrier_compare';
-		$this->version = '0.1';
+		$this->tab = 'shipping_logistics';
+		$this->version = '1.0';
 		$this->author = 'PrestaShop';
 		
 		parent::__construct();
 
-		$this->displayName = $this->l('Carrier Compare');
+		$this->displayName = $this->l('Shipping Estimation');
 		$this->description = $this->l('Module to Compare carrier possibilities before going under the checkout process');
 
 		$this->_storeUserSessionInformation();
@@ -93,7 +93,7 @@ class CarrierCompare extends Module
 		echo '
 			<style>
 				#compare_shipping {margin:20px 0 20px 0; line-height:30px;}
-				#compare_shipping label {width:220px; float:left; padding-left:20px;}
+				#compare_shipping label {float:left; padding-left:20px;}
 				#submitForm {text-align:center; margin-top:10px}
 				#submit {display:inline;}
 				.warningCarrierCompare 
@@ -104,7 +104,7 @@ class CarrierCompare extends Module
 					padding:0; 
 					padding-bottom:10px; 
 				}
-				.std_cp {width:100%; border-collapse:collapse; margin-top:10px;}
+				.std_cp {width:90%; border-collapse:collapse; margin:10px auto 0 auto;}
 				.std_cp td,.std th { padding: 0.4em 0.5em }
 				.std_cp th { white-space: nowrap }
 				.std_cp tr.item td,.std .item th { background-color: #dddddd }
@@ -201,7 +201,7 @@ class CarrierCompare extends Module
 			<form class="std" method="POST" action="'.$this->_path.'redirect.php?redirect='.$_SERVER['PHP_SELF'].'" >';
 		$countries = Country::getCountries($this->_userSession['id_lang']);
 		$this->_html .= '<fieldset id="compare_shipping">
-			<h3>'.$this->l('Estimate your shipping').'</h3>';
+			<h3>'.$this->l('Estimate your shipping & taxes').'</h3>';
 		if (count($this->_postErrors))
 		{
 			$this->_html .= '<div style="color:#F00; margin-left:10px;">';
