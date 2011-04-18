@@ -94,16 +94,8 @@ class CarrierCompare extends Module
 			<style>
 				#compare_shipping {margin:20px 0 20px 0; line-height:30px;}
 				#compare_shipping label {width:220px; float:left; padding-left:20px;}
-				#submit 
-				{
-					text-align:right;
-					margin-left:40px; 
-					cursor:pointer; 
-					padding:3px; 
-					font-size:10px;
-					font-weight:bold;
-				}
-				#submitForm {text-align:center; margin-top:10px;}
+				#submitForm {text-align:center; margin-top:10px}
+				#submit {display:inline;}
 				.warningCarrierCompare 
 				{
 					font-size:10px; 
@@ -111,6 +103,32 @@ class CarrierCompare extends Module
 					text-align:center; 
 					padding:0; 
 					padding-bottom:10px; 
+				}
+				.std_cp {width:100%; border-collapse:collapse; margin-top:10px;}
+				.std_cp td,.std th { padding: 0.4em 0.5em }
+				.std_cp th { white-space: nowrap }
+				.std_cp tr.item td,.std .item th { background-color: #dddddd }
+				.std_cp tr.alternate_item td,
+				.std_cp tr.alternate_item th { background-color: #f1f2f4 }
+				.std_cp thead th 
+				{
+					background-image:none;
+					background-color:#4e4e4e;
+					color:#FFFFFF;
+					line-height:0;
+					height: 24px;
+			 		font-weight: bold;
+			 		text-align: left;
+			 		white-space: nowrap
+				}
+				.std_cp th.first_item { background-position: top left }
+				.std_cp th.last_item { background-position: top right }
+				.std_cp th.item { background-position: -5px 0 }
+				.std_cp tfoot td 
+				{
+					color: #374853;
+			 		text-align: right;
+			 		white-space: nowrap
 				}
 			</style>
 			';
@@ -179,13 +197,14 @@ class CarrierCompare extends Module
 	*/
 	private function _getGuestFormInformation()
 	{
-		$this->_html .= '<form method="POST" action="'.$this->_path.'redirect.php?redirect='.$_SERVER['PHP_SELF'].'">';
+		$this->_html .= '
+			<form class="std" method="POST" action="'.$this->_path.'redirect.php?redirect='.$_SERVER['PHP_SELF'].'" >';
 		$countries = Country::getCountries($this->_userSession['id_lang']);
-		$this->_html .= '<div id="compare_shipping">
-			<h2>'.$this->l('Estimate your shipping').'</h2>';
+		$this->_html .= '<fieldset id="compare_shipping">
+			<h3>'.$this->l('Estimate your shipping').'</h3>';
 		if (count($this->_postErrors))
 		{
-			$this->_html .= '<div class="error">';
+			$this->_html .= '<div style="color:#F00; margin-left:10px;">';
 			foreach($this->_postErrors as $msgError)
 				$this->_html .= $msgError.'<br />';
 			$this->_html .= '</div>';
@@ -209,9 +228,11 @@ class CarrierCompare extends Module
 			<input type="hidden" name="redirect" id="redirect" value="'.$_SERVER['PHP_SELF'].'" />
 			<div id="availableCarriers"></div>
 			<div id="submitForm">
-				<input type="submit" id="submit" name="submitFormInformation" value="'.$this->l('Submit').'"/>
+				<input class="exclusive_large" id="submit" type="submit" name="submitFormInformation" value="'.
+				$this->l('Update my shipping option').'"/>
 			</div>
-		</div>';	
+		</fieldset>
+		</form>';	
 	}
 
 	/*
@@ -230,7 +251,7 @@ class CarrierCompare extends Module
 		if ($this->_checkZipcode(Tools::getValue('zipcode')))
 			$this->_userSession['zipcode'] = Tools::getValue('zipcode');
 		else
-			$this->_postErrors[] = $this->l('Please use a valid zipcode depending of your country selection');
+			$this->_postErrors[] = $this->l('Please use a valide zipcode depending of your country selection');
 		if (Validate::isInt(Tools::getValue('id_carrier')))
 			$this->_userSession['id_carrier'] = Tools::getValue('id_carrier');
 		else
@@ -339,30 +360,26 @@ class CarrierCompare extends Module
 	*/
 	public function getCarriersListByIdZone($id_zone, $id_carrier = '')
 	{
-		$html = '';
+		global $cart, $smarty;
 
+		$html = '';
 		$carriers = Carrier::getCarriersForOrder($id_zone);
 		if ($carriers && count($carriers))
 		{
-			$html = '<label for="carriers">'.$this->l('Select your Carrier').'</label>';
-			$html .= '<select name="id_carrier" id="id_carrier">';
-
-			foreach($carriers as $carrier)
-			{
-				$selected = '';
-				if ($carrier['id_carrier'] == $id_carrier)
-					$selected = 'selected="selected"';
-			$html .= '<option value="'.$carrier['id_carrier'].'" '.$selected.'>'.
-					$carrier['name'].'</option>';
-			}
-			$html.= '</select>';
+			$smarty->assign(array(
+						'carriers' => $carriers,
+						'selected_carrier' => $id_carrier));
+			$html .= $this->display('carriercompare', 'display_carriers.tpl');
 		}
-		else
+		else  
 			$html .= '<div class="warning warningCarrierCompare">'.
-				$this->l('There isn\'t carriers for this selection').'</div>';
+				$this->l('There is no carriers for this selection').'</div>';
 		return $html;
 	}
 
+	/*
+	** Check the validity of the zipcode format depending of the country
+	*/
 	private function _checkZipcode($zipcode)
 	{
 		$zipcodeFormat = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
