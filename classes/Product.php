@@ -1720,6 +1720,7 @@ class ProductCore extends ObjectModel
 		$id_state = 0;
 		$id_county = 0;
 
+
 		if (!$id_address)
 		{
 			if ($id_address = $cur_cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
@@ -1730,15 +1731,18 @@ class ProductCore extends ObjectModel
 					$id_country = (int)($address_infos['id_country']);
 					$id_state = (int)($address_infos['id_state']);
 					$postcode = (int)$address_infos['postcode'];
+
+					$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
 				}
-			} else {
+			} else if (isset($cookie->id_country)) {
 				// fetch address from cookie
 		      $id_country = (int)$cookie->id_country;
 				$id_state = (int)$cookie->id_state;
 				$postcode = (int)$cookie->postcode;
+
+				$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
 			}
 
-			$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
 		}
 
 		if (Tax::excludeTaxeOption())
