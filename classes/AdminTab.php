@@ -190,9 +190,9 @@ abstract class AdminTabCore
 
 	/**
 	 * use translations files to replace english expression.
-	 * 
+	 *
 	 * @param mixed $string term or expression in english
-	 * @param string $class 
+	 * @param string $class
 	 * @param boolan $addslashes if set to true, the return value will pass through addslashes(). Otherwise, stripslashes().
 	 * @param boolean $htmlentities if set to true(default), the return value will pass through htmlentities($string, ENT_QUOTES, 'utf-8')
 	 * @return string the translation if available, or the english default text.
@@ -1094,7 +1094,7 @@ abstract class AdminTabCore
 			LIMIT '.(int)($start).','.(int)($limit);
 
 		$this->_list = Db::getInstance()->ExecuteS($sql);
-		$this->_listTotal = count(Db::getInstance()->ExecuteS('SELECT 
+		$this->_listTotal = count(Db::getInstance()->ExecuteS('SELECT
 			'.($this->_tmpTableFilter ? ' * FROM (SELECT ' : '').'
 			'.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
 			FROM `'._DB_PREFIX_.$sqlTable.'` a
@@ -1105,8 +1105,8 @@ abstract class AdminTabCore
 			'.((isset($this->_filterHaving) || isset($this->_having)) ? 'HAVING ' : '').(isset($this->_filterHaving) ? ltrim($this->_filterHaving, ' AND ') : '').(isset($this->_having) ? $this->_having.' ' : '').'
 			ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 			($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '')));
-			
-			
+
+
 	}
 
 	/**
@@ -1145,9 +1145,9 @@ abstract class AdminTabCore
 		global $currentIndex, $cookie;
 		$isCms = false;
 		if (preg_match('/cms/Ui', $this->identifier))
-			$isCms = true;	
+			$isCms = true;
 		$id_cat = Tools::getValue('id_'.($isCms ? 'cms_' : '').'category');
-		
+
 		if (!isset($token) OR empty($token))
 			$token = $this->token;
 
@@ -1469,7 +1469,7 @@ abstract class AdminTabCore
 	{
 	    global $currentIndex;
 
-	    echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$active.
+	    echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$active.$this->table.
 	        ((int)$id_category AND (int)$id_product ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
 	        <img src="../img/admin/'.($value ? 'enabled.gif' : 'disabled.gif').'"
 	        alt="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" /></a>';
