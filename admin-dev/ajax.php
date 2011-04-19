@@ -629,6 +629,8 @@ if (Tools::isSubmit('getAdminHomeElement'))
 				}
 			}
 	}
+	else
+		$result['partner_preactivation'] = '';
 	
 	// DISCOVER PRESTASHOP
 	$content = @file_get_contents('https://www.prestashop.com/partner/prestashop/prestashop-link.php?iso_country='.$isoCountry.'&iso_lang='.Tools::strtolower($isoUser).'&id_lang='.(int)$cookie->id_lang, false, $context);
