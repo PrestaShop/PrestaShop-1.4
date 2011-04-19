@@ -59,7 +59,39 @@ class AdminCountries extends AdminTab
 		if (isset($_GET['delete'.$this->table]) OR Tools::getValue('submitDel'.$this->table))
 			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it available for customers, please disable it.');
 		else
+		{
+			if (Tools::getValue('submitAdd'.$this->table))
+			{
+				$id_country = Tools::getValue('id_country');
+				$tmp_addr_format = new AddressFormat($id_country);
+
+				$save_status = false;
+
+				$is_new = is_null($tmp_addr_format->id_country);
+				if ($is_new)
+				{
+					$tmp_addr_format = new AddressFormat();
+					$tmp_addr_format->id_country = $id_country;
+				}
+
+				$tmp_addr_format->format = Tools::getValue('address_layout');
+				if (strlen($tmp_addr_format->format) > 0)
+				{
+					if ($tmp_addr_format->checkFormatFields())
+					{
+						$save_status = ($is_new) ? $tmp_addr_format->save(): $tmp_addr_format->update();
+					}
+
+					if (!$save_status)
+					{
+						$this->_errors[] = Tools::displayError('Invalid address layout'.Db::getInstance()->getMsgError());
+					}
+				}
+				unset($tmp_addr_format);
+			}
+
 			return parent::postProcess();
+		}
 	}
 
 	public function displayForm($isMainTab = true)
@@ -113,6 +145,7 @@ class AdminCountries extends AdminTab
 		$zones = Zone::getZones();
 		foreach ($zones AS $zone)
 			echo '		<option value="'.(int)($zone['id_zone']).'"'.(($this->getFieldValue($obj, 'id_zone') == $zone['id_zone']) ? ' selected="selected"' : '').'>'.$zone['name'].'</option>';
+		$address_layout = AddressFormat::getAddressCountryFormat($obj->id);
 		echo '		</select>
 					<p>'.$this->l('Geographical zone where country is located').'</p>
 				</div>
@@ -127,6 +160,10 @@ class AdminCountries extends AdminTab
 				<div class="margin-form zip_code_format">
 					<input type="text" name="zip_code_format" id="zip_code_format" value="'.$this->getFieldValue($obj, 'zip_code_format').'" onkeyup="$(\'#zip_code_format\').val($(\'#zip_code_format\').val().toUpperCase());" /> <sup>*</sup>
 					<p>'.$this->l('National zip code (L for a letter, N for a number and C for the Iso code), e.g., NNNNN for France. No verification if undefined').'.</p>
+				</div>
+				<label class="address_layout">'.$this->l('Address layout:').' </label>
+				<div class="margin_form">
+					<textarea id="ordered_fields" name="address_layout" cols="26" rows="3">'.$address_layout.'</textarea> <a href="#" onClick="$(\'textarea#ordered_fields\').val(unescape(\''.urlencode($address_layout).'\'.replace(/\+/g, \' \')));return false;" class="button">'.$this->l('Reset address layout').'</a><p>'.$this->l('(Possible fields: ').implode(' ', (Address::getDispFieldsValidate())).')</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
