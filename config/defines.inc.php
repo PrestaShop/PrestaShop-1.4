@@ -74,6 +74,8 @@ define('_PS_MAIL_DIR_',             _PS_ROOT_DIR_.'/mails/');
 define('_PS_ALL_THEMES_DIR_',       _PS_ROOT_DIR_.'/themes/');
 define('_PS_THEME_DIR_',            _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/');
 define('_PS_IMG_DIR_',              _PS_ROOT_DIR_.'/img/');
+if (!defined('_PS_MODULE_DIR_'))
+	define('_PS_MODULE_DIR_',              _PS_ROOT_DIR_.'/modules/');
 define('_PS_CAT_IMG_DIR_',          _PS_IMG_DIR_.'c/');
 define('_PS_STORE_IMG_DIR_',		_PS_IMG_DIR_.'st/');
 define('_PS_PROD_IMG_DIR_',         _PS_IMG_DIR_.'p/');
