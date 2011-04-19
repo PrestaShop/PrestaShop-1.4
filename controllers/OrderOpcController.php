@@ -120,6 +120,7 @@ class OrderOpcControllerCore extends ParentOrderController
 									$blockUserInfo = new BlockUserInfo();
 								}
 								self::$smarty->assign('isVirtualCart', self::$cart->isVirtualCart());
+								$this->processAddressFormat();
 								$this->_assignAddress();
 								// Wrapping fees
 								$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
@@ -265,7 +266,9 @@ class OrderOpcControllerCore extends ParentOrderController
 	public function displayContent()
 	{
 		parent::displayContent();
-		
+	
+		$this->processAddressFormat();
+	
 		self::$smarty->display(_PS_THEME_DIR_.'errors.tpl');
 		self::$smarty->display(_PS_THEME_DIR_.'order-opc.tpl');
 	}
@@ -445,6 +448,15 @@ class OrderOpcControllerCore extends ParentOrderController
 		if (self::$cart->update())
 			return self::$cart->id_carrier;
 		return 0;
+	}
+
+	protected function processAddressFormat()
+	{
+		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
+		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
+		self::$smarty->assign('inv_adr_fields', $inv_adr_fields);
+		self::$smarty->assign('dlv_adr_fields', $dlv_adr_fields);
 	}
 }
 
