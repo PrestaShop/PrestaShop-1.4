@@ -29,5 +29,22 @@ DROP TABLE IF EXISTS `PREFIX_country_tax`;
 ALTER TABLE `PREFIX_order_detail`
 CHANGE `product_quantity_in_stock` `product_quantity_in_stock` INT(10) NOT NULL DEFAULT '0';
 
+CREATE TABLE `PREFIX_address_format` (
+  `id_country` int(10) unsigned NOT NULL,
+  `format` varchar(255) NOT NULL DEFAULT '',
+  KEY `country` (`id_country`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+insert into `ps_address_format` (`id_country`, `format`)
+(SELECT `id_country` as id_country, 'firstname lastname\ncompany\nvat_number\naddress1\naddress2\npostcode city\ncountry\nphone' as format from ps_country);
+
+update `ps_address_format` set `format`='firstname lastname
+company
+address1
+address2
+city state postcode 
+country
+phone' where `id_country`=21;
+
 /* PHP:alter_cms_block(); */;
 

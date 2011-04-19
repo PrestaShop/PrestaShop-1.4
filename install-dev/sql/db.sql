@@ -1631,3 +1631,10 @@ CREATE TABLE `PREFIX_county_zip_code` (
 	PRIMARY KEY ( `id_county` , `from_zip_code` , `to_zip_code` )
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `PREFIX_address_format` (
+  `id_country` int(10) unsigned NOT NULL,
+  `format` varchar(255) NOT NULL DEFAULT '',
+  KEY `country` (`id_country`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+
