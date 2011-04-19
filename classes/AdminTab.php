@@ -185,6 +185,7 @@ abstract class AdminTabCore
 		if ($className == 'AdminCategories' OR $className == 'AdminProducts')
 			$className = 'AdminCatalog';
 		$this->token = Tools::getAdminToken($className.(int)($this->id).(int)($cookie->id_employee));
+
 	}
 
 
@@ -296,6 +297,7 @@ abstract class AdminTabCore
 		if ($res)
 			foreach ($res AS $row)
 				$required_fields[(int)$row['id_required_field']] = $row['field_name'];
+
 
 		$table_fields = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM '.pSQL(_DB_PREFIX_.$this->table));
 		$irow = 0;
