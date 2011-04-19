@@ -1026,10 +1026,10 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `n
 (5, 4, 'Auffüllung'),
 (5, 5, 'Riassortimento');
 
-insert into `ps_address_format` (`id_country`, `format`)
+INSERT INTO `PREFIX_address_format` (`id_country`, `format`)
 (SELECT `id_country` as id_country, 'firstname lastname\ncompany\nvat_number\naddress1\naddress2\npostcode city\ncountry\nphone' as format from ps_country);
 
-update `ps_address_format` set `format`='firstname lastname
+UPDATE `PREFIX_address_format` set `format`='firstname lastname
 company
 address1
 address2
