@@ -2453,12 +2453,12 @@ class ProductCore extends ObjectModel
 
 	public static function duplicateTags($id_product_old, $id_product_new)
 	{
-		$resource = Db::getInstance()->ExecuteS('SELECT `id_tag` FROM `'._DB_PREFIX_.'product_tag` WHERE `id_product` = '.(int)($id_product_old));
+		$tags = Db::getInstance()->ExecuteS('SELECT `id_tag` FROM `'._DB_PREFIX_.'product_tag` WHERE `id_product` = '.(int)($id_product_old));
 		if (!Db::getInstance()->NumRows())
 			return true;
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_tag` (`id_product`, `id_tag`) VALUES';
-		while ($row = Db::getInstance()->nextRow($resource))
-			$query .= ' ('.(int)($id_product_new).', '.(int)($row['id_tag']).'),';
+		foreach($tags as $tag)
+			$query .= ' ('.(int)($id_product_new).', '.(int)($tag['id_tag']).'),';
 		$query = rtrim($query, ',');
 		return Db::getInstance()->Execute($query);
 	}
