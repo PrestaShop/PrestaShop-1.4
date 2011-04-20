@@ -829,8 +829,10 @@ class CartCore extends ObjectModel
 
 				if ($withTaxes)
 				{
-				    $total_price = ($total_price - $total_ecotax) * (1 + (float)(Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) / 100);
-					$total_price = Tools::ps_round($total_price - $total_ecotax, 2);
+				   $total_price = ($total_price - $total_ecotax) * (1 + (float)(Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) / 100);
+				   $total_ecotax = $total_ecotax * (1 + Tax::getProductEcotaxRate((int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) / 100);
+					$total_price = Tools::ps_round($total_price + $total_ecotax, 2);
+
 				}
 			}
 			else
@@ -1267,6 +1269,7 @@ class CartCore extends ObjectModel
 		$invoice = new Address((int)($this->id_address_invoice));
 
 		$total_tax = $this->getOrderTotal() - $this->getOrderTotal(false);
+
 		if ($total_tax < 0)
 			$total_tax = 0;
 
