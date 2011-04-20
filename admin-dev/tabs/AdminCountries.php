@@ -78,14 +78,10 @@ class AdminCountries extends AdminTab
 				if (strlen($tmp_addr_format->format) > 0)
 				{
 					if ($tmp_addr_format->checkFormatFields())
-					{
 						$save_status = ($is_new) ? $tmp_addr_format->save(): $tmp_addr_format->update();
-					}
 
 					if (!$save_status)
-					{
 						$this->_errors[] = Tools::displayError('Invalid address layout'.Db::getInstance()->getMsgError());
-					}
 				}
 				unset($tmp_addr_format);
 			}
@@ -162,8 +158,10 @@ class AdminCountries extends AdminTab
 					<p>'.$this->l('National zip code (L for a letter, N for a number and C for the Iso code), e.g., NNNNN for France. No verification if undefined').'.</p>
 				</div>
 				<label class="address_layout">'.$this->l('Address layout:').' </label>
-				<div class="margin_form">
-					<textarea id="ordered_fields" name="address_layout" cols="26" rows="3">'.$address_layout.'</textarea> <a href="#" onClick="$(\'textarea#ordered_fields\').val(unescape(\''.urlencode($address_layout).'\'.replace(/\+/g, \' \')));return false;" class="button">'.$this->l('Reset address layout').'</a><p>'.$this->l('(Possible fields: ').implode(' ', (Address::getDispFieldsValidate())).')</p>
+				<div class="margin-form" style="vertical-align: top;">
+					<p style="float: left;"><textarea id="ordered_fields" name="address_layout" style="width: 300px;height: 120px;">'.$address_layout.'</textarea></p>
+					<p style="float: left;margin-left: 10px;"><a href="#" onClick="$(\'textarea#ordered_fields\').val(unescape(\''.urlencode($address_layout).'\'.replace(/\+/g, \' \')));return false;" class="button">'.$this->l('Reset address layout').'</a></p>					
+					<p class="clear">'.$this->l('Possible fields :').' '.implode(', ', (Address::getDispFieldsValidate())).'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
@@ -187,6 +185,7 @@ class AdminCountries extends AdminTab
 					<input type="radio" name="need_identification_number" id="need_identification_number_off" value="0" '.((!$this->getFieldValue($obj, 'need_identification_number') AND $obj->id) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="need_identification_number_off"> <img src="../img/admin/disabled.gif" alt="" title="" />'.$this->l('No').'</label>
 				</div>
+				<div class="clear"></div>
 				<label>'.$this->l('Display tax label:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="display_tax_label" id="display_tax_label_on" value="1" '.((!$obj->id OR $this->getFieldValue($obj, 'display_tax_label')) ? 'checked="checked" ' : '').'/>

@@ -63,15 +63,12 @@ class AddressFormatCore extends ObjectModel
 		$fields_format = explode("\n", $this->format);
 		foreach($fields_format as $field_line)
 		{
-			$fields = explode(' ', $field_line);
+			$fields = explode(' ', trim($field_line));
 			foreach($fields as $field_item)
 			{
 				$field_item = trim($field_item);
 				if (!isset($addr_f_validate[$field_item]) && !isset($addr_f_validate['id_'.$field_item]))
-				{
 					$out = false;
-					// echo('<br />'.$field_item . ' is not defined: '.$addr_f_validate[$field_item]);
-				}
 			}
 		}
 		return $out;
