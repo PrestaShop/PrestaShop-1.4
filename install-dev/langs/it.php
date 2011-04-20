@@ -266,4 +266,4 @@ $_LANG['do not close the window and be patient.'] = 'non chiudere la finestra e 
 $_LANG['Your update is completed!'] = 'L\'aggiornamento è completo!';
 $_LANG['Your shop version is now'] = 'La tua versione adesso è';
 $_LANG['New features in PrestaShop v'] = 'Nuove caratteristiche in PrestaShop v';
-
+$_LANG['In this aim, use our'] = 'A questo scopo, utilizzare il nostro';

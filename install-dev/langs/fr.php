@@ -241,7 +241,7 @@ $_LANG['Upgrade file'] = 'Fichier de mise à jour';
 $_LANG['Modifications to process'] = 'Modifications à prendre en compte';
 $_LANG['(major)'] = '(majeure)';
 $_LANG['TOTAL'] = 'TOTAL';
-$_LANG['Estimated time to complete the'] = 'Temps estimé pour réaliser la';
+$_LANG['Estimated time to complete the'] = 'Temps estimé pour réaliser les';
 $_LANG['modifications:'] = 'modifications :';
 $_LANG['minutes'] = 'minutes';
 $_LANG['minute'] = 'minute';
@@ -278,7 +278,8 @@ $_LANG['of PrestaShop.'] = 'de PrestaShop';
 $_LANG['Link to the validator'] = 'Lien vers le validateur';
 $_LANG['Online Theme Validator'] = 'Validateur de Theme en ligne';
 $_LANG['If your theme is not valid, you may experience some problems in your front-office aspect, but don\'t panic ! To solve this, you can make it compatible by correcting the validators errors or by using a theme compatible with '] = 'Si votre thème n\'est pas valide, vous pourrez rencontrer quelques problèmes d\'affichage de votre site, mais inutile de paniquer ! Vous pouvez le rendre compatible en corrigeant les erreurs signalées par le validateur ou en utilisant un thème compatible avec la version' ;
-$_LANG['version'] = '';
+$_LANG['version'] = 'version';
+$_LANG['In this aim, use our'] = 'Dans ce but, utilisez notre';
 
 
 

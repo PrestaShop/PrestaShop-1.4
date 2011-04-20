@@ -1059,17 +1059,12 @@ if ($lm->getIncludeTradFilename())
 
 				?>
 				
-				<h3 style="margin-top: 15px;"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt).'); ?></h3>
+				<h3 style="margin-top: 15px;"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?></h3>
 				<a href="../" id="access_update" target="_blank">
 					<span class="title"><?php echo lang('Front Office'); ?></span>
 					<span class="description"><?php echo lang('Find your store as your future customers will see!'); ?></span>
 					<span class="message"><?php echo lang('Discover your store'); ?></span>
 				</a>
-				<span href="#" id="access" class="BO" target="_blank">
-					<span class="title"><?php echo lang('Back Office'); ?></span>
-					<span class="description"><?php echo lang('Manage your store with your back office. Manage your orders and customers, add modules, change your theme, etc...'); ?></span>
-					<span class="message"><?php echo lang('Manage your store'); ?></span>
-				</span>
 			</div>
 			<?php
 			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)): ?>
