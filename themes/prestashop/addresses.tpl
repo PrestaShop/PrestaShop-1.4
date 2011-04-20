@@ -51,7 +51,7 @@
 		{elseif $field_item eq "phone" && $address.phone}<li class="address_phone">{$address.phone}</li>
 		{elseif $field_item eq "phone_mobile" && $address.phone_mobile}<li class="address_phone_mobile">{$address.phone_mobile}</li>
 		{else}
-			{assign var="address_words" value=explode(' ', $field_item)}
+			{assign var=address_words value=" "|explode:$field_item} 
 			<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$address.$word_item|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
 		{/if}
 		{/foreach}

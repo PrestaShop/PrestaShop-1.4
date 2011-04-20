@@ -83,7 +83,7 @@
 		{elseif $field_item eq "address2" && $address_invoice->address2}<li class="address_address2">{$address_invoice->address2|escape:'htmlall':'UTF-8'}</li>
 		{elseif $field_item eq "phone_mobile" && $address_invoice->phone_mobile}<li class="address_phone_mobile">{$address_invoice->phone_mobile|escape:'htmlall':'UTF-8'}</li>
 		{else}
-				{assign var="address_words" value=explode(' ', $field_item)}
+				{assign var=address_words value=" "|explode:$field_item} 
 				<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$address_invoice->$word_item|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
 		{/if}
 	
@@ -96,7 +96,7 @@
 		{elseif $field_item eq "address2" && $address_delivery->address2}<li class="address_address2">{$address_delivery->address2|escape:'htmlall':'UTF-8'}</li>
 		{elseif $field_item eq "phone_mobile" && $address_delivery->phone_mobile}<li class="address_phone_mobile">{$address_delivery->phone_mobile|escape:'htmlall':'UTF-8'}</li>
 		{else}
-				{assign var="address_words" value=explode(' ', $field_item)}
+				{assign var=address_words value=" "|explode:$field_item} 
 				<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$address_delivery->$word_item|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
 		{/if}
 	{/foreach}
