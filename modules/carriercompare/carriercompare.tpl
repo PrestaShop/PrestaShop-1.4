@@ -71,7 +71,7 @@
 		</p>
 		
 		<div id="availableCarriers" style="display: none;">
-			<table cellspacing="0" cellpadding="0" id="availableCarriers_table">
+			<table cellspacing="0" cellpadding="0" id="availableCarriers_table" class="std">
 				<thead>
 					<tr>
 						<th class="carrier_action first_item"></th>
