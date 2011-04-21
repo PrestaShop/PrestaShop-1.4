@@ -1403,8 +1403,8 @@ CREATE TABLE `PREFIX_tab` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_tab_lang` (
-  `id_lang` int(10) unsigned NOT NULL,
   `id_tab` int(10) unsigned NOT NULL,
+  `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(32) default NULL,
   PRIMARY KEY  (`id_tab`,`id_lang`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
