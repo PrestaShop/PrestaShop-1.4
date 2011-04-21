@@ -314,7 +314,6 @@ class BlockLayered extends Module
 	
 	public function generateFiltersBlock($selectedFilters = array())
 	{
-		ini_set('display_errors', 'On');
 		
 		global $smarty, $link, $cookie;
 
