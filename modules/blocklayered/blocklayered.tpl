@@ -25,6 +25,7 @@
 *}
 
 <!-- Block layered navigation module -->
+{if $nbr_filterBlocks != 0}
 <div id="layered_block_left" class="block">
 	<h4>{l s='Catalog' mod='blocklayered'}</h4>
 	<div class="block_content">
@@ -35,17 +36,28 @@
 					<span class="layered_subtitle" style="float: none;">{l s='Enabled filters:' mod='blocklayered'}</span>
 					<ul>
 					{foreach from=$selected_filters key=filter_type item=filter_values}
-					{foreach from=$filter_values item=filter_value}
-					{foreach from=$filters item=filter}
-					{if $filter.type == $filter_type && isset($filter.values)}
-					{foreach from=$filter.values key=id_value item=value}
-					{if $id_value == $filter_value}
-						<li><a href="#" rel="layered_{$filter.type_lite}_{$id_value}" title="{l s='Cancel' mod='blocklayered'}">x</a> {$filter.name|escape:html:'UTF-8'}{l s=':'} {$value.name|escape:html:'UTF-8'}</li>
-					{/if}
-					{/foreach}
-					{/if}
-					{/foreach}
-					{/foreach}
+						{foreach from=$filter_values item=filter_value name=f_values}
+							{foreach from=$filters item=filter}
+								{if $filter.type == $filter_type && isset($filter.values)}
+									{if isset($filter.slider) && $smarty.foreach.f_values.first}
+										<li>
+											- {$filter.name|escape:html:'UTF-8'}{l s=':'} 
+											{$filter.values[0]|escape:html:'UTF-8'}{$filter.unit|escape:html:'UTF-8'} - 
+											{$filter.values[1]|escape:html:'UTF-8'}{$filter.unit|escape:html:'UTF-8'}
+										</li>
+									{else}
+										{foreach from=$filter.values key=id_value item=value}
+											{if $id_value == $filter_value}
+												<li>
+													<a href="#" rel="layered_{$filter.type_lite}_{$id_value}" title="{l s='Cancel' mod='blocklayered'}">x</a>
+													{$filter.name|escape:html:'UTF-8'}{l s=':'} {$value.name|escape:html:'UTF-8'}
+												</li>
+											{/if}
+										{/foreach}
+									{/if}
+								{/if}
+							{/foreach}
+						{/foreach}
 					{/foreach}
 					</ul>
 				</div>
@@ -72,11 +84,47 @@
 								</li>
 							{/foreach}
 						{else}
+							<label for="{$filter.type}">{l s='Range'} : </label><span id="layered_{$filter.type}_range"></span>
+							<div style="margin-top:5px;" class="layered_slider" id="layered_{$filter.type}_slider"></div>
+							<script type="text/javascript">
+							unit = '{$filter.unit}';
+							{literal}
+								$(document).ready(function()
+								{
+									$('#layered_{/literal}{$filter.type}{literal}_slider').slider({
+										range: true,
+										min: {/literal}{$filter.min}{literal},
+										max: {/literal}{$filter.max}{literal},
+										values: [ {/literal}{$filter.values[0]}{literal}, {/literal}{$filter.values[1]}{literal}],
+										slide: function( event, ui ) {
+											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + unit + ' - ' + ui.values[ 1 ] + unit);
+											console.log(event);
+											console.log(ui);
+										},
+										stop: function () {
+											reloadContent();
+										}
+									});
+									$('#layered_{/literal}{$filter.type}{literal}_range').html($('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 0 ) +unit+
+										' - ' + $('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 1 )+unit );
+								});
+							{/literal}
+							</script>
 							<!--
-<label for="{$filter.type}"></label>
-							<input type="text" id="layered_{$filter.type}" />
--->
-							<div id="layered_{$filter.type}"></div>
+							<script type="text/javascript">
+							unit = '{$filter.unit}';
+							type = '{$filter.type}';
+							max = '{$filter.max}';
+							min = '{$filter.min}';
+							values = [{$filter.values[0]}, {$filter.values[1]}];
+							{literal}
+								$(document).ready(function()
+								{
+									initSlider(type, min, max, values, unit);
+								});
+							{/literal}
+							</script>
+							-->
 						{/if}
 						</ul>
 					</div>
@@ -99,4 +147,5 @@
 		<p style="margin: 20px 0; text-align: center;"><img src="{$img_ps_dir}loader.gif" alt="" /><br />{l s='Loading...' mod='blocklayered'}</p>
 	</div>
 </div>
+{/if}
 <!-- /Block layered navigation module -->

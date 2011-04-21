@@ -92,7 +92,8 @@ class BlockLayered extends Module
 	public function hookCategoryUpdate($params)
 	{
 		/* The category status might (active, inactive) have changed, we have to update the layered cache table structure */
-		if (!$params['category']->active)
+		/*
+if (!$params['category']->active)
 			$this->hookCategoryDeletion($params);
 		else
 		{
@@ -105,6 +106,7 @@ class BlockLayered extends Module
 			if (!Db::getInstance()->getRow('SELECT id_layered_category FROM `'._DB_PREFIX_.'layered_category` WHERE id_category = '.(int)$params['category']->id))
 				$this->rebuildLayeredCache(array(), array((int)$params['category']->id));
 		}
+*/
 	}
 	
 	public function hookCategoryDeletion($params)
@@ -137,11 +139,11 @@ class BlockLayered extends Module
 		
 		$html .= '
 		<h2>'.$this->l('Layered navigation').'</h2>
-		<p class="warning" style="font-weight: bold;"><img src="../img/admin/information.png" alt="" /> '.$this->l('This module is in beta version and will be improved in PrestaShop v1.4.1').'</p><br />
+		<p class="warning" style="font-weight: bold;"><img src="../img/admin/information.png" alt="" /> '.$this->l('This module is in beta version and will be improved').'</p><br />
 		<fieldset class="width2">
-			<legend><img src="../img/admin/asterisk.gif" alt="" />'.$this->l('10 upcoming improvements in PrestaShop v1.4.1').'</legend>
+			<legend><img src="../img/admin/asterisk.gif" alt="" />'.$this->l('10 upcoming improvements').'</legend>
 			<ol>				
-				<li>'.$this->l('Real-time refresh of the cache table').'</li>
+				<li>'.$this->l('Real-time refresh of the cache table').' <img src="../img/admin/enabled.gif" alt="" /></li>
 				<li>'.$this->l('Additional filters (prices, weight)').'</li>
 				<li>'.$this->l('Ability to manage filters by category in the module configuration').'</li>
 				<li>'.$this->l('Ability to hide filter groups with no values and filter values with 0 products').'</li>
@@ -166,13 +168,7 @@ class BlockLayered extends Module
 			<legend><img src="../img/admin/database_gear.gif" alt="" />'.$this->l('Cache initialization').'</legend>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 				<div class="warning">
-					<p style="font-weight: bold;"><img src="../img/admin/warning.gif" alt="" /> '.$this->l('When do you have to initialize the cache?').'</p>					
-					<ul>
-						<li style="color: red; font-weight: bold;">'.$this->l('Before using this module for the first time').'</li>
-						<li>'.$this->l('You add/update/delete').' '.$this->l('a feature or a feature value').'</li>
-						<li>'.$this->l('You add/update/delete').' '.$this->l('an attribute group or an attribute value').'</li>
-						<li>'.$this->l('You update one or more feature values for a product').'</li>
-					</ul>
+						<p style="color: red; font-weight: bold;">'.$this->l('Before using this module for the first time you have to initialize the cache').'</p>
 					<p><b>'.$this->l('Warning: This could take several minutes.').'</b><br /><br />
 					'.$this->l('If you do not, this cache table might become larger and larger (less efficient), and all the new choices (attributes, features) will not be offered to your visitors.').'</p>
 				</div>
@@ -194,7 +190,7 @@ class BlockLayered extends Module
 		{
 			if (substr($key, 0, 8) == 'layered_')
 			{
-				preg_match('/^(.*)_[0-9|new|used|refurbished]+$/', substr($key, 8, strlen($key) - 8), $res);
+				preg_match('/^(.*)_[0-9|new|used|refurbished|slider]+$/', substr($key, 8, strlen($key) - 8), $res);
 				if (isset($res[1]))
 				{
 					$tmpTab = explode('_', $value);
@@ -212,6 +208,8 @@ class BlockLayered extends Module
 							$selectedFilters[$res[1].($id_key ? '_'.$id_key : '')] = array();
 						$selectedFilters[$res[1].($id_key ? '_'.$id_key : '')][] = (int)$value;
 					}
+					elseif (in_array($res[1], array('weight')))
+						$selectedFilters[$res[1]] = $tmpTab;
 				}
 			}
 		}
@@ -262,12 +260,20 @@ class BlockLayered extends Module
 					$queryFilters = rtrim($queryFilters, 'OR ').')';
 				break;
 				case 'category':
-					$queryFilters .= ' AND p.id_product IN ( SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE 1 AND cp.`id_category` = '.(int)$id_parent;
-					if (sizeof($selectedFilters['category']))
-						$queryFilters .= ' OR ';
-					foreach ($selectedFilters['category'] AS $id_category)
-						$queryFilters .= 'cp.`id_category` = '.(int)$id_category.' OR ';
-					$queryFilters = rtrim($queryFilters, 'OR ').')';
+					$parent = new category($id_parent);
+					if (!sizeof($selectedFilters['category']))
+                         $queryFilters .= ' AND p.id_product IN ( SELECT id_product FROM '._DB_PREFIX_.'category_product cp 
+                         LEFT JOIN ps_category c ON (c.id_category = cp.id_category) 
+                         WHERE 1 AND c.nleft >= parent->nleft AND c.nright <= parent->nright';
+					else
+					{
+						$queryFilters .= ' AND p.id_product IN ( SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE 1 AND cp.`id_category` = '.(int)$id_parent;					
+						if (sizeof($selectedFilters['category']))
+							$queryFilters .= ' OR ';
+						foreach ($selectedFilters['category'] AS $id_category)
+							$queryFilters .= 'cp.`id_category` = '.(int)$id_category.' OR ';
+						$queryFilters = rtrim($queryFilters, 'OR ').')';
+					}
 				break;
 				
 				case 'quantity':
@@ -288,6 +294,10 @@ class BlockLayered extends Module
 						$queryFilters .= '\''.$cond.'\',';
 					$queryFilters = rtrim($queryFilters, ',').')';
 				break;
+				
+				case 'weight':
+					$queryFilters .= ' AND p.`weight` BETWEEN '.(float)$selectedFilters['weight'][0].' AND '.(float)$selectedFilters['weight'][1];
+				break;
 			}
 		}
 		//id_category_layered = current displayed category
@@ -297,7 +307,7 @@ class BlockLayered extends Module
 				WHERE cp.`id_category` = '.(int)$id_parent.')';
 		
 		$sql = '
-		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.id_category_default, p.customizable, p.show_price,
+		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
 		p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name, p.condition, p.id_manufacturer,
 		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM '._DB_PREFIX_.'product p
@@ -306,7 +316,7 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image AND il.id_lang = '.(int)($cookie->id_lang).')
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE pl.id_lang = '.(int)$cookie->id_lang.$queryFilters;
-				
+			
 		$this->products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		
 		return $this->products;
@@ -334,14 +344,11 @@ class BlockLayered extends Module
 		
 		$whereC = ' cp.`id_category` = '.(int)$id_parent.' OR ';
 		foreach ($subCategories AS $subcategory)
-		{
 				$whereC .= ' cp.`id_category` = '.(int)$subcategory['id_category'].' OR ';
-				if (!sizeof($selectedFilters))
-					$selectedFilters['category'][] = (int)$subcategory['id_category'];
-		}
+
 		$whereC = rtrim($whereC, 'OR ').')';
 		$productsSQL = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.`id_product`, p.`condition`, p.`id_manufacturer`, p.`quantity`,
+		SELECT p.`id_product`, p.`condition`, p.`id_manufacturer`, p.`quantity`, p.`weight`,
 		(SELECT GROUP_CONCAT(`id_category`) FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_product` = p.`id_product`) as ids_cat,
 			(SELECT GROUP_CONCAT(`id_feature_value`) FROM `'._DB_PREFIX_.'feature_product` fp WHERE fp.`id_product` = p.`id_product`) as ids_feat,
 			(SELECT GROUP_CONCAT(DISTINCT(pac.`id_attribute`)) 
@@ -353,7 +360,7 @@ class BlockLayered extends Module
 
 		$products = array();
 		$db = Db::getInstance();
-		
+		$weight = array();
 		while ($product = $db->nextRow($productsSQL))
 		{
 			$row = array();
@@ -365,28 +372,19 @@ class BlockLayered extends Module
 					$row['a'] = explode(',', $value);
 				if($key == 'ids_cat')
 					$row['c'] = explode(',', $value);
+				if($key == 'weight')
+					$weight[] = $value;
 			}
 			
 			$row['id_manufacturer'] = (int)$product['id_manufacturer'];
 			$row['quantity'] = (bool)$product['quantity'];
 			$row['condition'] = $product['condition'];
+			$row['weight'] = $product['weight'];
 			$products[(int)$product['id_product']] = $row;
 		}
-		
-		/*
-file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_APPEND);
-		file_put_contents('titi.txt', $id_parent, FILE_APPEND);
-		file_put_contents('titi.txt', print_r($products, true), FILE_APPEND);
-*/
 
-/*
-		p($selectedFilters['category']);
-		p($id_parent);
-		d(var_dump($products));
-*/
 		/* Get the filters for the current category */
 		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'layered_category WHERE id_category = '.(int)$id_parent);		
-
 		$filterBlocks = $f = $a = array();
 	
 		foreach ($filters AS $filter)
@@ -418,7 +416,7 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 					break;
 			}
 		}
-		
+
 		/* Get the feature block names & values */
 		if (sizeof($f))
 		{
@@ -601,27 +599,35 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 						$filterBlock['values'][(int)$manufacturer['id_manufacturer']]['checked'] = true;
 				}
 			}
+			elseif ($filterBlock['type_lite'] == 'weight')
+			{
+				if (max($weight) != min($weight))
+				{
+					$filterBlock['name'] = $this->l('Weight');
+					$filterBlock['slider'] = true;
+					$filterBlock['max'] = max($weight);
+					$filterBlock['min'] = min($weight);
+					if (isset($selectedFilters['weight']))
+						$filterBlock['values'] = array($selectedFilters['weight'][0], $selectedFilters['weight'][1]);
+					else
+						$filterBlock['values'] = array(min($weight), max($weight));
+					$filterBlock['unit'] = Configuration::get('PS_WEIGHT_UNIT');
+				}
+				else
+					unset($selectedFilters['weight']);
+			}
 		}
+		
 		$nFilters = 0;
 		foreach ($selectedFilters AS $filters)
 			$nFilters += sizeof($filters);
-			
-			$filterBlocks[] = array(
-            'type_lite' => 'weight',
-            'type' => 'weight',
-            'slider' => true,
-            'id_key' => 0,
-            'name' => 'Poids',
-            'values' => 200,
-            'max' => 300,
-            'min' => 100);
-			p(Configuration::get('PS_LAYERED_NAVIGATION_CHECKBOXES'));
-//d($filterBlocks);
+
 		$smarty->assign(array(
 		'layered_use_checkboxes' => (int)Configuration::get('PS_LAYERED_NAVIGATION_CHECKBOXES'),
 		'id_category_layered' => (int)$id_parent,
 		'selected_filters' => $selectedFilters,
 		'n_filters' => (int)$nFilters,
+		'nbr_filterBlocks' => sizeof($filterBlocks),
 		'filters' => $filterBlocks));
 				
 		return $smarty->fetch(_PS_MODULE_DIR_.$this->name.'/blocklayered.tpl');
@@ -640,66 +646,18 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 		$smarty->assign('products', $products);
 		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
-		return '<div id="layered_ajax_column">'.$this->generateFiltersBlock($selectedFilters).'</div><div id="layered_ajax_products">'.$smarty->fetch(_PS_THEME_DIR_.'product-list.tpl').'</div>';	}
+		return Tools::jsonEncode(array(
+			'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
+			'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl')
+		));
+	//	return '<div id="layered_ajax_column">'.$this->generateFiltersBlock($selectedFilters).'</div><div id="layered_ajax_products">'.$smarty->fetch(_PS_THEME_DIR_.'product-list.tpl').'</div>';	
+	}
 	
 	public function rebuildLayeredStructure()
 	{
 		@set_time_limit(0);
 		@ini_set('memory_limit', '64M');
 
-		/* Delete and re-create the products cache table */
-		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_cache');
-		$createTable = 'CREATE TABLE `'._DB_PREFIX_.'layered_cache` (`id_product` INT UNSIGNED NOT NULL,';
-		$confValue = 'id_product,';
-		
-		/* Add the missing feature values columns */
-		$featureValues = Db::getInstance()->ExecuteS('
-		SELECT fv.id_feature_value
-		FROM '._DB_PREFIX_.'feature_product fp
-		LEFT JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value)
-		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = fp.id_product)
-		WHERE (fv.custom IS NULL OR fv.custom = 0) AND p.active = 1
-		GROUP BY fv.id_feature_value');
-		
-		/* Add the missing attribute values columns */
-		$attributeValues = Db::getInstance()->ExecuteS('
-		SELECT pac.id_attribute
-		FROM '._DB_PREFIX_.'product_attribute_combination pac
-		LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
-		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = pa.id_product)
-		WHERE p.active = 1
-		GROUP BY pac.id_attribute');
-		
-		/* Add the missing categories columns */
-		$categories = Db::getInstance()->ExecuteS('
-		SELECT cp.id_category
-		FROM '._DB_PREFIX_.'category_product cp
-		LEFT JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category)
-		LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product)
-		WHERE p.active = 1 AND c.active = 1
-		GROUP BY cp.id_category');
-		
-		foreach ($featureValues AS $featureValue)
-		{
-			$createTable .= '`f'.(int)$featureValue['id_feature_value'].'` TINYINT(1) UNSIGNED NOT NULL DEFAULT \'0\',';
-			$confValue .= 'f'.(int)$featureValue['id_feature_value'].',';
-		}
-		
-		foreach ($attributeValues AS $attributeValue)
-		{
-			$createTable .= '`a'.(int)$attributeValue['id_attribute'].'` TINYINT(1) UNSIGNED NOT NULL DEFAULT \'0\',';
-			$confValue .= 'a'.(int)$attributeValue['id_attribute'].',';
-		}
-		
-		foreach ($categories AS $category)
-		{
-			$createTable .= '`c'.(int)$category['id_category'].'` TINYINT(1) UNSIGNED NOT NULL DEFAULT \'0\',';
-			$confValue .= 'c'.(int)$category['id_category'].',';
-		}
-
-		Configuration::updateValue('PS_LAYERED_COLUMNS', rtrim($confValue, ','));
-		Db::getInstance()->Execute($createTable.' PRIMARY KEY (`id_product`)) ENGINE=MyISAM CHARSET=latin1');
-		
 		/* Delete and re-create the layered categories table */
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_category');
 		Db::getInstance()->Execute('
@@ -707,7 +665,7 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 		`id_layered_category` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 		`id_category` INT(10) UNSIGNED NOT NULL,
 		`id_value` INT(10) UNSIGNED NOT NULL DEFAULT \'0\',
-		`type` ENUM(\'category\',\'id_feature\',\'id_attribute_group\',\'quantity\',\'condition\',\'manufacturer\') NOT NULL,
+		`type` ENUM(\'category\',\'id_feature\',\'id_attribute_group\',\'quantity\',\'condition\',\'manufacturer\',\'weight\') NOT NULL,
 		`position` INT(10) UNSIGNED NOT NULL,
 		PRIMARY KEY (`id_layered_category`),
 		KEY `id_category` (`id_category`,`type`)
@@ -761,15 +719,6 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 		WHERE c.active = 1'.(sizeof($categoriesIds) ? ' AND cp.id_category IN ('.implode(',', $categoriesIds).')' : '').' AND p.active = 1'.(sizeof($productsIds) ? ' AND p.id_product IN ('.implode(',', $productsIds).')' : '').' AND (fv.custom IS NULL OR fv.custom = 0)
 		GROUP BY p.id_product', false);
 		
-		/* Get all the columns to fill */
-		$columns = explode(',', Configuration::get('PS_LAYERED_COLUMNS'));
-
-		/* We do not need to build the query for products when we are just updating the layered_category table */
-		if (!sizeof($categoriesIds))
-		{
-			$query = 'INSERT INTO `'._DB_PREFIX_.'layered_cache` VALUES ';
-			$values = '';
-		}
 		while ($product = $db->nextRow($result))
 		{
 			$a = $c = $f = array();
@@ -779,27 +728,6 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 				$c = array_flip(explode(',', $product['categories']));
 			if (!empty($product['features']))
 				$f = array_flip(explode(',', $product['features']));
-
-			/* We do not need to build the query for products when we are just updating the layered_category table */
-			if (!sizeof($categoriesIds))
-			{
-				$values .= '(';
-				$n = 0;
-				foreach ($columns AS $column)
-				{
-					if (!$n)
-						$values .= (int)$product['id_product'].',';
-					else
-					{
-						if (isset(${$column{0}}[ltrim($column, $column{0})]))
-							$values .= '1,';
-						else
-							$values .= '0,';
-					}
-					$n++;
-				}
-				$values = rtrim($values, ',').'),';
-			}
 
 			$queryCategory = 'INSERT INTO '._DB_PREFIX_.'layered_category (id_category, id_value, type, position) VALUES ';
 			$toInsert = false;
@@ -845,20 +773,32 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 					$queryCategory .= '('.(int)$id_category.',NULL,\'condition\','.(int)$nCategories[(int)$id_category]++.'),';
 					$toInsert = true;
 				}
+				if (!isset($doneCategories[(int)$id_category]['w']))
+				{
+					$doneCategories[(int)$id_category]['w'] = true;
+					$queryCategory .= '('.(int)$id_category.',NULL,\'weight\','.(int)$nCategories[(int)$id_category]++.'),';
+					$toInsert = true;
+				}
+				/*
+if (!isset($doneCategories[(int)$id_category]['p']))
+				{
+					$doneCategories[(int)$id_category]['p'] = true;
+					$queryCategory .= '('.(int)$id_category.',NULL,\'price\','.(int)$nCategories[(int)$id_category]++.'),';
+					$toInsert = true;
+				}
+*/
 			}
 			if ($toInsert)
 				Db::getInstance()->Execute(rtrim($queryCategory, ','));
 		}
-		
-		/* We do not need to build the query for products when we are just updating the layered_category table */
-		if (!sizeof($categoriesIds))
-			$db->Execute($query.rtrim($values, ','));
 	}
 	
 	function filterProducts($products, $selectedFilters, $excludeType = false)
 	{
 		$productsToKeep = array();
-		$filterByLetter = array('id_attribute_group' => 'a', 'id_feature' => 'f', 'category' => 'c', 'manufacturer' => 'id_manufacturer', 'quantity' => 'quantity', 'condition' => 'condition');
+		$filterByLetter = array('id_attribute_group' => 'a', 'id_feature' => 'f', 'category' => 'c', 'manufacturer' => 'id_manufacturer',
+								'quantity' => 'quantity', 'condition' => 'condition', 'weight' => 'weight', 'price' => 'price');
+		
 		foreach ($selectedFilters AS $type => $filters)
 		{		
 			if ($type == $excludeType OR !sizeof($filters))
@@ -889,6 +829,14 @@ file_put_contents('titi.txt', print_r($selectedFilters['category'], true), FILE_
 							foreach ($filters AS $filter)
 								if ($product[$filterByLetter[$type]] == $filter)
 									$productsToKeep[] = (int)$k;
+						break;
+					case 'weight':
+					case 'price':
+						$min = $filters[0];
+						$max = $filters[1]; 
+						foreach ($products AS $k => $product)
+							if((float)$min <= (float)$product[$filterByLetter[$type]] AND (float)$product[$filterByLetter[$type]] <= (float)$max)
+								$productsToKeep[] = (int)$k;
 						break;
 				}
 				
