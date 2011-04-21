@@ -1,5 +1,5 @@
 {*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -34,7 +34,7 @@
 	var addresses_values = new Array();
 	{foreach from=$addresses key=k item=address}
 		addresses[{$address.id_address|intval}] = new Array('{$address.company|addslashes}', '{$address.firstname|addslashes}', '{$address.lastname|addslashes}', '{$address.address1|addslashes}', '{$address.address2|addslashes}', '{$address.postcode|addslashes}', '{$address.city|addslashes}', '{$address.country|addslashes}', '{$address.state|default:''|addslashes}');
-		addresses_values[{$address.id_address|intval}] = {
+		addresses_values[{$address.id_address|intval}] = {ldelim}
 								company: '{$address.company|addslashes}'
 								,firstname: '{$address.firstname|addslashes}'
 								,lastname: '{$address.lastname|addslashes}'
@@ -44,11 +44,11 @@
 								,city: '{$address.city|addslashes}'
 								,country: '{$address.country|addslashes}'
 								,state: '{$address.state|default:''|addslashes}'
-							};
+							{rdelim};
 	{/foreach}
 
 
-	var address_format = {
+	var address_format = {ldelim}
 				invoice:[
 	{if isset($inv_adr_fields)}
 		{foreach from=$inv_adr_fields item=inv_field name=inv_loop}
@@ -64,16 +64,16 @@
 		{/foreach}
 	{/if}
 					]
-				};
+				{rdelim};
 
 
 
 	function buildAddressBlock(id_address, address_type, dest_comp)
-	{
-		var adr_titles_vals = {
+	{ldelim}
+		var adr_titles_vals = {ldelim}
 						'invoice': "{l s='Your billing address'}"
 						, 'delivery': "{l s='Your delivery address'}"
-					};
+					{rdelim};
 
 		var li_content = addresses_values[id_address];
 		var fields_name = ["title"];
@@ -88,24 +88,24 @@
 
 
 		appendAddressLis(dest_comp, fields_name, li_content);
-	}
+	{rdelim}
 
 	function appendAddressLis(dest_comp, fields_name, values)
-	{
-	
+	{ldelim}
+
 		for (var item in fields_name)
-		{
+		{ldelim}
 			var name = fields_name[item];
 			var new_li = document.createElement('li');
 			new_li.className = 'address_'+ name;
 			new_li.innerHTML = getFieldValue(name, values);
 			dest_comp.append(new_li);
-		}
-		
-	}
+		{rdelim}
+
+	{rdelim}
 
 	function getFieldValue(field_name, values)
-	{
+	{ldelim}
 		var reg=new RegExp("[ ]+", "g");
 
 		var items=field_name.split(reg);
@@ -114,8 +114,8 @@
 		for (var field_item in items)
 			vals.push(values[items[field_item]]);
 		return vals.join(" ");
-	}
-	
+	{rdelim}
+
 //]]>
 </script>
 
@@ -188,3 +188,4 @@
 {else}
 </div>
 {/if}
+
