@@ -34,7 +34,7 @@ class Ekomi extends Module
     {
         $this->name = 'ekomi';
         $this->tab = 'advertising_marketing';
-        $this->version = 0.8;
+        $this->version = 1.0;
 
 		parent::__construct();
 
@@ -108,7 +108,6 @@ class Ekomi extends Module
 		
 	public function hookNewOrder($params)
 	{
-		global $cookie;
 		if (!Configuration::get('PS_EKOMI_EMAIL'))
 			return false;
 
@@ -122,7 +121,7 @@ class Ekomi extends Module
 		);
 
 		/* Email sending */
-		if (!Mail::Send((int)($cookie->id_lang), 'ekomi', $subject, $templateVars, Configuration::get('PS_EKOMI_EMAIL'), NULL, $params['customer']->email, Configuration::get('PS_SHOP_NAME'), NULL, NULL, dirname(__FILE__).'/mails/'))
+		if (!Mail::Send(1, 'ekomi', $subject, $templateVars, Configuration::get('PS_EKOMI_EMAIL'), NULL, $params['customer']->email, Configuration::get('PS_SHOP_NAME'), NULL, NULL, dirname(__FILE__).'/mails/'))
 			return false;
 		return true;
 	}
