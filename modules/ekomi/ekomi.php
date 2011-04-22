@@ -109,7 +109,7 @@ class Ekomi extends Module
 	public function hookNewOrder($params)
 	{
 		if (!Configuration::get('PS_EKOMI_EMAIL'))
-			return false;
+			return true;
 
 		/* Email generation */
 		$subject = '[Ekomi-Prestashop] '.Configuration::get('PS_SHOP_NAME');
@@ -122,7 +122,7 @@ class Ekomi extends Module
 
 		/* Email sending */
 		if (!Mail::Send(1, 'ekomi', $subject, $templateVars, Configuration::get('PS_EKOMI_EMAIL'), NULL, $params['customer']->email, Configuration::get('PS_SHOP_NAME'), NULL, NULL, dirname(__FILE__).'/mails/'))
-			return false;
+			return true;
 		return true;
 	}
 }
