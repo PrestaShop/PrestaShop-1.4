@@ -455,8 +455,23 @@ class OrderOpcControllerCore extends ParentOrderController
 		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
 		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
-		self::$smarty->assign('inv_adr_fields', $inv_adr_fields);
-		self::$smarty->assign('dlv_adr_fields', $dlv_adr_fields);
+
+		$inv_all_fields = array();
+		$dlv_all_fields = array();
+
+		foreach (array('inv','dlv') as $adr_type)
+		{
+			foreach (${$adr_type.'_adr_fields'} as $fields_line)
+				foreach(explode(' ',$fields_line) as $field_item)
+					${$adr_type.'_all_fields'}[] = trim($field_item);
+
+// DEBUG		echo('<br />processAddressFormat: inv_all_fields: ' . var_export($inv_all_fields, true)
+// DEBUG		.'<br />processAddressFormat: inv_all_fields: ' . var_export($dlv_all_fields, true));					
+
+			self::$smarty->assign($adr_type.'_adr_fields', ${$adr_type.'_adr_fields'});
+			self::$smarty->assign($adr_type.'_all_fields', ${$adr_type.'_all_fields'});
+
+		}
 	}
 }
 

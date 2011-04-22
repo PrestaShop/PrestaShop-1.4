@@ -63,6 +63,7 @@ class AuthControllerCore extends FrontController
 				$create_account = 1;
 				self::$smarty->assign('email_create', Tools::safeOutput($email));
 				$_POST['email'] = $email;
+
 			}
 		}
 
@@ -379,8 +380,32 @@ class AuthControllerCore extends FrontController
 
 	public function displayContent()
 	{
+		$this->processAddressFormat();
+
 		parent::displayContent();
 		self::$smarty->display(_PS_THEME_DIR_.'authentication.tpl');
+	}
+
+	protected function processAddressFormat()
+	{
+		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
+		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
+
+		$inv_all_fields = array();
+		$dlv_all_fields = array();
+
+
+		foreach (array('inv','dlv') as $adr_type)
+		{
+			foreach (${$adr_type.'_adr_fields'} as $fields_line)
+				foreach(explode(' ',$fields_line) as $field_item)
+					${$adr_type.'_all_fields'}[] = trim($field_item);
+
+			self::$smarty->assign($adr_type.'_adr_fields', ${$adr_type.'_adr_fields'});
+			self::$smarty->assign($adr_type.'_all_fields', ${$adr_type.'_all_fields'});
+
+		}
 	}
 }
 
