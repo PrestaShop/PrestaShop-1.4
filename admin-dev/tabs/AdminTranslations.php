@@ -1487,39 +1487,22 @@ class AdminTranslations extends AdminTab
 	}
 	protected function getTinyMCEForMails($iso_lang)
 	{
+		// TinyMCE
+		$isoTinyMCE = (file_exists(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso_lang.'.js') ? $iso_lang : 'en');
+		$ad = dirname($_SERVER["PHP_SELF"]);
 		return '
-			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript">	
+			var iso = \''.$isoTinyMCE.'\' ;
+			var pathCSS = \''._THEME_CSS_DIR_.'\' ;
+			var ad = \''.$ad.'\' ;
+			</script>
+			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tiny_mce/tiny_mce.js"></script>
+			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce.inc.js"></script>
 			<script type="text/javascript">
-				tinyMCE.init({
-					mode : "specific_textareas",
-					editor_deselector : "noEditor",
-					theme : "advanced",
-					plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
-					// Theme options
-					theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-					theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
-					theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
-					theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
-					theme_advanced_toolbar_location : "top",
-					theme_advanced_toolbar_align : "left",
-					theme_advanced_statusbar_location : "bottom",
-					theme_advanced_resizing : false,
-					content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
-					document_base_url : "'.__PS_BASE_URI__.'",
-					width: "600",
-					height: "600",
-					font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
-					elements : "nourlconvert",
-					entity_encoding: "raw",
-					convert_urls : false,
-					language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso_lang.'.js') ? $iso_lang : 'en').'"
-					
-				});
-				function displayTiny(obj) {
+			function displayTiny(obj) {
 					tinyMCE.get(obj.attr(\'name\')).show();
 				}
-			</script>
-		';
+			</script>';
 	}
 	public function displayFormMails($lang, $noDisplay = false)
 	{
