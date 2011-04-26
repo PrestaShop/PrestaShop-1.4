@@ -35,9 +35,13 @@ function updateAddressesDisplay(first_view)
 	// update content of delivery address
 	updateAddressDisplay('delivery');
 
+	var adrs_titles = getAddressesTitles();
+
 	// update content of invoice address
 	//if addresses have to be equals...
-	var txtInvoiceTitle = $('ul#address_invoice li.address_title').html();	
+
+	var txtInvoiceTitle = adrs_titles.invoice;
+
 	if ($('input[type=checkbox]#addressesAreEquals:checked').length == 1)
 	{
 		$('#address_invoice_form:visible').hide('fast');
