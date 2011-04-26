@@ -1345,18 +1345,21 @@ class ToolsCore
 		//overriding of modules js files
 		foreach ($js_uri AS $key => &$file)
 		{
-			$different = 0;
-			$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/js/modules/', $file, $different);
-			if ($different && file_exists($override_path))
-				$file = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/js/modules/', $file, $different);
-			else
+			if (!preg_match('/^http(s?):\/\//i', $file))
 			{
-				// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
-				$url_data = parse_url($file);
-				$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
-				// check if js files exists
-				if (!file_exists($file_uri))
-					unset($js_uri[$key]);
+				$different = 0;
+				$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/js/modules/', $file, $different);
+				if ($different && file_exists($override_path))
+					$file = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/js/modules/', $file, $different);
+				else
+				{
+					// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
+					$url_data = parse_url($file);
+					$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
+					// check if js files exists
+					if (!file_exists($file_uri))
+						unset($js_uri[$key]);
+				}
 			}
 		}
 
