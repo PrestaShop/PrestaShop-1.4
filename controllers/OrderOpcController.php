@@ -465,9 +465,6 @@ class OrderOpcControllerCore extends ParentOrderController
 				foreach(explode(' ',$fields_line) as $field_item)
 					${$adr_type.'_all_fields'}[] = trim($field_item);
 
-// DEBUG		echo('<br />processAddressFormat: inv_all_fields: ' . var_export($inv_all_fields, true)
-// DEBUG		.'<br />processAddressFormat: inv_all_fields: ' . var_export($dlv_all_fields, true));					
-
 			self::$smarty->assign($adr_type.'_adr_fields', ${$adr_type.'_adr_fields'});
 			self::$smarty->assign($adr_type.'_all_fields', ${$adr_type.'_all_fields'});
 

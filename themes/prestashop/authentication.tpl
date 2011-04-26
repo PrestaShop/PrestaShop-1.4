@@ -230,7 +230,6 @@ $(function(){ldelim}
 						</select>
 						<sup>*</sup>
 					</p>
-					{* DEBUG: elseif $field_name eq "state" *}
 					<p class="required id_state select">
 						<label for="id_state">{l s='State'}</label>
 						<select name="id_state" id="id_state">
@@ -399,7 +398,6 @@ $(function(){ldelim}
 			</select>
 			<sup>*</sup>
 		</p>
-		{* DEBUG: elseif $field_name eq "state" *}
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
 			<select name="id_state" id="id_state">
