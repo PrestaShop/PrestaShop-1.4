@@ -35,12 +35,19 @@ function updateAddressesDisplay(first_view)
 	// update content of delivery address
 	updateAddressDisplay('delivery');
 
-	var adrs_titles = getAddressesTitles();
+	var txtInvoiceTitle = "";
+
+	try{
+		var adrs_titles = getAddressesTitles();
+		txtInvoiceTitle = adrs_titles.invoice;
+	}
+	catch (e)
+	{
+
+	}
 
 	// update content of invoice address
 	//if addresses have to be equals...
-
-	var txtInvoiceTitle = adrs_titles.invoice;
 
 	if ($('input[type=checkbox]#addressesAreEquals:checked').length == 1)
 	{
@@ -59,13 +66,13 @@ function updateAddressesDisplay(first_view)
 			$('ul#address_invoice li.address_title').html(txtInvoiceTitle);
 		}	
 	}
-	
+
 	if(!first_view)
 	{
 		if (orderProcess == 'order')
 			updateAddresses();
 	}
-	
+
 	return true;
 }
 
