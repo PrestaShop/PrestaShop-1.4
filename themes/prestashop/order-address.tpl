@@ -44,6 +44,8 @@
 								,city: '{$address.city|addslashes}'
 								,country: '{$address.country|addslashes}'
 								,state: '{$address.state|default:''|addslashes}'
+								,state_iso: '{$address.state_iso|default:''|addslashes}'
+
 							{rdelim};
 	{/foreach}
 
