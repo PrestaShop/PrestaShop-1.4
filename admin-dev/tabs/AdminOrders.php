@@ -991,6 +991,11 @@ class AdminOrders extends AdminTab
 					$deliveryState = new State((int)($address->id_state));
 					$out = (isset($deliveryState->name)) ? ' - '.$deliveryState->name : '';
 					break;
+				case 'state_iso':
+					$deliveryState = new State((int)($address->id_state));
+					$out = (isset($deliveryState->iso_code)) ? ' - '.$deliveryState->iso_code : '';
+					break;
+
 				default:
 					$out = $address->$field_name;
 
