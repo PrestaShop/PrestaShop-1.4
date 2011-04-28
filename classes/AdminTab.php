@@ -228,7 +228,7 @@ abstract class AdminTabCore
 		global $currentIndex, $cookie;
 
 		// Include other tab in current tab
-		if ($this->includeSubTab('display', array('submitAdd2', 'add', 'update', 'view')));
+		if ($this->includeSubTab('display', array('submitAdd2', 'add', 'update', 'view'))){}
 
 		// Include current tab
 		elseif ((Tools::getValue('submitAdd'.$this->table) AND sizeof($this->_errors)) OR isset($_GET['add'.$this->table]))
@@ -319,8 +319,9 @@ abstract class AdminTabCore
 	public function includeSubTab($methodname, $actions = array())
 	{
 		if (!isset($this->_includeTab) OR !is_array($this->_includeTab))
-			return ;
+			return false;
 		$key = 0;
+		$inc = false;
 		foreach ($this->_includeTab as $subtab => $extraVars)
 		{
 			/* New tab loading */
@@ -1552,7 +1553,7 @@ abstract class AdminTabCore
 		global $currentIndex, $cookie, $tab;
 
 		if (!isset($this->_fieldsOptions) OR !sizeof($this->_fieldsOptions))
-			return ;
+			return false;
 
 		$defaultLanguage = (int)Configuration::get('PS_LANG_DEFAULT');
 		$this->_languages = Language::getLanguages(false);
