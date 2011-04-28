@@ -612,15 +612,17 @@ class ToolsCore
 			elseif ($id_manufacturer = self::getValue('id_manufacturer'))
 			{
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-				SELECT `meta_title`, `meta_description`, `meta_keywords`
-				FROM `'._DB_PREFIX_.'manufacturer_lang`
-				WHERE id_lang = '.(int)($id_lang).' AND id_manufacturer = '.(int)($id_manufacturer));
+				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`
+				FROM `'._DB_PREFIX_.'manufacturer_lang` ml
+				LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (ml.`id_manufacturer` = m.`id_manufacturer`)
+				WHERE ml.id_lang = '.(int)($id_lang).' AND ml.id_manufacturer = '.(int)($id_manufacturer));
 				if ($row)
 				{
 					if (empty($row['meta_description']))
 						$row['meta_description'] = strip_tags($row['meta_description']);
-					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
-					return self::completeMetaTags($row, $row['meta_title']);
+					if (!empty($row['meta_title']))
+						$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
+					return self::completeMetaTags($row, $row['name']);
 				}
 			}
 
@@ -628,15 +630,18 @@ class ToolsCore
 			elseif ($id_supplier = self::getValue('id_supplier'))
 			{
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-				SELECT `meta_title`, `meta_description`, `meta_keywords`
-				FROM `'._DB_PREFIX_.'supplier_lang`
-				WHERE id_lang = '.(int)($id_lang).' AND id_supplier = '.(int)($id_supplier));
+				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`
+				FROM `'._DB_PREFIX_.'supplier_lang` sl
+				LEFT JOIN `'._DB_PREFIX_.'supplier` s ON (sl.`id_supplier` = s.`id_supplier`)
+				WHERE sl.id_lang = '.(int)($id_lang).' AND sl.id_supplier = '.(int)($id_supplier));
+
 				if ($row)
 				{
 					if (empty($row['meta_description']))
 						$row['meta_description'] = strip_tags($row['meta_description']);
-					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
-					return self::completeMetaTags($row, $row['meta_title']);
+					if (!empty($row['meta_title']))
+						$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
+					return self::completeMetaTags($row, $row['name']);
 				}
 			}
 
