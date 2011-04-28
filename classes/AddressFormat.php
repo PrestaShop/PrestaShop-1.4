@@ -60,6 +60,8 @@ class AddressFormatCore extends ObjectModel
 		$out = true;
 		$addr_f_validate = Address::getFieldsValidate();
 
+		$addr_f_validate['state_iso'] = 1;		// adding state iso code into allowed fields
+
 		$fields_format = explode("\n", $this->format);
 		foreach($fields_format as $field_line)
 		{
