@@ -43,7 +43,7 @@ $backupdir = realpath( PS_ADMIN_DIR . '/backups/');
 
 if ($backupdir === false)
 	die (Tools::displayError('Backups directory does not exist.'));
-	
+
 if (!$backupfile = Tools::getValue('filename'))
 	die (Tools::displayError('No file specified'));
 
@@ -59,7 +59,7 @@ else if (substr($backupfile, -3) == '.gz')
     $contentType = 'application/x-gzip';
 else
     $contentType = 'text/x-sql';
-$fp = @fopen($backupfile, 'r'); 
+$fp = @fopen($backupfile, 'r');
 
 if ($fp === false)
 	die (Tools::displayError('Unable to open backup file').' "'.addslashes($backupfile).'"');
@@ -68,6 +68,7 @@ if ($fp === false)
 header('Content-Type: '.$contentType);
 header('Content-Disposition: attachment; filename="'.Tools::getValue('filename'). '"');
 
+ob_clean();
 $ret = @fpassthru($fp);
 
 fclose($fp);
