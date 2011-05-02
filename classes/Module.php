@@ -880,6 +880,8 @@ abstract class ModuleCore
 			FROM `'._DB_PREFIX_.'hook_module_exceptions`');
 			foreach ($result as $row)
 			{
+				if (empty($row['value']))
+					continue;
 				if (!array_key_exists($row['key'], self::$exceptionsCache))
 					self::$exceptionsCache[$row['key']] = array();
 				self::$exceptionsCache[$row['key']][] = array('file_name' => $row['value']);

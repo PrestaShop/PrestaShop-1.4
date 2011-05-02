@@ -520,10 +520,11 @@ class ThemeInstallator extends Module
 							Db::getInstance()->Execute('
 								INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
 								VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', '.(int)$position[$count].')');
-							foreach ($exceptions[$count] as $file_name)
-								Db::getInstance()->Execute('
-									INSERT INTO `'._DB_PREFIX_.'hook_module_exceptions` (`id_module`, `id_hook`, `file_name`)
-									VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', "'.pSQL($file_name).'")');
+							foreach ($exceptions[$count] as $filename)
+								if (!empty($filename))
+									Db::getInstance()->Execute('
+										INSERT INTO `'._DB_PREFIX_.'hook_module_exceptions` (`id_module`, `id_hook`, `file_name`)
+										VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', "'.pSQL($filename).'")');
 						}
 				}
 		}
