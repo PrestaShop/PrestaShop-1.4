@@ -1228,7 +1228,7 @@ class shopimporter extends ImportModule
 			
 			$customer = new Customer((int)$order->id_customer);
 			$order->secure_key = pSQL($customer->secure_key);
-			$order->payment = Tools::substr($item['payment'], 0, 32);
+			$order->payment = strip_tags(Tools::substr($item['payment'], 0, 32));
 			if (isset($this->name))
 				$order->module = $this->name;
 			
