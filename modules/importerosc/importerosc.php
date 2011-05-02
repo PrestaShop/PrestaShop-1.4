@@ -161,25 +161,11 @@ class importerosc extends ImportModule
 									customers_lastname as lastname, DATE(customers_dob) as birthday, customers_email_address as email, customers_password as passwd, 1 as active 
 									FROM  `'.addslashes($this->prefix).'customers` LIMIT '.(int)($limit).' , '.(int)$nrb_import
 									);
-		
-		$return = array();
-		$i = 0;
-		foreach($customers AS $customer)
-		{
+		foreach($customers AS &$customer)
 			foreach($customer AS $attr => $val)
-			{
-				switch ($attr) 
-				{
-			    case 'id_gender':
-			    	(array_key_exists($val, $genderMatch) ? $val = $genderMatch[$val] : $val = 9);
-			        break;
-			    default:
-				    $return[$i][$attr] = $val;
-				}
-			}
-			$i ++;
-			 
-		}
+				if ($attr == 'id_gender')
+			    	(array_key_exists($val, $genderMatch) ? $customer[$attr] = $genderMatch[$val] : $customer[$attr] = 9);
+
 		return $this->autoFormat($return, $identifier);
 	}
 	
