@@ -2755,6 +2755,7 @@ $_LANGADM['AdminTranslations2e8d630dcde90b8b5be0468678f88551'] = 'Import / Expor
 $_LANGADM['AdminTranslations369b8db3e9651d0b5d8a13a5f7f9a53a'] = 'Sprachen hinzufügen';
 $_LANGADM['AdminTranslationscb349b532e76464bb69eb4f85f64c721'] = 'Sie können eine Sprache direkt aus Prestashop.com hinzufügen';
 $_LANGADM['AdminTranslations41e910740ee55e371bbe3da90cb38994'] = 'Sprache, die Sie hinzufügen möchten:';
+$_LANGADM['AdminTranslations57fa5be19cbdbe09aa4f555b2ee710b3'] = 'Sprachpaket aktualisieren';
 $_LANGADM['AdminTranslations25df70a3f433ad6f7666e1de076bd5f8'] = 'Sprache hinzufügen';
 $_LANGADM['AdminTranslationse1d8f264ad68caa3ced0b12042f3e62e'] = 'Kann keine Verbindung zu prestashop.com herstellen, um die Sprachenliste zu erhalten.';
 $_LANGADM['AdminTranslationsa9b6eaa5ff754aa46d30f5547a0edbf2'] = 'Manuelles Importieren einer Sprache';
