@@ -91,7 +91,7 @@ class ImageTypeCore extends ObjectModel
 		$fields['manufacturers'] = (int)($this->manufacturers);
 		$fields['suppliers'] = (int)($this->suppliers);
 		$fields['scenes'] = (int)($this->scenes);
-		$fields['stores'] = (int)($this->store);
+		$fields['stores'] = (int)($this->stores);
 		return $fields;
 	}
 
