@@ -1317,10 +1317,7 @@ class WebserviceRequestCore
 									if (isset($fieldAttributes['required']))
 										unset($fieldAttributes['required']);
 									if (count($fieldAttributes) > 0)
-									{
-										$associationsRet .= ' format="'.explode(',', $fieldAttributes).'"';
-										echo $fieldName.'^'.$fieldAttributes;
-									}
+										$associationsRet .= ' format="'.implode(',', $fieldAttributes).'"';
 									$associationsRet .= '/>'."\n";
 								}
 							}
