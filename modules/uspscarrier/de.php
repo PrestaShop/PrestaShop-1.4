@@ -24,6 +24,8 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_7545c5d3ad246a683a197a2903a4d5e6'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b089be65fd32939f1bf1c4aeff1a7457'] = 'Nicht rechteckig';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f8320b26d30ab433c5a54546d21f414c'] = 'Falsch';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f827cf462f62848df37c5e1e94a4da74'] = 'Richtig';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_386aad80d82f8245e9ef80352a2240e8'] = 'Alle Einheiten im Paket';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_f35eb2a913a3fd6fd8e661012cf0ebd8'] = 'In eine Einheit pro Paket aufteilen';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f57cff5425b6e64843c5f066c5b310d0'] = 'Usps Modulstatus';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_09bdd414ce843927aa3dceadc8bce034'] = 'USPS Carrier ist richtig konfiguriert und online!';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ec8b84c83dfee20afa4c2f35245a254b'] = 'USPS Carrier ist noch nicht konfiguriert, Sie müssen:';
@@ -117,3 +119,5 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_902b0d55fddef6f8d651fe1035b7d4bd'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ad20d10621babf619967b16f690a05f2'] = 'Der USPS Webservice scheint heruntergefahren zu sein, warten Sie bitte ein paar Minuten und versuchen Sie es erneut';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_a4692f93340d1d8c0c01e94baa56b8b9'] = 'USPS Webservice hat die Zeit überschritten.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ef87d840de42d54364089d1d45f8d08c'] = 'Konnte keine Verbindung zu USPS.com herstellen';
+
+?>

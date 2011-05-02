@@ -12,7 +12,7 @@ $_MODULE['<{fianetfraud}prestashop>fianetfraud_dc647eb65e6711e155375218212b3964'
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_b250a007769c7ffe655c74cfb8176b8c'] = 'Seiten-ID';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_30dbd3dffa9dbd08b062436ba8dcbad7'] = 'Betriebsmodus';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_99dbbd4d0ac4c725f3b0d2ff29abaf63'] = 'Standard-Produkttyp';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_7bc873cba11f035df692c3549366c722'] = '- Wählen Sie -';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_7bc873cba11f035df692c3549366c722'] = '-- Wählen Sie --';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_b16c6b201b9dea0dba4c5214e584d5a9'] = 'Kategorie Details';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Kategorie';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_32b1e872d533aced68e8fd06117c35d9'] = 'Kategorie Typ';
@@ -33,4 +33,6 @@ $_MODULE['<{fianetfraud}prestashop>fianetfraud_7f2a1b59ac1ab6d2d892dbbf4f132c40'
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Unbekannt';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_d13270d4831bb2a2723f0fb5b573807c'] = 'Fianet Bestätigung';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_e010021939a49b7cce07f0e546c1d54f'] = 'Detailansicht';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_b086843368d1c92d0a86cbee76b20b6f'] = 'Eval';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_b086843368d1c92d0a86cbee76b20b6f'] = 'Evaluate';
+
+?>

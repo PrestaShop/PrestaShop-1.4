@@ -37,5 +37,4 @@ Kundennachricht:
 {message}
 
 
-
-{shop_url} powered by PrestaShop™
+{shop_name} powered with PrestaShop™ 

@@ -2,6 +2,10 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_2f84f9d5731852c4d07d52ef0badc42e'] = 'Problem beim Lesen der Adressen aus MondialRelay Webservice: Mondial Relay-Server kann abgeschaltet sein';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = '(zzgl. MwSt.).';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = '(Inkl. Mwst.)';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Kostenlos!';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_44585fcd617dce6416d8283b026714c1'] = 'Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ed4a3b96dc1f38c160775cac1f7bcd6d'] = 'Liefern Sie in Relay-Punkten';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_70d70ce314f545b7c500a086f147f64b'] = 'Ungültiger Shop';
@@ -48,6 +52,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_90b95ae88150c6a34c4129dc4f1ebbd
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_c15b40b8c535191f6f0b6f9beaced3cf'] = 'Zusatzversicherung LV4';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b67a442fff3ca0a03ea253b0668f946d'] = 'Zusatzversicherung Lv5';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_33cbd0d8b6476501f55a8320481ec0f1'] = 'Zustellländer:';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_aef71ba4fd060dea2e2c76d1b5076caf'] = 'Halten Sie die die STRG-Taste gedrückt, um mehrere Länder zu wählen';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_0309a6c666a7a803fdb9db95de71cf01'] = 'Frankreich';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_6c1674d14bf5f95742f572cddb0641a7'] = 'Belgien';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_06630c890abadde9228ea818ce52b621'] = 'Luxemburg';
@@ -119,8 +124,5 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_621895c388c9bb22abbbc69fad00184
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_6c530987d533793b0f25fb18807b69cd'] = 'Um Label zu generieren, müssen Sie eine korrekte Adresse Ihres Shops registriert haben';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_3d2da0d2e731d59465a92f13216cf82d'] = 'Die Kontaktseite';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_06b3355cd8a61603396c7e453bdb1025'] = 'Leere Adresse: Sind Sie sicher, dass Sie eine gültige Adresse auf der Kontaktseite eingestellt haben?';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_2f84f9d5731852c4d07d52ef0badc42e'] = 'Problem beim Lesen der Adressen aus MondialRelay Webservice: Mondial Relay-Server kann abgeschaltet sein';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = '(zzgl. MwSt.).';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = '(Inkl. Mwst.)';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Kostenlos!';
-$_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Lieferung an';
+
+?>

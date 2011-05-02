@@ -1,11 +1,9 @@
 Hallo {firstname} {lastname},
-
-Der Verlauf Ihrer Bestellrücksendung Nr. "{id_order_return}" wurde zu "{state_order_return}" geändert.
-
-Sie können diese Bestellrücksendung im Abschnitt "Bestellverlauf" Ihres Kontos ansehen, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
-
-{shop_name} - {shop_url}
-
-
-
-{shop_url} powered by PrestaShopâ„¢
+ 
+Der Verlauf Ihrer BestellrÃ¼cksendung Nr. {id_order_return}
+ 
+Ihre BestellrÃ¼cksendung wurde in "{state_order_return}" geÃ¤ndert.
+ 
+Sie kÃ¶nnen diese BestellrÃ¼cksendung im Abschnitt "Bestellverlauf" Ihres Kontos ansehen, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
+ 
+{shop_name} powered with PrestaShopâ„¢ 

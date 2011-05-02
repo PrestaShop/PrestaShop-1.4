@@ -2,6 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Bezahlen Sie mit Hipay';
+$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'erforderlicher Minimalbetrag , um mit Hipay bezahlen:';
+$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(Sandbox / Test-Modus)';
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
 $_MODULE['<{hipay}prestashop>hipay_3a630598b9817a76dbb984ba467f6400'] = 'Secure payement Visa Mastercard und europäische Lösungen.';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Fehler: kann keine PaymentParams erstellen ';
@@ -19,12 +22,14 @@ $_MODULE['<{hipay}prestashop>hipay_527557971b02f68ead6a278fb96ac396'] = 'überpr
 $_MODULE['<{hipay}prestashop>hipay_1c5f361b20c116ab2324e28b1ac54e12'] = 'Ihr Shop ist nicht online';
 $_MODULE['<{hipay}prestashop>hipay_66170e45eb6eb71c35fc3b259a866ff7'] = 'Hipay Kategorien nicht für jede Seiten-ID eingestellt';
 $_MODULE['<{hipay}prestashop>hipay_1a1a01512e42b64541ed9b1f43a56036'] = 'Unmöglich, Hipay Kategorien abzurufen. Bitte beziehen Sie sich auf Ihr Fehlerprotokoll für weitere Details.';
-$_MODULE['<{hipay}prestashop>hipay_8f19eb452ad0295c45ca62a099f10dc6'] = 'Hipay ist eine sichere elektronische Geldbörse, die Händlern ein komplettes Service-Paket für Online-Business-Transaktionen bietet: ob für digitale Inhalte, Software, Musik, Abonnements, physische Güter ... ohne mit einer Bank zu verhandeln und ohne technische Kosten.';
-$_MODULE['<{hipay}prestashop>hipay_e5ac60a0713182096ea3f9590f101b25'] = 'Free & Easy, die Hipay-Implementierung ist ein echtes Plus für E-Commerce-Webseite, die sich in Europa ausbreiten wollen: sichere Zahlungen durch internationale Karten, Local Payment-Lösungen, Überweisungen ...';
 $_MODULE['<{hipay}prestashop>hipay_01ad06b7c5887516f56ff824278feb67'] = 'Hinweis: Wenn Sie eine Zahlung erstatten möchten, melden Sie sich auf Ihrem Hipay-Konto an, dann gehen Sie zu Merchant Management> Verkaufsmanagement.';
 $_MODULE['<{hipay}prestashop>hipay_254f642527b45bc260048e30704edb39'] = 'Konfiguration';
+$_MODULE['<{hipay}prestashop>hipay_d86590564b22be4d3b242472722bf969'] = 'Die Konfiguration von Hipay ist einfach und erfolgt in drei Schritten';
 $_MODULE['<{hipay}prestashop>hipay_f21850b58e4866b30f7d3724cc29edb1'] = 'Melden Sie sich bei Ihrem Händler-Konto an';
 $_MODULE['<{hipay}prestashop>hipay_dc32882bf2b1893d53aeaaa862c46d5c'] = 'Erstellen Sie ein hipay-Konto ';
+$_MODULE['<{hipay}prestashop>hipay_04c85eb0ee32a3a352e80c9bce37b038'] = 'Aktivieren Sie Hipay für Ihren Prestashop, es ist kostenlos!';
+$_MODULE['<{hipay}prestashop>hipay_b7ce0a1dce723a074049b88fb22dbb4d'] = 'Erfahren Sie mehr über Sonderkonditionen auf Transaktionen über prestashop, indem Sie';
+$_MODULE['<{hipay}prestashop>hipay_7667c2b31b9980267cb526ed2f0d235d'] = 'unseren Support kontaktieren';
 $_MODULE['<{hipay}prestashop>hipay_08bd40c7543007ad06e4fce31618f6ec'] = 'Konto';
 $_MODULE['<{hipay}prestashop>hipay_9596f310ab4657258496ab217d3b5d85'] = 'Echtzeit/ Betrieb';
 $_MODULE['<{hipay}prestashop>hipay_aeda5c9c68fbc42071d76a8d2b3d73e8'] = 'Sandbox / Test';
@@ -41,6 +46,5 @@ $_MODULE['<{hipay}prestashop>hipay_524fefef83fd5b0b82292a5366b40cd2'] = 'Ab 16 J
 $_MODULE['<{hipay}prestashop>hipay_4f47a2eb5f2af6c1419baa17794e5f03'] = 'Ab 18 Jahren und älter';
 $_MODULE['<{hipay}prestashop>hipay_0d10a9cae9827e30b09913c1ec6ef2db'] = 'Hinweis: Bitte sicherstellen, dass der Währungsmodus, den Sie im Zahlungs-Tab gewählt haben, mit Ihrem Hipay Konto (en) kompatibel ist.';
 $_MODULE['<{hipay}prestashop>hipay_c80a51a60c5ee43553c3881459b8f431'] = 'Konfiguration aktualisieren';
-$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Bezahlen Sie mit Hipay';
-$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'erforderlicher Minimalbetrag , um mit Hipay bezahlen:';
-$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(Sandbox / Test-Modus)';
+
+?>

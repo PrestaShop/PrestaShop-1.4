@@ -5,4 +5,4 @@ Hallo,
 
 
 
-{shop_url} Powered by PrestaShop™
+{shop_name} powered with PrestaShop™ 

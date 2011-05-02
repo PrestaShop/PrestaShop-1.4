@@ -1,12 +1,9 @@
 Hallo {firstname} {lastname},
-
-Damit werden Sie über die Erstellung eines Gutscheins auf Ihren Namen nach Ihrer Bestellung Nr. informiert.{id_order}.
-
-Sie können diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverfolgung" Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
-
-Danke für Ihren Einkauf bei {shop_name}.
-
-{shop_name} - {shop_url}
-
-
-{shop_url} powered by PrestaShopâ„¢
+ 
+Ihre Bestellung Nr.{id_order} 
+ 
+Damit werden Sie Ã¼ber die Erstellung eines Gutscheins auf Ihren Namen nach Ihrer Bestellung Nr. {id_order} informiert.
+ 
+Sie kÃ¶nnen diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverfolgung" Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken.
+ 
+{shop_name} powered with PrestaShopâ„¢

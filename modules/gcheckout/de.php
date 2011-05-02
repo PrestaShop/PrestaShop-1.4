@@ -10,9 +10,9 @@ $_MODULE['<{gcheckout}prestashop>confirm_c884ed19483d45970c5bf23a681e2dd2'] = 'H
 $_MODULE['<{gcheckout}prestashop>confirm_e2867a925cba382f1436d1834bb52a1c'] = 'Der Gesamtbetrag Ihrer Bestellung beträgt';
 $_MODULE['<{gcheckout}prestashop>confirm_1f87346a16cf80c372065de3c54c86d9'] = '(Inkl. Mwst.)';
 $_MODULE['<{gcheckout}prestashop>confirm_eecc59d9ca953545b6c5ac9bf11ded00'] = 'Wir akzeptieren die folgende Währung bei einer Zahlung mit Google Checkout:';
-$_MODULE['<{gcheckout}prestashop>confirm_0881a11f7af33bc1b43e437391129d66'] = 'Bitte bestätigen Sie Ihre Bestellung durch Klicken auf \"Ich bestätige meine Bestellung\"';
+$_MODULE['<{gcheckout}prestashop>confirm_0881a11f7af33bc1b43e437391129d66'] = 'Bitte bestätigen Sie Ihre Bestellung durch Klicken auf \"BESTELLEN\"';
 $_MODULE['<{gcheckout}prestashop>confirm_569fd05bdafa1712c4f6be5b153b8418'] = 'Andere Zahlungsmethoden';
-$_MODULE['<{gcheckout}prestashop>confirm_46b9e3665f187c739c55983f757ccda0'] = 'Ich bestätige meine Bestellung';
+$_MODULE['<{gcheckout}prestashop>confirm_46b9e3665f187c739c55983f757ccda0'] = 'BESTELLEN';
 $_MODULE['<{gcheckout}prestashop>gcheckout_6c132b5e262594950586ae13a7d3aa94'] = 'Google Checkout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_3f3c0194c5adbe6953eb571f125af16d'] = 'Google Checkout-API-Implementierung';
 $_MODULE['<{gcheckout}prestashop>gcheckout_4402acab1c8f90dcf4a31dc96833bd86'] = 'Keine Währung für dieses Modul eingestellt';
@@ -40,3 +40,5 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_0d46d15f70a7cfa670545b308c022840'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Bezahlen Sie mit GoogleCheckout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_ba794350deb07c0c96fe73bd12239059'] = 'Verpackung';
 $_MODULE['<{gcheckout}prestashop>gcheckout_9f06b28a40790c4c4df5739bce3c1eb0'] = 'Versandkosten';
+
+?>

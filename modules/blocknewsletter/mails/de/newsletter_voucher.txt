@@ -5,5 +5,4 @@ Sie haben unseren Newsletter abonniert, wir freuen uns, Ihnen den folgenden Guts
 {shop_name} - {shop_url}
 
 
-
-{shop_url} Powered by PrestaShop™
+{shop_name} powered with PrestaShop™ 

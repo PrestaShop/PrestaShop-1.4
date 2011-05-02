@@ -5,4 +5,4 @@ Sie haben eine neue Nachricht zur Bestellung Nr. {id_order} erhalten:
 {message}
 
 
-{shop_url} powered by PrestaShop™
+{shop_name} powered with PrestaShop™ 

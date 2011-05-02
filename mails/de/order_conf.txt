@@ -14,7 +14,7 @@ Details zur Bestellung
 
 Versand
 
-	Lieferant: {carrier}
+	Spediteur: {carrier}
 
 	Lieferanschrift:
 
@@ -40,4 +40,4 @@ Versand
 Sie können diese Bestellung ansehen und Ihre Rechnung aus dem Abschnitt "Bestellverlauf" Ihres Kontos downloaden, indem Sie auf unserer Webseite auf "Mein Konto" klicken. 
 Wenn Sie ein Gast-Konto haben, können Sie Ihre Bestellung auf dieser Webseite verfolgen: {shop_url}gast-bestellverfolgung.php
 
-{shop_url} powered by PrestaShop™
+{shop_name} powered with PrestaShop™ 
