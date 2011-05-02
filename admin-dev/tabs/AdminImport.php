@@ -468,7 +468,7 @@ class AdminImport extends AdminTab
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 
 			self::setDefaultValues($info);
@@ -571,7 +571,7 @@ class AdminImport extends AdminTab
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 			if (array_key_exists('id', $info) AND (int)($info['id']) AND Product::existsInDatabase((int)($info['id'])))
 			{
@@ -858,7 +858,7 @@ class AdminImport extends AdminTab
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 			$info = array_map('trim', $info);
 
@@ -909,7 +909,7 @@ class AdminImport extends AdminTab
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 
 			self::setDefaultValues($info);
@@ -947,7 +947,7 @@ class AdminImport extends AdminTab
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 
 			self::setDefaultValues($info);
@@ -1079,7 +1079,7 @@ class AdminImport extends AdminTab
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 
 			self::setDefaultValues($info);
@@ -1111,7 +1111,7 @@ class AdminImport extends AdminTab
 		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 
 			self::setDefaultValues($info);
@@ -1276,12 +1276,15 @@ class AdminImport extends AdminTab
 		}
 	}
 
-	public function utf8_encode_array(&$array)
+	public function utf8_encode_array($array)
 	{
-	    if (is_array($array))
-			self::array_walk($array, array(get_class($this), 'utf8_encode_array'));
+		if (is_array($array))
+			foreach ($array as $key => $value)
+				$array[$key] = utf8_encode($value);
 		else
 			$array = utf8_encode($array);
+		
+		return $array;
 	}
 
 	private function getNbrColumn($handle, $glue)
@@ -1351,7 +1354,7 @@ class AdminImport extends AdminTab
 		{
 			/* UTF-8 conversion */
 			if (Tools::getValue('convert'))
-				$this->utf8_encode_array($line);
+				$line = $this->utf8_encode_array($line);
 			echo '<tr id="table_'.$current_table.'_line_'.$current_line.'" style="padding: 4px">';
 			foreach ($line AS $nb_c => $column)
 				if ((MAX_COLUMNS * (int)($current_table) <= $nb_c) AND ((int)($nb_c) < MAX_COLUMNS * ((int)($current_table) + 1)))
