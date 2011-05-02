@@ -565,10 +565,7 @@ class AdminProducts extends AdminTab
 					if (!sizeof($this->_errors))
 					{
 						if (!$product->cache_default_attribute)
-						{
-							$product->cache_default_attribute = 1;
-							$product->update();
-						}
+							Product::updateDefaultAttribute($id_product);
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=3&token='.($token ? $token : $this->token));
 					}
 				}
@@ -587,7 +584,9 @@ class AdminProducts extends AdminTab
 					{
 						$product->cache_default_attribute = 0;
 						$product->update();
-					}
+					}else
+						Product::updateDefaultAttribute($id_product);
+						
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
