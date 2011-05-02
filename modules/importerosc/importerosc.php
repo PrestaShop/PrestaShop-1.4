@@ -157,16 +157,19 @@ class importerosc extends ImportModule
 		$genderMatch = array('m' => 1,'f' => 2);
 		$identifier = 'id_customer';
 		$customers = $this->ExecuteS('
-									SELECT customers_id as id_customer, 1 as id_default_group, customers_gender as id_gender, customers_firstname as firstname,
-									customers_lastname as lastname, DATE(customers_dob) as birthday, customers_email_address as email, customers_password as passwd, 1 as active 
-									FROM  `'.addslashes($this->prefix).'customers` LIMIT '.(int)($limit).' , '.(int)$nrb_import
+									SELECT c.`customers_id` as id_customer, 1 as id_default_group, c.`customers_gender` as id_gender, c.`customers_firstname` as firstname, c.`customers_newsletter` as newsletter
+									c.`customers_lastname` as lastname, DATE(c.`customers_dob`) as birthday, c.`customers_email_address` as email, c.`customers_password` as passwd, 1 as active,
+									ci.`customers_info_date_account_created` as date_add
+									FROM  `'.addslashes($this->prefix).'customers` c
+									LEFT JOIN `'.addslashes($this->prefix).'customers_info` ci
+									LIMIT '.(int)($limit).' , '.(int)$nrb_import
 									);
 		foreach($customers AS &$customer)
 			foreach($customer AS $attr => $val)
 				if ($attr == 'id_gender')
 			    	(array_key_exists($val, $genderMatch) ? $customer[$attr] = $genderMatch[$val] : $customer[$attr] = 9);
-
-		return $this->autoFormat($return, $identifier);
+		
+		return $this->autoFormat($customers, $identifier);
 	}
 	
 	public function getAddresses($limit = 0, $nrb_import = 100)
