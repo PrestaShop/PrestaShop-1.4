@@ -346,7 +346,7 @@ class WebserviceRequestCore
 	{
 		global $display_errors;
 		$this->setStatus($num);
-		$this->_errors[] = $display_errors ? $label : 'Internal error';
+		$this->_errors[] = $display_errors ? $label : 'Internal error, error not showed for security measures, please set display_errors to on in your config.inc.php file if you want to see it';
 	}
 	
 	/**
