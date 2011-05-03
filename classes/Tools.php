@@ -521,14 +521,11 @@ class ToolsCore
 	 */
 	public static function dieObject($object, $kill = true)
 	{
-		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
-		{
-			echo '<pre style="text-align: left;">';
-			print_r($object);
-			echo '</pre><br />';
-			if ($kill)
-				die('END');
-		}
+		echo '<pre style="text-align: left;">';
+		print_r($object);
+		echo '</pre><br />';
+		if ($kill)
+			die('END');
 		return $object;
 	}
 
