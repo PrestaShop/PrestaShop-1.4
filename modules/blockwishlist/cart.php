@@ -55,7 +55,7 @@ if ($cookie->isLogged())
 		{
 			$wishlist = new WishList();
 			$modWishlist = new BlockWishList();
-			$wishlist->name = $modWishlist->l('My wishlist');
+			$wishlist->name = $modWishlist->default_wishlist_name;
 			$wishlist->id_customer = (int)($cookie->id_customer);
 			list($us, $s) = explode(' ', microtime());
 			srand($s * $us);

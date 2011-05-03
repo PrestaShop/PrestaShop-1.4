@@ -46,6 +46,7 @@ class BlockWishList extends Module
 		
 		$this->displayName = $this->l('Wishlist block');
 		$this->description = $this->l('Adds a block containing the customer\'s wishlists.');
+		$this->default_wishlist_name = $this->l('My wishlist');
 	}
 	
 	public function install()
