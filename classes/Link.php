@@ -187,7 +187,7 @@ class LinkCore
 		if ($id_lang == NULL)
 			$id_lang = (int)($cookie->id_lang);
 
-		if (array_key_exists($filename.'_'.$id_lang, self::$cache['page']))
+		if (array_key_exists($filename.'_'.$id_lang, self::$cache['page']) AND !empty(self::$cache['page'][$filename.'_'.$id_lang]))
 			$uri_path = self::$cache['page'][$filename.'_'.$id_lang];
 		else
 		{
