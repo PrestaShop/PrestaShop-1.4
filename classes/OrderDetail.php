@@ -149,7 +149,7 @@ class OrderDetailCore extends ObjectModel
 	'fields' => array (
 		'id_order' => array('xlink_resource' => 'orders'),
 		'product_id' => array('xlink_resource' => 'products'),
-		'product_attribute_id' => array('xlink_resource' => 'product_attributes'),
+		'product_attribute_id' => array('xlink_resource' => 'combinations'),
 		'product_quantity_reinjected' => array(),
 		'group_reduction' => array(),
 		'discount_quantity_applied' => array(),
