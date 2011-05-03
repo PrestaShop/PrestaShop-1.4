@@ -143,7 +143,7 @@ class CartCore extends ObjectModel
 		{
 			$customer = new Customer((int)($this->id_customer));
 			$this->_taxCalculationMethod = Group::getPriceDisplayMethod((int)($customer->id_default_group));
-			if (!$this->secure_key AND $customer->secure_key)
+			if ((!$this->secure_key OR $this->secure_key == '-1') AND $customer->secure_key)
 			{
 				$this->secure_key = $customer->secure_key;
 				$this->save();
