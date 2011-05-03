@@ -437,6 +437,9 @@ class BlowfishCore extends Crypt_Blowfish
 {
 	function encrypt($plaintext)
 	{
+        if (($length = strlen($plaintext)) >= 1048576)
+			return false;
+			
 		$ciphertext = '';
 		$paddedtext = $this->maxi_pad($plaintext);
 		$strlen = strlen($paddedtext);
@@ -447,11 +450,14 @@ class BlowfishCore extends Crypt_Blowfish
 			$encoded = base64_encode($cipher_piece); 
 			$ciphertext = $ciphertext.$encoded;       
 		}
-	   return $ciphertext;  
+	   return $ciphertext.sprintf('%06d', $length);  
 	}
 
 	function decrypt($ciphertext)
 	{
+		$plainTextLength = intval(substr($ciphertext, -6));
+		$ciphertext = substr($ciphertext, 0, -6);
+		
 		$plaintext = '';
 		$chunks = explode('=', $ciphertext);
 		$ending_value = sizeof($chunks) ;
@@ -462,7 +468,7 @@ class BlowfishCore extends Crypt_Blowfish
 			$piece = parent::decrypt($decoded);
 			$plaintext = $plaintext.$piece;
 		}
-		return $plaintext;
+		return substr($plaintext, 0, $plainTextLength);
 	}
 	
 	function maxi_pad($plaintext)

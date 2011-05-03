@@ -39,12 +39,16 @@ class RijndaelCore
 	// Base64 is not required, but it is be more compact than urlencode
 	public function encrypt($plaintext)
 	{
-		return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $this->_key, $plaintext, MCRYPT_MODE_ECB, $this->_iv));
+        if (($length = strlen($plaintext)) >= 1048576)
+			return false;
+		return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $this->_key, $plaintext, MCRYPT_MODE_ECB, $this->_iv)).sprintf('%06d', $length);
 	}
 
 	public function decrypt($ciphertext)
 	{
-		return mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $this->_key, base64_decode($ciphertext), MCRYPT_MODE_ECB, $this->_iv);
+		$plainTextLength = intval(substr($ciphertext, -6));
+		$ciphertext = substr($ciphertext, 0, -6);
+		return substr(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $this->_key, base64_decode($ciphertext), MCRYPT_MODE_ECB, $this->_iv), 0, $plainTextLength);
 	}
 }
 
