@@ -1218,7 +1218,7 @@ class WebserviceRequestCore
 							if (!is_array($field['xlink_resource']))
 								$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource'].'/'.($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
 							else
-								$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource']['resourceName'].'/'.(isset($field['xlink_resource']['subResourceName']) ? $field['xlink_resource']['subResourceName'].'/'.$object->id.'/' : '').($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
+								$ret .= ' xlink:href="'.$this->_wsUrl.$field['xlink_resource']['resourceName'].'/'.($this->_schemaToDisplay != 'synopsis' && isset($field['xlink_resource']['subResourceName']) ? $field['xlink_resource']['subResourceName'].'/'.$object->id.'/' : '').($this->_schemaToDisplay != 'synopsis' ? $object->$key : '').'"';
 						}
 						
 						if (isset($field['getter']) && $this->_schemaToDisplay != 'blank')
@@ -1233,7 +1233,7 @@ class WebserviceRequestCore
 								$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
 						}
 						$ret .= '>';
-						if ($this->_resourceConfiguration['objectNodeName'] == 'product' && $key == 'price')
+						if ($this->_resourceConfiguration['objectNodeName'] == 'product' && $key == 'price' && $this->_schemaToDisplay != 'synopsis')
 							$ret .= $this->getPrice(null, $object->id, null, null, null, null, null, null, 
 							null, null, null, null, null, null, null, null);
 						else if (is_null($this->_schemaToDisplay))
@@ -1241,10 +1241,8 @@ class WebserviceRequestCore
 						$ret .= '</'.$field['sqlId'].'>'."\n";
 					}
 				}
-				else
-					// display id
-					if (is_null($this->_schemaToDisplay))
-						$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
+				elseif (is_null($this->_schemaToDisplay))
+					$ret .= '<id><![CDATA['.$object->id.']]></id>'."\n";
 			}
 		}
 	
