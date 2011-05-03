@@ -282,7 +282,7 @@ class BlockLink extends Module
 					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('URL:').'</label>
-				<div class="margin-form"><input type="text" name="url" id="url" value="'.(($this->error AND isset($_POST['url'])) ? $_POST['url'] : '').'" /></div>
+				<div class="margin-form"><input type="text" name="url" id="url" value="'.(($this->error AND isset($_POST['url'])) ? $_POST['url'] : '').'" /><sup> *</sup></div>
 				<label>'.$this->l('Open in a new window:').'</label>
 				<div class="margin-form"><input type="checkbox" name="newWindow" id="newWindow" '.(($this->error AND isset($_POST['newWindow'])) ? 'checked="checked"' : '').' /></div>
 				<div class="margin-form">
