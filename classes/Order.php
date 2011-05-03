@@ -158,7 +158,7 @@ class OrderCore extends ObjectModel
 			'id_lang' => array('xlink_resource'=> 'languages'),
 			'id_customer' => array('xlink_resource'=> 'customers'),
 			'id_carrier' => array('xlink_resource'=> 'carriers'),
-			'module' => array(), // mettre en requis
+			'module' => array('required' => true),
 			'invoice_number' => array(),
 			'delivery_number' => array(),
 			'invoice_date' => array(),
@@ -1030,6 +1030,7 @@ class OrderCore extends ObjectModel
 		$history = new OrderHistory();
 		$history->id_order = (int)($this->id);
 		$history->changeIdOrderState((int)$id_order_state, (int)($this->id));
+		$history->addWithemail();
 	}
 
 	public function addWs($autodate = true, $nullValues = false)
