@@ -73,8 +73,7 @@ class CurrencyCore extends ObjectModel
 	static protected	$currencies = array();
 
 	protected	$webserviceParameters = array(
-		'fields' => array(
-		),
+		'objectsNodeName' => 'currencies',
 	);
 
 
