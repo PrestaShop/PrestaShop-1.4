@@ -104,8 +104,8 @@ abstract class ModuleGraphCore extends Module
 			if (is_callable(array($this, 'setMonthValues')))
 				$this->setMonthValues($layers);
 		}
-		// If the granularity is superior to 1 month
-		else
+		// If the granularity is less than 1 year
+		elseif (strtotime('-1 year', strtotime($this->_employee->stats_date_to)) < strtotime($this->_employee->stats_date_from))
 		{
 			if ($legend)
 			{
@@ -132,6 +132,27 @@ abstract class ModuleGraphCore extends Module
 			}
 			if (is_callable(array($this, 'setYearValues')))
 				$this->setYearValues($layers);
+		}
+		// If the granularity is greater than 1 year
+		else
+		{
+			if ($legend)
+			{
+				$years = array();
+				for ($i = $fromArray['year']; $i <= $toArray['year']; ++$i)
+					$years[] = $i;
+				foreach ($years as $i)
+				{
+					if ($layers == 1)
+						$this->_values[$i] = 0;
+					else
+						for ($j = 0; $j < $layers; $j++)
+							$this->_values[$j][$i] = 0;
+					$this->_legend[$i] = sprintf('%04d', $i);
+				}
+			}
+			if (is_callable(array($this, 'setAllTimeValues')))
+				$this->setAllTimeValues($layers);
 		}
 	}
 	

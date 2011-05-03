@@ -127,6 +127,16 @@ class StatsVisits extends ModuleGraph
 		$this->setDateGraph($layers, true);
 	}
 	
+	protected function setAllTimeValues($layers)
+	{
+		for ($i = 0; $i < $layers; $i++)
+		{
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i].$this->getDate().' GROUP BY LEFT(date_add, 4)');
+			foreach ($result AS $row)
+				$this->_values[$i][(int)(substr($row['date_add'], 0, 4))] = (int)($row['total']);
+		}
+	}
+	
 	protected function setYearValues($layers)
 	{
 		for ($i = 0; $i < $layers; $i++)

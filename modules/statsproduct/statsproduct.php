@@ -369,6 +369,16 @@ class StatsProduct extends ModuleGraph
 		}
 	}
 	
+	protected function setAllTimeValues($layers)
+	{
+		for ($i = 0; $i < $layers; $i++)
+		{
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query[$i]);
+			foreach ($result AS $row)
+			    $this->_values[$i][(int)(substr($row['date_add'], 0, 4))] += $row['total'];
+		}
+	}
+	
 	protected function setYearValues($layers)
 	{
 		for ($i = 0; $i < $layers; $i++)

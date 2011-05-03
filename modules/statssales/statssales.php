@@ -162,6 +162,19 @@ class StatsSales extends ModuleGraph
 		$this->setDateGraph($layers, true);
 	}
 	
+	protected function setAllTimeValues($layers)
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);
+		foreach ($result AS $row)
+			if ($this->_option == 1)
+			{
+				$this->_values[0][(int)(substr($row['invoice_date'], 0, 4))] += 1;
+				$this->_values[1][(int)(substr($row['invoice_date'], 0, 4))] += $row['product_quantity'];
+			}
+			else
+				$this->_values[(int)(substr($row['invoice_date'], 0, 4))] += $row['total_paid_real'];
+	}
+	
 	protected function setYearValues($layers)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate().$this->_query2);

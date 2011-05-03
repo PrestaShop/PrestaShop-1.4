@@ -106,6 +106,19 @@ class StatsNewsletter extends ModuleGraph
 		$this->setDateGraph($layers, true);
 	}
 	
+	protected function setAllTimeValues($layers)
+	{
+		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
+		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query2.$this->getDate());
+		foreach ($result1 AS $row)
+			$this->_values[0][(int)(substr($row['newsletter_date_add'], 0, 4))] += 1;
+		if ($result2)
+			foreach ($result2 AS $row)
+				$this->_values[1][(int)(substr($row['newsletter_date_add'], 0, 4))] += 1;
+		foreach ($this->_values[2] as $key => $zerofill)
+			$this->_values[2][$key] = $this->_values[0][$key] + $this->_values[1][$key];
+	}
+	
 	protected function setYearValues($layers)
 	{
 		$result1 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());

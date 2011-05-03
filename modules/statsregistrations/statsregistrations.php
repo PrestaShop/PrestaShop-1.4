@@ -132,6 +132,13 @@ class StatsRegistrations extends ModuleGraph
 		$this->setDateGraph($layers, true);
 	}
 	
+	protected function setAllTimeValues($layers)
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
+		foreach ($result AS $row)
+		    $this->_values[(int)(substr($row['date_add'], 0, 4))]++;
+	}
+	
 	protected function setYearValues($layers)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
