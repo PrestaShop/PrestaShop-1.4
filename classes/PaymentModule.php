@@ -131,7 +131,10 @@ abstract class PaymentModuleCore extends Module
 			$order->invoice_date = '0000-00-00 00:00:00';
 			$order->delivery_date = '0000-00-00 00:00:00';
 			// Amount paid by customer is not the right one -> Status = payment error
-			if ($order->total_paid != $order->total_paid_real)
+			// We don't use the following condition to avoid the float precision issues : http://www.php.net/manual/en/language.types.float.php
+			// if ($order->total_paid != $order->total_paid_real)
+			// We use number_format in order to compare two string
+			if (number_format($order->total_paid, 2) != number_format($order->total_paid_real, 2))
 				$id_order_state = _PS_OS_ERROR_;
 			// Creating order
 			if ($cart->OrderExists() === 0)
