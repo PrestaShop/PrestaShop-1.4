@@ -126,7 +126,7 @@ var removingLinkText = '{l s='remove this product from my cart' mod='blockcart' 
 			<span>{l s='Total' mod='blockcart'}</span>
 			<span id="cart_block_total" class="price ajax_block_cart_total">{$total}</span>
 		</p>
-		{if $use_taxes && $display_tax_label == 1}
+		{if $use_taxes && $display_tax_label == 1 && $show_tax}
 			{if $priceDisplay == 0}
 				<p id="cart-price-precisions">
 					{l s='Prices are tax included' mod='blockcart'}
