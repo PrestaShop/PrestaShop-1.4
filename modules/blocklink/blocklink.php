@@ -172,7 +172,7 @@ class BlockLink extends Module
 	
 	public function deleteLink()
 	{
-	 	return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'blocklink WHERE `id_blocklink`='.(int)($_GET['id']));
+	 	return (Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'blocklink WHERE `id_blocklink`='.(int)($_GET['id'])) AND Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'blocklink_lang WHERE `id_blocklink`='.(int)($_GET['id'])));
 	}
 	
 	public function updateTitle()
