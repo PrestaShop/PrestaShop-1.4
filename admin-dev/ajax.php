@@ -43,14 +43,21 @@ if (isset($_GET['installBoughtModule']))
 	while ($file === false OR file_exists(_PS_MODULE_DIR_.$file))
 		$file = uniqid();
 	$file = _PS_MODULE_DIR_.$file.'.zip';
-	if (!copy('http://addons.prestashop.com/iframe/getboughtfile.php?id_order_detail='.Tools::getValue('id_order_detail').'&token='.Tools::getValue('token'), $file))
-		die(displayJavascriptAlert('Cannot copy file'));
+	$sourceFile = 'http://addons.prestashop.com/iframe/getboughtfile.php?id_order_detail='.Tools::getValue('id_order_detail').'&token='.Tools::getValue('token');
+	if (!copy($sourceFile, $file))
+	{
+		if (!($content = file_get_contents($sourceFile)))
+			die(displayJavascriptAlert('Access denied: Please download your module directly from PrestaShop Addons website'));
+		elseif (!file_put_contents($file, $content))
+			die(displayJavascriptAlert('Local error: your module directory is not writable'));
+	}
 	$first6 = fread($fd = fopen($file, 'r'), 6);
 	if (!strncmp($first6, 'Error:', 6))
 	{
+		$displayJavascriptAlert = displayJavascriptAlert(fread($fd, 1024));
 		fclose($fd);
 		unlink($file);
-		die(displayJavascriptAlert(fread($fd, 1024)));
+		die($displayJavascriptAlert);
 	}
 	fclose($fd);
 	if ($zip->open($file) !== true OR !$zip->extractTo(_PS_MODULE_DIR_) OR !$zip->close())
