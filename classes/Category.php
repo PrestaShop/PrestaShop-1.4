@@ -162,7 +162,7 @@ class CategoryCore extends ObjectModel
 		$this->level_depth = $this->calcLevelDepth();
 		$this->cleanPositions((int)$this->id_parent);
 		// If the parent category was changed, we don't want to have 2 categories with the same position
-		if($this->getDuplicatePosition())
+		if ($this->getDuplicatePosition())
 			$this->position = self::getLastPosition((int)Tools::getValue('id_parent'));
 		$ret = parent::update($nullValues);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
