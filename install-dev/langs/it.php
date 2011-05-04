@@ -247,7 +247,7 @@ $_LANG['seconds'] = 'secondi';
 $_LANG['second'] = 'secondo';
 $_LANG['Depending on your server and the size of your shop'] = 'In base al tuo server e alle dimensioni del tuo negozio';
 $_LANG['You did not update your shop for a while,'] = 'E\' da un po\' di tempo che non aggiorni il tuo negozio';
-$_LANG['major releases have been made available since.'] = 'Sono state messe a disposizione importanti novità';
+$_LANG['stable releases have been made ​​available since.'] = 'Sono state messe a disposizione importanti novità';
 $_LANG['This is not a problem however the update may take several minutes, try to update your shop more frequently.'] = 'Questo non è un problema, comunque l’aggiornamento può impiegare diversi minuti: cerca di aggiornare il tuo negozio più spesso';
 $_LANG['No files to process, this might be an error.'] = 'Nessun file da elaborare, potrebbe esserci un errore';
 $_LANG['Hosting parameters'] = 'Parametri host';
@@ -267,3 +267,4 @@ $_LANG['Your update is completed!'] = 'L\'aggiornamento è completo!';
 $_LANG['Your shop version is now'] = 'La tua versione adesso è';
 $_LANG['New features in PrestaShop v'] = 'Nuove caratteristiche in PrestaShop v';
 $_LANG['In this aim, use our'] = 'A questo scopo, utilizzare il nostro';
+

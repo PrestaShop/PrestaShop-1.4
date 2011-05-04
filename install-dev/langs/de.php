@@ -249,7 +249,7 @@ $_LANG['seconds'] = 'Sekunden';
 $_LANG['second'] = 'Sekunde';
 $_LANG['Depending on your server and the size of your shop'] = 'Anhängig vom Server und der Größer Ihres Shops';
 $_LANG['You did not update your shop for a while,'] = 'Sie haben Ihren Shop seit Längerem nicht upgedatet,';
-$_LANG['major releases have been made ​​available since.'] = 'wichtige Neuerungen wurden implementiert seit';
+$_LANG['stable releases have been made ​​available since.'] = 'wichtige Neuerungen wurden implementiert seit';
 $_LANG['This is not a problem however the update may take several minutes, try to update your shop more frequently.'] = 'Das ist unwesentlich, das Upgrade kann einige Minuten dauern, versuchen Sie, Ihren Shop öfert zu updaten.';
 $_LANG['No files to process, this might be an error.'] = 'Keine Dateien zum Verarbeiten, womöglich ein Fehler';
 $_LANG['Hosting parameters'] = 'Hosting Eigenschaften';
@@ -280,6 +280,4 @@ $_LANG['Online Theme Validator'] = 'Online Themenvalidator';
 $_LANG['If your theme is not valid, you may experience some problems in your front-office aspect, but don\'t panic ! To solve this, you can make it compatible by correcting the validators errors or by using a theme compatible with '] = 'Sollte Ihr Thema nicht kompatibel sein, könnten einige Probleme im Front-End auftreten. Sie können die Kompatibilität wieder einstellen, indem Sie im Backend Unter Einstellungen die entsprechende Einstellung treffen';
 $_LANG['version'] = 'Version';
 $_LANG['In this aim, use our'] = 'Verwenden Sie dazu unseren';
-
-
 
