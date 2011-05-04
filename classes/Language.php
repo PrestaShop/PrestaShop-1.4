@@ -53,7 +53,10 @@ class LanguageCore extends ObjectModel
 	protected static $_LANGUAGES;
 	protected static $countActiveLanguages;
 
-	protected	$webserviceParameters = array();
+	protected	$webserviceParameters = array(
+		'objectNodeName' => 'language',
+		'objectsNodeName' => 'languages',
+	);
 
 	public	function __construct($id = NULL, $id_lang = NULL)
 	{

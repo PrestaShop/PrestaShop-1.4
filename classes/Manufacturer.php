@@ -77,8 +77,12 @@ class ManufacturerCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
-			'id_address' => array('xlink_resource'=> 'addresses'),
-			'link_rewrite' => array(),
+			'link_rewrite' => array('getter' => 'getLink', 'setter' => null),
+		),
+		'associations' => array(
+			'addresses' => array('resource' => 'address', 'fields' => array(
+				'id' => array('required' => true, 'xlink_resource' => 'addresses'),
+			)),
 		),
 	);
 
@@ -356,6 +360,15 @@ class ManufacturerCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'address` AS a
 		LEFT JOIN `'._DB_PREFIX_.'country_lang` AS cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'state` AS s ON (s.`id_state` = a.`id_state`)
+		WHERE `id_manufacturer` = '.(int)($this->id).'
+		AND a.`deleted` = 0');
+	}
+	
+	public function getWsAddresses()
+	{
+			return Db::getInstance()->ExecuteS('
+		SELECT a.id_address as id
+		FROM `'._DB_PREFIX_.'address` AS a
 		WHERE `id_manufacturer` = '.(int)($this->id).'
 		AND a.`deleted` = 0');
 	}
