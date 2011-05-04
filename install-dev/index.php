@@ -873,7 +873,7 @@ if ($lm->getIncludeTradFilename())
 				if ($handle = opendir($upgradePath))
 				{
 					while (false !== ($file = readdir($handle)))
-						if ($file != '.' AND $file != '..')
+						if (!preg_match('/^\..*/Ui', $file))
 						{
 							$version = str_replace('.sql', '', $file);
 							if (version_compare($version, $oldversion) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
