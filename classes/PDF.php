@@ -171,7 +171,7 @@ class PDFCore extends PDF_PageGroupCore
    /*
     * Return the complete Address format
     */
-   private function _getCompleteAddressFormat($conf)
+   private function _getCompleteUSAddressFormat($conf)
    {
    	$shopCity = (isset($conf['PS_SHOP_CITY']) && !empty($conf['PS_SHOP_CITY'])) ? $conf['PS_SHOP_CITY'] : '';
 		$shopState = ((isset($conf['PS_SHOP_STATE']) && !empty($conf['PS_SHOP_STATE'])) ? $conf['PS_SHOP_STATE'] : '');
@@ -189,20 +189,33 @@ class PDFCore extends PDF_PageGroupCore
    }
    
    /*
-    * Build the the detailed footer of the marchand
+    * Build the the detailed footer of the merchant
     */
-   private function _builMarchandFooterDetail($conf)
+   private function _builMerchantFooterDetail($conf)
    {
-   	$completeAddressShop = $this->_getCompleteAddressFormat($conf);
+   	$footerText;
    	
-   	$footerText = self::l('Headquarters:')."\n".
-			$conf['PS_SHOP_NAME_UPPER']."\n".
-			(isset($conf['PS_SHOP_ADDR1']) && !empty($conf['PS_SHOP_ADDR1']) ? $conf['PS_SHOP_ADDR1']."\n" : '').
-			(isset($conf['PS_SHOP_ADDR2']) && !empty($conf['PS_SHOP_ADDR2']) ? $conf['PS_SHOP_ADDR2']."\n" : '').
-			(!empty($completeAddressShop) ? $completeAddressShop."\n" : '').
-			(isset($conf['PS_SHOP_COUNTRY']) && !empty($conf['PS_SHOP_COUNTRY']) ? $conf['PS_SHOP_COUNTRY']."\n" : '').
-			((isset($conf['PS_SHOP_PHONE']) && !empty($conf['PS_SHOP_PHONE'])) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
-			
+   	// If the country is USA
+   	if ($conf['PS_SHOP_COUNTRY_ID'] == 21)
+   	{
+   		$completeAddressShop = $this->_getCompleteUSAddressFormat($conf);
+   	
+   		$footerText = self::l('Headquarters:')."\n".
+				$conf['PS_SHOP_NAME_UPPER']."\n".
+				(isset($conf['PS_SHOP_ADDR1']) && !empty($conf['PS_SHOP_ADDR1']) ? $conf['PS_SHOP_ADDR1']."\n" : '').
+				(isset($conf['PS_SHOP_ADDR2']) && !empty($conf['PS_SHOP_ADDR2']) ? $conf['PS_SHOP_ADDR2']."\n" : '').
+				(!empty($completeAddressShop) ? $completeAddressShop."\n" : '').
+				(isset($conf['PS_SHOP_COUNTRY']) && !empty($conf['PS_SHOP_COUNTRY']) ? $conf['PS_SHOP_COUNTRY']."\n" : '').
+				((isset($conf['PS_SHOP_PHONE']) && !empty($conf['PS_SHOP_PHONE'])) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
+   	}
+   	else 
+   	{
+   		$footerText = $conf['PS_SHOP_NAME_UPPER'].(!empty($conf['PS_SHOP_ADDR1']) ? ' - '.self::l('Headquarters:').' '.$conf['PS_SHOP_ADDR1'].
+   			(!empty($conf['PS_SHOP_ADDR2']) ? ' '.$conf['PS_SHOP_ADDR2'] : '').' '.$conf['PS_SHOP_CODE'].' '.$conf['PS_SHOP_CITY'].
+   			((isset($conf['PS_SHOP_STATE']) AND !empty($conf['PS_SHOP_STATE'])) ? (', '.$conf['PS_SHOP_STATE']) : '').' '.$conf['PS_SHOP_COUNTRY'] : '').
+   			"\n".(!empty($conf['PS_SHOP_DETAILS']) ? self::l('Details:').' '.$conf['PS_SHOP_DETAILS'].' - ' : '').
+				(!empty($conf['PS_SHOP_PHONE']) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
+   	}		
 		return $footerText;
    }
    
@@ -211,7 +224,18 @@ class PDFCore extends PDF_PageGroupCore
 	*/
 	public function Footer()
 	{
-		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
+		$arrayConf = array(
+			'PS_SHOP_NAME', 
+			'PS_SHOP_ADDR1', 
+			'PS_SHOP_ADDR2', 
+			'PS_SHOP_CODE', 
+			'PS_SHOP_CITY', 
+			'PS_SHOP_COUNTRY',
+			'PS_SHOP_COUNTRY_ID', 
+			'PS_SHOP_DETAILS', 
+			'PS_SHOP_PHONE', 
+			'PS_SHOP_STATE');
+		
 		$conf = Configuration::getMultiple($arrayConf);
 		$conf['PS_SHOP_NAME_UPPER'] = Tools::strtoupper($conf['PS_SHOP_NAME']);
 		$y_delta = array_key_exists('PS_SHOP_DETAILS', $conf) ? substr_count($conf['PS_SHOP_DETAILS'],"\n") : 0;
@@ -222,8 +246,8 @@ class PDFCore extends PDF_PageGroupCore
 			if (!isset($conf[$key]))
 				$conf[$key] = '';
 		
-		$marchandDetailFooter = $this->_builMarchandFooterDetail($conf);
-		$totalLineDetailFooter = count(explode("\n", $marchandDetailFooter));
+		$merchantDetailFooter = $this->_builMerchantFooterDetail($conf);
+		$totalLineDetailFooter = count(explode("\n", $merchantDetailFooter));
 		
 		// A point equals 1/72 of inch, that is to say about 0.35 mm (an inch being 2.54 cm). 
 		// This is a very common unit in typography; font sizes are expressed in that unit.
@@ -254,7 +278,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetTextColor(0, 0, 0);
 		$this->SetFont(self::fontname(), '', 8);
 		
-		$this->MultiCell(0.0, 4.0, $marchandDetailFooter, 0, 'C', 1);
+		$this->MultiCell(0.0, 4.0, $merchantDetailFooter, 0, 'C', 1);
 	}
 
 	public static function multipleInvoices($invoices)
@@ -322,8 +346,6 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetX(10);
 		$pdf->SetY(25);
 		$pdf->SetFont(self::fontname(), '', 9);
-
-
 		
 		$ordered_adr_fields = AddressFormat::getOrderedAddressFields($invoice_address->id_country);
  
