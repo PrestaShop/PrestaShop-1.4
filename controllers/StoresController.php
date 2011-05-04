@@ -96,7 +96,7 @@ class StoresControllerCore extends FrontController
 				$days[5] = 'Friday';
 				$days[6] = 'Saturday';
 				$days[7] = 'Sunday';
-				
+
 				foreach ($stores AS $store)
 				{
 					$days_datas = array();
@@ -157,6 +157,7 @@ class StoresControllerCore extends FrontController
 		$out_datas = array();
 
 		$address_datas = AddressFormat::getOrderedAddressFields($store['id_country']);
+		$state = (isset($store['id_state'])) ? new State($store['id_state']) : NULL;
 		
 		foreach ($address_datas as $data_line)
 		{
@@ -169,7 +170,8 @@ class StoresControllerCore extends FrontController
 				$field_item = trim($field_item);
 				if (!isset($ignore_field[$field_item])  && !empty($store[$field_item]) && $store[$field_item] != '')
 				{
-					$adr_out[] = $store[$field_item];
+					$adr_out[] = ($field_item == "city" && $state && isset($state->iso_code) && strlen($state->iso_code)) ? 
+						$store[$field_item].', '.$state->iso_code : $store[$field_item];
 					$data_fields_mod = true;
 				}
 			}
