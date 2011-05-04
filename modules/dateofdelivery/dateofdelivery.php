@@ -262,7 +262,7 @@ class DateOfDelivery extends Module
 			</table>';
 		}
 		else
-			$this->_html .= '<p class="center">No carrier rule</p>';
+			$this->_html .= '<p class="center">'.$this->l('No carrier rule').'</p>';
 		$this->_html .= '
 		</fieldset>
 		<br />
@@ -290,7 +290,7 @@ class DateOfDelivery extends Module
 				<label for="date_format">'.$this->l('Date format:').'</label>
 				<div class="margin-form">
 					<input type="text" name="date_format" id="date_format" value="'.htmlentities(Tools::getValue('date_format', Configuration::get('DOD_DATE_FORMAT')), ENT_QUOTES, 'UTF-8').'" size="10" />
-					<p>You can see all parameters available at: <a href="http://www.php.net/manual/en/function.date.php" target="_blank">http://www.php.net/manual/en/function.date.php</a></p>
+					<p>'.$this->l('You can see all parameters available at:').' <a href="http://www.php.net/manual/en/function.date.php" target="_blank">http://www.php.net/manual/en/function.date.php</a></p>
 				</div>
 				<p class="center"><input type="submit" class="button" name="submitMoreOptions" value="'.$this->l('Save').'" /></p>
 			</fieldset>

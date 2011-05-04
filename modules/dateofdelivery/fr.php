@@ -33,6 +33,7 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_93cba07454f06a4a960172bbd6e
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7dce122004969d56ae2e0245cb754d35'] = 'Modifier';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_58f748703db13e81b6ca6c366d1ab50c'] = 'Aucune règle de transporteur';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_4dab36ac83853282fc0d7bae20c19e90'] = 'Plus d\'options';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0008e84621e5c9f21f8a55387a28692f'] = 'Temps supplémentaire lorsqu\'un produit est hors stock';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_521d02cf307201053a46e0b9c5b5170c'] = 'Temps supplémentaire pour la préparation des commandes';
@@ -40,6 +41,7 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_cec31ec82e3bdee482baaa9f5b1
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_15b4020fafe2bcadf41fbdb2e7fa137a'] = 'préparation le Samedi';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_9685cbc6ac9090137fb087d4f48d0561'] = 'préparation le Dimanche';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_104f1a7d59077b514d4105fcee0e42ff'] = 'Format de la date :';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_f19cb36e3ae263c8c3617a453a0ff521'] = 'Vous pouvez voir tous les paramètres disponibles à l\'adresse suivante:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_168ee9f4820976c4f4055cd817965df4'] = 'Nouvelle règle de transporteur';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_8c5961161cc9ce6db81bf3be77091136'] = 'Modification d\'une règle de transporteur';
