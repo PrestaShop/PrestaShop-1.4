@@ -36,6 +36,7 @@ class BlockSearch extends Module
 		$this->tab = 'search_filter';
 		$this->version = 1.0;
 		$this->author = 'PrestaShop';
+		$this->need_instance = 0;
 
 		parent::__construct();
 		

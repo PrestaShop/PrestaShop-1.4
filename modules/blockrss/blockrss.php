@@ -37,6 +37,7 @@ class Blockrss extends Module
  	{
  	 	$this->name = 'blockrss';
  	 	$this->tab = 'front_office_features';
+		$this->need_instance = 0;
 
 		parent::__construct();
 

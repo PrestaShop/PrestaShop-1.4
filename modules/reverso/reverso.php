@@ -40,6 +40,7 @@ class Reverso extends Module
        $this->version = '1.0';
 	   // Iso code of countries where the module can be used, if none module available for all countries
 		$this->limited_countries = array('fr');
+		$this->need_instance = 0;
 		
        parent::__construct();
         /* The parent construct is required for translations */

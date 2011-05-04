@@ -33,6 +33,7 @@ class iAdvize extends Module
 		$this->tab = 'front_office_features';
 		$this->version = '1.0';
 		$this->displayName = 'iAdvize';
+		$this->need_instance = 0;
 		
 		parent::__construct();
 		

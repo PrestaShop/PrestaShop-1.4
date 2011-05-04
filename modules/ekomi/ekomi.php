@@ -35,6 +35,7 @@ class Ekomi extends Module
         $this->name = 'ekomi';
         $this->tab = 'advertising_marketing';
         $this->version = 1.0;
+		$this->need_instance = 0;
 
 		parent::__construct();
 

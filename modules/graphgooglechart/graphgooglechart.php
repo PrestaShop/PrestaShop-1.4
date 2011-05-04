@@ -47,7 +47,8 @@ class GraphGoogleChart extends ModuleGraphEngine
 			$this->name = 'graphgooglechart';
 			$this->tab = 'administration';
 			$this->version = 1.0;
-		$this->author = 'PrestaShop';
+			$this->author = 'PrestaShop';
+			$this->need_instance = 0;
 
 			Module::__construct();
 				

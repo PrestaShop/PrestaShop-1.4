@@ -43,6 +43,7 @@ class Secuvad extends Module
   		$this->version = '2.0.1';
   		$this->currencies = NULL;
   		$this->currencies_mode = NULL;
+		$this->need_instance = 0;
 		
 		parent::__construct();
   		$this->displayName = $this->l('Secuvad module');

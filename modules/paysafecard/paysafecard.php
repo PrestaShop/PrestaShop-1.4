@@ -58,6 +58,7 @@ class PaysafeCard extends PrepaidServices
 		$this->version = 1.2;
 		$this->module_dir = dirname(__FILE__);
         $this->certificat_dir = dirname(__FILE__).'/keyring/';
+		$this->need_instance = 0;
 
 		parent::__construct();
 

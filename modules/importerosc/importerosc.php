@@ -11,6 +11,7 @@ class importerosc extends ImportModule
 		$this->version = '1.0';
 		$this->author = 'PrestaShop';
 		$this->theImporter = 1;
+		$this->need_instance = 0;
 
 		parent::__construct ();
 

@@ -39,7 +39,8 @@ class Gsitemap extends Module
 		$this->tab = 'seo';
 		$this->version = '1.6';
 		$this->author = 'PrestaShop';
-
+		$this->need_instance = 0;
+		
 		parent::__construct();
 
 		$this->displayName = $this->l('Google sitemap');

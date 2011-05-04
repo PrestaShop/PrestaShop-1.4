@@ -36,6 +36,7 @@ class Followup extends Module
 		$this->tab = 'advertising_marketing';
 		$this->version = '1.0';
 		$this->author = 'PrestaShop';
+		$this->need_instance = 0;
 
 		$this->confKeys = array(
 		'PS_FOLLOW_UP_ENABLE_1', 'PS_FOLLOW_UP_ENABLE_2', 'PS_FOLLOW_UP_ENABLE_3', 'PS_FOLLOW_UP_ENABLE_4', 

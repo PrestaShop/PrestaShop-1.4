@@ -36,6 +36,7 @@ class CashOnDelivery extends PaymentModule
 		$this->tab = 'payments_gateways';
 		$this->version = '0.3';
 		$this->author = 'PrestaShop';
+		$this->need_instance = 0;
 		
 		$this->currencies = false;
 

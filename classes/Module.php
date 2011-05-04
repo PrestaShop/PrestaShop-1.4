@@ -44,6 +44,9 @@ abstract class ModuleCore
 
 	/** @var string author of the module */
 	public $author;
+	
+	/** @var int need_instance */
+	public $need_instance = 1;
 
 	/** @var string Admin tab correponding to the module */
 	public $tab = NULL;
@@ -501,7 +504,7 @@ abstract class ModuleCore
 					{
 						self::$_generateConfigXmlMode = true;
 						$tmpModule = new $module;
-						$tmpModule->_generateConfigXml((isset($xml_module->need_instance) ? (int)$xml_module->need_instance : 1));
+						$tmpModule->_generateConfigXml();
 						self::$_generateConfigXmlMode = false;
 					}
 				}
@@ -517,6 +520,7 @@ abstract class ModuleCore
 				echo '<li>'.$error.'</li>';
 			echo '</ol></div>';
 		}
+
 		return $moduleList;
 	}
 
@@ -978,18 +982,18 @@ abstract class ModuleCore
 			return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
 	}
 	
-	protected function _generateConfigXml($need_instance = 1)
+	protected function _generateConfigXml()
 	{
 		$xml = '<?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>'.$this->name.'</name>
-	<displayName>'.Tools::htmlentitiesUTF8($this->displayName).'</displayName>
-	<version>'.$this->version.'</version>
-	<description>'.Tools::htmlentitiesUTF8($this->description).'</description>
-	<author>'.Tools::htmlentitiesUTF8($this->author).'</author>
-	<tab>'.Tools::htmlentitiesUTF8($this->tab).'</tab>'.(isset($this->confirmUninstall) ? "\n\t".'<confirmUninstall>'.$this->confirmUninstall.'</confirmUninstall>' : '').'
+	<displayName><![CDATA['.Tools::htmlentitiesUTF8($this->displayName).']]></displayName>
+	<version><![CDATA['.$this->version.']]></version>
+	<description><![CDATA['.Tools::htmlentitiesUTF8($this->description).']]></description>
+	<author><![CDATA['.Tools::htmlentitiesUTF8($this->author).']]></author>
+	<tab><![CDATA['.Tools::htmlentitiesUTF8($this->tab).']]></tab>'.(isset($this->confirmUninstall) ? "\n\t".'<confirmUninstall>'.$this->confirmUninstall.'</confirmUninstall>' : '').'
 	<is_configurable>'.(int)method_exists($this, 'getContent').'</is_configurable>
-	<need_instance>'.$need_instance.'</need_instance>'.(isset($this->limited_countries) ? "\n\t".'<limited_countries>'.(sizeof($this->limited_countries) == 1 ? $this->limited_countries[0] : '').'</limited_countries>' : '').'
+	<need_instance>'.(int)$this->need_instance.'</need_instance>'.(isset($this->limited_countries) ? "\n\t".'<limited_countries>'.(sizeof($this->limited_countries) == 1 ? $this->limited_countries[0] : '').'</limited_countries>' : '').'
 </module>';
 		if (is_writable(_PS_MODULE_DIR_.$this->name.'/'))
 			file_put_contents(_PS_MODULE_DIR_.$this->name.'/config.xml', utf8_encode($xml));
