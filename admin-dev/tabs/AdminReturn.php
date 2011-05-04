@@ -150,7 +150,7 @@ class AdminReturn extends AdminTab
 			{
 				$tr['id_order'] = $this->l('#').sprintf('%06d', $tr['id_order']);
 				$id = $tr['id_'.$this->table];
-				echo '<tr'.($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($state->color) AND $this->colorOnBackground) ? 'style="background-color: '.$state->color.'"' : '').'>';
+				echo '<tr'.($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($state->color) AND $this->colorOnBackground) ? 'style="background-color: '.$state->color.'"' : '').'><td></td>';
 				foreach ($this->fieldsDisplay AS $key => $params)
 					echo '<td class="pointer" onclick="document.location = \''.$currentIndex.'&id_'.$this->table.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'"'.'>'.$tr[$key].'</td>';
 				echo '</tr>';
@@ -184,7 +184,7 @@ class AdminReturn extends AdminTab
 				</div>
 				<label>'.$this->l('Customer explanation:').' </label>
 				<div class="margin-form">'.$obj->question.'</div>
-				<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" style="float:right; margin-right:120px;"/>
+
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 				<select name=\'state\'>';
@@ -278,7 +278,7 @@ class AdminReturn extends AdminTab
 				<p>'.$this->l('List of products in return package').'</p>
 				</div>
 				<div class="margin-form">
-					
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" style="margin-right:120px;"/>
 				</div>
 			</fieldset>
 		</form>';

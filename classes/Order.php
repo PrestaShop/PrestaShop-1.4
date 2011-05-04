@@ -883,7 +883,12 @@ class OrderCore extends ObjectModel
 
 	public function isReturnable()
 	{
-		return ((int)(Configuration::get('PS_ORDER_RETURN')) == 1 AND (int)($this->getCurrentState()) == _PS_OS_DELIVERED_ AND $this->getNumberOfDays());
+		$payment = $this->getHistory((int)($this->id_lang), _PS_OS_PAYMENT_);
+		$delivred = $this->getHistory((int)($this->id_lang), _PS_OS_DELIVERED_);
+		if ($payment AND $delivred AND strtotime($delivred[0]['date_add']) < strtotime($payment[0]['date_add']))
+			return ((int)(Configuration::get('PS_ORDER_RETURN')) == 1 AND $this->getNumberOfDays());
+		else
+			return ((int)(Configuration::get('PS_ORDER_RETURN')) == 1 AND (int)($this->getCurrentState()) == _PS_OS_DELIVERED_ AND $this->getNumberOfDays());
 	}
 
 

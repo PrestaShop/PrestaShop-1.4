@@ -307,6 +307,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->AddPage();
 
 		/* Display address information */
+		$invoice_address = new Address((int)($order->id_address_invoice));
 		$delivery_address = new Address((int)($order->id_address_delivery));
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
 		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
@@ -323,7 +324,7 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetFont(self::fontname(), '', 9);
 
 
-
+		
 		$ordered_adr_fields = AddressFormat::getOrderedAddressFields($invoice_address->id_country);
  
 		$optional_fields = array(
