@@ -394,6 +394,7 @@ class AdminAddresses extends AdminTab
 				<div class="margin-form">
 				<select name="id_state" id="id_state">
 				</select>
+				<sup>*</sup>
 				</div>
 				</div>';
 
