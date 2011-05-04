@@ -37,7 +37,7 @@ if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
 if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 
-define('INSTALL_VERSION', '1.4.1.0');
+define('INSTALL_VERSION', '1.4.2.0');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
 define('INSTALL_PATH', dirname(__FILE__));
 if (version_compare(phpversion(), '5.0.0', '<'))
@@ -818,10 +818,10 @@ if ($lm->getIncludeTradFilename())
 				<input id="btDisclaimerOk" type="checkbox" value="1" style="vertical-align: middle; width: 16px; height: 16px;" />
 				<label for="btDisclaimerOk" style="font-weight: bold; color: #CC0000;"><?php echo lang('I certify that I backed up my database and application files. I assume all responsibility for any data loss or damage related to this upgrade.'); ?></label>
 			</div>
-			
+
 			<div id="upgradeProcess" style="display: none;width: 650px;">
-				<?php 
-				
+				<?php
+
 				function sortnatversion($a, $b)
 				{
 					return strnatcmp($a['version'], $b['version']);
@@ -838,7 +838,7 @@ if ($lm->getIncludeTradFilename())
 							$countNonNative++;
 							$moduleNonNativeLi .= '<li>'.$module['name'].'</li>';
 						}
-					$moduleNonNativeLi .= '</ul>';	
+					$moduleNonNativeLi .= '</ul>';
 				}
 				if($countNonNative)
 				{
@@ -851,14 +851,14 @@ if ($lm->getIncludeTradFilename())
 					<input id="customModuleDesactivation" type="checkbox" checked="checked" value="1" name="customModuleDesactivation" /> <label for="customModuleDesactivation">'
 					.lang('Ok, please desactivate the following modules, I will reactivate them later.').' : </label>';
 					echo $moduleNonNativeLi;
-	
+
 				}
 
 				echo '<h2>'.lang('Theme compatibility').'</h2>';
 				echo '<p>'.lang('Before updating, you need to check that your theme is compatible with version').' <b>'.INSTALL_VERSION.'</b> '.lang('of PrestaShop.').'</p>
 	<p><b>'.lang('In this aim, use our').'</b> <a target="_blank" href="http://validator.prestashop.com?version='.INSTALL_VERSION.'" title="'.lang('Link to the validator').'"><b>'.lang('Online Theme Validator').'</b></a>.'.'</p>';
 	echo '<p>'.lang('If your theme is not valid, you may experience some problems in your front-office aspect, but don\'t panic ! To solve this, you can make it compatible by correcting the validators errors or by using a theme compatible with ').' '.INSTALL_VERSION.' '.lang('version').'.</p>';
-				
+
 				echo '<h2>'.lang('Let\'s go!').'</h2>
 				<p>'.lang('Click on the "Next" button to start the upgrade, this can take several minutes,').' <u style="font-weight: bold; text-decoration: underline;">'.lang('do not close the window and be patient.').'</u></p>';
 				echo '<h2>'.lang('Details about this upgrade').' (v'.INSTALL_VERSION.')</h2>
@@ -866,16 +866,16 @@ if ($lm->getIncludeTradFilename())
 				lang('Thank you, you will be able to continue the upgrade process by clicking on the "Next" button.').'<br /><br />'.
 				lang('PrestaShop is upgrading your shop one version after the other, the following upgrade files will be processed:').'
 				</p>';
-				
+
 				$upgradeFiles = array();
 				$upgradePath = INSTALL_PATH.'/sql/upgrade';
 				$majorReleases = 0;
 				if ($handle = opendir($upgradePath))
-				{					
+				{
 					while (false !== ($file = readdir($handle)))
 						if ($file != '.' AND $file != '..')
 						{
-							$version = str_replace('.sql', '', $file);							
+							$version = str_replace('.sql', '', $file);
 							if (version_compare($version, $oldversion) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
 							{
 								$major = false;
@@ -884,13 +884,13 @@ if ($lm->getIncludeTradFilename())
 									$majorReleases++;
 									$major = true;
 								}
-							
-								$upgradeFiles[] = array('instructions' => (int)substr_count(file_get_contents($upgradePath.'/'.$file), ';'), 
+
+								$upgradeFiles[] = array('instructions' => (int)substr_count(file_get_contents($upgradePath.'/'.$file), ';'),
 								'version' => str_replace('.sql', '', $file), 'is_major' => $major);
 							}
 						}
 					closedir($handle);
-					
+
 					if (sizeof($upgradeFiles))
 					{
 						echo '
@@ -898,8 +898,8 @@ if ($lm->getIncludeTradFilename())
 							<tr>
 								<th>'.lang('Upgrade file').'</th>
 								<th style="width: 100px;">'.lang('Modifications to process').'</th>
-							</tr>';					
-						
+							</tr>';
+
 						uasort($upgradeFiles, 'sortnatversion');
 						$totalInstructions = 0;
 						foreach ($upgradeFiles AS $file)
@@ -910,26 +910,26 @@ if ($lm->getIncludeTradFilename())
 						echo '<tr style="font-weight: bold;"><td>'.lang('TOTAL').'</td><td style="text-align: right; padding-right: 5px;">'.(int)$totalInstructions.'</td></tr>';
 						echo '
 						</table>';
-						
+
 						$upgradeTime = $totalInstructions * 0.05;
 						$minutes = (int)($upgradeTime / 60);
 						$seconds = (int)($upgradeTime - ($minutes * 60));
-						
+
 						echo '<p><img src="../img/admin/time.gif" alt="" style="vertical-align: middle;" /> '.lang('Estimated time to complete the').' '.(int)$totalInstructions.' '.lang('modifications:').' <b style="font-size: 14px;">'.(int)$minutes.' '.($minutes > 1 ? lang('minutes') : lang('minute')).' '.(int)$seconds.' '.($seconds > 1 ? lang('seconds') : lang('second')).'</b><br />
 						<i style="font-size: 11px;">'.lang('Depending on your server and the size of your shop').'</i></p>';
-						
+
 						if ($majorReleases > 1)
 							echo '<p style="margin-top: 8px;"><b>'.lang('You did not update your shop for a while,').' '.(int)$majorReleases.' '.lang('stable releases have been made ​​available since.').'</b> '.lang('This is not a problem however the update may take several minutes, try to update your shop more frequently.').'</p>';
 					}
 					else
-						echo '<p>'.lang('No files to process, this might be an error.').'</p>';				
+						echo '<p>'.lang('No files to process, this might be an error.').'</p>';
 				}
-				
+
 				$maxMemory = @ini_get('memory_limit');
 				$maxTime = @ini_get('max_execution_time');
 				$color = '#D9F2D0';
 				$textColor = 'green';
-				
+
 				if (str_replace('M', '', $maxMemory) < 16)
 					$color = '#FFDEB7';
 				if (str_replace('M', '', $maxMemory) < 8)
@@ -939,7 +939,7 @@ if ($lm->getIncludeTradFilename())
 				if ($maxTime AND $maxTime <= 20)
 					$color = '#FAE2E3';
 				$color = '#FFDEB7';
-				
+
 				echo '
 				<br />
 				<h2>'.lang('Hosting parameters').'</h2>
@@ -962,22 +962,22 @@ if ($lm->getIncludeTradFilename())
 					</tr>
 				</table>
 				<div style="font-weight: bold; background: '.$color.'; color: #000; padding: 10px; border: 1px solid #999; margin-top: 10px;">';
-				
+
 				if ($color == '#D9F2D0')
 					echo '<img src="../img/admin/ok.gif" alt="" style="vertical-align: middle;" /> '.lang('All your settings seem to be OK, go for it!');
 				elseif ($color == '#FFDEB7')
 					echo '<img src="../img/admin/warning.gif" alt="" style="vertical-align: middle;" /> '.lang('Beware, your settings look correct but are not optimal, if you encounter problems (upgrade too long, memory error...), please ask your hosting provider to increase the values of these parameters (max_execution_time & memory_limit).');
 				elseif ($color == '#FAE2E3')
 					echo '<img src="../img/admin/error2.png" alt="" style="vertical-align: middle;" /> '.lang('We strongly recommend that you inform your hosting provider to modify the settings before process to the update.');
-					
+
 				echo '
 				</div><br />';
-				
-				
+
+
 				?>
 			</div>
 		</div>
-		
+
 		<div class="sheet" id="sheet_require_update">
 
 			<h2><?php echo lang('System and permissions'); ?></h2>
@@ -1045,9 +1045,9 @@ if ($lm->getIncludeTradFilename())
 				<p><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
 				<div id="updateLog"></div>
 				<p><?php echo lang('You have just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p><br />
-				
+
 				<?php
-				
+
 					if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))
 					{
 						echo '
@@ -1058,7 +1058,7 @@ if ($lm->getIncludeTradFilename())
 					}
 
 				?>
-				
+
 				<h3 style="margin-top: 15px;"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?></h3>
 				<a href="../" id="access_update" target="_blank">
 					<span class="title"><?php echo lang('Front Office'); ?></span>
@@ -1072,7 +1072,7 @@ if ($lm->getIncludeTradFilename())
 				<p>Your browser does not support iframes.</p>
 			</iframe>
 			<?php
-			endif; 
+			endif;
 			?>
 		</div>
 
