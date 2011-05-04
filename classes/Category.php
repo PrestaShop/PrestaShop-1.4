@@ -928,11 +928,11 @@ class CategoryCore extends ObjectModel
 	/**
 	 * Search for another category with the same parent and the same position
 	 * 
-	 * @return array id of the first category found
+	 * @return array first category found
 	 */
 	public function getDuplicatePosition()
 	{
-		return Db::getInstance()->getValue('
+		return Db::getInstance()->getRow('
 		SELECT c.`id_category` as id
 		FROM `'._DB_PREFIX_.'category` c
 		WHERE c.`id_parent` = '.(int)($this->id_parent).'
