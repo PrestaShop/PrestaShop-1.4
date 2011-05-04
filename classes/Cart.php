@@ -68,7 +68,7 @@ class CartCore extends ObjectModel
 	/** @var string Object last modification date */
 	public 		$date_upd;
 
-	protected static $_nbProducts = NULL;
+	protected static $_nbProducts = array();
 	protected static $_isVirtualCart = array();
 
 	protected	$fieldsRequired = array('id_currency', 'id_lang');
@@ -162,7 +162,10 @@ class CartCore extends ObjectModel
 
 	public function update($nullValues = false)
 	{
-		self::$_nbProducts = NULL;
+		if (isset(self::$_nbProducts[$this->id]))
+			unset(self::$_nbProducts[$this->id]);
+		if (isset(self::$_totalWeight[$this->id]))
+			unset(self::$_totalWeight[$this->id]);
 		$this->_products = NULL;
 		$return = parent::update();
 		Module::hookExec('cart');
@@ -448,10 +451,13 @@ class CartCore extends ObjectModel
 	public static function getNbProducts($id)
 	{
 		// Must be strictly compared to NULL, or else an empty cart will bypass the cache and add dozens of queries
-		if (self::$_nbProducts !== NULL)
-			return self::$_nbProducts;
-		self::$_nbProducts = (int)(Db::getInstance()->getValue('SELECT SUM(`quantity`) FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)($id)));
-		return self::$_nbProducts;
+		if (isset(self::$_nbProducts[$id]) && self::$_nbProducts[$id] !== NULL)
+			return self::$_nbProducts[$id];
+		self::$_nbProducts[$id] = (int)(Db::getInstance()->getValue('
+			SELECT SUM(`quantity`) 
+			FROM `'._DB_PREFIX_.'cart_product` 
+			WHERE `id_cart` = '.(int)($id)));
+		return self::$_nbProducts[$id];
 	}
 
 	/**
@@ -495,8 +501,9 @@ class CartCore extends ObjectModel
 
 		if (!Validate::isLoadedObject($product))
 			die(Tools::displayError());
-		self::$_nbProducts = NULL;
-		if (array_key_exists($this->id, self::$_totalWeight))
+		if (isset(self::$_nbProducts[$this->id]))
+			unset(self::$_nbProducts[$this->id]);
+		if (isset(self::$_totalWeight[$this->id]))
 			unset(self::$_totalWeight[$this->id]);
 		if ((int)$quantity <= 0)
 			return $this->deleteProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
@@ -682,7 +689,10 @@ class CartCore extends ObjectModel
 	 */
 	public	function deleteProduct($id_product, $id_product_attribute = NULL, $id_customization = NULL)
 	{
-		self::$_nbProducts = NULL;
+		if (isset(self::$_nbProducts[$this->id]))
+			unset(self::$_nbProducts[$this->id]);
+		if (isset(self::$_totalWeight[$this->id]))
+			unset(self::$_totalWeight[$this->id]);
 		if ((int)($id_customization))
 		{
 			$productTotalQuantity = (int)(Db::getInstance()->getValue('SELECT `quantity`
@@ -1142,7 +1152,7 @@ class CartCore extends ObjectModel
 	*/
 	public function getTotalWeight()
 	{
-		if (!array_key_exists($this->id, self::$_totalWeight))
+		if (!isset(self::$_totalWeight[$this->id]))
 		{
 			$result = Db::getInstance()->getRow('
 			SELECT SUM((p.`weight` + pa.`weight`) * cp.`quantity`) as nb
