@@ -1175,14 +1175,15 @@ class AdminImport extends AdminTab
 				</div>
 				<div class="margin-form">
 					'.$this->l('Allowed files are only UTF-8 and iso-8859-1 encoded ones').'
-				</div>
+				</div>s
 			</form>
 		</fieldset>';
 
 		$filesToImport = scandir(dirname(__FILE__).'/../import');
 		uasort($filesToImport, array('AdminImport', '_usortFiles'));
 		foreach ($filesToImport AS $k => &$filename)
-			if (in_array($filename, array('.', '..', '.svn', '.htaccess', 'index.php')))
+			//exclude .  ..  .svn and index.php and all hidden files
+			if (preg_match('/^\..*|index.php/Ui', $filename))
 				unset($filesToImport[$k]);
 		unset($filename);
 		if (sizeof($filesToImport))
