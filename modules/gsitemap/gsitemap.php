@@ -222,8 +222,10 @@ XML;
 		$link = new Link();	
 		$image = $xml->addChild('image', null, 'http://www.google.com/schemas/sitemap-image/1.1');
 		$image->addChild('loc', $link->getImageLink($product['link_rewrite'], (int)$product['id_product'].'-'.(int)$product['id_image']), 'http://www.google.com/schemas/sitemap-image/1.1');
-		$image->addChild('caption', $product['legend_image'], 'http://www.google.com/schemas/sitemap-image/1.1');
-		$image->addChild('title', $product['legend_image'], 'http://www.google.com/schemas/sitemap-image/1.1');
+		
+		$legend_image = preg_replace('/(&+)/i', '&amp;', $product['legend_image']);
+		$image->addChild('caption', $legend_image, 'http://www.google.com/schemas/sitemap-image/1.1');
+		$image->addChild('title', $legend_image, 'http://www.google.com/schemas/sitemap-image/1.1');
 	}
 
     private function _displaySitemap()
