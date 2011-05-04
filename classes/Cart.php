@@ -508,7 +508,7 @@ class CartCore extends ObjectModel
 			$result = $this->containsProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
 
 			/* Update quantity if product already exist */
-			if (Db::getInstance()->NumRows())
+			if ($result)
 			{
 				if ($operator == 'up')
 				{
@@ -551,7 +551,7 @@ class CartCore extends ObjectModel
 					LIMIT 1');
 			}
 
-			/* Add produt to the cart */
+			/* Add product to the cart */
 			else
 			{
 				$result2 = Db::getInstance()->getRow('
