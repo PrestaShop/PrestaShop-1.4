@@ -161,6 +161,9 @@ class CategoryCore extends ObjectModel
 	{
 		$this->level_depth = $this->calcLevelDepth();
 		$this->cleanPositions((int)$this->id_parent);
+		// If the parent category was changed, we don't want to have 2 categories with the same position
+		if($this->getDuplicatePosition())
+			$this->position = self::getLastPosition((int)Tools::getValue('id_parent'));
 		$ret = parent::update($nullValues);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
@@ -920,5 +923,20 @@ class CategoryCore extends ObjectModel
 		WHERE cp.`id_category` = '.(int)($this->id).'
 		ORDER BY `position` ASC');
 		return $result;
+	}
+	
+	/**
+	 * Search for another category with the same parent and the same position
+	 * 
+	 * @return array id of the first category found
+	 */
+	public function getDuplicatePosition()
+	{
+		return Db::getInstance()->getValue('
+		SELECT c.`id_category` as id
+		FROM `'._DB_PREFIX_.'category` c
+		WHERE c.`id_parent` = '.(int)($this->id_parent).'
+		AND `position` = '.(int)($this->position).'
+		AND c.`id_category` != '.(int)($this->id));
 	}
 }
