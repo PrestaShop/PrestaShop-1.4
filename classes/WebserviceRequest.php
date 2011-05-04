@@ -1233,7 +1233,7 @@ class WebserviceRequestCore
 								$ret .= ' format="'.implode(' ', $field['validateMethod']).'"';
 						}
 						$ret .= '>';
-						if ($this->_resourceConfiguration['objectNodeName'] == 'product' && $key == 'price' && $this->_schemaToDisplay != 'synopsis')
+						if ($this->_resourceConfiguration['objectNodeName'] == 'product' && $key == 'price' && $this->_schemaToDisplay == null)
 							$ret .= $this->getPrice(null, $object->id, null, null, null, null, null, null, 
 							null, null, null, null, null, null, null, null);
 						else if (is_null($this->_schemaToDisplay))
