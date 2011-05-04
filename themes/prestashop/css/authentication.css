@@ -48,3 +48,11 @@
 #account-creation_form #id_country, 
 #account-creation_form #id_state, 
   #authentication textarea { width: 17em }
+
+.account_creation span.inline-infos
+{
+	width:100%;
+	text-align:left;
+	margin:2px 0 2px 32%;
+	font-size:9px;
+}

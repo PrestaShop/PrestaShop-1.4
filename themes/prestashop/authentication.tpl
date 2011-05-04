@@ -376,11 +376,13 @@ $(function(){ldelim}
 			<label for="address1">{l s='Address'}</label>
 			<input type="text" class="text" name="address1" id="address1" value="{if isset($smarty.post.address1)}{$smarty.post.address1}{/if}" />
 			<sup>*</sup>
+			<span class="inline-infos">{l s='Street address, P.O. box, compagny name, c/o'}</span>
 		</p>
 		{elseif $field_name eq "address2"}
 		<p class="text">
 			<label for="address2">{l s='Address (Line 2)'}</label>
 			<input type="text" class="text" name="address2" id="address2" value="{if isset($smarty.post.address2)}{$smarty.post.address2}{/if}" />
+			<span class="inline-infos">{l s='Apartment, suite, unit, building, floor, etc.'}</span>
 		</p>
 		{elseif $field_name eq "postcode"}
 		<p class="required postcode text">
