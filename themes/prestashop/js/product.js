@@ -175,7 +175,7 @@ function updateDisplay()
 		if (availableNowValue != '')
 		{
 			//update the availability statut of the product
-			$('#availability_value').removeClass('warning-inline');
+			$('#availability_value').removeClass('warning_inline');
 			$('#availability_value').text(availableNowValue);
 			$('#availability_statut:hidden').show();
 		}
@@ -232,10 +232,10 @@ function updateDisplay()
 
 		//display that the product is unavailable with theses attributes
 		if (!selectedCombination['unavailable'])
-			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '')).addClass('warning-inline');
+			$('#availability_value').text(doesntExistNoMore + (globalQuantity > 0 ? ' ' + doesntExistNoMoreBut : '')).addClass('warning_inline');
 		else
 		{
-			$('#availability_value').text(doesntExist).addClass('warning-inline');
+			$('#availability_value').text(doesntExist).addClass('warning_inline');
 			$('#oosHook').hide();
 		}
 		$('#availability_statut:hidden').show();
