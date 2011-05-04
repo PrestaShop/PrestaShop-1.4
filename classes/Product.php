@@ -268,8 +268,13 @@ class ProductCore extends ObjectModel
 			'categories' => array('resource' => 'category', 'fields' => array(
 				'id' => array('required' => true),
 			)),
-			'images' => array('resource' => 'image','fields' => array('id' => array())
+			'images' => array('resource' => 'image', 'fields' => array('id' => array())
 			),
+			'product_features' => array('resource' => 'product_feature', 'setter' => null, 
+				'fields' => array(
+					'id' => array('required' => true),
+					'id_feature_value' => array('required' => true, 'xlink_resource' => 'product_feature_values'),
+			)),
 		),
 	);
 
@@ -3070,7 +3075,26 @@ class ProductCore extends ObjectModel
 		}
 		return false;
 	}
-
+	
+	public function getWsProductFeatures()
+	{
+		$rows = $this->getFeatures();
+		foreach ($rows as $keyrow => $row)
+		{
+			foreach ($row as $keyfeature => $feature)
+			{
+				if ($keyfeature == 'id_feature')
+				{
+					$rows[$keyrow]['id'] = $feature;
+					unset($rows[$keyrow]['id_feature']);
+				}
+				unset($rows[$keyrow]['id_product']);
+			}
+			asort($rows[$keyrow]);
+		}
+		return $rows;
+	}
+	
 	public function getWsCategories()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_category` AS id FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)$this->id);
