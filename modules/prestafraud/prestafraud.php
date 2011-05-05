@@ -48,8 +48,8 @@ class PrestaFraud extends Module
 	
 		parent::__construct();
 
-		$this->displayName = 'PrestaShop Security';
-		$this->description = 'Protect your store from fraudulent payments';
+		$this->displayName = $this->l('PrestaShop Security');
+		$this->description = $this->l('Protect your store from fraudulent payments');
 		
 		$this->_activities = array(0 => $this->l('-- Please choose your main activity --'),
 											1 => $this->l('Adult'),
