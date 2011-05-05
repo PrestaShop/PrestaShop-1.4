@@ -78,11 +78,11 @@ class AdminAccess extends AdminTab
 		<div id="ajax_confirmation"></div>
 		<table class="table" cellspacing="0">
 			<tr>
-				<th '.($currentProfile == (int)(_PS_ADMIN_PROFILE_) ? 'colspan="6"' : '').'>
+				<th '.($currentProfile == (int)_PS_ADMIN_PROFILE_ ? 'colspan="6"' : '').'>
 					<select name="profile" onchange="redirect(\''.Tools::getHttpHost(true, true).$currentIndex.'&token='.$this->token.'&profile=\'+this.options[this.selectedIndex].value)">';
 		if ($profiles)
 			foreach ($profiles AS $profile)
-				echo '<option value="'.(int)($profile['id_profile']).'" '.((int)($profile['id_profile']) == $currentProfile ? 'selected="selected"' : '').'>'.$profile['name'].'</option>';
+				echo '<option value="'.(int)$profile['id_profile'].'" '.((int)$profile['id_profile'] == $currentProfile ? 'selected="selected"' : '').'>'.$profile['name'].'</option>';
 
 		$tabsize = sizeof($tabs);
 		foreach ($tabs AS $tab)

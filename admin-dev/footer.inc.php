@@ -42,7 +42,13 @@ echo '				| <a href="http://www.prestashop.com/en/contact_us/" target="_blank" c
 				</div>
 			</div>
 		</div>
-	</div>
+	</div>';
+
+// $fc = new FrontController();
+// $fc->disableParentFooter();
+// $fc->displayFooter();
+
+echo '
 	</body>
 </html>';
 

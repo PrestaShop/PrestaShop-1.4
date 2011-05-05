@@ -52,7 +52,7 @@ class TabCore extends ObjectModel
 	protected 	$table = 'tab';
 	protected 	$identifier = 'id_tab';
 	
-	protected static $_getIdFromClassName = array();
+	protected static $_getIdFromClassName = null;
 	
 	public function getFields()
 	{
@@ -112,9 +112,7 @@ class TabCore extends ObjectModel
 	 */
 	static public function getCurrentTabId()
 	{
-	 	if ($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_tab` FROM `'._DB_PREFIX_.'tab` WHERE LOWER(class_name)=\''.pSQL(Tools::strtolower(Tools::getValue('tab'))).'\''))
-		 	return $result['id_tab'];
- 		return -1;
+		return self::getIdFromClassName(Tools::getValue('tab'));
 	}
 
 	/**
@@ -124,7 +122,7 @@ class TabCore extends ObjectModel
 	 */
 	static public function getCurrentParentId()
 	{
-	 	if ($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_parent` FROM `'._DB_PREFIX_.'tab` WHERE LOWER(class_name)=\''.pSQL(Tools::strtolower(Tools::getValue('tab'))).'\''))
+	 	if ($result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_parent` FROM `'._DB_PREFIX_.'tab` WHERE LOWER(class_name) = \''.pSQL(Tools::strtolower(Tools::getValue('tab'))).'\''))
 		 	return $result['id_parent'];
  		return -1;
 	}
@@ -134,14 +132,32 @@ class TabCore extends ObjectModel
 	 *
 	 * @return array tabs
 	 */
-	static public function getTabs($id_lang = false, $id_parent = NULL)
+	static $_cache_tabs = array();
+	static public function getTabs($id_lang, $id_parent = NULL)
 	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT *
-		FROM `'._DB_PREFIX_.'tab` t
-		'.($id_lang ? 'LEFT JOIN `'._DB_PREFIX_.'tab_lang` tl ON (t.`id_tab` = tl.`id_tab` AND tl.`id_lang` = '.(int)($id_lang).')' : '').
-		($id_parent !== NULL ? ('WHERE t.`id_parent` = '.(int)($id_parent)) : '').'
-		ORDER BY t.`position` ASC');
+		if (!isset(self::$_cache_tabs[$id_lang]))
+		{
+			self::$_cache_tabs[$id_lang] = array();
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT *
+			FROM `'._DB_PREFIX_.'tab` t
+			LEFT JOIN `'._DB_PREFIX_.'tab_lang` tl ON (t.`id_tab` = tl.`id_tab` AND tl.`id_lang` = '.(int)$id_lang.')
+			ORDER BY t.`position` ASC');
+			foreach ($result as $row)
+			{
+				if (!isset(self::$_cache_tabs[$id_lang][$row['id_parent']]))
+					self::$_cache_tabs[$id_lang][$row['id_parent']] = array();
+				self::$_cache_tabs[$id_lang][$row['id_parent']][] = $row;
+			}
+		}
+		if ($id_parent === null)
+		{
+			$array_all = array();
+			foreach (self::$_cache_tabs[$id_lang] as $array_parent)
+				$array_all = array_merge($array_all, $array_parent);
+			return $array_all;
+		}
+		return (isset(self::$_cache_tabs[$id_lang][$id_parent]) ? self::$_cache_tabs[$id_lang][$id_parent] : array());
 	}
 
 	/**
@@ -167,15 +183,14 @@ class TabCore extends ObjectModel
 	 */
 	static public function getIdFromClassName($class_name)
 	{
-		if (isset(self::$_getIdFromClassName[$class_name]) AND self::$_getIdFromClassName[$class_name])
-			return (int)self::$_getIdFromClassName[$class_name]['id'];
-			
-		self::$_getIdFromClassName[$class_name] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT id_tab AS id 
-		FROM `'._DB_PREFIX_.'tab` t 
-		WHERE LOWER(t.`class_name`) = \''.pSQL($class_name).'\'');
-		
-		return (int)self::$_getIdFromClassName[$class_name]['id'];
+		if (self::$_getIdFromClassName === null)
+		{
+			self::$_getIdFromClassName = array();
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_tab, class_name FROM `'._DB_PREFIX_.'tab`');
+			foreach ($result as $row)
+				self::$_getIdFromClassName[$row['class_name']] = $row['id_tab'];
+		}
+		return (isset(self::$_getIdFromClassName[$class_name]) ? (int)self::$_getIdFromClassName[$class_name] : false);
 	}
 
 	/**

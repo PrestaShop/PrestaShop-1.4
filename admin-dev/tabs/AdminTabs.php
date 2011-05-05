@@ -42,7 +42,7 @@ class AdminTabs extends AdminTab
 		$this->imageType = 'gif';
 		
 		$tabs = array(0 => $this->l('Home'));
-		foreach (Tab::getTabs((int)($cookie->id_lang), 0) AS $tab)
+		foreach (Tab::getTabs((int)$cookie->id_lang, 0) AS $tab)
 			$tabs[$tab['id_tab']] = $tab['name'];
 		$this->fieldsDisplay = array(
 		'id_tab' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -100,13 +100,13 @@ class AdminTabs extends AdminTab
 		
 		parent::displayList();
 		
-		$tabs = Tab::getTabs((int)($cookie->id_lang), 0);
+		$tabs = Tab::getTabs((int)$cookie->id_lang, 0);
 		echo '<br /><h2>'.$this->l('Positions').'</h2>
 		<h3>'.$this->l('Level').' 1</h3>';
 		$this->_posTabs($this->l('Main'), $tabs);
 		echo '<h3>'.$this->l('Level').' 2</h3>';
 		foreach ($tabs AS $t)
-			$this->_posTabs(stripslashes($t['name']), Tab::getTabs((int)($cookie->id_lang), $t['id_tab']));
+			$this->_posTabs(stripslashes($t['name']), Tab::getTabs((int)$cookie->id_lang, $t['id_tab']));
 	}
 	
 	public function displayForm($isMainTab = true)
@@ -156,7 +156,7 @@ class AdminTabs extends AdminTab
 					<select name="id_parent">
 						<option value="-1" '.(($this->getFieldValue($obj, 'id_parent') == -1) ? 'selected="selected"' : '').'>'.$this->l('None').'</option>
 						<option value="0" '.(($this->getFieldValue($obj, 'id_parent') == 0) ? 'selected="selected"' : '').'>'.$this->l('Home').'</option>';
-		foreach (Tab::getTabs((int)($cookie->id_lang), 0) AS $tab)
+		foreach (Tab::getTabs((int)$cookie->id_lang, 0) AS $tab)
 			echo '		<option value="'.$tab['id_tab'].'" '.($tab['id_tab'] == $this->getFieldValue($obj, 'id_parent') ? 'selected="selected"' : '').'>'.$tab['name'].'</option>';
 		echo '		</select>
 				</div>

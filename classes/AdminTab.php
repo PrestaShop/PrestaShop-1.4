@@ -184,7 +184,7 @@ abstract class AdminTabCore
 		$className = get_class($this);
 		if ($className == 'AdminCategories' OR $className == 'AdminProducts')
 			$className = 'AdminCatalog';
-		$this->token = Tools::getAdminToken($className.(int)($this->id).(int)($cookie->id_employee));
+		$this->token = Tools::getAdminToken($className.(int)$this->id.(int)$cookie->id_employee);
 
 	}
 

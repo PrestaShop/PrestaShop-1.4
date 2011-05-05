@@ -660,8 +660,7 @@ class CartCore extends ObjectModel
 	 */
 	public function OrderExists()
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT `id_cart` FROM `'._DB_PREFIX_.'orders` WHERE `id_cart` = '.(int)($this->id));
-		return Db::getInstance()->NumRows();
+		return (bool)Db::getInstance()->getValue('SELECT `id_cart` FROM `'._DB_PREFIX_.'orders` WHERE `id_cart` = '.(int)$this->id);
 	}
 
 	/*
@@ -1410,10 +1409,9 @@ class CartCore extends ObjectModel
 
 	static public function getCartIdByOrderId($id_order)
 	{
-		$result = Db::getInstance()->getRow('SELECT `id_cart` FROM '._DB_PREFIX_.'orders WHERE `id_order` = '.(int)($id_order));
+		$result = Db::getInstance()->getRow('SELECT `id_cart` FROM '._DB_PREFIX_.'orders WHERE `id_order` = '.(int)$id_order);
 		if (!$result OR empty($result) OR !key_exists('id_cart', $result))
 			return false;
-
 		return $result['id_cart'];
 	}
 

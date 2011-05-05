@@ -123,7 +123,7 @@ if (empty($tab))
 	echo '<div class="mainsubtablist" style="display:none"></div>';
 
 $id_parent_tab_current = (int)(Tab::getCurrentParentId());
-$tabs = Tab::getTabs((int)($cookie->id_lang), 0);
+$tabs = Tab::getTabs((int)$cookie->id_lang, 0);
 $echoLis = '';
 $mainsubtablist = '';
 foreach ($tabs AS $t)
@@ -139,7 +139,7 @@ foreach ($tabs AS $t)
 			</a>
 		</li>';
 		$echoLi = '';
-		$subTabs = Tab::getTabs((int)($cookie->id_lang), (int)($t['id_tab']));
+		$subTabs = Tab::getTabs((int)$cookie->id_lang, (int)$t['id_tab']);
 		foreach ($subTabs AS $t2)
 			if (checkTabRights($t2['id_tab']) === true)
 				$echoLi .= '<li><a href="index.php?tab='.$t2['class_name'].'&token='.Tools::getAdminTokenLite($t2['class_name']).'">'.$t2['name'].'</a></li>';

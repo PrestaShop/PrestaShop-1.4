@@ -83,6 +83,12 @@ class FrontController extends FrontControllerCore
 {
 	public $_memory = array();
 	public $_time = array();
+	private $_footer = true;
+	
+	public function disableParentFooter()
+	{
+		$this->_footer = false;
+	}
 	
 	private function displayMemoryColor($n)
 	{
@@ -214,7 +220,10 @@ class FrontController extends FrontControllerCore
 	public function displayFooter()
 	{
 		global $start_time;
-		parent::displayFooter();
+		
+		if ($this->_footer)
+			parent::displayFooter();
+			
 		if (!$this->ini_get_display_errors())
 			return;
 		
@@ -250,7 +259,9 @@ class FrontController extends FrontControllerCore
 			
 		echo '<br /><br />
 		<div class="rte" style="text-align:left;padding:8px;float:left">
-			<b>Load time</b>: '.$this->displayLoadTimeColor($this->_time[6] - $start_time, true).'
+			<b>Load time</b>: '.$this->displayLoadTimeColor($this->_time[6] - $start_time, true).'';
+		if ($this->_footer)
+			echo '
 			<ul>
 				<li>Config: '.$this->displayLoadTimeColor($this->_time[-3] - $start_time).'</li>
 				<li>Init: '.$this->displayLoadTimeColor(($this->_time[-2] - $this->_time[-3])).'</li>
@@ -261,8 +272,8 @@ class FrontController extends FrontControllerCore
 				<li>process: '.$this->displayLoadTimeColor(($this->_time[4] - $this->_time[3])).'</li>
 				<li>displayContent: '.$this->displayLoadTimeColor(($this->_time[5] - $this->_time[4])).'</li>
 				<li>displayFooter: '.$this->displayLoadTimeColor(($this->_time[6] - $this->_time[5])).'</li>
-			</ul>
-		</div>
+			</ul>';
+		echo '</div>
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
 			<b>Hook processing</b>: '.$this->displayLoadTimeColor($totalHookTime).'
 			<ul>';
@@ -271,7 +282,9 @@ class FrontController extends FrontControllerCore
 		echo '</ul>
 		</div>
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
-			<b>Memory peak usage</b>: '.$this->displayMemoryColor(memory_get_peak_usage()).'
+			<b>Memory peak usage</b>: '.$this->displayMemoryColor(memory_get_peak_usage()).'';
+		if ($this->_footer)
+			echo '
 			<ul>
 				<li>Config: '.$this->displayMemoryColor($this->_memory[-3]).'</li>
 				<li>Init: '.$this->displayMemoryColor(($this->_memory[-2] - $this->_memory[-3])).'</li>
@@ -280,10 +293,9 @@ class FrontController extends FrontControllerCore
 				<li>setMedia: '.$this->displayMemoryColor(($this->_memory[2] - $this->_memory[1])).'</li>
 				<li>displayHeader: '.$this->displayMemoryColor(($this->_memory[3] - $this->_memory[2])).'</li>
 				<li>process: '.$this->displayMemoryColor(($this->_memory[4] - $this->_memory[3])).'</li>
-				<li>displayContent: '.$this->displayMemoryColor(($this->_memory[5] - $this->_memory[4])).'</li>
-				<li>displayFooter: '.$this->displayMemoryColor(($this->_memory[6] - $this->_memory[5])).'</li>
-			</ul>
-		</div>';
+				<li>displayContent: '.$this->displayMemoryColor(($this->_memory[5] - $this->_memory[4])).'</li><li>displayFooter: '.$this->displayMemoryColor(($this->_memory[6] - $this->_memory[5])).'</li>
+			</ul>';
+		echo '</div>';
 		
 		$countByTypes = '';
 		foreach (Db::getInstance()->countTypes as $type => $count)

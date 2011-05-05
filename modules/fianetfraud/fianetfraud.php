@@ -355,7 +355,7 @@ class Fianetfraud extends Module
 		$res = Db::getInstance()->ExecuteS('
 		SELECT `id_cart`
 		FROM '._DB_PREFIX_.'fianet_fraud
-		WHERE id_cart='.(int)($params['cart']->id));
+		WHERE id_cart = '.(int)($params['cart']->id));
 		if (Db::getInstance()->NumRows() > 0)
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'fianet_fraud`
