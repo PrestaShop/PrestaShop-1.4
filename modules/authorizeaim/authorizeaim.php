@@ -25,6 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+	
 class authorizeAIM extends PaymentModule
 {
 	public function __construct()

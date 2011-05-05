@@ -25,6 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+
 class Socolissimo extends CarrierModule
 {
 	private $_html = '';

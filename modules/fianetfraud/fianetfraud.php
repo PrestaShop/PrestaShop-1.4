@@ -24,7 +24,9 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
+	
 if ((basename(__FILE__) == 'fianetfraud.php'))
 	require_once(dirname(__FILE__).'/fianet/fianet.php');
 

@@ -33,6 +33,8 @@
  * @author Nans Pellicari - Prestashop
  * @version 1.3
  */
+if (!defined('_CAN_LOAD_FILES_'))
+	exit;
 
 class Twenga extends PaymentModule
 {
