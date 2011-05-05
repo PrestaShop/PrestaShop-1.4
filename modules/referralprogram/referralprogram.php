@@ -217,7 +217,7 @@ class ReferralProgram extends Module
 		elseif (Tools::isSubmit('submitText'))
 		{
 			foreach ($_POST AS $key => $value)
-				if (!Validate::isString(Tools::getValue($key)))
+				if (!is_array(Tools::getValue($key)) && !Validate::isString(Tools::getValue($key)))
 				{
 					$this->_html .= $this->displayError($this->l('Invalid html field, javascript is forbidden'));
 					$this->_displayForm();
