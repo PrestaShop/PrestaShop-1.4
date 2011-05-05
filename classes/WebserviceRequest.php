@@ -1093,7 +1093,7 @@ class WebserviceRequestCore
 						$temp .= $tableAlias.'`'.pSQL($sqlId).'` = "'.pSQL($value).'" OR ';// AND (field = value3 OR field = value7 OR field = value9)
 					$ret .= rtrim($temp, 'OR ').')'."\n";
 				}
-				elseif (preg_match('/^([\d\.]+),([\d\.]+)$/', $matches[2], $matches3))// "AND" case
+				elseif (preg_match('/^([\d\.-]+),([\d\.-]+)$/', $matches[2], $matches3))// "AND" case
 				{
 					unset($matches3[0]);
 					if (count($matches3) > 0)
