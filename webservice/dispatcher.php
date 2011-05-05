@@ -30,8 +30,14 @@ require_once(dirname(__FILE__).'/../config/config.inc.php');
 
 // Use for image management (using the POST method of the browser to simulate the PUT method)
 $method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
-
-$key = isset($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : NULL;
+if (isset($_SERVER['PHP_AUTH_USER']))
+	$key = $_SERVER['PHP_AUTH_USER'];
+else
+{
+	header($_SERVER['SERVER_PROTOCOL'].' 401 Unauthorized');
+	header('WWW-Authenticate: Basic realm="Welcome to PrestaShop Webservice, please enter the authentication key as the login. No password required."');
+	die;
+}
 
 if (isset($_REQUEST['xml']))
 {
