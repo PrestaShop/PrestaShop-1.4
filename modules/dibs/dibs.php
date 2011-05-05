@@ -95,6 +95,7 @@ class dibs extends PaymentModule
 		$this->name = 'dibs';
 		$this->tab = 'payments_gateways';
 		$this->version = '1.0';
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 
