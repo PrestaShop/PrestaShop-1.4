@@ -1175,7 +1175,7 @@ class AdminImport extends AdminTab
 				</div>
 				<div class="margin-form">
 					'.$this->l('Allowed files are only UTF-8 and iso-8859-1 encoded ones').'
-				</div>s
+				</div>
 			</form>
 		</fieldset>';
 
