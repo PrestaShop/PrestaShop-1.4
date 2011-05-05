@@ -242,7 +242,7 @@ class ValidateCore
 	static public function isIconFile($icon)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^[a-z0-9_-]+\.[gif|jpg|jpeg|png]$/ui', $icon);
+		return preg_match('/^[a-z0-9_-]+\.(gif|jpg|jpeg|png)$/ui', $icon);
 	}
 
 	/**
@@ -316,7 +316,7 @@ class ValidateCore
 	static public function isGenderIsoCode($isoCode)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^[0|1|2|9]$/ui', $isoCode);
+		return preg_match('/^0|1|2|9$/ui', $isoCode);
 	}
 
 	/**
@@ -495,6 +495,17 @@ class ValidateCore
 	}
 
 	/**
+	* Check for date format
+	*
+	* @param string $date Date to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isDateFormat($date)
+	{
+		return (bool)preg_match('/^([0-9]{4})-((0?[0-9])|(1[0-2]))-((0?[1-9])|([0-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date);
+	}
+	
+	/**
 	* Check for date validity
 	*
 	* @param string $date Date to validate
@@ -504,7 +515,7 @@ class ValidateCore
 	{
 		if (!preg_match('/^([0-9]{4})-((0?[1-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date, $matches))
 			return false;
-		return checkdate((int)($matches[2]), (int)($matches[5]), (int)($matches[0]));
+		return checkdate((int)$matches[2], (int)$matches[5], (int)$matches[0]);
 	}
 
 	/**
@@ -533,7 +544,7 @@ class ValidateCore
 	*/
 	static public function isBool($bool)
 	{
-		return is_null($bool) OR is_bool($bool) OR preg_match('/^[0|1]{1}$/ui', $bool);
+		return is_null($bool) OR is_bool($bool) OR preg_match('/^0|1$/ui', $bool);
 	}
 
 	/**
@@ -712,7 +723,7 @@ class ValidateCore
 	*/
 	static public function isColor($color)
 	{
-		return preg_match('/^(#[0-9A-Fa-f]{6}|[[:alnum:]]*)$/ui', $color);
+		return preg_match('/^(#[0-9a-f]{6}|[[:alnum:]]*)$/ui', $color);
 	}
 
 	/**
@@ -723,7 +734,7 @@ class ValidateCore
 	*/
 	static public function isUrl($url)
 	{
-		return preg_match('/^([[:alnum:]]|[~:#%&_=\(\)\.\? \+\-@\/])+$/ui', $url);
+		return preg_match('/^[~:#%&_=\(\)\.\? \+\-@\/a-z0-9]+$/ui', $url);
 	}
 
 	/**
@@ -735,7 +746,7 @@ class ValidateCore
 	static public function isAbsoluteUrl($url)
 	{
 		if (!empty($url))
-			return preg_match('/^https?:\/\/([[:alnum:]]|[:#%&_=\(\)\.\? \+\-@\/])+$/ui', $url);
+			return preg_match('/^https?:\/\/[:#%&_=\(\)\.\? \+\-@\/a-z0-9]+$/ui', $url);
 		return true;
 	}
 
@@ -969,17 +980,6 @@ class ValidateCore
 	{
 		return ($data === 'amount' || $data === 'percentage');
 	}
-
-	/**
-	* Check for date format
-	*
-	* @param string $date Date to validate
-	* @return boolean Validity is ok or not
-	*/
-	static public function isDateFormat($date)
-	{
-		return (bool)preg_match('/^([0-9]{4})-((0?[0-9])|(1[0-2]))-((0?[1-9])|([0-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date, $matches);
-	}
 	
 	/**
 	* Check for bool_id
@@ -1044,7 +1044,7 @@ class ValidateCore
 	*/
 	static public function isLanguageFileName($file_name)
 	{
-		return (bool)(preg_match('/^[a-zA-Z]{2,3}[\.gzip]{5}$/s', $file_name));
+		return (bool)(preg_match('/^[a-zA-Z]{2,3}\.gzip$/s', $file_name));
 	}
 }
 
