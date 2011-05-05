@@ -40,3 +40,5 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_0d46d15f70a7cfa670545b308c022840'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Paga con GoogleCheckout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_ba794350deb07c0c96fe73bd12239059'] = 'Confezione';
 $_MODULE['<{gcheckout}prestashop>gcheckout_9f06b28a40790c4c4df5739bce3c1eb0'] = 'Costi di spedizione';
+
+?>

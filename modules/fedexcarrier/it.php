@@ -143,3 +143,5 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_71ffd676000b4ec8ea95f4096adc3d3
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_89a9eabc8fc9335d484dcb1eb7ef4ac5'] = 'Questa sezione ti permette di definire una configurazione specifica FEDEX per ogni prodotto (come il tipo di confezione e le spese supplementari).';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Errore';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5e303843029d99ced59415005037969d'] = 'Fedex Webservice sembra non funzionare, attendi qualche minuto e riprova';
+
+?>

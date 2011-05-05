@@ -11,3 +11,5 @@ $_MODULE['<{importerosc}prestashop>importerosc_a1831ea8716cc4375483dc42bf5fde96'
 $_MODULE['<{importerosc}prestashop>importerosc_375e6e17d4bd18a5163d3a7d13b80b4b'] = 'Seleziona una valuta di default';
 $_MODULE['<{importerosc}prestashop>importerosc_294f0969b5f80f1bae24a7183eb338d5'] = 'Imposta il tuo url negozio';
 $_MODULE['<{importerosc}prestashop>importerosc_86545d77ce5790e924190d9b5a7ac1b6'] = 'Gruppo di Commercio OS di default';
+
+?>

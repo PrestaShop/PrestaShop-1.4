@@ -2,13 +2,19 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogo';
+$_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtri abilitati:';
+$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
+$_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
+$_MODULE['<{blocklayered}prestashop>blocklayered_87ba2ecc8b6915e8bd6f5089918229fd'] = 'Intervallo';
+$_MODULE['<{blocklayered}prestashop>blocklayered_8524de963f07201e5c086830d370797f'] = 'Caricamento in corso ...';
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Blocco di navigazione a strati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Visualizza un blocco con i filtri di navigazione a strati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7ad3f384bcf30d783b5a6f6c810b4762'] = 'Il database di navigazione a strati è stato inizializzato con successo';
 $_MODULE['<{blocklayered}prestashop>blocklayered_fe016d3b990c2a9dd72ab6b45892f2ae'] = 'Configurazione salvata con successo';
 $_MODULE['<{blocklayered}prestashop>blocklayered_09da2b6f1217055bb22caa6ea08d9b80'] = 'Navigazione a strati';
-$_MODULE['<{blocklayered}prestashop>blocklayered_6b50913da72479e39aae61ec4739b09a'] = 'Questo modulo è in versione beta e sarà migliorato in PrestaShop v1.4.1';
-$_MODULE['<{blocklayered}prestashop>blocklayered_f6fc27f63284329ab1391e19ec7d873a'] = '10 miglioramenti imminenti in PrestaShop v1.4.1';
+$_MODULE['<{blocklayered}prestashop>blocklayered_382a0cf3c7ea26e9c7d0642d6d0ec07d'] = 'Questo modulo è in versione beta e sarà migliorato';
+$_MODULE['<{blocklayered}prestashop>blocklayered_016d6031144c99f759b36c5e00c79e91'] = '10 miglioramenti imminenti';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b77ae7b3f227f97fdbfbaee819c048d6'] = 'Aggiornamento in tempo reale della tabella cache';
 $_MODULE['<{blocklayered}prestashop>blocklayered_3cd881c5805a5564b080022968081652'] = 'Filtri aggiuntivi (prezzi, peso)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_f67587ba40eff59a15796352c9037ddf'] = 'Possibilità di gestire i filtri in base alla categoria nella configurazione del modulo';
@@ -22,12 +28,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_fb8082696a8d7a40fa62ea0e89b18c3
 $_MODULE['<{blocklayered}prestashop>blocklayered_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b17f3f4dcf653a5776792498a9b44d6a'] = 'Aggiorna le impostazioni';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7263de0a10ad25dfdadc44791c44fb1f'] = 'Inizializzazione cache';
-$_MODULE['<{blocklayered}prestashop>blocklayered_590af1487ee6c10871628c4e2a968f67'] = 'Quando si deve inizializzare la cache?';
-$_MODULE['<{blocklayered}prestashop>blocklayered_f3ac6d10ce5508b543141ae9bce6294c'] = 'Prima di usare questo modulo per la prima volta';
-$_MODULE['<{blocklayered}prestashop>blocklayered_c32735b7ba755d545ef36c5e5cd1f17e'] = 'È possibile aggiungere / aggiornare / eliminare';
-$_MODULE['<{blocklayered}prestashop>blocklayered_97e3d87f9cedf66eea7514ffe2f8d56c'] = 'una funzione o un valore funzione';
-$_MODULE['<{blocklayered}prestashop>blocklayered_7a5d52e91cda4e97b3776b23a9356918'] = 'un gruppo di attributi o un valore di attributo';
-$_MODULE['<{blocklayered}prestashop>blocklayered_5a1e99c9ae45729844784683d8c02379'] = 'Aggiorna uno o più valori di funzionalità di un prodotto';
+$_MODULE['<{blocklayered}prestashop>blocklayered_d15ce73cbadfe1e806ee7abd08a7fe4d'] = 'Prima di usare questo modulo per la prima volta si deve inizializzare la cache';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2875534393f5ef32e42d92c30e9dfda5'] = 'Attenzione: Questo potrebbe richiedere alcuni minuti.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_15aa842a19af51c2cf1ec631cdf8337a'] = 'Se non lo fai, questa tabella cache potrebbe diventare sempre più granda (meno efficiente), e tutte le nuove scelte (attributi, caratteristiche) non saranno offerte ai visitatori.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c64a069750ff8924b029b2206cabf3b2'] = 'Inizializzare il database di navigazione a strati';
@@ -40,8 +41,6 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_faeaec9eda6bc4c8cb6e1a9156a858b
 $_MODULE['<{blocklayered}prestashop>blocklayered_fcebe56087b9373f15514831184fa572'] = 'In magazzino';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d25c72c1b18e562f6654fff8e11711e'] = 'Non disponibile';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c0bd7654d5b278e65f21cf4e9153fdb4'] = 'Produttore';
-$_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogo';
-$_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtri abilitati:';
-$_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
-$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
-$_MODULE['<{blocklayered}prestashop>blocklayered_8524de963f07201e5c086830d370797f'] = 'Caricamento in corso ...';
+$_MODULE['<{blocklayered}prestashop>blocklayered_8c489d0946f66d17d73f26366a4bf620'] = 'Peso';
+
+?>

@@ -2,6 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Paga con Hipay';
+$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'importo minimo richiesto per pagare con Hipay:';
+$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(Sandbox / modalità di prova)';
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
 $_MODULE['<{hipay}prestashop>hipay_3a630598b9817a76dbb984ba467f6400'] = 'Pagamento sicuro Visa Mastercard e soluzioni europee.';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Errore: non è possibile creare PaymentParams';
@@ -19,12 +22,15 @@ $_MODULE['<{hipay}prestashop>hipay_527557971b02f68ead6a278fb96ac396'] = 'Control
 $_MODULE['<{hipay}prestashop>hipay_1c5f361b20c116ab2324e28b1ac54e12'] = 'Il tuo negozio non è online';
 $_MODULE['<{hipay}prestashop>hipay_66170e45eb6eb71c35fc3b259a866ff7'] = 'categorie Hipay non impostate per ogni ID del sito';
 $_MODULE['<{hipay}prestashop>hipay_1a1a01512e42b64541ed9b1f43a56036'] = 'Impossibile recuperare categorie Hipay. Consulta il log degli errori per ulteriori dettagli.';
-$_MODULE['<{hipay}prestashop>hipay_8f19eb452ad0295c45ca62a099f10dc6'] = 'Hipay è un portafoglio elettronico sicuro che fornisce ai commercianti un pacchetto di servizi completo per le transazioni commerciali on-line: sia per i contenuti digitali, software, musica, abbonamenti, beni fisici ... senza dover negoziare con una banca e senza oneri tecnici.';
-$_MODULE['<{hipay}prestashop>hipay_e5ac60a0713182096ea3f9590f101b25'] = 'Free & Easy, l\'attuazione Hipay è un bene reale per un sito di e-commerce che vuole espandersi in Europa: pagamenti sicuri con carte internazionali, soluzioni di pagamento locali, bonifici ...';
+$_MODULE['<{hipay}prestashop>hipay_74e0ddca931daefcd88f3c118e8eb0f1'] = 'Impossibile recuperare la categoria di Hipay. Consulta il registro degli Errori per ulteriori dettagli.rnHipay è un portafoglio elettronico sicuro che ha l\'approvazione della Banca Europea. Hipay offre molte opportunità, senza bisogno di negoziare con una banca. Facile e libero l\'utilizzo, la soluzione Hipay di attuazione è un bene reale per un sito di e-commerce che vuole espandersi in Europa: pagamento sicuro con carta internazionali, soluzioni di pagamento locali, bonifici ...';
 $_MODULE['<{hipay}prestashop>hipay_01ad06b7c5887516f56ff824278feb67'] = 'Avviso: se vuoi rimborsare un pagamento, accedi al tuo account Hipay poi vai a Merchant Management > Sales management.';
 $_MODULE['<{hipay}prestashop>hipay_254f642527b45bc260048e30704edb39'] = 'Configurazione';
+$_MODULE['<{hipay}prestashop>hipay_d86590564b22be4d3b242472722bf969'] = 'La configurazione di Hipay è molto semplice e viene eseguita in 3 passi';
 $_MODULE['<{hipay}prestashop>hipay_f21850b58e4866b30f7d3724cc29edb1'] = 'Accedi al tuo account commerciante';
 $_MODULE['<{hipay}prestashop>hipay_dc32882bf2b1893d53aeaaa862c46d5c'] = 'Crea un account hipay';
+$_MODULE['<{hipay}prestashop>hipay_04c85eb0ee32a3a352e80c9bce37b038'] = 'L\'attivazione di Hipay nel tuo Prestashop è gratuita!';
+$_MODULE['<{hipay}prestashop>hipay_b7ce0a1dce723a074049b88fb22dbb4d'] = 'Approfitta di prezzi convenienti per transazioni via Prestashop da';
+$_MODULE['<{hipay}prestashop>hipay_7667c2b31b9980267cb526ed2f0d235d'] = 'contattando il nostro ufficio commerciale';
 $_MODULE['<{hipay}prestashop>hipay_08bd40c7543007ad06e4fce31618f6ec'] = 'Account';
 $_MODULE['<{hipay}prestashop>hipay_9596f310ab4657258496ab217d3b5d85'] = 'reale / produzione';
 $_MODULE['<{hipay}prestashop>hipay_aeda5c9c68fbc42071d76a8d2b3d73e8'] = 'sandbox / test';
@@ -41,6 +47,5 @@ $_MODULE['<{hipay}prestashop>hipay_524fefef83fd5b0b82292a5366b40cd2'] = 'Per 16 
 $_MODULE['<{hipay}prestashop>hipay_4f47a2eb5f2af6c1419baa17794e5f03'] = 'Per 18 anni e oltre';
 $_MODULE['<{hipay}prestashop>hipay_0d10a9cae9827e30b09913c1ec6ef2db'] = 'Nota: verificare che la modalità di valuta che hai scelto nella scheda di pagamento sia compatibile con il tuo/i tuoi account Hipay.';
 $_MODULE['<{hipay}prestashop>hipay_c80a51a60c5ee43553c3881459b8f431'] = 'Aggiorna la configurazione';
-$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Paga con Hipay';
-$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'importo minimo richiesto per pagare con Hipay:';
-$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(Sandbox / modalità di prova)';
+
+?>

@@ -12,3 +12,5 @@ $_MODULE['<{vatnumber}prestashop>vatnumber_038b34b36ec9eaf5f96d11e17f208f1b'] = 
 $_MODULE['<{vatnumber}prestashop>vatnumber_ab73ac60f122e6493f53ba7699ae2139'] = 'Abilita il controllo della partita IVA con il WebService';
 $_MODULE['<{vatnumber}prestashop>vatnumber_0a57ec92318a15681fb878bc2931480c'] = 'La verifica da parte del webservice è lenta. L\'attivazione di questa opzione può rallentare il tuo negozio.';
 $_MODULE['<{vatnumber}prestashop>vatnumber_38fb7d24e0d60a048f540ecb18e13376'] = 'Salva';
+
+?>
