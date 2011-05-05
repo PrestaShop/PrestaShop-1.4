@@ -856,8 +856,9 @@ class TSBuyerProtection extends AbsTrustedShops
 	 */
 	public function _setEnvApi($env_api)
 	{
+		if (Configuration::get(TSBuyerProtection::PREFIX_TABLE.'ENV_API') != $env_api)
+			Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ENV_API', $env_api);
 		TSBuyerProtection::$ENV_API = $env_api;
-		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ENV_API', TSBuyerProtection::$ENV_API);
 	}
 
 	/**

@@ -57,7 +57,7 @@ class TrustedShops extends Module
 			TSBuyerProtection::setTranslationObject($this);
 			$obj_ts_rating = new TrustedShopsRating();
 			$obj_ts_buyerprotection = new TSBuyerProtection();
-			$obj_ts_buyerprotection->_setEnvApi('production');
+			$obj_ts_buyerprotection->_setEnvApi(TSBuyerProtection::ENV_PROD);
 			self::$objects_list = array($obj_ts_rating, $obj_ts_buyerprotection);
 			self::$objects_list[0]->setModuleName($this->name);
 			self::$objects_list[0]->setSmarty($smarty);
