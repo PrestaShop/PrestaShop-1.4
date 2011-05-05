@@ -172,6 +172,14 @@ class ProductComments extends Module
 			$productCommentCriterion = new ProductCommentCriterion((int)$id_criterion);
 			foreach ($languages AS $lang)
 				$productCommentCriterion->name[(int)$lang['id_lang']] = Tools::getValue('criterion_'.(int)$lang['id_lang']);
+				
+			// Check default language criterion name
+			$defaultLanguage = new Language((int)(Configuration::get('PS_LANG_DEFAULT')));
+			if (!Tools::getValue('criterion_'.$defaultLanguage->id))
+			{
+				$this->_html .= '<div class="error"><img src="../img/admin/error2.png" />'.$this->l('The field <b>Name</b> is required at least in').' '.$defaultLanguage->name.'</div>';
+				return;
+			}
 
 			$productCommentCriterion->id_product_comment_criterion_type = (int)Tools::getValue('criterion_type');
 			$productCommentCriterion->active = (int)Tools::getValue('criterion_active');
