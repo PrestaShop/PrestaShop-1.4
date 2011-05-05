@@ -39,7 +39,7 @@ class AdminTaxRulesGroup extends AdminTab
 		$this->fieldsDisplay = array(
 		'id_tax_rules_group' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 140),
-		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status'.$this->table, 'type' => 'bool', 'orderby' => false));
+		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
 
         parent::__construct();
 	}
