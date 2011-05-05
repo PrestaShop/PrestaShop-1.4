@@ -1317,7 +1317,7 @@ class CartCore extends ObjectModel
 			'total_price' => $this->getOrderTotal(),
 			'total_tax' => $total_tax,
 			'total_price_without_tax' => $this->getOrderTotal(false),
-			'free_ship' => (int)$total_free_ship);
+			'free_ship' => $total_free_ship);
 	}
 
 	/**
