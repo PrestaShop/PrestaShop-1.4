@@ -90,7 +90,7 @@ class DiscountCore extends ObjectModel
 	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_group' => 'isUnsignedId', 'id_discount_type' => 'isUnsignedId', 'id_currency' => 'isUnsignedId',
 		'name' => 'isDiscountName', 'value' => 'isPrice', 'quantity' => 'isUnsignedInt', 'quantity_per_user' => 'isUnsignedInt',
 		'cumulable' => 'isBool', 'cumulable_reduction' => 'isBool', 'date_from' => 'isDate',
-		'date_to' => 'isDate', 'minimal' => 'isFloat', 'active' => 'isBool');
+		'date_to' => 'isDate', 'minimal' => 'isUnsignedFloat', 'active' => 'isBool');
 	protected	$fieldsRequiredLang = array('description');
 	protected	$fieldsSizeLang = array('description' => 128);
 	protected	$fieldsValidateLang = array('description' => 'isVoucherDescription');
