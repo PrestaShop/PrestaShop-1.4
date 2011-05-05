@@ -94,7 +94,7 @@ abstract class PaymentModuleCore extends Module
 
 		$cart = new Cart((int)($id_cart));
 		// Does order already exists ?
-		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() === 0)
+		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() == false)
 		{
 			if ($secure_key !== false AND $secure_key != $cart->secure_key)
 				die(Tools::displayError());
@@ -137,7 +137,7 @@ abstract class PaymentModuleCore extends Module
 			if (number_format($order->total_paid, 2) != number_format($order->total_paid_real, 2))
 				$id_order_state = _PS_OS_ERROR_;
 			// Creating order
-			if ($cart->OrderExists() === 0)
+			if ($cart->OrderExists() == false)
 				$result = $order->add();
 			else
 			{
