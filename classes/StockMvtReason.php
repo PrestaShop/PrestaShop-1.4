@@ -45,6 +45,7 @@ class StockMvtReasonCore extends ObjectModel
 	
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'stock_movement_reasons',
+		'objectNodeName' => 'stock_movement_reason',
 	);
 	
 	public function getFields()
