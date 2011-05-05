@@ -48,7 +48,7 @@ class StockMvtCore extends ObjectModel
  													'quantity' => 'isInt', 'id_stock_mvt_reason' => 'isUnsignedId');
 	
 	protected	$webserviceParameters = array(
-		'objectNodeNames' => 'stock_movements',
+		'objectsNodeName' => 'stock_movements',
 	);
 	
 	
