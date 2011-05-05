@@ -745,24 +745,7 @@ abstract class AdminTabCore
 		/* Submit options list */
 		elseif (Tools::getValue('submitOptions'.$this->table))
 		{
-			if ($this->tabAccess['edit'] === '1')
-			{
-				foreach ($this->_fieldsOptions as $key => $field)
-				{
-					if ($field['type'] == 'textLang' OR $field['type'] == 'textareaLang')
-					{
-						$languages = Language::getLanguages(false);
-						$list = array();
-						foreach ($languages as $language)
-							$list[$language['id_lang']] = (isset($field['cast']) ? $field['cast'](Tools::getValue($key.'_'.$language['id_lang'])) : Tools::getValue($key.'_'.$language['id_lang']));
-						Configuration::updateValue($key, $list);
-					} else
-						Configuration::updateValue($key, (isset($field['cast']) ? $field['cast'](Tools::getValue($key)) : Tools::getValue($key)));
-				}
-				Tools::redirectAdmin($currentIndex.'&conf=6&token='.$token);
-			}
-			else
-				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+			$this->updateOptions($token);
 		}
 
 		/* Manage list filtering */
@@ -837,6 +820,55 @@ abstract class AdminTabCore
 			else
 				Tools::redirectAdmin($currentIndex.'&conf=4&token='.$token);
 		}
+	}
+
+	protected function updateOptions($token)
+	{
+		global $currentIndex, $cookie;
+
+		if ($this->tabAccess['edit'] === '1')
+		{
+			foreach ($this->_fieldsOptions as $key => $field)
+			{
+
+				if ($this->validateField(Tools::getValue($key), $field))
+				{
+					if ($field['type'] == 'textLang' OR $field['type'] == 'textareaLang')
+					{
+						$languages = Language::getLanguages(false);
+						$list = array();
+						foreach ($languages as $language)
+							$list[$language['id_lang']] = (isset($field['cast']) ? $field['cast'](Tools::getValue($key.'_'.$language['id_lang'])) : Tools::getValue($key.'_'.$language['id_lang']));
+						Configuration::updateValue($key, $list);
+					} 
+					else	
+						Configuration::updateValue($key, (isset($field['cast']) ? $field['cast'](Tools::getValue($key)) : Tools::getValue($key)));
+				}
+			}
+
+			if (count($this->_errors) <= 0)
+				Tools::redirectAdmin($currentIndex.'&conf=6&token='.$token);
+		}
+		else
+			$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+	}
+
+	protected function validateField($value, $field)
+	{
+		if (isset($field['validation']))
+		{
+			$validate = new Validate();
+			if (method_exists($validate, $field['validation']))
+			{
+				if (!Validate::$field['validation']($value))
+				{
+					$this->_errors[] = Tools::displayError($field['title'].' : Incorrect value');
+					return false;
+				}			
+			}	
+		}
+		
+		return true;
 	}
 
 	protected function uploadImage($id, $name, $dir, $ext = false)
