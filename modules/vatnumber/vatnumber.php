@@ -40,7 +40,7 @@ class VatNumber extends Module
 		parent::__construct();
 		
 		$this->displayName = $this->l('European VAT number');
-		$this->description = $this->l('Enable the management of VAT number.');
+		$this->description = $this->l('Enable to fill VAT intra-community number when creating address (You must fill in the company field to allowed keyboarding VAT number)');
 	}
    
 	public function	install()

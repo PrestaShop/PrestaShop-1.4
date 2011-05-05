@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{vatnumber}prestashop>vatnumber_cee549912e318726d2c4989bb507665f'] = 'Numéro de TVA Europeen';
-$_MODULE['<{vatnumber}prestashop>vatnumber_d881fd0a28cbb0d0e351207e6e4d91da'] = 'Activer la gestion du numéro de TVA';
+$_MODULE['<{vatnumber}prestashop>vatnumber_582cbc2fac0fdd7a6688a928333530da'] = 'Permet de renseigner son numéro de TVA intra-communautaire lors de la création d\'une adresse (Renseigner auparavant le champ \"société\" pour pouvoir saisir votre numéro de TVA)';
 $_MODULE['<{vatnumber}prestashop>vatnumber_162b29cf61678af2aaac37f440265c28'] = 'Votre pays a été mis à jour.';
 $_MODULE['<{vatnumber}prestashop>vatnumber_0ca51bcd22e4d7b56b6f1d8a01cefc1f'] = 'La vérification du numéro de TVA avec le WebService est maintenant activé.';
 $_MODULE['<{vatnumber}prestashop>vatnumber_467c214bb76759108ece49873eda44e4'] = 'La vérification du numéro de TVA avec le WebService est maintenant desactivé.';
