@@ -1575,7 +1575,6 @@ class ProductCore extends ObjectModel
 	*
 	* @param integer $id_product Product id
 	* @return array Categories where product is indexed
-	* @deprecated
 	*/
 	public static function getIndexedCategories($id_product)
 	{
