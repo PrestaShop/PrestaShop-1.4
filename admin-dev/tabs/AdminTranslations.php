@@ -726,10 +726,10 @@ class AdminTranslations extends AdminTab
 			echo '<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
 			<fieldset>
 				<legend onclick="$(\'#submitAddLangContent\').slideDown(\'slow\'); $(\'#submitImportContent\').slideUp(\'slow\');" style="cursor:pointer;">
-					<img src="../img/admin/import.gif" />'.$this->l('Add a language').'
+					<img src="../img/admin/import.gif" />'.$this->l('Add / Update a language').'
 				</legend>
-				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add a language directly from prestashop.com here').'</p>
-					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add:').' ';
+				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add or update a language directly from prestashop.com here').'</p>
+					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add or update:').' ';
 			
 			// create a context to test www.prestashop.com connection 
 			$opts = array(
@@ -760,7 +760,7 @@ class AdminTranslations extends AdminTab
 					}
 					echo '	</div>
 					<div style="float:left">
-						<input type="submit" value="'.$this->l('Add the language').'" name="submitAddLanguage" class="button" style="margin:0px 0px 0px 25px;" />
+						<input type="submit" value="'.$this->l('Add or update the language').'" name="submitAddLanguage" class="button" style="margin:0px 0px 0px 25px;" />
 					</div>';
 				}
 			}
