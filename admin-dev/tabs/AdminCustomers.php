@@ -54,8 +54,8 @@ class AdminCustomers extends AdminTab
 		'email' => array('title' => $this->l('E-mail address'), 'width' => 120, 'maxlength' => 19),
 		'age' => array('title' => $this->l('Age'), 'width' => 30, 'search' => false),
 		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
-		'newsletter' => array('title' => $this->l('News.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
-		'optin' => array('title' => $this->l('Opt.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif'), 'orderby' => false),
+		'newsletter' => array('title' => $this->l('News.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'callback' => 'printNewsIcon', 'orderby' => false),
+		'optin' => array('title' => $this->l('Opt.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'callback' => 'printOptinIcon', 'orderby' => false),
 		'date_add' => array('title' => $this->l('Registration'), 'width' => 30, 'type' => 'date', 'align' => 'right'),
 		'connect' => array('title' => $this->l('Connection'), 'width' => 60, 'type' => 'datetime', 'search' => false));
 
@@ -229,7 +229,29 @@ class AdminCustomers extends AdminTab
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+		}elseif (Tools::isSubmit('changeNewsletterVal') AND Tools::getValue('id_customer'))
+		{
+			$id_customer = (int)Tools::getValue('id_customer');
+			$customer = new Customer($id_customer);
+			if (!Validate::isLoadedObject($customer))
+				$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
+			$update = Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customer` SET newsletter = '.($customer->newsletter ? 0 : 1).' WHERE `id_customer` = '.(int)($customer->id));
+			if (!$update)
+				$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
+			Tools::redirectAdmin($currentIndex.'&token='.$this->token);	
+
+		}elseif (Tools::isSubmit('changeOptinVal') AND Tools::getValue('id_customer'))
+		{
+			$id_customer = (int)Tools::getValue('id_customer');
+			$customer = new Customer($id_customer);
+			if (!Validate::isLoadedObject($customer))
+				$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
+			$update = Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customer` SET optin = '.($customer->optin ? 0 : 1).' WHERE `id_customer` = '.(int)($customer->id));
+			if (!$update)
+				$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
+			Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 		}
+		
 		return parent::postProcess();
 	}
 

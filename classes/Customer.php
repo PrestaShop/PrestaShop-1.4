@@ -650,10 +650,31 @@ class CustomerCore extends ObjectModel
 		}
 		return false;
 	}
+	
 	public function addWs($autodate = true, $nullValues = false)
 	{
 		$this->passwd = Tools::encrypt($this->passwd);
 		return $this->add($autodate, $nullValues);
+	}
+	
+	static public function printNewsIcon($id_customer, $tr)
+	{
+		$customer = new Customer($tr['id_customer']);
+		if (!Validate::isLoadedObject($customer))
+			die(Tools::displayError('Invalid objects'));
+		echo '<a href="index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&changeNewsletterVal&token='.Tools::getAdminTokenLite('AdminCustomers').'">'.
+				($customer->newsletter ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').
+			'</a>';
+	}
+	
+	static public function printOptinIcon($id_customer, $tr)
+	{
+		$customer = new Customer($tr['id_customer']);
+		if (!Validate::isLoadedObject($customer))
+			die(Tools::displayError('Invalid objects'));
+		echo '<a href="index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&changeOptinVal&token='.Tools::getAdminTokenLite('AdminCustomers').'">'.
+				($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').
+			'</a>';
 	}
 }
 
