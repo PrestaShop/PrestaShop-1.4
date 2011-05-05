@@ -44,7 +44,7 @@ class StockMvtReasonCore extends ObjectModel
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
 	
 	protected	$webserviceParameters = array(
-		'objectNodeNames' => 'stock_movement_reasons',
+		'objectsNodeName' => 'stock_movement_reasons',
 	);
 	
 	public function getFields()
