@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>ogone</name>
-	<displayName>Ogone</displayName>
-	<version>2.0</version>
-	<description></description>
-	<author></author>
-	<tab>payments_gateways</tab>
+	<displayName><![CDATA[Ogone]]></displayName>
+	<version><![CDATA[2.0]]></version>
+	<description><![CDATA[]]></description>
+	<author><![CDATA[]]></author>
+	<tab><![CDATA[payments_gateways]]></tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>0</need_instance>
 	<limited_countries></limited_countries>
