@@ -216,6 +216,7 @@ class AdminCategories extends AdminTab
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
+			return;
 		}
 		parent::postProcess();
 	}
