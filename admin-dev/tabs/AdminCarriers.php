@@ -58,6 +58,26 @@ class AdminCarriers extends AdminTab
 		parent::__construct();
 	}
 
+	public function displayTop()
+	{
+		echo 
+		'<div class="hint clear" style="display:block;">'.
+			'<b>'.$this->l('How to create a new carrier?').'</b>'.
+			'<br />'.
+			'<ul>'.'
+				<li>'.$this->l('Click "Add new".').'<br />'.'</li>
+				<li>'.$this->l('Fill in the fields and click "Save".').'</li>
+				<li>'.$this->l('You need to decide the price range or the weight range for which the new carrier will be available. Under the "Shipping" tab, click either "Price Ranges" or "Weight Ranges".').'</li>
+				<li>'.$this->l('Click "Add new".').'</li>
+				<li>'.$this->l('Select the name of the carrier and define the price range or the weight range, then click "Save".').'</li>
+				<li>'.$this->l('Click on the "Shipping" tab.').'</li>
+				<li>'.$this->l('You need to choose the fees that will be applied for this carrier. At the bottom on the page, in the "Fees" section, select the name of the carrier.').'</li>
+				<li>'.$this->l('For each zone, enter a price. Click "Save".').'</li>
+				<li>'.$this->l('You\'re set! The new carrier will be displayed to your customers.').'</li>
+			</ul>
+		</div><br />';
+	}
+	
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
