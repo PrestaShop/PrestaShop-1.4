@@ -145,7 +145,12 @@ class CartControllerCore extends FrontController
 						$discounts = self::$cart->getDiscounts();
 						foreach($discounts as $discount)
 							if (!$discount['cumulable_reduction'])
-								$this->errors[] = Tools::displayError('Cannot add this product because current voucher does not allow additional discounts.');
+								if (Tools::getValue('ajax') == 'true')
+									die('{"hasError" : true, "errors" : ["'.Tools::displayError('Cannot add this product because current voucher does not allow additional discounts.').'"]}');
+								else
+									$this->errors[] = Tools::displayError('Cannot add this product because current voucher does not allow additional discounts.');
+							
+						
 					}
 					if (!sizeof($this->errors))
 					{
