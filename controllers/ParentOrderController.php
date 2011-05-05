@@ -326,16 +326,9 @@ class ParentOrderControllerCore extends FrontController
 		$address = new Address((int)(self::$cart->id_address_delivery));
 		$id_zone = Address::getZoneById((int)($address->id));
 		$carriers = Carrier::getCarriersForOrder($id_zone, $customer->getGroups());
-		
-		$checked = 0;
-		if (Validate::isUnsignedInt(self::$cart->id_carrier) AND self::$cart->id_carrier)
-		{
-			$carrier = new Carrier((int)(self::$cart->id_carrier));
-			if ($carrier->active AND !$carrier->deleted)
-				$checked = (int)(self::$cart->id_carrier);
-		}
+
 		self::$smarty->assign(array(
-			'checked' => (int)($checked),
+			'checked' => $this->_setDefaultCarrierSelection($carriers),
 			'carriers' => $carriers,
 			'default_carrier' => (int)(Configuration::get('PS_CARRIER_DEFAULT')),
 			'HOOK_EXTRACARRIER' => Module::hookExec('extraCarrier', array('address' => $address)),
@@ -388,4 +381,37 @@ class ParentOrderControllerCore extends FrontController
 		self::$cart->id_carrier = 0;
 		self::$cart->update();
 	}
+	
+	/**
+	 * Decides what the default carrier is and update the cart with it
+	 *
+	 * @param array $carriers
+	 * @return number the id of the default carrier
+	 */
+	protected function _setDefaultCarrierSelection(Array $carriers)
+	{
+		if (sizeof($carriers))
+		{
+			$defaultCarrierIsPresent = false;
+			if ((int)self::$cart->id_carrier != 0)
+				foreach ($carriers AS $carrier)
+					if ($carrier['id_carrier'] == (int)self::$cart->id_carrier)
+						$defaultCarrierIsPresent = true;
+			if (!$defaultCarrierIsPresent)
+				foreach ($carriers AS $carrier)
+					if ($carrier['id_carrier'] == (int)Configuration::get('PS_CARRIER_DEFAULT'))
+					{
+						$defaultCarrierIsPresent = true;
+						self::$cart->id_carrier = (int)$carrier['id_carrier'];
+					}
+			if (!$defaultCarrierIsPresent)
+				self::$cart->id_carrier = (int)$carriers[0]['id_carrier'];
+		}
+		else
+			self::$cart->id_carrier = 0;
+		if (self::$cart->update())
+			return self::$cart->id_carrier;
+		return 0;
+	}
+	
 }

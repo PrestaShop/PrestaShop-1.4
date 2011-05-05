@@ -420,35 +420,6 @@ class OrderOpcControllerCore extends ParentOrderController
 				'errors' => $this->errors
 			);
 	}
-	
-	protected function _setDefaultCarrierSelection($carriers)
-	{
-		if (sizeof($carriers))
-		{
-			$defaultCarrierIsPresent = false;
-			if (self::$cart->id_carrier != 0)
-				foreach ($carriers AS $carrier)
-					if ($carrier['id_carrier'] == self::$cart->id_carrier)
-					{
-						$defaultCarrierIsPresent = true;
-						self::$cart->id_carrier = $carrier['id_carrier'];
-					}
-			if (!$defaultCarrierIsPresent)
-				foreach ($carriers AS $carrier)
-					if ($carrier['id_carrier'] == Configuration::get('PS_CARRIER_DEFAULT'))
-					{
-						$defaultCarrierIsPresent = true;
-						self::$cart->id_carrier = $carrier['id_carrier'];
-					}
-			if (!$defaultCarrierIsPresent)
-				self::$cart->id_carrier = $carriers[0]['id_carrier'];
-		}
-		else
-			self::$cart->id_carrier = 0;
-		if (self::$cart->update())
-			return self::$cart->id_carrier;
-		return 0;
-	}
 
 	protected function _processAddressFormat()
 	{
