@@ -61,7 +61,7 @@ class AdminCustomers extends AdminTab
 
 		$this->optionTitle = $this->l('Customers options');
 		$this->_fieldsOptions = array(
-			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Regenerate password:'), 'desc' => $this->l('Security minimum time to wait to regenerate the password'), 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
+			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Regenerate password:'), 'desc' => $this->l('Security minimum time to wait to regenerate the password'),'validation' => 'isUnsignedInt', 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
 		);
 
 		parent::__construct();
