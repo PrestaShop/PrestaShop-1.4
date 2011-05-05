@@ -1084,9 +1084,7 @@ class WebserviceRequestCore
 			elseif ($matches[1] == '' && $matches[3] == '')
 			{
 				// "OR" case
-				preg_match('/^([^\|]+)(\|([^\|]+))+$/', $matches[2], $matches2);
-				preg_match('/^(.+)$/', $matches[2], $matches4);
-				if (count($matches2) > 0 || count($matches4) > 1)
+				if (strpos($matches[2], '|') > 0)
 				{
 					$values = explode('|', $matches[2]);
 					$ret .= ' AND (';
@@ -1095,13 +1093,13 @@ class WebserviceRequestCore
 						$temp .= $tableAlias.'`'.pSQL($sqlId).'` = "'.pSQL($value).'" OR ';// AND (field = value3 OR field = value7 OR field = value9)
 					$ret .= rtrim($temp, 'OR ').')'."\n";
 				}
-				else // "AND" case
+				elseif (preg_match('/^([\d\.]+),([\d\.]+)$/', $matches[2], $matches3))// "AND" case
 				{
-					preg_match('/^(\d+),(\d+)$/', $matches[2], $matches3);
+					unset($matches3[0]);
 					if (count($matches3) > 0)
 					{
-						$values = explode(',', $matches[2]);
-						$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` BETWEEN "'.$values[0].'" AND "'.$values[1]."\"\n";// AND field BETWEEN value3 AND value4
+						sort($matches3);
+						$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` BETWEEN "'.$matches3[0].'" AND "'.$matches3[1]."\"\n";// AND field BETWEEN value3 AND value4
 					}
 				}
 			}
