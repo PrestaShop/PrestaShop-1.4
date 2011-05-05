@@ -49,6 +49,7 @@ class StockMvtCore extends ObjectModel
 	
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'stock_movements',
+		'objectNodeName' => 'stock_movement',
 	);
 	
 	
