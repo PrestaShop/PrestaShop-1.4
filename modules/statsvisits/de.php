@@ -9,7 +9,7 @@ $_MODULE['<{statsvisits}prestashop>statsvisits_9cc2d19df71705e62e5ae8ec152ef78f'
 $_MODULE['<{statsvisits}prestashop>statsvisits_54067074d24489ddb5654bf46642cb85'] = 'Besuche gesamt:';
 $_MODULE['<{statsvisits}prestashop>statsvisits_23e640d55e56db79971918936e95bf9d'] = 'Besucher gesamt:';
 $_MODULE['<{statsvisits}prestashop>statsvisits_998e4c5c80f27dec552e99dfed34889a'] = 'CSV-Export';
-$_MODULE['<{statsvisits}prestashop>statsvisits_6602bbeb2956c035fb4cb5e844a4861b'] = 'Erklärung';
+$_MODULE['<{statsvisits}prestashop>statsvisits_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guide';
 $_MODULE['<{statsvisits}prestashop>statsvisits_ffbee337f031c2282b311bac40bc8bb9'] = 'Bestimmen Sie das Ziel eines Besuchs';
 $_MODULE['<{statsvisits}prestashop>statsvisits_e90d50ca1e68dc66c97bd62929dcbaf1'] = 'Die Besucherentwicklungsgrafik sieht der Besuchsgrafik sehr ähnlich, liefert aber zusätzliche Informationen: ';
 $_MODULE['<{statsvisits}prestashop>statsvisits_cb3ba5c56a0115bd92d888c89e759745'] = 'Falls dies der Fall ist: Gratulation, Ihre Webseite ist gut durchdacht und gefällt.';

@@ -1,0 +1,16 @@
+<?php
+
+global $_MODULE;
+$_MODULE = array();
+$_MODULE['<{carriercompare}prestashop>carriercompare_e7a6ca4e744870d455a57b644f696457'] = 'Gratis!';
+$_MODULE['<{carriercompare}prestashop>carriercompare_fbc1bef527a3a092053a244fd8d87abf'] = 'Versand und Steuern kalkulieren';
+$_MODULE['<{carriercompare}prestashop>carriercompare_e0ed8e71dbd22a1e91cb570b52443fd5'] = 'PLZ';
+$_MODULE['<{carriercompare}prestashop>carriercompare_914419aa32f04011357d3b604a86d7eb'] = 'Versender';
+$_MODULE['<{carriercompare}prestashop>carriercompare_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Information';
+$_MODULE['<{carriercompare}prestashop>carriercompare_3601146c4e948c32b6424d2c0a7f0118'] = 'Preis';
+$_MODULE['<{carriercompare}prestashop>carriercompare_f620c0ed0c89129c9dd8953406300061'] = 'Kein Versender für diese Region ausgewählt';
+$_MODULE['<{carriercompare}prestashop>carriercompare_c6b61ece4cb72c71e84d91a4d22aa449'] = 'Versandoptionen aktualisieren';
+$_MODULE['<{carriercompare}prestashop>carriercompare_115484428c82f859100c07ae1170d9e0'] = 'Versandkalkulation';
+$_MODULE['<{carriercompare}prestashop>carriercompare_edc5cf1b3bab64b1d45ef51c63b53887'] = 'Warenkorb kann nicht aktualisiert werden';
+
+?>
