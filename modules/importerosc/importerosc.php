@@ -123,7 +123,7 @@ class importerosc extends ImportModule
 		$defaultIdLang = $this->getDefaultIdLang();
 		$countries = $this->ExecuteS('
 										SELECT countries_id as id_country, countries_name as name, countries_iso_code_2 as iso_code, '.$defaultIdLang.' as id_lang,
-										1 as id_zone, 0 as id_currency, 1 as contains_states, 1 as need_identification_number, 1 as active
+										1 as id_zone, 0 as id_currency, 1 as contains_states, 1 as need_identification_number, 1 as active, 1 as display_tax_label
 										FROM  `'.addslashes($this->prefix).'countries` as c  LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 		return $this->autoFormat($countries, $identifier, $keyLanguage, $multiLangFields);		
 	}
@@ -383,20 +383,46 @@ class importerosc extends ImportModule
 	          WHERE `active` = 1 AND `email` = \''.pSQL($email).'\'');
 		if ($result && !empty($result['passwd_'.$this->name]))
 	    {	
+			if($this->checkPwd($passwd, $result['passwd_'.pSQL($this->name)]))
+		 	{
+				$ps_passwd =  md5(pSQL(_COOKIE_KEY_.$passwd));
+				Db::getInstance()->Execute('
+				UPDATE `'._DB_PREFIX_.'customer`
+				SET `passwd` = \''.pSQL($ps_passwd).'\', passwd_'.pSQL($this->name).' = \'\'
+				WHERE `'._DB_PREFIX_.'customer`.`id_customer` ='.(int)$result['id_customer'].' LIMIT 1');
+			}
+		}
+		
+	}
+	
+	private function checkPwd($passwd, $encrypt_pwd)
+	{
+		//checks the type of encryption password
+		if (preg_match('/^[A-Z0-9]{32}\:[A-Z0-9]{2}$/i', $encrypt_pwd) === 1)
+		{
+			//salt
+			$stack = explode(':', $encrypt_pwd);
+      		if (sizeof($stack) != 2)
+      			return false;
+      			
+      		if (md5($stack[1] . $passwd) == $stack[0])
+       			return true;
+       		else
+       			return false;
+		}
+		else
+		{
+			//phpass
 			if (file_exists(dirname(__FILE__).'/passwordhash.php'))
 			{
 				include(dirname(__FILE__).'/passwordhash.php');
 				$hasher = new PasswordHash(10, true);
-			 	if($hasher->CheckPassword($passwd, $result['passwd_'.pSQL($this->name)]))
-			 	{
-					$ps_passwd =  md5(pSQL(_COOKIE_KEY_.$passwd));
-					Db::getInstance()->Execute('
-					UPDATE `'._DB_PREFIX_.'customer`
-					SET `passwd` = \''.pSQL($ps_passwd).'\', passwd_'.pSQL($this->name).' = \'\'
-					WHERE `'._DB_PREFIX_.'customer`.`id_customer` ='.(int)$result['id_customer'].' LIMIT 1');
-				}
+				return $hasher->CheckPassword($passwd, $encrypt_pwd);
 			}
+			else
+				return false;
 		}
+		
 	}
 
 }
