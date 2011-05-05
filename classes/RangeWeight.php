@@ -32,7 +32,7 @@ class RangeWeightCore extends ObjectModel
 	public 		$delimiter2;
 	
  	protected 	$fieldsRequired = array('id_carrier', 'delimiter1', 'delimiter2');
- 	protected 	$fieldsValidate = array('id_carrier' => 'isInt', 'delimiter1' => 'isFloat', 'delimiter2' => 'isFloat');
+ 	protected 	$fieldsValidate = array('id_carrier' => 'isInt', 'delimiter1' => 'isUnsignedFloat', 'delimiter2' => 'isUnsignedFloat');
 
 	protected 	$table = 'range_weight';
 	protected 	$identifier = 'id_range_weight';
