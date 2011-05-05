@@ -102,6 +102,10 @@ class GridHtml extends ModuleGridEngine
 							var newLine = "<tr>";';
 			foreach ($params['columns'] as $column)
 				$html .= '	newLine += "<td'.(isset($column['align']) ? ' style=\"text-align:'.$column['align'].'\"' : '').'>" + row["'.$column['dataIndex'].'"] + "</td>";';
+			if (!isset($params['defaultSortColumn']))
+				$params['defaultSortColumn'] = false;
+			if (!isset($params['defaultSortDirection']))
+				$params['defaultSortDirection'] = false;
 			$html .= '		$("#grid_1 tbody").append(newLine);
 						});
 					else

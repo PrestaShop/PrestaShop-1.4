@@ -144,7 +144,12 @@ class StatsRegistrations extends ModuleGraph
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query.$this->getDate());
 		foreach ($result AS $row)
-		    $this->_values[(int)(substr($row['date_add'], 5, 2))]++;
+		{
+			$mounth = (int)substr($row['date_add'], 5, 2);
+			if (!isset($this->_values[$mounth]))
+				$this->_values[$mounth] = 0;
+			$this->_values[$mounth]++;
+		}
 	}
 	
 	protected function setMonthValues($layers)

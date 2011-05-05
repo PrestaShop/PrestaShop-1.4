@@ -167,14 +167,21 @@ abstract class ModuleGraphCore extends Module
 			$this->setOption($datas['option'], $layers);
 		$this->getData($layers);
 		
+		// Generate first line (column titles)
 		if (is_array($this->_titles['main']))
-			for ($i = 1; $i <= sizeof($this->_titles['main']); $i++)
-				$this->_csv .= ';'.$this->_titles['main'][$i];
-		else
+			for ($i = 0; $i <= sizeof($this->_titles['main']); $i++)
+			{
+				if($i > 0)
+					$this->_csv .= ';';
+				if (isset($this->_titles['main'][$i]))
+					$this->_csv .= $this->_titles['main'][$i];
+			}
+		else // If there is only one column title, there is in fast two column (the first without title)
 			$this->_csv .= ';'.$this->_titles['main'];
 		$this->_csv .= "\n";
 		if (sizeof($this->_legend))
 		{
+			$total = 0;
 			if ($datas['type'] == 'pie')
 				foreach ($this->_legend AS $key => $legend)
 					for ($i = 0; $i < (is_array($this->_titles['main']) ? sizeof($this->_values) : 1); ++$i)
@@ -183,7 +190,16 @@ abstract class ModuleGraphCore extends Module
 			{
 				$this->_csv .= $legend.';';		
 				for ($i = 0; $i < (is_array($this->_titles['main']) ? sizeof($this->_values) : 1); ++$i)
-					$this->_csv .= (is_array($this->_values[$i])  ? $this->_values[$i][$key] : $this->_values[$key]) / (($datas['type'] == 'pie') ? $total : 1).';';
+				{
+					if (!isset($this->_values[$i]) || !is_array($this->_values[$i]))
+						if (isset($this->_values[$key]))
+							$this->_csv .= $this->_values[$key] / (($datas['type'] == 'pie') ? $total : 1);
+						else
+							$this->_csv .= '0';
+					else
+						$this->_csv .= $this->_values[$i][$key] / (($datas['type'] == 'pie') ? $total : 1);
+					$this->_csv .= ';';
+				}
 				$this->_csv .= "\n";
 			}
 		}

@@ -279,7 +279,11 @@ class StatsProduct extends ModuleGraph
 	
 	public function setOption($option, $layers = 1)
 	{
-		list($this->_option, $this->_id_product) = explode('-', $option);
+		$options = explode('-', $option);
+		if (count($options) === 2)
+			list($this->_option, $this->_id_product) = $options;
+		else
+			$this->_option = $option;
 		$dateBetween = $this->getDate();
 		switch ($this->_option)
 		{
@@ -319,10 +323,10 @@ class StatsProduct extends ModuleGraph
 				$this->_titles['main'] = $this->l('Attributes');
 				break;
 				
-				case 42:
-					$this->_titles['main'][1] = $this->l('Ref.');
-					$this->_titles['main'][2] = $this->l('Name');
-					$this->_titles['main'][3] = $this->l('Stock');
+			case 42:
+				$this->_titles['main'][1] = $this->l('Ref.');
+				$this->_titles['main'][2] = $this->l('Name');
+				$this->_titles['main'][3] = $this->l('Stock');
 				break;
 		}
 	}
