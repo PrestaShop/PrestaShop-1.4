@@ -2,11 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_2f84f9d5731852c4d07d52ef0badc42e'] = 'Problema per ottenere gli indirizzi da MondialRelay Webservice: i server di Mondial Relay potrebbero essere inattivi';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_016854c68c7122b18d89ff0f5e40502b'] = 'Il Relay Point non è vicino al tuo indirizzo, per favore cambia il tuo indirizzo o utilizza un altro corriere';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = '(Tasse escl.)';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = '(Tasse incl.)';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Gratis!';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_44585fcd617dce6416d8283b026714c1'] = 'Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ed4a3b96dc1f38c160775cac1f7bcd6d'] = 'Consegna nei punti Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_70d70ce314f545b7c500a086f147f64b'] = 'Negozio non valido';
@@ -125,6 +120,9 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_621895c388c9bb22abbbc69fad00184
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_6c530987d533793b0f25fb18807b69cd'] = 'Per generare le etichette, è necessario avere registrato un indirizzo corretto del tuo negozio';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_3d2da0d2e731d59465a92f13216cf82d'] = 'La pagina contatti';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_06b3355cd8a61603396c7e453bdb1025'] = 'Svuotare indirizzo: Sei sicuro di aver impostato un indirizzo valido nella pagina di contatto?';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_2f84f9d5731852c4d07d52ef0badc42e'] = 'Problema per ottenere gli indirizzi da MondialRelay Webservice: i server di Mondial Relay potrebbero essere inattivi';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_016854c68c7122b18d89ff0f5e40502b'] = 'Il Relay Point non è vicino al tuo indirizzo, per favore cambia il tuo indirizzo o utilizza un altro corriere';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_21034ae6d01a83e702839a72ba8a77b0'] = '(Tasse escl.)';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d9'] = '(Tasse incl.)';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Gratis!';
 $_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Consegna a';
-
-?>

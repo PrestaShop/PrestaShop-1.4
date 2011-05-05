@@ -11,7 +11,6 @@ $_MODULE['<{moneybookers}prestashop>confirmation_df194447dfecf36bb8043bd8d94feed
 $_MODULE['<{moneybookers}prestashop>confirmation_047e219d25b398033511b18041dbfd7a'] = 'Il tuo ordine verrà spedito non appena avremo ricevuto il bonifico bancario.';
 $_MODULE['<{moneybookers}prestashop>confirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Abbiamo notato un problema con il tuo ordine. Se pensi che sia un errore, contatta la nostra';
 $_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'Non puoi pagare con Moneybookers con la valuta attuale, scegli un\'altra valuta';
-$_MODULE['<{moneybookers}prestashop>moneybookers_27266fe4d37bf06589c7c6dbf2d5c067'] = 'Paga con';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28c'] = 'Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a356736cbcf740f8648d71067fca090d'] = 'Si accettano pagamenti con Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999d'] = 'Sei sicuro di voler cancellare i tuoi dati?';
@@ -59,5 +58,4 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_554fd8768f165251646ce21ba499820
 $_MODULE['<{moneybookers}prestashop>moneybookers_a190bc880b04cf478e0370d1b315a5a3'] = 'Tutti i loghi in 1 blocco';
 $_MODULE['<{moneybookers}prestashop>moneybookers_852d04b5f455aaf5264e9a8c561ced71'] = '1 blocco per ogni logo';
 $_MODULE['<{moneybookers}prestashop>moneybookers_d4dccb8ca2dac4e53c01bd9954755332'] = 'Salva impostazioni';
-
-?>
+$_MODULE['<{moneybookers}prestashop>moneybookers_27266fe4d37bf06589c7c6dbf2d5c067'] = 'Paga con';

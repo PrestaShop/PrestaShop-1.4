@@ -120,5 +120,3 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_902b0d55fddef6f8d651fe1035b7d4bd'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ad20d10621babf619967b16f690a05f2'] = 'USPS Webservice sembra essere fuori uso, si prega di attendere qualche minuto e riprovare';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_a4692f93340d1d8c0c01e94baa56b8b9'] = 'Webservice USPS scaduto.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ef87d840de42d54364089d1d45f8d08c'] = 'Impossibile connettersi a USPS.com';
-
-?>
