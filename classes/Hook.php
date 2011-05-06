@@ -37,6 +37,8 @@ class HookCore extends ObjectModel
 	protected 	$table = 'hook';
 	protected 	$identifier = 'id_hook';
 	
+	static $preloadModulesFromHooks = array();
+	
 	public function getFields()
 	{
 		parent::validateFields();		
@@ -73,11 +75,46 @@ class HookCore extends ObjectModel
 	
 	static public function getModulesFromHook($id_hook)
 	{
+		if(isset(self::$preloadModulesFromHooks)) 
+			if(isset(self::$preloadModulesFromHooks[$id_hook]))
+				return self::$preloadModulesFromHooks[$id_hook]['data'];
+			else
+				return array();
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'module` m
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
 		WHERE hm.id_hook = '.(int)($id_hook));
+	}
+	
+	static public function preloadModulesFromHooks($position = false)
+	{
+		$results = Db::getInstance()->executeS('
+		SELECT h.id_hook, h.name as h_name, title, description, h.position, live_edit, hm.position as hm_position, m.id_module, m.name, active
+		FROM `'._DB_PREFIX_.'hook` h
+		INNER JOIN hook_module hm ON (h.id_hook = hm.id_hook)
+		INNER JOIN module as m    ON (m.id_module = hm.id_module)
+		'.($position ? 'WHERE h.`position` = 1' : ''));
+		
+		foreach($results as $result)
+		{
+			if(!isset(self::$preloadModulesFromHooks[$result['id_hook']]))
+				self::$preloadModulesFromHooks[$result['id_hook']] = array('data' => array(), 'module_position' => array());
+			
+			self::$preloadModulesFromHooks[$result['id_hook']]['data'][] = array(
+				'id_hook' => $result['id_hook'],
+				'title' => $result['title'],
+				'description' => $result['description'],
+				'hm.position' => $result['position'],
+				'live_edit' => $result['live_edit'],
+				'm.position' => $result['hm_position'],
+				'id_module' => $result['id_module'],
+				'name' => $result['name'],
+				'active' => $result['active'],
+			);
+			
+			self::$preloadModulesFromHooks[$result['id_hook']]['module_position'][$result['id_module']] = $result['hm_position'];
+		}
 	}
 	
 	static public function getModuleFromHook($id_hook, $id_module)

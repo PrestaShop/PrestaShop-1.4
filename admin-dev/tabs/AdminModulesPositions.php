@@ -218,9 +218,17 @@ class AdminModulesPositions extends AdminTab
 				<option>---------------</option>';
 				$modules = Module::getModulesInstalled();
 
+				$moduleIdList = array();
 				foreach ($modules AS $module)
+				{
+					$moduleIdList[] = (int)$module['id_module'];
+				}
+				Module::preloadModuleNameFromId($moduleIdList);
+				foreach ($modules AS $module) {
+					Module::getInstanceById((int)($module['id_module']));
 					if ($tmpInstance = Module::getInstanceById((int)($module['id_module'])))
 						$cm[$tmpInstance->displayName] = $tmpInstance;
+				}
 				ksort($cm);
 				foreach ($cm AS $module)
 					echo '
@@ -241,7 +249,9 @@ class AdminModulesPositions extends AdminTab
 		echo '<form method="post" action="'.$currentIndex.'&token='.$this->token.'">';
 		$irow = 0;
 		$hooks = Hook::getHooks(!(int)(Tools::getValue('hook_position')));
+
 		echo '<div id="unhook_button_position_top"><input class="button floatr" type="submit" name="unhookform" value="'.$this->l('Unhook the selection').'"/></div>';
+		Hook::preloadModulesFromHooks();
 		foreach ($hooks AS $hook)
 		{
 			$modules = array();
@@ -261,13 +271,18 @@ class AdminModulesPositions extends AdminTab
 			echo ' <sub style="color:grey;"><i>('.$this->l('Technical name: ').$hook['name'].')</i></sub></th></tr>';
 
 			// Print modules list
-		
 			if ($nbModules)
 			{
 				$instances = array();
 				foreach ($modules AS $module)
+				{
+					$moduleIdList[] = (int)$module['id_module'];
+				}
+				Module::preloadModuleNameFromId($moduleIdList);
+				foreach ($modules AS $module) {
 					if ($tmpInstance = Module::getInstanceById((int)($module['id_module'])))
 						$instances[$tmpInstance->getPosition($hook['id_hook'])] = $tmpInstance;
+				}
 				ksort($instances);
 				foreach ($instances AS $position => $instance)
 				{

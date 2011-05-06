@@ -424,6 +424,54 @@ abstract class ModuleCore
 	}
 
 	/**
+	  * Load modules Ids from Ids
+	  *
+	  * @param array|int $ids Modules ID
+	  * @return Array of module name
+	  */
+	static public function preloadModuleNameFromId($ids)
+	{
+		static $preloadedModuleNameFromId;
+		if(!isset($preloadedModuleNameFromId)) {
+			$preloadedModuleNameFromId = array();
+		}
+		static $a = array();
+		
+		if(is_array($ids))
+		{
+			foreach($ids as $id)
+				$preloadedModuleNameFromId[$id] = false;
+
+			$results = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
+			SELECT `name`,`id_module`
+			FROM `'._DB_PREFIX_.'module`
+			WHERE `id_module` IN ('.join(',',$ids) .');');
+			foreach($results as $result)
+				$preloadedModuleNameFromId[$result['id_module']] = $result['name'];
+		}
+		elseif(!isset($preloadedModuleNameFromId[$ids]))
+		{
+			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			SELECT `name`
+			FROM `'._DB_PREFIX_.'module`
+			WHERE `id_module` = '.(int)($ids));
+			if($result)
+				$preloadedModuleNameFromId[$ids] = $result['name'];
+			else
+				$preloadedModuleNameFromId[$ids] = false;
+		}
+		
+
+		if(is_array($ids)) {
+			return $preloadedModuleNameFromId;
+		} else {
+			if(!isset($preloadedModuleNameFromId[$ids])) 
+				return false;
+			return $preloadedModuleNameFromId[$ids];
+		}
+	}
+
+	/**
 	  * Return an instance of the specified module
 	  *
 	  * @param integer $id_module Module ID
@@ -431,11 +479,8 @@ abstract class ModuleCore
 	  */
 	static public function getInstanceById($id_module)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `name`
-		FROM `'._DB_PREFIX_.'module`
-		WHERE `id_module` = '.(int)($id_module));
-		return ($result ? Module::getInstanceByName($result['name']) : false);
+		$moduleName = Module::preloadModuleNameFromId($id_module);
+		return ($moduleName ? Module::getInstanceByName($moduleName) : false);
 	}
 
 	/**
@@ -855,6 +900,12 @@ abstract class ModuleCore
 	 */
 	public function getPosition($id_hook)
 	{
+		if(isset(Hook::$preloadModulesFromHooks)) 
+			if(isset(Hook::$preloadModulesFromHooks[$id_hook]))
+				if(isset(Hook::$preloadModulesFromHooks[$id_hook]['module_position'][$this->id]))
+					return Hook::$preloadModulesFromHooks[$id_hook]['module_position'][$this->id];
+				else
+					return array();
 		$result = Db::getInstance()->getRow('
 			SELECT `position`
 			FROM `'._DB_PREFIX_.'hook_module`
