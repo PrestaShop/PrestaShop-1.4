@@ -379,13 +379,24 @@ class AdminHome extends AdminTab
 						dataType: "json",
 						data: "getAdminHomeElement",
 						success: function(json) {
+							if (json.screencast != \'NOK\')
+								$(\'#adminpresentation\').fadeIn(\'slow\');
+							else
+								$(\'#adminpresentation\').fadeOut(\'slow\');
+								
 							$(\'#partner_preactivation\').fadeOut(\'slow\', function() {
-								$(\'#partner_preactivation\').html(json.partner_preactivation);
+								if (json.partner_preactivation != \'NOK\')
+									$(\'#partner_preactivation\').html(json.partner_preactivation);
+								else
+									$(\'#partner_preactivation\').html(\'\');
 								$(\'#partner_preactivation\').fadeIn(\'slow\');
 							});
 							
 							$(\'#discover_prestashop\').fadeOut(\'slow\', function() {
-								$(\'#discover_prestashop\').html(json.discover_prestashop);
+								if (json.discover_prestashop != \'NOK\')
+									$(\'#discover_prestashop\').html(json.discover_prestashop);
+								else
+									$(\'#discover_prestashop\').html(\'\');
 								$(\'#discover_prestashop\').fadeIn(\'slow\');
 							});
 						},
