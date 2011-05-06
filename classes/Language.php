@@ -605,7 +605,7 @@ class LanguageCore extends ObjectModel
 			foreach ($result as $row)
 				self::$_cache_language_installation[$row['iso_code']] = $row['id_lang'];
 		}
-		return (isset(self::$_cache_language_installation[$row['iso_code']]) ? self::$_cache_language_installation[$row['iso_code']] : false);
+		return (isset(self::$_cache_language_installation[$iso_code]) ? self::$_cache_language_installation[$iso_code] : false);
 	}
 
 	public static function countActiveLanguages()
