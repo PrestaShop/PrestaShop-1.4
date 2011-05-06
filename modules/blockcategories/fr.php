@@ -15,5 +15,7 @@ $_MODULE['<{blockcategories}prestashop>blockcategories_971fd8cc345d8bd9f92e9f7d8
 $_MODULE['<{blockcategories}prestashop>blockcategories_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
 $_MODULE['<{blockcategories}prestashop>blockcategories_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivé';
 $_MODULE['<{blockcategories}prestashop>blockcategories_2c1199ee18b344152f35ec237acb5796'] = 'Activer l\'arbre dynamique (animé)';
+$_MODULE['<{blockcategories}prestashop>blockcategories_4f32360218e145e3ba681a2343015eb3'] = 'Nombre de colonnes pour le footer';
+$_MODULE['<{blockcategories}prestashop>blockcategories_3d81ca758785a8528208613752ad2c81'] = 'Détermine le nombre de colonne pour le footer';
 $_MODULE['<{blockcategories}prestashop>blockcategories_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{blockcategories}prestashop>blockcategories_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
