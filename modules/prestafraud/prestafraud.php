@@ -33,7 +33,7 @@ class PrestaFraud extends Module
 	
 	private $_html;
 	public $_errors;
-	private static $_trustUrl = 'http://trust.prestashop.com/';
+	private $_trustUrl;
 	
 	private $_activities;
 	private $_payment_types;
@@ -79,6 +79,7 @@ class PrestaFraud extends Module
 												3 => $this->l('Credit card multiple'),
 												4 => $this->l('Prepaid account (MoneyBookers, PayPal...)'));
 
+		$this->_trustUrl = 'http'.(extension_loaded('openssl') ? 's' : '').'://trust.prestashop.com/';
 	}
 	
 	public function install()
@@ -152,7 +153,7 @@ class PrestaFraud extends Module
 						<input id="terms_and_conditions" type="checkbox" value="1" />'.$this->l('I agree with the terms of PrestaShop Security service and i adhere to them unconditionally.').'</label>
 					</div>
 					<div id="terms" class="margin-form">';
-					$terms = file_get_contents(self::$_trustUrl.'terms.php?lang='.Language::getIsoById((int)$cookie->id_lang));
+					$terms = file_get_contents($this->_trustUrl.'terms.php?lang='.Language::getIsoById((int)$cookie->id_lang));
 					$this->_html .= $terms;
 					$this->_html .= '</div>
 					<div class="margin-form">
@@ -277,7 +278,7 @@ class PrestaFraud extends Module
 		$xml = $root->addChild('create_account');
 		$xml->addChild('email', $email);
 		$xml->addChild('shop_url', $shop_url);
-		$result = self::_pushDatas($root->asXml());
+		$result = $this->_pushDatas($root->asXml());
 		$xml_result = simplexml_load_string($result);
 		if (!(int)$xml_result->create_account->result)
 		{
@@ -408,7 +409,7 @@ class PrestaFraud extends Module
 		$carriers_type = $this->_getConfiguredCarriers();
 
 		$carrier_infos->addChild('type', $carriers_type[$carrier->id]);
-		if (self::_pushDatas($root->asXml()) !== false)
+		if ($this->_pushDatas($root->asXml()) !== false)
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'prestafraud_orders (id_order) VALUES('.(int)$params['order']->id.')');
 		return true;
 	}
@@ -492,7 +493,7 @@ class PrestaFraud extends Module
 			$scoring = $this->_getScoring((int)$id_order, $cookie->id_lang);
 			$this->_html .= '<p><b>'.$this->l('Scoring:').'</b> '.($scoring['scoring'] < 0 ? $this->l('Unknown') : (float)$scoring['scoring']).'</p>
 			<p><b>'.$this->l('Comment:').'</b> '.htmlentities($scoring['comment']).'</p>
-			<p><center><a target="_BLANK" href="'.self::$_trustUrl.'fraud_report.php?shop_id='.Configuration::get('PS_TRUST_SHOP_ID').'&shop_key='.Configuration::get('PS_TRUST_SHOP_KEY').'&order_id='.$id_order.'">'.$this->l('Report this order as a fraud to PrestaShop').'</a></center></p>';
+			<p><center><a target="_BLANK" href="'.$this->_trustUrl.'fraud_report.php?shop_id='.Configuration::get('PS_TRUST_SHOP_ID').'&shop_key='.Configuration::get('PS_TRUST_SHOP_KEY').'&order_id='.$id_order.'">'.$this->l('Report this order as a fraud to PrestaShop').'</a></center></p>';
 		}
 		$this->_html .= '</fieldset>';
 		return $this->_html;
@@ -510,7 +511,7 @@ class PrestaFraud extends Module
 			$xml->addChild('shop_password', Configuration::get('PS_TRUST_SHOP_KEY'));
 			$xml->addChild('id_order', (int)$id_order);
 			$xml->addChild('lang', Language::getIsoById((int)$id_lang));
-			$result = self::_pushDatas($root->asXml());
+			$result = $this->_pushDatas($root->asXml());
 			if (!$result)
 				return false;
 			$xml = simplexml_load_string($result);
@@ -569,11 +570,11 @@ class PrestaFraud extends Module
 		return Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'prestafraud_carrier SET id_carrier='.(int)$new.' WHERE id_carrier='.(int)$old);
 	}
 	
-	private static function _pushDatas($datas)
+	private function _pushDatas($datas)
 	{
 		if (function_exists('curl_init'))
 		{
-			$ch = curl_init(self::$_trustUrl);
+			$ch = curl_init($this->_trustUrl);
 			curl_setopt($ch, CURLOPT_POST, true);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, array('xml' => $datas));
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -586,7 +587,7 @@ class PrestaFraud extends Module
 		elseif (function_exists('file_get_contents'))
 		{
 			$context = stream_context_create(array('http' => array('timeout' => 5)));
-			return file_get_contents(self::$_trustUrl.'?xml='.urlencode(str_replace("\r", "\n", '', $datas)), $context);
+			return file_get_contents($this->_trustUrl.'?xml='.urlencode(str_replace("\r", "\n", '', $datas)), $context);
 		}
 		else
 			return false;

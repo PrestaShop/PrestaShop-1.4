@@ -835,11 +835,24 @@ abstract class AdminTabCore
 						$languages = Language::getLanguages(false);
 						$list = array();
 						foreach ($languages as $language)
-							$list[$language['id_lang']] = (isset($field['cast']) ? $field['cast'](Tools::getValue($key.'_'.$language['id_lang'])) : Tools::getValue($key.'_'.$language['id_lang']));
+						{
+							$val = (isset($field['cast']) ? $field['cast'](Tools::getValue($key.'_'.$language['id_lang'])) : Tools::getValue($key.'_'.$language['id_lang']));
+							if (Validate::isCleanHtml($val))
+								$list[$language['id_lang']] = $val;
+							else
+								$this->_errors[] = Tools::displayError('Can not add configuration '.$key.' for lang '.Language::getIsoById((int)$language['id_lang']));
+						}
 						Configuration::updateValue($key, $list);
 					} 
-					else	
-						Configuration::updateValue($key, (isset($field['cast']) ? $field['cast'](Tools::getValue($key)) : Tools::getValue($key)));
+					else
+					{
+						$val = (isset($field['cast']) ? $field['cast'](Tools::getValue($key)) : Tools::getValue($key));
+						if (Validate::isCleanHtml($val))
+							Configuration::updateValue($key, $val);
+						else
+							$this->_errors[] = Tools::displayError('Can not add configuration '.$key.' for lang '.Language::getIsoById((int)$language['id_lang']));
+
+					}
 				}
 			}
 
@@ -1298,6 +1311,8 @@ abstract class AdminTabCore
 				case 'datetime':
 					if (is_string($value))
 						$value = unserialize($value);
+					if (!Validate::isCleanHtml($value[0]) OR !Validate::isCleanHtml($value[1]))
+						$value = '';
 					$name = $this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key);
 					$nameId = str_replace('!', '__', $name);
 					includeDatepicker(array($nameId.'_0', $nameId.'_1'));
@@ -1322,6 +1337,8 @@ abstract class AdminTabCore
 
 				case 'text':
 				default:
+					if (!Validate::isCleanHtml($value))
+							$value = '';
 					echo '<input type="text" name="'.$this->table.'Filter_'.(isset($params['filter_key']) ? $params['filter_key'] : $key).'" value="'.htmlentities($value, ENT_COMPAT, 'UTF-8').'"'.$width.' '.$keyPress.' />';
 			}
 			echo '</td>';
@@ -1590,6 +1607,10 @@ abstract class AdminTabCore
 		foreach ($this->_fieldsOptions AS $key => $field)
 		{
 			$val = Tools::getValue($key, Configuration::get($key));
+			if ($field['type'] != 'textLang')
+				if (!Validate::isCleanHtml($val))
+					$val = Configuration::get($key);
+					
 			echo '<label>'.$field['title'].' </label>
 			<div class="margin-form">';
 			switch ($field['type'])
@@ -1613,6 +1634,8 @@ abstract class AdminTabCore
 					foreach ($this->_languages as $language)
 					{
 						$val = Tools::getValue($key.'_'.$language['id_lang'], Configuration::get($key, $language['id_lang']));
+						if (!Validate::isCleanHtml($val))
+							$val = Configuration::get($key);
 						echo '
 						<div id="'.$key.'_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
 							<input size="'.$field['size'].'" type="text" name="'.$key.'_'.$language['id_lang'].'" value="'.$val.'" />
