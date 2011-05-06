@@ -297,10 +297,9 @@ class ConfigurationCore extends ObjectModel
 		
 		foreach ($result AS $row)
 		{
+			self::$_CONF[$row['name']] = stripslashes($row['c_value']);
 			if ($row['id_lang'])
-				self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = stripslashes($row['cl_value']);
-			else
-				self::$_CONF[$row['name']] = stripslashes($row['c_value']);
+				self::$_CONF_LANG[(int)$row['id_lang']][$row['name']] = stripslashes($row['cl_value']);
 		}
 	}
 	
