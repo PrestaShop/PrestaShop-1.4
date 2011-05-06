@@ -532,8 +532,8 @@ abstract class ModuleCore
 
 					$moduleList[$moduleListCursor] = $xml_module;
 					$moduleNameList[$moduleListCursor] = '\''.strval($xml_module->name).'\'';
-					$moduleListCursor++;
 					$modulesNameToCursor[strval($xml_module->name)] = $moduleListCursor;
+					$moduleListCursor++;
 				}
 			}
 			if (!$useConfig OR !$xml_exist OR (isset($xml_module->need_instance) AND (int)$xml_module->need_instance == 1) OR $needNewConfigFile)
