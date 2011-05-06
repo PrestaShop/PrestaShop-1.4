@@ -27,7 +27,6 @@
 
 class AdminDiscounts extends AdminTab
 {
-	
 	public function __construct()
 	{
 		global $cookie;
@@ -82,11 +81,15 @@ class AdminDiscounts extends AdminTab
 
 		if ($discountName = Tools::getValue('name') AND Validate::isDiscountName($discountName) AND Discount::discountExists($discountName, Tools::getValue('id_discount')))
 			$this->_errors[] = Tools::displayError('A voucher of this name already exists. Please choose another name.');
-	
+
 		if (Tools::getValue('submitAdd'.$this->table))
 		{
+			if (Tools::getValue('id_discount_type') == 0)
+				$this->_errors[] = Tools::displayError('Please set a type for this voucher.');
 			if (Tools::getValue('id_discount_type') == 2 AND Tools::getValue('id_currency') == 0)
-				$this->_errors[] = Tools::displayError('Please set a currency for this voucher.');
+				$this->_errors[] = Tools::displayError('Please set a currency for this voucher.');			
+			if ((Tools::getValue('id_discount_type') == 1 || Tools::getValue('id_discount_type') == 2) && !Tools::getValue('value'))
+				$this->_errors[] = Tools::displayError('Please set a amount for this voucher.');
 			if (!Validate::isBool_Id(Tools::getValue('id_target')))
 				$this->_errors[] = Tools::displayError('Invalid customer or group ID field');
 			else
@@ -100,7 +103,6 @@ class AdminDiscounts extends AdminTab
 			if (!sizeof($this->_errors))
 			{
 				$id = (int)(Tools::getValue($this->identifier));
-
 				/* Object update */
 				if (isset($id) AND !empty($id))
 				{
@@ -123,7 +125,7 @@ class AdminDiscounts extends AdminTab
 							else
 							{
 								if (($categories = Tools::getValue('categoryBox')) === false OR (!empty($categories) AND !is_array($categories)))
-									die(Tools::displayError());
+									$this->_errors[] = Tools::displayError('Please set a category for this voucher.');
 								$this->copyFromPost($object, $this->table);
 								$result = $object->update(true, false, $categories);
 							}
@@ -136,7 +138,6 @@ class AdminDiscounts extends AdminTab
 								if (Tools::getValue('stay_here') == 'on' || Tools::getValue('stay_here') == 'true' || Tools::getValue('stay_here') == '1')
 									Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&updatescene&token='.$token);
 								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=4&token='.$token);
-								
 							}
 						}
 						else
