@@ -24,21 +24,13 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
+
 function desactivate_custom_modules()
 {
-	// Get all modules then select only payment ones
-	$arrInstalledModules = Module::getModulesInstalled();
-	// get native module list 
-	$module_list_xml = INSTALL_PATH.'/../config/modules_list.xml';
-	$nativeModules = simplexml_load_file($module_list_xml);
-	$nativeModules = $nativeModules->modules;
-	if ($nativeModules['type'] == 'native')
-	{
-		foreach ($nativeModules->module as $module)
-			$arrNativeModules[] = $module['name'].'';
-	}
+	$arrNonNative = Module::getNonNativeModuleList();
+
 	$uninstallMe = array("rien");
-	foreach($arrInstalledModules as $aModule)
+	foreach($arrNonNative as $aModule)
 	{
 		if(!in_array($aModule['name'],$arrNativeModules))
 		{
