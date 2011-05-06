@@ -67,7 +67,7 @@
 	<div class="clear"></div>
 	<br />
 	{if !$refresh}
-	<form class="wl_send std hidden" method="post" class="hidden" onsubmit="return (false);">
+	<form method="post" class="wl_send std hidden" onsubmit="return (false);">
 		<fieldset>
 			<p class="required">
 				<label for="email1">{l s='Email' mod='blockwishlist'}1</label>
