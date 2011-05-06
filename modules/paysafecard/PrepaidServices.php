@@ -313,7 +313,7 @@ abstract class PrepaidServices extends PaymentModule
 					</div>
 					<label>'.$this->getL('keyring_pw').'</label>
 					<div class="margin-form">
-						<input type="text" name="ct_keyring_pw_'.$currency['iso_code'].'" value="'.Tools::htmlentitiesUTF8(Configuration::get($this->prefix.'KEYRING_PW_'.$currency['iso_code'])).'"/>
+						<input type="password" name="ct_keyring_pw_'.$currency['iso_code'].'" value=""/>
 					</div>
 				</td>
 			</tr>';
