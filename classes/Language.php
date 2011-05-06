@@ -595,9 +595,17 @@ class LanguageCore extends ObjectModel
 		return copy(dirname(__FILE__).'/../img/l/none.jpg', dirname(__FILE__).'/../img/l/'.$id.'.jpg');
 	}
 
+	private static $_cache_language_installation = null;
 	public static function isInstalled($iso_code)
 	{
-		return Db::getInstance()->getValue('SELECT `id_lang` FROM `'._DB_PREFIX_.'lang` WHERE `iso_code` = "'.pSQL($iso_code).'"');
+		if (self::$_cache_language_installation === null)
+		{
+			self::$_cache_language_installation = array();
+			$result = Db::getInstance()->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang`');
+			foreach ($result as $row)
+				self::$_cache_language_installation[$row['iso_code']] = $row['id_lang'];
+		}
+		return (isset(self::$_cache_language_installation[$row['iso_code']]) ? self::$_cache_language_installation[$row['iso_code']] : false);
 	}
 
 	public static function countActiveLanguages()
