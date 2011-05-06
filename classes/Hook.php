@@ -92,8 +92,8 @@ class HookCore extends ObjectModel
 		$results = Db::getInstance()->executeS('
 		SELECT h.id_hook, h.name as h_name, title, description, h.position, live_edit, hm.position as hm_position, m.id_module, m.name, active
 		FROM `'._DB_PREFIX_.'hook` h
-		INNER JOIN hook_module hm ON (h.id_hook = hm.id_hook)
-		INNER JOIN module as m    ON (m.id_module = hm.id_module)
+		INNER JOIN `'._DB_PREFIX_.'hook_module` hm ON (h.id_hook = hm.id_hook)
+		INNER JOIN `'._DB_PREFIX_.'module` as m    ON (m.id_module = hm.id_module)
 		'.($position ? 'WHERE h.`position` = 1' : ''));
 		
 		foreach($results as $result)
