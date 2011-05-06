@@ -124,7 +124,10 @@ else
 			$sortie.='http://www.mondialrelay.fr/lg_fr/espaces/url/popup_exp_details.aspx?cmrq='._Enseigne_webservice._Code_Marque.'&nexp='.$var_Expedition.'&crc='.$k_security;
 		}
 		else
-			$sortie.=mb_convert_encoding(error_message_MR($result_mr['WSI2_CreationEtiquetteResult']['STAT']), 'UTF-8', 'ISO-8859-15' ).'|';
+			if (function_exists('mb_convert_encoding'))
+				$sortie .= mb_convert_encoding(error_message_MR($result_mr['WSI2_CreationEtiquetteResult']['STAT']), 'UTF-8', 'ISO-8859-15' ).'|';
+			else
+				$sortie .= iconv("UTF-8", 'ISO-8859-15', error_message_MR($result_mr['WSI2_CreationEtiquetteResult']['STAT']));
 	}
 }
 echo ':THISTAG:'.$sortie.':THISTAG:';
