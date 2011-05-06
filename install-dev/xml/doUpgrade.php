@@ -33,7 +33,7 @@ if (function_exists('date_default_timezone_set'))
 
 define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
 define('_PS_INSTALLER_PHP_UPGRADE_DIR_', 'php/');
-// desactivate non-native module 
+// desactivate non-native module
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'desactivatecustommodules.php');
 // utf-8 conversion if needed (before v0.9.8.1 utf-8 was badly supported)
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'utf8.php');
@@ -103,6 +103,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_for_13version.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_cms_block.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_blocklink.php');
+
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
 
 //old version detection
 global $oldversion;
