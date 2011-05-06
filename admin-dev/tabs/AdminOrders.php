@@ -505,7 +505,7 @@ class AdminOrders extends AdminTab
 				'.(Validate::isLoadedObject($customer) ? $customer->firstname.' '.$customer->lastname.' - ' : '').$this->l('Order #').sprintf('%06d', $order->id).'
 				'.$nextOrder.'
 			</h2>
-			<div>
+			<div style="width:429px">
 				'.((($currentState->invoice OR $order->invoice_number) AND count($products))
 					? '<a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" alt="'.$this->l('View invoice').'" /> '.$this->l('View invoice').'</a>'
 					: '<img src="../img/admin/charged_ko.gif" alt="'.$this->l('No invoice').'" /> '.$this->l('No invoice')).' -
