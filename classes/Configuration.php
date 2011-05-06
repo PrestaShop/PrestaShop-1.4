@@ -292,8 +292,9 @@ class ConfigurationCore extends ObjectModel
 		self::$_CONF_LANG = array();
 		$result = Db::getInstance()->ExecuteS('
 		SELECT c.`name`, cl.`id_lang`, cl.`value` as cl_value, c.`value` as c_value
-		FROM `'._DB_PREFIX_.'configuration_lang` cl
-		LEFT JOIN `'._DB_PREFIX_.'configuration` c ON c.id_configuration = cl.id_configuration');
+		FROM `'._DB_PREFIX_.'configuration` c
+		LEFT JOIN `'._DB_PREFIX_.'configuration_lang` cl ON (c.id_configuration = cl.id_configuration)');
+		
 		foreach ($result AS $row)
 		{
 			if ($row['c_value'])
