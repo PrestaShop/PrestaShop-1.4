@@ -639,7 +639,7 @@ abstract class ObjectModelCore
 		return Db::getInstance()->ExecuteS('
 		SELECT id_required_field, object_name, field_name
 		FROM '._DB_PREFIX_.'required_field
-		WHERE 1 '.(!$all ? ' AND object_name = \''.pSQL(get_class($this)).'\'' : ''));
+		'.(!$all ? 'WHERE object_name = \''.pSQL(get_class($this)).'\'' : ''));
 	}
 
 	public function addFieldsRequiredDatabase($fields)

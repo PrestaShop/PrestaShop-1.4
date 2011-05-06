@@ -276,7 +276,6 @@ abstract class AdminTabCore
 		foreach ($rules['required'] AS $required)
 			$required_class_fields[] = $required;
 
-
 		echo '<br />
 		<a href="#" onclick="if ($(\'.requiredFieldsParameters:visible\').length == 0) $(\'.requiredFieldsParameters\').slideDown(\'slow\'); else $(\'.requiredFieldsParameters\').slideUp(\'slow\'); return false;"><img src="../img/admin/duplicate.gif" alt="" /> '.$this->l('Advanced parameters...').'</a>
 		<fieldset style="display:none" class="width1 requiredFieldsParameters">
@@ -294,10 +293,8 @@ abstract class AdminTabCore
 		$res = $object->getFieldsRequiredDatabase();
 
 		$required_fields = array();
-		if ($res)
-			foreach ($res AS $row)
-				$required_fields[(int)$row['id_required_field']] = $row['field_name'];
-
+		foreach ($res AS $row)
+			$required_fields[(int)$row['id_required_field']] = $row['field_name'];
 
 		$table_fields = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM '.pSQL(_DB_PREFIX_.$this->table));
 		$irow = 0;

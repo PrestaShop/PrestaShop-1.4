@@ -128,6 +128,21 @@ class TabCore extends ObjectModel
 	}
 
 	/**
+	 * Get tab
+	 *
+	 * @return array tab
+	 */
+	static public function getTab($id_lang, $id_tab)
+	{
+		/* Tabs selection */
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT *
+		FROM `'._DB_PREFIX_.'tab` t
+		LEFT JOIN `'._DB_PREFIX_.'tab_lang` tl ON (t.`id_tab` = tl.`id_tab` AND tl.`id_lang` = '.(int)($id_lang).')
+		WHERE t.`id_tab` = '.(int)($id_tab));
+	}
+
+	/**
 	 * Get tabs
 	 *
 	 * @return array tabs
@@ -158,21 +173,6 @@ class TabCore extends ObjectModel
 			return $array_all;
 		}
 		return (isset(self::$_cache_tabs[$id_lang][$id_parent]) ? self::$_cache_tabs[$id_lang][$id_parent] : array());
-	}
-
-	/**
-	 * Get tab
-	 *
-	 * @return array tab
-	 */
-	static public function getTab($id_lang, $id_tab)
-	{
-		/* Tabs selection */
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT *
-		FROM `'._DB_PREFIX_.'tab` t
-		LEFT JOIN `'._DB_PREFIX_.'tab_lang` tl ON (t.`id_tab` = tl.`id_tab` AND tl.`id_lang` = '.(int)($id_lang).')
-		WHERE t.`id_tab` = '.(int)($id_tab));
 	}
 
 	/**

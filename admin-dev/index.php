@@ -35,9 +35,8 @@ if (empty($tab) and !sizeof($_POST))
 {
 	$tab = 'AdminHome';
 	$_POST['tab'] = 'AdminHome';
-	$_POST['token'] = Tools::getAdminToken($tab.intval(checkingTab($tab)).intval($cookie->id_employee));
+	$_POST['token'] = Tools::getAdminTokenLite($tab);
 }
-
 
 	if ($id_tab = checkingTab($tab))
 	{
@@ -46,7 +45,6 @@ if (empty($tab) and !sizeof($_POST))
 		recursiveTab($id_tab);
 		$tabs = array_reverse($tabs);
 		$bread = '';
-		$country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
 
 		foreach ($tabs AS $key => $item)
 			$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />
@@ -61,7 +59,7 @@ if (empty($tab) and !sizeof($_POST))
 			$.ajax({
 				type: \'POST\',
 				url: \'ajax.php\',
-				data: \'helpAccess=1&item='.$item['class_name'].'&isoUser='.$isoUser.'&country='.$country->iso_code.'&version='._PS_VERSION_.'\',
+				data: \'helpAccess=1&item='.$item['class_name'].'&isoUser='.$isoUser.'&country='.Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')).'&version='._PS_VERSION_.'\',
 				async : true,
 				success: function(msg) {
 					$("#help-button").html(msg);

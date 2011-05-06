@@ -406,7 +406,7 @@ if (Tools::getValue('submitPublishProduct'))
 		if (Tools::getValue('redirect'))
 			die($bo_product_url);
 
-		$profileAccess = Profile::getProfileAccess((int)($cookie->profile), $id_tab_catalog);
+		$profileAccess = Profile::getProfileAccess((int)$cookie->profile, $id_tab_catalog);
 		if($profileAccess['edit'])
 		{
 			$product = new Product((int)(Tools::getValue('id_product')));
@@ -442,7 +442,7 @@ if (Tools::getValue('submitPublishCMS'))
 		if (Tools::getValue('redirect'))
 			die($bo_cms_url);
 
-		$profileAccess = Profile::getProfileAccess((int)($cookie->profile), $id_tab_cms);
+		$profileAccess = Profile::getProfileAccess((int)$cookie->profile, $id_tab_cms);
 		if($profileAccess['edit'])
 		{
 			$cms = new CMS((int)(Tools::getValue('id_cms')));

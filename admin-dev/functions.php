@@ -231,7 +231,7 @@ function recursiveTab($id_tab)
 {
 	global $cookie, $tabs;
 	
-	$adminTab = Tab::getTab((int)($cookie->id_lang), $id_tab);
+	$adminTab = Tab::getTab((int)$cookie->id_lang, $id_tab);
 	$tabs[]= $adminTab;
 	if ($adminTab['id_parent'] > 0)
 		recursiveTab($adminTab['id_parent']);
@@ -244,19 +244,21 @@ function checkingTab($tab)
 	$tab = trim($tab);
 	if (!Validate::isTabName($tab))
 		return false;
-	if (!($id_tab = Tab::getIdFromClassName($tab)))
+		
+	$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT id_tab, module FROM `'._DB_PREFIX_.'tab` WHERE class_name = \''.pSQL($tab).'\'');
+	if (!$row['id_tab'])
 	{
 		if (isset(AdminTab::$tabParenting[$tab]))
 			Tools::redirectAdmin('?tab='.AdminTab::$tabParenting[$tab].'&token='.Tools::getAdminTokenLite(AdminTab::$tabParenting[$tab]));
 		echo Tools::displayError('Tab cannot be found.');
 		return false;
 	}
-	if ($module = Db::getInstance()->getValue('SELECT module FROM '._DB_PREFIX_.'tab WHERE class_name = \''.pSQL($tab).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php'))
-		include_once(_PS_MODULE_DIR_.'/'.$module.'/'.$tab.'.php');
+	if ($row['module'] AND file_exists(_PS_MODULE_DIR_.'/'.$row['module'].'/'.$tab.'.php'))
+		include_once(_PS_MODULE_DIR_.'/'.$row['module'].'/'.$tab.'.php');
 	elseif (file_exists(PS_ADMIN_DIR.'/tabs/'.$tab.'.php'))
 		include_once(PS_ADMIN_DIR.'/tabs/'.$tab.'.php');
 
-	if (!class_exists($tab, false) OR !$id_tab)
+	if (!class_exists($tab, false) OR !$row['id_tab'])
 	{
 		echo Tools::displayError('Tab file cannot be found.');
 		return false;
@@ -268,7 +270,7 @@ function checkingTab($tab)
 		echo $adminObj->displayErrors();
 		return false;
 	}
-	return ($id_tab);
+	return $row['id_tab'];
 }
 
 function checkTabRights($id_tab)

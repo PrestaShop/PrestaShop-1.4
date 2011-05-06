@@ -44,8 +44,8 @@ echo '				| <a href="http://www.prestashop.com/en/contact_us/" target="_blank" c
 		</div>
 	</div>';
 
+// FrontController::disableParentCalls();
 // $fc = new FrontController();
-// $fc->disableParentFooter();
 // $fc->displayFooter();
 
 echo '

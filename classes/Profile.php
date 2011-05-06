@@ -101,29 +101,30 @@ class ProfileCore extends ObjectModel
 
 	public static function getProfileAccess($id_profile, $id_tab)
 	{
-	 	/* Accesses selection */
-	 	return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `view`, `add`, `edit`, `delete`
-		FROM `'._DB_PREFIX_.'access`
-		WHERE `id_profile` = '.(int)($id_profile).' AND `id_tab` = '.(int)($id_tab));
+		// getProfileAccesses is cached so there is no performance leak
+		$accesses = self::getProfileAccesses($id_profile);
+		return (isset($accesses[$id_tab]) ? $accesses[$id_tab] : false);
 	}
 
+	private static $_cache_accesses = array();
 	public static function getProfileAccesses($id_profile)
 	{
-	 	/* Accesses selection */
-	 	$accesses = Db::getInstance()->ExecuteS('
-		SELECT *
-		FROM `'._DB_PREFIX_.'access`
-		WHERE `id_profile` = '.(int)($id_profile));
+		if (!isset(self::$_cache_accesses[$id_profile]))
+		{
+			$result = Db::getInstance()->ExecuteS('
+			SELECT *
+			FROM `'._DB_PREFIX_.'access`
+			WHERE `id_profile` = '.(int)$id_profile);
 
-	 	$result = array();
-		foreach($accesses AS $access) {
-		 	/* If it is the first time we meet this tab we prepare it */
-		 	if (!isset($result[$access['id_tab']]))
-		 		$result[$access['id_tab']] = array();
-			$result[$access['id_tab']] = $access;
+			self::$_cache_accesses[$id_profile] = array();
+			foreach($result AS $row)
+			{
+				if (!isset(self::$_cache_accesses[$id_profile][$row['id_tab']]))
+					self::$_cache_accesses[$id_profile][$row['id_tab']] = array();
+				self::$_cache_accesses[$id_profile][$row['id_tab']] = $row;
+			}
 		}
-		return $result;
+		return self::$_cache_accesses[$id_profile];
 	}
 }
 

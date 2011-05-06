@@ -53,17 +53,17 @@ class ConfigurationCore extends ObjectModel
 	/** @var array Configuration multilang cache */
 	protected static $_CONF_LANG;
 
-	protected	$webserviceParameters = array(
-			'fields' => array(
-				'value' => array(),
-				'date_add' => array(),
-				'date_upd' => array()
+	protected $webserviceParameters = array(
+		'fields' => array(
+			'value' => array(),
+			'date_add' => array(),
+			'date_upd' => array()
 		)
 	);
 	
-	protected	$webserviceParametersI18n = array(
-			'retrieveData' => array('retrieveMethod' => 'getI18nConfigurationList'),
-			'fields' => array(
+	protected $webserviceParametersI18n = array(
+		'retrieveData' => array('retrieveMethod' => 'getI18nConfigurationList'),
+		'fields' => array(
 			'value' => array('i18n' => true),
 			'date_add' => array('i18n' => true),
 			'date_upd' => array('i18n' => true)
@@ -102,10 +102,10 @@ class ConfigurationCore extends ObjectModel
 	static public function deleteByName($key)
 	{
 	 	if (!Validate::isConfigName($key))
-	 		die(Tools::displayError());
+			return false;
 
-		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration_lang` WHERE `id_configuration` =
-		(SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\')') AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\''))
+		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration_lang` WHERE `id_configuration` = (SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\')')
+		AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\''))
 		{
 			unset(self::$_CONF[$key]);
 			return true;
@@ -124,8 +124,8 @@ class ConfigurationCore extends ObjectModel
 	{
 	 	if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
-		if ($id_lang AND isset(self::$_CONF_LANG[(int)($id_lang)][$key]))
-			return self::$_CONF_LANG[(int)($id_lang)][$key];
+		if ($id_lang AND isset(self::$_CONF_LANG[(int)$id_lang][$key]))
+			return self::$_CONF_LANG[(int)$id_lang][$key];
 		elseif (key_exists($key, self::$_CONF))
 			return self::$_CONF[$key];
 		return false;
@@ -288,23 +288,19 @@ class ConfigurationCore extends ObjectModel
 
 	static public function loadConfiguration()
 	{
-		/* Configuration */
 		self::$_CONF = array();
-		$result = Db::getInstance()->ExecuteS('SELECT `name`, `value` FROM `'._DB_PREFIX_.'configuration`');
-		if ($result)
-			foreach ($result AS $row)
-				self::$_CONF[$row['name']] = stripslashes($row['value']);
-
-		/* Multilingual configuration */
 		self::$_CONF_LANG = array();
 		$result = Db::getInstance()->ExecuteS('
-		SELECT c.`name`, cl.`id_lang`, IFNULL(cl.`value`, c.`value`) AS value
+		SELECT c.`name`, cl.`id_lang`, cl.`value` as cl_value, c.`value` as c_value
 		FROM `'._DB_PREFIX_.'configuration_lang` cl
 		LEFT JOIN `'._DB_PREFIX_.'configuration` c ON c.id_configuration = cl.id_configuration');
-		if ($result === false)
-			die(Tools::displayError('Invalid loadConfiguration() SQL query'));
 		foreach ($result AS $row)
-			self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = stripslashes($row['value']);
+		{
+			if ($row['c_value'])
+				self::$_CONF[$row['name']] = stripslashes($row['c_value']);
+			if ($row['cl_value'])
+				self::$_CONF_LANG[(int)($row['id_lang'])][$row['name']] = stripslashes($row['cl_value']);
+		}
 	}
 	
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)

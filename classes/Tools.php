@@ -743,7 +743,7 @@ class ToolsCore
 	public static function getAdminTokenLite($tab)
 	{
 		global $cookie;
-		return Tools::getAdminToken($tab.(int)(Tab::getIdFromClassName($tab)).(int)($cookie->id_employee));
+		return Tools::getAdminToken($tab.(int)Tab::getIdFromClassName($tab).(int)$cookie->id_employee);
 	}
 
 	/**

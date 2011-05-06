@@ -442,8 +442,8 @@ class LanguageCore extends ObjectModel
 	  */
 	public static function getIsoById($id_lang)
 	{
-		if (isset(self::$_LANGUAGES[(int)($id_lang)]['iso_code']))
-			return self::$_LANGUAGES[(int)($id_lang)]['iso_code'];
+		if (isset(self::$_LANGUAGES[(int)$id_lang]['iso_code']))
+			return self::$_LANGUAGES[(int)$id_lang]['iso_code'];
 		return false;
 	}
 
@@ -517,7 +517,7 @@ class LanguageCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'lang`');
 
 		foreach ($result AS $row)
-			self::$_LANGUAGES[(int)($row['id_lang'])] = array('id_lang' => (int)($row['id_lang']), 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => (int)($row['active']));
+			self::$_LANGUAGES[(int)$row['id_lang']] = array('id_lang' => (int)$row['id_lang'], 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => (int)$row['active']);
 	}
 
 	public function update($nullValues = false)

@@ -87,6 +87,10 @@ class FrontControllerCore
 		}
 
 		ob_start();
+		
+		/* Loading default country */
+		global $defaultCountry;
+		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
 
 		$cookie = new Cookie('ps');
 		$link = new Link();
