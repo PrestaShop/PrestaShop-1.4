@@ -147,8 +147,8 @@ define('_PS_USE_SQL_SLAVE_', 0);
 define('_PS_ADMIN_PROFILE_', 1);
 
 /* Stock Movement */
-define('_STOCK_MOVEMENT_ORDER_REASON_', 2);
-define('_STOCK_MOVEMENT_MISSING_REASON_', 3);
+define('_STOCK_MOVEMENT_ORDER_REASON_', 3);
+define('_STOCK_MOVEMENT_MISSING_REASON_', 4);
 
 define('_PS_DEFAULT_CUSTOMER_GROUP_', 1);
 
