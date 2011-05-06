@@ -37,6 +37,7 @@ class authorizeAIM extends PaymentModule
 		$this->version = '1.0';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
+		$this->need_instance = 0;
 
         parent::__construct();
 
