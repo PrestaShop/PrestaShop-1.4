@@ -53,7 +53,6 @@ class BlockCategories extends Module
 			!$this->registerHook('categoryAddition') OR
 			!$this->registerHook('categoryUpdate') OR
 			!$this->registerHook('categoryDeletion') OR
-			!$this->registerHook('afterCreateHtaccess') OR
 			!$this->registerHook('afterSaveAdminMeta') OR
 			!Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', 3) OR
 			!Configuration::updateValue('BLOCK_CATEG_DHTML', 1))
@@ -229,11 +228,6 @@ class BlockCategories extends Module
 	}
 
 	public function hookCategoryDeletion($params)
-	{
-		$this->_clearBlockcategoriesCache();
-	}
-
-	public function hookAfterCreateHtaccess($params)
 	{
 		$this->_clearBlockcategoriesCache();
 	}

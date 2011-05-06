@@ -108,6 +108,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_blocklink.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_module_from_hook.php');
+
 //old version detection
 global $oldversion;
 $oldversion = false;
