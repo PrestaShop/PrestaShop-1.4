@@ -449,6 +449,9 @@ abstract class ModuleCore
 		global $cookie, $_MODULES;
 
 		$moduleList = array();
+		$moduleListCursor = 0;
+		$moduleNameList = array();
+		$modulesNameToCursor = array();
 		$errors = array();
 		$modules_dir = self::getModulesDirOnDisk();
 		foreach ($modules_dir AS $module)
@@ -482,12 +485,10 @@ abstract class ModuleCore
 						$xml_module->confirmUninstall = Module::findTranslation($xml_module->name, $xml_module->confirmUninstall, (string)$xml_module->name);
 
 
-					$result = Db::getInstance()->getRow('SELECT `id_module`, `active` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.strval($xml_module->name).'\'');
-					if (isset($result['active']) AND $result['active'])
-						$xml_module->active = $result['active'];
-					if (isset($result['id_module']) AND $result['id_module'])
-						$xml_module->id = $result['id_module'];
-					$moduleList[] = $xml_module;
+					$moduleList[$moduleListCursor] = $xml_module;
+					$moduleNameList[$moduleListCursor] = '\''.strval($xml_module->name).'\'';
+					$moduleListCursor++;
+					$modulesNameToCursor[strval($xml_module->name)] = $moduleListCursor;
 				}
 			}
 			if (!$useConfig OR !$xml_exist OR (isset($xml_module->need_instance) AND (int)$xml_module->need_instance == 1) OR $needNewConfigFile)
@@ -499,7 +500,7 @@ abstract class ModuleCore
 					$file = substr($file, 0, -2);
 				if (class_exists($module, false) OR eval($file) !== false)
 				{
-					$moduleList[] = new $module;
+					$moduleList[$moduleListCursor++] = new $module;
 					if (!$xml_exist OR $needNewConfigFile)
 					{
 						self::$_generateConfigXmlMode = true;
@@ -510,6 +511,20 @@ abstract class ModuleCore
 				}
 				else
 					$errors[] = $module;
+			}
+		}
+
+		// Get modules information from database
+		if(!empty($moduleNameList))
+		{
+			$results = Db::getInstance()->executeS('SELECT `id_module`, `active`, `name` FROM `'._DB_PREFIX_.'module` WHERE `name` IN ('.join(',',$moduleNameList).')');
+			foreach($results as $result)
+			{
+				$moduleCursor = $modulesNameToCursor[$result['name']];
+				if (isset($result['active']) AND $result['active'])
+					$moduleList[$moduleCursor]->active = $result['active'];
+				if (isset($result['id_module']) AND $result['id_module'])
+					$moduleList[$moduleCursor]->id = $result['id_module'];
 			}
 		}
 
@@ -984,6 +999,7 @@ abstract class ModuleCore
 	
 	protected function _generateConfigXml()
 	{
+		elog('_generateConfigXml');
 		$xml = '<?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>'.$this->name.'</name>
