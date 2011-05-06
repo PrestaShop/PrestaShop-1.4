@@ -102,11 +102,14 @@ class StatsSearch extends ModuleGraph
 		</thead><tbody>';
 
 		foreach ($result as $row)
-			$table .= '<tr>
-				<td>'.$row['keywords'].'</td>
-				<td style="text-align: right">'.$row['occurences'].'</td>
-				<td style="text-align: right">'.$row['total'].'</td>
-			</tr>';
+		{
+			if (Tools::strlen($row['keywords']) >= Configuration::get('PS_SEARCH_MINWORDLEN'))
+				$table .= '<tr>
+					<td>'.$row['keywords'].'</td>
+					<td style="text-align: right">'.$row['occurences'].'</td>
+					<td style="text-align: right">'.$row['total'].'</td>
+				</tr>';
+		}
 		$table .= '</tbody></table></div>';
 		
 		if (sizeof($result))
