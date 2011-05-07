@@ -150,7 +150,7 @@ function isPicture($file, $types = NULL)
         if (!$mimeType)
             $mimeType = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
     }
-    if (empty($mimeType) OR $mimeType == 'regular file')
+    if (empty($mimeType) OR $mimeType == 'regular file' OR $mimeType == 'text/plain')
         $mimeType = $file['type'];
 
     /* For each allowed MIME type, we are looking for it inside the current MIME type */
