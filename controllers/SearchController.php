@@ -115,6 +115,8 @@ class SearchControllerCore extends FrontController
 	{
 		if (!$this->instantSearch AND !$this->ajaxSearch)
 			parent::displayHeader();
+		else
+			self::$smarty->assign('static_token', Tools::getToken(false));
 	}
 	
 	public function displayContent()
