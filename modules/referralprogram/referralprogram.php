@@ -140,6 +140,7 @@ class ReferralProgram extends Module
 			Configuration::updateValue('REFERRAL_DISCOUNT_VALUE_'.(int)($id_currency), (float)($discount_value));
 		Configuration::updateValue('REFERRAL_DISCOUNT_TYPE', (int)(Tools::getValue('discount_type')));
 		Configuration::updateValue('REFERRAL_NB_FRIENDS', (int)(Tools::getValue('nb_friends')));
+		Configuration::updateValue('REFERRAL_PERCENTAGE', (int)(Tools::getValue('discount_value_percentage')));
 		Configuration::updateValue('REFERRAL_DISCOUNT_DESCRIPTION', Tools::getValue('discount_description'));
 		$this->_html .= $this->displayConfirmation($this->l('Configuration updated.'));
 	}
