@@ -182,16 +182,8 @@ class ToolsCore
 	*/
 	static function getRemoteAddr()
 	{
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND $_SERVER['HTTP_X_FORWARDED_FOR'])
-		{
-			if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ','))
-			{
-				$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-				return $ips[0];
-			}
-			else
-				return $_SERVER['HTTP_X_FORWARDED_FOR'];
-		}
+		// we don't look for HTTP_X_FORWARDED_FOR (security leak), see PSCFI-1278
+
 		return $_SERVER['REMOTE_ADDR'];
 	}
 
