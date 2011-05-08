@@ -41,8 +41,7 @@ class MySQLCore extends Db
 		/* UTF-8 support */
 		if (!mysql_query('SET NAMES \'utf8\'', $this->_link))
 			die(Tools::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
-		/* Disable some MySQL limitations */
-		mysql_query('SET GLOBAL SQL_MODE=\'\'', $this->_link);
+		// removed SET GLOBAL SQL_MODE : we can't do that (see PSCFI-1548)
 		return $this->_link;
 	}
 	
