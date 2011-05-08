@@ -133,7 +133,7 @@ class GAnalytics extends Module
 	
 		// Otherwise, create Google Analytics stats
 		$ganalytics_id = Configuration::get('GANALYTICS_ID');
-		$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.intval($step).'.html"' : '');
+		$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '/order/step'.intval($step).'.html' : '');
 		$smarty->assign('ganalytics_id', $ganalytics_id);
 		$smarty->assign('pageTrack', $pageTrack);
 		$smarty->assign('isOrder', false);
@@ -194,7 +194,7 @@ class GAnalytics extends Module
 								);
 			}
 			$ganalytics_id = Configuration::get('GANALYTICS_ID');
-			$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '"/order/step'.intval($step).'.html"' : '');
+			$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '/order/step'.intval($step).'.html' : '');
 			$smarty->assign('items', $items);
 			$smarty->assign('trans', $trans);
 			$smarty->assign('ganalytics_id', $ganalytics_id);
