@@ -82,7 +82,7 @@ class ValidateCore
 	*/
 	static public function isMd5($md5)
 	{
-		return preg_match('/^[a-f0-9]{32}$/ui', $md5);
+		return preg_match('/^[a-f0-9A-F]{32}$/', $md5);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class ValidateCore
 	*/
 	static public function isSha1($sha1)
 	{
-		return preg_match('/^[a-f0-9]{40}$/ui', $sha1);
+		return preg_match('/^[a-fA-F0-9]{40}$/', $sha1);
 	}
 
 	/**
@@ -131,7 +131,7 @@ class ValidateCore
 	*/
 	static public function isCarrierName($name)
 	{
-		return empty($name) OR preg_match('/^[^<>;=#{}]*$/ui', $name);
+		return empty($name) OR preg_match('/^[^<>;=#{}]*$/', $name);
 	}
 
 	/**
@@ -142,7 +142,7 @@ class ValidateCore
 	*/
 	static public function isImageSize($size)
 	{
-		return preg_match('/^[0-9]{1,4}$/ui', $size);
+		return preg_match('/^[0-9]{1,4}$/', $size);
 	}
 
 	/**
@@ -163,7 +163,7 @@ class ValidateCore
 	*/
 	static public function isName($name)
 	{
-		return preg_match('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/ui', stripslashes($name));
+		return preg_match('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/', stripslashes($name));
 	}
 
 	/**
@@ -174,7 +174,7 @@ class ValidateCore
 	*/
 	static public function isHookName($hook)
 	{
-		return preg_match('/^[a-z0-9_-]+$/ui', $hook);
+		return preg_match('/^[a-zA-Z0-9_-]+$/', $hook);
 	}
 
 	/**
@@ -185,7 +185,7 @@ class ValidateCore
 	*/
 	static public function isMailName($mailName)
 	{
-		return preg_match('/^[^<>;=#{}]*$/ui', $mailName);
+		return preg_match('/^[^<>;=#{}]*$/', $mailName);
 	}
 
 	/**
@@ -196,7 +196,7 @@ class ValidateCore
 	*/
 	static public function isMailSubject($mailSubject)
 	{
-		return preg_match('/^[^<>{}]*$/ui', $mailSubject);
+		return preg_match('/^[^<>{}]*$/', $mailSubject);
 	}
 
 	/**
@@ -207,7 +207,7 @@ class ValidateCore
 	*/
 	static public function isModuleName($moduleName)
 	{
-		return preg_match('/^[a-z0-9_-]+$/ui', $moduleName);
+		return preg_match('/^[a-zA-Z0-9_-]+$/', $moduleName);
 	}
 
 	/**
@@ -218,7 +218,7 @@ class ValidateCore
 	*/
 	static public function isTplName($tplName)
 	{
-		return preg_match('/^[a-z0-9_-]+$/ui', $tplName);
+		return preg_match('/^[a-zA-Z0-9_-]+$/', $tplName);
 	}
 
 	/**
@@ -229,7 +229,7 @@ class ValidateCore
 	static public function isTplFileName($tplFileName)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^[a-zA-Z0-9\/_.-]+/ui', $tplFileName);
+		return preg_match('/^[a-zA-Z0-9\/_.-]+/', $tplFileName);
 	}
 
 	/**
@@ -242,7 +242,7 @@ class ValidateCore
 	static public function isIconFile($icon)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^[a-z0-9_-]+\.(gif|jpg|jpeg|png)$/ui', $icon);
+		return preg_match('/^[a-z0-9_-]+\.(gif|jpg|jpeg|png)$/i', $icon);
 	}
 
 	/**
@@ -255,7 +255,7 @@ class ValidateCore
 	static public function isIcoFile($icon)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^[a-z0-9_-]+\.ico$/ui', $icon);
+		return preg_match('/^[a-z0-9_-]+\.ico$/i', $icon);
 	}
 
 	/**
@@ -266,7 +266,7 @@ class ValidateCore
 	*/
 	static public function isImageTypeName($type)
 	{
-		return preg_match('/^[a-z0-9_ -]+$/ui', $type);
+		return preg_match('/^[a-zA-Z0-9_ -]+$/', $type);
 	}
 
 	/**
@@ -277,7 +277,7 @@ class ValidateCore
 	*/
 	static public function isPrice($price)
 	{
-		return preg_match('/^[0-9]{1,10}(\.[0-9]{1,9})?$/ui', $price);
+		return preg_match('/^[0-9]{1,10}(\.[0-9]{1,9})?$/', $price);
 	}
 
 	/**
@@ -288,22 +288,22 @@ class ValidateCore
 	*/
 	static public function isLanguageIsoCode($isoCode)
 	{
-		return preg_match('/^[a-z]{2,3}$/ui', $isoCode);
+		return preg_match('/^[a-zA-Z]{2,3}$/', $isoCode);
 	}
 	
 	static public function isLanguageCode($s)
 	{
-		return preg_match('/^[a-z]{2}(-[a-z]{2})?$/ui', $s);
+		return preg_match('/^[a-zA-Z]{2}(-[a-zA-Z]{2})?$/', $s);
 	}
 	
 	static public function isStateIsoCode($isoCode)
 	{
-		return preg_match('/^[a-z0-9]{2,3}((-)[a-z0-9]{1,3})?$/ui', $isoCode);
+		return preg_match('/^[a-zA-Z0-9]{2,3}((-)[a-zA-Z0-9]{1,3})?$/', $isoCode);
 	}
 	
 	static public function isNumericIsoCode($isoCode)
 	{
-		return preg_match('/^[0-9]{2,3}$/ui', $isoCode);
+		return preg_match('/^[0-9]{2,3}$/', $isoCode);
 	}
 
 	/**
@@ -316,7 +316,7 @@ class ValidateCore
 	static public function isGenderIsoCode($isoCode)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^0|1|2|9$/ui', $isoCode);
+		return preg_match('/^0|1|2|9$/', $isoCode);
 	}
 
 	/**
@@ -329,7 +329,7 @@ class ValidateCore
 	static public function isGenderName($genderName)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^[a-z.]+$/ui', $genderName);
+		return preg_match('/^[a-zA-Z.]+$/', $genderName);
 	}
 
 	/**
@@ -340,7 +340,7 @@ class ValidateCore
 	*/
 	static public function isDiscountName($discountName)
 	{
-		return preg_match('/^[^!<>,;?=+()@"°{}_$%:]{3,32}$/ui', $discountName);
+		return preg_match('/^[^!<>,;?=+()@"°{}_$%:]{3,32}$/', $discountName);
 	}
 
 	/**
@@ -351,7 +351,7 @@ class ValidateCore
 	*/
 	static public function isCatalogName($name)
 	{
-		return preg_match('/^[^<>;=#{}]*$/ui', $name);
+		return preg_match('/^[^<>;=#{}]*$/', $name);
 	}
 
 	/**
@@ -362,7 +362,7 @@ class ValidateCore
 	*/
 	static public function isMessage($message)
 	{
-		return preg_match('/^([^<>{}]|<br \/>)*$/ui', $message);
+		return preg_match('/^([^<>{}]|<br \/>)*$/i', $message);
 	}
 
 	/**
@@ -373,7 +373,7 @@ class ValidateCore
 	*/
 	static public function isCountryName($name)
 	{
-		return preg_match('/^[a-z -]+$/ui', $name);
+		return preg_match('/^[a-zA-Z -]+$/', $name);
 	}
 
 	/**
@@ -384,7 +384,7 @@ class ValidateCore
 	*/
 	static public function isLinkRewrite($link)
 	{
-		return (boolean)preg_match('/^[_a-z0-9-]+$/ui', $link);
+		return (boolean)preg_match('/^[_a-zA-Z0-9-]+$/', $link);
 	}
 
 	/**
@@ -397,7 +397,7 @@ class ValidateCore
 	static public function isZoneName($name)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^[a-z -()]+$/ui', $name);
+		return preg_match('/^[a-zA-Z -()]+$/', $name);
 	}
 
 	/**
@@ -408,7 +408,7 @@ class ValidateCore
 	*/
 	static public function isAddress($address)
 	{
-		return empty($address) OR preg_match('/^[^!<>?=+@{}_$%]*$/ui', $address);
+		return empty($address) OR preg_match('/^[^!<>?=+@{}_$%]*$/', $address);
 	}
 
 	/**
@@ -419,7 +419,7 @@ class ValidateCore
 	*/
 	static public function isCityName($city)
 	{
-		return preg_match('/^[^!<>;?=+@#"°{}_$%]*$/ui', $city);
+		return preg_match('/^[^!<>;?=+@#"°{}_$%]*$/', $city);
 	}
 
 	/**
@@ -430,7 +430,7 @@ class ValidateCore
 	*/
 	static public function isValidSearch($search)
 	{
-		return preg_match('/^[^<>;=#{}]{0,64}$/ui', $search);
+		return preg_match('/^[^<>;=#{}]{0,64}$/', $search);
 	}
 
 	/**
@@ -441,7 +441,7 @@ class ValidateCore
 	*/
 	static public function isGenericName($name)
 	{
-		return empty($name) OR preg_match('/^[^<>;=#{}]*$/ui', $name);
+		return empty($name) OR preg_match('/^[^<>;=#{}]*$/', $name);
 	}
 
 	/**
@@ -453,7 +453,7 @@ class ValidateCore
 	static public function isCleanHtml($html)
 	{
 		$jsEvent = 'onmousedown|onmousemove|onmmouseup|onmouseover|onmouseout|onload|onunload|onfocus|onblur|onchange|onsubmit|ondblclick|onclick|onkeydown|onkeyup|onkeypress|onmouseenter|onmouseleave';
-		return (!preg_match('/<[ \t\n]*script/ui', $html) && !preg_match('/<?.*('.$jsEvent.')[ \t\n]*=/ui', $html)  && !preg_match('/.*script\:/ui', $html));
+		return (!preg_match('/<[ \t\n]*script/i', $html) && !preg_match('/<?.*('.$jsEvent.')[ \t\n]*=/i', $html)  && !preg_match('/.*script\:/i', $html));
 	}
 
 	/**
@@ -464,7 +464,7 @@ class ValidateCore
 	*/
 	static public function isReference($reference)
 	{
-		return preg_match('/^[^<>;={}]*$/ui', $reference);
+		return preg_match('/^[^<>;={}]*$/', $reference);
 	}
 
 	/**
@@ -475,7 +475,7 @@ class ValidateCore
 	*/
 	static public function isPasswd($passwd, $size = 5)
 	{
-		return preg_match('/^[.a-z_0-9-!@#$%\^&*()]{'.$size.',32}$/ui', $passwd);
+		return preg_match('/^[.a-zA-Z_0-9-!@#$%\^&*()]{'.(int)$size.',32}$/', $passwd);
 	}
 
 	static public function isPasswdAdmin($passwd)
@@ -491,7 +491,7 @@ class ValidateCore
 	*/
 	static public function isConfigName($configName)
 	{
-		return preg_match('/^[a-z_0-9-]+$/ui', $configName);
+		return preg_match('/^[a-zA-Z_0-9-]+$/', $configName);
 	}
 
 	/**
@@ -502,7 +502,7 @@ class ValidateCore
 	*/
 	static public function isDateFormat($date)
 	{
-		return (bool)preg_match('/^([0-9]{4})-((0?[0-9])|(1[0-2]))-((0?[1-9])|([0-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date);
+		return (bool)preg_match('/^([0-9]{4})-((0?[0-9])|(1[0-2]))-((0?[1-9])|([0-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/', $date);
 	}
 	
 	/**
@@ -513,7 +513,7 @@ class ValidateCore
 	*/
 	static public function isDate($date)
 	{
-		if (!preg_match('/^([0-9]{4})-((0?[1-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date, $matches))
+		if (!preg_match('/^([0-9]{4})-((0?[1-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/', $date, $matches))
 			return false;
 		return checkdate((int)$matches[2], (int)$matches[5], (int)$matches[0]);
 	}
@@ -528,7 +528,7 @@ class ValidateCore
 	{
 	 	if (empty($date) || $date == '0000-00-00')
 	 		return true;
-	 	if (preg_match('/^([0-9]{4})-((0?[1-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/ui', $date, $birthDate)) {
+	 	if (preg_match('/^([0-9]{4})-((0?[1-9])|(1[0-2]))-((0?[1-9])|([1-2][0-9])|(3[01]))( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/', $date, $birthDate)) {
 			 if ($birthDate[1] >= date('Y') - 9)
 	 			return false;
 	 		return true;
@@ -544,7 +544,7 @@ class ValidateCore
 	*/
 	static public function isBool($bool)
 	{
-		return is_null($bool) OR is_bool($bool) OR preg_match('/^0|1$/ui', $bool);
+		return is_null($bool) OR is_bool($bool) OR preg_match('/^0|1$/', $bool);
 	}
 
 	/**
@@ -555,7 +555,7 @@ class ValidateCore
 	*/
 	static public function isPhoneNumber($phoneNumber)
 	{
-		return preg_match('/^[+0-9. ()-]*$/ui', $phoneNumber);
+		return preg_match('/^[+0-9. ()-]*$/', $phoneNumber);
 	}
 
 	/**
@@ -566,7 +566,7 @@ class ValidateCore
 	*/
 	static public function isEan13($ean13)
 	{
-		return !$ean13 OR preg_match('/^[0-9]{0,13}$/ui', $ean13);
+		return !$ean13 OR preg_match('/^[0-9]{0,13}$/', $ean13);
 	}
 	
 	/**
@@ -577,7 +577,7 @@ class ValidateCore
 	*/
 	static public function isUpc($upc)
 	{
-		return !$upc OR preg_match('/^[0-9]{0,12}$/ui', $upc);
+		return !$upc OR preg_match('/^[0-9]{0,12}$/', $upc);
 	}
 
 	/**
@@ -588,7 +588,7 @@ class ValidateCore
 	*/
 	static public function isPostCode($postcode)
 	{
-		return empty($postcode) OR preg_match('/^[a-z 0-9-]+$/ui', $postcode);
+		return empty($postcode) OR preg_match('/^[a-zA-Z 0-9-]+$/', $postcode);
 	}
 	
 	/**
@@ -600,7 +600,7 @@ class ValidateCore
 	static public function isZipCodeFormat($zip_code)
 	{
 		if (!empty($zip_code))
-			return preg_match('/^[NLC -]+$/ui', $zip_code);
+			return preg_match('/^[NLCnlc -]+$/', $zip_code);
 		return true;
 	}
 
@@ -625,7 +625,7 @@ class ValidateCore
 	*/
 	static public function isOrderBy($orderBy)
 	{
-		return preg_match('/^[a-z0-9_-]+$/ui', $orderBy);
+		return preg_match('/^[a-zA-Z0-9_-]+$/', $orderBy);
 	}
 
 	/**
@@ -637,7 +637,7 @@ class ValidateCore
 	*/
 	static public function isTableOrIdentifier($table)
 	{
-		return preg_match('/^[a-z0-9_-]+$/ui', $table);
+		return preg_match('/^[a-zA-Z0-9_-]+$/', $table);
 	}
 
 	/**
@@ -651,7 +651,7 @@ class ValidateCore
 	{
 		return true;
 		/* For history reason, we keep this line */
-		// return preg_match('/^[0-9,\'(). NULL]+$/ui', $list);
+		// return preg_match('/^[0-9,\'(). NULL]+$/', $list);
 	}
 
 	/**
@@ -662,7 +662,7 @@ class ValidateCore
 	*/
 	static public function isTagsList($list)
 	{
-		return preg_match('/^[^!<>;?=+#"°{}_$%]*$/ui', $list);
+		return preg_match('/^[^!<>;?=+#"°{}_$%]*$/', $list);
 	}
 
 	/**
@@ -723,7 +723,7 @@ class ValidateCore
 	*/
 	static public function isColor($color)
 	{
-		return preg_match('/^(#[0-9a-f]{6}|[[:alnum:]]*)$/ui', $color);
+		return preg_match('/^(#[0-9a-fA-F]{6}|[a-zA-Z0-9-]*)$/', $color);
 	}
 
 	/**
@@ -734,7 +734,7 @@ class ValidateCore
 	*/
 	static public function isUrl($url)
 	{
-		return preg_match('/^[~:#%&_=\(\)\.\? \+\-@\/a-z0-9]+$/ui', $url);
+		return preg_match('/^[~:#%&_=\(\)\.\? \+\-@\/a-zA-Z0-9]+$/', $url);
 	}
 
 	/**
@@ -746,7 +746,7 @@ class ValidateCore
 	static public function isAbsoluteUrl($url)
 	{
 		if (!empty($url))
-			return preg_match('/^https?:\/\/[:#%&_=\(\)\.\? \+\-@\/a-z0-9]+$/ui', $url);
+			return preg_match('/^https?:\/\/[:#%&_=\(\)\.\? \+\-@\/a-zA-Z0-9]+$/', $url);
 		return true;
 	}
 
@@ -758,7 +758,7 @@ class ValidateCore
 	*/
 	static public function isFileName($name)
 	{
-		return preg_match('/^[a-z0-9_.-]*$/ui', $name);
+		return preg_match('/^[a-zA-Z0-9_.-]*$/', $name);
 	}
 
 	/**
@@ -769,17 +769,17 @@ class ValidateCore
 	*/
 	static public function isTabName($name)
 	{
-		return preg_match('/^[a-z0-9_-]*$/ui', $name);
+		return preg_match('/^[a-zA-Z0-9_-]*$/', $name);
 	}
 
 	static public function isWeightUnit($unit)
 	{
-		return preg_match('/^[[:alpha:]]{1,3}$/ui', $unit);
+		return preg_match('/^[a-zA-Z]{1,3}$/', $unit);
 	}
 	
 	static public function isDistanceUnit($unit)
 	{
-		return preg_match('/^[[:alpha:]]{1,2}$/ui', $unit);
+		return preg_match('/^[a-zA-Z]{1,2}$/', $unit);
 	}
 
 	/**
@@ -789,18 +789,18 @@ class ValidateCore
 	static public function isProtocol($protocol)
 	{
 		Tools::displayAsDeprecated();
-		return preg_match('/^http(s?):\/\/$/ui', $protocol);
+		return preg_match('/^http(s?):\/\/$/i', $protocol);
 	}
 
 
 	static public function isSubDomainName($subDomainName)
 	{
-		return preg_match('/^[[:alnum:]]*$/ui', $subDomainName);
+		return preg_match('/^[a-zA-Z0-9-_]*$/', $subDomainName);
 	}
 
 	static public function isVoucherDescription($text)
 	{
-		return preg_match('/^([^<>{}]|<br \/>)*$/ui', $text);
+		return preg_match('/^([^<>{}]|<br \/>)*$/i', $text);
 	}
 	
 	/**
@@ -835,7 +835,7 @@ class ValidateCore
 	*/
 	static public function isLabel($label)
 	{
-		return (preg_match('/^[^{}<>]*$/ui', $label));
+		return (preg_match('/^[^{}<>]*$/', $label));
 	}
 
 	/**
@@ -855,7 +855,7 @@ class ValidateCore
 	 */
 	static public function isDniLite($dni)
 	{
-		return empty($dni) OR (bool)preg_match('/^[0-9a-z-.]{1,16}$/Ui', $dni);
+		return empty($dni) OR (bool)preg_match('/^[0-9A-Za-z-.]{1,16}$/U', $dni);
 	}
 	
 	/**

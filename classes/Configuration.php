@@ -122,8 +122,6 @@ class ConfigurationCore extends ObjectModel
 	  */
 	static public function get($key, $id_lang = NULL)
 	{
-	 	if (!Validate::isConfigName($key))
-	 		die(Tools::displayError());
 		if ($id_lang AND isset(self::$_CONF_LANG[(int)$id_lang][$key]))
 			return self::$_CONF_LANG[(int)$id_lang][$key];
 		elseif (key_exists($key, self::$_CONF))

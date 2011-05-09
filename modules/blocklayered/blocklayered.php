@@ -325,8 +325,8 @@ if (!$params['category']->active)
 	
 	public function generateFiltersBlock($selectedFilters = array())
 	{
-		
 		global $smarty, $link, $cookie;
+		$id_lang = (int)$cookie->id_lang;
 
 		/* If the current category isn't defined of if it's homepage, we have nothing to display */
 		$id_parent = (int)Tools::getValue('id_category', Tools::getValue('id_category_layered', 1));
@@ -402,7 +402,7 @@ if (!$params['category']->active)
 					SELECT fvl.id_feature_value, fvl.value
 					FROM '._DB_PREFIX_.'feature_value fv
 					LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
-					WHERE (fv.custom IS NULL OR fv.custom = 0) AND fv.id_feature = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND fvl.id_lang = '.(int)$cookie->id_lang);
+					WHERE (fv.custom IS NULL OR fv.custom = 0) AND fv.id_feature = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND fvl.id_lang = '.(int)$id_lang);
 
 					break;
 
@@ -413,7 +413,7 @@ if (!$params['category']->active)
 					SELECT al.id_attribute, al.name, a.color
 					FROM '._DB_PREFIX_.'attribute a
 					LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
-					WHERE a.id_attribute_group = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND al.id_lang = '.(int)$cookie->id_lang);					
+					WHERE a.id_attribute_group = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND al.id_lang = '.(int)$id_lang);					
 					break;
 			}
 		}
@@ -448,6 +448,7 @@ if (!$params['category']->active)
 			}
 		}
 
+		$weight_unit = Configuration::get('PS_WEIGHT_UNIT');
 		foreach ($filterBlocks AS &$filterBlock)
 		{
 			if ($filterBlock['type_lite'] == 'category')
@@ -474,7 +475,7 @@ if (!$params['category']->active)
 				//count nbr product in category
 				foreach ($c AS $idSubCategory)
 					foreach ($productCat AS $product)
-						if(in_array($idSubCategory, $product['c']))
+						if (in_array($idSubCategory, $product['c']))
 							$filterBlock['values'][(int)$idSubCategory]['nbr']++;
 			
 			}
@@ -612,7 +613,7 @@ if (!$params['category']->active)
 						$filterBlock['values'] = array($selectedFilters['weight'][0], $selectedFilters['weight'][1]);
 					else
 						$filterBlock['values'] = array(min($weight), max($weight));
-					$filterBlock['unit'] = Configuration::get('PS_WEIGHT_UNIT');
+					$filterBlock['unit'] = $weight_unit;
 				}
 				else
 					unset($selectedFilters['weight']);
@@ -811,9 +812,9 @@ if (!isset($doneCategories[(int)$id_category]['p']))
 				
 				switch ($type)
 				{
-				case 'category':
+					case 'category':
 						foreach ($products AS $k => $product)
-							if($filter = Tools::getValue('id_category_layered'))
+							if ($filter = Tools::getValue('id_category_layered'))
 								$productsToKeep[] = (int)$k;
 						//don't break me
 					case 'id_attribute_group':
@@ -850,5 +851,4 @@ if (!isset($doneCategories[(int)$id_category]['p']))
 		
 		return $products;
 	}
-
 }
