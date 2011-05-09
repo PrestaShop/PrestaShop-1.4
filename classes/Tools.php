@@ -1560,22 +1560,23 @@ class ToolsCore
 		
 	}
 
+	private static $_cache_nb_media_servers = null;
 	public static function getMediaServer($filename)
 	{
-		if (function_exists('mb_convert_encoding'))
-			$filename = mb_convert_encoding(md5(strtoupper($filename)), "UCS-4BE", 'UTF-8');
-		else
-			$filename = iconv("UCS-4BE", 'UTF-8', md5(strtoupper($filename)));
-		$intvalue = 0;
-		for($i = 0; $i < Tools::strlen($filename, 'UCS-4BE'); $i++)
+		if (self::$_cache_nb_media_servers === null)
 		{
-			$s2 = Tools::substr($filename, $i, 1, 'UCS-4BE');
-			$val = unpack("N",$s2);
-			$intvalue += ($val[1]+$i)*2;
+			if (_MEDIA_SERVER_1_ == '')
+				self::$_cache_nb_media_servers = 0;
+			elseif (_MEDIA_SERVER_2_ == '')
+				self::$_cache_nb_media_servers = 1;
+			elseif (_MEDIA_SERVER_3_ == '')
+				self::$_cache_nb_media_servers = 2;
+			else
+				self::$_cache_nb_media_servers = 3;
 		}
-		$nb_server = ($intvalue % 3)+1;
-		if (($value = constant('_MEDIA_SERVER_'.$nb_server.'_')) && $value != '')
-			return $value;
+	
+		if (self::$_cache_nb_media_servers AND ($id_media_server = (abs(crc32($filename)) % self::$_cache_nb_media_servers + 1)))
+			return constant('_MEDIA_SERVER_'.$id_media_server.'_');
 		return Tools::getHttpHost();
 	}
 
