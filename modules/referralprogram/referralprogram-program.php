@@ -73,7 +73,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 				$error = 'name invalid';
 			elseif (ReferralProgramModule::isEmailExists($friendEmail) OR Customer::customerExists($friendEmail))
 			{
-				$error = 'email exists';
+				//$error = 'email exists';
 				$mails_exists[] = $friendEmail;
 
 			}
@@ -117,6 +117,8 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 		}
 		if ($nbInvitation > 0)
 			unset($_POST);
+		if(sizeof($mails_exists))
+			$error = 'email exists';
 	}
 }
 
