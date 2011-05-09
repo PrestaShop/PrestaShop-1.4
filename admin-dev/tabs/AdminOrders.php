@@ -934,50 +934,16 @@ class AdminOrders extends AdminTab
 
 	public function displayAddressDetail($addressDelivery)
 	{
-		$optional_fields = array(
-						'company' => 1
-						, 'phone' => 1
-						, 'phone_mobile' => 1
-						, 'address2' => 1
-					);
-
-		$out_field_sep = ' ';
-		$out_line_sep = '<br />';
-		$out = '';
-		$lines_out = array();
-
-		$address_datas = explode("\n", AddressFormat::getAddressCountryFormat($addressDelivery->id_country));
-
-		foreach ($address_datas as $fields_line)
-		{
-			$fields_arr = array();
-			$is_empty = true;
-			foreach(explode(' ',$fields_line) as $field_item)
-				{
-					$field_item = trim($field_item);
-					if (!empty($addressDelivery->$field_item))
-					{
-						$fields_arr[] = $this->_getAddressFieldValue($addressDelivery, $field_item);
-						$is_empty = false;
-					}
-					else
-					{
-						if (!isset($optional_fields[$field_item]))
-						{
-							$fields_arr[] = $this->_getAddressFieldValue($addressDelivery, $field_item);
-							$is_empty = false;
-						}
-					}
-				}
-			if (!$is_empty)
-			{
-				$tmp_line = implode($out_field_sep, $fields_arr);
-				$line_out[] = $tmp_line;
-			}
-		}
-
-		$out = implode($out_line_sep, $line_out);
-		return $out;
+		// Allow to add specific rules
+		$patternRules = array(
+				'avoid' => array(
+					'company',
+					'phone',
+					'phone_mobile',
+					'address2'));
+		
+		return AddressFormat::generateAddress($addressDelivery, $patternRules, '<br />').
+			'<br />'.$this->l('Phone').': '.$addressDelivery->phone;
 	}
 
 	private function _getAddressFieldValue(Address $address, $field_name)
@@ -997,7 +963,8 @@ class AdminOrders extends AdminTab
 					break;
 
 				default:
-					$out = $address->$field_name;
+					if (isset($address->$field_name))
+						$out = $address->$field_name;
 
 			}
 		return $out;

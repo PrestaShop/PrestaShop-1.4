@@ -176,30 +176,30 @@ class PDFCore extends PDF_PageGroupCore
    	$shopCity = (isset($conf['PS_SHOP_CITY']) && !empty($conf['PS_SHOP_CITY'])) ? $conf['PS_SHOP_CITY'] : '';
 		$shopState = ((isset($conf['PS_SHOP_STATE']) && !empty($conf['PS_SHOP_STATE'])) ? $conf['PS_SHOP_STATE'] : '');
 		$shopZipcode = (isset($conf['PS_SHOP_CODE']) && !empty($conf['PS_SHOP_CODE'])) ? $conf['PS_SHOP_CODE'] : '';
-
+		
 		// Build the complete address with good separators
 		$completeAddressShop = $shopCity.
-			((!empty($shopState) && !empty($shopCity)) ? ', '.$shopState.((!empty($shopZipcode)) ? ' ' : '') :
-			((!empty($shopState)) ? $shopState. ((!empty($shopZipcode)) ? ' ' : '') :
+			((!empty($shopState) && !empty($shopCity)) ? ', '.$shopState.((!empty($shopZipcode)) ? ' ' : '') : 
+			((!empty($shopState)) ? $shopState. ((!empty($shopZipcode)) ? ' ' : '') : 
 			((!empty($shopCity) && !empty($shopZipcode)) ? ' ' : ''))).
 			$shopZipcode;
-
+		
 		// Clean the string
 		return ($completeAddressShop = trim($completeAddressShop, ' '));
    }
-
+   
    /*
     * Build the the detailed footer of the merchant
     */
    private function _builMerchantFooterDetail($conf)
    {
    	$footerText;
-
+   	
    	// If the country is USA
    	if ($conf['PS_SHOP_COUNTRY_ID'] == 21)
    	{
    		$completeAddressShop = $this->_getCompleteUSAddressFormat($conf);
-
+   	
    		$footerText = self::l('Headquarters:')."\n".
 				$conf['PS_SHOP_NAME_UPPER']."\n".
 				(isset($conf['PS_SHOP_ADDR1']) && !empty($conf['PS_SHOP_ADDR1']) ? $conf['PS_SHOP_ADDR1']."\n" : '').
@@ -208,50 +208,50 @@ class PDFCore extends PDF_PageGroupCore
 				(isset($conf['PS_SHOP_COUNTRY']) && !empty($conf['PS_SHOP_COUNTRY']) ? $conf['PS_SHOP_COUNTRY']."\n" : '').
 				((isset($conf['PS_SHOP_PHONE']) && !empty($conf['PS_SHOP_PHONE'])) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
    	}
-   	else
+   	else 
    	{
    		$footerText = $conf['PS_SHOP_NAME_UPPER'].(!empty($conf['PS_SHOP_ADDR1']) ? ' - '.self::l('Headquarters:').' '.$conf['PS_SHOP_ADDR1'].
    			(!empty($conf['PS_SHOP_ADDR2']) ? ' '.$conf['PS_SHOP_ADDR2'] : '').' '.$conf['PS_SHOP_CODE'].' '.$conf['PS_SHOP_CITY'].
    			((isset($conf['PS_SHOP_STATE']) AND !empty($conf['PS_SHOP_STATE'])) ? (', '.$conf['PS_SHOP_STATE']) : '').' '.$conf['PS_SHOP_COUNTRY'] : '').
    			"\n".(!empty($conf['PS_SHOP_DETAILS']) ? self::l('Details:').' '.$conf['PS_SHOP_DETAILS'].' - ' : '').
 				(!empty($conf['PS_SHOP_PHONE']) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
-   	}
+   	}		
 		return $footerText;
    }
-
+   
 	/**
 	* Invoice footer
 	*/
 	public function Footer()
 	{
 		$arrayConf = array(
-			'PS_SHOP_NAME',
-			'PS_SHOP_ADDR1',
-			'PS_SHOP_ADDR2',
-			'PS_SHOP_CODE',
-			'PS_SHOP_CITY',
+			'PS_SHOP_NAME', 
+			'PS_SHOP_ADDR1', 
+			'PS_SHOP_ADDR2', 
+			'PS_SHOP_CODE', 
+			'PS_SHOP_CITY', 
 			'PS_SHOP_COUNTRY',
-			'PS_SHOP_COUNTRY_ID',
-			'PS_SHOP_DETAILS',
-			'PS_SHOP_PHONE',
+			'PS_SHOP_COUNTRY_ID', 
+			'PS_SHOP_DETAILS', 
+			'PS_SHOP_PHONE', 
 			'PS_SHOP_STATE');
-
+		
 		$conf = Configuration::getMultiple($arrayConf);
 		$conf['PS_SHOP_NAME_UPPER'] = Tools::strtoupper($conf['PS_SHOP_NAME']);
 		$y_delta = array_key_exists('PS_SHOP_DETAILS', $conf) ? substr_count($conf['PS_SHOP_DETAILS'],"\n") : 0;
-
+		
 		foreach($conf as $key => $value)
 			$conf[$key] = Tools::iconv('utf-8', self::encoding(), $value);
 		foreach ($arrayConf as $key)
 			if (!isset($conf[$key]))
 				$conf[$key] = '';
-
+		
 		$merchantDetailFooter = $this->_builMerchantFooterDetail($conf);
 		$totalLineDetailFooter = count(explode("\n", $merchantDetailFooter));
-
-		// A point equals 1/72 of inch, that is to say about 0.35 mm (an inch being 2.54 cm).
+		
+		// A point equals 1/72 of inch, that is to say about 0.35 mm (an inch being 2.54 cm). 
 		// This is a very common unit in typography; font sizes are expressed in that unit.
-		// 8 point = 2.8mm and the cell height = 4mm
+		// 8 point = 2.8mm and the cell height = 4mm 
 		$this->SetY(-(21.0 + (4 * $totalLineDetailFooter)) - ($y_delta * 7.0));
 		$this->SetFont(self::fontname(), '', 7);
 		$this->Cell(190, 5, ' '."\n".Tools::iconv('utf-8', self::encoding(), 'P. ').$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
@@ -277,7 +277,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetFillColor(240, 240, 240);
 		$this->SetTextColor(0, 0, 0);
 		$this->SetFont(self::fontname(), '', 8);
-
+		
 		$this->MultiCell(0.0, 4.0, $merchantDetailFooter, 0, 'C', 1);
 	}
 
@@ -331,9 +331,6 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->AddPage();
 
 		/* Display address information */
-		$invoice_address = new Address((int)($order->id_address_invoice));
-		$delivery_address = new Address((int)($order->id_address_delivery));
-		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
 		$arrayConf = array('PS_SHOP_NAME', 'PS_SHOP_ADDR1', 'PS_SHOP_ADDR2', 'PS_SHOP_CODE', 'PS_SHOP_CITY', 'PS_SHOP_COUNTRY', 'PS_SHOP_DETAILS', 'PS_SHOP_PHONE', 'PS_SHOP_STATE');
 		$conf = Configuration::getMultiple($arrayConf);
 		foreach ($conf as $key => $value)
@@ -346,51 +343,20 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetX(10);
 		$pdf->SetY(25);
 		$pdf->SetFont(self::fontname(), '', 9);
-
-		$ordered_adr_fields = AddressFormat::getOrderedAddressFields($invoice_address->id_country);
-
-		$optional_fields = array(
-						'address2' => 1
-						, 'company' => 1
-					);
-		$ignore_fields = array(
-						'phone'	=> 1
-						, 'mobile_phone' =>1
-					);
-
-		foreach ($ordered_adr_fields as $adr_line)
-		{
-			$line_fields = explode(" ", trim($adr_line));
-			$tmp_dlv_vals = array();
-
-			foreach($line_fields as $field_name)
-			{
-				// if not skip
-				if (!isset($ignore_fields[$field_name]))
-				{
-					$tmp_dlv = $delivery_address->{$field_name};
-
-					if (!((empty($tmp_dlv) || $tmp_dlv == '') && isset($optional_fields[$field_name])))
-					{
-						$tmp_dlv = ($field_name == "country") ? $tmp_dlv.($deliveryState ? ' - '.$deliveryState->name : ''): $tmp_dlv;
-						$tmp_dlv_vals[] = Tools::iconv('utf-8', self::encoding(), $tmp_dlv);
-					}
-				}
-			}
-			$str_dlv_vals = implode(" ", $tmp_dlv_vals);
-
-			$need_nl = false;
-			if (!empty($str_dlv_vals) && $str_dlv_vals != '' && $str_dlv_vals != ' ')
-			{
-				$need_nl = true;
-				$pdf->Cell($width, 10, $str_dlv_vals, 0, 'L');
-			}
-
-			if ($need_nl)
-				$pdf->Ln(5);
-
-		}
-
+		
+		$addressType = array(
+			'invoice' => array(), 
+			'delivery' => array());
+		
+		$patternRules = array(
+				'avoid' => array(
+					'address2',
+					'company',
+					'phone',
+					'mobil_phone'));
+		
+		$addressType = self::generateHeaderAddresses($pdf, $order, $addressType, $patternRules, $width);
+		
 		/*
 		 * display order information
 		 */
@@ -463,6 +429,52 @@ class PDFCore extends PDF_PageGroupCore
 		}
 	}
 
+	/*
+	 * Generate the header addresses for pdf File
+	 */
+	public static function generateHeaderAddresses(&$pdf, $order, $addressType, $patternRules, $width)
+	{
+		$maxY = 0;
+		$pdf->setY($pdf->GetY() + 5);
+		foreach($addressType as $type => $idNameAttribute)
+		{
+			$currentY = $pdf->GetY();
+			
+			$attributeName = 'id_address_'.$type;
+			$addressType[$type]['displayed'] = '';
+			$addressType[$type]['addressObject'] = new Address((int)($order->$attributeName));
+			$addressType[$type]['addressFields'] = AddressFormat::getOrderedAddressFields($addressType[$type]['addressObject']->id_country);
+			$addressType[$type]['addressFormatedValues'] = AddressFormat::getFormattedAddressFieldsValues(
+				$addressType[$type]['addressObject'],
+				$addressType[$type]['addressFields']);
+				
+			foreach ($addressType[$type]['addressFields'] as $line)
+				if (($patternsList = explode(' ', $line)))
+				{
+					$tmp = '';
+					foreach($patternsList as $pattern)
+						if (!in_array($pattern, $patternRules['avoid']))
+							$tmp .= ((isset($addressType[$type]['addressFormatedValues'][$pattern]) && 
+								!empty($addressType[$type]['addressFormatedValues'][$pattern])) ?
+								(Tools::iconv('utf-8', self::encoding(), $addressType[$type]['addressFormatedValues'][$pattern]).' ') : '');
+					$tmp = trim($tmp);
+					$addressType[$type]['displayed'] .= (!empty($tmp)) ? $tmp."\n" : '';
+				}
+				$pdf->MultiCell($width, 6.0, $addressType[$type]['displayed'], 0, 'L', 0);
+				
+				if ($pdf->GetY() > $maxY)
+					$maxY = $pdf->GetY();
+					
+				$pdf->SetY($currentY);
+				$pdf->SetX($width + 10);
+		}
+
+		$pdf->SetY($maxY);
+		if ($maxY)
+			$pdf->Ln(5);
+		return $addressType;
+	}
+	
 	/**
 	* Main
 	*
@@ -492,25 +504,8 @@ class PDFCore extends PDF_PageGroupCore
 
 		$pdf->AliasNbPages();
 		$pdf->AddPage();
-		/* Display address information */
-		$invoice_address = new Address((int)($order->id_address_invoice));
-		$invoiceState = $invoice_address->id_state ? new State($invoice_address->id_state) : false;
-		$delivery_address = new Address((int)($order->id_address_delivery));
-		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
-
-		$ordered_adr_fields = AddressFormat::getOrderedAddressFields($invoice_address->id_country);
-
-		$optional_fields = array(
-						'address2' => 1,
-						'company' => 1);
-
-		$ignore_fields = array(
-						'phone'	=> 1,
-						'mobile_phone' => 1,
-						'state_iso' => 1);
-
+				
 		$width = 100;
-
 		$pdf->SetX(10);
 		$pdf->SetY(25);
 		$pdf->SetFont(self::fontname(), '', 12);
@@ -518,74 +513,36 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->Cell($width, 10, self::l('Invoicing'), 0, 'L');
 		$pdf->Ln(5);
 		$pdf->SetFont(self::fontname(), '', 9);
+		
+		$addressType = array(
+			'invoice' => array(), 
+			'delivery' => array());
+		
+		$patternRules = array(
+				'optional' => array(
+					'address2',
+					'company'),
+				'avoid' => array(
+					'phone',
+					'mobil_phone',
+					'State:iso_code'));
+		
+		$addressType = self::generateHeaderAddresses($pdf, $order, $addressType, $patternRules, $width);
 
-		foreach ($ordered_adr_fields as $adr_line)
-		{
-			$line_fields = explode(" ", trim($adr_line));
-
-			$tmp_inv_vals = array();
-			$tmp_dlv_vals = array();
-
-			foreach($line_fields as $field_name)
-			{
-				// if not skip
-				if (!isset($ignore_fields[$field_name]))
-				{
-					$tmp_inv = $invoice_address->{$field_name};
-					$tmp_dlv = $delivery_address->{$field_name};
-					if (!((empty($tmp_inv) || $tmp_inv == '') && isset($optional_fields[$field_name])))
-					{
-						$tmp_inv = ($field_name == "city") ? $tmp_inv.($deliveryState ? ', '.$deliveryState->name : ''): $tmp_inv;
-						$tmp_inv_vals[] = Tools::iconv('utf-8', self::encoding(), $tmp_inv);
-					}
-					if (!((empty($tmp_dlv) || $tmp_dlv == '') && isset($optional_fields[$field_name])))
-					{
-						$tmp_dlv = ($field_name == "city") ? $tmp_dlv.($deliveryState ? ', '.$deliveryState->name : ''): $tmp_dlv;
-						$tmp_dlv_vals[] = Tools::iconv('utf-8', self::encoding(), $tmp_dlv);
-					}
-				}
-			}
-			$str_inv_vals = implode(" ", $tmp_inv_vals);
-			$str_dlv_vals = implode(" ", $tmp_dlv_vals);
-
-			$need_nl = false;
-			if (!empty($str_dlv_vals) && $str_dlv_vals != '' && $str_dlv_vals != ' ')
-			{
-				$need_nl = true;
-				$pdf->Cell($width, 10, $str_dlv_vals, 0, 'L');
-			}
-			if (!empty($str_inv_vals) && $str_inv_vals != '' && $str_inv_vals != ' ')
-			{
-				$need_nl = true;
-				$pdf->Cell($width, 10, $str_inv_vals, 0, 'L');
-			}
-
-			if ($need_nl)
-				$pdf->Ln(5);
-
-		}
-
-		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoice_address->vat_number))
+		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($addressType['invoice']['addressObject']->vat_number))
 		{
 			$vat_delivery = '';
-			if ($invoice_address->id != $delivery_address->id)
-				$vat_delivery = $delivery_address->vat_number;
+			if ($invoiceAddress->id != $addressType['delivery']['addressObject']->id)
+				$vat_delivery = $addressType['delivery']['addressObject']->vat_number;
 			$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $vat_delivery), 0, 'L');
-			$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $invoice_address->vat_number), 0, 'L');
+			$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $addressType['invoice']['addressObject']->vat_number), 0, 'L');
 			$pdf->Ln(5);
 		}
 
-		// All phone number are deleted to display a new format type
-		//$pdf->Cell($width, 10, $delivery_address->phone, 0, 'L');
-
-		if ($invoice_address->dni != NULL)
-			$pdf->Cell($width, 10, self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), $invoice_address->dni), 0, 'L');
-
-		/*if (!empty($delivery_address->phone_mobile))
-		{
-			$pdf->Ln(5);
-			$pdf->Cell($width, 10, $delivery_address->phone_mobile, 0, 'L');
-		}*/
+		if ($addressType['invoice']['addressObject']->dni != NULL)
+			$pdf->Cell($width, 10, 
+				self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), 
+				$addressType['invoice']['addressObject']->dni), 0, 'L');
 
 		/*
 		 * display order information
@@ -602,12 +559,12 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetTextColor(0, 0, 0);
 		$pdf->SetFont(self::fontname(), '', 9);
 		if (self::$orderSlip)
-			$pdf->Cell(0, 6, self::l('SLIP #').sprintf('%06d', self::$orderSlip->id).' '.self::l('from') . ' ' .Tools::displayDate(self::$orderSlip->date_upd, self::$order->id_lang), 1, 2, 'L', 1);
+			$pdf->Cell(0, 6, self::l('SLIP #').' '.sprintf('%06d', self::$orderSlip->id).' '.self::l('from') . ' ' .Tools::displayDate(self::$orderSlip->date_upd, self::$order->id_lang), 1, 2, 'L', 1);
 		elseif (self::$delivery)
 			$pdf->Cell(0, 6, self::l('DELIVERY SLIP #').Configuration::get('PS_DELIVERY_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', self::$delivery).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->delivery_date, self::$order->id_lang), 1, 2, 'L', 1);
 		else
-			$pdf->Cell(0, 6, self::l('INVOICE #').Configuration::get('PS_INVOICE_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->invoice_date, self::$order->id_lang), 1, 2, 'L', 1);
-		$pdf->Cell(55, 6, self::l('Order #').sprintf('%06d', self::$order->id), 'L', 0);
+			$pdf->Cell(0, 6, self::l('INVOICE #').' '.Configuration::get('PS_INVOICE_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', self::$order->invoice_number).' '.self::l('from') . ' ' .Tools::displayDate(self::$order->invoice_date, self::$order->id_lang), 1, 2, 'L', 1);
+		$pdf->Cell(55, 6, self::l('Order #').' '.sprintf('%06d', self::$order->id), 'L', 0);
 		$pdf->Cell(70, 6, self::l('Carrier:').($order->gift ? ' '.Tools::iconv('utf-8', self::encoding(), $carrier->name) : ''), 'L');
 		$pdf->Cell(0, 6, self::l('Payment method:'), 'LR');
 		$pdf->Ln(5);
@@ -777,8 +734,7 @@ class PDFCore extends PDF_PageGroupCore
 		$lines = 25;
 		$lineSize = 0;
 		$line = 0;
-
-
+		
 		foreach($products AS $product)
 			if (!$delivery OR ((int)($product['product_quantity']) - (int)($product['product_quantity_refunded']) > 0))
 			{

@@ -36,13 +36,14 @@ class AddressFormatCore extends ObjectModel
 	/** @var string */
 	public $format;
 
+	private $_errorFormatList = array();
 
 	protected	$fieldsRequired = array ('format');	
 	protected	$fieldsValidate = array ('format' => 'isGenericName');
 
 	/* MySQL does not allow 'order detail' for a table name */
 	protected	$table = 'address_format';
-	protected 	$identifier = 'id_country';
+	protected $identifier = 'id_country';
 
 	public function getFields()
 	{
@@ -54,29 +55,194 @@ class AddressFormatCore extends ObjectModel
 		return $fields;
 	}
 
-
-	public function checkFormatFields()
+	/*
+	 * Check if the the association of the field name and a class name
+	 * is valide
+	 * @className is the name class
+	 * @fieldName is a property name
+	 * @isIdField boolean to know if we have to allowed a property name started by 'id_'
+	 */
+	private function _checkValidateClassField($className, $fieldName, $isIdField)
 	{
-		$out = true;
-		$addr_f_validate = Address::getFieldsValidate();
+		$isValide = false;
 
-		$addr_f_validate['state_iso'] = 1;		// adding state iso code into allowed fields
-
-		$fields_format = explode("\n", $this->format);
-		foreach($fields_format as $field_line)
+		if (!class_exists($className))
+			$this->_errorFormatList[] = Tools::displayError('This class name doesn\'t exist').
+			': '.$className;
+		else
 		{
-			$fields = explode(' ', trim($field_line));
-			foreach($fields as $field_item)
+			$obj = new $className();
+			$reflect = new ReflectionObject($obj);
+			
+			// Check if the property is accessible
+			$publicProperties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+			foreach($publicProperties as $property)
 			{
-				$field_item = trim($field_item);
-				if (!isset($addr_f_validate[$field_item]) && !isset($addr_f_validate['id_'.$field_item]))
-					$out = false;
+				$propertyName = $property->getName();
+				if (($propertyName == $fieldName) && ($isIdField ||
+						(!preg_match('#id_\w#', $propertyName, $match))))
+					$isValide = true;
+			}
+			
+			if (!$isValide)
+				$this->_errorFormatList[] = Tools::displayError('This property doesn\'t exist into the class').
+				' '.$className.': '.$fieldName;
+				
+			unset($obj);
+			unset($reflect);
+		}
+	}
+	
+	/*
+	 * Verify the existence of a field name and check the availability
+	 * of an association between a field name and a class (ClassName:fieldName)
+	 * if the separator is overview
+	 * @patternName is the composition of the class and field name
+	 * @fieldsValidate contains the list of available field for the Address class
+	 */
+	private function _checkLiableAssociation($patternName, $fieldsValidate)
+	{
+		$patternName = trim($patternName);
+		
+		if ($associationName = explode(':', $patternName))
+		{
+			$totalNameUsed = count($associationName);
+			if ($totalNameUsed > 2)
+				$this->_errorFormatList[] = Tools::displayError('This assocation contains too much key name');
+			else if ($totalNameUsed == 1 && (!isset($fieldsValidate[$associationName[0]]) || 
+					isset($fieldsValidate['id_'.$associationName[0]])))
+						$this->_errorFormatList[] = Tools::displayError('This name isn\'t allowed').': '.
+						$associationName[0];
+			else if ($totalNameUsed == 2)
+			{
+				if (empty($associationName[0]) || empty($associationName[1]))
+					$this->_errorFormatList[] = Tools::displayError('Syntax error with this pattern').': '.$patternName;
+				else
+				{
+					// Check if the id field name exist in the Address class 
+					$this->_checkValidateClassField('Address', 'id_'.strtolower($associationName[0]), true);
+					
+					// Check if the field name exist in the class write by the user
+					$this->_checkValidateClassField(ucfirst($associationName[0]), $associationName[1], false);
+				}
 			}
 		}
-		return $out;
 	}
 
+	/*
+	 * Check if the set fields are valide
+	 */
+	public function checkFormatFields()
+	{
+		$cleanedContent = '';
+		$this->_errorFormatList = array();
+		$fieldsValidate = Address::getFieldsValidate();
 
+		$multipleLineFields = explode("\n", $this->format);
+		if ($multipleLineFields && is_array($multipleLineFields))
+			foreach($multipleLineFields as $lineField)
+			{
+				$lineField = str_replace(array("\n", "\t", "\r\n", "\r"), '', $lineField);
+				if (strlen($lineField))
+				{
+					$cleanedContent .= $lineField."\r\n";
+					$patternsName = explode(' ', trim($lineField));
+					if ($patternsName && is_array($patternsName))
+						foreach($patternsName as $patternName)
+							$this->_checkLiableAssociation($patternName, $fieldsValidate);
+				}
+			}
+		$this->format = $cleanedContent;
+		return (count($this->_errorFormatList)) ? false : true;
+	}
+	
+	/*
+	 * Returns the error list
+	 */
+	public function getErrorList()
+	{
+		return $this->_errorFormatList;
+	}
+
+	/*
+	 * Returns the formatted fields with associated values
+	 * 
+	 * @address is an instancied Address object
+	 * @addressFormat is the format
+	 * @return double Array
+	 */
+	public static function getFormattedAddressFieldsValues($address, $addressFormat)
+	{
+		global $cookie;
+		
+		$tab = array();
+		$temporyObject = array();
+		
+		// Check if $address exist and it's an instanciate object of Address
+		if ($address && ($address instanceof Address))
+			foreach($addressFormat as $lineNum => $line)
+			{
+				if (($keyList = explode(' ', $line)) && is_array($keyList))
+					foreach($keyList as $pattern)
+						if ($associateName = explode(':', $pattern))
+						{
+							$totalName = count($associateName);
+							if ($totalName == 1 && isset($address->{$associateName[0]}))
+								$tab[$associateName[0]] = $address->{$associateName[0]};
+							else 
+							{
+								$tab[$pattern] = '';
+								
+								// Check if the property exist in both classes
+								if (($totalName == 2) && class_exists($associateName[0]) &&
+									property_exists($associateName[0], $associateName[1]) &&
+									property_exists($address, 'id_'.strtolower($associateName[0])))
+								{
+									$idFieldName = 'id_'.strtolower($associateName[0]);
+
+									if (!isset($temporyObject[$associateName[0]]))
+										$temporyObject[$associateName[0]] = new $associateName[0]($address->{$idFieldName});
+									if ($temporyObject[$associateName[0]])
+										$tab[$pattern] = (is_array($temporyObject[$associateName[0]]->{$associateName[1]})) ?
+											((isset($temporyObject[$associateName[0]]->{$associateName[1]}[$cookie->id_lang])) ? 
+											$temporyObject[$associateName[0]]->{$associateName[1]}[$cookie->id_lang] : '') :
+											$temporyObject[$associateName[0]]->{$associateName[1]};
+								}
+							}
+					}
+			}
+		// Free the instanciate objects
+		foreach($temporyObject as $objectName => &$object)
+			unset($object);
+		return $tab;
+	}
+	
+	/*
+	 * Generates the full address text
+	 * @address is an instanciate object of Address class
+	 * @patternrules is a defined rules array to avoid some pattern
+	 * @newLine is a string containing the newLine format
+	 * @separator is a string containing the separator format
+	 */
+	public static function generateAddress(Address $address, $patternRules, $newLine = "\n", $separator = ' ')
+	{
+		$addressFields = AddressFormat::getOrderedAddressFields($address->id_country);
+		$addressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($address, $addressFields);
+		
+		$addressText = '';
+		foreach ($addressFields as $line)
+			if (($patternsList = explode(' ', $line)))
+				{
+					$tmpText = '';
+					foreach($patternsList as $pattern)
+						if (!in_array($pattern, $patternRules['avoid']))
+							$tmpText .= (isset($addressFormatedValues[$pattern])) ?
+								$addressFormatedValues[$pattern].$separator : '';
+					$tmpText = trim($tmpText);
+					$addressText .= (!empty($tmpText)) ? $tmpText.$newLine: '';
+				}
+		return $addressText;
+	}
 	
 	/**
 	 * Returns address format fields in array by country
@@ -88,18 +254,13 @@ class AddressFormatCore extends ObjectModel
 	{
 		$out = array();
 		$field_set = explode("\n", self::getAddressCountryFormat($id_country));
+		
 		foreach ($field_set as $field_item)
-		{
-		// 	$field_item = trim($field_item);
-			
 			if ($split_all)
-			{
 				foreach(explode(' ',$field_item) as $word_item)
 					$out[] = trim($word_item);
-			}
 			else
 				$out[] = trim($field_item);
-		}
 		return $out;
 	}
 

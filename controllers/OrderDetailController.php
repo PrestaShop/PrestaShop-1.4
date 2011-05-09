@@ -42,6 +42,7 @@ class OrderDetailControllerCore extends FrontController
 	public function preProcess()
 	{
 		parent::preProcess();
+		
 
 		if (Tools::isSubmit('submitMessage'))
 		{
@@ -104,10 +105,13 @@ class OrderDetailControllerCore extends FrontController
 				$carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
 				$addressInvoice = new Address((int)($order->id_address_invoice));
 				$addressDelivery = new Address((int)($order->id_address_delivery));
+			//	$stateInvoiceAddress = new State((int)$addressInvoice->id_state);
 
 				$inv_adr_fields = AddressFormat::getOrderedAddressFields($addressInvoice->id_country);
 				$dlv_adr_fields = AddressFormat::getOrderedAddressFields($addressDelivery->id_country);
 				
+				$invoiceAddressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($addressInvoice, $inv_adr_fields);
+				$delivryAddressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($addressDelivery, $dlv_adr_fields);
 
 				if ($order->total_discounts > 0)
 					self::$smarty->assign('total_old', (float)($order->total_paid - $order->total_discounts));
@@ -135,6 +139,8 @@ class OrderDetailControllerCore extends FrontController
 					'address_delivery' => $addressDelivery,
 					'inv_adr_fields' => $inv_adr_fields,
 					'dlv_adr_fields' => $dlv_adr_fields,
+					'invoiceAddressFormatedValues' => $invoiceAddressFormatedValues,
+					'deliveryAddressFormatedValues' => $delivryAddressFormatedValues,
 					'deliveryState' => (Validate::isLoadedObject($addressDelivery) AND $addressDelivery->id_state) ? new State((int)($addressDelivery->id_state)) : false,
 					'is_guest' => false,
 					'messages' => Message::getMessagesByOrderId((int)($order->id)),
@@ -147,9 +153,14 @@ class OrderDetailControllerCore extends FrontController
 					self::$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
 				self::$smarty->assign('HOOK_ORDERDETAILDISPLAYED', Module::hookExec('orderDetailDisplayed', array('order' => $order)));
 				Module::hookExec('OrderDetail', array('carrier' => $carrier, 'order' => $order));
+				
+				unset($carrier);
+				unset($addressInvoice);
+				unset($addressDelivery);
 			}
 			else
 				$this->errors[] = Tools::displayError('Cannot find this order');
+			unset($order);
 		}
 	}
 

@@ -24,6 +24,12 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+<script type="text/javascript">
+// <![CDATA[
+		
+//]]>
+</script>
+
 <form action="{if isset($opc) && $opc}{$link->getPageLink('order-opc.php', true)}{else}{$link->getPageLink('order.php', true)}{/if}" method="post" class="submit">
 	<input type="hidden" value="{$order->id}" name="id_order">
 	<h4>
@@ -84,7 +90,7 @@
 		{elseif $field_item eq "phone_mobile" && $address_invoice->phone_mobile}<li class="address_phone_mobile">{$address_invoice->phone_mobile|escape:'htmlall':'UTF-8'}</li>
 		{else}
 				{assign var=address_words value=" "|explode:$field_item} 
-				<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$address_invoice->$word_item|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
+				<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$invoiceAddressFormatedValues[$word_item]|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
 		{/if}
 	
 	{/foreach}
@@ -97,7 +103,7 @@
 		{elseif $field_item eq "phone_mobile" && $address_delivery->phone_mobile}<li class="address_phone_mobile">{$address_delivery->phone_mobile|escape:'htmlall':'UTF-8'}</li>
 		{else}
 				{assign var=address_words value=" "|explode:$field_item} 
-				<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$address_delivery->$word_item|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
+				<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$deliveryAddressFormatedValues[$word_item]|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
 		{/if}
 	{/foreach}
 </ul>

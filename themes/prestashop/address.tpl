@@ -85,11 +85,6 @@ $(function(){ldelim}
 <form action="{$link->getPageLink('address.php', true)}" method="post" class="std">
 	<fieldset>
 		<h3>{if isset($id_address)}{l s='Your address'}{else}{l s='New address'}{/if}</h3>
-		<p class="text">
-			<input type="hidden" name="token" value="{$token}" />
-			<label for="company">{l s='Company'}</label>
-			<input type="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{else}{if isset($address->company)}{$address->company|escape:'htmlall':'UTF-8'}{/if}{/if}" />
-		</p>
 		<p class="required text dni">
 			<label for="dni">{l s='Identification number'}</label>
 			<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{else}{if isset($address->dni)}{$address->dni|escape:'htmlall':'UTF-8'}{/if}{/if}" />
@@ -109,13 +104,20 @@ $(function(){ldelim}
 			</p>
 		</div>
 		</div>
-		{foreach from=$ordered_adr_fields item=field_name}
-		{if $field_name eq 'firstname'}
+	{foreach from=$ordered_adr_fields item=field_name}
+		{if $field_name eq 'company'}
+			<p class="text">
+			<input type="hidden" name="token" value="{$token}" />
+			<label for="company">{l s='Company'}</label>
+			<input type="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{else}{if isset($address->company)}{$address->company|escape:'htmlall':'UTF-8'}{/if}{/if}" />
+		</p>
+		{else if $field_name eq 'firstname'}
 		<p class="required text">
 			<label for="firstname">{l s='First name'}</label>
 			<input type="text" name="firstname" id="firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{elseif isset($address->firstname)}{$address->firstname|escape:'htmlall':'UTF-8'}{/if}" />
 			<sup>*</sup>
 		</p>
+		
 		{elseif $field_name eq 'lastname'}
 		<p class="required text">
 			<label for="lastname">{l s='Last name'}</label>
@@ -145,7 +147,11 @@ $(function(){ldelim}
 			<input type="text" name="city" id="city" value="{if isset($smarty.post.city)}{$smarty.post.city}{else}{if isset($address->city)}{$address->city|escape:'htmlall':'UTF-8'}{/if}{/if}" maxlength="64" />
 			<sup>*</sup>
 		</p>
-		{elseif $field_name eq 'country'}
+		<!-- 
+			if customer hasn't update his layout address, country has to be verified
+			but it's deprecated
+		-->
+		{elseif $field_name eq 'Country:name' || $field_name eq 'country'}
 		<p class="required select">
 			<label for="id_country">{l s='Country'}</label>
 			<select id="id_country" name="id_country">{$countries_list}</select>

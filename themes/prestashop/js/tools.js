@@ -208,3 +208,19 @@ function in_array(value, array)
 			return true;
 	return false;
 }
+
+function resizeAddressesBox(nameBox)
+{
+	maxHeight = 0;
+
+	if (nameBox == undefined)
+		nameBox = '.address';
+	$(nameBox).each(function()
+	{
+		$(this).css('height', 'auto');
+		currentHeight = $(this).height();
+		if (maxHeight < currentHeight)
+			maxHeight = currentHeight;
+	});
+	$(nameBox).height(maxHeight);
+}

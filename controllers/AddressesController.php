@@ -41,23 +41,38 @@ class AddressesControllerCore extends FrontController
 	{
 		parent::setMedia();
 		Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
+		Tools::addJS(_THEME_JS_DIR_.'tools.js');
 	}
 	
 	public function process()
 	{
 		parent::process();
 		
+		$multipleAddressesFormated = array();
 		$customer = new Customer((int)(self::$cookie->id_customer));
+		
 		if (!Validate::isLoadedObject($customer))
 			die(Tools::displayError('Customer not found'));
+			
+		// Retro Compatibility Theme < 1.4.1
 		self::$smarty->assign('addresses', $customer->getAddresses((int)(self::$cookie->id_lang)));
-
-		$values = array();
-		$customer_address = $customer->getAddresses((int)(self::$cookie->id_lang));
-
-		foreach($customer_address as $addr_item)
-			$ordered_fields = AddressFormat::getOrderedAddressFields($addr_item['id_country']);
-
+		
+		$customerAddressesDetailed = $customer->getAddresses((int)(self::$cookie->id_lang));
+		
+		$total = 0;
+		foreach($customerAddressesDetailed as $addressDetailed)
+		{
+			$address = new Address($addressDetailed['id_address']);
+			
+			$multipleAddressesFormated[$total]['ordered'] = AddressFormat::getOrderedAddressFields($addressDetailed['id_country']);
+			$multipleAddressesFormated[$total]['formated'] =  AddressFormat::getFormattedAddressFieldsValues(
+				$address, 
+				$multipleAddressesFormated[$total]['ordered']);
+			$multipleAddressesFormated[$total]['object'] = $addressDetailed;
+			unset($address);
+			++$total;
+		}
+		
 		self::$smarty->assign('addresses_style', array(
 								'company' => 'address_company'
 								,'vat_number' => 'address_company'
@@ -71,7 +86,8 @@ class AddressesControllerCore extends FrontController
 								,'phone_mobile' => 'address_phone_mobile'
 								,'alias' => 'address_title'
 							));
-		self::$smarty->assign('ordered_fields', $ordered_fields);
+		self::$smarty->assign('multipleAddresses', $multipleAddressesFormated);
+		unset($customer);
 	}
 	
 	public function displayContent()

@@ -289,7 +289,23 @@ class ParentOrderControllerCore extends FrontController
 		{
 			/* Getting customer addresses */
 			$customerAddresses = $customer->getAddresses((int)(self::$cookie->id_lang));
-			self::$smarty->assign('addresses', $customerAddresses);
+			
+			// Getting a list of formated address fields with associated values
+			$formatedAddressFieldsValuesList = array();
+			foreach($customerAddresses as $address)
+			{
+				$tmpAddress = new Address($address['id_address']);
+				
+				$formatedAddressFieldsValuesList[$address['id_address']]['ordered_fields'] = AddressFormat::getOrderedAddressFields($address['id_country']);
+				$formatedAddressFieldsValuesList[$address['id_address']]['formated_fields_values'] = AddressFormat::getFormattedAddressFieldsValues(
+					$tmpAddress,
+					$formatedAddressFieldsValuesList[$address['id_address']]['ordered_fields']);
+				
+				unset($tmpAddress);
+			}
+			self::$smarty->assign(array(
+				'addresses' => $customerAddresses,
+				'formatedAddressFieldsValuesList' => $formatedAddressFieldsValuesList));
 
 			/* Setting default addresses for cart */
 			if ((!isset(self::$cart->id_address_delivery) OR empty(self::$cart->id_address_delivery)) AND sizeof($customerAddresses))

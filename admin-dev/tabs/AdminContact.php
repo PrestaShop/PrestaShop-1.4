@@ -35,7 +35,17 @@ class AdminContact extends AdminPreferences
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
 
+		$temporyArrayFields = $this->_getDefaultFieldsContent();
+		$this->_buildOrderedFieldsShop($temporyArrayFields);
+		
+		parent::__construct();
+
+	}
+	
+	private function _getDefaultFieldsContent()
+	{
 		global $cookie;
+		
 		$countryList = array();
 		$countryList[] = array('id' => '0', 'name' => $this->l('Choose your country'));
 		foreach (Country::getCountries(intval($cookie->id_lang)) AS $country)
@@ -43,14 +53,14 @@ class AdminContact extends AdminPreferences
 		$stateList = array();
 		$stateList[] = array('id' => '0', 'name' => $this->l('Choose your state (if applicable)'));
 		foreach (State::getStates(intval($cookie->id_lang)) AS $state)
-			$stateList[] = array('id' => $state['id_state'], 'name' => $state['name']);		
-
- 		$this->_fieldsShop = array(
+			$stateList[] = array('id' => $state['id_state'], 'name' => $state['name']);
+			
+		$formFields = array(
 			'PS_SHOP_NAME' => array('title' => $this->l('Shop name:'), 'desc' => $this->l('Displayed in e-mails and page titles'), 'validation' => 'isGenericName', 'required' => true, 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_EMAIL' => array('title' => $this->l('Shop e-mail:'), 'desc' => $this->l('Displayed in e-mails sent to customers'), 'validation' => 'isEmail', 'required' => true, 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_DETAILS' => array('title' => $this->l('Registration:'), 'desc' => $this->l('Shop registration information (e.g., SIRET or RCS)'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'textarea', 'cols' => 30, 'rows' => 5),
-			'PS_SHOP_ADDR1' => array('title' => $this->l('Shop address:'), 'validation' => 'isAddress', 'size' => 30, 'type' => 'text'),
-			'PS_SHOP_ADDR2' => array('title' => '', 'validation' => 'isAddress', 'size' => 30, 'type' => 'text'),
+			'PS_SHOP_ADDR1' => array('title' => $this->l('Shop address line 1:'), 'validation' => 'isAddress', 'size' => 30, 'type' => 'text'),
+			'PS_SHOP_ADDR2' => array('title' => 'Address line 2', 'validation' => 'isAddress', 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_CODE' => array('title' => $this->l('Post/Zip code:'), 'validation' => 'isGenericName', 'size' => 6, 'type' => 'text'),
 			'PS_SHOP_CITY' => array('title' => $this->l('City:'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_COUNTRY_ID' => array('title' => $this->l('Country:'), 'validation' => 'isInt', 'size' => 30, 'type' => 'select', 'list' => $countryList, 'identifier' => 'id', 'cast' => 'intval'),
@@ -58,10 +68,34 @@ class AdminContact extends AdminPreferences
 			'PS_SHOP_PHONE' => array('title' => $this->l('Phone:'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_FAX' => array('title' => $this->l('Fax:'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
 		);
-		parent::__construct();
-
+		return $formFields;
 	}
 
+	private function _buildOrderedFieldsShop($formFields)
+	{
+		$associatedOrderKey = array(
+			'PS_SHOP_NAME' => 'company',
+			'PS_SHOP_ADDR1' => 'address1',
+			'PS_SHOP_ADDR2' => 'address2',
+			'PS_SHOP_CITY' => 'city',
+			'PS_SHOP_STATE_ID' => 'State:name',
+			'PS_SHOP_CODE' => 'postcode',
+			'PS_SHOP_COUNTRY_ID' => 'Country:name',
+			'PS_SHOP_PHONE' => 'phone');
+		
+		$this->_fieldsShop = array();
+		$orderedFields = AddressFormat::getOrderedAddressFields(Configuration::get('PS_SHOP_COUNTRY_ID'));
+		
+		foreach($orderedFields as $lineFields)
+			if (($patterns = explode(' ', $lineFields)))
+				foreach($patterns as $pattern)
+					if (($key = array_search($pattern, $associatedOrderKey)))
+						$this->_fieldsShop[$key] = $formFields[$key];
+		foreach($formFields as $key => $value)
+			if (!isset($this->_fieldsShop[$key]))
+				$this->_fieldsShop[$key] = $formFields[$key];
+	}
+	
 	public function postProcess()
 	{
 		if (isset($_POST['PS_SHOP_STATE_ID']) && $_POST['PS_SHOP_STATE_ID'] != '0')

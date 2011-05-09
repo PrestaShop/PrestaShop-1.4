@@ -73,12 +73,20 @@ class AdminCountries extends AdminTab
 					$tmp_addr_format = new AddressFormat();
 					$tmp_addr_format->id_country = $id_country;
 				}
-
+				
 				$tmp_addr_format->format = Tools::getValue('address_layout');
+				
 				if (strlen($tmp_addr_format->format) > 0)
 				{
 					if ($tmp_addr_format->checkFormatFields())
 						$save_status = ($is_new) ? $tmp_addr_format->save(): $tmp_addr_format->update();
+					else
+					{
+						$errorList = $tmp_addr_format->getErrorList();
+						foreach($errorList as $numError => $error)
+							$this->_errors[] = $error;
+					}
+						
 
 					if (!$save_status)
 						$this->_errors[] = Tools::displayError('Invalid address layout'.Db::getInstance()->getMsgError());
@@ -142,6 +150,9 @@ class AdminCountries extends AdminTab
 		foreach ($zones AS $zone)
 			echo '		<option value="'.(int)($zone['id_zone']).'"'.(($this->getFieldValue($obj, 'id_zone') == $zone['id_zone']) ? ' selected="selected"' : '').'>'.$zone['name'].'</option>';
 		$address_layout = AddressFormat::getAddressCountryFormat($obj->id);
+		if ($value = Tools::getValue('address_layout'))
+			$address_layout = $value;
+		
 		echo '		</select>
 					<p>'.$this->l('Geographical zone where country is located').'</p>
 				</div>

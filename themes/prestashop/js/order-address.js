@@ -27,6 +27,7 @@
 $(document).ready(function()
 {
 	updateAddressesDisplay(true);
+	resizeAddressesBox();
 });
 
 //update the display of the addresses
@@ -72,16 +73,12 @@ function updateAddressesDisplay(first_view)
 		if (orderProcess == 'order')
 			updateAddresses();
 	}
-
 	return true;
 }
 
 function updateAddressDisplay(addressType)
-{	
-	if (typeof(addresses) == 'undefined')
-		return false;
-		
-	if (addresses.length <= 0)
+{		
+	if (formatedAddressFieldsValuesList.length <= 0)
 		return false;
 
 	var idAddress = $('select#id_address_' + addressType + '').val();
@@ -120,4 +117,5 @@ function updateAddresses()
 		},
            error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save adresses \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
        });
+   resizeAddressesBox();
 }

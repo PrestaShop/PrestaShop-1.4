@@ -28,6 +28,12 @@
 <!--
 	var baseDir = '{$base_dir_ssl}';
 -->
+
+	$(document).ready(function()
+	{
+		resizeAddressesBox();
+	});
+
 </script>
 
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My addresses'}{/capture}
@@ -36,28 +42,27 @@
 <h1>{l s='My addresses'}</h1>
 <p>{l s='Please configure the desired billing and delivery addresses to be preselected when placing an order. You may also add additional addresses, useful for sending gifts or receiving your order at the office.'}</p>
 
-{if $ordered_fields}
+{if isset($multipleAddresses) && $multipleAddresses}
 <div class="addresses">
 	<h3>{l s='Your addresses are listed below.'}</h3>
 	<p>{l s='Be sure to update them if they have changed.'}</p>
 	{assign var="adrs_style" value=$addresses_style}
-	{foreach from=$addresses item=address name=myLoop}
-	<ul class="address {if $smarty.foreach.myLoop.last}last_item{elseif $smarty.foreach.myLoop.first}first_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
-		<li class="address_title">{$address.alias}</li>
-		{foreach from=$ordered_fields name=adr_loop item=field_item}
-		{if $field_item eq "company" && $address.company}<li class="address_company">{$address.company}</li>
-		{elseif $field_item eq "vat_number" && $address.vat_number}<li class="address_company">{$address.vat_number}</li>
-		{elseif $field_item eq "address2" && $address.address2}<li class="address_address2">{$address.address2}</li>
-		{elseif $field_item eq "phone" && $address.phone}<li class="address_phone">{$address.phone}</li>
-		{elseif $field_item eq "phone_mobile" && $address.phone_mobile}<li class="address_phone_mobile">{$address.phone_mobile}</li>
-		{else}
-			{assign var=address_words value=" "|explode:$field_item} 
-			<li>{foreach from=$address_words item=word_item name="word_loop"}{if !$smarty.foreach.word_loop.first} {/if}<span class="address_{$word_item}">{$address.$word_item|escape:'htmlall':'UTF-8'}</span>{/foreach}</li>
-		{/if}
-		{/foreach}
-		<li class="address_update"><a href="{$link->getPageLink('address.php', true)}?id_address={$address.id_address|intval}" title="{l s='Update'}">{l s='Update'}</a></li>
-		<li class="address_delete"><a href="{$link->getPageLink('address.php', true)}?id_address={$address.id_address|intval}&amp;delete" onclick="return confirm('{l s='Are you sure?'}');" title="{l s='Delete'}">{l s='Delete'}</a></li>
-	</ul>
+	{foreach from=$multipleAddresses item=address name=myLoop}
+		<ul class="address {if $smarty.foreach.myLoop.last}last_item{elseif $smarty.foreach.myLoop.first}first_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
+			<li class="address_title">{$address['object'].alias}</li>
+			{foreach from=$address['ordered'] name=adr_loop item=pattern}
+				{assign var=addressKey value=" "|explode:$pattern}
+				<li>
+				{foreach from=$addressKey item=key name="word_loop"}
+					<span class="{if isset($addresses_style[$key])}{$addresses_style[$key]}{/if}">
+						{$address['formated'][$key]|escape:'htmlall':'UTF-8'}
+					</span>
+				{/foreach}
+				</li>
+			{/foreach}
+			<li class="address_update"><a href="{$link->getPageLink('address.php', true)}?id_address={$address['object'].id_address|intval}" title="{l s='Update'}">{l s='Update'}</a></li>
+			<li class="address_delete"><a href="{$link->getPageLink('address.php', true)}?id_address={$address['object'].id_address|intval}&amp;delete" onclick="return confirm('{l s='Are you sure?'}');" title="{l s='Delete'}">{l s='Delete'}</a></li>
+		</ul>
 	{/foreach}
 	<p class="clear" />
 </div>

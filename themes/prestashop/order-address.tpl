@@ -30,43 +30,24 @@
 	var baseDir = '{$base_dir_ssl}';
 	var orderProcess = 'order';
 	{/if}
-	var addresses = new Array();
-	var addresses_values = new Array();
-	{foreach from=$addresses key=k item=address}
-		addresses[{$address.id_address|intval}] = new Array('{$address.company|addslashes}', '{$address.firstname|addslashes}', '{$address.lastname|addslashes}', '{$address.address1|addslashes}', '{$address.address2|addslashes}', '{$address.postcode|addslashes}', '{$address.city|addslashes}', '{$address.country|addslashes}', '{$address.state|default:''|addslashes}');
-		addresses_values[{$address.id_address|intval}] = {ldelim}
-								company: '{$address.company|addslashes}'
-								,firstname: '{$address.firstname|addslashes}'
-								,lastname: '{$address.lastname|addslashes}'
-								,address1: '{$address.address1|addslashes}'
-								,address2: '{$address.address2|addslashes}'
-								,postcode: '{$address.postcode|addslashes}'
-								,city: '{$address.city|addslashes}'
-								,country: '{$address.country|addslashes}'
-								,state: '{$address.state|default:''|addslashes}'
-								,state_iso: '{$address.state_iso|default:''|addslashes}'
 
-							{rdelim};
+	var formatedAddressFieldsValuesList = new Array();
+
+	{foreach from=$formatedAddressFieldsValuesList key=id_address item=type}
+		formatedAddressFieldsValuesList[{$id_address}] =
+		{ldelim}
+			'ordered_fields':[
+				{foreach from=$type['ordered_fields'] key=num_field item=field_name name=inv_loop}
+					{if !$smarty.foreach.inv_loop.first},{/if}"{$field_name}"
+				{/foreach}
+			],
+			'formated_fields_values':{ldelim}
+					{foreach from=$type['formated_fields_values'] key=pattern_name item=field_name name=inv_loop}
+						{if !$smarty.foreach.inv_loop.first},{/if}"{$pattern_name}":"{$field_name}"
+					{/foreach}
+				{rdelim}
+		{rdelim}
 	{/foreach}
-
-
-	var address_format = {ldelim}
-				invoice:[
-	{if isset($inv_adr_fields)}
-		{foreach from=$inv_adr_fields item=inv_field name=inv_loop}
-					{if !$smarty.foreach.inv_loop.first},{/if}"{$inv_field}"
-		{/foreach}
-	{/if}
-				]
-				, delivery:
-					[
-	{if isset($dlv_adr_fields)}
-		{foreach from=$dlv_adr_fields item=dlv_field name=dlv_loop}
-					{if !$smarty.foreach.dlv_loop.first},{/if}"{$dlv_field}"
-		{/foreach}
-	{/if}
-					]
-				{rdelim};
 
 	function getAddressesTitles()
 	{ldelim}
@@ -81,25 +62,22 @@
 	function buildAddressBlock(id_address, address_type, dest_comp)
 	{ldelim}
 		var adr_titles_vals = getAddressesTitles();
+		var li_content = formatedAddressFieldsValuesList[id_address]['formated_fields_values'];
+		var ordered_fields_name = ["title"];
 
-		var li_content = addresses_values[id_address];
-		var fields_name = ["title"];
-
-		fields_name = fields_name.concat(address_format[address_type]);
-		fields_name = fields_name.concat(["update"]);
-
+		ordered_fields_name = ordered_fields_name.concat(formatedAddressFieldsValuesList[id_address]['ordered_fields']);
+		ordered_fields_name = ordered_fields_name.concat(["update"]);
+		
 		dest_comp.html('');
 
 		li_content["title"] = adr_titles_vals[address_type];
-		li_content["update"] = '<a href="{$link->getPageLink('address.php', true)}?id_address={$address.id_address|intval}&amp;back=order.php&amp;step=1{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a>';
+		li_content["update"] = '<a href="{$link->getPageLink('address.php', true)}?id_address='+id_address+'&amp;back=order.php&amp;step=1{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a>';
 
-
-		appendAddressLis(dest_comp, fields_name, li_content);
+		appendAddressList(dest_comp, li_content, ordered_fields_name);
 	{rdelim}
 
-	function appendAddressLis(dest_comp, fields_name, values)
+	function appendAddressList(dest_comp, values, fields_name)
 	{ldelim}
-
 		for (var item in fields_name)
 		{ldelim}
 			var name = fields_name[item];
@@ -108,14 +86,13 @@
 			new_li.innerHTML = getFieldValue(name, values);
 			dest_comp.append(new_li);
 		{rdelim}
-
 	{rdelim}
 
 	function getFieldValue(field_name, values)
 	{ldelim}
 		var reg=new RegExp("[ ]+", "g");
 
-		var items=field_name.split(reg);
+		var items = field_name.split(reg);
 		var vals = new Array();
 
 		for (var field_item in items)

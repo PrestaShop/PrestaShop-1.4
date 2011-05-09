@@ -310,10 +310,6 @@ class AddressCore extends ObjectModel
 		return isset($result['used']) ? $result['used'] : false;
 	}
 
-
-
-
-
 	/**
 	 * @param int $id_address
 	 * @return int

@@ -219,7 +219,11 @@ $(function(){ldelim}
 						<input type="text" class="text" name="city" id="city" value="{if isset($smarty.post.city)}{$smarty.post.city}{/if}">
 						<sup>*</sup>
 					</p>
-					{elseif $field_name eq "country"}
+						<!-- 
+							if customer hasn't update his layout address, country has to be verified
+							but it's deprecated
+						-->
+					{elseif $field_name eq "Country:name" || $field_name eq "country"}
 					<p class="required select">
 						<label for="id_country">{l s='Country'}</label>
 						<select name="id_country" id="id_country">
@@ -396,7 +400,11 @@ $(function(){ldelim}
 			<input type="text" class="text" name="city" id="city" value="{if isset($smarty.post.city)}{$smarty.post.city}{/if}" />
 			<sup>*</sup>
 		</p>
-		{elseif $field_name eq "country"}
+		<!--
+			if customer hasn't update his layout address, country has to be verified
+			but it's deprecated
+		-->
+		{elseif $field_name eq "Country:name" || $field_name eq "country"}
 		<p class="required select">
 			<label for="id_country">{l s='Country'}</label>
 			<select name="id_country" id="id_country">
