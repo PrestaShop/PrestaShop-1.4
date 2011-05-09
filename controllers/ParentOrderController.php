@@ -50,7 +50,13 @@ class ParentOrderControllerCore extends FrontController
 	
 	public function preProcess()
 	{
-		global $isVirtualCart;
+		global $isVirtualCart, $cookie;
+
+		// Re-set default/selected currency (when currency was change by a specific payment method)
+		if($cookie->old_id_currency && $cookie->old_id_currency != $cookie->id_currency)
+			$cookie->id_currency = (int)$cookie->old_id_currency;
+		else
+			$cookie->old_id_currency = (int)$cookie->id_currency;
 		
 		parent::preProcess();
 		
