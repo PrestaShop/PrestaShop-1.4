@@ -26,7 +26,8 @@
 
 $(document).ready(function()
 {
-	updateAddressesDisplay(true);
+	if (typeof(formatedAddressFieldsValuesList) != 'undefined')
+		updateAddressesDisplay(true);
 	resizeAddressesBox();
 });
 
