@@ -79,7 +79,7 @@ function findCombination(firstTime)
 		choice.push($(this).val());
 	});
 	var nbAttributesEquals = 0;
-	
+
 	//testing every combination to find the conbination's attributes' case of the user
 	for (var combination = 0; combination < combinations.length; ++combination)
 	{
@@ -192,7 +192,7 @@ function updateDisplay()
 			$('#last_quantities').show('slow');
 			$('#pQuantityAvailable:hidden').show('slow');
 			$('#quantityAvailable').text(quantityAvailable);
-			
+
 			if(quantityAvailable < 2)
 			{
 				$('#quantityAvailableTxt').show();
@@ -278,11 +278,13 @@ function updateDisplay()
 	//update display of the the prices in relation to tax, discount, ecotax, and currency criteria
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
+		var combination_add_price = selectedCombination['price'] * group_reduction;
+
 		var tax = (taxRate / 100) + 1;
-		var taxExclPrice = (specific_price ? (specific_currency ? specific_price : specific_price * currencyRate) : productPriceTaxExcluded) + selectedCombination['price'] * currencyRate;
+		var taxExclPrice = (specific_price ? (specific_currency ? specific_price : specific_price * currencyRate) : productPriceTaxExcluded) + combination_add_price * currencyRate;
 
 		if (specific_price)
-			var productPriceWithoutReduction = productPriceTaxExcluded + selectedCombination['price'] * currencyRate;
+			var productPriceWithoutReduction = productPriceTaxExcluded + combination_add_price * currencyRate;
 
 		if (!displayPrice && !noTaxForThisProduct)
 		{
@@ -319,7 +321,7 @@ function updateDisplay()
 			$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
 		else
 			$('#our_price_display').text(formatCurrency(0, currencyFormat, currencySign, currencyBlank));
-		
+
 		$('#old_price_display').text(formatCurrency(productPriceWithoutReduction, currencyFormat, currencySign, currencyBlank));
 
 		/* Special feature: "Display product price tax excluded on product page" */
