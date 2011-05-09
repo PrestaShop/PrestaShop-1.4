@@ -213,7 +213,7 @@ function resizeAddressesBox(nameBox)
 {
 	maxHeight = 0;
 
-	if (nameBox == undefined)
+	if (typeof(nameBox) == 'undefined')
 		nameBox = '.address';
 	$(nameBox).each(function()
 	{
