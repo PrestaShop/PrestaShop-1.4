@@ -272,7 +272,7 @@ INSERT INTO `PREFIX_zone` (`id_zone`, `name`, `active`) VALUES
 
 INSERT INTO `PREFIX_country` (`id_country`, `id_zone`, `iso_code`, `call_prefix`, `active`, `contains_states`, `need_identification_number`, `need_zip_code`, `zip_code_format`, `display_tax_label`) VALUES
 (1, 1, 'DE', 49, 1, 0, 0, 1, 'NNNNN', 1),(2, 1, 'AT', 43, 1, 0, 0, 1, 'NNNN', 1),(3, 1, 'BE', 32, 1, 0, 0, 1, 'NNNN', 1),(4, 2, 'CA', 1, 1, 1, 0, 1, 'LNL NLN', 0),(5, 3, 'CN', 86, 1, 0, 0, 1, 'NNNNNN', 1),
-(6, 1, 'ES', 34, 1, 0, 1, 1, 'NNNNN', 1),(7, 1, 'FI', 358, 1, 0, 0, 1, 'NNNNN', 1),(8, 1, 'FR', 33, 1, 0, 0, 1, 'NNNNN', 1),(9, 1, 'GR', 30, 1, 0, 0, 1, 'NNNNN', 1),(10, 1, 'IT', 39, 1, 0, 0, 1, 'NNNNN', 1),
+(6, 1, 'ES', 34, 1, 0, 1, 1, 'NNNNN', 1),(7, 1, 'FI', 358, 1, 0, 0, 1, 'NNNNN', 1),(8, 1, 'FR', 33, 1, 0, 0, 1, 'NNNNN', 1),(9, 1, 'GR', 30, 1, 0, 0, 1, 'NNNNN', 1),(10, 1, 'IT', 39, 1, 1, 0, 1, 'NNNNN', 1),
 (11, 3, 'JP', 81, 1, 0, 0, 1, 'NNN-NNNN', 1),(12, 1, 'LU', 352, 1, 0, 0, 1, 'NNNN', 1),(13, 1, 'NL', 31, 1, 0, 0, 1, 'NNNN LL', 1),(14, 1, 'PL', 48, 1, 0, 0, 1, 'NN-NNN', 1),
 (15, 1, 'PT', 351, 1, 0, 0, 1, 'NNNN NNN', 1),(16, 1, 'CZ', 420, 1, 0, 0, 1, 'NNN NN', 1),(17, 1, 'GB', 44, 1, 0, 0, 1, '', 1),(18, 1, 'SE', 46, 1, 0, 0, 1, 'NNN NN', 1),
 (19, 7, 'CH', 41, 1, 0, 0, 1, 'NNNN', 1),(20, 1, 'DK', 45, 1, 0, 0, 1, 'NNNN', 1),(21, 2, 'US', 1, 1, 1, 0, 1, 'NNNNN', 0),(22, 3, 'HK', 852, 1, 0, 0, 0, '', 1),(23, 1, 'NO', 47, 1, 0, 0, 1, 'NNNN', 1),
