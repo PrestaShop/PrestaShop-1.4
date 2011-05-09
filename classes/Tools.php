@@ -176,14 +176,23 @@ class ToolsCore
 	}
 
 	/**
-	* Get the server variable REMOTE_ADDR
+	* Get the server variable REMOTE_ADDR, or the first ip of HTTP_X_FORWARDED_FOR (when using proxy)
 	*
-	* @param string $remote_addr ip of client
+	* @return string $remote_addr ip of client
 	*/
 	static function getRemoteAddr()
 	{
-		// we don't look for HTTP_X_FORWARDED_FOR (security leak), see PSCFI-1278
-
+		// This condition is necessary when using CDN, don't remove it.
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND $_SERVER['HTTP_X_FORWARDED_FOR'])
+		{
+			if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ','))
+			{
+				$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+				return $ips[0];
+			}
+			else
+				return $_SERVER['HTTP_X_FORWARDED_FOR'];
+		}
 		return $_SERVER['REMOTE_ADDR'];
 	}
 
