@@ -161,10 +161,8 @@ class AddressCore extends ObjectModel
 			return parent::delete();
 		else
 		{
-			$class =  get_class($this);
-			$obj = new $class($this->id);
-			$obj->deleted = true;
-			return $obj->update();
+			$this->deleted = true;
+			return $this->update();
 		}
 	}
 

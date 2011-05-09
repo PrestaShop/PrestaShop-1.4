@@ -146,16 +146,26 @@ class AddressControllerCore extends FrontController
 					$address_old = new Address((int)$id_address);
 					if (Validate::isLoadedObject($address_old) AND Customer::customerHasAddress((int)self::$cookie->id_customer, (int)$address_old->id))
 					{
-						if (!Tools::isSubmit('ajax'))
-						{
-							if (self::$cart->id_address_invoice == $address_old->id)
-								unset(self::$cart->id_address_invoice);
-							if (self::$cart->id_address_delivery == $address_old->id)
-								unset(self::$cart->id_address_delivery);
-						}
-						
 						if ($address_old->isUsed())
+						{
 							$address_old->delete();
+							if (!Tools::isSubmit('ajax'))
+							{
+								$to_update = false;
+								if (self::$cart->id_address_invoice == $address_old->id)
+								{
+									$to_update = true;
+									self::$cart->id_address_invoice = 0;
+								}
+								if (self::$cart->id_address_delivery == $address_old->id)
+								{
+									$to_update = true;
+									self::$cart->id_address_delivery = 0;
+								}
+								if ($to_update)
+									self::$cart->update();
+							}
+						}
 						else
 						{
 							$address->id = (int)($address_old->id);
@@ -168,6 +178,7 @@ class AddressControllerCore extends FrontController
 				
 				if ($result = $address->save())
 				{
+					/* In order to select this new address : order-address.tpl */
 					if ((bool)(Tools::getValue('select_address', false)) == true OR (Tools::isSubmit('ajax') AND Tools::getValue('type') == 'invoice'))
 					{
 						/* This new adress is for invoice_adress, select it */
