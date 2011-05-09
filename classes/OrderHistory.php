@@ -164,7 +164,10 @@ class OrderHistoryCore extends ObjectModel
 					$id_product_download = ProductDownload::getIdFromIdProduct($virtualProduct['product_id']);
 					$product_download = new ProductDownload($id_product_download);
 					$assign[$key]['name'] = $product_download->display_filename;
-					$assign[$key]['link'] = $product_download->getTextLink(false, $virtualProduct['download_hash']);
+					$dl_link = $product_download->getTextLink(false, $virtualProduct['download_hash'])
+						.'&id_order='.$order->id
+						.'&secure_key='.$order->secure_key;
+					$assign[$key]['link'] = $dl_link;
 					if ($virtualProduct['download_deadline'] != '0000-00-00 00:00:00')
 						$assign[$key]['deadline'] = Tools::displayDate($virtualProduct['download_deadline'], $order->id_lang);
 					if ($product_download->nb_downloadable != 0)
