@@ -116,6 +116,7 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 		}
 		if ($nbInvitation > 0)
 			unset($_POST);
+		//Not to stop the sending of e-mails in case of doubloon
 		if(sizeof($mails_exists))
 			$error = 'email exists';
 	}
