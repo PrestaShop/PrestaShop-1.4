@@ -470,7 +470,7 @@ class FrontControllerCore
 			'logo_image_width' => Configuration::get('SHOP_LOGO_WIDTH'),
 			'logo_image_height' => Configuration::get('SHOP_LOGO_HEIGHT'),
 			'priceDisplayPrecision' => _PS_PRICE_DISPLAY_PRECISION_,
-			'content_only' => (int)(Tools::getValue('content_only'))
+			'content_only' => (int)Tools::getValue('content_only')
 		));
 		self::$smarty->assign(array(
 			'HOOK_HEADER' => Module::hookExec('header'),

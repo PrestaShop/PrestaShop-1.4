@@ -62,21 +62,21 @@ else
 smartyRegisterFunction($smarty, 'modifier', 'truncate', 'smarty_modifier_truncate');
 smartyRegisterFunction($smarty, 'modifier', 'secureReferrer', array('Tools', 'secureReferrer'));
 
-smartyRegisterFunction($smarty, 'function', 't', 'smartyTruncate');
-smartyRegisterFunction($smarty, 'function', 'm', 'smartyMaxWords');
-smartyRegisterFunction($smarty, 'function', 'p', 'smartyShowObject');
-smartyRegisterFunction($smarty, 'function', 'd', 'smartyDieObject');
+smartyRegisterFunction($smarty, 'function', 't', 'smartyTruncate'); // unused
+smartyRegisterFunction($smarty, 'function', 'm', 'smartyMaxWords'); // unused
+smartyRegisterFunction($smarty, 'function', 'p', 'smartyShowObject'); // unused
+smartyRegisterFunction($smarty, 'function', 'd', 'smartyDieObject'); // unused
 smartyRegisterFunction($smarty, 'function', 'l', 'smartyTranslate');
 
 smartyRegisterFunction($smarty, 'function', 'dateFormat', array('Tools', 'dateFormat'));
-smartyRegisterFunction($smarty, 'function', 'productPrice', array('Product', 'productPrice'));
+smartyRegisterFunction($smarty, 'function', 'productPrice', array('Product', 'productPrice')); // unused
 smartyRegisterFunction($smarty, 'function', 'convertPrice', array('Product', 'convertPrice'));
-smartyRegisterFunction($smarty, 'function', 'convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay'));
+smartyRegisterFunction($smarty, 'function', 'convertPriceWithoutDisplay', array('Product', 'productPriceWithoutDisplay')); // unused
 smartyRegisterFunction($smarty, 'function', 'convertPriceWithCurrency', array('Product', 'convertPriceWithCurrency'));
 smartyRegisterFunction($smarty, 'function', 'displayWtPrice', array('Product', 'displayWtPrice'));
 smartyRegisterFunction($smarty, 'function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
 smartyRegisterFunction($smarty, 'function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
-smartyRegisterFunction($smarty, 'modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice'));
+smartyRegisterFunction($smarty, 'modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice')); // used twice
 
 function smartyTranslate($params, &$smarty)
 {
@@ -138,16 +138,19 @@ function smartyTranslate($params, &$smarty)
 
 function smartyDieObject($params, &$smarty)
 {
+	Tools::displayAsDeprecated();
 	return Tools::d($params['var']);
 }
 
 function smartyShowObject($params, &$smarty)
 {
+	Tools::displayAsDeprecated();
 	return Tools::p($params['var']);
 }
 
 function smartyMaxWords($params, &$smarty)
 {
+	Tools::displayAsDeprecated();
 	$params['s'] = str_replace('...', ' ...', html_entity_decode($params['s'], ENT_QUOTES, 'UTF-8'));
 	$words = explode(' ', $params['s']);
 	
@@ -160,6 +163,7 @@ function smartyMaxWords($params, &$smarty)
 
 function smartyTruncate($params, &$smarty)
 {
+	Tools::displayAsDeprecated();
 	$text = isset($params['strip']) ? strip_tags($params['text']) : $params['text'];
 	$length = $params['length'];
 	$sep = isset($params['sep']) ? $params['sep'] : '...';

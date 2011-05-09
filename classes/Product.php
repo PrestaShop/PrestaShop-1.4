@@ -1961,6 +1961,7 @@ class ProductCore extends ObjectModel
 	*/
 	static function productPrice($params, &$smarty)
 	{
+		Tools::displayAsDeprecated();
 		$ret = '';
 		if (isset($params['p']['reduction']) AND $params['p']['reduction'])
 			$ret .= '<span class="discounted">'.Tools::displayPrice($params['p']['price_without_reduction'], $smarty->ps_currency).'</span><br />';
@@ -1970,6 +1971,7 @@ class ProductCore extends ObjectModel
 
 	static function productPriceWithoutDisplay($params, &$smarty)
 	{
+		Tools::displayAsDeprecated();
 		return Tools::convertPrice($params['p'], $params['c']);
 	}
 

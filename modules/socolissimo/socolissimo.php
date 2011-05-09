@@ -736,7 +736,7 @@ class Socolissimo extends CarrierModule
 	        if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
 				$id_zone = Address::getZoneById((int)($cart->id_address_delivery));
 			else
-				$id_zone = (int)($defaultCountry->id_zone);
+				$id_zone = (int)$defaultCountry->id_zone;
 
 			// Get only carriers that have a range compatible with cart
 			if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight((int)($carrier->id), $cart->getTotalWeight(), $id_zone)))

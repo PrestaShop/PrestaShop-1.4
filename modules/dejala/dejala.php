@@ -741,7 +741,7 @@ class Dejala extends CarrierModule
 		if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
 			$id_zone = Address::getZoneById((int)($cart->id_address_delivery));
 		else
-			$id_zone = (int)($defaultCountry->id_zone);
+			$id_zone = (int)$defaultCountry->id_zone;
 		
 		$djlCarrier = DejalaCarrierUtils::getCarrierByName($this->name) ;
 		

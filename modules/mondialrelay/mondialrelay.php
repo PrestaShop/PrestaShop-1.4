@@ -419,7 +419,7 @@ class MondialRelay extends Module
 				if (isset($cart->id_address_delivery) AND $cart->id_address_delivery)
 					$id_zone = Address::getZoneById((int)($cart->id_address_delivery));
 				else
-					$id_zone = (int)($defaultCountry->id_zone);
+					$id_zone = (int)$defaultCountry->id_zone;
 				if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone))) OR
 					(!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, $cart->id_currency))))
 					{

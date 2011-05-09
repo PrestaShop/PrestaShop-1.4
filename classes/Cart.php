@@ -971,14 +971,17 @@ class CartCore extends ObjectModel
 			return $shipping_cost;
 
 		// Get id zone
-		if (
-      isset($this->id_address_delivery)
-      AND $this->id_address_delivery
-      AND Customer::customerHasAddress($this->id_customer, $this->id_address_delivery)
-    )
+		if (isset($this->id_address_delivery)
+			AND $this->id_address_delivery
+			AND Customer::customerHasAddress($this->id_customer, $this->id_address_delivery))
 			$id_zone = Address::getZoneById((int)($this->id_address_delivery));
 		else
-			$id_zone = (int)($defaultCountry->id_zone);
+		{
+			// This method can be called from the backend, and $defaultCountry won't be defined
+			if (!Validate::isLoadedObject($defaultCountry))
+				$defaultCountry = new Country(Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
+			$id_zone = (int)$defaultCountry->id_zone;
+		}		
 
 		// If no carrier, select default one
 		if (!$id_carrier)
@@ -1096,7 +1099,7 @@ class CartCore extends ObjectModel
             )
 					$id_zone = Address::getZoneById((int)($this->id_address_delivery));
 				else
-					$id_zone = (int)($defaultCountry->id_zone);
+					$id_zone = (int)$defaultCountry->id_zone;
 				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($carrier->id, $this->getTotalWeight(), $id_zone)))
 						OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($carrier->id, $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, (int)($this->id_currency)))))
 						$shipping_cost += 0;
