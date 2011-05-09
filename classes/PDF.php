@@ -176,30 +176,30 @@ class PDFCore extends PDF_PageGroupCore
    	$shopCity = (isset($conf['PS_SHOP_CITY']) && !empty($conf['PS_SHOP_CITY'])) ? $conf['PS_SHOP_CITY'] : '';
 		$shopState = ((isset($conf['PS_SHOP_STATE']) && !empty($conf['PS_SHOP_STATE'])) ? $conf['PS_SHOP_STATE'] : '');
 		$shopZipcode = (isset($conf['PS_SHOP_CODE']) && !empty($conf['PS_SHOP_CODE'])) ? $conf['PS_SHOP_CODE'] : '';
-		
+
 		// Build the complete address with good separators
 		$completeAddressShop = $shopCity.
-			((!empty($shopState) && !empty($shopCity)) ? ', '.$shopState.((!empty($shopZipcode)) ? ' ' : '') : 
-			((!empty($shopState)) ? $shopState. ((!empty($shopZipcode)) ? ' ' : '') : 
+			((!empty($shopState) && !empty($shopCity)) ? ', '.$shopState.((!empty($shopZipcode)) ? ' ' : '') :
+			((!empty($shopState)) ? $shopState. ((!empty($shopZipcode)) ? ' ' : '') :
 			((!empty($shopCity) && !empty($shopZipcode)) ? ' ' : ''))).
 			$shopZipcode;
-		
+
 		// Clean the string
 		return ($completeAddressShop = trim($completeAddressShop, ' '));
    }
-   
+
    /*
     * Build the the detailed footer of the merchant
     */
    private function _builMerchantFooterDetail($conf)
    {
    	$footerText;
-   	
+
    	// If the country is USA
    	if ($conf['PS_SHOP_COUNTRY_ID'] == 21)
    	{
    		$completeAddressShop = $this->_getCompleteUSAddressFormat($conf);
-   	
+
    		$footerText = self::l('Headquarters:')."\n".
 				$conf['PS_SHOP_NAME_UPPER']."\n".
 				(isset($conf['PS_SHOP_ADDR1']) && !empty($conf['PS_SHOP_ADDR1']) ? $conf['PS_SHOP_ADDR1']."\n" : '').
@@ -208,50 +208,50 @@ class PDFCore extends PDF_PageGroupCore
 				(isset($conf['PS_SHOP_COUNTRY']) && !empty($conf['PS_SHOP_COUNTRY']) ? $conf['PS_SHOP_COUNTRY']."\n" : '').
 				((isset($conf['PS_SHOP_PHONE']) && !empty($conf['PS_SHOP_PHONE'])) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
    	}
-   	else 
+   	else
    	{
    		$footerText = $conf['PS_SHOP_NAME_UPPER'].(!empty($conf['PS_SHOP_ADDR1']) ? ' - '.self::l('Headquarters:').' '.$conf['PS_SHOP_ADDR1'].
    			(!empty($conf['PS_SHOP_ADDR2']) ? ' '.$conf['PS_SHOP_ADDR2'] : '').' '.$conf['PS_SHOP_CODE'].' '.$conf['PS_SHOP_CITY'].
    			((isset($conf['PS_SHOP_STATE']) AND !empty($conf['PS_SHOP_STATE'])) ? (', '.$conf['PS_SHOP_STATE']) : '').' '.$conf['PS_SHOP_COUNTRY'] : '').
    			"\n".(!empty($conf['PS_SHOP_DETAILS']) ? self::l('Details:').' '.$conf['PS_SHOP_DETAILS'].' - ' : '').
 				(!empty($conf['PS_SHOP_PHONE']) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
-   	}		
+   	}
 		return $footerText;
    }
-   
+
 	/**
 	* Invoice footer
 	*/
 	public function Footer()
 	{
 		$arrayConf = array(
-			'PS_SHOP_NAME', 
-			'PS_SHOP_ADDR1', 
-			'PS_SHOP_ADDR2', 
-			'PS_SHOP_CODE', 
-			'PS_SHOP_CITY', 
+			'PS_SHOP_NAME',
+			'PS_SHOP_ADDR1',
+			'PS_SHOP_ADDR2',
+			'PS_SHOP_CODE',
+			'PS_SHOP_CITY',
 			'PS_SHOP_COUNTRY',
-			'PS_SHOP_COUNTRY_ID', 
-			'PS_SHOP_DETAILS', 
-			'PS_SHOP_PHONE', 
+			'PS_SHOP_COUNTRY_ID',
+			'PS_SHOP_DETAILS',
+			'PS_SHOP_PHONE',
 			'PS_SHOP_STATE');
-		
+
 		$conf = Configuration::getMultiple($arrayConf);
 		$conf['PS_SHOP_NAME_UPPER'] = Tools::strtoupper($conf['PS_SHOP_NAME']);
 		$y_delta = array_key_exists('PS_SHOP_DETAILS', $conf) ? substr_count($conf['PS_SHOP_DETAILS'],"\n") : 0;
-		
+
 		foreach($conf as $key => $value)
 			$conf[$key] = Tools::iconv('utf-8', self::encoding(), $value);
 		foreach ($arrayConf as $key)
 			if (!isset($conf[$key]))
 				$conf[$key] = '';
-		
+
 		$merchantDetailFooter = $this->_builMerchantFooterDetail($conf);
 		$totalLineDetailFooter = count(explode("\n", $merchantDetailFooter));
-		
-		// A point equals 1/72 of inch, that is to say about 0.35 mm (an inch being 2.54 cm). 
+
+		// A point equals 1/72 of inch, that is to say about 0.35 mm (an inch being 2.54 cm).
 		// This is a very common unit in typography; font sizes are expressed in that unit.
-		// 8 point = 2.8mm and the cell height = 4mm 
+		// 8 point = 2.8mm and the cell height = 4mm
 		$this->SetY(-(21.0 + (4 * $totalLineDetailFooter)) - ($y_delta * 7.0));
 		$this->SetFont(self::fontname(), '', 7);
 		$this->Cell(190, 5, ' '."\n".Tools::iconv('utf-8', self::encoding(), 'P. ').$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
@@ -277,7 +277,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetFillColor(240, 240, 240);
 		$this->SetTextColor(0, 0, 0);
 		$this->SetFont(self::fontname(), '', 8);
-		
+
 		$this->MultiCell(0.0, 4.0, $merchantDetailFooter, 0, 'C', 1);
 	}
 
@@ -346,9 +346,9 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetX(10);
 		$pdf->SetY(25);
 		$pdf->SetFont(self::fontname(), '', 9);
-		
+
 		$ordered_adr_fields = AddressFormat::getOrderedAddressFields($invoice_address->id_country);
- 
+
 		$optional_fields = array(
 						'address2' => 1
 						, 'company' => 1
@@ -362,14 +362,14 @@ class PDFCore extends PDF_PageGroupCore
 		{
 			$line_fields = explode(" ", trim($adr_line));
 			$tmp_dlv_vals = array();
-		
+
 			foreach($line_fields as $field_name)
 			{
-				// if not skip 
+				// if not skip
 				if (!isset($ignore_fields[$field_name]))
 				{
 					$tmp_dlv = $delivery_address->{$field_name};
-					
+
 					if (!((empty($tmp_dlv) || $tmp_dlv == '') && isset($optional_fields[$field_name])))
 					{
 						$tmp_dlv = ($field_name == "country") ? $tmp_dlv.($deliveryState ? ' - '.$deliveryState->name : ''): $tmp_dlv;
@@ -499,16 +499,16 @@ class PDFCore extends PDF_PageGroupCore
 		$deliveryState = $delivery_address->id_state ? new State($delivery_address->id_state) : false;
 
 		$ordered_adr_fields = AddressFormat::getOrderedAddressFields($invoice_address->id_country);
- 
+
 		$optional_fields = array(
-						'address2' => 1, 
+						'address2' => 1,
 						'company' => 1);
-		
+
 		$ignore_fields = array(
-						'phone'	=> 1, 
+						'phone'	=> 1,
 						'mobile_phone' => 1,
 						'state_iso' => 1);
-		
+
 		$width = 100;
 
 		$pdf->SetX(10);
@@ -525,10 +525,10 @@ class PDFCore extends PDF_PageGroupCore
 
 			$tmp_inv_vals = array();
 			$tmp_dlv_vals = array();
-		
+
 			foreach($line_fields as $field_name)
 			{
-				// if not skip 
+				// if not skip
 				if (!isset($ignore_fields[$field_name]))
 				{
 					$tmp_inv = $invoice_address->{$field_name};
@@ -562,7 +562,7 @@ class PDFCore extends PDF_PageGroupCore
 
 			if ($need_nl)
 				$pdf->Ln(5);
-			
+
 		}
 
 		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoice_address->vat_number))
@@ -577,7 +577,7 @@ class PDFCore extends PDF_PageGroupCore
 
 		// All phone number are deleted to display a new format type
 		//$pdf->Cell($width, 10, $delivery_address->phone, 0, 'L');
-		
+
 		if ($invoice_address->dni != NULL)
 			$pdf->Cell($width, 10, self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(), $invoice_address->dni), 0, 'L');
 
@@ -798,7 +798,7 @@ class PDFCore extends PDF_PageGroupCore
 
 				// Unit vars
 				$unit_without_tax = $product['product_price'] + $product['ecotax'];
-				$unit_with_tax = $product['product_price_wt'] + ($product['ecotax'] * (1 + $product['ecotax_tax_rate'] / 100));
+				$unit_with_tax = $product['product_price_wt'];
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
 					$unit_price = &$unit_without_tax;
 				else
