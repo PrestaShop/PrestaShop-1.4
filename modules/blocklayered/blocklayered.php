@@ -30,8 +30,7 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class BlockLayered extends Module
 {
-	
-	private $products ;
+	private $products;
 	
 	public function __construct()
 	{
@@ -94,7 +93,7 @@ class BlockLayered extends Module
 	{
 		/* The category status might (active, inactive) have changed, we have to update the layered cache table structure */
 		/*
-if (!$params['category']->active)
+		if (!$params['category']->active)
 			$this->hookCategoryDeletion($params);
 		else
 		{
@@ -107,7 +106,7 @@ if (!$params['category']->active)
 			if (!Db::getInstance()->getRow('SELECT id_layered_category FROM `'._DB_PREFIX_.'layered_category` WHERE id_category = '.(int)$params['category']->id))
 				$this->rebuildLayeredCache(array(), array((int)$params['category']->id));
 		}
-*/
+		*/
 	}
 	
 	public function hookCategoryDeletion($params)

@@ -285,9 +285,9 @@ class CountryCore extends ObjectModel
 		global $cookie;
 
 		if (Configuration::get('PS_GEOLOCATION_ENABLED') AND Validate::isLanguageIsoCode($cookie->iso_code_country))
-			$id_country = (int)(Country::getByIso($cookie->iso_code_country));
+			$id_country = (int)Country::getByIso($cookie->iso_code_country);
 		else
-			$id_country = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+			$id_country = (int)Configuration::get('PS_COUNTRY_DEFAULT');
 
 		return $id_country;
 	}
@@ -303,8 +303,7 @@ class CountryCore extends ObjectModel
         LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_country` = c.`id_country`)
         LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country`)
         WHERE (c.`id_zone` = '.(int)$id_zone.' OR s.`id_zone` = '.(int)$id_zone.')
-        AND `id_lang` = '.(int)$id_lang
-        );
+        AND `id_lang` = '.(int)$id_lang);
     }
 
 	public function isNeedDni()
@@ -327,6 +326,4 @@ class CountryCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'country`
 			WHERE `id_country` = '.(int)$id_country);
 	}
-
 }
-
