@@ -126,14 +126,14 @@ class GAnalytics extends Module
 	
 	function hookHeader($params)
 	{
-		global $step, $smarty;
+		global $smarty;
 		
 		// hookOrderConfirmation() already send the sats bypass this step
 		if (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order-confirmation.php') === 0) return '';
 	
 		// Otherwise, create Google Analytics stats
 		$ganalytics_id = Configuration::get('GANALYTICS_ID');
-		$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '/order/step'.intval($step).'.html' : '');
+		$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '/order/step'.(int)(Tools::getValue('step')).'.html' : '');
 		$smarty->assign('ganalytics_id', $ganalytics_id);
 		$smarty->assign('pageTrack', $pageTrack);
 		$smarty->assign('isOrder', false);
