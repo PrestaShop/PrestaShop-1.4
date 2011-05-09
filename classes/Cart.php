@@ -1065,6 +1065,11 @@ class CartCore extends ObjectModel
 			die(Tools::displayError('Fatal error: "no default carrier"'));
         if (!$carrier->active)
 			return $shipping_cost;
+			
+		// Free fees if free carrier
+		if ($carrier->is_free == 1)
+			return 0;	
+			
 		// Select carrier tax
 		if ($useTax AND !Tax::excludeTaxeOption())
 			 $carrierTax = Tax::getCarrierTaxRate((int)$carrier->id, (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')});

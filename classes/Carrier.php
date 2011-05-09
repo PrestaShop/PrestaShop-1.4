@@ -58,6 +58,9 @@ class CarrierCore extends ObjectModel
 	/** @var boolean Carrier module */
 	public		$is_module;
 
+	/** @var boolean Free carrier */
+	public		$is_free = false;
+	
 	/** @var int shipping behavior: by weight or by price */
 	public 		$shipping_method = 0;
 
@@ -72,7 +75,7 @@ class CarrierCore extends ObjectModel
 
  	protected 	$fieldsRequired = array('name', 'active');
  	protected 	$fieldsSize = array('name' => 64);
- 	protected 	$fieldsValidate = array('id_tax_rules_group' => 'isInt', 'name' => 'isCarrierName', 'active' => 'isBool', 'url' => 'isAbsoluteUrl', 'shipping_handling' => 'isBool', 'range_behavior' => 'isBool', 'shipping_method' => 'isUnsignedInt');
+ 	protected 	$fieldsValidate = array('id_tax_rules_group' => 'isInt', 'name' => 'isCarrierName', 'active' => 'isBool', 'is_free' => 'isBool', 'url' => 'isAbsoluteUrl', 'shipping_handling' => 'isBool', 'range_behavior' => 'isBool', 'shipping_method' => 'isUnsignedInt');
  	protected 	$fieldsRequiredLang = array('delay');
  	protected 	$fieldsSizeLang = array('delay' => 128);
  	protected 	$fieldsValidateLang = array('delay' => 'isGenericName');
@@ -107,6 +110,7 @@ class CarrierCore extends ObjectModel
 		$fields['range_behavior'] = (int)($this->range_behavior);
 		$fields['shipping_method'] = (int)($this->shipping_method);
 		$fields['is_module'] = (int)($this->is_module);
+		$fields['is_free'] = (int)($this->is_free);
 		$fields['shipping_external'] = (int)($this->shipping_external);
 		$fields['external_module_name'] = $this->external_module_name;
 		$fields['need_range'] = $this->need_range;

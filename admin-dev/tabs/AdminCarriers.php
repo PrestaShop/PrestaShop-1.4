@@ -48,8 +48,9 @@ class AdminCarriers extends AdminTab
 		'name' => array('title' => $this->l('Name'), 'width' => 100),
 		'logo' => array('title' => $this->l('Logo'), 'align' => 'center', 'image' => 's', 'orderby' => false, 'search' => false),
 		'delay' => array('title' => $this->l('Delay'), 'width' => 300, 'orderby' => false),
-		'active' => array('title' => $this->l('Status'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
-
+		'active' => array('title' => $this->l('Status'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
+		'is_free' => array('title' => $this->l('Is Free'), 'align' => 'center', 'icon' => array(0 => 'disabled.gif', 1 => 'enabled.gif', 'default' => 'disabled.gif'), 'type' => 'bool', 'orderby' => false));
+		
 		$this->optionTitle = $this->l('Carrier options');
 		$this->_fieldsOptions = array(
 			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, ALL_CARRIERS)),
@@ -88,7 +89,16 @@ class AdminCarriers extends AdminTab
 			return;
 		$currentLanguage = (int)($cookie->id_lang);
 
-		echo '
+		echo '<script type="text/javascript">
+			$(document).ready(function(){
+				// At the loading
+				($("input[name=\'is_free\']:checked").val() == 1) ? $("#shipping_costs_div").show(): $("#shipping_costs_div").hide();
+			
+				$("input[name=\'is_free\']").live("change", function(){
+					($("input[name=\'is_free\']:checked").val() == 1) ? $("#shipping_costs_div").show(): $("#shipping_costs_div").hide();			
+				});
+			});
+		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/delivery.gif" />'.$this->l('Carriers').'</legend>
@@ -118,14 +128,6 @@ class AdminCarriers extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="40" name="url" value="'.htmlentities($this->getFieldValue($obj, 'url'), ENT_COMPAT, 'UTF-8').'" />
 					<p class="clear">'.$this->l('URL for the tracking number; type \'@\' where the tracking number will appear').'</p>
-				</div>
-				<label>'.$this->l('Tax').'</label>
-				<div class="margin-form">
-					 <select name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
-					    <option value="0">'.$this->l('No Tax').'</option>';
-						foreach (TaxRulesGroup::getTaxRulesGroups(true) AS $tax_rules_group)
-							echo '<option value="'.$tax_rules_group['id_tax_rules_group'].'" '.(($this->getFieldValue($obj, 'id_tax_rules_group') == $tax_rules_group['id_tax_rules_group']) ? ' selected="selected"' : '').'>'.$tax_rules_group['name'].'</option>';
-				echo '</select>
 				</div>
 				<label>'.$this->l('Zone').'</label>
 				<div class="margin-form">';
@@ -170,6 +172,23 @@ class AdminCarriers extends AdminTab
 					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Include or exclude carrier from list of carriers on Front Office').'</p>
+				</div>
+				<label>'.$this->l('Apply shipping cost:').' </label>
+				<div class="margin-form">
+					<input type="radio" name="is_free" id="is_free_on" value="1" '.($this->getFieldValue($obj, 'is_free') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
+					<input type="radio" name="is_free" id="is_free_off" value="0" '.(!$this->getFieldValue($obj, 'is_free') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" /></label>
+					<p>'.$this->l('Apply shipping costs and additional shipping costs by products in carrier price').'</p>
+				</div>
+				<div id="shipping_costs_div">
+				<label>'.$this->l('Tax').'</label>
+				<div class="margin-form">
+					 <select name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
+					    <option value="0">'.$this->l('No Tax').'</option>';
+						foreach (TaxRulesGroup::getTaxRulesGroups(true) AS $tax_rules_group)
+							echo '<option value="'.$tax_rules_group['id_tax_rules_group'].'" '.(($this->getFieldValue($obj, 'id_tax_rules_group') == $tax_rules_group['id_tax_rules_group']) ? ' selected="selected"' : '').'>'.$tax_rules_group['name'].'</option>';
+				echo '</select>
 				</div>
 				<label>'.$this->l('Shipping & handling:').' </label>
 				<div class="margin-form">
@@ -217,7 +236,7 @@ class AdminCarriers extends AdminTab
 
 					echo '</div>';
 				}
-				echo '
+				echo '</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>

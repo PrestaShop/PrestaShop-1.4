@@ -129,6 +129,7 @@ CREATE TABLE `PREFIX_carrier` (
   `shipping_handling` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `range_behavior` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `is_module` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `is_free` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `shipping_external` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `need_range` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `external_module_name` varchar(64) DEFAULT NULL,
