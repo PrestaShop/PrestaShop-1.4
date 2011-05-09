@@ -144,19 +144,17 @@ class AdminGenerator extends AdminTab
 					fwrite($writeFd, "# http://www.robotstxt.org/wc/robots.html\n\n");
 
 					// User-Agent
-					fwrite($writeFd, "User-agent: *\n\n");
+					fwrite($writeFd, "User-agent: *\n");
 
 					// Directories
 					fwrite($writeFd, "# Directories\n");
 					foreach ($this->_rbData['Directories'] as $dir)
 						fwrite($writeFd, 'Disallow: '.__PS_BASE_URI__.$dir."\n");
-					fwrite($writeFd, "\n");
 
 					// Files
 					fwrite($writeFd, "# Files\n");
 					foreach ($this->_rbData['Files'] as $file)
 						fwrite($writeFd, 'Disallow: '.__PS_BASE_URI__.$file."\n");
-					fwrite($writeFd, "\n");
 
 					// Sitemap
 					fwrite($writeFd, "# Sitemap\n");
