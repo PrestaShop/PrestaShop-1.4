@@ -54,7 +54,7 @@ class ProductControllerCore extends FrontController
 	{
 		if ($id_product = (int)Tools::getValue('id_product'))
 			$this->product = new Product($id_product, true, self::$cookie->id_lang);
-			
+
 		if (!Validate::isLoadedObject($this->product))
 		{
 			header('HTTP/1.1 404 Not Found');
@@ -200,7 +200,7 @@ class ProductControllerCore extends FrontController
 
 				$ecotax_rate = (float) Tax::getProductEcotaxRate($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
                 $ecotaxTaxAmount = Tools::ps_round($this->product->ecotax, 2);
-				if (Product::$_taxCalculationMethod == PS_TAX_INC)
+				if (Product::$_taxCalculationMethod == PS_TAX_INC && (int)Configuration::get('PS_TAX'))
 					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + $ecotax_rate / 100), 2);
 
 				self::$smarty->assign(array(
