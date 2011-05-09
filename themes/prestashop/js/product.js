@@ -78,28 +78,21 @@ function findCombination(firstTime)
 	$('div#attributes select').each(function(){
 		choice.push($(this).val());
 	});
-	var nbAttributesEquals = 0;
 
 	//testing every combination to find the conbination's attributes' case of the user
 	for (var combination = 0; combination < combinations.length; ++combination)
 	{
 		//verify if this combinaison is the same that the user's choice
-		nbAttributesEquals = 0;
-		for (idAttribute in combinations[combination]['idsAttributes'])
+		var combinationMatchForm = true;
+		$.each(combinations[combination]['idsAttributes'], function(key, value)
 		{
-			//ie6 bug fix
-			if (idAttribute != 'indexOf'){
-				//if this attribute has been choose by user
-				if (in_array(combinations[combination]['idsAttributes'][idAttribute], choice))
-				{
-
-					//we are in a good way to find the good combination !
-					nbAttributesEquals++;
-				}
+			if (!in_array(value, choice))
+			{
+				combinationMatchForm = false;
 			}
-		}
+		})
 
-		if (nbAttributesEquals == choice.length)
+		if (combinationMatchForm)
 		{
 			if (combinations[combination]['minimal_quantity'] > 1)
 			{
