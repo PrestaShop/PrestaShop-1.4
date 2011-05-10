@@ -149,7 +149,8 @@ class OrderHistoryCore extends ObjectModel
 		{
 			$topic = $result['osname'];
 			$data = array('{lastname}' => $result['lastname'], '{firstname}' => $result['firstname'], '{id_order}' => (int)($this->id_order));
-			if ($templateVars) $data = array_merge($data, $templateVars);
+			if ($templateVars)
+				$data = array_merge($data, $templateVars);
 			$order = new Order((int)($this->id_order));
 			$data['{total_paid}'] = Tools::displayPrice((float)($order->total_paid), new Currency((int)($order->id_currency)), false, false);
 			$data['{order_name}'] = sprintf("#%06d", (int)($order->id));
@@ -174,6 +175,7 @@ class OrderHistoryCore extends ObjectModel
 						$assign[$key]['downloadable'] = $product_download->nb_downloadable;
 				}
 				$smarty->assign('virtualProducts', $assign);
+				$smarty->assign('id_order', $order->id);
 				$iso = Language::getIsoById((int)($order->id_lang));
 				$links = $smarty->fetch(_PS_MAIL_DIR_.$iso.'/download-product.tpl');
 				$tmpArray = array('{nbProducts}' => count($virtualProducts), '{virtualProducts}' => $links);
