@@ -296,7 +296,7 @@ class BlockLayered extends Module
 				break;
 				
 				case 'weight':
-					$queryFilters .= ' AND p.`weight` BETWEEN '.(float)$selectedFilters['weight'][0].' AND '.(float)($selectedFilters['weight'][1] + 0.1);
+					$queryFilters .= ' AND p.`weight` BETWEEN '.(float)($selectedFilters['weight'][0] - 0.001).' AND '.(float)($selectedFilters['weight'][1] + 0.001);
 				break;
 			}
 		}
