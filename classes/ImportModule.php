@@ -79,7 +79,7 @@ abstract class ImportModuleCore extends Module
 	
 	public static function getImportModulesOnDisk ()
 	{
-		$modules = Module::getModulesOnDisk();
+		$modules = Module::getModulesOnDisk(true);
 		foreach ($modules as $key => $module)
 			if(get_parent_class($module) != 'ImportModule')
 				unset($modules[$key]);
