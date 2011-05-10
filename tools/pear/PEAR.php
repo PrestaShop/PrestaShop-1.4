@@ -28,9 +28,12 @@
 /*
  * If the library is already loaded (some hosts do that), don't load it again.
  */
+ 
 if (class_exists('PEAR', false))
-	return;
-	
+	if (class_exists('PEAR_Exception', false))
+		if (class_exists('PEAR_Error', false))
+			return;
+
 /**#@+
  * ERROR constants
  */
@@ -39,6 +42,7 @@ define('PEAR_ERROR_PRINT',      2);
 define('PEAR_ERROR_TRIGGER',    4);
 define('PEAR_ERROR_DIE',        8);
 define('PEAR_ERROR_CALLBACK',  16);
+
 /**
  * WARNING: obsolete
  * @deprecated
