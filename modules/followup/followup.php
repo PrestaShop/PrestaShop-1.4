@@ -277,7 +277,7 @@ class Followup extends Module
 		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_cart = c.id_cart)
 		LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = c.id_customer)
 		WHERE DATE_SUB(CURDATE(),INTERVAL 7 DAY) <= c.date_add AND cu.id_customer IS NOT NULL AND o.id_order IS NULL AND c.id_cart NOT IN 
-		(SELECT id_cart FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 1)');
+		('.join(',', $this->getLogsEmail(1)).')');
 		
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
@@ -295,6 +295,45 @@ class Followup extends Module
 		}
 	}
 	
+	private function getLogsEmail($emailType)
+	{
+		static $idList = array(
+			'1' => array(),
+			'2' => array(),
+			'3' => array(),
+			'4' => array(),
+		);
+		static $executed = false;
+		
+		if(!$executed)
+		{
+			$query = '
+			SELECT id_cart, id_customer, id_email_type FROM ps_log_email
+			WHERE id_email_type <> 4 OR date_add >= DATE_SUB(date_add,INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY)';
+			$results = Db::getInstance()->ExecuteS($query);
+			foreach ($results as $line)
+			{
+				switch ($line['id_email_type'])
+				{
+					case 1:
+						$idList['1'][] = $line['id_cart'];
+						break;
+					case 2:
+						$idList['2'][] = $line['id_cart'];
+						break;
+					case 3:
+						$idList['3'][] = $line['id_customer'];
+						break;
+					case 4:
+						$idList['4'][] = $line['id_customer'];
+						break;
+				}
+			}
+			$executed = true;
+		}
+		return $idList[$emailType];
+	}
+	
 	/* For all validated orders, a discount if re-ordering before x days */
 	private function reOrder($count = false)
 	{
@@ -303,8 +342,8 @@ class Followup extends Module
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = o.id_customer)
 		LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
-		WHERE o.valid = 1 AND c.date_add >= DATE_SUB(CURDATE(),INTERVAL 7 DAY) AND o.id_order NOT IN 
-		(SELECT id_order FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 2)');
+		WHERE o.valid = 1 AND c.date_add >= DATE_SUB(CURDATE(),INTERVAL 7 DAY) AND o.id_cart NOT IN 
+		('.join(',', $this->getLogsEmail(2)).')');
 
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
@@ -331,7 +370,7 @@ class Followup extends Module
 		LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = o.id_customer)
 		LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
 		WHERE o.valid = 1 AND DATE_SUB(CURDATE(),INTERVAL 90 DAY) <= o.date_add AND cu.id_customer NOT IN
-		(SELECT id_customer FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 3)
+		('.join(',', $this->getLogsEmail(3)).')
 		GROUP BY o.id_customer
 		HAVING total >= '.(float)(Configuration::get('PS_FOLLOW_UP_THRESHOLD_3')));
 		
@@ -370,10 +409,10 @@ class Followup extends Module
 			WHERE cu.id_customer NOT IN
 			(SELECT o.id_customer FROM '._DB_PREFIX_.'orders o WHERE DATE_SUB(CURDATE(),INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY) <= o.date_add)
 			AND cu.id_customer NOT IN
-			(SELECT id_customer FROM '._DB_PREFIX_.'log_email WHERE id_email_type = 4 AND date_add >= DATE_SUB(date_add,INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY))
+			('.join(',',$this->getLogsEmail(4)).')
 		GROUP BY cu.id_customer
 		HAVING nb_orders >= 1');
-	
+		
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
 			
