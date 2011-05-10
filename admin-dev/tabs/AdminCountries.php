@@ -98,6 +98,28 @@ class AdminCountries extends AdminTab
 		}
 	}
 
+	private function _displayValidFields()
+	{
+		$html = '<ul>';
+		$appendContainer = '';
+		
+		$objectList = AddressFormat::getLiableClass('Address');
+		$objectList['Address'] = NULL;
+		
+		// Get the available properties for each class
+		foreach($objectList as $className => &$object)
+		{
+			$html .= '<li>
+				<a href="javascript:void(0);" onClick="displayAvailableFields(\''.$className.'\')">'.$className.'</a>';
+			$fields = AddressFormat::getValidateFields($className);
+			$html .= '
+				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'">
+				'.implode(', ', $fields).'</div></li>';
+			unset($object);
+		}
+		return $html .= '</ul>';
+	}
+	
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
@@ -107,6 +129,19 @@ class AdminCountries extends AdminTab
 			return;
 
 		echo '
+		<script type="text/javascript" language="javascript">
+			$(document).ready(function()
+			{
+				$(".availableFieldsList").css("display", "none");
+			});
+			
+			function displayAvailableFields(containerName)
+			{
+				$(".availableFieldsList").css("display", "none");
+				$("#availableListFieldsFor_" + containerName).toggle("slow");
+			}
+			
+		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/world.gif" />'.$this->l('Countries').'</legend>
@@ -152,7 +187,7 @@ class AdminCountries extends AdminTab
 		$address_layout = AddressFormat::getAddressCountryFormat($obj->id);
 		if ($value = Tools::getValue('address_layout'))
 			$address_layout = $value;
-		
+			
 		echo '		</select>
 					<p>'.$this->l('Geographical zone where country is located').'</p>
 				</div>
@@ -172,7 +207,7 @@ class AdminCountries extends AdminTab
 				<div class="margin-form" style="vertical-align: top;">
 					<p style="float: left;"><textarea id="ordered_fields" name="address_layout" style="width: 300px;height: 120px;">'.$address_layout.'</textarea></p>
 					<p style="float: left;margin-left: 10px;"><a href="#" onClick="$(\'textarea#ordered_fields\').val(unescape(\''.urlencode($address_layout).'\'.replace(/\+/g, \' \')));return false;" class="button">'.$this->l('Reset address layout').'</a></p>					
-					<p class="clear">'.$this->l('Possible fields :').' '.implode(', ', (Address::getDispFieldsValidate())).'</p>
+					<p class="clear">'.$this->l('Liable fields for the address information (click to have more details)').': '.$this->_displayValidFields().'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
