@@ -89,7 +89,7 @@ class BlockCart extends Module
 			'nb_total_products' => (int)($nbTotalProducts),
 			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, Cart::ONLY_SHIPPING), $currency),
 			'show_wrapping' => $wrappingCost > 0 ? true : false,
-			'show_tax' => (int)(Configuration::get('PS_TAX_DISPLAY') == 1 && $smarty->getConfigVars('use_taxes')),
+			'show_tax' => (int)(Configuration::get('PS_TAX_DISPLAY') == 1 && (int)Configuration::get('PS_TAX')),
 			'wrapping_cost' => Tools::displayPrice($wrappingCost, $currency),
 			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, Cart::BOTH_WITHOUT_SHIPPING), $currency),
 			'total' => Tools::displayPrice($totalToPay, $currency),
