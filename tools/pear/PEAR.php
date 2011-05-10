@@ -25,6 +25,12 @@
  * @since      File available since Release 0.1
  */
 
+/*
+ * If the library is already loaded (some hosts do that), don't load it again.
+ */
+if (class_exists('PEAR', false))
+	return;
+	
 /**#@+
  * ERROR constants
  */
