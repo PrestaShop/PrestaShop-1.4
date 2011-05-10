@@ -180,39 +180,7 @@ class AddressCore extends ObjectModel
 	}
 
 
-	/**
-	* Returns selected fields required for an address in an array according to a selection hash
-	* @return array String values 
-	*/
-	public static function getDispFieldsValidate()
-	{
-		$out = array();
-		$remove_fields = array(
-					'id_customer'	=> 1
-					,'id_manufacturer' => 1
-					,'id_supplier'	=> 1
-					,'deleted'=> 1
-					,'dni' => 1
-					,'vat_number' => 1
-					,'other' => 1
 
-				);
-
-		$fields_hash = self::getFieldsValidate();
-		foreach (array_keys($fields_hash) as $field_item)
-		{
-			if (!isset($remove_fields[$field_item]))
-			{
-				if ($field_item == 'id_country')
-					$field_item = 'country';
-				elseif($field_item == 'id_state')
-					$field_item = 'state';
-
-				$out[] = $field_item;	
-			}
-		}
-		return $out;
-	}
 
 	public function getFields()
 	{

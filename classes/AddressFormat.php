@@ -44,6 +44,34 @@ class AddressFormatCore extends ObjectModel
 	/* MySQL does not allow 'order detail' for a table name */
 	protected	$table = 'address_format';
 	protected $identifier = 'id_country';
+	
+	static public $forbiddenProperyList = array(
+		'deleted',
+		'vat_number',
+		'date_add',
+		'other',
+		'alias',
+		'secure_key',
+		'note',
+		'newsletter',
+		'ip_registration_newsletter',
+		'newsletter_date_add',
+		'optin',
+		'passwd',
+		'last_passwd_gen',
+		'active',
+		'is_guest',
+		'date_upd',
+		'years',
+		'days',
+		'months',
+		'description',
+		'meta_description',
+		'short_description',
+		'link_rewrite',
+		'meta_title',
+		'meta_keywords',
+		'dni');
 
 	public function getFields()
 	{
@@ -80,17 +108,18 @@ class AddressFormatCore extends ObjectModel
 			{
 				$propertyName = $property->getName();
 				if (($propertyName == $fieldName) && ($isIdField ||
-						(!preg_match('#id_\w#', $propertyName, $match))))
+						(!preg_match('#id|id_\w#', $propertyName, $match))))
 					$isValide = true;
 			}
 			
 			if (!$isValide)
-				$this->_errorFormatList[] = Tools::displayError('This property doesn\'t exist into the class').
-				' '.$className.': '.$fieldName;
+				$this->_errorFormatList[] = Tools::displayError('This property doesn\'t exist into the class or is forbidden').
+				': '.$className.': '.$fieldName;
 				
 			unset($obj);
 			unset($reflect);
 		}
+		return $isValide;
 	}
 	
 	/*
@@ -114,9 +143,9 @@ class AddressFormatCore extends ObjectModel
 			{
 				$associationName[0] = strtolower($associationName[0]);
 				$cleanedLine = $associationName[0];
-				if (!isset($fieldsValidate[$associationName[0]]) || 
-					isset($fieldsValidate['id_'.$associationName[0]]))
-						$this->_errorFormatList[] = Tools::displayError('This name isn\'t allowed').': '.
+				if (in_array($associationName[0], self::$forbiddenProperyList) || 
+						!$this->_checkValidateClassField('Address', $associationName[0], false))
+					$this->_errorFormatList[] = Tools::displayError('This name isn\'t allowed').': '.
 						$associationName[0];
 			}
 			else if ($totalNameUsed == 2)
@@ -255,6 +284,64 @@ class AddressFormatCore extends ObjectModel
 					$addressText .= (!empty($tmpText)) ? $tmpText.$newLine: '';
 				}
 		return $addressText;
+	}
+	
+	/**
+	* Returns selected fields required for an address in an array according to a selection hash
+	* @return array String values 
+	*/
+	public static function getValidateFields($className)
+	{
+		$propertyList = array();
+		
+		if (class_exists($className))
+		{
+			$object = new $className();
+			$reflect = new ReflectionObject($object);
+			
+			// Check if the property is accessible
+			$publicProperties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+			foreach($publicProperties as $property)
+			{
+				$propertyName = $property->getName();
+				if ((!in_array($propertyName, AddressFormat::$forbiddenProperyList)) && 
+						(!preg_match('#id|id_\w#', $propertyName, $match)))
+					$propertyList[] = $propertyName;
+			}
+			unset($object);
+			unset($reflect);
+		}
+		return $propertyList;
+	}
+	
+	/*
+	 * Return a list of liable class of the className
+	 */
+	public static function getLiableClass($className)
+	{
+		$objectList = array();
+
+		if (class_exists($className))
+		{
+			$object = new $className();
+			$reflect = new ReflectionObject($object);
+
+			// Get all the name object liable to the Address class
+			$publicProperties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+			foreach($publicProperties as $property)
+			{
+				$propertyName = $property->getName();
+				if (preg_match('#id_\w#', $propertyName, $match) && strlen($propertyName) > 3)
+				{
+					$nameObject = ucfirst(substr($propertyName, 3));
+					if (class_exists($nameObject))
+						$objectList[$nameObject] = new $nameObject();
+				}
+			}
+			unset($object);
+			unset($reflect);
+		}
+		return $objectList;
 	}
 	
 	/**
