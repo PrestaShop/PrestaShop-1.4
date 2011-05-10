@@ -53,6 +53,12 @@ class GuestTrackingControllerCore extends FrontController
 			    $carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
 			    $addressInvoice = new Address((int)($order->id_address_invoice));
 			    $addressDelivery = new Address((int)($order->id_address_delivery));
+				$inv_adr_fields = AddressFormat::getOrderedAddressFields($addressInvoice->id_country);
+				$dlv_adr_fields = AddressFormat::getOrderedAddressFields($addressDelivery->id_country);
+			    
+				$invoiceAddressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($addressInvoice, $inv_adr_fields);
+				$deliveryAddressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($addressDelivery, $dlv_adr_fields);
+				
 			    if ($order->total_discounts > 0)
 			    	self::$smarty->assign('total_old', (float)($order->total_paid - $order->total_discounts));
 			    $products = $order->getProducts();
@@ -81,7 +87,9 @@ class GuestTrackingControllerCore extends FrontController
 			    	'CUSTOMIZE_FILE' => _CUSTOMIZE_FILE_,
 			    	'CUSTOMIZE_TEXTFIELD' => _CUSTOMIZE_TEXTFIELD_,
 			    	'use_tax' => Configuration::get('PS_TAX'),
-			    	'customizedDatas' => $customizedDatas));
+			    	'customizedDatas' => $customizedDatas,
+			    	'invoiceAddressFormatedValues' => $invoiceAddressFormatedValues,
+			    	'deliveryAddressFormatedValues' => $deliveryAddressFormatedValues));
 			    if ($carrier->url AND $order->shipping_number)
 			    	self::$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
 			    self::$smarty->assign('HOOK_ORDERDETAILDISPLAYED', Module::hookExec('orderDetailDisplayed', array('order' => $order)));

@@ -111,7 +111,7 @@ class OrderDetailControllerCore extends FrontController
 				$dlv_adr_fields = AddressFormat::getOrderedAddressFields($addressDelivery->id_country);
 				
 				$invoiceAddressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($addressInvoice, $inv_adr_fields);
-				$delivryAddressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($addressDelivery, $dlv_adr_fields);
+				$deliveryAddressFormatedValues = AddressFormat::getFormattedAddressFieldsValues($addressDelivery, $dlv_adr_fields);
 
 				if ($order->total_discounts > 0)
 					self::$smarty->assign('total_old', (float)($order->total_paid - $order->total_discounts));
@@ -140,7 +140,7 @@ class OrderDetailControllerCore extends FrontController
 					'inv_adr_fields' => $inv_adr_fields,
 					'dlv_adr_fields' => $dlv_adr_fields,
 					'invoiceAddressFormatedValues' => $invoiceAddressFormatedValues,
-					'deliveryAddressFormatedValues' => $delivryAddressFormatedValues,
+					'deliveryAddressFormatedValues' => $deliveryAddressFormatedValues,
 					'deliveryState' => (Validate::isLoadedObject($addressDelivery) AND $addressDelivery->id_state) ? new State((int)($addressDelivery->id_state)) : false,
 					'is_guest' => false,
 					'messages' => Message::getMessagesByOrderId((int)($order->id)),
