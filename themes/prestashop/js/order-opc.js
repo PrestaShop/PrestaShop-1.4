@@ -341,6 +341,7 @@ function updateNewAccountToAddressBlock()
 					});
 				}
 				$('#opc_new_account').fadeIn('fast', function() {
+					updateCartSummary(json.summary);
 					updateAddressesDisplay(true);
 					updateCarrierList(json.carrier_list);
 					updatePaymentMethods(json);

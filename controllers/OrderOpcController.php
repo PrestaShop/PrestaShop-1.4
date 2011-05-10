@@ -127,6 +127,7 @@ class OrderOpcControllerCore extends ParentOrderController
 								$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
 								$wrapping_fees_tax_inc = $wrapping_fees * (1 + (((float)($wrapping_fees_tax->rate) / 100)));
 								$return = array(
+									'summary' => self::$cart->getSummaryDetails(),
 									'order_opc_adress' => self::$smarty->fetch(_PS_THEME_DIR_.'order-address.tpl'),
 									'block_user_info' => (isset($blockUserInfo) ? $blockUserInfo->hookTop(array()) : ''),
 									'carrier_list' => self::_getCarrierList(),
