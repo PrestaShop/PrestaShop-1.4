@@ -172,6 +172,8 @@ class AdminLanguages extends AdminTab
 					{
 						if ($_FILES['no-picture']['error'] == UPLOAD_ERR_OK)
 							$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
+						// class AdminTab deal with every $_FILES content, don't do that for no-picture
+						unset($_FILES['no-picture']);
 						parent::postProcess();
 					}
 					else
@@ -193,6 +195,8 @@ class AdminLanguages extends AdminTab
 					{
 						if ($_FILES['no-picture']['error'] == UPLOAD_ERR_OK)
 							$this->copyNoPictureImage(strtolower(Tools::getValue('iso_code')));
+						// class AdminTab deal with every $_FILES content, don't do that for no-picture
+						unset($_FILES['no-picture']);
 						parent::postProcess();
 					}
 
