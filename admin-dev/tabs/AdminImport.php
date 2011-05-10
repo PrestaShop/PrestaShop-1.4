@@ -744,7 +744,7 @@ class AdminImport extends AdminTab
 			else
 			{
 				// SpecificPrice (only the basic reduction feature is supported by the import)
-				if (isset($info['reduction_price']) OR isset($info['reduction_percent']))
+				if ((isset($info['reduction_price']) AND $info['reduction_price'] > 0) OR (isset($info['reduction_percent']) AND $info['reduction_percent'] > 0))
 				{
 					$specificPrice = new SpecificPrice();
 					$specificPrice->id_product = (int)($product->id);
