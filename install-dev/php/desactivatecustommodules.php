@@ -29,14 +29,10 @@ function desactivate_custom_modules()
 {
 	$arrNonNative = Module::getNonNativeModuleList();
 
-	$uninstallMe = array("rien");
+	$uninstallMe = array("undefined-modules");
 	foreach($arrNonNative as $aModule)
-	{
-		if(!in_array($aModule['name'],$arrNativeModules))
-		{
-			$uninstallMe[] = $aModule['name'];
-		}
-	}
+		$uninstallMe[] = $aModule['name'];
+
 	return Module::disableByName($uninstallMe);
 
 }
