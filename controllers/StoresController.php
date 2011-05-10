@@ -186,11 +186,13 @@ class StoresControllerCore extends FrontController
 
 	public function process()
 	{
+		global $link;
 		parent::process();
-		
+				
 		self::$smarty->assign(array(
 			'defaultLat' => (float)Configuration::get('PS_STORES_CENTER_LAT'),
-			'defaultLong' => (float)Configuration::get('PS_STORES_CENTER_LONG')
+			'defaultLong' => (float)Configuration::get('PS_STORES_CENTER_LONG'),
+			'searchUrl' => $link->getPageLink('stores.php')
 		));
 	}
 

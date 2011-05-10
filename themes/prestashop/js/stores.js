@@ -26,7 +26,7 @@
 
 function initMarkers()
 {
-	var searchUrl = baseDir+'stores.php?ajax=1&all=1';
+	searchUrl += '?ajax=1&all=1';
 	downloadUrl(searchUrl, function(data) {
 		var xml = parseXml(data);
 		var markerNodes = xml.documentElement.getElementsByTagName('marker');

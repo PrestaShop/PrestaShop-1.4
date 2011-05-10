@@ -70,6 +70,7 @@
 		var distance_unit = '{$distance_unit}';
 		var img_store_dir = '{$img_store_dir}';
 		var img_ps_dir = '{$img_ps_dir}';
+		var searchUrl = '{$searchUrl}';
 		//]]>
 	</script>
 
