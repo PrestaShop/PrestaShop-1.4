@@ -92,10 +92,10 @@ class AdminCarriers extends AdminTab
 		echo '<script type="text/javascript">
 			$(document).ready(function(){
 				// At the loading
-				($("input[name=\'is_free\']:checked").val() == 1) ? $("#shipping_costs_div").show(): $("#shipping_costs_div").hide();
+				($("input[name=\'is_free\']:checked").val() == 0) ? $("#shipping_costs_div").show(): $("#shipping_costs_div").hide();
 			
 				$("input[name=\'is_free\']").live("change", function(){
-					($("input[name=\'is_free\']:checked").val() == 1) ? $("#shipping_costs_div").show(): $("#shipping_costs_div").hide();			
+					($("input[name=\'is_free\']:checked").val() == 0) ? $("#shipping_costs_div").show(): $("#shipping_costs_div").hide();			
 				});
 			});
 		</script>
@@ -175,9 +175,9 @@ class AdminCarriers extends AdminTab
 				</div>
 				<label>'.$this->l('Apply shipping cost:').' </label>
 				<div class="margin-form">
-					<input type="radio" name="is_free" id="is_free_on" value="1" '.($this->getFieldValue($obj, 'is_free') ? 'checked="checked" ' : '').'/>
+					<input type="radio" name="is_free" id="is_free_on" value="0" '.(!$this->getFieldValue($obj, 'is_free') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" /></label>
-					<input type="radio" name="is_free" id="is_free_off" value="0" '.(!$this->getFieldValue($obj, 'is_free') ? 'checked="checked" ' : '').'/>
+					<input type="radio" name="is_free" id="is_free_off" value="1" '.($this->getFieldValue($obj, 'is_free') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" /></label>
 					<p>'.$this->l('Apply shipping costs and additional shipping costs by products in carrier price').'</p>
 				</div>
