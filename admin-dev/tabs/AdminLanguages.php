@@ -128,6 +128,9 @@ class AdminLanguages extends AdminTab
 		 	{
 				if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
 				{
+					// English is needed by the system (ex. translations)
+					if ($object->id == Language::getIdByIso('en'))
+						$this->_errors[] = $this->l('You cannot delete the English language as it is a system requirement, you can only deactivate it.');
 					if ($object->id == Configuration::get('PS_LANG_DEFAULT'))
 						$this->_errors[] = $this->l('you cannot delete the default language');
 					elseif ($object->id == $cookie->id_lang)
