@@ -221,7 +221,7 @@
 					<input type="text" class="text" name="city" id="city" value="{if isset($guestInformations) && $guestInformations.city}{$guestInformations.city}{/if}" />
 					<sup>*</sup>
 				</p>
-				{elseif $field_name eq "country"}
+				{elseif $field_name eq "country" || $field_name eq "Country:name"}
 				<p class="required select">
 					<label for="id_country">{l s='Country'}</label>
 					<select name="id_country" id="id_country">
