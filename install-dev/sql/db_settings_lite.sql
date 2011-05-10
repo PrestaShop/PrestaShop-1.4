@@ -1139,11 +1139,11 @@ INSERT INTO `PREFIX_stock_mvt_reason_lang` (`id_stock_mvt_reason`, `id_lang`, `n
 (5, 5, 'Riassortimento');
 
 INSERT INTO `PREFIX_address_format` (`id_country`, `format`)
-(SELECT `id_country` as id_country, 'firstname lastname\ncompany\nvat_number\naddress1\naddress2\npostcode city\ncountry\nphone' as format FROM `PREFIX_country`);
+(SELECT `id_country` as id_country, 'firstname lastname\ncompany\nvat_number\naddress1\naddress2\npostcode city\nCountry:name\nphone' as format FROM `PREFIX_country`);
 
 UPDATE `PREFIX_address_format` set `format`='company
 firstname lastname
 address1 address2
-city state_iso postcode 
-country
+city State:name postcode 
+Country:name
 phone' where `id_country`=21;
