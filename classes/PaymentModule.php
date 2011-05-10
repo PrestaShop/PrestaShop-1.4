@@ -186,7 +186,6 @@ abstract class PaymentModuleCore extends Module
 						if ($product['stock_quantity'] < 0 && Configuration::get('PS_STOCK_MANAGEMENT'))
 							$outOfStock = true;
 
-						Hook::updateQuantity($product, $order);
 						Product::updateDefaultAttribute($product['id_product']);
 					}
 					$price = Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));

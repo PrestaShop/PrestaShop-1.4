@@ -94,7 +94,6 @@ class OrderHistoryCore extends ObjectModel
 					if (!$isValidated AND $newOS->logable AND isset($oldOrderStatus) AND $oldOrderStatus AND $oldOrderStatus->id == _PS_OS_ERROR_)
 					{
 						Product::updateQuantity($product);
-						Hook::updateQuantity($product, $order);
 					}
 				}
 			

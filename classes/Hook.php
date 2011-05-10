@@ -154,7 +154,13 @@ class HookCore extends ObjectModel
 		return $return;
 	}
 
-	static public function updateQuantity($product, $order)
+	/**
+	 * Called when quantity of a product is updated.
+	 * 
+	 * @param Product
+	 * @param Order
+	 */
+	static public function updateQuantity($product, $order = null)
 	{
 		return Module::hookExec('updateQuantity', array('product' => $product, 'order' => $order));
 	}

@@ -3037,7 +3037,17 @@ class ProductCore extends ObjectModel
 		$stockMvt->id_employee = (int)$id_employee;
 		$stockMvt->quantity = (int)$quantity;
 		$stockMvt->id_stock_mvt_reason = (int)$id_reason;
-		return $stockMvt->add();
+		$result = $stockMvt->add();
+
+		// Increase or decrease current product quantity value
+		if ($id_reason == 1)
+			$this->quantity += abs($quantity);
+		else if ($id_reason == 2)
+			$this->quantity -= abs($quantity);
+			
+		Hook::updateQuantity($this, null);
+		
+		return $result;
 	}
 
 	public function getStockMvts($id_lang)

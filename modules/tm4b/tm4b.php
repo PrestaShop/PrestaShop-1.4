@@ -172,8 +172,7 @@ class Tm4b extends Module
 			return ;
 	
 		$product = $params['product'];
-		$order = $params['order'];
-		
+
 		$qty = (int)($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']) - (int)($params['product']['quantity']);
 		if ($qty <= (int)(Configuration::get('PS_LAST_QTIES')))
 		{

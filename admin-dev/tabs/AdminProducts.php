@@ -1167,7 +1167,7 @@ class AdminProducts extends AdminTab
 					$this->_removeTaxFromEcotax();
 					$this->copyFromPost($object, $this->table);
 					if ($object->update())
-					{					
+					{
 						if ($id_reason = (int)Tools::getValue('id_mvt_reason') AND (int)Tools::getValue('mvt_quantity') > 0 AND $id_reason > 0)
 						{
 							$reason = new StockMvtReason((int)$id_reason);

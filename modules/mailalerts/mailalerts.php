@@ -247,14 +247,19 @@ class MailAlerts extends Module
 	public function hookUpdateQuantity($params)
 	{
 		global $cookie;
-		
+
 		if (is_object($params['product']))
 			$params['product'] = get_object_vars($params['product']);
-			
+
+		if (is_array($params['product']['name']))
+		{
+			$params['product']['name'] = $params['product']['name'][(int)Configuration::get('PS_LANG_DEFAULT')];
+		}
+
 		if (isset($params['product']['id_product']))
 			$params['product']['id'] = (int)$params['product']['id_product'];
-		
-		$qty = (int)$params['product']['stock_quantity'];
+
+		$qty = (int)$params['product']['quantity'];
 		if ($qty <= (int)(Configuration::get('MA_LAST_QTIES')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(
@@ -266,9 +271,9 @@ class MailAlerts extends Module
 			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
 				Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'productoutofstock', Mail::l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 		}
-		
+
 		if ($this->_customer_qty AND $params['product']['quantity'] > 0)
-			$this->sendCustomerAlert((int)$params['product']['id_product'], 0);
+			$this->sendCustomerAlert((int)$params['product']['id'], 0);
 	}
 
 	public function hookUpdateProduct($params)
