@@ -7,7 +7,7 @@ UPDATE `PREFIX_address_format` SET `format`=REPLACE(REPLACE(`format`, 'state_iso
 
 ALTER TABLE `PREFIX_orders` ADD INDEX `date_add`(`date_add`);
 
-PHP:update_module_followup();
+/* PHP:update_module_followup(); */;
 
 INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PS_STOCK_MVT_REASON_DEFAULT', 3, NOW(), NOW());
@@ -15,3 +15,4 @@ INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_up
 /* PHP:alter_blocklink(); */;
 /* PHP:update_module_loyalty(); */;
 /* PHP:remove_module_from_hook(blockcategories, afterCreateHtaccess); */;
+
