@@ -79,6 +79,7 @@
 	</form>
 </p>
 <script type="text/javascript">
+	var mess_error = "{l s='Your card number is false' mod='authorizeaim' js=1}";
 	{literal}
 		$(document).ready(function(){
 			$('#click_authorizeaim').click(function(e){
@@ -101,7 +102,7 @@
 			$('#asubmit').click(function(){
 				if ($('#ccn').val() < 13)
 				{
-					alert("{l s='Your card number is false' mod='authorizeaim' js=1}");
+					alert(mess_error);
 				}
 				else
 				{

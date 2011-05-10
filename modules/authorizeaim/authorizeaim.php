@@ -135,12 +135,13 @@ class authorizeAIM extends PaymentModule
 
 	public function hookPayment($params)
 	{
-		global $smarty;
+		global $cookie, $smarty;
 
 		if (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off' AND Configuration::get('PS_SSL_ENABLED'))
 		{
 			$invoiceAddress = new Address((int)$params['cart']->id_address_invoice);
-
+			$customer = new Customer((int)$cookie->id_customer);
+			
 			$authorizeAIMParams = array();
 			$authorizeAIMParams['x_login'] = Configuration::get('AUTHORIZE_AIM_LOGIN_ID');
 			$authorizeAIMParams['x_tran_key'] = Configuration::get('AUTHORIZE_AIM_KEY');
@@ -155,6 +156,9 @@ class authorizeAIM extends PaymentModule
 			$authorizeAIMParams['x_amount'] = number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '');
 			$authorizeAIMParams['x_address'] = $invoiceAddress->address1.' '.$invoiceAddress->address2;
 			$authorizeAIMParams['x_zip'] = $invoiceAddress->postcode;
+			$authorizeAIMParams['x_first_name'] = $customer->firstname;
+			$authorizeAIMParams['x_last_name'] = $customer->lastname;
+			
 			$isFailed = Tools::getValue('aimerror');
 
 			$cards = array();
