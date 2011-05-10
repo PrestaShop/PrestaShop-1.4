@@ -56,7 +56,7 @@ function cancelFilter()
 
 function openCloseFilter()
 {
-	$('#layered_form span.layered_close a').live('click', function()
+	$('#layered_form span.layered_close a').live('click', function(e)
 	{
 		if ($(this).html() == '&lt;')
 		{
@@ -68,6 +68,8 @@ function openCloseFilter()
 			$('#'+$(this).attr('rel')).hide();
 			$(this).html('&lt;');
 		}
+		
+		e.preventDefault();
 	});
 }
 
