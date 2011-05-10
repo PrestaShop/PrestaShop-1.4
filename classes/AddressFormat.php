@@ -103,30 +103,41 @@ class AddressFormatCore extends ObjectModel
 	private function _checkLiableAssociation($patternName, $fieldsValidate)
 	{
 		$patternName = trim($patternName);
+		$cleanedLine = '';
 		
 		if ($associationName = explode(':', $patternName))
 		{
 			$totalNameUsed = count($associationName);
 			if ($totalNameUsed > 2)
 				$this->_errorFormatList[] = Tools::displayError('This assocation contains too much key name');
-			else if ($totalNameUsed == 1 && (!isset($fieldsValidate[$associationName[0]]) || 
-					isset($fieldsValidate['id_'.$associationName[0]])))
+			else if ($totalNameUsed == 1)
+			{
+				$associationName[0] = strtolower($associationName[0]);
+				$cleanedLine = $associationName[0];
+				if (!isset($fieldsValidate[$associationName[0]]) || 
+					isset($fieldsValidate['id_'.$associationName[0]]))
 						$this->_errorFormatList[] = Tools::displayError('This name isn\'t allowed').': '.
 						$associationName[0];
+			}
 			else if ($totalNameUsed == 2)
 			{
 				if (empty($associationName[0]) || empty($associationName[1]))
 					$this->_errorFormatList[] = Tools::displayError('Syntax error with this pattern').': '.$patternName;
 				else
 				{
+					$associationName[0] = ucfirst($associationName[0]);
+					$associationName[1] = strtolower($associationName[1]);
+					
 					// Check if the id field name exist in the Address class 
 					$this->_checkValidateClassField('Address', 'id_'.strtolower($associationName[0]), true);
 					
 					// Check if the field name exist in the class write by the user
-					$this->_checkValidateClassField(ucfirst($associationName[0]), $associationName[1], false);
+					$this->_checkValidateClassField($associationName[0], $associationName[1], false);
+					$cleanedLine = $associationName[0].':'.$associationName[1];
 				}
 			}
 		}
+		return (strlen($cleanedLine)) ? $cleanedLine.' ' : '';
 	}
 
 	/*
@@ -145,11 +156,13 @@ class AddressFormatCore extends ObjectModel
 				$lineField = str_replace(array("\n", "\t", "\r\n", "\r"), '', $lineField);
 				if (strlen($lineField))
 				{
-					$cleanedContent .= $lineField."\r\n";
 					$patternsName = explode(' ', trim($lineField));
 					if ($patternsName && is_array($patternsName))
+					{
 						foreach($patternsName as $patternName)
-							$this->_checkLiableAssociation($patternName, $fieldsValidate);
+							$cleanedContent .= $this->_checkLiableAssociation($patternName, $fieldsValidate);
+						$cleanedContent = trim($cleanedContent)."\r\n";
+					}
 				}
 			}
 		$this->format = $cleanedContent;
