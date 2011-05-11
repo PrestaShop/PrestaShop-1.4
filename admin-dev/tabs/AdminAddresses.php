@@ -289,9 +289,11 @@ class AdminAddresses extends AdminTab
 				</div>';
 				break;
 		}
+		
 		$addresses_fields = $this->processAddressFormat();
 		$addresses_fields = $addresses_fields["dlv_all_fields"];	// we use  delivery address
 
+	
 
 		foreach($addresses_fields as $addr_field_item)
 		{
@@ -374,7 +376,7 @@ class AdminAddresses extends AdminTab
 					<input type="text" size="33" name="city" value="'.htmlentities($this->getFieldValue($obj, 'city'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
 					</div>';
 			}
-			elseif ($addr_field_item == 'country')
+			elseif ($addr_field_item == 'country' || $addr_field_item == 'Country:name')
 			{
 
 				echo '
@@ -478,7 +480,10 @@ class AdminAddresses extends AdminTab
 	protected function processAddressFormat()
 	{
 		$tmp_addr = new Address((int)Tools::getValue("id_address"));
-		$selectedCountry = (!is_null($tmp_addr)) ? $tmp_addr->id_country : (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		
+		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country : 
+				(int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		
 		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
 		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
 
