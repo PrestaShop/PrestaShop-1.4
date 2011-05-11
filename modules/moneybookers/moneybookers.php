@@ -455,7 +455,7 @@ class MoneyBookers extends PaymentModule
 			$mbParams['phone_number'] = !empty($address->phone_mobile) ? $address->phone_mobile : $address->phone;
 			$mbParams['postal_code'] = $address->postcode;
 			$mbParams['city'] = $address->city;
-			$mbParams['country'] = $this->_country[strtoupper($countryObj->iso_code)];
+			$mbParams['country'] = isset($this->_country[strtoupper($countryObj->iso_code)]) ? $this->_country[strtoupper($countryObj->iso_code)] : '';
 			$mbParams['language'] = strtoupper($lang->iso_code);
 			$mbParams['date_of_birth'] = substr($customer->birthday, 5, 2).substr($customer->birthday, 8, 2).substr($customer->birthday, 0, 4);
 
