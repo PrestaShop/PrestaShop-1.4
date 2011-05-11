@@ -350,6 +350,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="required">/tools/smarty_v2/compile</li>
 				<li class="required">/tools/smarty_v2/cache</li>
 				<li class="required">/sitemap.xml</li>
+				<li class="required">/log</li>
 				<li class="title"><?php echo lang('Write permissions on folders (and subfolders):')?></li>
 				<li class="required">/img</li>
 				<li class="required">/mails</li>
@@ -359,7 +360,6 @@ if ($lm->getIncludeTradFilename())
 				<li class="required">/translations</li>
 				<li class="required">/upload</li>
 				<li class="required">/download</li>
-				<li class="required">/log</li>
 			</ul>
 
 			<h3><?php echo lang('Optional set-up')?></h3>
@@ -1010,6 +1010,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="required">/tools/smarty_v2/compile</li>
 				<li class="required">/tools/smarty_v2/cache</li>
 				<li class="required">/sitemap.xml</li>
+				<li class="required">/log</li>
 				<li class="title"><?php echo lang('Write permissions on folders (and subfolders):')?></li>
 				<li class="required">/img</li>
 				<li class="required">/mails</li>
