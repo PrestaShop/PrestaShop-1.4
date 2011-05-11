@@ -846,7 +846,7 @@ class WebserviceRequestCore
 								$error = true;
 							}
 							foreach ($part as $field)
-								if (!array_key_exists($field, $this->resourceConfiguration['associations'][$field_name]['fields']))
+								if ($field != 'id' && !array_key_exists($field, $this->resourceConfiguration['associations'][$field_name]['fields']))
 								{
 									$error = true;
 									break;
