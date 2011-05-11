@@ -31,11 +31,13 @@
 </script>
 
 <form action="{if isset($opc) && $opc}{$link->getPageLink('order-opc.php', true)}{else}{$link->getPageLink('order.php', true)}{/if}" method="post" class="submit">
-	<input type="hidden" value="{$order->id}" name="id_order">
-	<h4>
-		{l s='Order placed on'} {dateFormat date=$order->date_add full=0}
-		<input type="submit" value="{l s='Reorder'}" name="submitReorder" class="button exclusive" style="float:right">
-	</h4>
+	<div>
+		<input type="hidden" value="{$order->id}" name="id_order"/>
+		<h4>
+			{l s='Order placed on'} {dateFormat date=$order->date_add full=0}
+			<input type="submit" value="{l s='Reorder'}" name="submitReorder" class="button exclusive" style="float:right"/>
+		</h4>
+	</div>
 </form>
 
 {if count($order_history)}
