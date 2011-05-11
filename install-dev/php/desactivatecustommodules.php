@@ -30,8 +30,9 @@ function desactivate_custom_modules()
 	$arrNonNative = Module::getNonNativeModuleList();
 
 	$uninstallMe = array("undefined-modules");
-	foreach($arrNonNative as $aModule)
-		$uninstallMe[] = $aModule['name'];
+	if (is_array($arrNonNative))
+		foreach($arrNonNative as $aModule)
+			$uninstallMe[] = $aModule['name'];
 
 	return Module::disableByName($uninstallMe);
 

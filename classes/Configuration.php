@@ -286,12 +286,13 @@ class ConfigurationCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'configuration` c
 		LEFT JOIN `'._DB_PREFIX_.'configuration_lang` cl ON (c.id_configuration = cl.id_configuration)');
 		
-		foreach ($result AS $row)
-		{
-			self::$_CONF[$row['name']] = $row['c_value'];
-			if ($row['id_lang'])
-				self::$_CONF_LANG[(int)$row['id_lang']][$row['name']] = $row['cl_value'];
-		}
+		if (is_array($result))
+			foreach ($result AS $row)
+			{
+				self::$_CONF[$row['name']] = $row['c_value'];
+				if ($row['id_lang'])
+					self::$_CONF_LANG[(int)$row['id_lang']][$row['name']] = $row['cl_value'];
+			}
 	}
 	
 	/**
