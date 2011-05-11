@@ -90,6 +90,14 @@ function d($var) {
 	Tools::d($var);
 }
 
+function ppp($var) {
+	return (Tools::p($var));
+}
+function ddd($var) {
+	Tools::d($var);
+}
+
+
 global $_MODULES;
 $_MODULES = array();
 
