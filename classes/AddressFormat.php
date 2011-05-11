@@ -394,12 +394,10 @@ class AddressFormatCore extends ObjectModel
 	 */
 	public function getFormat($id_country)
 	{
-		global $defaultCountry;
-		
 		$out = $this->_getFormatDB($id_country);
 		
 		if (strlen(trim($out)) == 0)
-			$out = $this->_getFormatDB($defaultCountry->id);
+			$out = $this->_getFormatDB(Configuration::get('PS_COUNTRY_DEFAULT'));
 		return $out;
 	}
 
