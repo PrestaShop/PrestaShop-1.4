@@ -3183,7 +3183,7 @@ class ProductCore extends ObjectModel
 				return $result;
 			}
 		}
-		return false;
+		return true;
 	}
 	
 	/**
