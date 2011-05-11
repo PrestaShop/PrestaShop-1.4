@@ -113,7 +113,7 @@ class AdminCountries extends AdminTab
 				<a href="javascript:void(0);" onClick="displayAvailableFields(\''.$className.'\')">'.$className.'</a>';
 			$fields = AddressFormat::getValidateFields($className);
 			$html .= '
-				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'">
+				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'" style="display:none;">
 				'.implode(', ', $fields).'</div></li>';
 			unset($object);
 		}
@@ -137,8 +137,11 @@ class AdminCountries extends AdminTab
 			
 			function displayAvailableFields(containerName)
 			{
-				$(".availableFieldsList").css("display", "none");
-				$("#availableListFieldsFor_" + containerName).toggle("slow");
+				$(".availableFieldsList").each( function (){
+					if ($(this).attr(\'id\') != \'availableListFieldsFor_\'+containerName)
+						$(this).slideUp();
+				});
+				$("#availableListFieldsFor_" + containerName).slideToggle();
 			}
 			
 		</script>
