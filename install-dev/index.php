@@ -832,14 +832,17 @@ if ($lm->getIncludeTradFilename())
 				{
 					include_once(realpath(INSTALL_PATH.'/../config').'/defines.inc.php');
 					$moduleList = Module::getNonNativeModuleList();
-					$moduleNonNativeLi = '<ul>';
-					foreach($moduleList as $module)
-						if($module['active'])
-						{
-							$countNonNative++;
-							$moduleNonNativeLi .= '<li>'.$module['name'].'</li>';
-						}
-					$moduleNonNativeLi .= '</ul>';
+					if (is_array($moduleList))
+					{
+						$moduleNonNativeLi = '<ul>';
+						foreach($moduleList as $module)
+							if($module['active'])
+							{
+								$countNonNative++;
+								$moduleNonNativeLi .= '<li>'.$module['name'].'</li>';
+							}
+						$moduleNonNativeLi .= '</ul>';
+					}
 				}
 				if($countNonNative)
 				{
