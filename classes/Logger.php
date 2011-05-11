@@ -85,13 +85,13 @@ class	LoggerCore extends ObjectModel
 	}
 
 	/**
-	 * add a log item to the database and send a mail if configured for this $severity 
-	 * 
+	 * add a log item to the database and send a mail if configured for this $severity
+	 *
 	 * @param string $message the log message
-	 * @param int $severity 
-	 * @param int $errorCode 
-	 * @param string $objectType 
-	 * @param int $objectId 
+	 * @param int $severity
+	 * @param int $errorCode
+	 * @param string $objectType
+	 * @param int $objectId
 	 * @param boolean $allowDuplicate if set to true, can log several time the same information (not recommended)
 	 * @return boolean true if succeed
 	 */
@@ -125,7 +125,7 @@ class	LoggerCore extends ObjectModel
 
 	/**
 	 * this function md5($this->message.$this->severity.$this->error_code.$this->object_type.$this->object_id)
-	 * 
+	 *
 	 * @return string hash
 	 */
 	public function getHash(){
@@ -137,16 +137,16 @@ class	LoggerCore extends ObjectModel
 
 	/**
 	 * check if this log message already exists in database.
-	 * 
-	 * @param mixed $message 
+	 *
+	 * @param mixed $message
 	 * @return true if exists
 	 */
 	private function _isPresent()
 	{
 		if (!isset(self::$_is_present[md5($this->message)]))
-			self::$_is_present[$this->getHash()] = Db::getInstance()->getValue('SELECT COUNT(*) 
+			self::$_is_present[$this->getHash()] = Db::getInstance()->getValue('SELECT COUNT(*)
 				FROM `'._DB_PREFIX_.'log`
-				WHERE 
+				WHERE
 					`message` = \''.$this->message.'\'
 					AND `severity` = \''.$this->severity.'\'
 					AND `error_code` = \''.$this->error_code.'\'

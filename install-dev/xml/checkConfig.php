@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -52,6 +52,7 @@ $tests = array(
 	'translations_dir' => INSTALL_PATH.'/../translations/',
 	'customizable_products_dir' => INSTALL_PATH.'/../upload/',
 	'virtual_products_dir' => INSTALL_PATH.'/../download/',
+	'log_dir' => INSTALL_PATH.'/../log/',
 );
 $tests_op = array(
 	'fopen' => false,
@@ -64,15 +65,32 @@ $tests_op = array(
 $res = ConfigurationTest::check($tests);
 $res_op = ConfigurationTest::check($tests_op);
 
+$has_error = false;
+
 // Building XML Tree...
 echo '<config>'."\n";
 	echo '<firsttime value="'.((isset($_GET['firsttime']) AND $_GET['firsttime'] == 1) ? 1 : 0).'" />'."\n";
 	echo '<testList id="required">'."\n";
 	foreach ($res AS $key => $line)
+	{
+		if ($line == 'fail') $has_error = true;
 		echo '<test id="'.$key.'" result="'.$line.'"/>'."\n";
+	}
 	echo '</testList>'."\n";
 	echo '<testList id="optional">'."\n";
 	foreach ($res_op AS $key => $line)
+	{
+		if ($line == 'fail') $has_error = true;
 		echo '<test id="'.$key.'" result="'.$line.'"/>'."\n";
+	}
 	echo '</testList>'."\n";
 echo '</config>';
+
+if (!$has_error)
+{
+	// log directory is writable, so we can init the logger
+	global $logger;
+	$logger = new FileLogger();
+	$logger->setFilename(dirname(__FILE__).'/../../log/'.date('Ymd').'_installation.log');
+}
+

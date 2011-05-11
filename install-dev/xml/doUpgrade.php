@@ -35,7 +35,7 @@ define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
 define('_PS_INSTALLER_PHP_UPGRADE_DIR_', 'php/');
 // Only if loyalty module is installed
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
-// desactivate non-native module 
+// desactivate non-native module
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'desactivatecustommodules.php');
 // utf-8 conversion if needed (before v0.9.8.1 utf-8 was badly supported)
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'utf8.php');
@@ -113,7 +113,7 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_followup.php');
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_module_from_hook.php');
 
 //old version detection
-global $oldversion;
+global $oldversion, $logger;
 $oldversion = false;
 if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
 {
@@ -122,9 +122,16 @@ if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
 	$oldversion = _PS_VERSION_;
 }
 else
+{
 	die('<action result="fail" error="30" />'."\n");
+	$logger->logError('The config/settings.inc.php file was not found.');
+}
+
 if (!file_exists(DEFINES_FILE))
+{
 	die('<action result="fail" error="37" />'."\n");
+	$logger->logError('The config/settings.inc.php file was not found.');
+}
 include_once(SETTINGS_FILE);
 
 if (!defined('_THEMES_DIR_'))
@@ -141,17 +148,29 @@ $oldversion = _PS_VERSION_;
 
 $versionCompare =  version_compare(INSTALL_VERSION, _PS_VERSION_);
 if ($versionCompare == '-1')
+{
+	$logger->logError('This installer is too old.');
 	die('<action result="fail" error="27" />'."\n");
+}
 elseif ($versionCompare == 0)
+{
+	$logger->logError('You already have the '.INSTALL_VERSION.' version.');
 	die('<action result="fail" error="28" />'."\n");
+}
 elseif ($versionCompare === false)
+{
+	$logger->logError('There is no older version. Did you delete or rename the config/settings.inc.php file?');
 	die('<action result="fail" error="29" />'."\n");
+}
 
 //check DB access
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 $resultDB = ToolsInstall::checkDB(_DB_SERVER_, _DB_USER_, _DB_PASSWD_, _DB_NAME_, false);
 if ($resultDB !== true)
+{
+	$logger->logError('Invalid database configuration.');
 	die("<action result='fail' error='".$resultDB."'/>\n");
+}
 
 //custom sql file creation
 $upgradeFiles = array();
@@ -163,14 +182,20 @@ if ($handle = opendir(INSTALL_PATH.'/sql/upgrade'))
     closedir($handle);
 }
 if (empty($upgradeFiles))
+{
+	$logger->logError('Can\'t find the sql upgrade files. Please verify that the /install/sql/upgrade folder is not empty)');
 	die('<action result="fail" error="31" />'."\n");
+}
 natcasesort($upgradeFiles);
 $neededUpgradeFiles = array();
 foreach ($upgradeFiles AS $version)
 	if (version_compare($version, _PS_VERSION_) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
 		$neededUpgradeFiles[] = $version;
 if (empty($neededUpgradeFiles))
+{
+	$logger->logError('No upgrade is possible.');
 	die('<action result="fail" error="32" />'."\n");
+}
 
 
 //refresh conf file
@@ -214,9 +239,15 @@ foreach($neededUpgradeFiles AS $version)
 {
 	$file = INSTALL_PATH.'/sql/upgrade/'.$version.'.sql';
 	if (!file_exists($file))
+	{
+		$logger->logError('Error while loading sql upgrade file.');
 		die('<action result="fail" error="33" />'."\n");
+	}
 	if (!$sqlContent .= file_get_contents($file))
+	{
+		$logger->logError('Error while loading sql upgrade file.');
 		die('<action result="fail" error="33" />'."\n");
+	}
 	$sqlContent .= "\n";
 }
 
@@ -226,14 +257,20 @@ $sqlContent = preg_split("/;\s*[\r\n]+/",$sqlContent);
 error_reporting($oldLevel);
 $confFile = new AddConfToFile(SETTINGS_FILE, 'w');
 if ($confFile->error)
+{
+	$logger->logError($confFile->error);
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
+}
 
 foreach ($datas AS $data){
 	$confFile->writeInFile($data[0], $data[1]);
 }
 
 if ($confFile->error != false)
+{
+	$logger->logError($confFile->error);
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
+}
 
 // Settings updated, compile and cache directories must be emptied
 foreach (array(INSTALL_PATH.'/../tools/smarty/cache/', INSTALL_PATH.'/../tools/smarty/compile/', INSTALL_PATH.'/../tools/smarty_v2/cache/', INSTALL_PATH.'/../tools/smarty_v2/compile/') as $dir)
@@ -285,6 +322,8 @@ foreach($sqlContent as $query)
 		}
 		elseif(!Db::getInstance()->Execute($query))
 		{
+			$logger->logError('SQL query: '."\r\n".$query);
+			$logger->logError('SQL error: '."\r\n".Db::getInstance()->getMsgError());
 			$warningExist = true;
 			$requests .=
 '	<request result="fail">

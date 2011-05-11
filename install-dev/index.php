@@ -359,6 +359,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="required">/translations</li>
 				<li class="required">/upload</li>
 				<li class="required">/download</li>
+				<li class="required">/log</li>
 			</ul>
 
 			<h3><?php echo lang('Optional set-up')?></h3>
@@ -1032,7 +1033,7 @@ if ($lm->getIncludeTradFilename())
 
 		<div class="sheet" id="sheet_updateErrors">
 			<h2><?php echo lang('Error!'); ?></h2>
-			<h3><?php echo lang('One or more errors have occurred...'); ?></h3>
+			<h3><?php echo lang('One or more errors have occurred, you can find more informations below or in the log/installation.log file.'); ?></h3>
 			<p id="resultUpdate"></p>
 			<p id="detailsError"></p>
 		</div>

@@ -194,8 +194,8 @@ if (isFormValid())
 	Configuration::loadConfiguration();
 	require_once(dirname(__FILE__).'/../../config/defines.inc.php');
 	require_once(dirname(__FILE__).'/../../classes/LocalizationPack.php');
-	
-	
+
+
 	$context = stream_context_create(array('http' => array('timeout' => 5)));
 	$localization_file = @Tools::file_get_contents('http://www.prestashop.com/download/localization_pack.php?country='.$_GET['countryName'], false, $context);
 	if (!$localization_file AND file_exists(dirname(__FILE__).'/../../localization/'.strtolower($_GET['countryName']).'.xml'))
@@ -262,8 +262,14 @@ if (isFormValid())
 // Building XML Response//
 //////////////////////////
 
+global $logger;
 echo '<shopConfig>'."\n";
 foreach ($error AS $key => $line)
+{
+	if ($line != '')
+		$logger->logError($key.' => '.$line);
+
 	echo '<field id="'.$key.'" result="'.( $line != "" ? 'fail' : 'ok').'" error="'.$line.'" />'."\n";
+}
 echo '</shopConfig>';
 

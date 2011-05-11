@@ -134,6 +134,11 @@ class	ConfigurationTest
 		return self::test_dir($dir);
 	}
 
+	static function		test_log_dir($dir)
+	{
+		return self::test_dir($dir);
+	}
+
 	static function		test_admin_dir($dir)
 	{
 		return self::test_dir($dir);

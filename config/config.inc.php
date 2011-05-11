@@ -42,7 +42,7 @@ ini_set('upload_max_filesize', '100M');
 ini_set('default_charset', 'utf-8');
 ini_set('magic_quotes_runtime', 0);
 
-// correct Apache charset (except if it's too late 
+// correct Apache charset (except if it's too late
 if(!headers_sent())
 	header('Content-Type: text/html; charset=utf-8');
 
@@ -102,7 +102,7 @@ Language::loadLanguages();
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set(Configuration::get('PS_TIMEZONE'));
-	
+
 if (!function_exists('property_exists'))
 {
 	function property_exists($class, $property)
@@ -117,3 +117,4 @@ if (!function_exists('property_exists'))
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
+
