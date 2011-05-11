@@ -263,6 +263,8 @@ class ProductCore extends ObjectModel
 			'new' => array(),
 			'cache_default_attribute' => array(),
 			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => '', 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
+			'id_default_combination' => array('getter' => 'getWsDefaultCombination', 'setter' => 'setWsDefaultCombination', 'xlink_resource' => array('resourceName' => 'combinations')),
+			'position_in_category' => array('getter' => 'getWsPositionInCategory', 'setter' => ''),
 			),
 		'associations' => array(
 			'categories' => array('resource' => 'category', 'fields' => array(
@@ -270,31 +272,19 @@ class ProductCore extends ObjectModel
 			)),
 			'images' => array('resource' => 'image', 'fields' => array('id' => array())
 			),
-			'product_features' => array('resource' => 'product_feature', 'setter' => null, 
+			'combinations' => array('resource' => 'combinations', 'fields' => array(
+				'id' => array('required' => true),
+			)),
+			'product_options' => array('resource' => 'product_options', 'fields' => array(
+				'id' => array('required' => true),
+			)),
+			'product_features' => array('resource' => 'product_feature', 
 				'fields' => array(
 					'id' => array('required' => true),
 					'id_feature_value' => array('required' => true, 'xlink_resource' => 'product_feature_values'),
 			)),
 		),
 	);
-
-	public function getCoverWs()
-	{
-		$result = $this->getCover($this->id);
-		return $result['id_image'];
-	}
-
-	public function	getWsImages()
-	{
-		//d('a');
-		return Db::getInstance()->ExecuteS('
-		SELECT `id_image` as id
-		FROM `'._DB_PREFIX_.'image`
-		WHERE `id_product` = '.(int)($this->id).'
-		ORDER BY `position`');
-	}
-
-
 
 	public	function __construct($id_product = NULL, $full = false, $id_lang = NULL)
 	{
@@ -3064,54 +3054,6 @@ class ProductCore extends ObjectModel
 		GROUP BY sm.id_stock_mvt');
 	}
 
-	public function setWsCategories($values)
-	{
-		$ids = array();
-		foreach ($values as $value)
-			$ids[] = $value['id'];
-		if ($this->deleteCategories())
-		{
-			if ($ids)
-			{
-				$sqlValues = '';
-				$ids = array_map('intval', $ids);
-				foreach ($ids as $position => $id)
-					$sqlValues[] = '('.(int)$id.', '.(int)$this->id.', '.(int)$position.')';
-				$result = Db::getInstance()->Execute('
-					INSERT INTO `'._DB_PREFIX_.'category_product` (`id_category`, `id_product`, `position`)
-					VALUES '.implode(',', $sqlValues)
-				);
-				return $result;
-			}
-		}
-		return false;
-	}
-	
-	public function getWsProductFeatures()
-	{
-		$rows = $this->getFeatures();
-		foreach ($rows as $keyrow => $row)
-		{
-			foreach ($row as $keyfeature => $feature)
-			{
-				if ($keyfeature == 'id_feature')
-				{
-					$rows[$keyrow]['id'] = $feature;
-					unset($rows[$keyrow]['id_feature']);
-				}
-				unset($rows[$keyrow]['id_product']);
-			}
-			asort($rows[$keyrow]);
-		}
-		return $rows;
-	}
-	
-	public function getWsCategories()
-	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_category` AS id FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)$this->id);
-		return $result;
-	}
-
 	/**
 	 * @deprecated
 	 */
@@ -3145,5 +3087,219 @@ class ProductCore extends ObjectModel
         }
 	    return self::$_tax_rules_group[$id_product];
 	}
-}
+	
+	/**
+	* Webservice getter : get product features association
+	*
+	* @return array
+	*/
+	public function getWsProductFeatures()
+	{
+		$rows = $this->getFeatures();
+		foreach ($rows as $keyrow => $row)
+		{
+			foreach ($row as $keyfeature => $feature)
+			{
+				if ($keyfeature == 'id_feature')
+				{
+					$rows[$keyrow]['id'] = $feature;
+					unset($rows[$keyrow]['id_feature']);
+				}
+				unset($rows[$keyrow]['id_product']);
+			}
+			asort($rows[$keyrow]);
+		}
+		return $rows;
+	}
 
+	/**
+	* Webservice setter : set product features association
+	*
+	* @param $productFeatures Product Feature ids
+	* @return boolean
+	*/
+	public function setWsProductFeatures($productFeatures)
+	{
+		$this->deleteProductFeatures();
+		foreach ($productFeatures as $productFeature)
+			$this->addFeaturesToDB($productFeature['id'], $productFeature['id_feature_value']);
+		return true;
+	}
+	
+	/**
+	* Webservice getter : get virtual field default combination
+	*
+	* @return int
+	*/
+	public function getWsDefaultCombination()
+	{
+		return self::getDefaultAttribute($this->id);
+	}
+
+	/**
+	* Webservice setter : set virtual field default combination
+	*
+	* @param $id_combination id default combination
+	*/
+	public function setWsDefaultCombination($id_combination)
+	{
+		$this->deleteDefaultAttributes();
+		return $this->setDefaultAttribute((int)$id_combination);
+	}
+	
+	/**
+	* Webservice getter : get category ids of current product for association
+	*
+	* @return array
+	*/
+	public function getWsCategories()
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_category` AS id FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)$this->id);
+		return $result;
+	}
+	
+	/**
+	* Webservice setter : set category ids of current product for association
+	*
+	* @param $category_ids category ids
+	*/
+	public function setWsCategories($category_ids)
+	{
+		$ids = array();
+		foreach ($category_ids as $value)
+			$ids[] = $value['id'];
+		if ($this->deleteCategories())
+		{
+			if ($ids)
+			{
+				$sqlValues = '';
+				$ids = array_map('intval', $ids);
+				foreach ($ids as $position => $id)
+					$sqlValues[] = '('.(int)$id.', '.(int)$this->id.', '.(int)$position.')';
+				$result = Db::getInstance()->Execute('
+					INSERT INTO `'._DB_PREFIX_.'category_product` (`id_category`, `id_product`, `position`)
+					VALUES '.implode(',', $sqlValues)
+				);
+				return $result;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	* Webservice getter : get combination ids of current product for association
+	*
+	* @return array
+	*/
+	public function getWsCombinations()
+	{
+		$result = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` as id FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)($this->id));
+		return $result;
+	}
+	
+	/**
+	* Webservice setter : set combination ids of current product for association
+	*
+	* @param $combinations combination ids
+	*/
+	public function setWsCombinations($combinations)
+	{
+		// No hook exec
+		$ids_new = array();
+		foreach ($combinations as $combination)
+			$ids_new[] = (int)$combination['id'];
+		
+		$ids_orig = array();
+		$original = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` as id FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)($this->id));
+		if (is_array($original))
+			foreach ($original as $id)
+				$ids_orig[] = $id['id'];
+		
+		$all_ids = array();
+		$all = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` as id FROM `'._DB_PREFIX_.'product_attribute`');
+		if (is_array($all))
+			foreach ($all as $id)
+				$all_ids[] = $id['id'];
+		
+		$toAdd = array();
+		foreach ($ids_new as $id)
+			if (!in_array($id, $ids_orig))
+				$toAdd[] = $id;
+
+		$toDelete = array();
+		foreach ($ids_orig as $id)
+			if (!in_array($id, $ids_new))
+				$toDelete[] = $id;
+
+		// Delete rows
+		if (count($toDelete) > 0)
+		$result = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(',', $toDelete).')');
+
+		foreach ($toAdd as $id)
+		{
+			// Update id_product if exists else create
+			if (in_array($id, $all_ids))
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET id_product = '.(int)$this->id.' WHERE id_product_attribute='.$id);
+			else
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'product_attribute` (`id_product`) VALUES ('.$this->id.')');
+		}
+		return true;
+	}
+	
+	/**
+	* Webservice getter : get product option ids of current product for association
+	*
+	* @return array
+	*/
+	public function getWsProductOptions()
+	{
+		$result = Db::getInstance()->ExecuteS('SELECT DISTINCT id_attribute_group as id
+			FROM `'._DB_PREFIX_.'product_attribute` pa
+			LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON (pac.id_product_attribute = pa.id_product_attribute)
+			LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (pac.id_attribute = a.id_attribute)
+			WHERE pa.id_product = '.(int)($this->id).'
+			GROUP BY pa.id_product_attribute');
+		return $result;
+	}
+	
+	/**
+	* Webservice getter : get virtual field position in category
+	*
+	* @return int
+	*/
+	public function getWsPositionInCategory()
+	{
+		$result = Db::getInstance()->ExecuteS('SELECT position
+			FROM `'._DB_PREFIX_.'category_product` 
+			WHERE id_category = '.(int)($this->id_category_default).'
+			AND id_product = '.(int)($this->id));
+		if (count($result) > 0)
+			return $result[0]['position'];
+		return '';
+	}
+	
+	/**
+	* Webservice getter : get virtual field id_default_image in category
+	*
+	* @return int
+	*/
+	public function getCoverWs()
+	{
+		$result = $this->getCover($this->id);
+		return $result['id_image'];
+	}
+	
+	/**
+	* Webservice getter : get image ids of current product for association
+	*
+	* @return array
+	*/
+	public function	getWsImages()
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT `id_image` as id
+		FROM `'._DB_PREFIX_.'image`
+		WHERE `id_product` = '.(int)($this->id).'
+		ORDER BY `position`');
+	}
+}

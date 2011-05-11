@@ -61,14 +61,7 @@ class ConfigurationCore extends ObjectModel
 		)
 	);
 	
-	protected $webserviceParametersI18n = array(
-		'retrieveData' => array('retrieveMethod' => 'getI18nConfigurationList'),
-		'fields' => array(
-			'value' => array('i18n' => true),
-			'date_add' => array('i18n' => true),
-			'date_upd' => array('i18n' => true)
-		)
-	);
+	
 	
 	public function getFields()
 	{
@@ -301,6 +294,15 @@ class ConfigurationCore extends ObjectModel
 		}
 	}
 	
+	/**
+	 * This method is override to allow TranslatedConfiguration entity
+	 * 
+	 * @param $sql_join
+	 * @param $sql_filter
+	 * @param $sql_sort
+	 * @param $sql_limit
+	 * @return array
+	 */
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
 		$query = '
@@ -315,21 +317,5 @@ class ConfigurationCore extends ObjectModel
 		';
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 	}
-	
-	public function getI18nConfigurationList($sql_join, $sql_filter, $sql_sort, $sql_limit)
-	{
-		$query = '
-		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` main
-		'.$sql_join.'
-		WHERE id_configuration IN 
-		(	SELECT id_configuration
-			FROM '._DB_PREFIX_.$this->table.'_lang
-		) '.$sql_filter.'
-		'.($sql_sort != '' ? $sql_sort : '').'
-		'.($sql_limit != '' ? $sql_limit : '').'
-		';
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
-	}
 }
-
 

@@ -77,6 +77,7 @@ class ManufacturerCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
+			'id_address' => array('xlink_resource'=> 'addresses'),
 			'link_rewrite' => array('getter' => 'getLink', 'setter' => null),
 		),
 		'associations' => array(
@@ -92,7 +93,6 @@ class ManufacturerCore extends ObjectModel
 
 		/* Get the manufacturer's id_address */
 		$this->id_address = $this->getManufacturerAddress();
-
 		$this->link_rewrite = $this->getLink();
 	}
 

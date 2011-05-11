@@ -507,7 +507,8 @@ abstract class ObjectModelCore
 			'retrieveData' => array(
 				'className' => get_class($this),
 				'retrieveMethod' => 'getWebserviceObjectList',
-				'params' => array()
+				'params' => array(),
+				'table' => $this->table,
 			),
 			'fields' => array(
 				'id' => array('sqlId' => $this->identifier, 'i18n' => false),
@@ -625,7 +626,7 @@ abstract class ObjectModelCore
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
 		$query = '
-		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` main
+		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` AS main
 		'.$sql_join.'
 		WHERE 1 '.$sql_filter.'
 		'.($sql_sort != '' ? $sql_sort : '').'

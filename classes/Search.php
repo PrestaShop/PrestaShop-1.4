@@ -146,11 +146,17 @@ class SearchCore
 		return $string;
 	}
 
-	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'position', $orderWay = 'desc', $ajax = false)
+	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'position', $orderWay = 'desc', $ajax = false, $useCookie = true)
 	{
 		global $cookie;
 		$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
-
+		
+		// Only use cookie if id_customer is not present
+		if ($useCookie)
+			$id_customer = $cookie->id_customer;
+		else
+			$id_customer = 0;
+		
 		// TODO : smart page management
 		if ($pageNumber < 1) $pageNumber = 1;
 		if ($pageSize < 1) $pageSize = 1;
@@ -201,9 +207,9 @@ class SearchCore
 		INNER JOIN `'._DB_PREFIX_.'category` c ON cp.`id_category` = c.`id_category`
 		INNER JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
 		WHERE c.`active` = 1 AND p.`active` = 1
-		AND cg.`id_group` '.(!$cookie->id_customer ?  '= 1' : 'IN (
+		AND cg.`id_group` '.(!$id_customer ?  '= 1' : 'IN (
 			SELECT id_group FROM '._DB_PREFIX_.'customer_group
-			WHERE id_customer = '.(int)$cookie->id_customer.'
+			WHERE id_customer = '.(int)$id_customer.'
 		)').'
 		AND '.implode(' AND ', $whereArray));
 

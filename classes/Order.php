@@ -1023,7 +1023,7 @@ class OrderCore extends ObjectModel
 
 	public function getWsOrderRows()
 	{
-		$query = 'SELECT id_order_detail as `id`, id_order, product_attribute_id, product_quantity, product_name
+		$query = 'SELECT id_order_detail as `id`, `product_id`, `product_price`, `id_order`, `product_attribute_id`, `product_quantity`, `product_name`
 		FROM `'._DB_PREFIX_.'order_detail`
 		WHERE id_order = '.(int)$this->id;
 		$result = Db::getInstance()->executeS($query);

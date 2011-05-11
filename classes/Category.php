@@ -94,8 +94,10 @@ class CategoryCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'categories',
+		'hidden_fields' => array('nleft', 'nright'),
 		'fields' => array(
 			'id_parent' => array('xlink_resource'=> 'categories'),
+			'level_depth' => array('setter' => null),
 		),
 		'associations' => array(
 				'categories' => array('getter' => 'getChildrenWs', 'resource' => 'category', ),
