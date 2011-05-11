@@ -26,10 +26,12 @@
 */
 
 ob_start();
+
 require_once(dirname(__FILE__).'/../config/config.inc.php');
 
 // Use for image management (using the POST method of the browser to simulate the PUT method)
 $method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQUEST_METHOD'];
+
 if (isset($_SERVER['PHP_AUTH_USER']))
 	$key = $_SERVER['PHP_AUTH_USER'];
 else
@@ -48,7 +50,7 @@ else
 {
 	// if no XML
 	$input_xml = NULL;
-	
+
 	// if a XML is in PUT
 	if ($_SERVER['REQUEST_METHOD'] == 'PUT')
 	{
@@ -72,29 +74,27 @@ if (!class_exists($class_name))
 // fetch the request
 $request = call_user_func(array($class_name, 'getInstance'));
 $result = $request->fetch($key, $method, $_GET['url'], $params, $bad_class_name, $input_xml);
+
 // display result
-if (ob_get_length() == 0)
-	header($result['content_type']);
-else
+if (ob_get_length() != 0)
 	header('Content-Type: application/javascript'); // Useful for debug...
-header($result['status']);
-header($result['x_powered_by']);
-header($result['execution_time']);
-if (isset($result['ps_ws_version']))
-	header($result['ps_ws_version']);
 
-if ($result['type'] == 'xml')
-{
-	header($result['content_sha1']);
-	echo $result['content'];
-}
-elseif ($result['type'] == 'image')
-{
-	if ($result['content_type'] == 'Content-Type: image/jpeg')
-		imagejpeg(WebserviceRequest::getInstance()->_imageResource);
-	elseif ($result['content_type'] == 'Content-Type: image/gif')
-		imagegif(WebserviceRequest::getInstance()->_imageResource);
-	imagedestroy(WebserviceRequest::getInstance()->_imageResource);
+// Manage cache
+if (isset($_SERVER['HTTP_LOCAL_CONTENT_SHA1']) && $_SERVER['HTTP_LOCAL_CONTENT_SHA1'] == $result['content_sha1']) {
+	$result['status'] = $_SERVER['SERVER_PROTOCOL'].' 304 Not Modified';
 }
 
+foreach ($result['headers'] as $param_value)
+{
+	header($param_value);
+}
+if (isset($result['type']))
+{
+//	header($result['content_sha1']);
+	if (!isset($_SERVER['HTTP_LOCAL_CONTENT_SHA1']) || $_SERVER['HTTP_LOCAL_CONTENT_SHA1'] != $result['content_sha1'])
+	{
+		echo $result['content'];
+	}
+		
+}
 ob_end_flush();
