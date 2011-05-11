@@ -1005,7 +1005,7 @@ class AdminProducts extends AdminTab
 				if (filesize($subdir.$file) > $this->maxImageSize)
 				{
 					$image->delete();
-					throw new Exception(Tools::displayError('Image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('KB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('KB'));
+					throw new Exception(Tools::displayError('Image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('kB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('kB'));
 				}
 
 				$ext = substr($file, -4);
