@@ -56,8 +56,8 @@ if (isset($_GET['method']))
 	{
 		global $logger;
 		$logger = new FileLogger();
-		if (is_writable(dirname(__FILE__).'/../../log/'.date('Ymd').'_installation.log'))
-			$logger->setFilename(dirname(__FILE__).'/../../log/'.date('Ymd').'_installation.log');
+		if (is_writable(dirname(__FILE__).'/../log/'.date('Ymd').'_installation.log'))
+			$logger->setFilename(dirname(__FILE__).'/../log/'.date('Ymd').'_installation.log');
 	}
 	switch ($_GET['method'])
 	{
