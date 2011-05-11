@@ -87,6 +87,7 @@
 								'&email='+ encodeURIComponent($('input#infosEmail').val()),
 							  context: document.body,
 							  success: function(data) {
+									$('.lockedForAjax').removeAttr('disabled').removeClass('disabled').removeClass('lockedForAjax');
 							  }
 							});
 						}
@@ -120,3 +121,4 @@
 	}
 
 ?>
+
