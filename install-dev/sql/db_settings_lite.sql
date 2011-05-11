@@ -524,7 +524,7 @@ INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `active
 (44, 6, 'Tierra del Fuego', 'V', 1),
 (44, 6, 'Tucumán', 'T', 1);
 
-INSERT INTO `ps_state` (`id_country`, `id_zone`, `name`, `iso_code`, `tax_behavior`, `active`) VALUES
+INSERT INTO `PREFIX_state` (`id_country`, `id_zone`, `name`, `iso_code`, `tax_behavior`, `active`) VALUES
 (10, 1, 'Agrigento', 'AG', 0, 1),
 (10, 1, 'Alessandria', 'AL', 0, 1),
 (10, 1, 'Ancona', 'AN', 0, 1),
