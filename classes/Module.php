@@ -614,10 +614,10 @@ abstract class ModuleCore
 		$module_list_xml = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'modules_list.xml';
 		$nativeModules = simplexml_load_file($module_list_xml);
 		$nativeModules = $nativeModules->modules;
-		$arrNativeModules[] = '""';
 		foreach ($nativeModules as $nativeModulesType)
 			if (in_array($nativeModulesType['type'],array('native','partner')))
 			{
+				$arrNativeModules[] = '""';
 				foreach ($nativeModulesType->module as $module)
 					$arrNativeModules[] = '"'.pSQL($module['name']).'"';
 			}
