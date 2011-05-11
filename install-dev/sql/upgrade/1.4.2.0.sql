@@ -15,4 +15,5 @@ INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_up
 /* PHP:alter_blocklink(); */;
 /* PHP:update_module_loyalty(); */;
 /* PHP:remove_module_from_hook(blockcategories, afterCreateHtaccess); */;
+/* PHP:updatetabicon_from_11version(); */;
 

@@ -112,6 +112,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_followup.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_module_from_hook.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatetabicon_from_11version.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;
@@ -311,11 +313,19 @@ foreach($sqlContent as $query)
 
 			/* Call a simple function */
 			if (strpos($phpString, '::') === false)
-				call_user_func_array(str_replace($pattern[0], '', $php[0]), $parameters);
+				$phpRes = call_user_func_array(str_replace($pattern[0], '', $php[0]), $parameters);
 			/* Or an object method */
 			else
-				call_user_func_array(array($php[0], str_replace($pattern[0], '', $php[1])), $parameters);
-			$requests .=
+				$phpRes = call_user_func_array(array($php[0], str_replace($pattern[0], '', $php[1])), $parameters);
+			if((is_array($phpRes) AND !empty($phpRes['error'])) OR $phpRes === false )
+				$request .=
+'	<request result="fail">
+		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
+		<phpMsgError><![CDATA['.(empty($phpRes['msg'])?'':$phpRes['msg']).']]></sqlMsgError>
+		<phpNumberError><![CDATA['.(empty($phpRes['error'])?'':$phpRes['error']).']]></sqlNumberError>
+	</request>'."\n";
+			else
+				$requests .=
 '	<request result="ok">
 		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
 	</request>'."\n";
