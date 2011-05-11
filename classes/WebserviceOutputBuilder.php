@@ -256,7 +256,7 @@ class WebserviceOutputBuilderCore
 			}
 			else
 			{
-				$str_output = '<pre>'.print_r($errors).'</pre>';
+				$str_output = '<pre>'.print_r($errors, true).'</pre>';
 			}
 		}
 		return $str_output;

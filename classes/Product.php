@@ -275,7 +275,7 @@ class ProductCore extends ObjectModel
 			'combinations' => array('resource' => 'combinations', 'fields' => array(
 				'id' => array('required' => true),
 			)),
-			'product_options' => array('resource' => 'product_options', 'fields' => array(
+			'product_option_values' => array('resource' => 'product_options_values', 'fields' => array(
 				'id' => array('required' => true),
 			)),
 			'product_features' => array('resource' => 'product_feature', 
@@ -3251,7 +3251,7 @@ class ProductCore extends ObjectModel
 	*
 	* @return array
 	*/
-	public function getWsProductOptions()
+	public function getWsProductOptionValues()
 	{
 		$result = Db::getInstance()->ExecuteS('SELECT DISTINCT id_attribute_group as id
 			FROM `'._DB_PREFIX_.'product_attribute` pa
