@@ -321,6 +321,8 @@ foreach($sqlContent as $query)
 			{
 				$logger->logError('PHP error: '.$query."\r\n".(empty($phpRes['msg'])?'':' - '.$phpRes['msg']));
 				$logger->logError(empty($phpRes['error'])?'':$phpRes['error']);
+				if (!isset($request))
+					$request = '';
 				$request .=
 '	<request result="fail">
 		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
