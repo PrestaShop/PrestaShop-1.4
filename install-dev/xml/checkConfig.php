@@ -86,11 +86,4 @@ echo '<config>'."\n";
 	echo '</testList>'."\n";
 echo '</config>';
 
-if (!$has_error)
-{
-	// log directory is writable, so we can init the logger
-	global $logger;
-	$logger = new FileLogger();
-	$logger->setFilename(dirname(__FILE__).'/../../log/'.date('Ymd').'_installation.log');
-}
 

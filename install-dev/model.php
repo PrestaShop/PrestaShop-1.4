@@ -50,8 +50,15 @@ define('INSTALLER__PS_BASE_URI_ABSOLUTE', 'http://'.ToolsInstall::getHttpHost(fa
 header('Content-Type: text/xml');
 
 // Switching method
-if(isset($_GET['method']))
+if (isset($_GET['method']))
 {
+	if (in_array($_GET['method'], array('doUpgrade', 'createDB', 'checkShopInfos')))
+	{
+		global $logger;
+		$logger = new FileLogger();
+		if (is_writable(dirname(__FILE__).'/../../log/'.date('Ymd').'_installation.log'))
+			$logger->setFilename(dirname(__FILE__).'/../../log/'.date('Ymd').'_installation.log');
+	}
 	switch ($_GET['method'])
 	{
 		case 'checkConfig' :

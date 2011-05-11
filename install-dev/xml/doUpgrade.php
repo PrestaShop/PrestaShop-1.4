@@ -319,7 +319,7 @@ foreach($sqlContent as $query)
 				$phpRes = call_user_func_array(array($php[0], str_replace($pattern[0], '', $php[1])), $parameters);
 			if ((is_array($phpRes) AND !empty($phpRes['error'])) OR $phpRes === false )
 			{
-				$logger->logError('PHP error: '.$query."\r\n".(empty($phpRes['msg'])?'':$phpRes['msg']));
+				$logger->logError('PHP error: '.$query."\r\n".(empty($phpRes['msg'])?'':' - '.$phpRes['msg']));
 				$logger->logError(empty($phpRes['error'])?'':$phpRes['error']);
 				$request .=
 '	<request result="fail">
