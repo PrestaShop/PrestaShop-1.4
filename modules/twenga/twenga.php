@@ -98,6 +98,14 @@ class Twenga extends PaymentModule
 
 	private $_currentIsoCodeCountry = NULL;
 	
+	const ONLY_PRODUCTS = 1;
+	const ONLY_DISCOUNTS = 2;
+	const BOTH = 3;
+	const BOTH_WITHOUT_SHIPPING = 4;
+	const ONLY_SHIPPING = 5;
+	const ONLY_WRAPPING = 6;
+	const ONLY_PRODUCTS_WITHOUT_SHIPPING = 7;
+	
 	/**
 	 * The current country iso code for the shop.
 	 * @var string
@@ -434,7 +442,14 @@ class Twenga extends PaymentModule
 		$type_both = 3;
 		$type_only_shipping = 5;
 		
-		
+		/*		const ONLY_PRODUCTS = 1;
+		const ONLY_DISCOUNTS = 2;
+		const BOTH = 3;
+		const BOTH_WITHOUT_SHIPPING = 4;
+		const ONLY_SHIPPING = 5;
+		const ONLY_WRAPPING = 6;
+		const ONLY_PRODUCTS_WITHOUT_SHIPPING = 7;
+		*/
 		$tva = $params['cart']->getOrderTotal(true, $type_both)-$params['cart']->getOrderTotal(false, $type_both);
 		$tax = ($tva * 100) / $params['cart']->getOrderTotal(true, $type_both);
 		
@@ -442,11 +457,12 @@ class Twenga extends PaymentModule
 		// @todo delete or not ??
 //		$params_to_twenga['user_id'] = $customer->id;
 //		$params_to_twenga['cli_email'] = $customer->email;
-		$params_to_twenga['total_ht'] = $params['cart']->getOrderTotal(false, $type_both);
+		
+		$params_to_twenga['total_ht'] = $params['cart']->getOrderTotal(false, Twenga::ONLY_PRODUCTS_WITHOUT_SHIPPING);
 		$params_to_twenga['basket_id'] = $params['cart']->id;
 		$params_to_twenga['currency'] = $currency->iso_code;
-		$params_to_twenga['total_ttc'] = $params['cart']->getOrderTotal(true, $type_both);
-		$params_to_twenga['shipping'] = $params['cart']->getOrderTotal(true, $type_only_shipping);
+		$params_to_twenga['total_ttc'] = $params['cart']->getOrderTotal(true, Twenga::BOTH);
+		$params_to_twenga['shipping'] = $params['cart']->getOrderTotal(true, Twenga::ONLY_SHIPPING);
 		$params_to_twenga['tax'] = Tools::ps_round($tax, 2);
 		$params_to_twenga['tva'] = $tva;
 		$params_to_twenga['cli_firstname'] = $customer->firstname;
@@ -503,7 +519,7 @@ class Twenga extends PaymentModule
 	}
 
 	/*
-		 ** Check if the default country if available with the restricted ones
+	 ** Check if the default country if available with the restricted ones
 	 */
 	private function _checkCurrentCountrie()
 	{
