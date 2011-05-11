@@ -245,8 +245,8 @@ class AddressFormatCore extends ObjectModel
 										$temporyObject[$associateName[0]] = new $associateName[0]($address->{$idFieldName});
 									if ($temporyObject[$associateName[0]])
 										$tab[$pattern] = (is_array($temporyObject[$associateName[0]]->{$associateName[1]})) ?
-											((isset($temporyObject[$associateName[0]]->{$associateName[1]}[$cookie->id_lang])) ? 
-											$temporyObject[$associateName[0]]->{$associateName[1]}[$cookie->id_lang] : '') :
+											((isset($temporyObject[$associateName[0]]->{$associateName[1]}[(isset($cookie) ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT'))])) ? 
+											$temporyObject[$associateName[0]]->{$associateName[1]}[(isset($cookie) ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT'))] : '') :
 											$temporyObject[$associateName[0]]->{$associateName[1]};
 								}
 							}
@@ -353,7 +353,6 @@ class AddressFormatCore extends ObjectModel
 	{
 		$out = array();
 		$field_set = explode("\n", self::getAddressCountryFormat($id_country));
-		
 		foreach ($field_set as $field_item)
 			if ($split_all)
 				foreach(explode(' ',$field_item) as $word_item)

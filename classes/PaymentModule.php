@@ -481,25 +481,7 @@ abstract class PaymentModuleCore extends Module
 
 	private function _getFormatedAddress(Address $the_address, $line_sep, $fields_style = array())
 	{
-		$out = '';
-		$adr_fields = AddressFormat::getOrderedAddressFields($the_address->id_country);
-
-		$r_values = array();
-
-		foreach($adr_fields as $fields_line)
-		{
-			$tmp_values = array();
-			foreach (explode(' ', $fields_line) as $field_item)
-			{
-				$field_item = trim($field_item);
-				$tmp_values[] = (isset($fields_style[$field_item]))? sprintf($fields_style[$field_item], $the_address->{$field_item}) : $the_address->{$field_item};
-			}
-			$r_values[] = implode(' ', $tmp_values);
-		}
-
-
-		$out = implode($line_sep, $r_values);
-		return $out;
+		return AddressFormat::generateAddress($the_address, array('avoid' => array()), $line_sep);
 	}
 
 	/**

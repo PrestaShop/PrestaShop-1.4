@@ -1032,6 +1032,8 @@ class OrderCore extends ObjectModel
 
 	public function setCurrentState($id_order_state)
 	{
+		if (empty($id_order_state))
+			return false;
 		$history = new OrderHistory();
 		$history->id_order = (int)($this->id);
 		$history->changeIdOrderState((int)$id_order_state, (int)($this->id));
@@ -1043,7 +1045,7 @@ class OrderCore extends ObjectModel
 		$paymentModule = Module::getInstanceByName($this->module);
 		$id_order_state = 1; // TODO
 		$customer = new Customer($this->id_customer);
-		$paymentModule->validateOrder($this->id_cart, $id_order_state, $this->total_paid,	$this->payment,	NULL, array(), null, false, $customer->secure_key);
+		$paymentModule->validateOrder($this->id_cart, $id_order_state, $this->total_paid, $this->payment, NULL, array(), null, false, $customer->secure_key);
 		$this->id = $paymentModule->currentOrder;
 		return true;
 	}
