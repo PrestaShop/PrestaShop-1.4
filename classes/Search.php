@@ -409,6 +409,7 @@ class SearchCore
 		Search::saveIndex($queryArray, $queryArray2);
 		Search::setProductsAsIndexed($productsArray);
 		
+		Configuration::updateValue('PS_NEED_REBUILD_INDEX', 0);
 		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT id_word FROM '._DB_PREFIX_.'search_index)');
 		return true;
 	}

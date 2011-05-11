@@ -954,6 +954,7 @@ $_LANGADM['AdminHome4d92a8b44ec205ea708bd3f3a8926b2d'] = 'Cache & compression na
 $_LANGADM['AdminHome5ad483f10dec94a21c78d89edc1fef94'] = 'Optimisation smarty';
 $_LANGADM['AdminHome202460d68b46910927f17628291fdd61'] = 'Concaténation, Compression & Cache';
 $_LANGADM['AdminHome73a910e532bbbc17742ac1ad88189026'] = 'Boutique activée';
+$_LANGADM['AdminHomeaff26d06b54b6d6acb2ed185a5477f49'] = 'Index reconstruit après mise à jour';
 $_LANGADM['AdminHome6cf148afcc6acae611cf5f65ddf074f9'] = '.htaccess mis à jour';
 $_LANGADM['AdminHome2938c7f7e560ed972f8a4f68e80ff834'] = 'Tableau de bord';
 $_LANGADM['AdminHome486389453cfc7006870efa54fb7f6df9'] = 'Nouvelle version de PrestaShop disponible';

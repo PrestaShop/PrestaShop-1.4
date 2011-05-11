@@ -317,13 +317,17 @@ foreach($sqlContent as $query)
 			/* Or an object method */
 			else
 				$phpRes = call_user_func_array(array($php[0], str_replace($pattern[0], '', $php[1])), $parameters);
-			if((is_array($phpRes) AND !empty($phpRes['error'])) OR $phpRes === false )
+			if ((is_array($phpRes) AND !empty($phpRes['error'])) OR $phpRes === false )
+			{
+				$logger->logError('PHP error: '.$query."\r\n".(empty($phpRes['msg'])?'':$phpRes['msg']));
+				$logger->logError(empty($phpRes['error'])?'':$phpRes['error']);
 				$request .=
 '	<request result="fail">
 		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
 		<phpMsgError><![CDATA['.(empty($phpRes['msg'])?'':$phpRes['msg']).']]></sqlMsgError>
 		<phpNumberError><![CDATA['.(empty($phpRes['error'])?'':$phpRes['error']).']]></sqlNumberError>
 	</request>'."\n";
+			}
 			else
 				$requests .=
 '	<request result="ok">
@@ -350,6 +354,7 @@ foreach($sqlContent as $query)
 	}
 }
 Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 0);
+Configuration::updateValue('PS_NEED_REBUILD_INDEX', 1);
 $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action result="ok" error="">'."\n";
 $result .= $requests;
 die($result.'</action>'."\n");

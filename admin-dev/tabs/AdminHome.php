@@ -65,6 +65,10 @@ class AdminHome extends AdminTab
 			if ($dateUpdate AND strtotime($dateUpdate) > $stat['mtime'])
 				$htaccessAfterUpdate = 0;
 		}
+		$indexRebuiltAfterUpdate = 0;
+		$needRebuild=Configuration::get('PS_NEED_REBUILD_INDEX');
+		if($needRebuild !='0');
+			$indexRebuiltAfterUpdate = 2;
 		
 		$smartyOptimized = 0;
 		if (!Configuration::get('PS_SMARTY_FORCE_COMPILE'))
@@ -89,7 +93,7 @@ class AdminHome extends AdminTab
 		2 => array('image'=>'ok2.png','color'=>'#dffad3'));
 		
 		
-		if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled + $htaccessAfterUpdate != 12)	
+		if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled + $htaccessAfterUpdate + $indexRebuiltAfterUpdate != 14)
 			echo '
 			<div class="admin-box1">
 				<h5>'.$this->l('A good beginning...')
@@ -133,6 +137,9 @@ class AdminHome extends AdminTab
 				<li style="background-color:'.$lights[$shopEnabled]['color'].'">
 				<img src="../img/admin/'.$lights[$shopEnabled]['image'].'" class="pico" />
 				<a href="index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'">'.$this->l('Shop enabled').'</a></li>
+				<li style="background-color:'.$lights[$indexRebuiltAfterUpdate]['color'].'">
+					<img src="../img/admin/'.$lights[$indexRebuiltAfterUpdate]['image'].'" class="pico" />
+		<a href="index.php?tab=AdminSearchConf&token='.Tools::getAdminTokenLite('AdminSearchConf').'">'.$this->l('index rebuilt after update').'</a></li>
 				<li style="background-color:'.$lights[$htaccessAfterUpdate]['color'].'">
 					<img src="../img/admin/'.$lights[$htaccessAfterUpdate]['image'].'" class="pico" />
 		<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.$this->l('.htaccess up-to-date').'</a></li>
