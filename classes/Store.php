@@ -91,6 +91,7 @@ class StoreCore extends ObjectModel
 		'fields' => array(
 			'id_country' => array('xlink_resource'=> 'countries'),
 			'id_state' => array('xlink_resource'=> 'states'),
+			'hours' => array('getter' => 'getWsHours', 'setter' => 'setWsHours'),
 		),
 	);
 
@@ -117,6 +118,17 @@ class StoreCore extends ObjectModel
 		$fields['active'] = (int)($this->active);
 		
 		return $fields;
+	}
+	
+	public function getWsHours()
+	{
+		return implode(';', unserialize($this->hours));
+	}
+	
+	public function setWsHours($hours)
+	{
+		$this->hours = serialize(explode(';', $hours));
+		return true;
 	}
 }
 
