@@ -321,14 +321,14 @@ class Twenga extends PaymentModule
 			try{
 				$bool_save = self::$obj_twenga->saveMerchantLogin();
 				self::$obj_ps_stats->validateSubscription();
+				if (!$bool_save)
+					$this->_errors[] = $this->l('Authentication failed.')."<br />\n"
+						.$this->l('Please review the e-mail sent by Twenga after subscription. If error still occurred, contact Twenga service.');
+				else
+					self::$obj_twenga->addFeed(array('feed_url' => $this->feed_url));
 			} catch (Exception $e) {
 				$this->_errors[] = nl2br($e->getMessage());
 			}
-			if(!$bool_save)
-				$this->_errors[] = $this->l('Authentication failed.')."<br />\n"
-				.$this->l('Please review the e-mail sent by Twenga after subscription. If error still occurred, contact Twenga service.');
-			else
-				self::$obj_twenga->addFeed(array('feed_url' => $this->feed_url));
 		}
 	}
 
