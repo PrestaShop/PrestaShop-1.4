@@ -42,3 +42,5 @@ $_MODULE['<{tm4b}prestashop>tm4b_713569f69019a591adfda481f6668a06'] = 'Numero di
 $_MODULE['<{tm4b}prestashop>tm4b_8394f2c720f3798ff8ef93fe7e331866'] = 'Ordini:';
 $_MODULE['<{tm4b}prestashop>tm4b_ec3e48bb9aa902ba2ad608547fdcbfdc'] = 'Vendite:';
 $_MODULE['<{tm4b}prestashop>tm4b_01411a97818b38fc6524d56590ca5a12'] = 'Mese:';
+
+?>

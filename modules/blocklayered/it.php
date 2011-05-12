@@ -2,6 +2,12 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogo';
+$_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtri abilitati:';
+$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
+$_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
+$_MODULE['<{blocklayered}prestashop>blocklayered_87ba2ecc8b6915e8bd6f5089918229fd'] = 'Intervallo';
+$_MODULE['<{blocklayered}prestashop>blocklayered_8524de963f07201e5c086830d370797f'] = 'Caricamento in corso ...';
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Blocco di navigazione a strati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Visualizza un blocco con i filtri di navigazione a strati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7ad3f384bcf30d783b5a6f6c810b4762'] = 'Il database di navigazione a strati è stato inizializzato con successo';
@@ -36,9 +42,5 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_fcebe56087b9373f15514831184fa57
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d25c72c1b18e562f6654fff8e11711e'] = 'Non disponibile';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c0bd7654d5b278e65f21cf4e9153fdb4'] = 'Produttore';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8c489d0946f66d17d73f26366a4bf620'] = 'Peso';
-$_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogo';
-$_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtri abilitati:';
-$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
-$_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
-$_MODULE['<{blocklayered}prestashop>blocklayered_87ba2ecc8b6915e8bd6f5089918229fd'] = 'Intervallo';
-$_MODULE['<{blocklayered}prestashop>blocklayered_8524de963f07201e5c086830d370797f'] = 'Caricamento in corso ...';
+
+?>

@@ -2,6 +2,24 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{twenga}prestashop>twengaobj_2823b98d043387f608f16d5830d63f5f'] = 'Per attivare il plugin Twenga, la costante  \"PARTNER_AUTH_KEY\" deve essere impostata. L\'installazione di default di Prestashop contiene questo valore.';
+$_MODULE['<{twenga}prestashop>twengaobj_9f7cd403f4ab77ce8c00426d4a01345e'] = 'L\'oggetto per convalidare i campi deve essere un\'istanza della classe TwengaFields';
+$_MODULE['<{twenga}prestashop>twengaobj_b78d4ca3fa82bab9e21c8110511ed947'] = 'La risposta HTTP XML non è analizzabile:';
+$_MODULE['<{twenga}prestashop>twengaobj_7edc522b57a063ef075b68fdb791af40'] = 'risposta HTTP vuota';
+$_MODULE['<{twenga}prestashop>twengaobj_d00d3f61833c8686be3f0ca7df670e20'] = 'Questa chiamata alla Twenga Web Services non è riuscita e ha rinviato uno stato HTTP di% d. Ciò significa:';
+$_MODULE['<{twenga}prestashop>twengaobj_5177c3a8e526ccb227441827d43d9583'] = 'La funzione a cui hai tentato di accedere non esiste';
+$_MODULE['<{twenga}prestashop>twengaobj_3718cdfdc7439f35aed9f053b5991baf'] = 'Un campo obbligatorio è vuoto';
+$_MODULE['<{twenga}prestashop>twengaobj_f97fd38d65fe891d07fc1a157b0752a2'] = 'Il tipo di parametro che è stato inviato è diverso dal tipo di parametro previsto';
+$_MODULE['<{twenga}prestashop>twengaobj_737b702af5cbf3c4b0e7404592bae85e'] = 'Hash key non valido';
+$_MODULE['<{twenga}prestashop>twengaobj_c54550e963195bd4e80b862f40b8d574'] = 'Hash key richiesto';
+$_MODULE['<{twenga}prestashop>twengaobj_c4e170c475b0285f284ccb066bcd81f4'] = 'Nessun ordine trovato. Verifica i parametri che hai inviato';
+$_MODULE['<{twenga}prestashop>twengaobj_54441256ce04ab07a29463646d0a9931'] = 'È richiesta l\'autenticazione.';
+$_MODULE['<{twenga}prestashop>twengaobj_802b207b05fe5cea22e11b9db804b33d'] = 'Autenticazione non riuscita.';
+$_MODULE['<{twenga}prestashop>twengaobj_629a8cfa226f98886062bfdc9666e266'] = 'URL non valido.';
+$_MODULE['<{twenga}prestashop>twengaobj_9fb66ea632c1aff220b180918df3c77c'] = 'Il server ha rilevato un errore interno del server';
+$_MODULE['<{twenga}prestashop>twengaobj_6e182f2ba494a6720ce552ed2a255403'] = 'Il server non è disponibile per il momento';
+$_MODULE['<{twenga}prestashop>twengaobj_4252fb7eb531ed1ec250e5c16f8ced37'] = 'Questa chiamata a PrestaShop Web Services ha rinviato uno stato HTTP inaspettato:';
+$_MODULE['<{twenga}prestashop>twengaobj_5619f08f21127bd8f72ec9bbb25031ac'] = 'Errore n.';
 $_MODULE['<{twenga}prestashop>twenga_400b0c914f01bcecf50b936e652695b2'] = 'Twenga API';
 $_MODULE['<{twenga}prestashop>twenga_64ef67f03ba236aef261078101017d57'] = 'ruolo Modulo: esportazione dei vostri prodotti su Twenga ed installazione delle vendite di monitoraggio proposto da Twenga (richiede di registrarsi per Twenga)';
 $_MODULE['<{twenga}prestashop>twenga_2034864b8a4fce12f3621b7ec8912e95'] = 'Il modulo Twenga funziona solo in determinati paesi (elenco dei codici ISO:';
@@ -74,21 +92,5 @@ $_MODULE['<{twenga}prestashop>twenga_cd07439a0c70b97a595de73218094a36'] = 'Per a
 $_MODULE['<{twenga}prestashop>twenga_a13367a8e2a3f3bf4f3409079e3fdf87'] = 'Attivare';
 $_MODULE['<{twenga}prestashop>twenga_09d0c75c525a2cb0bf2310e447ea8a45'] = 'La hashkey deve essere impostata per utilizzare Twenga API.';
 $_MODULE['<{twenga}prestashop>twenga_12a4f08255155a828e10c2c513595fe1'] = 'Alcuni parametri mancanti, o il sito non esiste';
-$_MODULE['<{twenga}prestashop>twengaobj_2823b98d043387f608f16d5830d63f5f'] = 'Per attivare il plugin Twenga, la costante  \"PARTNER_AUTH_KEY\" deve essere impostata. L\'installazione di default di Prestashop contiene questo valore.';
-$_MODULE['<{twenga}prestashop>twengaobj_9f7cd403f4ab77ce8c00426d4a01345e'] = 'L\'oggetto per convalidare i campi deve essere un\'istanza della classe TwengaFields';
-$_MODULE['<{twenga}prestashop>twengaobj_b78d4ca3fa82bab9e21c8110511ed947'] = 'La risposta HTTP XML non è analizzabile:';
-$_MODULE['<{twenga}prestashop>twengaobj_7edc522b57a063ef075b68fdb791af40'] = 'risposta HTTP vuota';
-$_MODULE['<{twenga}prestashop>twengaobj_d00d3f61833c8686be3f0ca7df670e20'] = 'Questa chiamata alla Twenga Web Services non è riuscita e ha rinviato uno stato HTTP di% d. Ciò significa:';
-$_MODULE['<{twenga}prestashop>twengaobj_5177c3a8e526ccb227441827d43d9583'] = 'La funzione a cui hai tentato di accedere non esiste';
-$_MODULE['<{twenga}prestashop>twengaobj_3718cdfdc7439f35aed9f053b5991baf'] = 'Un campo obbligatorio è vuoto';
-$_MODULE['<{twenga}prestashop>twengaobj_f97fd38d65fe891d07fc1a157b0752a2'] = 'Il tipo di parametro che è stato inviato è diverso dal tipo di parametro previsto';
-$_MODULE['<{twenga}prestashop>twengaobj_737b702af5cbf3c4b0e7404592bae85e'] = 'Hash key non valido';
-$_MODULE['<{twenga}prestashop>twengaobj_c54550e963195bd4e80b862f40b8d574'] = 'Hash key richiesto';
-$_MODULE['<{twenga}prestashop>twengaobj_c4e170c475b0285f284ccb066bcd81f4'] = 'Nessun ordine trovato. Verifica i parametri che hai inviato';
-$_MODULE['<{twenga}prestashop>twengaobj_54441256ce04ab07a29463646d0a9931'] = 'È richiesta l\'autenticazione.';
-$_MODULE['<{twenga}prestashop>twengaobj_802b207b05fe5cea22e11b9db804b33d'] = 'Autenticazione non riuscita.';
-$_MODULE['<{twenga}prestashop>twengaobj_629a8cfa226f98886062bfdc9666e266'] = 'URL non valido.';
-$_MODULE['<{twenga}prestashop>twengaobj_9fb66ea632c1aff220b180918df3c77c'] = 'Il server ha rilevato un errore interno del server';
-$_MODULE['<{twenga}prestashop>twengaobj_6e182f2ba494a6720ce552ed2a255403'] = 'Il server non è disponibile per il momento';
-$_MODULE['<{twenga}prestashop>twengaobj_4252fb7eb531ed1ec250e5c16f8ced37'] = 'Questa chiamata a PrestaShop Web Services ha rinviato uno stato HTTP inaspettato:';
-$_MODULE['<{twenga}prestashop>twengaobj_5619f08f21127bd8f72ec9bbb25031ac'] = 'Errore n.';
+
+?>

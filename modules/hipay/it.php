@@ -2,6 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Paga con Hipay';
+$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'importo minimo richiesto per pagare con Hipay:';
+$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(Sandbox / modalità di prova)';
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
 $_MODULE['<{hipay}prestashop>hipay_3a630598b9817a76dbb984ba467f6400'] = 'Pagamento sicuro Visa Mastercard e soluzioni europee.';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Errore: non è possibile creare PaymentParams';
@@ -44,6 +47,5 @@ $_MODULE['<{hipay}prestashop>hipay_524fefef83fd5b0b82292a5366b40cd2'] = 'Per 16 
 $_MODULE['<{hipay}prestashop>hipay_4f47a2eb5f2af6c1419baa17794e5f03'] = 'Per 18 anni e oltre';
 $_MODULE['<{hipay}prestashop>hipay_0d10a9cae9827e30b09913c1ec6ef2db'] = 'Nota: verificare che la modalità di valuta che hai scelto nella scheda di pagamento sia compatibile con il tuo/i tuoi account Hipay.';
 $_MODULE['<{hipay}prestashop>hipay_c80a51a60c5ee43553c3881459b8f431'] = 'Aggiorna la configurazione';
-$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Paga con Hipay';
-$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'importo minimo richiesto per pagare con Hipay:';
-$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = '(Sandbox / modalità di prova)';
+
+?>

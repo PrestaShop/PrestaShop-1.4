@@ -20,3 +20,5 @@ $_MODULE['<{statslive}prestashop>statslive_b6f05e5ddde1ec63d992d61144452dfa'] = 
 $_MODULE['<{statslive}prestashop>statslive_ec0fc0100c4fc1ce4eea230c3dc10360'] = 'Indefinito';
 $_MODULE['<{statslive}prestashop>statslive_334c4a4c42fdb79d7ebc3e73b517e6f8'] = 'nessuno';
 $_MODULE['<{statslive}prestashop>statslive_a55533db46597bee3cd16899c007257e'] = 'Non ci sono visitatori online adesso.';
+
+?>
