@@ -71,7 +71,7 @@ class BlockStore extends Module
 	
 	function hookHeader($params)
 	{
-		Tools::addCSS(_THEME_CSS_DIR_.'modules/'.$this->name.'/blockstore.css', 'all');
+		Tools::addCSS($this->_path.'/blockstore.css', 'all');
 	}
 	
 	public function postProcess()
