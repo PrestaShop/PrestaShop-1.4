@@ -188,6 +188,7 @@ $(function(){ldelim}
 					</p>
 					{/if}
 					<h3>{l s='Delivery address'}</h3>
+					{assign var='stateExist' value='false'}
 					{foreach from=$dlv_all_fields item=field_name}
 					{if $field_name eq "company"}
 					<p class="text">
@@ -234,6 +235,7 @@ $(function(){ldelim}
 						</select>
 						<sup>*</sup>
 					</p>
+					{elseif $field_name eq "State:name"}
 					<p class="required id_state select">
 						<label for="id_state">{l s='State'}</label>
 						<select name="id_state" id="id_state">
@@ -241,14 +243,18 @@ $(function(){ldelim}
 						</select>
 						<sup>*</sup>
 					</p>
-					{elseif $field_name eq "phone"}
-					<p class="text">
-						<label for="phone">{l s='Phone'}</label>
-						<input type="text" class="text" name="phone" id="phone" value="{if isset($smarty.post.phone)}{$smarty.post.phone}{/if}"> <sup style="color:red;">*</sup>
+					{$stateExist='true'}
+					{/if}
+					{/foreach}
+					{if $stateExist eq "false"}
+					<p class="required id_state select">
+						<label for="id_state">{l s='State'}</label>
+						<select name="id_state" id="id_state">
+							<option value="">-</option>
+						</select>
+						<sup>*</sup>
 					</p>
-					{/if}{/foreach}
-
-					
+					{/if}
 					<input type="hidden" name="alias" id="alias" value="{l s='My address'}">
 					<input type="hidden" name="is_new_customer" id="is_new_customer" value="0">
 					<!-- END Account -->
@@ -350,6 +356,7 @@ $(function(){ldelim}
 	</fieldset>
 	<fieldset class="account_creation">
 		<h3>{l s='Your address'}</h3>
+		{assign var='stateExist' value='false'}
 		{foreach from=$dlv_all_fields item=field_name}
 		{if $field_name eq "company"}
 		<p class="text">
@@ -415,6 +422,18 @@ $(function(){ldelim}
 			</select>
 			<sup>*</sup>
 		</p>
+		{elseif $field_name eq "State:name"}
+		<p class="required id_state select">
+			<label for="id_state">{l s='State'}</label>
+			<select name="id_state" id="id_state">
+				<option value="">-</option>
+			</select>
+			<sup>*</sup>
+		</p>
+		{$stateExist="true"}
+		{/if}
+		{/foreach}
+		{if $stateExist eq "false"}
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
 			<select name="id_state" id="id_state">
@@ -423,7 +442,6 @@ $(function(){ldelim}
 			<sup>*</sup>
 		</p>
 		{/if}
-		{/foreach}
 		<p class="textarea">
 			<label for="other">{l s='Additional information'}</label>
 			<textarea name="other" id="other" cols="26" rows="3">{if isset($smarty.post.other)}{$smarty.post.other}{/if}</textarea>

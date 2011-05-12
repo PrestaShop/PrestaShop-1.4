@@ -182,6 +182,7 @@ $(function(){ldelim}
 				});
 		{/literal}
 		</script>
+		{else if $field_name eq 'State:name'}
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
 			<select name="id_state" id="id_state">
