@@ -32,7 +32,6 @@ $currency = new Currency((int)(Tools::getValue('id_currency')));
 if (Validate::isLoadedObject($currency) AND !$currency->deleted)
 {
 	$cookie->id_currency = (int)($currency->id);
-	$cookie->old_id_currency = (int)($currency->id);
 	die('1');
 }
 else
