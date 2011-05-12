@@ -97,7 +97,6 @@ function ddd($var) {
 	Tools::d($var);
 }
 
-
 global $_MODULES;
 $_MODULES = array();
 
@@ -110,18 +109,6 @@ Language::loadLanguages();
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set(Configuration::get('PS_TIMEZONE'));
-
-if (!function_exists('property_exists'))
-{
-	function property_exists($class, $property)
-	{
-		if (is_object($class))
-			$vars = get_object_vars($class);
-		else
-			$vars = get_class_vars($class);
-		return array_key_exists($property, $vars);
-	}
-}
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');

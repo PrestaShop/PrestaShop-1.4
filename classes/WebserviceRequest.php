@@ -1273,7 +1273,7 @@ class WebserviceRequestCore
 						else
 							$object->$fieldProperties['setter']((string)$attributes->$fieldName);
 					}
-					elseif (property_exists($object, $sqlId))
+					elseif (Tools::property_exists($object, $sqlId))
 						$object->$sqlId = (string)$attributes->$fieldName;
 					else
 						$this->setError(400, 'Parameter "'.$fieldName.'" can\'t be set to the object "'.$this->resourceConfiguration['retrieveData']['className'].'"', 123);
@@ -1284,7 +1284,7 @@ class WebserviceRequestCore
 					$this->setError(400, 'parameter "'.$fieldName.'" required', 41);
 					return false;
 				}
-				elseif ((!isset($fieldProperties['required']) || !$fieldProperties['required']) && property_exists($object, $sqlId))
+				elseif ((!isset($fieldProperties['required']) || !$fieldProperties['required']) && Tools::property_exists($object, $sqlId))
 					$object->$sqlId = null;
 				
 				if (isset($fieldProperties['i18n']) && $fieldProperties['i18n'])

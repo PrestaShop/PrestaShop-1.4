@@ -1899,13 +1899,34 @@ FileETag INode MTime Size
 		return $s;
 	}
 	
-	public static function str_replace_once($needle , $replace , $haystack)
+	public static function str_replace_once($needle , $replace, $haystack)
 	{
 		$pos = strpos($haystack, $needle);
 		if ($pos === false)
 			return $haystack;
 		return substr_replace($haystack, $replace, $pos, strlen($needle));
 	}
+	
+	
+	/**
+	 * Function property_exists does not exist in PHP < 5.1
+	 *
+	 * @param object or class $class
+	 * @param string $property
+	 * @return boolean
+	 */
+	public static function property_exists($class, $property)
+	{
+		if (function_exists('proprty_exists'))
+			return property_exists($class, $property);
+			
+        if (is_object($class))
+            $vars = get_object_vars($class);
+        else
+            $vars = get_class_vars($class);
+            
+        return array_key_exists($property, $vars);
+    }
 }
 
 /**

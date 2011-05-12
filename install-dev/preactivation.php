@@ -4,9 +4,9 @@
 		$_GET['language'] = 0;
 	function getPreinstallXmlLang($object, $field)
 	{
-		if (property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
+		if (Tools::property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
 			return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_'.((int)($_GET['language'])+1)}));
-		if (property_exists($object, $field.'_1'))
+		if (Tools::property_exists($object, $field.'_1'))
 			return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_1'}));
 		return '';
 	}
