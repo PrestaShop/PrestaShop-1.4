@@ -114,10 +114,10 @@ class AdminCountries extends AdminTab
 			$html .= '<li>
 				<a href="javascript:void(0);" onClick="displayAvailableFields(\''.$className.'\')">'.$className.'</a>';
 			foreach(AddressFormat::getValidateFields($className) as $name)
-				$fields[] = '<a href="javascript:void(0)" class="addPattern" id="'.$className.':'.$name.'">
+				$fields[] = '<a style="color:#4B8;" href="javascript:void(0);" class="addPattern" id="'.$className.':'.$name.'">
 					'.$name.'</a>';
 			$html .= '
-				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'">
+				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'" style="width:300px;">
 				'.implode(', ', $fields).'</div></li>';
 			unset($object);
 		}
@@ -128,9 +128,24 @@ class AdminCountries extends AdminTab
 	{
 		global $currentIndex, $cookie;
 		parent::displayForm();
-
+		
+		$defaultLayout = '';
+		
+		$defaultLayoutTab = array(
+			array('firstname', 'lastname'),
+			array('company'),
+			array('vat_number'),
+			array('address1'),
+			array('address2'),
+			array('postcode', 'city'),
+			array('Country:name'),
+			array('phone'));
+			
 		if (!($obj = $this->loadObject(true)))
 			return;
+			
+		foreach ($defaultLayoutTab as $line)
+			$defaultLayout .= implode(' ', $line)."\r\n";
 
 		echo '
 		<script type="text/javascript" language="javascript" src="'._PS_JS_DIR_.'jquery/jquery-fieldselection.js"></script>
@@ -157,6 +172,11 @@ class AdminCountries extends AdminTab
 						$(this).slideUp();
 				});
 				$("#availableListFieldsFor_" + containerName).slideToggle();
+			}
+			
+			function resetLayout(defaultLayout)
+			{
+				$("#ordered_fields").val(unescape(defaultLayout.replace(/\+/g, " ")));
 			}
 			
 		</script>
@@ -223,9 +243,18 @@ class AdminCountries extends AdminTab
 				</div>
 				<label class="address_layout">'.$this->l('Address layout:').' </label>
 				<div class="margin-form" style="vertical-align: top;">
-					<p style="float: left;"><textarea id="ordered_fields" name="address_layout" style="width: 300px;height: 120px;">'.$address_layout.'</textarea></p>
-					<p style="float: left;margin-left: 10px;"><a href="#" onClick="$(\'textarea#ordered_fields\').val(unescape(\''.urlencode($address_layout).'\'.replace(/\+/g, \' \')));return false;" class="button">'.$this->l('Reset address layout').'</a></p>					
-					<p class="clear">'.$this->l('Liable fields for the address information (click to have more details)').': '.$this->_displayValidFields().'</p>
+					<div style="float:left">
+						<textarea id="ordered_fields" name="address_layout" style="width: 300px;height: 120px;">'.$address_layout.'</textarea>
+					</div>
+					<div style="float:left; margin-left:20px;">
+						'.$this->l('Liable fields for the address information (click to have more details)').': '.$this->_displayValidFields().'
+					</div>
+					<div class="clear"></div>
+					<div style="margin:10px 0 10px 0;">
+						<a style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($address_layout).'\');" class="button">'.$this->l('Reset address layout').'</a>
+						<a style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($defaultLayout).'\');" class="button">'.$this->l('Use a default layout').'</a>
+						<a style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\'\');" class="button">'.$this->l('Clean layout').'</a>
+					</div>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
