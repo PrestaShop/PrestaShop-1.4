@@ -776,11 +776,34 @@ class PDFCore extends PDF_PageGroupCore
 
 				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 				{
+					$custoLabel = '';
+					
+					foreach($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customizedData)
+					{
+						$customizationGroup = $customizedData['datas'];
+						$nb_images = 0;
+						
+						if (array_key_exists(_CUSTOMIZE_FILE_, $customizationGroup))
+							$nb_images = sizeof($customizationGroup[_CUSTOMIZE_FILE_]);
+
+						if (array_key_exists(_CUSTOMIZE_TEXTFIELD_, $customizationGroup))
+							foreach($customizationGroup[_CUSTOMIZE_TEXTFIELD_] as $customization)
+								if(!empty($customization['name'])) $custoLabel .= '- '.$customization['name'].': '.$customization['value']."\n"; 
+								
+						
+						if ($nb_images > 0)
+							$custoLabel .= '- '.$nb_images. ' '. self::l('image(s)')."\n";
+							
+						$custoLabel .= "---\n";
+					}
+					
+					$custoLabel = rtrim($custoLabel, "---\n");	
+									
 					$productQuantity = (int)($product['product_quantity']) - (int)($product['customizationQuantityTotal']);
 					if ($delivery)
 						$this->SetX(25);
 					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized'), 'B');
+					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized')." \n".Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B');
 					$lineSize = $this->GetY() - $before;
 					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
