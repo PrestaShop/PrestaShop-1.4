@@ -244,9 +244,9 @@ class AdminCountries extends AdminTab
 				<label class="address_layout">'.$this->l('Address layout:').' </label>
 				<div class="margin-form" style="vertical-align: top;">
 					<div style="float:left">
-						<textarea id="ordered_fields" name="address_layout" style="width: 300px;height: 120px;">'.$address_layout.'</textarea>
+						<textarea id="ordered_fields" name="address_layout" style="width: 300px;height: 140px;">'.$address_layout.'</textarea>
 					</div>
-					<div style="float:left; margin-left:20px;">
+					<div style="float:left; margin-left:20px; width:340px;">
 						'.$this->l('Liable fields for the address information (click to have more details)').': '.$this->_displayValidFields().'
 					</div>
 					<div class="clear"></div>
