@@ -31,7 +31,7 @@
 
 {if isset($order)}
 	<div id="block-history">
-		<div id="block-order-detail" class="std">
+		<div id="block-order-detail" class="std" style="zoom:1">
 		{include file="$tpl_dir./order-detail.tpl"}
 		</div>
 	</div>
