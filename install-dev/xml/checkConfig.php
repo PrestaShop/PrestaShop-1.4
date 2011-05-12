@@ -44,6 +44,7 @@ $tests = array(
 	'tools_v2_dir' => INSTALL_PATH.'/../tools/smarty_v2/compile/',
 	'cache_v2_dir' => INSTALL_PATH.'/../tools/smarty_v2/cache/',
 	'sitemap' => INSTALL_PATH.'/../sitemap.xml',
+	'log_dir' => INSTALL_PATH.'/../log/',
 	'img_dir' => INSTALL_PATH.'/../img/',
 	'mails_dir' => INSTALL_PATH.'/../mails/',
 	'module_dir' => INSTALL_PATH.'/../modules/',
@@ -52,7 +53,6 @@ $tests = array(
 	'translations_dir' => INSTALL_PATH.'/../translations/',
 	'customizable_products_dir' => INSTALL_PATH.'/../upload/',
 	'virtual_products_dir' => INSTALL_PATH.'/../download/',
-	'log_dir' => INSTALL_PATH.'/../log/',
 );
 $tests_op = array(
 	'fopen' => false,
