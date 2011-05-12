@@ -2,6 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{prestafraud}prestashop>prestafraud_eed029a9cfe78c1230a654e58fe8b6f8'] = 'PrestaShop Security';
+$_MODULE['<{prestafraud}prestashop>prestafraud_95d311a37e934646eec0c79c4f266feb'] = 'Proteja su tienda de pagos fraudulentos';
 $_MODULE['<{prestafraud}prestashop>prestafraud_4d0a6a9777a818ecc3b59b9a8ecd0c43'] = '- Por favor, elija su actividad principal -';
 $_MODULE['<{prestafraud}prestashop>prestafraud_5a600f5b88f416c470991c6831add13a'] = 'Adultos';
 $_MODULE['<{prestafraud}prestashop>prestafraud_0fe4ca3df29658482098bb33a2ff66e5'] = 'Animales y animales domésticos';
@@ -50,7 +52,6 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_827638f0be5ae74be04ed494087de714'
 $_MODULE['<{prestafraud}prestashop>prestafraud_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{prestafraud}prestashop>prestafraud_16648260e58b4cf9d458e1a197ef43f1'] = 'El email no es válido';
 $_MODULE['<{prestafraud}prestashop>prestafraud_cb18f4dc13847e2ed5d69cb936f9b26c'] = 'URL de la tienda no válido';
-$_MODULE['<{prestafraud}prestashop>prestafraud_eed029a9cfe78c1230a654e58fe8b6f8'] = 'PrestaShop Security';
 $_MODULE['<{prestafraud}prestashop>prestafraud_950c093b260d7c7709f8ff96e10a6fe0'] = 'Este pedido no se ha enviado a PrestaShop Security.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_d0c6a2fa938df84c0ce628de99c97e16'] = 'Nota:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Desconocido';

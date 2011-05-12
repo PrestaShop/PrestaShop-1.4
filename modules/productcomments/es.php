@@ -7,6 +7,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_0c21532dfd3476791e5aab1aa
 $_MODULE['<{productcomments}prestashop>productcomments_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';
 $_MODULE['<{productcomments}prestashop>productcomments_c888438d14855d7d96a2724ee9c306bd'] = 'Ajustes actualizados';
 $_MODULE['<{productcomments}prestashop>productcomments_1bb54e382f7dbdb260f0aa6b42bb624b'] = 'Criterio suprimido';
+$_MODULE['<{productcomments}prestashop>productcomments_e6ea19ae2eb9447f98c7ed74227bb4a3'] = 'El campo Nombre es requerido por lo menos en';
 $_MODULE['<{productcomments}prestashop>productcomments_21b0922096daf5c742cc98986d857cc1'] = 'Criterio actualizado';
 $_MODULE['<{productcomments}prestashop>productcomments_e140a9c4fcfa0aad7af83f65e577c287'] = 'Creteria añadido';
 $_MODULE['<{productcomments}prestashop>productcomments_254f642527b45bc260048e30704edb39'] = 'Configuración';

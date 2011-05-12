@@ -51,6 +51,7 @@ $_FIELDS['CMSCategory_69a2fc764784fa41975b85e0aa96ded3'] = 'meta-palabras clave'
 $_FIELDS['Carrier_1e11810933474f450c5a5ed9d091ad54'] = 'id_tax_rules_group';
 $_FIELDS['Carrier_b068931cc450442b63f5b3d276ea4297'] = 'nombre';
 $_FIELDS['Carrier_c76a5e84e4bdee527e274ea30c680d79'] = 'activo';
+$_FIELDS['Carrier_74558e4715dc84026c83612907d09a65'] = 'is_free';
 $_FIELDS['Carrier_572d4e421e5e6b9bc11d815e8a027112'] = 'url';
 $_FIELDS['Carrier_dda135a8dc6469e2cef29a428827d700'] = 'gastos de envío y embalaje';
 $_FIELDS['Carrier_f04324a1dcab9d9a2a05b65c76980771'] = 'comportamiento del rango';
