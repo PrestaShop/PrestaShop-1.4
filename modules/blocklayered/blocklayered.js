@@ -46,12 +46,12 @@ $(document).ready(function()
 
 function cancelFilter()
 {
-	$('#enabled_filters a').live('click', function()
+	$('#enabled_filters a').live('click', function(e)
 	{
 		$('#'+$(this).attr('rel')).attr('checked', false);
 		$('#layered_form input[name='+$(this).attr('rel')+']').remove();
 		reloadContent();
-		return false;
+		e.preventDefault();
 	});
 }
 
