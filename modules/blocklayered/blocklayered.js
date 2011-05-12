@@ -51,6 +51,7 @@ function cancelFilter()
 		$('#'+$(this).attr('rel')).attr('checked', false);
 		$('#layered_form input[name='+$(this).attr('rel')+']').remove();
 		reloadContent();
+		return false;
 	});
 }
 
