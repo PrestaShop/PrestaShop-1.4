@@ -433,14 +433,14 @@ class OrderCore extends ObjectModel
 			else
 				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['reduction_amount'], 2);
 		}
-
+/*
 		if ($row['group_reduction'])
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
 				$row['product_price'] = $row['product_price'] - $row['product_price'] * ($row['group_reduction'] * 0.01);
 			else
 				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['product_price_wt'] * ($row['group_reduction'] * 0.01), 2);
-		}
+		}*/
 
 		if (($row['reduction_percent'] OR $row['reduction_amount'] OR $row['group_reduction']) AND $this->_taxCalculationMethod == PS_TAX_EXC)
 			$row['product_price'] = Tools::ps_round($row['product_price'], 2);
@@ -1056,3 +1056,4 @@ class OrderCore extends ObjectModel
 				WHERE `id_order` = '.(int)($this->id)) !== false);
 	}
 }
+
