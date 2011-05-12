@@ -156,12 +156,13 @@ abstract class PaymentModuleCore extends Module
 				{
 					$msg = new Message();
 					$message = strip_tags($message, '<br>');
-					if (!Validate::isCleanHtml($message))
-						$message = $this->l('Payment message is not valid, please check your module!');
-					$msg->message = $message;
-					$msg->id_order = (int)($order->id);
-					$msg->private = 1;
-					$msg->add();
+					if (Validate::isCleanHtml($message))
+					{
+						$msg->message = $message;
+						$msg->id_order = intval($order->id);
+						$msg->private = 1;
+						$msg->add();
+					}
 				}
 
 				// Insert products from cart into order_detail table
@@ -246,11 +247,19 @@ abstract class PaymentModuleCore extends Module
 					{
 						$customizationText = '';
 						foreach ($customizedDatas[$product['id_product']][$product['id_product_attribute']] AS $customization)
+						{
 							if (isset($customization['datas'][_CUSTOMIZE_TEXTFIELD_]))
 								foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] AS $text)
-									$customizationText .= $text['name'].$this->l(':').' '.$text['value'].', ';
-						$customizationText = rtrim($customizationText, ', ');
-
+									$customizationText .= $text['name'].':'.' '.$text['value'].'<br />';
+							
+							if (isset($customization['datas'][_CUSTOMIZE_FILE_]))
+								$customizationText .= sizeof($customization['datas'][_CUSTOMIZE_FILE_]) .' '. Tools::displayError('image(s)').'<br />';
+								
+							$customizationText .= '---<br />';							
+						}
+						
+						$customizationText = rtrim($customizationText, '---<br />');
+						
 						$customizationQuantity = (int)($product['customizationQuantityTotal']);
 						$productsList .=
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
