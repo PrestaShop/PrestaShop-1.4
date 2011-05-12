@@ -174,7 +174,7 @@ class Envoimoinscher extends Module
 						
 		$this->_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">
 		<div style="float: right; width: 440px; height: 165px; border: 1px dashed rgb(102, 102, 102); padding: 8px; margin-left: 12px;margin-top: 11px;">'.$link.'
-			<h3>'.$this->l('Create account Envoimoinscher :').'</h3>
+			<h3>'.$this->l('Create Envoimoinscher account:').'</h3>
 			<p style="text-align:justify">'.$this->l('To create your account on Envoimoinscher, click the image below. You will go to a dedicated personal space where you will find the necessary tools for easy management of your shipments.').'</p>
 			<img src="'.$this->_path.'/ps_emc.png" alt="" /></a>
 		</div>
@@ -236,18 +236,18 @@ class Envoimoinscher extends Module
 		<label for="id_order_state">'.$this->l('Packaging').' :</label>
 		<div class="margin-form">
 		<select name="EMC_PACKAGING_DEFAULT">
-				<option value="">'.$this->l('Choose a Packaging ...').'</option>';
+				<option value="">'.$this->l('Choose packaging...').'</option>';
 				foreach($this->packaging as $package => $value)
 					$this->_html .= '<option '.(Tools::getValue('EMC_PACKAGING_DEFAULT', Configuration::get('EMC_PACKAGING_DEFAULT')) == $value ? ' selected="selected" ' : '').' value="'.$value.'">'.htmlspecialchars($package, ENT_COMPAT, 'UTF-8').'</option>';
 		$this->_html .= '</select>
-		<p>'. $this->l('Choose the packaging by default.').'</p>
+		<p>'. $this->l('Choose the default packaging.').'</p>
 		</div>
 		<div class="clear">&nbsp;</div>
 		
 		<label for="id_order_state">'.$this->l('Nature of content').' :</label>
 		<div class="margin-form">'.
 		self::selectNature(Tools::getValue('type_objet', Configuration::get('EMC_CONTENT'))).
-		'<p>'. $this->l('Choose the Nature of content by default.').'</p>
+		'<p>'. $this->l('Choose the default nature of content.').'</p>
 		</div>
 		<div class="clear">&nbsp;</div>
 

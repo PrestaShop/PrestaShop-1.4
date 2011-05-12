@@ -190,7 +190,7 @@ class dibs extends PaymentModule
 		<fieldset class="width2">
 			<legend><img src="../img/admin/contact.gif" />'.$this->l('Get a DIBS account').'</legend>
 			<p>
-				'.$this->l('Please click on the following link to access of DIBS formular subscription:')
+				'.$this->l('Please click on the following link to access the DIBS subscription form:')
 				.' <a href="'.$href.'" class="link" target="_blank" >&raquo; '.$this->l('Link').' &laquo;</a>
 			</p>
 			<p>'

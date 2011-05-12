@@ -41,7 +41,7 @@ class ProductToolTip extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Product tooltips');
-		$this->description = $this->l('Show how many people are watching a product page, last sale and last cart add.');		
+		$this->description = $this->l('Show how many people are watching a product page, last sale and last cart added.');		
 	}
 	
 	public function install()

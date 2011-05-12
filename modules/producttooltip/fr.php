@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{producttooltip}prestashop>producttooltip_4776f7eb5998034f7bbc63b6457d1ff4'] = 'Infobulles produit';
-$_MODULE['<{producttooltip}prestashop>producttooltip_317993b85812c8e0e9042a7dd871f538'] = 'Affiche combien de personnes consultent un produit ainsi que les dates de dernière commande ou ajout au panier';
+$_MODULE['<{producttooltip}prestashop>producttooltip_3e29935c25a10ae452308dc52381f353'] = 'Affiche combien de personnes consultent un produit ainsi que les dates de dernière commande ou ajout au panier';
 $_MODULE['<{producttooltip}prestashop>producttooltip_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
 $_MODULE['<{producttooltip}prestashop>producttooltip_e548d0d6a94a27306b8b31472a3e5ec3'] = 'Afficher le nombre de personnes qui consultent la fiche produit ?';
 $_MODULE['<{producttooltip}prestashop>producttooltip_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';

@@ -7,7 +7,7 @@ $_MODULE['<{crossselling}prestashop>crossselling_dd1f775e443ff3b9a89270713580a51
 $_MODULE['<{crossselling}prestashop>crossselling_4351cfebe4b61d8aa5efa1d020710005'] = 'Zurück';
 $_MODULE['<{crossselling}prestashop>crossselling_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Weiter';
 $_MODULE['<{crossselling}prestashop>crossselling_a1892c39b2598b4f30f9cc92c59f1aa5'] = 'Cross-Selling';
-$_MODULE['<{crossselling}prestashop>crossselling_e316b4398212d473f7f53c7728fe1c37'] = 'Einstellungen erfolgreich aktualisiert';
+$_MODULE['<{crossselling}prestashop>crossselling_462390017ab0938911d2d4e964c0cab7'] = 'Einstellungen erfolgreich aktualisiert';
 $_MODULE['<{crossselling}prestashop>crossselling_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';
 $_MODULE['<{crossselling}prestashop>crossselling_b6bf131edd323320bac67303a3f4de8a'] = 'Preis auf Produkten anzeigen ';
 $_MODULE['<{crossselling}prestashop>crossselling_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Aktiviert';

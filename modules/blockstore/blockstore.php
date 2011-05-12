@@ -85,7 +85,7 @@ class BlockStore extends Module
 				else
 				{
 					if (!move_uploaded_file($_FILES['store_img']['tmp_name'], dirname(__FILE__).'/'.$_FILES['store_img']['name']))
-						return $this->displayError($this->l('an error occured on uploading file'));
+						return $this->displayError($this->l('an error occurred on uploading file'));
 					else
 					{
 						if (Configuration::get('BLOCKSTORE_IMG') != $_FILES['store_img']['name'])

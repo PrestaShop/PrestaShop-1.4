@@ -34,7 +34,7 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_7e97953add2f27fce07653151ba3e862'
 $_MODULE['<{prestafraud}prestashop>prestafraud_3b2aee63259f6dc9b94914884474f8de'] = 'Ich habe bereits ein Konto';
 $_MODULE['<{prestafraud}prestashop>prestafraud_9d5c4ae518b30bacdb69912d87b3406a'] = 'Ihre E-Mail:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_6c3b9b51615d1d57773f25903da2018c'] = 'Shop URL:';
-$_MODULE['<{prestafraud}prestashop>prestafraud_36380b31592ff6bf7be94513409871b6'] = 'Ich stimme den Bedingungen von PrestaShop Security Service zu und halte mich bedingungslos an sie.';
+$_MODULE['<{prestafraud}prestashop>prestafraud_432dc11f749f7a5ea483a3c71e34e119'] = 'Ich stimme den Bedingungen von PrestaShop Security Service zu und halte mich bedingungslos an sie.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_42369faa6a6b243aac58683f3874bf99'] = 'Konto erstellen';
 $_MODULE['<{prestafraud}prestashop>prestafraud_212713efb37cd2f521ee584f1dbb5f0b'] = 'Shop-ID:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_c6b84387320705147af2f9e79d72c6fc'] = 'Shop SCHLÜSSEL:';

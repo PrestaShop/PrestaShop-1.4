@@ -49,8 +49,8 @@ class shopimporter extends ImportModule
 														'alterTable' => array('id_tax' => 'int(10)'),
 														'delete' => true
 														),
-									'tax_rule' => array('methodName' => 'getTaxesRules',
-														'name' => $this->l('TaxesRules'),
+									'tax_rule' => array('methodName' => 'getTaxes rules',
+														'name' => $this->l('Taxes rules'),
 														'className' => 'TaxRule',
 														'label' => $this->l('Import Taxes Rules'),
 														'table' => 'tax',
@@ -227,8 +227,8 @@ class shopimporter extends ImportModule
 													 'alterTable' => array('id_cart' => 'int(10)')
 													 ),
 									'orderhistory' => array('methodName' => 'getOrdersHistory',
-													 'name' => $this->l('OrderHistory'),
-													 'className' => 'OrderHistory',
+													 'name' => $this->l('Order history'),
+													 'className' => 'Order history',
 													 'label' => $this->l('Import Order History'),
 													 'table' => 'order_history',
 													 'identifier' => 'id_order_history',

@@ -18,7 +18,7 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_6357d3551190ec7e79371a85701
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_4ce81305b7edb043d0a7a5c75cab17d0'] = 'Il y a';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_07213a0161f52846ab198be103b5ab43'] = 'Erreurs';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_cb5e100e5a9a3e7f6d1fd97512215282'] = 'Erreur';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_667f01ead42da9ba606aaee5632f1cd0'] = 'Créer son compte Envoimoinscher :';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_413c9cfb1b07fabd2f4e2873e6b92da1'] = 'Créer son compte Envoimoinscher :';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_8fc0ba19a15eeb50ab4ad8db449b0c74'] = 'Pour créer votre compte Envoimoinscher cliquez sur l\'image ci-dessous. Vous allez accéder à un espace personnel dédié sur lequel vous retrouverez tous les outils permettant une gestion facile et rapide de vos envois.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Description';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_82b213c84c7cf648a3cc9e718bb0f1c5'] = 'Ce module vous permet de comparer les offres des transporteurs et de commander en ligne des prestations de livraison à des tarifs négociés.';
@@ -34,10 +34,10 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_97fd502c6a75bfb727fbb5a93d3
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_675056ad1441b6375b2c5abd48c27ef1'] = 'Profondeur';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_ccccb5efc77dfc62afb2c5ad4223916d'] = 'Choisir la caractéristique \"profondeur\" dans la liste';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_a669003ea35aa39ca280b83bd259a032'] = 'Conditionnement';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_86a0b81400546aa3bbfe94b796ed6c31'] = 'Choisir un conditionnement ... ';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_16ef6ec0f179beeae1a68c4ebef97254'] = 'Choisir un conditionnement par défaut';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_6106b8b4d1ecffdfa8357956183ec519'] = 'Choisir un conditionnement ... ';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_2b4c2d19b9293e812fa18765a407be4d'] = 'Choisir un conditionnement par défaut';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_f0c28b9363b60ed0a4579291ca510544'] = 'Contenu';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_55303dad425107852ebecc47601f73e2'] = 'Choisir le contenu par défaut';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_f4c0dac58ce6ddb2fa8776d32b1571d4'] = 'Choisir le contenu par défaut';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e74b7618bb3f99b8a7c00ef765c727eb'] = 'Statut de commandes à envoyer';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_509d517463244dcd1ec09c4c5fa266ac'] = 'Choisir un statut de commande ...';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_bb4b4f2503c57254aaed1f1a07bb71da'] = 'Choisir un statut de commande dans la liste à exporter vers Envoimoinscher.com';

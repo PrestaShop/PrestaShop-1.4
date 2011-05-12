@@ -66,7 +66,7 @@ class LiveZilla extends Module
 			'.$this->l('LiveZilla is not a hosted solution, which means that LiveZilla needs to be installed on your local computer (step 1) and on your webserver (step 2) as well.').'
 			'.$this->l('The LiveZilla installation on your webserver is called the LiveZilla Server.').'
 			<br /><br />
-			'.$this->l('Once you have finished step 1 & 2, you must fill in the URL of your LiveZilla installation below or directly copy / paste the script in the text area. This will integrates LiveZilla with your website (step 3).').'
+			'.$this->l('Once you have finished step 1 & 2, you must fill in the URL of your LiveZilla installation below or directly copy / paste the script in the text area. This will integrate LiveZilla with your website (step 3).').'
 			<br /><br />
 			'.$this->l('The full installation guide is available on').' <a href="http://www.livezilla.net/installation/" style="text-decoration:underline">'.$this->l('the official LiveZilla website').'</a>.
 			<br /><br />

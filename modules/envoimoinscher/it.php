@@ -18,7 +18,7 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_6357d3551190ec7e79371a85701
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_4ce81305b7edb043d0a7a5c75cab17d0'] = 'C\'è';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_07213a0161f52846ab198be103b5ab43'] = 'errori';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_cb5e100e5a9a3e7f6d1fd97512215282'] = 'errore';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_667f01ead42da9ba606aaee5632f1cd0'] = 'Crea un account Envoimoinscher:';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_413c9cfb1b07fabd2f4e2873e6b92da1'] = 'Crea un account Envoimoinscher:';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_8fc0ba19a15eeb50ab4ad8db449b0c74'] = 'Per creare il tuo account Envoimoinscher clicca sull\'immagine qui sotto. Sarai indirizzato ad uno spazio dedicato personale, dove trovi tutti gli strumenti per una facile gestione delle tue spedizioni.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Descrizione';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_82b213c84c7cf648a3cc9e718bb0f1c5'] = 'Questo modulo permette di confrontare le offerte dei corrieri e servizi di ordine online a tariffe di consegna. negoziate';
@@ -34,10 +34,10 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_97fd502c6a75bfb727fbb5a93d3
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_675056ad1441b6375b2c5abd48c27ef1'] = 'Profondità';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_ccccb5efc77dfc62afb2c5ad4223916d'] = 'Scegli profondità nella lista';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_a669003ea35aa39ca280b83bd259a032'] = 'Confezione';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_86a0b81400546aa3bbfe94b796ed6c31'] = 'Scegli una confezione...';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_16ef6ec0f179beeae1a68c4ebef97254'] = 'Scegli la confezione di default.';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_6106b8b4d1ecffdfa8357956183ec519'] = 'Scegli una confezione...';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_2b4c2d19b9293e812fa18765a407be4d'] = 'Scegli la confezione di default.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_f0c28b9363b60ed0a4579291ca510544'] = 'Natura dei contenuti';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_55303dad425107852ebecc47601f73e2'] = 'Scegli la natura dei contenuti di default.';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_f4c0dac58ce6ddb2fa8776d32b1571d4'] = 'Scegli la natura dei contenuti di default.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e74b7618bb3f99b8a7c00ef765c727eb'] = 'Stato dell\'ordine da esportare';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_509d517463244dcd1ec09c4c5fa266ac'] = 'Scegli uno stato ...';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_bb4b4f2503c57254aaed1f1a07bb71da'] = 'Scegliere lo stato di ordine per esportare a Envoi Moins Cher.';

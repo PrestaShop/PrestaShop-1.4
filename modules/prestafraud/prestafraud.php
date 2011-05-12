@@ -150,7 +150,7 @@ class PrestaFraud extends Module
 						<input type="text" style="width:400px;" name="shop_url" value="http://www.'.Tools::getHttpHost().__PS_BASE_URI__.'"/>
 					</div>
 					<div class="margin-form">
-						<input id="terms_and_conditions" type="checkbox" value="1" />'.$this->l('I agree with the terms of PrestaShop Security service and i adhere to them unconditionally.').'</label>
+						<input id="terms_and_conditions" type="checkbox" value="1" />'.$this->l('I agree with the terms of PrestaShop Security service and I adhere to them unconditionally.').'</label>
 					</div>
 					<div id="terms" class="margin-form">';
 					$terms = file_get_contents($this->_trustUrl.'terms.php?lang='.Language::getIsoById((int)$cookie->id_lang));

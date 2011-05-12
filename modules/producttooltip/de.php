@@ -8,7 +8,7 @@ $_MODULE['<{producttooltip}prestashop>producttooltip_d296e0c3a7dffc0f4d02574bd50
 $_MODULE['<{producttooltip}prestashop>producttooltip_71736c614b237f4368128077411f1699'] = 'Dieses Produkt wurde zuletzt gekauft ';
 $_MODULE['<{producttooltip}prestashop>producttooltip_4dda321f0231c2d50fcee5c20075dbbd'] = 'Dieses Produkt wurde zuletzt in den Warenkorb hinzugefügt';
 $_MODULE['<{producttooltip}prestashop>producttooltip_4776f7eb5998034f7bbc63b6457d1ff4'] = 'Produkt-Tooltips';
-$_MODULE['<{producttooltip}prestashop>producttooltip_317993b85812c8e0e9042a7dd871f538'] = 'Anzeigen, wie viele Leute eine Produktseite ansehen, sowie die Anzeige des letzten Verkaufs und des letzten hinzugefügten Warenkorbs';
+$_MODULE['<{producttooltip}prestashop>producttooltip_3e29935c25a10ae452308dc52381f353'] = 'Anzeigen, wie viele Leute eine Produktseite ansehen, sowie die Anzeige des letzten Verkaufs und des letzten hinzugefügten Warenkorbs';
 $_MODULE['<{producttooltip}prestashop>producttooltip_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{producttooltip}prestashop>producttooltip_e548d0d6a94a27306b8b31472a3e5ec3'] = 'Anzahl der Menschen anzeigen, die gerade dieses Produkt ansehen?';
 $_MODULE['<{producttooltip}prestashop>producttooltip_93cba07454f06a4a960172bbd6e2a435'] = 'Ja';

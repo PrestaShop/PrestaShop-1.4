@@ -134,7 +134,7 @@ class LocalizationPackCore
 
 						if (!$county->save())
 						{
-							$this->_errors[] = Tools::displayError('An error has occured while adding the county');
+							$this->_errors[] = Tools::displayError('An error has occurred while adding the county');
 							return false;
 						}
 					} else {
@@ -160,7 +160,7 @@ class LocalizationPackCore
 
 							if (!$county->addZipCodes($zipcodes))
 							{
-								$this->_errors[] = Tools::displayError('An error has occured while adding zipcodes');
+								$this->_errors[] = Tools::displayError('An error has occurred while adding zipcodes');
 								return false;
 							}
 					}

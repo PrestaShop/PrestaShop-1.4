@@ -11,7 +11,7 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_386c339d37e737a436499d423a77df0
 $_MODULE['<{shopimporter}prestashop>shopimporter_4234c64201820401dfa04eeb449c1bbc'] = 'Import des devises';
 $_MODULE['<{shopimporter}prestashop>shopimporter_719fec04166d6fa75f89cd29ad61fa8c'] = 'Taxes';
 $_MODULE['<{shopimporter}prestashop>shopimporter_94c5ffc9d364127b232f58b4cfd8c88a'] = 'Importer les taxes';
-$_MODULE['<{shopimporter}prestashop>shopimporter_d3352014303b292984466bbb1da371db'] = 'Règle de taxes';
+$_MODULE['<{shopimporter}prestashop>shopimporter_3c994b8c6c4e8b756185f74ded711f69'] = 'Règle de taxes';
 $_MODULE['<{shopimporter}prestashop>shopimporter_6ec25fc9cc7df7b0d1fce57923f46ec1'] = 'Importer les règles de taxes';
 $_MODULE['<{shopimporter}prestashop>shopimporter_b3ff996fe5c77610359114835baf9b38'] = 'Zone';
 $_MODULE['<{shopimporter}prestashop>shopimporter_21d250d17e35e3e02db9f1a618bad913'] = 'Import des zones';
@@ -43,7 +43,7 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_b3df6b363e7979ce81b71d92961fc67
 $_MODULE['<{shopimporter}prestashop>shopimporter_6b24bd15b10bc10de9687f16ebe728e4'] = 'Import des statuts de commande';
 $_MODULE['<{shopimporter}prestashop>shopimporter_a240fa27925a635b08dc28c9e4f9216d'] = 'Commande';
 $_MODULE['<{shopimporter}prestashop>shopimporter_3b7e768ebab2171baa41d5ea13017b02'] = 'Import des commandes';
-$_MODULE['<{shopimporter}prestashop>shopimporter_582602d7c6762c923cf7fce178b94e1a'] = 'Historique de commande';
+$_MODULE['<{shopimporter}prestashop>shopimporter_782c8b38bce4f2f6975ca7f33ac8189b'] = 'Historique de commande';
 $_MODULE['<{shopimporter}prestashop>shopimporter_f2931b8b1622867fcc461d7de388e319'] = 'Import des historique de commande';
 $_MODULE['<{shopimporter}prestashop>shopimporter_32a6deec3cca312a54d6b8769c9b8dd7'] = 'n\'est pas disponible dans ce module';
 $_MODULE['<{shopimporter}prestashop>shopimporter_1e411d25230ba738b9ae583bcb9b0b57'] = 'Connexion à la base de données OK ';

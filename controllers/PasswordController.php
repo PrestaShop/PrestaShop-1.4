@@ -65,7 +65,7 @@ class PasswordControllerCore extends FrontController
 						$customer->firstname.' '.$customer->lastname))
 							self::$smarty->assign(array('confirmation' => 2, 'email' => $customer->email));
 						else
-							$this->errors[] = Tools::displayError('Error occured when sending the e-mail.');
+							$this->errors[] = Tools::displayError('Error occurred when sending the e-mail.');
 					}
 				}
 			}
@@ -94,7 +94,7 @@ class PasswordControllerCore extends FrontController
 						$customer->firstname.' '.$customer->lastname)) 
 							self::$smarty->assign(array('confirmation' => 1, 'email' => $customer->email));
 						else
-							$this->errors[] = Tools::displayError('Error occured when sending the e-mail.');
+							$this->errors[] = Tools::displayError('Error occurred when sending the e-mail.');
 					}
 					else
 						$this->errors[] = Tools::displayError('An error occurred with your account and your new password cannot be sent to your e-mail. Please report your problem using the contact form.');
