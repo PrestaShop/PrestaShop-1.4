@@ -117,7 +117,7 @@ class ConfigurationCore extends ObjectModel
 	{
 		if ($id_lang AND isset(self::$_CONF_LANG[(int)$id_lang][$key]))
 			return self::$_CONF_LANG[(int)$id_lang][$key];
-		elseif (key_exists($key, self::$_CONF))
+		elseif (is_array(self::$_CONF) AND key_exists($key, self::$_CONF))
 			return self::$_CONF[$key];
 		return false;
 	}
