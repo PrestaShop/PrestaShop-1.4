@@ -1,17 +1,15 @@
 <?php
-
+	include('../classes/Tools.php');
 	if (!isset($_GET['language']))
 		$_GET['language'] = 0;
 	function getPreinstallXmlLang($object, $field)
 	{
-		if (Tools::property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
+		if (ToolsCore::property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
 			return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_'.((int)($_GET['language'])+1)}));
-		if (Tools::property_exists($object, $field.'_1'))
+		if (ToolsCore::property_exists($object, $field.'_1'))
 			return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_1'}));
 		return '';
 	}
-
-
 
 	if ($_GET['request'] == 'form')
 	{
