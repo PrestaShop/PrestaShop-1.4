@@ -109,11 +109,15 @@ class AdminCountries extends AdminTab
 		// Get the available properties for each class
 		foreach($objectList as $className => &$object)
 		{
+			$fields = array();
+
 			$html .= '<li>
 				<a href="javascript:void(0);" onClick="displayAvailableFields(\''.$className.'\')">'.$className.'</a>';
-			$fields = AddressFormat::getValidateFields($className);
+			foreach(AddressFormat::getValidateFields($className) as $name)
+				$fields[] = '<a href="javascript:void(0)" class="addPattern" id="'.$className.':'.$name.'">
+					'.$name.'</a>';
 			$html .= '
-				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'" style="display:none;">
+				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'">
 				'.implode(', ', $fields).'</div></li>';
 			unset($object);
 		}
@@ -129,11 +133,22 @@ class AdminCountries extends AdminTab
 			return;
 
 		echo '
+		<script type="text/javascript" language="javascript" src="'._PS_JS_DIR_.'jquery/jquery-fieldselection.js"></script>
 		<script type="text/javascript" language="javascript">
 			$(document).ready(function()
 			{
 				$(".availableFieldsList").css("display", "none");
+				$(".addPattern").click(function()
+				{
+					addFieldsToCursorPosition($(this).attr("id"))
+				});
+				
 			});
+			
+			function addFieldsToCursorPosition(pattern)
+			{
+				$("#ordered_fields").replaceSelection(pattern + " ");
+			}
 			
 			function displayAvailableFields(containerName)
 			{
