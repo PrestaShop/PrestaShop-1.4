@@ -95,6 +95,8 @@ class Twenga extends PaymentModule
 	 * @var array
 	 */
 	public $limited_countries = array('fr', 'de', 'gb', 'uk', 'it', 'es');
+	
+	private $_allowToWork = true;
 
 	private $_currentIsoCodeCountry = NULL;
 	
@@ -130,7 +132,7 @@ class Twenga extends PaymentModule
 		// For Twenga subscription
 		$protocol = 'http://';
 		if (isset($_SERVER['https']) && $_SERVER['https'] != 'off')
-			$protocol = 'http://';
+			$protocol = 'https://';
 		$this->site_url = Tools::htmlentitiesutf8($protocol.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		self::$base_dir = _PS_ROOT_DIR_.'/modules/twenga/';
 		self::$base_path = $this->site_url.'/modules/twenga/';
@@ -148,9 +150,11 @@ class Twenga extends PaymentModule
 		TwengaException::setTranslationObject($this);
 		if (!in_array(strtolower(self::$shop_country), $this->limited_countries))
 		{
-			$this->warning = $this->l('Twenga module works only in specific countries (iso code list:').' '.implode(', ',$this->limited_countries).').';
+			$this->_allowToWork = false;
+			$this->warning = $this->l('Twenga module works only in specific countries (iso code list:').' '.implode(', ',$this->limited_countries).').';;
 			return false;
 		}
+		
 		// instanciate (just once) the TwengaObj and PrestashopStats
 		if (self::$obj_twenga === NULL)
 			self::$obj_twenga = new TwengaObj();
@@ -433,6 +437,9 @@ class Twenga extends PaymentModule
 
 	public function hookPayment($params)
 	{
+		if ($this->_allowToWork == false)
+			return;
+			
 		$customer = new Customer($params['cart']->id_customer);
 		$currency = new Currency($params['cart']->id_currency);
 		$address = $customer->getAddresses($params['cart']->id_lang);
@@ -486,6 +493,7 @@ class Twenga extends PaymentModule
 		try {
 			// twenga don't saved double orders with the same id, 
 			// so don't need to use TwengaObj::orderExist() method.
+			var_dump(self::$obj_twenga);
 			$tracking_code = self::$obj_twenga->getTrackingScript($params_to_twenga);
 			return $tracking_code;
 		} catch (TwengaFieldsException $e) {
