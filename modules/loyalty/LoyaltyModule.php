@@ -92,7 +92,7 @@ class LoyaltyModule extends ObjectModel
 			$taxesEnabled = Product::getTaxCalculationMethod();
 			if (isset($newProduct) AND !empty($newProduct))
 			{
-				$cartProductsNew['id_product'] = (int)$newProduct->id;				
+				$cartProductsNew['id_product'] = (int)$newProduct->id;
 				if ($taxesEnabled == PS_TAX_EXC)
 					$cartProductsNew['price'] = number_format($newProduct->getPrice(false, (int)($newProduct->getIdProductAttributeMostExpensive())), 2, '.', '');
 				else
@@ -109,13 +109,13 @@ class LoyaltyModule extends ObjectModel
 						$smarty->assign('no_pts_discounted', 1);
 					continue;
 				}
-				$total += self::getNbPointsByPrice($taxesEnabled == PS_TAX_EXC ? $product['price'] : $product['price_wt']) * (int)($product['cart_quantity']);
+				$total += ($taxesEnabled == PS_TAX_EXC ? $product['price'] : $product['price_wt'])* (int)($product['cart_quantity']);
 			}
 			foreach ($cart->getDiscounts(false) AS $discount)
-				$total -= self::getNbPointsByPrice($discount['value_real']);
+				$total -= $discount['value_real'];
 		}
 
-		return $total;
+		return self::getNbPointsByPrice($total);
 	}
 
 	static public function getVoucherValue($nbPoints, $id_currency = NULL)
