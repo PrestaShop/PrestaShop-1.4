@@ -66,7 +66,7 @@ class SupplierControllerCore extends FrontController
 				$this->pagination($nbProducts);
 		
 				$data = call_user_func(array('Supplier', 'getSuppliers'), true, (int)(self::$cookie->id_lang), true, $this->p, $this->n);
-				$imgDir = _PS_MANU_IMG_DIR_;
+				$imgDir = _PS_SUPP_IMG_DIR_;
 				foreach ($data AS &$item)
 					$item['image'] = (!file_exists($imgDir.'/'.$item['id_supplier'].'-medium.jpg')) ? 
 						Language::getIsoById((int)(self::$cookie->id_lang)).'-default' :	$item['id_supplier'];
