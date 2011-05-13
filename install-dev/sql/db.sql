@@ -1519,6 +1519,8 @@ CREATE TABLE `PREFIX_webservice_account` (
   `key` varchar(32) NOT NULL,
   `description` text NULL,
   `class_name` VARCHAR( 50 ) NOT NULL DEFAULT 'WebserviceRequest',
+  `is_module` TINYINT( 2 ) NOT NULL DEFAULT '0',
+  `module_name` VARCHAR( 50 ) NULL DEFAULT NULL,
   `active` tinyint(2) NOT NULL,
   PRIMARY KEY (`id_webservice_account`),
   KEY `key` (`key`)
