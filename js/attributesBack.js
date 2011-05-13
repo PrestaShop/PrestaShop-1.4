@@ -1,5 +1,5 @@
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -262,37 +262,15 @@ function del_attr_multiple()
 
 function create_attribute_row(id, id_group, name, price, weight)
 {
-	var row = document.createElement('tr');
-	var col1 = document.createElement('td');
-	var col2 = document.createElement('td');
-	var col3 = document.createElement('td');
-	var col1_content = document.createElement('input');
-	var col2_content = document.createElement('input');
-	var col3_content = document.createElement('input');
+	var html = '';
+	html += '<tr id="result_'+id+'">';
+	html += 		'<td><input type="hidden" value="'+id+'" name="options['+id_group+']['+id+']" />'+name+'</td>';
+	html += 		'<td>'+i18n_tax_exc+'<input id="related_to_price_impact_ti_'+id+'" class="price_impact" style="width:50px" type="text" value="'+price+'" name="price_impact_'+id+'"></td>';
+	html += 		'<td>'+i18n_tax_inc+'<input id="related_to_price_impact_'+id+'" class="price_impact_ti" style="width:50px" type="text" value="" name="price_impact_ti_'+id+'"></td>';
+	html += 		'<td><input style="width:50px" type="text" value="'+weight+'" name="weight_impact['+id+']"></td>';
+	html += '</tr>';
 
-	col1.innerHTML = name;
-
-
-	col1_content.name = 'options['+id_group+']['+id+']';
-	col1_content.value = id;
-	col1_content.type = 'hidden';
-
-	col2_content.name = 'price_impact['+id+']';
-	col2_content.value = price;
-	col2_content.style.width = '50px';
-
-	col3_content.value = weight;
-	col3_content.name = 'weight_impact['+id+']';
-	col3_content.style.width = '50px';
-
-	col1.appendChild(col1_content);
-	col2.appendChild(col2_content);
-	col3.appendChild(col3_content);
-	row.appendChild(col1);
-	row.appendChild(col2);
-	row.appendChild(col3);
-	row.id = 'result_' + id;
-	return row;
+	return html;
 }
 
 function add_attr_multiple()
@@ -310,12 +288,12 @@ function add_attr_multiple()
 		if (elem.selected)
 		{
 			name = elem.parentNode.getAttribute('name');
-			target = getE('table_' + name);
+			target = $('#table_' + name);
 			if (target && !getE('result_' + elem.getAttribute('name')))
 			{
 				new_elem = create_attribute_row(elem.getAttribute('name'), elem.parentNode.getAttribute('name'), elem.value, '0.00', '0.00');
-				target.appendChild(new_elem);
-				toggle(target.parentNode, true);
+				target.append(new_elem);
+				toggle(target.parent()[0], true);
 			}
 		}
 	}
@@ -377,3 +355,4 @@ function openCloseLayer(whichLayer)
 		var style = document.layers[whichLayer].style;
 	style.display = style.display == 'none' ? 'block' : 'none';
 }
+

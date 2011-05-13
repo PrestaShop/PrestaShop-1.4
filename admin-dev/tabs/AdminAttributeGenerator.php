@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -37,7 +37,7 @@ class AdminAttributeGenerator extends AdminTab
 	{
 		foreach ($arr AS $attr)
 		{
-			$price += (float)($_POST['price_impact'][(int)($attr)]);
+			$price += (float)($_POST['price_impact_'.(int)($attr)]);
 			$weight += (float)($_POST['weight_impact'][(int)($attr)]);
 		}
 		if ($this->product->id)
@@ -74,6 +74,7 @@ class AdminAttributeGenerator extends AdminTab
 		global $currentIndex;
 
 		$this->product = new Product((int)(Tools::getValue('id_product')));
+
 		if (isset($_POST['generate']))
 		{
 			if (!is_array(Tools::getValue('options')))
@@ -129,7 +130,7 @@ class AdminAttributeGenerator extends AdminTab
 	{
 		echo '	<div>
 					<select multiple name="attributes[]" id="attribute_group" style="width: 200px; height: 350px; margin-bottom: 10px;">';
-					
+
 		foreach ($attributesGroups AS $k => $attributeGroup)
 		{
 			$idGroup = (int)$attributeGroup['id_attribute_group'];
@@ -150,7 +151,7 @@ class AdminAttributeGenerator extends AdminTab
         $attributes = array();
         foreach ($tab AS $group)
             foreach ($group AS $attribute)
-                $attributes[] = '('.(int)($id_product).', '.(int)($attribute).', '.(float)($_POST['price_impact'][(int)($attribute)]).', '.(float)($_POST['weight_impact'][(int)($attribute)]).')';
+                $attributes[] = '('.(int)($id_product).', '.(int)($attribute).', '.(float)($_POST['price_impact_'.(int)($attribute)]).', '.(float)($_POST['weight_impact'][(int)($attribute)]).')';
         return Db::getInstance()->Execute(
         'INSERT INTO `'._DB_PREFIX_.'attribute_impact` (`id_product`, `id_attribute`, `price`, `weight`)
         VALUES '.implode(',', $attributes).'
@@ -204,8 +205,8 @@ class AdminAttributeGenerator extends AdminTab
 				<table class="table" cellpadding="0" cellspacing="0" align="left" style="margin-bottom: 10px; display: none;">
 					<thead>
 						<tr>
-							<th id="tab_h1" style="width: 250px">'.htmlspecialchars(stripslashes($attributeGroup['name'])).'</th>
-							<th id="tab_h2" style="width: 150px">'.$this->l('Price impact').' ('.$currency->sign.')'.' <sup>*</sup></th>
+							<th id="tab_h1" style="width: 150px">'.htmlspecialchars(stripslashes($attributeGroup['name'])).'</th>
+							<th id="tab_h2" style="width: 350px" colspan="2">'.$this->l('Price impact').' ('.$currency->sign.')'.'</th>
 							<th style="width: 150px">'.$this->l('Weight impact').' ('.Configuration::get('PS_WEIGHT_UNIT').')'.'</th>
 						</tr>
 					</thead>
@@ -214,10 +215,9 @@ class AdminAttributeGenerator extends AdminTab
 				</table>';
 				if (isset($attributes[$idGroup]))
 					foreach ($attributes[$idGroup] AS $k => $attribute)
-						echo '<script type="text/javascript">getE(\'table_\' + '.$idGroup.').appendChild(create_attribute_row('.$k.', '.$idGroup.', \''.addslashes($attribute['attribute_name']).'\', '.$attribute['price'].', '.$attribute['weight'].'));toggle(getE(\'table_\' + '.$idGroup.').parentNode, true);</script>';
+						echo '<script type="text/javascript">$(\'#table_'.$idGroup.'\').append(create_attribute_row('.$k.', '.$idGroup.', \''.addslashes($attribute['attribute_name']).'\', '.$attribute['price'].', '.$attribute['weight'].'));toggle(getE(\'table_\' + '.$idGroup.').parentNode, true);</script>';
 			}
 		}
-		echo '<p><sup>*</sup> '.$this->l('tax included').'</p>';
 	}
 
 	public function displayForm($isMainTab = true)
@@ -228,6 +228,56 @@ class AdminAttributeGenerator extends AdminTab
 		$jsAttributes = self::displayAndReturnAttributeJs();
 		$attributesGroups = AttributeGroup::getAttributesGroups((int)($cookie->id_lang));
 		$this->product = new Product((int)(Tools::getValue('id_product')));
+
+		// JS Init
+		echo
+		'<script type="text/javascript">
+			i18n_tax_exc = "'.$this->l('Tax Excl.:').'";
+			i18n_tax_inc = "'.$this->l('Tax Incl.:').'";
+
+			var product_tax = "'.Tax::getProductTaxRate($this->product->id, NULL).'";
+
+			function bindCalcPrice()
+			{
+				$(".price_impact_ti").bind("keyup", function() {
+					calcPrice($(this), true);
+				});
+
+				$(".price_impact").bind("keyup", function() {
+					calcPrice($(this), false);
+				});
+			}
+
+			function calcPrice(element, element_has_tax)
+			{
+					name = element.attr("name");
+					var element_price = element.val().replace(/,/g, ".");
+					var other_element_price = "0";
+
+					if (!isNaN(element_price) && element_price > 0)
+					{
+						if (element_has_tax)
+							other_element_price = parseFloat(element_price / ((product_tax / 100) + 1));
+						else
+							other_element_price = ps_round(parseFloat(element_price * ((product_tax / 100) + 1)), 2);
+					}
+
+					$("#related_to_"+name).val(other_element_price);
+			}
+
+
+			$(document).ready(function() {
+				bindCalcPrice();
+
+				$(".price_impact").each(function()
+				{
+						calcPrice($(this), false);
+				});
+			});
+		</script>';
+
+
+
 		if (isset($_POST['generate']) AND !sizeof($this->_errors))
 			echo '
 			<div class="module_confirmation conf confirm">
@@ -280,5 +330,4 @@ class AdminAttributeGenerator extends AdminTab
 		</form>';
 	}
 }
-
 
