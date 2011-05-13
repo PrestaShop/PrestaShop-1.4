@@ -104,7 +104,7 @@ $(function(){ldelim}
 			</p>
 		</div>
 		</div>
-	{assign var='stateExist' value='false'}
+	{assign var="stateExist" value="false"}
 	{foreach from=$ordered_adr_fields item=field_name}
 		{if $field_name eq 'company'}
 			<p class="text">
@@ -184,7 +184,7 @@ $(function(){ldelim}
 		{/literal}
 		</script>
 		{else if $field_name eq 'State:name'}
-		{$stateExist = "false"}
+		{$stateExist = "true"}
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
 			<select name="id_state" id="id_state">
