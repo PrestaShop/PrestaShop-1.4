@@ -34,7 +34,7 @@ class MoneyBookers extends PaymentModule
 	{
 		$this->name = 'moneybookers';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.4';
+		$this->version = '1.5';
 
 		parent::__construct();
 
@@ -54,7 +54,7 @@ class MoneyBookers extends PaymentModule
 		4 => array('file' => 'mastercard', 'name' => 'Mastercard', 'code' => 'MSC'),
 		5 => array('file' => 'visa', 'name' => 'Visa', 'code' => 'VSA'),
 		6 => array('file' => 'visadebit', 'name' => 'Visa Debit', 'code' => 'VSD'),
-		7 => array('file' => 'ewallet', 'name' => 'MoneyBookers eWallet', 'code' => 'WLT'));
+		7 => array('file' => 'ewallet', 'name' => 'Moneybookers eWallet', 'code' => 'WLT'));
 
 		$this->_localPaymentMethods = array(
 		0 => array('file' => '4b', 'name' => '4B', 'code' => 'MSC'),
@@ -115,7 +115,7 @@ class MoneyBookers extends PaymentModule
 		Configuration::updateValue('MB_ID_LOGO', 1);
 		Configuration::updateValue('MB_ID_LOGO_WALLET', 1);
 		Configuration::updateValue('MB_PARAMETERS', 0);
-		Configuration::updateValue('MB_DISPLAY_MODE', 0);
+		Configuration::updateValue('MB_DISPLAY_MODE', 1);
 
 		return true;
 	}
@@ -269,41 +269,77 @@ class MoneyBookers extends PaymentModule
 		/* Display settings form */
 		$output .= '
 		<b>'.$this->l('About Moneybookers').'</b><br /><br /><p style="font-size: 11px;">'.
-		$this->l('Moneybookers is one of Europe\'s largest online payment systems and among the world\'s leading eWallet providers, with over 14 million account holders. The simple eWallet enables customers to conveniently and securely pay online without revealing personal financial data, as well as to send and receive money transfers cost-effectively by using an e-mail address.').'<br /><br />'.
-		$this->l('Moneybookers worldwide payment network offers businesses access to over 80 local payment options in over 200 countries with just one integration. Already more than 60,000 merchants use the Moneybookers payment service, including global partners such as eBay, Skype and Thomas Cook.').'<br /><br />'.$this->l('Moneybookers was founded in 2001 in London and is regulated by the Financial Services Authority of the United Kingdom.').'</p>
+		$this->l('Take advantage of the special fees offered by Moneybookers to PrestaShop merchants !').'<br /><br />'.
+		$this->l('Moneybookers, controlled by Skrill Holdings, is one of the biggest online payment systems in Europe, and proposes more than 100 payment options and 41 currencies in more than 200 countries and territories. More than 80,000 merchants already use this solution among which eBay.com, Skype and Thomas Cook.').'<br /><br />'.
+		$this->l('With more than 17 million users and more than 15,000 new accounts created per day, Moneybookers also offers one of the biggest electronic wallet in the world. Your customers can also pay by using their e-mail and password thanks to the e-Wallet solution.').'<br /><br />'.
+		$this->l('Moneybookers change its name and becomes Skrill!').'<br /><br />
                 <div style="clear: both;"></div>
 
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" id="form-opening">
-			<fieldset class="width2" style="margin: 20px 0;">
+			<fieldset class="width2" style="margin: 20px 0; width: 800px;">
 				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Open Account').'</legend>
 				'.$this->l('Start by opening a').' <b>'.$this->l('free account').'</b> '.$this->l('with Moneybookers:').'
 				<p><a href="http://www.moneybookers.com/partners/prestashop/'.($lang->iso_code == 'fr' ? '' : strtolower($lang->iso_code).'/').'"><img src="../modules/moneybookers/prestashop_mb_'.$iso_img.'.gif" alt="PrestaShop & Moneybookers" /></a><br /><br />
-				<span style="color: #CC0000; font-weight: bold; line-height: 20px;"><img src="../img/admin/gold.gif" alt="" /> '.$this->l('Thanks to the PrestaShop/Moneybookers partnership,').'<br />'.$this->l('you will get a preferential commission rate!').'</span></p>
 				<p style="margin: 0;">
-					<hr size="1" style="margin: 0 0 15px 0;" noshade />
 					'.$this->l('Then click here:').' <input type="button" class="button" value="'.$this->l('I already have a Moneybookers account').'" style="margin: 0 auto;" onclick="$(\'#form-activation\').show(1500);" />
+					<hr size="1" style="margin: 0 0 15px 0;" noshade />
 				</p>
+				<span style="color: #CC0000; font-weight: bold; line-height: 20px;"><img src="../img/admin/gold.gif" alt="" /> '.$this->l('Thanks to the PrestaShop/Moneybookers partnership,').' '.$this->l('you will get a preferential commission rate!').'</span></p>
+
+<br /><br />
+<style>
+.tdMBL { border-left: 1px solid black; border-top: 1px solid black; }
+.tdMBR { border-left: 1px solid black; border-top: 1px solid black; border-right: 1px solid black; }
+.tdMBLast { border-top: 1px solid black; border-right: 1px solid black; }
+</style>
+<table cellpadding="2" cellspacing="0" style="width: 750px;">
+ <tr><td class="tdMBL" style="background-color: grey;"><b>PrestaShop</b></td><td colspan="2" class="tdMBR" style="background-color: grey;"><b>'.$this->l('Online payment solution by Moneybookers').'</b></td></tr>
+ <tr><td class="tdMBL">'.$this->l('Monthly volume for payments made via Moneybookers').'</td><td class="tdMBL">Quick Checkout Moneybookers ***</td><td class="tdMBR">Moneybookers eWallet **</td></tr>
+ <tr><td class="tdMBL">€ 0 - € 1,000</td><td class="tdMBR">2.9% + 0.19€</td><td rowspan="5" class="tdMBLast">0.9% + 0.19€</td></tr>
+ <tr><td class="tdMBL">€ 1,000.01 - € 10,000</td><td class="tdMBR">1.8% + 0.19€</td></tr>
+ <tr><td class="tdMBL">€ 10,000.01 - € 50,000</td><td class="tdMBR">1.6% + 0.19€</td></tr>
+ <tr><td class="tdMBL">€ 50,000.01 - € 100,000</td><td class="tdMBR">1.4% + 0.19€</td></tr>
+ <tr><td class="tdMBL">€ 100,000</td><td class="tdMBR">1.2% + 0.19€</td></tr>
+ <tr><td colspan="3" style="border-top: 1px solid black;"><small>'.$this->l('For merchants over €100,000 fees can be negociated.').' Contact: ecommerce@moneybookers.com</small></td></tr>
+</table>
+
+<p align="left">
+** '.$this->l('Moneybookers eWallet').'<br />
+*** '.$this->l('Quick Checkout Moneybookers').'
+</p>
+
 			</fieldset>
 		</form>
 
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" id="form-activation"'.((!Configuration::get('MB_PARAMETERS') AND !isset($_POST['SubmitValidation'])) ? ' style="display: none;"' : '').'>
-			<fieldset class="width2" style="margin: 20px 0;">
+			<fieldset class="width2" style="margin: 20px 0; width: 800px;">
 				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Account validation').'</legend>
 				'.(Configuration::get('MB_PARAMETERS') == 1 ? '<p style="font-weight: bold; color: green;"><img src="../img/admin/ok.gif" alt="" /> '.$this->l('Your account has been activated').'</p>' : '').'
-				<p style="line-height: 20px;">'.$this->l('You need to').' <b>'.$this->l('validate your account').'</b>, '.$this->l('please type the e-mail address used to open your Moneybookers account:').'<br /><br />
+				<p style="line-height: 20px;">'.$this->l('You need to').' <b>'.$this->l('validate your account').'</b>.<br />'.$this->l('Beware ! Be sure that you replaced the test e-mail « testmerchant@moneybookers.com » by your e-mail used to open your Moneybookers account :').'<br /><br />
 				<input type="text" name="mb_email_to_validate" value="'.Configuration::get('MB_PAY_TO_EMAIL').'" style="width: 250px;" />
 				<input type="submit" name="SubmitValidation" class="button" value="'.$this->l('Validate my account').'" /></p>
-				<p style="font-size: 11px;"><a href="'.$manual_links[$iso_manual].'" target="_blank"><img src="../img/admin/pdf.gif" alt="" /></a><a href="'.$manual_links[$iso_manual].'" target="_blank">'.$this->l('For help, refer to the activation manual.').'</a></p>
+				<p style="font-size: 14px;"><a href="'.$manual_links[$iso_manual].'" target="_blank"><img src="../img/admin/pdf.gif" alt="" /></a><a href="'.$manual_links[$iso_manual].'" target="_blank"><b>'.$this->l('For help, refer to the activation manual.').'</b></a></p>
 			</fieldset>
 		</form>
 
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" id="form-secret"'.((!Configuration::get('MB_PARAMETERS') AND !isset($_POST['SubmitSecret'])) ? ' style="display: none;"' : '').'>
-			<fieldset class="width2" style="margin: 20px 0;">
+			<fieldset class="width2" style="margin: 20px 0; width: 800px;">
 				<legend><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo.gif" alt="" />'.$this->l('Secret word validation').'</legend>
 				'.(Configuration::get('MB_PARAMETERS_2') == 1 ? '<p style="font-weight: bold; color: green;"><img src="../img/admin/ok.gif" alt="" /> '.$this->l('Your secret word has been activated').'</p>' : '').'
 				<p style="line-height: 20px;">'.$this->l('You need to').' <b>'.$this->l('validate your secret word').'</b>, '.$this->l('Please enter the secret word entered on your Moneybookers account:').'<br /><br />
 				<input type="password" name="mb_sw_to_validate" value="'.Configuration::get('MB_SECRET_WORD').'" style="width: 250px;" />
 				<input type="submit" name="SubmitSecret" class="button" value="'.$this->l('Validate my secret word').'" /></p>
+
+				<br />
+				<p><b>'.$this->l('What is the secret word ?').'</b></p>
+				<p>'.$this->l('The secret word is different from the password. It is used by Moneybookers to securely encrypt the transmission from your server.').'</p>
+				<p><b>'.$this->l('Why a secret word different from the password ?').'</b></p>
+				<p>'.$this->l('The secret word is used to reinforce the payment security.').'</p>
+				<p>'.$this->l('The password is only used to securely connect to your Moneybookers account. If the password changes, it won\'t affect your secret word. So it is recommended to have your password different from your secret word.').'</p>
+				<p><b>'.$this->l('Where can I find my secret word ?').'</b></p>
+				<p>'.$this->l('Once your account has been validated, go to your account in the "Merchant Tools" section. There, you will be able to define your secret word.').'</p>
+
+
 			</fieldset>
 		</form>
 
@@ -315,7 +351,7 @@ class MoneyBookers extends PaymentModule
 					font-size: 12px;
 				}
 			</style>
-			<fieldset style="width: 700px;">';
+			<fieldset style="width: 800px;">';
 
 
 				$interActivated = Configuration::get('MB_INTER_METHODS') != '' ? explode('|', Configuration::get('MB_INTER_METHODS')) : array();
