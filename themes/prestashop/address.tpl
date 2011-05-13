@@ -104,6 +104,7 @@ $(function(){ldelim}
 			</p>
 		</div>
 		</div>
+	{assign var='stateExist' value='false'}
 	{foreach from=$ordered_adr_fields item=field_name}
 		{if $field_name eq 'company'}
 			<p class="text">
@@ -183,6 +184,7 @@ $(function(){ldelim}
 		{/literal}
 		</script>
 		{else if $field_name eq 'State:name'}
+		{$stateExist = "false"}
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
 			<select name="id_state" id="id_state">
@@ -192,7 +194,15 @@ $(function(){ldelim}
 		</p>
 		{/if}
 		{/foreach}
-
+		{if $stateExist eq "false"}
+		<p class="required id_state select">
+			<label for="id_state">{l s='State'}</label>
+			<select name="id_state" id="id_state">
+				<option value="">-</option>
+			</select>
+			<sup>*</sup>
+		</p>
+		{/if}
 		<p class="textarea">
 			<label for="other">{l s='Additional information'}</label>
 			<textarea id="other" name="other" cols="26" rows="3">{if isset($smarty.post.other)}{$smarty.post.other}{else}{if isset($address->other)}{$address->other|escape:'htmlall':'UTF-8'}{/if}{/if}</textarea>
