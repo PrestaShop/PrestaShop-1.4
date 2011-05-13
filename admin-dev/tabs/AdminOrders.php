@@ -937,7 +937,6 @@ class AdminOrders extends AdminTab
 		// Allow to add specific rules
 		$patternRules = array(
 				'avoid' => array(
-					'company',
 					'phone',
 					'phone_mobile',
 					'address2'));

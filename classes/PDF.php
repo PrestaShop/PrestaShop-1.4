@@ -523,8 +523,6 @@ class PDFCore extends PDF_PageGroupCore
 					'address2',
 					'company'),
 				'avoid' => array(
-					'phone',
-					'phone_mobile',
 					'State:iso_code'));
 		
 		$addressType = self::generateHeaderAddresses($pdf, $order, $addressType, $patternRules, $width);
