@@ -243,7 +243,7 @@ $(function(){ldelim}
 						</select>
 						<sup>*</sup>
 					</p>
-					{$stateExist='true'}
+					{assign var=stateExist value=true}
 					{/if}
 					{/foreach}
 					{if $stateExist eq "false"}
@@ -430,7 +430,7 @@ $(function(){ldelim}
 			</select>
 			<sup>*</sup>
 		</p>
-		{$stateExist="true"}
+		{assign var=stateExist value=true}
 		{/if}
 		{/foreach}
 		{if $stateExist eq "false"}
