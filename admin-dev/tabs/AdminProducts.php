@@ -1195,16 +1195,14 @@ class AdminProducts extends AdminTab
 							// Save and preview
 							if (Tools::isSubmit('submitAddProductAndPreview'))
 							{
-								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), (int)($cookie->id_lang))));
+								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', (int)($cookie->id_lang)), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), (int)($cookie->id_lang))));
 								if (!$object->active)
 								{
 									$admin_dir = dirname($_SERVER['PHP_SELF']);
 									$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
 									$token = Tools::encrypt('PreviewProduct'.$object->id);
-
-									$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+									$preview_url .= $object->active ? '' : '?adtoken='.$token.'&ad='.$admin_dir;
 								}
-
 								Tools::redirectAdmin($preview_url);
 							} else if (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true)) // Save and stay on same form
 							// Save and stay on same form
@@ -1247,14 +1245,13 @@ class AdminProducts extends AdminTab
 							// Save and preview
 							if (Tools::isSubmit('submitAddProductAndPreview'))
 							{
-								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), (int)($cookie->id_lang))));
+								$preview_url = ($link->getProductLink($this->getFieldValue($object, 'id'), $this->getFieldValue($object, 'link_rewrite', (int)($cookie->id_lang)), Category::getLinkRewrite($this->getFieldValue($object, 'id_category_default'), (int)($cookie->id_lang))));
 								if (!$obj->active)
 								{
 									$admin_dir = dirname($_SERVER['PHP_SELF']);
 									$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
 									$token = Tools::encrypt('PreviewProduct'.$object->id);
-
-									$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+									$preview_url .= $object->active ? '' : '?adtoken='.$token.'&ad='.$admin_dir;
 								}
 
 								Tools::redirectAdmin($preview_url);
