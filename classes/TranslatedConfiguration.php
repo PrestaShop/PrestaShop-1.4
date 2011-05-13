@@ -36,6 +36,18 @@ class TranslatedConfigurationCore extends Configuration
 			'date_upd' => array('i18n' => true),
 		),
 	);
+	public function __construct($id = NULL, $id_lang = NULL)
+	{
+		// Check if the id configuration is set in the configuration_lang table.
+		// Otherwise configuration is not set as translated configuration.
+		if ($id !== null)
+		{
+			$id_translated = Db::getInstance()->ExecuteS('SELECT `'.$this->identifier.'` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'`='.pSQL($id).' LIMIT 0,1');
+			if (empty($id_translated))
+				$id = null;
+		}
+		parent::__construct($id,$id_lang);
+	}
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
 		$query = '

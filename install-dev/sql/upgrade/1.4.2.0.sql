@@ -21,6 +21,7 @@ INSERT IGNORE INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name
 (12, 4, 'Payment remotely accepted', ''),
 (12, 5, 'Payment remotely accepted', '');
 
+DELETE FROM `PREFIX_configuration_lang` WHERE 1 AND `value` is NULL AND `date_upd` is NULL;
 
 /* PHP:alter_blocklink(); */;
 /* PHP:update_module_loyalty(); */;

@@ -50,8 +50,13 @@ class StockMvtCore extends ObjectModel
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'stock_movements',
 		'objectNodeName' => 'stock_movement',
-		'id_zone' => array('xlink_resource'=> 'zones'),
-		'id_country' => array('xlink_resource'=> 'countries'),
+		'fields' => array(
+			'id_product' => array('xlink_resource'=> 'products'),
+			'id_product_attribute' => array('xlink_resource'=> 'product_option_values'),
+			'id_order' => array('xlink_resource'=> 'orders'),
+			'id_employee' => array('xlink_resource'=> 'employees'),
+			'id_stock_mvt_reason' => array('xlink_resource'=> 'stock_movement_reasons'),
+		),
 	);
 	
 	

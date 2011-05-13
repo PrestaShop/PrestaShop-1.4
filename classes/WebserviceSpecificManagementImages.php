@@ -42,7 +42,6 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	 * @var array The list of supported mime types
 	 */
 	protected $acceptedImgMimeTypes = array('image/gif', 'image/jpg', 'image/jpeg', 'image/pjpeg', 'image/png', 'image/x-png');
-	protected $outputEnabled = true;
 	
 	/**
 	 * @var string The product image declination id
@@ -125,7 +124,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	public function manage()
 	{
 		$this->manageImages();
-		return $this->outputEnabled;
+		return $this->wsObject->getOutputEnabled();
 	}
 	
 	/**
@@ -514,7 +513,10 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 					$this->output .= $this->objOutput->getObjectRender()->renderNodeFooter('image', array());
 				}
 				else
-					throw new WebserviceException('This image was not found', array(125, 404));
+				{
+					$this->objOutput->setStatus(404);
+					$this->wsObject->setOutputEnabled(false);
+				}
 			}
 			
 		}

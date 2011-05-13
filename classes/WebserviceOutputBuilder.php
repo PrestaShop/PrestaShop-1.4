@@ -72,13 +72,13 @@ class WebserviceOutputBuilderCore
 	 * Set the Content-type for the http header.
 	 * 
 	 * @param WebserviceOutputInterface $obj_render
-	 * @throw Exception if the object render is not an instance of WebserviceOutputInterface
+	 * @throw WebserviceException if the object render is not an instance of WebserviceOutputInterface
 	 * @return $this
 	 */
 	public function setObjectRender(WebserviceOutputInterface $obj_render)
 	{
 		if (!$obj_render instanceof WebserviceOutputInterface)
-			throw new Exception('Obj_render param must be an WebserviceOutputInterface object type', 83);
+			throw new WebserviceException('Obj_render param must be an WebserviceOutputInterface object type', array(83, 500));
 		
 		$this->objectRender = $obj_render;
 		$this->objectRender->setWsUrl($this->wsUrl);
@@ -131,22 +131,22 @@ class WebserviceOutputBuilderCore
 	/**
 	 * @param $key The normalized key expected for an http response
 	 * @param $value
-	 * @throw Exception if the key or the value are corrupted
+	 * @throw WebserviceException if the key or the value are corrupted
 	 * 		  (use Validate::isCleanHtml method)
 	 * @return $this
 	 */
 	public function setHeaderParams($key, $value)
 	{
 		if (!Validate::isCleanHtml($key) OR !Validate::isCleanHtml($value))
-			throw new Exception('the key or your value is corrupted.', 94);
+			throw new WebserviceException('the key or your value is corrupted.', array(94, 500));
 		$this->headerParams[$key] = $value;
 		return $this;
 	}
 	
 	/**
 	 * @param null|string $key if null get all header params otherwise the params specified by the key
-	 * @throw Exception if the key is corrupted (use Validate::isCleanHtml method)
-	 * @throw Exception if the asked key does'nt exists.
+	 * @throw WebserviceException if the key is corrupted (use Validate::isCleanHtml method)
+	 * @throw WebserviceException if the asked key does'nt exists.
 	 * @return array|string
 	 */
 	public function getHeaderParams($key = null)
@@ -156,9 +156,9 @@ class WebserviceOutputBuilderCore
 		if (!is_null($key))
 		{
 			if (!is_null($key) && Validate::isCleanHtml($key))
-				throw new Exception('the key you write is a corrupted text.', 95);
+				throw new WebserviceException('the key you write is a corrupted text.', array(95, 500));
 			if (!array_key_exists($key, $this->headerParams))
-				throw new Exception(sprintf('The key %s does\'nt exist', $key), 96);
+				throw new WebserviceException(sprintf('The key %s does\'nt exist', $key), array(96, 500));
 			$return = $this->headerParams[$key];
 		}
 		else
@@ -270,7 +270,7 @@ class WebserviceOutputBuilderCore
 	public function getResourcesList($key_permissions)
 	{
 		if (is_null($this->wsResource))
-			throw new Exception ('You must set web service resource for get the resources list.', 82);
+			throw new WebserviceException ('You must set web service resource for get the resources list.', array(82, 500));
 		$output = '';
 		$more_attr = array('shop_name' => Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_NAME')));
 		$output .= $this->objectRender->renderNodeHeader('api', array(), $more_attr);
@@ -548,10 +548,8 @@ class WebserviceOutputBuilderCore
 	private function renderAssociations($object, $depth, $associations, $ws_params)
 	{
 		$output = $this->objectRender->renderAssociationWrapperHeader();
-		
 		foreach ($associations as $assoc_name => $association)
 		{
-		
 			if ($this->fieldsToDisplay == 'full' || is_array($this->fieldsToDisplay) && array_key_exists($assoc_name, $this->fieldsToDisplay))
 			{
 				$getter = $association['getter'];
@@ -700,7 +698,7 @@ class WebserviceOutputBuilderCore
 	{
 		try {
 			$this->validateObjectAndMethod($object, $method);
-		} catch (Exception $e) {
+		} catch (WebserviceException $e) {
 			throw $e;
 		}
 		
@@ -710,9 +708,9 @@ class WebserviceOutputBuilderCore
 	private function validateObjectAndMethod($object, $method)
 	{
 		if (is_string($object) && !class_exists($object))
-			throw new Exception ('The object you want to set in '.__METHOD__.' is not allowed.', 98);
+			throw new WebserviceException ('The object you want to set in '.__METHOD__.' is not allowed.', array(98, 500));
 		if (!method_exists($object, $method))
-			throw new Exception ('The method you want to set in '.__METHOD__.' is not allowed.', 99);
+			throw new WebserviceException ('The method you want to set in '.__METHOD__.' is not allowed.', array(99, 500));
 	}
 	public function getSpecificField()
 	{
@@ -735,7 +733,7 @@ class WebserviceOutputBuilderCore
 	{
 		try {
 			$this->validateObjectAndMethod($object, $method);
-		} catch (Exception $e) {
+		} catch (WebserviceException $e) {
 			throw $e;
 		}
 		

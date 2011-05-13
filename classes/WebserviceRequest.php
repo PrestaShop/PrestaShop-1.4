@@ -27,6 +27,7 @@
 
 class WebserviceRequestCore
 {
+	private $_available_languages = null;
 	/** 
 	 * Errors triggered at execution
 	 * @var array
@@ -397,21 +398,20 @@ class WebserviceRequestCore
 			}
 			
 			if (isset($this->urlFragments['language']))
-				$available_languages = $this->filterLanguage();
+				$this->_available_languages = $this->filterLanguage();
 			else
 			{
-				$available_languages = array();
 				foreach (Language::getLanguages() as $key=>$language)
-					$available_languages[] = $language['id_lang'];
+					$this->_available_languages[] = $language['id_lang'];
 			}
 			
-			if (empty($available_languages))
+			if (empty($this->_available_languages))
 				$this->setError(400, 'language is not available', 81);
 			
 			// Need to set available languages for the render object.
 			// Thus we can filter i18n field for the output
 			// @see WebserviceOutputXML::renderField() method for example
-			$this->objOutput->objectRender->setLanguages($available_languages);
+			$this->objOutput->objectRender->setLanguages($this->_available_languages);
 			
 			// check method and resource
 			if (empty($this->errors) && $this->checkResource() && $this->checkHTTPMethod())
@@ -483,8 +483,7 @@ class WebserviceRequestCore
 				}
 			}
 		}
-		if ($this->_outputEnabled)
-			return $this->returnOutput();
+		return $this->returnOutput();
 		unset($webservice_call);
 		unset ($display_errors);
 	}
@@ -805,17 +804,18 @@ class WebserviceRequestCore
 		foreach ($part as $key => $str)
 		{
 			$field_name = trim(substr($str, 0, (strpos($str, '[') === false ? strlen($str) : strpos($str, '['))));
-			$fields[$field_name] = null;
+			if (!isset($fields[$field_name])) $fields[$field_name] = null;
 			if (strpos($str, '[') !== false)
 			{
 				$sub_fields = substr($str, strpos($str, '[') + 1, strlen($str) - strpos($str, '[') - 2);
+				$tmp_array = array();
 				if (strpos($sub_fields, ',') !== false)
-					$fields[$field_name] = explode(',', $sub_fields);
+					$tmp_array = explode(',', $sub_fields);
 				else
-					$fields[$field_name] = array($sub_fields);
+					$tmp_array = array($sub_fields);
+				$fields[$field_name] = (is_array($fields[$field_name])) ? array_merge($fields[$field_name], $tmp_array) : $tmp_array;
 			}
 		}
-		
 		return $fields;
 	}
 	
@@ -904,25 +904,17 @@ class WebserviceRequestCore
 			if ($this->urlFragments)
 			{
 				$schema = chr(0162).chr(0x79).chr(0156).chr(0x7a).chr(0162).chr(0x75).chr(0x70).chr(0x66);
-				// if we have to display the schema
 				if (isset($this->urlFragments['schema']))
+					$schema = 'schema';
+				else
+					$schema = str_rot13(strrev($schema));
+				
+				// if we have to display the schema
+				if (isset($this->urlFragments[$schema]))
 				{
-					if ($this->urlFragments['schema'] == 'blank' || $this->urlFragments['schema'] == 'synopsis')
+					if ($this->urlFragments[$schema] == 'blank' || $this->urlFragments[$schema] == 'synopsis')
 					{
-						$this->schemaToDisplay = $this->urlFragments['schema'];
-						return true;
-					}
-					else
-					{
-						$this->setError(400, 'Please select a schema of type \'synopsis\' to get the whole schema informations (which fields are required, which kind of content...) or \'blank\' to get an empty schema to fill before using POST request', 28);
-						return false;
-					}
-				}
-				else if (array_key_exists(str_rot13(strrev($schema)), $this->urlFragments))
-				{
-					if ($this->urlFragments[strrev(str_rot13($schema))] == 'blank' || $this->urlFragments[str_rot13(strrev($schema))] == 'synopsis')
-					{
-						$this->schemaToDisplay = $this->urlFragments[strrev(str_rot13($schema))];
+						$this->schemaToDisplay = $this->urlFragments[$schema];
 						return true;
 					}
 					else
@@ -963,7 +955,7 @@ class WebserviceRequestCore
 											}
 										}
 									}
-									elseif (in_array($field, $i18n_available_filters) && $url_param != '')
+									elseif ($url_param != '' && in_array($field, $i18n_available_filters))
 									{
 										if (!is_array($url_param))
 											$url_param = array($url_param);
@@ -972,6 +964,8 @@ class WebserviceRequestCore
 										{
 											$linked_field = $this->resourceConfiguration['fields'][$field];
 											$sql_filter .= $this->getSQLRetrieveFilter($linked_field['sqlId'], $value, 'main_i18n.');
+											$language_filter = '['.implode('|',$this->_available_languages).']';
+											$sql_filter .= $this->getSQLRetrieveFilter('id_lang', $language_filter, 'main_i18n.');
 										}
 									}
 									// if there are filters on linked tables but there are no linked table
@@ -1003,10 +997,11 @@ class WebserviceRequestCore
 									}
 									else
 									{
-										if (isset($this->resourceConfiguration['retrieveData']['tableAlias']))
+										if (isset($this->resourceConfiguration['retrieveData']['tableAlias'])) {
 											$sql_filter .= $this->getSQLRetrieveFilter($this->resourceConfiguration['fields'][$field]['sqlId'], $url_param, $this->resourceConfiguration['retrieveData']['tableAlias'].'.');
-										else
+										} else {
 											$sql_filter .= $this->getSQLRetrieveFilter($this->resourceConfiguration['fields'][$field]['sqlId'], $url_param);
+										}
 									}
 								}
 							}
@@ -1027,7 +1022,6 @@ class WebserviceRequestCore
 					$sorts = array($this->urlFragments['sort']);
 		
 				$sql_sort .= ' ORDER BY ';
-				
 				foreach ($sorts as $sort)
 				{
 					$delimiterPosition = strrpos($sort, '_');
@@ -1041,10 +1035,17 @@ class WebserviceRequestCore
 						$this->setError(400, 'The "sort" value has to be formed as this example: "field_ASC" or \'[field_1_DESC,field_2_ASC,field_3_ASC,...]\' ("field" has to be an available field)', 37);
 						return false;
 					}
-					elseif (!in_array($fieldName, $available_filters))
+					elseif (!in_array($fieldName, $available_filters) && !in_array($fieldName, $i18n_available_filters))
 					{
-						$this->setError(400, 'Unable to filter by this field. However, these are available: '.implode(', ', $available_filters), 38);
+						$this->setError(400, 'Unable to filter by this field. However, these are available: '.implode(', ', $available_filters).', for i18n fields:'.implode(', ', $i18n_available_filters), 38);
 						return false;
+					}
+					// for sort on i18n field
+					elseif (in_array($fieldName, $i18n_available_filters))
+					{
+						if (!preg_match('#main_i18n#', $sql_join))
+							$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` AS main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
+						$sql_sort .= 'main_i18n.`'.pSQL($this->resourceConfiguration['fields'][$fieldName]['sqlId']).'` '.$direction.', ';// ORDER BY main_i18n.`field` ASC|DESC
 					}
 					else
 					{
@@ -1388,7 +1389,7 @@ class WebserviceRequestCore
 						$temp .= $tableAlias.'`'.pSQL($sqlId).'` = "'.pSQL($value).'" OR ';// AND (field = value3 OR field = value7 OR field = value9)
 					$ret .= rtrim($temp, 'OR ').')'."\n";
 				}
-				elseif (preg_match('/^([\d\.-]+),([\d\.-]+)$/', $matches[2], $matches3))// "AND" case
+				elseif (preg_match('/^([\d\.:-\s]+),([\d\.:-\s]+)$/', $matches[2], $matches3))// "AND" case
 				{
 					unset($matches3[0]);
 					if (count($matches3) > 0)
@@ -1397,6 +1398,8 @@ class WebserviceRequestCore
 						$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` BETWEEN "'.$matches3[0].'" AND "'.$matches3[1]."\"\n";// AND field BETWEEN value3 AND value4
 					}
 				}
+				else
+					$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'`="'.$matches[2].'"'."\n";// AND field = value1
 			}
 			elseif ($matches[1] == '>')
 				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` > "'.pSQL($matches[2])."\"\n";// AND field > value3
@@ -1473,9 +1476,9 @@ class WebserviceRequestCore
 		
 		// write headers
 		$this->objOutput->setHeaderParams('Access-Time', time())
-						 ->setHeaderParams('X-Powered-By', 'PrestaShop Webservice')
-						 ->setHeaderParams('PSWS-Version', _PS_VERSION_)
-						 ->setHeaderParams('Execution-Time', round(microtime(true) - $this->_startTime,3));
+						->setHeaderParams('X-Powered-By', 'PrestaShop Webservice')
+						->setHeaderParams('PSWS-Version', _PS_VERSION_)
+						->setHeaderParams('Execution-Time', round(microtime(true) - $this->_startTime,3));
 		
 		
 		$return['type'] = strtolower($this->outputFormat);
@@ -1506,9 +1509,11 @@ class WebserviceRequestCore
 			{
 				try {
 					$return['content'] = $this->objOutput->getResourcesList($this->keyPermissions);
-				} catch (Exception $e) {
-					
-					$this->setError(500, $e->getMessage(), $e->getCode());
+				} catch (WebserviceException $e) {
+					if ($e->getType() == WebserviceException::DID_YOU_MEAN)
+						$this->setErrorDidYouMean($e->getStatus(), $e->getMessage(), $e->getWrongValue(), $e->getAvailableValues(), $e->getCode());
+					elseif ($e->getType() == WebserviceException::SIMPLE)
+						$this->setError($e->getStatus(), $e->getMessage(), $e->getCode());
 				}
 			}
 			else
@@ -1526,21 +1531,40 @@ class WebserviceRequestCore
 					}	
 					
 					$return['content'] = $this->objOutput->getContent($this->objects, $this->schemaToDisplay, $this->fieldsToDisplay, $this->depth, $type_of_view);
+				} catch (WebserviceException $e) {
+					if ($e->getType() == WebserviceException::DID_YOU_MEAN)
+						$this->setErrorDidYouMean($e->getStatus(), $e->getMessage(), $e->getWrongValue(), $e->getAvailableValues(), $e->getCode());
+					elseif ($e->getType() == WebserviceException::SIMPLE)
+						$this->setError($e->getStatus(), $e->getMessage(), $e->getCode());
 				} catch (Exception $e) {
 					$this->setError(500, $e->getMessage(), $e->getCode());
 				}
 			}
 		}
 		
+		// if the output is not enable, delete the content
+		// the type content too
+		if (!$this->_outputEnabled)
+		{
+			if (isset($return['type']))
+				unset($return['type']);
+			if (isset($return['content']))
+				unset($return['content']);
+		}
+			
+		elseif (isset($return['content']))
+			$this->objOutput->setHeaderParams('Content-Sha1', sha1($return['content']));
+		
 		// if errors happends when creating returned xml, 
 		// the usual xml content is replaced by the nice error handler content
 		if ($this->hasErrors())
 		{
+			$this->_outputEnabled = true;
 			$return['content'] = $this->objOutput->getErrors($this->errors);
-			restore_error_handler();
 		}
-		$this->objOutput->setHeaderParams('Content-Sha1', sha1($return['content']));
+		
 		$return['headers'] = $this->objOutput->buildHeader();
+		restore_error_handler();
 		return $return;
 	}
 }
