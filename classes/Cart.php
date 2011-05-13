@@ -1546,21 +1546,38 @@ class CartCore extends ObjectModel
 		FROM '._DB_PREFIX_.'customization c
 		LEFT JOIN '._DB_PREFIX_.'customized_data cd ON cd.id_customization = c.id_customization
 		WHERE c.id_cart = '.(int)$this->id);
-
-		$custom_ids = array();
-		$sql_custom_data = 'INSERT INTO '._DB_PREFIX_.'customized_data (id_customization, type, index, value) VALUES ';
-		if (count($custom_ids))
+		
+		// Group line by id_customization
+		$customsById = array();
+		foreach ($customs AS $custom)
 		{
-			foreach ($customs AS $custom)
-			{
-				Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute('
+			if(!isset($customsById[$custom['id_customization']]))
+				$customsById[$custom['id_customization']] = array();
+			$customsById[$custom['id_customization']][] = $custom;
+		}
+		
+		// Insert new customizations
+		$custom_ids = array();
+		foreach($customsById as $customizationId => $val)
+		{
+			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute('
 				INSERT INTO '._DB_PREFIX_.'customization (id_customization, id_cart, id_product_attribute, id_product, quantity)
 				VALUES(\'\', '.(int)$cart->id.', '.(int)$custom['id_product_attribute'].', '.(int)$custom['id_product'].', '.(int)$custom['quantity'].')');
-				$custom_ids[$custom['id_customization']] = Db::getInstance(_PS_USE_SQL_SLAVE_)->Insert_ID();
-				$sql_custom_data .= '('.(int)$custom_ids[$custom['id_customization']].', '.(int)$custom['type'].', '.(int)$custom['index'].', \''.pSQL($custom['value']).'\'),';
-			}
-			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql_custom_data);
+			$custom_ids[$custom['id_customization']] = Db::getInstance(_PS_USE_SQL_SLAVE_)->Insert_ID();
 		}
+		
+		// Insert customized_data
+		$first = true;
+		$sql_custom_data = 'INSERT INTO '._DB_PREFIX_.'customized_data (`id_customization`, `type`, `index`, `value`) VALUES ';
+		foreach ($customs AS $custom)
+		{
+			if(!$first)
+				$sql_custom_data .= ',';
+			else
+				$first = false;
+			$sql_custom_data .= '('.(int)$custom_ids[$custom['id_customization']].', '.(int)$custom['type'].', '.(int)$custom['index'].', \''.pSQL($custom['value']).'\')';
+		}
+		Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql_custom_data);
 
 		return array('cart' => $cart, 'success' => $success);
 	}
