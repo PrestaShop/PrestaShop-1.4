@@ -657,7 +657,13 @@ class BlockLayered extends Module
 	public function rebuildLayeredStructure()
 	{
 		@set_time_limit(0);
-		@ini_set('memory_limit', '64M');
+		// setting the memory limit to 128M only if current is lower
+		$memory_limit = ini_get('memory_limit');
+		if ( substr($memory_limit,-1) != 'G' 
+		  AND ((substr($memory_limit,-1) == 'M' AND substr($memory_limit,0,-1) < 128) OR intval($memory_limit) < 131072)
+		){
+			@ini_set('memory_limit','128M');
+		}
 
 		/* Delete and re-create the layered categories table */
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_category');
