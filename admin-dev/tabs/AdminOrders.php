@@ -936,13 +936,10 @@ class AdminOrders extends AdminTab
 	{
 		// Allow to add specific rules
 		$patternRules = array(
-				'avoid' => array(
-					'phone',
-					'phone_mobile',
-					'address2'));
+				'avoid' => array('address2')
+		);
 		
-		return AddressFormat::generateAddress($addressDelivery, $patternRules, '<br />').
-			'<br />'.$this->l('Phone').': '.$addressDelivery->phone;
+		return AddressFormat::generateAddress($addressDelivery, $patternRules, '<br />');
 	}
 
 	private function _getAddressFieldValue(Address $address, $field_name)
