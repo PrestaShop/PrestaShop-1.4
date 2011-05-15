@@ -686,12 +686,6 @@ class AdminOrders extends AdminTab
 					<a href="http://maps.google.com/maps?f=q&hl='.$currentLanguage->iso_code.'&geocode=&q='.$addressDelivery->address1.' '.$addressDelivery->postcode.' '.$addressDelivery->city.($addressDelivery->id_state ? ' '.$deliveryState->name: '').'" target="_blank"><img src="../img/admin/google.gif" alt="" class="middle" /></a>
 				</div>
 				'.$this->displayAddressDetail($addressDelivery)
-//				. (!empty($addressDelivery->company) ? $addressDelivery->company.'<br />' : '') .$addressDelivery->firstname.' '.$addressDelivery->lastname.'<br />
-//				'.$addressDelivery->address1.'<br />'. (!empty($addressDelivery->address2) ? $addressDelivery->address2.'<br />' : '') .'
-//				'.$addressDelivery->postcode.' '.$addressDelivery->city.'<br />
-//				'.$addressDelivery->country.($addressDelivery->id_state ? ' - '.$deliveryState->name : '').'<br />
-//				'.(!empty($addressDelivery->phone) ? $addressDelivery->phone.'<br />' : '').'
-//				'.(!empty($addressDelivery->phone_mobile) ? $addressDelivery->phone_mobile.'<br />' : '').'
 				.(!empty($addressDelivery->other) ? '<hr />'.$addressDelivery->other.'<br />' : '')
 			.'</fieldset>
 		</div>
@@ -936,7 +930,8 @@ class AdminOrders extends AdminTab
 	{
 		// Allow to add specific rules
 		$patternRules = array(
-				'avoid' => array('address2')
+			'avoid' => array()
+			//'avoid' => array('address2')
 		);
 		
 		return AddressFormat::generateAddress($addressDelivery, $patternRules, '<br />');

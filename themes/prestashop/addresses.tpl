@@ -28,12 +28,7 @@
 <!--
 	var baseDir = '{$base_dir_ssl}';
 -->
-
-	$(document).ready(function()
-	{
-		resizeAddressesBox();
-	});
-
+	{literal}$(document).ready(function() { resizeAddressesBox(); });{/literal}
 </script>
 
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My addresses'}{/capture}
@@ -49,19 +44,19 @@
 	{assign var="adrs_style" value=$addresses_style}
 	{foreach from=$multipleAddresses item=address name=myLoop}
 		<ul class="address {if $smarty.foreach.myLoop.last}last_item{elseif $smarty.foreach.myLoop.first}first_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
-			<li class="address_title">{$address['object'].alias}</li>
-			{foreach from=$address['ordered'] name=adr_loop item=pattern}
+			<li class="address_title">{$address.object.alias}</li>
+			{foreach from=$address.ordered name=adr_loop item=pattern}
 				{assign var=addressKey value=" "|explode:$pattern}
 				<li>
 				{foreach from=$addressKey item=key name="word_loop"}
 					<span class="{if isset($addresses_style[$key])}{$addresses_style[$key]}{/if}">
-						{$address['formated'][$key]|escape:'htmlall':'UTF-8'}
+						{$address.formated[$key]|escape:'htmlall':'UTF-8'}
 					</span>
 				{/foreach}
 				</li>
 			{/foreach}
-			<li class="address_update"><a href="{$link->getPageLink('address.php', true)}?id_address={$address['object'].id_address|intval}" title="{l s='Update'}">{l s='Update'}</a></li>
-			<li class="address_delete"><a href="{$link->getPageLink('address.php', true)}?id_address={$address['object'].id_address|intval}&amp;delete" onclick="return confirm('{l s='Are you sure?'}');" title="{l s='Delete'}">{l s='Delete'}</a></li>
+			<li class="address_update"><a href="{$link->getPageLink('address.php', true)}?id_address={$address.object.id_address|intval}" title="{l s='Update'}">{l s='Update'}</a></li>
+			<li class="address_delete"><a href="{$link->getPageLink('address.php', true)}?id_address={$address.object.id_address|intval}&amp;delete" onclick="return confirm('{l s='Are you sure?'}');" title="{l s='Delete'}">{l s='Delete'}</a></li>
 		</ul>
 	{/foreach}
 	<p class="clear" />

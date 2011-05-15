@@ -214,7 +214,7 @@ h4 { font-size: 1em }
 #header_logo {
 	float: left;
 	width: 264px;
-	display:block
+	display: block
 }
 img.logo {
 	float: left;
@@ -291,7 +291,7 @@ body.mceContentBody {
  .mceContentBody h1 {
 	font-size: 25px;
 	font-weight: bold;
-	background:inherit;
+	background: inherit;
 }
 .rte h2,
  .mceContentBody h2 {
@@ -1159,7 +1159,6 @@ tr.cart_total_price { font-weight: bold }
 }
 #order-opc #order_carrier img { vertical-align: middle }
 #order-opc #order_carrier span { margin: 0 0.2em }
-
 #order-opc #gift_div label, #order #gift_div textarea {
 	display: block;
 	width: 100%;
@@ -1186,7 +1185,7 @@ tr.cart_total_price { font-weight: bold }
 	cursor: pointer;
 	width: 80px;
 	height: 80px;
-	margin-right: 5px;
+	margin-right: 5px
 }
 #view_scroll_left, #view_scroll_right {
 	background: url('../img/thumbs_left.gif') no-repeat center;

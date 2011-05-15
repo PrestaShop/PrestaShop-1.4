@@ -36,21 +36,22 @@ class AdminCarts extends AdminTab
 		$this->lang = false;
 	 	$this->edit = false;
 	 	$this->view = true;
-	 	$this->delete = false;
+	 	$this->delete = true;
 
-
-		$this->_select = 'CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) AS `customer`, a.id_cart as total, ca.name as carrier';
-		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer c on (c.id_customer = a.id_customer)
-		LEFT JOIN '._DB_PREFIX_.'currency cu on (cu.id_currency = a.id_currency)
-		LEFT JOIN '._DB_PREFIX_.'carrier ca on (ca.id_carrier = a.id_carrier)
-		';
+		$this->_select = 'CONCAT(LEFT(c.`firstname`, 1), \'. \', c.`lastname`) `customer`, a.id_cart total, ca.name carrier, o.id_order ';
+		$this->_join = 'LEFT JOIN '._DB_PREFIX_.'customer c ON (c.id_customer = a.id_customer)
+		LEFT JOIN '._DB_PREFIX_.'currency cu ON (cu.id_currency = a.id_currency)
+		LEFT JOIN '._DB_PREFIX_.'carrier ca ON (ca.id_carrier = a.id_carrier)
+		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_cart = a.id_cart) ';
 
  		$this->fieldsDisplay = array(
-		'id_cart' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'customer' => array('title' => $this->l('Customer'), 'width' => 80, 'filter_key' => 'c!lastname'),
-		'total' => array('title' => $this->l('Total'), 'callback' => 'getOrderTotalUsingTaxCalculationMethod', 'orderby' => false, 'search' => false, 'width' => 50, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'currency' => true),
-		'carrier' => array('title' => $this->l('Carrier'), 'width' => 25, 'align' => 'center', 'callback' => 'replaceZeroByShopName', 'filter_key' => 'ca!name'),
-		'date_add' => array('title' => $this->l('Date'), 'width' => 90, 'align' => 'right', 'type' => 'datetime', 'filter_key' => 'a!date_add'));
+			'id_cart' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
+			'id_order' => array('title' => $this->l('ID Order'), 'align' => 'center', 'width' => 25),
+			'customer' => array('title' => $this->l('Customer'), 'width' => 80, 'filter_key' => 'c!lastname'),
+			'total' => array('title' => $this->l('Total'), 'callback' => 'getOrderTotalUsingTaxCalculationMethod', 'orderby' => false, 'search' => false, 'width' => 50, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'currency' => true),
+			'carrier' => array('title' => $this->l('Carrier'), 'width' => 25, 'align' => 'center', 'callback' => 'replaceZeroByShopName', 'filter_key' => 'ca!name'),
+			'date_add' => array('title' => $this->l('Date'), 'width' => 90, 'align' => 'right', 'type' => 'datetime', 'filter_key' => 'a!date_add'));
+
 		parent::__construct();
 	}
 
@@ -315,6 +316,7 @@ class AdminCarts extends AdminTab
 			$this->viewDetails();
 		else
 		{
+			$this->displayWarning($this->l('Be careful, do not remove carts related to an order'));
 			$this->getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 			$this->displayList();
 		}
