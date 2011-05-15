@@ -37,17 +37,19 @@
 		formatedAddressFieldsValuesList[{$id_address}] =
 		{ldelim}
 			'ordered_fields':[
-				{foreach from=$type['ordered_fields'] key=num_field item=field_name name=inv_loop}
+				{foreach from=$type.ordered_fields key=num_field item=field_name name=inv_loop}
 					{if !$smarty.foreach.inv_loop.first},{/if}"{$field_name}"
 				{/foreach}
 			],
 			'formated_fields_values':{ldelim}
-					{foreach from=$type['formated_fields_values'] key=pattern_name item=field_name name=inv_loop}
+					{foreach from=$type.formated_fields_values key=pattern_name item=field_name name=inv_loop}
 						{if !$smarty.foreach.inv_loop.first},{/if}"{$pattern_name}":"{$field_name}"
 					{/foreach}
 				{rdelim}
 		{rdelim}
 	{/foreach}
+	
+	console.log(formatedAddressFieldsValuesList);
 
 	function getAddressesTitles()
 	{ldelim}
@@ -114,7 +116,6 @@
 {assign var='current_step' value='address'}
 {include file="$tpl_dir./order-steps.tpl"}
 {include file="$tpl_dir./errors.tpl"}
-
 <form action="{$link->getPageLink('order.php', true)}" method="post">
 {else}
 <div id="opc_account" class="opc-main-block">
@@ -124,16 +125,20 @@
 		<p class="address_delivery select">
 			<label for="id_address_delivery">{l s='Choose a delivery address:'}</label>
 			<select name="id_address_delivery" id="id_address_delivery" class="address_select" onchange="updateAddressesDisplay();{if $opc}updateAddressSelection();{/if}">
+
 			{foreach from=$addresses key=k item=address}
 				<option value="{$address.id_address|intval}" {if $address.id_address == $cart->id_address_delivery}selected="selected"{/if}>{$address.alias|escape:'htmlall':'UTF-8'}</option>
 			{/foreach}
+			
 			</select>
 		</p>
 		<p class="checkbox">
 			<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();{if $opc}updateAddressSelection();{/if}" {if $cart->id_address_invoice == $cart->id_address_delivery || $addresses|@count == 1}checked="checked"{/if} />
 			<label for="addressesAreEquals">{l s='Use the same address for billing.'}</label>
 		</p>
+		
 		<p id="address_invoice_form" class="select" {if $cart->id_address_invoice == $cart->id_address_delivery}style="display: none;"{/if}>
+		
 		{if $addresses|@count > 1}
 			<label for="id_address_invoice" class="strong">{l s='Choose a billing address:'}</label>
 			<select name="id_address_invoice" id="id_address_invoice" class="address_select" onchange="updateAddressesDisplay();{if $opc}updateAddressSelection();{/if}">
