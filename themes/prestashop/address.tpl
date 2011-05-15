@@ -32,7 +32,7 @@
 
 <script type="text/javascript">
 // <![CDATA[
-idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{elseif isset($address->id_state)}{$address->id_state|intval}{else}false{/if};
+idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{/if}{if isset($address->id_state)}{$address->id_state|intval}{else}false{/if};
 countries = new Array();
 countriesNeedIDNumber = new Array();
 countriesNeedZipCode = new Array();
@@ -78,7 +78,7 @@ $(function(){ldelim}
 
 <h1>{l s='Your addresses'}</h1>
 
-<h3>{if isset($id_address)}{l s='Modify address'} {if isset($smarty.post.alias)}"{$smarty.post.alias}"{elseif isset($address->alias)}"{$address->alias|escape:'htmlall':'UTF-8'}"{/if}{else}{l s='To add a new address, please fill out the form below.'}{/if}</h3>
+<h3>{if isset($id_address)}{l s='Modify address'} {if isset($smarty.post.alias)}"{$smarty.post.alias}"{/if}{if isset($address->alias)}"{$address->alias|escape:'htmlall':'UTF-8'}"{/if}{else}{l s='To add a new address, please fill out the form below.'}{/if}</h3>
 
 {include file="$tpl_dir./errors.tpl"}
 
@@ -92,7 +92,8 @@ $(function(){ldelim}
 		</p>
 	{if $vat_display == 2}
 		<div id="vat_area">
-	{elseif $vat_display == 1}
+	{/if}
+	{if $vat_display == 1}
 		<div id="vat_area" style="display: none;">
 	{else}
 		<div style="display: none;">
@@ -112,37 +113,42 @@ $(function(){ldelim}
 			<label for="company">{l s='Company'}</label>
 			<input type="text" id="company" name="company" value="{if isset($smarty.post.company)}{$smarty.post.company}{else}{if isset($address->company)}{$address->company|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 		</p>
-		{else if $field_name eq 'firstname'}
+		{/if}
+		{if $field_name eq 'firstname'}
 		<p class="required text">
 			<label for="firstname">{l s='First name'}</label>
-			<input type="text" name="firstname" id="firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{elseif isset($address->firstname)}{$address->firstname|escape:'htmlall':'UTF-8'}{/if}" />
+			<input type="text" name="firstname" id="firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{/if}{if isset($address->firstname)}{$address->firstname|escape:'htmlall':'UTF-8'}{/if}" />
 			<sup>*</sup>
 		</p>
-		
-		{elseif $field_name eq 'lastname'}
+		{/if}
+		{if $field_name eq 'lastname'}
 		<p class="required text">
 			<label for="lastname">{l s='Last name'}</label>
 			<input type="text" id="lastname" name="lastname" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname}{else}{if isset($address->lastname)}{$address->lastname|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 			<sup>*</sup>
 		</p>
-		{elseif $field_name eq 'address1'}
+		{/if}
+		{if $field_name eq 'address1'}
 		<p class="required text">
 			<label for="address1">{l s='Address'}</label>
 			<input type="text" id="address1" name="address1" value="{if isset($smarty.post.address1)}{$smarty.post.address1}{else}{if isset($address->address1)}{$address->address1|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 			<sup>*</sup>
 		</p>
-		{elseif $field_name eq 'address2'}
+		{/if}
+		{if $field_name eq 'address2'}
 		<p class="required text">
 			<label for="address2">{l s='Address (Line 2)'}</label>
 			<input type="text" id="address2" name="address2" value="{if isset($smarty.post.address2)}{$smarty.post.address2}{else}{if isset($address->address2)}{$address->address2|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 		</p>
-		{elseif $field_name eq 'postcode'}
+		{/if}
+		{if $field_name eq 'postcode'}
 		<p class="required postcode text">
 			<label for="postcode">{l s='Zip / Postal Code'}</label>
 			<input type="text" id="postcode" name="postcode" value="{if isset($smarty.post.postcode)}{$smarty.post.postcode}{else}{if isset($address->postcode)}{$address->postcode|escape:'htmlall':'UTF-8'}{/if}{/if}" onkeyup="$('#postcode').val($('#postcode').val().toUpperCase());" />
 			<sup>*</sup>
 		</p>
-		{elseif $field_name eq 'city'}
+		{/if}
+		{if $field_name eq 'city'}
 		<p class="required text">
 			<label for="city">{l s='City'}</label>
 			<input type="text" name="city" id="city" value="{if isset($smarty.post.city)}{$smarty.post.city}{else}{if isset($address->city)}{$address->city|escape:'htmlall':'UTF-8'}{/if}{/if}" maxlength="64" />
@@ -152,7 +158,8 @@ $(function(){ldelim}
 			if customer hasn't update his layout address, country has to be verified
 			but it's deprecated
 		-->
-		{elseif $field_name eq 'Country:name' || $field_name eq 'country'}
+		{/if}
+		{if $field_name eq 'Country:name' || $field_name eq 'country'}
 		<p class="required select">
 			<label for="id_country">{l s='Country'}</label>
 			<select id="id_country" name="id_country">{$countries_list}</select>
@@ -183,8 +190,9 @@ $(function(){ldelim}
 				});
 		{/literal}
 		</script>
-		{else if $field_name eq 'State:name'}
-		{$stateExist = "true"}
+		{/if}
+		{if $field_name eq 'State:name'}
+		{assign var="stateExist" value="true"}
 		<p class="required id_state select">
 			<label for="id_state">{l s='State'}</label>
 			<select name="id_state" id="id_state">
@@ -218,7 +226,7 @@ $(function(){ldelim}
 		</p>
 		<p class="required text" id="adress_alias">
 			<label for="alias">{l s='Assign an address title for future reference'}</label>
-			<input type="text" id="alias" name="alias" value="{if isset($smarty.post.alias)}{$smarty.post.alias}{elseif isset($address->alias)}{$address->alias|escape:'htmlall':'UTF-8'}{elseif isset($select_address)}{else}{l s='My address'}{/if}" />
+			<input type="text" id="alias" name="alias" value="{if isset($smarty.post.alias)}{$smarty.post.alias}{/if}{if isset($address->alias)}{$address->alias|escape:'htmlall':'UTF-8'}{/if}{if isset($select_address)}{else}{l s='My address'}{/if}" />
 			<sup>*</sup>
 		</p>
 	</fieldset>
