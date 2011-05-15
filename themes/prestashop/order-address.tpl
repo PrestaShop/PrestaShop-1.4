@@ -48,8 +48,6 @@
 				{rdelim}
 		{rdelim}
 	{/foreach}
-	
-	console.log(formatedAddressFieldsValuesList);
 
 	function getAddressesTitles()
 	{ldelim}
@@ -65,10 +63,10 @@
 	{ldelim}
 		var adr_titles_vals = getAddressesTitles();
 		var li_content = formatedAddressFieldsValuesList[id_address]['formated_fields_values'];
-		var ordered_fields_name = ["title"];
+		var ordered_fields_name = ['title'];
 
 		ordered_fields_name = ordered_fields_name.concat(formatedAddressFieldsValuesList[id_address]['ordered_fields']);
-		ordered_fields_name = ordered_fields_name.concat(["update"]);
+		ordered_fields_name = ordered_fields_name.concat(['update']);
 		
 		dest_comp.html('');
 
