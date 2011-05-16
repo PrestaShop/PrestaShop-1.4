@@ -185,15 +185,22 @@ XML;
 			'prices-drop' => false, 
 			'supplier' => false, 
 			'store' => false);
+		
+		// Don't show suppliers and manufacturers if they are disallowed
+		if (!Module::getInstanceByName('blockmanufacturer')->id && !Configuration::get('PS_DISPLAY_SUPPLIERS'))
+			unset($pages['manufacturer']);
+			
+		if (!Module::getInstanceByName('blocksupplier')->id && !Configuration::get('PS_DISPLAY_SUPPLIERS'))
+			unset($pages['supplier']);
 
-
-			if(Configuration::get('PS_REWRITING_SETTINGS'))		
-				foreach ($pages AS $page => $ssl)		
-					foreach($langs as $lang)
-						$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl, $lang['id_lang']), '0.5', 'monthly');
-			else
-				foreach($pages AS $page => $ssl)
-					$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl), '0.5', 'monthly');
+		// Generate nodes for pages
+		if(Configuration::get('PS_REWRITING_SETTINGS'))		
+			foreach ($pages AS $page => $ssl)		
+				foreach($langs as $lang)
+					$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl, $lang['id_lang']), '0.5', 'monthly');
+		else
+			foreach($pages AS $page => $ssl)
+				$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl), '0.5', 'monthly');
 
         $xmlString = $xml->asXML();
 		
