@@ -2,6 +2,7 @@
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', '{$ganalytics_id}']);
 _gaq.push(['_trackPageview', '{$pageTrack}']);
+_gaq.push(['_trackPageLoadTime']);
 {if $isOrder eq true}		{* If it's an order we need more data for stats *}
   _gaq.push(['_addTrans',
     '{$trans.id}',			{* order ID - required			*}
