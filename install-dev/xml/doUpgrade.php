@@ -277,10 +277,17 @@ if ($confFile->error != false)
 }
 
 // Settings updated, compile and cache directories must be emptied
-foreach (array(INSTALL_PATH.'/../tools/smarty/cache/', INSTALL_PATH.'/../tools/smarty/compile/', INSTALL_PATH.'/../tools/smarty_v2/cache/', INSTALL_PATH.'/../tools/smarty_v2/compile/') as $dir)
-	if (file_exists($dir))
+$arrayToClean = array(
+	INSTALL_PATH.'/../tools/smarty/cache/', 
+	INSTALL_PATH.'/../tools/smarty/compile/', 
+	INSTALL_PATH.'/../tools/smarty_v2/cache/', 
+	INSTALL_PATH.'/../tools/smarty_v2/compile/');
+foreach ($arrayToClean as $dir)
+	if (!file_exists($dir))
+		$logger->logError('directory '.$dir." doesn't exist and can't be emptied.\r\n");
+	else
 		foreach (scandir($dir) as $file)
-			if ($file[0] != '.' AND $file != 'index.php')
+			if ($file[0] != '.' AND $file != 'index.php' AND $file != '.htaccess')
 				unlink($dir.$file);
 
 //sql file execution
