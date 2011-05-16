@@ -385,6 +385,9 @@ class Twenga extends PaymentModule
 
 	public function hookCancelProduct($params)
 	{
+		if ($this->_allowToWork == false)
+			return;
+			
 		if((float)$params['order']->total_products_wt <= 0)
 		{
 			$cart = new Cart($params['order']->id_cart);
@@ -409,6 +412,9 @@ class Twenga extends PaymentModule
 
 	public function hookUpdateOrderStatus($params)
 	{
+		if ($this->_allowToWork == false)
+			return;
+			
 		if( (int)$params['newOrderStatus']->unremovable === 1
 		&& (int)$params['newOrderStatus']->logable === 1
 		&& (int)$params['newOrderStatus']->delivery === 0)
@@ -423,7 +429,7 @@ class Twenga extends PaymentModule
 			$params_to_twenga['basket_id'] = (int)$obj_order->id_cart;
 			$bool = false;
 			try {
-				if(self::$obj_twenga->orderExist($params_to_twenga))
+				if(($params_to_twenga))
 				{
 					$cart = new Cart($params_to_twenga['basket_id']);
 					$bool = self::$obj_twenga->orderValidate($params_to_twenga);
