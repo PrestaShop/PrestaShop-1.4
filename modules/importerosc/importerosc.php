@@ -241,10 +241,12 @@ class importerosc extends ImportModule
 		$identifier = 'id_product';
 		$products = $this->ExecuteS('
 									SELECT p.`products_id` as id_product, p.`products_quantity` as quantity, p.`products_model` as reference, p.`products_price` as price, p.`products_weight` as weight,
-									p.`products_status` as active, p.`manufacturers_id` as id_manufacturer, pd.language_id as id_lang, pd.products_name as name, pd.products_description as description, 
-									CONCAT(\''.Tools::getProtocol().Tools::getValue('shop_url').'\/images/\',p.`products_image`) as images,
-									(SELECT ptc.categories_id FROM `'.addslashes($this->prefix).'products_to_categories` ptc WHERE ptc.`products_id` = p.`products_id` LIMIT 1) as id_category_default
-									FROM	`'.addslashes($this->prefix).'products` p LEFT JOIN `'.addslashes($this->prefix).'products_description` pd ON (p.products_id = pd.products_id)
+									IFNULL(STRCMP(p.`products_status`, \'\') , 0 ) as active, p.`manufacturers_id` as id_manufacturer, pd.language_id as id_lang, pd.products_name as name,
+									pd.products_description as description, CONCAT(\''.Tools::getProtocol().Tools::getValue('shop_url').'\/images/\',p.`products_image`) as images,
+									(SELECT ptc.categories_id FROM `'.addslashes($this->prefix).'products_to_categories` ptc WHERE ptc.`products_id` = p.`products_id` LIMIT 1) as id_category_default,
+									p.`products_date_added` as date_add
+									FROM	`'.addslashes($this->prefix).'products` p 
+									LEFT JOIN `'.addslashes($this->prefix).'products_description` pd ON (p.products_id = pd.products_id)
 									WHERE pd.products_name IS NOT NULL AND pd.language_id IS NOT NULL
 									LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 		
