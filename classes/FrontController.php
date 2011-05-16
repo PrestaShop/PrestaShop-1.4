@@ -53,7 +53,7 @@ class FrontControllerCore
 
 	public function __construct()
 	{
-		global $css_files, $js_files, $useSSL;
+		global $useSSL;
 
 		$useSSL = $this->ssl;
 	}
@@ -89,7 +89,6 @@ class FrontControllerCore
 		ob_start();
 		
 		/* Loading default country */
-		global $defaultCountry;
 		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
 
 		$cookie = new Cookie('ps');
@@ -319,7 +318,6 @@ class FrontControllerCore
 	/* Display a maintenance page if shop is closed */
 	protected function displayMaintenancePage()
 	{
-
 		if (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))
 		{
 			header('HTTP/1.1 503 temporarily overloaded');
