@@ -114,6 +114,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_module_from_hook.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatetabicon_from_11version.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'check_webservice_account_table.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;
