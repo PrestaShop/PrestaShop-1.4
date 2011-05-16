@@ -227,12 +227,13 @@ class AdminShipping extends AdminTab
 				$delivery = Carrier::getDeliveryPriceByRanges($rangeTable, $id_carrier);
 				foreach ($delivery AS $deliv)
 					$deliveryArray[$deliv['id_zone']][$deliv['id_carrier']][$deliv[$rangeIdentifier]] = $deliv['price'];
-				foreach ($ranges AS $range)
-					echo '<th style="font-size: 11px;">'.(float)($range['delimiter1']).$suffix.' '.$this->l('to').' '.(float)($range['delimiter2']).$suffix.'</th>';
-				echo '</tr>';
+				if (!$carrierSelected->is_free)
+					foreach ($ranges AS $range)
+						echo '<th style="font-size: 11px;">'.(float)($range['delimiter1']).$suffix.' '.$this->l('to').' '.(float)($range['delimiter2']).$suffix.'</th>';
+					echo '</tr>';
 
 				$zones = $carrierSelected->getZones();
-				if (sizeof($ranges))
+				if (sizeof($ranges) && !$carrierSelected->is_free)
 				{
 					if(sizeof($zones) > 1)
 					{
@@ -267,9 +268,10 @@ class AdminShipping extends AdminTab
 						<td colspan="'.(sizeof($ranges) + 1).'" class="center" style="border-bottom: none; height: 40px;">
 							<input type="hidden" name="submitFees'.$this->table.'" value="1" />
 					';
-
-				if (sizeof($ranges))
+				if (sizeof($ranges) && !$carrierSelected->is_free)
 					echo '	<input type="submit" value="'.$this->l('   Save   ').'" class="button" />';
+				else if($carrierSelected->is_free)
+					echo $this->l('This is a free carrier');
 				else
 					echo $this->l('No ranges set for this carrier');
 				echo '
