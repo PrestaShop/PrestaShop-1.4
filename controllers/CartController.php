@@ -227,7 +227,7 @@ class CartControllerCore extends FrontController
 							// Redirect to previous page
 							preg_match('!http(s?)://(.*)/(.*)!', $_SERVER['HTTP_REFERER'], $regs);
 							if (isset($regs[3]) AND !Configuration::get('PS_CART_REDIRECT') AND Tools::getValue('ajax') != 'true')
-								Tools::redirect($regs[3]);
+								Tools::redirect($_SERVER['HTTP_REFERER']);
 						}
 					}
 				}
