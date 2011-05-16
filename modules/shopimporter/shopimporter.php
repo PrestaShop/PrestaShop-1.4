@@ -53,9 +53,9 @@ class shopimporter extends ImportModule
 														'name' => $this->l('Taxes rules'),
 														'className' => 'TaxRule',
 														'label' => $this->l('Import Taxes Rules'),
-														'table' => 'tax',
+														'table' => 'tax_rules_group',
 														'identifier' => 'id_tax',
-														'alterTable' => array('id_tax' => 'int(10)'),
+														'alterTable' => array('id_tax_rules_group' => 'int(10)'),
 														'delete' => true
 														),
 */
@@ -567,7 +567,7 @@ class shopimporter extends ImportModule
 				else
 					$object->$key = $val;
 			}
-			if (!$object->save())
+			if (!$object->save(false, false))
 				$return[] = array($item[$this->supportedImports[strtolower($className)]['identifier']], $this->l('An error occurred when adding the object'));
 			else
 			{
@@ -961,18 +961,16 @@ class shopimporter extends ImportModule
 				if (array_key_exists($fieldLang, $fields) AND ($value = $fields[$fieldLang][$language['id_lang']]) !== false AND !empty($value))
 				{
 					if (!Validate::$function($value))
-					{
 						if ($hasErrors == 2)
 						{
 							if (array_key_exists($fieldLang, $rules['sizeLang']))
 								$size = $rules['sizeLang'][$fieldLang];
 							else
 								$size = 1;
-							$fields[$fieldLang][$matchIdLang[$language['id_lang']]] = $this->generateData($size, $rules['validateLang'][$fieldLang]);
+							$fields[$fieldLang][$language['id_lang']] = $this->generateData($size, $rules['validateLang'][$fieldLang]);
 						}
-					}
-					else
-						$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
+						else
+							$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
 				}
 			}
 		}
@@ -1045,6 +1043,7 @@ class shopimporter extends ImportModule
 		{
 			case 'customer' :
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'customer');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'customer_group');
 				break;
 			case 'address' :
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'address');
@@ -1067,7 +1066,9 @@ class shopimporter extends ImportModule
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination');   
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price_priority');
 				foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
 					if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d))
 						unlink(_PS_PROD_IMG_DIR_.$d);
@@ -1088,6 +1089,14 @@ class shopimporter extends ImportModule
 					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
 						unlink(_PS_SUPP_IMG_DIR_.$d);
 				Image::clearTmpDir();
+				break;
+			case 'attribute' :
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_lang');
+				break;
+			case 'attributegroup' :
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_group');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_group_lang');
 				break;
 			case 'currency' :
 			case 'customer' :
@@ -1131,7 +1140,6 @@ class shopimporter extends ImportModule
 		$alpha = 'abcdefghijklmnopqrstuvwxyz';
 		$num = '0123456789';
 		$return = '';
-		
 		switch($type)
 		{
 			case 'CityName':
@@ -1229,7 +1237,10 @@ class shopimporter extends ImportModule
 			
 			$customer = new Customer((int)$order->id_customer);
 			$order->secure_key = pSQL($customer->secure_key);
-			$order->payment = strip_tags(Tools::substr($item['payment'], 0, 32));
+			if (!strlen(trim($item['payment'])))
+				$order->payment = 'payment'.Tools::getValue('moduleName');
+			else
+				$order->payment = strip_tags(Tools::substr($item['payment'], 0, 32));
 			if (isset($this->name))
 				$order->module = $this->name;
 			
