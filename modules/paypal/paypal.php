@@ -55,7 +55,7 @@ class PayPal extends PaymentModule
 			$this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.');
 		$this->_checkAndUpdateFromOldVersion();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND $this->active)
-			$this->warning = $this->l('In order to REMOVE this warning, please uninstall and remove the PayPalAPI module.');
+			$this->warning = $this->l('All features of Paypal API module are be include in the new Paypal module. In order to don\'t have any conflict, please don\'t use and remove PayPalAPI module.');
 
 		global $cookie;
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
@@ -165,7 +165,7 @@ class PayPal extends PaymentModule
 		$this->_postProcess();
 		$this->_setPayPalSubscription();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php'))
-			$this->_html .= '<div class="warning warn"><h3>'.$this->l('Please do not use, and remove PayPalAPI module.').'</h3></div>';
+			$this->_html .= '<div class="warning warn"><h3>'.$this->l('All features of Paypal API module are be include in this new module. In order to don\'t have any conflict, please don\'t use and remove PayPalAPI module.').'</h3></div>';
 		$this->_setConfigurationForm();
 		
 		return $this->_html;
