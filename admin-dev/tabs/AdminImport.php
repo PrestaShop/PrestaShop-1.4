@@ -169,6 +169,7 @@ class AdminImport extends AdminTab
 				'available_now' => $this->l('Text when in-stock'),
 				'available_later' => $this->l('Text if back-order allowed'),
 				'image' => $this->l('Image URLs (x,y,z...)'),
+				'delete_existing_images' => $this->l('Delete existing images (0 = no, 1 = yes)'),
 				'feature' => $this->l('Feature'),
 				'online_only' => $this->l('Only available online'));
 
@@ -800,7 +801,13 @@ class AdminImport extends AdminTab
 						}
 					}
 				}
-
+				//delete existing images if "delete_existing_images" is set to 1
+				if (isset($product->delete_existing_images)
+					if ((bool)$product->delete_existing_images)
+						$product->deleteImages();
+				elseif (isset($product->image) AND is_array($product->image) AND sizeof($product->image))
+					$product->deleteImages();
+				
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
 				{
 					$productHasImages = (bool)Image::getImages((int)($cookie->id_lang), (int)($product->id));
