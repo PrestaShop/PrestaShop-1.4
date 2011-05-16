@@ -727,14 +727,25 @@ class ValidateCore
 	}
 
 	/**
-	* Check object validity
+	* Check url valdity (disallowed empty string)
 	*
-	* @param integer $object Object to validate
+	* @param string $url Url to validate
 	* @return boolean Validity is ok or not
 	*/
 	static public function isUrl($url)
 	{
 		return preg_match('/^[~:#%&_=\(\)\.\? \+\-@\/a-zA-Z0-9]+$/', $url);
+	}
+
+	/**
+	* Check url validity (allowed empty string)
+	*
+	* @param string $url Url to validate
+	* @return boolean Validity is ok or not
+	*/
+	static public function isUrlOrEmpty($url)
+	{
+		return empty($url) || self::isUrl($url);
 	}
 
 	/**
