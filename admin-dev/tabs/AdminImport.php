@@ -576,7 +576,7 @@ class AdminImport extends AdminTab
 			if (array_key_exists('id', $info) AND (int)($info['id']) AND Product::existsInDatabase((int)($info['id'])))
 			{
 				$product = new Product((int)($info['id']));
-				$categoryData = Product::getIndexedCategories((int)($product->id));
+				$categoryData = Product::getProductCategories((int)($product->id));
 				foreach ($categoryData as $tmp)
 					$product->category[] = $tmp['id_category'];
 			}
