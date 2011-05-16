@@ -34,15 +34,16 @@ function __autoload($className)
 		if (file_exists(dirname(__FILE__).'/../classes/'.$className.'.php'))
 		{
 			require_once(dirname(__FILE__).'/../classes/'.str_replace(chr(0), '', $className).'.php');
-			
-			$coreClass = new ReflectionClass($className.( (interface_exists($className, false)) ? '' : 'Core'));
+			$exists = class_exists($className, false);
+			$coreClass = new ReflectionClass($className.((interface_exists($className, false) OR $exists) ? '' : 'Core'));
 			if(!$coreClass->isInterface())
 			{
 				if (file_exists(dirname(__FILE__).'/../override/classes/'.$className.'.php'))
 					require_once(dirname(__FILE__).'/../override/classes/'.$className.'.php');
 				else
 				{
-					eval(($coreClass->isAbstract() ? 'abstract ' : '').'class '.$className.' extends '.$className.'Core {}');
+					if (!$exists)
+						eval(($coreClass->isAbstract() ? 'abstract ' : '').'class '.$className.' extends '.$className.'Core {}');
 				}
 			}
 		}
