@@ -493,7 +493,6 @@ class Twenga extends PaymentModule
 		try {
 			// twenga don't saved double orders with the same id, 
 			// so don't need to use TwengaObj::orderExist() method.
-			var_dump(self::$obj_twenga);
 			$tracking_code = self::$obj_twenga->getTrackingScript($params_to_twenga);
 			return $tracking_code;
 		} catch (TwengaFieldsException $e) {
