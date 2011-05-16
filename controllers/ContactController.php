@@ -88,7 +88,7 @@ class ContactControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('Invalid e-mail address');
 			elseif (!($message = nl2br2($message)))
 				$this->errors[] = Tools::displayError('Message cannot be blank');
-			elseif (!Validate::isMessage($message))
+			elseif (!Validate::isCleanHtml($message))
 				$this->errors[] = Tools::displayError('Invalid message');
 			elseif (!($id_contact = (int)(Tools::getValue('id_contact'))) OR !(Validate::isLoadedObject($contact = new Contact((int)($id_contact), (int)(self::$cookie->id_lang)))))
 				$this->errors[] = Tools::displayError('Please select a subject on the list.');
