@@ -29,7 +29,7 @@ class AdminOrders extends AdminTab
 {
 	public function __construct()
 	{
-		global $cookie, $currentIndex;
+		global $cookie;
 
 	 	$this->table = 'order';
 	 	$this->className = 'Order';
@@ -937,30 +937,6 @@ class AdminOrders extends AdminTab
 		return AddressFormat::generateAddress($addressDelivery, $patternRules, '<br />');
 	}
 
-	private function _getAddressFieldValue(Address $address, $field_name)
-	{
-		$out = '';
-		if(!empty($field_name) && $field_name!= '' && !is_null($address))
-			switch($field_name)
-			{
-				// Note: add other cases as needed
-				case 'state':
-					$deliveryState = new State((int)($address->id_state));
-					$out = (isset($deliveryState->name)) ? ' - '.$deliveryState->name : '';
-					break;
-				case 'state_iso':
-					$deliveryState = new State((int)($address->id_state));
-					$out = (isset($deliveryState->iso_code)) ? ' - '.$deliveryState->iso_code : '';
-					break;
-
-				default:
-					if (isset($address->$field_name))
-						$out = $address->$field_name;
-
-			}
-		return $out;
-	}
-
 	public function display()
 	{
 		global $cookie;
@@ -978,8 +954,6 @@ class AdminOrders extends AdminTab
 
 	private function getTotal()
 	{
-		global $cookie;
-
 		$total = 0;
 		foreach($this->_list AS $item)
 			if ($item['id_currency'] == Configuration::get('PS_CURRENCY_DEFAULT'))
