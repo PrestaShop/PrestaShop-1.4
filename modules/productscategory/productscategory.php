@@ -46,7 +46,7 @@ class productsCategory extends Module
 		$this->description = $this->l('Display products of the same category on the product page.');
 		
 		if (!$this->isRegisteredInHook('header'))
-			$this->registerHook ('header');
+			$this->registerHook('header');
  	}
 
 	public function install()

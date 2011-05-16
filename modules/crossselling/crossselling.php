@@ -46,7 +46,7 @@ class CrossSelling extends Module
 		$this->description = $this->l('Customers who bought this product also bought:');
 		
 		if (!$this->isRegisteredInHook('header'))
-			$this->registerHook ('header');
+			$this->registerHook('header');
 	}
 
 	public function install()
