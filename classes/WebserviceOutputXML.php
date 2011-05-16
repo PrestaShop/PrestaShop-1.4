@@ -129,9 +129,7 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 	}
 	public function renderNodeHeader($node_name, $params, $more_attr = null, $has_child = true)
 	{
-		// if ($node_name == 'schema')
-			// die(var_dump(func_get_args()));
-		$string_attr = ''; 
+		$string_attr = '';
 		if (is_array($more_attr))
 		{
 			foreach($more_attr as $key=>$attr)
