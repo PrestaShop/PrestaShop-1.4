@@ -43,7 +43,7 @@ function add_module_to_hook($module_name, $hook_name)
 		if ((int)$id_hook > 0)
 		{
 			$result = Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
+			INSERT IGNORE INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
 			VALUES (
 			'.(int)$id_module.',
 			'.(int)$id_hook.',
