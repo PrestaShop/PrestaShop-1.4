@@ -292,7 +292,7 @@ function addAccessory(event, data, formatted)
 	$inputAccessories.val($inputAccessories.val() + productId + '-');
 	$('#product_autocomplete_input').val('');
 	$('#product_autocomplete_input').setOptions({
-		extraParams: {excludeIds : $('#inputAccessories').val().replace(/\-/g,',').replace(/\,$/,'')}
+		extraParams: {excludeIds : getAccessorieIds()}
 	});
 }
 
@@ -330,6 +330,10 @@ function delAccessory(id)
 		else
 			$('#selectAccessories').append('<option selected="selected" value="' + inputCut[i] + '-' + nameCut[i] + '">' + inputCut[i] + ' - ' + nameCut[i] + '</option>');
 	}
+
+	$('#product_autocomplete_input').setOptions({
+		extraParams: {excludeIds : getAccessorieIds()}
+	});
 }
 
 function dontChange(srcText)

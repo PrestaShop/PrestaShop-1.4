@@ -2829,7 +2829,7 @@ class AdminProducts extends AdminTab
 											}
 										}).result(addAccessory);
 									$(\'#product_autocomplete_input\').setOptions({
-										extraParams: {excludeIds : $(\'#inputAccessories\').val().replace(/\-/g,\',\').replace(/\,$/,\'\')}
+										extraParams: {excludeIds : getAccessorieIds()}
 									});
 								});
 							</script>
@@ -3586,11 +3586,21 @@ class AdminProducts extends AdminTab
 									// input lines QTY x ID-
 									var ids = '. $obj->id.'+\',\';
 									ids += $(\'#inputPackItems\').val().replace(/\\d+x/g, \'\').replace(/\-/g,\',\');
-									ids = ids.replace(/\,$/,\'\')
+									ids = ids.replace(/\,$/,\'\');
 
 									return ids;
 
 								}
+								
+								function getAccessorieIds()
+								{
+									var ids = '. $obj->id.'+\',\';
+									ids += $(\'#inputAccessories\').val().replace(/\\-/g,\',\').replace(/\\,$/,\'\');
+									ids = ids.replace(/\,$/,\'\');
+
+									return ids;
+								}
+								
 			</script>';
 
 	}
