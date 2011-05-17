@@ -243,6 +243,11 @@ $(function(){ldelim}
 						</select>
 						<sup>*</sup>
 					</p>
+					{elseif $field_name eq "phone"}
+					<p class="text">
+						<label for="phone">{l s='Phone'}</label>
+						<input type="text" class="text" name="phone" id="phone" value="{if isset($smarty.post.phone)}{$smarty.post.phone}{/if}"> <sup style="color:red;">*</sup>
+					</p>
 					{assign var=stateExist value=true}
 					{/if}
 					{/foreach}
