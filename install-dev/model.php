@@ -62,7 +62,7 @@ if (isset($_GET['method']))
 	{
 		global $logger;
 		$logger = new FileLogger();
-		$logger->setFilename(dirname(__FILE__).'/../log/'.date('Ymd').'_installation.log');
+		$logger->setFilename(dirname(__FILE__).'/../log/'.@date('Ymd').'_installation.log');
 	}
 	switch ($_GET['method'])
 	{
