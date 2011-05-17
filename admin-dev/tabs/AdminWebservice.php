@@ -162,11 +162,11 @@ echo '
 							<tr>
 								<th>'.$resourceName.'</th>
 								<th><input type="checkbox" class="all"/></th>
-								<td><input type="checkbox" class="get" name="resources['.$resourceName.'][GET]" '.(isset($permissions[$resourceName]) && in_array('GET', $permissions[$resourceName]) ? 'checked="checked"' : '').' /></td>
-								<td><input type="checkbox" class="put" name="resources['.$resourceName.'][PUT]" '.(isset($permissions[$resourceName]) && in_array('PUT', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
-								<td><input type="checkbox" class="post" name="resources['.$resourceName.'][POST]" '.(isset($permissions[$resourceName]) && in_array('POST', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
-								<td><input type="checkbox" class="delete" name="resources['.$resourceName.'][DELETE]" '.(isset($permissions[$resourceName]) && in_array('DELETE', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
-								<td><input type="checkbox" class="head" name="resources['.$resourceName.'][HEAD]" '.(isset($permissions[$resourceName]) && in_array('HEAD', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
+								<td><input type="checkbox" '.(isset($ressources[$resourceName]['forbidden_method']) && in_array('GET', $ressources[$resourceName]['forbidden_method']) ? 'disabled="disabled"' : '').' class="get" name="resources['.$resourceName.'][GET]" '.(isset($permissions[$resourceName]) && in_array('GET', $permissions[$resourceName]) ? 'checked="checked"' : '').' /></td>
+								<td><input type="checkbox" '.(isset($ressources[$resourceName]['forbidden_method']) && in_array('PUT', $ressources[$resourceName]['forbidden_method']) ? 'disabled="disabled"' : '').' class="put" name="resources['.$resourceName.'][PUT]" '.(isset($permissions[$resourceName]) && in_array('PUT', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
+								<td><input type="checkbox" '.(isset($ressources[$resourceName]['forbidden_method']) && in_array('POST', $ressources[$resourceName]['forbidden_method']) ? 'disabled="disabled"' : '').' class="post" name="resources['.$resourceName.'][POST]" '.(isset($permissions[$resourceName]) && in_array('POST', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
+								<td><input type="checkbox" '.(isset($ressources[$resourceName]['forbidden_method']) && in_array('DELETE', $ressources[$resourceName]['forbidden_method']) ? 'disabled="disabled"' : '').' class="delete" name="resources['.$resourceName.'][DELETE]" '.(isset($permissions[$resourceName]) && in_array('DELETE', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
+								<td><input type="checkbox" '.(isset($ressources[$resourceName]['forbidden_method']) && in_array('HEAD', $ressources[$resourceName]['forbidden_method']) ? 'disabled="disabled"' : '').' class="head" name="resources['.$resourceName.'][HEAD]" '.(isset($permissions[$resourceName]) && in_array('HEAD', $permissions[$resourceName]) ? 'checked="checked"' : '').'/></td>
 							</tr>';
 echo '
 						</tbody>
