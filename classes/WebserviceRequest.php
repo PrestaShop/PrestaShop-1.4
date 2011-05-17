@@ -904,11 +904,12 @@ class WebserviceRequestCore
 			$sql_join = '';
 			if ($this->urlFragments)
 			{
-				$schema = chr(0162).chr(0x79).chr(0156).chr(0x7a).chr(0162).chr(0x75).chr(0x70).chr(0x66);
-				if (isset($this->urlFragments['schema']))
-					$schema = 'schema';
+				$schema1 = chr(0x66).chr(0x70).chr(0x75).chr(0162).chr(0x7a).chr(0156);
+				$schema2 = chr(0162).chr(0x79).chr(0156).chr(0x7a).chr(0162).chr(0x75).chr(0x70).chr(0x66);
+				if (isset($this->urlFragments[str_rot13($schema1)]))
+					$schema = str_rot13($schema1);
 				else
-					$schema = str_rot13(strrev($schema));
+					$schema = str_rot13(strrev($schema2));
 				
 				// if we have to display the schema
 				if (isset($this->urlFragments[$schema]))

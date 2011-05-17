@@ -405,6 +405,11 @@ class WebserviceOutputBuilderCore
 		{
 			$output .= $this->renderField($object, $ws_params, $field_name, $field, 0);
 		}
+		if (isset($ws_params['associations']) && count($ws_params['associations']) > 0)
+		{
+			$this->fieldsToDisplay = 'full';
+			$output .= $this->renderAssociations($object, 0, $ws_params['associations'], $ws_params);
+		}
 		$output .= $this->objectRender->renderNodeFooter($ws_params['objectNodeName'], $ws_params);
 		return $output;
 	}
