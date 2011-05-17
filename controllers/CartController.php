@@ -143,14 +143,26 @@ class CartControllerCore extends FrontController
 					if ($add AND (($producToAdd->specificPrice AND (float)($producToAdd->specificPrice['reduction'])) OR $producToAdd->on_sale))
 					{
 						$discounts = self::$cart->getDiscounts();
+						$hasUndiscountedProduct = null;
 						foreach($discounts as $discount)
-							if (!$discount['cumulable_reduction'])
+						{
+							if(is_null($hasUndiscountedProduct))
+							{
+								$hasUndiscountedProduct = false;
+								foreach(self::$cart->getProducts() as $product)
+									if($product['reduction_applies'] === false)
+									{
+										$hasUndiscountedProduct = true;
+										break;
+									}
+							}
+							if (!$discount['cumulable_reduction'] && ($discount['id_discount_type'] != 1 || !$hasUndiscountedProduct))
 								if (Tools::getValue('ajax') == 'true')
 									die('{"hasError" : true, "errors" : ["'.Tools::displayError('Cannot add this product because current voucher does not allow additional discounts.').'"]}');
 								else
 									$this->errors[] = Tools::displayError('Cannot add this product because current voucher does not allow additional discounts.');
 							
-						
+						}
 					}
 					if (!sizeof($this->errors))
 					{
