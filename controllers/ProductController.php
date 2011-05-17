@@ -94,8 +94,8 @@ class ProductControllerCore extends FrontController
 
 	public function process()
 	{
+		global $cart, $currency;;
 		parent::process();
-		global $cart;
 
 		if (!$id_product = (int)(Tools::getValue('id_product')) OR !Validate::isUnsignedId($id_product))
 			$this->errors[] = Tools::displayError('Product not found');
@@ -257,9 +257,10 @@ class ProductControllerCore extends FrontController
 
 				/* Attributes / Groups & colors */
 				$colors = array();
-				$attributesGroups = $this->product->getAttributesGroups((int)(self::$cookie->id_lang));
-				if (is_array($attributesGroups) AND sizeof($attributesGroups))
+				$attributesGroups = $this->product->getAttributesGroups((int)(self::$cookie->id_lang));  // @todo (RM) should only get groups and not all declination ?
+				if (is_array($attributesGroups) AND $attributesGroups)
 				{
+					$groups = array();
 					$combinationImages = $this->product->getCombinationImages((int)(self::$cookie->id_lang));
 					foreach ($attributesGroups AS $k => $row)
 					{
@@ -273,11 +274,17 @@ class ProductControllerCore extends FrontController
 							$colors[$row['id_attribute']]['attributes_quantity'] += (int)($row['quantity']);
 						}
 
+						if (!isset($groups[$row['id_attribute_group']]))
+						{
+							$groups[$row['id_attribute_group']] = array(
+								'name' =>			$row['public_group_name'],
+								'is_color_group' =>	$row['is_color_group'],
+								'default' =>		-1,
+							);
+						}
+
 						$groups[$row['id_attribute_group']]['attributes'][$row['id_attribute']] = $row['attribute_name'];
-						$groups[$row['id_attribute_group']]['name'] = $row['public_group_name'];
-						$groups[$row['id_attribute_group']]['is_color_group'] = $row['is_color_group'];
-						$groups[$row['id_attribute_group']]['default'] = -1;
-						if ($row['default_on'])
+						if ($row['default_on'] && $groups[$row['id_attribute_group']]['default'] == -1)
 							$groups[$row['id_attribute_group']]['default'] = (int)($row['id_attribute']);
 						if (!isset($groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']]))
 							$groups[$row['id_attribute_group']]['attributes_quantity'][$row['id_attribute']] = 0;
@@ -294,6 +301,7 @@ class ProductControllerCore extends FrontController
 						$combinations[$row['id_product_attribute']]['minimal_quantity'] = $row['minimal_quantity'];
 						$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
 					}
+
 					//wash attributes list (if some attributes are unavailables and if allowed to wash it)
 					if (!Product::isAvailableWhenOutOfStock($this->product->out_of_stock) && Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0)
 					{
@@ -301,12 +309,15 @@ class ProductControllerCore extends FrontController
 							foreach ($group['attributes_quantity'] AS $key => &$quantity)
 								if (!$quantity)
 									unset($group['attributes'][$key]);
+
 						foreach ($colors AS $key => $color)
 							if (!$color['attributes_quantity'])
 								unset($colors[$key]);
 					}
-					foreach($groups AS &$group)
+
+					foreach ($groups AS &$group)
 						natcasesort($group['attributes']);
+
 					foreach ($combinations AS $id_product_attribute => $comb)
 					{
 						$attributeList = '';
@@ -315,6 +326,7 @@ class ProductControllerCore extends FrontController
 						$attributeList = rtrim($attributeList, ',');
 						$combinations[$id_product_attribute]['list'] = $attributeList;
 					}
+
 					self::$smarty->assign(array(
 						'groups' => $groups,
 						'combinaisons' => $combinations, /* Kept for compatibility purpose only */
@@ -344,10 +356,6 @@ class ProductControllerCore extends FrontController
 			'display_qties' => (int)(Configuration::get('PS_DISPLAY_QTIES')),
 			'display_ht' => !Tax::excludeTaxeOption(),
 			'ecotax' => (!sizeof($this->errors) AND $this->product->ecotax > 0 ? Tools::convertPrice((float)($this->product->ecotax)) : 0),
-		));
-
-		global $currency;
-		self::$smarty->assign(array(
 			'currencySign' => $currency->sign,
 			'currencyRate' => $currency->conversion_rate,
 			'currencyFormat' => $currency->format,
