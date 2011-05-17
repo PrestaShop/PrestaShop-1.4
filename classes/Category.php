@@ -98,6 +98,7 @@ class CategoryCore extends ObjectModel
 		'fields' => array(
 			'id_parent' => array('xlink_resource'=> 'categories'),
 			'level_depth' => array('setter' => null),
+			'nb_products_recursive' => array('getter' => 'getWsNbProductsRecursive', 'setter' => ''),
 		),
 		'associations' => array(
 				'categories' => array('getter' => 'getChildrenWs', 'resource' => 'category', ),
@@ -940,5 +941,18 @@ class CategoryCore extends ObjectModel
 		WHERE c.`id_parent` = '.(int)($this->id_parent).'
 		AND `position` = '.(int)($this->position).'
 		AND c.`id_category` != '.(int)($this->id));
+	}
+	
+	public function getWsNbProductsRecursive()
+	{
+		$result = Db::getInstance()->ExecuteS(
+		'SELECT count(distinct(id_product)) as nb_product_recursive FROM  `'._DB_PREFIX_.'category_product`
+		WHERE id_category IN (SELECT id_category
+		FROM `'._DB_PREFIX_.'category`
+		WHERE nleft > '.(int)$this->nleft.
+		' AND nright < '.(int)$this->nright.' AND active = 1 UNION SELECT '.(int)$this->id.')');
+		if (!$result)
+			return -1;
+		return $result[0]['nb_product_recursive'];
 	}
 }

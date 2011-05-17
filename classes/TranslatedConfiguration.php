@@ -36,6 +36,7 @@ class TranslatedConfigurationCore extends Configuration
 			'date_upd' => array('i18n' => true),
 		),
 	);
+	
 	public function __construct($id = NULL, $id_lang = NULL)
 	{
 		// Check if the id configuration is set in the configuration_lang table.
@@ -48,6 +49,27 @@ class TranslatedConfigurationCore extends Configuration
 		}
 		parent::__construct($id,$id_lang);
 	}
+	
+	public function add()
+	{
+		return $this->update();
+	}
+	
+	public function update()
+	{
+		$ishtml = false;
+		foreach ($this->value as $i18n_value)
+		{
+			if (Validate::isCleanHtml($i18n_value))
+			{
+				$ishtml = true;
+				break;
+			}
+		}
+		Configuration::updateValue($this->name, $this->value, $ishtml);
+		return true;
+	}
+	
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
 		$query = '
