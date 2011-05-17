@@ -337,6 +337,7 @@ class WebserviceOutputBuilderCore
 		if ($schema_to_display != null)
 		{
 			$this->schemaToDisplay = $schema_to_display;
+			$this->objectRender->setSchemaToDisplay($this->schemaToDisplay);
 			
 			// If a shema is asked the view must be an details type 
 			$type_of_view = self::VIEW_DETAILS;
@@ -489,9 +490,6 @@ class WebserviceOutputBuilderCore
 				$show_field = false;
 		}
 
-		if ($this->schemaToDisplay === 'blank')
-			 $field['blank_schema'] = true;
-		
 		// don't set any value for a schema
 		if (isset($field['synopsis_details']) || $this->schemaToDisplay === 'blank')
 		{
@@ -509,7 +507,7 @@ class WebserviceOutputBuilderCore
 		
 		// Use recursivity for deeper details in tree diagram.
 		if($this->schemaToDisplay !== 'synopsis'
-			&& !isset($field['blank_schema']) 
+			&& $this->schemaToDisplay !== 'blank'
 			&& !isset($field['type']) 
 			&& $depth != 0
 			&& isset($field['xlink_resource']) 
@@ -661,9 +659,6 @@ class WebserviceOutputBuilderCore
 				
 				if (!is_null($this->schemaToDisplay))
 					$field['synopsis_details'] = $this->getSynopsisDetails($field);
-				
-				if ($this->schemaToDisplay === 'blank')
-				 $field['blank_schema'] = true;
 				
 				$output .= $this->setIndent($depth-1).$this->objectRender->renderField($field);
 			}

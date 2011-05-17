@@ -34,6 +34,19 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 	public $docUrl = '';
 	public $languages = array();
 	protected $wsUrl;
+	protected $schemaToDisplay;
+	
+	public function setSchemaToDisplay($schema)
+	{
+		if (is_string($schema))
+			$this->schemaToDisplay = $schema;
+		return $this;
+	}
+	
+	public function getSchemaToDisplay()
+	{
+		return $this->schemaToDisplay;
+	}
 	
 	public function setWsUrl($url)
 	{
@@ -88,7 +101,7 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 				if (isset($field['synopsis_details']) || (isset($field['value']) AND is_array($field['value']))) 
 				{
 					$more_attr .= ' xlink:href="'.$this->getWsUrl().'languages/'.$language.'"';
-					if (isset($field['synopsis_details']) && !isset($field['blank_schema'])) 
+					if (isset($field['synopsis_details']) && $this->schemaToDisplay != 'blank') 
 						$more_attr .= ' format="isUnsignedId" ';
 				}
 				$node_content .= '<language id="'.$language.'"'.$more_attr.'>';
@@ -100,7 +113,7 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 		// display not i18n fields value
 		else
 		{
-			if (array_key_exists('xlink_resource', $field) && !isset($field['blank_schema']))
+			if (array_key_exists('xlink_resource', $field) && $this->schemaToDisplay != 'blank')
 			{
 				if (!is_array($field['xlink_resource']))
 					$ret .= ' xlink:href="'.$this->getWsUrl().$field['xlink_resource'].'/'. $field['value'] .'"';
@@ -109,13 +122,13 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 					(isset($field['xlink_resource']['subResourceName']) ? $field['xlink_resource']['subResourceName'].'/'.$field['object_id'].'/' : '').$field['value'].'"';
 			}
 			
-			if (isset($field['getter']) && !isset($field['blank_schema']))
+			if (isset($field['getter']) && $this->schemaToDisplay != 'blank')
 				$ret .= ' not_filterable="true"';
 			
 			if ($field['value'] != '')	
 				$node_content .= '<![CDATA['.$field['value'].']]>';
 		}
-		if (isset($field['synopsis_details']) && !empty($field['synopsis_details']))
+		if (isset($field['synopsis_details']) && !empty($field['synopsis_details']) && $this->schemaToDisplay !== 'blank')
 		{
 			foreach ($field['synopsis_details'] as $name => $detail)
 			{
@@ -173,8 +186,13 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 	public function renderAssociationHeader($obj, $params, $assoc_name, $closed_tags = false)
 	{
 		$end_tag = ($closed_tags) ? '/>' : '>';
-		$virtual = (isset($params['associations'][$assoc_name]['virtual_entity']) && $params['associations'][$assoc_name]['virtual_entity'] ? 'virtual_entity="true"' : '');
-		return '<'.$assoc_name.' '.$virtual.' node_type="'.$params['associations'][$assoc_name]['resource'].'"'.$end_tag."\n";
+		$more = '';
+		if ($this->schemaToDisplay != 'blank')
+		{
+			$more .= (isset($params['associations'][$assoc_name]['virtual_entity']) && $params['associations'][$assoc_name]['virtual_entity'] ? ' virtual_entity="true"' : '');
+			$more .= ' node_type="'.$params['associations'][$assoc_name]['resource'].'"';
+		}
+		return '<'.$assoc_name.$more.$end_tag."\n";
 	}
 	public function renderAssociationFooter($obj, $params, $assoc_name)
 	{
