@@ -255,43 +255,35 @@ class AdminTranslations extends AdminTab
 	public function submitAddLang()
 	{
 		global $currentIndex;
-		
-		// $arr_import_lang[0] = iso lang
-		// $arr_import_lang[1] = prestashop version
-		$arr_import_lang = explode('|',Tools::getValue('params_import_language'));
-		
+
+		$arr_import_lang = explode('|', Tools::getValue('params_import_language')); /* 0 = Language ISO code, 1 = PS version */
 		if (Validate::isLangIsoCode($arr_import_lang[0]))
 		{
-			if (@fsockopen('www.prestashop.com', 80))
+			if ($content = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$arr_import_lang[1].'/'.$arr_import_lang[0].'.gzip', false, stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 5)))))
 			{
-				if ($content = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/gzip/'.$arr_import_lang[1].'/'.$arr_import_lang[0].'.gzip'))
+				$file = _PS_TRANSLATIONS_DIR_.$arr_import_lang[0].'.gzip';
+				if (file_put_contents($file, $content))
 				{
-					$file = _PS_TRANSLATIONS_DIR_.$arr_import_lang[0].'.gzip';
-					if (file_put_contents($file, $content))
+					$gz = new Archive_Tar($file, true);
+					$files_list = $gz->listContent();
+					if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 					{
-						$gz = new Archive_Tar($file, true);
-						$files_list = $gz->listContent();
-						if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
-						{
-							$this->checkAndAddMailsFiles($arr_import_lang[0], $files_list);
-							if (!Language::checkAndAddLanguage($arr_import_lang[0]))
-								$conf = 20;
-							if (!unlink($file))
-								$this->_errors[] = Tools::displayError('Cannot delete archive');
-							Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
-						}
-						$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
+						$this->checkAndAddMailsFiles($arr_import_lang[0], $files_list);
+						if (!Language::checkAndAddLanguage($arr_import_lang[0]))
+							$conf = 20;
 						if (!unlink($file))
 							$this->_errors[] = Tools::displayError('Cannot delete archive');
+						Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 					}
-					else
-						$this->_errors[] = Tools::displayError('Server does not have permissions for writing.');
+					$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
+					if (!unlink($file))
+						$this->_errors[] = Tools::displayError('Cannot delete archive');
 				}
 				else
-					$this->_errors[] = Tools::displayError('Language not found');
+					$this->_errors[] = Tools::displayError('Server does not have permissions for writing.');
 			}
 			else
-				$this->_errors[] = Tools::displayError('archive cannot be downloaded from prestashop.com.');
+				$this->_errors[] = Tools::displayError('Language not found');
 		}
 		else
 			$this->_errors[] = Tools::displayError('Invalid parameter');
@@ -707,7 +699,7 @@ class AdminTranslations extends AdminTab
 		else
 		{
 			$languages = Language::getLanguages(false);
-			echo '<fieldset><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify translations').'</legend>'.
+			echo '<fieldset class="width3"><legend><img src="../img/admin/translation.gif" />'.$this->l('Modify translations').'</legend>'.
 			$this->l('Here you can modify translations for all text input into PrestaShop.').'<br />'.
 			$this->l('First, select a section (such as Back Office or Modules), then click the flag representing the language you want to edit.').'<br /><br />
 			<form method="get" action="index.php" id="typeTranslationForm">
@@ -724,76 +716,56 @@ class AdminTranslations extends AdminTab
 			echo '<input type="hidden" name="token" value="'.$this->token.'" /></form></fieldset>
 			<br /><br /><h2>'.$this->l('Translation exchange').'</h2>';
 			echo '<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-			<fieldset>
-				<legend onclick="$(\'#submitAddLangContent\').slideDown(\'slow\'); $(\'#submitImportContent\').slideUp(\'slow\');" style="cursor:pointer;">
+			<fieldset class="width3">
+				<legend>
 					<img src="../img/admin/import.gif" />'.$this->l('Add / Update a language').'
 				</legend>
 				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add or update a language directly from prestashop.com here').'</p>
 					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add or update:').' ';
 			
-			// create a context to test www.prestashop.com connection 
-			$opts = array(
-				'http'=>array(
-					'protocol_version'=>'1.1',
-					'method'=>'GET',
-				)
-			);
-			$context = stream_context_create($opts);
-			if (@file_get_contents('http://www.prestashop.com', false, $context))
+			if ($lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_, false, stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 5)))))
 			{
-				// Get all iso code available
-				if(fsockopen('www.prestashop.com', 80))
+				if ($lang_packs != '' AND $lang_packs = Tools::jsonDecode($lang_packs))
 				{
-					$lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_);
-					if ($lang_packs!== false && $lang_packs != '' && $lang_packs = Tools::jsonDecode($lang_packs))
+					echo '
+					<select id="params_import_language" name="params_import_language">
+						<optgroup label="'.$this->l('Add a language').'">';
+					
+					$alreadyInstalled = '<optgroup label="'.$this->l('Update a language').'">';
+					foreach($lang_packs AS $lang_pack)
 					{
-						echo 	'<select id="params_import_language" name="params_import_language">';
-						echo '<optgroup label="'.$this->l('Add a language').'">';
-						$alreadyInstalled = '<optgroup label="'.$this->l('Update a language').'">';
-						foreach($lang_packs AS $lang_pack)
-							if (!Language::isInstalled($lang_pack->iso_code))
-								echo '<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
-							else 
-								$alreadyInstalled.='<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
-						echo '</optgroup>'.$alreadyInstalled.'</optgroup>';
-						echo 	'</select>';
+						if (!Language::isInstalled($lang_pack->iso_code))
+							echo '<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
+						else 
+							$alreadyInstalled.='<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
 					}
-					echo '	</div>
-					<div style="float:left">
-						<input type="submit" value="'.$this->l('Add or update the language').'" name="submitAddLanguage" class="button" style="margin:0px 0px 0px 25px;" />
-					</div>';
+					
+					echo '
+						</optgroup>'.$alreadyInstalled.'</optgroup>
+					</select> &nbsp;<input type="submit" value="'.$this->l('Add or update the language').'" name="submitAddLanguage" class="button" />';
 				}
+				echo '</div>';
 			}
 			else
 				echo '<br /><br /><p class="error">'.$this->l('Cannot connect to prestashop.com to get languages list.').'</p></div>';
 			echo '	</div>
 			</fieldset>
-			</form><br />';
+			</form><br /><br />';
 			echo '<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-				<fieldset>
-					<legend onclick="$(\'#submitImportContent\').slideDown(\'slow\'); $(\'#submitAddLangContent\').slideUp(\'slow\');" style="cursor:pointer;">
+				<fieldset class="width3">
+					<legend>
 						<img src="../img/admin/import.gif" />'.$this->l('Import a language pack manually').'
 					</legend>
-					<div id="submitImportContent" style="display:none;">
-						<p>'.$this->l('Import data from file (language pack).').'<br />'.
-						$this->l('If the name format is: isocode.gzip (e.g. fr.gzip) and the language corresponding to this package does not exist, it will automatically be created.').'<br />'.
-						$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
-						$this->l('Browse your computer for the language file to be imported:').'</p>
-						<div style="float:left;">
-							<p>
-								<div style="width:75px; font-weight:bold; float:left;">'.$this->l('From:').'</div>
-								<input type="file" name="file" />
-							</p>
-						</div>
-						<div style="float:left;">
-							<input type="submit" value="'.$this->l('Import').'" name="submitImport" class="button" style="margin:10px 0px 0px 25px;" />
-						</div>
+					<div id="submitImportContent">'.
+						$this->l('If the name format is: isocode.gzip (e.g. fr.gzip) and the language corresponding to this package does not exist, it will automatically be created.').
+						$this->l('Be careful, as it will replace all existing data for the destination language!').'<br /><br />'.
+						$this->l('Language pack to import:').' <input type="file" name="file" /> &nbsp;<input type="submit" value="'.$this->l('Import').'" name="submitImport" class="button" /></p>
 					</div>
 				</fieldset>
 			</form>
 			<br /><br />
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
-				<fieldset><legend><img src="../img/admin/export.gif" />'.$this->l('Export a language').'</legend>
+				<fieldset class="width3"><legend><img src="../img/admin/export.gif" />'.$this->l('Export a language').'</legend>
 					<p>'.$this->l('Export data from one language to a file (language pack).').'<br />'.
 					$this->l('Choose the theme from which you want to export translations.').'<br />
 					<select name="iso_code" style="margin-top:10px;">';
@@ -815,7 +787,7 @@ class AdminTranslations extends AdminTab
 			$allLanguages = Language::getLanguages(false);
 			echo '
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-				<fieldset><legend><img src="../img/admin/copy_files.gif" />'.$this->l('Copy').'</legend>
+				<fieldset class="width3"><legend><img src="../img/admin/copy_files.gif" />'.$this->l('Copy').'</legend>
 					<p>'.$this->l('Copies data from one language to another.').'<br />'.
 					$this->l('Be careful, as it will replace all existing data for the destination language!').'<br />'.
 					$this->l('If necessary').', <b><a href="index.php?tab=AdminLanguages&addlang&token='.Tools::getAdminToken('AdminLanguages'.(int)(Tab::getIdFromClassName('AdminLanguages')).(int)($cookie->id_employee)).'">'.$this->l('first create a new language').'</a></b>.</p>
