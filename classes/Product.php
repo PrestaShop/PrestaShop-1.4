@@ -1777,9 +1777,15 @@ class ProductCore extends ObjectModel
 		else
 			$product_attribute_label = ($id_product_attribute === false ? 'false' : $id_product_attribute);
 		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_state.'-'.$id_county.'-'.$id_group.'-'.$quantity.'-'.$product_attribute_label.'-'.($use_tax?'1':'0').'-'.$decimals.'-'.($only_reduc?'1':'0').'-'.($use_reduc?'1':'0').'-'.$with_ecotax;
-
+		// Cache for specific prices
+		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
+		
 		if (isset(self::$_prices[$cacheId]))
+		{
+			if(isset(self::$_pricesLevel3[$cacheId3]))
+				$specific_price_output = self::$_pricesLevel3[$cacheId3];
 			return self::$_prices[$cacheId];
+		}
 
 		// fetch price & attribute price
 		$cacheId2 = $id_product.'-'.$id_product_attribute;
@@ -1792,9 +1798,6 @@ class ProductCore extends ObjectModel
 			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.(int)($id_product_attribute) : '').'
 			WHERE p.`id_product` = '.(int)($id_product));
 		$result = self::$_pricesLevel2[$cacheId2];
-
-		// Cache for specific prices
-		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
 
 		if (!isset(self::$_pricesLevel3[$cacheId3]))
 			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
