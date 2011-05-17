@@ -82,19 +82,19 @@ class AdminImport extends AdminTab
 
 				self::$required_fields = array('id_product', 'options');
 				$this->available_fields = array(
-					'no' => $this->l('Ignore this column'),
-					'id_product' => $this->l('Product ID').'*',
-					'options' => $this->l('Options (Group:Value)').'*',
-					'reference' => $this->l('Reference'),
-					'supplier_reference' => $this->l('Supplier reference'),
-					'ean13' => $this->l('EAN13'),
-					'upc' => $this->l('UPC'),
-					'wholesale_price' => $this->l('Wholesale price'),
-					'price' => $this->l('Price'),
-					'ecotax' => $this->l('Ecotax'),
-					'quantity' => $this->l('Quantity'),
-					'weight' => $this->l('Weight'),
-					'default_on' => $this->l('Default')
+					'no' => array('label' => $this->l('Ignore this column')), 
+					'id_product' => array('label' => $this->l('Product ID').'*'),
+					'options' => array('label' => $this->l('Options (Group:Value)').'*'),
+					'reference' => array('label' => $this->l('Reference')),
+					'supplier_reference' => array('label' => $this->l('Supplier reference')),
+					'ean13' => array('label' => $this->l('EAN13')),
+					'upc' => array('label' => $this->l('UPC')),
+					'wholesale_price' => array('label' => $this->l('Wholesale price')),
+					'price' => array('label' => $this->l('Price')),
+					'ecotax' => array('label' => $this->l('Ecotax')),
+					'quantity' => array('label' => $this->l('Quantity')),
+					'weight' => array('label' => $this->l('Weight')),
+					'default_on' => array('label' => $this->l('Default'))
 				);
 
 				self::$default_values = array(
@@ -115,17 +115,17 @@ class AdminImport extends AdminTab
 			case $this->entities[$this->l('Categories')]:
 
 				$this->available_fields = array(
-				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),
-				'active' => $this->l('Active (0/1)'),
-				'name' => $this->l('Name *'),
-				'parent' => $this->l('Parent category'),
-				'description' => $this->l('Description'),
-				'meta_title' => $this->l('Meta-title'),
-				'meta_keywords' => $this->l('Meta-keywords'),
-				'meta_description' => $this->l('Meta-description'),
-				'link_rewrite' => $this->l('URL rewritten'),
-				'image' => $this->l('Image URL'));
+				'no' => array('label' => $this->l('Ignore this column')),
+				'id' => array('label' => $this->l('ID')),
+				'active' => array('label' => $this->l('Active (0/1)')),
+				'name' => array('label' => $this->l('Name *')),
+				'parent' => array('label' => $this->l('Parent category')),
+				'description' => array('label' => $this->l('Description')),
+				'meta_title' => array('label' => $this->l('Meta-title')),
+				'meta_keywords' => array('label' => $this->l('Meta-keywords')),
+				'meta_description' => array('label' => $this->l('Meta-description')),
+				'link_rewrite' => array('label' => $this->l('URL rewritten')),
+				'image' => array('label' => $this->l('Image URL')));
 
 				self::$default_values = array('active' => '1', 'parent' => '1', 'link_rewrite' => '');
 
@@ -136,42 +136,44 @@ class AdminImport extends AdminTab
 				self::$validators['image'] = array('AdminImport', 'split');
 
 				$this->available_fields = array(
-				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),
-				'active' => $this->l('Active (0/1)'),
-				'name' => $this->l('Name *'),
-				'category' => $this->l('Categories (x,y,z...)'),
-				'price_tex' => $this->l('Price tax excl.'),
-				'price_tin' => $this->l('Price tax incl.'),
-				'id_tax_rules_group' => $this->l('Tax rules id'),
-				'wholesale_price' => $this->l('Wholesale price'),
-				'on_sale' => $this->l('On sale (0/1)'),
-				'reduction_price' => $this->l('Discount amount'),
-				'reduction_percent' => $this->l('Discount percent'),
-				'reduction_from' => $this->l('Discount from (yyyy-mm-dd)'),
-				'reduction_to' => $this->l('Discount to (yyyy-mm-dd)'),
-				'reference' => $this->l('Reference #'),
-				'supplier_reference' => $this->l('Supplier reference #'),
-				'supplier' => $this->l('Supplier'),
-				'manufacturer' => $this->l('Manufacturer'),
-				'ean13' => $this->l('EAN13'),
-				'upc' => $this->l('UPC'),
-				'ecotax' => $this->l('Ecotax'),
-				'weight' => $this->l('Weight'),
-				'quantity' => $this->l('Quantity'),
-				'description_short' => $this->l('Short description'),
-				'description' => $this->l('Description'),
-				'tags' => $this->l('Tags (x,y,z...)'),
-				'meta_title' => $this->l('Meta-title'),
-				'meta_keywords' => $this->l('Meta-keywords'),
-				'meta_description' => $this->l('Meta-description'),
-				'link_rewrite' => $this->l('URL rewritten'),
-				'available_now' => $this->l('Text when in-stock'),
-				'available_later' => $this->l('Text if back-order allowed'),
-				'image' => $this->l('Image URLs (x,y,z...)'),
-				'delete_existing_images' => $this->l('Delete existing images (0 = no, 1 = yes)'),
-				'feature' => $this->l('Feature'),
-				'online_only' => $this->l('Only available online'));
+				'no' => array('label' => $this->l('Ignore this column')),
+				'id' => array('label' => $this->l('ID')),
+				'active' => array('label' => $this->l('Active (0/1)')),
+				'name' => array('label' => $this->l('Name *')),
+				'category' => array('label' => $this->l('Categories (x,y,z...)')),
+				'price_tex' => array('label' => $this->l('Price tax excl.')),
+				'price_tin' => array('label' => $this->l('Price tax incl.')),
+				'id_tax_rules_group' => array('label' => $this->l('Tax rules id')),
+				'wholesale_price' => array('label' => $this->l('Wholesale price')),
+				'on_sale' => array('label' => $this->l('On sale (0/1)')),
+				'reduction_price' => array('label' => $this->l('Discount amount')),
+				'reduction_percent' => array('label' => $this->l('Discount percent')),
+				'reduction_from' => array('label' => $this->l('Discount from (yyyy-mm-dd)')),
+				'reduction_to' => array('label' => $this->l('Discount to (yyyy-mm-dd)')),
+				'reference' => array('label' => $this->l('Reference #')),
+				'supplier_reference' => array('label' => $this->l('Supplier reference #')),
+				'supplier' => array('label' => $this->l('Supplier')),
+				'manufacturer' => array('label' => $this->l('Manufacturer')),
+				'ean13' => array('label' => $this->l('EAN13')),
+				'upc' => array('label' => $this->l('UPC')),
+				'ecotax' => array('label' => $this->l('Ecotax')),
+				'weight' => array('label' => $this->l('Weight')),
+				'quantity' => array('label' => $this->l('Quantity')),
+				'description_short' => array('label' => $this->l('Short description')),
+				'description' => array('label' => $this->l('Description')),
+				'tags' => array('label' => $this->l('Tags (x,y,z...)')),
+				'meta_title' => array('label' => $this->l('Meta-title')),
+				'meta_keywords' => array('label' => $this->l('Meta-keywords')),
+				'meta_description' => array('label' => $this->l('Meta-description')),
+				'link_rewrite' => array('label' => $this->l('URL rewritten')),
+				'available_now' => array('label' => $this->l('Text when in-stock')),
+				'available_later' => array('label' => $this->l('Text if back-order allowed')),
+				'image' => array('label' => $this->l('Image URLs (x,y,z...)')),
+				'delete_existing_images' => array(
+											'label' => $this->l('Delete existing images (0 = no, 1 = yes)'),
+											'help' => $this->l('')),
+				'feature' => array('label' => $this->l('Feature')),
+				'online_only' => array('label' => $this->l('Only available online')));
 
 				self::$default_values = array(
 				'id_category' => array(1),
@@ -192,17 +194,17 @@ class AdminImport extends AdminTab
 				self::$required_fields = array('email', 'passwd', 'lastname', 'firstname');
 
 				$this->available_fields = array(
-				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),
-				'active' => $this->l('Active  (0/1)'),
-				'id_gender' => $this->l('Gender ID (Mr = 1, Ms = 2, else 9)'),
-				'email' => $this->l('E-mail *'),
-				'passwd' => $this->l('Password *'),
-				'birthday' => $this->l('Birthday (yyyy-mm-dd)'),
-				'lastname' => $this->l('Lastname *'),
-				'firstname' => $this->l('Firstname *'),
-				'newsletter' => $this->l('Newsletter (0/1)'),
-				'optin' => $this->l('Opt in (0/1)'));
+				'no' => array('label' => $this->l('Ignore this column')),
+				'id' => array('label' => $this->l('ID')),
+				'active' => array('label' => $this->l('Active  (0/1)')),
+				'id_gender' => array('label' => $this->l('Gender ID (Mr = 1, Ms = 2, else 9)')),
+				'email' => array('label' => $this->l('E-mail *')),
+				'passwd' => array('label' => $this->l('Password *')),
+				'birthday' => array('label' => $this->l('Birthday (yyyy-mm-dd)')),
+				'lastname' => array('label' => $this->l('Lastname *')),
+				'firstname' => array('label' => $this->l('Firstname *')),
+				'newsletter' => array('label' => $this->l('Newsletter (0/1)')),
+				'optin' => array('label' => $this->l('Opt in (0/1)')));
 
 				self::$default_values = array('active' => '1');
 
@@ -213,26 +215,26 @@ class AdminImport extends AdminTab
 				self::$required_fields = array('lastname', 'firstname', 'address1', 'postcode', 'country', 'city');
 
 				$this->available_fields = array(
-				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),
-				'alias' => $this->l('Alias *'),
-				'active' => $this->l('Active  (0/1)'),
-				'customer_email' => $this->l('Customer e-mail'),
-				'manufacturer' => $this->l('Manufacturer'),
-				'supplier' => $this->l('Supplier'),
-				'company' => $this->l('Company'),
-				'lastname' => $this->l('Lastname *'),
-				'firstname' => $this->l('Firstname *'),
-				'address1' => $this->l('Address 1 *'),
-				'address2' => $this->l('Address 2'),
-				'postcode' => $this->l('Postcode*/ Zipcode*'),
-				'city' => $this->l('City *'),
-				'country' => $this->l('Country *'),
-				'state' => $this->l('State'),
-				'other' => $this->l('Other'),
-				'phone' => $this->l('Phone'),
-				'phone_mobile' => $this->l('Mobile Phone'),
-				'vat_number' => $this->l('VAT number'));
+				'no' => array('label' => $this->l('Ignore this column')),
+				'id' => array('label' => $this->l('ID')),
+				'alias' => array('label' => $this->l('Alias *')),
+				'active' => array('label' => $this->l('Active  (0/1)')),
+				'customer_email' => array('label' => $this->l('Customer e-mail')),
+				'manufacturer' => array('label' => $this->l('Manufacturer')),
+				'supplier' => array('label' => $this->l('Supplier')),
+				'company' => array('label' => $this->l('Company')),
+				'lastname' => array('label' => $this->l('Lastname *')),
+				'firstname' => array('label' => $this->l('Firstname *')),
+				'address1' => array('label' => $this->l('Address 1 *')),
+				'address2' => array('label' => $this->l('Address 2')),
+				'postcode' => array('label' => $this->l('Postcode*/ Zipcode*')),
+				'city' => array('label' => $this->l('City *')),
+				'country' => array('label' => $this->l('Country *')),
+				'state' => array('label' => $this->l('State')),
+				'other' => array('label' => $this->l('Other')),
+				'phone' => array('label' => $this->l('Phone')),
+				'phone_mobile' => array('label' => $this->l('Mobile Phone')),
+				'vat_number' => array('label' => $this->l('VAT number')));
 
 				self::$default_values = array('alias' => 'Alias', 'postcode' => 'X');
 
@@ -249,15 +251,15 @@ class AdminImport extends AdminTab
 				'meta_description' => array('AdminImport', 'createMultiLangField'));
 
 				$this->available_fields = array(
-				'no' => $this->l('Ignore this column'),
-				'id' => $this->l('ID'),
-				'active' => $this->l('Active (0/1)'),
-				'name' => $this->l('Name *'),
-				'description' => $this->l('Description'),
-				'short_description' => $this->l('Short description'),
-				'meta_title' => $this->l('Meta-title'),
-				'meta_keywords' => $this->l('Meta-keywords'),
-				'meta_description' => $this->l('Meta-description'));
+				'no' => array('label' => $this->l('Ignore this column')),
+				'id' => array('label' => $this->l('ID')),
+				'active' => array('label' => $this->l('Active (0/1)')),
+				'name' => array('label' => $this->l('Name *')),
+				'description' => array('label' => $this->l('Description')),
+				'short_description' => array('label' => $this->l('Short description')),
+				'meta_title' => array('label' => $this->l('Meta-title')),
+				'meta_keywords' => array('label' => $this->l('Meta-keywords')),
+				'meta_description' => array('label' => $this->l('Meta-description')));
 			break;
 		}
 		parent::__construct();
@@ -328,10 +330,11 @@ class AdminImport extends AdminTab
 				continue;
 			if ($k === 'price_tin')
 			{
-				$fields[$i-1] = $fields[$i-1].' '.$this->l('or').' '.$field;
+				$fields[$i-1] = $fields[$i-1].' '.$this->l('or').' '.$field['label'];
 			}
 			else
-				$fields[] = $field;
+				$fields[] = '<div>'.(isset($field['help']) ? '<a href="#" class="info" title="'.$this->l('Infos').'|'.$field['help'].'">
+				<img src="'._PS_ADMIN_IMG_.'information.png"></a>' : '<span style="margin-left:16px"></span>').$field['label'].'</div>';
 			++$i;
 		}
 		if ($inArray)
@@ -1168,7 +1171,14 @@ class AdminImport extends AdminTab
 				$warnings[] = $warning;
 			$this->displayWarning($warnings);
 		}
-
+		echo '<script type="text/javascript">
+					$(document).ready(function(){
+						$(\'.info\').cluetip({
+							splitTitle: \'|\',
+						    showTitle: false
+						 });
+					});
+			</script>';
 		echo '
 		<fieldset class="width3">
 			<legend><img src="../img/admin/import.gif" />'.$this->l('Upload').'</legend>
@@ -1198,7 +1208,7 @@ class AdminImport extends AdminTab
 			echo '
 			<div class="space">
 					<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
-						<fieldset style="float: left; width: 650px">
+						<fieldset style="float: left; width: 550px">
 							<legend><img src="../img/admin/import.gif" />'.$this->l('Import').'</legend>
 							<label class="clear">'.$this->l('Select which entity to import:').' </label>
 							<div class="margin-form">
@@ -1252,9 +1262,9 @@ class AdminImport extends AdminTab
 					</form>
 					<fieldset style="display: inline; float: right; margin-left: 20px;">
 					<legend><img src="../img/admin/import.gif" />'.$this->l('Fields available').'</legend>
-					<div id="availableFields" style="min-height: 218px; width: 200px; font-size: 10px;">'.nl2br($this->getAvailableFields()).'</div>
+					<div id="availableFields" style="min-height: 218px; width: 300px;">'.$this->getAvailableFields().'</div>
 					</fieldset>
-					<div class="clear" style="float:right; font-size:10px; padding-right: 120px;">
+					<div class="clear" style="float:right; padding-right: 120px;">
 					'.$this->l('* Required Fields').'
 					</div>
 				</div>
