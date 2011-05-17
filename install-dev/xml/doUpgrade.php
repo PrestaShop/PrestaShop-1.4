@@ -290,6 +290,14 @@ foreach ($arrayToClean as $dir)
 			if ($file[0] != '.' AND $file != 'index.php' AND $file != '.htaccess')
 				unlink($dir.$file);
 
+// delete cache filesystem if activated
+$depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
+if($depth)
+{
+	CacheFS::deleteCacheDirectory();
+	CacheFS::createCacheDirectories((int)$depth);
+}
+
 //sql file execution
 global $requests, $warningExist;
 $requests = '';
