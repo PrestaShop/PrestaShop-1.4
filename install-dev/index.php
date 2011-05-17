@@ -1068,7 +1068,7 @@ if ($lm->getIncludeTradFilename())
 					{
 						echo '
 						<h2>'.lang('New features in PrestaShop v').INSTALL_VERSION.'</h2>
-						<iframe style="width: 595px; margin-top: 5px; padding: 5px; border: 1px solid #BBB;" src="http://www.prestashop.com/download/features.php?lang='.$lm->getIsoCodeSelectedLang().'&version='.INSTALL_VERSION.'">
+						<iframe style="width: 595px; margin-top: 5px; padding: 5px; border: 1px solid #BBB;" src="http://features.prestashop.com/?lang='.$lm->getIsoCodeSelectedLang().'&version='.INSTALL_VERSION.'">
 							<p>Your browser does not support iframes.</p>
 						</iframe>';
 					}
