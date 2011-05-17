@@ -1,11 +1,10 @@
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)
-VALUES
-(
-'PREFIX_INVOICE_START_NUMBER',
-( SELECT `invoice_number` FROM (SELECT GREATEST(`value`, (SELECT CAST(MAX(`invoice_number`) AS CHAR) FROM `PREFIX_orders`)) AS `invoice_number`  FROM `PREFIX_configuration`  WHERE `name` = 'PREFIX_INVOICE_NUMBER' ) as tmp),
-NOW(),
-NOW()
+CREATE TEMPORARY TABLE `PREFIX_tab_tmp` (
+	`position` int(10)
 );
+
+INSERT INTO `PREFIX_tab_tmp` (SELECT * FROM (SELECT `position` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') AS tmp);
+UPDATE `PREFIX_tab` SET `position` = (SELECT position FROM PREFIX_tab_tmp tmp) + 1 WHERE `class_name` = 'AdminTaxRulesGroup';
+DROP TABLE PREFIX_tab_tmp;
 
 DELETE FROM `PREFIX_configuration` WHERE `name` = 'PS_INVOICE_NUMBER';
 

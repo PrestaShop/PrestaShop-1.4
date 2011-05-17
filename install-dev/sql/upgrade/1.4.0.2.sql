@@ -380,7 +380,13 @@ UPDATE `PREFIX_country` SET `call_prefix` = 594 WHERE `iso_code` = 'GF' LIMIT 1;
 UPDATE `PREFIX_country` SET `call_prefix` = 689 WHERE `iso_code` = 'PF' LIMIT 1;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_CONDITIONS_CMS_ID', IFNULL((SELECT `id_cms` FROM `PREFIX_cms` WHERE `id_cms` = 3), 0), NOW(), NOW());
-UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_CONDITIONS_CMS_ID')tmp), 1, 0) WHERE `name` = 'PS_CONDITIONS';
+CREATE TEMPORARY TABLE `PREFIX_configuration_tmp` (
+	`value` text
+);
+INSERT INTO `PREFIX_configuration_tmp` (SELECT value FROM (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PREFIX_CONDITIONS_CMS_ID') AS tmp);
+
+UPDATE `PREFIX_configuration` SET `value` = IF((SELECT value FROM PREFIX_configuration_tmp), 1, 0) WHERE `name` = 'PREFIX_CONDITIONS';
+DROP TABLE PREFIX_configuration_tmp;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_CIPHER_ALGORITHM', 0, NOW(), NOW());
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_ORDER_PROCESS_TYPE', 0, NOW(), NOW());

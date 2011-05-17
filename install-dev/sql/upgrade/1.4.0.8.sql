@@ -1,13 +1,27 @@
 SET NAMES 'utf8';
 
-UPDATE `PREFIX_tab`
-SET `position` = `position` + 1
-WHERE `id_parent` = (SELECT * FROM (SELECT `id_parent` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') tmp)
-AND `position` > (SELECT * FROM (SELECT `position` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') tmp2);
+CREATE TEMPORARY TABLE `PREFIX_tab_tmp1` (
+	`id_parent` int(11)
+);
+INSERT INTO `PREFIX_tab_tmp1` (SELECT * FROM (SELECT `id_parent` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') AS  tmp);
 
-UPDATE `PREFIX_tab`
-SET `position` = (SELECT * FROM (SELECT `position` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') tmp) + 1
-WHERE `class_name` = 'AdminTaxRulesGroup';
+CREATE TEMPORARY TABLE `PREFIX_tab_tmp2` (
+	`position` int(10)
+);
+
+INSERT INTO `PREFIX_tab_tmp2` (SELECT * FROM (SELECT `position` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') AS  tmp2);
+
+UPDATE `PREFIX_tab` SET `position` = `position` + 1 WHERE `id_parent` = (SELECT id_parent FROM PREFIX_tab_tmp1 AS tmp) AND `position` > (SELECT position FROM PREFIX_tab_tmp2 AS tmp2);
+DROP TABLE PREFIX_tab_tmp1;
+DROP TABLE PREFIX_tab_tmp2;
+
+CREATE TEMPORARY TABLE `PREFIX_tab_tmp` (
+	`position` int(10)
+);
+
+INSERT INTO `PREFIX_tab_tmp` (SELECT * FROM (SELECT `position` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') AS tmp);
+UPDATE `PREFIX_tab` SET `position` = (SELECT position FROM PREFIX_tab_tmp tmp) + 1 WHERE `class_name` = 'AdminTaxRulesGroup';
+DROP TABLE PREFIX_tab_tmp;
 
 UPDATE `PREFIX_hook` SET `title` = 'Category creation', description = '' WHERE `name` = 'categoryAddition' LIMIT 1;
 UPDATE `PREFIX_hook` SET `title` = 'Category modification', description = '' WHERE `name` = 'categoryUpdate' LIMIT 1;
