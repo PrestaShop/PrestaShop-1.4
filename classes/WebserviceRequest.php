@@ -370,6 +370,10 @@ class WebserviceRequestCore
 		
 		$this->_key = trim($key);
 		
+		$this->outputFormat = isset($params['output_format']) ? $params['output_format'] : $this->outputFormat;
+		// Set the render object to build the output on the asked format (XML, JSON, CSV, ...)
+		$this->objOutput->setObjectRender($this->getOutputObject($this->outputFormat));
+		
 		// Check webservice activation and request authentication
 		if ($this->isActivated() && $this->authenticate())
 		{
@@ -380,11 +384,8 @@ class WebserviceRequestCore
 			$this->urlSegment = explode('/', $url);
 			$this->urlFragments = $params;
 			$this->_inputXml = $inputXml;
-			$this->outputFormat = isset($this->urlFragments['output_format']) ? $this->urlFragments['output_format'] : $this->outputFormat;
 			$this->depth = isset($this->urlFragments['depth']) ? (int)$this->urlFragments['depth'] : $this->depth;
 			
-			// Set the render object to build the output on the asked format (XML, JSON, CSV, ...)
-			$this->objOutput->setObjectRender($this->getOutputObject($this->outputFormat));
 			
 			try {
 				// Method below set a particular fonction to use on the price field for products entity
