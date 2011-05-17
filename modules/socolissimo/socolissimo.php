@@ -402,8 +402,9 @@ class Socolissimo extends CarrierModule
 
 			$country = new Country((int)($params['address']->id_country));
 			$carriers = Carrier::getCarriers($cookie->id_lang,  true , false,false, NULL, ALL_CARRIERS);
+			$ids = array();
 			foreach($carriers as $carrier)
-				$ids[] .= $carrier['id_carrier'];
+				$ids[] = $carrier['id_carrier'];
 
 			if (($country->iso_code == 'FR') AND (Configuration::Get('SOCOLISSIMO_ID') != NULL) 
 				AND (Configuration::get('SOCOLISSIMO_KEY') != NULL) AND $this->checkAvailibility()
