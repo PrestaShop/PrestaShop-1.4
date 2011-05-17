@@ -19,3 +19,4 @@ $_MODULE['<{blockcategories}prestashop>blockcategories_4f32360218e145e3ba681a234
 $_MODULE['<{blockcategories}prestashop>blockcategories_3d81ca758785a8528208613752ad2c81'] = 'Détermine le nombre de colonne pour le footer';
 $_MODULE['<{blockcategories}prestashop>blockcategories_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{blockcategories}prestashop>blockcategories_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
+$_MODULE['<{blockcategories}prestashop>blockcategories_footer_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';

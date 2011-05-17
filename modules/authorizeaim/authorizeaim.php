@@ -100,7 +100,7 @@ class authorizeAIM extends PaymentModule
 			<h3>'.$this->l('In your PrestaShop admin panel').'</h3>
 			- '.$this->l('Fill the Login ID field with the one provided by Authorize.net').'<br />
 			- '.$this->l('Fill the key field with the transaction key provided by Authorize.net').'<br />
-			<span style="color: red;" >- '.$this->l('Warning: Your website must possess a SSL certificate to use the Authorize.net AIM payment system. You are responsible for the safety of your customers\' bank information. PrestaShop could not be blamed in case of security shortage on your website.').'</span><br />
+			<span style="color: red;" >- '.$this->l('Warning: Your website must possess a SSL certificate to use the Authorize.net AIM payment system. You are responsible for the safety of your customers\' bank information. PrestaShop cannot be blamed for any security issue on your website.').'</span><br />
 			<br />
 		</fieldset><br />
 		<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post">
