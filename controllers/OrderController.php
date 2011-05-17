@@ -137,7 +137,16 @@ class OrderControllerCore extends ParentOrderController
 
 	public function displayContent()
 	{
+		global $currency;
+
 		parent::displayContent();
+		
+		self::$smarty->assign(array(
+			'currencySign' => $currency->sign,
+			'currencyRate' => $currency->conversion_rate,
+			'currencyFormat' => $currency->format,
+			'currencyBlank' => $currency->blank,
+		));
 
 		switch ((int)$this->step)
 		{
