@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -33,7 +33,7 @@ class Tm4b extends Module
 	private $_html = '';
 	private $_postErrors = array();
 	private $_postSucess;
-	
+
 	private $_data;
 	private $_password;
 	private $_user;
@@ -45,7 +45,7 @@ class Tm4b extends Module
 	private	$_alert_new_order_active;
 	private	$_alert_update_quantity_active;
 	private	$_daily_report_active;
-	
+
 	const __TM4B_LOWBALANCE__ = '20';
 	const __TM4B_NUMBER_DELIMITOR__ = ',';
 
@@ -59,7 +59,7 @@ class Tm4b extends Module
 			'out_of_stock' => '.txt'
 			)
 		);
-	
+
 	public function __construct()
 	{
 		$this->name = 'tm4b';
@@ -69,45 +69,45 @@ class Tm4b extends Module
 		$this->version = 1.1;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
-		
+
 		if ($this->id)
 		{
 			$this->_data = array('shopname' => Configuration::get('PS_SHOP_NAME'));
-			
-			/* Get config vars */		 
+
+			/* Get config vars */
 			$this->_password = Configuration::get('TM4B_PASSWORD');
 			$this->_user = Configuration::get('TM4B_USER');
 			$this->_originator = Configuration::get('TM4B_ORIGINATOR');
 			$this->_route = Configuration::get('TM4B_ROUTE');
 			$this->_simulation = Configuration::get('TM4B_SIM');
 			$this->_new_order_numbers =  Configuration::get('TM4B_NEW_ORDER_NUMBERS');
-			
+
 			$this->_alert_new_order_active = Configuration::get('TM4B_ALERT_NO_ACTIVE');
 			$this->_alert_update_quantity_active = Configuration::get('TM4B_ALERT_UQ_ACTIVE');
 			$this->_daily_report_active = Configuration::get('TM4B_DAILY_REPORT_ACTIVE');
 		}
-		
+
 		$this->displayName = 'SMS Tm4b';
 		$this->description = $this->l('Sends an SMS for each new order');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your info?');
 	}
-   
+
 	public function	install()
 	{
 		if (!parent::install() OR
 			!$this->registerHook('newOrder') OR
 			!$this->registerHook('updateQuantity'))
 			return false;
-			
+
 		Configuration::updateValue('TM4B_SIM', 1);
 		Configuration::updateValue('TM4B_ALERT_NO_ACTIVE', 1);
 		Configuration::updateValue('TM4B_ALERT_UQ_ACTIVE', 1);
 		Configuration::updateValue('TM4B_DAILY_REPORT_ACTIVE', 0);
 		return true;
 	}
-	
+
 	public function uninstall()
 	{
 		Configuration::deleteByName('TM4B_PASSWORD');
@@ -120,10 +120,10 @@ class Tm4b extends Module
 		Configuration::deleteByName('TM4B_ALERT_UQ_ACTIVE');
 		Configuration::deleteByName('TM4B_DAILY_REPORT_ACTIVE');
 		Configuration::deleteByName('TM4B_LAST_REPORT');
-		
+
 		return parent::uninstall();
 	}
-	
+
 	private function _getTplBody($tpl_file, $vars = array())
 	{
 		$iso = Language::getIsoById((int)(Configuration::get('PS_LANG_DEFAULT')));
@@ -134,18 +134,18 @@ class Tm4b extends Module
 		$template = str_replace(array_keys($vars), array_values($vars), $tpl);
 		return (implode("\n", $template));
 	}
-	
+
 	public function hookNewOrder($params)
 	{
 		include_once (dirname(__FILE__).'/classes/Tm4bSms.php');
-		
+
 		if ( !(int)($this->_alert_new_order_active) OR empty($this->_user) OR empty($this->_password)
 			OR empty($this->_new_order_numbers))
 			return ;
 		$order = $params['order'];
 		$customer = $params['customer'];
 		$currency = $params['currency'];
-		
+
 		$templateVars = array(
 		'{firstname}' => utf8_decode($customer->firstname),
 		'{lastname}' => utf8_decode($customer->lastname),
@@ -156,7 +156,7 @@ class Tm4b extends Module
 		'{currency}' => $currency->sign);
 
 		$body = $this->_getTplBody(self::$_tpl_sms_files['name']['new_orders'].self::$_tpl_sms_files['ext']['new_orders'], $templateVars);
-		
+
 		$sms = new Tm4bSms($this->_user, $this->_password, $this->_route, $this->_originator);
 		$sms->msg = $body;
 		$numbers = explode(self::__TM4B_NUMBER_DELIMITOR__, $this->_new_order_numbers);
@@ -164,13 +164,13 @@ class Tm4b extends Module
 			if ($number != '')
 				$sms->addRecipient($number);
 		$sms->Send($this->_simulation);
-	}	
+	}
 
 	public function hookUpdateQuantity($params)
 	{
 		if (!(int)($this->_alert_update_quantity_active) OR empty($this->_new_order_numbers))
 			return ;
-	
+
 		$product = $params['product'];
 
 		$qty = (int)($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']) - (int)($params['product']['quantity']);
@@ -183,7 +183,7 @@ class Tm4b extends Module
 
 			$body = $this->_getTplBody(self::$_tpl_sms_files['name']['out_of_stock'].self::$_tpl_sms_files['ext']['out_of_stock'], $templateVars);
 		}
-		
+
 		if (!empty($body))
 		{
 			$sms = new Tm4bSms($this->_user, $this->_password, $this->_route, $this->_originator);
@@ -199,6 +199,7 @@ class Tm4b extends Module
 	public function getContent()
 	{
 		include_once (dirname(__FILE__).'/classes/Tm4bSms.php');
+
 		$this->_html = '<h2>'.$this->displayName.'</h2>';
 
 		if (!empty($_POST))
@@ -229,19 +230,19 @@ class Tm4b extends Module
 						$this->_html .= $this->displayError($err);
 			}
 		}
-		
+
 		$this->_displayTm4b();
 		$this->_displayForm();
 
 		return $this->_html;
 	}
-	
+
 	private function _displayTm4b()
 	{
 		include_once (dirname(__FILE__).'/classes/Tm4bSms.php');
-		
+
 		$testsms_txt = 'Send';
-		
+
 		$this->_html .= '
 		<fieldset><legend><img src="'.$this->_path.'informations.gif" alt="" title="" /> '.$this->l('Information').'</legend>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
@@ -261,7 +262,7 @@ class Tm4b extends Module
 			</form>
 		</fieldset><br />';
 	}
-	
+
 	private function _displayForm()
 	{
 				if (!isset($_POST['btnSubmit']))
@@ -279,7 +280,7 @@ class Tm4b extends Module
 				$_POST['daily_report'] = $this->_daily_report_active;
 			}
 		}
-		
+
 		$this->_html .= '<fieldset><legend><img src="'.$this->_path.'prefs.gif" alt="" title="" /> '.$this->l('Settings').'</legend>
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<label>'.$this->l('Username:').'</label>
@@ -351,7 +352,7 @@ class Tm4b extends Module
 		elseif (preg_match('/([^0-9[:space:],])/', $_POST['new_order_numbers'], $regs))
 			$this->_postErrors[]  = $this->l('Phone number invalid');
 	}
-	
+
 	public function getStatsBody()
 	{
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
@@ -372,12 +373,11 @@ class Tm4b extends Module
 		AND o.`date_add` >= DATE_SUB(\''.date('Y-m-d').' 20:00:00\', INTERVAL 1 DAY)
 		AND o.`date_add` < \''.date('Y-m-d').' 20:00:00\'');
 		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($query.'AND o.`date_add` LIKE \''.date('Y-m').'-%\'');
-		
+
 		return date('Y-m-d')."\n".
 		$this->l('Orders:').' '.(int)($result['total_orders'])."\n".
 		$this->l('Sales:').' '.Tools::displayPrice($result['total_sales'], $currency, true)."\n".
 		'('.$this->l('Month:').' '.Tools::displayPrice($result2['total_sales'], $currency, true).')';
 	}
 }
-
 
