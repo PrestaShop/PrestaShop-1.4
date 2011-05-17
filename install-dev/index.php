@@ -822,40 +822,51 @@ if ($lm->getIncludeTradFilename())
 
 			<div id="upgradeProcess" style="display: none;width: 650px;">
 				<?php
+				if (file_exists(dirname(__FILE__).'/../config/settings.inc.php')) :
+				?>
+				<script type="text/javascript">
+					$(document).ready(function() {
+						$.ajax({
+							url: 'xml/getNonNativeModules.php',
+							dataType: 'json',
+							success: function (json) 
+							{
+								if (json.length == 0)
+									$('#nonNativeModules').hide();
+								else
+								{
+									$(json).each( function () {
+										$('ul#nonNativeModulesLi').append('<li>'+this.name+'</li>');
+									});
+								}
+							},
+							error: function ()
+							{
+								$('#nonNativeModules').hide();
+							}
+						});
+					});
+				</script>
+				
+				<div id="nonNativeModules" style="font-weight: bold; background-color: #ffdeb7; color: #000; padding: 10px; border: 1px solid #999; margin-top: 10px;">
+					<p><img src="../img/admin/warning.gif" alt="" style="vertical-align: middle;" /> <?php echo lang('It\'s dangerous to keep non-native modules activated during the update. If you really want to take this risk, uncheck the following box.'); ?></p>
 
+					<p><?php echo lang('You will be able to manually reactivate them in your back-office, once the update process has succeeded.'); ?></p>
+					<input id="customModuleDesactivation" type="checkbox" checked="checked" value="1" name="customModuleDesactivation" />
+					<label for="customModuleDesactivation">
+						<?php echo lang('Ok, please desactivate the following modules, I will reactivate them later'); ?>:
+					</label>
+					<ul id="nonNativeModulesLi">
+						
+					</ul>
+				</div>
+				<?php
+
+				endif;
+				
 				function sortnatversion($a, $b)
 				{
 					return strnatcmp($a['version'], $b['version']);
-				}
-				$countNonNative = 0;
-				if ($oldversion !== false AND !$sameVersions)
-				{
-					include_once(realpath(INSTALL_PATH.'/../config').'/defines.inc.php');
-					$moduleList = Module::getNonNativeModuleList();
-					if (is_array($moduleList))
-					{
-						$moduleNonNativeLi = '<ul>';
-						foreach($moduleList as $module)
-							if($module['active'])
-							{
-								$countNonNative++;
-								$moduleNonNativeLi .= '<li>'.$module['name'].'</li>';
-							}
-						$moduleNonNativeLi .= '</ul>';
-					}
-				}
-				if($countNonNative)
-				{
-					echo '<br /><br />
-					<h2>'.lang('Module compatibility').'</h2>';
-					echo '<div style="font-weight: bold; background-color: #ffdeb7; color: #000; padding: 10px; border: 1px solid #999; margin-top: 10px;">
-					<p><img src="../img/admin/warning.gif" alt="" style="vertical-align: middle;" /> '.lang('It\'s dangerous to keep non-native modules activated during the update. If you really want to take this risk, uncheck the following box.').'</p>
-					</div>
-					<p>'.lang('You will be able to manually reactivate them in your back-office, once the update process has succeeded.').'</p>
-					<input id="customModuleDesactivation" type="checkbox" checked="checked" value="1" name="customModuleDesactivation" /> <label for="customModuleDesactivation">'
-					.lang('Ok, please desactivate the following modules, I will reactivate them later.').' : </label>';
-					echo $moduleNonNativeLi;
-
 				}
 
 				echo '<h2>'.lang('Theme compatibility').'</h2>';
