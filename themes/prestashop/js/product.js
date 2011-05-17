@@ -108,6 +108,7 @@ function findCombination(firstTime)
 
 			//get the data of product with these attributes
 			quantityAvailable = combinations[combination]['quantity'];
+			alert(quantityAvailable);
 			selectedCombination['price'] = combinations[combination]['price'];
 			selectedCombination['unit_price'] = combinations[combination]['unit_price'];
 			if (combinations[combination]['ecotax'])
@@ -179,7 +180,7 @@ function updateDisplay()
 		}
 
 		//'last quantities' message management
-		if (quantityAvailable <= maxQuantityToAllowDisplayOfLastQuantityMessage && !allowBuyWhenOutOfStock)
+		if ((quantitiesDisplayAllowed || quantityAvailable <= maxQuantityToAllowDisplayOfLastQuantityMessage) && !allowBuyWhenOutOfStock)
 		{
 			//display the 'last quantities' message
 			$('#last_quantities').show('slow');
