@@ -98,7 +98,7 @@ class CartCore extends ObjectModel
 		'id_carrier' => array('xlink_resource' => 'carriers'),
 		),
 		'associations' => array(
-			'cart_rows' => array('resource' => 'cart_row', 'fields' => array(
+			'cart_rows' => array('resource' => 'cart_row', 'virtual_entity' => true, 'fields' => array(
 				'id_product' => array('required' => true, 'xlink_resource' => 'products'),
 				'id_product_attribute' => array('required' => true, 'xlink_resource' => 'combinations'),
 				'quantity' => array('required' => true),

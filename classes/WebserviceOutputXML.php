@@ -173,7 +173,8 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 	public function renderAssociationHeader($obj, $params, $assoc_name, $closed_tags = false)
 	{
 		$end_tag = ($closed_tags) ? '/>' : '>';
-		return '<'.$assoc_name.' node_type="'.$params['associations'][$assoc_name]['resource'].'"'.$end_tag."\n";
+		$virtual = (isset($params['associations'][$assoc_name]['virtual_entity']) && $params['associations'][$assoc_name]['virtual_entity'] ? 'virtual_entity="true"' : '');
+		return '<'.$assoc_name.' '.$virtual.' node_type="'.$params['associations'][$assoc_name]['resource'].'"'.$end_tag."\n";
 	}
 	public function renderAssociationFooter($obj, $params, $assoc_name)
 	{
