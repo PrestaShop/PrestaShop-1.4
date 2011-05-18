@@ -972,12 +972,16 @@ class ProductCore extends ObjectModel
 	}
 
 	public function setDefaultAttribute($id_product_attribute)
-	{
+	{	
 		return Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'product_attribute`
 		SET `default_on` = 1
-		WHERE `id_product` = '.(int)($this->id).'
-		AND `id_product_attribute` = '.(int)($id_product_attribute));
+		WHERE `id_product` = '.(int)$this->id.'
+		AND `id_product_attribute` = '.(int)$id_product_attribute) && 
+		Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'product` 
+		SET `cache_default_attribute` = '.(int)$id_product_attribute.' 
+		WHERE `id_product` = '.(int)$this->id.' LIMIT 1');
 	}
 
 	/**
