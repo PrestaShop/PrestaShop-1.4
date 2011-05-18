@@ -45,7 +45,7 @@ class AdminProducts extends AdminTab
 		$this->view = false;
 		$this->duplicate = true;
 		$this->imageType = 'jpg';
-		
+
 		$this->fieldsDisplay = array(
 			'id_product' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 20),
 			'image' => array('title' => $this->l('Photo'), 'align' => 'center', 'image' => 'p', 'width' => 45, 'orderby' => false, 'filter' => false, 'search' => false),
@@ -301,6 +301,9 @@ class AdminProducts extends AdminTab
 					AND Product::duplicateTags($id_product_old, $product->id)
 					AND Product::duplicateDownload($id_product_old, $product->id))
 					{
+						if ($product->hasAttributes())
+							Product::updateDefaultAttribute($product->id);
+
 						if (!Tools::getValue('noimage') AND !Image::duplicateProductImages($id_product_old, $product->id, $combinationImages))
 							$this->_errors[] = Tools::displayError('An error occurred while copying images.');
 						else
@@ -356,7 +359,7 @@ class AdminProducts extends AdminTab
 							$product->deleteImages();
 						}else
 							$this->deleteImage($object->id);
-							
+
 						if ($this->deleted)
 						{
 							$object->deleted = 1;
@@ -530,7 +533,7 @@ class AdminProducts extends AdminTab
 								if ($id_reason = (int)Tools::getValue('id_mvt_reason') AND (int)Tools::getValue('attribute_mvt_quantity') > 0 AND $id_reason > 0)
 								{
 									$reason = new StockMvtReason((int)$id_reason);
-									$qty = Tools::getValue('attribute_mvt_quantity') * $reason->sign; 
+									$qty = Tools::getValue('attribute_mvt_quantity') * $reason->sign;
 									if (!$product->addStockMvt($qty, $id_reason, (int)$id_product_attribute, NULL, $cookie->id_employee))
 										$this->_errors[] = Tools::displayError('An error occurred while updating qty.');
 								}
@@ -565,7 +568,7 @@ class AdminProducts extends AdminTab
 					if (!sizeof($this->_errors))
 					{
 						if (!$product->cache_default_attribute)
-							Product::updateDefaultAttribute($id_product);
+							Product::updateDefaultAttribute($product->id);
 						Tools::redirectAdmin($currentIndex.'&id_product='.$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=3&token='.($token ? $token : $this->token));
 					}
 				}
@@ -586,7 +589,7 @@ class AdminProducts extends AdminTab
 						$product->update();
 					}else
 						Product::updateDefaultAttribute($id_product);
-						
+
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&tabs=3&id_product='.$product->id.'&token='.($token ? $token : $this->token));
 				}
 				else
@@ -1171,7 +1174,7 @@ class AdminProducts extends AdminTab
 						if ($id_reason = (int)Tools::getValue('id_mvt_reason') AND (int)Tools::getValue('mvt_quantity') > 0 AND $id_reason > 0)
 						{
 							$reason = new StockMvtReason((int)$id_reason);
-							$qty = Tools::getValue('mvt_quantity') * $reason->sign; 
+							$qty = Tools::getValue('mvt_quantity') * $reason->sign;
 							if (!$object->addStockMvt($qty, (int)$id_reason, NULL, NULL, (int)$cookie->id_employee))
 								$this->_errors[] = Tools::displayError('An error occurred while updating qty.');
 						}
@@ -2589,7 +2592,7 @@ class AdminProducts extends AdminTab
 									<select id="id_mvt_reason" name="id_mvt_reason">
 										<option value="-1">--</option>';
 							$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
-							
+
 							foreach ($reasons AS $reason)
 								echo '<option rel="'.$reason['sign'].'" value="'.$reason['id_stock_mvt_reason'].'" '.(Configuration::get('PS_STOCK_MVT_REASON_DEFAULT') == $reason['id_stock_mvt_reason'] ? 'selected="selected"' : '').'>'.$reason['name'].'</option>';
 							echo '</select>
@@ -2850,7 +2853,7 @@ class AdminProducts extends AdminTab
 		$isoTinyMCE = (file_exists(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
 		$ad = dirname($_SERVER["PHP_SELF"]);
 		echo '
-			<script type="text/javascript">	
+			<script type="text/javascript">
 			var iso = \''.$isoTinyMCE.'\' ;
 			var pathCSS = \''._THEME_CSS_DIR_.'\' ;
 			var ad = \''.$ad.'\' ;
@@ -3567,7 +3570,7 @@ class AdminProducts extends AdminTab
 											mustMatch:true,
 											scroll:false,
 											cacheLength:0,
-											multipleSeparator:\'||\', 
+											multipleSeparator:\'||\',
 											formatItem: function(item) {
 												return item[1]+\' - \'+item[0];
 											}
@@ -3591,7 +3594,7 @@ class AdminProducts extends AdminTab
 									return ids;
 
 								}
-								
+
 								function getAccessorieIds()
 								{
 									var ids = '. $obj->id.'+\',\';
@@ -3600,7 +3603,7 @@ class AdminProducts extends AdminTab
 
 									return ids;
 								}
-								
+
 			</script>';
 
 	}
