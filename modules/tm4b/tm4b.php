@@ -137,7 +137,7 @@ class Tm4b extends Module
 
 	public function hookNewOrder($params)
 	{
-		include_once (dirname(__FILE__).'/classes/Tm4bSms.php');
+		require_once (dirname(__FILE__).'/classes/Tm4bSms.php');
 
 		if ( !(int)($this->_alert_new_order_active) OR empty($this->_user) OR empty($this->_password)
 			OR empty($this->_new_order_numbers))
@@ -168,6 +168,7 @@ class Tm4b extends Module
 
 	public function hookUpdateQuantity($params)
 	{
+		require_once (dirname(__FILE__).'/classes/Tm4bSms.php');
 		if (!(int)($this->_alert_update_quantity_active) OR empty($this->_new_order_numbers))
 			return ;
 
@@ -198,7 +199,7 @@ class Tm4b extends Module
 
 	public function getContent()
 	{
-		include_once (dirname(__FILE__).'/classes/Tm4bSms.php');
+		require_once (dirname(__FILE__).'/classes/Tm4bSms.php');
 
 		$this->_html = '<h2>'.$this->displayName.'</h2>';
 
@@ -239,7 +240,7 @@ class Tm4b extends Module
 
 	private function _displayTm4b()
 	{
-		include_once (dirname(__FILE__).'/classes/Tm4bSms.php');
+		require_once (dirname(__FILE__).'/classes/Tm4bSms.php');
 
 		$testsms_txt = 'Send';
 
