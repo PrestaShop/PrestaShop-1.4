@@ -171,7 +171,7 @@ class AdminImport extends AdminTab
 				'image' => array('label' => $this->l('Image URLs (x,y,z...)')),
 				'delete_existing_images' => array(
 											'label' => $this->l('Delete existing images (0 = no, 1 = yes)'),
-											'help' => $this->l('')),
+											'help' => $this->l('If you do not specify this column and you specify the column images, all images of the product will be replaced by those specified in the import file')),
 				'feature' => array('label' => $this->l('Feature')),
 				'online_only' => array('label' => $this->l('Only available online')));
 
@@ -330,11 +330,10 @@ class AdminImport extends AdminTab
 				continue;
 			if ($k === 'price_tin')
 			{
-				$fields[$i-1] = $fields[$i-1].' '.$this->l('or').' '.$field['label'];
+				$fields[$i-1]['label'] = $fields[$i-1]['label'].' '.$this->l('or').' '.$field['label'];
 			}
 			else
-				$fields[] = '<div>'.(isset($field['help']) ? '<a href="#" class="info" title="'.$this->l('Infos').'|'.$field['help'].'">
-				<img src="'._PS_ADMIN_IMG_.'information.png"></a>' : '<span style="margin-left:16px"></span>').$field['label'].'</div>';
+				$fields[] = '<div>'.(isset($field['help']) ? '<a href="#" class="info" title="'.$this->l('Infos').'|'.$field['help'].'"><img src="'._PS_ADMIN_IMG_.'information.png"></a>' : '<span style="margin-left:16px"></span>').$field['label'].'</div>';
 			++$i;
 		}
 		if ($inArray)
@@ -1173,11 +1172,15 @@ class AdminImport extends AdminTab
 		}
 		echo '<script type="text/javascript">
 					$(document).ready(function(){
-						$(\'.info\').cluetip({
-							splitTitle: \'|\',
-						    showTitle: false
-						 });
+						activeClueTip();
 					});
+					function activeClueTip()
+					{
+						$(\'.info\').cluetip({
+						splitTitle: \'|\',
+					    showTitle: false
+					 	});
+					};
 			</script>';
 		echo '
 		<fieldset class="width3">
@@ -1270,23 +1273,23 @@ class AdminImport extends AdminTab
 				</div>
 				<div class="clear">&nbsp;</div>
 				<script type="text/javascript">
-					$("select#entity").change
-					(
-						function()
-						{
-							$("#entitie").html($("#entity > option:selected").text().toLowerCase());
-							$.getJSON("'.dirname($currentIndex).'/ajax.php",{getAvailableFields:1, entity: $("#entity").val()},
-										function(j)
-										{
-											var fields = "";
-											$("#availableFields").empty();
-											for (var i = 0; i < j.length; i++)
-											fields += j[i].field + "<br />";
-											$("#availableFields").html(fields);
-										}
-									)
-						}
-					);
+					$("select#entity").change( function() {
+						$("#entitie").html($("#entity > option:selected").text().toLowerCase());
+						$.getJSON("'.dirname($currentIndex).'/ajax.php", 
+							{
+							getAvailableFields:1,
+							entity: $("#entity").val()},
+									function(j)
+									{
+										var fields = "";
+										$("#availableFields").empty();
+										for (var i = 0; i < j.length; i++)
+											fields += j[i].field;
+										$("#availableFields").html(fields);
+										activeClueTip();
+									}
+						);
+					});
 				</script>';
 
 				if (Tools::getValue('entity'))
