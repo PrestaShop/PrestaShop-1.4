@@ -167,7 +167,7 @@ class AttributeGroupCore extends ObjectModel
 		$ids = array();
 		foreach ($values as $value)
 			$ids[] = intval($value['id']);
-		$result = Db::getInstance()->Execute('
+		Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'attribute`
 			WHERE `id_attribute_group` = '.(int)$this->id.'
 			AND `id_attribute` NOT IN ('.implode(',', $ids).')'
