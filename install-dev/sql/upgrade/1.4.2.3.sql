@@ -13,3 +13,16 @@ UPDATE `PREFIX_product` p SET `cache_default_attribute` = (SELECT `id_product_at
 UPDATE `PREFIX_product` p SET `cache_default_attribute` = (SELECT `id_product_attribute` FROM `PREFIX_product_attribute` WHERE `id_product` = p.`id_product` AND quantity > 0 LIMIT 1) WHERE `cache_default_attribute` IS NULL;
 /* If there is still no default attribute, then we go back to the default one */
 UPDATE `PREFIX_product` p SET `cache_default_attribute` = (SELECT `id_product_attribute` FROM `PREFIX_product_attribute` WHERE `id_product` = p.`id_product` AND default_on = 1 LIMIT 1) WHERE `cache_default_attribute` IS NULL;
+
+
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Zahlung eingegangen' WHERE `PREFIX_order_state_lang`.`id_order_state` =2 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Bestellung eingegangen' WHERE `PREFIX_order_state_lang`.`id_order_state` =3 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Versendet' WHERE `PREFIX_order_state_lang`.`id_order_state` =4 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Erfolgreich abgeschlossen' WHERE `PREFIX_order_state_lang`.`id_order_state` =5 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Storniert' WHERE `PREFIX_order_state_lang`.`id_order_state` =6 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Fehler bei der Bezahlung' WHERE `PREFIX_order_state_lang`.`id_order_state` =8 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Artikel erwartet' WHERE `PREFIX_order_state_lang`.`id_order_state` =9 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Warten auf Zahlungseingang' WHERE `PREFIX_order_state_lang`.`id_order_state` =10 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'Warten auf Zahlungseingang von PayPal' WHERE `PREFIX_order_state_lang`.`id_order_state` =11 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+UPDATE `PREFIX_order_state_lang` SET `name` = 'PayPal Anmeldung erfolgreich' WHERE `PREFIX_order_state_lang`.`id_order_state` =12 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
+
