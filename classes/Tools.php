@@ -53,7 +53,7 @@ class ToolsCore
 	*/
 	public static function redirect($url, $baseUri = __PS_BASE_URI__)
 	{
-		if (strpos($url, 'http://') === FALSE)
+		if (strpos($url, 'http://') === FALSE && strpos($url, 'https://') === FALSE)
 		{
 			global $link;
 			if (strpos($url, $baseUri) !== FALSE && strpos($url, $baseUri) == 0)
