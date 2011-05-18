@@ -131,6 +131,7 @@ class Editorial extends Module
 			else
 			{
 				unlink(dirname(__FILE__).'/homepage_logo.jpg');
+				Configuration::updateValue('EDITORIAL_IMAGE_DISABLE', 1);
 				Tools::redirectAdmin('index.php?tab=AdminModules&configure='.$this->name.'&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)));
 			}
 			$this->_html .= $errors;
@@ -150,6 +151,8 @@ class Editorial extends Module
 			if (isset($_FILES['body_homepage_logo']) AND isset($_FILES['body_homepage_logo']['tmp_name']) AND !empty($_FILES['body_homepage_logo']['tmp_name']))
 			{
 				Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
+				if(file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+					unlink(dirname(__FILE__).'/homepage_logo.jpg');
 				if ($error = checkImage($_FILES['body_homepage_logo'], $this->maxImageSize))
 					$errors .= $error;
 				elseif (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['body_homepage_logo']['tmp_name'], $tmpName))
@@ -165,6 +168,7 @@ class Editorial extends Module
 				list($width, $height, $type, $attr) = getimagesize(dirname(__FILE__).'/homepage_logo.jpg');
 				Configuration::updateValue('EDITORIAL_IMAGE_WIDTH', (int)round($width));
 				Configuration::updateValue('EDITORIAL_IMAGE_HEIGHT', (int)round($height));
+				Configuration::updateValue('EDITORIAL_IMAGE_DISABLE', 0);
 			}
 		}
 
@@ -251,7 +255,7 @@ class Editorial extends Module
 				</div>
 				<label>'.$this->l('Homepage logo').' </label>
 				<div class="margin-form">';
-				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg') && !Configuration::get('EDITORIAL_IMAGE_DISABLE'))
 						$this->_html .= '<div id="image" >
 							<img src="'.$this->_path.'homepage_logo.jpg?t='.time().'" />
 							<p align="center">'.$this->l('Filesize').' '.(filesize(dirname(__FILE__).'/homepage_logo.jpg') / 1000).'kb</p>
@@ -301,7 +305,7 @@ class Editorial extends Module
 			'image_width' => Configuration::get('EDITORIAL_IMAGE_WIDTH'),
 			'image_height' => Configuration::get('EDITORIAL_IMAGE_HEIGHT'),
 			'id_lang' => $cookie->id_lang,
-			'homepage_logo' => file_exists('modules/editorial/homepage_logo.jpg'),
+			'homepage_logo' => !Configuration::get('EDITORIAL_IMAGE_DISABLE') && file_exists('modules/editorial/homepage_logo.jpg'),
 			'image_path' => $this->_path.'homepage_logo.jpg'
 		));
 		return $this->display(__FILE__, 'editorial.tpl');
