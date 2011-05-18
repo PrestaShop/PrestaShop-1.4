@@ -308,7 +308,7 @@ class AdminImport extends AdminTab
 				++$nb_c;
 			if ($i === ($nb_c + 1) AND (!in_array($k, $noPreSelect)))
 				$options .= ' selected="selected"';
-			$options .= '>'.$field.'</option>';
+			$options .= '>'.$field['label'].'</option>';
 			++$i;
 		}
 		return $options;
