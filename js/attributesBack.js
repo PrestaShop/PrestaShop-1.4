@@ -24,6 +24,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+var storeUsedGroups = {};
+
 function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impact, reference, supplier_reference, ean, quantity, image, old_attr, id_product_attribute, default_attribute, eco_tax, location, upc, minimal_quantity)
 {
 	init_elems();
@@ -299,50 +301,40 @@ function add_attr_multiple()
 	}
 }
 
+/**
+ * Delete one or several attributes from the declination multilist
+ */
 function del_attr()
 {
-	var elem = getE('product_att_list');
-	var i;
-
-	for (i = elem.length - 1; i >= 0; i--)
+	$('#product_att_list option:selected').each(function()
 	{
-		if (elem.options[i].selected)
-			elem.remove(i);
-	}
+		delete storeUsedGroups[$(this).attr('groupid')];
+		$(this).remove();
+	});
 }
 
+/**
+ * Add an attribute from a group in the declination multilist
+ */
 function add_attr()
 {
-	var attr_group = getE('attribute_group');
-	var attr_name = getE('attribute');
-	var opt = document.createElement('option');
-	var elem = getE('product_att_list');
-	var gs = attr_group.options.length ? attr_group.options[attr_group.selectedIndex] : 0;
-	var as = attr_name.options.length ? attr_name.options[attr_name.selectedIndex] : 0;
-	var list = getE('product_att_list');
-	var i;
+	var attr_group = $('#attribute_group option:selected');
+	if (attr_group.val() == 0)
+		return alert('Please choose a group');
 
-	if (gs.value == 0) alert('Please choose a group');
-	else if (as.value == 0) alert('Please choose an attribute');
-	else
-	{
-		opt.text = gs.text + ' : ' + as.text;
-		opt.value = as.value;
+	var attr_name = $('#attribute option:selected');
+	if (attr_name.val() == 0)
+		return alert('Please choose an attribute');
+	
+	if (attr_group.val() in storeUsedGroups)
+		return alert('You can only add one type of group per combination');
 
-		for (i = list.length - 1; i >= 0; i--)
-			if (list.options[i].value == as.value)
-			{
-				alert('You cannot add same attribute twice');
-				return;
-			}
-
-		try {
-			elem.add(opt, null);
-		}
-		catch(ex) {
-			elem.add(opt);
-		}
-	}
+	storeUsedGroups[attr_group.val()] = true;
+	$('<option></option>')
+		.attr('value', attr_name.val())
+		.attr('groupid', attr_group.val())
+		.text(attr_group.text() + ' : ' + attr_name.text())
+		.appendTo('#product_att_list');
 }
 
 function openCloseLayer(whichLayer)
