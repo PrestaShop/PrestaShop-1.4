@@ -1095,6 +1095,7 @@ $_LANGADM['AdminImport927f1f2b947a6e113e98af5ae86fcc49'] = 'Texte en stock';
 $_LANGADM['AdminImport77493578c6e0675711fe7355a8457668'] = 'Texte en commande';
 $_LANGADM['AdminImport4d2589e1bcd4263cb99927b59f0f88d2'] = 'URLs des images (x,y,z...)';
 $_LANGADM['AdminImport14913d7e9d486e77b5c8d085e3797f94'] = 'Supprimer les images existantes (0 = non, 1 = oui)';
+$_LANGADM['AdminImporte6691747add3b37b9c381b8d9476fd4c'] = 'Si vous ne spécifiez pas cette colonne et vous spécifier la colonne images, toutes les images du produit seront remplacé par celle spécifié dans le fichier d\'import';
 $_LANGADM['AdminImport21021ea0e52be8e9c599f4dff41e5be0'] = 'Caractéristique';
 $_LANGADM['AdminImport71d0ceacdf562024f2d4c3a76d3b63e4'] = 'Uniquement disponible en ligne';
 $_LANGADM['AdminImporta10d0bff85112a2b35f885a38088cd20'] = 'Actif (0/1)';
