@@ -515,8 +515,9 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->SetFont(self::fontname(), '', 9);
 		
 		$addressType = array(
-			'invoice' => array(), 
-			'delivery' => array());
+			'delivery' => array(),
+			'invoice' => array(),
+		);
 		
 		$patternRules = array(
 				'optional' => array(
