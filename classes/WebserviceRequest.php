@@ -1423,26 +1423,35 @@ class WebserviceRequestCore
 		if (is_numeric($this->urlFragments['language']))
 			$arr_languages[] = (int)$this->urlFragments['language'];
 		// if a range or a list is asked
-		elseif (strpos($this->urlFragments['language'], '[') === 0 && strpos($this->urlFragments['language'], ']') === $length_values-1 && ((strpos($this->urlFragments['language'], '|') !== false) XOR (strpos($this->urlFragments['language'], ',') !== false)))
+		elseif (strpos($this->urlFragments['language'], '[') === 0
+			&& strpos($this->urlFragments['language'], ']') === $length_values-1)
 		{
-			$params_values = str_replace(array(']', '['), '', $this->urlFragments['language']);
-			// it's a list
-			if (strpos($params_values, '|') !== false)
+			if (strpos($this->urlFragments['language'], '|') !== false
+				XOR strpos($this->urlFragments['language'], ',') !== false)
 			{
-				$list_enabled_lang = explode('|', $params_values);
-				$arr_languages = $list_enabled_lang;
-			}
-			// it's a range
-			elseif (strpos($params_values, ',') !== false)
-			{
-				$range_enabled_lang = explode(',', $params_values);
-				if (count($range_enabled_lang) != 2)
+				$params_values = str_replace(array(']', '['), '', $this->urlFragments['language']);
+				// it's a list
+				if (strpos($params_values, '|') !== false)
 				{
-					$this->setError(400, 'A range value for a language must contains only 2 values', 78);
-					return false;
+					$list_enabled_lang = explode('|', $params_values);
+					$arr_languages = $list_enabled_lang;
 				}
-				for ($i = $range_enabled_lang[0]; $i <= $range_enabled_lang[1]; $i++)
-					$arr_languages[] = $i;
+				// it's a range
+				elseif (strpos($params_values, ',') !== false)
+				{
+					$range_enabled_lang = explode(',', $params_values);
+					if (count($range_enabled_lang) != 2)
+					{
+						$this->setError(400, 'A range value for a language must contains only 2 values', 78);
+						return false;
+					}
+					for ($i = $range_enabled_lang[0]; $i <= $range_enabled_lang[1]; $i++)
+						$arr_languages[] = $i;
+				}
+			}
+			else if (preg_match('#\[(\d)+\]#Ui', $this->urlFragments['language'], $match_lang))
+			{
+				$arr_languages[] = $match_lang[1];
 			}
 		}
 		else

@@ -612,7 +612,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 				return $this->manageListDeclinatedImages($directory, $normal_image_sizes);
 				break;
 			default:
-				return $this->manageEntityDeclinatedImages($directory, $normal_image_sizes, $qsdqsd);
+				return $this->manageEntityDeclinatedImages($directory, $normal_image_sizes);
 				break;
 		}
 	}
