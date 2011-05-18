@@ -97,8 +97,8 @@ class CategoryCore extends ObjectModel
 		'hidden_fields' => array('nleft', 'nright'),
 		'fields' => array(
 			'id_parent' => array('xlink_resource'=> 'categories'),
-			'level_depth' => array('setter' => null),
-			'nb_products_recursive' => array('getter' => 'getWsNbProductsRecursive', 'setter' => ''),
+			'level_depth' => array('setter' => false),
+			'nb_products_recursive' => array('getter' => 'getWsNbProductsRecursive', 'setter' => false),
 		),
 		'associations' => array(
 				'categories' => array('getter' => 'getChildrenWs', 'resource' => 'category', ),

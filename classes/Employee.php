@@ -74,12 +74,12 @@ class EmployeeCore extends ObjectModel
 	protected 	$identifier = 'id_employee';
 
 	protected	$webserviceParameters = array(
-		'objectMethods' => array('add' => 'addWs'),
 		'fields' => array(
 			'id_lang' => array('xlink_resource' => 'languages'),
 			'last_passwd_gen' => array('setter' => null),
 			'stats_date_from' => array('setter' => null),
 			'stats_date_to' => array('setter' => null),
+			'passwd' => array('setter' => 'setWsPasswd'),
 		),
 	);
 	
@@ -202,11 +202,15 @@ class EmployeeCore extends ObjectModel
 		);
 	}
 	
-	
-	public function addWs($autodate = true, $nullValues = false)
+	public function setWsPasswd($passwd)
 	{
-		$this->passwd = Tools::encrypt($this->passwd);
-		return $this->add($autodate, $nullValues);
+		if ($this->id != 0)
+		{
+			if ($this->passwd != $passwd)
+				$this->passwd = Tools::encrypt($passwd);
+		}
+		else
+			$this->passwd = Tools::encrypt($passwd);
+		return true;
 	}
-
 }

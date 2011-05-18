@@ -527,7 +527,7 @@ abstract class ObjectModelCore
 		if (isset($this->{$wsParamsAttributeName}['associations']))
 			foreach ($this->{$wsParamsAttributeName}['associations'] as $assocName => &$association)
 			{
-				if (!array_key_exists('setter', $association))
+				if (!array_key_exists('setter', $association) || (isset($association['setter']) && !$association['setter']))
 					$association['setter'] = Tools::toCamelCase('set_ws_'.$assocName);
 				if (!array_key_exists('getter', $association))
 					$association['getter'] = Tools::toCamelCase('get_ws_'.$assocName);

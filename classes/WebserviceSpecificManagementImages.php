@@ -842,7 +842,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 					throw new WebserviceException(sprintf('Unable to save the declination "%s" of this image.', $imageType['name']), array(71, 500));
 			}
 		}
-		return !$this->hasErrors() ? $newPath : false;
+		return $newPath;
 	}
 	
 	/**

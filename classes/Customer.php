@@ -98,14 +98,14 @@ class CustomerCore extends ObjectModel
 		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'note' => 'isCleanHtml', 'is_guest' => 'isBool');
 
 	protected	$webserviceParameters = array(
-		'objectMethods' => array('add' => 'addWs'),
 		'fields' => array(
 			'id_default_group' => array('xlink_resource' => 'groups'),
 			'newsletter_date_add' => array(),
 			'ip_registration_newsletter' => array(),
 			'last_passwd_gen' => array('setter' => null),
 			'secure_key' => array('setter' => null),
-			'deleted' => array()
+			'deleted' => array(),
+			'passwd' => array('setter' => 'setWsPasswd'),
 		),
 	);
 
@@ -651,12 +651,6 @@ class CustomerCore extends ObjectModel
 		return false;
 	}
 	
-	public function addWs($autodate = true, $nullValues = false)
-	{
-		$this->passwd = Tools::encrypt($this->passwd);
-		return $this->add($autodate, $nullValues);
-	}
-	
 	static public function printNewsIcon($id_customer, $tr)
 	{
 		$customer = new Customer($tr['id_customer']);
@@ -675,6 +669,18 @@ class CustomerCore extends ObjectModel
 		echo '<a href="index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&changeOptinVal&token='.Tools::getAdminTokenLite('AdminCustomers').'">'.
 				($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').
 			'</a>';
+	}
+	
+	public function setWsPasswd($passwd)
+	{
+		if ($this->id != 0)
+		{
+			if ($this->passwd != $passwd)
+				$this->passwd = Tools::encrypt($passwd);
+		}
+		else
+			$this->passwd = Tools::encrypt($passwd);
+		return true;
 	}
 }
 

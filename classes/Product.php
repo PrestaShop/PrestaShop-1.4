@@ -262,9 +262,9 @@ class ProductCore extends ObjectModel
 			'out_of_stock' => array('required' => true),
 			'new' => array(),
 			'cache_default_attribute' => array(),
-			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => '', 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
+			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => false, 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
 			'id_default_combination' => array('getter' => 'getWsDefaultCombination', 'setter' => 'setWsDefaultCombination', 'xlink_resource' => array('resourceName' => 'combinations')),
-			'position_in_category' => array('getter' => 'getWsPositionInCategory', 'setter' => ''),
+			'position_in_category' => array('getter' => 'getWsPositionInCategory', 'setter' => false),
 			),
 		'associations' => array(
 			'categories' => array('resource' => 'category', 'fields' => array(

@@ -169,14 +169,14 @@ class OrderCore extends ObjectModel
 			'date_upd' => array(),
 		),
 		'associations' => array(
-			'order_rows' => array('resource' => 'order_row', 'setter' => null,
+			'order_rows' => array('resource' => 'order_row', 'setter' => false, 'virtual_entity' => true, 
 				'fields' => array(
 					'id' =>  array(),
 					'product_id' => array('required' => true),
 					'product_attribute_id' => array('required' => true),
 					'product_quantity' => array('required' => true),
-					'product_name' => array('setter' => null),
-					'product_price' => array('setter' => null),
+					'product_name' => array('setter' => false),
+					'product_price' => array('setter' => false),
 			)),
 		),
 

@@ -1600,7 +1600,7 @@ class CartCore extends ObjectModel
 				$query .= '('.(int)$this->id.', '.(int)$value['id_product'].', '.(int)$value['id_product_attribute'].', '.(int)$value['quantity'].', NOW()),';
 			$result = Db::getInstance()->Execute(rtrim($query, ','));
 		}
-		return $result;
+		return true;
 	}
 
 	public function deleteAssociations()

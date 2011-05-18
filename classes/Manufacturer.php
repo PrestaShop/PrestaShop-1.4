@@ -77,12 +77,11 @@ class ManufacturerCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
-			'id_address' => array('xlink_resource'=> 'addresses'),
-			'link_rewrite' => array('getter' => 'getLink', 'setter' => null),
+			'link_rewrite' => array('getter' => 'getLink', 'setter' => false),
 		),
 		'associations' => array(
-			'addresses' => array('resource' => 'address', 'fields' => array(
-				'id' => array('required' => true, 'xlink_resource' => 'addresses'),
+			'addresses' => array('resource' => 'address', 'setter' => false, 'fields' => array(
+				'id' => array('xlink_resource' => 'addresses'),
 			)),
 		),
 	);
@@ -371,6 +370,23 @@ class ManufacturerCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'address` AS a
 		WHERE `id_manufacturer` = '.(int)($this->id).'
 		AND a.`deleted` = 0');
+	}
+	
+	public function setWsAddresses($id_addresses)
+	{
+		$ids = array();
+		foreach ($id_addresses as $id)
+			$ids[] = (int)$id['id'];
+		Db::getInstance()->ExecuteS('
+			UPDATE `'._DB_PREFIX_.'address` 
+			SET id_manufacturer = 0 
+			WHERE id_manufacturer = '.(int)$this->id.' 
+			AND deleted = 0');
+		return (Db::getInstance()->ExecuteS('
+			UPDATE `'._DB_PREFIX_.'address` 
+			SET id_customer = 0, id_supplier = 0, id_manufacturer = '.(int)$this->id.' 
+			WHERE id_address IN('.implode(',', $ids).') 
+			AND deleted = 0') !== false);
 	}
 }
 
