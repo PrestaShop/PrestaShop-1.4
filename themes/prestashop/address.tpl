@@ -92,8 +92,7 @@ $(function(){ldelim}
 		</p>
 	{if $vat_display == 2}
 		<div id="vat_area">
-	{/if}
-	{if $vat_display == 1}
+	{elseif $vat_display == 1}
 		<div id="vat_area" style="display: none;">
 	{else}
 		<div style="display: none;">
@@ -165,6 +164,7 @@ $(function(){ldelim}
 			<select id="id_country" name="id_country">{$countries_list}</select>
 			<sup>*</sup>
 		</p>
+		{if $vatnumber_ajax_call}
 		<script type="text/javascript">
 		var ajaxurl = '{$ajaxurl}';
 		{literal}
@@ -190,6 +190,7 @@ $(function(){ldelim}
 				});
 		{/literal}
 		</script>
+		{/if}
 		{/if}
 		{if $field_name eq 'State:name'}
 		{assign var="stateExist" value="true"}

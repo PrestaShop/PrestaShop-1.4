@@ -259,6 +259,9 @@ class AddressControllerCore extends FrontController
 			self::$smarty->assign('vat_display', 0);
 
 		self::$smarty->assign('ajaxurl', _MODULE_DIR_);
+		
+		self::$smarty->assign('vatnumber_ajax_call', (int)file_exists(_PS_MODULE_DIR_.'vatnumber/ajax.php'));
+		
 		self::$smarty->assign(array(
 			'countries_list' => $countriesList,
 			'countries' => $countries,

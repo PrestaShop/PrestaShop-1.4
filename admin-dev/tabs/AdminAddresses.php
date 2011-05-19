@@ -431,7 +431,7 @@ class AdminAddresses extends AdminTab
 											}
 										}
 									}); ';
-		if (file_exists(_MODULE_DIR_.'vatnumber/ajax.php'))
+		if (file_exists(_PS_MODULE_DIR_.'vatnumber/ajax.php'))
 			echo '	$.ajax({
 					type: "GET",
 					url: "'._MODULE_DIR_.'vatnumber/ajax.php?id_country="+$(\'#id_country\').val(),
