@@ -174,8 +174,30 @@ class CartCore extends ObjectModel
 
 	public function delete()
 	{
-		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cart_discount` WHERE `id_cart` = '.(int)($this->id)) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)($this->id)))
+		if ($this->OrderExists()) //NOT delete a cart which is associated with an order
+        	return false;
+		
+		$uploadedFiles = Db::getInstance()->ExecuteS('SELECT cd.`value` 
+        FROM `'._DB_PREFIX_.'customized_data` cd
+        INNER JOIN `'._DB_PREFIX_.'customization` c ON cd.`id_customization`= c.`id_customization`
+        WHERE cd.`type`= 0 AND c.`id_cart`='.(int)$this->id);
+        
+        foreach ($uploadedFiles as $mustUnlink)
+	    {
+	         unlink(_PS_UPLOAD_DIR_.$mustUnlink['value'].'_small');
+	         unlink(_PS_UPLOAD_DIR_.$mustUnlink['value']);
+	    }
+		
+		Db::getInstance()->Execute(
+			'DELETE FROM `'._DB_PREFIX_.'customized_data` WHERE `id_customization` 
+			IN (SELECT `id_customization` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart`='.intval($this->id).')');
+		
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_cart`='.intval($this->id) );
+
+		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cart_discount` WHERE `id_cart` = '.(int)($this->id)) 
+		 OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)($this->id)))
 			return false;
+			
 		return parent::delete();
 	}
 

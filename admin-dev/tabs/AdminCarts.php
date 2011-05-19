@@ -316,9 +316,21 @@ class AdminCarts extends AdminTab
 			$this->viewDetails();
 		else
 		{
-			$this->displayWarning($this->l('Be careful, do not remove carts related to an order'));
 			$this->getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
 			$this->displayList();
+		}
+	}
+	protected function _displayDeleteLink($token = NULL, $id)
+	{
+	    global $currentIndex;
+	    $cart = new Cart((int)$id);
+		if (!$cart->OrderExists())
+		{
+			$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
+			$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?)';
+			echo '
+				<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].'\');">
+				<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
 		}
 	}
 }
