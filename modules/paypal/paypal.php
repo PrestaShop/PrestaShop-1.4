@@ -55,7 +55,7 @@ class PayPal extends PaymentModule
 			$this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.');
 		$this->_checkAndUpdateFromOldVersion();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND $this->active)
-			$this->warning = $this->l('In order to REMOVE this warning, please uninstall and remove the PayPalAPI module.');
+			$this->warning = $this->l('All features of Paypal API module are be include in the new Paypal module. In order to don\'t have any conflict, please don\'t use and remove PayPalAPI module.');
 
 		global $cookie;
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
@@ -165,7 +165,7 @@ class PayPal extends PaymentModule
 		$this->_postProcess();
 		$this->_setPayPalSubscription();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php'))
-			$this->_html .= '<div class="warning warn"><h3>'.$this->l('Please do not use, and remove PayPalAPI module.').'</h3></div>';
+			$this->_html .= '<div class="warning warn"><h3>'.$this->l('All features of Paypal API module are be include in this new module. In order to don\'t have any conflict, please don\'t use and remove PayPalAPI module.').'</h3></div>';
 		$this->_setConfigurationForm();
 		
 		return $this->_html;
@@ -406,30 +406,30 @@ class PayPal extends PaymentModule
 
 		// Making request
 		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn.$requestAddress ;
-		$discounts = (float)($cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS));
+		$discounts = (float)$cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
 		if ($discounts == 0)
 		{
 			$products = $cart->getProducts();
 			$amt = 0;
-			for ($i = 0 ; $i < sizeof($products) ; $i++)
+			for ($i = 0; $i < sizeof($products); $i++)
 			{
-				$request .= '&L_NAME'.$i.'='.substr(urlencode($products[$i]['name'].(isset($products[$i]['attributes'])?' - '.$products[$i]['attributes']:'').(isset($products[$i]['instructions'])?' - '.$products[$i]['instructions']:'') ),0,127);
-				$request .= '&L_AMT'.$i.'='.urlencode(number_format($products[$i]['price'],2));
+				$request .= '&L_NAME'.$i.'='.substr(urlencode($products[$i]['name'].(isset($products[$i]['attributes'])?' - '.$products[$i]['attributes']:'').(isset($products[$i]['instructions'])?' - '.$products[$i]['instructions']:'') ), 0, 127);
+				$request .= '&L_AMT'.$i.'='.urlencode(number_format($products[$i]['price'], 2));
 				$request .= '&L_QTY'.$i.'='.urlencode($products[$i]['cart_quantity']);
-				$amt += number_format($products[$i]['price'],2);
+				$amt += number_format($products[$i]['price'], 2);
 			}
-			$shipping = number_format($cart->getOrderShippingCost($cart->id_carrier,false),2);
+			$shipping = number_format($cart->getOrderShippingCost($cart->id_carrier, false), 2);
 			$request .= '&ITEMAMT='.urlencode($amt);
 			$request .= '&SHIPPINGAMT='.urlencode($shipping);
-			$request .= '&TAXAMT='.urlencode((float)max($total-$amt-$shipping,0));
+			$request .= '&TAXAMT='.urlencode((float)max($total - $amt - $shipping, 0));
 		}
 		else
 		{
 			$products = $cart->getProducts();
 			$description = 0;
-			for ($i = 0 ; $i < sizeof($products) ; $i++)
+			for ($i = 0; $i < sizeof($products); $i++)
 				$description .= ($description == ''?'':', ').$products[$i]['cart_quantity']." x ".$products[$i]['name'].(isset($products[$i]['attributes'])?' - '.$products[$i]['attributes']:'').(isset($products[$i]['instructions'])?' - '.$products[$i]['instructions']:'') ; 
-			$request .= '&ORDERDESCRIPTION='.urlencode(substr($description,0,120));
+			$request .= '&ORDERDESCRIPTION='.urlencode(substr($description, 0, 120));
 		}
 
 
