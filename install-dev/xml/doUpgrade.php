@@ -114,6 +114,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatetabicon_from_11version.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'check_webservice_account_table.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_missing_rewrite_value.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;

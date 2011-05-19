@@ -176,7 +176,7 @@ class AdminHome extends AdminTab
 	  	if ($cookie->show_screencast)
 			echo'
 			<div id="adminpresentation">
-				<iframe src="http://screencasts.prestashop.com/screencast.php?iso_lang='.Tools::strtolower($isoUser).'" style="border:none;width:100%;height:420px;" scrolling="no"></iframe>
+				<iframe src="'.$protocol.'://screencasts.prestashop.com/screencast.php?iso_lang='.Tools::strtolower($isoUser).'" style="border:none;width:100%;height:420px;" scrolling="no"></iframe>
 				<div id="footer_iframe_home">
 					<!--<a href="#">'.$this->l('View more video tutorials').'</a>-->
 					<input type="checkbox" id="screencast_dont_show_again"><label for="screencast_dont_show_again">'.$this->l('don\'t show again').'</label>
