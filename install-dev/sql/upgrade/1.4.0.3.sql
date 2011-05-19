@@ -28,19 +28,19 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 ('PS_GEOLOCATION_BEHAVIOR', '0', NOW(), NOW());
 
 ALTER TABLE `PREFIX_orders` ADD `conversion_rate` decimal(13,6) NOT NULL default 1 AFTER `payment`;
-UPDATE `PREFIX_orders` o SET o.`conversion_rate` = (
+UPDATE `PREFIX_orders` o SET o.`conversion_rate` = IFNULL((
 	SELECT c.`conversion_rate`
 	FROM `PREFIX_currency` c
 	WHERE c.`id_currency` = o.`id_currency`
-	LIMIT 1
+	LIMIT 1), 0
 );
 
 ALTER TABLE `PREFIX_order_slip` ADD `conversion_rate` decimal(13,6) NOT NULL default 1 AFTER `id_order`;
-UPDATE `PREFIX_order_slip` os SET os.`conversion_rate` = (
+UPDATE `PREFIX_order_slip` os SET os.`conversion_rate` = IFNULL((
 	SELECT o.`conversion_rate`
 	FROM `PREFIX_orders` o
 	WHERE os.`id_order` = o.`id_order`
-	LIMIT 1
+	LIMIT 1), 0
 );
 
 UPDATE `PREFIX_configuration` SET `value` = 'gridhtml' WHERE `name` = 'PS_STATS_GRID_RENDER' LIMIT 1;

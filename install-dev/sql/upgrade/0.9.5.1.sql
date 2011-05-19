@@ -31,18 +31,6 @@ CREATE TABLE `PREFIX_tax_zone` (
 
 /*  CONTENTS */
 
-/* Adding tab Contact */
-INSERT INTO `PREFIX_tab` (`id_parent`, `class_name`, `position`) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM`PREFIX_tab` t WHERE t.class_name = 'AdminPreferences' LIMIT 1) AS tmp), 'AdminContact', 6);
-INSERT INTO `PREFIX_tab_lang` (id_lang, id_tab, name) (
-	SELECT id_lang,
-	(SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminContact' LIMIT 1),
-	'Contact' FROM `PREFIX_lang`);
-UPDATE `PREFIX_tab_lang` SET `name` = 'Coordonnées'
-	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminContact' LIMIT 1)
-	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr' LIMIT 1);
-INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`)
-	VALUES ('1', (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminContact' LIMIT 1), '1', '1', '1', '1');
-
 /* Rename old tab */
 UPDATE `PREFIX_tab_lang` SET `name` = 'Produits'
 	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminPPreferences')
@@ -73,3 +61,6 @@ INSERT INTO `PREFIX_carrier_zone` (id_carrier, id_zone) (SELECT id_carrier, id_z
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
 ('PREFIX_PURCHASE_MINIMUM', '0', NOW(), NOW()),
 ('PREFIX_SHOP_ENABLE', '1', NOW(), NOW());
+
+/* Adding tab Contact */
+/* PHP:add_new_tab(AdminContact, fr:Coordonnées|es:Datos|en:Contact Information|de:Kontaktinformation|it:Informazioni di contatto, 8); */;

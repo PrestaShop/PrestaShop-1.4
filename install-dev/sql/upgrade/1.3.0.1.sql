@@ -45,7 +45,7 @@ ALTER TABLE `PREFIX_orders` ADD `total_products_wt` DECIMAL(10, 2) NOT NULL AFTE
 /* 					CONTENTS			 */
 /* ##################################### */
 
-UPDATE `PREFIX_group` SET `price_display_method` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY');
+UPDATE IGNORE `PREFIX_group` SET `price_display_method` = IFNULL((SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_PRICE_DISPLAY'), 0);
 
 UPDATE `PREFIX_configuration` 
 SET `value` = ROUND(value / (1 + (

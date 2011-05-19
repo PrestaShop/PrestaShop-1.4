@@ -58,8 +58,10 @@ ALTER TABLE PREFIX_attribute_lang
 ALTER TABLE PREFIX_block_cms
 	ADD PRIMARY KEY (`id_block`, `id_cms`);
 
-ALTER TABLE PREFIX_connections
+/* IGNORE because can raise error data truncated */
+ALTER IGNORE TABLE PREFIX_connections
 	CHANGE `http_referer` `http_referer` VARCHAR(255) DEFAULT NULL;
+	
 ALTER TABLE PREFIX_connections
 	ADD INDEX `date_add` (`date_add`);
 
@@ -72,9 +74,6 @@ ALTER TABLE PREFIX_delivery
 	ADD INDEX id_zone (`id_zone`);
 ALTER TABLE PREFIX_delivery
 	ADD INDEX id_carrier (`id_carrier`, `id_zone`);
-
-ALTER TABLE PREFIX_discount_category
-	ADD INDEX id_category (`id_category`);
 
 ALTER TABLE PREFIX_feature_product
 	ADD INDEX `id_feature` (`id_feature`);
@@ -121,7 +120,7 @@ ALTER TABLE PREFIX_cart_discount
 	ADD INDEX `id_discount` (`id_discount`);
 
 ALTER TABLE PREFIX_discount_category
-	ADD PRIMARY KEY (id_category,id_discount);
+	ADD PRIMARY KEY (`id_category`,`id_discount`);
 
 ALTER TABLE PREFIX_image_lang
 	ADD INDEX id_image (id_image);
@@ -160,7 +159,6 @@ ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_attribute`;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `attribute_lang_index`, ADD PRIMARY KEY (`id_attribute`, `id_lang`);
 ALTER TABLE PREFIX_carrier_zone DROP INDEX `carrier_zone_index`, ADD PRIMARY KEY (`id_carrier`, `id_zone`);
 ALTER TABLE PREFIX_discount_category CHANGE `id_discount` `id_discount` int(11) NOT NULL AFTER `id_category`;
-ALTER TABLE PREFIX_discount_category DROP INDEX `id_category`;
 ALTER TABLE PREFIX_feature_product DROP INDEX `id_feature`;
 ALTER TABLE PREFIX_hook_module DROP INDEX `id_module`;
 ALTER TABLE PREFIX_image_lang DROP INDEX `id_image`;
@@ -451,13 +449,6 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'Groupes'
 	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
 INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGroups' LIMIT 1), 1, 1, 1, 1);
 
-INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminTools' LIMIT 1) AS tmp), 'AdminGenerator', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminTools' LIMIT 1) AS tmp )) AS tmp));
-INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
-	SELECT id_lang,
-	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGenerator' LIMIT 1),
-	'Generator' FROM PREFIX_lang);
-INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminGenerator' LIMIT 1), 1, 1, 1, 1);
-
 INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCustomers' LIMIT 1) AS tmp), 'AdminCarts', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminCustomers' LIMIT 1) AS tmp )) AS tmp));
 INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
 	SELECT id_lang,
@@ -504,7 +495,8 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'Statuts'
 	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminStatuses')
 	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
 
-INSERT INTO PREFIX_product_attribute_image (id_image, id_product_attribute) (SELECT id_image, id_product_attribute FROM PREFIX_product_attribute);
+INSERT IGNORE INTO PREFIX_product_attribute_image (id_image, id_product_attribute) 
+	(SELECT id_image, id_product_attribute FROM PREFIX_product_attribute WHERE id_image IS NOT NULL);
 /* ALTER query must stay here (right after the INSERT INTO PREFIX_product_attribute_image)! */
 ALTER TABLE PREFIX_product_attribute DROP id_image;
 
@@ -1076,3 +1068,4 @@ INSERT INTO `PREFIX_timezone` (`id_timezone`, `name`) VALUES
 
 /* PHP:blocknewsletter(); */;
 /* PHP:set_payment_module_group(); */;
+/* PHP:add_new_tab(AdminGenerator, fr:Générateurs|es:Generadores|en:Generators|de:Generatoren|it:Generatori, 9); */;

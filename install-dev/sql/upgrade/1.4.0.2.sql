@@ -691,5 +691,5 @@ CREATE TABLE `PREFIX_webservice_permission` (
 /* PHP:add_new_tab(AdminAddonsMyAccount, it:Il mio Account|de:Mein Konto|fr:Mon compte|en:My Account,  7); */;
 /* PHP:add_new_tab(AdminPerformance, de:Leistung|en:Performance|it:Performance|fr:Performances|es:Rendimiento,  8); */;
 /* PHP:add_new_tab(AdminThemes, es:Temas|it:Temi|de:Themen|en:Themes|fr:Thèmes,  7); */;
-/* PHP:add_new_tab(AdminWebservice, fr:Service web|es:Web service|en:Webservice|de:Webservice|it:Webservice,  8); */;
+/* PHP:add_new_tab(AdminWebservice, fr:Service web|es:Web service|en:Webservice|de:Webservice|it:Webservice, 9); */;
 

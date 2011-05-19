@@ -68,15 +68,6 @@ UPDATE PREFIX_product p SET p.id_category_default = (SELECT id_category FROM PRE
 UPDATE PREFIX_category_product cp SET cp.position= cp.id_product;
 
 /* NEW TABS */
-INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPreferences' LIMIT 1) AS tmp), 'AdminPDF', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminPreferences' LIMIT 1) AS tmp )) AS tmp));
-INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
-	SELECT id_lang,
-	(SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminPDF' LIMIT 1),
-	'PDF Invoice' FROM PREFIX_lang);
-UPDATE `PREFIX_tab_lang` SET `name` = 'Facture PDF'
-	WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` t WHERE t.class_name = 'AdminPDF')
-	AND `id_lang` = (SELECT `id_lang` FROM `PREFIX_lang` l WHERE l.iso_code = 'fr');
-INSERT INTO PREFIX_access (id_profile, id_tab, `view`, `add`, edit, `delete`) VALUES ('1', (SELECT id_tab FROM PREFIX_tab t WHERE t.class_name = 'AdminPDF' LIMIT 1), 1, 1, 1, 1);
 
 INSERT INTO PREFIX_tab (id_parent, class_name, position) VALUES ((SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp), 'AdminPrintPDF', (SELECT tmp.max FROM (SELECT MAX(position) max FROM `PREFIX_tab` WHERE id_parent = (SELECT tmp.`id_tab` FROM (SELECT `id_tab` FROM PREFIX_tab t WHERE t.class_name = 'AdminOrders' LIMIT 1) AS tmp )) AS tmp));
 INSERT INTO PREFIX_tab_lang (id_lang, id_tab, name) (
@@ -127,3 +118,5 @@ INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_B
 INSERT INTO PREFIX_configuration (name, value, date_add, date_upd) VALUES ('PS_FO_PROTOCOL', 'http://', NOW(), NOW());
 UPDATE PREFIX_configuration SET name = 'PS_MAIL_SMTP_PORT', value = 25 WHERE name = 'PS_MAIL_SMTP_PORT' AND value = 'default';
 UPDATE PREFIX_configuration SET name = 'PS_MAIL_SMTP_PORT', value = 465 WHERE name = 'PS_MAIL_SMTP_PORT' AND value = 'secure';
+
+/* PHP:add_new_tab(AdminPDF, fr:PDF|es:PDF|en:PDF|de:PDF|it:PDF, 3); */;
