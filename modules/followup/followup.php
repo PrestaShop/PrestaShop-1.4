@@ -62,7 +62,9 @@ class Followup extends Module
 		`id_discount` INT UNSIGNED NOT NULL ,
 		`id_customer` INT UNSIGNED NULL ,
 		`id_cart` INT UNSIGNED NULL ,
-		`date_add` DATETIME NOT NULL
+		`date_add` DATETIME NOT NULL,
+		 INDEX `date_add`(`date_add`),
+		 INDEX `id_cart`(`id_cart`)
 		) ENGINE='._MYSQL_ENGINE_);
 		
 		foreach ($this->confKeys AS $key)
