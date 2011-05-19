@@ -720,8 +720,9 @@ class AdminTranslations extends AdminTab
 				<legend>
 					<img src="../img/admin/import.gif" />'.$this->l('Add / Update a language').'
 				</legend>
-				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add or update a language directly from prestashop.com here').'</p>
-					<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add or update:').' ';
+				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add or update a language directly from prestashop.com here').'</p>';
+			$this->displayWarning($this->l('If you choose to update an existing language pack, all your previous customization in the theme named prestashop will be lost. This include front office expressions and default mails.'));
+			echo '<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add or update:').' ';
 			
 			if ($lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_, false, stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 5)))))
 			{
