@@ -1,6 +1,6 @@
 SET NAMES 'utf8';
 
-SET @alias = (SELECT IFNULL((SELECT `id_tab` FROM `PREFIX_tab` WHERE `class_name` = "AdminAlias" LIMIT 1), '0'));
+SET @alias = (SELECT IFNULL((SELECT `id_tab` FROM `PREFIX_tab` WHERE `class_name` = "AdminAliases" LIMIT 1), '0'));
 UPDATE `PREFIX_tab` SET `id_parent` = 8 WHERE `id_tab` = @alias LIMIT 1;
 SET @stores = (SELECT IFNULL((SELECT `id_tab` FROM `PREFIX_tab` WHERE `class_name` = "AdminStores" LIMIT 1), '0'));
 UPDATE `PREFIX_tab` SET `id_parent` = 9 WHERE `id_tab` = @stores LIMIT 1;
