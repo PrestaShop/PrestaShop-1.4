@@ -320,18 +320,21 @@ class AdminCarts extends AdminTab
 			$this->displayList();
 		}
 	}
+	
 	protected function _displayDeleteLink($token = NULL, $id)
 	{
 	    global $currentIndex;
 	    $cart = new Cart((int)$id);
-		if (!$cart->OrderExists())
-		{
-			$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
-			$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?)';
-			echo '
-				<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].'\');">
-				<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
-		}
+		
+		foreach ($this->_list as $cart)
+			if ($id == $cart['id_cart'])
+				if (!$cart['id_order'])
+					return;
+		$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, TRUE, FALSE);
+		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?)';
+		echo '
+			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].'\');">
+			<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
 	}
 }
 
