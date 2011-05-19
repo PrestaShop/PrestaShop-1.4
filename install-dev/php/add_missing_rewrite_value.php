@@ -29,8 +29,10 @@ function add_missing_rewrite_value()
 {
 	$pages = Db::getInstance()->ExecuteS('
 	SELECT * 
-	FROM `'._DB_PREFIX_.'meta_lang` 
-	WHERE `url_rewrite` = \'\'
+	FROM `'._DB_PREFIX_.'meta` m
+	LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.`id_meta` = ml.`id_meta`)
+	WHERE ml.`url_rewrite` = \'\'
+	AND m.`page` != "index"
 	');
 	foreach ($pages as $page)
 	{
