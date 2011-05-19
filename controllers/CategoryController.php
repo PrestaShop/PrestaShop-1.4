@@ -123,8 +123,9 @@ class CategoryControllerCore extends FrontController
 
 				$this->category->description = nl2br2($this->category->description);
 				$subCategories = $this->category->getSubCategories((int)(self::$cookie->id_lang));
-				self::$smarty->assign('category', $this->category);
-				if (Db::getInstance()->numRows())
+				self::$smarty->assign('category', $this->category);	
+				
+				if (isset($subCategories) AND !empty($subCategories) AND $subCategories)
 				{
 					self::$smarty->assign('subcategories', $subCategories);
 					self::$smarty->assign(array(
