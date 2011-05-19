@@ -99,6 +99,11 @@ class OrderControllerCore extends ParentOrderController
 				$this->_assignCarrier();
 				break;
 			case 3:
+				//Test that the conditions were accepted by the customer
+				if (!isset($_POST['cgv']) OR !Validate::isBool($_POST['cgv']) OR 1 != $_POST['cgv'])
+				{
+					Tools::redirect('order.php?step=2');
+				}
 				if(Tools::isSubmit('processCarrier'))
 					$this->processCarrier();
 				$this->autoStep();
