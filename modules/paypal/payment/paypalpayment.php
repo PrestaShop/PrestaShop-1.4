@@ -73,7 +73,7 @@ class PaypalPayment extends Paypal
 				$request .= '&L_NAME'.$i.'='.substr(urlencode($products[$i]['name'].(isset($products[$i]['attributes'])?' - '.$products[$i]['attributes']:'').(isset($products[$i]['instructions'])?' - '.$products[$i]['instructions']:'') ), 0, 127);
 				$request .= '&L_AMT'.$i.'='.urlencode(number_format($products[$i]['price'], 2));
 				$request .= '&L_QTY'.$i.'='.urlencode($products[$i]['cart_quantity']);
-				$amt += number_format($products[$i]['price'], 2);
+				$amt += number_format($products[$i]['price']*$products[$i]['cart_quantity'], 2);
 			}
 			$shipping = number_format($cart->getOrderShippingCost($cart->id_carrier, false), 2);
 			$request .= '&ITEMAMT='.urlencode($amt);
