@@ -250,7 +250,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (2, 4, 'Zahlung eingegangen', 'payment'),
 (3, 4, 'Bestellung eingegangen', 'preparation'),
 (4, 4, 'Versendet', 'shipped'),
-(5, 4, 'Erfolgreich abgeschlossen' ''),
+(5, 4, 'Erfolgreich abgeschlossen', ''),
 (6, 4, 'Storniert', 'order_canceled'),
 (7, 4, 'Erstattet', 'refund'),
 (8, 4, 'Fehler bei der Bezahlung', 'payment_error'),
