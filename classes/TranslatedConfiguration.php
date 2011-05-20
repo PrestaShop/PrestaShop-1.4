@@ -50,12 +50,12 @@ class TranslatedConfigurationCore extends Configuration
 		parent::__construct($id,$id_lang);
 	}
 	
-	public function add()
+	public function add($autodate = true, $nullValues = false)
 	{
 		return $this->update();
 	}
 	
-	public function update()
+	public function update($nullValues = false)
 	{
 		$ishtml = false;
 		foreach ($this->value as $i18n_value)
