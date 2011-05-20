@@ -158,7 +158,7 @@ class TrackingFront extends Module
 	public function displayAccount()
 	{
 		global $smarty, $cookie;
-elog('rrrrrrrrrrrrrrrrrrrrrrr');
+		
 		if (!isset($cookie->stats_date_from))
 			$cookie->stats_date_from = date('Y-m-d');
 		if (!isset($cookie->stats_date_to))
