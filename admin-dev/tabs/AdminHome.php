@@ -149,7 +149,8 @@ class AdminHome extends AdminTab
 	public function display()
 	{
 		global $cookie;
-		
+		$this->warnDomainName();
+
 		$tab = get_class();
 		$protocol = (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')?'https':'http';
 		$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));

@@ -58,6 +58,12 @@ class AdminMeta extends AdminTab
 		parent::__construct();
 	}
 
+	public function display()
+	{
+		$this->warnDomainName();
+		parent::display();
+	}
+	
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex;

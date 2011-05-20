@@ -185,7 +185,6 @@ abstract class AdminTabCore
 		if ($className == 'AdminCategories' OR $className == 'AdminProducts')
 			$className = 'AdminCatalog';
 		$this->token = Tools::getAdminToken($className.(int)$this->id.(int)$cookie->id_employee);
-
 	}
 
 
@@ -1872,6 +1871,17 @@ abstract class AdminTabCore
 		if (array_key_exists($filter, $this->fieldsDisplay))
 			return $this->fieldsDisplay[$filter];
 		return false;
+	}
+	
+	protected function warnDomainName()
+	{
+		if ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN'))
+			$this->displayWarning($this->l('Your shop\'s domain name ("').Configuration::get('PS_SHOP_DOMAIN').
+			$this->l('") seems to be different from the shop url which is: "').$_SERVER['HTTP_HOST'].
+			$this->l('". Click ').
+			'<a href=\'http://localhost/prestashop/admin-dev/index.php?tab=AdminMeta&token='.
+			Tools::getAdminTokenLite('AdminMeta').'#SEO%20%26%20URLs\'>'.
+			$this->l('here').'</a>'.$this->l(' to change your shop\'s domain name.'));
 	}
 }
 
