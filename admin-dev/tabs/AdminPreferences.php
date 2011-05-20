@@ -104,7 +104,7 @@ class AdminPreferences extends AdminTab
 			if (empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
 			{
 				$this->_fieldsGeneral['PS_SSL_ENABLED']['type'] = 'disabled';
-				$this->_fieldsGeneral['PS_SSL_ENABLED']['disabled'] = '<a href="https://'.Tools::getShopDomainSsl().$_SERVER['REQUEST_URI'].'">'.$this->l('You have first to login with the HTTPS protocol if you want to enable SSL.').'</a>';
+				$this->_fieldsGeneral['PS_SSL_ENABLED']['disabled'] = '<a href="https://'.Tools::getShopDomainSsl().$_SERVER['REQUEST_URI'].'">'.$this->l('Please click here to use HTTPS protocol before enabling SSL.').'</a>';
 			}
 
 		parent::__construct();
