@@ -209,7 +209,7 @@ class UspsCarrier extends CarrierModule
 					'deleted' => 0,
 					'shipping_handling' => false,
 					'range_behavior' => 0,
-					'delay' => array('fr' => $rateService['service'], 'en' => $rateService['service']),
+					'delay' => array('fr' => $rateService['service'], 'en' => $rateService['service'], Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')) => $rateService['service']),
 					'id_zone' => 1,
 					'is_module' => true,
 					'shipping_external' => true,
@@ -243,6 +243,8 @@ class UspsCarrier extends CarrierModule
 			if ($language['iso_code'] == 'fr')
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
 			if ($language['iso_code'] == 'en')
+				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
+			if ($language['iso_code'] == Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')))
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
 		}
 
