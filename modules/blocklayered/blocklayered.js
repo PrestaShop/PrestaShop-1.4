@@ -34,7 +34,10 @@ $(document).ready(function()
 	
 	$('#layered_form input[type=button], #layered_form label.layered_color').live('click', function()
 	{
-		$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
+		if (!$('\'input[name='+$(this).attr('name')+']:hidden\'').length)
+			$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
+		else
+			$('\'input[name='+$(this).attr('name')+']:hidden\'').remove();
 		reloadContent();
 	});
 	

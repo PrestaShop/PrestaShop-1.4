@@ -643,7 +643,7 @@ class BlockLayered extends Module
 		$products = $this->getProductByFilters($selectedFilters);
 		
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
-							
+						
 		$smarty->assign('products', $products);
 		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */

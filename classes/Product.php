@@ -198,7 +198,7 @@ class ProductCore extends ObjectModel
 	protected static $_tax_rules_group = array();
 	protected static $_cacheFeatures = array();
 	protected static $_frontFeaturesCache = array();
-
+	protected static $producPropertiesCache = array();
 	/** @var array tables */
 	protected $tables = array ('product', 'product_lang');
 
@@ -2614,8 +2614,6 @@ class ProductCore extends ObjectModel
 			return $row['id_product'].'-'.$row['id_image'];
 		return Language::getIsoById((int)$id_lang).'-default';
 	}
-
-	protected static $producPropertiesCache = array();
 
 	public static function getProductProperties($id_lang, $row)
 	{
