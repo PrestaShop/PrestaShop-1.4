@@ -127,7 +127,7 @@ class AdminReferrers extends AdminTab
 					{
 						referrerStatus[id_referrer] = true;
 						for (var i = 0; i < productIds.length; ++i)
-							$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:id_referrer,id_product:productIds[i]},
+							$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxReferrers:1, ajaxProductFilter:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:id_referrer,id_product:productIds[i]},
 								function(result) {
 									var newLine = newProductLine(id_referrer, result[0]);
 									$(newLine).hide().insertAfter(getE(\'trid_\'+id_referrer)).fadeIn();
@@ -388,7 +388,7 @@ class AdminReferrers extends AdminTab
 		<script type="text/javascript">
 			function updateConversionRate(id_product)
 			{
-				$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",{ajaxProductFilter:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:'.$referrer->id.',id_product:id_product},
+				$.getJSON("'.dirname($currentIndex).'/ajax.php",{ajaxReferrers:1, ajaxProductFilter:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_referrer:'.$referrer->id.',id_product:id_product},
 					function(j) {';
 		foreach ($displayTab as $key => $value)
 			echo '$("#'.$key.'").html(j[0].'.$key.');';
