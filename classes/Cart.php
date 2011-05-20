@@ -1596,9 +1596,9 @@ class CartCore extends ObjectModel
 		}
 		
 		// Insert customized_data
-		$first = true;
 		if (sizeof($customs))
 		{
+			$first = true;
 			$sql_custom_data = 'INSERT INTO '._DB_PREFIX_.'customized_data (`id_customization`, `type`, `index`, `value`) VALUES ';
 			foreach ($customs AS $custom)
 			{
