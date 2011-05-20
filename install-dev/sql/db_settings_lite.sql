@@ -952,7 +952,7 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (14, 5, 'Carrello', '', '', 'carrello'),
 (15, 5, 'Sconto', '', '', 'sconto'),
 (16, 5, 'Storico ordine', '', '', 'storico-ordine'),
-(17, 5, 'Identità', '', '', 'identità'),
+(17, 5, 'Identità', '', '', 'identita'),
 (18, 5, 'Il mio account', '', '', 'il-mio-account'),
 (19, 5, 'Seguito ordine', '', '', 'seguito-ordine'),
 (20, 5, 'Nota di ordine', '', '', 'nota-di-ordine'),

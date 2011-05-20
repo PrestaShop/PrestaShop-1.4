@@ -26,4 +26,8 @@ UPDATE `PREFIX_order_state_lang` SET `name` = 'Warten auf Zahlungseingang' WHERE
 UPDATE `PREFIX_order_state_lang` SET `name` = 'Warten auf Zahlungseingang von PayPal' WHERE `PREFIX_order_state_lang`.`id_order_state` =11 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
 UPDATE `PREFIX_order_state_lang` SET `name` = 'PayPal Anmeldung erfolgreich' WHERE `PREFIX_order_state_lang`.`id_order_state` =12 AND `PREFIX_order_state_lang`.`id_lang` = (SELECT id_lang FROM `PREFIX_lang` WHERE `iso_code` = 'de');
 
+UPDATE `PREFIX_meta_lang` SET `url_rewrite` = 'identita' WHERE `url_rewrite` = 'Identità';
+
 /* PHP:add_missing_rewrite_value(); */;
+
+
