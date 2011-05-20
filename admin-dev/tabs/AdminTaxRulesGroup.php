@@ -57,7 +57,7 @@ class AdminTaxRulesGroup extends AdminTab
 					<ul>
 					<li>'.$this->l('Click "Add New".').'</li>
 					<li>'.$this->l('Give a name to your tax rule (ex: "19.6% tax rule”).').'</li>
-					<li>'.$this->l('Move the current field to true.').'</li>
+					<li>'.$this->l('Set the \'active\' field to true.').'</li>
 					<li>'.$this->l('Edit its configuration by country by associating a 19.6% tax with France and with European countries, and a tax of 0% to other countries.').'</li>
 					<li>'.$this->l('Click on Save.').'</li>
 					<li>'.$this->l('Go to your product page (Catalog tab) and associate the "19.6% tax rule" to your product.').'</li>
