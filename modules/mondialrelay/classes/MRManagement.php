@@ -47,6 +47,15 @@ class MRManagement extends MondialRelay
 		
 	}
 	
+	static public function replaceAccentedCharacters($string)
+	{
+		$currentLocale = setlocale(LC_ALL, NULL);
+		setlocale(LC_ALL, 'en_US.UTF8');
+		$cleanedString = iconv("UTF-8","ASCII//TRANSLIT", $string);
+		setLocale(LC_ALL, $currentLocale);
+		return $cleanedString;
+	}
+	
 	public function DeleteHistory()
 	{
 		$success = array();

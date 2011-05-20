@@ -364,7 +364,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			foreach($rootCase['list'] as $paramName => &$valueDetailed)
 				if ($paramName != 'Texte' && $paramName != 'Security')
 				{
-					$valueDetailed['value'] = strtoupper($valueDetailed['value']);
+					$valueDetailed['value'] = strtoupper(MRManagement::replaceAccentedCharacters($valueDetailed['value']));
 					if (preg_match($valueDetailed['regexValidation'], $valueDetailed['value'], $matches))
 						$concatenationValue .= $valueDetailed['value'];
 					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
@@ -372,12 +372,12 @@ class MRCreateTickets implements IMondialRelayWSMethod
 						if (empty($valueDetailed['value']))
 							$error = 'This key ['.$paramName.'] is empty and need to be filled';
 						else
-							$error = 'This key ['.$paramName.'] hasn\'t a valide value format : '.$valueDetailed['value']; 
+							$error = 'This key ['.$paramName.'] hasn\'t a valid value format : '.$valueDetailed['value']; 
 						$this->_resultList['error'][$rootCase['list']['NDossier']['value']][] = $error;
 					}
 				}
 			$concatenationValue .= $this->_webServiceKey;
-			$rootCase['list']['Security']['value'	] = strtoupper(md5($concatenationValue));	
+			$rootCase['list']['Security']['value'	] = strtoupper(md5($concatenationValue));
 		}
 	}
 	
@@ -425,7 +425,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		$success = &$this->_resultList['success'][$params['NDossier']];
 		
 		if ($client->fault)
-			$errors[] = $this->_mondialRelay->l('Its seems the request isn\'t valide :').
+			$errors[] = $this->_mondialRelay->l('Its seems the request isn\'t valid :').
 				$result;
 				
 		$result = $result['WSI2_CreationEtiquetteResult'];
