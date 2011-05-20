@@ -210,7 +210,7 @@ class TwengaObj
 	 * @param string $url
 	 * @param array $params
 	 */
-	private static function buildUrlToQuery($url, array $params)
+	private static function buildUrlToQuery($url, $params)
 	{
 		$str_params = http_build_query($params);
 		$str_url = $url.(($str_params !== '') ? '?'.$str_params : ''); 
@@ -225,7 +225,7 @@ class TwengaObj
 	 * @throws TwengaException in case of cURL error.
 	 * @return array with status code and response of the cURL request.
 	 */
-	private static function executeQuery($query, array $params = array(), $authentication = true)
+	private static function executeQuery($query, $params = array(), $authentication = true)
 	{
 		$defaultParams = array(
 			CURLOPT_HEADER => TRUE,
@@ -258,7 +258,7 @@ class TwengaObj
 	 * @throws TwengaException if the object instanciate by the method name to check $params is a TwengaFields subclass.
 	 * @throws TwengaFieldsException thrown by the TwengaFields::checkParams() method.
 	 */
-	public static function checkParams($method_name, array $params)
+	public static function checkParams($method_name, $params)
 	{
 		$classname = 'TwengaFields'.ucfirst($method_name);
 		if(class_exists($classname))
@@ -279,7 +279,7 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-	public function getSubscriptionLink(array $params = array())
+	public function getSubscriptionLink($params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsGetSubscriptionLink.php');
 //		$params['site_id'] = self::$site_id;
@@ -331,7 +331,7 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-	public function siteExist(array $params = array())
+	public function siteExist($params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
 		$params['key'] = self::$hashkey;
@@ -360,7 +360,7 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-	public function siteActivate(array $params = array())
+	public function siteActivate($params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
 		require_once realpath(self::$base_dir.'/TwengaFieldsSiteActivate.php');
@@ -390,7 +390,7 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-	public function getTrackingScript(array $params = array())
+	public function getTrackingScript($params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsGetTrackingScript.php');
 		$params['key'] = self::$hashkey;
@@ -418,7 +418,7 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-	public function orderExist(array $params = array())
+	public function orderExist($params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderExist.php');
@@ -447,7 +447,7 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-	public function orderValidate(array $params = array())
+	public function orderValidate($params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
 		$params['key'] = self::$hashkey;
@@ -475,7 +475,7 @@ class TwengaObj
 	 * @throws TwengaFieldsException
 	 * @throws TwengaException
 	 */
-	public function orderCancel(array $params = array())
+	public function orderCancel($params = array())
 	{
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
 		require_once realpath(self::$base_dir.'/TwengaFieldsOrderCancel.php');

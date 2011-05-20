@@ -63,7 +63,7 @@ class PrestashopStats
      * @param string $url url which defined the method to use for the tracker.
      * @param array $params params to passed for the tracker.
      */
-    private static function buildUrlToQuery($url, array $params = array())
+    private static function buildUrlToQuery($url, $params = array())
     {
         $params['url'] = self::$site_url;
         $params['module'] = 'twenga';

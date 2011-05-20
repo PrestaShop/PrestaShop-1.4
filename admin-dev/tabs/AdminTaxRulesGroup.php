@@ -56,7 +56,7 @@ class AdminTaxRulesGroup extends AdminTab
 					.$this->l('You want to apply a tax of 19.6% to a product in France and Europe, but not apply this tax to other countries. Follow these steps:').'
 					<ul>
 					<li>'.$this->l('Click "Add New".').'</li>
-					<li>'.$this->l('Give a name to your tax rule (ex: "19.6% tax rule”).').'</li>
+					<li>'.$this->l('Give a name to your tax rule (ex: "19.6% tax rule).').'</li>
 					<li>'.$this->l('Set the \'active\' field to true.').'</li>
 					<li>'.$this->l('Edit its configuration by country by associating a 19.6% tax with France and with European countries, and a tax of 0% to other countries.').'</li>
 					<li>'.$this->l('Click on Save.').'</li>
@@ -64,7 +64,7 @@ class AdminTaxRulesGroup extends AdminTab
 					</ul>
 					<br />
  				  '.$this->l('Later, if you need to apply a different tax to Spain, you can simply edit the rule "19.6% tax rule" and change the tax associated with Spain.').'<br />
- 				  '.$this->l('Note: The default rate applied to your product will be based on your store’s default country.').'
+ 				  '.$this->l('Note: The default rate applied to your product will be based on your store\'s default country.').'
 				</div><br />';
 	}
 
@@ -348,7 +348,7 @@ class AdminTaxRulesGroup extends AdminTab
     	return $html;
   	 }
 
-    public function renderTaxesSelect($id_lang, $default_value, array $html_options)
+    public function renderTaxesSelect($id_lang, $default_value, $html_options)
     {
         $opt = '';
         foreach( array('id', 'class', 'name', 'disabled') AS $prop)

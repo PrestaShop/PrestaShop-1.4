@@ -378,7 +378,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 *
 	 * @param array $params
 	 */
-	private function _requestForProtectionV2ParamsValidator(array $params)
+	private function _requestForProtectionV2ParamsValidator($params)
 	{
 		$bool_flag = true;
 		$mandatory_keys = array(
@@ -434,7 +434,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 * @see TSBuyerProtection::cronTasks()
 	 * @param array $params
 	 */
-	private function _requestForProtectionV2(array $params)
+	private function _requestForProtectionV2($params)
 	{
 		$client = $this->_getClient(TSBuyerProtection::WEBSERVICE_FO);
 		$testing_params = $this->_requestForProtectionV2ParamsValidator($params);
@@ -512,7 +512,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 * @param array $params
 	 * @throws TSBPException
 	 */
-	private function _getRequestState(array $params)
+	private function _getRequestState($params)
 	{
 		$client = $this->_getClient(TSBuyerProtection::WEBSERVICE_FO);
 		$code = 0;
@@ -1085,7 +1085,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		unset($module);
 		return $return;
 	}
-	private function _displayFormEditCertificate(array $certificate)
+	private function _displayFormEditCertificate($certificate)
 	{
 		$installed_modules = Module::getModulesInstalled();
 		$payment_module_collection = '';

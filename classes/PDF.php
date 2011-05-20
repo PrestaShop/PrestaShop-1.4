@@ -862,7 +862,7 @@ class PDFCore extends PDF_PageGroupCore
 			$this->Cell(array_sum($w), 0, '');
 	}
 
-	public function priceBreakDownCalculation(array &$priceBreakDown)
+	public function priceBreakDownCalculation(&$priceBreakDown)
 	{
 		$priceBreakDown['totalsWithoutTax'] = array();
 		$priceBreakDown['totalsWithTax'] = array();
@@ -975,7 +975,7 @@ class PDFCore extends PDF_PageGroupCore
 	/**
 	* Tax table
 	*/
-	public function TaxTab(array &$priceBreakDown)
+	public function TaxTab(&$priceBreakDown)
 	{
 
      $invoiceAddress = new Address(self::$order->id_address_invoice);

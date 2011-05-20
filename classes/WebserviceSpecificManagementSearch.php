@@ -30,7 +30,7 @@ class WebserviceSpecificManagementSearchCore implements WebserviceSpecificManage
 		return $this->objOutput;
 	}
 	
-	public function setUrlSegment(array $segments)
+	public function setUrlSegment($segments)
 	{
 		$this->urlSegment = $segments;
 		return $this;

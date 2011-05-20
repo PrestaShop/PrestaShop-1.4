@@ -414,14 +414,14 @@ class SearchCore
 		return true;
 	}
 
-	protected static function setProductsAsIndexed(array &$products)
+	protected static function setProductsAsIndexed(&$products)
 	{
 		if (count($products))
 			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT 20');
 	}
 
 	// $queryArray and $queryArray2 are automatically emptied in order to be reused immediatly
-	protected static function saveIndex(array &$queryArray, array &$queryArray2)
+	protected static function saveIndex(&$queryArray, &$queryArray2)
 	{
 		if (count($queryArray) AND count($queryArray2))
 		{

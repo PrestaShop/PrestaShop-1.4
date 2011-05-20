@@ -561,7 +561,7 @@ class MondialRelay extends Module
 		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Delete successful').'</div>';
 	}
 	
-	public function mrUpdate($type, Array $array, Array $keyArray)
+	public function mrUpdate($type, $array, $keyArray)
 	{
 		global $cookie;
 		

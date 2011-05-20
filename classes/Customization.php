@@ -75,7 +75,7 @@ class CustomizationCore
 		return $result['name'];
 	}
 
-	public static function retrieveQuantitiesFromIds(array $ids_customizations)
+	public static function retrieveQuantitiesFromIds($ids_customizations)
 	{
 		$quantities = array();
 

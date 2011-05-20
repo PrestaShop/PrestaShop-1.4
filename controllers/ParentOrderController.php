@@ -408,7 +408,7 @@ class ParentOrderControllerCore extends FrontController
 	 * @param array $carriers
 	 * @return number the id of the default carrier
 	 */
-	protected function _setDefaultCarrierSelection(Array $carriers)
+	protected function _setDefaultCarrierSelection($carriers)
 	{
 		if (sizeof($carriers))
 		{

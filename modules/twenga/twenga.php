@@ -961,7 +961,7 @@ class Twenga extends PaymentModule
 	 * 		  But for now it's not sure enough.
 	 * @return array with good value for the XML.
 	 */
-	private function preparedValues(Product $product, array $combination, $lang, Link $link, Carrier $carrier)
+	private function preparedValues(Product $product, $combination, $lang, Link $link, Carrier $carrier)
 	{
 		$arr_return = array();
 		$str_features = array();

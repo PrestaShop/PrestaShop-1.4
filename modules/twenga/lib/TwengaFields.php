@@ -130,7 +130,7 @@ abstract class TwengaFields
 	 * @throws TwengaFieldsException if an attribut of a field is not set correctly 
 	 * 		   (much more debugging rather than production).
 	 */
-	private function checkFieldAttributs ($name, array $field_attributs)
+	private function checkFieldAttributs ($name, $field_attributs)
 	{
 		// attribut at key 0 is the length of the required value
 		if(!Validate::isInt($field_attributs[0]))
@@ -245,7 +245,7 @@ abstract class TwengaFields
 	 * @param array $params
 	 * @return TwengaFields current instance for chainability
 	 */
-	public function setParams(array $params)
+	public function setParams($params)
 	{
 		if(empty($params))
 			throw new TwengaFieldsException(Tools::displayError('Params must be filled'));

@@ -1729,7 +1729,7 @@ class AdminTranslations extends AdminTab
 	 * @param boolean $is_default set it if modules are located in root/prestashop/modules folder
 	 * 				  This allow to distinguish overrided prestashop theme and original module 
 	 */
-	protected function getAllModuleFiles(array $modules, $root_dir, $lang, $is_default = false)
+	protected function getAllModuleFiles($modules, $root_dir, $lang, $is_default = false)
 	{
 		$array_files = array();
 		foreach ($modules AS $module)

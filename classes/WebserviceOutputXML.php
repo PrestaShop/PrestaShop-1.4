@@ -65,7 +65,7 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 	{
 		$this->languages = $languages;
 	}
-	public function setLanguages(array $languages)
+	public function setLanguages($languages)
 	{
 		$this->languages = $languages;
 		return $this;
@@ -87,7 +87,7 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 		$str_output .= '</error>'."\n";
 		return $str_output;
 	}
-	public function renderField(array $field)
+	public function renderField($field)
 	{
 		$ret = '';
 		$node_content = '';

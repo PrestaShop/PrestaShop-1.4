@@ -135,8 +135,8 @@ class Curve
 	protected $label;
 	protected $type;
 
-	/** @prototype void public function setValues(array $values) */
-	public function setValues(array $values)
+	/** @prototype void public function setValues($values) */
+	public function setValues($values)
 	{
 		$this->values = $values;
 	}

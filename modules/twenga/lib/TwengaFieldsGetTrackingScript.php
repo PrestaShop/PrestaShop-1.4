@@ -64,7 +64,7 @@ class TwengaFieldsGetTrackingScript extends TwengaFields
 		}
 		parent::__construct();
 	}
-	public static function isItemsOrder (array $value)
+	public static function isItemsOrder ($value)
 	{
 		$str_error = Tools::displayError('For the items');
 		foreach ($value as $key=>$item)

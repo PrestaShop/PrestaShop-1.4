@@ -305,7 +305,7 @@ class WebserviceRequestCore
 	 * @param array $parameters
 	 * @return unknown_type
 	 */
-	public function specificPriceForProduct($entity_object, array $parameters)
+	public function specificPriceForProduct($entity_object, $parameters)
 	{
 		$arr_return = array();
 		foreach($parameters as $name => $value)

@@ -403,7 +403,7 @@ class AdminModules extends AdminTab
 	 * @return String built comp
 	 */
 
-	private function _buildModuleAuthorsOptGroup(Array $authors, $fieldName = "UNDEFINED")
+	private function _buildModuleAuthorsOptGroup($authors, $fieldName = "UNDEFINED")
 	{
 		$out = '<optgroup label="'.$this->l('Authors').'">';
 		foreach($authors as $author_item => $status)

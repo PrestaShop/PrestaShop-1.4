@@ -2291,7 +2291,7 @@ class ProductCore extends ObjectModel
 		return self::$_cacheFeatures[$id_product];
 	}
 
-	public static function cacheProductsFeatures(array $productIds)
+	public static function cacheProductsFeatures($productIds)
 	{
 		$productImplode = array();
 		foreach ($productIds as $id_product)
@@ -2312,7 +2312,7 @@ class ProductCore extends ObjectModel
 		}
 	}
 
-	public static function cacheFrontFeatures(array $productIds, $id_lang)
+	public static function cacheFrontFeatures($productIds, $id_lang)
 	{
 		$productImplode = array();
 		foreach ($productIds as $id_product)

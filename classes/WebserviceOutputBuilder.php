@@ -103,7 +103,7 @@ class WebserviceOutputBuilderCore
 	 * @param array $resources
 	 * @return $this
 	 */
-	public function setWsResources(array $resources)
+	public function setWsResources($resources)
 	{
 		$this->wsResource = $resources;
 		return $this;
@@ -237,7 +237,7 @@ class WebserviceOutputBuilderCore
 	 * @param array $errors
 	 * @return string output in the format specified by WebserviceOutputBuilder::objectRender
 	 */
-	public function getErrors(array $errors)
+	public function getErrors($errors)
 	{
 		if (!empty($errors))
 		{
@@ -328,7 +328,7 @@ class WebserviceOutputBuilderCore
 	 * @param int $type_of_view use the 2 constants WebserviceOutputBuilder::VIEW_LIST WebserviceOutputBuilder::VIEW_DETAILS
 	 * @return string in the output format specified by WebserviceOutputBuilder::objectRender
 	 */
-	public function getContent(array $objects, $schema_to_display = null, $fields_to_display = 'minimum', $depth = 0, $type_of_view = self::VIEW_LIST, $override = true)
+	public function getContent($objects, $schema_to_display = null, $fields_to_display = 'minimum', $depth = 0, $type_of_view = self::VIEW_LIST, $override = true)
 	{
 		$this->fieldsToDisplay = $fields_to_display;
 		$this->depth = $depth;
