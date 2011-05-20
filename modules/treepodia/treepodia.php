@@ -82,7 +82,10 @@ class Treepodia extends Module
 
 	private function _getShopURL()
 	{
-		return ((Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')) ? Tools::getShopDomainSsl() : Tools::getShopDomain()).__PS_BASE_URI__;
+		$host = ((Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')) ? Tools::getShopDomainSsl() : Tools::getShopDomain()).__PS_BASE_URI__;
+		if (substr($host, 0, 4) != 'http')
+			$host = ((Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://'.$host : 'http://'.$host);
+		return $host;
 	}
 
 	public function generateXmlFlow()
