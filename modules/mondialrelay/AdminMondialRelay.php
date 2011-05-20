@@ -73,14 +73,14 @@ class AdminMondialRelay extends AdminTab
 		
 		$html = '';
 		
-		$html .= $mondialrelay->l('To generate sticks, you must have register a correct address of your store on').
+		$html .= $this->l('To generate sticks, you must have register a correct address of your store on').
 			' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.
 			(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.
-			$mondialrelay->l('The contact page').'</a>';
-		$html .= '<p>'.$mondialrelay->l('All orders which have the state').' "<b>'.$order_state->name.'</b>"';
+			$this->l('The contact page').'</a>';
+		$html .= '<p>'.$this->l('All orders which have the state').' "<b>'.$order_state->name.'</b>"';
 		$html .= '.&nbsp;<a href="index.php?tab=AdminModules&configure=mondialrelay&token='.
 			Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).
-			(int)($cookie->id_employee)).'" class="green">' . $mondialrelay->l('Change configuration') . '</a></p>
+			(int)($cookie->id_employee)).'" class="green">' . $this->l('Change configuration') . '</a></p>
 			<div class="PS_MRErrorList error" id="otherErrors">
 							<img src="'._PS_IMG_.'admin/error2.png" alt="" />
 							<span></span>
@@ -88,23 +88,23 @@ class AdminMondialRelay extends AdminTab
 
 		$orders = MondialRelay::getOrders();
 		if (empty($orders))
-			$html.= '<h3 style="color:red;">' . $mondialrelay->l('No orders with this state.') . '</h3>';
+			$html.= '<h3 style="color:red;">' . $this->l('No orders with this state.') . '</h3>';
 		else
 		{
 			$html.= '<form method="post" action="'.$_SERVER['REQUEST_URI'].'">';
 			$html.= "\n<table class=\"table\" id='orders'>";
 			$html.= '<tr>';
-			$html.= '<th>'.$mondialrelay->l('Order ID').'</th>';
-			$html.= '<th>'.$mondialrelay->l('Customer').'</th>';
-			$html.= '<th>'.$mondialrelay->l('Total price').'</th>';
-			$html.= '<th>'.$mondialrelay->l('Total shipping').'</th>';
-			$html.= '<th>'.$mondialrelay->l('Date').'</th>';
-			$html.= '<th>'.$mondialrelay->l('Put a Weight (grams)').'</th>';
-			$html.= '<th class="fixed"><a href="javascript:void(0);" id="toggleStatusOrderList">'.$mondialrelay->l('Toggle selection').'</a><br /></th>';
-			$html.= '<th>'.$mondialrelay->l('MR Number').'</th>';
-			$html.= '<th>'.$mondialrelay->l('MR Country').'</th>';
-			$html.= '<th>'.$mondialrelay->l('Exp Number').'</th>';
-			$html.= '<th>'.$mondialrelay->l('Detail').'</th>';
+			$html.= '<th>'.$this->l('Order ID').'</th>';
+			$html.= '<th>'.$this->l('Customer').'</th>';
+			$html.= '<th>'.$this->l('Total price').'</th>';
+			$html.= '<th>'.$this->l('Total shipping').'</th>';
+			$html.= '<th>'.$this->l('Date').'</th>';
+			$html.= '<th>'.$this->l('Put a Weight (grams)').'</th>';
+			$html.= '<th class="fixed"><a href="javascript:void(0);" id="toggleStatusOrderList">'.$this->l('Toggle selection').'</a><br /></th>';
+			$html.= '<th>'.$this->l('MR Number').'</th>';
+			$html.= '<th>'.$this->l('MR Country').'</th>';
+			$html.= '<th>'.$this->l('Exp Number').'</th>';
+			$html.= '<th>'.$this->l('Detail').'</th>';
 			$html.= '</tr>';
 			
 			foreach ($orders as $order)
@@ -132,7 +132,7 @@ class AdminMondialRelay extends AdminTab
 				$html .= '
 					<td class="center">
 						<a href="index.php?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'">
-						<img border="0" title="'.$mondialrelay->l('View').'" alt="'.$mondialrelay->l('View').'" src="'._PS_IMG_.'admin/details.gif"/></a>
+						<img border="0" title="'.$this->l('View').'" alt="'.$this->l('View').'" src="'._PS_IMG_.'admin/details.gif"/></a>
 					</td>
 					</tr>
 					<tr class="PS_MRErrorList error" id="errorCreatingTicket_'.$order['id_order'].'" style="display:none;">
@@ -143,7 +143,7 @@ class AdminMondialRelay extends AdminTab
 					<tr class="PS_MRSuccessList" id="successCreatingTicket_'.$order['id_order'].'" style="display:none;">
 						<td>'.$order['id_order'].'</td>
 						<td colspan="10" style="background:url('._PS_IMG_.'admin/ok2.png) 10px 5px no-repeat #DFFAD3;">
-						'.$mondialrelay->l('Operation successful').'
+						'.$this->l('Operation successful').'
 						<span></span>
 						</td>
 					</tr>';
@@ -153,7 +153,7 @@ class AdminMondialRelay extends AdminTab
 			$html .= '
 				<div class="submit_button">
 					<div class="PS_MRSubmitButton" id="PS_MRSubmitButtonGenerateTicket">
-						<input type="button" name="generate" id="generate" value="' . $mondialrelay->l('Generate') . '" class="button" />
+						<input type="button" name="generate" id="generate" value="' . $this->l('Generate') . '" class="button" />
 					</div>
 					<div class="PS_MRLoader" id="PS_MRSubmitGenerateLoader"><img src="'.$this->_moduleDirectory.'images/getTickets.gif"</div>
 				</div>';
@@ -171,17 +171,17 @@ class AdminMondialRelay extends AdminTab
 		
 		$_html.= '
 			<fieldset>
-				<legend>' . $mondialrelay->l('History of sticks creation') . '</legend>
+				<legend>' . $this->l('History of sticks creation') . '</legend>
 				<div style="overflow-x: auto;overflow-y: scroller; height: 300px; padding-top: 0.6em;" >
 					<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 						<table class="table" id="PS_MRHistoriqueTableList">
 							<tbody>
 								<tr>
-									<th><a href="javascript:void(0);" id="toggleStatusHistoryList">' . $mondialrelay->l('Toggle selection') . '</a></th>
-			 						<th>' . $mondialrelay->l('Order ID') . '</th>
-			 						<th>' . $mondialrelay->l('Exp num') . '</th>
-			 						<th>' . $mondialrelay->l('Print stick A4') . '</th>
-			 						<th>' . $mondialrelay->l('Print stick A5') . '</th>
+									<th><a href="javascript:void(0);" id="toggleStatusHistoryList">' . $this->l('Toggle selection') . '</a></th>
+			 						<th>' . $this->l('Order ID') . '</th>
+			 						<th>' . $this->l('Exp num') . '</th>
+			 						<th>' . $this->l('Print stick A4') . '</th>
+			 						<th>' . $this->l('Print stick A5') . '</th>
 			 					</tr>';
 		foreach ($query AS $k => $row) 
 	  {
@@ -204,7 +204,7 @@ class AdminMondialRelay extends AdminTab
 					</tbody>
 				</table>
 				<div class="PS_MRSubmitButton">
-					<input type="button" id="PS_MRSubmitButtonDeleteHistories" name="deleteSelectedHistories" value="' . $mondialrelay->l('Delete selected history') . '" class="button" />
+					<input type="button" id="PS_MRSubmitButtonDeleteHistories" name="deleteSelectedHistories" value="' . $this->l('Delete selected history') . '" class="button" />
 					<div class="PS_MRLoader" id="PS_MRSubmitDeleteHistoriesLoader">
 						<img src="'.$this->_moduleDirectory.'images/getTickets.gif"
 					</div>
