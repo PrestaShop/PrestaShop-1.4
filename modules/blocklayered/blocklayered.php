@@ -307,7 +307,7 @@ class BlockLayered extends Module
 				WHERE cp.`id_category` = '.(int)$id_parent.')';
 		
 		$sql = '
-		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
+		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.minimal_quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
 		p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name, p.condition, p.id_manufacturer,
 		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM '._DB_PREFIX_.'product p
