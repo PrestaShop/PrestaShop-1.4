@@ -49,6 +49,7 @@ class AddressesControllerCore extends FrontController
 		parent::process();
 		
 		$multipleAddressesFormated = array();
+		$ordered_fields = array();
 		$customer = new Customer((int)(self::$cookie->id_customer));
 		
 		if (!Validate::isLoadedObject($customer))
@@ -71,8 +72,15 @@ class AddressesControllerCore extends FrontController
 			$multipleAddressesFormated[$total]['object'] = $addressDetailed;
 			unset($address);
 			++$total;
+			
+			// Retro theme < 1.4.2
+      $ordered_fields = AddressFormat::getOrderedAddressFields($addressDetailed['id_country']);
 		}
 		
+		// Retro theme 1.4.2
+    if (($key = array_search('Country:name', $ordered_fields)))
+       $ordered_fields[$key] = 'country';
+
 		self::$smarty->assign('addresses_style', array(
 								'company' => 'address_company'
 								,'vat_number' => 'address_company'
@@ -86,7 +94,10 @@ class AddressesControllerCore extends FrontController
 								,'phone_mobile' => 'address_phone_mobile'
 								,'alias' => 'address_title'
 							));
-		self::$smarty->assign('multipleAddresses', $multipleAddressesFormated);
+							
+		self::$smarty->assign(array(
+			'multipleAddresses' => $multipleAddressesFormated,
+			'ordered_fields' => $ordered_fields));
 		unset($customer);
 	}
 	
