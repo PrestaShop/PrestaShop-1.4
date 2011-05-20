@@ -2,7 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{treepodia}prestashop>footer_93c433787599e3c6a61c27c9faad7cb1'] = 'Regarder la vidéo';
 $_MODULE['<{treepodia}prestashop>treepodia_63003285187eda3cbab5be4c64b19da7'] = 'Des vidéos de démonstration pour chacun de vos produits en 24h chrono!';
 $_MODULE['<{treepodia}prestashop>treepodia_e0f18214ada56df05a4cb4f2834a6bbd'] = 'Le module n\'est pas configuré.';
 $_MODULE['<{treepodia}prestashop>treepodia_84d2e2420a102446904946c6611610e7'] = 'Choisissez une image ou télécharger ';

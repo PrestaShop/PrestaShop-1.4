@@ -2,6 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{prestafraud}prestashop>prestafraud_eed029a9cfe78c1230a654e58fe8b6f8'] = 'PrestaShop Security';
+$_MODULE['<{prestafraud}prestashop>prestafraud_95d311a37e934646eec0c79c4f266feb'] = 'Proteggi il tuo negozio da pagamenti fraudolenti';
 $_MODULE['<{prestafraud}prestashop>prestafraud_4d0a6a9777a818ecc3b59b9a8ecd0c43'] = '- Scegli la tua attività principale -';
 $_MODULE['<{prestafraud}prestashop>prestafraud_5a600f5b88f416c470991c6831add13a'] = 'Adulti';
 $_MODULE['<{prestafraud}prestashop>prestafraud_0fe4ca3df29658482098bb33a2ff66e5'] = 'Animali';
@@ -34,7 +36,7 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_7e97953add2f27fce07653151ba3e862'
 $_MODULE['<{prestafraud}prestashop>prestafraud_3b2aee63259f6dc9b94914884474f8de'] = 'Ho già un account';
 $_MODULE['<{prestafraud}prestashop>prestafraud_9d5c4ae518b30bacdb69912d87b3406a'] = 'Il tuo indirizzo email:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_6c3b9b51615d1d57773f25903da2018c'] = 'Url negozio';
-$_MODULE['<{prestafraud}prestashop>prestafraud_432dc11f749f7a5ea483a3c71e34e119'] = 'Accetto i termini del servizio PrestaShop Security e vi aderisco incondizionatamente.';
+$_MODULE['<{prestafraud}prestashop>prestafraud_36380b31592ff6bf7be94513409871b6'] = 'Accetto i termini del servizio PrestaShop Security e vi aderisco incondizionatamente.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_42369faa6a6b243aac58683f3874bf99'] = 'Crea un account';
 $_MODULE['<{prestafraud}prestashop>prestafraud_212713efb37cd2f521ee584f1dbb5f0b'] = 'ID negozio:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_c6b84387320705147af2f9e79d72c6fc'] = 'KEY negozio:';
@@ -50,7 +52,6 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_827638f0be5ae74be04ed494087de714'
 $_MODULE['<{prestafraud}prestashop>prestafraud_c9cc8cce247e49bae79f15173ce97354'] = 'Salva';
 $_MODULE['<{prestafraud}prestashop>prestafraud_16648260e58b4cf9d458e1a197ef43f1'] = 'E-mail non è valida';
 $_MODULE['<{prestafraud}prestashop>prestafraud_cb18f4dc13847e2ed5d69cb936f9b26c'] = 'URL Shop non è valido';
-$_MODULE['<{prestafraud}prestashop>prestafraud_eed029a9cfe78c1230a654e58fe8b6f8'] = 'PrestaShop Security';
 $_MODULE['<{prestafraud}prestashop>prestafraud_950c093b260d7c7709f8ff96e10a6fe0'] = 'Questo ordine non è stato inviato a PrestaShop Security.';
 $_MODULE['<{prestafraud}prestashop>prestafraud_d0c6a2fa938df84c0ce628de99c97e16'] = 'Punteggio:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Sconosciuto';

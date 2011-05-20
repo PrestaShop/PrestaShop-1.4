@@ -12,6 +12,7 @@ $_MODULE['<{dibs}prestashop>dibs_94c824556baeddc9d8a31710c38fb045'] = 'Devi impo
 $_MODULE['<{dibs}prestashop>dibs_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configurazione aggiornata';
 $_MODULE['<{dibs}prestashop>dibs_323d72a644340f9f2152febe46a52259'] = 'Ottieni un account DIBS';
 $_MODULE['<{dibs}prestashop>dibs_a24f296af38bde709dffc364b28bdebb'] = 'Clicca sul link seguente per accedere al modulo di abbonamento DIBS :';
+$_MODULE['<{dibs}prestashop>dibs_2981c3142099b5653c220ac6ed2620c4'] = 'Clicca sul link seguente per accedere al modulo di abbonamento DIBS :';
 $_MODULE['<{dibs}prestashop>dibs_97e7c9a7d06eac006a28bf05467fcc8b'] = 'Link';
 $_MODULE['<{dibs}prestashop>dibs_9a6126fa59acab742993a80fa0ca9340'] = 'A seconda della lingua e delle regole del tuo paese, il modulo di sottoscrizione  potrebbe essere diverso.';
 $_MODULE['<{dibs}prestashop>dibs_d076f6d79396f176263a61ad3a1fe945'] = 'Clicca sulle bandiere corrette:';
