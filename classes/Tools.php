@@ -1026,17 +1026,6 @@ class ToolsCore
 		return time()+microtime();
 	}
 
-	/**
-	 * mb_encode_mimeheader is used to return a string you can use as mail subject
-	 * 
-	 * @param string $str 
-	 * @return string
-	 */
-	static function mb_encode_mimeheader($str){
-		if (function_exists('mb_encode_mimeheader'))
-			return mb_encode_mimeheader($str);
-		return $str;
-	}
 	static function strtolower($str)
 	{
 		if (is_array($str))
