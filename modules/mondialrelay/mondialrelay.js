@@ -56,7 +56,7 @@ function checkErrorGenetateTickets(json)
 	{
 		if ((++i >= $('.PS_MRErrorList').length) && json && json.error)
 			for (id_order in json.error)
-				if (json.error[id_order].length)
+				if (json.error[id_order] && json.error[id_order].length)
 				{
 					$('#errorCreatingTicket_' + id_order).children('td').children('span').html('');
 					$('#errorCreatingTicket_' + id_order).fadeOut('slow');
@@ -94,7 +94,7 @@ function checkSucceedGenerateTickets(json)
 		if ((++i >= $('.PS_MRSuccessList').length) && json && json.success)
 		{
 			for (id_order in json.success)
-				if (json.success[id_order].expeditionNumber)
+				if (json.success[id_order] && json.success[id_order].expeditionNumber)
 				{
 					$('#successCreatingTicket_' + id_order).children('td').children('span').html('');
 					$('#PS_MRLineOrderInformation-' + id_order).remove();

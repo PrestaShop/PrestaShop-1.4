@@ -369,7 +369,10 @@ class MRCreateTickets implements IMondialRelayWSMethod
 						$concatenationValue .= $valueDetailed['value'];
 					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
 					{
-						$error = 'This key ['.$paramName.'] hasn\'t a valide value format : '.$valueDetailed['value']; 
+						if (empty($valueDetailed['value']))
+							$error = 'This key ['.$paramName.'] is empty and need to be filled';
+						else
+							$error = 'This key ['.$paramName.'] hasn\'t a valide value format : '.$valueDetailed['value']; 
 						$this->_resultList['error'][$rootCase['list']['NDossier']['value']][] = $error;
 					}
 				}
@@ -418,8 +421,8 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	 */
 	private function _parseResult($client, $result, $params, $id_mr_selected)
 	{
-		$errors = array();
-		$success = array();
+		$errors = &$this->_resultList['error'][$params['NDossier']];
+		$success = &$this->_resultList['success'][$params['NDossier']];
 		
 		if ($client->fault)
 			$errors[] = $this->_mondialRelay->l('Its seems the request isn\'t valide :').
@@ -450,8 +453,6 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			
 			$this->_updateTable($params, $expedition, $ticketURL, $trackingURL, $id_mr_selected);	
 		}
-		$this->_resultList['error'][$params['NDossier']] = $errors;
-		$this->_resultList['success'][$params['NDossier']] = $success;
 	}
 	
 	/*
