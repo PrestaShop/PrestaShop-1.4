@@ -1,10 +1,9 @@
 <?php 
-// tu récup les point relay
 
 include(dirname(__FILE__).'/../../../config/config.inc.php');
 include(dirname(__FILE__).'/../../../init.php');
 include(dirname(__FILE__).'/../mondialrelay.php');
-include(dirname(__FILE__).'/statCodeError.php');
+include(dirname(__FILE__).'/../errorCode.php');
 
 global $cookie;
 

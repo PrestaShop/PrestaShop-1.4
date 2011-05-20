@@ -136,9 +136,9 @@ function impression_etiquette_MR()
 		oXmlhttpMR2.onreadystatechange=function()
 			{
 				if (oXmlhttpMR2.readyState == 1)
-					document.getElementById('reponse_impression_etiquette_MR').innerHTML='Création en cours...';
+					document.getElementById('reponse_impression_etiquette_MR').innerHTML='Crï¿½ation en cours...';
 				if (oXmlhttpMR2.readyState == 2)
-					document.getElementById('reponse_impression_etiquette_MR').innerHTML='Création en cours...';
+					document.getElementById('reponse_impression_etiquette_MR').innerHTML='Crï¿½ation en cours...';
 				if (oXmlhttpMR2.readyState == 4 && oXmlhttpMR2.status == 200)
 				{
 					var response = oXmlhttpMR2.responseText || "z|";
@@ -151,7 +151,7 @@ function impression_etiquette_MR()
 					else if (res[0] == 'z')
 					{
 						document.getElementById('reponse_impression_etiquette_MR').innerHTML = '';
-						alert('Requête sans réponse.');
+						alert('Requï¿½te sans rï¿½ponse.');
 					}
 					else
 					{
@@ -206,9 +206,9 @@ function creation_etiquette_MR()
 		oXmlhttpMR3.onreadystatechange = function()
 		{
 			if (oXmlhttpMR3.readyState == 1)
-				document.getElementById('reponse_creation_etiquette_MR').innerHTML = 'Création en cours...';
+				document.getElementById('reponse_creation_etiquette_MR').innerHTML = 'Crï¿½ation en cours...';
 			if (oXmlhttpMR3.readyState == 2)
-				document.getElementById('reponse_creation_etiquette_MR').innerHTML = 'Création en cours...';
+				document.getElementById('reponse_creation_etiquette_MR').innerHTML = 'Crï¿½ation en cours...';
 			if (oXmlhttpMR3.readyState == 4 && oXmlhttpMR3.status == 200)
 			{
 				var response = oXmlhttpMR3.responseText || "z|";
@@ -221,13 +221,13 @@ function creation_etiquette_MR()
 				else if (res[0] == 'z')
 				{
 					document.getElementById('reponse_creation_etiquette_MR').innerHTML = '';
-					alert('Requête sans réponse.');
+					alert('Requï¿½te sans rï¿½ponse.');
 				}
 				else
 				{
 					document.getElementById('list_url_reponse_creation_etiquette_MR').innerHTML = document.getElementById('list_url_reponse_creation_etiquette_MR').innerHTML
 					+ '<br><a href="'+res[2]+'" target="print_etiquette">'+res[2]+'</a>';
-					Url_suivi_MR(res[1]);//ligne à supprimer seulement utilisée pour le test
+					Url_suivi_MR(res[1]);//ligne ï¿½ supprimer seulement utilisï¿½e pour le test
 					if (document.getElementById('input_Expeditions').value != '')
 						document.getElementById('input_Expeditions').value = document.getElementById('input_Expeditions').value+';'+res[1];
 					else
@@ -254,11 +254,12 @@ function recherche_MR(num, args)
 		data: args ,
 		dataType: 'json',
 		beforeSend : function(params)
-			{
-				$('#loading_mr').show();
-			},
+		{
+			$('#loading_mr').show();
+		},
 		success: function(obj)
 			{
+				console.log(obj);
 				$('#loading_mr').hide();
 				$('#mondialrelay_'+num).html('');
 				$("#all_mondialrelay_map_" + num).show();
@@ -271,12 +272,16 @@ function recherche_MR(num, args)
 					{
 						if (obj.addresses[cpt].num)
 							set_html_MR_recherche(obj.addresses[cpt], num, obj.base_dir, cpt);
-						cpt++;
+						++cpt;
 					}
 					if (!obj.addresses[0].num)
 						$('#mondialrelay_'+num).html('<div class="error"><p>'+address_error+'</p></div>');
 				}
-			}
+			},
+		error: function(xhr, ajaxOptions, thrownError)
+		{
+			
+		}
 	});
 }
 
@@ -408,7 +413,7 @@ function is_ok_mr(type,id,message)
 										{masque_recherche_MR_detail(num_mode);
 										 message_MR(res[0]);}
 									else if (res[0]=='a') {document.getElementById('detail_md_'+res[2]).innerHTML=res[1];}	
-									else if (res[0]=='z') {masque_recherche_MR_detail(res[2]); alert('Requête sans réponse.');}
+									else if (res[0]=='z') {masque_recherche_MR_detail(res[2]); alert('Requï¿½te sans rï¿½ponse.');}
 									else {document.getElementById('detail_md_'+res[2]).innerHTML=res[1];};};
 			}
 	
@@ -457,18 +462,18 @@ function select_PR_MR(num, id_carrier)
 
 function message_MR(etat)
 {
-	if (etat == 'a') {alert("Résultat vide");}
+	if (etat == 'a') {alert("Rï¿½sultat vide");}
 	if (etat == 1) {alert("Enseigne invalide");}
-	if (etat == 2) {alert("Numéro d'enseigne vide ou inexistant");}
-	if (etat == 3) {alert("Numéro de compte enseigne invalide");}
-	if (etat == 5) {alert("Numéro de dossier enseigne invalide");}
-	if (etat == 7) {alert("Numéro de client enseigne invalide");}
+	if (etat == 2) {alert("Numï¿½ro d'enseigne vide ou inexistant");}
+	if (etat == 3) {alert("Numï¿½ro de compte enseigne invalide");}
+	if (etat == 5) {alert("Numï¿½ro de dossier enseigne invalide");}
+	if (etat == 7) {alert("Numï¿½ro de client enseigne invalide");}
 	if (etat == 9) {alert("Nom de ville non reconnu ou non unique");}
 	if (etat == 10) {alert("Type de collecte invalide ou incorrect (1/D > Domicile -- 3/R > Relais)");}
-	if (etat == 11) {alert("Numéro de Point Relais de collecte invalide");}
+	if (etat == 11) {alert("Numï¿½ro de Point Relais de collecte invalide");}
 	if (etat == 12) {alert("Pays du Point Relais de collecte invalide");}
 	if (etat == 13) {alert("Type de livraison invalide ou incorrect (1/D > Domicile -- 3/R > Relais)");}
-	if (etat == 14) {alert("Numéro du Point Relais de livraison invalide");}
+	if (etat == 14) {alert("Numï¿½ro du Point Relais de livraison invalide");}
 	if (etat == 15) {alert("Pays du Point Relais de livraison invalide");}
 	if (etat == 16) {alert("Code pays invalide");}
 	if (etat == 17) {alert("Adresse invalide");}
@@ -477,25 +482,25 @@ function message_MR(etat)
 	if (etat == 20) {alert("Poids du colis invalide");}
 	if (etat == 21) {alert("Taille (Longueur + Hauteur) du colis invalide");}
 	if (etat == 22) {alert("Taille du Colis invalide");}
-	if (etat == 24) {alert("Numéro de Colis Mondial Relay invalide");}
+	if (etat == 24) {alert("Numï¿½ro de Colis Mondial Relay invalide");}
 	if (etat == 28) {alert("Mode de collecte invalide");}
 	if (etat == 29) {alert("Mode de livraison invalide");}
-	if (etat == 30) {alert("Adresse (L1) de l'expéditeur invalide");}
-	if (etat == 31) {alert("Adresse (L2) de l'expéditeur invalide");}
-	if (etat == 33) {alert("Adresse (L3) de l'expéditeur invalide");}
-	if (etat == 34) {alert("Adresse (L4) de l'expéditeur invalide");}
-	if (etat == 35) {alert("Ville de l'expéditeur invalide");}
-	if (etat == 36) {alert("Code postal de l'expéditeur invalide");}
-	if (etat == 37) {alert("Pays de l'expéditeur invalide");}
-	if (etat == 38) {alert("Numéro de téléphone de l'expéditeur invalide");}
-	if (etat == 39) {alert("Adresse e-mail de l'expéditeur invalide");}
+	if (etat == 30) {alert("Adresse (L1) de l'expï¿½diteur invalide");}
+	if (etat == 31) {alert("Adresse (L2) de l'expï¿½diteur invalide");}
+	if (etat == 33) {alert("Adresse (L3) de l'expï¿½diteur invalide");}
+	if (etat == 34) {alert("Adresse (L4) de l'expï¿½diteur invalide");}
+	if (etat == 35) {alert("Ville de l'expï¿½diteur invalide");}
+	if (etat == 36) {alert("Code postal de l'expï¿½diteur invalide");}
+	if (etat == 37) {alert("Pays de l'expï¿½diteur invalide");}
+	if (etat == 38) {alert("Numï¿½ro de tï¿½lï¿½phone de l'expï¿½diteur invalide");}
+	if (etat == 39) {alert("Adresse e-mail de l'expï¿½diteur invalide");}
 	if (etat == 40) {alert("Action impossible sans ville ni code postal");}
 	if (etat == 41) {alert("Mode de livraison invalide");}
 	if (etat == 42) {alert("Montant CRT invalide");}
 	if (etat == 43) {alert("Devise CRT invalide");}
 	if (etat == 44) {alert("Valeur du colis invalide");}
 	if (etat == 45) {alert("Devise de la valeur du colis invalide");}
-	if (etat == 46) {alert("Plage de numéro d'expédition epuisee");}
+	if (etat == 46) {alert("Plage de numï¿½ro d'expï¿½dition epuisee");}
 	if (etat == 47) {alert("Nombre de colis invalide");}
 	if (etat == 48) {alert("Multi-colis en Point Relais Interdit");}
 	if (etat == 49) {alert("Mode de collecte ou de livraison invalide");}
@@ -506,7 +511,7 @@ function message_MR(etat)
 	if (etat == 55) {alert("Ville du destinataire invalide");}
 	if (etat == 56) {alert("Code postal du destinataire invalide");}
 	if (etat == 57) {alert("Pays du destinataire invalide");}
-	if (etat == 58) {alert("Numéro de téléphone du destinataire invalide");}
+	if (etat == 58) {alert("Numï¿½ro de tï¿½lï¿½phone du destinataire invalide");}
 	if (etat == 59) {alert("Adresse e-mail du destinataire invalide");}
 	if (etat == 60) {alert("Champ texte libre invalide");}
 	if (etat == 61) {alert("Top avisage invalide");}
@@ -515,38 +520,38 @@ function message_MR(etat)
 	if (etat == 64) {alert("Temps de montage invalide");}
 	if (etat == 65) {alert("Top rendez-vous invalide");}
 	if (etat == 66) {alert("Top reprise invalide");}
-	if (etat == 70) {alert("Numéro de Point Relais invalide");}
-	if (etat == 72) {alert("Langue expéditeur invalide");}
+	if (etat == 70) {alert("Numï¿½ro de Point Relais invalide");}
+	if (etat == 72) {alert("Langue expï¿½diteur invalide");}
 	if (etat == 73) {alert("Langue destinataire invalide");}
 	if (etat == 74) {alert("Langue invalide");}
 	if (etat == 80) {alert("Code tracing : Colis enregistre");}
 	if (etat == 81) {alert("Code tracing : Colis en traitement chez Mondial Relay");}
 	if (etat == 82) {alert("Code tracing : Colis livre");}
 	if (etat == 83) {alert("Code tracing : Anomalie");}
-	if (etat == 84) {alert("84 (Réservé Code Tracing)");}
-	if (etat == 85) {alert("85 (Réservé Code Tracing)");}
-	if (etat == 86) {alert("86 (Réservé Code Tracing)");}
-	if (etat == 87) {alert("87 (Réservé Code Tracing)");}
-	if (etat == 88) {alert("88 (Réservé Code Tracing)");}
-	if (etat == 89) {alert("89 (Réservé Code Tracing)");}
+	if (etat == 84) {alert("84 (Rï¿½servï¿½ Code Tracing)");}
+	if (etat == 85) {alert("85 (Rï¿½servï¿½ Code Tracing)");}
+	if (etat == 86) {alert("86 (Rï¿½servï¿½ Code Tracing)");}
+	if (etat == 87) {alert("87 (Rï¿½servï¿½ Code Tracing)");}
+	if (etat == 88) {alert("88 (Rï¿½servï¿½ Code Tracing)");}
+	if (etat == 89) {alert("89 (Rï¿½servï¿½ Code Tracing)");}
 	if (etat == 90) {alert("AS400 indisponible");}
-	if (etat == 91) {alert("Numéro d'expédition invalide");}
-	if (etat == 93) {alert("Aucun élément retourné par le plan de tri\n\
-							Si vous effectuez une collecte ou une livraison en Point Relais, vérifiez que les\n\
+	if (etat == 91) {alert("Numï¿½ro d'expï¿½dition invalide");}
+	if (etat == 93) {alert("Aucun ï¿½lï¿½ment retournï¿½ par le plan de tri\n\
+							Si vous effectuez une collecte ou une livraison en Point Relais, vï¿½rifiez que les\n\
 							Point Relais sont bien disponibles.\n\
-							Si vous effectuez une livraison à domicile, il est probable que le code postal que\n\
+							Si vous effectuez une livraison ï¿½ domicile, il est probable que le code postal que\n\
 							vous avez indiquez n'existe pas.");}
 	if (etat == 94) {alert("Colis Inexistant");}
 	if (etat == 95) {alert("Compte Enseigne non active");}
 	if (etat == 96) {alert("Type d'enseigne incorrect en Base");}
-	if (etat == 97) {alert("Clé de sécurité invalide");}
+	if (etat == 97) {alert("Clï¿½ de sï¿½curitï¿½ invalide");}
 	if (etat == 98) {alert("Service Indisponible");}
-	if (etat == 99) {alert("Erreur générique du service\n\
-							Cette erreur peut être dû autant à un problème technique du service qu'à des\n\
-							données incorrectes ou inexistantes dans la Base de Données. Lorsque vous avez\n\
-							cette erreur veuillez la notifier à Mondial Relay en précisant la date et l'heure de la\n\
-							connexion ainsi que les informations envoyés au WebService afin d'effectuer une\n\
-							vérification.");}
+	if (etat == 99) {alert("Erreur gï¿½nï¿½rique du service\n\
+							Cette erreur peut ï¿½tre dï¿½ autant ï¿½ un problï¿½me technique du service qu'ï¿½ des\n\
+							donnï¿½es incorrectes ou inexistantes dans la Base de Donnï¿½es. Lorsque vous avez\n\
+							cette erreur veuillez la notifier ï¿½ Mondial Relay en prï¿½cisant la date et l'heure de la\n\
+							connexion ainsi que les informations envoyï¿½s au WebService afin d'effectuer une\n\
+							vï¿½rification.");}
 }
 
 

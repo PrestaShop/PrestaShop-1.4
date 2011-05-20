@@ -27,9 +27,9 @@ $o1=substr($o1, 0, 2).':'.substr($o1, 2, 2);
 $f1=substr($f1, 0, 2).':'.substr($f1, 2, 2);
 $o2=substr($o2, 0, 2).':'.substr($o2, 2, 2);
 $f2=substr($f2, 0, 2).':'.substr($f2, 2, 2);
-if ($o1=='00:00' && $f1=='00:00') {$p1=$mondialrelay->getL('Closed');} else {$p1=$o1.' - '.$f1;};
-if ($o2=='00:00' && $f2=='00:00') {$p2=$mondialrelay->getL('Closed');} else {$p2=$o2.' - '.$f2;};
-if ($p1=='Fermé' && $p2=='Fermé' ) {$p=$mondialrelay->getL('Closed');} else {$p=$p1.'&nbsp;&nbsp;'.$p2;};
+if ($o1=='00:00' && $f1=='00:00') {$p1=$mondialrelay->l('Closed');} else {$p1=$o1.' - '.$f1;};
+if ($o2=='00:00' && $f2=='00:00') {$p2=$mondialrelay->l('Closed');} else {$p2=$o2.' - '.$f2;};
+if ($p1=='Fermé' && $p2=='Fermé' ) {$p=$mondialrelay->l('Closed');} else {$p=$p1.'&nbsp;&nbsp;'.$p2;};
 return utf8_encode($p);
 };
 
@@ -77,27 +77,27 @@ echo $result_mr['WSI2_DetailPointRelaisResult']['STAT'].'|';
 
 
 $sortie_horaires.="<tr>";
-$sortie_horaires.="<td>".$mondialrelay->getL('Monday')."</td>";
+$sortie_horaires.="<td>".$mondialrelay->l('Monday')."</td>";
 $sortie_horaires.="<td>".mr_horaire_fr($result_mr['WSI2_DetailPointRelaisResult']['Horaires_Lundi']['string'][0],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Lundi']['string'][1],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Lundi']['string'][2],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Lundi']['string'][3])."</td>";
 $sortie_horaires.="</tr>";
 $sortie_horaires.="<tr>";
-$sortie_horaires.="<td>".$mondialrelay->getL('Tuesday')."</td>";
+$sortie_horaires.="<td>".$mondialrelay->l('Tuesday')."</td>";
 $sortie_horaires.="<td>".mr_horaire_fr($result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mardi']['string'][0],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mardi']['string'][1],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mardi']['string'][2],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mardi']['string'][3])."</td>";
 $sortie_horaires.="</tr>";
 $sortie_horaires.="<tr>";
-$sortie_horaires.="<td>".$mondialrelay->getL('Wednesday')."</td>";
+$sortie_horaires.="<td>".$mondialrelay->l('Wednesday')."</td>";
 $sortie_horaires.="<td>".mr_horaire_fr($result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mercredi']['string'][0],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mercredi']['string'][1],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mercredi']['string'][2],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Mercredi']['string'][3])."</td>";
 $sortie_horaires.="</tr>";
-$sortie_horaires.="<td>".$mondialrelay->getL('Thursday')."</td>";
+$sortie_horaires.="<td>".$mondialrelay->l('Thursday')."</td>";
 $sortie_horaires.="<td>".mr_horaire_fr($result_mr['WSI2_DetailPointRelaisResult']['Horaires_Jeudi']['string'][0],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Jeudi']['string'][1],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Jeudi']['string'][2],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Jeudi']['string'][3])."</td>";
 $sortie_horaires.="</tr>";
-$sortie_horaires.="<td>".$mondialrelay->getL('Friday')."</td>";
+$sortie_horaires.="<td>".$mondialrelay->l('Friday')."</td>";
 $sortie_horaires.="<td>".mr_horaire_fr($result_mr['WSI2_DetailPointRelaisResult']['Horaires_Vendredi']['string'][0],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Vendredi']['string'][1],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Vendredi']['string'][2],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Vendredi']['string'][3])."</td>";
 $sortie_horaires.="</tr>";
-$sortie_horaires.="<td>".$mondialrelay->getL('Saturday')."</td>";
+$sortie_horaires.="<td>".$mondialrelay->l('Saturday')."</td>";
 $sortie_horaires.="<td>".mr_horaire_fr($result_mr['WSI2_DetailPointRelaisResult']['Horaires_Samedi']['string'][0],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Samedi']['string'][1],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Samedi']['string'][2],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Samedi']['string'][3])."</td>";
 $sortie_horaires.="</tr>";
-$sortie_horaires.="<td>".$mondialrelay->getL('Sunday')."</td>";
+$sortie_horaires.="<td>".$mondialrelay->l('Sunday')."</td>";
 $sortie_horaires.="<td>".mr_horaire_fr($result_mr['WSI2_DetailPointRelaisResult']['Horaires_Dimanche']['string'][0],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Dimanche']['string'][1],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Dimanche']['string'][2],$result_mr['WSI2_DetailPointRelaisResult']['Horaires_Dimanche']['string'][3])."</td>";
 $sortie_horaires.="</tr>";
 
@@ -141,7 +141,7 @@ echo "<div style=\"width=740px;height:15px;\">".$fermer."</div>
 		</td>
 	  </tr>
       </table>
-	  <center><input name=\"select_MR_PR\" id=\"select_MR_PR\" value=\"".utf8_encode($mondialrelay->getL('Select this Relay Point'))."\" type=\"button\" onclick=\"
+	  <center><input name=\"select_MR_PR\" id=\"select_MR_PR\" value=\"".utf8_encode($mondialrelay->l('Select this Relay Point'))."\" type=\"button\" onclick=\"
 	  document.getElementById('MRchoixRelais".$num.'_'.$result_mr['WSI2_DetailPointRelaisResult']['Num']."').checked=true;select_PR_MR('".$result_mr['WSI2_DetailPointRelaisResult']['Num']."','".$num."');masque_recherche_MR_detail('".$num."');\"></center>
       </div>|".$num;
 

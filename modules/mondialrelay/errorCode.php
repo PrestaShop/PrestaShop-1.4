@@ -1,5 +1,7 @@
 <?php
 
+global $statCode;
+
 $statCode = array(
 	'1' => 'Enseigne invalide',
 	'2'	=> 'Numéro d\'enseigne vide ou inexistant',

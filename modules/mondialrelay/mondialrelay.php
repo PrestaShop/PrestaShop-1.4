@@ -26,32 +26,31 @@
 */
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
+
+require_once(_PS_MODULE_DIR_.'/mondialrelay/classes/MondialRelayClass.php');
 	
 class MondialRelay extends Module
 {
 	const INSTALL_SQL_FILE = 'mrInstall.sql';
 	
 	private $_postErrors;
+	private $_modulePath;
 	
 	public function __construct()
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.3';
+		$this->version	= '1.4';
 
 		parent::__construct();
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Mondial Relay');
 		$this->description = $this->l('Deliver in Relay points');
+		$this->_modulePath =	_PS_MODULE_DIR_. '/mondialrelay/';
 		
-		if (!defined('_MR_CSS_'))
-			define('_MR_CSS_', dirname(__FILE__) . '/style.css');
-		if (Module::isInstalled('mondialrelay') AND !Configuration::get('MONDIAL_RELAY_1_4'))
-		{
-			$this->update_v1_4();
-			Configuration::updateValue('MONDIAL_RELAY_1_4', 1);
-		}
+		// Call everytime if the merchant make a replace file update
+		$this->_updateProcess();
 	}
 	
 	public function install()
@@ -79,14 +78,15 @@ class MondialRelay extends Module
 			!$this->registerHook('processCarrier') OR
 			!$this->registerHook('orderDetail') OR
 			!$this->registerHook('updateCarrier') OR
-			!$this->registerHook('orderDetailDisplayed'))
+			!$this->registerHook('orderDetailDisplayed') ||
+			!$this->registerHook('newOrder') ||
+			!$this->registerHook('BackOfficeHeader'))
 			return false;
 		
-		if (!file_exists(_PS_MODULE_DIR_. '/mondialrelay/' . self::INSTALL_SQL_FILE))
+		if ((!file_exists($this->_modulePath.self::INSTALL_SQL_FILE)) ||
+			(!$sql = file_get_contents($this->_modulePath.self::INSTALL_SQL_FILE)))
 			return false;
-		elseif(!$sql = file_get_contents(_PS_MODULE_DIR_. '/mondialrelay/' . self::INSTALL_SQL_FILE))
-			return false;
-	
+
 		$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
 		$sql = preg_split("/;\s*[\r\n]+/", $sql);
 		foreach($sql AS $k => $query)
@@ -110,14 +110,15 @@ class MondialRelay extends Module
 
 			$pos = (isset($result['position'])) ? $result['position'] + 1 : 0;
 
-			Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'tab 
+			Db::getInstance()->Execute('
+				INSERT INTO ' . _DB_PREFIX_ . 'tab 
 				(id_parent, class_name, position, module) 
 				VALUES(3, "AdminMondialRelay",  "'.(int)($pos).'", "mondialrelay")');	 	
 
 			$id_tab = Db::getInstance()->Insert_ID();		
 			
 			$languages = Language::getLanguages();
-			foreach ($languages AS $language)
+			foreach ($languages as $language)
 				Db::getInstance()->Execute('
 				INSERT INTO ' . _DB_PREFIX_ . 'tab_lang 
 				(id_lang, id_tab, name) 
@@ -125,7 +126,8 @@ class MondialRelay extends Module
 
 			$profiles = Profile::getProfiles(Configuration::get('PS_LANG_DEFAULT'));
 			foreach ($profiles as $profile)
-				Db::getInstance()->Execute('INSERT INTO ' . _DB_PREFIX_ . 'access 
+				Db::getInstance()->Execute('
+				INSERT INTO ' . _DB_PREFIX_ . 'access 
 				(`id_profile`,`id_tab`,`view`,`add`,`edit`,`delete`)
 				VALUES('.$profile['id_profile'].', '.(int)($id_tab).', 1, 1, 1, 1)');
 
@@ -181,10 +183,58 @@ class MondialRelay extends Module
 		return true;
 	}
 	
-	private function update_v1_4()
+	private function _updateProcess()
 	{
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'carrier` SET `shipping_external` = 0, `need_range` = 1, `external_module_name` = "mondialrelay", `shipping_method` = 1 WHERE `id_carrier` IN (SELECT `id_mr_method` FROM `'._DB_PREFIX_.'mr_method`)');
-		return true;
+		$this->_update_v1_4();
+		$this->_update_v1_4_2();
+	}
+	
+	private function _update_v1_4()
+	{
+		if (Module::isInstalled('mondialrelay') && 
+			!Configuration::get('MONDIAL_RELAY_1_4'))
+		{
+			Configuration::updateValue('MONDIAL_RELAY_1_4', 1);
+			Db::getInstance()->Execute('
+				UPDATE `'._DB_PREFIX_.'carrier` 
+				SET 
+					`shipping_external` = 0, 
+					`need_range` = 1, 
+					`external_module_name` = 
+					"mondialrelay", 
+					`shipping_method` = 1 
+				WHERE `id_carrier` 
+				IN (SELECT `id_mr_method` 
+						FROM `'._DB_PREFIX_.'mr_method`)');
+			return true;
+		}
+		return false;
+	}
+	
+	private function _update_v1_4_2()
+	{
+		if (!$this->isRegisteredInHook('newOrder'))
+			$this->registerHook('newOrder');
+		if (!$this->isRegisteredInHook('BackOfficeHeader'))
+			$this->registerHook('BackOfficeHeader');
+	}
+	
+	public function hookNewOrder($params)
+	{
+		DB::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'mr_selected`
+			SET `id_order` = '.$params['order']->id.'
+			WHERE `id_cart` = '.$params['cart']->id);
+	}
+	
+	public function hookBackOfficeHeader()
+	{
+		$cssFilePath = $this->_path.'style.css';
+		$jsFilePath= $this->_path.'mondialrelay.js';
+		
+		return '
+			<link type="text/css" rel="stylesheet" href="'.$cssFilePath.'" />
+			<script type="text/javascript" src="'.$jsFilePath.'"></script>';
 	}
 	
 	private function _postValidation()
@@ -202,7 +252,7 @@ class MondialRelay extends Module
 			if (!Tools::getValue('mr_weight_coef') OR !Validate::isInt(Tools::getValue('mr_weight_coef')))
 				$this->_postErrors[] = $this->l('Invalid Weight Coefficient');
 		}
-		elseif (Tools::isSubmit('submitMethod'))
+		else if (Tools::isSubmit('submitMethod'))
 		{
 			if (Configuration::get('MR_ENSEIGNE_WEBSERVICE') == '' OR Configuration::get('MR_CODE_MARQUE') == '' OR
 				Configuration::get('MR_KEY_WEBSERVICE') == '' OR Configuration::get('MR_LANGUAGE') == '')
@@ -218,7 +268,7 @@ class MondialRelay extends Module
 			if (!Tools::getValue('mr_Pays_list'))
 				$this->_postErrors[] = $this->l('You must choose at least one delivery country.');
 		}
-		elseif (Tools::isSubmit('submit_order_state'))
+		else if (Tools::isSubmit('submit_order_state'))
 		{
 			if (!Validate::isBool(Tools::getValue('mr_google_key')))
 				$this->_postErrors[] = $this->l('Invalid google key');
@@ -239,11 +289,11 @@ class MondialRelay extends Module
 	
 		if (isset($_POST['submitMR']) AND $_POST['submitMR'])
 			self::mrUpdate('settings', $setArray, $keyArray);
-		elseif (isset($_POST['submitShipping']) AND $_POST['submitShipping'])
+		else if (isset($_POST['submitShipping']) AND $_POST['submitShipping'])
 			self::mrUpdate('shipping', $_POST, array());
-		elseif (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
+		else if (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
 			self::mrUpdate('addShipping', $setArray, $keyArray);
-		elseif (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])
+		else if (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])
 		{
 			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', Tools::getValue('id_order_state'));
 			Configuration::updateValue('MR_GOOGLE_MAP', Tools::getValue('mr_google_key'));
@@ -271,15 +321,11 @@ class MondialRelay extends Module
 			AND z.`active` = 1' : '').'
 			GROUP BY c.`id_carrier`');
 		
-		if (is_array($carriers) AND count($carriers))
-		{
-			foreach ($carriers as $key => $carrier)
-				if ($carrier['name'] == '0')
-					$carriers[$key]['name'] = Configuration::get('PS_SHOP_NAME');
-		}
-		else
+		if (!is_array($carriers))
 			$carriers = array();
-
+		foreach ($carriers as $key => $carrier)
+			if ($carrier['name'] == '0')
+				$carriers[$key]['name'] = Configuration::get('PS_SHOP_NAME');
 		return $carriers;
 	}
 	
@@ -297,7 +343,7 @@ class MondialRelay extends Module
 			$module_carrier = new $module();
 			$smarty->assign('followup', $module_carrier->get_followup($order->shipping_number));
 		}
-		elseif ($carrier->url AND $order->shipping_number)
+		else if ($carrier->url AND $order->shipping_number)
 			$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
 	}
 	
@@ -317,8 +363,6 @@ class MondialRelay extends Module
 	
 	public function hookProcessCarrier($params)
 	{
-		include_once(_PS_MODULE_DIR_.'/mondialrelay/MondialRelayClass.php');
-		
 		$cart = $params['cart'];
 		$result_MR = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'mr_method` WHERE `id_carrier` = '.(int)($cart->id_carrier));
 		if (count($result_MR) > 0) 
@@ -338,9 +382,8 @@ class MondialRelay extends Module
 					$mrselected->save();
 	 			}
 			}
-			elseif (!Configuration::get('PS_ORDER_PROCESS_TYPE'))
+			else if (!Configuration::get('PS_ORDER_PROCESS_TYPE'))
 			{
-				
 				if (empty($_POST['MR_Selected_Num_'.$cart->id_carrier])) // Case error : the customer didn't choose a 'relais' but selected Relais Colis TNT as a carrier 
 					Tools::redirect('order.php?step=2&mr_null');
 				else
@@ -465,6 +508,7 @@ class MondialRelay extends Module
 		global $cookie;
 		$error = null;
 		
+
 		if (isset($_GET['updatesuccess']))
 			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated').'</div>';
 		if (!empty($_POST))
@@ -485,19 +529,28 @@ class MondialRelay extends Module
 		if (isset($_GET['delete_mr']) && !empty($_GET['delete_mr']))
 			self::mrDelete((int)($_GET['delete_mr']));
 
-		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>'.
-		'<style> . "\n" . ' . file_get_contents(_MR_CSS_) . "\n" . '</style>
+		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>
 		<fieldset>
-			<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('To create a Mondial Relay carrier').'</legend>
+			<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('To create a Mondial Relay carrier').'</legend>
 		- '.$this->l('Enter and save your Mondial Relay account settings').'<br />
 		- '.$this->l('Create a Carrier').'<br />
 		- '.$this->l('Define a price for your carrier on').' <a href="index.php?tab=AdminCarriers&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'" class="green">'.$this->l('The Carrier page').'</a><br />
 		- '.$this->l('To generate labels, you must have a valid and registered address of your store on your').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.$this->l('contact page').'</a><br />
 		- '.$this->l('Go to the front office').'<br /><br class="clear" />
 		<p>'.$this->l('URL Cron Task:').' '.Tools::getHttpHost(true, true)._MODULE_DIR_.$this->name.'/cron.php?secure_key='.Configuration::get('MONDIAL_RELAY_SECURE_KEY').'</p></fieldset>
-		<br class="clear" />'.self::settingsForm().self::settingsstateorderForm().self::addMethodForm().self::shippingForm().
-		'<br class="clear" />';
-
+		<br class="clear" />
+		<div class="PS_MRFormType">'.
+			self::settingsForm().
+		'</div>
+		<div class="PS_MRFormType">'.
+			self::settingsstateorderForm().
+		'</div>
+		<div class="PS_MRFormType">'.
+			self::addMethodForm().
+			'</div>
+		<div class="PS_MRFormType">'.
+			self::shippingForm().
+			'</div><br class="clear" />';
 		return $this->_html;
 	}
 	
@@ -520,7 +573,7 @@ class MondialRelay extends Module
 			Configuration::updateValue('MR_LANGUAGE', $array[3]);
 			Configuration::updateValue('MR_WEIGHT_COEF', $array[4]);
 		}
-		elseif ($type == 'shipping')
+		else if ($type == 'shipping')
 		{
 			array_pop($array);
 			foreach ($array AS $Key => $value)
@@ -530,7 +583,7 @@ class MondialRelay extends Module
 				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'carrier SET active = "'.(int)($value).'" WHERE `id_carrier` = "'.(int)($id).'"');
 			}
 		}
-		elseif ($type == 'addShipping') 
+		else if ($type == 'addShipping') 
 		{
 			$query = 'INSERT INTO ' .  _DB_PREFIX_ . 'mr_method (';
 
@@ -608,9 +661,12 @@ class MondialRelay extends Module
 		$zones = Db::getInstance()->ExecuteS("SELECT * FROM " . _DB_PREFIX_ . "zone WHERE active = 1");
 		$output = '
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post" >
-			<fieldset class="shippingList addMethodForm">
-				<legend><img src="../modules/mondialrelay/logo.gif" alt="" />'.$this->l('Add a Shipping Method').'</legend>
-				<ol>
+			<fieldset>
+				<legend><img src="../modules/mondialrelay/images/logo.gif" alt="" />'.$this->l('Add a Shipping Method').'</legend>
+				<ul>
+					<li class="PS_MRRequireFields">
+						<sup>* ' . $this->l('Required') . '</sup>
+					</li>
 					<li>
 						<label for="mr_Name" class="shipLabel">'.$this->l('Carrier\'s name').'<sup>*</sup></label>
 						<input type="text" id="mr_Name" name="mr_Name" '.(Tools::getValue('mr_Name') ? 'value="'.Tools::getValue('mr_Name').'"' : '').'/>
@@ -657,13 +713,10 @@ class MondialRelay extends Module
 							<option value="ES">'.$this->l('Spain').'</option>
 						</select>
 					</li>			
-					<li class="mrSubmit">
+					<li class="PS_MRSubmit">
 						<input type="submit" name="submitMethod" value="' . $this->l('Add a Shipping Method') . '" class="button" />
 					</li>
-					<li>
-						<sup><sup>*</sup> ' . $this->l('Required') . '</sup>
-					</li>
-				</ol>
+				</ul>
 			</fieldset>
 		</form>';
 		
@@ -683,7 +736,7 @@ class MondialRelay extends Module
 		$output = '
 		<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
 			<fieldset class="shippingList">
-				<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Shipping Method\'s list').'</legend>
+				<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Shipping Method\'s list').'</legend>
 				<ol>';
 		if (!sizeof($query))
 			$output .= '<li>'.$this->l('No shipping methods created').'</li>';
@@ -708,10 +761,11 @@ class MondialRelay extends Module
 	public function settingsstateorderForm()
 	{
 		global $cookie;
+		
 		$this->orderState = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
 	    $output = '';
 		$output .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">';
-		$output .= '<fieldset><legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Settings').'</legend>';
+		$output .= '<fieldset><legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Settings').'</legend>';
 		$output .= '<label for="id_order_state">' . $this->l('Order state') . '</label>';
 		$output .= '<div class="margin-form">';
 		$output .= '<select id="id_order_state" name="id_order_state" style="width:250px">';
@@ -750,27 +804,30 @@ class MondialRelay extends Module
 			<script type="text/javascript" >var url_appel="";</script>
 			<script type="text/javascript" src="../modules/mondialrelay/kit_mondialrelay/js/ressources_MR.js"></script>
 			<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" >
-				<fieldset class="settingsList">
-					<legend><img src="../modules/mondialrelay/logo.gif" />'.$this->l('Mondial Relay Account Settings').'</legend>
-					<ol>
+				<fieldset>
+					<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Mondial Relay Account Settings').'</legend>
+					<ul>
+						<li class="PS_MRRequireFields">
+							<sup>* ' . $this->l('Required') . '</sup>
+						</li>
 						<li>
-							<label style="float:none;" for="mr_Enseigne_WebService" class="mrLabel">' . $this->l('Webservice Enseigne:') . '<sup>*</sup></label>
-							<input style="float:right;" id="mr_Enseigne_WebService" class="mrInput" type="text" name="mr_Enseigne_WebService" value="' .
+							<label for="mr_Enseigne_WebService" class="mrLabel">' . $this->l('Webservice Enseigne:') . '<sup>*</sup></label>
+							<input id="mr_Enseigne_WebService" class="mrInput" type="text" name="mr_Enseigne_WebService" value="' .
 							(Tools::getValue('mr_Enseigne_WebService') ? Tools::getValue('mr_Enseigne_WebService') : Configuration::get('MR_ENSEIGNE_WEBSERVICE')) . '"/>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_code_marque" class="mrLabel">' . $this->l('Code marque:') . '<sup>*</sup></label>
-							<input style="float:right;" id="mr_code_marque" class="mrInput" type="text" name="mr_code_marque" value="' .
+							<label for="mr_code_marque" class="mrLabel">' . $this->l('Code marque:') . '<sup>*</sup></label>
+							<input id="mr_code_marque" class="mrInput" type="text" name="mr_code_marque" value="' .
 							(Tools::getValue('mr_code_marque') ? Tools::getValue('mr_code_marque') : Configuration::get('MR_CODE_MARQUE')) . '"/>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_Key_WebService" class="mrLabel">' . $this->l('Webservice Key:') . '<sup>*</sup></label>
-							<input style="float:right;" id="mr_Key_WebService" class="mrInput" type="text" name="mr_Key_WebService" value="' .
+							<label for="mr_Key_WebService" class="mrLabel">' . $this->l('Webservice Key:') . '<sup>*</sup></label>
+							<input id="mr_Key_WebService" class="mrInput" type="text" name="mr_Key_WebService" value="' .
 							(Tools::getValue('mr_Key_WebService') ? Tools::getValue('mr_Key_WebService') : Configuration::get('MR_KEY_WEBSERVICE')) . '"/>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_Langage" class="mrLabel">' . $this->l('Etiquette\'s Language:') . '<sup>*</sup></label>
-							<select style="float:right;" id="mr_Langage" name="mr_Langage" value="'.
+							<label for="mr_Langage" class="mrLabel">' . $this->l('Etiquette\'s Language:') . '<sup>*</sup></label>
+							<select id="mr_Langage" name="mr_Langage" value="'.
 							(Tools::getValue('mr_Langage') ? Tools::getValue('mr_Langage') : Configuration::get('MR_LANGUAGE')).'" >';
 		$languages = Language::getLanguages();
 		foreach ($languages as $language)
@@ -779,18 +836,15 @@ class MondialRelay extends Module
 				$output .= '</select>
 						</li>
 						<li>
-							<label style="float:none;" for="mr_weight_coef" class="mrLabel">' . $this->l('Weight Coefficient:') . '<sup>*</sup></label>
-							<input id="mr_weight_coef" class="mrInput" type="text" name="mr_weight_coef" value="' . 
-							(Tools::getValue('mr_weight_coef') ? Tools::getValue('mr_weight_coef') : Configuration::get('MR_WEIGHT_COEF')) . '"  style="width:45px;"/> ' . 
-							$this->l('grammes = 1 ') . Configuration::get('PS_WEIGHT_UNIT').'
+							<label for="mr_weight_coef" class="mrLabel">' . $this->l('Weight Coefficient:') . '<sup>*</sup></label>
+							<input class="mrInput" type="text" name="mr_weight_coef" value="' . 
+							(Tools::getValue('mr_weight_coef') ? Tools::getValue('mr_weight_coef') : Configuration::get('MR_WEIGHT_COEF')) . '"  style="width:45px;"/>
+							<span class="indication">(' . $this->l('grammes = 1 ') . Configuration::get('PS_WEIGHT_UNIT').')</span>
 						</li>						
-						<li class="MRSubmit">
+						<li class="PS_MRSubmit">
 							<input type="submit" name="submitMR" value="' . $this->l('Update Settings') . '" class="button" />
 						</li>
-						<li>
-							<sup><sup>*</sup> ' . $this->l('Required') . '</sup>
-						</li>
-					</ol>
+					</ul>
 				</fieldset>
 			</form>';
 
@@ -799,95 +853,110 @@ class MondialRelay extends Module
 
 	public function displayInfoByCart($id_cart)
 	{
-		$simpleresul = Db::getInstance()->ExecuteS('SELECT * FROM ' . _DB_PREFIX_ . 'mr_selected where id_cart='.(int)($id_cart));
+		$html = '<p>';
+		$simpleresul = Db::getInstance()->ExecuteS('
+			SELECT * FROM ' . _DB_PREFIX_ . 'mr_selected 
+			WHERE id_cart='.(int)($id_cart));
 	
 		if (trim($simpleresul[0]['exp_number']) != '0') 
-			@$sortie .= $this->l('Nb expedition:').$simpleresul[0]['exp_number']."<br>";
+			$html .= $this->l('Nb expedition:').$simpleresul[0]['exp_number']."<br>";
 		if (trim($simpleresul[0]['url_etiquette']) != '0') 
-			@$sortie .= "<a href='".$simpleresul[0]['url_etiquette']."' target='etiquette".$simpleresul[0]['url_etiquette']."'>".$this->l('Label URL')."</a><br>";
+			$html .= "<a href='".$simpleresul[0]['url_etiquette']."' target='etiquette".$simpleresul[0]['url_etiquette']."'>".$this->l('Label URL')."</a><br>";
 		if (trim($simpleresul[0]['url_suivi']) != '0')
-			@$sortie .= "<a href='".$simpleresul[0]['url_suivi']."' target='suivi".$simpleresul[0]['exp_number']."'>".$this->l('Follow-up URL')."</a><br>";
+			$html .= "<a href='".$simpleresul[0]['url_suivi']."' target='suivi".$simpleresul[0]['exp_number']."'>".$this->l('Follow-up URL')."</a><br>";
 		if (trim($simpleresul[0]['MR_Selected_Num']) != '')
-			@$sortie .= $this->l('Nb Point Relay :').$simpleresul[0]['MR_Selected_Num']."<br>";
+			$html .= $this->l('Nb Point Relay :').$simpleresul[0]['MR_Selected_Num']."<br>";
 		if (trim($simpleresul[0]['MR_Selected_LgAdr1']) != '')
-			@$sortie .= $simpleresul[0]['MR_Selected_LgAdr1']."<br>";
+			$html .= $simpleresul[0]['MR_Selected_LgAdr1']."<br>";
 		if (trim($simpleresul[0]['MR_Selected_LgAdr2']) != '')
-			@$sortie .= $simpleresul[0]['MR_Selected_LgAdr2']."<br>";
+			$html .= $simpleresul[0]['MR_Selected_LgAdr2']."<br>";
 		if (trim($simpleresul[0]['MR_Selected_LgAdr3']) != '')
-			@$sortie .= $simpleresul[0]['MR_Selected_LgAdr3']."<br>"; 
+			$html .= $simpleresul[0]['MR_Selected_LgAdr3']."<br>"; 
 		if (trim($simpleresul[0]['MR_Selected_LgAdr4']) != '')
-			@$sortie .= $simpleresul[0]['MR_Selected_LgAdr4']."<br>"; 
+			$html .= $simpleresul[0]['MR_Selected_LgAdr4']."<br>"; 
 		if (trim($simpleresul[0]['MR_Selected_CP']) != '')
-			@$sortie .= $simpleresul[0]['MR_Selected_CP']." ";
+			$html .= $simpleresul[0]['MR_Selected_CP']." ";
 		if (trim($simpleresul[0]['MR_Selected_Ville']) != '')
-			@$sortie .= $simpleresul[0]['MR_Selected_Ville']."<br>";
+			$html .= $simpleresul[0]['MR_Selected_Ville']."<br>";
 		if (trim($simpleresul[0]['MR_Selected_Pays']) != '')
-			@$sortie .= $simpleresul[0]['MR_Selected_Pays']."<br>";
-		return '<p>'.$sortie.'</p>';
+			$html .= $simpleresul[0]['MR_Selected_Pays']."<br>";
+		$html .= '</p>';
+		return $html;
 	}
 
 	public function get_followup($shipping_number)
 	{
-	    $query    = 'SELECT url_suivi FROM '._DB_PREFIX_ .'mr_selected where  id_mr_selected=\''.(int)($shipping_number).'\';';
+	  $query = 'SELECT url_suivi 
+	  	FROM '._DB_PREFIX_ .'mr_selected 
+	  	WHERE id_mr_selected=\''.(int)($shipping_number).'\';';
+	  	  
 		$settings = Db::getInstance()->ExecuteS($query);
-        return $settings[0]['url_suivi'];
+		
+		return $settings[0]['url_suivi'];
 	}
 
-
-	public function set_carrier($key,$value,$id_carrier)
+	public function set_carrier($key, $value, $id_carrier)
 	{
-		if($key == 'name')
+		if ($key == 'name')
 			$key = 'mr_Name';
-		return Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . 'mr_method SET '.pSQL($key).'="'.pSQL($value).'" WHERE id_carrier=\''.(int)($id_carrier).'\' ; ');
+			
+		return Db::getInstance()->Execute('
+			UPDATE ' . _DB_PREFIX_ . 'mr_method 
+			SET '.pSQL($key).'="'.pSQL($value).'" 
+			WHERE id_carrier=\''.(int)($id_carrier).'\' ; ');
 	}
-
-	public function getL($key)
+	
+	static function getOrders($orderIdList = array())
 	{
-		$trad = array(
-			'List of recognized orders' => $this->l('List of recognized orders'),
-			'Order number' => $this->l('Order number'),
-			'Send e-mail to' => $this->l('Send e-mail to'),
-			'Print A4 Label' => $this->l('Print A4 Label'),
-			'Print A5 Label' => $this->l('Print A5 Label'),
-			'return' => $this->l('return'),
-			'All orders which have the state' => $this->l('All orders which have the state'),
-			'Change configuration' => $this->l('Change configuration'),
-			'No orders with this state.' => $this->l('No orders with this state.'),
-			'Order ID' => $this->l('Order ID'),
-			'Customer' => $this->l('Customer'),
-			'Total price' => $this->l('Total price'),
-			'Total shipping' => $this->l('Total shipping'),
-			'Date' => $this->l('Date'),
-			'Weight (in grams)' => $this->l('Weight (in grams)'),
-			'Selected' => $this->l('Selected'),
-			'All' => $this->l('All'),
-			'None' => $this->l('None'),
-			'MR_Selected_Num' => $this->l('MR_Selected_Num'),
-			'MR_Selected_Pays' => $this->l('MR_Selected_Pays'),
-			'exp_number' => $this->l('exp_number'),
-			'Detail' => $this->l('Detail'),
-			'View' => $this->l('View'),
-			'Generate' => $this->l('Generate'),
-			'Label creation history' => $this->l('Label creation history'),
-			'Orders ID' => $this->l('Orders ID'),
-			'Exps num' => $this->l('Exps num'),
-			'Delete selected history' => $this->l('Delete selected history'),
-			'Closed' => $this->l('Closed'),
-			'Monday' => $this->l('Monday'),
-			'Tuesday' => $this->l('Tuesday'),
-			'Wednesday' => $this->l('Wednesday'),
-			'Thursday' => $this->l('Thursday'),
-			'Friday' => $this->l('Friday'),
-			'Saturday' => $this->l('Saturday'),
-			'Sunday' => $this->l('Sunday'),
-			'Select this Relay Point' => $this->l('Select this Relay Point'),
-			'To generate sticks, you must have register a correct address of your store on' => $this->l('To generate labels, you must have registered a correct address of your store on'),
-			'To generate labels, you must have registered a correct address of your store on' => $this->l('To generate labels, you must have registered a correct address of your store on'),
-			'The contact page' => $this->l('The contact page'),
-			'Settings updated succesfull' => $this->l('Settings updated'),
-			'Settings updated' => $this->l('Settings updated'),
-			'Empty address : Are you sure you have set a valid address on the contact page?' => $this->l('Empty address : Are you sure you have set a valid address on the contact page?')
-		);
-		return (array_key_exists($key, $trad)) ? $trad[$key] : $key;
+		$id_order_state = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
+		$sql = '
+			SELECT  o.`id_address_delivery` as id_address_delivery, 
+							o.`id_order` as id_order, 
+							o.`id_customer` as id_customer,
+							o.`id_cart` as id_cart, 
+							mrs.`id_mr_selected` as id_mr_selected,
+							CONCAT(c.`firstname`, \' \', c.`lastname`) AS `customer`,
+							o.`total_paid_real` as total, o.`total_shipping` as shipping,
+							o.`date_add` as date, o.`id_currency` as id_currency, o.`id_lang` as id_lang,
+							mrs.`MR_poids` as weight, mr.`mr_Name` as mr_Name, mrs.`MR_Selected_Num` as MR_Selected_Num,
+							mrs.`MR_Selected_Pays` as MR_Selected_Pays, mrs.`exp_number` as exp_number,
+							mr.`mr_ModeCol` as mr_ModeCol, mr.`mr_ModeLiv` as mr_ModeLiv, mr.`mr_ModeAss` as mr_ModeAss 
+			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'carrier` ca 
+			ON (ca.`id_carrier` = o.`id_carrier` 
+			AND ca.`external_module_name` = "mondialrelay")
+			LEFT JOIN `'._DB_PREFIX_.'mr_selected` mrs 
+			ON (mrs.`id_cart` = o.`id_cart`)
+			LEFT JOIN `'._DB_PREFIX_.'mr_method` mr 
+			ON (mr.`id_carrier` = ca.`id_carrier`)
+			LEFT JOIN `'._DB_PREFIX_.'customer` c 
+			ON (c.`id_customer` = o.`id_customer`)
+			WHERE (
+				SELECT moh.`id_order_state` 
+				FROM `'._DB_PREFIX_.'order_history` moh 
+				WHERE moh.`id_order` = o.`id_order` 
+				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).' 
+			AND ca.`external_module_name` = "mondialrelay"';
+		
+		if (count($orderIdList))
+		{
+			$sql .= ' AND o.id_order IN (';
+			foreach ($orderIdList as $id_order)
+				$sql .= (int)$id_order.', ';
+			$sql = rtrim($sql, ', ').')';
+		}
+		$sql .= '
+			GROUP BY o.`id_order`
+			ORDER BY o.`date_add` ASC';
+		return Db::getInstance()->ExecuteS($sql);
+	}
+	
+	public function getErrorCodeDetail($code)
+	{
+		global $statCode;
+		
+		if (isset($statCode[$code]))
+			return $statCode[$code];
+		return $this->l('This error isn\'t referred : ') . $code;
 	}
 }
