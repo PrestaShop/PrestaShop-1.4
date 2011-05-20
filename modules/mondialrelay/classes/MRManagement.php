@@ -51,7 +51,7 @@ class MRManagement extends MondialRelay
 	{
 		$currentLocale = setlocale(LC_ALL, NULL);
 		setlocale(LC_ALL, 'en_US.UTF8');
-		$cleanedString = iconv("UTF-8","ASCII//TRANSLIT", $string);
+		$cleanedString = iconv('UTF-8','ASCII//TRANSLIT', $string);
 		setLocale(LC_ALL, $currentLocale);
 		return $cleanedString;
 	}
