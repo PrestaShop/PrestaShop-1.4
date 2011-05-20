@@ -25,6 +25,10 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+//
+// IMPORTANT : don't forget to delete the underscore _ in the file name if you want to use it !
+//
+
 class Module extends ModuleCore
 {
 	private static $hookTime = array();
