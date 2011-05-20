@@ -1597,17 +1597,20 @@ class CartCore extends ObjectModel
 		
 		// Insert customized_data
 		$first = true;
-		$sql_custom_data = 'INSERT INTO '._DB_PREFIX_.'customized_data (`id_customization`, `type`, `index`, `value`) VALUES ';
-		foreach ($customs AS $custom)
+		if (sizeof($customs))
 		{
-			if(!$first)
-				$sql_custom_data .= ',';
-			else
-				$first = false;
-			$sql_custom_data .= '('.(int)$custom_ids[$custom['id_customization']].', '.(int)$custom['type'].', '.(int)$custom['index'].', \''.pSQL($custom['value']).'\')';
+			$sql_custom_data = 'INSERT INTO '._DB_PREFIX_.'customized_data (`id_customization`, `type`, `index`, `value`) VALUES ';
+			foreach ($customs AS $custom)
+			{
+				if(!$first)
+					$sql_custom_data .= ',';
+				else
+					$first = false;
+				$sql_custom_data .= '('.(int)$custom_ids[$custom['id_customization']].', '.(int)$custom['type'].', '.(int)$custom['index'].', \''.pSQL($custom['value']).'\')';
+			}
+			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql_custom_data);
 		}
-		Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql_custom_data);
-
+		
 		return array('cart' => $cart, 'success' => $success);
 	}
 
