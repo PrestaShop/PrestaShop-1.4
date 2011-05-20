@@ -293,21 +293,21 @@ class ReferrerCore extends ObjectModel
 			exit;
 		
 		$jsonArray = array();
-		$jsonArray[] = 'id_product:\''.(int)($product->id).'\'';
-		$jsonArray[] = 'product_name:\''.addslashes($product->name).'\'';
-		$jsonArray[] = 'uniqs:\''.(int)($statsVisits['uniqs']).'\'';
-		$jsonArray[] = 'visitors:\''.(int)($statsVisits['visitors']).'\'';
-		$jsonArray[] = 'visits:\''.(int)($statsVisits['visits']).'\'';
-		$jsonArray[] = 'pages:\''.(int)($statsVisits['pages']).'\'';
-		$jsonArray[] = 'registrations:\''.(int)($registrations).'\'';
-		$jsonArray[] = 'orders:\''.(int)($statsSales['orders']).'\'';
-		$jsonArray[] = 'sales:\''.Tools::displayPrice($statsSales['sales'], $currency).'\'';
-		$jsonArray[] = 'cart:\''.Tools::displayPrice(((int)($statsSales['orders']) ? $statsSales['sales'] / (int)($statsSales['orders']) : 0), $currency).'\'';
-		$jsonArray[] = 'reg_rate:\''.number_format((int)($statsVisits['uniqs']) ? (int)($registrations) / (int)($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
-		$jsonArray[] = 'order_rate:\''.number_format((int)($statsVisits['uniqs']) ? (int)($statsSales['orders']) / (int)($statsVisits['uniqs']) : 0, 4, '.', '').'\'';
-		$jsonArray[] = 'click_fee:\''.Tools::displayPrice((int)($statsVisits['visits']) * $referrer->click_fee, $currency).'\'';
-		$jsonArray[] = 'base_fee:\''.Tools::displayPrice($statsSales['orders'] * $referrer->base_fee, $currency).'\'';
-		$jsonArray[] = 'percent_fee:\''.Tools::displayPrice($statsSales['sales'] * $referrer->percent_fee / 100, $currency).'\'';
+		$jsonArray[] = '"id_product":"'.(int)($product->id).'"';
+		$jsonArray[] = '"product_name":"'.addslashes($product->name).'"';
+		$jsonArray[] = '"uniqs":"'.(int)($statsVisits['uniqs']).'"';
+		$jsonArray[] = '"visitors":"'.(int)($statsVisits['visitors']).'"';
+		$jsonArray[] = '"visits":"'.(int)($statsVisits['visits']).'"';
+		$jsonArray[] = '"pages":"'.(int)($statsVisits['pages']).'"';
+		$jsonArray[] = '"registrations":"'.(int)($registrations).'"';
+		$jsonArray[] = '"orders":"'.(int)($statsSales['orders']).'"';
+		$jsonArray[] = '"sales":"'.Tools::displayPrice($statsSales['sales'], $currency).'"';
+		$jsonArray[] = '"cart":"'.Tools::displayPrice(((int)($statsSales['orders']) ? $statsSales['sales'] / (int)($statsSales['orders']) : 0), $currency).'"';
+		$jsonArray[] = '"reg_rate":"'.number_format((int)($statsVisits['uniqs']) ? (int)($registrations) / (int)($statsVisits['uniqs']) : 0, 4, '.', '').'"';
+		$jsonArray[] = '"order_rate":"'.number_format((int)($statsVisits['uniqs']) ? (int)($statsSales['orders']) / (int)($statsVisits['uniqs']) : 0, 4, '.', '').'"';
+		$jsonArray[] = '"click_fee":"'.Tools::displayPrice((int)($statsVisits['visits']) * $referrer->click_fee, $currency).'"';
+		$jsonArray[] = '"base_fee":"'.Tools::displayPrice($statsSales['orders'] * $referrer->base_fee, $currency).'"';
+		$jsonArray[] = '"percent_fee":"'.Tools::displayPrice($statsSales['sales'] * $referrer->percent_fee / 100, $currency).'"';
 		die ('[{'.implode(',', $jsonArray).'}]');
 	}
 }

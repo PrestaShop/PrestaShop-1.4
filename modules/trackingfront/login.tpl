@@ -39,7 +39,7 @@
 			</div>
 			<form action="{$request_uri|escape:'htmlall':'UTF-8'}" method="post" style="margin: 20px 50px; text-align: left; font-weight: bold;">
 				<label>{l s='Login' mod='trackingfront'}</label><br />
-				<input type="text" id="email" name="login" value="{$smarty.post.login|escape:'htmlall'|stripslashes}" class="input" />
+				<input type="text" id="email" name="login" value="{if isset($smarty.post.login)}{$smarty.post.login|escape:'htmlall'|stripslashes}{/if}" class="input" />
 				<div style="margin: 2.0em 0 0 0;">
 					<label>{l s='Password' mod='trackingfront'}</label><br />
 					<input type="password" name="passwd" class="input" />

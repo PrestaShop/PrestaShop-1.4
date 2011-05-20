@@ -77,7 +77,7 @@ class TrackingFront extends Module
 				$errors[] = $this->l('invalid login');
 			elseif (empty($passwd))
 				$errors[] = $this->l('password is required');
-			elseif (!Validate::isPasswd($passwd))
+			elseif (!Validate::isPasswd($passwd,1))
 				$errors[] = $this->l('invalid password');
 			else
 			{
@@ -158,7 +158,7 @@ class TrackingFront extends Module
 	public function displayAccount()
 	{
 		global $smarty, $cookie;
-		
+elog('rrrrrrrrrrrrrrrrrrrrrrr');
 		if (!isset($cookie->stats_date_from))
 			$cookie->stats_date_from = date('Y-m-d');
 		if (!isset($cookie->stats_date_to))
