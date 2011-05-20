@@ -1055,7 +1055,7 @@ class AdminProducts extends AdminTab
 	 */
 	public function copyImage($id_product, $id_image, $method = 'auto')
 	{
-		if (!isset($_FILES['image_product']['tmp_name']) OR !file_exists($_FILES['image_product']['tmp_name']))
+		if (!isset($_FILES['image_product']['tmp_name']))
 			return false;
 		if ($error = checkImage($_FILES['image_product'], $this->maxImageSize))
 			$this->_errors[] = $error;
