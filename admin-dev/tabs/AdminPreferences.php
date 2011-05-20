@@ -99,7 +99,13 @@ class AdminPreferences extends AdminTab
 		);
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
-
+			
+			// No HTTPS activation if you haven't already.
+			if (empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
+			{
+				$this->_fieldsGeneral['PS_SSL_ENABLED']['type'] = 'disabled';
+				$this->_fieldsGeneral['PS_SSL_ENABLED']['disabled'] = '<a href="https://'.Tools::getShopDomainSsl().$_SERVER['REQUEST_URI'].'">'.$this->l('You have first to login with the HTTPS protocol if you want to enable SSL.').'</a>';
+			}
 
 		parent::__construct();
 	}
@@ -356,6 +362,7 @@ class AdminPreferences extends AdminTab
 			/* Display the appropriate input type for each field */
 			switch ($field['type'])
 			{
+				case 'disabled': echo $field['disabled'];break;
 				case 'select':
 					echo '
 					<select name="'.$key.'"'.(isset($field['js']) === true ? ' onchange="'.$field['js'].'"' : '').' id="'.$key.'">';
