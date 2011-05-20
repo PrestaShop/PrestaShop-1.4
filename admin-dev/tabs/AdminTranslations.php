@@ -625,6 +625,8 @@ class AdminTranslations extends AdminTab
 					{
 						$content = Tools::htmlentitiesUTF8($content);
 						$content = htmlspecialchars_decode($content);
+						// replace correct end of line
+						$content = str_replace("\r\n", PHP_EOL, $content);
 						
 						$title = '';
 						if (Tools::getValue('title_'.$group_name.'_'.$mail_name))
