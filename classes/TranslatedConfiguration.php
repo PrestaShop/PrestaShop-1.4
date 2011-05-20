@@ -52,7 +52,7 @@ class TranslatedConfigurationCore extends Configuration
 	
 	public function add($autodate = true, $nullValues = false)
 	{
-		return $this->update();
+		return $this->update($nullValues);
 	}
 	
 	public function update($nullValues = false)
