@@ -49,7 +49,7 @@ function cancelFilter()
 	$('#enabled_filters a').live('click', function(e)
 	{
 		$('#'+$(this).attr('rel')).attr('checked', false);
-		$('#layered_form input[name='+$(this).attr('rel')+']').remove();
+		$('#layered_form input[name='+$(this).attr('rel')+']:hidden').remove();
 		reloadContent();
 		e.preventDefault();
 	});
