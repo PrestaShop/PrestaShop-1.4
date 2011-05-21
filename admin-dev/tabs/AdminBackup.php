@@ -29,7 +29,6 @@ include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
 
 class AdminBackup extends AdminTab
 {
-
 	/** @var string The field we are sorting on */
 	protected $_sortBy = 'date';
 
@@ -52,8 +51,12 @@ class AdminBackup extends AdminTab
 			'age' => array('title' => $this->l('Age')),
 			'filename' => array('title' => $this->l('File name'), 'width' => 200),
 			'filesize' => array('title' => $this->l('File size')));
-		$this->optionTitle = $this->l('Backup option');
-		$this->_fieldsOptions = array('PS_BACKUP_ALL' => array('title' => $this->l('Backup all tables:'), 'desc' => $this->l('If you disable this option, only the necessary tables will be imported (connections and statistics will not be imported)'), 'cast' => 'intval', 'type' => 'bool'));
+		$this->optionTitle = $this->l('Backup options');
+		$this->_fieldsOptions = array(
+			'PS_BACKUP_ALL' => array('title' => $this->l('Ignore statistics tables:'), 
+			'desc' => $this->l('The following tables will NOT be backed up if you enable this option:').'<br />'._DB_PREFIX_.'connections, '._DB_PREFIX_.'connections_page, '._DB_PREFIX_.'connections_source, '._DB_PREFIX_.'guest, '._DB_PREFIX_.'statssearch', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_BACKUP_DROP_TABLE' => array('title' => $this->l('Drop existing tables during import:'), 
+			'desc' => $this->l('Select this option to instruct the backup file to drop your tables prior to restoring the backed up data').'<br />(ie. "DROP TABLE IF EXISTS")', 'cast' => 'intval', 'type' => 'bool'));
 
 		$this->identifier = 'filename';
 	}
@@ -80,14 +83,20 @@ class AdminBackup extends AdminTab
 	{
 		if(is_writable(PS_ADMIN_DIR.'/backups/'))
 		{
-		if (!($object = $this->loadObject()))
-			return;
+			if (!($object = $this->loadObject()))
+				return;
 			if ($object->add())
 			{
-				echo '<div class="conf confirm"><img src="../img/admin/ok.gif" />&nbsp;'.$this->l('Back-up Creation successful').' !</div>';
+				echo '<div class="conf confirm"><img src="../img/admin/ok.gif" />&nbsp;'.$this->l('It appears that the Backup was successful, however, you must download and carefully verify the Backup file.').'</div>';
 				if ($this->tabAccess['view'] === '1')
-					echo '<br />'.$this->l('You can now').' <b><a href="'.$object->getBackupURL().'">'.$this->l('download the back-up file').'</a></b>.';
-				echo '<br />';
+					echo '
+					<fieldset style="margin: 40px 0;" class="width3">
+						<legend><img src="../img/admin/AdminBackup.gif" alt="" class="icon" /> '.$this->l('Download').'</legend>
+						<p style="font-size: 13px;"><a href="'.$object->getBackupURL().'"><img src="../img/admin/AdminBackup.gif" alt="" class="icon" /></a><b><a href="'.$object->getBackupURL().'">'.$this->l('Download the Backup file').' ('.number_format((filesize($object->id)*0.000001), 2, '.', '').$this->l('Mb').')</a></b><br /><br />
+						'.$this->l('Tip: You can also download this file by FTP, Backup files are located in "admin/backups" directory.').'</p>
+					</fieldset>';
+				
+				$this->displayHowTo(false);
 			}
 			elseif ($object->error)
 				$this->_errors[] = $object->error;
@@ -120,16 +129,62 @@ class AdminBackup extends AdminTab
 		$this->displayErrors();
 	}
 
-	public function displayList()
+	public function displayHowTo($showForm = true)
 	{
 		global $currentIndex;
 
+		echo '
+		<div class="error width1" style="float: left; margin-right: 10px;">
+			<p>'.$this->l('Disclaimer before creating a new Backup').'</p>
+			<ol style="font-size: 11px; font-weight: normal; line-height: 20px; padding-left: 10px;">
+				<li>'.$this->l('PrestaShop is not responsible for your database, Backups, restore and data.').'</li>
+				<li>'.$this->l('PrestaShop is an Open-source software, you are using it at your own risk under the licence agreement.').'</li>
+				<li>'.$this->l('You should Backup your data on a regular basis (both files and database).').'</li>
+				<li>'.$this->l('This function only backs up your database, not your files.').'</li>
+				<li>'.$this->l('By default, your existing database tables will be deleted during Backup restore (see options).').'</li>
+				<li>'.$this->l('Always verify the quality and integrity of your Backups files.').'</li>
+				<li>'.$this->l('Always verify that your Backups files are complete, up-to-date and valid. Even if you had a success message during the Backup process.').'</li>
+				<li>'.$this->l('Always check your data.').'</li>
+				<li>'.$this->l('Never restore a Backup on a live site.').'</li>
+			</ol>';
+			
+		if ($showForm)
+			echo '
+			<form action="'.$currentIndex.'&add'.$this->table.'&token='.$this->token.'" method="post" style="text-align: center;">
+				<input type="submit" class="button" value="'.$this->l('I read the disclaimer - Create a new Backup').'" style="padding: 10px; font-weight: bold; border: 1px solid;" />
+			</form>';
+			
+		echo '
+		</div>
+		<div class="warn width2" style="float: left;">
+			<p>'.$this->l('How-to restore a database Backup in 10 easy steps').'</p>
+			<ol style="font-size: 11px; font-weight: normal; line-height: 20px;">
+				<li>'.$this->l('Turn off the "Enable Shop" option in the "Preferences" tab.').'</li>
+				<li>'.$this->l('Download the Backup from the list below or from your FTP server (in the folder "admin/backups").').'</li>
+				<li>'.$this->l('Check the Backup integrity: look for errors, incomplete file. Verify all your data.').'</li>
+				<li>'.$this->l('Ask your hosting provider for a "phpMyAdmin" access to your database').'</li>
+				<li>'.$this->l('Connect to "phpMyAdmin" and select your current database').'</li>
+				<li>'.$this->l('Unless you enabled the "Drop existing tables" option, you must delete all tables from your current database.').'</li>
+				<li>'.$this->l('At the top of the screen select the tab "Import"').'</li>
+				<li>'.$this->l('Click on the "Browse..." button and select the Backup file from your hard drive').'</li>
+				<li>'.$this->l('Check the max. allowed filesize (ie. Max: 16Mb)').'<br />'.$this->l('If your Backup file exceeds this limit, contact your hosting provider').'</li>
+				<li>'.$this->l('Click on the "Go" button and wait during the import, the process can take several minutes').'</li>
+			</ol>
+		</div>		
+		<div class="clear"></div>';
+	}
+	
+	public function displayList()
+	{
+		global $currentIndex;
+		
 		// Test if the backup dir is writable
 		if(!is_writable(PS_ADMIN_DIR.'/backups/'))
 			$this->displayWarning($this->l('"Backups" Directory in admin directory must be writeable (CHMOD 755 / 777)'));
 
 		$this->displayErrors();
-		echo '<br /><a href="'.$currentIndex.'&add'.$this->table.'&token='.$this->token.'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Create new back-up').'</a><br /><br />';
+		$this->displayHowTo();	
+		
 		parent::displayList();
 	}
 
@@ -242,20 +297,11 @@ class AdminBackup extends AdminTab
 	
 	public function int_sort($a, $b)
 	{
-		if ($this->_orderWay == 'ASC')
-			return $a[$this->_sortBy] - $b[$this->_sortBy];
-		else
-			return $b[$this->_sortBy] - $a[$this->_sortBy];
+		return $this->_orderWay == 'ASC' ? $a[$this->_sortBy] - $b[$this->_sortBy] : $b[$this->_sortBy] - $a[$this->_sortBy];
 	}
 	
 	public function str_sort($a, $b)
 	{
-		if ($this->_orderWay == 'ASC')
-			return strcmp ($a[ $this->_sortBy], $b[$this->_sortBy]);
-		else
-			return strcmp ($b[ $this->_sortBy], $a[$this->_sortBy]);
+		return $this->_orderWay == 'ASC' ? strcmp($a[ $this->_sortBy], $b[$this->_sortBy]) : strcmp($b[ $this->_sortBy], $a[$this->_sortBy]);
 	}
-
 }
-
-

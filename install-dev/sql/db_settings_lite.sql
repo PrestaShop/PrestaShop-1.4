@@ -183,9 +183,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (112, 'PS_HOMEPAGE_PHP_SELF', 'index.php', NOW(), NOW()),
 (113, 'PS_USE_ECOTAX', '0', NOW(), NOW()),
 (114, 'PS_CANONICAL_REDIRECT', '1', NOW(), NOW()),
-(115, 'PS_IMG_UPDATE_TIME', UNIX_TIMESTAMP(), NOW(), NOW());
-
-
+(115, 'PS_IMG_UPDATE_TIME', UNIX_TIMESTAMP(), NOW(), NOW()),
+(116, 'PS_BACKUP_DROP_TABLE', 1, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),(36, 4, 'FA', NOW()),(36, 5, 'FA', NOW()),

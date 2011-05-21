@@ -39,7 +39,7 @@ $tabAccess = Profile::getProfileAccess($cookie->profile, Tab::getIdFromClassName
 if ($tabAccess['view'] !== '1')
 	die (Tools::displayError('You do not have permission to view here'));
 
-$backupdir = realpath( PS_ADMIN_DIR . '/backups/');
+$backupdir = realpath(PS_ADMIN_DIR . '/backups/');
 
 if ($backupdir === false)
 	die (Tools::displayError('Backups directory does not exist.'));
@@ -75,5 +75,3 @@ fclose($fp);
 
 if ($ret === false)
 	die (Tools::displayError('Unable to display backup file').' "'.addslashes($backupfile).'"');
-
-

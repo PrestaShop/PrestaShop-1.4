@@ -29,7 +29,6 @@ class BackupCore
 {
 	/** @var integer Object id */
 	public $id;
-
 	/** @var string Last error messages */
 	public $error;
 
@@ -131,9 +130,9 @@ class BackupCore
 			$ignore_insert_table = array();
 		
 		// Generate some random number, to make it extra hard to guess backup file names
-		$rand = dechex ( mt_rand(0, min(0xffffffff, mt_getrandmax() ) ) );
+		$rand = dechex(mt_rand(0, min(0xffffffff, mt_getrandmax())));
 		$date = time();
-		$backupfile = PS_ADMIN_DIR . '/backups/' . $date . '-' . $rand . '.sql';
+		$backupfile = PS_ADMIN_DIR.'/backups/'.$date.'-'.$rand.'.sql';
 
 		// Figure out what compression is available and open the file
 		if (function_exists('bzopen'))
@@ -163,7 +162,7 @@ class BackupCore
 		// Find all tables
 		$tables = Db::getInstance()->ExecuteS('SHOW TABLES');
 		$found = 0;
-		foreach ($tables as $table)
+		foreach ($tables AS $table)
 		{
 			$table = current($table);
 
@@ -183,6 +182,10 @@ class BackupCore
 			}
 
 			fwrite($fp, '/* Scheme for table ' . $schema[0]['Table'] . " */\n");
+			
+			if (Configuration::get('PS_BACKUP_DROP_TABLE'))
+				fwrite($fp, 'DROP TABLE IF EXISTS `'.$schema[0]['Table'].'`;'."\n");
+			
 			fwrite($fp, $schema[0]['Create Table'] . ";\n\n");
 
 			if (!in_array($schema[0]['Table'], $ignore_insert_table))
@@ -200,7 +203,7 @@ class BackupCore
 					{
 						$s = '(';
 						
-						foreach ($row as $field => $value)
+						foreach ($row AS $field => $value)
 						{
 							$tmp = "'" . mysql_real_escape_string($value) . "',";
 							if($tmp != "'',")
