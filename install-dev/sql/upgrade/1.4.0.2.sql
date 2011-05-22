@@ -602,8 +602,6 @@ UPDATE `PREFIX_supplier` SET `active` = 1;
 ALTER TABLE `PREFIX_cms` ADD `active` tinyint(1) unsigned NOT NULL default 0;
 UPDATE `PREFIX_cms` SET `active` = 1;
 
-UPDATE `PREFIX_tab_lang` SET `name` = 'SEO & URLs' WHERE `id_tab` = (SELECT `id_tab` FROM `PREFIX_tab` WHERE `class_name` = 'AdminMeta' LIMIT 1) AND `id_lang` IN(1,2,3);
-
 ALTER TABLE `PREFIX_cart` ADD `secure_key` varchar(32) NOT NULL default '-1' AFTER `id_guest`;
 
 ALTER TABLE `PREFIX_order_detail` ADD `product_upc` varchar(12) default NULL AFTER `product_ean13`;
