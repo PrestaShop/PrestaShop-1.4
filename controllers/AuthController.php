@@ -124,7 +124,7 @@ class AuthControllerCore extends FrontController
 				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
 					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.');
 			}
-			if (Country::isNeedDniByCountryId($address->id_country) AND !Tools::getValue('dni') AND !Validate::isDniLite(Tools::getValue('dni')))
+			if (Country::isNeedDniByCountryId($address->id_country) AND (!Tools::getValue('dni') OR !Validate::isDniLite(Tools::getValue('dni'))))
 				$this->errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
 			elseif (!Country::isNeedDniByCountryId($address->id_country))
 				$address->dni = NULL;
