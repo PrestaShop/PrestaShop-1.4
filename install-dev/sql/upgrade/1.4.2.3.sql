@@ -29,4 +29,8 @@ UPDATE `PREFIX_meta_lang` SET `url_rewrite` = 'identita' WHERE `url_rewrite` = '
 
 INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_BACKUP_DROP_TABLE', 1, NOW(), NOW());
 
+/* Remove duplicates from this table caused by a bug in category importing */
+ALTER IGNORE TABLE `PREFIX_category_group` ADD UNIQUE INDEX `temp` (`id_category`, `id_group`); 
+ALTER TABLE `PREFIX_category_group` DROP INDEX `temp`;
+
 /* PHP:add_missing_rewrite_value(); */;
