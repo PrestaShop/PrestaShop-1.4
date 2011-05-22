@@ -85,7 +85,7 @@ if (isset($_GET['ajaxProductManufacturers']))
 }
 if (isset($_GET['ajaxReferrers']))
 {
-	require 'tabs/AdminReferrers.php';
+	require('tabs/AdminReferrers.php');
 }
 
 if (isset($_GET['ajaxProductSuppliers']))
