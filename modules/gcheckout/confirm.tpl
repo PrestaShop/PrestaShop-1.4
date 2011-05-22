@@ -40,7 +40,7 @@
 </p>
 <p style="margin-top:20px;">
 	- {l s='The total amount of your order is' mod='gcheckout'}
-		<span class="price">{convertPriceWithCurrency price=$total currency=$currency}</span> {if $use_taxes == 1}{l s='(tax incl.)' mod='gcheckout'}{/if}
+		<span class="price">{convertPriceWithCurrency price=$googleTotal currency=$currency}</span> {if $use_taxes == 1}{l s='(tax incl.)' mod='gcheckout'}{/if}
 </p>
 <p>
 	- {l s='We accept the following currency to be sent by Google Checkout:' mod='gcheckout'}&nbsp;<b>{$currency->name}</b>

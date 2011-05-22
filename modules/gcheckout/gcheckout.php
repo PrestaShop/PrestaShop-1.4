@@ -198,9 +198,12 @@ class GCheckout extends PaymentModule
 		$googleCart->SetContinueShoppingUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order-confirmation.php');
 		$googleCart->SetRequestBuyerPhone(false);
 		$googleCart->SetMerchantPrivateData($cart->id.'|'.$cart->secure_key);
+		$total = $cart->getOrderTotal();
+
 		$smarty->assign(array(
 			'googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($this->l('Pay with GoogleCheckout'), 'LARGE'),
-			'total' => $cart->getOrderTotal()
+			'total' => $total,
+			'googleTotal' => $total,
 		));
     }
 }
