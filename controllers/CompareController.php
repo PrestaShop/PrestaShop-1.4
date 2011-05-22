@@ -61,7 +61,11 @@ class CompareControllerCore extends FrontController
 					$curProduct = new Product((int)($id), true, (int)(self::$cookie->id_lang));
 					if (!Validate::isLoadedObject($curProduct))
 						continue;
-
+					if (!$curProduct->active)
+					{
+						unset($ids[$k]);
+						continue;
+					}
 					foreach ($curProduct->getFrontFeatures(self::$cookie->id_lang) AS $feature)
 						$listFeatures[$curProduct->id][$feature['id_feature']] = $feature['value'];
 
