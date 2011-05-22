@@ -24,7 +24,7 @@
 *  @license	http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-include(_PS_MODULE_DIR_.'/trustedshops/lib/TSBPException.php');
+include(_PS_MODULE_DIR_.'trustedshops/lib/TSBPException.php');
 
 /**
  * @see the technical doc for entire description.

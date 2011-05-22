@@ -27,9 +27,9 @@
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
-require (_PS_MODULE_DIR_.'/trustedshops/lib/AbsTrustedShops.php');
-require (_PS_MODULE_DIR_.'/trustedshops/lib/TrustedShopsRating.php');
-require (_PS_MODULE_DIR_.'/trustedshops/lib/TSBuyerProtection.php');
+require (_PS_MODULE_DIR_.'trustedshops/lib/AbsTrustedShops.php');
+require (_PS_MODULE_DIR_.'trustedshops/lib/TrustedShopsRating.php');
+require (_PS_MODULE_DIR_.'trustedshops/lib/TSBuyerProtection.php');
 
 class TrustedShops extends Module
 {

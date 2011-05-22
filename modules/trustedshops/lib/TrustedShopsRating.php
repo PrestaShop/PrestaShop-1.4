@@ -25,9 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-include(_PS_MODULE_DIR_.'/trustedshops/lib/TrustedShopsSoapApi.php');
-include(_PS_MODULE_DIR_.'/trustedshops/lib/WidgetCache.php');
-include(_PS_MODULE_DIR_.'/trustedshops/lib/RatingAlert.php');
+include(_PS_MODULE_DIR_.'trustedshops/lib/TrustedShopsSoapApi.php');
+include(_PS_MODULE_DIR_.'trustedshops/lib/WidgetCache.php');
+include(_PS_MODULE_DIR_.'trustedshops/lib/RatingAlert.php');
 
 class TrustedShopsRating extends AbsTrustedShops
 {
@@ -160,7 +160,7 @@ class TrustedShopsRating extends AbsTrustedShops
 	{
 		$this->_initAllowedLanguages();
 		$out = '';
-		if (is_writable(_PS_MODULE_DIR_.'/trustedshops/cache') === FALSE)
+		if (is_writable(_PS_MODULE_DIR_.'trustedshops/cache') === FALSE)
 			$this->errors[] = $this->l('This module requires write and read permissions on the module cache directory.');
 			
 		if (Tools::isSubmit('submitTrustedShops')) 

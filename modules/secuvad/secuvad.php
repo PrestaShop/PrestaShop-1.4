@@ -303,8 +303,8 @@ class Secuvad extends Module
 			');		
 			if ($this->check_assoc() == '' AND Configuration::get('SECUVAD_ACTIVATION') == 1)
 			{
-				include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_flux.php');
-				include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_connection.php');
+				include_once (_PS_MODULE_DIR_.'secuvad/classes/Secuvad_flux.php');
+				include_once (_PS_MODULE_DIR_.'secuvad/classes/Secuvad_connection.php');
 				
 				$xml_obj = new Secuvad_flux(Configuration::get('SECUVAD_ID'),Configuration::get('SECUVAD_XML_ENCODING'));
 				$flux_xml = $xml_obj->get_flux_xml((int)($id_order));
@@ -335,8 +335,8 @@ class Secuvad extends Module
 			');		
 			if ($this->check_assoc() == '' AND Configuration::get('SECUVAD_ACTIVATION') == 1)
 			{
-				include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_flux.php');
-				include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_connection.php');
+				include_once (_PS_MODULE_DIR_.'secuvad/classes/Secuvad_flux.php');
+				include_once (_PS_MODULE_DIR_.'secuvad/classes/Secuvad_connection.php');
 				
 				$xml_obj = new Secuvad_flux(Configuration::get('SECUVAD_ID'), Configuration::get('SECUVAD_XML_ENCODING'));
 				$flux_xml = $xml_obj->get_flux_xml((int)($id_order));
@@ -941,7 +941,7 @@ class Secuvad extends Module
 
 	private function installModuleTab($tabClass, $tabName, $idTabParent)
 	{
-		@copy(_PS_IMG_DIR_.'t/AdminAccess.gif', _PS_MODULE_DIR_.'/'.$this->name.'/'.$tabClass.'.gif');
+		@copy(_PS_IMG_DIR_.'t/AdminAccess.gif', _PS_MODULE_DIR_.$this->name.'/'.$tabClass.'.gif');
 		@copy(_PS_IMG_DIR_.'t/AdminAccess.gif', _PS_IMG_DIR_.'t/'.$tabClass.'.gif');
 		$tab = new Tab();
 		$tab->name = $tabName;
@@ -1169,8 +1169,8 @@ class Secuvad extends Module
 			$this->secuvad_log('AdminOrders.php : '.$this->l('Error during activation'));
 			return 0;
 		}
-		include_once(_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_flux.php');
-		include_once(_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_connection.php');
+		include_once(_PS_MODULE_DIR_.'secuvad/classes/Secuvad_flux.php');
+		include_once(_PS_MODULE_DIR_.'secuvad/classes/Secuvad_connection.php');
 		if (Tools::isSubmit('id_secuvad_order'))
 		{
 			$xml_obj = new Secuvad_flux(Configuration::get('SECUVAD_ID'), Configuration::get('SECUVAD_XML_ENCODING'));
@@ -1194,8 +1194,8 @@ class Secuvad extends Module
 			$this->secuvad_log('AdminOrders.php : '.$this->l('Error during activation'));
 			return 0;
 		}
-		include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_flux.php');
-		include_once (_PS_MODULE_DIR_.'/secuvad/classes/Secuvad_connection.php');
+		include_once (_PS_MODULE_DIR_.'secuvad/classes/Secuvad_flux.php');
+		include_once (_PS_MODULE_DIR_.'secuvad/classes/Secuvad_connection.php');
 		
 		if (Tools::isSubmit('id_secuvad_order'))
 		{	

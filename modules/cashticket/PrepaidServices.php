@@ -26,8 +26,8 @@
 */
 $module_name = 'cashticket';
 
-include(_PS_MODULE_DIR_.'/'.$module_name.'/Disposition.php');
-include(_PS_MODULE_DIR_.'/'.$module_name.'/PrepaidServicesAPI.php');
+include(_PS_MODULE_DIR_.$module_name.'/Disposition.php');
+include(_PS_MODULE_DIR_.$module_name.'/PrepaidServicesAPI.php');
 
 abstract class PrepaidServices extends PaymentModule
 {

@@ -27,7 +27,7 @@
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
-require_once(_PS_MODULE_DIR_.'/mondialrelay/classes/MondialRelayClass.php');
+require_once(_PS_MODULE_DIR_.'mondialrelay/classes/MondialRelayClass.php');
 	
 class MondialRelay extends Module
 {
@@ -47,7 +47,7 @@ class MondialRelay extends Module
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Mondial Relay');
 		$this->description = $this->l('Deliver in Relay points');
-		$this->_modulePath =	_PS_MODULE_DIR_. '/mondialrelay/';
+		$this->_modulePath =	_PS_MODULE_DIR_. 'mondialrelay/';
 		
 		// Call everytime if the merchant make a replace file update
 		$this->_updateProcess();
@@ -485,7 +485,7 @@ class MondialRelay extends Module
 
 		if ($i > 0)
 		{
-			include_once(_PS_MODULE_DIR_.'/mondialrelay/page_iso.php');
+			include_once(_PS_MODULE_DIR_.'mondialrelay/page_iso.php');
 
 			$smarty->assign( array(
 							'address_map' => $address->address1.', '.$address->postcode.', '.ote_accent($address->city).', '.$country->iso_code,

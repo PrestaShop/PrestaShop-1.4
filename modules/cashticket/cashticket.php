@@ -27,7 +27,7 @@
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 	
-if (!in_array('PrepaidServices', get_declared_classes())) include_once(_PS_MODULE_DIR_.'/cashticket/PrepaidServices.php');
+if (!in_array('PrepaidServices', get_declared_classes())) include_once(_PS_MODULE_DIR_.'cashticket/PrepaidServices.php');
 
 class CashTicket extends PrepaidServices
 {
