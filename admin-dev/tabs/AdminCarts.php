@@ -327,7 +327,7 @@ class AdminCarts extends AdminTab
 		
 		foreach ($this->_list as $cart)
 			if ($id == $cart['id_cart'])
-				if (!$cart['id_order'])
+				if ($cart['id_order'])
 					return;
 		
 		$_cacheLang['Delete'] = $this->l('Delete', __CLASS__, true, false);
