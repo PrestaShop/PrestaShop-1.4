@@ -211,3 +211,12 @@ function isArrowKey(k_ev)
 
 }
 
+//On dom ready
+$().ready(function()
+{
+	// Hide all elements with .hideOnSubmit class when parent form is submit
+	$('form').submit(function()
+	{
+		$(this).find('.hideOnSubmit').hide();
+	});
+});
