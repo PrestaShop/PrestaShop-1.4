@@ -187,13 +187,13 @@ class AttributeCore extends ObjectModel
 	 */
 	static public function getAttributeMinimalQty($id_product_attribute)
 	{
-		$row = Db::getInstance()->getValue('
-		SELECT minimal_quantity
+		$minimal_quantity = Db::getInstance()->getValue('
+		SELECT `minimal_quantity`
 		FROM `'._DB_PREFIX_.'product_attribute` 
 		WHERE `id_product_attribute` = '.(int)($id_product_attribute));
 		
-		if ($row['quantity'] !== NULL)
-			return (int)($row['quantity']);
+		if ($minimal_quantity > 1)
+			return (int)$minimal_quantity;
 		return false;
 	}
 	
