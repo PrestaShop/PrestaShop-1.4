@@ -1227,7 +1227,7 @@ class AdminProducts extends AdminTab
 			else
 			{
 				$object = new $this->className();
-                $this->_removeTaxFromEcotax();
+				$this->_removeTaxFromEcotax();
 				$this->copyFromPost($object, $this->table);
 				if ($object->add())
 				{
@@ -1282,7 +1282,7 @@ class AdminProducts extends AdminTab
 
 	private function _removeTaxFromEcotax()
 	{
-	    $ecotaxTaxRate = Tax::getProductEcotaxRate();
+		$ecotaxTaxRate = Tax::getProductEcotaxRate();
 		if ($ecotax = Tools::getValue('ecotax'))
 			$_POST['ecotax'] = Tools::ps_round(Tools::getValue('ecotax') / (1 + $ecotaxTaxRate / 100), 6);
 	}
