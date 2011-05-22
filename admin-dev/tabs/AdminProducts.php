@@ -1227,6 +1227,7 @@ class AdminProducts extends AdminTab
 			else
 			{
 				$object = new $this->className();
+                $this->_removeTaxFromEcotax();
 				$this->copyFromPost($object, $this->table);
 				if ($object->add())
 				{
