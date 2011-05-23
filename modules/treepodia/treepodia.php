@@ -755,6 +755,7 @@ XML;
 	{
 		global $smarty;
 
+		$id_product = Tools::getValue('id_product');
 		if (!Configuration::get('TREEPODIA_ACCOUNT_CODE') OR Configuration::get('TREEPODIA_INTEGRATION_TYPE') != 0)
 			return '';
 
@@ -773,7 +774,7 @@ XML;
 				$position = 'left';
 		}
 
-		$smarty->assign(array('position' => $position, 'img_src' => _MODULE_DIR_.$this->name.'/logos/'.Configuration::get('TREEPODIA_PLAY_LOGO')));
+		$smarty->assign(array('position' => $position, 'img_src' => _MODULE_DIR_.$this->name.'/logos/'.Configuration::get('TREEPODIA_PLAY_LOGO'), 'account_id' => Configuration::get('TREEPODIA_ACCOUNT_CODE'), 'product_sku' => (int)($id_product)));
 		return $this->display(__FILE__, 'product.tpl');
 	}
 
