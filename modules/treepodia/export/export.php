@@ -20,7 +20,7 @@
 *
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2011 PrestaShop SA
-*  @version  Release: $Revision: 1.4 $
+*  @version  Release: $Revision$
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */include(dirname(__FILE__).'/../../../config/config.inc.php');include(dirname(__FILE__).'/../../../init.php');include(dirname(__FILE__).'/../treepodia.php');$treepodia = new Treepodia();$treepodia->generateXmlFlow();

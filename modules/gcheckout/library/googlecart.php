@@ -17,7 +17,7 @@
 
 /**
  * Classes used to build a shopping cart and submit it to Google Checkout
- * @version $Id: googlecart.php 1234 2007-09-25 14:58:57Z ropu $
+ * @version $Id$
  */
 
   define('MAX_DIGITAL_DESC', 1024);

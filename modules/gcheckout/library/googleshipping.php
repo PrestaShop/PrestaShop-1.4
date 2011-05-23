@@ -17,7 +17,7 @@
  */
 /**
  * Classes used to represent shipping types
- * @version $Id: googleshipping.php 1234 2007-09-25 14:58:57Z ropu $
+ * @version $Id$
  */
  
   /**

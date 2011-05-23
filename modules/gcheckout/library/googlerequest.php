@@ -21,7 +21,7 @@
  /** This class is instantiated everytime any notification or 
   * order processing commands are received.
   * 
-  * @version $Id: googlerequest.php 1234 2007-09-25 14:58:57Z ropu $
+  * @version $Id$
   * It has a SendReq function to post different requests to the Google Server
   * Send functions are provided for most of the commands that are supported
   * by the server for this code

@@ -17,7 +17,7 @@
 
 /**
  * Classes used to represent an item to be used for Google Checkout
- * @version $Id: googleitem.php 1234 2007-09-25 14:58:57Z ropu $
+ * @version $Id$
  */
 
  /**
