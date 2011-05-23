@@ -1797,7 +1797,8 @@ class ProductCore extends ObjectModel
 			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT p.`price`,
 			'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.(int)($id_product).' AND default_on = 1), 0)').' AS attribute_price,
-			'.($id_product_attribute ? 'pa.`ecotax`' : 'p.`ecotax`').'
+			p.`ecotax`
+			'.($id_product_attribute ? ', pa.`ecotax` AS attribute_ecotax' : '').'
 			FROM `'._DB_PREFIX_.'product` p
 			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.(int)($id_product_attribute) : '').'
 			WHERE p.`id_product` = '.(int)($id_product));
@@ -1859,9 +1860,12 @@ class ProductCore extends ObjectModel
 		$price = Tools::ps_round($price, $decimals);
 
 		// Eco Tax
-		if ($result['ecotax'] AND $with_ecotax)
+		if (($result['ecotax'] OR isset($result['attribute_ecotax'])) AND $with_ecotax)
 		{
 			$ecotax = $result['ecotax'];
+			if (isset($result['attribute_ecotax']) && $result['attribute_ecotax'] > 0)
+				$ecotax = $result['ecotax'];
+
 			if ($id_currency)
 				$ecotax = Tools::convertPrice($ecotax, $id_currency);
 			if ($use_tax)
