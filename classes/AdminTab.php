@@ -1875,13 +1875,13 @@ abstract class AdminTabCore
 	
 	protected function warnDomainName()
 	{
-		if ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN'))
-			$this->displayWarning($this->l('Your shop\'s domain name ("').Configuration::get('PS_SHOP_DOMAIN').
-			$this->l('") seems to be different from the shop url which is: "').$_SERVER['HTTP_HOST'].
-			$this->l('". Click ').
-			'<a href=\'http://localhost/prestashop/admin-dev/index.php?tab=AdminMeta&token='.
-			Tools::getAdminTokenLite('AdminMeta').'#SEO%20%26%20URLs\'>'.
-			$this->l('here').'</a>'.$this->l(' to change your shop\'s domain name.'));
+		global $currentIndex;
+
+		if ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') AND $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'))
+			$this->displayWarning($this->l('Your are currently connected with the following domain name:').' <span style="color: #CC0000;">'.$_SERVER['HTTP_HOST'].'</span><br />'.
+			$this->l('This one is different from the main shop domain name set in "Preferences > SEO & URLs":').' <span style="color: #CC0000;">'.Configuration::get('PS_SHOP_DOMAIN').'</span><br />
+			<a href="index.php?tab=AdminMeta&token='.Tools::getAdminTokenLite('AdminMeta').'#SEO%20%26%20URLs">'.
+			$this->l('Click here if you want to modify the main shop domain name').'</a>');
 	}
 }
 
