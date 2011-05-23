@@ -607,6 +607,7 @@ abstract class ObjectModelCore
 					)
 				);
 			}
+
 		if (isset($this->fieldsRequiredLang))
 			foreach ($this->fieldsRequiredLang as $field)
 			{
@@ -617,6 +618,12 @@ abstract class ObjectModelCore
 					$resourceParameters['fields'][$field] = array('sqlId' => $field, 'required' => true, 'i18n' => true)
 				);
 			}
+
+		if (isset($this->date_add))
+			$resourceParameters['fields']['date_add']['setter'] = false;
+		if (isset($this->date_upd))
+			$resourceParameters['fields']['date_upd']['setter'] = false;
+
 		foreach ($resourceParameters['fields'] as $key => &$resourceParametersField)
 			if (!isset($resourceParametersField['sqlId']))
 				$resourceParametersField['sqlId'] = $key;
