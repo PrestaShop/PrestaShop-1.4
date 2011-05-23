@@ -2329,7 +2329,7 @@ class AdminProducts extends AdminTab
 		-->
 	</style>
 	<script type="text/javascript">
-	<!--
+	//<![CDATA[
 	function toggleVirtualProduct(elt)
 	{
 		if (elt.checked)
@@ -2389,7 +2389,7 @@ class AdminProducts extends AdminTab
 		);
 	}
 
-	-->
+	//]]>
 	</script>
 	<?php
 		echo '

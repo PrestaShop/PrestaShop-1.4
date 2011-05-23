@@ -1,6 +1,6 @@
 {literal}
 <script type="text/javascript">
-<!--
+//<![CDATA[
 function toggleVisibleUserListState(state) {
 	var elt = document.getElementById('visible_users_list');
 
@@ -40,7 +40,7 @@ addLoadEvent(function() {
 	updateDJLVisibilityChoices() ;
 }) ;
 
-//-->
+//]]>
 </script>
 {/literal}
 

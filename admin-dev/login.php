@@ -157,9 +157,9 @@ else
 }
 ?>
 <script type="text/javascript">
-<!--
+//<![CDATA[
 if (document.getElementById('email')) document.getElementById('email').focus();
--->
+//]]>
 </script>
 <?php
 echo '

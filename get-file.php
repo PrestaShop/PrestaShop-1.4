@@ -40,10 +40,10 @@ function displayError($msg)
 	'You have reached the maximum number of allowed downloads.' => Tools::displayError('You have reached the maximum number of allowed downloads.'));
 ?>
 <script type="text/javascript">
-<!--
+//<![CDATA[
 alert("<?php echo html_entity_decode($translations[$msg], ENT_QUOTES, 'utf-8'); ?>");
 window.location.href = '<?php echo __PS_BASE_URI__ ?>';
--->
+//]]>
 </script>
 <?php
 	exit();

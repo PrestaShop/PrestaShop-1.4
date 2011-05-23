@@ -26,7 +26,7 @@
 
 {literal}
 <script type="text/javascript">
-<!-- 
+//<![CDATA[
     document.write(unescape("%3Cscript src='" + ((document.location.protocol == 'https:') ? 'https://' : 'http://') + "api.treepodia.com/video/Treepodia.js' type='text/javascript'%3E%3C/script%3E"));
 
 	
@@ -52,6 +52,6 @@
 			return false;
 		});
 	});
-// -->
+//]]>
 </script>
 {/literal}

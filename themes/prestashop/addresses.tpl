@@ -25,10 +25,13 @@
 *}
 
 <script type="text/javascript">
-<!--
+//<![CDATA[
 	var baseDir = '{$base_dir_ssl}';
--->
-	{literal}$(document).ready(function() { resizeAddressesBox(); });{/literal}
+	$(document).ready(function()
+	{
+			resizeAddressesBox();
+	});
+//]]>
 </script>
 
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='My addresses'}{/capture}

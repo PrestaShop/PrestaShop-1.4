@@ -25,9 +25,9 @@
 *}
 
 <script type="text/javascript">
-<!--
+//<![CDATA[
 	var baseDir = '{$base_dir_ssl}';
--->
+//]]>
 </script>
 
 {capture name=path}<a href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Your personal information'}{/capture}

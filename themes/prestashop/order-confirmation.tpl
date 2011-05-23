@@ -25,9 +25,9 @@
 *}
 
 <script type="text/javascript">
-<!--
+//<![CDATA[
 	var baseDir = '{$base_dir_ssl}';
--->
+//]]>
 </script>
 
 {capture name=path}{l s='Order confirmation'}{/capture}

@@ -26,7 +26,7 @@
 
 {if !$opc}
 	<script type="text/javascript">
-	<!--
+	//<![CDATA[
 		var baseDir = '{$base_dir_ssl}';
 		var orderProcess = 'order';
 		var currencySign = '{$currencySign|html_entity_decode:2:"UTF-8"}';
@@ -35,22 +35,21 @@
 		var currencyBlank = '{$currencyBlank|intval}';
 		var txtProduct = "{l s='product'}";
 		var txtProducts = "{l s='products'}";
-	-->
-	</script>
-	<script type="text/javascript">
-	var msg = "{l s='You must agree to the terms of service before continuing.' js=1}";
-	{literal}
-	function acceptCGV()
-	{
-		if ($('#cgv').length && !$('input#cgv:checked').length)
+
+		var msg = "{l s='You must agree to the terms of service before continuing.' js=1}";
+		{literal}
+		function acceptCGV()
 		{
-			alert(msg);
-			return false;
+			if ($('#cgv').length && !$('input#cgv:checked').length)
+			{
+				alert(msg);
+				return false;
+			}
+			else
+				return true;
 		}
-		else
-			return true;
-	}
-	{/literal}
+		{/literal}
+	//]]>
 	</script>
 {/if}
 
