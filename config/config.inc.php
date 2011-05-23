@@ -112,4 +112,7 @@ if (function_exists('date_default_timezone_set'))
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
-
+/* Possible value are true, false, 'URL'
+ (for 'URL' append SMARTY_DEBUG as a parameter to the url)
+ default is false for production environment */
+define('SMARTY_DEBUG_CONSOLE', false); 
