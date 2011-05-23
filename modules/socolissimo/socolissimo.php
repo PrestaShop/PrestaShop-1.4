@@ -503,9 +503,7 @@ class Socolissimo extends CarrierModule
 
 	public function make_key($ceName, $dyPraparationTime, $dyForwardingCharges, $trClientNumber, $orderId)
 	{
-		$strPs = Configuration::get('SOCOLISSIMO_ID').$ceName.number_format($dyPraparationTime, 2, ',', '').$dyForwardingCharges.$trClientNumber.self::formatOrderId($orderId).Configuration::get('SOCOLISSIMO_KEY');
-		$keyPs = sha1($strPs);
-		return $keyPs;
+		return sha1(Configuration::get('SOCOLISSIMO_ID').$ceName.number_format($dyPraparationTime, 2, ',', '').$dyForwardingCharges.$trClientNumber.self::formatOrderId($orderId).Configuration::get('SOCOLISSIMO_KEY'));
 	}
 
 	public static function createSoColissimoCarrier($config)

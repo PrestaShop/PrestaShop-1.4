@@ -243,7 +243,6 @@ class	CookieCore
 	  */
 	function update($nullValues = false)
 	{
-		
 		if (isset($_COOKIE[$this->_name]))
 		{
 			/* Decrypt cookie content */

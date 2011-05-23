@@ -99,7 +99,7 @@ class AdminEmployees extends AdminTab
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.((int)$this->tabAccess['view'] ? '' : '&updateemployee&id_employee='.(int)$obj->id).'" method="post" enctype="multipart/form-data" autocomplete="off">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 		'.((int)$this->tabAccess['view'] ? '' : '<input type="hidden" name="back" value="'.$currentIndex.'&token='.$this->token.'&updateemployee&id_employee='.(int)$obj->id.'" />').'
-			<fieldset><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
+			<fieldset class="width3"><legend><img src="../img/admin/nav-user.gif" />'.$this->l('Employees').'</legend>
 				<label>'.$this->l('Last name:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="lastname" value="'.htmlentities($this->getFieldValue($obj, 'lastname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
@@ -167,9 +167,9 @@ class AdminEmployees extends AdminTab
 				</div>';
 		}
 		echo '<div class="clear">&nbsp;</div>
-				<div class="floatr">
+				<center>
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
-				</div><div class="clear">&nbsp;</div>
+				</center><div class="clear">&nbsp;</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		</form>';
@@ -196,13 +196,13 @@ class AdminEmployees extends AdminTab
 		}
 		elseif (Tools::isSubmit('submitAddemployee'))
 		{
-			$employee = new Employee(Tools::getValue('id_employee'));
+			$employee = new Employee((int)Tools::getValue('id_employee'));
 			if (!(int)$this->tabAccess['edit'])
 				$_POST['id_profile'] = $_GET['id_profile'] = $employee->id_profile;
 			
 			if ($employee->isLastAdmin()) 
 			{
-				if  (Tools::getValue('id_profile') != (int)(_PS_ADMIN_PROFILE_)) 
+				if  (Tools::getValue('id_profile') != (int)_PS_ADMIN_PROFILE_) 
 				{
 					$this->_errors[] = Tools::displayError('You should have at least one employee in the administrator group.');
 					return false;
@@ -219,5 +219,3 @@ class AdminEmployees extends AdminTab
 		return parent::postProcess();
 	}
 }
-
-

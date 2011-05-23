@@ -50,8 +50,8 @@ class EmployeeCore extends ObjectModel
 	/** @var datetime Password */
 	public 		$last_passwd_gen;
 	
-	public $stats_date_from;
-	public $stats_date_to;
+	public		$stats_date_from;
+	public		$stats_date_to;
 	
 	/** @var string Display back office background in the specified color */
 	public		$bo_color;
@@ -95,8 +95,15 @@ class EmployeeCore extends ObjectModel
 		$fields['email'] = pSQL($this->email);
 		$fields['passwd'] = pSQL($this->passwd);
 		$fields['last_passwd_gen'] = pSQL($this->last_passwd_gen);
+		
+		if (empty($this->stats_date_from))
+			$this->stats_date_from = date('Y-m-d 00:00:00');
 		$fields['stats_date_from'] = pSQL($this->stats_date_from);
+		
+		if (empty($this->stats_date_to))
+			$this->stats_date_to = date('Y-m-d 23:59:59');
 		$fields['stats_date_to'] = pSQL($this->stats_date_to);
+		
 		$fields['bo_color'] = pSQL($this->bo_color);
 		$fields['bo_theme'] = pSQL($this->bo_theme);
 		$fields['bo_uimode'] = pSQL($this->bo_uimode);
