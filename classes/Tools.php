@@ -1927,6 +1927,33 @@ FileETag INode MTime Size
             
         return array_key_exists($property, $vars);
     }
+
+	/**
+     * @desc identify the version of php
+     * @return string
+     */
+    public static function checkPhpVersion()
+    {
+    	$version =null;
+    	if(defined('PHP_VERSION'))
+    		$version = PHP_VERSION;
+    	else
+    		$version = substr(phpversion(''), 0, strpos(phpversion(''), '-'));
+        return $version;
+    }
+
+    /**
+     * @desc selection of Smarty depending on the version of php
+     *
+     */
+    public static function selectionVersionSmarty()
+    {
+        //Smarty 3 requirements PHP 5.2 +
+        if (strnatcmp(self::checkPhpVersion(),'5.2.0') >= 0)
+            Configuration::updateValue('PS_FORCE_SMARTY_2', 0);
+        else
+            Configuration::updateValue('PS_FORCE_SMARTY_2',1);
+    }
 }
 
 /**
