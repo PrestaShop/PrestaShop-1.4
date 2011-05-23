@@ -751,7 +751,7 @@ class AdminModules extends AdminTab
 				/* Display modules for each tab type */
 				foreach ($tabModule as $module)
 				{
-					echo '<div id="modgo_'.$module->name.'" >';
+					echo '<div id="modgo_'.$module->name.'" title="' . $module->name . '">';
 					if ($module->id)
 					{
 						$img = '<img src="../img/admin/module_install.png" alt="'.$this->l('Module enabled').'" title="'.$this->l('Module enabled').'" />';
