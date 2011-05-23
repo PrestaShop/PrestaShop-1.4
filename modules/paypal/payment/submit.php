@@ -54,7 +54,7 @@ function getAuthorization()
 				$cookie->paypal_token = strval($result['TOKEN']);
 				$cookie->paypal_token_date = time();
 				header('Location: https://'.$ppPayment->getPayPalURL().'/webscr&cmd=_express-checkout&token='.urldecode(strval($cookie->paypal_token)).'&useraction=commit');
-        exit;
+				exit;
 			}
 			else
 				$logs[] = '<b>'.$ppPayment->l('No token given by PayPal', 'submit').'</b>';
@@ -69,7 +69,10 @@ function displayConfirm()
 	global $cookie, $smarty, $ppPayment, $cart;
 
 	if (!$cookie->isLogged(true))
+	{
+		header('location:../../../'); exit;
 		die('Not logged');
+	}
 	unset($cookie->paypal_token);
 
 	if ($cart->id_currency != $ppPayment->getCurrency((int)$cart->id_currency)->id)
@@ -102,7 +105,10 @@ function submitConfirm()
 	global $cookie, $smarty, $ppPayment, $cart;
 
 	if (!$cookie->isLogged(true))
+	{
+		header('location:../../../'); exit;
 		die('Not logged');
+	}
 	elseif (!$id_currency = (int)(Tools::getValue('currency_payement')))
 		die('No currency');
 	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
@@ -118,7 +124,10 @@ function validOrder()
 {
 	global $cookie, $cart, $ppPayment;
 	if (!$cookie->isLogged(true))
+	{
+		header('location:../../../'); exit;
 		die('Not logged');
+	}
 	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
 		die('Empty cart');
 	if (!$token = Tools::htmlentitiesUTF8(strval(Tools::getValue('token'))))
