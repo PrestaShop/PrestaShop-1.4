@@ -278,7 +278,7 @@ class ProductCore extends ObjectModel
 			'product_option_values' => array('resource' => 'product_options_values', 'fields' => array(
 				'id' => array('required' => true),
 			)),
-			'product_features' => array('resource' => 'product_feature', 
+			'product_features' => array('resource' => 'product_feature',
 				'fields' => array(
 					'id' => array('required' => true),
 					'id_feature_value' => array('required' => true, 'xlink_resource' => 'product_feature_values'),
@@ -972,15 +972,15 @@ class ProductCore extends ObjectModel
 	}
 
 	public function setDefaultAttribute($id_product_attribute)
-	{	
+	{
 		return Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'product_attribute`
 		SET `default_on` = 1
 		WHERE `id_product` = '.(int)$this->id.'
-		AND `id_product_attribute` = '.(int)$id_product_attribute) && 
+		AND `id_product_attribute` = '.(int)$id_product_attribute) &&
 		Db::getInstance()->Execute('
-		UPDATE `'._DB_PREFIX_.'product` 
-		SET `cache_default_attribute` = '.(int)$id_product_attribute.' 
+		UPDATE `'._DB_PREFIX_.'product`
+		SET `cache_default_attribute` = '.(int)$id_product_attribute.'
 		WHERE `id_product` = '.(int)$this->id.' LIMIT 1');
 	}
 
@@ -1716,10 +1716,10 @@ class ProductCore extends ObjectModel
 		$id_country = (int)Country::getDefaultCountryId();
 		$id_state = 0;
 		$id_county = 0;
-	    
+
 		if (!$id_address)
 			$id_address = $cur_cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
-			
+
 		if ($id_address)
 		{
 			$address_infos = Address::getCountryAndState($id_address);
@@ -1732,7 +1732,7 @@ class ProductCore extends ObjectModel
 				$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
 			}
 		}
-		elseif (isset($cookie->id_country)) 
+		elseif (isset($cookie->id_country))
 		{
 			// fetch address from cookie
 			$id_country = (int)$cookie->id_country;
@@ -1783,7 +1783,7 @@ class ProductCore extends ObjectModel
 		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_state.'-'.$id_county.'-'.$id_group.'-'.$quantity.'-'.$product_attribute_label.'-'.($use_tax?'1':'0').'-'.$decimals.'-'.($only_reduc?'1':'0').'-'.($use_reduc?'1':'0').'-'.$with_ecotax;
 		// Cache for specific prices
 		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
-		
+
 		if (isset(self::$_prices[$cacheId]))
 		{
 			if(isset(self::$_pricesLevel3[$cacheId3]))
@@ -2649,7 +2649,7 @@ class ProductCore extends ObjectModel
 			$row['price'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : 	NULL), 6);
 		}
 		else
-			$row['price'] = Tools::ps_round(Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6), 2);
+			$row['price'] = Tools::ps_round(Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 2), 2);
 
 		$row['reduction'] = Product::getPriceStatic((int)($row['id_product']), (bool)$usetax, (int)($row['id_product_attribute']), 6, NULL, true, true, 1, true, NULL, NULL, NULL, $specific_prices);
         $row['specific_prices'] = $specific_prices;
@@ -3039,9 +3039,9 @@ class ProductCore extends ObjectModel
 			$this->quantity += abs($quantity);
 		else if ($id_reason == 2)
 			$this->quantity -= abs($quantity);
-			
+
 		Hook::updateQuantity($this, null);
-		
+
 		return $result;
 	}
 
@@ -3092,7 +3092,7 @@ class ProductCore extends ObjectModel
         }
 	    return self::$_tax_rules_group[$id_product];
 	}
-	
+
 	/**
 	* Webservice getter : get product features association
 	*
@@ -3130,7 +3130,7 @@ class ProductCore extends ObjectModel
 			$this->addFeaturesToDB($productFeature['id'], $productFeature['id_feature_value']);
 		return true;
 	}
-	
+
 	/**
 	* Webservice getter : get virtual field default combination
 	*
@@ -3151,7 +3151,7 @@ class ProductCore extends ObjectModel
 		$this->deleteDefaultAttributes();
 		return $this->setDefaultAttribute((int)$id_combination);
 	}
-	
+
 	/**
 	* Webservice getter : get category ids of current product for association
 	*
@@ -3162,7 +3162,7 @@ class ProductCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT `id_category` AS id FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)$this->id);
 		return $result;
 	}
-	
+
 	/**
 	* Webservice setter : set category ids of current product for association
 	*
@@ -3190,7 +3190,7 @@ class ProductCore extends ObjectModel
 		}
 		return true;
 	}
-	
+
 	/**
 	* Webservice getter : get combination ids of current product for association
 	*
@@ -3201,7 +3201,7 @@ class ProductCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` as id FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)($this->id));
 		return $result;
 	}
-	
+
 	/**
 	* Webservice setter : set combination ids of current product for association
 	*
@@ -3213,19 +3213,19 @@ class ProductCore extends ObjectModel
 		$ids_new = array();
 		foreach ($combinations as $combination)
 			$ids_new[] = (int)$combination['id'];
-		
+
 		$ids_orig = array();
 		$original = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` as id FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)($this->id));
 		if (is_array($original))
 			foreach ($original as $id)
 				$ids_orig[] = $id['id'];
-		
+
 		$all_ids = array();
 		$all = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` as id FROM `'._DB_PREFIX_.'product_attribute`');
 		if (is_array($all))
 			foreach ($all as $id)
 				$all_ids[] = $id['id'];
-		
+
 		$toAdd = array();
 		foreach ($ids_new as $id)
 			if (!in_array($id, $ids_orig))
@@ -3250,7 +3250,7 @@ class ProductCore extends ObjectModel
 		}
 		return true;
 	}
-	
+
 	/**
 	* Webservice getter : get product option ids of current product for association
 	*
@@ -3266,7 +3266,7 @@ class ProductCore extends ObjectModel
 			GROUP BY pa.id_product_attribute');
 		return $result;
 	}
-	
+
 	/**
 	* Webservice getter : get virtual field position in category
 	*
@@ -3275,14 +3275,14 @@ class ProductCore extends ObjectModel
 	public function getWsPositionInCategory()
 	{
 		$result = Db::getInstance()->ExecuteS('SELECT position
-			FROM `'._DB_PREFIX_.'category_product` 
+			FROM `'._DB_PREFIX_.'category_product`
 			WHERE id_category = '.(int)($this->id_category_default).'
 			AND id_product = '.(int)($this->id));
 		if (count($result) > 0)
 			return $result[0]['position'];
 		return '';
 	}
-	
+
 	/**
 	* Webservice getter : get virtual field id_default_image in category
 	*
@@ -3293,7 +3293,7 @@ class ProductCore extends ObjectModel
 		$result = $this->getCover($this->id);
 		return $result['id_image'];
 	}
-	
+
 	/**
 	* Webservice getter : get image ids of current product for association
 	*
@@ -3308,3 +3308,4 @@ class ProductCore extends ObjectModel
 		ORDER BY `position`');
 	}
 }
+
