@@ -118,6 +118,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_missing_rewrite_value.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_duplicate_category_groups.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'migrate_block_info_to_cms_block.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;

@@ -462,6 +462,7 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 /* PHP:add_module_to_hook(blockcurrencies, header); */;
 /* PHP:add_module_to_hook(blocknewproducts, header); */;
 /* PHP:add_module_to_hook(blockuserinfo, header); */;
+/* PHP:migrate_block_info_to_cms_block(); */;
 /* PHP:add_module_to_hook(blockcms, header); */;
 /* PHP:add_module_to_hook(blocklanguages, header); */;
 /* PHP:add_module_to_hook(blockmanufacturer, header); */;
