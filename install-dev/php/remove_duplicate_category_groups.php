@@ -31,7 +31,7 @@
 function remove_duplicate_category_groups()
 {
 	$result = Db::getInstance()->ExecuteS('
-		SELECT `id_category`, `id_group`, COUNT(*) as count
+		SELECT `id_category`, `id_group`, COUNT(*) as `count`
 		FROM `'._DB_PREFIX_.'category_group`
 		GROUP BY `id_category`, `id_group`
 		ORDER BY `count` DESC');

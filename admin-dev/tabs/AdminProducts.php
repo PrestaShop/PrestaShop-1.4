@@ -3547,7 +3547,8 @@ class AdminProducts extends AdminTab
 					echo '" />
 					<input type="hidden" size="2" id="curPackItemId" />
 
-					<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
+					<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'
+					<br />'.$this->l('You cannot add downloadable products to a pack.').'</p>
 					<input type="text" size="25" id="curPackItemName" />
 					<input type="text" name="curPackItemQty" id="curPackItemQty" value="1" size="1" />
 					<script language="javascript">
@@ -3582,7 +3583,7 @@ class AdminProducts extends AdminTab
 											$(\'#curPackItemId\').val(item[1]);
 										});
 										$(\'#curPackItemName\').setOptions({
-											extraParams: {excludeIds :  getSelectedIds()}
+											extraParams: {excludeIds : getSelectedIds(), excludeVirtuals : 1}
 										});
 
 								});

@@ -49,12 +49,17 @@ if ($excludeIds && $excludeIds != 'NaN')
 	$excludeIds = implode(',', array_map('intval', explode(',', $excludeIds)));
 else
 	$excludeIds = '';
+	
+// Excluding downloadable products from packs because download from pack is not supported
+$excludeVirtuals = (bool)Tools::getValue('excludeVirtuals', false);
+
 $items = Db::getInstance()->ExecuteS('
 SELECT p.`id_product`, `reference`, pl.name
 FROM `'._DB_PREFIX_.'product` p
 LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.id_product = p.id_product)
 WHERE (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query).'%\') AND pl.id_lang = '.(int)($cookie->id_lang).
-(!empty($excludeIds) ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : ''));
+(!empty($excludeIds) ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : '').
+($excludeVirtuals ? 'AND p.id_product NOT IN (SELECT pd.id_product FROM `'._DB_PREFIX_.'product_download` pd WHERE (pd.id_product = p.id_product))' : ''));
 
 if ($items)
 	foreach ($items AS $item)

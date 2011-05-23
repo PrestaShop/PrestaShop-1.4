@@ -2184,6 +2184,7 @@ $_LANGADM['AdminProducts22987d3b86cd0afd549196e94817e20f'] = 'Vous perdrez toute
 $_LANGADM['AdminProductsd6ae681fcd58f1e1936ca97da36528ff'] = 'Ajouter une nouvelle caractéristique';
 $_LANGADM['AdminProductsd1a1006c2d7ebf87d5e4d934a138e5a5'] = 'Vous devez sauvegarder ce produit avant de pouvoir ajouter des caractéristiques';
 $_LANGADM['AdminProducts4492081ca02b059f9e8af4ddaf0f7292'] = 'Pack';
+$_LANGADM['AdminProducts2811dedc85918c3e3ed0becd87cbb336'] = 'Vous ne pouvez pas ajouter de produits téléchargeables à un pack.';
 $_LANGADM['AdminProductsc7a915a59b56dc898c0ae52b64bed0c5'] = 'Ajouter un objet au pack';
 $_LANGADM['AdminProducts9d9aa88574c4dab04ddd8356c377357d'] = 'Catégorie par défaut :';
 $_LANGADM['AdminProducts10cbdb4839f838ce30409739435a6070'] = 'Catalogue :';
