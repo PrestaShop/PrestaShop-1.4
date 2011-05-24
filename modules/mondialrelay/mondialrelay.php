@@ -486,7 +486,11 @@ class MondialRelay extends Module
 		if ($i > 0)
 		{
 			include_once(_PS_MODULE_DIR_.'mondialrelay/page_iso.php');
-
+			
+			$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) 
+				AND strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
+			$new_base_dir = $protocol_link.Tools::getShopDomainSsl().__PS_BASE_URI__;
+			
 			$smarty->assign( array(
 							'address_map' => $address->address1.', '.$address->postcode.', '.ote_accent($address->city).', '.$country->iso_code,
 							'input_cp'  => $address->postcode,
@@ -497,6 +501,7 @@ class MondialRelay extends Module
 							'checked' => (int)($checked),
 							'google_api_key' => Configuration::get('MR_GOOGLE_MAP'),
 							'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
+							'new_base_dir' => $new_base_dir,
 							'carriersextra' => $resultsArray));
 			$nbcarriers = $nbcarriers + $i;
 			return $this->display(__FILE__, 'mondialrelay.tpl');

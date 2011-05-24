@@ -36,8 +36,12 @@ class AdminMondialRelay extends AdminTab
 
 	public function __construct()
 	{
-		$this->_moduleDirectory = Tools::getProtocol().Tools::getShopDomainSsl().
-			__PS_BASE_URI__.'/modules/mondialrelay/';
+		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) 
+			AND strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
+		
+		$new_base_dir = $protocol_link.Tools::getShopDomainSsl().__PS_BASE_URI__;
+			
+		$this->_moduleDirectory = $new_base_dir.'/modules/mondialrelay/';
 		
 		$this->table = 'mr_selected';
 		$this->className = 'MondialRelayClass';

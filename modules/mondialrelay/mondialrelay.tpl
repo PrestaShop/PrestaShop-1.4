@@ -24,9 +24,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<script type="text/javascript">var url_appel="{$base_dir}";</script>
-<script type="text/javascript" src="{$base_dir}modules/mondialrelay/kit_mondialrelay/js/include_MR.js"></script>
-<script type="text/javascript" src="{$base_dir}modules/mondialrelay/kit_mondialrelay/js/ressources_MR.js"></script>
+<script type="text/javascript">var url_appel="{$new_base_dir}";</script>
+<script type="text/javascript" src="{$new_base_dir}modules/mondialrelay/kit_mondialrelay/js/include_MR.js"></script>
+<script type="text/javascript" src="{$new_base_dir}modules/mondialrelay/kit_mondialrelay/js/ressources_MR.js"></script>
 <script type="text/javascript">
 	var one_page_checkout = {$one_page_checkout};
 	var server_error = "{l s='Problem getting addresses from MondialRelay Webservice : Mondial Relay servers\' may be down' mod='mondialrelay'}";
