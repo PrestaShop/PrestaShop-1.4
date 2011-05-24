@@ -94,7 +94,7 @@ input:focus, textarea:focus {
 
 /* ERROR */
 
-#error {
+.error, #error {
 	margin: 0 30px 15px 30px;
 	padding: 10px 15px;
 	border: 1px solid #EC9B9B;

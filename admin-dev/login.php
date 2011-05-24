@@ -31,15 +31,25 @@ define('PS_ADMIN_DIR', getcwd());
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 
+$clientIsMaintenanceOrLocal = in_array(Tools::getRemoteAddr(), array_merge(array('127.0.0.1'),explode(',', Configuration::get('PS_MAINTENANCE_IP'))));
+
+$errors = array();
+
 if ((empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
 	 AND Configuration::get('PS_SSL_ENABLED'))
 {
-	header('HTTP/1.1 301 Moved Permanently');
-	header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
-	exit();
-}
+	// You can uncomment theses lines if you want to force https even from localhost and automatically redirect
+	// header('HTTP/1.1 301 Moved Permanently');
+	// header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
+	// exit();
 
-$errors = array();
+	// If ssl is enabled, https protocol is required. Exception for maintenance and local (127.0.0.1) IP
+	if ($clientIsMaintenanceOrLocal)
+		$errors[] = translate('SSL is activated. However, your IP is allowed to use unsecure mode (Maintenance or local IP).').'<br/>';
+	else
+		$warningSslMessage = translate('SSL is activated. Please connect using the following url to log in in secure mode (https).')
+		.'<br/><br/><a href="https://'.Tools::getServerName().$_SERVER['REQUEST_URI'].'">https://'.Tools::getServerName().$_SERVER['REQUEST_URI'].'</a>';
+}
 
 $cookie = new Cookie('psAdmin', substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__), -10));
 if (!isset($cookie->id_lang))
@@ -143,11 +153,17 @@ if(file_exists(PS_ADMIN_DIR.'/../install') OR file_exists(PS_ADMIN_DIR.'/../admi
 }
 else
 {
-	echo '			<label>'.translate('E-mail address:').'</label><br />
+	// If https enabled, we force it except if you try to log in from maintenance or local ip
+	if ( (empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
+		AND (	Configuration::get('PS_SSL_ENABLED') AND !$clientIsMaintenanceOrLocal)
+	 	)
+		echo '<div class="error">'.$warningSslMessage.'</div>';
+	else
+		echo '<label for="email">'.translate('E-mail address:').'</label><br />
 					<input type="text" id="email" name="email" value="'.Tools::safeOutput(Tools::getValue('email')).'" class="input"/>
 					<div style="margin: 1.8em 0 0 0;">
-						<label>'.translate('Password:').'</label><br />
-						<input type="password" name="passwd" class="input" value=""/>
+						<label for="passwd">'.translate('Password:').'</label><br />
+						<input id="passwd" type="password" name="passwd" class="input" value=""/>
 					</div>
 					<div>
 						<div id="submit"><input type="submit" name="Submit" value="'.translate('Log in').'" class="button" /></div>
