@@ -74,7 +74,9 @@ class ImageCore extends ObjectModel
 	
 	public function delete()
 	{
-		parent::delete();
+		if (!parent::delete() || !$this->deleteProductAttributeImage())
+			return false;
+		
 		$result = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'image`
@@ -87,6 +89,7 @@ class ImageCore extends ObjectModel
 			$row['position'] = $i++;
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table, $row, 'UPDATE', '`id_image` = '.(int)($row['id_image']), 1);
 		}
+		return true;
 	}
 		
 	/**
@@ -296,6 +299,17 @@ class ImageCore extends ObjectModel
 				unlink(_PS_TMP_IMG_DIR_.$d);
 	}
 	
+	/**
+	 * Delete Image - Product attribute associations for this image
+	 */
+	public function deleteProductAttributeImage()
+	{
+		return Db::getInstance()->Execute('
+			DELETE
+			FROM `'._DB_PREFIX_.'product_attribute_image`
+			WHERE `id_image` = '.(int)($this->id)
+		);
+	}
 }
 
 
