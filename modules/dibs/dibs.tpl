@@ -8,6 +8,6 @@
 </p>
 <form name="dibs_form" action="https://payment.architrade.com/paymentweb/start.action" method="post">
 {foreach from=$p key=k item=v}
-	<input type="hidden" name="{$k}" value="{$v}" />
+	<input type="hidden" name="{$k}"  value="{$v}" />
 {/foreach}
 </form>
