@@ -29,10 +29,8 @@ function migrate_block_info_to_cms_block()
 {	
 	//get ids cms of block information
 	$id_blockinfos = Db::getInstance()->getValue('SELECT id_module FROM  `'._DB_PREFIX_.'module` WHERE name = \'blockinfos\' ');
-	file_put_contents('toto.txt', $id_blockinfos, FILE_APPEND);
 	//get ids cms of block information
 	$ids_cms = Db::getInstance()->ExecuteS('SELECT * FROM  `'._DB_PREFIX_.'block_cms` WHERE `id_block` = '.(int)$id_blockinfos);
-	file_put_contents('toto.txt', print_r($ids_cms, true), FILE_APPEND);
 	//check if block info is installed and active
 	if (sizeof($ids_cms))
 	{
