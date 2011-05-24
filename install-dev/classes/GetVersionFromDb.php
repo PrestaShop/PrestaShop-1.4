@@ -294,7 +294,7 @@ class GetVersionFromDb
 	{
 		$struct = array();
 		$sql = 'SHOW TABLES';
-		foreach (DB::getInstance()->executeS($sql) as $row)
+		foreach (Db::getInstance()->executeS($sql) as $row)
 		{
 			$table = current($row);
 			if (substr($table, 0, strlen($this->prefix)) != $this->prefix)
