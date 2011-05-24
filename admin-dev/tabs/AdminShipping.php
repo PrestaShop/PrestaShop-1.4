@@ -107,11 +107,10 @@ class AdminShipping extends AdminTab
 								$tmpArray = explode('_', $key);
 								$priceList .= '('.($shipping_method == Carrier::SHIPPING_METHOD_PRICE ? (int)($tmpArray[2]) : 'NULL').',
 								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? (int)($tmpArray[2]) : 'NULL').', '.$carrier->id.',
-								'.(int)($tmpArray[1]).', '.number_format(abs($value), 2, '.', '').'),';
+								'.(int)($tmpArray[1]).', '.number_format(abs(preg_replace("#,#", '.', $value)), 2, '.', '').'),';
 								unset($tmpArray);
 							}
 						$priceList = rtrim($priceList, ',');
-
 						/* Update delivery prices */
 						$carrier->addDeliveryPrice($priceList);
 						Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
@@ -241,7 +240,7 @@ class AdminShipping extends AdminTab
 						<tr>
 							<th style="height: 30px;">'.$this->l('All').'</th>';
 							foreach ($ranges AS $range)
-								echo '<td class="center">'.$currency->getSign('left').'<input type="text" id="fees_all_'.$range[$rangeIdentifier].'" onkeyup="if ((event.keyCode||event.which) != 9){ spreadFees('.$range[$rangeIdentifier].') }" style="width: 45px;" />'.$currency->getSign('right').'</td>';
+								echo '<td class="center">'.$currency->getSign('left').'<input type="text" id="fees_all_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" onkeyup="if ((event.keyCode||event.which) != 9){ spreadFees('.$range[$rangeIdentifier].') }" style="width: 45px;" />'.$currency->getSign('right').'</td>';
 						echo '</tr>';
 					}
 				
@@ -256,7 +255,7 @@ class AdminShipping extends AdminTab
 								$price = $deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]];
 							else
 								$price = '0.00';
-							echo '<td class="center">'.$currency->getSign('left').'<input type="text" class="fees_'.$range[$rangeIdentifier].'" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" onkeyup="clearAllFees('.$range[$rangeIdentifier].')" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
+							echo '<td class="center">'.$currency->getSign('left').'<input type="text" class="fees_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" onkeyup="clearAllFees('.$range[$rangeIdentifier].')" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
 						}
 						echo '
 						</tr>';
