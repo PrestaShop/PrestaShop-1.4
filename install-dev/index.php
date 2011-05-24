@@ -56,6 +56,7 @@ if (version_compare(phpversion(), '5.0.0', '<'))
 
 require(dirname(__FILE__).'/../config/autoload.php');
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
+include_once(INSTALL_PATH.'/classes/GetVersionFromDb.php');
 
 /* Prevent from bad URI parsing when using index.php */
 $requestUri = str_replace('index.php', '', $_SERVER['REQUEST_URI']);
@@ -202,9 +203,36 @@ if ($lm->getIncludeTradFilename())
 		txtError[35] = "<?php echo lang('Unfortunately,'); ?>";
 		txtError[36] = "<?php echo lang('SQL errors have occurred.'); ?>";
 		txtError[37] = "<?php echo lang('The config/defines.inc.php file was not found. Where did you move it?'); ?>";
-
 	</script>
 	<script type="text/javascript" src="controller.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function()
+		{
+			$('#btNext').click(function()
+			{
+				if (step == 6)
+				{
+					$.ajax({
+						url: 'model.php?method=getVersionFromDb',
+						success: function (xml) 
+						{
+							var action = $(xml).find('action');
+							if (action.attr('result') == 'ko')
+							{
+								$('#versionWarning span').html(action.attr('lang'));
+								$('#versionWarning').show();
+							}
+						},
+						error: function()
+						{
+							
+						}
+					});
+				}
+			});
+		});
+	</script>
 
 </head>
 <body>
@@ -815,6 +843,11 @@ if ($lm->getIncludeTradFilename())
 			<h3><?php echo lang('Warning: a manual backup is HIGHLY recommended before continuing!'); ?></h3>
 			<p><?php echo lang('Please backup the database and application files.'); ?></p>
 			<p><?php echo lang('When your files and database are saving in an other support, please certify that your shop is really backed up.'); ?><br /><br /></p>
+
+			<div id="versionWarning" style="font-weight: bold; background-color: #ffdeb7; color: #000; padding: 10px; border: 1px solid #999; margin-top: 10px; margin-bottom: 10px; display: none">
+				<p><img src="../img/admin/warning.gif" alt="" style="vertical-align: middle;" /> <span></span></p>
+			</div>
+
 			<div id="disclaimerDivCertify">
 				<input id="btDisclaimerOk" type="checkbox" value="1" style="vertical-align: middle; width: 16px; height: 16px;" />
 				<label for="btDisclaimerOk" style="font-weight: bold; color: #CC0000;"><?php echo lang('I certify that I backed up my database and application files. I assume all responsibility for any data loss or damage related to this upgrade.'); ?></label>

@@ -90,6 +90,10 @@ if (isset($_GET['method']))
 		case 'doUpgrade' :
 			include_once('xml/doUpgrade.php');
 		break;
+		
+		case 'getVersionFromDb' :
+			include_once('xml/getVersionFromDb.php');
+		break;
 	}
 }
 
