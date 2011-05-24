@@ -1137,7 +1137,7 @@ class AdminTranslations extends AdminTab
 			}
 		foreach ($dirToParse AS $dir)
 			foreach (scandir($dir) AS $file)
-				if (preg_match('/.php$/', $file) AND file_exists($fn = $dir.$file) AND $file != 'index.php')
+				if (preg_match('/\.php$/', $file) AND file_exists($fn = $dir.$file) AND $file != 'index.php')
 				{
 					if (!filesize($fn))
 						continue;
