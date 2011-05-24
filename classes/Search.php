@@ -370,18 +370,18 @@ class SearchCore
 			foreach ($product AS $key => $value)
 				if (strncmp($key, 'id_', 3))
 				{
-				$words = explode(' ', Search::sanitize($value, (int)$product['id_lang'], true));
-				foreach ($words AS $word)
-					if (!empty($word))
-					{
-						$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
-						if (!isset($pArray[$word]))
-							$pArray[$word] = $weightArray[$key];
-						else
-							$pArray[$word] += $weightArray[$key];
-					}
+					$words = explode(' ', Search::sanitize($value, (int)$product['id_lang'], true));
+					foreach ($words AS $word)
+						if (!empty($word))
+						{
+							$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
+							if (!isset($pArray[$word]))
+								$pArray[$word] = $weightArray[$key];
+							else
+								$pArray[$word] += $weightArray[$key];
+						}
 				}
-				
+
 			if (sizeof($pArray))
 			{
 				$list = '';
@@ -393,23 +393,38 @@ class SearchCore
 				SELECT sw.id_word, sw.word
 				FROM '._DB_PREFIX_.'search_word sw
 				WHERE sw.word IN ('.$list.') AND sw.id_lang = '.(int)$product['id_lang']);
+
+				$wordIdsByWord = array();
+				foreach ($wordIds AS $wordId)
+					$wordIdsByWord[$wordId['word']] = (int)$wordId['id_word'];
+					
+				$queryArray = array();
+				foreach ($pArray AS $word => $weight)
+					if ($weight AND !isset($wordIdsByWord[$word]))
+						$queryArray[] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
+				if (count($queryArray))
+					Search::saveWords($queryArray);
+				
+				$wordIds = Db::getInstance()->ExecuteS('
+				SELECT sw.id_word, sw.word
+				FROM '._DB_PREFIX_.'search_word sw
+				WHERE sw.word IN ('.$list.') AND sw.id_lang = '.(int)$product['id_lang']);
 				
 				$wordIdsByWord = array();
 				foreach ($wordIds AS $wordId)
 					$wordIdsByWord[$wordId['word']] = (int)$wordId['id_word'];
-			}
+			}	
 
 			foreach ($pArray AS $word => $weight)
 			{
 				if (!$weight OR !isset($wordIdsByWord[$word]))
 					continue;
 
-				$queryArray[] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
 				$queryArray2[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$word].','.(int)$weight.')';
 
 				// Force save every 40 words in order to avoid overloading MySQL
 				if (++$countWords % 40 == 0)
-					Search::saveIndex($queryArray, $queryArray2);
+					Search::saveIndex($queryArray2);
 			}
 			
 			if (!in_array($product['id_product'], $productsArray))
@@ -423,7 +438,8 @@ class SearchCore
 			}
 		}
 		// One last save is done at the end in order to save what's left
-		Search::saveIndex($queryArray, $queryArray2);
+		Search::saveWords($queryArray);
+		Search::saveIndex($queryArray2);
 		Search::setProductsAsIndexed($productsArray);
 		
 		Configuration::updateValue('PS_NEED_REBUILD_INDEX', 0);
@@ -437,17 +453,20 @@ class SearchCore
 			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT 20');
 	}
 
-	// $queryArray and $queryArray2 are automatically emptied in order to be reused immediatly
-	protected static function saveIndex(&$queryArray, &$queryArray2)
+	protected static function saveWords(&$queryArray)
 	{
-		if (count($queryArray) AND count($queryArray2))
-		{
+		if (count($queryArray))
 			if (!($rows = $db = Db::getInstance()->Execute('INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word) VALUES '.implode(',',$queryArray))) OR $rows != count($queryArray))
 				Tools::d(array(mysql_error(), $queryArray));
+		$queryArray = array();
+	}
+	
+	// $queryArray and $queryArray2 are automatically emptied in order to be reused immediatly
+	protected static function saveIndex(&$queryArray2)
+	{
+		if (count($queryArray2))
 			if (!($rows = $db = Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'search_index (id_product, id_word, weight) VALUES '.implode(',',$queryArray2).' ON DUPLICATE KEY UPDATE weight = weight + VALUES(weight)')) OR $rows != sizeof($queryArray2))
 				Tools::d(array(mysql_error(), $queryArray2));
-		}
-		$queryArray = array();
 		$queryArray2 = array();
 	}
 
