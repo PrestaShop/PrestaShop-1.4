@@ -108,7 +108,7 @@ Language::loadLanguages();
 
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))
-	date_default_timezone_set(Configuration::get('PS_TIMEZONE'));
+	@date_default_timezone_set(Configuration::get('PS_TIMEZONE'));
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
