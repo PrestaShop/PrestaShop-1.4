@@ -767,7 +767,7 @@ function disableZipFormat()
 
 function spreadFees(id_range)
 {
-	newVal = $('#fees_all_'+id_range).val();
+	newVal = $('#fees_all_'+id_range).val().replace(/,/g, '.');
 	$('.fees_'+id_range).val(newVal);
 }
 
