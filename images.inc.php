@@ -309,7 +309,7 @@ function returnDestImage($type, $ressource, $filename)
 			break;
 	}
 	imagedestroy($ressource);
-	@chmod($filename, 0644);
+	@chmod($filename, 0664);
 	return $flag;
 }
 
