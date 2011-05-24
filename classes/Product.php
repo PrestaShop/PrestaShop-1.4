@@ -265,6 +265,7 @@ class ProductCore extends ObjectModel
 			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => false, 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
 			'id_default_combination' => array('getter' => 'getWsDefaultCombination', 'setter' => 'setWsDefaultCombination', 'xlink_resource' => array('resourceName' => 'combinations')),
 			'position_in_category' => array('getter' => 'getWsPositionInCategory', 'setter' => false),
+			'manufacturer_name' => array('getter' => 'getWsManufacturerName', 'setter' => false),
 			),
 		'associations' => array(
 			'categories' => array('resource' => 'category', 'fields' => array(
@@ -3310,6 +3311,11 @@ class ProductCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'image`
 		WHERE `id_product` = '.(int)($this->id).'
 		ORDER BY `position`');
+	}
+	
+	public function getWsManufacturerName()
+	{
+		return Manufacturer::getNameById((int)$this->id_manufacturer);
 	}
 }
 
