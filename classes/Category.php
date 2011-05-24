@@ -554,23 +554,35 @@ class CategoryCore extends ObjectModel
 	  * @param boolean $active return only active categories
 	  * @return array categories
 	  */
-	static public function getHomeCategories($id_lang, $active = true)
+	public static function getHomeCategories($id_lang, $active = true)
 	{
 		return self::getChildren(1, $id_lang, $active);
 	}
 
-	static public function getRootCategory($id_lang = NULL)
+	public static function getRootCategory($id_lang = NULL)
 	{
 		return new Category (1, is_null($id_lang) ? (int)_USER_ID_LANG_ : (int)($id_lang));
 	}
 
-	static public function getChildren($id_parent, $id_lang, $active = true)
+	/**
+	 *
+	 * @param int $id_parent
+	 * @param int $id_lang
+	 * @param bool $active
+	 * @param bool $get_has_children in order to indicate if the category has children
+	 * @return array 
+	 */
+	public static function getChildren($id_parent, $id_lang, $active = true, $get_has_children = false)
 	{
 		if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`
+		SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`'.($get_has_children ? ', IF((
+			SELECT COUNT(*) 
+			FROM `'._DB_PREFIX_.'category` c2
+			WHERE c2.`id_parent` = c.`id_category`
+		) > 0, 1, 0) AS has_children' : '').'
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
 		WHERE `id_lang` = '.(int)($id_lang).'

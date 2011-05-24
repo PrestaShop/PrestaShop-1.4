@@ -675,3 +675,9 @@ if (Tools::isSubmit('getAdminHomeElement'))
 	
 	die(Tools::jsonEncode($result));
 }
+
+if (Tools::isSubmit('getChildrenCategories') && Tools::getValue('id_category_parent')) 
+{
+	$children_categories = Category::getChildren(Tools::getValue('id_category_parent'), $cookie->id_lang, false, true);
+	die(Tools::jsonEncode($children_categories));
+}
