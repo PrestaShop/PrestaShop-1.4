@@ -382,13 +382,31 @@ class SearchCore
 							$pArray[$word] += $weightArray[$key];
 					}
 				}
+				
+			if (sizeof($pArray))
+			{
+				$list = '';
+				foreach ($pArray AS $word => $weight)
+					$list .= '\''.$word.'\',';
+				$list = rtrim($list, ',');
+				
+				$wordIds = Db::getInstance()->ExecuteS('
+				SELECT sw.id_word, sw.word
+				FROM '._DB_PREFIX_.'search_word sw
+				WHERE sw.word IN ('.$list.') AND sw.id_lang = '.(int)$product['id_lang']);
+				
+				$wordIdsByWord = array();
+				foreach ($wordIds AS $wordId)
+					$wordIdsByWord[$wordId['word']] = (int)$wordId['id_word'];
+			}
 
 			foreach ($pArray AS $word => $weight)
 			{
-				if (!$weight)
+				if (!$weight OR !isset($wordIdsByWord[$word]))
 					continue;
+
 				$queryArray[] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
-				$queryArray2[] = '('.(int)$product['id_product'].',(SELECT id_word FROM '._DB_PREFIX_.'search_word WHERE word = \''.pSQL($word).'\' AND id_lang = '.(int)$product['id_lang'].' LIMIT 1),'.(int)$weight.')';
+				$queryArray2[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$word].','.(int)$weight.')';
 
 				// Force save every 40 words in order to avoid overloading MySQL
 				if (++$countWords % 40 == 0)

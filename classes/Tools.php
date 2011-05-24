@@ -1682,7 +1682,8 @@ class ToolsCore
 						$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$meta['url_rewrite'].'$'] = $meta['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 					elseif (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
 						$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
-				$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';
+				$tab['RewriteRule']['content']['^'.$language['iso_code'].'$'] = $language['iso_code'].'/ [QSA,L]';
+				$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)$'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';				
 			}
 		else
 			foreach ($default_meta as $key => $meta)

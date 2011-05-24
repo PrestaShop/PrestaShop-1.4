@@ -179,14 +179,20 @@ function updateDisplay()
 		}
 
 		//'last quantities' message management
-		if ((quantitiesDisplayAllowed || quantityAvailable <= maxQuantityToAllowDisplayOfLastQuantityMessage) && !allowBuyWhenOutOfStock)
+		if (!allowBuyWhenOutOfStock)
 		{
-			//display the 'last quantities' message
-			$('#last_quantities').show('slow');
+			if (quantityAvailable <= maxQuantityToAllowDisplayOfLastQuantityMessage)
+				$('#last_quantities').show('slow');
+			else
+				$('#last_quantities').hide('slow');
+		}
+		
+		if (quantitiesDisplayAllowed)
+		{
 			$('#pQuantityAvailable:hidden').show('slow');
 			$('#quantityAvailable').text(quantityAvailable);
 
-			if(quantityAvailable < 2)
+			if (quantityAvailable < 2) // we have 1 or less product in stock and need to show "item" instead of "items"
 			{
 				$('#quantityAvailableTxt').show();
 				$('#quantityAvailableTxtMultiple').hide();
@@ -196,11 +202,6 @@ function updateDisplay()
 				$('#quantityAvailableTxt').hide();
 				$('#quantityAvailableTxtMultiple').show();
 			}
-		}
-		else
-		{
-			//hide the 'last quantities' message
-			$('#last_quantities').hide('slow');
 		}
 	}
 	else
@@ -513,4 +514,3 @@ function checkMinimalQuantity(minimal_quantity)
 		$('#minimal_quantity_wanted_p').css('color', '#374853');
 	}
 }
-
