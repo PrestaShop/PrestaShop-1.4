@@ -179,7 +179,7 @@ class TwengaObj
 	 */
 	public function __construct()
 	{
-		require_once realpath(self::$base_dir.'/TwengaFields.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFields.php');
 		
 		if (self::$arr_api_url === NULL)
 		{
@@ -281,7 +281,7 @@ class TwengaObj
 	 */
 	public function getSubscriptionLink($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaFieldsGetSubscriptionLink.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsGetSubscriptionLink.php');
 //		$params['site_id'] = self::$site_id;
 		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
@@ -305,7 +305,7 @@ class TwengaObj
 
 	public function addFeed($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaAddFeed.php');
+		require_once realpath(dirname(__FILE__).'/TwengaAddFeed.php');
 		$params['key'] = self::$hashkey;
 		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
@@ -333,7 +333,7 @@ class TwengaObj
 	 */
 	public function siteExist($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsSiteExist.php');
 		$params['key'] = self::$hashkey;
 		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		
@@ -362,8 +362,8 @@ class TwengaObj
 	 */
 	public function siteActivate($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaFieldsSiteExist.php');
-		require_once realpath(self::$base_dir.'/TwengaFieldsSiteActivate.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsSiteExist.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsSiteActivate.php');
 		$params['key'] = self::$hashkey;
 		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
@@ -392,7 +392,7 @@ class TwengaObj
 	 */
 	public function getTrackingScript($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaFieldsGetTrackingScript.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsGetTrackingScript.php');
 		$params['key'] = self::$hashkey;
 		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
@@ -420,8 +420,8 @@ class TwengaObj
 	 */
 	public function orderExist($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
-		require_once realpath(self::$base_dir.'/TwengaFieldsOrderExist.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsOrderValidate.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsOrderExist.php');
 		$params['key'] = self::$hashkey;
 		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
@@ -449,7 +449,7 @@ class TwengaObj
 	 */
 	public function orderValidate($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsOrderValidate.php');
 		$params['key'] = self::$hashkey;
 		$params['PARTNER_AUTH_KEY'] = self::PARTNER_AUTH_KEY;
 		try {
@@ -477,8 +477,8 @@ class TwengaObj
 	 */
 	public function orderCancel($params = array())
 	{
-		require_once realpath(self::$base_dir.'/TwengaFieldsOrderValidate.php');
-		require_once realpath(self::$base_dir.'/TwengaFieldsOrderCancel.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsOrderValidate.php');
+		require_once realpath(dirname(__FILE__).'/TwengaFieldsOrderCancel.php');
 		$params['key'] = self::$hashkey;
 		try {
 			self::checkParams(__FUNCTION__, $params);
