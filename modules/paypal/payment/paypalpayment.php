@@ -60,8 +60,6 @@ class PaypalPayment extends Paypal
 		$request .= '&EMAIL='.urlencode($customer->email);//customer
 		// address of delivery
 		$id_address = $cart->id_address_delivery;
-		if ($cart->id_address_delivery != $cart->id_address_invoice)
-			$id_address = $cart->id_address_invoice;
 		$address = new Address((int)$id_address);
 		$country = new Country((int)$address->id_country);
 		if ($address->id_state)
