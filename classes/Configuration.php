@@ -233,9 +233,9 @@ class ConfigurationCore extends ObjectModel
 		/* Update classic values */
 		if (!is_array($values))
 		{
-			$values = pSQL($values, $html);
 		 	if (Configuration::get($key) !== false)
 		 	{
+		 		$values = pSQL($values, $html);
 				$result = $db->AutoExecute(
 					_DB_PREFIX_.'configuration',
 					array('value' => $values, 'date_upd' => date('Y-m-d H:i:s')),

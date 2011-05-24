@@ -66,7 +66,7 @@ class AdminGenerator extends AdminTab
 			<div class="clear">&nbsp;</div>
 			<label for="specific_configuration">'.$this->l('Specific configuration').'</label>
 			<div class="margin-form">
-				<textarea rows="10" class="width3" id="specific_configuration" name="ps_htaccess_specific">'.str_replace(array('\r\n', '\n', '\r'), array("\r\n", "\n", "\r"), Configuration::get('PS_HTACCESS_SPECIFIC')).'</textarea>
+				<textarea rows="10" class="width3" id="specific_configuration" name="ps_htaccess_specific">'.Configuration::get('PS_HTACCESS_SPECIFIC').'</textarea>
 				<p>'.$this->l('Add here the specifical directives of your hosting (SetEnv PHP_VER 5, AddType x-mapp-php5 .php...).').'</p>
 			</div>
 			<p class="clear" style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').'<br /><br />
