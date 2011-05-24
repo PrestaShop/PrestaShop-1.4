@@ -73,7 +73,7 @@ class AdminDb extends AdminPreferences
 		if (Tools::isSubmit('submitEngine'))
 		{
 			if (!isset($_POST['tablesBox']) OR !sizeof($_POST['tablesBox']))
-				$this->_errors[] = Tools::displayError('You do not have select tables');
+				$this->_errors[] = Tools::displayError('You did not select any tables');
 			else
 			{
 				$available_engines = $this->_getEngines();

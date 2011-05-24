@@ -42,7 +42,7 @@ class Ekomi extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('eKomi');
-		$this->description = $this->l('Adds a eKomi block');
+		$this->description = $this->l('Adds an eKomi block');
 	}
 
 	public function install()
@@ -88,7 +88,7 @@ class Ekomi extends Module
 						<label class="t" for="ekomi_display_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
 						<p class="clear">'.$this->l('Show or don\'t show the block (orders will be sent to eKomi either you choose to hide or display the block).').'</p>
 					</div>
-					<p class="clear">'.$this->l('Please, fill the form with the datas that eKomi gives you.').'</p>
+					<p class="clear">'.$this->l('Please fill the form with the data that eKomi gives you.').'</p>
 				</div>
 				<center><input type="submit" name="submitEkomi" value="'.$this->l('Save').'" class="button" /></center>
 			</fieldset>

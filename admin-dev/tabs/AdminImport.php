@@ -1027,7 +1027,7 @@ class AdminImport extends AdminTab
 					if ($customer)
 						$address->id_customer = (int)($customer);
 					else
-						$this->_errors[] = mysql_error().' '.$address->customer_email.' '.Tools::displayError('does not exist in base').' '.(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
+						$this->_errors[] = mysql_error().' '.$address->customer_email.' '.Tools::displayError('does not exist in database').' '.(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
 				}
 				else
 					$this->_errors[] = '"'.$address->customer_email.'" :' .Tools::displayError('Is not a valid Email');

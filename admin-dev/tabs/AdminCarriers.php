@@ -230,7 +230,7 @@ class AdminCarriers extends AdminTab
 					}
 					if($this->getFieldValue($obj, 'need_range'))
 					{
-						echo '<p> - '.$this->l('This carrier uses PrestaShop range to calculate shippping costs').'</p>
+						echo '<p> - '.$this->l('This carrier uses PrestaShop range to calculate shipping costs').'</p>
 						<input type="hidden" name="need_range" value="1">';
 					}
 

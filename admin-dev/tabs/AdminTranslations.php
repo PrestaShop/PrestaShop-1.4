@@ -938,7 +938,7 @@ class AdminTranslations extends AdminTab
 			if (ini_get('suhosin.post.max_vars') < $count OR ini_get('suhosin.request.max_vars') < $count)
 			{
 				$this->suhosin_limit_exceed = true;
-				$str_output .= '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, which limit the maximum number of fields to post in a form :').'<br/>'
+				$str_output .= '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, which limits the maximum number of fields to post in a form:').'<br/>'
 				.'<b>'.ini_get('suhosin.post.max_vars').'</b> '.$this->l('for suhosin.post.max_vars.').'<br/>'
 				.'<b>'.ini_get('suhosin.request.max_vars').'</b> '.$this->l('for suhosin.request.max_vars.').'<br/>'
 				.$this->l('Please ask your hosting provider to increase the suhosin post and request limit to')
@@ -1147,7 +1147,7 @@ class AdminTranslations extends AdminTab
 				}
 		$irow = 0;
 		$str_output .= $this->displayAutoTranslate();
-		$str_output .= '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Errors translations').'</h2>'
+		$str_output .= '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Error translations').'</h2>'
 		.$this->l('Errors to translate').' : <b>'.sizeof($stringToTranslate).'</b><br /><br />';
 		$str_output .= $this->displayLimitPostWarning(sizeof($stringToTranslate));
 		if (!$this->suhosin_limit_exceed)
@@ -1191,7 +1191,7 @@ class AdminTranslations extends AdminTab
 
 		$str_output .= $this->displayAutoTranslate();
 		$str_output .= '
-		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Fields translations').'</h2>';
+		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Field name translations').'</h2>';
 		$str_output .= $this->displayLimitPostWarning($count);
 		if (!$this->suhosin_limit_exceed)
 		{
@@ -1362,8 +1362,8 @@ class AdminTranslations extends AdminTab
 		else
 		{
 			$str_return .= '
-				<p class="error">'.$this->l('There is a problem to get the Mail files.').'<br />'
-				.sprintf($this->l('Please ensure that english files exists in %s folder'), '<em>'.$mails['directory'].'en</em>')
+				<p class="error">'.$this->l('There is a problem getting the Mail files.').'<br />'
+				.sprintf($this->l('Please ensure that English files exist in %s folder'), '<em>'.$mails['directory'].'en</em>')
 				.'</p>';
 		}
 		$str_return .= '
@@ -1682,7 +1682,7 @@ class AdminTranslations extends AdminTab
 
 		}
 		else
-			die($this->l('Cannot write language file for mails subjects, path is:').$path);
+			die($this->l('Cannot write language file for e-mail subjects, path is:').$path);
 	}
 	
 	/**
