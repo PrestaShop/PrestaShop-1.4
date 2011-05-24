@@ -20,7 +20,7 @@ $_MODULE['<{trustedshops}prestashop>tsbpexception_de14ce5aee772cd0330819c0ecf76a
 $_MODULE['<{trustedshops}prestashop>tsbpexception_43048f232a4ebab67835c425a1113b29'] = 'Sie haben Ihr Kreditlimit erreicht';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_eb601fb44b908fec1ee41383d4d948ac'] = 'Keine Kredite von Trusted Shops erältlich';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_cb71cc86f5c38200b3821adb49966522'] = 'Daten konnten nicht gespeichert werden';
-$_MODULE['<{trustedshops}prestashop>tsbpexception_07ff7715e67826fb7d9af1d2d1d30e46'] = 'Ein Fehler ist aufgetreten';
+$_MODULE['<{trustedshops}prestashop>tsbpexception_8711dbcb9166dca544544b027d7edb83'] = 'Ein Fehler ist aufgetreten';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_5fb7a36c0bdf3cde4f3e038a0eff2b6f'] = 'Webservice Anmeldung oder TS-ID ist ungültig';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_6453e3467d4c087afbfd33d4013cd3e9'] = 'Bestellnummer wird bereits verwendet';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_8100f51dcd57174e15ef0c3b3456e3ca'] = 'Nicht unterstützter Käuferschutz-Produkt';
@@ -72,11 +72,11 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d4eb1e83b0ea3af3e2b8a6e7b7
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fd511061055fcb2d10d31a51be3539d0'] = 'Registrierungslink';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_de5536f42490f11e92ad1c20d999fd15'] = 'Registrierungslink anklicken';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_97e7c9a7d06eac006a28bf05467fcc8b'] = 'Link';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c80549181fa4baa695cd054b6dd21c49'] = 'Produkt nicht gespeichert';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_76044a7414d56c702b0134907e1a3ccd'] = 'Zertifikat wurde hinzugefügt';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_32ba2d2119a269c536c5d9e1362d5865'] = 'Produkt nicht gespeichert';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_bf67e5e156927e871cc3dd2bde2faa78'] = 'Zertifikat wurde hinzugefügt';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_259060bb469ed1256c2e758e32da126f'] = 'Das Zertifikat';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8512ae7d57b1396273f76fe6ed341a23'] = 'Sprache';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f7ea4ac740662d2427d1ef1f2695206d'] = 'wurde entfernt';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8638c4fb6ff62122acd9927c4edbd22c'] = 'wurde entfernt';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Sind Sie zufriedn mit';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Schreiben Sie bitte eine Kundnemeinung';
 $_MODULE['<{trustedshops}prestashop>trustedshops_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Dieses Modul erfordert die SOAP-PHP-Erweiterung, um ordnungsgemäß zu funktionieren.';

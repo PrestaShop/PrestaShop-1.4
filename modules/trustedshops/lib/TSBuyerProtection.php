@@ -448,7 +448,7 @@ class TSBuyerProtection extends AbsTrustedShops
 
 		// If an order was already added, no need to continue.
 		// Otherwise a new application is created by TrustedShops.
-		// this can occured when order confirmation page is reload.
+		// this can occurred when order confirmation page is reload.
 		if(isset($order[0]))
 			return false;
 
@@ -532,7 +532,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 * Check statut of last applications
 	 * saved with TSBuyerProtection::_requestForProtectionV2()
 	 *
-	 * Negative value means an error occured.
+	 * Negative value means an error occurred.
 	 * Error code are managed in TSBPException.
 	 * @see (exception) TSBPException::_getFrontEndMessage() method
 	 *
@@ -569,7 +569,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			}
 			elseif ($code > 0)
 			{
-				$return_message = sprintf($this->l('Trusted Shops application number %1$d was successfully processed. The garantee number is: %2$d'), $application['id_application'], $code);
+				$return_message = sprintf($this->l('Trusted Shops application number %1$d was successfully processed. The guarantee number is: %2$d'), $application['id_application'], $code);
 			}
 			$sql = '
 			UPDATE `'.$db_name.'`
@@ -630,7 +630,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ET_CID', TSBuyerProtection::$ET_CID);
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'ET_LID', TSBuyerProtection::$ET_LID);
 		$link_registration = $this->_makeRegistrationLink(TSBuyerProtection::$SHOPSW, TSBuyerProtection::$ET_CID, TSBuyerProtection::$ET_LID, Tools::getValue('lang'));
-		$this->confirmations[] = $this->l('Registration link has been created. Follow this link if you was not redirected ealier:').'&nbsp;<a href="'.$link_registration.'" class="link">&gt;'.$this->l('Link').'&lt;</a>';
+		$this->confirmations[] = $this->l('Registration link has been created. Follow this link if you were not redirected earlier:').'&nbsp;<a href="'.$link_registration.'" class="link">&gt;'.$this->l('Link').'&lt;</a>';
 		return $link_registration;
 	}
 
@@ -661,8 +661,8 @@ class TSBuyerProtection extends AbsTrustedShops
 				$language = Language::getIdByIso(strtolower($iso));
 				if ((int)$language !== 0)
 				{
-					$product->name[$language] = 'TrustedShops garantee';
-					$product->link_rewrite[$language] = 'trustedshops_garantee';
+					$product->name[$language] = 'TrustedShops guarantee';
+					$product->link_rewrite[$language] = 'trustedshops_guarantee';
 				}
 			}
 
@@ -709,7 +709,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				Db::getInstance()->Execute($sql);
 			}
 			else {
-				$this->errors['products'] = $this->l('Product wasn\'t be saved.');
+				$this->errors['products'] = $this->l('Product wasn\'t saved.');
 			}
 		}
 	}
@@ -721,7 +721,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 * 		 to get all buyer protection products from Trusted Shops
 	 * @uses TSBuyerProtection::_saveProtectionItems()
 	 * 		 to save buyer protection products in shop
-	 * @return boolean true if certificate is well added, false otherwise
+	 * @return boolean true if certificate is added successfully, false otherwise
 	 */
 	private function _submitAddCertificate()
 	{
@@ -737,7 +737,7 @@ class TSBuyerProtection extends AbsTrustedShops
 
 			// update the configuration var
 			Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($checked_certificate->certificationLanguage), Tools::htmlentitiesUTF8(Tools::jsonEncode(TSBuyerProtection::$CERTIFICATE[strtoupper($checked_certificate->certificationLanguage)])));
-			$this->confirmations[] = $this->l('Certificate has been well added.');
+			$this->confirmations[] = $this->l('Certificate has been added successfully.');
 			if ($checked_certificate->typeEnum === 'EXCELLENCE')
 			{
 				try {
@@ -758,7 +758,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 *
 	 * @return boolean|array
 	 * 		   - false if action concerned multiple certificate
-	 * 		   (in normal way, this never occured )
+	 * 		   (in normal way, this never occurred )
 	 * 		   - return required $certificate to edit.
 	 * 		   - true in other case.
 	 */
@@ -768,7 +768,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$delete = Tools::getValue('certificate_delete');
 		if ((is_array($edit) AND count($edit) > 1) OR (is_array($delete) AND count($delete) > 1))
 		{
-			$this->errors[] = $this->l('You must edit or delete a Certificate one per one');
+			$this->errors[] = $this->l('You must edit or delete a Certificate one at a time');
 			return false;
 		}
 
@@ -780,7 +780,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			unset(TSBuyerProtection::$CERTIFICATE[$delete[0]]);
 			$this->confirmations[] = $this->l('The certificate')
 				.' "'.$certificate_to_delete.'" ('.$this->l('language').' : '.$delete[0].') '
-				.$this->l('has been well deleted');
+				.$this->l('has been deleted successfully');
 		}
 
 		// edit action :
@@ -828,7 +828,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				TSBuyerProtection::$CERTIFICATE[$iso_lang]['user'] = $user;
 				TSBuyerProtection::$CERTIFICATE[$iso_lang]['password'] = $password;
 				Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.$iso_lang, Tools::htmlentitiesUTF8(Tools::jsonEncode(TSBuyerProtection::$CERTIFICATE[$iso_lang])));
-				$this->confirmations[] = $this->l('Certificate login has been well added.');
+				$this->confirmations[] = $this->l('Certificate login has been successful.');
 
 			}
 		}
@@ -929,7 +929,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		<h3>'.$this->l('More trust leads to more sales!').'</h3>
 		<p>'.$this->l('The Trusted Shops seal of approval is the optimal way to increase the trust of your online customers. Trust increases customers\' willingness to buy from you.').'</p>
 		<h3>'.$this->l('Less abandoned purchases').'</h3>
-		<p>'.$this->l('Give your online customers a strong reason to buy proposing the Trusted Shops Buyer Protection. This additional security leads to less shopping basket abandonment').'</p>
+		<p>'.$this->l('Give your online customers a strong reason to buy with the Trusted Shops Buyer Protection. This additional security leads to less shopping basket abandonment').'</p>
 		<h3>'.$this->l('Profitable and long-term customer relationship').'</h3>
 		<p>'.$this->l('For many online shoppers, the Trusted Shops Seal of Approval with Buyer Protection is an effective sign of quality for safe shopping on the internet. One-time buyers become regular customers.').'</p><br />
 		<h3>'.$this->l('Environment type').'</h3>
@@ -942,7 +942,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		<form action="'.$this->_makeFormAction($_SERVER['REQUEST_URI'], $this->id_tab).'" method="post" >
 			<fieldset>
 				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Get the Registration Link').'</legend>
-				<p>'.$this->l('This variable was sent you via email by TrustedShops').'</p>
+				<p>'.$this->l('This variable was sent to you via e-mail by TrustedShops').'</p>
 				<label>'.$this->l('Internal identification of shop software at Trusted Shops').'</label>
 				<div class="margin-form">
 					<input type="text" name="shopsw" value="'.TSBuyerProtection::$SHOPSW.'"/>
@@ -1210,12 +1210,12 @@ class TSBuyerProtection extends AbsTrustedShops
 		if(TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum'] == 'CLASSIC' OR (TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'INTEGRATION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'PRODUCTION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'TEST'))
 			return '';
 
-		// If login parameters missing for the certificate an error occured
+		// If login parameters missing for the certificate an error occurred
 		if ((TSBuyerProtection::$CERTIFICATE[$lang]['user'] == '' OR TSBuyerProtection::$CERTIFICATE[$lang]['password'] == '') AND TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum'] == 'EXCELLENCE')
 		{
 			return '
 			<p style="color:red;text-align:center;font-size:14px;font-weight:bold;">'
-			.$this->l('The Trusted Shop Buyer Protection need a login to success. Please contact the shop administrator.')
+			.$this->l('The Trusted Shop Buyer Protection needs a login to succeed. Please contact the shop administrator.')
 			.'<br />'
 			.$this->l('Problem occurred with your language:').' "'.$lang
 			.'"</p>';
@@ -1261,7 +1261,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 * @see TSBuyerProtection::_requestForProtectionV2() method
 	 * @param array $params
 	 * @param string $lang
-	 * @return string empty if no error occured or no item was set.
+	 * @return string empty if no error occurred or no item was set.
 	 */
 	private function _orderConfirmationExcellence($params, $lang)
 	{
@@ -1285,7 +1285,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		if(empty($item))
 			return '';
 
-		// In normal context this never occured,
+		// In normal context this never occurred,
 		// because of a buyer could never add multiple Buyer protection products.
 		if (count($item) > 1)
 		{
@@ -1325,7 +1325,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		if (!empty($this->errors))
 			$return = '<p style="color:red">'.implode('<br />', $this->errors).'</p>';
 		else
-			$return = '<p>'.$this->l('You will receive a mail by Trusted Shops about your garantie number.').'</p>';
+			$return = '<p>'.$this->l('You will receive an e-mail by Trusted Shops about your guarantee number.').'</p>';
 		return $return;
 	}
 

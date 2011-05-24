@@ -65,7 +65,7 @@ class TSBPException extends Exception
 		if(array_key_exists($code, $errors))
 			$return_message = $errors[$code].$mail;
 		else
-			$return_message = self::$translation_object->l('An error occured.').$mail;
+			$return_message = self::$translation_object->l('An error occurred.').$mail;
 		
 		return $return_message;
 	}
@@ -95,7 +95,7 @@ class TSBPException extends Exception
 			case -10019 : case 'WRONG_TS_PRODUCT' : $return_message .= self::$translation_object->l('Non-applicable Buyer Protection product', TSBPException::$translate_key); break;
 			case -11001 : case 'INVALID_SECURITY_TOKEN' : $return_message .= self::$translation_object->l('Invalid security token', TSBPException::$translate_key); break;
 			case -11111 : case 'SYSTEM_EXCEPTION' : $return_message .= self::$translation_object->l('General system error, please contact Trusted Shops', TSBPException::$translate_key); break;
-			default : $return_message .= self::$translation_object->l('An error occured.', TSBPException::$translate_key); break;
+			default : $return_message .= self::$translation_object->l('An error occurred.', TSBPException::$translate_key); break;
 		}
 		return $return_message;
 	}

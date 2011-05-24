@@ -339,7 +339,7 @@ class TrustedShopsRating extends AbsTrustedShops
 								<input type="checkbox" name="display_rating_order_confirmation" value="1" '.(Configuration::get('TS_TAB0_DISPLAY_RATING_OC') ? 'checked' : '').'/>
 							</div>
 							<br />
-							<label>'.$this->l('Send rating link in seperate email').'</label>
+							<label>'.$this->l('Send rating link in separate e-mail').'</label>
 							<div class="margin-form">
 								<input onclick="toggleSendMailInfos()" type="checkbox" name="send_seperate_mail" value="1" '.(Configuration::get('TS_TAB0_SEND_SEPERATE_MAIL') ? 'checked' : '').'/> <br />
 								<div id="send_seperate_mail_infos">'.
