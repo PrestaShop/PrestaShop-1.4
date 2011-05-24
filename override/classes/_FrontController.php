@@ -86,11 +86,11 @@ class FrontController extends FrontControllerCore
 {
 	public $_memory = array();
 	public $_time = array();
-	private $_footer = true;
+	private static $_footer = true;
 	
-	public function disableParentFooter()
+	public static function disableParentCalls()
 	{
-		$this->_footer = false;
+		self::$_footer = false;
 	}
 	
 	private function displayMemoryColor($n)
@@ -162,6 +162,9 @@ class FrontController extends FrontControllerCore
 		// Usually set in the parent constructor, but here I need it to evaluate init()
 		$useSSL = $this->ssl;
 		
+		if (!self::$_footer)
+			return;
+	
 		$this->_memory[-3] = memory_get_usage();
 		$this->_time[-3] = microtime(true);
 		$this->init();
@@ -224,7 +227,7 @@ class FrontController extends FrontControllerCore
 	{
 		global $start_time;
 		
-		if ($this->_footer)
+		if (self::$_footer)
 			parent::displayFooter();
 			
 		if (!$this->ini_get_display_errors())
@@ -263,7 +266,7 @@ class FrontController extends FrontControllerCore
 		echo '<br /><br />
 		<div class="rte" style="text-align:left;padding:8px;float:left">
 			<b>Load time</b>: '.$this->displayLoadTimeColor($this->_time[6] - $start_time, true).'';
-		if ($this->_footer)
+		if (self::$_footer)
 			echo '
 			<ul>
 				<li>Config: '.$this->displayLoadTimeColor($this->_time[-3] - $start_time).'</li>
@@ -286,7 +289,7 @@ class FrontController extends FrontControllerCore
 		</div>
 		<div class="rte" style="text-align:left;padding:8px;float:left;margin-left:20px">
 			<b>Memory peak usage</b>: '.$this->displayMemoryColor(memory_get_peak_usage()).'';
-		if ($this->_footer)
+		if (self::$_footer)
 			echo '
 			<ul>
 				<li>Config: '.$this->displayMemoryColor($this->_memory[-3]).'</li>
