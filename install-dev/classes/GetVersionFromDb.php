@@ -28,7 +28,6 @@
 /**
  * This class search Prestashop version from current database structure
  * 
- * @author Raphaël Malié
  * @since 1.4.2.3
  * @todo (priority low) compare index keys updates ; compare types range ; add custom methods to search versions with no SQL updates
  */
