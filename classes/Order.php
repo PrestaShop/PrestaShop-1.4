@@ -613,20 +613,17 @@ class OrderCore extends ObjectModel
 	 * Get customer orders
 	 *
 	 * @param integer $id_customer Customer id
+	 * @param boolean $showHiddenStatus Display or not hidden order statuses
 	 * @return array Customer orders
 	 */
-	static public function getCustomerOrders($id_customer)
+	static public function getCustomerOrders($id_customer, $showHiddenStatus = false)
     {
 		global $cookie;
 
     	$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-        SELECT o.*, (
-				SELECT SUM(od.`product_quantity`)
-				FROM `'._DB_PREFIX_.'order_detail` od
-				WHERE od.`id_order` = o.`id_order`)
-				AS nb_products
+        SELECT o.*, (SELECT SUM(od.`product_quantity`) FROM `'._DB_PREFIX_.'order_detail` od WHERE od.`id_order` = o.`id_order`) nb_products
         FROM `'._DB_PREFIX_.'orders` o
-        WHERE o.`id_customer` = '.(int)($id_customer).'
+        WHERE o.`id_customer` = '.(int)$id_customer.'
         GROUP BY o.`id_order`
         ORDER BY o.`date_add` DESC');
 		if (!$res)
@@ -635,15 +632,13 @@ class OrderCore extends ObjectModel
 		foreach ($res AS $key => $val)
 		{
 			$res2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-				SELECT os.`id_order_state`, osl.`name` AS order_state, os.`invoice`
-				FROM `'._DB_PREFIX_.'order_history` oh
-				LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
-				INNER JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($cookie->id_lang).')
-				WHERE oh.`id_order` = '.(int)($val['id_order']).'
-				AND os.`hidden` != 1
-				ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
-				LIMIT 1
-			');
+			SELECT os.`id_order_state`, osl.`name` AS order_state, os.`invoice`
+			FROM `'._DB_PREFIX_.'order_history` oh
+			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
+			INNER JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($cookie->id_lang).')
+			WHERE oh.`id_order` = '.(int)($val['id_order']).(!$showHiddenStatus ? ' AND os.`hidden` != 1' : '').'
+			ORDER BY oh.`date_add` DESC, oh.`id_order_history` DESC
+			LIMIT 1');
 			if ($res2)
 				$res[$key] = array_merge($res[$key], $res2[0]);
 		}

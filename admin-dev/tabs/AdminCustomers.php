@@ -268,12 +268,12 @@ class AdminCustomers extends AdminTab
 		$customerStats = $customer->getStats();
 		$addresses = $customer->getAddresses($defaultLanguage);
 		$products = $customer->getBoughtProducts();
-		$discounts = Discount::getCustomerDiscounts($defaultLanguage, $customer->id, false, false);
-		$orders = Order::getCustomerOrders($customer->id);
-		$carts = Cart::getCustomerCarts($customer->id);
+		$discounts = Discount::getCustomerDiscounts($defaultLanguage, (int)$customer->id, false, false);
+		$orders = Order::getCustomerOrders((int)$customer->id, true);
+		$carts = Cart::getCustomerCarts((int)$customer->id);
 		$groups = $customer->getGroups();
-		$messages = CustomerThread::getCustomerMessages($customer->id);
-		$referrers = Referrer::getReferrers($customer->id);
+		$messages = CustomerThread::getCustomerMessages((int)$customer->id);
+		$referrers = Referrer::getReferrers((int)$customer->id);
 		if ($totalCustomer = Db::getInstance()->getValue('SELECT SUM(total_paid_real) FROM '._DB_PREFIX_.'orders WHERE id_customer = '.$customer->id.' AND valid = 1'))
 		{
 			Db::getInstance()->getValue('SELECT SQL_CALC_FOUND_ROWS COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 GROUP BY id_customer HAVING SUM(total_paid_real) > '.$totalCustomer);
@@ -405,8 +405,8 @@ class AdminCustomers extends AdminTab
 			$totalOK = 0;
 			$ordersOK = array();
 			$ordersKO = array();
-			$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee));
-			foreach ($orders as $order)
+			$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)Tab::getIdFromClassName('AdminOrders').(int)$cookie->id_employee);
+			foreach ($orders AS $order)
 			if ($order['valid'])
 			{
 				$ordersOK[] = $order;
