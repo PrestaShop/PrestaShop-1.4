@@ -318,6 +318,7 @@ class SearchCore
 		if ($full)
 		{
 			$db->Execute('TRUNCATE '._DB_PREFIX_.'search_index');
+			$db->Execute('ALTER TABLE '._DB_PREFIX_.'search_index DROP PRIMARY KEY');
 			$db->Execute('TRUNCATE '._DB_PREFIX_.'search_word');
 			$db->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 0');
 		}
@@ -333,6 +334,7 @@ class SearchCore
 				$db->Execute('DELETE FROM '._DB_PREFIX_.'search_index WHERE id_product IN ('.implode(',', $ids).')');
 		}
 
+		// Every fields are weighted according to the configuration in the backend
 		$weightArray = array(
 			'pname' => Configuration::get('PS_SEARCH_WEIGHT_PNAME'),
 			'reference' => Configuration::get('PS_SEARCH_WEIGHT_REF'),
@@ -347,6 +349,7 @@ class SearchCore
 			'features' => Configuration::get('PS_SEARCH_WEIGHT_FEATURE')
 		);
 
+		// All the product not yet indexed are retrieved
 		$products = $db->ExecuteS('
 		SELECT p.id_product, pl.id_lang, pl.name pname, p.reference, p.ean13, p.upc, pl.description_short, pl.description, cl.name cname, m.name mname
 		FROM '._DB_PREFIX_.'product p
@@ -355,17 +358,33 @@ class SearchCore
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON m.id_manufacturer = p.id_manufacturer
 		WHERE p.indexed = 0', false);
 
+		// Those are kind of global variables required to save the processed data in the database every X occurences, in order to avoid overloading MySQL
 		$countWords = 0;
 		$countProducts = 0;
-		$queryArray = array();
-		$queryArray2 = array();
+		$queryArray3 = array();
 		$productsArray = array();
+		
+		// Every indexed words are cached into a PHP array 
+		$wordIdsByWord = array();
+		$wordIds = Db::getInstance()->ExecuteS('
+		SELECT sw.id_word, sw.word, id_lang
+		FROM '._DB_PREFIX_.'search_word sw', false);
+		$wordIdsByWord = array();
+		while ($wordId = $db->nextRow($wordIds))
+		{
+			if (!isset($wordIdsByWord[$wordId['id_lang']]))
+				$wordIdsByWord[$wordId['id_lang']] = array();
+			$wordIdsByWord[$wordId['id_lang']][$wordId['word']] = (int)$wordId['id_word'];
+		}
+		
+		// Now each non-indexed product is processed one by one, langage by langage 
 		while ($product = $db->nextRow($products))
 		{
 			$product['tags'] = Search::getTags($db, (int)$product['id_product'], (int)$product['id_lang']);
 			$product['attributes'] = Search::getAttributes($db, (int)$product['id_product'], (int)$product['id_lang']);
 			$product['features'] = Search::getFeatures($db, (int)$product['id_product'], (int)$product['id_lang']);
 
+			// Data must be cleaned of html, bad characters, spaces and anything, then if the resulting words are long enough, they're added to the array
 			$pArray = array();
 			foreach ($product AS $key => $value)
 				if (strncmp($key, 'id_', 3))
@@ -376,98 +395,95 @@ class SearchCore
 						{
 							$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
 							if (!isset($pArray[$word]))
-								$pArray[$word] = $weightArray[$key];
-							else
-								$pArray[$word] += $weightArray[$key];
+								$pArray[$word] = 0;
+							$pArray[$word] += $weightArray[$key];
 						}
 				}
 
+			// If we find words that need to be indexed, they're added to the word table in the database
 			if (sizeof($pArray))
 			{
 				$list = '';
 				foreach ($pArray AS $word => $weight)
 					$list .= '\''.$word.'\',';
 				$list = rtrim($list, ',');
-				
-				$wordIds = Db::getInstance()->ExecuteS('
-				SELECT sw.id_word, sw.word
-				FROM '._DB_PREFIX_.'search_word sw
-				WHERE sw.word IN ('.$list.') AND sw.id_lang = '.(int)$product['id_lang']);
 
-				$wordIdsByWord = array();
-				foreach ($wordIds AS $wordId)
-					$wordIdsByWord[$wordId['word']] = (int)$wordId['id_word'];
-					
 				$queryArray = array();
+				$queryArray2 = array();
 				foreach ($pArray AS $word => $weight)
 					if ($weight AND !isset($wordIdsByWord[$word]))
+					{
 						$queryArray[] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
+						$queryArray2[] = '\''.pSQL($word).'\'';
+					}
+					
 				if (count($queryArray))
-					Search::saveWords($queryArray);
-				
-				$wordIds = Db::getInstance()->ExecuteS('
-				SELECT sw.id_word, sw.word
-				FROM '._DB_PREFIX_.'search_word sw
-				WHERE sw.word IN ('.$list.') AND sw.id_lang = '.(int)$product['id_lang']);
-				
-				$wordIdsByWord = array();
-				foreach ($wordIds AS $wordId)
-					$wordIdsByWord[$wordId['word']] = (int)$wordId['id_word'];
-			}	
+				{
+					// The words are inserted...
+					$db->Execute('
+					INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word)
+					VALUES '.implode(',',$queryArray));
+					
+					// ...then their IDs are retrieved and added to the cache
+					$addedWords = $db->ExecuteS('
+					SELECT sw.id_word, sw.word
+					FROM '._DB_PREFIX_.'search_word sw
+					WHERE sw.word IN ('.implode(',', $queryArray2).')
+					AND sw.id_lang = '.(int)$product['id_lang'].'
+					LIMIT '.count($queryArray2));
+					foreach ($addedWords AS $wordId)
+					{
+						if (!isset($wordIdsByWord[$product['id_lang']]))
+							$wordIdsByWord[$product['id_lang']] = array();
+						$wordIdsByWord[$product['id_lang']][$wordId['word']] = (int)$wordId['id_word'];
+					}
+				}
+			}
 
 			foreach ($pArray AS $word => $weight)
 			{
-				if (!$weight OR !isset($wordIdsByWord[$word]))
+				if (!$weight OR !isset($wordIdsByWord[$product['id_lang']][$word]))
 					continue;
 
-				$queryArray2[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$word].','.(int)$weight.')';
+				$queryArray3[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$product['id_lang']][$word].','.(int)$weight.')';
 
-				// Force save every 40 words in order to avoid overloading MySQL
-				if (++$countWords % 40 == 0)
-					Search::saveIndex($queryArray2);
+				// Force save every 200 words in order to avoid overloading MySQL
+				if (++$countWords % 200 == 0)
+					Search::saveIndex($queryArray3);
 			}
 			
 			if (!in_array($product['id_product'], $productsArray))
 				$productsArray[] = (int)$product['id_product'];
 
-			// Force save every 20 products in order to avoid overloading MySQL
-			if (++$countProducts % 20 == 0) // If you change "20" here, you must change the limit in setProductsAsIndexed()
-			{
+			// Force save every 50 products in order to avoid overloading MySQL
+			if (++$countProducts % 50 == 0)
 				Search::setProductsAsIndexed($productsArray);
-				$productsArray = array();
-			}
 		}
 		// One last save is done at the end in order to save what's left
-		Search::saveWords($queryArray);
-		Search::saveIndex($queryArray2);
+		Search::saveIndex($queryArray3);
+		if ($full)
+			$db->Execute('ALTER TABLE `'._DB_PREFIX_.'search_index` ADD PRIMARY KEY (`id_word`, `id_product`)');
 		Search::setProductsAsIndexed($productsArray);
 		
 		Configuration::updateValue('PS_NEED_REBUILD_INDEX', 0);
-		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT id_word FROM '._DB_PREFIX_.'search_index)');
+		// The DISTINCT is not needed, but I would rather loose processing time with the subquery than have too much words in the IN ()
+		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT DISTINCT id_word FROM '._DB_PREFIX_.'search_index)');
 		return true;
 	}
 
 	protected static function setProductsAsIndexed(&$products)
 	{
 		if (count($products))
-			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT 20');
-	}
-
-	protected static function saveWords(&$queryArray)
-	{
-		if (count($queryArray))
-			if (!($rows = $db = Db::getInstance()->Execute('INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word) VALUES '.implode(',',$queryArray))) OR $rows != count($queryArray))
-				Tools::d(array(mysql_error(), $queryArray));
-		$queryArray = array();
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT '.(int)count($products));
+		$productsArray = array();
 	}
 	
-	// $queryArray and $queryArray2 are automatically emptied in order to be reused immediatly
-	protected static function saveIndex(&$queryArray2)
+	// $queryArray3 is automatically emptied in order to be reused immediatly
+	protected static function saveIndex(&$queryArray3)
 	{
-		if (count($queryArray2))
-			if (!($rows = $db = Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'search_index (id_product, id_word, weight) VALUES '.implode(',',$queryArray2).' ON DUPLICATE KEY UPDATE weight = weight + VALUES(weight)')) OR $rows != sizeof($queryArray2))
-				Tools::d(array(mysql_error(), $queryArray2));
-		$queryArray2 = array();
+		if (count($queryArray3))
+			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'search_index (id_product, id_word, weight) VALUES '.implode(',', $queryArray3).' ON DUPLICATE KEY UPDATE weight = weight + VALUES(weight)');
+		$queryArray3 = array();
 	}
 
 	public static function searchTag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false)
