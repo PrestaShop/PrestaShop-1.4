@@ -48,8 +48,6 @@ class UspsCarrier extends CarrierModule
 
 	public function __construct()
 	{
-		global $cookie;
-
 		$this->name = 'uspscarrier';
 		$this->tab = 'shipping_logistics';
 		$this->version = '1.0';
@@ -149,8 +147,6 @@ class UspsCarrier extends CarrierModule
 
 	public function install()
 	{
-		global $cookie;
-
 		// Install SQL
 		include(dirname(__FILE__).'/sql-install.php');
 		foreach ($sql as $s)
@@ -169,8 +165,6 @@ class UspsCarrier extends CarrierModule
 
 	public function uninstall()
 	{
-		global $cookie;
-
 		// Uninstall Carriers
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 1), 'UPDATE', '`external_module_name` = \'uspscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');
 
@@ -1355,15 +1349,15 @@ class UspsCarrier extends CarrierModule
 	**
 	*/
 
-	public function getCookieCurrencyRate($id_currency_origin)
+	public function getCartCurrencyRate($id_currency_origin, $id_cart)
 	{
-		global $cookie;
 		$conversionRate = 1;
-		if ($cookie->id_currency != $id_currency_origin)
+		$cart = new Cart($id_cart);
+		if ($cart->id_currency != $id_currency_origin)
 		{
 			$currencyOrigin = new Currency((int)$id_currency_origin);
 			$conversionRate /= $currencyOrigin->conversion_rate;
-			$currencySelect = new Currency((int)$cookie->id_currency);
+			$currencySelect = new Currency((int)$cart->id_currency);
 			$conversionRate *= $currencySelect->conversion_rate;
 		}
 		return $conversionRate;
@@ -1397,7 +1391,7 @@ class UspsCarrier extends CarrierModule
 		if ($row['id_currency'])
 		{
 			// Check Currency Rate And Calcul
-			$conversionRate = $this->getCookieCurrencyRate($row['id_currency']);
+			$conversionRate = $this->getCartCurrencyRate($row['id_currency'], $wsParams['id_cart']);
 			$row['total_charges'] = $row['total_charges'] * $conversionRate;
 
 			// Return Cache
@@ -1409,16 +1403,16 @@ class UspsCarrier extends CarrierModule
 
 	public function saveOrderShippingCostCache($wsParams, $wscost)
 	{
-		global $cookie;
 		$is_available = 1;
 		if (!$wscost)
 			$is_available = 0;
 		$date = date('Y-m-d H:i:s');
+		$cart = new Cart((int)$wsParams['id_cart']);
 		$insert = array(
 			'id_cart' => (int)($wsParams['id_cart']),
 			'id_carrier' => (int)($this->id_carrier),
 			'hash' => pSQL($wsParams['hash']),
-			'id_currency' => (int)($cookie->id_currency),
+			'id_currency' => (int)($cart->id_currency),
 			'total_charges' => pSQL($wscost),
 			'is_available' => (int)($is_available),
 			'date_add' => pSQL($date),
@@ -1545,7 +1539,7 @@ class UspsCarrier extends CarrierModule
 				if (isset($config['id_currency']) && isset($config['additional_charges']))
 				{
 					$conversionRate = 1;
-					$conversionRate = $this->getCookieCurrencyRate((int)($config['id_currency']));
+					$conversionRate = $this->getCartCurrencyRate((int)($config['id_currency']), (int)$wsParams['id_cart']);
 					$cost += ($config['additional_charges'] * $conversionRate);
 				}
 			}
@@ -1726,19 +1720,9 @@ class UspsCarrier extends CarrierModule
 		$resultTab = $this->sendRequest($wsParams);
 
 		// Check currency
-		global $cookie;
 		$conversionRate = 1;
 		if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
-		{
-			$id_currency_return = 2;
-			if ($cookie->id_currency != $id_currency_return)
-			{
-				$currencyReturn = new Currency((int)$id_currency_return);
-				$conversionRate /= $currencyReturn->conversion_rate;
-				$currencySelect = new Currency((int)$cookie->id_currency);
-				$conversionRate *= $currencySelect->conversion_rate;
-			}
-		}
+			$conversionRate = $this->getCartCurrencyRate(2, $wsParams['id_cart']);
 
 		// Return results
 		if (isset($resultTab['RATEV4RESPONSE']['PACKAGE']['POSTAGE']['RATE']))
