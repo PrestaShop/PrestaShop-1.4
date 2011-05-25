@@ -248,7 +248,7 @@ class SearchCore
 			WHERE p.`id_product` '.$productPool.'
 			ORDER BY position DESC LIMIT 10');
 		}
-
+		
 		$queryResults = '
 		SELECT p.*, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`, pl.`name`,
 			tax.`rate`, i.`id_image`, il.`legend`, m.`name` manufacturer_name '.$score.', DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 new
@@ -352,7 +352,16 @@ class SearchCore
 		}
 		
 		if ($dropIndex)
-			$db->Execute('ALTER TABLE '._DB_PREFIX_.'search_index DROP PRIMARY KEY');
+		{
+			$dropIndex = false;
+			$result = $db->ExecuteS('SHOW INDEX FROM `'._DB_PREFIX_.'search_index`');
+			foreach ($result as $row)
+				if (strtolower($row['Key_name']) == 'primary')
+					$dropIndex = true;
+			if ($dropIndex)
+				$db->Execute('ALTER TABLE '._DB_PREFIX_.'search_index DROP PRIMARY KEY');
+			$dropIndex = true;
+		}
 
 		// Every fields are weighted according to the configuration in the backend
 		$weightArray = array(
@@ -462,9 +471,9 @@ class SearchCore
 				if (!$weight)
 					continue;
 				if (!isset($wordIdsByWord[$product['id_lang']]['_'.$word]))
-					die('Word missing from cache: '.htmlentities($word, ENT_COMPAT, 'utf-8'));
+					continue;
 				if (!$wordIdsByWord[$product['id_lang']]['_'.$word])
-					die('Word ID missing from cache for word: '.htmlentities($word, ENT_COMPAT, 'utf-8'));
+					continue;
 				$queryArray3[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$product['id_lang']]['_'.$word].','.(int)$weight.')';
 
 				// Force save every 200 words in order to avoid overloading MySQL
