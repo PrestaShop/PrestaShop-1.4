@@ -88,7 +88,8 @@ class CombinationCore extends ObjectModel
 			'id_product' => array('required' => true, 'xlink_resource'=> 'products'),
 		),
 		'associations' => array(
-			'product_option_values' => array('resource' => 'product_option_value', 'xlink_resource'=> 'product_option_values'),
+			'product_option_values' => array('resource' => 'product_option_value'),
+			'images' => array('resource' => 'image'),
 		),
 	);
 
@@ -123,10 +124,6 @@ class CombinationCore extends ObjectModel
 			Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'product_attribute_combination`
 				WHERE `id_product_attribute` = '.(int)($this->id)) === false
-			||
-			Db::getInstance()->Execute('
-				DELETE FROM `'._DB_PREFIX_.'product_attribute_image`
-				WHERE `id_product_attribute` = '.(int)($this->id)) === false
 			)
 			return false;
 		return true;
@@ -153,7 +150,31 @@ class CombinationCore extends ObjectModel
 		$result = Db::getInstance()->executeS('SELECT id_attribute AS id from `'._DB_PREFIX_.'product_attribute_combination` WHERE id_product_attribute = '.(int)$this->id);
 		return $result;
 	}
-
+	
+	public function getWsImages()
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT `id_image` as id
+		FROM `'._DB_PREFIX_.'product_attribute_image`
+		WHERE `id_product_attribute` = '.(int)($this->id).'
+		');
+	}
+	
+	public function setWsImages($values)
+	{
+		if (Db::getInstance()->Execute('
+			DELETE FROM `'._DB_PREFIX_.'product_attribute_image`
+			WHERE `id_product_attribute` = '.(int)($this->id)) === false)
+		return false;
+		$sqlValues = array();
+		foreach ($values as $value)
+			$sqlValues[] = '('.(int)$this->id.', '.(int)$value['id'].')';
+		$result = Db::getInstance()->Execute('
+			INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`)
+			VALUES '.implode(',', $sqlValues)
+		);
+		return true;
+	}
 }
 
 
