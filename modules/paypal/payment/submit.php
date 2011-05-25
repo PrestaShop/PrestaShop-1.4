@@ -131,7 +131,12 @@ function validOrder()
 	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
 		die('Empty cart');
 	if (!$token = Tools::htmlentitiesUTF8(strval(Tools::getValue('token'))))
+	{
+		global $smarty;
+		$smarty->assign('paypalError', 'Invalid token');
+		displayConfirm();
 		die('Invalid token');
+	}
 	if ($token != strval($cookie->paypal_token))
 		die('Invalid cookie token');
 	if (!$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('PayerID'))))
