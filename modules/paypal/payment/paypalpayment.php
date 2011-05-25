@@ -72,11 +72,11 @@ class PaypalPayment extends Paypal
 			for ($i = 0; $i < sizeof($products); $i++)
 			{
 				$request .= '&L_NAME'.$i.'='.substr(urlencode($products[$i]['name'].(isset($products[$i]['attributes'])?' - '.$products[$i]['attributes']:'').(isset($products[$i]['instructions'])?' - '.$products[$i]['instructions']:'') ), 0, 127);
-				$request .= '&L_AMT'.$i.'='.urlencode(number_format($products[$i]['price'], 2));
+				$request .= '&L_AMT'.$i.'='.urlencode(round($products[$i]['price'], 2, PHP_ROUND_HALF_DOWN));
 				$request .= '&L_QTY'.$i.'='.urlencode($products[$i]['cart_quantity']);
-				$amt += number_format($products[$i]['price']*$products[$i]['cart_quantity'], 2);
+				$amt += round($products[$i]['price']*$products[$i]['cart_quantity'], 2, PHP_ROUND_HALF_DOWN);
 			}
-			$shipping = number_format($cart->getOrderShippingCost($cart->id_carrier, false), 2);
+			$shipping = round($cart->getOrderShippingCost($cart->id_carrier, false), 2, PHP_ROUND_HALF_DOWN);
 			$request .= '&ITEMAMT='.urlencode($amt);
 			$request .= '&SHIPPINGAMT='.urlencode($shipping);
 			$request .= '&TAXAMT='.urlencode((float)max($paymentAmount - $amt - $shipping, 0));
