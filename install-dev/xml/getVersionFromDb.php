@@ -40,14 +40,18 @@ if ($lm->getIncludeTradFilename())
 	include_once($lm->getIncludeTradFilename());
 
 $dbVersion = new GetVersionFromDb();
-$version = $dbVersion->getVersion();
+$versions = $dbVersion->getVersions();
 
-if (!$version)
+if (!$versions)
 {
 	die('<action result="ko" lang="' . htmlspecialchars(lang('Warning, the installer was unable to find which is your current PrestaShop version from your database structure analysis. This means some fields or tables are missing, and upgrade is under your own risk.')) . '" />');
 }
-else if (version_compare(_PS_VERSION_, $version) == -1)
+
+foreach ($versions as $version)
 {
-	die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, the installer found in your setting file that your PrestaShop is in version %s, but the database analysis say you seem to be in version %s. Be sure of what you are doing if you start upgrade.<br /><br />If you never tried an update to this new version, or never made modifications in your base, please ignore this warning.'), _PS_VERSION_, $version)) . '" />');
+	if (version_compare(_PS_VERSION_, $version) == 0)
+	{
+		die('<action result="ok" />');
+	}
 }
-die('<action result="ok" />');
+die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, the installer found in your setting file that your PrestaShop is in version %s, but the database analysis say you seem to be in version %s. Be sure of what you are doing if you start upgrade.<br /><br />If you never tried an update to this new version, or never made modifications in your base, please ignore this warning.'), _PS_VERSION_, '(' . ((count($versions) > 1) ? $versions[count($versions) - 1] . ' - ' . $versions[0] : $versions[0]) . ')')) . '" />');

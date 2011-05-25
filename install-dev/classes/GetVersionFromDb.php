@@ -79,9 +79,9 @@ class GetVersionFromDb
 	private $prefix;
 	
 	/**
-	 * @var string Found version
+	 * @var string Found versions
 	 */
-	private $version;
+	private $versions = array();
 
 	/**
 	 * Constructor, launch the compare algorithm
@@ -99,7 +99,7 @@ class GetVersionFromDb
 		$start = microtime(true);
 		$this->generateSchemasFromUpdates();
 		$this->getDatabaseSchema();
-		$this->version = $this->searchCurrentVersion();
+		$this->versions = $this->searchCurrentVersion();
 		$this->totalTime = microtime(true) - $start;
 	}
 	
@@ -124,11 +124,11 @@ class GetVersionFromDb
 	}
 	
 	/**
-	 * @return string Get found version
+	 * @return string Get found versions
 	 */
-	public function getVersion()
+	public function getVersions()
 	{
-		return $this->version;
+		return $this->versions;
 	}
 
 	/**
@@ -140,7 +140,7 @@ class GetVersionFromDb
 		$fd = opendir($this->installPath . 'sql/upgrade');
 		while ($file = readdir($fd))
 		{
-			if (substr($file, -3, 3) == 'sql' && version_compare(substr($file, 0, -4), INSTALL_VERSION) == -1)
+			if (substr($file, -3, 3) == 'sql' && version_compare(substr($file, 0, -4), INSTALL_VERSION) <= 0)
 			{
 				$list[] = $file;
 			}
@@ -153,6 +153,7 @@ class GetVersionFromDb
 		{
 			$file = $list[$i];
 			$next = $list[$i + 1];
+
 			$this->generateSchema(substr($file, 0, -4), substr($next, 0, -4));
 		}
 	}
@@ -160,17 +161,12 @@ class GetVersionFromDb
 	/**
 	 * Generate the schema of the given version
 	 * 
-	 * @param string $name Version name
-	 * @param string $next Next version
+	 * @param string $currentVersion Version name
+	 * @param string $nextVersion Next version
 	 */
-	private function generateSchema($name, $next)
+	private function generateSchema($currentVersion, $nextVersion)
 	{
 		static $storeTypes = array();
-
-		$this->schemas[] = array(
-			'name' =>	$next,
-			'struct' =>	array(),
-		);
 		
 		// Load db.sql once
 		if (is_null($this->generalSchema))
@@ -178,15 +174,20 @@ class GetVersionFromDb
 			$this->loadGeneralSchema();
 		}
 		
+		$this->schemas[] = array(
+			'name' =>	$nextVersion,
+			'struct' =>	array(),
+		);
+		
 		// Read queries in upgrade files, and reverse structure from db.sql
-		if (!file_exists($this->installPath . 'sql/upgrade/' . $name . '.sql'))
+		if (!file_exists($this->installPath . 'sql/upgrade/' . $currentVersion . '.sql'))
 		{
-			throw new Exception('File sql/upgrade/' . $name . '.sql not found');
+			throw new Exception('File sql/upgrade/' . $currentVersion . '.sql not found');
 		}
 		
 		$struct = (count($this->schemas) >= 2) ? $this->schemas[count($this->schemas) - 2]['struct'] : $this->generalSchema;
-		$content = file_get_contents($this->installPath . 'sql/upgrade/' . $name . '.sql');
-		$queries = preg_split("/;\s*[\r\n]+/", $content);
+		$content = file_get_contents($this->installPath . 'sql/upgrade/' . $currentVersion . '.sql');
+		$queries = array_reverse(preg_split("/;\s*[\r\n]+/", $content));
 		foreach ($queries as $query)
 		{
 			$query = trim($query);
@@ -196,25 +197,85 @@ class GetVersionFromDb
 			{
 				$table = $m[1];
 				
-				// Alter add
-				preg_match_all('#\s*add\s+`?([a-z0-9_]+)`?#si', $query, $m);
+				// Alter drop index
+				preg_match_all('#\s*drop\s+(index|primary key)(\s+`?([a-z0-9_]+)`?)?#si', $query, $m);
 				for ($i = 0, $total = count($m[0]); $i < $total; $i++)
 				{
-					if (in_array(strtolower($m[1][$i]), array('primary', 'index', 'key', 'unique')))
+					$name = $m[3][$i];
+					if (strtolower($m[1][$i]) == 'primary key')
 					{
-						continue;
+						$name = 'primary';
 					}
+
+					$struct[$table]['@keys'][$name] = '?';
+					$query = str_replace($m[0][$i], '', $query);
+				}
+				
+				// Alter add index
+				preg_match_all('#\s*add\s+(index|primary key|key|unique key|unique)\s*\(?([a-z0-9_,`\s]+)\)?(\s+\(([a-z0-9_,` ]+)\))?\s*(,|;|$)#si', $query, $m);
+				for ($i = 0, $total = count($m[0]); $i < $total; $i++)
+				{
+					$name = str_replace(array('`', ' '), array('', ''), $m[2][$i]);
+					$tmpName = explode(',', $name);
+					$name = $tmpName[0];
+					
+					if (strtolower($m[1][$i] == 'primary key'))
+					{
+						$name = 'primary';
+					}
+
+					if (isset($struct[$table]['@keys']) && !isset($struct[$table]['@keys'][$name]))
+					{
+						// If key name doesn't exist, we try to match with list of fields and type
+						$type = strtolower($m[1][$i]);
+						if ($type == 'primary key')
+						{
+							$type = 'primary';
+						}
+						else if ($type == 'key')
+						{
+							$type = 'index';
+						}
+						else if ($type == 'unique key')
+						{
+							$type = 'unique';
+						}
+						
+						$fields = ($m[4][$i]) ? $m[4][$i] : $m[2][$i];
+						$fields = explode(',', preg_replace('#[\s`]#si', '', $fields));
+
+						foreach ($struct[$table]['@keys'] as $key => $data)
+						{
+							if ($data['type'] == $type && !array_diff($data['fields'], $fields))
+							{
+								// Found it !
+								unset($struct[$table]['@keys'][$key]);
+								break;
+							}
+						}
+					}
+					else
+					{
+						unset($struct[$table]['@keys'][$name]);
+					}
+					$query = str_replace($m[0][$i], '', $query);
+				}
+				
+				// Alter add
+				preg_match_all('#\s*add\s+`?([a-z0-9_]+)`?\s+(([a-z]+)(\([ 0-9,]+\))?(\s+unsigned)?)(\s+not)?(\s+null)?(\s+auto_increment)?(\s+primary)?#si', $query, $m);
+				for ($i = 0, $total = count($m[0]); $i < $total; $i++)
+				{
 					unset($struct[$table][$m[1][$i]]);
+					if (strtolower(trim($m[9][$i])) == 'primary')
+					{
+						unset($struct[$table]['@keys']['primary']);
+					}
 				}
 
 				// Alter drop
 				preg_match_all('#\s*drop\s+`?([a-z0-9_]+)`?#si', $query, $m);
 				for ($i = 0, $total = count($m[0]); $i < $total; $i++)
 				{
-					if (in_array(strtolower($m[1][$i]), array('primary', 'index', 'key', 'unique')))
-					{
-						continue;
-					}
 					$struct[$table][$m[1][$i]] = '?';
 				}
 				
@@ -222,11 +283,6 @@ class GetVersionFromDb
 				preg_match_all('#\s*change\s+`([a-z0-9_]+)`\s+`?([a-z0-9_]+)`?\s+([a-z]+)(\s*\([ 0-9,]+\))?(\s+unsigned)?#si', $query, $m);
 				for ($i = 0, $total = count($m[0]); $i < $total; $i++)
 				{
-					if (in_array(strtolower($m[1][$i]), array('primary', 'index', 'key', 'unique')))
-					{
-						continue;
-					}
-					
 					if ($m[1][$i] != $m[2][$i])
 					{
 						unset($struct[$table][$m[1][$i]]);
@@ -246,6 +302,12 @@ class GetVersionFromDb
 			}
 		}
 		
+		/*echo $currentVersion . ' :: ' . $nextVersion;
+		echo '<xmp>';
+		print_r($struct['carrier']);
+		echo '</xmp><hr />';
+		exit;*/
+
 		$this->schemas[count($this->schemas) - 1]['struct'] = $struct;
 	}
 
@@ -284,7 +346,48 @@ class GetVersionFromDb
 				}
 				$this->generalSchema[$table][$m[2][$i]] = $this->parseType($m[4][$i]);
 			}
+			
+			// Get index
+			$this->generalSchema[$table]['@keys'] = array();
+			preg_match_all('#(primary\s+key|unique\s+key|key|index)\s+\(?`?([a-z0-9_,` ]+)`?\)?(\s+\(([a-z0-9_,` ]+)\))?\s*(,|\))#si', $query, $m);
+			for ($i = 0, $total = count($m[0]); $i < $total; $i++)
+			{
+				$type = strtolower($m[1][$i]);
+				if ($type == 'primary key')
+				{
+					$type = 'primary';
+				}
+				else if ($type == 'key')
+				{
+					$type = 'index';
+				}
+				else if ($type == 'unique key')
+				{
+					$type = 'unique';
+				}
+				
+				$name = str_replace(array('`', ' '), array('', ''), $m[2][$i]);
+				$tmpName = explode(',', $name);
+				$name = $tmpName[0];
+				if ($type == 'primary')
+				{
+					$name = 'primary';
+				}
+
+				$fields = ($m[4][$i]) ? $m[4][$i] : $m[2][$i];
+				$fields = explode(',', preg_replace('#[\s`]#si', '', $fields));
+
+				$this->generalSchema[$table]['@keys'][$name] = array(
+					'type' =>	$type,
+					'fields' =>	$fields,
+				);
+			}
 		}
+		
+		$this->schemas[] = array(
+			'name' =>	INSTALL_VERSION,
+			'struct' =>	$this->generalSchema,
+		);
 	}
 
 	/**
@@ -301,13 +404,41 @@ class GetVersionFromDb
 			{
 				continue;
 			}
-
+			
 			$virtualTable = substr($table, strlen($this->prefix));
 			$struct[$virtualTable] = array();
+
+			// List fields
 			$sql = 'SHOW FIELDS FROM ' . $table;
-			foreach (DB::getInstance()->executeS($sql) as $rowField)
+			foreach (Db::getInstance()->executeS($sql) as $rowField)
 			{
 				$struct[$virtualTable][$rowField['Field']] = $this->parseType($rowField['Type']);
+			}
+			
+			// List keys
+			$struct[$virtualTable]['@keys'] = array();
+			$sql = 'SHOW INDEX FROM ' . $table;
+			foreach (Db::getInstance()->executeS($sql) as $rowIndex)
+			{
+				$keyName = strtolower($rowIndex['Key_name']);
+				$type = 'index';
+				if ($keyName == 'primary')
+				{
+					$type = 'primary';
+				}
+				else if (!$rowIndex['Non_unique'])
+				{
+					$type = 'unique';
+				}
+
+				if (!isset($struct[$virtualTable]['@keys'][$keyName]))
+				{
+					$struct[$virtualTable]['@keys'][$keyName] = array(
+						'type' =>	$type,
+						'fields' =>	array(),
+					);
+				}
+				$struct[$virtualTable]['@keys'][$keyName]['fields'][] = $rowIndex['Column_name'];
 			}
 		}
 
@@ -321,6 +452,8 @@ class GetVersionFromDb
 	{
 		$this->errors = array();
 		$version = null;
+		$versions = array();
+		$state = 0;
 
 		// Browse all schema, we will compare all data of listed schema to current database structure, evertytime something is different
 		// we break and go to next schema
@@ -349,6 +482,11 @@ class GetVersionFromDb
 				// Browse all fields for this table
 				foreach ($fields as $field => $type)
 				{
+					if ($field == '@keys')
+					{
+						continue;
+					}
+
 					// Check if field exists
 					if (!isset($this->currentSchema[$table][$field]))
 					{
@@ -374,16 +512,71 @@ class GetVersionFromDb
 						}
 					}
 				}
+				
+				// Compare index
+				if (isset($fields['@keys']))
+				{
+					foreach ($fields['@keys'] as $name => $data)
+					{
+						if ($data == '?')
+						{
+							continue;
+						}
+
+						// Test if index exists
+						if (!isset($this->currentSchema[$table]['@keys'][$name]))
+						{
+							$this->errors[$schema['name']][] = "Key '$name' in table '$table' not found";
+							$isThisVersion = false;
+							
+							if ($this->fastExecution)
+							{
+								break 2;
+							}
+							continue;
+						}
+						
+						// Compare index type
+						if ($this->currentSchema[$table]['@keys'][$name]['type'] != $data['type'])
+						{
+							$this->errors[$schema['name']][] = "Key '$name' in table '$table' has different type ('{$this->currentSchema[$table]['@keys'][$name]['type']}', '{$data['type']}')";
+							$isThisVersion = false;
+							
+							if ($this->fastExecution)
+							{
+								break 2;
+							}
+						}
+						
+						// Compare list of fields
+						$diff = array_diff($this->currentSchema[$table]['@keys'][$name]['fields'], $data['fields']);
+						if ($diff)
+						{
+							$this->errors[$schema['name']][] = "Key '$name' in table '$table' has different fields ('" . implode("', '", $diff) . "')";
+							$isThisVersion = false;
+							
+							if ($this->fastExecution)
+							{
+								break 2;
+							}
+						}
+					}
+				}
 			}
 			
 			if ($isThisVersion)
 			{
-				$version = $schema['name'];
+				$versions[] = $schema['name'];
+				$state = 1;
+			}
+			
+			if (!$isThisVersion && $state == 1)
+			{
 				break;
 			}
 		}
 		
-		return ($version);
+		return ($versions);
 	}
 	
 	/**
