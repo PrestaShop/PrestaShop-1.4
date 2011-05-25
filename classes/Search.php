@@ -205,7 +205,7 @@ class SearchCore
 		INNER JOIN `'._DB_PREFIX_.'category_product` cp ON cp.`id_category` = cg.`id_category`
 		INNER JOIN `'._DB_PREFIX_.'category` c ON cp.`id_category` = c.`id_category`
 		INNER JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
-		WHERE c.`active` = 1 AND p.`active` = 1
+		WHERE c.`active` = 1 AND p.`active` = 1 AND indexed = 1
 		AND cg.`id_group` '.(!$id_customer ?  '= 1' : 'IN (
 			SELECT id_group FROM '._DB_PREFIX_.'customer_group
 			WHERE id_customer = '.(int)$id_customer.'
@@ -222,17 +222,14 @@ class SearchCore
 
 		if ($ajax)
 		{
-			if (!$result = $db->ExecuteS('
+			return $db->ExecuteS('
 			SELECT DISTINCT p.id_product, pl.name pname, cl.name cname,
 				cl.link_rewrite crewrite, pl.link_rewrite prewrite '.$score.'
 			FROM '._DB_PREFIX_.'product p
 			INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)$id_lang.')
 			INNER JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.(int)$id_lang.')
 			WHERE p.`id_product` '.$productPool.'
-			ORDER BY position DESC LIMIT 10'))
-				return false;
-
-			return $result;
+			ORDER BY position DESC LIMIT 10');
 		}
 
 		$queryResults = '
@@ -451,6 +448,8 @@ class SearchCore
 					continue;
 				if (!isset($wordIdsByWord[$product['id_lang']]['_'.$word]))
 					die('Word missing from cache: '.htmlentities($word, ENT_COMPAT, 'utf-8'));
+				if (!$wordIdsByWord[$product['id_lang']]['_'.$word])
+					die('Word ID missing from cache for word: '.htmlentities($word, ENT_COMPAT, 'utf-8'));
 				$queryArray3[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$product['id_lang']]['_'.$word].','.(int)$weight.')';
 
 				// Force save every 200 words in order to avoid overloading MySQL
