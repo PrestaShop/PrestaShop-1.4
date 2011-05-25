@@ -1936,12 +1936,18 @@ FileETag INode MTime Size
     public static function checkPhpVersion()
     {
     	$version = null;
+    	$length = null;
+    	
     	if(defined('PHP_VERSION'))
     		$version = PHP_VERSION;
     	else
     		$version  = phpversion('');
+
 		//Case management system of ubuntu, php version return 5.2.4-2ubuntu5.2
-        return substr($version, 0, strpos($version, '-'));
+    	if(strpos($version, '-') !== false )
+			$version  = substr($version, 0, strpos($version, '-'));
+
+        return $version;
     }
 
     /**
