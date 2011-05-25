@@ -123,27 +123,29 @@ abstract class ObjectModelCore
 				.' WHERE a.`'.$this->identifier.'` = '.(int)($id));
 
 			$result = self::$_cache[$this->table][(int)($id)][(int)($id_lang)];
-			if (!$result) return false;
-			$this->id = (int)($id);
-			foreach ($result AS $key => $value)
-				if (key_exists($key, $this))
-					$this->{$key} = stripslashes($value);
-
-			/* Join multilingual tables */
-			if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
+			if ($result)
 			{
-				$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.(int)($id));
-				if ($result)
-					foreach ($result as $row)
-						foreach ($row AS $key => $value)
-						{
-							if (key_exists($key, $this) AND $key != $this->identifier)
+				$this->id = (int)($id);
+				foreach ($result AS $key => $value)
+					if (key_exists($key, $this))
+						$this->{$key} = stripslashes($value);
+	
+				/* Join multilingual tables */
+				if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
+				{
+					$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.(int)($id));
+					if ($result)
+						foreach ($result as $row)
+							foreach ($row AS $key => $value)
 							{
-								if (!is_array($this->{$key}))
-									$this->{$key} = array();
-								$this->{$key}[$row['id_lang']] = stripslashes($value);
+								if (key_exists($key, $this) AND $key != $this->identifier)
+								{
+									if (!is_array($this->{$key}))
+										$this->{$key} = array();
+									$this->{$key}[$row['id_lang']] = stripslashes($value);
+								}
 							}
-						}
+				}
 			}
 		}
 
