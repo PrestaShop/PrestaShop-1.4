@@ -36,9 +36,9 @@ function __autoload($className)
 		$file_in_override = file_exists(dirname(__FILE__).'/../override/classes/'.$className.'.php');
 		$file_in_classes = file_exists(dirname(__FILE__).'/../classes/'.$className.'.php');
 		// It's a Core class and his name is the same as his declared name
-		if (preg_match('/([a-z]+)Core$/', $className, $matches_class))
+		if (substr($className, -4) == 'Core')
 		{
-			require_once(dirname(__FILE__).'/../classes/'.$matches_class[1].'.php');
+			require_once(dirname(__FILE__).'/../classes/'.substr($className, 0, -4).'.php');
 		}
 		else
 		{
