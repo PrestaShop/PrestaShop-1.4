@@ -569,30 +569,68 @@ class CategoryCore extends ObjectModel
 	 * @param int $id_parent
 	 * @param int $id_lang
 	 * @param bool $active
-	 * @param bool $get_has_children in order to indicate if the category has children
 	 * @return array 
 	 */
-	public static function getChildren($id_parent, $id_lang, $active = true, $get_has_children = false)
+	public static function getChildren($id_parent, $id_lang, $active = true)
 	{
 		if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`'.($get_has_children ? ', IF((
-			SELECT COUNT(*) 
-			FROM `'._DB_PREFIX_.'category` c2
-			WHERE c2.`id_parent` = c.`id_category`
-		) > 0, 1, 0) AS has_children' : '').'
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
 		WHERE `id_lang` = '.(int)($id_lang).'
 		AND c.`id_parent` = '.(int)($id_parent).'
 		'.($active ? 'AND `active` = 1' : '').'
 		ORDER BY `position` ASC');
-
-		return $result;
 	}
 
+	/**
+	 * This method allow to return children categories with the number of sub children selected for a product
+	 * 
+	 * @param int $id_parent
+	 * @param int $id_product
+	 * @param int $id_lang
+	 * @return array 
+	 */
+	public static function getChildrenWithNbSelectedSubCatForProduct($id_parent, $id_product = 0, $id_lang)
+	{
+		if ($id_product)
+			$categories_product = Db::getInstance()->ExecuteS('
+			SELECT `id_category` 
+			FROM `'._DB_PREFIX_.'category_product` 
+			WHERE `id_product` = '.(int)$id_product);
+		else
+			$categories_product = array();
+		
+		if (sizeof($categories_product))
+		{
+			$categories_product_str = '';
+			foreach ($categories_product as $category_product)
+				$categories_product_str .= $category_product['id_category'].',';
+			$categories_product_str = rtrim($categories_product_str, ',');
+		}
+		
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT c.`id_category`, cl.`name`, IF((
+			SELECT COUNT(*) 
+			FROM `'._DB_PREFIX_.'category` c2
+			WHERE c2.`id_parent` = c.`id_category`
+		) > 0, 1, 0) AS has_children, '.((sizeof($categories_product) AND $id_product) ? '(
+			SELECT count(c3.`id_category`) 
+			FROM `'._DB_PREFIX_.'category` c3 
+			WHERE c3.`nleft` > c.`nleft` 
+			AND c3.`nright` < c.`nright`
+			AND c3.`id_category`  IN ('.$categories_product_str.')
+		)' : '0').' AS nbSelectedSubCat
+		FROM `'._DB_PREFIX_.'category` c
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
+		WHERE `id_lang` = '.(int)($id_lang).'
+		AND c.`id_parent` = '.(int)($id_parent).'
+		ORDER BY `position` ASC');
+	}
+	
 	/**
 	  * Copy products from a category to another
 	  *

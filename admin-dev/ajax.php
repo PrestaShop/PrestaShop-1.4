@@ -678,6 +678,6 @@ if (Tools::isSubmit('getAdminHomeElement'))
 
 if (Tools::isSubmit('getChildrenCategories') && Tools::getValue('id_category_parent')) 
 {
-	$children_categories = Category::getChildren(Tools::getValue('id_category_parent'), $cookie->id_lang, false, true);
+	$children_categories = Category::getChildrenWithNbSelectedSubCatForProduct(Tools::getValue('id_category_parent'), Tools::getValue('id_product', 0), $cookie->id_lang);
 	die(Tools::jsonEncode($children_categories));
 }
