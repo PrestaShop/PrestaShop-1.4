@@ -232,11 +232,11 @@ class dibs extends PaymentModule
 				</div>
 				<label>'.$this->l('Secure Key #1').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" size="20" name="k1" value="'.self::$MORE_SETTINGS['k1'].'" />
+					<input type="text" size="20" name="k1" value="'.Tools::htmlentitiesUTF8(self::$MORE_SETTINGS['k1']).'" />
 				</div>
 				<label>'.$this->l('Secure Key #2').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" size="20" name="k2" value="'.self::$MORE_SETTINGS['k2'].'" />
+					<input type="text" size="20" name="k2" value="'.Tools::htmlentitiesUTF8(self::$MORE_SETTINGS['k2']).'" />
 					<p>'.$this->l('These keys are used for security improvement.').'<br />'.$this->l('To obtain these keys, go to the DIBS administration interface and under \'Integration\', select the MD5 Keys menu. Please ensure the MD5 control is activated, otherwise the module will not work.').'</p>
 				</div>
 				<label>'.$this->l('Use DIBS test module').'</label>
@@ -327,6 +327,7 @@ class dibs extends PaymentModule
 		$dibsParams['HTTP_COOKIE']	= urlencode((string)serialize($params['cookie'])); // optional - Cookies/sessions which are to be sent to callbackurl. Must be sent along if you are using callbackurl and depend on cookies/sessions for keeping track of the user. Read how this is carried out in the description of automatic call-back further down this page.
 		$md5_params = 'merchant='.self::$ID_MERCHANT.'&orderid='.$dibsParams['orderid'].'&currency='.$dibsParams['currency'].'&amount='.$dibsParams['amount'];
 		$dibsParams['md5key']		= md5(self::$MORE_SETTINGS['k2'].md5(self::$MORE_SETTINGS['k1'].$md5_params)); // optional - This variable enables a MD5 key control of the values received by DIBS. This control  confirms that the values sent to DIBS has not been tampered with during the transfer. The MD5 key is calculated as:  MD5(key2 + MD5(key1 + "merchant=&orderid=&transact="))  Where key1 and key2 are shop specific keys available through the DIBS administration interface, and + is the concatenation operator. NB! MD5 key check must also be enabled through the DIBS administration interface in order to work. Further details on MD5-key control.  
+		
 		
 		// @todo need more infos.
 		$dibsParams['account']		= ''; // optional - If multiple departments utilize the company's acquirer agreement with PBS, it may prove practical to keep the transactions separate at DIBS. An "account number" may be inserted in this field, so as to separate transactions at DIBS.
