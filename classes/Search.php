@@ -161,7 +161,7 @@ class SearchCore
 		if ($pageSize < 1) $pageSize = 1;
 
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
-			die(Tools::displayError());
+			return false;
 
 		$whereArray = array();
 		$scoreArray = array();
@@ -314,13 +314,14 @@ class SearchCore
 	public static function indexation($full = false)
 	{
 		$db = Db::getInstance();
-
+		$dropIndex = false;
+		
 		if ($full)
 		{
 			$db->Execute('TRUNCATE '._DB_PREFIX_.'search_index');
-			$db->Execute('ALTER TABLE '._DB_PREFIX_.'search_index DROP PRIMARY KEY');
 			$db->Execute('TRUNCATE '._DB_PREFIX_.'search_word');
 			$db->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 0');
+			$dropIndex = true;
 		}
 		else
 		{
@@ -332,7 +333,14 @@ class SearchCore
 					$ids[] = (int)$product['id_product'];
 			if (sizeof($ids))
 				$db->Execute('DELETE FROM '._DB_PREFIX_.'search_index WHERE id_product IN ('.implode(',', $ids).')');
+				
+				
+			if (count($products) > 2000)
+				$dropIndex = true;
 		}
+		
+		if ($dropIndex)
+			$db->Execute('ALTER TABLE '._DB_PREFIX_.'search_index DROP PRIMARY KEY');
 
 		// Every fields are weighted according to the configuration in the backend
 		$weightArray = array(
@@ -374,7 +382,7 @@ class SearchCore
 		{
 			if (!isset($wordIdsByWord[$wordId['id_lang']]))
 				$wordIdsByWord[$wordId['id_lang']] = array();
-			$wordIdsByWord[$wordId['id_lang']][$wordId['word']] = (int)$wordId['id_word'];
+			$wordIdsByWord[$wordId['id_lang']]['_'.$wordId['word']] = (int)$wordId['id_word'];
 		}
 		
 		// Now each non-indexed product is processed one by one, langage by langage 
@@ -411,12 +419,13 @@ class SearchCore
 				$queryArray = array();
 				$queryArray2 = array();
 				foreach ($pArray AS $word => $weight)
-					if ($weight AND !isset($wordIdsByWord[$word]))
+					if ($weight AND !isset($wordIdsByWord['_'.$word]))
 					{
 						$queryArray[] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
 						$queryArray2[] = '\''.pSQL($word).'\'';
+						$wordIdsByWord[$product['id_lang']]['_'.$word] = 0;
 					}
-					
+
 				if (count($queryArray))
 				{
 					// The words are inserted...
@@ -432,20 +441,17 @@ class SearchCore
 					AND sw.id_lang = '.(int)$product['id_lang'].'
 					LIMIT '.count($queryArray2));
 					foreach ($addedWords AS $wordId)
-					{
-						if (!isset($wordIdsByWord[$product['id_lang']]))
-							$wordIdsByWord[$product['id_lang']] = array();
-						$wordIdsByWord[$product['id_lang']][$wordId['word']] = (int)$wordId['id_word'];
-					}
+						$wordIdsByWord[$product['id_lang']]['_'.$wordId['word']] = (int)$wordId['id_word'];
 				}
 			}
 
 			foreach ($pArray AS $word => $weight)
 			{
-				if (!$weight OR !isset($wordIdsByWord[$product['id_lang']][$word]))
+				if (!$weight)
 					continue;
-
-				$queryArray3[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$product['id_lang']][$word].','.(int)$weight.')';
+				if (!isset($wordIdsByWord[$product['id_lang']]['_'.$word]))
+					die('Word missing from cache: '.htmlentities($word, ENT_COMPAT, 'utf-8'));
+				$queryArray3[] = '('.(int)$product['id_product'].','.(int)$wordIdsByWord[$product['id_lang']]['_'.$word].','.(int)$weight.')';
 
 				// Force save every 200 words in order to avoid overloading MySQL
 				if (++$countWords % 200 == 0)
@@ -461,13 +467,21 @@ class SearchCore
 		}
 		// One last save is done at the end in order to save what's left
 		Search::saveIndex($queryArray3);
-		if ($full)
-			$db->Execute('ALTER TABLE `'._DB_PREFIX_.'search_index` ADD PRIMARY KEY (`id_word`, `id_product`)');
 		Search::setProductsAsIndexed($productsArray);
 		
+		// If it has been deleted, the index is created again once the indexation is done
+		if (!$dropIndex)
+		{
+			$dropIndex = true;
+			$result = $db->ExecuteS('SHOW INDEX FROM `'._DB_PREFIX_.'search_index`');
+			foreach ($result as $row)
+				if (strtolower($row['Key_name']) == 'primary')
+					$dropIndex = false;
+		}
+		if ($dropIndex)
+			$db->Execute('ALTER TABLE `'._DB_PREFIX_.'search_index` ADD PRIMARY KEY (`id_word`, `id_product`)');
+		
 		Configuration::updateValue('PS_NEED_REBUILD_INDEX', 0);
-		// The DISTINCT is not needed, but I would rather loose processing time with the subquery than have too much words in the IN ()
-		$db->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_word NOT IN (SELECT DISTINCT id_word FROM '._DB_PREFIX_.'search_index)');
 		return true;
 	}
 
@@ -492,7 +506,7 @@ class SearchCore
 
 		if (!is_numeric($pageNumber) OR !is_numeric($pageSize) OR !Validate::isBool($count) OR !Validate::isValidSearch($tag)
 		OR $orderBy AND !$orderWay OR ($orderBy AND !Validate::isOrderBy($orderBy))	OR ($orderWay AND !Validate::isOrderBy($orderWay)))
-			die(Tools::displayError());
+			return false;
 
 		if ($pageNumber < 1) $pageNumber = 1;
 		if ($pageSize < 1) $pageSize = 10;
