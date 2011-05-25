@@ -34,6 +34,8 @@ $method = isset($_REQUEST['ps_method']) ? $_REQUEST['ps_method'] : $_SERVER['REQ
 
 if (isset($_SERVER['PHP_AUTH_USER']))
 	$key = $_SERVER['PHP_AUTH_USER'];
+elseif (isset($_GET['ws_key']))
+	$key = $_GET['ws_key'];
 else
 {
 	header($_SERVER['SERVER_PROTOCOL'].' 401 Unauthorized');
