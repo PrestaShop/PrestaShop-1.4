@@ -296,7 +296,7 @@ class AdminAttributeGenerator extends AdminTab
                     <div style="float:left;">
 						<label>'.$this->l('Quantity').'</label>
 						<div class="margin-form">
-							<input type="text" size="20" name="quantity" value="1"/>
+							<input type="text" size="20" name="quantity" value="0"/>
 						</div>
 						<label>'.$this->l('Reference').'</label>
 						<div class="margin-form">

@@ -2614,7 +2614,7 @@ class AdminProducts extends AdminTab
 						else
 							echo '<tr><td class="col-left">'.$this->l('Initial stock:').'</td>
 									<td style="padding-bottom:5px;">
-										<input size="3" maxlength="6" name="quantity" type="text" value="1" />
+										<input size="3" maxlength="6" name="quantity" type="text" value="0" />
 									</td>';
 						echo  '<tr>
 								<td class="col-left">'.$this->l('Minimum quantity:').'</td>
@@ -3201,7 +3201,7 @@ class AdminProducts extends AdminTab
 		echo'
 		  <tr id="initial_stock_attribute">
 				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Initial stock:').'</td>
-				<td><input type="text" name="attribute_quantity" size="3" maxlength="6" value="1"/></td>
+				<td><input type="text" name="attribute_quantity" size="3" maxlength="6" value="0"/></td>
 		  </tr>
 		  </tr>
 			<tr id="stock_mvt_attribute" style="display:none;">
