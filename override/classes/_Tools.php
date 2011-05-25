@@ -31,14 +31,16 @@
 
 if (!class_exists('FB') and file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'fb.php'))
 {
-	if(!defined('PS_USE_FIREPHP'))
+	if (!defined('PS_USE_FIREPHP'))
 	{
 		require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'fb.php';
 		define('PS_USE_FIREPHP',true);
 	}
 }
 else
-	if(!defined('PS_USE_FIREPHP'))
+	if (class_exists('FB') AND !defined('PS_USE_FIREPHP'))
+		define('PS_USE_FIREPHP',true);
+	else 
 		define('PS_USE_FIREPHP',false);
 
 class Tools extends ToolsCore
