@@ -594,30 +594,32 @@ class CategoryCore extends ObjectModel
 	 * @param int $id_lang
 	 * @return array 
 	 */
-	public static function getChildrenWithNbSelectedSubCatForProduct($id_parent, $id_product = 0, $id_lang)
+	public static function getChildrenWithNbSelectedSubCatForProduct($id_parent, $id_product = 0, $ids_categories = null, $id_lang)
 	{
+		$categories_product_str = '';
 		if ($id_product)
+		{
 			$categories_product = Db::getInstance()->ExecuteS('
 			SELECT `id_category` 
 			FROM `'._DB_PREFIX_.'category_product` 
 			WHERE `id_product` = '.(int)$id_product);
-		else
-			$categories_product = array();
-		
-		if (sizeof($categories_product))
-		{
-			$categories_product_str = '';
-			foreach ($categories_product as $category_product)
-				$categories_product_str .= $category_product['id_category'].',';
-			$categories_product_str = rtrim($categories_product_str, ',');
+			if (sizeof($categories_product))
+				foreach ($categories_product as $category_product)
+					$categories_product_str .= $category_product['id_category'].',';
 		}
+		else
+		{
+			$categories_product = array();
+			$categories_product_str = $ids_categories;
+		}
+		$categories_product_str = rtrim($categories_product_str, ',');
 		
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_category`, cl.`name`, IF((
 			SELECT COUNT(*) 
 			FROM `'._DB_PREFIX_.'category` c2
 			WHERE c2.`id_parent` = c.`id_category`
-		) > 0, 1, 0) AS has_children, '.((sizeof($categories_product) AND $id_product) ? '(
+		) > 0, 1, 0) AS has_children, '.($categories_product_str ? '(
 			SELECT count(c3.`id_category`) 
 			FROM `'._DB_PREFIX_.'category` c3 
 			WHERE c3.`nleft` > c.`nleft` 
