@@ -33,6 +33,7 @@ ALTER TABLE `PREFIX_category` ADD INDEX `nleftright` (`nleft`, `nright`);
 
 ALTER TABLE `PREFIX_product` ADD  `id_tax_rules_group` int(10) unsigned NOT NULL AFTER `id_tax`;
 ALTER TABLE `PREFIX_carrier` ADD  `id_tax_rules_group` int(10) unsigned NOT NULL AFTER `id_tax`;
+ALTER TABLE `PREFIX_carrier` ADD INDEX ( `id_tax_rules_group` ) ;
 
 CREATE TABLE `PREFIX_tax_rule` (
 `id_tax_rules_group` INT NOT NULL ,
