@@ -1,4 +1,3 @@
-
 Nachricht von Ihrem Shop {shop_name}
  
 E-Mail-Adresse: {email}

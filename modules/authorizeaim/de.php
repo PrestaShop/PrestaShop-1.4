@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_f745351b1387473d3d2de5bfe18d3562'] = 'Fehler, überprüfen Sie bitte die Karteninformationen';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_f745351b1387473d3d2de5bfe18d3562'] = 'Fehler, bitte Kreditkarteninformationen überprüfen';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_1814fc250eea61e13aa95e81b61bf72a'] = 'Bezahlen Sie mit authorizeaim';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_442155d68aea78b4ef707796d76ca48c'] = 'Visa-Logo';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f65943f43529e119969e533dc6f691f9'] = 'MasterCard-Logo';
@@ -13,7 +13,7 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_f11b368cddfe37c47af9b9d91c6ba4f
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_a44217022190f5734b2f72ba1e4f8a79'] = 'Kartennummer';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_8c1279db4db86553e4b9682f78cf500e'] = 'Verfallsdatum';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_60a104dc50579d60cbc90158fada1dcf'] = 'CVV';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_6149e52c36edb9ee4494d5412e42eef2'] = 'die 3 letzten Ziffern auf der Rückseite Ihrer Kreditkarte';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_6149e52c36edb9ee4494d5412e42eef2'] = 'die letzten drei Ziffern auf der Rückseite Ihrer Kreditkarte';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_40566b26dcc126bce704f2c1d622a6a3'] = 'Bestellung bestätigen';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_9286982d71addb45ad3a9472282f2c69'] = 'Ihre Kartennummer ist falsch';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_cb313e911b15b21b57f4fc7b53058e4f'] = 'Zahlung mit Authorize.net erhalten ';
@@ -22,7 +22,6 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_6a26f548831e6a8c26bfbbd9f6ec61e
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_11a4b229c0e206b831f729572618553f'] = 'In Ihrem PrestaShop Admin-Panel';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_bc6781f2b59d4e973bd0075baab62a40'] = 'Füllen Sie das Login-ID-Feld mit der von Authorize.net vorgesehenen Kennung aus';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_95eb440b753d6505aad5c3f72b50eec9'] = 'Füllen Sie das Schlüsselfeld mit dem Transaktionsschlüssel von Authorize.net aus';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_a7180ba675bb293f415aab47e52a1732'] = 'Achtung: Ihre Webseite muss über ein SSL-Zertifikat verfügen, um das Authorize.net AIM Zahlungssystem nutzen zu können. Sie sind verantwortlich für die Sicherheit Ihrer Kundenbankdaten. PrestaShop kann nicht für Sicherheitsmängel auf Ihrer Webseite verantwortlich gemacht werden.';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f3ef34226d51e9ca88eaa2f20d7ffb91'] = 'Login-ID';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_897356954c2cd3d41b221e3f24f99bba'] = 'Schlüssel';

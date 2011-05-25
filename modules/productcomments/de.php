@@ -21,6 +21,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_0c21532dfd3476791e5aab1aa
 $_MODULE['<{productcomments}prestashop>productcomments_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Bestätigung';
 $_MODULE['<{productcomments}prestashop>productcomments_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{productcomments}prestashop>productcomments_1bb54e382f7dbdb260f0aa6b42bb624b'] = 'Kriterium gelöscht';
+$_MODULE['<{productcomments}prestashop>productcomments_e6ea19ae2eb9447f98c7ed74227bb4a3'] = 'Das Feld Name ist erfolderlich mindestns in';
 $_MODULE['<{productcomments}prestashop>productcomments_21b0922096daf5c742cc98986d857cc1'] = 'Kriterium aktualisiert';
 $_MODULE['<{productcomments}prestashop>productcomments_e140a9c4fcfa0aad7af83f65e577c287'] = 'Kriterium  hinzugefügt';
 $_MODULE['<{productcomments}prestashop>productcomments_254f642527b45bc260048e30704edb39'] = 'Konfiguration';

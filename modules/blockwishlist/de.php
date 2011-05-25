@@ -16,6 +16,7 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist_09dc02ecbb078868a3a86dded0300
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_7ec9cceb94985909c6994e95c31c1aa8'] = 'Meine Wunschlisten';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_2715a65604e1af3d6933b61704865daf'] = 'Wunschlistenblock';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_7244141a5de030c4c882556f4fd70a8b'] = 'Fügt einen Block hinzu mit der Kundenwunschliste';
+$_MODULE['<{blockwishlist}prestashop>blockwishlist_9ae79c1fccd231ac7fbbf3235dbf6326'] = 'Meine Wunschliste';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_5ef2d617096ae7b47a83f3d4de9c84bd'] = 'Modul Aktivieren: Ungültige Auswahl.';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Bestätigung';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
