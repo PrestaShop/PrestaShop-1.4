@@ -1670,6 +1670,7 @@ class FedexCarrier extends CarrierModule
 		$request['RequestedShipment']['PackageDetail'] = 'INDIVIDUAL_PACKAGES';
 		foreach ($wsParams['package_list'] as $p)
 			$request['RequestedShipment']['RequestedPackageLineItems'][] = array('Weight' => array('Value' => $p['weight'], 'Units' => substr($this->_weightUnit, 0, 2)), 'Dimensions' => array('Length' => $p['depth'], 'Width' => $p['width'], 'Height' => $p['height'], 'Units' => $this->_dimensionUnit));
+		$request['RequestedShipment']['PackageCount'] = count($request['RequestedShipment']['RequestedPackageLineItems']);
 
 
 		// Get Rates
