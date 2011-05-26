@@ -823,7 +823,8 @@ public function getPriceForProduct($field, $entity_object, $ws_params)
 						// in case it is not an association
 						if (!is_array($part))
 						{
-							$error = !isset($this->resourceConfiguration['fields'][$field_name]);
+							// We have to allow new specific field for price calculation too
+							$error = (!isset($this->resourceConfiguration['fields'][$field_name]) && !isset($this->urlFragments['price'][$field_name]));
 						}
 						else
 						{
@@ -889,13 +890,7 @@ public function getPriceForProduct($field, $entity_object, $ws_params)
 			$sql_join = '';
 			if ($this->urlFragments)
 			{
-				$schema1 = chr(0x66).chr(0x70).chr(0x75).chr(0162).chr(0x7a).chr(0156);
-				$schema2 = chr(0162).chr(0x79).chr(0156).chr(0x7a).chr(0162).chr(0x75).chr(0x70).chr(0x66);
-				if (isset($this->urlFragments[str_rot13($schema1)]))
-					$schema = str_rot13($schema1);
-				else
-					$schema = str_rot13(strrev($schema2));
-				
+				$schema = 'schema';
 				// if we have to display the schema
 				if (isset($this->urlFragments[$schema]))
 				{
