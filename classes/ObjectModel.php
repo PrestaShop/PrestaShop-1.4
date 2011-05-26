@@ -133,18 +133,19 @@ abstract class ObjectModelCore
 				/* Join multilingual tables */
 				if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
 				{
-					$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.$this->identifier.'` = '.(int)($id));
+					$result = Db::getInstance()->ExecuteS('
+					SELECT * 
+					FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` 
+					WHERE `'.$this->identifier.'` = '.(int)$id);
 					if ($result)
-						foreach ($result as $row)
+						foreach ($result AS $row)
 							foreach ($row AS $key => $value)
-							{
 								if (key_exists($key, $this) AND $key != $this->identifier)
 								{
 									if (!is_array($this->{$key}))
 										$this->{$key} = array();
-									$this->{$key}[$row['id_lang']] = stripslashes($value);
+									$this->{$key}[(int)$row['id_lang']] = stripslashes($value);
 								}
-							}
 				}
 			}
 		}
@@ -661,11 +662,8 @@ abstract class ObjectModelCore
 			return false;
 
 		foreach ($fields AS $field)
-			if (!Db::getInstance()->Execute('
-				INSERT INTO '._DB_PREFIX_.'required_field (id_required_field, object_name, field_name)
-				VALUES(\'\', \''.pSQL(get_class($this)).'\', \''.pSQL($field).'\')'))
+			if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'required_field', array('object_name' => pSQL(get_class($this)), 'field_name' => pSQL($field)), 'INSERT'))
 				return false;
-
 		return true;
 	}
 

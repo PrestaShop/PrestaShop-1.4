@@ -28,7 +28,7 @@
 function migrate_block_info_to_cms_block()
 {	
 	//get ids cms of block information
-	$id_blockinfos = Db::getInstance()->getValue('SELECT id_module FROM  `'._DB_PREFIX_.'module` WHERE name = \'blockinfos\' ');
+	$id_blockinfos = Db::getInstance()->getValue('SELECT id_module FROM  `'._DB_PREFIX_.'module` WHERE name = \'blockinfos\'');
 	//get ids cms of block information
 	$ids_cms = Db::getInstance()->ExecuteS('SELECT * FROM  `'._DB_PREFIX_.'block_cms` WHERE `id_block` = '.(int)$id_blockinfos);
 	//check if block info is installed and active

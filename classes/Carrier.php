@@ -393,14 +393,14 @@ class CarrierCore extends ObjectModel
 		global $cookie, $cart;
 
 		if (is_array($groups) AND !empty($groups))
-			$result = Carrier::getCarriers((int)($cookie->id_lang), true, false, (int)($id_zone), $groups, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+			$result = Carrier::getCarriers((int)$cookie->id_lang, true, false, (int)$id_zone, $groups, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		else
-			$result = Carrier::getCarriers((int)($cookie->id_lang), true, false, (int)($id_zone), array(1), PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+			$result = Carrier::getCarriers((int)$cookie->id_lang, true, false, (int)$id_zone, array(1), PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$resultsArray = array();
 
 		foreach ($result AS $k => $row)
 		{
-			$carrier = new Carrier((int)($row['id_carrier']));
+			$carrier = new Carrier((int)$row['id_carrier']);
 			$shippingMethod = $carrier->getShippingMethod();
 			if ($shippingMethod != Carrier::SHIPPING_METHOD_FREE)
 			{
