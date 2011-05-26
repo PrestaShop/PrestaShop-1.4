@@ -29,6 +29,8 @@ if (!defined('_CAN_LOAD_FILES_'))
 	
 class Ogone extends PaymentModule
 {
+	private $_ignoreKeyList = array('secure_key');
+
 	public function __construct()
 	{
 		$this->name = 'ogone';
@@ -36,15 +38,17 @@ class Ogone extends PaymentModule
 		$this->version = '2.0';
 		$this->need_instance = 0;
 
-        parent::__construct();
-
-        $this->displayName = 'Ogone';
-        $this->description = '';
+		parent::__construct();
+		
+		$this->displayName = 'Ogone';
+		$this->description = '';
 	}
 	
 	public function install()
 	{
-		return (parent::install() AND $this->registerHook('payment') AND $this->registerHook('orderConfirmation'));
+		return (parent::install() AND 
+				$this->registerHook('payment') AND 
+				$this->registerHook('orderConfirmation'));
 	}
 	
 	public function getContent()
@@ -174,7 +178,7 @@ class Ogone extends PaymentModule
 		$smarty->assign('ogone_params', $ogoneParams);
 		$smarty->assign('OGONE_MODE', Configuration::get('OGONE_MODE'));
 		
-		return $this->display(__FILE__, 'ogone.tpl');
+		return $this->display(dirname(__FILE__), 'ogone.tpl');
     }
 	
 	public function hookOrderConfirmation($params)
@@ -190,7 +194,7 @@ class Ogone extends PaymentModule
 			$smarty->assign('status', 'failed');
 		$link = new Link();
 		$smarty->assign('ogone_link', (method_exists($link, 'getPageLink') ? $link->getPageLink('contact-form.php', true) : Tools::getHttpHost(true).'contact-form.php'));
-		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
+		return $this->display(dirname(__FILE__), 'hookorderconfirmation.tpl');
 	}
 	
 	public function validate($id_cart, $id_order_state, $amount, $message = '', $secure_key)

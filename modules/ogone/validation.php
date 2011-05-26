@@ -46,8 +46,12 @@ if (Validate::isLoadedObject($cart))
 {
 	/* Fist, check for a valid SHA-1 signature */
 	$ogoneParams = array();
+	$ignoreKeyList = $ogone->getIgnoreKeyList();
+
 	foreach ($_GET as $key => $value)
-	if (strtoupper($key) != 'SHASIGN' AND $value != '')
+	if (strtoupper($key) != 'SHASIGN' AND 
+			$value != '' AND
+			!in_array($key, $ignoreKeyList))
 		$ogoneParams[strtoupper($key)] = $value;
 
 	ksort($ogoneParams);

@@ -41,7 +41,7 @@ $smarty->assign(array(
 	'key' => $key,
 	'ogone_link' => (method_exists($link, 'getPageLink') ? $link->getPageLink('my-account.php') : _PS_BASE_URL_.'my-account.php')
 	));
-echo $ogone->display(__FILE__, 'waiting.tpl');
+echo $ogone->display(dirname(__FILE__), 'waiting.tpl');
 
 include(dirname(__FILE__).'/../../footer.php');
 
