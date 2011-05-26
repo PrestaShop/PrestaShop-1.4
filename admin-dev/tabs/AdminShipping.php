@@ -197,14 +197,22 @@ class AdminShipping extends AdminTab
 	{
 		global $currentIndex;
 		
-		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
-		$id_carrier = Tools::getValue('id_carrier') ? (int)(Tools::getValue('id_carrier')) : (int)($carriers[0]['id_carrier']);
-		$carrierSelected = new Carrier($id_carrier);
 		$carrierArray = array();
+		$id_carrier = Tools::getValue('id_carrier');
+		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		foreach ($carriers AS $carrier)
 			if (!$carrier['is_free'])
-				$carrierArray[] = '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option>';
-				
+				$carrierArray[] = array(
+					'id' => $carrier['id_carrier'],
+					'display' => '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option>'
+				);
+		if (count($carrierArray))
+		{
+			if (!$id_carrier)
+				$id_carrier = (int)$carrierArray[0]['id'];
+			$carrierSelected = new Carrier($id_carrier);
+		}
+		
 		echo '<br /><br />
 		<h2>'.$this->l('Fees by carrier, geographical zone, and ranges').'</h2>
 		<form action="'.$currentIndex.'&token='.$this->token.'" id="fees" name="fees" method="post">
@@ -218,7 +226,7 @@ class AdminShipping extends AdminTab
 			echo '<b>'.$this->l('Carrier:').' </b>
 				<select name="id_carrier2" onchange="document.fees.submit();">';
 			foreach ($carrierArray AS $carrierOption)
-				echo $carrierOption;
+				echo $carrierOption['display'];
 			echo '
 				</select><br />
 				<table class="table space" cellpadding="0" cellspacing="0">

@@ -1670,19 +1670,18 @@ class CartCore extends ObjectModel
 	public function isCarrierInRange($id_carrier, $id_zone)
 	{
 		$carrier = new Carrier((int)$id_carrier, Configuration::get('PS_LANG_DEFAULT'));
-		$is_in_zone = false;
-		$order_total = $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING);
-
-		if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT
-		AND (Carrier::checkDeliveryPriceByWeight((int)$id_carrier, $this->getTotalWeight(), $id_zone)))
-		OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE
-		AND (Carrier::checkDeliveryPriceByPrice((int)$id_carrier, $order_total, $id_zone, (int)($this->id_currency)))))
-		{
-			$is_in_zone = true;
-		}
-
-		unset($carrier);
-		return $is_in_zone;
+		$shippingMethod = $carrier->getShippingMethod();
+		
+		if ($shippingMethod == Carrier::SHIPPING_METHOD_FREE)
+			return true;
+		if ($shippingMethod == Carrier::SHIPPING_METHOD_WEIGHT
+			AND (Carrier::checkDeliveryPriceByWeight((int)$id_carrier, $this->getTotalWeight(), $id_zone)))
+			return true;
+		if ($shippingMethod == Carrier::SHIPPING_METHOD_PRICE
+			AND (Carrier::checkDeliveryPriceByPrice((int)$id_carrier, $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, (int)$this->id_currency)))
+			return true;
+			
+		return false;
 	}
 }
 
