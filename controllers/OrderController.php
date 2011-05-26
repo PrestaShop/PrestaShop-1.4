@@ -58,8 +58,9 @@ class OrderControllerCore extends ParentOrderController
 
 		$orderTotal = self::$cart->getOrderTotal();
 		$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
-
-		if ($orderTotal < $minimalPurchase)
+p(self::$cart->getOrderTotal(false));
+p($minimalPurchase);
+		if (self::$cart->getOrderTotal(false) < $minimalPurchase)
 		{
 			$this->step = 0;
 			$this->errors[] = Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
@@ -134,7 +135,7 @@ class OrderControllerCore extends ParentOrderController
 
 		$invoiceAddressFields = AddressFormat::getOrderedAddressFields($addressInvoice->id_country);
 		$deliveryAddressFields = AddressFormat::getOrderedAddressFields($addressDelivery->id_country);
-		
+
 		self::$smarty->assign(array(
 			'inv_adr_fields' => $invoiceAddressFields,
 			'dlv_adr_fields' => $deliveryAddressFields));
@@ -145,7 +146,7 @@ class OrderControllerCore extends ParentOrderController
 		global $currency;
 
 		parent::displayContent();
-		
+
 		self::$smarty->assign(array(
 			'currencySign' => $currency->sign,
 			'currencyRate' => $currency->conversion_rate,
@@ -282,7 +283,7 @@ class OrderControllerCore extends ParentOrderController
 
 		// Redirect instead of displaying payment modules if any module are grefted on
 		Hook::backBeforePayment('order.php?step=3');
-		
+
 		/* We may need to display an order summary */
 		self::$smarty->assign(self::$cart->getSummaryDetails());
 		self::$smarty->assign(array(
@@ -290,7 +291,7 @@ class OrderControllerCore extends ParentOrderController
 			'taxes_enabled' => (int)(Configuration::get('PS_TAX'))
 		));
 		self::$cookie->checkedTOS = '1';
-		
+
 		parent::_assignPayment();
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -30,14 +30,14 @@ ControllerFactory::includeController('ParentOrderController');
 class OrderOpcControllerCore extends ParentOrderController
 {
 	public $isLogged;
-	
+
 	public function preProcess()
 	{
 		parent::preProcess();
 		if ($this->nbProducts)
 			self::$smarty->assign('virtual_cart', false);
 		$this->isLogged = (bool)((int)(self::$cookie->id_customer) AND Customer::customerIdExistsStatic((int)(self::$cookie->id_customer)));
-		
+
 		if (self::$cart->nbProducts())
 		{
 			if (Tools::isSubmit('ajax'))
@@ -100,7 +100,7 @@ class OrderOpcControllerCore extends ParentOrderController
 							$customer->newsletter = (int)Tools::isSubmit('newsletter');
 							$customer->optin = (int)Tools::isSubmit('optin');
 							$return = array(
-								'hasError' => !empty($this->errors), 
+								'hasError' => !empty($this->errors),
 								'errors' => $this->errors,
 								'id_customer' => (int)self::$cookie->id_customer,
 								'token' => Tools::getToken(false)
@@ -155,7 +155,7 @@ class OrderOpcControllerCore extends ParentOrderController
 							$id_address_invoice = (int)(Tools::getValue('id_address_invoice'));
 							$address_delivery = new Address((int)(Tools::getValue('id_address_delivery')));
 							$address_invoice = ((int)(Tools::getValue('id_address_delivery')) == (int)(Tools::getValue('id_address_invoice')) ? $address_delivery : new Address((int)(Tools::getValue('id_address_invoice'))));
-							
+
 							if (!Address::isCountryActiveById((int)(Tools::getValue('id_address_delivery'))))
 								$this->errors[] = Tools::displayError('This address is not in a valid area.');
 							elseif (!Validate::isLoadedObject($address_delivery) OR !Validate::isLoadedObject($address_invoice) OR $address_invoice->deleted OR $address_delivery->deleted)
@@ -202,11 +202,11 @@ class OrderOpcControllerCore extends ParentOrderController
 		elseif (Tools::isSubmit('ajax'))
 			exit;
 	}
-	
+
 	public function setMedia()
 	{
 		parent::setMedia();
-		
+
 		// Adding CSS style sheet
 		Tools::addCSS(_THEME_CSS_DIR_.'order-opc.css');
 		// Adding JS files
@@ -214,7 +214,7 @@ class OrderOpcControllerCore extends ParentOrderController
 		Tools::addJs(_PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js');
 		Tools::addJS(_THEME_JS_DIR_.'tools/statesManagement.js');
 	}
-	
+
 	public function process()
 	{
 		// SHOPPING CART
@@ -242,11 +242,11 @@ class OrderOpcControllerCore extends ParentOrderController
 			'months' => $months,
 			'days' => $days,
 		));
-		
+
 		/* Load guest informations */
 		if ($this->isLogged AND self::$cookie->is_guest)
 			self::$smarty->assign('guestInformations', $this->_getGuestInformations());
-		
+
 		if ($this->isLogged)
 			$this->_assignAddress(); // ADDRESS
 		// CARRIER
@@ -254,32 +254,32 @@ class OrderOpcControllerCore extends ParentOrderController
 		// PAYMENT
 		$this->_assignPayment();
 		Tools::safePostVars();
-		
+
 		self::$smarty->assign('newsletter', (int)Module::getInstanceByName('blocknewsletter')->active);
 	}
-	
+
 	public function displayHeader()
 	{
 		if (Tools::getValue('ajax') != 'true')
 			parent::displayHeader();
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
-	
+
 		$this->_processAddressFormat();
-	
+
 		self::$smarty->display(_PS_THEME_DIR_.'errors.tpl');
 		self::$smarty->display(_PS_THEME_DIR_.'order-opc.tpl');
 	}
-	
+
 	public function displayFooter()
 	{
 		if (Tools::getValue('ajax') != 'true')
 			parent::displayFooter();
 	}
-	
+
 	protected function _getGuestInformations()
 	{
 		$customer = new Customer((int)(self::$cookie->id_customer));
@@ -316,7 +316,7 @@ class OrderOpcControllerCore extends ParentOrderController
 			'sl_day' => $birthday[2]
 		);
 	}
-	
+
 	protected function _assignCarrier()
 	{
 		if (!$this->isLogged)
@@ -333,7 +333,7 @@ class OrderOpcControllerCore extends ParentOrderController
 		else
 			parent::_assignCarrier();
 	}
-	
+
 	protected function _assignPayment()
 	{
 		self::$smarty->assign(array(
@@ -341,7 +341,7 @@ class OrderOpcControllerCore extends ParentOrderController
 			'HOOK_PAYMENT' => self::_getPaymentMethods()
 		));
 	}
-	
+
 	protected function _getPaymentMethods()
 	{
 		if (!$this->isLogged)
@@ -366,30 +366,29 @@ class OrderOpcControllerCore extends ParentOrderController
 			return '<p class="warning">'.Tools::displayError('Error: no currency has been selected').'</p>';
 		if (!self::$cookie->checkedTOS AND Configuration::get('PS_CONDITIONS'))
 			return '<p class="warning">'.Tools::displayError('Please accept Terms of Service').'</p>';
-		
+
 		/* If some products have disappear */
 		if (!self::$cart->checkQuantities())
 			return '<p class="warning">'.Tools::displayError('An item in your cart is no longer available, you cannot proceed with your order.').'</p>';
-		
+
 		/* Check minimal amount */
 		$currency = Currency::getCurrency((int)self::$cart->id_currency);
-		
-		$orderTotal = self::$cart->getOrderTotal();
+
 		$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
-		if ($orderTotal < $minimalPurchase)
+		if (self::$cart->getOrderTotal(false) < $minimalPurchase)
 			return '<p class="warning">'.Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
 			' '.Tools::displayError('is required in order to validate your order.').'</p>';
-		
+
 		/* Bypass payment step if total is 0 */
 		if (self::$cart->getOrderTotal() <= 0)
 			return '<p class="center"><input type="button" class="exclusive_large" name="confirmOrder" id="confirmOrder" value="'.Tools::displayError('I confirm my order').'" onclick="confirmFreeOrder();" /></p>';
-		
+
 		$return = Module::hookExecPayment();
 		if (!$return)
 			return '<p class="warning">'.Tools::displayError('No payment method is available').'</p>';
 		return $return;
 	}
-	
+
 	protected function _getCarrierList()
 	{
 		$address_delivery = new Address(self::$cart->id_address_delivery);
@@ -447,5 +446,4 @@ class OrderOpcControllerCore extends ParentOrderController
 		}
 	}
 }
-
 
