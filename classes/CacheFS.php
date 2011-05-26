@@ -32,7 +32,7 @@ class CacheFSCore extends Cache {
 	protected function __construct()
 	{
 		parent::__construct();
-		return $this->_init();
+		$this->_init();
 	}
 	
 	protected function _init()

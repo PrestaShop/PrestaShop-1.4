@@ -111,14 +111,15 @@ abstract class ModuleCore
 				foreach ($result as $row)
 					self::$modulesCache[$row['name']] = $row;
 			}
-			if (!isset(self::$modulesCache[$this->name]))
-				return false;
-			$this->active = true;
-			$this->id = self::$modulesCache[$this->name]['id_module'];
-			foreach (self::$modulesCache[$this->name] AS $key => $value)
-				if (key_exists($key, $this))
-					$this->{$key} = $value;
-			$this->_path = __PS_BASE_URI__.'modules/'.$this->name.'/';
+			if (isset(self::$modulesCache[$this->name]))
+			{
+				$this->active = true;
+				$this->id = self::$modulesCache[$this->name]['id_module'];
+				foreach (self::$modulesCache[$this->name] AS $key => $value)
+					if (key_exists($key, $this))
+						$this->{$key} = $value;
+				$this->_path = __PS_BASE_URI__.'modules/'.$this->name.'/';
+			}
 		}
 	}
 
