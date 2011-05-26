@@ -446,6 +446,11 @@ class Twenga extends PaymentModule
 		if ($this->_allowToWork == false)
 			return;
 			
+		// One page Checkout cause problem with event and document.write use by twenga script
+		// (page completely deleted
+		if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
+			return ;
+			
 		$customer = new Customer($params['cart']->id_customer);
 		$currency = new Currency($params['cart']->id_currency);
 		$address = $customer->getAddresses($params['cart']->id_lang);
@@ -573,6 +578,11 @@ class Twenga extends PaymentModule
 	{
 		try {
 			$this->_checkCurrentCountrie();
+			if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
+				$this->_html .= '
+					<div class="warn" style="font-weight:bolder;">
+						'.$this->l('Twenga can\'t work under the one page checkout process').'
+					</div>';
 		}
 		catch (Exception $e)
 		{
