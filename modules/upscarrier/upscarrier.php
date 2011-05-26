@@ -38,6 +38,7 @@ class UpsCarrier extends CarrierModule
 	private $_fieldsList = array();
 	private $_pickupTypeList = array();
 	private $_packagingTypeList = array();
+	private $_calculModeList = array();
 	private $_dimensionUnit = '';
 	private $_weightUnit = '';
 	private $_dimensionUnitList = array('CM' => 'CM', 'IN' => 'IN', 'CMS' => 'CM', 'INC' => 'IN');
@@ -46,9 +47,10 @@ class UpsCarrier extends CarrierModule
 
 	public function __construct()
 	{
+		set_time_limit(0);
 		$this->name = 'upscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.0';
+		$this->version = '1.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 
@@ -67,6 +69,10 @@ class UpsCarrier extends CarrierModule
 			foreach ($this->_fieldsList as $keyConfiguration => $name)
 				if (!Configuration::get($keyConfiguration) && !empty($name))
 					$warning[] = '\''.$name.'\' ';
+
+			// Check calcul mode
+			if (!Configuration::get('UPS_CARRIER_CALCUL_MODE'))
+				Configuration::updateValue('UPS_CARRIER_CALCUL_MODE', 'split');
 
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
@@ -99,6 +105,7 @@ class UpsCarrier extends CarrierModule
 			'UPS_CARRIER_CITY' => '',
 			'UPS_CARRIER_STATE' => '',
 			'UPS_CARRIER_COUNTRY' => '',
+			'UPS_CARRIER_CALCUL_MODE' => '',
 		);
 
 		// Loading Rate Service Group List
@@ -138,6 +145,12 @@ class UpsCarrier extends CarrierModule
 			'2a' => $this->l('Small Express Box'),
 			'2b' => $this->l('Medium Express Box'),
 			'2c' => $this->l('Large Express Box')
+		);
+
+		// Loading calcul mode list
+		$this->_calculModeList = array(
+			'onepackage' => $this->l('All items in one package'),
+			'split' => $this->l('Split one item per package')
 		);
 	}
 
@@ -553,6 +566,16 @@ class UpsCarrier extends CarrierModule
 								}
 					$html .= '</select>
 					<p>' . $this->l('Select packaging type from within the list.') . '</p>
+					</div>
+
+					<label>'.$this->l('Calcul mode').' : </label>
+						<div class="margin-form">
+							<select name="ups_carrier_calcul_mode">';
+								$idcalculmode = array();
+								foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
+									$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('ups_carrier_calcul_mode', Configuration::get('UPS_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
+					$html .= '</select>
+					<p>' . $this->l('Using the calcul mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specifics configurations for categories or product won\'t be use.') . '</p>
 					</div>';
 
 					if (Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))
@@ -645,6 +668,7 @@ class UpsCarrier extends CarrierModule
 			Configuration::updateValue('UPS_CARRIER_CITY', Tools::getValue('ups_carrier_city'));
 			Configuration::updateValue('UPS_CARRIER_STATE', Tools::getValue('ups_carrier_state'));
 			Configuration::updateValue('UPS_CARRIER_COUNTRY', Tools::getValue('ups_carrier_country'));
+			Configuration::updateValue('UPS_CARRIER_CALCUL_MODE', Tools::getValue('ups_carrier_calcul_mode'));
 			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]);
 			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]);
 			if (isset($this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]))
@@ -669,6 +693,7 @@ class UpsCarrier extends CarrierModule
 			Configuration::updateValue('UPS_CARRIER_CITY', Tools::getValue('ups_carrier_city')) AND
 			Configuration::updateValue('UPS_CARRIER_STATE', Tools::getValue('ups_carrier_state')) AND
 			Configuration::updateValue('UPS_CARRIER_COUNTRY', Tools::getValue('ups_carrier_country')) AND
+			Configuration::updateValue('UPS_CARRIER_CALCUL_MODE', Tools::getValue('ups_carrier_calcul_mode')) AND
 			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]) AND
 			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]))
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
@@ -1420,34 +1445,68 @@ class UpsCarrier extends CarrierModule
 		// Init var
 		$cost = 0;
 
-		// Getting shipping cost for each product
-		foreach ($wsParams['products'] as $product)
+		if (Configuration::get('UPS_CARRIER_CALCUL_MODE') == 'onepackage')
 		{
-			// Load specific configuration
-			$config = $this->loadShippingCostConfig($product);
+			$width = 0;
+			$height = 0;
+			$depth = 0;
+			$weight = 0;
+
+			foreach ($wsParams['products'] as $product)
+			{
+				if ($product['width'] && $product['width'] > $width) $width = $product['width'];
+				if ($product['height'] && $product['height'] > $height) $height = $product['height'];
+				if ($product['depth'] && $product['depth'] > $depth) $depth = $product['depth'];
+				if ($product['weight'])
+					$weight += ($product['weight'] * $product['quantity']);
+			}
 
 			// Get service in adequation with carrier and check if available
-			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
-			if (!isset($config['services'][$serviceSelected['id_ups_rate_service_code']]))
+			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `active` = 1 AND `id_carrier` = '.(int)($this->id_carrier));
+			if ($serviceSelected['id_ups_rate_service_code'] < 1)
 				return false;
 
-			// Load param product
 			$wsParams['service'] = $serviceSelected['code'];
-			for ($qty = 0; $qty < $product['quantity']; $qty++)
-				$wsParams['package_list'][] = array(
-					'width' => ($product['width'] ? $product['width'] : 1),
-					'height' => ($product['height'] ? $product['height'] : 1),
-					'depth' => ($product['depth'] ? $product['depth'] : 1),
-					'weight' => ($product['weight'] ? $product['weight'] : 1),
-					'packaging_type' => ($config['packaging_type_code'] ? $config['packaging_type_code'] : Configuration::get('UPS_CARRIER_PACKAGING_TYPE')),
-				);
-
-			// If Additional charges
-			if (isset($config['id_currency']) && isset($config['additionnal_charges']))
+			$wsParams['package_list'] = array();
+			$wsParams['package_list'][] = array(
+				'width' => ($width > 0 ? $width : 1),
+				'height' => ($height > 0 ? $height : 1),
+				'depth' => ($depth > 0 ? $depth : 1),
+				'weight' => ($weight > 0 ? $weight : 1),
+				'packaging_type' => Configuration::get('UPS_CARRIER_PACKAGING_TYPE'),
+			);
+		}
+		else
+		{
+			// Getting shipping cost for each product
+			foreach ($wsParams['products'] as $product)
 			{
-				$conversionRate = 1;
-				$conversionRate = $this->getCartCurrencyRate((int)($config['id_currency']), (int)$wsParams['id_cart']);
-				$cost += ($config['additionnal_charges'] * $conversionRate);
+				// Load specific configuration
+				$config = $this->loadShippingCostConfig($product);
+	
+				// Get service in adequation with carrier and check if available
+				$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
+				if (!isset($config['services'][$serviceSelected['id_ups_rate_service_code']]))
+					return false;
+	
+				// Load param product
+				$wsParams['service'] = $serviceSelected['code'];
+				for ($qty = 0; $qty < $product['quantity']; $qty++)
+					$wsParams['package_list'][] = array(
+						'width' => ($product['width'] ? $product['width'] : 1),
+						'height' => ($product['height'] ? $product['height'] : 1),
+						'depth' => ($product['depth'] ? $product['depth'] : 1),
+						'weight' => ($product['weight'] ? $product['weight'] : 1),
+						'packaging_type' => ($config['packaging_type_code'] ? $config['packaging_type_code'] : Configuration::get('UPS_CARRIER_PACKAGING_TYPE')),
+					);
+	
+				// If Additional charges
+				if (isset($config['id_currency']) && isset($config['additionnal_charges']))
+				{
+					$conversionRate = 1;
+					$conversionRate = $this->getCartCurrencyRate((int)($config['id_currency']), (int)$wsParams['id_cart']);
+					$cost += ($config['additionnal_charges'] * $conversionRate);
+				}
 			}
 		}
 
