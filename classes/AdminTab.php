@@ -847,7 +847,7 @@ abstract class AdminTabCore
 						if (Validate::isCleanHtml($val))
 							Configuration::updateValue($key, $val);
 						else
-							$this->_errors[] = Tools::displayError('Can not add configuration '.$key.' for lang '.Language::getIsoById((int)$language['id_lang']));
+							$this->_errors[] = Tools::displayError('Can not add configuration '.$key);
 
 					}
 				}
