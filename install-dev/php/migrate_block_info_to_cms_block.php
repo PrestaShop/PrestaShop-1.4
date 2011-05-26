@@ -42,11 +42,11 @@ function migrate_block_info_to_cms_block()
 			$id_block = Db::getInstance()->Insert_ID();
 			
 			$languages = Language::getLanguages(false);
-			foreach($languages as $language)
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_cms_block`, `id_lang`, `name`) VALUES ('.(int)$id_block.', '.(int)$language->id.', \'Information\')');
+			foreach($languages AS $language)
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_cms_block`, `id_lang`, `name`) VALUES ('.(int)$id_block.', '.(int)$language['id_lang'].', \'Information\')');
 			
 			//save ids cms of block information in new module cms bloc
-			foreach($ids_cms as $id_cms)
+			foreach($ids_cms AS $id_cms)
 				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'cms_block_page` (`id_cms_block`, `id_cms`, `is_category`) VALUES ('.(int)$id_block.', '.(int)$id_cms['id_cms'].', 0)');
 		}
 		else
