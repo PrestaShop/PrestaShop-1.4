@@ -155,7 +155,7 @@ class AdminSuppliers extends AdminTab
 				</div>
 				<label>'.$this->l('Logo:').' </label>
 				<div class="margin-form">';
-		echo		$this->displayImage($supplier->id, _PS_SUPP_IMG_DIR_.$supplier->id.'.jpg', 350);
+		echo		$this->displayImage($supplier->id, _PS_SUPP_IMG_DIR_.$supplier->id.'.jpg', 350, NULL, NULL, true);
 		echo '	<br /><input type="file" name="logo" />
 					<p>'.$this->l('Upload supplier logo from your computer').'</p>
 				</div>

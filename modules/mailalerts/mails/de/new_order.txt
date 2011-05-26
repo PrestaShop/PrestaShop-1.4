@@ -1,6 +1,6 @@
 Hallo,
 
-Sie haben eine neue Bestellung erhalten von {firstname} {lastname} auf {shop_name}.
+Sie haben eine neue Bestellung erhalten von {firstname} {lastname} ({email}) auf {shop_name}.
 
 Bestellung: {order_name}
 Ausgeführt am: {date}

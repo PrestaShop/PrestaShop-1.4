@@ -150,7 +150,7 @@ class AdminManufacturers extends AdminTab
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce.inc.js"></script>';
 		echo '<br style="clear:both;" /><br/><br/><label>'.$this->l('Logo').'</label>
 				<div class="margin-form">';
-					$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350);
+					$this->displayImage($manufacturer->id, _PS_MANU_IMG_DIR_.$manufacturer->id.'.jpg', 350, NULL, NULL, true);
 		echo '	<br /><input type="file" name="logo" />
 					<p>'.$this->l('Upload manufacturer logo from your computer').'</p>
 				</div>

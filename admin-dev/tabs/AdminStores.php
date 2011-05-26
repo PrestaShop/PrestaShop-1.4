@@ -167,11 +167,15 @@ class AdminStores extends AdminTab
 						  success: function(html)
 						  {
 						  	if (html == \'false\')
-						  		$("#contains_states").fadeOut();
+							{
+						  		$(\'#contains_states\').fadeOut();
+								$(\'#id_state option[value=0]\').attr(\'selected\', \'selected\');
+							}
 						  	else
 						  	{
-						  		$("#id_state").html(html);
-						  		$("#contains_states").fadeIn();
+						  		$(\'#id_state\').html(html);
+						  		$(\'#contains_states\').fadeIn();
+								$(\'#id_state option[value='.(int)$obj->id_state.']\').attr(\'selected\', \'selected\');
 						  	}
 						  }
 						});
@@ -256,7 +260,7 @@ class AdminStores extends AdminTab
 						<input type="file" name="image" />
 						<p class="clear">'.$this->l('Store window picture').'</p>';
 
-				echo $this->displayImage($obj->id, _PS_STORE_IMG_DIR_.'/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminStores'.(int)(Tab::getIdFromClassName('AdminStores')).(int)($cookie->id_employee)));
+				echo $this->displayImage($obj->id, _PS_STORE_IMG_DIR_.'/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminStores'.(int)(Tab::getIdFromClassName('AdminStores')).(int)($cookie->id_employee)), true);
 				
 				echo '</div>
 					<table cellpadding="2" cellspacing="2" style="padding: 10px; margin-top: 15px; border: 1px solid #BBB;">

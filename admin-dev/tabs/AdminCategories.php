@@ -283,7 +283,7 @@ class AdminCategories extends AdminTab
 				</div>
 				<label>'.$this->l('Image:').' </label>
 				<div class="margin-form">';
-		echo 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
+		echo 		$this->displayImage($obj->id, _PS_IMG_DIR_.'c/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)), true);
 		echo '	<br /><input type="file" name="image" />
 					<p>'.$this->l('Upload category logo from your computer').'</p>
 				</div>

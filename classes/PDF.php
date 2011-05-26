@@ -1113,4 +1113,3 @@ class PDFCore extends PDF_PageGroupCore
  	}
 
 }
-

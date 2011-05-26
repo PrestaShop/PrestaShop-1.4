@@ -1149,10 +1149,12 @@ abstract class AdminTabCore
 	 * @param string $image Local image filepath
 	 * @param integer $size Image width
 	 * @param integer $id_image Image id (for products with several images)
+	 * @param string $token Employee token used in the image deletion link
+	 * @param boolean $disableCache When turned on a timestamp will be added to the image URI to disable the HTTP cache
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayImage($id, $image, $size, $id_image = NULL, $token = NULL)
+	public function displayImage($id, $image, $size, $id_image = NULL, $token = NULL, $disableCache = false)
 	{
 		global $currentIndex;
 
@@ -1161,7 +1163,7 @@ abstract class AdminTabCore
 		if ($id AND file_exists($image))
 			echo '
 			<div id="image" >
-				'.cacheImage($image, $this->table.'_'.(int)($id).'.'.$this->imageType, $size, $this->imageType).'
+				'.cacheImage($image, $this->table.'_'.(int)($id).'.'.$this->imageType, $size, $this->imageType, $disableCache).'
 				<p align="center">'.$this->l('File size').' '.(filesize($image) / 1000).'kb</p>
 				<a href="'.$currentIndex.'&'.$this->identifier.'='.(int)($id).'&token='.$token.($id_image ? '&id_image='.(int)($id_image) : '').'&deleteImage=1">
 				<img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /> '.$this->l('Delete').'</a>

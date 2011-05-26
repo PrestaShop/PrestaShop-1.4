@@ -31,8 +31,10 @@
   * @param string $image Real image filename
   * @param string $cacheImage Cached filename
   * @param integer $size Desired size
+  * @param string $imageType Image type
+  * @param boolean $disableCache When turned on a timestamp will be added to the image URI to disable the HTTP cache
   */
-function cacheImage($image, $cacheImage, $size, $imageType = 'jpg')
+function cacheImage($image, $cacheImage, $size, $imageType = 'jpg', $disableCache = false)
 {
 	if (file_exists($image))
 	{
@@ -70,7 +72,7 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg')
 					imagejpeg($newImage, _PS_TMP_IMG_DIR_.$cacheImage, 86);
 			}
 		}
-		return '<img src="../img/tmp/'.$cacheImage.'" alt="" class="imgm" />';
+		return '<img src="../img/tmp/'.$cacheImage.($disableCache ? '?time='.time() : '').'" alt="" class="imgm" />';
 	}
 	return '';
 }

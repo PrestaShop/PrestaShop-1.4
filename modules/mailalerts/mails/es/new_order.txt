@@ -1,6 +1,6 @@
 Hola,
 
-Has un nuevo orden de {firstname} {lastname} en {shop_name}.
+Has un nuevo orden de {firstname} {lastname} ({email}) en {shop_name}.
 
 Orden: {order_name}
 Puesto en: {date}

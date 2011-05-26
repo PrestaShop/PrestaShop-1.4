@@ -77,14 +77,15 @@ class ImageCore extends ObjectModel
 		if (!parent::delete() || !$this->deleteProductAttributeImage())
 			return false;
 		
+
 		$result = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'image`
-		WHERE `id_product` = '.(int)($this->id_product).'
+		WHERE `id_product` = '.(int)$this->id_product.'
 		ORDER BY `position`');
 		$i = 1;
 		
-		foreach ($result as $row)
+		foreach ($result AS $row)
 		{
 			$row['position'] = $i++;
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table, $row, 'UPDATE', '`id_image` = '.(int)($row['id_image']), 1);
@@ -104,10 +105,9 @@ class ImageCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'image` i
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON i.`id_image` = il.`id_image`
-		WHERE i.`id_product` = '.(int)($id_product).'
-		AND il.`id_lang` = '.(int)($id_lang).'
-		ORDER BY `position` ASC');
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image`)
+		WHERE i.`id_product` = '.(int)$id_product.' AND il.`id_lang` = '.(int)$id_lang.'
+		ORDER BY i.`position` ASC');
 	}
 	
 	/**
