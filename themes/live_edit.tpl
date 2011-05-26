@@ -29,7 +29,7 @@
 	{/if}
 	var lastMove = '';
 	var saveOK = '{l s='Module position saved'}';
-	var confirmClose = '{l s='Are you sure ? If you close this window, position wont be save'}';
+	var confirmClose = '{l s='Are you sure? If you close this window, its position won\'t be saved'}';
 	var close = '{l s='Close'}';
 	var cancel = '{l s='Cancel'}';
 	var confirm = '{l s='Confirm'}';
