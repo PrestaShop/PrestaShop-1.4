@@ -173,6 +173,12 @@ class WebserviceRequestCore
 	 */
 	protected $objOutput;
 	
+	/**
+	 * Save the class name for override used in getInstance()
+	 * @var ws_current_classname
+	 */
+	public static $ws_current_classname;
+	
 	public function getOutputEnabled()
 	{
 		return $this->_outputEnabled;
@@ -194,7 +200,7 @@ class WebserviceRequestCore
 	public static function getInstance()
 	{
 		if(!isset(self::$_instance))
-			self::$_instance = new WebserviceRequest();
+			self::$_instance = new WebserviceRequest::$ws_current_classname();
 		return self::$_instance;
 	}
 	
@@ -378,7 +384,7 @@ class WebserviceRequestCore
 		if ($this->isActivated() && $this->authenticate())
 		{
 			if ($bad_class_name)
-				$this->setError(500, 'Bad override class name for this key. Please update class_name field');
+				$this->setError(500, 'Bad override class name for this key. Please update class_name field', 126);
 			// parse request url
 			$this->method = $method;
 			$this->urlSegment = explode('/', $url);
@@ -1097,7 +1103,7 @@ class WebserviceRequestCore
 				$object = new $this->resourceConfiguration['retrieveData']['className']($this->urlSegment[1]);
 				if ($object->id)
 					$this->objects[] = $object;
-				else
+				elseif (!count($this->errors))
 				{
 					$this->objOutput->setStatus(404);
 					$this->_outputEnabled = false;
@@ -1574,6 +1580,10 @@ class WebserviceRequestCore
 			$return['content'] = $this->objOutput->getErrors($this->errors);
 		}
 		
+		if (!isset($return['content']) || strlen($return['content']) <= 0)
+		{
+			$this->objOutput->setHeaderParams('Content-Type', '');
+		}
 		$return['headers'] = $this->objOutput->buildHeader();
 		restore_error_handler();
 		return $return;

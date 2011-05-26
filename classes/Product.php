@@ -3263,12 +3263,10 @@ class ProductCore extends ObjectModel
 	*/
 	public function getWsProductOptionValues()
 	{
-		$result = Db::getInstance()->ExecuteS('SELECT DISTINCT id_attribute_group as id
+		$result = Db::getInstance()->ExecuteS('SELECT DISTINCT pac.id_attribute as id
 			FROM `'._DB_PREFIX_.'product_attribute` pa
 			LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON (pac.id_product_attribute = pa.id_product_attribute)
-			LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (pac.id_attribute = a.id_attribute)
-			WHERE pa.id_product = '.(int)($this->id).'
-			GROUP BY pa.id_product_attribute');
+			WHERE pa.id_product = '.(int)$this->id);
 		return $result;
 	}
 
