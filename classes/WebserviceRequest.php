@@ -272,33 +272,12 @@ class WebserviceRequestCore
 	 * @param $ws_params
 	 * @return array field parameters.
 	 */
-	public function getPriceForProduct($field, $entity_object, $ws_params)
+public function getPriceForProduct($field, $entity_object, $ws_params)
 	{
 		if (is_int($entity_object->id))
 		{
-			$id_product = $entity_object->id;
-			$id_shop = (int)Shop::getCurrentShop();
-			
-			$id_product_attribute = (isset($id_product_attribute) ? $id_product_attribute : 1);
-			$id_country = (isset($id_country) ? $id_country : (int)(Configuration::get('PS_COUNTRY_DEFAULT')));
-			$id_state = (isset($id_state) ? $id_state : 0);
-			$id_county = (isset($id_county) ? $id_county : 0);
-			$id_currency = (isset($id_currency) ? $id_currency : Configuration::get('PS_CURRENCY_DEFAULT'));
-			$id_group = (isset($id_group) ? $id_group : Configuration::get('_PS_DEFAULT_CUSTOMER_GROUP_'));
-			$quantity = (isset($quantity) ? $quantity : 1);
-			$use_tax = (isset($use_tax) ? $use_tax : false);
-			$decimals = (isset($decimals) ? $decimals : 6);
-		
-			$only_reduc = (isset($only_reduc) ? $only_reduc : false);
-			$use_reduc = (isset($use_reduc) ? $use_reduc : true); // ?
-			$with_ecotax = (isset($with_ecotax) ? $with_ecotax : true); // ?
-			$specific_price_output = (isset($specific_price_output) ? $specific_price_output : null); // ?
-			
-			// UNUSED
-			$divisor = null;
-			$price = Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
-				$use_tax, $decimals, $only_reduc, $use_reduc, $with_ecotax, $specific_price_output, $divisor);
-			$field['value'] = Tools::ps_round($price, 2);
+			$arr_return = $this->specificPriceForProduct($entity_object, array('default_price'=>''));
+			$field['value'] = $arr_return['default_price']['value'];
 		}
 		return $field;
 	}
@@ -309,7 +288,7 @@ class WebserviceRequestCore
 	 * 
 	 * @param $entity_object
 	 * @param array $parameters
-	 * @return unknown_type
+	 * @return array
 	 */
 	public function specificPriceForProduct($entity_object, $parameters)
 	{
@@ -322,7 +301,7 @@ class WebserviceRequestCore
 			$id_group = (isset($value['group']) ? $value['group'] : Configuration::get('_PS_DEFAULT_CUSTOMER_GROUP_'));
 			$quantity = (isset($value['quantity']) ? $value['quantity'] : 1);
 			$use_tax = (isset($value['use_tax']) ? $value['use_tax'] : Configuration::get('PS_TAX'));
-			$decimals = (isset($value['decimals']) ? $value['decimals'] : 6);
+			$decimals = (isset($value['decimals']) ? $value['decimals'] : 2);
 			$id_product_attribute = (isset($value['product_attribute']) ? $value['product_attribute'] : null);
 			$id_county = (isset($value['county']) ? $value['county'] : null);
 			
@@ -331,9 +310,9 @@ class WebserviceRequestCore
 			$use_ecotax = (isset($value['use_ecotax']) ? $value['use_ecotax'] : true);
 			$specific_price_output = null;
 			$county = (isset($value['county']) ? $value['county'] : 0);
-			$return_value['value'] = Product::priceCalculation(null, $entity_object->id, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
+			$return_value = Product::priceCalculation(null, $entity_object->id, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
 									$use_tax, $decimals, $only_reduc, $use_reduc, $use_ecotax, $specific_price_output, null);
-			$arr_return[$name] = array('sqlId'=>strtolower($name), 'value'=>$return_value['value']);
+			$arr_return[$name] = array('sqlId'=>strtolower($name), 'value'=>$return_value);
 		}
 		return $arr_return;
 	}
