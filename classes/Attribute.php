@@ -50,7 +50,6 @@ class AttributeCore extends ObjectModel
 		'objectNodeName' => 'product_option_value',
 		'fields' => array(
 			'id_attribute_group' => array('xlink_resource'=> 'product_options'),
-			'default' => array(),
 		),
 	);
 
