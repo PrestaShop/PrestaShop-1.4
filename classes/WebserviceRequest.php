@@ -196,7 +196,6 @@ class WebserviceRequestCore
 	 *
 	 * @return object WebserviceRequest instance
 	 */
-	
 	public static function getInstance()
 	{
 		if(!isset(self::$_instance))
@@ -272,7 +271,7 @@ class WebserviceRequestCore
 	 * @param $ws_params
 	 * @return array field parameters.
 	 */
-public function getPriceForProduct($field, $entity_object, $ws_params)
+	public function getPriceForProduct($field, $entity_object, $ws_params)
 	{
 		if (is_int($entity_object->id))
 		{
@@ -292,6 +291,15 @@ public function getPriceForProduct($field, $entity_object, $ws_params)
 	 */
 	public function specificPriceForProduct($entity_object, $parameters)
 	{
+		foreach($parameters as $name => $value)
+		{
+			$parameters[$name]['object_id'] = $entity_object->id;
+		}
+		$arr_return = $this->specificPriceCalculation($parameters);
+		return $arr_return;
+	}
+	public function specificPriceCalculation($parameters)
+	{
 		$arr_return = array();
 		foreach($parameters as $name => $value)
 		{
@@ -310,10 +318,27 @@ public function getPriceForProduct($field, $entity_object, $ws_params)
 			$use_ecotax = (isset($value['use_ecotax']) ? $value['use_ecotax'] : true);
 			$specific_price_output = null;
 			$county = (isset($value['county']) ? $value['county'] : 0);
-			$return_value = Product::priceCalculation(null, $entity_object->id, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
+			$return_value = Product::priceCalculation(null, $value['object_id'], $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
 									$use_tax, $decimals, $only_reduc, $use_reduc, $use_ecotax, $specific_price_output, null);
 			$arr_return[$name] = array('sqlId'=>strtolower($name), 'value'=>$return_value);
 		}
+		return $arr_return;
+	}
+	// @todo : set this method out
+	/**
+	 * This method is used for calculate the price for products on a virtual fields
+	 * 
+	 * @param $entity_object
+	 * @param array $parameters
+	 * @return array
+	 */
+	public function specificPriceForCombination($entity_object, $parameters)
+	{
+		foreach($parameters as $name => $value)
+		{
+			$parameters[$name]['object_id'] = $entity_object->id_product;
+		}
+		$arr_return = $this->specificPriceCalculation($parameters);
 		return $arr_return;
 	}
 	
@@ -378,7 +403,10 @@ public function getPriceForProduct($field, $entity_object, $ws_params)
 				// @see WebserviceOutputBuilder::setSpecificField() method
 				$this->objOutput->setSpecificField($this, 'getPriceForProduct', 'price', 'products');
 				if (isset($this->urlFragments['price']))
+				{
+					$this->objOutput->setVirtualField($this, 'specificPriceForCombination', 'combinations', $this->urlFragments['price']);
 					$this->objOutput->setVirtualField($this, 'specificPriceForProduct', 'products', $this->urlFragments['price']);
+				}
 			} catch (Exception $e) {
 				$this->setError(500, $e->getMessage(), $e->getCode());
 			}
