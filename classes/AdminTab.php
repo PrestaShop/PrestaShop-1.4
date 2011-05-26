@@ -276,15 +276,14 @@ abstract class AdminTabCore
 			$required_class_fields[] = $required;
 
 		echo '<br />
-		<a href="#" onclick="if ($(\'.requiredFieldsParameters:visible\').length == 0) $(\'.requiredFieldsParameters\').slideDown(\'slow\'); else $(\'.requiredFieldsParameters\').slideUp(\'slow\'); return false;"><img src="../img/admin/duplicate.gif" alt="" /> '.$this->l('Advanced parameters...').'</a>
+		<p><a href="#" onclick="if ($(\'.requiredFieldsParameters:visible\').length == 0) $(\'.requiredFieldsParameters\').slideDown(\'slow\'); else $(\'.requiredFieldsParameters\').slideUp(\'slow\'); return false;"><img src="../img/admin/duplicate.gif" alt="" /> '.$this->l('Set required fields for this section').'</a></p>
 		<fieldset style="display:none" class="width1 requiredFieldsParameters">
 		<legend>'.$this->l('Required Fields').'</legend>
 		<form name="updateFields" action="'.$currentIndex.'&submitFields'.$this->table.'=1&token='.$this->token.'" method="post">
-		<p><b>'.$this->l('Select the fields you require.').'<br />
-		'.$this->l('Be careful in using this feature, a misuse can alter your store.').'</b></p>
+		<p><b>'.$this->l('Select the fields you would like to be required for this section.').'<br />
 		<table cellspacing="0" cellpadding="0" class="table width1 clear">
 		<tr>
-			<th><input type="checkbox" onclick="checkDelBoxes(this.form, \'tablesBox[]\', this.checked)" class="noborder" name="checkme"></th>
+			<th><input type="checkbox" onclick="checkDelBoxes(this.form, \'fieldsBox[]\', this.checked)" class="noborder" name="checkme"></th>
 			<th>'.$this->l('Field Name').'</th>
 		</tr>';
 
@@ -307,8 +306,7 @@ abstract class AdminTabCore
 					</tr>';
 		}
 		echo '</table><br />
-				<input style="margin-left:15px;" class="button" type="submit" value="'.$this->l('Submit').'" name="submitFields" />
-				<br />
+				<center><input style="margin-left:15px;" class="button" type="submit" value="'.$this->l('   Save   ').'" name="submitFields" /></center>
 		</fieldset>';
 	}
 
