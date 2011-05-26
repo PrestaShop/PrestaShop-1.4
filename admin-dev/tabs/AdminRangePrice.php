@@ -73,20 +73,30 @@ class AdminRangePrice extends AdminTab
 			return;
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 
+		$carrierArray = array();
+		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+		$id_carrier = Tools::getValue('id_carrier', $obj->id_carrier);
+		foreach ($carriers AS $carrier)
+			if (!$carrier['is_free'])
+				$carrierArray[] = '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
+
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/t/AdminRangePrice.gif" />'.$this->l('Price ranges').'</legend>
 				<label>'.$this->l('Carrier').'</label>
-				<div class="margin-form">
-					<select name="id_carrier">';
-			$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true, false, false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
-			$id_carrier = Tools::getValue('id_carrier', $obj->id_carrier);
-			foreach ($carriers AS $carrier)
-				echo '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
+				<div class="margin-form">';
+			if (count($carrierArray))
+			{
+				echo '<select name="id_carrier">';
+				foreach ($carrierArray AS $carrierOption)
+					echo $carrierOption;
+				echo '</select>
+				<p class="clear">'.$this->l('Carrier to which this range will be applied').'</p>';
+			}
+			else
+				echo '<div style="margin:5px 0 10px 0">'.$this->l('There isn\'t any carrier available for a price range.').'</div>';
 			echo '
-					</select>
-					<p class="clear">'.$this->l('Carrier to which this range will be applied').'</p>
 				</div>
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">

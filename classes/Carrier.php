@@ -30,6 +30,7 @@ class CarrierCore extends ObjectModel
 	const SHIPPING_METHOD_DEFAULT = 0;
 	const SHIPPING_METHOD_WEIGHT = 1;
 	const SHIPPING_METHOD_PRICE = 2;
+	const SHIPPING_METHOD_FREE = 3;
 
 	/** @var int Tax id (none = 0) */
 	public		$id_tax_rules_group;
@@ -396,42 +397,48 @@ class CarrierCore extends ObjectModel
 		else
 			$result = Carrier::getCarriers((int)($cookie->id_lang), true, false, (int)($id_zone), array(1), PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$resultsArray = array();
+
 		foreach ($result AS $k => $row)
 		{
 			$carrier = new Carrier((int)($row['id_carrier']));
-			// Get only carriers that are compliant with shipping method
-			if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
-			OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
+			$shippingMethod = $carrier->getShippingMethod();
+			if ($shippingMethod != Carrier::SHIPPING_METHOD_FREE)
 			{
-				unset($result[$k]);
-				continue ;
-			}
+				// Get only carriers that are compliant with shipping method
+				if (($shippingMethod == Carrier::SHIPPING_METHOD_WEIGHT AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false)
+					OR ($shippingMethod == Carrier::SHIPPING_METHOD_PRICE AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
+				{
+					unset($result[$k]);
+					continue ;
+				}
 
-			// If out-of-range behavior carrier is set on "Desactivate carrier"
-			if ($row['range_behavior'])
-			{
-				// Get id zone
-		        if (!$id_zone)
-					$id_zone = (int)$defaultCountry->id_zone;
+				// If out-of-range behavior carrier is set on "Desactivate carrier"
+				if ($row['range_behavior'])
+				{
+					// Get id zone
+					if (!$id_zone)
+						$id_zone = (int)$defaultCountry->id_zone;
 
-				// Get only carriers that have a range compatible with cart
-				if (($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
-				OR ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, $cart->id_currency))))
+					// Get only carriers that have a range compatible with cart
+					if (($shippingMethod == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))
+						OR ($shippingMethod == Carrier::SHIPPING_METHOD_PRICE AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, $cart->id_currency))))
 					{
 						unset($result[$k]);
 						continue ;
 					}
+				}
 			}
+			
 			$row['name'] = (strval($row['name']) != '0' ? $row['name'] : Configuration::get('PS_SHOP_NAME'));
-			$row['price'] = $cart->getOrderShippingCost((int)($row['id_carrier']));
-			$row['price_tax_exc'] = $cart->getOrderShippingCost((int)($row['id_carrier']), false);
+			$row['price'] = ($shippingMethod == Carrier::SHIPPING_METHOD_FREE ? 0 : $cart->getOrderShippingCost((int)$row['id_carrier']));
+			$row['price_tax_exc'] = ($shippingMethod == Carrier::SHIPPING_METHOD_FREE ? 0 : $cart->getOrderShippingCost((int)$row['id_carrier'], false));
 			$row['img'] = file_exists(_PS_SHIP_IMG_DIR_.(int)($row['id_carrier']).'.jpg') ? _THEME_SHIP_DIR_.(int)($row['id_carrier']).'.jpg' : '';
 
 			// If price is false, then the carrier is unavailable (carrier module)
 			if ($row['price'] === false)
 			{
 				unset($result[$k]);
-				continue ;
+				continue;
 			}
 
 			$resultsArray[] = $row;
@@ -640,12 +647,15 @@ class CarrierCore extends ObjectModel
 
 	public function getShippingMethod()
 	{
-		$method = (int)($this->shipping_method);
+		if ($this->is_free)
+			return Carrier::SHIPPING_METHOD_FREE;
+			
+		$method = (int)$this->shipping_method;
 
 		if ($this->shipping_method == Carrier::SHIPPING_METHOD_DEFAULT)
 		{
 			// backward compatibility
-			if ((int)(Configuration::get('PS_SHIPPING_METHOD')))
+			if ((int)Configuration::get('PS_SHIPPING_METHOD'))
 				$method = Carrier::SHIPPING_METHOD_WEIGHT;
 			else
 				$method = Carrier::SHIPPING_METHOD_PRICE;
@@ -656,12 +666,22 @@ class CarrierCore extends ObjectModel
 
 	public function getRangeTable()
 	{
-		return ($this->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT) ? 'range_weight' : 'range_price';
+		$shippingMethod = $this->getShippingMethod();
+		if ($shippingMethod == Carrier::SHIPPING_METHOD_WEIGHT)
+			return 'range_weight';
+		elseif ($shippingMethod == Carrier::SHIPPING_METHOD_PRICE)
+			return 'range_price';
+		return false;
 	}
 
 	public function getRangeObject()
 	{
-		return ($this->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT) ? new RangeWeight() : new RangePrice();
+		$shippingMethod = $this->getShippingMethod();
+		if ($shippingMethod == Carrier::SHIPPING_METHOD_WEIGHT)
+			return new RangeWeight();
+		elseif ($shippingMethod == Carrier::SHIPPING_METHOD_PRICE)
+			return new RangePrice();
+		return false;
 	}
 
 	public function getRangeSuffix()

@@ -196,89 +196,99 @@ class AdminShipping extends AdminTab
 	public function displayFormFees()
 	{
 		global $currentIndex;
-
+		
+		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+		$id_carrier = Tools::getValue('id_carrier') ? (int)(Tools::getValue('id_carrier')) : (int)($carriers[0]['id_carrier']);
+		$carrierSelected = new Carrier($id_carrier);
+		$carrierArray = array();
+		foreach ($carriers AS $carrier)
+			if (!$carrier['is_free'])
+				$carrierArray[] = '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option>';
+				
 		echo '<br /><br />
 		<h2>'.$this->l('Fees by carrier, geographical zone, and ranges').'</h2>
 		<form action="'.$currentIndex.'&token='.$this->token.'" id="fees" name="fees" method="post">
 			<fieldset>
-				<legend><img src="../img/admin/delivery.gif" />'.$this->l('Fees').'</legend>
-				<b>'.$this->l('Carrier:').' </b>
+				<legend><img src="../img/admin/delivery.gif" />'.$this->l('Fees').'</legend>';
+		
+		if (!count($carrierArray))
+			echo $this->l('You only have free carriers, there is no need to configure your delivery prices.');
+		else
+		{
+			echo '<b>'.$this->l('Carrier:').' </b>
 				<select name="id_carrier2" onchange="document.fees.submit();">';
-		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
-		$id_carrier = Tools::getValue('id_carrier') ? (int)(Tools::getValue('id_carrier')) : (int)($carriers[0]['id_carrier']);
-		$carrierSelected = new Carrier($id_carrier);
-		foreach ($carriers AS $carrier)
-			echo '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option>';
-		echo '
+			foreach ($carrierArray AS $carrierOption)
+				echo $carrierOption;
+			echo '
 				</select><br />
 				<table class="table space" cellpadding="0" cellspacing="0">
 					<tr>
 						<th>'.$this->l('Zone / Range').'</th>';
 
-				$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-				
-				$rangeObj = $carrierSelected->getRangeObject();
-				$rangeTable = $carrierSelected->getRangeTable();
-				$suffix = $carrierSelected->getRangeSuffix();
+			$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+			
+			$rangeObj = $carrierSelected->getRangeObject();
+			$rangeTable = $carrierSelected->getRangeTable();
+			$suffix = $carrierSelected->getRangeSuffix();
 
-				$rangeIdentifier = 'id_'.$rangeTable;
-				$ranges = $rangeObj->getRanges($id_carrier);
-				$delivery = Carrier::getDeliveryPriceByRanges($rangeTable, $id_carrier);
-				foreach ($delivery AS $deliv)
-					$deliveryArray[$deliv['id_zone']][$deliv['id_carrier']][$deliv[$rangeIdentifier]] = $deliv['price'];
-				if (!$carrierSelected->is_free)
-					foreach ($ranges AS $range)
-						echo '<th style="font-size: 11px;">'.(float)($range['delimiter1']).$suffix.' '.$this->l('to').' '.(float)($range['delimiter2']).$suffix.'</th>';
-					echo '</tr>';
+			$rangeIdentifier = 'id_'.$rangeTable;
+			$ranges = $rangeObj->getRanges($id_carrier);
+			$delivery = Carrier::getDeliveryPriceByRanges($rangeTable, $id_carrier);
+			foreach ($delivery AS $deliv)
+				$deliveryArray[$deliv['id_zone']][$deliv['id_carrier']][$deliv[$rangeIdentifier]] = $deliv['price'];
+			if (!$carrierSelected->is_free)
+				foreach ($ranges AS $range)
+					echo '<th style="font-size: 11px;">'.(float)($range['delimiter1']).$suffix.' '.$this->l('to').' '.(float)($range['delimiter2']).$suffix.'</th>';
+				echo '</tr>';
 
-				$zones = $carrierSelected->getZones();
-				if (sizeof($ranges) && !$carrierSelected->is_free)
+			$zones = $carrierSelected->getZones();
+			if (sizeof($ranges) && !$carrierSelected->is_free)
+			{
+				if(sizeof($zones) > 1)
 				{
-					if(sizeof($zones) > 1)
-					{
-						echo '
-						<tr>
-							<th style="height: 30px;">'.$this->l('All').'</th>';
-							foreach ($ranges AS $range)
-								echo '<td class="center">'.$currency->getSign('left').'<input type="text" id="fees_all_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" onkeyup="if ((event.keyCode||event.which) != 9){ spreadFees('.$range[$rangeIdentifier].') }" style="width: 45px;" />'.$currency->getSign('right').'</td>';
-						echo '</tr>';
-					}
-				
-					foreach ($zones AS $zone)
-					{
-						echo '
-						<tr>
-							<th style="height: 30px;">'.$zone['name'].'</th>';
-						foreach ($ranges AS $range)
-						{
-							if (isset($deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]]))
-								$price = $deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]];
-							else
-								$price = '0.00';
-							echo '<td class="center">'.$currency->getSign('left').'<input type="text" class="fees_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" onkeyup="clearAllFees('.$range[$rangeIdentifier].')" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
-						}
-						echo '
-						</tr>';
-					}
-				}
-					
-				echo '
+					echo '
 					<tr>
-						<td colspan="'.(sizeof($ranges) + 1).'" class="center" style="border-bottom: none; height: 40px;">
-							<input type="hidden" name="submitFees'.$this->table.'" value="1" />
-					';
-				if (sizeof($ranges) && !$carrierSelected->is_free)
-					echo '	<input type="submit" value="'.$this->l('   Save   ').'" class="button" />';
-				else if($carrierSelected->is_free)
-					echo $this->l('This is a free carrier');
-				else
-					echo $this->l('No ranges set for this carrier');
-				echo '
-						</td>
+						<th style="height: 30px;">'.$this->l('All').'</th>';
+						foreach ($ranges AS $range)
+							echo '<td class="center">'.$currency->getSign('left').'<input type="text" id="fees_all_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" onkeyup="if ((event.keyCode||event.which) != 9){ spreadFees('.$range[$rangeIdentifier].') }" style="width: 45px;" />'.$currency->getSign('right').'</td>';
+					echo '</tr>';
+				}
+			
+				foreach ($zones AS $zone)
+				{
+					echo '
+					<tr>
+						<th style="height: 30px;">'.$zone['name'].'</th>';
+					foreach ($ranges AS $range)
+					{
+						if (isset($deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]]))
+							$price = $deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]];
+						else
+							$price = '0.00';
+						echo '<td class="center">'.$currency->getSign('left').'<input type="text" class="fees_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" onkeyup="clearAllFees('.$range[$rangeIdentifier].')" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
+					}
+					echo '
 					</tr>';
-				echo '
-				</table>
-				<p>'.$this->l('Prices do not include tax.').'</p>
+				}
+			}
+				
+			echo '<tr>
+					<td colspan="'.(sizeof($ranges) + 1).'" class="center" style="border-bottom: none; height: 40px;">
+						<input type="hidden" name="submitFees'.$this->table.'" value="1" />';
+			if (sizeof($ranges) && !$carrierSelected->is_free)
+				echo '	<input type="submit" value="'.$this->l('   Save   ').'" class="button" />';
+			else if ($carrierSelected->is_free)
+				echo $this->l('This is a free carrier');
+			else
+				echo $this->l('No ranges set for this carrier');
+			echo '
+					</td>
+				</tr>';
+			echo '
+			</table>
+			<p>'.$this->l('Prices do not include tax.').'</p>';
+		}
+		echo '
 			</fieldset>
 			<input type="hidden" name="id_carrier" value="'.$id_carrier.'" />
 		</form>';
