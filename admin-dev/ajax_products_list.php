@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -36,8 +36,8 @@ if (!$query OR $query == '' OR strlen($query) < 1)
 
 /*
  * In the SQL request the "q" param is used entirely to match result in database.
- * In this way if string:"(ref : #ref_pattern#)" is displayed on the return list, 
- * they are no return values just because string:"(ref : #ref_pattern#)" 
+ * In this way if string:"(ref : #ref_pattern#)" is displayed on the return list,
+ * they are no return values just because string:"(ref : #ref_pattern#)"
  * is not write in the name field of the product.
  * So the ref pattern will be cut for the search request.
  */
@@ -49,7 +49,7 @@ if ($excludeIds && $excludeIds != 'NaN')
 	$excludeIds = implode(',', array_map('intval', explode(',', $excludeIds)));
 else
 	$excludeIds = '';
-	
+
 // Excluding downloadable products from packs because download from pack is not supported
 $excludeVirtuals = (bool)Tools::getValue('excludeVirtuals', false);
 
@@ -58,9 +58,10 @@ SELECT p.`id_product`, `reference`, pl.name
 FROM `'._DB_PREFIX_.'product` p
 LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.id_product = p.id_product)
 WHERE (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query).'%\') AND pl.id_lang = '.(int)($cookie->id_lang).
-(!empty($excludeIds) ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : '').
+(!empty($excludeIds) ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : ' ').
 ($excludeVirtuals ? 'AND p.id_product NOT IN (SELECT pd.id_product FROM `'._DB_PREFIX_.'product_download` pd WHERE (pd.id_product = p.id_product))' : ''));
 
 if ($items)
 	foreach ($items AS $item)
 		echo trim($item['name']).(!empty($item['reference']) ? ' (ref: '.$item['reference'].')' : '').'|'.(int)($item['id_product'])."\n";
+
