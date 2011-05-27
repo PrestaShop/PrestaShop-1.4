@@ -728,7 +728,8 @@ class AdminTranslations extends AdminTab
 			
 			if ($lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_, false, stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 5)))))
 			{
-				if ($lang_packs != '' AND $lang_packs = Tools::jsonDecode($lang_packs))
+				// Notice : for php < 5.2 compatibility, Tools::jsonDecode. The second parameter to true will set us 
+				if ($lang_packs != '' AND $lang_packs = Tools::jsonDecode($lang_packs,true))
 				{
 					echo '
 					<select id="params_import_language" name="params_import_language">
@@ -737,10 +738,10 @@ class AdminTranslations extends AdminTab
 					$alreadyInstalled = '<optgroup label="'.$this->l('Update a language').'">';
 					foreach($lang_packs AS $lang_pack)
 					{
-						if (!Language::isInstalled($lang_pack->iso_code))
-							echo '<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
+						if (!Language::isInstalled($lang_pack['iso_code']))
+							echo '<option value="'.$lang_pack['iso_code'].'|'.$lang_pack['version'].'">'.$lang_pack['name'].'</option>';
 						else 
-							$alreadyInstalled.='<option value="'.$lang_pack->iso_code.'|'.$lang_pack->version.'">'.$lang_pack->name.'</option>';
+							$alreadyInstalled.='<option value="'.$lang_pack['iso_code'].'|'.$lang_pack['version'].'">'.$lang_pack['name'].'</option>';
 					}
 					
 					echo '

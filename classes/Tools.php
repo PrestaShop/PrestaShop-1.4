@@ -1753,10 +1753,19 @@ FileETag INode MTime Size
 
 		return true;
 	}
-	public static function jsonDecode($json)
+
+	/**
+	 * jsonDecode convert json string to php array (or object if json_decode is available).
+	 * 
+	 * @param string $json 
+	 * @param boolean $assoc  (since 1.4.2.4)
+	 * @return array
+	 *
+	 */
+	public static function jsonDecode($json, $assoc = false)
 	{
 		if (function_exists('json_decode'))
-			return json_decode($json);
+			return json_decode($json, $assoc);
 		else
 		{
 			$comment = false;
