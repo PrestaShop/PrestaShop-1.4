@@ -8,7 +8,6 @@ $_MODULE['<{livezilla}prestashop>livezilla_c888438d14855d7d96a2724ee9c306bd'] = 
 $_MODULE['<{livezilla}prestashop>livezilla_1445650302f377af43ee1f7738dc7b50'] = 'Guida';
 $_MODULE['<{livezilla}prestashop>livezilla_3e4804ddb635637d8b873f7cfee85ed5'] = 'LiveZilla non è una soluzione in hosting, il che significa che LiveZilla ha bisogno di essere installato sul computer locale (fase 1) e anche sul tuo server (fase 2) .';
 $_MODULE['<{livezilla}prestashop>livezilla_f3a98489037e44119b187247b5894526'] = 'L\'installazione LiveZilla sul tuo server è chiamata Server LiveZilla.';
-$_MODULE['<{livezilla}prestashop>livezilla_6dc42b5059b4c589e225323855cd1100'] = 'Una volta terminate le fasi 1 & 2, è necessario compilare l\'URL della tua installazione LiveZilla qui sotto o direttamente il copia / incolla lo script nell\'area di testo. Questo integrerà LiveZilla con il tuo sito web (fase 3).';
 $_MODULE['<{livezilla}prestashop>livezilla_417de17915872c0304c7d0b01887fb9f'] = 'Una volta terminate le fasi 1 & 2, è necessario compilare l\'URL della tua installazione LiveZilla qui sotto o direttamente il copia / incolla lo script nell\'area di testo. Questo integrerà LiveZilla con il tuo sito web (fase 3).';
 $_MODULE['<{livezilla}prestashop>livezilla_1965c2fd150423248634c52fc53c6e80'] = 'La guida di installazione completa è disponibile sul';
 $_MODULE['<{livezilla}prestashop>livezilla_10827a74160be97df6c0873f7c9809b9'] = 'sito ufficiale LiveZilla';

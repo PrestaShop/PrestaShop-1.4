@@ -1,6 +1,6 @@
 Salve,
 
-Hai un nuovo ordine da parte di  {firstname} {lastname} ({email}) su {shop_name}.
+Hai un nuovo ordine da parte di  {firstname} {lastname} su {shop_name}.
 
 Ordine: {order_name}
 Effettuato il: {date}
