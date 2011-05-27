@@ -379,17 +379,14 @@ abstract class PaymentModuleCore extends Module
 					'{email}' => $customer->email,
 					'{delivery_block_txt}' => $this->_getFormatedAddress($delivery, "\n"),
 					'{invoice_block_txt}' => $this->_getFormatedAddress($invoice, "\n"),
-					'{delivery_block_html}' => $this->_getFormatedAddress($delivery, "<br />", array(
-			'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>'
-			, 'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>'
-
-		)),
-					'{invoice_block_html}' => $this->_getFormatedAddress($invoice, "<br />", array(
-			'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>'
-			, 'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>'
-
-		)),
-
+					'{delivery_block_html}' => $this->_getFormatedAddress($delivery, "<br />", 
+						array(
+							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>', 
+							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
+						'{invoice_block_html}' => $this->_getFormatedAddress($invoice, "<br />", 
+						array(
+							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>',
+							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
 					'{delivery_company}' => $delivery->company,
 					'{delivery_firstname}' => $delivery->firstname,
 					'{delivery_lastname}' => $delivery->lastname,
@@ -490,7 +487,7 @@ abstract class PaymentModuleCore extends Module
 
 	private function _getFormatedAddress(Address $the_address, $line_sep, $fields_style = array())
 	{
-		return AddressFormat::generateAddress($the_address, array('avoid' => array()), $line_sep);
+		return AddressFormat::generateAddress($the_address, array('avoid' => array()), $line_sep, ' ', $fields_style);
 	}
 
 	/**
