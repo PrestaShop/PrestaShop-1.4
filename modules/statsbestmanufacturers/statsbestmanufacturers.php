@@ -35,6 +35,7 @@ class StatsBestManufacturers extends ModuleGrid
 	private $_query =  null;
 	private $_columns = null;
 	private $_defaultSortColumn = null;
+	private $_defaultSortDirection = null;
 	private $_emptyMessage = null;
 	private $_pagingMessage = null;
 	
@@ -93,6 +94,7 @@ class StatsBestManufacturers extends ModuleGrid
 			'title' => $this->displayName,
 			'columns' => $this->_columns,
 			'defaultSortColumn' => $this->_defaultSortColumn,
+			'defaultSortDirection' => $this->_defaultSortDirection,
 			'emptyMessage' => $this->_emptyMessage,
 			'pagingMessage' => $this->_pagingMessage
 		);
