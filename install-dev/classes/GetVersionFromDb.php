@@ -34,6 +34,40 @@
 class GetVersionFromDb
 {
 	/**
+	 * @var array Because of some errors and differences between some upgrades files and some db.sql files, we need to ignore some fields.
+	 */
+	private $ignore = array(
+		'blocklink' => array(
+			'fields' => array('id_link', 'id_blocklink'),
+		),
+		'blocklink_lang' => array(
+			'fields' => array('id_link', 'id_blocklink'),
+			'keys' => array('primary'),
+		),
+		'cms_block' => array(
+			'fields' => array('id_block_cms', 'id_cms_block', 'display_store'),
+		),
+		'cms_block_lang' => array(
+			'fields' => array('id_block_cms', 'id_cms_block'),
+		),
+		'cms_block_page' => array(
+			'fields' => array('id_block_cms_page', 'id_cms_block_page'),
+		),
+		'log_email' => array(
+			'keys' => array('date_add', 'id_cart'),
+		),
+		'newsletter' => array(
+			'fields' => array('http_referer'),
+		),
+		'order_detail' => array(
+			'fields' => array('group_reduction', 'ecotax_tax_rate', 'id_currency', 'reduction_percent', 'reduction_amount'),
+		),
+		'webservice_account' => array(
+			'fields' =>	array('is_module', 'module_name'),
+		),
+	);
+	
+	/**
 	 * @var string Path to install directory
 	 */
 	private $installPath;
@@ -301,12 +335,6 @@ class GetVersionFromDb
 				$struct[$m[2]] = array();
 			}
 		}
-		
-		/*echo $currentVersion . ' :: ' . $nextVersion;
-		echo '<xmp>';
-		print_r($struct['carrier']);
-		echo '</xmp><hr />';
-		exit;*/
 
 		$this->schemas[count($this->schemas) - 1]['struct'] = $struct;
 	}
@@ -466,6 +494,12 @@ class GetVersionFromDb
 			// Browse all table for schema
 			foreach ($struct as $table => $fields)
 			{
+				// Is this table ignored ?
+				if (isset($this->ignore[$table]) && !$this->ignore[$table])
+				{
+					continue;
+				}
+
 				// Check if table exists
 				if (!isset($this->currentSchema[$table]))
 				{
@@ -486,6 +520,12 @@ class GetVersionFromDb
 					{
 						continue;
 					}
+					
+					// Is this field ignored ?
+					if (isset($this->ignore[$table], $this->ignore[$table]['fields']) && in_array($field, $this->ignore[$table]['fields']))
+					{
+						continue;
+					}
 
 					// Check if field exists
 					if (!isset($this->currentSchema[$table][$field]))
@@ -497,6 +537,12 @@ class GetVersionFromDb
 						{
 							break 2;
 						}
+						continue;
+					}
+					
+					// Is this type ignored ?
+					if (isset($this->ignore[$table], $this->ignore[$table]['types']) && in_array($field, $this->ignore[$table]['types']))
+					{
 						continue;
 					}
 					
@@ -519,6 +565,12 @@ class GetVersionFromDb
 					foreach ($fields['@keys'] as $name => $data)
 					{
 						if ($data == '?')
+						{
+							continue;
+						}
+						
+						// Is this index ignored ?
+						if (isset($this->ignore[$table], $this->ignore[$table]['keys']) && in_array($name, $this->ignore[$table]['keys']))
 						{
 							continue;
 						}
