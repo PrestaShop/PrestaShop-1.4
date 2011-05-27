@@ -137,7 +137,7 @@ class FrontControllerCore
 		{
 			$cart = new Cart((int)$cookie->id_cart);
 			if ($cart->OrderExists())
-				unset($cookie->id_cart, $cart);
+				unset($cookie->id_cart, $cart, $cookie->checkedTOS);
 			/* Delete product of cart, if user can't make an order from his country */
 			elseif (intval(Configuration::get('PS_GEOLOCATION_ENABLED')) AND 
 					!in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND 
