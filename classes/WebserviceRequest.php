@@ -309,7 +309,7 @@ class WebserviceRequestCore
 			$id_group = (isset($value['group']) ? $value['group'] : Configuration::get('_PS_DEFAULT_CUSTOMER_GROUP_'));
 			$quantity = (isset($value['quantity']) ? $value['quantity'] : 1);
 			$use_tax = (isset($value['use_tax']) ? $value['use_tax'] : Configuration::get('PS_TAX'));
-			$decimals = (isset($value['decimals']) ? $value['decimals'] : 2);
+			$decimals = (isset($value['decimals']) ? $value['decimals'] : Configuration::get('PS_PRICE_ROUND_MODE'));
 			$id_product_attribute = (isset($value['product_attribute']) ? $value['product_attribute'] : null);
 			$id_county = (isset($value['county']) ? $value['county'] : null);
 			
