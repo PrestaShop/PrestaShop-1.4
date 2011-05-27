@@ -26,7 +26,24 @@
 
 
 <a href="modules/socolissimo/redirect.php?{$serialsInput|escape:'htmlall':'UTF-8'}" class="iframe" style="display:none" id="soLink"></a>
-
+{if isset($opc) && $opc}
+<script type="text/javascript">
+	var opc = true;
+</script>
+{else}
+<script type="text/javascript">
+	var opc = false;
+</script>
+{/if}
+{if isset($already_select_delivery) && $already_select_delivery}
+<script type="text/javascript">
+	var already_select_delivery = true;
+</script>
+{else}
+<script type="text/javascript">
+	var already_select_delivery = false;
+</script>
+{/if}
 
 <script type="text/javascript">
 var post = '';
@@ -71,30 +88,39 @@ var post = '';
 			   });
         	}
 			});
-
-	function so_click() 
-	{
-		
-		if ($('#id_carrier{/literal}{$id_carrier}{literal}').is(':not(:checked)'))
-			$('[name=processCarrier]').unbind('click').click( function () { 
-			 	return true;
-			});
-		else
-			$('[name=processCarrier]').unbind('click').click(function () {
-				if (acceptCGV())				
-					$("#soLink").trigger("click");
-				return false;
-			})
-	}
-
 	$(document).ready(function() 
 	{
-
 		$('input[name=id_carrier]').change(function() {
 			so_click();	
 		});
 		so_click();
 	});
+	function so_click() 
+	{
+		if ($('#id_carrier{/literal}{$id_carrier}{literal}').is(':not(:checked)'))
+			$('[name=processCarrier]').unbind('click').click( function () { 
+			 	return true;
+			});
+		else if (opc)
+		{
+			if (!already_select_delivery)
+				$("#soLink").trigger("click");
+			else if (!$('#edit_socolissimo').length)
+			{
+				$('#id_carrier{/literal}{$id_carrier}{literal}').parent().prepend('<a style="margin-left:5px;" id="edit_socolissimo" href="#" onclick="$(\'#soLink\').trigger(\'click\');"><img src="img/admin/edit.gif"></a>');
+			}
+		}
+		else
+		{
+			$('[name=processCarrier]').unbind('click').click(function () {
+				if (acceptCGV())				
+					$("#soLink").trigger("click");
+				return false;
+			})
+
+		}
+	}
+	
 {/literal}
 </script>
 {foreach from=$inputs item=input key=name name=myLoop}

@@ -405,7 +405,12 @@ class Socolissimo extends CarrierModule
 			$ids = array();
 			foreach($carriers as $carrier)
 				$ids[] = $carrier['id_carrier'];
-
+			
+			if ($this->getDeliveryInfos((int)$cookie->id_cart, (int)$cookie->id_customer))
+				$smarty->assign('already_select_delivery', true);
+			else
+				$smarty->assign('already_select_delivery', false);
+			
 			if (($country->iso_code == 'FR') AND (Configuration::Get('SOCOLISSIMO_ID') != NULL) 
 				AND (Configuration::get('SOCOLISSIMO_KEY') != NULL) AND $this->checkAvailibility()
 				AND $this->checkSoCarrierAvailable((int)(Configuration::get('SOCOLISSIMO_CARRIER_ID'))) 
