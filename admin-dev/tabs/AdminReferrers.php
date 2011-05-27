@@ -400,8 +400,8 @@ class AdminReferrers extends AdminTab
 			{
 				var form = document.layers ? document.forms.product : document.product;
 				var filter = form.filterProduct.value;
-				$.getJSON("'.dirname($currentIndex).'/tabs/AdminReferrers.php",
-					{ajaxFillProducts:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_lang:'.(int)($cookie->id_lang).',filter:filter},
+				$.getJSON("'.dirname($currentIndex).'/ajax.php",
+					{ajaxReferrers:1,ajaxFillProducts:1,id_employee:'.(int)($cookie->id_employee).',token:"'.Tools::getValue('token').'",id_lang:'.(int)($cookie->id_lang).',filter:filter},
 					function(j) {
 						
 						form.selectProduct.length = j.length + 1;
