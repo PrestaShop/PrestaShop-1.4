@@ -106,7 +106,8 @@ class AdminPayment extends AdminTab
 		
 		$tokenModules = Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee));
 		echo '<h2 class="space">'.$this->l('Payment modules list').'</h2>';
-		echo '<input type="button" class="button" onclick="document.location=\'index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$this->paymentModules[0]->name.'&tab_module=payments_gateways\'" value="'.$this->l('Click to see the list of payment modules.').'" /><br>';
+		if (isset($this->paymentModules[0]))
+			echo '<input type="button" class="button" onclick="document.location=\'index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$this->paymentModules[0]->name.'&tab_module=payments_gateways\'" value="'.$this->l('Click to see the list of payment modules.').'" /><br>';
 		
 		foreach ($this->paymentModules as $module)
 			if ($module->active)
