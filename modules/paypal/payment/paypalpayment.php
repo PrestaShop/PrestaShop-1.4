@@ -79,7 +79,7 @@ class PaypalPayment extends Paypal
 			$shipping = round($cart->getOrderShippingCost($cart->id_carrier, false), 2);
 			$request .= '&ITEMAMT='.urlencode($amt);
 			$request .= '&SHIPPINGAMT='.urlencode($shipping);
-			$request .= '&TAXAMT='.urlencode((float)max($paymentAmount - $amt - $shipping, 0));
+			$request .= '&TAXAMT='.urlencode((float)max(round($paymentAmount - $amt - $shipping, 2), 0));
 		}
 		else
 		{
