@@ -315,7 +315,7 @@ class WebserviceRequestCore
 			
 			$only_reduc = (isset($value['only_reduction']) ? $value['only_reduction'] : false);
 			$use_reduc = (isset($value['use_reduction']) ? $value['use_reduction'] : true);
-			$use_ecotax = (isset($value['use_ecotax']) ? $value['use_ecotax'] : true);
+			$use_ecotax = (isset($value['use_ecotax']) ? $value['use_ecotax'] : Configuration::get('PS_USE_ECOTAX'));
 			$specific_price_output = null;
 			$county = (isset($value['county']) ? $value['county'] : 0);
 			$return_value = Product::priceCalculation(null, $value['object_id'], $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
