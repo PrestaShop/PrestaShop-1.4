@@ -259,7 +259,6 @@ function recherche_MR(num, args)
 		},
 		success: function(obj)
 			{
-				console.log(obj);
 				$('#loading_mr').hide();
 				$('#mondialrelay_'+num).html('');
 				$("#all_mondialrelay_map_" + num).show();

@@ -358,7 +358,7 @@ class MondialRelay extends Module
 		if ((!$res) OR ($res['MR_Selected_Num'] == 'LD1') OR ($res['MR_Selected_Num'] == 'LDS'))
 			return '';
 		$smarty->assign('mr_addr', $res['MR_Selected_LgAdr1'].($res['MR_Selected_LgAdr1'] ? ' - ' : '').$res['MR_Selected_LgAdr2'].($res['MR_Selected_LgAdr2'] ? ' - ' : '').$res['MR_Selected_LgAdr3'].($res['MR_Selected_LgAdr3'] ? ' - ' : '').$res['MR_Selected_LgAdr4'].($res['MR_Selected_LgAdr4'] ? ' - ' : '').$res['MR_Selected_CP'].' '.$res['MR_Selected_Ville'].' - '.$res['MR_Selected_Pays']);
-		return $this->display(__FILE__, 'orderDetail.tpl');
+		return $this->display(dirname(__FILE__), 'orderDetail.tpl');
 	}
 	
 	public function hookProcessCarrier($params)
@@ -504,7 +504,7 @@ class MondialRelay extends Module
 							'new_base_dir' => $new_base_dir,
 							'carriersextra' => $resultsArray));
 			$nbcarriers = $nbcarriers + $i;
-			return $this->display(__FILE__, 'mondialrelay.tpl');
+			return $this->display(dirname(__FILE__), 'mondialrelay.tpl');
 		}
 	}
 	
