@@ -754,7 +754,7 @@ class PayPal extends PaymentModule
 		$link = 'http://altfarm.mediaplex.com/ad/ck/3484-23403-8030-88?ID=PROCPRESTA';
 		$lang = new Language((int)($cookie->id_lang));
 		if ($lang->iso_code == 'es')
-			$link = 'http://altfarm.mediaplex.com/ad/ck/3484-34334-12439-1';
+			$link = 'http://www.paypal.com';
 		else if ($lang->iso_code == 'it')
 			$link = 'https://www.paypal-business.it/paypalpro.asp';
 		
@@ -762,7 +762,7 @@ class PayPal extends PaymentModule
 		<h2>'.$this->l('Solution').'</h2>
 		<h3>'.$this->l('Choose a solution:').'</h3>
 		<ul style="list-style-type:none;">
-			<li><input type="radio" name="payment_method" id="payment_method_0" value="'._PAYPAL_INTEGRAL_.'" '.($paymentMethod == _PAYPAL_INTEGRAL_ ? 'checked="checked" ' : '').'/> <label for="payment_method_0" class="t"><b>'.$this->l('Payments by credit cards').'</b>: '.$this->l('CB , Visa, Mastercard and PayPal account').'</label></li>
+			<li><input type="radio" name="payment_method" id="payment_method_0" value="'._PAYPAL_INTEGRAL_.'" '.($paymentMethod == _PAYPAL_INTEGRAL_ ? 'checked="checked" ' : '').'/> <label for="payment_method_0" class="t" style="font-weight:normal;"><b>'.$this->l('Payments by credit cards').'</b>: '.$this->l('CB , Visa, Mastercard and PayPal account').'</label></li>
 			<li><input type="radio" name="payment_method" id="payment_method_2" value="'._PAYPAL_INTEGRAL_EVOLUTION_.'" '.($paymentMethod == _PAYPAL_INTEGRAL_EVOLUTION_ ? 'checked="checked" ' : '').'/> <label for="payment_method_2" class="t"><b>'.$this->l('Payments by cards + seller protection').'</b></label><sup>*</sup> '.$this->l('(PayPal Integral Evolution, monthly subscription)').'</li>
 			<li><input type="radio" name="payment_method" id="payment_method_1" value="'._PAYPAL_OPTION_PLUS_.'" '.($paymentMethod == _PAYPAL_OPTION_PLUS_ ? 'checked="checked" ' : '').'/> <label for="payment_method_1" class="t">'.$this->l('Payments by').' <b>'.$this->l('PayPal account').'</b> '.$this->l('(PayPal Option+)').'</label></li>
 		</ul>
