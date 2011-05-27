@@ -214,7 +214,7 @@ if ($lm->getIncludeTradFilename())
 				if (step == 6)
 				{
 					$.ajax({
-						url: 'model.php?method=getVersionFromDb',
+						url: 'model.php?method=getVersionFromDb&language='+id_lang,
 						success: function (xml) 
 						{
 							var action = $(xml).find('action');
