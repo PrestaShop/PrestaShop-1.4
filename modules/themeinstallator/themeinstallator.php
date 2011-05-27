@@ -206,46 +206,38 @@ class ThemeInstallator extends Module
 
 	private function handleInformations()
 	{
-		if (!class_exists('ZipArchive', false))
-		{
-			$this->errors .= parent::displayError($this->l('Zip is not installed on your server. Ask your host for further information.'));
-			return ;
-		}
 		if (Tools::isSubmit('submitImport1'))
 		{
-			$zip = new ZipArchive();
 			if ($_FILES['themearchive']['error'] OR !file_exists($_FILES['themearchive']['tmp_name']))
 				$this->errors .= parent::displayError($this->l('An error has occurred during the file upload.'));
-			else if (substr($_FILES['themearchive']['name'], -4) != '.zip')
+			elseif (substr($_FILES['themearchive']['name'], -4) != '.zip')
 				$this->errors .= parent::displayError($this->l('Only zip files are allowed'));
-			else if (!rename($_FILES['themearchive']['tmp_name'], ARCHIVE_NAME))
+			elseif (!rename($_FILES['themearchive']['tmp_name'], ARCHIVE_NAME))
 				$this->errors .= parent::displayError($this->l('An error has occurred during the file copy.'));
-			else if ($zip->open(ARCHIVE_NAME, ZIPARCHIVE::CHECKCONS) === true)
+			elseif (Tools::ZipTest(ARCHIVE_NAME))
 				$this->page = 2;
 			else
 				$this->errors .= parent::displayError($this->l('Zip file seems to be broken'));
 		}
 		else if (Tools::isSubmit('submitImport2'))
 		{
-			$zip = new ZipArchive();
 			if (!Validate::isModuleUrl($url = Tools::getValue('linkurl'), $this->errors))
 				$this->errors .= parent::displayError($this->l('Only zip files are allowed'));
-			else if (!copy($url, ARCHIVE_NAME))
+			elseif (!copy($url, ARCHIVE_NAME))
 				$this->errors .= parent::displayError($this->l('Error during the file download'));
-			else if ($zip->open(ARCHIVE_NAME, ZIPARCHIVE::CHECKCONS) !== true)
+			elseif (Tools::ZipTest(ARCHIVE_NAME))
 				$this->errors .= parent::displayError($this->l('Zip file seems to be broken'));
 			else
 				$this->page = 2;
 		}
 		else if (Tools::isSubmit('submitImport3'))
 		{
-			$zip = new ZipArchive();
 			$filename = _IMPORT_FOLDER_.Tools::getValue('ArchiveName');
 			if (substr($filename, -4) != '.zip')
 				$this->errors .= parent::displayError($this->l('Only zip files are allowed'));
-			else if (!copy($filename, ARCHIVE_NAME))
+			elseif (!copy($filename, ARCHIVE_NAME))
 				$this->errors .= parent::displayError($this->l('An error has occurred during the file copy.'));
-			else if ($zip->open(ARCHIVE_NAME, ZIPARCHIVE::CHECKCONS) === true)
+			elseif (Tools::ZipTest(ARCHIVE_NAME))
 				$this->page = 2;
 			else
 				$this->errors .= parent::displayError($this->l('Zip file seems to be broken'));
@@ -258,12 +250,11 @@ class ThemeInstallator extends Module
 			$this->page = 4;
 		if ($this->page == 2 AND file_exists(ARCHIVE_NAME))
 		{
-			if (!$zip->extractTo(_IMPORT_FOLDER_))
+			if (!Tools::ZipExtract(ARCHIVE_NAME, _IMPORT_FOLDER_))
 			{
 				$this->errors .= parent::displayError($this->l('Error during zip extraction'));
 				$this->page = 1;
 			}
-			$zip->close();
 		}
 		if (file_exists(ARCHIVE_NAME))
 			unlink(ARCHIVE_NAME);

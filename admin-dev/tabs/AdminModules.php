@@ -289,16 +289,8 @@ class AdminModules extends AdminTab
 		$success = false;
 		if (substr($file, -4) == '.zip')
 		{
-			if (class_exists('ZipArchive', false))
-			{
-				$zip = new ZipArchive();
-				if ($zip->open($file) === true AND $zip->extractTo(_PS_MODULE_DIR_) AND $zip->close())
-					$success = true;
-				else
-					$this->_errors[] = Tools::displayError('Error while extracting module (file may be corrupted).');
-			}
-			else
-				$this->_errors[] = Tools::displayError('Zip is not installed on your server. Ask your host for further information.');
+			if (!Tools::ZipExtract($file, _PS_MODULE_DIR_))
+				$this->_errors[] = Tools::displayError('Error while extracting module (file may be corrupted).');
 		}
 		else
 		{

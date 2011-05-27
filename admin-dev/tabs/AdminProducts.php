@@ -929,7 +929,7 @@ class AdminProducts extends AdminTab
 			{
 				if (!Validate::isLoadedObject($product))
 					$this->_errors[] = Tools::displayError('Cannot add image because product add failed.');
-				elseif (substr($_FILES['image_product']['name'], -4) == '.zip' AND class_exists('ZipArchive', false))
+				elseif (substr($_FILES['image_product']['name'], -4) == '.zip')
 					return $this->uploadImageZip($product);
 				else
 				{
@@ -972,12 +972,10 @@ class AdminProducts extends AdminTab
 		}
 
 		// Unzip the file to a subdirectory
-		$zip = new ZipArchive();
 		$subdir = _PS_TMP_IMG_DIR_.uniqid().'/';
-
 		try
 		{
-			if ($zip->open($zipfile) !== true OR !mkdir($subdir, 0777) OR !$zip->extractTo($subdir) OR !$zip->close())
+			if (!Tools::ZipExtract($zipfile, $subdir))
 				throw new Exception(Tools::displayError('An error occurred while unzipping your file.'));
 
 			$types = array('.gif' => 'image/gif', '.jpeg' => 'image/jpeg', '.jpg' => 'image/jpg', '.png' => 'image/png');
@@ -2893,12 +2891,7 @@ class AdminProducts extends AdminTab
 					<td><b>'.(Tools::getValue('id_image')?$this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
 				</tr>
 				</table>
-				<hr style="width: 100%;" /><br />';
-
-		if (!class_exists('ZipArchive', false))
-			echo '<p class="warning">'.$this->l('You should ask your hosting provider to install or enable the PHP class "ZipArchive", therefore, you\'ll be able to save time by uploading a ZIP file containing several images.').'</p>';
-
-		echo '
+				<hr style="width: 100%;" /><br />
 				<table cellpadding="5" style="width:100%">
 					<tr>
 						<td class="col-left">'.$this->l('File:').'</td>
@@ -2906,7 +2899,7 @@ class AdminProducts extends AdminTab
 							<input type="file" id="image_product" name="image_product" />
 							<p>
 								'.$this->l('Format:').' JPG, GIF, PNG. '.$this->l('Filesize:').' '.($this->maxImageSize / 1000).''.$this->l('Kb max.').'
-								'.(class_exists('ZipArchive', false) ? '<br />'.$this->l('You can also upload a ZIP file containing several images. Thumbnails will be resized automatically.') : '').'
+								<br />'.$this->l('You can also upload a ZIP file containing several images. Thumbnails will be resized automatically.
 							</p>
 						</td>
 					</tr>

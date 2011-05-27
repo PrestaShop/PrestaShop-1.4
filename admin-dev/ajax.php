@@ -36,9 +36,6 @@ if (isset($_GET['changeParentUrl']))
 	echo '<script type="text/javascript">parent.parent.document.location.href = "'.addslashes(urldecode(Tools::getValue('changeParentUrl'))).'";</script>';
 if (isset($_GET['installBoughtModule']))
 {
-	if (!class_exists('ZipArchive', false))
-		die(displayJavascriptAlert('Host does not handle Zip files'));
-	$zip = new ZipArchive();
 	$file = false;
 	while ($file === false OR file_exists(_PS_MODULE_DIR_.$file))
 		$file = uniqid();
@@ -60,7 +57,7 @@ if (isset($_GET['installBoughtModule']))
 		die($displayJavascriptAlert);
 	}
 	fclose($fd);
-	if ($zip->open($file) !== true OR !$zip->extractTo(_PS_MODULE_DIR_) OR !$zip->close())
+	if (!Tools::ZipExtract($file, _PS_MODULE_DIR_))
 	{
 		unlink($file);
 		die(displayJavascriptAlert('Cannot unzip file'));
