@@ -337,6 +337,7 @@ class WebserviceRequestCore
 		foreach($parameters as $name => $value)
 		{
 			$parameters[$name]['object_id'] = $entity_object->id_product;
+			$parameters[$name]['product_attribute'] = $entity_object->id;
 		}
 		$arr_return = $this->specificPriceCalculation($parameters);
 		return $arr_return;
