@@ -125,6 +125,10 @@ class GetVersionFromDb
 	 */
 	public function __construct($compareTypes = true, $fastExecution = false)
 	{
+		// added for compatibility prestashop version < 1.3.7
+		if(!defined('_PS_CACHE_ENABLED_'))
+			define('_PS_CACHE_ENABLED_', '0');
+
 		$this->installPath = INSTALL_PATH . '/';
 		$this->prefix = _DB_PREFIX_;
 		$this->compareTypes = $compareTypes;
