@@ -2899,7 +2899,7 @@ class AdminProducts extends AdminTab
 							<input type="file" id="image_product" name="image_product" />
 							<p>
 								'.$this->l('Format:').' JPG, GIF, PNG. '.$this->l('Filesize:').' '.($this->maxImageSize / 1000).''.$this->l('Kb max.').'
-								<br />'.$this->l('You can also upload a ZIP file containing several images. Thumbnails will be resized automatically.
+								<br />'.$this->l('You can also upload a ZIP file containing several images. Thumbnails will be resized automatically.').'
 							</p>
 						</td>
 					</tr>
