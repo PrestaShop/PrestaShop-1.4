@@ -197,7 +197,7 @@ class Cheque extends PaymentModule
 		$state = $params['objOrder']->getCurrentState();
 		if ($state == _PS_OS_CHEQUE_ OR $state == _PS_OS_OUTOFSTOCK_)
 			$smarty->assign(array(
-				'total_to_pay' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false, false),
+				'total_to_pay' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
 				'chequeName' => $this->chequeName,
 				'chequeAddress' => nl2br2($this->address),
 				'status' => 'ok',

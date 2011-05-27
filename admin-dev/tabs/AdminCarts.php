@@ -88,7 +88,7 @@ class AdminCarts extends AdminTab
 			(<a href="mailto:'.$customer->email.'">'.$customer->email.'</a>)<br /><br />
 			'.$this->l('Account registered:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
 			'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
-			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice($customerStats['total_orders'], $currency, false, false).'</b><br />';
+			'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice($customerStats['total_orders'], $currency, false).'</b><br />';
 			else
 				echo $this->l('Guest not registered').'</span>';
 		echo '</fieldset>';
@@ -188,10 +188,10 @@ class AdminCarts extends AdminTab
 										'.($product['reference'] ? $this->l('Ref:').' '.$product['reference'] : '')
 										.(($product['reference'] AND $product['supplier_reference']) ? ' / '.$product['supplier_reference'] : '')
 										.'</a></td>
-									<td align="center">'.Tools::displayPrice($product_price, $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice($product_price, $currency, false).'</td>
 									<td align="center" class="productQuantity">'.((int)($product['cart_quantity']) - $product['customizationQuantityTotal']).'</td>
 									<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
-									<td align="right">'.Tools::displayPrice($product_total, $currency, false, false).'</td>
+									<td align="right">'.Tools::displayPrice($product_total, $currency, false).'</td>
 								</tr>';
 						}
 					echo '
@@ -269,10 +269,10 @@ class AdminCarts extends AdminTab
 					'.($product['reference'] ? $this->l('Ref:').' '.$product['reference'] : '')
 					.(($product['reference'] AND $product['supplier_reference']) ? ' / '.$product['supplier_reference'] : '')
 					.'</a></td>
-				<td align="center">'.Tools::displayPrice($product['price_wt'], $currency, false, false).'</td>
+				<td align="center">'.Tools::displayPrice($product['price_wt'], $currency, false).'</td>
 				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
 				<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
-				<td align="right">'.Tools::displayPrice($product['total_customization_wt'], $currency, false, false).'</td>
+				<td align="right">'.Tools::displayPrice($product['total_customization_wt'], $currency, false).'</td>
 			</tr>';
 			foreach ($customizedDatas[(int)($product['id_product'])][(int)($product['id_product_attribute'])] AS $customization)
 			{

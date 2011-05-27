@@ -332,7 +332,7 @@ class AdminOrders extends AdminTab
 						else
 						{
 							$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false, false);
+							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false);
 							$params['{voucher_num}'] = $voucher->name;
 							@Mail::Send((int)($order->id_lang), 'voucher', Mail::l('New voucher regarding your order'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
 						}
@@ -371,12 +371,12 @@ class AdminOrders extends AdminTab
 					'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'].'<br />' : '')
 					.($product['product_supplier_reference'] ? $this->l('Ref Supplier:').' '.$product['product_supplier_reference'] : '')
 					.'</a></td>
-				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false, false).'</td>
+				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false).'</td>
 				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
 				'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityRefunded'].'</td>' : '').'
 				'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityReturned'].'</td>' : '').'
 				<td align="center" class="productQuantity"> - </td>
-				<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $product['customizationQuantityTotal'], $currency, false, false).'</td>
+				<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $product['customizationQuantityTotal'], $currency, false).'</td>
 				<td align="center" class="cancelCheck">--</td>
 			</tr>';
 			foreach ($customizedDatas[(int)($product['product_id'])][(int)($product['product_attribute_id'])] AS $customizationId => $customization)
@@ -409,7 +409,7 @@ class AdminOrders extends AdminTab
 					'.($order->hasBeenPaid() ? '<td align="center">'.$customization['quantity_refunded'].'</td>' : '').'
 					'.($order->hasBeenDelivered() ? '<td align="center">'.$customization['quantity_returned'].'</td>' : '').'
 					<td align="center">-</td>
-					<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $customization['quantity'], $currency, false, false).'</td>
+					<td align="center">'.Tools::displayPrice(Tools::ps_round($order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] : $product['product_price_wt'], 2) * $customization['quantity'], $currency, false).'</td>
 					<td align="center" class="cancelCheck">
 						<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.(int)($customization['quantity_returned']).'" />
 						<input type="hidden" name="totalQty" id="totalQty" value="'.(int)($customization['quantity']).'" />
@@ -486,7 +486,7 @@ class AdminOrders extends AdminTab
 
 
 		if ($order->total_paid != $order->total_paid_real)
-			echo '<center><span class="warning" style="font-size: 16px">'.$this->l('Warning:').' '.Tools::displayPrice($order->total_paid_real, $currency, false, false).' '.$this->l('paid instead of').' '.Tools::displayPrice($order->total_paid, $currency, false, false).' !</span></center><div class="clear"><br /><br /></div>';
+			echo '<center><span class="warning" style="font-size: 16px">'.$this->l('Warning:').' '.Tools::displayPrice($order->total_paid_real, $currency, false).' '.$this->l('paid instead of').' '.Tools::displayPrice($order->total_paid, $currency, false).' !</span></center><div class="clear"><br /><br /></div>';
 
 		// display bar code if module enabled
 		$hook = Module::hookExec('invoice', array('id_order' => $order->id));
@@ -575,7 +575,7 @@ class AdminOrders extends AdminTab
 			{
 				echo $this->l('Account registered:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
 				'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
-				'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round(Tools::convertPrice($customerStats['total_orders'], $currency), 2), $currency, false, false).'</b><br />';
+				'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round(Tools::convertPrice($customerStats['total_orders'], $currency), 2), $currency, false).'</b><br />';
 			}
 			echo '</fieldset>';
 		}
@@ -653,11 +653,11 @@ class AdminOrders extends AdminTab
 			<div style="margin: 2px 0 1em 190px;">'.$order->payment.' '.($order->module ? '('.$order->module.')' : '').'</div>
 			<div style="margin: 2px 0 1em 50px;">
 				<table class="table" width="300px;" cellspacing="0" cellpadding="0">
-					<tr><td width="150px;">'.$this->l('Products').'</td><td align="right">'.Tools::displayPrice($order->getTotalProductsWithTaxes(), $currency, false, false).'</td></tr>
-					'.($order->total_discounts > 0 ? '<tr><td>'.$this->l('Discounts').'</td><td align="right">-'.Tools::displayPrice($order->total_discounts, $currency, false, false).'</td></tr>' : '').'
-					'.($order->total_wrapping > 0 ? '<tr><td>'.$this->l('Wrapping').'</td><td align="right">'.Tools::displayPrice($order->total_wrapping, $currency, false, false).'</td></tr>' : '').'
-					<tr><td>'.$this->l('Shipping').'</td><td align="right">'.Tools::displayPrice($order->total_shipping, $currency, false, false).'</td></tr>
-					<tr style="font-size: 20px"><td>'.$this->l('Total').'</td><td align="right">'.Tools::displayPrice($order->total_paid, $currency, false, false).($order->total_paid != $order->total_paid_real ? '<br /><font color="red">('.$this->l('Paid:').' '.Tools::displayPrice($order->total_paid_real, $currency, false, false).')</font>' : '').'</td></tr>
+					<tr><td width="150px;">'.$this->l('Products').'</td><td align="right">'.Tools::displayPrice($order->getTotalProductsWithTaxes(), $currency, false).'</td></tr>
+					'.($order->total_discounts > 0 ? '<tr><td>'.$this->l('Discounts').'</td><td align="right">-'.Tools::displayPrice($order->total_discounts, $currency, false).'</td></tr>' : '').'
+					'.($order->total_wrapping > 0 ? '<tr><td>'.$this->l('Wrapping').'</td><td align="right">'.Tools::displayPrice($order->total_wrapping, $currency, false).'</td></tr>' : '').'
+					<tr><td>'.$this->l('Shipping').'</td><td align="right">'.Tools::displayPrice($order->total_shipping, $currency, false).'</td></tr>
+					<tr style="font-size: 20px"><td>'.$this->l('Total').'</td><td align="right">'.Tools::displayPrice($order->total_paid, $currency, false).($order->total_paid != $order->total_paid_real ? '<br /><font color="red">('.$this->l('Paid:').' '.Tools::displayPrice($order->total_paid_real, $currency, false, false).')</font>' : '').'</td></tr>
 				</table>
 			</div>
 			<div style="float: left; margin-right: 10px; margin-left: 42px;">
@@ -767,12 +767,12 @@ class AdminOrders extends AdminTab
 										'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'].'<br />' : '')
 										.($product['product_supplier_reference'] ? $this->l('Ref Supplier:').' '.$product['product_supplier_reference'] : '')
 										.'</a></td>
-									<td align="center">'.Tools::displayPrice($product_price, $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice($product_price, $currency, false).'</td>
 									<td align="center" class="productQuantity">'.((int)($product['product_quantity']) - $product['customizationQuantityTotal']).'</td>
 									'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.(int)($product['product_quantity_refunded']).'</td>' : '').'
 									'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.(int)($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
-									<td align="center">'.Tools::displayPrice(Tools::ps_round($product_price, 2) * ((int)($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false, false).'</td>
+									<td align="center">'.Tools::displayPrice(Tools::ps_round($product_price, 2) * ((int)($product['product_quantity']) - $product['customizationQuantityTotal']), $currency, false).'</td>
 									<td align="center" class="cancelCheck">
 										<input type="hidden" name="totalQtyReturn" id="totalQtyReturn" value="'.(int)($product['product_quantity_return']).'" />
 										<input type="hidden" name="totalQty" id="totalQty" value="'.(int)($product['product_quantity']).'" />

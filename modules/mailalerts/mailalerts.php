@@ -141,9 +141,9 @@ class MailAlerts extends Module
 				'<tr style="background-color:'.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
 					<td style="padding:0.6em 0.4em;">'.$product['product_reference'].'</td>
 					<td style="padding:0.6em 0.4em;"><strong>'.$product['product_name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
-					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($unit_price, $currency, false, false).'</td>
+					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($unit_price, $currency, false).'</td>
 					<td style="padding:0.6em 0.4em; text-align:center;">'.(int)($product['product_quantity']).'</td>
-					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(($unit_price * $product['product_quantity']), $currency, false, false).'</td>
+					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(($unit_price * $product['product_quantity']), $currency, false).'</td>
 				</tr>';
 		}
 		foreach ($params['order']->getDiscounts() AS $discount)
@@ -151,7 +151,7 @@ class MailAlerts extends Module
 			$itemsTable .=
 			'<tr style="background-color:#EBECEE;">
 					<td colspan="4" style="padding:0.6em 0.4em; text-align:right;">'.$this->l('Voucher code:').' '.$discount['name'].'</td>
-					<td style="padding:0.6em 0.4em; text-align:right;">-'.Tools::displayPrice($discount['value'], $currency, false, false).'</td>
+					<td style="padding:0.6em 0.4em; text-align:right;">-'.Tools::displayPrice($discount['value'], $currency, false).'</td>
 			</tr>';
 		}
 		if ($delivery->id_state)

@@ -208,7 +208,7 @@ class BankWire extends PaymentModule
 		$state = $params['objOrder']->getCurrentState();
 		if ($state == _PS_OS_BANKWIRE_ OR $state == _PS_OS_OUTOFSTOCK_)
 			$smarty->assign(array(
-				'total_to_pay' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false, false),
+				'total_to_pay' => Tools::displayPrice($params['total_to_pay'], $params['currencyObj'], false),
 				'bankwireDetails' => nl2br2($this->details),
 				'bankwireAddress' => nl2br2($this->address),
 				'bankwireOwner' => $this->owner,

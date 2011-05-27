@@ -151,7 +151,7 @@ class OrderHistoryCore extends ObjectModel
 			if ($templateVars)
 				$data = array_merge($data, $templateVars);
 			$order = new Order((int)($this->id_order));
-			$data['{total_paid}'] = Tools::displayPrice((float)($order->total_paid), new Currency((int)($order->id_currency)), false, false);
+			$data['{total_paid}'] = Tools::displayPrice((float)($order->total_paid), new Currency((int)($order->id_currency)), false);
 			$data['{order_name}'] = sprintf("#%06d", (int)($order->id));
 			
 			// An additional email is sent the first time a virtual item is validated
