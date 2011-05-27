@@ -47,6 +47,7 @@ class StatsBestManufacturers extends ModuleGrid
 		$this->need_instance = 0;
 		
 		$this->_defaultSortColumn = 'sales';
+		$this->_defaultSortDirection = 'DESC';
 		$this->_emptyMessage = $this->l('Empty recordset returned');
 		$this->_pagingMessage = $this->l('Displaying').' {0} - {1} '.$this->l('of').' {2}';
 		
