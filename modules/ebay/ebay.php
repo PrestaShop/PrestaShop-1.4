@@ -134,8 +134,8 @@ class Ebay extends Module
 		    !$this->registerHook('addproduct') ||
 		    !$this->registerHook('updateproduct') ||
 		    !$this->registerHook('updateProductAttribute') ||
-                    !$this->registerHook('deleteproduct') ||
-                    !$this->registerHook('newOrder') ||
+				!$this->registerHook('deleteproduct') ||
+				!$this->registerHook('newOrder') ||
 		    !$this->registerHook('backOfficeTop') ||
 		    !$this->registerHook('header') ||
 		    !$this->registerHook('updateOrderStatus'))
@@ -313,43 +313,55 @@ class Ebay extends Module
 						$address->add();
 						$id_address = $address->id;
 
- 						$cartAdd = new Cart();
-					        $cartAdd->id_customer = $id_customer;
-					        $cartAdd->id_address_invoice = $id_address;
-					        $cartAdd->id_address_delivery = $id_address;
-					        $cartAdd->id_carrier = 1;
-					        $cartAdd->id_lang = $this->id_lang;
-					        $cartAdd->id_currency = Currency::getIdByIsoCode('EUR');
-	 					$cartAdd->add();
-					        foreach ($order['product_list'] as $product)
-					        	$cartAdd->updateQty((int)($product['quantity']), (int)($product['id_product']), (isset($product['id_product_attribute']) ? $product['id_product_attribute'] : NULL));
-			        	        $cartAdd->update();
-
-						// Fix on sending e-mail
-						Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY-ALAIN'), 'UPDATE', '`id_customer` = '.(int)$id_customer);
-						$customerClear = new Customer();
-						if (method_exists($customerClear, 'clearCache'))
-							$customerClear->clearCache(true);
-
-						// Validate order
-		        			$paiement = new eBayPayment();
-					        $paiement->validateOrder(intval($cartAdd->id), _PS_OS_PAYMENT_, floatval($cartAdd->getOrderTotal(true, 3)), 'Paypal eBay', NULL, array(), intval($cartAdd->id_currency));
-					        $id_order = $paiement->currentOrder;
-
-						// Fix on sending e-mail
-						Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($order['email'])), 'UPDATE', '`id_customer` = '.(int)$id_customer);
-
-						// Update price (because of possibility of price impact)
-						$updateOrder = array(
-							'total_paid' => floatval($order['amount']),
-							'total_paid_real' => floatval($order['amount']),
-							'total_products' => floatval($order['amount']),
-							'total_products_wt' => floatval($order['amount']),
-							'total_shipping' => floatval($order['shippingServiceCost']),
-						);
-						Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', $updateOrder, 'UPDATE', '`id_order` = '.(int)$id_order);
-					        foreach ($order['product_list'] as $product)
-							Db::getInstance()->autoExecute(_DB_PREFIX_.'order_detail', array('product_price' => floatval($product['price']), 'tax_rate' => 0, 'reduction_percent' => 0), 'UPDATE', '`id_order` = '.(int)$id_order.' AND `product_id` = '.(int)$product['id_product'].' AND `product_attribute_id` = '.(int)$product['id_product_attribute']);
+						$flag = 1;
+						foreach ($order['product_list'] as $product)
+						{
+							if ((int)$product['id_product'] < 1 || !Db::getInstance()->getValue('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product['id_product']))
+								$flag = 0;
+							if (isset($product['id_product_attribute']) && !Db::getInstance()->getValue('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$product['id_product'].' AND `id_product_attribute` = '.(int)$product['id_product_attribute']))
+								$flag = 0;
+						}
+						
+						if ($flag == 1)
+						{
+	 						$cartAdd = new Cart();
+							$cartAdd->id_customer = $id_customer;
+							$cartAdd->id_address_invoice = $id_address;
+							$cartAdd->id_address_delivery = $id_address;
+							$cartAdd->id_carrier = 1;
+							$cartAdd->id_lang = $this->id_lang;
+							$cartAdd->id_currency = Currency::getIdByIsoCode('EUR');
+		 					$cartAdd->add();
+							foreach ($order['product_list'] as $product)
+								$cartAdd->updateQty((int)($product['quantity']), (int)($product['id_product']), (isset($product['id_product_attribute']) ? $product['id_product_attribute'] : NULL));
+							$cartAdd->update();
+	
+							// Fix on sending e-mail
+							Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int)$id_customer);
+							$customerClear = new Customer();
+							if (method_exists($customerClear, 'clearCache'))
+								$customerClear->clearCache(true);
+	
+							// Validate order
+							$paiement = new eBayPayment();
+							$paiement->validateOrder(intval($cartAdd->id), _PS_OS_PAYMENT_, floatval($cartAdd->getOrderTotal(true, 3)), 'Paypal eBay', NULL, array(), intval($cartAdd->id_currency));
+							$id_order = $paiement->currentOrder;
+	
+							// Fix on sending e-mail
+							Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($order['email'])), 'UPDATE', '`id_customer` = '.(int)$id_customer);
+	
+							// Update price (because of possibility of price impact)
+							$updateOrder = array(
+								'total_paid' => floatval($order['amount']),
+								'total_paid_real' => floatval($order['amount']),
+								'total_products' => floatval($order['amount']),
+								'total_products_wt' => floatval($order['amount']),
+								'total_shipping' => floatval($order['shippingServiceCost']),
+							);
+							Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', $updateOrder, 'UPDATE', '`id_order` = '.(int)$id_order);
+							foreach ($order['product_list'] as $product)
+								Db::getInstance()->autoExecute(_DB_PREFIX_.'order_detail', array('product_price' => floatval($product['price']), 'tax_rate' => 0, 'reduction_percent' => 0), 'UPDATE', '`id_order` = '.(int)$id_order.' AND `product_id` = '.(int)$product['id_product'].' AND `product_attribute_id` = '.(int)$product['id_product_attribute']);
+						}
 					}
 
 			Configuration::updateValue('EBAY_ORDER_LAST_UPDATE', $dateNew);
