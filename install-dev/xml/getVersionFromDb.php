@@ -45,6 +45,9 @@ $psVersionDb = Configuration::get('PS_VERSION_DB');
 
 if (!$versions)
 {
+	// Desactivate this case temporary
+	die('<action result="ok" />');
+	
 	$message = lang('Warning, the installer was unable to detect what is your current PrestaShop version from a database structure analysis. This means some fields or tables are missing, and upgrade is under your own risk.');
 	if ($psVersionDb)
 	{

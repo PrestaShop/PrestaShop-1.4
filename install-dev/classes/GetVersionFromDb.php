@@ -53,6 +53,9 @@ class GetVersionFromDb
 		'cms_block_page' => array(
 			'fields' => array('id_block_cms_page', 'id_cms_block_page'),
 		),
+		'cms_lang' => array(
+			'types' => array('content'),
+		),
 		'log_email' => array(
 			'keys' => array('date_add', 'id_cart'),
 		),
