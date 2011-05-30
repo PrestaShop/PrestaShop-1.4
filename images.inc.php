@@ -47,10 +47,11 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg', $disableCach
 				$memory_limit = 1024 * 1024 * (int)$memory_limit;
 			elseif (preg_match('/[0-9]+g/i', $memory_limit))
 				$memory_limit = 1024 * 1024 * 1024 * (int)$memory_limit;
-			$current_memory = memory_get_peak_usage();
+			$current_memory = memory_get_usage();
 			$infos = getimagesize($image);
+
 			// Evaluate the memory required to resize the image: if it's too much, you can't resize it.
-			if ($infos[0] * $infos[1] * $infos['bits'] + $current_memory > $memory_limit - 1024 * 1024)
+			if (($infos[0] * $infos[1] * $infos['bits'] * ($infos['channels'] / 8) + Pow(2, 16)) * 1.8 + $current_memory > $memory_limit - 1024 * 1024)
 				return false;
 				
 			$imageGd = ($imageType == 'gif' ? imagecreatefromgif($image) : imagecreatefromjpeg($image));
