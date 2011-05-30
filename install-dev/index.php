@@ -861,7 +861,6 @@ if ($lm->getIncludeTradFilename())
 					$(document).ready(function() {
 						$.ajax({
 							url: 'xml/getNonNativeModules.php',
-							dataType: 'json',
 							async: false,
 							success: function (json) 
 							{
