@@ -25,22 +25,34 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+/**
+ * Regenerate the entire category tree level_depth
+ */
 function regenerate_level_depth()
 {
-	$category = new Category();
-	$cats = $category->getSimpleCategories((int)Configuration::get('PS_LANG_DEFAULT'));
-	foreach($cats as $cat)
+	Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'category` SET `level_depth` = 0 WHERE `id_category` = 1');
+	regenerate_children_categories(1, 0);
+}
+
+/**
+ * Recursively regenerate the level_depth of this category's children
+ *
+ * @param int $id_category
+ * @param int $level_depth
+ */
+function regenerate_children_categories($id_category, $level_depth)
+{
+	$categories = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)$id_category);
+	if (!$categories)
+		return;
+	$new_depth = (int)$level_depth + 1;
+	$cat_ids = "";
+	foreach($categories as $category)
 	{
-		$category = new Category((int)$cat['id_category']);
-		// if the category has no parent, it's the home
-		if ((int)$category->id_parent != 0)
-		{
-			$catParent = new Category((int)$category->id_parent);
-			$category->level_depth = $catParent->level_depth +1;
-			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'category` SET `level_depth` = '.(int)$category->level_depth.' WHERE `id_category` = '.(int)$category->id);
-		}
-	}
+		$cat_ids .= (string)$category['id_category'].',';
+		regenerate_children_categories($category['id_category'], $new_depth);
+	}	
+	$cat_ids = substr($cat_ids, 0, -1);
 
-	Category::regenerateEntireNtree();
-
+	Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'category` SET `level_depth` = '.(int)$new_depth.' WHERE `id_category` IN ('.$cat_ids.')');
 }
