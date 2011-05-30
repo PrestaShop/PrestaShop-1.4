@@ -195,6 +195,9 @@ class Socolissimo extends CarrierModule
 	public function getContent()
 	{
 		$this->_html .= '<h2>' . $this->l('So Colissimo').'</h2>';
+		if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
+			$this->_html .= '<div class="alert error"><img src="'._PS_IMG_.'admin/forbbiden.gif" alt="nok" />&nbsp;'.$this->l('So Colissimo isn\'t compliant with One Page Checkout feature, in order to use this module, please activate the standard order process (Preferences > "Order process type")').'</div>';
+		
 		if (!empty($_POST) AND Tools::isSubmit('submitSave'))
 		{
 			$this->_postValidation();
