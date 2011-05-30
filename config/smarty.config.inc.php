@@ -41,9 +41,9 @@ $smarty->config_dir = _PS_SMARTY_DIR_.'configs';
 $smarty->caching = false;
 $smarty->force_compile = (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
 $smarty->compile_check = false;
-$smarty->debugging = false; // added doekia
-$smarty->debugging_ctrl = 'URL'; // added doekia, 'NONE' on production
-$smarty->deprecation_notices = false; // added doekia, so many depreciated yet not migrated smarty calls
+$smarty->debugging = false; 
+$smarty->debugging_ctrl = 'URL'; // 'NONE' on production
+$smarty->deprecation_notices = false; // so many depreciated yet not migrated smarty calls
 
 if (Configuration::get('PS_FORCE_SMARTY_2')) 
 {	
