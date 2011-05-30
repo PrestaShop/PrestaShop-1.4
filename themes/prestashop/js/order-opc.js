@@ -59,7 +59,7 @@ function updateCarrierList(json)
 			if (carriers[i].img != '')
 				name = '<img src="'+carriers[i].img+'" alt="" />';
 			
-			if (!(carrier.is_module && !isLogged))
+			if (!(carriers[i].is_module && !isLogged))
 				var extraHtml = 'disabled="disabled"';
 			else if (checkedCarrier == carriers[i].id_carrier || carriers.length == 1)
 				var extraHtml = 'checked="checked"';
