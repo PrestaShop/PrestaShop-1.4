@@ -448,12 +448,12 @@ class AdminCustomerThreads extends AdminTab
 		LEFT JOIN '._DB_PREFIX_.'customer c ON (IFNULL(ct.id_customer, ct.email) = IFNULL(c.id_customer, c.email))
 		WHERE ct.id_customer_thread = '.(int)Tools::getValue('id_customer_thread').'
 		ORDER BY cm.date_add DESC');
-
+	
 		echo '<div style="float:right">';
 
 		$nextThread = Db::getInstance()->getValue('
 		SELECT id_customer_thread FROM '._DB_PREFIX_.'customer_thread ct
-		WHERE ct.status = "open" AND ct.date_upd > (
+		WHERE ct.status = "open" AND ct.date_upd = (
 			SELECT date_add FROM '._DB_PREFIX_.'customer_message
 			WHERE (id_employee IS NULL OR id_employee = 0) AND id_customer_thread = '.(int)$thread->id.'
 			ORDER BY date_add DESC LIMIT 1
@@ -461,6 +461,7 @@ class AdminCustomerThreads extends AdminTab
 		'.($cookie->{'customer_threadFilter_cl!id_contact'} ? 'AND ct.id_contact = '.(int)$cookie->{'customer_threadFilter_cl!id_contact'} : '').'
 		'.($cookie->{'customer_threadFilter_l!id_lang'} ? 'AND ct.id_lang = '.(int)$cookie->{'customer_threadFilter_l!id_lang'} : '').
 		' ORDER BY ct.date_upd ASC');
+				
 		if ($nextThread)
 			echo $this->displayButton('
 			<a href="'.$currentIndex.'&id_customer_thread='.(int)$nextThread.'&viewcustomer_thread&token='.$this->token.'">
