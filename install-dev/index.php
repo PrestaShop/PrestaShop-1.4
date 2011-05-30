@@ -651,7 +651,7 @@ if ($lm->getIncludeTradFilename())
 							$modulesPrechecked = array();
 							foreach ($result->partner as $p)
 							{
-								$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo), 'label' => getPreinstallXmlLang($p, 'label'), 'description' => getPreinstallXmlLang($p, 'description').getPreinstallXmlLang($p, 'more'));
+								$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo_medium), 'label' => getPreinstallXmlLang($p, 'label'), 'description' => getPreinstallXmlLang($p, 'description'), 'more' => getPreinstallXmlLang($p, 'more'));
 								foreach ($p->country as $country_iso_code)
 									$modulesHelpInstall[trim($country_iso_code)][] = trim($p->key);
 								if ($p->prechecked)
@@ -664,15 +664,22 @@ if ($lm->getIncludeTradFilename())
 								echo '<div class="installModuleList'.($country_iso_code == 'FR' ? ' selected' : '').'" id="modulesList'.$country_iso_code.'">';
 								foreach ($modulesList as $module)
 								{
-									echo '<div class="field">
-										<div style="float: left; height: 35px; width: 275px; padding-top: 6px;"><input type="checkbox" id="preInstallModules_'.$country_iso_code.'_'.$module.'" value="'.$module.'" class="aligned '.$module.' preInstallModules_'.$country_iso_code.'" style="vertical-align: middle;" /></div>
-										<div style="float: left; height: 35px; width: 40px;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'" /></div>
-										<div style="float: left; height: 35px; width: 300px;"><label for="preInstallModules_'.$country_iso_code.'_'.$module.'">'.$modulesDescription[$module]['label'].'</label></div>
-										<br clear="left" />
-										<span id="resultInfosNotification" class="result aligned"></span>
-										<p class="userInfos aligned">'.$modulesDescription[$module]['description'].'</p>
-										<div id="divForm_'.$country_iso_code.'_'.$module.'" style="display: none;"></div>
-									</div>';
+									echo '
+									<table style="border: 1px solid #CCC; padding: 5px; width: 650px">
+									<tr>
+									<td style="width: 100px; text-align: center;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'">'.(isset($modulesDescription[$module]['more']) ? $modulesDescription[$module]['more'] : '').'</td>
+									<td style="padding-left: 15px; width: 430px;">
+									'.$modulesDescription[$module]['description'].'
+									</td>
+									<td style="text-align: center; width: 30px; background: #FFF;">
+									<span style="padding: 3px 4px 6px 2px; background: none repeat scroll 0pt 0pt #7EB423;">
+									<input type="checkbox" id="preInstallModules_'.$country_iso_code.'_'.$module.'" value="'.$module.'" class="'.$module.' preInstallModules_'.$country_iso_code.'" style="vertical-align: middle;" />
+									</span>
+									</td>
+									</tr>
+									<tr><td colspan="3"><div id="divForm_'.$country_iso_code.'_'.$module.'">&nbsp;</div></td></tr>
+									</table>
+									<br />';
 									echo "<script>
 										moduleChecked['".$country_iso_code.'_'.$module."'] = 0;
 										$(document).ready(function() {
