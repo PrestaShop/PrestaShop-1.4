@@ -29,5 +29,8 @@
 include_once(dirname(__FILE__).'/../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../config/defines.inc.php');
 
-die(Tools::jsonEncode(Module::getNonNativeModuleList()));
+$module_list = Module::getNonNativeModuleList();
+if (sizeof($module_list))
+	die(Tools::jsonEncode());
+die('');
 
