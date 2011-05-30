@@ -639,7 +639,7 @@ if ($lm->getIncludeTradFilename())
 					}
 
 					$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 3)));
-					$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/partners.php?version=1.0', false, $context);
+					$content = @file_get_contents('http://www.prestashop.com/partner/preactivation/partners.php?version=1.0', false, $context);
 					if ($content && $content[0] == '<')
 					{
 						$result = simplexml_load_string($content);

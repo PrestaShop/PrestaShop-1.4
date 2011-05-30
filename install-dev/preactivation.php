@@ -17,7 +17,7 @@
 		$c = addslashes(strtolower($_GET['country_iso_code']));
 
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.$p.'&country_iso_code='.$c, false, $context);
+		$content = @file_get_contents('http://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.$p.'&country_iso_code='.$c, false, $context);
 
 		if ($content && $content[0] == '<')
 		{
@@ -100,7 +100,7 @@
 	if ($_GET['request'] == 'send')
 	{
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$url = 'https://www.prestashop.com/partner/preactivation/actions.php?version=1.0&partner='.addslashes($_GET['partner']);
+		$url = 'http://www.prestashop.com/partner/preactivation/actions.php?version=1.0&partner='.addslashes($_GET['partner']);
 
 		// Protect fields
 		foreach ($_GET as $key => $value)
