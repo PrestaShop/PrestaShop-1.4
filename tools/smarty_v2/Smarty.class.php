@@ -1105,7 +1105,7 @@ class Smarty
      */
     function display($resource_name, $cache_id = null, $compile_id = null)
     {
-		$this->currentTemplate = substr(basename($resource_name), 0, -4);
+				// this->currentTemplate moved in fetch method
         $this->fetch($resource_name, $cache_id, $compile_id, true);
     }
 
@@ -1119,6 +1119,8 @@ class Smarty
      */
     function fetch($resource_name, $cache_id = null, $compile_id = null, $display = false)
     {
+			// Added in Prestashop for compatibility v2/v3 
+			$this->currentTemplate = substr(basename($resource_name), 0, -4);
         static $_cache_info = array();
         
         $_smarty_old_error_level = $this->debugging ? error_reporting() : error_reporting(isset($this->error_reporting)

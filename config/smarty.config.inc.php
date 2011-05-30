@@ -86,7 +86,8 @@ function smartyTranslate($params, &$smarty)
 	/*
 	 * Warning in Smarty-v2 : 2 lines have been added to the Smarty class.
 	 * "public $currentTemplate = null;" into the class itself
-	 * "$this->currentTemplate = Tools::substr(basename($resource_name), 0, -4);" into the "display" method
+	 * "$this->currentTemplate = Tools::substr(basename($resource_name), 0, -4);" into the "fetch" method
+	 * Notice : before 1.4.2.5, this modification was in the display method
 	 *
 	 * In Smarty-v3 : No modifications, using the existing var $this->smarty->_current_file instead
 	 */

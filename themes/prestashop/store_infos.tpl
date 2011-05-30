@@ -23,7 +23,8 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-{*
+{* The following lines allow translations in back-office and has to stay commented
+
 	{l s='Monday'}
 	{l s='Tuesday'}
 	{l s='Wednesday'}
@@ -38,8 +39,7 @@
 <table style="font-size: 9px;">
 	{foreach from=$days_datas  item=one_day}
 	<tr>
-		<td style="width: 70px;">{$one_day.day}</td>
-		<td>{$one_day.hours}</td>
+		<td style="width: 70px;">{l s=$one_day.day}</td><td>{$one_day.hours}</td>
 	</tr>
 	{/foreach}
 </table>
