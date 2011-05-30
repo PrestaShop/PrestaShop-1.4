@@ -58,10 +58,15 @@ function updateCarrierList(json)
 			var name = carriers[i].name;
 			if (carriers[i].img != '')
 				name = '<img src="'+carriers[i].img+'" alt="" />';
-				
+			
+			if (!(carrier.is_module && !isLogged))
+				var extraHtml = 'disabled="disabled"';
+			else if (checkedCarrier == carriers[i].id_carrier || carriers.length == 1)
+				var extraHtml = 'checked="checked"';
+			
 			html = html + 
 			'<tr class="'+itemType+'">'+
-				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'"  onclick="updateCarrierSelectionAndGift();" '+((checkedCarrier == carriers[i].id_carrier || carriers.length == 1) ? 'checked="checked"' : '')+' /></td>'+
+				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'"  onclick="updateCarrierSelectionAndGift();" '+extraHtml+' /></td>'+
 				'<td class="carrier_name"><label for="id_carrier'+carriers[i].id_carrier+'">'+name+'</label></td>'+
 				'<td class="carrier_infos">'+carriers[i].delay+'</td>'+
 				'<td class="carrier_price"><span class="price">'+formatCurrency(carriers[i].price, currencyFormat, currencySign, currencyBlank)+'</span>';
