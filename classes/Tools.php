@@ -1755,12 +1755,11 @@ FileETag INode MTime Size
 	}
 
 	/**
-	 * jsonDecode convert json string to php array (or object if json_decode is available).
+	 * jsonDecode convert json string to php array / object
 	 * 
 	 * @param string $json 
-	 * @param boolean $assoc  (since 1.4.2.4)
+	 * @param boolean $assoc  (since 1.4.2.4) if true, convert to associativ array
 	 * @return array
-	 *
 	 */
 	public static function jsonDecode($json, $assoc = false)
 	{
@@ -1768,74 +1767,27 @@ FileETag INode MTime Size
 			return json_decode($json, $assoc);
 		else
 		{
-			$comment = false;
-			$out = '$x=';
-
-			for ($i=0; $i<strlen($json); $i++)
-			{
-				if (!$comment)
-				{
-					if (($json[$i] == '{') || ($json[$i] == '['))
-						$out .= ' array(';
-					else if (($json[$i] == '}') || ($json[$i] == ']'))
-						$out .= ')';
-					else if ($json[$i] == ':')
-						$out .= '=>';
-					else
-						$out .= $json[$i];
-				}
-				else $out .= $json[$i];
-				if ($json[$i] == '"' && $json[($i-1)]!="\\")	$comment = !$comment;
-			}
-			eval($out . ';');
-			return $x;
+			include_once(_PS_TOOL_DIR_.'json/json.php');
+			$pearJson = new Services_JSON(($assoc) ? SERVICES_JSON_LOOSE_TYPE : 0);
+			return $pearJson->decode($json);
 		}
 	}
-	public static function jsonEncode($json)
+
+	/**
+	 * Convert an array to json string
+	 * 
+	 * @param array $data
+	 * @return string json
+	 */
+	public static function jsonEncode($data)
 	{
 		if (function_exists('json_encode'))
-			return json_encode($json);
+			return json_encode($data);
 		else
 		{
-			if (is_null($json)) return 'null';
-			if ($json === false) return 'false';
-			if ($json === true) return 'true';
-			if (is_scalar($json))
-			{
-			  if (is_float($json))
-			  {
-			    // Always use "." for floats.
-			    return (float)(str_replace(",", ".", strval($json)));
-			  }
-
-			  if (is_string($json))
-			  {
-			    static $jsonReplaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
-			    return '"' . str_replace($jsonReplaces[0], $jsonReplaces[1], $json) . '"';
-			  }
-			  else
-			    return $json;
-			}
-			$isList = true;
-			for ($i = 0, reset($json); $i < count($json); $i++, next($json))
-			{
-			  if (key($json) !== $i)
-			  {
-			    $isList = false;
-			    break;
-			  }
-			}
-			$result = array();
-			if ($isList)
-			{
-			  foreach ($json as $v) $result[] = self::jsonEncode($v);
-			  return '[' . join(',', $result) . ']';
-			}
-			else
-			{
-			  foreach ($json as $k => $v) $result[] = self::jsonEncode($k).':'.self::jsonEncode($v);
-			  return '{' . join(',', $result) . '}';
-			}
+			include_once(_PS_TOOL_DIR_.'json/json.php');
+			$pearJson = new Services_JSON();
+			return $pearJson->encode($data);
 		}
 	}
 
