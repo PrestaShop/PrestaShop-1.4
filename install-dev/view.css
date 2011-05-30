@@ -588,3 +588,8 @@ p#php5_nok a {
 	display: block;
 	width: 185px;
 }
+
+.versionInfo{
+	color: #D41958;
+}
+}

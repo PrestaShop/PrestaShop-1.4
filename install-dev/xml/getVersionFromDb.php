@@ -44,7 +44,7 @@ $versions = $dbVersion->getVersions();
 
 if (!$versions)
 {
-	die('<action result="ko" lang="' . htmlspecialchars(lang('Warning, the installer was unable to find which is your current PrestaShop version from your database structure analysis. This means some fields or tables are missing, and upgrade is under your own risk.')) . '" />');
+	die('<action result="ko" lang="' . htmlspecialchars(lang('Warning, the installer was unable to detect what is your current PrestaShop version from a database structure analysis. This means some fields or tables are missing, and upgrade is under your own risk.')) . '" />');
 }
 
 foreach ($versions as $version)
@@ -54,4 +54,9 @@ foreach ($versions as $version)
 		die('<action result="ok" />');
 	}
 }
-die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, the installer found in your setting file that your PrestaShop is in version %s, but the database analysis say you seem to be in version %s. Be sure of what you are doing if you start upgrade.<br /><br />If you never tried an update to this new version, or never made modifications in your base, please ignore this warning.'), _PS_VERSION_, '(' . ((count($versions) > 1) ? $versions[count($versions) - 1] . ' - ' . $versions[0] : $versions[0]) . ')')) . '" />');
+
+if (count($versions) == 1)
+{
+	die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, we detected that the version specified in your config/settings.inc.php does not match your SQL database structure.<br />File config/settings.inc.php indicates: %1$s<br />Our automatic detection tool has detected version: %2$s<br /><br />You should edit your config/settings.inc.php file to replace %1$s by %2$s.<br />Failure to fix this issue before upgrading may result in severe complications.<br />Do not forget to relaunch the installer after this modification by pressing F5 on your web browser.'), '<span class="versionInfo">' . _PS_VERSION_ . '</span>', '<span class="versionInfo">' . $versions[0] . '</span>')) . '" />');
+}
+die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, we detected that the version specified in your config/settings.inc.php does not match your SQL database structure.<br />File config/settings.inc.php indicates: %1$s<br />Our automatic detection tool has detected a version between %2$s and %3$s<br /><br />You should edit your config/settings.inc.php file to replace %1$s by your real shop version.<br />Failure to fix this issue before upgrading may result in severe complications.<br />Do not forget to relaunch the installer after this modification by pressing F5 on your web browser.'), '<span class="versionInfo">' . _PS_VERSION_ . '</span>', '<span class="versionInfo">' . $versions[count($versions) - 1] . '</span>', '<span class="versionInfo">' . $versions[0] . '</span>')) . '" />');
