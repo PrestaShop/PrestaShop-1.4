@@ -994,7 +994,6 @@ if ($lm->getIncludeTradFilename())
 					$color = '#FFDEB7';
 				if ($maxTime AND $maxTime <= 20)
 					$color = '#FAE2E3';
-				$color = '#FFDEB7';
 
 				echo '
 				<br />

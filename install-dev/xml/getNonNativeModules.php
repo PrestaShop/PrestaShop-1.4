@@ -31,6 +31,6 @@ include_once(dirname(__FILE__).'/../../config/defines.inc.php');
 
 $module_list = Module::getNonNativeModuleList();
 if (sizeof($module_list))
-	die(Tools::jsonEncode());
+	die(Tools::jsonEncode($module_list));
 die('');
 
