@@ -23,7 +23,6 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
 <script type="text/javascript">
 // <![CDATA[
 	var baseDir = '{$base_dir_ssl}';
@@ -32,7 +31,7 @@
 
 <script type="text/javascript">
 // <![CDATA[
-idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{/if}{if isset($address->id_state)}{$address->id_state|intval}{else}false{/if};
+idSelectedCountry = {if isset($smarty.post.id_state)}{$smarty.post.id_state|intval}{else}{if isset($address->id_state)}{$address->id_state|intval}{else}false{/if}{/if};
 countries = new Array();
 countriesNeedIDNumber = new Array();
 countriesNeedZipCode = new Array();
@@ -127,7 +126,7 @@ $(function(){ldelim}
 		{if $field_name eq 'firstname'}
 		<p class="required text">
 			<label for="firstname">{l s='First name'}</label>
-			<input type="text" name="firstname" id="firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{/if}{if isset($address->firstname)}{$address->firstname|escape:'htmlall':'UTF-8'}{/if}" />
+			<input type="text" name="firstname" id="firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{else}{if isset($address->firstname)}{$address->firstname|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 			<sup>*</sup>
 		</p>
 		{/if}
@@ -238,7 +237,7 @@ $(function(){ldelim}
 		</p>
 		<p class="required text" id="adress_alias">
 			<label for="alias">{l s='Assign an address title for future reference'}</label>
-			<input type="text" id="alias" name="alias" value="{if isset($smarty.post.alias)}{$smarty.post.alias}{/if}{if isset($address->alias)}{$address->alias|escape:'htmlall':'UTF-8'}{/if}{if isset($select_address)}{else}{l s='My address'}{/if}" />
+			<input type="text" id="alias" name="alias" value="{if isset($smarty.post.alias)}{$smarty.post.alias}{else}{if isset($address->alias)}{$address->alias|escape:'htmlall':'UTF-8'}{/if}{if isset($select_address)}{else}{l s='My address'}{/if}{/if}" />
 			<sup>*</sup>
 		</p>
 	</fieldset>
