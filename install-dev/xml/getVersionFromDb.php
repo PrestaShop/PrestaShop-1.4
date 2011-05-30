@@ -41,10 +41,16 @@ if ($lm->getIncludeTradFilename())
 
 $dbVersion = new GetVersionFromDb();
 $versions = $dbVersion->getVersions();
+$psVersionDb = Configuration::get('PS_VERSION_DB');
 
 if (!$versions)
 {
-	die('<action result="ko" lang="' . htmlspecialchars(lang('Warning, the installer was unable to detect what is your current PrestaShop version from a database structure analysis. This means some fields or tables are missing, and upgrade is under your own risk.')) . '" />');
+	$message = lang('Warning, the installer was unable to detect what is your current PrestaShop version from a database structure analysis. This means some fields or tables are missing, and upgrade is under your own risk.');
+	if ($psVersionDb)
+	{
+		$message .= '<br /><br />' . sprintf(lang('However the installer has detected that the version stored in your configuration table is %1$s'), '<span class="versionInfo">' . $psVersionDb . '</span>');
+	}
+	die('<action result="ko" lang="' . htmlspecialchars($message) . '" />');
 }
 
 foreach ($versions as $version)
@@ -59,4 +65,12 @@ if (count($versions) == 1)
 {
 	die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, we detected that the version specified in your config/settings.inc.php does not match your SQL database structure.<br />File config/settings.inc.php indicates: %1$s<br />Our automatic detection tool has detected version: %2$s<br /><br />You should edit your config/settings.inc.php file to replace %1$s by %2$s.<br />Failure to fix this issue before upgrading may result in severe complications.<br />Do not forget to relaunch the installer after this modification by pressing F5 on your web browser.'), '<span class="versionInfo">' . _PS_VERSION_ . '</span>', '<span class="versionInfo">' . $versions[0] . '</span>')) . '" />');
 }
-die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, we detected that the version specified in your config/settings.inc.php does not match your SQL database structure.<br />File config/settings.inc.php indicates: %1$s<br />Our automatic detection tool has detected a version between %2$s and %3$s<br /><br />You should edit your config/settings.inc.php file to replace %1$s by your real shop version.<br />Failure to fix this issue before upgrading may result in severe complications.<br />Do not forget to relaunch the installer after this modification by pressing F5 on your web browser.'), '<span class="versionInfo">' . _PS_VERSION_ . '</span>', '<span class="versionInfo">' . $versions[count($versions) - 1] . '</span>', '<span class="versionInfo">' . $versions[0] . '</span>')) . '" />');
+
+if ($psVersionDb && in_array($psVersionDb, $versions))
+{
+	die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, we detected that the version specified in your config/settings.inc.php does not match your SQL database structure.<br />File config/settings.inc.php indicates: %1$s<br />Our automatic detection tool has detected version: %2$s<br /><br />You should edit your config/settings.inc.php file to replace %1$s by %2$s.<br />Failure to fix this issue before upgrading may result in severe complications.<br />Do not forget to relaunch the installer after this modification by pressing F5 on your web browser.'), '<span class="versionInfo">' . _PS_VERSION_ . '</span>', '<span class="versionInfo">' . $psVersionDb . '</span>')) . '" />');
+}
+else
+{
+	die('<action result="ko" lang="' . htmlspecialchars(sprintf(lang('Warning, we detected that the version specified in your config/settings.inc.php does not match your SQL database structure.<br />File config/settings.inc.php indicates: %1$s<br />Our automatic detection tool has detected a version between %2$s and %3$s<br /><br />You should edit your config/settings.inc.php file to replace %1$s by your real shop version.<br />Failure to fix this issue before upgrading may result in severe complications.<br />Do not forget to relaunch the installer after this modification by pressing F5 on your web browser.'), '<span class="versionInfo">' . _PS_VERSION_ . '</span>', '<span class="versionInfo">' . $versions[count($versions) - 1] . '</span>', '<span class="versionInfo">' . $versions[0] . '</span>')) . '" />');
+}

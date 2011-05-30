@@ -378,6 +378,7 @@ foreach($sqlContent as $query)
 }
 Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 0);
 Configuration::updateValue('PS_NEED_REBUILD_INDEX', 1);
+Configuration::updateValue('PS_VERSION_DB', INSTALL_VERSION);
 $result = $warningExist ? '<action result="fail" error="34">'."\n" : '<action result="ok" error="">'."\n";
 $result .= $requests;
 die($result.'</action>'."\n");
