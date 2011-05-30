@@ -224,11 +224,13 @@ if ($lm->getIncludeTradFilename())
 								$('#versionWarning').show();
 							}
 						},
-						error: function()
-						{
-							
-						}
+					  	error: function() {
+					  		errorOccured = true;
+					  	}
 					});
+					$('#btNext, #btBack').removeAttr('disabled').removeClass('disabled');
+					if (!$('#btDisclaimerOk').is(':checked'))
+						$("#btNext[disabled!=1]").attr("disabled", "disabled").addClass("disabled").addClass("lockedForAjax");
 				}
 			});
 		});
@@ -701,6 +703,9 @@ if ($lm->getIncludeTradFilename())
 														'&email='+ encodeURIComponent($('input#infosEmail').val()),
 													  	success: function(data) {
 													    		$(idDivForm).html(data);
+													  	},
+													  	error: function() {
+													  		errorOccured = true;
 													  	}
 													});
 												}
@@ -731,6 +736,9 @@ if ($lm->getIncludeTradFilename())
 													'&email='+ encodeURIComponent($('input#infosEmail').val()),
 												  	success: function(data) {
 												    		$('#divForm_".$country_iso_code."_".$module."').html(data);
+												  	},
+												  	error: function() {
+												  		errorOccured = true;
 												  	}
 												});
 											});";
@@ -870,6 +878,7 @@ if ($lm->getIncludeTradFilename())
 						$.ajax({
 							url: 'xml/getNonNativeModules.php',
 							async: false,
+							dataType: "json",
 							success: function (json) 
 							{
 								if (json.length == 0)
@@ -883,6 +892,7 @@ if ($lm->getIncludeTradFilename())
 							},
 							error: function ()
 							{
+								errorOccured = true;
 								$('#nonNativeModules').hide();
 							}
 						});

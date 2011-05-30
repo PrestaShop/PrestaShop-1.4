@@ -28,6 +28,8 @@
 verifMailREGEX = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
 verifNameREGEX = /^[^0-9!<>,;?=+()@#"°{}_$%:]*$/;
 
+var errorOccured = false;
+
 //params
 configIsOk = false;
 createdBase = false;
@@ -914,9 +916,20 @@ $(document).ready(
 			function(e, xhr, settings)
 			{
 				$(this).fadeOut();
-				$(".lockedForAjax").removeAttr("disabled").removeClass("disabled").removeClass("lockedForAjax");
-				if (settings.url.substr(0, 17) == 'preactivation.php' && step == 1)
-					$("#btNext[disabled!=1], #btBack[disabled!=1]").attr("disabled", "disabled").addClass("disabled").addClass("lockedForAjax");
+				if (!errorOccured)
+				{
+					$(".lockedForAjax").removeAttr("disabled").removeClass("disabled").removeClass("lockedForAjax");
+					if (step == 1)
+						$("#btNext[disabled!=1], #btBack[disabled!=1]").attr("disabled", "disabled").addClass("disabled").addClass("lockedForAjax");
+					if (step == 6)
+					{
+						$('#btNext, #btBack').removeAttr('disabled').removeClass('disabled');
+						console.log('test');
+						if (!$('#btDisclaimerOk').is(':checked'))
+							$("#btNext[disabled!=1]").attr("disabled", "disabled").addClass("disabled").addClass("lockedForAjax");
+					}
+				}
+				errorOccured = false;
 			}
 		);
 		//set actions on clicks
@@ -992,13 +1005,6 @@ $(document).ready(
 		autoCheckField("#infosPasswordRepeat", "#resultInfosPasswordRepeat", "required");
 		autoCheckField("#infosPasswordRepeat", "#resultInfosPassword", "required");
 		
-		//fix PNG for IE < IE7
-		/*
-		$(document).ready(function(){ 
-	        $("#dfdsf").pngFix(); 
-	    });*/
-	    
-		
 		constructInstallerTabs();
 		
 		//show 1st step
@@ -1009,8 +1015,6 @@ $(document).ready(
 		$("#btNext")
 		.attr("disabled", "disabled")
 		.addClass("disabled");
-		
-		
 			
 		function checkLicenseButton(elt)
 		{
