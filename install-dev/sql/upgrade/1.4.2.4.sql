@@ -8,6 +8,3 @@ UPDATE `PREFIX_tab_lang` SET `name` = 'SEO & URLs' WHERE `id_tab` = (SELECT `id_
 /* PHP:remove_duplicate_category_groups(); */;
 ALTER TABLE `PREFIX_category_group` DROP INDEX `category_group_index`;
 ALTER TABLE `PREFIX_category_group` ADD UNIQUE `category_group_index` (`id_category`,`id_group`);
-
-/* Fix wrong category level_depth caused by bug in 1.4.0.13 upgrade script */
-/* PHP:regenerate_level_depth(); */;
