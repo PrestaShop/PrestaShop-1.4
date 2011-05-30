@@ -6,7 +6,7 @@ include(dirname(__FILE__).'/dibs.php');
 $posted_values = array();
 $errors = array();
 $obj_dibs = new dibs();
-$required_fields = array('orderid', 'paytype', 'transact', 'HTTP_COOKIE', 'merchant', 'uniqueoid', 'amount', 'currency', 'authkey');
+$required_fields = array('orderid', 'paytype', 'transact', 'merchant', 'uniqueoid', 'amount', 'currency', 'authkey');
 $valid_order = true;
 if (count($_POST))
 {
@@ -16,16 +16,10 @@ if (count($_POST))
 		if (!isset($posted_values[$field]))
 			$errors[] = 'Missing field '.$field;
 
-	$posted_values['cookie'] = unserialize(urldecode($posted_values['HTTP_COOKIE']));
-	
 	$secure_cart = explode('_', $posted_values['uniqueoid']);
 	$arr_order_id = explode('_',$posted_values['orderid']);
 	$posted_values['orderid'] = $arr_order_id[0];
 	
-	if ($posted_values['cookie']->id_cart != ($posted_values['orderid'] || $secure_cart[0]))
-		$errors[] = Tools::displayErrors('The order you want to validate is not Allow.');
-	if (!$posted_values['cookie']->isLogged())
-		$errors[] = Tools::displayError('Your login account does not allow');
 	if ((string)$posted_values['merchant'] !== (string)dibs::$ID_MERCHANT)
 		$errors[] = Tools::displayError('You did not use the correct merchant ID.');
 	
