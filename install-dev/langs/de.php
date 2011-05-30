@@ -280,4 +280,5 @@ $_LANG['Online Theme Validator'] = 'Online Themenvalidator';
 $_LANG['If your theme is not valid, you may experience some problems in your front-office aspect, but don\'t panic ! To solve this, you can make it compatible by correcting the validators errors or by using a theme compatible with '] = 'Sollte Ihr Thema nicht kompatibel sein, könnten einige Probleme im Front-End auftreten. Sie können die Kompatibilität wieder einstellen, indem Sie im Backend Unter Einstellungen die entsprechende Einstellung treffen';
 $_LANG['version'] = 'Version';
 $_LANG['In this aim, use our'] = 'Verwenden Sie dazu unseren';
-
+$_LANG['Additional Benefits'] = 'Exklusiv Angebot';
+$_LANG['Exclusive offers dedicated to PrestaShop merchants'] = 'Exklusiv Angebot für die Verkäufer PrestaShop';

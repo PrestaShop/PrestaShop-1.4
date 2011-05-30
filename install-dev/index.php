@@ -592,9 +592,6 @@ if ($lm->getIncludeTradFilename())
 					<p class="userInfos aligned"><?php echo lang('If you check this box and your mail configuration is wrong, your installation might be blocked. If so, please uncheck the box to go to the next step.'); ?></p>
 				</div>
 
-
-
-
 				<!-- Partner Modules -->
 				<?php
 					if (!isset($_GET['language']))
@@ -645,6 +642,10 @@ if ($lm->getIncludeTradFilename())
 						$result = simplexml_load_string($content);
 						if ($result->partner)
 						{
+							echo '
+							<h2>'.lang('Additional Benefits').'</h2>
+							<h3>'.lang('Exclusive offers dedicated to PrestaShop merchants').'</h3>';
+				
 							$modulesHelpInstall = array();
 							$modulesDescription = array();
 							$modulesPrechecked = array();

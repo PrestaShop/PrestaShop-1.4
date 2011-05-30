@@ -267,4 +267,5 @@ $_LANG['Your update is completed!'] = 'L\'aggiornamento è completo!';
 $_LANG['Your shop version is now'] = 'La tua versione adesso è';
 $_LANG['New features in PrestaShop v'] = 'Nuove caratteristiche in PrestaShop v';
 $_LANG['In this aim, use our'] = 'A questo scopo, utilizzare il nostro';
-
+$_LANG['Additional Benefits'] = 'Ulteriori vantaggi';
+$_LANG['Exclusive offers dedicated to PrestaShop merchants'] = 'Offerte esclusivo dedicato ai venditori PrestaShop';
