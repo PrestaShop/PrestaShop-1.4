@@ -24,6 +24,547 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.2.5 - 6780 (2011-05-30)  #
+####################################
+
+	Improved/changed features:
+
+	[*] Installer : add PS_VERSION_DB configuration data filled after install / upgrade
+
+	[*] FO : smarty_v2 improvement : moved currentTemplate init in fetch method instead of display method
+
+	[*] Core : module carrier has been disabled on One page checkout when customer isn't logged
+	[*] Core : module carrier has been disabled on One page checkout when customer isn't logged Part 2
+
+	Fixed bugs:
+
+	[-] Project : fix an issue on Tools::jsonDecode
+
+	[-] Installer : fixed bug where categories have incorrect level_depth
+
+	[-] FO : Bug Fixed #PSCFI-2077 - Tax rules + customization
+	[-] FO : Fixed #PSCFI-2051 - weekdays translations are now correct in store_infos google maps
+	[-] FO : Fixed #PSCFI-2066 - Control terms if terms are activated
+	[-] FO : On updating address with a bad field, firstname and alias are fill with the post + the registered data.
+
+	[-] BO : Fixed bug #PSCFI-2035 - The other messages in this category have been answered
+	[-] BO : Fixed bug #PSCFI-2073 - avoid crashing the product listing page when you have not enough memory to resize the thumbnails
+
+	[-] Classes : fixed bug with cookie name generated from http host causing cookie duplication
+
+	[-] MO : Bug fixed #PSCFI-2055 - number_format replaced by round in PayPal Module (Thanks Angora :)
+	[-] MO : Bug fixed on eBay Module (when products does not exist)
+	[-] MO : Fixed bug #PSCFI-1782 - Dibs could not do the callback
+	[-] MO : adding a message in So Colissimo module, in order to indicate: this module isn't compliant with OPC feature
+
+
+####################################
+#   v1.4.2.4 - 6742 (2011-05-27)  #
+####################################
+
+	Added Features:
+
+	[+] Installer : Case management system of ubuntu, phpversion return 5.2.4-2ubuntu5.2
+	[+] Installer : During installation if the PHP version is less than 5.2, install smarty 2, otherwise it installs smarty 3
+	[+] Installer : during upgrade, analyse the database structure to find PrestaShop version and compare it to version in settings to display or not a warning
+	[+] Installer : hidden notice  date_default_timezone_set, notice prevented the use of Ajax back
+
+	[+] BO : Add jquery plugin for the address layout selection feature
+	[+] BO : Added ability to add instructions in the backup file to drop existing tables during restore
+	[+] BO : Adding validation field for Regenerate password
+	[+] BO : Adding validation function and Update Options function
+	[+] BO : Address layout add the pattern when an user click on a selection key
+	[+] BO : Now you can update an already installed language from prestashop.com
+	[+] BO : add display of company name in order details, and display of phone in PDF invoice
+	[+] BO : add module physical name as title of element in admin module list
+
+	[+] MO : Added "Site speed" feature to Google Analytics Module (See which pages load the fastest and which ones are slower)
+	[+] MO : Added customer e-mail in the notification sent after each order (mailalerts module)
+	[+] MO : Rewrite Generate and Get tickets including new Interface class to communique with the mondial relay webservice
+	[+] MO : blockcategories can now be hooked on footer
+	[+] MO : eBay module (currently only for eBay.fr)
+
+	[+] WS : Add virtual field in Category entity.
+	[+] WS : add state command for WS
+	[+] WS : allow displayed simple association
+	[+] WS : allow negative values in the filter
+	[+] WS : allow the outformat even the authentication failed
+	[+] WS : allow to display association in blank schema
+	[+] WS : allow to display association in synopsis
+	[+] WS : bug PSCFI-1659 is fixed
+	[+] WS : bug PSCFI-1778 is fixed
+	[+] WS : bug PSCFI-1778 is fixed
+	[+] WS : bug PSCFI-1780 is fixed
+	[+] WS : change association name and its getter, improve error output
+	[+] WS : improve the filter behaviour
+
+	Improved/changed features:
+
+	[*] Project : Improve autoload performances
+
+	[*] Installer : A log file is now created during installation
+	[*] Installer : Add index to modules followup and add index to installer
+	[*] Installer : added unique index to table category_group
+	[*] Installer : for old version, you will keep your admin icon for your custom tab
+	[*] Installer : no more cache after upgrade
+	[*] Installer : when upgrade, cleaning cache and compile dir now also exclude .htaccess files
+
+	[*] FO : #PSCFI-1594 Corrects missing id_country
+	[*] FO : #PSCFI-1647 corrects disappearing invoice address title
+	[*] FO : Adding address layout management
+	[*] FO : Adding address layout management
+	[*] FO : Adding address layout management
+	[*] FO : Adding address layout management
+	[*] FO : CSS improvements (thanks Melinda!)
+	[*] FO : New default logo (better JPG quality)
+	[*] FO : corrects js error when cart is empty
+	[*] FO : hide the "add to cart" button if there are required customization fields
+	[*] FO : hide the "hide to cart" button for products with minimal quantity > 1 when customer can't choose the quantity
+	[*] FO : remove some unused global vars declaration
+
+	[*] BO : 'add a language' is now 'add or update a language'
+	[*] BO : Added new column to "Carts" tab and ability to delete carts
+	[*] BO : Added several advice to help during database backup process and database restore process
+	[*] BO : Better cache management for image uploading (Categories, Manufacturers, Suppliers, Stores) - no more need to press CTRL+F5
+	[*] BO : Fixed #PSCFI-1667
+	[*] BO : Improved code standards and UI/UX for the Translations tab
+	[*] BO : Improved product indexation (1 query instead of 1 query per word!)
+	[*] BO : Improvement about login with SSL enabled. Now you can use http if maintenance or local ip.
+	[*] BO : On module list reduce SQL query
+	[*] BO : On modules position reduce SQL queries
+	[*] BO : Remove unused variable
+	[*] BO : added a default sort direction on the stats modules
+	[*] BO : added a warning message when the shop domain name is wrong
+	[*] BO : added warning message when updating a language pack you already installed
+	[*] BO : check if cart has an order attached improvement
+	[*] BO : delete unused method and globals in adminOrder
+	[*] BO : deleting the English language is now forbidden
+	[*] BO : improvement of module filter system
+	[*] BO : initial stock to 0 (new added products,new declination,generator declination )
+	[*] BO : now all hidden file are excluded in listing file in adminImport
+	[*] BO : now to enable ssl, you need to already use it in back office
+	[*] BO : performance optimization in the back office, and performance tools added for developers
+	[*] BO : when carrier is free => don't display range
+	[*] BO : you can now choose if you want to delete existing images in product import
+	[*] BO : you can now enable or disable newsletter and optin options, directly on the customers listing
+
+	[*] Classes : removed some more returns in constructors see #PSCFI-2009
+	[*] Classes : see #PSCFI-2009 - Use of return statements in class constructors break class integrity
+
+	[*] MO : Change European VAT module description
+	[*] MO : Enable translation to title/description of the module "pretashop security"
+	[*] MO : Fix bug when saving module Customer referral program (error message say each time "Invalid html field, javascript is forbidden")
+	[*] MO : Improvment #PSCFI-934 - UPS module has now an option to make one package for all products
+	[*] MO : fixed bug on validate Rules shopImport
+	[*] MO : fixing tpl calculation specials
+	[*] MO : import oscommerce now import newsletter
+	[*] MO : improve in module Paypal (thank you Tomer)
+	[*] MO : now oscommerce import use "date_add" for products
+	[*] MO : theme installer can now manage module exceptions
+
+	[*] WS : Add image association for combinations
+	[*] WS : Add information for associations : virtual_entity
+	[*] WS : Add manufacturer_name getter for Product entity and clean WebserviceParameters of Configuration entity
+	[*] WS : Add new authentification method for Webservice
+	[*] WS : Add setWsPasswd in Customer and Employee entity in order to set password in plain text
+	[*] WS : All setter which don't exists is set to false
+	[*] WS : Fixed feature/bug PSCFI-1095
+	[*] WS : Improve Attribute displaying
+	[*] WS : dispatcher evolved
+	[*] WS : refactoring webservice classes
+	[*] WS : set the class name to us for webservice  with a static property of WebserviceRequest class. [-] WS : product options values are get well
+
+	[*] TR : fixed translations #PSCFI-759
+	[*] TR : fixed translations #PSCFI-862
+
+	Fixed bugs:
+
+	[-] PROJECT : Fixing bug in AddressFormat (as vSchoener suggestion)
+	[-] Project : Add a new way to build the layout address. All template / pdf are compatible with and keep the order of the layout. Fix US format view for the addresses
+	[-] Project : add parameters to respect the strict standard
+	[-] Project : add parameters to respect the strict standard
+	[-] Project : fixed bug #PSCFI-1687 - $protocol_link and $protocol_content not assigning correctly
+
+	[-] Installer : 1.4.1.1 => 1.4.2.0 wq
+	[-] Installer : Fix PSCFI-1579 - on update, paypal and authorize.net will not be disabled.
+	[-] Installer : Fixed #PSCFI-1722 - Characters encoding problem
+	[-] Installer : Fixed bug #1803 - Adding IGNORE if the configuration already exists
+	[-] Installer : Fixed bug #1803 - The PS_STOCK_MVT_REASON_DEFAULT was never add in the configuration table during the update.
+	[-] Installer : Fixed bug in sql query settings lite
+	[-] Installer : Fixed bug on installing without default timezone
+	[-] Installer : Fixed for new address format
+	[-] Installer : Fixed undefined constant when upgrading from version 1.3.7 or lower
+	[-] Installer : If an user submit wrong infos on the step 4, he can't re-submit the form because the button next is disabled
+	[-] Installer : Missing translations
+	[-] Installer : Tab AdminAliases is now correctly moved to Preferences during update
+	[-] Installer : Undefined variable in update_module_followup
+	[-] Installer : bug fixed #1863 request update (SQL)
+	[-] Installer : desactivate custom module will not desactivate native partner modules
+	[-] Installer : fix commit 6591 - remove duplicates from table category_group
+	[-] Installer : fix error template smarty for smarty v2
+	[-] Installer : fix php version ubuntu
+	[-] Installer : fixed bug #PSCFI-1301 - Prestashop installation and Swift exception
+	[-] Installer : fixed bug #PSCFI-1542 - PSCFI-1455 (svn5981) needs further followup
+	[-] Installer : fixed bug #PSCFI-1613 - Missing flag when adding languages during installation
+	[-] Installer : fixed bug #PSCFI-1747 - Variable assigned to rigidly in a file in the module dateofdelivery
+	[-] Installer : fixed bug #PSCFI-1823 - use of PHP function property_exists is not compatible with PHP 5.0
+	[-] Installer : fixed bug #PSCFI-1841 - ps prefix in sql file
+	[-] Installer : fixed bug #PSCFI-1908 - Tab name for SEO & URLs is now updated in sql 1.4.2.3
+	[-] Installer : fixed bug #PSCFI-1934 - removes duplicates from table category_group
+	[-] Installer : fixed bug #PSCFI-979 - unknown _PS_version_ in install process
+	[-] Installer : fixed bug on upgrader when you have wrong informations in your settings.inc.php file
+	[-] Installer : fixed timezone issue on install process with a version of PHP < 5.2
+	[-] Installer : fixes for the sql upgrade scripts
+	[-] Installer : module loyalty
+	[-] Installer : removed hard id_tab for AdminMeta lang update
+
+	[-] FO :   If the purchase is verified with a guest account if this type of control is allowed
+	[-] FO :   Prohibits the payment of an order if the conditions were not accepted
+	[-] FO : #PSCFI-1654 Fixed a bug concerning the order process after a login
+	[-] FO : #PSCFI-1660 Fixed a bug which not display an error when a carrier is not selected
+	[-] FO : #PSCFI-1674 Display problem about tax identification with guest checkout activated
+	[-] FO : Accept return product when the status of payment is accepted.
+	[-] FO : After an upgrade, it was impossible to create an account
+	[-] FO : Bug Fixed #PSCFI-1558 - Ecotax on product page when taxes are disabled
+	[-] FO : Bug Fixed #PSCFI-1845 - Rounding issues
+	[-] FO : Bug Fixed #PSCFI-1980 - Minimum order purchase and taxes
+	[-] FO : Fix bug when double click on "confirm order" button (add .hideOnSubmit class on elements to hide when parent form is submit) #PSCFI-1954
+	[-] FO : Fix bug when double click on "confirm order" button (add .hideOnSubmit class on elements to hide when parent form is submit) #PSCFI-1954
+	[-] FO : Fix else if and assign compatibility for smarty v2
+	[-] FO : Fix state order for USA
+	[-] FO : Fix the displayed address using smarty 2
+	[-] FO : Fix the state display changing the country when State:name doesn't exist in the layout
+	[-] FO : Fix theme compatibility < 1.4.2
+	[-] FO : Fix undefined variable
+	[-] FO : Fixed #PSCFI-1454 - fixed security lack if someone know the maintenance IP
+	[-] FO : Fixed #PSCFI-1611 - Comment mistake
+	[-] FO : Fixed a bug related to Smarty v2 on addresses.tpl
+	[-] FO : Fixed a bug related to the "Last quantities available" message display
+	[-] FO : Fixed an error when declinations with variable attributes are created for a same product
+	[-] FO : Fixed bug #PSCFI-1582 - Not correct search. Now we list all products which contains the search word.
+	[-] FO : Fixed bug #PSCFI-1592 - CMS category specifics meta tags was missing
+	[-] FO : Fixed bug #PSCFI-1593 - Path error with CMS subcategory. The $fullPath variable wasn't declared in the right place.
+	[-] FO : Fixed bug #PSCFI-1652 - The Best Sales pagination now works properly
+	[-] FO : Fixed bug #PSCFI-1665 - Invalid token when Instant search enabled. The $static_token variable was never set with instant search
+	[-] FO : Fixed bug #PSCFI-1718 - Categories block doesn't show categories when processing empty cart checkout. There was a javascript error.
+	[-] FO : Fixed bug #PSCFI-1825 - Tax is always displayed on the cart module
+	[-] FO : Fixed bug #PSCFI-1842 For guest, order details disappears when the browser is resized (IE7)
+	[-] FO : Fixed bug #PSCFI-1858 - Bug with cutomized field and reordering
+	[-] FO : Fixed bug #PSCFI-1864 - Fixed bug on ganalytics trackink step order when using url rewriting
+	[-] FO : Fixed bug #PSCFI-1865 - Some supplier images were not displayed. Image directory was _PS_MANU_IMG_DIR_ instead of _PS_SUPP_IMG_DIR_
+	[-] FO : Fixed bug #PSCFI-1883 - Changing the condition to avoid a problem of cache
+	[-] FO : Fixed bug #PSCFI-1895 - redirection problems on adding product to cart
+	[-] FO : Fixed bug #PSCFI-1895 - redirection problems on removing product to cart
+	[-] FO : Fixed bug #PSCFI-1914 - Voucher calculation and product discount
+	[-] FO : Fixed bug #PSCFI-1914 - Voucher calculation and product discount
+	[-] FO : Fixed bug #PSCFI-2024 - If using minimum amount to order don't see "cart is empty" alert but the cart with no products.
+	[-] FO : Fixed bug Smarty error $customizationQuantityTotal didn't exist. Replaced by $product.customizationQuantityTotal.
+	[-] FO : Fixed the undefined variable invoice_address on pdf-order-return.php
+	[-] FO : Incorrect price on product page when using group reduction + combination
+	[-] FO : No error popup "Cannot add this product because current voucher does not allow additional discounts" while using ajax cart
+	[-] FO : Product combination quantity not displayed
+	[-] FO : Product with combination should use default ecotax if not overriden
+	[-] FO : Removed useless CSS in blockstore #PSCFI-1443
+	[-] FO : Small fix regarding code standards
+	[-] FO : Validation W3C
+	[-] FO : bug fixed remaning for free shippping was casted to int
+	[-] FO : extra semicolon
+	[-] FO : fix a bug with default declination in product page #PSCFI-1917
+	[-] FO : fix a javascript bug on order page when a cart item is deleted #PSCFI-1905
+	[-] FO : fixed a bug wich controls the validity of the password
+	[-] FO : fixed bug #PSCFI-1310 - DNI mandatory for country not requesting DNI
+	[-] FO : fixed bug #PSCFI-1316 - one page checkout gives shipping error when the shipping clearly shows
+	[-] FO : fixed bug #PSCFI-1585 - Wrong filename css in SearchControllers.php
+	[-] FO : fixed bug #PSCFI-1590 - meta page title for manufacturers and suppliers
+	[-] FO : fixed bug #PSCFI-1602 - Googlemaps does not show the map or even the shops (there is no map)
+	[-] FO : fixed bug #PSCFI-1686 - Redirect to ssl has incorrect logic
+	[-] FO : fixed bug #PSCFI-1713 - issue with wishlist name translation
+	[-] FO : fixed bug #PSCFI-1786 - svn6231 cart bug and cannot check out using 1 page or 5 step checkout
+	[-] FO : fixed bug #PSCFI-1827 - Error with Url rewrite on stores page
+	[-] FO : fixed bug #PSCFI-1906 - 2 states fields for American account creation
+	[-] FO : fixed bug #PSCFI-2012 - The names of some sub categories are overflowing
+	[-] FO : fixed bug on refresh of cart summary when you log in on One page checkout
+	[-] FO : fixed bug on smarty v2 compatibility
+	[-] FO : fixed little bug with TOS value on Cookie
+	[-] FO : fixed strange chars in CMS contents when HTML is reduced #PSCFI-1956
+	[-] FO : removing the link on the category label
+	[-] FO : search improvements, both for indexation and search
+	[-] FO : see #PSCFI-1454
+	[-] FO : set <script> tags comments compatible XHTML with CDATA #PSCFI-1978
+
+	[-] BO : Address Layout is more restriced for the format of the attributes name
+	[-] BO : Bad link in AdminTab.php
+	[-] BO : Bug Fixed #PSCFI-1250 - Translations in tax rules instructions
+	[-] BO : Bug Fixed #PSCFI-1457 - Ecotax problem during product creation
+	[-] BO : Cache + pagination
+	[-] BO : Fees by Carrier the "," was not correctly replaced by "."
+	[-] BO : Fees by Carrier the "," was not correctly replaced by "."
+	[-] BO : Fix a bad method call with an object not instantiated
+	[-] BO : Fix div size
+	[-] BO : Fix error when PEAR already installed
+	[-] BO : Fix notice error in adminPayment tab
+	[-] BO : Fix notices "undefined variables/indexes" when exporting statistic data to CSV
+	[-] BO : Fix template mail for new address layout system
+	[-] BO : Fixed #PSCFI-1624 - Extra forward slash
+	[-] BO : Fixed #PSCFI-2046 - select box was empty when json_decode missing librarie
+	[-] BO : Fixed #PSCFI-985 - notice about image type fixed
+	[-] BO : Fixed PSCFI-1634 / PSCFI-1664 - colorpicker fix
+	[-] BO : Fixed a bug occurring while updating an employee information
+	[-] BO : Fixed a bug related to the "Address 2" not shown on order page
+	[-] BO : Fixed bug #PSCFI-1403 - Auto-reset default or selected currency after paypal payment.
+	[-] BO : Fixed bug #PSCFI-1405 - robots.txt was a too strict with pagination
+	[-] BO : Fixed bug #PSCFI-1547 - Image paths were hard-coded in the generateHtaccess function
+	[-] BO : Fixed bug #PSCFI-1684 - Tinymce didn't initialize in IE8 because of an extra comma at the end of the function
+	[-] BO : Fixed bug #PSCFI-1707 - Depending on the environment png image are concider as text/plain type.
+	[-] BO : Fixed bug #PSCFI-1769 - The id number of reason were not the same as in the table.
+	[-] BO : Fixed bug #PSCFI-1785 - Display problem when the content was too long.
+	[-] BO : Fixed bug #PSCFI-1814 - Remove blank lines on robot.txt
+	[-] BO : Fixed bug #PSCFI-1840 - Bugs on module trakingfront and referrer stat on the BO
+	[-] BO : Fixed bug #PSCFI-1840 - Bugs on module trakingfront and referrer stat on the BO
+	[-] BO : Fixed bug #PSCFI-1849. Rules pattern for ignored key.
+	[-] BO : Fixed bug #PSCFI-1860 - Loyalty point must be calculated by using the cart total (and not product by product)
+	[-] BO : Fixed bug #PSCFI-2011 - you can now change your language on the product page
+	[-] BO : Fixed bug #PSCFI-2032 - Ajax problem (call dirrectly on admin/tab)
+	[-] BO : Fixed bug - Few modules and sections missing when filtering
+	[-] BO : Fixed bug - The phone field was missing for guest checkout
+	[-] BO : Fixed bug - allowed to empty "Shop domain name" and "Shop domain name for SSL"
+	[-] BO : Fixed bug PSCFI-1056 - distant image is now https compliant
+	[-] BO : Fixed bug PSCFI-1970 - Hidden order statuses were not shown in admin panel "Customer" page
+	[-] BO : Fixed bug PSCFI-1985 - URL like "/en" were not redirecting to the homepage
+	[-] BO : Fixed bug PSCFI-1989 - Bad regex in errors translation tool
+	[-] BO : Fixed bug PSCFI-2018 - Custom required field were not inserted properly into the DB
+	[-] BO : Fixed bug on product accessories
+	[-] BO : Fixed bug with new status in order list
+	[-] BO : Fixed small bug on switch entity to import
+	[-] BO : Fixed the gap on the merchandise return table (<table>)
+	[-] BO : Fixed the position of the button save on the merchandise return edit form
+	[-] BO : Modules installation/uninstallation does not work
+	[-] BO : Mysql error during new pack creation
+	[-] BO : New view with new feature to clear / reset / use a default layout
+	[-] BO : PSCFI-1847 - Product combinations generator tax incl & tax excl
+	[-] BO : Remove undefined function 'elog'
+	[-] BO : Translations tab was not using Tools::file_get_contents and had no timeout
+	[-] BO : Two same error message when trying to delete categorie and nothing was selected
+	[-] BO : Update cache_default_attribute when you duplicate a product
+	[-] BO : Using _DB_PREFIX_ to prefix table name
+	[-] BO : When you translate mails, end of line is now correct
+	[-] BO : Wrong validator for SMTP password.
+	[-] BO : Wrong validator for the minimal field
+	[-] BO : Wrong validators for the delimiters
+	[-] BO : Wrong validators for the delimiters
+	[-] BO : Wrong validators for the width, height, depth and weight of a product
+	[-] BO : add of a Javascript verification in product's declination tab to check that only group of attributes can be used per declination #PSCFI-1813
+	[-] BO : added "$this->author = 'PrestaShop';" to the Dibs module
+	[-] BO : added a condition in order to forbid the access to the main PHP file  by  URL
+	[-] BO : avoid crashing the product listing page when you have not enough memory to resize the thumbnails
+	[-] BO : fix .htaccess specific configuration (pSql was called twice in Configuration class on insert) #PSCFI-1976
+	[-] BO : fix of a double slash in admin icons img path #PSCFI-1912
+	[-] BO : fix of a rare bug in .htaccess generation if a category name is composed only of numbers, with multilang disactivated #PSCFI-1925
+	[-] BO : fix of display order of billing / shipping addresss in PDF invoices #PSCFI-1922
+	[-] BO : fix of htaccess specific configuration (\r and \n are not stored anymore as string)
+	[-] BO : fix some notices in product customization page when some languages are disabled
+	[-] BO : fix upload of images for products on IIS servers
+	[-] BO : fixed a part of PSCFI-1746 (Add customer name and Fix secure key is empty
+	[-] BO : fixed bug "save and preview" on product page redirect was broken. Now it's work fine
+	[-] BO : fixed bug #1302 - Bad step number
+	[-] BO : fixed bug #PSCFI-1354 - default attribute cache was not updated
+	[-] BO : fixed bug #PSCFI-1432 - Import encoding iso-8859-1 doesn't work
+	[-] BO : fixed bug #PSCFI-1524 - Browser cache & compression has a caution sign and goes to the AdminGenerator page
+	[-] BO : fixed bug #PSCFI-1539 - BO tabs problem after lang change
+	[-] BO : fixed bug #PSCFI-1564 - CSV import of feature value reuses custom values
+	[-] BO : fixed bug #PSCFI-1583
+	[-] BO : fixed bug #PSCFI-1591 - StatusCMS doesn't work
+	[-] BO : fixed bug #PSCFI-1596 - Second level category is not sorted correctly
+	[-] BO : fixed bug #PSCFI-1599 - bug fixed when you edit the preference of an employee
+	[-] BO : fixed bug #PSCFI-1616 - Imported categories are shown duplicates on FO
+	[-] BO : fixed bug #PSCFI-1748 - mandatory states does not have a star denoting mandatory next to it
+	[-] BO : fixed bug #PSCFI-1766 - When moving category from parent to another parent, it keeps its position => position duplicates
+	[-] BO : fixed bug #PSCFI-1772 - Clicking checkmark does not disable Tax Rule
+	[-] BO : fixed bug #PSCFI-1797 - product specific price not deleted during import
+	[-] BO : fixed bug #PSCFI-1807 - Product details export displays 0 instead of product name
+	[-] BO : fixed bug #PSCFI-1812 - CSV Import bug - wrong nice URLs
+	[-] BO : fixed bug #PSCFI-1881 - SSL Security Warning in IE8 PS V 1.4.0 BO Login
+	[-] BO : fixed bug #PSCFI-1936 - Cart::delete() fails to preserve db referential integrity
+	[-] BO : fixed bug #PSCFI-1965 - svn6545 -- inverted logic within AdminCarts::_displayDeleteLink()
+	[-] BO : fixed bug #PSCFI-1971 - it is now impossible to add downloadable products to a pack.
+	[-] BO : fixed bug #PSTP-15 - Wrong text for kilobytes
+	[-] BO : fixed bug : AdminImport no longer uses Product::getIndexedCategories but Product::getProductCategories
+	[-] BO : fixed bug admin tab filter
+	[-] BO : fixed bug on module filters
+	[-] BO : fixed bug where imported csv content was not correctly encoded.
+	[-] BO : fixed bug while add or updating without amount for a voucher in AdminDiscounts
+	[-] BO : fixed bug while add or updating without voucher type in AdminDiscounts
+	[-] BO : fixed bug while updating without category for a voucher in AdminDiscounts
+	[-] BO : fixed bug with corrupted db backup gzip archive
+	[-] BO : fixed display of error in catalog attachments when a file size is too big
+	[-] BO : fixed display of phone data in order #PSCFI-1862
+	[-] BO : fixed table product_attribute_image not being updated when image is deleted
+	[-] BO : module XML config files stability improved
+	[-] BO : performance optimizations
+	[-] BO : performance optimizations
+	[-] BO : remove an alone char 's'
+	[-] BO : resized images are now chmoded 644 #PSCFI-1498
+	[-] BO : stats modules can now display graphs larger than 1 year
+	[-] BO : the errors when you try to copy a module from prestashop addons are now more detailed
+	[-] BO : you can now try to extract zip file even if you do not have ArchiveZip on your server
+	[-] BO : you do not need to configure ranges anymore with free carriers
+	[-] BO :Fix unavailable global issue and use instead of it the configuration variable
+
+	[-] Classes : Add personalized styles to a generated address layout
+	[-] Classes : fixed bug #PSCFI-1272 - Fatal Error Fatal Error on Payment Return - 1.4.0.17 upgrade from 1.3.7.0 (Secure Keys)
+	[-] Classes : fixed bug #PSCFI-1477 - PaymentModule.php price comparing error
+	[-] Classes : fixed bug #PSCFI-1691 - svn6062 payment -> taxes set to NOT show tax line in cart but it does anyway.
+	[-] Classes : fixed bug #PSCFI-1737 - Incorrect test on numRow() in Cart class
+	[-] Classes : fixed bug #PSCFI-1738 - Incorrect cacheKey in Cart::getNbProduct()
+	[-] Classes : fixed bug #PSCFI-1800 - after purchasing a product you cannot download because you have to login.
+	[-] Classes : fixed bug #PSCFI-1966 - Attribute::getAttributeMinimalQty
+	[-] Classes : fixed bug on Payment validation with using of Specific price (Country criteria)
+	[-] Classes : fixed bug on duplicate method in Cart class
+	[-] Classes : small bug fixed on "stores" field
+
+	[-] Core : Autoload is now compliant with older classes name
+	[-] Core : decrypted data are now truncate to the size of the original plain text (Rijndael & Blowfish)
+	[-] Core : fixed bug #PSCFI-1529 - Forgot password link is empty
+	[-] Core : fixed bug #PSCFI-1546 - need_instance is not configurable
+	[-] Core : fixed bug on update of customer address
+	[-] Core : fixed cache_default_attribute issue
+	[-] Core : fixed regexp that crashed IIS when the URL was too long (and a few others)
+
+	[-] MO : Add a method to clean char accented
+	[-] MO : Adding help and fix some details on Moneybookers module
+	[-] MO : Bug #PSCFI-1681 - Correction part1. Rows in blocklist_lang were never removed when a link was deleted.
+	[-] MO : Bug #PSCFI-1681 - Correction part2.  * symbol was missing next to the URL field.
+	[-] MO : Bug concerning getShopUrl on this module due to no retrocompatibility in 1.4 has been fixed
+	[-] MO : Bug fixed #PSCFI-1054 - The error "Invalid token" on PayPal module is now well handled
+	[-] MO : Bug fixed #PSCFI-1138 - Fixing address problem in PayPal module
+	[-] MO : Bug fixed #PSCFI-1138 - Refixing, only one address can be send, so the delivery and billing address will be the same
+	[-] MO : Bug fixed #PSCFI-1754 - Fedex module does not need cookie anymore to calculate shipping cost
+	[-] MO : Bug fixed #PSCFI-1754 - UPS module does not need cookie anymore to calculate shipping cost
+	[-] MO : Bug fixed #PSCFI-1754 - USPS module does not need cookie anymore to calculate shipping cost
+	[-] MO : Bug fixed #PSCFI-1798 - Fedex module had the wrong gateway address (Thanks Will :)
+	[-] MO : Bug fixed #PSCFI-1879 - Fedex Carriers does not appear when there is too much products in the cart (thanks Thomas :D)
+	[-] MO : Bug fixed #PSCFI-1952 - Paypal did not handle logout properly on submit.php
+	[-] MO : Bug fixed #PSCFI-738 - UPS, USPS and Fedex module had an error during install when the default language is not fr or en
+	[-] MO : Bug fixed PayPal module - The module had an error on PHP 5.2 and lower
+	[-] MO : Bug fixed PayPal module was not working properly when the product costs more than 1000 $ because of number_format (sigh)
+	[-] MO : Bug fixed concerning smarty template on Treepodia module
+	[-] MO : Bug fixed on PayPal module where there is no tax
+	[-] MO : Change wordings and small logo on PayPal Module
+	[-] MO : Changing url in Dibs module
+	[-] MO : Fix SSL issues
+	[-] MO : Fix a bad displaying of the error messages
+	[-] MO : Fix a crach during the payment process when the module isn't available to be use in restricted country
+	[-] MO : Fix bad iso code country verfication
+	[-] MO : Fix on Twenga Module (problem with object require path)
+	[-] MO : Fix one page checkout with a broken display. Twenga use' document.write' and this delete the page content using with an event (ex onclick)
+	[-] MO : Fixed bug #PSCFI-1574 - When only one language was activated iso code was still used.
+	[-] MO : Fixed bug #PSCFI-1617 - Sitemap module produced duplicate rows.
+	[-] MO : Fixed bug #PSCFI-1802 - Etra double quote for the $pageTrack variable
+	[-] MO : Fixed bug #PSCFI-1808 - Can not change the percentage of voucher
+	[-] MO : Fixed bug #PSCFI-1864 - Fixed bug on ganalytics trackink step order when using url rewriting
+	[-] MO : Fixed bug #PSCFI-1930 - ajax call to unexistant url on customer address updating
+	[-] MO : Fixed bug #PSCFI-1945 - Bad cart total calculation on paypal module when having an article qty > 1
+	[-] MO : Fixed bug #PSCFI-2004 - On using special secures keys in dibs (like &#37) the module do not work.
+	[-] MO : Fixed bug - Don't display all carriers. Now it is correct
+	[-] MO : Fixed bug - Undefined variable ids.
+	[-] MO : Fixed bug PSCFI-1754, Google Checkout are now correctly taking in consideration
+	[-] MO : Fixed bug PSCFI-2025 when loading the carrier hook without have selected a mondial relay carrier, this one tryed to load google map and other inormation...
+	[-] MO : Fixed bug when saving a criteria without name in the default language on the  module "Product comment"
+	[-] MO : Fixed open basedir
+	[-] MO : Hiding password in Paysafecard module
+	[-] MO : Improve rapidity of the module followup.
+	[-] MO : Loyalty - After an upgrade, categories were not initialized for the loyalty module
+	[-] MO : Not correct display of "date_add" for the discounts
+	[-] MO : Ogone fixed shaOut sign generation and exclude bad key used, add dirname() for all smarty include
+	[-] MO : On updating PS, module editorial add iphone image on the home page even if the images was removed.
+	[-] MO : Prevent bug #PSCFI-1768
+	[-] MO : Removing cookie on eKomi which was not working with paiement card module
+	[-] MO : Subscribe link paypal updated
+	[-] MO : Translations fixed on Paypal module
+	[-] MO : Twenga fix try catch error
+	[-] MO : Twenga, fix tracking ht price
+	[-] MO : blocklayered (same as revision 6319)
+	[-] MO : css changes not done
+	[-] MO : fix an error in blocklayered module with weights data in sql query
+	[-] MO : fix display of price in gCheckout module on confirm template #PSCFI-1949
+	[-] MO : fix display of supplier / manufacturer node in sitemap.xml (gsitemap module) if we want to hide them #PSCFI-1893
+	[-] MO : fix on some spurious slashes after constant PS_MODULE_DIR #PSCFI-1964
+	[-] MO : fix smarty $minimal_quantity notice in blocklayered
+	[-] MO : fixed a bug in mailalert with bad trigger of notifications ; added the updateQuantity hook in product->stockMvt method + clean of this hook call in some places #PSCFI-1829
+	[-] MO : fixed bug #PSCFI-1117 - Layered navigation block - cannot cancel color filter
+	[-] MO : fixed bug #PSCFI-1352 - oscommerce import module now supports the encryption password of the earlier version 2.3 of oscommerce
+	[-] MO : fixed bug #PSCFI-1410 - Socolissimo module fail validation w/ error 998
+	[-] MO : fixed bug #PSCFI-1589 - fixed hard coding prefix and Class name.
+	[-] MO : fixed bug #PSCFI-1762 - Compatibility problem Theme Installator with Prestashop 1.3.1
+	[-] MO : fixed bug #PSCFI-1856 - Layered module "go to the top of the page"
+	[-] MO : fixed bug #PSCFI-1856 - better fix (e.preventDefault() allow use of chained JS events)
+	[-] MO : fixed bug into statssearch module with keywords
+	[-] MO : fixed bug on crossselling and productscategory module after an upgrade
+	[-] MO : fixed bug on oscommerce import gender is correctly import now
+	[-] MO : fixed bug on oscommerce import gender is correctly import now
+	[-] MO : fixed bug on shopImport - now old identifier are drop before import
+	[-] MO : fixed bug on shopImport with payment method (FATAL ERROR)
+	[-] MO : fixed bug on socolissimo with one page checkout
+	[-] MO : fixed bug table name different from the identifier (id_link => id_blocklink)
+	[-] MO : fixed display of wishlist send form when HTML code is minified #PSCFI-1640
+	[-] MO : fixed issue with blockcms module after an update of Prestashop
+	[-] MO : improving of comment for the deletion of PaypalAPI module
+	[-] MO : modules exceptions stability improved
+	[-] MO : no longer go to the top of the page when click on a filter toggle icon in module blocklayered
+	[-] MO : tm4b - missing include on hookUpdateQuantity
+	[-] MO : when cancel enabled filters, checkbox no longer disappear
+
+	[-] WS : Add missing headers in Webservice classes
+	[-] WS : Bug PSCFI-1451 fixed
+	[-] WS : Bug PSCFI-1473 fixed.
+	[-] WS : Bug fixed PSCFI-1407
+	[-] WS : Bug fixed PSCFI-1449
+	[-] WS : Bug fixed for hours field of store
+	[-] WS : Bug fixed in schema synopsis
+	[-] WS : Code cleaning
+	[-] WS : Error message changed
+	[-] WS : Fix association in Cart entity
+	[-] WS : Fix bug in ImageManagement
+	[-] WS : Fix update/add for TranslatedConfiguration entity.
+	[-] WS : Fixed bug PSCFI-1091 and language node name
+	[-] WS : Fixed bug PSCFI-1450
+	[-] WS : Fixed bug PSCFI-1731
+	[-] WS : Fixed bug on product class
+	[-] WS : Fixed setter in Order
+	[-] WS : allow one id for a language filter in the recommanded format (between brackets). [-] WS : delete an unnecessary variable in images management
+	[-] WS : allow to display and calculate specific price field for combinations entity
+	[-] WS : allow to display specific price field
+	[-] WS : bug PSCFI-1779 is fixed
+	[-] WS : bug PSCFI-1779 is fixed
+	[-] WS : bug PSCFI-1790 is fixed
+	[-] WS : bug PSCFI-1791 is fixed
+	[-] WS : bug PSCFI-506 is fixed
+	[-] WS : date_add and date_upd management
+	[-] WS : fix a E_STRICT php error
+	[-] WS : fix price calculation
+	[-] WS : fixed bug for synopsis detail : PSCFI-1417
+	[-] WS : minor bugs are fixed, [-] Install : delete unusable values in configuration_lang table if exists
+	[-] WS : set the product_attribute in price calculation for combinations entity
+	[-] WS : use configuration variable by default for decimals
+	[-] WS : use configuration variable by default for ecotax
+
+	[-] PDF : Bug Fixed #1817 - Group discount applied twice
+	[-] PDF : Incorrect unit price = 2 ecotax
+
+	[-] TR : Bug fixed #1792 (1.4.1) - Allow to apply or not shipping costs and additional shipping costs on carriers
+	[-] TR : Fixed #PSTP-7 - se.xml iso code fix
+	[-] TR : Fixed wrong url-rewrite for italian version (identica)
+	[-] TR : French translations added
+	[-] TR : Italian et German translations updated
+	[-] TR : Maj german version
+	[-] TR : Maj italian version
+	[-] TR : Thanks to Michael Bangiev for all german translation fix
+	[-] TR : missing translation for error message (config)
+	[-] TR : updated italian versions from language pack
+	[-] TR : updated italian versions from language pack, part 2
+
+
+####################################
 #   v1.4.1.0 - 6030 (2011-04-21)  #
 ####################################
 
