@@ -45,6 +45,15 @@ class AddressFormatCore extends ObjectModel
 	protected	$table = 'address_format';
 	protected $identifier = 'id_country';
 	
+	static public $requireFormFieldsList = array(
+		'firstname',
+		'name',
+		'address1',
+		'city',
+		'postcode',
+		'Country:name',
+		'State:name');
+	
 	static public $forbiddenProperyList = array(
 		'deleted',
 		'date_add',

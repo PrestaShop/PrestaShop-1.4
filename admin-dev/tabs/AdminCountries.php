@@ -287,10 +287,14 @@ class AdminCountries extends AdminTab
 					</div>
 					<div class="clear"></div>
 					<div style="margin:10px 0 10px 0;">
-						<a id="useLastDefaultLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($address_layout).'\', \'lastDefault\');" class="button">'.$this->l('Use the last registered layout').'</a>
-						<a id="useDefaultLayoutSystem" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($defaultLayout).'\', \'defaultSystem\');" class="button">'.$this->l('Use a default layout').'</a>
-						<a id="useCurrentLastModifiedLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(lastLayoutModified, \'currentModified\')" class="button">'.$this->l('Use my current modified layout').'</a>
-						<a id="eraseCurrentLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\'\', \'erase\');" class="button">'.$this->l('Clean layout').'</a>
+						<a id="useLastDefaultLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($address_layout).'\', \'lastDefault\');" class="button">'.
+							$this->l('Use the last registered layout').'</a>
+						<a id="useDefaultLayoutSystem" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($defaultLayout).'\', \'defaultSystem\');" class="button">'.
+							$this->l('Use a default layout').'</a>
+						<a id="useCurrentLastModifiedLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(lastLayoutModified, \'currentModified\')" class="button">'.
+							$this->l('Use my current modified layout').'</a>
+						<a id="eraseCurrentLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\'\', \'erase\');" class="button">'.
+							$this->l('Clean layout').'</a>
 						<div style="margin-top:10px; padding-top:5px; height:10px;" id="explanationText"></div>
 					</div>
 				</div>
