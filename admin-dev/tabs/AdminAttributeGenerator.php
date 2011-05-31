@@ -237,41 +237,29 @@ class AdminAttributeGenerator extends AdminTab
 
 			var product_tax = "'.Tax::getProductTaxRate($this->product->id, NULL).'";
 
-			function bindCalcPrice()
-			{
-				$(".price_impact_ti").bind("keyup", function() {
-					calcPrice($(this), true);
-				});
-
-				$(".price_impact").bind("keyup", function() {
-					calcPrice($(this), false);
-				});
-			}
-
 			function calcPrice(element, element_has_tax)
 			{
-					name = element.attr("name");
-					var element_price = element.val().replace(/,/g, ".");
-					var other_element_price = "0";
+				name = element.attr("name");
+				var element_price = element.val().replace(/,/g, ".");
+				var other_element_price = "0";
 
-					if (!isNaN(element_price) && element_price > 0)
-					{
-						if (element_has_tax)
-							other_element_price = parseFloat(element_price / ((product_tax / 100) + 1));
-						else
-							other_element_price = ps_round(parseFloat(element_price * ((product_tax / 100) + 1)), 2);
-					}
+				if (!isNaN(element_price) && element_price > 0)
+				{
+					if (element_has_tax)
+						other_element_price = parseFloat(element_price / ((product_tax / 100) + 1));
+					else
+						other_element_price = ps_round(parseFloat(element_price * ((product_tax / 100) + 1)), 2);
+				}
 
-					$("#related_to_"+name).val(other_element_price);
+				$("#related_to_"+name).val(other_element_price);
 			}
 
 
-			$(document).ready(function() {
-				bindCalcPrice();
-
+			$(document).ready(function()
+			{
 				$(".price_impact").each(function()
 				{
-						calcPrice($(this), false);
+					calcPrice($(this), false);
 				});
 			});
 		</script>';
