@@ -173,7 +173,8 @@ class AdminImport extends AdminTab
 											'label' => $this->l('Delete existing images (0 = no, 1 = yes)'),
 											'help' => $this->l('If you do not specify this column and you specify the column images, all images of the product will be replaced by those specified in the import file')),
 				'feature' => array('label' => $this->l('Feature')),
-				'online_only' => array('label' => $this->l('Only available online')));
+				'online_only' => array('label' => $this->l('Only available online')),
+				'condition' => array('label' => $this->l('Condition')));
 
 				self::$default_values = array(
 				'id_category' => array(1),
@@ -184,7 +185,8 @@ class AdminImport extends AdminTab
 				'id_tax_rules_group' => 0,
 				'description_short' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
 				'link_rewrite' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
-				'online_only' => 0);
+				'online_only' => 0,
+				'condition' => 'new');
 
 				break;
 
@@ -597,7 +599,6 @@ class AdminImport extends AdminTab
 				
 			}
 			
-
 			if (isset($product->manufacturer) AND is_numeric($product->manufacturer) AND Manufacturer::manufacturerExists((int)($product->manufacturer)))
 				$product->id_manufacturer = (int)($product->manufacturer);
 			elseif (isset($product->manufacturer) AND is_string($product->manufacturer) AND !empty($product->manufacturer))
