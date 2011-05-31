@@ -33,7 +33,7 @@ class MCachedCore extends Cache
 	protected function __construct()
 	{
 		parent::__construct();
-		return $this->connect();
+		$this->connect();
 	}
 
 	public function connect()
