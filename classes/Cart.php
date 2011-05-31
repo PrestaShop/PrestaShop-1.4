@@ -808,7 +808,7 @@ class CartCore extends ObjectModel
 		if (!Validate::isLoadedObject($cart))
 			die(Tools::displayError());
 	    $with_taxes = $use_tax_display ? $cart->_taxCalculationMethod != PS_TAX_EXC : true;
-		return Tools::displayPrice($cart->getOrderTotal($with_taxes), Currency::getCurrencyInstance((int)($cart->id_currency)), false, false);
+		return Tools::displayPrice($cart->getOrderTotal($with_taxes), Currency::getCurrencyInstance((int)($cart->id_currency)), false);
 	}
 
 

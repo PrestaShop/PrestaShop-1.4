@@ -1993,7 +1993,7 @@ class ProductCore extends ObjectModel
 	{
 		if (!isset($params['convert']))
 			$params['convert'] = true;
-		return Tools::displayPrice($params['price'], $params['currency'], false, $params['convert']);
+		return Tools::displayPrice($params['price'], $params['currency'], false);
 	}
 
 	static function displayWtPrice($params, &$smarty)
@@ -2003,7 +2003,7 @@ class ProductCore extends ObjectModel
 
 	static function displayWtPriceWithCurrency($params, &$smarty)
 	{
-		return Tools::displayPrice($params['price'], $params['currency'], false, $params['convert']);
+		return Tools::displayPrice($params['price'], $params['currency'], false);
 	}
 
 	/**
