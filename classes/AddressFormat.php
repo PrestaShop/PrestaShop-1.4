@@ -70,7 +70,15 @@ class AddressFormatCore extends ObjectModel
 		'link_rewrite',
 		'meta_title',
 		'meta_keywords',
-		'dni');
+		'display_tax_label',
+		'need_zip_code',
+		'contains_states',
+		'call_prefixes',
+		'call_prefix');
+		
+	static public $forbiddenClassList = array(
+		'Manufacturer',
+		'Supplier');
 
 	public function getFields()
 	{
@@ -156,12 +164,18 @@ class AddressFormatCore extends ObjectModel
 					$associationName[0] = ucfirst($associationName[0]);
 					$associationName[1] = strtolower($associationName[1]);
 					
-					// Check if the id field name exist in the Address class 
-					$this->_checkValidateClassField('Address', 'id_'.strtolower($associationName[0]), true);
+					if (in_array($associationName[0], self::$forbiddenClassList))
+						$this->_errorFormatList[] = Tools::displayError('This name isn\'t allowed').': '.
+							$associationName[0];
+					else
+					{
+						// Check if the id field name exist in the Address class 
+						$this->_checkValidateClassField('Address', 'id_'.strtolower($associationName[0]), true);
 					
-					// Check if the field name exist in the class write by the user
-					$this->_checkValidateClassField($associationName[0], $associationName[1], false);
-					$cleanedLine = $associationName[0].':'.$associationName[1];
+						// Check if the field name exist in the class write by the user
+						$this->_checkValidateClassField($associationName[0], $associationName[1], false);
+						$cleanedLine = $associationName[0].':'.$associationName[1];
+					}
 				}
 			}
 		}
@@ -335,7 +349,8 @@ class AddressFormatCore extends ObjectModel
 				if (preg_match('#id_\w#', $propertyName, $match) && strlen($propertyName) > 3)
 				{
 					$nameObject = ucfirst(substr($propertyName, 3));
-					if (class_exists($nameObject))
+					if (!in_array($nameObject, self::$forbiddenClassList) && 
+							class_exists($nameObject))
 						$objectList[$nameObject] = new $nameObject();
 				}
 			}

@@ -150,15 +150,48 @@ class AdminCountries extends AdminTab
 		echo '
 		<script type="text/javascript" language="javascript" src="'._PS_JS_DIR_.'jquery/jquery-fieldselection.js"></script>
 		<script type="text/javascript" language="javascript">
+			
+			lastLayoutModified = "";
+			
 			$(document).ready(function()
 			{
 				$(".availableFieldsList").css("display", "none");
 				$(".addPattern").click(function()
 				{
 					addFieldsToCursorPosition($(this).attr("id"))
+					lastLayoutModified = $("#ordered_fields").val();
+				});
+				$("#ordered_fields").keyup(function()
+				{
+					lastLayoutModified = $(this).val();
+				});
+				$("#useLastDefaultLayout").mouseover(function()
+				{
+					switchExplanationText("'.$this->l('Will display back you\'re last registered layout').'");
+				});
+				$("#useDefaultLayoutSystem").mouseover(function()
+				{
+					switchExplanationText("'.$this->l('Will display a default layout for this country').'");
+				});
+				$("#useCurrentLastModifiedLayout").mouseover(function()
+				{
+					switchExplanationText("'.$this->l('Will display back you\'re current editing layout').'");
+				});
+				$("#eraseCurrentLayout").mouseover(function()
+				{
+					switchExplanationText("'.$this->l('Will delete the current layout').'");
 				});
 				
 			});
+			
+			function  switchExplanationText(text)
+			{
+				$("#explanationText").fadeOut("fast", function()
+				{
+					$(this).html(text);
+					$(this).fadeIn("fast");
+				});
+			}
 			
 			function addFieldsToCursorPosition(pattern)
 			{
@@ -174,9 +207,12 @@ class AdminCountries extends AdminTab
 				$("#availableListFieldsFor_" + containerName).slideToggle();
 			}
 			
-			function resetLayout(defaultLayout)
+			function resetLayout(defaultLayout, type)
 			{
-				$("#ordered_fields").val(unescape(defaultLayout.replace(/\+/g, " ")));
+				if (confirm("'.$this->l('Are you sure to apply this selection ?').'"))
+				{
+					$("#ordered_fields").val(unescape(defaultLayout.replace(/\+/g, " ")));
+				}
 			}
 			
 		</script>
@@ -251,9 +287,11 @@ class AdminCountries extends AdminTab
 					</div>
 					<div class="clear"></div>
 					<div style="margin:10px 0 10px 0;">
-						<a style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($address_layout).'\');" class="button">'.$this->l('Reset address layout').'</a>
-						<a style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($defaultLayout).'\');" class="button">'.$this->l('Use a default layout').'</a>
-						<a style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\'\');" class="button">'.$this->l('Clean layout').'</a>
+						<a id="useLastDefaultLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($address_layout).'\', \'lastDefault\');" class="button">'.$this->l('Use the last registered layout').'</a>
+						<a id="useDefaultLayoutSystem" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($defaultLayout).'\', \'defaultSystem\');" class="button">'.$this->l('Use a default layout').'</a>
+						<a id="useCurrentLastModifiedLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(lastLayoutModified, \'currentModified\')" class="button">'.$this->l('Use my current modified layout').'</a>
+						<a id="eraseCurrentLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\'\', \'erase\');" class="button">'.$this->l('Clean layout').'</a>
+						<div style="margin-top:10px; padding-top:5px; height:10px;" id="explanationText"></div>
 					</div>
 				</div>
 				<label>'.$this->l('Status:').' </label>
