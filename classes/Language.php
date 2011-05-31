@@ -341,7 +341,8 @@ class LanguageCore extends ObjectModel
 
 		// Files deletion
 		foreach (self::getFilesList($this->iso_code, _THEME_NAME_, false, false, false, true, true) as $key => $file)
-			unlink($key);
+			if (file_exists($key))
+				unlink($key);
 		$modList = scandir(_PS_MODULE_DIR_);
 		foreach ($modList as $k => $mod)
 		{
