@@ -235,7 +235,7 @@ $(function(){ldelim}
 			<label for="phone_mobile">{l s='Mobile phone'}</label>
 			<input type="text" id="phone_mobile" name="phone_mobile" value="{if isset($smarty.post.phone_mobile)}{$smarty.post.phone_mobile}{else}{if isset($address->phone_mobile)}{$address->phone_mobile|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 		</p>
-		<p class="required text" id="adress_alias">
+		<p class="required text" id="address_alias">
 			<label for="alias">{l s='Assign an address title for future reference'}</label>
 			<input type="text" id="alias" name="alias" value="{if isset($smarty.post.alias)}{$smarty.post.alias}{else}{if isset($address->alias)}{$address->alias|escape:'htmlall':'UTF-8'}{/if}{if isset($select_address)}{else}{l s='My address'}{/if}{/if}" />
 			<sup>*</sup>
