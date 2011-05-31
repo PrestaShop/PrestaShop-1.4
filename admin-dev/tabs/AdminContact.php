@@ -60,7 +60,7 @@ class AdminContact extends AdminPreferences
 			'PS_SHOP_EMAIL' => array('title' => $this->l('Shop e-mail:'), 'desc' => $this->l('Displayed in e-mails sent to customers'), 'validation' => 'isEmail', 'required' => true, 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_DETAILS' => array('title' => $this->l('Registration:'), 'desc' => $this->l('Shop registration information (e.g., SIRET or RCS)'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'textarea', 'cols' => 30, 'rows' => 5),
 			'PS_SHOP_ADDR1' => array('title' => $this->l('Shop address line 1:'), 'validation' => 'isAddress', 'size' => 30, 'type' => 'text'),
-			'PS_SHOP_ADDR2' => array('title' => 'Address line 2', 'validation' => 'isAddress', 'size' => 30, 'type' => 'text'),
+			'PS_SHOP_ADDR2' => array('title' => $this->l('Address line 2'), 'validation' => 'isAddress', 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_CODE' => array('title' => $this->l('Post/Zip code:'), 'validation' => 'isGenericName', 'size' => 6, 'type' => 'text'),
 			'PS_SHOP_CITY' => array('title' => $this->l('City:'), 'validation' => 'isGenericName', 'size' => 30, 'type' => 'text'),
 			'PS_SHOP_COUNTRY_ID' => array('title' => $this->l('Country:'), 'validation' => 'isInt', 'size' => 30, 'type' => 'select', 'list' => $countryList, 'identifier' => 'id', 'cast' => 'intval'),

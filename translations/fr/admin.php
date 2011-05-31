@@ -381,6 +381,7 @@ $_LANGADM['AdminContact0188aaac1db951dc90bced9ecd606c04'] = 'Affichée dans les 
 $_LANGADM['AdminContactd7ceaa3ddb4fc6884046456463ecb258'] = 'Immatriculation :';
 $_LANGADM['AdminContact76cee53a1d378b50e5bc3aa50ab3b4c0'] = 'Immatriculation de la boutique (ex : SIRET, RCS, ...)';
 $_LANGADM['AdminContact3c720ca57528095461f52d40d26d956a'] = 'Adresse du magasin (ligne 1):';
+$_LANGADM['AdminContact3d4d4cac03e194ab20154382cd544e0f'] = 'Adresse (ligne 2):';
 $_LANGADM['AdminContacte0ef7a9e00e6b6189c8da23da3fe79f8'] = 'Code postal :';
 $_LANGADM['AdminContactbffb711ec36f280459d11dce315da72f'] = 'Ville :';
 $_LANGADM['AdminContactf64be5eef68442a8f50cf535b92ad3e4'] = 'Pays :';
