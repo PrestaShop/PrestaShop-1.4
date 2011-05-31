@@ -388,24 +388,13 @@ class AuthControllerCore extends FrontController
 
 	protected function processAddressFormat()
 	{
-		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
-		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
-
-		$inv_all_fields = array();
-		$dlv_all_fields = array();
-
-
-		foreach (array('inv','dlv') as $adr_type)
-		{
-			foreach (${$adr_type.'_adr_fields'} as $fields_line)
-				foreach(explode(' ',$fields_line) as $field_item)
-					${$adr_type.'_all_fields'}[] = trim($field_item);
-
-			self::$smarty->assign($adr_type.'_adr_fields', ${$adr_type.'_adr_fields'});
-			self::$smarty->assign($adr_type.'_all_fields', ${$adr_type.'_all_fields'});
-
-		}
+		$addressItems = array();
+		$addressFormat = AddressFormat::getOrderedAddressFields(Configuration::get('PS_COUNTRY_DEFAULT'));
+		foreach ($addressFormat as $addressline)
+			foreach (explode(' ', $addressline) as $addressItem)
+				$addressItems[] = trim($addressItem);
+		foreach (array('inv', 'dlv') as $addressType)
+			self::$smarty->assign(array($addressType.'_adr_fields' => $addressFormat, $addressType.'_all_fields' => $addressItems));
 	}
 }
 
