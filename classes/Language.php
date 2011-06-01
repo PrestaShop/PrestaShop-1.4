@@ -95,6 +95,10 @@ class LanguageCore extends ObjectModel
 	$'.$var.' = array();
 ?>');
 
+		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
+		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+			return true;
+
 		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
@@ -107,6 +111,9 @@ class LanguageCore extends ObjectModel
 		if (!parent::toggleStatus())
 			return false;
 
+		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
+		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+			return true;
 		return (Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
@@ -380,6 +387,11 @@ class LanguageCore extends ObjectModel
 				if (file_exists(dirname(__FILE__).'/../img/l/'.$this->id.'.jpg'))
 					unlink(dirname(__FILE__).'/../img/l/'.$this->id.'.jpg');
 			}
+
+		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
+		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+			return true;
+
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
@@ -398,6 +410,10 @@ class LanguageCore extends ObjectModel
 			$this->id = (int)($id);
 			$result = $result AND $this->delete();
 		}
+
+		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
+		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+			return true;
 
 		Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 								(int)(Configuration::get('PS_REWRITING_SETTINGS')),
@@ -525,6 +541,10 @@ class LanguageCore extends ObjectModel
 	{
 		if (!parent::update($nullValues))
 			return false;
+
+		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
+		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+			return true;
 
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 							(int)(Configuration::get('PS_REWRITING_SETTINGS')),
