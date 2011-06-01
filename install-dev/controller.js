@@ -924,7 +924,6 @@ $(document).ready(
 					if (step == 6)
 					{
 						$('#btNext, #btBack').removeAttr('disabled').removeClass('disabled');
-						console.log('test');
 						if (!$('#btDisclaimerOk').is(':checked'))
 							$("#btNext[disabled!=1]").attr("disabled", "disabled").addClass("disabled").addClass("lockedForAjax");
 					}
