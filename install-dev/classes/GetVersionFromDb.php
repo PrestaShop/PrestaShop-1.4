@@ -171,6 +171,16 @@ class GetVersionFromDb
 	{
 		return $this->versions;
 	}
+	
+	/**
+	 * Add more informations in database schema property in order to fix some troubles with missing data between db.sql and upgrades
+	 */
+	private function completeDatabaseSchema()
+	{
+		// Add key "discount" in "discount_category" table, because the name is different between the 1.2.2 upgrade and db.sql
+		if (isset($this->currentSchema['discount_category']['@keys']['id_discount']))
+			$this->currentSchema['discount_category']['@keys']['discount'] = $this->currentSchema['discount_category']['@keys']['id_discount'];
+	}
 
 	/**
 	 * Get the schema of all updates
@@ -418,7 +428,7 @@ class GetVersionFromDb
 				);
 			}
 		}
-		
+
 		$this->schemas[] = array(
 			'name' =>	INSTALL_VERSION,
 			'struct' =>	$this->generalSchema,
@@ -478,6 +488,7 @@ class GetVersionFromDb
 		}
 
 		$this->currentSchema = $struct;
+		$this->completeDatabaseSchema();
 	}
 
 	/**

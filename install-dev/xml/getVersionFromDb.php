@@ -43,6 +43,12 @@ $dbVersion = new GetVersionFromDb();
 $versions = $dbVersion->getVersions();
 $psVersionDb = Configuration::get('PS_VERSION_DB');
 
+// Usefull debug
+/* echo '<xmp>';
+print_r($versions);
+print_r($dbVersion->getErrors());
+exit;*/
+
 if (!$versions)
 {
 	// Desactivate this case temporary
