@@ -271,7 +271,7 @@ $_LANG['We strongly recommend that you inform your hosting provider to modify th
 $_LANG['Module compatibility'] = 'Modulkompatibilität';
 $_LANG['It\'s dangerous to keep non-native modules activated during the update. If you really want to take this risk, uncheck the following box.'] = 'Es wird nicht empfohlen, fremde Module während des Updates aktiviert zu lassen. Wenn Sie trotzdem fortfahren wollen, entfernen Sie die Markierung in der Checkbox';
 $_LANG['You will be able to manually reactivate them in your back-office, once the update process has succeeded.'] = 'Sie können sie später im Adminbereich aktivieren, nachdem das Update abgeschlossen ist.';
-$_LANG['Ok, please desactivate the following modules, I will reactivate them later.'] = 'ok, bitte folgende Module deaktivieren (sie werden später wieder aktiviert)';
+$_LANG['Ok, please desactivate the following modules, I will reactivate them later:'] = 'ok, bitte folgende Module deaktivieren (sie werden später wieder aktiviert):';
 $_LANG['Theme compatibility'] = 'Themenkompatibilität';
 $_LANG['Before updating, you need to check that your theme is compatible with version'] = 'Um fortzufahren müssen Sie bestätigen, dass Ihr Thema mit der aktuellen Version kompatibel ist';
 $_LANG['of PrestaShop.'] = 'von Prestashop';

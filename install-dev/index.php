@@ -905,7 +905,7 @@ if ($lm->getIncludeTradFilename())
 					<p><?php echo lang('You will be able to manually reactivate them in your back-office, once the update process has succeeded.'); ?></p>
 					<input id="customModuleDesactivation" type="checkbox" checked="checked" value="1" name="customModuleDesactivation" />
 					<label for="customModuleDesactivation">
-						<?php echo lang('Ok, please desactivate the following modules, I will reactivate them later'); ?>:
+						<?php echo lang('Ok, please desactivate the following modules, I will reactivate them later:'); ?>
 					</label>
 					<ul id="nonNativeModulesLi">
 						
