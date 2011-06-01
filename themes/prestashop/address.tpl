@@ -1,5 +1,5 @@
 {*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -44,7 +44,7 @@ countriesNeedZipCode = new Array();
 	{/if}
 	{if $country.need_identification_number}
 		countriesNeedIDNumber.push({$country.id_country|intval});
-	{/if}	
+	{/if}
 	{if isset($country.need_zip_code)}
 		countriesNeedZipCode[{$country.id_country|intval}] = {$country.need_zip_code};
 	{/if}
@@ -79,7 +79,7 @@ $(function(){ldelim}
 
 <h3>
 {if isset($id_address) && (isset($smarty.post.alias) || isset($address->alias))}
-	{l s='Modify address'} 
+	{l s='Modify address'}
 	{if isset($smarty.post.alias)}
 		"{$smarty.post.alias}"
 	{else}
@@ -99,6 +99,7 @@ $(function(){ldelim}
 			<label for="dni">{l s='Identification number'}</label>
 			<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{else}{if isset($address->dni)}{$address->dni|escape:'htmlall':'UTF-8'}{/if}{/if}" />
 			<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+			<sup>*</sup>
 		</p>
 	{if $vat_display == 2}
 		<div id="vat_area">
@@ -163,7 +164,7 @@ $(function(){ldelim}
 			<input type="text" name="city" id="city" value="{if isset($smarty.post.city)}{$smarty.post.city}{else}{if isset($address->city)}{$address->city|escape:'htmlall':'UTF-8'}{/if}{/if}" maxlength="64" />
 			<sup>*</sup>
 		</p>
-		<!-- 
+		<!--
 			if customer hasn't update his layout address, country has to be verified
 			but it's deprecated
 		-->
@@ -196,7 +197,7 @@ $(function(){ldelim}
 							}
 						});
 					});
-					
+
 				});
 		{/literal}
 		</script>
@@ -250,3 +251,4 @@ $(function(){ldelim}
 	</p>
 	<p class="required"><sup>*</sup>{l s='Required field'}</p>
 </form>
+

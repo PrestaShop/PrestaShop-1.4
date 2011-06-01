@@ -34,7 +34,7 @@
 						<input type="button" class="exclusive_large" id="opc_guestCheckout" value="{l s='Checkout as guest'}" />
 					</p>
 				</div>
-				
+
 				<div class="opc_float">
 					<h4>{l s='Create your account today and enjoy:'}</h4>
 					<ul class="bullet">
@@ -61,7 +61,7 @@
 						{/if}
 						{if $country.need_identification_number}
 							countriesNeedIDNumber.push({$country.id_country|intval});
-						{/if}	
+						{/if}
 						{if isset($country.need_zip_code)}
 							countriesNeedZipCode[{$country.id_country|intval}] = {$country.need_zip_code};
 						{/if}
@@ -84,7 +84,7 @@
 						else
 							$('#vat_number_block_invoice').hide();
 					}
-					
+
 					$(document).ready(function() {
 						$('#company').blur(function(){
 							vat_number();
@@ -232,7 +232,7 @@
 					</select>
 					<sup>*</sup>
 				</p>
-				{elseif $field_name eq "vat_number"}	
+				{elseif $field_name eq "vat_number"}
 				<div id="vat_number_block" style="display:none;">
 					<p class="text">
 						<label for="vat_number">{l s='VAT number'}</label>
@@ -245,6 +245,7 @@
 					<label for="dni">{l s='Identification number'}</label>
 					<input type="text" class="text" name="dni" id="dni" value="{if isset($guestInformations) && $guestInformations.dni}{$guestInformations.dni}{/if}" />
 					<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+					<sup>*</sup>
 				</p>
 				<p class="required id_state select">
 					<label for="id_state">{l s='State'}</label>
@@ -271,7 +272,7 @@
 					<input type="checkbox" name="invoice_address" id="invoice_address" />
 					<label for="invoice_address"><b>{l s='Please use another address for invoice'}</b></label>
 				</p>
-				
+
 				<div id="opc_invoice_address" class="is_customer_param">
 					<h3>{l s='Invoice address'}</h3>
 					{foreach from=$inv_all_fields item=field_name}
@@ -291,6 +292,7 @@
 						<label for="dni">{l s='Identification number'}</label>
 						<input type="text" class="text" name="dni" id="dni" value="{if isset($guestInformations) && $guestInformations.dni}{$guestInformations.dni}{/if}" />
 						<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+						<sup>*</sup>
 					</p>
 					{elseif $field_name eq "firstname"}
 					<p class="required text">
@@ -377,3 +379,4 @@
 	</form>
 	<div class="clear"></div>
 </div>
+

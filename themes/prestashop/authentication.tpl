@@ -1,5 +1,5 @@
 {*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -43,7 +43,7 @@ countriesNeedZipCode = new Array();
 		{/if}
 		{if $country.need_identification_number}
 			countriesNeedIDNumber.push({$country.id_country|intval});
-		{/if}	
+		{/if}
 		{if isset($country.need_zip_code)}
 			countriesNeedZipCode[{$country.id_country|intval}] = {$country.need_zip_code};
 		{/if}
@@ -218,7 +218,7 @@ $(function(){ldelim}
 							<input type="text" class="text" name="city" id="city" value="{if isset($smarty.post.city)}{$smarty.post.city}{/if}">
 							<sup>*</sup>
 						</p>
-							<!-- 
+							<!--
 								if customer hasn't update his layout address, country has to be verified
 								but it's deprecated
 							-->
@@ -235,7 +235,7 @@ $(function(){ldelim}
 						</p>
 						{elseif $field_name eq "State:name"}
 						{assign var='stateExist' value=true}
-						
+
 						<p class="required id_state select">
 							<label for="id_state">{l s='State'}</label>
 							<select name="id_state" id="id_state">
@@ -266,15 +266,16 @@ $(function(){ldelim}
 			</fieldset>
 			<fieldset class="account_creation dni">
 				<h3>{l s='Tax identification'}</h3>
-	
+
 				<p class="required text">
 					<label for="dni">{l s='Identification number'}</label>
 					<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{/if}" />
 					<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+					<sup>*</sup>
 				</p>
 			</fieldset>
-			<p class="cart_navigation required submit">		
-				<span><sup>*</sup>{l s='Required field'}</span>			
+			<p class="cart_navigation required submit">
+				<span><sup>*</sup>{l s='Required field'}</span>
 				<input type="submit" class="button" name="submitGuestAccount" id="submitGuestAccount" style="float:right" value="{l s='Continue'}">
 			</p>
 		</form>
@@ -466,11 +467,12 @@ $(function(){ldelim}
 	</fieldset>
 	<fieldset class="account_creation dni">
 		<h3>{l s='Tax identification'}</h3>
-	
+
 		<p class="required text">
 			<label for="dni">{l s='Identification number'}</label>
 			<input type="text" class="text" name="dni" id="dni" value="{if isset($smarty.post.dni)}{$smarty.post.dni}{/if}" />
 			<span class="form_info">{l s='DNI / NIF / NIE'}</span>
+			<sup>*</sup>
 		</p>
 	</fieldset>
 	{$HOOK_CREATE_ACCOUNT_FORM}
@@ -484,3 +486,4 @@ $(function(){ldelim}
 
 </form>
 {/if}
+
