@@ -754,7 +754,7 @@ class PayPal extends PaymentModule
 		$link = 'http://altfarm.mediaplex.com/ad/ck/3484-23403-8030-88?ID=PROCPRESTA';
 		$lang = new Language((int)($cookie->id_lang));
 		if ($lang->iso_code == 'es')
-			$link = 'http://www.paypal.com';
+			$link = 'http://altfarm.mediaplex.com/ad/ck/3484-34334-12439-1';
 		else if ($lang->iso_code == 'it')
 			$link = 'https://www.paypal-business.it/paypalpro.asp';
 		
