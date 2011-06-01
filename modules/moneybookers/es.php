@@ -27,7 +27,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_a9dd80641753cafc9c967e317ba92a2
 $_MODULE['<{moneybookers}prestashop>moneybookers_8342dda89e8c20bb92916fbe052c583a'] = 'Disfrute de las tarifas especiales que PrestaShop Moneybookers frece a los comerciantes ';
 $_MODULE['<{moneybookers}prestashop>moneybookers_4f4c1b5e5d775709e08ccc3afad1a5c3'] = 'Moneybookers, controlado por Holdings Skrill, es uno de los más importantes sistemas de pago en línea en Europa, y propone más de 100 opciones de pago y 41 divisas en más de 200 países y territorios. Más de 80.000 comerciantes ya utilizan esta solución entre los que se encuentran eBay.com, Skype y Thomas Cook.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_acf2b73b741f10cd1e0d075ed43fed39'] = 'Con más de 17 millones de usuarios y más de 15.000 nuevas cuentas creadas cada día, Moneybookers también ofrece uno de los mayores monedero electrónico en el mundo. Sus clientes también pueden pagar por medio de su e-mail y contraseña gracias a la solución de e-Wallet.';
-$_MODULE['<{moneybookers}prestashop>moneybookers_80346621324d2aa2c1a953100bad1711'] = '¡Moneybookers cambia de nombre y se convierte en Skrill!';
+$_MODULE['<{moneybookers}prestashop>moneybookers_76264fd7352f803c63396bc27b0ee893'] = '¡Moneybookers cambia de nombre y se convierte en Skrill!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_5138738b54f0d4bdf7c72780db651abc'] = 'Abrir una cuenta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_41992c760318e60740f7a9b2819af191'] = 'Comience por abrir';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c0302a6fbca061af831bc12f06cadb2f'] = 'una cuenta gratis';
@@ -38,7 +38,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_b0e8c8326985417a5efdd6649f02e38
 $_MODULE['<{moneybookers}prestashop>moneybookers_d5086eeb1bc1994c5abf945fd79d4246'] = '¡obtendrá una tasa de comisión preferencial!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_68db2cda800ddb2ae307c60b0a96252f'] = 'Solución de pago en línea  de Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_b9c758264b134743b13a85ca4055c629'] = 'Estimación del volumen mensual de los pagos realizados a través de Moneybookers';
-$_MODULE['<{moneybookers}prestashop>moneybookers_826ba0a71ab6e534b04bfdd4dd98ac9e'] = 'Para los comerciantes que sobrepasan 100 000€ se pueden establecer tarifas especiales.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_7d294d4900ff1a38f5b0a89612916eac'] = 'Para los comerciantes que sobrepasan 100 000€ se pueden establecer tarifas especiales.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_11c8ff1cde03aa19406dfe5971b92553'] = 'Monedero electrónico Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_223b661f7b13d33498a9274bb10e3538'] = 'Portal de Pedido Rápido Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f284fe53995a4cc2e1e099cb1e511ec8'] = 'Validación de cuenta';

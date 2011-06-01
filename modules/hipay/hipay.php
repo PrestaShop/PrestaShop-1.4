@@ -45,7 +45,7 @@ class Hipay extends PaymentModule
 		parent::__construct();
 		
 		$this->displayName = $this->l('Hipay');
-		$this->description = $this->l('Secure payement Visa Mastercard and european solutions.');
+		$this->description = $this->l('Secure payement with Visa, Mastercard and European solutions.');
 
 		$result = Db::getInstance()->ExecuteS('
 			SELECT iso_code

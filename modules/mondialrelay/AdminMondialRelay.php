@@ -77,7 +77,7 @@ class AdminMondialRelay extends AdminTab
 		
 		$html = '';
 		
-		$html .= $this->l('To generate sticks, you must have register a correct address of your store on').
+		$html .= $this->l('To generate labels, you must register a correct address for your store on').
 			' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.
 			(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.
 			$this->l('The contact page').'</a>';
@@ -175,7 +175,7 @@ class AdminMondialRelay extends AdminTab
 		
 		$_html.= '
 			<fieldset>
-				<legend>' . $this->l('History of sticks creation') . '</legend>
+				<legend>' . $this->l('History of labels creation') . '</legend>
 				<div style="overflow-x: auto;overflow-y: scroller; height: 300px; padding-top: 0.6em;" >
 					<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 						<table class="table" id="PS_MRHistoriqueTableList">

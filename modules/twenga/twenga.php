@@ -127,7 +127,7 @@ class Twenga extends PaymentModule
 	 	parent::__construct();
 	
 		$this->displayName = $this->l('Twenga API');
-		$this->description = $this->l('Module role: export of your products on Twenga and installation of the sales tracking brought by Twenga (requires to sign up to Twenga)');
+		$this->description = $this->l('Module role: export of your products on Twenga and installation of the sales tracking brought by Twenga (requires sign up to Twenga)');
 
 		// For Twenga subscription
 		$protocol = 'http://';
@@ -219,7 +219,7 @@ class Twenga extends PaymentModule
 					#mainContent a { text-decoration:none; color:#268CCD;}
 			</style>
 			<div id="mainContent" >
-				<p>'.$this->l('If you subscriber on Twenga, the activation of this module is mandatory.').
+				<p>'.$this->l('If you subscribe on Twenga, the activation of this module is mandatory.').
 				'<br /><br />'.$this->l('In case of dysfunction, uninstall this module, install the newer version here and fill up again Twenga hashkey and login.').'
 				<br /><br />'.$this->l('To unsubscribe or for any question, please contact Twenga on your account.').'
 				<div style="margin: 10px 0 5px 0; font-size:14px; color:#FFF; text-align:center;">
@@ -681,7 +681,7 @@ class Twenga extends PaymentModule
 			$str_return .= '&nbsp;<em style="color:red;">'.$this->l('Error(s) occurred: please contact Twenga').'</em>';
 			
 				$str_return .='
-					<li>'.$this->l('Step 2: Fill up Twenga sign up form').'</li>
+					<li>'.$this->l('Step 2: Fill in the Twenga sign up form').'</li>
 					<li>'.$this->l('Step 3: When you got the Twenga hash-key by Email, come back here and paste it here in the field „hash key“. Click on Save and Activate.').'</li>
 				</ul>';
 

@@ -17,7 +17,7 @@ $_MODULE['<{producttooltip}prestashop>producttooltip_2c8de3180924949acc5f6250af6
 $_MODULE['<{producttooltip}prestashop>producttooltip_640fd0cc0ffa0316ae087652871f4486'] = 'minuti';
 $_MODULE['<{producttooltip}prestashop>producttooltip_8a8110f8a25a0e445f51edf84fd98a96'] = 'Se si attiva l\'opzione di sopra, è necessario attivare la prima opzione del modulo StatDATA';
 $_MODULE['<{producttooltip}prestashop>producttooltip_1e358b149c2d4105f3a74c1961d1d9fb'] = 'Visualizzare l\'ultima volta in cui il prodotto è stato ordinato?';
-$_MODULE['<{producttooltip}prestashop>producttooltip_69cd5a64d37c70989558b58f0b484fb3'] = 'Se ancora non c\'è nessun ordine, vuoi vedere l\'ultima volta che il prodotto è stato aggiunto al carrello?';
+$_MODULE['<{producttooltip}prestashop>producttooltip_dbcfa4aa50cd5f7ad099b3ba50e1137c'] = 'Se ancora non c\'è nessun ordine, vuoi vedere l\'ultima volta che il prodotto è stato aggiunto al carrello?';
 $_MODULE['<{producttooltip}prestashop>producttooltip_a536f110cc080569666e95e8f49fda9b'] = 'Non visualizzare gli eventi che datano a prima di:';
 $_MODULE['<{producttooltip}prestashop>producttooltip_44fdec47036f482b68b748f9d786801b'] = 'giorno';
 $_MODULE['<{producttooltip}prestashop>producttooltip_b17f3f4dcf653a5776792498a9b44d6a'] = 'Aggiornare le impostazioni';

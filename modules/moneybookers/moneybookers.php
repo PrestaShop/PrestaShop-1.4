@@ -272,7 +272,7 @@ class MoneyBookers extends PaymentModule
 		$this->l('Take advantage of the special fees offered by Moneybookers to PrestaShop merchants !').'<br /><br />'.
 		$this->l('Moneybookers, controlled by Skrill Holdings, is one of the biggest online payment systems in Europe, and proposes more than 100 payment options and 41 currencies in more than 200 countries and territories. More than 80,000 merchants already use this solution among which eBay.com, Skype and Thomas Cook.').'<br /><br />'.
 		$this->l('With more than 17 million users and more than 15,000 new accounts created per day, Moneybookers also offers one of the biggest electronic wallet in the world. Your customers can also pay by using their e-mail and password thanks to the e-Wallet solution.').'<br /><br />'.
-		$this->l('Moneybookers change its name and becomes Skrill!').'<br /><br />
+		$this->l('Moneybookers changes its name and becomes Skrill!').'<br /><br />
                 <div style="clear: both;"></div>
 
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" id="form-opening">
@@ -300,7 +300,7 @@ class MoneyBookers extends PaymentModule
  <tr><td class="tdMBL">€ 10,000.01 - € 50,000</td><td class="tdMBR">1.6% + 0.19€</td></tr>
  <tr><td class="tdMBL">€ 50,000.01 - € 100,000</td><td class="tdMBR">1.4% + 0.19€</td></tr>
  <tr><td class="tdMBL">€ 100,000</td><td class="tdMBR">1.2% + 0.19€</td></tr>
- <tr><td colspan="3" style="border-top: 1px solid black;"><small>'.$this->l('For merchants over €100,000 fees can be negociated.').' Contact: ecommerce@moneybookers.com</small></td></tr>
+ <tr><td colspan="3" style="border-top: 1px solid black;"><small>'.$this->l('For merchants over €100,000 fees can be negotiated.').' Contact: ecommerce@moneybookers.com</small></td></tr>
 </table>
 
 <p align="left">

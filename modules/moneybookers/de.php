@@ -26,7 +26,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_cd1dfa342c3c11c17ede212e6429ca0
 $_MODULE['<{moneybookers}prestashop>moneybookers_2e531f9ad978a2a1a88a00ae0d4dc78e'] = 'Das Kennwortfeld ist erforderlich';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a9dd80641753cafc9c967e317ba92a28'] = 'Über Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_8342dda89e8c20bb92916fbe052c583a'] = 'Freuen Sie sich auf Sonderkonditionen, die Moneybookers für Prestashop-Shopbetreiber vorbereitet hat!';
-$_MODULE['<{moneybookers}prestashop>moneybookers_80346621324d2aa2c1a953100bad1711'] = 'Aus Moneybookers wird Skrill!';
+$_MODULE['<{moneybookers}prestashop>moneybookers_76264fd7352f803c63396bc27b0ee893'] = 'Aus Moneybookers wird Skrill!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_5138738b54f0d4bdf7c72780db651abc'] = 'Kontoeröffnung';
 $_MODULE['<{moneybookers}prestashop>moneybookers_41992c760318e60740f7a9b2819af191'] = 'Starten Sie mit der Eröffung eines ';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c0302a6fbca061af831bc12f06cadb2f'] = 'Gratis-Kontos';
@@ -37,7 +37,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_b0e8c8326985417a5efdd6649f02e38
 $_MODULE['<{moneybookers}prestashop>moneybookers_d5086eeb1bc1994c5abf945fd79d4246'] = 'erhalten Sie eine bevorzugte Provision!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_68db2cda800ddb2ae307c60b0a96252f'] = 'Online Bezahlsystem von Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_b9c758264b134743b13a85ca4055c629'] = 'Monatlicher Umsatz über Moneybookers';
-$_MODULE['<{moneybookers}prestashop>moneybookers_826ba0a71ab6e534b04bfdd4dd98ac9e'] = 'Für Verkäufer mit Umsatz über 100,000 € kann verhandelt werden.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_7d294d4900ff1a38f5b0a89612916eac'] = 'Für Verkäufer mit Umsatz über 100,000 € kann verhandelt werden.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_11c8ff1cde03aa19406dfe5971b92553'] = 'Moneybookers eWallet';
 $_MODULE['<{moneybookers}prestashop>moneybookers_223b661f7b13d33498a9274bb10e3538'] = 'Quick Checkout Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f284fe53995a4cc2e1e099cb1e511ec8'] = 'Konto-Bestätigung';

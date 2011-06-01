@@ -127,7 +127,7 @@ class StatsLive extends Module
 			echo '</table>';
 		}
 		else
-			echo $this->l('There are no cusomers online.');
+			echo $this->l('There are no customers online.');
 		echo '</fieldset>
 		<fieldset class="width3 space"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Visitors online').'</legend>';
 		if ($totalVisitors)

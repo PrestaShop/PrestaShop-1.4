@@ -12,7 +12,7 @@ $_MODULE['<{producttooltip}prestashop>producttooltip_2c8de3180924949acc5f6250af6
 $_MODULE['<{producttooltip}prestashop>producttooltip_640fd0cc0ffa0316ae087652871f4486'] = 'minutes';
 $_MODULE['<{producttooltip}prestashop>producttooltip_8a8110f8a25a0e445f51edf84fd98a96'] = 'Si vous activez l\'option ci-dessus, vous devez activer la première option du module StatData';
 $_MODULE['<{producttooltip}prestashop>producttooltip_1e358b149c2d4105f3a74c1961d1d9fb'] = 'Afficher la date de la dernière commande ?';
-$_MODULE['<{producttooltip}prestashop>producttooltip_69cd5a64d37c70989558b58f0b484fb3'] = 'Si aucune commande à afficher, afficher la date du dernier ajout au panier ?';
+$_MODULE['<{producttooltip}prestashop>producttooltip_dbcfa4aa50cd5f7ad099b3ba50e1137c'] = 'Si aucune commande à afficher, afficher la date du dernier ajout au panier ?';
 $_MODULE['<{producttooltip}prestashop>producttooltip_a536f110cc080569666e95e8f49fda9b'] = 'Ne pas afficher les événements datant de plus de :';
 $_MODULE['<{producttooltip}prestashop>producttooltip_44fdec47036f482b68b748f9d786801b'] = 'jours';
 $_MODULE['<{producttooltip}prestashop>producttooltip_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mettre à jour les paramètres';

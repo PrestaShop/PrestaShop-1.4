@@ -3,13 +3,13 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{twenga}prestashop>twenga_400b0c914f01bcecf50b936e652695b2'] = 'l\'API de Twenga';
-$_MODULE['<{twenga}prestashop>twenga_64ef67f03ba236aef261078101017d57'] = 'Rôle du module : export de vos produits sur Twenga et installation du suivi des ventes apportées par Twenga (inscription sur Twenga requise)';
+$_MODULE['<{twenga}prestashop>twenga_2ae2a43eb971f87b2c8dabcb6192b05e'] = 'Rôle du module : export de vos produits sur Twenga et installation du suivi des ventes apportées par Twenga (inscription sur Twenga requise)';
 $_MODULE['<{twenga}prestashop>twenga_2034864b8a4fce12f3621b7ec8912e95'] = 'Le module Twenga marche seulement dans certains pays (liste des iso codes :';
 $_MODULE['<{twenga}prestashop>twenga_bcfaccebf745acfd5e75351095a5394a'] = 'Désactiver';
 $_MODULE['<{twenga}prestashop>twenga_526d688f37a86d3c3f27d0c5016eb71d'] = 'Réinitialiser';
 $_MODULE['<{twenga}prestashop>twenga_a27dfe771799a09fd55fea73286eb6ab'] = 'Désinstaller';
 $_MODULE['<{twenga}prestashop>twenga_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
-$_MODULE['<{twenga}prestashop>twenga_bf4510198726bc0736e7705e10fffd8b'] = 'Si vous êtes inscrit sur Twenga, l’activation de ce module est obligatoire.';
+$_MODULE['<{twenga}prestashop>twenga_54e885a24cb26f1c788586cf5c3716c0'] = 'Si vous êtes inscrit sur Twenga, l’activation de ce module est obligatoire.';
 $_MODULE['<{twenga}prestashop>twenga_9d156e107098a77332f309c765b72b9c'] = 'En cas de dysfonctionnement, désinstallez ce module, installez la version la plus récente ici puis renseignez à nouveau votre hashkey et login Twenga.';
 $_MODULE['<{twenga}prestashop>twenga_a9d7299384e1f3fc346790328ffa8ac3'] = 'Pour vous désinscrire ou toute autre question, contactez Twenga sur votre compte.';
 $_MODULE['<{twenga}prestashop>twenga_fb3ecfb2800400fb01b0bfd39903e9fb'] = 'Version plus récente';
@@ -37,7 +37,7 @@ $_MODULE['<{twenga}prestashop>twenga_f9c31cabc1e6928068e7394f5453e759'] = 'Comme
 $_MODULE['<{twenga}prestashop>twenga_87645feb1c92efecd6a6946d1b498fd7'] = 'Etape 1 : Cliquez sur ce lien pour vous inscrire à Twenga Ready To Sell';
 $_MODULE['<{twenga}prestashop>twenga_b26917587d98330d93f87808fc9d7267'] = 's\'inscrire';
 $_MODULE['<{twenga}prestashop>twenga_1d79f46fad241d4984e47165ca578ee9'] = '(des erreurs sont survenues : merci de contacter Twenga)';
-$_MODULE['<{twenga}prestashop>twenga_195b3777fa9dcc91d27b86391e7f9a49'] = 'Etape 2 : Compléter le formulaire d\'inscription Twenga';
+$_MODULE['<{twenga}prestashop>twenga_07831f67b9efb636c0a625674e8d7f79'] = 'Etape 2 : Compléter le formulaire d\'inscription Twenga';
 $_MODULE['<{twenga}prestashop>twenga_767a31e960aa760c42722d2e7373b2ad'] = 'Etape 3 : Une fois votre clé Twenga reçue, retournez ici et coller cette clé dans le champs „hash key“. Cliquez pour sauvegarder et activer.';
 $_MODULE['<{twenga}prestashop>twenga_bc88fe7063d7e7da0bf08003f21a1ad2'] = 'Augmentez votre traffic - 500 clics offerts';
 $_MODULE['<{twenga}prestashop>twenga_2d82e5a3931e70d2c94b9ba6e674edbc'] = 'Votre catalogue sera référencé sous une dizaine de jours. Une fois les 500 clics consommés, vous serez facturés au clic par catégorie de 0.05€ à 0.15€. Vous aurez accès à une interface de gestion complète et pouvez partir à tout moment.';

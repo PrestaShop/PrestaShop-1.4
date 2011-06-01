@@ -109,7 +109,7 @@ class ProductToolTip extends Module
 				&nbsp;<img src="'._PS_ADMIN_IMG_.'disabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_order" value="0"'.(!Configuration::get('PS_PTOOLTIP_DATE_ORDER') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('No').'<br /><br />
 			</p>
 			<p>
-				'.$this->l('If not order yet, display the last time the product has been added to cart?').'<br /><br />
+				'.$this->l('If not ordered yet, display the last time the product has been added to a cart?').'<br /><br />
 				<img src="'._PS_ADMIN_IMG_.'enabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_cart" value="1"'.(Configuration::get('PS_PTOOLTIP_DATE_CART') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('Yes').' 
 				&nbsp;<img src="'._PS_ADMIN_IMG_.'disabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_cart" value="0"'.(!Configuration::get('PS_PTOOLTIP_DATE_CART') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('No').'<br /><br />
 				

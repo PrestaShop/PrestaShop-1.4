@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
-$_MODULE['<{hipay}prestashop>hipay_3a630598b9817a76dbb984ba467f6400'] = 'Asegure los pagos de Visa Mastercard y soluciones europeas.';
+$_MODULE['<{hipay}prestashop>hipay_035ab5edb2d8af86d51f6a92e65b4c0f'] = 'Asegure los pagos de Visa Mastercard y soluciones europeas.';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Error: imposible crear PaymentParams';
 $_MODULE['<{hipay}prestashop>hipay_a85eba4c6c699122b2bb1387ea4813ad'] = 'Carrito';
 $_MODULE['<{hipay}prestashop>hipay_d4126d0b64579211d37151ef9b5af754'] = '[Hipay] Error:  imposible crear el Producto \"Carrito\"';

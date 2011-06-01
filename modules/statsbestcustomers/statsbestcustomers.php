@@ -123,7 +123,7 @@ class StatsBestCustomers extends ModuleGrid
 					<li>'.$this->l('Punctual operations: commercial rewards (personalized special offers, product or service offered), non commercial rewards (priority handling of an order or a product), pecuniary rewards (bonds, discount coupons, payback).').'</li>
 					<li>'.$this->l('Sustainable operations: loyalty points or cards, which not only justify communication between merchant and client, but also offer advantages to clients (private offers, discounts).').'</li>
 				</ul>
-				'.$this->l('These operations encourage clients to buy products visit your webshop regularly.').' <br />
+				'.$this->l('These operations encourage clients to buy products and visit your webshop regularly.').' <br />
 			</p><br />
 		</fieldset>';
 		return $this->_html;
