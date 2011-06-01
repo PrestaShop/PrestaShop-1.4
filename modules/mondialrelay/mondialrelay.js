@@ -43,7 +43,7 @@ function getTickets(detailedExpeditionList)
 		},
 		error: function(xhr, ajaxOptions, thrownError)
 		{
-            console.log(thrownError);
+            //console.log(thrownError);
             displayBackGenerateSubmitButton();
 		}
 	});
@@ -175,8 +175,8 @@ function generateTicketsAjax()
 		error: function(xhr, ajaxOptions, thrownError)
 		{
 			display_generate_button = true;
-            console.log(thrownError);
-            displayBackGenerateSubmitButton();
+      //console.log(thrownError);
+      displayBackGenerateSubmitButton();
 		}
 	});
 	delete(order_id_list);
@@ -185,7 +185,9 @@ function generateTicketsAjax()
 
 function displayDeletedHistoryInformation()
 {
-	console.log('call');
+  :x
+
+
 	$('input[name="history_id_list[]"]:checked').each(function()
 	{
 		$(this).parent().parent().css('background-color', '#FFE2E3');
@@ -246,8 +248,8 @@ function deleteSelectedHistories()
 		error: function(xhr, ajaxOptions, thrownError)
 		{
 			display_generate_button = true;
-            console.log(thrownError);
-            displayBackHistoriesSubmitButton();
+      //console.log(thrownError);
+      displayBackHistoriesSubmitButton();
 		}
 	});
 }

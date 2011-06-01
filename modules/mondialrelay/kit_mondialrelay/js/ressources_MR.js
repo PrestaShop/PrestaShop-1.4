@@ -171,13 +171,13 @@ function select_PR_MR(num, id_carrier)
 					'&MR_Selected_Pays_' + id_carrier  + '=' + $('#MR_Selected_Pays_' + id_carrier).val(),
 		success: function(json) 
 		{
-			console.log(json);
+			//console.log(json);
 		},
 		error: function(xhr, ajaxOptions, thrownError)
 		{
-			console.log(xhr);
-			console.log(thrownError);
-			console.log(ajaxOptions);
+			//console.log(xhr);
+			//console.log(thrownError);
+			//console.log(ajaxOptions);
 		}	
 	});
 	
