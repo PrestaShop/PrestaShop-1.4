@@ -98,8 +98,6 @@
 										values: [ {/literal}{$filter.values[0]}{literal}, {/literal}{$filter.values[1]}{literal}],
 										slide: function( event, ui ) {
 											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + unit + ' - ' + ui.values[ 1 ] + unit);
-											console.log(event);
-											console.log(ui);
 										},
 										stop: function () {
 											reloadContent();
