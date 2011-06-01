@@ -131,7 +131,7 @@ class ValidateCore
 	*/
 	static public function isCarrierName($name)
 	{
-		return empty($name) OR preg_match('/^[^<>;=#{}]*$/', $name);
+		return empty($name) OR preg_match('/^[^<>;=#{}]*$/u', $name);
 	}
 
 	/**
@@ -163,7 +163,7 @@ class ValidateCore
 	*/
 	static public function isName($name)
 	{
-		return preg_match('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/', stripslashes($name));
+		return preg_match('/^[^0-9!<>,;?=+()@#"°{}_$%:]*$/u', stripslashes($name));
 	}
 
 	/**
@@ -185,7 +185,7 @@ class ValidateCore
 	*/
 	static public function isMailName($mailName)
 	{
-		return preg_match('/^[^<>;=#{}]*$/', $mailName);
+		return preg_match('/^[^<>;=#{}]*$/u', $mailName);
 	}
 
 	/**
@@ -196,7 +196,7 @@ class ValidateCore
 	*/
 	static public function isMailSubject($mailSubject)
 	{
-		return preg_match('/^[^<>{}]*$/', $mailSubject);
+		return preg_match('/^[^<>{}]*$/u', $mailSubject);
 	}
 
 	/**
@@ -340,7 +340,7 @@ class ValidateCore
 	*/
 	static public function isDiscountName($discountName)
 	{
-		return preg_match('/^[^!<>,;?=+()@"°{}_$%:]{3,32}$/', $discountName);
+		return preg_match('/^[^!<>,;?=+()@"°{}_$%:]{3,32}$/u', $discountName);
 	}
 
 	/**
@@ -351,7 +351,7 @@ class ValidateCore
 	*/
 	static public function isCatalogName($name)
 	{
-		return preg_match('/^[^<>;=#{}]*$/', $name);
+		return preg_match('/^[^<>;=#{}]*$/u', $name);
 	}
 
 	/**
@@ -408,7 +408,7 @@ class ValidateCore
 	*/
 	static public function isAddress($address)
 	{
-		return empty($address) OR preg_match('/^[^!<>?=+@{}_$%]*$/', $address);
+		return empty($address) OR preg_match('/^[^!<>?=+@{}_$%]*$/u', $address);
 	}
 
 	/**
@@ -419,7 +419,7 @@ class ValidateCore
 	*/
 	static public function isCityName($city)
 	{
-		return preg_match('/^[^!<>;?=+@#"°{}_$%]*$/', $city);
+		return preg_match('/^[^!<>;?=+@#"°{}_$%]*$/u', $city);
 	}
 
 	/**
@@ -430,7 +430,7 @@ class ValidateCore
 	*/
 	static public function isValidSearch($search)
 	{
-		return preg_match('/^[^<>;=#{}]{0,64}$/', $search);
+		return preg_match('/^[^<>;=#{}]{0,64}$/u', $search);
 	}
 
 	/**
@@ -441,7 +441,7 @@ class ValidateCore
 	*/
 	static public function isGenericName($name)
 	{
-		return empty($name) OR preg_match('/^[^<>;=#{}]*$/', $name);
+		return empty($name) OR preg_match('/^[^<>;=#{}]*$/u', $name);
 	}
 
 	/**
@@ -464,7 +464,7 @@ class ValidateCore
 	*/
 	static public function isReference($reference)
 	{
-		return preg_match('/^[^<>;={}]*$/', $reference);
+		return preg_match('/^[^<>;={}]*$/u', $reference);
 	}
 
 	/**
@@ -662,7 +662,7 @@ class ValidateCore
 	*/
 	static public function isTagsList($list)
 	{
-		return preg_match('/^[^!<>;?=+#"°{}_$%]*$/', $list);
+		return preg_match('/^[^!<>;?=+#"°{}_$%]*$/u', $list);
 	}
 
 	/**
@@ -846,7 +846,7 @@ class ValidateCore
 	*/
 	static public function isLabel($label)
 	{
-		return (preg_match('/^[^{}<>]*$/', $label));
+		return (preg_match('/^[^{}<>]*$/u', $label));
 	}
 
 	/**
