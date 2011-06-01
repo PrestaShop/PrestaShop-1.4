@@ -30,41 +30,16 @@ require_once(dirname(__FILE__).'/mondialrelay.php');
 
 class AdminMondialRelay extends AdminTab
 {
-	private $displayInfos = true;
 	private $mondialrelay = NULL;
-	private $moduleDirectory = '';
-
+	
 	public function __construct()
 	{
-		$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) 
-			AND strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
-		
-		$new_base_dir = $protocol_link.Tools::getShopDomainSsl().__PS_BASE_URI__;
-			
-		$this->_moduleDirectory = $new_base_dir.'/modules/mondialrelay/';
+		MondialRelay::initModuleAccess();
 		
 		$this->table = 'mr_selected';
 		$this->className = 'MondialRelayClass';
-		
-		
-		$mondialrelay = new MondialRelay();
-		if (!$mondialrelay->isRegisteredInHook('backofficeheader'))
-			$mondialrelay->registerHook('backofficeheader');
+	
 		parent::__construct();
-	}
-
-	private function _delete_history()
-	{
-		if (isset($_POST['history']))
-			foreach($_POST['history'] as $field)
-				if (isset($field['selected']) AND $field['selected'] == '1')
-					$query = Db::getInstance()->Execute("DELETE FROM `" . _DB_PREFIX_ ."mr_historique` WHERE id='".(int)($field['id'])."';");
-	}
-
-	private function _postProcess()
-	{
-		if (Tools::isSubmit('delete_h'))
-			$this->_delete_history();
 	}
 
 	private function displayOrdersTable()
@@ -77,7 +52,7 @@ class AdminMondialRelay extends AdminTab
 		
 		$html = '';
 		
-		$html .= $this->l('To generate labels, you must register a correct address for your store on').
+		$html .= $this->l('To generate sticks, you must have register a correct address of your store on').
 			' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.
 			(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.
 			$this->l('The contact page').'</a>';
@@ -86,9 +61,9 @@ class AdminMondialRelay extends AdminTab
 			Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).
 			(int)($cookie->id_employee)).'" class="green">' . $this->l('Change configuration') . '</a></p>
 			<div class="PS_MRErrorList error" id="otherErrors">
-							<img src="'._PS_IMG_.'admin/error2.png" alt="" />
-							<span></span>
-					</div>';
+				<img src="'._PS_IMG_.'admin/error2.png" alt="" />
+				<span></span>
+			</div>';
 
 		$orders = MondialRelay::getOrders();
 		if (empty($orders))
@@ -159,10 +134,12 @@ class AdminMondialRelay extends AdminTab
 					<div class="PS_MRSubmitButton" id="PS_MRSubmitButtonGenerateTicket">
 						<input type="button" name="generate" id="generate" value="' . $this->l('Generate') . '" class="button" />
 					</div>
-					<div class="PS_MRLoader" id="PS_MRSubmitGenerateLoader"><img src="'.$this->_moduleDirectory.'images/getTickets.gif"</div>
+					<div class="PS_MRLoader" id="PS_MRSubmitGenerateLoader"><img src="'.MondialRelay::$moduleURL.'images/getTickets.gif"</div>
 				</div>';
 			$html .= '</form>';
 		}
+		unset($mondialrelay);
+		unset($order_state);
 		return $html;
 	}
 
@@ -175,7 +152,7 @@ class AdminMondialRelay extends AdminTab
 		
 		$_html.= '
 			<fieldset>
-				<legend>' . $this->l('History of labels creation') . '</legend>
+				<legend>' . $this->l('History of sticks creation') . '</legend>
 				<div style="overflow-x: auto;overflow-y: scroller; height: 300px; padding-top: 0.6em;" >
 					<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
 						<table class="table" id="PS_MRHistoriqueTableList">
@@ -197,10 +174,10 @@ class AdminMondialRelay extends AdminTab
 					<td>'.$row['order'].'</td>
 					<td id="expeditionNumber_'.$row['order'].'">'.$row['exp'].'</td>
 					<td id="URLA4_'.$row['order'].'">
-						<a href="'.$row['url_a4'].'" target="a4"><img width="20" src="'.$this->_moduleDirectory.'images/pdf_icon.jpg" /></a>
+						<a href="'.$row['url_a4'].'" target="a4"><img width="20" src="'.MondialRelay::$moduleURL.'images/pdf_icon.jpg" /></a>
 					</td>
 					<td id="URLA5_'.$row['order'].'">
-						<a href="'.$row['url_a5'].'" target="a5"><img width="20" src="'.$this->_moduleDirectory.'images/pdf_icon.jpg" /></a>
+						<a href="'.$row['url_a5'].'" target="a5"><img width="20" src="'.MondialRelay::$moduleURL.'images/pdf_icon.jpg" /></a>
 					</td>
 				</tr>';
 	  }
@@ -210,7 +187,7 @@ class AdminMondialRelay extends AdminTab
 				<div class="PS_MRSubmitButton">
 					<input type="button" id="PS_MRSubmitButtonDeleteHistories" name="deleteSelectedHistories" value="' . $this->l('Delete selected history') . '" class="button" />
 					<div class="PS_MRLoader" id="PS_MRSubmitDeleteHistoriesLoader">
-						<img src="'.$this->_moduleDirectory.'images/getTickets.gif"
+						<img src="'.MondialRelay::$moduleURL.'images/getTickets.gif"
 					</div>
 				</div>
 			</form></div></fieldset>';
@@ -220,23 +197,21 @@ class AdminMondialRelay extends AdminTab
 
 	public function display()
 	{	
-		$urlModuleDir = Tools::getProtocol().Tools::getShopDomainSsl().__PS_BASE_URI__.'/modules/';
 		$html = '';
 		
-		if (!empty($_POST))
-			$html .= $this->_postProcess();
-
-		if ($this->displayInfos)
-		{
-			$html .= '
-				<script type="text/javascript" language="javascript">
-					var _PS_MR_MODULE_DIR_ = "'.$this->_moduleDirectory.'";
-				</script>';
+		// Allow to override the older jquery to use a new one :)
+		// Added for the 1.3 compatibility to keep using the recent code
+		if (_PS_VERSION_ < '1.4')
+			$html .= MondialRelay::getjQueryCompatibility();
+		
+		$html .= '
+			<script type="text/javascript" language="javascript">
+				var _PS_MR_MODULE_DIR_ = "'.MondialRelay::$moduleURL.'";
+			</script>';
 			
-			$html .= $this->displayOrdersTable();
-			$html .= '<br/><br/>';
-			$html .= $this->displayhistoriqueForm();
-		}
+		$html .= $this->displayOrdersTable();
+		$html .= '<br/><br/>';
+		$html .= $this->displayhistoriqueForm();
 		echo $html;
 	}
 }

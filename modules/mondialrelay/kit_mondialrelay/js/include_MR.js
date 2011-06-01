@@ -1,19 +1,3 @@
-function addLoadEvent_MR(func, args)
-{ 
-	var oldonload = window.onload;
-	if (typeof window.onload != 'function')
-		window.onload = func;
-	else
-	{
-		window.onload = function()
-			{
-				if (oldonload)
-					oldonload();
-				func(args);
-			} 
-	}
-}
-
 var gl_base_dir;
 
 function set_html_MR_recherche(obj, num, base_dir, cpt)
@@ -51,22 +35,4 @@ html = html + '<span id="MR_CP_'+obj.num+'">'+obj.postcode+'</span> \
 	$('#mondialrelay_'+num).html($('#mondialrelay_'+num).html()+html);
 	if (obj.checked == '1' || cpt == 0)
 		select_PR_MR(obj.num, num);
-}
-
-function include_mondialrelay(num)
-{
-	$('#form_mondialrelay_'+num).html('\
-	<input id="MR_Selected_Num_'+num+'" name="MR_Selected_Num_'+num+'" type="hidden" >\
-	<input id="MR_Selected_LgAdr1_'+num+'" name="MR_Selected_LgAdr1_'+num+'" type="hidden" >\
-	<input id="MR_Selected_LgAdr2_'+num+'" name="MR_Selected_LgAdr2_'+num+'" type="hidden" >\
-	<input id="MR_Selected_LgAdr3_'+num+'" name="MR_Selected_LgAdr3_'+num+'" type="hidden" >\
-	<input id="MR_Selected_LgAdr4_'+num+'" name="MR_Selected_LgAdr4_'+num+'" type="hidden" >\
-	<input id="MR_Selected_CP_'+num+'" name="MR_Selected_CP_'+num+'" type="hidden" >\
-	<input id="MR_Selected_Ville_'+num+'" name="MR_Selected_Ville_'+num+'" type="hidden" >\
-	<input id="MR_Selected_Pays_'+num+'" name="MR_Selected_Pays_'+num+'" type="hidden" >\
-	\
-	\
-	<div id="recherche_MR_form_'+num+'" >\
-	</div>\
-	<div id="mondialprelay_'+num+'" style="padding:3px;"></div>');
 }

@@ -24,9 +24,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<script type="text/javascript">var url_appel="{$new_base_dir}";</script>
-<script type="text/javascript" src="{$new_base_dir}modules/mondialrelay/kit_mondialrelay/js/include_MR.js"></script>
-<script type="text/javascript" src="{$new_base_dir}modules/mondialrelay/kit_mondialrelay/js/ressources_MR.js"></script>
+<script type="text/javascript">var _PS_MR_MODULE_DIR_ = "{$new_base_dir}";</script>
+<script type="text/javascript" src="{$new_base_dir}kit_mondialrelay/js/include_MR.js"></script>
+<script type="text/javascript" src="{$new_base_dir}kit_mondialrelay/js/ressources_MR.js"></script>
 <script type="text/javascript">
 	var one_page_checkout = {$one_page_checkout};
 	var server_error = "{l s='Problem getting addresses from MondialRelay Webservice : Mondial Relay servers\' may be down' mod='mondialrelay'}";
@@ -76,7 +76,7 @@
 						{if ($google_api_key)}
 						<iframe style="display:none;" id="all_mondialrelay_map_{$carrier.id_carrier|intval}" width="517px" height="317px" frameborder="0" scrolling="no" src="{$base_dir}modules/mondialrelay/googlemap.php?relativ_base_dir={$base_dir}&Pays={$input_pays}&Ville={$input_ville}&CP={$input_cp}&Taille=&Poids={$input_poids}&Action={$carrier.liv|escape:'htmlall':'UTF-8'}&num={$carrier.id_carrier|intval}&address={$address_map}"></iframe>
 						{/if}
-						<img src="{$base_dir}modules/mondialrelay/kit_mondialrelay/loading.gif" style="display:none;" id="loading_mr"/>
+						<img src="{$new_base_dir}images/loader.gif" style="display:none;" id="loading_mr"/>
 						<div style="display:none;" id="mondialrelay_{$carrier.id_carrier|intval}"></div>		 
 					</td>
 				</tr>

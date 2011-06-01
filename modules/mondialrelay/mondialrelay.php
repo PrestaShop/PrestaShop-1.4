@@ -34,20 +34,23 @@ class MondialRelay extends Module
 	const INSTALL_SQL_FILE = 'mrInstall.sql';
 	
 	private $_postErrors;
-	private $_modulePath;
+	
+	static public $modulePath = '';
+	static public $moduleURL = '';
 	
 	public function __construct()
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.4';
+		$this->version	= '1.5';
 
 		parent::__construct();
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Mondial Relay');
 		$this->description = $this->l('Deliver in Relay points');
-		$this->_modulePath =	_PS_MODULE_DIR_. 'mondialrelay/';
+		
+		self::initModuleAccess();
 		
 		// Call everytime if the merchant make a replace file update
 		$this->_updateProcess();
@@ -56,6 +59,7 @@ class MondialRelay extends Module
 	public function install()
 	{
 		global $cookie;
+		
 		$name = "shipping";
 		$title = "Mondial Relay API";
 
@@ -73,16 +77,9 @@ class MondialRelay extends Module
 			(name, title, description, position) 
 			VALUES(\''.$name.'\', \''.$title.'\', NULL, 0)');
 
-		if (!$this->registerHook('shipping') OR
-			!$this->registerHook('extraCarrier') OR
-			!$this->registerHook('processCarrier') OR
-			!$this->registerHook('orderDetail') OR
-			!$this->registerHook('updateCarrier') OR
-			!$this->registerHook('orderDetailDisplayed') ||
-			!$this->registerHook('newOrder') ||
-			!$this->registerHook('BackOfficeHeader'))
-			return false;
-		
+		if (!$this->registerHookByVersion())
+				return false;
+
 		if ((!file_exists($this->_modulePath.self::INSTALL_SQL_FILE)) ||
 			(!$sql = file_get_contents($this->_modulePath.self::INSTALL_SQL_FILE)))
 			return false;
@@ -147,6 +144,27 @@ class MondialRelay extends Module
 		return true;
 	}
 	
+	/*
+	** Register hook depending of the Prestashop version used
+	*/
+	private function registerHookByVersion()
+	{
+		if (_PS_VERSION_ >= '1.3' &&  
+				(!$this->registerHook('shipping') ||
+				!$this->registerHook('extraCarrier') ||
+				!$this->registerHook('updateCarrier') ||
+				!$this->registerHook('newOrder') ||
+				!$this->registerHook('BackOfficeHeader')))
+			return false;
+			
+		if (_PS_VERSION_ >= '1.4' &&
+				(!$this->registerHook('processCarrier') ||
+				!$this->registerHook('orderDetail') ||
+				!$this->registerHook('orderDetailDisplayed')))
+			return false;
+		return true;
+	}
+	
 	public function uninstall()
 	{
 		if (!parent::uninstall())
@@ -177,9 +195,21 @@ class MondialRelay extends Module
 			!Configuration::deleteByName('MR_CODE_MARQUE') OR
 			!Configuration::deleteByName('MR_KEY_WEBSERVICE') OR
 			!Configuration::deleteByName('MR_WEIGHT_COEF') OR
-			!Db::getInstance()->Execute('UPDATE  '._DB_PREFIX_ .'carrier  set `active` = 0, `deleted` = 1 WHERE `external_module_name` = "mondialrelay"') OR
 			!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_ .'mr_historique, '._DB_PREFIX_ .'mr_method, '._DB_PREFIX_ .'mr_selected'))
 			return false;
+			
+		if (_PS_VERSION_ >= '1.4' && 
+				!Db::getInstance()->Execute('
+					UPDATE  '._DB_PREFIX_ .'carrier  
+					SET `active` = 0, `deleted` = 1 
+					WHERE `external_module_name` = "mondialrelay"'))
+			return false;
+		else if (!Db::getInstance()->Execute('
+					UPDATE  '._DB_PREFIX_ .'carrier  
+					SET `active` = 0, `deleted` = 1 
+					WHERE `name` = "mondialrelay"'))
+			return false; 
+			
 		return true;
 	}
 	
@@ -217,6 +247,38 @@ class MondialRelay extends Module
 			$this->registerHook('newOrder');
 		if (!$this->isRegisteredInHook('BackOfficeHeader'))
 			$this->registerHook('BackOfficeHeader');
+	}
+	
+	/*
+	** Init the access directory module for URL and file system
+	** Allow a compatibility for Presta < 1.4
+	*/
+	static public function initModuleAccess()
+	{
+		self::$modulePath =	_PS_MODULE_DIR_. 'mondialrelay/';
+	
+		$protocol = (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) 
+			&& strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
+		
+		$endURL = __PS_BASE_URI__.'/modules/mondialrelay/';
+	
+		if (method_exists('Tools', 'getShopDomainSsl'))
+			self::$moduleURL = $protocol.Tools::getShopDomainSsl().$endURL;
+		else
+			self::$moduleURL = $protocol.$_SERVER['HTTP_HOST'].$endURL;			
+	}
+	
+	/*
+	** Override a jQuery version included by another one us.
+	** Allow a compatibility for Presta < 1.4
+	*/
+	static public function getJqueryCompatibility()
+	{
+		return '
+			<script type="text/javascript">
+				jq13 = jQuery.noConflict(true); 
+			</script>
+			<script type="text/javascript" src="'.self::$moduleURL.'/jquery-1.4.4.min.js"></script>';
 	}
 	
 	public function hookNewOrder($params)
@@ -358,10 +420,10 @@ class MondialRelay extends Module
 		if ((!$res) OR ($res['MR_Selected_Num'] == 'LD1') OR ($res['MR_Selected_Num'] == 'LDS'))
 			return '';
 		$smarty->assign('mr_addr', $res['MR_Selected_LgAdr1'].($res['MR_Selected_LgAdr1'] ? ' - ' : '').$res['MR_Selected_LgAdr2'].($res['MR_Selected_LgAdr2'] ? ' - ' : '').$res['MR_Selected_LgAdr3'].($res['MR_Selected_LgAdr3'] ? ' - ' : '').$res['MR_Selected_LgAdr4'].($res['MR_Selected_LgAdr4'] ? ' - ' : '').$res['MR_Selected_CP'].' '.$res['MR_Selected_Ville'].' - '.$res['MR_Selected_Pays']);
-		return $this->display(dirname(__FILE__), 'orderDetail.tpl');
+		return $this->display(__FILE__, 'orderDetail.tpl');
 	}
 	
-	public function hookProcessCarrier($params)
+	public function hookProcessCarrier($params, $redirect = true)
 	{
 		$cart = $params['cart'];
 		$result_MR = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'mr_method` WHERE `id_carrier` = '.(int)($cart->id_carrier));
@@ -372,7 +434,7 @@ class MondialRelay extends Module
 			{
 				$deliveryAddressLDS = new Address((int)($cart->id_address_delivery));
 				if (Validate::isLoadedObject($deliveryAddressLDS) AND ($deliveryAddressLDS->id_customer == $cart->id_customer))
-     			{
+     		{
 	 				Db::getInstance()->delete(_DB_PREFIX_.'mr_selected','id_cart = "'.(int)($cart->id).'"');
 					$mrselected = new MondialRelayClass();
 					$mrselected->id_customer = $cart->id_customer;
@@ -384,7 +446,9 @@ class MondialRelay extends Module
 			}
 			else if (!Configuration::get('PS_ORDER_PROCESS_TYPE'))
 			{
-				if (empty($_POST['MR_Selected_Num_'.$cart->id_carrier])) // Case error : the customer didn't choose a 'relais' but selected Relais Colis TNT as a carrier 
+				// Redirect is set to false in Presta 1.3 for compatibility 
+				// when this method is called under an ajax process
+				if (empty($_POST['MR_Selected_Num_'.$cart->id_carrier]) && $redirect) // Case error : the customer didn't choose a 'relais' but selected Relais Colis TNT as a carrier 
 					Tools::redirect('order.php?step=2&mr_null');
 				else
 				{
@@ -410,12 +474,26 @@ class MondialRelay extends Module
 	public function hookupdateCarrier($params)
 	{
 		$new_carrier = $params['carrier'];
-		if ($new_carrier->external_module_name == 'mondialrelay')
-		{
-			$mr_data = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'mr_method` WHERE `id_carrier` = '.(int)($params['id_carrier']));
-			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'mr_method` (mr_Name, mr_Pays_list, mr_ModeCol, mr_ModeLiv, mr_ModeAss, id_carrier)
-										VALUES ("'.pSQL($mr_data['mr_Name']).'", "'.pSQL($mr_data['mr_Pays_list']).'", "'.pSQL($mr_data['mr_ModeCol']).'", "'.pSQL($mr_data['mr_ModeLiv']).'", "'.pSQL($mr_data['mr_ModeAss']).'", '.(int)($new_carrier->id).')');
-		}
+		// Depends of the Prestashop version, the matches key isn't the same
+		if ((_PS_VERSION_ >= '1.4' && $new_carrier->external_module_name == 'mondialrelay') ||
+				$new_carrier->name = 'mondialrelay')
+			{
+				$mr_data = Db::getInstance()->getRow('
+					SELECT * 
+					FROM `'._DB_PREFIX_.'mr_method` 
+					WHERE `id_carrier` = '.(int)($params['id_carrier']));
+				
+				Db::getInstance()->Execute('
+					INSERT INTO `'._DB_PREFIX_.'mr_method` 
+					(mr_Name, mr_Pays_list, mr_ModeCol, mr_ModeLiv, mr_ModeAss, id_carrier)
+					VALUES (
+						"'.pSQL($mr_data['mr_Name']).'", 
+						"'.pSQL($mr_data['mr_Pays_list']).'", 
+						"'.pSQL($mr_data['mr_ModeCol']).'", 
+						"'.pSQL($mr_data['mr_ModeLiv']).'", 
+						"'.pSQL($mr_data['mr_ModeAss']).'", 
+						'.(int)($new_carrier->id).')');
+			}	
 	}
 	
 	public function hookextraCarrier($params)
@@ -487,10 +565,6 @@ class MondialRelay extends Module
 		{
 			include_once(_PS_MODULE_DIR_.'mondialrelay/page_iso.php');
 			
-			$protocol_link = (Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) 
-				AND strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
-			$new_base_dir = $protocol_link.Tools::getShopDomainSsl().__PS_BASE_URI__;
-			
 			$smarty->assign( array(
 							'address_map' => $address->address1.', '.$address->postcode.', '.ote_accent($address->city).', '.$country->iso_code,
 							'input_cp'  => $address->postcode,
@@ -501,7 +575,7 @@ class MondialRelay extends Module
 							'checked' => (int)($checked),
 							'google_api_key' => Configuration::get('MR_GOOGLE_MAP'),
 							'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
-							'new_base_dir' => $new_base_dir,
+							'new_base_dir' => self::$moduleURL,
 							'carriersextra' => $resultsArray));
 			$nbcarriers = $nbcarriers + $i;
 			return $this->display(dirname(__FILE__), 'mondialrelay.tpl');
@@ -624,9 +698,18 @@ class MondialRelay extends Module
 						$checkD[] = $value;
 			}
 
-			Db::getInstance()->Execute('INSERT INTO `' . _DB_PREFIX_ . 'carrier` (`id_tax_rules_group`, `url`, `name`, `active`, `is_module`, `range_behavior`, `shipping_external`, `need_range`, `external_module_name`, `shipping_method`)
-									VALUES("0", NULL, "'.pSQL($array[0]).'", "1", "1", "1", "0", "1", "mondialrelay", "1")');
-
+			// Added for 1.3 compatibility to match with the right key
+			if (_PS_VERSION_ >= '1.4')
+				Db::getInstance()->Execute('
+					INSERT INTO `' . _DB_PREFIX_ . 'carrier` 
+					(`id_tax_rules_group`, `url`, `name`, `active`, `is_module`, `range_behavior`, `shipping_external`, `need_range`, `external_module_name`, `shipping_method`)
+					VALUES("0", NULL, "'.pSQL($array[0]).'", "1", "1", "1", "0", "1", "mondialrelay", "1")');
+			else
+				Db::getInstance()->Execute('
+				INSERT INTO `' . _DB_PREFIX_ . 'carrier`
+				(`url`, `name`, `active`, `is_module`, `range_behavior`)
+				VALUES(NULL, "'.pSQL('mondialrelay').'", "1", "1", "1")');
+				
 			$get   = Db::getInstance()->getRow('SELECT * FROM `' . _DB_PREFIX_ . 'carrier` WHERE `id_carrier` = "' . mysql_insert_id() . '"');
 			Db::getInstance()->Execute('UPDATE `' . _DB_PREFIX_ . 'mr_method` SET `id_carrier` = "' . (int)($get['id_carrier']) . '" WHERE `id_mr_method` = "' . pSQL($mainInsert) . '"');
 			$weight_coef = Configuration::get('MR_WEIGHT_COEF');
@@ -675,7 +758,7 @@ class MondialRelay extends Module
 					<li>
 						<label for="mr_Name" class="shipLabel">'.$this->l('Carrier\'s name').'<sup>*</sup></label>
 						<input type="text" id="mr_Name" name="mr_Name" '.(Tools::getValue('mr_Name') ? 'value="'.Tools::getValue('mr_Name').'"' : '').'/>
-					</li>
+					</li>̵
 
 					<li>
 						<label for="mr_ModeCol" class="shipLabel">'.$this->l('Collection Mode').'<sup>*</sup></label>
@@ -733,10 +816,11 @@ class MondialRelay extends Module
 		global $cookie;
 
 		$query = Db::getInstance()->ExecuteS('
-		SELECT m.*
-		FROM `'._DB_PREFIX_.'mr_method` m
-		JOIN `'._DB_PREFIX_.'carrier` c ON (c.`id_carrier` = m.`id_carrier`)
-		WHERE c.`deleted` = 0');
+			SELECT m.*
+			FROM `'._DB_PREFIX_.'mr_method` m
+			JOIN `'._DB_PREFIX_.'carrier` c 
+			ON (c.`id_carrier` = m.`id_carrier`)
+			WHERE c.`deleted` = 0');
 			
 		$output = '
 		<form action="' . $_SERVER['REQUEST_URI'] . '" method="post">
@@ -910,12 +994,17 @@ class MondialRelay extends Module
 			SET '.pSQL($key).'="'.pSQL($value).'" 
 			WHERE id_carrier=\''.(int)($id_carrier).'\' ; ');
 	}
-	
-	static function getOrders($orderIdList = array())
+ 
+ 	// Add for 1.3 compatibility and avoid duplicate code	
+	static public function jsonEncode($result)
 	{
-		$id_order_state = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
-		$sql = '
-			SELECT  o.`id_address_delivery` as id_address_delivery, 
+		return (method_exists('Tools', 'jsonEncode')) ? 
+			Tools::jsonEncode($result) : json_encode($result);
+	}
+	
+	static public function ordersSQLQuery1_4($id_order_state)
+	{
+		return 'SELECT  o.`id_address_delivery` as id_address_delivery, 
 							o.`id_order` as id_order, 
 							o.`id_customer` as id_customer,
 							o.`id_cart` as id_cart, 
@@ -942,6 +1031,52 @@ class MondialRelay extends Module
 				WHERE moh.`id_order` = o.`id_order` 
 				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).' 
 			AND ca.`external_module_name` = "mondialrelay"';
+	}
+	
+	static public function ordersSQLQuery1_3($id_order_state)
+	{
+		return '
+				SELECT  o.`id_address_delivery` as id_address_delivery, 
+							o.`id_order` as id_order, 
+							o.`id_customer` as id_customer,
+							o.`id_cart` as id_cart, 
+							mrs.`id_mr_selected` as id_mr_selected,
+							CONCAT(c.`firstname`, \' \', c.`lastname`) AS `customer`,
+							o.`total_paid_real` as total, o.`total_shipping` as shipping,
+							o.`date_add` as date, o.`id_currency` as id_currency, o.`id_lang` as id_lang,
+							mrs.`MR_poids` as weight, mr.`mr_Name` as mr_Name, mrs.`MR_Selected_Num` as MR_Selected_Num,
+							mrs.`MR_Selected_Pays` as MR_Selected_Pays, mrs.`exp_number` as exp_number,
+							mr.`mr_ModeCol` as mr_ModeCol, mr.`mr_ModeLiv` as mr_ModeLiv, mr.`mr_ModeAss` as mr_ModeAss 
+			FROM `'._DB_PREFIX_.'orders` o
+			LEFT JOIN `'._DB_PREFIX_.'carrier` ca 
+			ON (ca.`id_carrier` = o.`id_carrier`)
+			AND ca.`name` = "mondialrelay"
+			LEFT JOIN `'._DB_PREFIX_.'mr_selected` mrs 
+			ON (mrs.`id_cart` = o.`id_cart`)
+			LEFT JOIN `'._DB_PREFIX_.'mr_method` mr 
+			ON (mr.`id_carrier` = ca.`id_carrier`)
+			LEFT JOIN `'._DB_PREFIX_.'customer` c 
+			ON (c.`id_customer` = o.`id_customer`)
+			WHERE (
+				SELECT moh.`id_order_state` 
+				FROM `'._DB_PREFIX_.'order_history` moh 
+				WHERE moh.`id_order` = o.`id_order` 
+				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).'
+			AND ca.`name` = "mondialrelay"';
+	}
+	
+	static public function getBaseOrdersSQLQuery($id_order_state)
+	{
+		if (_PS_VERSION_ >= '1.4')
+			return self::ordersSQLQuery1_4($id_order_state);
+		else
+			return self::ordersSQLQuery1_3($id_order_state);
+	}
+	
+	static public function getOrders($orderIdList = array())
+	{
+		$id_order_state = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
+		$sql = self::getBaseOrdersSQLQuery($id_order_state);
 		
 		if (count($orderIdList))
 		{

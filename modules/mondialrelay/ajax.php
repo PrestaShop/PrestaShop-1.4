@@ -32,8 +32,8 @@
  * methods to manage correctly the data and name fields
  */
 
-require_once(dirname(__FILE__).'../../../config/config.inc.php');
-require_once(dirname(__FILE__).'../../../init.php');
+require_once(realpath(dirname(__FILE__).'/../../config/config.inc.php'));
+require_once(realpath(dirname(__FILE__).'/../../init.php'));
 require(dirname(__FILE__).'/classes/MRCreateTickets.php');
 require(dirname(__FILE__).'/classes/MRGetTickets.php');
 require(dirname(__FILE__).'/classes/MRManagement.php');
@@ -57,13 +57,20 @@ switch($method)
 	case 'DeleteHistory':
 		$params['historyIdList'] = Tools::getValue('history_id_list');
 		break;
+	// 1.3 compatibility to add carrier info when an user select one
+	case 'addSelectedCarrierToDB':
+		$params['cart'] = new Cart($cookie->id_cart);
+		// Sometimes the carrier id isn't set into the cart object
+		if (($id_carrier = Tools::getValue('id_carrier')))
+			$params['cart']->id_carrier = $id_carrier;
+		break;
 	default:
 }
 
 // Try to instanciate the method object name and call the necessaries method
 try 
 {
-	if (class_exists($method))
+	if (class_exists($method, false))
 	{
 		$obj = new $method($params);
 		
@@ -86,9 +93,9 @@ try
 }
 catch(Exception $e)
 {
-	echo Tools::jsonEncode(array('other' => array('error' => array($e->getMessage()))));
+	echo MondialRelay::jsonEncode(array('other' => array('error' => array($e->getMessage()))));
 	exit(-1);
 }
-echo Tools::jsonEncode($result);
+echo MondialRelay::jsonEncode($result);
 exit(0);
 ?>

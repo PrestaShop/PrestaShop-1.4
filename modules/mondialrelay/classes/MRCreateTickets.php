@@ -278,7 +278,12 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		$this->_fields['list']['Expe_Ad4']['value'] = Configuration::get('PS_SHOP_ADDR2');
 		$this->_fields['list']['Expe_Ville']['value'] = Configuration::get('PS_SHOP_CITY');
 		$this->_fields['list']['Expe_CP']['value'] = Configuration::get('PS_SHOP_CODE');
-		$this->_fields['list']['Expe_Pays']['value'] = Country::getIsoById(Configuration::get('PS_SHOP_COUNTRY_ID'));
+		
+		if (_PS_VERSION_ >= '1.4')
+			$this->_fields['list']['Expe_Pays']['value'] = Country::getIsoById(Configuration::get('PS_SHOP_COUNTRY_ID'));
+		else
+			$this->_fields['list']['Expe_Pays']['value'] = substr(Configuration::get('PS_SHOP_COUNTRY'), 0, 2);
+			
 		$this->_fields['list']['Expe_Tel1']['value'] = Configuration::get('PS_SHOP_PHONE');
 		$this->_fields['list']['Expe_Mail']['value'] = Configuration::get('PS_SHOP_EMAIL');
 		$this->_fields['list']['NbColis']['value'] = 1;

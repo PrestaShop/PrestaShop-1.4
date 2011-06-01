@@ -1,4 +1,12 @@
-<script type="text/javascript" src="../../js/jquery/jquery-1.4.4.min.js"></script>
+<?php
+	require_once(dirname(__FILE__).'/../../config/config.inc.php');
+	require_once(dirname(__FILE__).'/../../init.php');
+	require_once(dirname(__FILE__).'/mondialrelay.php');
+	
+	MondialRelay::initModuleAccess();
+	echo '<script type="text/javascript" src="'.MondialRelay::$moduleURL.'jquery-1.4.4.min.js"></script>';
+ ?>
+
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript">
 
@@ -87,11 +95,14 @@ function recherche_MR(args)
 
 <div id="map" style="height:300px; width:500px; border:1px;" ></div>
 
-<?php echo '<script type="text/javascript">
+<?php 
+	echo '<script type="text/javascript">
 
-	recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays'].'&Ville='.$_GET['Ville'].'&CP='.$_GET['CP'].'&Taille=&Poids='.$_GET['Poids'].'&Action='.$_GET['Action'].'&num='.$_GET['num'].'\');
+	$(document).ready(function ()
+	{
+		recherche_MR(\'relativ_base_dir='.$_GET['relativ_base_dir'].'&Pays='.$_GET['Pays'].'&Ville='.$_GET['Ville'].'&CP='.$_GET['CP'].'&Taille=&Poids='.$_GET['Poids'].'&Action='.$_GET['Action'].'&num='.$_GET['num'].'\');
 
-	window.onload = function()
+		window.onload = function()
 		{
 			var cpt = 0;
 			google_map_init();
@@ -107,5 +118,6 @@ function recherche_MR(args)
 						cpt++;
 				}
 		}
+	});
 </script>';
 ?>

@@ -1,16 +1,13 @@
-var relativ_base_dir = url_appel;
+var relativ_base_dir = _PS_MR_MODULE_DIR_;
 var num_mode_actif = -1;
 
-url_appel = url_appel+'modules/mondialrelay/kit_mondialrelay/';
-
 img_loader = new Image;
-img_loader.src = url_appel+'loading.gif';
+img_loader.src = _PS_MR_MODULE_DIR_+'images/loader.gif';
 
 var google_map_general = null;
 var geocoder = null;
 var recherche = 0;
 var json_addresses = null;
-//var address;
 
 function affiche_mydiv_mr(id_carrier, args)
 {
@@ -35,222 +32,11 @@ function affiche_mydiv_mr(id_carrier, args)
 	}
 }
 
-function trim_MR(s)
-{return s.replace(/^\s+|\s+$/g,"");}
-
-function ltrim_MR(s)
-{return s.replace(/^\s+/,"");}
-
-function rtrim_MR(s)
-{return s.replace(/\s+$/,"");}
-
-function strtoupper_MR(s)
-{return s.toUpperCase();}
-
-var oXmlhttpMR1 = null;
-if (window.XMLHttpRequest) {
-  // If IE7, Mozilla, Safari, and so on: Use native object.
-  oXmlhttpMR1 = new XMLHttpRequest();
-}
-else
-{
-  if (window.ActiveXObject) {
-	 // ...otherwise, use the ActiveX control for IE5.x and IE6.
-	 oXmlhttpMR1 = new ActiveXObject('MSXML2.XMLHTTP.3.0');
-  }
-}
-
-var oXmlhttpMR2 = null;
-if (window.XMLHttpRequest) {
-  // If IE7, Mozilla, Safari, and so on: Use native object.
-  oXmlhttpMR2 = new XMLHttpRequest();
-}
-else
-{
-  if (window.ActiveXObject) {
-	 // ...otherwise, use the ActiveX control for IE5.x and IE6.
-	 oXmlhttpMR2 = new ActiveXObject('MSXML2.XMLHTTP.3.0');
-  }
-}
-	
-var oXmlhttpMR3 = null;
-if (window.XMLHttpRequest) {
-  // If IE7, Mozilla, Safari, and so on: Use native object.
-  oXmlhttpMR3 = new XMLHttpRequest();
-}
-else
-{
-  if (window.ActiveXObject) {
-	 // ...otherwise, use the ActiveX control for IE5.x and IE6.
-	 oXmlhttpMR3 = new ActiveXObject('MSXML2.XMLHTTP.3.0');
-  }
-}		
-		
-var oXmlhttpMR5 = null;
-if (window.XMLHttpRequest) {
-  // If IE7, Mozilla, Safari, and so on: Use native object.
-  oXmlhttpMR5 = new XMLHttpRequest();
-}
-else
-{
-  if (window.ActiveXObject) {
-	 // ...otherwise, use the ActiveX control for IE5.x and IE6.
-	 oXmlhttpMR5 = new ActiveXObject('MSXML2.XMLHTTP.3.0');
-  }
-}	
-
-function Url_suivi_MR(numexp)
-{
-	var ok = 0;
-	if (numexp != '')
-		ok = 1;
-	if (ok == 1)
-	{
-	
-	oXmlhttpMR1.open('POST',url_appel+'SuiviExpedition_ajax.php');
-		oXmlhttpMR1.onreadystatechange = function()
-			{
-				if (oXmlhttpMR1.readyState == 4 && oXmlhttpMR1.status == 200)
-				{
-					var response = oXmlhttpMR1.responseText;
-					document.getElementById('list_Url_suivi_MR_expediation').innerHTML=document.getElementById('list_Url_suivi_MR_expediation').innerHTML
-					 + '<br><a href="'+response+'" target="suivi_exp">'+response+'</a>';
-				}
-			}
-		oXmlhttpMR1.setRequestHeader("Content-type", "application/x-www-form-urlencoded; ");
-		var data = 'Expedition='+encodeURIComponent(numexp);
-		oXmlhttpMR1.send(data);
-	}
-	else
-	{
-		alert('Formulaire incomplet');
-		return false;
-	}
-}
-	
-function impression_etiquette_MR()
-{
-	if (document.getElementById('input_Expeditions').value != '' && is_ok_mr('Pays','input_Langue',''))
-	{
-		oXmlhttpMR2.open('POST',url_appel+'ImpressionEtiquettePointRelais_ajax.php');
-		oXmlhttpMR2.onreadystatechange=function()
-			{
-				if (oXmlhttpMR2.readyState == 1)
-					document.getElementById('reponse_impression_etiquette_MR').innerHTML='Cr�ation en cours...';
-				if (oXmlhttpMR2.readyState == 2)
-					document.getElementById('reponse_impression_etiquette_MR').innerHTML='Cr�ation en cours...';
-				if (oXmlhttpMR2.readyState == 4 && oXmlhttpMR2.status == 200)
-				{
-					var response = oXmlhttpMR2.responseText || "z|";
-					document.getElementById('reponse_impression_etiquette_MR').innerHTML = '';
-					res=response.split('|');
-					if (res[0] != 0 && res[0] != 'a' && res[0] != 'z') 
-						message_MR(res[0]);
-					else if (res[0] == 'a')
-						document.getElementById('reponse_impression_etiquette_MR').innerHTML = res[1];	
-					else if (res[0] == 'z')
-					{
-						document.getElementById('reponse_impression_etiquette_MR').innerHTML = '';
-						alert('Requ�te sans r�ponse.');
-					}
-					else
-					{
-						document.getElementById('list_url_reponse_impression_etiquette_MR_A4').innerHTML=document.getElementById('list_url_reponse_impression_etiquette_MR_A4').innerHTML
-						+ '<br><a href="' + res[1] + '" target="print_etiquette">' + res[1] + '</a>';
-						document.getElementById('list_url_reponse_impression_etiquette_MR_A5').innerHTML=document.getElementById('list_url_reponse_impression_etiquette_MR_A5').innerHTML
-						+ '<br><a href="' + res[2] + '" target="print_etiquette">' + res[2] + '</a>';
-					}
-				}
-			}
-			oXmlhttpMR2.setRequestHeader("Content-type", "application/x-www-form-urlencoded; ");
-			var data = 'Expeditions=' + encodeURIComponent(document.getElementById('input_Expeditions').value) + '&Langue=' + encodeURIComponent($('#input_Langue').val());
-			oXmlhttpMR2.send (data);
-		}
-		else
-		{
-			alert('Formulaire incomplet');
-			return false;
-		}
-	}
-
-
-function creation_etiquette_MR()
-{
-	if (	is_ok_mr('NDossier','input_NDossier','')
-			&& is_ok_mr('NClient','input_NClient','')
-			&& is_ok_mr('Pays','input_Expe_Langage','')
-			&& is_ok_mr('Ad2','input_Expe_Ad2','')
-			&& is_ok_mr('Ad3','input_Expe_Ad3','')
-			&& is_ok_mr('Ad2','input_Expe_Ad4','')
-			&& is_ok_mr('VilleO','input_Expe_Ville','')
-			&& is_ok_mr('CPO','input_Expe_CP','')
-			&& is_ok_mr('Pays','input_Expe_Pays','')
-			&& is_ok_mr('Tel1','input_Expe_Tel1','')
-			&& is_ok_mr('Tel2','input_Expe_Tel2','')
-			&& is_ok_mr('Mail','input_Expe_Mail','')
-			&& is_ok_mr('Pays','input_Dest_Langage','')
-			&& is_ok_mr('Ad2','input_Dest_Ad2','')
-			&& is_ok_mr('Ad3','input_Dest_Ad3','')
-			&& is_ok_mr('Ad2','input_Dest_Ad4','')
-			&& is_ok_mr('VilleO','input_Dest_Ville','')
-			&& is_ok_mr('CPO','input_Dest_CP','')
-			&& is_ok_mr('Pays','input_Dest_Pays','')
-			&& is_ok_mr('Tel2','input_Dest_Tel1','')
-			&& is_ok_mr('Tel2','input_Dest_Tel2','')
-			&& is_ok_mr('MailO','input_Dest_Mail','')
-			&& is_ok_mr('PoidsO','input_Poids','')
-			&& is_ok_mr('Longueur','input_Longueur','')
-		)
-	{			
-		oXmlhttpMR3.open('POST',url_appel+'CreationEtiquettePointRelais_ajax.php');
-		oXmlhttpMR3.onreadystatechange = function()
-		{
-			if (oXmlhttpMR3.readyState == 1)
-				document.getElementById('reponse_creation_etiquette_MR').innerHTML = 'Cr�ation en cours...';
-			if (oXmlhttpMR3.readyState == 2)
-				document.getElementById('reponse_creation_etiquette_MR').innerHTML = 'Cr�ation en cours...';
-			if (oXmlhttpMR3.readyState == 4 && oXmlhttpMR3.status == 200)
-			{
-				var response = oXmlhttpMR3.responseText || "z|";
-				document.getElementById('reponse_creation_etiquette_MR').innerHTML = '';
-				res = response.split('|');
-				if (res[0] != 0 && res[0] != 'a' && res[0] != 'z') 
-					{message_MR(res[0]);}
-				else if (res[0] == 'a')
-					document.getElementById('reponse_creation_etiquette_MR').innerHTML = res[1];
-				else if (res[0] == 'z')
-				{
-					document.getElementById('reponse_creation_etiquette_MR').innerHTML = '';
-					alert('Requ�te sans r�ponse.');
-				}
-				else
-				{
-					document.getElementById('list_url_reponse_creation_etiquette_MR').innerHTML = document.getElementById('list_url_reponse_creation_etiquette_MR').innerHTML
-					+ '<br><a href="'+res[2]+'" target="print_etiquette">'+res[2]+'</a>';
-					Url_suivi_MR(res[1]);//ligne � supprimer seulement utilis�e pour le test
-					if (document.getElementById('input_Expeditions').value != '')
-						document.getElementById('input_Expeditions').value = document.getElementById('input_Expeditions').value+';'+res[1];
-					else
-						document.getElementById('input_Expeditions').value = res[1];
-				}
-			}
-		}
-		oXmlhttpMR3.setRequestHeader("Content-type", "application/x-www-form-urlencoded; ");
-		var data = 'ModeCol='+encodeURIComponent(document.getElementById('input_ModeCol').value)+'&ModeLiv='+encodeURIComponent(document.getElementById('input_ModeLiv').value)+'&NDossier='+encodeURIComponent(document.getElementById('input_NDossier').value)+'&NClient='+encodeURIComponent(document.getElementById('input_NClient').value)+'&Expe_Langage='+encodeURIComponent(document.getElementById('input_Expe_Langage').value)+'&Expe_Ad1='+encodeURIComponent(document.getElementById('input_Expe_Ad1').value)+'&Expe_Ad2='+encodeURIComponent(document.getElementById('input_Expe_Ad2').value)+'&Expe_Ad3='+encodeURIComponent(document.getElementById('input_Expe_Ad3').value)+'&Expe_Ad4='+encodeURIComponent(document.getElementById('input_Expe_Ad4').value)+'&Expe_Ville='+encodeURIComponent(document.getElementById('input_Expe_Ville').value)+'&Expe_CP='+encodeURIComponent(document.getElementById('input_Expe_CP').value)+'&Expe_Pays='+encodeURIComponent(document.getElementById('input_Expe_Pays').value)+'&Expe_Tel1='+encodeURIComponent(document.getElementById('input_Expe_Tel1').value)+'&Expe_Tel2='+encodeURIComponent(document.getElementById('input_Expe_Tel2').value)+'&Expe_Mail='+encodeURIComponent(document.getElementById('input_Expe_Mail').value)+'&Dest_Langage='+encodeURIComponent(document.getElementById('input_Dest_Langage').value)+'&Dest_Ad1='+encodeURIComponent(document.getElementById('input_Dest_Ad1').value)+'&Dest_Ad2='+encodeURIComponent(document.getElementById('input_Dest_Ad2').value)+'&Dest_Ad3='+encodeURIComponent(document.getElementById('input_Dest_Ad3').value)+'&Dest_Ad4='+encodeURIComponent(document.getElementById('input_Dest_Ad4').value)+'&Dest_Ville='+encodeURIComponent(document.getElementById('input_Dest_Ville').value)+'&Dest_CP='+encodeURIComponent(document.getElementById('input_Dest_CP').value)+'&Dest_Pays='+encodeURIComponent(document.getElementById('input_Dest_Pays').value)+'&Dest_Tel1='+encodeURIComponent(document.getElementById('input_Dest_Tel1').value)+'&Dest_Tel2='+encodeURIComponent(document.getElementById('input_Dest_Tel2').value)+'&Dest_Mail='+encodeURIComponent(document.getElementById('input_Dest_Mail').value)+'&Poids='+encodeURIComponent(document.getElementById('input_Poids').value)+'&Longueur='+encodeURIComponent(document.getElementById('input_Longueur').value)+'&Taille='+encodeURIComponent(document.getElementById('input_Taille').options[document.getElementById('input_Taille').selectedIndex].value)+'&NbColis='+encodeURIComponent(document.getElementById('input_NbColis').options[document.getElementById('input_NbColis').selectedIndex].value)+'&CRT_Valeur='+encodeURIComponent(document.getElementById('input_CRT_Valeur').value)+'&CRT_Devise='+encodeURIComponent(document.getElementById('input_CRT_Devise').value)+'&Exp_Valeur='+encodeURIComponent(document.getElementById('input_Exp_Valeur').value)+'&Exp_Devise='+encodeURIComponent(document.getElementById('input_Exp_Devise').value)+'&LIV_Rel_Pays='+encodeURIComponent(document.getElementById('input_LIV_Rel_Pays').value)+'&LIV_Rel='+encodeURIComponent(document.getElementById('input_LIV_Rel').value)+'&Assurance='+encodeURIComponent(document.getElementById('input_Assurance').options[document.getElementById('input_Assurance').selectedIndex].value)+'&Instructions='+encodeURIComponent(document.getElementById('input_Instructions').value)+'&Texte='+encodeURIComponent(document.getElementById('input_Texte').value);
-		oXmlhttpMR3.send(data);
-	}
-	else
-	{
-		alert('Formulaire incomplet');
-		return false;
-	}
-}
-
 function recherche_MR(num, args)
 {
 	$.ajax({
 		type: "POST",
-		url: url_appel+'RecherchePointRelais_ajax.php',
+		url: _PS_MR_MODULE_DIR_ + 'kit_mondialrelay/RecherchePointRelais_ajax.php',
 		data: args ,
 		dataType: 'json',
 		beforeSend : function(params)
@@ -283,97 +69,7 @@ function recherche_MR(num, args)
 		}
 	});
 }
-
 	
-function is_numeric(id,message)
-{
-	var string = trim_MR(document.getElementById(id).value);
-	if ((isNaN(string)) == true || string == '')
-	{
-		document.getElementById(id).focus();
-		alert(message);
-		return false;
-	}
-	else
-		return true;
-}	
-	
-function is_no_null_mr(id,message)
-{
-	var string = trim_MR(document.getElementById(id).value);
-	if (string != '')
-		return true;
-	else
-	{
-		document.getElementById(id).focus();
-		alert(message);
-		return false;
-	}
-}
-	
-function is_ok_mr(type,id,message)
-	{
-		if (type != 'key') document.getElementById(id).value = trim_MR(strtoupper_MR(document.getElementById(id).value));
-		var string = document.getElementById(id).value;
-		var reg = "";
-		if (type == 'Enseigne' )
-			reg = "^[0-9A-Z]{2}[0-9A-Z ]{6}$";
-		else if (type == 'CM' ) 
-			reg = "^[0-9]{2}$";
-		else if (type == 'key' )
-			reg = "^[0-9A-Za-z_\'., /\-]{2,32}$";
-		else if (type == 'Longueur' && string != '')
-			reg = "^[0-9]{0,3}$";
-		else if (type == 'MailO' )
-			reg = "^[a-zA-Z0-9\-\.@_]{6,70}$";
-		else if (type == 'Mail' && string != '')
-			reg = "^[a-zA-Z0-9\-\.@_]{0,70}$";
-		else if (type == 'Tel1' )
-			reg = "^(((00|[\+])33)|0)[0-9]{1}[0-9]{8}$";
-		else if (type == 'Tel2' && string != '')
-			reg = "^(((00|[\+])33)|0)[0-9]{1}[0-9]{8}$";
-		else if (type == 'Ad2' && string != '')
-			reg = "^[0-9A-Z_\'., /\-]{2,32}$";
-		else if (type == 'Ad3')
-			reg = "^[0-9A-Z_\'., /\-]{2,32}$";
-		else if (type == 'NDossier' && string != '')
-			reg = "^[0-9A-Z_ \-]{0,15}$";
-		else if (type == 'NClient' && string != '')
-			reg = "^[0-9A-Z]{0,9}$";
-		else if (type == 'Pays')
-			reg = "^[A-Z]{2}$";
-		else if (type == 'VilleO' )
-			reg = "^[A-Z_' \-]{2,25}$";
-		else if (type == 'Ville' && string != '')
-			reg = "^[A-Z_' \-]{2,25}$";
-		else if (type == 'CP' && string != '')
-			reg = "^[0-9]{4,5}$";
-		else if (type == 'CPO' )
-			reg = "^[0-9]{4,5}$";
-		else if (type == 'Taille' && string != '')
-			reg = "^XS|S|M|L|XL|XXL|3XL$";
-		else if (type == 'Poids' && string != '')
-			reg = "^[0-9]{1,6}$";
-		else if (type == 'PoidsO')
-			reg = "^[0-9]{1,6}$";
-		else if (type == 'Action' && string != '')
-			reg = "^REL|24R|ESP|DRI|LDS|LDR|LD1$";
-		else if (reg!="")
-			{
-			try {
-			 if (string != string.match(reg)[0]) 
-			  {if (message!='') {document.getElementById(id).focus();alert(message);}
-			  return false;
-			  }
-			  else {return true;}
-			   } catch(err) 
-			  {
-			  document.getElementById(id).focus();alert(message);
-			  return false;
-			  }
-			} else {return true;} 
-	}
-
 	function masque_recherche_MR_detail(num)	
 	{
 		document.getElementById('bg_detail_md_'+num).style.display='none';
@@ -383,7 +79,7 @@ function is_ok_mr(type,id,message)
 	
 	function recherche_MR_detail(num, pays, num_mode)
 	{
-		oXmlhttpMR5.open('POST',url_appel+'RechercheDetailPointRelais_ajax.php');
+		oXmlhttpMR5.open('POST',_PS_MR_MODULE_DIR_ + 'kit_mondialrelay/RechercheDetailPointRelais_ajax.php');
 		oXmlhttpMR5.onreadystatechange=function() {
 			if (oXmlhttpMR5.readyState==1) {
 									var arrayPageSize = getPageSize_MR();
@@ -454,9 +150,37 @@ function select_PR_MR(num, id_carrier)
 		url: gl_base_dir + 'modules/mondialrelay/kit_mondialrelay/mr_opc_ajax.php',
 		async: true,
 		cache: false,
-		data: 'Num='+$('#MR_Selected_Num_'+id_carrier).val()+'&LgAdr1='+$('#MR_Selected_LgAdr1_'+id_carrier).val()+'&LgAdr2='+$('#MR_Selected_LgAdr2_'+id_carrier).val()+'&LgAdr3='+$('#MR_Selected_LgAdr3_'+id_carrier).val()+'&LgAdr4='+$('#MR_Selected_LgAdr4_'+id_carrier).val()+'&CP='+$('#MR_Selected_CP_'+id_carrier).val()+'&Ville='+$('#MR_Selected_Ville_'+id_carrier).val()+'&Pays='+$('#MR_Selected_Pays_'+id_carrier).val()
+		data: 'Num='+$('#MR_Selected_Num_'+id_carrier).val()+'&LgAdr1='+$('#MR_Selected_LgAdr1_'+id_carrier).val()+'&LgAdr2='+$('#MR_Selected_LgAdr2_'+id_carrier).val()+'&LgAdr3='+$('#MR_Selected_LgAdr3_'+id_carrier).val()+'&LgAdr4='+$('#MR_Selected_LgAdr4_'+id_carrier).val()+'&CP='+	$('#MR_Selected_CP_'+id_carrier).val()+'&Ville='+$('#MR_Selected_Ville_'+id_carrier).val()+'&Pays='+$('#MR_Selected_Pays_'+id_carrier).val()
 		});
 	}
+	
+	// 1.3 compatibility, hookProcessCarrier Missing
+	// Allow to fill the database with the selected information
+	$.ajax({
+		type: 'POST',
+		url: _PS_MR_MODULE_DIR_ + 'ajax.php',
+		data: 'method=addSelectedCarrierToDB' + 
+					'&id_carrier=' + id_carrier + 
+					'&MR_Selected_Num_' + id_carrier + '=' + $('#MR_Selected_Num_' + id_carrier).val() + 
+					'&MR_Selected_LgAdr1_' + id_carrier + '=' + $('#MR_Selected_LgAdr1_' + id_carrier).val() + 
+					'&MR_Selected_LgAdr2_' + id_carrier + '=' + $('#MR_Selected_LgAdr2_' + id_carrier).val() + 
+					'&MR_Selected_LgAdr3_' + id_carrier + '=' + $('#MR_Selected_LgAdr3_' + id_carrier).val() + 
+					'&MR_Selected_LgAdr4_' + id_carrier + '=' + $('#MR_Selected_LgAdr4_' + id_carrier).val() + 
+					'&MR_Selected_CP_' + id_carrier + '=' + $('#MR_Selected_CP_' + id_carrier).val() + 
+					'&MR_Selected_Ville_' + id_carrier + '=' + $('#MR_Selected_Ville_' + id_carrier).val() + 
+					'&MR_Selected_Pays_' + id_carrier  + '=' + $('#MR_Selected_Pays_' + id_carrier).val(),
+		success: function(json) 
+		{
+			console.log(json);
+		},
+		error: function(xhr, ajaxOptions, thrownError)
+		{
+			console.log(xhr);
+			console.log(thrownError);
+			console.log(ajaxOptions);
+		}	
+	});
+	
 }
 
 function message_MR(etat)
