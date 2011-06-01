@@ -335,7 +335,7 @@ class AdminImport extends AdminTab
 				$fields[$i-1]['label'] = $fields[$i-1]['label'].' '.$this->l('or').' '.$field['label'];
 			}
 			else
-				$fields[] = '<div>'.(isset($field['help']) ? '<a href="#" class="info" title="'.$this->l('Infos').'|'.$field['help'].'"><img src="'._PS_ADMIN_IMG_.'information.png"></a>' : '<span style="margin-left:16px"></span>').$field['label'].'</div>';
+				$fields[] = '<div>'.(isset($field['help']) ? '<a href="#" class="info" title="'.$this->l('Info').'|'.$field['help'].'"><img src="'._PS_ADMIN_IMG_.'information.png"></a>' : '<span style="margin-left:16px"></span>').$field['label'].'</div>';
 			++$i;
 		}
 		if ($inArray)

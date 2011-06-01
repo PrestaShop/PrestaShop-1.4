@@ -409,9 +409,9 @@ class AdminPreferences extends AdminTab
 					if ($name == 'themes')
 						echo '
 						<td colspan="'.sizeof($field['list']).'">
-							<b>'.$this->l('In order to use a new theme, please follow this steps:', get_class()).'</b>
+							<b>'.$this->l('In order to use a new theme, please follow these steps:', get_class()).'</b>
 							<ul>
-								<li>'.$this->l('Import your theme with using this module:', get_class()).' <a href="index.php?tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules').'&filtername=themeinstallator" style="text-decoration: underline;">'.$this->l('Theme installator', get_class()).'</a></li>
+								<li>'.$this->l('Import your theme using this module:', get_class()).' <a href="index.php?tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules').'&filtername=themeinstallator" style="text-decoration: underline;">'.$this->l('Theme installer', get_class()).'</a></li>
 								<li>'.$this->l('When your theme is imported, please select the theme in this page', get_class()).'</li>
 							</ul>
 						</td>

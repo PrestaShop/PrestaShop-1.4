@@ -194,7 +194,7 @@ class dibs extends PaymentModule
 				.' <a href="'.$href.'" class="link" target="_blank" >&raquo; '.$this->l('Link').' &laquo;</a>
 			</p>
 			<p>'
-				.$this->l('Depending on language and country rules, formular subscription may be different.').'<br />'
+				.$this->l('Depending on language and country rules, subscription parameters may be different.').'<br />'
 				.$this->l('Please click on the appropriate flags:').'&nbsp;';
 		foreach (dibs::$dibs_subscription_link as $lang=>$url)
 		{

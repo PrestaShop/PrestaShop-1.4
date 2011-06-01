@@ -102,7 +102,7 @@ class AdminTranslations extends AdminTab
 			if(!mkdir($path, 0777, true))
 			{
 				$bool &= false;
-				$this->_errors[] = $this->l('Cannot create the folder').' "'.$path.'". '.$this->l('Check directory writing permisions.');
+				$this->_errors[] = $this->l('Cannot create the folder').' "'.$path.'". '.$this->l('Check directory writing permissions.');
 			}
 		}
 		return $bool;
@@ -723,7 +723,7 @@ class AdminTranslations extends AdminTab
 					<img src="../img/admin/import.gif" />'.$this->l('Add / Update a language').'
 				</legend>
 				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add or update a language directly from prestashop.com here').'</p>';
-			$this->displayWarning($this->l('If you choose to update an existing language pack, all your previous customization in the theme named prestashop will be lost. This include front office expressions and default mails.'));
+			$this->displayWarning($this->l('If you choose to update an existing language pack, all your previous customization in the theme named prestashop will be lost. This includes front office expressions and default e-mail templates.'));
 			echo '<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add or update:').' ';
 			
 			if ($lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_each_language_pack.php?version='._PS_VERSION_, false, stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 5)))))

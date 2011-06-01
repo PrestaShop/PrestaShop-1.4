@@ -513,7 +513,7 @@ class Ebay extends Module
 			</script>';
 			$html .= '<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Register the module on eBay').'</legend>';
 			$html .= '<p align="center"><img src="'.$this->_path.'loading.gif" alt="'.$this->l('Loading').'" title="'.$this->l('Loading').'" /></p>';
-			$html .= '<p align="center">'.$this->l('Once you will signin on ebay new window, the module will automatically finish the installation few seconds later').'</p>';
+			$html .= '<p align="center">'.$this->l('Once you sign in from the new eBay window, the module will automatically finish the installation a few seconds later').'</p>';
 			$html .= '</fieldset>';
 		}
 		else
@@ -661,7 +661,7 @@ class Ebay extends Module
 					<label>'.$this->l('Shop postal code').' : </label>
 					<div class="margin-form">
 						<input type="text" size="20" name="ebay_shop_postalcode" value="'.Tools::getValue('ebay_shop_postalcode', Configuration::get('EBAY_SHOP_POSTALCODE')).'" />
-						<p>'.$this->l('You shop postalcode').'</p>
+						<p>'.$this->l('Your shop\'s postal code').'</p>
 					</div>
 				</fieldset>
 				<div class="margin-form" id="buttonEbayParameters"><input class="button" name="submitSave" type="submit" id="save_ebay_parameters" value="'.$this->l('Save').'" /></div>
@@ -698,13 +698,13 @@ class Ebay extends Module
 	{
 		// Check configuration values
 		if (Tools::getValue('ebay_identifier') == NULL)
-			$this->_postErrors[]  = $this->l('Your eBay identifier account is not specified or invalid');
+			$this->_postErrors[]  = $this->l('Your eBay identifier account is not specified or is invalid');
 		if (Tools::getValue('ebay_paypal_email') == NULL OR !Validate::isEmail(Tools::getValue('ebay_paypal_email')))
-			$this->_postErrors[]  = $this->l('Your Paypal E-mail account is not specified or invalid');
+			$this->_postErrors[]  = $this->l('Your Paypal E-mail account is not specified or is invalid');
 		if (Tools::getValue('ebay_shipping_cost') == '' OR !is_numeric(Tools::getValue('ebay_shipping_cost')))
-			$this->_postErrors[]  = $this->l('Your shipping cost is not specified or invalid');
+			$this->_postErrors[]  = $this->l('Your shipping cost is not specified or is invalid');
 		if (Tools::getValue('ebay_shop_postalcode') == '' OR !Validate::isPostCode(Tools::getValue('ebay_shop_postalcode')))
-			$this->_postErrors[]  = $this->l('Your shop postalcode is not specified or invalid');
+			$this->_postErrors[]  = $this->l('Your shop\'s postal code is not specified or is invalid');
 	}
 
 	private function _postProcessParameters()
@@ -776,7 +776,7 @@ class Ebay extends Module
 
 
 		// Display header
-		$html = '<p><b>'.$this->l('To export your products on eBay, you have to associate each one of your shop category to an eBay category. You can also define an impact of your price on eBay.').'</b></p><br />
+		$html = '<p><b>'.$this->l('To export your products on eBay, you have to associate each one of your shop categories to an eBay category. You can also define an impact of your price on eBay.').'</b></p><br />
 
 		<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=suggestCategories" method="post" class="form" id="configForm2SuggestedCategories">			
 			<p><b>'.$this->l('You can use the button below to associate automatically the categories which have no association for the moment with an eBay suggested category.').'</b>
@@ -956,7 +956,7 @@ class Ebay extends Module
 		// Display Form
 		$html = '<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=template" method="post" class="form" id="configForm3">
 				<fieldset style="border: 0">
-					<h4>'.$this->l('You can custom the template for your products page on eBay').' :</h4>
+					<h4>'.$this->l('You can customise the template for your products page on eBay').' :</h4>
 					<textarea class="rte" cols="100" rows="50" name="ebay_product_template">'.Tools::getValue('ebay_product_template', Configuration::get('EBAY_PRODUCT_TEMPLATE')).'</textarea><br />
 					<script type="text/javascript">	
 					var iso = \''.$isoTinyMCE.'\';

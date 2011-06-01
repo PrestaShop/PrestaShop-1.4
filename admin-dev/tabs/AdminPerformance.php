@@ -45,7 +45,7 @@ class AdminPerformance extends AdminTab
 				else
 					$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
 				if ($cache_active AND $caching_system == 'MCached' AND !extension_loaded('memcache'))
-					$this->_errors[] = Tools::displayError('To use Memcached, you must to install the Memcache PECL extension on your server.').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
+					$this->_errors[] = Tools::displayError('To use Memcached, you must install the Memcache PECL extension on your server.').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
 				elseif ($cache_active AND $caching_system == 'CacheFS' AND !is_writable(_PS_CACHEFS_DIRECTORY_))
 					$this->_errors[] = Tools::displayError('To use CacheFS the directory').' '.realpath(_PS_CACHEFS_DIRECTORY_).' '.Tools::displayError('must be writable');
 
@@ -211,7 +211,7 @@ class AdminPerformance extends AdminTab
 
 		$warnings = array();
 		if (!extension_loaded('memcache'))
-			$warnings[] = $this->l('To use Memcached, you must to install the Memcache PECL extension on your server.').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
+			$warnings[] = $this->l('To use Memcached, you must install the Memcache PECL extension on your server.').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
 		if(!is_writable(_PS_CACHEFS_DIRECTORY_))
 			$warnings[] = $this->l('To use CacheFS the directory').' '.realpath(_PS_CACHEFS_DIRECTORY_).' '.$this->l('must be writable');
 	

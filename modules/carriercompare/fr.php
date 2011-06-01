@@ -3,10 +3,10 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{carriercompare}prestashop>carriercompare_115484428c82f859100c07ae1170d9e0'] = 'Estimation des livraisons';
-$_MODULE['<{carriercompare}prestashop>carriercompare_1b28c1bcdfb00fe76bf8612d5cd81b01'] = 'Module permettant de faire une estimation des coûts de livraison avant de rentrer dans le processus de commande';
+$_MODULE['<{carriercompare}prestashop>carriercompare_68e114c207a6820a8f14d0eceacf17d7'] = 'Module permettant de faire une estimation des coûts de livraison avant de rentrer dans le processus de commande';
 $_MODULE['<{carriercompare}prestashop>carriercompare_ed70a57a190d596171cf324c16a2277d'] = 'L\'identifiant State est invalide';
 $_MODULE['<{carriercompare}prestashop>carriercompare_66e799a222e07b1cf25498465028061d'] = 'L\'identifiant Country est invalide';
-$_MODULE['<{carriercompare}prestashop>carriercompare_8250266f9d2fb72b4f8921a0b998546e'] = 'Veuillez utiliser un code postal valide en fonction du pays choisi';
+$_MODULE['<{carriercompare}prestashop>carriercompare_b72dd62d03697b37417288c63e78c8c6'] = 'Veuillez utiliser un code postal valide en fonction du pays choisi';
 $_MODULE['<{carriercompare}prestashop>carriercompare_e3f585e306c3cda18369730a6a628f7b'] = 'L\'identifiant du transporteur est invalide';
 $_MODULE['<{carriercompare}prestashop>carriercompare_efaf5c3827ef576b05de32ad458f196c'] = 'Cet identifiant de transporteur n\'est pas disponible pour cette sélection';
 $_MODULE['<{carriercompare}prestashop>carriercompare_edc5cf1b3bab64b1d45ef51c63b53887'] = 'Impossibilité de mettre a jour le panier';

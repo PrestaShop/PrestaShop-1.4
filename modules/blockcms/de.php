@@ -52,7 +52,7 @@ $_MODULE['<{blockcms}prestashop>blockcms_5dab5acc3c6a2a7e87e8d8926a2c763e'] = 'V
 $_MODULE['<{blockcms}prestashop>blockcms_138218281781fd0d938a140892d7386c'] = 'Fußzeilen-CMS erfolgreich aktualisiert';
 $_MODULE['<{blockcms}prestashop>blockcms_ddd7d8a072783afaf23e5e6843398fc9'] = 'CMS-Block erfolgreich hinzugefügt';
 $_MODULE['<{blockcms}prestashop>blockcms_31a22821c66edf7e3aa33ef1c8109f4c'] = 'CMS-Block erfolgreich bearbeitet';
-$_MODULE['<{blockcms}prestashop>blockcms_10432af9a9d55d5aa8b0f380194af673'] = 'Löschung erfolgreich';
+$_MODULE['<{blockcms}prestashop>blockcms_87a2663d841b78f01c27c0edb4f50b76'] = 'Löschung erfolgreich';
 $_MODULE['<{blockcms}prestashop>blockcms_be58fccb15fb119b8c3d485e3a8561c4'] = 'CMS-Block-Konfiguration';
 $_MODULE['<{blockcms}prestashop>blockcms_78edb384f1a71576034e00ed6844bcc2'] = 'In dieser CMS-Kategorie gibt es nichts anzuzeigen';
 

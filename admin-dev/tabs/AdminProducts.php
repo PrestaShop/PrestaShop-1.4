@@ -2605,7 +2605,7 @@ class AdminProducts extends AdminTab
 							<tr>
 								<td class="col-left">&nbsp;</td>
 								<td>
-									<div class="hint clear" style="display: block;width: 70%;">'.$this->l('Choose the reason and fill the quantity that you want to increase or decrease in your stock').'</div>
+									<div class="hint clear" style="display: block;width: 70%;">'.$this->l('Choose the reason and enter the quantity that you want to increase or decrease in your stock').'</div>
 								</td>
 							</tr>';
 						}
@@ -3209,7 +3209,7 @@ class AdminProducts extends AdminTab
 					<input type="text" name="attribute_mvt_quantity" size="3" maxlength="6" value="0"/>&nbsp;&nbsp;
 					<span style="display:none;" id="mvt_sign"></span>
 					<br />
-					<div class="hint clear" style="display: block;width: 70%;">'.$this->l('Choose the reason and fill the quantity that you want to increase or decrease in your stock').'</div>
+					<div class="hint clear" style="display: block;width: 70%;">'.$this->l('Choose the reason and enter the quantity that you want to increase or decrease in your stock').'</div>
 				</td>
 			</tr>
 			<tr>

@@ -644,7 +644,7 @@ class BlockCms extends Module
 		elseif (Tools::isSubmit('editBlockCMSConfirmation'))
 			$this->_html = $this->displayConfirmation($this->l('Block CMS edited'));
 		elseif (Tools::isSubmit('deleteBlockCMSConfirmation'))
-			$this->_html .= $this->displayConfirmation($this->l('Deletion succesfull'));
+			$this->_html .= $this->displayConfirmation($this->l('Deletion successful'));
 		elseif (Tools::isSubmit('id_cms_block') AND Tools::isSubmit('way') AND Tools::isSubmit('position') AND Tools::isSubmit('location'))
 			$this->changePosition();
 	}

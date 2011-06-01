@@ -41,7 +41,7 @@ class CarrierCompare extends Module
 		parent::__construct();
 
 		$this->displayName = $this->l('Shipping Estimation');
-		$this->description = $this->l('Module to Compare carrier possibilities before going under the checkout process');
+		$this->description = $this->l('Module to compare carrier possibilities before using  the checkout process');
 	}
 
 	public function install()
@@ -123,7 +123,7 @@ class CarrierCompare extends Module
 		if (!Validate::isInt($id_country) || !Validate::isLoadedObject(new Country($id_country)))
 			$errors[] = $this->l('Invalid country ID');
 		if (!$this->checkZipcode($zipcode, $id_country))
-			$errors[] = $this->l('Please use a valide zipcode depending of your country selection');
+			$errors[] = $this->l('Please use a valid zip/postal code depending on your country selection');
 		if (!Validate::isInt($id_carrier) || !Validate::isLoadedObject(new Carrier($id_carrier)))
 			$errors[] = $this->l('Invalid carrier ID');
 		
