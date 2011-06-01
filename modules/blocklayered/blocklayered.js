@@ -95,7 +95,13 @@ function reloadContent()
 		data += '&'+$(this).attr('id')+'='+$(this).slider('values', 0)+'_'+$(this).slider('values', 1);
 	});
 	
-ajaxQuery = $.ajax(
+	if ($('#selectPrductSort').length)
+	{
+		var splitData = $('#selectPrductSort').val().split(':');
+		data += '&orderby='+splitData[0]+'&orderway='+splitData[1];
+	}
+	
+	ajaxQuery = $.ajax(
 	{
 		type: 'GET',
 		url: baseDir + 'modules/blocklayered/blocklayered-ajax.php',

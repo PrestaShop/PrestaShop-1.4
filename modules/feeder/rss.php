@@ -29,14 +29,8 @@ require_once(dirname(__FILE__).'/../../init.php');
 
 // Get data
 $number = ((int)(Tools::getValue('n')) ? (int)(Tools::getValue('n')) : 10);
-$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
-$orderWayValues = array(0 => 'ASC', 1 => 'DESC');
-$orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
-$orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
-if (!in_array($orderBy, $orderByValues))
-	$orderBy = $orderByValues[0];
-if (!in_array($orderWay, $orderWayValues))
-	$orderWay = $orderWayValues[0];
+$orderBy = Tools::getProductsOrder('by', Tools::getValue('orderby'));
+$orderWay = Tools::getProductsOrder('way', Tools::getValue('orderway'));
 $id_category = ((int)(Tools::getValue('id_category')) ? (int)(Tools::getValue('id_category')) : 1);
 $products = Product::getProducts((int)($cookie->id_lang), 0, ($number > 10 ? 10 : $number), $orderBy, $orderWay, $id_category, true);
 $currency = new Currency((int)($cookie->id_currency));

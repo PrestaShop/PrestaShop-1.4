@@ -1970,6 +1970,30 @@ FileETag INode MTime Size
 			return true;
 		}
 	}
+	
+	/**
+	 * Get products order field name for queries.
+	 * 
+	 * @param string $type by|way
+	 * @param string $value If no index given, use default order from admin -> pref -> products
+	 */
+	public static function getProductsOrder($type, $value = null)
+	{
+		switch ($type)
+		{
+			case 'by' :
+				$value = (is_null($value)) ? (int)Configuration::get('PS_PRODUCTS_ORDER_BY') : $value;
+				$list = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
+				return ((isset($list[$value])) ? $list[$value] : ((in_array($value, $list)) ? $value : 'position'));
+			break;
+
+			case 'way' :
+				$value = (is_null($value)) ? (int)Configuration::get('PS_PRODUCTS_ORDER_WAY') : $value;
+				$list = array(0 => 'asc', 1 => 'desc');
+				return ((isset($list[$value])) ? $list[$value] : ((in_array($value, $list)) ? $value : 'asc'));
+			break;
+		}
+	}
 }
 
 /**

@@ -77,14 +77,8 @@ class Feeder extends Module
 			}
 		}
 		$category = new Category($id_category);
-		$orderByValues = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
-		$orderWayValues = array(0 => 'ASC', 1 => 'DESC');
-		$orderBy = Tools::strtolower(Tools::getValue('orderby', $orderByValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_BY'))]));
-		$orderWay = Tools::strtoupper(Tools::getValue('orderway', $orderWayValues[(int)(Configuration::get('PS_PRODUCTS_ORDER_WAY'))]));
-		if (!in_array($orderBy, $orderByValues))
-			$orderBy = $orderByValues[0];
-		if (!in_array($orderWay, $orderWayValues))
-			$orderWay = $orderWayValues[0];
+		$orderBy = Tools::getProductsOrder('by', Tools::getValue('orderby'));
+		$orderWay = Tools::getProductsOrder('way', Tools::getValue('orderway'));
 		$smarty->assign(array(
 			'feedUrl' => Tools::getShopDomain(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/rss.php?id_category='.$id_category.'&amp;orderby='.$orderBy.'&amp;orderway='.$orderWay,
 		));
