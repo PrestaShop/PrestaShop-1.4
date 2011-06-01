@@ -578,7 +578,7 @@ class MondialRelay extends Module
 							'new_base_dir' => self::$moduleURL,
 							'carriersextra' => $resultsArray));
 			$nbcarriers = $nbcarriers + $i;
-			return $this->display(dirname(__FILE__), 'mondialrelay.tpl');
+			return $this->display(__FILE__, 'mondialrelay.tpl');
 		}
 	}
 	
