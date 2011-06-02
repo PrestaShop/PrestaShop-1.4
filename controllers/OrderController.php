@@ -99,10 +99,10 @@ class OrderControllerCore extends ParentOrderController
 				break;
 			case 3:
 				//Test that the conditions (so active) were accepted by the customer 
-				if (Configuration::get('PS_CONDITIONS') AND (!isset($_POST['cgv']) OR !Validate::isBool($_POST['cgv']) OR (1 != $_POST['cgv'])))
-				{
+				$cgv = Tools::getValue('cgv');
+				if (Configuration::get('PS_CONDITIONS') AND (!Validate::isBool($cgv)))
 					Tools::redirect('order.php?step=2');
-				}
+				
 				if(Tools::isSubmit('processCarrier'))
 					$this->processCarrier();
 				$this->autoStep();
