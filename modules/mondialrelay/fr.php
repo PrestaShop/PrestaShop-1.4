@@ -41,6 +41,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_5eeb9ca7eee4be7192dd10d917f79a1
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_8b446ac2013dc7085802de71cc342ead'] = 'Vous devez choisir au moins un pays de livraison';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b9a85d87ae6dd77f2107734a4cd0bb15'] = 'Clé google invalide';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_979c6094728c14aac1b66d544dc5cebd'] = 'Etat de commande invalide';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_808fb4e3a637a759565de1d314ea526f'] = 'L\'adresse principale envoyée ne n\'a pas un bon format';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour avec succès';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_07213a0161f52846ab198be103b5ab43'] = 'erreurs';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_cb5e100e5a9a3e7f6d1fd97512215282'] = 'erreur';
@@ -52,7 +53,6 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_b962d8fb95f5a439f50502152f3bad7
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_faf1247ae6846a9955a466d4f301bbe4'] = 'La page Transporteurs';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_10d78806b84b97ebc774e9f6277af6ac'] = 'Pour générer vos étiquettes, vous devez avoir enregistré une adresse valide de votre boutique sur votre';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_af5efea250326c1c34d69aa9364b482c'] = 'page contact';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_ddcd6a653f661fd7d219d9102528b917'] = 'Aller sur le Front-office';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_fcf5b2122da1d5a5f5c7253b96a3f9d9'] = 'URL de la tache CRON à lancer pour la mise à jour des statuts de commandes';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_362dff77f7403550e886db901404856c'] = 'Suppression effectuée';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_66661dacf33146201b60dc16520ddd68'] = 'Ajouter un transporteur';
@@ -81,6 +81,11 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_907eba32d950bfab68227fd7ea22999
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_0c24ec05a02c710cedd400e3680d8b81'] = 'Liste des tranporteurs';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_14039af96b01e718a9c9d9c1259b6472'] = 'Aucun transporteur créé';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_8596361cec00f8d2438d264827eee737'] = 'Modification de la configuration';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_c437cbdaa5799236b2f5b07634679e3d'] = 'Personnalisation des champs';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_0eddbda2340214e74be063ed1d1af8a0'] = 'Adresse principale';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_7e9bbecd32836500b557db33c3b3e93b'] = 'La clé utilisée par Mondialrelay est';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_32963eea43914b6a418fb2fd9850beb9'] = 'et elle contient comme valeur par défaut';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d02bbc3cb147c272b0445ac5ca7d1a36'] = 'Etat des commandes';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_818f954f4838ecad839c5dcbd287d291'] = 'Choississez le statut pour la génération d\'étiquette. Vous pouvez administrer vos étiquettes sur';
@@ -91,7 +96,6 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_93cba07454f06a4a960172bbd6e2a43
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_9c5c09beb32c36129b857c2a40c861b6'] = 'Affiche une Google map sur votre transporteur Mondial Relay, mais votre page de sélection du transporteur peut devenir plus lente.';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_1ba3935c9858ffb8e19a35ca640b8505'] = 'Paramètres du compte Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_12a3fbd35c1cab4b1101b91d708efd15'] = 'Enseigne Webservice:';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_6f0434b67007b555dfd1201f4e0d5254'] = 'Code marque:';

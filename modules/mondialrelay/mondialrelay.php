@@ -80,8 +80,8 @@ class MondialRelay extends Module
 		if (!$this->registerHookByVersion())
 				return false;
 
-		if ((!file_exists($this->_modulePath.self::INSTALL_SQL_FILE)) ||
-			(!$sql = file_get_contents($this->_modulePath.self::INSTALL_SQL_FILE)))
+		if ((!file_exists(self::$modulePath.self::INSTALL_SQL_FILE)) ||
+			(!$sql = file_get_contents(self::$modulePath.self::INSTALL_SQL_FILE)))
 			return false;
 
 		$sql = str_replace('PREFIX_', _DB_PREFIX_, $sql);
@@ -141,7 +141,7 @@ class MondialRelay extends Module
 		Configuration::updateValue('MR_KEY_WEBSERVICE', '');
 		Configuration::updateValue('MR_LANGUAGE', '');
 		Configuration::updateValue('MR_WEIGHT_COEF', '');
-		Configuration::updateValue('PS_MR_SHOP_NAME', Configuration::getValue('PS_SHOP_NAME'));
+		Configuration::updateValue('PS_MR_SHOP_NAME', Configuration::get('PS_SHOP_NAME'));
 		return true;
 	}
 	
@@ -196,7 +196,7 @@ class MondialRelay extends Module
 				!Configuration::deleteByName('MR_CODE_MARQUE') ||
 				!Configuration::deleteByName('MR_KEY_WEBSERVICE') ||
 				!Configuration::deleteByName('MR_WEIGHT_COEF') ||
-				!Configuration::updateValue('PS_MR_SHOP_NAME') || 
+				!Configuration::deleteByName('PS_MR_SHOP_NAME') || 
 				!Db::getInstance()->Execute('
 					DROP TABLE '._DB_PREFIX_ .'mr_historique, 
 					'._DB_PREFIX_ .'mr_method, 
@@ -766,8 +766,6 @@ class MondialRelay extends Module
 			
 			if(!in_array($default[0]['value'], $checkD))
 				$default = Db::getInstance()->ExecuteS("UPDATE " . _DB_PREFIX_ . "configuration SET value = '" . (int)($get['id_carrier']) . "' WHERE name = 'PS_CARRIER_DEFAULT'");
-			
-			Tools::redirectAdmin('index.php?tab=AdminModules&configure=mondialrelay&updatesuccess&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)));
 		}
 		else 
 			return false;
@@ -906,13 +904,13 @@ class MondialRelay extends Module
 		$form .= '
 			<fieldset class="PS_MRFormStyle">
 				<legend>
-					<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Personalize fields').
+					<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Fields personalization').
 			'</legend>'.
 			$warn.'
 			<label for="PS_MR_SHOP_NAME">'.$this->l('Main Address').'</label>
 			<div class="margin-form">
 				<input type="text" name="Expe_ad1" value="'.$addr1.'" /><br />
-				<p>'.$this->l('The key used by Mondialrelay is <b>Expe_ad1</b> and has this default value').'
+				<p>'.$this->l('The key used by Mondialrelay is').' <b>Expe_ad1</b> '.$this->l('and has this default value').'
 			 	: <b>'.Configuration::get('PS_SHOP_NAME').'</b></p>
 			</div>
 		
