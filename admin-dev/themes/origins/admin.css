@@ -39,7 +39,7 @@ legend{background:#FFF6D3;border:1px solid #DFD5C3;font-weight:700;margin:0;padd
 #menu li.active a{color:#000}
 #submenu{clear:both;color:#666;margin:0;height:38px;padding:0}
 .withLeftBorder{background:transparent url(separator_subnav.png) no-repeat 0 5px}
-#submenu li{display:inline;list-style:none;margin:0;background:transparent url(separator_subnav.png) no-repeat right 0;padding-left:9px;padding-right:9px;margin-top:8px;float:left;height:20px}
+#submenu li{display:inline;list-style:none;margin:0;background:transparent url(separator_subnav.png) no-repeat right 0;padding-left:8px;padding-right:8px;margin-top:8px;float:left;height:20px}
 #submenu li a{text-decoration:underline}
 #menu li{_height:32px;_padding-top:3px}
 #menu li a{_display:inline;_padding:6px 5px 4px 0}
