@@ -1547,8 +1547,35 @@ class AdminImport extends AdminTab
 
 		if (Tools::isSubmit('submitFileUpload'))
 		{
-			if (!isset($_FILES['file']['tmp_name']) OR empty($_FILES['file']['tmp_name']))
-				$this->_errors[] = $this->l('no file selected');
+			if (isset($_FILES['file']) AND !empty($_FILES['file']['error']))
+			{
+				switch ($_FILES['file']['error'])
+				{
+					case UPLOAD_ERR_INI_SIZE:
+						$this->_errors[] = Tools::displayError('The uploaded file exceeds the upload_max_filesize directive in php.ini. If your server configuration allows it, you may add a directive in your .htaccess, for example:')
+						.'<br/><a href="?tab=AdminGenerator&amp;token='
+						.Tools::getAdminTokenLite('AdminGenerator').'" >'
+						.'<code>php_value upload_max_filesize 20M</code> '.
+						Tools::displayError('(clic to open Generator tab)').'</a>';
+						break;
+					case UPLOAD_ERR_FORM_SIZE:
+						$this->_errors[] = Tools::displayError('The uploaded file exceeds the post_max_size directive in php.ini. If your server configuration allows it, you may add a directive in your .htaccess, for example:')
+						.'<br/><a href="?tab=AdminGenerator&amp;token='
+						.Tools::getAdminTokenLite('AdminGenerator').'" >'
+						.'<code>php_value post_max_size 20M</code> '.
+						Tools::displayError('(clic to open Generator tab)').'</a>';
+						break;
+					break;
+					case UPLOAD_ERR_PARTIAL:
+						$this->_errors[] = Tools::displayError('The uploaded file was only partially uploaded.');
+						break;
+					break;
+					case UPLOAD_ERR_NO_FILE:
+						$this->_errors[] = Tools::displayError('No file was uploaded');
+						break;
+					break;
+				}	
+			}
 			elseif (!file_exists($_FILES['file']['tmp_name']) OR !@rename($_FILES['file']['tmp_name'], dirname(__FILE__).'/../import/'.$_FILES['file']['name'].'.'.date('Ymdhis')))
 				$this->_errors[] = $this->l('an error occurred while uploading and copying file');
 			else
