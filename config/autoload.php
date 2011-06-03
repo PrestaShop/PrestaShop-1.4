@@ -31,31 +31,30 @@ function __autoload($className)
 		return true;
 
 	$className = str_replace(chr(0), '', $className);
-	$file_in_override = file_exists(dirname(__FILE__).'/../override/classes/'.$className.'.php');
-	$file_in_classes = file_exists(dirname(__FILE__).'/../classes/'.$className.'.php');
-	// It's a Core class and his name is the same as his declared name
+	$classDir = dirname(__FILE__).'/../classes/';
+	$overrideDir = dirname(__FILE__).'/../override/classes/';
+	$file_in_override = file_exists($overrideDir.$className.'.php');
+	$file_in_classes = file_exists($classDir.$className.'.php');
+	
+	// This is a Core class and its name is the same as its declared name
 	if (substr($className, -4) == 'Core')
-	{
-		require_once(dirname(__FILE__).'/../classes/'.substr($className, 0, -4).'.php');
-	}
+		require($classDir.substr($className, 0, -4).'.php');
 	else
 	{
 		if ($file_in_override && $file_in_classes)
 		{
-			require_once(dirname(__FILE__).'/../classes/'.str_replace(chr(0), '', $className).'.php');
-			require_once(dirname(__FILE__).'/../override/classes/'.$className.'.php');
+			require($classDir.str_replace(chr(0), '', $className).'.php');
+			require($overrideDir.$className.'.php');
 		}
-		else if (!$file_in_override && $file_in_classes)
+		elseif (!$file_in_override && $file_in_classes)
 		{
-			require_once(dirname(__FILE__).'/../classes/'.str_replace(chr(0), '', $className).'.php');
+			require($classDir.str_replace(chr(0), '', $className).'.php');
 			$classInfos = new ReflectionClass($className.((interface_exists($className, false) or class_exists($className, false)) ? '' : 'Core'));
 			if (!$classInfos->isInterface())
 				eval(($classInfos->isAbstract() ? 'abstract ' : '').'class '.$className.' extends '.$className.'Core {}');
 		}
-		else if ($file_in_override && !$file_in_classes)
-		{
-			require_once(dirname(__FILE__).'/../override/classes/'.$className.'.php');
-		}
+		elseif ($file_in_override && !$file_in_classes)
+			require($overrideDir.$className.'.php');
 	}
 }
 
