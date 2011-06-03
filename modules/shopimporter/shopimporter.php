@@ -1240,7 +1240,7 @@ class shopimporter extends ImportModule
 			if (!strlen(trim($item['payment'])))
 				$order->payment = 'payment'.Tools::getValue('moduleName');
 			else
-				$order->payment = strip_tags(Tools::substr($item['payment'], 0, 32));
+				$order->payment = utf8_encode(html_entity_decode(strip_tags(Tools::substr($item['payment'], 0, 32))));
 			if (isset($this->name))
 				$order->module = $this->name;
 			
