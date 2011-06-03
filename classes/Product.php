@@ -1848,7 +1848,6 @@ class ProductCore extends ObjectModel
 
 		if ($only_reduc)
 			return $reduc;
-
 		if ($use_reduc)
 			$price -= $reduc;
 
@@ -1877,9 +1876,7 @@ class ProductCore extends ObjectModel
 			else
 				$price += $ecotax;
 		}
-
 		$price = Tools::ps_round($price, $decimals);
-
 		if ($price < 0)
 			$price = 0;
 
@@ -2652,13 +2649,17 @@ class ProductCore extends ObjectModel
 		{
 			$row['price_tax_exc'] = Tools::ps_round($row['price_tax_exc'], 2);
 			$row['price'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : 	NULL), 6);
+			$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], false, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 2, NULL, false, false);
 		}
 		else
+		{
 			$row['price'] = Tools::ps_round(Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 2), 2);
+			$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
+		}
 
 		$row['reduction'] = Product::getPriceStatic((int)($row['id_product']), (bool)$usetax, (int)($row['id_product_attribute']), 6, NULL, true, true, 1, true, NULL, NULL, NULL, $specific_prices);
         $row['specific_prices'] = $specific_prices;
-		$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
+
 		if ($row['id_product_attribute'])
 		{
 			$row['quantity_all_versions'] = $row['quantity'];
@@ -3310,7 +3311,7 @@ class ProductCore extends ObjectModel
 		WHERE `id_product` = '.(int)($this->id).'
 		ORDER BY `position`');
 	}
-	
+
 	public function getWsManufacturerName()
 	{
 		return Manufacturer::getNameById((int)$this->id_manufacturer);

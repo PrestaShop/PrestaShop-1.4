@@ -169,7 +169,7 @@ class OrderCore extends ObjectModel
 			'date_upd' => array(),
 		),
 		'associations' => array(
-			'order_rows' => array('resource' => 'order_row', 'setter' => false, 'virtual_entity' => true, 
+			'order_rows' => array('resource' => 'order_row', 'setter' => false, 'virtual_entity' => true,
 				'fields' => array(
 					'id' =>  array(),
 					'product_id' => array('required' => true),
@@ -418,20 +418,24 @@ class OrderCore extends ObjectModel
 		else
 			$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2);
 
+		$group_reduction = 0;
+		if ($row['group_reduction'])
+			$group_reduction =  $row['group_reduction'] / 100;
+
 		if ($row['reduction_percent'])
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
-				$row['product_price'] = $row['product_price'] - $row['product_price'] * ($row['reduction_percent'] * 0.01);
+				$row['product_price'] = $row['product_price'] - $row['product_price'] * ($row['reduction_percent'] * 0.01 * $group_reduction);
 			else
-				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['product_price_wt'] * ($row['reduction_percent'] * 0.01), 2);
+				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['product_price_wt'] * ($row['reduction_percent'] * 0.01 * $group_reduction), 2);
 		}
 
 		if ($row['reduction_amount'])
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
-				$row['product_price'] = $row['product_price'] - $row['reduction_amount'] / (1 + $row['tax_rate'] / 100);
+				$row['product_price'] = $row['product_price'] - ($row['reduction_amount'] / (1 + $row['tax_rate'] / 100))  * $group_reduction;
 			else
-				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['reduction_amount'], 2);
+				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] - $row['reduction_amount'] * $group_reduction, 2);
 		}
 
 		if (($row['reduction_percent'] OR $row['reduction_amount'] OR $row['group_reduction']) AND $this->_taxCalculationMethod == PS_TAX_EXC)

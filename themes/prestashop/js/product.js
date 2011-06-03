@@ -186,7 +186,7 @@ function updateDisplay()
 			else
 				$('#last_quantities').hide('slow');
 		}
-		
+
 		if (quantitiesDisplayAllowed)
 		{
 			$('#pQuantityAvailable:hidden').show('slow');
@@ -272,18 +272,26 @@ function updateDisplay()
 	//update display of the the prices in relation to tax, discount, ecotax, and currency criteria
 	if (!selectedCombination['unavailable'] && productShowPrice == 1)
 	{
+		// retrieve price without group_reduction in order to compute the group reduction after
+		// the specific price discount (done in the JS in order to keep backward compatibility)
+		if (!displayPrice && !noTaxForThisProduct)
+		{
+			var priceTaxExclWithoutGroupReduction = ps_round(productPriceTaxExcluded, 2) * (1 / group_reduction);
+		} else {
+			var priceTaxExclWithoutGroupReduction = ps_round(productPriceTaxExcluded, 6) * (1 / group_reduction);
+		}
 		var combination_add_price = selectedCombination['price'] * group_reduction;
 
 		var tax = (taxRate / 100) + 1;
-		var taxExclPrice = (specific_price ? (specific_currency ? specific_price : specific_price * currencyRate) : productPriceTaxExcluded) + combination_add_price * currencyRate;
+		var taxExclPrice = (specific_price ? (specific_currency ? specific_price : specific_price * currencyRate) : priceTaxExclWithoutGroupReduction) + selectedCombination['price'] * currencyRate;
 
 		if (specific_price)
-			var productPriceWithoutReduction = productPriceTaxExcluded + combination_add_price * currencyRate;
+			var productPriceWithoutReduction = priceTaxExclWithoutGroupReduction + selectedCombination['price'] * currencyRate;
 
 		if (!displayPrice && !noTaxForThisProduct)
 		{
 
-			var productPrice = ps_round(taxExclPrice * tax, 2);
+			var productPrice = taxExclPrice * tax;
 			if (specific_price)
 				productPriceWithoutReduction = ps_round(productPriceWithoutReduction * tax, 2);
 		}
@@ -299,12 +307,16 @@ function updateDisplay()
 		{
 			reduction = productPrice * (parseFloat(reduction_percent) / 100) + reduction_price;
 			if (reduction_price && (displayPrice || noTaxForThisProduct))
-				reduction = reduction / tax;
+				reduction = ps_round(reduction / tax, 6);
 		}
 
 		if (!specific_price)
-			productPriceWithoutReduction = productPrice;
+			productPriceWithoutReduction = productPrice * group_reduction;
+
+
 		productPrice -= reduction;
+		var tmp = productPrice * group_reduction;
+		productPrice = ps_round(productPrice * group_reduction, 2);
 
 		var ecotaxAmount = !displayPrice ? ps_round(selectedCombination['ecotax'] * (1 + ecotaxTax_rate / 100), 2) : selectedCombination['ecotax'];
 		productPrice += ecotaxAmount;
@@ -514,3 +526,4 @@ function checkMinimalQuantity(minimal_quantity)
 		$('#minimal_quantity_wanted_p').css('color', '#374853');
 	}
 }
+

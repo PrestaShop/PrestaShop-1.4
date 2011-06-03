@@ -237,7 +237,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 			{if $product->show_price AND !isset($restricted_country_mode) AND !$PS_CATALOG_MODE}
 				<p class="price">
 					{if !$priceDisplay || $priceDisplay == 2}
-						{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL)}
+						{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL, 2)}
 						{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(false, $smarty.const.NULL)}
 					{elseif $priceDisplay == 1}
 						{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL)}
@@ -276,6 +276,7 @@ var fieldRequired = '{l s='Please fill in all required fields' js=1}';
 					{/if}
 					</span>
 					</p>
+
 				{/if}
 				{if $product->specificPrice AND $product->specificPrice.reduction_type == 'percentage'}
 					<p id="reduction_percent">{l s='(price reduced by'} <span id="reduction_percent_display">{$product->specificPrice.reduction*100}</span> %{l s=')'}</p>
