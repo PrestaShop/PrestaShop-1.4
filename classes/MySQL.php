@@ -59,6 +59,7 @@ class MySQLCore extends Db
 	
 	public function	getRow($query, $use_cache = 1)
 	{
+		$query .= ' LIMIT 1';
 		$this->_result = false;
 		$this->_lastQuery = $query;
 		if($use_cache AND _PS_CACHE_ENABLED_)
@@ -68,7 +69,7 @@ class MySQLCore extends Db
 				return $result;
 			}
 		if ($this->_link)
-			if ($this->_result = mysql_query($query.' LIMIT 1', $this->_link))
+			if ($this->_result = mysql_query($query, $this->_link))
 			{
 				$this->_lastCached = false;
 				if (_PS_DEBUG_SQL_)
@@ -85,6 +86,7 @@ class MySQLCore extends Db
 
 	public function	getValue($query, $use_cache = 1)
 	{
+		$query .= ' LIMIT 1';
 		$this->_result = false;
 		$this->_lastQuery = $query;
 		if ($use_cache AND _PS_CACHE_ENABLED_)
@@ -93,7 +95,7 @@ class MySQLCore extends Db
 				$this->_lastCached = true;
 				return $result;
 			}
-		if ($this->_link AND $this->_result = mysql_query($query.' LIMIT 1', $this->_link) AND is_array($tmpArray = mysql_fetch_assoc($this->_result)))
+		if ($this->_link AND $this->_result = mysql_query($query, $this->_link) AND is_array($tmpArray = mysql_fetch_assoc($this->_result)))
 		{ 
 			$this->_lastCached = false;
 			$result =  array_shift($tmpArray);
