@@ -55,7 +55,16 @@ class MRManagement extends MondialRelay
 		setLocale(LC_ALL, $currentLocale);
 		return $cleanedString;
 	}
-	
+
+	/*
+	** Retro compatibility for 1.3
+	** This method fill the database with the selected carrier
+	*/
+	public function addSelectedCarrierToDB()
+	{
+		$this->hookProcessCarrier($this->_params, false);
+	}
+
 	public function DeleteHistory()
 	{
 		$success = array();

@@ -610,26 +610,37 @@ class MondialRelay extends Module
 
 		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>
 		<fieldset>
-			<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('To create a Mondial Relay carrier').'</legend>
-		- '.$this->l('Enter and save your Mondial Relay account settings').'<br />
-		- '.$this->l('Create a Carrier').'<br />
-		- '.$this->l('Define a price for your carrier on').' <a href="index.php?tab=AdminCarriers&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'" class="green">'.$this->l('The Carrier page').'</a><br />
-		- '.$this->l('To generate labels, you must have a valid and registered address of your store on your').' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" class="green">'.$this->l('contact page').'</a><br />
-		- '.$this->l('Go to the front office').'<br /><br class="clear" />
-		<p>'.$this->l('URL Cron Task:').' '.Tools::getHttpHost(true, true)._MODULE_DIR_.$this->name.'/cron.php?secure_key='.Configuration::get('MONDIAL_RELAY_SECURE_KEY').'</p></fieldset>
+			<legend>
+				<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('To create a Mondial Relay carrier').
+			'</legend>
+				- '.$this->l('Enter and save your Mondial Relay account settings').'<br />
+				- '.$this->l('Create a Carrier').'<br />
+				- '.$this->l('Define a price for your carrier on').' 
+					<a href="index.php?tab=AdminCarriers&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).
+					(int)($cookie->id_employee)).'" class="green">'.$this->l('The Carrier page').'</a><br />
+				- '.$this->l('To generate labels, you must have a valid and registered address of your store on your').
+					' <a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).
+					(int)($cookie->id_employee)).'" class="green">'.$this->l('contact page').'</a><br />
+				<p>
+					'.$this->l('URL Cron Task:').' '.Tools::getHttpHost(true, true)._MODULE_DIR_.$this->name.'/cron.php?secure_key='.Configuration::get('MONDIAL_RELAY_SECURE_KEY').
+				'</p>
+		</fieldset>
 		<br class="clear" />
 		<div class="PS_MRFormType">'.
-			self::settingsForm().
+			$this->settingsForm().
 		'</div>
 		<div class="PS_MRFormType">'.
-			self::settingsstateorderForm().
+			$this->settingsstateorderForm().
+		'</div>
+		<div>'.
+			$this->personalizeFormFields().
 		'</div>
 		<div class="PS_MRFormType">'.
-			self::addMethodForm().
-			'</div>
+			$this->addMethodForm().
+		'</div>
 		<div class="PS_MRFormType">'.
-			self::shippingForm().
-			'</div><br class="clear" />';
+			$this->shippingForm().
+		'</div><br class="clear" />';
 		return $this->_html;
 	}
 	
@@ -847,12 +858,29 @@ class MondialRelay extends Module
 		return $output;	
 	}
 	
+	/*
+	** Form to allow personalization fields sent for MondialRelay
+	*/
+	public function personalizeFormFields()
+	{
+		$form = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">';
+		$form .= '
+			<fieldset>
+				<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Personalize fields').
+			'</legend>';
+
+
+		$form .= '</form><br  />';
+		return $form;
+	}
+	
+	
 	public function settingsstateorderForm()
 	{
 		global $cookie;
 		
 		$this->orderState = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
-	    $output = '';
+	  $output = '';
 		$output .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">';
 		$output .= '<fieldset><legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Settings').'</legend>';
 		$output .= '<label for="id_order_state">' . $this->l('Order state') . '</label>';
