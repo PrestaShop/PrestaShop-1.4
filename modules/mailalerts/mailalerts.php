@@ -192,7 +192,7 @@ class MailAlerts extends Module
 			'{shop_name}' => Configuration::get('PS_SHOP_NAME'),
 			'{date}' => $order_date_text,
 			'{carrier}' => (($carrier->name == '0') ? Configuration::get('PS_SHOP_NAME') : $carrier->name),
-			'{payment}' => $order->payment,
+			'{payment}' => Tools::substr($order->payment, 0, 32),
 			'{items}' => $itemsTable,
 			'{total_paid}' => Tools::displayPrice($order->total_paid, $currency),
 			'{total_products}' => Tools::displayPrice($order->getTotalProductsWithTaxes(), $currency),

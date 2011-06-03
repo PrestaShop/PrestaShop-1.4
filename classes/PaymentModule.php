@@ -111,7 +111,6 @@ abstract class PaymentModuleCore extends Module
 			$order->id_cart = (int)($cart->id);
 			$customer = new Customer((int)($order->id_customer));
 			$order->secure_key = ($secure_key ? pSQL($secure_key) : pSQL($customer->secure_key));
-			$order->payment = Tools::substr($paymentMethod, 0, 32);
 			if (isset($this->name))
 				$order->module = $this->name;
 			$order->recyclable = $cart->recyclable;
@@ -413,7 +412,7 @@ abstract class PaymentModuleCore extends Module
 					'{order_name}' => sprintf("#%06d", (int)($order->id)),
 					'{date}' => Tools::displayDate(date('Y-m-d H:i:s'), (int)($order->id_lang), 1),
 					'{carrier}' => $carrier->name,
-					'{payment}' => $order->payment,
+					'{payment}' => Tools::substr($order->payment, 0, 32),
 					'{products}' => $productsList,
 					'{discounts}' => $discountsList,
 					'{total_paid}' => Tools::displayPrice($order->total_paid, $currency, false),

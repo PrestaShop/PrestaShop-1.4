@@ -650,7 +650,7 @@ class AdminOrders extends AdminTab
 			<label>'.$this->l('Original cart:').' </label>
 			<div style="margin: 2px 0 1em 190px;"><a href="?tab=AdminCarts&id_cart='.$cart->id.'&viewcart&token='.Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee)).'">'.$this->l('Cart #').sprintf('%06d', $cart->id).'</a></div>
 			<label>'.$this->l('Payment mode:').' </label>
-			<div style="margin: 2px 0 1em 190px;">'.$order->payment.' '.($order->module ? '('.$order->module.')' : '').'</div>
+			<div style="margin: 2px 0 1em 190px;">'.Tools::substr($order->payment, 0, 32).' '.($order->module ? '('.$order->module.')' : '').'</div>
 			<div style="margin: 2px 0 1em 50px;">
 				<table class="table" width="300px;" cellspacing="0" cellpadding="0">
 					<tr><td width="150px;">'.$this->l('Products').'</td><td align="right">'.Tools::displayPrice($order->getTotalProductsWithTaxes(), $currency, false).'</td></tr>
