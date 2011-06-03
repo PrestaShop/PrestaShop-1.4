@@ -42,7 +42,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.5';
+		$this->version	= '1.6';
 
 		parent::__construct();
 
@@ -141,6 +141,7 @@ class MondialRelay extends Module
 		Configuration::updateValue('MR_KEY_WEBSERVICE', '');
 		Configuration::updateValue('MR_LANGUAGE', '');
 		Configuration::updateValue('MR_WEIGHT_COEF', '');
+		Configuration::updateValue('PS_MR_SHOP_NAME', Configuration::getValue('PS_SHOP_NAME'));
 		return true;
 	}
 	
@@ -178,7 +179,7 @@ class MondialRelay extends Module
 		if ($result)
 		{
 			$id_tab = $result['id_tab'];
-			if (isset($id_tab) AND !empty($id_tab))
+			if (isset($id_tab) && !empty($id_tab))
 			{	
 				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab WHERE id_tab = '.(int)($id_tab));
 				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab_lang WHERE id_tab = '.(int)($id_tab));
@@ -186,16 +187,20 @@ class MondialRelay extends Module
 			}
 		}
 
-		if (!Configuration::deleteByName('MONDIAL_RELAY_1_4') OR
-			!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') OR
-			!Configuration::deleteByName('MONDIAL_RELAY_SECURE_KEY') OR
-			!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') OR
-			!Configuration::deleteByName('MR_GOOGLE_MAP') OR
-			!Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE') OR
-			!Configuration::deleteByName('MR_CODE_MARQUE') OR
-			!Configuration::deleteByName('MR_KEY_WEBSERVICE') OR
-			!Configuration::deleteByName('MR_WEIGHT_COEF') OR
-			!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_ .'mr_historique, '._DB_PREFIX_ .'mr_method, '._DB_PREFIX_ .'mr_selected'))
+		if (!Configuration::deleteByName('MONDIAL_RELAY_1_4') ||
+				!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') ||
+				!Configuration::deleteByName('MONDIAL_RELAY_SECURE_KEY') ||
+				!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') ||
+				!Configuration::deleteByName('MR_GOOGLE_MAP') ||
+				!Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE') ||
+				!Configuration::deleteByName('MR_CODE_MARQUE') ||
+				!Configuration::deleteByName('MR_KEY_WEBSERVICE') ||
+				!Configuration::deleteByName('MR_WEIGHT_COEF') ||
+				!Configuration::updateValue('PS_MR_SHOP_NAME') || 
+				!Db::getInstance()->Execute('
+					DROP TABLE '._DB_PREFIX_ .'mr_historique, 
+					'._DB_PREFIX_ .'mr_method, 
+						'._DB_PREFIX_ .'mr_selected'))
 			return false;
 			
 		if (_PS_VERSION_ >= '1.4' && 
@@ -296,6 +301,7 @@ class MondialRelay extends Module
 		
 		return '
 			<link type="text/css" rel="stylesheet" href="'.$cssFilePath.'" />
+			<script type="text/javascript">var _PS_MR_MODULE_DIR_ = "'.self::$moduleURL.'";</script>
 			<script type="text/javascript" src="'.$jsFilePath.'"></script>';
 	}
 	
@@ -337,6 +343,12 @@ class MondialRelay extends Module
 			if (!Validate::isUnsignedInt(Tools::getValue('id_order_state')))
 				$this->_postErrors[] = $this->l('Invalid order state');
 		}
+		else if (Tools::isSubmit('PS_MRSubmitFieldPersonalization'))
+		{
+			$addr1 = Tools::getValue('Expe_ad1');
+			if (!preg_match('#^[0-9A-Z_\-\'., /]{2,32}$#', strtoupper($addr1), $match))
+				$this->_postErrors[] = $this->l('The Main address submited hasn\'t a good format');
+		}
 	}
 
 	private function _postProcess()
@@ -353,14 +365,15 @@ class MondialRelay extends Module
 			self::mrUpdate('settings', $setArray, $keyArray);
 		else if (isset($_POST['submitShipping']) AND $_POST['submitShipping'])
 			self::mrUpdate('shipping', $_POST, array());
+		else if (Tools::getValue('PS_MRSubmitFieldPersonalization'))
+			$this->updateFieldsPersonalization();
 		else if (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
 			self::mrUpdate('addShipping', $setArray, $keyArray);
 		else if (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])
 		{
 			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', Tools::getValue('id_order_state'));
 			Configuration::updateValue('MR_GOOGLE_MAP', Tools::getValue('mr_google_key'));
-			if (!Tools::isSubmit('updatesuccess'))
-				$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated').'</div>';
+			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated').'</div>';
 		}
 	}
 	
@@ -585,11 +598,10 @@ class MondialRelay extends Module
 	public function getContent()
 	{	
 		global $cookie;
+		
 		$error = null;
 		
-
-		if (isset($_GET['updatesuccess']))
-			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" /> '.$this->l('Settings updated').'</div>';
+		$html = '';
 		if (!empty($_POST))
 		{
 			$this->_postValidation();
@@ -632,7 +644,7 @@ class MondialRelay extends Module
 		<div class="PS_MRFormType">'.
 			$this->settingsstateorderForm().
 		'</div>
-		<div>'.
+		<div class="PS_MRFormType">'.
 			$this->personalizeFormFields().
 		'</div>
 		<div class="PS_MRFormType">'.
@@ -642,6 +654,15 @@ class MondialRelay extends Module
 			$this->shippingForm().
 		'</div><br class="clear" />';
 		return $this->_html;
+	}
+	
+	/*
+	** Update the new defined fields of the merchant
+	*/
+	public function updateFieldsPersonalization()
+	{
+		Configuration::updateValue('PS_MR_SHOP_NAME', Tools::getValue('Expe_ad1'));
+		$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated').'</div>';		
 	}
 	
 	public function mrDelete($id)
@@ -769,8 +790,7 @@ class MondialRelay extends Module
 					<li>
 						<label for="mr_Name" class="shipLabel">'.$this->l('Carrier\'s name').'<sup>*</sup></label>
 						<input type="text" id="mr_Name" name="mr_Name" '.(Tools::getValue('mr_Name') ? 'value="'.Tools::getValue('mr_Name').'"' : '').'/>
-					</li>̵
-
+					</li>
 					<li>
 						<label for="mr_ModeCol" class="shipLabel">'.$this->l('Collection Mode').'<sup>*</sup></label>
 						<select name="mr_ModeCol" id="mr_ModeCol" style="width:200px">
@@ -863,14 +883,43 @@ class MondialRelay extends Module
 	*/
 	public function personalizeFormFields()
 	{
+		$form = '';
+		$warn = '';
+		
+		// Load the Default value from the configuration
+		$addr1 = (Configuration::get('PS_MR_SHOP_NAME')) ? 
+			Configuration::get('PS_MR_SHOP_NAME') : 
+			Configuration::get('PS_SHOP_NAME');
+		
+		// Check if a request exist and if errors occured, use the post variable
+		if (Tools::isSubmit('PS_MRSubmitFieldPersonalization') && count($this->_postErrors))
+			$addr1 = Tools::getValue('Expe_ad1');
+			
+
+		if (!Configuration::get('PS_MR_SHOP_NAME'))
+			$warn .= '<div class="warn">'.
+				$this->l('Its seems you updated Mondialrelay without use the uninstall / install method, 
+				you have to set up this part to make working the generating ticket process').
+				'</div>';			
+		// Form
 		$form = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">';
 		$form .= '
-			<fieldset>
-				<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Personalize fields').
-			'</legend>';
-
-
-		$form .= '</form><br  />';
+			<fieldset class="PS_MRFormStyle">
+				<legend>
+					<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Personalize fields').
+			'</legend>'.
+			$warn.'
+			<label for="PS_MR_SHOP_NAME">'.$this->l('Main Address').'</label>
+			<div class="margin-form">
+				<input type="text" name="Expe_ad1" value="'.$addr1.'" /><br />
+				<p>'.$this->l('The key used by Mondialrelay is <b>Expe_ad1</b> and has this default value').'
+			 	: <b>'.Configuration::get('PS_SHOP_NAME').'</b></p>
+			</div>
+		
+		<div class="margin-form">
+			<input type="submit" name="PS_MRSubmitFieldPersonalization"  value="' . $this->l('Save') . '" class="button" />
+		</div>
+		</form><br  />';
 		return $form;
 	}
 	
@@ -918,8 +967,6 @@ class MondialRelay extends Module
 	public function settingsForm()
 	{
 		$output = '
-			<script type="text/javascript" >var url_appel="";</script>
-			<script type="text/javascript" src="../modules/mondialrelay/kit_mondialrelay/js/ressources_MR.js"></script>
 			<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" >
 				<fieldset>
 					<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Mondial Relay Account Settings').'</legend>

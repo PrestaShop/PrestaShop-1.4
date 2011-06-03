@@ -185,9 +185,6 @@ function generateTicketsAjax()
 
 function displayDeletedHistoryInformation()
 {
-  :x
-
-
 	$('input[name="history_id_list[]"]:checked').each(function()
 	{
 		$(this).parent().parent().css('background-color', '#FFE2E3');

@@ -273,7 +273,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	{
 		$this->_fields['list']['Enseigne']['value'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
 		$this->_fields['list']['Expe_Langage']['value'] = Configuration::get('MR_LANGUAGE');
-		$this->_fields['list']['Expe_Ad1']['value'] = Configuration::get('PS_SHOP_NAME');
+		$this->_fields['list']['Expe_Ad1']['value'] = Configuration::get('PS_MR_SHOP_NAME');
 		$this->_fields['list']['Expe_Ad3']['value'] = Configuration::get('PS_SHOP_ADDR1');
 		$this->_fields['list']['Expe_Ad4']['value'] = Configuration::get('PS_SHOP_ADDR2');
 		$this->_fields['list']['Expe_Ville']['value'] = Configuration::get('PS_SHOP_CITY');
@@ -523,6 +523,5 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	{
 		// TODO: Build a SQL Query to know how many request have been executed
 	}
-	
 }
 ?>
