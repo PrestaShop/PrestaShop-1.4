@@ -155,7 +155,9 @@ class Socolissimo extends CarrierModule
 	public function uninstall()
 	{
 		global $cookie;
-
+				
+		$so_id = (int)Configuration::get('SOCOLISSIMO_CARRIER_ID');
+		
 		if (!parent::uninstall() 
 			OR !Db::getInstance()->Execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'socolissimo_delivery_info`')
 		    OR !$this->unregisterHook('extraCarrier') 
@@ -175,20 +177,21 @@ class Socolissimo extends CarrierModule
 			return false;
 
 		//Delete So Carrier
-			$soCarrier = new Carrier((int)(Configuration::get('SOCOLISSIMO_CARRIER_ID')));
-			//if socolissimo carrier is default set other one as default
-				if(Configuration::get('PS_CARRIER_DEFAULT') == (int)($soCarrier->id))
-				{
-					$carriersD = Carrier::getCarriers((int)($cookie->id_lang));
-					foreach($carriersD as $carrierD)
-						if ($carrierD['active'] AND !$carrierD['deleted'] AND ($carrierD['name'] != $this->_config['name']))
-							Configuration::updateValue('PS_CARRIER_DEFAULT', $carrierD['id_carrier']);
-				}
-				//save old carrier id
-				Configuration::updateValue('SOCOLISSIMO_CARRIER_ID_HIST', Configuration::get('SOCOLISSIMO_CARRIER_ID_HIST').'|'.(int)($soCarrier->id));
-				$soCarrier->deleted = 1;
-				if (!$soCarrier->update())
-					return false;
+		$soCarrier = new Carrier($so_id);
+		//if socolissimo carrier is default set other one as default
+		if(Configuration::get('PS_CARRIER_DEFAULT') == (int)($soCarrier->id))
+		{
+			$carriersD = Carrier::getCarriers((int)($cookie->id_lang));
+			foreach($carriersD as $carrierD)
+				if ($carrierD['active'] AND !$carrierD['deleted'] AND ($carrierD['name'] != $this->_config['name']))
+					Configuration::updateValue('PS_CARRIER_DEFAULT', $carrierD['id_carrier']);
+		}
+		//save old carrier id
+		Configuration::updateValue('SOCOLISSIMO_CARRIER_ID_HIST', Configuration::get('SOCOLISSIMO_CARRIER_ID_HIST').'|'.(int)($soCarrier->id));
+		$soCarrier->deleted = 1;
+
+		if (!$soCarrier->update())
+			return false;
 		return true;
 	}
 
