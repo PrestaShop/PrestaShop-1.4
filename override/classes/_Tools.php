@@ -29,19 +29,21 @@
 // IMPORTANT : don't forget to delete the underscore _ in the file name if you want to use it !
 //
 
-if (!class_exists('FB') and file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'fb.php'))
+// if FB class is already loaded, just enable it. else, enable it only if fb.php exists and is loaded
+if (!defined('PS_USE_FIREPHP') AND class_exists('FB'))
+	define('PS_USE_FIREPHP',true);
+elseif (file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR.'fb.php'))
 {
 	if (!defined('PS_USE_FIREPHP'))
 	{
-		require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'fb.php';
+		require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'fb.php');
 		define('PS_USE_FIREPHP',true);
 	}
+	else
+		define('PS_USE_FIREPHP',false);
 }
 else
-	if (class_exists('FB') AND !defined('PS_USE_FIREPHP'))
-		define('PS_USE_FIREPHP',true);
-	else 
-		define('PS_USE_FIREPHP',false);
+	define('PS_USE_FIREPHP',class_exists('FB'));
 
 class Tools extends ToolsCore
 {
@@ -206,19 +208,109 @@ class Tools extends ToolsCore
 	}
 
 	/**
+	 * use of FirePHP::error() if allowed
+	 * 
+	 * @param mixed $obj 
+	 * @param string $label 
+	 * @return void
+	 */
+	public static function error($obj, $label = '')
+	{
+		if(PS_USE_FIREPHP)
+			FB::error($object, $label);
+	}
+
+	/**
+	 * use of FirePHP::warn() if allowed
+	 * 
+	 * @param mixed $obj 
+	 * @param string $label 
+	 * @return void
+	 */
+	public static function warn($obj, $label = '')
+	{
+		if(PS_USE_FIREPHP)
+			FB::warn($obj, $label);
+	}
+
+	/**
+	 * use of FirePHP::info() if allowed
+	 * 
+	 * @param mixed $obj 
+	 * @param string $label 
+	 * @return void
+	 */
+	public static function info($obj, $label = '')
+	{
+		if(PS_USE_FIREPHP)
+			FB::info($obj, $label);
+	}
+
+	/**
+	 * use of FirePHP::log() if allowed
+	 * 
+	 * @param mixed $obj 
+	 * @param string $label 
+	 * @return void
+	 */
+	public static function log($obj, $label = '')
+	{
+		if(PS_USE_FIREPHP)
+			FB::log($obj,$label);
+	}
+	/**
 	* display debug_backtrace() 
 	* (display in firefox console if Firephp is enabled)
 	* 
 	* @param mixed $obj 
 	* @return void
 	*/
-	public static function trace($obj = NULL)
+	public static function trace($obj = NULL, $label = '')
 	{
 		if(PS_USE_FIREPHP)
-			FB::trace($obj);
+			FB::trace($obj, $label);
 		else{
 			Tools::p($obj);
+			echo'<pre><h1>'.$label.'</h1><br/>';
 			debug_print_backtrace();
+			echo '</pre>';
 		}
 	}
 }
+// Add some convenient shortcut
+
+if (!function_exists('error'))
+{
+	function error($obj, $label = ''){
+		return Tools::error($obj, $label);
+	}
+}
+
+if (!function_exists('warn'))
+{
+	function warn($obj, $label = ''){
+		return Tools::warn($obj,$label);
+	}
+}
+
+if (!function_exists('info'))
+{
+	function info($obj, $label = ''){
+		return Tools::info($obj, $label);
+	}
+}
+
+if (!function_exists('log'))
+{
+	function log($obj, $label = ''){
+		return Tools::log($obj, $label);
+	}
+}
+
+if (!function_exists('trace'))
+{
+	function trace($obj, $label = ''){
+		return Tools::trace($obj, $label);
+	}
+}
+
