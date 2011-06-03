@@ -111,6 +111,7 @@ abstract class PaymentModuleCore extends Module
 			$order->id_cart = (int)($cart->id);
 			$customer = new Customer((int)($order->id_customer));
 			$order->secure_key = ($secure_key ? pSQL($secure_key) : pSQL($customer->secure_key));
+			$order->payment = $paymentMethod;
 			if (isset($this->name))
 				$order->module = $this->name;
 			$order->recyclable = $cart->recyclable;
