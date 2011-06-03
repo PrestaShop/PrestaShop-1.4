@@ -457,9 +457,14 @@ class eBayRequest
 					$this->errorCode = (int)$e->ErrorCode;
 
 				// We log error message
-				if ($this->error != '')
-					$this->error .= '<br />';
-				$this->error .= (string)$e->LongMessage;
+				if ($e->SeverityCode == 'Error')
+				{
+					if ($this->error != '')
+						$this->error .= '<br />';
+					$this->error .= (string)$e->LongMessage;
+					if (isset($e->ErrorParameters->Value))
+						$this->error .= '<br />'.(string)$e->ErrorParameters->Value;
+				}
 			}
 
 		// Checking Success
@@ -540,9 +545,14 @@ class eBayRequest
 					$this->errorCode = (int)$e->ErrorCode;
 
 				// We log error message
-				if ($this->error != '')
-					$this->error .= '<br />';
-				$this->error .= (string)$e->LongMessage;
+				if ($e->SeverityCode == 'Error')
+				{
+					if ($this->error != '')
+						$this->error .= '<br />';
+					$this->error .= (string)$e->LongMessage;
+					if (isset($e->ErrorParameters->Value))
+						$this->error .= '<br />'.(string)$e->ErrorParameters->Value;
+				}
 			}
 
 		// Checking Success
@@ -712,9 +722,14 @@ class eBayRequest
 					$this->errorCode = (int)$e->ErrorCode;
 
 				// We log error message
-				if ($this->error != '')
-					$this->error .= '<br />';
-				$this->error .= (string)$e->LongMessage;
+				if ($e->SeverityCode == 'Error')
+				{
+					if ($this->error != '')
+						$this->error .= '<br />';
+					$this->error .= (string)$e->LongMessage;
+					if (isset($e->ErrorParameters->Value))
+						$this->error .= '<br />'.(string)$e->ErrorParameters->Value;
+				}
 			}
 
 		// Checking Success
@@ -878,9 +893,14 @@ class eBayRequest
 					$this->errorCode = (int)$e->ErrorCode;
 
 				// We log error message
-				if ($this->error != '')
-					$this->error .= '<br />';
-				$this->error .= (string)$e->LongMessage;
+				if ($e->SeverityCode == 'Error')
+				{
+					if ($this->error != '')
+						$this->error .= '<br />';
+					$this->error .= (string)$e->LongMessage;
+					if (isset($e->ErrorParameters->Value))
+						$this->error .= '<br />'.(string)$e->ErrorParameters->Value;
+				}
 			}
 
 		// Checking Success

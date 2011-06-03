@@ -26,9 +26,14 @@
 */
 
 
+// Loading eBay Class Request
 if (file_exists(dirname(__FILE__).'/eBayRequest.php'))
 	require_once(dirname(__FILE__).'/eBayRequest.php');
 
+
+// Checking compatibility with older PrestaShop and fixing it
+if (!defined('_MYSQL_ENGINE_'))
+	define('_MYSQL_ENGINE_', 'MyISAM');
 
 
 class Ebay extends Module
@@ -53,29 +58,43 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.0';
+		$this->version = '1.1';
 		parent::__construct ();
 		$this->displayName = $this->l('eBay');
 		$this->description = $this->l('Open your shop on the eBay market place !');
 		$this->id_lang = Language::getIdByIso('fr');
 
-		if (strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))) != 'fr')
+		// Check the country and ask the bypass if not 'fr'
+		if (strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))) != 'fr' && !isset($cookie->ebay_country_default_fr))
 		{
 			$this->warning = $this->l('eBay module currently works only for eBay.fr');
 			return false;
 		}
 
+		// Checking Extension
+		if (!extension_loaded('curl') || !ini_get('allow_url_fopen'))
+		{
+			if (!extension_loaded('curl') && !ini_get('allow_url_fopen'))
+				$this->warning = $this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.');
+			else if (!extension_loaded('curl'))
+				$this->warning = $this->l('You must enable cURL extension on your server if you want to use this module.');
+			else if (!ini_get('allow_url_fopen'))
+				$this->warning = $this->l('You must enable allow_url_fopen option on your server if you want to use this module.');
+			return false;
+		}
+
+		// Checking compatibility with older PrestaShop and fixing it
+		if (!Configuration::get('PS_SHOP_DOMAIN'))
+			Configuration::updateValue('PS_SHOP_DOMAIN', $_SERVER['HTTP_HOST']);
+
+		// Check if installed
 		if (self::isInstalled($this->name))
 		{
 			// Generate warnings
-			$warning = array();
-			if (!extension_loaded('curl'))
-				$warning[] = "'".$this->l('Class Curl')."', ";
 			if (!Configuration::get('EBAY_API_TOKEN'))
-				$warning[] = '\'eBay registration\' ';
-			if (count($warning))
-				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly').' ';
+				$this->warning = $this->l('You must register your module on eBay.');
 
+			// Shipping methods
 			$this->_shippingMethod = array(
 					7104 => array('description' => 'Colissimo', 'shippingService' => 'FR_ColiposteColissimo', 'shippingServiceID' => '7104'),
 					7112 => array('description' => 'Ecopli', 'shippingService' => 'FR_Ecopli', 'shippingServiceID' => '7112'),
@@ -134,8 +153,8 @@ class Ebay extends Module
 		    !$this->registerHook('addproduct') ||
 		    !$this->registerHook('updateproduct') ||
 		    !$this->registerHook('updateProductAttribute') ||
-				!$this->registerHook('deleteproduct') ||
-				!$this->registerHook('newOrder') ||
+		    !$this->registerHook('deleteproduct') ||
+		    !$this->registerHook('newOrder') ||
 		    !$this->registerHook('backOfficeTop') ||
 		    !$this->registerHook('header') ||
 		    !$this->registerHook('updateOrderStatus'))
@@ -387,11 +406,30 @@ class Ebay extends Module
 
 	public function getContent()
 	{
+		global $cookie;
 		$this->_html .= '<h2>' . $this->l('eBay').'</h2>';
 
-		if (strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))) != 'fr')
-			return $this->_html.$this->displayError($this->l('eBay module currently works only for eBay.fr'));
 
+		// Checking Country
+		if (Tools::getValue('ebay_country_default_fr') == 'ok')
+			$cookie->ebay_country_default_fr = true;
+		if (strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))) != 'fr' && !isset($cookie->ebay_country_default_fr))
+			return $this->_html.$this->displayError($this->l('eBay module currently works only for eBay.fr').'. <a href="'.$_SERVER['REQUEST_URI'].'&ebay_country_default_fr=ok">'.$this->l('Continue anyway ?').'</a>');
+
+
+		// Checking Extension
+		if (!extension_loaded('curl') || !ini_get('allow_url_fopen'))
+		{
+			if (!extension_loaded('curl') && !ini_get('allow_url_fopen'))
+				return $this->_html.$this->displayError($this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.'));
+			else if (!extension_loaded('curl'))
+				return $this->_html.$this->displayError($this->l('You must enable cURL extension on your server if you want to use this module.'));
+			else if (!ini_get('allow_url_fopen'))
+				return $this->_html.$this->displayError($this->l('You must enable allow_url_fopen option on your server if you want to use this module.'));
+		}
+
+
+		// If isset Post Var, post process else display form
 		if (!empty($_POST) AND Tools::isSubmit('submitSave'))
 		{
 			$this->_postValidation();
@@ -399,7 +437,7 @@ class Ebay extends Module
 				$this->_postProcess();
 			else
 				foreach ($this->_postErrors AS $err)
-					$this->_html .= '<div class="alert error"><img src="'._PS_IMG_.'admin/forbbiden.gif" alt="nok" />&nbsp;'.$err.'</div>';
+					$this->_html .= '<div class="alert error"><img src="../modules/ebay/forbbiden.gif" alt="nok" />&nbsp;'.$err.'</div>';
 		}
 		$this->_displayForm();
 		return $this->_html;
@@ -419,7 +457,7 @@ class Ebay extends Module
 
 		// Displaying Information from Prestashop
 		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$prestashopContent = @file_get_contents('https://www.prestashop.com/partner/modules/ebay.php?version='.$this->version.'&shop='.urlencode(Configuration::get('PS_SHOP_NAME')).'&registered='.($alert['registration'] == 1 ? 'no' : 'yes').'&url='.urlencode($_SERVER['HTTP_HOST']).'&iso_country='.$isoCountry.'&iso_lang='.Tools::strtolower($isoUser).'&id_lang='.(int)$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
+		$prestashopContent = @file_get_contents('http://www.prestashop.com/partner/modules/ebay.php?version='.$this->version.'&shop='.urlencode(Configuration::get('PS_SHOP_NAME')).'&registered='.($alert['registration'] == 1 ? 'no' : 'yes').'&url='.urlencode($_SERVER['HTTP_HOST']).'&iso_country='.$isoCountry.'&iso_lang='.Tools::strtolower($isoUser).'&id_lang='.(int)$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $context);
 
 
 		// Displaying page
@@ -427,13 +465,13 @@ class Ebay extends Module
 		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('eBay Module Status').'</legend>';
 		$this->_html .= '<div style="float: left; width: 45%">';
 		if (!count($alert))
-			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('eBay Module is configured and online!').'</strong>';
+			$this->_html .= '<img src="../modules/ebay/valid.png" /><strong>'.$this->l('eBay Module is configured and online!').'</strong>';
 		else
 		{
-			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('eBay Module is not configured yet, you must:').'</strong>';
-			$this->_html .= '<br />'.(isset($alert['registration']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 1) '.$this->l('Register the module on eBay');
-			$this->_html .= '<br />'.(isset($alert['allowurlfopen']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 2) '.$this->l('Allow url fopen');
-			$this->_html .= '<br />'.(isset($alert['curl']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Enable cURL');
+			$this->_html .= '<img src="../modules/ebay/warn.png" /><strong>'.$this->l('eBay Module is not configured yet, you must:').'</strong>';
+			$this->_html .= '<br />'.(isset($alert['registration']) ? '<img src="../modules/ebay/warn.png" />' : '<img src="../modules/ebay/valid.png" />').' 1) '.$this->l('Register the module on eBay');
+			$this->_html .= '<br />'.(isset($alert['allowurlfopen']) ? '<img src="../modules/ebay/warn.png" />' : '<img src="../modules/ebay/valid.png" />').' 2) '.$this->l('Allow url fopen');
+			$this->_html .= '<br />'.(isset($alert['curl']) ? '<img src="../modules/ebay/warn.png" />' : '<img src="../modules/ebay/valid.png" />').' 3) '.$this->l('Enable cURL');
 		}
 		$this->_html .= '</div><div style="float: right; width: 45%">'.$prestashopContent.'</div>';
 
@@ -958,6 +996,39 @@ class Ebay extends Module
 				<fieldset style="border: 0">
 					<h4>'.$this->l('You can customise the template for your products page on eBay').' :</h4>
 					<textarea class="rte" cols="100" rows="50" name="ebay_product_template">'.Tools::getValue('ebay_product_template', Configuration::get('EBAY_PRODUCT_TEMPLATE')).'</textarea><br />
+
+					'.(substr(_PS_VERSION_, 0, 3) == '1.3' ? '
+					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+					<script type="text/javascript">
+					tinyMCE.init({
+						mode : "textareas",
+						theme : "advanced",
+						plugins : "safari,pagebreak,style,layer,table,advimage,advlink,inlinepopups,media,searchreplace,contextmenu,paste,directionality,fullscreen",
+						// Theme options
+						theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+						theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,,|,forecolor,backcolor",
+						theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,media,|,ltr,rtl,|,fullscreen",
+						theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,pagebreak",
+						theme_advanced_toolbar_location : "top",
+						theme_advanced_toolbar_align : "left",
+						theme_advanced_statusbar_location : "bottom",
+						theme_advanced_resizing : false,
+						content_css : "'.__PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/global.css",
+						document_base_url : "'.__PS_BASE_URI__.'",
+						width: "850",
+						height: "800",
+						font_size_style_values : "8pt, 10pt, 12pt, 14pt, 18pt, 24pt, 36pt",
+						// Drop lists for link/image/media/template dialogs
+						template_external_list_url : "lists/template_list.js",
+						external_link_list_url : "lists/link_list.js",
+						external_image_list_url : "lists/image_list.js",
+						media_external_list_url : "lists/media_list.js",
+						elements : "nourlconvert",
+						convert_urls : false,
+						language : "'.(file_exists(_PS_ROOT_DIR_.'/js/tinymce/jscripts/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en').'"
+					});
+					</script>
+					' : '
 					<script type="text/javascript">	
 					var iso = \''.$isoTinyMCE.'\';
 					var pathCSS = \''._THEME_CSS_DIR_.'\';
@@ -970,7 +1041,8 @@ class Ebay extends Module
 						tinyMCE.settings.height = 800;
 						tinyMCE.settings.extended_valid_elements = "iframe[id|class|title|style|align|frameborder|height|longdesc|marginheight|marginwidth|name|scrolling|src|width]";
 						tinyMCE.settings.extended_valid_elements = "link[href|type|rel|id|class|title|style|align|frameborder|height|longdesc|marginheight|marginwidth|name|scrolling|src|width]";
-					</script>
+					</script>').'
+
 				</fieldset>
 				<div class="margin-form"><input class="button" name="submitSave" value="'.$this->l('Save').'" type="submit"></div>
 			</form>';
@@ -1168,6 +1240,9 @@ class Ebay extends Module
 		global $link;
 		$fees = 0;
 		$count = 0;
+		$count_success = 0;
+		$count_error = 0;
+		$tab_error = array();
 		$date = date('Y-m-d H:i:s');
 		$ebay = new eBayRequest();
 		$categoryDefaultCache = array();
@@ -1187,12 +1262,13 @@ class Ebay extends Module
 				$pictures = array();
 				$picturesMedium = array();
 				$picturesLarge = array();
+				$prefix = (substr(_PS_VERSION_, 0, 3) == '1.3' ? 'http://'.Configuration::get('PS_SHOP_DOMAIN').'/' : '');
 				$images = $product->getImages($this->id_lang);
 				foreach ($images as $image)
 				{
-					$pictures[] = $link->getImageLink('', $product->id.'-'.$image['id_image'], NULL);
-					$picturesMedium[] = $link->getImageLink('', $product->id.'-'.$image['id_image'], 'medium');
-					$picturesLarge[] = $link->getImageLink('', $product->id.'-'.$image['id_image'], 'large');
+					$pictures[] = $prefix.$link->getImageLink('', $product->id.'-'.$image['id_image'], NULL);
+					$picturesMedium[] = $prefix.$link->getImageLink('', $product->id.'-'.$image['id_image'], 'medium');
+					$picturesLarge[] = $prefix.$link->getImageLink('', $product->id.'-'.$image['id_image'], 'large');
 				}
 
 				// Load Variations
@@ -1228,7 +1304,7 @@ class Ebay extends Module
 				if (isset($combinationsImages) && !empty($combinationsImages) && count($combinationsImages) > 0)
 					foreach ($combinationsImages as $ci)
 						foreach ($ci as $i)
-							$variations[$product->id.'-'.$i['id_product_attribute']]['pictures'][] = $link->getImageLink('', $product->id.'-'.$i['id_image'], NULL);
+							$variations[$product->id.'-'.$i['id_product_attribute']]['pictures'][] = $prefix.$link->getImageLink('', $product->id.'-'.$i['id_image'], NULL);
 
 
 				// Load basic price
@@ -1244,7 +1320,7 @@ class Ebay extends Module
 				// Generate array and try insert in database
 				$datas = array(
 					'id_product' => $product->id,
-					'name' => $product->name,
+					'name' => str_replace('&', '&amp;', $product->name),
 					'brand' => $product->manufacturer_name,
 					'description' => $product->description,
 					'price' => $price,
@@ -1448,13 +1524,32 @@ class Ebay extends Module
 				// Check error
 				if (!empty($ebay->error))
 				{
-					$this->_html .= $this->displayError($ebay->error);
-					return false;
+					$tab_error[md5($ebay->error)]['msg'] = $ebay->error;
+					if (!isset($tab_error[md5($ebay->error)]['products']))
+						$tab_error[md5($ebay->error)]['products'] = array();
+					if (count($tab_error[md5($ebay->error)]['products']) < 10)
+						$tab_error[md5($ebay->error)]['products'][] = $datas['name'];
+					if (count($tab_error[md5($ebay->error)]['products']) == 10)
+						$tab_error[md5($ebay->error)]['products'][] = '...';
+					$count_error++;
 				}
+				else
+					$count_success++;
 				$count++;
 			}
 		}
-		$this->_html .= $this->displayConfirmation($this->l('Settings updated').' ('.$this->l('Option').' '.Configuration::get('EBAY_SYNC_MODE').' : '.$count.' '.$this->l('product(s) sync with eBay').')');
+		if ($count_success > 0)
+			$this->_html .= $this->displayConfirmation($this->l('Settings updated').' ('.$this->l('Option').' '.Configuration::get('EBAY_SYNC_MODE').' : '.$count_success.'/'.$count.' '.$this->l('product(s) sync with eBay').')');
+		if ($count_error > 0)
+		{
+			foreach ($tab_error as $error)
+			{
+				$productsDetails = '<br /><u>'.$this->l('Product(s) concerned').' :</u>';
+				foreach ($error['products'] as $product)
+					$productsDetails .= '<br />- '.$product;
+				$this->_html .= $this->displayError($error['msg'].'<br />'.$productsDetails);
+			}
+		}
 	}
 
 
