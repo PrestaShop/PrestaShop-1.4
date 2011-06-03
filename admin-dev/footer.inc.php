@@ -37,7 +37,7 @@ echo '			</div>
 if (strtoupper(Language::getIsoById($cookie->id_lang)) == 'FR') echo '<span style="color: #812143; font-weight: bold;">Questions / Renseignements / Formations :</span> <strong>+33 (0)1.40.18.30.04</strong> de 09h &agrave; 18h ';
 
 echo '				| <a href="http://www.prestashop.com/en/contact_us/" target="_blank" class="footer_link">'.translate('Contact').'</a>
-					| <a href="http://www.prestashop.com/bug_tracker/" target="_blank" class="footer_link">'.translate('Bug Tracker').'</a>
+					| <a href="http://forge.prestashop.com" target="_blank" class="footer_link">'.translate('Bug Tracker').'</a>
 					| <a href="http://www.prestashop.com/forums/" target="_blank" class="footer_link">'.translate('Forum').'</a>	
 				</div>
 			</div>
