@@ -64,7 +64,7 @@ class OrderOpcControllerCore extends ParentOrderController
 									$return = array(
 										'summary' => self::$cart->getSummaryDetails(),
 										'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
-										'HOOK_PAYMENT' => self::_getPaymentMethods()
+										'HOOK_PAYMENT' => $this->_getPaymentMethods()
 									);
 									die(Tools::jsonEncode($return));
 								}
@@ -81,12 +81,12 @@ class OrderOpcControllerCore extends ParentOrderController
 								self::$cookie->checkedTOS = (int)(Tools::getValue('checked'));
 								die(Tools::jsonEncode(array(
 									'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
-									'HOOK_PAYMENT' => self::_getPaymentMethods()
+									'HOOK_PAYMENT' => $this->_getPaymentMethods()
 								)));
 							}
 							break;
 						case 'getCarrierList':
-							die(Tools::jsonEncode(self::_getCarrierList()));
+							die(Tools::jsonEncode($this->_getCarrierList()));
 							break;
 						case 'editCustomer':
 							if (!$this->isLogged)
@@ -130,9 +130,9 @@ class OrderOpcControllerCore extends ParentOrderController
 									'summary' => self::$cart->getSummaryDetails(),
 									'order_opc_adress' => self::$smarty->fetch(_PS_THEME_DIR_.'order-address.tpl'),
 									'block_user_info' => (isset($blockUserInfo) ? $blockUserInfo->hookTop(array()) : ''),
-									'carrier_list' => self::_getCarrierList(),
+									'carrier_list' => $this->_getCarrierList(),
 									'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
-									'HOOK_PAYMENT' => self::_getPaymentMethods(),
+									'HOOK_PAYMENT' => $this->_getPaymentMethods(),
 									'gift_price' => Tools::displayPrice(Tools::convertPrice(Product::getTaxCalculationMethod() == 1 ? $wrapping_fees : $wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))))
 								);
 								die(Tools::jsonEncode($return));
@@ -175,7 +175,7 @@ class OrderOpcControllerCore extends ParentOrderController
 									}
 									else
 										$groups = array(1);
-									$result = self::_getCarrierList();
+									$result = $this->_getCarrierList();
 									// Wrapping fees
 									$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
 									$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
@@ -183,7 +183,7 @@ class OrderOpcControllerCore extends ParentOrderController
 									$result = array_merge($result, array(
 										'summary' => self::$cart->getSummaryDetails(),
 										'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
-										'HOOK_PAYMENT' => self::_getPaymentMethods(),
+										'HOOK_PAYMENT' => $this->_getPaymentMethods(),
 										'gift_price' => Tools::displayPrice(Tools::convertPrice(Product::getTaxCalculationMethod() == 1 ? $wrapping_fees : $wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))))
 									));
 									die(Tools::jsonEncode($result));
@@ -337,8 +337,8 @@ class OrderOpcControllerCore extends ParentOrderController
 	protected function _assignPayment()
 	{
 		self::$smarty->assign(array(
-		    'HOOK_TOP_PAYMENT' => ($this->isLogged ? Module::hookExec('paymentTop') : ''),
-			'HOOK_PAYMENT' => self::_getPaymentMethods()
+		   'HOOK_TOP_PAYMENT' => ($this->isLogged ? Module::hookExec('paymentTop') : ''),
+			'HOOK_PAYMENT' => $this->_getPaymentMethods()
 		));
 	}
 
