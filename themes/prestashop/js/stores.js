@@ -26,8 +26,8 @@
 
 function initMarkers()
 {
-	searchUrl += '?ajax=1&all=1';
-	downloadUrl(searchUrl, function(data) {
+	var localSearchUrl = searchUrl + '?ajax=1&all=1';
+	downloadUrl(localSearchUrl, function(data) {
 		var xml = parseXml(data);
 		var markerNodes = xml.documentElement.getElementsByTagName('marker');
 		var bounds = new google.maps.LatLngBounds();
@@ -90,8 +90,8 @@ function clearLocations(n)
 function searchLocationsNear(center)
 {
 	var radius = document.getElementById('radiusSelect').value;
-	var searchUrl = baseDir+'stores.php?ajax=1&latitude=' + center.lat() + '&longitude=' + center.lng() + '&radius=' + radius;
-	downloadUrl(searchUrl, function(data) {
+	var localSearchUrl = searchUrl + '?ajax=1&latitude=' + center.lat() + '&longitude=' + center.lng() + '&radius=' + radius;
+	downloadUrl(localSearchUrl, function(data) {
 		var xml = parseXml(data);
 		var markerNodes = xml.documentElement.getElementsByTagName('marker');
 		var bounds = new google.maps.LatLngBounds();
