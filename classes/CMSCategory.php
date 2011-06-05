@@ -75,7 +75,7 @@ class CMSCategoryCore extends ObjectModel
 
 	protected 	$fieldsRequired = array('id_parent', 'active');
  	protected 	$fieldsSize = array('id_parent' => 10, 'active' => 1);
- 	protected 	$fieldsValidate = array('active' => 'isBool');
+ 	protected 	$fieldsValidate = array('active' => 'isBool', 'id_parent' => 'isUnsignedInt');
 	protected 	$fieldsRequiredLang = array('name', 'link_rewrite');
  	protected 	$fieldsSizeLang = array('name' => 64, 'link_rewrite' => 64, 'meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
  	protected 	$fieldsValidateLang = array('name' => 'isCatalogName', 'link_rewrite' => 'isLinkRewrite', 'description' => 'isCleanHtml',
@@ -116,7 +116,7 @@ class CMSCategoryCore extends ObjectModel
 
 	public	function add($autodate = true, $nullValues = false)
 	{
-		$this->position = self::getLastPosition((int)(Tools::getValue('id_parent')));
+		$this->position = self::getLastPosition((int)$this->id_parent);
 		$this->level_depth = $this->calcLevelDepth();
 		foreach ($this->name AS $k => $value)
 			if (preg_match('/^[1-9]\./', $value))
@@ -590,7 +590,7 @@ class CMSCategoryCore extends ObjectModel
 		if (!$res = Db::getInstance()->ExecuteS('
 			SELECT cp.`id_cms_category`, cp.`position`, cp.`id_parent` 
 			FROM `'._DB_PREFIX_.'cms_category` cp
-			WHERE cp.`id_parent` = '.(int)(Tools::getValue('id_cms_category_parent', 1)).' 
+			WHERE cp.`id_parent` = '.(int)$this->id_parent.' 
 			ORDER BY cp.`position` ASC'
 		))
 			return false;

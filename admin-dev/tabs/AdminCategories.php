@@ -103,23 +103,6 @@ class AdminCategories extends AdminTab
 					$this->_errors[] = Tools::displayError('Category cannot be moved here');
 					return false;
 				}
-
-				// Updating customer's group
-				if ($this->tabAccess['edit'] !== '1')
-					$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
-				else
-				{
-					$object = new $this->className($id_category);
-					if (Tools::getValue('groupBox') != NULL)
-					{
-						if (Validate::isLoadedObject($object))
-							$object->updateGroup(Tools::getValue('groupBox'));
-						else
-							$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
-					}
-					else
-						$this->_errors[] = Tools::displayError('You must select at least one group.');
-				}
 			}
 		}
 		/* Change object statuts (active, inactive) */

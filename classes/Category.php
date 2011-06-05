@@ -74,13 +74,15 @@ class CategoryCore extends ObjectModel
 	/** @var string Object last modification date */
 	public 		$date_upd;
 
+	public		$groupBox;
+	
 	protected static $_links = array();
 
 	protected $tables = array ('category', 'category_lang');
 
 	protected 	$fieldsRequired = array('active');
  	protected 	$fieldsSize = array('active' => 1);
- 	protected 	$fieldsValidate = array('nleft' => 'isUnsignedInt', 'nright' => 'isUnsignedInt', 'level_depth' => 'isUnsignedInt', 'active' => 'isBool');
+ 	protected 	$fieldsValidate = array('nleft' => 'isUnsignedInt', 'nright' => 'isUnsignedInt', 'level_depth' => 'isUnsignedInt', 'active' => 'isBool', 'id_parent' => 'isUnsignedInt', 'groupBox' => 'isArrayWithIds');
 	protected 	$fieldsRequiredLang = array('name', 'link_rewrite');
  	protected 	$fieldsSizeLang = array('name' => 64, 'link_rewrite' => 64, 'meta_title' => 128, 'meta_description' => 255, 'meta_keywords' => 255);
  	protected 	$fieldsValidateLang = array('name' => 'isCatalogName', 'link_rewrite' => 'isLinkRewrite', 'description' => 'isCleanHtml',
@@ -143,13 +145,13 @@ class CategoryCore extends ObjectModel
 
 	public	function add($autodate = true, $nullValues = false)
 	{
-		$this->position = self::getLastPosition((int)(Tools::getValue('id_parent')));
+		$this->position = self::getLastPosition((int)$this->id_parent);
 		if (!isset($this->level_depth) OR $this->level_depth != 0)
 			$this->level_depth = $this->calcLevelDepth();
 		$ret = parent::add($autodate);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
-		$this->updateGroup(Tools::getValue('groupBox'));
+		$this->updateGroup($this->groupBox);
 		Module::hookExec('categoryAddition', array('category' => $this));
 		return $ret;
 	}
@@ -162,11 +164,13 @@ class CategoryCore extends ObjectModel
 	 */
 	public function update($nullValues = false)
 	{
+		// Update group selection
+		$this->updateGroup($this->groupBox);
 		$this->level_depth = $this->calcLevelDepth();
 		$this->cleanPositions((int)$this->id_parent);
 		// If the parent category was changed, we don't want to have 2 categories with the same position
 		if ($this->getDuplicatePosition())
-			$this->position = self::getLastPosition((int)Tools::getValue('id_parent'));
+			$this->position = self::getLastPosition((int)$this->id_parent);
 		$ret = parent::update($nullValues);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
 			self::regenerateEntireNtree();
@@ -883,7 +887,7 @@ class CategoryCore extends ObjectModel
 		if (!$res = Db::getInstance()->ExecuteS('
 			SELECT cp.`id_category`, cp.`position`, cp.`id_parent`
 			FROM `'._DB_PREFIX_.'category` cp
-			WHERE cp.`id_parent` = '.(int)(Tools::getValue('id_category_parent', 1)).'
+			WHERE cp.`id_parent` = '.(int)$this->id_parent.'
 			ORDER BY cp.`position` ASC'
 		))
 			return false;

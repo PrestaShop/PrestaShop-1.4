@@ -38,7 +38,8 @@ class CMSCore extends ObjectModel
 	public $position;
 	public $active;
 
- 	protected $fieldsRequiredLang = array('meta_title', 'link_rewrite');
+ 	protected $fieldsValidate = array('id_cms_category' => 'isUnsignedInt');
+	protected $fieldsRequiredLang = array('meta_title', 'link_rewrite');
 	protected $fieldsSizeLang = array('meta_description' => 255, 'meta_keywords' => 255, 'meta_title' => 128, 'link_rewrite' => 128, 'content' => 3999999999999);
 	protected $fieldsValidateLang = array('meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName', 'meta_title' => 'isGenericName', 'link_rewrite' => 'isLinkRewrite', 'content' => 'isString');
 
@@ -85,7 +86,7 @@ class CMSCore extends ObjectModel
 	
 	public function add($autodate = true, $nullValues = false)
 	{ 
-		$this->position = CMS::getLastPosition((int)(Tools::getValue('id_cms_category')));
+		$this->position = CMS::getLastPosition((int)$this->id_cms_category);
 		return parent::add($autodate, true); 
 	}
 	
@@ -175,7 +176,7 @@ class CMSCore extends ObjectModel
 		if (!$res = Db::getInstance()->ExecuteS('
 			SELECT cp.`id_cms`, cp.`position`, cp.`id_cms_category` 
 			FROM `'._DB_PREFIX_.'cms` cp
-			WHERE cp.`id_cms_category` = '.(int)(Tools::getValue('id_cms_category', 1)).' 
+			WHERE cp.`id_cms_category` = '.(int)$this->id_cms_category.' 
 			ORDER BY cp.`position` ASC'
 		))
 			return false;
