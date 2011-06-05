@@ -1057,6 +1057,42 @@ class ValidateCore
 	{
 		return (bool)(preg_match('/^[a-zA-Z]{2,3}\.gzip$/s', $file_name));
 	}
+	
+	/**
+	 *
+	 * @param array $ids
+	 * @return boolean return true if the array contain only unsigned int value 
+	 */
+	public static function isArrayWithIds($ids)
+	{
+		if (sizeof($ids))
+			foreach($ids as $id)
+				if ($id == 0 || !self::isUnsignedInt($id))
+					return false;
+		return true;
+	}
+	
+	/**
+	 *
+	 * @param array $zones
+	 * @return array return true if array contain all value required for an image map zone 
+	 */
+	public static function isSceneZones($zones)
+	{
+		foreach($zones as $zone)
+		{
+			if (!isset($zone['x1']) || !self::isUnsignedInt($zone['x1']))
+				return false;
+			if (!isset($zone['y1']) || !self::isUnsignedInt($zone['y1']))
+				return false;
+			if (!isset($zone['width']) || !self::isUnsignedInt($zone['width']))
+				return false;
+			if (!isset($zone['height']) || !self::isUnsignedInt($zone['height']))
+				return false;
+			if (!isset($zone['id_product']) || !self::isUnsignedInt($zone['id_product']))
+				return false;
+		}
+		return true;
+	}
 }
-
 

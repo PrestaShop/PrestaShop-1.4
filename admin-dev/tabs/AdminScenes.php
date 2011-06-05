@@ -51,13 +51,7 @@ class AdminScenes extends AdminTab
 		parent::__construct();
 	}
 	
-	
-	public function delete()
-	{
-		removeZoneProducts();
-	}
-	
-	function afterImageUpload()
+	public function afterImageUpload()
 	{
 		/* Generate image with differents size */
 		if (!($obj = $this->loadObject(true)))
@@ -70,19 +64,17 @@ class AdminScenes extends AdminTab
 				if ($imageType['name'] == 'large_scene' AND isset($_FILES['image']))
 					imageResize($_FILES['image']['tmp_name'], _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 				elseif ($imageType['name'] == 'thumb_scene')
-					{
+				{
 					if (isset($_FILES['thumb'])  AND !$_FILES['thumb']['error'])
 						$tmpName = $_FILES['thumb']['tmp_name'];
 					else
 						$tmpName = $_FILES['image']['tmp_name'];
 					imageResize($tmpName, _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
-					}
+				}
 			}
 		}
 		return true;
 	}
-	
-	
 	
 	/**
 	 * Build a categories tree
@@ -111,7 +103,7 @@ class AdminScenes extends AdminTab
 		echo '
 		<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 			<td>
-				<input type="checkbox" name="categoryBox[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR ((int)(Tools::getValue('id_category')) == $id_category AND !(int)($id_obj))) ? ' checked="checked"' : '').' />
+				<input type="checkbox" name="categories[]" class="categoryBox'.($id_category_default == $id_category ? ' id_category_default' : '').'" id="categoryBox_'.$id_category.'" value="'.$id_category.'"'.((in_array($id_category, $indexedCategories) OR ((int)(Tools::getValue('id_category')) == $id_category AND !(int)($id_obj))) ? ' checked="checked"' : '').' />
 			</td>
 			<td>
 				'.$id_category.'
@@ -130,7 +122,6 @@ class AdminScenes extends AdminTab
 				if ($key != 'infos')
 					$this->recurseCategoryForInclude($indexedCategories, $categories, $categories[$id_category][$key], $key, $id_category_default, $has_suite);
 	}
-	
 	
 	public function displayForm($isMainTab = true)
 	{
@@ -157,15 +148,12 @@ class AdminScenes extends AdminTab
 		<form id="scenesForm" action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/photo.gif" />'.$this->l('Image Maps').'</legend>';
-			
-		
-				echo '
-					<label>'.$this->l('How to map products in the image:').' </label>
-					<div class="margin-form">
-						'.$this->l('When a customer hovers over the image with the mouse, a pop-up appears displaying a brief description of the product. The customer can then click to open the product\'s full product page. To achieve this, please define the \'mapping zone\' that, when hovered over, will display the pop-up. Left-click with your mouse to draw the four-sided mapping zone, then release. Then, begin typing the name of the associated product. A list of products appears. Click the appropriate product, then click OK. Repeat these steps for each mapping zone you wish to create. When you have finished mapping zones, click Save Image Map.').'
-					</div>
-					';
-		
+		echo '
+			<label>'.$this->l('How to map products in the image:').' </label>
+			<div class="margin-form">
+				'.$this->l('When a customer hovers over the image with the mouse, a pop-up appears displaying a brief description of the product. The customer can then click to open the product\'s full product page. To achieve this, please define the \'mapping zone\' that, when hovered over, will display the pop-up. Left-click with your mouse to draw the four-sided mapping zone, then release. Then, begin typing the name of the associated product. A list of products appears. Click the appropriate product, then click OK. Repeat these steps for each mapping zone you wish to create. When you have finished mapping zones, click Save Image Map.').'
+			</div>
+			';
 		
 		echo '<label>'.$this->l('Image map name:').' </label>
 				<div class="margin-form">';
@@ -201,58 +189,57 @@ class AdminScenes extends AdminTab
 					}
 					
 	
- 	echo '<label>'.$this->l('Image to be mapped:').' </label>
+		echo '<label>'.$this->l('Image to be mapped:').' </label>
 				<div class="margin-form">
 					<input type="hidden" id="stay_here" name="stay_here" value="" />
 					<input type="file" name="image" id="image_input" /> <input type="button" value="'.$this->l('Upload image').'" onclick="{$(\'#stay_here\').val(\'true\');$(\'#scenesForm\').submit();}" class="button" /><br/>
 					<p>'.$this->l('Format:').' JPG, GIF, PNG. '.$this->l('File size:').' '.($this->maxImageSize / 1000).''.$this->l('KB max.').' '.$this->l('If larger than the image size setting, the image will be reduced to ').' '.$largeSceneImageType['width'].'x'.$largeSceneImageType['height'].'px '.$this->l('(width x height). If smaller than the image-size setting, a white background will be added in order to achieve the correct image size.').'.<br />'.$this->l('Note: To change image dimensions, please change the \'large_scene\' image type settings to the desired size (in Back Office > Preferences > Images).').'</p>';
 					
-	if ($obj->id && file_exists(_PS_SCENE_IMG_DIR_.$obj->id.'-large_scene.jpg'))
-	{
+		if ($obj->id && file_exists(_PS_SCENE_IMG_DIR_.$obj->id.'-large_scene.jpg'))
+		{
+			echo '<img id="large_scene_image" style="clear:both;border:1px solid black;" alt="" src="'._THEME_SCENE_DIR_.$obj->id.'-large_scene.jpg" /><br />';
 
-		echo '<img id="large_scene_image" style="clear:both;border:1px solid black;" alt="" src="'._THEME_SCENE_DIR_.$obj->id.'-large_scene.jpg" /><br />';
-		
-		echo '
-					<div id="ajax_choose_product" style="display:none; padding:6px; padding-top:2px; width:600px;">
-						'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'<br /><input type="text" value="" id="product_autocomplete_input" /> <input type="button" class="button" value="'.$this->l('OK').'" onclick="$(this).prev().search();" /><input type="button" class="button" value="'.$this->l('Delete').'" onclick="undoEdit();" />
-					</div>
+			echo '
+						<div id="ajax_choose_product" style="display:none; padding:6px; padding-top:2px; width:600px;">
+							'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'<br /><input type="text" value="" id="product_autocomplete_input" /> <input type="button" class="button" value="'.$this->l('OK').'" onclick="$(this).prev().search();" /><input type="button" class="button" value="'.$this->l('Delete').'" onclick="undoEdit();" />
+						</div>
+				';
+
+			echo '
+						<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'css/jquery.autocomplete.css" />
+						<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'js/jquery/imgareaselect/imgareaselect-default.css" />
+						<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.autocomplete.js"></script>
+						<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/imgareaselect/jquery.imgareaselect.pack.js"></script>
+						<script type="text/javascript" src="'.__PS_BASE_URI__.'js/admin-scene-cropping.js"></script>
 			';
-		
-		echo '
-					<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'css/jquery.autocomplete.css" />
-					<link rel="stylesheet" type="text/css" href="'.__PS_BASE_URI__.'js/jquery/imgareaselect/imgareaselect-default.css" />
-					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.autocomplete.js"></script>
-					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/imgareaselect/jquery.imgareaselect.pack.js"></script>
-					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/admin-scene-cropping.js"></script>
-		';
-				
-		echo '</div>';
+
+			echo '</div>';
 
 
- 	echo '<label>'.$this->l('Alternative thumbnail:').' </label>
-				<div class="margin-form">
-					<input type="file" name="thumb" id="thumb_input" />&nbsp;&nbsp;'.$this->l('(optional)').'
-					<p>'.$this->l('If you want to use a thumbnail other than one generated from simply reducing the mapped image, please upload it here.').'<br />'.$this->l('Format:').' JPG, GIF, PNG. '.$this->l('Filesize:').' '.($this->maxImageSize / 1000).''.$this->l('Kb max.').' '.$this->l('Automatically resized to').' '.$thumbSceneImageType['width'].'x'.$thumbSceneImageType['height'].'px '.$this->l('(width x height)').'.<br />'.$this->l('Note: To change image dimensions, please change the \'thumb_scene\' image type settings to the desired size (in Back Office > Preferences > Images).').'</p>
-					';
-	if ($obj->id && file_exists(_PS_SCENE_IMG_DIR_.'thumbs/'.$obj->id.'-thumb_scene.jpg'))
-		echo '<img id="large_scene_image" style="clear:both;border:1px solid black;" alt="" src="'._THEME_SCENE_DIR_.'thumbs/'.$obj->id.'-thumb_scene.jpg" /><br />';
-	echo '</div>
-			 ';
-					
-		echo '<label>'.$this->l('Category:').' </label>
-				<div class="margin-form">
-					<div style="overflow: auto; min-height: 300px; padding-top: 0.6em;" id="categoryList">
-						<table cellspacing="0" cellpadding="0" class="table" style="width: 600px;">
-								<tr>
-									<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categoryBox[]\', this.checked)" /></th>
+			echo '<label>'.$this->l('Alternative thumbnail:').' </label>
+					<div class="margin-form">
+						<input type="file" name="thumb" id="thumb_input" />&nbsp;&nbsp;'.$this->l('(optional)').'
+						<p>'.$this->l('If you want to use a thumbnail other than one generated from simply reducing the mapped image, please upload it here.').'<br />'.$this->l('Format:').' JPG, GIF, PNG. '.$this->l('Filesize:').' '.($this->maxImageSize / 1000).''.$this->l('Kb max.').' '.$this->l('Automatically resized to').' '.$thumbSceneImageType['width'].'x'.$thumbSceneImageType['height'].'px '.$this->l('(width x height)').'.<br />'.$this->l('Note: To change image dimensions, please change the \'thumb_scene\' image type settings to the desired size (in Back Office > Preferences > Images).').'</p>
+						';
+			if ($obj->id && file_exists(_PS_SCENE_IMG_DIR_.'thumbs/'.$obj->id.'-thumb_scene.jpg'))
+				echo '<img id="large_scene_image" style="clear:both;border:1px solid black;" alt="" src="'._THEME_SCENE_DIR_.'thumbs/'.$obj->id.'-thumb_scene.jpg" /><br />';
+			echo '</div>
+				 ';
+
+			echo '<label>'.$this->l('Category:').' </label>
+					<div class="margin-form">
+						<div style="overflow: auto; min-height: 300px; padding-top: 0.6em;" id="categoryList">
+							<table cellspacing="0" cellpadding="0" class="table" style="width: 600px;">
+									<tr>
+									<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'categories[]\', this.checked)" /></th>
 									<th>'.$this->l('ID').'</th>
 									<th>'.$this->l('Image map name:').'</th>
 								</tr>';
 					$categories = Category::getCategories((int)($cookie->id_lang), false);
 					$done = array();
 					$index = array();
-					if (Tools::isSubmit('categoryBox'))
-						foreach (Tools::getValue('categoryBox') AS $k => $row)
+					if (Tools::isSubmit('categories'))
+						foreach (Tools::getValue('categories') AS $k => $row)
 							$index[] = $row;
 					elseif ($obj->id)
 						foreach (Scene::getIndexedCategories($obj->id) AS $k => $row)
@@ -262,22 +249,33 @@ class AdminScenes extends AdminTab
 						<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of the categories for which the image map is to appear.').'<sup> *</sup></p>
 					</div>
 				</div>';
-				
-				
-				
-				
-
-		echo '
+			echo '
 					<div id="save_scene" class="margin-form" '.(($obj->id && file_exists(_PS_SCENE_IMG_DIR_.$obj->id.'-large_scene.jpg')) ? '' : 'style="display:none;"') .'>
-						<input type="submit" value="'.$this->l('Save Image Map(s)').'" class="button" />
+						<input type="submit" name="save_image_map" value="'.$this->l('Save Image Map(s)').'" class="button" />
 					</div>';
-	} else {
-	echo '
+		}
+		else
+		{
+			echo '
 					<br/><span class="bold">'.$this->l('Please add a picture to continue mapping the image...').'</span><br/><br/>';
-	}
-	echo '<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
+		}
+		echo '
+		<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
-		</form>';
+		</form>
+		';
+	}
+	
+	public function postProcess()
+	{
+		if (Tools::isSubmit('save_image_map'))
+		{
+			if (!Tools::isSubmit('categories') || !sizeof(Tools::getValue('categories')))
+				$this->_errors[] = Tools::displayError('You should select at least one category');
+			if (!Tools::isSubmit('zones') || !sizeof(Tools::getValue('zones')))
+				$this->_errors[] = Tools::displayError('You should make at least one zone');
+		}
+		parent::postProcess();
 	}
 }
 

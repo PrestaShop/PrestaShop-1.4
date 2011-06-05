@@ -33,6 +33,12 @@ class SceneCore extends ObjectModel
 	/** @var boolean Active Scene */
 	public 		$active = true;
 	
+	/** @var array Zone for image map */
+	public		$zones = array();
+	
+	/** @var array list of category where this scene is available */
+	public		$categories = array();
+	
 	/** @var array Products */
 	public 		$products;
 		
@@ -40,7 +46,7 @@ class SceneCore extends ObjectModel
 	protected 	$identifier = 'id_scene';
 
  	protected 	$fieldsRequired = array('active');
- 	protected 	$fieldsValidate = array('active' => 'isBool');
+ 	protected 	$fieldsValidate = array('active' => 'isBool', 'zones' => 'isSceneZones', 'categories' => 'isArrayWithIds');
  	protected 	$fieldsRequiredLang = array('name');
  	protected 	$fieldsSizeLang = array('name' => 100);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
@@ -84,12 +90,10 @@ class SceneCore extends ObjectModel
 	
 	public function add($autodate = true, $nullValues = false)
 	{
-		$zones = Tools::getValue('zones');
-		if ($zones)
-			$this->addZoneProducts($zones);
-		$categories = Tools::getValue('categoryBox');
-		if ($categories)
-			$this->addCategories($categories);
+		if (!empty($this->zones))
+			$this->addZoneProducts($this->zones);
+		if (!empty($this->categories))
+			$this->addCategories($this->categories);
 		
 		return parent::add($autodate, $nullValues);
 	}
@@ -121,11 +125,9 @@ class SceneCore extends ObjectModel
 	
 	public function updateCategories()
 	{
-		
 		if (!$this->deleteCategories())
 			return false;
-		$categories = Tools::getValue('categoryBox');
-		if ($categories AND !$this->addCategories($categories))
+		if (!empty($this->categories) AND !$this->addCategories($this->categories))
 				return false;
 		return true;
 	}
@@ -154,8 +156,7 @@ class SceneCore extends ObjectModel
 	{
 		if (!$this->deleteZoneProducts())
 			return false;
-		$zones = Tools::getValue('zones');
-		if ($zones AND !$this->addZoneProducts($zones))
+		if ($this->zones AND !$this->addZoneProducts($this->zones))
 			return false;
 		return true;
 	}
@@ -237,7 +238,6 @@ class SceneCore extends ObjectModel
 	{
 		return preg_replace('/^[0-9]+\./', '', $name);
 	}
-	
 }
 
 
