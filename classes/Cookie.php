@@ -343,4 +343,12 @@ class	CookieCore
 			unset($this->$member);
 	}
 
+	/**
+	 *
+	 * @return String name of cookie
+	 */
+	public function getName()
+	{
+		return $this->_name;
+	}
 }
