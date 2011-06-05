@@ -58,7 +58,7 @@ class ToolsCore
 			global $link;
 			if (strpos($url, $baseUri) !== FALSE && strpos($url, $baseUri) == 0)
 				$url = substr($url, strlen($baseUri));
-			$explode = explode('?', $url);
+			$explode = explode('?', $url, 2);
 			$url = $link->getPageLink($explode[0], true);
 			if (isset($explode[1]))
 				$url .= '?'.$explode[1];
@@ -84,7 +84,7 @@ class ToolsCore
 			global $link;
 			if (strpos($url, __PS_BASE_URI__) !== FALSE && strpos($url, __PS_BASE_URI__) == 0)
 				$url = substr($url, strlen(__PS_BASE_URI__));
-			$explode = explode('?', $url);
+			$explode = explode('?', $url, 2);
 			$url = $link->getPageLink($explode[0]);
 			if (isset($explode[1]))
 				$url .= '?'.$explode[1];
