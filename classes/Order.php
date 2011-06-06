@@ -417,8 +417,8 @@ class OrderCore extends ObjectModel
 		else
 			$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2);
 
-		$group_reduction = 0;
-		if ($row['group_reduction'])
+		$group_reduction = 1;
+		if ($row['group_reduction'] > 0)
 			$group_reduction =  $row['group_reduction'] / 100;
 
 		if ($row['reduction_percent'])
