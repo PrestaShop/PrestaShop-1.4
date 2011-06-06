@@ -47,7 +47,7 @@ $(document).ready(function()
 		{if Module::isInstalled('blocklayered')}
 			reloadContent();
 		{else}
-			document.location.href = requestSortProducts + ((requestSortProducts.indexOf('?')) ? '&' : '?') + 'orderby=' + splitData[0] + '&orderway=' + splitData[1];
+			document.location.href = requestSortProducts + ((requestSortProducts.indexOf('?') < 0) ? '?' : '&') + 'orderby=' + splitData[0] + '&orderway=' + splitData[1];
 		{/if}
 	});
 });
