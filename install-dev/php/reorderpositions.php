@@ -46,15 +46,11 @@ function reorderpositions()
 							ORDER BY name ASC');
 		foreach($result AS $i => $categ)
 		{
-			$sizeof = sizeof($result);
-			for ($i = 0; $i < $sizeof; ++$i)
-			{
-				Db::getInstance()->Execute('
-				UPDATE `'._DB_PREFIX_.'category`
-				SET `position` = '.(int)($i).'
-				WHERE `id_parent` = '.(int)($categ['id_parent']).'
-				AND `id_category` = '.(int)($result[$i]['id_category']));
-			}
+			Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'category`
+			SET `position` = '.(int)($i).'
+			WHERE `id_parent` = '.(int)($categ['id_parent']).'
+			AND `id_category` = '.(int)($categ['id_category']));
 		}
 		
 		$result = Db::getInstance()->ExecuteS('
