@@ -329,7 +329,7 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image AND il.id_lang = '.(int)($cookie->id_lang).')
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE pl.id_lang = '.(int)$cookie->id_lang.$queryFilters
-		.'ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby')).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
+		.' ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby')).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
 		' LIMIT '.(((int)(Tools::getValue('p', 1)) - 1) * (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))).','.(int)(Configuration::get('PS_PRODUCTS_PER_PAGE'));
 
 		$this->products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
