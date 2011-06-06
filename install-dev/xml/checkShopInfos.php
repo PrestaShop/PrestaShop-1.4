@@ -251,6 +251,8 @@ if (isFormValid())
 		$sqlParams[] = 'DELETE c, cl FROM `'._DB_PREFIX_.'cms` AS c LEFT JOIN `'._DB_PREFIX_.'cms_lang` AS cl ON c.id_cms = cl.id_cms WHERE 1 AND c.`id_cms` IN (1, 5)';
 	}
 
+	$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'lang` SET `active` = 0 WHERE `id_lang` != '.(int)Configuration::get('PS_LANG_DEFAULT');
+	
 	$dbInstance = Db::getInstance();
 	foreach($sqlParams as $query)
 		if(!$dbInstance->Execute($query))
