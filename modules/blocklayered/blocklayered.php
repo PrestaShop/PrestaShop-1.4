@@ -682,7 +682,8 @@ class BlockLayered extends Module
 			'n' => (int)($n),
 			'range' => (int)($range),
 			'start' => (int)($start),
-			'stop' => (int)($stop)
+			'stop' => (int)($stop),
+			'nArray' => $nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50)
 		);
 		$smarty->assign($pagination_infos);
 		
