@@ -55,13 +55,21 @@ function reorderpositions()
 				WHERE `id_parent` = '.(int)($categ['id_parent']).'
 				AND `id_category` = '.(int)($result[$i]['id_category']));
 			}
-		
-			foreach($language AS $lang)
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'category` c 
-				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)  
-				SET `name` = \''.preg_replace('/^[0-9]+\./', '',$categ['name']).'\' 
-				WHERE c.id_category = '.(int)($categ['id_category']).' AND id_lang = \''.(int)($lang['id_lang']).'\'');
 		}
+		
+		$result = Db::getInstance()->ExecuteS('
+							SELECT DISTINCT c.*, cl.*
+							FROM `'._DB_PREFIX_.'category` c 
+							LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
+							WHERE c.id_parent = '.(int)($parent['id_parent']).'
+							ORDER BY name ASC');
+		
+		// Remove number from category name
+		foreach($result AS $i => $categ)
+			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'category` c 
+			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
+			SET `name` = \''.preg_replace('/^[0-9]+\./', '',$categ['name']).'\' 
+			WHERE c.id_category = '.(int)($categ['id_category']).' AND id_lang = \''.(int)($categ['id_lang']).'\'');
 	}
 	
 	/* Clean CMS positions */
