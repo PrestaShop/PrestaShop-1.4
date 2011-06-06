@@ -192,7 +192,6 @@ class ProductCore extends ObjectModel
 	public	static $_taxCalculationMethod = PS_TAX_EXC;
 	protected static $_prices = array();
 	protected static $_pricesLevel2 = array();
-	protected static $_pricesLevel3 = array();
 	protected static $_incat = array();
 	protected static $_cart_quantity = array();
 	protected static $_tax_rules_group = array();
@@ -1774,7 +1773,7 @@ class ProductCore extends ObjectModel
 	* @param variable_reference $specific_price_output If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object
 	* @return float Product price
 	**/
-	public static function priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $use_tax, $decimals, $only_reduc, $use_reduc, $with_ecotax, &$specific_price_output)
+	public static function priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $use_tax, $decimals, $only_reduc, $use_reduc, $with_ecotax, &$specific_price)
 	{
 		// Caching
 		if ($id_product_attribute === NULL)
@@ -1785,12 +1784,11 @@ class ProductCore extends ObjectModel
 		// Cache for specific prices
 		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
 
+		// reference parameter is filled before any returns
+		$specific_price = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
+
 		if (isset(self::$_prices[$cacheId]))
-		{
-			if(isset(self::$_pricesLevel3[$cacheId3]))
-				$specific_price_output = self::$_pricesLevel3[$cacheId3];
 			return self::$_prices[$cacheId];
-		}
 
 		// fetch price & attribute price
 		$cacheId2 = $id_product.'-'.$id_product_attribute;
@@ -1805,17 +1803,11 @@ class ProductCore extends ObjectModel
 			WHERE p.`id_product` = '.(int)($id_product));
 		$result = self::$_pricesLevel2[$cacheId2];
 
-		if (!isset(self::$_pricesLevel3[$cacheId3]))
-			self::$_pricesLevel3[$cacheId3] = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
-		$specific_price = self::$_pricesLevel3[$cacheId3];
-
 		$price = (float)(!$specific_price OR $specific_price['price'] == 0) ? $result['price'] : $specific_price['price'];
 		// convert only if the specific price is in the default currency (id_currency = 0)
 	    if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
 
-		// Parameter passed by ref
-		$specific_price_output = $specific_price;
 		// Attribute price
 		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0, $id_currency);
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
