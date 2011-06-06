@@ -45,7 +45,31 @@ $(document).ready(function()
 	{
 		reloadContent();
 	});
+	
+	paginationButton();
 });
+
+function paginationButton() {
+	$('#pagination li').not('.current, .disabled').each( function () {
+		var nbPage = 0;
+		if ($(this).attr('id') == 'pagination_next')
+			nbPage = parseInt($('#pagination li.current').children().html())+ 1;
+		else if ($(this).attr('id') == 'pagination_previous')
+			nbPage = parseInt($('#pagination li.current').children().html())- 1;
+	
+		$(this).children().click(function () {
+			if (nbPage == 0)
+				p = parseInt($(this).html()) + parseInt(nbPage);
+			else
+				p = nbPage;
+			p = '&p='+ p;
+			console.log(p);
+			reloadContent(p);
+			nbPage = 0;
+			return false;
+		});
+	});
+}
 
 function cancelFilter()
 {
@@ -77,7 +101,7 @@ function openCloseFilter()
 	});
 }
 
-function reloadContent()
+function reloadContent(params_plus)
 {
 	for(i = 0; i < ajaxQueries.length; i++)
 		ajaxQueries[i].abort();
@@ -105,7 +129,7 @@ function reloadContent()
 	{
 		type: 'GET',
 		url: baseDir + 'modules/blocklayered/blocklayered-ajax.php',
-		data: data,
+		data: data+params_plus,
 		dataType: 'json',
 		success: function(result)
 		{
@@ -114,6 +138,8 @@ function reloadContent()
 
 			$('#product_list').html(result.productList).html();
 			$('#product_list').css('opacity', '1');
+			$('div#pagination').html(result.pagination);
+			paginationButton();
 			ajaxLoaderOn = 0;
 		}
 	});

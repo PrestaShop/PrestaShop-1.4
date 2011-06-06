@@ -31,6 +31,7 @@ if (!defined('_CAN_LOAD_FILES_'))
 class BlockLayered extends Module
 {
 	private $products;
+	private $nbr_products;
 
 	public function __construct()
 	{
@@ -148,7 +149,7 @@ class BlockLayered extends Module
 				<li>'.$this->l('Ability to manage filters by category in the module configuration').'</li>
 				<li>'.$this->l('Ability to hide filter groups with no values and filter values with 0 products').'</li>
 				<li>'.$this->l('Statistics and analysis').'</li>
-				<li>'.$this->l('Manage products sort & pagination').'</li>
+				<li>'.$this->l('Manage products sort & pagination').' <img src="../img/admin/enabled.gif" alt="" /></li>
 				<li>'.$this->l('Add a check on the category_group table').'</li>
 				<li>'.$this->l('SEO links & real time URL building (ability to give the URL to someone)').'</li>
 				<li>'.$this->l('Add more options in the module configuration').'</li>
@@ -308,7 +309,16 @@ class BlockLayered extends Module
 			$queryFilters .= ' AND p.id_product IN (
 				SELECT id_product FROM '._DB_PREFIX_.'category_product cp 
 				WHERE cp.`id_category` = '.(int)$id_parent.')';
-
+		
+		
+		/* Return only the number of products */
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT COUNT(p.`id_product`) AS total
+		FROM `'._DB_PREFIX_.'product` p
+		WHERE 1 '.$queryFilters);
+		
+		$this->nbr_products = isset($result) ? $result['total'] : 0;
+				
 		$sql = '
 		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.minimal_quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
 		p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name, p.condition, p.id_manufacturer,
@@ -319,7 +329,8 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image AND il.id_lang = '.(int)($cookie->id_lang).')
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE pl.id_lang = '.(int)$cookie->id_lang.$queryFilters
-		.'ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby')).' '.Tools::getProductsOrder('way', Tools::getValue('orderway'));
+		.'ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby')).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
+		' LIMIT '.(((int)(Tools::getValue('p', 1)) - 1) * (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))).','.(int)(Configuration::get('PS_PRODUCTS_PER_PAGE'));
 
 		$this->products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
@@ -644,12 +655,44 @@ class BlockLayered extends Module
 		$selectedFilters = $this->getSelectedFilters();
 		$products = $this->getProductByFilters($selectedFilters);
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
+		$nbProducts = $this->nbr_products;
+		$range = 2; /* how many pages around page selected */
+		$n = Configuration::get('PS_PRODUCTS_PER_PAGE');
+		$p = Tools::getValue('p', 1);
+		
+		if ($p < 0)
+			$p = 0;
+		
+		if ($p > ($nbProducts / $n))
+			$p = ceil($nbProducts / $n);
+		$pages_nb = ceil($nbProducts / (int)($n));
+
+		$start = (int)($p - $range);
+		if ($start < 1)
+			$start = 1;
+			
+		$stop = (int)($p + $range);
+		if ($stop > $pages_nb)
+			$stop = (int)($pages_nb);
+			
+		$smarty->assign('nb_products', $nbProducts);
+		$pagination_infos = array(
+			'pages_nb' => (int)($pages_nb),
+			'p' => (int)($p),
+			'n' => (int)($n),
+			'range' => (int)($range),
+			'start' => (int)($start),
+			'stop' => (int)($stop)
+		);
+		$smarty->assign($pagination_infos);
+		
 		$smarty->assign('products', $products);
 		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
 		return Tools::jsonEncode(array(
 			'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
-			'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl')
+			'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
+			'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl')
 		));
 	//	return '<div id="layered_ajax_column">'.$this->generateFiltersBlock($selectedFilters).'</div><div id="layered_ajax_products">'.$smarty->fetch(_PS_THEME_DIR_.'product-list.tpl').'</div>';	
 	}
