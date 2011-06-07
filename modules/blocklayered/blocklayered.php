@@ -594,11 +594,14 @@ class BlockLayered extends Module
 			{
 				$filterBlock['name'] = $this->l('Manufacturer');
 
-				$man = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-				SELECT DISTINCT(p.id_manufacturer), m.name
-				FROM '._DB_PREFIX_.'product p			
-				LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
-				WHERE p.id_product IN ('.implode(',', array_keys($products)).') AND p.id_manufacturer != 0');
+				$man = array();
+				$productKeys = array_keys($products);
+				if(!empty($productKeys))
+					$man = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+					SELECT DISTINCT(p.id_manufacturer), m.name
+					FROM '._DB_PREFIX_.'product p			
+					LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
+					WHERE p.id_product IN ('.implode(',', $productKeys).') AND p.id_manufacturer != 0');
 
 				$productsManuf = $this->filterProducts($products, $selectedFilters, 'manufacturer');
 
@@ -616,7 +619,7 @@ class BlockLayered extends Module
 			}
 			elseif ($filterBlock['type_lite'] == 'weight')
 			{
-				if (max($weight) != min($weight))
+				if (!empty($weight) && max($weight) != min($weight))
 				{
 					$filterBlock['name'] = $this->l('Weight');
 					$filterBlock['slider'] = true;
