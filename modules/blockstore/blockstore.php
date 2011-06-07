@@ -30,25 +30,25 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class BlockStore extends Module
 {
-    function __construct()
-    {
-        $this->name = 'blockstore';
-        $this->tab = 'front_office_features';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'blockstore';
+		$this->tab = 'front_office_features';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
-        parent::__construct();
+		parent::__construct();
 
 		$this->displayName = $this->l('Stores block');
-        $this->description = $this->l('Displays a block with a link to the store locator.');
-    }
+		$this->description = $this->l('Displays a block with a link to the store locator.');
+	}
 
-    function install()
-    {
-        Configuration::updateValue('BLOCKSTORE_IMG', 'store.jpg');
-        return (parent::install() AND $this->registerHook('rightColumn') AND $this->registerHook('header'));
-    }
+	function install()
+	{
+		Configuration::updateValue('BLOCKSTORE_IMG', 'store.jpg');
+		return (parent::install() AND $this->registerHook('rightColumn') AND $this->registerHook('header'));
+	}
 
 	public function uninstall()
 	{
@@ -56,8 +56,8 @@ class BlockStore extends Module
 		return parent::uninstall();
 	}
 
-    function hookLeftColumn($params)
-    {
+	function hookLeftColumn($params)
+	{
 		return $this->hookRightColumn($params);
 	}
 	
