@@ -28,7 +28,7 @@ if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
 require_once(_PS_MODULE_DIR_.'mondialrelay/classes/MondialRelayClass.php');
-	
+
 class MondialRelay extends Module
 {
 	const INSTALL_SQL_FILE = 'mrInstall.sql';
@@ -37,7 +37,16 @@ class MondialRelay extends Module
 	
 	static public $modulePath = '';
 	static public $moduleURL = '';
-	
+
+	// Added for 1.3 compatibility
+	const ONLY_PRODUCTS = 1;
+	const ONLY_DISCOUNTS = 2;
+	const BOTH = 3;
+	const BOTH_WITHOUT_SHIPPING = 4;
+	const ONLY_SHIPPING = 5;
+	const ONLY_WRAPPING = 6;
+	const ONLY_PRODUCTS_WITHOUT_SHIPPING = 7;
+
 	public function __construct()
 	{
 		$this->name		= 'mondialrelay';
@@ -547,6 +556,7 @@ class MondialRelay extends Module
 				unset($result[$k]);
 				continue ;
 			}
+
 			if ($row['range_behavior'])
 			{
 				// Get id zone
@@ -555,7 +565,7 @@ class MondialRelay extends Module
 				else
 					$id_zone = (int)$defaultCountry->id_zone;
 				if ((Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone))) OR
-					(!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, $cart->id_currency))))
+					(!Configuration::get('PS_SHIPPING_METHOD') AND (!Carrier::checkDeliveryPriceByPrice($row['id_carrier'], $cart->getOrderTotal(true, self::BOTH_WITHOUT_SHIPPING), $id_zone, $cart->id_currency))))
 					{
 						unset($result[$k]);
 						continue ;
