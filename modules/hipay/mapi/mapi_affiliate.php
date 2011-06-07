@@ -53,7 +53,6 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 	 */
 	protected $_baseAmount;
 
-
 	/**
 	 * Assigne le numéro de client
 	 *
@@ -65,8 +64,9 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 			return false;
 
 		$customerId = (int)$customerId;
-		if ($customerId<=0)
+		if ($customerId <= 0)
 			return false;
+			
 		$this->customerId = $customerId;
 		return true;
 	}
@@ -91,8 +91,9 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 			return false;
 
 		$accountId = (int)$accountId;
-		if ($accountId<=0)
+		if ($accountId <= 0)
 			return false;
+			
 		$this->accountId = $accountId;
 		return true;
 	}
@@ -115,18 +116,20 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 	 * @param int $percentageTarget
 	 * @return boolean
 	 */
-	public function setValue($val,$percentageTarget=0) {
+	public function setValue($val, $percentageTarget = 0) {
 		if ($this->_locked)
 			return false;
 
 		$val = sprintf('%.02f',(float)$val);
 		$percentageTarget = (int)$percentageTarget;
-		if ($val<=0 || $percentageTarget<0)
+		
+		if ($val <= 0 || $percentageTarget < 0)
 			return false;
-		if ($percentageTarget>0 && $val>100)
+		if ($percentageTarget > 0 && $val > 100)
 			return false;
-		if ($percentageTarget>0 && $percentageTarget>HIPAY_MAPI_TTARGET_ALL)
+		if ($percentageTarget > 0 && $percentageTarget > HIPAY_MAPI_TTARGET_ALL)
 			return false;
+		
 		$this->val = $val;
 		$this->percentageTarget = $percentageTarget;
 		$this->setAmount();
@@ -163,8 +166,9 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 
 		$baseAmount = sprintf('%.02f',(float)$baseAmount);
 
-		if ($baseAmount<0)
+		if ($baseAmount < 0)
 			return false;
+			
 		$this->_baseAmount = $baseAmount;
 		$this->setAmount();
 		return true;
@@ -194,8 +198,8 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 	 *
 	 */
 	protected function setAmount() {
-		if ($this->percentageTarget>0) {
-			$this->_amount = sprintf('%.02f',($this->_baseAmount/100)*$this->val);
+		if ($this->percentageTarget > 0) {
+			$this->_amount = sprintf('%.02f',($this->_baseAmount/100) * $this->val);
 		} else {
 			$this->_amount = sprintf('%.02f',$this->_baseAmount);
 		}
@@ -207,8 +211,8 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 	 * @return boolean
 	 */
 	public function check() {
-		if ($this->customerId<=0 || $this->accountId<=0 || $this->val<=0 || $this->percentageTarget<0)
-			throw new Exception('Numéro de client, numéro de compte, valeur ou cible incorrects');
+		if ($this->customerId <= 0 || $this->accountId <= 0 || $this->val <= 0 || $this->percentageTarget < 0)
+			throw new Exception('Customer identifier, account number, value or invalid target');
 		return true;
 	}
 
@@ -220,7 +224,6 @@ class HIPAY_MAPI_Affiliate extends HIPAY_MAPI_lockable {
 		$this->val = 0;
 		$this->percentageTarget = 0;
 	}
-
 
 	function __construct() {
 		$this->init();
