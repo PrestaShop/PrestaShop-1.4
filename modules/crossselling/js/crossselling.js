@@ -42,7 +42,7 @@ function cs_serialScrollFixLock(event, targeted, scrolled, items, position)
 }
 
 $(document).ready(function(){
-//init the serialScroll for thumbs
+	//init the serialScroll for thumbs
 	cs_serialScrollNbImages = $('#crossselling_list li').length;
 	cs_serialScrollNbImagesDisplayed = 5;
 	cs_serialScrollActualImagesIndex = 0;
