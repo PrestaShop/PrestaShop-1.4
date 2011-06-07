@@ -30,47 +30,47 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class GCheckout extends PaymentModule
 {
-    function __construct()
-    {
-        $this->name = 'gcheckout';
-        $this->tab = 'payments_gateways';
-        $this->version = 1.1;
-        $this->author = 'PrestaShop';
-        
-        $this->currencies = true;
-        $this->currencies_mode = 'radio';
+	function __construct()
+	{
+		$this->name = 'gcheckout';
+		$this->tab = 'payments_gateways';
+		$this->version = 1.1;
+		$this->author = 'PrestaShop';
+		
+		$this->currencies = true;
+		$this->currencies_mode = 'radio';
 
-        parent::__construct();
+		parent::__construct();
 
-        $this->displayName = $this->l('Google Checkout');
-        $this->description = $this->l('Google Checkout API implementation');
+		$this->displayName = $this->l('Google Checkout');
+		$this->description = $this->l('Google Checkout API implementation');
 		
 			if (!sizeof(Currency::checkPaymentCurrencies($this->id)))
 				$this->warning = $this->l('No currency set for this module');
-    }
+	}
 
-    function install()
-    {		
-    	if (!parent::install() OR !$this->registerHook('payment') OR 
-    			!$this->registerHook('paymentReturn') OR 
-    			!Configuration::updateValue('GCHECKOUT_MERCHANT_ID', '822305931131113') OR 
-    			!Configuration::updateValue('GCHECKOUT_MERCHANT_KEY', '2Lv_osMomVIocnLK0aif3A') OR 
-    			!Configuration::updateValue('GCHECKOUT_LOGS', '1') OR 
-    			!Configuration::updateValue('GCHECKOUT_MODE', 'real') OR 
-    			!Configuration::updateValue('GCHECKOUT_NO_SHIPPING', '0'))
+	function install()
+	{		
+		if (!parent::install() OR !$this->registerHook('payment') OR 
+				!$this->registerHook('paymentReturn') OR 
+				!Configuration::updateValue('GCHECKOUT_MERCHANT_ID', '822305931131113') OR 
+				!Configuration::updateValue('GCHECKOUT_MERCHANT_KEY', '2Lv_osMomVIocnLK0aif3A') OR 
+				!Configuration::updateValue('GCHECKOUT_LOGS', '1') OR 
+				!Configuration::updateValue('GCHECKOUT_MODE', 'real') OR 
+				!Configuration::updateValue('GCHECKOUT_NO_SHIPPING', '0'))
 				return false;
 			return true;
-    }
+	}
 
-    function uninstall()
-    {
-        return (parent::uninstall() AND 
-        	Configuration::deleteByName('GCHECKOUT_MERCHANT_ID') AND 
-        	Configuration::deleteByName('GCHECKOUT_MERCHANT_KEY') AND
-        	Configuration::deleteByName('GCHECKOUT_MODE') AND 
-        	Configuration::deleteByName('GCHECKOUT_LOGS') AND 
-        	Configuration::deleteByName('GCHECKOUT_NO_SHIPPING'));
-    }
+	function uninstall()
+	{
+		return (parent::uninstall() AND 
+			Configuration::deleteByName('GCHECKOUT_MERCHANT_ID') AND 
+			Configuration::deleteByName('GCHECKOUT_MERCHANT_KEY') AND
+			Configuration::deleteByName('GCHECKOUT_MODE') AND 
+			Configuration::deleteByName('GCHECKOUT_LOGS') AND 
+			Configuration::deleteByName('GCHECKOUT_NO_SHIPPING'));
+	}
 	
 	function getContent()
 	{
@@ -167,19 +167,19 @@ class GCheckout extends PaymentModule
 		return $this->display(__FILE__, 'payment.tpl');
 	}
 	
-    function hookPaymentReturn($params)
-    {
+	function hookPaymentReturn($params)
+	{
 			if (!$this->active)
 				return;
 			return $this->display(__FILE__, 'payment_return.tpl');
-    }
-    
-    function preparePayment()
-    {
-    	global $smarty, $cart, $cookie;
-    	
-    	
-    	require_once(dirname(__FILE__).'/library/googlecart.php');
+	}
+	
+	function preparePayment()
+	{
+		global $smarty, $cart, $cookie;
+		
+		
+		require_once(dirname(__FILE__).'/library/googlecart.php');
 			require_once(dirname(__FILE__).'/library/googleitem.php');
 			require_once(dirname(__FILE__).'/library/googleshipping.php');
 		
@@ -226,5 +226,5 @@ class GCheckout extends PaymentModule
 				'googleCheckoutExtraForm' => $googleCart->CheckoutButtonCode($this->l('Pay with GoogleCheckout'), 'LARGE'),
 				'total' => $total,
 				'googleTotal' => $total));
-    }
+	}
 }

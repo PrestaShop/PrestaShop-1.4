@@ -70,22 +70,22 @@ if(!$status)
    *
    */
 
-  switch ($root) {
-    case "request-received": {
-      break;
-    }
-    case "error": {
-      break;
-    }
-    case "diagnosis": {
-      break;
-    }
-    case "checkout-redirect": {
-      break;
-    }
-    case "merchant-calculation-callback": {
-      break;
-    }
+switch ($root) {
+	case "request-received": {
+		break;
+	}
+	case "error": {
+		break;
+	}
+	case "diagnosis": {
+		break;
+	}
+	case "checkout-redirect": {
+		break;
+	}
+	case "merchant-calculation-callback": {
+		break;
+	}
 		case "new-order-notification": {
 			// secure_cart[0] => id_cart
 			// secure_cart[1] => secure_key
@@ -101,59 +101,58 @@ if(!$status)
 				$gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
 			$Gresponse->SendAck();
 			break;
-    }
-    case "order-state-change-notification": {
-      $Gresponse->SendAck();
-      break;
-    }
-    case "charge-amount-notification": {
-      $Gresponse->SendAck();
-      break;
-    }
-    case "chargeback-amount-notification": {
-      $Gresponse->SendAck();
-      break;
-    }
-    case "refund-amount-notification": {
-      $Gresponse->SendAck();
-      break;
-    }
-    case "risk-information-notification": {
-      $Gresponse->SendAck();
-      break;
-    }
-    default:
-      $Gresponse->SendBadRequestStatus("Invalid or not supported Message");
-      break;
-  }
-  
-  
-  /* In case the XML API contains multiple open tags
-     with the same value, then invoke this function and
-     perform a foreach on the resultant array.
-     This takes care of cases when there is only one unique tag
-     or multiple tags.
-     Examples of this are "anonymous-address", "merchant-code-string"
-     from the merchant-calculations-callback API
-  */
-  function get_arr_result($child_node) {
-    $result = array();
-    if(isset($child_node)) {
-      if(is_associative_array($child_node)) {
-        $result[] = $child_node;
-      }
-      else {
-        foreach($child_node as $curr_node){
-          $result[] = $curr_node;
-        }
-      }
-    }
-    return $result;
-  }
+	}
+	case "order-state-change-notification": {
+		$Gresponse->SendAck();
+		break;
+	}
+	case "charge-amount-notification": {
+		$Gresponse->SendAck();
+		break;
+	}
+	case "chargeback-amount-notification": {
+		$Gresponse->SendAck();
+		break;
+	}
+	case "refund-amount-notification": {
+		$Gresponse->SendAck();
+		break;
+	}
+	case "risk-information-notification": {
+		$Gresponse->SendAck();
+		break;
+	}
+	default:
+		$Gresponse->SendBadRequestStatus("Invalid or not supported Message");
+		break;
+}
 
-  /* Returns true if a given variable represents an associative array */
-  function is_associative_array( $var ) {
-    return is_array( $var ) && !is_numeric( implode( '', array_keys( $var ) ) );
-  }
 
+/* In case the XML API contains multiple open tags
+   with the same value, then invoke this function and
+   perform a foreach on the resultant array.
+   This takes care of cases when there is only one unique tag
+   or multiple tags.
+   Examples of this are "anonymous-address", "merchant-code-string"
+   from the merchant-calculations-callback API
+*/
+function get_arr_result($child_node) {
+	$result = array();
+	if(isset($child_node)) {
+		if(is_associative_array($child_node)) {
+			$result[] = $child_node;
+		}
+		else {
+			foreach($child_node as $curr_node){
+				$result[] = $curr_node;
+			}
+		}
+	}
+	return $result;
+}
+
+/* Returns true if a given variable represents an associative array */
+function is_associative_array($var) {
+	return is_array($var) && !is_numeric(implode('', array_keys($var)));
+}
 
