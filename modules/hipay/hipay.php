@@ -119,7 +119,7 @@ class Hipay extends PaymentModule
 	{
 		global $cookie, $cart;
 
-		$id_currency = $this->getModuleCurrency($cart);
+		$id_currency = (int)$this->getModuleCurrency($cart);
 		// If the currency is forced to a different one than the current one, then the cart must be updated
 		if ($cart->id_currency != $id_currency)
 			if (Db::getInstance()->execute('UPDATE '._DB_PREFIX_.'cart SET id_currency = '.(int)$id_currency.' WHERE id_cart = '.(int)$cart->id))
