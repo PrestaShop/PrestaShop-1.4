@@ -159,6 +159,18 @@ var ajaxCart = {
 		}
 	},
 
+	// Update the cart information
+	updateCartInformation : function (jsonData, addedFromProductPage)
+	{
+		ajaxCart.updateCart(jsonData);
+		
+		//reactive the button when adding has finished
+		if (addedFromProductPage)
+			$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
+		else
+			$('.ajax_add_to_cart_button').removeAttr('disabled');
+	},
+
 	// add a product in the cart via ajax
 	add : function(idProduct, idCombination, addedFromProductPage, callerElement, quantity, whishlist){
 		if (addedFromProductPage && !checkCustomizations())
@@ -201,17 +213,18 @@ var ajaxCart = {
 				var pictureOffset = $picture.offset();
 				var cartBlockOffset = $('#cart_block').offset();
 
-				$picture.appendTo('body');
-				$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
-				.animate({ 'width': $element.attr('width')*0.66, 'height': $element.attr('height')*0.66, 'opacity': 0.2, 'top': cartBlockOffset.top + 30, 'left': cartBlockOffset.left + 15 }, 1000)
-				.fadeOut(100, function() {
-					ajaxCart.updateCart(jsonData);
-					//reactive the button when adding has finished
-					if (addedFromProductPage)
-						$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
-					else
-						$('.ajax_add_to_cart_button').removeAttr('disabled');
-				});
+				// Check if the block cart is activated for the animation
+				if (cartBlockOffset != undefined)
+				{
+					$picture.appendTo('body');
+					$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
+					.animate({ 'width': $element.attr('width')*0.66, 'height': $element.attr('height')*0.66, 'opacity': 0.2, 'top': cartBlockOffset.top + 30, 'left': cartBlockOffset.left + 15 }, 1000)
+					.fadeOut(100, function() {
+						ajaxCart.updateCartInformation(jsonData, addedFromProductPage);
+					});
+				}
+				else
+					ajaxCart.updateCartInformation(jsonData, addedFromProductPage);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown)
 			{
