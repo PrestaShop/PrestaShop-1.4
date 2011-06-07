@@ -318,7 +318,9 @@ class BlockLayered extends Module
 		WHERE 1 '.$queryFilters);
 		
 		$this->nbr_products = isset($result) ? $result['total'] : 0;
-				
+		
+		$n = (int)Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'));
+		
 		$sql = '
 		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.minimal_quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
 		p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name, p.condition, p.id_manufacturer,
@@ -330,8 +332,7 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 		WHERE pl.id_lang = '.(int)$cookie->id_lang.$queryFilters
 		.' ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby')).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
-		' LIMIT '.(((int)(Tools::getValue('p', 1)) - 1) * (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))).','.(int)(Configuration::get('PS_PRODUCTS_PER_PAGE'));
-
+		' LIMIT '.(((int)(Tools::getValue('p', 1)) - 1) * $n.','.$n);
 		$this->products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
 		return $this->products;
@@ -660,7 +661,8 @@ class BlockLayered extends Module
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
 		$nbProducts = $this->nbr_products;
 		$range = 2; /* how many pages around page selected */
-		$n = Configuration::get('PS_PRODUCTS_PER_PAGE');
+		
+		$n = (int)Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'));
 		$p = Tools::getValue('p', 1);
 		
 		if ($p < 0)

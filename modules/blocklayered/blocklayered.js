@@ -63,7 +63,6 @@ function paginationButton() {
 			else
 				p = nbPage;
 			p = '&p='+ p;
-			console.log(p);
 			reloadContent(p);
 			nbPage = 0;
 			return false;
@@ -125,11 +124,22 @@ function reloadContent(params_plus)
 		data += '&orderby='+splitData[0]+'&orderway='+splitData[1];
 	}
 	
+	if(params_plus == undefined)
+		params_plus = '';
+	
+	// Get nb items per page
+	var n = '';
+	$('#pagination #nb_item').children().each(function(it, option) {
+		if(option.selected) {
+			n = '&n='+option.value;
+		}
+	});
+	
 	ajaxQuery = $.ajax(
 	{
 		type: 'GET',
 		url: baseDir + 'modules/blocklayered/blocklayered-ajax.php',
-		data: data+params_plus,
+		data: data+params_plus+n,
 		dataType: 'json',
 		success: function(result)
 		{
@@ -141,6 +151,21 @@ function reloadContent(params_plus)
 			$('div#pagination').html(result.pagination);
 			paginationButton();
 			ajaxLoaderOn = 0;
+			
+			// On submiting nb items form, relaod with the good nb of items
+			$("#pagination form").submit(function() {
+				val = $('#pagination #nb_item').val();
+				$('#pagination #nb_item').children().each(function(it, option) {
+					if(option.value == val) {
+						$(option).attr('selected', 'selected');
+					} else {
+						$(option).removeAttr('selected');
+					}
+				});
+				// Reload products and pagination
+				reloadContent();
+				return false;
+			});
 		}
 	});
 	
