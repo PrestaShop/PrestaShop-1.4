@@ -16,27 +16,27 @@
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 	// Insert Service in database
-	$sql[] = "INSERT INTO `"._DB_PREFIX_."fedex_rate_service_code` (`id_carrier`, `code`, `service`, `active`) VALUES
-			('0', 'EUROPE_FIRST_INTERNATIONAL_PRIORITY', 'Europe first international priority', '0'),
-			('0', 'FEDEX_1_DAY_FREIGHT', 'Fedex 1 day freight', '0'),
-			('0', 'FEDEX_2_DAY', 'Fedex 2 day', '0'),
-			('0', 'FEDEX_2_DAY_FREIGHT', 'Fedex 2 day freight', '0'),
-			('0', 'FEDEX_3_DAY_FREIGHT', 'Fedex 3 day freight', '0'),
-			('0', 'FEDEX_EXPRESS_SAVER', 'Fedex express saver', '0'),
-			('0', 'FEDEX_FREIGHT', 'Fedex freight', '0'),
-			('0', 'FEDEX_GROUND', 'Fedex ground', '0'),
-			('0', 'FEDEX_NATIONAL_FREIGHT', 'Fedex national freight', '0'),
-			('0', 'FIRST_OVERNIGHT', 'First overnight', '0'),
-			('0', 'GROUND_HOME_DELIVERY', 'Ground home delivery', '0'),
-			('0', 'INTERNATIONAL_ECONOMY', 'International economy', '0'),
-			('0', 'INTERNATIONAL_ECONOMY_FREIGHT', 'International economy freight', '0'),
-			('0', 'INTERNATIONAL_FIRST', 'International first', '0'),
-			('0', 'INTERNATIONAL_GROUND', 'International ground', '0'),
-			('0', 'INTERNATIONAL_PRIORITY', 'International priority', '0'),
-			('0', 'INTERNATIONAL_PRIORITY_FREIGHT', 'International priority freight', '0'),
-			('0', 'PRIORITY_OVERNIGHT', 'Priority overnight', '0'),
-			('0', 'SMART_POST', 'Smart post', '0'),
-			('0', 'STANDARD_OVERNIGHT', 'Standard overnight', '0');";
+	$sql[] = "INSERT INTO `"._DB_PREFIX_."fedex_rate_service_code` (`id_carrier`, `id_carrier_history`, `code`, `service`, `active`) VALUES
+			('0', '', 'EUROPE_FIRST_INTERNATIONAL_PRIORITY', 'Europe first international priority', '0'),
+			('0', '', 'FEDEX_1_DAY_FREIGHT', 'Fedex 1 day freight', '0'),
+			('0', '', 'FEDEX_2_DAY', 'Fedex 2 day', '0'),
+			('0', '', 'FEDEX_2_DAY_FREIGHT', 'Fedex 2 day freight', '0'),
+			('0', '', 'FEDEX_3_DAY_FREIGHT', 'Fedex 3 day freight', '0'),
+			('0', '', 'FEDEX_EXPRESS_SAVER', 'Fedex express saver', '0'),
+			('0', '', 'FEDEX_FREIGHT', 'Fedex freight', '0'),
+			('0', '', 'FEDEX_GROUND', 'Fedex ground', '0'),
+			('0', '', 'FEDEX_NATIONAL_FREIGHT', 'Fedex national freight', '0'),
+			('0', '', 'FIRST_OVERNIGHT', 'First overnight', '0'),
+			('0', '', 'GROUND_HOME_DELIVERY', 'Ground home delivery', '0'),
+			('0', '', 'INTERNATIONAL_ECONOMY', 'International economy', '0'),
+			('0', '', 'INTERNATIONAL_ECONOMY_FREIGHT', 'International economy freight', '0'),
+			('0', '', 'INTERNATIONAL_FIRST', 'International first', '0'),
+			('0', '', 'INTERNATIONAL_GROUND', 'International ground', '0'),
+			('0', '', 'INTERNATIONAL_PRIORITY', 'International priority', '0'),
+			('0', '', 'INTERNATIONAL_PRIORITY_FREIGHT', 'International priority freight', '0'),
+			('0', '', 'PRIORITY_OVERNIGHT', 'Priority overnight', '0'),
+			('0', '', 'SMART_POST', 'Smart post', '0'),
+			('0', '', 'STANDARD_OVERNIGHT', 'Standard overnight', '0');";
 
 	// Create Cache Table in Database
 	$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'fedex_cache` (
