@@ -35,16 +35,16 @@ require_once(dirname(__FILE__).'/WishList.php');
 if ($cookie->isLogged())
 {
 	$action = Tools::getValue('action');
-	$id_wishlist = Tools::getValue('id_wishlist');
-	$id_product = Tools::getValue('id_product');
-	$id_product_attribute = Tools::getValue('id_product_attribute');
-	$quantity = Tools::getValue('quantity');
+	$id_wishlist = (int)Tools::getValue('id_wishlist');
+	$id_product = (int)Tools::getValue('id_product');
+	$id_product_attribute = (int)Tools::getValue('id_product_attribute');
+	$quantity = (int)Tools::getValue('quantity');
 	$priority = Tools::getValue('priority');
 	$wishlist = new WishList((int)($id_wishlist));
 	$refresh = (($_GET['refresh'] == 'true') ? 1 : 0);
 	if (empty($id_wishlist) === false)
 	{
-		 if (!strcmp($action, 'update'))
+		if (!strcmp($action, 'update'))
 		{
 			WishList::updateProduct($id_wishlist, $id_product, $id_product_attribute, $priority, $quantity);
 		}

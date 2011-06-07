@@ -249,7 +249,7 @@ class Loyalty extends Module
 		$this->_postProcess();
 
 		$categories = Category::getCategories((int)($cookie->id_lang));
-		$order_states = OrderState::getOrderStates($cookie->id_lang);
+		$order_states = OrderState::getOrderStates((int)$cookie->id_lang);
 		$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
 		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		$languages = Language::getLanguages(false);

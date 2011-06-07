@@ -105,7 +105,7 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 						$more_attr .= ' format="isUnsignedId" ';
 				}
 				$node_content .= '<language id="'.$language.'"'.$more_attr.'>';
-				if (isset($field['value']) AND is_array($field['value']))
+				if (isset($field['value']) AND is_array($field['value']) AND isset($field['value'][$language]))
 					$node_content .= '<![CDATA['.$field['value'][$language].']]>';
 				$node_content .= '</language>'."";
 			}

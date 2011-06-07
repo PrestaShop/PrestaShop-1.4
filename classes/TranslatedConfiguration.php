@@ -67,6 +67,14 @@ class TranslatedConfigurationCore extends Configuration
 			}
 		}
 		Configuration::updateValue($this->name, $this->value, $ishtml);
+		
+		$last_insert = Db::getInstance()->getRow('
+			SELECT `id_configuration` AS id
+			FROM `'._DB_PREFIX_.'configuration`
+			WHERE `name` = \''.pSQL($this->name).'\'');
+		if ($last_insert)
+			$this->id = $last_insert['id'];
+		
 		return true;
 	}
 	

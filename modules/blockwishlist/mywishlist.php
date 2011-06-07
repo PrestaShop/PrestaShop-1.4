@@ -58,7 +58,7 @@ if ($cookie->isLogged())
 			{
 				$wishlist = new WishList();
 				$wishlist->name = $name;
-				$wishlist->id_customer = $cookie->id_customer;
+				$wishlist->id_customer = (int)$cookie->id_customer;
 				list($us, $s) = explode(' ', microtime());
 				srand($s * $us);
 				$wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$cookie->id_customer), 0, 16));
