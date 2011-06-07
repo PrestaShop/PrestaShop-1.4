@@ -30,28 +30,28 @@ include('../../init.php');
 
 global $cookie;
 
-$validReturn = array('infoexterne','token','etat','envoi');
+$validReturn = array('infoexterne', 'token', 'etat', 'envoi');
 
 $return = array();
 foreach ($_GET AS $key => $val)
-	if (in_array(strtolower($key),$validReturn))
+	if (in_array(strtolower($key), $validReturn))
 		$return[strtolower($key)] = utf8_encode(urldecode(stripslashes($val)));
-		
+
 if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return['etat']))
-{	
-	$id_order = str_replace(str_replace('.','_',str_replace('www.','',$_SERVER['HTTP_HOST'])).'_','',$return['infoexterne']);
-	
+{
+	$id_order = str_replace(str_replace('.', '_', str_replace('www.','',$_SERVER['HTTP_HOST'])).'_', '', $return['infoexterne']);
+
 	$order = new Order((int)($id_order));
 	$customer = new Customer((int)($order->id_customer));
 	$confs = Configuration::getMultiple(array('EMC_SEND_STATE', 'EMC_ORDER_PAST_STATE', 'EMC_DELIVERY_STATE'));
-	
+
 	if ($customer->secure_key != $return['token'])
 		d(Tools::displayError('Hack attempt'));
 	else
 	{
-		switch($return['etat'])
+		switch ($return['etat'])
 		{
-			//commande pass�e
+			// New command
 			case 'CMD' :
 				$history = new OrderHistory();
 				$history->id_order = (int)($id_order);
@@ -72,7 +72,7 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 				}
 			
 			break;
-			//colis (ou autre objet) envoy�
+			// Send object
 			case 'ENV' :
 				$history = new OrderHistory();
 				$history->id_order = (int)($id_order);
@@ -80,30 +80,26 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 				$history->id_employee = (int)($cookie->id_employee);
 				$history->addWithemail();
 			break;
-			//envoi annul�
+			// Cancel
 			case 'ANN' :
 				$message = new Message();
-				$texte = 'Envoi Moins cher : envoi annul�';
+				$texte = 'Envoi Moins cher : envoi annulé';
 				$message->message = htmlentities($texte, ENT_COMPAT, 'UTF-8');
 				$message->id_order = (int)($id_order);
 				$message->private = 1;
 				$message->add();
 			break;
-			//objet livr� (pas g�r� actuellement)
-				case 'LIV' :
+			// todo ??
+			case 'LIV' :
 				$history = new OrderHistory();
 				$history->id_order = (int)($id_order);
 				$history->changeIdOrderState((int)($confs['EMC_DELIVERY_STATE']), (int)($history->id_order));
 				$history->id_employee = (int)($cookie->id_employee);
 				$history->addWithemail();
 			break;
-	
-		
 		}	
-	
-	
 	}
 }
 else
-d(Tools::displayError('Hack attempt'));
+	d(Tools::displayError('Hack attempt'));
 

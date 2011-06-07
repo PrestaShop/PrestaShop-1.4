@@ -76,6 +76,9 @@ class Envoimoinscher extends Module
 		}
 	}
 	
+	/**
+	 * @see ModuleCore::install()
+	 */
 	public function install()
 	{
 		global $cookie;
@@ -100,6 +103,9 @@ class Envoimoinscher extends Module
 		return true; 					
 	}
 	
+	/**
+	 * Add new tab in administration
+	 */
 	private function adminInstall()
 	{
 		$tab = new Tab();
@@ -110,6 +116,9 @@ class Envoimoinscher extends Module
 		return $tab->add();
 	}
 	
+	/**
+	 * @see ModuleCore::uninstall()
+	 */
 	public function uninstall()
 	{
 		global $cookie;
@@ -301,7 +310,7 @@ class Envoimoinscher extends Module
 		<div class="margin-form">
 		<select name="EMC_SEND_STATE">
 				<option value="O">'.$this->l('Choose a state ...').'</option>';
-		foreach ( $order_states as $state)
+		foreach ($order_states as $state)
 		{
 			$this->_html .= '<option value="' . $state['id_order_state'] . '" style="background-color:' . $state['color'] . ';"';
 			if (Tools::getValue('EMC_SEND_STATE', Configuration::get('EMC_SEND_STATE')) == $state['id_order_state']) $this->_html .= ' selected="selected"';
@@ -318,7 +327,7 @@ class Envoimoinscher extends Module
 		<div class="margin-form">
 		<select name="EMC_DELIVERY_STATE">
 				<option value="O">'.$this->l('Choose a state ...').'</option>';
-		foreach ( $order_states as $state)
+		foreach ($order_states as $state)
 		{
 			$this->_html .= '<option value="'.(int)($state['id_order_state']).'" style="background-color:'.$state['color'].';"';
 			if (Tools::getValue('EMC_DELIVERY_STATE', (int)(Configuration::get('EMC_DELIVERY_STATE'))) == (int)($state['id_order_state'])) $this->_html .= ' selected="selected"';
@@ -512,7 +521,6 @@ class Envoimoinscher extends Module
 			if ($result['id'][0] != $optgroup)
 			{
 				$optgroup ++;
-				
 				$select .= '</optgroup><optgroup label="'.htmlspecialchars($groups[$optgroup], ENT_COMPAT, 'UTF-8').'">';
 			}
 			$select .= '<option '.($selected == $result['id'] ? 'selected="selected"' : '').' value="'.(int)($result['id']).'" >'.htmlspecialchars($result['libelle'], ENT_COMPAT, 'UTF-8').'</option>';
@@ -522,8 +530,7 @@ class Envoimoinscher extends Module
 	}
 	
 	public function hookAdminOrder($params)
-	{	
-	
+	{
 		$order = new Order($params['id_order']);
 		if ($order->id_carrier == Configuration::get('EMC_CARRIER'))
 		{
@@ -546,48 +553,48 @@ class Envoimoinscher extends Module
 	{
 		switch($str)
 		{
-		case 'No order to export':
-			return $this->l('No order to export');
-		break;
-		case 'Please configure this module in order':
-			return $this->l('Please configure this module in order');
-		break;
-		case 'Change configuration':
-			return $this->l('Change configuration');
-		break;
-		case 'ID':
-			return $this->l('ID');
-		break;
-		case 'Name':
-			return $this->l('Name');
-		break;
-		case 'Total Cost':
-			return $this->l('Total Cost');
-		break;
-		case 'Total shipment':
-			return $this->l('Total shipment');
-		break;
-		case 'Date':
-			return $this->l('Date');
-		break;
-		case 'Packaging':
-			return $this->l('Packaging');
-		break;
-		case 'Nature of contents':
-			return $this->l('Nature of contents');
-		break;
-		case 'Detail':
-			return $this->l('Detail');
-		break;
-		case 'View':
-			return $this->l('View');
-		break;
-		case 'Send':
-			return $this->l('Send');
-		break;
-		case 'List of orders to export':
-			return $this->l('List of orders to export');
-		break;
+			case 'No order to export':
+				return $this->l('No order to export');
+			break;
+			case 'Please configure this module in order':
+				return $this->l('Please configure this module in order');
+			break;
+			case 'Change configuration':
+				return $this->l('Change configuration');
+			break;
+			case 'ID':
+				return $this->l('ID');
+			break;
+			case 'Name':
+				return $this->l('Name');
+			break;
+			case 'Total Cost':
+				return $this->l('Total Cost');
+			break;
+			case 'Total shipment':
+				return $this->l('Total shipment');
+			break;
+			case 'Date':
+				return $this->l('Date');
+			break;
+			case 'Packaging':
+				return $this->l('Packaging');
+			break;
+			case 'Nature of contents':
+				return $this->l('Nature of contents');
+			break;
+			case 'Detail':
+				return $this->l('Detail');
+			break;
+			case 'View':
+				return $this->l('View');
+			break;
+			case 'Send':
+				return $this->l('Send');
+			break;
+			case 'List of orders to export':
+				return $this->l('List of orders to export');
+			break;
 		}
 	}	
 }

@@ -88,6 +88,7 @@ class dibs extends PaymentModule
 		'sv'	=> 'http://www.dibs.se/bestall/internet/',
 		'no'	=> 'http://www.dibs.no/bestill/internett/',
 	);
+
 	public function __construct()
 	{
 		global $smarty;
@@ -117,7 +118,7 @@ class dibs extends PaymentModule
 		if (!self::$ID_MERCHANT OR self::$ID_MERCHANT === '')
 			$this->warning = $this->l('You have to set your merchant ID to use DIBS API.');
 	}
-	
+
 	public function install()
 	{
 		return (parent::install() 
@@ -128,7 +129,7 @@ class dibs extends PaymentModule
 			AND Configuration::updateValue('DIBS_TESTING', 1)
 			AND Configuration::updateValue('DIBS_MORE_SETTINGS', Tools::htmlentitiesUTF8(serialize(array('flexwin_color' => 'blue', 'logo_color' => 'black', 'k1' => '', 'k2' => ''))), true));
 	}
-	
+
 	public function uninstall()
 	{
 		return (parent::uninstall()
@@ -152,7 +153,7 @@ class dibs extends PaymentModule
 			$this->smarty->assign('status', 'failed');
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
-	
+
 	private function preProcess()
 	{
 		if (Tools::isSubmit('submitModule'))
@@ -179,6 +180,7 @@ class dibs extends PaymentModule
 			echo '<div class="conf confirm"><img src="../img/admin/ok.gif"/>'.$this->l('Configuration updated').$data_sync.'</div>';
 		}
 	}
+
 	private function _displayPresentation()
 	{
 		$href = '';
@@ -205,6 +207,7 @@ class dibs extends PaymentModule
 		</fieldset>';
 		return $out;
 	}
+
 	public function getContent()
 	{
 		$this->preProcess();
@@ -268,6 +271,7 @@ class dibs extends PaymentModule
 		</form>';
 		return $str;
 	}
+
 	public function hookPayment($params)
 	{
 		if ((self::$ID_MERCHANT === false || self::$ID_MERCHANT === '' || self::$ID_MERCHANT === NULL) 
@@ -280,19 +284,19 @@ class dibs extends PaymentModule
 		$address = new Address(intval($params['cart']->id_address_invoice));
 		$country = new Country(intval($address->id_country), intval($params['cart']->id_lang));
 		$products = $params['cart']->getProducts();
-		
+
 		$dibsParams = array();
-		
+
 		// Required
 		$dibsParams['merchant']		= self::$ID_MERCHANT; // id merchant send from DIBS e-mail
-			
+
 		// don't cast to int !! It has strange behaviour (really strange) 
 		// for example : When calculate a total amount of 557.05, the result is 55704 after casting !!
 		$dibsParams['amount']		= $params['cart']->getOrderTotal(true, Cart::BOTH) * 100; // The smallest unit of an amount, cent for EUR
 		$dibsParams['accepturl']	= self::$ACCEPTED_URL.'?id_cart='.(int)($params['cart']->id).'&id_module='.(int)($this->id).'&key='.$customer->secure_key; // The URL of the page to be displayed if the purchase is approved.
 		$dibsParams['orderid']		= $params['cart']->id.'_'.date('YmdHis'); // The shop's order number for this particular puchase. It can be seen later when payment is captured, and will in some instances appear on the customer's bank statement (max. 50 characters, both numerals and letters may be used).
 		$currency_num = 0;
-		
+
 		// for 1.3 compatibility
 		if(!isset($currency->iso_code_num) OR $currency->iso_code_num == '')
 		{
@@ -316,7 +320,7 @@ class dibs extends PaymentModule
 		else
 			$currency_num = $currency->iso_code_num;
 		$dibsParams['currency']		= (int)$currency_num; // Currency specification as indicated in ISO4217 where the EUR is no. 978
-		
+
 		// optional
 		$dibsParams['test']			= (self::$TESTING === 1) ? 'yes' : 'no'; // optional - This field is used when tests are being conducted on the shop (e.g. test=yes). When this field is declared, the transaction is not dispatched to the card issuer, but is instead handled by the DIBS test module. See also Step 5 of the 10 Step Guide for more information. During your initial integration with DIBS, there is no need to insert this parameter, since all default transactions will hit the DIBS test system until DIBS has approved integration. Should the test system be used at a later date, this will be activated at DIBS (contact DIBS support for reactivating the test mode of your shop).
 		$dibsParams['lang']			= in_array(strtolower($lang->iso_code), self::$accepted_lang) ? $lang->iso_code : ''; // optional - This parameter determines the language in which the page will be opened. The following values are accepted: da=Danish en=English es=Spanish fi=Finnish fo=Faroese fr=French it=Italian nl=Dutch no=Norwegian pl=Polish (simplified) sv=Swedish Default language is Danish.
@@ -326,8 +330,7 @@ class dibs extends PaymentModule
 		$dibsParams['callbackurl']	= self::$site_url.'modules/'.$this->name.'/validation.php'; // optional - An optional �server-to-server� call which tells the shop�s server that payment was a success. Can be used for many purposes, the most important of these being the ability to register the order in your own system without depending on the customer�s browser hitting a specific page of the shop. See also HTTP_COOKIE.
 		$md5_params = 'merchant='.self::$ID_MERCHANT.'&orderid='.$dibsParams['orderid'].'&currency='.$dibsParams['currency'].'&amount='.$dibsParams['amount'];
 		$dibsParams['md5key']		= md5(self::$MORE_SETTINGS['k2'].md5(self::$MORE_SETTINGS['k1'].$md5_params)); // optional - This variable enables a MD5 key control of the values received by DIBS. This control  confirms that the values sent to DIBS has not been tampered with during the transfer. The MD5 key is calculated as:  MD5(key2 + MD5(key1 + "merchant=&orderid=&transact="))  Where key1 and key2 are shop specific keys available through the DIBS administration interface, and + is the concatenation operator. NB! MD5 key check must also be enabled through the DIBS administration interface in order to work. Further details on MD5-key control.  
-		
-		
+
 		// @todo need more infos.
 		$dibsParams['account']		= ''; // optional - If multiple departments utilize the company's acquirer agreement with PBS, it may prove practical to keep the transactions separate at DIBS. An "account number" may be inserted in this field, so as to separate transactions at DIBS.
 		$dibsParams['calcfee']		= ''; // optional - If this parameter is set (e.g. calcfee=foo), the charge due to the transaction will automatically be calculated and affixed, i.e., the charge payable to the acquirer (e.g. PBS)
@@ -338,17 +341,17 @@ class dibs extends PaymentModule
 		$dibsParams['postype']		= ''; // optional - "postype" (one 't') is used when one wishes to register the transaction origin. For normal internet transaction it is not required to include "postype", as it is automatically set to SSL. Possible values are:  ssl = internet transactions, magnetic = magnetic stripe read, and signature is available, magnosig = magnetic stripe read, and no signature is available, mail = mail order, manual = manually entered, phone = phone order, signature = card and signature available, manually entered.
 		$dibsParams['ticketrule']	= ''; // optional - Set the value of this parameter to the same as defined by you in DIBS Admin.
 		$dibsParams['preauth']		= ''; // optional - When preauth=true is sent as part of the request to auth.cgi the DIBS server identifies the authorisation as a ticket authorisation rather than a normal transaction. Please note that the pre-authorised transaction is NOT available among the transactions in the DIBS administration interface. When using MD5 the Authkey must be calculated from the string transact=12345678&preauth=true&currency=123
-		
+
 		// @todo Since Prestashop manage vouchers, ask if necessary to use this params 
 		$dibsParams['voucher']		= ''; // optional - If set to "yes", then the list of payment types on the first page of FlexWin will contain vouchers, too. If FlexWin is called with a paytype, which would lead directly to the payment form, the customer is given the choice of entering a voucher code first.
 		$dibsParams['split']		= ''; // optional - "split" is used for splitting up a transaction into two or more sub-transactions. This enables part of an order to be paid for when shipped in part. It requires that the amount and currency of the part payments are known at the time of the order, and are posted to the DIBS server as:  split=2&amount1=&amount2=
-		
+
 		// to erase optional params which are not filled
 		$dibsParams = array_filter($dibsParams);
-		
+
 		/* Order Information as "complex model" :
 		 * -------------------------------------- */
-		
+
 		// delivery params
 		$dibsParams['delivery1.Name'] = $address->firstname.' '.$address->lastname;
 		$dibsParams['delivery2.Address'] = $address->address1;
@@ -358,7 +361,7 @@ class dibs extends PaymentModule
 		$dibsParams['delivery6.Comment'] = $address->other;
 		$dibsParams['delivery7.Phone'] = $address->phone;
 		$dibsParams['delivery8.Company'] = $address->company;
-		
+
 		// order line (product list)
 		$dibsParams['ordline0-1'] = 'Product ref / Product Id';
 		$dibsParams['ordline0-2'] = 'Name';
@@ -368,7 +371,7 @@ class dibs extends PaymentModule
 		$dibsParams['ordline0-6'] = 'Quantity';
 		$dibsParams['ordline0-7'] = 'Weight';
 		$dibsParams['ordline0-8'] = 'ecotax';
-		
+
 		$count_products = 1;
 		foreach ($products as $key => $product)
 		{
@@ -382,7 +385,7 @@ class dibs extends PaymentModule
 			$dibsParams['ordline'.$count_products.'-8'] = $product['ecotax'];
 			$count_products++;
 		}
-		
+
 		// Price info
 		$dibsParams['priceinfo1.Deliverycosts'] = $params['cart']->getOrderTotal(true, Cart::ONLY_SHIPPING);
 		$dibsParams['priceinfo2.ProductsAmount'] = $params['cart']->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING);

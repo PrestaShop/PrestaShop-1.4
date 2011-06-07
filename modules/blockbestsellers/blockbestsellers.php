@@ -35,18 +35,21 @@ class BlockBestSellers extends Module
 
 	public function __construct()
 	{
-			$this->name = 'blockbestsellers';
-			$this->tab = 'front_office_features';
-			$this->version = '1.1';
-			$this->author = 'PrestaShop';
-			$this->need_instance = 0;
-			
-			parent::__construct();
+		$this->name = 'blockbestsellers';
+		$this->tab = 'front_office_features';
+		$this->version = '1.1';
+		$this->author = 'PrestaShop';
+		$this->need_instance = 0;
 
-			$this->displayName = $this->l('Top seller block');
-			$this->description = $this->l('Add a block displaying the shop\'s top sellers.');
+		parent::__construct();
+
+		$this->displayName = $this->l('Top seller block');
+		$this->description = $this->l('Add a block displaying the shop\'s top sellers.');
 	}
 
+	/**
+	 * @see ModuleCore::install()
+	 */
 	public function install()
 	{
 		if (!parent::install() OR
@@ -58,6 +61,9 @@ class BlockBestSellers extends Module
 		return true;
 	}
 
+	/**
+	 * Called in administration -> module -> configure
+	 */
 	public function getContent()
 	{
 		$output = '<h2>'.$this->displayName.'</h2>';
@@ -92,7 +98,7 @@ class BlockBestSellers extends Module
 	{
 		if (Configuration::get('PS_CATALOG_MODE'))
 			return ;
-		
+
 		global $smarty;
 		$currency = new Currency((int)($params['cookie']->id_currency));
 		$bestsellers = ProductSale::getBestSalesLight((int)($params['cookie']->id_lang), 0, 5);
@@ -122,7 +128,6 @@ class BlockBestSellers extends Module
 			return ;
 		Tools::addCSS(($this->_path).'blockbestsellers.css', 'all');
 	}
-
 }
 
 
