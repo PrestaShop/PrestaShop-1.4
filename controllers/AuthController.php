@@ -390,9 +390,17 @@ class AuthControllerCore extends FrontController
 	{
 		$addressItems = array();
 		$addressFormat = AddressFormat::getOrderedAddressFields(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$requireFormFieldsList = AddressFormat::$requireFormFieldsList;
+		
 		foreach ($addressFormat as $addressline)
 			foreach (explode(' ', $addressline) as $addressItem)
 				$addressItems[] = trim($addressItem);
+		
+		// Add missing require fields for a new user susbscription form
+		foreach($requireFormFieldsList as $fieldName)
+			if (!in_array($fieldName, $addressItems))
+				$addressItems[] = trim($fieldName);
+				
 		foreach (array('inv', 'dlv') as $addressType)
 			self::$smarty->assign(array($addressType.'_adr_fields' => $addressFormat, $addressType.'_all_fields' => $addressItems));
 	}
