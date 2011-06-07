@@ -741,11 +741,14 @@ class WebserviceOutputBuilderCore
 				elseif ($function_infos['type'] == 'object')
 					$object= $function_infos['object'];
 				
-				 $return_fields = $object->{$function_infos['method']}($entity_object, $function_infos['parameters']);
-				 foreach ($return_fields as $field_name => $value)
-				 {
-					 $arr_return[$field_name] = $value;
-				 }
+				$return_fields = $object->{$function_infos['method']}($entity_object, $function_infos['parameters']);
+				foreach ($return_fields as $field_name => $value)
+				{
+					if (Validate::isConfigName($field_name))
+						$arr_return[$field_name] = $value;
+					else
+						throw new WebserviceException('Name for the virtual field is not allow', array(128, 400));
+				}
 			}
 		}
 		return $arr_return;

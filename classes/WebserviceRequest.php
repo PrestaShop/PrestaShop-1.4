@@ -27,7 +27,7 @@
 
 class WebserviceRequestCore
 {
-	private $_available_languages = null;
+	protected $_available_languages = null;
 	/** 
 	 * Errors triggered at execution
 	 * @var array
@@ -38,13 +38,13 @@ class WebserviceRequestCore
 	 * Set if return should display content or not
 	 * @var boolean
 	 */
-	private $_outputEnabled = true;
+	protected $_outputEnabled = true;
 	
 	/**
 	 * Set if the management is specific or if it is classic (entity management)
 	 * @var boolean
 	 */
-	private $objectSpecificManagement = false;
+	protected $objectSpecificManagement = false;
 	
 	/**
 	 * Base PrestaShop webservice URL
@@ -56,13 +56,13 @@ class WebserviceRequestCore
 	 * PrestaShop Webservice Documentation URL
 	 * @var string 
 	 */
-	private $_docUrl = 'http://prestashop.com/docs/1.4/webservice';
+	protected $_docUrl = 'http://prestashop.com/docs/1.4/webservice';
 	
 	/**
 	 * Set if the authentication key was checked
 	 * @var boolean
 	 */
-	private $_authenticated = false;
+	protected $_authenticated = false;
 	
 	/**
 	 * HTTP Method to support
@@ -86,7 +86,7 @@ class WebserviceRequestCore
 	 * The time in microseconds of the start of the execution of the web service request
 	 * @var int
 	 */
-	private $_startTime = 0;
+	protected $_startTime = 0;
 	
 	/**
 	 * The list of each resources manageable via web service
@@ -110,7 +110,7 @@ class WebserviceRequestCore
 	 * The XML string to display if web service call succeed
 	 * @var string
 	 */
-	private $specificOutput = '';
+	protected $specificOutput = '';
 	
 	/**
 	 * The list of objects to display
@@ -122,7 +122,7 @@ class WebserviceRequestCore
 	 * The current object to support, it extends the PrestaShop ObjectModel
 	 * @var ObjectModel
 	 */
-	private $_object;
+	protected $_object;
 	
 	/**
 	 * The schema to display. 
@@ -141,19 +141,19 @@ class WebserviceRequestCore
 	 * If we are in PUT or POST case, we use this attribute to store the xml string value during process
 	 * @var string
 	 */
-	private $_inputXml;
+	protected $_inputXml;
 	
 	/**
 	 * Object instance for singleton
 	 * @var WebserviceRequest
 	 */
-	private static $_instance;
+	protected static $_instance;
 	
 	/**
 	 * Key used for authentication
 	 * @var string
 	 */
-	private $_key;
+	protected $_key;
 	
 	/**
 	 * This is used to have a deeper tree diagram.
@@ -541,7 +541,7 @@ class WebserviceRequestCore
 	 * @param array $words
 	 * @return string
 	 */
-	private function getClosest($input, $words)
+	protected function getClosest($input, $words)
 	{
 		$shortest = -1;
 		foreach ($words as $word)
@@ -628,7 +628,7 @@ class WebserviceRequestCore
 	 *
 	 * @return boolean
 	 */
-	private function hasErrors()
+	protected function hasErrors()
 	{
 		return (boolean)$this->errors;
 	}
@@ -638,7 +638,7 @@ class WebserviceRequestCore
 	 *
 	 * @return boolean
 	 */
-	private function authenticate()
+	protected function authenticate()
 	{
 		if (!$this->hasErrors())
 		{
@@ -698,7 +698,7 @@ class WebserviceRequestCore
 	 *
 	 * @return boolean
 	 */
-	private function isActivated()
+	protected function isActivated()
 	{
 		if (!Configuration::get('PS_WEBSERVICE'))
 		{
@@ -713,7 +713,7 @@ class WebserviceRequestCore
 	 *
 	 * @return boolean
 	 */
-	private function checkHTTPMethod()
+	protected function checkHTTPMethod()
 	{
 		if (!in_array($this->method, array('GET', 'POST', 'PUT', 'DELETE', 'HEAD')))
 			$this->setError(405, 'Method '.$this->method.' is not valid', 23);
@@ -731,7 +731,7 @@ class WebserviceRequestCore
 	 *
 	 * @return boolean
 	 */
-	private function checkResource()
+	protected function checkResource()
 	{
 		$this->resourceList = self::getResources();
 		$resourceNames = array_keys($this->resourceList);
@@ -754,7 +754,7 @@ class WebserviceRequestCore
 	}
 	
 	
-	private function setObjects()
+	protected function setObjects()
 	{
 		$objects = array();
 		$count = 0;
@@ -793,7 +793,7 @@ class WebserviceRequestCore
 		}
 	}
 	
-	private function parseDisplayFields($str)
+	protected function parseDisplayFields($str)
 	{
 		$last = 0;
 		$bracket_level = 0;
@@ -897,7 +897,7 @@ class WebserviceRequestCore
 	 * 
 	 * @return boolean
 	 */
-	private function executeEntityGetAndHead()
+	protected function executeEntityGetAndHead()
 	{
 		if ($this->resourceConfiguration['objectsNodeName'] != 'resources')
 		{
@@ -1122,7 +1122,7 @@ class WebserviceRequestCore
 	 * 
 	 * @return boolean
 	 */
-	private function executeEntityPost()
+	protected function executeEntityPost()
 	{
 		return $this->saveEntityFromXml(201);
 	}
@@ -1132,7 +1132,7 @@ class WebserviceRequestCore
 	 * 
 	 * @return boolean
 	 */
-	private function executeEntityPut()
+	protected function executeEntityPut()
 	{
 		return $this->saveEntityFromXml(200);
 
@@ -1146,7 +1146,7 @@ class WebserviceRequestCore
 	 * 
 	 * @return boolean
 	 */
-	private function executeEntityDelete()
+	protected function executeEntityDelete()
 	{
 		$objects = array();
 		$count = 0;
@@ -1213,7 +1213,7 @@ class WebserviceRequestCore
 	 * @param int $successReturnCode
 	 * @return boolean
 	 */
-	private function saveEntityFromXml($successReturnCode)
+	protected function saveEntityFromXml($successReturnCode)
 	{
 		$xml = new SimpleXMLElement($this->_inputXml);
 		$xmlEntities = $xml->children();
@@ -1379,7 +1379,7 @@ class WebserviceRequestCore
 	 * @param string $tableAlias = 'main.'
 	 * @return string
 	 */
-	private function getSQLRetrieveFilter($sqlId, $filterValue, $tableAlias = 'main.')
+	protected function getSQLRetrieveFilter($sqlId, $filterValue, $tableAlias = 'main.')
 	{
 		$ret = '';
 		// "LIKE" case (=%[foo]%, =%[foo], =[foo]%)
@@ -1490,7 +1490,7 @@ class WebserviceRequestCore
 	 * 
 	 * @return array with displaying informations (used in the dispatcher).
 	 */
-	private function returnOutput()
+	protected function returnOutput()
 	{
 		$return = array();
 		

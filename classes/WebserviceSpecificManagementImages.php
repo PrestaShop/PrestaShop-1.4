@@ -93,7 +93,6 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	// GETTERS & SETTERS
 	// ------------------------------------------------
 	
-	
 	public function setObjectOutput(WebserviceOutputBuilderCore $obj)
 	{
 		$this->objOutput = $obj;
