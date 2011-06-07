@@ -77,9 +77,9 @@ class PaypalPayment extends Paypal
 			for ($i = 0; $i < sizeof($products); $i++)
 			{
 				$request .= '&L_NAME'.$i.'='.substr(urlencode($products[$i]['name'].(isset($products[$i]['attributes'])?' - '.$products[$i]['attributes']:'').(isset($products[$i]['instructions'])?' - '.$products[$i]['instructions']:'') ), 0, 127);
-				$request .= '&L_AMT'.$i.'='.urlencode($this->PayPalRound($products[$i]['price']));
+				$request .= '&L_AMT'.$i.'='.urlencode($this->PayPalRound($products[$i]['price_wt']));
 				$request .= '&L_QTY'.$i.'='.urlencode($products[$i]['cart_quantity']);
-				$amt += $this->PayPalRound($products[$i]['price']*$products[$i]['cart_quantity']);
+				$amt += $this->PayPalRound($products[$i]['price_wt']*$products[$i]['cart_quantity']);
 			}
 			$shipping = $this->PayPalRound($cart->getOrderShippingCost($cart->id_carrier, false));
 			$request .= '&ITEMAMT='.urlencode($amt);
