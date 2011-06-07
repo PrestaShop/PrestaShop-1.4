@@ -505,37 +505,22 @@ class WebserviceOutputBuilderCore
 		// this apply specific function for a particular field on a choosen entity
 		$field = $this->overrideSpecificField($ws_params['objectsNodeName'], $field_name, $field, $object, $ws_params);
 		
-		// Use recursivity for deeper details in tree diagram.
-		if($this->schemaToDisplay !== 'synopsis'
-			&& $this->schemaToDisplay !== 'blank'
-			&& !isset($field['type']) 
-			&& $depth != 0
-			&& isset($field['xlink_resource']) 
-			&& !is_array($field['xlink_resource']))
+		// don't display informations for a not existant id
+		if (substr($field['sqlId'], 0, 3) == 'id_' && $field['value'] == 0)
 		{
-			$class = $this->wsResource[$field['xlink_resource']]['class'];
-			$child_object = new $class($field['value']);
-			$output .= $this->renderEntity($child_object, $depth-1);
+			$field['value'] = '';
+			// delete the xlink except for schemas
+			if (isset($field['xlink_resource']) && is_null($this->schemaToDisplay))
+				 unset($field['xlink_resource']);
 		}
-		else
-		{
-			// don't display informations for a not existant id
-			if (substr($field['sqlId'], 0, 3) == 'id_' && $field['value'] == 0)
-			{
-				$field['value'] = '';
-				// delete the xlink except for schemas
-				if (isset($field['xlink_resource']) && is_null($this->schemaToDisplay))
-					 unset($field['xlink_resource']);
-			}
-			// set "id" for each node name which display the id of the entity
-			if ($field_name === 'id')
-				$field['sqlId'] = 'id';
-			
-			
-			// don't display the node id for a synopsis schema
-			if ($show_field)
-				$output .= $this->setIndent($depth-1).$this->objectRender->renderField($field);
-		}
+		// set "id" for each node name which display the id of the entity
+		if ($field_name === 'id')
+			$field['sqlId'] = 'id';
+		
+		
+		// don't display the node id for a synopsis schema
+		if ($show_field)
+			$output .= $this->setIndent($depth-1).$this->objectRender->renderField($field);
 		return $output;
 	}
 
