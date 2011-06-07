@@ -30,41 +30,41 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class ProductComment extends ObjectModel
 {
-	public 		$id;
+	public		$id;
 	
 	/** @var integer Product's id */
-	public 		$id_product;
+	public		$id_product;
 	
 	/** @var integer Customer's id */
-	public 		$id_customer;
+	public		$id_customer;
 
 	/** @var integer Guest's id */
-	public 		$id_guest;
+	public		$id_guest;
 	
 	
 	/** @var integer Customer name */
-	public 		$customer_name;
+	public		$customer_name;
 	
 	/** @var string Title */
-	public 		$title;
+	public		$title;
 	
 	/** @var string Content */
-	public 		$content;
+	public		$content;
 	
 	/** @var integer Grade */
-	public 		$grade;
+	public		$grade;
 	
 	/** @var boolean Validate */
-	public 		$validate = 0;
+	public		$validate = 0;
 	
-	public 		$deleted = 0;
+	public		$deleted = 0;
 	
 	/** @var string Object creation date */
-	public 		$date_add;
+	public		$date_add;
 	
- 	protected 	$fieldsRequired = array('id_product', 'id_customer', 'content');
- 	protected 	$fieldsSize = array('content' => 65535);
- 	protected 	$fieldsValidate = array('id_product' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'content' => 'isMessage',
+	protected	$fieldsRequired = array('id_product', 'id_customer', 'content');
+	protected	$fieldsSize = array('content' => 65535);
+	protected	$fieldsValidate = array('id_product' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'content' => 'isMessage',
 		'grade' => 'isFloat', 'validate' => 'isBool');
 
 	protected 	$table = 'product_comment';
@@ -218,7 +218,7 @@ class ProductComment extends ObjectModel
 	static public function getByValidate($validate = '0', $deleted = false)
 	{
 		global $cookie;
-
+		
 		return (Db::getInstance()->ExecuteS('
 		SELECT pc.`id_product_comment`, pc.`id_product`, IF(c.id_customer, CONCAT(c.`firstname`, \' \',  c.`lastname`), pc.customer_name) customer_name, pc.`content`, pc.`grade`, pc.`date_add`, pl.`name`
 		FROM `'._DB_PREFIX_.'product_comment` pc

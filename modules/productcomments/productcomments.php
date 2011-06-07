@@ -71,7 +71,7 @@ class ProductComments extends Module
 		OR !Configuration::updateValue('PRODUCT_COMMENTS_MODERATE', 1))
 			return false;
 		return true;
-    }
+	}
 	
 	function uninstall()
 	{
@@ -109,7 +109,7 @@ class ProductComments extends Module
 		$this->_checkModerateComment();
 		$this->_checkCriterion();
 		$this->_updateApplicationCriterion();
-
+		
 		return $this->_html.$this->_displayForm();
 	}
 	
@@ -172,7 +172,7 @@ class ProductComments extends Module
 			$productCommentCriterion = new ProductCommentCriterion((int)$id_criterion);
 			foreach ($languages AS $lang)
 				$productCommentCriterion->name[(int)$lang['id_lang']] = Tools::getValue('criterion_'.(int)$lang['id_lang']);
-				
+			
 			// Check default language criterion name
 			$defaultLanguage = new Language((int)(Configuration::get('PS_LANG_DEFAULT')));
 			if (!Tools::getValue('criterion_'.$defaultLanguage->id))
@@ -180,10 +180,10 @@ class ProductComments extends Module
 				$this->_html .= '<div class="error"><img src="../img/admin/error2.png" />'.$this->l('The field <b>Name</b> is required at least in').' '.$defaultLanguage->name.'</div>';
 				return;
 			}
-
+			
 			$productCommentCriterion->id_product_comment_criterion_type = (int)Tools::getValue('criterion_type');
 			$productCommentCriterion->active = (int)Tools::getValue('criterion_active');
-
+			
 			if ($productCommentCriterion->save())
 				$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.(Tools::getValue('editCriterion') ? $this->l('Criterion updated') : $this->l('Criterion added')).'</div>';
 		}
@@ -234,7 +234,7 @@ class ProductComments extends Module
 								$productCommentCriterion->addProduct((int)$product);
 				}
 			}
-						
+			
 			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
 	}
@@ -290,27 +290,27 @@ class ProductComments extends Module
 				{
 					$this->_html .= '
 					<form action="'.$this->_baseUrl.'" method="post" name="comment_form">
-				  	<input type="hidden" name="id_product_comment[]" id="id_product_comment" />
-					 <input type="hidden" name="action" id="action" />
-					 <br /><table class="table" border="0" cellspacing="0" cellpadding="0">
-					 <thead>
-					  <tr>
+					<input type="hidden" name="id_product_comment[]" id="id_product_comment" />
+					<input type="hidden" name="action" id="action" />
+					<br /><table class="table" border="0" cellspacing="0" cellpadding="0">
+					<thead>
+					<tr>
 						<th><input class="noborder" type="checkbox" name="id_product_comment[]" onclick="checkDelBoxes(this.form, \'id_product_comment[]\', this.checked)" /></th>
 						<th style="width:150px;">'.$this->l('Author').'</th>
 						<th style="width:550px;">'.$this->l('Comment').'</th>
 						<th style="width:150px;">'.$this->l('Product name').'</th>
 						<th style="width:30px;">'.$this->l('Actions').'</th>
-					  </tr>
-					 </thead>
-					 <tbody>';
+					</tr>
+					</thead>
+					<tbody>';
 					foreach ($comments AS $comment)
 						$this->_html .= '<tr>
-						 <td><input class="noborder" type="checkbox" value="'.$comment['id_product_comment'].'" name="id_product_comment[]" /></td>
-						 <td>'.htmlspecialchars($comment['customer_name'], ENT_COMPAT, 'UTF-8').'.</td>
-						 <td>'.htmlspecialchars($comment['content'], ENT_COMPAT, 'UTF-8').'</td>
-						 <td>'.$comment['id_product'].' - '.htmlspecialchars($comment['name'], ENT_COMPAT, 'UTF-8').'</td>
+						<td><input class="noborder" type="checkbox" value="'.$comment['id_product_comment'].'" name="id_product_comment[]" /></td>
+						<td>'.htmlspecialchars($comment['customer_name'], ENT_COMPAT, 'UTF-8').'.</td>
+						<td>'.htmlspecialchars($comment['content'], ENT_COMPAT, 'UTF-8').'</td>
+						<td>'.$comment['id_product'].' - '.htmlspecialchars($comment['name'], ENT_COMPAT, 'UTF-8').'</td>
 						<td><a href="javascript:;" onclick="acceptComment(\''.(int)($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/accept.png" alt="'.$this->l('Accept').'" title="'.$this->l('Accept').'" /></a>
-							  <a href="javascript:;" onclick="deleteComment(\''.(int)($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/delete.png" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a></td>
+							<a href="javascript:;" onclick="deleteComment(\''.(int)($comment['id_product_comment']).'\');"><img src="'.$this->_path.'img/delete.png" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a></td>
 						</tr>';
 						$this->_html .= '
 						<tr>
@@ -378,26 +378,26 @@ class ProductComments extends Module
 				$criterions = ProductCommentCriterion::getCriterions((int)$cookie->id_lang);
 				if (sizeof($criterions))
 				{
-						 $this->_html.= '<br />
-						 <table class="table">
-						 <thead>
-						  <tr>
+						$this->_html.= '<br />
+						<table class="table">
+						<thead>
+						<tr>
 							<th style="width:260px;">'.$this->l('Criterion').'</th>
 							<th style="width:260px;">'.$this->l('Type').'</th>
 							<th style="width:50px;">'.$this->l('Status').'</th>
 							<th style="width:30px;">'.$this->l('Actions').'</th>
-						  </tr>
-						 </thead>
-						 <tbody>';
+						</tr>
+						</thead>
+						<tbody>';
 				
 						foreach ($criterions AS $criterion)
 						{
 							$this->_html .= '<tr>
-							 <td>'.$criterion['name'].'</td>
-							 <td>'.$this->_productCommentsCriterionTypes[(int)$criterion['id_product_comment_criterion_type']].'</td>
-							 <td style="text-align:center;"><img src="../img/admin/'.($criterion['active'] ? 'enabled' : 'disabled').'.gif" /></td>
-							 <td><a href="'.$this->_baseUrl.'&editCriterion='.(int)$criterion['id_product_comment_criterion'].'"><img src="../img/admin/edit.gif" alt="'.$this->l('Edit').'" /></a>
-								  <a href="'.$this->_baseUrl.'&deleteCriterion='.(int)$criterion['id_product_comment_criterion'].'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td><tr>';
+							<td>'.$criterion['name'].'</td>
+							<td>'.$this->_productCommentsCriterionTypes[(int)$criterion['id_product_comment_criterion_type']].'</td>
+							<td style="text-align:center;"><img src="../img/admin/'.($criterion['active'] ? 'enabled' : 'disabled').'.gif" /></td>
+							<td><a href="'.$this->_baseUrl.'&editCriterion='.(int)$criterion['id_product_comment_criterion'].'"><img src="../img/admin/edit.gif" alt="'.$this->l('Edit').'" /></a>
+								<a href="'.$this->_baseUrl.'&deleteCriterion='.(int)$criterion['id_product_comment_criterion'].'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td><tr>';
 						}
 					$this->_html .= '</tbody></table>';
 				}
@@ -455,15 +455,15 @@ class ProductComments extends Module
 					<form action="'.$this->_baseUrl.'" method="post" name="comment_form">
 						<div id="product_criterions" class="margin-form">
 							<input type="hidden" name="id_criterion" id="id_criterion" value="'.(int)$id_criterion.'" />
-							 <br /><table class="table" border="0" cellspacing="0" cellpadding="0">
-							 <thead>
-							  <tr>
+							<br /><table class="table" border="0" cellspacing="0" cellpadding="0">
+							<thead>
+							<tr>
 								<th><input class="noborder" type="checkbox" name="id_product[]" onclick="checkDelBoxes(this.form, \'id_product[]\', this.checked);" /></th>
 								<th style="width: 30px;">'.$this->l('ID').'</th>
 								<th style="width: 550px;">'.($criterion->id_product_comment_criterion_type == 3 ? $this->l('Product Name') : $this->l('Category Name')).'</th>
-							  </tr>
-							 </thead>
-							 <tbody>';
+							</tr>
+							</thead>
+							<tbody>';
 				
 				if ($criterion->id_product_comment_criterion_type == 3)	
 					foreach ($products AS $product)
@@ -474,7 +474,7 @@ class ProductComments extends Module
 						$this->_html .='<tr><td><input class="noborder" type="checkbox" value="'.(int)$category['id_category'].'" name="id_product[]" '.(in_array($category['id_category'], $criterion_categories) ? 'checked="checked"' : '').' /></td>
 											<td>'.(int)$category['id_category'].'</td><td>'.$category['name'].'</td></tr>';
 				$this->_html .='</tbody>
-						 </table>
+						</table>
 						</div>
 						<div class="margin-form clear">
 							<input type="submit" name="submitApplicationCriterion" value="'.$this->l('Save').'" class="button" />

@@ -27,17 +27,17 @@
 
 class ProductCommentCriterion extends ObjectModel
 {
-	public 		$id;
+	public		$id;
 	public		$id_product_comment_criterion_type;
 	
-	public 		$name;
-	public 		$active = 1;
- 	protected 	$fieldsRequiredLang = array('name');
- 	protected 	$fieldsSizeLang = array('name' => 128);
- 	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
+	public		$name;
+	public		$active = 1;
+	protected	$fieldsRequiredLang = array('name');
+	protected	$fieldsSizeLang = array('name' => 128);
+	protected	$fieldsValidateLang = array('name' => 'isGenericName');
 	
-	protected 	$table = 'product_comment_criterion';
-	protected 	$identifier = 'id_product_comment_criterion';
+	protected	$table = 'product_comment_criterion';
+	protected	$identifier = 'id_product_comment_criterion';
 	
 	
 	public function getFields()
@@ -85,7 +85,7 @@ class ProductCommentCriterion extends ObjectModel
 		}
 		return true;
 	}
-		
+	
 	/**
 	 * Link a Comment Criterion to a product
 	 *
