@@ -193,17 +193,20 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	 * @param string $password
 	 * @return boolean
 	 */
-	public function setLogin($login,$password) {
+	public function setLogin($login, $password) {
 		if ($this->_locked)
 			return false;
+			
 		$login = HIPAY_MAPI_UTF8::forceUTF8($login);
 		if (empty($login))
             return false;
+			
 		$password = HIPAY_MAPI_UTF8::forceUTF8($password);
 		if (empty($password))
             return false;
-		$this->login=$login;
-		$this->password=$password;
+			
+		$this->login = $login;
+		$this->password = $password;
 		return true;
 	}
 
@@ -235,31 +238,33 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	 * @param int $shippingCostAccount
 	 * @return boolean
 	 */
-	public function setAccounts($itemAccount,$taxAccount=0,$insuranceAccount=0,$fixedCostAccount=0,$shippingCostAccount=0) {
+	public function setAccounts($itemAccount, $taxAccount = 0, $insuranceAccount = 0, $fixedCostAccount =0, $shippingCostAccount = 0) {
 		if ($this->_locked)
 			return false;
 
-		$itemAccount=(int)$itemAccount;
-		$taxAccount=(int)$taxAccount;
-		$insuranceAccount=(int)$insuranceAccount;
-		$fixedCostAccount=(int)$fixedCostAccount;
-		$shippingCostAccount=(int)$shippingCostAccount;
+		$itemAccount = (int)$itemAccount;
+		$taxAccount = (int)$taxAccount;
+		$insuranceAccount = (int)$insuranceAccount;
+		$fixedCostAccount = (int)$fixedCostAccount;
+		$shippingCostAccount = (int)$shippingCostAccount;
 
-		if ($itemAccount<=0)
+		if ($itemAccount <= 0)
 			return false;
-		if ($taxAccount<=0)
-			$taxAccount=$itemAccount;
-		if ($insuranceAccount<=0)
-			$insuranceAccount=$itemAccount;
-		if ($fixedCostAccount<=0)
-			$fixedCostAccount=$itemAccount;
-		if ($shippingCostAccount<=0)
-			$shippingCostAccount=$itemAccount;
+		if ($taxAccount <= 0)
+			$taxAccount = $itemAccount;
+		if ($insuranceAccount <= 0)
+			$insuranceAccount = $itemAccount;
+		if ($fixedCostAccount <= 0)
+			$fixedCostAccount = $itemAccount;
+		if ($shippingCostAccount <= 0)
+			$shippingCostAccount = $itemAccount;
+			
 		$this->itemAccount = $itemAccount;
 		$this->taxAccount = $taxAccount;
 		$this->insuranceAccount = $insuranceAccount;
 		$this->fixedCostAccount = $fixedCostAccount;
 		$this->shippingCostAccount = $shippingCostAccount;
+		
 		return true;
 	}
 
@@ -323,9 +328,10 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-        if (!preg_match('#^[A-Z]{2}_[a-z]{2}$#',$defaultLang))
+        if (!preg_match('#^[A-Z]{2}_[a-z]{2}$#', $defaultLang))
 			return false;
-		$this->defaultLang=$defaultLang;
+			
+		$this->defaultLang = $defaultLang;
 		return true;
 	}
 
@@ -348,9 +354,10 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-        if (!preg_match('#^[A-Z]+$#',$media))
+        if (!preg_match('#^[A-Z]+$#', $media))
 			return false;
-		$this->media=$media;
+			
+		$this->media = $media;
 		return true;
 	}
 
@@ -373,10 +380,11 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		$rating = trim(substr($rating,0,HIPAY_MAPI_MAX_RATING_LENGTH));
-		if ($rating=='')
+		$rating = trim(substr($rating, 0, HIPAY_MAPI_MAX_RATING_LENGTH));
+		if ($rating == '')
 			return false;
-		$this->rating=$rating;
+			
+		$this->rating = $rating;
 		return true;
 	}
 
@@ -402,9 +410,10 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
         }
 
 		$paymentMethod = (int)$paymentMethod;
-        if ($paymentMethod!=HIPAY_MAPI_METHOD_SIMPLE && $paymentMethod!=HIPAY_MAPI_METHOD_MULTI)
+        if ($paymentMethod != HIPAY_MAPI_METHOD_SIMPLE && $paymentMethod != HIPAY_MAPI_METHOD_MULTI)
             return false;
-		$this->paymentMethod=$paymentMethod;
+			
+		$this->paymentMethod = $paymentMethod;
 		return true;
 	}
 
@@ -428,9 +437,10 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 			return false;
 
 		$captureDay = (int)$captureDay;
-		if (($captureDay!=HIPAY_MAPI_CAPTURE_MANUAL && $captureDay!=HIPAY_MAPI_CAPTURE_IMMEDIATE && $captureDay<=0) || $captureDay>HIPAY_MAPI_CAPTURE_MAX_DAYS)
+		if (($captureDay != HIPAY_MAPI_CAPTURE_MANUAL && $captureDay != HIPAY_MAPI_CAPTURE_IMMEDIATE && $captureDay <= 0) || $captureDay > HIPAY_MAPI_CAPTURE_MAX_DAYS)
 			return false;
-		$this->captureDay=$captureDay;
+			
+		$this->captureDay = $captureDay;
 		return true;
 
 	}
@@ -454,8 +464,9 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-        if (!preg_match('#^[A-Z]{3}$#',$currency))
+        if (!preg_match('#^[A-Z]{3}$#', $currency))
 			return false;
+			
 		$this->currency = $currency;
 		return true;
 	}
@@ -481,10 +492,11 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		$statsGroupId=(int)$statsGroupId;
-		if ($statsGroupId<0)
+		$statsGroupId = (int)$statsGroupId;
+		if ($statsGroupId < 0)
 			return false;
-		$this->statsGroupId=$statsGroupId;
+			
+		$this->statsGroupId = $statsGroupId;
 		return true;
 	}
 
@@ -509,7 +521,7 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		$this->idForMerchant=$idForMerchant;
+		$this->idForMerchant = $idForMerchant;
 		return true;
 	}
 
@@ -532,10 +544,11 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		$merchantSiteId=(int)$merchantSiteId;
-		if ($merchantSiteId<0)
+		$merchantSiteId = (int)$merchantSiteId;
+		if ($merchantSiteId < 0)
 			return false;
-		$this->merchantSiteId=$merchantSiteId;
+			
+		$this->merchantSiteId = $merchantSiteId;
 		return true;
 	}
 
@@ -557,10 +570,13 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setMerchantDatas($key,$merchantDatas) {
 		if ($this->_locked)
 			return false;
-		if ($key=='')
+			
+		if ($key == '')
 			return false;
-		$merchantDatas=substr($merchantDatas,0,HIPAY_MAPI_MAX_MDATAS_LENGTH);
-		$this->merchantDatas[$key]=$merchantDatas;
+			
+		$merchantDatas = substr($merchantDatas, 0, HIPAY_MAPI_MAX_MDATAS_LENGTH);
+		$this->merchantDatas[$key] = $merchantDatas;
+		
 		return true;
 	}
 
@@ -583,10 +599,12 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setUrlOk($url_ok) {
 		if ($this->_locked)
 			return false;
+			
 		$url_ok = trim($url_ok);
-		if (!HIPAY_MAPI_UTILS::checkURL($url_ok) && $url_ok!='')
+		if (!HIPAY_MAPI_UTILS::checkURL($url_ok) && $url_ok != '')
 			return false;
-		$this->url_ok=$url_ok;
+			
+		$this->url_ok = $url_ok;
 		return true;
 	}
 
@@ -609,10 +627,12 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setUrlNok($url_nok) {
 		if ($this->_locked)
 			return false;
+			
 		$url_nok = trim($url_nok);
-		if (!HIPAY_MAPI_UTILS::checkURL($url_nok) && $url_nok!='')
+		if (!HIPAY_MAPI_UTILS::checkURL($url_nok) && $url_nok != '')
 			return false;
-		$this->url_nok=$url_nok;
+			
+		$this->url_nok = $url_nok;
 		return true;
 	}
 
@@ -635,10 +655,12 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setUrlCancel($url_cancel) {
 		if ($this->_locked)
 			return false;
+			
 		$url_cancel = trim($url_cancel);
-		if (!HIPAY_MAPI_UTILS::checkURL($url_cancel) && $url_cancel!='')
+		if (!HIPAY_MAPI_UTILS::checkURL($url_cancel) && $url_cancel != '')
 			return false;
-		$this->url_cancel=$url_cancel;
+			
+		$this->url_cancel = $url_cancel;
 		return true;
 	}
 
@@ -661,10 +683,12 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setUrlAck($url_ack) {
 		if ($this->_locked)
 			return false;
+			
 		$url_ack = trim($url_ack);
-		if (!HIPAY_MAPI_UTILS::checkURL($url_ack) && $url_ack!='')
+		if (!HIPAY_MAPI_UTILS::checkURL($url_ack) && $url_ack != '')
 			return false;
-		$this->url_ack=$url_ack;
+			
+		$this->url_ack = $url_ack;
 		return true;
 	}
 
@@ -677,9 +701,6 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		return $this->url_ack;
 	}
 
-
-
-
 	/**
 	 * Assigne le mot clé d'acquittement
 	 *
@@ -689,10 +710,12 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setAckWd($ack_wd) {
 		if ($this->_locked)
 			return false;
+			
 		$ack_wd=trim($ack_wd);
-		if (strlen($ack_wd)>HIPAY_MAPI_MAX_ACKWD_LENGTH)
+		if (strlen($ack_wd) > HIPAY_MAPI_MAX_ACKWD_LENGTH)
 			return false;
-		$this->ack_wd=$ack_wd;
+			
+		$this->ack_wd = $ack_wd;
 		return true;
 	}
 
@@ -714,10 +737,12 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setEmailAck($email_ack) {
 		if ($this->_locked)
 			return false;
-		$email_ack=trim($email_ack);
-		if (strlen($email_ack)>HIPAY_MAPI_MAX_ACKMAIL_LENGTH || (!HIPAY_MAPI_UTILS::checkemail($email_ack) && $email_ack!=''))
+			
+		$email_ack = trim($email_ack);
+		if (strlen($email_ack) > HIPAY_MAPI_MAX_ACKMAIL_LENGTH || (!HIPAY_MAPI_UTILS::checkemail($email_ack) && $email_ack != ''))
 			return false;
-		$this->email_ack=$email_ack;
+			
+		$this->email_ack = $email_ack;
 		return true;
 	}
 
@@ -739,9 +764,11 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setBackgroundColor($bg_color) {
 		if ($this->_locked)
 			return false;
+			
 		$bg_color = trim($bg_color);
         if (!preg_match('#^\#([0-9a-f]){6}$#i', $bg_color) && $bg_color != '')
 			return false;
+			
 		$this->bg_color = $bg_color;
 		return true;
 	}
@@ -755,7 +782,6 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		return $this->bg_color;
 	}
 
-
 	/**
 	 * Assigne l'url du logo du marchand
 	 *
@@ -765,10 +791,12 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	public function setLogoUrl($logo_url) {
 		if ($this->_locked)
 			return false;
+			
 		$logo_url = trim($logo_url);
-		if (!HIPAY_MAPI_UTILS::checkURL($logo_url) && $logo_url!='')
+		if (!HIPAY_MAPI_UTILS::checkURL($logo_url) && $logo_url != '')
 			return false;
-		$this->logo_url=$logo_url;
+			
+		$this->logo_url = $logo_url;
 		return true;
 	}
 
@@ -781,64 +809,68 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		return $this->logo_url;
 	}
 
-
 	/**
 	 * Vérifie que l'objet est correctement initialisé
 	 *
 	 * @return boolean
 	 */
 	public function check() {
-		if ($this->login=='')
-			throw new Exception('Nom d\'utilisateur manquant');
-		if ($this->itemAccount<=0 || $this->taxAccount<=0 || $this->insuranceAccount <=0 ||
-		$this->fixedCostAccount<=0 || $this->shippingCostAccount<=0)
-			throw new Exception('Numéros de compte invalides');
-		if ($this->rating=='')
-			throw new Exception('Type de public visé invalide');
-		if ($this->paymentMethod<0)
-			throw new Exception('Type de paiement invalide');
-		if ($this->captureDay==-100)
-			throw new Exception('Délai de capture invalide ');
-		if ($this->currency=='')
-			throw new Exception('Devise non-définie');
-		if ($this->idForMerchant<0)
-			throw new Exception('ID chez le marchand manquant');
-		if ($this->idForMerchant>0)
-			if ($this->password=='')
-                throw new Exception('Mot de passe manquant');
-	    if ($this->statsGroupId<0)
-			throw new Exception('ID groupe est négatif');
-		if ($this->merchantSiteId<0)
-			throw new Exception('ID du site marchand manquant');
+		if ($this->login == '')
+			throw new Exception('Username is missing');
+		if ($this->itemAccount <= 0 || $this->taxAccount <= 0 || $this->insuranceAccount <= 0 ||
+		$this->fixedCostAccount <= 0 || $this->shippingCostAccount <= 0)
+			throw new Exception('Invalid account numbers');
+			
+		if ($this->rating == '')
+			throw new Exception('Invalid public target');
+		if ($this->paymentMethod < 0)
+			throw new Exception('Invalid payment type');
+			
+		if ($this->captureDay == -100)
+			throw new Exception('Invalid capture delay');
+		if ($this->currency == '')
+			throw new Exception('Undefined currency');
+			
+		if ($this->idForMerchant < 0)
+			throw new Exception('Merchant ID is missing');
+		if ($this->idForMerchant > 0)
+			if ($this->password == '')
+                throw new Exception('Password is missing');
+				
+	    if ($this->statsGroupId < 0)
+			throw new Exception('Negative group ID');
+		if ($this->merchantSiteId < 0)
+			throw new Exception('Merchant site ID is missing');
+			
 		return true;
 	}
 
 	protected function init() {
-		$this->login='';
-		$this->password='';
-		$this->itemAccount=0;
-		$this->taxAccount=0;
-		$this->insuranceAccount=0;
-		$this->fixedCostAccount=0;
-		$this->shippingCostAccount=0;
-		$this->defaultLang=HIPAY_MAPI_DEFLANG;
-		$this->media=HIPAY_MAPI_DEFMEDIA;
-		$this->rating='';
-		$this->paymentMethod=-1;
-		$this->captureDay=-100;
-		$this->currency='';
-		$this->idForMerchant=-1;
-		$this->statsGroupId=0;
-		$this->merchantSiteId=-1;
-		$this->merchantDatas=array();
-		$this->url_ok='';
-		$this->url_nok='';
-		$this->url_cancel='';
-		$this->url_ack='';
-		$this->ack_wd='';
-		$this->email_ack='';
-		$this->bg_color='';
-		$this->logo_url='';
+		$this->login = '';
+		$this->password = '';
+		$this->itemAccount = 0;
+		$this->taxAccount = 0;
+		$this->insuranceAccount = 0;
+		$this->fixedCostAccount = 0;
+		$this->shippingCostAccount = 0;
+		$this->defaultLang = HIPAY_MAPI_DEFLANG;
+		$this->media = HIPAY_MAPI_DEFMEDIA;
+		$this->rating = '';
+		$this->paymentMethod = -1;
+		$this->captureDay = -100;
+		$this->currency = '';
+		$this->idForMerchant = -1;
+		$this->statsGroupId = 0;
+		$this->merchantSiteId = -1;
+		$this->merchantDatas = array();
+		$this->url_ok = '';
+		$this->url_nok = '';
+		$this->url_cancel = '';
+		$this->url_ack = '';
+		$this->ack_wd = '';
+		$this->email_ack = '';
+		$this->bg_color = '';
+		$this->logo_url = '';
 	}
 
 	function __construct() {
@@ -846,4 +878,3 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		parent::__construct();
 	}
 }
-

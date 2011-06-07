@@ -75,8 +75,6 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 	 */
 	protected $orderCategory;
 
-
-
 	/**
 	 * Défini le montant des frais d'envoi et les taxes s'y appliquant
 	 *
@@ -84,20 +82,26 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 	 * @param array $shippingTax
 	 * @return boolean
 	 */
-	public function setShipping($shippingAmount,$shippingTax) {
+	public function setShipping($shippingAmount, $shippingTax) {
 		if ($this->_locked)
 			return false;
 
-		$shippingAmount = sprintf('%.02f',(float)$shippingAmount);
-		if ($shippingAmount<0) {
+		$shippingAmount = sprintf('%.02f', (float)$shippingAmount);
+		if ($shippingAmount < 0) {
 			return false;
 		}
-		if (!HIPAY_MAPI_UTILS::is_an_array_of($shippingTax,'HIPAY_MAPI_Tax')) {
+		
+		if(empty($shippingTax))	{
 			return false;
 		}
-		$this->shippingAmount=$shippingAmount;
+		if (!HIPAY_MAPI_UTILS::is_an_array_of($shippingTax, 'HIPAY_MAPI_Tax')) {
+			return false;
+		}
+		
+		$this->shippingAmount = $shippingAmount;
 		foreach ($shippingTax as $obj)
-			$this->shippingTax[]= clone $obj;
+			$this->shippingTax[] = clone $obj;
+			
 		return true;
 	}
 
@@ -126,18 +130,25 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 	 * @param array $insuranceTax
 	 * @return boolean
 	 */
-	public function setInsurance($insuranceAmount,$insuranceTax) {
+	public function setInsurance($insuranceAmount, $insuranceTax) {
 		if ($this->_locked)
 			return false;
 
-		$insuranceAmount = sprintf('%.02f',(float)$insuranceAmount);
-		if ($insuranceAmount<0)
+		$insuranceAmount = sprintf('%.02f', (float)$insuranceAmount);
+		
+		if ($insuranceAmount < 0)
 			return false;
-		if (!HIPAY_MAPI_UTILS::is_an_array_of($insuranceTax,'HIPAY_MAPI_Tax'))
+			
+		if(empty($insuranceTax)) {
 			return false;
-		$this->insuranceAmount=$insuranceAmount;
+		}	
+		if (!HIPAY_MAPI_UTILS::is_an_array_of($insuranceTax, 'HIPAY_MAPI_Tax'))
+			return false;
+			
+		$this->insuranceAmount = $insuranceAmount;
 		foreach ($insuranceTax as $obj)
-			$this->insuranceTax[]= clone $obj;
+			$this->insuranceTax[] = clone $obj;
+			
 		return true;
 	}
 
@@ -170,14 +181,20 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		$fixedCostAmount = sprintf('%.02f',(float)$fixedCostAmount);
+		$fixedCostAmount = sprintf('%.02f', (float)$fixedCostAmount);
+		
 		if ($fixedCostAmount<0)
 			return false;
-		if (!HIPAY_MAPI_UTILS::is_an_array_of($fixedCostTax,'HIPAY_MAPI_Tax'))
+		
+		if(empty($fixedCostTax)) {
 			return false;
-		$this->fixedCostAmount=$fixedCostAmount;
+		}
+		if (!HIPAY_MAPI_UTILS::is_an_array_of($fixedCostTax, 'HIPAY_MAPI_Tax'))
+			return false;
+			
+		$this->fixedCostAmount = $fixedCostAmount;
 		foreach ($fixedCostTax as $obj)
-			$this->fixedCostTax[]= clone $obj;
+			$this->fixedCostTax[] = clone $obj;
 		return true;
 	}
 
@@ -209,10 +226,15 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		if (!HIPAY_MAPI_UTILS::is_an_array_of($affiliate,'HIPAY_MAPI_Affiliate'))
+		if(empty($affiliate)) {
 			return false;
+		}
+		if (!HIPAY_MAPI_UTILS::is_an_array_of($affiliate, 'HIPAY_MAPI_Affiliate'))
+			return false;
+			
 		foreach ($affiliate as $obj)
-			$this->affiliate[]= clone $obj;
+			$this->affiliate[] = clone $obj;
+			
 		return true;
 	}
 
@@ -236,10 +258,11 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 			return false;
 
 		$orderTitle = HIPAY_MAPI_UTF8::forceUTF8($orderTitle);
-		$len=HIPAY_MAPI_UTF8::strlen_utf8($orderTitle);
-		if ($len<1 || $len>HIPAY_MAPI_MAX_TITLE_LENGTH)
+		$len = HIPAY_MAPI_UTF8::strlen_utf8($orderTitle);
+		if ($len < 1 || $len > HIPAY_MAPI_MAX_TITLE_LENGTH)
 			return false;
-		$this->orderTitle=$orderTitle;
+			
+		$this->orderTitle = $orderTitle;
 		return true;
 	}
 
@@ -263,10 +286,11 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 			return false;
 
 		$orderInfo = HIPAY_MAPI_UTF8::forceUTF8($orderInfo);
-		$len=HIPAY_MAPI_UTF8::strlen_utf8($orderInfo);
-		if ($len>HIPAY_MAPI_MAX_INFO_LENGTH)
+		$len = HIPAY_MAPI_UTF8::strlen_utf8($orderInfo);
+		if ($len > HIPAY_MAPI_MAX_INFO_LENGTH)
 			return false;
-		$this->orderInfo=$orderInfo;
+			
+		$this->orderInfo = $orderInfo;
 		return true;
 	}
 
@@ -291,9 +315,10 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 			return false;
 
 		$orderCategory = (int)$orderCategory;
-		if ($orderCategory<1)
+		if ($orderCategory < 1)
 			return false;
-		$this->orderCategory=$orderCategory;
+			
+		$this->orderCategory = $orderCategory;
 		return true;
 	}
 
@@ -313,17 +338,17 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 	 * @return boolean
 	 */
 	public function check() {
-		if ($this->orderTitle=='' || $this->orderCategory<0)
-			throw new Exception('L\'intitulé et/ou la catégorie de la commande sont manquants');
+		if ($this->orderTitle == '' || $this->orderCategory < 0)
+			throw new Exception('Label and/or category of order are missing');
 		
 		foreach($this->affiliate as $obj) {
 			try {
 				$obj->check();
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());			
-			}
-				
+			}				
 		}
+		
 		foreach($this->shippingTax as $obj) {
 			try {
 				$obj->check();
@@ -331,6 +356,7 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 				throw new Exception($e->getMessage());			
 			}
 		}
+		
 		foreach($this->insuranceTax as $obj) {
 			try {
 				$obj->check();
@@ -338,6 +364,7 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 				throw new Exception($e->getMessage());			
 			}
 		}
+		
 		foreach($this->fixedCostTax as $obj) {
 			try {
 				$obj->check();
@@ -345,23 +372,22 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 				throw new Exception($e->getMessage());			
 			}
 		}
+		
 		return true;
 	}
 
 	protected function init() {
-		$this->shippingAmount=0;
-		$this->shippingTax=array();
-		$this->insuranceAmount=0;
-		$this->insuranceTax=array();
-		$this->fixedCostAmount=0;
-		$this->fixedCostTax=array();
-		$this->affiliate=array();
-		$this->orderTitle='';
-		$this->orderInfo='';
-		$this->orderCategory=-1;
-
+		$this->shippingAmount = 0;
+		$this->shippingTax = array();
+		$this->insuranceAmount = 0;
+		$this->insuranceTax = array();
+		$this->fixedCostAmount = 0;
+		$this->fixedCostTax = array();
+		$this->affiliate = array();
+		$this->orderTitle = '';
+		$this->orderInfo = '';
+		$this->orderCategory = -1;
 	}
-
 
 	function __construct() {
 		$this->init();

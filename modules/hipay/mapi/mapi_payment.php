@@ -82,7 +82,6 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 	 */
 	protected $_orderTotalAmount;
 
-
 	/**
 	 * Total des affilies
 	 *
@@ -90,20 +89,19 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 	 */
 	protected $_affiliateTotalAmount;
 
-
-	public function __construct($paymentParams,$order,$items) {
+	public function __construct($paymentParams, $order, $items) {
 		try {
-			$this->init($paymentParams,$order,$items);
+			$this->init($paymentParams, $order, $items);
 		} catch(Exception $e) {
 			throw new Exception($e->getMessage());
 		}
 	}
 
-	protected function init($paymentParams,$order,$items) {
+	protected function init($paymentParams, $order, $items) {
 		if (!($paymentParams instanceof HIPAY_MAPI_PaymentParams)
-		|| !HIPAY_MAPI_UTILS::is_an_array_of($order,'HIPAY_MAPI_Order')
-		|| !HIPAY_MAPI_UTILS::is_an_array_of($items,'HIPAY_MAPI_Item')
-		|| count($items)<1)
+		|| !HIPAY_MAPI_UTILS::is_an_array_of($order, 'HIPAY_MAPI_Order')
+		|| !HIPAY_MAPI_UTILS::is_an_array_of($items, 'HIPAY_MAPI_Item')
+		|| count($items) < 1)
 			throw new Exception('Wrong parameters');
 
 		try {
@@ -111,6 +109,7 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage());
 		}
+		
 		foreach($order as $orderObj) {
 			try {
 				$orderObj->check();
@@ -119,34 +118,35 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 			}
 		}
 
-		foreach($items as $obj)
+		foreach($items as $obj) {
 			try {
 				$obj->check();
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}
-
-		$this->paymentParams= clone $paymentParams;
+		}
+		
+		$this->paymentParams = clone $paymentParams;
 		$this->paymentParams->lock();
 
-
 		foreach($order as $obj) {
-			$this->order[]= clone $obj;
+			$this->order[] = clone $obj;
 			end($this->order)->lock();
-			$this->_taxItemsAmount[]=0;
-			$this->_taxShippingAmount[]=0;
-			$this->_taxInsuranceAmount[]=0;
-			$this->_taxFixedCostAmount[]=0;
-			$this->_itemsTotalAmount[]=0;
-			$this->_taxTotalAmount[]=0;
-			$this->_orderTotalAmount[]=0;
-			$this->_affiliateTotalAmount[]=0;
-
+			$this->_taxItemsAmount[] = 0;
+			$this->_taxShippingAmount[] = 0;
+			$this->_taxInsuranceAmount[] = 0;
+			$this->_taxFixedCostAmount[] = 0;
+			$this->_itemsTotalAmount[] = 0;
+			$this->_taxTotalAmount[] = 0;
+			$this->_orderTotalAmount[] = 0;
+			$this->_affiliateTotalAmount[] = 0;
 		}
+		
 		foreach($items as $obj) {
-			$this->items[]= clone $obj;
+			$this->items[] = clone $obj;
 			end($this->items)->lock();
 		}
+		
 		try {
 			$this->compute();
 		} catch(Exception $e) {
@@ -159,7 +159,6 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 	 *
 	 */
 	protected function compute() {
-
 		// Mise à jour du montant total des taxes pour chaque item du tableau _taxItemsAmount
 		// Mise à jour du montant total des taxes de livraison pour chaque order du tableau _taxShippingAmount
 		// Mise à jour du montant total des taxes d'assurances pour chaque order du tableau _taxInsuranceAmount
@@ -185,76 +184,80 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 		}
 	}
 
-
 	/**
 	 * Calcul le montant des taxes
 	 *
 	 */
 	protected function computeTaxes() {
-
 		// Taxes sur les produits au niveau de l'item (ligne de commande)
 		// @FIXME bug et confusion entre indice d'item et indice d'order ?
-		$cur=0;
+		$cur = 0;
 		// pour chaque ligne de commande
 		foreach($this->items as $item) {
 			// Liste des taxes de la ligne
-			$itemTaxes= $item->getTax();
-			$tItemsAmount=0;
+			$itemTaxes = $item->getTax();
+			$tItemsAmount = 0;
+			
 			// pour chaque taxe appliquée sur cette ligne
 			foreach($itemTaxes as $tax) {
-				$amount=HIPAY_MAPI_UTILS::computeTax($item->getPrice(),$tax);
+				$amount = HIPAY_MAPI_UTILS::computeTax($item->getPrice(), $tax);
 				$tax->setTaxAmount($amount);
 				$tax->lock();
 				// mise a jour du montant total des taxes pour cet item (ligne de commande)
-				$tItemsAmount+=$amount;
+				$tItemsAmount += $amount;
 			}
+			
 			if (!isset($this->order[$cur]))
-				$cur=0;
+				$cur = 0;
 			if (!isset($this->_taxItemsAmount[$cur]))
-				$this->_taxItemsAmount[$cur]=0;
+				$this->_taxItemsAmount[$cur] = 0;
+			
 			// mise a jour du montant total des taxes pour cette ligne de commande
 			// avec prise en compte du nombre de produits dans l'indice numLigneCommande
 			// du tableau _taxItemsAmount de cette commande
-			$this->_taxItemsAmount[$cur]+=($tItemsAmount*$item->getQuantity());
+			$this->_taxItemsAmount[$cur] += ($tItemsAmount*$item->getQuantity());
 			$item->lock();
 			$cur++;
 		}
 
 		// Taxes sur frais d'envoi, assurances, coûts fixes
         // au niveau des commandes
-		$cur=0;
+		$cur = 0;
 		foreach($this->order as $order) {
 			// Taxes sur frais d'envoi
 			$taxArr =& $order->getShippingTax();
 			foreach($taxArr as $key=>$tax) {
-				$amount=HIPAY_MAPI_UTILS::computeTax($order->getShippingAmount(),$tax);
+				$amount = HIPAY_MAPI_UTILS::computeTax($order->getShippingAmount(), $tax);
 				$taxArr[$key]->setTaxAmount($amount);
 				$taxArr[$key]->lock();
 
 				if (!isset($this->_taxShippingAmount[$cur]))
-					$this->_taxShippingAmount[$cur]=0;
-				$this->_taxShippingAmount[$cur]+=$amount;
+					$this->_taxShippingAmount[$cur] = 0;
+				$this->_taxShippingAmount[$cur] += $amount;
 			}
+			
             // Taxes sur assurances
             $taxArr =& $order->getInsuranceTax();
 			foreach($taxArr as $key=>$tax) {
-				$amount=HIPAY_MAPI_UTILS::computeTax($order->getInsuranceAmount(),$tax);
+				$amount = HIPAY_MAPI_UTILS::computeTax($order->getInsuranceAmount(), $tax);
 				$taxArr[$key]->setTaxAmount($amount);
 				$taxArr[$key]->lock();
 				if (!isset($this->_taxInsuranceAmount[$cur]))
-					$this->_taxInsuranceAmount[$cur]=0;
-				$this->_taxInsuranceAmount[$cur]+=$amount;
+					$this->_taxInsuranceAmount[$cur] = 0;
+				$this->_taxInsuranceAmount[$cur] += $amount;
 			}
+			
             // Taxes sur coûts fixes
 			$taxArr =& $order->getFixedCostTax();
 			foreach($taxArr as $key=>$tax) {
-				$amount=HIPAY_MAPI_UTILS::computeTax($order->getFixedCostAmount(),$tax);
+				$amount = HIPAY_MAPI_UTILS::computeTax($order->getFixedCostAmount(), $tax);
 				$taxArr[$key]->setTaxAmount($amount);
 				$taxArr[$key]->lock();
 				if (!isset($this->_taxFixedCostAmount[$cur]))
-					$this->_taxFixedCostAmount[$cur]=0;
-				$this->_taxFixedCostAmount[$cur]+=$amount;
+					$this->_taxFixedCostAmount[$cur] = 0;
+				$this->_taxFixedCostAmount[$cur] += $amount;
 			}
+			
 			$cur++;
 		}
 	}
@@ -264,16 +267,17 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 	 *
 	 */
 	protected function computeItemsAmount() {
-		$itemsAmount=0;
-		$cur=0;
+		$itemsAmount = 0;
+		$cur = 0;
 		foreach($this->items as $item) {
-			$mt=sprintf("%.02f",$item->getPrice()*$item->getQuantity());
+			$mt = sprintf("%.02f", $item->getPrice() * $item->getQuantity());
 
 			if (!isset($this->order[$cur]))
-				$cur=0;
+				$cur = 0;
 			if (!isset($this->_itemsTotalAmount[$cur]))
-				$this->_itemsTotalAmount[$cur]=0;
-			$this->_itemsTotalAmount[$cur]+=$mt;
+				$this->_itemsTotalAmount[$cur] = 0;
+			$this->_itemsTotalAmount[$cur] += $mt;
+			
 			$cur++;
 		}
 	}
@@ -286,11 +290,11 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 	 * @param array $tInsuranceAmount
 	 * @param array $tFixedCostAmount
 	 */
-	public function getTotalTaxes(&$tItemsAmount,&$tShippingAmount,&$tInsuranceAmount,&$tFixedCostAmount) {
-		$tItemsAmount=$this->getItemsTaxes();
-		$tShippingAmount=$this->getShippingTaxes();
-		$tInsuranceAmount=$this->getInsuranceTaxes();
-		$tFixedCostAmount=$this->getFixedCostTaxes();
+	public function getTotalTaxes(&$tItemsAmount, &$tShippingAmount, &$tInsuranceAmount, &$tFixedCostAmount) {
+		$tItemsAmount = $this->getItemsTaxes();
+		$tShippingAmount = $this->getShippingTaxes();
+		$tInsuranceAmount = $this->getInsuranceTaxes();
+		$tFixedCostAmount = $this->getFixedCostTaxes();
 	}
 
 	/**
@@ -401,47 +405,43 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 		return $this->paymentParams;
 	}
 
-
 	/**
 	 * Calcul les montants à redistribuer aux affiliés
 	 *
 	 */
 	protected function computeAffiliates() {
-
-
 		foreach($this->order as $k=>$order) {
-			$totalAmount=0;
+			$totalAmount = 0;
 			$tAffiliate = $order->getAffiliate();
 			foreach($tAffiliate as $key=>$affiliate) {
-				$baseAmount=0;
-				$percentageTarget= $affiliate->getPercentageTarget();
-				if ($percentageTarget>0) {
+				$baseAmount = 0;
+				$percentageTarget = $affiliate->getPercentageTarget();
+				if ($percentageTarget > 0) {
 					if ($percentageTarget & HIPAY_MAPI_TTARGET_ITEM)
-						$baseAmount+=$this->_itemsTotalAmount[$k];
+						$baseAmount +=$this->_itemsTotalAmount[$k];
 					if ($percentageTarget & HIPAY_MAPI_TTARGET_TAX)
-						$baseAmount+=$this->_taxItemsAmount[$k]+$this->_taxFixedCostAmount[$k]+$this->_taxInsuranceAmount[$k]+$this->_taxShippingAmount[$k];
+						$baseAmount += $this->_taxItemsAmount[$k] + $this->_taxFixedCostAmount[$k] + $this->_taxInsuranceAmount[$k] + $this->_taxShippingAmount[$k];
 					if ($percentageTarget& HIPAY_MAPI_TTARGET_INSURANCE)
-						$baseAmount+=$order->getInsuranceAmount();
+						$baseAmount += $order->getInsuranceAmount();
 					if ($percentageTarget & HIPAY_MAPI_TTARGET_FCOST)
-						$baseAmount+=$order->getFixedCostAmount();
+						$baseAmount += $order->getFixedCostAmount();
 					if ($percentageTarget & HIPAY_MAPI_TTARGET_SHIPPING)
-						$baseAmount+=$order->getShippingAmount();
-							$tAffiliate[$key]->setBaseAmount($baseAmount);
+						$baseAmount + =$order->getShippingAmount();
+						
+					$tAffiliate[$key]->setBaseAmount($baseAmount);
 				} else {
 					$baseAmount = $affiliate->getValue();
 					$tAffiliate[$key]->setBaseAmount($baseAmount);
 				}
-				$totalAmount+=$tAffiliate[$key]->getAmount();
+				
+				$totalAmount += $tAffiliate[$key]->getAmount();
 				$tAffiliate[$key]->lock();
 			}
-			$this->_affiliateTotalAmount[$k]=$totalAmount;
+			
+			$this->_affiliateTotalAmount[$k] = $totalAmount;
 			if ($totalAmount > $this->_orderTotalAmount[$k]) {
-				throw new Exception('Le montant à redistribuer est supérieur au montant de la transaction ('.$totalAmount.'/'.$this->_orderTotalAmount.')');
+				throw new Exception('The total amount to distribute is greather than the transaction amount ('.$totalAmount.'/'.$this->_orderTotalAmount.')');
 			}
 		}
-
 	}
-
-
-
 }

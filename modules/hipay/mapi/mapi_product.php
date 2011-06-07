@@ -53,7 +53,6 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 	 */
 	protected $tax;
 
-
 	/**
 	 * Assigne le nom du produit
 	 *
@@ -65,10 +64,12 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 			return false;
 
 		$name = HIPAY_MAPI_UTF8::forceUTF8($name);
-		$len=HIPAY_MAPI_UTF8::strlen_utf8($name);
-		if ($len<1 || $len>HIPAY_MAPI_MAX_PRODUCT_NAME_LENGTH)
+		$len = HIPAY_MAPI_UTF8::strlen_utf8($name);
+		
+		if ($len < 1 || $len > HIPAY_MAPI_MAX_PRODUCT_NAME_LENGTH)
 			return false;
-		$this->name=$name;
+			
+		$this->name = $name;
 		return true;
 	}
 
@@ -92,10 +93,12 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 			return false;
 
 		$info = HIPAY_MAPI_UTF8::forceUTF8($info);
-		$len=HIPAY_MAPI_UTF8::strlen_utf8($info);
-		if ($len>HIPAY_MAPI_MAX_PRODUCT_INFO_LENGTH)
+		$len = HIPAY_MAPI_UTF8::strlen_utf8($info);
+		
+		if ($len > HIPAY_MAPI_MAX_PRODUCT_INFO_LENGTH)
 			return false;
-		$this->info=$info;
+			
+		$this->info = $info;
 		return true;
 	}
 
@@ -118,10 +121,11 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 		if ($this->_locked)
 			return false;
 
-		$quantity=(int)$quantity;
-		if ($quantity<1)
+		$quantity = (int)$quantity;
+		if ($quantity < 1)
 			return false;
-		$this->quantity=$quantity;
+			
+		$this->quantity = $quantity;
 		return true;
 	}
 
@@ -145,10 +149,11 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 			return false;
 
 		$ref = HIPAY_MAPI_UTF8::forceUTF8($ref);
-		$len=HIPAY_MAPI_UTF8::strlen_utf8($ref);
-		if ($len>HIPAY_MAPI_MAX_PRODUCT_REF_LENGTH)
+		$len = HIPAY_MAPI_UTF8::strlen_utf8($ref);
+		if ($len > HIPAY_MAPI_MAX_PRODUCT_REF_LENGTH)
 			return false;
-		$this->ref=$ref;
+			
+		$this->ref = $ref;
 		return true;
 	}
 
@@ -173,9 +178,10 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 			return false;
 
 		$category = (int)$category;
-		if ($category<1)
+		if ($category < 1)
 			return false;
-		$this->category=$category;
+			
+		$this->category = $category;
 		return true;
 	}
 
@@ -198,10 +204,11 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 		if ($this->_locked)
 			return false;
 
-		$price = sprintf('%.02f',(float)$price);
-		if ($price<0)
+		$price = sprintf('%.02f', (float)$price);
+		if ($price < 0)
 			return false;
-		$this->price=$price;
+			
+		$this->price = $price;
 		return true;
 	}
 
@@ -224,10 +231,14 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 		if ($this->_locked)
 			return false;
 
+		if (empty($tax))
+			return false;
 		if (!HIPAY_MAPI_UTILS::is_an_array_of($tax,'HIPAY_MAPI_Tax'))
 			return false;
+			
 		foreach ($tax as $obj)
 			$this->tax[]= clone $obj;
+			
 		return true;
 	}
 
@@ -246,29 +257,29 @@ class HIPAY_MAPI_Product extends HIPAY_MAPI_Item {
 	 * @return boolean
 	 */
 	public function check() {
-		if ($this->name=='' || $this->quantity<0 || $this->category<0 || $this->price<0 || !HIPAY_MAPI_UTILS::is_an_array_of($this->tax,'HIPAY_MAPI_Tax'))
-			throw new Exception('L\'objet n\'à pas été initilisé. Vous devez préciser un nom de produit, une quantité, un prix, une catégorie et des taxes');
+		if ($this->name == '' || $this->quantity < 0 || $this->category < 0 || $this->price < 0 || !HIPAY_MAPI_UTILS::is_an_array_of($this->tax, 'HIPAY_MAPI_Tax'))
+			throw new Exception('Object not initialized. Please precise a product name, quantity, price, category and taxes');
+		
 		foreach($this->tax as $obj) {
 			if (!$obj->check())
 				return false;
 		}
+		
 		return true;
 	}
 
 	protected function init() {
-		$this->name='';
-		$this->info='';
-		$this->quantity=-1;
-		$this->ref='';
-		$this->category=-1;
-		$this->price=-1;
-		$this->tax=array();
+		$this->name = '';
+		$this->info = '';
+		$this->quantity = -1;
+		$this->ref = '';
+		$this->category = -1;
+		$this->price = -1;
+		$this->tax = array();
 	}
 
 	function __construct() {
 		$this->init();
 		parent::__construct();
 	}
-
 }
-

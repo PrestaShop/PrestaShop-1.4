@@ -8,16 +8,14 @@ class HIPAY_MAPI_lockable extends HIPAY_MAPI_XML {
 	protected $_locked;
 
 	/**
-	 * Vérouille l'objet
+	 * Verouille l'objet
 	 *
 	 */
 	public function lock() {
-		$this->_locked=true;
+		$this->_locked = true;
 	}
 
 	function __construct() {
-		$this->_locked=false;
+		$this->_locked = false;
 	}
-
-
 }

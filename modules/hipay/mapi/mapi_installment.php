@@ -53,9 +53,10 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 			return false;
 
 		$price = sprintf('%.02f',(float)$price);
-		if ($price<0)
+		if ($price < 0)
 			return false;
-		$this->price=$price;
+		$this->price = $price;
+		
 		return true;
 	}
 
@@ -80,6 +81,7 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 			return false;
 		if (!is_bool($first))
 			return false;
+			
 		$paymentDelay=trim($paymentDelay);
 		if ($first) {
 			if (!preg_match("#[0-9]+[HDM]#",$paymentDelay))
@@ -91,12 +93,13 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 				return false;
 			}
 		}
-		$num = (int)substr($paymentDelay,0,strlen($paymentDelay)-1);
-		if (($num<1 && !$first) || ($num<0 && $first) || $num>365) {
+		
+		$num = (int)substr($paymentDelay, 0, strlen($paymentDelay)-1);
+		if (($num < 1 && !$first) || ($num < 0 && $first) || $num > 365) {
 			return false;
 		}
-		$this->first=$first;
-		$this->paymentDelay=$paymentDelay;
+		$this->first = $first;
+		$this->paymentDelay = $paymentDelay;
 		return true;
 	}
 
@@ -110,10 +113,11 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 		if ($this->_locked)
 			return false;
 
-		if (!HIPAY_MAPI_UTILS::is_an_array_of($tax,'HIPAY_MAPI_Tax'))
+		if (!HIPAY_MAPI_UTILS::is_an_array_of($tax, 'HIPAY_MAPI_Tax'))
 			return false;
 		foreach ($tax as $obj)
 			$this->tax[]= clone $obj;
+			
 		return true;
 	}
 
@@ -123,18 +127,18 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 	 */
 	public function setDelayTS( $baseTS=0 )
 	{
-		if( (int)$baseTS <= 0 ) {
+		if ((int)$baseTS <= 0) {
 			$baseTS = time();
 		}
 
-		switch( substr($this->paymentDelay, -1, 1) ) {
+		switch (substr($this->paymentDelay, -1, 1)) {
 			case 'd': case 'D': $unit='day'; break;
 			case 'm': case 'M': $unit='month'; break;
 			case 'h': case 'H':
 			default : $unit='hour'; break;
 		}
 
-		$this->_delayTS = strtotime( '+'.substr($this->paymentDelay, 0, -1).' '.$unit, $baseTS );
+		$this->_delayTS = strtotime('+'.substr($this->paymentDelay, 0, -1).' '.$unit, $baseTS);
 	}
 
 	/**
@@ -179,30 +183,33 @@ class HIPAY_MAPI_Installment extends HIPAY_MAPI_Item {
 	 * @return float
 	 */
 	public function check() {
-		if ($this->price<0)
-			throw new Exception('Montant invalide ou pas initilisé');
-		if (!HIPAY_MAPI_UTILS::is_an_array_of($this->tax,'HIPAY_MAPI_Tax'))
-			throw new Exception('Taxes invalides ou pas initialisées');
+		if ($this->price < 0)
+			throw new Exception('Invalid amount or not initialized');
+		if (!HIPAY_MAPI_UTILS::is_an_array_of($this->tax, 'HIPAY_MAPI_Tax'))
+			throw new Exception('Invalid taxes or not initialized');
 		foreach($this->tax as $obj) {
 			if (!$obj->check())
 				return false;
 		}
+		
 		if (!is_bool($this->first))
 			throw new Exception('Premier paiement ou suivant n\'est pas initialisé');
+			
 		return true;
 	}
 
 	protected function init()
 	{
-		$this->price        = -1;
-		$this->tax          = array();
-		$this->first        = '';
+		$this->price = -1;
+		$this->tax = array();
+		$this->first = '';
 		$this->paymentDelay = '';
-		$this->_delayTS     = '';
+		$this->_delayTS = '';
 	}
 
 	function __construct() {
 		$this->init();
+		
 		parent::__construct();
 	}
 }
