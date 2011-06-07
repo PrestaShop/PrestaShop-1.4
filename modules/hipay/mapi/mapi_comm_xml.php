@@ -13,18 +13,19 @@ class HIPAY_MAPI_COMM_XML
 	 * @param string $err_code
 	 * @return boolean
 	 */
-	public static function analyzeResponseXML($xml,&$url,&$err_msg,&$err_keyword,&$err_value,&$err_code)
-        {
-		$url='';
-		$err_msg='';
-		$err_keyword='';
-		$err_value='';
-		$err_code='';
+	public static function analyzeResponseXML($xml, &$url, &$err_msg, &$err_keyword, &$err_value, &$err_code)
+    {
+		$url = '';
+		$err_msg = '';
+		$err_keyword = '';
+		$err_value = '';
+		$err_code = '';
 		try {
 			$obj = @new SimpleXMLElement(trim($xml));
 		} catch (Exception $e) {
 			return false;
 		}
+		
 		if (isset($obj->result[0]->url)) {
 			$url = $obj->result[0]->url;
 			return true;
@@ -37,8 +38,8 @@ class HIPAY_MAPI_COMM_XML
 			$err_value = $obj->result[0]->value;
 		if (isset($obj->result[0]->code))
 			$err_code = $obj->result[0]->code;
+		
 		return false;
-
 	}
 
 	/**
@@ -55,22 +56,24 @@ class HIPAY_MAPI_COMM_XML
 	 * @param array $merchantdatas
 	 * @return boolean
 	 */
-	public static function analyzeNotificationXML($xml,&$operation,&$status,&$date,&$time,&$transid,&$origAmount,&$origCurrency,&$idformerchant,&$merchantdatas)
-        {
-		$operation='';
-		$status='';
-		$date='';
-		$time='';
-                $transid='';
-		$origAmount='';
-		$origCurrency='';
-		$idformerchant='';
-		$merchantdatas=array();
+	public static function analyzeNotificationXML($xml, &$operation, &$status, &$date, &$time, &$transid, &$origAmount, &$origCurrency, &$idformerchant, &$merchantdatas)
+    {
+		$operation = '';
+		$status = '';
+		$date = '';
+		$time = '';
+        $transid = '';
+		$origAmount = '';
+		$origCurrency = '';
+		$idformerchant = '';
+		$merchantdatas = array();
+		
 		try {
 			$obj = new SimpleXMLElement(trim($xml));
 		} catch (Exception $e) {
 			return false;
 		}
+		
 		if (isset($obj->result[0]->operation))
 			$operation=$obj->result[0]->operation;
 		else return false;
@@ -110,13 +113,12 @@ class HIPAY_MAPI_COMM_XML
 					$indice = substr($xml2->getName(),6);
 					$xml2 = (array)$xml2;
 					$valeur = (string)$xml2[0];
-					$merchantdatas[$indice]=$valeur;
+					$merchantdatas[$indice] = $valeur;
 				}
 			}
-
 		}
+		
 		return true;
-
 	}
 }
 
