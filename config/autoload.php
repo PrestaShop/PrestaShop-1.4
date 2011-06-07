@@ -50,7 +50,7 @@ function __autoload($className)
 		{
 			require_once($classDir.str_replace(chr(0), '', $className).'.php');
 			$classInfos = new ReflectionClass($className.((interface_exists($className, false) or class_exists($className, false)) ? '' : 'Core'));
-			if (!$classInfos->isInterface())
+			if (!$classInfos->isInterface() && substr($classInfos->name, -4) == 'Core')
 				eval(($classInfos->isAbstract() ? 'abstract ' : '').'class '.$className.' extends '.$className.'Core {}');
 		}
 		elseif ($file_in_override && !$file_in_classes)
