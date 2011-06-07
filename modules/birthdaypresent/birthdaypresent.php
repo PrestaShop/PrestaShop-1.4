@@ -27,23 +27,24 @@
 
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
-  
+
 class BirthdayPresent extends Module
 {
-    private $_html = '';
+	private $_html = '';
 
-    function __construct()
-    {
-        $this->name = 'birthdaypresent';
-        $this->tab = 'pricing_promotion';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'birthdaypresent';
+		$this->tab = 'pricing_promotion';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 		
 		parent::__construct();
 		
-        $this->displayName = $this->l('Birthday Present');
-        $this->description = $this->l('Offer your clients birthday presents automatically');
+		$this->displayName = $this->l('Birthday Present');
+		$this->description = $this->l('Offer your clients birthday presents automatically');
+
 	}
 		
 	public function getContent()
