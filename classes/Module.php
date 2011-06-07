@@ -906,7 +906,7 @@ abstract class ModuleCore
 				if(isset(Hook::$preloadModulesFromHooks[$id_hook]['module_position'][$this->id]))
 					return Hook::$preloadModulesFromHooks[$id_hook]['module_position'][$this->id];
 				else
-					return array();
+					return 0;
 		$result = Db::getInstance()->getRow('
 			SELECT `position`
 			FROM `'._DB_PREFIX_.'hook_module`
