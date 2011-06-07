@@ -419,7 +419,7 @@ class DateOfDelivery extends Module
 		SELECT COUNT(*) 
 		FROM `'._DB_PREFIX_.'dateofdelivery_carrier_rule` 
 		WHERE `id_carrier` = '.(int)($id_carrier).'
-		'.($id_carrier_rule != 0 ? 'AND `id_carrier_rule` != '.(int)($id_carrier_rule) : ''));
+		'.((int)$id_carrier_rule != 0 ? 'AND `id_carrier_rule` != '.(int)($id_carrier_rule) : ''));
 	}
 	
 	private function _getDatesOfDelivery($id_carrier, $product_oos = false, $date = null)
