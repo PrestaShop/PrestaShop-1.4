@@ -74,7 +74,7 @@ class CrossSelling extends Module
 			$this->_html .= $this->displayError('Invalid displayPrice');
 		elseif (Tools::isSubmit('submitCross'))
 		{
-			Configuration::updateValue('CROSSSELLING_DISPLAY_PRICE', Tools::getValue('displayPrice'));
+			Configuration::updateValue('CROSSSELLING_DISPLAY_PRICE', (int)Tools::getValue('displayPrice'));
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated successfully'));
 		}
 		$this->_html .= '
