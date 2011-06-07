@@ -1,5 +1,6 @@
 <?php
-class HIPAY_MAPI_UTF8 {
+class HIPAY_MAPI_UTF8 
+{
 	/**
 	 * Test si une chaine est en UTF-8
 	 *
@@ -30,7 +31,8 @@ class HIPAY_MAPI_UTF8 {
 	public static function forceUTF8($string) {
 		if (!self::is_utf8($string))
 			return utf8_encode($string);
-		else return $string;
+		else 
+			return $string;
 	}
 
 
@@ -44,23 +46,24 @@ class HIPAY_MAPI_UTF8 {
 	    $i = 0;
 	    $count = 0;
 	    $len = strlen ($str);
+		
 	    while ($i < $len)
 	    {
-	    $chr = ord ($str[$i]);
-	    $count++;
-	    $i++;
-	    if ($i >= $len)
-	        break;
+			$chr = ord($str[$i]);
+			$count++;
+			$i++;
+			if ($i >= $len)
+				break;
 
-	    if ($chr & 0x80)
-	    {
-	        $chr <<= 1;
-	        while ($chr & 0x80)
-	        {
-	        $i++;
-	        $chr <<= 1;
-	        }
-	    }
+			if ($chr & 0x80)
+			{
+				$chr <<= 1;
+				while ($chr & 0x80)
+				{
+					$i++;
+					$chr <<= 1;
+				}
+			}
 	    }
 	    return $count;
 	}

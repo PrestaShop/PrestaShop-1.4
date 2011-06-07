@@ -85,7 +85,6 @@ class HIPAY_MAPI_Tax extends HIPAY_MAPI_lockable
 		return true;
 	}
 
-
 	/**
 	 * retourne la valeur de la taxe
 	 *
@@ -94,7 +93,6 @@ class HIPAY_MAPI_Tax extends HIPAY_MAPI_lockable
 	public function getTaxVal() {
 		return $this->taxVal;
 	}
-
 
 	/**
 	 * détermine si la valeur de la taxe est un pourcentage
@@ -105,7 +103,6 @@ class HIPAY_MAPI_Tax extends HIPAY_MAPI_lockable
 		return $this->percentage;
 	}
 
-
 	/**
 	 * effectue une vérification des propriétés de la taxe
 	 *
@@ -113,23 +110,22 @@ class HIPAY_MAPI_Tax extends HIPAY_MAPI_lockable
 	 */
 	public function check() {
 		if ($this->taxName == '' || $this->taxVal < 0)
-			throw new Exception('Nom ou valeur de la taxe non initialisée');
+			throw new Exception('Tax name or Tax value not initialized');
+			
 		return true;
 	}
-
 
 	/**
 	 * initilise les propriétés de la taxe
 	 *
 	 */
 	protected function init() {
-		$this->taxVal=-1;
-		$this->taxName='';
-		$this->percentage=false;
-		$this->_amount=0;
-		$this->_locked=false;
+		$this->taxVal = -1;
+		$this->taxName = '';
+		$this->percentage = false;
+		$this->_amount = 0;
+		$this->_locked = false;
 	}
-
 
 	/**
 	 * assigne le montant calculé de la taxe
@@ -141,14 +137,13 @@ class HIPAY_MAPI_Tax extends HIPAY_MAPI_lockable
 		if ($this->_locked)
 			return false;
 
-		$amount=(float)$amount;
-		if ($amount<0)
-			$amount=0;
-		$this->_amount = sprintf("%.02f",$amount);
-
+		$amount = (float)$amount;
+		if ($amount < 0)
+			$amount = 0;
+			
+		$this->_amount = sprintf("%.02f", $amount);
 		return true;
 	}
-
 
 	/**
 	 * retourne le montant calculé de la taxe
@@ -158,7 +153,6 @@ class HIPAY_MAPI_Tax extends HIPAY_MAPI_lockable
 	public function getTaxAmount() {
 		return $this->_amount;
 	}
-
 
 	/**
 	 * constructeur

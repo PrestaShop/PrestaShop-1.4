@@ -8,7 +8,7 @@ class HIPAY_MAPI_UTILS {
 	 * @param string $objectName
 	 * @return boolean
 	 */
-	public static function is_an_array_of($array,$objectName) {
+	public static function is_an_array_of($array, $objectName) {
 		if (!is_array($array))
 			return false;
 		try {
@@ -30,13 +30,13 @@ class HIPAY_MAPI_UTILS {
 	 * @param HIPAY_MAPI_Tax $tax
 	 * @return float
 	 */
-	public static function computeTax($itemValue,HIPAY_MAPI_Tax $tax) {
-		$itemValue = (float) $itemValue;
-		$taxAmount=0;
+	public static function computeTax($itemValue, HIPAY_MAPI_Tax $tax) {
+		$itemValue = (float)$itemValue;
+		$taxAmount = 0;
 		if ($tax->isPercentage()) {
-			$taxAmount=sprintf("%.02f",($itemValue/100)*$tax->getTaxVal());
+			$taxAmount = sprintf("%.02f", ($itemValue / 100) * $tax->getTaxVal());
 		} else {
-			$taxAmount+=sprintf("%.02f",$tax->getTaxVal());
+			$taxAmount += sprintf("%.02f", $tax->getTaxVal());
 		}
 		return (float)$taxAmount;
 	}
@@ -47,8 +47,8 @@ class HIPAY_MAPI_UTILS {
 	 * @param string $url
 	 * @return boolean
 	 */
-	public static function checkURL( $url ) {
-		return preg_match( '#^(((http|https):\/\/){0,1})(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(.*)#i', $url );
+	public static function checkURL($url) {
+		return preg_match('#^(((http|https):\/\/){0,1})(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(.*)#i', $url);
 	}
 
 	/**
@@ -57,16 +57,16 @@ class HIPAY_MAPI_UTILS {
 	 * @param string $email
 	 * @return boolean
 	 */
-	public static function checkemail( $email ) {
-		return preg_match( '#^[_a-z0-9-]+(\.[_a-z0-9-]*)*@[a-z0-9-]+(\.[a-z0-9-]+)+$#i', $email );
+	public static function checkemail($email) {
+		return preg_match('#^[_a-z0-9-]+(\.[_a-z0-9-]*)*@[a-z0-9-]+(\.[a-z0-9-]+)+$#i', $email);
 	}
 
-	public static function parseDelay( $delay )
+	public static function parseDelay($delay)
 	{
-		$array = array_fill_keys( array('H', 'I', 'S', 'M', 'D', 'Y'), 0 );
-		$n = substr( $delay, 0, -1 );
-		$r = substr( $delay, -1, 1 );
-		$array[ strtoupper($r) ] = $n;
+		$array = array_fill_keys(array('H', 'I', 'S', 'M', 'D', 'Y'), 0);
+		$n = substr($delay, 0, -1);
+		$r = substr($delay, -1, 1);
+		$array[strtoupper($r)] = $n;
 
 		return $array;
 	}
