@@ -4,6 +4,9 @@ $configPath = '../../../config/config.inc.php';
 if (file_exists($configPath))
 {
 	include('../../../config/config.inc.php');
+	if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+		die('ERROR :X');
+
 	if (file_exists(dirname(__FILE__).'/../eBayRequest.php'))
 	{
 		include(dirname(__FILE__).'/../eBayRequest.php');

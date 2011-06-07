@@ -4,6 +4,8 @@ $configPath = '../../../config/config.inc.php';
 if (file_exists($configPath))
 {
 	include('../../../config/config.inc.php');
+	if (!Tools::getValue('token') || Tools::getValue('token') != Configuration::get('EBAY_SECURITY_TOKEN'))
+		die('ERROR :X');
 
 	Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', array('sync' => (int)($_GET['action'])), 'UPDATE', '`id_category` = '.(int)$_GET['id_category']);
 

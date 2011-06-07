@@ -87,6 +87,10 @@ class Ebay extends Module
 		if (!Configuration::get('PS_SHOP_DOMAIN'))
 			Configuration::updateValue('PS_SHOP_DOMAIN', $_SERVER['HTTP_HOST']);
 
+		// Generate eBay Security Token if not exists
+		if (!Configuration::get('EBAY_SECURITY_TOKEN'))
+			Configuration::updateValue('EBAY_SECURITY_TOKEN', Tools::passwdGen(30));
+
 		// Check if installed
 		if (self::isInstalled($this->name))
 		{
@@ -204,6 +208,7 @@ class Ebay extends Module
 		Configuration::deleteByName('EBAY_SYNC_MODE');
 		Configuration::deleteByName('EBAY_ORDER_LAST_UPDATE');
 		Configuration::deleteByName('EBAY_VERSION');
+		Configuration::deleteByName('EBAY_SECURITY_TOKEN');
 
 		// Uninstall Module
 		if (!parent::uninstall() ||
@@ -537,7 +542,7 @@ class Ebay extends Module
 				function checkToken()
 				{
 					$.ajax({
-					  url: \''._MODULE_DIR_.'ebay/ajax/checkToken.php\',
+					  url: \''._MODULE_DIR_.'ebay/ajax/checkToken.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'\',
 					  success: function(data)
 					  {
 						if (data == \'OK\')
@@ -876,7 +881,7 @@ class Ebay extends Module
 			function loadCategoryMatch(id_category)
 			{
 				$.ajax({
-				  url: "'._MODULE_DIR_.'ebay/ajax/loadCategoryMatch.php?id_category=" + id_category,
+				  url: "'._MODULE_DIR_.'ebay/ajax/loadCategoryMatch.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_category=" + id_category,
 				  success: function(data) { $("#categoryPath" + id_category).html(data); }
 				});
 			}
@@ -889,7 +894,7 @@ class Ebay extends Module
 				if (level > 4) levelParams += "&level5=" + $("#categoryLevel5-" + id_category).val();
 
 				$.ajax({
-				  url: "'._MODULE_DIR_.'ebay/ajax/changeCategoryMatch.php?id_category=" + id_category + "&level=" + level + levelParams,
+				  url: "'._MODULE_DIR_.'ebay/ajax/changeCategoryMatch.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_category=" + id_category + "&level=" + level + levelParams,
 				  success: function(data) { $("#categoryPath" + id_category).html(data); }
 				});
 			}
@@ -1104,14 +1109,14 @@ class Ebay extends Module
 
 					var params = "";
 					if ($(this).attr("value") > 0)
-						params = "?id_category=" + $(this).attr("value");
+						params = "&id_category=" + $(this).attr("value");
 					if ($(this).attr("checked"))
 						params = params + "&action=1";
 					else
 						params = params + "&action=0";
 
 					$.ajax({
-						url: "'._MODULE_DIR_.'ebay/ajax/getNbProductsSync.php" + params,
+						url: "'._MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'" + params,
 						success: function(data) {
 					  		nbProducts = data;
 					  		nbProductsModeB = data;
