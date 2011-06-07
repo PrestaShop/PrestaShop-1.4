@@ -60,6 +60,7 @@ class DateOfDelivery extends Module
 			`delivery_sunday` TINYINT(1) NOT NULL
 		) ENGINE ='._MYSQL_ENGINE_.';
 		'))
+			return false;
 		
 		Configuration::updateValue('DOD_EXTRA_TIME_PRODUCT_OOS', 0);
 		Configuration::updateValue('DOD_EXTRA_TIME_PREPARATION', 1);
@@ -78,12 +79,12 @@ class DateOfDelivery extends Module
 		Configuration::deleteByName('DOD_PREPARATION_SUNDAY');
 		Configuration::deleteByName('DOD_DATE_FORMAT');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'dateofdelivery_carrier_rule`');
+		
 		return parent::uninstall();
 	}
 
 	public function getContent()
-	{
-		
+	{		
 		$this->_html .= '<h2>'.$this->l('Date of delivery configuration').'</h2>';
 		
 		$this->_postProcess();
@@ -110,10 +111,12 @@ class DateOfDelivery extends Module
 		$datesDelivery = array();
 		foreach ($params['carriers'] as $carrier)
 			$datesDelivery[(int)($carrier['id_carrier'])] = $this->_getDatesOfDelivery((int)($carrier['id_carrier']), $oos);
+		
 		$smarty->assign(array(
 			'datesDelivery' => $datesDelivery,
 			'id_carrier' => ($params['cart']->id_carrier ? (int)($params['cart']->id_carrier) : (int)(Configuration::get('PS_CARRIER_DEFAULT')))
 		));
+		
 		return $this->display(__FILE__, 'beforeCarrier.tpl');
 	}
 	
@@ -125,10 +128,15 @@ class DateOfDelivery extends Module
 		foreach ($params['order']->getProducts() as $product)
 			if ($product['product_quantity_in_stock'] < 1)
 				$oos = true;
+		
+		$datesDelivery = array();		
 		$datesDelivery = $this->_getDatesOfDelivery((int)($params['order']->id_carrier), $oos, $params['order']->date_add);
+		
 		if (!is_array($datesDelivery) OR !sizeof($datesDelivery))
 			return ;
+			
 		$smarty->assign('datesDelivery', $datesDelivery);
+		
 		return $this->display(__FILE__, 'orderDetail.tpl');
 	}
 
@@ -166,7 +174,7 @@ class DateOfDelivery extends Module
 			if ($this->_isAlreadyDefinedForCarrier((int)($carrier->id), (int)(Tools::getValue('id_carrier_rule', 0))))
 				$errors[] = $this->l('You cannot use this carrier, a rule has already been saved.');
 			
-			if(!sizeof($errors))
+			if (!sizeof($errors))
 			{
 				if (Tools::isSubmit('addCarrierRule'))
 				{
@@ -219,6 +227,7 @@ class DateOfDelivery extends Module
 			<p><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&addCarrierRule"><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/img/time_add.png" alt="" /> '.$this->l('Add a new carrier rule').'</a></p>
 			
 			<h3>'.$this->l('List of carrier rules').'</h3>';
+			
 		$carrier_rules = $this->_getCarrierRulesWithCarrierName();
 		if (sizeof($carrier_rules))
 		{
@@ -234,6 +243,7 @@ class DateOfDelivery extends Module
 			</thead>
 			<tbody>
 			';
+			
 			foreach ($carrier_rules as $rule)
 			{
 				$this->_html .= '
@@ -241,6 +251,7 @@ class DateOfDelivery extends Module
 					<td width="30%">'.(!preg_match('/^0$/Ui', $rule['name']) ? htmlentities($rule['name'], ENT_QUOTES, 'UTF-8') : Configuration::get('PS_SHOP_NAME')).'</td>
 					<td width="40%" class="center"><b>'.(int)($rule['minimal_time']).'</b> '.$this->l('day(s) and').' <b>'.(int)($rule['maximal_time']).'</b> '.$this->l('day(s)').'</td>
 					<td width="10%" class="center">';
+					
 				if ($rule['delivery_saturday'])
 					$this->_html .= '<img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/img/tick.png" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />';
 				else
@@ -248,6 +259,7 @@ class DateOfDelivery extends Module
 				$this->_html .='
 					</td>
 					<td width="10%" class="center">';
+					
 				if ($rule['delivery_sunday'])
 					$this->_html .= '<img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/img/tick.png" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />';
 				else
@@ -260,12 +272,14 @@ class DateOfDelivery extends Module
 					</td>
 				</tr>';
 			}
+			
 			$this->_html .= '
 			</tbody>
 			</table>';
 		}
 		else
 			$this->_html .= '<p class="center">'.$this->l('No carrier rule').'</p>';
+		
 		$this->_html .= '
 		</fieldset>
 		<br />
@@ -312,6 +326,7 @@ class DateOfDelivery extends Module
 		$this->_html .= '
 		<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
 		';
+		
 		if (isset($carrier_rule) AND $carrier_rule['id_carrier_rule'])
 			$this->_html .= '<input type="hidden" name="id_carrier_rule" value="'.(int)($carrier_rule['id_carrier_rule']).'" />';
 		$this->_html .= '
@@ -330,6 +345,7 @@ class DateOfDelivery extends Module
 					<option>'.$this->l('Choose').'</option>';
 		foreach ($carriers as $carrier)
 			$this->_html .= '<option value="'.$carrier['id_carrier'].'" '.((Tools::isSubmit('id_carrier') AND Tools::getValue('id_carrier') == $carrier['id_carrier']) ? 'selected="selected"' : ((isset($carrier_rule) AND $carrier_rule['id_carrier'] == $carrier['id_carrier']) ? 'selected="selected"' : '')).'>'.htmlentities($carrier['name'].' | '.$carrier['delay'], ENT_QUOTES, 'UTF-8').'</option>';
+		
 		$this->_html .= '
 				</select>
 			</div>
@@ -349,8 +365,7 @@ class DateOfDelivery extends Module
 			</div>
 			
 			<p class="center"><input type="submit" class="button" name="submitCarrierRule" value="'.$this->l('Save').'" /></p>
-			<p class="center"><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'">'.$this->l('Cancel').'</a>
-</p>
+			<p class="center"><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'">'.$this->l('Cancel').'</a></p>
 		';
 		
 		$this->_html .= '
@@ -509,6 +524,4 @@ class DateOfDelivery extends Module
 			$date_maximal_string
 		);
 	}
-
 }
-
