@@ -169,10 +169,10 @@ class Fianetfraud extends Module
 		Configuration::updateValue('SAC_DEFAULT_CARRIER_TYPE', Tools::getValue('fianetfraud_default_carrier'));
 		Configuration::updateValue('SAC_MINIMAL_ORDER', Tools::getValue('fianetfraud_minimal_order'));
 		
-		if (isset($_POST['payementBox']))
+		if (isset(htmlentities($_POST['payementBox'])))
 		{
-			Configuration::updateValue('SAC_PAYMENT_MODULE', implode(',', $_POST['payementBox']));
-			foreach ($_POST['payementBox'] as $payment) 
+			Configuration::updateValue('SAC_PAYMENT_MODULE', implode(',', htmlentities($_POST['payementBox'])));
+			foreach (htmlentities($_POST['payementBox']) as $payment) 
 			 	Configuration::updateValue('SAC_PAYMENT_TYPE_'.$payment,Tools::getValue($payment));
 		}
 		
@@ -183,8 +183,8 @@ class Fianetfraud extends Module
 		$carriers = Carrier::getCarriers($cookie->id_lang);
 		foreach ($carriers as $carrier) 
 		{
-			if (isset($_POST['carrier_'.$carrier['id_carrier']]))
-				Configuration::updateValue('SAC_CARRIER_TYPE_'.$carrier['id_carrier'], $_POST['carrier_'.$carrier['id_carrier']]);
+			if (isset(htmlentities($_POST['carrier_'.$carrier['id_carrier']])))
+				Configuration::updateValue('SAC_CARRIER_TYPE_'.$carrier['id_carrier'], htmlentities($_POST['carrier_'.$carrier['id_carrier']]));
 			else
 			{
 				$error = true;
@@ -205,7 +205,7 @@ class Fianetfraud extends Module
 
 	public function getContent()
 	{
-		if (isset($_POST['submitSettings']))
+		if (isset(htmlentities($_POST['submitSettings'])))
 			$this->_postProcess();
 		$id_lang = Configuration::get('PS_LANG_DEFAULT');
 		$categories = Category::getSimpleCategories($id_lang);
@@ -546,7 +546,7 @@ class Fianetfraud extends Module
 		if (!self::needCheck($order->module, $order->total_paid))
 			return null;
 
-		if (isset($_POST['submitFianet']))
+		if (isset(htmlentities($_POST['submitFianet'])))
 			$this->_postProcess();
 		$html = '<br /><fieldset style="width:400px;"><legend>'.$this->l('Fianet Validation').'</legend>';
 		$html .= '<a href="https://secure.fia-net.com/'.($conf ? 'fscreener' : 'pprod').'/BO/visucheck_detail.php?sid='.Configuration::get('SAC_SITEID').'&log='.Configuration::get('SAC_LOGIN').'&pwd='.urlencode(Configuration::get('SAC_PASSWORD')).'&rid='.$params['id_order'].'">'.$this->l('See Detail').'</a><br />';

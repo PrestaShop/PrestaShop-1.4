@@ -112,7 +112,7 @@ class SearchCore
 			$string = preg_replace('/[^\s]-+/', '', $string);
 		}
 
-		$blacklist = Configuration::get('PS_SEARCH_BLACKLIST', $id_lang);
+		$blacklist = Configuration::get('PS_SEARCH_BLACKLIST', (int)$id_lang);
 		if (!empty($blacklist))
 		{
 			$string = preg_replace('/(?<=\s)('.$blacklist.')(?=\s)/Su', '', $string);
@@ -152,7 +152,7 @@ class SearchCore
 		
 		// Only use cookie if id_customer is not present
 		if ($useCookie)
-			$id_customer = $cookie->id_customer;
+			$id_customer = (int)$cookie->id_customer;
 		else
 			$id_customer = 0;
 		
@@ -165,7 +165,7 @@ class SearchCore
 
 		$intersectArray = array();
 		$scoreArray = array();
-		$words = explode(' ', Search::sanitize($expr, $id_lang));
+		$words = explode(' ', Search::sanitize($expr, (int)$id_lang));
 
 		foreach ($words AS $key => $word)
 			if (!empty($word) AND strlen($word) >= (int)Configuration::get('PS_SEARCH_MINWORDLEN'))
@@ -281,7 +281,7 @@ class SearchCore
 		if (!$result)
 			$resultProperties = false;
 		else
-			$resultProperties = Product::getProductsProperties($id_lang, $result);
+			$resultProperties = Product::getProductsProperties((int)$id_lang, $result);
 			
 		return array('total' => $total,'result' => $resultProperties);
 	}
@@ -565,6 +565,6 @@ class SearchCore
 		LIMIT '.(int)(($pageNumber - 1) * $pageSize).','.(int)$pageSize);
 		if (!$result) return false;
 
-		return Product::getProductsProperties($id_lang, $result);
+		return Product::getProductsProperties((int)$id_lang, $result);
 	}
 }
