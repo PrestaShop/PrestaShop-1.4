@@ -70,7 +70,7 @@ class ThemeInstallator extends Module
 			foreach ($xml->modules as $row)
 				foreach ($row->module as $row2)
 					$natives[] = (string)$row2['name'];
-
+		
 		if (count($natives > 0))
 			return $natives;
 		// use this list if we can't contact the prestashop.com server
@@ -89,19 +89,23 @@ class ThemeInstallator extends Module
 	}
 	
 	private function deleteDirectory($dirname)
-    {
-        $files = scandir($dirname);
-        foreach ($files as $file)
-            if ($file != '.' AND $file != '..')
-            {
-                if (is_dir($dirname.'/'.$file))
-                    self::deleteDirectory($dirname.'/'.$file);
-                elseif (file_exists($dirname.'/'.$file))
-                    unlink($dirname.'/'.$file);
-            }
-        rmdir($dirname);
-    }
-
+	{
+		self::cleanDirectory($dirname);
+		rmdir($dirname);
+	}
+	private function cleanDirectory($dirname)
+	{
+		$files = scandir($dirname);
+		foreach ($files as $file)
+			if ($file != '.' AND $file != '..' AND $file != '.svn')
+			{
+				if (is_dir($dirname.'/'.$file))
+					self::deleteDirectory($dirname.'/'.$file);
+				elseif (file_exists($dirname.'/'.$file))
+					unlink($dirname.'/'.$file);
+				}
+	}
+	
 	private function recurseCopy($src, $dst)
 	{
 		if (!$dir = opendir($src))
@@ -145,14 +149,7 @@ class ThemeInstallator extends Module
 	
 	private function deleteTmpFiles()
 	{
-		if (file_exists(_IMPORT_FOLDER_.'doc'))
-			self::deleteDirectory(_IMPORT_FOLDER_.'doc');
-		if (file_exists(_IMPORT_FOLDER_.XMLFILENAME))
-			unlink(_IMPORT_FOLDER_.XMLFILENAME);
-		if (file_exists(_IMPORT_FOLDER_.'modules'))
-			self::deleteDirectory(_IMPORT_FOLDER_.'modules');
-		if (file_exists(_IMPORT_FOLDER_.'themes'))
-			self::deleteDirectory(_IMPORT_FOLDER_.'themes');
+		self::cleanDirectory(_IMPORT_FOLDER_);
 		if (file_exists(_EXPORT_FOLDER_.'archive.zip'))	
 			unlink(_EXPORT_FOLDER_.'archive.zip');
 	}
@@ -160,7 +157,7 @@ class ThemeInstallator extends Module
 	private function init_defines()
 	{
 		global $currentIndex, $cookie;
-
+		
 		define('_EXPORT_FOLDER_', dirname(__FILE__).'/export/');
 		define('_IMPORT_FOLDER_', dirname(__FILE__).'/import/');
 		$this->page = 1;		
@@ -168,12 +165,11 @@ class ThemeInstallator extends Module
 			mkdir(_EXPORT_FOLDER_, 0777);
 		if (!file_exists(_IMPORT_FOLDER_) OR !is_dir(_IMPORT_FOLDER_))
 			mkdir(_IMPORT_FOLDER_, 0777);
-
+		
 		if (!Tools::isSubmit('cancelExport') AND (Tools::isSubmit('exportTheme') OR Tools::isSubmit('submitExport')))
 			$this->page = 'exportPage';
 		$this->_html = '<form action="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::htmlentitiesUTF8(Tools::getValue('token')).'" method="POST" enctype=multipart/form-data>';
-
-
+		
 		if (Tools::isSubmit('modulesToExport') OR Tools::isSubmit('submitModules'))
 			$this->to_export = Tools::getValue('modulesToExport');
 		if (Tools::isSubmit('submitThemes'))
@@ -203,7 +199,7 @@ class ThemeInstallator extends Module
 				echo parent::displayError('<b>'.$theme.'</b> is not a valid theme to export');
 			}
 	}
-
+	
 	private function handleInformations()
 	{
 		if (Tools::isSubmit('submitImport1'))
@@ -799,6 +795,7 @@ class ThemeInstallator extends Module
 				header('Content-Type: multipart/x-zip');
 				header('Content-Disposition:attachment;filename="'.$zip_file_name.'"');
 				readfile(_EXPORT_FOLDER_.$zip_file_name);
+				unlink(_EXPORT_FOLDER_.$zip_file_name);
 				die ;
 			}
 		}
