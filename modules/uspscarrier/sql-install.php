@@ -16,22 +16,22 @@
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
 	// Insert Service in database
-	$sql[] = "INSERT INTO `"._DB_PREFIX_."usps_rate_service_code` (`id_carrier`, `code`, `service`, `active`) VALUES
-			('0', 'FIRST CLASS', 'First Class', '0'),
-			('0', 'PRIORITY', 'Priority', '0'),
-			('0', 'PRIORITY COMMERCIAL', 'Priority Commercial', '0'),
-			('0', 'EXPRESS', 'Express', '0'),
-			('0', 'EXPRESS COMMERCIAL', 'Express Commercial', '0'),
-			('0', 'EXPRESS SH', 'Express SH', '0'),
-			('0', 'EXPRESS SH COMMERCIAL', 'Express SH Commercial', '0'),
-			('0', 'EXPRESS HFP', 'Express HFP', '0'),
-			('0', 'EXPRESS HFP COMMERCIAL', 'Express HFP Commercial', '0'),
-			('0', 'BPM', 'BPM', '0'),
-			('0', 'PARCEL', 'Parcel', '0'),
-			('0', 'MEDIA', 'Media', '0'),
-			('0', 'LIBRARY', 'Library', '0'),
-			('0', 'ALL', 'All', '0'),
-			('0', 'ONLINE', 'Online', '0');";
+	$sql[] = "INSERT INTO `"._DB_PREFIX_."usps_rate_service_code` (`id_carrier`, `id_carrier_history`, `code`, `service`, `active`) VALUES
+			('0', '', 'FIRST CLASS', 'First Class', '0'),
+			('0', '', 'PRIORITY', 'Priority', '0'),
+			('0', '', 'PRIORITY COMMERCIAL', 'Priority Commercial', '0'),
+			('0', '', 'EXPRESS', 'Express', '0'),
+			('0', '', 'EXPRESS COMMERCIAL', 'Express Commercial', '0'),
+			('0', '', 'EXPRESS SH', 'Express SH', '0'),
+			('0', '', 'EXPRESS SH COMMERCIAL', 'Express SH Commercial', '0'),
+			('0', '', 'EXPRESS HFP', 'Express HFP', '0'),
+			('0', '', 'EXPRESS HFP COMMERCIAL', 'Express HFP Commercial', '0'),
+			('0', '', 'BPM', 'BPM', '0'),
+			('0', '', 'PARCEL', 'Parcel', '0'),
+			('0', '', 'MEDIA', 'Media', '0'),
+			('0', '', 'LIBRARY', 'Library', '0'),
+			('0', '', 'ALL', 'All', '0'),
+			('0', '', 'ONLINE', 'Online', '0');";
 
 	// Create Cache Table in Database
 	$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'usps_cache` (

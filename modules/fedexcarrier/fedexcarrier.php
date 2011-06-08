@@ -412,9 +412,9 @@ class FedexCarrier extends CarrierModule
 		if (isset($_GET['id_tab']))
 			$html .= '<script>
 				  $(".menuTabButton.selected").removeClass("selected");
-				  $("#menuTab'.$_GET['id_tab'].'").addClass("selected");
+				  $("#menuTab'.Tools::getValue('id_tab').'").addClass("selected");
 				  $(".tabItem.selected").removeClass("selected");
-				  $("#menuTab'.$_GET['id_tab'].'Sheet").addClass("selected");
+				  $("#menuTab'.Tools::getValue('id_tab').'Sheet").addClass("selected");
 			</script>';
 		return $html;
 	}
@@ -448,7 +448,7 @@ class FedexCarrier extends CarrierModule
 			</style>
 
 
-			<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=1&section=general" method="post" class="form" id="configForm">
+			<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=1&section=general" method="post" class="form" id="configForm">
 
 				<fieldset style="border: 0px;">
 					<h4>'.$this->l('General configuration').' :</h4>
@@ -790,10 +790,10 @@ class FedexCarrier extends CarrierModule
 					<td>'.$c['additional_charges'].' '.$configCurrency->sign.'</td>
 					<td>'.$services.'</td>
 					<td>
-						<a href="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=edit&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'" style="float: left;">
+						<a href="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=2&section=category&action=edit&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'" style="float: left;">
 							<img src="'._PS_IMG_.'admin/edit.gif" />
 						</a>
-						<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=delete&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'&id_category='.(int)($c['id_category']).'" method="post" class="form" style="float: left;">
+						<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=2&section=category&action=delete&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'&id_category='.(int)($c['id_category']).'" method="post" class="form" style="float: left;">
 							<input name="submitSave" type="image" src="'._PS_IMG_.'admin/delete.gif" OnClick="return confirm(\''.$this->l('Are you sure you want to delete this specific FEDEX configuration for this category ?').'\');" />
 						</form>
 					</td>
@@ -819,8 +819,8 @@ class FedexCarrier extends CarrierModule
 				$path .= $p;
 			}
 
-			$html .= '<p align="center"><b>'.$this->l('Update a rule').' (<a href="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=add">'.$this->l('Add a rule').' ?</a>)</b></p>
-					<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=edit&id_fedex_rate_config='.(int)(Tools::getValue('id_fedex_rate_config')).'" method="post" class="form">
+			$html .= '<p align="center"><b>'.$this->l('Update a rule').' (<a href="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=2&section=category&action=add">'.$this->l('Add a rule').' ?</a>)</b></p>
+					<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=2&section=category&action=edit&id_fedex_rate_config='.(int)(Tools::getValue('id_fedex_rate_config')).'" method="post" class="form">
 						<label>'.$this->l('Category').' :</label>
 						<div class="margin-form" style="padding: 0.2em 0.5em 0 0; font-size: 12px;">'.$path.' <input type="hidden" name="id_category" value="'.(int)($configSelected['id_category']).'" /></div><br clear="left" />
 						<label>'.$this->l('Pickup Type').' : </label>
@@ -858,7 +858,7 @@ class FedexCarrier extends CarrierModule
 		else
 		{
 			$html .= '<p align="center"><b>'.$this->l('Add a rule').'</b></p>
-					<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=2&section=category&action=add" method="post" class="form">
+					<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=2&section=category&action=add" method="post" class="form">
 						<label>'.$this->l('Category').' : </label>
 						<div class="margin-form">
 							<select name="id_category">
@@ -1062,10 +1062,10 @@ class FedexCarrier extends CarrierModule
 					<td>'.$c['additional_charges'].' '.$configCurrency->sign.'</td>
 					<td>'.$services.'</td>
 					<td>
-						<a href="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=edit&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'" style="float: left;">
+						<a href="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=3&section=product&action=edit&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'" style="float: left;">
 							<img src="'._PS_IMG_.'admin/edit.gif" />
 						</a>
-						<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=delete&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'&id_product='.(int)($c['id_product']).'" method="post" class="form" style="float: left;">
+						<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=3&section=product&action=delete&id_fedex_rate_config='.(int)($c['id_fedex_rate_config']).'&id_product='.(int)($c['id_product']).'" method="post" class="form" style="float: left;">
 							<input name="submitSave" type="image" src="'._PS_IMG_.'admin/delete.gif" OnClick="return confirm(\''.$this->l('Are you sure you want to delete this specific FEDEX configuration for this product ?').'\');" />
 						</form>
 					</td>
@@ -1083,8 +1083,8 @@ class FedexCarrier extends CarrierModule
 			$configSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'fedex_rate_config` WHERE `id_fedex_rate_config` = '.(int)(Tools::getValue('id_fedex_rate_config')));
 			$product = new Product((int)$configSelected['id_product'], false, (int)$cookie->id_lang);
 
-			$html .= '<p align="center"><b>'.$this->l('Update a rule').' (<a href="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=add">'.$this->l('Add a rule').' ?</a>)</b></p>
-					<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=edit&id_fedex_rate_config='.(int)(Tools::getValue('id_fedex_rate_config')).'" method="post" class="form">
+			$html .= '<p align="center"><b>'.$this->l('Update a rule').' (<a href="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=3&section=product&action=add">'.$this->l('Add a rule').' ?</a>)</b></p>
+					<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=3&section=product&action=edit&id_fedex_rate_config='.(int)(Tools::getValue('id_fedex_rate_config')).'" method="post" class="form">
 						<label>'.$this->l('Product').' :</label>
 						<div class="margin-form" style="padding: 0.2em 0.5em 0 0; font-size: 12px;">'.$product->name.' <input type="hidden" name="id_product" value="'.(int)($configSelected['id_product']).'" /></div><br clear="left" />
 						<label>'.$this->l('Pickup Type').' : </label>
@@ -1122,7 +1122,7 @@ class FedexCarrier extends CarrierModule
 		else
 		{
 			$html .= '<p align="center"><b>'.$this->l('Add a rule').'</b></p>
-					<form action="index.php?tab='.$_GET['tab'].'&configure='.$_GET['configure'].'&token='.$_GET['token'].'&tab_module='.$_GET['tab_module'].'&module_name='.$_GET['module_name'].'&id_tab=3&section=product&action=add" method="post" class="form">
+					<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=3&section=product&action=add" method="post" class="form">
 						<label>'.$this->l('Product').' : </label>
 						<div class="margin-form">
 							<select name="id_product">
