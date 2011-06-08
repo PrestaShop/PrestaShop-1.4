@@ -45,6 +45,8 @@ class Tm4b extends Module
 	private	$_alert_new_order_active;
 	private	$_alert_update_quantity_active;
 	private	$_daily_report_active;
+	
+	public $token;
 
 	const __TM4B_LOWBALANCE__ = '20';
 	const __TM4B_NUMBER_DELIMITOR__ = ',';
@@ -92,6 +94,8 @@ class Tm4b extends Module
 		$this->displayName = 'SMS Tm4b';
 		$this->description = $this->l('Sends an SMS for each new order');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your info?');
+		
+		$this->token = md5('tm4b'._COOKIE_KEY_);
 	}
 
 	public function	install()
@@ -246,10 +250,9 @@ class Tm4b extends Module
 
 		$this->_html .= '
 		<fieldset><legend><img src="'.$this->_path.'informations.gif" alt="" title="" /> '.$this->l('Information').'</legend>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+			<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 				<label>'.$this->l('Send test SMS:').'</label>
-				<div class="margin-form"><input onclick="this.value=\'\'" type="text" style="margin-bottom:10px;" name="test_number" size="30" value="'.
-				((isset($_POST) AND isset($_POST['test_number'])) ? $_POST['test_number'] : $this->l('Enter your phone number')).'">
+				<div class="margin-form"><input onclick="this.value=\'\'" type="text" style="margin-bottom:10px;" name="test_number" size="30" value="'.Tools::getValue('test_number', $this->l('Enter your phone number')).'">
 				<input class="button" name="btnTestSms" value="'.$testsms_txt.'" type="submit" style="margin-bottom:10px;" /><br />'.$this->l('ex: 33642424242').'</div>';
 				if (!empty($this->_user) AND !empty($this->_password))
 				{
@@ -261,12 +264,18 @@ class Tm4b extends Module
 				}
 		$this->_html .= '
 			</form>
+		</fieldset><br />
+		<fieldset>
+			<legend><img src="'.$this->_path.'informations.gif" alt="" title="" /> '.$this->l('Information about CRON tab').'</legend>
+			
+			<label>'.$this->l('URL for cron task configuration:').'</label>
+			<b>http://'.Tools::getShopDomain().__PS_BASE_URI__.'modules/'.$this->name.'/cron.php?token='.$this->token.'</b>
 		</fieldset><br />';
 	}
 
 	private function _displayForm()
 	{
-				if (!isset($_POST['btnSubmit']))
+		if (Tools::isSubmit('btnSubmit'))
 		{
 			if ($this->_user)
 			{
@@ -282,50 +291,53 @@ class Tm4b extends Module
 			}
 		}
 
-		$this->_html .= '<fieldset><legend><img src="'.$this->_path.'prefs.gif" alt="" title="" /> '.$this->l('Settings').'</legend>
-		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-			<label>'.$this->l('Username:').'</label>
-			<div class="margin-form"><input type="text" name="user" value="'.(isset($_POST['user']) ? $_POST['user'] : '').'" /></div>
-			<label>'.$this->l('Password:').'</label>
-			<div class="margin-form"><input type="text" name="password" value="'.(isset($_POST['password']) ? $_POST['password'] : '').'" /></div>
-			<label>'.$this->l('Relay:').'</label>
-			<div class="margin-form"><select name="route">
-				<option value="GD01" '.(isset($_POST['route']) ? ($_POST['route'] == 'GD01' ? 'selected="selected"' : '') : '').'>Global I</option>
-				<option value="GD02" '.(isset($_POST['route']) ? ($_POST['route'] == 'GD02' ? 'selected="selected"' : '') : '').'>Global II</option>
-				<option value="USS1" '.(isset($_POST['route']) ? ($_POST['route'] == 'USS1' ? 'selected="selected"' : '') : '').'>USA Direct</option>
-				</select></div>
-			<label>'.$this->l('SMS sender\'s phone #').'</label>
-			<div class="margin-form"><input type="text" name="originator" value="'.(isset($_POST['originator']) ? $_POST['originator'] : '').'" style="margin-bottom:10px;" /><br />'.$this->l('ex: 33642424242').'</div>
-			<label>'.$this->l('Mode:').'</label>
-			<div class="margin-form"><input type="radio" name="simulation" value="1" style="vertical-align: middle;" '.( (isset($_POST['simulation']) AND $_POST['simulation'] == '1' ) ? 'checked' : '').' /> <span style="color: #900;">'.$this->l('Simulation').'</span>
-			&nbsp;<input type="radio" name="simulation" value="0" style="vertical-align: middle;" '.( (!isset($_POST['simulation']) OR $_POST['simulation'] == '0') ? 'checked' : '').' /> <span style="color: #080;">'.$this->l('Production').'</div>
-			<br />
-			<label>'.$this->l('Alerts on new order:').'</label>
-			<div class="margin-form"><div style="color:#000000; font-size:12px; margin-bottom:6px"><input type="checkbox" value="1" name="alert_new_order" '.( (isset($_POST['alert_new_order']) AND $_POST['alert_new_order'] == '1') ? 'checked' : '').' />&nbsp;'.$this->l('Yes').'</div>'.$this->l('Send SMS if a new order is made').'</div>
-			<label class="clear">'.$this->l('Alerts on product quantity:').'</label>
-			<div class="margin-form"><div style="color:#000000; font-size:12px; margin-bottom:6px"><input type="checkbox" value="1" name="alert_update_quantity" '.( (isset($_POST['alert_update_quantity']) AND $_POST['alert_update_quantity'] == '1') ? 'checked' : '').' />&nbsp;'.$this->l('Yes').'</div>'.$this->l('Send SMS if the stock of product is updated').'</div>
-			<label class="clear">'.$this->l('Daily report:').'</label>
-			<div class="margin-form"><div style="color:#000000; font-size:12px; margin-bottom:6px"><input type="checkbox" value="1" name="daily_report" '.( (isset($_POST['daily_report']) AND $_POST['daily_report'] == '1') ? 'checked' : '').' />&nbsp;'.$this->l('Yes').'</div>'.$this->l('Send a daily stats report - You must set a CRON to').' /modules/tm4b/cron.php</div>
-			<br />
-			<label>'.$this->l('SMS receiver\'s phone #').'</label>
-			<div class="margin-form"><input type="text" name="new_order_numbers" size="30" value="'.(isset($_POST['new_order_numbers']) ? $_POST['new_order_numbers'] : '').'" style="margin-bottom:10px;" /><br />'.$this->l('ex: 33642424242').'</div>
-			<br />
-			<div class="margin-form"><input class="button" name="btnSubmit" value="'.$this->l('Update settings').'" type="submit" /></div>
-		</form></fieldset>';
+		$this->_html .= '
+		<fieldset>
+			<legend><img src="'.$this->_path.'prefs.gif" alt="" title="" /> '.$this->l('Settings').'</legend>
+			<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
+				<label>'.$this->l('Username:').'</label>
+				<div class="margin-form"><input type="text" name="user" value="'.Tools::htmlentitiesUTF8(Tools::getValue('user')).'" /></div>
+				<label>'.$this->l('Password:').'</label>
+				<div class="margin-form"><input type="text" name="password" value="'.Tools::htmlentitiesUTF8(Tools::getValue('password')).'" /></div>
+				<label>'.$this->l('Relay:').'</label>
+				<div class="margin-form"><select name="route">
+					<option value="GD01" '.(Tools::getValue('route') == 'GD01' ? 'selected="selected"' : '').'>Global I</option>
+					<option value="GD02" '.(Tools::getValue('route') == 'GD02' ? 'selected="selected"' : '').'>Global II</option>
+					<option value="USS1" '.(Tools::getValue('route') == 'USS1' ? 'selected="selected"' : '').'>USA Direct</option>
+					</select></div>
+				<label>'.$this->l('SMS sender\'s phone #').'</label>
+				<div class="margin-form"><input type="text" name="originator" value="'.Tools::htmlentitiesUTF8(Tools::getValue('originator')).'" style="margin-bottom:10px;" /><br />'.$this->l('ex: 33642424242').'</div>
+				<label>'.$this->l('Mode:').'</label>
+				<div class="margin-form"><input type="radio" name="simulation" value="1" style="vertical-align: middle;" '.(Tools::getValue('simulation') == '1' ? 'checked' : '').' /> <span style="color: #900;">'.$this->l('Simulation').'</span>
+				&nbsp;<input type="radio" name="simulation" value="0" style="vertical-align: middle;" '.(!Tools::getValue('simulation') ? 'checked' : '').' /> <span style="color: #080;">'.$this->l('Production').'</div>
+				<br />
+				<label>'.$this->l('Alerts on new order:').'</label>
+				<div class="margin-form"><div style="color:#000000; font-size:12px; margin-bottom:6px"><input type="checkbox" value="1" name="alert_new_order" '.(Tools::getValue('alert_new_order') == '1' ? 'checked' : '').' />&nbsp;'.$this->l('Yes').'</div>'.$this->l('Send SMS if a new order is made').'</div>
+				<label class="clear">'.$this->l('Alerts on product quantity:').'</label>
+				<div class="margin-form"><div style="color:#000000; font-size:12px; margin-bottom:6px"><input type="checkbox" value="1" name="alert_update_quantity" '.(Tools::getValue('alert_update_quantity') == '1' ? 'checked' : '').' />&nbsp;'.$this->l('Yes').'</div>'.$this->l('Send SMS if the stock of product is updated').'</div>
+				<label class="clear">'.$this->l('Daily report:').'</label>
+				<div class="margin-form"><div style="color:#000000; font-size:12px; margin-bottom:6px"><input type="checkbox" value="1" name="daily_report" '.(Tools::getValue('daily_report') == '1' ? 'checked' : '').' />&nbsp;'.$this->l('Yes').'</div>'.$this->l('Send a daily stats report - You must set a CRON to').' /modules/tm4b/cron.php</div>
+				<br />
+				<label>'.$this->l('SMS receiver\'s phone #').'</label>
+				<div class="margin-form"><input type="text" name="new_order_numbers" size="30" value="'.Tools::htmlentitiesUTF8(Tools::getValue('new_order_numbers')).'" style="margin-bottom:10px;" /><br />'.$this->l('ex: 33642424242').'</div>
+				<br />
+				<div class="margin-form"><input class="button" name="btnSubmit" value="'.$this->l('Update settings').'" type="submit" /></div>
+			</form>
+		</fieldset>';
 	}
 
 	private function _postProcess()
 	{
-		Configuration::updateValue('TM4B_PASSWORD', $_POST['password']);
-		Configuration::updateValue('TM4B_USER', $_POST['user']);
-		Configuration::updateValue('TM4B_ORIGINATOR', $_POST['originator']);
-		Configuration::updateValue('TM4B_ROUTE', $_POST['route']);
-		Configuration::updateValue('TM4B_SIM', $_POST['simulation']);
-		Configuration::updateValue('TM4B_ALERT_NO_ACTIVE', isset($_POST['alert_new_order']) ? 1 : 0);
-		Configuration::updateValue('TM4B_ALERT_UQ_ACTIVE', isset($_POST['alert_update_quantity']) ? 1 : 0);
-		Configuration::updateValue('TM4B_DAILY_REPORT_ACTIVE', isset($_POST['daily_report']) ? 1 : 0);
+		Configuration::updateValue('TM4B_PASSWORD', Tools::getValue('password'));
+		Configuration::updateValue('TM4B_USER', Tools::getValue('user'));
+		Configuration::updateValue('TM4B_ORIGINATOR', Tools::getValue('originator'));
+		Configuration::updateValue('TM4B_ROUTE', Tools::getValue('route'));
+		Configuration::updateValue('TM4B_SIM', Tools::getValue('simulation'));
+		Configuration::updateValue('TM4B_ALERT_NO_ACTIVE', (int)Tools::isSubmit('alert_new_order'));
+		Configuration::updateValue('TM4B_ALERT_UQ_ACTIVE', (int)Tools::isSubmit('alert_update_quantity'));
+		Configuration::updateValue('TM4B_DAILY_REPORT_ACTIVE', (int)Tools::isSubmit('daily_report'));
 
-		$numbers = explode("\n", $_POST['new_order_numbers']);
+		$numbers = explode("\n", Tools::getValue('new_order_numbers'));
 		$this->_new_order_numbers = '';
 		foreach ($numbers as $number)
 		{
@@ -338,17 +350,17 @@ class Tm4b extends Module
 
 	private function _postValidation()
 	{
-		if (empty($_POST['user']))
+		if (!Tools::getValue('user') || Validate::isGenericName(Tools::getValue('user')) != true)
 			$this->_postErrors[] = $this->l('Username is mandatory');
-		elseif (empty($_POST['password']))
+		elseif (!Tools::getValue('password') || Validate::isPasswd(Tools::getValue('password')) != true)
 			$this->_postErrors[] = $this->l('Password is mandatory');
-		elseif (empty($_POST['route']) OR ($_POST['route'] != 'GD01' AND $_POST['route'] != 'GD02' AND $_POST['route'] != 'USS1'))
+		elseif (!Tools::getValue('route') OR (Tools::getValue('route') != 'GD01' AND Tools::getValue('route') != 'GD02' AND Tools::getValue('route') != 'USS1'))
 			$this->_postErrors[] = $this->l('Route is mandatory');
-		elseif (empty($_POST['originator']))
+		elseif (!Tools::getValue('originator'))
 			$this->_postErrors[] = $this->l('Origin is mandatory');
-		elseif (!isset($_POST['simulation']) OR ($_POST['simulation'] != 0 AND $_POST['simulation'] != 1))
+		elseif (!Tools::isSubmit('simulation') OR (Tools::getValue('simulation') != 0 AND Tools::getValue('simulation') != 1))
 			$this->_postErrors[] = $this->l('Mode is mandatory');
-		elseif (empty($_POST['new_order_numbers']))
+		elseif (!Tools::getValue('new_order_numbers'))
 			$this->_postErrors[] = $this->l('Please enter a phone number');
 		elseif (preg_match('/([^0-9[:space:],])/', $_POST['new_order_numbers'], $regs))
 			$this->_postErrors[]  = $this->l('Phone number invalid');
@@ -376,7 +388,7 @@ class Tm4b extends Module
 		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($query.'AND o.`date_add` LIKE \''.date('Y-m').'-%\'');
 
 		return date('Y-m-d')."\n".
-		$this->l('Orders:').' '.(int)($result['total_orders'])."\n".
+		$this->l('Orders:').' '.(int)$result['total_orders']."\n".
 		$this->l('Sales:').' '.Tools::displayPrice($result['total_sales'], $currency, true)."\n".
 		'('.$this->l('Month:').' '.Tools::displayPrice($result2['total_sales'], $currency, true).')';
 	}
