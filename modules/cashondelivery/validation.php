@@ -38,15 +38,14 @@ $customer = new Customer((int)$cart->id_customer);
 if (!Validate::isLoadedObject($customer))
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
-
 /* Validate order */
 if (Tools::getValue('confirm'))
 {
-	$customer = new Customer((int)($cart->id_customer));
+	$customer = new Customer((int)$cart->id_customer);
 	$total = $cart->getOrderTotal(true, Cart::BOTH);
-	$cashOnDelivery->validateOrder((int)($cart->id), _PS_OS_PREPARATION_, $total, $cashOnDelivery->displayName, NULL, array(), NULL, false,$customer->secure_key);
-	$order = new Order((int)($cashOnDelivery->currentOrder));
-	Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.(int)($cart->id).'&id_module='.(int)($cashOnDelivery->id).'&id_order='.(int)($cashOnDelivery->currentOrder));
+	$cashOnDelivery->validateOrder((int)$cart->id, _PS_OS_PREPARATION_, $total, $cashOnDelivery->displayName, NULL, array(), NULL, false, $customer->secure_key);
+	$order = new Order((int)$cashOnDelivery->currentOrder);
+	Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?key='.$customer->secure_key.'&id_cart='.(int)($cart->id).'&id_module='.(int)$cashOnDelivery->id.'&id_order='.(int)$cashOnDelivery->currentOrder);
 }
 else
 {
