@@ -87,9 +87,9 @@ class BankWire extends PaymentModule
 	{
 		if (Tools::isSubmit('btnSubmit'))
 		{
-			if (Tools::getValue('details'))
+			if (!Tools::getValue('details'))
 				$this->_postErrors[] = $this->l('Account details are required.');
-			elseif (Tools::getValue('owner'))
+			elseif (!Tools::getValue('owner'))
 				$this->_postErrors[] = $this->l('Account owner is required.');
 		}
 	}
