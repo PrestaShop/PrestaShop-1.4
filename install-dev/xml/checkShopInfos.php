@@ -204,11 +204,12 @@ if (isFormValid())
 	{
 		$localizationPack = new LocalizationPackCore();
 		$localizationPack->loadLocalisationPack($localization_file, '', true);
+
 		if (Configuration::get('PS_LANG_DEFAULT') == 1)
 		{
-			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
+			$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'configuration` SET `value` = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
 			// This request is used when _PS_MODE_DEV_ is set to true
-			$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'lang` SET `active` = 0 WHERE `id_lang` != (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\')';
+			$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'lang` SET `active` = 0 WHERE `iso_code` != \''.pSQL($_GET['isoCode']).'\'';
 		}
 		else
 			$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'lang` SET `active` = 0 WHERE `id_lang` != '.Configuration::get('PS_LANG_DEFAULT');
