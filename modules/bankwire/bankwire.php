@@ -85,22 +85,22 @@ class BankWire extends PaymentModule
 
 	private function _postValidation()
 	{
-		if (isset($_POST['btnSubmit']))
+		if (Tools::isSubmit('btnSubmit'))
 		{
-			if (empty($_POST['details']))
+			if (Tools::getValue('details'))
 				$this->_postErrors[] = $this->l('Account details are required.');
-			elseif (empty($_POST['owner']))
+			elseif (Tools::getValue('owner'))
 				$this->_postErrors[] = $this->l('Account owner is required.');
 		}
 	}
 
 	private function _postProcess()
 	{
-		if (isset($_POST['btnSubmit']))
+		if (Tools::isSubmit('btnSubmit'))
 		{
-			Configuration::updateValue('BANK_WIRE_DETAILS', $_POST['details']);
-			Configuration::updateValue('BANK_WIRE_OWNER', $_POST['owner']);
-			Configuration::updateValue('BANK_WIRE_ADDRESS', $_POST['address']);
+			Configuration::updateValue('BANK_WIRE_DETAILS', Tools::getValue('details'));
+			Configuration::updateValue('BANK_WIRE_OWNER', Tools::getValue('owner'));
+			Configuration::updateValue('BANK_WIRE_ADDRESS', Tools::getValue('address'));
 		}
 		$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('ok').'" /> '.$this->l('Settings updated').'</div>';
 	}
@@ -115,7 +115,7 @@ class BankWire extends PaymentModule
 	private function _displayForm()
 	{
 		$this->_html .=
-		'<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+		'<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset>
 			<legend><img src="../img/admin/contact.gif" />'.$this->l('Contact details').'</legend>
 				<table border="0" width="500" cellpadding="0" cellspacing="0" id="form">
@@ -144,7 +144,7 @@ class BankWire extends PaymentModule
 	{
 		$this->_html = '<h2>'.$this->displayName.'</h2>';
 
-		if (!empty($_POST))
+		if (Tools::isSubmit('btnSubmit'))
 		{
 			$this->_postValidation();
 			if (!sizeof($this->_postErrors))
@@ -230,5 +230,6 @@ class BankWire extends PaymentModule
 			foreach ($currencies_module AS $currency_module)
 				if ($currency_order->id == $currency_module['id_currency'])
 					return true;
+		return false;
 	}
 }
