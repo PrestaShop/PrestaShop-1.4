@@ -136,7 +136,7 @@ class Twenga extends PaymentModule
 		$this->site_url = Tools::htmlentitiesutf8($protocol.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		self::$base_dir = _PS_ROOT_DIR_.'/modules/twenga/';
 		self::$base_path = $this->site_url.'/modules/twenga/';
-		$this->feed_url = self::$base_path.'export.php';
+		$this->feed_url = self::$base_path.'export.php?twenga_token='.sha1(Configuration::get('TWENGA_TOKEN')._COOKIE_KEY_);
 		
 		self::$shop_country = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 		
@@ -162,7 +162,15 @@ class Twenga extends PaymentModule
 			self::$obj_ps_stats = new PrestashopStats($this->site_url);
 		$this->_initCurrentIsoCodeCountry();
 	}
-
+	
+	public function install()
+	{
+		if (Configuration::updateValue('TWENGA_TOKEN', Tools::passwdGen()))
+			return parent::install();
+		else
+			return false;
+	}
+	
 	/**
 	 * For uninstall just need to delete the Merchant Login.
 	 * @return bool see parent class.
@@ -248,7 +256,7 @@ class Twenga extends PaymentModule
 				$.ajax({
 						type: \'POST\',
 						url: \''._MODULE_DIR_.'twenga/'.$file.'\',
-						data: \'type='.$type.'&base='.$href.'&id_lang='.(int)$cookie->id_lang.'\',
+						data: \'type='.$type.'&base='.$href.'&twenga_token='.sha1(Configuration::get('TWENGA_TOKEN')._COOKIE_KEY_).'&id_lang='.(int)$cookie->id_lang.'\',
 						success: function(msg) {
 							'.(($displayMsg) ? '
 							$.fancybox(msg, {

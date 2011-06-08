@@ -6,13 +6,17 @@ if (file_exists($configPath))
 {
 	include('../../config/config.inc.php');
 	include(dirname(__FILE__).'/twenga.php');
+	
+	if ((sha1(Configuration::get('TWENGA_TOKEN')._COOKIE_KEY_)) != Tools::getValue('twenga_token'))
+		die('FATAL ERROR : INVALID TOKEN');
 
 	$controller = new FrontController();
 	$controller->init();
 
 	$country = Twenga::getCurrentCountryName();
 
-	$to = 'rts_support@twenga.com';
+	//$to = 'rts_support@twenga.com';
+	$to = 'vincent@prestashop.com';
 	$subject = 'Site prestashop '.$country.' ayant supprimé le module';
 	
 	$template = 'mail';

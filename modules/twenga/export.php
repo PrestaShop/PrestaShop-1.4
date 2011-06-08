@@ -32,6 +32,10 @@
 include_once('../../config/config.inc.php');
 include_once('../../init.php');
 include_once(dirname(__FILE__).'/twenga.php');
+
+if ((sha1(Configuration::get('TWENGA_TOKEN')._COOKIE_KEY_)) != Tools::getValue('twenga_token'))
+	die('FATAL ERROR : INVALID TOKEN');
+
 $export = new Twenga();
 $output = $export->buildXML();
 if (empty($export->_errors))
