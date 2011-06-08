@@ -72,12 +72,13 @@ class FrontControllerCore
 	{
 		global $cookie, $smarty, $cart, $iso, $defaultCountry, $protocol_link, $protocol_content, $link, $css_files, $js_files;
 
-		$css_files = array();
-		$js_files = array();
-
 		if (self::$initialized)
 			return;
 		self::$initialized = true;
+
+		$css_files = array();
+		$js_files = array();
+
 
 		if ($this->ssl AND (empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off') AND Configuration::get('PS_SSL_ENABLED'))
 		{
