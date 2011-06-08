@@ -95,11 +95,12 @@ class LanguageCore extends ObjectModel
 	$'.$var.' = array();
 ?>');
 
+		$resUpdateSQL = $this->loadUpdateSQL();
 		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
 		if(!Configuration::get('PS_REWRITING_SETTINGS'))
-			return true;
+			return $resUpdateSQL;
 
-		return ($this->loadUpdateSQL() AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+		return ($resUpdateSQL AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 			Configuration::get('PS_HTACCESS_SPECIFIC')
@@ -277,6 +278,11 @@ class LanguageCore extends ObjectModel
 		return $files;
 	}
 
+	/**
+	 * loadUpdateSQL will create default lang values when you create a new lang, based on default id lang
+	 * 
+	 * @return boolean true if succeed
+	 */
 	public function loadUpdateSQL()
 	{
 		$tables = Db::getInstance()->ExecuteS('SHOW TABLES LIKE \''._DB_PREFIX_.'%_lang\' ');
