@@ -62,8 +62,8 @@
 					{foreach from=$datas key='index' item='data' name='datas'}
 						{ldelim}
 						"index":			{$index},
-						"value":			"{$data.value|addslashes}",
-						"truncatedValue":	"{$data.value|truncate:28:'...'|addslashes}"
+						"value":			"{$data.value|addslashes|replace: '\\\'':'\''}",
+						"truncatedValue":	"{$data.value|truncate:28:'...'|addslashes|replace: '\\\'':'\''}"
 						{rdelim}{if !$smarty.foreach.datas.last},{/if}
 					{/foreach}]
 				{rdelim}{if !$smarty.foreach.customization.last},{/if}
