@@ -33,7 +33,7 @@ class Gsitemap extends Module
 	private $_html = '';
 	private $_postErrors = array();
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'gsitemap';
 		$this->tab = 'seo';
@@ -50,7 +50,7 @@ class Gsitemap extends Module
 			define('GSITEMAP_FILE', dirname(__FILE__).'/../../sitemap.xml');
 	}
 
-	function uninstall()
+	public function uninstall()
 	{
 		file_put_contents(GSITEMAP_FILE, '');
 		return parent::uninstall();
@@ -76,8 +76,8 @@ class Gsitemap extends Module
 
 	private function _postProcess()
 	{
-		Configuration::updateValue('GSITEMAP_ALL_CMS', (int)(Tools::getValue('GSITEMAP_ALL_CMS')));
-		Configuration::updateValue('GSITEMAP_ALL_PRODUCTS', (int)(Tools::getValue('GSITEMAP_ALL_PRODUCTS')));
+		Configuration::updateValue('GSITEMAP_ALL_CMS', (int)Tools::getValue('GSITEMAP_ALL_CMS'));
+		Configuration::updateValue('GSITEMAP_ALL_PRODUCTS', (int)Tools::getValue('GSITEMAP_ALL_PRODUCTS'));
 		$link = new Link();
 		$langs = Language::getLanguages();
 				
@@ -90,7 +90,7 @@ XML;
 		
 		$xml = new SimpleXMLElement($xmlString);
 
-		if (Configuration::get('PS_REWRITING_SETTINGS') AND count($langs) > 1)
+		if (Configuration::get('PS_REWRITING_SETTINGS') AND sizeof($langs) > 1)
 			foreach($langs as $lang)
 				$this->_addSitemapNode($xml, Tools::getShopDomain(true, true).__PS_BASE_URI__.$lang['iso_code'].'/', '1.00', 'daily', date('Y-m-d'));
 		else
@@ -116,7 +116,7 @@ XML;
 		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
 		foreach($cmss AS $cms)
 		{
-			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCMSLink((int)($cms['id_cms']), $cms['link_rewrite'], false, (int)($cms['id_lang'])) : $link->getCMSLink((int)($cms['id_cms']));
+			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCMSLink((int)$cms['id_cms'], $cms['link_rewrite'], false, (int)$cms['id_lang']) : $link->getCMSLink((int)$cms['id_cms']);
 			$this->_addSitemapNode($xml, $tmpLink, '0.8', 'daily');				
 		}
 		
@@ -141,10 +141,9 @@ XML;
 			if (($priority = 0.9 - ($category['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
 			
-			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCategoryLink((int)($category['id_category']), $category['link_rewrite'], (int)($category['id_lang'])) : $link->getCategoryLink((int)($category['id_category']));
-			
+			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCategoryLink((int)$category['id_category'], $category['link_rewrite'], (int)$category['id_lang']) : $link->getCategoryLink((int)$category['id_category']);	
 			$this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($category['date_upd'], 0, 10));
-      	}
+      }
 
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') date_upd, pl.id_lang, cl.`link_rewrite` category, ean13, i.id_image, il.legend legend_image, (
@@ -171,7 +170,7 @@ XML;
 			$tmpLink = $link->getProductLink((int)($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], (int)($product['id_lang']));
 			$sitemap = $this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($product['date_upd'], 0, 10));
 			$sitemap = $this->_addSitemapNodeImage($sitemap, $product);
-        }
+		}
 		
 		/* Add classic pages (contact, best sales, new products...) */
 		$pages = array(
@@ -259,7 +258,7 @@ XML;
 	private function _displayForm()
 	{
 		$this->_html .=
-		'<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+		'<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 			<div style="margin:0 0 20px 0;">
 				<input type="checkbox" name="GSITEMAP_ALL_PRODUCTS" id="GSITEMAP_ALL_PRODUCTS" style="vertical-align: middle;" value="1" '.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? 'checked="checked"' : '').' /> <label class="t" for="GSITEMAP_ALL_PRODUCTS">'.$this->l('Sitemap contains all products').'</label>
 				<p style="color:#7F7F7F;">'.$this->l('Default: only products in active categories are included on Sitemap').'</p>
@@ -273,12 +272,12 @@ XML;
 		</form>';
 	}
 	
-	function getContent()
+	public function getContent()
 	{
 		$this->_html .= '<h2>'.$this->l('Search Engine Optimization').'</h2>
 		'.$this->l('See').' <a href="https://www.google.com/webmasters/tools/docs/en/about.html" style="font-weight:bold;text-decoration:underline;" target="_blank">
 		'.$this->l('this page').'</a> '.$this->l('for more information').'<br /><br />';
-		if (!empty($_POST))
+		if (Tools::isSubmit('btnSubmit'))
 		{
 			$this->_postValidation();
 			if (!sizeof($this->_postErrors))
@@ -294,6 +293,3 @@ XML;
 		return $this->_html;
 	}
 }
-
-
-
