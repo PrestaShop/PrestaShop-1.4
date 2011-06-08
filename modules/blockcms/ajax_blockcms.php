@@ -41,25 +41,28 @@ if (Tools::getValue('action') == 'getCms')
 	$cms_categories = Db::getInstance()->ExecuteS('
 	SELECT * FROM `'._DB_PREFIX_.'cms_category` c
 	JOIN `'._DB_PREFIX_.'cms_category_lang` cl ON (c.`id_cms_category` = cl.`id_cms_category`)
-	WHERE c.`id_parent` = '.(int)(Tools::getValue('id_cms_category')).'
-	AND cl.`id_lang` = '.(int)($cookie->id_lang).'
+	WHERE c.`id_parent` = '.(int)Tools::getValue('id_cms_category').'
+	AND cl.`id_lang` = '.(int)$cookie->id_lang.'
 	ORDER BY c.`id_cms_category`');
+	
 	$cms_pages = Db::getInstance()->ExecuteS('
 	SELECT cl.`meta_title`, c.`id_cms` FROM `'._DB_PREFIX_.'cms` c
 	JOIN `'._DB_PREFIX_.'cms_lang` cl ON (c.`id_cms` = cl.`id_cms`)
-	WHERE c.`id_cms_category` = '.(int)(Tools::getValue('id_cms_category')).'
+	WHERE c.`id_cms_category` = '.(int)Tools::getValue('id_cms_category').'
 	AND c.`active` = 1 
-	AND cl.`id_lang` = '.(int)($cookie->id_lang).'
+	AND cl.`id_lang` = '.(int)$cookie->id_lang.'
 	ORDER BY c.`id_cms`');
+	
 	if (Tools::getValue('id_cms_block'))
 		$cms_selected = Db::getInstance()->ExecuteS('
 		SELECT `is_category`, `id_cms` FROM `'._DB_PREFIX_.'cms_block_page`
-		WHERE `id_cms_block` = '.(int)(Tools::getValue('id_cms_block')));
+		WHERE `id_cms_block` = '.(int)Tools::getValue('id_cms_block'));
+	
 	$html = '';
-
 	if (sizeof($cms_categories) OR sizeof($cms_pages))
 	{
-		$html .= '<table width="100%" class="table" cellspacing="0" cellpadding="0">
+		$html .= '
+			<table width="100%" class="table" cellspacing="0" cellpadding="0">
 				<thead>
 				<tr>
 					<th width="5%" class="center"><input type="checkbox" class="noborder" name="checkme" onclick="checkallCMSBoxes($(this).attr(\'checked\'))"></th>
@@ -78,6 +81,7 @@ if (Tools::getValue('action') == 'getCms')
 						<td width="85%"><b>'.$cms_category['name'].'</b></td>
 					</tr>';
 		}
+		
 		foreach ($cms_pages as $cms_page)
 		{
 			$html .= '
@@ -89,9 +93,7 @@ if (Tools::getValue('action') == 'getCms')
 		}
 	}
 	else
-	{
 		$html .= $blockcms->getL('There is nothing to display in this CMS category');
-	}
 
 	echo $html;
 }
@@ -103,7 +105,10 @@ elseif (Tools::getValue('action') == 'dnd')
 		foreach ($table as $key =>$row)
 		{
 			$ids = explode('_', $row);
-			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cms_block` SET `position` = '.(int)($pos).' WHERE `id_cms_block` = '.(int)($ids[2]));
+			Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'cms_block` 
+			SET `position` = '.(int)$pos.' 
+			WHERE `id_cms_block` = '.(int)$ids[2]);
 			$pos++;
 		}
 	}
