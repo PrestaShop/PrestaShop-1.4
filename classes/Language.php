@@ -128,11 +128,11 @@ class LanguageCore extends ObjectModel
 
 
 	/**
-	 * This functions checks if every files exists for the language $iso_code. 
-	 * Concerned files are theses located in translations/$iso_code/ 
+	 * This functions checks if every files exists for the language $iso_code.
+	 * Concerned files are theses located in translations/$iso_code/
 	 * and translations/mails/$iso_code .
-	 * 
-	 * @param mixed $iso_code 
+	 *
+	 * @param mixed $iso_code
 	 * @returntrue if all files exists
 	 */
 	public static function checkFilesWithIsoCode($iso_code)
@@ -281,11 +281,11 @@ class LanguageCore extends ObjectModel
 	{
 		$tables = Db::getInstance()->ExecuteS('SHOW TABLES LIKE \''._DB_PREFIX_.'%_lang\' ');
 		$langTables = array();
-		
+
 		foreach($tables as $table)
 			foreach($table as $t)
 				$langTables[] = $t;
-		
+
 		Db::getInstance()->Execute('SET @id_lang_default = (SELECT c.`value` FROM `'._DB_PREFIX_.'configuration` c WHERE c.`name` = \'PS_LANG_DEFAULT\' LIMIT 1)');
 		$return = true;
 		foreach($langTables as $name)
@@ -296,7 +296,7 @@ class LanguageCore extends ObjectModel
 				$fields .= $column['Field'].', ';
 			$fields = rtrim($fields, ', ');
 			$identifier = 'id_'.str_replace('_lang', '', str_replace(_DB_PREFIX_, '', $name));
-			
+
 			$sql = 'INSERT IGNORE INTO `'.$name.'` ('.$fields.') (SELECT ';
 			$sql .= '`'.$identifier.'`, `id_lang`, ';
 			foreach($columns as $column)
@@ -332,7 +332,7 @@ class LanguageCore extends ObjectModel
 	{
 		if (empty($this->iso_code))
 			$this->iso_code = self::getIsoById($this->id);
-		
+
 		// Database translations deletion
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
 		foreach ($result AS $row)
@@ -357,7 +357,7 @@ class LanguageCore extends ObjectModel
 			$files = @scandir(_PS_MODULE_DIR_.$mod.'/mails/');
 			if (count($files) <= 2)
 				self::recurseDeleteDir(_PS_MODULE_DIR_.$mod.'/mails/');
-			
+
 			if(file_exists(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php'))
 			{
 				$return = unlink(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php');
@@ -366,14 +366,14 @@ class LanguageCore extends ObjectModel
 					self::recurseDeleteDir(_PS_MODULE_DIR_.$mod);
 			}
 		}
-		
+
 		if (file_exists(_PS_MAIL_DIR_.$this->iso_code))
 			self::recurseDeleteDir(_PS_MAIL_DIR_.$this->iso_code);
 		if (file_exists(_PS_TRANSLATIONS_DIR_.$this->iso_code))
 			self::recurseDeleteDir(_PS_TRANSLATIONS_DIR_.$this->iso_code);
 		if (!parent::delete())
 			return false;
-		
+
 		// delete images
 		$files_copy = array('/en.jpg', '/en-default-thickbox.jpg', '/en-default-home.jpg', '/en-default-large.jpg', '/en-default-medium.jpg', '/en-default-small.jpg', '/en-default-large_scene.jpg');
 		$tos = array(_PS_CAT_IMG_DIR_, _PS_MANU_IMG_DIR_, _PS_PROD_IMG_DIR_, _PS_SUPP_IMG_DIR_);
@@ -381,7 +381,7 @@ class LanguageCore extends ObjectModel
 			foreach($files_copy AS $file)
 			{
 				$name = str_replace('/en', ''.$this->iso_code, $file);
-					
+
 				if (file_exists($to.$name))
 					unlink($to.$name);
 				if (file_exists(dirname(__FILE__).'/../img/l/'.$this->id.'.jpg'))
@@ -435,6 +435,7 @@ class LanguageCore extends ObjectModel
 		if(!self::$_LANGUAGES)
 			self::loadLanguages();
 
+		$languages = array();
 		foreach (self::$_LANGUAGES AS $language)
 		{
 			if ($active AND !$language['active'])
