@@ -1,5 +1,5 @@
 <?php
-
+//Indispensable ??
 class DejalaTest
 {
 	public $dejalaConfig;

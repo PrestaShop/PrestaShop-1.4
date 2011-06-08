@@ -27,21 +27,22 @@ class DejalaCart extends ObjectModel
 	private static $INSTANCES = array() ;
 	private $djlCart ;
 
-	static public function getInstance($id) {
-		if (!isset(self::$INSTANCES[$id])) {
+	static public function getInstance($id) 
+	{
+		if (!isset(self::$INSTANCES[$id]))
         	self::$INSTANCES[$id] = new DejalaCart($id);
-		}
+
 		return self::$INSTANCES[$id];
 	}
 
-	public function __construct($id = NULL, $id_lang = NULL) {
-		if (isset($id) && !is_null($id)) {
-			$this->wanted_cart_id = $id ;
-		}
+	public function __construct($id = NULL, $id_lang = NULL) 
+	{
+		if (isset($id) && !is_null($id))
+			$this->wanted_cart_id = (int)$id ;
+			
 		parent::__construct($id, $id_lang) ;
-		if (isset($this->id) && $this->id == $this->wanted_cart_id) {
-			unset($this->wanted_cart_id) ;	
-		}
+		if (isset($this->id) && $this->id == $this->wanted_cart_id)
+			unset($this->wanted_cart_id) ;
 	}
 	
 	public function getFields()
@@ -57,11 +58,13 @@ class DejalaCart extends ObjectModel
 		return $fields;
 	}
 	
-	public function save($nullValues = false, $autodate = true) {
+	public function save($nullValues = false, $autodate = true)
+	{
 		parent::save($nullValues, $autodate) ;
-		if (isset($this->wanted_cart_id)) {
+		if (isset($this->wanted_cart_id)) 
+		{
 			Db::getInstance()->Execute('UPDATE ' . _DB_PREFIX_ . $this->table . ' SET ' . $this->identifier . ' = ' . (int)$this->wanted_cart_id . ' WHERE ' . $this->identifier . ' = ' . (int)$this->id);
-			$this->id = $this->wanted_cart_id ;
+			$this->id = (int)$this->wanted_cart_id ;
 			unset($this->wanted_cart_id) ;			
 		}		
 	}

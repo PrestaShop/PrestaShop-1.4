@@ -13,7 +13,7 @@ class DejalaConfig
 	public $mode = 'TEST';
 	public $trigerringStatuses = '2';
 	// Faire apparaitre/disparaitre le module sur le front
-//	public $active = 0;
+    //public $active = 0;
 	public $visibility_status = "invisible" ;
 	public $visible_users_list = "";
 	public $internal_version ;
@@ -82,13 +82,14 @@ class DejalaConfig
 
 		// Backward compatibility
 		$activeVal = html_entity_decode(Configuration::get('DJL_ACTIVE'), ENT_COMPAT, 'UTF-8') ;
-		if ($activeVal != "") {
+		if ($activeVal != "") 
+		{
 			$this->active = (int)($activeVal);
 			$this->visibility_status = ($this->active == 0 ? "invisible" : "visible") ;
 		}
-		if ($this->visibility_status == "") {
+		
+		if ($this->visibility_status == "") 
 			$this->visibility_status = "invisible" ;
-		}
 	}
 
 	/**
@@ -109,10 +110,10 @@ class DejalaConfig
 			$l_serviceURL = $this->serviceURL;
 		else
 			$l_serviceURL = $this->sandboxServiceURL;
-		if ($this->useSSL !== 0) {
+		if ($this->useSSL !== 0)
 			if (0 === strpos($l_serviceURL, 'http:'))
 				$l_serviceURL = 'https'.substr($l_serviceURL, 4);
-		}
+				
 		return ($l_serviceURL);
 	}
 }

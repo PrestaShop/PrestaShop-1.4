@@ -1,7 +1,7 @@
 <?php
 
 /**
-	* Utilitary functions for calendar
+* Utilitary functions for calendar
  **/
 class CalendarUtils
 {
@@ -9,7 +9,8 @@ class CalendarUtils
 	*	Ajuste l'heure de dateUtc en fonction de l'ouverture
 	* La dateUtc est considérée dispo
 	**/
-	public function adjustHour($dateUtc, $calendar) {
+	public function adjustHour($dateUtc, $calendar) 
+	{
 		$wd = date('w', $dateUtc);
 		$startHour = (int)($calendar[$wd]['start_hour']);
 		$stopHour = (int)($calendar[$wd]['stop_hour']);
@@ -17,12 +18,14 @@ class CalendarUtils
 		$currentMin = (int)(date('i', $dateUtc));
 
 		// arrondi à l'heure juste d'après
-		if ($currentMin > 0) {
+		if ($currentMin > 0) 
+		{
 			$currentHour = $currentHour + 1;
 			$dateUtc = mktime($currentHour, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
 		}
 		// si on est avant l'heure de départ, on se met à l'heure de départ
-		if ($currentHour < $startHour) {
+		if ($currentHour < $startHour) 
+		{
 			$dateUtc = mktime($startHour, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
 		}
 		return ($dateUtc);
@@ -32,17 +35,21 @@ class CalendarUtils
 	 * Ajout un délai à la date dateUtc : 0.5 jour ou 1*nb de jours 
 	 * Prend en compte le calendrier & les exceptions
 	**/
-	public function addDelay($dateUtc, $delay, $calendar, $exceptions) {
+	public function addDelay($dateUtc, $delay, $calendar, $exceptions) 
+	{
 		// on se base sur la prochaine date dispo
 		$dateUtc = $this->getNextDateAvailable($dateUtc, $calendar, $exceptions);
 		if (!$dateUtc)
 			return (null);
 			
-		if ($delay == '0.5') {
+		if ($delay == '0.5') 
+		{
 			$hour = (int)(date('H', $dateUtc));
-			if ($hour < 12) {
+			if ($hour < 12) 
+			{
 				$dateUtc = mktime('14', 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
-			} else {
+			} else 
+			{
 				$dateUtc = $this->skipOneDay($dateUtc) ;
 				$dateUtc = $this->getNextDateAvailable($dateUtc, $calendar, $exceptions);				
 			}
@@ -59,17 +66,20 @@ class CalendarUtils
 		return ($dateUtc);
 	}
 	
-	public function skipOneDay($dateUtc) {
+	public function skipOneDay($dateUtc) 
+	{
 		$dateUtc = strtotime(date("Y-m-d", $dateUtc) . " +1 day");
 		// on remet sur 00h00 pr livrer au début du jour
 		$dateUtc = mktime(0, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
 		
 		return $dateUtc ;
 	}
-	public function skipCurDay($dateUtc) {
+	public function skipCurDay($dateUtc) 
+	{
 		$currentDayZero = mktime(0, 0, 0, date('m', time()), date('d', time()), date('Y', time()));
 		$dateUtcZero = mktime(0, 0, 0, date('m', $dateUtc), date('d', $dateUtc), date('Y', $dateUtc));
-		if ($currentDayZero == $dateUtcZero) {
+		if ($currentDayZero == $dateUtcZero) 
+		{
 			$dateUtc = $this->skipOneDay($dateUtc) ;
 		}		
 		return $dateUtc ;
