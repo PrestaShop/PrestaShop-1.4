@@ -733,7 +733,7 @@ class WebserviceRequestCore
 	 */
 	protected function checkResource()
 	{
-		$this->resourceList = self::getResources();
+		$this->resourceList = $this->getResources();
 		$resourceNames = array_keys($this->resourceList);
 		if ($this->urlSegment[0] == '')
 			$this->resourceConfiguration['objectsNodeName'] = 'resources';
@@ -886,6 +886,239 @@ class WebserviceRequestCore
 		return true;
 	}
 	
+	protected function manageFilters()
+	{
+		// filtered fields which can not use filters : hidden_fields
+		$available_filters = array();
+		// filtered i18n fields which can use filters
+		$i18n_available_filters = array();
+		foreach ($this->resourceConfiguration['fields'] as $fieldName => $field)
+			if ((!isset($this->resourceConfiguration['hidden_fields']) ||
+				(isset($this->resourceConfiguration['hidden_fields']) && !in_array($fieldName, $this->resourceConfiguration['hidden_fields']))))
+				if ((!isset($field['i18n']) || 
+				(isset($field['i18n']) && !$field['i18n'])))
+					$available_filters[] = $fieldName;
+				else
+					$i18n_available_filters[] = $fieldName;
+		
+		//construct SQL filter
+		$sql_filter = '';
+		$sql_join = '';
+		if ($this->urlFragments)
+		{
+			$schema = 'schema';
+			// if we have to display the schema
+			if (isset($this->urlFragments[$schema]))
+			{
+				if ($this->urlFragments[$schema] == 'blank' || $this->urlFragments[$schema] == 'synopsis')
+				{
+					$this->schemaToDisplay = $this->urlFragments[$schema];
+					return true;
+				}
+				else
+				{
+					$this->setError(400, 'Please select a schema of type \'synopsis\' to get the whole schema informations (which fields are required, which kind of content...) or \'blank\' to get an empty schema to fill before using POST request', 28);
+					return false;
+				}
+			}
+			else
+			{
+				// if there are filters
+				if (isset($this->urlFragments['filter']))
+					foreach ($this->urlFragments['filter'] as $field => $url_param)
+					{
+						if ($field != 'sort' && $field != 'limit')
+						{
+							if (!in_array($field, $available_filters))
+							{
+								// if there are linked tables
+								if (isset($this->resourceConfiguration['linked_tables']) && isset($this->resourceConfiguration['linked_tables'][$field]))
+								{
+									// contruct SQL join for linked tables
+									$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['linked_tables'][$field]['table']).'` '.pSQL($field).' ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = '.pSQL($field).'.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
+					
+									// construct SQL filter for linked tables
+									foreach ($url_param as $field2 => $value)
+									{
+										if (isset($this->resourceConfiguration['linked_tables'][$field]['fields'][$field2]))
+										{
+											$linked_field = $this->resourceConfiguration['linked_tables'][$field]['fields'][$field2];
+											$sql_filter .= $this->getSQLRetrieveFilter($linked_field['sqlId'], $value, $field.'.');
+										}
+										else
+										{
+											$list = array_keys($this->resourceConfiguration['linked_tables'][$field]['fields']);
+											$this->setErrorDidYouMean(400, 'This filter does not exist for this linked table', $field2, $list, 29);
+											return false;
+										}
+									}
+								}
+								elseif ($url_param != '' && in_array($field, $i18n_available_filters))
+								{
+									if (!is_array($url_param))
+										$url_param = array($url_param);
+									$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` AS main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
+									foreach ($url_param as $field2 => $value)
+									{
+										$linked_field = $this->resourceConfiguration['fields'][$field];
+										$sql_filter .= $this->getSQLRetrieveFilter($linked_field['sqlId'], $value, 'main_i18n.');
+										$language_filter = '['.implode('|',$this->_available_languages).']';
+										$sql_filter .= $this->getSQLRetrieveFilter('id_lang', $language_filter, 'main_i18n.');
+									}
+								}
+								// if there are filters on linked tables but there are no linked table
+								elseif (is_array($url_param))
+								{
+									if (isset($this->resourceConfiguration['linked_tables']))
+										$this->setErrorDidYouMean(400, 'This linked table does not exist', $field, array_keys($this->resourceConfiguration['linked_tables']), 30);
+									else
+										$this->setError(400, 'There is no existing linked table for this resource', 31);
+									return false;
+								}
+								else
+								{
+									$this->setErrorDidYouMean(400, 'This filter does not exist', $field, $available_filters, 32);
+									return false;
+								}
+							}
+							elseif ($url_param == '')
+							{
+								$this->setError(400, 'The filter "'.$field.'" is malformed.', 33);
+								return false;
+							}
+							else
+							{
+								if (isset($this->resourceConfiguration['fields'][$field]['getter']))
+								{
+									$this->setError(400, 'The field "'.$field.'" is dynamic. It is not possible to filter GET query with this field.', 34);
+									return false;
+								}
+								else
+								{
+									if (isset($this->resourceConfiguration['retrieveData']['tableAlias'])) {
+										$sql_filter .= $this->getSQLRetrieveFilter($this->resourceConfiguration['fields'][$field]['sqlId'], $url_param, $this->resourceConfiguration['retrieveData']['tableAlias'].'.');
+									} else {
+										$sql_filter .= $this->getSQLRetrieveFilter($this->resourceConfiguration['fields'][$field]['sqlId'], $url_param);
+									}
+								}
+							}
+						}
+					}
+			}
+		}
+		
+		if (!$this->setFieldsToDisplay())
+			return false;
+		// construct SQL Sort
+		$sql_sort = '';
+		if (isset($this->urlFragments['sort']))
+		{
+			preg_match('#^\[(.*)\]$#Ui', $this->urlFragments['sort'], $matches);
+			if (count($matches) > 1)
+				$sorts = explode(',', $matches[1]);
+			else
+				$sorts = array($this->urlFragments['sort']);
+	
+			$sql_sort .= ' ORDER BY ';
+			foreach ($sorts as $sort)
+			{
+				$delimiterPosition = strrpos($sort, '_');
+				if ($delimiterPosition !== false)
+				{
+					$fieldName = substr($sort, 0, $delimiterPosition);
+					$direction = strtoupper(substr($sort, $delimiterPosition + 1));
+				}
+				if ($delimiterPosition === false || !in_array($direction, array('ASC', 'DESC')))
+				{
+					$this->setError(400, 'The "sort" value has to be formed as this example: "field_ASC" or \'[field_1_DESC,field_2_ASC,field_3_ASC,...]\' ("field" has to be an available field)', 37);
+					return false;
+				}
+				elseif (!in_array($fieldName, $available_filters) && !in_array($fieldName, $i18n_available_filters))
+				{
+					$this->setError(400, 'Unable to filter by this field. However, these are available: '.implode(', ', $available_filters).', for i18n fields:'.implode(', ', $i18n_available_filters), 38);
+					return false;
+				}
+				// for sort on i18n field
+				elseif (in_array($fieldName, $i18n_available_filters))
+				{
+					if (!preg_match('#main_i18n#', $sql_join))
+						$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` AS main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
+					$sql_sort .= 'main_i18n.`'.pSQL($this->resourceConfiguration['fields'][$fieldName]['sqlId']).'` '.$direction.', ';// ORDER BY main_i18n.`field` ASC|DESC
+				}
+				else
+				{
+					$sql_sort .= (isset($this->resourceConfiguration['retrieveData']['tableAlias']) ? $this->resourceConfiguration['retrieveData']['tableAlias'].'.' : '').'`'.pSQL($this->resourceConfiguration['fields'][$fieldName]['sqlId']).'` '.$direction.', ';// ORDER BY `field` ASC|DESC
+				}
+			}
+			$sql_sort = rtrim($sql_sort, ', ')."\n";
+		}
+
+		//construct SQL Limit
+		$sql_limit = '';
+		if (isset($this->urlFragments['limit']))
+		{
+			$limitArgs = explode(',', $this->urlFragments['limit']);
+			if (count($limitArgs) > 2)
+			{
+				$this->setError(400, 'The "limit" value has to be formed as this example: "5,25" or "10"', 39);
+				return false;
+			}
+			else
+			{
+				$sql_limit .= ' LIMIT '.(int)($limitArgs[0]).(isset($limitArgs[1]) ? ', '.(int)($limitArgs[1]) : '')."\n";// LIMIT X|X, Y
+			}
+		}
+		$filters['sql_join'] = $sql_join;
+		$filters['sql_filter'] = $sql_filter;
+		$filters['sql_sort'] = $sql_sort;
+		$filters['sql_limit'] = $sql_limit;
+		
+		return $filters;
+	}
+	
+	
+	
+	public function getFilteredObjectList()
+	{
+		$objects = array();
+		$filters = $this->manageFilters();
+		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_join'];
+		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_filter'];
+		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_sort'];
+		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_limit'];
+		//list entities
+		
+		$tmp = new $this->resourceConfiguration['retrieveData']['className']();
+		$sqlObjects = call_user_func_array(array($tmp, $this->resourceConfiguration['retrieveData']['retrieveMethod']), $this->resourceConfiguration['retrieveData']['params']);
+		if ($sqlObjects)
+		{
+			foreach ($sqlObjects as $sqlObject)
+			{
+				$objects[] = new $this->resourceConfiguration['retrieveData']['className']($sqlObject[$this->resourceConfiguration['fields']['id']['sqlId']]);
+			}
+			return $objects;
+		}
+	}
+	
+	public function getFilteredObjectDetails()
+	{
+		$objects = array();
+		if (!isset($this->urlFragments['display'])) 
+			$this->fieldsToDisplay = 'full';
+		//get entity details
+		$object = new $this->resourceConfiguration['retrieveData']['className']($this->urlSegment[1]);
+		if ($object->id)
+		{
+			$objects[] = $object;
+			return $objects;
+		}
+		elseif (!count($this->errors))
+		{
+			$this->objOutput->setStatus(404);
+			$this->_outputEnabled = false;
+			return false;
+		}
+	}
 	
 	/**
 	 * Execute GET and HEAD requests
@@ -897,222 +1130,19 @@ class WebserviceRequestCore
 	 * 
 	 * @return boolean
 	 */
-	protected function executeEntityGetAndHead()
+	public function executeEntityGetAndHead()
 	{
 		if ($this->resourceConfiguration['objectsNodeName'] != 'resources')
 		{
-			// filtered fields which can not use filters : hidden_fields
-			$available_filters = array();
-			// filtered i18n fields which can use filters
-			$i18n_available_filters = array();
-			foreach ($this->resourceConfiguration['fields'] as $fieldName => $field)
-				if ((!isset($this->resourceConfiguration['hidden_fields']) ||
-					(isset($this->resourceConfiguration['hidden_fields']) && !in_array($fieldName, $this->resourceConfiguration['hidden_fields']))))
-					if ((!isset($field['i18n']) || 
-					(isset($field['i18n']) && !$field['i18n'])))
-						$available_filters[] = $fieldName;
-					else
-						$i18n_available_filters[] = $fieldName;
-			
-			//construct SQL filter
-			$sql_filter = '';
-			$sql_join = '';
-			if ($this->urlFragments)
-			{
-				$schema = 'schema';
-				// if we have to display the schema
-				if (isset($this->urlFragments[$schema]))
-				{
-					if ($this->urlFragments[$schema] == 'blank' || $this->urlFragments[$schema] == 'synopsis')
-					{
-						$this->schemaToDisplay = $this->urlFragments[$schema];
-						return true;
-					}
-					else
-					{
-						$this->setError(400, 'Please select a schema of type \'synopsis\' to get the whole schema informations (which fields are required, which kind of content...) or \'blank\' to get an empty schema to fill before using POST request', 28);
-						return false;
-					}
-				}
-				else
-				{
-					// if there are filters
-					if (isset($this->urlFragments['filter']))
-						foreach ($this->urlFragments['filter'] as $field => $url_param)
-						{
-							if ($field != 'sort' && $field != 'limit')
-							{
-								if (!in_array($field, $available_filters))
-								{
-									// if there are linked tables
-									if (isset($this->resourceConfiguration['linked_tables']) && isset($this->resourceConfiguration['linked_tables'][$field]))
-									{
-										// contruct SQL join for linked tables
-										$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['linked_tables'][$field]['table']).'` '.pSQL($field).' ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = '.pSQL($field).'.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
-						
-										// construct SQL filter for linked tables
-										foreach ($url_param as $field2 => $value)
-										{
-											if (isset($this->resourceConfiguration['linked_tables'][$field]['fields'][$field2]))
-											{
-												$linked_field = $this->resourceConfiguration['linked_tables'][$field]['fields'][$field2];
-												$sql_filter .= $this->getSQLRetrieveFilter($linked_field['sqlId'], $value, $field.'.');
-											}
-											else
-											{
-												$list = array_keys($this->resourceConfiguration['linked_tables'][$field]['fields']);
-												$this->setErrorDidYouMean(400, 'This filter does not exist for this linked table', $field2, $list, 29);
-												return false;
-											}
-										}
-									}
-									elseif ($url_param != '' && in_array($field, $i18n_available_filters))
-									{
-										if (!is_array($url_param))
-											$url_param = array($url_param);
-										$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` AS main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
-										foreach ($url_param as $field2 => $value)
-										{
-											$linked_field = $this->resourceConfiguration['fields'][$field];
-											$sql_filter .= $this->getSQLRetrieveFilter($linked_field['sqlId'], $value, 'main_i18n.');
-											$language_filter = '['.implode('|',$this->_available_languages).']';
-											$sql_filter .= $this->getSQLRetrieveFilter('id_lang', $language_filter, 'main_i18n.');
-										}
-									}
-									// if there are filters on linked tables but there are no linked table
-									elseif (is_array($url_param))
-									{
-										if (isset($this->resourceConfiguration['linked_tables']))
-											$this->setErrorDidYouMean(400, 'This linked table does not exist', $field, array_keys($this->resourceConfiguration['linked_tables']), 30);
-										else
-											$this->setError(400, 'There is no existing linked table for this resource', 31);
-										return false;
-									}
-									else
-									{
-										$this->setErrorDidYouMean(400, 'This filter does not exist', $field, $available_filters, 32);
-										return false;
-									}
-								}
-								elseif ($url_param == '')
-								{
-									$this->setError(400, 'The filter "'.$field.'" is malformed.', 33);
-									return false;
-								}
-								else
-								{
-									if (isset($this->resourceConfiguration['fields'][$field]['getter']))
-									{
-										$this->setError(400, 'The field "'.$field.'" is dynamic. It is not possible to filter GET query with this field.', 34);
-										return false;
-									}
-									else
-									{
-										if (isset($this->resourceConfiguration['retrieveData']['tableAlias'])) {
-											$sql_filter .= $this->getSQLRetrieveFilter($this->resourceConfiguration['fields'][$field]['sqlId'], $url_param, $this->resourceConfiguration['retrieveData']['tableAlias'].'.');
-										} else {
-											$sql_filter .= $this->getSQLRetrieveFilter($this->resourceConfiguration['fields'][$field]['sqlId'], $url_param);
-										}
-									}
-								}
-							}
-						}
-				}
-			}
-			
-			if (!$this->setFieldsToDisplay())
-				return false;
-			// construct SQL Sort
-			$sql_sort = '';
-			if (isset($this->urlFragments['sort']))
-			{
-				preg_match('#^\[(.*)\]$#Ui', $this->urlFragments['sort'], $matches);
-				if (count($matches) > 1)
-					$sorts = explode(',', $matches[1]);
-				else
-					$sorts = array($this->urlFragments['sort']);
-		
-				$sql_sort .= ' ORDER BY ';
-				foreach ($sorts as $sort)
-				{
-					$delimiterPosition = strrpos($sort, '_');
-					if ($delimiterPosition !== false)
-					{
-						$fieldName = substr($sort, 0, $delimiterPosition);
-						$direction = strtoupper(substr($sort, $delimiterPosition + 1));
-					}
-					if ($delimiterPosition === false || !in_array($direction, array('ASC', 'DESC')))
-					{
-						$this->setError(400, 'The "sort" value has to be formed as this example: "field_ASC" or \'[field_1_DESC,field_2_ASC,field_3_ASC,...]\' ("field" has to be an available field)', 37);
-						return false;
-					}
-					elseif (!in_array($fieldName, $available_filters) && !in_array($fieldName, $i18n_available_filters))
-					{
-						$this->setError(400, 'Unable to filter by this field. However, these are available: '.implode(', ', $available_filters).', for i18n fields:'.implode(', ', $i18n_available_filters), 38);
-						return false;
-					}
-					// for sort on i18n field
-					elseif (in_array($fieldName, $i18n_available_filters))
-					{
-						if (!preg_match('#main_i18n#', $sql_join))
-							$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` AS main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
-						$sql_sort .= 'main_i18n.`'.pSQL($this->resourceConfiguration['fields'][$fieldName]['sqlId']).'` '.$direction.', ';// ORDER BY main_i18n.`field` ASC|DESC
-					}
-					else
-					{
-						$sql_sort .= (isset($this->resourceConfiguration['retrieveData']['tableAlias']) ? $this->resourceConfiguration['retrieveData']['tableAlias'].'.' : '').'`'.pSQL($this->resourceConfiguration['fields'][$fieldName]['sqlId']).'` '.$direction.', ';// ORDER BY `field` ASC|DESC
-					}
-				}
-				$sql_sort = rtrim($sql_sort, ', ')."\n";
-			}
-
-			//construct SQL Limit
-			$sql_limit = '';
-			if (isset($this->urlFragments['limit']))
-			{
-				$limitArgs = explode(',', $this->urlFragments['limit']);
-				if (count($limitArgs) > 2)
-				{
-					$this->setError(400, 'The "limit" value has to be formed as this example: "5,25" or "10"', 39);
-					return false;
-				}
-				else
-				{
-					$sql_limit .= ' LIMIT '.(int)($limitArgs[0]).(isset($limitArgs[1]) ? ', '.(int)($limitArgs[1]) : '')."\n";// LIMIT X|X, Y
-				}
-			}
-
-
-			$this->objects = array();
 			if (!isset($this->urlSegment[1]) || !strlen($this->urlSegment[1]))
-			{
-				$this->resourceConfiguration['retrieveData']['params'][] = $sql_join;
-				$this->resourceConfiguration['retrieveData']['params'][] = $sql_filter;
-				$this->resourceConfiguration['retrieveData']['params'][] = $sql_sort;
-				$this->resourceConfiguration['retrieveData']['params'][] = $sql_limit;
-				//list entities
-				$tmp = new $this->resourceConfiguration['retrieveData']['className']();
-				$sqlObjects = call_user_func_array(array($tmp, $this->resourceConfiguration['retrieveData']['retrieveMethod']), $this->resourceConfiguration['retrieveData']['params']);
-				if ($sqlObjects)
-					foreach ($sqlObjects as $sqlObject)
-					{
-						$this->objects[] = new $this->resourceConfiguration['retrieveData']['className']($sqlObject[$this->resourceConfiguration['fields']['id']['sqlId']]);
-					}
-			}
+				$return = $this->getFilteredObjectList();
 			else
-			{
-				if (!isset($this->urlFragments['display'])) $this->fieldsToDisplay = 'full';
-				//get entity details
-				$object = new $this->resourceConfiguration['retrieveData']['className']($this->urlSegment[1]);
-				if ($object->id)
-					$this->objects[] = $object;
-				elseif (!count($this->errors))
-				{
-					$this->objOutput->setStatus(404);
-					$this->_outputEnabled = false;
-					return false;
-				}
-			}
+				$return = $this->getFilteredObjectDetails();
+			
+			if (!$return)
+				return false;
+			else
+				$this->objects = $return;
 		}
 		return true;
 	}
@@ -1215,7 +1245,15 @@ class WebserviceRequestCore
 	 */
 	protected function saveEntityFromXml($successReturnCode)
 	{
-		$xml = new SimpleXMLElement($this->_inputXml);
+		try
+		{
+			$xml = new SimpleXMLElement($this->_inputXml);
+		}
+		catch (Exception $error)
+		{
+			$this->setError(500, 'XML error : '.$error->getMessage()."\n".'XML length : '.strlen($this->_inputXml)."\n".'Original XML : '.$this->_inputXml, 127);
+			return;
+		}
 		$xmlEntities = $xml->children();
 		$object = null;
 		
