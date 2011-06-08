@@ -98,6 +98,7 @@ if ($lm->getIncludeTradFilename())
 	<meta http-equiv="Pragma" content="no-cache" />
 	<meta http-equiv="Cache" content="no store" />
 	<meta http-equiv="Expires" content="-1" />
+	<meta name="robots" content="noindex" />
 	<title><?php echo lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?></title>
 	<link rel="stylesheet" type="text/css" media="all" href="view.css"/>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery-1.4.4.min.js"></script>
