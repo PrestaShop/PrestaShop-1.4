@@ -506,15 +506,19 @@ class eBayRequest
 		$requestXml .= '    <SKU>prestashop-'.$datas['id_product'].'</SKU>';
 		$requestXml .= '    <Quantity>'.$datas['quantity'].'</Quantity>'."\n";
 		$requestXml .= '    <StartPrice>'.$datas['price'].'</StartPrice>'."\n";
-		$requestXml .= '    <Description><![CDATA['.$datas['description'].']]></Description>'."\n";
-		$requestXml .= '    <ShippingDetails>'."\n";
-		$requestXml .= '      <ShippingServiceOptions>'."\n";
-		$requestXml .= '        <ShippingServicePriority>1</ShippingServicePriority>'."\n";
-		$requestXml .= '        <ShippingService>'.$datas['shippingService'].'</ShippingService>'."\n";
-		$requestXml .= '        <FreeShipping>false</FreeShipping>'."\n";
-		$requestXml .= '        <ShippingServiceCost currencyID="EUR">'.$datas['shippingCost'].'</ShippingServiceCost>'."\n";
-		$requestXml .= '      </ShippingServiceOptions>'."\n";
-		$requestXml .= '    </ShippingDetails>'."\n";
+		if (Configuration::get('EBAY_SYNC_OPTION_RESYNC') == 1)
+		{
+			$requestXml .= '    <Title>'.substr($datas['name'], 0, 55).'</Title>'."\n";
+			$requestXml .= '    <Description><![CDATA['.$datas['description'].']]></Description>'."\n";
+			$requestXml .= '    <ShippingDetails>'."\n";
+			$requestXml .= '      <ShippingServiceOptions>'."\n";
+			$requestXml .= '        <ShippingServicePriority>1</ShippingServicePriority>'."\n";
+			$requestXml .= '        <ShippingService>'.$datas['shippingService'].'</ShippingService>'."\n";
+			$requestXml .= '        <FreeShipping>false</FreeShipping>'."\n";
+			$requestXml .= '        <ShippingServiceCost currencyID="EUR">'.$datas['shippingCost'].'</ShippingServiceCost>'."\n";
+			$requestXml .= '      </ShippingServiceOptions>'."\n";
+			$requestXml .= '    </ShippingDetails>'."\n";
+		}
 		$requestXml .= '  </Item>'."\n";
 		$requestXml .= '  <RequesterCredentials>'."\n";
 		$requestXml .= '    <eBayAuthToken>'.Configuration::get('EBAY_API_TOKEN').'</eBayAuthToken>'."\n";
@@ -769,9 +773,6 @@ class eBayRequest
 		$requestXml .= '    <ItemID>'.$datas['itemID'].'</ItemID>'."\n";
 		$requestXml .= '    <Country>FR</Country>'."\n";
 		$requestXml .= '    <Currency>EUR</Currency>'."\n";
-		$requestXml .= '    <Description>'."\n";
-		$requestXml .= '      <![CDATA['.$datas['description'].']]>'."\n";
-		$requestXml .= '    </Description>'."\n";
 		$requestXml .= '    <ConditionID>1000</ConditionID>'."\n";
 		$requestXml .= '    <DispatchTimeMax>3</DispatchTimeMax>'."\n";
 		$requestXml .= '    <ListingDuration>GTC</ListingDuration>'."\n";
@@ -782,7 +783,6 @@ class eBayRequest
 		$requestXml .= '    <PrimaryCategory>'."\n";
 		$requestXml .= '      <CategoryID>'.$datas['categoryId'].'</CategoryID>'."\n";
 		$requestXml .= '    </PrimaryCategory>'."\n";
-		$requestXml .= '    <Title>'.substr($datas['name'], 0, 55).'</Title>'."\n";
 		if (isset($datas['pictures']))
 		{
 			$requestXml .= '<PictureDetails>';
@@ -855,14 +855,21 @@ class eBayRequest
 		}
 
 		$requestXml .= '    </Variations>'."\n";
-		$requestXml .= '    <ShippingDetails>'."\n";
-		$requestXml .= '      <ShippingServiceOptions>'."\n";
-		$requestXml .= '        <ShippingServicePriority>1</ShippingServicePriority>'."\n";
-		$requestXml .= '        <ShippingService>'.$datas['shippingService'].'</ShippingService>'."\n";
-		$requestXml .= '        <FreeShipping>false</FreeShipping>'."\n";
-		$requestXml .= '        <ShippingServiceCost currencyID="EUR">'.$datas['shippingCost'].'</ShippingServiceCost>'."\n";
-		$requestXml .= '      </ShippingServiceOptions>'."\n";
-		$requestXml .= '    </ShippingDetails>'."\n";
+		if (Configuration::get('EBAY_SYNC_OPTION_RESYNC') == 1)
+		{
+			$requestXml .= '    <Title>'.substr($datas['name'], 0, 55).'</Title>'."\n";
+			$requestXml .= '    <Description>'."\n";
+			$requestXml .= '      <![CDATA['.$datas['description'].']]>'."\n";
+			$requestXml .= '    </Description>'."\n";
+			$requestXml .= '    <ShippingDetails>'."\n";
+			$requestXml .= '      <ShippingServiceOptions>'."\n";
+			$requestXml .= '        <ShippingServicePriority>1</ShippingServicePriority>'."\n";
+			$requestXml .= '        <ShippingService>'.$datas['shippingService'].'</ShippingService>'."\n";
+			$requestXml .= '        <FreeShipping>false</FreeShipping>'."\n";
+			$requestXml .= '        <ShippingServiceCost currencyID="EUR">'.$datas['shippingCost'].'</ShippingServiceCost>'."\n";
+			$requestXml .= '      </ShippingServiceOptions>'."\n";
+			$requestXml .= '    </ShippingDetails>'."\n";
+		}
 		$requestXml .= '    <Site>France</Site>'."\n";
 		$requestXml .= '  </Item>'."\n";
 		$requestXml .= '  <RequesterCredentials>'."\n";

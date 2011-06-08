@@ -160,6 +160,7 @@ class Ebay extends Module
 		    !$this->registerHook('deleteproduct') ||
 		    !$this->registerHook('newOrder') ||
 		    !$this->registerHook('backOfficeTop') ||
+		    !$this->registerHook('backOfficeFooter') ||
 		    !$this->registerHook('header') ||
 		    !$this->registerHook('updateOrderStatus'))
 			return false;
@@ -218,6 +219,7 @@ class Ebay extends Module
                     !$this->unregisterHook('deleteproduct') ||
                     !$this->unregisterHook('newOrder') ||
 		    !$this->unregisterHook('backOfficeTop') ||
+		    !$this->unregisterHook('backOfficeFooter') ||
 		    !$this->unregisterHook('header') ||
 		    !$this->unregisterHook('updateOrderStatus'))
 			return false;
@@ -403,6 +405,7 @@ class Ebay extends Module
 	public function hookupdateProductAttribute($params) { $this->hookaddproduct($params); }
 	public function hookdeleteproduct($params) { $this->hookaddproduct($params); }
 	public function hookheader($params) { $this->hookbackOfficeTop($params); }
+	public function hookbackOfficeFooter($params) { $this->hookbackOfficeTop($params); }
 
 
 	/******************************************************************/
@@ -871,6 +874,8 @@ class Ebay extends Module
 		<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save').'" /></div>
 		</form>
 
+		<p><b>'.$this->l('Beware : Only product default categories are used for this configuration.').'</b></p><br />
+
 		<p align="left">
 			* Certaines catégories bénéficient du nouveau format d’annonces multi-versions qui permet de publier 1 seule annonce pour plusieurs versions du même produit.<br />
 			Pour les catégories ne bénéficiant pas de ce format multi-versions, une annonce sera créée pour chaque version du produit.<br />
@@ -1063,7 +1068,7 @@ class Ebay extends Module
 	private function _postProcessTemplateManager()
 	{
 		// Saving new configurations
-		if (Configuration::updateValue('EBAY_PRODUCT_TEMPLATE', pSQL(Tools::getValue('ebay_product_template'))))
+		if (Configuration::updateValue('EBAY_PRODUCT_TEMPLATE', Tools::getValue('ebay_product_template'), true))
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 		else
 			$this->_html .= $this->displayError($this->l('Settings failed'));
@@ -1082,7 +1087,8 @@ class Ebay extends Module
 		// Check if the module is configured
 		if (!Configuration::get('EBAY_PAYPAL_EMAIL'))
 			return '<p><b>'.$this->l('You have to configure "General Settings" tab before using this tab.').'</b></p><br />';
-
+		if (Db::getInstance()->getValue('SELECT COUNT(`id_ebay_category_configuration`) as nb FROM `'._DB_PREFIX_.'ebay_category_configuration`') < 1)
+			return '<p><b>'.$this->l('You have to configure "Categories Settings" tab before using this tab.').'</b></p><br />';
 
 		$nbProductsModeA = Db::getInstance()->getValue('
 		SELECT COUNT(`id_product`) as nb
@@ -1151,6 +1157,10 @@ class Ebay extends Module
 					<div class="margin-form">
 						<input type="radio" size="20" name="ebay_sync_mode" id="ebay_sync_mode2" value="B" /> '.$this->l('Option B').' : '.$this->l('Sync the products only from selected categories').'
 					</div>
+					<label style="width: 250px;">'.$this->l('Option').' : </label><br clear="left" /><br /><br />
+					<div class="margin-form">
+						<input type="checkbox" size="20" name="ebay_sync_option_resync" id="ebay_sync_option_resync" value="1" '.(Configuration::get('EBAY_SYNC_OPTION_RESYNC') == 1 ? 'checked="checked"' : '').' /> '.$this->l('When update a product, resync only price and quantity').'
+					</div>
 					<div style="display: none;" id="catSync">';
 
 
@@ -1212,6 +1222,9 @@ class Ebay extends Module
 
 	private function _postProcessEbaySync()
 	{
+		// Update Sync Option
+		Configuration::updateValue('EBAY_SYNC_OPTION_RESYNC', (Tools::getValue('ebay_sync_option_resync') == 1 ? 1 : 0));
+
 		if ($_POST['ebay_sync_mode'] == 'A')
 		{
 			// Update Sync Mod
@@ -1251,6 +1264,9 @@ class Ebay extends Module
 		$date = date('Y-m-d H:i:s');
 		$ebay = new eBayRequest();
 		$categoryDefaultCache = array();
+
+		// Up the time limit
+		set_time_limit(3600);
 
 		// Run the products list
 		foreach ($productsList as $product)
