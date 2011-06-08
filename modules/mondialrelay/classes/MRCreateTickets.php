@@ -246,7 +246,6 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		$this->_orderListId = $params['orderIdList'];
 		$this->_totalOrder = $params['totalOrder'];
 		$this->_weightList = $params['weightList'];
-		$this->_mondialRelay = new MondialRelay();
 		$this->_webServiceKey = Configuration::get('MR_KEY_WEBSERVICE');
 		$this->_markCode = Configuration::get('MR_CODE_MARQUE');
 	}
@@ -297,6 +296,8 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	 */
 	public function init()
 	{
+		$this->_mondialRelay = new MondialRelay();
+		
 		if ($this->_totalOrder == 0)
 			throw new Exception($this->_mondialRelay->l('Please select at least one order'));
 		
@@ -335,7 +336,6 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				$tmp['Dest_Tel1']['value'] = $deliveriesAddress->phone;
 				$tmp['Dest_Tel2']['value'] = $deliveriesAddress->phone_mobile;
 				$tmp['Dest_Mail']['value'] = $customer->email;
-				$tmp['Dest_Tel2']['value'] = $deliveriesAddress->phone_mobile;
 				$tmp['Assurance']['value'] = $orderDetail['mr_ModeAss'];
 				
 				if ($orderDetail['MR_Selected_Num'] != 'LD1' && $orderDetail['MR_Selected_Num'] != 'LDS')
@@ -375,7 +375,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
 					{
 						if (empty($valueDetailed['value']))
-							$error = 'This key ['.$paramName.'] is empty and need to be filled';
+							$error = $this->_mondialRelay->l('This key').' ['.$paramName.'] '.$this->_mondialRelay->l('is empty and need to be filled');
 						else
 							$error = 'This key ['.$paramName.'] hasn\'t a valid value format : '.$valueDetailed['value']; 
 						$this->_resultList['error'][$rootCase['list']['NDossier']['value']][] = $error;

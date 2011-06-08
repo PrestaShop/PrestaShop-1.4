@@ -68,7 +68,6 @@ class MRGetTickets implements IMondialRelayWSMethod
 	public function __construct($params)	
 	{
 		$this->_detailedExpeditionList = $params['detailedExpeditionList'];
-		$this->_mondialRelay = new MondialRelay();
 		$this->_webServiceKey = Configuration::get('MR_KEY_WEBSERVICE');
 		$this->_markCode = Configuration::get('MR_CODE_MARQUE');
 	}
@@ -79,7 +78,9 @@ class MRGetTickets implements IMondialRelayWSMethod
 	}
 	
 	public function init()
-	{
+	{	
+		$this->_mondialRelay = new MondialRelay();
+		
 		$this->_fields['list']['Enseigne']['value'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
 		$this->_fields['list']['Langue']['value'] = Configuration::get('MR_LANGUAGE');
 		
@@ -113,7 +114,7 @@ class MRGetTickets implements IMondialRelayWSMethod
 						$concatenationValue .= $valueDetailed['value'];
 					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
 					{
-						$error = 'This key ['.$paramName.'] hasn\'t a valide value format : '.$valueDetailed['value'];
+						$error = $this->_mondialRelay->l('This key').' ['.$paramName.'] '.$this->_mondialRelay->l('hasn\'t a valide value format').' : '.$valueDetailed['value'];
 						$id_order = $this->_getOrderIdWithExpeditionNumber($rootCase['list']['Expeditions']['value']);
 						$this->_resultList['error'][$id_order][] = $error;
 					}

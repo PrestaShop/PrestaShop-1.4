@@ -175,7 +175,7 @@ function generateTicketsAjax()
 		error: function(xhr, ajaxOptions, thrownError)
 		{
 			display_generate_button = true;
-      //console.log(thrownError);
+      console.log(thrownError);
       displayBackGenerateSubmitButton();
 		}
 	});
