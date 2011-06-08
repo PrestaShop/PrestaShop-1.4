@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -37,7 +37,7 @@ class CarrierCompare extends Module
 		$this->version = '1.0';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
 
 		$this->displayName = $this->l('Shipping Estimation');
@@ -59,25 +59,29 @@ class CarrierCompare extends Module
 		Tools::addCSS(($this->_path).'style.css', 'all');
 		Tools::addJS(($this->_path).'carriercompare.js');
 	}
-	
+
 	/*
 	 ** Hook Shopping Cart Process
 	 */
 	public function hookShoppingCart($params)
-	{	
-		global $cookie, $smarty;
-		
+	{
+		global $cookie, $smarty, $currency;
+
 		if ($cookie->id_customer)
 			return;
-		
+
 		$smarty->assign(array(
 			'countries' => Country::getCountries((int)$cookie->id_lang),
 			'id_carrier' => ($params['cart']->id_carrier ? $params['cart']->id_carrier : Configuration::get('PS_CARRIER_DEFAULT')),
 			'id_country' => (isset($cookie->id_country) ? $cookie->id_country : Configuration::get('PS_COUNTRY_DEFAULT')),
 			'id_state' => (isset($cookie->id_state) ? $cookie->id_state : 0),
-			'zipcode' => (isset($cookie->postcode) ? $cookie->postcode : '')
+			'zipcode' => (isset($cookie->postcode) ? $cookie->postcode : ''),
+			'currencySign' => $currency->sign,
+			'currencyRate' => $currency->conversion_rate,
+			'currencyFormat' => $currency->format,
+			'currencyBlank' => $currency->blank
 		));
-		
+
 		return $this->display(__FILE__, 'carriercompare.tpl');
 	}
 
@@ -88,7 +92,7 @@ class CarrierCompare extends Module
 	public function getStatesByIdCountry($id_country, $id_state = '')
 	{
 		$states = State::getStatesByIdCountry($id_country);
-		
+
 		return (sizeof($states) ? $states : array());
 	}
 
@@ -104,18 +108,18 @@ class CarrierCompare extends Module
 			$id_zone = State::getIdZone($id_state);
 		if (!$id_zone)
 			$id_zone = Country::getIdZone($id_country);
-		
+
 		$carriers = Carrier::getCarriersForOrder((int)$id_zone);
-		
+
 		return (sizeof($carriers) ? $carriers : array());
 	}
 
 	public function saveSelection($id_country, $id_state, $zipcode, $id_carrier)
 	{
 		global $cart, $cookie;
-		
+
 		$errors = array();
-		
+
 		if (!Validate::isInt($id_state))
 			$errors[] = $this->l('Invalid state ID');
 		if ($id_state != 0 && !Validate::isLoadedObject(new State($id_state)))
@@ -126,19 +130,19 @@ class CarrierCompare extends Module
 			$errors[] = $this->l('Please use a valid zip/postal code depending on your country selection');
 		if (!Validate::isInt($id_carrier) || !Validate::isLoadedObject(new Carrier($id_carrier)))
 			$errors[] = $this->l('Invalid carrier ID');
-		
+
 		if (sizeof($errors))
 			return $errors;
-		
+
 		$ids_carrier = array();
 		foreach (self::getCarriersListByIdZone($id_country, $id_state) as $carrier)
 			$ids_carrier[] = $carrier['id_carrier'];
 		if (!in_array($id_carrier, $ids_carrier))
 			$errors[] = $this->l('This carrier ID isn\'t available for your selection');
-		
+
 		if (sizeof($errors))
 			return $errors;
-		
+
 		$cookie->id_country = $id_country;
 		$cookie->id_state = $id_state;
 		$cookie->postcode = $zipcode;
@@ -157,14 +161,14 @@ class CarrierCompare extends Module
 				SELECT `zip_code_format`
 				FROM `'._DB_PREFIX_.'country`
 				WHERE `id_country` = '.(int)$id_country);
-		
+
 		if (!$zipcodeFormat)
 			return false;
-		
+
 		$regxMask = str_replace(
-				array('N', 'C', 'L'), 
+				array('N', 'C', 'L'),
 				array(
-					'[0-9]', 
+					'[0-9]',
 					Country::getIsoById((int)$id_country),
 					'[a-zA-Z]'),
 				$zipcodeFormat);
@@ -173,3 +177,4 @@ class CarrierCompare extends Module
 		return false;
 	}
 }
+
