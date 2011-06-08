@@ -207,7 +207,11 @@ if (isFormValid())
 		if (Configuration::get('PS_LANG_DEFAULT') == 1)
 		{
 			$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\') WHERE name = \'PS_LANG_DEFAULT\'';
+			// This request is used when _PS_MODE_DEV_ is set to true
+			$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'lang` SET `active` = 0 WHERE `id_lang` != (SELECT id_lang FROM '._DB_PREFIX_.'lang WHERE iso_code = \''.pSQL($_GET['isoCode']).'\')';
 		}
+		else
+			$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'lang` SET `active` = 0 WHERE `id_lang` != '.Configuration::get('PS_LANG_DEFAULT');
 	}
 	if (isset($_GET['infosMailMethod']) AND $_GET['infosMailMethod'] == "smtp")
 	{
@@ -250,8 +254,6 @@ if (isFormValid())
 	{
 		$sqlParams[] = 'DELETE c, cl FROM `'._DB_PREFIX_.'cms` AS c LEFT JOIN `'._DB_PREFIX_.'cms_lang` AS cl ON c.id_cms = cl.id_cms WHERE 1 AND c.`id_cms` IN (1, 5)';
 	}
-
-	$sqlParams[] = 'UPDATE `'._DB_PREFIX_.'lang` SET `active` = 0 WHERE `id_lang` != '.(int)Configuration::get('PS_LANG_DEFAULT');
 	
 	$dbInstance = Db::getInstance();
 	foreach($sqlParams as $query)
