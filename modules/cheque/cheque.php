@@ -80,21 +80,21 @@ class Cheque extends PaymentModule
 
 	private function _postValidation()
 	{
-		if (isset($_POST['btnSubmit']))
+		if (Tools::isSubmit('btnSubmit'))
 		{
-			if (empty($_POST['name']))
+			if (!Tools::getValue('name'))
 				$this->_postErrors[] = $this->l('\'To the order of\' field is required.');
-			elseif (empty($_POST['address']))
+			elseif (!Tools::getValue('address'))
 				$this->_postErrors[] = $this->l('Address is required.');
 		}
 	}
 
 	private function _postProcess()
 	{
-		if (isset($_POST['btnSubmit']))
+		if (Tools::isSubmit('btnSubmit'))
 		{
-			Configuration::updateValue('CHEQUE_NAME', $_POST['name']);
-			Configuration::updateValue('CHEQUE_ADDRESS', $_POST['address']);
+			Configuration::updateValue('CHEQUE_NAME', Tools::getValue('name'));
+			Configuration::updateValue('CHEQUE_ADDRESS', Tools::getValue('address'));
 		}
 		$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('OK').'" /> '.$this->l('Settings updated').'</div>';
 	}
@@ -109,15 +109,15 @@ class Cheque extends PaymentModule
 	private function _displayForm()
 	{
 		$this->_html .=
-		'<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+		'<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset>
 			<legend><img src="../img/admin/contact.gif" />'.$this->l('Contact details').'</legend>
 				<table border="0" width="500" cellpadding="0" cellspacing="0" id="form">
 					<tr><td colspan="2">'.$this->l('Please specify the name and address to which customers must send their check.').'.<br /><br /></td></tr>
-					<tr><td width="130" style="height: 35px;">'.$this->l('To the order of').'</td><td><input type="text" name="name" value="'.htmlentities(Tools::getValue('name', $this->chequeName), ENT_COMPAT, 'UTF-8').'" style="width: 300px;" /></td></tr>
+					<tr><td width="130" style="height: 35px;">'.$this->l('To the order of').'</td><td><input type="text" name="name" value="'.Tools::htmlentitiesUTF8(Tools::getValue('name', $this->chequeName)).'" style="width: 300px;" /></td></tr>
 					<tr>
 						<td width="130" style="vertical-align: top;">'.$this->l('Address').'</td>
-						<td><textarea name="address" rows="3" cols="53">'.htmlentities(Tools::getValue('address', $this->address), ENT_COMPAT, 'UTF-8').'</textarea></td>
+						<td><textarea name="address" rows="3" cols="53">'.Tools::htmlentitiesUTF8(Tools::getValue('address', $this->address)).'</textarea></td>
 					</tr>
 					<tr><td colspan="2" align="center"><br /><input class="button" name="btnSubmit" value="'.$this->l('Update settings').'" type="submit" /></td></tr>
 				</table>
@@ -129,7 +129,7 @@ class Cheque extends PaymentModule
 	{
 		$this->_html = '<h2>'.$this->displayName.'</h2>';
 
-		if (!empty($_POST))
+		if (Tools::isSubmit('btnSubmit'))
 		{
 			$this->_postValidation();
 			if (!sizeof($this->_postErrors))
@@ -166,7 +166,7 @@ class Cheque extends PaymentModule
 			'chequeName' => $this->chequeName,
 			'chequeAddress' => nl2br2($this->address),
 			'this_path' => $this->_path,
-            'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
+			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
 		));
 
 		return $this->display(__FILE__, 'payment_execution.tpl');
@@ -182,9 +182,9 @@ class Cheque extends PaymentModule
 		global $smarty;
 
 		$smarty->assign(array(
-            'this_path' => $this->_path,
-            'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
-            ));
+			'this_path' => $this->_path,
+			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
+		));
 		return $this->display(__FILE__, 'payment.tpl');
 	}
 
@@ -218,5 +218,6 @@ class Cheque extends PaymentModule
 			foreach ($currencies_module AS $currency_module)
 				if ($currency_order->id == $currency_module['id_currency'])
 					return true;
+		return false;
 	}
 }

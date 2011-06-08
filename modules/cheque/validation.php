@@ -39,15 +39,15 @@ $customer = new Customer((int)$cart->id_customer);
 if (!Validate::isLoadedObject($customer))
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
-$currency = new Currency((int)(isset($_POST['currency_payement']) ? $_POST['currency_payement'] : $cookie->id_currency));
-$total = (float)($cart->getOrderTotal(true, Cart::BOTH));
+$currency = new Currency((int)(Tools::isSubmit('currency_payement') ? Tools::getValue('currency_payement') : $cookie->id_currency));
+$total = (float)$cart->getOrderTotal(true, Cart::BOTH);
 
 $mailVars =	array(
 	'{cheque_name}' => Configuration::get('CHEQUE_NAME'),
 	'{cheque_address}' => Configuration::get('CHEQUE_ADDRESS'),
 	'{cheque_address_html}' => str_replace("\n", '<br />', Configuration::get('CHEQUE_ADDRESS')));
 
-$cheque->validateOrder((int)($cart->id), _PS_OS_CHEQUE_, $total, $cheque->displayName, NULL, $mailVars, (int)($currency->id), false, $customer->secure_key);
+$cheque->validateOrder((int)$cart->id, _PS_OS_CHEQUE_, $total, $cheque->displayName, NULL, $mailVars, (int)$currency->id, false, $customer->secure_key);
 
-Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)($cart->id).'&id_module='.(int)($cheque->id).'&id_order='.$cheque->currentOrder.'&key='.$customer->secure_key);
+Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&id_module='.(int)$cheque->id.'&id_order='.$cheque->currentOrder.'&key='.$customer->secure_key);
 
