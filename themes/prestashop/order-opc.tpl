@@ -25,6 +25,8 @@
 *}
 
 {if $PS_CATALOG_MODE}
+	{capture name=path}{l s='Your shopping cart'}{/capture}
+	{include file="$tpl_dir./breadcrumb.tpl"}
 	<h2 id="cart_title">{l s='Your shopping cart'}</h2>
 	<p class="warning">{l s='This store has not accepted your new order.'}</p>
 {else}
@@ -95,6 +97,8 @@
 		{include file="$tpl_dir./order-payment.tpl"}
 		<!-- END Payment -->
 	{else}
+		{capture name=path}{l s='Your shopping cart'}{/capture}
+		{include file="$tpl_dir./breadcrumb.tpl"}
 		<h2>{l s='Your shopping cart'}</h2>
 		<p class="warning">{l s='Your shopping cart is empty.'}</p>
 	{/if}
