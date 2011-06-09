@@ -30,6 +30,10 @@ zoneCurrent = 0;
 selectionCurrent = null;
 valueOfZoneEdited = null;
 
+// Last item is used to save the current zone and 
+// allow to replace it if user cancel the editing
+lastItemEdited = null;
+
 /* functions called by cropping events */
 
 function showZone(){
@@ -37,7 +41,9 @@ function showZone(){
 }
 
 function hideAutocompleteBox(){
-	$('#ajax_choose_product:visible').hide();
+	$('#ajax_choose_product')
+		.fadeOut('fast')
+		.find('#product_autocomplete_input').val('');
 }
 
 function onSelectEnd(img, selection) {
@@ -51,15 +57,27 @@ function undoEdit(){
 	$(document).unbind('keydown');
 }
 
-function showAutocompleteBox(x1, y1) {
+/*
+** Pointer function do handle event by key released
+*/
+function handlePressedKey(keyNumber, fct)
+{
+	// KeyDown isn't handled correctly in editing mode
+	$(document).keyup(function(event) 
+	{
+		console.log(keyNumber);
+		
+	  if (event.keyCode == keyNumber)
+		 fct();
+	});
+}
+
+function showAutocompleteBox(x1, y1) 
+{	
 	$('#ajax_choose_product:hidden')
 	.slideDown('fast');
 	$('#product_autocomplete_input').focus();
-	$(document).keydown(function(event) {
-	  if (event.keyCode == '27') {
-		 undoEdit();
-	   }
-	});
+	handlePressedKey('27', undoEdit);
 }
 
 function editThisZone(aInFixedZoneElement) {
@@ -76,7 +94,7 @@ function editThisZone(aInFixedZoneElement) {
 	var height = $fixedZoneElement.css('height');	
 	height = height.substring(0,height.indexOf('px'));
 	var y2 = y1 + parseInt(height);
-	
+
 	valueOfZoneEdited = $fixedZoneElement.find('a').attr('rel');
 	
 	selectionCurrent = new Array();
@@ -85,7 +103,9 @@ function editThisZone(aInFixedZoneElement) {
 	selectionCurrent['width'] = width;
 	selectionCurrent['height'] = height;
 	
-	$fixedZoneElement.remove();
+	// Save the last zone
+	lastEditedItem = $fixedZoneElement;
+	
 	$('#product_autocomplete_input').val( $fixedZoneElement.find('p').text() );
 	showAutocompleteBox(x1, y1+parseInt(height));
 	
@@ -102,9 +122,15 @@ function deleteProduct(index_zone){
 }
 
 function afterTextInserted (event, data, formatted) {	
-	if (data == null){
+	if (data == null)
 		return false;
-	}
+	
+	// If the element exist, then the user confirm the editing
+	// The variable need to be reinitialized to null for the next
+	if (lastEditedItem != null)
+		lastEditedItem.remove();
+	lastEditedItem = null;
+	
 	zoneCurrent++;
 	var idProduct = data[1];
 	var nameProduct = data[0];
@@ -113,6 +139,7 @@ function afterTextInserted (event, data, formatted) {
 	var width = selectionCurrent.width;
 	var height = selectionCurrent.height;
 	addProduct(zoneCurrent, x1, y1, width, height, idProduct, nameProduct);
+	
 }
 
 function addProduct(zoneIndex, x1, y1, width, height, idProduct, nameProduct){
