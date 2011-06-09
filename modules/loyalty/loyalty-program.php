@@ -148,17 +148,13 @@ else
 {
 	$categoriesNames = array();
 	foreach ($allCategories AS $k => $allCategory)
-	{
-		if (in_array($allCategory['id_category'],$voucherCategories))
-		{
+		if (in_array($allCategory['id_category'], $voucherCategories))
 			$categoriesNames[$allCategory['id_category']] = trim($allCategory['name']);
-		}
-	}
 	if (!empty($categoriesNames))
-		$categoriesNames = Tools::truncate(implode(', ',$categoriesNames),100).'.';
+		$categoriesNames = Tools::truncate(implode(', ', $categoriesNames), 100).'.';
 	else
 		$categoriesNames = null;
-}
+}	
 $smarty->assign(array(
 	'nbDiscounts' => (int)$nbDiscounts,
 	'discounts' => $discounts,
