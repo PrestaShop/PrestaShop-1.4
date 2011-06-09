@@ -70,7 +70,7 @@ class ProductCore extends ObjectModel
 	public 		$quantity = 0;
 
 	/** @var integer Minimal quantity for add to cart */
-	public      $minimal_quantity = 0;
+	public      $minimal_quantity = 1;
 
 	/** @var string available_now */
 	public 		$available_now;
