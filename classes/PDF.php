@@ -531,7 +531,7 @@ class PDFCore extends PDF_PageGroupCore
 		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($addressType['invoice']['addressObject']->vat_number))
 		{
 			$vat_delivery = '';
-			if ($invoiceAddress->id != $addressType['delivery']['addressObject']->id)
+			if ($addressType['invoice']['addressObject']->id != $addressType['delivery']['addressObject']->id)
 				$vat_delivery = $addressType['delivery']['addressObject']->vat_number;
 			$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $vat_delivery), 0, 'L');
 			$pdf->Cell($width, 10, Tools::iconv('utf-8', self::encoding(), $addressType['invoice']['addressObject']->vat_number), 0, 'L');
