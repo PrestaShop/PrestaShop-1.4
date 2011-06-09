@@ -79,8 +79,8 @@ class ProductToolTip extends Module
 			Configuration::updateValue('PS_PTOOLTIP_PEOPLE', (int)(Tools::getValue('ps_ptooltip_people')));
 			Configuration::updateValue('PS_PTOOLTIP_DATE_CART', (int)(Tools::getValue('ps_ptooltip_date_cart')));
 			Configuration::updateValue('PS_PTOOLTIP_DATE_ORDER', (int)(Tools::getValue('ps_ptooltip_date_order')));
-			Configuration::updateValue('PS_PTOOLTIP_DAYS', (int)(Tools::getValue('ps_ptooltip_days')));
-			Configuration::updateValue('PS_PTOOLTIP_LIFETIME', (int)(Tools::getValue('ps_ptooltip_lifetime')));
+			Configuration::updateValue('PS_PTOOLTIP_DAYS', ((int)(Tools::getValue('ps_ptooltip_days') < 0 ? 0 : (int)Tools::getValue('ps_ptooltip_days'))));
+			Configuration::updateValue('PS_PTOOLTIP_LIFETIME', ((int)(Tools::getValue('ps_ptooltip_lifetime') < 0 ? 0 : (int)Tools::getValue('ps_ptooltip_lifetime'))));
 			
 			echo $this->displayConfirmation($this->l('Settings updated'));
 		}
