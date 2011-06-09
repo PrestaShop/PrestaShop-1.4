@@ -64,9 +64,7 @@ function handlePressedKey(keyNumber, fct)
 {
 	// KeyDown isn't handled correctly in editing mode
 	$(document).keyup(function(event) 
-	{
-		console.log(keyNumber);
-		
+	{	
 	  if (event.keyCode == keyNumber)
 		 fct();
 	});
