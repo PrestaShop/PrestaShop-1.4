@@ -139,7 +139,11 @@ class Watermark extends Module
 				$this->_errors[] = Tools::displayError('an error occurred while uploading watermark: '.$_FILES['PS_WATERMARK']['tmp_name'].' to '.$dest);
 		}
 		
-		$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('ok').'" /> '.$this->l('Settings updated').'</div>';
+		if($this->_errors)
+			foreach ($this->_errors as $error)
+				$this->_html .= '<div class="module_error alert error"><img src="../img/admin/warning.gif" alt="'.$this->l('ok').'" /> '.$this->l($error).'</div>';
+		else
+			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('ok').'" /> '.$this->l('Settings updated').'</div>';
 	}
 
 	private function _displayForm()
