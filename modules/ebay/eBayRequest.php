@@ -506,7 +506,7 @@ class eBayRequest
 		$requestXml .= '    <SKU>prestashop-'.$datas['id_product'].'</SKU>';
 		$requestXml .= '    <Quantity>'.$datas['quantity'].'</Quantity>'."\n";
 		$requestXml .= '    <StartPrice>'.$datas['price'].'</StartPrice>'."\n";
-		if (Configuration::get('EBAY_SYNC_OPTION_RESYNC') == 1)
+		if (Configuration::get('EBAY_SYNC_OPTION_RESYNC') != 1)
 		{
 			$requestXml .= '    <Title>'.substr($datas['name'], 0, 55).'</Title>'."\n";
 			$requestXml .= '    <Description><![CDATA['.$datas['description'].']]></Description>'."\n";
@@ -855,7 +855,7 @@ class eBayRequest
 		}
 
 		$requestXml .= '    </Variations>'."\n";
-		if (Configuration::get('EBAY_SYNC_OPTION_RESYNC') == 1)
+		if (Configuration::get('EBAY_SYNC_OPTION_RESYNC') != 1)
 		{
 			$requestXml .= '    <Title>'.substr($datas['name'], 0, 55).'</Title>'."\n";
 			$requestXml .= '    <Description>'."\n";
