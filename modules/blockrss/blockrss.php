@@ -108,13 +108,13 @@ class Blockrss extends Module
 			<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<label>'.$this->l('Block title').'</label>
 				<div class="margin-form">
-					<input type="text" name="title" value="'.Tools::getValue('title', Configuration::get('RSS_FEED_TITLE')).'" />
+					<input type="text" name="title" value="'.htmlentities(Tools::getValue('title', Configuration::get('RSS_FEED_TITLE'))).'" />
 					<p class="clear">'.$this->l('Create a title for the block (default: \'RSS feed\')').'</p>
 
 				</div>
 				<label>'.$this->l('Add a feed URL').'</label>
 				<div class="margin-form">
-					<input type="text" size="85" name="urlfeed" value="'.Tools::getValue('urlfeed', Configuration::get('RSS_FEED_URL')).'" />
+					<input type="text" size="85" name="urlfeed" value="'.htmlentities(Tools::getValue('urlfeed', Configuration::get('RSS_FEED_URL'))).'" />
 					<p class="clear">'.$this->l('Add the URL of the feed you want to use').'</p>
 
 				</div>
