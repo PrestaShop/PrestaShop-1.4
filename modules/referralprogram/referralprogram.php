@@ -161,6 +161,8 @@ class ReferralProgram extends Module
 			$this->_errors[] = $this->displayError($this->l('Discount type is required/invalid.'));
 		if (!(int)(Tools::getValue('nb_friends')) OR Tools::getValue('nb_friends') < 0)
 			$this->_errors[] = $this->displayError($this->l('Number of friends is required/invalid.'));
+		if (!(int)(Tools::getValue('discount_value_percentage')) OR (int)(Tools::getValue('discount_value_percentage')) < 0 OR (int)(Tools::getValue('discount_value_percentage')) > 100)
+			$this->_errors[] = $this->displayError($this->l('Discount percentage is required/invalid.'));
 	}
 
 	private function _writeXml()
@@ -277,7 +279,8 @@ class ReferralProgram extends Module
 			<p>
 				 <div style="float: left"><label class="t" for="discount_description">'.$this->l('Voucher description:').'</label></div>';
 			$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
-			$languages = Language::getLanguages(false);
+			$languages = Language::getLanguages();
+
 			foreach ($languages AS $language)
 				$this->_html .= '
 				<div id="dd_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left; margin-left: 4px;">
