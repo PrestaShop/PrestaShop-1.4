@@ -103,7 +103,7 @@ var doesntExist = '{l s='The product does not exist in this model. Please choose
 var doesntExistNoMore = '{l s='This product is no longer in stock' js=1}';
 var doesntExistNoMoreBut = '{l s='with those attributes but is available with others' js=1}';
 var uploading_in_progress = '{l s='Uploading in progress, please wait...' js=1}';
-var fieldRequired = '{l s='Please fill in all required fields' js=1}';
+var fieldRequired = '{l s='Please fill in all required fields, then save the customization.' js=1}';
 
 {if isset($groups)}
 	// Combinations

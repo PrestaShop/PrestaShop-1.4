@@ -151,13 +151,21 @@ function writeBookmarkLinkObject(url, title, insert)
 
 function checkCustomizations()
 {
-	var tmp;
 	var pattern = new RegExp(' ?filled ?');
 	for (var i = 0; i < customizationFields.length; i++)
 		/* If the field is required and empty then we abort */
-		if (parseInt(customizationFields[i][1]) == 1 && $('#' + customizationFields[i][0]).val() == '' && !pattern.test($('#' + customizationFields[i][0]).attr('class')))
+		if (parseInt(customizationFields[i][1]) == 1 && ($('#' + customizationFields[i][0]).html() == '' ||  $('#' + customizationFields[i][0]).html() != $('#' + customizationFields[i][0]).val()) && !pattern.test($('#' + customizationFields[i][0]).attr('class')))
 			return false;
 	return true;
+}
+
+function emptyCustomizations()
+{
+	for (var i = 0; i < customizationFields.length; i++)
+	{
+		$('#' + customizationFields[i][0]).html('');
+		$('#' + customizationFields[i][0]).val('');
+	}
 }
 
 function ceilf(value, precision)

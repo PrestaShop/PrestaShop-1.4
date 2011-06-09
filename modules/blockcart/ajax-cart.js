@@ -178,6 +178,7 @@ var ajaxCart = {
 			alert(fieldRequired);
 			return ;
 		}
+		emptyCustomizations()
 		//disabled the button when adding to do not double add if user double click
 		if (addedFromProductPage)
 		{
