@@ -142,17 +142,18 @@ class BlockCategories extends Module
 		global $smarty, $cookie;
 
 		$id_customer = (int)($params['cookie']->id_customer);
-		$id_group = $id_customer ? Customer::getDefaultGroupId($id_customer) : _PS_DEFAULT_CUSTOMER_GROUP_;
+		// Get all groups for this customer and concatenate them as a string: "1,2,3..."
+		// It is necessary to keep the group query separate from the main select query because it is used for the cache
+		$groups = $id_customer ? implode(', ', Customer::getGroupsStatic($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
 		$id_product = (int)(Tools::getValue('id_product', 0));
 		$id_category = (int)(Tools::getValue('id_category', 0));
 		$id_lang = (int)($params['cookie']->id_lang);
-		$smartyCacheId = 'blockcategories|'.$id_group.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
+		$smartyCacheId = 'blockcategories|'.$groups.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
 
 		Tools::enableCache();
 		if (!$this->isCached('blockcategories.tpl', $smartyCacheId))
 		{
 			$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
-
 			if (!$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT c.id_parent, c.id_category, cl.name, cl.description, cl.link_rewrite
 				FROM `'._DB_PREFIX_.'category` c
@@ -160,10 +161,11 @@ class BlockCategories extends Module
 				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
 				WHERE (c.`active` = 1 OR c.`id_category` = 1)
 				'.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
-				AND cg.`id_group` = '.$id_group.'
+				AND cg.`id_group` IN ('.pSQL($groups).')
 				ORDER BY `level_depth` ASC, c.`position` ASC')
 			)
 				return;
+				
 			$resultParents = array();
 			$resultIds = array();
 
@@ -172,6 +174,7 @@ class BlockCategories extends Module
 				$resultParents[$row['id_parent']][] = &$row;
 				$resultIds[$row['id_category']] = &$row;
 			}
+
 			$blockCategTree = $this->getTree($resultParents, $resultIds, Configuration::get('BLOCK_CATEG_MAX_DEPTH'));
 			unset($resultParents);
 			unset($resultIds);
@@ -211,11 +214,12 @@ class BlockCategories extends Module
 		global $smarty, $cookie;
 
 		$id_customer = (int)($params['cookie']->id_customer);
-		$id_group = $id_customer ? Customer::getDefaultGroupId($id_customer) : _PS_DEFAULT_CUSTOMER_GROUP_;
+		// Get all groups for this customer and concatenate them as a string: "1,2,3..."
+		$groups = $id_customer ? implode(', ', Customer::getGroupsStatic($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
 		$id_product = (int)(Tools::getValue('id_product', 0));
 		$id_category = (int)(Tools::getValue('id_category', 0));
 		$id_lang = (int)($params['cookie']->id_lang);
-		$smartyCacheId = 'blockcategories|'.$id_group.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
+		$smartyCacheId = 'blockcategories|'.$groups.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
 
 		Tools::enableCache();
 		if (!$this->isCached('blockcategories_footer.tpl', $smartyCacheId))
@@ -229,7 +233,7 @@ class BlockCategories extends Module
 				LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
 				WHERE (c.`active` = 1 OR c.`id_category` = 1)
 				'.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
-				AND cg.`id_group` = '.$id_group.'
+				AND cg.`id_group` IN ('.pSQL($groups).')
 				ORDER BY `level_depth` ASC, c.`position` ASC')
 			)
 				return;
