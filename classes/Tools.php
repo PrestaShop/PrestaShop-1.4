@@ -195,6 +195,25 @@ class ToolsCore
 		}
 		return $_SERVER['REMOTE_ADDR'];
 	}
+	
+	/**
+	* Check if the current page use SSL connection on not
+	*/
+	public static function usingSecureMode()
+	{
+		return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+	}
+	
+	/**
+	* Get the current url prefix protocole (https/http)
+	*/
+	public static function getCurrentUrlProtocolPrefix()
+	{
+		if(Tools::usingSecureMode())
+			return 'https://';
+		else
+			return 'http://';
+	}
 
 	/**
 	* Secure an URL referrer
@@ -1345,11 +1364,13 @@ class ToolsCore
 	public static function replaceByAbsoluteURL($matches)
 	{
 		global $current_css_file, $protocol_link;
-
+		
+		$protocolLink = Tools::getCurrentUrlProtocolPrefix();
+		
 		if (array_key_exists(1, $matches))
 		{
 			$tmp = dirname($current_css_file).'/'.$matches[1];
-			return 'url(\''.$protocol_link.Tools::getMediaServer($tmp).$tmp.'\')';
+			return 'url(\''.$protocolLink.Tools::getMediaServer($tmp).$tmp.'\')';
 		}
 		return false;
 	}
@@ -1455,12 +1476,13 @@ class ToolsCore
 	*
 	*/
 	public static function cccCss() {
-		global $css_files, $protocol_link;
+		global $css_files;
 		//inits
 		$css_files_by_media = array();
 		$compressed_css_files = array();
 		$compressed_css_files_not_found = array();
 		$compressed_css_files_infos = array();
+		$protocolLink = Tools::getCurrentUrlProtocolPrefix();
 
 		// group css files by media
 		foreach ($css_files as $filename => $media)
@@ -1488,7 +1510,7 @@ class ToolsCore
 		// get compressed css file infos
 		foreach ($compressed_css_files_infos as $media => &$info)
 		{
-			$key = md5($info['key']);
+			$key = md5($info['key'].$protocolLink);
 			$filename = _PS_THEME_DIR_.'cache/'.$key.'_'.$media.'.css';
 			$info = array(
 				'key' => $key,
@@ -1526,7 +1548,7 @@ class ToolsCore
 		foreach ($compressed_css_files as $media => $filename)
 		{
 			$url = str_replace(_PS_THEME_DIR_, _THEMES_DIR_._THEME_NAME_.'/', $filename);
-			$css_files[$protocol_link.Tools::getMediaServer($url).$url] = $media;
+			$css_files[$protocolLink.Tools::getMediaServer($url).$url] = $media;
 		}
 	}
 
@@ -1535,7 +1557,7 @@ class ToolsCore
 	* Combine Compress and Cache (ccc) JS calls
 	*/
 	public static function cccJS() {
-		global $js_files, $protocol_link;
+		global $js_files;
 		//inits
 		$compressed_js_files_not_found = array();
 		$js_files_infos = array();
@@ -1543,6 +1565,7 @@ class ToolsCore
 		$compressed_js_file_date = 0;
 		$compressed_js_filename = '';
 		$js_external_files = array();
+		$protocolLink = Tools::getCurrentUrlProtocolPrefix();
 
 		// get js files infos
 		foreach ($js_files as $filename)
@@ -1597,7 +1620,7 @@ class ToolsCore
 
 		// rebuild the original js_files array
 		$url = str_replace(_PS_ROOT_DIR_.'/', __PS_BASE_URI__, $compressed_js_path);
-		$js_files = array_merge(array($protocol_link.Tools::getMediaServer($url).$url), $js_external_files);
+		$js_files = array_merge(array($protocolLink.Tools::getMediaServer($url).$url), $js_external_files);
 		
 	}
 
