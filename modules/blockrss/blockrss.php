@@ -120,7 +120,7 @@ class Blockrss extends Module
 				</div>
 				<label>'.$this->l('Number of threads displayed').'</label>
 				<div class="margin-form">
-					<input type="text" size="5" name="nbr" value="'.Tools::getValue('nbr', Configuration::get('RSS_FEED_NBR')).'" />
+					<input type="text" size="5" name="nbr" value="'.(int)Tools::getValue('nbr', Configuration::get('RSS_FEED_NBR')).'" />
 					<p class="clear">'.$this->l('Number of threads displayed by the block (default value: 5)').'</p>
 
 				</div>
