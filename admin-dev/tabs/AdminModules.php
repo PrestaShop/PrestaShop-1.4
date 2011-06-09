@@ -199,7 +199,7 @@ class AdminModules extends AdminTab
 			{
 				if (Tools::getValue('module_name') != '')
 				{
-					$moduleDir = _PS_MODULE_DIR_.Tools::getValue('module_name');
+					$moduleDir = _PS_MODULE_DIR_.str_replace(array('.', '/', '\\'), array('', '', ''), Tools::getValue('module_name'));
 					$this->recursiveDeleteOnDisk($moduleDir);
 					Tools::redirectAdmin($currentIndex.'&conf=22&token='.$this->token.'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name'));
 				}
@@ -813,6 +813,8 @@ class AdminModules extends AdminTab
 	
 	public function recursiveDeleteOnDisk($dir)
 	{
+		if (strpos(realpath($dir), realpath(_PS_MODULE_DIR_)) === false)
+			return ;
 		if (is_dir($dir)) 
 		{
 			$objects = scandir($dir);
