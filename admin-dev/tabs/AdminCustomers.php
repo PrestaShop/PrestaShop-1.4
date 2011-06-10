@@ -222,7 +222,9 @@ class AdminCustomers extends AdminTab
 				$customer = new Customer((int)Tools::getValue('id_customer'));
 				if (!Validate::isLoadedObject($customer))
 					$this->_errors[] = Tools::displayError('This customer does not exist.');
-				if ($customer->transformToCustomer(Tools::getValue('id_lang', Configuration::get('PS_LANG_DEFAULT'))))
+				if(Customer::customerExists($customer->email))
+					$this->_errors[] = Tools::displayError('This customer already exist as non-guest.');
+				elseif ($customer->transformToCustomer(Tools::getValue('id_lang', Configuration::get('PS_LANG_DEFAULT'))))
 					Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$customer->id.'&conf=3&token='.$this->token);
 				else
 					$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
@@ -302,16 +304,25 @@ class AdminCustomers extends AdminTab
 			'.$this->l('Last update:').' '.Tools::displayDate($customer->date_upd, (int)($cookie->id_lang), true).'<br />
 			'.$this->l('Status:').' '.($customer->active ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />');
 		if ($customer->isGuest())
+		{
 			echo '
-		    <div>
-		  	  '.$this->l('This customer is registered as').' <b>'.$this->l('guest').'</b>
-		  	  <form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
-		  	  	<input type="hidden" name="id_lang" value="'.(int)(sizeof($orders) ? $orders[0]['id_lang'] : Configuration::get('PS_LANG_DEFAULT')).'" />
-		  	  	<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
-		  	  	'.$this->l('This feature generates a random password and sends an e-mail to the customer').'
-		  	  </form>
-		    </div>
-		    ';
+			<div>
+			'.$this->l('This customer is registered as').' <b>'.$this->l('guest').'</b>';
+				if(!Customer::customerExists($customer->email))
+				{
+					echo '
+					<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
+						<input type="hidden" name="id_lang" value="'.(int)(sizeof($orders) ? $orders[0]['id_lang'] : Configuration::get('PS_LANG_DEFAULT')).'" />
+						<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
+						'.$this->l('This feature generates a random password and sends an e-mail to the customer
+					</form>');
+				}
+				else
+					echo '</div><div><b style="color:red;">'.$this->l('A registered customer account exists with the same email address').'</b>';
+			echo '
+			</div>
+			';
+		}
 		echo '
 		</fieldset>
 		<div class="clear">&nbsp;</div>';

@@ -564,12 +564,17 @@ class AdminOrders extends AdminTab
 			if ($customer->isGuest())
 			{
 				echo '
-				'.$this->l('This order has been placed by a').' <b>'.$this->l('guest').'</b>
-				<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
-					<input type="hidden" name="id_lang" value="'.(int)$order->id_lang.'" />
-					<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
-					'.$this->l('This feature will generate a random password and send an e-mail to the customer').'
-				</form>';
+				'.$this->l('This order has been placed by a').' <b>'.$this->l('guest').'</b>';
+				if(!Customer::customerExists($customer->email))
+				{
+					echo '<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
+						<input type="hidden" name="id_lang" value="'.(int)$order->id_lang.'" />
+						<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
+						'.$this->l('This feature will generate a random password and send an e-mail to the customer').'
+					</form>';
+				}
+				else
+					echo '<div><b style="color:red;">'.$this->l('A registered customer account exists with the same email address').'</b></div>';
 			}
 			else
 			{
