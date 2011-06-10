@@ -202,7 +202,7 @@ class GCheckout extends PaymentModule
 				$googleCart->AddItem(new GoogleItem(utf8_decode($product['name'].
 				((isset($product['attributes']) AND !empty($product['attributes'])) ? 
 				' - '.$product['attributes'] : '')), utf8_decode($product['description_short']), 
-				(int)$product['cart_quantity'], $product['total_wt'], 
+				(int)$product['cart_quantity'], $product['price_wt'], 
 				strtoupper(Configuration::get('PS_WEIGHT_UNIT')), (float)$product['weight']));
 				 
 			if ($wrapping = $cart->getOrderTotal(true, Cart::ONLY_WRAPPING))
