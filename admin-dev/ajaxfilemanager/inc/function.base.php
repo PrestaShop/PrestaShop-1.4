@@ -40,7 +40,7 @@ if (!function_exists("stripos"))
 				$output .= $strAppend . $k . "=" . $v;
 			}
 		}
-		return $output;
+		return htmlspecialchars($output);
 	}
 
 /**
