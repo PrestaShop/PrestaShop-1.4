@@ -2017,6 +2017,14 @@ FileETag INode MTime Size
 			break;
 		}
 	}
+	
+	public static function display404Error()
+	{
+		header('HTTP/1.1 404 Not Found');
+		header('Status: 404 Not Found');
+		include(dirname(__FILE__).'/../404.php');
+		die;
+	}
 }
 
 /**
