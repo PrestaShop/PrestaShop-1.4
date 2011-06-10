@@ -286,3 +286,4 @@ $_LANG['Warning, the installer was unable to detect what is your current PrestaS
 $_LANG['However the installer has detected that the version stored in your configuration table is %1$s'] = "Cependant l'installeur a détecté que la version sauvée dans votre table de configuration est %1\$s";
 $_LANG['Additional Benefits'] = 'Avantages exclusifs PrestaShop';
 $_LANG['Exclusive offers dedicated to PrestaShop merchants'] = 'Offres réservées aux marchands PrestaShop';
+$_LANG['PHP magic quotes option is off (recommended)'] = 'L\'option PHP "magic quotes" est désactivée (recommandé)';
