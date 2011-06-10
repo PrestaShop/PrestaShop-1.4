@@ -855,7 +855,7 @@ class AdminOrders extends AdminTab
 				<div id="message" style="display: '.(Tools::getValue('message') ? 'block' : 'none').'">
 					<select name="order_message" id="order_message" onchange="orderOverwriteMessage(this, \''.$this->l('Do you want to overwrite your existing message?').'\')">
 						<option value="0" selected="selected">-- '.$this->l('Choose a standard message').' --</option>';
-		$orderMessages = OrderMessage::getOrderMessages((int)($order->id_lang));
+		$orderMessages = OrderMessage::getOrderMessages((int)($cookie->id_lang));
         foreach ($orderMessages AS $orderMessage)
             echo '		<option value="'.htmlentities($orderMessage['message'], ENT_COMPAT, 'UTF-8').'">'.$orderMessage['name'].'</option>';
 		echo '		</select><br /><br />
