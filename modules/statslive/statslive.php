@@ -49,9 +49,14 @@ class StatsLive extends Module
 		return (parent::install() AND $this->registerHook('AdminStatsModules'));
 	}
 	
+	/**
+	 * Get the number of online customers
+	 * 
+	 * @return array(array, int) array of online customers entries, number of online customers
+	 */
 	private function getCustomersOnline()
 	{
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT u.id_customer, u.firstname, u.lastname, pt.name as page
 		FROM `'._DB_PREFIX_.'connections` c
 		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
@@ -63,13 +68,19 @@ class StatsLive extends Module
 		AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
 		GROUP BY c.id_connections
 		ORDER BY u.firstname, u.lastname');
+		
+		return array($result, Db::getInstance()->NumRows());
 	}
 	
+	/**
+	 * Get the number of online visitors
+	 * 
+	 * @return array(array, int) array of online visitors entries, number of online visitors
+	 */
 	private function getVisitorsOnline()
 	{
 		if (Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
-			return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer, pt.name as page
+			$query = 'SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer, pt.name as page
 			FROM `'._DB_PREFIX_.'connections` c
 			LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
 			LEFT JOIN `'._DB_PREFIX_.'page` p ON p.id_page = cp.id_page
@@ -79,24 +90,25 @@ class StatsLive extends Module
 			AND cp.`time_end` IS NULL
 			AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
 			GROUP BY c.id_connections
-			ORDER BY c.date_add DESC');
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer
-		FROM `'._DB_PREFIX_.'connections` c
-		INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
-		WHERE (g.id_customer IS NULL OR g.id_customer = 0)
-		AND TIME_TO_SEC(TIMEDIFF(NOW(), c.`date_add`)) < 900
-		ORDER BY c.date_add DESC');
+			ORDER BY c.date_add DESC';
+		else
+			$query = 'SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer
+			FROM `'._DB_PREFIX_.'connections` c
+			INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
+			WHERE (g.id_customer IS NULL OR g.id_customer = 0)
+			AND TIME_TO_SEC(TIMEDIFF(NOW(), c.`date_add`)) < 900
+			ORDER BY c.date_add DESC';
+			
+		$result =  Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
+		return array($result, Db::getInstance()->NumRows());
 	}
 	
 	public function hookAdminStatsModules($params)
 	{
 		global $cookie;
-		
-		$customers = $this->getCustomersOnline();
-		$totalCustomers = Db::getInstance()->NumRows();
-		$visitors = $this->getVisitorsOnline();
-		$totalVisitors = Db::getInstance()->NumRows();
+
+		list($customers, $totalCustomers) = $this->getCustomersOnline();
+		list($visitors, $totalVisitors) = $this->getVisitorsOnline();
 		$irow = 0;
 		
 		echo '<script type="text/javascript" language="javascript">

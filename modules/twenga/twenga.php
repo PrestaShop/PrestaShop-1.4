@@ -1063,7 +1063,7 @@ class Twenga extends PaymentModule
 	{
 		$attributesGroups = $product->getAttributesGroups((int)$lang);
 		$combinations = array();
-		if (Db::getInstance()->numRows())
+		if ($attributesGroups && is_array($attributesGroups))
 		{
 			$combinationImages = $product->getCombinationImages((int)$lang);
 			foreach ($attributesGroups AS $k => $row)
