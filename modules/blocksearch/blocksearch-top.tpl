@@ -46,6 +46,7 @@
 			{
 				$('#center_column').remove();
 				$('#old_center_column').attr('id', 'center_column');
+				$('#center_column').show();
 				return false;
 			}
 		}
@@ -71,6 +72,7 @@
 						tryToCloseInstantSearch();
 						$('#center_column').attr('id', 'old_center_column');
 						$('#old_center_column').after('<div id="center_column">'+data+'</div>');
+						$('#old_center_column').hide();
 						$("#instant_search_results a.close").click(function() {
 							$("#search_query_top").val('');
 							return tryToCloseInstantSearch();
