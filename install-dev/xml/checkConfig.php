@@ -59,6 +59,7 @@ $tests_op = array(
 	'register_globals' => false,
 	'gz' => false,
 	'mcrypt' => false,
+	'magicquotes' => false,
 );
 
 // Execute tests
