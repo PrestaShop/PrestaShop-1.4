@@ -338,6 +338,9 @@ function updateNewAccountToAddressBlock()
 		data: 'ajax=true&method=getAddressBlockAndCarriersAndPayments&token=' + static_token ,
 		success: function(json)
 		{
+			if (json.no_address == 1)
+				document.location.href = addressUrl;
+			
 			$('#opc_new_account').fadeOut('fast', function() {
 				$('#opc_new_account').html(json.order_opc_adress);
 				// update block user info

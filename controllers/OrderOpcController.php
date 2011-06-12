@@ -114,6 +114,9 @@ class OrderOpcControllerCore extends ParentOrderController
 						case 'getAddressBlockAndCarriersAndPayments':
 							if (self::$cookie->isLogged())
 							{
+								// check if customer have addresses
+								if (!Customer::getAddressesTotalById((int)(self::$cookie->id_customer)))
+									die(Tools::jsonEncode(array('no_address' => 1)));
 								if (file_exists(_PS_MODULE_DIR_.'blockuserinfo/blockuserinfo.php'))
 								{
 									include_once(_PS_MODULE_DIR_.'blockuserinfo/blockuserinfo.php');
@@ -133,6 +136,7 @@ class OrderOpcControllerCore extends ParentOrderController
 									'carrier_list' => $this->_getCarrierList(),
 									'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
 									'HOOK_PAYMENT' => $this->_getPaymentMethods(),
+									'no_address' => 0,
 									'gift_price' => Tools::displayPrice(Tools::convertPrice(Product::getTaxCalculationMethod() == 1 ? $wrapping_fees : $wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))))
 								);
 								die(Tools::jsonEncode($return));
