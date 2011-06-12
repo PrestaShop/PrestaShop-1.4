@@ -29,8 +29,11 @@ include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../init.php');
 include(dirname(__FILE__) .'/trustedshops.php');
 
-$ts_module = new TrustedShops();
-TSBuyerProtection::setTranslationObject($ts_module);
-$bp = new TSBuyerProtection();
-$bp->setModuleName($ts_module->name);
-$bp->cronTask();
+if (isset($_GET['secure_key']) AND !empty($_GET['secure_key']) AND Configuration::get(TSBuyerProtection::PREFIX_TABLE.'SECURE_KEY') == $_GET['secure_key'])
+{
+	$ts_module = new TrustedShops();
+	TSBuyerProtection::setTranslationObject($ts_module);
+	$bp = new TSBuyerProtection();
+	$bp->setModuleName($ts_module->name);
+	$bp->cronTask();
+}

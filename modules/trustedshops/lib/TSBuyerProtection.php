@@ -240,6 +240,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$category->active = 0;
 		$category->add();
 		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'CAT_ID', intval($category->id));
+		Configuration::updateValue(TSBuyerProtection::PREFIX_TABLE.'SECURE_KEY', strtoupper(Tools::passwdGen(16)));
 		return true;
 	}
 
@@ -255,6 +256,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		Configuration::deleteByName(TSBuyerProtection::PREFIX_TABLE.'ET_CID');
 		Configuration::deleteByName(TSBuyerProtection::PREFIX_TABLE.'ET_LID');
 		Configuration::deleteByName(TSBuyerProtection::PREFIX_TABLE.'ENV_API');
+		Configuration::deleteByName(TSBuyerProtection::PREFIX_TABLE.'SECURE_KEY');
 		return true;
 	}
 
@@ -264,7 +266,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 */
 	public function getCronFilePath()
 	{
-		return $this->site_url.'modules/'.self::$module_name.'/cron_garantee.php';
+		return $this->site_url.'modules/'.self::$module_name.'/cron_garantee.php?secure_key='.Configuration::get(TSBuyerProtection::PREFIX_TABLE.'SECURE_KEY');
 	}
 
 	/**
@@ -442,7 +444,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$sql = '
 		SELECT *
 		FROM `'._DB_PREFIX_.TSBuyerProtection::DB_APPLI.'`
-		WHERE `id_order` = "'.$params['shopOrderID'].'"
+		WHERE `id_order` = "'.(int)$params['shopOrderID'].'"
 		';
 		$order = Db::getInstance()->ExecuteS($sql);
 
@@ -490,7 +492,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				$sql = '
 				SELECT `id_product`
 				FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'`
-				WHERE `ts_product_id` = "'.$params['tsProductID'].'"
+				WHERE `ts_product_id` = "'.(int)$params['tsProductID'].'"
 				';
 				$ts_product = Db::getInstance()->ExecuteS($sql);
 				$product = new Product($ts_product[0]['id_product']);

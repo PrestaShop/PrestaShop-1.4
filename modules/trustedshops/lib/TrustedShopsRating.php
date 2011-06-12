@@ -345,7 +345,7 @@ class TrustedShopsRating extends AbsTrustedShops
 								<div id="send_seperate_mail_infos">'.
 								$this->l('Send the email after').'<input size="2" type="text" name="send_seperate_mail_delay" value="'.(int)(Configuration::get('TS_TAB0_SEND_SEPERATE_MAIL_DELAY')).'" />'.$this->l('days').'.<br />
 								<span style="color: #CC0000; font-weight: bold;">'.$this->l('IMPORTANT:').'</span> '.$this->l('Put this URL in crontab or call it manually daily:').'<br />'
-								.self::getHttpHost(true, true)._MODULE_DIR_.self::$module_name.'/cron.php?secure_key='.Configuration::get('PS_TAB0_TS_SECURE_KEY').
+								.self::getHttpHost(true, true)._MODULE_DIR_.self::$module_name.'/cron.php?secure_key='.Configuration::get('PS_TS_TAB0_SECURE_KEY').
 								'</div>
 							</div>
 						</fieldset>';
