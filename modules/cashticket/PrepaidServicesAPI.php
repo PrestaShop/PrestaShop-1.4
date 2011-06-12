@@ -66,14 +66,17 @@ class PrepaidServicesAPI
 		
 		list ($rc, $msg, $data) = self::_doHttpRequest(self::getBaseUrl('create_disposition_url', $configuration['env']), $params, $configuration['keyring_file'], $configuration['keyring_pw'], $configuration['keyring_prepaid']);
 		
-		if ($rc == 0) {
+		if ($rc == 0) 
+		{
 			$data_array = explode("\n", $data,7);
 			$resultcode = trim($data_array[0]);
 			$errorcode = trim($data_array[1]);
 			$errormessage = trim($data_array[2]);
       
 			return array($resultcode, $errorcode, $errormessage);
-		} else {
+		} 
+		else 
+		{
 			$resultcode = '9001';
 			$errorcode = $rc;
 			$errormessage = 'libcurl error: '.$msg;
@@ -89,7 +92,8 @@ class PrepaidServicesAPI
 
 		list ($rc, $msg, $data) = self::_doHttpRequest(self::getBaseUrl('get_disposition_state_url', $configuration['env']), $params, $configuration['keyring_file'], $configuration['keyring_pw'], $configuration['keyring_prepaid']);
 		
-		if ($rc == 0) {
+		if ($rc == 0) 
+		{
 			$dataarray = explode("\n", $data,7);
 			$resultcode = trim($dataarray[0]);
 			$errorcode = trim($dataarray[1]);
@@ -99,7 +103,9 @@ class PrepaidServicesAPI
 			$state = trim($dataarray[5]);
 			
 			return array($resultcode, $errorcode, $errormessage, $amount, $currency, $state);
-	   } else {
+	   } 
+		else 
+		{
 			$resultcode = '9001';
 			$errorcode = $rc;
 			$errormessage = 'libcurl error: '.$msg;
@@ -114,8 +120,9 @@ class PrepaidServicesAPI
 		$params = 'mid='.$mid.'&mtid='.$mtid.'&language='.$language;
 
 	   list ($rc, $msg, $data) = self::_doHttpRequest(self::getBaseUrl('get_serial_number_url', $configuration['env']), $params, $configuration['keyring_file'], $configuration['keyring_pw'], $configuration['keyring_prepaid']);
-	   if ($rc == 0) {
-		/* read and return data from paysafecard server */
+	   if ($rc == 0) 
+		{
+			/* read and return data from paysafecard server */
 			$dataarray = explode("\n", $data,7);
 			$resultcode = trim($dataarray[0]);
 			$errorcode = trim($dataarray[1]);
@@ -125,7 +132,9 @@ class PrepaidServicesAPI
 			$state = trim($dataarray[5]);
 			$snamount = trim($dataarray[6]);
 			return array ($resultcode, $errorcode, $errormessage, $amount, $currency, $state, $snamount);
-		} else {
+		} 
+		else 
+		{
 			$resultcode = '9001';
 			$errorcode = $rc;
 			$errormessage = 'libcurl error: '.$msg;
@@ -141,14 +150,17 @@ class PrepaidServicesAPI
 
 		list ($rc, $msg, $data) = self::_doHttpRequest(self::getBaseUrl('execute_debit_url', $configuration['env']), $params, $configuration['keyring_file'], $configuration['keyring_pw'], $configuration['keyring_prepaid']);
 
-		if ($rc == 0) {
+		if ($rc == 0) 
+		{
 			$dataarray=explode("\n", $data,7);
 			$resultcode=trim($dataarray[0]);
 			$errorcode=trim($dataarray[1]);
 			$errormessage=trim($dataarray[2]);
 			
 			return array ($resultcode, $errorcode, $errormessage);
-		} else {
+		} 
+		else 
+		{
 			$resultcode = '9001';
 			$errorcode = $rc;
 			$errormessage = 'libcurl error: '.$msg;

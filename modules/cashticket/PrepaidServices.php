@@ -320,7 +320,7 @@ abstract class PrepaidServices extends PaymentModule
 		}
 		$currencies_configuration .= '</table>';
 
-		return '<form enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'" method="post">
+		return '<form enctype="multipart/form-data" action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 					<fieldset>
 					<legend><img src="../img/admin/cog.gif" alt="" />'.$this->getL('configuration').'</legend>
 					<label>'.$this->getL('environment').'</label>
@@ -615,7 +615,9 @@ abstract class PrepaidServices extends PaymentModule
 
 			$query_string = $error ? self::changeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error', (int)($error)) : self::removeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error');
 			Tools::redirectAdmin(Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$query_string);
-		} else if (Tools::isSubmit('releasePayment')) {
+		} 
+		elseif (Tools::isSubmit('releasePayment')) 
+		{
 			if (!$this->_releasePayment($order, $disposition))
 				$error = 1;
 

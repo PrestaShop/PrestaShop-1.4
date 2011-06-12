@@ -41,8 +41,6 @@ $amount = number_format((float)($cart->getOrderTotal(true, Cart::BOTH)), 2, '.',
 if (Tools::getValue('hash') != md5(Configuration::get($module->prefix.'SALT') + $amount + $currency->iso_code)) 
 	die(Tools::displayError());
 
-	
-
 $result = $module->getDispositionState((int)($cart->id));
 $state = _PS_OS_ERROR_;
 
@@ -57,10 +55,14 @@ if ($result[0] == 0)
 	{
 		$state = _PS_OS_PAYMENT_;
 		$message .= $module->getL('disposition_created');
-	} else {
+	} 
+	else 
+	{
 		$message .= $module->getL('disposition_invalid').' '.$state;
 	}
-} else {
+}
+else 
+{
 	$message .= 'payment_error'.' '.$result[2];
 }
 
