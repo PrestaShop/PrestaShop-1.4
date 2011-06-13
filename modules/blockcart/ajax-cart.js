@@ -210,12 +210,15 @@ var ajaxCart = {
 					$element = $('#bigpic');
 				var $picture = $element.clone();
 				var pictureOffsetOriginal = $element.offset();
-				$picture.css({'position': 'absolute', 'top': pictureOffsetOriginal.top, 'left': pictureOffsetOriginal.left});
+
+				if ($picture.size())
+					$picture.css({'position': 'absolute', 'top': pictureOffsetOriginal.top, 'left': pictureOffsetOriginal.left});
+
 				var pictureOffset = $picture.offset();
 				var cartBlockOffset = $('#cart_block').offset();
 
 				// Check if the block cart is activated for the animation
-				if (cartBlockOffset != undefined)
+				if (cartBlockOffset != undefined && $picture.size())
 				{
 					$picture.appendTo('body');
 					$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
