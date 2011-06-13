@@ -55,6 +55,7 @@ class importerosc extends ImportModule
 		$html .= '<label style="width:220px">'.$this->l('Shop url').' : </label>
 				<div class="margin-form">
 					http://<input type="text" name="shop_url">/
+					<p>'.$this->l('Specify the root URL of your site oscommerce').'</p>
 				</div>';
 		
 		
