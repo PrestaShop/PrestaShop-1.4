@@ -161,6 +161,8 @@ function checkCustomizations()
 
 function emptyCustomizations()
 {
+	if(typeof(customizationFields)=='undefined') return;
+	
 	for (var i = 0; i < customizationFields.length; i++)
 	{
 		$('#' + customizationFields[i][0]).html('');
