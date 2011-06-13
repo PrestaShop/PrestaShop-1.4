@@ -276,5 +276,12 @@
 		<unit type="base_distance" value="ft" />
 		<unit type="long_distance" value="mi" />
 	</units>
+	<modules>
+		<module name="carriercompare" install="1" />
+	</modules>
+	<configurations>
+		<configuration name="PS_TAX_DISPLAY" value="1" />
+	</configurations>
+	<group_default price_display_method="1" />
 </localizationPack>
 

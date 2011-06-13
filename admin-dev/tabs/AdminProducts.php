@@ -1658,6 +1658,7 @@ class AdminProducts extends AdminTab
 			return;
 		$specificPrices = SpecificPrice::getByProductId((int)($obj->id));
 		$specificPricePriorities = SpecificPrice::getPriority((int)($obj->id));
+		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
 
 		$taxRate = TaxRulesGroup::getTaxesRate($obj->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
 
@@ -1690,11 +1691,11 @@ class AdminProducts extends AdminTab
 					<th class="cell border" style="width: 12%;">'.$this->l('Currency').'</th>
 					<th class="cell border" style="width: 11%;">'.$this->l('Country').'</th>
 					<th class="cell border" style="width: 13%;">'.$this->l('Group').'</th>
-					<th class="cell border" style="width: 12%;">'.$this->l('Price (tax excl.)').'</th>
+					<th class="cell border" style="width: 12%;">'.$this->l('Price').' '.($default_country->display_tax_label ? $this->l('(tax excl.)') : '').'</th>
 					<th class="cell border" style="width: 10%;">'.$this->l('Reduction').'</th>
 					<th class="cell border" style="width: 15%;">'.$this->l('Period').'</th>
 					<th class="cell border" style="width: 10%;">'.$this->l('From (quantity)').'</th>
-					<th class="cell border" style="width: 15%;">'.$this->l('Final price (tax excl.)').'</th>
+					<th class="cell border" style="width: 15%;">'.$this->l('Final price').' '.($default_country->display_tax_label ? $this->l('(tax excl.)') : '').'</th>
 					<th class="cell border" style="width: 2%;">'.$this->l('Action').'</th>
 				</tr>
 			</thead>
@@ -1842,7 +1843,10 @@ class AdminProducts extends AdminTab
 				<input type="text" name="sp_from_quantity" value="1" size="3" /> <span style="font-weight:bold; color:#000000; font-size:12px">'.$this->l('unit').'</span>
 			</div>
 
-			<label>'.$this->l('Product price (tax excl.):').'</label>
+			<label>'.$this->l('Product price');
+				if ($default_country->display_tax_label)
+					echo ' '.$this->l('(tax excl.):');
+			echo '</label>
 			<div class="margin-form">
 				<span id="spm_currency_sign_pre_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span>
 				<input type="text" name="sp_price" value="0" size="11" />
@@ -1905,7 +1909,7 @@ class AdminProducts extends AdminTab
 						<div style="margin-right: 6px; float:left; text-align:right;">#'.(int)($id_customization_field).'</div><input type="text" name="'.$fieldName.'" value="'.htmlentities($text, ENT_COMPAT, 'UTF-8').'" style="float: left" />
 					</div>';
 		}
-		
+
 		$required = (isset($label[(int)($language['id_lang'])])) ? $label[(int)($language['id_lang'])]['required'] : false;
 		echo '</div>
 				<div style="margin: 3px 0 0 3px; font-size: 11px">
@@ -2073,6 +2077,8 @@ class AdminProducts extends AdminTab
 	{
 		parent::displayForm(false);
 		global $currentIndex, $cookie, $link;
+
+		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
 		$iso = Language::getIsoById((int)($cookie->id_lang));
 		$has_attribute = false;
 		$qty_state = 'readonly';
@@ -2549,18 +2555,24 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>';
 
+				if ($default_country->display_tax_label)
+				{
+					echo '
+						<tr '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'>
+							<td class="col-left">'.$this->l('Retail price with tax:').'</td>
+							<td style="padding-bottom:5px;">
+								'.($currency->format % 2 != 0 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="priceTI" type="text" value="" onchange="noComma(\'priceTI\');" onkeyup="if (isArrowKey(event)) return;  calcPriceTE();" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'
+							</td>
+						</tr>';
+				} else {
+					echo '<input size="11" maxlength="14" id="priceTI" type="hidden" value="" onchange="noComma(\'priceTI\');" onkeyup="if (isArrowKey(event)) return;  calcPriceTE();" />';
+				}
 				echo '
-					<tr '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'>
-						<td class="col-left">'.$this->l('Retail price with tax:').'</td>
-						<td style="padding-bottom:5px;">
-							'.($currency->format % 2 != 0 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="priceTI" type="text" value="" onchange="noComma(\'priceTI\');" onkeyup="if (isArrowKey(event)) return;  calcPriceTE();" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'
-						</td>
-					</tr>
 					<tr id="tr_unit_price">
 						<td class="col-left">'.$this->l('Unit price without tax:').'</td>
 						<td style="padding-bottom:5px;">
 							'.($currency->format % 2 != 0 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="unit_price" name="unit_price" type="text" value="'.($this->getFieldValue($obj, 'unit_price_ratio') != 0 ? Tools::ps_round($this->getFieldValue($obj, 'price') / $this->getFieldValue($obj, 'unit_price_ratio'), 2) : 0).'" onkeyup="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\'); unitPriceWithTax(\'unit\');"/>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.$this->l('per').' <input size="6" maxlength="10" id="unity" name="unity" type="text" value="'.htmlentities($this->getFieldValue($obj, 'unity'), ENT_QUOTES, 'UTF-8').'" onkeyup="if (isArrowKey(event)) return ;unitySecond();" onchange="unitySecond();"/>'.
-							(Configuration::get('PS_TAX') ? '<span style="margin-left:15px">'.$this->l('or').' '.($currency->format % 2 != 0 ? ' '.$currency->sign : '').'<span id="unit_price_with_tax">0.00</span>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.$this->l('per').' <span id="unity_second">'.$this->getFieldValue($obj, 'unity').'</span> '.$this->l('with tax') : '').'</span>
+							(Configuration::get('PS_TAX') && $default_country->display_tax_label ? '<span style="margin-left:15px">'.$this->l('or').' '.($currency->format % 2 != 0 ? ' '.$currency->sign : '').'<span id="unit_price_with_tax">0.00</span>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.$this->l('per').' <span id="unity_second">'.$this->getFieldValue($obj, 'unity').'</span> '.$this->l('with tax') : '').'</span>
 							<p>'.$this->l('Eg. $15 per Lb').'</p>
 						</td>
 					</tr>
@@ -2573,8 +2585,15 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left"><b>'.$this->l('Final retail price:').'</b></td>
 						<td style="padding-bottom:5px;">
+							<span style="'.($default_country->display_tax_label ? '' : 'display:none').'">
 							'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<span id="finalPrice" style="font-weight: bold;"></span>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'> ('.$this->l('tax incl.').')</span>
-							<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'> / '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')</span>
+							</span>
+							<span'.(!Configuration::get('PS_TAX') ? ' style="display:none;"' : '').'>';
+
+							if ($default_country->display_tax_label)
+								echo ' / ';
+
+							 echo ($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<span id="finalPriceWithoutTax" style="font-weight: bold;"></span>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.($default_country->display_tax_label ? '('.$this->l('tax excl.').')' : '').'</span>
 						</td>
 					</tr>
 					<tr>
@@ -2641,8 +2660,11 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Additional shipping cost:').'</td>
 						<td style="padding-bottom:5px;">
-							<input type="text" name="additional_shipping_cost" value="'.($this->getFieldValue($obj, 'additional_shipping_cost')).'" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' ('.$this->l('tax excl.').')
-							<p>'.$this->l('Carrier tax will be applied.').'</p>
+							<input type="text" name="additional_shipping_cost" value="'.($this->getFieldValue($obj, 'additional_shipping_cost')).'" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '');
+							if ($default_country->display_tax_label)
+								echo ' ('.$this->l('tax excl.').')';
+
+					echo '<p>'.$this->l('Carrier tax will be applied.').'</p>
 						</td>
 					</tr>
 					<tr>
@@ -2665,7 +2687,7 @@ class AdminProducts extends AdminTab
 								value="'.stripslashes(htmlentities($this->getFieldValue($obj, 'available_later', $language['id_lang']), ENT_COMPAT, 'UTF-8')).'" />
 								<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 							</div>';
-		echo '			</td>
+			echo '	</td>
 					</tr>
 
 					<script type="text/javascript">
@@ -3158,8 +3180,13 @@ class AdminProducts extends AdminTab
 				  <option value="-1">'.$this->l('Reduction').'</option>
 				</select>
 				<span id="span_impact">&nbsp;&nbsp;'.$this->l('of').'&nbsp;&nbsp;'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'
-					<input type="text" size="6" name="attribute_price" id="attribute_price" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTI();"/>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.$this->l('(tax excl.)').'<span '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'> '.$this->l('or').' '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'
-					<input type="text" size="6" name="attribute_priceTI" id="attribute_priceTI" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTE();"/>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.$this->l('(tax incl.)').'</span> '.$this->l('final product price will be set to').' '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<span id="attribute_new_total_price">0.00</span>'.($currency->format % 2 == 0 ? $currency->sign.' ' : '').'
+					<input type="text" size="6" name="attribute_price" id="attribute_price" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTI();"/>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '');
+					if ($default_country->display_tax_label)
+					{
+						echo ' '.$this->l('(tax excl.)').'<span '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'> '.$this->l('or').' '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'
+							<input type="text" size="6" name="attribute_priceTI" id="attribute_priceTI" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTE();"/>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.$this->l('(tax incl.)').'</span> '.$this->l('final product price will be set to').' '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<span id="attribute_new_total_price">0.00</span>'.($currency->format % 2 == 0 ? $currency->sign.' ' : '');
+					}
+			echo '
 				</span>
 			</td>
 		  </tr>

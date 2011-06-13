@@ -1671,7 +1671,7 @@ class CartCore extends ObjectModel
 	{
 		$carrier = new Carrier((int)$id_carrier, Configuration::get('PS_LANG_DEFAULT'));
 		$shippingMethod = $carrier->getShippingMethod();
-		
+
 		if ($shippingMethod == Carrier::SHIPPING_METHOD_FREE)
 			return true;
 		if ($shippingMethod == Carrier::SHIPPING_METHOD_WEIGHT
@@ -1680,7 +1680,7 @@ class CartCore extends ObjectModel
 		if ($shippingMethod == Carrier::SHIPPING_METHOD_PRICE
 			AND (Carrier::checkDeliveryPriceByPrice((int)$id_carrier, $this->getOrderTotal(true, Cart::BOTH_WITHOUT_SHIPPING), $id_zone, (int)$this->id_currency)))
 			return true;
-			
+
 		return false;
 	}
 }

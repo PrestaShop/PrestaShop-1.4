@@ -50,6 +50,9 @@ class LocalizationPackCore
 			$res &= $this->_installTaxes($xml);
 			$res &= $this->_installCurrencies($xml, $install_mode);
 			$res &= $this->_installUnits($xml);
+			$res &= $this->installConfiguration($xml);
+			$res &= $this->installModules($xml);
+			$res &= $this->updateDefaultGroupDisplayMethod($xml);
 
 			if (!defined('_PS_MODE_DEV_') OR !_PS_MODE_DEV_)
 				$res &= $this->_installLanguages($xml, $install_mode);
@@ -400,6 +403,82 @@ class LocalizationPackCore
 					return false;
 				}
 			}
+		return true;
+	}
+
+	/**
+	* Install/Uninstall a module from a localization file
+	* <modules>
+	*	<module name="module_name" [install="0|1"] />
+	*/
+	protected function installModules($xml)
+	{
+		if (isset($xml->modules))
+			foreach($xml->modules->module as $data)
+			{
+				$attributes = $data->attributes();
+				$name = (string)$attributes['name'];
+				if (isset($name) && $module = Module::getInstanceByName($name))
+				{
+					$install = ($attributes['install'] == 1) ? true : false;
+
+					if ($install)
+					{
+						if (!Module::isInstalled($name))
+							if (!$module->install())
+								$this->_errors[] = Tools::displayError('An error has occured during the module installation: '). $name;
+					}
+					else
+						if (Module::isInstalled($name))
+							if (!$module->uninstall())
+								$this->_errors[] = Tools::displayError('An error has occured during the module uninstall: '). $name;
+
+					unset($module);
+				}
+				else
+					$this->_errors[] = Tools::displayError('An error has occured, this module doesnt exists: '). $name;
+			}
+
+		return true;
+	}
+
+	/**
+	* Update a configuration variable from a localization file
+	* <configuration>
+	*	<configuration name="variable_name" value="variable_value" />
+	*/
+	protected function installConfiguration($xml)
+	{
+		if (isset($xml->configurations))
+			foreach($xml->configurations->configuration as $data)
+			{
+				$attributes = $data->attributes();
+				$name = (string)$attributes['name'];
+
+				if (isset($name) && isset($attributes['value']) && Configuration::get($name) !== false)
+					if (!Configuration::updateValue($name, (string)$attributes['value']))
+						$this->_errors[] = Tools::displayError('An error has occured during the configuration setup: '. $name);
+			}
+
+		return true;
+	}
+
+	protected function updateDefaultGroupDisplayMethod($xml)
+	{
+		if (isset($xml->group_default))
+		{
+			$attributes = $xml->group_default->attributes();
+			if (isset($attributes['price_display_method']) && in_array((int)$attributes['price_display_method'], array(0, 1)))
+			{
+				$group = new Group((int)_PS_DEFAULT_CUSTOMER_GROUP_);
+				$group->price_display_method = (int)$attributes['price_display_method'];
+				if (!$group->save())
+					$this->_errors[] = Tools::displayError('An error has occured during the default group update');
+			}
+			else
+				$this->_errors[] = Tools::displayError('An error has occured during the default group update');
+		}
+
 		return true;
 	}
 
