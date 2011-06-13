@@ -162,6 +162,7 @@ class BlockCategories extends Module
 				WHERE (c.`active` = 1 OR c.`id_category` = 1)
 				'.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
 				AND cg.`id_group` IN ('.pSQL($groups).')
+				GROUP BY id_category
 				ORDER BY `level_depth` ASC, c.`position` ASC')
 			)
 				return;
