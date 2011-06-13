@@ -90,7 +90,7 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg', $disableCach
 					imagejpeg($newImage, _PS_TMP_IMG_DIR_.$cacheImage, 86);
 			}
 		}
-		return '<img src="../img/tmp/'.$cacheImage.($disableCache ? '?time='.time() : '').'" alt="" class="imgm" />';
+		return '<img src="'._PS_TMP_IMG_.$cacheImage.($disableCache ? '?time='.time() : '').'" alt="" class="imgm" />';
 	}
 	return '';
 }
