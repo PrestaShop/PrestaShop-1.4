@@ -161,7 +161,7 @@ function checkCustomizations()
 
 function emptyCustomizations()
 {
-	if(typeof(customizationFields)=='undefined') return;
+	if(typeof(customizationFields) == 'undefined') return;
 	
 	for (var i = 0; i < customizationFields.length; i++)
 	{
