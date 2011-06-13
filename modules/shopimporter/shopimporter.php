@@ -1256,7 +1256,7 @@ class shopimporter extends ImportModule
 			$order->total_paid_real = (float)$item['total_paid_real'];
 			$order->invoice_date = '0000-00-00 00:00:00';
 			$order->delivery_date = '0000-00-00 00:00:00';
-			$order->add();
+			$order->save(false, false);
 			
 			$this->saveMatchId('order', (int)$order->id, (int)$item['id_cart']);
 		}

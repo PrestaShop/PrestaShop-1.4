@@ -327,7 +327,8 @@ class importerosc extends ImportModule
 		}
 		
 		$orders = $this->ExecuteS('
-								SELECT orders_id as id_cart, '.$psCarrierDefault.' as id_carrier, 1 as id_lang, currency as id_currency, customers_id as id_customer, payment_method as payment, 1 as valid
+								SELECT orders_id as id_cart, '.$psCarrierDefault.' as id_carrier, 1 as id_lang, currency as id_currency, customers_id as id_customer, payment_method as payment, 1 as valid,
+								date_purchased as date_add, last_modified as date_upd
 								FROM  `'.addslashes($this->prefix).'orders` LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 		foreach($orders as $key => $order)
 		{
