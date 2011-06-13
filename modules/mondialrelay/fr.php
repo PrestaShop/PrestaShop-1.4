@@ -116,6 +116,8 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = 'Gratuit !';
 $_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Livraison à';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_a1c3470a944b9625cfb924fd15c8bdbf'] = 'Veuillez choisir au moins une commande';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_dc41aac14af17f1d19fca5e3b9439e74'] = 'Cette clé';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_306b346c19017609403424203ea3d720'] = 'est vide et doit être rensignée';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_ee22121d08c09c8f68bfad2bf9fd3ec1'] = 'Il semble que la requête ne soit pas valide';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_c9b4de92f371ae545ad6f051c07d58ca'] = 'Erreur numéro :';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_ea5f761be4e4888eabf4e1501d7817d1'] = 'Détails :';
@@ -123,6 +125,8 @@ $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_eabb11bf9623f08409a0a4c9d035
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_b92c3d3319314513c547675924ceecd1'] = 'URL du Ticket :';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_66b793b6b4125e300717e8cf7449f533'] = 'Url de Tracking :';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_2653c23b8c0daac59571e4be5e8fa7d0'] = 'Le webservice Mondial Relay est actuellement innaccessible.';
+$_MODULE['<{mondialrelay}prestashop>mrgettickets_dc41aac14af17f1d19fca5e3b9439e74'] = 'Cette clé';
+$_MODULE['<{mondialrelay}prestashop>mrgettickets_135a7b9a62531e066a95093d8951b344'] = 'n\'a pas un format valide';
 $_MODULE['<{mondialrelay}prestashop>mrgettickets_23e794a72c9b95b20a6c05cf7d3a17a5'] = 'Il semble que la requête ne soit pas valide';
 $_MODULE['<{mondialrelay}prestashop>mrgettickets_c9b4de92f371ae545ad6f051c07d58ca'] = 'Erreur numéro :';
 $_MODULE['<{mondialrelay}prestashop>mrgettickets_ea5f761be4e4888eabf4e1501d7817d1'] = 'Détails :';
