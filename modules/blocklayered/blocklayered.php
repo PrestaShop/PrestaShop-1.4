@@ -649,7 +649,7 @@ class BlockLayered extends Module
 		'nbr_filterBlocks' => sizeof($filterBlocks),
 		'filters' => $filterBlocks));
 
-		return $smarty->fetch(_PS_MODULE_DIR_.$this->name.'/blocklayered.tpl');
+		return $this->display(__FILE__, 'blocklayered.tpl');
 	}
 	
 	public function ajaxCall()
