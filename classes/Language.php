@@ -304,11 +304,13 @@ class LanguageCore extends ObjectModel
 			$identifier = 'id_'.str_replace('_lang', '', str_replace(_DB_PREFIX_, '', $name));
 
 			$sql = 'INSERT IGNORE INTO `'.$name.'` ('.$fields.') (SELECT ';
-			$sql .= '`'.$identifier.'`, `id_lang`, ';
-			foreach($columns as $column)
+			foreach($columns as $column) {
 				if ($identifier != $column['Field'] and $column['Field'] != 'id_lang')
 					$sql .= '(SELECT `'.$column['Field'].'` FROM `'.$name.'` tl WHERE tl.`id_lang` = @id_lang_default AND tl.`'.$identifier.'` = `'.str_replace('_lang', '', $name).'`.`'.$identifier.'`), ';
-				$sql = rtrim($sql, ', ');
+				else
+					$sql.= '`'.$column['Field'].'`, ';
+			}
+			$sql = rtrim($sql, ', ');
 			$sql .= ' FROM `'._DB_PREFIX_.'lang` CROSS JOIN `'.str_replace('_lang', '', $name).'`) ;';
 			$return &= Db::getInstance()->Execute(pSQL($sql));
 		}
