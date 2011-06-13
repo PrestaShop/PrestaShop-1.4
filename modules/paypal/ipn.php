@@ -75,6 +75,6 @@ if ($order->getCurrentState() == $id_order_state)
 
 // Set order state in order history
 $history = new OrderHistory();
-$history->id_order = (int)($order->id);
-$history->changeIdOrderState((int)($id_order_state), (int)($order->id));
+$history->id_order = (int)$order->id;
+$history->changeIdOrderState((int)$id_order_state, (int)$order->id);
 $history->addWithemail(true, $extraVars);

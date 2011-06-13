@@ -133,8 +133,8 @@ class PayPal extends PaymentModule
 			$orderState->logable = true;
 			$orderState->invoice = true;
 			if ($orderState->add())
-				copy(dirname(__FILE__).'/../../img/os/'._PS_OS_PAYPAL_.'.gif', dirname(__FILE__).'/../../img/os/'.(int)($orderState->id).'.gif');
-			Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)($orderState->id));
+				copy(dirname(__FILE__).'/../../img/os/'._PS_OS_PAYPAL_.'.gif', dirname(__FILE__).'/../../img/os/'.(int)$orderState->id.'.gif');
+			Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)$orderState->id);
 		}
 		
 		return true;
@@ -283,60 +283,50 @@ class PayPal extends PaymentModule
 				<br />
 				<div class="module_confirmation conf confirm" style="width: 400px;">
 					<img src="'._PS_IMG_.'admin/ok.gif" alt="" title="" /> '.$message.'
-				</div>
-				';
+				</div>';
 		}
 		
-		if ($this->_needValidation((int)($params['id_order'])) AND $this->_isPayPalAPIAvailable())
+		if ($this->_needValidation((int)$params['id_order']) AND $this->_isPayPalAPIAvailable())
 		{
-			$this->_html .= '
-			<br />
+			$this->_html .= '<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Validation').'</legend>
 				<p><b>'.$this->l('Information:').'</b> '.(OrderHistory::getLastOrderState((int)($params['id_order']))->id == (int)(Configuration::get('PAYPAL_OS_AUTHORIZATION')) ? $this->l('Pending Capture - No shipping') : $this->l('Pending Payment - No shipping')).'</p>
-				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
-					<input type="hidden" name="id_order" value="'.$params['id_order'].'" />
+				<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">
+					<input type="hidden" name="id_order" value="'.(int)$params['id_order'].'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalValidation" value="'.$this->l('Get payment status').'" /></p>
-				</form>
-			';
+				</form>';
 			$this->_postProcess();
-			$this->_html .= '</fieldset>
-			';
+			$this->_html .= '</fieldset>';
 		}
 		
-		if ($this->_needCapture((int)($params['id_order'])) AND $this->_isPayPalAPIAvailable())
+		if ($this->_needCapture((int)$params['id_order']) AND $this->_isPayPalAPIAvailable())
 		{
-			$this->_html .= '
-			<br />
+			$this->_html .= '<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Capture').'</legend>
 				<p><b>'.$this->l('Information:').'</b> '.$this->l('Funds ready to be captured before shipping.').'</p>
-				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
-					<input type="hidden" name="id_order" value="'.$params['id_order'].'" />
+				<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">
+					<input type="hidden" name="id_order" value="'.(int)$params['id_order'].'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalCapture" value="'.$this->l('Get the money.').'" /></p>
-				</form>
-			';
+				</form>';
 			$this->_postProcess();
-			$this->_html .= '</fieldset>
-			';
+			$this->_html .= '</fieldset>';
 		}
 		
-		if ($this->_canRefund((int)($params['id_order'])) AND $this->_isPayPalAPIAvailable())
+		if ($this->_canRefund((int)$params['id_order']) AND $this->_isPayPalAPIAvailable())
 		{
-			$this->_html .= '
-			<br />
+			$this->_html .= '<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Refund').'</legend>
 				<p><b>'.$this->l('Information:').'</b> '.$this->l('Payment accepted').'</p>
 				<p><b>'.$this->l('Information:').'</b> '.$this->l('When you refund a product, a partial refund is made unless you select "Generate a voucher".').'</p>
-				<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
-					<input type="hidden" name="id_order" value="'.(int)($params['id_order']).'" />
+				<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">
+					<input type="hidden" name="id_order" value="'.(int)$params['id_order'].'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalRefund" value="'.$this->l('Refund total transaction').'" onclick="if(!confirm(\''.$this->l('Are you sure?').'\'))return false;" /></p>
-				</form>
-			';
+				</form>';
 			$this->_postProcess();
-			$this->_html .= '</fieldset>
-			';
+			$this->_html .= '</fieldset>';
 		}
 		
 		return $this->_html;
@@ -368,7 +358,7 @@ class PayPal extends PaymentModule
 		$message = $this->l('Cancel products result:').'<br>';
 		foreach ($response AS $k => $value)
 			$message .= $k.': '.$value.'<br>';
-		$this->_addNewPrivateMessage((int)($order->id), $message);
+		$this->_addNewPrivateMessage((int)$order->id, $message);
 	}
 
 	public function makePayPalAPIValidation($cookie, $cart, $id_currency, $payerID, $type)
@@ -489,9 +479,10 @@ class PayPal extends PaymentModule
 	public function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, $secure_key = false)
 	{
 		if (!$this->active)
-			return ;
+			return;
 
 		parent::validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod, $message, $extraVars, $currency_special, $dont_touch_amount, $secure_key);
+		
 		if (array_key_exists('transaction_id', $extraVars) AND array_key_exists('payment_status', $extraVars))
 			$this->_saveTransaction($id_cart, $extraVars);
 	}
@@ -559,24 +550,24 @@ class PayPal extends PaymentModule
 
 		if ($ppExpress)
 		{
-			$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? (int)($cookie->id_lang) : 1));
+			$iso_code = Tools::strtoupper(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : 1));
 			$logo = array(
-				'FR' => _MODULE_DIR_.$this->name.'/img/FR_pp_express.gif',
-				'DE' => _MODULE_DIR_.$this->name.'/img/DE_pp_express.gif',
-				'US' => _MODULE_DIR_.$this->name.'/img/US_pp_express.gif',
-				'GB' => _MODULE_DIR_.$this->name.'/img/UK_pp_express.gif',
-				'ES' => _MODULE_DIR_.$this->name.'/img/ES_pp_express.gif',
-				'IT' => _MODULE_DIR_.$this->name.'/img/IT_pp_express.gif',
-				'PL' => _MODULE_DIR_.$this->name.'/img/PL_pp_express.gif',
-				'NL' => _MODULE_DIR_.$this->name.'/img/NL_pp_express.gif',
-				'AU' => _MODULE_DIR_.$this->name.'/img/AU_pp_express.gif',
-				'CA' => _MODULE_DIR_.$this->name.'/img/CA_pp_express.gif',
-				'CN' => _MODULE_DIR_.$this->name.'/img/CN_pp_express.gif',
-				'JP' => _MODULE_DIR_.$this->name.'/img/JP_pp_express.gif'
+				'FR' => 'FR',
+				'DE' => 'DE',
+				'US' => 'US',
+				'GB' => 'UK',
+				'ES' => 'ES',
+				'IT' => 'IT',
+				'PL' => 'PL',
+				'NL' => 'NL',
+				'AU' => 'AU',
+				'CA' => 'CA',
+				'CN' => 'CN',
+				'JP' => 'JP'
 			);
-			if (isset($logo[$iso_code]))
-				return $logo[$iso_code];
-			return $logo['US'];
+			if (!isset($logo[$iso_code]))
+				$iso_code = 'US';
+			return _MODULE_DIR_.$this->name.'/img/'.$logo[$iso_code].'_pp_express.gif';
 		}
 
 		if (Configuration::get('PAYPAL_PAYMENT_METHOD') == _PAYPAL_INTEGRAL_)
@@ -604,17 +595,16 @@ class PayPal extends PaymentModule
 		}
 		elseif (Configuration::get('PAYPAL_PAYMENT_METHOD') == _PAYPAL_INTEGRAL_EVOLUTION_)
 			return _MODULE_DIR_.$this->name.'/img/integral_evolution'.($vertical ? '_vertical' : '').'.png';
-		else
-			return _MODULE_DIR_.$this->name.'/img/PayPal_mark_60x38.gif';
+		return _MODULE_DIR_.$this->name.'/img/PayPal_mark_60x38.gif';
 	}
 	
 	public function getCountryCode()
 	{
 		global $cookie;
 
-		$cart = new Cart((int)($cookie->id_cart));
-		$address = new Address((int)($cart->id_address_invoice));
-		$country = new Country((int)($address->id_country));
+		$cart = new Cart((int)$cookie->id_cart);
+		$address = new Address((int)$cart->id_address_invoice);
+		$country = new Country((int)$address->id_country);
 		return $country->iso_code;
 	}
 	
@@ -623,7 +613,7 @@ class PayPal extends PaymentModule
 		global $cookie, $smarty;
 
 		$send = true;
-		// Sanitinize log
+		// Sanitize log
 		foreach ($log AS $key => $string)
 			if ($string == 'ACK -> Success')
 				$send = false;
@@ -649,7 +639,7 @@ class PayPal extends PaymentModule
 			Mail::Send((int)($cookie->id_lang), 'error_reporting', Mail::l('Error reporting from your PayPal module'), $data, Configuration::get('PS_SHOP_EMAIL'), NULL, NULL, NULL, NULL, NULL, _PS_MODULE_DIR_.$this->name.'/mails/');
 		echo $this->display(__FILE__, 'error.tpl');
 		include_once(dirname(__FILE__).'/../../footer.php');
-		die ;
+		die;
 	}
 	
 	private function _saveTransaction($id_cart, $extraVars)
@@ -660,22 +650,22 @@ class PayPal extends PaymentModule
 			$id_order = Db::getInstance()->getValue('
 			SELECT `id_order` 
 			FROM `'._DB_PREFIX_.'orders` 
-			WHERE `id_cart` = '.(int)($cart->id));
+			WHERE `id_cart` = '.(int)$cart->id);
 			
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'paypal_order` (`id_order`, `id_transaction`, `payment_method`, `payment_status`, `capture`) 
-			VALUES ('.(int)($id_order).', \''.pSQL($extraVars['transaction_id']).'\', '.(int)(Configuration::get('PAYPAL_PAYMENT_METHOD')).', \''.pSQL($extraVars['payment_status']).((isset($extraVars['pending_reason']) AND $extraVars['pending_reason'] == 'authorization') ? '_authorization' : '').'\', '.(int)(Configuration::get('PAYPAL_CAPTURE')).')');
+			VALUES ('.(int)$id_order.', \''.pSQL($extraVars['transaction_id']).'\', '.(int)Configuration::get('PAYPAL_PAYMENT_METHOD').', \''.pSQL($extraVars['payment_status']).((isset($extraVars['pending_reason']) AND $extraVars['pending_reason'] == 'authorization') ? '_authorization' : '').'\', '.(int)(Configuration::get('PAYPAL_CAPTURE')).')');
 		}
 	}
 	
 	private function _canRefund($id_order)
 	{
-		if (!(int)($id_order))
+		if (!(int)$id_order)
 			return false;
 		$paypal_order = Db::getInstance()->getRow('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'paypal_order` 
-		WHERE `id_order` = '.(int)($id_order));
+		WHERE `id_order` = '.(int)$id_order);
 		if (!is_array($paypal_order) OR !sizeof($paypal_order))
 			return false;
 		if ($paypal_order['payment_status'] != 'Completed' OR $paypal_order['capture'] != 0)
@@ -685,12 +675,12 @@ class PayPal extends PaymentModule
 	
 	private function _needValidation($id_order)
 	{
-		if (!(int)($id_order))
+		if (!(int)$id_order)
 			return false;
 		$order = Db::getInstance()->getRow('
 		SELECT `payment_method`, `payment_status` 
 		FROM `'._DB_PREFIX_.'paypal_order` 
-		WHERE `id_order` = '.(int)($id_order));
+		WHERE `id_order` = '.(int)$id_order);
 		if (!$order)
 			return false;
 		return $order['payment_status'] == 'Pending' AND $order['payment_method'] == _PAYPAL_INTEGRAL_EVOLUTION_;
@@ -698,7 +688,7 @@ class PayPal extends PaymentModule
 	
 	private function _needCapture($id_order)
 	{
-		if (!(int)($id_order))
+		if (!(int)$id_order)
 			return false;
 		$result = Db::getInstance()->getRow('
 		SELECT `payment_method`, `payment_status`, `capture`  
@@ -714,9 +704,9 @@ class PayPal extends PaymentModule
 	private function _setConfigurationForm()
 	{
 		$this->_html .= '
-		<form method="post" action="'.$_SERVER['REQUEST_URI'].'">	
+		<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">	
 			<script type="text/javascript">
-				var pos_select = '.(($tab = (int)(Tools::getValue('tabs'))) ? $tab : '0').';
+				var pos_select = '.(($tab = (int)Tools::getValue('tabs')) ? $tab : '0').';
 			</script>
 			<script type="text/javascript" src="'._PS_BASE_URL_._PS_JS_DIR_.'tabpane.js"></script>
 			<link type="text/css" rel="stylesheet" href="'._PS_BASE_URL_._PS_CSS_DIR_.'tabpane.css" />
@@ -752,10 +742,10 @@ class PayPal extends PaymentModule
 		$paypalDebug = (int)(Tools::isSubmit('paypal_debug') ? 1 : Configuration::get('PAYPAL_DEBUG_MODE'));
 
 		$link = 'http://altfarm.mediaplex.com/ad/ck/3484-23403-8030-88?ID=PROCPRESTA';
-		$lang = new Language((int)($cookie->id_lang));
-		if ($lang->iso_code == 'es')
+		$lang = new Language((int)$cookie->id_lang);
+		if (strtolower($lang->iso_code) == 'es')
 			$link = 'http://altfarm.mediaplex.com/ad/ck/3484-34334-12439-1';
-		else if ($lang->iso_code == 'it')
+		else if (strtolower($lang->iso_code) == 'it')
 			$link = 'https://www.paypal-business.it/paypalpro.asp';
 		
 		return '
@@ -783,7 +773,7 @@ class PayPal extends PaymentModule
 	{
 		global $cookie;
 
-		$lang = new Language((int)($cookie->id_lang));
+		$lang = new Language((int)$cookie->id_lang);
 		$sandboxMode = (int)(Tools::getValue('sandbox_mode', Configuration::get('PAYPAL_SANDBOX')));
 		$paypalCapture = (int)(Tools::getValue('paypal_capture', Configuration::get('PAYPAL_CAPTURE')));
 		
@@ -820,15 +810,17 @@ class PayPal extends PaymentModule
 		<div class="margin-form">
 			<input type="text" name="api_signature" value="'.htmlentities(Tools::getValue('api_signature', Configuration::get('PAYPAL_API_SIGNATURE')), ENT_COMPAT, 'UTF-8').'" size="40" />
 		</div>
-		';
-		if ($lang->iso_code == 'fr')
-			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=P2OmzHzbpIA" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature.').'</a></p>';
-		elseif ($lang->iso_code == 'es')
-			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=5x_BXI4equo" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature.').'</a></p>';
+		<p>
+			<a style="color:blue;text-decoration:underline" href="http://www.youtube.com/watch?v=';
+		if (strtolower($lang->iso_code) == 'fr')
+			$html .= 'P2OmzHzbpIA';
+		elseif (strtolower($lang->iso_code) == 'es')
+			$html .= '5x_BXI4equo';
 		else
-			$html .= '<p><a style="color:blue;text-decoration:underline;" href="http://www.youtube.com/watch?v=ho1OefLKbM0" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature.').'</a></p>';
-		$html .= '<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>';
-		
+			$html .= 'ho1OefLKbM0';
+		$html .= '" target="_blank">'.$this->l('Click here to learn how to generate your API username, password and signature.').'</a>
+		</p>
+		<p class="center"><input class="button" type="submit" name="submitPayPal" value="'.$this->l('Save settings').'" /></p>';
 		return $html;
 	}
 	
@@ -836,7 +828,7 @@ class PayPal extends PaymentModule
 	{
 		global $cookie;
 
-		$lang = new Language((int)($cookie->id_lang));
+		$lang = new Language((int)$cookie->id_lang);
 		$template_paypal = Tools::getValue('template_paypal', Configuration::get('PAYPAL_TEMPLATE'));
 		
 		return '
@@ -988,13 +980,13 @@ class PayPal extends PaymentModule
 	
 	private function _getTransactionId($id_order)
 	{
-		if (!$id_order)
+		if (!(int)$id_order)
 			return false;
 		
 		return Db::getInstance()->getValue('
 		SELECT `id_transaction` 
 		FROM `'._DB_PREFIX_.'paypal_order` 
-		WHERE `id_order` = '.(int)($id_order));
+		WHERE `id_order` = '.(int)$id_order);
 	}
 	
 	private function _makeRefund($id_transaction, $amt = false)
@@ -1110,13 +1102,13 @@ class PayPal extends PaymentModule
 		{
 			$history = new OrderHistory();
 			$history->id_order = (int)($id_order);
-			$history->changeIdOrderState(_PS_OS_PAYMENT_, (int)($id_order));
+			$history->changeIdOrderState(_PS_OS_PAYMENT_, (int)$id_order);
 			$history->addWithemail();
 			$message .= $this->l('Order finished with PayPal!');
 		}
 		elseif (isset($response['PAYMENTSTATUS']))
 			$message .= $this->l('Transaction error!');
-		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'paypal_order` SET `capture` = 0, `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).'\', `id_transaction` = \''.pSQL($response['TRANSACTIONID']).'\' WHERE `id_order` = '.(int)($id_order)))
+		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'paypal_order` SET `capture` = 0, `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).'\', `id_transaction` = \''.pSQL($response['TRANSACTIONID']).'\' WHERE `id_order` = '.(int)$id_order))
 			die(Tools::displayError('Error when updating PayPal database'));
 		$this->_addNewPrivateMessage((int)($id_order), $message);
 
@@ -1168,14 +1160,14 @@ class PayPal extends PaymentModule
 						$history->changeIdOrderState(_PS_OS_ERROR_, (int)($id_order));
 						$history->addWithemail();
 					}
-					if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'paypal_order` SET `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).($response['PENDINGREASON'] == 'authorization' ? '_authorization' : '').'\' WHERE `id_order` = '.(int)($id_order)))
+					if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'paypal_order` SET `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).($response['PENDINGREASON'] == 'authorization' ? '_authorization' : '').'\' WHERE `id_order` = '.(int)$id_order))
 						die(Tools::displayError('Error when updating PayPal database'));
 				}
 			}
 			$message = $this->l('Verification status:').'<br>';
 			foreach ($response AS $k => $value)
 				$message .= $k.': '.$value.'<br>';
-			$this->_addNewPrivateMessage((int)($id_order), $message);
+			$this->_addNewPrivateMessage((int)$id_order, $message);
 			return $response;
 		}
 		return false;
@@ -1262,7 +1254,6 @@ class PayPal extends PaymentModule
 
 			if ($ok)
 				Configuration::updateValue('PAYPAL_NEW', 1);
-
 			return $ok;
 		}
 		return false;
@@ -1273,7 +1264,6 @@ class PayPal extends PaymentModule
 		return Db::getInstance()->getValue('
 		SELECT `id_order` 
 		FROM `'._DB_PREFIX_.'paypal_order` 
-		WHERE `id_transaction` = \''.pSQL($id_transaction).'\'
-		');
+		WHERE `id_transaction` = \''.pSQL($id_transaction).'\'');
 	}
 }

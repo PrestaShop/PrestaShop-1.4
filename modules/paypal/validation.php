@@ -96,29 +96,41 @@ elseif (($fp = @fsockopen('ssl://' . $paypalServer, 443, $errno, $errstr, 30)) |
 else
 	$errors = $paypal->getL('connect').$paypal->getL('nomethod');
 
-if (isset($_POST['custom']))
-	$cart_secure = explode('_', $_POST['custom']);
-else
-	$cart_secure = array();
+$cart_secure = (isset($_POST['custom']) ? explode('_', $_POST['custom']) : array());
+// If there isn't any cart ID, set it to "0"
+if (!isset($cart_secure[0]))
+	$cart_secure[0] = 0;
+// If there isn't any secure key, set it to anything short of "false"
+if (!isset($cart_secure[1]))
+	$cart_secure[1] = '42';
 
 // Printing errors...
 if (strtoupper($result) == 'VERIFIED')
 {
 	if (!isset($_POST['mc_gross']))
+	{
 		$errors .= $paypal->getL('mc_gross').'<br />';
+		$_POST['mc_gross'] = 0;
+	}
 	if (!isset($_POST['payment_status']))
+	{
 		$errors .= $paypal->getL('payment_status').'<br />';
+		$_POST['payment_status'] = 'ko';
+	}
 	elseif (strtoupper($_POST['payment_status']) != 'COMPLETED')
 		$errors .= $paypal->getL('payment').$_POST['payment_status'].'<br />';
 	if (!isset($_POST['custom']))
 		$errors .= $paypal->getL('custom').'<br />';
 	if (!isset($_POST['txn_id']))
+	{
 		$errors .= $paypal->getL('txn_id').'<br />';
+		$_POST['txn_id'] = 0;
+	}
 	if (!isset($_POST['mc_currency']))
 		$errors .= $paypal->getL('mc_currency').'<br />';
 	if (empty($errors))
 	{
-		$cart = new Cart((int)($cart_secure[0]));
+		$cart = new Cart((int)$cart_secure[0]);
 		if (!$cart->id)
 			$errors = $paypal->getL('cart').'<br />';
 		elseif (Order::getOrderByCartId((int)($cart_secure[0])))
@@ -133,7 +145,7 @@ else
 if (!empty($errors) AND isset($_POST['custom']))
 {
 	if (strtoupper($_POST['payment_status']) == 'PENDING')
-		$paypal->validateOrder((int)$cart_secure[0], _PS_OS_PAYPAL_, (float)($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
+		$paypal->validateOrder((int)$cart_secure[0], _PS_OS_PAYPAL_, (float)$_POST['mc_gross'], $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
 	else
 		$paypal->validateOrder((int)$cart_secure[0], _PS_OS_ERROR_, 0, $paypal->displayName, $errors.'<br />', array(), NULL, false, $cart_secure[1]);
 }

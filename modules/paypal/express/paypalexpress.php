@@ -47,7 +47,7 @@ class PaypalExpress extends Paypal
 		// Making request
 		$returnURL = Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/paypal/express/submit.php';
 		$cancelURL = Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order.php';
-		$paymentAmount = (float)($cart->getOrderTotal());
+		$paymentAmount = (float)$cart->getOrderTotal();
 		$currencyCodeType = strval($currency->iso_code);
 		$paymentType = Configuration::get('PAYPAL_CAPTURE') == 1 ? 'Authorization' : 'Sale';
 		$request = '&Amt='.urlencode($paymentAmount).'&PAYMENTACTION='.urlencode($paymentType).'&ReturnUrl='.urlencode($returnURL).'&CANCELURL='.urlencode($cancelURL).'&CURRENCYCODE='.urlencode($currencyCodeType);
@@ -56,7 +56,8 @@ class PaypalExpress extends Paypal
 		else
 			$request .= '&SOLUTIONTYPE=Mark&LANDINGPAGE=Login';
 		$request .= '&LOCALECODE='.strtoupper($this->getCountryCode());
-		if ($this->_header) $request .= '&HDRIMG='.urlencode($this->_header);
+		if ($this->_header)
+			$request .= '&HDRIMG='.urlencode($this->_header);
 		// Customer informations
 		$customer = new Customer((int)$cart->id_customer);
 		$request .= '&EMAIL='.urlencode($customer->email);//customer

@@ -26,11 +26,13 @@
 */
 
 include(dirname(__FILE__).'/../../config/config.inc.php');
-include(dirname(__FILE__).'/../../header.php');
 require_once(dirname(__FILE__).'/sendtoafriend.php');
 
 $sendtoafriend = new sendToAFriend();
-echo $sendtoafriend->displayFrontForm();
+if (!$sendtoafriend->active)
+	Tools::display404Error();
 
+include(dirname(__FILE__).'/../../header.php');
+echo $sendtoafriend->displayFrontForm();
 include(dirname(__FILE__).'/../../footer.php');
 

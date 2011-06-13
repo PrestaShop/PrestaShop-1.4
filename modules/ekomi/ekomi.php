@@ -70,7 +70,7 @@ class Ekomi extends Module
 	public function displayForm()
 	{
 		return '
-		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+		<form action="'.htmlentities($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset>
 				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 				<label>'.$this->l('eKomi configuration').'</label>
@@ -98,9 +98,9 @@ class Ekomi extends Module
 	public function hookRightColumn($params)
 	{
 		if (!Configuration::get('PS_EKOMI_SCRIPT'))
-			return ;
+			return;
 		if (!Configuration::get('PS_EKOMI_DISPLAY'))
-			return ;
+			return;
 		return stripslashes(html_entity_decode(Configuration::get('PS_EKOMI_SCRIPT'))).'<br clear="left" /><br />';
 	}
 		

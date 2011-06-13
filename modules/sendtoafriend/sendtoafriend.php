@@ -46,9 +46,7 @@ class sendToAFriend extends Module
 
 	function install()
 	{
-	 	if (!parent::install() OR !$this->registerHook('extraLeft'))
-	 		return false;
-		return true;
+	 	return (parent::install() AND $this->registerHook('extraLeft'));
 	}
 
 	function hookExtraLeft($params)
@@ -68,7 +66,7 @@ class sendToAFriend extends Module
 		{
 			global $cookie, $link;
 			/* Product informations */
-			$product = new Product((int)(Tools::getValue('id_product')), false, (int)($cookie->id_lang));
+			$product = new Product((int)Tools::getValue('id_product'), false, (int)$cookie->id_lang);
 			$productLink = $link->getProductLink($product);
 
 			/* Fields verifications */
@@ -92,31 +90,31 @@ class sendToAFriend extends Module
 				);
 
 				/* Email sending */
-				if (!Mail::Send((int)($cookie->id_lang), 'send_to_a_friend', Mail::l('A friend sent you a link to').' '.$product->name, $templateVars, $_POST['email'], NULL, ($cookie->email ? $cookie->email : NULL), ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : NULL), NULL, NULL, dirname(__FILE__).'/mails/'))
+				if (!Mail::Send((int)$cookie->id_lang, 'send_to_a_friend', Mail::l('A friend sent you a link to').' '.$product->name, $templateVars, $_POST['email'], NULL, ($cookie->email ? $cookie->email : NULL), ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : NULL), NULL, NULL, dirname(__FILE__).'/mails/'))
 					$error = $this->l('An error occurred during the process.');
 				else
-					Tools::redirect(_MODULE_DIR_.'/'.$this->name.'/sendtoafriend-form.php?id_product='.$product->id.'&submited');
+					Tools::redirect(_MODULE_DIR_.'/'.$this->name.'/sendtoafriend-form.php?id_product='.(int)$product->id.'&submited');
 			}
 		}
 		else
 		{
 			global $cookie, $link;
 			/* Product informations */
-			$product = new Product((int)(Tools::getValue('id_product')), false, (int)($cookie->id_lang));
+			$product = new Product((int)Tools::getValue('id_product'), false, (int)$cookie->id_lang);
 			$productLink = $link->getProductLink($product);
 		}
 
 		/* Image */
-		$images = $product->getImages((int)($cookie->id_lang));
+		$images = $product->getImages((int)$cookie->id_lang);
 		foreach ($images AS $k => $image)
 			if ($image['cover'])
 			{
-				$cover['id_image'] = (int)($product->id).'-'.(int)($image['id_image']);
+				$cover['id_image'] = (int)$product->id.'-'.(int)$image['id_image'];
 				$cover['legend'] = $image['legend'];
 			}
 
 		if (!isset($cover))
-			$cover = array('id_image' => Language::getIsoById((int)($cookie->id_lang)).'-default', 'legend' => 'No picture');
+			$cover = array('id_image' => Language::getIsoById((int)$cookie->id_lang).'-default', 'legend' => 'No picture');
 
 		$smarty->assign(array(
 			'cover' => $cover,

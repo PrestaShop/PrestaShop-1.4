@@ -91,21 +91,18 @@ class Treepodia extends Module
 	public function generateXmlFlow()
 	{
 		global $cart, $cookie;
-		$cookie->id_lang = (int)(Configuration::get('PS_LANG_DEFAULT')); // url rewriting case
+		$cookie->id_lang = (int)Configuration::get('PS_LANG_DEFAULT'); // url rewriting case
 
 		$cart = new Cart();
 		$link = new Link();
-		$defaultCurrencyIsoCode = strtoupper(Db::getInstance()->getValue('SELECT c.iso_code FROM '._DB_PREFIX_.'currency c WHERE c.id_currency = '.(int)(Configuration::get('PS_CURRENCY_DEFAULT'))));
-		$defaultIdLang = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultCurrencyIsoCode = strtoupper(Db::getInstance()->getValue('SELECT c.iso_code FROM '._DB_PREFIX_.'currency c WHERE c.id_currency = '.(int)Configuration::get('PS_CURRENCY_DEFAULT')));
+		$defaultIdLang = (int)Configuration::get('PS_LANG_DEFAULT');
 		$hasImageLink = method_exists($link, 'getImageLink');
 
 		$sqlLangs = Db::getInstance()->ExecuteS('SELECT l.id_lang, l.iso_code FROM '._DB_PREFIX_.'lang l');
 
 		foreach ($sqlLangs AS $sqlLang)
-		{
-			$langs[$sqlLang[ 'id_lang' ]] = $sqlLang[ 'iso_code' ] ;
-		}
-
+			$langs[$sqlLang['id_lang']] = $sqlLang['iso_code'];
 
 		$xmlString = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -154,7 +151,7 @@ XML;
 			SELECT pl.name, pl.description_short, pl.link_rewrite, l.iso_code, l.id_lang
 			FROM '._DB_PREFIX_.'product_lang pl
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (l.id_lang = pl.id_lang)
-			WHERE pl.id_product = '.(int)($sqlProduct['id_product']));
+			WHERE pl.id_product = '.(int)$sqlProduct['id_product']);
 
 			foreach ($texts AS $text)
 			{
@@ -168,7 +165,7 @@ XML;
 				}
 			}
 
-			$product->addCData('page-url', $link->getProductLink((int)($sqlProduct['id_product']), $productLinkRewrite));
+			$product->addCData('page-url', $link->getProductLink((int)$sqlProduct['id_product'], $productLinkRewrite));
 			$shortDescription = $product->addChild('short-description');
 			$languageVariant = $shortDescription->addChild('language-variant');
 
@@ -177,34 +174,33 @@ XML;
 				$variant = $languageVariant->addChild('variant');
 				$variant->addChild('locale', $text['iso_code']);
 				$variant->addCData('value', Tools::htmlentitiesDecodeUTF8(strip_tags($text['description_short'])));
-
 			}
 
 			$accessories = Db::getInstance()->ExecuteS('
 			SELECT a.id_product_2
 			FROM '._DB_PREFIX_.'accessory a
-			WHERE a.id_product_1 = '.(int)($sqlProduct['id_product']));
+			WHERE a.id_product_1 = '.(int)$sqlProduct['id_product']);
 
 			foreach ($accessories AS $accessory)
 				$product->addChild('accessory-sku', (int)($accessory['id_product_2']));
 
 			$price = $product->addChild('price');
 			$price->addChild('currency', $defaultCurrencyIsoCode);
-			$price->addChild('retail-price-with-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), true, NULL, 6, NULL, false, false));
-			$price->addChild('retail-price-without-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), false, NULL, 6, NULL, false, false));
-			$price->addChild('final-retail-price-with-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), true));
-			$price->addChild('final-retail-price-without-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $specificPrice));
+			$price->addChild('retail-price-with-tax', Product::getPriceStatic((int)$sqlProduct['id_product'], true, NULL, 6, NULL, false, false));
+			$price->addChild('retail-price-without-tax', Product::getPriceStatic((int)$sqlProduct['id_product'], false, NULL, 6, NULL, false, false));
+			$price->addChild('final-retail-price-with-tax', Product::getPriceStatic((int)$sqlProduct['id_product'], true));
+			$price->addChild('final-retail-price-without-tax', Product::getPriceStatic((int)$sqlProduct['id_product'], false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $specificPrice));
 			$price->addChild('reduction_percent', ($specificPrice AND $specificPrice['reduction_type'] == 'percentage') ? $specificPrice['reduction'] * 100 : 0.00);
-			$price->addChild('reduction_price', ($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (float)($specificPrice['reduction']) : 0.00);
-			$price->addChild('display-on-sale', (int)($sqlProduct['on_sale']));
-
+			$price->addChild('reduction_price', ($specificPrice AND $specificPrice['reduction_type'] == 'amount') ? (float)$specificPrice['reduction'] : 0.00);
+			$price->addChild('display-on-sale', (int)$sqlProduct['on_sale']);
+			
 			$product->addChild('downloadable', $sqlProduct['id_product_download'] >= 1 ? 1 : 0);
 
 			$pack = Db::getInstance()->ExecuteS('
 			SELECT p.id_product, pp.quantity
 			FROM '._DB_PREFIX_.'pack pp
 			LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = pp.id_product_item)
-			WHERE pp.id_product_pack = '.(int)($sqlProduct['id_product']));
+			WHERE pp.id_product_pack = '.(int)$sqlProduct['id_product']);
 
 			if (sizeof($pack))
 			{
@@ -212,8 +208,8 @@ XML;
 				foreach ($pack AS $p)
 				{
 					$packItem = $pack->addChild('pack-item');
-					$packItem->addChild('quantity', (int)($p['quantity']));
-					$packItem->addChild('sku', (int)($p['id_product']));
+					$packItem->addChild('quantity', (int)$p['quantity']);
+					$packItem->addChild('sku', (int)$p['id_product']);
 				}
 			}
 
@@ -222,13 +218,13 @@ XML;
 			FROM '._DB_PREFIX_.'image i
 			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (il.id_image = i.id_image)
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (l.id_lang = il.id_lang)
-			WHERE i.id_product = '.(int)($sqlProduct['id_product']));
+			WHERE i.id_product = '.(int)$sqlProduct['id_product']);
 
 			$imagesLegends = array();
 			foreach ($images AS $image)
 			{
-				$imagesLegends[(int)($image['id_image'])][$image['iso_code']]['legend'] = $image['legend'];
-				$imagesLegends[(int)($image['id_image'])][$image['iso_code']]['iso_code'] = $image['iso_code'];
+				$imagesLegends[(int)$image['id_image']][$image['iso_code']]['legend'] = $image['legend'];
+				$imagesLegends[(int)$image['id_image']][$image['iso_code']]['iso_code'] = $image['iso_code'];
 			}
 
 			$imagesAlreadyDone = array();
@@ -236,12 +232,8 @@ XML;
 			{
 				if (isset($imagesAlreadyDone[$imageSQL['id_image']]))
 					continue;
-				else
-					$imagesAlreadyDone[(int)($imageSQL['id_image'])] = 1;
-
-
-				global $cookie;
-				$cookie->id_lang = Configuration::get('PS_LANG_DEFAULT');
+				
+				$imagesAlreadyDone[(int)$imageSQL['id_image']] = 1;
 
 				$image = $product->addChild('image');
 				$image->addAttribute('id',$imageSQL['id_image']);
@@ -261,12 +253,11 @@ XML;
 						$variant = $languageVariant->addChild('variant');
 						$variant->addChild('locale', $legend['iso_code']);
 						$variant->addCData('value', $legend['legend']);
-
 					}
 				}
 			}
 
-			$quantityDiscounts = SpecificPrice::getQuantityDiscounts((int)($sqlProduct['id_product']), (int)(Shop::getCurrentShop()), 0, 0, 0);
+			$quantityDiscounts = SpecificPrice::getQuantityDiscounts((int)$sqlProduct['id_product'], (int)Shop::getCurrentShop(), 0, 0, 0);
 
 			foreach ($quantityDiscounts AS $quantityDiscount)
 			{
@@ -281,7 +272,7 @@ XML;
 			FROM '._DB_PREFIX_.'category_product cp
 			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = cp.id_category)
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (l.id_lang = cl.id_lang)
-			WHERE cp.id_product = '.(int)($sqlProduct['id_product']));
+			WHERE cp.id_product = '.(int)$sqlProduct['id_product']);
 
 			if (sizeof($categories))
 			{
@@ -301,7 +292,7 @@ XML;
 			FROM '._DB_PREFIX_.'product_tag pt
 			LEFT JOIN '._DB_PREFIX_.'tag t ON (t.id_tag = pt.id_tag)
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (l.id_lang = t.id_lang)
-			WHERE pt.id_product = '.(int)($sqlProduct['id_product']));
+			WHERE pt.id_product = '.(int)$sqlProduct['id_product']);
 
 
 			if (!empty($tags) && sizeof($tags) > 0)
@@ -312,12 +303,10 @@ XML;
 				{
 					if (!in_array($tag['iso_code'], $tagsIso))
 						$tagsIso[] = $tag['iso_code'];
-
 					$tagsTexts[$tag['iso_code']][] = $tag['name'];
 				}
 
 				$tags_item = $product->addChild('tags');
-
 				foreach ($tagsIso AS $iso)
 				{
 					$languageVariant = $tags_item->addChild('language-variant');
@@ -334,40 +323,43 @@ XML;
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (l.id_lang = al.id_lang)
 			LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_attribute = a.id_attribute)
 			LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
-			WHERE pa.id_product = '.(int)($sqlProduct['id_product']) .'
+			WHERE pa.id_product = '.(int)$sqlProduct['id_product'].'
 			GROUP BY a.id_attribute, l.iso_code');
 
-			$groups = array() ;
+			$groups = array();
 			foreach ($groupAttributes AS $groupAttribute)
 			{
 				$id_group_attribute = $groupAttribute[ 'id_attribute_group' ] ;
 				$id_attribute = $groupAttribute[ 'id_attribute' ] ;
 				$id_product_attribute = $groupAttribute[ 'id_product_attribute' ] ;
 
-				$groups[$id_group_attribute][ 'name' ][$groupAttribute[ 'iso_code' ]] = $groupAttribute[ 'name' ] ;
-				$groups[$id_group_attribute][ 'attributes' ][$groupAttribute[ 'id_attribute' ]][$groupAttribute[ 'iso_code' ]] = $groupAttribute[ 'attribute_name' ] ;
+				$groups[$id_group_attribute]['name'][$groupAttribute['iso_code']] = $groupAttribute['name'] ;
+				$groups[$id_group_attribute]['attributes'][$groupAttribute['id_attribute']][$groupAttribute['iso_code']] = $groupAttribute['attribute_name'];
 			}
 
-			if(!empty($groups))	{
+			if (!empty($groups))
+			{
 				foreach ($groups AS $id_group => $group)
 				{
 					$xml_group = $product->addChild('attribute-group');
 					$xml_group->addAttribute('id', $id_group);
 
-					if(!empty($group[ 'name' ]))	{
+					if(!empty($group[ 'name' ]))
+					{
 						$nameGroup = $xml_group->addChild('name');
 						$languageVariant = $nameGroup->addChild('language-variant');
 
-						foreach ($group[ 'name' ] AS $iso2 => $name_group)
+						foreach ($group['name'] AS $iso2 => $name_group)
 						{
-								$variant = $languageVariant->addChild('variant');
-								$variant->addChild('locale', $iso2);
-								$variant->addCData('value', $name_group);
+							$variant = $languageVariant->addChild('variant');
+							$variant->addChild('locale', $iso2);
+							$variant->addCData('value', $name_group);
 						}
 					}
 
-					if(!empty($group[ 'attributes' ]))	{
-						foreach ($group[ 'attributes' ] AS $id_attribute => $attribute)
+					if (!empty($group['attributes']))	
+					{
+						foreach ($group['attributes'] AS $id_attribute => $attribute)
 						{
 							$xml_attribute = $xml_group->addChild('attribute');
 							$xml_attribute->addAttribute('id', $id_attribute);
@@ -381,11 +373,10 @@ XML;
 							}
 						}
 					}
-
 				}
-			 }
+			}
 
-			 $groupAttributes = Db::getInstance()->ExecuteS('
+			$groupAttributes = Db::getInstance()->ExecuteS('
 			SELECT agl.id_attribute_group, agl.name, l.iso_code, a.id_attribute, al.name attribute_name, al.id_lang, pa.id_product_attribute
 			FROM '._DB_PREFIX_.'attribute_group_lang agl
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (l.id_lang = agl.id_lang)
@@ -393,35 +384,36 @@ XML;
 			LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
 			LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_attribute = a.id_attribute)
 			LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
-			WHERE pa.id_product = '.(int)($sqlProduct['id_product']));
+			WHERE pa.id_product = '.(int)$sqlProduct['id_product']);
 
-			$combinaison = array() ;
+			$combinaison = array();
 
 			foreach ($groupAttributes AS $groupAttribute)
 			{
-				$id_group_attribute = $groupAttribute[ 'id_attribute_group' ] ;
-				$id_attribute = $groupAttribute[ 'id_attribute' ] ;
-				$id_product_attribute = $groupAttribute[ 'id_product_attribute' ] ;
-				$combinaison[$id_product_attribute][$id_group_attribute] = $id_attribute ;
+				$id_group_attribute = $groupAttribute['id_attribute_group'];
+				$id_attribute = $groupAttribute['id_attribute'];
+				$id_product_attribute = $groupAttribute['id_product_attribute'];
+				$combinaison[$id_product_attribute][$id_group_attribute] = $id_attribute;
 			}
 
 			$productAttributes = Db::getInstance()->ExecuteS('
 			SELECT pa.id_product_attribute, pa.weight, pa.quantity, pi.id_image
 			FROM '._DB_PREFIX_.'product_attribute pa
 			LEFT JOIN '._DB_PREFIX_.'product_attribute_image pi ON (pa.id_product_attribute = pi.id_product_attribute)
-			WHERE pa.id_product = '.(int)($sqlProduct['id_product']));
+			WHERE pa.id_product = '.(int)$sqlProduct['id_product']);
 
-			if(!empty($productAttributes))	{
+			if(!empty($productAttributes))	
+			{
 				foreach ($productAttributes AS $productAttribute)
 				{
-					$id_product_attribute = (int)($productAttribute['id_product_attribute']) ;
+					$id_product_attribute = (int)$productAttribute['id_product_attribute'];
 
 					$attributeCombination = $product->addChild('attribute-combination');
 					$attributeCombination->addAttribute('id', $id_product_attribute);
 					$attributeCombination->addChild('weight', (float)($sqlProduct['weight'] + $productAttribute['weight']));
 					$attributeCombination->addChild('final-retail-price-with-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), true, $id_product_attribute));
 					$attributeCombination->addChild('final-retail-price-without-tax', Product::getPriceStatic((int)($sqlProduct['id_product']), false, $id_product_attribute));
-					$attributeCombination->addChild('quantity', $productAttribute['quantity'] );
+					$attributeCombination->addChild('quantity', $productAttribute['quantity']);
 
 					if (isset($productAttribute['id_image']) && !empty($productAttribute['id_image']))
 					{
@@ -429,8 +421,8 @@ XML;
 						$image->addAttribute('ref-id', $productAttribute['id_image']);
 					}
 
-					if( isset($combinaison[$id_product_attribute]) && !empty($combinaison[$id_product_attribute]) )	{
-
+					if (isset($combinaison[$id_product_attribute]) && !empty($combinaison[$id_product_attribute]))	
+					{
 						foreach ($combinaison[$id_product_attribute] AS $id_group_attribute => $id_attribute)
 						{
 							$attribute = $attributeCombination->addChild('attribute');
@@ -440,9 +432,7 @@ XML;
 					}
 				}
 			}
-
 		}
-
 		echo $products->asXML();
 	}
 
@@ -478,43 +468,38 @@ XML;
 				<input type="file" name="trpd_logo_file" />
 				<div id="logo-selector">';
 
-		if (is_dir($dir)) {
-			if ($dh = opendir($dir)) {
-				while (($file = readdir($dh)) !== false) {
-					$filename = $dir.$file;
+		if (is_dir($dir) AND $dh = opendir($dir))
+		{
+			while (($file = readdir($dh)) !== false)
+			{
+				$filename = $dir.$file;
+				if (is_file($filename) AND in_array(substr($filename, -4), $this->allowed_extensions))
+				{
+					list($width, $height) = getimagesize($filename);
 
-					if (is_file($filename) AND in_array(substr($filename, -4), $this->allowed_extensions))
+					if ($width > $height)
 					{
-						list($width, $height) = getimagesize($filename);
-
-						if ($width > $height)
+						if ($width > $max_width)
 						{
-							if ($width > $max_width)
-							{
-								$ratio = $width / $max_width;
-								$width = $max_width;
-								$height = $height / $ratio;
-							}
-						} else {
-							if ($height > $max_height)
-							{
-								$ratio = $height / $max_height;
-								$height = $max_height;
-								$width = $width / $ratio;
-							}
+							$ratio = $width / $max_width;
+							$width = $max_width;
+							$height = $height / $ratio;
 						}
-
-						$out .= '<div class="logo-item"><img class="logo" onclick="setPreview(\''._MODULE_DIR_.$this->name.'/logos/'.$file.'\',\''. $file.'\')" src="'._MODULE_DIR_.$this->name.'/logos/'.$file.'" width="'.$width.'" height="'.$height.'" alt="" /></div>';
 					}
+					elseif ($height > $max_height)
+					{
+						$ratio = $height / $max_height;
+						$height = $max_height;
+						$width = $width / $ratio;
+					}
+
+					$out .= '<div class="logo-item"><img class="logo" onclick="setPreview(\''._MODULE_DIR_.$this->name.'/logos/'.$file.'\',\''. $file.'\')" src="'._MODULE_DIR_.$this->name.'/logos/'.$file.'" width="'.$width.'" height="'.$height.'" alt="" /></div>';
 				}
-
-				closedir($dh);
 			}
+			closedir($dh);
 		}
-		$out .= '<div class="clear"></div>
-				</div>
-				</div>';
-
+		
+		$out .= '<div class="clear"></div></div></div>';
 		return $out;
 	}
 
@@ -528,45 +513,45 @@ XML;
 		<img id="treepodia-logo" src="'.__PS_BASE_URI__.'modules/'.$this->name.'/logo.png'.'" alt="" />
 		<p>'.$this->l('It is well known that product videos increase sales, customer engagement and loyalty, and enhance your shoppers experience dramatically. They also enhance your shoppers\' overall experience and have a strong positive effect on your search engine visibility.').'. <a target="_blank" class="link-trpd" href="http://www.prestashop.com/en/partner_treepodia">'.$this->l('Learn more').'</a></p><div class="clear" /><br />';
 
-
 		$output .= '<script type="text/javascript">
-					function redirectToTreepodia()
-					{
-						var url = \'https://www.treepodia.com/prestashop/api/register?token='.Configuration::get('TREEPODIA_TOKEN').'&lang='.$lang->iso_code.'&prestashop-api='.$this->_getShopURL().'modules/treepodia/api\';
-						window.open(url);
-					}
+			function redirectToTreepodia()
+			{
+				var url = \'https://www.treepodia.com/prestashop/api/register?token='.Configuration::get('TREEPODIA_TOKEN').'&lang='.$lang->iso_code.'&prestashop-api='.$this->_getShopURL().'modules/treepodia/api\';
+				window.open(url);
+			}
 
-					function signInTripodia()
-					{
-						var url = \'https://www.treepodia.com/prestashop/api/sign-in?token='.Configuration::get('TREEPODIA_TOKEN').'&lang='.$lang->iso_code.'&prestashop-api='.$this->_getShopURL().'modules/treepodia/api\';
-						window.open(url);
-					}
-					</script>
-					<fieldset>
-					<legend><img src="'.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" />'.$this->l('My Treepodia account').'</legend>';
+			function signInTripodia()
+			{
+				var url = \'https://www.treepodia.com/prestashop/api/sign-in?token='.Configuration::get('TREEPODIA_TOKEN').'&lang='.$lang->iso_code.'&prestashop-api='.$this->_getShopURL().'modules/treepodia/api\';
+				window.open(url);
+			}
+		</script>
+		<fieldset>
+			<legend><img src="'.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" />'.$this->l('My Treepodia account').'</legend>';
 
-		if (Configuration::get('TREEPODIA_ACCOUNT_CODE') == NULL)
+		if (!Configuration::get('TREEPODIA_ACCOUNT_CODE'))
 		{
-			$output .= '<p style="width: 75%; float: left; margin-right: 20px;">'.$this->l('You are not yet registered for a Treepodia video account. Please register with Treepodia.').'</p>
-			<p style="width: 10%; float: left;"><input type="button" class="button" value="'.$this->l('Registration').'" onclick="redirectToTreepodia();" style="padding: 15px; font-weight: bold; font-size: 13px;"></p>
-			<div style="clear: both;"></div>';
-
+			$output .= '
+			<p style="width:75%;float:left;margin-right:20px">'.$this->l('You are not yet registered for a Treepodia video account. Please register with Treepodia.').'</p>
+			<p style="width:10%;float:left"><input type="button" class="button" value="'.$this->l('Registration').'" onclick="redirectToTreepodia();" style="padding:15px;font-weight:bold;font-size:13px"></p>
+			<div style="clear:both"></div>';
 		}
 		else
 		{
-			$output .= '<label>'.$this->l('Video Account Code').'</label>
-						<div class="margin-form">
-							<input type="text" style="width: 160px;" value="'.Tools::htmlentitiesUTF8(Configuration::get('TREEPODIA_ACCOUNT_CODE')).'" readonly/><br >'
-							.$this->l('Your video account code uniquely identifies your store and was assigned to you automatically.').
-						'</div><br />
-						<p>
-							'.$this->l('Sign in to your video account to change your preferences, settings and see your business performance reports.').' <input type="button" class="button" value="'.$this->l('Sign in').'" onclick="signInTripodia();" style="padding: 15px; font-weight: bold; font-size: 13px;">
-						</p>';
+			$output .= '
+			<label>'.$this->l('Video Account Code').'</label>
+			<div class="margin-form">
+				<input type="text" style="width: 160px;" value="'.Tools::htmlentitiesUTF8(Configuration::get('TREEPODIA_ACCOUNT_CODE')).'" readonly/><br >'
+				.$this->l('Your video account code uniquely identifies your store and was assigned to you automatically.').'
+			</div><br />
+			<p>
+				'.$this->l('Sign in to your video account to change your preferences, settings and see your business performance reports.').' <input type="button" class="button" value="'.$this->l('Sign in').'" onclick="signInTripodia();" style="padding: 15px; font-weight: bold; font-size: 13px;">
+			</p>';
 		}
 
 		$output .= '</fieldset><br />';
 
-		if (Configuration::get('TREEPODIA_ACCOUNT_CODE') != NULL)
+		if (Configuration::get('TREEPODIA_ACCOUNT_CODE'))
         {
 			$output .= '
 			<fieldset>
@@ -580,10 +565,8 @@ XML;
 
 					<input type="hidden" name="trpd_play_logo" id="trpd_play_logo" value="'.Configuration::get('TREEPODIA_PLAY_LOGO').'" /></div>
 					<a id="change-logo" href="" >'.$this->l('Change logo').'</a></p>
-
 						'.$this->_displayImageSelector().'
 					<br /><br />
-
 					<div>
 				    <p id="current">'.$this->l('Display logo:').'<br />
 				    <select name="trpd_hook_position">
@@ -610,23 +593,13 @@ XML;
 
 	public function getContent()
 	{
-
 		$out = '';
-
 		if (Tools::isSubmit('submitTreepodia'))
 		{
 			$errors = $this->_validateForm();
-
-			if (empty($errors))
-			{
-				$out .= $this->_postProcess();
-			}
-			else
-				$out .= $errors;
+			$out .= (empty($errors) ? $this->_postProcess() : $errors);
 		}
-
 		$out .= $this->displayForm();
-
 		return $out;
 	}
 
@@ -647,15 +620,12 @@ XML;
 					case 1:
 						$errors .= $this->displayError('The file is too large.');
 						break;
-
                    case 2:
 						$errors .= $this->displayError('The file is too large.');
 						break;
-
 					case 3:
 						$errors .= $this->displayError('The file was partialy uploaded');
 						break;
-
 					case 4:
 						$errors .= $this->displayError('The file is empty');
 						break;
@@ -664,10 +634,9 @@ XML;
 
 			if (!in_array(substr($file['name'], -4), $this->allowed_extensions))
 				$errors .= $this->displayError($this->l('Invalid file type'));
-		} else {
-			if (!is_file(_PS_MODULE_DIR_.$this->name.'/logos/'.Tools::getValue('trpd_play_logo')))
-				$errors .= $this->displayError('Invalid logo');
 		}
+		elseif (!is_file(_PS_MODULE_DIR_.$this->name.'/logos/'.Tools::getValue('trpd_play_logo')))
+			$errors .= $this->displayError('Invalid logo');
 
 		return $errors;
 	}
@@ -698,7 +667,9 @@ XML;
             Configuration::updateValue('TREEPODIA_HOOK', 0);
             $this->unregisterHook(Hook::get('productFooter'));
             $this->registerHook('extraLeft');
-        } else {
+        }
+		else
+		{
             Configuration::updateValue('TREEPODIA_HOOK', 1);
             $this->unregisterHook(Hook::get('extraLeft'));
             $this->registerHook('productFooter');
@@ -717,9 +688,7 @@ XML;
 		if (!ini_get('allow_url_fopen'))
 			return false;
 
-		$socket = fsockopen('ssl://'.$host, 443, $errno, $errstr, 30);
-
-		if ($socket)
+		if ($socket = fsockopen('ssl://'.$host, 443, $errno, $errstr, 30))
 		{
 			$params = 'prestashop-api='._PS_BASE_URL_._MODULE_DIR_.$this->name.'/api'.
 				 '&account-code='.Configuration::get('TREEPODIA_ACCOUNT_CODE').
@@ -737,10 +706,8 @@ XML;
 
 			$result = '';
 			while (!feof($socket))
-			{
 				$result .= trim(fgets($socket, 1024));
-			}
-
+			
 			fclose($socket);
 		}
 
@@ -788,17 +755,13 @@ XML;
 	{
 		global $smarty;
 
-		$id_product = Tools::getValue('id_product');
 		if (!Configuration::get('TREEPODIA_ACCOUNT_CODE') OR Configuration::get('TREEPODIA_INTEGRATION_TYPE') != 0)
-			return '';
+			return;
+		if (!(int)Tools::getValue('id_product'))
+			return;
 
-		if (!empty($id_product))
-		{
-			$smarty->assign(array('account_id' => Configuration::get('TREEPODIA_ACCOUNT_CODE'),
-								  'product_sku' => (int)($id_product)));
-
-			return $this->display(__FILE__, 'footer.tpl');
-		}
+		$smarty->assign(array('account_id' => Configuration::get('TREEPODIA_ACCOUNT_CODE'), 'product_sku' => (int)Tools::getValue('id_product')));
+		return $this->display(__FILE__, 'footer.tpl');
 	}
 
 	public function hookProductDescription($params)
@@ -819,9 +782,7 @@ XML;
 		$products = $order->getProducts();
 
 		global $smarty;
-
 		$smarty->assign(array('account_id' => Configuration::get('TREEPODIA_ACCOUNT_CODE'), 'products' => $products));
-
 		return $this->display(__FILE__, 'tracking.tpl');
 	}
 }

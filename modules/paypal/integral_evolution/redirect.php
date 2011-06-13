@@ -30,7 +30,7 @@ include(dirname(__FILE__).'/../../../init.php');
 include(dirname(__FILE__).'/../paypal.php');
 
 $paypal = new Paypal();
-$cart = new Cart((int)($cookie->id_cart));
+$cart = new Cart((int)$cookie->id_cart);
 
 // Billing address
 $billingAddress = new Address((int)($cart->id_address_invoice));

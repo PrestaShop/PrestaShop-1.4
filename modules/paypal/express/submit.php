@@ -52,11 +52,12 @@ function getAuthorization()
 				$cookie->paypal_token = strval($result['TOKEN']);
 				$cookie->paypal_token_date = time();
 				header('Location: https://'.$ppExpress->getPayPalURL().'/webscr&cmd=_express-checkout&token='.urldecode(strval($cookie->paypal_token)));
-        exit;
+				exit;
 			}
 			else
 				$logs[] = '<b>'.$ppExpress->l('No token given by PayPal', 'submit').'</b>';
-		} else
+		}
+		else
 			$logs[] = '<b>'.$ppExpress->l('PayPal returned error', 'submit').'</b>';
 	}
 	$ppExpress->displayPayPalAPIError($ppExpress->l('Authorisation to PayPal failed', 'submit'), $logs);
