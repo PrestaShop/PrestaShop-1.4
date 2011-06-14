@@ -1803,6 +1803,8 @@ class AdminProducts extends AdminTab
 		if (!($product = $this->loadObject()))
 			return;
 
+		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
+
 		echo '
 		<a href="#" onclick="$(\'#add_specific_price\').slideToggle();return false;"><img src="../img/admin/add.gif" alt="" /> '.$this->l('Add a new specific price').'</a>
 
