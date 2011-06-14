@@ -54,7 +54,6 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		'categories' => array(),
 		'manufacturers' => array(),
 		'suppliers' => array(),
-//		'scenes' => array(),
 		'stores' => array()
 	);
 	
@@ -955,49 +954,56 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 					throw new WebserviceException('Image upload error : '.$error, array(76, 400));
 				if (isset($file['tmp_name']) AND $file['tmp_name'] != NULL)
 				{
-					$product = new Product((int)$this->wsObject->urlSegment[2]);
-					if (!Validate::isLoadedObject($product))
-						throw new WebserviceException('Product '.(int)$this->wsObject->urlSegment[2].' doesn\'t exists', array(76, 400));
-					else
+					if ($this->imageType == 'products')
 					{
+						$product = new Product((int)$this->wsObject->urlSegment[2]);
+						if (!Validate::isLoadedObject($product))
+							throw new WebserviceException('Product '.(int)$this->wsObject->urlSegment[2].' doesn\'t exists', array(76, 400));
 						$image = new Image();
 						$image->id_product = (int)($product->id);
 						$image->position = Image::getHighestPosition($product->id) + 1;
 						if (!$image->add())
 							throw new WebserviceException('Error while creating image', array(76, 400));
+						if (!Validate::isLoadedObject($product))
+							throw new WebserviceException('Product '.(int)$this->wsObject->urlSegment[2].' doesn\'t exists', array(76, 400));
+					}
+					
+					// copy image
+					if (!isset($file['tmp_name']))
+						return false;
+					if ($error = checkImage($file, $this->imgMaxUploadSize))
+						throw new WebserviceException('Bad image : '.$error, array(76, 400));
+					
+					if ($this->imageType == 'products')
+					{
+						$image = new Image($image->id);
+						if (!(Configuration::get('PS_OLD_FILESYSTEM') && file_exists(_PS_PROD_IMG_DIR_.$product->id.'-'.$image->id.'.jpg')))
+							$image->createImgFolder();
+							
+						if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
+							throw new WebserviceException('An error occurred during the image upload', array(76, 400));
+						elseif (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format))
+							throw new WebserviceException('An error occurred while copying image', array(76, 400));
 						else
 						{
-							
-							if (!Validate::isLoadedObject($product))
-								throw new WebserviceException('Product '.(int)$this->wsObject->urlSegment[2].' doesn\'t exists', array(76, 400));
-							// copy image
-							if (!isset($file['tmp_name']))
-								return false;
-							if ($error = checkImage($file, $this->imgMaxUploadSize))
-								throw new WebserviceException('Bad image : '.$error, array(76, 400)); // $this->_errors[] = $error;
-							else
-							{
-								$method = 'auto';
-								$image = new Image($image->id);
-								if (!(Configuration::get('PS_OLD_FILESYSTEM') && file_exists(_PS_PROD_IMG_DIR_.$product->id.'-'.$image->id.'.jpg')))
-									$image->createImgFolder();
-								if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
-									throw new WebserviceException('An error occurred during the image upload', array(76, 400));// $this->_errors[] = Tools::displayError('An error occurred during the image upload');
-								elseif (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format))
-									throw new WebserviceException('An error occurred while copying image', array(76, 400));// $this->_errors[] = Tools::displayError('An error occurred while copying image.');
-								elseif($method == 'auto')
-								{
-									$imagesTypes = ImageType::getImagesTypes('products');
-									foreach ($imagesTypes AS $k => $imageType)
-										if (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'-'.stripslashes($imageType['name']).'.'.$image->image_format, $imageType['width'], $imageType['height'], $image->image_format))
-											$this->_errors[] = Tools::displayError('An error occurred while copying image:').' '.stripslashes($imageType['name']);
-								}
-								@unlink($tmpName);
-								$this->imgToDisplay = _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format;
-								return true;
-							}
+							$imagesTypes = ImageType::getImagesTypes('products');
+							foreach ($imagesTypes AS $k => $imageType)
+								if (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'-'.stripslashes($imageType['name']).'.'.$image->image_format, $imageType['width'], $imageType['height'], $image->image_format))
+									$this->_errors[] = Tools::displayError('An error occurred while copying image:').' '.stripslashes($imageType['name']);
 						}
+						@unlink($tmpName);
+						$this->imgToDisplay = _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format;
 					}
+					elseif ($this->imageType == 'categories')
+					{
+						if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
+							throw new WebserviceException('An error occurred during the image upload', array(76, 400));
+						elseif (!imageResize($tmpName, $receptionPath))
+							throw new WebserviceException('An error occurred while copying image', array(76, 400));
+						@unlink(_PS_TMP_IMG_DIR_.$tmpName);
+						$this->imgToDisplay = $receptionPath;
+					}
+					return true;
 				}
 			}
 		}
