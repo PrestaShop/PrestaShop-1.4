@@ -132,7 +132,7 @@ if (Tools::isSubmit('revive'))
 	{
 		foreach ($friendsChecked as $key => $friendChecked)
 		{
-			if(ReferralProgramModule::isSponsorFriend((int)($cookie->id_customer), (int)($friendChecked)))
+			if (ReferralProgramModule::isSponsorFriend((int)($cookie->id_customer), (int)($friendChecked)))
 			{
 				if (Configuration::get('PS_CIPHER_ALGORITHM'))
 					$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
