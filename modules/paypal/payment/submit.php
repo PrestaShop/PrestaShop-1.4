@@ -33,6 +33,11 @@ include_once(dirname(__FILE__).'/../../../init.php');
 include_once(_PS_MODULE_DIR_.'paypal/paypal.php');
 include_once(_PS_MODULE_DIR_.'paypal/payment/paypalpayment.php');
 
+$paypal = new Paypal();
+
+if (!$paypal->active)
+	exit;
+
 $ppPayment = new PaypalPayment();
 $errors = array();
 
@@ -146,6 +151,11 @@ function validOrder()
 
 // #####
 // Process !!
+
+if (!$cookie->isLogged(true))
+	die('Not logged');
+elseif (!$cart->getOrderTotal(true, Cart::BOTH))
+	die('Empty cart');
 
 // No submit, confirmation page
 if (!Tools::isSubmit('submitPayment') AND !Tools::getValue('fromPayPal'))

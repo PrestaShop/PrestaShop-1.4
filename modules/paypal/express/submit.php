@@ -31,6 +31,11 @@ include_once(dirname(__FILE__).'/../../../init.php');
 include_once(_PS_MODULE_DIR_.'paypal/paypal.php');
 include_once(_PS_MODULE_DIR_.'paypal/express/paypalexpress.php');
 
+$paypal = new Paypal();
+
+if (!$paypal->active)
+	exit;
+
 $ppExpress = new PaypalExpress();
 $errors = array();
 
@@ -326,6 +331,11 @@ function displayAccount()
 
 // #####
 // Process !!
+
+if (!$cookie->isLogged(true))
+	die('Not logged');
+elseif (!$cart->getOrderTotal(true, Cart::BOTH))
+	die('Empty cart');
 
 // No token, we need to get one by making PayPal Authorisation
 if (!isset($cookie->paypal_token) OR !$cookie->paypal_token)
