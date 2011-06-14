@@ -192,14 +192,71 @@ class AdminGroups extends AdminTab
 
 		if (isset($customers) AND !empty($customers) AND $nbCustomers = sizeof($customers))
 		{
-			echo '<h2>'.$this->l('Customer members of this group').' ('.$nbCustomers.')</h2>
-			<table cellspacing="0" cellpadding="0" class="table widthfull">
+			
+			echo '<h2>'.$this->l('Customer members of this group').' ('.$nbCustomers.')</h2>';
+			
+			//Pagination Begin
+			
+			$customerPageIndex = (Tools::getValue('customerPageIndex') ? (int)Tools::getValue('customerPageIndex') : 1); 
+			$customersPerPage = (Tools::getValue('customerPerPage') ? (int)Tools::getValue('customerPerPage') : 50); 
+			$from = (Tools::getValue('customerPageIndex') ? ( (int)$customerPageIndex - 1) * ((int)$customersPerPage) : 0);
+			$totalPages = ceil($nbCustomers/$customersPerPage);
+			$perPageOptions = array(20,50,100,300);
+			
+			$customers = Db::getInstance()->ExecuteS('
+					SELECT cg.`id_customer`, c.*
+					FROM `'._DB_PREFIX_.'customer_group` cg
+					LEFT JOIN `'._DB_PREFIX_.'customer` c ON (cg.`id_customer` = c.`id_customer`)
+					WHERE cg.`id_group` = '.(int)($obj->id).' 
+					AND c.`deleted` != 1 
+					ORDER BY cg.`id_customer` ASC LIMIT '.pSQL($from).', '.pSQL($customersPerPage));
+			
+			if (empty($customers))
+				header('Location: '.$currentIndex.'&id_group='.(int)$obj->id.'&viewgroup&token='.$this->token);
+			
+			echo '<tr>
+				<form method="post" action="'.$currentIndex.'&id_group='.(int)$obj->id.'&viewgroup&token='.$this->token.'">
+				<td style="vertical-align: bottom;"><span style="float: left; height:30px">';
+						
+			if ($customerPageIndex > 1)
+			{
+					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value=1" src="../img/admin/list-prev2.gif">&nbsp';
+					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.($customerPageIndex-1).'" src="../img/admin/list-prev.gif">&nbsp';
+			}
+			
+			echo    'Page <b><select onChange="submit()" name="customerPageIndex" id="customerPageIndex">';
+					for ($i=1; $i<=$totalPages; $i++)
+						echo '<option value="'.$i.'"'.((int)$customerPageIndex === $i ? 'selected="selected"' : '').'>'.$i.'</option>';
+			echo 	'</select></b> / '.$totalPages;
+			
+			if ($customerPageIndex < $totalPages)
+			{
+					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.((int)$customerPageIndex+1).'" src="../img/admin/list-next.gif">';
+					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.$totalPages.'" src="../img/admin/list-next2.gif">';
+			}
+			
+			echo 	'			| Display
+						<select onChange="document.getElementById(\'customerPageIndex\').value=1; submit()" name="customerPerPage">';
+							foreach ($perPageOptions as $option)
+								echo '<option value="'.$option.'"'.((int)$customersPerPage == $option ? 'selected="selected"' : '').'>'.$option.'</option>';
+			echo	'	</select> / '.$nbCustomers.' result(s)	
+					</span>
+					<span style="float: right;">
+						<input type="submit" value="Filter" class="button" />
+					</span><span class="clear"></span></td>
+				</form>
+			</tr>';
+			
+			//Pagination End
+			
+			echo '<table cellspacing="0" cellpadding="0" class="table widthfull">
 				<tr>';
 			foreach ($this->fieldsDisplay AS $field)
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
 			echo '
 				</tr>';
 			$irow = 0;
+			
 			foreach ($customers AS $k => $customer)
 			{
 				$imgGender = $customer['id_gender'] == 1 ? '<img src="../img/admin/male.gif" alt="'.$this->l('Male').'" />' : ($customer['id_gender'] == 2 ? '<img src="../img/admin/female.gif" alt="'.$this->l('Female').'" />' : '');
