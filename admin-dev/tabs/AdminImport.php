@@ -437,7 +437,9 @@ class AdminImport extends AdminTab
 		{
 			default:
 			case 'products':
-				$path = _PS_PROD_IMG_DIR_.(int)($id_entity).'-'.(int)($id_image);
+				$imageObj = new Image($id_image);
+				$imageObj->createImgFolder();
+				$path = _PS_PROD_IMG_DIR_.$imageObj->getImgPath();
 			break;
 			case 'categories':
 				$path = _PS_CAT_IMG_DIR_.(int)($id_entity);
@@ -1504,9 +1506,11 @@ class AdminImport extends AdminTab
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price_priority');
-				foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d) OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
-						unlink(_PS_PROD_IMG_DIR_.$d);
+				if (Configuration::get('PS_LEGACY_IMAGES'))
+					foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
+						if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d) OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
+							unlink(_PS_PROD_IMG_DIR_.$d);
+				Image::deleteAllImages(_PS_PROD_IMG_DIR_);
 				break;
 			case $this->entities[$this->l('Customers')]:
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'customer');

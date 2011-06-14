@@ -59,6 +59,7 @@ class SceneCore extends ObjectModel
 			$this->products = $this->getProducts(true, (int)($id_lang), false);		
 		if ($hideScenePosition)
 			$this->name = Scene::hideScenePosition($this->name);
+		$this->image_dir = _PS_SCENE_IMG_DIR_;
 	}
 	
 	public function getFields()
@@ -102,7 +103,21 @@ class SceneCore extends ObjectModel
 	{
 		$this->deleteZoneProducts();
 		$this->deleteCategories();
-		return parent::delete();
+		if (parent::delete())
+			return $this->deleteImage();
+	}
+	
+	public function deleteImage()
+	{
+		if (parent::deleteImage())
+		{
+			if (file_exists($this->image_dir.'thumbs/'.$this->id.'-thumb_scene.'.$this->image_format) 
+				&& !unlink($this->image_dir.'thumbs/'.$this->id.'-thumb_scene.'.$this->image_format))
+				return false;
+		}
+		else
+			return false;
+		return true;
 	}
 	
 	public function addCategories($categories)

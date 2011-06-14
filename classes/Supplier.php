@@ -80,6 +80,7 @@ class SupplierCore extends ObjectModel
 		parent::__construct($id, $id_lang);
 
 		$this->link_rewrite = $this->getLink();
+		$this->image_dir = _PS_SUPP_IMG_DIR_;
 	}
 
 	public function getLink()
@@ -267,6 +268,12 @@ class SupplierCore extends ObjectModel
 		WHERE s.`id_supplier` = '.(int)($id_supplier));
 
 		return isset($row['id_supplier']);
+	}
+	
+	public function delete()
+	{
+		if (parent::delete())
+			return $this->deleteImage();
 	}
 }
 

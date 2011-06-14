@@ -362,9 +362,10 @@ class AdminOrders extends AdminTab
 
 		if (is_array($customizedDatas) AND isset($customizedDatas[(int)($product['product_id'])][(int)($product['product_attribute_id'])]))
 		{
+			$imageObj = new Image($image['id_image']);
 			echo '
 			<tr>
-				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.(int)($product['product_id']).'-'.(int)($image['id_image']).'.jpg',
+				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.$imageObj->getExistingImgPath().'.jpg',
 				'product_mini_'.(int)($product['product_id']).(isset($product['product_attribute_id']) ? '_'.(int)($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
 					<span class="productName">'.$product['product_name'].' - '.$this->l('customized').'</span><br />
@@ -763,9 +764,10 @@ class AdminOrders extends AdminTab
 							// Normal display
 							if ($product['product_quantity'] > $product['customizationQuantityTotal'])
 							{
+								$imageObj = new Image($image['id_image']);
 								echo '
 								<tr'.((isset($image['id_image']) AND isset($products[$k]['image_size'])) ? ' height="'.($products[$k]['image_size'][1] + 7).'"' : '').'>
-									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.(int)($product['product_id']).'-'.(int)($image['id_image']).'.jpg',
+									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.$imageObj->getExistingImgPath().'.jpg',
 									'product_mini_'.(int)($product['product_id']).(isset($product['product_attribute_id']) ? '_'.(int)($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 									<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
 										<span class="productName">'.$product['product_name'].'</span><br />

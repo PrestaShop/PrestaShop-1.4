@@ -266,7 +266,8 @@ class shopimporter extends ImportModule
 		foreach($exportModules as $key => $module)
 			if ($module->name == $this->name OR !(bool)$module->id)
 				unset($exportModules[$key]);
-		$html = '<script type="text/javascript" src="../modules/shopimporter/shopimporter.js"></script>
+		$html = '<script type="text/javascript">var globalAjaxShopImporterToken = "'.sha1(_COOKIE_KEY_.'ajaxShopImporter').'";</script>
+		<script type="text/javascript" src="../modules/shopimporter/shopimporter.js"></script>
 				<script src="'._PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js"></script> 
 				 <script type="text/javascript">
 					var conf = new Array(); ';
@@ -1069,9 +1070,11 @@ class shopimporter extends ImportModule
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price_priority');
-				foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d))
-						unlink(_PS_PROD_IMG_DIR_.$d);
+				if (Configuration::get('PS_LEGACY_IMAGES'))
+					foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
+						if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d))
+							unlink(_PS_PROD_IMG_DIR_.$d);
+				Image::deleteAllImages(_PS_PROD_IMG_DIR_);
 				Image::clearTmpDir();
 				break;
 			case 'Manufacturers' :

@@ -5,11 +5,11 @@ include_once('../../init.php');
 include_once('../../modules/shopimporter/shopimporter.php');
 ini_set('display_errors', 'off');
 
-if (!Tools::getValue('ajax'))
-	die('');
+if (!Tools::getValue('ajax') OR Tools::getValue('token') != sha1(_COOKIE_KEY_.'ajaxShopImporter'))
+	die;
 
 $moduleName = Tools::getValue('moduleName');
-$className =Tools::getValue('className');
+$className = Tools::getValue('className');
 $getMethod = Tools::getValue('getMethod');
 $limit = Tools::getValue('limit');
 $nbr_import = Tools::getValue('nbr_import');

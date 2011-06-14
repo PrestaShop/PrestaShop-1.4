@@ -97,7 +97,6 @@ class Treepodia extends Module
 		$link = new Link();
 		$defaultCurrencyIsoCode = strtoupper(Db::getInstance()->getValue('SELECT c.iso_code FROM '._DB_PREFIX_.'currency c WHERE c.id_currency = '.(int)Configuration::get('PS_CURRENCY_DEFAULT')));
 		$defaultIdLang = (int)Configuration::get('PS_LANG_DEFAULT');
-		$hasImageLink = method_exists($link, 'getImageLink');
 
 		$sqlLangs = Db::getInstance()->ExecuteS('SELECT l.id_lang, l.iso_code FROM '._DB_PREFIX_.'lang l');
 
@@ -237,11 +236,8 @@ XML;
 
 				$image = $product->addChild('image');
 				$image->addAttribute('id',$imageSQL['id_image']);
-				if ($hasImageLink)
-					$image->addCData('image-url', $link->getImageLink($productLinkRewrite, (int)($sqlProduct['id_product']).'-'.(int)($imageSQL['id_image']), 'large'));
-				/* For 1.0/1.1 compatibility purpose only */
-				else
-					$image->addCData('image-url', $this->_getImageLink($productLinkRewrite, (int)($sqlProduct['id_product']).'-'.(int)($imageSQL['id_image']), 'large'));
+
+				$image->addCData('image-url', $link->getImageLink($productLinkRewrite, (int)($sqlProduct['id_product']).'-'.(int)($imageSQL['id_image']), 'large'));
 
 				if (isset($imagesLegends[$imageSQL['id_image']]) AND sizeof($imagesLegends[$imageSQL['id_image']]))
 				{
@@ -768,13 +764,6 @@ XML;
 	{
 		return $this->hookExtraLeft($params);
 	}
-
-	/* For 1.0/1.1 compatibility purpose only */
-	private function _getImageLink($name, $ids, $type = null)
-	{
-		return ($this->allow == 1) ? (__PS_BASE_URI__.$ids.($type ? '-'.$type : '').'/'.$name.'.jpg') : (_THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg');
-	}
-
 
 	public function hookOrderConfirmation($params)
 	{

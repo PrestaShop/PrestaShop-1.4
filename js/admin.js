@@ -408,6 +408,12 @@ if (helpboxes)
 	});
 }
 
+/**
+ * Deprecated
+ * 
+ * @param id_product
+ * @param id_image
+ */
 function changePic(id_product, id_image)
 {
  	if (id_image == -1)

@@ -227,15 +227,17 @@ class Watermark extends Module
 	public function hookwatermark($params)
 	{
 		global $smarty;
-		$file = _PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'-watermark.jpg';
+		$image = new Image($params['id_image']);
+		$image->id_product = $params['id_product'];
+		$file = _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'-watermark.jpg';
 		
 		//first make a watermark image
-		$return = $this->watermarkByImage(_PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'.jpg',  dirname(__FILE__).'/watermark.gif', $file, 23, 0, 0, 'right');
+		$return = $this->watermarkByImage(_PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.jpg',  dirname(__FILE__).'/watermark.gif', $file, 23, 0, 0, 'right');
 
 		//go through file formats defined for watermark and resize them
 		foreach($this->imageTypes as $imageType)
 		{
-		    $newFile = _PS_PROD_IMG_DIR_.$params['id_product'].'-'.$params['id_image'].'-'.stripslashes($imageType['name']).'.jpg';
+		    $newFile = _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'-'.stripslashes($imageType['name']).'.jpg';
 		    if (!imageResize($file, $newFile, (int)($imageType['width']), (int)($imageType['height'])))
 				$return = false;    
 		}

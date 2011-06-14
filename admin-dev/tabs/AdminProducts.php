@@ -45,7 +45,7 @@ class AdminProducts extends AdminTab
 		$this->view = false;
 		$this->duplicate = true;
 		$this->imageType = 'jpg';
-
+		
 		$this->fieldsDisplay = array(
 			'id_product' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 20),
 			'image' => array('title' => $this->l('Photo'), 'align' => 'center', 'image' => 'p', 'width' => 45, 'orderby' => false, 'filter' => false, 'search' => false),
@@ -172,7 +172,7 @@ class AdminProducts extends AdminTab
 	public function postProcess($token = NULL)
 	{
 		global $cookie, $currentIndex;
-
+		
 		/* Add a new product */
 		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay') OR  Tools::isSubmit('submitAddProductAndPreview'))
 		{
@@ -289,7 +289,6 @@ class AdminProducts extends AdminTab
 					unset($product->id_product);
 					$product->indexed = 0;
 					$product->active = 0;
-
 					if ($product->add()
 					AND Category::duplicateProductCategories($id_product_old, $product->id)
 					AND ($combinationImages = Product::duplicateAttributes($id_product_old, $product->id)) !== false
@@ -353,15 +352,9 @@ class AdminProducts extends AdminTab
 						$id_category = Tools::getValue('id_category');
 						$category_url = empty($id_category) ? '' : '&id_category='.$id_category;
 
-						if ($this->table == 'product')
-						{
-							$product = new Product($object->id);
-							$product->deleteImages();
-						}else
-							$this->deleteImage($object->id);
-
 						if ($this->deleted)
 						{
+							$object->deleteImages();
 							$object->deleted = 1;
 							if ($object->update())
 								Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
@@ -432,7 +425,7 @@ class AdminProducts extends AdminTab
 				if (isset($_GET['deleteImage']))
 				{
 					$image->delete();
-					deleteImage($image->id_product, $image->id);
+
 					if (!Image::getCover($image->id_product))
 					{
 						$first_img = Db::getInstance()->getRow('
@@ -901,7 +894,6 @@ class AdminProducts extends AdminTab
 		/* Updating an existing product image */
 		if ($id_image = ((int)(Tools::getValue('id_image'))))
 		{
-
 			$image = new Image($id_image);
 			if (!Validate::isLoadedObject($image))
 				$this->_errors[] = Tools::displayError('An error occurred while loading object image.');
@@ -953,7 +945,7 @@ class AdminProducts extends AdminTab
 				}
 			}
 		}
-		if (isset($image) AND Validate::isLoadedObject($image) AND !file_exists(_PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'.jpg'))
+		if (isset($image) AND Validate::isLoadedObject($image) AND !file_exists(_PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format))
 			$image->delete();
 		if (sizeof($this->_errors))
 			return false;
@@ -1017,14 +1009,14 @@ class AdminProducts extends AdminTab
 					throw new Exception(Tools::displayError('Image format not recognized, allowed formats are: .gif, .jpg, .png'));
 				}
 
-				if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'.jpg'))
+				if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->getImgPath().'.jpg'))
 				{
 					$image->delete();
 					throw new Exception(Tools::displayError('An error occurred while resizing image.'));
 				}
 
 				foreach ($imagesTypes AS $k => $imageType)
-					if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->id_product.'-'.$image->id.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
+					if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->getImgPath().'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 					{
 						$image->delete();
 						throw new Exception(Tools::displayError('An error occurred while copying image.').' '.stripslashes($imageType['name']));
@@ -1059,17 +1051,21 @@ class AdminProducts extends AdminTab
 			$this->_errors[] = $error;
 		else
 		{
+			$image = new Image($id_image);
+			if (!(Configuration::get('PS_LEGACY_IMAGES') && file_exists(_PS_PROD_IMG_DIR_.$id_product.'-'.$id_image.'.jpg')))	
+				$image->createImgFolder();
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $tmpName))
 				$this->_errors[] = Tools::displayError('An error occurred during the image upload');
-			elseif (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$id_product.'-'.$id_image.'.jpg'))
+			elseif (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format))
 				$this->_errors[] = Tools::displayError('An error occurred while copying image.');
 			elseif($method == 'auto')
 			{
 				$imagesTypes = ImageType::getImagesTypes('products');
 				foreach ($imagesTypes AS $k => $imageType)
-					if (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$id_product.'-'.$id_image.'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
-						$this->_errors[] = Tools::displayError('An error occurred while copying image.').' '.stripslashes($imageType['name']);
+					if (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'-'.stripslashes($imageType['name']).'.'.$image->image_format, $imageType['width'], $imageType['height'], $image->image_format))
+						$this->_errors[] = Tools::displayError('An error occurred while copying image:').' '.stripslashes($imageType['name']);
 			}
+
 			@unlink($tmpName);
 			Module::hookExec('watermark', array('id_image' => $id_image, 'id_product' => $id_product));
 		}
@@ -3004,10 +3000,12 @@ class AdminProducts extends AdminTab
 
 						foreach ($images AS $k => $image)
 						{
+							$image_obj = new Image($image['id_image']);
+							$img_path = $image_obj->getExistingImgPath();
 							echo  $this->_positionJS().'
 							<tr>
-								<td style="padding: 4px;"><a href="'._THEME_PROD_DIR_.$obj->id.'-'.$image['id_image'].'.jpg" target="_blank">
-								<img src="'._THEME_PROD_DIR_.$obj->id.'-'.$image['id_image'].'-small.jpg'.((int)(Tools::getValue('image_updated')) === (int)($image['id_image']) ? '?date='.time() : '').'"
+								<td style="padding: 4px;"><a href="'._THEME_PROD_DIR_.$img_path.'.jpg" target="_blank">
+								<img src="'._THEME_PROD_DIR_.$img_path.'-small.jpg'.((int)(Tools::getValue('image_updated')) === (int)($image['id_image']) ? '?date='.time() : '').'"
 								alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></a></td>
 								<td class="center">'.(int)($image['position']).'</td>
 								<td class="position-cell">';
@@ -3262,8 +3260,9 @@ class AdminProducts extends AdminTab
 			$imageWidth = (isset($imageType['width']) ? (int)($imageType['width']) : 64) + 25;
 			foreach ($images AS $image)
 			{
+				$imageObj = new Image($image['id_image']);
 				echo '<li style="float: left; width: '.$imageWidth.'px;"><input type="checkbox" name="id_image_attr[]" value="'.(int)($image['id_image']).'" id="id_image_attr_'.(int)($image['id_image']).'" />
-				<label for="id_image_attr_'.(int)($image['id_image']).'" style="float: none;"><img src="'._THEME_PROD_DIR_.$obj->id.'-'.$image['id_image'].'-small.jpg" alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></label></li>';
+				<label for="id_image_attr_'.(int)($image['id_image']).'" style="float: none;"><img src="'._THEME_PROD_DIR_.$imageObj->getExistingImgPath().'-small.jpg" alt="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" title="'.htmlentities(stripslashes($image['legend']), ENT_COMPAT, 'UTF-8').'" /></label></li>';
 				++$i;
 			}
 			echo '</ul>

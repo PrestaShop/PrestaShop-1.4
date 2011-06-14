@@ -240,6 +240,26 @@ class AdminImages extends AdminTab
 				if (preg_match('/^[0-9]+\-'.($product ? '[0-9]+\-' : '').$imageType['name'].'\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 					if (file_exists($dir.$d))
 						unlink($dir.$d);
+						
+		// delete product images using new filesystem.
+		if ($product)
+		{
+			$productsImages = Image::getAllImages();
+			foreach ($productsImages AS $k => $image)
+			{
+				$imageObj = new Image($image['id_image']);
+				$imageObj->id_product = $image['id_product'];
+				if (file_exists($dir.$imageObj->getImgFolder()))
+				{
+					$toDel = scandir($dir.$imageObj->getImgFolder());
+					foreach ($toDel AS $d)
+						foreach ($type AS $imageType)
+							if (preg_match('/^[0-9]+\-'.$imageType['name'].'\.jpg$/', $d))
+								if (file_exists($dir.$imageObj->getImgFolder().$d))
+									unlink($dir.$imageObj->getImgFolder().$d);
+				}				
+			}	
+		}
 	}
 
 	// Regenerate images
@@ -270,15 +290,18 @@ class AdminImages extends AdminTab
 		{
 			$productsImages = Image::getAllImages();
 			foreach ($productsImages AS $k => $image)
-				if (file_exists($dir.$image['id_product'].'-'.$image['id_image'].'.jpg'))
+			{
+				$imageObj = new Image($image['id_image']);
+				if (file_exists($dir.$imageObj->getExistingImgPath().'.jpg'))
 					foreach ($type AS $k => $imageType)
 					{
-						if (!file_exists($dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg'))
-							if (!imageResize($dir.$image['id_product'].'-'.$image['id_image'].'.jpg', $dir.$image['id_product'].'-'.$image['id_image'].'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height'])))
+						if (!file_exists($dir.$imageObj->getExistingImgPath().'-'.stripslashes($imageType['name']).'.jpg'))
+							if (!imageResize($dir.$imageObj->getExistingImgPath().'.jpg', $dir.$imageObj->getExistingImgPath().'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height'])))
 								$errors = true;
 						if (time() - $this->start_time > $this->max_execution_time - 4) // stop 4 seconds before the tiemout, just enough time to process the end of the page on a slow server
 							return 'timeout';
 					}
+			}
 		}
 		return $errors;
 	}
@@ -313,7 +336,8 @@ class AdminImages extends AdminTab
 		{
 			$productsImages = Image::getAllImages();
 			foreach ($productsImages AS $k => $image)
-				if (file_exists($dir.$image['id_product'].'-'.$image['id_image'].'.jpg'))
+				$imageObj = new Image($image['id_image']);
+				if (file_exists($dir.$imageObj->getExistingImgPath().'.jpg'))
 					foreach ($result AS $k => $module)
 					{
 						if ($moduleInstance = Module::getInstanceByName($module['name']) AND is_callable(array($moduleInstance, 'hookwatermark')))

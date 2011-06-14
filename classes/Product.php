@@ -728,7 +728,7 @@ class ProductCore extends ObjectModel
 	/**
 	* Delete product images from database
 	*
-	* @return array Deletion result
+	* @return bool success
 	*/
 	public function deleteImages()
 	{
@@ -736,10 +736,15 @@ class ProductCore extends ObjectModel
 		SELECT `id_image`
 		FROM `'._DB_PREFIX_.'image`
 		WHERE `id_product` = '.(int)($this->id));
-		foreach($result as $row)
-			if (!deleteImage((int)($this->id), $row['id_image']) OR !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'image_lang` WHERE `id_image` = '.(int)($row['id_image'])))
-				return false;
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'image` WHERE `id_product` = '.(int)($this->id));
+		
+		$status = true;
+		if ($result)
+			foreach ($result as $row)
+			{
+				$image = new Image($row['id_image']);
+				$status &= $image->delete();
+			}
+		return $status;
 	}
 
 	public static function getProductAttributePrice($id_product_attribute)

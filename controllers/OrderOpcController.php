@@ -155,46 +155,52 @@ class OrderOpcControllerCore extends ParentOrderController
 							exit;
 							break;
 						case 'updateAddressesSelected':
-							$id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
-							$id_address_invoice = (int)(Tools::getValue('id_address_invoice'));
-							$address_delivery = new Address((int)(Tools::getValue('id_address_delivery')));
-							$address_invoice = ((int)(Tools::getValue('id_address_delivery')) == (int)(Tools::getValue('id_address_invoice')) ? $address_delivery : new Address((int)(Tools::getValue('id_address_invoice'))));
-
-							if (!Address::isCountryActiveById((int)(Tools::getValue('id_address_delivery'))))
-								$this->errors[] = Tools::displayError('This address is not in a valid area.');
-							elseif (!Validate::isLoadedObject($address_delivery) OR !Validate::isLoadedObject($address_invoice) OR $address_invoice->deleted OR $address_delivery->deleted)
-								$this->errors[] = Tools::displayError('This address is invalid.');
-							else
+							if (self::$cookie->isLogged())
 							{
-								self::$cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
-								self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
-								if (!self::$cart->update())
-									$this->errors[] = Tools::displayError('An error occurred while updating your cart.');
-								if (!sizeof($this->errors))
+								$id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
+								$id_address_invoice = (int)(Tools::getValue('id_address_invoice'));
+								$address_delivery = new Address((int)(Tools::getValue('id_address_delivery')));
+								$address_invoice = ((int)(Tools::getValue('id_address_delivery')) == (int)(Tools::getValue('id_address_invoice')) ? $address_delivery : new Address((int)(Tools::getValue('id_address_invoice'))));
+
+								if ($address_delivery->id_customer != self::$cookie->id_customer || $address_invoice->id_customer != self::$cookie->id_customer)
+									$this->errors[] = Tools::displayError('This address is not yours.');
+								elseif (!Address::isCountryActiveById((int)(Tools::getValue('id_address_delivery'))))
+									$this->errors[] = Tools::displayError('This address is not in a valid area.');
+								elseif (!Validate::isLoadedObject($address_delivery) OR !Validate::isLoadedObject($address_invoice) OR $address_invoice->deleted OR $address_delivery->deleted)
+									$this->errors[] = Tools::displayError('This address is invalid.');
+								else
 								{
-									if (self::$cookie->id_customer)
+									self::$cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
+									self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
+									if (!self::$cart->update())
+										$this->errors[] = Tools::displayError('An error occurred while updating your cart.');
+									if (!sizeof($this->errors))
 									{
-										$customer = new Customer((int)(self::$cookie->id_customer));
-										$groups = $customer->getGroups();
+										if (self::$cookie->id_customer)
+										{
+											$customer = new Customer((int)(self::$cookie->id_customer));
+											$groups = $customer->getGroups();
+										}
+										else
+											$groups = array(1);
+										$result = $this->_getCarrierList();
+										// Wrapping fees
+										$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
+										$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
+										$wrapping_fees_tax_inc = $wrapping_fees * (1 + (((float)($wrapping_fees_tax->rate) / 100)));
+										$result = array_merge($result, array(
+											'summary' => self::$cart->getSummaryDetails(),
+											'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
+											'HOOK_PAYMENT' => $this->_getPaymentMethods(),
+											'gift_price' => Tools::displayPrice(Tools::convertPrice(Product::getTaxCalculationMethod() == 1 ? $wrapping_fees : $wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))))
+										));
+										die(Tools::jsonEncode($result));
 									}
-									else
-										$groups = array(1);
-									$result = $this->_getCarrierList();
-									// Wrapping fees
-									$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
-									$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
-									$wrapping_fees_tax_inc = $wrapping_fees * (1 + (((float)($wrapping_fees_tax->rate) / 100)));
-									$result = array_merge($result, array(
-										'summary' => self::$cart->getSummaryDetails(),
-										'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
-										'HOOK_PAYMENT' => $this->_getPaymentMethods(),
-										'gift_price' => Tools::displayPrice(Tools::convertPrice(Product::getTaxCalculationMethod() == 1 ? $wrapping_fees : $wrapping_fees_tax_inc, new Currency((int)(self::$cookie->id_currency))))
-									));
-									die(Tools::jsonEncode($result));
 								}
+								if (sizeof($this->errors))
+									die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 							}
-							if (sizeof($this->errors))
-								die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
+							die(Tools::displayError());
 							break;
 						default:
 							exit;

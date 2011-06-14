@@ -60,7 +60,7 @@ class AdminImageResize extends AdminTab
 		parent::displayForm();
 		
 		$imagesTypes = ImageType::getImagesTypes();
-
+		$imageObj = new Image(Tools::getValue('id_image'));
 		echo '
 		<script type="text/javascript" src="../js/cropper/prototype.js"></script>
 		<script type="text/javascript" src="../js/cropper/scriptaculous.js"></script>
@@ -79,12 +79,12 @@ class AdminImageResize extends AdminTab
 				<legend><img src="../img/admin/picture.gif" />'.$this->l('Image resize').'</legend>
 				'.$this->l('Using your mouse, define which area of the image is to be used for generating each type of thumbnail.').'
 				<br /><br />
-				<img src="'._THEME_PROD_DIR_.Tools::getValue('id_product').'-'.Tools::getValue('id_image').'.jpg" id="testImage">
+				<img src="'._THEME_PROD_DIR_.$imageObj->getExistingImgPath().'.jpg" id="testImage">
 				<label for="imageChoice">'.$this->l('Thumbnails format').'</label>
 				<div class="margin-form"">
 					<select name="imageChoice" id="imageChoice">';
 						foreach ($imagesTypes AS $type)
-							echo '<option value="../img/p/'.Tools::getValue('id_product').'-'.Tools::getValue('id_image').'.jpg|'.$type['width'].'|'.$type['height'].'|'.$type['id_image_type'].'">'.$type['name'].'</option>';
+							echo '<option value="../img/p/'.$imageObj->getExistingImgPath().'.jpg|'.$type['width'].'|'.$type['height'].'|'.$type['id_image_type'].'">'.$type['name'].'</option>';
 		echo '		</select>
 					<input type="submit" class="button" style="margin-left : 40px;" name="resize" value="'.$this->l('   Save all  ').'" />
 				</div>';

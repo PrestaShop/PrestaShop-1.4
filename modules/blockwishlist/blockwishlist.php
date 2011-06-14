@@ -234,7 +234,7 @@ class BlockWishList extends Module
 	
 	private function _displayProducts($id_wishlist)
 	{
-		global $cookie;
+		global $cookie, $link;
 		include_once(dirname(__FILE__).'/WishList.php');
 		
 		$wishlist = new WishList((int)($id_wishlist));
@@ -275,7 +275,7 @@ class BlockWishList extends Module
 				$this->_html .= '
 				<tr>
 					<td class="first_item">
-						<img src="'._THEME_PROD_DIR_.$product['cover'].'-small.jpg" alt="'.htmlentities($product['name'], ENT_COMPAT, 'UTF-8').'" style="float:left;" />
+						<img src="'.$link->getImageLink($product['link_rewrite'], $product['cover'], 'small').'" alt="'.htmlentities($product['name'], ENT_COMPAT, 'UTF-8').'" style="float:left;" />
 						'.$product['name'];
 				if (isset($product['attributes_small']))
 					$this->_html .= '<br /><i>'.htmlentities($product['attributes_small'], ENT_COMPAT, 'UTF-8').'</i>';

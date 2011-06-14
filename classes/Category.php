@@ -112,6 +112,7 @@ class CategoryCore extends ObjectModel
 	{
 		parent::__construct($id_category, $id_lang);
 		$this->id_image = ($this->id AND file_exists(_PS_CAT_IMG_DIR_.(int)($this->id).'.jpg')) ? (int)($this->id) : false;
+		$this->image_dir = _PS_CAT_IMG_DIR_;
 	}
 
 	public function getFields()
@@ -267,10 +268,13 @@ class CategoryCore extends ObjectModel
 
 		self::cleanPositions($this->id_parent);
 
-		/* Delete categories images */
-		require_once(_PS_ROOT_DIR_.'/images.inc.php');
+		/* Delete category images and its children images */
+		$tmpCategory= new Category();
 		foreach ($toDelete AS $id_category)
-			deleteImage((int)$id_category);
+		{
+			$tmpCategory->id = (int)$id_category;
+			$tmpCategory->deleteImage();
+		}
 
 		/* Delete products which were not in others categories */
 		$result = Db::getInstance()->ExecuteS('

@@ -67,6 +67,12 @@ abstract class ObjectModelCore
  	protected $webserviceParameters = array();
 
 	protected static $_cache = array();
+	
+	/** @var  string path to image directory. Used for image deletion. */
+	protected $image_dir = NULL;
+	
+	/** @var string file type of image files. Used for image deletion. */
+	protected $image_format = 'jpg';
 
 	/**
 	 * Returns object validation rules (fields validity)
@@ -192,6 +198,7 @@ abstract class ObjectModelCore
 			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'INSERT');
 		else
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $this->getFields(), 'INSERT');
+
 		if (!$result)
 			return false;
 		/* Get object id in database */
@@ -673,6 +680,38 @@ abstract class ObjectModelCore
 			unset(self::$_cache[$this->table]);
 		elseif ($this->id AND isset(self::$_cache[$this->table][(int)$this->id]))
 			unset(self::$_cache[$this->table][(int)$this->id]);
+	}
+	
+	/**
+	 * Delete images associated with the object
+	 *
+	 * @return bool success
+	 */
+	public function deleteImage()
+	{
+		if (!$this->id)
+			return false;
+
+		/* Deleting object images and thumbnails (cache) */
+		if ($this->image_dir)
+		{
+			if (file_exists($this->image_dir.$this->id.'.'.$this->image_format) 
+				&& !unlink($this->image_dir.$this->id.'.'.$this->image_format))
+				return false;
+		}
+		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_'.$this->id.'.'.$this->image_format) 
+			&& !unlink(_PS_TMP_IMG_DIR_.$this->table.'_'.$this->id.'.'.$this->image_format))
+			return false;
+		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$this->id.'.'.$this->image_format) 
+			&& !unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$this->id.'.'.$this->image_format))
+			return false;
+			
+		$types = ImageType::getImagesTypes();
+		foreach ($types AS $image_type)
+			if (file_exists($this->image_dir.$this->id.'-'.stripslashes($image_type['name']).'.'.$this->image_format) 
+			&& !unlink($this->image_dir.$this->id.'-'.stripslashes($image_type['name']).'.'.$this->image_format))
+				return false;
+		return true;
 	}
 }
 

@@ -160,11 +160,12 @@ class Criteo extends Module
 
 			if (Validate::isLoadedObject($product))
 			{
+				$imageObj = new Image($row['id_image']);
 				$line = array();
 				$line[] = $product->id;
 				$line[] = $product->manufacturer_name.' - '.$product->name[intval($conf['PS_LANG_DEFAULT'])];
-				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-small.jpg';
-				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-thickbox.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.$imageObj->getExistingImgPath().'-small.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.$imageObj->getExistingImgPath().'-thickbox.jpg';
 				$line[] = $link->getProductLink(intval($product->id), $product->link_rewrite[intval($conf['PS_LANG_DEFAULT'])], $product->ean13).'&utm_source=criteo&aff=criteo';
 				$line[] = str_replace(array("\n", "\r", "\t", '|'), '', strip_tags(html_entity_decode($product->description_short[intval($conf['PS_LANG_DEFAULT'])], ENT_COMPAT, 'UTF-8')));
 
@@ -229,11 +230,13 @@ class Criteo extends Module
 
 			if (Validate::isLoadedObject($product))
 			{
+				$imageObj = new Image($row['id_image']);
+				$imageObj->id_product = intval($product->id);
 				$line = array();
 				$line[] = $product->manufacturer_name.' - '.$product->name[intval($conf['PS_LANG_DEFAULT'])];
 
-				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-small.jpg';
-				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.intval($product->id).'-'.$row['id_image'].'-thickbox.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.$imageObj->getExistingImgPath().'-small.jpg';
+				$line[] = Tools::getProtocol().$_SERVER['HTTP_HOST']._THEME_PROD_DIR_.$imageObj->getExistingImgPath().'-thickbox.jpg';
 				$line[] = $link->getProductLink(intval($product->id), $product->link_rewrite[intval($conf['PS_LANG_DEFAULT'])], $product->ean13).'&utm_source=criteo&aff=criteo';
 				$line[] = str_replace(array("\n", "\r", "\t", '|'), '', strip_tags(html_entity_decode($product->description_short[intval($conf['PS_LANG_DEFAULT'])], ENT_COMPAT, 'UTF-8')));
 

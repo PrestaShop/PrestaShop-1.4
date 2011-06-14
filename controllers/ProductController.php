@@ -238,7 +238,7 @@ class ProductControllerCore extends FrontController
 					{
 						self::$smarty->assign('mainImage', $images[0]);
 						$cover = $image;
-						$cover['id_image'] = (int)($this->product->id).'-'.$cover['id_image'];
+						$cover['id_image'] = (Configuration::get('PS_LEGACY_IMAGES') ? ($this->product->id.'-'.$image['id_image']) : $image['id_image']);
 						$cover['id_image_only'] = (int)($image['id_image']);
 					}
 					$productImages[(int)($image['id_image'])] = $image;

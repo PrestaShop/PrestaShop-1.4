@@ -185,6 +185,7 @@ abstract class AdminTabCore
 		if ($className == 'AdminCategories' OR $className == 'AdminProducts')
 			$className = 'AdminCatalog';
 		$this->token = Tools::getAdminToken($className.(int)$this->id.(int)$cookie->id_employee);
+
 	}
 
 
@@ -293,6 +294,7 @@ abstract class AdminTabCore
 		$required_fields = array();
 		foreach ($res AS $row)
 			$required_fields[(int)$row['id_required_field']] = $row['field_name'];
+
 
 		$table_fields = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM '.pSQL(_DB_PREFIX_.$this->table));
 		$irow = 0;
@@ -464,6 +466,7 @@ abstract class AdminTabCore
 	 * Overload this method for custom checking
 	 *
 	 * @param integer $id Object id used for deleting images
+	 * TODO This function will soon be deprecated. Use ObjectModel->deleteImage instead.
 	 */
 	public function deleteImage($id)
 	{
@@ -506,8 +509,8 @@ abstract class AdminTabCore
 		/* Delete object image */
 		if (isset($_GET['deleteImage']))
 		{
-			if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
-				if ($this->deleteImage($object->id))
+			if (Validate::isLoadedObject($object = $this->loadObject()))
+				if (($object->deleteImage()))
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&'.$this->identifier.'='.Tools::getValue($this->identifier).'&conf=7&token='.$token);
 			$this->_errors[] = Tools::displayError('An error occurred during image deletion (cannot load object).');
 		}
@@ -524,9 +527,9 @@ abstract class AdminTabCore
 						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
 					else
 					{
-						$this->deleteImage($object->id);
 						if ($this->deleted)
 						{
+							$object->deleteImage();
 							$object->deleted = 1;
 							if ($object->update())
 								Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
@@ -883,7 +886,10 @@ abstract class AdminTabCore
 		if (isset($_FILES[$name]['tmp_name']) AND !empty($_FILES[$name]['tmp_name']))
 		{
 			// Delete old image
-			$this->deleteImage($id);
+			if (Validate::isLoadedObject($object = $this->loadObject()))
+				$object->deleteImage();
+			else
+				return false;
 
 			// Check image validity
 			if ($error = checkImage($_FILES[$name], $this->maxImageSize))
@@ -1134,7 +1140,7 @@ abstract class AdminTabCore
 			ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 			($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 			LIMIT '.(int)($start).','.(int)($limit);
-
+			
 		$this->_list = Db::getInstance()->ExecuteS($sql);
 		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS() AS `'._DB_PREFIX_.$this->table.'`');
 
@@ -1458,8 +1464,17 @@ abstract class AdminTabCore
 					}
 					elseif (isset($params['image']))
 					{
-						$image_id = isset($params['image_id']) ? $tr[$params['image_id']] : $id;
-						echo cacheImage(_PS_IMG_DIR_.$params['image'].'/'.$image_id.(isset($tr['id_image']) ? '-'.(int)($tr['id_image']) : '').'.'.$this->imageType, $this->table.'_mini_'.$image_id.'.'.$this->imageType, 45, $this->imageType);
+						// item_id is the product id in a product image context, else it is the image id.
+						$item_id = isset($params['image_id']) ? $tr[$params['image_id']] : $id;
+						// If it's a product image
+						if (isset($tr['id_image'])) 
+						{
+							$image = new Image((int)$tr['id_image']);
+							$path_to_image = _PS_IMG_DIR_.$params['image'].'/'.$image->getExistingImgPath().'.'.$this->imageType;
+						}else
+							$path_to_image = _PS_IMG_DIR_.$params['image'].'/'.$item_id.(isset($tr['id_image']) ? '-'.(int)($tr['id_image']) : '').'.'.$this->imageType;
+							
+						echo cacheImage($path_to_image, $this->table.'_mini_'.$item_id.'.'.$this->imageType, 45, $this->imageType);
 					}
 					elseif (isset($params['icon']) AND (isset($params['icon'][$tr[$key]]) OR isset($params['icon']['default'])))
 						echo '<img src="../img/admin/'.(isset($params['icon'][$tr[$key]]) ? $params['icon'][$tr[$key]] : $params['icon']['default'].'" alt="'.$tr[$key]).'" title="'.$tr[$key].'" />';

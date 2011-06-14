@@ -179,9 +179,11 @@ class AdminCarts extends AdminTab
 							/* Customization display */
 							$this->displayCustomizedDatas($customizedDatas, $product, $currency, $image, $tokenCatalog, $stock);
 							if ($product['cart_quantity'] > $product['customizationQuantityTotal'])
+							{
+								$imageProduct = new Image($image['id_image']);
 								echo '
 								<tr>
-									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.(int)($product['id_product']).'-'.(int)($image['id_image']).'.jpg',
+									<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.$imageProduct->getExistingImgPath().'.jpg',
 									'product_mini_'.(int)($product['id_product']).(isset($product['id_product_attribute']) ? '_'.(int)($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 									<td><a href="index.php?tab=AdminCatalog&id_product='.$product['id_product'].'&updateproduct&token='.$tokenCatalog.'">
 										<span class="productName">'.$product['name'].'</span><br />
@@ -193,6 +195,7 @@ class AdminCarts extends AdminTab
 									<td align="center" class="productQuantity">'.(int)($stock['quantity']).'</td>
 									<td align="right">'.Tools::displayPrice($product_total, $currency, false).'</td>
 								</tr>';
+							}
 						}
 					echo '
 					<tr class="cart_total_product">
@@ -260,9 +263,10 @@ class AdminCarts extends AdminTab
 
 		if (is_array($customizedDatas) AND isset($customizedDatas[(int)($product['id_product'])][(int)($product['id_product_attribute'])]))
 		{
+			$image = new Image($image['id_image']);
 			echo '
 			<tr>
-				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.(int)($product['id_product']).'-'.(int)($image['id_image']).'.jpg',
+				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.$image->getExistingImgPath().'.jpg',
 				'product_mini_'.(int)($product['id_product']).(isset($product['id_product_attribute']) ? '_'.(int)($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['id_product'].'&updateproduct&token='.$tokenCatalog.'">
 					<span class="productName">'.$product['name'].'</span><br />

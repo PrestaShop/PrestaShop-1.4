@@ -93,6 +93,7 @@ class ManufacturerCore extends ObjectModel
 		/* Get the manufacturer's id_address */
 		$this->id_address = $this->getManufacturerAddress();
 		$this->link_rewrite = $this->getLink();
+		$this->image_dir = _PS_MANU_IMG_DIR_;
 	}
 
 	public function getFields()
@@ -143,7 +144,8 @@ class ManufacturerCore extends ObjectModel
 		$address = new Address($this->id_address);
 		if (!$address->delete())
 			return false;
-		return parent::delete();
+		if (parent::delete())
+			return $this->deleteImage();
 	}
 
 	/**

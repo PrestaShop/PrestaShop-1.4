@@ -147,9 +147,9 @@ class AdminCategories extends AdminTab
 						$this->_errors[] = Tools::displayError('You need at least one object.').' <b>'.$this->table.'</b><br />'.Tools::displayError('You cannot delete all of the items.');
 					else
 					{
-						$this->deleteImage($object->id);
 						if ($this->deleted)
 						{
+							$object->deleteImage();
 							$object->deleted = 1;
 							if ($object->update())
 								Tools::redirectAdmin($currentIndex.'&conf=1&token='.Tools::getValue('token').'&id_category='.(int)($object->id_parent));

@@ -45,7 +45,7 @@
 		<li class="address_title">{$product.name|truncate:30:'...'|escape:'htmlall':'UTF-8'}</li>
 		<li class="address_name">
 			<a href="{$link->getProductlink($product.id_product, $product.link_rewrite, $product.category_rewrite)}" title="{l s='Product detail' mod='blockwishlist'}">
-				<img src="{$img_prod_dir}{$product.cover}-medium.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" />
+				<img src="{$link->getImageLink($product.link_rewrite, $product.cover, 'medium')}" alt="{$product.name|escape:'htmlall':'UTF-8'}" />
 			</a>
 		<span class="wishlist_product_detail">
 		{if isset($product.attributes_small)}
@@ -105,7 +105,7 @@
 			{if $bought.quantity > 0}
 				<tr>
 					<td class="first_item">
-					<span style="float:left;"><img src="{$img_prod_dir}{$product.cover}-small.jpg" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></span>
+					<span style="float:left;"><img src="{$link->getImageLink($product.link_rewrite, $product.cover, 'small')}" alt="{$product.name|escape:'htmlall':'UTF-8'}" /></span>			
 					<span style="float:left;">{$product.name|truncate:40:'...'|escape:'htmlall':'UTF-8'}
 					{if isset($product.attributes_small)}
 						<br /><i>{$product.attributes_small|escape:'htmlall':'UTF-8'}</i>

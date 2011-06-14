@@ -151,13 +151,38 @@ class LinkCore
 		return _PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom);
 	}
 
+	/**
+	 * Returns a link to a product image for display
+	 * Note: the new image filesystem stores product images in subdirectories of img/p/
+	 * 
+	 * @param string $name rewrite link of the image
+	 * @param string $ids id part of the image filename - can be "id_product-id_image" (legacy support, recommended) or "id_image" (new)
+	 * @param string $type
+	 */
 	public function getImageLink($name, $ids, $type = NULL)
 	{
 		global $protocol_content;
-		if ($this->allow == 1)
-			$uri_path = __PS_BASE_URI__.$ids.($type ? '-'.$type : '').'/'.$name.'.jpg';
-		else
-			$uri_path = _THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg';
+
+		// legacy mode
+		if (Configuration::get('PS_LEGACY_IMAGES') 
+			&& (file_exists(_PS_PROD_IMG_DIR_.$ids.($type ? '-'.$type : '').'.jpg')))
+		{
+			if ($this->allow == 1)
+				$uri_path = __PS_BASE_URI__.$ids.($type ? '-'.$type : '').'/'.$name.'.jpg';
+			else
+				$uri_path = _THEME_PROD_DIR_.$ids.($type ? '-'.$type : '').'.jpg';
+		}else
+		{
+			// if ids if of the form id_product-id_image, we want to extract the id_image part
+			$split_ids = explode('-', $ids);
+			$id_image = (isset($split_ids[1]) ? $split_ids[1] : $split_ids[0]);
+			
+			if ($this->allow == 1)
+				$uri_path = __PS_BASE_URI__.$id_image.($type ? '-'.$type : '').'/'.$name.'.jpg';
+			else
+				$uri_path = _THEME_PROD_DIR_.Image::getImgFolderStatic($id_image).$id_image.($type ? '-'.$type : '').'.jpg';
+		}
+		
 		return $protocol_content.Tools::getMediaServer($uri_path).$uri_path;
 	}
 	
@@ -220,7 +245,7 @@ class LinkCore
 
 	public function getCatImageLink($name, $id_category, $type = null)
 	{
-		return ($this->allow == 1) ? (__PS_BASE_URI__.$id_category.($type ? '-'.$type : '').'/'.$name.'.jpg') : (_THEME_CAT_DIR_.$id_category.($type ? '-'.$type : '').'.jpg');
+		return ($this->allow == 1) ? (__PS_BASE_URI__.'c/'.$id_category.($type ? '-'.$type : '').'/'.$name.'.jpg') : (_THEME_CAT_DIR_.$id_category.($type ? '-'.$type : '').'.jpg');
 	}
 
 	/**

@@ -1,5 +1,5 @@
 var shopImporter = {
-	
+	token: globalAjaxShopImporterToken,
 	moduleName: $('#import_module_name').val(),
 	server: $('#server').val(),
 	user: $('#user').val(),
@@ -30,7 +30,7 @@ var shopImporter = {
 	       async: false,
 	       cache: false,
 	       dataType : "json",
-	       data: 'ajax=true&syncLang&getMethod=getLangagues&className=Language&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&prefix='+prefix+this.specificOptions+'&nbr_import='+this.nbr_import ,
+	       data: 'ajax=true&syncLang&getMethod=getLangagues&token='+this.token+'&className=Language&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&prefix='+prefix+this.specificOptions+'&nbr_import='+this.nbr_import ,
 	       success: function(jsonData)
 	       {
 				if (jsonData.hasError)
@@ -60,7 +60,7 @@ var shopImporter = {
 	       async: false,
 	       cache: false,
 	       dataType : "json",
-	       data: 'ajax=true&syncCurrency&getMethod=getCurrencies&className=Currency&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&prefix='+prefix+this.specificOptions+'&nbr_import='+this.nbr_import ,
+	       data: 'ajax=true&token='+this.token+'&syncCurrency&getMethod=getCurrencies&className=Currency&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&prefix='+prefix+this.specificOptions+'&nbr_import='+this.nbr_import ,
 	       success: function(jsonData)
 	       {
 				if (jsonData.hasError)
@@ -97,7 +97,7 @@ var shopImporter = {
 						       async: true,
 						       cache: false,
 						       dataType : "json",
-						       data: 'ajax=true&checkAndSaveConfig&moduleName='+shopImporter.moduleName+'&server='+shopImporter.server+'&user='+shopImporter.user+'&password='+shopImporter.password+'&database='+shopImporter.database+'&prefix='+prefix+shopImporter.specificOptions+'&nbr_import='+shopImporter.nbr_import ,
+						       data: 'ajax=true&token='+this.token+'&checkAndSaveConfig&moduleName='+shopImporter.moduleName+'&server='+shopImporter.server+'&user='+shopImporter.user+'&password='+shopImporter.password+'&database='+shopImporter.database+'&prefix='+prefix+shopImporter.specificOptions+'&nbr_import='+shopImporter.nbr_import ,
 						       success: function(jsonData)
 						       {
 							       	if ($('#technical_error_feedback').length)
@@ -182,7 +182,7 @@ var shopImporter = {
 	       async: true,
 	       cache: false,
 	       dataType : "json",
-	       data: 'ajax=true&getData&className='+methodName[2]+'&getMethod='+methodName[0]+'&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&prefix='+prefix+'&limit='+this.limit+'&nbr_import='+this.nbr_import+'&save='+this.save+'&errors='+this.errors+'&hasErrors='+this.hasErrors+this.specificOptions+this.imagesOptions ,
+	       data: 'ajax=true&token='+this.token+'&getData&className='+methodName[2]+'&getMethod='+methodName[0]+'&moduleName='+this.moduleName+'&server='+this.server+'&user='+this.user+'&password='+this.password+'&database='+this.database+'&prefix='+prefix+'&limit='+this.limit+'&nbr_import='+this.nbr_import+'&save='+this.save+'&errors='+this.errors+'&hasErrors='+this.hasErrors+this.specificOptions+this.imagesOptions ,
 	       success: function(jsonData)
 	       {	
 		       	var jsonError;
@@ -286,7 +286,7 @@ var shopImporter = {
 	       async: false,
 	       cache: false,
 	       dataType : "json",
-	       data: 'ajax=true&truncatTable&className='+className+this.specificOptions ,
+	       data: 'ajax=true&token='+this.token+'&truncatTable&className='+className+this.specificOptions ,
 	       success: function(jsonData)
 	       {		      
 		       	var jsonError;
@@ -381,7 +381,7 @@ function displaySpecificOptions(moduleName, server, user, password, database, pr
 	       async: false,
 	       cache: false,
 	       dataType : "html",
-	       data: 'ajax=true&displaySpecificOptions&moduleName='+moduleName+'&server='+ server+'&user='+user+'&password='+password+'&database='+database+'&prefix='+prefix ,
+	       data: 'ajax=true&token='+this.token+'&displaySpecificOptions&moduleName='+moduleName+'&server='+ server+'&user='+user+'&password='+password+'&database='+database+'&prefix='+prefix ,
 	       success: function(htmlData)
 	       {
 	       		if (htmlData != 'not_exist')
@@ -404,7 +404,7 @@ function validateSpecificOptions(moduleName, specificOptions)
 	       async: false,
 	       cache: false,
 	       dataType : "json",
-	       data: 'ajax=true&validateSpecificOptions&moduleName='+moduleName+specificOptions ,
+	       data: 'ajax=true&token='+this.token+'&validateSpecificOptions&moduleName='+moduleName+specificOptions ,
 	       success: function(jsonData)
 	       {
 	       		var jsonError = '';

@@ -43,7 +43,7 @@ define('_THEME_CSS_DIR_',  _THEME_DIR_.'css/');
 define('_THEME_JS_DIR_',   _THEME_DIR_.'js/');
 
 /* Image URLs */
-define('_PS_IMG_',         __PS_BASE_URI__.'img/');
+define('_PS_IMG_',         			__PS_BASE_URI__.'img/');
 define('_PS_ADMIN_IMG_',   			_PS_IMG_.'admin/');
 define('_PS_TMP_IMG_',   			_PS_IMG_.'tmp/');
 define('_THEME_CAT_DIR_',  			_PS_IMG_.'c/');
@@ -57,6 +57,7 @@ define('_THEME_STORE_DIR_',			_PS_IMG_.'st/');
 define('_THEME_LANG_DIR_',			_PS_IMG_.'l/');
 define('_THEME_COL_DIR_', 			_PS_IMG_.'co/');
 define('_SUPP_DIR_',      			_PS_IMG_.'su/');
+define('_PS_PROD_IMG_', 			'img/p/');
 
 /* Other URLs */
 define('_PS_JS_DIR_',               __PS_BASE_URI__.'js/');
