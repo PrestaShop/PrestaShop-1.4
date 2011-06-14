@@ -51,4 +51,5 @@ $(document).ready(function()
 		lock: false,
 		force: false,
 		cycle: false });
+	$('#productscategory_list').trigger( 'goto', 0);
 });
