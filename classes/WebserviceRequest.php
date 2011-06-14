@@ -186,7 +186,7 @@ class WebserviceRequestCore
 	
 	public function setOutputEnabled($bool)
 	{
-		if (Tools::isBool($bool))
+		if (Validate::isBool($bool))
 			$this->_outputEnabled = $bool; 
 		return $this;
 	}
