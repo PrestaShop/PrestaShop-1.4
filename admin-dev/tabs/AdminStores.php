@@ -81,7 +81,7 @@ class AdminStores extends AdminTab
 		$ret = parent::postImage($id);
 		if (($id_store = (int)(Tools::getValue('id_store'))) AND isset($_FILES) AND sizeof($_FILES) AND file_exists(_PS_STORE_IMG_DIR_.$id_store.'.jpg'))
 		{
-			$imagesTypes = ImageType::getImagesTypes('categories');
+			$imagesTypes = ImageType::getImagesTypes('stores');
 			foreach ($imagesTypes AS $k => $imageType)
 				imageResize(_PS_STORE_IMG_DIR_.$id_store.'.jpg', _PS_STORE_IMG_DIR_.$id_store.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 		}

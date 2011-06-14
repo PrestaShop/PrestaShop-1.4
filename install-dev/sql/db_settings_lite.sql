@@ -655,15 +655,15 @@ INSERT INTO `PREFIX_currency` (`name`, `iso_code`, `iso_code_num`, `sign`, `blan
 ('Ringgit', 'MYR', '458', 'RM', 1, 4.13, 2, 0, 0), ('New-Zeland Dollar', 'NZD', '554', '$', 1, 1.81, 2, 0, 0), ('Peso Phillipin', 'PHP', '608', 'Php', 1, 58.61, 2, 0, 0),
 ('Singapour Dollar', 'SGD', '702', '$', 1, 1.77, 2, 0, 0), ('Baht', 'THB', '764', '฿', 1, 40.96, 2, 0, 0), ('Rand', 'ZAR', '710', 'R', 1, 9.38, 2, 0, 0);*/
 
-INSERT INTO `PREFIX_image_type` (`id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes`) VALUES
-(1, 'small', 45, 45, 1, 1, 1, 1, 0),
-(2, 'medium', 80, 80, 1, 1, 1, 1, 0),
-(3, 'large', 300, 300, 1, 1, 1, 1, 0),
-(4, 'thickbox', 600, 600, 1, 0, 0, 0, 0),
-(5, 'category', 500, 150, 0, 1, 0, 0, 0),
-(6, 'home', 129, 129, 1, 0, 0, 0, 0),
-(7, 'large_scene', 556, 200, 0, 0, 0, 0, 1),
-(8, 'thumb_scene', 161, 58, 0, 0, 0, 0, 1);
+INSERT INTO `PREFIX_image_type` (`id_image_type`, `name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes`, `stores`) VALUES
+(1, 'small', 45, 45, 1, 1, 1, 1, 0, 0),
+(2, 'medium', 80, 80, 1, 1, 1, 1, 0, 1),
+(3, 'large', 300, 300, 1, 1, 1, 1, 0, 0),
+(4, 'thickbox', 600, 600, 1, 0, 0, 0, 0, 0),
+(5, 'category', 500, 150, 0, 1, 0, 0, 0, 0),
+(6, 'home', 129, 129, 1, 0, 0, 0, 0, 0),
+(7, 'large_scene', 556, 200, 0, 0, 0, 0, 1, 0),
+(8, 'thumb_scene', 161, 58, 0, 0, 0, 0, 1, 0);
 
 INSERT INTO `PREFIX_contact_lang` (`id_contact`, `id_lang`, `name`, `description`) VALUES
 (1, 1, 'Webmaster', 'If a technical problem occurs on this website'),
