@@ -91,15 +91,23 @@ class GroupCore extends ObjectModel
 		ORDER BY g.`id_group` ASC');
 	}
 	
-	public function getCustomers()
+	public function getCustomers($count = false, $start = 0, $limit = 0)
 	{
+		if ($count)
+			return Db::getInstance()->getValue('
+			SELECT COUNT(*)
+			FROM `'._DB_PREFIX_.'customer_group` cg
+			LEFT JOIN `'._DB_PREFIX_.'customer` c ON (cg.`id_customer` = c.`id_customer`)
+			WHERE cg.`id_group` = '.(int)$this->id.' 
+			AND c.`deleted` != 1');
 		return Db::getInstance()->ExecuteS('
 		SELECT cg.`id_customer`, c.*
 		FROM `'._DB_PREFIX_.'customer_group` cg
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON (cg.`id_customer` = c.`id_customer`)
-		WHERE cg.`id_group` = '.(int)($this->id).' 
+		WHERE cg.`id_group` = '.(int)$this->id.' 
 		AND c.`deleted` != 1 
-		ORDER BY cg.`id_customer` ASC');
+		ORDER BY cg.`id_customer` ASC
+		'.($limit > 0 ? 'LIMIT '.(int)$start.', '.(int)$limit : ''));
 	}
 	
 	static public function getReduction($id_customer = NULL)

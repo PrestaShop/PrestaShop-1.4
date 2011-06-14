@@ -165,7 +165,6 @@ class AdminGroups extends AdminTab
 		$currentIndex = 'index.php?tab=AdminGroups';
 		if (!($obj = $this->loadObject(true)))
 			return;
-		$group = new Group((int)($obj->id));
 		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		
 		echo '
@@ -177,7 +176,6 @@ class AdminGroups extends AdminTab
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
 
-		$customers = $obj->getCustomers();
 		$this->fieldsDisplay = (array(
 			'ID' => array('title' => $this->l('ID')),
 			'sex' => array('title' => $this->l('Sex')),
@@ -190,32 +188,22 @@ class AdminGroups extends AdminTab
 			'actions' => array('title' => $this->l('Actions'))
 		));
 
-		if (isset($customers) AND !empty($customers) AND $nbCustomers = sizeof($customers))
+		if ($nbCustomers = $obj->getCustomers(true))
 		{
-			
 			echo '<h2>'.$this->l('Customer members of this group').' ('.$nbCustomers.')</h2>';
 			
-			//Pagination Begin
-			
-			$customerPageIndex = (Tools::getValue('customerPageIndex') ? (int)Tools::getValue('customerPageIndex') : 1); 
+			// Pagination Begin
 			$customersPerPage = (Tools::getValue('customerPerPage') ? (int)Tools::getValue('customerPerPage') : 50); 
-			$from = (Tools::getValue('customerPageIndex') ? ( (int)$customerPageIndex - 1) * ((int)$customersPerPage) : 0);
-			$totalPages = ceil($nbCustomers/$customersPerPage);
-			$perPageOptions = array(20,50,100,300);
+			$totalPages = ceil($nbCustomers / $customersPerPage);
+			$perPageOptions = array(20, 50, 100, 300);
 			
-			$customers = Db::getInstance()->ExecuteS('
-					SELECT cg.`id_customer`, c.*
-					FROM `'._DB_PREFIX_.'customer_group` cg
-					LEFT JOIN `'._DB_PREFIX_.'customer` c ON (cg.`id_customer` = c.`id_customer`)
-					WHERE cg.`id_group` = '.(int)($obj->id).' 
-					AND c.`deleted` != 1 
-					ORDER BY cg.`id_customer` ASC LIMIT '.pSQL($from).', '.pSQL($customersPerPage));
+			$customerPageIndex = (Tools::getValue('customerPageIndex') && Tools::getValue('customerPageIndex') <= $totalPages ? (int)Tools::getValue('customerPageIndex') : 1);
+			$from = (Tools::getValue('customerPageIndex') ? ((int)$customerPageIndex - 1) * ((int)$customersPerPage) : 0);
 			
-			if (empty($customers))
-				header('Location: '.$currentIndex.'&id_group='.(int)$obj->id.'&viewgroup&token='.$this->token);
+			$customers = $obj->getCustomers(false, $from, $customersPerPage);
 			
 			echo '<tr>
-				<form method="post" action="'.$currentIndex.'&id_group='.(int)$obj->id.'&viewgroup&token='.$this->token.'">
+				<form method="post" action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'">
 				<td style="vertical-align: bottom;"><span style="float: left; height:30px">';
 						
 			if ($customerPageIndex > 1)
@@ -225,8 +213,8 @@ class AdminGroups extends AdminTab
 			}
 			
 			echo    'Page <b><select onChange="submit()" name="customerPageIndex" id="customerPageIndex">';
-					for ($i=1; $i<=$totalPages; $i++)
-						echo '<option value="'.$i.'"'.((int)$customerPageIndex === $i ? 'selected="selected"' : '').'>'.$i.'</option>';
+			for ($i=1; $i <= $totalPages; $i++)
+				echo '<option value="'.$i.'"'.((int)$customerPageIndex === $i ? 'selected="selected"' : '').'>'.$i.'</option>';
 			echo 	'</select></b> / '.$totalPages;
 			
 			if ($customerPageIndex < $totalPages)
@@ -236,18 +224,14 @@ class AdminGroups extends AdminTab
 			}
 			
 			echo 	'			| Display
-						<select onChange="document.getElementById(\'customerPageIndex\').value=1; submit()" name="customerPerPage">';
-							foreach ($perPageOptions as $option)
-								echo '<option value="'.$option.'"'.((int)$customersPerPage == $option ? 'selected="selected"' : '').'>'.$option.'</option>';
+						<select onchange="document.getElementById(\'customerPageIndex\').value=1; submit();" name="customerPerPage">';
+			foreach ($perPageOptions as $option)
+				echo '<option value="'.$option.'"'.((int)$customersPerPage == $option ? 'selected="selected"' : '').'>'.$option.'</option>';
 			echo	'	</select> / '.$nbCustomers.' result(s)	
-					</span>
-					<span style="float: right;">
-						<input type="submit" value="Filter" class="button" />
 					</span><span class="clear"></span></td>
 				</form>
 			</tr>';
-			
-			//Pagination End
+			// Pagination End
 			
 			echo '<table cellspacing="0" cellpadding="0" class="table widthfull">
 				<tr>';

@@ -523,7 +523,7 @@ class SearchCore
 		$queryArray3 = array();
 	}
 
-	public static function searchTag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false, $useCookie=true)
+	public static function searchTag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false, $useCookie = true)
 	{
 	 	global $link, $cookie;
 
