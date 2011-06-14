@@ -240,7 +240,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 						{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL, 2)}
 						{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(false, $smarty.const.NULL)}
 					{elseif $priceDisplay == 1}
-						{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL)}
+						{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL, 2)}
 						{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(true, $smarty.const.NULL)}
 					{/if}
 					{if $product->on_sale}

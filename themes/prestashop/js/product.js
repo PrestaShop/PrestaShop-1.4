@@ -276,7 +276,7 @@ function updateDisplay()
 		// the specific price discount (done in the JS in order to keep backward compatibility)
 		if (!displayPrice && !noTaxForThisProduct)
 		{
-			var priceTaxExclWithoutGroupReduction = ps_round(productPriceTaxExcluded, 2) * (1 / group_reduction);
+			var priceTaxExclWithoutGroupReduction = ps_round(productPriceTaxExcluded, 6) * (1 / group_reduction);
 		} else {
 			var priceTaxExclWithoutGroupReduction = ps_round(productPriceTaxExcluded, 6) * (1 / group_reduction);
 		}
@@ -290,7 +290,6 @@ function updateDisplay()
 
 		if (!displayPrice && !noTaxForThisProduct)
 		{
-
 			var productPrice = taxExclPrice * tax;
 			if (specific_price)
 				productPriceWithoutReduction = ps_round(productPriceWithoutReduction * tax, 2);
