@@ -75,13 +75,10 @@ function recherche_MR(args)
 			data: args ,
 			dataType: 'json',
 			async : false,
-			success: function(obj)
-			{
-					json_addresses = obj;
+			success: function(obj) {
+				json_addresses = obj;
 			},
-			error: function(XMLHttpRequest, textStatus, errorThrown) 
-			{
-			}
+			error: function(XMLHttpRequest, textStatus, errorThrown) {}
 		});
 	}
 	else

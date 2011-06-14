@@ -31,8 +31,12 @@
  * Each Name method allow to instanciate an object containing
  * methods to manage correctly the data and name fields
  */
-
+ 
 require_once(realpath(dirname(__FILE__).'/../../config/config.inc.php'));
+
+if (Tools::getValue('mrtoken') != sha1('mr'._COOKIE_KEY_.'mrAgain'))
+	die;
+
 require_once(realpath(dirname(__FILE__).'/../../init.php'));
 require(dirname(__FILE__).'/classes/MRCreateTickets.php');
 require(dirname(__FILE__).'/classes/MRGetTickets.php');

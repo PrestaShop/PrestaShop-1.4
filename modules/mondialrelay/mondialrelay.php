@@ -307,10 +307,14 @@ class MondialRelay extends Module
 	{
 		$cssFilePath = $this->_path.'style.css';
 		$jsFilePath= $this->_path.'mondialrelay.js';
+		$mrtoken = sha1('mr'._COOKIE_KEY_.'mrAgain');
 		
 		return '
 			<link type="text/css" rel="stylesheet" href="'.$cssFilePath.'" />
-			<script type="text/javascript">var _PS_MR_MODULE_DIR_ = "'.self::$moduleURL.'";</script>
+			<script type="text/javascript">
+				var _PS_MR_MODULE_DIR_ = "'.self::$moduleURL.'";
+				var mrtoken = "'.$mrtoken.'";
+			</script>
 			<script type="text/javascript" src="'.$jsFilePath.'"></script>';
 	}
 	

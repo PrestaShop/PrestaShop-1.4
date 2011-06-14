@@ -4,32 +4,26 @@ var toggle_history_order_list = false;
 function toggleOrderListSelection()
 {
 	toggle_status_order_list = !toggle_status_order_list;
-
 	$('input[name="order_id_list[]"]').attr('checked', toggle_status_order_list);
 }
 
 function toggleHistoryListSelection()
 {
 	toggle_history_order_list = !toggle_history_order_list;
-
 	$('input[name="history_id_list[]"]').attr('checked', toggle_history_order_list);
 }
 
 function getTickets(detailedExpeditionList)
 {
-	$.ajax(
-	{
+	$.ajax({
 		type : 'POST',
 		url : _PS_MR_MODULE_DIR_ + 'ajax.php',
-		data :	{'detailedExpeditionList':detailedExpeditionList, 
-				'method' : 'MRGetTickets'},
+		data :	{'detailedExpeditionList':detailedExpeditionList, 'method':'MRGetTickets', 'mrtoken':mrtoken},
 		dataType: 'json',
-		success: function(json) 
-		{
+		success: function(json) {
 			if (json && json.success)
 				for (id_order in json.success)
-					if (json.success[id_order])
-					{
+					if (json.success[id_order]){
 						$('#URLA4_' + id_order).html('<a href="' + json.success[id_order].URLPDF_A4 + '">\
 								<img width="20" src="' + _PS_MR_MODULE_DIR_ + 'images/pdf_icon.jpg" alt="download pdf"" /></a>');
 						$('#URLA5_' + id_order).html('<a href="' + json.success[id_order].URLPDF_A5 + '">\
@@ -41,8 +35,7 @@ function getTickets(detailedExpeditionList)
 			displayBackGenerateSubmitButton();
 			displayBackHistoriesSubmitButton();
 		},
-		error: function(xhr, ajaxOptions, thrownError)
-		{
+		error: function(xhr, ajaxOptions, thrownError){
             //console.log(thrownError);
             displayBackGenerateSubmitButton();
 		}
@@ -52,12 +45,10 @@ function getTickets(detailedExpeditionList)
 function checkErrorGenetateTickets(json)
 {
 	i = 0;
-	$('.PS_MRErrorList').fadeOut('fast', function()
-	{
+	$('.PS_MRErrorList').fadeOut('fast', function(){
 		if ((++i >= $('.PS_MRErrorList').length) && json && json.error)
 			for (id_order in json.error)
-				if (json.error[id_order] && json.error[id_order].length)
-				{
+				if (json.error[id_order] && json.error[id_order].length){
 					$('#errorCreatingTicket_' + id_order).children('td').children('span').html('');
 					$('#errorCreatingTicket_' + id_order).fadeOut('slow');
 					$('#errorCreatingTicket_' + id_order).fadeIn('slow');
@@ -70,17 +61,14 @@ function checkErrorGenetateTickets(json)
 
 function checkOtherErrors(json)
 {
-	$('#otherErrors').fadeOut('fast', function()
-	{
-		
+	$('#otherErrors').fadeOut('fast', function(){
 		if (json && json.other && json.other.error)
-		for (numError in json.other.error)
-			if (json.other.error[numError])
-			{
-				$('#otherErrors').fadeIn('slow');
-				$('#otherErrors').children('span').html('');
-				$('#otherErrors').children('span').append(json.other.error[numError]);
-			}
+			for (numError in json.other.error)
+				if (json.other.error[numError]){
+					$('#otherErrors').fadeIn('slow');
+					$('#otherErrors').children('span').html('');
+					$('#otherErrors').children('span').append(json.other.error[numError]);
+				}
 	});
 }
 
@@ -89,19 +77,16 @@ function checkSucceedGenerateTickets(json)
 	detailedExpeditionList = new Array();
 	
 	i = 0;
-	$('.PS_MRSuccessList').fadeOut('fast', function()
-	{
-		if ((++i >= $('.PS_MRSuccessList').length) && json && json.success)
-		{
+	$('.PS_MRSuccessList').fadeOut('fast', function(){
+		if ((++i >= $('.PS_MRSuccessList').length) && json && json.success){
 			for (id_order in json.success)
-				if (json.success[id_order] && json.success[id_order].expeditionNumber)
-				{
+				if (json.success[id_order] && json.success[id_order].expeditionNumber){
 					$('#successCreatingTicket_' + id_order).children('td').children('span').html('');
 					$('#PS_MRLineOrderInformation-' + id_order).remove();
 					$('#successCreatingTicket_' + id_order).fadeIn('slow');
 					detailedExpeditionList.push({'id_order':id_order, 'expeditionNumber':json.success[id_order].expeditionNumber});
 					
-					if (!$('#detailHistory_' + id_order).length)
+					if (!$('#detailHistory_' + id_order).length) {
 						$('#PS_MRHistoriqueTableList').append('\
 							<tr id="detailHistory_' + id_order + '">\
 								<td><input type="checkbox" class="history_id_list" name="history_id_list[]" value="' + id_order + '" /></td>\
@@ -110,8 +95,7 @@ function checkSucceedGenerateTickets(json)
 								<td id="URLA4_' + id_order + '"><img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" /></td>\
 								<td id="URLA5_' + id_order + '"><img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" /></td>\
 							</tr>');
-					else
-					{	
+					} else {	
 						$('#detailHistory_' + id_order).children('#URLA4_' + id_order).html('<img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" />');
 						$('#detailHistory_' + id_order).children('#URLA5_' + id_order).html('<img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" />');
 						$('#detailHistory_' + id_order).children('#expeditionNumber_' + id_order).html('<img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" />');
@@ -145,8 +129,7 @@ function generateTicketsAjax()
 	$('#PS_MRSubmitGenerateLoader').fadeIn('slow');
 	
 	numSelected = $('input[name="order_id_list[]"]:checked').length;
-	$('input[name="order_id_list[]"]:checked').each(function()
-	{
+	$('input[name="order_id_list[]"]:checked').each(function(){
 		order_id_list.push($(this).val());
 		weight_list.push(($('#weight_' + $(this).val()).val()) + '-' + $(this).val());
 	});
@@ -158,10 +141,10 @@ function generateTicketsAjax()
 		data :	{'order_id_list' : order_id_list, 
 				'numSelected' : numSelected,
 				'weight_list' : weight_list,
-				'method' : 'MRCreateTickets'},
+				'method' : 'MRCreateTickets',
+				'mrtoken' : mrtoken},
 		dataType: 'json',
-		success: function(json) 
-		{
+		success: function(json) {
 			detailedExpeditionList = new Array();
 			
 			checkErrorGenetateTickets(json);
@@ -172,11 +155,9 @@ function generateTicketsAjax()
 			else
 				displayBackGenerateSubmitButton();
 		},
-		error: function(xhr, ajaxOptions, thrownError)
-		{
+		error: function(xhr, ajaxOptions, thrownError){
 			display_generate_button = true;
-      console.log(thrownError);
-      displayBackGenerateSubmitButton();
+			displayBackGenerateSubmitButton();
 		}
 	});
 	delete(order_id_list);
@@ -185,8 +166,7 @@ function generateTicketsAjax()
 
 function displayDeletedHistoryInformation()
 {
-	$('input[name="history_id_list[]"]:checked').each(function()
-	{
+	$('input[name="history_id_list[]"]:checked').each(function(){
 		$(this).parent().parent().css('background-color', '#FFE2E3');
 	});
 	displayBackHistoriesSubmitButton();
@@ -194,14 +174,11 @@ function displayDeletedHistoryInformation()
 
 function checkDeletedHistoriesId(json)
 {
-	if (json && json.success)
-	{
+	if (json && json.success) {
 		// Allow to wait the end of the loop to manage unremoved item
 		i = 0;
-		for (numberHistoryId in json.success.deletedListId)
-		{
-			$('#PS_MRHistoryId_' + json.success.deletedListId[numberHistoryId]).parent().parent().fadeOut('fast', function()
-			{
+		for (numberHistoryId in json.success.deletedListId) {
+			$('#PS_MRHistoryId_' + json.success.deletedListId[numberHistoryId]).parent().parent().fadeOut('fast', function(){
 				$(this).remove();
 				// Fadeout is asynchome verify everytime the number element
 				if (++i == json.success.deletedListId.length)
@@ -224,49 +201,41 @@ function deleteSelectedHistories()
 	$('#PS_MRSubmitDeleteHistoriesLoader').fadeIn('slow');
 	
 	numSelected = $('input[name="order_id_list[]"]:checked').length;
-	$('input[name="history_id_list[]"]:checked').each(function()
-	{
+	$('input[name="history_id_list[]"]:checked').each(function(){
 		history_id_list.push($(this).val());
 	});
 	
-	$.ajax(
-	{
+	$.ajax({
 		type : 'POST',
 		url : _PS_MR_MODULE_DIR_ + 'ajax.php',
 		data :	{'history_id_list' : history_id_list, 
 				'numSelected' : numSelected,
-				'method' : 'DeleteHistory'},
+				'method' : 'DeleteHistory',
+				'mrtoken' : mrtoken},
 		dataType: 'json',
-		success: function(json)
-		{
+		success: function(json) {
 			checkOtherErrors(json);
 			checkDeletedHistoriesId(json);
 		},
-		error: function(xhr, ajaxOptions, thrownError)
-		{
+		error: function(xhr, ajaxOptions, thrownError) {
 			display_generate_button = true;
-      //console.log(thrownError);
-      displayBackHistoriesSubmitButton();
+			displayBackHistoriesSubmitButton();
 		}
 	});
 }
 
 $(document).ready(function()
 {
-	$('#toggleStatusOrderList').click(function()
-	{
+	$('#toggleStatusOrderList').click(function() {
 		toggleOrderListSelection();
 	});
-	$('#toggleStatusHistoryList').click(function()
-	{
+	$('#toggleStatusHistoryList').click(function() {
 		toggleHistoryListSelection();
 	});
-	$('#generate').click(function()
-	{
+	$('#generate').click(function() {
 		generateTicketsAjax();
 	});
-	$('#PS_MRSubmitButtonDeleteHistories').click(function()
-	{
+	$('#PS_MRSubmitButtonDeleteHistories').click(function() {
 		deleteSelectedHistories();
 	});
 });
