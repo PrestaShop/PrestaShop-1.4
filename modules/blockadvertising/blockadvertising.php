@@ -31,6 +31,13 @@ if (!defined('_CAN_LOAD_FILES_'))
 class BlockAdvertising extends Module
 {
 	public $adv_link;
+
+	/**
+	 * adv_title contains string for title and alt attributes
+	 * 
+	 * @var mixed
+	 */
+	public $adv_title;
 	/**
 	 * adv_img contains url to the image to display.
 	 * 
@@ -49,7 +56,7 @@ class BlockAdvertising extends Module
 	{
 		$this->name = 'blockadvertising';
 		$this->tab = 'advertising_marketing';
-		$this->version = 0.2;
+		$this->version = 0.3;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -58,12 +65,20 @@ class BlockAdvertising extends Module
 		$this->displayName = $this->l('Block advertising');
 		$this->description = $this->l('Adds a block to display an advertisement.');
 
-		$current_dir = defined('__DIR__')?__DIR__:dirname(__FILE__);
-		if (!file_exists($current_dir.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT')))
-			$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/advertising.jpg';
-		else
+		if (!file_exists(_PS_MODULE_DIR_.$this->name.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT')))
+		{
+			$this->adv_imgname = 'advertising';
+			if (!file_exists(_PS_MODULE_DIR_.$this->name.'/advertising.jpg'))
+				$this->adv_imgname = '';
+			else
+				Configuration::updateValue('BLOCKADVERT_IMG_EXT','jpg');
+		}
+
+		if (!empty($this->adv_imgname))
 			$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT');
+
 		$this->adv_link = htmlentities(Configuration::get('BLOCKADVERT_LINK'), ENT_QUOTES, 'UTF-8');
+		$this->adv_title = htmlentities(Configuration::get('BLOCKADVERT_TITLE'), ENT_QUOTES, 'UTF-8');
 	}
 
 
@@ -84,11 +99,10 @@ class BlockAdvertising extends Module
 	 */
 	private function _deleteCurrentImg()
 	{
-		// can work before 5.3
-		$current_dir=defined(__DIR__)?__DIR__:dirname(__FILE__);
 
-		if(file_exists($current_dir.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT')))
-			unlink($current_dir.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT'));
+		if (file_exists(_PS_MODULE_DIR_.$this->name.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT')))
+			unlink(_PS_MODULE_DIR_.$this->name.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT'));
+		$this->adv_imgname = $this->adv_imgname == 'advertising_custom'?'advertising':'';
 	}
 	/**
 	 * postProcess update configuration
@@ -109,20 +123,21 @@ class BlockAdvertising extends Module
 			$file = false;
 			if (isset($_FILES['adv_img']) AND isset($_FILES['adv_img']['tmp_name']) AND !empty($_FILES['adv_img']['tmp_name']))
 			{
-				if ($error = checkImage($_FILES['adv_img'], 4000000))
+				if ($error = checkImage($_FILES['adv_img'], Tools::convertBytes(ini_get('upload_max_filesize'))))
 					$errors .= $error;
 				elseif ($dot_pos = strrpos($_FILES['adv_img']['name'],'.'))
 				{
-					// __DIR__ exists since php 5.3
-					$current_dir = defined(__DIR__)?__DIR__:dirname(__FILE__);
 					// as checkImage tell us it's a good image, we'll just copy the extension
-					$ext=substr($_FILES['adv_img']['name'], $dot_pos+1);
-					$newname=$this->adv_imgname.'.'.$ext;
 
 					$this->_deleteCurrentImg();
+					$this->adv_imgname = 'advertising';
+					$ext = substr($_FILES['adv_img']['name'], $dot_pos+1);
+					$newname = 'advertising_custom';
 
-					if (!move_uploaded_file($_FILES['adv_img']['tmp_name'], $current_dir.'/'.$newname))
+					if (!move_uploaded_file($_FILES['adv_img']['tmp_name'],_PS_MODULE_DIR_.$this->name.'/'.$newname.'.'.$ext))
 						$errors .= $this->l('Error move uploaded file');
+					else
+						$this->adv_imgname = $newname;
 
 					Configuration::updateValue('BLOCKADVERT_IMG_EXT',$ext);
 					$this->adv_img = Tools::getMediaServer($this->name)._MODULE_DIR_.$this->name.'/'.$this->adv_imgname.'.'.Configuration::get('BLOCKADVERT_IMG_EXT');
@@ -133,6 +148,12 @@ class BlockAdvertising extends Module
 			{
 				Configuration::updateValue('BLOCKADVERT_LINK', $link);
 				$this->adv_link = htmlentities($link, ENT_QUOTES, 'UTF-8');
+			}
+
+			if ($title = Tools::getValue('adv_title'))
+			{
+				Configuration::updateValue('BLOCKADVERT_TITLE', $title);
+				$this->adv_title = htmlentities($title, ENT_QUOTES, 'UTF-8');
 			}
 		}
 		if ($errors)
@@ -153,14 +174,15 @@ class BlockAdvertising extends Module
 		$output .= '
 <form action="'.$_SERVER['REQUEST_URI'].'" method="post" enctype="multipart/form-data">
 <fieldset><legend>'.$this->l('Advertising block configuration').'</legend>
-<a href="'.$this->adv_link.'" target="_blank" title="'.$this->l('Advertising').'">';
+<a href="'.$this->adv_link.'" target="_blank" title="'.$this->adv_title.'">';
 		if ($this->adv_img)
-			$output .= '<img src="'.$protocol_content.$this->adv_img.'" alt="'.$this->l('Advertising image').'" style="height:163px;margin-left: 100px;width:163px"/>';
-		else
-			$output .= $this->l('no image');
-		$output .= '</a>';
-		if ($this->adv_img)
+		{
+			$output .= '<img src="'.$protocol_content.$this->adv_img.'" alt="'.$this->adv_title.'" title="'.$this->adv_title.'" style="height:163px;margin-left: 100px;width:163px"/>';
 			$output .= '<input class="button" type="submit" name="submitDeleteImgConf" value="'.$this->l('Delete image').'" style=""/>';
+		}
+		else
+			$output .= '<div style="margin-left: 100px;width:163px;"/>'.$this->l('no image').'</div>';
+		$output .= '</a>';
 		$output .= '<br/>
 <br/>
 <label for="adv_img">'.$this->l('Change image').'&nbsp;&nbsp;</label><input id="adv_img" type="file" name="adv_img" />
@@ -168,6 +190,9 @@ class BlockAdvertising extends Module
 <br/>
 <br class="clear"/>
 <label for="adv_link">'.$this->l('Image link').'&nbsp;&nbsp;</label><input id="adv_link" type="text" name="adv_link" value="'.$this->adv_link.'" />
+<br class="clear"/>
+<br/>
+<label for="adv_title">'.$this->l('Title').'&nbsp;&nbsp;</label><input id="adv_title" type="text" name="adv_title" value="'.$this->adv_title.'" />
 <br class="clear"/>
 <br/>
 <input class="button" type="submit" name="submitAdvConf" value="'.$this->l('validate').'" style="margin-left: 200px;"/>
@@ -187,9 +212,10 @@ class BlockAdvertising extends Module
 	{
 		global $smarty, $protocol_content;
 
-		Tools::addCSS(($this->_path).'blockadvertising.css', 'all');
+		Tools::addCSS($this->_path.'blockadvertising.css', 'all');
 		$smarty->assign('image', $protocol_content.$this->adv_img);
 		$smarty->assign('adv_link', $this->adv_link);
+		$smarty->assign('adv_title', $this->adv_title);
 
 		return $this->display(__FILE__, 'blockadvertising.tpl');
 	}
