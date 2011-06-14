@@ -133,14 +133,37 @@ class MailAlerts extends Module
 			$message = $this->l('No message');
 
 		$itemsTable = '';
+		
+		$customizedDatas = Product::getAllCustomizedDatas(intval($params['cart']->id));
+		Product::addCustomizationPrice($products, $customizedDatas);
 		foreach ($params['order']->getProducts() AS $key => $product)
 		{
 			$unit_price = $product['product_price_wt'];
 			$price = $product['total_price'];
+			
+			$customizationText = '';
+			if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
+			{
+
+				foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] AS $customization)
+				{
+					if (isset($customization['datas'][_CUSTOMIZE_TEXTFIELD_]))
+						foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] AS $text)
+							$customizationText .= $text['name'].':'.' '.$text['value'].'<br />';
+					
+					if (isset($customization['datas'][_CUSTOMIZE_FILE_]))
+						$customizationText .= sizeof($customization['datas'][_CUSTOMIZE_FILE_]) .' '. Tools::displayError('image(s)').'<br />';
+						
+					$customizationText .= '---<br />';							
+				}
+				
+				$customizationText = rtrim($customizationText, '---<br />');
+			}
+			
 			$itemsTable .=
 				'<tr style="background-color:'.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
 					<td style="padding:0.6em 0.4em;">'.$product['product_reference'].'</td>
-					<td style="padding:0.6em 0.4em;"><strong>'.$product['product_name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').'</strong></td>
+					<td style="padding:0.6em 0.4em;"><strong>'.$product['product_name'].(isset($product['attributes_small']) ? ' '.$product['attributes_small'] : '').(!empty($customizationText) ? '<br />'.$customizationText : '').'</strong></td>
 					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice($unit_price, $currency, false).'</td>
 					<td style="padding:0.6em 0.4em; text-align:center;">'.(int)($product['product_quantity']).'</td>
 					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(($unit_price * $product['product_quantity']), $currency, false).'</td>
