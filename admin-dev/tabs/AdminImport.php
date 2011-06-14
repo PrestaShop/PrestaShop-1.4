@@ -705,10 +705,9 @@ class AdminImport extends AdminTab
 			}
 
 			$product->id_category_default = isset($product->id_category[0]) ? (int)($product->id_category[0]) : '';
-			$link_rewrite = is_array($product->link_rewrite) ? $product->link_rewrite[$defaultLanguageId] : '';
+			$link_rewrite = (is_array($product->link_rewrite) && count($product->link_rewrite)) ? $product->link_rewrite[$defaultLanguageId] : '';
 			$valid_link = Validate::isLinkRewrite($link_rewrite);
 
-			$bak = $product->link_rewrite;
 			if ((isset($product->link_rewrite[$defaultLanguageId]) AND empty($product->link_rewrite[$defaultLanguageId])) OR !$valid_link)
 			{
 				$link_rewrite = Tools::link_rewrite($product->name[$defaultLanguageId]);
@@ -716,7 +715,7 @@ class AdminImport extends AdminTab
 					$link_rewrite = 'friendly-url-autogeneration-failed';
 			}
 			if (!$valid_link)
-				$this->_warnings[] = Tools::displayError('Rewrite link for'). ' '.$bak.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
+				$this->_warnings[] = Tools::displayError('Rewrite link for'). ' '.$link_rewrite.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
 
 			$product->link_rewrite = self::createMultiLangField($link_rewrite);
 
