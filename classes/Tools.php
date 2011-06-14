@@ -201,7 +201,7 @@ class ToolsCore
 	*/
 	public static function usingSecureMode()
 	{
-		return isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
+		return !(empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off');
 	}
 	
 	/**
