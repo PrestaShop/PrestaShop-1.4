@@ -164,6 +164,19 @@ class ReferralProgramModule extends ObjectModel
 		return isset($result['id_referralprogram']);
 	}
 
+	static public function isSponsorFriend($id_sponsor, $id_friend)
+	{
+		if (!(int)($id_sponsor) OR !(int)($id_friend))
+			return false; 
+	
+		$result = Db::getInstance()->getRow('
+		SELECT s.`id_referralprogram`
+		FROM `'._DB_PREFIX_.'referralprogram` s
+		WHERE s.`id_sponsor` = '.(int)($id_sponsor).' AND s.`id_referralprogram` = '.(int)($id_friend));
+
+		return isset($result['id_referralprogram']);
+	}
+	
 	/**
 	  * Return if an email is already register
 	  *

@@ -132,25 +132,28 @@ if (Tools::isSubmit('revive'))
 	{
 		foreach ($friendsChecked as $key => $friendChecked)
 		{
-			if (Configuration::get('PS_CIPHER_ALGORITHM'))
-				$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
-			else
-				$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
-			$referralprogram = new ReferralProgramModule((int)($key));
-			$vars = array(
-				'{email}' => $cookie->email,
-				'{lastname}' => $cookie->customer_lastname,
-				'{firstname}' => $cookie->customer_firstname,
-				'{email_friend}' => $referralprogram->email,
-				'{lastname_friend}' => $referralprogram->lastname,
-				'{firstname_friend}' => $referralprogram->firstname,
-				'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($cipherTool->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
-				'{discount}' => $discount
-			);
-			$referralprogram->save();
-			Mail::Send((int)($cookie->id_lang), 'referralprogram-invitation', Mail::l('Referral Program'), $vars, $referralprogram->email, $referralprogram->firstname.' '.$referralprogram->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
-			$revive_sent = true;
-			$nbRevive++;
+			if(ReferralProgramModule::isSponsorFriend((int)($cookie->id_customer), (int)($friendChecked)))
+			{
+				if (Configuration::get('PS_CIPHER_ALGORITHM'))
+					$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+				else
+					$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+				$referralprogram = new ReferralProgramModule((int)($key));
+				$vars = array(
+					'{email}' => $cookie->email,
+					'{lastname}' => $cookie->customer_lastname,
+					'{firstname}' => $cookie->customer_firstname,
+					'{email_friend}' => $referralprogram->email,
+					'{lastname_friend}' => $referralprogram->lastname,
+					'{firstname_friend}' => $referralprogram->firstname,
+					'{link}' => 'authentication.php?create_account=1&sponsor='.urlencode($cipherTool->encrypt($referralprogram->id.'|'.$referralprogram->email.'|')),
+					'{discount}' => $discount
+				);
+				$referralprogram->save();
+				Mail::Send((int)($cookie->id_lang), 'referralprogram-invitation', Mail::l('Referral Program'), $vars, $referralprogram->email, $referralprogram->firstname.' '.$referralprogram->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+				$revive_sent = true;
+				$nbRevive++;
+			}
 		}
 	}
 	else
