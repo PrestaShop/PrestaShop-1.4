@@ -120,7 +120,9 @@ class BlockLayered extends Module
 
 	public function getContent()
 	{
+		$errors = array();
 		$html = '';
+
 		if (Tools::isSubmit('submitLayeredCache'))
 		{
 			$this->rebuildLayeredStructure();
@@ -134,14 +136,53 @@ class BlockLayered extends Module
 		}
 		elseif (Tools::isSubmit('submitLayeredSettings'))
 		{
-			$html .= '
-			<div class="conf confirm">
-				<img src="../img/admin/ok.gif" alt="" title="" />
-				'.$this->l('Settings saved successfully').'
-			</div>';
+			if (Tools::getValue('share_url'))
+			{
+				if (Tools::getValue('bitly_username') == '')
+					$errors[] = $this->l('Bit.ly username is empty');
+				if (Tools::getValue('bitly_api_key') == '')
+					$errors[] = $this->l('Bit.ly api_key is empty');
+			}
+			
+			if (!sizeof($errors))
+			{
+				Configuration::updateValue('PS_LAYERED_BITLY_USERNAME', Tools::getValue('bitly_username'));
+				Configuration::updateValue('PS_LAYERED_BITLY_API_KEY', Tools::getValue('bitly_api_key'));
+				Configuration::updateValue('PS_LAYERED_SHARE', Tools::getValue('share_url'));
+				$html .= '
+					<div class="conf confirm">
+						<img src="../img/admin/ok.gif" alt="" title="" />
+						'.$this->l('Settings saved successfully').'
+					</div>';
+			}
+			else
+			{
+				$html .= '
+				<div class="error">
+					<img src="../img/admin/error.png" alt="" title="" />'.$this->l('Settings not saved :').'<ul>';
+						foreach($errors as $error)
+							$html .= '<li>'.$error.'</li>';
+				$html .= '</ul></div>';
+			}
+				
 		}
 		
-		$html .= '
+		$html .= '<script>
+					$(document).ready(function()
+					{
+						$(\'.share_url\').change(function(){
+							toggleBitly();
+						});
+						toggleBitly();
+						
+						function toggleBitly(){
+							if ($(\'#share_url_on\').attr(\'checked\'))
+								$(\'#bitly\').slideDown();
+							else
+								$(\'#bitly\').slideUp();
+						}
+					});
+				</script>
 		<h2>'.$this->l('Layered navigation').'</h2>
 		<p class="warning" style="font-weight: bold;"><img src="../img/admin/information.png" alt="" /> '.$this->l('This module is in beta version and will be improved').'</p><br />
 		<fieldset class="width2">
@@ -154,20 +195,12 @@ class BlockLayered extends Module
 				<li>'.$this->l('Statistics and analysis').'</li>
 				<li>'.$this->l('Manage products sort & pagination').' <img src="../img/admin/enabled.gif" alt="" /></li>
 				<li>'.$this->l('Add a check on the category_group table').'</li>
-				<li>'.$this->l('SEO links & real time URL building (ability to give the URL to someone)').'</li>
+				<li>'.$this->l('SEO links & real time URL building (ability to give the URL to someone)').' <img src="../img/admin/enabled.gif" alt="" /> </li>
 				<li>'.$this->l('Add more options in the module configuration').'</li>
 				<li>'.$this->l('Performances improvements').'</li>
 			</ol>
 		</fieldset><br />
-		<!--
-		<fieldset class="width2">
-			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Settings').'</legend>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">				
-				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredSettings" value="'.$this->l('Update settings').'" /></p>
-			</form>
-		</fieldset>
-		<br />
-		-->
+
 		<fieldset class="width2">
 			<legend><img src="../img/admin/database_gear.gif" alt="" />'.$this->l('Cache initialization').'</legend>
 			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
@@ -177,6 +210,33 @@ class BlockLayered extends Module
 					'.$this->l('If you do not, this cache table might become larger and larger (less efficient), and all the new choices (attributes, features) will not be offered to your visitors.').'</p>
 				</div>
 				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredCache" value="'.$this->l('Initialize the layered navigation database').'" /></p>
+			</form>
+		</fieldset><br />
+		<fieldset class="width2">
+			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Configuration').'</legend>
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+				<label>'.$this->l('Enable share URL').' : </label>
+						<div class="margin-form">
+							<label class="t" for="share_url_on"><img src="../img/admin/enabled.gif" alt="Yes" title="Yes"></label>
+							<input type="radio" id="share_url_on" name="share_url" class="share_url" value="1" '.(Configuration::get('PS_LAYERED_SHARE') ? 'checked="checked"' : '').'>
+							<label class="t" for="share_url_off"><img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;"></label>
+							<input type="radio" id="share_url_off" name="share_url" class="share_url" value="0" '.(!Configuration::get('PS_LAYERED_SHARE') ? 'checked="checked"' : '').'>
+							<p>'.$this->l('By enabling this option, your visitors can share the URL of their research').'</p>
+						</div>
+						<div class="clear"></div>
+						<div id="bitly">
+							<p>'.$this->l('To offer your customers short links, create an account on bit.ly, then copy and paste login and API key.').'
+							<a style="text-decoration:underline" href="http://bit.ly/a/sign_up">'.$this->l('Sign Up').'</a></p>
+							<label>'.$this->l('Login bit.ly').'</label>
+							<div class="margin-form">
+									<input type="text" name="bitly_username" value="'. Tools::getValue('bitly_username', Configuration::get('PS_LAYERED_BITLY_USERNAME')).'">
+							</div>
+							<label>'.$this->l('API Key bit.ly').'</label>
+							<div class="margin-form">
+								<input type="text" name="bitly_api_key" value="'.Tools::getValue('bitly_api_key', Configuration::get('PS_LAYERED_BITLY_API_KEY')).'">
+							</div>
+						</div>
+				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredSettings" value="'.$this->l('Save configuration').'" /></p>
 			</form>
 		</fieldset>';
 		return $html;
@@ -643,8 +703,17 @@ class BlockLayered extends Module
 		$nFilters = 0;
 		foreach ($selectedFilters AS $filters)
 			$nFilters += sizeof($filters);
-
+		
+		
+		$params = '?';
+		foreach($_GET as $key => $val)
+			$params .= $key.'='.$val.'&';
+		
+		$share_url = $link->getCategoryLink((int)$category->id, $category->link_rewrite[(int)$cookie->id_lang], (int)$cookie->id_lang).rtrim($params, '&');
+				
 		$smarty->assign(array(
+		'display_share' => (int)Configuration::get('PS_LAYERED_SHARE'),
+		'share_url' => $this->getShortLink($share_url),
 		'layered_use_checkboxes' => (int)Configuration::get('PS_LAYERED_NAVIGATION_CHECKBOXES'),
 		'id_category_layered' => (int)$id_parent,
 		'selected_filters' => $selectedFilters,
@@ -918,7 +987,22 @@ if (!isset($doneCategories[(int)$id_category]['p']))
 				$productsToKeep = array();
 			}
 		}
-
 		return $products;
+	}
+	
+	private function getShortLink($share_url) {
+	
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "http://api.bitly.com/v3/shorten");
+		curl_setopt($ch, CURLOPT_HEADER, 0);
+		curl_setopt($ch, CURLOPT_HTTPGET, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, 'login='.Configuration::get('PS_LAYERED_BITLY_USERNAME').'&apiKey='.Configuration::get('PS_LAYERED_BITLY_API_KEY').'&longUrl='.urlencode($share_url).'&format=txt');
+		$return = curl_exec($ch);
+		
+		if ($return != 'INVALID_LOGIN' AND $return != 'INVALID_APIKEY')
+			return $return;
+		else
+			return $share_url;
 	}
 }

@@ -12,7 +12,7 @@
 	list-style-type: none;
 }
 
-#layered_block_left #enabled_filters {
+#layered_block_left #enabled_filters , #layered_url_filter_block{
 	font-size: 10px;
 	padding-bottom: 10px;
 	margin-bottom: 5px;
