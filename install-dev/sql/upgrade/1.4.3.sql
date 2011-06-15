@@ -8,7 +8,7 @@ city
 State:name
 postcode
 Country:name' 
-WHERE id_country = (SELECT id_country FROM `PREFIX_country` WHERE `iso_code`='GB')
+WHERE id_country = (SELECT id_country FROM `PREFIX_country` WHERE `iso_code`='GB');
 
 UPDATE `PREFIX_country` SET `contains_states` = 1 WHERE `id_country` = 145;
 
