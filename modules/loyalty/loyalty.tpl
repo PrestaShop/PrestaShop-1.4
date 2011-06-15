@@ -75,9 +75,10 @@
 		<ul class="pagination">
 		{if $page != 1}
 			{assign var='p_previous' value=$page-1}
-			<li id="pagination_previous"><a href="{$pagination_link}?p={$p_previous}&n={$nbpagination}">&laquo;&nbsp;{l s='Previous'}</a></li>
+			<li id="pagination_previous"><a href="{$pagination_link}?p={$p_previous}&n={$nbpagination}">
+			&laquo;&nbsp;{l s='Previous' mod='loyalty'}</a></li>
 		{else}
-			<li id="pagination_previous" class="disabled"><span>&laquo;&nbsp;{l s='Previous'}</span></li>
+			<li id="pagination_previous" class="disabled"><span>&laquo;&nbsp;{l s='Previous' mod='loyalty'}</span></li>
 		{/if}
 		{if $page > 2}
 			<li><a href="{$pagination_link}?p=1&n={$nbpagination}">1</a></li>
@@ -100,9 +101,9 @@
 		{/if}
 		{if $orders|@count > $page * $nbpagination}
 			{assign var='p_next' value=$page+1}
-			<li id="pagination_next"><a href="{$pagination_link}?p={$p_next}&n={$nbpagination}">{l s='Next'}&nbsp;&raquo;</a></li>
+			<li id="pagination_next"><a href="{$pagination_link}?p={$p_next}&n={$nbpagination}">{l s='Next' mod='loyalty'}&nbsp;&raquo;</a></li>
 		{else}
-			<li id="pagination_next" class="disabled"><span>{l s='Next'}&nbsp;&raquo;</span></li>
+			<li id="pagination_next" class="disabled"><span>{l s='Next' mod='loyalty'}&nbsp;&raquo;</span></li>
 		{/if}
 		</ul>
 	{/if}
@@ -110,7 +111,7 @@
 		<form action="{$pagination_link}" method="get" class="pagination">
 			<p>
 				<input type="submit" class="button_mini" value="{l s='OK'}" />
-				<label for="nb_item">{l s='items:'}</label>
+				<label for="nb_item">{l s='items:' mod='loyalty'}</label>
 				<select name="n" id="nb_item">
 				{foreach from=$nArray item=nValue}
 					{if $nValue <= $orders|@count}
