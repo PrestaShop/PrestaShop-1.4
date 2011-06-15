@@ -648,7 +648,7 @@ class AdminImport extends AdminTab
 				$product->price = $product->price_tin;
 				// If a tax is already included in price, withdraw it from price
 				if ($product->tax_rate)
-					$product->price = (float)(number_format($product->price / (1 + $product->tax_rate / 100), 6));
+					$product->price = (float)(number_format($product->price / (1 + $product->tax_rate / 100), 6, '.', ''));
 			}
 			elseif (isset($product->price_tin) AND isset($product->price_tex))
 				$product->price = $product->price_tex;
