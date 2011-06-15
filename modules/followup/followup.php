@@ -310,7 +310,7 @@ class Followup extends Module
 		if(!$executed)
 		{
 			$query = '
-			SELECT id_cart, id_customer, id_email_type FROM ps_log_email
+			SELECT id_cart, id_customer, id_email_type FROM '._DB_PREFIX_.'log_email
 			WHERE id_email_type <> 4 OR date_add >= DATE_SUB(date_add,INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY)';
 			$results = Db::getInstance()->ExecuteS($query);
 			foreach ($results as $line)
