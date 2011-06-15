@@ -96,9 +96,9 @@ class Criteo extends Module
                     <center><input type="submit" class="button" name="submitCriteo" value="'.$this->l('Submit').'" /></center>
                 </form>
               	'.$this->l('URL to communicate to Criteo:').'
-                <a href="'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php">'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php</a><br />
+                <a href="'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php?token='.sha1(_COOKIE_KEY_.'exportCriteo').'">'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_csv.php?token='.sha1(_COOKIE_KEY_.'exportCriteo').'</a><br />
                 '.$this->l('URL to communicate to Criteo:').'
-                    <a href="'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php">'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php</a>
+                    <a href="'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php?token='.sha1(_COOKIE_KEY_.'exportCriteo').'">'.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/export_xml.php?token='.sha1(_COOKIE_KEY_.'exportCriteo').'</a>
        	</fieldset>';
 	}
 

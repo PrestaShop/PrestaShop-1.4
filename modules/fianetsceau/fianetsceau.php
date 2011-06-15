@@ -140,9 +140,9 @@ class FianetSceau extends Module
 	private function sendXML()
 	{
 		$SiteID = Configuration::get('FIANET_SCEAU_SITEID');
-		$order = new Order($this->id_order);
-		$customer = new Customer($order->id_customer);
-		$currency = new Currency($order->id_currency);
+		$order = new Order((int)$this->id_order);
+		$customer = new Customer((int)$order->id_customer);
+		$currency = new Currency((int)$order->id_currency);
 		$control = new SimpleXMLElement('<?xml version="1.0" encoding="ISO-8859-1"?><control></control>');
 
 		$user = $control->addChild('utilisateur');
@@ -154,7 +154,7 @@ class FianetSceau extends Module
 		
 		$info = $control->addChild('infocommande');
 		$info->addChild('siteid', $SiteID);
-		$info->addChild('refid', $order->id);
+		$info->addChild('refid', (int)$order->id);
 		
 		$total = round($order->total_paid / $currency->conversion_rate, 2);
 		$amount = $info->addChild('montant', $total);
@@ -165,7 +165,7 @@ class FianetSceau extends Module
 			FROM '._DB_PREFIX_.'connections a
 			WHERE a.id_guest = (
 				SELECT id_guest FROM '._DB_PREFIX_.'guest
-				WHERE id_customer = '.$customer->id.'
+				WHERE id_customer = '.(int)$customer->id.'
 				LIMIT 1)'));
 
 		$order_date = Db::getInstance()->getValue('
@@ -175,7 +175,7 @@ class FianetSceau extends Module
 		$customer_ip = $info->addChild('ip', $ip);		
 		$customer_ip->addAttribute('timestamp', $order_date);
 
-		$cryptKey = md5(Configuration::get('FIANET_SCEAU_PRIVATEKEY').'_'.$order->id.'+'.$order_date.'='.$customer->email);
+		$cryptKey = md5(Configuration::get('FIANET_SCEAU_PRIVATEKEY').'_'.(int)$order->id.'+'.$order_date.'='.$customer->email);
 		$control->addChild('crypt', $cryptKey);
 		
 		$XMLInfo = $control->asXML();
@@ -203,7 +203,7 @@ class FianetSceau extends Module
 		$upload_success = false;
 		if (!$res)
 		{
-			if (!($order = new Order($params['id_order'])))
+			if (!($order = new Order((int)$params['id_order'])))
 				return;
 			if ($params['newOrderStatus']->logable == 1)
 				$upload_success = self::sendXML();
@@ -220,7 +220,7 @@ class FianetSceau extends Module
 			Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'fianet_seal` a
 				SET valid = '.(int)$params['newOrderStatus']->logable.', upload_success = '.(int)$upload_success.', status = '.(int)$params['newOrderStatus']->id.', date_upd = NOW()
-				WHERE a.id = '.$res['id']);
+				WHERE a.id = '.(int)$res['id']);
 		}
 	}
 	

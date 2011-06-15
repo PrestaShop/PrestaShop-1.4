@@ -299,8 +299,8 @@ class MondialRelay extends Module
 	{
 		DB::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'mr_selected`
-			SET `id_order` = '.$params['order']->id.'
-			WHERE `id_cart` = '.$params['cart']->id);
+			SET `id_order` = '.(int)$params['order']->id.'
+			WHERE `id_cart` = '.(int)$params['cart']->id);
 	}
 	
 	public function hookBackOfficeHeader()

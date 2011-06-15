@@ -967,18 +967,6 @@ class Secuvad extends Module
 
 	public function getRemoteIPaddress()
 	{
-		if (method_exists('Tools', 'getRemoteAddr'))
-			return Tools::getRemoteAddr();
-		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND $_SERVER['HTTP_X_FORWARDED_FOR'])
-		{
-			if (strpos($_SERVER['HTTP_X_FORWARDED_FOR'], ','))
-			{
-				$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-				return $ips[0];
-			}
-			else
-				return $_SERVER['HTTP_X_FORWARDED_FOR'];
-		}
 		return $_SERVER['REMOTE_ADDR'];
 	}
 	

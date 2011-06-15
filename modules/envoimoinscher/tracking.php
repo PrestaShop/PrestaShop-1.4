@@ -64,11 +64,11 @@ if (isset($return['infoexterne']) AND isset($return['token']) AND isset($return[
 				$numRows = (int)($db->NumRows());
 				if ($numRows == 0)
 				{
-					if (Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'envoimoinscher VALUES (\''.(int)($id_order).'\', \''.$return['envoi'].'\');'));
+					if (Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'envoimoinscher VALUES (\''.(int)($id_order).'\', \''.pSQL($return['envoi']).'\');'));
 				}
 				else
 				{
-					if (Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'envoimoinscher SET shipping_number=\''.$return['envoi'].'\' WHERE id_order=\''.(int)($id_order).'\' '));	
+					if (Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'envoimoinscher SET shipping_number=\''.pSQL($return['envoi']).'\' WHERE id_order=\''.(int)($id_order).'\' '));	
 				}
 			
 			break;

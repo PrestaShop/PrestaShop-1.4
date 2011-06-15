@@ -29,6 +29,8 @@ include_once(dirname(__FILE__).'/../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../init.php');
 include_once(dirname(__FILE__).'/criteo.php');
 
+if (Tools::getValue('token') != sha1(_COOKIE_KEY_.'exportCriteo'))
+	die(Tools::displayError('The token is invalid, please check the export url in your module configuration.'));
 Criteo::buildCSV();
 
 ?>
