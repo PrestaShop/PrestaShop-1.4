@@ -380,6 +380,7 @@ $_ERRORS['deccf4daff483f5f31a2e19482f56d32'] = 'le montant total de votre comman
 $_ERRORS['2031a6bfe5f5bed90694c02868ebf2ed'] = 'Le paramètre';
 $_ERRORS['2d30f823fe8f59bbcbec1fec853e4549'] = 'La date limite est dépassée.';
 $_ERRORS['082dfb8fc5e3d1fed89956a67eed23cd'] = 'Le numéro de suivi du colis ne peut être saisi qu\'une fois la commande expédiée';
+$_ERRORS['7a9cd16fab81e60ec22c671ddffe4c55'] = 'Le token n\'est pas valide, merci de vérifier l\'url d\'exportation dans la configuration du module.';
 $_ERRORS['0bedafc96db94da3f85caa7101944eb5'] = 'La taille du fichier envoyé dépasse la limite autorisée par la directive post_max_size du fichier php.ini. Si votre serveur vous le permet, vous pouvez ajouter une directive dans votre fichier .htaccess. Par exemple :';
 $_ERRORS['3d922fc29b0773435fbc540ec1c02ba4'] = 'La taille du fichier envoyé dépasse la limite autorisée par la directive upload_max_filesize du fichier php.ini. Si votre serveur vous le permet, vous pouvez ajouter une directive dans votre fichier .htaccess. Par exemple :';
 $_ERRORS['4f12b222c9659d62afa795987259933f'] = 'Le fichier n\'a été reçu que partiellement.';

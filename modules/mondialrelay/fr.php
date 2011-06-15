@@ -2,7 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_69084dc4aa58c6977257fcbb0b47f269'] = 'Pour générer les étiquettes, vous devez enregistrer une adresse valable de votre magasin';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3d2da0d2e731d59465a92f13216cf82d'] = 'La page de contact';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_de21dc13e1ea638777fbfad49f88b332'] = 'Toutes les commandes qui auront un status';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_2345e28c9b93f368968be4781ed70f5c'] = 'Changer la configuration';
@@ -21,7 +20,7 @@ $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_a254c25adc7d10d7e9c4889484
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_4351cfebe4b61d8aa5efa1d020710005'] = 'Voir';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_2e01172e31495f41fcebcf3f831cc82c'] = 'Opération réussie';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_32b919d18cfaca89383f6000dcc9c031'] = 'Générer';
-$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_8dca07c38824ccbdd267ee4237682ae2'] = 'Historique des tickets crées';
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_4f1a377c20ace646ddd303ad1e1d243d'] = 'Historique de la création d\'étiquettes';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_e1a98101d56e29eeea312a0eb2748a92'] = 'Exp num';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_aab39f783ba2e72eaad1770f4d9ad0c4'] = 'Imprimer l\'étiquette format A4';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3eb2bc1ee46258d2a166e89398756b3e'] = 'Imprimer l\'étiquette format A5';
