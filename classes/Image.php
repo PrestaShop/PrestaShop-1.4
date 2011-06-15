@@ -387,9 +387,14 @@ class ImageCore extends ObjectModel
 	{
 		if (!$path || !$format || !is_dir($path))
 			return false;
-
-		self::recursiveDeleteImages($path, $format);
-			
+		foreach (scandir($path) as $file)
+		{
+			if (preg_match('/^[0-9]+(\-(.*))?\.'.$format.'$/', $file))
+				unlink($path.$file);	
+			else if (is_dir($path.$file) && (preg_match('/^[0-9]$/', $file)))
+				self::deleteAllImages($path.$file.'/', $format);
+		}
+		
 		// Can we remove the image folder?
 		$remove_folder = true;
 		foreach (scandir($path) as $file)
@@ -400,36 +405,9 @@ class ImageCore extends ObjectModel
 			}
 
 		if ($remove_folder)
-			@rmdir($path);
-
-		// Delete tmp images
-		foreach (scandir(_PS_TMP_IMG_DIR_) as $file)
-		{
-			if (preg_match('/^product_/', $file))
-				unlink(_PS_TMP_IMG_DIR_.$file);
-		}
-			
+			@rmdir($path);	
+		
 		return true;
-	}
-	
-	/**
-	 * Recursively deletes the product images in a folder
-	 *
-	 * @param string $path folder containing the product images to delete
-	 * @param string $format image format
-	 * @return boolean
-	 */
-	protected static function recursiveDeleteImages($path, $format)
-	{
-		if (!$path || !is_dir($path))
-			return false;
-		foreach (scandir($path) as $file)
-		{
-			if (preg_match('/^[0-9]+(\-(.*))?\.'.$format.'$/', $file))
-				unlink($path.$file);	
-			else if (is_dir($path.$file) && (preg_match('/^[0-9]$/', $file)))
-				self::recursiveDeleteImages($path.$file.'/', $format);
-		}
 	}
 	
 	/**
@@ -451,12 +429,15 @@ class ImageCore extends ObjectModel
 	}
 	
 	/**
-	 * Return the path to the folder containing the image in the new filesystem
+	 * Returns the path to the folder containing the image in the new filesystem
 	 * 
 	 * @return string path to folder
 	 */
 	public function getImgFolder()
 	{
+		if (!$this->id)
+			return false;
+			
 		if (!$this->folder)		
 			$this->folder = self::getImgFolderStatic($this->id);
 
@@ -465,12 +446,14 @@ class ImageCore extends ObjectModel
 	
 	/**
 	 * Create parent folders for the image in the new filesystem
+	 * 
+	 * @return bool success
 	 */
 	public function createImgFolder()
 	{
-		if (file_exists(_PS_PROD_IMG_DIR_.$this->getImgFolder()))
-			return;
-		mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0700, true);
+		if (!file_exists(_PS_PROD_IMG_DIR_.$this->getImgFolder()))
+			return @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0755, true);
+		return true;
 	}
 	
 	/**
@@ -485,15 +468,48 @@ class ImageCore extends ObjectModel
 	}
 	
 	/**
-	 * Return the path to the folder containing the image in the new filesystem
+	 * Returns the path to the folder containing the image in the new filesystem
 	 *
-	 * @param int $id_image
+	 * @param mixed $id_image
 	 * @return string path to folder
 	 */
 	public static function getImgFolderStatic($id_image)
 	{
+		if (!is_numeric($id_image))
+			return false;
 		$folders = str_split((string)$id_image);
 		return implode('/', $folders).'/';	
+	}
+
+	/**
+	 * Move all legacy product image files from the image folder root to their subfolder in the new filesystem.
+	 * If max_execution_time is provided, stops before timeout and returns string "timeout".
+	 *
+	 * @return mixed success or timeout
+	 */
+	public static function moveToNewFileSystem($max_execution_time = 0)
+	{
+		$start_time = time();
+		$image = null;
+		$result = true;
+		foreach (scandir(_PS_PROD_IMG_DIR_) as $file)
+		{
+			if (preg_match('/^([0-9]+\-)([0-9]+)(\-(.*))?\.jpg$/', $file, $matches))
+			{
+				// don't recreate an image object for each image type
+				if (!$image || $image->id !== (int)$matches[2])
+					$image = new Image((int)$matches[2]);
+
+				if ($image->createImgFolder())
+				{
+					$new_path = _PS_PROD_IMG_DIR_.$image->getImgPath().(isset($matches[3]) ? $matches[3] : '').'.jpg';
+					$result &= @rename(_PS_PROD_IMG_DIR_.$file, $new_path);
+				}
+			}
+			if ((int)$max_execution_time != 0 && (time() - $start_time > (int)$max_execution_time - 4))
+				return 'timeout';
+		}
+		return $result;
 	}
 }
 

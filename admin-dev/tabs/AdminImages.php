@@ -44,7 +44,6 @@ class AdminImages extends AdminTab
 			'width' => array('title' => $this->l('Width'), 'align' => 'right', 'suffix' => ' px', 'width' => 50, 'size' => 5),
 			'height' => array('title' => $this->l('Height'), 'align' => 'right', 'suffix' => ' px', 'width' => 50, 'size' => 5)
 		);
-
 		parent::__construct();
 	}
 
@@ -52,6 +51,7 @@ class AdminImages extends AdminTab
 	{
 		parent::displayList();
 		$this->displayRegenerate();
+		$this->displayMoveImages();
 	}
 
 	public function postProcess()
@@ -66,7 +66,8 @@ class AdminImages extends AdminTab
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
-		}
+		}elseif (Tools::getValue('submitMoveImages'.$this->table))
+			$this->_moveImagesToNewFileSystem();
 		else
 			parent::postProcess();
 	}
@@ -399,5 +400,42 @@ class AdminImages extends AdminTab
 			}
 		}
 		return (sizeof($this->_errors) > 0 ? false : true);
+	}
+	
+	/**
+	 * Display the block for moving images
+	 */
+	public function displayMoveImages()
+	{
+	 	global $currentIndex;
+
+		echo '
+		<h2 class="space">'.$this->l('Move images').'</h2>
+		'.$this->l('A new storage system for product images is now used by PrestaShop. It offers better performance if your shop has a very large number of products.').'<br />'.
+		$this->l('You can decide to keep your images stored in the previous system - nothing wrong with that.').
+		$this->l('You can also decide to move your images to the new storage system: in this case, click on the "Move images" button below.').'.<br /><br />'.
+		$this->l('After moving all of your product images, for best performance go to the tab "Preferences > Products" and set "Activate legacy images compatibility" to NO.').'<br /><br />';
+		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('If the process was stopped before completion, you can click on \"Move images\" again to resume moving images.'));
+		echo '
+		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+			<fieldset class="width1">
+				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Move images').'</legend><br />
+				<center><input type="Submit" name="submitMoveImages'.$this->table.'" value="'.$this->l('Move images').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" /></center>
+			</fieldset>
+		</form>';
+	}
+	
+	/**
+	 * Move product images to the new filesystem
+	 */
+	private function _moveImagesToNewFileSystem()
+	{
+		global $currentIndex;
+		ini_set('max_execution_time', $this->max_execution_time); // ini_set may be disabled, we need the real value
+		$this->max_execution_time = (int)ini_get('max_execution_time');		
+		$result = Image::moveToNewFileSystem($this->max_execution_time);
+		if ($result === 'timeout')
+			$this->_errors[] =  Tools::displayError('Not all images have been moved, server timed out before finishing. Click on \"Move images\" again to resume moving images');
+		Tools::redirectAdmin($currentIndex.'&conf=25'.'&token='.$this->token);
 	}
 }

@@ -1070,10 +1070,7 @@ class shopimporter extends ImportModule
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price_priority');
-				if (Configuration::get('PS_LEGACY_IMAGES'))
-					foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
-						if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d))
-							unlink(_PS_PROD_IMG_DIR_.$d);
+
 				Image::deleteAllImages(_PS_PROD_IMG_DIR_);
 				Image::clearTmpDir();
 				break;

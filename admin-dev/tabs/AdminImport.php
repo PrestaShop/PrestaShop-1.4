@@ -1505,10 +1505,6 @@ class AdminImport extends AdminTab
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price_priority');
-				if (Configuration::get('PS_LEGACY_IMAGES'))
-					foreach (scandir(_PS_PROD_IMG_DIR_) AS $d)
-						if (preg_match('/^[0-9]+(\-[0-9]+\-(.*))?\.jpg$/', $d) OR preg_match('/^[0-9]+\-[0-9]+\.jpg$/', $d))
-							unlink(_PS_PROD_IMG_DIR_.$d);
 				Image::deleteAllImages(_PS_PROD_IMG_DIR_);
 				break;
 			case $this->entities[$this->l('Customers')]:
@@ -1541,6 +1537,7 @@ class AdminImport extends AdminTab
 						unlink(_PS_SUPP_IMG_DIR_.$d);
 				break;
 		}
+		Image::clearTmpDir();
 		return true;
 	}
 
