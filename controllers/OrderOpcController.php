@@ -279,8 +279,6 @@ class OrderOpcControllerCore extends ParentOrderController
 		parent::displayContent();
 
 		$this->_processAddressFormat();
-
-		self::$smarty->display(_PS_THEME_DIR_.'errors.tpl');
 		self::$smarty->display(_PS_THEME_DIR_.'order-opc.tpl');
 	}
 

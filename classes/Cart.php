@@ -863,20 +863,18 @@ class CartCore extends ObjectModel
 				// Here taxes are computed only once the quantity has been applied to the product price
 				$price = Product::getPriceStatic((int)$product['id_product'], false, (int)$product['id_product_attribute'], 2, NULL, false, true, $product['cart_quantity'], false, (int)$this->id_customer ? (int)$this->id_customer : NULL, (int)$this->id, ($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 
-                $total_ecotax = $product['ecotax'] * (int)$product['cart_quantity'];
+				$total_ecotax = $product['ecotax'] * (int)$product['cart_quantity'];
 				$total_price = $price * (int)$product['cart_quantity'];
 
 				if ($withTaxes)
 				{
-				   $total_price = ($total_price - $total_ecotax) * (1 + (float)(Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) / 100);
-				   $total_ecotax = $total_ecotax * (1 + Tax::getProductEcotaxRate((int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) / 100);
+					$total_price = ($total_price - $total_ecotax) * (1 + (float)(Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) / 100);
+					$total_ecotax = $total_ecotax * (1 + Tax::getProductEcotaxRate((int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) / 100);
 					$total_price = Tools::ps_round($total_price + $total_ecotax, 2);
-
 				}
 			}
 			else
 			{
-
 				$price = Product::getPriceStatic((int)($product['id_product']), $withTaxes, (int)($product['id_product_attribute']), 2, NULL, false, true, $product['cart_quantity'], false, ((int)($this->id_customer) ? (int)($this->id_customer) : NULL), (int)($this->id), ((int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) ? (int)($this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) : NULL));
 				$total_price = Tools::ps_round($price, 2) * (int)($product['cart_quantity']);
 			}
@@ -1244,9 +1242,12 @@ class CartCore extends ObjectModel
 			foreach ($discounts as $discount)
 				if (!$discount['cumulable'])
 					return Tools::displayError('Voucher is not valid with other discounts.');
+			
+			foreach($discounts as $discount)
+				if($discount['id_discount'] == $discountObj->id)
+					return Tools::displayError('This voucher is already in your cart');
 		}
-		if (is_array($discounts) AND in_array($discountObj->id, $discounts))
-			return Tools::displayError('This voucher is already in your cart');
+		
 		$groups = Customer::getGroupsStatic($this->id_customer);
 
 		if (($discountObj->id_customer OR $discountObj->id_group) AND ($this->id_customer != $discountObj->id_customer AND !in_array($discountObj->id_group, $groups)))
