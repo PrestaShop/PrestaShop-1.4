@@ -1576,7 +1576,7 @@ class AdminImport extends AdminTab
 					break;
 				}	
 			}
-			elseif (!file_exists($_FILES['file']['tmp_name']) OR !@rename($_FILES['file']['tmp_name'], dirname(__FILE__).'/../import/'.$_FILES['file']['name'].'.'.date('Ymdhis')))
+			elseif (!file_exists($_FILES['file']['tmp_name']) OR !@move_uploaded_file($_FILES['file']['tmp_name'], dirname(__FILE__).'/../import/'.$_FILES['file']['name'].'.'.date('Ymdhis')))
 				$this->_errors[] = $this->l('an error occurred while uploading and copying file');
 			else
 				Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=18');
