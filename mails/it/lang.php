@@ -24,7 +24,6 @@ $_LANGMAIL['Newsletter confirmation'] = 'Conferma newsletter';
 $_LANGMAIL['Newsletter voucher'] = 'Buono sconto newsletter';
 $_LANGMAIL['Your wishlist\\\'s link'] = 'Il tuo collegamento alla lista dei desideri';
 $_LANGMAIL['Message from '] = 'Messaggio da';
-$_LANGMAIL[' $subject'] = 'Oggetto';
 $_LANGMAIL['Your cart and your discount'] = 'Il tuo carrello e il tuo sconto';
 $_LANGMAIL['Thanks for your order'] = 'Grazie dell\'ordine';
 $_LANGMAIL['You are one of our best customers'] = 'Sei uno dei nostri clienti migliori';
@@ -35,5 +34,6 @@ $_LANGMAIL['Error reporting from your PayPal module'] = 'Errore dal tuo modulo P
 $_LANGMAIL['Congratulations!'] = 'Congratulazioni!';
 $_LANGMAIL['Referral Program'] = 'Programma di presentazione';
 $_LANGMAIL['A friend sent you a link to'] = 'Un amico ti ha inviato un link per';
+$_LANGMAIL[' $subject'] = 'Oggetto';
 
 ?>

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_a25569b97604bddcfba04d7eb9950eeb'] = 'Pour générer des étiquettes, vous devez inscrire une adresse correcte pour votre boutique sur ';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3d2da0d2e731d59465a92f13216cf82d'] = 'La page de contact';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_de21dc13e1ea638777fbfad49f88b332'] = 'Toutes les commandes qui auront un status';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_2345e28c9b93f368968be4781ed70f5c'] = 'Changer la configuration';
