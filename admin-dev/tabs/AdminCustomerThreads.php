@@ -91,7 +91,7 @@ class AdminCustomerThreads extends AdminTab
 	
 	public function postProcess()
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex, $cookie, $link;
 		
 		if ($id_customer_thread = (int)Tools::getValue('id_customer_thread'))
 		{
@@ -171,7 +171,7 @@ class AdminCustomerThreads extends AdminTab
 					}
 					$params = array(
 					'{reply}' => nl2br2(Tools::getValue('reply_message')),
-					'{link}' => Tools::getHttpHost(true).__PS_BASE_URI__.'contact-form.php?id_customer_thread='.(int)($ct->id).'&token='.$ct->token);
+					'{link}' => $link->getPageLink('contact-form.php', true).'?id_customer_thread='.(int)($ct->id).'&token='.$ct->token);
 					Mail::Send($ct->id_lang, 'reply_msg', Mail::l('An answer to your message is available'), $params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment);
 					$ct->status = 'closed';
 					$ct->update();
