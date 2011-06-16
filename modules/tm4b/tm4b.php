@@ -176,6 +176,9 @@ class Tm4b extends Module
 		if (!(int)($this->_alert_update_quantity_active) OR empty($this->_new_order_numbers))
 			return ;
 
+		if (is_object($params['product']))
+			$params['product'] = get_object_vars($params['product']);
+
 		$product = $params['product'];
 
 		$qty = (int)($params['product']['quantity_attribute'] ? $params['product']['quantity_attribute'] : $params['product']['stock_quantity']) - (int)($params['product']['quantity']);
