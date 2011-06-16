@@ -167,7 +167,7 @@ class AdminCountries extends AdminTab
 				});
 				$("#useLastDefaultLayout").mouseover(function()
 				{
-					switchExplanationText("'.$this->l('Will display back you\'re last registered layout').'");
+					switchExplanationText("'.$this->l('Will display back your last registered layout').'");
 				});
 				$("#useDefaultLayoutSystem").mouseover(function()
 				{
