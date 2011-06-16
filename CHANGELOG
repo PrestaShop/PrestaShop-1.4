@@ -24,6 +24,188 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.3.0 - 7115 (2011-06-16)  #
+####################################
+
+	Added Features:
+
+	[+] Installer : Refuse to index the page by robots
+
+	[+] BO : Added button "Add my IP"
+	[+] BO : Adding pagination to the customers list
+	[+] BO : added the option to move product images to the new filesystem
+
+	[+] Classes : added manufacturer name and id in ProductSale::getBestSales();
+	[+] Classes : added manufacturer name and id in ProductSale::getBestSales(); without sql error ;)
+
+	[+] MO : MondialRelay, add fields personalization and fix js
+	[+] MO : Refactoring Module dejala and LiveZilla
+	[+] MO : layered module - real time URL building (ability to give the URL to someone)
+
+	Improved/changed features:
+
+	[*] Project : Removed "if class_exists" in autoload
+
+	[*] Installer : Now when you install Prestashop, all languages are disabled expect the default language of your shop
+
+	[*] FO : Fixed Bug #PSCFI-1342 - Gest customer transformation is only applicable when there is no non-guest customer with the same email
+	[*] FO : Fixed Bug #PSCFI-2241 - Error in JS tools.js
+
+	[*] BO : Added some help on the search configuration page
+	[*] BO : detailled error message when you import from csv
+
+	[*] Classes : #PSCFI-2061 - removed return statement in constructor
+	[*] Classes : fix issue on cache object return value in method getPosition
+
+	[*] MO : Fixed bug #PSCFI-2242 - Changes from the 1.3.x version have not been added to the 1.4 version
+	[*] MO : Treepodia module can now handle more products on their feed
+	[*] MO : eBay module - Some improvments
+	[*] MO : fix issue on loyalty module
+
+	[*] WS : clean code
+	[*] WS : clean code
+
+	Fixed bugs:
+
+	[-] PROJECT : Bug fixed #PSCFI-2119 - Cache was not working well with getRow and getValue (Thanks Remi for the fix :)
+	[-] Project : remove unused 4 param in Tools::displayPrice() #PSCFI-2063
+	[-] Project : the autoload now accept not "Core" classes in classes folder.
+
+	[-] Installer : Undefined variable languages
+	[-] Installer : add a ";" to SQL requeste
+
+	[-] FO : Add a defined list of required fields for a susbscription form
+	[-] FO : Bug Fixed #PSCFI-1515 - Specific price cache is useless in priceCalculation
+	[-] FO : Bug Fixed #PSCFI-2090 - Group discount + discount = incorrect combination price
+	[-] FO : Bug Fixed #PSCFI-2105 - Voucher discount on total amount
+	[-] FO : Bug Fixed #PSCFI-2107 - Required Field "Tax Identification"
+	[-] FO : Bug Fixed #PSCFI-2161 - Rounding issues
+	[-] FO : Bug Fixed (related #PSCFI-2250) - Out of stock behavior + comparison page
+	[-] FO : BugFix #PSCFI-2267 : Forbidden access to tpl files
+	[-] FO : BugFix #PSCFI-2271 : Cumulable voucher can be added more than one time to cart
+	[-] FO : Fix Undefined value when adding a product to the cart
+	[-] FO : Fix a bug with invoice address on OPC #PSCFI-2099
+	[-] FO : Fix the default fields for a new register user form
+	[-] FO : Fixed Bug #PSCFI-1730 - CCC mustn't be included each time with https
+	[-] FO : Fixed Bug #PSCFI-2163 - Product list dont show "add to cart" button, if minimal qty to order is set to something != 1, it must be <= 1
+	[-] FO : Fixed Bug #PSCFI-2163 - Product minimal quantity by default must be 1 and not 0
+	[-] FO : Fixed Bug #PSCFI-2192 - Nomalization
+	[-] FO : Fixed Bug #PSCFI-2241 - Error in JS tools.js
+	[-] FO : Fixed bug #PSCFI-2088 - change id attribute adress_alias to address_alias.
+	[-] FO : Fixed bug #PSCFI-2120 - Customization image delete button doesn't work. The link was commented.
+	[-] FO : Fixed bug #PSCFI-2150 - Wrong url when we used the sort option
+	[-] FO : Fixed bug PSCFI-2135, Refreshing price is fixed when the ajax setting of blockcart is turned off
+	[-] FO : Function usingSecureMode does not work properly (depends on the server configuration)
+	[-] FO : PSCFI-2118 - Substr of payment name compared to payment name (payment name musnt be truncated).
+	[-] FO : PSCFI-2118 - Substr of payment name compared to payment name (payment name musnt be truncated).
+	[-] FO : Remove blocklayered CSS/Js files on page we dont need them (and they make bugs with pager)
+	[-] FO : Rounding issues
+	[-] FO : Smarty 2 compatibility
+	[-] FO : Validator don't work fine with non ansi chars
+	[-] FO : fix an URL never rewrited in stores.js #PSCFI-1931
+	[-] FO : fixed bug #PSCFI-2153 - CreditSlip PDF not accessible from FrontOffice
+	[-] FO : fixed bug #PSCFI-2171 - Group Access Not Working
+	[-] FO : fixed bug #PSCFI-2203 - [OPC] AJAX login fails and freezes when user has no address defined.
+	[-] FO : fixed bug #PSCFI-2279 - voucher add to cart technical error
+	[-] FO : fixed bug - breadcrumb was not display in some case.
+	[-] FO : removing the link on the category label #PSCFI-2065
+
+	[-] BO : Better understanting for address layout, Add a ignore class list for the liable fields and fix translsation
+	[-] BO : Bug fixed on CSV import (Thanks to Magavenue :)
+	[-] BO : BugFix #PSCFI-2289 - AdminImport not working in some cases
+	[-] BO : Fix tax calcul in attribute generator #PSCFI-2095
+	[-] BO : Fixed #PSCFI-444 - flag can be updated even if .htaccess is not writable
+	[-] BO : Fixed Bug #PSCFI-2200 - On installing languages, bad adding on table profile_lang (id_lang and id_profile are reversed)
+	[-] BO : Fixed Bug #PSCFI-2263 - Mexico must be set as a country with states
+	[-] BO : Fixed Bug PSCFI-2198, The current editing element will not be removed if the user cancel it and a better fonctionality of Echap key.
+	[-] BO : Fixed bug #PSCFI-2092 - Missing translation on contact details
+	[-] BO : Fixed bug PSCFI-2207, Fixed a bad variabled used with vat.
+	[-] BO : Fixed invoice date when database is MySQL 4.
+	[-] BO : fixed bug #PSCFI-2247 - AdminCustomerThreads (Customer Service) displays wrong currency symbol in BO
+	[-] BO : fixed bug #PSCFI-2248 - browser error "unterminated string constant" in AdminTracking.php
+	[-] BO : fixed bug #PSCFI-2255 - PDF PS_INVOICE_PREFIX without iconv
+	[-] BO : fixed image caching when memory_limit = -1
+	[-] BO : fixed overflowing admin sub-tabs in themes flashyturtle and origins
+	[-] BO : fixed rewrite link warning message when importing
+	[-] BO : removed hard coded tmp img link
+
+	[-] Classes : Bug fixed in Language class, delete method when no i18n file were created for a language.
+	[-] Classes : fixed bug #PSCFI-2124 - Misuse of redirect (Tools.php) in Order Process (and probably other areas) causes failed flow.
+	[-] Classes : fixed bug #PSCFI-2141 - Object->add() should not use Tools::getValue() - final part
+	[-] Classes : fixed bug #PSCFI-2141 - Object->add() should not use Tools::getValue() - first part
+	[-] Classes : fixed bug in property_exists function
+	[-] Classes : fixed calls of non static method as static in order controllers
+
+	[-] Core : fixed bug #PSCFI-2143 - Insufficient check for crawler populated ghost carts in CartController
+
+	[-] MO : #Fixed bug PSCFI-2134 - Json parse error. Need ' instead of \'
+	[-] MO : Add Constants cart directly to the module for the PrestaShop 1.3 compatibility
+	[-] MO : Bug fixed #PSCFI-2122 - Problem on rounded values
+	[-] MO : Bug fixed #PSCFI-2122 - Problem on tax values
+	[-] MO : Bug fixed #PSCFI-2238 - Module USPS was send container type to USPS
+	[-] MO : Bug fixed eBay module - Wrong flag for resync option
+	[-] MO : Categories shown twice (or more) on block category when customer have more than one group
+	[-] MO : Code Cleaning
+	[-] MO : Fix blocklayered module to allow user to sort products list (now use default value from BO, and refresh using ajax) #PSCFI-2096
+	[-] MO : Fix console.log IE
+	[-] MO : Fix minors bug and translations
+	[-] MO : Fix smarty display for 1.3
+	[-] MO : Fix translations
+	[-] MO : Fixed Bug #PSCFI-2182 - Loyalty module (loyalty-program.php) return wrong category list and too long list on vast catalog
+	[-] MO : Fixed Bug #PSCFI-2191 - DIBS module test paramter is assigned with wrong values.
+	[-] MO : Fixed Bug #PSCFI-2191 - DIBS module test paramter is assigned with wrong values.
+	[-] MO : Fixed Bug #PSCFI-2192 - Required fields and ajax cart dont work as expected
+	[-] MO : Fixed Bug #PSCFI-2192 - Required fields and ajax cart dont work as expected
+	[-] MO : Fixed Bug #PSCFI-2264 - Left scroll button is visible when the page is loaded whereas there is no products on the left.
+	[-] MO : Fixed SQL error on layered module
+	[-] MO : Fixed SQL/PHP errors on layered module when category is empty
+	[-] MO : Fixed bug - Incorrect validation for discount_value_percentage field
+	[-] MO : Fixed bug - Possibility to put negative values
+	[-] MO : Fixed bug - Values are not passed in an htmlentities function before display
+	[-] MO : Fixed bug : Ajax with the button add cart properly works when an product image doesn't exist
+	[-] MO : Fixed bug PSCFI-2187, Use back price_wt instead of total_wt wthen product is added to google cart.
+	[-] MO : Fixed bug when the hook is detached of the right
+	[-] MO : Fixed errors, and add nb items per page to the layered block module
+	[-] MO : Fixed norms
+	[-] MO : Had a security token on eBay module
+	[-] MO : Mistake in the commit 6952
+	[-] MO : MondialRelay fix french franslations
+	[-] MO : MondialRelay is now supported for PrestaShop 1.3. Clean unused code.
+	[-] MO : MondialRelay, add french translation
+	[-] MO : Norm pass
+	[-] MO : Normalization + better directory clean
+	[-] MO : PayPal create account link for Spain changed
+	[-] MO : added cast in blockrss
+	[-] MO : added check on secure key in moneybookers validation
+	[-] MO : added token on export and send mail on twenga module
+	[-] MO : carriercompare - undefined variable
+	[-] MO : eBay module - fix for PrestaShop 1.3.x and many others improvments
+	[-] MO : fix french translation for statscarrier
+	[-] MO : fixed Fatal Error when payment name in osc bdd has character inappropriate // :p
+	[-] MO : fixed bug #PSCFI-2165 - Module ImporterOsc - After importing, changing orders state, in list mode : date of today, in order detail mode : real date
+	[-] MO : fixed bug #PSCFI-2194 - Layered when reset display inactive products
+	[-] MO : fixed bug #PSCFI-2219 - Incorrect usage of numRows()
+	[-] MO : fixed bug #PSCFI-2229 - added help text on specific option
+	[-] MO : fixed bug #PSCFI-2240 - Layered navigation - overloading template file (.tpl) is not working
+	[-] MO : fixed bug #PSCFI-2280 - module customer follow up has bug when install in back office
+	[-] MO : fixed bug - import osc was not display in shopImport module
+	[-] MO : fixed bug on instant search with Internet Explorer 7
+	[-] MO : fixed bug on tm4b
+	[-] MO : fixed error when uninstall socolissimo module //thanks to Alain ouftete
+	[-] MO : layered navigation pagination added  ;) #PSCFI-2137 #PSCFI-2085
+	[-] MO : layered navigation pagination fixed undefined variable
+	[-] MO : now only discount bound to a valid order is shown (Loyalty module)
+
+	[-] WS : Bug fixed due to Core modifications
+	[-] WS : Factorization of WebserviceRequest
+	[-] WS : Small fix when error happens
+	[-] WS : Support for categories POST - PSCFI-1416
+	[-] WS : Support for image product POST method PSCFI-675, PSCFI-1416
+
+	[-] PDF : Bug Fixed - Invoice: tax detail line with reduction
+
+
+####################################
 #   v1.4.2.5 - 6780 (2011-05-30)  #
 ####################################
 
