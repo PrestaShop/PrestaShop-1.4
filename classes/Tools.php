@@ -1929,7 +1929,7 @@ FileETag INode MTime Size
 	 */
 	public static function property_exists($class, $property)
 	{
-		if (function_exists('proprty_exists'))
+		if (function_exists('property_exists'))
 			return property_exists($class, $property);
 			
         if (is_object($class))
