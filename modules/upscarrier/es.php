@@ -41,6 +41,8 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_fe78f3efbfa84d8485d589031596c5b8'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_e6fa03fa9e7d145171a6d2668fff42b0'] = 'Small Express Box';
 $_MODULE['<{upscarrier}prestashop>upscarrier_6c76ef0e25b3771e10e409179d2808ae'] = 'Medium Express Box';
 $_MODULE['<{upscarrier}prestashop>upscarrier_39a6651a951bf99fa4c3198a271a9c27'] = 'Large Express Box';
+$_MODULE['<{upscarrier}prestashop>upscarrier_386aad80d82f8245e9ef80352a2240e8'] = 'Todos los artículos en un solo paquete';
+$_MODULE['<{upscarrier}prestashop>upscarrier_f35eb2a913a3fd6fd8e661012cf0ebd8'] = 'Dividir un artículo por paquete';
 $_MODULE['<{upscarrier}prestashop>upscarrier_ff00c491eedc4e610f8ec9d02a46cf1b'] = 'Estado del módulo UPS';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a6adb58e6abd44d96cec7996c0e38629'] = 'El transportista UPS es funcional';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3184c79dd129c671b26afaefd7614488'] = 'El transportista UPS no está completamente configurado, debe:';
@@ -84,6 +86,8 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_4db2ac4ca0617d113b4df01fe69d3118'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_da42caf26ef85de3d7e48e16ca60b891'] = 'Tipo de paquete';
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d2ee0603dfce09b57d60db628cde269'] = 'Elija el tipo de paquete…';
 $_MODULE['<{upscarrier}prestashop>upscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Elija en la lista de tipos de paquete el que desea seleccionar por defecto.';
+$_MODULE['<{upscarrier}prestashop>upscarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Modo de cálculo';
+$_MODULE['<{upscarrier}prestashop>upscarrier_37fa4a1a7af70286d9067ac63555cbf4'] = 'Usando el modo de cálculo \"Todos los artículos en un solo paquete\", automáticamente usará el tamaño por defecto de embalaje, tipo de embalaje y entrega. Configuraciones específicas para las categorías de productos no se utilizarán.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servicio de entrega';
 $_MODULE['<{upscarrier}prestashop>upscarrier_78945de8de090e90045d299651a68a9b'] = 'Disponible ';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'No disponible';

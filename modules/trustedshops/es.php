@@ -90,7 +90,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8e3ee664fd829b2fa78533957c
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_259060bb469ed1256c2e758e32da126f'] = 'El certificado';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8512ae7d57b1396273f76fe6ed341a23'] = 'idioma';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8638c4fb6ff62122acd9927c4edbd22c'] = 'ha sido suprimido';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_3fb2ea84b90d4ea9fab48ea356a2319b'] = 'Se ha añadido el login del certificado';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a599ec4408db04d4bb9e4edd78b849f4'] = 'Certificado de inicio de sesión es un éxito';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b18f5630d5ffdfcee5ab0a44ee6e1eb6'] = 'Tiene que crear un nombre de usuario y una contraseña antes de efectuar cualquier cambio.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_e32263743aac776e5e32fc385d8b669a'] = 'Trusted Shops es el sello de calidad europea para sitios de venta en línea con garantía de reembolso para sus clientes. En el momento de la certificación, su tienda está sometida a una auditoría que agrupa más de 1000 criterios diferentes que respetan las exigencias de las asociaciones de protección de los consumidores, así como las legislaciones nacionales y europeas. ';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_2c786e15a571a442adf85460e6358883'] = '¡Más confianza implica más ventas!';
@@ -156,7 +156,7 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9dc0b7bdd32d5e30f4d71eb5a
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b30cb94d482485bf0bf7015520ffb557'] = 'Mostrar widget en la tienda';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_75a1b325a14f20c2cbb97061d1340451'] = 'Link de evaluación en la tienda';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_ab2ededbdea4f61279ec75b5777d39a0'] = 'Link de evaluación en la página de confirmación';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_8c9da127717bedb90821f29c6de12ce7'] = 'Link de evaluación en un email separado';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_ef0e903dffb94fd6d4362340d2f74a15'] = 'Enviar valoración de enlaces en un correo electrónico por separado';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_d344c0ebc1a11797405e4115a8260deb'] = 'Enviar el email después de';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_44fdec47036f482b68b748f9d786801b'] = 'día(s)';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9013b630235e2a5c48b7357e23e1bd2f'] = 'IMPORTANTE:';
