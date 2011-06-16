@@ -228,7 +228,7 @@ class Twenga extends PaymentModule
 			</style>
 			<div id="mainContent" >
 				<p>'.$this->l('If you subscribe on Twenga, the activation of this module is mandatory.').
-				'<br /><br />'.$this->l('In case of dysfunction, uninstall this module, install the newer version here and fill up again Twenga hashkey and login.').'
+				'<br /><br />'.$this->l('If there\'s a problem, uninstall this module, install the newer version here and enter the Twenga hashkey again and log in.').'
 				<br /><br />'.$this->l('To unsubscribe or for any question, please contact Twenga on your account.').'
 				<div style="margin: 10px 0 5px 0; font-size:14px; color:#FFF; text-align:center;">
 				<b><a '.(($_POST['type'] == 'uninstall') ? 

@@ -370,7 +370,7 @@ class Hipay extends PaymentModule
 			</tr>
 			<tr>
 				<td><img src="../modules/'.$this->name.'/2.png" alt="step 2" /></td>
-				<td class="tab2">'.$this->l('Active theHipay solution in you Prestashop, it\'s free !').'</td>
+				<td class="tab2">'.$this->l('Activate the Hipay solution in your Prestashop, it\'s free!').'</td>
 			</tr>
 			<tr>
 				<td><img src="../modules/'.$this->name.'/3.png" alt="step 3" /></td> 

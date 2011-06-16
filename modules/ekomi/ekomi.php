@@ -86,7 +86,7 @@ class Ekomi extends Module
 						<label class="t" for="ekomi_display_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 						<input type="radio" name="ekomi_display" id="ekomi_display_off" value="0" checked="checked" />
 						<label class="t" for="ekomi_display_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-						<p class="clear">'.$this->l('Show or don\'t show the block (orders will be sent to eKomi either you choose to hide or display the block).').'</p>
+						<p class="clear">'.$this->l('Show or don\'t show the block (orders will be sent to eKomi whether you choose to hide or display the block).').'</p>
 					</div>
 					<p class="clear">'.$this->l('Please fill the form with the data that eKomi gives you.').'</p>
 				</div>

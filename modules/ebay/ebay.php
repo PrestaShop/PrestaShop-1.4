@@ -689,7 +689,7 @@ class Ebay extends Module
 					<label>'.$this->l('Paypal Identifier (e-mail)').' : </label>
 					<div class="margin-form">
 						<input type="text" size="20" name="ebay_paypal_email" value="'.Tools::getValue('ebay_paypal_email', Configuration::get('EBAY_PAYPAL_EMAIL')).'" />
-						<p>'.$this->l('You have to set your paypal e-mail account, it\'s the only paiement available with this module').'</p>
+						<p>'.$this->l('You have to set your PayPal e-mail account, it\'s the only payment available with this module').'</p>
 					</div>
 					<label>'.$this->l('Shipping method').' : </label>
 					<div class="margin-form">

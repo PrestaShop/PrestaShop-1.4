@@ -650,7 +650,7 @@ class AdminTranslations extends AdminTab
 					}
 					else
 					{
-						$this->_errors[] = Tools::displayError('HTML mails templates cannot contain JavaScript code.');
+						$this->_errors[] = Tools::displayError('HTML e-mail templates cannot contain JavaScript code.');
 					}
 				}
 			}
