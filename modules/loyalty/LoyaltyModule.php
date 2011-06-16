@@ -184,7 +184,10 @@ class LoyaltyModule extends ObjectModel
 		$query = '
 		SELECT f.id_discount AS id_discount, f.date_upd AS date_add
 		FROM `'._DB_PREFIX_.'loyalty` f
-		WHERE f.id_customer = '.(int)($id_customer).' AND id_discount > 0';
+		LEFT JOIN `'._DB_PREFIX_.'orders` o ON (f.`id_order` = o.`id_order`)
+		WHERE f.`id_customer` = '.(int)($id_customer).' 
+		AND f.`id_discount` > 0
+		AND o.`valid` = 1';
 		if ($last === true)
 			$query.= ' ORDER BY f.id_loyalty DESC LIMIT 0,1';
 		$query.= ' GROUP BY f.id_discount';
