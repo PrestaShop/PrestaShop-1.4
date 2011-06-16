@@ -183,7 +183,7 @@ class MRGetTickets implements IMondialRelayWSMethod
 		
 		$id_order = $this->_getOrderIdWithExpeditionNumber($params['Expeditions']);
 		if ($client->fault)
-			$errors[$errorTotal++] = $this->_mondialRelay->l('Its seems the request isn\'t valide :').
+			$errors[$errorTotal++] = $this->_mondialRelay->l('It seems the request isn\'t valid:').
 				$result;
 				
 		$result = $result['WSI2_GetEtiquettesResult'];

@@ -430,7 +430,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		$success = &$this->_resultList['success'][$params['NDossier']];
 		
 		if ($client->fault)
-			$errors[] = $this->_mondialRelay->l('Its seems the request isn\'t valid :').
+			$errors[] = $this->_mondialRelay->l('It seems the request isn\'t valid:').
 				$result;
 				
 		$result = $result['WSI2_CreationEtiquetteResult'];

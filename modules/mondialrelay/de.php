@@ -88,7 +88,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_61e70b58e38fd01daa254f44c4fa264
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_bba366864d25056c941b72f18ef79e7c'] = 'Dieser Fehler ist nicht bekannt :';
 $_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Lieferung nach';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_a1c3470a944b9625cfb924fd15c8bdbf'] = 'Bitte mindestens eine Bestellung auswählen';
-$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_ee22121d08c09c8f68bfad2bf9fd3ec1'] = 'Die Anfrage scheint ungültig zu sein';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_e6940b76f045c8bc0aaaa5b2476cdaf7'] = 'Die Anfrage scheint ungültig zu sein';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_c9b4de92f371ae545ad6f051c07d58ca'] = 'Fehler Nummer:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_ea5f761be4e4888eabf4e1501d7817d1'] = 'Detail:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_eabb11bf9623f08409a0a4c9d035a336'] = 'Expedition Nummer:';

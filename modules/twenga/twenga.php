@@ -678,7 +678,7 @@ class Twenga extends PaymentModule
 				.'<ul>'
 					.'<li>'.$this->l('Step 1: Retrieve your Twenga hashkey from your Twenga Ready to Sell account (tools>tracking>hashkey). Also click on "Test the tracking".');			
 				$str_return .='
-					<li>'.$this->l('Step 2: Come back here and paste it here in the field „hash key“. Click on Save and Activate.').'</li>
+					<li>'.$this->l('Step 2: Come back here and paste it in the "hash key" field. Click on Save and Activate.').'</li>
 				</ul>
 				<p><strong>'.$this->l('You want to sign up to Twenga Ready to Sell ?').'</strong></p>
 				<p>'.$this->l('How to list your product on Twenga.co.uk:').'</p>
@@ -690,7 +690,7 @@ class Twenga extends PaymentModule
 			
 				$str_return .='
 					<li>'.$this->l('Step 2: Fill in the Twenga sign up form').'</li>
-					<li>'.$this->l('Step 3: When you got the Twenga hash-key by Email, come back here and paste it here in the field „hash key“. Click on Save and Activate.').'</li>
+					<li>'.$this->l('Step 3: When you receive the Twenga hash-key by e-mail, come back here and paste it in the "hash key" field. Click on Save and Activate.').'</li>
 				</ul>';
 
 				if ($isoUser == 'fr')

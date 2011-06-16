@@ -112,7 +112,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_1f87346a16cf80c372065de3c54c86d
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_e7a6ca4e744870d455a57b644f696457'] = '¡Gratis!';
 $_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Entregado a';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_a1c3470a944b9625cfb924fd15c8bdbf'] = 'Por favor, seleccione al menos un pedido';
-$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_ee22121d08c09c8f68bfad2bf9fd3ec1'] = 'Parece que la petición no es válida:';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_e6940b76f045c8bc0aaaa5b2476cdaf7'] = 'Parece que la petición no es válida:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_c9b4de92f371ae545ad6f051c07d58ca'] = 'Hay un número de error:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_ea5f761be4e4888eabf4e1501d7817d1'] = 'Detalles:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_eabb11bf9623f08409a0a4c9d035a336'] = 'Envío Número:';

@@ -74,7 +74,7 @@ class ParentOrderControllerCore extends FrontController
 			if (!$duplication OR !Validate::isLoadedObject($duplication['cart']))
 				$this->errors[] = Tools::displayError('Sorry, we cannot renew your order.');
 			elseif (!$duplication['success'])
-				$this->errors[] = Tools::displayError('Missing items - we are unable renew your order');
+				$this->errors[] = Tools::displayError('Missing items - we are unable to renew your order');
 			else
 			{
 				self::$cookie->id_cart = $duplication['cart']->id;

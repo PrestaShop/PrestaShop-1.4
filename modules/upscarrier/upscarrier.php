@@ -575,7 +575,7 @@ class UpsCarrier extends CarrierModule
 								foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
 									$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('ups_carrier_calcul_mode', Configuration::get('UPS_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
 					$html .= '</select>
-					<p>' . $this->l('Using the calcul mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specifics configurations for categories or product won\'t be use.') . '</p>
+					<p>' . $this->l('Using the calcul mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specific configurations for categories or product won\'t be used.') . '</p>
 					</div>';
 
 					if (Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))

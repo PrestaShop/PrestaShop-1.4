@@ -72,7 +72,7 @@ class AdminLanguages extends AdminTab
 				if (!imageResize($tmpName, _PS_IMG_DIR_.'c/'.$language.'.jpg'))
 					$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your category folder.');
 				if (!imageResize($tmpName, _PS_IMG_DIR_.'m/'.$language.'.jpg'))
-					$this->_errors[] = Tools::displayError('n error occurred while copying no-picture image to your manufacturer folder');
+					$this->_errors[] = Tools::displayError('An error occurred while copying no-picture image to your manufacturer folder');
 				else
 				{	
 					$imagesTypes = ImageType::getImagesTypes('products');

@@ -12,7 +12,7 @@ $_MODULE['<{ekomi}prestashop>ekomi_c4fda5e26d4854b8718850c90694a54c'] = 'e-mail 
 $_MODULE['<{ekomi}prestashop>ekomi_c48c140af813696592daafbabe6d8b9f'] = 'script eKomi';
 $_MODULE['<{ekomi}prestashop>ekomi_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Attivo';
 $_MODULE['<{ekomi}prestashop>ekomi_b9f5c797ebbf55adccdd8539a65a0241'] = 'Disattivato';
-$_MODULE['<{ekomi}prestashop>ekomi_ccf7919cbd0248b0f86a8c39f74da5d0'] = 'Mostrare oppure no il blocco (gli ordini verranno inviati a eKomi e scegli di nascondere o visualizzare il blocco)';
+$_MODULE['<{ekomi}prestashop>ekomi_ced21fe73878a0139d427ab2927f6772'] = 'Mostrare oppure no il blocco (gli ordini verranno inviati a eKomi e scegli di nascondere o visualizzare il blocco)';
 $_MODULE['<{ekomi}prestashop>ekomi_0767b05248fcba405524f792944858ef'] = 'Per favore, compila il modulo con i dati che eKomi ti dà.';
 $_MODULE['<{ekomi}prestashop>ekomi_c9cc8cce247e49bae79f15173ce97354'] = 'Salva';
 

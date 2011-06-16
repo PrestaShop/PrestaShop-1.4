@@ -87,7 +87,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_da42caf26ef85de3d7e48e16ca60b891'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d2ee0603dfce09b57d60db628cde269'] = 'Choisissez le type de paquet ...';
 $_MODULE['<{upscarrier}prestashop>upscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Choisissez dans la liste des types de paquet celui par défaut.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Mode de calcul';
-$_MODULE['<{upscarrier}prestashop>upscarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utilisation du mode de calcul : \"Tous les articles dans un seul paquet\" utilisera automatiquement la taille des emballages par défaut, le type d\'emballage et de livraison. Les configurations spécifiques pour les catégories ou un produit ne seront pas utilisées.';
+$_MODULE['<{upscarrier}prestashop>upscarrier_37fa4a1a7af70286d9067ac63555cbf4'] = 'Utilisation du mode de calcul : \"Tous les articles dans un seul paquet\" utilisera automatiquement la taille des emballages par défaut, le type d\'emballage et de livraison. Les configurations spécifiques pour les catégories ou un produit ne seront pas utilisées.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Service de livraison';
 $_MODULE['<{upscarrier}prestashop>upscarrier_78945de8de090e90045d299651a68a9b'] = 'Disponible';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'Non disponible';

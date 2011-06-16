@@ -129,7 +129,7 @@ class AddressFormatCore extends ObjectModel
 			}
 			
 			if (!$isValide)
-				$this->_errorFormatList[] = Tools::displayError('This property doesn\'t exist into the class or is forbidden').
+				$this->_errorFormatList[] = Tools::displayError('This property doesn\'t exist in the class or is forbidden').
 				': '.$className.': '.$fieldName;
 				
 			unset($obj);
