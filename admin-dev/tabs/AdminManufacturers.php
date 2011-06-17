@@ -46,6 +46,7 @@ class AdminManufacturers extends AdminTab
 		$countries = Country::getCountries((int)($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
+		
 		$this->fieldsDisplayAddresses = array(
 		'id_address' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'm!manufacturer_name' => array('title' => $this->l('Manufacturer'), 'width' => 100),
@@ -76,10 +77,6 @@ class AdminManufacturers extends AdminTab
 			'products' => array('title' => $this->l('Products'), 'align' => 'right', 'tmpTableFilter' => true, 'width' => 20),
 			'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false)
 		);
-
-		$countries = Country::getCountries((int)($cookie->id_lang));
-		foreach ($countries AS $country)
-			$this->countriesArray[$country['id_country']] = $country['name'];
 
 		parent::__construct();
 	}
