@@ -296,9 +296,9 @@ abstract class PaymentModuleCore extends Module
 					if ($objDiscount->id_discount_type == 2 AND in_array($objDiscount->behavior_not_exhausted, array(1,2)))
 						$shrunk = true;
 
-					if ($shrunk AND ($total_discount_value + $value) > ($order->total_products + $order->total_shipping + $order->total_wrapping))
+					if ($shrunk AND ($total_discount_value + $value) > ($order->total_products_wt + $order->total_shipping + $order->total_wrapping))
 					{
-						$amount_to_add = ($order->total_products + $order->total_shipping + $order->total_wrapping) - $total_discount_value;
+						$amount_to_add = ($order->total_products_wt + $order->total_shipping + $order->total_wrapping) - $total_discount_value;
 						if ($objDiscount->id_discount_type == 2 AND $objDiscount->behavior_not_exhausted == 2)
 						{
 							$voucher = new Discount();
