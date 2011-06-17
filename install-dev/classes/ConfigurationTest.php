@@ -225,6 +225,6 @@ class	ConfigurationTest
 	
 	static function		test_dom()
 	{
-		return extension_loaded('Doms');
+		return extension_loaded('Dom');
 	}
 }
