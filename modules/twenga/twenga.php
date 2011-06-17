@@ -210,6 +210,8 @@ class Twenga extends PaymentModule
 				(($_POST['type'] == 'reset') ? $this->l('Reset') : 
 				(($_POST['type'] == 'uninstall') ? $this->l('Uninstall') : $this->l('Delete'))));
 
+			if ($_POST['type'] == 'delete')
+				$_POST['type'] = 'deleteModule';
 			$url = $_POST['base'].'&token='.$_POST['token'].'&module_name='.
 				$_POST['module_name'].'&tab_module='.$_POST['tab_module'].'&'.
 				$_POST['type'].'='.$_POST['module_name'];
