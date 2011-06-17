@@ -122,7 +122,7 @@ class Twenga extends PaymentModule
 		$this->token = Tools::getValue('token');
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.6';
+	 	$this->version = '1.7';
 		
 	 	parent::__construct();
 	
