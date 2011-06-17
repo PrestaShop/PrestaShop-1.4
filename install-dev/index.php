@@ -401,6 +401,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="optional"><?php echo lang('GZIP compression is on (recommended)')?></li>
 				<li class="optional"><?php echo lang('Mcrypt is available (recommended)')?></li>
 				<li class="optional"><?php echo lang('PHP magic quotes option is off (recommended)')?></li>
+				<li class="optional"><?php echo lang('Dom extension loaded')?></li>
 			</ul>
 			<h3 style="display:none;" id="resultConfigHelper"><?php echo lang('If you do not know how to fix these issues, use turnkey solution PrestaBox at');?> <a href="http://www.prestabox.com">http://www.prestabox.com</a></h3>
 			<p><input class="button" value="<?php echo lang('Refresh these settings')?>" type="button" id="req_bt_refresh"/></p>
@@ -1093,6 +1094,7 @@ if ($lm->getIncludeTradFilename())
 				<li class="optional"><?php echo lang('GZIP compression is on (recommended)')?></li>
 				<li class="optional"><?php echo lang('Mcrypt is available (recommended)')?></li>
 				<li class="optional"><?php echo lang('PHP magic quotes option is off (recommended)')?></li>
+				<li class="optional"><?php echo lang('Dom extension loaded')?></li>
 			</ul>
 
 			<p><input class="button" value="<?php echo lang('Refresh these settings'); ?>" type="button" id="req_bt_refresh_update"/></p>

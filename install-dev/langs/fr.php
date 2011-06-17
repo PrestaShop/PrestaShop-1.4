@@ -287,3 +287,4 @@ $_LANG['However the installer has detected that the version stored in your confi
 $_LANG['Additional Benefits'] = 'Avantages exclusifs PrestaShop';
 $_LANG['Exclusive offers dedicated to PrestaShop merchants'] = 'Offres réservées aux marchands PrestaShop';
 $_LANG['PHP magic quotes option is off (recommended)'] = 'L\'option PHP "magic quotes" est désactivée (recommandé)';
+$_LANG['Dom extension loaded'] = 'L\'extension Dom est activée';

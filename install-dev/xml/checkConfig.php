@@ -60,6 +60,7 @@ $tests_op = array(
 	'gz' => false,
 	'mcrypt' => false,
 	'magicquotes' => false,
+	'dom' => false,
 );
 
 // Execute tests

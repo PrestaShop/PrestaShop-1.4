@@ -222,4 +222,9 @@ class	ConfigurationTest
 	{
 		return function_exists('mcrypt_encrypt');
 	}
+	
+	static function		test_dom()
+	{
+		return extension_loaded('Doms');
+	}
 }

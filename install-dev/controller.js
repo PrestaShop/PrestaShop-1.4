@@ -283,12 +283,14 @@ function verifyAndSetRequire(firsttime)
 			
 			
 			testListOptional = testLists[1].getElementsByTagName('test');
+			optionalIsOk = true
 			
 			for (i = 0; i < testListOptional.length; i++){
 				result = testListOptional[i].getAttribute("result");
 				$($("div#sheet_require"+isUpdate+" > ul#optional"+isUpdate+" li.optional")[i])
 					.removeClass( (result == "fail") ? "ok" : "fail" )
 					.addClass(result);
+				if (result == "fail") optionalIsOk = false;
 			}
 			
 			if (!configIsOk) {
@@ -301,7 +303,7 @@ function verifyAndSetRequire(firsttime)
 				$('#btNext').removeClass('disabled');
 				$("input#btNext").focus();
 				var firsttime = ret.getElementsByTagName('firsttime');
-				if (firsttime && firsttime[0].getAttribute("value") == 1)
+				if (firsttime && firsttime[0].getAttribute("value") == 1 && optionalIsOk)
 					$("input#btNext").click();
 				else
 				{
