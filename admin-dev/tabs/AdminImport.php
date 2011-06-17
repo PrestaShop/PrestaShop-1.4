@@ -1208,95 +1208,105 @@ class AdminImport extends AdminTab
 			if (preg_match('/^\..*|index.php/Ui', $filename))
 				unset($filesToImport[$k]);
 		unset($filename);
+		echo '
+		<div class="space">
+				<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
+					<fieldset style="float: left; width: 550px">
+						<legend><img src="../img/admin/import.gif" />'.$this->l('Import').'</legend>
+						<label class="clear">'.$this->l('Select which entity to import:').' </label>
+						<div class="margin-form">
+							<select name="entity" id="entity">';
+		foreach ($this->entities AS $entity => $i)
+		{
+			echo '<option value="'.$i.'"';
+			if (Tools::getValue('entity') == $i)
+				echo ' selected="selected" ';
+			echo'>'.$entity.'</option>';
+		}
+		echo '				</select>
+						</div>';
 		if (sizeof($filesToImport))
 		{
 			echo '
-			<div class="space">
-					<form id="preview_import" action="'.$currentIndex.'&token='.$this->token.'" method="post" style="display:inline" enctype="multipart/form-data" class="clear" onsubmit="if ($(\'#truncate\').get(0).checked) {if (confirm(\''.$this->l('Are you sure you want to delete', __CLASS__, true, false).'\' + \' \' + $(\'#entity > option:selected\').text().toLowerCase() + \''.$this->l('?', __CLASS__, true, false).'\')){this.submit();} else {return false;}}">
-						<fieldset style="float: left; width: 550px">
-							<legend><img src="../img/admin/import.gif" />'.$this->l('Import').'</legend>
-							<label class="clear">'.$this->l('Select which entity to import:').' </label>
-							<div class="margin-form">
-								<select name="entity" id="entity">';
-			foreach ($this->entities AS $entity => $i)
-			{
-				echo '<option value="'.$i.'"';
-				if (Tools::getValue('entity') == $i)
-					echo ' selected="selected" ';
-				echo'>'.$entity.'</option>';
-			}
-			echo '				</select>
-							</div>
-							<label class="clear">'.$this->l('Select your .CSV file:').' </label>
-							<div class="margin-form">
-								<select name="csv">';
+						<label class="clear">'.$this->l('Select your .CSV file:').' </label>
+						<div class="margin-form">
+							<select name="csv">';
 			foreach ($filesToImport AS $filename)
 				echo '<option value="'.$filename.'">'.$filename.'</option>';
 			echo '				</select> ('.sizeof($filesToImport).' '.(sizeof($filesToImport) > 1 ? $this->l('files available') : $this->l('file available')).')
-							</div>
-							<label class="clear">'.$this->l('Select language of the file (the locale must be installed):').' </label>
-							<div class="margin-form">
-								<select name="iso_lang">';
-							foreach ($this->_languages AS $lang)
-								echo '<option value="'.$lang['iso_code'].'" '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').'>'.$lang['name'].'</option>';
-							echo '</select></div><label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
-							<div class="margin-form">
-								<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
-							</div>
-							<label class="clear">'.$this->l('Field separator:').' </label>
-							<div class="margin-form">
-								<input type="text" size="2" value=";" name="separator"/>
-								'.$this->l('e.g. ').'"1<span class="bold" style="color: red">;</span>Ipod<span class="bold" style="color: red">;</span>129.90<span class="bold" style="color: red">;</span>5"
-							</div>
-							<label class="clear">'.$this->l('Multiple value separator:').' </label>
-							<div class="margin-form">
-								<input type="text" size="2" value="," name="multiple_value_separator"/>
-								'.$this->l('e.g. ').'"Ipod;red.jpg<span class="bold" style="color: red">,</span>blue.jpg<span class="bold" style="color: red">,</span>green.jpg;129.90"
-							</div>
-							<label for="truncate" class="clear">'.$this->l('Delete all').' <span id="entitie">'.$this->l('categories').'</span> '.$this->l('before import ?').' </label>
-							<div class="margin-form">
-								<input name="truncate" id="truncate" type="checkbox" style="margin-top: 6px;"/>
-							</div>
-							<div class="space margin-form">
-								<input type="submit" name="submitImportFile" value="'.$this->l('Next step').'" class="button"/>
-							</div>
-							<div>
-								'.$this->l('Note that the category import does not support categories of the same name').'
-							</div>
-						</fieldset>
-					</form>
-					<fieldset style="display: inline; float: right; margin-left: 20px;">
-					<legend><img src="../img/admin/import.gif" />'.$this->l('Fields available').'</legend>
-					<div id="availableFields" style="min-height: 218px; width: 300px;">'.$this->getAvailableFields().'</div>
+						</div>
+						<label class="clear">'.$this->l('Select language of the file (the locale must be installed):').' </label>
+						<div class="margin-form">
+							<select name="iso_lang">';
+						foreach ($this->_languages AS $lang)
+							echo '<option value="'.$lang['iso_code'].'" '.($lang['id_lang'] == $cookie->id_lang ? 'selected="selected"' : '').'>'.$lang['name'].'</option>';
+						echo '</select></div><label for="convert" class="clear">'.$this->l('iso-8859-1 encoded file').' </label>
+						<div class="margin-form">
+							<input name="convert" id="convert" type="checkbox" style="margin-top: 6px;"/>
+						</div>
+						<label class="clear">'.$this->l('Field separator:').' </label>
+						<div class="margin-form">
+							<input type="text" size="2" value=";" name="separator"/>
+							'.$this->l('e.g. ').'"1<span class="bold" style="color: red">;</span>Ipod<span class="bold" style="color: red">;</span>129.90<span class="bold" style="color: red">;</span>5"
+						</div>
+						<label class="clear">'.$this->l('Multiple value separator:').' </label>
+						<div class="margin-form">
+							<input type="text" size="2" value="," name="multiple_value_separator"/>
+							'.$this->l('e.g. ').'"Ipod;red.jpg<span class="bold" style="color: red">,</span>blue.jpg<span class="bold" style="color: red">,</span>green.jpg;129.90"
+						</div>
+						<label for="truncate" class="clear">'.$this->l('Delete all').' <span id="entitie">'.$this->l('categories').'</span> '.$this->l('before import ?').' </label>
+						<div class="margin-form">
+							<input name="truncate" id="truncate" type="checkbox" style="margin-top: 6px;"/>
+						</div>
+						<div class="space margin-form">
+							<input type="submit" name="submitImportFile" value="'.$this->l('Next step').'" class="button"/>
+						</div>
+						<div>
+							'.$this->l('Note that the category import does not support categories of the same name').'
+						</div>
+						';
+				}
+				else
+					echo '
+					<div class="warn">
+						'.$this->l('No CSV file is available, please upload one file above.').'<br /><br />
+						'.$this->l('You can get many informations about CSV import at:').' <a href="http://www.prestashop.com/wiki/Troubleshooting_6/" target="_blank">http://www.prestashop.com/wiki/Troubleshooting_6/</a><br /><br />
+						'.$this->l('More about CSV format at: ').' <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">http://en.wikipedia.org/wiki/Comma-separated_values</a>
+					</div>';
+					echo '
 					</fieldset>
-					<div class="clear" style="float:right; padding-right: 120px;">
-					'.$this->l('* Required Fields').'
-					</div>
+				</form>
+				<fieldset style="display: inline; float: right; margin-left: 20px;">
+				<legend><img src="../img/admin/import.gif" />'.$this->l('Fields available').'</legend>
+				<div id="availableFields" style="min-height: 218px; width: 300px;">'.$this->getAvailableFields().'</div>
+				</fieldset>
+				<div class="clear" style="float:right; padding-right: 120px;">
+				'.$this->l('* Required Fields').'
 				</div>
-				<div class="clear">&nbsp;</div>
-				<script type="text/javascript">
-					$("select#entity").change( function() {
-						$("#entitie").html($("#entity > option:selected").text().toLowerCase());
-						$.getJSON("'.dirname($currentIndex).'/ajax.php", 
-							{
-							getAvailableFields:1,
-							entity: $("#entity").val()},
-									function(j)
-									{
-										var fields = "";
-										$("#availableFields").empty();
-										for (var i = 0; i < j.length; i++)
-											fields += j[i].field;
-										$("#availableFields").html(fields);
-										activeClueTip();
-									}
-						);
-					});
-				</script>';
+			</div>
+			<div class="clear">&nbsp;</div>
+			<script type="text/javascript">
+				$("select#entity").change( function() {
+					$("#entitie").html($("#entity > option:selected").text().toLowerCase());
+					$.getJSON("'.dirname($currentIndex).'/ajax.php", 
+						{
+						getAvailableFields:1,
+						entity: $("#entity").val()},
+								function(j)
+								{
+									var fields = "";
+									$("#availableFields").empty();
+									for (var i = 0; i < j.length; i++)
+										fields += j[i].field;
+									$("#availableFields").html(fields);
+									activeClueTip();
+								}
+					);
+				});
+			</script>';
 
-				if (Tools::getValue('entity'))
-					echo' <script type="text/javascript">$("select#entity").change();</script>';
-		}
+			if (Tools::getValue('entity'))
+				echo' <script type="text/javascript">$("select#entity").change();</script>';
 	}
 
 	public function utf8_encode_array($array)
