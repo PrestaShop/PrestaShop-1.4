@@ -196,7 +196,7 @@ class ValidateCore
 	*/
 	static public function isMailSubject($mailSubject)
 	{
-		return preg_match('/^[^<>{}]*$/u', $mailSubject);
+		return preg_match('/^[^<>]*$/u', $mailSubject);
 	}
 
 	/**
