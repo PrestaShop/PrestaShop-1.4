@@ -155,7 +155,7 @@ class OrderOpcControllerCore extends ParentOrderController
 							exit;
 							break;
 						case 'updateAddressesSelected':
-							if (self::$cookie->isLogged())
+							if (self::$cookie->isLogged(true))
 							{
 								$id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
 								$id_address_invoice = (int)(Tools::getValue('id_address_invoice'));
