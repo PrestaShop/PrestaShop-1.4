@@ -168,6 +168,8 @@ class AdminImport extends AdminTab
 				'link_rewrite' => array('label' => $this->l('URL rewritten')),
 				'available_now' => array('label' => $this->l('Text when in-stock')),
 				'available_later' => array('label' => $this->l('Text if back-order allowed')),
+				'available_for_order' => array('label' => $this->l('Available for order')),
+				'show_price' => array('label' => $this->l('Show price')),
 				'image' => array('label' => $this->l('Image URLs (x,y,z...)')),
 				'delete_existing_images' => array(
 											'label' => $this->l('Delete existing images (0 = no, 1 = yes)'),
