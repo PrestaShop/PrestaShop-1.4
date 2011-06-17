@@ -545,7 +545,7 @@ class Ebay extends Module
 				function checkToken()
 				{
 					$.ajax({
-					  url: \''._MODULE_DIR_.'ebay/ajax/checkToken.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'\',
+					  url: \''._MODULE_DIR_.'ebay/ajax/checkToken.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'\',
 					  success: function(data)
 					  {
 						if (data == \'OK\')
@@ -886,7 +886,7 @@ class Ebay extends Module
 			function loadCategoryMatch(id_category)
 			{
 				$.ajax({
-				  url: "'._MODULE_DIR_.'ebay/ajax/loadCategoryMatch.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_category=" + id_category,
+				  url: "'._MODULE_DIR_.'ebay/ajax/loadCategoryMatch.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_category=" + id_category + "&time='.pSQL(date('Ymdhis')).'",
 				  success: function(data) { $("#categoryPath" + id_category).html(data); }
 				});
 			}
@@ -899,7 +899,7 @@ class Ebay extends Module
 				if (level > 4) levelParams += "&level5=" + $("#categoryLevel5-" + id_category).val();
 
 				$.ajax({
-				  url: "'._MODULE_DIR_.'ebay/ajax/changeCategoryMatch.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&id_category=" + id_category + "&level=" + level + levelParams,
+				  url: "'._MODULE_DIR_.'ebay/ajax/changeCategoryMatch.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'&id_category=" + id_category + "&level=" + level + levelParams,
 				  success: function(data) { $("#categoryPath" + id_category).html(data); }
 				});
 			}
@@ -1122,7 +1122,7 @@ class Ebay extends Module
 						params = params + "&action=0";
 
 					$.ajax({
-						url: "'._MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'" + params,
+						url: "'._MODULE_DIR_.'ebay/ajax/getNbProductsSync.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis')).'" + params,
 						success: function(data) {
 					  		nbProducts = data;
 					  		nbProductsModeB = data;
