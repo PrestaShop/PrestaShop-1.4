@@ -334,11 +334,14 @@ class ImageCore extends ObjectModel
 	}
 	
 	/**
-	 * Delete a product image from disk and remove the containing folder if empty
+	 * Delete the product image from disk and remove the containing folder if empty
 	 * Handles both legacy and new image filesystems
 	 */
 	public function deleteImage()
 	{
+		if (!$this->id)
+			return false;
+			
 		// Delete base image
 		if (file_exists($this->image_dir.$this->getExistingImgPath().'.'.$this->image_format))
 			unlink($this->image_dir.$this->getExistingImgPath().'.'.$this->image_format);
@@ -417,6 +420,9 @@ class ImageCore extends ObjectModel
 	 */
 	public function getExistingImgPath()
 	{
+		if (!$this->id)
+			return false;
+			
 		if (!$this->existing_path)
 		{
 			if (Configuration::get('PS_LEGACY_IMAGES') && file_exists(_PS_PROD_IMG_DIR_.$this->id_product.'-'.$this->id.'.'.$this->image_format))
@@ -451,6 +457,9 @@ class ImageCore extends ObjectModel
 	 */
 	public function createImgFolder()
 	{
+		if (!$this->id)
+			return false;
+			
 		if (!file_exists(_PS_PROD_IMG_DIR_.$this->getImgFolder()))
 			return @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0755, true);
 		return true;
@@ -463,6 +472,9 @@ class ImageCore extends ObjectModel
 	 */
 	public function getImgPath()
 	{
+		if (!$this->id)
+			return false;
+			
 		$path = $this->getImgFolder().$this->id;
 		return $path;
 	}
