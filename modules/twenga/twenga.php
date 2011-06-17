@@ -94,7 +94,7 @@ class Twenga extends PaymentModule
 	 * need to be in lowercase
 	 * @var array
 	 */
-	public $limited_countries = array('fr', 'de', 'gb', 'uk', 'it', 'es');
+	public $limited_countries = array('fr', 'de', 'gb', 'uk', 'it', 'es', 'nl');
 	
 	private $_allowToWork = true;
 
@@ -1010,7 +1010,7 @@ class Twenga extends PaymentModule
 		$category_path = (Configuration::get('PS_NAVIGATION_PIPE') != false && Configuration::get('PS_NAVIGATION_PIPE') !== '>' ) ? str_replace(Configuration::get('PS_NAVIGATION_PIPE'), '>', $category_path) : $category_path;
 		// image tag
 		$id_image = (isset($combination['id_image'])) ? $combination['id_image'] : 0;
-		if($id_image === 0)
+		if($id_image === 0 || $id_image < 0)
 		{
 			$image = $product->getCover((int)$product->id);
 			$id_image = $image['id_image'];
@@ -1031,7 +1031,17 @@ class Twenga extends PaymentModule
 		$arr_return['designation'] = Tools::htmlentitiesUTF8($product->name[$lang].' '.Manufacturer::getNameById($product->id_manufacturer).' '.implode(' ', $model));
 		$arr_return['price'] = $price;
 		$arr_return['category'] = Tools::htmlentitiesUTF8(strip_tags($category_path));
-		$arr_return['image_url'] = $link->getImageLink($product->link_rewrite[$lang], $product->id.'-'.$id_image, 'large');
+
+		if (substr(_PS_VERSION_, 0, 3) == '1.3')
+		{
+			if (!Configuration::get('PS_SHOP_DOMAIN'))
+				Configuration::updateValue('PS_SHOP_DOMAIN', $_SERVER['HTTP_HOST']);
+			$prefix =  'http://'.Configuration::get('PS_SHOP_DOMAIN').'/';
+			$arr_return['image_url'] = $prefix.$link->getImageLink('', $product->id.'-'.$id_image, 'large');
+		}
+		else
+			$arr_return['image_url'] = $link->getImageLink($product->link_rewrite[$lang], $product->id.'-'.$id_image, 'large');
+
 		
 		// Must description added since Twenga-module v1.1
 		$arr_return['description'] = is_array($product->description) ? strip_tags($product->description[$lang]) : strip_tags($product->description);
