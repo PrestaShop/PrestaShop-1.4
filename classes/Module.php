@@ -703,7 +703,7 @@ abstract class ModuleCore
 
 			$exceptions = $moduleInstance->getExceptions((int)$array['id_hook'], (int)$array['id_module']);
 			foreach ($exceptions AS $exception)
-				if (strstr(basename($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'], $exception['file_name']))
+				if (strstr(basename($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'], $exception['file_name']) && !strstr($_SERVER['QUERY_STRING'], $exception['file_name']))
 					continue 2;
 
 			if (is_callable(array($moduleInstance, 'hook'.$hook_name)))
