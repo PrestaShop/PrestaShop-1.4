@@ -273,13 +273,16 @@ class Followup extends Module
 	/* Each cart which wasn't transformed into an order */
 	private function cancelledCart($count = false)
 	{
-		$emails = Db::getInstance()->ExecuteS('
-		SELECT c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
-		FROM '._DB_PREFIX_.'cart c
-		LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_cart = c.id_cart)
-		LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = c.id_customer)
-		WHERE DATE_SUB(CURDATE(),INTERVAL 7 DAY) <= c.date_add AND cu.id_customer IS NOT NULL AND o.id_order IS NULL AND c.id_cart NOT IN 
-		('.join(',', $this->getLogsEmail(1)).')');
+		$emailLogs = $this->getLogsEmail(1);
+		$emails = array();
+		if(!empty($emailLogs))
+			$emails = Db::getInstance()->ExecuteS('
+			SELECT c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
+			FROM '._DB_PREFIX_.'cart c
+			LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_cart = c.id_cart)
+			LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = c.id_customer)
+			WHERE DATE_SUB(CURDATE(),INTERVAL 7 DAY) <= c.date_add AND cu.id_customer IS NOT NULL AND o.id_order IS NULL AND c.id_cart NOT IN 
+			('.join(',', $emailLogs).')');
 		
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
@@ -339,13 +342,16 @@ class Followup extends Module
 	/* For all validated orders, a discount if re-ordering before x days */
 	private function reOrder($count = false)
 	{
-		$emails = Db::getInstance()->ExecuteS('
-		SELECT o.id_order, c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
-		FROM '._DB_PREFIX_.'orders o
-		LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = o.id_customer)
-		LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
-		WHERE o.valid = 1 AND c.date_add >= DATE_SUB(CURDATE(),INTERVAL 7 DAY) AND o.id_cart NOT IN 
-		('.join(',', $this->getLogsEmail(2)).')');
+		$emailLogs =  $this->getLogsEmail(2);
+		$emails = array();
+		if(!empty($emailLogs))
+			$emails = Db::getInstance()->ExecuteS('
+			SELECT o.id_order, c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
+			FROM '._DB_PREFIX_.'orders o
+			LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = o.id_customer)
+			LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
+			WHERE o.valid = 1 AND c.date_add >= DATE_SUB(CURDATE(),INTERVAL 7 DAY) AND o.id_cart NOT IN 
+			('.join(',', $emailLogs).')');
 
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
@@ -366,15 +372,18 @@ class Followup extends Module
 	/* For all customers with more than x euros in 90 days */
 	private function bestCustomer($count = false)
 	{
-		$emails = Db::getInstance()->ExecuteS('
-		SELECT SUM(o.total_paid) total, c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
-		FROM '._DB_PREFIX_.'orders o
-		LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = o.id_customer)
-		LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
-		WHERE o.valid = 1 AND DATE_SUB(CURDATE(),INTERVAL 90 DAY) <= o.date_add AND cu.id_customer NOT IN
-		('.join(',', $this->getLogsEmail(3)).')
-		GROUP BY o.id_customer
-		HAVING total >= '.(float)(Configuration::get('PS_FOLLOW_UP_THRESHOLD_3')));
+		$emailLogs =  $this->getLogsEmail(2);
+		$emails = array();
+		if(!empty($emailLogs))
+			$emails = Db::getInstance()->ExecuteS('
+			SELECT SUM(o.total_paid) total, c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
+			FROM '._DB_PREFIX_.'orders o
+			LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = o.id_customer)
+			LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
+			WHERE o.valid = 1 AND DATE_SUB(CURDATE(),INTERVAL 90 DAY) <= o.date_add AND cu.id_customer NOT IN
+			('.join(',', $emailLogs).')
+			GROUP BY o.id_customer
+			HAVING total >= '.(float)(Configuration::get('PS_FOLLOW_UP_THRESHOLD_3')));
 		
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
@@ -403,7 +412,10 @@ class Followup extends Module
 	 */
 	private function badCustomer($count = false)
 	{
-		$emails = Db::getInstance()->ExecuteS('
+		$emailLogs =  $this->getLogsEmail(4);
+		$emails = array();
+		if(!empty($emailLogs))
+			$emails = Db::getInstance()->ExecuteS('
 			SELECT c.id_lang, c.id_cart, cu.id_customer, cu.firstname, cu.lastname, cu.email, (SELECT COUNT(o.id_order) FROM '._DB_PREFIX_.'orders o WHERE o.id_customer = cu.id_customer and o.valid = 1) nb_orders
 			FROM '._DB_PREFIX_.'customer cu
 			LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_customer = cu.id_customer)
@@ -411,9 +423,9 @@ class Followup extends Module
 			WHERE cu.id_customer NOT IN
 			(SELECT o.id_customer FROM '._DB_PREFIX_.'orders o WHERE DATE_SUB(CURDATE(),INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY) <= o.date_add)
 			AND cu.id_customer NOT IN
-			('.join(',',$this->getLogsEmail(4)).')
-		GROUP BY cu.id_customer
-		HAVING nb_orders >= 1');
+			('.join(',', $emailLogs).')
+			GROUP BY cu.id_customer
+			HAVING nb_orders >= 1');
 		
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
