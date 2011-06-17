@@ -1544,7 +1544,14 @@ class AdminProducts extends AdminTab
 			}
 		</script>
 		<script src="../js/tabpane.js" type="text/javascript"></script>
+		<script src="../js/jquery/treeview/jquery.treeview.js" type="text/javascript"></script>
+		<script src="../js/jquery/treeview/jquery.treeview.async.js" type="text/javascript"></script>
+		<script src="../js/jquery/treeview/jquery.treeview.edit.js" type="text/javascript"></script>
+		<script src="../js/admin-categories-tree.js" type="text/javascript"></script>
+		
+		
 		<link type="text/css" rel="stylesheet" href="../css/tabpane.css" />
+		<link type="text/css" rel="stylesheet" href="../css/jquery.treeview.css" />
 		<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" enctype="multipart/form-data" name="product" id="product">
 			'.$this->_displayDraftWarning($obj->active).'
 
@@ -2700,8 +2707,62 @@ class AdminProducts extends AdminTab
 							<br /><input type="radio" name="out_of_stock" id="out_of_stock_3" value="2" '.($this->getFieldValue($obj, 'out_of_stock') == 2 ? 'checked="checked"' : '').'/> <label for="out_of_stock_3" class="t" id="label_out_of_stock_3">'.$this->l('Default:').' <i>'.$this->l(((int)(Configuration::get('PS_ORDER_OUT_OF_STOCK')) ? 'Allow orders' : 'Deny orders')).'</i> ('.$this->l('as set in').' <a href="index.php?tab=AdminPPreferences&token='.Tools::getAdminToken('AdminPPreferences'.(int)(Tab::getIdFromClassName('AdminPPreferences')).(int)($cookie->id_employee)).'"  onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');">'.$this->l('Preferences').'</a>)</label>
 						</td>
 					</tr>
-					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
-					<tr id="tr_categories"></tr>
+					<tr>
+						<td colspan="2" style="padding-bottom:5px;">
+							<hr style="width:100%;" />
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left"><label for="id_category_default" class="t">'.$this->l('Default category:').'</label></td>
+						<td>
+						<div id="no_default_category" style="color: red;font-weight: bold;display: none;">'.$this->l('Please check a category in order to select the default category.').'</div>
+						<script>var post_selected_cat;</script>';
+						if (Tools::isSubmit('categoryBox'))
+						{
+							$postCat = Tools::getValue('categoryBox');
+							$selectedCat = Category::getSimpleCategories($this->_defaultFormLanguage, false, true, 'AND c.`id_category` IN ('.(empty($postCat) ? '1' : implode(',', $postCat)).')');
+							echo '<script>post_selected_cat = \''.implode(',', $postCat).'\';</script>';
+						}
+						if ($obj->id)
+							$selectedCat = $obj::getProductCategoriesFull($obj->id, $this->_defaultFormLanguage);
+						else if(!Tools::isSubmit('categoryBox'))
+							$selectedCat[] = array('id_category' => 1, 'name' => $this->l('Home'));
+						echo '<select id="id_category_default" name="id_category_default">';
+						
+							foreach($selectedCat as $cat)
+								echo '<option value="'.$cat['id_category'].'" '.($obj->id_category_default == $cat['id_category'] ? 'selected' : '').'>'.$cat['name'].'</option>';
+						echo '</select>
+							<script type="text/javascript">
+								var id_product = '.($obj->id ? $obj->id : '0').';
+								var selectedLabelSingular = \''.$this->l('selected').'\';
+								var selectedLabelPlurial = \''.$this->l('selecteds').'\';
+								var home = \''.$this->l('Home').'\';
+							</script>
+						</td> 
+					</tr>
+					<tr>
+						<td colspan="2" style="background:#F4E6C9;padding: 4px 6px;">
+							<a href="#" id="collapse_all" >'.$this->l('Collapse All').'</a>
+							 - <a href="#" id="expand_all" >'.$this->l('Expand All').'</a>
+							 - <a href="#" id="check_all" >'.$this->l('Check All').'</a>
+							 - <a href="#" id="uncheck_all" >'.$this->l('Uncheck All').'</a>
+						</td>
+					</tr>
+					<tr id="tr_categories">';
+					foreach($selectedCat as $cat)
+						if  ($cat['id_category'] != 1)
+							echo '<input type="hidden" name="categoryBox[]" value="'.$cat['id_category'].'" >';
+					echo '<td colspan="2">
+						<ul id="categories-treeview" class="filetree">
+							<li id="1" class="hasChildren">
+								<span class="folder"> <input type="checkbox" name="categoryBox[]" value="1" '.((!$obj->id || isset($selectedCat[1])) ? 'checked' : '').' onclick="clickOnCategoryBox($(this));" /> '.$this->l('Home').'</span>
+								<ul>
+									<li><span class="placeholder">&nbsp;</span></li>
+								</ul>
+							</li>		
+						</ul>
+						</td>
+					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr><td colspan="2">
 						<span onclick="$(\'#seo\').slideToggle();" style="cursor: pointer"><img src="../img/admin/arrow.gif" alt="'.$this->l('SEO').'" title="'.$this->l('SEO').'" style="float:left; margin-right:5px;"/>'.$this->l('Click here to improve product\'s rank in search engines (SEO)').'</span><br />
@@ -2884,18 +2945,10 @@ class AdminProducts extends AdminTab
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce.inc.js"></script>
 			<script type="text/javascript">
 					toggleVirtualProduct(getE(\'is_virtual_good\'));
-					unitPriceWithTax(\'unit\');';
+					unitPriceWithTax(\'unit\');
+			</script>';
 		$categoryBox = Tools::getValue('categoryBox', array());
-		echo '
-		$(function() {
-			$.ajax({
-				type: \'POST\',
-				url: \'ajax_category_list.php\',
-				data: \''.(sizeof($categoryBox) > 0 ? 'categoryBox='.serialize($categoryBox).'&' : '').'id_product='.$obj->id.'&id_category_default='.($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)).'&id_category='.(int)(Tools::getValue('id_category')).'&token='.$this->token.'\',
-				async : true,
-				success: function(msg) { $(\'#tr_categories\').replaceWith(msg); }
-			});
-		});</script>';
+		
 	}
 
 	function displayFormImages($obj, $token = NULL)
