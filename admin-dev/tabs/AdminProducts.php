@@ -3098,6 +3098,7 @@ class AdminProducts extends AdminTab
 			$attributeJs[$attribute['id_attribute_group']][$attribute['id_attribute']] = $attribute['name'];
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$attributes_groups = AttributeGroup::getAttributesGroups((int)($cookie->id_lang));
+		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
 
 		$images = Image::getImages((int)($cookie->id_lang), $obj->id);
 		if ($obj->id)
