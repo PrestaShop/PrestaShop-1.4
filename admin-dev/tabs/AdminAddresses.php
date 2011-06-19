@@ -353,7 +353,7 @@ class AdminAddresses extends AdminTab
 			{
 
 				echo '
-					<label>'.$this->l('Address').' (2):</label>
+					<label>'.$this->l('Address').' (2)</label>
 									     <div class="margin-form">
 												      <input type="text" size="33" name="address2" value="'.htmlentities($this->getFieldValue($obj, 'address2'), ENT_COMPAT, 'UTF-8').'" />
 															      </div>';
