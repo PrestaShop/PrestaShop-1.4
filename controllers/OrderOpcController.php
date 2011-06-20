@@ -265,8 +265,10 @@ class OrderOpcControllerCore extends ParentOrderController
 		// PAYMENT
 		$this->_assignPayment();
 		Tools::safePostVars();
-
-		self::$smarty->assign('newsletter', (int)Module::getInstanceByName('blocknewsletter')->active);
+		if ($blocknewsletter = Module::getInstanceByName('blocknewsletter'))
+			self::$smarty->assign('newsletter', (int)$blocknewsletter->active);
+		else
+			self::$smarty->assign('newsletter', 0);
 	}
 
 	public function displayHeader()
