@@ -338,6 +338,7 @@ function updateNewAccountToAddressBlock()
 		data: 'ajax=true&method=getAddressBlockAndCarriersAndPayments&token=' + static_token ,
 		success: function(json)
 		{
+			isLogged = 1;
 			if (json.no_address == 1)
 				document.location.href = addressUrl;
 			
@@ -583,6 +584,7 @@ $(function() {
 						// force to refresh carrier list
 						if (isGuest)
 						{
+							isLogged = 1;
 							$('#opc_account_saved').fadeIn('slow');
 							$('#submitAccount').hide();
 							updateAddressSelection();
