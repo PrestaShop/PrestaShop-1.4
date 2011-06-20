@@ -169,6 +169,7 @@ class AdminImport extends AdminTab
 				'available_now' => array('label' => $this->l('Text when in-stock')),
 				'available_later' => array('label' => $this->l('Text if back-order allowed')),
 				'available_for_order' => array('label' => $this->l('Available for order')),
+				'date_add' => array('label' => $this->l('Date add product')),
 				'show_price' => array('label' => $this->l('Show price')),
 				'image' => array('label' => $this->l('Image URLs (x,y,z...)')),
 				'delete_existing_images' => array(
@@ -188,6 +189,7 @@ class AdminImport extends AdminTab
 				'description_short' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
 				'link_rewrite' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
 				'online_only' => 0,
+				'date_add' => date('Y-m-d H:i:s'),
 				'condition' => 'new');
 
 				break;
@@ -739,7 +741,12 @@ class AdminImport extends AdminTab
 				}
 				// If no id_product or update failed
 				if (!$res)
-					$res = $product->add();
+				{
+					if (isset($product->date_add) && $product->date_add != '')
+						$res = $product->add(false);
+					else
+						$res = $product->add();
+				}
 			}
 			// If both failed, mysql error
 			if (!$res)
