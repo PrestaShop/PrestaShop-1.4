@@ -243,6 +243,12 @@ abstract class DbCore
 	 */
 	abstract public function nextRow($result = false);
 	
+	/*
+	 * return sql server version.
+	 * used in Order.php to allow or not subquery in update
+	 */
+	abstract public function getServerVersion();
+
 	/**
 		 * Alias of Db::getInstance()->ExecuteS
 		 *

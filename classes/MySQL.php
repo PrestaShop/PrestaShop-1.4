@@ -45,6 +45,10 @@ class MySQLCore extends Db
 		return $this->_link;
 	}
 	
+	public function getServerVersion(){
+		return mysql_get_server_info();
+	}
+	
 	/* do not remove, useful for some modules */
 	public function set_db($db_name) {
 		return mysql_select_db($db_name, $this->_link);
