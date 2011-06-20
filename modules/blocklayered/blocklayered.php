@@ -123,6 +123,9 @@ class BlockLayered extends Module
 		$errors = array();
 		$html = '';
 
+		if (!extension_loaded('curl'))
+			$html .= '<div class="warn"><p>'.$this->l('You must enable cURL extension on your server if you want to use short link.').'</p></div>';
+
 		if (Tools::isSubmit('submitLayeredCache'))
 		{
 			$this->rebuildLayeredStructure();
@@ -992,15 +995,18 @@ if (!isset($doneCategories[(int)$id_category]['p']))
 	
 	private function getShortLink($share_url) {
 	
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "http://api.bitly.com/v3/shorten");
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_HTTPGET, 1);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, 'login='.Configuration::get('PS_LAYERED_BITLY_USERNAME').'&apiKey='.Configuration::get('PS_LAYERED_BITLY_API_KEY').'&longUrl='.urlencode($share_url).'&format=txt');
-		$return = curl_exec($ch);
-		
-		if ($return != 'INVALID_LOGIN' AND $return != 'INVALID_APIKEY')
+		$return = '';
+		if (extension_loaded('curl'))
+		{
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "http://api.bitly.com/v3/shorten");
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_HTTPGET, 1);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, 'login='.Configuration::get('PS_LAYERED_BITLY_USERNAME').'&apiKey='.Configuration::get('PS_LAYERED_BITLY_API_KEY').'&longUrl='.urlencode($share_url).'&format=txt');
+			$return = curl_exec($ch);
+		}
+		if ($return != 'INVALID_LOGIN' AND $return != 'INVALID_APIKEY' AND extension_loaded('curl'))
 			return $return;
 		else
 			return $share_url;
