@@ -495,12 +495,12 @@ if (Tools::isSubmit('saveImportMatchs'))
 
 if (Tools::isSubmit('deleteImportMatchs'))
 {
-   Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'import_match` WHERE id_import_match = '.pSQL(Tools::getValue('idImportMatchs')));
+   Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'import_match` WHERE `id_import_match` = '.(int)Tools::getValue('idImportMatchs'));
 }
 
 if (Tools::isSubmit('loadImportMatchs'))
 {
-   $return = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'import_match` WHERE id_import_match = '.pSQL(Tools::getValue('idImportMatchs')));
+   $return = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'import_match` WHERE `id_import_match` = '.(int)Tools::getValue('idImportMatchs'));
    die('{"id" : "'.$return[0]['id_import_match'].'", "matchs" : "'.$return[0]['match'].'", "skip" : "'.$return[0]['skip'].'"}');
 }
 
@@ -675,6 +675,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 
 if (Tools::isSubmit('getChildrenCategories') && Tools::getValue('id_category_parent')) 
 {
+/* /	sleep(1); */
 	$children_categories = Category::getChildrenWithNbSelectedSubCatForProduct(Tools::getValue('id_category_parent'), Tools::getValue('id_product', 0), Tools::getValue('post_selected_cat', null), $cookie->id_lang);
 	die(Tools::jsonEncode($children_categories));
 }
