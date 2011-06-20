@@ -1363,14 +1363,14 @@ class ToolsCore
 
 	public static function replaceByAbsoluteURL($matches)
 	{
-		global $current_css_file, $protocol_link;
+		global $current_css_file;
 		
-		$protocolLink = Tools::getCurrentUrlProtocolPrefix();
+		$protocol_link = Tools::getCurrentUrlProtocolPrefix();
 		
 		if (array_key_exists(1, $matches))
 		{
 			$tmp = dirname($current_css_file).'/'.$matches[1];
-			return 'url(\''.$protocolLink.Tools::getMediaServer($tmp).$tmp.'\')';
+			return 'url(\''.$protocol_link.Tools::getMediaServer($tmp).$tmp.'\')';
 		}
 		return false;
 	}
