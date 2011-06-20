@@ -201,7 +201,7 @@ class AdminModules extends AdminTab
 				{
 					$moduleDir = _PS_MODULE_DIR_.str_replace(array('.', '/', '\\'), array('', '', ''), Tools::getValue('module_name'));
 					$this->recursiveDeleteOnDisk($moduleDir);
-					Tools::redirectAdmin($currentIndex.'&conf=22&token='.$this->token.'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name'));
+					Tools::redirectAdmin($currentIndex.'&conf=22&token='.$this->token.'&tab_module='.Tools::getValue('tab_module'));
 				}
 				Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 			}
@@ -708,9 +708,9 @@ class AdminModules extends AdminTab
 		 	}
 		 	return false;
 		 });
-		'.(!$goto ? '': '$(\'#'.$goto.'_content\').slideToggle( function (){
+		'.(!$goto ? '': 'if ($(\'#'.$goto.'_content\').length > 0) $(\'#'.$goto.'_content\').slideToggle( function (){
 		$(\'#'.$goto.'_img\').attr(\'src\', \'../img/admin/less.png\');
-		'.(!$goto ? '' : '$.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 300 , 
+		'.(!$goto ? '' : 'if ($("#modgo_'.Tools::getValue('module_name').'").length > 0) $.scrollTo($("#modgo_'.Tools::getValue('module_name').'"), 300 , 
 		{onAfter:function(){
 			$("#modgo_'.Tools::getValue('module_name').'").fadeTo(100, 0, function (){
 				$(this).fadeTo(100, 0, function (){
