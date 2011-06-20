@@ -460,8 +460,10 @@ class ImageCore extends ObjectModel
 		if (!$this->id)
 			return false;
 			
+		// Apparently sometimes mkdir cannot set the rights, and sometimes chmod can't. Doing both.
 		if (!file_exists(_PS_PROD_IMG_DIR_.$this->getImgFolder()))
-			return @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0755, true);
+			return @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777, true) 
+				|| @chmod(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777);
 		return true;
 	}
 	
