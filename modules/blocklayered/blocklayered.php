@@ -49,7 +49,7 @@ class BlockLayered extends Module
 
 	public function install()
 	{
-		if ($result = parent::install() AND $this->registerHook('leftColumn') AND $this->registerHook('header')
+		if ($result = parent::install() AND $this->registerHook('leftColumn') AND $this->registerHook('header') AND $this->registerHook('footer')
 		AND $this->registerHook('categoryAddition') AND $this->registerHook('categoryUpdate') AND $this->registerHook('categoryDeletion'))
 		{
 			Configuration::updateValue('PS_LAYERED_NAVIGATION_CHECKBOXES', 1);
@@ -84,8 +84,22 @@ class BlockLayered extends Module
 		Tools::addJS(($this->_path).'blocklayered.js');
 		Tools::addJS(_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js');
 		Tools::addCSS(($this->_path).'blocklayered.css', 'all');
-		Tools::addCSS(_PS_CSS_DIR_.'jquery-ui-1.8.10.custom.css', 'all');
-		
+		Tools::addCSS(_PS_CSS_DIR_.'jquery-ui-1.8.10.custom.css', 'all');	
+	}
+	
+	public function hookFooter($params)
+	{
+		return '<script type="text/javascript">
+				//<![CDATA[
+				$(document).ready(function()
+				{
+					$(\'#selectPrductSort\').unbind(\'change\').bind(\'change\', function()
+					{
+						reloadContent();
+					})
+				});
+				//]]>
+				</script>';
 	}
 
 	public function hookCategoryAddition($params)
