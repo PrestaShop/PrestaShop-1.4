@@ -421,6 +421,8 @@ class CartCore extends ObjectModel
 				)'
 				: 'i.`id_product` = '.(int)$row['id_product'].' AND i.`cover` = 1').'
 			');
+			if (!$row2)
+				$row2 = array('id_image' => false, 'legend' => false);
 			$row = array_merge($row, $row2);
 	
 			$row['reduction_applies'] = ($specificPriceOutput AND (float)$specificPriceOutput['reduction']);

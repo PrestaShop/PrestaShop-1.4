@@ -180,19 +180,16 @@ class MondialRelay extends Module
 		if (!parent::uninstall())
 			return false;
 		
-	/* Tab uninstallation */
-		$result = Db::getInstance()->getRow('
-			SELECT id_tab  
-			FROM `' . _DB_PREFIX_ . 'tab`
-			WHERE class_name="AdminMondialRelay"');
+		/* Tab uninstallation */
+		$result = Db::getInstance()->getRow('SELECT id_tab FROM `'._DB_PREFIX_.'tab` WHERE class_name = "AdminMondialRelay"');
 		if ($result)
 		{
 			$id_tab = $result['id_tab'];
 			if (isset($id_tab) && !empty($id_tab))
 			{	
-				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab WHERE id_tab = '.(int)($id_tab));
-				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'tab_lang WHERE id_tab = '.(int)($id_tab));
-				Db::getInstance()->Execute('DELETE FROM ' . _DB_PREFIX_ . 'access WHERE id_tab = '.(int)($id_tab));
+				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'tab WHERE id_tab = '.(int)$id_tab);
+				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'tab_lang WHERE id_tab = '.(int)$id_tab);
+				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'access WHERE id_tab = '.(int)$id_tab);
 			}
 		}
 
@@ -206,22 +203,12 @@ class MondialRelay extends Module
 				!Configuration::deleteByName('MR_KEY_WEBSERVICE') ||
 				!Configuration::deleteByName('MR_WEIGHT_COEF') ||
 				!Configuration::deleteByName('PS_MR_SHOP_NAME') || 
-				!Db::getInstance()->Execute('
-					DROP TABLE '._DB_PREFIX_ .'mr_historique, 
-					'._DB_PREFIX_ .'mr_method, 
-						'._DB_PREFIX_ .'mr_selected'))
+				!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_ .'mr_historique, '._DB_PREFIX_ .'mr_method, '._DB_PREFIX_ .'mr_selected'))
 			return false;
 			
-		if (_PS_VERSION_ >= '1.4' && 
-				!Db::getInstance()->Execute('
-					UPDATE  '._DB_PREFIX_ .'carrier  
-					SET `active` = 0, `deleted` = 1 
-					WHERE `external_module_name` = "mondialrelay"'))
+		if (_PS_VERSION_ >= '1.4' && !Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'carrier SET `active` = 0, `deleted` = 1 WHERE `external_module_name` = "mondialrelay"'))
 			return false;
-		else if (!Db::getInstance()->Execute('
-					UPDATE  '._DB_PREFIX_ .'carrier  
-					SET `active` = 0, `deleted` = 1 
-					WHERE `name` = "mondialrelay"'))
+		else if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'carrier SET `active` = 0, `deleted` = 1 WHERE `name` = "mondialrelay"'))
 			return false; 
 			
 		return true;
@@ -247,9 +234,7 @@ class MondialRelay extends Module
 					`external_module_name` = 
 					"mondialrelay", 
 					`shipping_method` = 1 
-				WHERE `id_carrier` 
-				IN (SELECT `id_mr_method` 
-						FROM `'._DB_PREFIX_.'mr_method`)');
+				WHERE `id_carrier` IN (SELECT `id_mr_method` FROM `'._DB_PREFIX_.'mr_method`)');
 			return true;
 		}
 		return false;
