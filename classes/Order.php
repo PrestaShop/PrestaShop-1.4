@@ -897,7 +897,7 @@ class OrderCore extends ObjectModel
 		if ($number)
  		    Configuration::updateValue('PS_INVOICE_START_NUMBER', false);
  		else
-		    $number = Order::getLastInvoiceNumber();
+		    $number = Order::getLastInvoiceNumber() + 1;
 
         // a way to avoid duplicate invoice number
 		Db::getInstance()->Execute('
