@@ -30,11 +30,13 @@ class FreeOrder extends PaymentModule {}
 
 class ParentOrderControllerCore extends FrontController
 {
+	public $ssl = true;
+	public $php_self = 'order.php';
+		
 	public $nbProducts;
 
 	public function __construct()
 	{
-		$this->ssl = true;
 		parent::__construct();
 
 		/* Disable some cache related bugs on the cart/order */

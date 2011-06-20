@@ -27,13 +27,8 @@
 
 class NewProductsControllerCore extends FrontController
 {
-	public function __construct()
-	{
-		$this->php_self = 'new-products.php';
-	
-		parent::__construct();
-	}
-	
+	public $php_self = 'new-products.php';
+
 	public function setMedia()
 	{
 		parent::setMedia();

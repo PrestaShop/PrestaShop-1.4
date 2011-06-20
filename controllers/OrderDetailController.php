@@ -27,12 +27,12 @@
 
 class OrderDetailControllerCore extends FrontController
 {
+	public $auth = true;
+	public $authRedirection = 'history.php';
+	public $ssl = true;
+	
 	public function __construct()
 	{
-		$this->auth = true;
-		$this->authRedirection = 'history.php';
-		$this->ssl = true;
-
 		parent::__construct();
 
 		header("Cache-Control: no-cache, must-revalidate");

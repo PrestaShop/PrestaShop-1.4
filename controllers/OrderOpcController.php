@@ -29,6 +29,7 @@ ControllerFactory::includeController('ParentOrderController');
 
 class OrderOpcControllerCore extends ParentOrderController
 {
+	public $php_self = 'order-opc.php';
 	public $isLogged;
 
 	public function preProcess()

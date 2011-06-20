@@ -28,6 +28,7 @@
 class ProductControllerCore extends FrontController
 {
 	protected $product;
+	public $php_self = 'product.php';
 
 	public function setMedia()
 	{
@@ -49,6 +50,23 @@ class ProductControllerCore extends FrontController
 			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.jqzoom.js');
 		}
 	}
+	
+	public function canonicalRedirection()
+	{
+		// Automatically redirect to the canonical URL if the current in is the right one
+		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
+		if (Validate::isLoadedObject($this->product))
+		{
+			$canonicalURL = self::$link->getProductLink($this->product);
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			{
+				header('HTTP/1.0 301 Moved');
+				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+				Tools::redirectLink($canonicalURL);
+			}
+		}
+	}
 
 	public function preProcess()
 	{
@@ -61,21 +79,7 @@ class ProductControllerCore extends FrontController
 			header('Status: 404 Not Found');
 		}
 		else
-		{
-			// Automatically redirect to the canonical URL if the current in is the right one
-			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-			if (Validate::isLoadedObject($this->product))
-			{
-				$canonicalURL = self::$link->getProductLink($this->product);
-				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
-				{
-					header('HTTP/1.0 301 Moved');
-					if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
-						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-					Tools::redirectLink($canonicalURL);
-				}
-			}
-		}
+			$this->canonicalRedirection();
 
 		parent::preProcess();
 
@@ -116,9 +120,6 @@ class ProductControllerCore extends FrontController
 
 				if (!$this->product->active)
 					self::$smarty->assign('adminActionDisplay', true);
-
-				/* rewrited url set */
-				$rewrited_url = self::$link->getProductLink($this->product->id, $this->product->link_rewrite);
 
 				/* Product pictures management */
 				require_once('images.inc.php');

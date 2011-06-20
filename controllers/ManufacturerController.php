@@ -27,6 +27,8 @@
 
 class ManufacturerControllerCore extends FrontController
 {
+	public $php_self = 'manufacturer.php';
+	
 	protected $manufacturer;
 	
 	public function setMedia()
@@ -35,47 +37,70 @@ class ManufacturerControllerCore extends FrontController
 		Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 	}
 	
-	public function process()
+	public function canonicalRedirection()
 	{
-		if ($id_manufacturer = Tools::getValue('id_manufacturer'))
+		if (Validate::isLoadedObject($this->manufacturer))
 		{
-			$this->manufacturer = new Manufacturer((int)$id_manufacturer, self::$cookie->id_lang);
-			if (Validate::isLoadedObject($this->manufacturer) AND $this->manufacturer->active)
+			$canonicalURL = self::$link->getManufacturerLink($this->manufacturer);
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
-				$nbProducts = $this->manufacturer->getProducts($id_manufacturer, NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
-				$this->pagination((int)$nbProducts);
-				self::$smarty->assign(array(
-					'nb_products' => $nbProducts,
-					'products' => $this->manufacturer->getProducts($id_manufacturer, (int)self::$cookie->id_lang, (int)$this->p, (int)$this->n, $this->orderBy, $this->orderWay),
-					'path' => ($this->manufacturer->active ? Tools::safeOutput($this->manufacturer->name) : ''),
-					'manufacturer' => $this->manufacturer));
+				header('HTTP/1.0 301 Moved');
+				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+				Tools::redirectLink($canonicalURL);
 			}
-			else
+		}
+	}
+	
+	public function preProcess()
+	{
+		if ($id_manufacturer = (int)Tools::getValue('id_manufacturer'))
+		{
+			$this->manufacturer = new Manufacturer($id_manufacturer, self::$cookie->id_lang);
+
+			if (!Validate::isLoadedObject($this->manufacturer) OR !$this->manufacturer->active)
 			{
 				header('HTTP/1.1 404 Not Found');
 				header('Status: 404 Not Found');
 				$this->errors[] = Tools::displayError('Manufacturer does not exist.');
 			}
+			else
+				$this->canonicalRedirection();
 		}
-		else
+
+		parent::preProcess();
+	}
+	
+	public function process()
+	{
+		if (Validate::isLoadedObject($this->manufacturer) AND $this->manufacturer->active)
+		{
+			$nbProducts = $this->manufacturer->getProducts($this->manufacturer->id, NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
+			$this->pagination($nbProducts);
+			self::$smarty->assign(array(
+				'nb_products' => $nbProducts,
+				'products' => $this->manufacturer->getProducts($this->manufacturer->id, (int)self::$cookie->id_lang, (int)$this->p, (int)$this->n, $this->orderBy, $this->orderWay),
+				'path' => ($this->manufacturer->active ? Tools::safeOutput($this->manufacturer->name) : ''),
+				'manufacturer' => $this->manufacturer));
+		}
+		elseif (!Tools::getValue('id_manufacturer'))
 		{
 			if (Configuration::get('PS_DISPLAY_SUPPLIERS'))
 			{
-				$data = call_user_func(array('Manufacturer', 'getManufacturers'), true, (int)(self::$cookie->id_lang), true);
-				$nbProducts = count($data);
+				$result = Manufacturer::getManufacturers(true, (int)self::$cookie->id_lang, true);
+				$nbProducts = count($result);
 				$this->pagination($nbProducts);
-		
-				$data = call_user_func(array('Manufacturer', 'getManufacturers'), true, (int)(self::$cookie->id_lang), true, $this->p, $this->n);
-				$imgDir = _PS_MANU_IMG_DIR_;
-				foreach ($data AS &$item)
-					$item['image'] = (!file_exists($imgDir.'/'.$item['id_manufacturer'].'-medium.jpg')) ? 
-						Language::getIsoById((int)(self::$cookie->id_lang)).'-default' :	$item['id_manufacturer'];
+				
+				$manufacturers = Manufacturer::getManufacturers(true, (int)self::$cookie->id_lang, true, $this->p, $this->n);
+				foreach ($manufacturers AS &$row)
+					$row['image'] = (!file_exists(_PS_MANU_IMG_DIR_.'/'.$row['id_manufacturer'].'-medium.jpg')) ? Language::getIsoById((int)self::$cookie->id_lang).'-default' : $row['id_manufacturer'];
+						
 				self::$smarty->assign(array(
-				'pages_nb' => ceil($nbProducts / (int)($this->n)),
-				'nbManufacturers' => $nbProducts,
-				'mediumSize' => Image::getSize('medium'),
-				'manufacturers' => $data,
-				'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
+					'pages_nb' => ceil($nbProducts / (int)$this->n),
+					'nbManufacturers' => $nbProducts,
+					'mediumSize' => Image::getSize('medium'),
+					'manufacturers' => $manufacturers,
+					'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 				));
 			}
 			else

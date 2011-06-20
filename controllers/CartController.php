@@ -27,6 +27,11 @@
 
 class CartControllerCore extends FrontController
 {
+	public $php_self = 'cart.php';
+	
+	// This is not a public page, so the canonical redirection is disabled
+	public function canonicalRedirection(){}
+	
 	public function run()
 	{
 		$this->init();
@@ -87,9 +92,9 @@ class CartControllerCore extends FrontController
 		$add = Tools::getIsset('add') ? 1 : 0;
 		$delete = Tools::getIsset('delete') ? 1 : 0;
 
-		if (Configuration::get('PS_TOKEN_ENABLE') == 1 &&
-			strcasecmp(Tools::getToken(false), strval(Tools::getValue('token'))) &&
-			self::$cookie->isLogged() === true)
+		if (Configuration::get('PS_TOKEN_ENABLE') == 1
+		&& strcasecmp(Tools::getToken(false), strval(Tools::getValue('token')))
+		&& self::$cookie->isLogged() === true)
 			$this->errors[] = Tools::displayError('Invalid token');
 
 		// Update the cart ONLY if $this->cookies are available, in order to avoid ghost carts created by bots

@@ -206,9 +206,7 @@ class FrontControllerCore
 			$smarty->ps_language = $ps_language;
 
 		/* get page name to display it in body id */
-		$pathinfo = pathinfo(__FILE__);
-		$page_name = basename($_SERVER['PHP_SELF'], '.'.$pathinfo['extension']);
-		$page_name = (preg_match('/^[0-9]/', $page_name)) ? 'page_'.$page_name : $page_name;
+		$page_name = (isset($this->php_self) ? preg_replace('/\.php$/', '', $this->php_self) : '');
 		$smarty->assign(Tools::getMetaTags($cookie->id_lang, $page_name));
 		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
 

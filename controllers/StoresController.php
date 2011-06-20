@@ -27,13 +27,8 @@
 
 class StoresControllerCore extends FrontController
 {
-	public function __construct()
-	{
-		$this->php_self = 'stores.php';
-	
-		parent::__construct();
-	}
-	
+	public $php_self = 'stores.php';
+
 	public function preProcess()
 	{
 		global $smarty, $cookie;

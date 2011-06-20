@@ -27,28 +27,25 @@
 
 class CmsControllerCore extends FrontController
 {
+	public $php_self = 'cms.php';
+	
 	public $assignCase;
 	public $cms;
 	public $cms_category;
 	
-	public function preProcess()
+	public function canonicalRedirection()
 	{
-		if ($id_cms = (int)Tools::getValue('id_cms'))
-		    $this->cms = new CMS($id_cms, self::$cookie->id_lang); 
-		elseif ($id_cms_category = (int)Tools::getValue('id_cms_category'))
-		    $this->cms_category = new CMSCategory($id_cms_category, self::$cookie->id_lang); 
-			
 		// Automatically redirect to the canonical URL if the current in is the right one
 		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-		if ($this->cms AND $canonicalURL = self::$link->getCMSLink($this->cms))
+		if (Validate::isLoadedObject($this->cms) AND $canonicalURL = self::$link->getCMSLink($this->cms))
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');
-				if (defined(_PS_MODE_DEV_) AND _PS_MODE_DEV_ )
+				if (_PS_MODE_DEV_)
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
 				Tools::redirectLink($canonicalURL);
 			}
-		if ($this->cms_category AND $canonicalURL = self::$link->getCMSCategoryLink($this->cms_category))
+		if (Validate::isLoadedObject($this->cms_category) AND $canonicalURL = self::$link->getCMSCategoryLink($this->cms_category))
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');
@@ -56,6 +53,15 @@ class CmsControllerCore extends FrontController
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
 				Tools::redirectLink($canonicalURL);
 			}
+	}
+	
+	public function preProcess()
+	{
+		if ($id_cms = (int)Tools::getValue('id_cms'))
+		    $this->cms = new CMS($id_cms, self::$cookie->id_lang); 
+		elseif ($id_cms_category = (int)Tools::getValue('id_cms_category'))
+		    $this->cms_category = new CMSCategory($id_cms_category, self::$cookie->id_lang); 
+		$this->canonicalRedirection();
 		
 		parent::preProcess();
 		
@@ -65,9 +71,9 @@ class CmsControllerCore extends FrontController
 		elseif (Validate::isLoadedObject($this->cms_category))
 			$this->assignCase = 2;
 		else
-			Tools::redirect('404.php');
+			Tools::display404Error('404.php');
 		
-		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
+		if((int)Configuration::get('PS_REWRITING_SETTINGS'))
 		{
     	    $rewrite_infos = (isset($id_cms) AND !isset($id_cms_category)) ? CMS::getUrlRewriteInformations($id_cms) : CMSCategory::getUrlRewriteInformations($id_cms_category);
     		$default_rewrite = array();

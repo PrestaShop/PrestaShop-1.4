@@ -27,6 +27,8 @@
 
 class CategoryControllerCore extends FrontController
 {
+	public $php_self = 'category.php';
+	
 	protected $category;
 
 	public function setMedia()
@@ -48,19 +50,12 @@ class CategoryControllerCore extends FrontController
 		$this->productSort();
 	}
 
-	public function preProcess()
+	public function canonicalRedirection()
 	{
-		if ($id_category = (int)Tools::getValue('id_category'))
-			$this->category = new Category($id_category, self::$cookie->id_lang);
-		if (!Validate::isLoadedObject($this->category))
+		// Automatically redirect to the canonical URL if the current in is the right one
+		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
+		if (Validate::isLoadedObject($this->category))
 		{
-			header('HTTP/1.1 404 Not Found');
-			header('Status: 404 Not Found');
-		}
-		else
-		{
-			// Automatically redirect to the canonical URL if the current in is the right one
-			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 			$currentURL = self::$link->getCategoryLink($this->category);
 			$currentURL = preg_replace('/[?&].*$/', '', $currentURL);
 			if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
@@ -71,7 +66,20 @@ class CategoryControllerCore extends FrontController
 				Tools::redirectLink($currentURL);
 			}
 		}
+	}
 	
+	public function preProcess()
+	{
+		if ($id_category = (int)Tools::getValue('id_category'))
+			$this->category = new Category($id_category, self::$cookie->id_lang);
+		if (!Validate::isLoadedObject($this->category))
+		{
+			header('HTTP/1.1 404 Not Found');
+			header('Status: 404 Not Found');
+		}
+		else
+			$this->canonicalRedirection();
+		
 		parent::preProcess();
 		
 		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))

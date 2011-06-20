@@ -27,15 +27,10 @@
 
 class AddressesControllerCore extends FrontController
 {
-	public function __construct()
-	{
-		$this->auth = true;
-		$this->php_self = 'addresses.php';
-		$this->authRedirection = 'addresses.php';
-		$this->ssl = true;
-	
-		parent::__construct();
-	}
+	public $auth = true;
+	public $php_self = 'addresses.php';
+	public $authRedirection = 'addresses.php';
+	public $ssl = true;
 	
 	public function setMedia()
 	{

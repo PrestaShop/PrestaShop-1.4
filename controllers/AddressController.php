@@ -24,24 +24,20 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-if(Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
+
+if (Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
 	include_once(_PS_MODULE_DIR_.'vatnumber/vatnumber.php');
 
 class AddressControllerCore extends FrontController
 {
+	public $auth = true;
+	public $guestAllowed = true;
+	public $php_self = 'address.php';
+	public $authRedirection = 'addresses.php';
+	public $ssl = true;
+		
 	protected $_address;
 
-	public function __construct()
-	{
-		$this->auth = true;
-		$this->guestAllowed = true;
-		$this->php_self = 'address.php';
-		$this->authRedirection = 'addresses.php';
-		$this->ssl = true;
-	
-		parent::__construct();
-	}
-	
 	public function preProcess()
 	{
 		parent::preProcess();

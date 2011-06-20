@@ -27,6 +27,8 @@
 
 class SupplierControllerCore extends FrontController
 {
+	public $php_self = 'supplier.php';
+	
 	protected $supplier;
 	
 	public function setMedia()
@@ -35,47 +37,70 @@ class SupplierControllerCore extends FrontController
 		Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 	}
 	
-	public function process()
+	public function canonicalRedirection()
 	{
-		if ($id_supplier = Tools::getValue('id_supplier'))
+		if (Validate::isLoadedObject($this->supplier))
 		{
-			$this->supplier = new Supplier((int)$id_supplier, self::$cookie->id_lang);
-			if (Validate::isLoadedObject($this->supplier) AND $this->supplier->active)
+			$canonicalURL = self::$link->getSupplierLink($this->supplier);
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
-				$nbProducts = $this->supplier->getProducts($id_supplier, NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
-				$this->pagination((int)$nbProducts);
-				self::$smarty->assign(array(
-					'nb_products' => $nbProducts,
-					'products' => $this->supplier->getProducts($id_supplier, (int)self::$cookie->id_lang, (int)$this->p, (int)$this->n, $this->orderBy, $this->orderWay),
-					'path' => ($this->supplier->active ? Tools::safeOutput($this->supplier->name) : ''),
-					'supplier' => $this->supplier));
-			}
-			else
-			{
-				header('HTTP/1.1 404 Not Found');
-				header('Status: 404 Not Found');			
-				$this->errors[] = Tools::displayError('Supplier does not exist');
+				header('HTTP/1.0 301 Moved');
+				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+				Tools::redirectLink($canonicalURL);
 			}
 		}
-		else
+	}
+	
+	public function preProcess()
+	{
+		if ($id_supplier = (int)Tools::getValue('id_supplier'))
+		{
+			$this->supplier = new Supplier($id_supplier, self::$cookie->id_lang);
+
+			if (!Validate::isLoadedObject($this->supplier) OR !$this->supplier->active)
+			{
+				header('HTTP/1.1 404 Not Found');
+				header('Status: 404 Not Found');
+				$this->errors[] = Tools::displayError('Supplier does not exist.');
+			}
+			else
+				$this->canonicalRedirection();
+		}
+
+		parent::preProcess();
+	}
+	
+	public function process()
+	{
+		if (Validate::isLoadedObject($this->supplier) AND $this->supplier->active)
+		{
+			$nbProducts = $this->supplier->getProducts($this->supplier->id, NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
+			$this->pagination((int)$nbProducts);
+			self::$smarty->assign(array(
+				'nb_products' => $nbProducts,
+				'products' => $this->supplier->getProducts($this->supplier->id, (int)self::$cookie->id_lang, (int)$this->p, (int)$this->n, $this->orderBy, $this->orderWay),
+				'path' => ($this->supplier->active ? Tools::safeOutput($this->supplier->name) : ''),
+				'supplier' => $this->supplier));
+		}
+		elseif (!Tools::getValue('id_supplier'))
 		{
 			if (Configuration::get('PS_DISPLAY_SUPPLIERS'))
 			{
-				$data = call_user_func(array('Supplier', 'getSuppliers'), true, (int)(self::$cookie->id_lang), true);
-				$nbProducts = count($data);
+				$result = Supplier::getSuppliers(true, (int)self::$cookie->id_lang, true);
+				$nbProducts = count($result);
 				$this->pagination($nbProducts);
-		
-				$data = call_user_func(array('Supplier', 'getSuppliers'), true, (int)(self::$cookie->id_lang), true, $this->p, $this->n);
-				$imgDir = _PS_SUPP_IMG_DIR_;
-				foreach ($data AS &$item)
-					$item['image'] = (!file_exists($imgDir.'/'.$item['id_supplier'].'-medium.jpg')) ? 
-						Language::getIsoById((int)(self::$cookie->id_lang)).'-default' :	$item['id_supplier'];
+				
+				$suppliers = Supplier::getSuppliers(true, (int)self::$cookie->id_lang, true, $this->p, $this->n);
+				foreach ($suppliers AS &$row)
+					$row['image'] = (!file_exists(_PS_SUPP_IMG_DIR_.'/'.$row['id_supplier'].'-medium.jpg')) ? Language::getIsoById((int)self::$cookie->id_lang).'-default' : $row['id_supplier'];
+				
 				self::$smarty->assign(array(
-				'pages_nb' => ceil($nbProducts / (int)($this->n)),
-				'nbSuppliers' => $nbProducts,
-				'mediumSize' => Image::getSize('medium'),
-				'suppliers' => $data,
-				'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
+					'pages_nb' => ceil($nbProducts / (int)$this->n),
+					'nbSuppliers' => $nbProducts,
+					'mediumSize' => Image::getSize('medium'),
+					'suppliers' => $suppliers,
+					'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 				));
 			}
 			else

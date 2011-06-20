@@ -27,6 +27,8 @@
 
 class CompareControllerCore extends FrontController
 {
+	public $php_self = 'products-comparison.php';
+	
 	public function setMedia()
 	{
 		parent::setMedia();
