@@ -45,7 +45,7 @@ $(document).ready(function()
 	{
 		var requestSortProducts = '{/literal}{$request}{literal}';
 		var splitData = $(this).val().split(':');
-		{/literal}{if Module::isInstalled('blocklayered')}{literal}
+		{/literal}{if $moduleBlocklayeredInstalled}{literal}
 			reloadContent();
 		{/literal}{else}{literal}
 			document.location.href = requestSortProducts + ((requestSortProducts.indexOf('?') < 0) ? '?' : '&') + 'orderby=' + splitData[0] + '&orderway=' + splitData[1];

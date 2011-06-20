@@ -262,7 +262,8 @@ class FrontControllerCore
 			'display_tax_label' => (bool)$display_tax_label,
 			'vat_management' => (int)Configuration::get('VATNUMBER_MANAGEMENT'),
 			'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE'),
-			'PS_CATALOG_MODE' => (bool)Configuration::get('PS_CATALOG_MODE')
+			'PS_CATALOG_MODE' => (bool)Configuration::get('PS_CATALOG_MODE'),
+			'moduleBlocklayeredInstalled' => Module::isInstalled('blocklayered')
 		));
 
 		// Deprecated
