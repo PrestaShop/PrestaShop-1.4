@@ -426,7 +426,7 @@ class HIPAY_MAPI_Payment extends HIPAY_MAPI_XML  {
 					if ($percentageTarget & HIPAY_MAPI_TTARGET_FCOST)
 						$baseAmount += $order->getFixedCostAmount();
 					if ($percentageTarget & HIPAY_MAPI_TTARGET_SHIPPING)
-						$baseAmount + =$order->getShippingAmount();
+						$baseAmount += $order->getShippingAmount();
 						
 					$tAffiliate[$key]->setBaseAmount($baseAmount);
 				} else {
