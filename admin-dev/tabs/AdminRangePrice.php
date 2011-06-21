@@ -78,14 +78,12 @@ class AdminRangePrice extends AdminTab
 		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$id_carrier = Tools::getValue('id_carrier', $obj->id_carrier);
 		foreach ($carriers AS $carrier)
-		{
 			if (!$carrier['is_free'])
 			{
 				$carrierArray[] = '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
 
 				$carrier_taxes[(int)$carrier['id_carrier']] = TaxRulesGroup::getTaxesRate((int)$carrier['id_tax_rules_group'], (int)Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
 			}
-		}
 
 		echo $this->displayJavascript($carrier_taxes);
 
@@ -109,17 +107,17 @@ class AdminRangePrice extends AdminTab
 				</div>
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">
-					'.$currency->getSign('left').'<input type="text" size="4" id="delimiter1_excl" name="delimiter1_excl" value="" />'.$currency->getSign('right').'<sup>*</sup>
+					'.$currency->getSign('left').'<input type="text" size="7" id="delimiter1_excl" name="delimiter1_excl" value="" />'.$currency->getSign('right').'<sup>*</sup>
 					'.$this->l('(tax excl.)').'
-					'.$currency->getSign('left').'<input type="text" size="4" id="delimiter1" name="delimiter1" value="'.Tools::ps_round($this->getFieldValue($obj, 'delimiter1'), 2).'" />'.$currency->getSign('right').'<sup>*</sup>
+					'.$currency->getSign('left').'<input type="text" size="7" id="delimiter1" name="delimiter1" value="'.Tools::ps_round($this->getFieldValue($obj, 'delimiter1'), 2).'" />'.$currency->getSign('right').'<sup>*</sup>
 					'.$this->l('(tax incl.)').'
 					<p class="clear">'.$this->l('Range start (included)').'</p>
 				</div>
 				<label>'.$this->l('To:').' </label>
 				<div class="margin-form">
-					'.$currency->getSign('left').'<input type="text" size="4" id="delimiter2_excl" name="delimiter2_excl" value="" />'.$currency->getSign('right').'<sup>*</sup>
+					'.$currency->getSign('left').'<input type="text" size="7" id="delimiter2_excl" name="delimiter2_excl" value="" />'.$currency->getSign('right').'<sup>*</sup>
 					'.$this->l('(tax excl.)').'
-					'.$currency->getSign('left').'<input type="text" size="4" id="delimiter2" name="delimiter2" value="'.Tools::ps_round($this->getFieldValue($obj, 'delimiter2'), 2).'" />'.$currency->getSign('right').'<sup>*</sup>
+					'.$currency->getSign('left').'<input type="text" size="7" id="delimiter2" name="delimiter2" value="'.Tools::ps_round($this->getFieldValue($obj, 'delimiter2'), 2).'" />'.$currency->getSign('right').'<sup>*</sup>
 					'.$this->l('(tax incl.)').'
 					<p class="clear">'.$this->l('Range end (excluded)').'</p>
 				</div>
