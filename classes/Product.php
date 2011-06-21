@@ -1593,7 +1593,7 @@ class ProductCore extends ObjectModel
 	public function	getImages($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT i.`cover`, i.`id_image`, il.`legend`
+		SELECT i.`cover`, i.`id_image`, il.`legend`, i.`position`
 		FROM `'._DB_PREFIX_.'image` i
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		WHERE i.`id_product` = '.(int)($this->id).'

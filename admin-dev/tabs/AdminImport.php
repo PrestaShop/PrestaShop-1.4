@@ -94,7 +94,9 @@ class AdminImport extends AdminTab
 					'ecotax' => array('label' => $this->l('Ecotax')),
 					'quantity' => array('label' => $this->l('Quantity')),
 					'weight' => array('label' => $this->l('Weight')),
-					'default_on' => array('label' => $this->l('Default'))
+					'default_on' => array('label' => $this->l('Default')),
+					'image_position' => array('label' => $this->l('Image position'), 
+						'help' => $this->l('Position of the product image to use for this combination'))
 				);
 
 				self::$default_values = array(
@@ -595,7 +597,7 @@ class AdminImport extends AdminTab
 				$product = new Product();
 			self::setEntityDefaultValues($product);
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
-            $trg_id = (int)$product->id_tax_rules_group;
+			$trg_id = (int)$product->id_tax_rules_group;
 
 			if ($product->id_tax_rules_group == 0 || !Validate::isLoadedObject(new TaxRulesGroup($trg_id)))
 				$this->_addProductWarning('id_tax_rules_group', $product->id_tax_rules_group, Tools::displayError('Invalid tax rule group ID, you first need a group with this ID.'));
@@ -883,8 +885,24 @@ class AdminImport extends AdminTab
 			$info = array_map('trim', $info);
 
 			self::setDefaultValues($info);
+			
 			$product = new Product((int)($info['id_product']), false, $defaultLanguage);
-			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), 0, (float)($info['ecotax']), (int)($info['quantity']), null, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
+			$id_image = null;
+			if (isset($info['image_position']))
+			{
+				$images = $product->getImages($defaultLanguage);
+				if ($images)
+					foreach ($images as $row)
+						if($row['position'] == (int)$info['image_position'])
+						{
+							$id_image = array($row['id_image']);
+							break;
+						}
+				if (!$id_image)
+					$this->_warnings[] = Tools::displayError('No image found for combination with id_product = '.$product->id.' and image position = '.(int)$info['image_position'].'.'); 
+			}
+
+			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), 0, (float)($info['ecotax']), (int)($info['quantity']), $id_image, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));
