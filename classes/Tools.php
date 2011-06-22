@@ -195,7 +195,7 @@ class ToolsCore
 		}
 		return $_SERVER['REMOTE_ADDR'];
 	}
-	
+
 	/**
 	* Check if the current page use SSL connection on not
 	*/
@@ -203,7 +203,7 @@ class ToolsCore
 	{
 		return !(empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off');
 	}
-	
+
 	/**
 	* Get the current url prefix protocole (https/http)
 	*/
@@ -675,7 +675,7 @@ class ToolsCore
 					return self::completeMetaTags($row, $row['meta_title']);
 				}
 			}
-			
+
 			/* CMS category specifics meta tags */
 			elseif ($id_cms = self::getValue('id_cms_category'))
 			{
@@ -910,7 +910,7 @@ class ToolsCore
 		return (($lang AND is_array($lang) AND key_exists($key, $lang)) ? stripslashes($lang[$key]) : $key);
 	}
 
-	
+
 	/**
 	 * Return the friendly url from the provided string
 	 *
@@ -922,11 +922,11 @@ class ToolsCore
 	{
 		return self::str2url($str);
 	}
-	
+
 	/**
 	 * Return a friendly url made from the provided string
 	 * If the mbstring library is available, the output is the same as the js function of the same name
-	 * 
+	 *
 	 * @param string $str
 	 * @return string
 	 */
@@ -953,15 +953,15 @@ class ToolsCore
 		$str = preg_replace('/[\x{017C}\x{017A}\x{017B}\x{0179}\x{017E}]/u','z', $str);
 		$str = preg_replace('/[\x{00E6}]/u','ae', $str);
 		$str = preg_replace('/[\x{0153}]/u','oe', $str);
-	
+
 		// Remove all non-whitelist chars.
 		$str = preg_replace('/[^a-zA-Z0-9\s\'\:\/\[\]-]/','', $str);
 		$str = preg_replace('/[\s\'\:\/\[\]-]+/',' ', $str);
 		$str = preg_replace('/[ ]/','-', $str);
 		$str = preg_replace('/[\/]/','-', $str);
-		
+
 		// If it was not possible to lowercase the string with mb_strtolower, we do it after the transformations.
-		// This way we lose fewer special chars. 
+		// This way we lose fewer special chars.
 		$str = strtolower($str);
 
 		return $str;
@@ -1266,9 +1266,11 @@ class ToolsCore
 	* Translates a string with underscores into camel case (e.g. first_name -> firstName)
 	* @prototype string public static function toCamelCase(string $str[, bool $capitaliseFirstChar = false])
 	*/
-	public static function toCamelCase($str, $capitaliseFirstChar = false) {
+	public static function toCamelCase($str, $capitaliseFirstChar = false)
+	{
+		$str = strtolower($str);
 		if($capitaliseFirstChar)
-			$str[0] = strtoupper($str[0]);
+			$str = ucfirst($str);
 		return preg_replace_callback('/_([a-z])/', create_function('$c', 'return strtoupper($c[1]);'), $str);
 	}
 
@@ -1364,9 +1366,9 @@ class ToolsCore
 	public static function replaceByAbsoluteURL($matches)
 	{
 		global $current_css_file;
-		
+
 		$protocol_link = Tools::getCurrentUrlProtocolPrefix();
-		
+
 		if (array_key_exists(1, $matches))
 		{
 			$tmp = dirname($current_css_file).'/'.$matches[1];
@@ -1442,7 +1444,7 @@ class ToolsCore
 				Tools::addCSS($file, $media_type);
 			return true;
 		}
-		
+
 		//overriding of modules css files
 		$different = 0;
 		$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
@@ -1552,7 +1554,7 @@ class ToolsCore
 		}
 	}
 
-	
+
 	/**
 	* Combine Compress and Cache (ccc) JS calls
 	*/
@@ -1571,17 +1573,17 @@ class ToolsCore
 		foreach ($js_files as $filename)
 		{
 			$expr = explode(':', $filename);
-			
+
 			if ($expr[0] == 'http')
-				$js_external_files[] = $filename;	
-			else 
+				$js_external_files[] = $filename;
+			else
 			{
 				$infos = array();
 				$infos['uri'] = $filename;
 				$url_data = parse_url($filename);
 				$infos['path'] =_PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
 				$js_files_infos[] = $infos;
-	
+
 				$js_files_date = max(
 					file_exists($infos['path']) ? filemtime($infos['path']) : 0,
 					$js_files_date
@@ -1621,7 +1623,7 @@ class ToolsCore
 		// rebuild the original js_files array
 		$url = str_replace(_PS_ROOT_DIR_.'/', __PS_BASE_URI__, $compressed_js_path);
 		$js_files = array_merge(array($protocolLink.Tools::getMediaServer($url).$url), $js_external_files);
-		
+
 	}
 
 	private static $_cache_nb_media_servers = null;
@@ -1638,7 +1640,7 @@ class ToolsCore
 			else
 				self::$_cache_nb_media_servers = 3;
 		}
-	
+
 		if (self::$_cache_nb_media_servers AND ($id_media_server = (abs(crc32($filename)) % self::$_cache_nb_media_servers + 1)))
 			return constant('_MEDIA_SERVER_'.$id_media_server.'_');
 		return Tools::getHttpHost();
@@ -1658,14 +1660,14 @@ class ToolsCore
 
 		// RewriteRules
 		$tab['RewriteRule']['comment'] = '# URL rewriting rules';
-		
+
 		// Compatibility with the old image filesystem
 		if (Configuration::get('PS_LEGACY_IMAGES'))
 		{
 			$tab['RewriteRule']['content']['^([a-z0-9]+)\-([a-z0-9]+)(\-[_a-zA-Z0-9-]*)/[_a-zA-Z0-9-]*\.jpg$'] = _PS_PROD_IMG_.'$1-$2$3.jpg [L]';
 			$tab['RewriteRule']['content']['^([0-9]+)\-([0-9]+)/[_a-zA-Z0-9-]*\.jpg$'] = _PS_PROD_IMG_.'$1-$2.jpg [L]';
-		}		
-		
+		}
+
 		// Rewriting for product image id < 100 millions
 		$tab['RewriteRule']['content']['^([0-9])(\-[_a-zA-Z0-9-]*)?/[_a-zA-Z0-9-]*\.jpg$'] = _PS_PROD_IMG_.'$1/$1$2.jpg [L]';
 		$tab['RewriteRule']['content']['^([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?/[_a-zA-Z0-9-]*\.jpg$'] = _PS_PROD_IMG_.'$1/$2/$1$2$3.jpg [L]';
@@ -1675,7 +1677,7 @@ class ToolsCore
 		$tab['RewriteRule']['content']['^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?/[_a-zA-Z0-9-]*\.jpg$'] = _PS_PROD_IMG_.'$1/$2/$3/$4/$5/$6/$1$2$3$4$5$6$7.jpg [L]';
 		$tab['RewriteRule']['content']['^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?/[_a-zA-Z0-9-]*\.jpg$'] = _PS_PROD_IMG_.'$1/$2/$3/$4/$5/$6/$7/$1$2$3$4$5$6$7$8.jpg [L]';
 		$tab['RewriteRule']['content']['^([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])([0-9])(\-[_a-zA-Z0-9-]*)?/[_a-zA-Z0-9-]*\.jpg$'] = _PS_PROD_IMG_.'$1/$2/$3/$4/$5/$6/$7/$8/$1$2$3$4$5$6$7$8$9.jpg [L]';
-		
+
 		$tab['RewriteRule']['content']['^c/([0-9]+)(\-[_a-zA-Z0-9-]*)/[_a-zA-Z0-9-]*\.jpg$'] = 'img/c/$1$2.jpg [L]';
 		$tab['RewriteRule']['content']['^([0-9]+)\-[a-zA-Z0-9-]*\.html'] = 'product.php?id_product=$1 [QSA,L]';
 		$tab['RewriteRule']['content']['^([0-9]+)\-[a-zA-Z0-9-]*'] = 'category.php?id_category=$1 [QSA,L]';
@@ -1698,7 +1700,7 @@ class ToolsCore
 
 		// PS BASE URI automaticaly prepend the string, do not use PS defines for the image directories
 		$tab['RewriteRule']['content']['^([0-9]+)(\-[_a-zA-Z0-9-]*)/[_a-zA-Z0-9-]*\.jpg$'] = 'img/c/$1$2.jpg [L]';
-		
+
 		$tab['RewriteRule']['content']['^([0-9]+)\-[a-zA-Z0-9-]*\.html'] = 'product.php?id_product=$1 [QSA,L]';
 		$tab['RewriteRule']['content']['^[a-zA-Z0-9-]*/([0-9]+)\-[a-zA-Z0-9-]*\.html'] = 'product.php?id_product=$1 [QSA,L]';
 		$tab['RewriteRule']['content']['^([0-9]+)\-[a-zA-Z0-9-]*'] = 'category.php?id_category=$1 [QSA,L]';
@@ -1706,7 +1708,7 @@ class ToolsCore
 		$tab['RewriteRule']['content']['^([0-9]+)_([a-zA-Z0-9-]*)'] = 'manufacturer.php?id_manufacturer=$1 [QSA,L]';
 		$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms=$1 [QSA,L]';
 		$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms_category=$1 [QSA,L]';
-		
+
 		// Compatibility with the old URLs
 		if (!Configuration::get('PS_INSTALL_VERSION') OR version_compare(Configuration::get('PS_INSTALL_VERSION'), '1.4.0.7') == -1)
 		{
@@ -1718,7 +1720,7 @@ class ToolsCore
 			$tab['RewriteRule']['content']['^content/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms=$1 [QSA,L]';
 			$tab['RewriteRule']['content']['^content/category/([0-9]+)\-([a-zA-Z0-9-]*)'] = 'cms.php?id_cms_category=$1 [QSA,L]';
 		}
-		
+
 		Language::loadLanguages();
 		$default_meta = Meta::getMetasByIdLang((int)Configuration::get('PS_LANG_DEFAULT'));
 
@@ -1731,7 +1733,7 @@ class ToolsCore
 					elseif (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
 						$tab['RewriteRule']['content']['^'.$language['iso_code'].'/'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php?isolang='.$language['iso_code'].' [QSA,L]';
 				$tab['RewriteRule']['content']['^'.$language['iso_code'].'$'] = $language['iso_code'].'/ [QSA,L]';
-				$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)$'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';				
+				$tab['RewriteRule']['content']['^'.$language['iso_code'].'/([^?&]*)$'] = '$1?isolang='.$language['iso_code'].' [QSA,L]';
 			}
 		else
 			foreach ($default_meta as $key => $meta)
@@ -1803,8 +1805,8 @@ FileETag INode MTime Size
 
 	/**
 	 * jsonDecode convert json string to php array / object
-	 * 
-	 * @param string $json 
+	 *
+	 * @param string $json
 	 * @param boolean $assoc  (since 1.4.2.4) if true, convert to associativ array
 	 * @return array
 	 */
@@ -1822,7 +1824,7 @@ FileETag INode MTime Size
 
 	/**
 	 * Convert an array to json string
-	 * 
+	 *
 	 * @param array $data
 	 * @return string json
 	 */
@@ -1908,7 +1910,7 @@ FileETag INode MTime Size
 			$s = str_replace($char, '\\'.$char, $s);
 		return $s;
 	}
-	
+
 	public static function str_replace_once($needle , $replace, $haystack)
 	{
 		$pos = strpos($haystack, $needle);
@@ -1916,8 +1918,8 @@ FileETag INode MTime Size
 			return $haystack;
 		return substr_replace($haystack, $replace, $pos, strlen($needle));
 	}
-	
-	
+
+
 	/**
 	 * Function property_exists does not exist in PHP < 5.1
 	 *
@@ -1929,12 +1931,12 @@ FileETag INode MTime Size
 	{
 		if (function_exists('property_exists'))
 			return property_exists($class, $property);
-			
+
         if (is_object($class))
             $vars = get_object_vars($class);
         else
             $vars = get_class_vars($class);
-            
+
         return array_key_exists($property, $vars);
     }
 
@@ -1946,7 +1948,7 @@ FileETag INode MTime Size
     {
     	$version = null;
     	$length = null;
-    	
+
     	if(defined('PHP_VERSION'))
     		$version = PHP_VERSION;
     	else
@@ -1971,7 +1973,7 @@ FileETag INode MTime Size
         else
             Configuration::updateValue('PS_FORCE_SMARTY_2',1);
     }
-	
+
     /**
      * @desc try to open a zip file in order to check if it's valid
      * @return bool success
@@ -1986,11 +1988,11 @@ FileETag INode MTime Size
 		else
 		{
 			require_once(dirname(__FILE__).'/../tools/pclzip/pclzip.lib.php');
-			$zip = new PclZip($fromFile);			
-			return ($zip->privCheckFormat() === true);	
+			$zip = new PclZip($fromFile);
+			return ($zip->privCheckFormat() === true);
 		}
 	}
-	
+
     /**
      * @desc extract a zip file to the given directory
      * @return bool success
@@ -2009,7 +2011,7 @@ FileETag INode MTime Size
 		else
 		{
 			require_once(dirname(__FILE__).'/../tools/pclzip/pclzip.lib.php');
-			$zip = new PclZip($fromFile);			
+			$zip = new PclZip($fromFile);
 			$list = $zip->extract(PCLZIP_OPT_PATH, $toDir);
 			foreach ($list as $extractedFile)
 				if ($extractedFile['status'] != 'ok')
@@ -2017,10 +2019,10 @@ FileETag INode MTime Size
 			return true;
 		}
 	}
-	
+
 	/**
 	 * Get products order field name for queries.
-	 * 
+	 *
 	 * @param string $type by|way
 	 * @param string $value If no index given, use default order from admin -> pref -> products
 	 */
@@ -2073,7 +2075,7 @@ FileETag INode MTime Size
 			return $qty;
 		}
 	}
-	
+
 	public static function display404Error()
 	{
 		header('HTTP/1.1 404 Not Found');

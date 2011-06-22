@@ -736,7 +736,7 @@ class ProductCore extends ObjectModel
 		SELECT `id_image`
 		FROM `'._DB_PREFIX_.'image`
 		WHERE `id_product` = '.(int)($this->id));
-		
+
 		$status = true;
 		if ($result)
 			foreach ($result as $row)
@@ -3313,6 +3313,14 @@ class ProductCore extends ObjectModel
 	public function getWsManufacturerName()
 	{
 		return Manufacturer::getNameById((int)$this->id_manufacturer);
+	}
+
+	public static function resetEcoTax()
+	{
+		Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'product`
+		SET ecotax = 0
+		');
 	}
 }
 

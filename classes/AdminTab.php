@@ -831,7 +831,13 @@ abstract class AdminTabCore
 
 				if ($this->validateField(Tools::getValue($key), $field))
 				{
-					if ($field['type'] == 'textLang' OR $field['type'] == 'textareaLang')
+					// check if a method updateOptionFieldName is available
+					$method_name = 'updateOption'.Tools::toCamelCase($key, true);
+					if (method_exists($this, $method_name))
+					{
+						$this->$method_name(Tools::getValue($key));
+					}
+					elseif ($field['type'] == 'textLang' OR $field['type'] == 'textareaLang')
 					{
 						$languages = Language::getLanguages(false);
 						$list = array();
@@ -844,7 +850,7 @@ abstract class AdminTabCore
 								$this->_errors[] = Tools::displayError('Can not add configuration '.$key.' for lang '.Language::getIsoById((int)$language['id_lang']));
 						}
 						Configuration::updateValue($key, $list);
-					} 
+					}
 					else
 					{
 						$val = (isset($field['cast']) ? $field['cast'](Tools::getValue($key)) : Tools::getValue($key));
@@ -875,10 +881,10 @@ abstract class AdminTabCore
 				{
 					$this->_errors[] = Tools::displayError($field['title'].' : Incorrect value');
 					return false;
-				}			
-			}	
+				}
+			}
 		}
-		
+
 		return true;
 	}
 
@@ -1141,7 +1147,7 @@ abstract class AdminTabCore
 			ORDER BY '.(($orderBy == $this->identifier) ? 'a.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 			($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 			LIMIT '.(int)($start).','.(int)($limit);
-			
+
 		$this->_list = Db::getInstance()->ExecuteS($sql);
 		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS() AS `'._DB_PREFIX_.$this->table.'`');
 
@@ -1468,13 +1474,13 @@ abstract class AdminTabCore
 						// item_id is the product id in a product image context, else it is the image id.
 						$item_id = isset($params['image_id']) ? $tr[$params['image_id']] : $id;
 						// If it's a product image
-						if (isset($tr['id_image'])) 
+						if (isset($tr['id_image']))
 						{
 							$image = new Image((int)$tr['id_image']);
 							$path_to_image = _PS_IMG_DIR_.$params['image'].'/'.$image->getExistingImgPath().'.'.$this->imageType;
 						}else
 							$path_to_image = _PS_IMG_DIR_.$params['image'].'/'.$item_id.(isset($tr['id_image']) ? '-'.(int)($tr['id_image']) : '').'.'.$this->imageType;
-							
+
 						echo cacheImage($path_to_image, $this->table.'_mini_'.$item_id.'.'.$this->imageType, 45, $this->imageType);
 					}
 					elseif (isset($params['icon']) AND (isset($params['icon'][$tr[$key]]) OR isset($params['icon']['default'])))
@@ -1625,7 +1631,7 @@ abstract class AdminTabCore
 			if ($field['type'] != 'textLang')
 				if (!Validate::isCleanHtml($val))
 					$val = Configuration::get($key);
-					
+
 			echo '<label>'.$field['title'].' </label>
 			<div class="margin-form">';
 			switch ($field['type'])
@@ -1888,7 +1894,7 @@ abstract class AdminTabCore
 			return $this->fieldsDisplay[$filter];
 		return false;
 	}
-	
+
 	protected function warnDomainName()
 	{
 		global $currentIndex;
