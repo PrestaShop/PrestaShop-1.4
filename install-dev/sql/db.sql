@@ -707,7 +707,7 @@ CREATE TABLE `PREFIX_hook_module_exceptions` (
 CREATE TABLE `PREFIX_image` (
   `id_image` int(10) unsigned NOT NULL auto_increment,
   `id_product` int(10) unsigned NOT NULL,
-  `position` tinyint(2) unsigned NOT NULL default '0',
+  `position` smallint(2) unsigned NOT NULL default '0',
   `cover` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_image`),
   KEY `image_product` (`id_product`),
