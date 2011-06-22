@@ -743,12 +743,12 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 13, 'Estados'),(3, 14, 'Vales de descuento'),(3, 15, 'Divisas'),(3, 16, 'Impuestos'),(3, 17, 'Transportistas'),(3, 18, 'Países'),(3, 19, 'Zonas'),
 (3, 20, 'Franja de precios'),(3, 21, 'Franja de pesos'),(3, 22, 'Posiciones'),(3, 23, 'Base de datos'),(3, 24, 'Emails'),(3, 26, 'Imágenes'),
 (3, 27, 'Productos'),(3, 28, 'Contactos'),(3, 29, 'Empleados'),(3, 30, 'Perfiles'),(3, 31, 'Permisos'),(3, 32, 'Idiomas'),(3, 33, 'Traducciones'),
-(3, 34, 'Proovedores'),(3, 35, 'Pestañas'),(3, 36, 'Características'),(3, 37, 'Acceso rápido'),(3, 38, 'Aspecto'),(3, 39, 'Datos'),(3, 40, 'Alias'),
+(3, 34, 'Proveedores'),(3, 35, 'Pestañas'),(3, 36, 'Características'),(3, 37, 'Acceso rápido'),(3, 38, 'Aspecto'),(3, 39, 'Datos'),(3, 40, 'Alias'),
 (3, 41, 'Importar'),(3, 42, 'Facturas'),(3, 43, 'Búsqueda'),(3, 44, 'Ubicación'),(3, 46, 'Estados'),(3, 47, 'Devolución productos'),(3, 48, 'PDF'),
 (3, 49, 'Vales'),(3, 51, 'Configuración'),(3, 52, 'Subcampos'),(3, 53, 'Copia de seguridad'),(3, 54, 'Mensajes de Orden'),
 (3, 55, 'Albaranes de entrega'),(3, 56, 'SEO & URLs'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
-(3, 69, 'Informations'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 73, 'Movimiento de Stock'), (3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log'),
+(3, 69, 'Informaciones'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 73, 'Movimiento de Stock'), (3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log'),
 (3, 87, 'Condados'),(3,88,'Home');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
