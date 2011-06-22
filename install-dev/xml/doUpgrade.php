@@ -162,7 +162,7 @@ if ($versionCompare == '-1')
 }
 elseif ($versionCompare == 0)
 {
-	$logger->logError('You already have the '.INSTALL_VERSION.' version.');
+	$logger->logError(sprintf('You already have the %s version.',INSTALL_VERSION));
 	die('<action result="fail" error="28" />'."\n");
 }
 elseif ($versionCompare === false)

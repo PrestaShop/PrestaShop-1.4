@@ -99,7 +99,7 @@ if ($lm->getIncludeTradFilename())
 	<meta http-equiv="Cache" content="no store" />
 	<meta http-equiv="Expires" content="-1" />
 	<meta name="robots" content="noindex" />
-	<title><?php echo lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?></title>
+	<title><?php echo sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?></title>
 	<link rel="stylesheet" type="text/css" media="all" href="view.css"/>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/ajaxfileupload.js"></script>
@@ -113,15 +113,15 @@ if ($lm->getIncludeTradFilename())
 		var id_lang = "<?php echo (isset($_GET['language']) ? (int)($_GET['language']) : 0); ?>";
 
 		//localWords
-		var Step1Title = "<?php echo lang('Welcome').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step2title = "<?php echo lang('System Compatibility').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step3title = "<?php echo lang('System Configuration').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step4title = "<?php echo lang('Shop Configuration').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step5title = "<?php echo lang('Ready, set, go!').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step6title = "<?php echo lang('Disclaimer').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step7title = "<?php echo lang('System Compatibility').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step8title = "<?php echo lang('Errors while updating...').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
-		var step9title = "<?php echo lang('Ready, set, go!').' - '.lang('PrestaShop '.INSTALL_VERSION.' Installer'); ?>";
+		var Step1Title = "<?php echo lang('Welcome').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step2title = "<?php echo lang('System Compatibility').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step3title = "<?php echo lang('System Configuration').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step4title = "<?php echo lang('Shop Configuration').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step5title = "<?php echo lang('Ready, set, go!').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step6title = "<?php echo lang('Disclaimer').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step7title = "<?php echo lang('System Compatibility').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step8title = "<?php echo lang('Errors while updating...').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
+		var step9title = "<?php echo lang('Ready, set, go!').' - '.sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?>";
 		var txtNext = "<?php echo lang('Next')?>"
 		var txtDbLoginEmpty = "<?php echo lang('Please set a database login'); ?>";
 		var txtDbNameEmpty = "<?php echo lang('Please set a database name'); ?>";
@@ -194,7 +194,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[999] = "<?php echo lang('No error code available.'); ?>";
 		//upgrader
 		txtError[27] = "<?php echo lang('This installer is too old.'); ?>";
-		txtError[28] = "<?php echo lang('You already have the '.INSTALL_VERSION.' version.'); ?>";
+		txtError[28] = "<?php echo sprintf(lang('You already have the %s version.'), INSTALL_VERSION); ?>";
 		txtError[29] = "<?php echo lang('There is no older version. Did you delete or rename the config/settings.inc.php file?'); ?>";
 		txtError[30] = "<?php echo lang('The config/settings.inc.php file was not found. Did you delete or rename this file?'); ?>";
 		txtError[31] = "<?php echo lang('Can\'t find the sql upgrade files. Please verify that the /install/sql/upgrade folder is not empty)'); ?>";
