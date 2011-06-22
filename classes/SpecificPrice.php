@@ -133,7 +133,12 @@ class SpecificPriceCore extends ObjectModel
 				AND `id_country` IN (0, '.(int)$id_country.')
 				AND `id_group` IN (0, '.(int)$id_group.')
 				AND `from_quantity` <= '.(int)$quantity.'
-				AND	(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
+				AND
+				(
+					(`from` = \'0000-00-00 00:00:00\' OR \''.$now.'\' >= `from`)
+					AND
+					(`to` = \'0000-00-00 00:00:00\' OR \''.$now.'\' <= `to`)
+				)
 				ORDER BY `score` DESC, `from_quantity` DESC');
 		}
 		return self::$_specificPriceCache[$key];
