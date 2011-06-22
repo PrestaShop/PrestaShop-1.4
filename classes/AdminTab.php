@@ -1205,6 +1205,7 @@ abstract class AdminTabCore
 		echo '<form method="post" action="'.$currentIndex;
 		if(Tools::getIsset($this->identifier))
 			echo '&'.$this->identifier.'='.(int)(Tools::getValue($this->identifier));
+		echo '&token='.$token;		
 		if (Tools::getIsset($this->table.'Orderby'))
 			echo '&'.$this->table.'Orderby='.urlencode($this->_orderBy).'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));
 		echo '#'.$this->table.'" class="form">
