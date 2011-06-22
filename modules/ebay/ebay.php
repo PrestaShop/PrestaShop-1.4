@@ -1266,7 +1266,7 @@ class Ebay extends Module
 		$categoryDefaultCache = array();
 
 		// Up the time limit
-		set_time_limit(3600);
+		@set_time_limit(3600);
 
 		// Run the products list
 		foreach ($productsList as $product)

@@ -47,7 +47,7 @@ class UpsCarrier extends CarrierModule
 
 	public function __construct()
 	{
-		set_time_limit(0);
+		@set_time_limit(0);
 		$this->name = 'upscarrier';
 		$this->tab = 'shipping_logistics';
 		$this->version = '1.1';
