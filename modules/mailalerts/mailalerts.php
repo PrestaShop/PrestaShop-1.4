@@ -134,9 +134,10 @@ class MailAlerts extends Module
 
 		$itemsTable = '';
 		
+		$products = $params['order']->getProducts();
 		$customizedDatas = Product::getAllCustomizedDatas(intval($params['cart']->id));
 		Product::addCustomizationPrice($products, $customizedDatas);
-		foreach ($params['order']->getProducts() AS $key => $product)
+		foreach ($products AS $key => $product)
 		{
 			$unit_price = $product['product_price_wt'];
 			$price = $product['total_price'];
