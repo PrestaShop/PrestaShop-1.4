@@ -222,21 +222,22 @@ class ImageCore extends ObjectModel
 			$imageOld = new Image($row['id_image']);
 			$imageNew = clone $imageOld;
 			$imageNew->id_product = (int)($id_product_new);
-			$imageOld->id_product = (int)($id_product_old);
+			// A new id is generated for the cloned image when calling add()
 			if ($imageNew->add())
             {
+				$new_path = $imageNew->getPathForCreation();
             	foreach ($imagesTypes AS $k => $imageType)
             	{
 					if (file_exists(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'-'.$imageType['name'].'.jpg'))
 					{
-						$imageNew->createImgFolder();
-						copy(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'-'.$imageType['name'].'.jpg', _PS_PROD_IMG_DIR_.
-						$imageNew->getImgPath().'-'.$imageType['name'].'.jpg');
+						if (!Configuration::get('PS_LEGACY_IMAGES'))
+							$imageNew->createImgFolder();
+						copy(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'-'.$imageType['name'].'.jpg',
+						$new_path.'-'.$imageType['name'].'.jpg');
 					}
             	}
                 if (file_exists(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'.jpg'))
-                    copy(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'.jpg',
-                            _PS_PROD_IMG_DIR_.$imageNew->getImgPath().'.jpg');
+                    copy(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'.jpg', $new_path.'.jpg');
 
 				self::replaceAttributeImageAssociationId($combinationImages, (int)($imageOld->id), (int)($imageNew->id));
             }
@@ -498,6 +499,7 @@ class ImageCore extends ObjectModel
 	/**
 	 * Move all legacy product image files from the image folder root to their subfolder in the new filesystem.
 	 * If max_execution_time is provided, stops before timeout and returns string "timeout".
+	 * If any image cannot be moved, stops and returns "false"
 	 *
 	 * @return mixed success or timeout
 	 */
@@ -505,7 +507,6 @@ class ImageCore extends ObjectModel
 	{
 		$start_time = time();
 		$image = null;
-		$result = true;
 		foreach (scandir(_PS_PROD_IMG_DIR_) as $file)
 		{
 			if (preg_match('/^([0-9]+\-)([0-9]+)(\-(.*))?\.jpg$/', $file, $matches))
@@ -517,14 +518,36 @@ class ImageCore extends ObjectModel
 				if ($image->createImgFolder())
 				{
 					$new_path = _PS_PROD_IMG_DIR_.$image->getImgPath().(isset($matches[3]) ? $matches[3] : '').'.jpg';
-					$result &= @rename(_PS_PROD_IMG_DIR_.$file, $new_path);
-				}
+					if (!@rename(_PS_PROD_IMG_DIR_.$file, $new_path))
+						return false;
+				} else
+					return false;
 			}
 			if ((int)$max_execution_time != 0 && (time() - $start_time > (int)$max_execution_time - 4))
 				return 'timeout';
 		}
-		return $result;
+		return true;
+	}
+	
+	/**
+	 * Returns the path where a product image should be created (without file format)
+	 * 
+	 * @return string path 
+	 */
+	public function getPathForCreation()
+	{
+		if (!$this->id)
+			return false;
+		if(Configuration::get('PS_LEGACY_IMAGES'))
+		{
+			if (!$this->id_product)
+				return false;
+			$path = $this->id_product.'-'.$this->id;
+		} else
+		{
+			$path = $this->getImgPath();
+			$this->createImgFolder();
+		}
+		return _PS_PROD_IMG_DIR_.$path;
 	}
 }
-
-

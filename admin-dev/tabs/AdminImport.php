@@ -444,8 +444,7 @@ class AdminImport extends AdminTab
 			default:
 			case 'products':
 				$imageObj = new Image($id_image);
-				$imageObj->createImgFolder();
-				$path = _PS_PROD_IMG_DIR_.$imageObj->getImgPath();
+				$path = $imageObj->getPathForCreation();
 			break;
 			case 'categories':
 				$path = _PS_CAT_IMG_DIR_.(int)($id_entity);
@@ -888,7 +887,7 @@ class AdminImport extends AdminTab
 			
 			$product = new Product((int)($info['id_product']), false, $defaultLanguage);
 			$id_image = null;
-			if (isset($info['image_position']))
+			if (isset($info['image_position']) && $info['image_position'])
 			{
 				$images = $product->getImages($defaultLanguage);
 				if ($images)

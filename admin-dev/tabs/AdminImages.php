@@ -439,6 +439,8 @@ class AdminImages extends AdminTab
 		$result = Image::moveToNewFileSystem($this->max_execution_time);
 		if ($result === 'timeout')
 			$this->_errors[] =  Tools::displayError('Not all images have been moved, server timed out before finishing. Click on \"Move images\" again to resume moving images');
+		else if ($result === false)
+			$this->_errors[] =  Tools::displayError('Error: some or all images could not be moved.');
 		Tools::redirectAdmin($currentIndex.'&conf=25'.'&token='.$this->token);
 	}
 }
