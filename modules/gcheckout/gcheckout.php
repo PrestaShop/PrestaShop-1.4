@@ -218,8 +218,11 @@ class GCheckout extends PaymentModule
 				utf8_decode($voucher['description']), 1, '-'.$voucher['value_real']));
 		
 			if (!Configuration::get('GCHECKOUT_NO_SHIPPING'))
-				$googleCart->AddShipping(new GooglePickUp($this->l('Shipping costs'), 
-				$cart->getOrderShippingCost($cart->id_carrier)));
+			{
+				$carrier = new Carrier((int)($cart->id_carrier), (int)($cookie->id_lang));
+				$googleCart->AddShipping(new GoogleFlatRateShipping(utf8_decode($carrier->name), 
+					$cart->getOrderShippingCost($cart->id_carrier)));		
+			}
 
 			$googleCart->SetEditCartUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order.php');
 			$googleCart->SetContinueShoppingUrl(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'order-confirmation.php');
