@@ -47,6 +47,9 @@ class ImageCore extends ObjectModel
 	/** @var string image extension */
 	public $image_format = 'jpg';
 	
+	/** @var string path to index.php file to be copied to new image folders */ 
+	public $source_index;
+	
 	/** @var string image folder */
 	protected $folder;
 	
@@ -70,6 +73,7 @@ class ImageCore extends ObjectModel
 	{
 		parent::__construct($id, $id_lang);
 		$this->image_dir = _PS_PROD_IMG_DIR_;
+		$this->source_index = _PS_PROD_IMG_DIR_.'index.php';
 	}
 	
 	public function getFields()
@@ -460,11 +464,19 @@ class ImageCore extends ObjectModel
 	{
 		if (!$this->id)
 			return false;
-			
-		// Apparently sometimes mkdir cannot set the rights, and sometimes chmod can't. Doing both.
+
 		if (!file_exists(_PS_PROD_IMG_DIR_.$this->getImgFolder()))
-			return @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777, true) 
-				|| @chmod(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777);
+		{
+			// Apparently sometimes mkdir cannot set the rights, and sometimes chmod can't. Trying both.
+			$success = @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777, true) 
+						|| @chmod(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777);
+			
+			// Create an index.php file in the new folder
+			if ($success 
+				&& !file_exists(_PS_PROD_IMG_DIR_.$this->getImgFolder().'index.php')
+				&& file_exists($this->source_index))
+				return @copy($this->source_index, _PS_PROD_IMG_DIR_.$this->getImgFolder().'index.php');	
+		}
 		return true;
 	}
 	
