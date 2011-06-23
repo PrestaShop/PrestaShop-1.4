@@ -42,7 +42,7 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg', $disableCach
 		{
 			$memory_limit = ini_get('memory_limit');
 			// memory_limit == -1 => unlimited memory
-			if ((int)$memory_limit != -1)
+			if (function_exists('memory_get_usage') AND (int)$memory_limit != -1)
 			{
 				if (preg_match('/[0-9]+k/i', $memory_limit))
 					$memory_limit = 1024 * (int)$memory_limit;
