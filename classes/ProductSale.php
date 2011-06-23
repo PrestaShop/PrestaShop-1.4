@@ -140,8 +140,9 @@ class ProductSaleCore
 		)
 		ORDER BY sales DESC
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
+
 		if (!$result)
-			return $result;
+			return false;
 
 		foreach ($result AS &$row)
 		{
