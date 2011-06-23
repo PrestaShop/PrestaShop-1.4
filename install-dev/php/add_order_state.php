@@ -55,7 +55,7 @@ function add_order_state($conf_name, $name, $invoice, $send_email, $color, $unre
 	{
 		Db::getInstance()->Execute('
 		INSERT IGNORE INTO `'._DB_PREFIX_.'order_state_lang` (`id_lang`, `id_order_state`, `name`, `template`) 
-		VALUES ('.(int)$lang['id_lang'].', '.(int)$id_order_state.', \''.pSQL(isset($name_lang[$lang['iso_code']]) ? $name_lang[$lang['iso_code']] : $name_lang['en']).'\', \''.pSQL(isset($template_lang[$lang['iso_code']]) ? $template_lang[$lang['iso_code']] : $template_lang['en']).'\')
+		VALUES ('.(int)$lang['id_lang'].', '.(int)$id_order_state.', \''.pSQL(isset($name_lang[$lang['iso_code']]) ? $name_lang[$lang['iso_code']] : $name_lang['en']).'\', \''.pSQL(isset($template_lang[$lang['iso_code']]) ? $template_lang[$lang['iso_code']] : (isset($template_lang['en']) ? $template_lang['en'] : '')).'\')
 		');
 	}
 	

@@ -14,4 +14,4 @@ INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_up
 ('PS_OS_OUTOFSTOCK', '9', NOW(), NOW()),
 ('PS_OS_BANKWIRE', '10', NOW(), NOW()),
 ('PS_OS_PAYPAL', '11', NOW(), NOW()),
-('PS_OS_WS_PAYEMENT', '12', NOW(), NOW()),
+('PS_OS_WS_PAYEMENT', '12', NOW(), NOW());
