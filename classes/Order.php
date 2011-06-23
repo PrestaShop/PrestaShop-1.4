@@ -324,7 +324,7 @@ class OrderCore extends ObjectModel
 				global $cookie;
 				$history = new OrderHistory();
 				$history->id_order = (int)($this->id);
-				$history->changeIdOrderState(_PS_OS_CANCELED_, (int)($this->id));
+				$history->changeIdOrderState(Configuration::get('PS_OS_CANCELED'), (int)($this->id));
 				if (!$history->addWithemail())
 					return false;
 			}
@@ -594,22 +594,22 @@ class OrderCore extends ObjectModel
 
 	public function hasBeenDelivered()
 	{
-		return sizeof($this->getHistory((int)($this->id_lang), _PS_OS_DELIVERED_));
+		return sizeof($this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_DELIVERED')));
 	}
 
 	public function hasBeenPaid()
 	{
-		return sizeof($this->getHistory((int)($this->id_lang), _PS_OS_PAYMENT_));
+		return sizeof($this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_PAYMENT')));
 	}
 
 	public function hasBeenShipped()
 	{
-		return sizeof($this->getHistory((int)($this->id_lang), _PS_OS_SHIPPING_));
+		return sizeof($this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_SHIPPING')));
 	}
 
 	public function isInPreparation()
 	{
-		return sizeof($this->getHistory((int)($this->id_lang), _PS_OS_PREPARATION_));
+		return sizeof($this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_PREPARATION')));
 	}
 
 	/**
@@ -873,12 +873,12 @@ class OrderCore extends ObjectModel
 
 	public function isReturnable()
 	{
-		$payment = $this->getHistory((int)($this->id_lang), _PS_OS_PAYMENT_);
-		$delivred = $this->getHistory((int)($this->id_lang), _PS_OS_DELIVERED_);
+		$payment = $this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_PAYMENT'));
+		$delivred = $this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_DELIVERED'));
 		if ($payment AND $delivred AND strtotime($delivred[0]['date_add']) < strtotime($payment[0]['date_add']))
 			return ((int)(Configuration::get('PS_ORDER_RETURN')) == 1 AND $this->getNumberOfDays());
 		else
-			return ((int)(Configuration::get('PS_ORDER_RETURN')) == 1 AND (int)($this->getCurrentState()) == _PS_OS_DELIVERED_ AND $this->getNumberOfDays());
+			return ((int)(Configuration::get('PS_ORDER_RETURN')) == 1 AND (int)($this->getCurrentState()) == Configuration::get('PS_OS_DELIVERED') AND $this->getNumberOfDays());
 	}
 
 
@@ -1040,7 +1040,7 @@ class OrderCore extends ObjectModel
 	{
 		$paymentModule = Module::getInstanceByName($this->module);
 		$customer = new Customer($this->id_customer);
-		$paymentModule->validateOrder($this->id_cart, _PS_OS_WS_PAYEMENT_, $this->total_paid, $this->payment, NULL, array(), null, false, $customer->secure_key);
+		$paymentModule->validateOrder($this->id_cart, Configuration::get('PS_OS_WS_PAYEMENT'), $this->total_paid, $this->payment, NULL, array(), null, false, $customer->secure_key);
 		$this->id = $paymentModule->currentOrder;
 		return true;
 	}

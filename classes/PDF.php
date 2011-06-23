@@ -551,7 +551,7 @@ class PDFCore extends PDF_PageGroupCore
 				$carrier->name = Configuration::get('PS_SHOP_NAME');
 		$history = self::$order->getHistory(self::$order->id_lang);
 		foreach($history as $h)
-			if ($h['id_order_state'] == _PS_OS_SHIPPING_)
+			if ($h['id_order_state'] == Configuration::get('PS_OS_SHIPPING'))
 				$shipping_date = $h['date_add'];
 		$pdf->Ln(12);
 		$pdf->SetFillColor(240, 240, 240);

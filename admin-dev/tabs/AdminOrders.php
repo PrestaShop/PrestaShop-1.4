@@ -121,13 +121,13 @@ class AdminOrders extends AdminTab
 					$order = new Order((int)$order->id);
 					$carrier = new Carrier((int)($order->id_carrier), (int)($order->id_lang));
 					$templateVars = array();
-					if ($history->id_order_state == _PS_OS_SHIPPING_ AND $order->shipping_number)
+					if ($history->id_order_state == Configuration::get('PS_OS_SHIPPING') AND $order->shipping_number)
 						$templateVars = array('{followup}' => str_replace('@', $order->shipping_number, $carrier->url));
-					elseif ($history->id_order_state == _PS_OS_CHEQUE_)
+					elseif ($history->id_order_state == Configuration::get('PS_OS_CHEQUE'))
 						$templateVars = array(
 							'{cheque_name}' => (Configuration::get('CHEQUE_NAME') ? Configuration::get('CHEQUE_NAME') : ''),
 							'{cheque_address_html}' => (Configuration::get('CHEQUE_ADDRESS') ? nl2br(Configuration::get('CHEQUE_ADDRESS')) : ''));
-					elseif ($history->id_order_state == _PS_OS_BANKWIRE_)
+					elseif ($history->id_order_state == Configuration::get('PS_OS_BANKWIRE'))
 						$templateVars = array(
 							'{bankwire_owner}' => (Configuration::get('BANK_WIRE_OWNER') ? Configuration::get('BANK_WIRE_OWNER') : ''),
 							'{bankwire_details}' => (Configuration::get('BANK_WIRE_DETAILS') ? nl2br(Configuration::get('BANK_WIRE_DETAILS')) : ''),
