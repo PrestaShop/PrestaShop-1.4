@@ -3,7 +3,7 @@
 	<name>vatnumber</name>
 	<displayName><![CDATA[European VAT number]]></displayName>
 	<version><![CDATA[1]]></version>
-	<description><![CDATA[Enable to fill VAT intra-community number when creating address (You must fill in the company field to allowed keyboarding VAT number)]]></description>
+	<description><![CDATA[Enable entering of the VAT intra-community number when creating the address (You must fill in the company field to allow keyboarding VAT number)]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[billing_invoicing]]></tab>
 	<is_configurable>1</is_configurable>
