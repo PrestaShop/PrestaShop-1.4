@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Bloc navigation à facettes';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Affiche un bloc avec les filtres de la navigation à facettes';
+$_MODULE['<{blocklayered}prestashop>blocklayered_1b90c001d668d0ec894392d8e6695054'] = 'Vous devez activer l\'extension cURL sur votre serveur si vous désirez utiliser des liens courts.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7ad3f384bcf30d783b5a6f6c810b4762'] = 'La base de données de la navigation à facettes à été initialisée avec succès';
 $_MODULE['<{blocklayered}prestashop>blocklayered_6e7db02664c13dd5b517a12eafab88b1'] = 'Bit.ly nom d\'utilisateur est vide';
 $_MODULE['<{blocklayered}prestashop>blocklayered_f5da5c32121b39bb2100b9b63ccf4c4c'] = 'Bit.ly  api_key est vide';
