@@ -512,9 +512,16 @@ class ProductCore extends ObjectModel
 			$result = Db::getInstance()->getRow('
 			SELECT `id_product_attribute`
 			FROM `'._DB_PREFIX_.'product_attribute`
+			WHERE `default_on` = 1 AND `id_product` = '.(int)($id_product));
+		if (!$result)
+			$result = Db::getInstance()->getRow('
+			SELECT `id_product_attribute`
+			FROM `'._DB_PREFIX_.'product_attribute`
 			WHERE `id_product` = '.(int)($id_product));
 		return $result['id_product_attribute'];
 	}
+
+	
 
 	public static function updateDefaultAttribute($id_product)
 	{
