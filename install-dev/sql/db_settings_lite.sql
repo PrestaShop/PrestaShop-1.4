@@ -185,7 +185,19 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (114, 'PS_CANONICAL_REDIRECT', '1', NOW(), NOW()),
 (115, 'PS_IMG_UPDATE_TIME', UNIX_TIMESTAMP(), NOW(), NOW()),
 (116, 'PS_BACKUP_DROP_TABLE', 1, NOW(), NOW()),
-(117, 'PS_LEGACY_IMAGES', '1', NOW(), NOW());
+(117, 'PS_OS_CHEQUE', '1', NOW(), NOW()),
+(118, 'PS_OS_PAYMENT', '2', NOW(), NOW()),
+(119, 'PS_OS_PREPARATION', '3', NOW(), NOW()),
+(120, 'PS_OS_SHIPPING', '4', NOW(), NOW()),
+(121, 'PS_OS_DELIVERED', '5', NOW(), NOW()),
+(122, 'PS_OS_CANCELED', '6', NOW(), NOW()),
+(123, 'PS_OS_REFUND', '7', NOW(), NOW()),
+(124, 'PS_OS_ERROR', '8', NOW(), NOW()),
+(125, 'PS_OS_OUTOFSTOCK', '9', NOW(), NOW()),
+(126, 'PS_OS_BANKWIRE', '10', NOW(), NOW()),
+(127, 'PS_OS_PAYPAL', '11', NOW(), NOW()),
+(128, 'PS_OS_WS_PAYEMENT', '12', NOW(), NOW()),
+(129, 'PS_LEGACY_IMAGES', '1', NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),(36, 4, 'FA', NOW()),(36, 5, 'FA', NOW()),

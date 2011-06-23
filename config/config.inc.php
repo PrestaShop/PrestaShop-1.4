@@ -106,6 +106,22 @@ Configuration::loadConfiguration();
 /* Load all language definitions */
 Language::loadLanguages();
 
+/* Define order state */
+// DEPRECATED : these defines are going to be deleted on 1.6 version of Prestashop
+// USE : Configuration::get() method in order to getting the id of order state
+define('_PS_OS_CHEQUE_',      Configuration::get('PS_OS_CHEQUE'));
+define('_PS_OS_PAYMENT_',     Configuration::get('PS_OS_PAYMENT'));
+define('_PS_OS_PREPARATION_', Configuration::get('PS_OS_PREPARATION'));
+define('_PS_OS_SHIPPING_',    Configuration::get('PS_OS_SHIPPING'));
+define('_PS_OS_DELIVERED_',   Configuration::get('PS_OS_DELIVERED'));
+define('_PS_OS_CANCELED_',    Configuration::get('PS_OS_CANCELED'));
+define('_PS_OS_REFUND_',      Configuration::get('PS_OS_REFUND'));
+define('_PS_OS_ERROR_',       Configuration::get('PS_OS_ERROR'));
+define('_PS_OS_OUTOFSTOCK_',  Configuration::get('PS_OS_OUTOFSTOCK'));
+define('_PS_OS_BANKWIRE_',    Configuration::get('PS_OS_BANKWIRE'));
+define('_PS_OS_PAYPAL_',      Configuration::get('PS_OS_PAYPAL'));
+define('_PS_OS_WS_PAYEMENT_', Configuration::get('PS_OS_WS_PAYEMENT'));
+
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))
 	@date_default_timezone_set(Configuration::get('PS_TIMEZONE'));

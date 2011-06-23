@@ -120,6 +120,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_duplicate_category_groups.ph
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'migrate_block_info_to_cms_block.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_order_state.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;
