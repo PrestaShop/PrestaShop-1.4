@@ -24,6 +24,27 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{*
+** Compatibility code for Prestashop older than 1.4.2 using a recent theme
+** Ignore list isn't require here
+** $address exist in every PrestaShop version
+*}
+
+{* Will be deleted for 1.5 version and more *}
+{* Smarty code compatibility v2 *}
+{* If ordered_adr_fields doesn't exist, it's a PrestaShop older than 1.4.2 *}
+{if !isset($dlv_all_fields)}
+		{$dlv_all_fields.0 = 'company'}
+		{$dlv_all_fields.1 = 'firstname'}
+		{$dlv_all_fields.2 = 'lastname'}
+		{$dlv_all_fields.3 = 'address1'}
+		{$dlv_all_fields.4 = 'address2'}
+		{$dlv_all_fields.5 = 'postcode'}
+		{$dlv_all_fields.6 = 'city'}
+		{$dlv_all_fields.7 = 'country'}
+		{$dlv_all_fields.8 = 'state'}
+{/if}
+
 {capture name=path}{l s='Login'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
@@ -176,7 +197,7 @@ $(function(){ldelim}
 							{/foreach}
 						</select>
 					</p>
-					{if $newsletter}
+					{if isset($newsletter) && $newsletter}
 						<p class="checkbox">
 							<input type="checkbox" name="newsletter" id="newsletter" value="1" {if isset($smarty.post.newsletter) && $smarty.post.newsletter == '1'}checked="checked"{/if}>
 							<label for="newsletter">{l s='Sign up for our newsletter'}</label>
@@ -233,7 +254,7 @@ $(function(){ldelim}
 							</select>
 							<sup>*</sup>
 						</p>
-						{elseif $field_name eq "State:name"}
+						{elseif $field_name eq "State:name" || $field_name eq 'state'}
 						{assign var='stateExist' value=true}
 
 						<p class="required id_state select">
@@ -348,7 +369,7 @@ $(function(){ldelim}
 				{/foreach}
 			</select>
 		</p>
-		{if $newsletter}
+		{if isset($newsletter) && $newsletter}
 		<p class="checkbox" >
 			<input type="checkbox" name="newsletter" id="newsletter" value="1" {if isset($smarty.post.newsletter) AND $smarty.post.newsletter == 1} checked="checked"{/if} />
 			<label for="newsletter">{l s='Sign up for our newsletter'}</label>
@@ -426,7 +447,7 @@ $(function(){ldelim}
 					</select>
 					<sup>*</sup>
 				</p>
-			{elseif $field_name eq "State:name"}
+			{elseif $field_name eq "State:name" || $field_name eq 'state'}
 				{assign var='stateExist' value=true}
 				<p class="required id_state select">
 					<label for="id_state">{l s='State'}</label>

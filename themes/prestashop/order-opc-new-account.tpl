@@ -1,3 +1,23 @@
+{*
+** Compatibility code for Prestashop older than 1.4.2 using a recent theme
+** Ignore list isn't require here
+** $address exist in every PrestaShop version
+*}
+
+{* Will be deleted for 1.5 version and more *}
+{* If ordered_adr_fields doesn't exist, it's a PrestaShop older than 1.4.2 *}
+{if !isset($dlv_all_fields)}
+		{$dlv_all_fields.0 = 'company'}
+		{$dlv_all_fields.1 = 'firstname'}
+		{$dlv_all_fields.2 = 'lastname'}
+		{$dlv_all_fields.3 = 'address1'}
+		{$dlv_all_fields.4 = 'address2'}
+		{$dlv_all_fields.5 = 'postcode'}
+		{$dlv_all_fields.6 = 'city'}
+		{$dlv_all_fields.7 = 'country'}
+		{$dlv_all_fields.8 = 'state'}
+{/if}
+
 <div id="opc_new_account" class="opc-main-block">
 	<div id="opc_new_account-overlay" class="opc-overlay" style="display: none;"></div>
 	<h2>1. {l s='Account'}</h2>
@@ -169,7 +189,7 @@
 						{/foreach}
 					</select>
 				</p>
-				{if $newsletter}
+				{if isset($newsletter) && $newsletter}
 				<p class="checkbox">
 					<input type="checkbox" name="newsletter" id="newsletter" value="1" {if isset($guestInformations) && $guestInformations.newsletter}checked="checked"{/if} />
 					<label for="newsletter">{l s='Sign up for our newsletter'}</label>
@@ -340,7 +360,7 @@
 						</select>
 						<sup>*</sup>
 					</p>
-					{elseif $field_name eq "state"}
+					{elseif $field_name eq "state" || $field_name eq 'State:name'}
 					<p class="required id_state_invoice select" style="display:none;">
 						<label for="id_state_invoice">{l s='State'}</label>
 						<select name="id_state_invoice" id="id_state_invoice">
