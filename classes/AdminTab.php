@@ -834,9 +834,7 @@ abstract class AdminTabCore
 					// check if a method updateOptionFieldName is available
 					$method_name = 'updateOption'.Tools::toCamelCase($key, true);
 					if (method_exists($this, $method_name))
-					{
 						$this->$method_name(Tools::getValue($key));
-					}
 					elseif ($field['type'] == 'textLang' OR $field['type'] == 'textareaLang')
 					{
 						$languages = Language::getLanguages(false);
