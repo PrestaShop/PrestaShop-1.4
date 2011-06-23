@@ -1389,7 +1389,7 @@ class FedexCarrier extends CarrierModule
 		foreach ($wsParams as $k => $v)
 			if ($k != 'products')
 			$paramHash .= '/'.$v;
-		return md5($productHash.$paramHash);
+		return md5($productHash.$paramHash.Configuration::get('FEDEX_CARRIER_CALCUL_MODE'));
 	}
 
 	public function getOrderShippingCostCache($wsParams)
