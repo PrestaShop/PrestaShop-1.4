@@ -589,7 +589,7 @@ class CartCore extends ObjectModel
 				else
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'cart_product`
-					SET `quantity` = `quantity` '.$qty.'
+					SET `quantity` = `quantity` '.$qty.', `date_add` = NOW()
 					WHERE `id_product` = '.(int)$id_product.
 					(!empty($id_product_attribute) ? ' AND `id_product_attribute` = '.(int)$id_product_attribute : '').'
 					AND `id_cart` = '.(int)$this->id.'
