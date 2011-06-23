@@ -38,12 +38,18 @@ class FedexCarrier extends CarrierModule
 	private $_fieldsList = array();
 	private $_pickupTypeList = array();
 	private $_packagingTypeList = array();
+	private $_calculModeList = array();
 	private $_serviceTypeList = array();
 	private $_dimensionUnit = '';
 	private $_weightUnit = '';
 	private $_dimensionUnitList = array('CM' => 'CM', 'IN' => 'IN', 'CMS' => 'CM', 'INC' => 'IN');
 	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LBS' => 'LBS', 'LB' => 'LBS');
 	private $_moduleName = 'fedexcarrier';
+
+	/*
+	** Construct Method
+	**
+	*/
 
 	public function __construct()
 	{
@@ -73,6 +79,10 @@ class FedexCarrier extends CarrierModule
 				if (!Configuration::get($keyConfiguration) && !empty($name))
 					$warning[] = '\''.$name.'\' ';
 
+			// Check calcul mode
+			if (!Configuration::get('FEDEX_CARRIER_CALCUL_MODE'))
+				Configuration::updateValue('FEDEX_CARRIER_CALCUL_MODE', 'onepackage');
+
 			// Checking Unit
 			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
 			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
@@ -97,12 +107,15 @@ class FedexCarrier extends CarrierModule
 			'FEDEX_CARRIER_API_KEY' => $this->l('Fedex API Key'),
 			'FEDEX_CARRIER_PICKUP_TYPE' => $this->l('Fedex default pickup type'),
 			'FEDEX_CARRIER_PACKAGING_TYPE' => $this->l('Fedex default packaging type'),
+			'FEDEX_CARRIER_PACKAGING_WEIGHT' => $this->l('Packaging weight'),
+			'FEDEX_CARRIER_HANDLING_FEE' => $this->l('Handling fee'),
 			'FEDEX_CARRIER_ADDRESS1' => '',
 			'FEDEX_CARRIER_ADDRESS2' => '',
 			'FEDEX_CARRIER_POSTAL_CODE' => '',
 			'FEDEX_CARRIER_CITY' => '',
 			'FEDEX_CARRIER_STATE' => '',
 			'FEDEX_CARRIER_COUNTRY' => '',
+			'FEDEX_CARRIER_CALCUL_MODE' => '',
 		);
 
 		// Loading pickup type list			
@@ -147,6 +160,12 @@ class FedexCarrier extends CarrierModule
 			'PRIORITY_OVERNIGHT' => $this->l('Priority overnight'),
 			'SMART_POST' => $this->l('Smart post'),
 			'STANDARD_OVERNIGHT' => $this->l('Standard overnight')
+		);
+
+		// Loading calcul mode list
+		$this->_calculModeList = array(
+			'onepackage' => $this->l('All items in one package'),
+			'split' => $this->l('Split one item per package')
 		);
 	}
 
@@ -422,6 +441,7 @@ class FedexCarrier extends CarrierModule
 	private function _displayFormGeneral()
 	{
 		global $cookie;
+		$configCurrency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 
 		$html = '<script>
 			$(document).ready(function() {
@@ -462,6 +482,17 @@ class FedexCarrier extends CarrierModule
 					<div class="margin-form">
 						<input type="text" size="20" name="fedex_carrier_api_key" value="'.Tools::getValue('fedex_carrier_api_key', Configuration::get('FEDEX_CARRIER_API_KEY')).'" />
 						<p><a href="http://www.fedex.com/webtools/" target="_blank">' . $this->l('Please click here to get your Fedex API Key.') . '</a></p>
+					</div>
+					<br /><br />
+					<label>'.$this->l('Packaging Weight').' : </label>
+					<div class="margin-form">
+						<input type="text" size="5" name="fedex_carrier_packaging_weight" value="'.Tools::getValue('fedex_carrier_packaging_weight', Configuration::get('FEDEX_CARRIER_PACKAGING_WEIGHT')).'" />
+						'.Tools::getValue('ps_weight_unit', Configuration::get('PS_WEIGHT_UNIT')).'
+					</div>
+					<label>'.$this->l('Handling Fee').' : </label>
+					<div class="margin-form">
+						<input type="text" size="5" name="fedex_carrier_handling_fee" value="'.Tools::getValue('fedex_carrier_handling_fee', Configuration::get('FEDEX_CARRIER_HANDLING_FEE')).'" />
+						'.$configCurrency->sign.'
 					</div>
 				</fieldset>
 
@@ -544,6 +575,15 @@ class FedexCarrier extends CarrierModule
 								$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Configuration::get('FEDEX_CARRIER_PACKAGING_TYPE')) ? 'selected="selected"' : '').'>'.$vkpackaging.'</option>';
 					$html .= '</select>
 					</div>
+					<label>'.$this->l('Calcul mode').' : </label>
+						<div class="margin-form">
+							<select name="fedex_carrier_calcul_mode">';
+								$idcalculmode = array();
+								foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
+									$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('fedex_carrier_calcul_mode', Configuration::get('FEDEX_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
+					$html .= '</select>
+					<p>' . $this->l('Using the calcul mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specifics configurations for categories or product won\'t be use.') . '</p>
+					</div>
 					<label>'.$this->l('Delivery Service').' : </label>
 					<div class="margin-form">';
 						$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'fedex_rate_service_code`');
@@ -623,12 +663,15 @@ class FedexCarrier extends CarrierModule
 			Configuration::updateValue('FEDEX_CARRIER_API_KEY', Tools::getValue('fedex_carrier_api_key'));
 			Configuration::updateValue('FEDEX_CARRIER_PICKUP_TYPE', Tools::getValue('fedex_carrier_pickup_type'));
 			Configuration::updateValue('FEDEX_CARRIER_PACKAGING_TYPE', Tools::getValue('fedex_carrier_packaging_type'));
+			Configuration::updateValue('FEDEX_CARRIER_PACKAGING_WEIGHT', Tools::getValue('fedex_carrier_packaging_weight'));
+			Configuration::updateValue('FEDEX_CARRIER_HANDLING_FEE', Tools::getValue('fedex_carrier_handling_fee'));
 			Configuration::updateValue('FEDEX_CARRIER_ADDRESS1', Tools::getValue('fedex_carrier_address1'));
 			Configuration::updateValue('FEDEX_CARRIER_ADDRESS2', Tools::getValue('fedex_carrier_address2'));
 			Configuration::updateValue('FEDEX_CARRIER_POSTAL_CODE', Tools::getValue('fedex_carrier_postal_code'));
 			Configuration::updateValue('FEDEX_CARRIER_CITY', Tools::getValue('fedex_carrier_city'));
 			Configuration::updateValue('FEDEX_CARRIER_STATE', Tools::getValue('fedex_carrier_state'));
 			Configuration::updateValue('FEDEX_CARRIER_COUNTRY', Tools::getValue('fedex_carrier_country'));
+			Configuration::updateValue('FEDEX_CARRIER_CALCUL_MODE', Tools::getValue('fedex_carrier_calcul_mode'));
 			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]);
 			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]);
 			if (isset($this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]))
@@ -647,12 +690,15 @@ class FedexCarrier extends CarrierModule
 			Configuration::updateValue('FEDEX_CARRIER_METER', Tools::getValue('fedex_carrier_meter')) AND
 			Configuration::updateValue('FEDEX_CARRIER_PASSWORD', Tools::getValue('fedex_carrier_password')) AND
 			Configuration::updateValue('FEDEX_CARRIER_API_KEY', Tools::getValue('fedex_carrier_api_key')) AND
+			Configuration::updateValue('FEDEX_CARRIER_PACKAGING_WEIGHT', Tools::getValue('fedex_carrier_packaging_weight')) AND
+			Configuration::updateValue('FEDEX_CARRIER_HANDLING_FEE', Tools::getValue('fedex_carrier_handling_fee')) AND
 			Configuration::updateValue('FEDEX_CARRIER_PICKUP_TYPE', Tools::getValue('fedex_carrier_pickup_type')) AND
 			Configuration::updateValue('FEDEX_CARRIER_PACKAGING_TYPE', Tools::getValue('fedex_carrier_packaging_type')) AND
 			Configuration::updateValue('FEDEX_CARRIER_POSTAL_CODE', Tools::getValue('fedex_carrier_postal_code')) AND
 			Configuration::updateValue('FEDEX_CARRIER_CITY', Tools::getValue('fedex_carrier_city')) AND
 			Configuration::updateValue('FEDEX_CARRIER_STATE', Tools::getValue('fedex_carrier_state')) AND
 			Configuration::updateValue('FEDEX_CARRIER_COUNTRY', Tools::getValue('fedex_carrier_country')) AND
+			Configuration::updateValue('FEDEX_CARRIER_CALCUL_MODE', Tools::getValue('fedex_carrier_calcul_mode')) AND
 			Configuration::updateValue('PS_WEIGHT_UNIT', $this->_weightUnitList[strtoupper(Tools::getValue('ps_weight_unit'))]) AND
 			Configuration::updateValue('PS_DIMENSION_UNIT', $this->_dimensionUnitList[strtoupper(Tools::getValue('ps_dimension_unit'))]))
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
@@ -1440,34 +1486,73 @@ class FedexCarrier extends CarrierModule
 		// Init var
 		$cost = 0;
 
-		// Getting shipping cost for each product
-		foreach ($wsParams['products'] as $product)
+		// Calcul mode condition
+		if (Configuration::get('FEDEX_CARRIER_CALCUL_MODE') == 'onepackage')
 		{
-			// Load specific configuration
-			$config = $this->loadShippingCostConfig($product);
+			$width = 0;
+			$height = 0;
+			$depth = 0;
+			$weight = 0;
+
+			foreach ($wsParams['products'] as $product)
+			{
+				if ($product['width'] && $product['width'] > $width) $width = $product['width'];
+				if ($product['height'] && $product['height'] > $height) $height = $product['height'];
+				if ($product['depth'] && $product['depth'] > $depth) $depth = $product['depth'];
+				if ($product['weight'])
+					$weight += ($product['weight'] * $product['quantity']);
+			}
+			$weight += Tools::getValue('fedex_carrier_packaging_weight', Configuration::get('FEDEX_CARRIER_PACKAGING_WEIGHT'));
 
 			// Get service in adequation with carrier and check if available
+			$servicesConfiguration = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'fedex_rate_service_code` WHERE `active` = 1');
+			foreach ($servicesConfiguration as $service)
+				$config['services'][$service['id_fedex_rate_service_code']] = $service;
 			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'fedex_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
 			if (!isset($config['services'][$serviceSelected['id_fedex_rate_service_code']]))
 				return false;
 
-			// Load param product
 			$wsParams['service'] = $serviceSelected['code'];
-			for ($qty = 0; $qty < $product['quantity']; $qty++)
-				$wsParams['package_list'][] = array(
-					'width' => ($product['width'] ? $product['width'] : 1),
-					'height' => ($product['height'] ? $product['height'] : 1),
-					'depth' => ($product['depth'] ? $product['depth'] : 1),
-					'weight' => ($product['weight'] ? $product['weight'] : 1),
-					'pickup_type' => (isset($config['pickup_type_code']) ? $config['pickup_type_code'] : Configuration::get('FEDEX_CARRIER_PICKUP_TYPE')),
-				);
-
-			// If Additional charges
-			if (isset($config['id_currency']) && isset($config['additional_charges']))
+			$wsParams['package_list'] = array();
+			$wsParams['package_list'][] = array(
+				'width' => ($width > 0 ? $width : 7),
+				'height' => ($height > 0 ? $height : 3),
+				'depth' => ($depth > 0 ? $depth : 5),
+				'weight' => ($weight > 0 ? $weight : .5),
+				'packaging_type' => Configuration::get('FEDEX_CARRIER_PACKAGING_TYPE'),
+			);
+		}
+		else 
+		{
+			// Getting shipping cost for each product
+			foreach ($wsParams['products'] as $product)
 			{
-				$conversionRate = 1;
-				$conversionRate = $this->getCartCurrencyRate((int)($config['id_currency']), (int)$wsParams['id_cart']);
-				$cost += ($config['additional_charges'] * $conversionRate);
+				// Load specific configuration
+				$config = $this->loadShippingCostConfig($product);
+
+				// Get service in adequation with carrier and check if available
+				$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'fedex_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
+				if (!isset($config['services'][$serviceSelected['id_fedex_rate_service_code']]))
+					return false;
+
+				// Load param product
+				$wsParams['service'] = $serviceSelected['code'];
+				for ($qty = 0; $qty < $product['quantity']; $qty++)
+					$wsParams['package_list'][] = array(
+						'width' => ($product['width'] ? $product['width'] : 1),
+						'height' => ($product['height'] ? $product['height'] : 1),
+						'depth' => ($product['depth'] ? $product['depth'] : 1),
+						'weight' => ($product['weight'] ? $product['weight'] : 1),
+						'pickup_type' => (isset($config['pickup_type_code']) ? $config['pickup_type_code'] : Configuration::get('FEDEX_CARRIER_PICKUP_TYPE')),
+					);
+
+				// If Additional charges
+				if (isset($config['id_currency']) && isset($config['additional_charges']))
+				{
+					$conversionRate = 1;
+					$conversionRate = $this->getCartCurrencyRate((int)($config['id_currency']), (int)$wsParams['id_cart']);
+					$cost += ($config['additional_charges'] * $conversionRate);
+				}
 			}
 		}
 
@@ -1475,7 +1560,7 @@ class FedexCarrier extends CarrierModule
 		// If webservice return a cost, we add it, else, we return the original shipping cost
 		$result = $this->getFedexShippingCost($wsParams);
 		if ($result['connect'] && $result['cost'] > 0)
-			return ($cost + $result['cost']);
+			return ($cost + $result['cost'] + Tools::getValue('fedex_carrier_handling_fee', Configuration::get('FEDEX_CARRIER_HANDLING_FEE')));
 		return false;
 	}
 
