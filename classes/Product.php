@@ -521,8 +521,6 @@ class ProductCore extends ObjectModel
 		return $result['id_product_attribute'];
 	}
 
-	
-
 	public static function updateDefaultAttribute($id_product)
 	{
 		$id_product_attribute = self::getDefaultAttribute($id_product);
