@@ -353,34 +353,39 @@ class ImageCore extends ObjectModel
 		else
 			return false;
 	
+		$files_to_delete = array();
+		
 		// Delete auto-generated images
 		$imageTypes = ImageType::getImagesTypes();
 		foreach ($imageTypes AS $imageType)
-			if (file_exists($this->image_dir.$this->getExistingImgPath().'-'.$imageType['name'].'.'.$this->image_format))
-				unlink($this->image_dir.$this->getExistingImgPath().'-'.$imageType['name'].'.'.$this->image_format);
+			$files_to_delete[] = $this->image_dir.$this->getExistingImgPath().'-'.$imageType['name'].'.'.$this->image_format;
 			
-		// Can we remove the image folder?
+		// Delete watermark image
+		$files_to_delete[] = $this->image_dir.$this->getExistingImgPath().'-watermark.'.$this->image_format;
+		// delete index.php
+		$files_to_delete[] = $this->image_dir.$this->getImgFolder().'index.php';
+		// Delete tmp images
+		$files_to_delete[] = _PS_TMP_IMG_DIR_.'product_'.$this->id_product.'.'.$this->image_format;
+		$files_to_delete[] = _PS_TMP_IMG_DIR_.'product_mini_'.$this->id_product.'.'.$this->image_format;
+		
+		foreach ($files_to_delete as $file)
+			if (file_exists($file) && !@unlink($file))
+				return false;
+		
+		// Can we delete the image folder?
 		if (is_dir($this->image_dir.$this->getImgFolder()))
 		{
-			$remove_folder = true;
+			$delete_folder = true;
 			foreach (scandir($this->image_dir.$this->getImgFolder()) as $file)
 				if (($file != '.' && $file != '..'))
 				{
-					$remove_folder = false;
+					$delete_folder = false;
 					break;
 				}
 		}		
-		if (isset($remove_folder) && $remove_folder)
+		if (isset($delete_folder) && $delete_folder)
 			@rmdir($this->image_dir.$this->getImgFolder());
-			
-		// Delete tmp images
-		if (file_exists(_PS_TMP_IMG_DIR_.'product_'.$this->id_product.'.'.$this->image_format) 
-			&& !unlink(_PS_TMP_IMG_DIR_.'product_'.$this->id_product.'.'.$this->image_format))
-			return false;
-		if (file_exists(_PS_TMP_IMG_DIR_.'product_mini_'.$this->id_product.'.'.$this->image_format) 
-			&& !unlink(_PS_TMP_IMG_DIR_.'product_mini_'.$this->id_product.'.'.$this->image_format))
-			return false;
-			
+
 		return true;
 	}
 	
@@ -398,7 +403,7 @@ class ImageCore extends ObjectModel
 		foreach (scandir($path) as $file)
 		{
 			if (preg_match('/^[0-9]+(\-(.*))?\.'.$format.'$/', $file))
-				unlink($path.$file);	
+				unlink($path.$file);
 			else if (is_dir($path.$file) && (preg_match('/^[0-9]$/', $file)))
 				self::deleteAllImages($path.$file.'/', $format);
 		}
@@ -406,14 +411,19 @@ class ImageCore extends ObjectModel
 		// Can we remove the image folder?
 		$remove_folder = true;
 		foreach (scandir($path) as $file)
-			if (($file != '.' && $file != '..'))
+			if (($file != '.' && $file != '..'&& $file != 'index.php'))
 			{
 				$remove_folder = false;
 				break;
 			}
 
 		if ($remove_folder)
+		{
+			// we're only removing index.php if it's a folder we want to delete
+			if (file_exists($path.'index.php'))
+				@unlink ($path.'index.php');
 			@rmdir($path);	
+		}
 		
 		return true;
 	}
