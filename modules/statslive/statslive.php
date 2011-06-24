@@ -86,9 +86,9 @@ class StatsLive extends Module
 			LEFT JOIN `'._DB_PREFIX_.'page` p ON p.id_page = cp.id_page
 			LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON p.id_page_type = pt.id_page_type
 			INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
-			WHERE (g.id_customer IS NULL OR g.id_customer = 0)
-			AND cp.`time_end` IS NULL
-			AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
+			WHERE cp.`time_end` IS NULL
+			AND (g.id_customer IS NULL OR g.id_customer = 0)
+			AND cp.`time_start` > '.strtotime('-15 minutes').'
 			GROUP BY c.id_connections
 			ORDER BY c.date_add DESC';
 		else
@@ -96,7 +96,7 @@ class StatsLive extends Module
 			FROM `'._DB_PREFIX_.'connections` c
 			INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
 			WHERE (g.id_customer IS NULL OR g.id_customer = 0)
-			AND TIME_TO_SEC(TIMEDIFF(NOW(), c.`date_add`)) < 900
+			AND c.`date_add` > "'.date('Y-m-d H:i:s', strtotime('-15 minutes')).'"
 			ORDER BY c.date_add DESC';
 			
 		$result =  Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
