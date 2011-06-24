@@ -120,7 +120,7 @@ define('_PS_OS_ERROR_',       Configuration::get('PS_OS_ERROR'));
 define('_PS_OS_OUTOFSTOCK_',  Configuration::get('PS_OS_OUTOFSTOCK'));
 define('_PS_OS_BANKWIRE_',    Configuration::get('PS_OS_BANKWIRE'));
 define('_PS_OS_PAYPAL_',      Configuration::get('PS_OS_PAYPAL'));
-define('_PS_OS_WS_PAYEMENT_', Configuration::get('PS_OS_WS_PAYEMENT'));
+define('_PS_OS_WS_PAYMENT_', Configuration::get('PS_OS_WS_PAYMENT'));
 
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))
