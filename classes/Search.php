@@ -323,10 +323,12 @@ class SearchCore
 		return $features;
 	}
 
-	public static function indexation($full = false)
+	public static function indexation($full = false, $id_product = false)
 	{
 		$db = Db::getInstance();
 		$dropIndex = false;
+		if ($id_product)
+			$full = false;
 		
 		if ($full)
 		{
@@ -337,7 +339,11 @@ class SearchCore
 		}
 		else
 		{
-			$products = $db->ExecuteS('SELECT id_product FROM '._DB_PREFIX_.'product WHERE indexed = 0');
+			// Do it even if you already know the product id on order to be sure that it exists
+			$products = $db->ExecuteS('
+			SELECT id_product
+			FROM '._DB_PREFIX_.'product
+			WHERE '.($id_product ? 'id_product = '.(int)$id_product : 'indexed = 0'));
 
 			$ids = array();
 			if ($products)
@@ -345,8 +351,7 @@ class SearchCore
 					$ids[] = (int)$product['id_product'];
 			if (sizeof($ids))
 				$db->Execute('DELETE FROM '._DB_PREFIX_.'search_index WHERE id_product IN ('.implode(',', $ids).')');
-				
-				
+			
 			if (count($products) > 2000)
 				$dropIndex = true;
 		}

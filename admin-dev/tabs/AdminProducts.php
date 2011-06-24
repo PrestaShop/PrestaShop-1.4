@@ -308,7 +308,7 @@ class AdminProducts extends AdminTab
 						else
 						{
 							Hook::addProduct($product);
-							Search::indexation(false);
+							Search::indexation(false, $product->id);
 							Tools::redirectAdmin($currentIndex.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&conf=19&token='.($token ? $token : $this->token));
 						}
 					}
@@ -1184,9 +1184,9 @@ class AdminProducts extends AdminTab
 							$this->_errors[] = Tools::displayError('An error occurred while adding tags.');
 						elseif ($id_image = $this->addProductImage($object, Tools::getValue('resizer')))
 						{
-							$currentIndex .= '&image_updated='.(int)(Tools::getValue('id_image'));
+							$currentIndex .= '&image_updated='.(int)Tools::getValue('id_image');
 							Hook::updateProduct($object);
-							Search::indexation(false);
+							Search::indexation(false, $object->id);
 							if (Tools::getValue('resizer') == 'man' && isset($id_image) AND is_int($id_image) AND $id_image)
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&edit='.strval(Tools::getValue('productCreated')).'&id_image='.$id_image.'&imageresize&toconf=4&submitAddAndStay='.((Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR Tools::getValue('productCreated') == 'on') ? 'on' : 'off').'&token='.(($token ? $token : $this->token)));
 
@@ -1239,7 +1239,7 @@ class AdminProducts extends AdminTab
 						elseif ($id_image = $this->addProductImage($object))
 						{
 							Hook::addProduct($object);
-							Search::indexation(false);
+							Search::indexation(false, $object->id);
 
 							// Save and preview
 							if (Tools::isSubmit('submitAddProductAndPreview'))
