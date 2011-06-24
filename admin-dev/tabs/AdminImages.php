@@ -337,15 +337,17 @@ class AdminImages extends AdminTab
 		{
 			$productsImages = Image::getAllImages();
 			foreach ($productsImages AS $k => $image)
+			{
 				$imageObj = new Image($image['id_image']);
 				if (file_exists($dir.$imageObj->getExistingImgPath().'.jpg'))
 					foreach ($result AS $k => $module)
 					{
 						if ($moduleInstance = Module::getInstanceByName($module['name']) AND is_callable(array($moduleInstance, 'hookwatermark')))
-							call_user_func(array($moduleInstance, 'hookwatermark'), array('id_image' => $image['id_image'], 'id_product' => $image['id_product']));
+							call_user_func(array($moduleInstance, 'hookwatermark'), array('id_image' => $imageObj->id, 'id_product' => $imageObj->id_product));
 						if (time() - $this->start_time > $this->max_execution_time - 4) // stop 4 seconds before the tiemout, just enough time to process the end of the page on a slow server
 							return 'timeout';
 					}
+			}
 		}
 	}
 
