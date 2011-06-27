@@ -119,6 +119,11 @@ class GCheckout extends PaymentModule
 						<option value="sandbox"'.(Configuration::get('GCHECKOUT_MODE') == 'sandbox' ? ' selected="selected"' : '').'>'.$this->l('Sandbox').'&nbsp;&nbsp;</option>
 					</select>
 				</div>
+				<p>'.$this->l('Don\'t forget to specify the currency used in the Payment tabs under the currency section').'</p>
+				<label>
+					'.$this->l('Currency').'
+				</label>
+				'.$this->getCurrency()->iso_code.'
 				<p>'.$this->l('You can find these keys in your Google Checkout account > Settings > Integration. Sandbox and real mode both have these keys.').'</p>
 				<label>
 					'.$this->l('Merchant ID').'
