@@ -23,11 +23,6 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_b4ecb2bd1ea5153550669329db53277
 $_MODULE['<{blocklayered}prestashop>blocklayered_d99bf479cc40101e28f1f0ba1bfb6150'] = 'Lien ré-écrits et construction de l\'URL en temps réel (possibilité de la transmettre à quelqu\'un)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_27c7b93d882068a1137a9350c7f1a132'] = 'Ajout d\'options de configuration';
 $_MODULE['<{blocklayered}prestashop>blocklayered_fb8082696a8d7a40fa62ea0e89b18c32'] = 'Amélioration des performance';
-$_MODULE['<{blocklayered}prestashop>blocklayered_7263de0a10ad25dfdadc44791c44fb1f'] = 'Initialisation du cache';
-$_MODULE['<{blocklayered}prestashop>blocklayered_d15ce73cbadfe1e806ee7abd08a7fe4d'] = 'Avant d\'utiliser ce module pour la première fois, vous devez initialiser le cache';
-$_MODULE['<{blocklayered}prestashop>blocklayered_2875534393f5ef32e42d92c30e9dfda5'] = 'Attention : cela peut prendre plusieurs minutes.';
-$_MODULE['<{blocklayered}prestashop>blocklayered_15aa842a19af51c2cf1ec631cdf8337a'] = 'Si vous ne le faites pas, cette table de cache risque de grossir rapidement (et d\'être moins performante), et les nouveaux choix (attributs, caractéristiques) ne seront pas présentés à vos visiteurs.';
-$_MODULE['<{blocklayered}prestashop>blocklayered_c64a069750ff8924b029b2206cabf3b2'] = 'Initialiser la base de données de la navigation à facettes';
 $_MODULE['<{blocklayered}prestashop>blocklayered_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{blocklayered}prestashop>blocklayered_32cd1899a36fd598df5a4e417bc6339a'] = 'Activer le partage d\'url';
 $_MODULE['<{blocklayered}prestashop>blocklayered_05ce875b6f1cb8477077f33bad5e9325'] = 'En activant cette option, vos visiteurs peuvent partager l\'URL de leur recherche';

@@ -52,7 +52,7 @@ class TrustedShopsRating extends AbsTrustedShops
 									   'fr' => '&et_cid=53&et_lid=3362');
 	public function __construct()
 	{
-		$this->tab_name = $this->l('Customer Rating');
+		$this->tab_name = $this->l('Trusted Shops customer rating');
 		
 		// @todo : That gonna be change - Be worry it's false, countries have not the same ISO code as Languages, waiting Truste Shop's answer
 		$this->limited_countries = $this->available_languages;

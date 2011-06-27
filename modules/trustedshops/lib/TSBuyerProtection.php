@@ -150,7 +150,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			'MONEYBOOKERS'		=> $this->l('moneybookers.com'),
 			'OTHER'				=> $this->l('Other method of payment'),
 		);
-		$this->tab_name = $this->l('Seal of Approval and Buyer Protection');
+		$this->tab_name = $this->l('Trusted Shops quality seal and buyer protection');
 		$this->site_url = Tools::htmlentitiesutf8('http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
 		TSBPException::setTranslationObject($this);
 		if (!method_exists('Tools', 'jsonDecode') || !method_exists('Tools', 'jsonEncode'))
@@ -1172,9 +1172,9 @@ class TSBuyerProtection extends AbsTrustedShops
 		$out = '<fieldset>
 				<legend><img src="../img/admin/warning.gif" alt="" />'.$this->l('Cronjob configuration').'</legend>';
 		$out .= '<p>'
-					.$this->l('You need to set a cron Task on your server, working with your EXCELLENT certificate.').'<br />'
-					.$this->l('The file you need to call:').' <b style="color:red;">'.$this->getCronFilePath().'</b><br />'
-					.$this->l('Trusted Shops recommends that the request should be automated by a cronjob with an interval of 10 minutes.')
+					.$this->l('If you are utilising a Trusted Shops EXCELLENCE cetificate in your shop, set up a cron job on your web server.').'<br />'
+					.$this->l('Run the script file ').' <b style="color:red;">'.$this->getCronFilePath().'</b> '.$this->l('with an interval of 10 minutes.').'<br /><br />'
+					.$this->l('The corresponding line in your cron file may look like this:').' <br /><b style="color:red;">*/10 * * * * '.$this->getCronFilePath().'>/dev/null 2>&1</b><br />'
 				.'</p>';
 		$out .= '</fieldset>';
 		return $out;
