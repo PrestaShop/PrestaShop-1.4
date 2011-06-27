@@ -54,6 +54,7 @@ class BlockLayered extends Module
 		{
 			Configuration::updateValue('PS_LAYERED_NAVIGATION_CHECKBOXES', 1);
 			$this->rebuildLayeredStructure();
+			$this->rebuildLayeredCache();
 		}
 
 		return $result;
@@ -110,21 +111,8 @@ class BlockLayered extends Module
 	public function hookCategoryUpdate($params)
 	{
 		/* The category status might (active, inactive) have changed, we have to update the layered cache table structure */
-		/*
 		if (!$params['category']->active)
 			$this->hookCategoryDeletion($params);
-		else
-		{
-			$oneRow = Db::getInstance()->getRow('SELECT c'.(int)$params['category']->id.' FROM `'._DB_PREFIX_.'layered_cache`');
-			if (!isset($oneRow['c'.(int)$params['category']->id]))
-			{
-				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'layered_cache` ADD `c'.(int)$params['category']->id.'` TINYINT UNSIGNED NOT NULL DEFAULT \'0\'');
-				Configuration::updateValue('PS_LAYERED_COLUMNS', Configuration::get('PS_LAYERED_COLUMNS').',c'.(int)$params['category']->id);
-			}
-			if (!Db::getInstance()->getRow('SELECT id_layered_category FROM `'._DB_PREFIX_.'layered_category` WHERE id_category = '.(int)$params['category']->id))
-				$this->rebuildLayeredCache(array(), array((int)$params['category']->id));
-		}
-		*/
 	}
 
 	public function hookCategoryDeletion($params)
@@ -216,18 +204,6 @@ class BlockLayered extends Module
 				<li>'.$this->l('Add more options in the module configuration').'</li>
 				<li>'.$this->l('Performances improvements').'</li>
 			</ol>
-		</fieldset><br />
-
-		<fieldset class="width2">
-			<legend><img src="../img/admin/database_gear.gif" alt="" />'.$this->l('Cache initialization').'</legend>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-				<div class="warning">
-						<p style="color: red; font-weight: bold;">'.$this->l('Before using this module for the first time you have to initialize the cache').'</p>
-					<p><b>'.$this->l('Warning: This could take several minutes.').'</b><br /><br />
-					'.$this->l('If you do not, this cache table might become larger and larger (less efficient), and all the new choices (attributes, features) will not be offered to your visitors.').'</p>
-				</div>
-				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredCache" value="'.$this->l('Initialize the layered navigation database').'" /></p>
-			</form>
 		</fieldset><br />
 		<fieldset class="width2">
 			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Configuration').'</legend>
@@ -401,8 +377,7 @@ class BlockLayered extends Module
 		
 		$n = (int)Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'));
 		
-		$sql = '
-		SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.minimal_quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
+		$sql = 'SELECT p.id_product, p.out_of_stock, p.available_for_order, p.quantity, p.minimal_quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
 		p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name, p.condition, p.id_manufacturer,
 		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 		FROM '._DB_PREFIX_.'product p
