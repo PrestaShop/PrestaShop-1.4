@@ -559,7 +559,7 @@ abstract class PrepaidServices extends PaymentModule
 							 'payment_name' => $this->displayName,
 							 'module_name' => $this->name));
 
-		return $this->display(__FILE__, 'payment.tpl');
+		return $this->display(_MODULE_DIR_.'/'.$this->name.'/', 'payment.tpl');
 	}
 
 
@@ -571,7 +571,7 @@ abstract class PrepaidServices extends PaymentModule
 			return;
 
 		$smarty->assign('payment_name', $this->displayName);
-		return $this->display(__FILE__, $this->name.'-confirmation.tpl');
+		return $this->display(_MODULE_DIR_.'/'.$this->name.'/', $this->name.'-confirmation.tpl');
 	}
 
 
