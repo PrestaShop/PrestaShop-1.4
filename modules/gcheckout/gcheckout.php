@@ -109,6 +109,11 @@ class GCheckout extends PaymentModule
 		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<fieldset>
 			<legend><img src="'.__PS_BASE_URI__.'modules/gcheckout/logo.gif" />'.$this->l('Settings').'</legend>
+			<p>
+				<div class="warn">
+					'.$this->l('The API version used by this module is 2.0').'
+				</div>
+			</p>
 				<p>'.$this->l('Use the sandbox to test out the module then you can use the real mode if no problems arise. Remember to change your merchant key and ID according to the mode.').'</p>
 				<label>
 					'.$this->l('Mode').'
