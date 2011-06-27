@@ -96,7 +96,8 @@ class AdminImport extends AdminTab
 					'weight' => array('label' => $this->l('Weight')),
 					'default_on' => array('label' => $this->l('Default')),
 					'image_position' => array('label' => $this->l('Image position'), 
-						'help' => $this->l('Position of the product image to use for this combination'))
+						'help' => $this->l('Position of the product image to use for this combination. If you use this field, leave image URL empty.')),
+					'image_url' => array('label' => $this->l('Image URL')),
 				);
 
 				self::$default_values = array(
@@ -864,6 +865,7 @@ class AdminImport extends AdminTab
 
 	public function attributeImport()
 	{
+		global $cookie;
 		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
 		$groups = array();
 		foreach (AttributeGroup::getAttributesGroups($defaultLanguage) AS $group)
@@ -887,7 +889,28 @@ class AdminImport extends AdminTab
 			
 			$product = new Product((int)($info['id_product']), false, $defaultLanguage);
 			$id_image = null;
-			if (isset($info['image_position']) && $info['image_position'])
+			
+			if (isset($info['image_url']) && $info['image_url'])
+			{
+				$productHasImages = (bool)Image::getImages((int)($cookie->id_lang), (int)($product->id));
+				$url = $info['image_url'];
+				$image = new Image();
+				$image->id_product = (int)($product->id);
+				$image->position = Image::getHighestPosition($product->id) + 1;
+				$image->cover = (!$productHasImages) ? true : false;
+				$image->legend = self::createMultiLangField($product->name);
+
+				if (($fieldError = $image->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $image->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true AND $image->add())
+				{
+					if (!self::copyImg($product->id, $image->id, $url))
+						$this->_warnings[] = Tools::displayError('Error copying image: ').$url;
+				}
+				else
+				{
+					$this->_warnings[] = $image->legend[$defaultLanguageId].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('Cannot be saved');
+					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+				}
+			} elseif (isset($info['image_position']) && $info['image_position'])
 			{
 				$images = $product->getImages($defaultLanguage);
 				if ($images)
