@@ -122,7 +122,7 @@ class ToolsCore
 	 *
 	 * @param boolean $http
 	 * @param boolean $entities
-	 * @return void
+	 * @return string host
 	 */
 	public static function getHttpHost($http = false, $entities = false)
 	{
@@ -135,11 +135,11 @@ class ToolsCore
 	}
 
 	/**
-	 * getShopDomain return domain name according to configuration
+	 * getShopDomain returns domain name according to configuration and ignoring ssl
 	 *
 	 * @param boolean $http if true, return domain name with protocol
 	 * @param boolean $entities if true,
-	 * @return void
+	 * @return string domain
 	 */
 	public static function getShopDomain($http = false, $entities = false)
 	{
@@ -152,6 +152,13 @@ class ToolsCore
 		return $domain;
 	}
 
+	/**
+	 * getShopDomainSsl returns domain name according to configuration and depending on ssl activation
+	 *
+	 * @param boolean $http if true, return domain name with protocol
+	 * @param boolean $entities if true,
+	 * @return string domain
+	 */
 	public static function getShopDomainSsl($http = false, $entities = false)
 	{
 		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SSL')))
@@ -166,7 +173,7 @@ class ToolsCore
 	/**
 	* Get the server variable SERVER_NAME
 	*
-	* @param string $referrer URL referrer
+	* @return string server name
 	*/
 	static function getServerName()
 	{
@@ -198,6 +205,8 @@ class ToolsCore
 
 	/**
 	* Check if the current page use SSL connection on not
+	* 
+	* @return bool uses SSL
 	*/
 	public static function usingSecureMode()
 	{
@@ -205,11 +214,13 @@ class ToolsCore
 	}
 
 	/**
-	* Get the current url prefix protocole (https/http)
+	* Get the current url prefix protocol (https/http)
+	* 
+	* @return string protocol
 	*/
 	public static function getCurrentUrlProtocolPrefix()
 	{
-		if(Tools::usingSecureMode())
+		if(self::usingSecureMode())
 			return 'https://';
 		else
 			return 'http://';
@@ -219,6 +230,7 @@ class ToolsCore
 	* Secure an URL referrer
 	*
 	* @param string $referrer URL referrer
+	* @return secured referrer
 	*/
 	public static function secureReferrer($referrer)
 	{
@@ -255,6 +267,8 @@ class ToolsCore
 
 	/**
 	* Change language in cookie while clicking on a flag
+	*
+	* @return string iso code
 	*/
 	public static function setCookieLanguage()
 	{
@@ -297,6 +311,9 @@ class ToolsCore
 		return $iso;
 	}
 
+	/**
+	 * Set cookie id_lang
+	 */
 	public static function switchLanguage()
 	{
 		global $cookie;
@@ -305,6 +322,11 @@ class ToolsCore
 			$cookie->id_lang = $id_lang;
 	}
 
+	/**
+	 * Set cookie currency from POST or default currency
+	 *
+	 * @return Currency object
+	 */
 	public static function setCurrency()
 	{
 		global $cookie;
@@ -592,7 +614,7 @@ class ToolsCore
 	{
 		global $maintenance;
 
-		if (!(isset($maintenance) AND (!in_array(Tools::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))))
+		if (!(isset($maintenance) AND (!in_array(self::getRemoteAddr(), explode(',', Configuration::get('PS_MAINTENANCE_IP'))))))
 		{
 		 	/* Products specifics meta tags */
 			if ($id_product = self::getValue('id_product'))
@@ -763,7 +785,7 @@ class ToolsCore
 	public static function getAdminTokenLite($tab)
 	{
 		global $cookie;
-		return Tools::getAdminToken($tab.(int)Tab::getIdFromClassName($tab).(int)$cookie->id_employee);
+		return self::getAdminToken($tab.(int)Tab::getIdFromClassName($tab).(int)$cookie->id_employee);
 	}
 
 	/**
@@ -1162,9 +1184,9 @@ class ToolsCore
 	{
 		$method = (int)(Configuration::get('PS_PRICE_ROUND_MODE'));
 		if ($method == PS_ROUND_UP)
-			return Tools::ceilf($value, $precision);
+			return self::ceilf($value, $precision);
 		elseif ($method == PS_ROUND_DOWN)
-			return Tools::floorf($value, $precision);
+			return self::floorf($value, $precision);
 		return round($value, $precision);
 	}
 
@@ -1367,12 +1389,12 @@ class ToolsCore
 	{
 		global $current_css_file;
 
-		$protocol_link = Tools::getCurrentUrlProtocolPrefix();
+		$protocol_link = self::getCurrentUrlProtocolPrefix();
 
 		if (array_key_exists(1, $matches))
 		{
 			$tmp = dirname($current_css_file).'/'.$matches[1];
-			return 'url(\''.$protocol_link.Tools::getMediaServer($tmp).$tmp.'\')';
+			return 'url(\''.$protocol_link.self::getMediaServer($tmp).$tmp.'\')';
 		}
 		return false;
 	}
@@ -1413,7 +1435,7 @@ class ToolsCore
 				{
 					// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
 					$url_data = parse_url($file);
-					$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
+					$file_uri = _PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 					// check if js files exists
 					if (!file_exists($file_uri))
 						unset($js_uri[$key]);
@@ -1441,7 +1463,7 @@ class ToolsCore
 		if (is_array($css_uri))
 		{
 			foreach ($css_uri as $file => $media_type)
-				Tools::addCSS($file, $media_type);
+				self::addCSS($file, $media_type);
 			return true;
 		}
 
@@ -1454,7 +1476,7 @@ class ToolsCore
 		{
 			// remove PS_BASE_URI on _PS_ROOT_DIR_ for the following
 			$url_data = parse_url($css_uri);
-			$file_uri = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
+			$file_uri = _PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 			// check if css files exists
 			if (!file_exists($file_uri))
 				return true;
@@ -1484,7 +1506,7 @@ class ToolsCore
 		$compressed_css_files = array();
 		$compressed_css_files_not_found = array();
 		$compressed_css_files_infos = array();
-		$protocolLink = Tools::getCurrentUrlProtocolPrefix();
+		$protocolLink = self::getCurrentUrlProtocolPrefix();
 
 		// group css files by media
 		foreach ($css_files as $filename => $media)
@@ -1495,7 +1517,7 @@ class ToolsCore
 			$infos = array();
 			$infos['uri'] = $filename;
 			$url_data = parse_url($filename);
-			$infos['path'] = _PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
+			$infos['path'] = _PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
 			$css_files_by_media[$media]['files'][] = $infos;
 			if (!array_key_exists('date', $css_files_by_media[$media]))
 				$css_files_by_media[$media]['date'] = 0;
@@ -1529,7 +1551,7 @@ class ToolsCore
 				foreach ($media_infos['files'] as $file_infos)
 				{
 					if (file_exists($file_infos['path']))
-						$compressed_css_files[$media] .= Tools::minifyCSS(file_get_contents($file_infos['path']), $file_infos['uri']);
+						$compressed_css_files[$media] .= self::minifyCSS(file_get_contents($file_infos['path']), $file_infos['uri']);
 					else
 						$compressed_css_files_not_found[] = $file_infos['path'];
 				}
@@ -1550,7 +1572,7 @@ class ToolsCore
 		foreach ($compressed_css_files as $media => $filename)
 		{
 			$url = str_replace(_PS_THEME_DIR_, _THEMES_DIR_._THEME_NAME_.'/', $filename);
-			$css_files[$protocolLink.Tools::getMediaServer($url).$url] = $media;
+			$css_files[$protocolLink.self::getMediaServer($url).$url] = $media;
 		}
 	}
 
@@ -1567,7 +1589,7 @@ class ToolsCore
 		$compressed_js_file_date = 0;
 		$compressed_js_filename = '';
 		$js_external_files = array();
-		$protocolLink = Tools::getCurrentUrlProtocolPrefix();
+		$protocolLink = self::getCurrentUrlProtocolPrefix();
 
 		// get js files infos
 		foreach ($js_files as $filename)
@@ -1581,7 +1603,7 @@ class ToolsCore
 				$infos = array();
 				$infos['uri'] = $filename;
 				$url_data = parse_url($filename);
-				$infos['path'] =_PS_ROOT_DIR_.Tools::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
+				$infos['path'] =_PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
 				$js_files_infos[] = $infos;
 
 				$js_files_date = max(
@@ -1609,7 +1631,7 @@ class ToolsCore
 				else
 					$compressed_js_files_not_found[] = $file_infos['path'];
 			}
-			$content = Tools::packJS($content);
+			$content = self::packJS($content);
 
 			if (!empty($compressed_js_files_not_found))
 				$content = '/* WARNING ! file(s) not found : "'.
@@ -1622,7 +1644,7 @@ class ToolsCore
 
 		// rebuild the original js_files array
 		$url = str_replace(_PS_ROOT_DIR_.'/', __PS_BASE_URI__, $compressed_js_path);
-		$js_files = array_merge(array($protocolLink.Tools::getMediaServer($url).$url), $js_external_files);
+		$js_files = array_merge(array($protocolLink.self::getMediaServer($url).$url), $js_external_files);
 
 	}
 
@@ -1643,7 +1665,7 @@ class ToolsCore
 
 		if (self::$_cache_nb_media_servers AND ($id_media_server = (abs(crc32($filename)) % self::$_cache_nb_media_servers + 1)))
 			return constant('_MEDIA_SERVER_'.$id_media_server.'_');
-		return Tools::getHttpHost();
+		return self::getHttpHost();
 	}
 
 	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '')
@@ -1851,7 +1873,7 @@ FileETag INode MTime Size
 			$callee = next($backtrace);
 			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
 
-			$message = Tools::displayError('The function').' '.$callee['function'].' ('.Tools::displayError('Line').' '.$callee['line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+			$message = self::displayError('The function').' '.$callee['function'].' ('.self::displayError('Line').' '.$callee['line'].') '.self::displayError('is deprecated and will be removed in the next major version.');
 
 			Logger::addLog($message, 3, $callee['class']);
 		}
@@ -1868,7 +1890,7 @@ FileETag INode MTime Size
 			$callee = next($backtrace);
 			trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['Line'].'</strong><br />', E_USER_WARNING);
 
-			$message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('Line').' '.$callee['Line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
+			$message = self::displayError('The parameter').' '.$parameter.' '.self::displayError(' in function ').' '.$callee['function'].' ('.self::displayError('Line').' '.$callee['Line'].') '.self::displayError('is deprecated and will be removed in the next major version.');
 			Logger::addLog($message, 3, $callee['class']);
 		}
 	}
