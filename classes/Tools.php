@@ -461,7 +461,7 @@ class ToolsCore
 	* @param boolean $full With time or not (optional)
 	* @return string Date
 	*/
-	public static function displayDate($date, $id_lang, $full = false, $separator='-')
+	public static function displayDate($date, $id_lang, $full = false, $separator = '-')
 	{
 	 	if (!$date OR !strtotime($date))
 	 		return $date;
