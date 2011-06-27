@@ -58,7 +58,7 @@ class OrderControllerCore extends ParentOrderController
 
 		$orderTotal = self::$cart->getOrderTotal();
 		$minimalPurchase = Tools::convertPrice((float)Configuration::get('PS_PURCHASE_MINIMUM'), $currency);
-		if (self::$cart->getOrderTotal(false) < $minimalPurchase && $this->step != -1)
+		if (self::$cart->getOrderTotal(false, Cart::ONLY_PRODUCTS) < $minimalPurchase && $this->step != -1)
 		{
 			$this->step = 0;
 			$this->errors[] = Tools::displayError('A minimum purchase total of').' '.Tools::displayPrice($minimalPurchase, $currency).
