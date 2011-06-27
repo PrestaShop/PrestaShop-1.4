@@ -29,6 +29,7 @@ class ProductControllerCore extends FrontController
 {
 	protected $product;
 	public $php_self = 'product.php';
+	protected $canonicalURL;
 
 	public function setMedia()
 	{
@@ -98,60 +99,61 @@ class ProductControllerCore extends FrontController
 
 	public function process()
 	{
-		global $cart, $currency;;
+		global $cart, $currency;
 		parent::process();
 
-		if (!$id_product = (int)(Tools::getValue('id_product')) OR !Validate::isUnsignedId($id_product))
+		if (!Validate::isLoadedObject($this->product))
 			$this->errors[] = Tools::displayError('Product not found');
 		else
 		{
-			if (!Validate::isLoadedObject($this->product)
-				OR (!$this->product->active AND (Tools::getValue('adtoken') != Tools::encrypt('PreviewProduct'.$this->product->id))
+			if ((!$this->product->active AND (Tools::getValue('adtoken') != Tools::encrypt('PreviewProduct'.$this->product->id))
 				|| !file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php')))
 			{
 				header('HTTP/1.1 404 page not found');
-				$this->errors[] = Tools::displayError('Pproduct is no longer available.');
+				$this->errors[] = Tools::displayError('Product is no longer available.');
 			}
-			elseif (!$this->product->checkAccess((int)(self::$cookie->id_customer)))
+			elseif (!$this->product->checkAccess((int)self::$cookie->id_customer))
 				$this->errors[] = Tools::displayError('You do not have access to this product.');
 			else
 			{
-				self::$smarty->assign('virtual', ProductDownload::getIdFromIdProduct((int)($this->product->id)));
+				self::$smarty->assign('virtual', ProductDownload::getIdFromIdProduct((int)$this->product->id));
 
 				if (!$this->product->active)
 					self::$smarty->assign('adminActionDisplay', true);
 
 				/* Product pictures management */
 				require_once('images.inc.php');
-				self::$smarty->assign('customizationFormTarget', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
-
-				if (Tools::isSubmit('submitCustomizedDatas'))
+				
+				if ($this->product->customizable)
 				{
-					$this->pictureUpload($this->product, $cart);
-					$this->textRecord($this->product, $cart);
-					$this->formTargetFormat();
+					self::$smarty->assign('customizationFormTarget', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
+
+					if (Tools::isSubmit('submitCustomizedDatas'))
+					{
+						$this->pictureUpload($this->product, $cart);
+						$this->textRecord($this->product, $cart);
+						$this->formTargetFormat();
+					}
+					elseif (isset($_GET['deletePicture']) AND !$cart->deletePictureToProduct((int)($this->product->id), (int)(Tools::getValue('deletePicture'))))
+						$this->errors[] = Tools::displayError('An error occurred while deleting the selected picture');
+
+					$files = self::$cookie->getFamily('pictures_'.(int)($this->product->id));
+					$textFields = self::$cookie->getFamily('textFields_'.(int)($this->product->id));
+					foreach ($textFields as $key => $textField)
+						$textFields[$key] = str_replace('<br />', "\n", $textField);
+					self::$smarty->assign(array(
+						'pictures' => $files,
+						'textFields' => $textFields));
 				}
-				elseif (isset($_GET['deletePicture']) AND !$cart->deletePictureToProduct((int)($this->product->id), (int)(Tools::getValue('deletePicture'))))
-					$this->errors[] = Tools::displayError('An error occurred while deleting the selected picture');
 
-				$files = self::$cookie->getFamily('pictures_'.(int)($this->product->id));
-				$textFields = self::$cookie->getFamily('textFields_'.(int)($this->product->id));
-				foreach ($textFields as $key => $textField)
-					$textFields[$key] = str_replace('<br />', "\n", $textField);
-				self::$smarty->assign(array(
-					'pictures' => $files,
-					'textFields' => $textFields));
-
-				$productPriceWithTax = Product::getPriceStatic($id_product, true, NULL, 6);
+				$productPriceWithTax = Product::getPriceStatic($this->product->id, true, NULL, 6);
 				if (Product::$_taxCalculationMethod == PS_TAX_INC)
 					$productPriceWithTax = Tools::ps_round($productPriceWithTax, 2);
-
 				$productPriceWithoutEcoTax = (float)($productPriceWithTax - $this->product->ecotax);
-				$configs = Configuration::getMultiple(array('PS_ORDER_OUT_OF_STOCK', 'PS_LAST_QTIES'));
 
 				/* Features / Values */
-				$features = $this->product->getFrontFeatures((int)(self::$cookie->id_lang));
-				$attachments = $this->product->getAttachments((int)(self::$cookie->id_lang));
+				$features = $this->product->getFrontFeatures((int)self::$cookie->id_lang);
+				$attachments = ($this->product->cache_has_attachments ? $this->product->getAttachments((int)self::$cookie->id_lang) : array());
 
 				/* Category */
 				$category = false;
@@ -174,23 +176,23 @@ class ProductControllerCore extends FrontController
 				if (isset($category) AND Validate::isLoadedObject($category))
 				{
 					self::$smarty->assign(array(
-					'path' => Tools::getPath((int)$category->id, $this->product->name, true),
-					'category' => $category,
-					'subCategories' => $category->getSubCategories((int)(self::$cookie->id_lang), true),
-					'id_category_current' => (int)($category->id),
-					'id_category_parent' => (int)($category->id_parent),
-					'return_category_name' => Tools::safeOutput($category->name)));
+						'path' => Tools::getPath((int)$category->id, $this->product->name, true),
+						'category' => $category,
+						'subCategories' => $category->getSubCategories((int)self::$cookie->id_lang, true),
+						'id_category_current' => (int)$category->id,
+						'id_category_parent' => (int)$category->id_parent,
+						'return_category_name' => Tools::safeOutput($category->name)
+					));
 				}
 				else
 					self::$smarty->assign('path', Tools::getPath((int)$this->product->id_category_default, $this->product->name));
 
 				self::$smarty->assign('return_link', (isset($category->id) AND $category->id) ? Tools::safeOutput(self::$link->getCategoryLink($category)) : 'javascript: history.back();');
 
-				$lang = Configuration::get('PS_LANG_DEFAULT');
-				if (Pack::isPack((int)($this->product->id), (int)($lang)) AND !Pack::isInStock((int)($this->product->id), (int)($lang)))
+				if (Pack::isPack((int)$this->product->id) AND !Pack::isInStock((int)$this->product->id))
 					$this->product->quantity = 0;
 
-				$group_reduction = (100 - Group::getReduction((int)(self::$cookie->id_customer))) / 100;
+				$group_reduction = (100 - Group::getReduction((int)self::$cookie->id_customer)) / 100;
 				$id_customer = (isset(self::$cookie->id_customer) AND self::$cookie->id_customer) ? (int)(self::$cookie->id_customer) : 0;
 				$id_group = $id_customer ? (int)(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
 				$id_country = (int)($id_customer ? Customer::getCurrentCountry($id_customer) : Configuration::get('PS_COUNTRY_DEFAULT'));
@@ -217,7 +219,7 @@ class ProductControllerCore extends FrontController
 					'features' => $features,
 					'attachments' => $attachments,
 					'allow_oosp' => $this->product->isAvailableWhenOutOfStock((int)($this->product->out_of_stock)),
-					'last_qties' =>  (int)($configs['PS_LAST_QTIES']),
+					'last_qties' =>  (int)Configuration::get('PS_LAST_QTIES'),
 					'group_reduction' => $group_reduction,
 					'col_img_dir' => _PS_COL_IMG_DIR_,
 				));
@@ -231,7 +233,7 @@ class ProductControllerCore extends FrontController
 					'HOOK_PRODUCT_TAB_CONTENT' =>  Module::hookExec('productTabContent')
 				));
 
-				$images = $this->product->getImages((int)(self::$cookie->id_lang));
+				$images = $this->product->getImages((int)self::$cookie->id_lang);
 				$productImages = array();
 				foreach ($images AS $k => $image)
 				{
@@ -242,7 +244,7 @@ class ProductControllerCore extends FrontController
 						$cover['id_image'] = (Configuration::get('PS_LEGACY_IMAGES') ? ($this->product->id.'-'.$image['id_image']) : $image['id_image']);
 						$cover['id_image_only'] = (int)($image['id_image']);
 					}
-					$productImages[(int)($image['id_image'])] = $image;
+					$productImages[(int)$image['id_image']] = $image;
 				}
 				if (!isset($cover))
 					$cover = array('id_image' => Language::getIsoById(self::$cookie->id_lang).'-default', 'legend' => 'No picture', 'title' => 'No picture');
@@ -252,8 +254,9 @@ class ProductControllerCore extends FrontController
 					'imgWidth' => (int)($size['width']),
 					'mediumSize' => Image::getSize('medium'),
 					'largeSize' => Image::getSize('large'),
-					'accessories' => $this->product->getAccessories((int)(self::$cookie->id_lang))));
-				if (sizeof($productImages))
+					'accessories' => $this->product->getAccessories((int)self::$cookie->id_lang)
+				));
+				if (count($productImages))
 					self::$smarty->assign('images', $productImages);
 
 				/* Attributes / Groups & colors */
@@ -338,7 +341,7 @@ class ProductControllerCore extends FrontController
 
 				self::$smarty->assign(array(
 					'no_tax' => Tax::excludeTaxeOption() OR !Tax::getProductTaxRate((int)$this->product->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}),
-					'customizationFields' => $this->product->getCustomizationFields((int)(self::$cookie->id_lang))
+					'customizationFields' => ($this->product->customizable ? $this->product->getCustomizationFields((int)self::$cookie->id_lang) : false)
 				));
 
 				// Pack management
@@ -351,10 +354,10 @@ class ProductControllerCore extends FrontController
 			'ENT_NOQUOTES' => ENT_NOQUOTES,
 			'outOfStockAllowed' => (int)(Configuration::get('PS_ORDER_OUT_OF_STOCK')),
 			'errors' => $this->errors,
-			'categories' => Category::getHomeCategories((int)(self::$cookie->id_lang)),
-			'have_image' => Product::getCover((int)(Tools::getValue('id_product'))),
+			'categories' => Category::getHomeCategories((int)self::$cookie->id_lang),
+			'have_image' => (isset($cover) ? (int)$cover['id_image'] : false),
 			'tax_enabled' => Configuration::get('PS_TAX'),
-			'display_qties' => (int)(Configuration::get('PS_DISPLAY_QTIES')),
+			'display_qties' => (int)Configuration::get('PS_DISPLAY_QTIES'),
 			'display_ht' => !Tax::excludeTaxeOption(),
 			'ecotax' => (!sizeof($this->errors) AND $this->product->ecotax > 0 ? Tools::convertPrice((float)($this->product->ecotax)) : 0),
 			'currencySign' => $currency->sign,
@@ -441,27 +444,22 @@ class ProductControllerCore extends FrontController
 		foreach ($specificPrices AS $key => &$row)
 		{
 			$row['quantity'] = &$row['from_quantity'];
-			if ($row['price'] != 0) // The price may be directly set
+			// The price may be directly set
+			if ($row['price'] != 0)
 			{
 			    $cur_price = (Product::$_taxCalculationMethod == PS_TAX_EXC ? $row['price'] : $row['price'] * (1 + $taxRate / 100));
-
                 if ($row['reduction_type'] == 'amount')
-			    {
 			        $cur_price = Product::$_taxCalculationMethod == PS_TAX_INC ? $cur_price - $row['reduction'] : $cur_price - ($row['reduction'] / (1 + $taxRate / 100));
-			    } else {
+				else
 				    $cur_price = $cur_price * ( 1  - ($row['reduction']));
-			    }
-
 			    $row['real_value'] = $price - $cur_price;
 			}
 			else
 			{
 			    if ($row['reduction_type'] == 'amount')
-			    {
 			        $row['real_value'] = Product::$_taxCalculationMethod == PS_TAX_INC ? $row['reduction'] : $row['reduction'] / (1 + $taxRate / 100);
-			    } else {
+			    else
 				    $row['real_value'] = $row['reduction'] * 100;
-			    }
 			}
 			$row['nextQuantity'] = (isset($specificPrices[$key + 1]) ? (int)($specificPrices[$key + 1]['from_quantity']) : -1);
 		}
