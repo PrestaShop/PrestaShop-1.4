@@ -84,7 +84,7 @@ class Hipay extends PaymentModule
 		
 		$result = Db::getInstance()->ExecuteS('
 			SELECT `id_zone`, `name`
-			FROM '._DB_PREFIX_.'zone
+			FROM `'._DB_PREFIX_.'zone`
 			WHERE `active` = 1
 		');
 		
@@ -93,7 +93,7 @@ class Hipay extends PaymentModule
 			Configuration::deleteByName('HIPAY_AZ_'.$rowValues['id_zone']);
 			Configuration::deleteByName('HIPAY_AZ_ALL_'.$rowValues['id_zone']);
 		}
-		Db::getInstance()->ExecuteS('DELETE FROM '._DB_PREFIX_.'module_country WHERE id_module = '.$this->id);
+		Db::getInstance()->ExecuteS('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE `id_module` = '.(int)$this->id);
 			
 		return true;
 	}
@@ -109,24 +109,21 @@ class Hipay extends PaymentModule
 	{
 		$result = Db::getInstance()->ExecuteS('
 			SELECT `id_zone`, `name`
-			FROM '._DB_PREFIX_.'zone
+			FROM `'._DB_PREFIX_.'zone`
 			WHERE `active` = 1
 		');
 		
 		$tmp = null;
-		foreach ($result as $rowNumber => $rowValues) 
-		{
-			if (strcmp(Configuration::get('HIPAY_AZ_'.$rowValues['id_zone']), 'ok') == 0) {
+		foreach ($result as $rowNumber => $rowValues)
+			if (strcmp(Configuration::get('HIPAY_AZ_'.$rowValues['id_zone']), 'ok') == 0)
 				$tmp .= $searchField.' = '.$rowValues['id_zone'].' OR ';
-			}
-		}
 		
 		if ($tmp == null)
 			$tmp = $searchField.' = '.$defaultZone;
 		else
 			$tmp = substr($tmp, 0, strlen($tmp) - strlen(' OR '));
 			
-		return ($tmp);
+		return $tmp;
 	}
 	
 	public function hookPayment($params)
@@ -307,16 +304,16 @@ class Hipay extends PaymentModule
 		
 		$result = Db::getInstance()->ExecuteS('
 			SELECT `id_zone`, `name`
-			FROM '._DB_PREFIX_.'zone
+			FROM `'._DB_PREFIX_.'zone`
 			WHERE `active` = 1
 		');
 		
-		foreach ($result as $rowNumber => $rowValues)
+		foreach ($result as $rowValues)
 		{
 			Configuration::deleteByName('HIPAY_AZ_'.$rowValues['id_zone']);
 			Configuration::deleteByName('HIPAY_AZ_ALL_'.$rowValues['id_zone']);
 		}
-		Db::getInstance()->ExecuteS('DELETE FROM '._DB_PREFIX_.'module_country WHERE id_module = '.$this->id);
+		Db::getInstance()->ExecuteS('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE `id_module` = '.(int)$this->id);
 		
 		return (true);
 	}
@@ -330,15 +327,13 @@ class Hipay extends PaymentModule
 		if (Tools::isSubmit('submitHipayAZ')) 
 		{
 			// Delete all configurated zones
-			foreach ($_POST as $key => $val) 
-			{
+			foreach ($_POST as $key => $val)
 				if (strncmp($key, 'HIPAY_AZ_ALL_', strlen('HIPAY_AZ_ALL_')) == 0) 
 				{
 					$id = substr($key, -(strlen($key) - strlen('HIPAY_AZ_ALL_')));
 					Configuration::updateValue('HIPAY_AZ_'.$id, 'ko');
 				}
-			}
-			Db::getInstance()->ExecuteS('DELETE FROM '._DB_PREFIX_.'module_country WHERE id_module = '.$this->id);
+			Db::getInstance()->ExecuteS('DELETE FROM `'._DB_PREFIX_.'module_country` WHERE `id_module` = '.(int)$this->id);
 			
 			// Add the new configuration zones
 			foreach ($_POST as $key => $val) 
@@ -348,11 +343,8 @@ class Hipay extends PaymentModule
 			}
 			$request = 'SELECT id_country FROM '._DB_PREFIX_.'country WHERE ';
 			$results = Db::getInstance()->ExecuteS($request.$this->getRequestZones('id_zone'));
-			foreach ($results as $rowNumber => $rowValues)
-			{
-				$request = 'INSERT INTO '._DB_PREFIX_.'module_country VALUE('.$this->id.', '.$rowValues['id_country'].')';
-				Db::getInstance()->ExecuteS($request);
-			}
+			foreach ($results as $rowValues)
+				Db::getInstance()->ExecuteS('INSERT INTO '._DB_PREFIX_.'module_country VALUE('.(int)$this->id.', '.(int)$rowValues['id_country'].')');
 			
 		}
 		elseif (Tools::isSubmit('submitHipay'))
