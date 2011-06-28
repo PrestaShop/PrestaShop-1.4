@@ -2764,6 +2764,7 @@ $_LANGADM['AdminTaxesb718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_LANGADM['AdminTaxes49ee3087348e8d44e1feda1917443987'] = 'Nom';
 $_LANGADM['AdminTaxesdcb66ff6e4a2517ade22183779939c9d'] = 'Taux';
 $_LANGADM['AdminTaxes00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
+$_LANGADM['AdminTaxes5f7d9a7f76dba4bc86062ea848255f2f'] = 'Si vous désactivez l\'ecotax, elle sera mise à 0 sur chacun de vos produits.';
 $_LANGADM['AdminTaxes1c669d037f8bc785f0e1a9aeb7070367'] = 'Taxe';
 $_LANGADM['AdminTaxes50068b9a709a0e2da6f25210de57bb85'] = 'Activer les taxes :';
 $_LANGADM['AdminTaxes7c9ad104937545220eb5ac67fb1ee9d9'] = 'Activer ou désactiver la prise en charge des taxes';
