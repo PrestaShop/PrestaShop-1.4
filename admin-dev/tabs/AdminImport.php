@@ -904,6 +904,8 @@ class AdminImport extends AdminTab
 				{
 					if (!self::copyImg($product->id, $image->id, $url))
 						$this->_warnings[] = Tools::displayError('Error copying image: ').$url;
+					else
+						$id_image = array($image->id);
 				}
 				else
 				{
