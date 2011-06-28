@@ -75,7 +75,7 @@ class CategoryCore extends ObjectModel
 	public 		$date_upd;
 
 	public		$groupBox;
-	
+
 	protected static $_links = array();
 
 	protected $tables = array ('category', 'category_lang');
@@ -157,8 +157,8 @@ class CategoryCore extends ObjectModel
 
 	/**
 	 * update category positions in parent
-	 * 
-	 * @param mixed $nullValues 
+	 *
+	 * @param mixed $nullValues
 	 * @return void
 	 */
 	public function update($nullValues = false)
@@ -217,11 +217,10 @@ class CategoryCore extends ObjectModel
 
 	static public function recurseCategory($categories, $current, $id_category = 1, $id_selected = 1)
 	{
-		global $currentIndex;
 		echo '<option value="'.$id_category.'"'.(($id_selected == $id_category) ? ' selected="selected"' : '').'>'.
 		str_repeat('&nbsp;', $current['infos']['level_depth'] * 5).stripslashes($current['infos']['name']).'</option>';
 		if (isset($categories[$id_category]))
-			foreach ($categories[$id_category] AS $key => $row)
+			foreach (array_keys($categories[$id_category]) AS $key)
 				self::recurseCategory($categories, $categories[$id_category][$key], $key, $id_selected);
 	}
 
@@ -241,7 +240,7 @@ class CategoryCore extends ObjectModel
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category`
 		WHERE `id_parent` = '.(int)($id_category));
-		foreach ($result AS $k => $row)
+		foreach ($result AS $row)
 		{
 			$toDelete[] = (int)($row['id_category']);
 			$this->recursiveDelete($toDelete, (int)($row['id_category']));
@@ -353,7 +352,7 @@ class CategoryCore extends ObjectModel
 	{
 		$left = (int)$n++;
 		if (isset($categories[(int)$id_category]['subcategories']))
-			foreach ($categories[(int)$id_category]['subcategories'] AS $id_subcategory => $value)
+			foreach (array_keys($categories[(int)$id_category]['subcategories']) AS $id_subcategory)
 				self::_subTree($categories, (int)$id_subcategory, $n);
 		$right = (int)$n++;
 
@@ -412,7 +411,6 @@ class CategoryCore extends ObjectModel
 	  */
 	public function getSubCategories($id_lang, $active = true)
 	{
-	 	global $cookie;
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
@@ -455,8 +453,8 @@ class CategoryCore extends ObjectModel
 	{
 		global $cookie;
 		if (!$checkAccess OR !$this->checkAccess($cookie->id_customer))
-			return false;	
-		
+			return false;
+
 		if ($p < 1) $p = 1;
 
 		if (empty($orderBy))
@@ -464,7 +462,7 @@ class CategoryCore extends ObjectModel
 		else
 			/* Fix for all modules which are now using lowercase values for 'orderBy' parameter */
 			$orderBy = strtolower($orderBy);
-			
+
 		if (empty($orderWay))
 			$orderWay = 'ASC';
 		if ($orderBy == 'id_product' OR	$orderBy == 'date_add')
@@ -575,7 +573,7 @@ class CategoryCore extends ObjectModel
 	 * @param int $id_parent
 	 * @param int $id_lang
 	 * @param bool $active
-	 * @return array 
+	 * @return array
 	 */
 	public static function getChildren($id_parent, $id_lang, $active = true)
 	{
@@ -594,11 +592,11 @@ class CategoryCore extends ObjectModel
 
 	/**
 	 * This method allow to return children categories with the number of sub children selected for a product
-	 * 
+	 *
 	 * @param int $id_parent
 	 * @param int $id_product
 	 * @param int $id_lang
-	 * @return array 
+	 * @return array
 	 */
 	public static function getChildrenWithNbSelectedSubCatForProduct($id_parent, $id_product = 0, $ids_categories = null, $id_lang)
 	{
@@ -606,8 +604,8 @@ class CategoryCore extends ObjectModel
 		if ($id_product)
 		{
 			$categories_product = Db::getInstance()->ExecuteS('
-			SELECT `id_category` 
-			FROM `'._DB_PREFIX_.'category_product` 
+			SELECT `id_category`
+			FROM `'._DB_PREFIX_.'category_product`
 			WHERE `id_product` = '.(int)$id_product);
 			if (sizeof($categories_product))
 				foreach ($categories_product as $category_product)
@@ -619,16 +617,16 @@ class CategoryCore extends ObjectModel
 			$categories_product_str = $ids_categories;
 		}
 		$categories_product_str = rtrim($categories_product_str, ',');
-		
+
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_category`, cl.`name`, IF((
-			SELECT COUNT(*) 
+			SELECT COUNT(*)
 			FROM `'._DB_PREFIX_.'category` c2
 			WHERE c2.`id_parent` = c.`id_category`
 		) > 0, 1, 0) AS has_children, '.($categories_product_str ? '(
-			SELECT count(c3.`id_category`) 
-			FROM `'._DB_PREFIX_.'category` c3 
-			WHERE c3.`nleft` > c.`nleft` 
+			SELECT count(c3.`id_category`)
+			FROM `'._DB_PREFIX_.'category` c3
+			WHERE c3.`nleft` > c.`nleft`
 			AND c3.`nright` < c.`nright`
 			AND c3.`id_category`  IN ('.$categories_product_str.')
 		)' : '0').' AS nbSelectedSubCat
@@ -638,7 +636,7 @@ class CategoryCore extends ObjectModel
 		AND c.`id_parent` = '.(int)($id_parent).'
 		ORDER BY `position` ASC');
 	}
-	
+
 	/**
 	  * Copy products from a category to another
 	  *
@@ -840,8 +838,8 @@ class CategoryCore extends ObjectModel
 
 	/**
 	 * checkAccess return true if id_customer is in a group allowed to see this category.
-	 * 
-	 * @param mixed $id_customer 
+	 *
+	 * @param mixed $id_customer
 	 * @access public
 	 * @return boolean true if access allowed for customer $id_customer
 	 */
@@ -897,7 +895,7 @@ class CategoryCore extends ObjectModel
 		foreach ($res AS $category)
 			if ((int)($category['id_category']) == (int)($this->id))
 				$movedCategory = $category;
-		
+
 		if (!isset($movedCategory) || !isset($position))
 			return false;
 		// < and > statements rather than BETWEEN operator
@@ -923,8 +921,8 @@ class CategoryCore extends ObjectModel
 	 * cleanPositions keep order of category in $id_category_parent,
 	 * but remove duplicate position. Should not be used if positions
 	 * are clean at the beginning !
-	 * 
-	 * @param mixed $id_category_parent 
+	 *
+	 * @param mixed $id_category_parent
 	 * @return boolean true if succeed
 	 */
 	static public function cleanPositions($id_category_parent)
@@ -952,7 +950,7 @@ class CategoryCore extends ObjectModel
 	{
 		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
-	
+
     public static function getUrlRewriteInformations($id_category)
 	{
 		return Db::getInstance()->ExecuteS('
@@ -964,7 +962,7 @@ class CategoryCore extends ObjectModel
 		);
 
 	}
-	
+
 	public function getChildrenWs()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -975,7 +973,7 @@ class CategoryCore extends ObjectModel
 		ORDER BY `position` ASC');
 		return $result;
 	}
-	
+
 	public function getProductsWs()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -985,10 +983,10 @@ class CategoryCore extends ObjectModel
 		ORDER BY `position` ASC');
 		return $result;
 	}
-	
+
 	/**
 	 * Search for another category with the same parent and the same position
-	 * 
+	 *
 	 * @return array first category found
 	 */
 	public function getDuplicatePosition()
@@ -1000,7 +998,7 @@ class CategoryCore extends ObjectModel
 		AND `position` = '.(int)($this->position).'
 		AND c.`id_category` != '.(int)($this->id));
 	}
-	
+
 	public function getWsNbProductsRecursive()
 	{
 		$result = Db::getInstance()->ExecuteS(
@@ -1014,3 +1012,4 @@ class CategoryCore extends ObjectModel
 		return $result[0]['nb_product_recursive'];
 	}
 }
+
