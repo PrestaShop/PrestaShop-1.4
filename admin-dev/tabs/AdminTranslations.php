@@ -1737,7 +1737,7 @@ class AdminTranslations extends AdminTab
 		{
 			if ($module{0} != '.' AND is_dir($root_dir.$module))
 			{
-				@include_once($root_dir.$module.'/'.$lang.'.php');
+				@include($root_dir.$module.'/'.$lang.'.php');
 				self::getModuleTranslations($is_default);
 				$this->recursiveGetModuleFiles($root_dir.$module.'/', $array_files, $module, $root_dir.$module.'/'.$lang.'.php', $is_default);
 			}
