@@ -97,7 +97,9 @@ class AdminOrders extends AdminTab
 						'{lastname}' => $customer->lastname,
 						'{id_order}' => (int)($order->id)
 					);
-					@Mail::Send((int)($order->id_lang), 'in_transit', Mail::l('Package in transit'), $templateVars, $customer->email, $customer->firstname.' '.$customer->lastname);
+					@Mail::Send((int)($order->id_lang), 'in_transit', Mail::l('Package in transit'), $templateVars,
+						$customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL, NULL,
+						_PS_MAIL_DIR_, true);
 				}
 			}
 			else
@@ -183,7 +185,9 @@ class AdminOrders extends AdminTab
 							if (Validate::isLoadedObject($order))
 							{
 								$varsTpl = array('{lastname}' => $customer->lastname, '{firstname}' => $customer->firstname, '{id_order}' => $message->id_order, '{message}' => (Configuration::get('PS_MAIL_TYPE') == 2 ? $message->message : nl2br2($message->message)));
-								if (@Mail::Send((int)($order->id_lang), 'order_merchant_comment', Mail::l('New message regarding your order'), $varsTpl, $customer->email, $customer->firstname.' '.$customer->lastname))
+								if (@Mail::Send((int)($order->id_lang), 'order_merchant_comment',
+									Mail::l('New message regarding your order'), $varsTpl, $customer->email,
+									$customer->firstname.' '.$customer->lastname, NULL, NULL, NULL, NULL, _PS_MAIL_DIR_, true))
 									Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder&conf=11'.'&token='.$this->token);
 							}
 						}
@@ -320,7 +324,9 @@ class AdminOrders extends AdminTab
 						else
 						{
 							Module::hookExec('orderSlip', array('order' => $order, 'productList' => $full_product_list, 'qtyList' => $full_quantity_list));
-							@Mail::Send((int)($order->id_lang), 'credit_slip', Mail::l('New credit slip regarding your order'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+							@Mail::Send((int)($order->id_lang), 'credit_slip', Mail::l('New credit slip regarding your order'),
+							$params, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL, NULL,
+							_PS_MAIL_DIR_, true);
 						}
 					}
 
@@ -334,7 +340,9 @@ class AdminOrders extends AdminTab
 							$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false);
 							$params['{voucher_num}'] = $voucher->name;
-							@Mail::Send((int)($order->id_lang), 'voucher', Mail::l('New voucher regarding your order'), $params, $customer->email, $customer->firstname.' '.$customer->lastname);
+							@Mail::Send((int)($order->id_lang), 'voucher', Mail::l('New voucher regarding your order'),
+							$params, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL,
+							NULL, _PS_MAIL_DIR_, true);
 						}
 					}
 				}

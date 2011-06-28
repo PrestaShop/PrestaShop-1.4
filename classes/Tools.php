@@ -2102,6 +2102,20 @@ FileETag INode MTime Size
 		include(dirname(__FILE__).'/../404.php');
 		die;
 	}
+	
+	/**
+	 * Display error and dies or silently log the error.
+	 * 
+	 * @param string $msg
+	 * @param bool $die
+	 */
+	public static function dieOrLog($msg, $die = true)
+	{
+		if ($die || (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_))
+			die($msg);
+		Logger::addLog($msg);
+		return false;
+	}
 }
 
 /**

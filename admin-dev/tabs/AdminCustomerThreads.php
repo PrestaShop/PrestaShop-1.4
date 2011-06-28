@@ -129,11 +129,14 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
+					if (Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
 						$employee->email, $employee->firstname.' '.$employee->lastname,
-						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname);
-					$cm->message = $this->l('Message forwarded to').' '.$employee->firstname.' '.$employee->lastname."\n".$this->l('Comment:').' '.$_POST['message_forward'];
-					$cm->add();
+						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname,
+						NULL, NULL, _PS_MAIL_DIR_, true))
+					{
+						$cm->message = $this->l('Message forwarded to').' '.$employee->firstname.' '.$employee->lastname."\n".$this->l('Comment:').' '.$_POST['message_forward'];
+						$cm->add();
+					}
 				}
 				elseif (($email = Tools::getValue('email')) AND Validate::isEmail($email))
 				{
@@ -141,11 +144,14 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
+					if (Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
 						$email, NULL,
-						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname);
-					$cm->message = $this->l('Message forwarded to').' '.$email."\n".$this->l('Comment:').' '.$_POST['message_forward'];
-					$cm->add();
+						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname,
+						NULL, NULL, _PS_MAIL_DIR_, true))
+					{
+						$cm->message = $this->l('Message forwarded to').' '.$email."\n".$this->l('Comment:').' '.$_POST['message_forward'];
+						$cm->add();
+					}
 				}
 				else
 					echo '<div class="alert error">'.Tools::displayError('Email invalid.').'</div>';
@@ -172,9 +178,13 @@ class AdminCustomerThreads extends AdminTab
 					$params = array(
 					'{reply}' => nl2br2(Tools::getValue('reply_message')),
 					'{link}' => $link->getPageLink('contact-form.php', true).'?id_customer_thread='.(int)($ct->id).'&token='.$ct->token);
-					Mail::Send($ct->id_lang, 'reply_msg', Mail::l('An answer to your message is available'), $params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment);
-					$ct->status = 'closed';
-					$ct->update();
+					if (Mail::Send($ct->id_lang, 'reply_msg', Mail::l('An answer to your message is available'), 
+						$params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment, NULL, 
+						_PS_MAIL_DIR_, true))
+					{
+						$ct->status = 'closed';
+						$ct->update();
+					}
 					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.(int)$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));
 				}
 				else

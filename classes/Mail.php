@@ -32,7 +32,7 @@ include_once(_PS_SWIFT_DIR_.'Swift/Plugin/Decorator.php');
 
 class MailCore
 {
-	static public function Send($id_lang, $template, $subject, $templateVars, $to, $toName = NULL, $from = NULL, $fromName = NULL, $fileAttachment = NULL, $modeSMTP = NULL, $templatePath = _PS_MAIL_DIR_)
+	static public function Send($id_lang, $template, $subject, $templateVars, $to, $toName = NULL, $from = NULL, $fromName = NULL, $fileAttachment = NULL, $modeSMTP = NULL, $templatePath = _PS_MAIL_DIR_, $die = false)
 	{
 		$configuration = Configuration::getMultiple(array('PS_SHOP_EMAIL', 'PS_MAIL_METHOD', 'PS_MAIL_SERVER', 'PS_MAIL_USER', 'PS_MAIL_PASSWD', 'PS_SHOP_NAME', 'PS_MAIL_SMTP_ENCRYPTION', 'PS_MAIL_SMTP_PORT', 'PS_MAIL_METHOD', 'PS_MAIL_TYPE'));
 		if(!isset($configuration['PS_MAIL_SMTP_ENCRYPTION'])) $configuration['PS_MAIL_SMTP_ENCRYPTION'] = 'off';
@@ -42,26 +42,26 @@ class MailCore
 		if (!isset($fromName)) $fromName = $configuration['PS_SHOP_NAME'];
 
 		if (!empty($from) AND !Validate::isEmail($from))
-	 		die(Tools::displayError('Error: parameter "from" is corrupted'));
+	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "from" is corrupted'), $die);
 			
 		if (!empty($fromName) AND !Validate::isMailName($fromName))
-	 		die(Tools::displayError('Error: parameter "fromName" is corrupted'));
+	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "fromName" is corrupted'), $die);
 			
 		if (!is_array($to) AND !Validate::isEmail($to))
-	 		die(Tools::displayError('Error: parameter "to" is corrupted'));
-			
+	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "to" is corrupted'), $die);
+
 		if (!is_array($templateVars))
-	 		die(Tools::displayError('Error: parameter "templateVars" is not an array'));
+	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "templateVars" is not an array'), $die);
 		
 		// Do not crash for this error, that may be a complicated customer name
 		if (!empty($toName) AND !Validate::isMailName($toName))
 	 		$toName = NULL;
 			
 		if (!Validate::isTplName($template))
-	 		die(Tools::displayError('Error: invalid email template'));
+	 		return Tools::dieOrLog(Tools::displayError('Error: invalid email template'), $die);
 			
 		if (!Validate::isMailSubject($subject))
-	 		die(Tools::displayError('Error: invalid email subject'));
+	 		return Tools::dieOrLog(Tools::displayError('Error: invalid email subject'), $die);
 
 		/* Construct multiple recipients list if needed */
 		if (is_array($to))
@@ -72,7 +72,7 @@ class MailCore
 				$to_name = NULL;
 				$addr = trim($addr);
 				if (!Validate::isEmail($addr))
-					die(Tools::displayError('Error: invalid email address'));
+					return Tools::dieOrLog(Tools::displayError('Error: invalid email address'), $die);
 				if ($toName AND is_array($toName) AND Validate::isGenericName($toName[$key]))
 					$to_name = $toName[$key];
 				$to_list->addTo($addr, $to_name);
@@ -89,7 +89,7 @@ class MailCore
 			if ($configuration['PS_MAIL_METHOD'] == 2)
 			{
 				if (empty($configuration['PS_MAIL_SERVER']) OR empty($configuration['PS_MAIL_SMTP_PORT']))
-					die(Tools::displayError('Error: invalid SMTP server or SMTP port'));
+					return Tools::dieOrLog(Tools::displayError('Error: invalid SMTP server or SMTP port'), $die);
 
 				$connection = new Swift_Connection_SMTP($configuration['PS_MAIL_SERVER'], $configuration['PS_MAIL_SMTP_PORT'], ($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "ssl") ? Swift_Connection_SMTP::ENC_SSL : (($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_OFF));
 				$connection->setTimeout(4);
@@ -109,7 +109,7 @@ class MailCore
 			/* Get templates content */
 			$iso = Language::getIsoById((int)($id_lang));
 			if (!$iso)
-				die (Tools::displayError('Error - No ISO code for email'));
+				return Tools::dieOrLog(Tools::displayError('Error - No ISO code for email'), $die);
 			$template = $iso.'/'.$template;
 
 			$moduleName = false;
@@ -128,7 +128,7 @@ class MailCore
 				$overrideMail  = true;
 			}
 			elseif (!file_exists($templatePath.$template.'.txt') OR !file_exists($templatePath.$template.'.html'))
-				die(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt');
+				return Tools::dieOrLog(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt', $die);
 
 			$templateHtml = file_get_contents($templatePath.$template.'.html');
 			$templateTxt = strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), NULL, 'utf-8'));

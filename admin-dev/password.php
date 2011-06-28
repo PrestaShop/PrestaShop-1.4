@@ -64,8 +64,8 @@ if (isset($_POST['Submit']))
 					$errors[] = Tools::displayError('An error occurred during your password change.');
 				else
 				{
-					Mail::Send((int)$id_lang, 'password', Mail::l('Your new admin password'), array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname);
-					$confirmation = 'ok';
+					if(Mail::Send((int)$id_lang, 'password', Mail::l('Your new admin password'), array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname))
+						$confirmation = 'ok';
 				}
 			}
 		}
