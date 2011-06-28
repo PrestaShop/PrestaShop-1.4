@@ -2108,6 +2108,7 @@ FileETag INode MTime Size
 	 * 
 	 * @param string $msg
 	 * @param bool $die
+	 * @return false
 	 */
 	public static function dieOrLog($msg, $die = true)
 	{
