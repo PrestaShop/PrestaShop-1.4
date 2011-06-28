@@ -436,6 +436,9 @@ class FrontControllerCore
 							);
 			Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css');
 		}
+		$language = new Language($cookie->id_lang);
+		if ($language->is_rtl)
+			Tools::addCSS(_THEME_CSS_DIR_.'rtl.css');
 	}
 
 	public function process()
