@@ -323,7 +323,7 @@ class BlockLayered extends Module
 					if (!sizeof($selectedFilters['category']))
                          $queryFilters .= ' AND p.id_product IN ( SELECT id_product FROM '._DB_PREFIX_.'category_product cp 
                          LEFT JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category) 
-                         WHERE 1 AND c.nleft >= parent->nleft AND c.nright <= parent->nright';
+                         WHERE 1 AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright;
 					else
 					{
 						$queryFilters .= ' AND p.id_product IN ( SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE 1 AND cp.`id_category` = '.(int)$id_parent;					
@@ -786,7 +786,7 @@ class BlockLayered extends Module
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'layered_category` (
 		`id_layered_category` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 		`id_category` INT(10) UNSIGNED NOT NULL,
-		`id_value` INT(10) UNSIGNED NOT NULL DEFAULT \'0\',
+		`id_value` INT(10) UNSIGNED NULL DEFAULT \'0\',
 		`type` ENUM(\'category\',\'id_feature\',\'id_attribute_group\',\'quantity\',\'condition\',\'manufacturer\',\'weight\') NOT NULL,
 		`position` INT(10) UNSIGNED NOT NULL,
 		PRIMARY KEY (`id_layered_category`),
