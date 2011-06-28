@@ -27,7 +27,8 @@
 
 include_once(PS_ADMIN_DIR.'/../images.inc.php');
 @ini_set('max_execution_time', 0);
-define('MAX_LINE_SIZE', 4096);
+// No max line limit since the lines can be more than 4096. Performance impact is not significant.
+define('MAX_LINE_SIZE', 0);
 
 define('UNFRIENDLY_ERROR', false); // Used for validatefields diying without user friendly error or not
 
@@ -597,16 +598,14 @@ class AdminImport extends AdminTab
 				$product = new Product();
 			self::setEntityDefaultValues($product);
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
-			$trg_id = (int)$product->id_tax_rules_group;
 
-			if ($product->id_tax_rules_group == 0 || !Validate::isLoadedObject(new TaxRulesGroup($trg_id)))
-				$this->_addProductWarning('id_tax_rules_group', $product->id_tax_rules_group, Tools::displayError('Invalid tax rule group ID, you first need a group with this ID.'));
-			else
+			if ((int)$product->id_tax_rules_group != 0)
 			{
-			    $product->tax_rate = TaxRulesGroup::getTaxesRate((int)$product->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
-				
+				if(Validate::isLoadedObject(new TaxRulesGroup($product->id_tax_rules_group)))
+				    $product->tax_rate = TaxRulesGroup::getTaxesRate((int)$product->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
+				else
+					$this->_addProductWarning('id_tax_rules_group', $product->id_tax_rules_group, Tools::displayError('Invalid tax rule group ID, you first need a group with this ID.'));
 			}
-			
 			if (isset($product->manufacturer) AND is_numeric($product->manufacturer) AND Manufacturer::manufacturerExists((int)($product->manufacturer)))
 				$product->id_manufacturer = (int)($product->manufacturer);
 			elseif (isset($product->manufacturer) AND is_string($product->manufacturer) AND !empty($product->manufacturer))
@@ -712,6 +711,7 @@ class AdminImport extends AdminTab
 
 			$product->id_category_default = isset($product->id_category[0]) ? (int)($product->id_category[0]) : '';
 			$link_rewrite = (is_array($product->link_rewrite) && count($product->link_rewrite)) ? $product->link_rewrite[$defaultLanguageId] : '';
+
 			$valid_link = Validate::isLinkRewrite($link_rewrite);
 
 			if ((isset($product->link_rewrite[$defaultLanguageId]) AND empty($product->link_rewrite[$defaultLanguageId])) OR !$valid_link)
