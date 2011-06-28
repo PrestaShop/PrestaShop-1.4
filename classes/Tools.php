@@ -205,7 +205,7 @@ class ToolsCore
 
 	/**
 	* Check if the current page use SSL connection on not
-	* 
+	*
 	* @return bool uses SSL
 	*/
 	public static function usingSecureMode()
@@ -215,7 +215,7 @@ class ToolsCore
 
 	/**
 	* Get the current url prefix protocol (https/http)
-	* 
+	*
 	* @return string protocol
 	*/
 	public static function getCurrentUrlProtocolPrefix()
@@ -725,8 +725,6 @@ class ToolsCore
 	*/
 	public static function getHomeMetaTags($id_lang, $page_name)
 	{
-		global $cookie;
-
 		/* Metas-tags */
 		$metas = Meta::getMetaByPage($page_name, $id_lang);
 		$ret['meta_title'] = (isset($metas['title']) AND $metas['title']) ? $metas['title'].' - '.Configuration::get('PS_SHOP_NAME') : Configuration::get('PS_SHOP_NAME');
@@ -1969,7 +1967,6 @@ FileETag INode MTime Size
     public static function checkPhpVersion()
     {
     	$version = null;
-    	$length = null;
 
     	if(defined('PHP_VERSION'))
     		$version = PHP_VERSION;
