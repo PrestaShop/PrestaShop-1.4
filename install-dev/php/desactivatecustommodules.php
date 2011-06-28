@@ -27,15 +27,39 @@
 
 function desactivate_custom_modules()
 {
-	$arrNonNative = Module::getNonNativeModuleList();
+	$db = Db::getInstance();
+	$modulesDirOnDisk = Module::getModulesDirOnDisk();
+
+	$module_list_xml = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'modules_list.xml';
+	$nativeModules = simplexml_load_file($module_list_xml);
+	$nativeModules = $nativeModules->modules;
+	foreach ($nativeModules as $nativeModulesType)
+		if (in_array($nativeModulesType['type'],array('native','partner')))
+		{
+			$arrNativeModules[] = '""';
+			foreach ($nativeModulesType->module as $module)
+				$arrNativeModules[] = '"'.pSQL($module['name']).'"';
+		}
+
+	$arrNonNative = $db->ExecuteS('
+		SELECT *
+		FROM `'._DB_PREFIX_.'module` m
+		WHERE name NOT IN ('.implode(',',$arrNativeModules).') ');
 
 	$uninstallMe = array("undefined-modules");
 	if (is_array($arrNonNative))
 		foreach($arrNonNative as $aModule)
 			$uninstallMe[] = $aModule['name'];
 
-	return Module::disableByName($uninstallMe);
+	if (!is_array($uninstallMe))
+		$uninstallMe = array($uninstallMe);
 
+	foreach ($uninstallMe as $k=>$v)
+		$uninstallMe[$k] = '"'.pSQL($v).'"';
+
+	return Db::getInstance()->Execute('
+	UPDATE `'._DB_PREFIX_.'module`
+	SET `active`= 0
+	WHERE `name` IN ('.implode(',',$uninstallMe).')');
 }
-
 
