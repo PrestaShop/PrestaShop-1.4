@@ -129,7 +129,6 @@ class CurrencyCore extends ObjectModel
 	{
 		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
-		$result = true;
 		foreach ($selection AS $id)
 		{
 			$obj = new Currency((int)($id));
