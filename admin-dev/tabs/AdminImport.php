@@ -275,6 +275,15 @@ class AdminImport extends AdminTab
 		parent::__construct();
 	}
 
+	private static function rewindBomAware($handle)
+	{
+		// A rewind wrapper that skip BOM signature wrongly
+		rewind($handle);
+		if (($bom = fread($handle,3)) != "\xEF\xBB\xBF") {
+			rewind($handle);
+		}
+	}
+
 	private static function getBoolean($field)
 	{
 		return (boolean)$field;
@@ -289,11 +298,18 @@ class AdminImport extends AdminTab
 
 	private static function split($field)
 	{
+		if (empty($field))
+			return array();
 		$separator = ((is_null(Tools::getValue('multiple_value_separator')) OR trim(Tools::getValue('multiple_value_separator')) == '' ) ? ',' : Tools::getValue('multiple_value_separator'));
-		$tab = explode($separator, $field);
-		$res = array_map('strval', $tab);
-		$res = array_map('trim', $tab);
+		$temp = $fd = tmpfile();
+		fwrite($temp,$field);
+		rewind($temp);
+		$tab = fgetcsv($temp, MAX_LINE_SIZE, $separator);
+		fclose($temp);
+		if (empty($tab) || (!is_array($tab)))
+			return array();
 		return $tab;
+
 	}
 
 	private static function createMultiLangField($field)
@@ -398,21 +414,6 @@ class AdminImport extends AdminTab
 		return true;
 	}
 
-	public static function fgetcsv($handle, $lenght, $delimiter)
-	{
-		if (feof($handle))
-			return false;
-		$line = fgets($handle, $lenght);
-		if ($line === false)
-			return false;
-		$tmpTab = explode($delimiter, $line);
-
-		foreach ($tmpTab AS &$row)
-			if (preg_match ('/^".*"$/Uims',$row))
-				$row = trim($row, '"');
-		return $tmpTab;
-	}
-
 	static public function array_walk(&$array, $funcname, &$user_data = false)
 	{
 		if (!is_callable($funcname)) return false;
@@ -422,8 +423,6 @@ class AdminImport extends AdminTab
 				return false;
 		return true;
 	}
-
-
 
 	/**
 	 * copyImg copy an image located in $url and save it in a path
@@ -773,7 +772,7 @@ class AdminImport extends AdminTab
 					$specificPrice->reduction = (isset($info['reduction_price']) AND $info['reduction_price']) ? $info['reduction_price'] : $info['reduction_percent'] / 100;
 					$specificPrice->reduction_type = (isset($info['reduction_price']) AND $info['reduction_price']) ? 'amount' : 'percentage';
 					$specificPrice->from = (isset($info['reduction_from']) AND Validate::isDate($info['reduction_from'])) ? $info['reduction_from'] : '0000-00-00 00:00:00';
-					$specificPrice->to = (isset($info['reduction_to']) AND Validate::isDate($info['reduction_to']))  ? $info['reduction_to'] : '0000-00-00 00:00:00';
+					$specificPrice->to = (isset($info['reduction_to']) AND Validate::isDate($info['reduction_to'])) ? $info['reduction_to'] : '0000-00-00 00:00:00';
 					if (!$specificPrice->add())
 						$this->_addProductWarning($info['name'], $product->id, $this->l('Discount is invalid'));
 				}
@@ -1231,8 +1230,8 @@ class AdminImport extends AdminTab
 					{
 						$(\'.info\').cluetip({
 						splitTitle: \'|\',
-					    showTitle: false
-					 	});
+						showTitle: false
+						});
 					};
 			</script>';
 		echo '
@@ -1374,7 +1373,7 @@ class AdminImport extends AdminTab
 	private function getNbrColumn($handle, $glue)
 	{
 		$tmp = fgetcsv($handle, MAX_LINE_SIZE, $glue);
-		fseek($handle, 0);
+		self::rewindBomAware($handle);
 		return sizeof($tmp);
 	}
 
@@ -1391,15 +1390,13 @@ class AdminImport extends AdminTab
 
 	private function openCsvFile()
 	{
-		 $handle = fopen(dirname(__FILE__).'/../import/'.strval(preg_replace('/\.{2,}/', '.',Tools::getValue('csv'))), 'r');
+		$handle = fopen(dirname(__FILE__).'/../import/'.strval(preg_replace('/\.{2,}/', '.',Tools::getValue('csv'))), 'r');
 
-		/* No BOM allowed */
-		$bom = fread($handle, 3);
-		if ($bom != '\xEF\xBB\xBF')
-			rewind($handle);
 
 		if (!$handle)
 			die(Tools::displayError('Cannot read the CSV file'));
+		
+		self::rewindBomAware($handle);
 
 		for ($i = 0; $i < (int)(Tools::getValue('skip')); ++$i)
 			$line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator', ';'));
@@ -1446,7 +1443,7 @@ class AdminImport extends AdminTab
 			echo '</tr>';
 		}
 		echo '</table>';
-		fseek($handle, 0);
+		self::rewindBomAware($handle);
 	}
 
 	public function displayCSV()
@@ -1682,7 +1679,7 @@ class AdminImport extends AdminTab
 
 	public static function setLocale()
 	{
-		$iso_lang  = trim(Tools::getValue('iso_lang'));
+		$iso_lang = trim(Tools::getValue('iso_lang'));
 		setlocale(LC_COLLATE, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
 		setlocale(LC_CTYPE, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
 	}
