@@ -211,13 +211,12 @@ class CMSCategoryCore extends ObjectModel
 
 	static public function recurseCMSCategory($categories, $current, $id_cms_category = 1, $id_selected = 1, $is_html = 0)
 	{
-		global $currentIndex;
 		$html = '<option value="'.$id_cms_category.'"'.(($id_selected == $id_cms_category) ? ' selected="selected"' : '').'>'.
 		str_repeat('&nbsp;', $current['infos']['level_depth'] * 5).self::hideCMSCategoryPosition(stripslashes($current['infos']['name'])).'</option>';
 		if ($is_html == 0)
 			echo $html;
 		if (isset($categories[$id_cms_category]))
-			foreach ($categories[$id_cms_category] AS $key => $row)
+			foreach (array_keys($categories[$id_cms_category]) AS $key)
 				$html .= self::recurseCMSCategory($categories, $categories[$id_cms_category][$key], $key, $id_selected, $is_html);
 		return $html;
 	}
@@ -239,7 +238,7 @@ class CMSCategoryCore extends ObjectModel
 		SELECT `id_cms_category`
 		FROM `'._DB_PREFIX_.'cms_category`
 		WHERE `id_parent` = '.(int)($id_cms_category));
-		foreach ($result AS $k => $row)
+		foreach ($result AS $row)
 		{
 			$toDelete[] = (int)($row['id_cms_category']);
 			$this->recursiveDelete($toDelete, (int)($row['id_cms_category']));
@@ -355,7 +354,6 @@ class CMSCategoryCore extends ObjectModel
 	  */
 	public function getSubCategories($id_lang, $active = true)
 	{
-	 	global $cookie;
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
 
