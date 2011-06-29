@@ -31,7 +31,13 @@ $engineType = 'ENGINE_TYPE';
 if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
-define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
+// if _PS_ROOT_DIR_ is defined, use it instead of "guessing" the module dir.
+if (defined('_PS_ROOT_DIR_') AND !defined('_PS_MODULE_DIR_'))
+	define('_PS_MODULE_DIR_', _PS_ROOT_DIR_.'/modules/');
+else
+	if(!defined('_PS_MODULE_DIR_'))
+		define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
+
 define('_PS_INSTALLER_PHP_UPGRADE_DIR_', 'php/');
 // Only if loyalty module is installed
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
