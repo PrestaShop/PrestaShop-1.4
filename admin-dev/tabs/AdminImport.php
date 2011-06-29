@@ -301,7 +301,7 @@ class AdminImport extends AdminTab
 		if (empty($field))
 			return array();
 		$separator = ((is_null(Tools::getValue('multiple_value_separator')) OR trim(Tools::getValue('multiple_value_separator')) == '' ) ? ',' : Tools::getValue('multiple_value_separator'));
-		$temp = $fd = tmpfile();
+		$temp = tmpfile();
 		fwrite($temp,$field);
 		rewind($temp);
 		$tab = fgetcsv($temp, MAX_LINE_SIZE, $separator);
