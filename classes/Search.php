@@ -513,10 +513,10 @@ class SearchCore
 		return true;
 	}
 
-	protected static function setProductsAsIndexed(&$products)
+	protected static function setProductsAsIndexed(&$productsArray)
 	{
-		if (count($products))
-			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $products).') LIMIT '.(int)count($products));
+		if ($i = count($productsArray))
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $productsArray).') LIMIT '.(int)$i);
 		$productsArray = array();
 	}
 	
@@ -530,7 +530,7 @@ class SearchCore
 
 	public static function searchTag($id_lang, $tag, $count = false, $pageNumber = 0, $pageSize = 10, $orderBy = false, $orderWay = false, $useCookie = true)
 	{
-	 	global $link, $cookie;
+	 	global $cookie;
 
 		// Only use cookie if id_customer is not present
 		if ($useCookie)

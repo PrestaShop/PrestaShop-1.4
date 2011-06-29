@@ -133,7 +133,7 @@ class WebserviceKeyCore extends ObjectModel
 				$methods = array('GET', 'PUT', 'POST', 'DELETE', 'HEAD');
 				foreach ($permissionsToSet as $resourceName => $resource_methods)
 					if (in_array($resourceName, array_keys($resources)))
-						foreach ($resource_methods as $methodName => $value)
+						foreach (array_keys($resource_methods) as $methodName)
 							if (in_array($methodName, $methods))
 								$permissions[] = array($methodName, $resourceName);
 				$account = new WebserviceKey($idAccount);

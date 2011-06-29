@@ -573,7 +573,7 @@ class WebserviceOutputBuilderCore
 				if (isset($this->wsResource[$assoc_name]['class']) && class_exists($this->wsResource[$assoc_name]['class'], true))
 					$class_name = $this->wsResource[$assoc_name]['class'];
 				$output_details = '';
-				foreach ($objects_assoc as $key => $object_assoc)
+				foreach ($objects_assoc as $object_assoc)
 				{
 					if ($depth == 0 || $class_name === null)
 					{
@@ -586,7 +586,7 @@ class WebserviceOutputBuilderCore
 					}
 					else
 					{
-						foreach ($object_assoc as $key_id => $id)
+						foreach ($object_assoc as $id)
 						{
 							if ($class_name !== null)
 							{
