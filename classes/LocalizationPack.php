@@ -342,7 +342,9 @@ class LocalizationPackCore
 				foreach ($native_lang AS $lang)
 					$native_iso_code[] = $lang['iso_code'];
 				if ((in_array((string)$attributes['iso_code'], $native_iso_code) AND !$install_mode) OR !in_array((string)$attributes['iso_code'], $native_iso_code))
-					if(@fsockopen('www.prestashop.com', 80, 0, '', 10))
+					$errno = 0;
+					$errstr = '';
+					if(@fsockopen('www.prestashop.com', 80, $errno, $errstr, 10))
 					{
 						if ($lang_pack = Tools::jsonDecode(Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='._PS_VERSION_.'&iso_lang='.$attributes['iso_code'])))
 						{
