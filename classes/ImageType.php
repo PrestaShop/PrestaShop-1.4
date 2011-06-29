@@ -128,7 +128,7 @@ class ImageTypeCore extends ObjectModel
 		if (!Validate::isImageTypeName($typeName))
 			die(Tools::displayError());
 			
-		$result = Db::getInstance()->ExecuteS('
+		Db::getInstance()->ExecuteS('
 		SELECT `id_image_type`
 		FROM `'._DB_PREFIX_.'image_type`
 		WHERE `name` = \''.pSQL($typeName).'\'');

@@ -290,7 +290,6 @@ class DiscountCore extends ObjectModel
 
 		$products = $cart->getProducts();
 		$categories = Discount::getCategories((int)($this->id));
-		$in_category = false;
 
 		foreach ($products AS $product)
 			if (count($categories) AND Product::idIsOnCategoryId($product['id_product'], $categories))

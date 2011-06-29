@@ -132,7 +132,7 @@ class FeatureCore extends ObjectModel
 	 	$fields = $this->getTranslationsFieldsChild();
 		foreach ($fields as $field)
 		{
-			foreach ($field as $key => $value)
+			foreach (array_keys($field) as $key)
 			 	if (!Validate::isTableOrIdentifier($key))
 	 				die(Tools::displayError());
 			$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).

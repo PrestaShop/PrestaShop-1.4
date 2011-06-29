@@ -141,7 +141,7 @@ class CarrierCore extends ObjectModel
 	{
 		if (!parent::add($autodate, $nullValues) OR !Validate::isLoadedObject($this))
 			return false;
-		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_carrier` FROM `'._DB_PREFIX_.$this->table.'` WHERE `deleted` = 0'))
+		if (!Db::getInstance()->ExecuteS('SELECT `id_carrier` FROM `'._DB_PREFIX_.$this->table.'` WHERE `deleted` = 0'))
 			return false;
 		if (!$numRows = Db::getInstance()->NumRows())
 			return false;

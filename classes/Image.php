@@ -230,7 +230,7 @@ class ImageCore extends ObjectModel
 			if ($imageNew->add())
             {
 				$new_path = $imageNew->getPathForCreation();
-            	foreach ($imagesTypes AS $k => $imageType)
+            	foreach ($imagesTypes AS $imageType)
             	{
 					if (file_exists(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'-'.$imageType['name'].'.jpg'))
 					{

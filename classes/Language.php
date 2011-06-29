@@ -144,7 +144,7 @@ class LanguageCore extends ObjectModel
 	{
 		if (isset(self::$_checkedLangs[$iso_code]) AND self::$_checkedLangs[$iso_code])
 			return true;
-		foreach (self::getFilesList($iso_code, _THEME_NAME_, false, false, false, true) as $key => $file)
+		foreach (array_keys(self::getFilesList($iso_code, _THEME_NAME_, false, false, false, true)) as $key)
 			if (!file_exists($key))
 				return false;
 		self::$_checkedLangs[$iso_code] = true;
@@ -238,7 +238,7 @@ class LanguageCore extends ObjectModel
 			if ($modules)
 			{
 				$modList = Module::getModulesDirOnDisk();
-				foreach ($modList as $k => $mod)
+				foreach ($modList as $mod)
 				{
 					$modDir = _PS_MODULE_DIR_.$mod;
 					// Lang file
@@ -363,7 +363,7 @@ class LanguageCore extends ObjectModel
 			if (file_exists($key))
 				unlink($key);
 		$modList = scandir(_PS_MODULE_DIR_);
-		foreach ($modList as $k => $mod)
+		foreach ($modList as $mod)
 		{
 			self::recurseDeleteDir(_PS_MODULE_DIR_.$mod.'/mails/'.$this->iso_code);
 			$files = @scandir(_PS_MODULE_DIR_.$mod.'/mails/');
@@ -372,7 +372,7 @@ class LanguageCore extends ObjectModel
 
 			if(file_exists(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php'))
 			{
-				$return = unlink(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php');
+				unlink(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php');
 				$files = @scandir(_PS_MODULE_DIR_.$mod);
 				if (count($files) <= 2)
 					self::recurseDeleteDir(_PS_MODULE_DIR_.$mod);
