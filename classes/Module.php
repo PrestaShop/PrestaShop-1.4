@@ -98,8 +98,6 @@ abstract class ModuleCore
 
 	public function __construct($name = NULL)
 	{
-		global $cookie;
-
 		if ($this->name == NULL)
 			$this->name = $this->id;
 		if ($this->name != NULL)
@@ -436,7 +434,6 @@ abstract class ModuleCore
 		if(!isset($preloadedModuleNameFromId)) {
 			$preloadedModuleNameFromId = array();
 		}
-		static $a = array();
 		
 		if(is_array($ids))
 		{
@@ -591,7 +588,7 @@ abstract class ModuleCore
 		$modules = scandir(_PS_MODULE_DIR_);
 		foreach ($modules AS $name)
 		{
-			if (Tools::file_exists_cache($moduleFile = _PS_MODULE_DIR_.$name.'/'.$name.'.php'))
+			if (Tools::file_exists_cache(_PS_MODULE_DIR_.$name.'/'.$name.'.php'))
 			{
 				if (!Validate::isModuleName($name))
 					die(Tools::displayError().' (Module '.$name.')');
@@ -610,7 +607,6 @@ abstract class ModuleCore
 	public static function getNonNativeModuleList()
 	{
 		$db = Db::getInstance();
-		$modulesDirOnDisk = Module::getModulesDirOnDisk();
 
 		$module_list_xml = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'modules_list.xml';
 		$nativeModules = simplexml_load_file($module_list_xml);
@@ -711,7 +707,7 @@ abstract class ModuleCore
 				$hookArgs['altern'] = ++$altern;
 
 				$display = call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
-				if ($array['live_edit'] && ((Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))))
+				if ($array['live_edit'] && ((Tools::isSubmit('live_edit') AND Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))))
 				{
 					$live_edit = true;
 					$output .= '<script type="text/javascript"> modules_list.push(\''.$moduleInstance->name.'\');</script>
@@ -754,7 +750,7 @@ abstract class ModuleCore
 		AND m.`active` = 1
 		ORDER BY hm.`position`, m.`name` DESC');
 		if ($result)
-			foreach ($result AS $k => $module)
+			foreach ($result AS $module)
 				if (($moduleInstance = Module::getInstanceByName($module['name'])) AND is_callable(array($moduleInstance, 'hookpayment')))
 					if (!$moduleInstance->currencies OR ($moduleInstance->currencies AND sizeof(Currency::checkPaymentCurrencies($moduleInstance->id))))
 						$output .= call_user_func(array($moduleInstance, 'hookpayment'), $hookArgs);

@@ -179,7 +179,6 @@ class OrderHistoryCore extends ObjectModel
 				$links = $smarty->fetch(_PS_MAIL_DIR_.$iso.'/download-product.tpl');
 				$tmpArray = array('{nbProducts}' => count($virtualProducts), '{virtualProducts}' => $links);
 				$data = array_merge ($data, $tmpArray);
-				global $_LANGMAIL;
 				Mail::Send((int)($order->id_lang), 'download_product', Mail::l('Virtual product to download'), $data, $result['email'], $result['firstname'].' '.$result['lastname']);
 			}
 

@@ -436,7 +436,7 @@ class PDFCore extends PDF_PageGroupCore
 	{
 		$maxY = 0;
 		$pdf->setY($pdf->GetY() + 5);
-		foreach($addressType as $type => $idNameAttribute)
+		foreach(array_keys($addressType) as $type)
 		{
 			$currentY = $pdf->GetY();
 
@@ -1029,7 +1029,7 @@ class PDFCore extends PDF_PageGroupCore
 		$nb_tax = 0;
 
 		// Display product tax
-		foreach ($priceBreakDown['taxes'] AS $tax_rate => $vat)
+		foreach (array_keys($priceBreakDown['taxes']) AS $tax_rate)
 		{
 			if ($tax_rate != '0.00' AND $priceBreakDown['totalsProductsWithTax'][$tax_rate] != '0.00')
 			{

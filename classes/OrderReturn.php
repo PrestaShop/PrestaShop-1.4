@@ -100,7 +100,7 @@ class OrderReturnCore extends ObjectModel
 		}
 		/* Quantity check */
 		if ($orderDetailList)
-			foreach ($orderDetailList AS $key => $orderDetail)
+			foreach (array_keys($orderDetailList) AS $key)
 				if ($qty = (int)($productQtyList[$key]))
 					if ($products[$key]['product_quantity'] - $qty < 0)
 						return false;
@@ -108,7 +108,7 @@ class OrderReturnCore extends ObjectModel
 		if ($customizationIds)
 		{
 			$orderedCustomizations = Customization::getOrderedCustomizations((int)($order->id_cart));
-			foreach ($customizationIds AS $productId => $customizations)
+			foreach ($customizationIds AS $customizations)
 				foreach ($customizations AS $customizationId)
 				{
 					$customizationId = (int)($customizationId);

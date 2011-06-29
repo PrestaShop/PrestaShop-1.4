@@ -210,7 +210,7 @@ abstract class ObjectModelCore
 			if ($fields AND is_array($fields))
 				foreach ($fields AS $field)
 				{
-					foreach ($field AS $key => $value)
+					foreach (array_keys($field) AS $key)
 					 	if (!Validate::isTableOrIdentifier($key))
 			 				die(Tools::displayError());
 					$field[$this->identifier] = (int)$this->id;
@@ -251,7 +251,7 @@ abstract class ObjectModelCore
 			if (is_array($fields))
 				foreach ($fields as $field)
 				{
-					foreach ($field as $key => $value)
+					foreach (array_keys($field) as $key)
 						if (!Validate::isTableOrIdentifier($key))
 							die(Tools::displayError());
 

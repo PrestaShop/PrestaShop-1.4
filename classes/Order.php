@@ -246,7 +246,7 @@ class OrderCore extends ObjectModel
 	/* Does NOT delete a product but "cancel" it (which means return/refund/delete it depending of the case) */
 	public function deleteProduct($order, $orderDetail, $quantity)
 	{
-		if (!$currentStatus = (int)($this->getCurrentState()))
+		if (!(int)($this->getCurrentState()))
 			return false;
 
 		if ($this->hasBeenDelivered())
@@ -321,7 +321,6 @@ class OrderCore extends ObjectModel
 				return false;
 			if (count($this->getProductsDetail()) == 0)
 			{
-				global $cookie;
 				$history = new OrderHistory();
 				$history->id_order = (int)($this->id);
 				$history->changeIdOrderState(Configuration::get('PS_OS_CANCELED'), (int)($this->id));
@@ -335,7 +334,7 @@ class OrderCore extends ObjectModel
 
 	public function deleteCustomization($id_customization, $quantity, $orderDetail)
 	{
-		if (!$currentStatus = (int)($this->getCurrentState()))
+		if (!(int)($this->getCurrentState()))
 			return false;
 
 		if ($this->hasBeenDelivered())
@@ -462,7 +461,7 @@ class OrderCore extends ObjectModel
 		if (!$products)
 			$products = $this->getProductsDetail();
 		$resultArray = array();
-		foreach ($products AS $k => $row)
+		foreach ($products AS $row)
 		{
 			// Change qty if selected
 			if ($selectedQty)
@@ -757,7 +756,7 @@ class OrderCore extends ObjectModel
 			$products = $this->getProductsDetail();
 
 		$return = 0;
-		foreach ($products AS $k => $row)
+		foreach ($products AS $row)
 		{
 			$price = Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2);
 			if ($row['reduction_percent'])
