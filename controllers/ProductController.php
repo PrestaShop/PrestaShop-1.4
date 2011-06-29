@@ -51,7 +51,7 @@ class ProductControllerCore extends FrontController
 			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.jqzoom.js');
 		}
 	}
-	
+
 	public function canonicalRedirection()
 	{
 		// Automatically redirect to the canonical URL if the current in is the right one
@@ -111,7 +111,7 @@ class ProductControllerCore extends FrontController
 
 				/* Product pictures management */
 				require_once('images.inc.php');
-				
+
 				if ($this->product->customizable)
 				{
 					self::$smarty->assign('customizationFormTarget', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
@@ -133,11 +133,6 @@ class ProductControllerCore extends FrontController
 						'pictures' => $files,
 						'textFields' => $textFields));
 				}
-
-				$productPriceWithTax = Product::getPriceStatic($this->product->id, true, NULL, 6);
-				if (Product::$_taxCalculationMethod == PS_TAX_INC)
-					$productPriceWithTax = Tools::ps_round($productPriceWithTax, 2);
-				$productPriceWithoutEcoTax = (float)($productPriceWithTax - $this->product->ecotax);
 
 				/* Features / Values */
 				$features = $this->product->getFrontFeatures((int)self::$cookie->id_lang);
@@ -189,8 +184,13 @@ class ProductControllerCore extends FrontController
 				$tax = (float)(Tax::getProductTaxRate((int)($this->product->id), $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 				self::$smarty->assign('tax_rate', $tax);
 
+				$productPriceWithTax = Product::getPriceStatic($this->product->id, true, NULL, 6);
+				if (Product::$_taxCalculationMethod == PS_TAX_INC)
+					$productPriceWithTax = Tools::ps_round($productPriceWithTax, 2);
+				$productPriceWithoutEcoTax = (float)($productPriceWithTax - $this->product->ecotax);
+
 				$ecotax_rate = (float) Tax::getProductEcotaxRate($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
-                $ecotaxTaxAmount = Tools::ps_round($this->product->ecotax, 2);
+            $ecotaxTaxAmount = Tools::ps_round($this->product->ecotax, 2);
 				if (Product::$_taxCalculationMethod == PS_TAX_INC && (int)Configuration::get('PS_TAX'))
 					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + $ecotax_rate / 100), 2);
 
