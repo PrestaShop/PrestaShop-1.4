@@ -38,7 +38,7 @@ else
 	if(!defined('_PS_MODULE_DIR_'))
 		define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
 
-define('_PS_INSTALLER_PHP_UPGRADE_DIR_', 'php/');
+define('_PS_INSTALLER_PHP_UPGRADE_DIR_', INSTALL_PATH.'/php/');
 // Only if loyalty module is installed
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
 // desactivate non-native module
