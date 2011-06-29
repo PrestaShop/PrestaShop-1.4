@@ -592,7 +592,7 @@ class CustomerCore extends ObjectModel
 	static public function getDefaultGroupId($id_customer)
 	{
 		if (!isset(self::$_defaultGroupId[(int)($id_customer)]))
-			self::$_defaultGroupId[(int)($id_customer)] = Db::getInstance()->getValue('SELECT `id_default_group` FROM `'._DB_PREFIX_.'customer` WHERE `id_customer` = '.(int)($id_customer));
+			self::$_defaultGroupId[(int)($id_customer)] = Db::getInstance()->getValue('SELECT `id_default_group` FROM `'._DB_PREFIX_.'customer` WHERE `id_customer` = '.(int)$id_customer);
 		return self::$_defaultGroupId[(int)($id_customer)];
 	}
 
