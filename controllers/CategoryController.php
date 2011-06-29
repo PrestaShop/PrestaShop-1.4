@@ -81,18 +81,6 @@ class CategoryControllerCore extends FrontController
 			$this->canonicalRedirection();
 		
 		parent::preProcess();
-		
-		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
-			if ($id_category = (int)Tools::getValue('id_category'))
-			{
-				$rewrite_infos = Category::getUrlRewriteInformations((int)$id_category);
-
-				$default_rewrite = array();
-				foreach ($rewrite_infos AS $infos)
-					$default_rewrite[$infos['id_lang']] = self::$link->getCategoryLink((int)$id_category, $infos['link_rewrite'], $infos['id_lang']);
-
-				self::$smarty->assign('lang_rewrite_urls', $default_rewrite);
-			}
 	}
 	
 	public function process()

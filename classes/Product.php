@@ -3025,22 +3025,19 @@ class ProductCore extends ObjectModel
 	{
 		if (!$id_customer)
 		{
-			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT ctg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
-			WHERE cp.`id_product` = '.(int)($this->id).' AND ctg.`id_group` = 1');
+			WHERE cp.`id_product` = '.(int)$this->id.' AND ctg.`id_group` = 1');
 		} else {
-			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+			return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT cg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
-			WHERE cp.`id_product` = '.(int)($this->id).' AND cg.`id_customer` = '.(int)($id_customer));
+			WHERE cp.`id_product` = '.(int)$this->id.' AND cg.`id_customer` = '.(int)$id_customer);
 		}
-		if ($result AND isset($result['id_group']) AND $result['id_group'])
-			return true;
-		return false;
 	}
 
 	public function addStockMvt($quantity, $id_reason, $id_product_attribute = NULL, $id_order = NULL, $id_employee = NULL)

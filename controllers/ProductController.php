@@ -83,18 +83,6 @@ class ProductControllerCore extends FrontController
 			$this->canonicalRedirection();
 
 		parent::preProcess();
-
-		if((int)(Configuration::get('PS_REWRITING_SETTINGS')))
-			if ($id_product = (int)Tools::getValue('id_product'))
-			{
-				$rewrite_infos = Product::getUrlRewriteInformations((int)$id_product);
-
-				$default_rewrite = array();
-				foreach ($rewrite_infos AS $infos)
-					$default_rewrite[$infos['id_lang']] = self::$link->getProductLink((int)$id_product, $infos['link_rewrite'], $infos['category_rewrite'], $infos['ean13'], (int)$infos['id_lang']);
-
-				self::$smarty->assign('lang_rewrite_urls', $default_rewrite);
-			}
 	}
 
 	public function process()
@@ -207,13 +195,13 @@ class ProductControllerCore extends FrontController
 					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + $ecotax_rate / 100), 2);
 
 				self::$smarty->assign(array(
-					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)($this->product->id), (int)(Shop::getCurrentShop()), (int)(self::$cookie->id_currency), $id_country, $id_group), $this->product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)($tax)),
+					'quantity_discounts' => $this->formatQuantityDiscounts(SpecificPrice::getQuantityDiscounts((int)$this->product->id, (int)Shop::getCurrentShop(), (int)self::$cookie->id_currency, $id_country, $id_group), $this->product->getPrice(Product::$_taxCalculationMethod == PS_TAX_INC, false), (float)$tax),
 					'product' => $this->product,
 					'ecotax_tax_inc' => $ecotaxTaxAmount,
 					'ecotax_tax_exc' => Tools::ps_round($this->product->ecotax, 2),
 					'ecotaxTax_rate' => $ecotax_rate,
 					'homeSize' => Image::getSize('home'),
-					'product_manufacturer' => new Manufacturer((int)($this->product->id_manufacturer), Configuration::get('PS_LANG_DEFAULT')),
+					'product_manufacturer' => new Manufacturer((int)$this->product->id_manufacturer, self::$cookie->id_lang),
 					'token' => Tools::getToken(false),
 					'productPriceWithoutEcoTax' => (float)($productPriceWithoutEcoTax),
 					'features' => $features,

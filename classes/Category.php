@@ -187,22 +187,23 @@ class CategoryCore extends ObjectModel
 	  *
  	  * @return array Subcategories lite tree
 	  */
-	function recurseLiteCategTree($maxDepth = 3, $currentDepth = 0, $idLang = NULL, $excludedIdsArray = NULL)
+	function recurseLiteCategTree($maxDepth = 3, $currentDepth = 0, $id_lang = NULL, $excludedIdsArray = NULL)
 	{
 		global $link;
 
-		$idLang = is_null($idLang) ? _USER_ID_LANG_ : (int)($idLang);
+		if (!(int)$id_lang)
+			$id_lang = _USER_ID_LANG_;
 
 		$children = array();
-		if (($maxDepth == 0 OR $currentDepth < $maxDepth) AND $subcats = $this->getSubCategories((int)$idLang, true) AND sizeof($subcats))
+		if (($maxDepth == 0 OR $currentDepth < $maxDepth) AND $subcats = $this->getSubCategories((int)$id_lang, true) AND sizeof($subcats))
 			foreach ($subcats AS &$subcat)
 			{
 				if (!$subcat['id_category'])
 					break;
 				elseif (!is_array($excludedIdsArray) || !in_array($subcat['id_category'], $excludedIdsArray))
 				{
-					$categ = new Category((int)$subcat['id_category'], (int)$idLang);
-					$children[] = $categ->recurseLiteCategTree($maxDepth, $currentDepth + 1, (int)$idLang, $excludedIdsArray);
+					$categ = new Category((int)$subcat['id_category'], (int)$id_lang);
+					$children[] = $categ->recurseLiteCategTree($maxDepth, $currentDepth + 1, (int)$id_lang, $excludedIdsArray);
 				}
 			}
 
