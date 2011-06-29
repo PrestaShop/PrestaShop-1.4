@@ -822,7 +822,7 @@ abstract class AdminTabCore
 
 	protected function updateOptions($token)
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex;
 
 		if ($this->tabAccess['edit'] === '1')
 		{
@@ -982,7 +982,7 @@ abstract class AdminTabCore
 		{
 			$languages = Language::getLanguages(false);
 			foreach ($languages AS $language)
-				foreach ($rules['validateLang'] AS $field => $validation)
+				foreach (array_keys($rules['validateLang']) AS $field)
 					if (isset($_POST[$field.'_'.(int)($language['id_lang'])]))
 						$object->{$field}[(int)($language['id_lang'])] = $_POST[$field.'_'.(int)($language['id_lang'])];
 		}
@@ -1258,7 +1258,7 @@ abstract class AdminTabCore
 			<script type="text/javascript" src="../js/admin-dnd.js"></script>
 			';
 		}
-		echo '<table'.(array_key_exists($this->identifier,$this->identifiersDnd) ? ' id="'.(($id_category = (int)(Tools::getValue($this->identifiersDnd[$this->identifier], 1))) ? substr($this->identifier,3,strlen($this->identifier)) : '').'"' : '' ).' class="table'.((array_key_exists($this->identifier,$this->identifiersDnd) AND ($this->_orderBy != 'position 'AND $this->_orderWay != 'DESC')) ? ' tableDnD'  : '' ).'" cellpadding="0" cellspacing="0">
+		echo '<table'.(array_key_exists($this->identifier,$this->identifiersDnd) ? ' id="'.(((int)(Tools::getValue($this->identifiersDnd[$this->identifier], 1))) ? substr($this->identifier,3,strlen($this->identifier)) : '').'"' : '' ).' class="table'.((array_key_exists($this->identifier,$this->identifiersDnd) AND ($this->_orderBy != 'position 'AND $this->_orderWay != 'DESC')) ? ' tableDnD'  : '' ).'" cellpadding="0" cellspacing="0">
 			<thead>
 				<tr class="nodrag nodrop">
 					<th>';
@@ -1427,7 +1427,7 @@ abstract class AdminTabCore
 			if (preg_match('/cms/Ui', $this->identifier))
 				$isCms = true;
 			$keyToGet = 'id_'.($isCms ? 'cms_' : '').'category'.(in_array($this->identifier, array('id_category', 'id_cms_category')) ? '_parent' : '');
-			foreach ($this->_list AS $i => $tr)
+			foreach ($this->_list AS $tr)
 			{
 				$id = $tr[$this->identifier];
 				echo '<tr'.(array_key_exists($this->identifier,$this->identifiersDnd) ? ' id="tr_'.(($id_category = (int)(Tools::getValue('id_'.($isCms ? 'cms_' : '').'category', '1'))) ? $id_category : '').'_'.$id.'_'.$tr['position'].'"' : '').($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($tr['color']) AND $this->colorOnBackground) ? 'style="background-color: '.$tr['color'].'"' : '').'>
@@ -1868,7 +1868,6 @@ abstract class AdminTabCore
 	{
 		if (sizeof($languages) == 1)
 			return false;
-		$defaultIso = Language::getIsoById($defaultLanguage);
 		$output = '
 		<div class="displayed_flag">
 			<img src="../img/l/'.$defaultLanguage.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="toggleLanguageFlags(this);" alt="" />
@@ -1896,8 +1895,6 @@ abstract class AdminTabCore
 
 	protected function warnDomainName()
 	{
-		global $currentIndex;
-
 		if ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') AND $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'))
 			$this->displayWarning($this->l('Your are currently connected with the following domain name:').' <span style="color: #CC0000;">'.$_SERVER['HTTP_HOST'].'</span><br />'.
 			$this->l('This one is different from the main shop domain name set in "Preferences > SEO & URLs":').' <span style="color: #CC0000;">'.Configuration::get('PS_SHOP_DOMAIN').'</span><br />
