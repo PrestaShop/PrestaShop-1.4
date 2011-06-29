@@ -124,7 +124,7 @@ class AddressFormatCore extends ObjectModel
 			{
 				$propertyName = $property->getName();
 				if (($propertyName == $fieldName) && ($isIdField ||
-						(!preg_match('#id|id_\w#', $propertyName, $match))))
+						(!preg_match('#id|id_\w#', $propertyName))))
 					$isValide = true;
 			}
 			
@@ -244,7 +244,7 @@ class AddressFormatCore extends ObjectModel
 		
 		// Check if $address exist and it's an instanciate object of Address
 		if ($address && ($address instanceof Address))
-			foreach($addressFormat as $lineNum => $line)
+			foreach($addressFormat as $line)
 			{
 				if (($keyList = explode(' ', $line)) && is_array($keyList))
 					foreach($keyList as $pattern)
@@ -276,7 +276,7 @@ class AddressFormatCore extends ObjectModel
 					}
 			}
 		// Free the instanciate objects
-		foreach($temporyObject as $objectName => &$object)
+		foreach($temporyObject as &$object)
 			unset($object);
 		return $tab;
 	}
@@ -329,7 +329,7 @@ class AddressFormatCore extends ObjectModel
 			{
 				$propertyName = $property->getName();
 				if ((!in_array($propertyName, AddressFormat::$forbiddenProperyList)) && 
-						(!preg_match('#id|id_\w#', $propertyName, $match)))
+						(!preg_match('#id|id_\w#', $propertyName)))
 					$propertyList[] = $propertyName;
 			}
 			unset($object);
@@ -355,7 +355,7 @@ class AddressFormatCore extends ObjectModel
 			foreach($publicProperties as $property)
 			{
 				$propertyName = $property->getName();
-				if (preg_match('#id_\w#', $propertyName, $match) && strlen($propertyName) > 3)
+				if (preg_match('#id_\w#', $propertyName) && strlen($propertyName) > 3)
 				{
 					$nameObject = ucfirst(substr($propertyName, 3));
 					if (!in_array($nameObject, self::$forbiddenClassList) && 
@@ -398,11 +398,6 @@ class AddressFormatCore extends ObjectModel
 	{
 		$out = '';
 		$id_country = (int) $id_country;
-
- 		if ($id_country <= 0)
-		{
-			$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-		}
 
 		$tmp_obj = new AddressFormat();
 		$tmp_obj->id_country = $id_country;
