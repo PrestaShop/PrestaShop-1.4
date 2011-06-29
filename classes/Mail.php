@@ -42,26 +42,42 @@ class MailCore
 		if (!isset($fromName)) $fromName = $configuration['PS_SHOP_NAME'];
 
 		if (!empty($from) AND !Validate::isEmail($from))
-	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "from" is corrupted'), $die);
-			
+		{
+ 			Tools::dieOrLog(Tools::displayError('Error: parameter "from" is corrupted'), $die);
+ 			return false;
+		}
 		if (!empty($fromName) AND !Validate::isMailName($fromName))
-	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "fromName" is corrupted'), $die);
-			
+		{
+	 		Tools::dieOrLog(Tools::displayError('Error: parameter "fromName" is corrupted'), $die);
+	 		return false;
+		}
 		if (!is_array($to) AND !Validate::isEmail($to))
-	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "to" is corrupted'), $die);
+		{
+	 		Tools::dieOrLog(Tools::displayError('Error: parameter "to" is corrupted'), $die);
+	 		return false;
+		}
 
 		if (!is_array($templateVars))
-	 		return Tools::dieOrLog(Tools::displayError('Error: parameter "templateVars" is not an array'), $die);
+		{
+	 		Tools::dieOrLog(Tools::displayError('Error: parameter "templateVars" is not an array'), $die);
+	 		return false;
+		}
 		
 		// Do not crash for this error, that may be a complicated customer name
 		if (!empty($toName) AND !Validate::isMailName($toName))
 	 		$toName = NULL;
 			
 		if (!Validate::isTplName($template))
-	 		return Tools::dieOrLog(Tools::displayError('Error: invalid email template'), $die);
+		{
+	 		Tools::dieOrLog(Tools::displayError('Error: invalid email template'), $die);
+	 		return false;
+		}
 			
 		if (!Validate::isMailSubject($subject))
-	 		return Tools::dieOrLog(Tools::displayError('Error: invalid email subject'), $die);
+		{
+	 		Tools::dieOrLog(Tools::displayError('Error: invalid email subject'), $die);
+	 		return false;
+		}
 
 		/* Construct multiple recipients list if needed */
 		if (is_array($to))
@@ -72,7 +88,10 @@ class MailCore
 				$to_name = NULL;
 				$addr = trim($addr);
 				if (!Validate::isEmail($addr))
-					return Tools::dieOrLog(Tools::displayError('Error: invalid email address'), $die);
+				{
+					Tools::dieOrLog(Tools::displayError('Error: invalid email address'), $die);
+					return false;
+				}
 				if ($toName AND is_array($toName) AND Validate::isGenericName($toName[$key]))
 					$to_name = $toName[$key];
 				$to_list->addTo($addr, $to_name);
@@ -89,8 +108,10 @@ class MailCore
 			if ($configuration['PS_MAIL_METHOD'] == 2)
 			{
 				if (empty($configuration['PS_MAIL_SERVER']) OR empty($configuration['PS_MAIL_SMTP_PORT']))
-					return Tools::dieOrLog(Tools::displayError('Error: invalid SMTP server or SMTP port'), $die);
-
+				{
+					Tools::dieOrLog(Tools::displayError('Error: invalid SMTP server or SMTP port'), $die);
+					return false;
+				}
 				$connection = new Swift_Connection_SMTP($configuration['PS_MAIL_SERVER'], $configuration['PS_MAIL_SMTP_PORT'], ($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "ssl") ? Swift_Connection_SMTP::ENC_SSL : (($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_OFF));
 				$connection->setTimeout(4);
 				if (!$connection)
@@ -109,7 +130,10 @@ class MailCore
 			/* Get templates content */
 			$iso = Language::getIsoById((int)($id_lang));
 			if (!$iso)
-				return Tools::dieOrLog(Tools::displayError('Error - No ISO code for email'), $die);
+			{
+				Tools::dieOrLog(Tools::displayError('Error - No ISO code for email'), $die);
+				return false;
+			}
 			$template = $iso.'/'.$template;
 
 			$moduleName = false;
@@ -128,8 +152,10 @@ class MailCore
 				$overrideMail  = true;
 			}
 			elseif (!file_exists($templatePath.$template.'.txt') OR !file_exists($templatePath.$template.'.html'))
-				return Tools::dieOrLog(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt', $die);
-
+			{
+				Tools::dieOrLog(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt', $die);
+				return false;
+			}
 			$templateHtml = file_get_contents($templatePath.$template.'.html');
 			$templateTxt = strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), NULL, 'utf-8'));
 

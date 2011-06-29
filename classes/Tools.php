@@ -2108,14 +2108,13 @@ FileETag INode MTime Size
 	 * 
 	 * @param string $msg
 	 * @param bool $die
-	 * @return false
+	 * @return success of logging
 	 */
 	public static function dieOrLog($msg, $die = true)
 	{
 		if ($die || (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_))
 			die($msg);
-		Logger::addLog($msg);
-		return false;
+		return Logger::addLog($msg);
 	}
 }
 
