@@ -374,7 +374,7 @@ class CartCore extends ObjectModel
 		$this->_products = array();
 		if (empty($result))
 			return array();
-		foreach ($result AS $k => $row)
+		foreach ($result AS $row)
 		{
 			if (isset($row['ecotax_attr']) AND $row['ecotax_attr'] > 0)
 				$row['ecotax'] = (float)($row['ecotax_attr']);
@@ -440,8 +440,6 @@ class CartCore extends ObjectModel
 	public static function cacheSomeAttributesLists($ipaList, $id_lang)
 	{
 		$paImplode = array();
-		$attributesList = array();
-		$attributesListSmall = array();
 		foreach ($ipaList as $id_product_attribute)
 			if ((int)$id_product_attribute AND !array_key_exists($id_product_attribute.'-'.$id_lang, self::$_attributesLists))
 			{
@@ -685,7 +683,7 @@ class CartCore extends ObjectModel
 				$query .= '('.(int)($id_customization).', '._CUSTOMIZE_TEXTFIELD_.', '.$tmp[2].', \''.$textFieldValue.'\'), ';
 			}
 		$query = rtrim($query, ', ');
-		if (!$result = Db::getInstance()->Execute($query))
+		if (!Db::getInstance()->Execute($query))
 			return false;
 		/* Deleting customized informations from the cart (we just copied them inside the db) */
 		return Cart::deleteCustomizationInformations((int)($id_product));
@@ -1040,7 +1038,6 @@ class CartCore extends ObjectModel
 			else
 				$result = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true, false, (int)($id_zone));
 
-			$resultsArray = array();
 			foreach ($result AS $k => $row)
 			{
 				if ($row['id_carrier'] == Configuration::get('PS_CARRIER_DEFAULT'))
@@ -1265,7 +1262,7 @@ class CartCore extends ObjectModel
 				return Tools::displayError('You cannot use this voucher.').' - '.Tools::displayError('Please log in.');
 			return Tools::displayError('You cannot use this voucher.');
 		}
-		$currentDate = date('Y-m-d');
+
 		$onlyProductWithDiscount = true;
 		if (!$discountObj->cumulable_reduction)
 		{
@@ -1640,7 +1637,7 @@ class CartCore extends ObjectModel
 			$query = 'INSERT INTO `'._DB_PREFIX_.'cart_product`(`id_cart`, `id_product`, `id_product_attribute`, `quantity`, `date_add`) VALUES ';
 			foreach ($values as $value)
 				$query .= '('.(int)$this->id.', '.(int)$value['id_product'].', '.(int)$value['id_product_attribute'].', '.(int)$value['quantity'].', NOW()),';
-			$result = Db::getInstance()->Execute(rtrim($query, ','));
+			Db::getInstance()->Execute(rtrim($query, ','));
 		}
 		return true;
 	}
