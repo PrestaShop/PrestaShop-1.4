@@ -417,7 +417,7 @@ class CarrierCore extends ObjectModel
 				{
 					// Get id zone
 					if (!$id_zone)
-						$id_zone = (int)$defaultCountry->id_zone;
+						$id_zone = Country::getIdZone(Country::getDefaultCountryId());
 
 					// Get only carriers that have a range compatible with cart
 					if (($shippingMethod == Carrier::SHIPPING_METHOD_WEIGHT AND (!Carrier::checkDeliveryPriceByWeight($row['id_carrier'], $cart->getTotalWeight(), $id_zone)))

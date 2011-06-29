@@ -484,7 +484,7 @@ class ProductCore extends ObjectModel
 		$sizeof = sizeof($result);
 
 		for ($i = 0; $i < $sizeof; $i++)
-			$return &= Db::getInstance()->Execute($sql='
+			$return &= Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category_product`
 			SET `position` = '.(int)($i).'
 			WHERE `id_category` = '.(int)($id_category).'
@@ -618,7 +618,8 @@ class ProductCore extends ObjectModel
 		$currentCategories = $this->getCategories();
 
 		// for new categ, put product at last position
-		$resCategNewPos = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql='SELECT id_category, MAX(position)+1 newPos
+		$resCategNewPos = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT id_category, MAX(position)+1 newPos
 			FROM `'._DB_PREFIX_.'category_product`
 			WHERE `id_category` IN('.implode(',', array_map('intval', $categories)).')
 			GROUP BY id_category');
@@ -655,7 +656,7 @@ class ProductCore extends ObjectModel
 	{
 		if (empty($categories))
 			return false;
-		$positions = array();
+
 		// get max position in each categories
 		$result = Db::getInstance()->ExecuteS('SELECT `id_category`
 				FROM `'._DB_PREFIX_.'category_product`
@@ -1250,26 +1251,26 @@ class ProductCore extends ObjectModel
 	public function deleteFeatures()
 	{
 		// List products features
-		$result1 = Db::getInstance()->ExecuteS('
+		$features = Db::getInstance()->ExecuteS('
 		SELECT p.*, f.*
 		FROM `'._DB_PREFIX_.'feature_product` as p
 		LEFT JOIN `'._DB_PREFIX_.'feature_value` as f ON (f.`id_feature_value` = p.`id_feature_value`)
 		WHERE `id_product` = '.(int)($this->id));
-		foreach ($result1 as $tab)
+		foreach ($features as $tab)
 			// Delete product custom features
 			if ($tab['custom']) {
-				$result2 = Db::getInstance()->Execute('
+				Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'feature_value`
 				WHERE `id_feature_value` = '.(int)($tab['id_feature_value']));
-				$result3 = Db::getInstance()->Execute('
+				Db::getInstance()->Execute('
 				DELETE FROM `'._DB_PREFIX_.'feature_value_lang`
 				WHERE `id_feature_value` = '.(int)($tab['id_feature_value']));
 			}
 		// Delete product features
-		$result4 = Db::getInstance()->Execute('
+		$result = Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'feature_product`
 		WHERE `id_product` = '.(int)($this->id));
-		return ($result4);
+		return ($result);
 	}
 
 	/**
@@ -1675,7 +1676,7 @@ class ProductCore extends ObjectModel
 	* @param boolean $only_reduc Returns only the reduction amount
 	* @param boolean $usereduc Set if the returned amount will include reduction
 	* @param integer $quantity Required for quantity discount application (default value: 1)
-	* @param boolean $forceAssociatedTax Force to apply the associated tax. Only works when the parameter $usetax is true
+	* @param boolean $forceAssociatedTax DEPRECATED - NOT USED Force to apply the associated tax. Only works when the parameter $usetax is true
 	* @param integer $id_customer Customer ID (for customer group reduction)
 	* @param integer $id_cart Cart ID. Required when the cookie is not accessible (e.g., inside a payment module, a cron task...)
 	* @param integer $id_address Customer address ID. Required for price (tax included) calculation regarding the guest localization
@@ -1791,8 +1792,6 @@ class ProductCore extends ObjectModel
 		else
 			$product_attribute_label = ($id_product_attribute === false ? 'false' : $id_product_attribute);
 		$cacheId = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_state.'-'.$id_county.'-'.$id_group.'-'.$quantity.'-'.$product_attribute_label.'-'.($use_tax?'1':'0').'-'.$decimals.'-'.($only_reduc?'1':'0').'-'.($use_reduc?'1':'0').'-'.$with_ecotax;
-		// Cache for specific prices
-		$cacheId3 = $id_product.'-'.$id_shop.'-'.$id_currency.'-'.$id_country.'-'.$id_group.'-'.$quantity;
 
 		// reference parameter is filled before any returns
 		$specific_price = SpecificPrice::getSpecificPrice((int)($id_product), $id_shop, $id_currency, $id_country, $id_group, $quantity);
@@ -1989,6 +1988,13 @@ class ProductCore extends ObjectModel
 		return Tools::displayPrice($params['price'], $smarty->ps_currency);
 	}
 
+	/**
+	 * Convert price with currency
+	 *
+	 * @param array $params
+	 * @param object $smarty DEPRECATED
+	 * @return Ambigous <string, mixed, Ambigous <number, string>>
+	 */
 	static function convertPriceWithCurrency($params, &$smarty)
 	{
 		if (!isset($params['convert']))
@@ -2001,6 +2007,13 @@ class ProductCore extends ObjectModel
 		return Tools::displayPrice($params['p'], $smarty->ps_currency);
 	}
 
+	/**
+	 * Display WT price with currency
+	 *
+	 * @param array $params
+	 * @param object DEPRECATED $smarty
+	 * @return Ambigous <string, mixed, Ambigous <number, string>>
+	 */
 	static function displayWtPriceWithCurrency($params, &$smarty)
 	{
 		return Tools::displayPrice($params['price'], $params['currency'], false);
@@ -2202,8 +2215,6 @@ class ProductCore extends ObjectModel
 	*/
 	public function getAccessories($id_lang, $active = true)
 	{
-		global	$link, $cookie;
-
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, p.`upc`,
 		i.`id_image`, il.`legend`, t.`rate`, m.`name` as manufacturer_name, cl.`name` AS category_default, DATEDIFF(p.`date_add`, DATE_SUB(NOW(),
@@ -2372,7 +2383,7 @@ class ProductCore extends ObjectModel
 			return false;
 
 		$resultsArray = array();
-		foreach ($result AS $k => $row)
+		foreach ($result AS $row)
 		{
 			$row['price'] = Product::getPriceStatic($row['id_product'], true, NULL, 2);
 			$row['quantity'] = Product::getQuantity($row['id_product'], NULL, $row['cache_is_pack']);
@@ -3247,7 +3258,7 @@ class ProductCore extends ObjectModel
 
 		// Delete rows
 		if (count($toDelete) > 0)
-		$result = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(',', $toDelete).')');
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(',', $toDelete).')');
 
 		foreach ($toAdd as $id)
 		{
