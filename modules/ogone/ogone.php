@@ -24,9 +24,7 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-if (!defined('_CAN_LOAD_FILES_'))
-	exit;
-	
+
 class Ogone extends PaymentModule
 {
 	private $_ignoreKeyList = array('secure_key');
@@ -36,8 +34,7 @@ class Ogone extends PaymentModule
 		$this->name = 'ogone';
 		$this->tab = 'payments_gateways';
 		$this->version = '2.0';
-		$this->need_instance = 0;
-
+		
 		parent::__construct();
 		
 		$this->displayName = 'Ogone';
@@ -47,8 +44,8 @@ class Ogone extends PaymentModule
 	public function install()
 	{
 		return (parent::install() AND 
-				$this->registerHook('payment') AND 
-				$this->registerHook('orderConfirmation'));
+			$this->registerHook('payment') AND 
+			$this->registerHook('orderConfirmation'));
 	}
 	
 	public function getContent()
@@ -142,6 +139,11 @@ class Ogone extends PaymentModule
 		<div class="clear">&nbsp;</div>';
 	}
 	
+	public function getIgnoreKeyList()
+	{
+		return $this->_ignoreKeyList;
+	}
+	
 	public function hookPayment($params)
 	{
 		global $smarty;
@@ -165,7 +167,7 @@ class Ogone extends PaymentModule
 		$ogoneParams['OWNERADDRESS'] = ($address->address1);
 		$ogoneParams['OWNERCTY'] = $country->iso_code;
 		$ogoneParams['OWNERTOWN'] = $address->city;
-		$ogoneParams['paramplus'] = 'secure_key='.$params['cart']->secure_key;
+		$ogoneParams['PARAMPLUS'] = 'secure_key='.$params['cart']->secure_key;
 		if (!empty($address->phone))
 			$ogoneParams['OWNERTELNO'] = $address->phone;
 
@@ -178,7 +180,7 @@ class Ogone extends PaymentModule
 		$smarty->assign('ogone_params', $ogoneParams);
 		$smarty->assign('OGONE_MODE', Configuration::get('OGONE_MODE'));
 		
-		return $this->display(dirname(__FILE__), 'ogone.tpl');
+		return $this->display(__FILE__, 'ogone.tpl');
     }
 	
 	public function hookOrderConfirmation($params)
@@ -194,7 +196,7 @@ class Ogone extends PaymentModule
 			$smarty->assign('status', 'failed');
 		$link = new Link();
 		$smarty->assign('ogone_link', (method_exists($link, 'getPageLink') ? $link->getPageLink('contact-form.php', true) : Tools::getHttpHost(true).'contact-form.php'));
-		return $this->display(dirname(__FILE__), 'hookorderconfirmation.tpl');
+		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
 	
 	public function validate($id_cart, $id_order_state, $amount, $message = '', $secure_key)
@@ -213,8 +215,6 @@ class Ogone extends PaymentModule
 			$pcc->card_expiration = Tools::getValue('ED');
 			$pcc->card_holder = Tools::getValue('CN');
 			$pcc->add();
-		}		
+		}
 	}
 }
-
-
