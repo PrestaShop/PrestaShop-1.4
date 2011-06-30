@@ -284,7 +284,9 @@ class CountryCore extends ObjectModel
 	{
 		global $cookie;
 
-		if (Configuration::get('PS_GEOLOCATION_ENABLED') AND Validate::isLanguageIsoCode($cookie->iso_code_country))
+		if (Configuration::get('PS_GEOLOCATION_ENABLED') && 
+				$cookie && isset($cookie->iso_code_country) &&
+				Validate::isLanguageIsoCode($cookie->iso_code_country))
 			$id_country = (int)Country::getByIso($cookie->iso_code_country);
 		else
 			$id_country = (int)Configuration::get('PS_COUNTRY_DEFAULT');
