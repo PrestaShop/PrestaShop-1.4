@@ -292,8 +292,9 @@
 					<input type="checkbox" name="invoice_address" id="invoice_address" />
 					<label for="invoice_address"><b>{l s='Please use another address for invoice'}</b></label>
 				</p>
-
+			
 				<div id="opc_invoice_address" class="is_customer_param">
+					{assign var=stateExist value=false}
 					<h3>{l s='Invoice address'}</h3>
 					{foreach from=$inv_all_fields item=field_name}
 					{if $field_name eq "company"}
@@ -349,7 +350,7 @@
 						<input type="text" class="text" name="city_invoice" id="city_invoice" value="" />
 						<sup>*</sup>
 					</p>
-					{elseif $field_name eq "country"}
+					{elseif $field_name eq "country" || $field_name eq "Country:name"}
 					<p class="required select">
 						<label for="id_country_invoice">{l s='Country'}</label>
 						<select name="id_country_invoice" id="id_country_invoice">
@@ -361,6 +362,7 @@
 						<sup>*</sup>
 					</p>
 					{elseif $field_name eq "state" || $field_name eq 'State:name'}
+					{$stateExist = true}
 					<p class="required id_state_invoice select" style="display:none;">
 						<label for="id_state_invoice">{l s='State'}</label>
 						<select name="id_state_invoice" id="id_state_invoice">
@@ -370,6 +372,15 @@
 					</p>
 					{/if}
 					{/foreach}
+					{if !$stateExist}
+					<p class="required id_state_invoice select" style="display:none;">
+						<label for="id_state_invoice">{l s='State'}</label>
+						<select name="id_state_invoice" id="id_state_invoice">
+							<option value="">-</option>
+						</select>
+						<sup>*</sup>
+					</p>
+					{/if}
 					<p class="textarea is_customer_param">
 						<label for="other_invoice">{l s='Additional information'}</label>
 						<textarea name="other_invoice" id="other_invoice" cols="26" rows="3"></textarea>
