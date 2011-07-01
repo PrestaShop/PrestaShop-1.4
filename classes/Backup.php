@@ -31,6 +31,8 @@ class BackupCore
 	public $id;
 	/** @var string Last error messages */
 	public $error;
+/** @var string default backup directory. */
+	public static $backupDir = '/backups/';
 
 	/**
 	 * Creates a new backup object
@@ -51,7 +53,7 @@ class BackupCore
 	 */
 	public static function getBackupPath($filename)
 	{
-		$backupdir = realpath(PS_ADMIN_DIR.'/backups/');
+		$backupdir = realpath(PS_ADMIN_DIR.self::$backupDir);
 
 		if ($backupdir === false)
 			die(Tools::displayError('Backups directory does not exist.'));
@@ -132,7 +134,7 @@ class BackupCore
 		// Generate some random number, to make it extra hard to guess backup file names
 		$rand = dechex(mt_rand(0, min(0xffffffff, mt_getrandmax())));
 		$date = time();
-		$backupfile = PS_ADMIN_DIR.'/backups/'.$date.'-'.$rand.'.sql';
+		$backupfile = PS_ADMIN_DIR.self::$backupDir.$date.'-'.$rand.'.sql';
 
 		// Figure out what compression is available and open the file
 		if (function_exists('bzopen'))
