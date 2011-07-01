@@ -72,7 +72,7 @@ require_once(dirname(__FILE__).'/autoload.php');
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 {
-	if (substr($_SERVER['SCRIPT_NAME'], -9) == 'index.php')
+	if (substr($_SERVER['SCRIPT_NAME'], -9) == 'index.php' && empty($_SERVER['QUERY_STRING']))
 		$_SERVER['REQUEST_URI'] = dirname($_SERVER['SCRIPT_NAME']).'/';
 	else
 	{
