@@ -186,8 +186,13 @@ class SpecificPriceCore extends ObjectModel
 					`id_shop` IN(0, '.(int)($id_shop).') AND
 					`id_currency` IN(0, '.(int)($id_currency).') AND
 					`id_country` IN(0, '.(int)($id_country).') AND
-					`id_group` IN(0, '.(int)($id_group).') AND
-					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
+					`id_group` IN(0, '.(int)($id_group).')
+					AND
+					(
+						(`from` = \'0000-00-00 00:00:00\' OR \''.$now.'\' >= `from`)
+						AND
+						(`to` = \'0000-00-00 00:00:00\' OR \''.$now.'\' <= `to`)
+					)
 					ORDER BY `score`  DESC, `from_quantity` DESC
 		');
 
@@ -220,8 +225,13 @@ class SpecificPriceCore extends ObjectModel
 					`id_currency` IN(0, '.(int)($id_currency).') AND
 					`id_country` IN(0, '.(int)($id_country).') AND
 					`id_group` IN(0, '.(int)($id_group).') AND
-					`from_quantity` >= '.(int)($quantity).' AND
-					(`from` = \'0000-00-00 00:00:00\' OR (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`))
+					`from_quantity` >= '.(int)($quantity).'
+					AND
+					(
+						(`from` = \'0000-00-00 00:00:00\' OR \''.$now.'\' >= `from`)
+						AND
+						(`to` = \'0000-00-00 00:00:00\' OR \''.$now.'\' <= `to`)
+					)
 					ORDER BY `score` DESC, `from_quantity` DESC
 		');
 	}
