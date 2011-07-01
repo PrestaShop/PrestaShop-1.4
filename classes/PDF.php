@@ -901,6 +901,8 @@ class PDFCore extends PDF_PageGroupCore
 				$taxes[$product['tax_rate']] = 0;
 			if (!isset($priceBreakDown['totalsProductsWithTaxAndReduction'][$product['tax_rate']]))
 				$priceBreakDown['totalsProductsWithTaxAndReduction'][$product['tax_rate']] = 0;
+			if (!isset($priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']]))
+				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] = 0;
 
 
 			/* Without tax */
@@ -934,7 +936,7 @@ class PDFCore extends PDF_PageGroupCore
 				$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / (((float)($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
 				$priceBreakDown['totalsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'] ;
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
-				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] = Tools::ps_round($product['priceWithoutTax'] - (float)$discountAmountWithoutTax, 2);
+				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] += Tools::ps_round($product['priceWithoutTax'] - (float)$discountAmountWithoutTax, 2);
 			}
 			else
 			{
