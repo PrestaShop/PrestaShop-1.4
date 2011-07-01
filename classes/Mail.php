@@ -227,12 +227,14 @@ class MailCore
 	 * 
 	 * @param string $string raw sentence (write directly in file)
 	 */
-	static public function l($string)
+	static public function l($string, $id_lang = null)
 	{
 		global $_LANGMAIL, $cookie;
 		
 		$key = str_replace('\'', '\\\'', $string);
-		$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang;
+
+		if ($id_lang == null)
+			$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang;
 
 		$file_core = _PS_ROOT_DIR_.'/mails/'.Language::getIsoById((int)$id_lang).'/lang.php';
 		if (Tools::file_exists_cache($file_core) && empty($_LANGMAIL))

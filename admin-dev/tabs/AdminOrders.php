@@ -324,7 +324,7 @@ class AdminOrders extends AdminTab
 						else
 						{
 							Module::hookExec('orderSlip', array('order' => $order, 'productList' => $full_product_list, 'qtyList' => $full_quantity_list));
-							@Mail::Send((int)($order->id_lang), 'credit_slip', Mail::l('New credit slip regarding your order'),
+							@Mail::Send((int)$order->id_lang, 'credit_slip', Mail::l('New credit slip regarding your order', $order->id_lang),
 							$params, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL, NULL,
 							_PS_MAIL_DIR_, true);
 						}

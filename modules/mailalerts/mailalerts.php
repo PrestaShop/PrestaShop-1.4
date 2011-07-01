@@ -119,7 +119,7 @@ class MailAlerts extends Module
 			return;
 
 		// Getting differents vars
-		$id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
 	 	$currency = $params['currency'];
 		$configuration = Configuration::getMultiple(array('PS_SHOP_EMAIL', 'PS_MAIL_METHOD', 'PS_MAIL_SERVER', 'PS_MAIL_USER', 'PS_MAIL_PASSWD', 'PS_SHOP_NAME'));
 		$order = $params['order'];
@@ -155,7 +155,7 @@ class MailAlerts extends Module
 					if (isset($customization['datas'][_CUSTOMIZE_FILE_]))
 						$customizationText .= sizeof($customization['datas'][_CUSTOMIZE_FILE_]) .' '. Tools::displayError('image(s)').'<br />';
 						
-					$customizationText .= '---<br />';							
+					$customizationText .= '---<br />';
 				}
 				
 				$customizationText = rtrim($customizationText, '---<br />');
@@ -185,7 +185,7 @@ class MailAlerts extends Module
 
 		// Filling-in vars for email
 		$template = 'new_order';
-		$subject = $this->l('New order');
+		$subject = $this->l('New order', $id_lang);
 		$templateVars = array(
 			'{firstname}' => $customer->firstname,
 			'{lastname}' => $customer->lastname,
