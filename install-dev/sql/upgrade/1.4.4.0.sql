@@ -17,3 +17,33 @@ INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_up
 ('PS_OS_WS_PAYMENT', '12', NOW(), NOW());
 
 ALTER TABLE `PREFIX_lang` ADD `is_rtl` TINYINT(1) NOT NULL DEFAULT '0';
+
+UPDATE `PREFIX_country_lang`
+SET `name` = 'United State'
+WHERE `name` = 'USA'
+AND `id_lang` = (
+	SELECT `id_lang`
+	FROM `PREFIX_lang`
+	WHERE `iso_code` = 'en'
+	LIMIT 1
+);
+
+UPDATE `PREFIX_hook`
+SET `live_edit` = 1
+WHERE `name` = 'leftColumn'
+OR `name` = 'home'
+OR `name` = 'rightColumn'
+OR `name` = 'productfooter'
+OR `name` = 'payment';
+
+ALTER TABLE `PREFIX_stock_mvt_reason` MODIFY `sign` TINYINT(1) NOT NULL DEFAULT '1' AFTER `id_stock_mvt_reason`;
+
+UPDATE `PREFIX_tab_lang`
+SET `name` = 'Geolocation'
+WHERE `name` = 'Geolocalization';
+
+UPDATE `PREFIX_tab_lang`
+SET `name` = 'Counties'
+WHERE `name` = 'County';
+
+ALTER TABLE `PREFIX_tax_rule` MODIFY `id_county` INT NOT NULL AFTER `id_country`;
