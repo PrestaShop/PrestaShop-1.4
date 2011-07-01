@@ -284,7 +284,7 @@ class ImageCore extends ObjectModel
 	  * @param integer $position Position
 	  * @param boolean $direction Direction
 	  */
-	public function	positionImage($position, $direction)
+	public function positionImage($position, $direction)
 	{
 		$position = (int)($position);
 		$direction = (int)($direction);

@@ -98,7 +98,7 @@ class Tm4b extends Module
 		$this->token = md5('tm4b'._COOKIE_KEY_);
 	}
 
-	public function	install()
+	public function install()
 	{
 		if (!parent::install() OR
 			!$this->registerHook('newOrder') OR

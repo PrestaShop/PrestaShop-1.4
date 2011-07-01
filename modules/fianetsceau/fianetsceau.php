@@ -196,7 +196,7 @@ class FianetSceau extends Module
 		return false;
 	}
 	
-	public function	hookUpdateOrderStatus($params)
+	public function hookUpdateOrderStatus($params)
 	{
 		$this->id_order = (int)$params['id_order'];
 		$res = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'fianet_seal` a WHERE a.id_order = '.(int)$params['id_order']);

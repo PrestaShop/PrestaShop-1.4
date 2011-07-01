@@ -816,7 +816,7 @@ class OrderCore extends ObjectModel
 	 * @param float $value Discount value
 	 * @return boolean Query sucess or not
 	 */
-	public function	addDiscount($id_discount, $name, $value)
+	public function addDiscount($id_discount, $name, $value)
 	{
 		return Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_discount', array('id_order' => (int)($this->id), 'id_discount' => (int)($id_discount), 'name' => pSQL($name), 'value' => (float)($value)), 'INSERT');
 	}

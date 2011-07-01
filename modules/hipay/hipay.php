@@ -68,7 +68,7 @@ class Hipay extends PaymentModule
 		}
 	}
 	
-	public function	install()
+	public function install()
 	{
 		Configuration::updateValue('HIPAY_SALT', uniqid());
 		// Force using Prod mod	

@@ -43,7 +43,7 @@ class VatNumber extends Module
 		$this->description = $this->l('Enable entering of the VAT intra-community number when creating the address (You must fill in the company field to allow keyboarding VAT number)');
 	}
    
-	public function	install()
+	public function install()
 	{
 		return (parent::install() AND Configuration::updateValue('VATNUMBER_MANAGEMENT', 1));
 	}

@@ -1596,7 +1596,7 @@ class ProductCore extends ObjectModel
 	* @param integer $id_lang Language id for multilingual legends
 	* @return array Product images and legends
 	*/
-	public function	getImages($id_lang)
+	public function getImages($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT i.`cover`, i.`id_image`, il.`legend`, i.`position`
@@ -3314,7 +3314,7 @@ class ProductCore extends ObjectModel
 	*
 	* @return array
 	*/
-	public function	getWsImages()
+	public function getWsImages()
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_image` as id

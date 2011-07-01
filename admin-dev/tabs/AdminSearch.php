@@ -50,7 +50,7 @@ class AdminSearch extends AdminTab
 	*
 	* @params string $query String to find in the catalog
 	*/
-	public function	searchCustomer($query)
+	public function searchCustomer($query)
 	{
 		$this->_list['customers'] = Customer::searchByName($query);
 	}

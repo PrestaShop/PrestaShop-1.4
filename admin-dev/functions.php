@@ -73,7 +73,7 @@ function includeDatepicker($id, $time = false)
   * @param string $theme Theme name (eg. default)
   * @param array $arrayDB Parameters in order to connect to database
   */
-function	rewriteSettingsFile($baseUrls = NULL, $theme = NULL, $arrayDB = NULL)
+function rewriteSettingsFile($baseUrls = NULL, $theme = NULL, $arrayDB = NULL)
 {
  	$defines = array();
 	$defines['__PS_BASE_URI__'] = ($baseUrls AND $baseUrls['__PS_BASE_URI__']) ? $baseUrls['__PS_BASE_URI__'] : __PS_BASE_URI__;
@@ -117,7 +117,7 @@ function	rewriteSettingsFile($baseUrls = NULL, $theme = NULL, $arrayDB = NULL)
   * @param boolean $withTime Display both date and time
   * @todo Several formats (french : DD-MM-YYYY)
   */
-function	displayDate($sqlDate, $withTime = false)
+function displayDate($sqlDate, $withTime = false)
 {
 	return strftime('%Y-%m-%d'.($withTime ? ' %H:%M:%S' : ''), strtotime($sqlDate));
 }

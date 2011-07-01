@@ -27,7 +27,7 @@
 
 class MySQLCore extends Db
 {
-	public function	connect()
+	public function connect()
 	{
 		if (!defined('_PS_DEBUG_SQL_'))
 			define('_PS_DEBUG_SQL_', false);
@@ -54,14 +54,14 @@ class MySQLCore extends Db
 		return mysql_select_db($db_name, $this->_link);
 	}
 	
-	public function	disconnect()
+	public function disconnect()
 	{
 		if ($this->_link)
 			@mysql_close($this->_link);
 		$this->_link = false;
 	}
 	
-	public function	getRow($query, $use_cache = 1)
+	public function getRow($query, $use_cache = 1)
 	{
 		$query .= ' LIMIT 1';
 		$this->_result = false;
@@ -88,7 +88,7 @@ class MySQLCore extends Db
 		return false;
 	}
 
-	public function	getValue($query, $use_cache = 1)
+	public function getValue($query, $use_cache = 1)
 	{
 		$query .= ' LIMIT 1';
 		$this->_result = false;
@@ -110,7 +110,7 @@ class MySQLCore extends Db
 		return false;
 	}
 	
-	public function	Execute($query, $use_cache = 1)
+	public function Execute($query, $use_cache = 1)
 	{
 		$this->_result = false;
 		if ($this->_link)
@@ -136,7 +136,7 @@ class MySQLCore extends Db
 	 * @param int $use_cache if query has been already executed, use its result
 	 * @return array or result object 
 	 */
-	public function	ExecuteS($query, $array = true, $use_cache = 1)
+	public function ExecuteS($query, $array = true, $use_cache = 1)
 	{
 		$this->_result = false;
 		$this->_lastQuery = $query;
@@ -172,7 +172,7 @@ class MySQLCore extends Db
 		return mysql_fetch_assoc($result ? $result : $this->_result);
 	}
 	
-	public function	delete($table, $where = false, $limit = false, $use_cache = 1)
+	public function delete($table, $where = false, $limit = false, $use_cache = 1)
 	{
 		$this->_result = false;
 		if ($this->_link)
@@ -187,7 +187,7 @@ class MySQLCore extends Db
 		return false;
 	}
 	
-	public function	NumRows()
+	public function NumRows()
 	{
 		if (!$this->_lastCached AND $this->_link AND $this->_result)
 		{
@@ -202,14 +202,14 @@ class MySQLCore extends Db
 		}
 	}
 	
-	public function	Insert_ID()
+	public function Insert_ID()
 	{
 		if ($this->_link)
 			return mysql_insert_id($this->_link);
 		return false;
 	}
 	
-	public function	Affected_Rows()
+	public function Affected_Rows()
 	{
 		if ($this->_link)
 			return mysql_affected_rows($this->_link);
