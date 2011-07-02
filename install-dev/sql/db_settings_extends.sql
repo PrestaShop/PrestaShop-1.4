@@ -95,6 +95,7 @@ CREATE TABLE `PREFIX_sekeyword` (
 CREATE TABLE `PREFIX_cms_block` (
 	`id_cms_block` int(10) unsigned NOT NULL auto_increment,
 	`id_cms_category` int(10) unsigned NOT NULL,
+	`name` varchar(40) NOT NULL,
 	`location` tinyint(1) unsigned NOT NULL,
 	`position` int(10) unsigned NOT NULL default '0',
 	`display_store` tinyint(1) unsigned NOT NULL DEFAULT '1',
