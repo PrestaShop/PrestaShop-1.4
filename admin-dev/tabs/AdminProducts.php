@@ -3639,32 +3639,39 @@ class AdminProducts extends AdminTab
 	private function addPackItem()
 	{
 		return '
-
 			function addPackItem()
 			{
-
-			if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemName\').val() == \'\') return false;
-
-			var lineDisplay = $(\'#curPackItemQty\').val()+ \'x \' +$(\'#curPackItemName\').val();
-
-			var divContent = $(\'#divPackItems\').html();
-			divContent += lineDisplay;
-			divContent += \'<span onclick="delPackItem(\' + $(\'#curPackItemId\').val() + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
-
-			// QTYxID-QTYxID
-			var line = $(\'#curPackItemQty\').val()+ \'x\' +$(\'#curPackItemId\').val();
-
-
-			$(\'#inputPackItems\').val($(\'#inputPackItems\').val() + line  + \'-\');
-			$(\'#divPackItems\').html(divContent);
-			$(\'#namePackItems\').val($(\'#namePackItems\').val() + lineDisplay + \'¤\');
-
-			$(\'#curPackItemId\').val(\'\');
-			$(\'#curPackItemName\').val(\'\');
-
-			$(\'#curPackItemName\').setOptions({
-				extraParams: {excludeIds :  getSelectedIds()}
-			});
+				if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemName\').val() == \'\')
+				{
+					alert(\''.$this->l('Thanks to select at least one product.').'\');
+					return false;
+				}
+				else if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemQty\').val() == \'\')
+				{
+					alert(\''.$this->l('Thanks to set a quantity to add a product.').'\');	
+					return false;
+				}
+	
+				var lineDisplay = $(\'#curPackItemQty\').val()+ \'x \' +$(\'#curPackItemName\').val();
+	
+				var divContent = $(\'#divPackItems\').html();
+				divContent += lineDisplay;
+				divContent += \'<span onclick="delPackItem(\' + $(\'#curPackItemId\').val() + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
+	
+				// QTYxID-QTYxID
+				var line = $(\'#curPackItemQty\').val()+ \'x\' +$(\'#curPackItemId\').val();
+	
+	
+				$(\'#inputPackItems\').val($(\'#inputPackItems\').val() + line  + \'-\');
+				$(\'#divPackItems\').html(divContent);
+				$(\'#namePackItems\').val($(\'#namePackItems\').val() + lineDisplay + \'Â¤\');
+	
+				$(\'#curPackItemId\').val(\'\');
+				$(\'#curPackItemName\').val(\'\');
+	
+				$(\'#curPackItemName\').setOptions({
+					extraParams: {excludeIds :  getSelectedIds()}
+				});
 			}
 		';
 	}
