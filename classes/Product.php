@@ -1559,9 +1559,19 @@ class ProductCore extends ObjectModel
 		WHERE `id_product` = '.(int)$id_product)
 		)
 			foreach ($row as $val)
-			{
 				$ret[] = $val['id_category'];
-			}
+		return $ret;
+	}
+	
+	public static function getProductCategoriesFull($id_product = '', $id_lang)
+	{
+		$ret = array();
+		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT cp.`id_category`, cl.`name`, cl.`link_rewrite` FROM `'._DB_PREFIX_.'category_product` cp
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (cp.`id_category` = cl.`id_category`)
+		WHERE cp.`id_product` = '.(int)$id_product);
+		foreach ($row as $val)
+			$ret[$val['id_category']] = $val;
 		return $ret;
 	}
 
@@ -1596,7 +1606,7 @@ class ProductCore extends ObjectModel
 	* @param integer $id_lang Language id for multilingual legends
 	* @return array Product images and legends
 	*/
-	public function getImages($id_lang)
+	public function	getImages($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT i.`cover`, i.`id_image`, il.`legend`, i.`position`
@@ -3314,7 +3324,7 @@ class ProductCore extends ObjectModel
 	*
 	* @return array
 	*/
-	public function getWsImages()
+	public function	getWsImages()
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_image` as id
