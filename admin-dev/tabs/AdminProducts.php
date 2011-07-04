@@ -1199,7 +1199,11 @@ class AdminProducts extends AdminTab
 									$admin_dir = dirname($_SERVER['PHP_SELF']);
 									$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
 									$token = Tools::encrypt('PreviewProduct'.$object->id);
-									$preview_url .= '&adtoken='.$token.'&ad='.$admin_dir;
+									if(strpos($preview_url, '?') === false)
+										$preview_url .= '?';
+									else
+										$preview_url .= '&';
+									$preview_url .= 'adtoken='.$token.'&ad='.$admin_dir;
 								}
 								Tools::redirectAdmin($preview_url);
 							} else if (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true)) // Save and stay on same form
