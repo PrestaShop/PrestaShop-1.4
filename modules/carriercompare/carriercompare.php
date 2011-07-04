@@ -53,8 +53,7 @@ class CarrierCompare extends Module
 
 	public function hookHeader($params)
 	{
-		$fileName = explode(DIRECTORY_SEPARATOR, $_SERVER['PHP_SELF']);
-		if ($fileName[(sizeof($fileName)-1)] != 'order.php')
+		if (!$this->isModuleAvailable())
 			return;
 		Tools::addCSS(($this->_path).'style.css', 'all');
 		Tools::addJS(($this->_path).'carriercompare.js');
@@ -67,7 +66,7 @@ class CarrierCompare extends Module
 	{
 		global $cookie, $smarty, $currency;
 
-		if ($cookie->id_customer)
+		if (!$this->isModuleAvailable())
 			return;
 
 		$smarty->assign(array(
@@ -175,6 +174,30 @@ class CarrierCompare extends Module
 		if (preg_match('/'.$regxMask.'/', $zipcode))
 			return true;
 		return false;
+	}
+
+	/**
+	 * This module is shown on front office, in only some conditions
+	 * @return bool
+	 */
+	private function isModuleAvailable()
+	{
+		global $cookie;
+		
+		$fileName = basename($_SERVER['SCRIPT_FILENAME']);
+		/**
+		 * This module is only available on standard order process because
+		 * on One Page Checkout the carrier list is already available.
+		 */
+		if ($fileName != 'order.php')
+			return false;
+		/**
+		 * If visitor is logged, the module isn't available on Front office,
+		 * we use the account informations for carrier selection and taxes.
+		 */
+		if ($cookie->id_customer)
+			return false;
+		return true;
 	}
 }
 
