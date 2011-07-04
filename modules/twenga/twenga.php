@@ -122,7 +122,7 @@ class Twenga extends PaymentModule
 		$this->token = Tools::getValue('token');
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.7';
+	 	$this->version = '1.8';
 		
 	 	parent::__construct();
 	
@@ -415,7 +415,7 @@ class Twenga extends PaymentModule
 					self::$obj_ps_stats->cancelOrder();
 				}
 			} catch (Exception $e) {
-				die($e->getMessage());
+				// die($e->getMessage());
 			}
 		}
 	}
@@ -446,7 +446,7 @@ class Twenga extends PaymentModule
 					self::$obj_ps_stats->validateOrder($obj_order->total_products_wt, $obj_order->total_paid);
 				}
 			} catch (Exception $e) {
-				die($e->getMessage());
+				// die($e->getMessage());
 			}
 		}
 	}
