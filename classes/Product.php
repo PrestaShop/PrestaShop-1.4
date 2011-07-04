@@ -1876,7 +1876,7 @@ class ProductCore extends ObjectModel
 		{
 			$ecotax = $result['ecotax'];
 			if (isset($result['attribute_ecotax']) && $result['attribute_ecotax'] > 0)
-				$ecotax = $result['ecotax'];
+				$ecotax = $result['attribute_ecotax'];
 
 			if ($id_currency)
 				$ecotax = Tools::convertPrice($ecotax, $id_currency);
