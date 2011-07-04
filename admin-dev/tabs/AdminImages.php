@@ -50,6 +50,7 @@ class AdminImages extends AdminTab
 	public function displayList()
 	{
 		parent::displayList();
+		$this->displayImagePreferences();
 		$this->displayRegenerate();
 		$this->displayMoveImages();
 	}
@@ -67,7 +68,26 @@ class AdminImages extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}elseif (Tools::getValue('submitMoveImages'.$this->table))
-			$this->_moveImagesToNewFileSystem();
+		{
+			if ($this->tabAccess['edit'] === '1')
+		 	{
+				if($this->_moveImagesToNewFileSystem())
+					Tools::redirectAdmin($currentIndex.'&conf=25'.'&token='.$this->token);
+		 	}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+		}elseif (Tools::getValue('submitImagePreferences'))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+				if (!Configuration::updateValue('PS_IMAGE_QUALITY', Tools::getValue('PS_IMAGE_QUALITY')))
+					$this->_errors[] = Tools::displayError('Unknown error.');
+				else
+					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+		}
 		else
 			parent::postProcess();
 	}
@@ -183,11 +203,12 @@ class AdminImages extends AdminTab
 		);
 		echo '
 		<h2 class="space">'.$this->l('Regenerate thumbnails').'</h2>
-		'.$this->l('Regenerates thumbnails for all existing product images').'.<br /><br />';
+		'.$this->l('Regenerates thumbnails for all existing product images').'.<br /><br /><div  class="width4">';
 		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
 		echo '
+		</div>
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-			<fieldset class="width2">
+			<fieldset class="width4">
 				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Regenerate thumbnails').'</legend><br />
 				<label>'.$this->l('Select image').'</label>
 				<div class="margin-form">
@@ -420,7 +441,7 @@ class AdminImages extends AdminTab
 		else
 			echo '
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
-				<fieldset class="width3">
+				<fieldset class="width4">
 					<legend><img src="../img/admin/picture.gif" /> '.$this->l('Move images').'</legend><br />'.
 					$this->l('You can choose to keep your images stored in the previous system - nothing wrong with that.').'<br />'.
 					$this->l('You can also decide to move your images to the new storage system: in this case, click on the "Move images" button below.	Please be patient, as this can take several minutes.').
@@ -447,6 +468,37 @@ class AdminImages extends AdminTab
 			$this->_errors[] =  Tools::displayError('Not all images have been moved, server timed out before finishing. Click on \"Move images\" again to resume moving images');
 		else if ($result === false)
 			$this->_errors[] =  Tools::displayError('Error: some or all images could not be moved.');
-		Tools::redirectAdmin($currentIndex.'&conf=25'.'&token='.$this->token);
+		return (sizeof($this->_errors) > 0 ? false : true);
+	}
+
+	/**
+	 * Display the block for moving images
+	 */
+	public function displayImagePreferences()
+	{
+	 	global $currentIndex;
+		echo '<br />
+		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
+			<fieldset class="width4">
+				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Images').'</legend>'.'
+				<p>'.$this->l('JPEG images have small file size and standard quality. PNG images have a bigger file size, a higher quality and support transparency.').'
+				<br />'.$this->l('Note that in all cases the image files will have the .jpg extension.').'</p>
+				<br />
+				<label>'.$this->l('Image quality').' </label>
+				<div class="margin-form">
+					<input type="radio" value="jpg" name="PS_IMAGE_QUALITY" id="PS_IMAGE_QUALITY_0" '.(Configuration::get('PS_IMAGE_QUALITY') == 'jpg' ? '' : 'checked="checked"').' />
+					<label class="t" for="PS_IMAGE_QUALITY_0">'.$this->l('Use JPEG').'</label>
+					<br />
+					<input type="radio" value="png" name="PS_IMAGE_QUALITY" id="PS_IMAGE_QUALITY_1" '.(Configuration::get('PS_IMAGE_QUALITY') == 'png' ? 'checked="checked"' : '').' />
+					<label class="t" for="PS_IMAGE_QUALITY_1">'.$this->l('Use PNG  only if the base image is in PNG format').'</label>
+					<br />
+					<input type="radio" value="png_all" name="PS_IMAGE_QUALITY" id="PS_IMAGE_QUALITY_2" '.(Configuration::get('PS_IMAGE_QUALITY') == 'png_all' ? 'checked="checked"' : '').' />
+					<label class="t" for="PS_IMAGE_QUALITY_2">'.$this->l('Use PNG for all images').'</label>
+				</div>
+				<div class="margin-form">
+					<input type="submit" value="'.$this->l('   Save   ').'" name="submitImagePreferences" class="button" />
+				</div>
+			</fieldset>
+		</form>';
 	}
 }

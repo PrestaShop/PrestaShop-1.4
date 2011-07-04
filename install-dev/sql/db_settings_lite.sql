@@ -197,7 +197,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (126, 'PS_OS_BANKWIRE', '10', NOW(), NOW()),
 (127, 'PS_OS_PAYPAL', '11', NOW(), NOW()),
 (128, 'PS_OS_WS_PAYMENT', '12', NOW(), NOW()),
-(129, 'PS_LEGACY_IMAGES', '1', NOW(), NOW());
+(129, 'PS_LEGACY_IMAGES', '1', NOW(), NOW(),
+(130, 'PS_IMAGE_QUALITY', 'jpg', NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),(36, 4, 'FA', NOW()),(36, 5, 'FA', NOW()),
