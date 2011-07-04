@@ -311,7 +311,7 @@
 					</div>
 					<p class="required text dni_invoice">
 						<label for="dni">{l s='Identification number'}</label>
-						<input type="text" class="text" name="dni" id="dni" value="{if isset($guestInformations) && $guestInformations.dni}{$guestInformations.dni}{/if}" />
+						<input type="text" class="text" name="dni_invoice" id="dni_invoice" value="{if isset($guestInformations) && $guestInformations.dni}{$guestInformations.dni}{/if}" />
 						<span class="form_info">{l s='DNI / NIF / NIE'}</span>
 						<sup>*</sup>
 					</p>
