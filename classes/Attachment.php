@@ -98,9 +98,28 @@ class AttachmentCore extends ObjectModel
 			foreach ($array as $id_attachment)
 				$ids[] = '('.(int)($id_product).','.(int)($id_attachment).')';
 			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_has_attachments = '.(count($ids) ? '1' : '0').' WHERE id_product = '.(int)($id_product).' LIMIT 1');
-			return ($result1 && Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attachment (id_product, id_attachment) VALUES '.implode(',',$ids)));
+			return ($result1 && Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attachment (id_product, id_attachment) VALUES '.implode(',', $ids)));
 		}
 		return $result1;
+	}
+	
+	public static function getProductAttached($id_lang, $list)
+	{
+		$ids_attachements = array();
+		if (is_array($list))
+		{
+			foreach($list as $attachement)
+				$ids_attachements[] = $attachement['id_attachment'];
+			$tmp = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'product_attachment` pa
+												LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pa.`id_product` = pl.`id_product`)
+												WHERE `id_attachment` IN ('.implode(',', array_map('intval', $ids_attachements)).') AND pl.`id_lang` = '.(int)$id_lang.';');
+			$productAttachements = array();
+			foreach($tmp as $t)
+				$productAttachements[$t['id_attachment']][] =  $t['name'];
+			return $productAttachements;
+		}
+		else
+			return false;
 	}
 }
 
