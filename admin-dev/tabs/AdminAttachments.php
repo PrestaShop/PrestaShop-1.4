@@ -138,7 +138,8 @@ class AdminAttachments extends AdminTab
 	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
 	{
 		parent::getList((int)$id_lang, $orderBy, $orderWay, $start, $limit);
-		$this->_productAttachements = Attachment::getProductAttached((int)$id_lang, $this->_list);	
+		if(sizeof($this->_list))
+			$this->_productAttachements = Attachment::getProductAttached((int)$id_lang, $this->_list);	
 	}
 	
 	protected function _displayDeleteLink($token = NULL, $id)
