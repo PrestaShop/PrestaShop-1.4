@@ -878,7 +878,6 @@ class PDFCore extends PDF_PageGroupCore
 		$priceBreakDown['totalProductsWithTax'] = 0;
 		$priceBreakDown['hasEcotax'] = 0;
 		$priceBreakDown['totalsProductsWithTaxAndReduction'] = array();
-		$ecotax_rate = 0;
 		if (self::$order->total_paid == '0.00' AND self::$order->total_discounts == 0)
 			return ;
 
@@ -892,7 +891,6 @@ class PDFCore extends PDF_PageGroupCore
 		/* Firstly calculate all prices */
 		foreach ($products AS &$product)
 		{
-			$ecotax_rate = (float) $product['ecotax_tax_rate'];
 			if (!isset($priceBreakDown['totalsWithTax'][$product['tax_rate']]))
 				$priceBreakDown['totalsWithTax'][$product['tax_rate']] = 0;
 			if (!isset($priceBreakDown['totalsEcotax'][$product['tax_rate']]))
@@ -905,10 +903,6 @@ class PDFCore extends PDF_PageGroupCore
 				$priceBreakDown['totalsProductsWithTaxAndReduction'][$product['tax_rate']] = 0;
 			if (!isset($priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']]))
 				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] = 0;
-			if (!isset($priceBreakDown['totalsEcoTax'][$product['tax_rate']]))
-				$priceBreakDown['totalsEcoTax'][$product['tax_rate']] = 0;
-			if (!isset($priceBreakDown['totalsProductsWithoutTaxButEcoTax'][$product['tax_rate']]))
-				$priceBreakDown['totalsProductsWithoutTaxButEcoTax'][$product['tax_rate']] = 0;
 
 
 			/* Without tax */
@@ -942,8 +936,6 @@ class PDFCore extends PDF_PageGroupCore
 				$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / (((float)($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
 				$priceBreakDown['totalsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'] ;
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
-				$priceBreakDown['totalsProductsWithoutTaxButEcoTax'][$product['tax_rate']]	+= (float)($product['product_price']);
-				$priceBreakDown['totalsEcoTax'][$product['tax_rate']]	+= (float)$product['ecotax'];
 				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] += Tools::ps_round($product['priceWithoutTax'] - (float)$discountAmountWithoutTax, 2);
 			}
 			else
@@ -971,12 +963,8 @@ class PDFCore extends PDF_PageGroupCore
 			{
 				$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
 				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
-
-				$total_wt_but_ecotax = $priceBreakDown['totalsProductsWithoutTaxButEcoTax'][$tax_rate] * (1 + $tax_rate / 100);
-				$total_ecotax = $priceBreakDown['totalsEcoTax'][$tax_rate] * (1 + $ecotax_rate / 100);
-
-				$priceBreakDown['totalsWithTax'][$tax_rate] = Tools::ps_round($total_wt_but_ecotax + $total_ecotax, 2);
-				$priceBreakDown['totalsProductsWithTax'][$tax_rate] = Tools::ps_round($total_wt_but_ecotax + $total_ecotax, 2);
+				$priceBreakDown['totalsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
+				$priceBreakDown['totalsProductsWithTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsProductsWithoutTax'][$tax_rate] * (1 + $tax_rate / 100), 2);
 				$priceBreakDown['totalsProductsWithTaxAndReduction'][$product['tax_rate']] += Tools::ps_round($priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] * (1 + $tax_rate / 100), 2);
 			}
 			else
