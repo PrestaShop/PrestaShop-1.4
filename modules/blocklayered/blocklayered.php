@@ -90,17 +90,18 @@ class BlockLayered extends Module
 	
 	public function hookFooter($params)
 	{
-		return '<script type="text/javascript">
-				//<![CDATA[
-				$(document).ready(function()
-				{
-					$(\'#selectPrductSort\').unbind(\'change\').bind(\'change\', function()
+		if (basename($_SERVER['PHP_SELF']) == 'category.php')
+			return '<script type="text/javascript">
+					//<![CDATA[
+					$(document).ready(function()
 					{
-						reloadContent();
-					})
-				});
-				//]]>
-				</script>';
+						$(\'#selectPrductSort\').unbind(\'change\').bind(\'change\', function()
+						{
+							reloadContent();
+						})
+					});
+					//]]>
+					</script>';
 	}
 
 	public function hookCategoryAddition($params)
