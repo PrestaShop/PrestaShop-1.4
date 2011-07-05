@@ -160,7 +160,7 @@ class AdminAttachments extends AdminTab
 				function confirmProductAttached(productList)
 				{
 					if (confirm(\''.$_cacheLang['DeleteItem'].$id.'\'))
-						return confirm(\''.$this->l('This attachment is use by folowing products :').'\r\n\' + productList);
+						return confirm(\''.$this->l('This attachment is used by the following products:').'\r\n\' + productList);
 					return false;
 				}
 			</script>

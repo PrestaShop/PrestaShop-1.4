@@ -150,7 +150,6 @@ abstract class AdminTabCore
 	public static $tabParenting = array(
 		'AdminProducts' => 'AdminCatalog',
 		'AdminCategories' => 'AdminCatalog',
-		'AdminImageResize' => 'AdminImages',
 		'AdminCMS' => 'AdminCMSContent',
 		'AdminCMSCategories' => 'AdminCMSContent',
 		'AdminOrdersStates' => 'AdminStatuses',
