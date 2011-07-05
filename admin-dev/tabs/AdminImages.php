@@ -80,7 +80,15 @@ class AdminImages extends AdminTab
 		{
 			if ($this->tabAccess['edit'] === '1')
 			{
-				if (!Configuration::updateValue('PS_IMAGE_QUALITY', Tools::getValue('PS_IMAGE_QUALITY')))
+				if ((int)Tools::getValue('PS_JPEG_QUALITY') < 0
+					|| (int)Tools::getValue('PS_JPEG_QUALITY') > 100)
+					$this->_errors[] = Tools::displayError('Incorrect value for JPEG image quality.');
+				elseif ((int)Tools::getValue('PS_PNG_QUALITY') < 0
+					|| (int)Tools::getValue('PS_PNG_QUALITY') > 9)
+					$this->_errors[] = Tools::displayError('Incorrect value for PNG image quality.');
+				elseif (!Configuration::updateValue('PS_IMAGE_QUALITY', Tools::getValue('PS_IMAGE_QUALITY'))
+					|| !Configuration::updateValue('PS_JPEG_QUALITY', Tools::getValue('PS_JPEG_QUALITY'))
+					|| !Configuration::updateValue('PS_PNG_QUALITY', Tools::getValue('PS_PNG_QUALITY')))
 					$this->_errors[] = Tools::displayError('Unknown error.');
 				else
 					Tools::redirectAdmin($currentIndex.'&token='.Tools::getValue('token').'&conf=4');
@@ -495,6 +503,17 @@ class AdminImages extends AdminTab
 					<input type="radio" value="png_all" name="PS_IMAGE_QUALITY" id="PS_IMAGE_QUALITY_2" '.(Configuration::get('PS_IMAGE_QUALITY') == 'png_all' ? 'checked="checked"' : '').' />
 					<label class="t" for="PS_IMAGE_QUALITY_2">'.$this->l('Use PNG for all images').'</label>
 				</div>
+				<br />
+				<label for="PS_JPEG_QUALITY">'.$this->l('JPEG quality').'</label>
+				<div class="margin-form">
+					<input type="text" name="PS_JPEG_QUALITY" id="PS_JPEG_QUALITY" value="'.(int)Configuration::get('PS_JPEG_QUALITY').'" size="3" />
+					<p>'.$this->l('Ranges from 0 (worst quality, smallest file) to 100 (best quality, biggest file)').'</p>
+				</div>
+				<label for="PS_PNG_QUALITY">'.$this->l('PNG quality').'</label>
+				<div class="margin-form">
+					<input type="text" name="PS_PNG_QUALITY" id="PS_PNG_QUALITY" value="'.(int)Configuration::get('PS_PNG_QUALITY').'" size="3" />
+					<p>'.$this->l('Ranges from 9 (worst quality, smallest file) to 0 (best quality, biggest file)').'</p>
+				</div>		
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitImagePreferences" class="button" />
 				</div>
