@@ -82,7 +82,8 @@ function showOrder(mode, var_content, file)
 			});
 			$(this).fadeIn('slow');
 			$.scrollTo(this, 1200);
-			resizeAddressesBox();
+			if(typeof(resizeAddressesBox) == 'function')
+				resizeAddressesBox();
 		});
 	});
 }
