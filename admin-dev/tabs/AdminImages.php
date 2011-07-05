@@ -486,7 +486,7 @@ class AdminImages extends AdminTab
 				<br />
 				<label>'.$this->l('Image quality').' </label>
 				<div class="margin-form">
-					<input type="radio" value="jpg" name="PS_IMAGE_QUALITY" id="PS_IMAGE_QUALITY_0" '.(Configuration::get('PS_IMAGE_QUALITY') == 'jpg' ? '' : 'checked="checked"').' />
+					<input type="radio" value="jpg" name="PS_IMAGE_QUALITY" id="PS_IMAGE_QUALITY_0" '.(Configuration::get('PS_IMAGE_QUALITY') == 'jpg' ? 'checked="checked"' : '').' />
 					<label class="t" for="PS_IMAGE_QUALITY_0">'.$this->l('Use JPEG').'</label>
 					<br />
 					<input type="radio" value="png" name="PS_IMAGE_QUALITY" id="PS_IMAGE_QUALITY_1" '.(Configuration::get('PS_IMAGE_QUALITY') == 'png' ? 'checked="checked"' : '').' />
