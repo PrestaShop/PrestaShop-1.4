@@ -1316,10 +1316,18 @@ class ToolsCore
 	{
 		if (strlen($html_content) > 0)
 		{
+			$htmlContentCopy = $html_content;
 			$html_content = preg_replace_callback(
 				'/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i'
 				,array('Tools', 'packJSinHTMLpregCallback')
 				,$html_content);
+			
+			// If the string is too big preg_replace return an error
+			// In this case, we don't compress the content
+			if( preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR ) {
+				error_log('ERROR: PREG_BACKTRACK_LIMIT_ERROR in function packJSinHTML');
+				return $htmlContentCopy;
+			}
 			return $html_content;
 		}
 		return false;
