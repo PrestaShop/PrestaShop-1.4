@@ -82,7 +82,7 @@ class AdminProducts extends AdminTab
 				if (!empty($word_item) && $word_item != '')
 					$out[] = $word_item;
 			}
-			return ((count($out) > 0) ? implode(',', $out) : '');
+			return ((count($out) > 0) ? implode(', ', $out) : '');
 		}
 		else
 			return '';
