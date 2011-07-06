@@ -39,7 +39,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.5';
+		$this->version = '2.6';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -67,6 +67,9 @@ class PayPal extends PaymentModule
 				$this->warning .= ', ';
 			$this->warning .= $content[1];
 		}
+
+		if (!Configuration::get('PS_OS_PAYPAL'))
+			Configuration::updateValue('PS_OS_PAYPAL', _PS_OS_PAYPAL_);
 	}
 	
 	public function install()
