@@ -1104,16 +1104,7 @@ class ProductCore extends ObjectModel
 	*/
 	public function deleteAttachments()
 	{
-		$attachments = Db::getInstance()->ExecuteS('SELECT id_attachment FROM `'._DB_PREFIX_.'product_attachment` WHERE `id_product` = '.(int)($this->id));
-		$result = true;
-		foreach ($attachments AS $attachment)
-		{
-			$attachmentObj = new Attachment((int)($attachment['id_attachment']));
-			if (Validate::isLoadedObject($attachmentObj))
-				$result &= $attachmentObj->delete();
-		}
-
-		return $result;
+		return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_attachment WHERE id_product = '.(int)($this->id));
 	}
 
 	/**
