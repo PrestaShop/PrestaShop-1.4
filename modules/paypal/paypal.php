@@ -39,7 +39,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.4';
+		$this->version = '2.5';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -361,6 +361,11 @@ class PayPal extends PaymentModule
 		$this->_addNewPrivateMessage((int)$order->id, $message);
 	}
 
+	public function PayPalRound($value)
+	{
+		return (floor(round($value * 100, 2)) / 100);
+	}
+
 	public function makePayPalAPIValidation($cookie, $cart, $id_currency, $payerID, $type)
 	{
 		global $cookie;
@@ -404,14 +409,14 @@ class PayPal extends PaymentModule
 			for ($i = 0; $i < sizeof($products); $i++)
 			{
 				$request .= '&L_NAME'.$i.'='.substr(urlencode($products[$i]['name'].(isset($products[$i]['attributes'])?' - '.$products[$i]['attributes']:'').(isset($products[$i]['instructions'])?' - '.$products[$i]['instructions']:'') ), 0, 127);
-				$request .= '&L_AMT'.$i.'='.urlencode(round($products[$i]['price'], 2));
+				$request .= '&L_AMT'.$i.'='.urlencode($this->PayPalRound($products[$i]['price']));
 				$request .= '&L_QTY'.$i.'='.urlencode($products[$i]['cart_quantity']);
-				$amt += round($products[$i]['price']*$products[$i]['cart_quantity'], 2);
+				$amt += $this->PayPalRound($products[$i]['price'])*$products[$i]['cart_quantity'];
 			}
-			$shipping = round($cart->getOrderShippingCost($cart->id_carrier, false), 2);
+			$shipping = $this->PayPalRound($cart->getOrderShippingCost($cart->id_carrier, false));
 			$request .= '&ITEMAMT='.urlencode($amt);
 			$request .= '&SHIPPINGAMT='.urlencode($shipping);
-			$request .= '&TAXAMT='.urlencode((float)max(round($total - $amt - $shipping, 2), 0));
+			$request .= '&TAXAMT='.urlencode((float)max($this->PayPalRound($total - $amt - $shipping), 0));
 		}
 		else
 		{
