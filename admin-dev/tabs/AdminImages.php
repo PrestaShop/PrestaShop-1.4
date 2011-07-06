@@ -489,8 +489,8 @@ class AdminImages extends AdminTab
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 			<fieldset class="width4">
 				<legend><img src="../img/admin/picture.gif" /> '.$this->l('Images').'</legend>'.'
-				<p>'.$this->l('JPEG images have small file size and standard quality. PNG images have a bigger file size, a higher quality and support transparency.').'
-				<br />'.$this->l('Note that in all cases the image files will have the .jpg extension.').'</p>
+				<p>'.$this->l('JPEG images have a small file size and standard quality. PNG images have a bigger file size, a higher quality and support transparency. Note that in all cases the image files will have the .jpg extension.').'
+				<br /><br />'.$this->l('WARNING: This feature may not be compatible with your theme or with some modules. If this is the case, turn it off by selecting "Use JPEG".').'</p>
 				<br />
 				<label>'.$this->l('Image quality').' </label>
 				<div class="margin-form">

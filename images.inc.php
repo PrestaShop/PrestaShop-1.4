@@ -243,8 +243,8 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 
 	$destImage = imagecreatetruecolor($destWidth, $destHeight);
 
-	// If image is a PNG, fill with transparency. Else fill with white background.
-	if ($type == IMAGETYPE_PNG)
+	// If image is a PNG and the output is PNG, fill with transparency. Else fill with white background.
+	if ($fileType == 'png' && $type == IMAGETYPE_PNG)
 	{
 		imagealphablending($destImage, false);
 		imagesavealpha($destImage, true);	
