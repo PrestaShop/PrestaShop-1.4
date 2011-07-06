@@ -62,8 +62,8 @@ $message = nl2br(strip_tags($message));
 $id_cart = (int)(substr($_POST['transaction_id'], 0, strpos($_POST['transaction_id'], '_')));
 $secure_cart = explode('_', $_POST['transaction_id']);
 $status = (int)($_POST['status']);
-//if (!isset($secure_cart[1]))
-//	$secure_cart[1] = 'KO';
+if (!isset($secure_cart[2]))
+	$secure_cart[2] = 'KO';
 switch ($status)
 {	
 	/* Bankwire */
