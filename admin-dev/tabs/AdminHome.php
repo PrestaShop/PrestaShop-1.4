@@ -94,6 +94,7 @@ class AdminHome extends AdminTab
 		
 		
 		if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled + $htaccessAfterUpdate + $indexRebuiltAfterUpdate != 14)
+		{
 			echo '
 			<div class="admin-box1">
 				<h5>'.$this->l('A good beginning...')
@@ -145,7 +146,9 @@ class AdminHome extends AdminTab
 		<a href="index.php?tab=AdminGenerator&token='.Tools::getAdminTokenLite('AdminGenerator').'">'.$this->l('.htaccess up-to-date').'</a></li>
 					</ul>
 			</div>';
+		}
 	}
+	
 	public function display()
 	{
 		global $cookie;
