@@ -68,8 +68,6 @@ class PayPal extends PaymentModule
 			$this->warning .= $content[1];
 		}
 
-		if (!Configuration::get('PS_OS_PAYPAL'))
-			Configuration::updateValue('PS_OS_PAYPAL', _PS_OS_PAYPAL_);
 	}
 	
 	public function install()
@@ -92,7 +90,13 @@ class PayPal extends PaymentModule
 			$paypalapi = new PaypalAPI();
 			return $this->_checkAndUpdateFromOldVersion(true);
 		}
-		
+
+		/* For 1.4.3 and less compatibility */
+		$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
+		foreach ($updateConfig as $u)
+			if (!Configuration::get($u) && defined('_'.$u.'_'))
+				Configuration::updateValue($u, constant('_'.$u.'_'));
+
 		/* Set database */
 		if (!Db::getInstance()->Execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'paypal_order` (
 		  `id_order` int(10) unsigned NOT NULL,
@@ -1228,6 +1232,12 @@ class PayPal extends PaymentModule
 			/* Hook */
 			$this->registerHook('cancelProduct');
 			$this->registerHook('adminOrder');
+
+			/* For 1.4.3 and less compatibility */
+			$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
+			foreach ($updateConfig as $u)
+				if (!Configuration::get($u) && defined('_'.$u.'_'))
+					Configuration::updateValue($u, constant('_'.$u.'_'));
 
 			/* Create OrderState */
 			if (!Configuration::get('PAYPAL_OS_AUTHORIZATION'))
