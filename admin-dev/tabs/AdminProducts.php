@@ -1008,8 +1008,10 @@ class AdminProducts extends AdminTab
 					$image->delete();
 					throw new Exception(Tools::displayError('Image format not recognized, allowed formats are: .gif, .jpg, .png'));
 				}
-
-				if (!imageResize($subdir.$file, _PS_PROD_IMG_DIR_.$image->getImgPath().'.jpg'))
+				
+				if (!$new_path = $image->getPathForCreation())
+					throw new Exception(Tools::displayError('An error occurred during new folder creation'));
+				if (!imageResize($subdir.$file, $new_path.'.'.$image->image_format))
 				{
 					$image->delete();
 					throw new Exception(Tools::displayError('An error occurred while resizing image.'));
