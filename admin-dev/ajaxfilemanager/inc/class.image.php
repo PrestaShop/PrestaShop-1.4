@@ -99,7 +99,7 @@
      */
     function showErrors()
     {
-    	if(sizeof($this->_errors))
+    	if (sizeof($this->_errors))
     	{
     		foreach($this->_errors as $error)
     		{
@@ -122,7 +122,7 @@
         if (!$this->_isSupported($filename, $ext, $func, false)) {
             return false;
         }
-        if($ext == "gif")
+        if ($ext == "gif")
         {
              // the following part gets the transparency color for a gif file
             // this code is from the PHP manual and is written by
@@ -155,7 +155,7 @@
 			    	'path'=>$filename,
 			    );        	
 			    $imgInfo = $this->_getImageInfo($filename);
-			    if(sizeof($imgInfo))
+			    if (sizeof($imgInfo))
 			    {
 			    	foreach($imgInfo as $k=>$v)
 			    	{
@@ -311,14 +311,14 @@
         $this->_createFinalImageHandler($dst_w, $dst_h);
         if ($this->gdInfo['Truecolor Support']) 
         {
-            	if(!@imagecopyresampled($this->_imgFinal, $this->_imgOrig, 0, 0, $dst_x, $dst_y, $dst_w, $dst_h, $dst_w, $dst_h))
+            	if (!@imagecopyresampled($this->_imgFinal, $this->_imgOrig, 0, 0, $dst_x, $dst_y, $dst_w, $dst_h, $dst_w, $dst_h))
             	{
             		$this->_debug('Unable crop the image.');
             		return false;
             	}            
         } else 
         {
-          	if(!@imagecopyresized($this->_imgFinal, $this->_imgOrig, 0, 0, $dst_x, $dst_y, $dst_w, $dst_h, $dst_w, $dst_h))
+          	if (!@imagecopyresized($this->_imgFinal, $this->_imgOrig, 0, 0, $dst_x, $dst_y, $dst_w, $dst_h, $dst_w, $dst_h))
           	{
            		$this->_debug('Unable crop the image.');
           		return false;           		
@@ -347,7 +347,7 @@
      */
 	function resize( $new_x, $new_y, $constraint= false, $unchangeIfsmaller=false)
 	{
-		if(!$this->_imgOrig)
+		if (!$this->_imgOrig)
 		{
 			$this->_debug('No image fould.');
 			return false;
@@ -355,23 +355,23 @@
 		
 		$new_x = (int)($new_x);
 		$new_y = (int)($new_y);
-		if($new_x <=0 || $new_y <= 0)
+		if ($new_x <=0 || $new_y <= 0)
 		{
 			$this->_debug('either of new width or height can be zeor or less.');
 		}else 
 		{
 		
-			if($constraint)
+			if ($constraint)
 			{
-				if($new_x < 1 && $new_y < 1)
+				if ($new_x < 1 && $new_y < 1)
 				{
 					$new_x = $this->_imgInfoOrig['width'];
 					$new_y = $this->_imgInfoOrig['height'];
-				}elseif($new_x < 1)
+				}elseif ($new_x < 1)
 				{
 					$new_x = floor($new_y / $this->_imgInfoOrig['height'] * $this->_imgInfoOrig['width']);
 	
-				}elseif($new_y < 1)
+				}elseif ($new_y < 1)
 				{
 					$new_y = floor($new_x / $this->_imgInfoOrig['width'] * $this->_imgInfoOrig['height']);
 				}else
@@ -381,9 +381,9 @@
 					$new_y = floor($scale*$this->_imgInfoOrig['height']);
 				}						
 			}
-			if($unchangeIfsmaller)
+			if ($unchangeIfsmaller)
 			{
-				if($this->_imgInfoOrig['width'] < $new_x && $this->_imgInfoOrig['height'] < $new_y )
+				if ($this->_imgInfoOrig['width'] < $new_x && $this->_imgInfoOrig['height'] < $new_y )
 				{
 					$new_x = $this->_imgInfoOrig['width'];
 					$new_y = $this->_imgInfoOrig['height'];
@@ -392,11 +392,11 @@
 		
 			
 			
-			if(is_null($this->_imgOrig))
+			if (is_null($this->_imgOrig))
 			{
 				$this->loadImage($filePath);
 			}
-			if(sizeof($this->_errors) == 0)
+			if (sizeof($this->_errors) == 0)
 			{
 				return $this->_resize($new_x, $new_y);
 			}			
@@ -421,7 +421,7 @@
     if ($this->_imgInfoOrig['type'] == 'png') 
     {    
         @imagealphablending($this->_imgFinal, false);
-				if(function_exists('ImageCopyResampled'))
+				if (function_exists('ImageCopyResampled'))
 				{
 					@ImageCopyResampled($this->_imgFinal, $this->_imgOrig, 0, 0, 0, 0, $new_x, $new_y, $this->_imgInfoOrig['width'], $this->_imgInfoOrig['height']);
 				} else {
@@ -431,7 +431,7 @@
 
     }else 
     {//for the rest image
-			if(function_exists('ImageCopyResampled'))
+			if (function_exists('ImageCopyResampled'))
 			{
 				@ImageCopyResampled($this->_imgFinal, $this->_imgOrig, 0, 0, 0, 0, $new_x, $new_y, $this->_imgInfoOrig['width'], $this->_imgInfoOrig['height']);
 			} else {
@@ -444,7 +444,7 @@
 		$this->_imgInfoFinal['height'] = $new_y;
 		$this->_imgInfoFinal['name'] = basename($this->_imgInfoOrig['name']);
 		$this->_imgInfoFinal['path'] = $this->_imgInfoOrig['path'];		
-		if($this->_imgFinal)
+		if ($this->_imgFinal)
 		{
 			return true;
 		}else 
@@ -510,7 +510,7 @@
     function flip($direction="horizontal")
     {
 				$this->_createFinalImageHandler($this->_imgInfoOrig['width'], $this->_imgInfoOrig['height']);
-			if($direction != "vertical")
+			if ($direction != "vertical")
 			{
 				$dst_x = 0;
 				$dst_y = 0;
@@ -532,7 +532,7 @@
 				$src_w = $this->_imgInfoOrig['width'];
 				$src_h = 0 - $this->_imgInfoOrig['height'];				
 			}			
-				if(function_exists('ImageCopyResampled')){
+				if (function_exists('ImageCopyResampled')){
 					ImageCopyResampled($this->_imgFinal, $this->_imgOrig, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
 				} else {
 					ImageCopyResized($this->_imgFinal, $this->_imgOrig, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
@@ -541,7 +541,7 @@
 				$this->_imgInfoFinal['height'] = $dst_h;
 				$this->_imgInfoFinal['name'] = basename($this->imageFile);
 				$this->_imgInfoFinal['path'] = $this->imageFile;		
-				if($this->_imgFinal)
+				if ($this->_imgFinal)
 				{
 					return true;
 				}else 
@@ -651,7 +651,7 @@
 	 */
     function DestroyImages($original = true)
     {
-    		if(!is_null($this->_imgFinal))
+    		if (!is_null($this->_imgFinal))
     		{
     			@imagedestroy($this->_imgFinal);
     		}        
@@ -713,13 +713,13 @@
 	  function rotate($angle, $bgColor=0)
     {
     	$angle = (int)($angle) -360;
-    		while($angle <0)
+    		while ($angle <0)
     		{
     			$angle += 360;
     		}
  
 		
-         if($this->_imgFinal = imagerotate($this->_imgOrig, $angle))
+         if ($this->_imgFinal = imagerotate($this->_imgOrig, $angle))
          {
          	return true;
          }else 
@@ -745,9 +745,9 @@
 	 */
 	function getFinalImageInfo()
 	{
-		if($this->_imgInfoFinal['width'] == '')
+		if ($this->_imgInfoFinal['width'] == '')
 		{
-			if(is_null($this->_imgFinal))
+			if (is_null($this->_imgFinal))
 			{
 				$this->_imgInfoFinal = $this->_imgInfoOrig;
 			}else 
@@ -770,7 +770,7 @@
      */
     function _createFinalImageHandler($dst_w, $dst_h)
     {
-		 		if(function_exists('ImageCreateTrueColor'))
+		 		if (function_exists('ImageCreateTrueColor'))
 		 		{
 					$this->_imgFinal = @ImageCreateTrueColor($dst_w,$dst_h);
 				} else {

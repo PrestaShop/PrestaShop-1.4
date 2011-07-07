@@ -225,7 +225,7 @@ class AdminThemes extends AdminPreferences
 			foreach ($configItem as $attr)
 			{
 				$check = $this->_checkConfigForFeatures($arrFeatures,$attr);
-				if($check == false)
+				if ($check == false)
 					$return = false;
 			}
 			return $return;

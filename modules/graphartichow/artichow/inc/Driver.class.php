@@ -426,11 +426,11 @@ class awPHPFontDriver extends awFontDriver {
 	private function gdString(awGDDriver $driver, awText $text, awPoint $point, $width = NULL) {
 		
 		$angle = $text->getAngle();
-		if($angle !== 90 and $angle !== 0) {
+		if ($angle !== 90 and $angle !== 0) {
 			awImage::drawError("Class PHPFontDriver: You can only use 0° and 90° angles.");
 		}
 
-		if($angle === 90) {
+		if ($angle === 90) {
 			$function = 'imagestringup';
 			$addAngle = $this->getGDTextHeight($text);
 		} else {
@@ -447,11 +447,11 @@ class awPHPFontDriver extends awFontDriver {
 		$textHeight = $this->getGDTextHeight($text);
 		
 		// Split text if needed
-		if($width !== NULL) {
+		if ($width !== NULL) {
 
 			$characters = floor($width / ($this->getGDTextWidth($text) / strlen($textString)));
 
-			if($characters > 0) {
+			if ($characters > 0) {
 				$textString = wordwrap($textString, $characters, "\n", TRUE);
 			}
 
@@ -463,7 +463,7 @@ class awPHPFontDriver extends awFontDriver {
 		foreach($lines as $i => $line) {
 
 			// Line position handling
-			if($angle === 90) {
+			if ($angle === 90) {
 				$addX = $i * $textHeight;
 				$addY = 0;
 			} else {
@@ -518,16 +518,16 @@ class awPHPFontDriver extends awFontDriver {
 	private function getGDTextWidth(awText $text) {
 		$font = $text->getFont();
 		
-		if($text->getAngle() === 90) {
+		if ($text->getAngle() === 90) {
 			$text->setAngle(45);
 			return $this->getGDTextHeight($text);
-		} elseif($text->getAngle() === 45) {
+		} elseif ($text->getAngle() === 45) {
 			$text->setAngle(90);
 		}
 
 		$fontWidth = imagefontwidth($font->font);
 
-		if($fontWidth === FALSE) {
+		if ($fontWidth === FALSE) {
 			awImage::drawError("Class PHPFontDriver: Unable to get font size.");
 		}
 
@@ -543,16 +543,16 @@ class awPHPFontDriver extends awFontDriver {
 	private function getGDTextHeight(awText $text) {
 		$font = $text->getFont();
 		
-		if($text->getAngle() === 90) {
+		if ($text->getAngle() === 90) {
 			$text->setAngle(45);
 			return $this->getGDTextWidth($text);
-		} elseif($text->getAngle() === 45) {
+		} elseif ($text->getAngle() === 45) {
 			$text->setAngle(90);
 		}
 
 		$fontHeight = imagefontheight($font->font);
 
-		if($fontHeight === FALSE) {
+		if ($fontHeight === FALSE) {
 			awImage::drawError("Class PHPFontDriver: Unable to get font size.");
 		}
 
@@ -599,7 +599,7 @@ class awFileFontDriver extends awFontDriver {
 		$text->setText($text->getText()." ");
 
 		$font = $text->getFont();
-		if($font instanceof awTTFFont === FALSE and $font->getExtension() === NULL) {
+		if ($font instanceof awTTFFont === FALSE and $font->getExtension() === NULL) {
 			$font->setExtension('ttf');
 		}
 		
@@ -617,7 +617,7 @@ class awFileFontDriver extends awFontDriver {
 		$textString = $text->getText();
 
 		// Split text if needed
-		if($width !== NULL) {
+		if ($width !== NULL) {
 
 			$characters = floor($width / $this->getGDAverageWidth($font));
 			$textString = wordwrap($textString, $characters, "\n", TRUE);
@@ -663,7 +663,7 @@ class awFileFontDriver extends awFontDriver {
 	
 	private function getGDTextWidth(awText $text) {
 		$font = $text->getFont();
-		if($font->getExtension() === NULL) {
+		if ($font->getExtension() === NULL) {
 			$font->setExtension('ttf');
 		}
 		
@@ -671,7 +671,7 @@ class awFileFontDriver extends awFontDriver {
 		
 		$box = imagettfbbox($font->getSize(), $text->getAngle(), $filePath, $text->getText());
 
-		if($box === FALSE) {
+		if ($box === FALSE) {
 			awImage::drawError("Class FileFontDriver: Unable to get font width (GD).");
 		}
 
@@ -682,7 +682,7 @@ class awFileFontDriver extends awFontDriver {
 	
 	private function getGDTextHeight(awText $text) {
 		$font = $text->getFont();
-		if($font->getExtension() === NULL) {
+		if ($font->getExtension() === NULL) {
 			$font->setExtension('ttf');
 		}
 		
@@ -690,7 +690,7 @@ class awFileFontDriver extends awFontDriver {
 		
 		$box = imagettfbbox($font->getSize(), $text->getAngle(), $filePath, $text->getText());
 
-		if($box === FALSE) {
+		if ($box === FALSE) {
 			awImage::drawError("Class FileFontDriver: Unable to get font height (GD).");
 		}
 
@@ -705,7 +705,7 @@ class awFileFontDriver extends awFontDriver {
 
 		$box = imagettfbbox($font->getSize(), 0, $font->getName().'.'.$font->getExtension(), $text);
 
-		if($box === FALSE) {
+		if ($box === FALSE) {
 			awImage::drawError("Class FileFontDriver: Unable to get font average width.");
 		}
 

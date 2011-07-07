@@ -556,7 +556,7 @@ class BlockCms extends Module
 		}
 		elseif (Tools::getValue('way') == 1)
 		{
-			if(Db::getInstance()->Execute('
+			if (Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'cms_block`
 			SET `position` = '.((int)Tools::getValue('position') - 1).'
 			WHERE `position` = '.((int)Tools::getValue('position')).'

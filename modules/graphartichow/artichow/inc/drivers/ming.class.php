@@ -42,12 +42,12 @@ class awMingDriver extends awDriver {
 	 */
 	public function init(awImage $image) {
 
-		if($this->movie === NULL) {
+		if ($this->movie === NULL) {
 			$this->setImageSize($image->width, $image->height);
 			
 			// Create movie
 			$this->movie = new SWFMovie();
-			if(!$this->movie) {
+			if (!$this->movie) {
 				awImage::drawError("Class Image: Unable to create a graph.");
 			}
 			
@@ -65,7 +65,7 @@ class awMingDriver extends awDriver {
 			);
 			
 			$shadow = $image->shadow;
-			if($shadow !== NULL) {
+			if ($shadow !== NULL) {
 				$shadow = $shadow->getSpace();
 				$p1 = new awPoint($shadow->left, $shadow->top);
 				$p2 = new awPoint($this->imageWidth - $shadow->right - 1, $this->imageHeight - $shadow->bottom - 1);
@@ -182,13 +182,13 @@ class awMingDriver extends awDriver {
 	 * @var bool $bool
 	 */
 	public function setAntiAliasing($bool) {
-		if($this->movie !== NULL) {
+		if ($this->movie !== NULL) {
 
 			$actionscript = '
 			_quality = "%s";
 			';
 
-			if((bool)$bool) {
+			if ((bool)$bool) {
 				$actionscript = sprintf($actionscript, 'high');
 			} else {
 				$actionscript = sprintf($actionscript, 'low');
@@ -257,7 +257,7 @@ class awMingDriver extends awDriver {
 		$font = $text->getFont();
 		
 		// Can we deal with that font?
-		if($this->isCompatibleWithFont($font) === FALSE) {
+		if ($this->isCompatibleWithFont($font) === FALSE) {
 			awImage::drawError('Class MingDriver: Incompatible font type (\''.get_class($font).'\')');
 		}
 		
@@ -265,7 +265,7 @@ class awMingDriver extends awDriver {
 		// (i.e. awFDBFont, or awTuffy et al.)
 		$fontDriver = $this->fileFontDriver;
 		
-		if($text->getBackground() !== NULL or $text->border->visible()) {
+		if ($text->getBackground() !== NULL or $text->border->visible()) {
 		
 			list($left, $right, $top, $bottom) = $text->getPadding();
 
@@ -300,7 +300,7 @@ class awMingDriver extends awDriver {
 	 * @param awPoint $p
 	 */
 	public function point(awColor $color, awPoint $p) {
-		if($p->isHidden() === FALSE) {
+		if ($p->isHidden() === FALSE) {
 			list($red, $green, $blue, $alpha) = $this->getColor($color);
 			
 			$point = new SWFShape();
@@ -322,7 +322,7 @@ class awMingDriver extends awDriver {
 	 * @param int $thickness Line tickness
 	 */
 	public function line(awColor $color, awLine $line) {
-		if($line->getThickness() > 0 and $line->isHidden() === FALSE) {
+		if ($line->getThickness() > 0 and $line->isHidden() === FALSE) {
 	
 			list($red, $green, $blue, $alpha) = $this->getColor($color);
 
@@ -345,7 +345,7 @@ class awMingDriver extends awDriver {
 					$cos = ($p2->x - $p1->x) / $size;
 					$sin = ($p2->y - $p1->y) / $size;
 					
-					for($i = 0; $i <= $size; $i += 2) {
+					for ($i = 0; $i <= $size; $i += 2) {
 						$p = new awPoint(
 							round($i * $cos + $p1->x),
 							round($i * $sin + $p1->y)
@@ -360,7 +360,7 @@ class awMingDriver extends awDriver {
 					$height = $p2->y - $p1->y;
 					$size = sqrt(pow($height, 2) + pow($width, 2));
 					
-					if($size == 0) {
+					if ($size == 0) {
 						return;
 					}
 					
@@ -370,7 +370,7 @@ class awMingDriver extends awDriver {
 					$functionX = ($width  > 0) ? 'min' : 'max';
 					$functionY = ($height > 0) ? 'min' : 'max';
 					
-					for($i = 0; $i <= $size; $i += 6) {
+					for ($i = 0; $i <= $size; $i += 6) {
 						
 						$t1 = new awPoint(
 							round($i * $cos + $p1->x),
@@ -469,7 +469,7 @@ class awMingDriver extends awDriver {
 		
 				
 		// Draw the four sides of the rectangle, clockwise
-		if(
+		if (
 			($p1->x <= $p2->x and $p1->y <= $p2->y)
 			or
 			($p1->x >= $p2->x and $p1->y >= $p2->y)
@@ -513,13 +513,13 @@ class awMingDriver extends awDriver {
 		$shape = new SWFShape();
 		$shape->setLine(0);
 		
-		if($background instanceof awColor) {
+		if ($background instanceof awColor) {
 			
 			// Get the Red, Green, Blue and Alpha values
 			list($r, $g, $b, $a) = $this->getColor($background);
 			$shape->setRightFill($r, $g, $b, $a);
 			
-		} elseif($background instanceof awGradient) {
+		} elseif ($background instanceof awGradient) {
 			
 			// Get the Gradient object as an SWFGradient one
 			list($flashGradient, $style) = $this->getGradient($background);
@@ -538,7 +538,7 @@ class awMingDriver extends awDriver {
 			
 			// Ming draws its gradients on a 1600x1600 image,
 			// so we have to resize it.
-			if($angle === -90) {
+			if ($angle === -90) {
 				$ratio = abs($p1->y - $p2->y) / 1600;
 			} else {
 				$ratio = abs($p1->x - $p2->x) / 1600;
@@ -554,7 +554,7 @@ class awMingDriver extends awDriver {
 		
 		// Depending on the points' relative positions,
 		// we have two drawing possibilities
-		if(
+		if (
 			($p1->x <= $p2->x and $p1->y <= $p2->y)
 			or
 			($p1->x >= $p2->x and $p1->y >= $p2->y)
@@ -583,7 +583,7 @@ class awMingDriver extends awDriver {
 		$points = $polygon->all();
 		$count = count($points);
 		
-		if($count > 1) {
+		if ($count > 1) {
 			
 			$side = new awLine;
 			$side->setStyle($polygon->getStyle());
@@ -591,7 +591,7 @@ class awMingDriver extends awDriver {
 			
 			$prev = $points[0];
 			
-			for($i = 1; $i < $count; $i++) {
+			for ($i = 1; $i < $count; $i++) {
 				$current = $points[$i];
 				$side->setLocation($prev, $current);
 				$this->line($color, $side);
@@ -613,11 +613,11 @@ class awMingDriver extends awDriver {
 	public function filledPolygon($background, awPolygon $polygon) {
 		$shape = new SWFShape();
 		
-		if($background instanceof awColor) {
+		if ($background instanceof awColor) {
 			list($red, $green, $blue, $alpha) = $this->getColor($background);
 			
 			$shape->setRightFill($red, $green, $blue, $alpha);
-		} elseif($background instanceof awGradient) {
+		} elseif ($background instanceof awGradient) {
 			list($flashGradient, $style) = $this->getGradient($background);
 			
 			$fill = $shape->addFill($flashGradient, $style);
@@ -625,7 +625,7 @@ class awMingDriver extends awDriver {
 			list($xMin, $xMax) = $polygon->getBoxXRange();
 			list($yMin, $yMax) = $polygon->getBoxYRange();
 			
-			if($background->angle === 0) {
+			if ($background->angle === 0) {
 				$fill->scaleTo(($yMax - $yMin) / 1600);
 			} else {
 				$fill->scaleTo(($xMax - $xMin) / 1600);
@@ -638,13 +638,13 @@ class awMingDriver extends awDriver {
 		$points = $polygon->all();
 		$count = count($points);
 		
-		if($count > 1) {
+		if ($count > 1) {
 			
 			$prev = $points[0];
 			
 			$shape->movePenTo($prev->x, $prev->y);
 			
-			for($i = 1; $i < $count; $i++) {
+			for ($i = 1; $i < $count; $i++) {
 				$current = $points[$i];
 				$shape->drawLineTo($current->x, $current->y);
 			}
@@ -677,7 +677,7 @@ class awMingDriver extends awDriver {
 	
 	public function getTextWidth(awText $text) {
 		$font = $text->getFont();
-		if($this->isCompatibleWithFont($font) === FALSE) {
+		if ($this->isCompatibleWithFont($font) === FALSE) {
 			awImage::drawError('Class MingDriver: Incompatible font type (\''.get_class($font).'\')');
 		}
 		
@@ -689,7 +689,7 @@ class awMingDriver extends awDriver {
 	
 	public function getTextHeight(awText $text) {
 		$font = $text->getFont();
-		if($this->isCompatibleWithFont($font) === FALSE) {
+		if ($this->isCompatibleWithFont($font) === FALSE) {
 			awImage::drawError('Class MingDriver: Incompatible font type (\''.get_class($font).'\')');
 		}
 		
@@ -700,7 +700,7 @@ class awMingDriver extends awDriver {
 	}
 	
 	protected function isCompatibleWithFont(awFont $font) {
-		if($font instanceof awTTFFont or $font instanceof awPHPFont) {
+		if ($font instanceof awTTFFont or $font instanceof awPHPFont) {
 			return FALSE;
 		} else {
 			return TRUE;
@@ -710,17 +710,17 @@ class awMingDriver extends awDriver {
 	private function drawImage(awImage $image, $return = FALSE, $header = TRUE) {
 		
 		// Send headers to the browser
-		if($header === TRUE) {
+		if ($header === TRUE) {
 			$image->sendHeaders();
 		}
 		
-		if($return) {
+		if ($return) {
 			ob_start();
 		}
 		
 		$this->movie->output();
 		
-		if($return) {
+		if ($return) {
 			return ob_get_clean();
 		}
 	}
@@ -741,7 +741,7 @@ class awMingDriver extends awDriver {
 		
 		$flashGradient->addEntry(0, $r1, $g1, $b1, $a1);
 		
-		if($gradient instanceof awBilinearGradient) {
+		if ($gradient instanceof awBilinearGradient) {
 			
 			$flashGradient->addEntry($gradient->center, $r2, $g2, $b2, $a2);
 			$flashGradient->addEntry(1, $r1, $g1, $b1, $a1);
@@ -751,7 +751,7 @@ class awMingDriver extends awDriver {
 
 			$flashGradient->addEntry(1, $r2, $g2, $b2, $a2);
 			
-			if($gradient instanceof awLinearGradient) {
+			if ($gradient instanceof awLinearGradient) {
 				return array($flashGradient, SWFFILL_LINEAR_GRADIENT);
 			} else {
 				return array($flashGradient, SWFFILL_RADIAL_GRADIENT);
@@ -767,7 +767,7 @@ registerClass('MingDriver');
 /*
  * Check for ming presence
  */
-if(function_exists('ming_useswfversion') === FALSE) {
+if (function_exists('ming_useswfversion') === FALSE) {
 	awImage::drawErrorFile('missing-ming');
 }
 

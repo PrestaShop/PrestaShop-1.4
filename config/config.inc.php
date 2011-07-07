@@ -43,14 +43,14 @@ ini_set('default_charset', 'utf-8');
 ini_set('magic_quotes_runtime', 0);
 
 // correct Apache charset (except if it's too late
-if(!headers_sent())
+if (!headers_sent())
 	header('Content-Type: text/html; charset=utf-8');
 
 /* No settings file? goto installer...*/
 if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 {
 	$dir = ((is_dir($_SERVER['REQUEST_URI']) OR substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
-	if(!file_exists(dirname(__FILE__).'/../install'))
+	if (!file_exists(dirname(__FILE__).'/../install'))
 		die('Error: \'install\' directory is missing');
 	header('Location: install/');
 	exit;

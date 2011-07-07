@@ -56,7 +56,7 @@ class StatsNewsletter extends ModuleGraph
 		
 	public function hookAdminStatsModules($params)
 	{
-		if(Module::isInstalled('blocknewsletter'))
+		if (Module::isInstalled('blocknewsletter'))
 		{
 			$totals = $this->getTotals();
 			if (Tools::getValue('export'))

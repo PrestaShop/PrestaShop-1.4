@@ -32,13 +32,13 @@ class awGDDriver extends Driver {
 
 	public function init(awImage $image) {
 		
-		if($this->resource === NULL) {
+		if ($this->resource === NULL) {
 			
 			$this->setImageSize($image->width, $image->height);
 			
 			// Create image
 			$this->resource = imagecreatetruecolor($this->imageWidth, $this->imageHeight);
-			if(!$this->resource) {
+			if (!$this->resource) {
 				awImage::drawError("Class Image: Unable to create a graph.");
 			}
 			
@@ -57,7 +57,7 @@ class awGDDriver extends Driver {
 			);
 			
 			$shadow = $image->shadow;
-			if($shadow !== NULL) {
+			if ($shadow !== NULL) {
 				$shadow = $shadow->getSpace();
 				$p1 = new awPoint($shadow->left, $shadow->top);
 				$p2 = new awPoint($this->imageWidth - $shadow->right - 1, $this->imageHeight - $shadow->bottom - 1);
@@ -77,7 +77,7 @@ class awGDDriver extends Driver {
 		
 		$image = @getimagesize((string)$file);
 		
-		if($image and in_array($image[2], array(2, 3))) {
+		if ($image and in_array($image[2], array(2, 3))) {
 		
 			$fileImage->setSize($image[0], $image[1]);
 			
@@ -155,7 +155,7 @@ class awGDDriver extends Driver {
 	
 	public function setAntiAliasing($bool) {
 		
-		if(function_exists('imageantialias')) {
+		if (function_exists('imageantialias')) {
 			imageantialias($this->resource, (bool)$bool);
 
 			$this->antiAliasing = (bool)$bool;
@@ -166,7 +166,7 @@ class awGDDriver extends Driver {
 	
 	public function getColor(awColor $color) {
 
-		if($color->alpha === 0 or function_exists('imagecolorallocatealpha') === FALSE) {
+		if ($color->alpha === 0 or function_exists('imagecolorallocatealpha') === FALSE) {
 			$gdColor = imagecolorallocate($this->resource, $color->red, $color->green, $color->blue);
 		} else {
 			$gdColor = imagecolorallocatealpha($this->resource, $color->red, $color->green, $color->blue, $color->alpha);
@@ -187,7 +187,7 @@ class awGDDriver extends Driver {
 	
 	public function copyResizeImage(awImage $image, awPoint $d1, awPoint $d2, awPoint $s1, awPoint $s2, $resample = TRUE) {
 		
-		if($resample) {
+		if ($resample) {
 			$function = 'imagecopyresampled';
 		} else {
 			$function = 'imagecopyresized';
@@ -211,18 +211,18 @@ class awGDDriver extends Driver {
 		$font = $text->getFont();
 		
 		// Can we deal with that font?
-		if($this->isCompatibleWithFont($font) === FALSE) {
+		if ($this->isCompatibleWithFont($font) === FALSE) {
 			awImage::drawError('Class GDDriver: Incompatible font type (\''.get_class($font).'\')');
 		}
 		
 		// Check which FontDriver to use
-		if($font instanceof awPHPFont) {
+		if ($font instanceof awPHPFont) {
 			$fontDriver = $this->phpFontDriver;
 		} else {
 			$fontDriver = $this->fileFontDriver;
 		}
 		
-		if($text->getBackground() !== NULL or $text->border->visible()) {
+		if ($text->getBackground() !== NULL or $text->border->visible()) {
 		
 			list($left, $right, $top, $bottom) = $text->getPadding();
 
@@ -253,7 +253,7 @@ class awGDDriver extends Driver {
 	
 	public function point(awColor $color, awPoint $p) {
 	
-		if($p->isHidden() === FALSE) {
+		if ($p->isHidden() === FALSE) {
 			$rgb = $this->getColor($color);
 			imagesetpixel($this->resource, $this->x + round($p->x), $this->y + round($p->y), $rgb);
 		}
@@ -262,7 +262,7 @@ class awGDDriver extends Driver {
 	
 	public function line(awColor $color, awLine $line) {
 	
-		if($line->thickness > 0 and $line->isHidden() === FALSE) {
+		if ($line->thickness > 0 and $line->isHidden() === FALSE) {
 	
 			$rgb = $this->getColor($color);
 			$thickness = $line->thickness;
@@ -281,7 +281,7 @@ class awGDDriver extends Driver {
 					$size = sqrt(pow($p2->y - $p1->y, 2) + pow($p2->x - $p1->x, 2));
 					$cos = ($p2->x - $p1->x) / $size;
 					$sin = ($p2->y - $p1->y) / $size;
-					for($i = 0; $i <= $size; $i += 2) {
+					for ($i = 0; $i <= $size; $i += 2) {
 						$p = new awPoint(
 							round($i * $cos + $p1->x),
 							round($i * $sin + $p1->y)
@@ -295,7 +295,7 @@ class awGDDriver extends Driver {
 					$height = $p2->y - $p1->y;
 					$size = sqrt(pow($height, 2) + pow($width, 2));
 					
-					if($size == 0) {
+					if ($size == 0) {
 						return;
 					}
 					
@@ -305,7 +305,7 @@ class awGDDriver extends Driver {
 					$functionX = ($width  > 0) ? 'min' : 'max';
 					$functionY = ($height > 0) ? 'min' : 'max';
 					
-					for($i = 0; $i <= $size; $i += 6) {
+					for ($i = 0; $i <= $size; $i += 6) {
 						
 						$t1 = new awPoint(
 							round($i * $cos + $p1->x),
@@ -374,7 +374,7 @@ class awGDDriver extends Driver {
 	
 	public function filledEllipse($background, awPoint $center, $width, $height) {
 	
-		if($background instanceof awColor) {
+		if ($background instanceof awColor) {
 	
 			list($x, $y) = $center->getLocation();
 		
@@ -389,7 +389,7 @@ class awGDDriver extends Driver {
 				$rgb
 			);
 			
-		} elseif($background instanceof awGradient) {
+		} elseif ($background instanceof awGradient) {
 	
 			list($x, $y) = $center->getLocation();
 			
@@ -468,10 +468,10 @@ class awGDDriver extends Driver {
 		$p1 = $line->p1;
 		$p2 = $line->p2;
 	
-		if($background instanceof awColor) {
+		if ($background instanceof awColor) {
 			$rgb = $this->getColor($background);
 			imagefilledrectangle($this->resource, $this->x + $p1->x, $this->y + $p1->y, $this->x + $p2->x, $this->y + $p2->y, $rgb);
-		} elseif($background instanceof awGradient) {
+		} elseif ($background instanceof awGradient) {
 			$gradientDriver = new awGDGradientDriver($this);
 			$gradientDriver->filledRectangle($background, $p1, $p2);
 		}
@@ -493,7 +493,7 @@ class awGDDriver extends Driver {
 				
 			default :
 			
-				if($polygon->count() > 1) {
+				if ($polygon->count() > 1) {
 				
 					$prev = $polygon->get(0);
 					
@@ -501,7 +501,7 @@ class awGDDriver extends Driver {
 					$line->setStyle($polygon->getStyle());
 					$line->setThickness($polygon->getThickness());
 					
-					for($i = 1; $i < $polygon->count(); $i++) {
+					for ($i = 1; $i < $polygon->count(); $i++) {
 						$current = $polygon->get($i);
 						$line->setLocation($prev, $current);
 						$this->line($color, $line);
@@ -520,14 +520,14 @@ class awGDDriver extends Driver {
 	
 	public function filledPolygon($background, awPolygon $polygon) {
 		
-		if($background instanceof awColor) {
+		if ($background instanceof awColor) {
 			
 			$points = $this->getPolygonPoints($polygon);
 			$rgb = $this->getColor($background);
 			
 			imagefilledpolygon($this->resource, $points, $polygon->count(), $rgb);
 			
-		} elseif($background instanceof awGradient) {
+		} elseif ($background instanceof awGradient) {
 			
 			$gradientDriver = new awGDGradientDriver($this);
 			$gradientDriver->filledPolygon($background, $polygon);
@@ -551,7 +551,7 @@ class awGDDriver extends Driver {
 	public function getTextWidth(awText $text) {
 		$font = $text->getFont();
 		
-		if($font instanceof awPHPFont) {
+		if ($font instanceof awPHPFont) {
 			$fontDriver = $this->phpFontDriver;
 		} else {
 			$fontDriver = $this->fileFontDriver;
@@ -563,7 +563,7 @@ class awGDDriver extends Driver {
 	public function getTextHeight(awText $text) {
 		$font = $text->getFont();
 		
-		if($font instanceof awPHPFont) {
+		if ($font instanceof awPHPFont) {
 			$fontDriver = $this->phpFontDriver;
 		} else {
 			$fontDriver = $this->fileFontDriver;
@@ -573,7 +573,7 @@ class awGDDriver extends Driver {
 	}
 	
 	protected function isCompatibleWithFont(awFont $font) {
-		if($font instanceof awFDBFont) {
+		if ($font instanceof awFDBFont) {
 			return FALSE;
 		} else {
 			return TRUE;
@@ -585,7 +585,7 @@ class awGDDriver extends Driver {
 		$format = $image->getFormatString();
 		
 		// Test if format is available
-		if((imagetypes() & $image->getFormat()) === FALSE) {
+		if ((imagetypes() & $image->getFormat()) === FALSE) {
 			awImage::drawError("Class Image: Format '".$format."' is not available on your system. Check that your PHP has been compiled with the good libraries.");
 		}
 	
@@ -603,17 +603,17 @@ class awGDDriver extends Driver {
 		}
 		
 		// Send headers to the browser
-		if($header === TRUE) {
+		if ($header === TRUE) {
 			$image->sendHeaders();
 		}
 		
-		if($return) {
+		if ($return) {
 			ob_start();
 		}
 		
 		$function($this->resource);
 		
-		if($return) {
+		if ($return) {
 			return ob_get_clean();
 		}
 	}
@@ -633,10 +633,10 @@ class awGDDriver extends Driver {
 	
 	private function startThickness($thickness) {
 		
-		if($thickness > 1) {
+		if ($thickness > 1) {
 		
 			// Beurk :'(
-			if($this->antiAliasing and function_exists('imageantialias')) {
+			if ($this->antiAliasing and function_exists('imageantialias')) {
 				imageantialias($this->resource, FALSE);
 			}
 			imagesetthickness($this->resource, $thickness);
@@ -647,9 +647,9 @@ class awGDDriver extends Driver {
 	
 	private function stopThickness($thickness) {
 		
-		if($thickness > 1) {
+		if ($thickness > 1) {
 		
-			if($this->antiAliasing and function_exists('imageantialias')) {
+			if ($this->antiAliasing and function_exists('imageantialias')) {
 				imageantialias($this->resource, TRUE);
 			}
 			imagesetthickness($this->resource, 1);
@@ -691,16 +691,16 @@ class awGDGradientDriver {
 	
 	public function drawFilledFlatTriangle(awGradient $gradient, awPoint $a, awPoint $b, awPoint $c) {
 	
-		if($gradient->angle !== 0) {
+		if ($gradient->angle !== 0) {
 			awImage::drawError("Class GDGradientDriver: Flat triangles can only be used with 0 degree gradients.");
 		}
 	
 		// Look for right-angled triangle
-		if($a->x !== $b->x and $b->x !== $c->x) {
+		if ($a->x !== $b->x and $b->x !== $c->x) {
 			awImage::drawError("Class GDGradientDriver: Not right-angled flat triangles are not supported yet.");
 		}
 		
-		if($a->x === $b->x) {
+		if ($a->x === $b->x) {
 			$d = $a;
 			$e = $c;
 		} else {
@@ -710,7 +710,7 @@ class awGDGradientDriver {
 		
 		$this->init($gradient, $b->y - $d->y);
 	
-		for($i = $c->y + 1; $i < $b->y; $i++) {
+		for ($i = $c->y + 1; $i < $b->y; $i++) {
 			
 			$color = $this->color($i - $d->y);
 			$pos = ($i - $d->y) / ($b->y - $d->y);
@@ -728,9 +728,9 @@ class awGDGradientDriver {
 	
 	protected function drawFilledTriangle(awGradient $gradient, awPolygon $polygon) {
 		
-		if($gradient->angle === 0) {
+		if ($gradient->angle === 0) {
 			$this->drawFilledTriangleVertically($gradient, $polygon);
-		} elseif($gradient->angle === 90) {
+		} elseif ($gradient->angle === 90) {
 			$this->drawFilledTriangleHorizontally($gradient, $polygon);
 		}
 		
@@ -749,8 +749,8 @@ class awGDGradientDriver {
 					
 		// Pick the side of the triangle going from the top
 		// to the bottom of the surrounding box
-		for($i = 0; $i < $count; $i++) {
-			if($lines[$i]->isTopToBottom($polygon)) {
+		for ($i = 0; $i < $count; $i++) {
+			if ($lines[$i]->isTopToBottom($polygon)) {
 				list($fromLine) = array_splice($lines, $i, 1);
 				break;
 			}
@@ -758,12 +758,12 @@ class awGDGradientDriver {
 		
 		// If for some reason the three points are aligned,
 		// $fromLine will still be NULL
-		if($fromLine === NULL) {
+		if ($fromLine === NULL) {
 			return;
 		}
 						
 		$fillLine = NULL;
-		for($y = round($yMin); $y < round($yMax); $y++) {
+		for ($y = round($yMin); $y < round($yMax); $y++) {
 			
 			$fromX = $fromLine->getXFrom($y);
 			
@@ -771,12 +771,12 @@ class awGDGradientDriver {
 			foreach($lines as $line) {
 				$xValue = $line->getXFrom($y);
 				
-				if(!is_null($xValue)) {
+				if (!is_null($xValue)) {
 					$toX[] = $xValue;
 				}
 			}
 			
-			if(count($toX) === 1) {
+			if (count($toX) === 1) {
 				$fillLine = new Line(
 					new Point($fromX, $y),
 					new Point($toX[0], $y)
@@ -792,14 +792,14 @@ class awGDGradientDriver {
 					new Point($toX[1], $y)
 				);
 			
-				if($line1->getSize() < $line2->getSize()) {
+				if ($line1->getSize() < $line2->getSize()) {
 					$fillLine = $line1;
 				} else {
 					$fillLine = $line2;
 				}
 			}
 			
-			if(!$fillLine->isPoint()) {
+			if (!$fillLine->isPoint()) {
 				$color = $this->color($y - $yMin);
 				$this->driver->line($color, $fillLine);
 				
@@ -822,8 +822,8 @@ class awGDGradientDriver {
 					
 		// Pick the side of the triangle going all the way
 		// from the left side to the right side of the surrounding box
-		for($i = 0; $i < $count; $i++) {
-			if($lines[$i]->isLeftToRight($polygon)) {
+		for ($i = 0; $i < $count; $i++) {
+			if ($lines[$i]->isLeftToRight($polygon)) {
 				list($fromLine) = array_splice($lines, $i, 1);
 				break;
 			}
@@ -831,12 +831,12 @@ class awGDGradientDriver {
 		
 		// If for some reason the three points are aligned,
 		// $fromLine will still be NULL
-		if($fromLine === NULL) {
+		if ($fromLine === NULL) {
 			return;
 		}
 
 		$fillLine = NULL;
-		for($x = round($xMin); $x < round($xMax); $x++) {
+		for ($x = round($xMin); $x < round($xMax); $x++) {
 			
 			$fromY = floor($fromLine->getYFrom($x));
 			
@@ -844,12 +844,12 @@ class awGDGradientDriver {
 			foreach($lines as $line) {
 				$yValue = $line->getYFrom($x);
 				
-				if(!is_null($yValue)) {
+				if (!is_null($yValue)) {
 					$toY[] = floor($yValue);
 				}
 			}
 			
-			if(count($toY) === 1) {
+			if (count($toY) === 1) {
 				$fillLine = new Line(
 					new Point($x, $fromY),
 					new Point($x, $toY[0])
@@ -865,7 +865,7 @@ class awGDGradientDriver {
 					new Point($x, $toY[1])
 				);
 			
-				if($line1->getSize() < $line2->getSize()) {
+				if ($line1->getSize() < $line2->getSize()) {
 					$fillLine = $line1;
 				} else {
 					$fillLine = $line2;
@@ -873,9 +873,9 @@ class awGDGradientDriver {
 			}
 			
 			$color = $this->color($x - $xMin);
-			if($fillLine->isPoint()) {
+			if ($fillLine->isPoint()) {
 				$this->driver->point($color, $fillLine->p1);
-			} elseif($fillLine->getSize() >= 1) {
+			} elseif ($fillLine->getSize() >= 1) {
 				$this->driver->line($color, $fillLine);
 			}
 			unset($color);
@@ -888,15 +888,15 @@ class awGDGradientDriver {
 		list($x1, $y1) = $p1->getLocation();
 		list($x2, $y2) = $p2->getLocation();
 	
-		if($y1 < $y2) {
+		if ($y1 < $y2) {
 			$y1 ^= $y2 ^= $y1 ^= $y2;
 		}
 	
-		if($x2 < $x1) {
+		if ($x2 < $x1) {
 			$x1 ^= $x2 ^= $x1 ^= $x2;
 		}
 		
-		if($gradient instanceof awLinearGradient) {
+		if ($gradient instanceof awLinearGradient) {
 			$this->rectangleLinearGradient($gradient, new awPoint($x1, $y1), new awPoint($x2, $y2));
 		} else {
 			awImage::drawError("Class GDGradientDriver: This gradient is not supported by rectangles.");
@@ -906,7 +906,7 @@ class awGDGradientDriver {
 	
 	public function filledPolygon(awGradient $gradient, awPolygon $polygon) {
 	
-		if($gradient instanceof awLinearGradient) {
+		if ($gradient instanceof awLinearGradient) {
 			$this->polygonLinearGradient($gradient, $polygon);
 		} else {
 			awImage::drawError("Class GDGradientDriver: This gradient is not supported by polygons.");
@@ -919,13 +919,13 @@ class awGDGradientDriver {
 		list($x1, $y1) = $p1->getLocation();
 		list($x2, $y2) = $p2->getLocation();
 	
-		if($y1 - $y2 > 0) {
+		if ($y1 - $y2 > 0) {
 		
-			if($gradient->angle === 0) {
+			if ($gradient->angle === 0) {
 			
 				$this->init($gradient, $y1 - $y2);
 		
-				for($i = $y2; $i <= $y1; $i++) {
+				for ($i = $y2; $i <= $y1; $i++) {
 				
 					$color = $this->color($i - $y2);
 					
@@ -938,11 +938,11 @@ class awGDGradientDriver {
 					
 				}
 				
-			} elseif($gradient->angle === 90) {
+			} elseif ($gradient->angle === 90) {
 			
 				$this->init($gradient, $x2 - $x1);
 		
-				for($i = $x1; $i <= $x2; $i++) {
+				for ($i = $x1; $i <= $x2; $i++) {
 				
 					$color = $this->color($i - $x1);
 					
@@ -963,17 +963,17 @@ class awGDGradientDriver {
 	
 	public function filledEllipse(awGradient $gradient, $x1, $y1, $x2, $y2) {
 	
-		if($y1 < $y2) {
+		if ($y1 < $y2) {
 			$y1 ^= $y2 ^= $y1 ^= $y2;
 		}
 	
-		if($x2 < $x1) {
+		if ($x2 < $x1) {
 			$x1 ^= $x2 ^= $x1 ^= $x2;
 		}
 		
-		if($gradient instanceof awRadialGradient) {
+		if ($gradient instanceof awRadialGradient) {
 			$this->ellipseRadialGradient($gradient, $x1, $y1, $x2, $y2);
-		} elseif($gradient instanceof awLinearGradient) {
+		} elseif ($gradient instanceof awLinearGradient) {
 			$this->ellipseLinearGradient($gradient, $x1, $y1, $x2, $y2);
 		} else {
 			awImage::drawError("Class GDGradientDriver: This gradient is not supported by ellipses.");
@@ -983,9 +983,9 @@ class awGDGradientDriver {
 	
 	protected function ellipseRadialGradient(awGradient $gradient, $x1, $y1, $x2, $y2) {
 	
-		if($y1 - $y2 > 0) {
+		if ($y1 - $y2 > 0) {
 	
-			if($y1 - $y2 != $x2 - $x1) {
+			if ($y1 - $y2 != $x2 - $x1) {
 				awImage::drawError("Class GDGradientDriver: Radial gradients are only implemented on circle, not ellipses.");
 			}
 			
@@ -996,11 +996,11 @@ class awGDGradientDriver {
 			// Init gradient
 			$this->init($gradient, $r);
 			
-			for($i = 0; $i <= $r; $i += 0.45) {
+			for ($i = 0; $i <= $r; $i += 0.45) {
 			
 				$p = ceil((2 * M_PI * $i));
 				
-				if($p > 0) {
+				if ($p > 0) {
 					$interval = 360 / $p;
 				} else {
 					$interval = 360;
@@ -1008,7 +1008,7 @@ class awGDGradientDriver {
 				
 				$color = $this->color($i);
 				
-				for($j = 0; $j < 360; $j += $interval) {
+				for ($j = 0; $j < 360; $j += $interval) {
 				
 					$rad = ($j / 360) * (2 * M_PI);
 					
@@ -1017,9 +1017,9 @@ class awGDGradientDriver {
 					
 					$l = sqrt($x * $x + $y * $y);
 					
-					if($l <= $r) {
+					if ($l <= $r) {
 					
-						if(
+						if (
 							array_key_exists((int)$x, $ok) === FALSE or
 							array_key_exists((int)$y, $ok[$x]) === FALSE
 						) {
@@ -1047,9 +1047,9 @@ class awGDGradientDriver {
 	
 		// Gauche->droite : 90°
 	
-		if($y1 - $y2 > 0) {
+		if ($y1 - $y2 > 0) {
 	
-			if($y1 - $y2 != $x2 - $x1) {
+			if ($y1 - $y2 != $x2 - $x1) {
 				awImage::drawError("Class GDGradientDriver: Linear gradients are only implemented on circle, not ellipses.");
 			}
 			
@@ -1058,13 +1058,13 @@ class awGDGradientDriver {
 			// Init gradient
 			$this->init($gradient, $x2 - $x1);
 			
-			for($i = -$r; $i <= $r; $i++) {
+			for ($i = -$r; $i <= $r; $i++) {
 				
 				$h = sin(acos($i / $r)) * $r;
 				
 				$color = $this->color($i + $r);
 				
-				if($gradient->angle === 90) {
+				if ($gradient->angle === 90) {
 				
 					// Print the line
 					$p1 = new awPoint(
@@ -1106,17 +1106,17 @@ class awGDGradientDriver {
 	
 		$count = $polygon->count();
 		
-		if($count >= 4) {
+		if ($count >= 4) {
 		
 			$left = $polygon->get(0);
 			$right = $polygon->get($count - 1);
 			
-			if($gradient->angle === 0) {
+			if ($gradient->angle === 0) {
 			
 				// Get polygon maximum and minimum
 				$offset = $polygon->get(0);
 				$max = $min = $offset->y;
-				for($i = 1; $i < $count - 1; $i++) {
+				for ($i = 1; $i < $count - 1; $i++) {
 					$offset = $polygon->get($i);
 					$max = max($max, $offset->y);
 					$min = min($min, $offset->y);
@@ -1128,17 +1128,17 @@ class awGDGradientDriver {
 				
 				$sum = 0;
 			
-				for($i = 2; $i < $count - 1; $i++) {
+				for ($i = 2; $i < $count - 1; $i++) {
 				
 					$current = $polygon->get($i);
 					
 					$interval = 1;
 					
-					if($i !== $count - 2) {
+					if ($i !== $count - 2) {
 						$current->x -= $interval;
 					}
 					
-					if($current->x - $prev->x > 0) {
+					if ($current->x - $prev->x > 0) {
 				
 						// Draw rectangle
 						$x1 = $prev->x;
@@ -1152,7 +1152,7 @@ class awGDGradientDriver {
 							0
 						);
 						
-						if($y1 > $y2) {
+						if ($y1 > $y2) {
 							$y2 = $y1;
 						}
 						
@@ -1189,7 +1189,7 @@ class awGDGradientDriver {
 				
 				}
 			
-			} elseif($gradient->angle === 90) {
+			} elseif ($gradient->angle === 90) {
 				
 				$width = $right->x - $left->x;
 				$this->init($gradient, $width);
@@ -1199,7 +1199,7 @@ class awGDGradientDriver {
 				
 				$this->next($polygon, $pos, $prev, $next);
 			
-				for($i = 0; $i <= $width; $i++) {
+				for ($i = 0; $i <= $width; $i++) {
 				
 					$x = $left->x + $i;
 					
@@ -1214,7 +1214,7 @@ class awGDGradientDriver {
 					unset($color);
 					
 					// Jump to next point
-					if($next->x == $i + $left->x) {
+					if ($next->x == $i + $left->x) {
 					
 						$this->next($polygon, $pos, $prev, $next);
 						
@@ -1224,7 +1224,7 @@ class awGDGradientDriver {
 	
 			}
 			
-		} elseif($count === 3) {
+		} elseif ($count === 3) {
 			$this->drawFilledTriangle(
 				$gradient,
 				$polygon
@@ -1239,7 +1239,7 @@ class awGDGradientDriver {
 			$prev = $next;
 			$next = $polygon->get($pos++);
 		}
-		while($next->x - $prev->x == 0 and $pos < $polygon->count());
+		while ($next->x - $prev->x == 0 and $pos < $polygon->count());
 		
 	}
 	
@@ -1291,7 +1291,7 @@ class awGDGradientDriver {
 	
 	
 	private function getRed($pos) {
-		if((float)$this->size !== 0.0) {
+		if ((float)$this->size !== 0.0) {
 			return (int)round($this->r1 + ($pos / $this->size) * ($this->r2 - $this->r1));
 		} else {
 			return 0;
@@ -1299,7 +1299,7 @@ class awGDGradientDriver {
 	}
 	
 	private function getGreen($pos) {
-		if((float)$this->size !== 0.0) {
+		if ((float)$this->size !== 0.0) {
 			return (int)round($this->g1 + ($pos / $this->size) * ($this->g2 - $this->g1));
 		} else {
 			return 0;
@@ -1307,7 +1307,7 @@ class awGDGradientDriver {
 	}
 	
 	private function getBlue($pos) {
-		if((float)$this->size !== 0.0) {
+		if ((float)$this->size !== 0.0) {
 			return (int)round($this->b1 + ($pos / $this->size) * ($this->b2 - $this->b1));
 		} else {
 			return 0;
@@ -1315,7 +1315,7 @@ class awGDGradientDriver {
 	}
 	
 	private function getAlpha($pos) {
-		if((float)$this->size !== 0.0) {
+		if ((float)$this->size !== 0.0) {
 			return (int)round(($this->a1 + ($pos / $this->size) * ($this->a2 - $this->a1)) / 127 * 100);
 		} else {
 			return 0;
@@ -1329,7 +1329,7 @@ registerClass('GDGradientDriver');
 /*
  * Check for GD2
  */
-if(function_exists('imagecreatetruecolor') === FALSE) {
+if (function_exists('imagecreatetruecolor') === FALSE) {
 	awImage::drawErrorFile('missing-gd2');
 }
 

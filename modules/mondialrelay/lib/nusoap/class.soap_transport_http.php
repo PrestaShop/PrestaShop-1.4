@@ -124,13 +124,13 @@ class soap_transport_http extends nusoap_base {
 		}
 		
 		// add any GET params to path
-		if(isset($u['query']) && $u['query'] != ''){
+		if (isset($u['query']) && $u['query'] != ''){
             $this->path .= '?' . $u['query'];
 		}
 		
 		// set default port
-		if(!isset($u['port'])){
-			if($u['scheme'] == 'https'){
+		if (!isset($u['port'])){
+			if ($u['scheme'] == 'https'){
 				$this->port = 443;
 			} else {
 				$this->port = 80;
@@ -198,7 +198,7 @@ class soap_transport_http extends nusoap_base {
 		}
 
 		// use persistent connection
-		if($this->persistentConnection && isset($this->fp) && is_resource($this->fp)){
+		if ($this->persistentConnection && isset($this->fp) && is_resource($this->fp)){
 			if (!feof($this->fp)) {
 				$this->debug('Re-use persistent connection');
 				return true;
@@ -214,14 +214,14 @@ class soap_transport_http extends nusoap_base {
 		$this->debug('calling fsockopen with host ' . $host . ' connection_timeout ' . $connection_timeout);
 
 		// open socket
-		if($connection_timeout > 0){
+		if ($connection_timeout > 0){
 			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str, $connection_timeout);
 		} else {
 			$this->fp = @fsockopen( $host, $this->port, $this->errno, $this->error_str);
 		}
 		
 		// test pointer
-		if(!$this->fp) {
+		if (!$this->fp) {
 			$msg = 'Couldn\'t open socket connection to server ' . $this->url;
 			if ($this->errno) {
 				$msg .= ', Error ('.$this->errno.'): '.$this->error_str;
@@ -295,7 +295,7 @@ class soap_transport_http extends nusoap_base {
 		$this->setCurlOption(CURLOPT_RETURNTRANSFER, 1);
 		// encode
 		// We manage this ourselves through headers and encoding
-//		if(function_exists('gzuncompress')){
+//		if (function_exists('gzuncompress')){
 //			$this->setCurlOption(CURLOPT_ENCODING, 'deflate');
 //		}
 		// persistent connection
@@ -743,7 +743,7 @@ class soap_transport_http extends nusoap_base {
 
 	  if ($this->io_method() == 'socket') {
 		// send payload
-		if(!fputs($this->fp, $this->outgoing_payload, strlen($this->outgoing_payload))) {
+		if (!fputs($this->fp, $this->outgoing_payload, strlen($this->outgoing_payload))) {
 			$this->setError('couldn\'t write message data to socket');
 			$this->debug('couldn\'t write message data to socket');
 			return false;
@@ -800,7 +800,7 @@ class soap_transport_http extends nusoap_base {
 	    while (!isset($lb)){
 
 			// We might EOF during header read.
-			if(feof($this->fp)) {
+			if (feof($this->fp)) {
 				$this->incoming_payload = $data;
 				$this->debug('found no headers before EOF after length ' . strlen($data));
 				$this->debug("received before EOF:\n" . $data);
@@ -822,11 +822,11 @@ class soap_transport_http extends nusoap_base {
 
 			$data .= $tmp;
 			$pos = strpos($data,"\r\n\r\n");
-			if($pos > 1){
+			if ($pos > 1){
 				$lb = "\r\n";
 			} else {
 				$pos = strpos($data,"\n\n");
-				if($pos > 1){
+				if ($pos > 1){
 					$lb = "\n";
 				}
 			}
@@ -846,7 +846,7 @@ class soap_transport_http extends nusoap_base {
 		$this->incoming_cookies = array();
 		foreach($header_array as $header_line){
 			$arr = explode(':',$header_line, 2);
-			if(count($arr) > 1){
+			if (count($arr) > 1){
 				$header_name = strtolower(trim($arr[0]));
 				$this->incoming_headers[$header_name] = trim($arr[1]);
 				if ($header_name == 'set-cookie') {
@@ -932,7 +932,7 @@ class soap_transport_http extends nusoap_base {
 		$this->debug('received a total of '.strlen($this->incoming_payload).' bytes of data from server');
 		
 		// close filepointer
-		if(
+		if (
 			(isset($this->incoming_headers['connection']) && strtolower($this->incoming_headers['connection']) == 'close') || 
 			(! $this->persistentConnection) || feof($this->fp)){
 			fclose($this->fp);
@@ -941,14 +941,14 @@ class soap_transport_http extends nusoap_base {
 		}
 		
 		// connection was closed unexpectedly
-		if($this->incoming_payload == ''){
+		if ($this->incoming_payload == ''){
 			$this->setError('no response from server');
 			return false;
 		}
 		
 		// decode transfer-encoding
-//		if(isset($this->incoming_headers['transfer-encoding']) && strtolower($this->incoming_headers['transfer-encoding']) == 'chunked'){
-//			if(!$data = $this->decodeChunked($data, $lb)){
+//		if (isset($this->incoming_headers['transfer-encoding']) && strtolower($this->incoming_headers['transfer-encoding']) == 'chunked'){
+//			if (!$data = $this->decodeChunked($data, $lb)){
 //				$this->setError('Decoding of chunked data failed');
 //				return false;
 //			}
@@ -989,7 +989,7 @@ class soap_transport_http extends nusoap_base {
 			$this->debug("Found HTTP header to skip");
 			if ($pos = strpos($data,"\r\n\r\n")) {
 				$data = ltrim(substr($data,$pos));
-			} elseif($pos = strpos($data,"\n\n") ) {
+			} elseif ($pos = strpos($data,"\n\n") ) {
 				$data = ltrim(substr($data,$pos));
 			}
 		}
@@ -1000,7 +1000,7 @@ class soap_transport_http extends nusoap_base {
 			while (preg_match('/^HTTP\/1.1 100/',$data)) {
 				if ($pos = strpos($data,"\r\n\r\n")) {
 					$data = ltrim(substr($data,$pos));
-				} elseif($pos = strpos($data,"\n\n") ) {
+				} elseif ($pos = strpos($data,"\n\n") ) {
 					$data = ltrim(substr($data,$pos));
 				}
 			}
@@ -1009,7 +1009,7 @@ class soap_transport_http extends nusoap_base {
 		// separate content from HTTP headers
 		if ($pos = strpos($data,"\r\n\r\n")) {
 			$lb = "\r\n";
-		} elseif( $pos = strpos($data,"\n\n")) {
+		} elseif ( $pos = strpos($data,"\n\n")) {
 			$lb = "\n";
 		} else {
 			$this->debug('no proper separation of headers and document');
@@ -1024,7 +1024,7 @@ class soap_transport_http extends nusoap_base {
 		// clean headers
 		foreach ($header_array as $header_line) {
 			$arr = explode(':',$header_line,2);
-			if(count($arr) > 1){
+			if (count($arr) > 1){
 				$header_name = strtolower(trim($arr[0]));
 				$this->incoming_headers[$header_name] = trim($arr[1]);
 				if ($header_name == 'set-cookie') {
@@ -1095,10 +1095,10 @@ class soap_transport_http extends nusoap_base {
 		}
 
 		// decode content-encoding
-		if(isset($this->incoming_headers['content-encoding']) && $this->incoming_headers['content-encoding'] != ''){
-			if(strtolower($this->incoming_headers['content-encoding']) == 'deflate' || strtolower($this->incoming_headers['content-encoding']) == 'gzip'){
+		if (isset($this->incoming_headers['content-encoding']) && $this->incoming_headers['content-encoding'] != ''){
+			if (strtolower($this->incoming_headers['content-encoding']) == 'deflate' || strtolower($this->incoming_headers['content-encoding']) == 'gzip'){
     			// if decoding works, use it. else assume data wasn't gzencoded
-    			if(function_exists('gzinflate')){
+    			if (function_exists('gzinflate')){
 					//$timer->setMarker('starting decoding of gzip/deflated content');
 					// IIS 5 requires gzinflate instead of gzuncompress (similar to IE 5 and gzdeflate v. gzcompress)
 					// this means there are no Zlib headers, although there should be
@@ -1153,7 +1153,7 @@ class soap_transport_http extends nusoap_base {
 			$this->debug('No Content-Encoding header');
 		}
 		
-		if(strlen($data) == 0){
+		if (strlen($data) == 0){
 			$this->debug('no data after headers!');
 			$this->setError('no data present after HTTP headers');
 			return false;

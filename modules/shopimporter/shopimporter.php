@@ -274,7 +274,7 @@ class shopimporter extends ImportModule
 		$i = 0;
 		foreach($this->supportedImports as $import)
 		{
-			if(!array_key_exists('hidden', $import))
+			if (!array_key_exists('hidden', $import))
 			$html .= 'conf['.$i.'] = new Array(\''.addslashes($import['methodName']).'\', \''.addslashes($import['label']).'\', \''.addslashes($import['className']).'\', \''.addslashes($import['name']).'\');';
 			$i++;
 		}
@@ -353,7 +353,7 @@ class shopimporter extends ImportModule
 					<div id="importOptionsYesNo">';
 					foreach($this->supportedImports as $key => $import)
 					{
-						if(!array_key_exists('hidden', $import))
+						if (!array_key_exists('hidden', $import))
 						$html .= '<label>'.$import['name'].' : </label>
 									<div class="margin-form">
 										<label class="t" for="'.$import['identifier'].'_on'.'"><img src="../img/admin/enabled.gif" alt="Yes" title="Yes"></label>
@@ -457,7 +457,7 @@ class shopimporter extends ImportModule
 				{
 					$defaultIdCurrency = $importModule->getDefaultIdCurrency();
 					$currencies = $importModule->getCurrencies(0);
-					if(!empty($currencies[$defaultIdCurrency]['iso_code']))
+					if (!empty($currencies[$defaultIdCurrency]['iso_code']))
 						$defaultCurrencyImport = new Currency((int)Currency::getIdByIsoCode($currencies[$defaultIdCurrency]['iso_code']));
 					else
 						$defaultCurrencyImport = new Currency((int)Currency::getIdByIsoCodeNum($currencies[$defaultIdCurrency]['iso_code_num']));
@@ -1114,14 +1114,14 @@ class shopimporter extends ImportModule
 
 	public function cleanPositions($table)
 	{
-		if($table == 'category')
+		if ($table == 'category')
 		{
 			//clean category position
 			$cat = Category::getCategories(1, false, false);
 			foreach($cat AS $i => $categ)
 				Category::cleanPositions((int)($categ['id_category']));
 		}
-		if($table == 'product')
+		if ($table == 'product')
 		{
 			//clean products position
 			$cat = Category::getCategories(1, false, false);

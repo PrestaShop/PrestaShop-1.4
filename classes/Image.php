@@ -560,7 +560,7 @@ class ImageCore extends ObjectModel
 	{
 		if (!$this->id)
 			return false;
-		if(Configuration::get('PS_LEGACY_IMAGES'))
+		if (Configuration::get('PS_LEGACY_IMAGES'))
 		{
 			if (!$this->id_product)
 				return false;

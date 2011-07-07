@@ -41,18 +41,18 @@ class BarDepthPattern extends Pattern {
 		$colorForeground = $this->getArg('colorForeground', new LightBlue(10));
 		$colorBackground = $this->getArg('colorBackground', new Orange(25));
 		
-		if($yForeground === NULL) {
+		if ($yForeground === NULL) {
 			awImage::drawError("Class BarDepthPattern: Argument 'yForeground' must not be NULL.");
 		}
 		
 		// Background
-		if($yBackground !== NULL) {
+		if ($yBackground !== NULL) {
 			
 			$plot = $this->getPlot($yBackground, 6);
 			$plot->setBarColor($colorBackground);
 			
 			$group->add($plot);
-			if($legendBackground !== NULL) {
+			if ($legendBackground !== NULL) {
 				$group->legend->add($plot, $legendBackground, Legend::BACKGROUND);
 			}
 			
@@ -63,7 +63,7 @@ class BarDepthPattern extends Pattern {
 		$plot->setBarColor($colorForeground);
 		
 		$group->add($plot);
-		if($legendForeground !== NULL) {
+		if ($legendForeground !== NULL) {
 			$group->legend->add($plot, $legendForeground, Legend::BACKGROUND);
 		}
 		

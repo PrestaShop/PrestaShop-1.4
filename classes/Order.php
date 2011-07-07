@@ -896,7 +896,7 @@ class OrderCore extends ObjectModel
 		if ($number)
  		    Configuration::updateValue('PS_INVOICE_START_NUMBER', false);
  		else
-			if(version_compare(Db::getInstance()->getServerVersion(), 5,'<'))
+			if (version_compare(Db::getInstance()->getServerVersion(), 5,'<'))
 			{
 				// I use mysql 4, I can't make sub query in FROM
 		    $number = Order::getLastInvoiceNumber() + 1;

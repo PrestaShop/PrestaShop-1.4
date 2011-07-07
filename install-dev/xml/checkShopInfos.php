@@ -57,22 +57,22 @@ foreach ($_GET AS &$var)
 			$row = html_entity_decode($row, ENT_COMPAT, 'UTF-8');
 }
 
-if(!isset($_GET['infosShop']) OR empty($_GET['infosShop']))
+if (!isset($_GET['infosShop']) OR empty($_GET['infosShop']))
 	$error['infosShop'] = '0';
 else
 	$error['infosShop'] = '';
 
-if(!isset($_GET['infosFirstname']) OR empty($_GET['infosFirstname']))
+if (!isset($_GET['infosFirstname']) OR empty($_GET['infosFirstname']))
 	$error['infosFirstname'] = '0';
 else
 	$error['infosFirstname'] = '';
 
-if(!isset($_GET['infosName']) OR empty($_GET['infosName']))
+if (!isset($_GET['infosName']) OR empty($_GET['infosName']))
 	$error['infosName'] = '0';
 else
 	$error['infosName'] = '';
 
-if(isset($_GET['infosEmail']) AND !Validate::isEmail($_GET['infosEmail']))
+if (isset($_GET['infosEmail']) AND !Validate::isEmail($_GET['infosEmail']))
 	$error['infosEmail'] = '3';
 else
 	$error['infosEmail'] = '';
@@ -97,7 +97,7 @@ if (isset($_GET['catalogMode']) AND !Validate::isInt($_GET['catalogMode']))
 else
 	$error['validateCatalogMode'] = '';
 
-if(!isset($_GET['infosEmail']) OR empty($_GET['infosEmail']))
+if (!isset($_GET['infosEmail']) OR empty($_GET['infosEmail']))
 	$error['infosEmail'] = '0';
 
 if (!isset($_GET['infosPassword']) OR empty($_GET['infosPassword']))
@@ -110,10 +110,10 @@ if (!isset($_GET['infosPasswordRepeat']) OR empty($_GET['infosPasswordRepeat']))
 else
 	$error['infosPasswordRepeat'] = '';
 
-if($error['infosPassword'] == '' AND $_GET['infosPassword'] != $_GET['infosPasswordRepeat'])
+if ($error['infosPassword'] == '' AND $_GET['infosPassword'] != $_GET['infosPasswordRepeat'])
 	$error['infosPassword'] = '2';
 
-if($error['infosPassword'] == '' AND (Tools::strlen($_GET['infosPassword']) < 8 OR !Validate::isPasswdAdmin($_GET['infosPassword'])))
+if ($error['infosPassword'] == '' AND (Tools::strlen($_GET['infosPassword']) < 8 OR !Validate::isPasswdAdmin($_GET['infosPassword'])))
 	$error['infosPassword'] = '12';
 
 /////////////////////////////
@@ -124,7 +124,7 @@ include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 $dbInstance = Db::getInstance();
 // set Languages
 $error['infosLanguages'] = '';
-if(isFormValid())
+if (isFormValid())
 {
 	/*$idDefault = array_search($_GET['infosDL'][0], $_GET['infosWL']) + 1;
 	//prepare the requests
@@ -136,11 +136,11 @@ if(isFormValid())
 	foreach ($_GET['infosWL'] AS $wl)
 		$sqlLanguages[] = "INSERT INTO `"._DB_PREFIX_."lang` (`id_lang` ,`name` ,`active` ,`iso_code`)VALUES (NULL , '".ToolsInstall::getLangString($wl)."', '1', '".pSQL($wl)."')";
 	foreach($sqlLanguages AS $query)
-		if(!Db::getInstance()->Execute($query))
+		if (!Db::getInstance()->Execute($query))
 			$error['infosLanguages'] = '11';
 
 	// Flags copy
-	if(!$languagesId = Db::getInstance()->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang`'))
+	if (!$languagesId = Db::getInstance()->ExecuteS('SELECT `id_lang`, `iso_code` FROM `'._DB_PREFIX_.'lang`'))
 		$error['infosLanguages'] = '11';
 
 	unset($dbInstance);*/
@@ -258,7 +258,7 @@ if (isFormValid())
 	
 	$dbInstance = Db::getInstance();
 	foreach($sqlParams as $query)
-		if(!$dbInstance->Execute($query))
+		if (!$dbInstance->Execute($query))
 			$error['infosInsertSQL'] = '11';
 	unset($dbInstance);
 

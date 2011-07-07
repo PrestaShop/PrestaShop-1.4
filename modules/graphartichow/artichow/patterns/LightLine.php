@@ -17,7 +17,7 @@ class LightLinePattern extends Pattern {
 		
 		$y = $this->getArg('y');
 		
-		if($y === NULL) {
+		if ($y === NULL) {
 			awImage::drawError("Class LightLinePattern: Argument 'y' must not be NULL.");
 		}
 		
@@ -38,7 +38,7 @@ class LightLinePattern extends Pattern {
 		$plot->legend->setAlign(Legend::LEFT);
 		$plot->legend->shadow->smooth(TRUE);
 		
-		if($legend !== NULL) {
+		if ($legend !== NULL) {
 			$plot->legend->add($plot, $legend, Legend::MARK);
 		}
 		

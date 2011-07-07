@@ -35,18 +35,18 @@ class Session
     	//check if the session folder read and writable
     	/*
 	$dir = new file();
-	        if(!file_exists(CONFIG_SYS_DIR_SESSION_PATH))
+	        if (!file_exists(CONFIG_SYS_DIR_SESSION_PATH))
 	        {
-	           if(!$dir->mkdir(CONFIG_SYS_DIR_SESSION_PATH))
+	           if (!$dir->mkdir(CONFIG_SYS_DIR_SESSION_PATH))
 	           {
 	              die('Unable to create session folder.');
 	           }
 	        }
-    		if(!$dir->isReadable(CONFIG_SYS_DIR_SESSION_PATH))
+    		if (!$dir->isReadable(CONFIG_SYS_DIR_SESSION_PATH))
     		{
     			die('Permission denied: ' . CONFIG_SYS_DIR_SESSION_PATH . " is not readable.");
     		}    		
-    		if(!$dir->isWritable(CONFIG_SYS_DIR_SESSION_PATH))
+    		if (!$dir->isWritable(CONFIG_SYS_DIR_SESSION_PATH))
     		{
     			die('Permission denied: ' . CONFIG_SYS_DIR_SESSION_PATH . " is not writable.");
     		}
@@ -81,16 +81,16 @@ class Session
     {
      		//init the counter file
         $fp = @fopen($this->gcCounterFile, 'a+');
-        if($fp)
+        if ($fp)
         {
         	$count = (int)(fgets($fp, 999999)) + 1;
-        	if($count > $this->gcCounter || rand(0, 23) == date('h'))
+        	if ($count > $this->gcCounter || rand(0, 23) == date('h'))
         	{
         		$this->_gc();
         		$count = 0;
         	}
         	@ftruncate($fp, 0);
-        	if(!@fputs($fp, $count))
+        	if (!@fputs($fp, $count))
         	{
         		die(SESSION_COUNTER_FILE_WRITE_FAILED);
         	}
@@ -109,18 +109,18 @@ class Session
 	 		$output = '';
 	 		$output .= "gc start at " . date('d/M/Y H:i:s') . "\n";
 	 		$fo = new file();
-			if($dirHandler)
+			if ($dirHandler)
 			{
-				while(false !== ($file = readdir($dirHandler)))
+				while (false !== ($file = readdir($dirHandler)))
 				{
-					if($file != '.' && $file != '..' && $file != $this->gcCounterFileName && $file != $this->gcLogFileName && $file != session_id() )
+					if ($file != '.' && $file != '..' && $file != $this->gcCounterFileName && $file != $this->gcLogFileName && $file != session_id() )
 					{						
 						$path=$this->dir.$file;
 						$output .= $path ;
 						//check if this is a expired session file
-						if(filemtime($path) + $this->lifeTime < time())
+						if (filemtime($path) + $this->lifeTime < time())
 						{							
-							if($fo->delete($path))
+							if ($fo->delete($path))
 							{
 								$output .= ' Deleted at ' . date('d/M/Y H:i:s');
 							}else 
@@ -132,7 +132,7 @@ class Session
 											
 					}
 				}
-				if($this->debug)
+				if ($this->debug)
 				{
 					$this->_log($output);
 				}
@@ -140,25 +140,25 @@ class Session
 				@closedir($dirHandler);
 
 			} 
-			if(CONFIG_SYS_DEMO_ENABLE)
+			if (CONFIG_SYS_DEMO_ENABLE)
 			{
 				//remove expired files from uploaded folder
 		 		$dirHandler = @opendir(CONFIG_SYS_ROOT_PATH);
 		 		$output = '';
 		 		$output .= "gc start at " . date('d/M/Y H:i:s') . "\n";
 		 		$fo = new file();
-				if($dirHandler)
+				if ($dirHandler)
 				{
-					while(false !== ($file = readdir($dirHandler)))
+					while (false !== ($file = readdir($dirHandler)))
 					{
-						if($file != '.' && $file != '..')
+						if ($file != '.' && $file != '..')
 						{						
 							$path=CONFIG_SYS_ROOT_PATH.$file;
 							$output .= $path ;
 							//check if this is a expired session file
-							if(filemtime($path) + $this->lifeTime < time())
+							if (filemtime($path) + $this->lifeTime < time())
 							{							
-								if($fo->delete($path))
+								if ($fo->delete($path))
 								{
 									$output .= ' Deleted at ' . date('d/M/Y H:i:s');
 								}else 
@@ -170,7 +170,7 @@ class Session
 												
 						}
 					}
-					if($this->debug)
+					if ($this->debug)
 					{
 						$this->_log($output);
 					}
@@ -190,7 +190,7 @@ class Session
     {
     	$msg = "<?php die(); ?>\n" . $msg;
     	$fp = @fopen($this->gcLogFile, 'w+');
-    	if($fp)
+    	if ($fp)
     	{
     		@ftruncate($fp, 0);
     		!@fputs($fp, $msg);
@@ -205,16 +205,16 @@ class Session
      */
     function getSessionDir()
     {
-    	if(!file_exists($this->sessionDir) && !is_dir($this->sessionDir))
+    	if (!file_exists($this->sessionDir) && !is_dir($this->sessionDir))
     	{
     		$dir = new file();
-    		if(!$dir->mkdir($this->sessionDir))
+    		if (!$dir->mkdir($this->sessionDir))
     		{
     			return '';
     		}
     	}else 
     	{
-	     	if(!@is_dir($this->sessionDir))
+	     	if (!@is_dir($this->sessionDir))
 	    	{
 	    		return '';
 	    	}   		

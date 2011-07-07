@@ -101,7 +101,7 @@ class LanguageCore extends ObjectModel
 
 		$resUpdateSQL = $this->loadUpdateSQL();
 		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
-		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+		if (!Configuration::get('PS_REWRITING_SETTINGS'))
 			return $resUpdateSQL;
 
 		return ($resUpdateSQL AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
@@ -117,7 +117,7 @@ class LanguageCore extends ObjectModel
 			return false;
 
 		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
-		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+		if (!Configuration::get('PS_REWRITING_SETTINGS'))
 			return true;
 		return (Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
@@ -370,7 +370,7 @@ class LanguageCore extends ObjectModel
 			if (count($files) <= 2)
 				self::recurseDeleteDir(_PS_MODULE_DIR_.$mod.'/mails/');
 
-			if(file_exists(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php'))
+			if (file_exists(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php'))
 			{
 				unlink(_PS_MODULE_DIR_.$mod.'/'.$this->iso_code.'.php');
 				$files = @scandir(_PS_MODULE_DIR_.$mod);
@@ -401,7 +401,7 @@ class LanguageCore extends ObjectModel
 			}
 
 		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
-		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+		if (!Configuration::get('PS_REWRITING_SETTINGS'))
 			return true;
 
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
@@ -424,7 +424,7 @@ class LanguageCore extends ObjectModel
 		}
 
 		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
-		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+		if (!Configuration::get('PS_REWRITING_SETTINGS'))
 			return true;
 
 		Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
@@ -444,7 +444,7 @@ class LanguageCore extends ObjectModel
 	  */
 	public static function getLanguages($active = true)
 	{
-		if(!self::$_LANGUAGES)
+		if (!self::$_LANGUAGES)
 			self::loadLanguages();
 
 		$languages = array();
@@ -556,7 +556,7 @@ class LanguageCore extends ObjectModel
 			return false;
 
 		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
-		if(!Configuration::get('PS_REWRITING_SETTINGS'))
+		if (!Configuration::get('PS_REWRITING_SETTINGS'))
 			return true;
 
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
@@ -572,7 +572,7 @@ class LanguageCore extends ObjectModel
 			return true;
 		else
 		{
-			if(@fsockopen('www.prestashop.com', 80))
+			if (@fsockopen('www.prestashop.com', 80))
 			{
 				$lang = new Language();
 				$lang->iso_code = $iso_code;

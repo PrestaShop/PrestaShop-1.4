@@ -24,7 +24,7 @@ if (count($_POST))
 		$errors[] = Tools::displayError('You did not use the correct merchant ID.');
 
 	$md5_key = md5(dibs::$MORE_SETTINGS['k2'].md5(dibs::$MORE_SETTINGS['k1'].'transact='.$posted_values['transact'].'&amount='.$posted_values['amount'].'&currency='.$posted_values['currency']));
-	if((string)$posted_values['authkey'] !== $md5_key)
+	if ((string)$posted_values['authkey'] !== $md5_key)
 		$errors[] = Tools::displayError('Your are not allowed to validate the command for security reasons.');
 
 	$message = '';

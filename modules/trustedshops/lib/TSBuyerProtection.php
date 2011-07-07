@@ -161,12 +161,12 @@ class TSBuyerProtection extends AbsTrustedShops
 		{
 			foreach ($this->available_languages as $iso => $lang)
 			{
-				if($lang === '')
+				if ($lang === '')
 					$this->available_languages[$iso] = Language::getLanguage(Language::getIdByIso($iso));
 				TSBuyerProtection::$CERTIFICATE[strtoupper($iso)] = (array)Tools::jsonDecode(
 					Tools::htmlentitiesDecodeUTF8(Configuration::get(TSBuyerProtection::PREFIX_TABLE.'CERTIFICATE_'.strtoupper($iso))));
 			}
-			if(TSBuyerProtection::$SHOPSW === NULL)
+			if (TSBuyerProtection::$SHOPSW === NULL)
 			{
 				TSBuyerProtection::$SHOPSW = Configuration::get(TSBuyerProtection::PREFIX_TABLE.'SHOPSW');
 				TSBuyerProtection::$ET_CID = Configuration::get(TSBuyerProtection::PREFIX_TABLE.'ET_CID');
@@ -310,7 +310,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			$this->errors[] = $this->l('Code #').$fault->faultcode.',<br />'.$this->l('message:').$fault->faultstring;
 		}
 
-		if(is_int($validation))
+		if (is_int($validation))
 			throw new TSBPException($validation, TSBPException::ADMINISTRATION);
 
 		if (!$validation OR array_key_exists($validation->stateEnum, $array_state))
@@ -412,7 +412,7 @@ class TSBuyerProtection extends AbsTrustedShops
 					foreach ($key['validator'] as $validator)
 						if (method_exists('Validate', $validator))
 							$bool_flag = !Validate::$validator((string)$params[$key['name']]) ? false : $bool_flag;
-				if(isset($key['ereg']))
+				if (isset($key['ereg']))
 					$bool_flag = !preg_match($key['ereg'], $params[$key['name']]) ? false : $bool_flag ;
 			}
 
@@ -451,7 +451,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		// If an order was already added, no need to continue.
 		// Otherwise a new application is created by TrustedShops.
 		// this can occurred when order confirmation page is reload.
-		if(isset($order[0]))
+		if (isset($order[0]))
 			return false;
 
 		if ($testing_params)
@@ -599,7 +599,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 */
 	private function _makeRegistrationLink($shopsw, $et_cid, $et_lid, $lang)
 	{
-		if(array_key_exists($lang, $this->registration_link))
+		if (array_key_exists($lang, $this->registration_link))
 			return $this->registration_link[$lang].sprintf('?shopsw=%s&et_cid=%s&et_lid=%s', urlencode($shopsw), urlencode($et_cid), urlencode($et_lid));
 		return false;
 	}
@@ -753,7 +753,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			{
 				try {
 					$protection_items = $this->_getProtectionItems($checked_certificate->tsID);
-					if($protection_items)
+					if ($protection_items)
 						$this->_saveProtectionItems($protection_items, $checked_certificate->tsID);
 				} catch (TSBPException $e) {
 					$this->errors[] = $e->getMessage();
@@ -818,7 +818,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$user = Tools::getValue('user');
 		$password = Tools::getValue('password');
 		$all_payment_type = Tools::getValue('choosen_payment_type');
-		if($user != '' AND $password != '')
+		if ($user != '' AND $password != '')
 		{
 			TSBuyerProtection::$CERTIFICATE[$iso_lang]['payment_type'] = array();
 			if ($all_payment_type)
@@ -834,7 +834,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			} catch (TSBPException $e) {
 				$this->errors[] = $e->getMessage();
 			}
-			if($check_login)
+			if ($check_login)
 			{
 				TSBuyerProtection::$CERTIFICATE[$iso_lang]['user'] = $user;
 				TSBuyerProtection::$CERTIFICATE[$iso_lang]['password'] = $password;
@@ -901,7 +901,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	{
 		$out = '';
 		$posts_return = $this->_preProcess();
-		if(empty($this->errors))
+		if (empty($this->errors))
 		{
 			$out .= '';
 		}
@@ -983,7 +983,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				<div class="margin-form">
 					<select name="lang" >';
 		foreach ($this->available_languages as $iso=>$lang)
-			if(is_array($lang))
+			if (is_array($lang))
 						$out .= '<option value="'.$iso.'" '.((int)$lang['id_lang'] === TSBuyerProtection::$DEFAULT_LANG ? 'selected' : '' ).'>'.$lang['name'].'</option>';
 					$out .= '</select>
 				</div>
@@ -1111,7 +1111,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$installed_modules = Module::getModulesInstalled();
 		$payment_module_collection = '';
 		foreach ($installed_modules as $k=>$value)
-			if($return = TSBuyerProtection::_isPaymentModule($value['name']))
+			if ($return = TSBuyerProtection::_isPaymentModule($value['name']))
 				$payment_module_collection[$value['id_module']] = $value;
 		$out = '
 		<script type="text/javascript" src="'.$this->site_url.'modules/trustedshops/lib/js/payment.js" ></script>
@@ -1228,7 +1228,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			return '';
 
 		// This hook is available only with EXCELLENCE certificate.
-		if(TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum'] == 'CLASSIC' OR (TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'INTEGRATION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'PRODUCTION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'TEST'))
+		if (TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum'] == 'CLASSIC' OR (TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'INTEGRATION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'PRODUCTION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'TEST'))
 			return '';
 
 		// If login parameters missing for the certificate an error occurred
@@ -1306,7 +1306,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$item = Db::getInstance()->ExecuteS($sql);
 
 		// No items ? means no buyer protection products was bought.
-		if(empty($item))
+		if (empty($item))
 			return '';
 
 		// In normal context this never occurred,
@@ -1323,7 +1323,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$arr_params = array();
 		foreach (TSBuyerProtection::$CERTIFICATE[$lang]['payment_type'] as $payment_type => $id_modules)
 		{
-			if(in_array($payment_module->id, $id_modules))
+			if (in_array($payment_module->id, $id_modules))
 			{
 				$arr_params['paymentType'] = (string)$payment_type;
 				break;
@@ -1406,7 +1406,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		OR (TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'INTEGRATION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'PRODUCTION' AND TSBuyerProtection::$CERTIFICATE[$lang]['stateEnum'] !== 'TEST'))
 			return '';
 
-		if(TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum'] == 'CLASSIC')
+		if (TSBuyerProtection::$CERTIFICATE[$lang]['typeEnum'] == 'CLASSIC')
 			return $this->_orderConfirmationClassic($params, $lang);
 		else
 			return $this->_orderConfirmationExcellence($params, $lang);

@@ -12,21 +12,21 @@
  */
 function array_min($array) {
 
-	if(is_array($array) and count($array) > 0) {
+	if (is_array($array) and count($array) > 0) {
 	
 		do {
 			$min = array_pop($array);
-			if(is_numeric($min) === FALSE) {
+			if (is_numeric($min) === FALSE) {
 				$min = NULL;
 			}
-		} while(count($array) > 0 and $min === NULL);
+		} while (count($array) > 0 and $min === NULL);
 		
-		if($min !== NULL) {
+		if ($min !== NULL) {
 			$min = (float)$min;
 		}
 		
 		foreach($array as $value) {
-			if(is_numeric($value) and (float)$value < $min) {
+			if (is_numeric($value) and (float)$value < $min) {
 				$min = (float)$value;
 			}
 		}
@@ -44,21 +44,21 @@ function array_min($array) {
  */
 function array_max($array) {
 
-	if(is_array($array) and count($array) > 0) {
+	if (is_array($array) and count($array) > 0) {
 	
 		do {
 			$max = array_pop($array);
-			if(is_numeric($max) === FALSE) {
+			if (is_numeric($max) === FALSE) {
 				$max = NULL;
 			}
-		} while(count($array) > 0 and $max === NULL);
+		} while (count($array) > 0 and $max === NULL);
 
-		if($max !== NULL) {
+		if ($max !== NULL) {
 			$max = (float)$max;
 		}
 		
 		foreach($array as $value) {
-			if(is_numeric($value) and (float)$value > $max) {
+			if (is_numeric($value) and (float)$value > $max) {
 				$max = (float)$value;
 			}
 		}
@@ -73,11 +73,11 @@ function array_max($array) {
 /*
  * Define file_put_contents() if needed
  */
-if(function_exists('file_put_contents') === FALSE) {
+if (function_exists('file_put_contents') === FALSE) {
 
 	function file_put_contents($file, $content) {
 		$fp = fopen($file, 'w');
-		if($fp) {
+		if ($fp) {
 			fwrite($fp, $content);
 			fclose($fp);
 		}

@@ -33,7 +33,7 @@ class TwengaFieldsSiteExist extends TwengaFields
 {
 	public function __construct()
 	{
-		if(!is_array($this->fields) AND empty($this->fields))
+		if (!is_array($this->fields) AND empty($this->fields))
 		{
 			$this->fields['key'] = array(32, array('is_string', 'isCleanHtml'), true);
 			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);

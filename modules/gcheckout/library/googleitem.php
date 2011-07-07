@@ -66,7 +66,7 @@
       $this->unit_price = $price;
       $this->quantity = $qty;
 
-      if($item_weight != '' && $numeric_weight !== '') {
+      if ($item_weight != '' && $numeric_weight !== '') {
         switch(strtoupper($item_weight)){
           case 'KG':
             $this->item_weight = strtoupper($item_weight);

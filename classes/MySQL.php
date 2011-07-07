@@ -33,7 +33,7 @@ class MySQLCore extends Db
 			define('_PS_DEBUG_SQL_', false);
 		if ($this->_link = mysql_connect($this->_server, $this->_user, $this->_password))
 		{
-			if(!$this->set_db($this->_database))
+			if (!$this->set_db($this->_database))
 				die(Tools::displayError('The database selection cannot be made.'));
 		}
 		else
@@ -66,7 +66,7 @@ class MySQLCore extends Db
 		$query .= ' LIMIT 1';
 		$this->_result = false;
 		$this->_lastQuery = $query;
-		if($use_cache AND _PS_CACHE_ENABLED_)
+		if ($use_cache AND _PS_CACHE_ENABLED_)
 			if ($result = Cache::getInstance()->get(md5($query)))
 			{
 				$this->_lastCached = true;
@@ -103,7 +103,7 @@ class MySQLCore extends Db
 		{ 
 			$this->_lastCached = false;
 			$result =  array_shift($tmpArray);
-			if($use_cache AND _PS_CACHE_ENABLED_)
+			if ($use_cache AND _PS_CACHE_ENABLED_)
 				Cache::getInstance()->setQuery($query, $result);
 			return $result;
 		}

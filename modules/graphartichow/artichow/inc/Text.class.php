@@ -73,7 +73,7 @@ class awText {
 	 */
 	public function __construct($text, $font = NULL, $color = NULL, $angle = 0) {
 	
-		if(is_null($font)) {
+		if (is_null($font)) {
 			$font = new awFont2;
 		}
 		
@@ -81,7 +81,7 @@ class awText {
 		$this->setFont($font);
 		
 		// Set default color to black
-		if($color === NULL) {
+		if ($color === NULL) {
 			$color = new awColor(0, 0, 0);
 		}
 		
@@ -172,9 +172,9 @@ class awText {
 	 * @param mixed $background
 	 */
 	public function setBackground($background) {
-		if($background instanceof awColor) {
+		if ($background instanceof awColor) {
 			$this->setBackgroundColor($background);
-		} elseif($background instanceof awGradient) {
+		} elseif ($background instanceof awGradient) {
 			$this->setBackgroundGradient($background);
 		}
 	}

@@ -800,7 +800,7 @@ class ProductCore extends ObjectModel
 		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'` '.pSQL($orderWay).
 		($limit > 0 ? ' LIMIT '.(int)($start).','.(int)($limit) : '')
 		);
-		if($orderBy == 'price')
+		if ($orderBy == 'price')
 			Tools::orderbyPrice($rq,$orderWay);
 		return ($rq);
 	}
@@ -1529,7 +1529,7 @@ class ProductCore extends ObjectModel
 		ORDER BY '.(isset($orderByPrefix) ? pSQL($orderByPrefix).'.' : '').'`'.pSQL($orderBy).'`'.' '.pSQL($orderWay).'
 		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts);
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
-		if($orderBy == 'price')
+		if ($orderBy == 'price')
 			Tools::orderbyPrice($result,$orderWay);
 		if (!$result)
 			return false;

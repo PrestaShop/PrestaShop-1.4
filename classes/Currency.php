@@ -96,7 +96,7 @@ class CurrencyCore extends ObjectModel
 	 */
 	public static function exists ($iso_code)
 	{
-		if(is_int($iso_code))
+		if (is_int($iso_code))
 			$id_currency_exists = Currency::getIdByIsoCodeNum($iso_code);
 		else
 			$id_currency_exists = Currency::getIdByIsoCode($iso_code);

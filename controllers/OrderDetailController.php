@@ -55,7 +55,7 @@ class OrderDetailControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('Message cannot be blank');
 			elseif (!Validate::isMessage($msgText))
 				$this->errors[] = Tools::displayError('Message is invalid (HTML is not allowed)');
-			if(!sizeof($this->errors))
+			if (!sizeof($this->errors))
 			{
 				$order = new Order((int)($idOrder));
 				if (Validate::isLoadedObject($order) AND $order->id_customer == self::$cookie->id_customer)

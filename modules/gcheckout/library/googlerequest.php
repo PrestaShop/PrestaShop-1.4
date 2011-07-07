@@ -69,7 +69,7 @@
       $this->merchant_key = $key;
       $this->currency = $currency;
 
-      if(strtolower($server_type) == "sandbox") {
+      if (strtolower($server_type) == "sandbox") {
         $this->server_url = "https://sandbox.google.com/checkout/";
       } else {
         $this->server_url = "https://checkout.google.com/";
@@ -120,7 +120,7 @@
     public function SendServer2ServerCart($xml_cart, $die=true) {
       list($status, $body) = $this->SendReq($this->merchant_checkout, 
                    $this->GetAuthenticationHeaders(), $xml_cart);
-      if($status != 200 ){
+      if ($status != 200 ){
           return array($status, $body);
       } else {
         ini_set('include_path', ini_get('include_path').PATH_SEPARATOR.'.');
@@ -133,7 +133,7 @@
         $this->log->logRequest("Redirecting to: ". 
                         $data[$root]['redirect-url']['VALUE']);
         header('Location: ' . $data[$root]['redirect-url']['VALUE']);
-        if($die) {
+        if ($die) {
           die($data[$root]['redirect-url']['VALUE']);
         }
         else {
@@ -185,7 +185,7 @@
                   <refund-order xmlns=\"".$this->schema_url.
                   "\" google-order-number=\"". $google_order. "\">" .
                   "<reason>". $reason . "</reason>";
-      if($amount!=0) {
+      if ($amount!=0) {
         $postargs .= "<amount currency=\"" . $this->currency . "\">".
                       htmlentities($amount)."</amount>";
       }
@@ -341,7 +341,7 @@
       $postargs = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
                   <deliver-order xmlns=\"". $this->schema_url . 
                   "\" google-order-number=\"". $google_order . "\">";
-      if($carrier != "" && $tracking_no != "") {
+      if ($carrier != "" && $tracking_no != "") {
          $postargs .= "<tracking-data>
                   <carrier>". htmlentities($carrier) . "</carrier>
             <tracking-number>". htmlentities($tracking_no) . "</tracking-number>
@@ -424,7 +424,7 @@
                         <merchant-item-id>" . $item->merchant_item_id . "</merchant-item-id>
                      </item-id>\n";
 
-        if(count($item->tracking_data_list)) {
+        if (count($item->tracking_data_list)) {
           $postargs .= "<tracking-data-list>\n";
           foreach($item->tracking_data_list as $tracking_data) {
             $postargs .= "<tracking-data>
@@ -596,7 +596,7 @@
      * 
      */
     function SetProxy($proxy=array()) {
-      if(is_array($proxy) && count($proxy)) {
+      if (is_array($proxy) && count($proxy)) {
         $this->proxy['host'] = $proxy['host'];
         $this->proxy['port'] = $proxy['port'];
       }
@@ -616,7 +616,7 @@
       curl_setopt($session, CURLOPT_HEADER, true);
       curl_setopt($session, CURLOPT_RETURNTRANSFER, true);
 
-      if(!empty($this->certPath) && file_exists($this->certPath)) {
+      if (!empty($this->certPath) && file_exists($this->certPath)) {
         curl_setopt($session, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($session, CURLOPT_CAINFO, $this->certPath);
       }
@@ -624,11 +624,11 @@
         curl_setopt($session, CURLOPT_SSL_VERIFYPEER, false);
       }
 
-      if(is_array($this->proxy) && count($this->proxy)) {
+      if (is_array($this->proxy) && count($this->proxy)) {
          curl_setopt($session, CURLOPT_PROXY, 
                             $this->proxy['host'] . ":" . $this->proxy['port']);
       }
-      if($timeout != false){
+      if ($timeout != false){
         curl_setopt($session, CURLOPT_TIMEOUT, $timeout);
         
       }
@@ -683,10 +683,10 @@
       $head_end = strpos($message, DOUBLE_ENTER);
       $headers = $this->get_headers_x(substr($message,0,
                                              $head_end + strlen(DOUBLE_ENTER)));
-      if(!is_array($headers) || empty($headers)){
+      if (!is_array($headers) || empty($headers)){
         return null;
       }
-      if(!preg_match('%[HTTP/\d\.\d] (\d\d\d)%', $headers[0], $status_code)) {
+      if (!preg_match('%[HTTP/\d\.\d] (\d\d\d)%', $headers[0], $status_code)) {
         return null;
       }
       switch( $status_code[1] ) {
@@ -707,16 +707,16 @@
     function get_headers_x($heads, $format=0) {
       $fp = explode(ENTER, $heads);
       foreach($fp as $header){
-        if($header == "") {
+        if ($header == "") {
           $eoheader = true;
           break;
         } else {
           $header = trim($header);
         }
     
-        if($format == 1) {
+        if ($format == 1) {
           $key = array_shift(explode(':',$header));
-          if($key == $header) {
+          if ($key == $header) {
             $headers[] = $header;
           } else {
             $headers[$key]=substr($header,strlen($key)+2);
@@ -749,7 +749,7 @@ class GoogleShipItem {
   }
   
   function AddTrackingData($carrier, $tracking_no) {
-    if($carrier != "" && $tracking_no != "") {
+    if ($carrier != "" && $tracking_no != "") {
       $this->tracking_data_list[] = array('carrier' => $carrier, 
                                           'tracking-number' => $tracking_no);
     }

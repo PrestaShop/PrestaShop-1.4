@@ -148,7 +148,7 @@ foreach($colors as $name => $color) {
 	}
 	';
 	
-	if(ARTICHOW_PREFIX !== 'aw') {
+	if (ARTICHOW_PREFIX !== 'aw') {
 		$php .= '
 		class '.ARTICHOW_PREFIX.$name.' extends aw'.$name.' {
 		

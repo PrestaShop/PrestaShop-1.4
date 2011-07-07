@@ -406,7 +406,7 @@ if (Tools::getValue('submitPublishProduct'))
 			die($bo_product_url);
 
 		$profileAccess = Profile::getProfileAccess((int)$cookie->profile, $id_tab_catalog);
-		if($profileAccess['edit'])
+		if ($profileAccess['edit'])
 		{
 			$product = new Product((int)(Tools::getValue('id_product')));
 			if (!Validate::isLoadedObject($product))
@@ -442,7 +442,7 @@ if (Tools::getValue('submitPublishCMS'))
 			die($bo_cms_url);
 
 		$profileAccess = Profile::getProfileAccess((int)$cookie->profile, $id_tab_cms);
-		if($profileAccess['edit'])
+		if ($profileAccess['edit'])
 		{
 			$cms = new CMS((int)(Tools::getValue('id_cms')));
 			if (!Validate::isLoadedObject($cms))

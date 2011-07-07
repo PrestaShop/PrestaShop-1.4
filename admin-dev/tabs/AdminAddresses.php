@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-if(Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
+if (Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
 	include_once(_PS_MODULE_DIR_.'vatnumber/vatnumber.php');
 
 class AdminAddresses extends AdminTab
@@ -152,7 +152,7 @@ class AdminAddresses extends AdminTab
 		$address_type = ((int)(Tools::getValue('address_type')) == 2 ? 'invoice' : ((int)(Tools::getValue('address_type')) == 1 ? 'delivery' : ''));
 		if (isset($_POST['submitAdd'.$this->table]) AND ($id_order = (int)(Tools::getValue('id_order'))) AND !sizeof($this->_errors) AND !empty($address_type))
 		{
-			if(!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET `id_address_'.$address_type.'` = '.Db::getInstance()->Insert_ID().' WHERE `id_order` = '.$id_order))
+			if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET `id_address_'.$address_type.'` = '.Db::getInstance()->Insert_ID().' WHERE `id_order` = '.$id_order))
 				$this->_errors[] = Tools::displayError('An error occurred while linking this address to its order.');
 			else
 				Tools::redirectAdmin(Tools::getValue('back').'&conf=4');
@@ -309,7 +309,7 @@ class AdminAddresses extends AdminTab
 
 					if ((Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
 						echo '<div id="vat_area" style="display: visible">';
-					elseif(Configuration::get('VATNUMBER_MANAGEMENT'))
+					elseif (Configuration::get('VATNUMBER_MANAGEMENT'))
 						echo '<div id="vat_area" style="display: hidden">';
 					else
 						echo'<div style="display: none;">';
@@ -437,7 +437,7 @@ class AdminAddresses extends AdminTab
 					url: "'._MODULE_DIR_.'vatnumber/ajax.php?id_country="+$(\'#id_country\').val(),
 					success: function(isApplicable)
 						{
-							if(isApplicable == 1)
+							if (isApplicable == 1)
 								$(\'#vat_area\').show();
 							else
 								$(\'#vat_area\').hide();

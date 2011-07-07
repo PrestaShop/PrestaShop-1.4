@@ -725,7 +725,7 @@ class MondialRelay extends Module
 			foreach($check AS $Key)
 			{
 				foreach($Key AS $key => $value)
-					if($key == "id_carrier")
+					if ($key == "id_carrier")
 						$checkD[] = $value;
 			}
 
@@ -763,7 +763,7 @@ class MondialRelay extends Module
 				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'delivery` (id_carrier, id_range_price, id_range_weight, id_zone, price) VALUES('.(int)($get['id_carrier']).', NULL, '.(int)($range_weight_id).','.(int)($zone['id_zone']).', 0.00)');
 			}
 			
-			if(!in_array($default[0]['value'], $checkD))
+			if (!in_array($default[0]['value'], $checkD))
 				$default = Db::getInstance()->ExecuteS("UPDATE " . _DB_PREFIX_ . "configuration SET value = '" . (int)($get['id_carrier']) . "' WHERE name = 'PS_CARRIER_DEFAULT'");
 		}
 		else 

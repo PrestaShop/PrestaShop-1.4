@@ -248,7 +248,7 @@ class BlockCategories extends Module
 			}
 			//$nbrColumns = Configuration::get('BLOCK_CATEG_NBR_COLUMNS_FOOTER');
 			$nbrColumns = Configuration::get('BLOCK_CATEG_NBR_COLUMN_FOOTER');
-			if(!$nbrColumns)
+			if (!$nbrColumns)
 				$nbrColumns=3;
 			$numberColumn = abs(sizeof($result)/$nbrColumns);
 			$widthColumn= floor(100/$nbrColumns);

@@ -69,7 +69,7 @@ class TrustedShops extends Module
 		foreach (self::$objects_list as $object)
 		{
 			$this->limited_countries = array_merge($this->limited_countries, $object->limited_countries);
-			if(!empty($object->warnings))
+			if (!empty($object->warnings))
 				$this->warnings = array_merge($this->warnings, $object->warnings);
 		}
 
@@ -175,16 +175,16 @@ class TrustedShops extends Module
 	{
 		foreach (self::$objects_list as $object)
 		{
-			if(!empty($object->errors))
+			if (!empty($object->errors))
 				$this->errors = array_merge($this->errors, $object->errors);
-			if(!empty($object->confirmations))
+			if (!empty($object->confirmations))
 				$this->confirmations = array_merge($this->confirmations, $object->confirmations);
 		}
 	}
 	private function displayConfirmations()
 	{
 		$html = '';
-		if(!empty($this->confirmations))
+		if (!empty($this->confirmations))
 			foreach ($this->confirmations as $confirmations)
 				$html .= $this->displayConfirmation($confirmations);
 		return $html;
@@ -192,7 +192,7 @@ class TrustedShops extends Module
 	private function displayErrors()
 	{
 		$html = '';
-		if(!empty($this->errors))
+		if (!empty($this->errors))
 			foreach ($this->errors as $error)
 				$html .= $this->displayError($error);
 		return $html;
@@ -225,7 +225,7 @@ class TrustedShops extends Module
 
 	private function dynamicHook($params, $hook_name)
 	{
-		if(!$this->active)
+		if (!$this->active)
 			return '';
 		$return = '';
 		foreach (self::$objects_list as $object)

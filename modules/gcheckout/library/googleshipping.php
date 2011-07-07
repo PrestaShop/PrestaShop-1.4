@@ -182,10 +182,10 @@
         default:
           $this->carrier_pickup = 'DROP_OFF';
       }
-      if($additional_fixed_charge){
+      if ($additional_fixed_charge){
         $this->additional_fixed_charge = (double)$additional_fixed_charge;
       }
-      if($additional_variable_charge_percent){
+      if ($additional_variable_charge_percent){
         $this->additional_variable_charge_percent = (double)$additional_variable_charge_percent;
       }
     }

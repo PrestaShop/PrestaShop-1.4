@@ -139,7 +139,7 @@ class awPie extends awComponent {
 		
 		$this->setValues($values);
 		
-		if(is_array($colors)) {
+		if (is_array($colors)) {
 			$this->colors = $colors;
 		} else {
 		
@@ -232,7 +232,7 @@ class awPie extends awComponent {
 	 * @param awColor $color A color for the border
 	 */
 	public function setBorder(awColor $color) {
-		if(ARTICHOW_DEPRECATED === TRUE) {
+		if (ARTICHOW_DEPRECATED === TRUE) {
 			awImage::drawError('Class Pie: Method setBorder() has been deprecated since Artichow 1.0.9. Please use setBorderColor() instead.');
 		} else {
 			$this->setBorderColor($color);
@@ -314,7 +314,7 @@ class awPie extends awComponent {
 		$width = $x2 - $x1;
 		$height = $y2 - $y1;
 		
-		if($aliasing) {
+		if ($aliasing) {
 			$x = $width / 2;
 			$y = $height / 2;
 		} else {
@@ -327,7 +327,7 @@ class awPie extends awComponent {
 		$parts = array();
 		$angles = 0;
 		
-		if($aliasing) {
+		if ($aliasing) {
 			$side = new awSide(0, 0, 0, 0);
 		}
 		
@@ -335,18 +335,18 @@ class awPie extends awComponent {
 		
 			$angle = ($value / $sum * 360);
 			
-			if($key === $count - 1) {
+			if ($key === $count - 1) {
 				$angle = 360 - $angles;
 			}
 			
 			$angles += $angle;
 			
-			if(array_key_exists($key, $this->explode)) {
+			if (array_key_exists($key, $this->explode)) {
 				$middle = 360 - ($position + $angle / 2);
 				$posX = $this->explode[$key] * cos($middle * M_PI / 180);
 				$posY = $this->explode[$key] * sin($middle * M_PI / 180) * -1;
 				
-				if($aliasing) {
+				if ($aliasing) {
 					$explode = new awPoint(
 						$posX * 2,
 						$posY * 2
@@ -383,7 +383,7 @@ class awPie extends awComponent {
 		
 		}
 		
-		if($aliasing) {
+		if ($aliasing) {
 		
 			$mainDriver = $driver;
 			
@@ -399,10 +399,10 @@ class awPie extends awComponent {
 			// Adds support for antialiased pies on non-white background
 			$background = $this->getBackground();
 			
-			if($background instanceof awColor) {
+			if ($background instanceof awColor) {
 				$image->setBackgroundColor($background);
 			}
-//			elseif($background instanceof awGradient) {
+//			elseif ($background instanceof awGradient) {
 //				$image->setBackgroundColor(new White(100));
 //			}
 			
@@ -421,7 +421,7 @@ class awPie extends awComponent {
 		}
 		
 		// Draw 3D effect
-		for($i = $this->size; $i > 0; $i--) {
+		for ($i = $this->size; $i > 0; $i--) {
 		
 			foreach($values as $key => $value) {
 			
@@ -434,11 +434,11 @@ class awPie extends awComponent {
 				
 				unset($color);
 				
-				if($this->border instanceof awColor) {
+				if ($this->border instanceof awColor) {
 				
 					$point = $explode->move($x, $y);
 					
-					if($i === $this->size) {
+					if ($i === $this->size) {
 				
 						$driver->arc($this->border, $point->move(0, $this->size), $width, $height, $from, $to);
 						
@@ -458,7 +458,7 @@ class awPie extends awComponent {
 			
 			$driver->filledArc($color, $explode->move($x, $y), $width, $height, $from, $to);
 			
-			if($this->border instanceof awColor) {
+			if ($this->border instanceof awColor) {
 			
 				$point = $explode->move($x, $y);
 				$driver->arc($this->border, $point, $width, $height, $from, $to);
@@ -466,7 +466,7 @@ class awPie extends awComponent {
 		
 		}
 		
-		if($aliasing) {
+		if ($aliasing) {
 		
 			$x = $x / 2 + $x1;
 			$y = $y / 2 + $y1;
@@ -499,7 +499,7 @@ class awPie extends awComponent {
 		foreach($this->values as $key => $value) {
 			$pc[$key] = round($value / $sum * 100, $this->precision);
 		}
-		if($this->label->count() === 0) { // Check that there is no user defined values
+		if ($this->label->count() === 0) { // Check that there is no user defined values
 			$this->label->set($pc);
 		}
 		
@@ -508,11 +508,11 @@ class awPie extends awComponent {
 		foreach($pc as $key => $value) {
 		
 			// Limit number of labels to display
-			if($position === $this->number) {
+			if ($position === $this->number) {
 				break;
 			}
 			
-			if(is_null($this->minimum) === FALSE and $value < $this->minimum) {
+			if (is_null($this->minimum) === FALSE and $value < $this->minimum) {
 				continue;
 			}
 			
@@ -531,15 +531,15 @@ class awPie extends awComponent {
 			$angle %= 360;
 			
 			// We don't display labels on the 3D effect
-			if($angle > 0 and $angle < 180) {
+			if ($angle > 0 and $angle < 180) {
 				$point = $point->move(0, -1 * sin($angleRad) * $this->size);
 			}
 			
-			if($angle >= 45 and $angle < 135) {
+			if ($angle >= 45 and $angle < 135) {
 				$this->label->setAlign(awLabel::CENTER, awLabel::BOTTOM);
-			} elseif($angle >= 135 and $angle < 225) {
+			} elseif ($angle >= 135 and $angle < 225) {
 				$this->label->setAlign(awLabel::RIGHT, awLabel::MIDDLE);
-			} elseif($angle >= 225 and $angle < 315) {
+			} elseif ($angle >= 225 and $angle < 315) {
 				$this->label->setAlign(awLabel::CENTER, awLabel::TOP);
 			} else {
 				$this->label->setAlign(awLabel::LEFT, awLabel::MIDDLE);
@@ -599,17 +599,17 @@ class awPie extends awComponent {
 	
 	private function checkArray(&$array) {
 	
-		if(is_array($array) === FALSE) {
+		if (is_array($array) === FALSE) {
 			awImage::drawError("Class Pie: You tried to set values that are not an array.");
 		}
 		
 		foreach($array as $key => $value) {
-			if(is_numeric($value) === FALSE) {
+			if (is_numeric($value) === FALSE) {
 				unset($array[$key]);
 			}
 		}
 		
-		if(count($array) < 1) {
+		if (count($array) < 1) {
 			awImage::drawError("Class Pie: Your graph must have at least 1 value.");
 		}
 	

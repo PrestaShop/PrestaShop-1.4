@@ -9,20 +9,20 @@
 	 *
 	 */
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
-	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_EDITABLE)
+	if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_EDITABLE)
 	{
 		die(SYS_DISABLED);
 	}	
 		//$session->gc();
 		$_GET['path'] = empty($_GET['path'])?CONFIG_SYS_ROOT_PATH . "ajax_image_editor_demo.jpg":$_GET['path'];
-		if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
+		if (!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
 		{
 				$path = $_GET['path'];
 		}else 
 		{
 			die(TXT_FILE_NOT_FOUND);
 		}
-		if(file_exists(DIR_AJAX_EDIT_AREA . "reg_syntax" . DIRECTORY_SEPARATOR . getFileExt($path) . ".js"))
+		if (file_exists(DIR_AJAX_EDIT_AREA . "reg_syntax" . DIRECTORY_SEPARATOR . getFileExt($path) . ".js"))
 		{
 			$syntax = getFileExt($path);			
 		}else 
@@ -36,7 +36,7 @@
 					$syntax = 'basic';
 			}
 		}
-		if(array_search(getFileExt($path), getValidTextEditorExts())=== false)
+		if (array_search(getFileExt($path), getValidTextEditorExts())=== false)
 		{
 			die(TXT_DISALLOWED_EXT);	
 		}

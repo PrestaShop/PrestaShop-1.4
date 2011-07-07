@@ -144,7 +144,7 @@ class AdminLanguages extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
-		elseif(Tools::getValue('submitDel'.$this->table) AND isset($_POST[$this->table.'Box']))
+		elseif (Tools::getValue('submitDel'.$this->table) AND isset($_POST[$this->table.'Box']))
 		{
 		 	if ($this->tabAccess['delete'] === '1')
 			{

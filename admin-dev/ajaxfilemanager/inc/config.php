@@ -11,11 +11,11 @@
 	//FILESYSTEM CONFIG	<br>
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");	
 	define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration
-	if(!isset($_SESSION))
+	if (!isset($_SESSION))
 	{
 		session_start();
 	}
-	if(!headers_sent())
+	if (!headers_sent())
 	{
 		header('Content-Type: text/html; charset=utf-8');
 	}
@@ -55,7 +55,7 @@
 	//include different config base file according to query string "config"
 	$configBaseFileName = 'config.base.php';
 	
-	if(CONFIG_QUERY_STRING_ENABLE && !empty($_GET['config']) && file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config.' . secureFileName($_GET['config']) . ".php")
+	if (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['config']) && file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config.' . secureFileName($_GET['config']) . ".php")
 	{
 		$configBaseFileName = 'config.' . secureFileName($_GET['config']) . ".php";
 	}
@@ -69,9 +69,9 @@
 	$session = new Session();
 	$auth = new Auth();
 	
-	if(CONFIG_ACCESS_CONTROL_MODE == 1)
+	if (CONFIG_ACCESS_CONTROL_MODE == 1)
 	{//access control enabled
-		if(!$auth->isLoggedIn() && strtolower(basename($_SERVER['PHP_SELF']) != strtolower(basename(CONFIG_LOGIN_PAGE))))
+		if (!$auth->isLoggedIn() && strtolower(basename($_SERVER['PHP_SELF']) != strtolower(basename(CONFIG_LOGIN_PAGE))))
 		{//
 			header('Location: ' . appendQueryString(CONFIG_LOGIN_PAGE, makeQueryString()));
 			exit;

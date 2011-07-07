@@ -208,7 +208,7 @@ class BackupCore
 						foreach ($row AS $field => $value)
 						{
 							$tmp = "'" . mysql_real_escape_string($value) . "',";
-							if($tmp != "'',")
+							if ($tmp != "'',")
 								$s .= $tmp;
 							else
 							{

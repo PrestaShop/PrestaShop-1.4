@@ -54,7 +54,7 @@ class ConnectionsSourceCore extends ObjectModel
 	
 	public function add($autodate = true, $nullValues = false)
 	{
-		if($result = parent::add($autodate, $nullValues))
+		if ($result = parent::add($autodate, $nullValues))
 			Referrer::cacheNewSource($this->id);
 		return $result;
 	}

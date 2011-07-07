@@ -51,7 +51,7 @@ if ($cookie->isLogged())
 		$smarty->assign('error', true);
 	if (($add OR $delete) AND empty($id_product) === false)
 	{
-		if(!isset($cookie->id_wishlist) OR $cookie->id_wishlist == '')
+		if (!isset($cookie->id_wishlist) OR $cookie->id_wishlist == '')
 		{
 			$wishlist = new WishList();
 			$modWishlist = new BlockWishList();

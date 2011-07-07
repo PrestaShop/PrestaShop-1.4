@@ -10,7 +10,7 @@
 	require_once('../../config/config.inc.php');
 	require_once('../init.php');
 
-	if(!isset($manager))
+	if (!isset($manager))
 	{
 		/**
 		 *  this is part of  script for processing file paste 
@@ -19,7 +19,7 @@
 		include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 		include_once(CLASS_PAGINATION);
 		$pagination = new pagination(false);
-		if(!empty($_GET['search']))
+		if (!empty($_GET['search']))
 		{
 			include_once(CLASS_SEARCH);
 			
@@ -89,11 +89,11 @@
 			foreach($file as $k=>$v)
 			{
 				
-				if($k  == 'ctime' || $k == 'mtime')
+				if ($k  == 'ctime' || $k == 'mtime')
 				{
 					$v = @date(DATE_TIME_FORMAT, $v);
 				}	
-				if($k == 'size')
+				if ($k == 'size')
 				{
 					$v = transformFileSize($v);
 				}
@@ -103,7 +103,7 @@
 			echo "}\n";				
 		}
 		echo  "};</script>\n";
-	if(!empty($_GET['view']))
+	if (!empty($_GET['view']))
 	{
 		switch($_GET['view'])
 		{

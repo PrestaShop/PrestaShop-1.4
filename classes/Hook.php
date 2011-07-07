@@ -75,8 +75,8 @@ class HookCore extends ObjectModel
 	
 	public static function getModulesFromHook($id_hook)
 	{
-		if(isset(self::$preloadModulesFromHooks)) 
-			if(isset(self::$preloadModulesFromHooks[$id_hook]))
+		if (isset(self::$preloadModulesFromHooks)) 
+			if (isset(self::$preloadModulesFromHooks[$id_hook]))
 				return self::$preloadModulesFromHooks[$id_hook]['data'];
 			else
 				return array();
@@ -98,7 +98,7 @@ class HookCore extends ObjectModel
 		
 		foreach($results as $result)
 		{
-			if(!isset(self::$preloadModulesFromHooks[$result['id_hook']]))
+			if (!isset(self::$preloadModulesFromHooks[$result['id_hook']]))
 				self::$preloadModulesFromHooks[$result['id_hook']] = array('data' => array(), 'module_position' => array());
 			
 			self::$preloadModulesFromHooks[$result['id_hook']]['data'][] = array(

@@ -443,7 +443,7 @@ class BlowfishCore extends Crypt_Blowfish
 		$ciphertext = '';
 		$paddedtext = $this->maxi_pad($plaintext);
 		$strlen = strlen($paddedtext);
-		for($x = 0; $x < $strlen; $x += 8)
+		for ($x = 0; $x < $strlen; $x += 8)
 		{
 			$piece = substr($paddedtext, $x, 8);
 			$cipher_piece = parent::encrypt($piece);
@@ -461,7 +461,7 @@ class BlowfishCore extends Crypt_Blowfish
 		$plaintext = '';
 		$chunks = explode('=', $ciphertext);
 		$ending_value = sizeof($chunks) ;
-		for($counter = 0; $counter < ($ending_value - 1); $counter++)
+		for ($counter = 0; $counter < ($ending_value - 1); $counter++)
 		{
 			$chunk = $chunks[$counter].'=';
 			$decoded = base64_decode($chunk);
@@ -475,7 +475,7 @@ class BlowfishCore extends Crypt_Blowfish
 	{
 		$str_len = sizeof($plaintext);
 		$pad_len = $str_len % 8;
-		for($x = 0; $x < $pad_len; $x++)
+		for ($x = 0; $x < $pad_len; $x++)
 			$plaintext = $plaintext.' ';
 		return $plaintext;
 	}

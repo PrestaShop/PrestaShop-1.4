@@ -52,14 +52,14 @@
     }
 
     function SetStateAreas($areas) {
-      if(is_array($areas))
+      if (is_array($areas))
         $this->state_areas_arr = $areas;
       else
         $this->state_areas_arr = array($areas);
     }
 
     function SetZipPatterns($zips) {
-      if(is_array($zips))
+      if (is_array($zips))
         $this->zip_patterns_arr = $zips;
       else
         $this->zip_patterns_arr = array($zips);
@@ -130,7 +130,7 @@
     var $standalone;
 
     function GoogleAlternateTaxTable($name = "", $standalone = "false") {
-      if($name != "") {
+      if ($name != "") {
         $this->name = $name;
         $this->tax_rules_arr = array();
         $this->standalone = $standalone;

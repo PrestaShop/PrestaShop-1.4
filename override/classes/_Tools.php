@@ -123,7 +123,7 @@ class Tools extends ToolsCore
 	*/
 	public static function dieObject($object, $kill = true)
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::error($object);
 		else
 			return parent::dieObject($object,$kill);
@@ -141,7 +141,7 @@ class Tools extends ToolsCore
 	*/
 	public static function d($obj, $kill = true)
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::error($obj);
 		else
 			parent::d($obj,$kill);
@@ -159,7 +159,7 @@ class Tools extends ToolsCore
 	*/
 	public static function p($object)
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::info($object);
 		else 
 			return parent::p($object);
@@ -177,7 +177,7 @@ class Tools extends ToolsCore
 		{
 		$backtrace = debug_backtrace();
 		$callee = next($backtrace);
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::warn('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', 'Deprecated method');
 		else
 			trigger_error('Function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['line'].'</strong><br />', E_USER_WARNING);
@@ -199,7 +199,7 @@ class Tools extends ToolsCore
 		$callee = next($backtrace);
 			trigger_error('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['Line'].'</strong><br />', E_USER_WARNING);
 
-			if(PS_USE_FIREPHP)
+			if (PS_USE_FIREPHP)
 				FB::trace('Parameter <strong>'.$parameter.'</strong> in function <strong>'.$callee['function'].'()</strong> is deprecated in <strong>'.$callee['file'].'</strong> on line <strong>'.$callee['Line'].'</strong><br />', 'deprecated parameter');
 			else
 				$message = Tools::displayError('The parameter').' '.$parameter.' '.Tools::displayError(' in function ').' '.$callee['function'].' ('.Tools::displayError('Line').' '.$callee['Line'].') '.Tools::displayError('is deprecated and will be removed in the next major version.');
@@ -217,7 +217,7 @@ class Tools extends ToolsCore
 	 */
 	public static function error($obj, $label = '')
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::error($obj, $label);
 	}
 
@@ -230,7 +230,7 @@ class Tools extends ToolsCore
 	 */
 	public static function warn($obj, $label = '')
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::warn($obj, $label);
 	}
 
@@ -243,7 +243,7 @@ class Tools extends ToolsCore
 	 */
 	public static function info($obj, $label = '')
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::info($obj, $label);
 	}
 
@@ -256,7 +256,7 @@ class Tools extends ToolsCore
 	 */
 	public static function log($obj, $label = '')
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::log($obj,$label);
 	}
 	/**
@@ -268,7 +268,7 @@ class Tools extends ToolsCore
 	*/
 	public static function trace($obj = NULL, $label = '')
 	{
-		if(PS_USE_FIREPHP)
+		if (PS_USE_FIREPHP)
 			FB::trace($obj, $label);
 		else{
 			Tools::p($obj);

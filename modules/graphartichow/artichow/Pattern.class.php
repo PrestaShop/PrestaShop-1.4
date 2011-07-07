@@ -33,13 +33,13 @@ abstract class awPattern {
 	
 		$file = ARTICHOW_PATTERN.DIRECTORY_SEPARATOR.$pattern.'.php';
 	
-		if(is_file($file)) {
+		if (is_file($file)) {
 		
 			require_once $file;
 			
 			$class = $pattern.'Pattern';
 			
-			if(class_exists($class)) {
+			if (class_exists($class)) {
 				return new $class;
 			} else {
 				awImage::drawError("Class Pattern: Class '".$class."' does not exist.");
@@ -58,7 +58,7 @@ abstract class awPattern {
 	 * @param mixed $value Argument value
 	 */
 	public function setArg($name, $value) {
-		if(is_string($name)) {
+		if (is_string($name)) {
 			$this->args[$name] = $value;
 		}
 	}
@@ -71,7 +71,7 @@ abstract class awPattern {
 	 * @return mixed Argument value
 	 */
 	protected function getArg($name, $default = NULL) {
-		if(array_key_exists($name, $this->args)) {
+		if (array_key_exists($name, $this->args)) {
 			return $this->args[$name];
 		} else {
 			return $default;
@@ -84,7 +84,7 @@ abstract class awPattern {
 	 * @param array $args New arguments
 	 */
 	public function setArgs($args) {
-		if(is_array($args)) {
+		if (is_array($args)) {
 			foreach($args as $name => $value) {
 				$this->setArg($name, $value);
 			}

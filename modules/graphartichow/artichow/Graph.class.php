@@ -101,27 +101,27 @@ class awGraph extends awImage {
 	
 		$this->setSize($width, $height);
 
-		if(ARTICHOW_CACHE) {
+		if (ARTICHOW_CACHE) {
 	
 			$this->name = $name;
 			$this->timeout = $timeout;
 			
 			// Clean sometimes all the cache
-			if(mt_rand(0, 5000) ===  0) {
+			if (mt_rand(0, 5000) ===  0) {
 				awGraph::cleanCache();
 			}
 		
 			// Take the graph from the cache if possible
-			if($this->name !== NULL) {
+			if ($this->name !== NULL) {
 			
 				$this->fileCache = ARTICHOW_CACHE_DIRECTORY."/".$this->name;
 				$this->fileCacheTime = $this->fileCache."-time";
 				
-				if(is_file($this->fileCache)) {
+				if (is_file($this->fileCache)) {
 				
 					$type = awGraph::cleanGraphCache($this->fileCacheTime);
 					
-					if($type === NULL) {
+					if ($type === NULL) {
 						awGraph::deleteFromCache($this->name);
 					} else {
 						header("Content-Type: image/".$type);
@@ -153,9 +153,9 @@ class awGraph extends awImage {
 	 */
 	public static function deleteFromCache($name) {
 
-		if(ARTICHOW_CACHE) {
+		if (ARTICHOW_CACHE) {
 		
-			if(is_file(ARTICHOW_CACHE_DIRECTORY."/".$name."-time")) {
+			if (is_file(ARTICHOW_CACHE_DIRECTORY."/".$name."-time")) {
 				unlink(ARTICHOW_CACHE_DIRECTORY."/".$name."");
 				unlink(ARTICHOW_CACHE_DIRECTORY."/".$name."-time");
 			}
@@ -169,12 +169,12 @@ class awGraph extends awImage {
 	 */
 	public static function deleteAllCache() {
 
-		if(ARTICHOW_CACHE) {
+		if (ARTICHOW_CACHE) {
 	
 			$dp = opendir(ARTICHOW_CACHE_DIRECTORY);
 			
-			while($file = readdir($dp)) {
-				if($file !== '.' and $file != '..') {
+			while ($file = readdir($dp)) {
+				if ($file !== '.' and $file != '..') {
 					unlink(ARTICHOW_CACHE_DIRECTORY."/".$file);
 				}
 			}
@@ -188,7 +188,7 @@ class awGraph extends awImage {
 	 */
 	public static function cleanCache() {
 
-		if(ARTICHOW_CACHE) {
+		if (ARTICHOW_CACHE) {
 	
 			$glob = glob(ARTICHOW_CACHE_DIRECTORY."/*-time");
 			
@@ -196,7 +196,7 @@ class awGraph extends awImage {
 				
 				$type = awGraph::cleanGraphCache($file);
 				
-				if($type === NULL) {
+				if ($type === NULL) {
 					$name = preg_replace('!.*/(.*)\-time!', "\\1", $file);
 					awGraph::deleteFromCache($name);
 				}
@@ -263,7 +263,7 @@ class awGraph extends awImage {
 	 */
 	public function draw($mode = Graph::DRAW_DISPLAY) {
 		
-		if($this->timing) {
+		if ($this->timing) {
 			$time = microtimeFloat();
 		}
 	
@@ -279,7 +279,7 @@ class awGraph extends awImage {
 		$this->drawShadow();
 		$this->drawLabels();
 		
-		if($this->timing) {
+		if ($this->timing) {
 			$this->drawTiming(microtimeFloat() - $time);
 		}
 		
@@ -300,7 +300,7 @@ class awGraph extends awImage {
 				return $data;
 			
 			default :
-				if(is_string($mode)) {
+				if (is_string($mode)) {
 					file_put_contents($mode, $data);
 				} else {
 					awImage::drawError("Class Graph: Unable to draw the graph.");
@@ -316,7 +316,7 @@ class awGraph extends awImage {
 	
 		foreach($this->labels as $array) {
 		
-			if(count($array) === 3) {
+			if (count($array) === 3) {
 			
 				// Text in relative position
 				list($label, $x, $y) = $array;
@@ -368,9 +368,9 @@ class awGraph extends awImage {
 	}
 	
 	private function cache($data) {
-		if(ARTICHOW_CACHE and $this->name !== NULL) {
+		if (ARTICHOW_CACHE and $this->name !== NULL) {
 			
-			if(is_writable(ARTICHOW_CACHE_DIRECTORY) === FALSE) {
+			if (is_writable(ARTICHOW_CACHE_DIRECTORY) === FALSE) {
 				awImage::drawError("Class Graph: Cache directory is not writable.");
 			}
 		
@@ -389,7 +389,7 @@ class awGraph extends awImage {
 		
 		$time = (int)$time;
 		
-		if($time !== 0 and $time < time()) {
+		if ($time !== 0 and $time < time()) {
 			return NULL;
 		} else {
 			return $type;

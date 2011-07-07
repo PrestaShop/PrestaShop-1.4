@@ -259,7 +259,7 @@ class awMathPlot extends awComponent {
 	
 		$this->functions[] = $function;
 		
-		if($name !== NULL) {
+		if ($name !== NULL) {
 			$this->legend->add($function, $name, $type);
 		}
 	
@@ -284,12 +284,12 @@ class awMathPlot extends awComponent {
 		$this->xAxis->setYCenter($this->yAxis, 0);
 		$this->yAxis->setXCenter($this->xAxis, 0);
 		
-		if($this->yAxis->getLabelNumber() === NULL) {
+		if ($this->yAxis->getLabelNumber() === NULL) {
 			$number = $this->extremum->top - $this->extremum->bottom + 1;
 			$this->yAxis->setLabelNumber($number);
 		}
 		
-		if($this->xAxis->getLabelNumber() === NULL) {
+		if ($this->xAxis->getLabelNumber() === NULL) {
 			$number = $this->extremum->right - $this->extremum->left + 1;
 			$this->xAxis->setLabelNumber($number);
 		}
@@ -302,13 +302,13 @@ class awMathPlot extends awComponent {
 				
 		// Set axis labels
 		$labels = array();
-		for($i = 0, $count = $this->xAxis->getLabelNumber(); $i < $count; $i++) {
+		for ($i = 0, $count = $this->xAxis->getLabelNumber(); $i < $count; $i++) {
 			$labels[] = $i;
 		}
 		$this->xAxis->label->set($labels);
 		
 		$labels = array();
-		for($i = 0, $count = $this->yAxis->getLabelNumber(); $i < $count; $i++) {
+		for ($i = 0, $count = $this->yAxis->getLabelNumber(); $i < $count; $i++) {
 			$labels[] = $i;
 		}
 		$this->yAxis->label->set($labels);
@@ -341,20 +341,20 @@ class awMathPlot extends awComponent {
 			
 			$old = NULL;
 			
-			for($i = $fromX; $i <= $toX; $i += $this->interval) {
+			for ($i = $fromX; $i <= $toX; $i += $this->interval) {
 			
 				$p = awAxis::toPosition($this->xAxis, $this->yAxis, new awPoint($i, $f($i)));
 				
-				if($p->y >= $y1 and $p->y <= $y2) {
+				if ($p->y >= $y1 and $p->y <= $y2) {
 					$function->mark->draw($driver, $p);
 				}
 			
-				if($old !== NULL) {
+				if ($old !== NULL) {
 				
 					$line = $function->line;
 					$line->setLocation($old, $p);
 				
-					if(
+					if (
 						($line->p1->y >= $y1 and $line->p1->y <= $y2) or
 						($line->p2->y >= $y1 and $line->p2->y <= $y2)
 					) {
@@ -371,11 +371,11 @@ class awMathPlot extends awComponent {
 			}
 			
 			// Draw last point if needed
-			if($old !== NULL and $i - $this->interval != $toX) {
+			if ($old !== NULL and $i - $this->interval != $toX) {
 			
 				$p = awAxis::toPosition($this->xAxis, $this->yAxis, new awPoint($toX, $f($toX)));
 				
-				if($p->y >= $y1 and $p->y <= $y2) {
+				if ($p->y >= $y1 and $p->y <= $y2) {
 					$function->mark->draw($driver, $p);
 				}
 				
@@ -383,7 +383,7 @@ class awMathPlot extends awComponent {
 				$line = $function->line;
 				$line->setLocation($old, $p);
 				
-				if(
+				if (
 					($line->p1->y >= $y1 and $line->p1->y <= $y2) or
 					($line->p2->y >= $y1 and $line->p2->y <= $y2)
 				) {
@@ -408,8 +408,8 @@ class awMathPlot extends awComponent {
 		$number = $this->yAxis->getLabelNumber() - 1;
 		
 		$h = array();
-		if($number > 0) {
-			for($i = 0; $i <= $number; $i++) {
+		if ($number > 0) {
+			for ($i = 0; $i <= $number; $i++) {
 				$h[] = $i / $number;
 			}
 		}
@@ -421,9 +421,9 @@ class awMathPlot extends awComponent {
 		$number = $this->xAxis->getLabelNumber() - 1;
 		
 		$w = array();
-		if($number > 0) {
-			for($i = 0; $i <= $number; $i++) {
-				if($i%$interval === 0) {
+		if ($number > 0) {
+			for ($i = 0; $i <= $number; $i++) {
+				if ($i%$interval === 0) {
 					$w[] = $i / $number;
 				}
 			}

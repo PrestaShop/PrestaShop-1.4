@@ -252,7 +252,7 @@ class AdminShipping extends AdminTab
 			$zones = $carrierSelected->getZones();
 			if (sizeof($ranges) && !$carrierSelected->is_free)
 			{
-				if(sizeof($zones) > 1)
+				if (sizeof($zones) > 1)
 				{
 					echo '
 					<tr>

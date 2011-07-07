@@ -97,9 +97,9 @@ class MCachedCore extends Cache
 		if (isset($this->_keysCached[$md5_query]))
 			return true;
 		$key = $this->set($md5_query, $result);
-		if(preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach($res[1] AS $table)
-				if(!isset($this->_tablesCached[$table][$key]))
+				if (!isset($this->_tablesCached[$table][$key]))
 					$this->_tablesCached[$table][$key] = true;	
 	}
 	
@@ -137,7 +137,7 @@ class MCachedCore extends Cache
 
 	public function flush()
 	{
-		if(!$this->_isConnected)
+		if (!$this->_isConnected)
 			return false;
 		if ($this->_memcacheObj->flush())
 			return $this->_setKeys();

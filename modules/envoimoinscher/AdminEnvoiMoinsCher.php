@@ -275,7 +275,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 						}
 						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.poids" value="'.$weight.'">';						
 					}
-					elseif($values[0]['nb'] > 1)
+					elseif ($values[0]['nb'] > 1)
 					{
 						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.groupe_0.poids" value="'.$values[0]['poids']*$values[0]['nb'].'">';
 						echo '<input type="hidden" name="envoi_'.htmlentities($nbrOrder, ENT_COMPAT, 'UTF-8').'.description" value="'.$values[0]['description'].'">';

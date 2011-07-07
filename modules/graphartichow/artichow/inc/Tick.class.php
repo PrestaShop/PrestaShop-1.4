@@ -235,13 +235,13 @@ class awTick {
 	 */
 	public function draw(awDriver $driver, awVector $vector) {
 		
-		if($this->numberByTick !== NULL) {
+		if ($this->numberByTick !== NULL) {
 			list($tick, $number) = $this->numberByTick;
 			$this->number = 1 + ($tick->getNumber() - 1) * ($number + 1);
 			$this->interval = $tick->getInterval();
 		}
 		
-		if($this->number < 2 or $this->hide) {
+		if ($this->number < 2 or $this->hide) {
 			return;
 		}
 		
@@ -268,10 +268,10 @@ class awTick {
 	protected function drawTicks(awDriver $driver, awVector $vector, $from, $to) {
 	
 		// Draw last tick
-		if($this->hideLast === FALSE) {
+		if ($this->hideLast === FALSE) {
 		
 			//echo '<b>';
-			if(($this->number - 1) % $this->interval === 0) {
+			if (($this->number - 1) % $this->interval === 0) {
 				$this->drawTick($driver, $vector->p2, $from, $to);
 			}
 			//echo '</b>';
@@ -290,9 +290,9 @@ class awTick {
 		
 		$position = 0;
 		
-		for($i = $start; round($i, 6) < $stop; $i += $inc) {
+		for ($i = $start; round($i, 6) < $stop; $i += $inc) {
 		
-			if($position % $this->interval === 0) {
+			if ($position % $this->interval === 0) {
 				$p = $vector->p1->move(
 					round($i * cos($vector->getAngle()), 6),
 					round($i * sin($vector->getAngle() * -1), 6)
@@ -313,14 +313,14 @@ class awTick {
 		$p1 = $p;
 		$p2 = $p;
 		
-		if($from !== NULL) {
+		if ($from !== NULL) {
 			$p1 = $p1->move(
 				round($this->size * cos($from), 6),
 				round($this->size * sin($from) * -1, 6)
 			);
 		}
 		
-		if($to !== NULL) {
+		if ($to !== NULL) {
 			$p2 = $p2->move(
 				round($this->size * cos($to), 6),
 				round($this->size * sin($to) * -1, 6)

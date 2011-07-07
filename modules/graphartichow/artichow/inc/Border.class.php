@@ -47,7 +47,7 @@ class awBorder {
 	
 		$this->setStyle($style);
 		
-		if($color instanceof awColor) {
+		if ($color instanceof awColor) {
 			$this->setColor($color);
 		} else {
 			$this->setColor(new awBlack);
@@ -112,7 +112,7 @@ class awBorder {
 	public function rectangle(awDriver $driver, awPoint $p1, awPoint $p2) {
 	
 		// Border is hidden
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 	
@@ -135,7 +135,7 @@ class awBorder {
 	public function ellipse(awDriver $driver, awPoint $center, $width, $height) {
 	
 		// Border is hidden
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 		
@@ -163,7 +163,7 @@ class awBorder {
 	public function polygon(awDriver $driver, awPolygon $polygon) {
 		
 		// Border is hidden
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 		
@@ -173,7 +173,7 @@ class awBorder {
 		// In case of Line::SOLID, Driver::polygon() uses imagepolygon()
 		// which automatically closes the shape. In any other case,
 		// we have to do it manually here.
-		if($this->style !== Line::SOLID) {
+		if ($this->style !== Line::SOLID) {
 			$this->closePolygon($driver, $polygon);
 		}
 	}

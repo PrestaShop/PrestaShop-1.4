@@ -92,7 +92,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 				alert("This page requires AC_RunActiveContent.js.");
 			} else {
 				var hasRightVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
-				if(hasRightVersion) {
+				if (hasRightVersion) {
 					AC_FL_RunContent(
 					\'codebase\', \'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,45,0\',
 					\'width\', \''.$params['width'].'\',

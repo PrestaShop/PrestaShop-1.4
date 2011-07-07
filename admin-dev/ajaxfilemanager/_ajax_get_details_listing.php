@@ -20,7 +20,7 @@
 								$css = ($css == "" || $css == "even"?"odd":"even");
 								$strDisabled = ($file['is_writable']?"":" disabled");
 								$strClass = ($file['is_writable']?"left":" leftDisabled");
-								if($file['type'] == 'file')
+								if ($file['type'] == 'file')
 								{
 
 								?>

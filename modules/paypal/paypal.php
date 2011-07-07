@@ -326,7 +326,7 @@ class PayPal extends PaymentModule
 				<p><b>'.$this->l('Information:').'</b> '.$this->l('When you refund a product, a partial refund is made unless you select "Generate a voucher".').'</p>
 				<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">
 					<input type="hidden" name="id_order" value="'.(int)$params['id_order'].'" />
-					<p class="center"><input type="submit" class="button" name="submitPayPalRefund" value="'.$this->l('Refund total transaction').'" onclick="if(!confirm(\''.$this->l('Are you sure?').'\'))return false;" /></p>
+					<p class="center"><input type="submit" class="button" name="submitPayPalRefund" value="'.$this->l('Refund total transaction').'" onclick="if (!confirm(\''.$this->l('Are you sure?').'\'))return false;" /></p>
 				</form>';
 			$this->_postProcess();
 			$this->_html .= '</fieldset>';

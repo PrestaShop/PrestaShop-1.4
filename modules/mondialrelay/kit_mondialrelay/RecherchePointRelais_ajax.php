@@ -67,7 +67,7 @@ else
 		for ($i = 1; $i <= 10; $i++)
 		{
 			//if ($i==1) {$checked="checked=\"checked\"" ;} else {$checked="";};
-			if($i < 10)
+			if ($i < 10)
 				$l = '0'.$i;
 			else
 				$l = '10';

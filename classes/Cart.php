@@ -791,7 +791,7 @@ class CartCore extends ObjectModel
 				FROM `'._DB_PREFIX_.'customized_data`
 				WHERE `id_customization` = '.(int)($id_customization));
 
-			if($result)
+			if ($result)
 				$result &= Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cart_product`
 					SET `quantity` = `quantity` - '.(int)($customization['quantity']).'
 					WHERE `id_cart` = '.(int)($this->id).'
@@ -921,7 +921,7 @@ class CartCore extends ObjectModel
 								$categories = Discount::getCategories($discount->id);
 								if (count($categories) AND Product::idIsOnCategoryId($product['id_product'], $categories))
 								{
-									if($type == Cart::ONLY_DISCOUNTS)
+									if ($type == Cart::ONLY_DISCOUNTS)
 										$order_total -= $shipping_fees;
 									$shipping_fees = 0;
 									break;
@@ -1168,7 +1168,7 @@ class CartCore extends ObjectModel
 			$module = Module::getInstanceByName($moduleName);
 			if (key_exists('id_carrier', $module))
 				$module->id_carrier = $carrier->id;
-			if($carrier->need_range)
+			if ($carrier->need_range)
 				$shipping_cost = $module->getOrderShippingCost($this, $shipping_cost);
 			else
 				$shipping_cost = $module->getOrderShippingCostExternal($this);
@@ -1250,7 +1250,7 @@ class CartCore extends ObjectModel
 					return Tools::displayError('Voucher is not valid with other discounts.');
 			
 			foreach($discounts as $discount)
-				if($discount['id_discount'] == $discountObj->id)
+				if ($discount['id_discount'] == $discountObj->id)
 					return Tools::displayError('This voucher is already in your cart');
 		}
 		
@@ -1277,7 +1277,7 @@ class CartCore extends ObjectModel
 		$returnErrorNoProductCategory = true;
 		foreach($products AS $product)
 		{
-			if(count($categories))
+			if (count($categories))
 				if (Product::idIsOnCategoryId($product['id_product'], $categories))
 				{
 					if ((!$discountObj->cumulable_reduction AND !$product['reduction_applies'] AND !$product['on_sale']) OR $discountObj->cumulable_reduction)
@@ -1587,7 +1587,7 @@ class CartCore extends ObjectModel
 		$customsById = array();
 		foreach ($customs AS $custom)
 		{
-			if(!isset($customsById[$custom['id_customization']]))
+			if (!isset($customsById[$custom['id_customization']]))
 				$customsById[$custom['id_customization']] = array();
 			$customsById[$custom['id_customization']][] = $custom;
 		}
@@ -1609,7 +1609,7 @@ class CartCore extends ObjectModel
 			$sql_custom_data = 'INSERT INTO '._DB_PREFIX_.'customized_data (`id_customization`, `type`, `index`, `value`) VALUES ';
 			foreach ($customs AS $custom)
 			{
-				if(!$first)
+				if (!$first)
 					$sql_custom_data .= ',';
 				else
 					$first = false;

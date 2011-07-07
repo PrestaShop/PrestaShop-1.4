@@ -68,7 +68,7 @@
       $xml_data->Push('results');
 
       foreach($this->results_arr as $result) {
-        if($result->shipping_name != "") {
+        if ($result->shipping_name != "") {
           $xml_data->Push('result', array('shipping-name' => 
               $result->shipping_name, 'address-id' => $result->address_id));
           $xml_data->Element('shipping-rate', $result->ship_price, 
@@ -77,11 +77,11 @@
         } else
           $xml_data->Push('result', array('address-id' => $result->address_id));
 
-        if($result->tax_amount != "")   
+        if ($result->tax_amount != "")   
           $xml_data->Element('total-tax', $result->tax_amount, 
               array('currency' => $this->currency));
 
-        if((count($result->coupon_arr) != 0) || 
+        if ((count($result->coupon_arr) != 0) || 
             (count($result->giftcert_arr) != 0) )  {
           $xml_data->Push('merchant-code-results');
 

@@ -13,15 +13,15 @@
 		var $fromFolderIndex = 'ajax_from_folder';
 		function __construct()
 		{
-			if(!isset($_SESSION[$this->actionIndex]))
+			if (!isset($_SESSION[$this->actionIndex]))
 			{
 				$_SESSION[$this->actionIndex] = '';
 			}
-			if(!isset($_SESSION[$this->selectedDocIndex]) || !is_array($_SESSION[$this->selectedDocIndex]))
+			if (!isset($_SESSION[$this->selectedDocIndex]) || !is_array($_SESSION[$this->selectedDocIndex]))
 			{
 				$_SESSION[$this->selectedDocIndex] = array();
 			}
-			if(!isset($_SESSION[$this->fromFolderIndex]))
+			if (!isset($_SESSION[$this->fromFolderIndex]))
 			{
 				$_SESSION[$this->fromFolderIndex] = '';
 			}

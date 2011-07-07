@@ -188,10 +188,10 @@ class awGrid {
 	 */
 	public function setGrid($xgrid, $ygrid) {
 	
-		if(empty($this->xgrid)) {
+		if (empty($this->xgrid)) {
 			$this->xgrid = $xgrid;
 		}
-		if(empty($this->ygrid)) {
+		if (empty($this->ygrid)) {
 			$this->ygrid = $ygrid;
 		}
 	
@@ -208,7 +208,7 @@ class awGrid {
 	 */
 	public function draw(awDriver $driver, $x1, $y1, $x2, $y2) {
 	
-		if($this->background instanceof awColor) {
+		if ($this->background instanceof awColor) {
 		
 			// Draw background color
 			$driver->filledRectangle(
@@ -218,7 +218,7 @@ class awGrid {
 			
 		}
 
-		if($this->hide === FALSE) {
+		if ($this->hide === FALSE) {
 			
 			$this->drawGrid(
 				$driver,
@@ -249,7 +249,7 @@ class awGrid {
 	
 		foreach($nx as $key => $n) {
 		
-			if(($key % $vInterval) === 0) {
+			if (($key % $vInterval) === 0) {
 		
 				$pos = (int)round($x1 + $left + $n * $width);
 				$driver->line(
@@ -267,7 +267,7 @@ class awGrid {
 	
 		foreach($ny as $key => $n) {
 		
-			if(($key % $hInterval) === 0) {
+			if (($key % $hInterval) === 0) {
 		
 				$pos = (int)round($y1 + $top + $n * $height);
 				$driver->line(

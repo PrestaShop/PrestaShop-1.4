@@ -35,7 +35,7 @@
 		 */
 		function login()
 		{
-			if($_POST['username'] == CONFIG_LOGIN_USERNAME && $_POST['password'] == CONFIG_LOGIN_PASSWORD)
+			if ($_POST['username'] == CONFIG_LOGIN_USERNAME && $_POST['password'] == CONFIG_LOGIN_PASSWORD)
 			{
 				$_SESSION[$this->__loginIndexInSession] = true;
 				return true;

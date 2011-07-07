@@ -9,9 +9,9 @@
  */ 
 function xml2array($contents, $get_attributes=1)
 { 
-    if(!$contents) return array(); 
+    if (!$contents) return array(); 
 
-    if(!function_exists('xml_parser_create'))
+    if (!function_exists('xml_parser_create'))
 	{ 
         //print "'xml_parser_create()' function not found!"; 
         return array(); 
@@ -23,7 +23,7 @@ function xml2array($contents, $get_attributes=1)
     xml_parse_into_struct( $parser, $contents, $xml_values ); 
     xml_parser_free( $parser ); 
 
-    if(!$xml_values) return;//Hmm... 
+    if (!$xml_values) return;//Hmm... 
 
     //Initializations 
     $xml_array = array(); 
@@ -42,30 +42,30 @@ function xml2array($contents, $get_attributes=1)
         extract($data);//We could use the array by itself, but this cooler. 
 
         $result = ''; 
-        if($get_attributes)
+        if ($get_attributes)
 		{//The second argument of the function decides this. 
             $result = array(); 
-            if(isset($value)) $result['value'] = $value; 
+            if (isset($value)) $result['value'] = $value; 
             //Set the attributes too. 
-            if(isset($attributes))
+            if (isset($attributes))
 			{ 
                 foreach($attributes as $attr => $val)
 				{ 
-                    if($get_attributes == 1) $result['attr'][$attr] = $val; //Set all the attributes in a array called 'attr' 
+                    if ($get_attributes == 1) $result['attr'][$attr] = $val; //Set all the attributes in a array called 'attr' 
                     /**  :TODO: should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */ 
                 } 
             } 
         }
-		elseif(isset($value))
+		elseif (isset($value))
 		{ 
             $result = $value; 
         } 
 
         //See tag status and do the needed. 
-        if($type == "open")
+        if ($type == "open")
 		{//The starting of the tag '<tag>' 
             $parent[$level-1] = &$current; 
-            if(!is_array($current) or (!in_array($tag, array_keys($current))))
+            if (!is_array($current) or (!in_array($tag, array_keys($current))))
 			{ //Insert New tag 
                 $current[$tag] = $result; 
                 $current = &$current[$tag]; 
@@ -73,7 +73,7 @@ function xml2array($contents, $get_attributes=1)
             }
 			else
 			{ //There was another element with the same tag name 
-                if(isset($current[$tag][0]))
+                if (isset($current[$tag][0]))
 				{				
                     array_push($current[$tag], $result); 
                 }
@@ -86,17 +86,17 @@ function xml2array($contents, $get_attributes=1)
             } 
 
         }
-		elseif($type == "complete")
+		elseif ($type == "complete")
 		{ //Tags that ends in 1 line '<tag />' 
             //See if the key is already taken. 
-            if(!isset($current[$tag]))
+            if (!isset($current[$tag]))
 			{ //New Key 
                 $current[$tag] = $result;
 				//array_push($current[$tag],$result);
             }
 			else
 			{ //If taken, put all things inside a list(array) 
-                if((is_array($current[$tag]) and $get_attributes == 0)//If it is already an array... 
+                if ((is_array($current[$tag]) and $get_attributes == 0)//If it is already an array... 
 					or (isset($current[$tag][0]) and is_array($current[$tag][0]) and $get_attributes == 1))
 				{ 
                     array_push($current[$tag],$result); // ...push the new element into that array. 

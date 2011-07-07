@@ -54,7 +54,7 @@ class PDF_PageGroupCore extends FPDF
 	function _beginpage($orientation, $arg2)
 	{
 		parent::_beginpage($orientation, $arg2);
-		if($this->NewPageGroup)
+		if ($this->NewPageGroup)
 		{
 			// start a new group
 			$n = sizeof($this->PageGroups)+1;
@@ -63,7 +63,7 @@ class PDF_PageGroupCore extends FPDF
 			$this->CurrPageGroup = $alias;
 			$this->NewPageGroup=false;
 		}
-		elseif($this->CurrPageGroup)
+		elseif ($this->CurrPageGroup)
 			$this->PageGroups[$this->CurrPageGroup]++;
 	}
 
@@ -634,7 +634,7 @@ class PDFCore extends PDF_PageGroupCore
 				$pdf->Ln(4);
 			}
 
-			if(isset(self::$order->total_wrapping) and ((float)(self::$order->total_wrapping) > 0))
+			if (isset(self::$order->total_wrapping) and ((float)(self::$order->total_wrapping) > 0))
 			{
 				$pdf->Cell($width, 0, self::l('Total gift-wrapping').' : ', 0, 0, 'R');
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
@@ -704,7 +704,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetFillColor(240, 240, 240);
 		if ($delivery)
 			$this->SetX(25);
-		for($i = 0; $i < sizeof($header); $i++)
+		for ($i = 0; $i < sizeof($header); $i++)
 			$this->Cell($w[$i], 5, $header[$i][0], 'T', 0, $header[$i][1], 1);
 		$this->Ln();
 		$this->SetFont(self::fontname(), '', 8);
@@ -740,7 +740,7 @@ class PDFCore extends PDF_PageGroupCore
 		foreach($products AS $product)
 			if (!$delivery OR ((int)($product['product_quantity']) - (int)($product['product_quantity_refunded']) > 0))
 			{
-				if($counter >= $lines)
+				if ($counter >= $lines)
 				{
 					$this->AddPage();
 					$this->Ln();
@@ -790,7 +790,7 @@ class PDFCore extends PDF_PageGroupCore
 
 						if (array_key_exists(_CUSTOMIZE_TEXTFIELD_, $customizationGroup))
 							foreach($customizationGroup[_CUSTOMIZE_TEXTFIELD_] as $customization)
-								if(!empty($customization['name'])) $custoLabel .= '- '.$customization['name'].': '.$customization['value']."\n";
+								if (!empty($customization['name'])) $custoLabel .= '- '.$customization['name'].': '.$customization['value']."\n";
 
 
 						if ($nb_images > 0)
@@ -1022,7 +1022,7 @@ class PDFCore extends PDF_PageGroupCore
 			$w = array(60, 30, 40, 30, 30);
 		}
 		$this->SetFont(self::fontname(), 'B', 8);
-		for($i = 0; $i < sizeof($header); $i++)
+		for ($i = 0; $i < sizeof($header); $i++)
 			$this->Cell($w[$i], 5, $header[$i], 0, 0, 'R');
 
 		$this->Ln();

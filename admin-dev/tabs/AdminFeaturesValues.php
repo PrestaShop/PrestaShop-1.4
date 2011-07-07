@@ -95,7 +95,7 @@ class AdminFeaturesValues extends AdminTab
 	{
 		global $currentIndex;
 
-		if(Tools::getValue('submitDel'.$this->table))
+		if (Tools::getValue('submitDel'.$this->table))
 		{
 		 	if ($this->tabAccess['delete'] === '1')
 		 	{

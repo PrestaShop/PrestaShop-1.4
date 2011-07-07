@@ -81,7 +81,7 @@ class AdminBackup extends AdminTab
 	 */
 	public function displayForm($isMainTab = true)
 	{
-		if(is_writable(PS_ADMIN_DIR.'/backups/'))
+		if (is_writable(PS_ADMIN_DIR.'/backups/'))
 		{
 			if (!($object = $this->loadObject()))
 				return;
@@ -179,7 +179,7 @@ class AdminBackup extends AdminTab
 		global $currentIndex;
 		
 		// Test if the backup dir is writable
-		if(!is_writable(PS_ADMIN_DIR.'/backups/'))
+		if (!is_writable(PS_ADMIN_DIR.'/backups/'))
 			$this->displayWarning($this->l('"Backups" Directory in admin directory must be writeable (CHMOD 755 / 777)'));
 
 		$this->displayErrors();

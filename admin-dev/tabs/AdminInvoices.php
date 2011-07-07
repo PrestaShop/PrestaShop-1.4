@@ -132,7 +132,7 @@ class AdminInvoices extends AdminTab
 				$this->_errors[] = $this->l('No invoice found for this period');
 			}
 		}
-		elseif(Tools::isSubmit('submitPrint2'))
+		elseif (Tools::isSubmit('submitPrint2'))
 		{
 			if (!is_array($statusArray = Tools::getValue('id_order_state')) OR !count($statusArray))
 				$this->_errors[] = $this->l('Invalid order statuses');

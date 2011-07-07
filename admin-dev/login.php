@@ -144,7 +144,7 @@ echo '
 				<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">';
 
 $randomNb = rand(100, 999);
-if(file_exists(PS_ADMIN_DIR.'/../install') OR file_exists(PS_ADMIN_DIR.'/../admin'))
+if (file_exists(PS_ADMIN_DIR.'/../install') OR file_exists(PS_ADMIN_DIR.'/../admin'))
 {
 	echo '				<span>'.translate('For security reasons, you cannot connect to the Back Office until after you have:').'<br /><br />
 		- '.translate('deleted the /install folder').'<br />

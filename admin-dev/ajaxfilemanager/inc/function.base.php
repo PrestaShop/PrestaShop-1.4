@@ -29,10 +29,10 @@ if (!function_exists("stripos"))
 		$count = 1;
 		foreach($_GET as $k=>$v)
 		{
-			if(array_search($k, $excls) ===false)
+			if (array_search($k, $excls) ===false)
 			{
 				$strAppend = "&";
-				if($count == 1)
+				if ($count == 1)
 				{
 					$strAppend = "?";
 					$count++;
@@ -71,7 +71,7 @@ function displayArray($array, $comments="")
 	{
 		$tem = array();
 
-		if(sizeof($validExts))
+		if (sizeof($validExts))
 		{
 			foreach($validExts as $k=>$v)
 			{
@@ -80,7 +80,7 @@ function displayArray($array, $comments="")
 		}
 		$validExts = $tem;
 		$tem = array();
-		if(sizeof($invalidExts))
+		if (sizeof($invalidExts))
 		{
 			foreach($invalidExts as $k=>$v)
 			{
@@ -88,26 +88,26 @@ function displayArray($array, $comments="")
 			}
 		}
 		$invalidExts = $tem;
-		if(sizeof($validExts) && sizeof($invalidExts))
+		if (sizeof($validExts) && sizeof($invalidExts))
 		{
 			foreach($validExts as  $k=>$ext)
 			{
-				if(array_search($ext, $invalidExts) !== false)
+				if (array_search($ext, $invalidExts) !== false)
 				{
 					unset($validExts[$k]);
 				}
 			}
 		}
-		if(sizeof($validExts))
+		if (sizeof($validExts))
 		{
-			if(array_search(strtolower(getFileExt($filePath)), $validExts) !== false)
+			if (array_search(strtolower(getFileExt($filePath)), $validExts) !== false)
 			{
 				return true;
 			}else 
 			{
 				return false;
 			}
-		}elseif(array_search(strtolower(getFileExt($filePath)), $invalidExts) === false)
+		}elseif (array_search(strtolower(getFileExt($filePath)), $invalidExts) === false)
 		{
 			return true;
 		}else 
@@ -171,7 +171,7 @@ function backslashToSlash($value) {
  * @return string
  */
 function removeTrailingSlash($value) {
-	if(preg_match('@^.+/$@i', $value))
+	if (preg_match('@^.+/$@i', $value))
 	{
 		$value = substr($value, 0, strlen($value)-1);
 	}
@@ -186,7 +186,7 @@ function removeTrailingSlash($value) {
  */
 function addTrailingSlash($value) 
 {
-	if(preg_match('@^.*[^/]{1}$@i', $value))
+	if (preg_match('@^.*[^/]{1}$@i', $value))
 	{
 		$value .= '/';
 	}
@@ -202,7 +202,7 @@ function addTrailingSlash($value)
 function transformFilePath($value) {
 	$rootPath = addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH)));
 	$value = addTrailingSlash(backslashToSlash(getRealPath($value)));
-	if(!empty($rootPath) && ($i = strpos($value, $rootPath)) !== false)
+	if (!empty($rootPath) && ($i = strpos($value, $rootPath)) !== false)
 	{
 		$value = ($i == 0?substr($value, strlen($rootPath)):"/");		
 	}
@@ -231,7 +231,7 @@ function prependSlash($value)
 		@fwrite($fp, $data);
 		@fwrite($fp, "\n\n" . date('d/M/Y H:i:s') );
 		@fclose($fp);
-		if($die)
+		if ($die)
 		{
 			die();
 		}
@@ -256,9 +256,9 @@ function addNoCacheHeaders() {
 	function appendQueryString($baseUrl, $extra)
 	{
 		$output = $baseUrl;
-		if(!empty($extra))
+		if (!empty($extra))
 		{
-			if(strpos($baseUrl, "?") !== false)
+			if (strpos($baseUrl, "?") !== false)
 			{
 				$output .= "&" . $extra;
 			}else
@@ -281,7 +281,7 @@ function addNoCacheHeaders() {
 		$count = 1;
 		foreach($_GET as $k=>$v)
 		{
-			if(array_search($k, $excluded) === false)
+			if (array_search($k, $excluded) === false)
 			{
 				$output .= ($count>1?'&':'') . ($k . "=" . $v);
 				$count++;
@@ -298,7 +298,7 @@ function addNoCacheHeaders() {
 	function getParentPath($value)
 	{
 		$value = removeTrailingSlash(backslashToSlash($value));
-		if(false !== ($index = strrpos($value, "/")) )
+		if (false !== ($index = strrpos($value, "/")) )
 		{
 			return substr($value, 0, $index);
 		}
@@ -315,7 +315,7 @@ function addNoCacheHeaders() {
 	function isUnderRoot($value)
 	{
 		$roorPath = strtolower(addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH))));
-		if(file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $roorPath) === 0 )
+		if (file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $roorPath) === 0 )
 		{
 			return true;
 		}
@@ -331,7 +331,7 @@ function addNoCacheHeaders() {
 	{
 		global $session;
 		$sessionPath = strtolower(addTrailingSlash(backslashToSlash(getRealPath($session->getSessionDir()))));
-		if(file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $sessionPath) === 0 )
+		if (file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $sessionPath) === 0 )
 		{
 			return true;
 		}
@@ -353,18 +353,18 @@ function addNoCacheHeaders() {
 		$outputs = array( "width"=>0, "height"=>0);
 		$thumbnailWidth	= (int)($thumbnailWidth);
 		$thumbnailHeight = (int)($thumbnailHeight);
-		if(!empty($originaleImageWidth) && !empty($originalImageHeight))
+		if (!empty($originaleImageWidth) && !empty($originalImageHeight))
 		{
 			//start to get the thumbnail width & height
-        	if(($thumbnailWidth < 1 && $thumbnailHeight < 1) || ($thumbnailWidth > $originaleImageWidth && $thumbnailHeight > $originalImageHeight ))
+        	if (($thumbnailWidth < 1 && $thumbnailHeight < 1) || ($thumbnailWidth > $originaleImageWidth && $thumbnailHeight > $originalImageHeight ))
         	{
         		$thumbnailWidth =$originaleImageWidth;
         		$thumbnailHeight = $originalImageHeight;
-        	}elseif($thumbnailWidth < 1)
+        	}elseif ($thumbnailWidth < 1)
         	{
         		$thumbnailWidth = floor($thumbnailHeight / $originalImageHeight * $originaleImageWidth);
 
-        	}elseif($thumbnailHeight < 1)
+        	}elseif ($thumbnailHeight < 1)
         	{
         		$thumbnailHeight = floor($thumbnailWidth / $originaleImageWidth * $originalImageHeight);
         	}else
@@ -402,7 +402,7 @@ function getAbsPath($value) {
 	{
 		$value = removeTrailingSlash(backslashToSlash($value));
 
-		if(false !== ($index = strrpos($value, "/")) )
+		if (false !== ($index = strrpos($value, "/")) )
 		{
 			return substr($value, $index + 1);
 		}else
@@ -413,7 +413,7 @@ function getAbsPath($value) {
 
 function myRealPath($path) {
 
-		if(strpos($path, ':/') !== false)
+		if (strpos($path, ':/') !== false)
 		{
 			return $path;
 		}
@@ -454,7 +454,7 @@ function myRealPath($path) {
  function getRealPath($value)
  {
  		$output = '';
- 	 if(($path = realpath($value)) && $path != $value)
+ 	 if (($path = realpath($value)) && $path != $value)
  	 {
  	 	$output = $path;
  	 }else 
@@ -506,7 +506,7 @@ function transformFileSize($size) {
 	}elseif ($size > 1024)
 	{
 		return round($size / 1024, 1) . " KB";
-	}elseif($size == '')
+	}elseif ($size == '')
 	{
 		return $size;
 	}else
@@ -524,7 +524,7 @@ function transformFileSize($size) {
 	function removeBeginingSlash($value)
 	{
 		$value = backslashToSlash($value);
-		if(strpos($value, "/") === 0)
+		if (strpos($value, "/") === 0)
 		{
 			$value = substr($value, 1);
 		}
@@ -542,13 +542,13 @@ function getRootPath() {
 		{
 			return slashToBackslash(CONFIG_WEBSITE_DOCUMENT_ROOT);
 		}
-		if(isset($_SERVER['DOCUMENT_ROOT']) && ($output = relToAbs($_SERVER['DOCUMENT_ROOT'])) != '' )
+		if (isset($_SERVER['DOCUMENT_ROOT']) && ($output = relToAbs($_SERVER['DOCUMENT_ROOT'])) != '' )
 		{
 			return $output;
-		}elseif(isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["SCRIPT_FILENAME"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), "", backslashToSlash($_SERVER["SCRIPT_FILENAME"]))) && is_dir($output))
+		}elseif (isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["SCRIPT_FILENAME"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), "", backslashToSlash($_SERVER["SCRIPT_FILENAME"]))) && is_dir($output))
 		{
 			return slashToBackslash($output);
-		}elseif(isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["PATH_TRANSLATED"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), "", str_replace("//", "/", backslashToSlash($_SERVER["PATH_TRANSLATED"])))) && is_dir($output))
+		}elseif (isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["PATH_TRANSLATED"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), "", str_replace("//", "/", backslashToSlash($_SERVER["PATH_TRANSLATED"])))) && is_dir($output))
 		{
 			return $output;
 		}else 
@@ -568,7 +568,7 @@ function getRootPath() {
 	 */	
 	function addBeginingSlash($value)
 	{
-		if(strpos($value, "/") !== 0 && !empty($value))
+		if (strpos($value, "/") !== 0 && !empty($value))
 		{
 			$value .= "/" . $value;
 		}
@@ -602,27 +602,27 @@ function getRootPath() {
       $secondPathParts = explode(DIRECTORY_SEPARATOR, $final_dir);
       //
       $sameCounter = 0;
-      for($i = 0; $i < min( count($firstPathParts), count($secondPathParts) ); $i++) {
-          if( strtolower($firstPathParts[$i]) !== strtolower($secondPathParts[$i]) ) {
+      for ($i = 0; $i < min( count($firstPathParts), count($secondPathParts) ); $i++) {
+          if ( strtolower($firstPathParts[$i]) !== strtolower($secondPathParts[$i]) ) {
               break;
           }
           $sameCounter++;
       }
-      if( $sameCounter == 0 ) {
+      if ( $sameCounter == 0 ) {
           return $final_dir;
       }
       //
       $newPath = '';
-      for($i = $sameCounter; $i < count($firstPathParts); $i++) {
-          if( $i > $sameCounter ) {
+      for ($i = $sameCounter; $i < count($firstPathParts); $i++) {
+          if ( $i > $sameCounter ) {
               $newPath .= DIRECTORY_SEPARATOR;
           }
           $newPath .= "..";
       }
-      if( count($newPath) == 0 ) {
+      if ( count($newPath) == 0 ) {
           $newPath = ".";
       }
-      for($i = $sameCounter; $i < count($secondPathParts); $i++) {
+      for ($i = $sameCounter; $i < count($secondPathParts); $i++) {
           $newPath .= DIRECTORY_SEPARATOR;
           $newPath .= $secondPathParts[$i];
       }
@@ -637,14 +637,14 @@ function getRootPath() {
   function getMemoryLimit()
   {
     $output = @ini_get('memory_limit') or $output = -1 ;
-    if((int)($output) < 0)
+    if ((int)($output) < 0)
     {//unlimited
     	$output = 999999999999999999;
     }
-    elseif(strpos('g', strtolower($output)) !== false)
+    elseif (strpos('g', strtolower($output)) !== false)
     {
     	$output = (int)($output) * 1024 * 1024 * 1024;
-    }elseif(strpos('k', strtolower($output)) !== false)
+    }elseif (strpos('k', strtolower($output)) !== false)
     {
     	$output = (int)($output) * 1024 ;
     }else
@@ -677,20 +677,20 @@ function getRootPath() {
          function getFolderListing($path,$indexNumber=null, $prefixNumber =' ', $prefixName =' - ',  $outputs=array())
          {
                    $path = removeTrailingSlash(backslashToSlash($path));
-                   if(is_null($indexNumber))
+                   if (is_null($indexNumber))
                    {
                    	$outputs[IMG_LBL_ROOT_FOLDER] = removeTrailingSlash(backslashToSlash($path));
                    }
                    $fh = @opendir($path);
-                   if($fh)
+                   if ($fh)
                    {
                             $count = 1;                          
-                            while($file = @readdir($fh))
+                            while ($file = @readdir($fh))
                             {
                                      $newPath = removeTrailingSlash(backslashToSlash($path . "/" . $file));
-                                     if(isListingDocument($newPath) && $file != '.' && $file != '..' && is_dir($newPath))
+                                     if (isListingDocument($newPath) && $file != '.' && $file != '..' && is_dir($newPath))
                                      {                                          
-                                               if(!empty($indexNumber))
+                                               if (!empty($indexNumber))
                                                {//this is not root folder
                                                					
                                                         $outputs[$prefixNumber . $indexNumber . "." . $count . $prefixName . $file] = $newPath;
@@ -721,23 +721,23 @@ function getRootPath() {
          function getValidTextEditorExts()
          {
          	$validEditorExts = explode(',', CONFIG_EDITABLE_VALID_EXTS);
-         	if(CONFIG_UPLOAD_VALID_EXTS)
+         	if (CONFIG_UPLOAD_VALID_EXTS)
          	{//exclude those exts not shown on CONFIG_UPLOAD_VALID_EXTS
          		$validUploadExts = explode(',', CONFIG_UPLOAD_VALID_EXTS);
          		foreach($validEditorExts as $k=>$v)
          		{
-         			if(array_search($v, $validUploadExts) === false)
+         			if (array_search($v, $validUploadExts) === false)
          			{
          				unset($validEditorExts[$k]);
          			}
          		}        		
          	}
-         	if(CONFIG_UPLOAD_INVALID_EXTS)
+         	if (CONFIG_UPLOAD_INVALID_EXTS)
          	{//exlcude those exists in CONFIG_UPLOAD_INVALID_EXTS
          		$invalidUploadExts = explode(',', CONFIG_UPLOAD_INVALID_EXTS);
          		foreach($validEditorExts as $k=>$v)
          		{
-         			if(array_search($v, $invalidUploadExts) !== false)
+         			if (array_search($v, $invalidUploadExts) !== false)
          			{
          				unset($validEditorExts[$k]);
          			}
@@ -755,7 +755,7 @@ function getRootPath() {
      */
         function isValidPattern( $pattern, $string)
         {
-            if(($pattern)=== '')
+            if (($pattern)=== '')
             {
                 return true;
             }
@@ -764,13 +764,13 @@ function getRootPath() {
                 $regExps = explode(',', $pattern);
                 foreach ($regExps as $regExp => $value)
                 {
-                    if(eregi($value, $string))
+                    if (eregi($value, $string))
                     {
                         return true;
                     }
                 }               
             }
-            elseif(eregi($pattern, $string))
+            elseif (eregi($pattern, $string))
             {
                 return true;
             }
@@ -788,7 +788,7 @@ function getRootPath() {
      */
         function isInvalidPattern( $pattern, $string)
         {
-            if(($pattern)=== '')
+            if (($pattern)=== '')
             {
                 return false;
             }
@@ -797,13 +797,13 @@ function getRootPath() {
                 $regExps = explode(',', $pattern);
                 foreach ($regExps as $regExp => $value)
                 {
-                    if(eregi($value, $string))
+                    if (eregi($value, $string))
                     {
                         return true;
                     }
                 }               
             }
-            elseif(eregi($pattern, $string))
+            elseif (eregi($pattern, $string))
             {
                 return true;
             }
@@ -819,7 +819,7 @@ function getRootPath() {
 		 */
 		function shortenFileName($fileName, $maxLeng=17, $indicate = '...')
 		{
-			if(strlen($fileName) > $maxLeng)
+			if (strlen($fileName) > $maxLeng)
 			{
 				$fileName = substr($fileName, 0, $maxLeng - strlen($indicate)) . $indicate;
 			}
@@ -843,32 +843,32 @@ function getRootPath() {
          function isListingDocument($path)
          {
          	$file = basename($path);
-         	if(CONFIG_SYS_PATTERN_FORMAT == 'list')
+         	if (CONFIG_SYS_PATTERN_FORMAT == 'list')
          	{// comma delimited vague file/folder name
 
 
 
 			    		
-      			if(is_dir($path))
+      			if (is_dir($path))
       			{
  				$includeDir = trimlrm(CONFIG_SYS_INC_DIR_PATTERN);
 				$excludeDir = trimlrm(CONFIG_SYS_EXC_DIR_PATTERN);     				
 				$found_includeDir = strpos($includeDir, $file);
 				$found_excludeDir = strpos($excludeDir, $file);      				
-      				if((!CONFIG_SYS_INC_DIR_PATTERN || (!($found_includeDir === FALSE))) && (!CONFIG_SYS_EXC_DIR_PATTERN || (($found_excludeDir === FALSE))))
+      				if ((!CONFIG_SYS_INC_DIR_PATTERN || (!($found_includeDir === FALSE))) && (!CONFIG_SYS_EXC_DIR_PATTERN || (($found_excludeDir === FALSE))))
       				{
       					return true;
       				}else 
       				{
       					return false;
       				}
-      			}elseif(is_file($path))
+      			}elseif (is_file($path))
       			{
 				$includeFile = trimlrm(CONFIG_SYS_INC_FILE_PATTERN);
 				$excludeFile = trimlrm(CONFIG_SYS_EXC_FILE_PATTERN);            				
 				$found_includeFile = strpos($includeFile, $file);
 				$found_excludeFile = strpos($excludeFile, $file);	      				
-      				if((!CONFIG_SYS_INC_FILE_PATTERN || (!($found_includeFile === FALSE))) && (!CONFIG_SYS_EXC_FILE_PATTERN ||   (($found_excludeFile === FALSE))))
+      				if ((!CONFIG_SYS_INC_FILE_PATTERN || (!($found_includeFile === FALSE))) && (!CONFIG_SYS_EXC_FILE_PATTERN ||   (($found_excludeFile === FALSE))))
       				{
       					return true;
       				}else 
@@ -876,33 +876,33 @@ function getRootPath() {
       					return false;
       				}
       			}
-         	}elseif(CONFIG_SYS_PATTERN_FORMAT == 'csv')
+         	}elseif (CONFIG_SYS_PATTERN_FORMAT == 'csv')
          	{//comma delimited file/folder name
          		
-         		if(is_dir($path))
+         		if (is_dir($path))
          		{
          		
 	 				$includeDir = trimlrm(CONFIG_SYS_INC_DIR_PATTERN);
 					$excludeDir = trimlrm(CONFIG_SYS_EXC_DIR_PATTERN);
 					        
-					if(!empty($includeDir) && !empty($excludeDir))
+					if (!empty($includeDir) && !empty($excludeDir))
 					{
 						
 						$validDir = explode(',', $includeDir);
 						
 						$invalidDir = explode(",", $excludeDir);
 
-						if(array_search(basename($path), $validDir) !== false && array_search(basename($path), $invalidDir) === false)
+						if (array_search(basename($path), $validDir) !== false && array_search(basename($path), $invalidDir) === false)
 						{
 							return true;
 						}else 
 						{
 							return false;
 						}
-					}elseif(!empty($includeDir))
+					}elseif (!empty($includeDir))
 					{
 						$validDir = explode(',', $includeDir);
-						if(array_search(basename($path), $validDir) !== false)
+						if (array_search(basename($path), $validDir) !== false)
 						{
 							return true;
 						}else 
@@ -910,10 +910,10 @@ function getRootPath() {
 							return false;
 						}
 						
-					}elseif(!empty($excludeFile))
+					}elseif (!empty($excludeFile))
 					{
 						$invalidDir = explode(",", $excludeDir);
-						if(array_search(basename($path), $invalidDir) === false)
+						if (array_search(basename($path), $invalidDir) === false)
 						{
 							return true;
 						}else 
@@ -923,35 +923,35 @@ function getRootPath() {
 					}
 					return true;
 					
-         		}elseif(is_file($path))
+         		}elseif (is_file($path))
          		{
 				$includeFile = trimlrm(CONFIG_SYS_INC_FILE_PATTERN);
 				$excludeFile = trimlrm(CONFIG_SYS_EXC_FILE_PATTERN);   
-				if(!empty($includeFile) && !empty($excludeFile))
+				if (!empty($includeFile) && !empty($excludeFile))
 				{
 					$validFile = explode(',', $includeFile);
 					$invalidFile = explode(',', $excludeFile);
-					if(array_search(basename($path), $validFile) !== false && array_search(basename($path), $invalidFile) === false)
+					if (array_search(basename($path), $validFile) !== false && array_search(basename($path), $invalidFile) === false)
 					{
 						return true;
 					}else 
 					{
 						return false;
 					}
-				}elseif(!empty($includeFile))
+				}elseif (!empty($includeFile))
 				{
 					$validFile = explode(',', $includeFile);
-					if(array_search(basename($path), $validFile) !== false)
+					if (array_search(basename($path), $validFile) !== false)
 					{
 						return true;
 					}else 
 					{
 						return false;
 					}
-				}elseif(!empty($excludeFile))
+				}elseif (!empty($excludeFile))
 				{
 					$invalidFile = explode(',', $excludeFile);
-					if(array_search(basename($path), $invalidFile) === false)
+					if (array_search(basename($path), $invalidFile) === false)
 					{
 						return true;
 					}else 
@@ -964,9 +964,9 @@ function getRootPath() {
          	}
          	else 
          	{//regular expression
-	          	if(is_dir($path) )
+	          	if (is_dir($path) )
 	         	{
-	         		if(isValidPattern(CONFIG_SYS_INC_DIR_PATTERN, $path) && !isInvalidPattern(CONFIG_SYS_EXC_DIR_PATTERN, $path))
+	         		if (isValidPattern(CONFIG_SYS_INC_DIR_PATTERN, $path) && !isInvalidPattern(CONFIG_SYS_EXC_DIR_PATTERN, $path))
 	         		{
 	         			 return true;	
 	         		}else 
@@ -974,9 +974,9 @@ function getRootPath() {
 	         			return false;
 	         		}
 	         	
-	         	}elseif(is_file($path))
+	         	}elseif (is_file($path))
 	         	{
-	         		if(isValidPattern(CONFIG_SYS_INC_FILE_PATTERN, $path) && !isInvalidPattern(CONFIG_SYS_EXC_FILE_PATTERN, $path)  )
+	         		if (isValidPattern(CONFIG_SYS_INC_FILE_PATTERN, $path) && !isInvalidPattern(CONFIG_SYS_EXC_FILE_PATTERN, $path)  )
 	         		{
 	         			return true;
 	         		}else 
@@ -997,18 +997,18 @@ function getRootPath() {
 		 */
 		function downloadFile($path, $newFileName=null)
 		{
-				if(file_exists($path) && is_file($path))
+				if (file_exists($path) && is_file($path))
 				{	
 					$mimeContentType = 'application/octet-stream';
-					if(function_exists('finfo_open'))
+					if (function_exists('finfo_open'))
 					{
-						if(($fp = @finfo_open($path)))
+						if (($fp = @finfo_open($path)))
 						{
 							$mimeContentType = @finfo_file($fp, basename($path));
 							@finfo_close($fp);
 						}
 						
-					}elseif(($temMimeContentType = @mime_content_type($path)) && !empty($temMimeContentType))
+					}elseif (($temMimeContentType = @mime_content_type($path)) && !empty($temMimeContentType))
 					{
 						$mimeContentType = $temMimeContentType;
 					}
@@ -1019,7 +1019,7 @@ function getRootPath() {
 
 			// START ANDR� SILVA DOWNLOAD CODE
 			// required for IE, otherwise Content-disposition is ignored
-			if(ini_get('zlib.output_compression'))
+			if (ini_get('zlib.output_compression'))
 			  ini_set('zlib.output_compression', 'Off');
 			header("Pragma: public"); // required
 			header("Expires: 0");
@@ -1062,7 +1062,7 @@ function getRootPath() {
   	$parentRealPath =  addTrailingSlash(backslashToSlash(dirname($realPath)));
   	$differentPath = addTrailingSlash(substr($realPath, strlen($parentRealPath)));
   	$parentPath = substr($path, 0, strlen(addTrailingSlash(backslashToSlash($path))) - strlen($differentPath));
-  	if(isUnderRoot($parentPath))
+  	if (isUnderRoot($parentPath))
   	{
   		return $parentPath;
   	}else 
@@ -1075,11 +1075,11 @@ function getRootPath() {
   {
   		$folderPathIndex = 'path';
   		$lastVisitedFolderPathIndex = 'ajax_last_visited_folder';
-		if(isset($_GET[$folderPathIndex]) && file_exists($_GET[$folderPathIndex]) && !is_file($_GET[$folderPathIndex]) )
+		if (isset($_GET[$folderPathIndex]) && file_exists($_GET[$folderPathIndex]) && !is_file($_GET[$folderPathIndex]) )
 		{
 			$currentFolderPath = $_GET[$folderPathIndex];
 		}
-		elseif(isset($_SESSION[$lastVisitedFolderPathIndex]) && file_exists($_SESSION[$lastVisitedFolderPathIndex]) && !is_file($_SESSION[$lastVisitedFolderPathIndex]))
+		elseif (isset($_SESSION[$lastVisitedFolderPathIndex]) && file_exists($_SESSION[$lastVisitedFolderPathIndex]) && !is_file($_SESSION[$lastVisitedFolderPathIndex]))
 		{
 			$currentFolderPath = $_SESSION[$lastVisitedFolderPathIndex];
 		}else
@@ -1093,13 +1093,13 @@ function getRootPath() {
 		$_SESSION[$lastVisitedFolderPathIndex] = $currentFolderPath;
 		
 
-		if(!file_exists($currentFolderPath))
+		if (!file_exists($currentFolderPath))
 		{
 			die(ERR_FOLDER_NOT_FOUND . $currentFolderPath);
 		}  	
   }
   
-       if(!function_exists("imagerotate"))
+       if (!function_exists("imagerotate"))
         {
             function imagerotate($src_img, $angle, $bicubic=false)
             {
@@ -1177,7 +1177,7 @@ function getRootPath() {
                     $dest_x = $src_y;
                     $dest_y = $src_x;
                 }     
-		 		if(function_exists('ImageCreateTrueColor'))
+		 		if (function_exists('ImageCreateTrueColor'))
 		 		{
 					$rotate = @ImageCreateTrueColor($dst_w,$dst_h);
 				} else {

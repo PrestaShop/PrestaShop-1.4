@@ -70,7 +70,7 @@ class AdminAttributesGroups extends AdminTab
 		$this->adminAttributes->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 		$this->adminAttributes->postProcess($this->token);
 
-		if(Tools::getValue('submitDel'.$this->table))
+		if (Tools::getValue('submitDel'.$this->table))
 		{
 		 	if ($this->tabAccess['delete'] === '1')
 			{

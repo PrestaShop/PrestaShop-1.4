@@ -356,7 +356,7 @@ class nusoap_base {
 	* @access   public
 	*/
 	function getError(){
-		if($this->error_str != ''){
+		if ($this->error_str != ''){
 			return $this->error_str;
 		}
 		return false;
@@ -425,23 +425,23 @@ class nusoap_base {
 		}
 		// if name has ns, add ns prefix to name
 		$xmlns = '';
-        if($name_ns){
+        if ($name_ns){
 			$prefix = 'nu'.rand(1000,9999);
 			$name = $prefix.':'.$name;
 			$xmlns .= " xmlns:$prefix=\"$name_ns\"";
 		}
 		// if type is prefixed, create type prefix
-		if($type_ns != '' && $type_ns == $this->namespaces['xsd']){
+		if ($type_ns != '' && $type_ns == $this->namespaces['xsd']){
 			// need to fix this. shouldn't default to xsd if no ns specified
 		    // w/o checking against typemap
 			$type_prefix = 'xsd';
-		} elseif($type_ns){
+		} elseif ($type_ns){
 			$type_prefix = 'ns'.rand(1000,9999);
 			$xmlns .= " xmlns:$type_prefix=\"$type_ns\"";
 		}
 		// serialize attributes if present
 		$atts = '';
-		if($attributes){
+		if ($attributes){
 			foreach($attributes as $k => $v){
 				$atts .= " $k=\"".$this->expandEntities($v).'"';
 			}
@@ -466,7 +466,7 @@ class nusoap_base {
         	}
 		}
         // serialize if an xsd built-in primitive type
-        if($type != '' && isset($this->typemap[$this->XMLSchemaVersion][$type])){
+        if ($type != '' && isset($this->typemap[$this->XMLSchemaVersion][$type])){
     		$this->debug("serialize_val: serialize xsd built-in primitive type");
         	if (is_bool($val)) {
         		if ($type == 'boolean') {
@@ -546,7 +546,7 @@ class nusoap_base {
 						$pXml = isset($pXml) ? $pXml.$this->serialize_val($v,$k,false,false,false,false,$use) : $this->serialize_val($v,$k,false,false,false,false,$use);
 					}
 				}
-				if(isset($type) && isset($type_prefix)){
+				if (isset($type) && isset($type_prefix)){
 					$type_str = " xsi:type=\"$type_prefix:$type\"";
 				} else {
 					$type_str = '';
@@ -561,12 +561,12 @@ class nusoap_base {
 			case (is_array($val) || $type):
 				// detect if struct or array
 				$valueType = $this->isArraySimpleOrStruct($val);
-                if($valueType=='arraySimple' || preg_match('/^ArrayOf/',$type)){
+                if ($valueType=='arraySimple' || preg_match('/^ArrayOf/',$type)){
 			   		$this->debug("serialize_val: serialize array");
 					$i = 0;
-					if(is_array($val) && count($val)> 0){
+					if (is_array($val) && count($val)> 0){
 						foreach($val as $v){
-	                    	if(is_object($v) && get_class($v) ==  'soapval'){
+	                    	if (is_object($v) && get_class($v) ==  'soapval'){
 								$tt_ns = $v->type_ns;
 								$tt = $v->type;
 							} elseif (is_array($v)) {
@@ -579,16 +579,16 @@ class nusoap_base {
 							$xml .= $this->serialize_val($v,'item',false,false,false,false,$use);
 							++$i;
 						}
-						if(count($array_types) > 1){
+						if (count($array_types) > 1){
 							$array_typename = 'xsd:anyType';
-						} elseif(isset($tt) && isset($this->typemap[$this->XMLSchemaVersion][$tt])) {
+						} elseif (isset($tt) && isset($this->typemap[$this->XMLSchemaVersion][$tt])) {
 							if ($tt == 'integer') {
 								$tt = 'int';
 							}
 							$array_typename = 'xsd:'.$tt;
-						} elseif(isset($tt) && $tt == 'arraySimple'){
+						} elseif (isset($tt) && $tt == 'arraySimple'){
 							$array_typename = 'SOAP-ENC:Array';
-						} elseif(isset($tt) && $tt == 'arrayStruct'){
+						} elseif (isset($tt) && $tt == 'arrayStruct'){
 							$array_typename = 'unnamed_struct_use_soapval';
 						} else {
 							// if type is prefixed, create type prefix
@@ -625,7 +625,7 @@ class nusoap_base {
 				} else {
 					// got a struct
 			   		$this->debug("serialize_val: serialize struct");
-					if(isset($type) && isset($type_prefix)){
+					if (isset($type) && isset($type_prefix)){
 						$type_str = " xsi:type=\"$type_prefix:$type\"";
 					} else {
 						$type_str = '';
@@ -686,12 +686,12 @@ class nusoap_base {
 	foreach(array_merge($this->namespaces,$namespaces) as $k => $v){
 		$ns_string .= " xmlns:$k=\"$v\"";
 	}
-	if($encodingStyle) {
+	if ($encodingStyle) {
 		$ns_string = " SOAP-ENV:encodingStyle=\"$encodingStyle\"$ns_string";
 	}
 
 	// serialize headers
-	if($headers){
+	if ($headers){
 		if (is_array($headers)) {
 			$xml = '';
 			foreach ($headers as $k => $v) {
@@ -764,12 +764,12 @@ class nusoap_base {
 	*/
 	function expandQname($qname){
 		// get element prefix
-		if(strpos($qname,':') && !preg_match('/^http:\/\//',$qname)){
+		if (strpos($qname,':') && !preg_match('/^http:\/\//',$qname)){
 			// get unqualified name
 			$name = substr(strstr($qname,':'),1);
 			// get ns prefix
 			$prefix = substr($qname,0,strpos($qname,':'));
-			if(isset($this->namespaces[$prefix])){
+			if (isset($this->namespaces[$prefix])){
 				return $this->namespaces[$prefix].':'.$name;
 			} else {
 				return $qname;
@@ -788,7 +788,7 @@ class nusoap_base {
     * @access public
     */
 	function getLocalPart($str){
-		if($sstr = strrchr($str,':')){
+		if ($sstr = strrchr($str,':')){
 			// get unqualified name
 			return substr( $sstr, 1 );
 		} else {
@@ -805,7 +805,7 @@ class nusoap_base {
     * @access public
     */
 	function getPrefix($str){
-		if($pos = strrpos($str,':')){
+		if ($pos = strrpos($str,':')){
 			// get prefix
 			return substr($str,0,$pos);
 		}
@@ -912,7 +912,7 @@ function timestamp_to_iso8601($timestamp,$utc=true){
 			$datestr = substr($datestr, 0, $pos + 3) . ':' . substr($datestr, -2);
 		}
 	}
-	if($utc){
+	if ($utc){
 		$pattern = '/'.
 		'([0-9]{4})-'.	// centuries & years CCYY-
 		'([0-9]{2})-'.	// months MM-
@@ -924,7 +924,7 @@ function timestamp_to_iso8601($timestamp,$utc=true){
 		'(Z|[+\-][0-9]{2}:?[0-9]{2})?'. // Z to indicate UTC, -/+HH:MM:SS.SS... for local tz's
 		'/';
 
-		if(preg_match($pattern,$datestr,$regs)){
+		if (preg_match($pattern,$datestr,$regs)){
 			return sprintf('%04d-%02d-%02dT%02d:%02d:%02dZ',$regs[1],$regs[2],$regs[3],$regs[4],$regs[5],$regs[6]);
 		}
 		return false;
@@ -951,16 +951,16 @@ function iso8601_to_timestamp($datestr){
 	'([0-9]{2})(\.[0-9]+)?'. // seconds ss.ss...
 	'(Z|[+\-][0-9]{2}:?[0-9]{2})?'. // Z to indicate UTC, -/+HH:MM:SS.SS... for local tz's
 	'/';
-	if(preg_match($pattern,$datestr,$regs)){
+	if (preg_match($pattern,$datestr,$regs)){
 		// not utc
-		if($regs[8] != 'Z'){
+		if ($regs[8] != 'Z'){
 			$op = substr($regs[8],0,1);
 			$h = substr($regs[8],1,2);
 			$m = substr($regs[8],strlen($regs[8])-2,2);
-			if($op == '-'){
+			if ($op == '-'){
 				$regs[4] = $regs[4] + $h;
 				$regs[5] = $regs[5] + $m;
-			} elseif($op == '+'){
+			} elseif ($op == '+'){
 				$regs[4] = $regs[4] - $h;
 				$regs[5] = $regs[5] - $m;
 			}

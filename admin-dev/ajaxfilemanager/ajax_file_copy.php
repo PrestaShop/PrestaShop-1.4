@@ -11,15 +11,15 @@
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 	$error = "";
 	$info = '';
-	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_COPY)
+	if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_COPY)
 	{
 		$error = SYS_DISABLED;
 	}
-	elseif(!isset($_POST['selectedDoc']) || !is_array($_POST['selectedDoc']) || sizeof($_POST['selectedDoc']) < 1)
+	elseif (!isset($_POST['selectedDoc']) || !is_array($_POST['selectedDoc']) || sizeof($_POST['selectedDoc']) < 1)
 	{
 		$error = ERR_NOT_DOC_SELECTED_FOR_COPY;
 	}
-	elseif(empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
+	elseif (empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
 	{
 		$error = ERR_FOLDER_PATH_NOT_ALLOWED;
 	}else 

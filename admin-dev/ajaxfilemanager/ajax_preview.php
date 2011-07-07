@@ -10,19 +10,19 @@
 	 */
 	include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");	
 	echo getRealPath($_GET['path']);
-	if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']))
+	if (!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']))
 	{
 		
 		include_once(CLASS_MANAGER);
 		$manager = new manager($_GET['path'], false);
 		$fileTypes = $manager->getFileType(basename($_GET['path']));
-		if($fileTypes['preview'])
+		if ($fileTypes['preview'])
 		{
 			switch($fileTypes['fileType'])
 			{
 				case "image":
 					$imageInfo = @getimagesize($_GET['path']);
-					if(!empty($imageInfo[0]) && !empty($imageInfo[1]))
+					if (!empty($imageInfo[0]) && !empty($imageInfo[1]))
 					{
 						$thumInfo = getThumbWidthHeight($imageInfo[0], $imageInfo[1], 400, 135);
 						printf("<img src=\"%s\" width=\"%s\" height=\"%s\" />", getFileUrl($_GET['path']), $thumInfo['width'], $thumInfo['height']);
@@ -34,7 +34,7 @@
 
 					break;
 				case "txt":
-					if(($fp = @fopen($_GET['path'], 'r')))
+					if (($fp = @fopen($_GET['path'], 'r')))
 					{
 						echo @fread($fp, @filesize($_GET['path']));
 						@fclose($fp);

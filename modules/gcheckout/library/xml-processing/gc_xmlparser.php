@@ -101,7 +101,7 @@
         xml_parser_set_option($xmlp, $opt, $optVal);
       }
       
-      if(xml_parse_into_struct($xmlp, $input, $vals, $index)) {
+      if (xml_parse_into_struct($xmlp, $input, $vals, $index)) {
         $this->root = $this->_foldCase($vals[0]['tag']);
         $this->params = $this->xml2ary($vals);
       }
@@ -183,7 +183,7 @@
             if ($k==='_p') {
               unset($ary[$k]);
             }
-            elseif(is_array($ary[$k])) {
+            elseif (is_array($ary[$k])) {
               $this->_del_p($ary[$k]);
             }
         }

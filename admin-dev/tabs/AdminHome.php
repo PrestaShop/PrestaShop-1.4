@@ -67,7 +67,7 @@ class AdminHome extends AdminTab
 		}
 		$indexRebuiltAfterUpdate = 0;
 		$needRebuild=Configuration::get('PS_NEED_REBUILD_INDEX');
-		if($needRebuild !='0');
+		if ($needRebuild !='0');
 			$indexRebuiltAfterUpdate = 2;
 		
 		$smartyOptimized = 0;
@@ -110,7 +110,7 @@ class AdminHome extends AdminTab
 			$(document).ready(function(){
 				$("#optimizationTipsFold").click(function(e){
 					$("#list-optimization-tips").toggle(function(){
-						if($("#optimizationTipsFold").children("img").attr("src") == "../img/admin/down-white.gif")
+						if ($("#optimizationTipsFold").children("img").attr("src") == "../img/admin/down-white.gif")
 							$("#optimizationTipsFold").children("img").attr("src","../img/admin/close-white.png");
 						else
 							$("#optimizationTipsFold").children("img").attr("src","../img/admin/down-white.gif");

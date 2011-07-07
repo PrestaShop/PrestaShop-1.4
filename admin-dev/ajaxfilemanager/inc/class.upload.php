@@ -50,7 +50,7 @@ class Upload
 	{
 		
 		$this->errCode = isset($_FILES[$indexInPost]['error'])?$_FILES[$indexInPost]['error']:999;
-		if((isset($_FILES[$indexInPost]['error']) && $_FILES[$indexInPost] == 0) ||
+		if ((isset($_FILES[$indexInPost]['error']) && $_FILES[$indexInPost] == 0) ||
 		(!empty($_FILES[$indexInPost]['tmp_name']) && $_FILES[$indexInPost]['tmp_name'] != 'none')
 		)
 		{
@@ -83,7 +83,7 @@ class Upload
 	{
 		$tem = array();
 
-		if(sizeof($validFileExt))
+		if (sizeof($validFileExt))
 		{
 			foreach($validFileExt as $k=>$v)
 			{
@@ -92,11 +92,11 @@ class Upload
 		}
 		$validFileExt = $tem;
 
-		if(sizeof($validFileExt) && sizeof($this->invalidFileExt))
+		if (sizeof($validFileExt) && sizeof($this->invalidFileExt))
 		{
 			foreach($validFileExt as  $k=>$ext)
 			{
-				if(array_search(strtolower($ext), $this->invalidFileExt) !== false)
+				if (array_search(strtolower($ext), $this->invalidFileExt) !== false)
 				{
 					unset($validFileExt[$k]);
 				}
@@ -106,13 +106,13 @@ class Upload
 	
 
 		
-		if(sizeof($validFileExt))
+		if (sizeof($validFileExt))
 		{
-			if(array_search(strtolower($this->getFileExt()), $validFileExt) !== false)
+			if (array_search(strtolower($this->getFileExt()), $validFileExt) !== false)
 			{
 				return true;
 			}
-		}elseif(array_search(strtolower($this->getFileExt()), $this->invalidFileExt) === false)
+		}elseif (array_search(strtolower($this->getFileExt()), $this->invalidFileExt) === false)
 		{
 			return true;
 		}
@@ -129,7 +129,7 @@ class Upload
 	 */
 	function isSizeTooBig($maxSize="")
 	{
-		if($this->fileSize > $maxSize)
+		if ($this->fileSize > $maxSize)
 		{
 			$this->deleteUploadedFile();
 			return true;
@@ -146,7 +146,7 @@ class Upload
 	function setInvalidFileExt($invalidFileExt=array())
 	{
 		$tem = array();
-		if(sizeof($invalidFileExt))
+		if (sizeof($invalidFileExt))
 		{
 			foreach($invalidFileExt as $k=>$v)
 			{
@@ -195,23 +195,23 @@ class Upload
 
 		$dotIndex = strrpos($fileName, '.');
 		$this->fileExtension = '';
-		if(is_int($dotIndex))
+		if (is_int($dotIndex))
 		{
 			$this->fileExtension = substr($fileName, $dotIndex);
 			$this->fileBaseName = substr($fileName, 0, $dotIndex);
 		}
-		if(!empty($fileBaseName))
+		if (!empty($fileBaseName))
 		{
 			$this->fileBaseName = $fileBaseName;
 		}
 		$fileName = $this->fileBaseName . $this->fileExtension;
 		$filePath = $dest . $fileName;
 
-		if(!$overwrite && file_exists($filePath) && is_file($filePath))
+		if (!$overwrite && file_exists($filePath) && is_file($filePath))
 		{//rename
 
 			$counter = 0;
-			while(file_exists($dest.$fileName) && is_file($dest .$fileName))
+			while (file_exists($dest.$fileName) && is_file($dest .$fileName))
 			{
 				$counter++;
 				$fileName = $this->fileBaseName.'_'.$counter.$this->fileExtension;
@@ -238,7 +238,7 @@ class Upload
 		 */	
 	function isImage($invalidImageExts = array(), $delete = true)
 	{
-		if(!is_array($invalidImageExts) && !empty($invalidImageExts))
+		if (!is_array($invalidImageExts) && !empty($invalidImageExts))
 		{
 			$invalidImageExts = explode(",", $invalidImageExts);
 		}
@@ -250,26 +250,26 @@ class Upload
 		{
 			$ValidImageExts[$k] = strtolower(trim($v));
 		}
-		if(sizeof($invalidImageExts))
+		if (sizeof($invalidImageExts))
 		{
 			foreach ($ValidImageExts as $k=>$v)
 			{
-				if(array_search(strtolower($v), $invalidImageExts) !== false)
+				if (array_search(strtolower($v), $invalidImageExts) !== false)
 				{
 					unset($ValidImageExts[$k]);
 				}
 			}
 		}
-		if(array_search(strtolower($this->getFileExt()), $ValidImageExts)!==false)
+		if (array_search(strtolower($this->getFileExt()), $ValidImageExts)!==false)
 		{
 			$this->_get_image_details($this->filePath);
-			if(!empty($this->fileType))
+			if (!empty($this->fileType))
 			{
 				return true;
 			}
 		}else
 		{
-			if($delete)
+			if ($delete)
 			{
 				$this->deleteUploadedFile();
 			}
@@ -294,7 +294,7 @@ class Upload
 	function resize($filePath, $thumb_suffix="", $new_x = 0, $new_y = 0)
 	{
 		
-		if(empty($filePath))
+		if (empty($filePath))
 		{
 			$filePath = $this->dirPath . $this->fileBaseName . $thumb_suffix  . $this->fileExtension;
 		}
@@ -319,7 +319,7 @@ class Upload
 		$functionName = 'ImageCreateFrom' . $this->fileType;
 
 
-		if(function_exists($functionName))
+		if (function_exists($functionName))
 		{
 			$this->imgHandler = $functionName($this->filePath);
 		}else
@@ -328,17 +328,17 @@ class Upload
 			return false;
 		}
 
-		if(function_exists('ImageCreateTrueColor')){
+		if (function_exists('ImageCreateTrueColor')){
 			$new_img =ImageCreateTrueColor($new_x,$new_y);
 		} else {
 			$new_img =ImageCreate($new_x,$new_y);
 		}
-		if(function_exists('ImageCopyResampled')){
+		if (function_exists('ImageCopyResampled')){
 			ImageCopyResampled($new_img, $this->imgHandler, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
 		} else {
 			ImageCopyResized($new_img, $this->imgHandler, 0, 0, 0, 0, $new_x, $new_y, $this->img_x, $this->img_y);
 		}
-		if($this->_imageSave($new_img, $fileName, 80))
+		if ($this->_imageSave($new_img, $fileName, 80))
 		{
 			return array("width"=>$new_x, "height"=>$new_y, "name"=>basename($fileName));
 		}else
@@ -360,7 +360,7 @@ class Upload
 	function _imageSave($newImageHandler, $fileName, $quality = 90)
 	{
 		$functionName = 'image' . $this->fileType;
-		if($functionName($newImageHandler, $fileName, $quality))
+		if ($functionName($newImageHandler, $fileName, $quality))
 		{
 			imagedestroy($newImageHandler);
 			return true;
@@ -435,28 +435,28 @@ class Upload
 		$outputs = array("name"=>"", "width"=>0, "height"=>0);
 		$thumbnailWidth	= (int)($thumbnailWidth);
 		$thumbnailHeight = (int)($thumbnailHeight);
-		if(!empty($originalImageName) && !empty($originaleImageWidth) && !empty($originalImageHeight))
+		if (!empty($originalImageName) && !empty($originaleImageWidth) && !empty($originalImageHeight))
 		{
 			$dotIndex = strrpos($originalImageName, '.');
 			//begin to get the thumbnail image name
 			$fileExtension = '';
 			$fileBaseName = '';
-			if(is_int($dotIndex))
+			if (is_int($dotIndex))
 			{
 				$fileExtension = substr($originalImageName, $dotIndex);
 				$fileBaseName = substr($originalImageName, 0, $dotIndex);
 			}
 			$outputs['name'] = $fileBaseName . $thumbnailSuffix . $fileExtension;
 			//start to get the thumbnail width & height
-			if($thumbnailWidth < 1 && $thumbnailHeight < 1)
+			if ($thumbnailWidth < 1 && $thumbnailHeight < 1)
 			{
 				$thumbnailWidth =$originaleImageWidth;
 				$thumbnailHeight = $originalImageHeight;
-			}elseif($thumbnailWidth < 1)
+			}elseif ($thumbnailWidth < 1)
 			{
 				$thumbnailWidth = floor($thumbnailHeight / $originalImageHeight * $originaleImageWidth);
 
-			}elseif($thumbnailHeight < 1)
+			}elseif ($thumbnailHeight < 1)
 			{
 				$thumbnailHeight = floor($thumbnailWidth / $originaleImageWidth * $originalImageHeight);
 			}else
@@ -491,7 +491,7 @@ class Upload
 	
 	function displayError()
 	{
-		if(sizeof($this->errors))
+		if (sizeof($this->errors))
 		{
 			echo "<pre>";
 			print_r($this->errors);
@@ -565,7 +565,7 @@ class Upload
 		if ($dirPath != ''  && substr($dirPath, -1) != '/') {
 			$dirPath .= '/';
 		}			
-		if(!empty($originalImageName) && file_exists($dirPath . $originalImageName) && is_file($dirPath . $originalImageName))
+		if (!empty($originalImageName) && file_exists($dirPath . $originalImageName) && is_file($dirPath . $originalImageName))
 		{
 			@unlink($dirPath . $originalImageName);
 			foreach($arrayThumbnailSuffix as $v)
@@ -574,7 +574,7 @@ class Upload
 				//begin to get the thumbnail image name
 				$fileExtension = '';
 				$fileBaseName = '';
-				if(is_int($dotIndex))
+				if (is_int($dotIndex))
 				{
 					$fileExtension = substr($originalImageName, $dotIndex);
 					$fileBaseName = substr($originalImageName, 0, $dotIndex);

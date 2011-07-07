@@ -222,7 +222,7 @@ class SceneCore extends ObjectModel
 				$product['details'] = new Product((int)($product['id_product']), !$liteResult, (int)($id_lang));
 				$product['link'] = $link->getProductLink((int)($product['details']->id), $product['details']->link_rewrite, $product['details']->category, $product['details']->ean13);
 				$cover = Product::getCover((int)($product['details']->id));
-				if(is_array($cover))
+				if (is_array($cover))
 					$product = array_merge($cover, $product);
 			}
 		

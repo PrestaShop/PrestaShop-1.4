@@ -82,7 +82,7 @@ class pagination
 	{
 
 		$output = floor(($this->totalItems / $this->itemsPerPage ));
-		if($this->totalItems % $this->itemsPerPage)
+		if ($this->totalItems % $this->itemsPerPage)
 		{
 			$output++;
 		}
@@ -121,9 +121,9 @@ class pagination
 	 */
 	function setUrl($value="")
 	{
-		if(empty($value))
+		if (empty($value))
 		{
-			if($this->friendlyUrl)
+			if ($this->friendlyUrl)
 			{
 				$this->url = "http://" . $_SERVER['HTTP_HOST'] . "/";
 			}else
@@ -145,7 +145,7 @@ class pagination
 	function getUrl()
 	{
 
-		if(empty($this->url))
+		if (empty($this->url))
 		{
 			$this->setUrl();
 
@@ -160,12 +160,12 @@ class pagination
 	function __setBaseUrl()
 	{
 
-		if(empty($this->url))
+		if (empty($this->url))
 		{
 			$this->getUrl();
 		}
 
-		if($this->friendlyUrl)
+		if ($this->friendlyUrl)
 		{
 			$this->baseUrl = $this->getUrl();
 		}else
@@ -175,12 +175,12 @@ class pagination
 			$this->excludedQueryStrings[$this->pageIndex] =$this->pageIndex;
 			foreach($_GET as $k=>$v)
 			{
-				if((array_search($k, $this->excludedQueryStrings) === false ))
+				if ((array_search($k, $this->excludedQueryStrings) === false ))
 				{
 					$appendingQueryStrings[$k] = $k . "=" . $v;
 				}
 			}
-			if(sizeof($appendingQueryStrings))
+			if (sizeof($appendingQueryStrings))
 			{
 				$this->baseUrl = $this->__appendQueryString($this->url, implode("&", $appendingQueryStrings));
 			}else
@@ -200,7 +200,7 @@ class pagination
 	function __getBaseUrl()
 	{
 
-		if(empty($this->baseUrl))
+		if (empty($this->baseUrl))
 		{
 
 			$this->__setBaseUrl();
@@ -218,7 +218,7 @@ class pagination
 	{
 		$output = 0;
 		$temStartItemNumber = (($this->currentPage - 1) * $this->itemsPerPage + 1);
-		if($this->totalItems && $temStartItemNumber <= $this->totalItems )
+		if ($this->totalItems && $temStartItemNumber <= $this->totalItems )
 		{
 
 			$output = $temStartItemNumber;
@@ -234,9 +234,9 @@ class pagination
 	{
 		$output = 0;
 		$temEndItemNumber = (($this->currentPage) * $this->itemsPerPage);
-		if($this->totalItems)
+		if ($this->totalItems)
 		{
-			if($temEndItemNumber <= $this->totalItems)
+			if ($temEndItemNumber <= $this->totalItems)
 			{
 				$output = $temEndItemNumber;
 			}else
@@ -286,11 +286,11 @@ class pagination
 
 		$url = "";
 		$totalPages = $this->getTotalPages();
-		if($this->currentPage < $totalPages)
+		if ($this->currentPage < $totalPages)
 		{
 			$url = $this->__getBaseUrl();
 
-			if($this->friendlyUrl)
+			if ($this->friendlyUrl)
 			{
 				$url .= $this->pageIndex . $totalPages . "/";
 			}else
@@ -315,10 +315,10 @@ class pagination
 	function getFirstUrl()
 	{
 		$url = "";
-		if($this->currentPage > 1)
+		if ($this->currentPage > 1)
 		{
 			$url = $this->__getBaseUrl();
-			if($this->friendlyUrl)
+			if ($this->friendlyUrl)
 			{
 				$url .= $this->pageIndex .  "1/";
 			}else
@@ -342,10 +342,10 @@ class pagination
 	function getPreviousUrl()
 	{
 		$url = "";
-		if($this->currentPage > 1 && $this->totalItems > 0 )
+		if ($this->currentPage > 1 && $this->totalItems > 0 )
 		{
 			$url = $this->__getBaseUrl();
-			if($this->friendlyUrl)
+			if ($this->friendlyUrl)
 			{
 				$url .= $this->pageIndex . ($this->currentPage - 1) . "/";
 			}else
@@ -369,10 +369,10 @@ class pagination
 	function getNextUrl()
 	{
 		$url = "";
-		if($this->totalItems > ($this->currentPage * $this->itemsPerPage))
+		if ($this->totalItems > ($this->currentPage * $this->itemsPerPage))
 		{
 			$url = $this->__getBaseUrl();
-			if($this->friendlyUrl)
+			if ($this->friendlyUrl)
 			{
 				$url .= $this->pageIndex . ($this->currentPage + 1) . "/";
 			}else
@@ -397,7 +397,7 @@ class pagination
 	function getGroupUrls()
 	{
 		$output = "";
-		if($this->totalItems > 0)
+		if ($this->totalItems > 0)
 		{
 			$displayedPages = 0;
 			$url = $this->__getBaseUrl();
@@ -409,25 +409,25 @@ class pagination
 			$itemStart = ($itemStart > 0 && $itemStart <= $totalPages)?$itemStart:1;
 			$itemEnd = $itemStart;
 
-			while($itemEnd < ($itemStart + $this->groupLimit - 1) && $itemEnd < $totalPages)
+			while ($itemEnd < ($itemStart + $this->groupLimit - 1) && $itemEnd < $totalPages)
 			{
 				$itemEnd++;
 			}
 
 
-			if($totalPages > ($itemEnd - $itemStart))
+			if ($totalPages > ($itemEnd - $itemStart))
 			{
-				for($i = $itemStart; $i > 1 && ($itemEnd - $itemStart + 1) < $this->groupLimit; $i--)
+				for ($i = $itemStart; $i > 1 && ($itemEnd - $itemStart + 1) < $this->groupLimit; $i--)
 				{
 					$itemStart--;
 				}
 			}
 
-			for($item = $itemStart; $item <= $itemEnd; $item++)
+			for ($item = $itemStart; $item <= $itemEnd; $item++)
 			{
-				if($item != $this->currentPage)
+				if ($item != $this->currentPage)
 				{//it is not the active link
-					if($this->friendlyUrl)
+					if ($this->friendlyUrl)
 					{
 						$temUrl = $url . $this->pageIndex . $item .   "/";
 					}else
@@ -506,7 +506,7 @@ class pagination
 	function __appendQueryString($baseUrl, $extra)
 	{
 		$output = trim($baseUrl);
-		if(strpos($baseUrl, "?") !== false)
+		if (strpos($baseUrl, "?") !== false)
 		{
 			$output .= "&" . $extra;
 		}else
@@ -528,12 +528,12 @@ class pagination
 		{
 			case "2":
 				$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . " to " . $this->getLastItem() . " of " . $this->getTotal() . " results.</span> ";	
-			if($previousUrl = $this->getPreviousUrl())
+			if ($previousUrl = $this->getPreviousUrl())
 			{
 				$output .= " " . $previousUrl;
 			}
 
-			if($nextUrl = $this->getNextUrl())
+			if ($nextUrl = $this->getNextUrl())
 			{
 				$output .= " " . $nextUrl;
 			}							
@@ -542,24 +542,24 @@ class pagination
 				//get full summary pagination
 			default:
 				$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . "/" . $this->getLastItem() . " (" . $this->getTotal() . ")</span> ";
-			if($firstUrl = $this->getFirstUrl())
+			if ($firstUrl = $this->getFirstUrl())
 			{
 				$output .= " " . $firstUrl;
 			}
-			if($previousUrl = $this->getPreviousUrl())
+			if ($previousUrl = $this->getPreviousUrl())
 			{
 				$output .= " " . $previousUrl;
 			}
 
-			if($groupUrls = $this->getGroupUrls())
+			if ($groupUrls = $this->getGroupUrls())
 			{
 				$output .= " " . $groupUrls;
 			}
-			if($nextUrl = $this->getNextUrl())
+			if ($nextUrl = $this->getNextUrl())
 			{
 				$output .= " " . $nextUrl;
 			}
-			if($lastUrl = $this->getLastUrl())
+			if ($lastUrl = $this->getLastUrl())
 			{
 				$output .= " " . $lastUrl;
 			}

@@ -202,7 +202,7 @@ abstract class AdminTabCore
 	{
 		// if the class is extended by a module, use modules/[module_name]/xx.php lang file
 		$currentClass = get_class($this);
-		if(Module::getModuleNameFromClass($currentClass))
+		if (Module::getModuleNameFromClass($currentClass))
 		{
 			$string = str_replace('\'', '\\\'', $string);
 			return Module::findTranslation(Module::$classInModule[$currentClass], $string, $currentClass);
@@ -806,7 +806,7 @@ abstract class AdminTabCore
 				}
 			}
 		}
-		elseif(Tools::isSubmit('submitFields') AND $this->requiredDatabase AND $this->tabAccess['add'] === '1' AND $this->tabAccess['delete'] === '1')
+		elseif (Tools::isSubmit('submitFields') AND $this->requiredDatabase AND $this->tabAccess['add'] === '1' AND $this->tabAccess['delete'] === '1')
 		{
 			if (!is_array($fields = Tools::getValue('fieldsBox')))
 				$fields = array();
@@ -931,7 +931,7 @@ abstract class AdminTabCore
 				$this->_errors[] = $error;
 
 			/* Copy new ico */
-			elseif(!copy($_FILES[$name]['tmp_name'], $dest))
+			elseif (!copy($_FILES[$name]['tmp_name'], $dest))
 				$this->_errors[] = Tools::displayError('an error occurred while uploading favicon: '.$_FILES[$name]['tmp_name'].' to '.$dest);
 		}
 		return !sizeof($this->_errors) ? true : false;
@@ -1200,7 +1200,7 @@ abstract class AdminTabCore
 
 		echo '<a name="'.$this->table.'">&nbsp;</a>';
 		echo '<form method="post" action="'.$currentIndex;
-		if(Tools::getIsset($this->identifier))
+		if (Tools::getIsset($this->identifier))
 			echo '&'.$this->identifier.'='.(int)(Tools::getValue($this->identifier));
 		echo '&token='.$token;		
 		if (Tools::getIsset($this->table.'Orderby'))

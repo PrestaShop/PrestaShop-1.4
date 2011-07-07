@@ -78,14 +78,14 @@
     function Pop($pop_element) {
       $element = array_pop($this->stack);
       $this->_indent();
-      if($element !== $pop_element) 
+      if ($element !== $pop_element) 
         die('XML Error: Tag Mismatch when trying to close "'. $pop_element. '"');
       else
         $this->xml .= "</$element>\n";
     }
 
     function GetXML() {
-      if(count($this->stack) != 0)
+      if (count($this->stack) != 0)
         die ('XML Error: No matching closing tag found for " '. array_pop($this->stack). '"');
       else
         return $this->xml;

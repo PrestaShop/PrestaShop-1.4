@@ -296,8 +296,8 @@ class FirePHP {
      */
     public function setLogToInsightConsole($console)
     {
-        if(is_string($console)) {
-            if(get_class($this)!='FirePHP_Insight' && !is_subclass_of($this, 'FirePHP_Insight')) {
+        if (is_string($console)) {
+            if (get_class($this)!='FirePHP_Insight' && !is_subclass_of($this, 'FirePHP_Insight')) {
                 throw new Exception('FirePHP instance not an instance or subclass of FirePHP_Insight!');
             }
             $this->logToInsightConsole = $this->to('request')->console($console);
@@ -736,8 +736,8 @@ class FirePHP {
      */
     public function fb($Object)
     {
-        if($this instanceof FirePHP_Insight && method_exists($this, '_logUpgradeClientMessage')) {
-            if(!FirePHP_Insight::$upgradeClientMessageLogged) {    // avoid infinite recursion as _logUpgradeClientMessage() logs a message
+        if ($this instanceof FirePHP_Insight && method_exists($this, '_logUpgradeClientMessage')) {
+            if (!FirePHP_Insight::$upgradeClientMessageLogged) {    // avoid infinite recursion as _logUpgradeClientMessage() logs a message
                 $this->_logUpgradeClientMessage();
             }
         }
@@ -795,12 +795,12 @@ class FirePHP {
             throw $this->newException('Wrong number of arguments to fb() function!');
         }
 
-        if($this->logToInsightConsole!==null && (get_class($this)=='FirePHP_Insight' || is_subclass_of($this, 'FirePHP_Insight'))) {
+        if ($this->logToInsightConsole!==null && (get_class($this)=='FirePHP_Insight' || is_subclass_of($this, 'FirePHP_Insight'))) {
             $msg = $this->logToInsightConsole;
             if ($Object instanceof Exception) {
                 $Type = self::EXCEPTION;
             }
-            if($Label && $Type!=self::TABLE && $Type!=self::GROUP_START) {
+            if ($Label && $Type!=self::TABLE && $Type!=self::GROUP_START) {
                 $msg = $msg->label($Label);
             }
             switch($Type) {
@@ -826,7 +826,7 @@ class FirePHP {
                 	$insightGroupStack[] = $msg->group(md5($Label))->open();
                     return $msg->log($Label);
                 case self::GROUP_END:
-                	if(count($insightGroupStack)==0) {
+                	if (count($insightGroupStack)==0) {
                 	    throw new Error('Too many groupEnd() as opposed to group() calls!');
                 	}
                 	$group = array_pop($insightGroupStack);
@@ -891,7 +891,7 @@ class FirePHP {
           
             $trace = debug_backtrace();
             if (!$trace) return false;
-            for( $i=0 ; $i<sizeof($trace) ; $i++ ) {
+            for ( $i=0 ; $i<sizeof($trace) ; $i++ ) {
     
                 if (isset($trace[$i]['class'])
                    && isset($trace[$i]['file'])
@@ -955,7 +955,7 @@ class FirePHP {
             if (!isset($meta['file']) || !isset($meta['line'])) {
     
                 $trace = debug_backtrace();
-                for( $i=0 ; $trace && $i<sizeof($trace) ; $i++ ) {
+                for ( $i=0 ; $trace && $i<sizeof($trace) ; $i++ ) {
           
                     if (isset($trace[$i]['class'])
                        && isset($trace[$i]['file'])
@@ -1016,7 +1016,7 @@ class FirePHP {
         
         $parts = explode("\n",chunk_split($msg, 5000, "\n"));
     
-        for( $i=0 ; $i<count($parts) ; $i++) {
+        for ( $i=0 ; $i<count($parts) ; $i++) {
             
             $part = $parts[$i];
             if ($part) {
@@ -1065,7 +1065,7 @@ class FirePHP {
     protected function _escapeTrace($Trace)
     {
         if (!$Trace) return $Trace;
-        for( $i=0 ; $i<sizeof($Trace) ; $i++ ) {
+        for ( $i=0 ; $i<sizeof($Trace) ; $i++ ) {
             if (isset($Trace[$i]['file'])) {
                 $Trace[$i]['file'] = $this->_escapeTraceFile($Trace[$i]['file']);
             }
@@ -1135,17 +1135,17 @@ class FirePHP {
      */
     public static function getAllRequestHeaders() {
         static $_cached_headers = false;
-        if($_cached_headers!==false) {
+        if ($_cached_headers!==false) {
             return $_cached_headers;
         }
         $headers = array();
-        if(function_exists('getallheaders')) {
+        if (function_exists('getallheaders')) {
             foreach( getallheaders() as $name => $value ) {
                 $headers[strtolower($name)] = $value;
             }
         } else {
             foreach($_SERVER as $name => $value) {
-                if(substr($name, 0, 5) == 'HTTP_') {
+                if (substr($name, 0, 5) == 'HTTP_') {
                     $headers[strtolower(str_replace(' ', '-', str_replace('_', ' ', substr($name, 5))))] = $value;
                 }
             }
@@ -1384,13 +1384,13 @@ class FirePHP {
      */
     protected static function is_utf8($str)
     {
-        if(function_exists('mb_detect_encoding')) {
+        if (function_exists('mb_detect_encoding')) {
             return (mb_detect_encoding($str) == 'UTF-8');
         }
         $c=0; $b=0;
         $bits=0;
         $len=strlen($str);
-        for($i=0; $i<$len; $i++){
+        for ($i=0; $i<$len; $i++){
             $c=ord($str[$i]);
             if ($c > 128){
                 if (($c >= 254)) return false;
@@ -1401,7 +1401,7 @@ class FirePHP {
                 elseif ($c >= 192) $bits=2;
                 else return false;
                 if (($i+$bits) > $len) return false;
-                while($bits > 1){
+                while ($bits > 1){
                     $i++;
                     $b=ord($str[$i]);
                     if ($b < 128 || $b > 191) return false;

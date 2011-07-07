@@ -103,7 +103,7 @@ if (Tools::isSubmit('displaySpecificOptions'))
 		$importModule->prefix = $prefix;
 		if ($link = @mysql_connect(Tools::getValue('server'), Tools::getValue('user'), Tools::getValue('password')))
 		{
-			if(!@mysql_select_db(Tools::getValue('database'), $link))
+			if (!@mysql_select_db(Tools::getValue('database'), $link))
 				die(Tools::displayError('The database selection cannot be made.'));
 			elseif (method_exists($importModule, 'displaySpecificOptions'))
 				die($importModule->displaySpecificOptions());

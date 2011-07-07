@@ -210,7 +210,7 @@ class awMark {
 	 */
 	public function setType($type, $size = NULL) {
 		$this->type = (int)$type;
-		if($size !== NULL) {
+		if ($size !== NULL) {
 			$this->setSize($size);
 		}
 	}
@@ -221,7 +221,7 @@ class awMark {
 	 * @param mixed $fill A color or a gradient
 	 */
 	public function setFill($fill) {
-		if($fill instanceof awColor or $fill instanceof awGradient) {
+		if ($fill instanceof awColor or $fill instanceof awGradient) {
 			$this->fill = $fill;
 		}
 	}
@@ -245,12 +245,12 @@ class awMark {
 	public function draw(awDriver $driver, awPoint $point) {
 	
 		// Hide marks ?
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 	
 		// Check if we can print marks
-		if($this->type !== NULL) {
+		if ($this->type !== NULL) {
 		
 			$this->driver = $driver;
 			$realPoint = $this->move->move($point->x, $point->y);
@@ -365,7 +365,7 @@ class awMark {
 		$triangle->setStyle(awPolygon::SOLID);
 		$triangle->setThickness(1);
 		
-		if($inverted === TRUE) {
+		if ($inverted === TRUE) {
 			// Bottom of the triangle
 			$triangle->append(new awPoint($x, $y + $size / sqrt(3)));
 		
@@ -387,7 +387,7 @@ class awMark {
 
 		$this->driver->filledPolygon($this->fill, $triangle);
 		
-		if($this->border->visible()) {			
+		if ($this->border->visible()) {			
 			$this->border->polygon($this->driver, $triangle);
 		}
 	}
@@ -415,7 +415,7 @@ class awMark {
 		
 		$this->driver->filledPolygon($this->fill, $rhombus);
 		
-		if($this->border->visible()) {			
+		if ($this->border->visible()) {			
 			$this->border->polygon($this->driver, $rhombus);
 		}
 	}
@@ -424,7 +424,7 @@ class awMark {
 	
 		list($x, $y) = $point->getLocation();
 
-		if($upright === TRUE) {
+		if ($upright === TRUE) {
 			$x11 = (int)($x);
 			$y11 = (int)($y - $this->size / 2);
 			$x12 = (int)($x);
@@ -464,7 +464,7 @@ class awMark {
 
 	protected function drawImage(awPoint $point) {
 		
-		if($this->image instanceof awImage) {
+		if ($this->image instanceof awImage) {
 		
 			$width = $this->image->width;
 			$height = $this->image->height;

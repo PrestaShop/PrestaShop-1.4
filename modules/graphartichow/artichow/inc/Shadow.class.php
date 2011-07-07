@@ -129,7 +129,7 @@ class awShadow {
 	 */
 	public function setSize($size, $smooth = NULL) {
 		$this->size = (int)$size;
-		if($smooth !== NULL) {
+		if ($smooth !== NULL) {
 			$this->smooth($smooth);
 		}
 	}
@@ -187,11 +187,11 @@ class awShadow {
 	 */
 	public function draw(awDriver $driver, awPoint $p1, awPoint $p2, $mode) {
 	
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 	
-		if($this->size <= 0) {
+		if ($this->size <= 0) {
 			return;
 		}
 		
@@ -203,7 +203,7 @@ class awShadow {
 		
 			case awShadow::RIGHT_BOTTOM :
 			
-				if($mode === awShadow::OUT) {
+				if ($mode === awShadow::OUT) {
 					$t1 = $p1->move(0, 0);
 					$t2 = $p2->move($this->size + 1, $this->size + 1);
 				} else { // PHP 4 compatibility
@@ -238,7 +238,7 @@ class awShadow {
 		
 			case awShadow::LEFT_TOP :
 			
-				if($mode === awShadow::OUT) {
+				if ($mode === awShadow::OUT) {
 					$t1 = $p1->move(- $this->size, - $this->size);
 					$t2 = $p2->move(0, 0);
 				} else { // PHP 4 compatibility
@@ -275,7 +275,7 @@ class awShadow {
 		
 			case awShadow::RIGHT_TOP :
 			
-				if($mode === awShadow::OUT) {
+				if ($mode === awShadow::OUT) {
 					$t1 = $p1->move(0, - $this->size);
 					$t2 = $p2->move($this->size + 1, 0);
 				} else { // PHP 4 compatibility
@@ -312,7 +312,7 @@ class awShadow {
 		
 			case awShadow::LEFT_BOTTOM :
 			
-				if($mode === awShadow::OUT) {
+				if ($mode === awShadow::OUT) {
 					$t1 = $p1->move(- $this->size, 0);
 					$t2 = $p2->move(0, $this->size + 1);
 				} else { // PHP 4 compatibility
@@ -351,10 +351,10 @@ class awShadow {
 	
 	private function smoothPast(awDriver $driver, awColor $color, $width, $height) {
 		
-		if($this->smooth) {
+		if ($this->smooth) {
 		
-			for($i = 0; $i < $this->size; $i++) {
-				for($j = 0; $j <= $i; $j++) {
+			for ($i = 0; $i < $this->size; $i++) {
+				for ($j = 0; $j <= $i; $j++) {
 					$driver->point(
 						$color,
 						new awPoint($i, $j + $height - $this->size)
@@ -362,8 +362,8 @@ class awShadow {
 				}
 			}
 			
-			for($i = 0; $i < $this->size; $i++) {
-				for($j = 0; $j <= $i; $j++) {
+			for ($i = 0; $i < $this->size; $i++) {
+				for ($j = 0; $j <= $i; $j++) {
 					$driver->point(
 						$color,
 						new awPoint($width - $this->size + $j, $i)
@@ -377,10 +377,10 @@ class awShadow {
 	
 	private function smoothFuture(awDriver $driver, awColor $color, $width, $height) {
 		
-		if($this->smooth) {
+		if ($this->smooth) {
 		
-			for($i = 0; $i < $this->size; $i++) {
-				for($j = 0; $j <= $i; $j++) {
+			for ($i = 0; $i < $this->size; $i++) {
+				for ($j = 0; $j <= $i; $j++) {
 					$driver->point(
 						$color,
 						new awPoint($i, $this->size - $j - 1)
@@ -388,8 +388,8 @@ class awShadow {
 				}
 			}
 			
-			for($i = 0; $i < $this->size; $i++) {
-				for($j = 0; $j <= $i; $j++) {
+			for ($i = 0; $i < $this->size; $i++) {
+				for ($j = 0; $j <= $i; $j++) {
 					$driver->point(
 						$color,
 						new awPoint($width - $this->size + $j, $height - $i - 1)

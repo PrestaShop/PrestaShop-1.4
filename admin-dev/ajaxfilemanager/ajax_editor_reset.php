@@ -9,7 +9,7 @@
 	require_once('../../config/config.inc.php');
 	require_once('../init.php');
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");	
-	if(!isset($_POST['path']))
+	if (!isset($_POST['path']))
 	{
 		$_POST['path'] = "uploaded/Winter.jpg" .  "?" . makeQueryString(array('path'));
 		//for crop
@@ -27,19 +27,19 @@
 	$error = "";
 	$info = "";
 	
-	if(empty($_POST['path']))
+	if (empty($_POST['path']))
 	{
 		$error  =  IMG_SAVE_EMPTY_PATH;
-	}elseif(!file_exists($_POST['path']))
+	}elseif (!file_exists($_POST['path']))
 	{
 		$error  =  IMG_SAVE_NOT_EXISTS;
-	}elseif(!isUnderRoot($_POST['path']))
+	}elseif (!isUnderRoot($_POST['path']))
 	{
 		$error = IMG_SAVE_PATH_DISALLOWED;
 	}
 	else
 	{
-		if(!empty($_POST['mode']))
+		if (!empty($_POST['mode']))
 		{
 			
 			include_once(CLASS_IMAGE);
@@ -49,26 +49,26 @@
 			switch($_POST['mode'])
 			{
 				case "resize":					
-					if(!$image->resize($_POST['width'], $_POST['height'], (!empty($_POST['constraint'])?true:false)))
+					if (!$image->resize($_POST['width'], $_POST['height'], (!empty($_POST['constraint'])?true:false)))
 					{
 						$error = IMG_SAVE_RESIZE_FAILED;
 					}					
 					break;
 				case "crop":
-					if(!$image->cropToDimensions($_POST['x'], $_POST['y'], (int)($_POST['x']) + (int)($_POST['width']), (int)($_POST['y']) + (int)($_POST['height'])))
+					if (!$image->cropToDimensions($_POST['x'], $_POST['y'], (int)($_POST['x']) + (int)($_POST['width']), (int)($_POST['y']) + (int)($_POST['height'])))
 					{
 						$error = IMG_SAVE_CROP_FAILED;
 					}
 					
 					break;
 				case "flip":
-					if(!$image->flip($_POST['flip_angle']))
+					if (!$image->flip($_POST['flip_angle']))
 					{
 						$error = IMG_SAVE_FLIP_FAILED;
 					}
 					break;
 				case "rotate":
-					if(!$image->rotate((int)($_POST['angle'])))
+					if (!$image->rotate((int)($_POST['angle'])))
 					{
 						$error = IMG_SAVE_ROTATE_FAILED;
 					}
@@ -76,17 +76,17 @@
 				default:
 					$error = IMG_SAVE_UNKNOWN_MODE;
 			}
-			if(empty($error))
+			if (empty($error))
 			{
 				
 				$sessionNewPath = $session->getSessionDir() . uniqid(md5(time())) . "." . getFileExt($_POST['path']);
-				if(!@copy($_POST['path'], $sessionNewPath))
+				if (!@copy($_POST['path'], $sessionNewPath))
 				{
 					$error = IMG_SAVE_BACKUP_FAILED;
 				}else 
 				{
 					addSessionHistory($_POST['path'], $sessionNewPath);
-					if($image->saveImage($_POST['path']))
+					if ($image->saveImage($_POST['path']))
 					{						
 						$imageInfo = $image->getFinalImageInfo();	
 						$info .= ",width:" . $imageInfo['width'] . "\n";
@@ -108,7 +108,7 @@
 	}
 	
 	echo "error:'" . $error . "'\n";
-	if(isset($image) && is_object($image))
+	if (isset($image) && is_object($image))
 	{
 		$image->DestroyImages();
 	}

@@ -84,7 +84,7 @@
 		{
 			foreach($this->searchkeywords as $k=>$v)
 			{
-				if(array_key_exists($k, $keywords) !== false)
+				if (array_key_exists($k, $keywords) !== false)
 				{
 					$this->searchkeywords[$k] = $keywords[$k];
 				}
@@ -100,40 +100,40 @@
 			$baseFolderPath = addTrailingSlash(backslashToSlash((is_null($baseFolderPath)?$this->rootFolder:$baseFolderPath)));
 			
 			$dirHandler = @opendir($baseFolderPath);
-			if($dirHandler)
+			if ($dirHandler)
 			{
-				while(false !== ($file = readdir($dirHandler)))
+				while (false !== ($file = readdir($dirHandler)))
 				{
-					if($file != '.' && $file != '..')
+					if ($file != '.' && $file != '..')
 					{
 						$path = $baseFolderPath . $file;
-						if(is_file($path))
+						if (is_file($path))
 						{
 							$isValid = true;
 
 							$fileTime = @filemtime($path);
 							$fileSize = @filesize($path);	
-							if($this->searchkeywords['name'] !== ''  && @eregi($this->searchkeywords['name'], $file) === false)
+							if ($this->searchkeywords['name'] !== ''  && @eregi($this->searchkeywords['name'], $file) === false)
 							{
 								$isValid = false;
 							}
-							if($this->searchkeywords['mtime_from'] != '' && $fileTime < @strtotime($this->searchkeywords['mtime_from']))
+							if ($this->searchkeywords['mtime_from'] != '' && $fileTime < @strtotime($this->searchkeywords['mtime_from']))
 							{
 								$isValid = false;
 							}
-							if($this->searchkeywords['mtime_to'] != '' && $fileTime > @strtotime($this->searchkeywords['mtime_to']))
+							if ($this->searchkeywords['mtime_to'] != '' && $fileTime > @strtotime($this->searchkeywords['mtime_to']))
 							{
 								$isValid = false;
 							}							
-							if($this->searchkeywords['size_from'] != '' && $fileSize < @strtotime($this->searchkeywords['size_from']))
+							if ($this->searchkeywords['size_from'] != '' && $fileSize < @strtotime($this->searchkeywords['size_from']))
 							{
 								$isValid = false;
 							}
-							if($this->searchkeywords['size_to'] != '' && $fileSize > @strtotime($this->searchkeywords['size_to']))
+							if ($this->searchkeywords['size_to'] != '' && $fileSize > @strtotime($this->searchkeywords['size_to']))
 							{
 								$isValid = false;
 							}			
-							if($isValid && isListingDocument($path))
+							if ($isValid && isListingDocument($path))
 							{
 								$finalPath = $path;
 								$objFile = new file($finalPath);
@@ -160,7 +160,7 @@
 								$this->files[] = $tem;
 								$tem = null;								
 							}
-						}elseif(is_dir($path) && $this->searchkeywords['recursive'])
+						}elseif (is_dir($path) && $this->searchkeywords['recursive'])
 						{
 							$this->Search($baseFolderPath);
 						}

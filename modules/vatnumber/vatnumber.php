@@ -154,7 +154,7 @@ class VatNumber extends Module
 				if (Configuration::updateValue('VATNUMBER_COUNTRY', (int)(Tools::getValue('vatnumber_country'))))
 					echo $this->displayConfirmation($this->l('Your country has been updated.'));
 			$check = (int)Tools::getValue('vatnumber_checking');
-			if(Configuration::get('VATNUMBER_CHECKING') != $check AND Configuration::updateValue('VATNUMBER_CHECKING', $check))
+			if (Configuration::get('VATNUMBER_CHECKING') != $check AND Configuration::updateValue('VATNUMBER_CHECKING', $check))
 				echo ($check ? $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now enabled.')) : $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now disabled.')));
 		}
 		echo '

@@ -223,7 +223,7 @@ class AdminCarriers extends AdminTab
 					</select>
 					<p>'.$this->l('Out-of-range behavior when none is defined (e.g., when a customer\'s cart weight is greater than the highest range limit)').'</p>
 				</div>';
-				if($this->getFieldValue($obj, 'is_module'))
+				if ($this->getFieldValue($obj, 'is_module'))
 				{
 					echo '<label>'.$this->l('Module:').' </label>
 						  <div class="margin-form"><p> - '.
@@ -231,12 +231,12 @@ class AdminCarriers extends AdminTab
 						  <input type="hidden" name="is_module" value="1">
 						  <input type="hidden" name="external_module_name" value="'.$this->getFieldValue($obj, 'external_module_name').'">';
 
-					if($this->getFieldValue($obj, 'shipping_external'))
+					if ($this->getFieldValue($obj, 'shipping_external'))
 					{
 						echo '<p> - '.$this->l('The shipping costs are calculated outside of your shop').'</p>
 						<input type="hidden" name="shipping_external" value="1">';
 					}
-					if($this->getFieldValue($obj, 'need_range'))
+					if ($this->getFieldValue($obj, 'need_range'))
 					{
 						echo '<p> - '.$this->l('This carrier uses PrestaShop range to calculate shipping costs').'</p>
 						<input type="hidden" name="need_range" value="1">';

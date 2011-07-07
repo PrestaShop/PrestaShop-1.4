@@ -220,7 +220,7 @@ class ToolsCore
 	*/
 	public static function getCurrentUrlProtocolPrefix()
 	{
-		if(self::usingSecureMode())
+		if (self::usingSecureMode())
 			return 'https://';
 		else
 			return 'http://';
@@ -529,7 +529,7 @@ class ToolsCore
 				else
 					p('Unable to delete '.$dirname.$file);
 			}
-		if($delete_self)
+		if ($delete_self)
 			rmdir($dirname);
 	}
 
@@ -863,7 +863,7 @@ class ToolsCore
 
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 
-		if($type_cat === 'products')
+		if ($type_cat === 'products')
 		    $category = new Category((int)($id_category), (int)($cookie->id_lang));
 		elseif ($type_cat === 'CMS')
 		    $category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
@@ -1118,7 +1118,7 @@ class ToolsCore
 	{
 		foreach($array as &$row)
 			$row['price_tmp'] =  Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 2);
-		if(strtolower($orderWay) == 'desc')
+		if (strtolower($orderWay) == 'desc')
 			uasort($array, 'cmpPriceDesc');
 		else
 			uasort($array, 'cmpPriceAsc');
@@ -1289,7 +1289,7 @@ class ToolsCore
 	public static function toCamelCase($str, $capitaliseFirstChar = false)
 	{
 		$str = strtolower($str);
-		if($capitaliseFirstChar)
+		if ($capitaliseFirstChar)
 			$str = ucfirst($str);
 		return preg_replace_callback('/_([a-z])/', create_function('$c', 'return strtoupper($c[1]);'), $str);
 	}
@@ -1324,7 +1324,7 @@ class ToolsCore
 			
 			// If the string is too big preg_replace return an error
 			// In this case, we don't compress the content
-			if( preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR ) {
+			if ( preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR ) {
 				error_log('ERROR: PREG_BACKTRACK_LIMIT_ERROR in function packJSinHTML');
 				return $htmlContentCopy;
 			}
@@ -1414,7 +1414,7 @@ class ToolsCore
 	public static function addJS($js_uri)
 	{
 		global $js_files;
-		if(!isset($js_files))
+		if (!isset($js_files))
 			$js_files = array();
 		// avoid useless operation...
 		if (in_array($js_uri, $js_files))
@@ -1976,13 +1976,13 @@ FileETag INode MTime Size
     {
     	$version = null;
 
-    	if(defined('PHP_VERSION'))
+    	if (defined('PHP_VERSION'))
     		$version = PHP_VERSION;
     	else
     		$version  = phpversion('');
 
 		//Case management system of ubuntu, php version return 5.2.4-2ubuntu5.2
-    	if(strpos($version, '-') !== false )
+    	if (strpos($version, '-') !== false )
 			$version  = substr($version, 0, strpos($version, '-'));
 
         return $version;

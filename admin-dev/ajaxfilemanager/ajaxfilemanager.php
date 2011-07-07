@@ -12,7 +12,7 @@
 	//$session->gc();
 	require_once(CLASS_SESSION_ACTION);
 	$sessionAction = new SessionAction();	
-	if(CONFIG_LOAD_DOC_LATTER)
+	if (CONFIG_LOAD_DOC_LATTER)
 	{
 		$fileList = array();
 		$folderInfo = array('path'=>getCurrentFolderPath());
@@ -26,7 +26,7 @@
 		$fileList = $manager->getFileList();
 		$folderInfo = $manager->getFolderInfo();		
 	}
-	if(CONFIG_SYS_THUMBNAIL_VIEW_ENABLE)
+	if (CONFIG_SYS_THUMBNAIL_VIEW_ENABLE)
 	{
 	$views = array(
 		'detail'=>LBL_BTN_VIEW_DETAILS,
@@ -39,7 +39,7 @@
 	);		
 	}
 
-	if(!empty($_GET['view']))
+	if (!empty($_GET['view']))
 	{
 		switch($_GET['view'])
 		{
@@ -137,11 +137,11 @@ $(document).ready(
 	{
 		jQuery(document).bind('keypress', function(event) {
 			var code=event.charCode || event.keyCode;
-			if(code && code == 13) {// if enter is pressed
+			if (code && code == 13) {// if enter is pressed
 	  			event.preventDefault(); //prevent browser from following the actual href
 			};
 		});		
-		if(typeof(cancelSelectFile) != 'undefined')
+		if (typeof(cancelSelectFile) != 'undefined')
 		{
 			$('#linkClose').show();
 		}
@@ -149,7 +149,7 @@ $(document).ready(
 			function()
 			{
 
-				if(this.value == '<?php echo $view; ?>')
+				if (this.value == '<?php echo $view; ?>')
 				{
 					this.checked = true;
 				}else
@@ -179,7 +179,7 @@ $(document).ready(
 	
 </script>
 <?php
-	if(file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY_SEPARATOR . 'for_' . CONFIG_EDITOR_NAME . ".js")
+	if (file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'jscripts' . DIRECTORY_SEPARATOR . 'for_' . CONFIG_EDITOR_NAME . ".js")
 	{
 	?>
 	<script type="text/javascript" src="jscripts/<?php echo 'for_' . CONFIG_EDITOR_NAME . '.js'; ?>"></script>
@@ -217,7 +217,7 @@ $(document).ready(
 					<li><a href="#" id="actionRefresh" onclick="return windowRefresh();"><span><?php echo LBL_ACTION_REFRESH; ?></span></a></li>
 					<li><a href="#" id="actionSelectAll" class="check_all" onclick="return checkAll(this);"><span><?php echo LBL_ACTION_SELECT_ALL; ?></span></a></li>
 					<?php 
-						if(CONFIG_OPTIONS_DELETE)
+						if (CONFIG_OPTIONS_DELETE)
 						{
 							?>
 							<li><a href="#" id="actionDelete" onclick="return deleteDocuments();"><span><?php echo LBL_ACTION_DELETE; ?></span></a></li>
@@ -225,7 +225,7 @@ $(document).ready(
 						}
 					?>
 					<?php 
-						if(CONFIG_OPTIONS_CUT)
+						if (CONFIG_OPTIONS_CUT)
 						{
 							?>
 							<li><a href="#" id="actionCut" onclick="return cutDocuments('<?php echo ERR_NOT_DOC_SELECTED_FOR_CUT; ?>');"><span><?php echo LBL_ACTION_CUT; ?></span></a></li>			
@@ -233,7 +233,7 @@ $(document).ready(
 						}
 					?>
 					<?php 
-						if(CONFIG_OPTIONS_COPY)
+						if (CONFIG_OPTIONS_COPY)
 						{
 							?>
 							<li><a href="#" id="actionCopy" onclick="return copyDocuments('<?php echo ERR_NOT_DOC_SELECTED_FOR_COPY; ?>');"><span><?php echo LBL_ACTION_COPY; ?></span></a></li>
@@ -241,7 +241,7 @@ $(document).ready(
 						}
 					?>
 					<?php 
-						if(CONFIG_OPTIONS_CUT || CONFIG_OPTIONS_COPY)
+						if (CONFIG_OPTIONS_CUT || CONFIG_OPTIONS_COPY)
 						{
 							?>
 							<li><a href="#" id="actionPaste" onclick="return pasteDocuments('<?php echo ERR_NOT_DOC_SELECTED_FOR_PASTE; ?>');"><span><?php echo LBL_ACTION_PASTE; ?></span></a></li>
@@ -250,7 +250,7 @@ $(document).ready(
 					?>															
 					
 					<?php 
-						if(CONFIG_OPTIONS_NEWFOLDER)
+						if (CONFIG_OPTIONS_NEWFOLDER)
 						{
 							?>
 							<li><a  id="actionNewFolder" href="#" onclick="return newFolderWin(this);"><span><?php echo LBL_BTN_NEW_FOLDER; ?></span></a></li>
@@ -258,7 +258,7 @@ $(document).ready(
 						}
 					?>
 					<?php 
-						if(CONFIG_OPTIONS_UPLOAD)
+						if (CONFIG_OPTIONS_UPLOAD)
 						{
 							?>
 							<li><a  id="actionUpload" href="#" onclick="return uploadFileWin(this);"><span><?php echo LBL_BTN_UPLOAD; ?></span></a></li>
@@ -285,7 +285,7 @@ $(document).ready(
          
       <div id="rightCol">
 	      	<?php
-			if(CONFIG_LOAD_DOC_LATTER )
+			if (CONFIG_LOAD_DOC_LATTER )
 			{
 				$currentPath = getCurrentFolderPath();
 				?>
@@ -427,7 +427,7 @@ $(document).ready(
 	          	<b><?php echo LBL_SEARCH_FOLDER; ?></b><br />
 	          	<span id="searchFolderContainer">
 	          	<?php
-	          		if(CONFIG_LOAD_DOC_LATTER)
+	          		if (CONFIG_LOAD_DOC_LATTER)
 	          		{
 	          			?>
 	          			<script type="text/javascript">

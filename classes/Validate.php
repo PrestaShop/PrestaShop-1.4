@@ -901,7 +901,7 @@ class ValidateCore
 		SELECT `id_address`
 		FROM `'._DB_PREFIX_.'address` 
 		WHERE `dni` = \''.pSQL($dni).'\'');
-		if($result)
+		if ($result)
 			return -1;
 		
 		for ($i=0;$i<9;$i++)

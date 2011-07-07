@@ -128,7 +128,7 @@ class awAxis {
 
 		$this->setColor(new awBlack);
 
-		if($min !== NULL and $max !== NULL) {
+		if ($min !== NULL and $max !== NULL) {
 			$this->setRange($min, $max);
 		}
 
@@ -200,7 +200,7 @@ class awAxis {
 	 * @param string $name Tick object name
 	 */
 	public function deleteTick($name) {
-		if(array_key_exists($name, $this->ticks)) {
+		if (array_key_exists($name, $this->ticks)) {
 			unset($this->ticks[$name]);
 		}
 	}
@@ -261,9 +261,9 @@ class awAxis {
 	public function reverseTickStyle() {
 		
 		foreach($this->ticks as $tick) {
-			if($tick->getStyle() === awTick::IN) {
+			if ($tick->getStyle() === awTick::IN) {
 				$tick->setStyle(awTick::OUT);
-			} elseif($tick->getStyle() === awTick::OUT) {
+			} elseif ($tick->getStyle() === awTick::OUT) {
 				$tick->setStyle(awTick::IN);
 			}
 		}
@@ -320,7 +320,7 @@ class awAxis {
 	 * @param array $texts Some texts
 	 */
 	public function setLabelText($texts) {
-		if(is_array($texts)) {
+		if (is_array($texts)) {
 			$this->auto(FALSE);
 			$function = 'axis'.time().'_'.(microtime() * 1000000);
 			eval('function '.$function.'($value) {
@@ -429,10 +429,10 @@ class awAxis {
 	 * @param float $max
 	 */
 	public function setRange($min, $max) {
-		if($min !== NULL) {
+		if ($min !== NULL) {
 			$this->range[0] = (float)$min;
 		}
-		if($max !== NULL) {
+		if ($max !== NULL) {
 			$this->range[1] = (float)$max;
 		}
 	}
@@ -468,7 +468,7 @@ class awAxis {
 	public function setXCenter(awAxis $axis, $value) {
 
 		// Check vector angle
-		if($this->line->isVertical() === FALSE) {
+		if ($this->line->isVertical() === FALSE) {
 			awImage::drawError("Class Axis: setXCenter() can only be used on vertical axes.");
 		}
 
@@ -490,7 +490,7 @@ class awAxis {
 	public function setYCenter(awAxis $axis, $value) {
 
 		// Check vector angle
-		if($this->line->isHorizontal() === FALSE) {
+		if ($this->line->isHorizontal() === FALSE) {
 			awImage::drawError("Class Axis: setYCenter() can only be used on horizontal axes.");
 		}
 
@@ -563,7 +563,7 @@ class awAxis {
 	 */
 	public function draw(awDriver $driver) {
 
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 
@@ -586,14 +586,14 @@ class awAxis {
 
 	public function autoScale() {
 
-		if($this->isAuto() === FALSE) {
+		if ($this->isAuto() === FALSE) {
 			return;
 		}
 
 		list($min, $max) = $this->getRange();
 		$interval = $max - $min;
 
-		if($interval > 0) {
+		if ($interval > 0) {
 			$partMax = $max / $interval;
 			$partMin = $min / $interval;
 		} else {
@@ -606,17 +606,17 @@ class awAxis {
 
 		$pow = pow(10, $difference);
 
-		if($pow > 0) {
+		if ($pow > 0) {
 			$intervalNormalize = $interval / $pow;
 		} else {
 			$intervalNormalize = 0;
 		}
 
-		if($difference <= 0) {
+		if ($difference <= 0) {
 
 			$precision = $difference * -1 + 1;
 
-			if($intervalNormalize > 2) {
+			if ($intervalNormalize > 2) {
 				$precision--;
 			}
 
@@ -624,45 +624,45 @@ class awAxis {
 			$precision = 0;
 		}
 
-		if($min != 0 and $max != 0) {
+		if ($min != 0 and $max != 0) {
 			$precision++;
 		}
 
-		if($this->label->getCallbackFunction() === NULL) {
+		if ($this->label->getCallbackFunction() === NULL) {
 			$this->setLabelPrecision($precision);
 		}
 
-		if($intervalNormalize <= 1.5) {
+		if ($intervalNormalize <= 1.5) {
 			$intervalReal = 1.5;
 			$labelNumber = 4;
-		} elseif($intervalNormalize <= 2) {
+		} elseif ($intervalNormalize <= 2) {
 			$intervalReal = 2;
 			$labelNumber = 5;
-		} elseif($intervalNormalize <= 3) {
+		} elseif ($intervalNormalize <= 3) {
 			$intervalReal = 3;
 			$labelNumber = 4;
-		} elseif($intervalNormalize <= 4) {
+		} elseif ($intervalNormalize <= 4) {
 			$intervalReal = 4;
 			$labelNumber = 5;
-		} elseif($intervalNormalize <= 5) {
+		} elseif ($intervalNormalize <= 5) {
 			$intervalReal = 5;
 			$labelNumber = 6;
-		} elseif($intervalNormalize <= 8) {
+		} elseif ($intervalNormalize <= 8) {
 			$intervalReal = 8;
 			$labelNumber = 5;
-		} elseif($intervalNormalize <= 10) {
+		} elseif ($intervalNormalize <= 10) {
 			$intervalReal = 10;
 			$labelNumber = 6;
 		}
 
-		if($min == 0) {
+		if ($min == 0) {
 
 			$this->setRange(
 				$min,
 				$intervalReal * $pow
 			);
 
-		} elseif($max == 0) {
+		} elseif ($max == 0) {
 
 			$this->setRange(
 				$intervalReal * $pow * -1,
@@ -695,15 +695,15 @@ class awAxis {
 
 	protected function drawLabels($driver) {
 
-		if($this->labelNumber !== NULL) {
+		if ($this->labelNumber !== NULL) {
 			list($min, $max) = $this->range;
 			$number = $this->labelNumber - 1;
-			if($number < 1) {
+			if ($number < 1) {
 				return;
 			}
 			$function = $this->rangeCallback['toValue'];
 			$labels = array();
-			for($i = 0; $i <= $number; $i++) {
+			for ($i = 0; $i <= $number; $i++) {
 				$labels[] = $function($i / $number, $min, $max);
 			}
 			$this->label->set($labels);
@@ -711,7 +711,7 @@ class awAxis {
 
 		$labels = $this->label->count();
 
-		for($i = 0; $i < $labels; $i++) {
+		for ($i = 0; $i < $labels; $i++) {
 
 			$p = $this->getPointFromValue($this->label->get($i));
 			$this->label->draw($driver, $p, $i);
@@ -761,7 +761,7 @@ function toProportionalValue($position, $min, $max) {
 }
 
 function toProportionalPosition($value, $min, $max) {
-	if($max - $min == 0) {
+	if ($max - $min == 0) {
 		return 0;
 	}
 	return ($value - $min) / ($max - $min);

@@ -217,7 +217,7 @@ abstract class awComponent {
 	 * @param awColor $color (can be null)
 	 */
 	public function setBackgroundColor($color) {
-		if($color === NULL or $color instanceof awColor) {
+		if ($color === NULL or $color instanceof awColor) {
 			$this->background = $color;
 		}
 	}
@@ -228,7 +228,7 @@ abstract class awComponent {
 	 * @param awGradient $gradient (can be null)
 	 */
 	public function setBackgroundGradient($gradient) {
-		if($gradient === NULL or $gradient instanceof awGradient) {
+		if ($gradient === NULL or $gradient instanceof awGradient) {
 			$this->background = $gradient;
 		}
 	}
@@ -239,7 +239,7 @@ abstract class awComponent {
 	 * @param awImage $image (can be null)
 	 */
 	public function setBackgroundImage($image) {
-		if($image === NULL or $image instanceof awImage) {
+		if ($image === NULL or $image instanceof awImage) {
 			$this->background = $image;
 		}
 	}
@@ -328,12 +328,12 @@ abstract class awComponent {
 		// Set component background
 		$background = $this->getBackground();
 		
-		if($background !== NULL) {
+		if ($background !== NULL) {
 			
 			$p1 = new awPoint(0, 0);
 			$p2 = new awPoint($this->w - 1, $this->h - 1);
 			
-			if($background instanceof awImage) {
+			if ($background instanceof awImage) {
 	
 				$driver->copyImage(
 					$background,

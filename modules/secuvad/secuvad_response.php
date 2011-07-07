@@ -88,7 +88,7 @@ if (in_array($secuvad->getRemoteIPaddress(), $secuvad->get_secuvad_ip()))
     		}		
     	}	
     }
-    if(preg_match('#<bulk_report><global_report>([^<]*)<.global_report><error>([^<]+)<.error><.bulk_report>#Ui', $rep, $regs))
+    if (preg_match('#<bulk_report><global_report>([^<]*)<.global_report><error>([^<]+)<.error><.bulk_report>#Ui', $rep, $regs))
 		$secuvad->secuvad_log('secuvad_response.php '."\n\t".' Error '.$regs[2]); 
 }
 

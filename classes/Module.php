@@ -431,11 +431,11 @@ abstract class ModuleCore
 	public static function preloadModuleNameFromId($ids)
 	{
 		static $preloadedModuleNameFromId;
-		if(!isset($preloadedModuleNameFromId)) {
+		if (!isset($preloadedModuleNameFromId)) {
 			$preloadedModuleNameFromId = array();
 		}
 		
-		if(is_array($ids))
+		if (is_array($ids))
 		{
 			foreach($ids as $id)
 				$preloadedModuleNameFromId[$id] = false;
@@ -447,23 +447,23 @@ abstract class ModuleCore
 			foreach($results as $result)
 				$preloadedModuleNameFromId[$result['id_module']] = $result['name'];
 		}
-		elseif(!isset($preloadedModuleNameFromId[$ids]))
+		elseif (!isset($preloadedModuleNameFromId[$ids]))
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT `name`
 			FROM `'._DB_PREFIX_.'module`
 			WHERE `id_module` = '.(int)($ids));
-			if($result)
+			if ($result)
 				$preloadedModuleNameFromId[$ids] = $result['name'];
 			else
 				$preloadedModuleNameFromId[$ids] = false;
 		}
 		
 
-		if(is_array($ids)) {
+		if (is_array($ids)) {
 			return $preloadedModuleNameFromId;
 		} else {
-			if(!isset($preloadedModuleNameFromId[$ids])) 
+			if (!isset($preloadedModuleNameFromId[$ids])) 
 				return false;
 			return $preloadedModuleNameFromId[$ids];
 		}
@@ -517,14 +517,14 @@ abstract class ModuleCore
 				{
 					$file = _PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php';
 					if (Tools::file_exists_cache($file) AND include_once($file))
-						if(isset($_MODULE) AND is_array($_MODULE))
+						if (isset($_MODULE) AND is_array($_MODULE))
 							$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 
 					$xml_module->displayName = Module::findTranslation($xml_module->name, $xml_module->displayName, (string)$xml_module->name);
 					$xml_module->description = Module::findTranslation($xml_module->name, $xml_module->description, (string)$xml_module->name);
 					$xml_module->author = Module::findTranslation($xml_module->name, $xml_module->author, (string)$xml_module->name);
 
-					if(isset($xml_module->confirmUninstall))
+					if (isset($xml_module->confirmUninstall))
 						$xml_module->confirmUninstall = Module::findTranslation($xml_module->name, $xml_module->confirmUninstall, (string)$xml_module->name);
 
 
@@ -558,7 +558,7 @@ abstract class ModuleCore
 		}
 
 		// Get modules information from database
-		if(!empty($moduleNameList))
+		if (!empty($moduleNameList))
 		{
 			$results = Db::getInstance()->executeS('SELECT `id_module`, `active`, `name` FROM `'._DB_PREFIX_.'module` WHERE `name` IN ('.join(',',$moduleNameList).')');
 			foreach($results as $result)
@@ -898,9 +898,9 @@ abstract class ModuleCore
 	 */
 	public function getPosition($id_hook)
 	{
-		if(isset(Hook::$preloadModulesFromHooks)) 
-			if(isset(Hook::$preloadModulesFromHooks[$id_hook]))
-				if(isset(Hook::$preloadModulesFromHooks[$id_hook]['module_position'][$this->id]))
+		if (isset(Hook::$preloadModulesFromHooks)) 
+			if (isset(Hook::$preloadModulesFromHooks[$id_hook]))
+				if (isset(Hook::$preloadModulesFromHooks[$id_hook]['module_position'][$this->id]))
 					return Hook::$preloadModulesFromHooks[$id_hook]['module_position'][$this->id];
 				else
 					return 0;

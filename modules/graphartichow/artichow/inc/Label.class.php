@@ -144,20 +144,20 @@ class awLabel implements awPositionable {
 	 */
 	public function __construct($label = NULL, $font = NULL, $color = NULL, $angle = 0) {
 	
-		if(is_array($label)) {
+		if (is_array($label)) {
 			$this->set($label);
-		} elseif(is_string($label)) {
+		} elseif (is_string($label)) {
 			$this->set(array($label));
 		}
 		
-		if($font === NULL) {
+		if ($font === NULL) {
 			$font = new awFont2;
 		}
 		
 		$this->setFont($font);
 		$this->setAngle($angle);
 		
-		if($color instanceof awColor) {
+		if ($color instanceof awColor) {
 			$this->setColor($color);
 		} else {
 			$this->setColor(new awColor(0, 0, 0));
@@ -196,7 +196,7 @@ class awLabel implements awPositionable {
 	 */
 	public function set($labels) {
 	
-		if(is_array($labels)) {
+		if (is_array($labels)) {
 			$this->texts = $labels;
 		} else {
 			$this->texts = array((string)$labels);
@@ -252,7 +252,7 @@ class awLabel implements awPositionable {
 	 */
 	public function setFont(awFont $font, $color = NULL) {
 		$this->font = $font;
-		if($color instanceof awColor) {
+		if ($color instanceof awColor) {
 			$this->setColor($color);
 		}
 	}
@@ -398,10 +398,10 @@ class awLabel implements awPositionable {
 	 * @param int $v Vertical alignment
 	 */
 	public function setAlign($h = NULL, $v = NULL) {
-		if($h !== NULL) {
+		if ($h !== NULL) {
 			$this->hAlign = (int)$h;
 		}
-		if($v !== NULL) {
+		if ($v !== NULL) {
 			$this->vAlign = (int)$v;
 		}
 	}
@@ -414,11 +414,11 @@ class awLabel implements awPositionable {
 	 */
 	public function getText($key) {
 	
-		if(is_array($this->texts) and array_key_exists($key, $this->texts)) {
+		if (is_array($this->texts) and array_key_exists($key, $this->texts)) {
 		
 			$value = $this->texts[$key];
 			
-			if(is_string($this->function)) {
+			if (is_string($this->function)) {
 				$value = call_user_func($this->function, $value);
 			}
 		
@@ -427,15 +427,15 @@ class awLabel implements awPositionable {
 			$text->setAngle($this->angle);
 			$text->setColor($this->color);
 			
-			if($this->background instanceof awColor) {
+			if ($this->background instanceof awColor) {
 				$text->setBackgroundColor($this->background);
-			} elseif($this->background instanceof awGradient) {
+			} elseif ($this->background instanceof awGradient) {
 				$text->setBackgroundGradient($this->background);
 			}
 			
 			$text->border = $this->border;
 			
-			if($this->padding !== NULL) {
+			if ($this->padding !== NULL) {
 				call_user_func_array(array($text, 'setPadding'), $this->padding);
 			}
 			
@@ -480,36 +480,36 @@ class awLabel implements awPositionable {
 	 */
 	public function draw(awDriver $driver, awPoint $p, $key = 0) {
 	
-		if(($key % $this->interval) !== 0) {
+		if (($key % $this->interval) !== 0) {
 			return;
 		}
 	
 		// Hide all labels
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 		
 		// Key is hidden
-		if(array_key_exists($key, $this->hideKey)) {
+		if (array_key_exists($key, $this->hideKey)) {
 			return;
 		}
 		
 		// Hide first label
-		if($key === 0 and $this->hideFirst) {
+		if ($key === 0 and $this->hideFirst) {
 			return;
 		}
 		
 		// Hide last label
-		if($key === count($this->texts) - 1 and $this->hideLast) {
+		if ($key === count($this->texts) - 1 and $this->hideLast) {
 			return;
 		}
 	
 		$text = $this->getText($key);
 		
-		if($text !== NULL) {
+		if ($text !== NULL) {
 		
 			// Value must be hidden
-			if(in_array($text->getText(), $this->hideValue)) {
+			if (in_array($text->getText(), $this->hideValue)) {
 				return;
 			}
 		
@@ -570,7 +570,7 @@ class awLabel implements awPositionable {
 			$text = $this->getText($key);
 			$font = $text->getFont();
 		
-			if(is_null($max)) {
+			if (is_null($max)) {
 				$max = $font->{$function}($text);
 			} else {
 				$max = max($max, $font->{$function}($text));

@@ -142,11 +142,11 @@ class Socolissimo extends CarrierModule
 				  PRIMARY KEY  (`id_cart`,`id_customer`)
 				) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
-		if(!Db::getInstance()->Execute($sql))
+		if (!Db::getInstance()->Execute($sql))
 			return false;
 
 		//add carrier in back office
-		if(!$this->createSoColissimoCarrier($this->_config))
+		if (!$this->createSoColissimoCarrier($this->_config))
 			return false;
 		
 		return true;
@@ -179,7 +179,7 @@ class Socolissimo extends CarrierModule
 		//Delete So Carrier
 		$soCarrier = new Carrier($so_id);
 		//if socolissimo carrier is default set other one as default
-		if(Configuration::get('PS_CARRIER_DEFAULT') == (int)($soCarrier->id))
+		if (Configuration::get('PS_CARRIER_DEFAULT') == (int)($soCarrier->id))
 		{
 			$carriersD = Carrier::getCarriers((int)($cookie->id_lang));
 			foreach($carriersD as $carrierD)
@@ -541,7 +541,7 @@ class Socolissimo extends CarrierModule
 				if ($language['iso_code'] == 'en')
 					$carrier->delay[$language['id_lang']] = $config['delay'][$language['iso_code']];
 			}
-			if($carrier->add())
+			if ($carrier->add())
 			{
 
 				Configuration::updateValue('SOCOLISSIMO_CARRIER_ID',(int)($carrier->id));
@@ -687,7 +687,7 @@ class Socolissimo extends CarrierModule
 
 	public function formatOrderId($id)
 	{
-		if(strlen($id)<5)
+		if (strlen($id)<5)
 			while (strLen($id) != 5)
 			{
             	$id = '0'.$id;
@@ -702,7 +702,7 @@ class Socolissimo extends CarrierModule
 			$ctx = stream_context_create(array('http' => array('timeout' => 1)));
 			$return = @file_get_contents(Configuration::get('SOCOLISSIMO_SUP_URL'), 0, $ctx);
 
-			if(ini_get('allow_url_fopen') == 0)
+			if (ini_get('allow_url_fopen') == 0)
 				return true;
 			else
 			{

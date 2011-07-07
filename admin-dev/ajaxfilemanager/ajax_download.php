@@ -9,14 +9,14 @@
 	require_once('../../config/config.inc.php');
 	require_once('../init.php');
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
-	if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
+	if (!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
 	{
 			
 			$path = $_GET['path'];
 			//check if the file size
 			$fileSize = @filesize($path);
 			
-			if($fileSize > getMemoryLimit())
+			if ($fileSize > getMemoryLimit())
 			{//larger then the php memory limit, redirect to the file
 				
 				header('Location: ' . $path);

@@ -35,7 +35,7 @@ class GoogleLog {
    */
   function GoogleLog($errorLogFile, $messageLogFile, $logLevel=L_ERR_RQST, $die=true){
     $this->logLevel = $logLevel;
-    if($logLevel == L_OFF) {
+    if ($logLevel == L_OFF) {
       $this->logLevel = L_OFF;
     } else {
       if (!$this->errorLogFile = @fopen($errorLogFile, "a")) {
@@ -43,7 +43,7 @@ class GoogleLog {
         $log = "Cannot open " . $errorLogFile . " file.\n" .
                     "Logs are not writable, set them to 777";        
         error_log($log, 0);
-        if($die) {
+        if ($die) {
           die($log);
         }else {
           echo $log;
@@ -56,7 +56,7 @@ class GoogleLog {
         $log = "Cannot open " . $messageLogFile . " file.\n" .
                     "Logs are not writable, set them to 777";        
         error_log($log, 0);
-        if($die) {
+        if ($die) {
           die($log);
         }else {
           echo $log;
@@ -68,7 +68,7 @@ class GoogleLog {
   }
   
   function LogError($log){
-    if($this->logLevel & L_ERR){
+    if ($this->logLevel & L_ERR){
       fwrite($this->errorLogFile,
       sprintf("\n%s:- %s\n",date("D M j G:i:s T Y"),$log));
       return true;
@@ -77,7 +77,7 @@ class GoogleLog {
   }
   
   function LogRequest($log){
-    if($this->logLevel & L_RQST){
+    if ($this->logLevel & L_RQST){
       fwrite($this->messageLogFile,
        sprintf("\n%s:- %s\n",date("D M j G:i:s T Y"),$log));
        return true;
@@ -86,7 +86,7 @@ class GoogleLog {
   }
   
   function LogResponse($log) {
-    if($this->logLevel & L_RESP){
+    if ($this->logLevel & L_RESP){
       $this->LogRequest($log);
       return true;
     }

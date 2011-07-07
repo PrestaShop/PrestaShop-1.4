@@ -38,21 +38,21 @@ class AdminPayment extends AdminTab
 			
 			if ($module->tab == 'payments_gateways')
 			{
-				if($module->id)
+				if ($module->id)
 				{
-					if(!get_class($module) == 'SimpleXMLElement')
+					if (!get_class($module) == 'SimpleXMLElement')
 						$module->country = array();
 					$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.(int)($module->id));
 					foreach ($countries as $country)
 						$module->country[] = $country['id_country'];
 						
-					if(!get_class($module) == 'SimpleXMLElement')
+					if (!get_class($module) == 'SimpleXMLElement')
 						$module->currency = array();
 					$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.(int)($module->id));
 					foreach ($currencies as $currency)
 						$module->currency[] = $currency['id_currency'];
 						
-					if(!get_class($module) == 'SimpleXMLElement')
+					if (!get_class($module) == 'SimpleXMLElement')
 						$module->group = array();
 					$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.(int)($module->id));
 					foreach ($groups as $group)

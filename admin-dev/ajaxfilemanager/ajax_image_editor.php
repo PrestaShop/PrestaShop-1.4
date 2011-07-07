@@ -9,13 +9,13 @@
 	 *
 	 */
 	require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
-	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_EDITABLE)
+	if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_EDITABLE)
 	{
 		die(SYS_DISABLED);
 	}
 		//$session->gc();
 		$_GET['path'] = empty($_GET['path'])?CONFIG_SYS_ROOT_PATH . "ajax_image_editor_demo.jpg":$_GET['path'];
-		if(!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
+		if (!empty($_GET['path']) && file_exists($_GET['path']) && is_file($_GET['path']) && isUnderRoot($_GET['path']))
 		{
 				$path = $_GET['path'];
 		}else 
@@ -24,11 +24,11 @@
 		}
 		require_once(CLASS_HISTORY);
 		$history = new History($path, $session);
-		if(CONFIG_SYS_DEMO_ENABLE)
+		if (CONFIG_SYS_DEMO_ENABLE)
 		{
 			$sessionImageInfo = $history->getLastestRestorable();
 			$originalSessionImageInfo = $history->getOriginalImage();
-			if(sizeof($originalSessionImageInfo))
+			if (sizeof($originalSessionImageInfo))
 			{
 				$path = backslashToSlash($session->getSessionDir() . $originalSessionImageInfo['info']['name']);
 			}

@@ -348,7 +348,7 @@ class DiscountCore extends ObjectModel
 		$category = new Category((int)($id_category_product));
 		$parentCategories = $category->getParentsCategories();
 		foreach($parentCategories AS $parentCategory)
-			if($id_category_discount == $parentCategory['id_category'])
+			if ($id_category_discount == $parentCategory['id_category'])
 				return true;
 		return false;
 	}

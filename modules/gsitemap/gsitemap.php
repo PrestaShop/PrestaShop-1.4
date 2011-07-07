@@ -121,7 +121,7 @@ XML;
 		}
 		
 		/* Categories Generator */
-		if(Configuration::get('PS_REWRITING_SETTINGS'))
+		if (Configuration::get('PS_REWRITING_SETTINGS'))
 			$categories = Db::getInstance()->ExecuteS('
 			SELECT c.id_category, c.level_depth, link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') AS date_upd, cl.id_lang
 			FROM '._DB_PREFIX_.'category c
@@ -193,7 +193,7 @@ XML;
 			unset($pages['supplier']);
 
 		// Generate nodes for pages
-		if(Configuration::get('PS_REWRITING_SETTINGS'))		
+		if (Configuration::get('PS_REWRITING_SETTINGS'))		
 			foreach ($pages AS $page => $ssl)		
 				foreach($langs as $lang)
 					$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl, $lang['id_lang']), '0.5', 'monthly');

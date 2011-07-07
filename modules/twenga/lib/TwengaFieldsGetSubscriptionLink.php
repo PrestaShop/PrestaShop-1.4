@@ -33,7 +33,7 @@ class TwengaFieldsGetSubscriptionLink extends TwengaFields
 {
 	public function __construct()
 	{
-		if(!is_array($this->fields) AND empty($this->fields))
+		if (!is_array($this->fields) AND empty($this->fields))
 		{
 			$this->fields['PARTNER_AUTH_KEY'] = array(56, array('is_string', 'isCleanHtml'), true);
 			$this->fields['site_url'] = array(200, array('is_string', 'isUrl'), true);

@@ -151,7 +151,7 @@ class Editorial extends Module
 			if (isset($_FILES['body_homepage_logo']) AND isset($_FILES['body_homepage_logo']['tmp_name']) AND !empty($_FILES['body_homepage_logo']['tmp_name']))
 			{
 				Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
-				if(file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
 					unlink(dirname(__FILE__).'/homepage_logo.jpg');
 				if ($error = checkImage($_FILES['body_homepage_logo'], $this->maxImageSize))
 					$errors .= $error;

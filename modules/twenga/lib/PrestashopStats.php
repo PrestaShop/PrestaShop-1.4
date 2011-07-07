@@ -67,7 +67,7 @@ class PrestashopStats
     {
         $params['url'] = self::$site_url;
         $params['module'] = 'twenga';
-        if(Configuration::get('PS_TWENGA_KEY') !== false && Configuration::get('PS_TWENGA_KEY') !== '') $params['key'] = Configuration::get('PS_TWENGA_KEY');
+        if (Configuration::get('PS_TWENGA_KEY') !== false && Configuration::get('PS_TWENGA_KEY') !== '') $params['key'] = Configuration::get('PS_TWENGA_KEY');
         $str_params = http_build_query($params);
 	    $str_url = $url.(($str_params !== '') ? '&'.$str_params : '');
 	    return $str_url;
@@ -105,7 +105,7 @@ class PrestashopStats
     {
         $str = self::buildUrlToQuery(self::$arr_ps_stats_url[__FUNCTION__]);
         $return = $this->executeQuery($str);
-        if(trim($return['response']) !== '' && Validate::isMd5($return['response']))
+        if (trim($return['response']) !== '' && Validate::isMd5($return['response']))
             Configuration::updateValue('PS_TWENGA_KEY', $return['response']);
     }
     public function validateSubscription ()

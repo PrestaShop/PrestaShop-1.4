@@ -38,14 +38,14 @@ class TSBPException extends Exception
 	
 	public function __construct($code, $type = TSBPException::ADMINISTRATION)
 	{
-		if(!(self::$translation_object instanceof AbsTrustedShops) OR self::$translation_object === NULL)
+		if (!(self::$translation_object instanceof AbsTrustedShops) OR self::$translation_object === NULL)
 		{
 			die('In '.__METHOD__.', you must defined an object for get messages translations. An herited object from AbsTrustedShops.');
 		}
 		if (TSBPException::$translate_key === NULL)
 			TSBPException::$translate_key = basename(__FILE__, '.php');
 		
-		if($type === TSBPException::ADMINISTRATION)
+		if ($type === TSBPException::ADMINISTRATION)
 			$message = $this->_getAdministrationMessage((int)$code);
 		else
 			$message = $this->_getFrontEndMessage($code);
@@ -62,7 +62,7 @@ class TSBPException extends Exception
 			-11111 => self::$translation_object->l('The data could not be saved.', TSBPException::$translate_key),
 		);
 		$return_message = '';
-		if(array_key_exists($code, $errors))
+		if (array_key_exists($code, $errors))
 			$return_message = $errors[$code].$mail;
 		else
 			$return_message = self::$translation_object->l('An error occurred.').$mail;

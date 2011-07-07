@@ -387,7 +387,7 @@ class importerosc extends ImportModule
 	          WHERE `active` = 1 AND `email` = \''.pSQL($email).'\'');
 		if ($result && !empty($result['passwd_'.$this->name]))
 	    {	
-			if($this->checkPwd($passwd, $result['passwd_'.pSQL($this->name)]))
+			if ($this->checkPwd($passwd, $result['passwd_'.pSQL($this->name)]))
 		 	{
 				$ps_passwd =  md5(pSQL(_COOKIE_KEY_.$passwd));
 				Db::getInstance()->Execute('

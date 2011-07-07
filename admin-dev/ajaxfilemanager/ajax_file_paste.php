@@ -5,17 +5,17 @@
 		$error = '';
 		$fileMoved = array();
 		$unmovedDocDueToSamePath = array();
-	if(CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY))
+	if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY))
 	{
 		$error = SYS_DISABLED;
 	}
-	elseif(empty($_GET['current_folder_path']))
+	elseif (empty($_GET['current_folder_path']))
 		{
 			$error = ERR_NOT_DEST_FOLDER_SPECIFIED;
-		}elseif(!file_exists($_GET['current_folder_path']) || !is_dir($_GET['current_folder_path']))
+		}elseif (!file_exists($_GET['current_folder_path']) || !is_dir($_GET['current_folder_path']))
 		{
 			$error = ERR_DEST_FOLDER_NOT_FOUND;
-		}elseif(!isUnderRoot($_GET['current_folder_path']))
+		}elseif (!isUnderRoot($_GET['current_folder_path']))
 		{
 			$error = ERR_DEST_FOLDER_NOT_ALLOWED;
 		}else 
@@ -32,13 +32,13 @@
 			$destFolderPath = addTrailingSlash(backslashToSlash($_GET['current_folder_path']));
 			
 			
-			if(sizeof($selectedDocuments))
+			if (sizeof($selectedDocuments))
 			{
 				//get all files within the destination folder
 				$allDocs = array();
-				if(($fh = @opendir($_GET['current_folder_path'])))
+				if (($fh = @opendir($_GET['current_folder_path'])))
 				{
-					while(($file = readdir($fh)) && $file != '.' && $file != '..')
+					while (($file = readdir($fh)) && $file != '.' && $file != '..')
 					{
 						$allDocs[] = getRealPath($destFolderPath . $file);
 					}
@@ -50,16 +50,16 @@
 
 				foreach($selectedDocuments as $doc)
 				{
-					if(file_exists($doc) && isUnderRoot($doc) )
+					if (file_exists($doc) && isUnderRoot($doc) )
 					{
 						
-						if( array_search(getRealPath($doc), $allDocs) === false || CONFIG_OVERWRITTEN)
+						if ( array_search(getRealPath($doc), $allDocs) === false || CONFIG_OVERWRITTEN)
 						{
-							if(CONFIG_OVERWRITTEN)
+							if (CONFIG_OVERWRITTEN)
 							{
 								$file->delete($doc);
 							}
-							if($file->copyTo($doc, $_GET['current_folder_path']))
+							if ($file->copyTo($doc, $_GET['current_folder_path']))
 							{
 								
 								$finalPath = $destFolderPath . basename($doc);
@@ -78,7 +78,7 @@
 								{
 									$tem['i_' . $k] = $v;
 								}
-								if($folderInfo['type'] == 'folder' && empty($folderInfo['subdir']) &&  empty($folderInfo['file']))
+								if ($folderInfo['type'] == 'folder' && empty($folderInfo['subdir']) &&  empty($folderInfo['file']))
 								{
 									$tem['cssClass'] = 'folderEmpty';
 								}*/
@@ -93,7 +93,7 @@
 								$tem['url'] = getFileUrl($doc);
 		
 								$manager = null;
-								if($sessionAction->getAction() == "cut")
+								if ($sessionAction->getAction() == "cut")
 								{
 									$file->delete($doc);
 								}
@@ -110,10 +110,10 @@
 
 				$sessionAction->set(array());
 			}
-			if(sizeof($unmovedDocDueToSamePath) == sizeof($selectedDocuments))
+			if (sizeof($unmovedDocDueToSamePath) == sizeof($selectedDocuments))
 			{
 				$error = ERR_DEST_FOLDER_NOT_ALLOWED;
-			}elseif(sizeof($unmovedDocDueToSamePath)) 
+			}elseif (sizeof($unmovedDocDueToSamePath)) 
 			{
 				foreach($unmovedDocDueToSamePath as $v)
 				{

@@ -71,7 +71,7 @@ class AdminImages extends AdminTab
 		{
 			if ($this->tabAccess['edit'] === '1')
 		 	{
-				if($this->_moveImagesToNewFileSystem())
+				if ($this->_moveImagesToNewFileSystem())
 					Tools::redirectAdmin($currentIndex.'&conf=25'.'&token='.$this->token);
 		 	}
 			else
@@ -444,7 +444,7 @@ class AdminImages extends AdminTab
 		<br /><h2 class="space">'.$this->l('Move images').'</h2>'.
 		$this->l('A new storage system for product images is now used by PrestaShop. It offers better performance if your shop has a very large number of products.').'<br />'.
 		'<br />';
-		if($safe_mode)
+		if ($safe_mode)
 			echo $this->displayWarning('PrestaShop has detected that your server configuration is not compatible with the new storage system (directive "safe_mode" is activated). You should continue to use the actual system.');
 		else
 			echo '

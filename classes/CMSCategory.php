@@ -560,7 +560,7 @@ class CMSCategoryCore extends ObjectModel
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 
 			$categories[] = $result[0];
-			if(!$result OR $result[0]['id_parent'] == 1)
+			if (!$result OR $result[0]['id_parent'] == 1)
 				return $categories;
 			$idCurrent = $result[0]['id_parent'];
 		}

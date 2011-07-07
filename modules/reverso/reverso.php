@@ -57,7 +57,7 @@ class Reverso extends Module
 		WHERE `name` = \'createAccountTop\'
 		');
 		if (!$result)
-			if(!Db::getInstance()->Execute('
+			if (!Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'hook` (`name`, `title`, `description`, `position`) 
 			VALUES (\'createAccountTop\', \'Block above the form for create an account\', NULL , \'1\');
 			'))

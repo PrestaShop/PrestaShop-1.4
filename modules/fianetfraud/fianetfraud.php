@@ -298,7 +298,7 @@ class Fianetfraud extends Module
 		foreach ($modules AS $module)
 			if (method_exists($module, 'hookPayment'))
 			{
-				if($module->id)
+				if ($module->id)
 				{
 					$module->country = array();
 					$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.(int)($module->id));
@@ -419,7 +419,7 @@ class Fianetfraud extends Module
 		$customer = new Customer((int)($params['order']->id_customer));
 		$orderFianet = new fianet_order_xml();
 		$id_lang = Configuration::get('PS_LANG_DEFAULT');
-		if($address_invoice->company == '')
+		if ($address_invoice->company == '')
 			$orderFianet->billing_user->set_quality_nonprofessional();
 		else
 			$orderFianet->billing_user->set_quality_professional();
@@ -497,7 +497,7 @@ class Fianetfraud extends Module
 
 			$produit = new fianet_product_xml();
 			
-			if(Configuration::get('SAC_CATEGORY_TYPE_'.$product['id_category_default']))
+			if (Configuration::get('SAC_CATEGORY_TYPE_'.$product['id_category_default']))
 			{
 				$produit->type = Configuration::get('SAC_CATEGORY_TYPE_'.$product['id_category_default']);
 			}

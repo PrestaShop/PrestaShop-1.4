@@ -600,7 +600,7 @@ class AdminImport extends AdminTab
 
 			if ((int)$product->id_tax_rules_group != 0)
 			{
-				if(Validate::isLoadedObject(new TaxRulesGroup($product->id_tax_rules_group)))
+				if (Validate::isLoadedObject(new TaxRulesGroup($product->id_tax_rules_group)))
 				    $product->tax_rate = TaxRulesGroup::getTaxesRate((int)$product->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
 				else
 					$this->_addProductWarning('id_tax_rules_group', $product->id_tax_rules_group, Tools::displayError('Invalid tax rule group ID, you first need a group with this ID.'));
@@ -916,7 +916,7 @@ class AdminImport extends AdminTab
 				$images = $product->getImages($defaultLanguage);
 				if ($images)
 					foreach ($images as $row)
-						if($row['position'] == (int)$info['image_position'])
+						if ($row['position'] == (int)$info['image_position'])
 						{
 							$id_image = array($row['id_image']);
 							break;
@@ -1020,7 +1020,7 @@ class AdminImport extends AdminTab
 				if (Country::getNameById(Configuration::get('PS_LANG_DEFAULT'), (int)($address->country)))
 					$address->id_country = (int)($address->country);
 			}
-			elseif(isset($address->country) AND is_string($address->country) AND !empty($address->country))
+			elseif (isset($address->country) AND is_string($address->country) AND !empty($address->country))
 			{
 				if ($id_country = Country::getIdByName(NULL, $address->country))
 					$address->id_country = (int)($id_country);
@@ -1048,7 +1048,7 @@ class AdminImport extends AdminTab
 				if (State::getNameById((int)($address->state)))
 					$address->id_state = (int)($address->state);
 			}
-			elseif(isset($address->state) AND is_string($address->state) AND !empty($address->state))
+			elseif (isset($address->state) AND is_string($address->state) AND !empty($address->state))
 			{
 				if ($id_state = State::getIdByName($address->state))
 					$address->id_state = (int)($id_state);
@@ -1071,9 +1071,9 @@ class AdminImport extends AdminTab
 				}
 			}
 
-			if(isset($address->customer_email) and !empty($address->customer_email))
+			if (isset($address->customer_email) and !empty($address->customer_email))
 			{	
-				if( Validate::isEmail($address->customer_email))
+				if ( Validate::isEmail($address->customer_email))
 				{
 					$customer = Customer::customerExists($address->customer_email, true);
 					if ($customer)
@@ -1212,10 +1212,10 @@ class AdminImport extends AdminTab
 		if ((Tools::getValue('import')) AND (isset($this->_warnings) AND !sizeof($this->_warnings)))
 			echo '<div class="module_confirmation conf confirm"><img src="../img/admin/ok.gif" alt="" title="" style="margin-right:5px; float:left;" />'.$this->l('The .CSV file has been imported into your shop.').'</div>';
 
-		if(!is_writable(PS_ADMIN_DIR.'/import/'))
+		if (!is_writable(PS_ADMIN_DIR.'/import/'))
 			$this->displayWarning($this->l('directory import on admin directory must be writable (CHMOD 755 / 777)'));
 
-		if(isset($this->_warnings) AND sizeof($this->_warnings))
+		if (isset($this->_warnings) AND sizeof($this->_warnings))
 		{
 			$warnings = array();
 			foreach ($this->_warnings as $warning)

@@ -18,7 +18,7 @@ define('ARTICHOW', dirname(__FILE__));
  * Path to TrueType fonts
  * DO NOT USE FONT PATH WITH SPACE CHARACTER (" ") WITH GD <= 2.0.18
  */
-if(!defined('ARTICHOW_FONT')) {
+if (!defined('ARTICHOW_FONT')) {
 	
 	define('ARTICHOW_FONT', ARTICHOW.DIRECTORY_SEPARATOR.'font');
 	
@@ -27,7 +27,7 @@ if(!defined('ARTICHOW_FONT')) {
 /*
  * Patterns directory
  */
-if(!defined('ARTICHOW_PATTERN')) {
+if (!defined('ARTICHOW_PATTERN')) {
 	
 	define('ARTICHOW_PATTERN', ARTICHOW.DIRECTORY_SEPARATOR.'patterns');
 	
@@ -36,7 +36,7 @@ if(!defined('ARTICHOW_PATTERN')) {
 /*
  * Images directory
  */
-if(!defined('ARTICHOW_IMAGE')) {
+if (!defined('ARTICHOW_IMAGE')) {
 	
 	define('ARTICHOW_IMAGE', ARTICHOW.DIRECTORY_SEPARATOR.'images');
 	
@@ -50,7 +50,7 @@ define('ARTICHOW_CACHE', TRUE);
 /*
  * Cache directory
  */
-if(!defined('ARTICHOW_CACHE_DIRECTORY')) {
+if (!defined('ARTICHOW_CACHE_DIRECTORY')) {
 	
 	define('ARTICHOW_CACHE_DIRECTORY', ARTICHOW.DIRECTORY_SEPARATOR.'cache');
 	

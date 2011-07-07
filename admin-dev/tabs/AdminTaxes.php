@@ -110,7 +110,7 @@ class AdminTaxes extends AdminTab
 	{
 		global $currentIndex;
 
-		if(Tools::getValue('submitAdd'.$this->table))
+		if (Tools::getValue('submitAdd'.$this->table))
 		{
 		 	/* Checking fields validity */
 			$this->validateRules();

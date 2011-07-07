@@ -12,15 +12,15 @@
 
 	$error = "";
 	$info = '';
-	if(CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_CUT)
+	if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_CUT)
 	{
 		$error = SYS_DISABLED;
 	}
-	elseif(!isset($_POST['selectedDoc']) || !is_array($_POST['selectedDoc']) || sizeof($_POST['selectedDoc']) < 1)
+	elseif (!isset($_POST['selectedDoc']) || !is_array($_POST['selectedDoc']) || sizeof($_POST['selectedDoc']) < 1)
 	{
 		$error = ERR_NOT_DOC_SELECTED_FOR_CUT;
 	}
-	elseif(empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
+	elseif (empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
 	{
 		$error = ERR_FOLDER_PATH_NOT_ALLOWED;
 	}else 

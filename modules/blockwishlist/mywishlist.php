@@ -54,7 +54,7 @@ if ($cookie->isLogged())
 			if (WishList::isExistsByNameForUser($name))
 				$errors[] = Tools::displayError('This name is already used by another list.');
 			
-			if(!sizeof($errors))
+			if (!sizeof($errors))
 			{
 				$wishlist = new WishList();
 				$wishlist->name = $name;

@@ -128,16 +128,16 @@ class awSide {
 	 */
 	public function set($left = NULL, $right = NULL, $top = NULL, $bottom = NULL) {
 	
-		if($left !== NULL) {
+		if ($left !== NULL) {
 			$this->left = (float)$left;
 		}
-		if($right !== NULL) {
+		if ($right !== NULL) {
 			$this->right = (float)$right;
 		}
-		if($top !== NULL) {
+		if ($top !== NULL) {
 			$this->top = (float)$top;
 		}
-		if($bottom !== NULL) {
+		if ($bottom !== NULL) {
 			$this->bottom = (float)$bottom;
 		}
 		
@@ -154,16 +154,16 @@ class awSide {
 	 */
 	public function add($left = NULL, $right = NULL, $top = NULL, $bottom = NULL) {
 	
-		if($left !== NULL) {
+		if ($left !== NULL) {
 			$this->left += (float)$left;
 		}
-		if($right !== NULL) {
+		if ($right !== NULL) {
 			$this->right += (float)$right;
 		}
-		if($top !== NULL) {
+		if ($top !== NULL) {
 			$this->top += (float)$top;
 		}
-		if($bottom !== NULL) {
+		if ($bottom !== NULL) {
 			$this->bottom += (float)$bottom;
 		}
 		

@@ -22,7 +22,7 @@
 		{
 			$this->path = $path;
 			$this->session = &$session;
-			if(!isset($_SESSION[$this->path]))
+			if (!isset($_SESSION[$this->path]))
 			{
 				$_SESSION[$this->path] = array();
 			}
@@ -57,13 +57,13 @@
 		function getNumRestorable()
 		{
 			$output = 0;
-			if(isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]))
+			if (isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]))
 			{
 				foreach($_SESSION[$this->path] as $k=>$v)
 				{
-					if(!empty($v['restorable']) && empty($v['is_original']))
+					if (!empty($v['restorable']) && empty($v['is_original']))
 					{
-						if(file_exists($this->session->getSessionDir() . $v['name']))
+						if (file_exists($this->session->getSessionDir() . $v['name']))
 						{
 							$output++;
 						}else 
@@ -84,13 +84,13 @@
 		 */
 		function getLastestRestorable()
 		{
-			if(isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]) && sizeof($_SESSION[$this->path]))
+			if (isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]) && sizeof($_SESSION[$this->path]))
 			{	
 				$sessionImages = array_reverse($_SESSION[$this->path], true);
 				$lastestKey = '';
 				foreach($sessionImages as $k=>$v)
 				{
-					if($v['restorable'] && empty($v['is_original']) && file_exists($this->session->getSessionDir() . $v['name']))
+					if ($v['restorable'] && empty($v['is_original']) && file_exists($this->session->getSessionDir() . $v['name']))
 					{
 						return $sessionImages[$k];
 					}
@@ -108,14 +108,14 @@
 		function getOriginalImage()
 		{
 			$outputs = array();
-			if(isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]))
+			if (isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]))
 			{
 				$sessionImages = array_reverse($_SESSION[$this->path], true);
 				foreach($sessionImages as $k=>$v)
 				{
-					if(!empty($v['is_original']))
+					if (!empty($v['is_original']))
 					{
-						if(file_exists($this->session->getSessionDir() . $v['name']))
+						if (file_exists($this->session->getSessionDir() . $v['name']))
 						{
 							return array('info'=>$_SESSION[$this->path][$k], 'key'=>$k);
 						}
@@ -133,13 +133,13 @@
 		 */
 		function restore()
 		{
-			if(isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]) && sizeof($_SESSION[$this->path]))
+			if (isset($_SESSION[$this->path]) && is_array($_SESSION[$this->path]) && sizeof($_SESSION[$this->path]))
 			{
 				$sessionImages = array_reverse($_SESSION[$this->path], true);
 				$lastestKey = '';
 				foreach($sessionImages as $k=>$v)
 				{
-					if($v['restorable'] && empty($v['is_original']))
+					if ($v['restorable'] && empty($v['is_original']))
 					{
 						unset($_SESSION[$k]);
 						return true;

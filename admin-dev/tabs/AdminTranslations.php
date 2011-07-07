@@ -67,7 +67,7 @@ class AdminTranslations extends AdminTab
 			$_MODULES = array();
 		elseif (isset($_MODULE))
 		{
-			if(is_array($_MODULE) AND $is_default === true)
+			if (is_array($_MODULE) AND $is_default === true)
 			{
 				$_NEW_MODULE = array();
 				foreach($_MODULE as $key=>$value)
@@ -99,7 +99,7 @@ class AdminTranslations extends AdminTab
 		// If folder wasn't already added
 		if (!file_exists($path))
 		{
-			if(!mkdir($path, 0777, true))
+			if (!mkdir($path, 0777, true))
 			{
 				$bool &= false;
 				$this->_errors[] = $this->l('Cannot create the folder').' "'.$path.'". '.$this->l('Check directory writing permissions.');
@@ -178,7 +178,7 @@ class AdminTranslations extends AdminTab
 		$content = file_get_contents($path);
 		$arr_replace = array();
 		$bool_flag = true;
-		if(preg_match_all('#\$_MODULE\[\'([^\']+)\'\]#Ui', $content, $matches))
+		if (preg_match_all('#\$_MODULE\[\'([^\']+)\'\]#Ui', $content, $matches))
 		{
 			foreach ($matches[1] as $key=>$value)
 			{
@@ -315,7 +315,7 @@ class AdminTranslations extends AdminTab
 		{
 			$str_write = '';
 			$_cache_file[($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'-'.$file_name] = true;
-			if(!file_exists($file_name))
+			if (!file_exists($file_name))
 				file_put_contents($file_name, '');
 			if (!is_writable($file_name))
 				die ($this->l('Cannot write the theme\'s language file ').'('.$file_name.')'.$this->l('. Please check write permissions.'));
@@ -542,7 +542,7 @@ class AdminTranslations extends AdminTab
 					$arr_files = $this->getAllModuleFiles($modules, _PS_MODULE_DIR_, $lang, true);
 					$arr_find_and_write = array_merge($arr_find_and_write, $arr_files);
 					
-					if(file_exists(_PS_THEME_DIR_.'/modules/'))
+					if (file_exists(_PS_THEME_DIR_.'/modules/'))
 					{
 						$modules = scandir(_PS_THEME_DIR_.'/modules/');
 						$arr_files = $this->getAllModuleFiles($modules, _PS_THEME_DIR_.'modules/', $lang);
@@ -974,7 +974,7 @@ class AdminTranslations extends AdminTab
 				/* Get string translation */
 				foreach($matches[1] AS $key)
 				{
-					if(empty($key))
+					if (empty($key))
 					{
 						$this->_errors[] = $this->l('Empty string found, please edit:').' <br />'._PS_THEME_DIR_.''.$template;
 						$newLang[$key] = '';
@@ -1014,7 +1014,7 @@ class AdminTranslations extends AdminTab
 						$str_output .= '<tr><td style="width: 40%">'.stripslashes($key).'</td><td>';
 						if (strlen($key) != 0 && strlen($key) < TEXTAREA_SIZED)
 							$str_output .= '= <input type="text" style="width: 450px" name="'.$k.'_'.md5($key).'" value="'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'" />';
-						elseif(strlen($key))
+						elseif (strlen($key))
 							$str_output .= '= <textarea rows="'.(int)(strlen($key) / TEXTAREA_SIZED).'" style="width: 450px" name="'.$k.'_'.md5($key).'">'.stripslashes(preg_replace('/"/', '\&quot;', stripslashes($value))).'</textarea>';
 						else
 							$str_output .= '<span class="error-inline">'.implode(', ', $this->_errors).'</span>';
@@ -1248,7 +1248,7 @@ class AdminTranslations extends AdminTab
 		$arr_return['total_filled'] = 0;
 		$arr_return['directory'] = $dir;
 //		$arr_return['subject'] = $this->getSubjectMailContent($dir.$lang);
-		if(file_exists($dir.'en'))
+		if (file_exists($dir.'en'))
 		{
 			// Get all english files to compare with the language to translate
 			foreach (scandir($dir.'en') AS $email_file)
@@ -1518,9 +1518,9 @@ class AdminTranslations extends AdminTab
 		// Before 1.4.0.14 each theme folder was parsed,
 		// This page was really to low to load.
 		// Now just use the current theme.
-		if(_THEME_NAME_ !== AdminTranslations::DEFAULT_THEME_NAME)
+		if (_THEME_NAME_ !== AdminTranslations::DEFAULT_THEME_NAME)
 		{
-			if(file_exists(_PS_THEME_DIR_.'mails'))
+			if (file_exists(_PS_THEME_DIR_.'mails'))
 			{
 				$theme_mails['theme_mail'] = $this->getMailFiles(_PS_THEME_DIR_.'mails/', $lang, 'theme_mail');
 				$theme_mails['theme_mail']['subject'] = $this->getSubjectMailContent(_PS_THEME_DIR_.'mails/'.$lang);
@@ -1711,7 +1711,7 @@ class AdminTranslations extends AdminTab
 				'theme'			=> ($is_default ? self::DEFAULT_THEME_NAME : _THEME_NAME_ ),
 			);
 		$dir_module = $this->clearModuleFiles($files_module, 'directory', $path);
-		if(!empty($dir_module))
+		if (!empty($dir_module))
 		{
 			foreach ($dir_module AS $folder)
 			{
@@ -1769,7 +1769,7 @@ class AdminTranslations extends AdminTab
 			$arr_files = $this->getAllModuleFiles($modules, _PS_MODULE_DIR_, $lang, true);
 			$arr_find_and_fill = array_merge($arr_find_and_fill, $arr_files);
 			
-			if(file_exists(_PS_THEME_DIR_.'/modules/'))
+			if (file_exists(_PS_THEME_DIR_.'/modules/'))
 			{
 				$modules = scandir(_PS_THEME_DIR_.'/modules/');
 				$arr_files = $this->getAllModuleFiles($modules, _PS_THEME_DIR_.'modules/', $lang);

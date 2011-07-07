@@ -171,7 +171,7 @@ abstract class ModuleGraphCore extends Module
 		if (is_array($this->_titles['main']))
 			for ($i = 0; $i <= sizeof($this->_titles['main']); $i++)
 			{
-				if($i > 0)
+				if ($i > 0)
 					$this->_csv .= ';';
 				if (isset($this->_titles['main'][$i]))
 					$this->_csv .= $this->_titles['main'][$i];

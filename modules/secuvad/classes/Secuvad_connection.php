@@ -142,7 +142,7 @@ class Secuvad_connection
     		else
     		{
     			$this->secuvad_h->secuvad_log('secuvad_connection.php::send_transaction() '."\n\t".' Response: '.(int)($idtransaction).'/'.(int)($score).'/'.$advice);    				    				  
-    			if(preg_match('/[0-9]+/', $score))
+    			if (preg_match('/[0-9]+/', $score))
 					Db::getInstance()->Execute('
 					UPDATE `'._DB_PREFIX_.'secuvad_order` 
 					SET `secuvad_status` = 5, `score` = '.(int)($score).', error = \'\' 

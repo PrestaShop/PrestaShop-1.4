@@ -112,7 +112,7 @@ class ThemeInstallator extends Module
 			return;
 		if (!file_exists($dst))
 			mkdir($dst);
-		while(($file = readdir($dir)) !== false)
+		while (($file = readdir($dir)) !== false)
 			if (strncmp($file, '.', 1) != 0)
 			{
 				if (is_dir($src.'/'.$file))

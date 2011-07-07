@@ -30,7 +30,7 @@ abstract class ImportModuleCore extends Module
 	
 	public function __destruct()
 	{
-		if($this->_link)
+		if ($this->_link)
 			@mysql_close($this->_link);
 	}
 	
@@ -40,7 +40,7 @@ abstract class ImportModuleCore extends Module
 			return $this->_link;
 		if ($this->_link = mysql_connect($this->server, $this->user, $this->passwd, true))
 		{
-			if(!mysql_select_db($this->database, $this->_link))
+			if (!mysql_select_db($this->database, $this->_link))
 				die(Tools::displayError('The database selection cannot be made.'));
 			if (!mysql_query('SET NAMES \'utf8\'', $this->_link))
 				die(Tools::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
@@ -81,7 +81,7 @@ abstract class ImportModuleCore extends Module
 	{
 		$modules = Module::getModulesOnDisk(true);
 		foreach ($modules as $key => $module)
-			if(get_parent_class($module) != 'ImportModule')
+			if (get_parent_class($module) != 'ImportModule')
 				unset($modules[$key]);
 		return $modules;
 	}

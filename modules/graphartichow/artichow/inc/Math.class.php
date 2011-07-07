@@ -329,10 +329,10 @@ class awLine extends awShape {
 	 * @param awPoint $p2 Second point
 	 */
 	public function setLocation($p1, $p2) {
-		if(is_null($p1) or $p1 instanceof awPoint) {
+		if (is_null($p1) or $p1 instanceof awPoint) {
 			$this->p1 = $p1;
 		}
-		if(is_null($p2) or $p2 instanceof awPoint) {
+		if (is_null($p2) or $p2 instanceof awPoint) {
 			$this->p2 = $p2;
 		}
 		
@@ -368,7 +368,7 @@ class awLine extends awShape {
 	 * 
 	 */
 	private function calculateSlope() {
-		if($this->isHorizontal()) {
+		if ($this->isHorizontal()) {
 			$this->slope = 0;
 		} else {
 			$slope = ($this->p1->y - $this->p2->y) / ($this->p1->x - $this->p2->x);
@@ -382,7 +382,7 @@ class awLine extends awShape {
 	 * 
 	 */
 	private function calculateOrigin() {
-		if($this->isHorizontal()) {
+		if ($this->isHorizontal()) {
 			$this->origin = $this->p1->y; // Or p2->y
 		} else {
 			$y1 = $this->p1->y;
@@ -411,9 +411,9 @@ class awLine extends awShape {
 	 * @return float
 	 */
 	public function getSlope() {
-		if($this->isVertical()) {
+		if ($this->isVertical()) {
 			return NULL;
-		} elseif($this->slope !== NULL) {
+		} elseif ($this->slope !== NULL) {
 			return $this->slope;
 		} else {
 			$this->calculateSlope();
@@ -427,9 +427,9 @@ class awLine extends awShape {
 	 * @return float
 	 */
 	public function getOrigin() {
-		if($this->isVertical()) {
+		if ($this->isVertical()) {
 			return NULL;
-		} elseif($this->origin !== NULL) {
+		} elseif ($this->origin !== NULL) {
 			return $this->origin;
 		} else {
 			$this->calculateOrigin();
@@ -459,13 +459,13 @@ class awLine extends awShape {
 	public function getXFrom($y) {
 		$x = NULL;
 		
-		if($this->isVertical()) {
+		if ($this->isVertical()) {
 			list($p, ) = $this->getLocation();
 			$x = $p->x;
 		} else {
 			list($slope, $origin) = $this->getEquation();
 			
-			if($slope !== 0) {
+			if ($slope !== 0) {
 				$y = (float)$y;
 				$x = ($y - $origin) / $slope;
 			}
@@ -484,13 +484,13 @@ class awLine extends awShape {
 	public function getYFrom($x) {
 		$y = NULL;
 		
-		if($this->isHorizontal()) {
+		if ($this->isHorizontal()) {
 			list($p, ) = $this->getLocation();
 			$y = $p->y;
 		} else {
 			list($slope, $origin) = $this->getEquation();
 			
-			if($slope !== NULL) {
+			if ($slope !== NULL) {
 				$x = (float)$x;
 				$y = $slope * $x + $origin;
 			}
@@ -537,10 +537,10 @@ class awLine extends awShape {
 		list($xMin, $xMax) = $polygon->getBoxXRange();
 		list($yMin, $yMax) = $polygon->getBoxYRange();
 		
-		if($this->isHorizontal()) {
+		if ($this->isHorizontal()) {
 			return FALSE;
 		} else {			
-			if($this->p1->y < $this->p2->y) {
+			if ($this->p1->y < $this->p2->y) {
 				$top = $this->p1;
 				$bottom = $this->p2;
 			} else {
@@ -567,10 +567,10 @@ class awLine extends awShape {
 		list($xMin, $xMax) = $polygon->getBoxXRange();
 		list($yMin, $yMax) = $polygon->getBoxYRange();
 		
-		if($this->isVertical()) {
+		if ($this->isVertical()) {
 			return FALSE;
 		} else {
-			if($this->p1->x < $this->p2->x) {
+			if ($this->p1->x < $this->p2->x) {
 				$left = $this->p1;
 				$right = $this->p2;
 			} else {
@@ -587,7 +587,7 @@ class awLine extends awShape {
 	}
 	
 	private function isOnBoxTopSide(awPoint $point, $xMin, $xMax, $yMin) {
-		if(
+		if (
 			$point->y === $yMin
 			and 
 			$point->x >= $xMin
@@ -601,7 +601,7 @@ class awLine extends awShape {
 	}
 
 	private function isOnBoxBottomSide(awPoint $point, $xMin, $xMax, $yMax) {
-		if(
+		if (
 			$point->y === $yMax
 			and
 			$point->x >= $xMin
@@ -615,7 +615,7 @@ class awLine extends awShape {
 	}
 	
 	private function isOnBoxLeftSide(awPoint $point, $yMin, $yMax, $xMin) {
-		if(
+		if (
 			$point->x === $xMin
 			and 
 			$point->y >= $yMin
@@ -629,7 +629,7 @@ class awLine extends awShape {
 	}
 	
 	private function isOnBoxRightSide(awPoint $point, $yMin, $yMax, $xMax) {
-		if(
+		if (
 			$point->x === $xMax
 			and 
 			$point->y >= $yMin
@@ -661,7 +661,7 @@ class awVector extends awLine {
 	 */
 	public function getAngle() {
 	
-		if($this->isPoint()) {
+		if ($this->isPoint()) {
 			return 0.0;
 		}
 		
@@ -670,15 +670,15 @@ class awVector extends awLine {
 		$width = ($this->p2->x - $this->p1->x);
 		$height = ($this->p2->y - $this->p1->y) * -1;
 		
-		if($width >= 0 and $height >= 0) {
+		if ($width >= 0 and $height >= 0) {
 			return acos($width / $size);
-		} elseif($width <= 0 and $height >= 0) {
+		} elseif ($width <= 0 and $height >= 0) {
 			return acos($width / $size);
 		} else {
 			$height *= -1;
-			if($width >= 0 and $height >= 0) {
+			if ($width >= 0 and $height >= 0) {
 				return 2 * M_PI - acos($width / $size);
-			} elseif($width <= 0 and $height >= 0) {
+			} elseif ($width <= 0 and $height >= 0) {
 				return 2 * M_PI - acos($width / $size);
 			}
 		}
@@ -711,7 +711,7 @@ class awPolygon extends awShape {
 	 * @param awPoint $point
 	 */
 	public function set($pos, $point) {
-		if(is_null($point) or $point instanceof awPoint) {
+		if (is_null($point) or $point instanceof awPoint) {
 			$this->points[$pos] = $point;
 		}
 	}
@@ -722,7 +722,7 @@ class awPolygon extends awShape {
 	 * @param awPoint $point
 	 */
 	public function append($point) {
-		if(is_null($point) or $point instanceof awPoint) {
+		if (is_null($point) or $point instanceof awPoint) {
 			$this->points[] = $point;
 		}
 	}
@@ -764,7 +764,7 @@ class awPolygon extends awShape {
 		$lines = array();
 		$count = $this->count();
 	
-		for($i = 0; $i < $count - 1; $i++) {
+		for ($i = 0; $i < $count - 1; $i++) {
 			$lines[] = new Line($this->get($i), $this->get($i + 1));
 		}
 		
@@ -784,7 +784,7 @@ class awPolygon extends awShape {
 		$count = $this->count();
 		$x = $y = array();
 		
-		for($i = 0; $i < $count; $i++) {
+		for ($i = 0; $i < $count; $i++) {
 			$point = $this->get($i);
 	
 			list($x[], $y[]) = $point->getLocation();

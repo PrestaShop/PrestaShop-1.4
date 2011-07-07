@@ -340,7 +340,7 @@ XML;
 					$xml_group = $product->addChild('attribute-group');
 					$xml_group->addAttribute('id', $id_group);
 
-					if(!empty($group[ 'name' ]))
+					if (!empty($group[ 'name' ]))
 					{
 						$nameGroup = $xml_group->addChild('name');
 						$languageVariant = $nameGroup->addChild('language-variant');
@@ -398,7 +398,7 @@ XML;
 			LEFT JOIN '._DB_PREFIX_.'product_attribute_image pi ON (pa.id_product_attribute = pi.id_product_attribute)
 			WHERE pa.id_product = '.(int)$sqlProduct['id_product']);
 
-			if(!empty($productAttributes))	
+			if (!empty($productAttributes))	
 			{
 				foreach ($productAttributes AS $productAttribute)
 				{

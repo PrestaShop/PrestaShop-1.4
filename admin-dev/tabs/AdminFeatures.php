@@ -177,7 +177,7 @@ class AdminFeatures extends AdminTab
 		$this->adminFeaturesValues->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 		$this->adminFeaturesValues->postProcess($this->token);
 
-		if(Tools::getValue('submitDel'.$this->table))
+		if (Tools::getValue('submitDel'.$this->table))
 		{
 		 	if ($this->tabAccess['delete'] === '1')
 		 	{

@@ -63,7 +63,7 @@ class awPHPFont extends awFont {
 	public function __construct($font = NULL) {
 		parent::__construct();
 		
-		if($font !== NULL) {
+		if ($font !== NULL) {
 			$this->font = (int)$font;
 		}
 	}
@@ -118,7 +118,7 @@ class awFileFont extends awFont {
 	public function setName($name) {
 		$fontInfo = pathinfo((string)$name);
 		
-		if(strpos($fontInfo['dirname'], '/') !== 0) {
+		if (strpos($fontInfo['dirname'], '/') !== 0) {
 			// Path is not absolute, use ARTICHOW_FONT
 			$name = ARTICHOW_FONT.DIRECTORY_SEPARATOR.$fontInfo['basename'];
 			$fontInfo = pathinfo($name);
@@ -126,7 +126,7 @@ class awFileFont extends awFont {
 		
 		$this->name = $fontInfo['dirname'].DIRECTORY_SEPARATOR.$fontInfo['basename'];
 		
-		if(array_key_exists('extension', $fontInfo) and $fontInfo['extension'] !== '') {
+		if (array_key_exists('extension', $fontInfo) and $fontInfo['extension'] !== '') {
 			$this->setExtension($fontInfo['extension']);
 		}
 	}
@@ -190,7 +190,7 @@ class awTTFFont extends awFileFont {
 	public function __construct($name, $size) {
 		parent::__construct($name, $size);
 		
-		if($this->getExtension() === NULL) {
+		if ($this->getExtension() === NULL) {
 			$this->setExtension('ttf');
 		}
 	}
@@ -203,7 +203,7 @@ registerClass('TTFFont');
 
 $php = '';
 
-for($i = 1; $i <= 5; $i++) {
+for ($i = 1; $i <= 5; $i++) {
 
 	$php .= '
 	class awFont'.$i.' extends awPHPFont {
@@ -215,7 +215,7 @@ for($i = 1; $i <= 5; $i++) {
 	}
 	';
 
-	if(ARTICHOW_PREFIX !== 'aw') {
+	if (ARTICHOW_PREFIX !== 'aw') {
 		$php .= '
 		class '.ARTICHOW_PREFIX.'Font'.$i.' extends awFont'.$i.' {
 		}
@@ -240,7 +240,7 @@ foreach($fonts as $font) {
 	}
 	';
 
-	if(ARTICHOW_PREFIX !== 'aw') {
+	if (ARTICHOW_PREFIX !== 'aw') {
 		$php .= '
 		class '.ARTICHOW_PREFIX.$font.' extends aw'.$font.' {
 		}
@@ -256,7 +256,7 @@ eval($php);
 /*
  * Environment modification for GD2 and TTF fonts
  */
-if(function_exists('putenv')) {
+if (function_exists('putenv')) {
 	putenv('GDFONTPATH='.ARTICHOW_FONT);
 }
 

@@ -393,7 +393,7 @@ class AdminDiscounts extends AdminTab
 										else
 											formDiscount.id_target.options.selectedIndex = 2;
 									}
-									elseif(filterValue)
+									elseif (filterValue)
 										for (i = 0; i < (customers_length + groups_length); i++)
 											if (formDiscount.id_target.options[i+1].value == filterValue)
 												formDiscount.id_target.options.selectedIndex = i + 1;

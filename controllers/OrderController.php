@@ -92,7 +92,7 @@ class OrderControllerCore extends ParentOrderController
 				$this->_assignAddress();
 				break;
 			case 2:
-				if(Tools::isSubmit('processAddress'))
+				if (Tools::isSubmit('processAddress'))
 					$this->processAddress();
 				$this->autoStep();
 				$this->_assignCarrier();
@@ -103,7 +103,7 @@ class OrderControllerCore extends ParentOrderController
 				if (Configuration::get('PS_CONDITIONS') AND (!Validate::isBool($cgv)))
 					Tools::redirect('order.php?step=2');
 				
-				if(Tools::isSubmit('processCarrier'))
+				if (Tools::isSubmit('processCarrier'))
 					$this->processCarrier();
 				$this->autoStep();
 				/* Bypass payment step if total is 0 */

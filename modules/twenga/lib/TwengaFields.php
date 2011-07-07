@@ -106,7 +106,7 @@ abstract class TwengaFields
 			throw new TwengaFieldsException('Some fields must be set');
 		
 		// if $noRequiredFields is set to false, means that we don't need to check fields.
-		if(!is_array($this->requiredFields) AND $this->noRequiredFields === false)
+		if (!is_array($this->requiredFields) AND $this->noRequiredFields === false)
 		{
 			$this->requiredFields = array();
 			foreach ($this->fields as $name=>$attributs)
@@ -117,7 +117,7 @@ abstract class TwengaFields
 					throw $e;
 				}
 			}
-			if(empty($this->requiredFields))
+			if (empty($this->requiredFields))
 				$this->noRequiredFields = true;
 		}
 	}
@@ -133,22 +133,22 @@ abstract class TwengaFields
 	private function checkFieldAttributs ($name, $field_attributs)
 	{
 		// attribut at key 0 is the length of the required value
-		if(!Validate::isInt($field_attributs[0]))
+		if (!Validate::isInt($field_attributs[0]))
 			throw new TwengaFieldsException(Tools::displayError('To add a field, you have to set a maximum length for checking the value. Error occurred for the value').' : '.$name);
 		
 		// attribut at key 1 is an array list of the validator
-		if(!is_array($field_attributs[1]))
+		if (!is_array($field_attributs[1]))
 			throw new TwengaFieldsException(Tools::displayError('To add a field, you have to set validators for checking value. Error occurred for the value').' : '.$name);
 		
 		// Check if validators setted are valid. 
 		foreach ($field_attributs[1] as $validator)
 		{
-			if(!function_exists($validator) && !method_exists('Validate', $validator) && !method_exists($this->className, $validator))
+			if (!function_exists($validator) && !method_exists('Validate', $validator) && !method_exists($this->className, $validator))
 				throw new TwengaFieldsException (Tools::displayError('The Validator').' '.$validator.' '.Tools::displayError('does\'nt exist'));
 		}
 			
 		// attribut at key 2 means that this fields is required or not
-		if(isset($field_attributs[2]) AND Validate::isBool($field_attributs[2]))
+		if (isset($field_attributs[2]) AND Validate::isBool($field_attributs[2]))
 			$this->requiredFields[$name] = false;
 	}
 	
@@ -163,7 +163,7 @@ abstract class TwengaFields
 	{
 		if (!is_array($this->fields))
 			throw new TwengaFieldsException(Tools::displayError('To get a field you have to saved some fields !'));
-		if(!key_exists($name, $this->fields))
+		if (!key_exists($name, $this->fields))
 			throw new TwengaFieldsException(Tools::displayError('The field').' <b>'.$name.'</b> '.Tools::displayError('doesn\'t exist.'));
 		return $this->fields[$name];
 	}
@@ -179,7 +179,7 @@ abstract class TwengaFields
 		$fieldValidate = $this->getField($key);
 		$str_return = '';
 		// check the length
-		if(strlen((string)$value) > $fieldValidate[0] AND  $fieldValidate[0] !== 0)
+		if (strlen((string)$value) > $fieldValidate[0] AND  $fieldValidate[0] !== 0)
 			return Tools::displayError('Wrong length of the value. Must be set between 1 and ').$fieldValidate[0].'<br />'."\n";
 		
 		// check each validators.
@@ -190,7 +190,7 @@ abstract class TwengaFields
 			$user_function = method_exists($this->className, $validator) ? array($this->className, $validator) : $user_function;
 			try {
 				$bool = call_user_func($user_function, $value);
-				if(!$bool)
+				if (!$bool)
 					$str_return .= Tools::displayError('Value don\'t respect the validator : ').'<b>'.$validator.'</b><br />'."\n";;
 			} catch (TwengaFieldsException $e) {
 				$str_return .= $e->getMessage();
@@ -214,7 +214,7 @@ abstract class TwengaFields
 	 */
 	private function compareFields()
 	{
-		if(is_array($this->requiredFields) AND !empty($this->requiredFields))
+		if (is_array($this->requiredFields) AND !empty($this->requiredFields))
 		{
 			$arr_compare = array_intersect_key($this->requiredFields, $this->params);
 			foreach ($this->requiredFields as $key=>&$value)
@@ -231,10 +231,10 @@ abstract class TwengaFields
 	 */
 	private function requiredFieldsAreSet()
 	{
-		if(is_array($this->requiredFields) AND !empty($this->requiredFields))
+		if (is_array($this->requiredFields) AND !empty($this->requiredFields))
 		{
 			$fields_not_set = array_keys($this->requiredFields, false);
-			if(!empty($fields_not_set))
+			if (!empty($fields_not_set))
 				throw new TwengaFieldsException (Tools::displayError('Some fields must be set').' : <b>'.implode(', ', $fields_not_set).'</b>');
 		}
 		return true;
@@ -247,7 +247,7 @@ abstract class TwengaFields
 	 */
 	public function setParams($params)
 	{
-		if(empty($params))
+		if (empty($params))
 			throw new TwengaFieldsException(Tools::displayError('Params must be filled'));
 		$this->params = $params;
 		return $this;
@@ -268,7 +268,7 @@ abstract class TwengaFields
 	 */
 	public function checkParams()
 	{
-		if(!is_array($this->params) || empty($this->params))
+		if (!is_array($this->params) || empty($this->params))
 			throw new TwengaFieldsException(Tools::displayError('Params must be setted before check it'));
 		try {
 			$this->compareFields();
@@ -280,10 +280,10 @@ abstract class TwengaFields
 		foreach ($this->params as $key=>$value)
 		{
 			$validate = $this->isValidate($key, $value);
-			if($validate !== '')
+			if ($validate !== '')
 				$str_message .= Tools::displayError('The field').' <b>'.$key.'</b> '.Tools::displayError('is a wrong value, see details :').'<br />'."\n<em>".$validate.'</em>';
 		}
-		if($str_message !== '')
+		if ($str_message !== '')
 			throw new TwengaFieldsException($str_message);
 	}
 	

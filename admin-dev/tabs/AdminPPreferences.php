@@ -74,7 +74,7 @@ class AdminPPreferences extends AdminPreferences
 		{
 		 	if ($this->tabAccess['add'] === '1')
 		 		{
-		 			if(!Tools::getValue('PS_STOCK_MANAGEMENT'))
+		 			if (!Tools::getValue('PS_STOCK_MANAGEMENT'))
 		 			{
 		 				$_POST['PS_ORDER_OUT_OF_STOCK'] = 1;
 		 				$_POST['PS_DISPLAY_QTIES'] = 0;

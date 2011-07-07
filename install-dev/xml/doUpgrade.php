@@ -35,7 +35,7 @@ if (function_exists('date_default_timezone_set'))
 if (defined('_PS_ROOT_DIR_') AND !defined('_PS_MODULE_DIR_'))
 	define('_PS_MODULE_DIR_', _PS_ROOT_DIR_.'/modules/');
 else
-	if(!defined('_PS_MODULE_DIR_'))
+	if (!defined('_PS_MODULE_DIR_'))
 		define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
 
 define('_PS_INSTALLER_PHP_UPGRADE_DIR_', INSTALL_PATH.'/php/');
@@ -242,13 +242,13 @@ if (defined('_RIJNDAEL_KEY_'))
 	$datas[] = array('_RIJNDAEL_KEY_', _RIJNDAEL_KEY_);
 if (defined('_RIJNDAEL_IV_'))
 	$datas[] = array('_RIJNDAEL_IV_', _RIJNDAEL_IV_);
-if(!defined('_PS_CACHE_ENABLED_'))
+if (!defined('_PS_CACHE_ENABLED_'))
 	define('_PS_CACHE_ENABLED_', '0');
-if(!defined('_MYSQL_ENGINE_'))
+if (!defined('_MYSQL_ENGINE_'))
 	define('_MYSQL_ENGINE_', 'MyISAM');
 
 $sqlContent = '';
-if(isset($_GET['customModule']) AND $_GET['customModule'] == 'desactivate')
+if (isset($_GET['customModule']) AND $_GET['customModule'] == 'desactivate')
 	desactivate_custom_modules();
 
 foreach($neededUpgradeFiles AS $version)
@@ -304,7 +304,7 @@ foreach ($arrayToClean as $dir)
 
 // delete cache filesystem if activated
 $depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
-if($depth)
+if ($depth)
 {
 	CacheFS::deleteCacheDirectory();
 	CacheFS::createCacheDirectories((int)$depth);
@@ -320,7 +320,7 @@ Configuration::loadConfiguration();
 foreach($sqlContent as $query)
 {
 	$query = trim($query);
-	if(!empty($query))
+	if (!empty($query))
 	{
 		/* If php code have to be executed */
 		if (strpos($query, '/* PHP:') !== false)
@@ -365,7 +365,7 @@ foreach($sqlContent as $query)
 		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
 	</request>'."\n";
 		}
-		elseif(!Db::getInstance()->Execute($query))
+		elseif (!Db::getInstance()->Execute($query))
 		{
 			$logger->logError('SQL query: '."\r\n".$query);
 			$logger->logError('SQL error: '."\r\n".Db::getInstance()->getMsgError());

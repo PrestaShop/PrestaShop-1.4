@@ -113,7 +113,7 @@ class awScatterPlot extends awPlot implements awLegendable {
 	 */
 	public function link($link, $color = NULL) {
 		$this->link = (bool)$link;
-		if($color instanceof awColor) {
+		if ($color instanceof awColor) {
 			$this->setColor($color);
 		}
 	}
@@ -209,28 +209,28 @@ class awScatterPlot extends awPlot implements awLegendable {
 		// Build the polygon
 		$polygon = new awPolygon;
 		
-		for($key = 0; $key < $count; $key++) {
+		for ($key = 0; $key < $count; $key++) {
 		
 			$x = $this->datax[$key];
 			$y = $this->datay[$key];
 			
-			if($y !== NULL) {
+			if ($y !== NULL) {
 				$p = awAxis::toPosition($this->xAxis, $this->yAxis, new awPoint($x, $y));
 				$polygon->set($key, $p);
-			} elseif($this->linkNull === FALSE) {
+			} elseif ($this->linkNull === FALSE) {
 				$polygon->set($key, NULL);
 			}
 		
 		}
 		
 		// Link points if needed
-		if($this->link) {
+		if ($this->link) {
 		
 			$prev = NULL;
 			
 			foreach($polygon->all() as $point) {
 			
-				if($prev !== NULL and $point !== NULL) {
+				if ($prev !== NULL and $point !== NULL) {
 					$driver->line(
 						$this->lineColor,
 						new awLine(
@@ -247,11 +247,11 @@ class awScatterPlot extends awPlot implements awLegendable {
 		}
 		
 		// Draw impulses
-		if($this->impulse instanceof awColor) {
+		if ($this->impulse instanceof awColor) {
 			
 			foreach($polygon->all() as $key => $point) {
 			
-				if($point !== NULL) {
+				if ($point !== NULL) {
 					
 					$zero = awAxis::toPosition(
 						$this->xAxis,

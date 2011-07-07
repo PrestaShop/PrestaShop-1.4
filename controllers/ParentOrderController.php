@@ -291,7 +291,7 @@ class ParentOrderControllerCore extends FrontController
 	protected function _assignAddress()
 	{
 		//if guest checkout disabled and flag is_guest  in cookies is actived
-		if(Configuration::get('PS_GUEST_CHECKOUT_ENABLED') == 0 AND ((int) self::$cookie->is_guest != Configuration::get('PS_GUEST_CHECKOUT_ENABLED')))
+		if (Configuration::get('PS_GUEST_CHECKOUT_ENABLED') == 0 AND ((int) self::$cookie->is_guest != Configuration::get('PS_GUEST_CHECKOUT_ENABLED')))
 		{
 			self::$cookie->logout();
 			Tools::redirect('');

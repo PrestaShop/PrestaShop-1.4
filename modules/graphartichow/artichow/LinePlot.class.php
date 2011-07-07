@@ -131,7 +131,7 @@ class awLinePlot extends awPlot implements awLegendable {
 	 */
 	public function setFilledArea($start, $stop, $background) {
 	
-		if($stop <= $start) {
+		if ($stop <= $start) {
 			awImage::drawError("Class LinePlot: End position can not be greater than begin position in setFilledArea().");
 		}
 	
@@ -237,7 +237,7 @@ class awLinePlot extends awPlot implements awLegendable {
 		// Get start and stop values
 		list($start, $stop) = $this->getLimit();
 		
-		if($this->lineMode === awLinePlot::MIDDLE) {
+		if ($this->lineMode === awLinePlot::MIDDLE) {
 			$inc = $this->xAxis->getDistance(0, 1) / 2;
 		} else {
 			$inc = 0;
@@ -246,11 +246,11 @@ class awLinePlot extends awPlot implements awLegendable {
 		// Build the polygon
 		$polygon = new awPolygon;
 		
-		for($key = $start; $key <= $stop; $key++) {
+		for ($key = $start; $key <= $stop; $key++) {
 		
 			$value = $this->datay[$key];
 			
-			if($value !== NULL) {
+			if ($value !== NULL) {
 			
 				$p = awAxis::toPosition($this->xAxis, $this->yAxis, new awPoint($key, $value));
 				$p = $p->move($inc, 0);
@@ -261,7 +261,7 @@ class awLinePlot extends awPlot implements awLegendable {
 		}
 		
 		// Draw backgrounds
-		if($this->lineBackground instanceof awColor or $this->lineBackground instanceof awGradient) {
+		if ($this->lineBackground instanceof awColor or $this->lineBackground instanceof awGradient) {
 		
 			$backgroundPolygon = new awPolygon;
 		
@@ -289,15 +289,15 @@ class awLinePlot extends awPlot implements awLegendable {
 		$prev = NULL;
 		
 		// Line color
-		if($this->lineHide === FALSE) {
+		if ($this->lineHide === FALSE) {
 		
-			if($this->lineColor === NULL) {
+			if ($this->lineColor === NULL) {
 				$this->lineColor = new awColor(0, 0, 0);
 			}
 			
 			foreach($polygon->all() as $point) {
 			
-				if($prev !== NULL) {
+				if ($prev !== NULL) {
 					$driver->line(
 						$this->lineColor,
 						new awLine(
@@ -342,16 +342,16 @@ class awLinePlot extends awPlot implements awLegendable {
 			$p = $this->xAxisPoint($start);
 			$polygonArea->append($p);
 			
-			for($i = $start; $i <= $stop; $i++) {
+			for ($i = $start; $i <= $stop; $i++) {
 				$p = clone $polygon->get($i);
-				if($i === $stop and array_key_exists($stop, $starts)) {
+				if ($i === $stop and array_key_exists($stop, $starts)) {
 					$p = $p->move(-1, 0);
 				}
 				$polygonArea->append($p);
 			}
 			
 			$p = $this->xAxisPoint($stop);
-			if(array_key_exists($stop, $starts)) {
+			if (array_key_exists($stop, $starts)) {
 				$p = $p->move(-1, 0);
 			}
 			$polygonArea->append($p);
@@ -364,7 +364,7 @@ class awLinePlot extends awPlot implements awLegendable {
 	}
 	
 	public function getXAxisNumber() {
-		if($this->lineMode === awLinePlot::MIDDLE) {
+		if ($this->lineMode === awLinePlot::MIDDLE) {
 			return count($this->datay) + 1;
 		} else {
 			return count($this->datay);
@@ -542,7 +542,7 @@ class awSimpleLinePlot extends awPlot implements awLegendable {
 	
 	public function drawComponent(awDriver $driver, $x1, $y1, $x2, $y2, $aliasing) {
 		
-		if($this->lineMode === awLinePlot::MIDDLE) {
+		if ($this->lineMode === awLinePlot::MIDDLE) {
 			$inc = $this->xAxis->getDistance(0, 1) / 2;
 		} else {
 			$inc = 0;
@@ -563,7 +563,7 @@ class awSimpleLinePlot extends awPlot implements awLegendable {
 }
 	
 	public function getXAxisNumber() {
-		if($this->lineMode === awLinePlot::MIDDLE) {
+		if ($this->lineMode === awLinePlot::MIDDLE) {
 			return count($this->datay) + 1;
 		} else {
 			return count($this->datay);

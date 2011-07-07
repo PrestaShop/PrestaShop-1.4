@@ -174,7 +174,7 @@ class dibs extends PaymentModule
 			Configuration::updateValue('DIBS_MORE_SETTINGS', Tools::htmlentitiesUTF8(serialize(self::$MORE_SETTINGS)));
 			
 			$data_sync = '';
-			if(self::$ID_MERCHANT !== '' AND self::$TESTING !== 1 AND self::$MORE_SETTINGS['k1'] !== '' AND self::$MORE_SETTINGS['k2'] !== '')
+			if (self::$ID_MERCHANT !== '' AND self::$TESTING !== 1 AND self::$MORE_SETTINGS['k1'] !== '' AND self::$MORE_SETTINGS['k2'] !== '')
 				$data_sync = '<img src="http://www.prestashop.com/modules/dibs.png?site_id='.urlencode(self::$ID_MERCHANT).'" style="float:right" />';
 			
 			echo '<div class="conf confirm"><img src="../img/admin/ok.gif"/>'.$this->l('Configuration updated').$data_sync.'</div>';
@@ -298,7 +298,7 @@ class dibs extends PaymentModule
 		$currency_num = 0;
 
 		// for 1.3 compatibility
-		if(!isset($currency->iso_code_num) OR $currency->iso_code_num == '')
+		if (!isset($currency->iso_code_num) OR $currency->iso_code_num == '')
 		{
 			$array_currency_iso_num = array(
 				'DKK'	=> 208,
@@ -322,7 +322,7 @@ class dibs extends PaymentModule
 		$dibsParams['currency']		= (int)$currency_num; // Currency specification as indicated in ISO4217 where the EUR is no. 978
 
 		// optional
-		if(self::$TESTING === 1)
+		if (self::$TESTING === 1)
 			$dibsParams['test']		= 'yes'; // optional - This field is used when tests are being conducted on the shop (e.g. test=yes). When this field is declared, the transaction is not dispatched to the card issuer, but is instead handled by the DIBS test module. See also Step 5 of the 10 Step Guide for more information. During your initial integration with DIBS, there is no need to insert this parameter, since all default transactions will hit the DIBS test system until DIBS has approved integration. Should the test system be used at a later date, this will be activated at DIBS (contact DIBS support for reactivating the test mode of your shop).
 		$dibsParams['lang']			= in_array(strtolower($lang->iso_code), self::$accepted_lang) ? $lang->iso_code : ''; // optional - This parameter determines the language in which the page will be opened. The following values are accepted: da=Danish en=English es=Spanish fi=Finnish fo=Faroese fr=French it=Italian nl=Dutch no=Norwegian pl=Polish (simplified) sv=Swedish Default language is Danish.
 		$dibsParams['color']		= self::$MORE_SETTINGS['flexwin_color']; // optional - The basic color theme of FlexWin. There is currently a choice of "sand", "grey" and "blue". The default value is "blue". 

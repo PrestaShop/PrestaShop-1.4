@@ -21,12 +21,12 @@
 		 */
 		function __construct($path = null)
 		{
-			if(!is_null($path))
+			if (!is_null($path))
 			{
-			if(file_exists($path))
+			if (file_exists($path))
 			{
 				$this->filePath = $path;
-				if(is_file($this->filePath))
+				if (is_file($this->filePath))
 				{
 					$this->fileStat = @stat($path);
 					$this->fileInfo['size'] = $this->fileStat[7];
@@ -37,7 +37,7 @@
 					$this->fileInfo['name'] = basename($path);	
 					$this->fileInfo['is_writable'] = $this->isWritable();
 					$this->fileInfo['is_readable'] = $this->isReadable();
-				}elseif(is_dir($this->filePath))
+				}elseif (is_dir($this->filePath))
 				{
 					$this->fileStat = @stat($path);
 					$this->fileInfo['name'] = basename($path);
@@ -80,15 +80,15 @@
 		if (DIRECTORY_SEPARATOR == "\\")
 		{
 			$path = slashToBackslash($path);
-			if(is_file($path))
+			if (is_file($path))
 			{
 				$fp = @fopen($path,'ab');
-				if($fp)
+				if ($fp)
 				{
 					@fclose($fp);
 					return true;
 				}
-			}elseif(is_dir($path))
+			}elseif (is_dir($path))
 			{
 					$path = addTrailingSlash($path);
 					$tmp = uniqid(time());
@@ -140,7 +140,7 @@
 		function mkdir($path = null, $mask=null, $dirOwner='') 
 		{
 			$path = is_null($path)?$this->filePath:$path;
-			if(!file_exists($path))
+			if (!file_exists($path))
 			{
 				$mask = is_null($mask)?$this->mask:$mask;				
 				$status = @mkdir(slashToBackslash($path));			
@@ -148,7 +148,7 @@
 				{
 					@chmod(slashToBackslash($path), intval($mask, 8));
 				}					
-				if($dirOwner)
+				if ($dirOwner)
 				{
 					$this->chown(slashToBackslash($path), $dirOwner);
 				}
@@ -165,12 +165,12 @@
 	 */
 	function chown($path, $owner) 
 	{
-		if(!empty($owner))
+		if (!empty($owner))
 		{
 			$owners = explode(":", $owner);
-			if(!empty($owners[0]))
+			if (!empty($owners[0]))
 				@chown($path, $owners[0]);
-			if(!empty($owners[1]))
+			if (!empty($owners[1]))
 				@chgrp($path, $owner[1]);
 		}
 	}	
@@ -188,9 +188,9 @@
     {
     	$source = removeTrailingSlash(backslashToSlash($source));
     	$dest = removeTrailingSlash(backslashToSlash($dest));
-	 		if(!file_exists($dest) || !is_dir($dest))
+	 		if (!file_exists($dest) || !is_dir($dest))
 			{
-				if(!$this->mkdir($dest))
+				if (!$this->mkdir($dest))
 				{
 					$this->_debug('Unable to create folder (' . $dest . ")");
 					return false;
@@ -206,7 +206,7 @@
         if (is_file($source))
         {        	
         		$dest = addTrailingSlash($dest) . (basename($source));
-        	if(file_exists($dest))
+        	if (file_exists($dest))
         	{
         		return false;
         	}else {
@@ -215,26 +215,26 @@
         	}
             
             
-        }elseif(is_dir($source))
+        }elseif (is_dir($source))
         {
 	        // Loop through the folder
-	           if(file_exists(addTrailingSlash($dest) . basename($source)))
+	           if (file_exists(addTrailingSlash($dest) . basename($source)))
 	           {
 	           	return false;
 	           }else 
 	           {
-			 		if(!file_exists(addTrailingSlash($dest) . basename($source)) || !is_dir(addTrailingSlash($dest) . basename($source)))
+			 		if (!file_exists(addTrailingSlash($dest) . basename($source)) || !is_dir(addTrailingSlash($dest) . basename($source)))
 					{
-						if(!$this->mkdir(addTrailingSlash($dest) . basename($source)))
+						if (!$this->mkdir(addTrailingSlash($dest) . basename($source)))
 						{
 							$this->_debug('Unable to create folder (' . addTrailingSlash($dest) . basename($source) . ")");
 							return false;
 						}					
 					}	        	
 		        $handle = opendir($source);
-		        while(false !== ($readdir = readdir($handle)))
+		        while (false !== ($readdir = readdir($handle)))
 		        {
-		            if($readdir != '.' && $readdir != '..')
+		            if ($readdir != '.' && $readdir != '..')
 		            {	  
 		            	$path = addTrailingSlash($source).'/'.$readdir;    
 		            	$this->copyTo($path, addTrailingSlash($dest) . basename($source));
@@ -260,23 +260,23 @@
     	$folderPath = addslashes(backslashToSlash(getParentPath($fileToMove)));
     	$destFolder = addslashes(backslashToSlash(getParentPath($destFolder)));
     	$finalPath = $destFolder . basename($fileToMove);
-    	if(file_exists($fileToMove))
+    	if (file_exists($fileToMove))
     	{
-    		if(is_file())
+    		if (is_file())
     		{
     			$fileExt = getFileExt($fileToMove);
     			$fileBaseName = basename($fileToMove, '.' . $fileExt);
     			$count = 1;
-    			while(file_exists($destFolder . $fileBaseName . $count . "." . $fileExt))
+    			while (file_exists($destFolder . $fileBaseName . $count . "." . $fileExt))
     			{
     				$count++;
     			}
     			$filePath = $destFolder . $fileBaseName . $count . "." . $fileExt;
-    		}elseif(is_dir())
+    		}elseif (is_dir())
     		{
     			$folderName = basename($fileToMove);
      			$count = 1;
-    			while(file_exists($destFolder . $folderName . $count))
+    			while (file_exists($destFolder . $folderName . $count))
     			{
     				$count++;
     			}
@@ -313,12 +313,12 @@
 	function delete($path = null)
 	{
 		$path = is_null($path)?$this->filePath:$path;
-		if(file_exists($path))
+		if (file_exists($path))
 		{
-			if(is_file($path))
+			if (is_file($path))
 			{
 				return @unlink($path);
-			}elseif(is_dir($path))
+			}elseif (is_dir($path))
 			{
 				return $this->__recursive_remove_directory($path);
 			}
@@ -335,7 +335,7 @@
 	function emptyFolder($path)
 	{
 		$path = is_null($path)?$this->filePath:"";
-		if(file_exists($path) && is_dir($path))
+		if (file_exists($path) && is_dir($path))
 		{
 			return $this->__recursive_remove_directory($path, true);
 		}
@@ -344,7 +344,7 @@
 	
 	function _debug($info)
 	{
-		if($this->debug)
+		if ($this->debug)
 		{
 			echo $info . "<br>\n";
 		}else 
@@ -369,19 +369,19 @@
  function __recursive_remove_directory($directory, $empty=FALSE)
  {
      // if the path has a slash at the end we remove it here
-     if(substr($directory,-1) == '/')
+     if (substr($directory,-1) == '/')
      {
          $directory = substr($directory,0,-1);
      }
   
      // if the path is not valid or is not a directory ...
-     if(!file_exists($directory) || !is_dir($directory))
+     if (!file_exists($directory) || !is_dir($directory))
      {
          // ... we return false and exit the function
          return FALSE;
   
      // ... if the path is not readable
-     }elseif(!is_readable($directory))
+     }elseif (!is_readable($directory))
      {
          // ... we return false and exit the function
          return FALSE;
@@ -397,13 +397,13 @@
          {
              // if the filepointer is not the current directory
              // or the parent directory
-             if($item != '.' && $item != '..')
+             if ($item != '.' && $item != '..')
              {
                  // we build the new path to delete
                  $path = $directory.'/'.$item;
   
                  // if the new path is a directory
-                 if(is_dir($path))                  {
+                 if (is_dir($path))                  {
                      // we call this function with the new path
                      $this->__recursive_remove_directory($path);
   
@@ -418,10 +418,10 @@
          @closedir($handle);
   
         // if the option to empty is not set to true
-         if($empty == FALSE)
+         if ($empty == FALSE)
          {
              // try to delete the now empty directory
-             if(!@rmdir($directory))
+             if (!@rmdir($directory))
              {
                  // return false if not possible
                  return FALSE;

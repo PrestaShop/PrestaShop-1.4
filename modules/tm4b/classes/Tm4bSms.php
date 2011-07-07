@@ -105,7 +105,7 @@ class Tm4bSms  {
     private function SendSocketHTTP()
     {
         // init infos
-        if( self::__TM4B_SMS_HTTP_METHOD__ == "GET")
+        if ( self::__TM4B_SMS_HTTP_METHOD__ == "GET")
         {
             $script = self::__TM4B_SMS_HTTP_SERVICE__ . '?' . $this->_httpQS;
         }
@@ -126,10 +126,10 @@ class Tm4bSms  {
         // Socket connection
         $socket = fsockopen( self::__TM4B_SMS_HTTP_HOST__ , 80, $errno, $errstr);
       
-        if($socket) // if we're connected
+        if ($socket) // if we're connected
         {
             fputs($socket, $header); // Send header
-            while(!feof($socket))
+            while (!feof($socket))
             {
                 $response[] = fgets($socket); // Grab return codes
             }

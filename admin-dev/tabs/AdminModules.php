@@ -261,7 +261,7 @@ class AdminModules extends AdminTab
 							<div class="clear">&nbsp;</div>'.$echo.'<div class="clear">&nbsp;</div>
 							'.$toolbar;
 						}
-						elseif($echo)
+						elseif ($echo)
 							$return = ($method == 'install' ? 12 : 13);
 						elseif ($echo === false)
 							$module_errors[] = $name;
@@ -778,7 +778,7 @@ class AdminModules extends AdminTab
 						? '<input type="button" class="button small" name="Install" value="'.$this->l('Install').'"
 						onclick="javascript:document.location.href=\''.$currentIndex.'&install='.urlencode($module->name).'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.'\'">'
 						: '<input type="button" class="button small" name="Uninstall" value="'.$this->l('Uninstall').'"
-						onclick="'.((!method_exists($module, 'onclickOption')) ? ((empty($module->confirmUninstall)) ? '' : 'if(confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$href.'\'' : $module->onclickOption('uninstall', $href)).'">').'</td>
+						onclick="'.((!method_exists($module, 'onclickOption')) ? ((empty($module->confirmUninstall)) ? '' : 'if (confirm(\''.addslashes($module->confirmUninstall).'\')) ').'document.location.href=\''.$href.'\'' : $module->onclickOption('uninstall', $href)).'">').'</td>
 						
 					</tr>
 					<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>

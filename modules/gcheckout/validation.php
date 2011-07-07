@@ -54,7 +54,7 @@ list($root, $data) = $Gresponse->GetParsedXML($xml_response);
 $Gresponse->SetMerchantAuthentication($merchant_id, $merchant_key);
 
 $status = $Gresponse->HttpAuthentication();
-if(!$status)
+if (!$status)
 	die('authentication failed');
 	
   /* Commands to send the various order processing APIs
@@ -131,8 +131,8 @@ switch ($root)
 */
 function get_arr_result($child_node) {
 	$result = array();
-	if(isset($child_node)) {
-		if(is_associative_array($child_node)) {
+	if (isset($child_node)) {
+		if (is_associative_array($child_node)) {
 			$result[] = $child_node;
 		}
 		else {

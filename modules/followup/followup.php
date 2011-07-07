@@ -281,7 +281,7 @@ class Followup extends Module
 			LEFT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = c.id_customer)
 			WHERE DATE_SUB(CURDATE(),INTERVAL 7 DAY) <= c.date_add AND cu.id_customer IS NOT NULL AND o.id_order IS NULL';
 
-		if(!empty($emailLogs))
+		if (!empty($emailLogs))
 			$sql .= ' AND c.id_cart NOT IN ('.join(',', $emailLogs).')';
 
 		$emails = Db::getInstance()->ExecuteS($sql);
@@ -312,7 +312,7 @@ class Followup extends Module
 		);
 		static $executed = false;
 		
-		if(!$executed)
+		if (!$executed)
 		{
 			$query = '
 			SELECT id_cart, id_customer, id_email_type FROM '._DB_PREFIX_.'log_email
@@ -352,7 +352,7 @@ class Followup extends Module
 			LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
 			WHERE o.valid = 1 AND c.date_add >= DATE_SUB(CURDATE(),INTERVAL 7 DAY) AND o.id_cart';
 
-		if(!empty($emailLogs))
+		if (!empty($emailLogs))
 			$sql .= ' NOT IN ('.join(',', $emailLogs).')';
 
 		$emails = Db::getInstance()->ExecuteS($sql);
@@ -385,7 +385,7 @@ class Followup extends Module
 			LEFT JOIN '._DB_PREFIX_.'cart c ON (c.id_cart = o.id_cart)
 			WHERE o.valid = 1 AND DATE_SUB(CURDATE(),INTERVAL 90 DAY) <= o.date_add AND cu.id_customer';
 
-		if(!empty($emailLogs))
+		if (!empty($emailLogs))
 			$sql .= ' NOT IN ('.join(',', $emailLogs).')';
 
 		$sql .= '
@@ -430,7 +430,7 @@ class Followup extends Module
 			WHERE cu.id_customer NOT IN
 			(SELECT o.id_customer FROM '._DB_PREFIX_.'orders o WHERE DATE_SUB(CURDATE(),INTERVAL '.(int)(Configuration::get('PS_FOLLOW_UP_DAYS_THRESHOLD_4')).' DAY) <= o.date_add)';
 
-		if(!empty($emailLogs))
+		if (!empty($emailLogs))
 			$sql .= 'AND cu.id_customer NOT IN ('.join(',', $emailLogs).')';
 
 		$sql .= 'GROUP BY cu.id_customer HAVING nb_orders >= 1';

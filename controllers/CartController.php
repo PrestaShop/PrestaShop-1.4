@@ -151,11 +151,11 @@ class CartControllerCore extends FrontController
 						$hasUndiscountedProduct = null;
 						foreach($discounts as $discount)
 						{
-							if(is_null($hasUndiscountedProduct))
+							if (is_null($hasUndiscountedProduct))
 							{
 								$hasUndiscountedProduct = false;
 								foreach(self::$cart->getProducts() as $product)
-									if($product['reduction_applies'] === false)
+									if ($product['reduction_applies'] === false)
 									{
 										$hasUndiscountedProduct = true;
 										break;

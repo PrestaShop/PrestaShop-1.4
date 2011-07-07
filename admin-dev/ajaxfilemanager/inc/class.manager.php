@@ -58,19 +58,19 @@ class manager
 	{
 
 		$this->calculateSubdir = $calculateSubdir;
-		if(defined('CONFIG_SYS_FOLDER_SHOWN_ON_TOP'))
+		if (defined('CONFIG_SYS_FOLDER_SHOWN_ON_TOP'))
 		{
 			$this->forceFolderOnTop = CONFIG_SYS_FOLDER_SHOWN_ON_TOP;
 		}
-		if(!is_null($path))
+		if (!is_null($path))
 		{
 			$this->currentFolderPath = $path;
 
-		}elseif(isset($_GET[$this->folderPathIndex]) && file_exists($_GET[$this->folderPathIndex]) && !is_file($_GET[$this->folderPathIndex]) )
+		}elseif (isset($_GET[$this->folderPathIndex]) && file_exists($_GET[$this->folderPathIndex]) && !is_file($_GET[$this->folderPathIndex]) )
 		{
 			$this->currentFolderPath = $_GET[$this->folderPathIndex];
 		}
-		elseif(isset($_SESSION[$this->lastVisitedFolderPathIndex]) && file_exists($_SESSION[$this->lastVisitedFolderPathIndex]) && !is_file($_SESSION[$this->lastVisitedFolderPathIndex]))
+		elseif (isset($_SESSION[$this->lastVisitedFolderPathIndex]) && file_exists($_SESSION[$this->lastVisitedFolderPathIndex]) && !is_file($_SESSION[$this->lastVisitedFolderPathIndex]))
 		{
 			$this->currentFolderPath = $_SESSION[$this->lastVisitedFolderPathIndex];
 		}else
@@ -80,15 +80,15 @@ class manager
 		
 		$this->currentFolderPath = (isUnderRoot($this->currentFolderPath)?backslashToSlash((addTrailingSlash($this->currentFolderPath))):CONFIG_SYS_DEFAULT_PATH);
 		
-		if($this->calculateSubdir)
+		if ($this->calculateSubdir)
 		{// keep track of this folder path in session 
 			$_SESSION[$this->lastVisitedFolderPathIndex] = $this->currentFolderPath;
 		}
-		if(is_dir($this->currentFolderPath))
+		if (is_dir($this->currentFolderPath))
 		{
 			$file = new file($this->currentFolderPath);
 			$folderInfo = $file->getFileInfo();
-			if(sizeof($folderInfo))
+			if (sizeof($folderInfo))
 			{
 				$this->currentFolderInfo['name']=basename($this->currentFolderPath);
 				$this->currentFolderInfo['subdir']=0;
@@ -105,7 +105,7 @@ class manager
 				//$this->currentFolderInfo['flag'] = $folderInfo['flag'];
 			}			
 		}
-		if($calculateSubdir && !file_exists($this->currentFolderPath))
+		if ($calculateSubdir && !file_exists($this->currentFolderPath))
 		{
 			die(ERR_FOLDER_NOT_FOUND . $this->currentFolderPath);
 		}
@@ -144,20 +144,20 @@ class manager
 		$folders = array();
 		$tem = array();
 		$dirHandler = @opendir($this->currentFolderPath);
-		if($dirHandler)
+		if ($dirHandler)
 		{
-			while(false !== ($file = readdir($dirHandler)))
+			while (false !== ($file = readdir($dirHandler)))
 			{
-				if($file != '.' && $file != '..')
+				if ($file != '.' && $file != '..')
 				{
 					$flag = $this->flags['no'];
 				
-					if($this->sessionAction->getFolder() == $this->currentFolderPath)
+					if ($this->sessionAction->getFolder() == $this->currentFolderPath)
 					{//check if any flag associated with this folder or file
 						$folder = addTrailingSlash(backslashToSlash($this->currentFolderPath));
-						if(in_array($folder . $file, $this->sessionAction->get()))
+						if (in_array($folder . $file, $this->sessionAction->get()))
 						{
-							if($this->sessionAction->getAction() == "copy")
+							if ($this->sessionAction->getAction() == "copy")
 							{
 								$flag = $this->flags['copy'];
 							}else 
@@ -167,10 +167,10 @@ class manager
 						}
 					}					
 					$path=$this->currentFolderPath.$file;
-					if(is_dir($path) && isListingDocument($path) )
+					if (is_dir($path) && isListingDocument($path) )
 					{
 						$this->currentFolderInfo['subdir']++;
-						if(!$this->calculateSubdir)
+						if (!$this->calculateSubdir)
 						{			
 						}else 
 						{
@@ -182,12 +182,12 @@ class manager
 						}
 
 						
-					}elseif(is_file($path) && isListingDocument($path))
+					}elseif (is_file($path) && isListingDocument($path))
 					{
 
 							$obj = new file($path);
 							$tem = $obj->getFileInfo();
-							if(sizeof($tem))
+							if (sizeof($tem))
 							{
 								$fileType = $this->getFileType($file);
 								foreach($fileType as $k=>$v)
@@ -211,7 +211,7 @@ class manager
 					
 				}
 			}
-			if($this->forceFolderOnTop)
+			if ($this->forceFolderOnTop)
 			{
 				uksort($folders, "strnatcasecmp");
 				uksort($files, "strnatcasecmp");
@@ -246,7 +246,7 @@ class manager
 	 */
 	function getFolderInfo($path=null)
 	{
-		if(is_null($path))
+		if (is_null($path))
 		{
 			return $this->currentFolderInfo;
 		}else 
@@ -272,16 +272,16 @@ class manager
 			
 			foreach ($this->fileTypes as $fileType) 
 			{
-				if(in_array($ext, $fileType[0]))
+				if (in_array($ext, $fileType[0]))
 				{
 					return array("cssClass" => $fileType[1], "fileType" => $fileType[2], "preview" => $fileType[3], 'test'=>5);
 				}
 			}
-			if(!empty($fileName))
+			if (!empty($fileName))
 			{//this is folder
-				if(empty($ext))
+				if (empty($ext))
 				{
-					if(is_dir($fileName))
+					if (is_dir($fileName))
 					{
 
 						return array("cssClass" => ($checkIfDir && $this->isDirEmpty($fileName)?'folderEmpty':"folder") , "fileType" => "Folder", "preview" => 0, 'test'=>1);
@@ -319,7 +319,7 @@ class manager
 	{
 		foreach($fileTypes as $fileType)
 		{
-			if(isset($fileType[0]) && is_array($fileType[0]))
+			if (isset($fileType[0]) && is_array($fileType[0]))
 			{
 				foreach($fileType[0] as $type)
 				{
@@ -338,7 +338,7 @@ class manager
 	 */
     function _getExtension($file, $checkIfDir = false)
     {
-    	if($checkIfDir && file_exists($file) && is_dir($file))
+    	if ($checkIfDir && file_exists($file) && is_dir($file))
     	{
     		return '';
     	}else 
@@ -352,11 +352,11 @@ class manager
 	function isDirEmpty($path)
 	{
 		$dirHandler = @opendir($path);
-		if($dirHandler)
+		if ($dirHandler)
 		{
-			while(false !== ($file = readdir($dirHandler)))
+			while (false !== ($file = readdir($dirHandler)))
 			{
-				if($file != '.' && $file != '..')
+				if ($file != '.' && $file != '..')
 				{
 					@closedir($dirHandler);
 					return false;

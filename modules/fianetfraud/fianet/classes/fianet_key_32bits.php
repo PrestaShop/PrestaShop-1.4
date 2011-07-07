@@ -63,15 +63,15 @@ Class HashMD5 {
     function rhex($num) {
         $hex_chr = "0123456789abcdef";
         $str = "";
-        for($j = 0; $j <= 3; $j++)
+        for ($j = 0; $j <= 3; $j++)
             $str .= substr($hex_chr, ($num >> ($j * 8 + 4)) & 0x0F, 1) . substr($hex_chr, ($num >> ($j * 8)) & 0x0F, 1);
         return $str;
     }
     
     function str2blks_MD5($str) {
         $nblk = ((strlen($str) + 8) >> 6) + 1;
-        for($i = 0; $i < $nblk * 16; $i++) $blks[$i] = 0;
-        for($i = 0; $i < strlen($str); $i++)
+        for ($i = 0; $i < $nblk * 16; $i++) $blks[$i] = 0;
+        for ($i = 0; $i < strlen($str); $i++)
             $blks[$i >> 2] |= ord(substr($str, $i, 1)) << (($i % 4) * 8);
         $blks[$i >> 2] |= 0x80 << (($i % 4) * 8);
         $blks[$nblk * 16 - 2] = strlen($str) * 8;
@@ -123,7 +123,7 @@ Class HashMD5 {
       
       $this->Init();
       
-      for($i = 0; $i < sizeof($x); $i += 16) {
+      for ($i = 0; $i < sizeof($x); $i += 16) {
         $olda = $this->a;
         $oldb = $this->b;
         $oldc = $this->c;

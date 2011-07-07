@@ -438,13 +438,13 @@ class BlockLayered extends Module
 			$row = array();
 			foreach ($product AS $key => $value)
 			{
-				if($key == 'ids_feat')
+				if ($key == 'ids_feat')
 					$row['f'] = explode(',', $value);
-				if($key == 'ids_attr')
+				if ($key == 'ids_attr')
 					$row['a'] = explode(',', $value);
-				if($key == 'ids_cat')
+				if ($key == 'ids_cat')
 					$row['c'] = explode(',', $value);
-				if($key == 'weight')
+				if ($key == 'weight')
 					$weight[] = $value;
 			}
 
@@ -591,7 +591,7 @@ class BlockLayered extends Module
 				{
 					foreach ($productsAttr AS $product)
 					{
-						if(in_array($value['id_attribute'], $product['a']))
+						if (in_array($value['id_attribute'], $product['a']))
 						{
 							$filterBlock['values'][(int)$value['id_attribute']]['name'] = $value['name'];
 							$filterBlock['values'][(int)$value['id_attribute']]['color'] = $value['color'];
@@ -653,7 +653,7 @@ class BlockLayered extends Module
 
 				$man = array();
 				$productKeys = array_keys($products);
-				if(!empty($productKeys))
+				if (!empty($productKeys))
 					$man = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 					SELECT DISTINCT(p.id_manufacturer), m.name
 					FROM '._DB_PREFIX_.'product p			
@@ -969,7 +969,7 @@ if (!isset($doneCategories[(int)$id_category]['p']))
 						$min = $filters[0];
 						$max = $filters[1]; 
 						foreach ($products AS $k => $product)
-							if((float)$min <= (float)$product[$filterByLetter[$type]] AND (float)$product[$filterByLetter[$type]] <= (float)$max)
+							if ((float)$min <= (float)$product[$filterByLetter[$type]] AND (float)$product[$filterByLetter[$type]] <= (float)$max)
 								$productsToKeep[] = (int)$k;
 					break;
 				}

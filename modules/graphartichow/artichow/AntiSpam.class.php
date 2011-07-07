@@ -59,7 +59,7 @@ class awAntiSpam extends awImage {
 		$letters = 'aAbBCDeEFgGhHJKLmMnNpPqQRsStTuVwWXYZz2345679';
 		$number = strlen($letters);
 	
-		for($i = 0; $i < $length; $i++) {
+		for ($i = 0; $i < $length; $i++) {
 			$this->string .= $letters{mt_rand(0, $number - 1)};
 		}
 		
@@ -73,10 +73,10 @@ class awAntiSpam extends awImage {
 	 * @param int $nois Noise intensity (from 0 to 10)
 	 */
 	public function setNoise($noise) {
-		if($noise < 0) {
+		if ($noise < 0) {
 			$noise = 0;
 		}
-		if($noise > 10) {
+		if ($noise > 10) {
 			$noise = 10;
 		}
 		$this->noise = (int)$noise;
@@ -139,7 +139,7 @@ class awAntiSpam extends awImage {
 		$this->setSize(10, 10);
 		$driver = $this->getDriver();
 		
-		for($i = 0; $i < strlen($this->string); $i++) {
+		for ($i = 0; $i < strlen($this->string); $i++) {
 		
 			$fontKey = array_rand($fonts);
 			$sizeKey = array_rand($sizes);
@@ -174,7 +174,7 @@ class awAntiSpam extends awImage {
 	
 		$this->create();
 		
-		for($i = 0; $i < strlen($this->string); $i++) {
+		for ($i = 0; $i < strlen($this->string); $i++) {
 		
 			$this->driver->string(
 				$texts[$i],
@@ -197,7 +197,7 @@ class awAntiSpam extends awImage {
 		$points = $this->noise * 30;
 		$color = new awColor(0, 0, 0);
 		
-		for($i = 0; $i < $points; $i++) {
+		for ($i = 0; $i < $points; $i++) {
 			$this->driver->point(
 				$color,
 				new awPoint(
@@ -212,7 +212,7 @@ class awAntiSpam extends awImage {
 	protected function session() {
 	
 		// Start session if needed
-		if(!session_id()) {
+		if (!session_id()) {
 			session_start();
 		}
 		

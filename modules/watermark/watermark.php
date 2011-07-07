@@ -97,17 +97,17 @@ class Watermark extends Module
 		
 		if (empty($transparency))
 			$this->_postErrors[] = $this->l('Transparency required.');
-		elseif($transparency < 0 || $transparency > 100)
+		elseif ($transparency < 0 || $transparency > 100)
 			$this->_postErrors[] = $this->l('Transparency is not in allowed range.');
 
 		if (empty($yalign))
 			$this->_postErrors[] = $this->l('Y-Align is required.');
-		elseif(!in_array($yalign, $this->yaligns))
+		elseif (!in_array($yalign, $this->yaligns))
 			$this->_postErrors[] = $this->l('Y-Align is not in allowed range.');
 		
 		if (empty($xalign))
 			$this->_postErrors[] = $this->l('X-Align is required.');
-		elseif(!in_array($xalign, $this->xaligns))
+		elseif (!in_array($xalign, $this->xaligns))
 			$this->_postErrors[] = $this->l('X-Align is not in allowed range.');
 		if (empty($image_types))
 			$this->_postErrors[] = $this->l('At least one image type is required.');
@@ -135,11 +135,11 @@ class Watermark extends Module
 			if ($error = checkImage($_FILES['PS_WATERMARK'], $this->maxImageSize))
 				$this->_errors[] = $error;
 			/* Copy new watermark */
-			elseif(!copy($_FILES['PS_WATERMARK']['tmp_name'], dirname(__FILE__).'/watermark.gif'))
+			elseif (!copy($_FILES['PS_WATERMARK']['tmp_name'], dirname(__FILE__).'/watermark.gif'))
 				$this->_errors[] = Tools::displayError('an error occurred while uploading watermark: '.$_FILES['PS_WATERMARK']['tmp_name'].' to '.$dest);
 		}
 		
-		if($this->_errors)
+		if ($this->_errors)
 			foreach ($this->_errors as $error)
 				$this->_html .= '<div class="module_error alert error"><img src="../img/admin/warning.gif" alt="'.$this->l('ok').'" /> '.$this->l($error).'</div>';
 		else
@@ -249,7 +249,7 @@ class Watermark extends Module
 		$Xoffset = $Yoffset = $xpos = $ypos = 0;
 		if (!$image = imagecreatefromjpeg($imagepath))
 			return false;
-		if (!$imagew = imagecreatefromgif($watermarkpath))
+		if (!$imagew = imagecreatefromgif ($watermarkpath))
 			die ($this->l('The watermark image is not a real gif, please CONVERT the image.'));
 		list($watermarkWidth, $watermarkHeight) = getimagesize($watermarkpath); 
 		list($imageWidth, $imageHeight) = getimagesize($imagepath); 

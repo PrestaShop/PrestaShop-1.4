@@ -55,7 +55,7 @@ class Secuvad extends Module
 	
 	public function install()
 	{
-	  	if(!parent::install()
+	  	if (!parent::install()
 			|| !$this->registerHook('paymentConfirm')
 			|| !$this->registerHook('adminOrder')
 			|| !Configuration::updateValue('SECUVAD_CONTACT', 'prestashop@secuvad.com') 
@@ -211,7 +211,7 @@ class Secuvad extends Module
 
 	public function uninstall()
 	{
-		if(!parent::uninstall()
+		if (!parent::uninstall()
 	    || !Configuration::deleteByName('SECUVAD_CONTACT')
 	    || !Configuration::deleteByName('SECUVAD_ACTIVATION')
 	    || !Configuration::deleteByName('SECUVAD_ID')
@@ -280,7 +280,7 @@ class Secuvad extends Module
 					<p class="center">
 						<input type="hidden" name="id_secuvad_order" value="'.(int)($params['id_order']).'" />
 						<input type="submit" class="button" name="send_to_secuvad" value="'.$this->l('Update Secuvad status').'"> 
-						<input type="submit" class="button" name="report_fraud" value="'.$this->l('Transmit an unpaid transaction').'" onclick="if(!confirm(\''.$this->l('Please note, by delivery of such unpaid SECUVAD, you certify that your claim is certain, liquid and payable, and that you entrust SECUVAD to EXCLUSIVE recovery. Do you wish to continue?').'\')) return false;">
+						<input type="submit" class="button" name="report_fraud" value="'.$this->l('Transmit an unpaid transaction').'" onclick="if (!confirm(\''.$this->l('Please note, by delivery of such unpaid SECUVAD, you certify that your claim is certain, liquid and payable, and that you entrust SECUVAD to EXCLUSIVE recovery. Do you wish to continue?').'\')) return false;">
 					</p>
 				</form>
 			</fieldset>
@@ -948,7 +948,7 @@ class Secuvad extends Module
 		$tab->class_name = $tabClass;
 		$tab->module = $this->name;
 		$tab->id_parent = (int)($idTabParent);
-		if(!$tab->save())
+		if (!$tab->save())
 		return false;
 		return true;
 	}
@@ -956,7 +956,7 @@ class Secuvad extends Module
 	private function uninstallModuleTab($tabClass)
 	{
 		$idTab = Tab::getIdFromClassName($tabClass);
-		if($idTab != 0)
+		if ($idTab != 0)
 		{
 			$tab = new Tab($idTab);
 			$tab->delete();
@@ -993,7 +993,7 @@ class Secuvad extends Module
 		FROM `'._DB_PREFIX_.'secuvad_order` 
 		WHERE `id_secuvad_order` = '.(int)($id_secuvad_order));
 		
-		if($secuvad_status == 0)
+		if ($secuvad_status == 0)
 			return false;
 		return true;
 	}
@@ -1001,11 +1001,11 @@ class Secuvad extends Module
 	public function check_assoc()
 	{
 		$result = '';
-		if(!$this->check_payment())
+		if (!$this->check_payment())
 			$result .= 'payment';
-		if(!$this->check_transport())
+		if (!$this->check_transport())
 			$result .= 'transport';
-		if(!$this->check_category())
+		if (!$this->check_category())
 			$result .= 'category';
 		return $result;
 	}
@@ -1136,7 +1136,7 @@ class Secuvad extends Module
 		LEFT JOIN `'._DB_PREFIX_.'secuvad_category` sc ON (sc.`category_id` = sac.`category_id` AND sc.`id_lang` = '.(int)($cookie->id_lang).')
 		WHERE sc.`category_id` IS NULL
 		');
-		if(count($module_not_assoc)>0)
+		if (count($module_not_assoc)>0)
 		{
 			$message = $this->l('Following categories are not associated:');
 			foreach($module_not_assoc as $mod)
@@ -1201,7 +1201,7 @@ class Secuvad extends Module
 			$xml_obj = new Secuvad_flux(Configuration::get('SECUVAD_ID'), Configuration::get('SECUVAD_XML_ENCODING'));
 			$flux_xml = $xml_obj->get_flux_xml_fraud(Tools::getValue('id_secuvad_order'));
 			
-			if(Configuration::get('SECUVAD_MODE') == 'TEST')
+			if (Configuration::get('SECUVAD_MODE') == 'TEST')
 				$url = 'https://'.Configuration::get('SECUVAD_LOGIN').':'.Configuration::get('SECUVAD_MDP').'@'.Configuration::get('SECUVAD_URL_TEST');
 			else
 				$url = 'https://'.Configuration::get('SECUVAD_LOGIN').':'.Configuration::get('SECUVAD_MDP').'@'.Configuration::get('SECUVAD_URL_PROD');			
@@ -1228,7 +1228,7 @@ class Secuvad extends Module
 		$res = Db::getInstance()->getValue('
 		SELECT COUNT(0) nb 
 		FROM `'._DB_PREFIX_.'secuvad_logs`');
-		if($res > $this->get_secuvad_max_log_size())
+		if ($res > $this->get_secuvad_max_log_size())
 			Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'secuvad_logs` 
 			ORDER BY `date` 

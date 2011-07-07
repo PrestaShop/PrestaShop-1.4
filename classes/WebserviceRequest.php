@@ -198,7 +198,7 @@ class WebserviceRequestCore
 	 */
 	public static function getInstance()
 	{
-		if(!isset(self::$_instance))
+		if (!isset(self::$_instance))
 			self::$_instance = new WebserviceRequest::$ws_current_classname();
 		return self::$_instance;
 	}
@@ -476,7 +476,7 @@ class WebserviceRequestCore
 				else
 				{
 					$specificObjectName = 'WebserviceSpecificManagement'.ucfirst($this->urlSegment[0]);
-					if(!class_exists($specificObjectName))
+					if (!class_exists($specificObjectName))
 						$this->setError(501, sprintf('The specific management class is not implemented for the "%s" entity.', $this->urlSegment[0]), 124);
 					else
 					{
@@ -662,7 +662,7 @@ class WebserviceRequestCore
 					{
 						$this->setError(401, 'Authentification key does not exist', 19);
 					}
-					elseif($keyValidation === true)
+					elseif ($keyValidation === true)
 					{
 						$this->keyPermissions = WebserviceKey::getPermissionForAccount($this->_key);
 					}
@@ -1360,7 +1360,7 @@ class WebserviceRequestCore
 					if (isset($this->resourceConfiguration['objectMethods']) && array_key_exists($objectMethod, $this->resourceConfiguration['objectMethods']))
 						$objectMethod = $this->resourceConfiguration['objectMethods'][$objectMethod];
 					$result = $object->{$objectMethod}();
-					if($result)
+					if ($result)
 					{
 						if (isset($attributes->associations))
 							foreach ($attributes->associations->children() as $association)

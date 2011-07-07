@@ -39,16 +39,16 @@ class ToolsInstall
 	public static function checkDB ($srv, $login, $password, $name, $posted = true)
 	{
 		// Don't include theses files if classes are already defined
-		if(!class_exists('Validate'))
+		if (!class_exists('Validate'))
 			include_once(INSTALL_PATH.'/../classes/Validate.php');
 
-		if(!class_exists('Db'))
+		if (!class_exists('Db'))
 			include_once(INSTALL_PATH.'/../classes/Db.php');
 
-		if(!class_exists('MySQL'))
+		if (!class_exists('MySQL'))
 			include_once(INSTALL_PATH.'/../classes/MySQL.php');
 		
-		if($posted)
+		if ($posted)
 		{
 			// Check POST data...
 			$data_check = array(
@@ -109,7 +109,7 @@ class ToolsInstall
 		try
 		{
 			
-			if($smtpChecked)
+			if ($smtpChecked)
 			{
 				
 				$smtp = new Swift_Connection_SMTP($smtpServer, $smtpPort, ($smtpEncryption == "off") ? Swift_Connection_SMTP::ENC_OFF : (($smtpEncryption == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_SSL));

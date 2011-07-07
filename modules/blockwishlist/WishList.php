@@ -181,7 +181,7 @@ class		WishList extends ObjectModel
 		WHERE (wp.id_wishlist='.(int)($id_wishlist).' AND o.id_cart IS NULL)
 		HAVING timecart  >= 3600*6');
 
-		if(isset($old_carts) AND $old_carts != false)
+		if (isset($old_carts) AND $old_carts != false)
 			foreach ($old_carts AS $old_cart)
 				Db::getInstance()->Execute('
 					DELETE FROM `'._DB_PREFIX_.'cart_product`
@@ -205,9 +205,9 @@ class		WishList extends ObjectModel
 			WHERE wp.id_wishlist='.(int)($id_wishlist)
 		);
 
-		if(isset($res) AND $res != false)
+		if (isset($res) AND $res != false)
 			foreach ($res AS $refresh)
-				if($refresh['wish_quantity'] > $refresh['cart_quantity'])
+				if ($refresh['wish_quantity'] > $refresh['cart_quantity'])
 				{
 					Db::getInstance()->Execute('
 						UPDATE `'._DB_PREFIX_.'wishlist_product`
@@ -220,7 +220,7 @@ class		WishList extends ObjectModel
 						WHERE id_wishlist_product='.(int)($refresh['id_wishlist_product']).' AND id_cart='.(int)($refresh['id_cart'])
 					);
 				}
-		if(isset($freshwish) AND $freshwish != false)
+		if (isset($freshwish) AND $freshwish != false)
 			foreach ($freshwish AS $prodcustomer)
 			{
 				Db::getInstance()->Execute('

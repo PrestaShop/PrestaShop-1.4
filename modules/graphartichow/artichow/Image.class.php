@@ -8,7 +8,7 @@
  */
  
 
-if(is_file(dirname(__FILE__)."/Artichow.cfg.php")) { // For PHP 4+5 version
+if (is_file(dirname(__FILE__)."/Artichow.cfg.php")) { // For PHP 4+5 version
 	require_once dirname(__FILE__)."/Artichow.cfg.php";
 }
 
@@ -20,12 +20,12 @@ if(is_file(dirname(__FILE__)."/Artichow.cfg.php")) { // For PHP 4+5 version
  */
 function registerClass($class, $abstract = FALSE) {
 
-	if(ARTICHOW_PREFIX === 'aw') {
+	if (ARTICHOW_PREFIX === 'aw') {
 		return;
 	}
 	
 	
-	if($abstract) {
+	if ($abstract) {
 		$abstract = 'abstract';
 	} else {
 		$abstract = '';
@@ -41,7 +41,7 @@ function registerClass($class, $abstract = FALSE) {
  */
 function registerInterface($interface) {
 
-	if(ARTICHOW_PREFIX === 'aw') {
+	if (ARTICHOW_PREFIX === 'aw') {
 		return;
 	}
 
@@ -216,10 +216,10 @@ class awImage {
 	 */
 	public function setSize($width, $height) {
 	
-		if($width !== NULL) {
+		if ($width !== NULL) {
 			$this->width = (int)$width;
 		}
-		if($height !== NULL) {
+		if ($height !== NULL) {
 			$this->height = (int)$height;
 		}
 	
@@ -231,9 +231,9 @@ class awImage {
 	 * @param mixed $background
 	 */
 	public function setBackground($background) {
-		if($background instanceof awColor) {
+		if ($background instanceof awColor) {
 			$this->setBackgroundColor($background);
-		} elseif($background instanceof awGradient) {
+		} elseif ($background instanceof awGradient) {
 			$this->setBackgroundGradient($background);
 		}
 	}
@@ -289,7 +289,7 @@ class awImage {
 	 * @var int $format New image format
 	 */
 	public function setFormat($format) {
-		if($format === awImage::JPEG or $format === awImage::PNG or $format === awImage::GIF) {
+		if ($format === awImage::JPEG or $format === awImage::PNG or $format === awImage::GIF) {
 			$this->format = $format;
 		}
 	}
@@ -326,7 +326,7 @@ class awImage {
 	 */
 	public function create() {
 
-		if($this->driver === NULL) {
+		if ($this->driver === NULL) {
 			$driver = $this->selectDriver($this->driverString);
 
 			$driver->init($this);
@@ -346,7 +346,7 @@ class awImage {
 		$drivers = array('gd');
 		$driver = strtolower((string)$driver);
 
-		if(in_array($driver, $drivers, TRUE)) {
+		if (in_array($driver, $drivers, TRUE)) {
 			$string = $driver;
 		} else {
 			$string = ARTICHOW_DRIVER;
@@ -383,7 +383,7 @@ class awImage {
 		);
 	
 		// No absolute size specified
-		if($component->w === NULL and $component->h === NULL) {
+		if ($component->w === NULL and $component->h === NULL) {
 		
 			list($width, $height) = $driver->setSize($component->width, $component->height);
 	
@@ -396,7 +396,7 @@ class awImage {
 		
 		}
 		
-		if($component->top !== NULL and $component->left !== NULL) {
+		if ($component->top !== NULL and $component->left !== NULL) {
 			$driver->setAbsPosition(
 				$border + $shadow->left + $component->left,
 				$border + $shadow->top + $component->top
@@ -453,7 +453,7 @@ class awImage {
 	 */
 	public function sendHeaders() {
 
-		if(headers_sent() === FALSE) {
+		if (headers_sent() === FALSE) {
 			
 			switch ($this->driverString) {
 				case 'gd' :
@@ -478,7 +478,7 @@ class awImage {
 	public static function drawError($message) {
 	
 			
-		if(self::$errorWriting) {
+		if (self::$errorWriting) {
 			return;
 		}
 	

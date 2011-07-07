@@ -45,7 +45,7 @@ abstract class CacheCore
 												'page_viewed');
 	public static function getInstance()
 	{	
-		if(!isset(self::$_instance))
+		if (!isset(self::$_instance))
 		{
 			$caching_system =  _PS_CACHING_SYSTEM_;
 			self::$_instance = new $caching_system();

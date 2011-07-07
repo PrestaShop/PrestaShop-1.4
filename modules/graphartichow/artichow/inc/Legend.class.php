@@ -288,10 +288,10 @@ class awLegend implements awPositionable {
 	 * @param int $v Vertical alignment
 	 */
 	public function setAlign($h = NULL, $v = NULL) {
-		if($h !== NULL) {
+		if ($h !== NULL) {
 			$this->hAlign = (int)$h;
 		}
-		if($v !== NULL) {
+		if ($v !== NULL) {
 			$this->vAlign = (int)$v;
 		}
 	}
@@ -405,14 +405,14 @@ class awLegend implements awPositionable {
 	
 	public function draw(awDriver $driver) {
 		
-		if($this->hide) {
+		if ($this->hide) {
 			return;
 		}
 	
 		$count = $this->count();
 		
 		// No legend to print
-		if($count === 0) {
+		if ($count === 0) {
 			return;
 		}
 		
@@ -420,7 +420,7 @@ class awLegend implements awPositionable {
 		$widths = array();
 		$heights = array();
 		$texts = array();
-		for($i = 0; $i < $count; $i++) {
+		for ($i = 0; $i < $count; $i++) {
 			list(, $title, ) = $this->legends[$i];
 			$text = new awText(
 				$title,
@@ -438,9 +438,9 @@ class awLegend implements awPositionable {
 		$heightMax = array_max($heights);
 		
 		// Get number of columns
-		if($this->columns !== NULL) {
+		if ($this->columns !== NULL) {
 			$columns = $this->columns;
-		} elseif($this->rows !== NULL) {
+		} elseif ($this->rows !== NULL) {
 			$columns = ceil($count / $this->rows);
 		} else {
 			$columns = $count;
@@ -451,10 +451,10 @@ class awLegend implements awPositionable {
 		
 		// Get maximum with of each column
 		$widthMax = array();
-		for($i = 0; $i < $count; $i++) {
+		for ($i = 0; $i < $count; $i++) {
 			// Get column width
 			$column = $i % $columns;
-			if(array_key_exists($column, $widthMax) === FALSE) {
+			if (array_key_exists($column, $widthMax) === FALSE) {
 				$widthMax[$column] = $widths[$i];
 			} else {
 				$widthMax[$column] = max($widthMax[$column], $widths[$i]);
@@ -462,7 +462,7 @@ class awLegend implements awPositionable {
 		}
 		
 		$width = $this->padding[0] + $this->padding[1] - $this->space;
-		for($i = 0; $i < $columns; $i++) {
+		for ($i = 0; $i < $columns; $i++) {
 			$width += $this->space + 5 + 10 + $widthMax[$i];
 		}
 		
@@ -512,7 +512,7 @@ class awLegend implements awPositionable {
 		$this->drawBase($driver, $p, $width, $height);
 		
 		// Draw each legend
-		for($i = 0; $i < $count; $i++) {
+		for ($i = 0; $i < $count; $i++) {
 		
 			list($component, $title, $type) = $this->legends[$i];
 		
@@ -521,7 +521,7 @@ class awLegend implements awPositionable {
 			
 			// Get width of all previous columns
 			$previousColumns = 0;
-			for($j = 0; $j < $column; $j++) {
+			for ($j = 0; $j < $column; $j++) {
 				$previousColumns += $this->space + 10 + 5 + $widthMax[$j];
 			}
 			
@@ -546,11 +546,11 @@ class awLegend implements awPositionable {
 					$y = $this->padding[2] + $row * ($heightMax + $this->space) + $heightMax / 2 - $component->getLegendLineThickness();
 					
 					// Draw two lines
-					if($component->getLegendLineColor() !== NULL) {
+					if ($component->getLegendLineColor() !== NULL) {
 					
 						$color = $component->getLegendLineColor();
 				
-						if($color instanceof awColor and $type !== awLegend::MARKONLY) {
+						if ($color instanceof awColor and $type !== awLegend::MARKONLY) {
 						
 							$driver->line(
 								$color,
@@ -574,11 +574,11 @@ class awLegend implements awPositionable {
 						
 					}
 					
-					if($type === awLegend::MARK or $type === awLegend::MARKONLY)  {
+					if ($type === awLegend::MARK or $type === awLegend::MARKONLY)  {
 					
 						$mark = $component->getLegendMark();
 					
-						if($mark !== NULL) {
+						if ($mark !== NULL) {
 							$mark->draw(
 								$driver,
 								$p->move(
@@ -612,7 +612,7 @@ class awLegend implements awPositionable {
 					
 					$background = $component->getLegendBackground();
 					
-					if($background !== NULL) {
+					if ($background !== NULL) {
 				
 						$driver->filledRectangle(
 							$component->getLegendBackground(),

@@ -81,7 +81,7 @@ class TwengaObj
 	}
 	public function setUserName($user_name)
 	{
-		if($user_name !== '' && is_string($user_name))
+		if ($user_name !== '' && is_string($user_name))
 		{
 			self::$user_name = $user_name;
 			return true;
@@ -95,7 +95,7 @@ class TwengaObj
 	}
 	public function setPassword($password)
 	{
-		if($password !== '' && Validate::isCleanHtml($password) && is_string($password) && strlen($password) <= 32)
+		if ($password !== '' && Validate::isCleanHtml($password) && is_string($password) && strlen($password) <= 32)
 		{
 			self::$password = $password;
 			return true;
@@ -114,7 +114,7 @@ class TwengaObj
 	 */
 	public function setHashkey($hashkey)
 	{
-		if($hashkey !== '' && Validate::isCleanHtml($hashkey) && is_string($hashkey) && strlen($hashkey) <= 32)
+		if ($hashkey !== '' && Validate::isCleanHtml($hashkey) && is_string($hashkey) && strlen($hashkey) <= 32)
 		{
 		   self::$hashkey = $hashkey;
 		   return true;
@@ -138,7 +138,7 @@ class TwengaObj
 	 */
 	public function saveMerchantLogin()
 	{
-		if(self::$user_name !== NULL
+		if (self::$user_name !== NULL
 		&& self::$password !== NULL
 		&& self::$hashkey !== NULL)
 		{
@@ -193,7 +193,7 @@ class TwengaObj
 			self::$arr_api_url['orderCancel'] = 'http://rts.twenga.com/api/Order/Cancel';
 			self::$arr_api_url['addFeed'] = 'https://rts.twenga.com/api/Site/AddFeed';
 			
-			if(self::PARTNER_AUTH_KEY === NULL)
+			if (self::PARTNER_AUTH_KEY === NULL)
 				throw new TwengaException(self::$translation_object->l('To activate the Twenga plugin, "PARTNER_AUTH_KEY" contant must be set. Default installation of Prestashop contains this value.', basename(__FILE__, '.php')));
 			
 			if (Configuration::get('TWENGA_HASHKEY') !== false && self::$hashkey === NULL)
@@ -233,7 +233,7 @@ class TwengaObj
 			CURLINFO_HEADER_OUT => TRUE,
 			CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
 		);
-		if($authentication)
+		if ($authentication)
 			$defaultParams[CURLOPT_USERPWD] = md5(self::$user_name).':'.md5(self::$password);
 		$session = curl_init($query);
 		$arr_opt = $defaultParams + $params;
@@ -261,10 +261,10 @@ class TwengaObj
 	public static function checkParams($method_name, $params)
 	{
 		$classname = 'TwengaFields'.ucfirst($method_name);
-		if(class_exists($classname))
+		if (class_exists($classname))
 		{
 			$fields = new $classname();
-			if(!$fields instanceof TwengaFields)
+			if (!$fields instanceof TwengaFields)
 				throw new TwengaException(self::$translation_object->l('Object for validate fields must be an instance of TwengaFields class', basename(__FILE__, '.php')));
 			try {
 				$fields->setParams($params)->checkParams();
@@ -510,7 +510,7 @@ class TwengaObj
 			$xml = simplexml_load_string($resource);
 			if (libxml_get_errors())
 				throw new TwengaException(self::$translation_object->l('HTTP XML response is not parsable : ', basename(__FILE__, '.php')).'<br />'.var_export(libxml_get_errors(), true));
-			if($xml->getName() === 'error')
+			if ($xml->getName() === 'error')
 				throw new TwengaException(self::$translation_object->l((string)$xml->message,basename(__FILE__, '.php')), (int)$xml->code);
 			return $xml;
 		}
@@ -548,11 +548,11 @@ class TwengaException extends Exception
 	}
 	public function __construct($message, $code = 0)
 	{
-		if($code !== 0)
+		if ($code !== 0)
 		{
 			$error_label = self::$translation_object->l('This call to Twenga Web Services failed and returned an HTTP status of %d. That means:', basename(__FILE__, '.php'))."\n";
 			$error_label = sprintf($error_label, $code);
-			if($message === '' || empty($message) || $message === NULL)
+			if ($message === '' || empty($message) || $message === NULL)
 			{
 				switch ($code)
 				{

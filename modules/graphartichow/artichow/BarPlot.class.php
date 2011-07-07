@@ -224,9 +224,9 @@ class awBarPlot extends awPlot implements awLegendable {
 		$min = $this->getRealYMin(NULL);
 		
 		// Find zero for bars
-		if($this->xAxisZero and $min <= 0 and $max >= 0) {
+		if ($this->xAxisZero and $min <= 0 and $max >= 0) {
 			$zero = 0;
-		} elseif($max < 0) {
+		} elseif ($max < 0) {
 			$zero = $max;
 		} else {
 			$zero = $min;
@@ -248,11 +248,11 @@ class awBarPlot extends awPlot implements awLegendable {
 		$barSize = ($distance - $padding - $space) / $this->number;
 		$barPosition = $leftPadding + $barSize * ($this->identifier - 1);
 		
-		for($key = 0; $key < $count; $key++) {
+		for ($key = 0; $key < $count; $key++) {
 		
 			$value = $this->datay[$key];
 			
-			if($value !== NULL) {
+			if ($value !== NULL) {
 		
 				$position = awAxis::toPosition(
 					$this->xAxis,
@@ -266,7 +266,7 @@ class awBarPlot extends awPlot implements awLegendable {
 				$t1 = min($zero->y, $position->y);
 				$t2 = max($zero->y, $position->y);
 				
-				if(round($t2 - $t1) == 0) {
+				if (round($t2 - $t1) == 0) {
 					continue;
 				}
 				
@@ -289,7 +289,7 @@ class awBarPlot extends awPlot implements awLegendable {
 		// Draw labels
 		foreach($this->datay as $key => $value) {
 			
-			if($value !== NULL) {
+			if ($value !== NULL) {
 		
 				$position = awAxis::toPosition(
 					$this->xAxis,
@@ -332,7 +332,7 @@ class awBarPlot extends awPlot implements awLegendable {
 			awShadow::OUT
 		);
 		
-		if(abs($p2->y - $p1->y) > 1) {
+		if (abs($p2->y - $p1->y) > 1) {
 			
 			$this->barBorder->rectangle(
 				$driver,
@@ -340,7 +340,7 @@ class awBarPlot extends awPlot implements awLegendable {
 				$p2
 			);
 			
-			if($this->barBackground !== NULL) {
+			if ($this->barBackground !== NULL) {
 			
 				$size = $this->barBorder->visible() ? 1 : 0;
 		

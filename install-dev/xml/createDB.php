@@ -114,7 +114,7 @@ switch (_DB_TYPE_) {
 		$engineType = 'ENGINE_TYPE';
 		//send the SQL structure file requests
 		$structureFile = dirname(__FILE__)."/../sql/db.sql";
-		if(!file_exists($structureFile))
+		if (!file_exists($structureFile))
 		{
 			$logger->logError('Impossible to access to a MySQL content file. ('.$structureFile.')');
 			die('<action result="fail" error="10" />'."\n");
@@ -135,9 +135,9 @@ switch (_DB_TYPE_) {
 		}
 		foreach($db_structure_settings as $query){
 			$query = trim($query);
-			if(!empty($query)){
-				if(!Db::getInstance()->Execute($query)){
-					if(Db::getInstance()->getNumberError() == 1050){
+			if (!empty($query)){
+				if (!Db::getInstance()->Execute($query)){
+					if (Db::getInstance()->getNumberError() == 1050){
 						$logger->logError('A Prestashop database already exists, please drop it or change the prefix.');
 						die('<action result="fail" error="14" />'."\n");
 					} else {
@@ -162,14 +162,14 @@ switch (_DB_TYPE_) {
 		$db_data_settings = "";
 
 		$liteFile = dirname(__FILE__)."/../sql/db_settings_lite.sql";
-		if(!file_exists($liteFile))
+		if (!file_exists($liteFile))
 			die('<action result="fail" error="10" />'."\n");
 		if ( !$db_data_settings .= file_get_contents( $liteFile ) )
 			die('<action result="fail" error="9" />'."\n");
 
-		if($_GET['mode'] == "full"){
+		if ($_GET['mode'] == "full"){
 			$fullFile = dirname(__FILE__)."/../sql/db_settings_extends.sql";
-			if(!file_exists($fullFile))
+			if (!file_exists($fullFile))
 			{
 				$logger->logError('Impossible to access to a MySQL content file. ('.$fullFile.')');
 				die('<action result="fail" error="10" />'."\n");
@@ -188,9 +188,9 @@ switch (_DB_TYPE_) {
 		array_unshift($db_data_settings, 'SET NAMES \'utf8\';');
 		foreach($db_data_settings as $query){
 			$query = trim($query);
-			if(!empty($query)){
-				if(!Db::getInstance()->Execute($query)){
-					if(Db::getInstance()->getNumberError() == 1050){
+			if (!empty($query)){
+				if (!Db::getInstance()->Execute($query)){
+					if (Db::getInstance()->getNumberError() == 1050){
 						die('<action result="fail" error="14" />'."\n");
 					} else {
 						$logger->logError('SQL query: '."\r\n".$query);

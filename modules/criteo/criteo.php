@@ -107,7 +107,7 @@ class Criteo extends Module
 		$category = new Category(intval($id_cat));
 
 		$sub_cats = $category->getSubcategories($id_lang);
-		if(count($sub_cats) > 0)
+		if (count($sub_cats) > 0)
 			foreach ($sub_cats AS $sub_cat)
 			{
 				$all_cats[] = $sub_cat['id_category'];

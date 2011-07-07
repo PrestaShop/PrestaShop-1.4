@@ -48,7 +48,7 @@ class CacheFSCore extends Cache {
 		{
 			$path.=$key[$i].'/';
 		}
-		if(file_put_contents($path.$key, serialize($value)))
+		if (file_put_contents($path.$key, serialize($value)))
 		{
 			$this->_keysCached[$key] = true;
 			return $key;
@@ -107,7 +107,7 @@ class CacheFSCore extends Cache {
 		$key = $this->set($md5_query, $result);
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach($res[1] AS $table)
-				if(!isset($this->_tablesCached[$table][$key]))
+				if (!isset($this->_tablesCached[$table][$key]))
 					$this->_tablesCached[$table][$key] = true;
 	}
 

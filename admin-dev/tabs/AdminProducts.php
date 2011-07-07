@@ -143,7 +143,7 @@ class AdminProducts extends AdminTab
 
 		if ($orderByPriceFinal == 'price_final')
 		{
-			if(strtolower($orderWayPriceFinal) == 'desc')
+			if (strtolower($orderWayPriceFinal) == 'desc')
 				uasort($this->_list, 'cmpPriceDesc');
 			else
 				uasort($this->_list, 'cmpPriceAsc');
@@ -205,7 +205,7 @@ class AdminProducts extends AdminTab
 					if (strlen($attachment_name_lang ) > 0)
 						$is_attachment_name_valid = true;
 
-					if(!Validate::isGenericName(Tools::getValue('attachment_name_'.(int)($language['id_lang']))))
+					if (!Validate::isGenericName(Tools::getValue('attachment_name_'.(int)($language['id_lang']))))
 						$this->_errors[] = Tools::displayError('Invalid Name');
 					elseif (Tools::strlen(Tools::getValue('attachment_name_'.(int)($language['id_lang']))) > 32)
 						$this->_errors[] = Tools::displayError('Name is too long');
@@ -237,7 +237,7 @@ class AdminProducts extends AdminTab
 						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceeds the size allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 					}
 
-					if(empty($this->_errors) && isset($uniqid))
+					if (empty($this->_errors) && isset($uniqid))
 					{
 						$attachment = new Attachment();
 						foreach ($languages AS $language)
@@ -1059,7 +1059,7 @@ class AdminProducts extends AdminTab
 				$this->_errors[] = Tools::displayError('An error occurred during the image upload');
 			elseif (!imageResize($tmpName, $new_path.'.'.$image->image_format))
 				$this->_errors[] = Tools::displayError('An error occurred while copying image.');
-			elseif($method == 'auto')
+			elseif ($method == 'auto')
 			{
 				$imagesTypes = ImageType::getImagesTypes('products');
 				foreach ($imagesTypes AS $k => $imageType)
@@ -1199,7 +1199,7 @@ class AdminProducts extends AdminTab
 									$admin_dir = dirname($_SERVER['PHP_SELF']);
 									$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
 									$token = Tools::encrypt('PreviewProduct'.$object->id);
-									if(strpos($preview_url, '?') === false)
+									if (strpos($preview_url, '?') === false)
 										$preview_url .= '?';
 									else
 										$preview_url .= '&';
@@ -1539,7 +1539,7 @@ class AdminProducts extends AdminTab
 			});
 			function updateMvtStatus(id_mvt_reason)
 			{
-				if(id_mvt_reason == -1)
+				if (id_mvt_reason == -1)
 					return $(\'#mvt_sign\').hide();
 				if ($(\'#id_mvt_reason option:selected\').attr(\'rel\') == -1)
 					$(\'#mvt_sign\').html(\'<img src="../img/admin/arrow_down.png" /> '.$this->l('Decrease your stock').'\');
@@ -2139,7 +2139,7 @@ class AdminProducts extends AdminTab
 						}
 
 					});
-					if($(\'#available_for_order\').is(\':checked\')){
+					if ($(\'#available_for_order\').is(\':checked\')){
 						$(\'#show_price\').attr(\'checked\', \'checked\');
 						$(\'#show_price\').attr(\'disabled\', \'disabled\');
 					}
@@ -2257,7 +2257,7 @@ class AdminProducts extends AdminTab
 					<tr id="product_options" '.(!$obj->active ? 'style="display:none"' : '').'>
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Options:').'</td>
 						<td style="padding-bottom:5px;">
-							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
+							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if ($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
 							<label for="available_for_order" class="t"><img src="../img/admin/products.gif" alt="'.$this->l('available for order').'" title="'.$this->l('available for order').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('available for order').'</label>
 							<br class="clear" />
 							<input style="float: left;" type="checkbox" name="show_price" id="show_price" value="1" '.($this->getFieldValue($obj, 'show_price') ? 'checked="checked" ' : '').' />
@@ -2376,7 +2376,7 @@ class AdminProducts extends AdminTab
 					var msg = data.getAttribute("msg");
 					var fileName = data.getAttribute("filename");
 
-					if(result == "error")
+					if (result == "error")
 					{
 						$("#upload-confirmation").html('<p>error: ' + msg + '</p>');
 					}
@@ -2413,21 +2413,21 @@ class AdminProducts extends AdminTab
 	?>
 	<tr>
 		<td colspan="2">
-			<p><input type="checkbox" id="is_virtual_good" name="is_virtual_good" value="true" onclick="toggleVirtualProduct(this);" <?php if(($productDownload->id OR Tools::getValue('is_virtual_good')=='true') AND $productDownload->active) echo 'checked="checked"' ?> />
+			<p><input type="checkbox" id="is_virtual_good" name="is_virtual_good" value="true" onclick="toggleVirtualProduct(this);" <?php if (($productDownload->id OR Tools::getValue('is_virtual_good')=='true') AND $productDownload->active) echo 'checked="checked"' ?> />
 			<label for="is_virtual_good" class="t bold" style="color: black;"><?php echo $this->l('Is this a downloadable product?') ?></label></p>
-			<div id="virtual_good" <?php if(!$productDownload->id OR !$productDownload->active) echo 'style="display:none;"' ?> >
-	<?php if(!ProductDownload::checkWritableDir()): ?>
+			<div id="virtual_good" <?php if (!$productDownload->id OR !$productDownload->active) echo 'style="display:none;"' ?> >
+	<?php if (!ProductDownload::checkWritableDir()): ?>
 		<p class="alert">
 			<?php echo $this->l('Your download repository is not writable.'); ?><br/>
 			<?php echo realpath(_PS_DOWNLOAD_DIR_); ?>
 		</p>
 	<?php else: ?>
-			<?php if($productDownload->id) echo '<input type="hidden" id="virtual_product_id" name="virtual_product_id" value="'.$productDownload->id.'" />' ?>
+			<?php if ($productDownload->id) echo '<input type="hidden" id="virtual_product_id" name="virtual_product_id" value="'.$productDownload->id.'" />' ?>
 				<p class="block">
-	<?php if(!$productDownload->checkFile()): ?>
+	<?php if (!$productDownload->checkFile()): ?>
 
 				<div style="padding:5px;width:50%;float:left;margin-right:20px;border-right:1px solid #E0D0B1">
-		<?php if($productDownload->id): ?>
+		<?php if ($productDownload->id): ?>
 					<p class="alert" id="file_missing">
 						<?php echo $this->l('This product is missing') ?>:<br/>
 						<?php echo realpath(_PS_DOWNLOAD_DIR_) .'/'. $productDownload->physically_filename ?>
@@ -2457,7 +2457,7 @@ class AdminProducts extends AdminTab
 				</p>
 
 				</div>
-				<div id="virtual_good_more" style="<?php if(!$productDownload->id OR !$productDownload->active) echo 'display:none;' ?>padding:5px;width:40%;float:left;margin-left:10px">
+				<div id="virtual_good_more" style="<?php if (!$productDownload->id OR !$productDownload->active) echo 'display:none;' ?>padding:5px;width:40%;float:left;margin-left:10px">
 
 				<p class="block">
 					<label for="virtual_product_nb_downloable" class="t"><?php echo $this->l('Number of downloads') ?></label>
@@ -2503,7 +2503,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Pre-tax retail price:').'</td>
 						<td style="padding-bottom:5px;">
-							'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="priceTE" name="price" type="text" value="'.$this->getFieldValue($obj, 'price').'" onchange="this.value = this.value.replace(/,/g, \'.\');" onkeyup="if(isArrowKey(event)) return; calcPriceTI();" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'<sup> *</sup>
+							'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="priceTE" name="price" type="text" value="'.$this->getFieldValue($obj, 'price').'" onchange="this.value = this.value.replace(/,/g, \'.\');" onkeyup="if (isArrowKey(event)) return; calcPriceTI();" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'<sup> *</sup>
 							<span style="margin-left:2px">'.$this->l('The pre-tax retail price to sell this product').'</span>
 						</td>
 					</tr>';
@@ -2553,7 +2553,7 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Eco-tax (tax incl.):').'</td>
 						<td style="padding-bottom:5px;">
-							'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="ecotax" name="ecotax" type="text" value="'.$this->getFieldValue($obj, 'ecotax').'" onkeyup="if(isArrowKey(event))return; calcPriceTE(); this.value = this.value.replace(/,/g, \'.\'); if (parseInt(this.value) > getE(\'priceTE\').value) this.value = getE(\'priceTE\').value; if (isNaN(this.value)) this.value = 0;" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'
+							'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input size="11" maxlength="14" id="ecotax" name="ecotax" type="text" value="'.$this->getFieldValue($obj, 'ecotax').'" onkeyup="if (isArrowKey(event))return; calcPriceTE(); this.value = this.value.replace(/,/g, \'.\'); if (parseInt(this.value) > getE(\'priceTE\').value) this.value = getE(\'priceTE\').value; if (isNaN(this.value)) this.value = 0;" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'
 							<span style="margin-left:10px">('.$this->l('already included in price').')</span>
 						</td>
 					</tr>';

@@ -124,7 +124,7 @@ class WebserviceKeyCore extends ObjectModel
 	{
 		$ok = true;
 		$sql = 'DELETE FROM `'._DB_PREFIX_.'webservice_permission` WHERE `id_webservice_account` = '.(int)($idAccount);
-		if(!Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql))
+		if (!Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql))
 			$ok = false;
 		if (isset($permissionsToSet))
 			{
@@ -143,7 +143,7 @@ class WebserviceKeyCore extends ObjectModel
 					foreach ($permissions as $permission)
 						$sql .= '(NULL , \''.pSQL($permission[1]).'\', \''.pSQL($permission[0]).'\', '.(int)($idAccount).'), ';
 					$sql = rtrim($sql, ', ');
-					if(!Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql))
+					if (!Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql))
 						$ok = false;
 				}
 			}

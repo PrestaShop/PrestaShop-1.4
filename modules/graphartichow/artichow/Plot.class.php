@@ -192,7 +192,7 @@ abstract class awPlot extends awComponent {
 		$count = count($this->datay);
 		$ratio = ceil($count / $number);
 		
-		if($ratio > 1) {
+		if ($ratio > 1) {
 		
 			$tmpy = $this->datay;
 			$datay = array();
@@ -200,13 +200,13 @@ abstract class awPlot extends awComponent {
 			$datax = array();
 			$cbLabel = $this->xAxis->label->getCallbackFunction();
 			
-			for($i = 0; $i < $count; $i += $ratio) {
+			for ($i = 0; $i < $count; $i += $ratio) {
 			
 				$slice = array_slice($tmpy, $i, $ratio);
 				$datay[] = array_sum($slice) / count($slice);
 				
 				// Reduce data on X axis if needed
-				if($cbLabel !== NULL) {
+				if ($cbLabel !== NULL) {
 					$datax[] = $cbLabel($i + round($ratio / 2));
 				}
 				
@@ -214,7 +214,7 @@ abstract class awPlot extends awComponent {
 			
 			$this->setValues($datay);
 			
-			if($cbLabel !== NULL) {
+			if ($cbLabel !== NULL) {
 				$this->xAxis->setLabelText($datax);
 			}
 			
@@ -339,10 +339,10 @@ abstract class awPlot extends awComponent {
 	 * @return float $value
 	 */
 	public function getYMin() {
-		if($this->auto) {
-			if(is_null($this->yMin)) {
+		if ($this->auto) {
+			if (is_null($this->yMin)) {
 				$min = array_min($this->datay);
-				if($min > 0) {
+				if ($min > 0) {
 					return 0;
 				}
 			}
@@ -356,10 +356,10 @@ abstract class awPlot extends awComponent {
 	 * @return float $value
 	 */
 	public function getYMax() {
-		if($this->auto) {
-			if(is_null($this->yMax)) {
+		if ($this->auto) {
+			if (is_null($this->yMax)) {
 				$max = array_max($this->datay);
-				if($max < 0) {
+				if ($max < 0) {
 					return 0;
 				}
 			}
@@ -392,7 +392,7 @@ abstract class awPlot extends awComponent {
 	 */
 	public function getRealYMin() {
 		$min = $this->getYMin();
-		if($this->space->bottom !== NULL) {
+		if ($this->space->bottom !== NULL) {
 			$interval = ($this->getYMax() - $min) * $this->space->bottom / 100;
 			return $min - $interval;
 		} else {
@@ -407,7 +407,7 @@ abstract class awPlot extends awComponent {
 	 */
 	public function getRealYMax() {
 		$max = $this->getYMax();
-		if($this->space->top !== NULL) {
+		if ($this->space->top !== NULL) {
 			$interval = ($max - $this->getYMin()) * $this->space->top / 100;
 			return $max + $interval;
 		} else {
@@ -424,7 +424,7 @@ abstract class awPlot extends awComponent {
 		
 		$this->xAxis->setPadding($leftSpace, $rightSpace);
 		
-		if($this->space->bottom > 0 or $this->space->top > 0) {
+		if ($this->space->bottom > 0 or $this->space->top > 0) {
 		
 			list($min, $max) = $this->yAxis->getRange();
 			$interval = $max - $min;
@@ -440,7 +440,7 @@ abstract class awPlot extends awComponent {
 		$this->yAxis->autoScale();
 		
 		// Number of labels is not specified
-		if($this->yAxis->getLabelNumber() === NULL) {
+		if ($this->yAxis->getLabelNumber() === NULL) {
 			$number = round(($y2 - $y1) / 75) + 2;
 			$this->yAxis->setLabelNumber($number);
 		}
@@ -455,12 +455,12 @@ abstract class awPlot extends awComponent {
 		
 				
 		// Center X axis on zero
-		if($this->xAxisZero) {
+		if ($this->xAxisZero) {
 			$this->xAxis->setYCenter($this->yAxis, 0);
 		}
 		
 		// Center Y axis on zero
-		if($this->yAxisZero) {
+		if ($this->yAxisZero) {
 			$this->yAxis->setXCenter($this->xAxis, 0);
 		}
 		
@@ -468,7 +468,7 @@ abstract class awPlot extends awComponent {
 		$labels = array();
 		
 		list($xMin, $xMax) = $this->xAxis->getRange();
-		for($i = $xMin; $i <= $xMax; $i++) {
+		for ($i = $xMin; $i <= $xMax; $i++) {
 			$labels[] = $i;
 		}
 		$this->xAxis->label->set($labels);
@@ -492,16 +492,16 @@ abstract class awPlot extends awComponent {
 		
 		list($x1, $y1, $x2, $y2) = $this->getPosition();
 		
-		if($this->getXCenter()) {
+		if ($this->getXCenter()) {
 			$size = $this->xAxis->getDistance(0, 1);
 			$this->xAxis->label->move($size / 2, 0);
 			$this->xAxis->label->hideLast(TRUE);
 		}
 		
 		// Draw top axis
-		if($this->xAxisPosition === awPlot::TOP or $this->xAxisPosition === awPlot::BOTH) {
+		if ($this->xAxisPosition === awPlot::TOP or $this->xAxisPosition === awPlot::BOTH) {
 			$top = clone $this->xAxis;
-			if($this->xAxisZero === FALSE) {
+			if ($this->xAxisZero === FALSE) {
 				$top->line->setY($y1, $y1);
 			}
 			$top->label->setAlign(NULL, awLabel::TOP);
@@ -511,9 +511,9 @@ abstract class awPlot extends awComponent {
 		}
 		
 		// Draw bottom axis
-		if($this->xAxisPosition === awPlot::BOTTOM or $this->xAxisPosition === awPlot::BOTH) {
+		if ($this->xAxisPosition === awPlot::BOTTOM or $this->xAxisPosition === awPlot::BOTH) {
 			$bottom = clone $this->xAxis;
-			if($this->xAxisZero === FALSE) {
+			if ($this->xAxisZero === FALSE) {
 				$bottom->line->setY($y2, $y2);
 			}
 			$bottom->label->setAlign(NULL, awLabel::BOTTOM);
@@ -524,9 +524,9 @@ abstract class awPlot extends awComponent {
 		}
 		
 		// Draw left axis
-		if($this->yAxisPosition === awPlot::LEFT or $this->yAxisPosition === awPlot::BOTH) {
+		if ($this->yAxisPosition === awPlot::LEFT or $this->yAxisPosition === awPlot::BOTH) {
 			$left = clone $this->yAxis;
-			if($this->yAxisZero === FALSE) {
+			if ($this->yAxisZero === FALSE) {
 				$left->line->setX($x1, $x1);
 			}
 			$left->label->setAlign(awLabel::RIGHT);
@@ -536,9 +536,9 @@ abstract class awPlot extends awComponent {
 		}
 		
 		// Draw right axis
-		if($this->yAxisPosition === awPlot::RIGHT or $this->yAxisPosition === awPlot::BOTH) {
+		if ($this->yAxisPosition === awPlot::RIGHT or $this->yAxisPosition === awPlot::BOTH) {
 			$right = clone $this->yAxis;
-			if($this->yAxisZero === FALSE) {
+			if ($this->yAxisZero === FALSE) {
 				$right->line->setX($x2, $x2);
 			}
 			$right->label->setAlign(awLabel::LEFT);
@@ -557,14 +557,14 @@ abstract class awPlot extends awComponent {
 
 		$number = $this->yAxis->getLabelNumber() - 1;
 		
-		if($number < 1) {
+		if ($number < 1) {
 			return;
 		}
 		
 		// Horizontal lines of the grid
 		
 		$h = array();
-		for($i = 0; $i <= $number; $i++) {
+		for ($i = 0; $i <= $number; $i++) {
 			$h[] = $i / $number;
 		}
 		
@@ -576,10 +576,10 @@ abstract class awPlot extends awComponent {
 		
 		$w = array();
 		
-		if($number > 0) {
+		if ($number > 0) {
 			
-			for($i = 0; $i <= $number; $i++) {
-				if($i%$interval === 0) {
+			for ($i = 0; $i <= $number; $i++) {
+				if ($i%$interval === 0) {
 					$w[] = $i / $number;
 				}
 			}
@@ -606,9 +606,9 @@ abstract class awPlot extends awComponent {
 			$datay[(int)$key] = $value;
 		}
 		
-		if($datax === NULL) {
+		if ($datax === NULL) {
 			$datax = array();
-			for($i = 0; $i < count($datay); $i++) {
+			for ($i = 0; $i < count($datay); $i++) {
 				$datax[] = $i;
 			}
 		} else {
@@ -620,7 +620,7 @@ abstract class awPlot extends awComponent {
 		
 		$this->checkArray($datax);
 		
-		if(count($datay) === count($datax)) {
+		if (count($datay) === count($datax)) {
 		
 			// Set values
 			$this->datay = $datay;
@@ -641,12 +641,12 @@ abstract class awPlot extends awComponent {
 	protected function getLimit() {
 	
 		$i = 0;
-		while(array_key_exists($i, $this->datay) and $this->datay[$i] === NULL) {
+		while (array_key_exists($i, $this->datay) and $this->datay[$i] === NULL) {
 			$i++;
 		}
 		$start = $i;
 		$i = count($this->datay) - 1;
-		while(array_key_exists($i, $this->datay) and $this->datay[$i] === NULL) {
+		while (array_key_exists($i, $this->datay) and $this->datay[$i] === NULL) {
 			$i--;
 		}
 		$stop = $i;
@@ -677,17 +677,17 @@ abstract class awPlot extends awComponent {
 	
 	private function checkArray(&$array) {
 	
-		if(is_array($array) === FALSE) {
+		if (is_array($array) === FALSE) {
 			awImage::drawError("Class Plot: You tried to set a value that is not an array.");
 		}
 		
 		foreach($array as $key => $value) {
-			if(is_numeric($value) === FALSE and is_null($value) === FALSE) {
+			if (is_numeric($value) === FALSE and is_null($value) === FALSE) {
 				awImage::drawError("Class Plot: Expected numeric values for the plot.");
 			}
 		}
 		
-		if(count($array) < 1) {
+		if (count($array) < 1) {
 			awImage::drawError("Class Plot: Your plot must have at least 1 value.");
 		}
 	
@@ -966,12 +966,12 @@ class awPlotGroup extends awComponentGroup {
 	
 		switch($type) {
 			case 'max' :
-				if($this->xMax !== NULL) {
+				if ($this->xMax !== NULL) {
 					return $this->xMax;
 				}
 				break;
 			case 'min' :
-				if($this->xMin !== NULL) {
+				if ($this->xMin !== NULL) {
 					return $this->xMin;
 				}
 				break;
@@ -980,11 +980,11 @@ class awPlotGroup extends awComponentGroup {
 		$value = NULL;
 		$get = 'getX'.ucfirst($type);
 		
-		for($i = 0; $i < count($this->components); $i++) {
+		for ($i = 0; $i < count($this->components); $i++) {
 		
 			$component = $this->components[$i];
 		
-			if($value === NULL) {
+			if ($value === NULL) {
 				$value = $component->$get();
 			} else {
 				$value = $type($value, $component->$get());
@@ -1004,14 +1004,14 @@ class awPlotGroup extends awComponentGroup {
 	 */
 	public function getRealYMin($axis = NULL) {
 	
-		if($axis === NULL) {
+		if ($axis === NULL) {
 			return NULL;
 		}
 		
 		$min = $this->getRealY('min', $axis);
 		$max = $this->getRealY('max', $axis);
 		
-		if($this->space->bottom !== NULL) {
+		if ($this->space->bottom !== NULL) {
 			$interval = ($min - $max) * $this->space->bottom / 100;
 			return $min + $interval;
 		} else {
@@ -1028,14 +1028,14 @@ class awPlotGroup extends awComponentGroup {
 	 */
 	public function getRealYMax($axis = NULL) {
 	
-		if($axis === NULL) {
+		if ($axis === NULL) {
 			return NULL;
 		}
 		
 		$min = $this->getRealY('min', $axis);
 		$max = $this->getRealY('max', $axis);
 		
-		if($this->space->top !== NULL) {
+		if ($this->space->top !== NULL) {
 			$interval = ($max - $min) * $this->space->top / 100;
 			return $max + $interval;
 		} else {
@@ -1048,12 +1048,12 @@ class awPlotGroup extends awComponentGroup {
 	
 		switch($type) {
 			case 'max' :
-				if($this->yMax !== NULL) {
+				if ($this->yMax !== NULL) {
 					return $this->yMax;
 				}
 				break;
 			case 'min' :
-				if($this->yMin !== NULL) {
+				if ($this->yMin !== NULL) {
 					return $this->yMin;
 				}
 				break;
@@ -1062,7 +1062,7 @@ class awPlotGroup extends awComponentGroup {
 		$value = NULL;
 		$get = 'getY'.ucfirst($type);
 		
-		for($i = 0; $i < count($this->components); $i++) {
+		for ($i = 0; $i < count($this->components); $i++) {
 		
 			$component = $this->components[$i];
 			
@@ -1077,12 +1077,12 @@ class awPlotGroup extends awComponentGroup {
 			
 			}
 			
-			if($test) {
+			if ($test) {
 				
 				$auto = $component->yAxis->isAuto();
 				$this->axis->{$axis}->auto($auto);
 				
-				if($value === NULL) {
+				if ($value === NULL) {
 					$value = $component->$get();
 				} else {
 					$value = $type($value, $component->$get());
@@ -1121,7 +1121,7 @@ class awPlotGroup extends awComponentGroup {
 		$this->axis->top->setRange($xMin, $xMax);
 		$this->axis->bottom->setRange($xMin, $xMax);
 		
-		for($i = 0; $i < count($this->components); $i++) {
+		for ($i = 0; $i < count($this->components); $i++) {
 		
 			
 			$component = $this->components[$i];
@@ -1142,7 +1142,7 @@ class awPlotGroup extends awComponentGroup {
 		// Set Y axis range
 		foreach(array('left', 'right') as $axis) {
 		
-			if($this->isAxisUsed($axis)) {
+			if ($this->isAxisUsed($axis)) {
 			
 				$min = $this->getRealYMin($axis);
 				$max = $this->getRealYMax($axis);
@@ -1155,7 +1155,7 @@ class awPlotGroup extends awComponentGroup {
 				);
 		
 				// Auto-scaling mode
-				if($this->axis->{$axis}->isAuto()) {
+				if ($this->axis->{$axis}->isAuto()) {
 					$this->axis->{$axis}->autoScale();
 				}
 				
@@ -1163,12 +1163,12 @@ class awPlotGroup extends awComponentGroup {
 			
 		}
 		
-		if($this->axis->left->getLabelNumber() === NULL) {
+		if ($this->axis->left->getLabelNumber() === NULL) {
 			$number = round(($y2 - $y1) / 75) + 2;
 			$this->axis->left->setLabelNumber($number);
 		}
 		
-		if($this->axis->right->getLabelNumber() === NULL) {
+		if ($this->axis->right->getLabelNumber() === NULL) {
 			$number = round(($y2 - $y1) / 75) + 2;
 			$this->axis->right->setLabelNumber($number);
 		}
@@ -1176,20 +1176,20 @@ class awPlotGroup extends awComponentGroup {
 		// Center labels on X axis if needed
 		$test = array(awPlot::TOP => FALSE, awPlot::BOTTOM => FALSE);
 		
-		for($i = 0; $i < count($this->components); $i++) {
+		for ($i = 0; $i < count($this->components); $i++) {
 		
 			
 			$component = $this->components[$i];
 			
 						
-			if($component->getValues() !== NULL) {
+			if ($component->getValues() !== NULL) {
 				
 				$axis = $component->getXAxis();
 				
-				if($test[$axis] === FALSE) {
+				if ($test[$axis] === FALSE) {
 		
 					// Center labels for bar plots
-					if($component->getXCenter()) {
+					if ($component->getXCenter()) {
 						$size = $this->axis->{$axis}->getDistance(0, 1);
 						$this->axis->{$axis}->label->move($size / 2, 0);
 						$this->axis->{$axis}->label->hideLast(TRUE);
@@ -1205,13 +1205,13 @@ class awPlotGroup extends awComponentGroup {
 		
 		// Set axis labels
 		$labels = array();
-		for($i = $xMin; $i <= $xMax; $i++) {
+		for ($i = $xMin; $i <= $xMax; $i++) {
 			$labels[] = $i;
 		}
-		if($this->axis->top->label->count() === 0) {
+		if ($this->axis->top->label->count() === 0) {
 			$this->axis->top->label->set($labels);
 		}
-		if($this->axis->bottom->label->count() === 0) {
+		if ($this->axis->bottom->label->count() === 0) {
 			$this->axis->bottom->label->set($labels);
 		}
 		
@@ -1224,14 +1224,14 @@ class awPlotGroup extends awComponentGroup {
 		
 				
 		// Set X axis on zero
-		if($this->xAxisZero) {
+		if ($this->xAxisZero) {
 			$axis = $this->selectYAxis();
 			$this->axis->bottom->setYCenter($axis, 0);
 			$this->axis->top->setYCenter($axis, 0);
 		}
 		
 		// Set Y axis on zero
-		if($this->yAxisZero) {
+		if ($this->yAxisZero) {
 			$axis = $this->selectXAxis();
 			$this->axis->left->setXCenter($axis, 1);
 			$this->axis->right->setXCenter($axis, 1);
@@ -1267,7 +1267,7 @@ class awPlotGroup extends awComponentGroup {
 			$max = $component->getYMax();
 			
 			// Set component minimum and maximum
-			if($component->getYAxis() === awPlot::LEFT) {
+			if ($component->getYAxis() === awPlot::LEFT) {
 			
 				list($min, $max) = $this->axis->left->getRange();
 			
@@ -1308,35 +1308,35 @@ class awPlotGroup extends awComponentGroup {
 		
 		// Hide unused axis
 		foreach(array(awPlot::LEFT, awPlot::RIGHT, awPlot::TOP, awPlot::BOTTOM) as $axis) {
-			if($this->isAxisUsed($axis) === FALSE) {
+			if ($this->isAxisUsed($axis) === FALSE) {
 				$this->axis->{$axis}->hide(TRUE);
 			}
 		}
 		
 		// Draw top axis
 		$top = $this->axis->top;
-		if($this->xAxisZero === FALSE) {
+		if ($this->xAxisZero === FALSE) {
 			$top->line->setY($y1, $y1);
 		}
 		$top->draw($driver);
 		
 		// Draw bottom axis
 		$bottom = $this->axis->bottom;
-		if($this->xAxisZero === FALSE) {
+		if ($this->xAxisZero === FALSE) {
 			$bottom->line->setY($y2, $y2);
 		}
 		$bottom->draw($driver);
 		
 		// Draw left axis
 		$left = $this->axis->left;
-		if($this->yAxisZero === FALSE) {
+		if ($this->yAxisZero === FALSE) {
 			$left->line->setX($x1, $x1);
 		}
 		$left->draw($driver);
 		
 		// Draw right axis
 		$right = $this->axis->right;
-		if($this->yAxisZero === FALSE) {
+		if ($this->yAxisZero === FALSE) {
 			$right->line->setX($x2, $x2);
 		}
 		$right->draw($driver);
@@ -1351,7 +1351,7 @@ class awPlotGroup extends awComponentGroup {
 	 */
 	protected function isAxisUsed($axis) {
 	
-		for($i = 0; $i < count($this->components); $i++) {
+		for ($i = 0; $i < count($this->components); $i++) {
 		
 			$component = $this->components[$i];
 			
@@ -1359,14 +1359,14 @@ class awPlotGroup extends awComponentGroup {
 			
 				case awPlot::LEFT :
 				case awPlot::RIGHT :
-					if($component->getYAxis() === $axis) {
+					if ($component->getYAxis() === $axis) {
 						return TRUE;
 					}
 					break;
 			
 				case awPlot::TOP :
 				case awPlot::BOTTOM :
-					if($component->getXAxis() === $axis) {
+					if ($component->getXAxis() === $axis) {
 						return TRUE;
 					}
 					break;
@@ -1389,14 +1389,14 @@ class awPlotGroup extends awComponentGroup {
 	
 		$number = $axis->getLabelNumber() - 1;
 		
-		if($number < 1) {
+		if ($number < 1) {
 			return;
 		}
 		
 		// Horizontal lines of grid
 		
 		$h = array();
-		for($i = 0; $i <= $number; $i++) {
+		for ($i = 0; $i <= $number; $i++) {
 			$h[] = $i / $number;
 		}
 		
@@ -1408,10 +1408,10 @@ class awPlotGroup extends awComponentGroup {
 		
 		$w = array();
 		
-		if($number > 0) {
+		if ($number > 0) {
 			
-			for($i = 0; $i <= $number; $i++) {
-				if($i%$interval === 0) {
+			for ($i = 0; $i <= $number; $i++) {
+				if ($i%$interval === 0) {
 					$w[] = $i / $number;
 				}
 			}
@@ -1425,7 +1425,7 @@ class awPlotGroup extends awComponentGroup {
 	protected function selectYAxis(){
 		
 		// Select axis (left if possible, right otherwise)
-		if($this->isAxisUsed(awPlot::LEFT)) {
+		if ($this->isAxisUsed(awPlot::LEFT)) {
 			$axis = $this->axis->left;
 		} else {
 			$axis = $this->axis->right;
@@ -1438,7 +1438,7 @@ class awPlotGroup extends awComponentGroup {
 	protected function selectXAxis(){
 		
 		// Select axis (bottom if possible, top otherwise)
-		if($this->isAxisUsed(awPlot::BOTTOM)) {
+		if ($this->isAxisUsed(awPlot::BOTTOM)) {
 			$axis = $this->axis->bottom;
 		} else {
 			$axis = $this->axis->top;
@@ -1451,7 +1451,7 @@ class awPlotGroup extends awComponentGroup {
 	protected function getXAxisNumber() {
 		$offset = $this->components[0];
 		$max = $offset->getXAxisNumber();
-		for($i = 1; $i < count($this->components); $i++) {
+		for ($i = 1; $i < count($this->components); $i++) {
 			$offset = $this->components[$i];
 			$max = max($max, $offset->getXAxisNumber());
 		}
