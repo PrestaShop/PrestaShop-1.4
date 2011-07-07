@@ -212,14 +212,14 @@ class AdminOrders extends AdminTab
 				$full_product_list = $productList;
 				$full_quantity_list = $qtyList;
 
-                if ($customizationList)
-                {
-    				foreach ($customizationList as $key => $id_order_detail)
-	    			{
-	    			    $full_product_list[$id_order_detail] = $id_order_detail;
-	    			    $full_quantity_list[$id_order_detail] = $customizationQtyList[$key];
-	    			}
-	    		}
+				if ($customizationList)
+				{
+					foreach ($customizationList as $key => $id_order_detail)
+					{
+						$full_product_list[$id_order_detail] = $id_order_detail;
+						$full_quantity_list[$id_order_detail] = $customizationQtyList[$key];
+					}
+				}
 
 				if ($productList OR $customizationList)
 				{
@@ -598,7 +598,7 @@ class AdminOrders extends AdminTab
 		if (sizeof($sources))
 		{
 			echo '<br />
-			<fieldset style="width: 400px;"><legend><img src="../img/admin/tab-stats.gif" /> '.$this->l('Sources').'</legend><ul '.(sizeof($sources) > 3 ? 'style="overflow-y: scroll; height: 200px"' : '').'>';
+			<fieldset style="width: 400px;"><legend><img src="../img/admin/tab-stats.gif" /> '.$this->l('Sources').'</legend><ul '.(sizeof($sources) > 3 ? 'style="height: 200px; overflow-y: scroll; width: 360px;"' : '').'>';
 			foreach ($sources as $source)
 				echo '<li>
 						'.Tools::displayDate($source['date_add'], (int)($cookie->id_lang), true).'<br />
@@ -738,10 +738,10 @@ class AdminOrders extends AdminTab
 						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee));
 						foreach ($products as $k => $product)
 						{
-					        if ($order->getTaxCalculationMethod() == PS_TAX_EXC)
-                                $product_price = $product['product_price'] + $product['ecotax'];
-                            else
-                                $product_price = $product['product_price_wt'];
+							if ($order->getTaxCalculationMethod() == PS_TAX_EXC)
+								$product_price = $product['product_price'] + $product['ecotax'];
+							else
+								$product_price = $product['product_price_wt'];
 
 							$image = array();
 							if (isset($product['product_attribute_id']) AND (int)($product['product_attribute_id']))
@@ -864,15 +864,15 @@ class AdminOrders extends AdminTab
 			<form action="'.$_SERVER['REQUEST_URI'].'&token='.$this->token.'" method="post" onsubmit="if (getE(\'visibility\').checked == true) return confirm(\''.$this->l('Do you want to send this message to the customer?', __CLASS__, true, false).'\');">
 			<fieldset style="width: 400px;">
 				<legend style="cursor: pointer;" onclick="$(\'#message\').slideToggle();$(\'#message_m\').slideToggle();return false"><img src="../img/admin/email_edit.gif" /> '.$this->l('New message').'</legend>
-				<div id="message_m" style="display: '.(Tools::getValue('message') ? 'none' : 'block').'">
+				<div id="message_m" style="display: '.(Tools::getValue('message') ? 'none' : 'block').'; overflow: auto; width: 400px;">
 					<a href="#" onclick="$(\'#message\').slideToggle();$(\'#message_m\').slideToggle();return false"><b>'.$this->l('Click here').'</b> '.$this->l('to add a comment or send a message to the customer').'</a>
 				</div>
 				<div id="message" style="display: '.(Tools::getValue('message') ? 'block' : 'none').'">
 					<select name="order_message" id="order_message" onchange="orderOverwriteMessage(this, \''.$this->l('Do you want to overwrite your existing message?').'\')">
 						<option value="0" selected="selected">-- '.$this->l('Choose a standard message').' --</option>';
 		$orderMessages = OrderMessage::getOrderMessages((int)($order->id_lang));
-        foreach ($orderMessages AS $orderMessage)
-            echo '		<option value="'.htmlentities($orderMessage['message'], ENT_COMPAT, 'UTF-8').'">'.$orderMessage['name'].'</option>';
+		foreach ($orderMessages AS $orderMessage)
+			echo '		<option value="'.htmlentities($orderMessage['message'], ENT_COMPAT, 'UTF-8').'">'.$orderMessage['name'].'</option>';
 		echo '		</select><br /><br />
 					<b>'.$this->l('Display to consumer?').'</b>
 					<input type="radio" name="visibility" id="visibility" value="0" /> '.$this->l('Yes').'
