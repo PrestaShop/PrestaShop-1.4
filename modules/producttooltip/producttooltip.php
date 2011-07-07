@@ -46,8 +46,8 @@ class ProductToolTip extends Module
 	
 	public function install()
 	{
-	 	if (!parent::install())
-	 		return false;
+		if (!parent::install())
+			return false;
 			
 		/* Default configuration values */
 		Configuration::updateValue('PS_PTOOLTIP_PEOPLE', 1);
@@ -181,7 +181,7 @@ class ProductToolTip extends Module
 						$smarty->assign('date_last_cart', $cart['date_add']);
 				}
 			}
-		}		
+		}
 
 		if ((isset($nbPeople['nb']) AND $nbPeople['nb'] > 0) OR isset($order['date_add']) OR isset($cart['date_add']))
 			return $this->display(__FILE__, 'producttooltip.tpl');
