@@ -190,6 +190,14 @@ class MailAlerts extends Module
 			'{firstname}' => $customer->firstname,
 			'{lastname}' => $customer->lastname,
 			'{email}' => $customer->email,
+			'{delivery_block_html}' => $this->_getFormatedAddress($delivery, "<br />", 
+						array(
+							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>', 
+							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
+			'{invoice_block_html}' => $this->_getFormatedAddress($invoice, "<br />", 
+						array(
+							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>',
+							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
 			'{delivery_company}' => $delivery->company,
 			'{delivery_firstname}' => $delivery->firstname,
 			'{delivery_lastname}' => $delivery->lastname,
@@ -229,6 +237,15 @@ class MailAlerts extends Module
 		$iso = Language::getIsoById((int)($id_lang));
 		if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.html'))
 			Mail::Send($id_lang, $template, $subject, $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
+	}
+
+
+	/*
+	** Generate correctly the address for an email
+	*/
+	private function _getFormatedAddress(Address $the_address, $line_sep, $fields_style = array())
+	{
+		return AddressFormat::generateAddress($the_address, array('avoid' => array()), $line_sep, ' ', $fields_style);
 	}
 
 	public function hookProductOutOfStock($params)

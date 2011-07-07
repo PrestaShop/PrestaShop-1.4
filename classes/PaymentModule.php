@@ -383,7 +383,7 @@ abstract class PaymentModuleCore extends Module
 						array(
 							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>', 
 							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
-						'{invoice_block_html}' => $this->_getFormatedAddress($invoice, "<br />", 
+					'{invoice_block_html}' => $this->_getFormatedAddress($invoice, "<br />", 
 						array(
 							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>',
 							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
