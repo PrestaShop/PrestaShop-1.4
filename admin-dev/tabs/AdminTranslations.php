@@ -903,7 +903,7 @@ class AdminTranslations extends AdminTab
 							google.language.translate(tdinput.parent("td").prev().html(), "en", gg_translate[\'language_code\'], function(result) {
 								if (!result.error)
 									tdinput.val(result.translation);
-								elseif (displayOnce == 0)
+								else if (displayOnce == 0)
 								{
 									displayOnce = 1;
 									alert(result.error.message);
@@ -917,7 +917,7 @@ class AdminTranslations extends AdminTab
 							google.language.translate(tdtextarea.parent("td").prev().html(), "en", gg_translate[\'language_code\'], function(result) {
 								if (!result.error)
 									tdtextarea.html(result.translation);
-								elseif (displayOnce == 0)
+								else if (displayOnce == 0)
 								{
 									displayOnce = 1;
 									alert(result.error.message);

@@ -41,7 +41,7 @@ class AdminTaxRulesGroup extends AdminTab
 		'name' => array('title' => $this->l('Name'), 'width' => 140),
 		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
 
-        parent::__construct();
+		parent::__construct();
 	}
 
 
@@ -68,76 +68,76 @@ class AdminTaxRulesGroup extends AdminTab
 				</div><br />';
 	}
 
-    public function displayForm($isMainTab = true)
-    {
-        global $cookie, $currentIndex;
+	public function displayForm($isMainTab = true)
+	{
+		global $cookie, $currentIndex;
 		parent::displayForm();
 		if (!($obj = $this->loadObject(true)))
 			return;
 		$tax_rules = isset($obj->id) ? $tax_rules = TaxRule::getTaxRulesByGroupId($obj->id) : array();
 
-        $param_product = Tools::getValue('id_product') ? '&id_product='.Tools::getValue('id_product') : '';
+		$param_product = Tools::getValue('id_product') ? '&id_product='.Tools::getValue('id_product') : '';
 
-        echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.$param_product.'" method="post">
-		        '.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-    			<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>
-    			<input type="hidden" name="tabs" id="tabs" value="0" />
-    			';
+		echo '<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.$param_product.'" method="post">
+				'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
+				<fieldset><legend><img src="../img/admin/dollar.gif" />'.$this->l('Tax Rules').'</legend>
+				<input type="hidden" name="tabs" id="tabs" value="0" />
+				';
 
-        echo '<label>'.$this->l('Name').'</label>
-    			<div class="margin-form">
+		echo '<label>'.$this->l('Name').'</label>
+				<div class="margin-form">
 					<input size="33" type="text" name="name" value="'.Tools::htmlentitiesUTF8($this->getFieldValue($obj, 'name')).'" /><sup> *</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-            <p class="clear"></p>
-            </div>';
+			<p class="clear"></p>
+			</div>';
 
-        echo '
-            <label>'.$this->l('Enable:').' </label>
+		echo '
+			<label>'.$this->l('Enable:').' </label>
 			<div class="margin-form">
 				<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 				<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 				<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 				<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-            </div>
-    		<div class="margin-form">
+			</div>
+			<div class="margin-form">
 				<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;
 				<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" />
 			</div>';
 
-        echo '<br />';
+		echo '<br />';
 
-        echo '<div class="tab-panet-tax" id="tab-pane-1">
-            <script type="text/javascript">
+		echo '<div class="tab-panet-tax" id="tab-pane-1">
+			<script type="text/javascript">
 			var pos_select = '.(($tab = Tools::getValue('tabs')) ? $tab : '0').';
-            function loadTab(id)
-            {}
+			function loadTab(id)
+			{}
 
-            function applyTax(id_zone)
-            {
-                   cur_tax = $("#zone_"+id_zone).val();
-                    $(".tax_"+id_zone).val(cur_tax);
-                    return false;
-            }
+			function applyTax(id_zone)
+			{
+				   cur_tax = $("#zone_"+id_zone).val();
+					$(".tax_"+id_zone).val(cur_tax);
+					return false;
+			}
 
-            function disableStateTaxRate(id_country, id_state)
-            {
-                if ($("#behavior_state_"+id_state).val() == '.PS_PRODUCT_TAX.')
-                    $("#tax_"+id_country+"_"+id_state).attr("disabled", true);
-                else
-                    $("#tax_"+id_country+"_"+id_state).attr("disabled", false);
-            }
+			function disableStateTaxRate(id_country, id_state)
+			{
+				if ($("#behavior_state_"+id_state).val() == '.PS_PRODUCT_TAX.')
+					$("#tax_"+id_country+"_"+id_state).attr("disabled", true);
+				else
+					$("#tax_"+id_country+"_"+id_state).attr("disabled", false);
+			}
 
-            function disableCountyTaxRate(id_country, id_state, id_county)
-            {
+			function disableCountyTaxRate(id_country, id_state, id_county)
+			{
 
-                if ($("#behavior_county_"+id_county).val() == '.County::USE_STATE_TAX.')
-                    $("#tax_"+id_country+"_"+id_state+"_"+id_county).attr("disabled", true);
-                else
-                {
+				if ($("#behavior_county_"+id_county).val() == '.County::USE_STATE_TAX.')
+					$("#tax_"+id_country+"_"+id_state+"_"+id_county).attr("disabled", true);
+				else
+				{
 
-                    $("#tax_"+id_country+"_"+id_state+"_"+id_county).attr("disabled", false);
-                }
-            }
+					$("#tax_"+id_country+"_"+id_state+"_"+id_county).attr("disabled", false);
+				}
+			}
 
 			$(\'document\').ready(function (){
 				$(\'.states\').hide();
@@ -177,39 +177,39 @@ class AdminTaxRulesGroup extends AdminTab
 				var tabPane1 = new WebFXTabPane( document.getElementById( "tab-pane-1" ) );
 			</script>
 			<link type="text/css" rel="stylesheet" href="../css/tabpane.css" />'.$this->renderZones($tax_rules, (int)$cookie->id_lang);
-        echo '
+		echo '
 				<div class="margin-form" style="margin-top: 10px">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />&nbsp;&nbsp;
 					<input type="submit" value="'.$this->l('Save and stay').'" name="submitAdd'.$this->table.'AndStay" class="button" />
 				</div>
-            </fieldset>
+			</fieldset>
 		</form>';
-    }
+	}
 
 
-    public function renderZones($tax_rules, $id_lang)
-    {
-        $html = '';
-        $zones = Zone::getZones(true);
-        foreach ($zones AS $key => $zone)
-        {
-            $html .= '<div class="tab-page" id="tab-page-'.$key.'">
-                            <h4 class="tab">'.$zone['name'].'</h4>
-                            <script type="text/javascript">
-                                tabPane1.addTabPage( document.getElementById( "tab-page-'.$key.'" ) );
-                            </script>
-                        '.$this->renderCountries($tax_rules, $zone['id_zone'], $id_lang).'
-                      </div>';
-        }
+	public function renderZones($tax_rules, $id_lang)
+	{
+		$html = '';
+		$zones = Zone::getZones(true);
+		foreach ($zones AS $key => $zone)
+		{
+			$html .= '<div class="tab-page" id="tab-page-'.$key.'">
+							<h4 class="tab">'.$zone['name'].'</h4>
+							<script type="text/javascript">
+								tabPane1.addTabPage( document.getElementById( "tab-page-'.$key.'" ) );
+							</script>
+						'.$this->renderCountries($tax_rules, $zone['id_zone'], $id_lang).'
+					  </div>';
+		}
 
-        return $html;
-    }
+		return $html;
+	}
 
-    public function renderCountries($tax_rules, $id_zone, $id_lang)
-    {
+	public function renderCountries($tax_rules, $id_zone, $id_lang)
+	{
 
-        $html = '
-        <table>
+		$html = '
+		<table>
 			<tr>
 				<td width="260px" style="font-weight:bold">'.$this->l('All').'</td>
 				<td>'.$this->renderTaxesSelect($id_lang, '', array('id' => 'zone_'.(int)$id_zone)).' <input type="submit" onclick="return applyTax(\''.(int)$id_zone.'\')" class="button" value="'.$this->l('Apply').'"/></td>
@@ -231,12 +231,12 @@ class AdminTaxRulesGroup extends AdminTab
 		$countCountries = sizeof($countries);
 		$i = 1;
 
-        foreach ($countries AS $country)
-        {
-            $id_tax =  0;
+		foreach ($countries AS $country)
+		{
+			$id_tax =  0;
 
-            if (array_key_exists($country['id_country'], $tax_rules) AND array_key_exists(0, $tax_rules[$country['id_country']]))
-                $id_tax = (int)$tax_rules[$country['id_country']][0][0]['id_tax'];
+			if (array_key_exists($country['id_country'], $tax_rules) AND array_key_exists(0, $tax_rules[$country['id_country']]))
+				$id_tax = (int)$tax_rules[$country['id_country']][0][0]['id_tax'];
 
 			$html .= '
 				<tr>
@@ -247,21 +247,22 @@ class AdminTaxRulesGroup extends AdminTab
 					<td>'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone, 'id' => 'tax_'.$country['id_country'].'_0', 'name' => 'tax_'.$country['id_country'].'_0' )).'</td>
 				</tr>
 			';
-			if ($country['contains_states'])
+			if ($country['contains_states']) {
 				$html .= $this->renderStates($tax_rules, (int)$id_zone, (int)$country['id_country'], (int)$id_lang);
+			}
 
 			$i++;
-        }
-        $html .= '
+		}
+		$html .= '
 			</tbody>
 		</table>
 		';
 
 		return $html;
-    }
+	}
 
-    public function renderStates($tax_rules, $id_zone, $id_country, $id_lang)
-    {
+	public function renderStates($tax_rules, $id_zone, $id_country, $id_lang)
+	{
 		$states = State::getStatesByIdCountry((int)$id_country);
 		$countStates = sizeof($states);
 		$i = 1;
@@ -304,11 +305,11 @@ class AdminTaxRulesGroup extends AdminTab
 			$i++;
 		}
 
-        return $html;
-    }
+		return $html;
+	}
 
-    public function renderCounties($tax_rules, $id_zone, $id_country, $id_state, $id_lang)
-    {
+	public function renderCounties($tax_rules, $id_zone, $id_country, $id_state, $id_lang)
+	{
 		$counties = County::getCounties((int)$id_state);
 		$countCounties = sizeof($counties);
 		$i = 1;
@@ -345,122 +346,122 @@ class AdminTaxRulesGroup extends AdminTab
 			';
 		}
 
-    	return $html;
+		return $html;
   	 }
 
-    public function renderTaxesSelect($id_lang, $default_value, $html_options)
-    {
-        $opt = '';
-        foreach( array('id', 'class', 'name', 'disabled') AS $prop)
-            if (array_key_exists($prop, $html_options) && !empty($html_options[$prop]))
-                $opt .= $prop.'="'.$html_options[$prop].'"';
+	public function renderTaxesSelect($id_lang, $default_value, $html_options)
+	{
+		$opt = '';
+		foreach( array('id', 'class', 'name', 'disabled') AS $prop)
+			if (array_key_exists($prop, $html_options) && !empty($html_options[$prop]))
+				$opt .= $prop.'="'.$html_options[$prop].'"';
 
-        $html = '<select '.$opt.'>
-                    <option value="0">'.$this->l('No Tax').'</option>';
+		$html = '<select '.$opt.'>
+					<option value="0">'.$this->l('No Tax').'</option>';
 
-        $taxes = Tax::getTaxes((int)$id_lang, true);
-        foreach ($taxes AS $tax)
-        {
-            $selected = ($default_value == $tax['id_tax']) ? 'selected="selected"' : '';
-            $html .= '<option value="'.(int)$tax['id_tax'].'" '.$selected.'>'.Tools::htmlentitiesUTF8($tax['name']).'</option>';
-        }
-        $html .= '</select>';
+		$taxes = Tax::getTaxes((int)$id_lang, true);
+		foreach ($taxes AS $tax)
+		{
+			$selected = ($default_value == $tax['id_tax']) ? 'selected="selected"' : '';
+			$html .= '<option value="'.(int)$tax['id_tax'].'" '.$selected.'>'.Tools::htmlentitiesUTF8($tax['name']).'</option>';
+		}
+		$html .= '</select>';
 
-        return $html;
-    }
+		return $html;
+	}
 
-    protected function afterAdd($object)
-    {
-        $this->afterUpdate($object);
-    }
-
-
-    protected function afterUpdate($object)
-    {
-        global $cookie;
-
-        TaxRule::deleteByGroupId($object->id);
+	protected function afterAdd($object)
+	{
+		$this->afterUpdate($object);
+	}
 
 
-        foreach(Country::getCountries($cookie->id_lang, true) AS $country)
-        {
-            $id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_0');
+	protected function afterUpdate($object)
+	{
+		global $cookie;
 
-            // default country rule
-            if (!empty($id_tax))
-            {
-                $tr = new TaxRule();
-                $tr->id_tax_rules_group = $object->id;
-                $tr->id_country = (int)$country['id_country'];
-                $tr->id_state = 0;
-                $tr->id_county = 0;
-                $tr->id_tax = $id_tax;
-                $tr->state_behavior = 0;
-                $tr->county_behavior = 0;
-                $tr->save();
-            }
+		TaxRule::deleteByGroupId($object->id);
 
-            // state specific rule
-            if (!empty($country['contains_states']))
-            {
-                foreach ($country['states'] AS $state)
-                {
-                    $state_behavior = (int)Tools::getValue('behavior_state_'.$state['id_state']);
-                    if ($state_behavior != PS_PRODUCT_TAX)
-                    {
-                        $tr = new TaxRule();
-                        $tr->id_tax_rules_group = $object->id;
-                        $tr->id_country = (int)$country['id_country'];
-                        $tr->id_state = (int)$state['id_state'];
-			               $tr->id_county = 0;
-                        $tr->id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_'.$state['id_state']);
-                        $tr->state_behavior = $state_behavior;
-			               $tr->county_behavior = 0;
-                        $tr->save();
-                    }
 
-                    // county specific rule
-                    if (State::hasCounties($state['id_state']))
-                    {
-                    		$counties = County::getCounties($state['id_state']);
-                    		foreach ($counties AS $county)
-                    		{
-   	                    	  $county_behavior = (int)Tools::getValue('behavior_county_'.$county['id_county']);
+		foreach(Country::getCountries($cookie->id_lang, true) AS $country)
+		{
+			$id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_0');
 
-				              if ($county_behavior != County::USE_STATE_TAX)
-				              {
-				                  $tr = new TaxRule();
-				                  $tr->id_tax_rules_group = $object->id;
-				                  $tr->id_country = (int)$country['id_country'];
-				                  $tr->id_state = (int)$state['id_state'];
-						          $tr->id_county = (int)$county['id_county'];
-				                  $tr->id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_'.$state['id_state'].'_'.$county['id_county']);
-	      		                  $tr->state_behavior = 0;
-					              $tr->county_behavior = $county_behavior;
+			// default country rule
+			if (!empty($id_tax))
+			{
+				$tr = new TaxRule();
+				$tr->id_tax_rules_group = $object->id;
+				$tr->id_country = (int)$country['id_country'];
+				$tr->id_state = 0;
+				$tr->id_county = 0;
+				$tr->id_tax = $id_tax;
+				$tr->state_behavior = 0;
+				$tr->county_behavior = 0;
+				$tr->save();
+			}
+
+			// state specific rule
+			if (!empty($country['contains_states']))
+			{
+				foreach ($country['states'] AS $state)
+				{
+					$state_behavior = (int)Tools::getValue('behavior_state_'.$state['id_state']);
+					if ($state_behavior != PS_PRODUCT_TAX)
+					{
+						$tr = new TaxRule();
+						$tr->id_tax_rules_group = $object->id;
+						$tr->id_country = (int)$country['id_country'];
+						$tr->id_state = (int)$state['id_state'];
+						   $tr->id_county = 0;
+						$tr->id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_'.$state['id_state']);
+						$tr->state_behavior = $state_behavior;
+						   $tr->county_behavior = 0;
+						$tr->save();
+					}
+
+					// county specific rule
+					if (State::hasCounties($state['id_state']))
+					{
+							$counties = County::getCounties($state['id_state']);
+							foreach ($counties AS $county)
+							{
+   							  $county_behavior = (int)Tools::getValue('behavior_county_'.$county['id_county']);
+
+							  if ($county_behavior != County::USE_STATE_TAX)
+							  {
+								  $tr = new TaxRule();
+								  $tr->id_tax_rules_group = $object->id;
+								  $tr->id_country = (int)$country['id_country'];
+								  $tr->id_state = (int)$state['id_state'];
+								  $tr->id_county = (int)$county['id_county'];
+								  $tr->id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_'.$state['id_state'].'_'.$county['id_county']);
+		  						  $tr->state_behavior = 0;
+								  $tr->county_behavior = $county_behavior;
 								  $tr->save();
-				              }
-                    		}
-                    }
-                }
-            }
+							  }
+							}
+					}
+				}
+			}
 
-       }
+	   }
    }
 
 
    public function postProcess()
    {
 
-        global $currentIndex, $cookie;
+		global $currentIndex, $cookie;
 		if (!isset($this->table))
 			return false;
 
 		// set token
 		$token = Tools::getValue('token') ? Tools::getValue('token') : $this->token;
 
-        if (Tools::getValue('submitAdd'.$this->table))
+		if (Tools::getValue('submitAdd'.$this->table))
 		{
-		    $id_product = Tools::getValue('id_product');
+			$id_product = Tools::getValue('id_product');
 
 			/* Checking fields validity */
 			$this->validateRules();
@@ -514,7 +515,7 @@ class AdminTaxRulesGroup extends AdminTab
 								// Default behavior (save and back)
 								$id_product = (int)Tools::getValue('id_product');
 								if ($id_product)
-    								Tools::redirectAdmin('?tab=AdminCatalog&id_product='.$id_product.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
+									Tools::redirectAdmin('?tab=AdminCatalog&id_product='.$id_product.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)));
 
 								Tools::redirectAdmin($currentIndex.($parent_id ? '&'.$this->identifier.'='.$object->id : '').'&conf=3&token='.$token);
 							}

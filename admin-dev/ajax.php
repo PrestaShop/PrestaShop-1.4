@@ -465,11 +465,11 @@ if (Tools::getValue('submitPublishCMS'))
 
 if (Tools::isSubmit('submitTrackClickOnHelp'))
 {
-    $label = Tools::getValue('label');
-    $version = Tools::getValue('version');
+	$label = Tools::getValue('label');
+	$version = Tools::getValue('version');
 
-    if (!empty($label) && !empty($version))
-        HelpAccess::trackClick($label, $version);
+	if (!empty($label) && !empty($version))
+		HelpAccess::trackClick($label, $version);
 }
 
 if (Tools::isSubmit('saveImportMatchs'))

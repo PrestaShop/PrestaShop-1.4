@@ -63,7 +63,7 @@ class AdminProducts extends AdminTab
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = a.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = a.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (a.`id_tax_rules_group` = tr.`id_tax_rules_group` AND tr.`id_country` = '.(int)Country::getDefaultCountryId().' AND tr.`id_state` = 0)
-	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)';
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)';
 		$this->_filter = 'AND cp.`id_category` = '.(int)($this->_category->id);
 		$this->_select = 'cp.`position`, i.`id_image`, (a.`price` * ((100 + (t.`rate`))/100)) AS price_final';
 
@@ -547,8 +547,8 @@ class AdminProducts extends AdminTab
 								$id_product_attribute = $product->addCombinationEntity(Tools::getValue('attribute_wholesale_price'),
 								Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'), Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'),
 								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
-                                Tools::getValue('attribute_ecotax'), Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'),
-                                Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'));
+								Tools::getValue('attribute_ecotax'), Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'),
+								Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'));
 						}
 						else
 							$this->_errors[] = Tools::displayError('You do not have permission to').'<hr>'.Tools::displayError('Edit here.');
@@ -1290,7 +1290,7 @@ class AdminProducts extends AdminTab
 
 	private function _applyTaxToEcotax($product)
 	{
-	    $ecotaxTaxRate = Tax::getProductEcotaxRate();
+		$ecotaxTaxRate = Tax::getProductEcotaxRate();
 		if ($product->ecotax)
 			$product->ecotax = Tools::ps_round($product->ecotax * (1 + $ecotaxTaxRate / 100), 2);
 	}
@@ -1821,14 +1821,14 @@ class AdminProducts extends AdminTab
 					echo '<option value="'.(int)($currency['id_currency']).'">'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
 				echo '
 				</select>
-	            &gt;
+				&gt;
 				<select name="sp_id_country">
 					<option value="0">'.$this->l('All countries').'</option>';
 				foreach ($countries as $country)
 					echo '<option value="'.(int)($country['id_country']).'">'.Tools::htmlentitiesUTF8($country['name']).'</option>';
 				echo '
 				</select>
-	            &gt;
+				&gt;
 				<select name="sp_id_group">
 					<option value="0">'.$this->l('All groups').'</option>';
 				foreach ($groups as $group)
@@ -1864,7 +1864,7 @@ class AdminProducts extends AdminTab
 
 			<label>'.$this->l('Apply a discount of:').'</label>
 			<div class="margin-form">
-	    		<input type="text" name="sp_reduction" value="0.00" size="11" />
+				<input type="text" name="sp_reduction" value="0.00" size="11" />
 				<select name="sp_reduction_type">
 					<option selected="selected">---</option>
 					<option value="amount">'.$this->l('Amount').'</option>
@@ -2195,7 +2195,7 @@ class AdminProducts extends AdminTab
 							<span class="hint" name="help_box">'.$this->l('Special characters allowed:').' .-_#\<span class="hint-pointer">&nbsp;</span></span>
 						</td>
 					</tr>
-                	<tr>
+					<tr>
 						<td class="col-left">'.$this->l('Supplier Reference:').'</td>
 						<td style="padding-bottom:5px;">
 							<input size="55" type="text" name="supplier_reference" value="'.htmlentities($this->getFieldValue($obj, 'supplier_reference'), ENT_COMPAT, 'UTF-8').'" style="width: 130px; margin-right: 44px;" />
@@ -2318,17 +2318,17 @@ class AdminProducts extends AdminTab
 		$productDownload = new ProductDownload($id_product_download);
 
 ?>
-    <script type="text/javascript">
-    // <![CDATA[
-    	ThickboxI18nImage = '<?php echo $this->l('Image') ?>';
-    	ThickboxI18nOf = '<?php echo $this->l('of') ?>';
-    	ThickboxI18nClose = '<?php echo $this->l('Close') ?>';
-    	ThickboxI18nOrEscKey = '<?php echo $this->l('(or "Esc")') ?>';
-    	ThickboxI18nNext = '<?php echo $this->l('Next >') ?>';
-    	ThickboxI18nPrev = '<?php echo $this->l('< Previous') ?>';
-    	tb_pathToImage = '../img/loadingAnimation.gif';
-    //]]>
-    </script>
+	<script type="text/javascript">
+	// <![CDATA[
+		ThickboxI18nImage = '<?php echo $this->l('Image') ?>';
+		ThickboxI18nOf = '<?php echo $this->l('of') ?>';
+		ThickboxI18nClose = '<?php echo $this->l('Close') ?>';
+		ThickboxI18nOrEscKey = '<?php echo $this->l('(or "Esc")') ?>';
+		ThickboxI18nNext = '<?php echo $this->l('Next >') ?>';
+		ThickboxI18nPrev = '<?php echo $this->l('< Previous') ?>';
+		tb_pathToImage = '../img/loadingAnimation.gif';
+	//]]>
+	</script>
 	<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/thickbox-modified.js"></script>
 	<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>jquery/ajaxfileupload.js"></script>
 	<script type="text/javascript" src="<?php echo _PS_JS_DIR_ ?>date.js"></script>
@@ -2519,7 +2519,7 @@ class AdminProducts extends AdminTab
 
 					foreach ($tax_rules_groups AS $tax_rules_group)
 					{
-    					$tax_rate = (array_key_exists($tax_rules_group['id_tax_rules_group'], $taxesRatesByGroup) ?  $taxesRatesByGroup[$tax_rules_group['id_tax_rules_group']] : 0);
+						$tax_rate = (array_key_exists($tax_rules_group['id_tax_rules_group'], $taxesRatesByGroup) ?  $taxesRatesByGroup[$tax_rules_group['id_tax_rules_group']] : 0);
 						echo 'taxesArray['.$tax_rules_group['id_tax_rules_group'].']='.$tax_rate."\n";
 					}
 					echo '
@@ -2531,7 +2531,7 @@ class AdminProducts extends AdminTab
 						<td style="padding-bottom:5px;">
 					<span '.(Tax::excludeTaxeOption() ? 'style="display:none;"' : '' ).'>
 					 <select onChange="javascript:calcPriceTI(); unitPriceWithTax(\'unit\');" name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
-					     <option value="0">'.$this->l('No Tax').'</option>';
+						 <option value="0">'.$this->l('No Tax').'</option>';
 
 						foreach ($tax_rules_groups AS $tax_rules_group)
 							echo '<option value="'.$tax_rules_group['id_tax_rules_group'].'" '.(($this->getFieldValue($obj, 'id_tax_rules_group') == $tax_rules_group['id_tax_rules_group']) ? ' selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($tax_rules_group['name']).'</option>';
@@ -3322,8 +3322,8 @@ class AdminProducts extends AdminTab
 						$combArray[$combinaison['id_product_attribute']]['weight'] = $combinaison['weight'];
 						$combArray[$combinaison['id_product_attribute']]['unit_impact'] = $combinaison['unit_price_impact'];
 						$combArray[$combinaison['id_product_attribute']]['reference'] = $combinaison['reference'];
-                        $combArray[$combinaison['id_product_attribute']]['supplier_reference'] = $combinaison['supplier_reference'];
-                        $combArray[$combinaison['id_product_attribute']]['ean13'] = $combinaison['ean13'];
+						$combArray[$combinaison['id_product_attribute']]['supplier_reference'] = $combinaison['supplier_reference'];
+						$combArray[$combinaison['id_product_attribute']]['ean13'] = $combinaison['ean13'];
 						$combArray[$combinaison['id_product_attribute']]['upc'] = $combinaison['upc'];
 						$combArray[$combinaison['id_product_attribute']]['minimal_quantity'] = $combinaison['minimal_quantity'];
 						$combArray[$combinaison['id_product_attribute']]['location'] = $combinaison['location'];
@@ -3652,7 +3652,7 @@ class AdminProducts extends AdminTab
 					alert(\''.$this->l('Thanks to select at least one product.').'\');
 					return false;
 				}
-				elseif ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemQty\').val() == \'\')
+				else if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemQty\').val() == \'\')
 				{
 					alert(\''.$this->l('Thanks to set a quantity to add a product.').'\');	
 					return false;

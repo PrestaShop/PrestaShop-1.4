@@ -184,13 +184,13 @@ class AdminDiscounts extends AdminTab
 			{
 				if ($("#id_discount_type").val() == 0)
 					$("#value-div").css("display", "none");
-				elseif ($("#id_discount_type").val() == 1)
+				else if ($("#id_discount_type").val() == 1)
 				{
 					$("#value-div").css("display", "block");
 					$("#percent-span").css("display", "block");
 					$("#id_currency").css("display", "none");
 				}
-				elseif ($("#id_discount_type").val() == 2)
+				else if ($("#id_discount_type").val() == 2)
 				{
 					$("#value-div").css("display", "block");
 					$("#percent-span").css("display", "none");
@@ -198,7 +198,7 @@ class AdminDiscounts extends AdminTab
 					$(\'#behavior_not_exhausted\').show();
 					
 				}
-				elseif ($("#id_discount_type").val() == 3)
+				else if ($("#id_discount_type").val() == 3)
 					$("#value-div").css("display", "none");
 				if ($(\'#id_discount_type\').val() != 2)
 					$(\'#behavior_not_exhausted\').hide();
@@ -393,7 +393,7 @@ class AdminDiscounts extends AdminTab
 										else
 											formDiscount.id_target.options.selectedIndex = 2;
 									}
-									elseif (filterValue)
+									else if (filterValue)
 										for (i = 0; i < (customers_length + groups_length); i++)
 											if (formDiscount.id_target.options[i+1].value == filterValue)
 												formDiscount.id_target.options.selectedIndex = i + 1;

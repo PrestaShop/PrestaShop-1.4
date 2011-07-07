@@ -347,9 +347,9 @@ class AdminCustomers extends AdminTab
 						$("#note_feedback").html("<b style=\"color:green\">'.addslashes($this->l('Your note has been saved')).'</b>").fadeIn(400);
 						$("#submitCustomerNote").attr("disabled", "disabled");
 					}
-					elseif (r == "error:validation")
+					else if (r == "error:validation")
 						$("#note_feedback").html("<b style=\"color:red\">'.addslashes($this->l('Error: your note is not valid')).'</b>").fadeIn(400);
-					elseif (r == "error:update")
+					else if (r == "error:update")
 						$("#note_feedback").html("<b style=\"color:red\">'.addslashes($this->l('Error: cannot save your note')).'</b>").fadeIn(400);
 					$("#note_feedback").fadeOut(3000);
 				});
@@ -626,45 +626,45 @@ class AdminCustomers extends AdminTab
 		echo '<div class="clear">&nbsp;</div>';
 
 		/* Last connections */
-        $connections = $customer->getLastConnections();
-        if (sizeof($connections))    
-        {
-            echo '<h2>'.$this->l('Last connections').'</h2>
-            <table cellspacing="0" cellpadding="0" class="table">
-                <tr>
-                    <th style="width: 200px">'.$this->l('Date').'</th>
-                    <th style="width: 100px">'.$this->l('Pages viewed').'</th>
-                    <th style="width: 100px">'.$this->l('Total time').'</th>
-                    <th style="width: 100px">'.$this->l('Origin').'</th>
-                    <th style="width: 100px">'.$this->l('IP Address').'</th>
-                </tr>';
-            foreach ($connections as $connection)
-                echo '<tr>
-                        <td>'.Tools::displayDate($connection['date_add'], (int)($cookie->id_lang), true).'</td>
-                        <td>'.(int)($connection['pages']).'</td>
-                        <td>'.$connection['time'].'</td>
-                        <td>'.($connection['http_referer'] ? preg_replace('/^www./', '', parse_url($connection['http_referer'], PHP_URL_HOST)) : $this->l('Direct link')).'</td>
-                        <td>'.$connection['ipaddress'].'</td>
-                    </tr>';
-            echo '</table><div class="clear">&nbsp;</div>';
-        }
-        if (sizeof($referrers))    
-        {
-            echo '<h2>'.$this->l('Referrers').'</h2>
-            <table cellspacing="0" cellpadding="0" class="table">
-                <tr>
-                    <th style="width: 200px">'.$this->l('Date').'</th>
-                    <th style="width: 200px">'.$this->l('Name').'</th>
-                </tr>';
-            foreach ($referrers as $referrer)
-                echo '<tr>
-                        <td>'.Tools::displayDate($referrer['date_add'], (int)($cookie->id_lang), true).'</td>
-                        <td>'.$referrer['name'].'</td>
-                    </tr>';
-            echo '</table><div class="clear">&nbsp;</div>';
-        }
-        echo '<a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to customer list').'</a><br />';
-    }
+		$connections = $customer->getLastConnections();
+	if (sizeof($connections))    
+		{
+			echo '<h2>'.$this->l('Last connections').'</h2>
+			<table cellspacing="0" cellpadding="0" class="table">
+				<tr>
+					<th style="width: 200px">'.$this->l('Date').'</th>
+					<th style="width: 100px">'.$this->l('Pages viewed').'</th>
+					<th style="width: 100px">'.$this->l('Total time').'</th>
+					<th style="width: 100px">'.$this->l('Origin').'</th>
+					<th style="width: 100px">'.$this->l('IP Address').'</th>
+				</tr>';
+			foreach ($connections as $connection)
+				echo '<tr>
+						<td>'.Tools::displayDate($connection['date_add'], (int)($cookie->id_lang), true).'</td>
+						<td>'.(int)($connection['pages']).'</td>
+						<td>'.$connection['time'].'</td>
+						<td>'.($connection['http_referer'] ? preg_replace('/^www./', '', parse_url($connection['http_referer'], PHP_URL_HOST)) : $this->l('Direct link')).'</td>
+						<td>'.$connection['ipaddress'].'</td>
+					</tr>';
+			echo '</table><div class="clear">&nbsp;</div>';
+		}
+		if (sizeof($referrers))    
+		{
+			echo '<h2>'.$this->l('Referrers').'</h2>
+			<table cellspacing="0" cellpadding="0" class="table">
+				<tr>
+					<th style="width: 200px">'.$this->l('Date').'</th>
+					<th style="width: 200px">'.$this->l('Name').'</th>
+				</tr>';
+			foreach ($referrers as $referrer)
+				echo '<tr>
+						<td>'.Tools::displayDate($referrer['date_add'], (int)($cookie->id_lang), true).'</td>
+						<td>'.$referrer['name'].'</td>
+					</tr>';
+			echo '</table><div class="clear">&nbsp;</div>';
+		}
+		echo '<a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to customer list').'</a><br />';
+	}
 
 	public function displayForm($isMainTab = true)
 	{

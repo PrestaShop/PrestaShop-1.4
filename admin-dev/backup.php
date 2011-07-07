@@ -54,11 +54,11 @@ if ($backupfile === false OR strncmp($backupdir, $backupfile, strlen($backupdir)
 	die (Tools::displayError());
 
 if (substr($backupfile, -4) == '.bz2')
-    $contentType = 'application/x-bzip2';
+	$contentType = 'application/x-bzip2';
 elseif (substr($backupfile, -3) == '.gz')
-    $contentType = 'application/x-gzip';
+	$contentType = 'application/x-gzip';
 else
-    $contentType = 'text/x-sql';
+	$contentType = 'text/x-sql';
 $fp = @fopen($backupfile, 'r');
 
 if ($fp === false)
