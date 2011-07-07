@@ -165,7 +165,7 @@ class ProductToolTip extends Module
 			WHERE od.product_id = '.(int)($id_product).' AND o.date_add >= \''.pSQL($date).'\'
 			ORDER BY o.date_add DESC');
 			
-			if (isset($order['date_add']) && Validate::isDateFormat($cart['date_add'])  && $cart['date_add'] != '0000-00-00 00:00:00')
+			if (isset($order['date_add']) && Validate::isDateFormat($order['date_add'])  && $order['date_add'] != '0000-00-00 00:00:00')
 				$smarty->assign('date_last_order', $order['date_add']);
 			else
 			{
