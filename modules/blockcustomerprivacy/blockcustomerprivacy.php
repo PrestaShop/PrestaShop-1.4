@@ -131,7 +131,12 @@ class blockcustomerprivacy extends Module
 						<textarea class="rte" cols="70" rows="30" id="custpriv_message_'.$language['id_lang'].'" name="custpriv_message_'.$language['id_lang'].'">'.(isset($values[$language['id_lang']]) ? $values[$language['id_lang']] : '').'</textarea>
 					</div>';		
 		$content .= $this->displayFlags($languages, $defaultLanguage, 'ccont', 'ccont', true).'
-					<div class="clear"></div><p>'.$this->l('Message that will be displayed in the account creation form.').'</p>
+					<div class="clear">
+					</div>
+					<p>
+						'.$this->l('Message that will be displayed in the account creation form.').'<br />
+						'.$this->l('Tips: Remember that if the text is too long to be written directly in the form, you can add a link to one of your pages created via the CMS tab.').'
+					</p>
 				</div>
 				<div class="clear">&nbsp;</div>
 				<div class="margin-form">
