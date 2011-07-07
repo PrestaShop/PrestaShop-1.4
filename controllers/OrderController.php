@@ -131,9 +131,9 @@ class OrderControllerCore extends ParentOrderController
 		$addressDelivery = new Address((int)(self::$cart->id_address_delivery));
 		$addressInvoice = new Address((int)(self::$cart->id_address_invoice));
 
-		$invoiceAddressFields = AddressFormat::getOrderedAddressFields($addressInvoice->id_country);
-		$deliveryAddressFields = AddressFormat::getOrderedAddressFields($addressDelivery->id_country);
-
+		$invoiceAddressFields = AddressFormat::getOrderedAddressFields($addressInvoice->id_country, false, true);
+		$deliveryAddressFields = AddressFormat::getOrderedAddressFields($addressDelivery->id_country, false, true);
+		
 		self::$smarty->assign(array(
 			'inv_adr_fields' => $invoiceAddressFields,
 			'dlv_adr_fields' => $deliveryAddressFields));

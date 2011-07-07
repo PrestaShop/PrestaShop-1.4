@@ -439,8 +439,8 @@ class OrderOpcControllerCore extends ParentOrderController
 		$address_delivery = new Address((int)self::$cart->id_address_delivery);
 		$address_invoice = new Address((int)self::$cart->id_address_invoice);
 
-		$inv_adr_fields = AddressFormat::getOrderedAddressFields((int)$address_delivery->id_country);
-		$dlv_adr_fields = AddressFormat::getOrderedAddressFields((int)$address_invoice->id_country);
+		$inv_adr_fields = AddressFormat::getOrderedAddressFields((int)$address_delivery->id_country, false, true);
+		$dlv_adr_fields = AddressFormat::getOrderedAddressFields((int)$address_invoice->id_country, false, true);
 
 		$inv_all_fields = array();
 		$dlv_all_fields = array();

@@ -1321,7 +1321,11 @@ class CartCore extends ObjectModel
 
 		$delivery = new Address((int)($this->id_address_delivery));
 		$invoice = new Address((int)($this->id_address_invoice));
-
+		
+		// New layout system with personalization fields
+		$formattedAddresses['invoice'] = AddressFormat::getFormattedLayoutData($invoice);
+		$formattedAddresses['delivery'] = AddressFormat::getFormattedLayoutData($delivery);
+		
 		$total_tax = $this->getOrderTotal() - $this->getOrderTotal(false);
 
 		if ($total_tax < 0)
@@ -1345,6 +1349,7 @@ class CartCore extends ObjectModel
 			'delivery_state' => State::getNameById($delivery->id_state),
 			'invoice' => $invoice,
 			'invoice_state' => State::getNameById($invoice->id_state),
+			'formattedAddresses' => $formattedAddresses,
 			'carrier' => new Carrier((int)($this->id_carrier), $cookie->id_lang),
 			'products' => $this->getProducts(false),
 			'discounts' => $this->getDiscounts(false, true),

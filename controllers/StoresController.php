@@ -151,7 +151,7 @@ class StoresControllerCore extends FrontController
 		$out = '';
 		$out_datas = array();
 
-		$address_datas = AddressFormat::getOrderedAddressFields($store['id_country']);
+		$address_datas = AddressFormat::getOrderedAddressFields($store['id_country'], false, true);
 		$state = (isset($store['id_state'])) ? new State($store['id_state']) : NULL;
 		
 		foreach ($address_datas as $data_line)

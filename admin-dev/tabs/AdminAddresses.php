@@ -484,8 +484,8 @@ class AdminAddresses extends AdminTab
 		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country : 
 				(int)(Configuration::get('PS_COUNTRY_DEFAULT'));
 		
-		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
-		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry);
+		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);
+		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);
 
 		$inv_all_fields = array();
 		$dlv_all_fields = array();

@@ -463,7 +463,7 @@ abstract class PaymentModuleCore extends Module
 	private function _getTxtFormatedAddress($the_address)
 	{
 		$out = '';
-		$adr_fields = AddressFormat::getOrderedAddressFields($the_address->id_country);
+		$adr_fields = AddressFormat::getOrderedAddressFields($the_address->id_country, false, true);
 		$r_values = array();
 		foreach($adr_fields as $fields_line)
 		{

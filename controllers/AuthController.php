@@ -384,7 +384,7 @@ class AuthControllerCore extends FrontController
 	protected function processAddressFormat()
 	{
 		$addressItems = array();
-		$addressFormat = AddressFormat::getOrderedAddressFields(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$addressFormat = AddressFormat::getOrderedAddressFields(Configuration::get('PS_COUNTRY_DEFAULT'), false, true);
 		$requireFormFieldsList = AddressFormat::$requireFormFieldsList;
 		
 		foreach ($addressFormat as $addressline)

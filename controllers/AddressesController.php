@@ -60,16 +60,12 @@ class AddressesControllerCore extends FrontController
 		{
 			$address = new Address($addressDetailed['id_address']);
 			
-			$multipleAddressesFormated[$total]['ordered'] = AddressFormat::getOrderedAddressFields($addressDetailed['id_country']);
-			$multipleAddressesFormated[$total]['formated'] =  AddressFormat::getFormattedAddressFieldsValues(
-				$address, 
-				$multipleAddressesFormated[$total]['ordered']);
-			$multipleAddressesFormated[$total]['object'] = $addressDetailed;
+			$multipleAddressesFormated[$total] = AddressFormat::getFormattedLayoutData($address);
 			unset($address);
 			++$total;
 			
 			// Retro theme < 1.4.2
-      $ordered_fields = AddressFormat::getOrderedAddressFields($addressDetailed['id_country']);
+      $ordered_fields = AddressFormat::getOrderedAddressFields($addressDetailed['id_country'], false, true);
 		}
 		
 		// Retro theme 1.4.2

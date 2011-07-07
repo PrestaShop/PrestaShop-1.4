@@ -948,7 +948,6 @@ class AdminOrders extends AdminTab
 			'avoid' => array()
 			//'avoid' => array('address2')
 		);
-		
 		return AddressFormat::generateAddress($addressDelivery, $patternRules, '<br />');
 	}
 

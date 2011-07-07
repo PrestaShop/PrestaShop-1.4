@@ -272,7 +272,7 @@ class AddressControllerCore extends FrontController
 
 		$id_country = is_null($this->_address)? 0 : (int)$this->_address->id_country;
 
-		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($id_country, $split_all = true);
+		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($id_country, true, true);
 		self::$smarty->assign('ordered_adr_fields', $dlv_adr_fields);
 	}
 	

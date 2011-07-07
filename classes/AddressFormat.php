@@ -88,6 +88,8 @@ class AddressFormatCore extends ObjectModel
 	public static $forbiddenClassList = array(
 		'Manufacturer',
 		'Supplier');
+		
+	const _CLEANING_REGEX_ = '#([^\w:_]+)#i';
 
 	public function getFields()
 	{
@@ -148,7 +150,6 @@ class AddressFormatCore extends ObjectModel
 	private function _checkLiableAssociation($patternName, $fieldsValidate)
 	{
 		$patternName = trim($patternName);
-		$cleanedLine = '';
 		
 		if ($associationName = explode(':', $patternName))
 		{
@@ -158,8 +159,7 @@ class AddressFormatCore extends ObjectModel
 			elseif ($totalNameUsed == 1)
 			{
 				$associationName[0] = strtolower($associationName[0]);
-				$cleanedLine = $associationName[0];
-				if (in_array($associationName[0], self::$forbiddenProperyList) || 
+				if (in_array($associationName[0], self::$forbiddenPropertyList) || 
 						!$this->_checkValidateClassField('Address', $associationName[0], false))
 					$this->_errorFormatList[] = Tools::displayError('This name isn\'t allowed').': '.
 						$associationName[0];
@@ -183,40 +183,41 @@ class AddressFormatCore extends ObjectModel
 					
 						// Check if the field name exist in the class write by the user
 						$this->_checkValidateClassField($associationName[0], $associationName[1], false);
-						$cleanedLine = $associationName[0].':'.$associationName[1];
 					}
 				}
 			}
 		}
-		return (strlen($cleanedLine)) ? $cleanedLine.' ' : '';
 	}
-
+	
 	/*
 	 * Check if the set fields are valide
 	 */
 	public function checkFormatFields()
 	{
-		$cleanedContent = '';
 		$this->_errorFormatList = array();
 		$fieldsValidate = Address::getFieldsValidate();
+		$usedKeyList = array();
 
 		$multipleLineFields = explode("\n", $this->format);
 		if ($multipleLineFields && is_array($multipleLineFields))
 			foreach($multipleLineFields as $lineField)
 			{
-				$lineField = str_replace(array("\n", "\t", "\r\n", "\r"), '', $lineField);
-				if (strlen($lineField))
-				{
-					$patternsName = explode(' ', trim($lineField));
-					if ($patternsName && is_array($patternsName))
+				if (($patternsName = preg_split(self::_CLEANING_REGEX_, $lineField, -1, PREG_SPLIT_NO_EMPTY)))
+					if (is_array($patternsName))
 					{
 						foreach($patternsName as $patternName)
-							$cleanedContent .= $this->_checkLiableAssociation($patternName, $fieldsValidate);
-						$cleanedContent = trim($cleanedContent)."\r\n";
+						{
+							if (!in_array($patternName, $usedKeyList))
+							{
+								$this->_checkLiableAssociation($patternName, $fieldsValidate);
+								$usedKeyList[] = $patternName;
+							}
+							else
+								$this->_errorFormatList[] = Tools::displayError('This key is used too many times (once allowed').
+									': '.$patternName;
+						}
 					}
-				}
 			}
-		$this->format = $cleanedContent;
 		return (count($this->_errorFormatList)) ? false : true;
 	}
 	
@@ -229,13 +230,68 @@ class AddressFormatCore extends ObjectModel
 	}
 
 	/*
+	** Set the layout key with the liable value
+	** example : (firstname) => 'Presta' will result (Presta)
+	**         : (firstname-lastname) => 'Presta' and 'Shop' result '(Presta-Shop)'
+	*/
+	private static function _setOriginalDisplayFormat(&$formattedValueList, $currentLine, $currentKeyList)
+	{
+		if ($currentKeyList && is_array($currentKeyList))
+			if ($originalFormattedPatternList = explode(' ', $currentLine))
+				// Foreach the available pattern
+				foreach($originalFormattedPatternList as $patternNum => $pattern)
+				{
+					// Var allows to modify the good formatted key value when multiple key exist into the same pattern
+					$mainFormattedKey = '';
+					
+					// Multiple key can be found in the same pattern
+					foreach($currentKeyList as $key)
+					{
+						// Check if we need to use an older modified pattern if a key has already be matched before
+						$replacedValue = empty($mainFormattedKey) ? $pattern : $formattedValueList[$mainFormattedKey];
+						if (($formattedValue = preg_replace('/'.$key.'/', $formattedValueList[$key], $replacedValue, -1, $count)))
+							if ($count)
+							{
+								// Allow to check multiple key in the same pattern,
+								if (empty($mainFormattedKey))
+									$mainFormattedKey = $key;
+								// Set the pattern value to an empty string if an older key has already been matched before 
+								if ($mainFormattedKey != $key)
+									$formattedValueList[$key] = '';
+								// Store the new pattern value
+								$formattedValueList[$mainFormattedKey] = $formattedValue;
+								unset($originalFormattedPatternList[$patternNum]);
+							}
+					}		
+				}
+	}
+	
+	/*
+	** Cleaned the layout set by the user
+	*/
+	public static function cleanOrderedAddress(&$orderedAddressField)
+	{
+		foreach($orderedAddressField as &$line)
+		{
+			$cleanedLine = '';
+			if (($keyList = preg_split(self::_CLEANING_REGEX_, $line, -1, PREG_SPLIT_NO_EMPTY)))
+			{
+				foreach($keyList as $key)
+					$cleanedLine .= $key.' ';
+				$cleanedLine = trim($cleanedLine);
+				$line = $cleanedLine;
+			}
+		}
+	}
+	
+	/*
 	 * Returns the formatted fields with associated values
 	 * 
 	 * @address is an instancied Address object
 	 * @addressFormat is the format
 	 * @return double Array
 	 */
-	public static function getFormattedAddressFieldsValues($address, $addressFormat)
+	public static function getFormattedAddressFieldsValues($address, &$addressFormat)
 	{
 		global $cookie;
 		
@@ -246,7 +302,8 @@ class AddressFormatCore extends ObjectModel
 		if ($address && ($address instanceof Address))
 			foreach($addressFormat as $line)
 			{
-				if (($keyList = explode(' ', $line)) && is_array($keyList))
+				if (($keyList = preg_split(self::_CLEANING_REGEX_, $line, -1, PREG_SPLIT_NO_EMPTY)) && is_array($keyList))
+				{
 					foreach($keyList as $pattern)
 						if ($associateName = explode(':', $pattern))
 						{
@@ -273,8 +330,11 @@ class AddressFormatCore extends ObjectModel
 											$temporyObject[$associateName[0]]->{$associateName[1]};
 								}
 							}
-					}
+						}
+						self::_setOriginalDisplayFormat($tab, $line, $keyList);
+				}
 			}
+		self::cleanOrderedAddress($addressFormat);
 		// Free the instanciate objects
 		foreach($temporyObject as &$object)
 			unset($object);
@@ -328,7 +388,7 @@ class AddressFormatCore extends ObjectModel
 			foreach($publicProperties as $property)
 			{
 				$propertyName = $property->getName();
-				if ((!in_array($propertyName, AddressFormat::$forbiddenProperyList)) && 
+				if ((!in_array($propertyName, AddressFormat::$forbiddenPropertyList)) && 
 						(!preg_match('#id|id_\w#', $propertyName)))
 					$propertyList[] = $propertyName;
 			}
@@ -371,21 +431,43 @@ class AddressFormatCore extends ObjectModel
 	
 	/**
 	 * Returns address format fields in array by country
-	 * 
+	 * 	
 	 * @param Integer PS_COUNTRY.id if null using default country 
 	 * @return Array String field address format
 	 */
-	public static function getOrderedAddressFields($id_country = 0, $split_all = false)
+	public static function getOrderedAddressFields($id_country = 0, $split_all = false, $cleaned = false)
 	{
 		$out = array();
 		$field_set = explode("\n", self::getAddressCountryFormat($id_country));
 		foreach ($field_set as $field_item)
 			if ($split_all)
-				foreach(explode(' ',$field_item) as $word_item)
+			{
+				if ($cleaned)
+					$keyList = ($cleaned) ? preg_split(self::_CLEANING_REGEX_, $field_item, -1, PREG_SPLIT_NO_EMPTY) : 
+						explode(' ', $field_item);
+				foreach($keyList as $word_item)
 					$out[] = trim($word_item);
+			}
 			else
-				$out[] = trim($field_item);
+				$out[] = ($cleaned) ? implode(' ', preg_split(self::_CLEANING_REGEX_, trim($field_item), -1, PREG_SPLIT_NO_EMPTY))
+					: trim($field_item);
 		return $out;
+	}
+	
+	/*
+	** Return a data array containing ordered, formatedValue and object fields
+	*/
+	public static function getFormattedLayoutData($address)
+	{
+		$layoutData = array();
+		
+		if ($address && $address instanceof Address)
+		{
+			$layoutData['ordered'] = AddressFormat::getOrderedAddressFields((int)$address->id_country);
+			$layoutData['formated'] = AddressFormat::getFormattedAddressFieldsValues($address, $layoutData['ordered']);
+			$layoutData['object'] = get_object_vars($address);
+		}
+		return $layoutData;
 	}
 
 	/**
