@@ -195,9 +195,9 @@ class GraphGoogleChart extends ModuleGraphEngine
 			{
 				if ($i == 0 && !empty($this->_titles['main']))
 					$url .= '&chtt='.urlencode($this->_titles['main'][$i]);
-				else if ($i == 1)
+				elseif ($i == 1)
 					$url .= '&chdl=';
-				else if ($i > 1)
+				elseif ($i > 1)
 					$url .= '|';
 				if ($i != 0)
 					$url .= urlencode($this->_titles['main'][$i]);

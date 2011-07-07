@@ -33,7 +33,7 @@
 	}elseif(!file_exists($_POST['path']))
 	{
 		$error  =  IMG_SAVE_NOT_EXISTS;
-	}else if(!isUnderRoot($_POST['path']))
+	}elseif(!isUnderRoot($_POST['path']))
 	{
 		$error = IMG_SAVE_PATH_DISALLOWED;
 	}

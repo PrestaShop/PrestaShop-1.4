@@ -80,7 +80,7 @@ abstract class ObjectModelCore
 	 * @param string $className Child class name for static use (optional)
 	 * @return array Validation rules (fields validity)
 	 */
-	static public function getValidationRules($className = __CLASS__)
+	public static function getValidationRules($className = __CLASS__)
 	{
 		$object = new $className();
 		return array(
@@ -452,7 +452,7 @@ abstract class ObjectModelCore
 		return true;
 	}
 
-	static public function displayFieldName($field, $className = __CLASS__, $htmlentities = true)
+	public static function displayFieldName($field, $className = __CLASS__, $htmlentities = true)
 	{
 		global $_FIELDS, $cookie;
 		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));

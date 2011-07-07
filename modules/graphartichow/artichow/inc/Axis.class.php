@@ -263,7 +263,7 @@ class awAxis {
 		foreach($this->ticks as $tick) {
 			if($tick->getStyle() === awTick::IN) {
 				$tick->setStyle(awTick::OUT);
-			} else if($tick->getStyle() === awTick::OUT) {
+			} elseif($tick->getStyle() === awTick::OUT) {
 				$tick->setStyle(awTick::IN);
 			}
 		}
@@ -635,22 +635,22 @@ class awAxis {
 		if($intervalNormalize <= 1.5) {
 			$intervalReal = 1.5;
 			$labelNumber = 4;
-		} else if($intervalNormalize <= 2) {
+		} elseif($intervalNormalize <= 2) {
 			$intervalReal = 2;
 			$labelNumber = 5;
-		} else if($intervalNormalize <= 3) {
+		} elseif($intervalNormalize <= 3) {
 			$intervalReal = 3;
 			$labelNumber = 4;
-		} else if($intervalNormalize <= 4) {
+		} elseif($intervalNormalize <= 4) {
 			$intervalReal = 4;
 			$labelNumber = 5;
-		} else if($intervalNormalize <= 5) {
+		} elseif($intervalNormalize <= 5) {
 			$intervalReal = 5;
 			$labelNumber = 6;
-		} else if($intervalNormalize <= 8) {
+		} elseif($intervalNormalize <= 8) {
 			$intervalReal = 8;
 			$labelNumber = 5;
-		} else if($intervalNormalize <= 10) {
+		} elseif($intervalNormalize <= 10) {
 			$intervalReal = 10;
 			$labelNumber = 6;
 		}
@@ -662,7 +662,7 @@ class awAxis {
 				$intervalReal * $pow
 			);
 
-		} else if($max == 0) {
+		} elseif($max == 0) {
 
 			$this->setRange(
 				$intervalReal * $pow * -1,

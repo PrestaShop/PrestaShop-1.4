@@ -251,7 +251,7 @@ class AdminBackup extends AdminTab
 			$age = time() - $timestamp;
 			if ($age < 3600)
 				$age = '< 1 '.$this->l('hour');
-			else if ($age < 86400)
+			elseif ($age < 86400)
 			{
 				$age = floor($age / 3600);
 				$age = $age.' '.(($age == 1) ? $this->l('hour') : $this->l('hours'));

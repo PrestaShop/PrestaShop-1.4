@@ -255,19 +255,19 @@ abstract class DbCore
 		 * @acces string query The query to execute
 		 * @return array Array of line returned by MySQL
 		 */
-	static public function s($query, $use_cache = 1)
+	public static function s($query, $use_cache = 1)
 	{
 		return Db::getInstance()->ExecuteS($query, true, $use_cache);
 	}
 	
-	static public function ps($query, $use_cache = 1)
+	public static function ps($query, $use_cache = 1)
 	{
 		$ret = Db::s($query, $use_cache);
 		p($ret);
 		return $ret;
 	}
 	
-	static public function ds($query, $use_cache = 1)
+	public static function ds($query, $use_cache = 1)
 	{
 		Db::s($query, $use_cache);
 		die();

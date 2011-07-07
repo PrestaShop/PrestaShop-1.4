@@ -615,7 +615,7 @@ abstract class PrepaidServices extends PaymentModule
 
 			$query_string = $error ? self::changeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error', (int)($error)) : self::removeQueryStringParameter($_SERVER['QUERY_STRING'], 'pp_error');
 			Tools::redirectAdmin(Tools::safeOutput($_SERVER['PHP_SELF']).'?'.$query_string);
-		} else if (Tools::isSubmit('releasePayment')) {
+		} elseif (Tools::isSubmit('releasePayment')) {
 			if (!$this->_releasePayment($order, $disposition))
 				$error = 1;
 

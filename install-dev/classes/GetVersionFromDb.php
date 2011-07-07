@@ -283,11 +283,11 @@ class GetVersionFromDb
 						{
 							$type = 'primary';
 						}
-						else if ($type == 'key')
+						elseif ($type == 'key')
 						{
 							$type = 'index';
 						}
-						else if ($type == 'unique key')
+						elseif ($type == 'unique key')
 						{
 							$type = 'unique';
 						}
@@ -342,12 +342,12 @@ class GetVersionFromDb
 				}
 			}
 			// CREATE TABLE -> delete this table from structure
-			else if (preg_match('#^create\s+table\s+(if\s+not\s+exists\s+)?`?prefix_([a-z0-9_]+)`?#si', $query, $m) && !preg_match('#_tmp[0-9]?$#i', $m[2]))
+			elseif (preg_match('#^create\s+table\s+(if\s+not\s+exists\s+)?`?prefix_([a-z0-9_]+)`?#si', $query, $m) && !preg_match('#_tmp[0-9]?$#i', $m[2]))
 			{
 				unset($struct[$m[2]]);
 			}
 			// DROP TABLE -> add this table in structure
-			else if (preg_match('#^drop\s*table\s+(if\s+exists\s+)?`?prefix_([a-z0-9_]+)`?#si', $query, $m) && !preg_match('#_tmp[0-9]?$#i', $m[2]))
+			elseif (preg_match('#^drop\s*table\s+(if\s+exists\s+)?`?prefix_([a-z0-9_]+)`?#si', $query, $m) && !preg_match('#_tmp[0-9]?$#i', $m[2]))
 			{
 				$struct[$m[2]] = array();
 			}
@@ -402,11 +402,11 @@ class GetVersionFromDb
 				{
 					$type = 'primary';
 				}
-				else if ($type == 'key')
+				elseif ($type == 'key')
 				{
 					$type = 'index';
 				}
-				else if ($type == 'unique key')
+				elseif ($type == 'unique key')
 				{
 					$type = 'unique';
 				}
@@ -471,7 +471,7 @@ class GetVersionFromDb
 				{
 					$type = 'primary';
 				}
-				else if (!$rowIndex['Non_unique'])
+				elseif (!$rowIndex['Non_unique'])
 				{
 					$type = 'unique';
 				}

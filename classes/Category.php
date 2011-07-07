@@ -216,7 +216,7 @@ class CategoryCore extends ObjectModel
 		);
 	}
 
-	static public function recurseCategory($categories, $current, $id_category = 1, $id_selected = 1)
+	public static function recurseCategory($categories, $current, $id_category = 1, $id_selected = 1)
 	{
 		echo '<option value="'.$id_category.'"'.(($id_selected == $id_category) ? ' selected="selected"' : '').'>'.
 		str_repeat('&nbsp;', $current['infos']['level_depth'] * 5).stripslashes($current['infos']['name']).'</option>';
@@ -367,7 +367,7 @@ class CategoryCore extends ObjectModel
 	  * @param boolean $active return only active categories
 	  * @return array Categories
 	  */
-	static public function getCategories($id_lang = false, $active = true, $order = true, $sql_filter = '', $sql_sort = '',$sql_limit = '')
+	public static function getCategories($id_lang = false, $active = true, $order = true, $sql_filter = '', $sql_sort = '',$sql_limit = '')
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
@@ -393,7 +393,7 @@ class CategoryCore extends ObjectModel
 		return $categories;
 	}
 
-	static public function getSimpleCategories($id_lang)
+	public static function getSimpleCategories($id_lang)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_category`, cl.`name`
@@ -546,7 +546,7 @@ class CategoryCore extends ObjectModel
 	  * @param string $name Category name
 	  * @return string Name without position
 	  */
-	static public function hideCategoryPosition($name)
+	public static function hideCategoryPosition($name)
 	{
 		Tools::displayAsDeprecated();
 		return preg_replace('/^[0-9]+\./', '', $name);
@@ -731,7 +731,7 @@ class CategoryCore extends ObjectModel
 	  * @param boolean $unrestricted allows search without lang and includes first category and exact match
 	  * @return array Corresponding categories
 	  */
-	static public function searchByName($id_lang, $query, $unrestricted = false)
+	public static function searchByName($id_lang, $query, $unrestricted = false)
 	{
 		if ($unrestricted === true)
 			return Db::getInstance()->getRow('
@@ -755,7 +755,7 @@ class CategoryCore extends ObjectModel
 	  * @param integer $id_parent_category parent category ID
 	  * @return array Corresponding category
 	  */
-	static public function searchByNameAndParentCategoryId($id_lang, $category_name, $id_parent_category)
+	public static function searchByNameAndParentCategoryId($id_lang, $category_name, $id_parent_category)
 	{
 		return Db::getInstance()->getRow('
 		SELECT c.*, cl.*
@@ -800,7 +800,7 @@ class CategoryCore extends ObjectModel
 	* @param $id_category Category id
 	* @return boolean
 	*/
-	static public function categoryExists($id_category)
+	public static function categoryExists($id_category)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_category`
@@ -873,7 +873,7 @@ class CategoryCore extends ObjectModel
 			$this->addGroups(array(1));
 	}
 
-	static public function setNewGroupForHome($id_group)
+	public static function setNewGroupForHome($id_group)
 	{
 		if (!(int)($id_group))
 			return false;
@@ -926,7 +926,7 @@ class CategoryCore extends ObjectModel
 	 * @param mixed $id_category_parent
 	 * @return boolean true if succeed
 	 */
-	static public function cleanPositions($id_category_parent)
+	public static function cleanPositions($id_category_parent)
 	{
 		$return = true;
 
@@ -947,7 +947,7 @@ class CategoryCore extends ObjectModel
 		return $return;
 	}
 
-	static public function getLastPosition($id_category_parent)
+	public static function getLastPosition($id_category_parent)
 	{
 		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}

@@ -30,7 +30,7 @@ class MyLogUtils
 			$buffer=$buffer.$indent."}";
 			return ($buffer);	
 		} 
-		else if (is_object($mvalue))
+		elseif (is_object($mvalue))
 		{
 			$indent="";
 			for ($i=0; $i < $lvl; $i++)

@@ -169,7 +169,7 @@ class TaxCore extends ObjectModel
 	*
 	* @return array Taxes
 	*/
-	static public function getTaxes($id_lang = false, $active = 1)
+	public static function getTaxes($id_lang = false, $active = 1)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT t.id_tax, t.rate'.((int)($id_lang) ? ', tl.name, tl.id_lang ' : '').'
@@ -179,7 +179,7 @@ class TaxCore extends ObjectModel
 		ORDER BY `name` ASC' : ''));
 	}
 
-	static public function excludeTaxeOption()
+	public static function excludeTaxeOption()
 	{
 		return !Configuration::get('PS_TAX');
 	}
@@ -187,7 +187,7 @@ class TaxCore extends ObjectModel
 	/*
 	 * @deprecated zones are not related to a tax
 	 */
-	static public function zoneHasTax($id_tax, $id_zone)
+	public static function zoneHasTax($id_tax, $id_zone)
 	{
 	    Tools::displayAsDeprecated();
 		return true;
@@ -198,7 +198,7 @@ class TaxCore extends ObjectModel
 	/**
 	 * @deprecated states are not related to a tax. Check TaxRules.
 	 */
-	static public function getRateByState($id_state, $active = 1)
+	public static function getRateByState($id_state, $active = 1)
 	{
 	    Tools::displayAsDeprecated();
         return false;
@@ -213,7 +213,7 @@ class TaxCore extends ObjectModel
 	 *
 	 * @return float taxe_rate
 	 */
-	static public function getApplicableTax($id_tax, $productTax, $id_address = NULL)
+	public static function getApplicableTax($id_tax, $productTax, $id_address = NULL)
 	{
 		Tools::displayAsDeprecated();
 		return Tax::getApplicableTaxRate($id_tax, $productTax, $id_address);
@@ -234,7 +234,7 @@ class TaxCore extends ObjectModel
 		return $productTax;
 	}
 
-	static public function getTaxIdByRate($rate, $active = 1)
+	public static function getTaxIdByRate($rate, $active = 1)
 	{
 	    Tools::displayAsDeprecated();
 		$tax = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -258,7 +258,7 @@ class TaxCore extends ObjectModel
 		return $tax ? (int)($tax['id_tax']) : false;
 	}
 
-	static public function getDataByProductId($id_product)
+	public static function getDataByProductId($id_product)
 	{
 	    Tools::displayAsDeprecated();
 

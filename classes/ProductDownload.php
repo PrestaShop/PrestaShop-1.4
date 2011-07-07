@@ -141,7 +141,7 @@ class ProductDownloadCore extends ObjectModel
 	 *
 	 * @return boolean
 	 */
-	static public function checkWritableDir()
+	public static function checkWritableDir()
 	{
 		return is_writable(_PS_DOWNLOAD_DIR_);
 	}
@@ -256,7 +256,7 @@ class ProductDownloadCore extends ObjectModel
 	 *
 	 * @return string Sha1 unique filename
 	 */
-	static public function getNewFilename()
+	public static function getNewFilename()
 	{
 		$ret = sha1(microtime());
 		if (file_exists(_PS_DOWNLOAD_DIR_.$ret))

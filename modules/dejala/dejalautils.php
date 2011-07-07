@@ -46,7 +46,7 @@ class DejalaUtils
 		return ($responseArray);
 	}
 	
-	static public function wtf($var, $arrayOfObjectsToHide=null, $fontSize=11)
+	public static function wtf($var, $arrayOfObjectsToHide=null, $fontSize=11)
 	{
 		$text = print_r($var, true);
 
@@ -440,13 +440,13 @@ class DejalaUtils
 				$requestArgs = '?' . $requestArgs;
 			$session = curl_init($serviceURL . $requestArgs);
 		}
-		else if ($method == 'POST')
+		elseif ($method == 'POST')
 		{
 			$session = curl_init($serviceURL);
 			curl_setopt($session, CURLOPT_POST, true);
 			curl_setopt($session, CURLOPT_POSTFIELDS, $requestArgs);
 		}
-		else if ($method == 'PUT')
+		elseif ($method == 'PUT')
 		{
 			curl_setopt($session, CURLOPT_CUSTOMREQUEST, 'PUT');
 			curl_setopt($session, CURLOPT_POSTFIELDS, $requestArgs);

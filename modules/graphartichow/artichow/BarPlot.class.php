@@ -226,7 +226,7 @@ class awBarPlot extends awPlot implements awLegendable {
 		// Find zero for bars
 		if($this->xAxisZero and $min <= 0 and $max >= 0) {
 			$zero = 0;
-		} else if($max < 0) {
+		} elseif($max < 0) {
 			$zero = $max;
 		} else {
 			$zero = $min;

@@ -76,14 +76,14 @@ class AdminAttachments extends AdminTab
 						$_POST['mime'] = $_FILES['file']['type'];
 					}
 				}
-				else if (array_key_exists('file', $_FILES) && (int)$_FILES['file']['error'] === 1) 
+				elseif (array_key_exists('file', $_FILES) && (int)$_FILES['file']['error'] === 1) 
 				{
 					$max_upload = (int)(ini_get('upload_max_filesize'));
 					$max_post = (int)(ini_get('post_max_size'));
 					$upload_mb = min($max_upload, $max_post);
 					$this->_errors[] = $this->l('the File').' <b>'.$_FILES['file']['name'].'</b> '.$this->l('exceeds the size allowed by the server. This limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 				}
-				else if (!empty($_FILES['file']['tmp_name']))
+				elseif (!empty($_FILES['file']['tmp_name']))
 					$this->_errors[] = $this->l('No file or your file isn\'t uploadable, check your server configuration about the upload maximum size.');
 			}
 			$this->validateRules();

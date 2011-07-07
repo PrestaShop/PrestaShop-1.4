@@ -759,7 +759,7 @@ function getRootPath() {
             {
                 return true;
             }
-            else if (strpos($pattern,",")!==false)
+            elseif (strpos($pattern,",")!==false)
             {
                 $regExps = explode(',', $pattern);
                 foreach ($regExps as $regExp => $value)
@@ -770,7 +770,7 @@ function getRootPath() {
                     }
                 }               
             }
-            else if(eregi($pattern, $string))
+            elseif(eregi($pattern, $string))
             {
                 return true;
             }
@@ -792,7 +792,7 @@ function getRootPath() {
             {
                 return false;
             }
-            else if (strpos($pattern,",")!==false)
+            elseif (strpos($pattern,",")!==false)
             {
                 $regExps = explode(',', $pattern);
                 foreach ($regExps as $regExp => $value)
@@ -803,7 +803,7 @@ function getRootPath() {
                     }
                 }               
             }
-            else if(eregi($pattern, $string))
+            elseif(eregi($pattern, $string))
             {
                 return true;
             }

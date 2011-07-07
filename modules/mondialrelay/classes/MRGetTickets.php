@@ -112,7 +112,7 @@ class MRGetTickets implements IMondialRelayWSMethod
 					$valueDetailed['value'] = strtoupper($valueDetailed['value']);
 					if (preg_match($valueDetailed['regexValidation'], $valueDetailed['value'], $matches))
 						$concatenationValue .= $valueDetailed['value'];
-					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
+					elseif ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
 					{
 						$error = $this->_mondialRelay->l('This key').' ['.$paramName.'] '.$this->_mondialRelay->l('hasn\'t a valide value format').' : '.$valueDetailed['value'];
 						$id_order = $this->_getOrderIdWithExpeditionNumber($rootCase['list']['Expeditions']['value']);

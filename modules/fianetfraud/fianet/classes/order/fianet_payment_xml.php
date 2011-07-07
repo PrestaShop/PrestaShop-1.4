@@ -20,7 +20,7 @@
 			{
 				fianet_insert_log("fianet_payment_xml.php - set_cb_number() <br />Cb number format is invalid, must be 00001111222233334444\n");
 			}
-			else if (!eregi("^[0-9]{2}/[0-9]{4}$", $dateval))
+			elseif (!eregi("^[0-9]{2}/[0-9]{4}$", $dateval))
 			{
 				fianet_insert_log("fianet_payment_xml.php - set_cb_number() <br />Validity date format is invalid, must be MM/YYYY\n");
 			}

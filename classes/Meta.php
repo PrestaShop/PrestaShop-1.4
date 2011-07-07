@@ -58,7 +58,7 @@ class MetaCore extends ObjectModel
 		return parent::getTranslationsFields(array('title', 'description', 'keywords', 'url_rewrite'));
 	}
 	
-	static public function getPages($excludeFilled = false, $addPage = false)
+	public static function getPages($excludeFilled = false, $addPage = false)
 	{
 		$selectedPages = array();
 		if (!$files = scandir(_PS_ROOT_DIR_))
@@ -87,7 +87,7 @@ class MetaCore extends ObjectModel
 		return $selectedPages;
 	}
 	
-	static public function getMetas()
+	public static function getMetas()
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
@@ -95,7 +95,7 @@ class MetaCore extends ObjectModel
 		ORDER BY page ASC');
 	}
 
-	static public function getMetasByIdLang($id_lang)
+	public static function getMetasByIdLang($id_lang)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
@@ -106,7 +106,7 @@ class MetaCore extends ObjectModel
 		
 	}
 	
-	static public function getMetaByPage($page, $id_lang)
+	public static function getMetaByPage($page, $id_lang)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT *
@@ -168,7 +168,7 @@ class MetaCore extends ObjectModel
 									);
 	}
 
-	static public function getEquivalentUrlRewrite($new_id_lang, $id_lang, $url_rewrite)
+	public static function getEquivalentUrlRewrite($new_id_lang, $id_lang, $url_rewrite)
 	{
 		return Db::getInstance()->getValue('
 		SELECT url_rewrite

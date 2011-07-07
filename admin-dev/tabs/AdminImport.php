@@ -414,7 +414,7 @@ class AdminImport extends AdminTab
 		return true;
 	}
 
-	static public function array_walk(&$array, $funcname, &$user_data = false)
+	public static function array_walk(&$array, $funcname, &$user_data = false)
 	{
 		if (!is_callable($funcname)) return false;
 

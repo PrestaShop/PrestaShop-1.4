@@ -229,7 +229,7 @@ class AdminProducts extends AdminTab
 							@unlink($_FILES['attachment_file']['tmp_name']);
 						}
 					}
-					else if ((int)$_FILES['attachment_file']['error'] === 1)
+					elseif ((int)$_FILES['attachment_file']['error'] === 1)
 					{
 						$max_upload = (int)(ini_get('upload_max_filesize'));
 						$max_post = (int)(ini_get('post_max_size'));
@@ -1206,7 +1206,7 @@ class AdminProducts extends AdminTab
 									$preview_url .= 'adtoken='.$token.'&ad='.$admin_dir;
 								}
 								Tools::redirectAdmin($preview_url);
-							} else if (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true)) // Save and stay on same form
+							} elseif (Tools::isSubmit('submitAdd'.$this->table.'AndStay') OR ($id_image AND $id_image !== true)) // Save and stay on same form
 							// Save and stay on same form
 							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
 								Tools::redirectAdmin($currentIndex.'&id_product='.$object->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&addproduct&conf=4&tabs='.(int)(Tools::getValue('tabs')).'&token='.($token ? $token : $this->token));
@@ -1238,7 +1238,7 @@ class AdminProducts extends AdminTab
 					{
 						if (!$object->updateCategories($_POST['categoryBox']))
 							$this->_errors[] = Tools::displayError('An error occurred while linking object.').' <b>'.$this->table.'</b> '.Tools::displayError('To categories');
-						else if (!$this->updateTags($languages, $object))
+						elseif (!$this->updateTags($languages, $object))
 							$this->_errors[] = Tools::displayError('An error occurred while adding tags.');
 						elseif ($id_image = $this->addProductImage($object))
 						{
@@ -3650,7 +3650,7 @@ class AdminProducts extends AdminTab
 					alert(\''.$this->l('Thanks to select at least one product.').'\');
 					return false;
 				}
-				else if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemQty\').val() == \'\')
+				elseif ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemQty\').val() == \'\')
 				{
 					alert(\''.$this->l('Thanks to set a quantity to add a product.').'\');	
 					return false;

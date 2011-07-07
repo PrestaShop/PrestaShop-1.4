@@ -80,11 +80,11 @@
       }
   //  IIS Note::  For HTTP Authentication to work with IIS, 
   // the PHP directive cgi.rfc2616_headers must be set to 0 (the default value). 
-      else if(isset($_SERVER['HTTP_AUTHORIZATION'])){
+      elseif(isset($_SERVER['HTTP_AUTHORIZATION'])){
         list($compare_mer_id, $compare_mer_key) = explode(':', 
             base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'],
             strpos($_SERVER['HTTP_AUTHORIZATION'], " ") + 1)));
-      } else if(isset($_SERVER['Authorization'])) {
+      } elseif(isset($_SERVER['Authorization'])) {
         list($compare_mer_id, $compare_mer_key) = explode(':', 
             base64_decode(substr($_SERVER['Authorization'],
             strpos($_SERVER['Authorization'], " ") + 1)));

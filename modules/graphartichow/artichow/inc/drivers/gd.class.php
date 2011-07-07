@@ -389,7 +389,7 @@ class awGDDriver extends Driver {
 				$rgb
 			);
 			
-		} else if($background instanceof awGradient) {
+		} elseif($background instanceof awGradient) {
 	
 			list($x, $y) = $center->getLocation();
 			
@@ -471,7 +471,7 @@ class awGDDriver extends Driver {
 		if($background instanceof awColor) {
 			$rgb = $this->getColor($background);
 			imagefilledrectangle($this->resource, $this->x + $p1->x, $this->y + $p1->y, $this->x + $p2->x, $this->y + $p2->y, $rgb);
-		} else if($background instanceof awGradient) {
+		} elseif($background instanceof awGradient) {
 			$gradientDriver = new awGDGradientDriver($this);
 			$gradientDriver->filledRectangle($background, $p1, $p2);
 		}
@@ -527,7 +527,7 @@ class awGDDriver extends Driver {
 			
 			imagefilledpolygon($this->resource, $points, $polygon->count(), $rgb);
 			
-		} else if($background instanceof awGradient) {
+		} elseif($background instanceof awGradient) {
 			
 			$gradientDriver = new awGDGradientDriver($this);
 			$gradientDriver->filledPolygon($background, $polygon);
@@ -938,7 +938,7 @@ class awGDGradientDriver {
 					
 				}
 				
-			} else if($gradient->angle === 90) {
+			} elseif($gradient->angle === 90) {
 			
 				$this->init($gradient, $x2 - $x1);
 		
@@ -973,7 +973,7 @@ class awGDGradientDriver {
 		
 		if($gradient instanceof awRadialGradient) {
 			$this->ellipseRadialGradient($gradient, $x1, $y1, $x2, $y2);
-		} else if($gradient instanceof awLinearGradient) {
+		} elseif($gradient instanceof awLinearGradient) {
 			$this->ellipseLinearGradient($gradient, $x1, $y1, $x2, $y2);
 		} else {
 			awImage::drawError("Class GDGradientDriver: This gradient is not supported by ellipses.");
@@ -1189,7 +1189,7 @@ class awGDGradientDriver {
 				
 				}
 			
-			} else if($gradient->angle === 90) {
+			} elseif($gradient->angle === 90) {
 				
 				$width = $right->x - $left->x;
 				$this->init($gradient, $width);
@@ -1224,7 +1224,7 @@ class awGDGradientDriver {
 	
 			}
 			
-		} else if($count === 3) {
+		} elseif($count === 3) {
 			$this->drawFilledTriangle(
 				$gradient,
 				$polygon

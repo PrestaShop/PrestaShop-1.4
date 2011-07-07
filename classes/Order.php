@@ -544,7 +544,7 @@ class OrderCore extends ObjectModel
 		WHERE od.`id_order` = '.(int)($this->id));
 	}
 
-	static public function getDiscountsCustomer($id_customer, $id_discount)
+	public static function getDiscountsCustomer($id_customer, $id_discount)
 	{
 		return Db::getInstance()->getValue('
 			SELECT COUNT(*) FROM `'._DB_PREFIX_.'orders` o
@@ -618,7 +618,7 @@ class OrderCore extends ObjectModel
 	 * @param boolean $showHiddenStatus Display or not hidden order statuses
 	 * @return array Customer orders
 	 */
-	static public function getCustomerOrders($id_customer, $showHiddenStatus = false)
+	public static function getCustomerOrders($id_customer, $showHiddenStatus = false)
     {
 		global $cookie;
 
@@ -647,7 +647,7 @@ class OrderCore extends ObjectModel
 		return $res;
     }
 
-	static public function getOrdersIdByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)
+	public static function getOrdersIdByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)
 	{
 		$sql = '
 		SELECT `id_order`
@@ -666,7 +666,7 @@ class OrderCore extends ObjectModel
 	/*
 	* @deprecated
 	*/
-	static public function getOrders($limit = NULL)
+	public static function getOrders($limit = NULL)
 	{
 		Tools::displayAsDeprecated();
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -676,7 +676,7 @@ class OrderCore extends ObjectModel
 			'.((int)$limit ? 'LIMIT 0, '.(int)$limit : ''));
 	}
 
-	static public function getOrdersWithInformations($limit = NULL)
+	public static function getOrdersWithInformations($limit = NULL)
 	{
 		global $cookie;
 
@@ -696,7 +696,7 @@ class OrderCore extends ObjectModel
 			'.((int)$limit ? 'LIMIT 0, '.(int)$limit : ''));
 	}
 
-	static public function getOrdersIdInvoiceByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)
+	public static function getOrdersIdInvoiceByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_order`
@@ -712,7 +712,7 @@ class OrderCore extends ObjectModel
 		return $orders;
 	}
 
-	static public function getOrderIdsByStatus($id_order_state)
+	public static function getOrderIdsByStatus($id_order_state)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT id_order
@@ -782,7 +782,7 @@ class OrderCore extends ObjectModel
 	 * @param integer $id_customer Customer id
 	 * @return array Customer orders number
 	 */
-	static public function getCustomerNbOrders($id_customer)
+	public static function getCustomerNbOrders($id_customer)
     {
     	$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
         SELECT COUNT(`id_order`) AS nb
@@ -798,7 +798,7 @@ class OrderCore extends ObjectModel
 	 * @param integer $id_cart Cart id
 	 * @return array Order details
 	 */
-	static public function getOrderByCartId($id_cart)
+	public static function getOrderByCartId($id_cart)
     {
     	$result = Db::getInstance()->getRow('
         SELECT `id_order`
@@ -941,7 +941,7 @@ class OrderCore extends ObjectModel
 		$this->update();
 	}
 
-	static public function printPDFIcons($id_order, $tr)
+	public static function printPDFIcons($id_order, $tr)
 	{
 		$order = new Order($id_order);
 		$orderState = OrderHistory::getLastOrderState($id_order);
@@ -961,7 +961,7 @@ class OrderCore extends ObjectModel
 		echo '</span>';
 	}
 
-	static public function getByDelivery($id_delivery)
+	public static function getByDelivery($id_delivery)
 	{
 	    $res = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
         SELECT id_order
@@ -980,7 +980,7 @@ class OrderCore extends ObjectModel
 		return (float)($result['weight']);
 	}
 
-	static public function getInvoice($id_invoice)
+	public static function getInvoice($id_invoice)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `invoice_number`, `id_order`
@@ -1007,7 +1007,7 @@ class OrderCore extends ObjectModel
 	 * @param int $id_customer optionnal
 	 * @return int id_cart
 	 */
-	static public function getCartIdStatic($id_order, $id_customer = 0)
+	public static function getCartIdStatic($id_order, $id_customer = 0)
 	{
 		return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT `id_cart`

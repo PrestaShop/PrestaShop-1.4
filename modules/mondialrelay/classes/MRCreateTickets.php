@@ -372,7 +372,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 					$valueDetailed['value'] = strtoupper(MRManagement::replaceAccentedCharacters($valueDetailed['value']));
 					if (preg_match($valueDetailed['regexValidation'], $valueDetailed['value'], $matches))
 						$concatenationValue .= $valueDetailed['value'];
-					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
+					elseif ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
 					{
 						if (empty($valueDetailed['value']))
 							$error = $this->_mondialRelay->l('This key').' ['.$paramName.'] '.$this->_mondialRelay->l('is empty and need to be filled');
@@ -519,7 +519,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	/*
 	 * Return which number order of the list is currently managed
 	 */
-	static public function getCurrentRequestUnderTraitment()
+	public static function getCurrentRequestUnderTraitment()
 	{
 		// TODO: Build a SQL Query to know how many request have been executed
 	}

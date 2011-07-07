@@ -477,7 +477,7 @@ class eBayRequest
 				foreach ($this->response->Fees->Fee as $f)
 					$this->fees += (float)$f->Fee;
 		}
-		else if ($this->error == '')
+		elseif ($this->error == '')
 			$this->error = 'Sorry, technical problem, try again later.';
 
 		if (!empty($this->error))
@@ -569,7 +569,7 @@ class eBayRequest
 				foreach ($this->response->Fees->Fee as $f)
 					$this->fees += (float)$f->Fee;
 		}
-		else if ($this->error == '')
+		elseif ($this->error == '')
 			$this->error = 'Sorry, technical problem, try again later.';
 
 		if (!empty($this->error))
@@ -746,7 +746,7 @@ class eBayRequest
 				foreach ($this->response->Fees->Fee as $f)
 					$this->fees += (float)$f->Fee;
 		}
-		else if ($this->error == '')
+		elseif ($this->error == '')
 			$this->error = 'Sorry, technical problem, try again later.';
 
 		if (!empty($this->error))
@@ -920,7 +920,7 @@ class eBayRequest
 				foreach ($this->response->Fees->Fee as $f)
 					$this->fees += (float)$f->Fee;
 		}
-		else if ($this->error == '')
+		elseif ($this->error == '')
 			$this->error = 'Sorry, technical problem, try again later.';
 
 		if (!empty($this->error))

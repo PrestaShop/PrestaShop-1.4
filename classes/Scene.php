@@ -181,7 +181,7 @@ class SceneCore extends ObjectModel
 	*
 	* @return array Products
 	*/
-	static public function getScenes($id_category, $id_lang = NULL, $onlyActive = true, $liteResult = true, $hideScenePosition = true)
+	public static function getScenes($id_category, $id_lang = NULL, $onlyActive = true, $liteResult = true, $hideScenePosition = true)
 	{
 		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)($id_lang);
 
@@ -235,7 +235,7 @@ class SceneCore extends ObjectModel
 	* @param integer $id_scene Scene id
 	* @return array Categories where scene is indexed
 	*/
-	static public function getIndexedCategories($id_scene)
+	public static function getIndexedCategories($id_scene)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_category`
@@ -249,7 +249,7 @@ class SceneCore extends ObjectModel
 	  * @param string $name Scene name
 	  * @return string Name without position
 	  */
-	static public function hideScenePosition($name)
+	public static function hideScenePosition($name)
 	{
 		return preg_replace('/^[0-9]+\./', '', $name);
 	}

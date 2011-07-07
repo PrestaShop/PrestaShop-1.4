@@ -76,9 +76,9 @@ class Ebay extends Module
 		{
 			if (!extension_loaded('curl') && !ini_get('allow_url_fopen'))
 				$this->warning = $this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.');
-			else if (!extension_loaded('curl'))
+			elseif (!extension_loaded('curl'))
 				$this->warning = $this->l('You must enable cURL extension on your server if you want to use this module.');
-			else if (!ini_get('allow_url_fopen'))
+			elseif (!ini_get('allow_url_fopen'))
 				$this->warning = $this->l('You must enable allow_url_fopen option on your server if you want to use this module.');
 			return false;
 		}
@@ -249,7 +249,7 @@ class Ebay extends Module
 			if ($productsList)
 				$this->_syncProducts($productsList);
 		}
-		else if (Configuration::get('EBAY_SYNC_MODE') == 'B')
+		elseif (Configuration::get('EBAY_SYNC_MODE') == 'B')
 		{
 			// Select the sync Categories and Retrieve product list for eBay (which have matched and sync categories) AND Send each product on eBay
 			$productsList = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE '.$sql.' AND `active` = 1 AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0 AND `sync` = 1)');
@@ -274,7 +274,7 @@ class Ebay extends Module
 			if ($productsList)
 				$this->_syncProducts($productsList);
 		}
-		else if (Configuration::get('EBAY_SYNC_MODE') == 'B')
+		elseif (Configuration::get('EBAY_SYNC_MODE') == 'B')
 		{
 			// Select the sync Categories and Retrieve product list for eBay (which have matched and sync categories) AND Send each product on eBay
 			$productsList = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$id_product.' AND `active` = 1 AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0 AND `sync` = 1)');
@@ -430,9 +430,9 @@ class Ebay extends Module
 		{
 			if (!extension_loaded('curl') && !ini_get('allow_url_fopen'))
 				return $this->_html.$this->displayError($this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.'));
-			else if (!extension_loaded('curl'))
+			elseif (!extension_loaded('curl'))
 				return $this->_html.$this->displayError($this->l('You must enable cURL extension on your server if you want to use this module.'));
-			else if (!ini_get('allow_url_fopen'))
+			elseif (!ini_get('allow_url_fopen'))
 				return $this->_html.$this->displayError($this->l('You must enable allow_url_fopen option on your server if you want to use this module.'));
 		}
 
@@ -496,13 +496,13 @@ class Ebay extends Module
 	{
 		if (!Configuration::get('EBAY_API_TOKEN'))
 			$this->_postValidationRegister();
-		else if (Tools::getValue('section') == 'parameters')
+		elseif (Tools::getValue('section') == 'parameters')
 			$this->_postValidationParameters();
-		else if (Tools::getValue('section') == 'category')
+		elseif (Tools::getValue('section') == 'category')
 			$this->_postValidationCategory();
-		else if (Tools::getValue('section') == 'template')
+		elseif (Tools::getValue('section') == 'template')
 			$this->_postValidationTemplateManager();
-		else if (Tools::getValue('section') == 'sync')
+		elseif (Tools::getValue('section') == 'sync')
 			$this->_postValidationEbaySync();
 	}
 
@@ -510,13 +510,13 @@ class Ebay extends Module
 	{
 		if (!Configuration::get('EBAY_API_TOKEN'))
 			$this->_postProcessRegister();
-		else if (Tools::getValue('section') == 'parameters')
+		elseif (Tools::getValue('section') == 'parameters')
 			$this->_postProcessParameters();
-		else if (Tools::getValue('section') == 'category')
+		elseif (Tools::getValue('section') == 'category')
 			$this->_postProcessCategory();
-		else if (Tools::getValue('section') == 'template')
+		elseif (Tools::getValue('section') == 'template')
 			$this->_postProcessTemplateManager();
-		else if (Tools::getValue('section') == 'sync')
+		elseif (Tools::getValue('section') == 'sync')
 			$this->_postProcessEbaySync();
 	}
 
@@ -1309,7 +1309,7 @@ class Ebay extends Module
 						$price_original = $price;
 						if ($categoryDefaultCache[$product->id_category_default]['percent'] > 0)
 							$price *= (1 + ($categoryDefaultCache[$product->id_category_default]['percent'] / 100));
-						else if ($categoryDefaultCache[$product->id_category_default]['percent'] < 0)
+						elseif ($categoryDefaultCache[$product->id_category_default]['percent'] < 0)
 							$price *= (1 - ($categoryDefaultCache[$product->id_category_default]['percent'] / (-100)));
 
 						$variations[$c['id_product'].'-'.$c['id_product_attribute']]['price'] = round($price, 2);
@@ -1333,7 +1333,7 @@ class Ebay extends Module
 				$price_original = $price;
 				if ($categoryDefaultCache[$product->id_category_default]['percent'] > 0)
 					$price *= (1 + ($categoryDefaultCache[$product->id_category_default]['percent'] / 100));
-				else if ($categoryDefaultCache[$product->id_category_default]['percent'] < 0)
+				elseif ($categoryDefaultCache[$product->id_category_default]['percent'] < 0)
 					$price *= (1 - ($categoryDefaultCache[$product->id_category_default]['percent'] / (-100)));
 				$price = round($price, 2);
 

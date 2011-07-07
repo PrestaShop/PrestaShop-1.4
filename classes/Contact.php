@@ -75,7 +75,7 @@ class ContactCore extends ObjectModel
 	  * @param integer $id_lang Language ID
 	  * @return array Contacts
 	  */
-	static public function getContacts($id_lang)
+	public static function getContacts($id_lang)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *

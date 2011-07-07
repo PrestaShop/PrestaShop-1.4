@@ -475,7 +475,7 @@ class MailAlerts extends Module
 		$this->_refreshProperties();
 	}
 
-	static public function getProductsAlerts($id_customer, $id_lang)
+	public static function getProductsAlerts($id_customer, $id_lang)
 	{
 		if (!Validate::isUnsignedId($id_customer) OR
 			!Validate::isUnsignedId($id_lang)
@@ -542,7 +542,7 @@ class MailAlerts extends Module
 		return ($products);
 	}
 
-	static public function deleteAlert($id_customer, $customer_email, $id_product, $id_product_attribute)
+	public static function deleteAlert($id_customer, $customer_email, $id_product, $id_product_attribute)
 	{
 		return Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos` 

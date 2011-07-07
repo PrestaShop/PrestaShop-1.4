@@ -107,7 +107,7 @@ class TrustedShopsRating extends AbsTrustedShops
 	}
 
 	
-	static public function getHttpHost($http = false, $entities = false)
+	public static function getHttpHost($http = false, $entities = false)
 	{
 		if (method_exists('Tools', 'getHttpHost'))
 			return call_user_func(array('Tools', 'getHttpHost'), array($http, $entities));

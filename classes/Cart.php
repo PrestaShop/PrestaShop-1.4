@@ -208,7 +208,7 @@ class CartCore extends ObjectModel
 		return parent::delete();
 	}
 
-	static public function getTaxesAverageUsed($id_cart)
+	public static function getTaxesAverageUsed($id_cart)
 	{
 		$cart = new Cart((int)($id_cart));
 		if (!Validate::isLoadedObject($cart))
@@ -809,7 +809,7 @@ class CartCore extends ObjectModel
 		return true;
 	}
 
-	static public function getTotalCart($id_cart, $use_tax_display = false)
+	public static function getTotalCart($id_cart, $use_tax_display = false)
 	{
 		$cart = new Cart((int)($id_cart));
 		if (!Validate::isLoadedObject($cart))
@@ -1402,7 +1402,7 @@ class CartCore extends ObjectModel
 		return true;
 	}
 
-	static public function lastNoneOrderedCart($id_customer)
+	public static function lastNoneOrderedCart($id_customer)
 	{
 	 	if (!$result = Db::getInstance()->getRow('
 		 	SELECT c.`id_cart`
@@ -1443,7 +1443,7 @@ class CartCore extends ObjectModel
 		return self::$_isVirtualCart[$this->id];
 	}
 
-	static public function getCartByOrderId($id_order)
+	public static function getCartByOrderId($id_order)
 	{
 		if ($id_cart = self::getCartIdByOrderId($id_order))
 			return new Cart((int)($id_cart));
@@ -1451,7 +1451,7 @@ class CartCore extends ObjectModel
 		return false;
 	}
 
-	static public function getCartIdByOrderId($id_order)
+	public static function getCartIdByOrderId($id_order)
 	{
 		$result = Db::getInstance()->getRow('SELECT `id_cart` FROM '._DB_PREFIX_.'orders WHERE `id_order` = '.(int)$id_order);
 		if (!$result OR empty($result) OR !key_exists('id_cart', $result))
@@ -1528,7 +1528,7 @@ class CartCore extends ObjectModel
 		return false;
 	}
 
-	static public function deleteCustomizationInformations($id_product)
+	public static function deleteCustomizationInformations($id_product)
 	{
 		global $cookie;
 
@@ -1537,7 +1537,7 @@ class CartCore extends ObjectModel
 		return true;
 	}
 
-	static public function getCustomerCarts($id_customer)
+	public static function getCustomerCarts($id_customer)
     {
 	 	$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		 	SELECT *
@@ -1547,7 +1547,7 @@ class CartCore extends ObjectModel
 	 	return $result;
     }
 
-	static public function replaceZeroByShopName($echo, $tr)
+	public static function replaceZeroByShopName($echo, $tr)
 	{
 		return ($echo == '0' ? Configuration::get('PS_SHOP_NAME') : $echo);
 	}
@@ -1655,7 +1655,7 @@ class CartCore extends ObjectModel
 	 * @param int $id_cart
 	 * @return bool true if cart has been made by a guest customer
 	 */
-	static public function isGuestCartByCartId($id_cart)
+	public static function isGuestCartByCartId($id_cart)
 	{
 		if (!(int)$id_cart)
 			return false;

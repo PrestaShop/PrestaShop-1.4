@@ -142,7 +142,7 @@ class BackupCore
 			$backupfile .= '.bz2';
 			$fp = @bzopen($backupfile, 'w');
 		}
-		else if (function_exists('gzopen'))
+		elseif (function_exists('gzopen'))
 		{
 			$backupfile .= '.gz';
 			$fp = @gzopen($backupfile, 'w');

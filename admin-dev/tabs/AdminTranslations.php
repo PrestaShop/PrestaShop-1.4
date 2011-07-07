@@ -363,9 +363,9 @@ class AdminTranslations extends AdminTab
 		{
 			if ($file{0} === '.' OR in_array(substr($file, 0, strrpos($file,'.')), $this->all_iso_lang))
 				unset($files[$key]);
-			else if ($type_clear === 'file' AND !in_array(substr($file, strrpos($file,'.')),$arr_good_ext))
+			elseif ($type_clear === 'file' AND !in_array(substr($file, strrpos($file,'.')),$arr_good_ext))
 				unset($files[$key]);
-			else if ($type_clear === 'directory' AND (!is_dir($path.$file) OR in_array($file, $arr_exclude)))
+			elseif ($type_clear === 'directory' AND (!is_dir($path.$file) OR in_array($file, $arr_exclude)))
 				unset($files[$key]);
 				
 		}
@@ -903,7 +903,7 @@ class AdminTranslations extends AdminTab
 							google.language.translate(tdinput.parent("td").prev().html(), "en", gg_translate[\'language_code\'], function(result) {
 								if (!result.error)
 									tdinput.val(result.translation);
-								else if (displayOnce == 0)
+								elseif (displayOnce == 0)
 								{
 									displayOnce = 1;
 									alert(result.error.message);
@@ -917,7 +917,7 @@ class AdminTranslations extends AdminTab
 							google.language.translate(tdtextarea.parent("td").prev().html(), "en", gg_translate[\'language_code\'], function(result) {
 								if (!result.error)
 									tdtextarea.html(result.translation);
-								else if (displayOnce == 0)
+								elseif (displayOnce == 0)
 								{
 									displayOnce = 1;
 									alert(result.error.message);
@@ -1915,7 +1915,7 @@ class AdminTranslations extends AdminTab
 	  *
 	  * @return array
 	  */
-	static public function getThemesList()
+	public static function getThemesList()
 	{
 		$dir = opendir(_PS_ALL_THEMES_DIR_);
 		while ($folder = readdir($dir))

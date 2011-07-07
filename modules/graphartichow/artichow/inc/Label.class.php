@@ -146,7 +146,7 @@ class awLabel implements awPositionable {
 	
 		if(is_array($label)) {
 			$this->set($label);
-		} else if(is_string($label)) {
+		} elseif(is_string($label)) {
 			$this->set(array($label));
 		}
 		
@@ -429,7 +429,7 @@ class awLabel implements awPositionable {
 			
 			if($this->background instanceof awColor) {
 				$text->setBackgroundColor($this->background);
-			} else if($this->background instanceof awGradient) {
+			} elseif($this->background instanceof awGradient) {
 				$text->setBackgroundGradient($this->background);
 			}
 			

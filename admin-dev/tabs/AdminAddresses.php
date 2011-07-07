@@ -309,7 +309,7 @@ class AdminAddresses extends AdminTab
 
 					if ((Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
 						echo '<div id="vat_area" style="display: visible">';
-					else if(Configuration::get('VATNUMBER_MANAGEMENT'))
+					elseif(Configuration::get('VATNUMBER_MANAGEMENT'))
 						echo '<div id="vat_area" style="display: hidden">';
 					else
 						echo'<div style="display: none;">';

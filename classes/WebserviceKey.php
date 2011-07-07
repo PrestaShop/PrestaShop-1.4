@@ -75,7 +75,7 @@ class WebserviceKeyCore extends ObjectModel
 		return true;
 	}
 	
-	static public function getPermissionForAccount($auth_key)
+	public static function getPermissionForAccount($auth_key)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT p.*
@@ -90,7 +90,7 @@ class WebserviceKeyCore extends ObjectModel
 		return $permissions;
 	}
 	
-	static public function isKeyActive($auth_key)
+	public static function isKeyActive($auth_key)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT a.active
@@ -105,7 +105,7 @@ class WebserviceKeyCore extends ObjectModel
 		}
 	}
 	
-	static public function getClassFromKey($auth_key)
+	public static function getClassFromKey($auth_key)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT a.class_name as class
@@ -120,7 +120,7 @@ class WebserviceKeyCore extends ObjectModel
 		}
 	}
 	
-	static public function setPermissionForAccount($idAccount, $permissionsToSet)
+	public static function setPermissionForAccount($idAccount, $permissionsToSet)
 	{
 		$ok = true;
 		$sql = 'DELETE FROM `'._DB_PREFIX_.'webservice_permission` WHERE `id_webservice_account` = '.(int)($idAccount);

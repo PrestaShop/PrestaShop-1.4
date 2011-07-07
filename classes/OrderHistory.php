@@ -115,7 +115,7 @@ class OrderHistoryCore extends ObjectModel
 		}
 	}
 
-	static public function getLastOrderState($id_order)
+	public static function getLastOrderState($id_order)
 	{
 		$id_order_state = Db::getInstance()->getValue('
 		SELECT `id_order_state`

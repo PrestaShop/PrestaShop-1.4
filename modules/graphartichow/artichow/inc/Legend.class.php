@@ -440,7 +440,7 @@ class awLegend implements awPositionable {
 		// Get number of columns
 		if($this->columns !== NULL) {
 			$columns = $this->columns;
-		} else if($this->rows !== NULL) {
+		} elseif($this->rows !== NULL) {
 			$columns = ceil($count / $this->rows);
 		} else {
 			$columns = $count;

@@ -166,7 +166,7 @@ class AdminCustomerThreads extends AdminTab
 				$cm->ip_address = ip2long($_SERVER['REMOTE_ADDR']);
 				if (isset($_FILES) AND !empty($_FILES['joinFile']['name']) AND $_FILES['joinFile']['error'] != 0)
 					$this->_errors[] = Tools::displayError('An error occurred with the file upload.');
-				else if ($cm->add())
+				elseif ($cm->add())
 				{
 					$fileAttachment = NULL;
 					if (!empty($_FILES['joinFile']['name']))
@@ -201,7 +201,7 @@ class AdminCustomerThreads extends AdminTab
 
 		if (isset($_GET['filename']) AND file_exists(_PS_UPLOAD_DIR_.$_GET['filename']))
 			self::openUploadedFile();
-		else if (isset($_GET['view'.$this->table]))
+		elseif (isset($_GET['view'.$this->table]))
 			$this->viewcustomer_thread();
 		else
 		{

@@ -753,7 +753,7 @@ class PayPal extends PaymentModule
 		$lang = new Language((int)$cookie->id_lang);
 		if (strtolower($lang->iso_code) == 'es')
 			$link = 'http://altfarm.mediaplex.com/ad/ck/3484-34334-12439-1';
-		else if (strtolower($lang->iso_code) == 'it')
+		elseif (strtolower($lang->iso_code) == 'it')
 			$link = 'https://www.paypal-business.it/paypalpro.asp';
 		
 		return '

@@ -783,7 +783,7 @@ class shopimporter extends ImportModule
 		{
 			if ($table == 'product' AND $key == 'id_category')
 				$key2 = 'id_category_default';
-			else if ($table == 'customer' AND $key == 'id_group')
+			elseif ($table == 'customer' AND $key == 'id_group')
 				$key2 = 'id_default_group';
 			else
 				$key2 = $key;

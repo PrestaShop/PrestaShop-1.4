@@ -30,7 +30,7 @@
 	}else	if(!$upload->isFileUploaded('file'))
 	{
 		$error = ERR_FILE_NOT_UPLOADED;
-	}else if(!$upload->moveUploadedFile($_GET['folder']))
+	}elseif(!$upload->moveUploadedFile($_GET['folder']))
 	{
 		$error = ERR_FILE_MOVE_FAILED;
 	}	

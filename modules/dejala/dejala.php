@@ -22,7 +22,7 @@ class Dejala extends CarrierModule
 	private $wday_labels ;
 	private static $INSTANCE = NULL ;
 	
-	static public function getInstance() 
+	public static function getInstance() 
 	{
 		if (!self::$INSTANCE) 
 		{
@@ -168,7 +168,7 @@ class Dejala extends CarrierModule
 			if (empty($_POST['country']))
 				$errors[] = $this->l('country is required.');
 		}
-		else if ($method == 'register')
+		elseif ($method == 'register')
 		{
 			if (empty($_POST['login']))
 				$errors[] = $this->l('login is required.');
@@ -181,7 +181,7 @@ class Dejala extends CarrierModule
 			if (empty($_POST['country']))
 				$errors[] = $this->l('country is required.');
 		}
-		else if ($method == 'products') 
+		elseif ($method == 'products') 
 		{
 			$products = array();
 			$djlUtil = new DejalaUtils();
@@ -261,7 +261,7 @@ class Dejala extends CarrierModule
 				$this->dejalaConfig->password = null;
 			}
 		}
-		else if ($method == 'register')
+		elseif ($method == 'register')
 		{
 			$djlUtil = new DejalaUtils();
 			$this->dejalaConfig->mode = 'TEST';
@@ -282,34 +282,34 @@ class Dejala extends CarrierModule
 				$errors[] = $this->l('Unable to process the action.') . '(' . $response['status'] . ')';
 			$this->dejalaConfig->loadConfig();
 		}
-		else if ($method == 'location')
+		elseif ($method == 'location')
 		{
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreLocation($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
 				$errors[] = $this->l('An error occurred while updating location');
 		}
-		else if ($method == 'contact')
+		elseif ($method == 'contact')
 		{
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreContacts($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
 				$errors[] = $this->l('An error occurred while updating contacts');
 		}
-		else if ($method == 'processes')
+		elseif ($method == 'processes')
 		{
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreProcesses($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
 				$errors[] = $this->l('An error occurred while updating processes');
 		}
-		else if ($method == 'products') {
+		elseif ($method == 'products') {
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreProducts($this->dejalaConfig, $_POST);
 			if ($response['status'] != 200)
 				$errors[] = $this->l('An error occurred while updating products');
 		}
-		else if ($method == 'technical_options')
+		elseif ($method == 'technical_options')
 		{
 			$maxSatuses = (int)$_POST['status_max'];
 			if ($maxSatuses > 30)
@@ -326,7 +326,7 @@ class Dejala extends CarrierModule
 			$this->dejalaConfig->saveConfig();
 			$this->dejalaConfig->loadConfig();
 		}
-		else if ($method == 'delivery_options') 
+		elseif ($method == 'delivery_options') 
 		{
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->setStoreCalendar($this->dejalaConfig, $_POST);
@@ -342,12 +342,12 @@ class Dejala extends CarrierModule
 				$errors[] = $this->l('An error occurred while updating products');
 
 		} 
-		else if ($method == 'golive') 
+		elseif ($method == 'golive') 
 		{
 			$djlUtil = new DejalaUtils();
 			$response = $djlUtil->goLive($this->dejalaConfig, $_POST);
 		}
-		else if ($method == 'switchMode') 
+		elseif ($method == 'switchMode') 
 		{
 			$l_mode = Tools::getValue('mode');
 			if ( ('PROD' == $l_mode) || ('TEST' == $l_mode) ) 
@@ -356,7 +356,7 @@ class Dejala extends CarrierModule
 				$this->dejalaConfig->saveConfig();
 			}
 		} 
-		else if ($method == 'switchActive') 
+		elseif ($method == 'switchActive') 
 		{
 
 			$l_active = Tools::getValue('visibility_status');
@@ -487,7 +487,7 @@ class Dejala extends CarrierModule
 			}
 			$outputMain = $this->display(__FILE__, 'dejala_home.tpl');
 		}
-		else if ($currentTab==='contacts') 
+		elseif ($currentTab==='contacts') 
 		{
 			$contacts = array();
 			$djlUtil = new DejalaUtils();
@@ -502,7 +502,7 @@ class Dejala extends CarrierModule
 			}
 			$outputMain = $this->display(__FILE__, 'dejala_contacts.tpl');
 		}
-		else if ($currentTab === 'location')
+		elseif ($currentTab === 'location')
 		{
 			$location = array();
 			$djlUtil = new DejalaUtils();
@@ -515,7 +515,7 @@ class Dejala extends CarrierModule
 				$outputMain = $this->display(__FILE__, 'dejala_location.tpl');
 			}
 		}
-		else if ($currentTab==='processes')
+		elseif ($currentTab==='processes')
 		{
 			$processes = array();
 			$djlUtil = new DejalaUtils();
@@ -528,7 +528,7 @@ class Dejala extends CarrierModule
 				$outputMain = $this->display(__FILE__, 'dejala_processes.tpl');
 			}
 		}
-		else if ($currentTab==='prices') 
+		elseif ($currentTab==='prices') 
 		{
 			$products = array();
 			$djlUtil = new DejalaUtils();
@@ -548,7 +548,7 @@ class Dejala extends CarrierModule
 				$outputMain = $this->display(__FILE__, 'dejala_products.tpl');
 			}
 		}
-		else if ($currentTab === 'accounting') 
+		elseif ($currentTab === 'accounting') 
 		{
 			$smartifyErrors = $this->smartyfyStoreAttributes();
 			if (isset($smartifyErrors) && count($smartifyErrors))
@@ -589,11 +589,11 @@ class Dejala extends CarrierModule
 				$outputMain = $this->display(__FILE__, 'dejala_deliveries.tpl');
 			}
 		}
-		else if ($currentTab==='delivery_options') 
+		elseif ($currentTab==='delivery_options') 
 		{
 			$outputMain = $this->displayDeliveryOptions();
 		}
-		else if ($_GET['cat']==='technical_options')
+		elseif ($_GET['cat']==='technical_options')
 		{
 			$states = $this->getOrderStates();
 			$triggers = explode(',', $this->dejalaConfig->trigerringStatuses);
@@ -1005,7 +1005,7 @@ class Dejala extends CarrierModule
 		}
 	}
 
-	static public function wtf($var, $arrayOfObjectsToHide=null, $fontSize=11)
+	public static function wtf($var, $arrayOfObjectsToHide=null, $fontSize=11)
 	{
 		$text = print_r($var, true);
 
@@ -1346,7 +1346,7 @@ class Dejala extends CarrierModule
 	}
 
 	// Stolen from PS 1.3 for backwards compatibility in PS 1.2.5
-	static public function getHttpHost($http = false, $entities = false)
+	public static function getHttpHost($http = false, $entities = false)
 	{
 		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
 		if ($entities)

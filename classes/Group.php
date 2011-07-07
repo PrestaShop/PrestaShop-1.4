@@ -82,7 +82,7 @@ class GroupCore extends ObjectModel
 		return parent::getTranslationsFields(array('name'));
 	}
 	
-	static public function getGroups($id_lang)
+	public static function getGroups($id_lang)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT g.`id_group`, g.`reduction`, g.`price_display_method`, gl.`name`
@@ -110,7 +110,7 @@ class GroupCore extends ObjectModel
 		'.($limit > 0 ? 'LIMIT '.(int)$start.', '.(int)$limit : ''));
 	}
 	
-	static public function getReduction($id_customer = NULL)
+	public static function getReduction($id_customer = NULL)
 	{
 		if (!isset(self::$_cacheReduction['customer'][(int)$id_customer]))
 			self::$_cacheReduction['customer'][(int)$id_customer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
@@ -132,7 +132,7 @@ class GroupCore extends ObjectModel
 		return self::$_cacheReduction['group'][$id_group];
 	}
 
-	static public function getPriceDisplayMethod($id_group)
+	public static function getPriceDisplayMethod($id_group)
 	{
 		if (!isset(self::$_groupPriceDisplayMethod[$id_group]))
 			self::$_groupPriceDisplayMethod[$id_group] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
@@ -142,7 +142,7 @@ class GroupCore extends ObjectModel
 		return self::$_groupPriceDisplayMethod[$id_group];
 	}
 
-	static public function getDefaultPriceDisplayMethod()
+	public static function getDefaultPriceDisplayMethod()
 	{
 		return self::getPriceDisplayMethod(1);
 	}

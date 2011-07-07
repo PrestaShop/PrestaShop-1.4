@@ -94,12 +94,12 @@ if ($option == 1)
 {
 	echo show_countries($id_lang);
 }
-else if ($option == 2)
+elseif ($option == 2)
 {
 	$id_country = Tools::getValue('id_country');
 	echo show_buttons($id_lang, $id_country);
 }
-else if ($option == 3)
+elseif ($option == 3)
 {
 	$id_country = Tools::getValue('id_country');
 	$x = Tools::getValue('x');

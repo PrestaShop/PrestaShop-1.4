@@ -181,7 +181,7 @@ class CurrencyCore extends ObjectModel
 	  *
 	  * @return array Currencies
 	  */
-	static public function getCurrencies($object = false, $active = 1)
+	public static function getCurrencies($object = false, $active = 1)
 	{
 		$tab = Db::getInstance()->ExecuteS('
 		SELECT *
@@ -195,7 +195,7 @@ class CurrencyCore extends ObjectModel
 		return $tab;
 	}
 
-	static public function getPaymentCurrenciesSpecial($id_module)
+	public static function getPaymentCurrenciesSpecial($id_module)
 	{
 		return Db::getInstance()->getRow('
 		SELECT mc.*
@@ -203,7 +203,7 @@ class CurrencyCore extends ObjectModel
 		WHERE mc.`id_module` = '.(int)($id_module));
 	}
 
-	static public function getPaymentCurrencies($id_module)
+	public static function getPaymentCurrencies($id_module)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT c.*
@@ -215,7 +215,7 @@ class CurrencyCore extends ObjectModel
 		ORDER BY c.`name` ASC');
 	}
 
-	static public function checkPaymentCurrencies($id_module)
+	public static function checkPaymentCurrencies($id_module)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT mc.*
@@ -223,7 +223,7 @@ class CurrencyCore extends ObjectModel
 		WHERE mc.`id_module` = '.(int)($id_module));
 	}
 
-	static public function getCurrency($id_currency)
+	public static function getCurrency($id_currency)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT *
@@ -232,7 +232,7 @@ class CurrencyCore extends ObjectModel
 		AND `id_currency` = '.(int)($id_currency));
 	}
 
-	static public function getIdByIsoCode($iso_code)
+	public static function getIdByIsoCode($iso_code)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_currency`
@@ -241,7 +241,7 @@ class CurrencyCore extends ObjectModel
 		AND `iso_code` = \''.pSQL($iso_code).'\'');
 		return $result['id_currency'];
 	}
-	static public function getIdByIsoCodeNum($iso_code)
+	public static function getIdByIsoCodeNum($iso_code)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `id_currency`
@@ -297,7 +297,7 @@ class CurrencyCore extends ObjectModel
 	/**
  	* @deprecated
 	**/
-	static public function refreshCurrenciesGetDefault($data, $isoCodeSource, $idCurrency)
+	public static function refreshCurrenciesGetDefault($data, $isoCodeSource, $idCurrency)
 	{
 		Tools::displayAsDeprecated();
 
@@ -321,7 +321,7 @@ class CurrencyCore extends ObjectModel
 		return new Currency($id_currency);
 	}
 
-	static public function refreshCurrencies()
+	public static function refreshCurrencies()
 	{
 		// Parse
 		if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml'))
@@ -339,7 +339,7 @@ class CurrencyCore extends ObjectModel
 
 	}
 
-	static public function getCurrent()
+	public static function getCurrent()
 	{
 		global $cookie;
 
@@ -353,7 +353,7 @@ class CurrencyCore extends ObjectModel
 		return self::$current;
 	}
 
-	static public function getCurrencyInstance($id)
+	public static function getCurrencyInstance($id)
 	{
 		if (!array_key_exists($id, self::$currencies))
 			self::$currencies[(int)($id)] = new Currency((int)($id));

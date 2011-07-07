@@ -3055,7 +3055,7 @@ class ProductCore extends ObjectModel
 		// Increase or decrease current product quantity value
 		if ($id_reason == 1)
 			$this->quantity += abs($quantity);
-		else if ($id_reason == 2)
+		elseif ($id_reason == 2)
 			$this->quantity -= abs($quantity);
 
 		Hook::updateQuantity($this, null);

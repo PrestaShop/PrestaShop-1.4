@@ -103,7 +103,7 @@ class TaxRulesGroupCore extends ObjectModel
           		break;
           	}
           }
-	       else if ($row['id_state'] != 0)
+	       elseif ($row['id_state'] != 0)
 	       {
 	            switch($row['state_behavior'])
 	            {

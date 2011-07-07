@@ -151,7 +151,7 @@ class PDFCore extends PDF_PageGroupCore
 
 		if (file_exists(_PS_IMG_DIR_.'/logo_invoice.jpg'))
 			$this->Image(_PS_IMG_DIR_.'/logo_invoice.jpg', 10, 8, 0, 15);
-		else if (file_exists(_PS_IMG_DIR_.'/logo.jpg'))
+		elseif (file_exists(_PS_IMG_DIR_.'/logo.jpg'))
 			$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15);
 		$this->SetFont(self::fontname(), 'B', 15);
 		$this->Cell(115);
@@ -1111,17 +1111,17 @@ class PDFCore extends PDF_PageGroupCore
 		return (Tools::iconv('utf-8', self::encoding(), $str));
 	}
 
-	static public function encoding()
+	public static function encoding()
 	{
 		return (isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['encoding']) ? self::$_pdfparams[self::$_iso]['encoding'] : 'iso-8859-1';
 	}
 
-	static public function embedfont()
+	public static function embedfont()
 	{
 		return (((isset(self::$_pdfparams[self::$_iso]) AND is_array(self::$_pdfparams[self::$_iso]) AND self::$_pdfparams[self::$_iso]['font']) AND !in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts)) ? self::$_pdfparams[self::$_iso]['font'] : false);
 	}
 
-	static public function fontname()
+	public static function fontname()
 	{
 		$font = self::embedfont();
 		if (in_array(self::$_pdfparams[self::$_iso]['font'], self::$_fpdf_core_fonts))

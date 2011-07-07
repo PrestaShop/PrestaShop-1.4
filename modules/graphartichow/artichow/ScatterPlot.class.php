@@ -217,7 +217,7 @@ class awScatterPlot extends awPlot implements awLegendable {
 			if($y !== NULL) {
 				$p = awAxis::toPosition($this->xAxis, $this->yAxis, new awPoint($x, $y));
 				$polygon->set($key, $p);
-			} else if($this->linkNull === FALSE) {
+			} elseif($this->linkNull === FALSE) {
 				$polygon->set($key, NULL);
 			}
 		

@@ -249,7 +249,7 @@ class AddressControllerCore extends FrontController
 
 		if ((Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
 			self::$smarty->assign('vat_display', 2);
-		else if(Configuration::get('VATNUMBER_MANAGEMENT'))
+		elseif(Configuration::get('VATNUMBER_MANAGEMENT'))
 			self::$smarty->assign('vat_display', 1);
 		else
 			self::$smarty->assign('vat_display', 0);

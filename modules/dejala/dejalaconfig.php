@@ -103,7 +103,7 @@ class DejalaConfig
 		// mode forcé ?
 		if ($forceMode && ($forceMode == 'PROD'))
 			$useMode = 'PROD';
-		else if ($forceMode)
+		elseif ($forceMode)
 			$useMode = 'TEST';
 
 		if ($useMode === 'PROD')

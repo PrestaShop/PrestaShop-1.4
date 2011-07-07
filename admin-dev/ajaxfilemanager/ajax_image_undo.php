@@ -28,7 +28,7 @@
 	}elseif(!isUnderRoot($_POST['file_path']))
 	{
 		$error = IMG_SAVE_PATH_DISALLOWED;
-	}else if(!sizeof($lastestSessionImageInfo))
+	}elseif(!sizeof($lastestSessionImageInfo))
 	{
 		$error = IMG_UNDO_NO_HISTORY_AVAIALBE;
 	}

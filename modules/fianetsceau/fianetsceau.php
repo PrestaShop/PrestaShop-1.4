@@ -90,7 +90,7 @@ class FianetSceau extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (!is_callable('curl_init'))
 			$output .= parent::displayError('You need to enable Curl library to use this module');
-		else if (Tools::isSubmit('submitFianet'))
+		elseif (Tools::isSubmit('submitFianet'))
 			$output .= self::getProcess();
 	
 		$output .= '

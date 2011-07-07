@@ -18,14 +18,14 @@ class HIPAY_MAPI_XML {
 
 			if (!is_array($this->$name) && !is_object($this->$name) && !is_bool($this->$name)) {
 				$xml .= str_repeat(chr(9), $t + 1)."<$name>$value</$name>\n";
-			} else if (is_bool($this->$name)) {
+			} elseif (is_bool($this->$name)) {
 				if ($value === true)
 					$xml .= str_repeat(chr(9), $t + 1)."<$name>true</$name>\n";
 				else
 					$xml .= str_repeat(chr(9), $t + 1)."<$name>false</$name>\n";
-			} else if (is_object($this->$name) && method_exists($this->$name, 'getXML')) {
+			} elseif (is_object($this->$name) && method_exists($this->$name, 'getXML')) {
 				$xml .= $this->$name->getXml($t + 1);
-			} else if (is_array($this->$name)) {
+			} elseif (is_array($this->$name)) {
 				$xml .= str_repeat(chr(9), $t + 1)."<$name>\n";
 				$xml .= self::getXMLArray($this->$name, $t + 1, $noshow);
 				$xml .= str_repeat(chr(9), $t + 1)."</$name>\n";
@@ -53,14 +53,14 @@ class HIPAY_MAPI_XML {
 
 			if (!is_array($array[$name]) && !is_object($array[$name]) && !is_bool($array[$name])) {
 				$xml .= str_repeat(chr(9), $t + 1)."<_aKey_$name>$value</_aKey_$name>\n";
-			} else if (is_bool($array[$name])) {
+			} elseif (is_bool($array[$name])) {
 				if ($value === true)
 					$xml .= str_repeat(chr(9), $t + 1)."<$name>true</$name>\n";
 				else
 					$xml .= str_repeat(chr(9), $t + 1)."<$name>false</$name>\n";
-			} else if (is_object($array[$name]) && method_exists($array[$name], 'getXML')) {
+			} elseif (is_object($array[$name]) && method_exists($array[$name], 'getXML')) {
 				$xml .= $array[$name]->getXml($t + 1);
-			} else if (is_array($array[$name])){
+			} elseif (is_array($array[$name])){
 				$xml .= str_repeat(chr(9), $t + 1)."<$name>\n";
 				$xml .= self::getXMLArray($array[$name], $t + 1, $noshow);
 				$xml .= str_repeat(chr(9), $t + 1)."</$name>\n";

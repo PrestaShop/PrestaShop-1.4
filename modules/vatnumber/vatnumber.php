@@ -129,7 +129,7 @@ class VatNumber extends Module
 					@ini_restore('default_socket_timeout');
 					return array(Tools::displayError('VAT number not found'));
 				}
-				else if (preg_match('/valid VAT number/i', $pageRes))
+				elseif (preg_match('/valid VAT number/i', $pageRes))
 				{
 					@ini_restore('default_socket_timeout');
 					return array();

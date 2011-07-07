@@ -57,7 +57,7 @@ else
 	$err = $client_mr->getError();
 	if ($err)
 		echo '{"error" : "'.$err.'"}';
-	else if (($code = $result_mr['WSI2_RecherchePointRelaisResult']['STAT']) != 0)
+	elseif (($code = $result_mr['WSI2_RecherchePointRelaisResult']['STAT']) != 0)
 		echo '{"statError": {"code": "'.$code.'", "msg": "'.
 		(array_key_exists($code, $statCode)) ? $statCode[$code] : 'Unknown error'.'}}';
 	else

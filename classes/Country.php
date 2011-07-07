@@ -118,7 +118,7 @@ class CountryCore extends ObjectModel
 	  * @param boolean $active return only active coutries
 	  * @return array Countries and corresponding zones
 	  */
-	static public function getCountries($id_lang, $active = false, $containStates = NULL)
+	public static function getCountries($id_lang, $active = false, $containStates = NULL)
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
@@ -153,7 +153,7 @@ class CountryCore extends ObjectModel
 	  * @param string $iso_code Country iso code
 	  * @return integer Country ID
 	  */
-	static public function getByIso($iso_code)
+	public static function getByIso($iso_code)
 	{
 		if (!Validate::isLanguageIsoCode($iso_code))
 			die(Tools::displayError());
@@ -165,7 +165,7 @@ class CountryCore extends ObjectModel
 		return $result['id_country'];
 	}
 
-	static public function getIdZone($id_country)
+	public static function getIdZone($id_country)
 	{
 		if (!Validate::isUnsignedId($id_country))
 			die(Tools::displayError());
@@ -189,7 +189,7 @@ class CountryCore extends ObjectModel
 	* @param integer $id_country Country ID
 	* @return string Country name
 	*/
-	static public function getNameById($id_lang, $id_country)
+	public static function getNameById($id_lang, $id_country)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name`
@@ -206,7 +206,7 @@ class CountryCore extends ObjectModel
 	* @param integer $id_country Country ID
 	* @return string Country iso
 	*/
-	static public function getIsoById($id_country)
+	public static function getIsoById($id_country)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `iso_code`
@@ -223,7 +223,7 @@ class CountryCore extends ObjectModel
 	* @param string $country Country Name
 	* @return intval Country id
 	*/
-	static public function getIdByName($id_lang = NULL, $country)
+	public static function getIdByName($id_lang = NULL, $country)
 	{
 		$sql = '
 		SELECT `id_country`
@@ -242,13 +242,13 @@ class CountryCore extends ObjectModel
 	 * @param $id_country
 	 * @deprecated
 	 */
-	static public function getNeedIdentifcationNumber($id_country)
+	public static function getNeedIdentifcationNumber($id_country)
 	{
 		Tools::displayAsDeprecated();
 		return self::isNeedDniByCountryId($id_country);
 	}
 
-	static public function getNeedZipCode($id_country)
+	public static function getNeedZipCode($id_country)
 	{
 		if (!(int)($id_country))
 			return false;
@@ -259,7 +259,7 @@ class CountryCore extends ObjectModel
 		WHERE `id_country` = '.(int)($id_country));
 	}
 
-	static public function getZipCodeFormat($id_country)
+	public static function getZipCodeFormat($id_country)
 	{
 		if (!(int)($id_country))
 			return false;
@@ -313,7 +313,7 @@ class CountryCore extends ObjectModel
 		return (bool)self::isNeedDniByCountryId($this->id);
 	}
 
-	static public function isNeedDniByCountryId($id_country)
+	public static function isNeedDniByCountryId($id_country)
 	{
 		return (bool)Db::getInstance()->getValue('
 			SELECT `need_identification_number`
@@ -321,7 +321,7 @@ class CountryCore extends ObjectModel
 			WHERE `id_country` = '.(int)$id_country);
 	}
 
-	static public function containsStates($id_country)
+	public static function containsStates($id_country)
 	{
 		return (bool)Db::getInstance()->getValue('
 			SELECT `contains_states`

@@ -59,13 +59,13 @@ class LoyaltyStateModule extends ObjectModel
 		return parent::getTranslationsFields(array('name'));
 	}
 
-	static public function getDefaultId() { return 1; }
-	static public function getValidationId() { return 2; }
-	static public function getCancelId() { return 3; }
-	static public function getConvertId() { return 4; }
-	static public function getNoneAwardId() { return 5; }
+	public static function getDefaultId() { return 1; }
+	public static function getValidationId() { return 2; }
+	public static function getCancelId() { return 3; }
+	public static function getConvertId() { return 4; }
+	public static function getNoneAwardId() { return 5; }
 
-	static public function insertDefaultData()
+	public static function insertDefaultData()
 	{
 		$loyaltyModule = new Loyalty();
 		$languages = Language::getLanguages();

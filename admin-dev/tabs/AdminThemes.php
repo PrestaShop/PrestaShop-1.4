@@ -34,13 +34,13 @@ class AdminThemes extends AdminPreferences
 	 * @since 1.4.0.11, check theme compatibility 1.4
 	 * @static
 		*/
-	static public $check_features_version = '1.4';
+	public static $check_features_version = '1.4';
 	
 	/** $check_features is a multidimensional array used to check [theme]/config.xml values, 
 	 * and also checks prestashop current configuration if not match.
 	 * @static
 	 */
-	static public $check_features = array(
+	public static $check_features = array(
 		'ccc' => array( // feature key name
 			'attributes' => array(
 				'available' => array( 

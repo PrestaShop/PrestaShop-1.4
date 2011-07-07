@@ -52,7 +52,7 @@ class HookCore extends ObjectModel
 	  * @param string $hookName Hook name
 	  * @return integer Hook ID
 	  */
-	static public function get($hookName)
+	public static function get($hookName)
 	{
 	 	if (!Validate::isHookName($hookName))
 	 		die(Tools::displayError());
@@ -65,7 +65,7 @@ class HookCore extends ObjectModel
 		return ($result ? $result['id_hook'] : false);
 	}
 	
-	static public function getHooks($position = false)
+	public static function getHooks($position = false)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
@@ -73,7 +73,7 @@ class HookCore extends ObjectModel
 		'.($position ? 'WHERE h.`position` = 1' : ''));
 	}
 	
-	static public function getModulesFromHook($id_hook)
+	public static function getModulesFromHook($id_hook)
 	{
 		if(isset(self::$preloadModulesFromHooks)) 
 			if(isset(self::$preloadModulesFromHooks[$id_hook]))
@@ -87,7 +87,7 @@ class HookCore extends ObjectModel
 		WHERE hm.id_hook = '.(int)($id_hook));
 	}
 	
-	static public function preloadModulesFromHooks($position = false)
+	public static function preloadModulesFromHooks($position = false)
 	{
 		$results = Db::getInstance()->executeS('
 		SELECT h.id_hook, h.name as h_name, title, description, h.position, live_edit, hm.position as hm_position, m.id_module, m.name, active
@@ -117,7 +117,7 @@ class HookCore extends ObjectModel
 		}
 	}
 	
-	static public function getModuleFromHook($id_hook, $id_module)
+	public static function getModuleFromHook($id_hook, $id_module)
 	{
 		return Db::getInstance()->getRow('
 		SELECT *
@@ -126,7 +126,7 @@ class HookCore extends ObjectModel
 		WHERE hm.id_hook = '.(int)($id_hook).' AND m.id_module = '.(int)($id_module));
 	}
 	
-	static public function newOrder($cart, $order, $customer, $currency, $orderStatus)
+	public static function newOrder($cart, $order, $customer, $currency, $orderStatus)
 	{
 		return Module::hookExec('newOrder', array(
 			'cart' => $cart,
@@ -136,7 +136,7 @@ class HookCore extends ObjectModel
 			'orderStatus' => $orderStatus));
 	}
 
-	static public function updateOrderStatus($newOrderStatusId, $id_order)
+	public static function updateOrderStatus($newOrderStatusId, $id_order)
 	{
 		$order = new Order((int)($id_order));
 		$newOS = new OrderState((int)($newOrderStatusId), $order->id_lang);
@@ -146,7 +146,7 @@ class HookCore extends ObjectModel
 		return $return;
 	}
 	
-	static public function postUpdateOrderStatus($newOrderStatusId, $id_order)
+	public static function postUpdateOrderStatus($newOrderStatusId, $id_order)
 	{
 		$order = new Order((int)($id_order));
 		$newOS = new OrderState((int)($newOrderStatusId), $order->id_lang);
@@ -160,42 +160,42 @@ class HookCore extends ObjectModel
 	 * @param Product
 	 * @param Order
 	 */
-	static public function updateQuantity($product, $order = null)
+	public static function updateQuantity($product, $order = null)
 	{
 		return Module::hookExec('updateQuantity', array('product' => $product, 'order' => $order));
 	}
 	
-	static public function productFooter($product, $category)
+	public static function productFooter($product, $category)
 	{
 		return Module::hookExec('productFooter', array('product' => $product, 'category' => $category));
 	}
 	
-	static public function productOutOfStock($product)
+	public static function productOutOfStock($product)
 	{
 		return Module::hookExec('productOutOfStock', array('product' => $product));
 	}
 	
-	static public function addProduct($product)
+	public static function addProduct($product)
 	{
 		return Module::hookExec('addProduct', array('product' => $product));
 	}
 	
-	static public function updateProduct($product)
+	public static function updateProduct($product)
 	{
 		return Module::hookExec('updateProduct', array('product' => $product));
 	}
 	
-	static public function deleteProduct($product)
+	public static function deleteProduct($product)
 	{
 		return Module::hookExec('deleteProduct', array('product' => $product));
 	}
 	
-	static public function updateProductAttribute($id_product_attribute)
+	public static function updateProductAttribute($id_product_attribute)
 	{
 		return Module::hookExec('updateProductAttribute', array('id_product_attribute' => $id_product_attribute));
 	}
 	
-	static public function orderConfirmation($id_order)
+	public static function orderConfirmation($id_order)
 	{
 	    if (Validate::isUnsignedId($id_order))
 	    {
@@ -216,7 +216,7 @@ class HookCore extends ObjectModel
 	    return false;
 	}
 	
-	static public function paymentReturn($id_order, $id_module)
+	public static function paymentReturn($id_order, $id_module)
 	{
 	    if (Validate::isUnsignedId($id_order) AND Validate::isUnsignedId($id_module))
 	    {
@@ -237,14 +237,14 @@ class HookCore extends ObjectModel
 	    return false;
 	}
 
-	static public function PDFInvoice($pdf, $id_order)
+	public static function PDFInvoice($pdf, $id_order)
 	{
 		if (!is_object($pdf) OR !Validate::isUnsignedId($id_order))
 			return false;
 		return Module::hookExec('PDFInvoice', array('pdf' => $pdf, 'id_order' => $id_order));
 	}
 	
-	static public function backBeforePayment($module)
+	public static function backBeforePayment($module)
 	{
 		$params['module'] = strval($module);
 		if (!$params['module'])
@@ -252,7 +252,7 @@ class HookCore extends ObjectModel
 		return Module::hookExec('backBeforePayment', $params);
 	}
 	
-	static public function updateCarrier($id_carrier, $carrier)
+	public static function updateCarrier($id_carrier, $carrier)
 	{
 		if (!Validate::isUnsignedId($id_carrier) OR !is_object($carrier))
 			return false;

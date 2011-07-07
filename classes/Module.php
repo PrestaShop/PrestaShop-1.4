@@ -72,7 +72,7 @@ abstract class ModuleCore
 
 	protected $identifier = 'id_module';
 
-	static public $_db;
+	public static $_db;
 
 	/** @var array to store the limited country */
 	public $limited_countries = array();
@@ -409,7 +409,7 @@ abstract class ModuleCore
 	  * @param string $moduleName Module name
 	  * @return Module instance
 	  */
-	static public function getInstanceByName($moduleName)
+	public static function getInstanceByName($moduleName)
 	{
 		if (!Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php'))
 			return false;
@@ -428,7 +428,7 @@ abstract class ModuleCore
 	  * @param array|int $ids Modules ID
 	  * @return Array of module name
 	  */
-	static public function preloadModuleNameFromId($ids)
+	public static function preloadModuleNameFromId($ids)
 	{
 		static $preloadedModuleNameFromId;
 		if(!isset($preloadedModuleNameFromId)) {
@@ -475,7 +475,7 @@ abstract class ModuleCore
 	  * @param integer $id_module Module ID
 	  * @return Module instance
 	  */
-	static public function getInstanceById($id_module)
+	public static function getInstanceById($id_module)
 	{
 		$moduleName = Module::preloadModuleNameFromId($id_module);
 		return ($moduleName ? Module::getInstanceByName($moduleName) : false);

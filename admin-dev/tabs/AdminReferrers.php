@@ -33,7 +33,7 @@ if (Tools::getValue('token') == Tools::getAdminToken('AdminReferrers'.(int)(Tab:
 {
 	if (Tools::isSubmit('ajaxProductFilter'))
 		Referrer::getAjaxProduct((int)(Tools::getValue('id_referrer')), (int)(Tools::getValue('id_product')), new Employee((int)(Tools::getValue('id_employee'))));
-	else if (Tools::isSubmit('ajaxFillProducts'))
+	elseif (Tools::isSubmit('ajaxFillProducts'))
 	{
 		$jsonArray = array();
 		$result = Db::getInstance()->ExecuteS('

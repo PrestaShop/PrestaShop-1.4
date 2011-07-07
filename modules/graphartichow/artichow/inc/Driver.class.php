@@ -521,7 +521,7 @@ class awPHPFontDriver extends awFontDriver {
 		if($text->getAngle() === 90) {
 			$text->setAngle(45);
 			return $this->getGDTextHeight($text);
-		} else if($text->getAngle() === 45) {
+		} elseif($text->getAngle() === 45) {
 			$text->setAngle(90);
 		}
 
@@ -546,7 +546,7 @@ class awPHPFontDriver extends awFontDriver {
 		if($text->getAngle() === 90) {
 			$text->setAngle(45);
 			return $this->getGDTextWidth($text);
-		} else if($text->getAngle() === 45) {
+		} elseif($text->getAngle() === 45) {
 			$text->setAngle(90);
 		}
 

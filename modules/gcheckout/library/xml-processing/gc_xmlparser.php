@@ -148,7 +148,7 @@
                 $cv['_p']=&$ary;
                 $ary=&$cv;
     
-            } else if ($r['type']=='complete') {
+            } elseif ($r['type']=='complete') {
                 if (isset($ary[$t]) && !empty($ary[$t])) { // same as open
                     if (isset($ary[$t][0])) {
                       $ary[$t][]=array();
@@ -183,7 +183,7 @@
             if ($k==='_p') {
               unset($ary[$k]);
             }
-            else if(is_array($ary[$k])) {
+            elseif(is_array($ary[$k])) {
               $this->_del_p($ary[$k]);
             }
         }

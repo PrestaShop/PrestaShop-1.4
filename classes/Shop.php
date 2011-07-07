@@ -32,7 +32,7 @@ class ShopCore extends ObjectModel
 	
 	}
 	
-	static public function getShops()
+	public static function getShops()
 	{
 		/*return Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'shops`
@@ -42,7 +42,7 @@ class ShopCore extends ObjectModel
 		);
 	}
 
-	static public function getCurrentShop()
+	public static function getCurrentShop()
 	{
 		// During implementation, remind you to NOT trust the cookie, you may be called from a payment module (Mouhahahaha!)
 		return 1;

@@ -1492,7 +1492,7 @@ class WebserviceRequestCore
 						$arr_languages[] = $i;
 				}
 			}
-			else if (preg_match('#\[(\d)+\]#Ui', $this->urlFragments['language'], $match_lang))
+			elseif (preg_match('#\[(\d)+\]#Ui', $this->urlFragments['language'], $match_lang))
 			{
 				$arr_languages[] = $match_lang[1];
 			}

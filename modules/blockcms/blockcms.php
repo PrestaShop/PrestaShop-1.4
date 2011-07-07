@@ -131,7 +131,7 @@ class BlockCms extends Module
 		return array_merge($this->getBlocksCMS(self::LEFT_COLUMN), $this->getBlocksCMS(self::RIGHT_COLUMN));
 	}
 
-	static public function getCMStitlesFooter()
+	public static function getCMStitlesFooter()
 	{
 		global $cookie;
 		
@@ -173,7 +173,7 @@ class BlockCms extends Module
 		return $content;
 	}
 
-	static public function getCMStitles($location)
+	public static function getCMStitles($location)
 	{
 		global $cookie;
 

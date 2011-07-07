@@ -77,7 +77,7 @@ class AdminEmployees extends AdminTab
 		$email = $this->getFieldValue($obj, 'email');
 		if (!Validate::isEmail($email))
 	 		$this->_errors[] = Tools::displayError('Invalid e-mail');
-		else if (Employee::employeeExists($email) AND !Tools::getValue('id_employee'))
+		elseif (Employee::employeeExists($email) AND !Tools::getValue('id_employee'))
 			$this->_errors[] = Tools::displayError('An account already exists for this e-mail address:').' '.$email;
 	}
 

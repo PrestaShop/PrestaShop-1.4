@@ -183,7 +183,7 @@ class ManufacturerCore extends ObjectModel
 	  * @param boolean $getNbProducts [optional] return products numbers for each
 	  * @return array Manufacturers
 	  */
-	static public function getManufacturers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_group = false)
+	public static function getManufacturers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_group = false)
 	{
 		if (!$id_lang)
 			$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
@@ -230,7 +230,7 @@ class ManufacturerCore extends ObjectModel
 	/**
 	 * @deprecated
 	 */
-	static public function getManufacturersWithoutAddress()
+	public static function getManufacturersWithoutAddress()
 	{
 		Tools::displayAsDeprecated();
 		$sql = 'SELECT m.* FROM `'._DB_PREFIX_.'manufacturer` m
@@ -246,7 +246,7 @@ class ManufacturerCore extends ObjectModel
 	  * @return string name
 	  */
 	static protected $cacheName = array();
-	static public function getNameById($id_manufacturer)
+	public static function getNameById($id_manufacturer)
 	{
 		if (!isset(self::$cacheName[$id_manufacturer]))
 			self::$cacheName[$id_manufacturer] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
@@ -254,7 +254,7 @@ class ManufacturerCore extends ObjectModel
 		return self::$cacheName[$id_manufacturer];
 	}
 
-	static public function getIdByName($name)
+	public static function getIdByName($name)
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT `id_manufacturer`
@@ -270,7 +270,7 @@ class ManufacturerCore extends ObjectModel
 		return Tools::link_rewrite($this->name, false);
 	}
 
-	static public function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $active_category = true)
+	public static function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $active_category = true)
 	{
 		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) ||$orderBy == 'position') $orderBy = 'name';
@@ -347,7 +347,7 @@ class ManufacturerCore extends ObjectModel
 	* @param $id_manufacturer Manufacturer id
 	* @return boolean
 	*/
-	static public function manufacturerExists($id_manufacturer)
+	public static function manufacturerExists($id_manufacturer)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_manufacturer`

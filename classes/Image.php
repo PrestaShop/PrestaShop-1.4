@@ -122,7 +122,7 @@ class ImageCore extends ObjectModel
 	  * @param integer $id_product Product ID
 	  * @return array Images
 	  */
-	static public function getImages($id_lang, $id_product)
+	public static function getImages($id_lang, $id_product)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT *
@@ -137,7 +137,7 @@ class ImageCore extends ObjectModel
 	  *
 	  * @return array Images
 	  */
-	static public function getAllImages()
+	public static function getAllImages()
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_image`, `id_product`
@@ -151,7 +151,7 @@ class ImageCore extends ObjectModel
 	  * @param integer $id_product Product ID
 	  * @return integer number of images
 	  */
-	static public function getImagesTotal($id_product)
+	public static function getImagesTotal($id_product)
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_image`) AS total
@@ -166,7 +166,7 @@ class ImageCore extends ObjectModel
 	  * @param integer $id_product Product ID
 	  * @return integer highest position of images
 	  */
-	static public function getHighestPosition($id_product)
+	public static function getHighestPosition($id_product)
 	{
 		$result = Db::getInstance()->getRow('
 		SELECT MAX(`position`) AS max
@@ -181,7 +181,7 @@ class ImageCore extends ObjectModel
 	  * @param integer $id_product Product ID
 	  * @return boolean result
 	  */
-	static public function deleteCover($id_product)
+	public static function deleteCover($id_product)
 	{
 	 	if (!Validate::isUnsignedId($id_product))
 	 		die(Tools::displayError());
@@ -200,7 +200,7 @@ class ImageCore extends ObjectModel
 	  * @param integer $id_product Product ID
 	  * @return boolean result
 	  */
-	static public function getCover($id_product)
+	public static function getCover($id_product)
 	{
 		return Db::getInstance()->getRow('
 		SELECT * FROM `'._DB_PREFIX_.'image` 
@@ -214,7 +214,7 @@ class ImageCore extends ObjectModel
 	  * @param integer $id_product_old Source product ID
 	  * @param boolean $id_product_new Destination product ID
 	  */
-	static public function duplicateProductImages($id_product_old, $id_product_new, $combinationImages)
+	public static function duplicateProductImages($id_product_old, $id_product_new, $combinationImages)
 	{
 		$imagesTypes = ImageType::getImagesTypes('products');
 		$result = Db::getInstance()->ExecuteS('
@@ -266,7 +266,7 @@ class ImageCore extends ObjectModel
 	* @param integer $id_product_attribute_old
 	* @return boolean
 	*/
-	static public function duplicateAttributeImageAssociations($combinationImages)
+	public static function duplicateAttributeImageAssociations($combinationImages)
 	{
 		if (!isset($combinationImages['new']) OR !is_array($combinationImages['new']))
 			return true;
@@ -310,7 +310,7 @@ class ImageCore extends ObjectModel
 		AND `position` = '.(int)($high_position));
 	}
 	
-	static public function getSize($type)
+	public static function getSize($type)
 	{
 		if (!isset(self::$_cacheGetSize[$type]) OR self::$_cacheGetSize[$type] === NULL)
 			self::$_cacheGetSize[$type] = Db::getInstance()->getRow('SELECT `width`, `height` FROM '._DB_PREFIX_.'image_type WHERE `name` = \''.pSQL($type).'\'');
@@ -320,7 +320,7 @@ class ImageCore extends ObjectModel
 	/**
 	  * Clear all images in tmp dir
 	  */
-	static public function clearTmpDir()
+	public static function clearTmpDir()
 	{
 		foreach (scandir(_PS_TMP_IMG_DIR_) AS $d)
 			if (preg_match('/(.*)\.jpg$/', $d))
@@ -404,7 +404,7 @@ class ImageCore extends ObjectModel
 		{
 			if (preg_match('/^[0-9]+(\-(.*))?\.'.$format.'$/', $file))
 				unlink($path.$file);
-			else if (is_dir($path.$file) && (preg_match('/^[0-9]$/', $file)))
+			elseif (is_dir($path.$file) && (preg_match('/^[0-9]$/', $file)))
 				self::deleteAllImages($path.$file.'/', $format);
 		}
 		

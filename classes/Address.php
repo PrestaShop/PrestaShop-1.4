@@ -281,7 +281,7 @@ class AddressCore extends ObjectModel
 	 * @return int
 	 * @deprecated
 	 */
-	static public function getManufacturerIdByAddress($id_address)
+	public static function getManufacturerIdByAddress($id_address)
 	{
 		Tools::displayAsDeprecated();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -290,7 +290,7 @@ class AddressCore extends ObjectModel
 		return isset($result['id_manufacturer']) ? $result['id_manufacturer'] : false;
 	}
 
-	static public function getCountryAndState($id_address)
+	public static function getCountryAndState($id_address)
 	{
 		if (isset(self::$_idCountries[$id_address]))
 			return self::$_idCountries[$id_address];
@@ -307,7 +307,7 @@ class AddressCore extends ObjectModel
 	* @param $id_address Address id
 	* @return boolean
 	*/
-	static public function addressExists($id_address)
+	public static function addressExists($id_address)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT `id_address`
@@ -317,7 +317,7 @@ class AddressCore extends ObjectModel
 		return isset($row['id_address']);
 	}
 
-	static public function getFirstCustomerAddressId($id_customer, $active = true)
+	public static function getFirstCustomerAddressId($id_customer, $active = true)
 	{
 		return Db::getInstance()->getValue('
 			SELECT `id_address`

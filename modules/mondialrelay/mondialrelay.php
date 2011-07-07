@@ -35,8 +35,8 @@ class MondialRelay extends Module
 	
 	private $_postErrors;
 	
-	static public $modulePath = '';
-	static public $moduleURL = '';
+	public static $modulePath = '';
+	public static $moduleURL = '';
 
 	// Added for 1.3 compatibility
 	const ONLY_PRODUCTS = 1;
@@ -208,7 +208,7 @@ class MondialRelay extends Module
 			
 		if (_PS_VERSION_ >= '1.4' && !Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'carrier SET `active` = 0, `deleted` = 1 WHERE `external_module_name` = "mondialrelay"'))
 			return false;
-		else if (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'carrier SET `active` = 0, `deleted` = 1 WHERE `name` = "mondialrelay"'))
+		elseif (!Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'carrier SET `active` = 0, `deleted` = 1 WHERE `name` = "mondialrelay"'))
 			return false; 
 			
 		return true;
@@ -252,7 +252,7 @@ class MondialRelay extends Module
 	** Init the access directory module for URL and file system
 	** Allow a compatibility for Presta < 1.4
 	*/
-	static public function initModuleAccess()
+	public static function initModuleAccess()
 	{
 		self::$modulePath =	_PS_MODULE_DIR_. 'mondialrelay/';
 	
@@ -271,7 +271,7 @@ class MondialRelay extends Module
 	** Override a jQuery version included by another one us.
 	** Allow a compatibility for Presta < 1.4
 	*/
-	static public function getJqueryCompatibility()
+	public static function getJqueryCompatibility()
 	{
 		return '
 			<script type="text/javascript">
@@ -318,7 +318,7 @@ class MondialRelay extends Module
 			if (!Tools::getValue('mr_weight_coef') OR !Validate::isInt(Tools::getValue('mr_weight_coef')))
 				$this->_postErrors[] = $this->l('Invalid Weight Coefficient');
 		}
-		else if (Tools::isSubmit('submitMethod'))
+		elseif (Tools::isSubmit('submitMethod'))
 		{
 			if (Configuration::get('MR_ENSEIGNE_WEBSERVICE') == '' OR Configuration::get('MR_CODE_MARQUE') == '' OR
 				Configuration::get('MR_KEY_WEBSERVICE') == '' OR Configuration::get('MR_LANGUAGE') == '')
@@ -334,14 +334,14 @@ class MondialRelay extends Module
 			if (!Tools::getValue('mr_Pays_list'))
 				$this->_postErrors[] = $this->l('You must choose at least one delivery country.');
 		}
-		else if (Tools::isSubmit('submit_order_state'))
+		elseif (Tools::isSubmit('submit_order_state'))
 		{
 			if (!Validate::isBool(Tools::getValue('mr_google_key')))
 				$this->_postErrors[] = $this->l('Invalid google key');
 			if (!Validate::isUnsignedInt(Tools::getValue('id_order_state')))
 				$this->_postErrors[] = $this->l('Invalid order state');
 		}
-		else if (Tools::isSubmit('PS_MRSubmitFieldPersonalization'))
+		elseif (Tools::isSubmit('PS_MRSubmitFieldPersonalization'))
 		{
 			$addr1 = Tools::getValue('Expe_ad1');
 			if (!preg_match('#^[0-9A-Z_\-\'., /]{2,32}$#', strtoupper($addr1), $match))
@@ -361,13 +361,13 @@ class MondialRelay extends Module
 	
 		if (isset($_POST['submitMR']) AND $_POST['submitMR'])
 			self::mrUpdate('settings', $setArray, $keyArray);
-		else if (isset($_POST['submitShipping']) AND $_POST['submitShipping'])
+		elseif (isset($_POST['submitShipping']) AND $_POST['submitShipping'])
 			self::mrUpdate('shipping', $_POST, array());
-		else if (Tools::getValue('PS_MRSubmitFieldPersonalization'))
+		elseif (Tools::getValue('PS_MRSubmitFieldPersonalization'))
 			$this->updateFieldsPersonalization();
-		else if (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
+		elseif (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
 			self::mrUpdate('addShipping', $setArray, $keyArray);
-		else if (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])
+		elseif (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])
 		{
 			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', Tools::getValue('id_order_state'));
 			Configuration::updateValue('MR_GOOGLE_MAP', Tools::getValue('mr_google_key'));
@@ -416,7 +416,7 @@ class MondialRelay extends Module
 			$module_carrier = new $module();
 			$smarty->assign('followup', $module_carrier->get_followup($order->shipping_number));
 		}
-		else if ($carrier->url AND $order->shipping_number)
+		elseif ($carrier->url AND $order->shipping_number)
 			$smarty->assign('followup', str_replace('@', $order->shipping_number, $carrier->url));
 	}
 	
@@ -455,7 +455,7 @@ class MondialRelay extends Module
 					$mrselected->save();
 	 			}
 			}
-			else if (!Configuration::get('PS_ORDER_PROCESS_TYPE'))
+			elseif (!Configuration::get('PS_ORDER_PROCESS_TYPE'))
 			{
 				// Redirect is set to false in Presta 1.3 for compatibility 
 				// when this method is called under an ajax process
@@ -683,7 +683,7 @@ class MondialRelay extends Module
 			Configuration::updateValue('MR_LANGUAGE', $array[3]);
 			Configuration::updateValue('MR_WEIGHT_COEF', $array[4]);
 		}
-		else if ($type == 'shipping')
+		elseif ($type == 'shipping')
 		{
 			array_pop($array);
 			foreach ($array AS $Key => $value)
@@ -693,7 +693,7 @@ class MondialRelay extends Module
 				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'carrier SET active = "'.(int)($value).'" WHERE `id_carrier` = "'.(int)($id).'"');
 			}
 		}
-		else if ($type == 'addShipping') 
+		elseif ($type == 'addShipping') 
 		{
 			$query = 'INSERT INTO ' .  _DB_PREFIX_ . 'mr_method (';
 
@@ -1068,13 +1068,13 @@ class MondialRelay extends Module
 	}
  
  	// Add for 1.3 compatibility and avoid duplicate code	
-	static public function jsonEncode($result)
+	public static function jsonEncode($result)
 	{
 		return (method_exists('Tools', 'jsonEncode')) ? 
 			Tools::jsonEncode($result) : json_encode($result);
 	}
 	
-	static public function ordersSQLQuery1_4($id_order_state)
+	public static function ordersSQLQuery1_4($id_order_state)
 	{
 		return 'SELECT  o.`id_address_delivery` as id_address_delivery, 
 							o.`id_order` as id_order, 
@@ -1105,7 +1105,7 @@ class MondialRelay extends Module
 			AND ca.`external_module_name` = "mondialrelay"';
 	}
 	
-	static public function ordersSQLQuery1_3($id_order_state)
+	public static function ordersSQLQuery1_3($id_order_state)
 	{
 		return '
 				SELECT  o.`id_address_delivery` as id_address_delivery, 
@@ -1137,7 +1137,7 @@ class MondialRelay extends Module
 			AND ca.`name` = "mondialrelay"';
 	}
 	
-	static public function getBaseOrdersSQLQuery($id_order_state)
+	public static function getBaseOrdersSQLQuery($id_order_state)
 	{
 		if (_PS_VERSION_ >= '1.4')
 			return self::ordersSQLQuery1_4($id_order_state);
@@ -1145,7 +1145,7 @@ class MondialRelay extends Module
 			return self::ordersSQLQuery1_3($id_order_state);
 	}
 	
-	static public function getOrders($orderIdList = array())
+	public static function getOrders($orderIdList = array())
 	{
 		$id_order_state = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
 		$sql = self::getBaseOrdersSQLQuery($id_order_state);

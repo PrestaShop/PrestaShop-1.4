@@ -519,7 +519,7 @@ class awMingDriver extends awDriver {
 			list($r, $g, $b, $a) = $this->getColor($background);
 			$shape->setRightFill($r, $g, $b, $a);
 			
-		} else if($background instanceof awGradient) {
+		} elseif($background instanceof awGradient) {
 			
 			// Get the Gradient object as an SWFGradient one
 			list($flashGradient, $style) = $this->getGradient($background);

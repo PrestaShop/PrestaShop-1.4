@@ -526,7 +526,7 @@ if (Tools::isSubmit('ajaxAddZipCode') OR Tools::isSubmit('ajaxRemoveZipCode'))
 		if ($county->addZipCodes($zipcodes))
 			die(AdminCounty::renderZipCodeList($county->getZipCodes()));
 	}
-	else if (Tools::isSubmit('ajaxRemoveZipCode') AND $county->removeZipCodes($zipcodes))
+	elseif (Tools::isSubmit('ajaxRemoveZipCode') AND $county->removeZipCodes($zipcodes))
 			die(AdminCounty::renderZipCodeList($county->getZipCodes()));
 
 	die('error');

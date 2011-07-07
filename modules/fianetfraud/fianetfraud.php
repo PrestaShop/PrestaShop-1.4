@@ -529,7 +529,7 @@ class Fianetfraud extends Module
 		return true;
 	}
 
-	static public function checkWaitingOrders()
+	public static function checkWaitingOrders()
 	{
 		$orders = Db::getInstance()->ExecuteS('SELECT id_order FROM '._DB_PREFIX_.'fianet_fraud_orders WHERE `date_add` > \''.pSQL(strtotime('+5 minute')).'\'');
 		foreach ($orders AS $order)

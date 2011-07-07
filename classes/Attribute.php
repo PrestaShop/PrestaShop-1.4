@@ -98,7 +98,7 @@ class AttributeCore extends ObjectModel
 	 * @param boolean $notNull Get only not null fields if true
 	 * @return array Attributes
 	 */
-	static public function getAttributes($id_lang, $notNull = false)
+	public static function getAttributes($id_lang, $notNull = false)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT ag.*, agl.*, a.`id_attribute`, al.`name`, agl.`name` AS `attribute_group`
@@ -118,7 +118,7 @@ class AttributeCore extends ObjectModel
 	 * @param integer $qty Quantity needed
 	 * @return boolean Quantity is available or not
 	 */
-	static public function checkAttributeQty($id_product_attribute, $qty)
+	public static function checkAttributeQty($id_product_attribute, $qty)
 	{ 		
 		$result = Db::getInstance()->getRow('
 		SELECT `quantity`
@@ -135,7 +135,7 @@ class AttributeCore extends ObjectModel
 	 * @param integer $id_product
 	 * @return mixed Quantity or false
 	 */
-	static public function getAttributeQty($id_product)
+	public static function getAttributeQty($id_product)
 	{
 		$row = Db::getInstance()->getRow('
 		SELECT SUM(quantity) as quantity
@@ -154,7 +154,7 @@ class AttributeCore extends ObjectModel
 	 * @param array &$arr
 	 * return bool
 	 */
-	static public function updateQtyProduct(&$arr)
+	public static function updateQtyProduct(&$arr)
 	{
 		$id_product = (int)($arr['id_product']);
 		$qty = self::getAttributeQty($id_product);
@@ -184,7 +184,7 @@ class AttributeCore extends ObjectModel
 	 * @param integer $id_product_attribute
 	 * @return mixed Minimal Quantity or false
 	 */
-	static public function getAttributeMinimalQty($id_product_attribute)
+	public static function getAttributeMinimalQty($id_product_attribute)
 	{
 		$minimal_quantity = Db::getInstance()->getValue('
 		SELECT `minimal_quantity`

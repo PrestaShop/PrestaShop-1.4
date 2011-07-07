@@ -276,7 +276,7 @@ class MySQLCore extends Db
 	 * @param boolean $newDbLink if set to true, the function will not create a new link if one already exists.
 	 * @return integer
 	 */
-	static public function tryToConnect($server, $user, $pwd, $db, $newDbLink = true)
+	public static function tryToConnect($server, $user, $pwd, $db, $newDbLink = true)
 	{
 		if (!$link = @mysql_connect($server, $user, $pwd, $newDbLink))
 			return 1;
@@ -286,7 +286,7 @@ class MySQLCore extends Db
 		return 0;
 	}
 
-	static public function tryUTF8($server, $user, $pwd)
+	public static function tryUTF8($server, $user, $pwd)
 	{
 		$link = @mysql_connect($server, $user, $pwd);
 		if (!mysql_query('SET NAMES \'utf8\'', $link))

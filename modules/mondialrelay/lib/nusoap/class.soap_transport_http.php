@@ -239,7 +239,7 @@ class soap_transport_http extends nusoap_base {
 
 		$this->debug('socket connected');
 		return true;
-	  } else if ($this->io_method() == 'curl') {
+	  } elseif ($this->io_method() == 'curl') {
 		if (!extension_loaded('curl')) {
 //			$this->setError('cURL Extension, or OpenSSL extension w/ PHP version >= 4.3 is required for HTTPS');
 			$this->setError('The PHP cURL Extension is required for HTTPS or NLTM.  You will need to re-build or update your PHP to include cURL or change php.ini to load the PHP cURL extension.');
@@ -750,7 +750,7 @@ class soap_transport_http extends nusoap_base {
 		}
 		$this->debug('wrote data to socket, length = ' . strlen($this->outgoing_payload));
 		return true;
-	  } else if ($this->io_method() == 'curl') {
+	  } elseif ($this->io_method() == 'curl') {
 		// set payload
 		// cURL does say this should only be the verb, and in fact it
 		// turns out that the URI and HTTP version are appended to this, which
@@ -859,7 +859,7 @@ class soap_transport_http extends nusoap_base {
 						$this->debug('did not find cookie in ' . trim($arr[1]));
 					}
     			}
-			} else if (isset($header_name)) {
+			} elseif (isset($header_name)) {
 				// append continuation line to previous header
 				$this->incoming_headers[$header_name] .= $lb . ' ' . $header_line;
 			}
@@ -957,7 +957,7 @@ class soap_transport_http extends nusoap_base {
 //			$this->incoming_payload = $header_data.$lb.$lb.$data;
 //		}
 	
-	  } else if ($this->io_method() == 'curl') {
+	  } elseif ($this->io_method() == 'curl') {
 		// send and receive
 		$this->debug('send and receive with cURL');
 		$this->incoming_payload = curl_exec($this->ch);
@@ -1037,7 +1037,7 @@ class soap_transport_http extends nusoap_base {
 						$this->debug('did not find cookie in ' . trim($arr[1]));
 					}
     			}
-			} else if (isset($header_name)) {
+			} elseif (isset($header_name)) {
 				// append continuation line to previous header
 				$this->incoming_headers[$header_name] .= $lb . ' ' . $header_line;
 			}

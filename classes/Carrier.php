@@ -189,7 +189,7 @@ class CarrierCore extends ObjectModel
 		return self::$priceByWeight[$cache_key];
 	}
 
-	static public function checkDeliveryPriceByWeight($id_carrier, $totalWeight, $id_zone)
+	public static function checkDeliveryPriceByWeight($id_carrier, $totalWeight, $id_zone)
 	{
 		$cache_key = $id_carrier.'_'.$totalWeight.'_'.$id_zone;
 		if (!isset(self::$priceByWeight2[$cache_key]))
@@ -263,7 +263,7 @@ class CarrierCore extends ObjectModel
 	 * @param integer $id_currency
 	 * @return float Delivery price
 	 */
-	static public function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone, $id_currency = NULL)
+	public static function checkDeliveryPriceByPrice($id_carrier, $orderTotal, $id_zone, $id_currency = NULL)
 	{
 		$cache_key = $id_carrier.'_'.$orderTotal.'_'.$id_zone.'_'.$id_currency;
 		if (!isset(self::$priceByPrice2[$cache_key]))

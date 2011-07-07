@@ -122,7 +122,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		if ($this->output != '')
 			return $this->objOutput->getObjectRender()->overrideContent($this->output);
 		// display image content if needed
-		else if ($this->imgToDisplay)
+		elseif ($this->imgToDisplay)
 		{
 			$imageResource = false;
 			$types = array('jpg' => array('function' => 'imagecreatefromjpeg', 'Content-Type' => 'image/jpeg'),
@@ -571,7 +571,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 				}
 			}
 			// display the list of declinated images
-			else if ($this->wsObject->method == 'GET' || $this->wsObject->method == 'HEAD')
+			elseif ($this->wsObject->method == 'GET' || $this->wsObject->method == 'HEAD')
 			{
 				if ($available_image_ids)
 				{

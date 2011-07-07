@@ -132,7 +132,7 @@ class OrderReturnCore extends ObjectModel
 		return (int)($data['total']);
 	}
 	
-	static public function getOrdersReturn($customer_id, $order_id = false, $no_denied = false)
+	public static function getOrdersReturn($customer_id, $order_id = false, $no_denied = false)
 	{
 		global $cookie;
 		
@@ -151,7 +151,7 @@ class OrderReturnCore extends ObjectModel
 		return $data;
 	}
 	
-	static public function getOrdersReturnDetail($id_order_return)
+	public static function getOrdersReturnDetail($id_order_return)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT *
@@ -159,7 +159,7 @@ class OrderReturnCore extends ObjectModel
 		WHERE `id_order_return` = '.(int)($id_order_return));
 	}
 	
-	static public function getOrdersReturnProducts($orderReturnId, $order)
+	public static function getOrdersReturnProducts($orderReturnId, $order)
 	{
 		$productsRet = self::getOrdersReturnDetail($orderReturnId);
 		$products = $order->getProducts();
@@ -180,7 +180,7 @@ class OrderReturnCore extends ObjectModel
 		return $resTab;
 	}
 
-	static public function getReturnedCustomizedProducts($id_order)
+	public static function getReturnedCustomizedProducts($id_order)
 	{
 		$returns = Customization::getReturnedCustomizations($id_order);
 		$order = new Order((int)($id_order));
@@ -197,7 +197,7 @@ class OrderReturnCore extends ObjectModel
 		return $returns;
 	}
 
-	static public function deleteOrderReturnDetail($id_order_return, $id_order_detail, $id_customization = 0)
+	public static function deleteOrderReturnDetail($id_order_return, $id_order_detail, $id_customization = 0)
 	{
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_return_detail` WHERE `id_order_detail` = '.(int)($id_order_detail).' AND `id_order_return` = '.(int)($id_order_return).' AND `id_customization` = '.(int)($id_customization));
 	}

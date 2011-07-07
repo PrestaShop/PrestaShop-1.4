@@ -88,7 +88,7 @@ try
 		}
 		unset($obj);
 	}
-	else if (($management = new MRManagement($params)) &&
+	elseif (($management = new MRManagement($params)) &&
 				method_exists($management, $method))
 			$result = $management->{$method}();
 	else 

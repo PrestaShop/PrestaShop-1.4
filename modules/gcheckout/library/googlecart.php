@@ -656,7 +656,7 @@ die();
           }
           $xml_data->Pop($ship->type);
         }
-        else if ($ship->type == "carrier-calculated-shipping"){
+        elseif ($ship->type == "carrier-calculated-shipping"){
 //          $xml_data->Push($ship->type, array('name' => $ship->name));
           $xml_data->Push($ship->type);
           $xml_data->Push('carrier-calculated-shipping-options');
@@ -706,7 +706,7 @@ die();
 
           $xml_data->Pop($ship->type);          
         }
-        else if ($ship->type == "pickup") {
+        elseif ($ship->type == "pickup") {
           $xml_data->Push('pickup', array('name' => $ship->name));
           $xml_data->Element('price', $ship->price, 
               array('currency' => $this->currency));

@@ -45,7 +45,7 @@ class AddressFormatCore extends ObjectModel
 	protected	$table = 'address_format';
 	protected $identifier = 'id_country';
 	
-	static public $requireFormFieldsList = array(
+	public static $requireFormFieldsList = array(
 		'firstname',
 		'name',
 		'address1',
@@ -54,7 +54,7 @@ class AddressFormatCore extends ObjectModel
 		'Country:name',
 		'State:name');
 	
-	static public $forbiddenProperyList = array(
+	public static $forbiddenProperyList = array(
 		'deleted',
 		'date_add',
 		'other',
@@ -85,7 +85,7 @@ class AddressFormatCore extends ObjectModel
 		'call_prefixes',
 		'call_prefix');
 		
-	static public $forbiddenClassList = array(
+	public static $forbiddenClassList = array(
 		'Manufacturer',
 		'Supplier');
 
@@ -155,7 +155,7 @@ class AddressFormatCore extends ObjectModel
 			$totalNameUsed = count($associationName);
 			if ($totalNameUsed > 2)
 				$this->_errorFormatList[] = Tools::displayError('This assocation contains too much key name');
-			else if ($totalNameUsed == 1)
+			elseif ($totalNameUsed == 1)
 			{
 				$associationName[0] = strtolower($associationName[0]);
 				$cleanedLine = $associationName[0];
@@ -164,7 +164,7 @@ class AddressFormatCore extends ObjectModel
 					$this->_errorFormatList[] = Tools::displayError('This name isn\'t allowed').': '.
 						$associationName[0];
 			}
-			else if ($totalNameUsed == 2)
+			elseif ($totalNameUsed == 2)
 			{
 				if (empty($associationName[0]) || empty($associationName[1]))
 					$this->_errorFormatList[] = Tools::displayError('Syntax error with this pattern').': '.$patternName;

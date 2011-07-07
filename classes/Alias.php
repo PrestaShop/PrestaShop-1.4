@@ -63,7 +63,7 @@ class AliasCore extends ObjectModel
 		}
 	}
 
-	static public function deleteAliases($search)
+	public static function deleteAliases($search)
 	{
 		return Db::getInstance()->Execute('
 		DELETE

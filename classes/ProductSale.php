@@ -31,7 +31,7 @@ class ProductSaleCore
 	** Fill the `product_sale` SQL table with data from `order_detail`
 	** @return bool True on success
 	*/
-	static public function fillProductSales()
+	public static function fillProductSales()
 	{
 		return Db::getInstance()->Execute('
 		REPLACE INTO '._DB_PREFIX_.'product_sale
@@ -44,7 +44,7 @@ class ProductSaleCore
 	** Get number of actives products sold
 	** @return int number of actives products listed in product_sales
 	*/
-	static public function getNbSales()
+	public static function getNbSales()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT COUNT(ps.`id_product`) AS nb
@@ -62,7 +62,7 @@ class ProductSaleCore
 	** @param integer $nbProducts Number of products to return (optional)
 	** @return array from Product::getProductProperties
 	*/
-	static public function getBestSales($id_lang, $pageNumber = 0, $nbProducts = 10, $orderBy=NULL, $orderWay=NULL)
+	public static function getBestSales($id_lang, $pageNumber = 0, $nbProducts = 10, $orderBy=NULL, $orderWay=NULL)
 	{
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
@@ -113,7 +113,7 @@ class ProductSaleCore
 	** @param integer $nbProducts Number of products to return (optional)
 	** @return array keys : id_product, link_rewrite, name, id_image, legend, sales, ean13, upc, link
 	*/
-	static public function getBestSalesLight($id_lang, $pageNumber = 0, $nbProducts = 10)
+	public static function getBestSalesLight($id_lang, $pageNumber = 0, $nbProducts = 10)
 	{
 	 	global $link;
 
@@ -152,7 +152,7 @@ class ProductSaleCore
 		return $result;
 	}
 
-	static public function addProductSale($product_id, $qty = 1)
+	public static function addProductSale($product_id, $qty = 1)
 	{
 		return Db::getInstance()->Execute('
 			INSERT INTO '._DB_PREFIX_.'product_sale
@@ -161,7 +161,7 @@ class ProductSaleCore
 			ON DUPLICATE KEY UPDATE `quantity` = `quantity` + '.(int)($qty).', `sale_nbr` = `sale_nbr` + 1, `date_upd` = NOW()');
 	}
 
-	static public function getNbrSales($id_product)
+	public static function getNbrSales($id_product)
 	{
 		$result = Db::getInstance()->getRow('SELECT `sale_nbr` FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)($id_product));
 		if (!$result OR empty($result) OR !key_exists('sale_nbr', $result))
@@ -169,7 +169,7 @@ class ProductSaleCore
 		return (int)($result['sale_nbr']);
 	}
 
-	static public function removeProductSale($id_product, $qty = 1)
+	public static function removeProductSale($id_product, $qty = 1)
 	{
 		$nbrSales = self::getNbrSales($id_product);
 		if ($nbrSales > 1)

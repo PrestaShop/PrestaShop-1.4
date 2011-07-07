@@ -65,14 +65,14 @@ class SpecificPriceCore extends ObjectModel
 		return $fields;
 	}
 
-	static public function getByProductId($id_product)
+	public static function getByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product)
 		);
 	}
 
-	static public function getIdsByProductId($id_product)
+	public static function getIdsByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
 			SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product.'
@@ -113,7 +113,7 @@ class SpecificPriceCore extends ObjectModel
 	    return preg_split('/;/', $priority);
     }
 
-	static public function getSpecificPrice($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
+	public static function getSpecificPrice($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
 	{
 		/*
 		** The date is not taken into account for the cache, but this is for the better because it keeps the consistency for the whole script.
@@ -144,7 +144,7 @@ class SpecificPriceCore extends ObjectModel
 		return self::$_specificPriceCache[$key];
 	}
 
-	static public function setPriorities($priorities)
+	public static function setPriorities($priorities)
 	{
 		$value = '';
 		foreach ($priorities as $priority)
@@ -162,7 +162,7 @@ class SpecificPriceCore extends ObjectModel
 	    ');
 	}
 
-	static public function setSpecificPriority($id_product, $priorities)
+	public static function setSpecificPriority($id_product, $priorities)
 	{
 		$value = '';
 		foreach ($priorities as $priority)
@@ -175,7 +175,7 @@ class SpecificPriceCore extends ObjectModel
 		');
 	}
 
-	static public function getQuantityDiscounts($id_product, $id_shop, $id_currency, $id_country, $id_group)
+	public static function getQuantityDiscounts($id_product, $id_shop, $id_currency, $id_country, $id_group)
 	{
 		$now = date('Y-m-d H:i:s');
 		$res =  Db::getInstance()->ExecuteS('
@@ -203,7 +203,7 @@ class SpecificPriceCore extends ObjectModel
 		{
 		    if (!isset($max_score))
 		        $max_score = $specific_price['score'];
-		    else if ($max_score != $specific_price['score'])
+		    elseif ($max_score != $specific_price['score'])
 		        break;
 
             if ($specific_price['from_quantity'] > 1)
@@ -213,7 +213,7 @@ class SpecificPriceCore extends ObjectModel
 		return $targeted_prices;
 	}
 
-	static public function getQuantityDiscount($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
+	public static function getQuantityDiscount($id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity)
 	{
 		$now = date('Y-m-d H:i:s');
 		return Db::getInstance()->getRow('
@@ -236,7 +236,7 @@ class SpecificPriceCore extends ObjectModel
 		');
 	}
 
-	static public function getProductIdByDate($id_shop, $id_currency, $id_country, $id_group, $beginning, $ending)
+	public static function getProductIdByDate($id_shop, $id_currency, $id_country, $id_group, $beginning, $ending)
 	{
 		$resource = Db::getInstance()->ExecuteS('
 			SELECT `id_product`
@@ -255,7 +255,7 @@ class SpecificPriceCore extends ObjectModel
 		return $ids_product;
 	}
 
-	static public function deleteByProductId($id_product)
+	public static function deleteByProductId($id_product)
 	{
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product));
 	}

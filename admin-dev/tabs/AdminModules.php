@@ -688,7 +688,7 @@ class AdminModules extends AdminTab
 						$(this).attr(\'src\', \'../img/admin/less.png\');
 					});
 				});
-			else if (id == \'all_close\')
+			elseif (id == \'all_close\')
 				$(\'.tab_module_content\').each(function(){
 					$(\'#all_open\').show();
 					$(\'#all_close\').hide();

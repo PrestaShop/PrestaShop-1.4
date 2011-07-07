@@ -672,13 +672,13 @@ class awVector extends awLine {
 		
 		if($width >= 0 and $height >= 0) {
 			return acos($width / $size);
-		} else if($width <= 0 and $height >= 0) {
+		} elseif($width <= 0 and $height >= 0) {
 			return acos($width / $size);
 		} else {
 			$height *= -1;
 			if($width >= 0 and $height >= 0) {
 				return 2 * M_PI - acos($width / $size);
-			} else if($width <= 0 and $height >= 0) {
+			} elseif($width <= 0 and $height >= 0) {
 				return 2 * M_PI - acos($width / $size);
 			}
 		}

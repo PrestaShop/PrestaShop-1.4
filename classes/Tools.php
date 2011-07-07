@@ -865,7 +865,7 @@ class ToolsCore
 
 		if($type_cat === 'products')
 		    $category = new Category((int)($id_category), (int)($cookie->id_lang));
-		else if ($type_cat === 'CMS')
+		elseif ($type_cat === 'CMS')
 		    $category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
 
 		if (!Validate::isLoadedObject($category))
@@ -1231,7 +1231,7 @@ class ToolsCore
     {
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 			return file_get_contents($url, $useIncludePath, $streamContext);
-		else if (function_exists('curl_init'))
+		elseif (function_exists('curl_init'))
 		{
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -1767,7 +1767,7 @@ class ToolsCore
 			foreach ($default_meta as $key => $meta)
 				if (!empty($meta['url_rewrite']))
 					$tab['RewriteRule']['content']['^'.$meta['url_rewrite'].'$'] = $meta['page'].'.php [QSA,L]';
-				else if (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
+				elseif (array_key_exists($key, $default_meta) && $default_meta[$key]['url_rewrite'] != '')
 					$tab['RewriteRule']['content']['^'.$default_meta[$key]['url_rewrite'].'$'] = $default_meta[$key]['page'].'.php [QSA,L]';
 
 		if (!$writeFd = @fopen($path, 'w'))

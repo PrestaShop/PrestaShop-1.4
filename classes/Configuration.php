@@ -90,7 +90,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param string $key Key to delete
 	  * @return boolean Deletion result
 	  */
-	static public function deleteByName($key)
+	public static function deleteByName($key)
 	{
 	 	if (!Validate::isConfigName($key))
 			return false;
@@ -111,7 +111,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param integer $id_lang Language ID
 	  * @return string Value
 	  */
-	static public function get($key, $id_lang = NULL)
+	public static function get($key, $id_lang = NULL)
 	{
 		if ($id_lang AND isset(self::$_CONF_LANG[(int)$id_lang][$key]))
 			return self::$_CONF_LANG[(int)$id_lang][$key];
@@ -126,7 +126,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param string $key Key wanted
 	  * @param mixed $values $values is an array if the configuration is multilingual, a single string else.
 	  */
-	static public function set($key, $values)
+	public static function set($key, $values)
 	{
 		if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
@@ -146,7 +146,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param string $key Key wanted
 	  * @return array Values in multiple languages
 	  */
-	static public function getInt($key)
+	public static function getInt($key)
 	{
 		$languages = Language::getLanguages();
 		$resultsArray = array();
@@ -162,7 +162,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param integer $id_lang Language ID
 	  * @return array Values
 	  */
-	static public function getMultiple($keys, $id_lang = NULL)
+	public static function getMultiple($keys, $id_lang = NULL)
 	{
 	 	if (!is_array($keys) OR !is_array(self::$_CONF) OR ($id_lang AND !is_array(self::$_CONF_LANG)))
 	 		die(Tools::displayError());
@@ -188,7 +188,7 @@ class ConfigurationCore extends ObjectModel
 	  * @return array Values in multiple languages
 	  * @deprecated
 	  */
-	static public function getMultipleInt($keys)
+	public static function getMultipleInt($keys)
 	{
 		Tools::displayAsDeprecated();
 		$languages = Language::getLanguages();
@@ -222,7 +222,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param boolean $html Specify if html is authorized in value
 	  * @return boolean Update result
 	  */
-	static public function updateValue($key, $values, $html = false)
+	public static function updateValue($key, $values, $html = false)
 	{
 		if ($key == NULL) return;
 		if (!Validate::isConfigName($key))
@@ -275,7 +275,7 @@ class ConfigurationCore extends ObjectModel
 		return $result;
 	}
 
-	static public function loadConfiguration()
+	public static function loadConfiguration()
 	{
 		self::$_CONF = array();
 		self::$_CONF_LANG = array();

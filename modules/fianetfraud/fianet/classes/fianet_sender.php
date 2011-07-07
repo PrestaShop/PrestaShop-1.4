@@ -208,7 +208,7 @@ class fianet_sender
 			}
 		}
 		}
-		else if (isset($xml_array['result']['transaction']))
+		elseif (isset($xml_array['result']['transaction']))
 		{
 			if (isset($xml_array['result']['transaction'][0]))
 			{

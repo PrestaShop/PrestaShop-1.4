@@ -27,7 +27,7 @@
 	}elseif(!preg_match("/^[a-zA-Z0-9_\- ]+$/", $_POST['new_folder']))
 	{
 		$error  =  ERR_FOLDER_FORMAT;
-	}else if(empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
+	}elseif(empty($_POST['currentFolderPath']) || !isUnderRoot($_POST['currentFolderPath']))
 	{
 		$error = ERR_FOLDER_PATH_NOT_ALLOWED;
 	}

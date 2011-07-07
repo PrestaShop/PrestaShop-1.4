@@ -386,7 +386,7 @@
          // ... we return false and exit the function
          return FALSE;
   
-     // ... else if the path is readable
+     // ... elseif the path is readable
      }else{
   
          // we open the directory

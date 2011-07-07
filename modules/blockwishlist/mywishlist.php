@@ -71,9 +71,9 @@ if ($cookie->isLogged())
 			}
 		}
 	}
-	else if ($add)
+	elseif ($add)
 		WishList::addCardToWishlist((int)($cookie->id_customer), (int)(Tools::getValue('id_wishlist')), (int)($cookie->id_lang));
-	else if ($delete AND empty($id_wishlist) === false)
+	elseif ($delete AND empty($id_wishlist) === false)
 	{
 		$wishlist = new WishList((int)($id_wishlist));
 		if (Validate::isLoadedObject($wishlist))

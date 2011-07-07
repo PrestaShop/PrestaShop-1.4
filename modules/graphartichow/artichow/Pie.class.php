@@ -537,9 +537,9 @@ class awPie extends awComponent {
 			
 			if($angle >= 45 and $angle < 135) {
 				$this->label->setAlign(awLabel::CENTER, awLabel::BOTTOM);
-			} else if($angle >= 135 and $angle < 225) {
+			} elseif($angle >= 135 and $angle < 225) {
 				$this->label->setAlign(awLabel::RIGHT, awLabel::MIDDLE);
-			} else if($angle >= 225 and $angle < 315) {
+			} elseif($angle >= 225 and $angle < 315) {
 				$this->label->setAlign(awLabel::CENTER, awLabel::TOP);
 			} else {
 				$this->label->setAlign(awLabel::LEFT, awLabel::MIDDLE);

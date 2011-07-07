@@ -285,7 +285,7 @@ class AdminShipping extends AdminTab
 						<input type="hidden" name="submitFees'.$this->table.'" value="1" />';
 			if (sizeof($ranges) && !$carrierSelected->is_free)
 				echo '	<input type="submit" value="'.$this->l('   Save   ').'" class="button" />';
-			else if ($carrierSelected->is_free)
+			elseif ($carrierSelected->is_free)
 				echo $this->l('This is a free carrier');
 			else
 				echo $this->l('No ranges set for this carrier');

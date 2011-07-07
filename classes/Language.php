@@ -260,7 +260,7 @@ class LanguageCore extends ObjectModel
 				$files = array_merge($files, $files_modules);
 			}
 		}
-		else if ($select == 'mail' OR $select == 'tr')
+		elseif ($select == 'mail' OR $select == 'tr')
 		{
 			return $files;
 		}

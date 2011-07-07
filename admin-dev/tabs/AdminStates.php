@@ -78,7 +78,7 @@ class AdminStates extends AdminTab
 										$object->deleted = 1;
 										if ($object->update()) Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
 									}
-									else if ($object->delete())
+									elseif ($object->delete())
 									{
 										Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
 									}

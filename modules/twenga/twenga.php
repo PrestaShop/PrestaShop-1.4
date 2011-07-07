@@ -526,7 +526,7 @@ class Twenga extends PaymentModule
 	/*
 	 ** Get the current country name used literaly
 	 */
-	static public function getCurrentCountryName()
+	public static function getCurrentCountryName()
 	{
 		global $cookie;
 
@@ -999,7 +999,7 @@ class Twenga extends PaymentModule
 		}
 		if(isset($combination['weight']) && (int)$combination['weight'] !== 0)
 			$str_features[] = 'weight : '.$combination['weight'];
-		else if ($product->weight !== 0)
+		elseif ($product->weight !== 0)
 			$str_features[] = 'weight : '.$product->weight;
 		
 		$features = $product->getFrontFeatures($lang);

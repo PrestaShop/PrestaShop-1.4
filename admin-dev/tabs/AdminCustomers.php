@@ -347,9 +347,9 @@ class AdminCustomers extends AdminTab
 						$("#note_feedback").html("<b style=\"color:green\">'.addslashes($this->l('Your note has been saved')).'</b>").fadeIn(400);
 						$("#submitCustomerNote").attr("disabled", "disabled");
 					}
-					else if (r == "error:validation")
+					elseif (r == "error:validation")
 						$("#note_feedback").html("<b style=\"color:red\">'.addslashes($this->l('Error: your note is not valid')).'</b>").fadeIn(400);
-					else if (r == "error:update")
+					elseif (r == "error:update")
 						$("#note_feedback").html("<b style=\"color:red\">'.addslashes($this->l('Error: cannot save your note')).'</b>").fadeIn(400);
 					$("#note_feedback").fadeOut(3000);
 				});

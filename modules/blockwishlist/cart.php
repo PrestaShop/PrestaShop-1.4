@@ -65,7 +65,7 @@ if ($cookie->isLogged())
 		}
 		if ($add AND $quantity)
 			WishList::addProduct($cookie->id_wishlist, $cookie->id_customer, $id_product, $id_product_attribute, $quantity);
-		else if ($delete)
+		elseif ($delete)
 			WishList::removeProduct($cookie->id_wishlist, $cookie->id_customer, $id_product, $id_product_attribute);
 	}
 	$smarty->assign('products', WishList::getProductByIdCustomer($cookie->id_wishlist, $cookie->id_customer, $cookie->id_lang, null, true));
