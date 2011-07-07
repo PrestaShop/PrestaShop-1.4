@@ -53,8 +53,8 @@ class AddressFormatCore extends ObjectModel
 		'postcode',
 		'Country:name',
 		'State:name');
-	
-	public static $forbiddenProperyList = array(
+		
+	public static $forbiddenPropertyList = array(
 		'deleted',
 		'date_add',
 		'other',
