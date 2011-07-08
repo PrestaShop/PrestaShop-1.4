@@ -138,26 +138,86 @@ class MoneyBookers extends PaymentModule
 		return true;
 	}
 
+	/*
+	** Fetch a distant content trying to use all the available function
+	** if one of theme doesn't exist of failed
+	*/
+	private function _fetchWebContent($url, $timeout = 5, $contextOptions = array())
+	{
+		$context = NULL;
+		$defaultContextOptions = array(
+				'http' => array(
+       	'user_agent'			=> $_SERVER['HTTP_USER_AGENT'],
+       	'max_redirects'		=> 10,
+       	'timeout'       	=> $timeout,
+       	'header'					=> array(
+       		'Accept-language: en', 
+          'Cookie: foo=bar')));
+    
+    if (is_callable('curl_init') && ($ch = curl_init()))
+		{
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			
+			$content = curl_exec($ch);
+			curl_close($ch);
+		}
+		else
+    {
+    	// Check availability of the context options     
+			if (!is_array($contextOptions) || !count($contextOptions))
+				$contextOptions = $defaultContextOptions;
+			
+			// Create a stream context
+			$context = stream_context_create($contextOptions);
+		
+			if (($fp = @fopen($url, $mode, false, $context)))
+			{
+				$content = fgets($fp, 4096);
+				fclose($fp);
+			}
+			else if (!($content = @file_get_contents($url, false, $context)))
+				if (($fp = @fsockopen($url, 80, $errnom, $errstr, $timeout)))
+					{
+						preg_match('@^(?:http://)?([^/]+)@i', $url, $matches);  
+						$host = $matches[1];
+						$out = "GET / HTTP/1.1\r\n";
+    				$out .= "Host: ".$host."\r\n";
+    				$out .= "Connection: Close\r\n\r\n";
+
+    				fwrite($fp, $out);
+    				$fetched = '';
+    				while (!feof($fp))
+        			$fetched .= fgets($fp, 1024);
+        		if (strlen($fetched))
+        			$content = $fetched;
+    				fclose($fp);
+					}
+		}
+		if (!$content)
+			throw new Exception($this->l('Unable to fetch content'));
+		return $content;
+	}
+
 	public function getContent()
 	{
 		global $cookie;
-
-		$output = '
-		<p><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo-mb.gif" alt="Moneybookers" /></p><br />';
-
 		$errors = array();
+		$output = '
+			<p><img src="'.__PS_BASE_URI__.'modules/moneybookers/logo-mb.gif" alt="Moneybookers" /></p><br />';
 
 		/* Validate account */
 		if (isset($_POST['SubmitValidation']))
-		{
-			if (isset($_POST['mb_email_to_validate']) AND !empty($_POST['mb_email_to_validate']))
+			if (isset($_POST['mb_email_to_validate']) &&
+				!empty($_POST['mb_email_to_validate']))
 			{
-				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url='.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__, 'r');
-				if (!$fp)
-					$errors[] = $this->l('Unable to contact activation server, please try again later.');
-				else
+				try 
 				{
-					$response = trim(strtolower(fgets($fp, 4096)));
+					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url='.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__;
+					$content = $this->_fetchWebContent($url);
+					$response = trim(strtolower($content));
 					if (!strstr('ok', $response))
 						$errors[] = $this->l('Account validation failed, please check your e-mail.');
 					else
@@ -166,28 +226,30 @@ class MoneyBookers extends PaymentModule
 						Configuration::updateValue('MB_PARAMETERS', 1);
 
 						$output .= '
-						<ul style="color: green; font-weight: bold; margin-bottom: 30px; width: 506px; background: #E1FFE9; border: 1px dashed #BBB; padding: 10px;">
-							<li>'.$this->l('E-mail activation successful, you can now validate your secret word.').'<img src="http://www.prestashop.com/modules/moneybookers.png?email='.urlencode($_POST['mb_email_to_validate']).'" style="float:right" /></li>
-						</ul>';
+							<ul style="color: green; font-weight: bold; margin-bottom: 30px; width: 506px; background: #E1FFE9; border: 1px dashed #BBB; padding: 10px;">
+								<li>'.$this->l('E-mail activation successful, you can now validate your secret word.').'<img src="http://www.prestashop.com/modules/moneybookers.png?email='.urlencode($_POST['mb_email_to_validate']).'" style="float:right" /></li>
+							</ul>';
 					}
-					fclose($fp);
+				}
+				catch(Exception $e)
+				{	
+					$errors[] = $this->l('Unable to contact activation server, please try again later.');
 				}
 			}
-			else
+			else 
 				$errors[] = $this->l('E-mail field is required');
-		}
-
+		
 		/* Validate secret word */
 		if (isset($_POST['SubmitSecret']))
 		{
 			if (isset($_POST['mb_sw_to_validate']) AND !empty($_POST['mb_sw_to_validate']))
 			{
-				$fp = fopen('http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url='.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']), 'r');
-				if (!$fp)
-					$errors[] = $this->l('Unable to contact activation server, please try again later.');
-				else
+				try
 				{
-					$response = trim(strtolower(fgets($fp, 4096)));
+					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url='.
+						Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']);
+					$content = $this->_fetchWebContent($url);
+					$response = trim(strtolower($content, 4096));
 					if (strstr('velocity_check_exceeded', $response))
 						$errors[] = $this->l('Secret word validation failed, exceeded max tries (3 per hour)');
 					elseif (!strstr('ok', $response))
@@ -202,7 +264,10 @@ class MoneyBookers extends PaymentModule
 							<li>'.$this->l('Account activation successful, secret word OK').'</li>
 						</ul>';
 					}
-					fclose($fp);
+				}
+				catch(Exception $e)
+				{
+					$errors[] = $this->l('Unable to contact activation server, please try again later.');
 				}
 			}
 			else
