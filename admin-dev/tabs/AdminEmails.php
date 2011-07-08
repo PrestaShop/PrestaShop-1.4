@@ -59,7 +59,7 @@ class AdminEmails extends AdminPreferences
 	{
 		if (isset($_POST['submitEmail'.$this->table]))
 		{
-		 	if ($this->tabAccess['edit'] === '1')
+			if ($this->tabAccess['edit'] === '1')
 			{
 				if ($_POST['PS_MAIL_METHOD'] == 2 AND (empty($_POST['PS_MAIL_SERVER']) OR empty($_POST['PS_MAIL_SMTP_PORT'])))
 					$this->_errors[] = Tools::displayError('You must define a SMTP server and a SMTP port. If you do not know, use the PHP mail() function instead.');
@@ -83,7 +83,7 @@ class AdminEmails extends AdminPreferences
 			<legend><img src="../img/admin/email.gif" alt="" /> '.$this->l('Test your e-mail configuration').'</legend>
 			<script type="text/javascript">
 				var textMsg = "'.urlencode($this->l('This is a test message, your server is now available to send email')).'";
-				var textSubject = "'.$this->l('Test message - Prestashop').'";
+				var textSubject = "'.urlencode($this->l('Test message - Prestashop')).'";
 				var textSendOk = "'.$this->l('Mail is sent').'";
 				var textSendError= "'.$this->l('Error: please check your configuration').'";
 				var errorMail = "'.$this->l('This email address is wrong!').'";
