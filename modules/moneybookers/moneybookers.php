@@ -249,7 +249,7 @@ class MoneyBookers extends PaymentModule
 					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url=http://'
 						.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']);
 					$content = $this->_fetchWebContent($url);
-					$response = trim(strtolower($content, 4096));
+					$response = trim(strtolower($content));
 					if (strstr('velocity_check_exceeded', $response))
 						$errors[] = $this->l('Secret word validation failed, exceeded max tries (3 per hour)');
 					elseif (!strstr('ok', $response))
