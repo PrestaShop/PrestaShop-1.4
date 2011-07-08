@@ -47,7 +47,7 @@ $mailVars =	array(
 	'{cheque_address}' => Configuration::get('CHEQUE_ADDRESS'),
 	'{cheque_address_html}' => str_replace("\n", '<br />', Configuration::get('CHEQUE_ADDRESS')));
 
-$cheque->validateOrder((int)$cart->id, _PS_OS_CHEQUE_, $total, $cheque->displayName, NULL, $mailVars, (int)$currency->id, false, $customer->secure_key);
+$cheque->validateOrder((int)$cart->id, Configuration::get('PS_OS_CHEQUE'), $total, $cheque->displayName, NULL, $mailVars, (int)$currency->id, false, $customer->secure_key);
 
 Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&id_module='.(int)$cheque->id.'&id_order='.$cheque->currentOrder.'&key='.$customer->secure_key);
 
