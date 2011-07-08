@@ -70,7 +70,7 @@ class authorizeAIM extends PaymentModule
 		if ($params['objOrder']->module != $this->name) 
 			return;
 
-		if ($params['objOrder']->getCurrentState() != Configuration::get('PS_OS_ERROR')) 
+		if ($params['objOrder']->getCurrentState() != _PS_OS_ERROR_) 
 			$smarty->assign(array('status' => 'ok', 'id_order' => intval($params['objOrder']->id)));
 		else
 			$smarty->assign('status', 'failed');

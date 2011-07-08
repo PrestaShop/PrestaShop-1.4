@@ -585,16 +585,16 @@ class MoneyBookers extends PaymentModule
 
 		switch($params['objOrder']->getCurrentState())
 		{
-			case Configuration::get('PS_OS_PAYMENT'):
-			case Configuration::get('PS_OS_OUTOFSTOCK'):
+			case _PS_OS_PAYMENT_:
+			case _PS_OS_OUTOFSTOCK_:
 				$smarty->assign('status', 'ok');
 				break;
 				
-			case Configuration::get('PS_OS_BANKWIRE'):
+			case _PS_OS_BANKWIRE_:
 				$smarty->assign('status', 'pending');
 				break;
 				
-			case Configuration::get('PS_OS_ERROR'):
+			case _PS_OS_ERROR_:
 			default:
 				$smarty->assign('status', 'failed');
 				break;
