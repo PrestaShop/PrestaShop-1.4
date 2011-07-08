@@ -47,6 +47,6 @@ $mailVars = array(
 	'{bankwire_address}' => nl2br(Configuration::get('BANK_WIRE_ADDRESS'))
 );
 
-$bankwire->validateOrder($cart->id, Configuration::get('PS_OS_BANKWIRE'), $total, $bankwire->displayName, NULL, $mailVars, (int)$currency->id, false, $customer->secure_key);
+$bankwire->validateOrder($cart->id, _PS_OS_BANKWIRE_, $total, $bankwire->displayName, NULL, $mailVars, (int)$currency->id, false, $customer->secure_key);
 $order = new Order($bankwire->currentOrder);
 Tools::redirectLink(__PS_BASE_URI__.'order-confirmation.php?id_cart='.$cart->id.'&id_module='.$bankwire->id.'&id_order='.$bankwire->currentOrder.'&key='.$customer->secure_key);
