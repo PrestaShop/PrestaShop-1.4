@@ -1490,3 +1490,9 @@ a.blue:hover {
 	width:15px;
 	cursor:pointer;
 }
+
+a.action_module_delete {
+	color: #CB1C00;
+	text-decoration: underline;
+	margin-right: 30px;
+}
