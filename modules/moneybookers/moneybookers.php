@@ -215,7 +215,7 @@ class MoneyBookers extends PaymentModule
 			{
 				try 
 				{
-					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url='.Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__;
+					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__;
 					$content = $this->_fetchWebContent($url);
 					$response = trim(strtolower($content));
 					if (!strstr('ok', $response))
@@ -246,8 +246,8 @@ class MoneyBookers extends PaymentModule
 			{
 				try
 				{
-					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url='.
-						Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']);
+					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url=http://'
+						.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']);
 					$content = $this->_fetchWebContent($url);
 					$response = trim(strtolower($content, 4096));
 					if (strstr('velocity_check_exceeded', $response))
