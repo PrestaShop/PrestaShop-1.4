@@ -58,7 +58,8 @@
 {literal}
 // <![CDATA[
     $('document').ready( function(){
-        $('#gift_div').toggle('slow');
+		if ($('input#gift').is(':checked'))
+			$('p#gift_div').show();
     });
 //]]>
 {/literal}
