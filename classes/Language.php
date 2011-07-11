@@ -294,7 +294,8 @@ class LanguageCore extends ObjectModel
 
 		foreach($tables as $table)
 			foreach($table as $t)
-				$langTables[] = $t;
+				if ($t != _DB_PREFIX_.'configuration_lang')
+					$langTables[] = $t;
 
 		Db::getInstance()->Execute('SET @id_lang_default = (SELECT c.`value` FROM `'._DB_PREFIX_.'configuration` c WHERE c.`name` = \'PS_LANG_DEFAULT\' LIMIT 1)');
 		$return = true;
