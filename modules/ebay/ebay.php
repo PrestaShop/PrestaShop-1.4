@@ -301,7 +301,8 @@ class Ebay extends Module
 			$orderList = $ebay->getOrders(Configuration::get('EBAY_ORDER_LAST_UPDATE'), $dateNew);
 			if ($orderList)
 				foreach ($orderList as $order)
-					if ($order['status'] == 'Complete')
+					if ($order['status'] == 'Complete'&& 
+						isset($order['product_list']) && count($order['product_list']))
 					{
 						$result = Db::getInstance()->getRow('SELECT `id_customer` FROM `'._DB_PREFIX_.'customer` WHERE `active` = 1 AND `email` = \''.pSQL($order['email']).'\' AND `deleted` = 0'.(substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
 						$id_customer = (isset($result['id_customer']) ? $result['id_customer'] : 0);
