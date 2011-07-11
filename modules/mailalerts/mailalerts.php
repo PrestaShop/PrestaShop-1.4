@@ -309,10 +309,13 @@ class MailAlerts extends Module
 				'{product}' => strval($params['product']['name']).(isset($params['product']['attributes_small']) ? ' '.$params['product']['attributes_small'] : ''));
 			$id_lang = (is_object($cookie) AND isset($cookie->id_lang)) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
 			$iso = Language::getIsoById((int)$id_lang);
-			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
-				Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'productoutofstock', Mail::l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			
+		    if ($params['product']['active'] == 1)
+		    {
+		    	if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
+			      Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'productoutofstock', Mail::l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+		    }
 		}
-
 		if ($this->_customer_qty AND $params['product']['quantity'] > 0)
 			$this->sendCustomerAlert((int)$params['product']['id'], 0);
 	}
