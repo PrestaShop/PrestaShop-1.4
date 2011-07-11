@@ -91,8 +91,8 @@ class FrontControllerCore
 		
 		/* Loading default country */
 		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
-
-		$cookie = new Cookie('ps');
+		$cookieLifetime = (time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_FO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_FO') : 1)* 3600));
+		$cookie = new Cookie('ps', '', $cookieLifetime);
 		$link = new Link();
 
 		if ($this->auth AND !$cookie->isLogged($this->guestAllowed))

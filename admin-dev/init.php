@@ -29,7 +29,9 @@ ob_start();
 $timerStart = microtime(true);
 
 $currentFileName = array_reverse(explode("/", $_SERVER['SCRIPT_NAME']));
-$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -strlen($currentFileName['0'])));
+$cookieLifetime = (time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_BO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_BO') : 1)* 3600));
+$cookie = new Cookie('psAdmin', substr($_SERVER['SCRIPT_NAME'], strlen(__PS_BASE_URI__), -strlen($currentFileName['0'])), $cookieLifetime);
+
 if (isset($_GET['logout']))
 	$cookie->logout();
 
