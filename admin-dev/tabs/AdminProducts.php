@@ -2608,6 +2608,11 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>';
+					
+				
+				if ((int)Configuration::get('PS_STOCK_MANAGEMENT'))
+				{
+					
 					if (!$has_attribute)
 					{
 						if ($obj->id)
@@ -2647,19 +2652,25 @@ class AdminProducts extends AdminTab
 								</tr>';
 					}
 
-				if ($obj->id)
-					echo '
-						<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
-							<td style="padding-bottom:5px;"><b>'.$qty.'</b><input type="hidden" name="quantity" value="'.$qty.'" /></td>
-						</tr>
-					';
-				if ($has_attribute)
+					if ($obj->id)
+						echo '
+							<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
+								<td style="padding-bottom:5px;"><b>'.$qty.'</b><input type="hidden" name="quantity" value="'.$qty.'" /></td>
+							</tr>
+						';
+					if ($has_attribute)
+						echo '<tr>
+								<td class="col-left">&nbsp;</td>
+								<td>
+									<div class="hint clear" style="display: block;width: 70%;">'.$this->l('You used combinations, for this reason you can\'t edit your stock quantity here, but in the Combinations tab').'</div>
+								</td>
+							</tr>';
+				}
+				else
 					echo '<tr>
-							<td class="col-left">&nbsp;</td>
-							<td>
-								<div class="hint clear" style="display: block;width: 70%;">'.$this->l('You used combinations, for this reason you can\'t edit your stock quantity here, but in the Combinations tab').'</div>
-							</td>
+							<td colspan="2">'.$this->l('The stock management is disabled').'</td>
 						</tr>';
+						
 				echo '
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>
