@@ -271,12 +271,14 @@ $(function(){ldelim}
 			<sup>*</sup>
 		</p>
 	</fieldset>
-	<p class="submit2">
+	<p class="submit2 address_navigation" style="padding:0">
 		{if isset($id_address)}<input type="hidden" name="id_address" value="{$id_address|intval}" />{/if}
 		{if isset($back)}<input type="hidden" name="back" value="{$back}" />{/if}
 		{if isset($mod)}<input type="hidden" name="mod" value="{$mod}" />{/if}
 		{if isset($select_address)}<input type="hidden" name="select_address" value="{$select_address|intval}" />{/if}
+		<a class="button" href="{$link->getPageLink('addresses.php', true)}" title="{l s='Previous'}">&laquo; {l s='Previous'}</a>
 		<input type="submit" name="submitAddress" id="submitAddress" value="{l s='Save'}" class="button" />
+		<br class="clear"/>
 	</p>
 	<p class="required"><sup>*</sup>{l s='Required field'}</p>
 </form>
