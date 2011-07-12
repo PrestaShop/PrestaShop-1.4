@@ -105,11 +105,14 @@ class BlockBestSellers extends Module
 		if (!$bestsellers AND !Configuration::get('PS_BLOCK_BESTSELLERS_DISPLAY'))
 			return;
 		$best_sellers = array();
-		foreach ($bestsellers AS $bestseller)
-		{
-			$bestseller['price'] = Tools::displayPrice(Product::getPriceStatic((int)($bestseller['id_product'])), $currency);
-			$best_sellers[] = $bestseller;
-		}
+		
+		if($bestsellers)
+			foreach ($bestsellers AS $bestseller)
+			{
+				$bestseller['price'] = Tools::displayPrice(Product::getPriceStatic((int)($bestseller['id_product'])), $currency);
+				$best_sellers[] = $bestseller;
+			}
+			
 		$smarty->assign(array(
 			'best_sellers' => $best_sellers,
 			'mediumSize' => Image::getSize('medium')));
@@ -120,7 +123,6 @@ class BlockBestSellers extends Module
 	{
 		return $this->hookRightColumn($params);
 	}
-	
 
 	public function hookHeader($params)
 	{
