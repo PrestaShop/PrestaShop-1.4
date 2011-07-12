@@ -159,8 +159,8 @@ class OrderCore extends ObjectModel
 			'id_carrier' => array('xlink_resource'=> 'carriers'),
 			'module' => array('required' => true),
 			'invoice_number' => array(),
-			'delivery_number' => array(),
 			'invoice_date' => array(),
+			'delivery_number' => array(),
 			'delivery_date' => array(),
 			'valid' => array(),
 			'current_state' => array('getter' => 'getCurrentState', 'setter' => 'setCurrentState', 'xlink_resource'=> 'order_states'),
@@ -892,7 +892,6 @@ class OrderCore extends ObjectModel
 	public function setInvoice()
 	{
 		$number = (int)Configuration::get('PS_INVOICE_START_NUMBER');
-
 		if ($number)
  		    Configuration::updateValue('PS_INVOICE_START_NUMBER', false);
  		else
@@ -907,14 +906,12 @@ class OrderCore extends ObjectModel
 		                    SELECT MAX(`invoice_number`) + 1 AS `invoice_number`
 		                    FROM `'._DB_PREFIX_.'orders`)
 		                 tmp )';
-
         // a way to avoid duplicate invoice number
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'orders`
 		SET `invoice_number` = '.$number.', `invoice_date` = \''.date('Y-m-d H:i:s').'\'
 		WHERE `id_order` = '.(int)$this->id
 		);
-
         $res = Db::getInstance()->getRow('
         SELECT `invoice_number`, `invoice_date`
         FROM `'._DB_PREFIX_.'orders`
@@ -1032,6 +1029,13 @@ class OrderCore extends ObjectModel
 		$history = new OrderHistory();
 		$history->id_order = (int)($this->id);
 		$history->changeIdOrderState((int)$id_order_state, (int)($this->id));
+		$res = Db::getInstance()->getRow('SELECT `invoice_number`, `invoice_date`, `delivery_number`, `delivery_date`, 
+											FROM `'._DB_PREFIX_.'orders`
+											WHERE `id_order` = '.(int)$this->id);
+        $this->invoice_date = $res['invoice_date'];
+        $this->invoice_number = $res['invoice_number'];
+        $this->delivery_date = $res['delivery_date'];
+        $this->delivery_number = $res['delivery_number'];
 		$history->addWithemail();
 	}
 
