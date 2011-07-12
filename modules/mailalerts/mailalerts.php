@@ -507,7 +507,8 @@ class MailAlerts extends Module
 			FROM `'._DB_PREFIX_.'mailalert_customer_oos` ma
 			JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ma.`id_product`
 			JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = ma.`id_product`
-			WHERE ma.`id_customer` = '.(int)($id_customer).'
+			WHERE p.`active` = 1
+			AND ma.`id_customer` = '.(int)($id_customer).'
 			AND pl.`id_lang` = '.(int)($id_lang));
 		if (empty($products) === true OR !sizeof($products))
 			return array();
