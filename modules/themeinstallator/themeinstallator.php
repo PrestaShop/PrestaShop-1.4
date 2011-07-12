@@ -64,7 +64,7 @@ class ThemeInstallator extends Module
 	
 	private function getTheNativeModules()
 	{
-		$xml = @simplexml_load_string(file_get_contents('http://www.prestashop.com/xml/modules_list.xml'));
+		$xml = simplexml_load_string(Tools::file_get_contents('http://www.prestashop.com/xml/modules_list.xml'));
 		$natives = array();
 		if ($xml)
 			foreach ($xml->modules as $row)
@@ -89,23 +89,19 @@ class ThemeInstallator extends Module
 	}
 	
 	private function deleteDirectory($dirname)
-	{
-		self::cleanDirectory($dirname);
-		rmdir($dirname);
-	}
-	private function cleanDirectory($dirname)
-	{
-		$files = scandir($dirname);
-		foreach ($files as $file)
-			if ($file != '.' AND $file != '..' AND $file != '.svn')
-			{
-				if (is_dir($dirname.'/'.$file))
-					self::deleteDirectory($dirname.'/'.$file);
-				elseif (file_exists($dirname.'/'.$file))
-					unlink($dirname.'/'.$file);
-				}
-	}
-	
+    {
+        $files = scandir($dirname);
+        foreach ($files as $file)
+            if ($file != '.' AND $file != '..')
+            {
+                if (is_dir($dirname.'/'.$file))
+                    self::deleteDirectory($dirname.'/'.$file);
+                elseif (file_exists($dirname.'/'.$file))
+                    unlink($dirname.'/'.$file);
+            }
+        rmdir($dirname);
+    }
+
 	private function recurseCopy($src, $dst)
 	{
 		if (!$dir = opendir($src))
@@ -149,7 +145,14 @@ class ThemeInstallator extends Module
 	
 	private function deleteTmpFiles()
 	{
-		self::cleanDirectory(_IMPORT_FOLDER_);
+		if (file_exists(_IMPORT_FOLDER_.'doc'))
+			self::deleteDirectory(_IMPORT_FOLDER_.'doc');
+		if (file_exists(_IMPORT_FOLDER_.XMLFILENAME))
+			unlink(_IMPORT_FOLDER_.XMLFILENAME);
+		if (file_exists(_IMPORT_FOLDER_.'modules'))
+			self::deleteDirectory(_IMPORT_FOLDER_.'modules');
+		if (file_exists(_IMPORT_FOLDER_.'themes'))
+			self::deleteDirectory(_IMPORT_FOLDER_.'themes');
 		if (file_exists(_EXPORT_FOLDER_.'archive.zip'))	
 			unlink(_EXPORT_FOLDER_.'archive.zip');
 	}
@@ -462,9 +465,16 @@ class ThemeInstallator extends Module
 				$count = -1;
 				while (isset($hookedModule[++$count]))
 					if ($hookedModule[$count] == $row)
+					{
 						Db::getInstance()->Execute('
 							INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
 							VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', '.(int)$position[$count].')');
+						if ($exceptions[$count])
+							foreach ($exceptions[$count] as $file_name)
+								Db::getInstance()->Execute('
+									INSERT INTO `'._DB_PREFIX_.'hook_module_exceptions` (`id_module`, `id_hook`, `file_name`)
+									VALUES ('.(int)$obj->id.', '.(int)Hook::get($hook[$count]).', "'.pSQL($file_name).'")');
+					}
 			}
 		if (($val = (int)(Tools::getValue('nativeModules'))) != 1)
 		{
