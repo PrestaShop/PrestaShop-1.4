@@ -32,7 +32,7 @@ class BackupCore
 	/** @var string Last error messages */
 	public $error;
 /** @var string default backup directory. */
-	public static $backupDir = '/backups/';
+	public $backupDir = '/backups/';
 
 	/**
 	 * Creates a new backup object
