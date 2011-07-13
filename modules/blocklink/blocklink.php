@@ -37,7 +37,7 @@ class BlockLink extends Module
 	{
 		$this->name = 'blocklink';
 		$this->tab = 'front_office_features';
-		$this->version = '1.4';
+		$this->version = '1.5';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -289,7 +289,7 @@ class BlockLink extends Module
 				<div class="margin-form">
 					<input type="hidden" name="id" id="id" value="'.($this->error AND isset($_POST['id']) ? $_POST['id'] : '').'" />
 					<input type="submit" class="button" name="submitLinkAdd" value="'.$this->l('Add this link').'" />
-					<input type="submit" class="button disable" name="submitLinkUpdate" value="'.$this->l('Edit this link').'" disabled="disabled" id="submitLinkUpdate" />
+					<input type="submit" class="button disable" name="submitLinkUpdate" value="'.$this->l('Edit this link').'" id="submitLinkUpdate" />
 				</div>
 			</form>
 		</fieldset>
@@ -330,7 +330,7 @@ class BlockLink extends Module
 	private function _list()
 	{
 		$links = $this->getLinks();
-	
+		
 		global $currentIndex, $cookie, $adminObj;
 		$languages = Language::getLanguages();
 		if ($links)
@@ -379,9 +379,22 @@ class BlockLink extends Module
 						<img src="../img/admin/delete.gif" alt="" title="" onclick="linkDeletion('.$link['id'].')" style="cursor: pointer" />
 					</td>
 				</tr>';
+
+		$i = 0;
+		$nb = count($languages);
+		$idLng = 0;
+		while($i < $nb)
+		{
+			if ($languages[$i]['id_lang'] == (int)Configuration::get('PS_LANG_DEFAULT'))
+			{
+				$idLng = $i;
+			}
+			$i++;
+		}
+
 		$this->_html .= '
 		</table>
-		<input type="hidden" id="languageFirst" value="'.$languages[0]['id_lang'].'" />
+		<input type="hidden" id="languageFirst" value="'.$languages[$idLng]['id_lang'].'" />
 		<input type="hidden" id="languageNb" value="'.sizeof($languages).'" />';
 	}
 }
