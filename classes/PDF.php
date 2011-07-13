@@ -196,7 +196,7 @@ class PDFCore extends PDF_PageGroupCore
    	$footerText;
 
    	// If the country is USA
-   	if ($conf['PS_SHOP_COUNTRY_ID'] == 21)
+   	if (Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
    	{
    		$completeAddressShop = $this->_getCompleteUSAddressFormat($conf);
 
@@ -447,16 +447,24 @@ class PDFCore extends PDF_PageGroupCore
 			$addressType[$type]['addressFormatedValues'] = AddressFormat::getFormattedAddressFieldsValues(
 				$addressType[$type]['addressObject'],
 				$addressType[$type]['addressFields']);
-
+				
 			foreach ($addressType[$type]['addressFields'] as $line)
 				if (($patternsList = explode(' ', $line)))
 				{
 					$tmp = '';
 					foreach($patternsList as $pattern)
 						if (!in_array($pattern, $patternRules['avoid']))
+						{
+							if ($pattern == 'State:name' && 
+								Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
+							{
+								$state = &$addressType[$type]['addressFormatedValues'][$pattern];
+								$state = strtoupper(substr($state, 0, 2));
+							}
 							$tmp .= ((isset($addressType[$type]['addressFormatedValues'][$pattern]) &&
 								!empty($addressType[$type]['addressFormatedValues'][$pattern])) ?
 								(Tools::iconv('utf-8', self::encoding(), $addressType[$type]['addressFormatedValues'][$pattern]).' ') : '');
+						}
 					$tmp = trim($tmp);
 					$addressType[$type]['displayed'] .= (!empty($tmp)) ? $tmp."\n" : '';
 				}
