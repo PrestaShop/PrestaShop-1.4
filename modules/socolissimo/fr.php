@@ -55,7 +55,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_b0b2896e75025245cbb05e96bd1466d6'
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce88aabea3b363c753b02ddcb2fbafff'] = 'Url de l\'administration de So Colissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_85068ddf0b9bcbb6913008356fe328a0'] = 'Supervision';
 $_MODULE['<{socolissimo}prestashop>socolissimo_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activé';
-$_MODULE['<{socolissimo}prestashop>socolissimo_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactivé';
+$_MODULE['<{socolissimo}prestashop>socolissimo_b9f5c797ebbf55adccdd8539a65a0241'] = 'Désactiver';
 $_MODULE['<{socolissimo}prestashop>socolissimo_fdd526b84abc0b8fc17060e62d022b84'] = 'Autoriser ou non la verification de la disponibilité des services SoColissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_32996bdf4214d6cb8bf7fa02273813c8'] = 'Adresse de verification';
 $_MODULE['<{socolissimo}prestashop>socolissimo_947d84460ad5676c9d79fa05727f1e8a'] = 'L\'URL de surveillance permet de s\'assurer de la disponibilité du service socolissimo. Il n\'est pas conseillé de la desactivé.';
