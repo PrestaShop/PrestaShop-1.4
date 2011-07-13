@@ -864,9 +864,9 @@ class ToolsCore
 		$pipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
 
 		if ($type_cat === 'products')
-		    $category = new Category((int)($id_category), (int)($cookie->id_lang));
+			$category = new Category((int)($id_category), (int)($cookie->id_lang));
 		elseif ($type_cat === 'CMS')
-		    $category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
+			$category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
 
 		if (!Validate::isLoadedObject($category))
 			$id_category = 1;
@@ -1037,14 +1037,14 @@ class ToolsCore
 
 	public static function hourGenerate($hours, $minutes, $seconds)
 	{
-	    return implode(':', array($hours, $minutes, $seconds));
+		return implode(':', array($hours, $minutes, $seconds));
 	}
 
 	public static function dateFrom($date)
 	{
 		$tab = explode(' ', $date);
 		if (!isset($tab[1]))
-		    $date .= ' ' . self::hourGenerate(0, 0, 0);
+			$date .= ' ' . self::hourGenerate(0, 0, 0);
 		return $date;
 	}
 
@@ -1052,7 +1052,7 @@ class ToolsCore
 	{
 		$tab = explode(' ', $date);
 		if (!isset($tab[1]))
-		    $date .= ' ' . self::hourGenerate(23, 59, 59);
+			$date .= ' ' . self::hourGenerate(23, 59, 59);
 		return $date;
 	}
 
@@ -1116,13 +1116,13 @@ class ToolsCore
 
 	public static function orderbyPrice(&$array, $orderWay)
 	{
-		foreach($array as &$row)
+		foreach ($array as &$row)
 			$row['price_tmp'] =  Product::getPriceStatic($row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 2);
 		if (strtolower($orderWay) == 'desc')
 			uasort($array, 'cmpPriceDesc');
 		else
 			uasort($array, 'cmpPriceAsc');
-		foreach($array as &$row)
+		foreach ($array as &$row)
 			unset($row['price_tmp']);
 	}
 
@@ -1228,7 +1228,7 @@ class ToolsCore
 	}
 
 	public static function file_get_contents($url, $useIncludePath = false, $streamContext = NULL)
-    {
+	{
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 			return file_get_contents($url, $useIncludePath, $streamContext);
 		elseif (function_exists('curl_init'))
@@ -1242,7 +1242,19 @@ class ToolsCore
 		}
 		else
 			return false;
-    }
+	}
+
+	public static function simplexml_load_file($url, $class_name = null)
+	{
+		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
+			return simplexml_load_file($url, $class_name);
+		elseif (function_exists('curl_init'))
+		{
+			return simplexml_load_string(Tools::file_get_contents($url), $class_name);
+		}
+		else
+			return false;
+	}
 
 	public static function minifyHTML($html_content)
 	{
@@ -1424,7 +1436,7 @@ class ToolsCore
 		if (!is_array($js_uri) && !in_array($js_uri, $js_files))
 			$js_uri = array($js_uri);
 		else
-			foreach($js_uri as $key => $js)
+			foreach ($js_uri as $key => $js)
 				if (in_array($js, $js_files))
 					unset($js_uri[$key]);
 
@@ -1960,51 +1972,51 @@ FileETag INode MTime Size
 		if (function_exists('property_exists'))
 			return property_exists($class, $property);
 
-        if (is_object($class))
-            $vars = get_object_vars($class);
-        else
-            $vars = get_class_vars($class);
+		if (is_object($class))
+			$vars = get_object_vars($class);
+		else
+			$vars = get_class_vars($class);
 
-        return array_key_exists($property, $vars);
-    }
+		return array_key_exists($property, $vars);
+	}
 
 	/**
-     * @desc identify the version of php
-     * @return string
-     */
-    public static function checkPhpVersion()
-    {
-    	$version = null;
+	 * @desc identify the version of php
+	 * @return string
+	 */
+	public static function checkPhpVersion()
+	{
+		$version = null;
 
-    	if (defined('PHP_VERSION'))
-    		$version = PHP_VERSION;
-    	else
-    		$version  = phpversion('');
+		if (defined('PHP_VERSION'))
+			$version = PHP_VERSION;
+		else
+			$version  = phpversion('');
 
 		//Case management system of ubuntu, php version return 5.2.4-2ubuntu5.2
-    	if (strpos($version, '-') !== false )
+		if (strpos($version, '-') !== false )
 			$version  = substr($version, 0, strpos($version, '-'));
 
-        return $version;
-    }
+		return $version;
+	}
 
-    /**
-     * @desc selection of Smarty depending on the version of php
-     *
-     */
-    public static function selectionVersionSmarty()
-    {
-        //Smarty 3 requirements PHP 5.2 +
-        if (strnatcmp(self::checkPhpVersion(),'5.2.0') >= 0)
-            Configuration::updateValue('PS_FORCE_SMARTY_2', 0);
-        else
-            Configuration::updateValue('PS_FORCE_SMARTY_2',1);
-    }
+	/**
+	 * @desc selection of Smarty depending on the version of php
+	 *
+	 */
+	public static function selectionVersionSmarty()
+	{
+		//Smarty 3 requirements PHP 5.2 +
+		if (strnatcmp(self::checkPhpVersion(),'5.2.0') >= 0)
+			Configuration::updateValue('PS_FORCE_SMARTY_2', 0);
+		else
+			Configuration::updateValue('PS_FORCE_SMARTY_2',1);
+	}
 
-    /**
-     * @desc try to open a zip file in order to check if it's valid
-     * @return bool success
-     */
+	/**
+	 * @desc try to open a zip file in order to check if it's valid
+	 * @return bool success
+	 */
 	public static function ZipTest($fromFile)
 	{
 		if (class_exists('ZipArchive', false))
@@ -2020,10 +2032,10 @@ FileETag INode MTime Size
 		}
 	}
 
-    /**
-     * @desc extract a zip file to the given directory
-     * @return bool success
-     */
+	/**
+	 * @desc extract a zip file to the given directory
+	 * @return bool success
+	 */
 	public static function ZipExtract($fromFile, $toDir)
 	{
 		if (!file_exists($toDir))

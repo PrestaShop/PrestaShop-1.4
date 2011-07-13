@@ -224,7 +224,7 @@ class LocalizationPackCore
 					return false;
 				}
 
-				foreach($group->taxRule as $rule)
+				foreach ($group->taxRule as $rule)
 				{
 					$rule_attributes = $rule->attributes();
 
@@ -261,7 +261,6 @@ class LocalizationPackCore
 							$county_behavior = (int)$rule_attributes['county_behavior'];
 					}
 
-
 					// Creation
 					$tr = new TaxRule();
 					$tr->id_tax_rules_group = $trg->id;
@@ -283,7 +282,7 @@ class LocalizationPackCore
 	{
 		if (isset($xml->currencies->currency))
 		{
-			if (!$feed = @simplexml_load_file('http://www.prestashop.com/xml/currencies.xml') AND !$feed = @simplexml_load_file(dirname(__FILE__).'/../localization/currencies.xml'))
+			if (!$feed = Tools::simplexml_load_file('http://www.prestashop.com/xml/currencies.xml') AND !$feed = @simplexml_load_file(dirname(__FILE__).'/../localization/currencies.xml'))
 			{
 				$this->_errors[] = Tools::displayError('Cannot parse the currencies XML feed.');
 				return false;
@@ -416,7 +415,7 @@ class LocalizationPackCore
 	protected function installModules($xml)
 	{
 		if (isset($xml->modules))
-			foreach($xml->modules->module as $data)
+			foreach ($xml->modules->module as $data)
 			{
 				$attributes = $data->attributes();
 				$name = (string)$attributes['name'];
@@ -452,7 +451,7 @@ class LocalizationPackCore
 	protected function installConfiguration($xml)
 	{
 		if (isset($xml->configurations))
-			foreach($xml->configurations->configuration as $data)
+			foreach ($xml->configurations->configuration as $data)
 			{
 				$attributes = $data->attributes();
 				$name = (string)$attributes['name'];

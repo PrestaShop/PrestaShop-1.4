@@ -100,7 +100,7 @@ class AdminLocalization extends AdminPreferences
 			<label>'.$this->l('Localization pack you want to import:').'</label>
 			<div class="margin-form">
 			<select id="iso_localization_pack" name="iso_localization_pack">';
-			$localization_packs = @simplexml_load_file('http://www.prestashop.com/rss/localization.xmlddd');
+			$localization_packs = Tools::simplexml_load_file('http://www.prestashop.com/rss/localization.xml');
 			if (!$localization_packs)
 			{
 				$localizationFile = dirname(__FILE__).'/../../localization/localization.xml';
