@@ -898,6 +898,23 @@ class WebserviceRequestCore
 				else
 					$i18n_available_filters[] = $fieldName;
 		
+		// Date feature : date=1
+		if (!empty($this->urlFragments['date']) && $this->urlFragments['date'])
+		{
+			if (!in_array('date_add', $available_filters))
+				$available_filters[] = 'date_add';
+			if (!in_array('date_upd', $available_filters))
+				$available_filters[] = 'date_upd';
+			if (!array_key_exists('date_add', $this->resourceConfiguration['fields']))
+				$this->resourceConfiguration['fields']['date_add'] = array('sqlId' => 'date_add');
+			if (!array_key_exists('date_upd', $this->resourceConfiguration['fields']))
+				$this->resourceConfiguration['fields']['date_upd'] = array('sqlId' => 'date_upd');
+		}
+		else
+			foreach ($available_filters as $key => $value)
+				if ($value == 'date_add' || $value == 'date_upd')
+					unset($available_filters[$key]);
+
 		//construct SQL filter
 		$sql_filter = '';
 		$sql_join = '';
