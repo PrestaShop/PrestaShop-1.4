@@ -285,7 +285,14 @@ class OrderCore extends ObjectModel
 		/* Update order */
 		$shippingDiff = $this->total_shipping - $cart->getOrderShippingCost();
 		$this->total_products -= $productPriceWithoutTax;
-		$this->total_products_wt -= $productPrice;
+		
+		// After upgrading from old version
+		// total_products_wt is null
+		// removing a product made order total negative
+		// and don't recalculating totals (on getTotalProductsWithTaxes)
+		if ($this->total_products_wt != 0)
+			$this->total_products_wt -= $productPrice;
+		
 		$this->total_shipping = $cart->getOrderShippingCost();
 
 		/* It's temporary fix for 1.3 version... */
@@ -619,15 +626,15 @@ class OrderCore extends ObjectModel
 	 * @return array Customer orders
 	 */
 	public static function getCustomerOrders($id_customer, $showHiddenStatus = false)
-    {
+	{
 		global $cookie;
 
-    	$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-        SELECT o.*, (SELECT SUM(od.`product_quantity`) FROM `'._DB_PREFIX_.'order_detail` od WHERE od.`id_order` = o.`id_order`) nb_products
-        FROM `'._DB_PREFIX_.'orders` o
-        WHERE o.`id_customer` = '.(int)$id_customer.'
-        GROUP BY o.`id_order`
-        ORDER BY o.`date_add` DESC');
+		$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT o.*, (SELECT SUM(od.`product_quantity`) FROM `'._DB_PREFIX_.'order_detail` od WHERE od.`id_order` = o.`id_order`) nb_products
+		FROM `'._DB_PREFIX_.'orders` o
+		WHERE o.`id_customer` = '.(int)$id_customer.'
+		GROUP BY o.`id_order`
+		ORDER BY o.`date_add` DESC');
 		if (!$res)
 			return array();
 
@@ -645,7 +652,7 @@ class OrderCore extends ObjectModel
 				$res[$key] = array_merge($res[$key], $res2[0]);
 		}
 		return $res;
-    }
+	}
 
 	public static function getOrdersIdByDate($date_from, $date_to, $id_customer = NULL, $type = NULL)
 	{
@@ -732,22 +739,22 @@ class OrderCore extends ObjectModel
 		return $orders;
 	}
 
-    /**
-     * Get product total without taxes
-     *
-     * @return Product total with taxes
-     */
-    public function getTotalProductsWithoutTaxes($products = false)
+	/**
+	 * Get product total without taxes
+	 *
+	 * @return Product total with taxes
+	 */
+	public function getTotalProductsWithoutTaxes($products = false)
 	{
 		return $this->total_products;
 	}
 
-    /**
-     * Get product total with taxes
-     *
-     * @return Product total with taxes
-     */
-    public function getTotalProductsWithTaxes($products = false)
+	/**
+	 * Get product total with taxes
+	 *
+	 * @return Product total with taxes
+	 */
+	public function getTotalProductsWithTaxes($products = false)
 	{
 		if ($this->total_products_wt != '0.00' AND !$products)
 			return $this->total_products_wt;
@@ -783,14 +790,14 @@ class OrderCore extends ObjectModel
 	 * @return array Customer orders number
 	 */
 	public static function getCustomerNbOrders($id_customer)
-    {
-    	$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-        SELECT COUNT(`id_order`) AS nb
-        FROM `'._DB_PREFIX_.'orders`
-        WHERE `id_customer` = '.(int)($id_customer));
+	{
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT COUNT(`id_order`) AS nb
+		FROM `'._DB_PREFIX_.'orders`
+		WHERE `id_customer` = '.(int)($id_customer));
 
 		return isset($result['nb']) ? $result['nb'] : 0;
-    }
+	}
 
 	/**
 	 * Get an order by its cart id
@@ -799,16 +806,16 @@ class OrderCore extends ObjectModel
 	 * @return array Order details
 	 */
 	public static function getOrderByCartId($id_cart)
-    {
-    	$result = Db::getInstance()->getRow('
-        SELECT `id_order`
-        FROM `'._DB_PREFIX_.'orders`
-        WHERE `id_cart` = '.(int)($id_cart));
+	{
+		$result = Db::getInstance()->getRow('
+		SELECT `id_order`
+		FROM `'._DB_PREFIX_.'orders`
+		WHERE `id_cart` = '.(int)($id_cart));
 
 		return isset($result['id_order']) ? $result['id_order'] : false;
-    }
+	}
 
-    /**
+	/**
 	 * Add a discount to order
 	 *
 	 * @param integer $id_discount Discount id
@@ -881,45 +888,45 @@ class OrderCore extends ObjectModel
 	}
 
 
-    public static function getLastInvoiceNumber()
-    {
-        return (int)Db::getInstance()->getValue('
-        SELECT MAX(`invoice_number`) AS `invoice_number`
+	public static function getLastInvoiceNumber()
+	{
+		return (int)Db::getInstance()->getValue('
+		SELECT MAX(`invoice_number`) AS `invoice_number`
 		FROM `'._DB_PREFIX_.'orders`
-        ');
-    }
+		');
+	}
 
 	public function setInvoice()
 	{
 		$number = (int)Configuration::get('PS_INVOICE_START_NUMBER');
 		if ($number)
- 		    Configuration::updateValue('PS_INVOICE_START_NUMBER', false);
+ 			Configuration::updateValue('PS_INVOICE_START_NUMBER', false);
  		else
 			if (version_compare(Db::getInstance()->getServerVersion(), 5,'<'))
 			{
 				// I use mysql 4, I can't make sub query in FROM
-		    $number = Order::getLastInvoiceNumber() + 1;
+			$number = Order::getLastInvoiceNumber() + 1;
 			}
 			else 
-		    $number = '(SELECT `invoice_number`
-		                 FROM (
-		                    SELECT MAX(`invoice_number`) + 1 AS `invoice_number`
-		                    FROM `'._DB_PREFIX_.'orders`)
-		                 tmp )';
-        // a way to avoid duplicate invoice number
+			$number = '(SELECT `invoice_number`
+						FROM (
+							SELECT MAX(`invoice_number`) + 1 AS `invoice_number`
+							FROM `'._DB_PREFIX_.'orders`)
+						tmp )';
+		// a way to avoid duplicate invoice number
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'orders`
 		SET `invoice_number` = '.$number.', `invoice_date` = \''.date('Y-m-d H:i:s').'\'
 		WHERE `id_order` = '.(int)$this->id
 		);
-        $res = Db::getInstance()->getRow('
-        SELECT `invoice_number`, `invoice_date`
-        FROM `'._DB_PREFIX_.'orders`
+		$res = Db::getInstance()->getRow('
+		SELECT `invoice_number`, `invoice_date`
+		FROM `'._DB_PREFIX_.'orders`
 		WHERE `id_order` = '.(int)$this->id
-        );
+		);
 
-        $this->invoice_date = $res['invoice_date'];
-        $this->invoice_number = $res['invoice_number'];
+		$this->invoice_date = $res['invoice_date'];
+		$this->invoice_number = $res['invoice_number'];
 	}
 
 	public function setDelivery()
@@ -960,10 +967,10 @@ class OrderCore extends ObjectModel
 
 	public static function getByDelivery($id_delivery)
 	{
-	    $res = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-        SELECT id_order
-        FROM `'._DB_PREFIX_.'orders`
-        WHERE `delivery_number` = '.(int)($id_delivery));
+		$res = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT id_order
+		FROM `'._DB_PREFIX_.'orders`
+		WHERE `delivery_number` = '.(int)($id_delivery));
 		return new Order((int)($res['id_order']));
 	}
 
