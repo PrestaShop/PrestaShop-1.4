@@ -139,14 +139,14 @@ if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
 }
 else
 {
-	die('<action result="fail" error="30" />'."\n");
 	$logger->logError('The config/settings.inc.php file was not found.');
+	die('<action result="fail" error="30" />'."\n");
 }
 
 if (!file_exists(DEFINES_FILE))
 {
-	die('<action result="fail" error="37" />'."\n");
 	$logger->logError('The config/settings.inc.php file was not found.');
+	die('<action result="fail" error="37" />'."\n");
 }
 include_once(SETTINGS_FILE);
 
