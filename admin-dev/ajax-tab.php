@@ -50,8 +50,25 @@ if (empty($tab) and !sizeof($_POST))
 			$adminObj->ajax = true;
 			if ($adminObj->checkToken())
 			{
-				// when ajax, let postProcess handle everything, including display. (this may change)
-				$adminObj->postProcess();
+				// the differences with index.php is here 
+
+				$adminObj->ajaxPreProcess();
+				$action = Tools::getValue('action');
+
+				// no need to use displayConf() here
+
+				if (!empty($action) AND method_exists($adminObj, 'ajaxProcess'.Tools::toCamelCase($action)) )
+					$adminObj->{'ajaxProcess'.Tools::toCamelCase($action)}();
+				else
+					$adminObj->ajaxProcess();
+				
+
+				$adminObj->displayErrors();
+				if (!empty($action) AND method_exists($adminObj, 'displayAjax'.Tools::toCamelCase($action)) )
+					$adminObj->{'displayAjax'.$action}();
+				else
+					$adminObj->displayAjax();
+
 			}
 			else
 			{
@@ -63,9 +80,9 @@ if (empty($tab) and !sizeof($_POST))
 				if (false === strpos($url, '?token=') AND false === strpos($url, '&token='))
 					$url .= '&token='.$adminObj->token;
 
-				$message = translate('Invalid security token');
-				// this return can be modified later
-				echo Tools::jsonencode(array($message,$url));
+				// we can display the correct url
+				// die(Tools::jsonEncode(array(translate('Invalid security token'),$url)));
+				die(Tools::jsonEncode(translate('Invalid security token')));
 			}
 		}
 	}

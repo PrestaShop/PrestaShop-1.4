@@ -164,10 +164,14 @@ class AdminHome extends AdminTab
 		<h1>'.$this->l('Dashboard').'</h1>
 		<hr style="background-color: #812143;color: #812143;" />
 		<br />';
-		if (@ini_get('allow_url_fopen') AND $update = checkPSVersion())
-			echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.$this->l('New PrestaShop version available').' : <a style="text-decoration: underline;" href="'.$update['link'].'" target="_blank">'.$this->l('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
-	    elseif (!@ini_get('allow_url_fopen'))
-	    {
+		if (@ini_get('allow_url_fopen'))
+		{
+			$upgrade = new Upgrader();
+			if($update = $upgrade->checkPSVersion())
+				echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.$this->l('New PrestaShop version available').' : <a style="text-decoration: underline;" href="'.$update['link'].'" target="_blank">'.$this->l('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
+		}
+		else 
+		{
 			echo '<p>'.$this->l('Update notification unavailable').'</p>';
 			echo '<p>&nbsp;</p>';
 			echo '<p>'.$this->l('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.$this->l('more info').'</a>]</p>';

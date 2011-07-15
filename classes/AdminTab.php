@@ -147,6 +147,8 @@ abstract class AdminTabCore
 	protected $_includeVars = false;
 	protected $_includeContainer = true;
 
+	protected $ajax = false;
+
 	public static $tabParenting = array(
 		'AdminProducts' => 'AdminCatalog',
 		'AdminCategories' => 'AdminCatalog',
@@ -218,6 +220,14 @@ abstract class AdminTabCore
 		return str_replace('"', '&quot;', ($addslashes ? addslashes($str) : stripslashes($str)));
 	}
 
+	/**
+	 * ajaxDisplay is the default ajax return sytem 
+	 * 
+	 * @return void
+	 */
+	public function displayAjax()
+	{
+	}
 	/**
 	 * Manage page display (form, list...)
 	 *
@@ -487,6 +497,24 @@ abstract class AdminTabCore
 			if (file_exists(_PS_IMG_DIR_.$dir.$id.'-'.stripslashes($imageType['name']).'.'.$this->imageType) AND !unlink(_PS_IMG_DIR_.$dir.$id.'-'.stripslashes($imageType['name']).'.'.$this->imageType))
 				return false;
 		return true;
+	}
+
+	/**
+	 * ajaxPreProcess is a method called in ajax-tab.php before displayConf(). 
+	 * 
+	 * @return void
+	 */
+	public function ajaxPreProcess()
+	{
+	}
+
+	/**
+	 * ajaxProcess is the default handle method for request with ajax-tab.php
+	 * 
+	 * @return void
+	 */
+	public function ajaxProcess()
+	{
 	}
 
 	/**
