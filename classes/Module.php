@@ -482,6 +482,11 @@ abstract class ModuleCore
 		$moduleName = Module::preloadModuleNameFromId($id_module);
 		return ($moduleName ? Module::getInstanceByName($moduleName) : false);
 	}
+	
+	public static function configXmlStringFormat($string)
+	{
+		return str_replace('\'', '\\\'', Tools::htmlentitiesDecodeUTF8($string));
+	}
 
 	/**
 	  * Return available modules
@@ -522,12 +527,12 @@ abstract class ModuleCore
 						if (isset($_MODULE) AND is_array($_MODULE))
 							$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 
-					$xml_module->displayName = Module::findTranslation($xml_module->name, $xml_module->displayName, (string)$xml_module->name);
-					$xml_module->description = Module::findTranslation($xml_module->name, $xml_module->description, (string)$xml_module->name);
-					$xml_module->author = Module::findTranslation($xml_module->name, $xml_module->author, (string)$xml_module->name);
+					$xml_module->displayName = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->displayName), (string)$xml_module->name);
+					$xml_module->description = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->description), (string)$xml_module->name);
+					$xml_module->author = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->author), (string)$xml_module->name);
 
 					if (isset($xml_module->confirmUninstall))
-						$xml_module->confirmUninstall = Module::findTranslation($xml_module->name, $xml_module->confirmUninstall, (string)$xml_module->name);
+						$xml_module->confirmUninstall = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->confirmUninstall), (string)$xml_module->name);
 
 
 					$moduleList[$moduleListCursor] = $xml_module;

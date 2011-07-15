@@ -209,8 +209,8 @@ abstract class AdminTabCore
 		}
 		global $_LANGADM;
 
-        if ($class == __CLASS__)
-                $class = 'AdminTab';
+		if ($class == __CLASS__)
+				$class = 'AdminTab';
 
 		$key = md5(str_replace('\'', '\\\'', $string));
 		$str = (key_exists(get_class($this).$key, $_LANGADM)) ? $_LANGADM[get_class($this).$key] : ((key_exists($class.$key, $_LANGADM)) ? $_LANGADM[$class.$key] : $string);
@@ -1445,7 +1445,7 @@ abstract class AdminTabCore
 					else
 						echo '>';
 					if (isset($params['active']) AND isset($tr[$key]))
-					    $this->_displayEnableLink($token, $id, $tr[$key], $params['active'], Tools::getValue('id_category'), Tools::getValue('id_product'));
+						$this->_displayEnableLink($token, $id, $tr[$key], $params['active'], Tools::getValue('id_category'), Tools::getValue('id_product'));
 					elseif (isset($params['activeVisu']) AND isset($tr[$key]))
 						echo '<img src="../img/admin/'.($tr[$key] ? 'enabled.gif' : 'disabled.gif').'"
 						alt="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($tr[$key] ? $this->l('Enabled') : $this->l('Disabled')).'" />';
@@ -1483,7 +1483,7 @@ abstract class AdminTabCore
 					}
 					elseif (isset($params['icon']) AND (isset($params['icon'][$tr[$key]]) OR isset($params['icon']['default'])))
 						echo '<img src="../img/admin/'.(isset($params['icon'][$tr[$key]]) ? $params['icon'][$tr[$key]] : $params['icon']['default'].'" alt="'.$tr[$key]).'" title="'.$tr[$key].'" />';
-                    elseif (isset($params['price']))
+					elseif (isset($params['price']))
 						echo Tools::displayPrice($tr[$key], (isset($params['currency']) ? Currency::getCurrencyInstance((int)($tr['id_currency'])) : $currency), false);
 					elseif (isset($params['float']))
 						echo rtrim(rtrim($tr[$key], '0'), '.');
@@ -1507,13 +1507,13 @@ abstract class AdminTabCore
 				{
 					echo '<td class="center" style="white-space: nowrap;">';
 					if ($this->view)
-                        $this->_displayViewLink($token, $id);
+						$this->_displayViewLink($token, $id);
 					if ($this->edit)
-					    $this->_displayEditLink($token, $id);
+						$this->_displayEditLink($token, $id);
 					if ($this->delete AND (!isset($this->_listSkipDelete) OR !in_array($id, $this->_listSkipDelete)))
-					    $this->_displayDeleteLink($token, $id);
+						$this->_displayDeleteLink($token, $id);
 					if ($this->duplicate)
-                        $this->_displayDuplicate($token, $id);
+						$this->_displayDuplicate($token, $id);
 					echo '</td>';
 				}
 				echo '</tr>';
@@ -1524,60 +1524,60 @@ abstract class AdminTabCore
 
 	protected function _displayEnableLink($token, $id, $value, $active,  $id_category = NULL, $id_product = NULL)
 	{
-	    global $currentIndex;
+		global $currentIndex;
 
-	    echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$active.$this->table.
-	        ((int)$id_category AND (int)$id_product ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
-	        <img src="../img/admin/'.($value ? 'enabled.gif' : 'disabled.gif').'"
-	        alt="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" /></a>';
+		echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$active.$this->table.
+			((int)$id_category AND (int)$id_product ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
+			<img src="../img/admin/'.($value ? 'enabled.gif' : 'disabled.gif').'"
+			alt="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" /></a>';
 	}
 
-    protected function 	_displayDuplicate($token = NULL, $id)
-    {
-	    global $currentIndex;
+	protected function 	_displayDuplicate($token = NULL, $id)
+	{
+		global $currentIndex;
 
-        $_cacheLang['Duplicate'] = $this->l('Duplicate');
+		$_cacheLang['Duplicate'] = $this->l('Duplicate');
 		$_cacheLang['Copy images too?'] = $this->l('Copy images too?', __CLASS__, TRUE, FALSE);
 
-    	$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
+		$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
 
 		echo '
 			<a class="pointer" onclick="if (confirm(\''.$_cacheLang['Copy images too?'].'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
-    		<img src="../img/admin/duplicate.png" alt="'.$_cacheLang['Duplicate'].'" title="'.$_cacheLang['Duplicate'].'" /></a>';
-    }
+			<img src="../img/admin/duplicate.png" alt="'.$_cacheLang['Duplicate'].'" title="'.$_cacheLang['Duplicate'].'" /></a>';
+	}
 
 	protected function _displayViewLink($token = NULL, $id)
 	{
-	    global $currentIndex;
+		global $currentIndex;
 
 		$_cacheLang['View'] = $this->l('View');
 
-    	echo '
+		echo '
 			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
 			<img src="../img/admin/details.gif" alt="'.$_cacheLang['View'].'" title="'.$_cacheLang['View'].'" /></a>';
 	}
 
 	protected function _displayEditLink($token = NULL, $id)
 	{
-	    global $currentIndex;
+		global $currentIndex;
 
 		$_cacheLang['Edit'] = $this->l('Edit');
 
 		echo '
-    		<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
-    		<img src="../img/admin/edit.gif" alt="" title="'.$_cacheLang['Edit'].'" /></a>';
+			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
+			<img src="../img/admin/edit.gif" alt="" title="'.$_cacheLang['Edit'].'" /></a>';
 	}
 
 	protected function _displayDeleteLink($token = NULL, $id)
 	{
-	    global $currentIndex;
+		global $currentIndex;
 
 		$_cacheLang['Delete'] = $this->l('Delete');
 		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE);
 
 		echo '
 			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].$id.' ?'.
-    				(!is_null($this->specificConfirmDelete) ? '\r'.$this->specificConfirmDelete : '').'\');">
+					(!is_null($this->specificConfirmDelete) ? '\r'.$this->specificConfirmDelete : '').'\');">
 			<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
 	}
 
