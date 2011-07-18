@@ -55,6 +55,16 @@ class sendToAFriend extends Module
 		$smarty->assign('this_path', $this->_path);
 		return $this->display(__FILE__, 'product_page.tpl');
 	}
+	
+	public function displayPageForm()
+	{
+		if (!$this->active)
+			Tools::display404Error();
+
+		include(dirname(__FILE__).'/../../header.php');
+		echo $this->displayFrontForm();
+		include(dirname(__FILE__).'/../../footer.php');
+	}
 
 	public function displayFrontForm()
 	{
