@@ -147,7 +147,7 @@ abstract class AdminTabCore
 	protected $_includeVars = false;
 	protected $_includeContainer = true;
 
-	protected $ajax = false;
+	public $ajax = false;
 
 	public static $tabParenting = array(
 		'AdminProducts' => 'AdminCatalog',
