@@ -250,7 +250,7 @@ class AdminProducts extends AdminTab
 						$attachment->file = $uniqid;
 						$attachment->mime = $_FILES['attachment_file']['type'];
 						$attachment->file_name = pSQL($_FILES['attachment_file']['name']);
-						if (empty($attachment->mime) OR Tools::strlen($attachment->mime) > 64)
+						if (empty($attachment->mime) OR Tools::strlen($attachment->mime) > 128)
 							$this->_errors[] = Tools::displayError('Invalid file extension');
 						if (!Validate::isGenericName($attachment->file_name))
 							$this->_errors[] = Tools::displayError('Invalid file name');

@@ -60,3 +60,5 @@ city, State:name postcode
 Country:name
 phone' 
 WHERE `id_country` = (SELECT `id_country` FROM `PREFIX_country` WHERE `iso_code`='US');
+
+ALTER TABLE `PREFIX_attachment` CHANGE `mime` `mime` VARCHAR(128) NOT NULL;
