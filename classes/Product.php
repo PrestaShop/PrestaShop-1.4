@@ -283,6 +283,10 @@ class ProductCore extends ObjectModel
 					'id' => array('required' => true),
 					'id_feature_value' => array('required' => true, 'xlink_resource' => 'product_feature_values'),
 			)),
+			'tags' => array('resource' => 'tag',
+				'fields' => array(
+					'id' => array('required' => true),
+			)),
 		),
 	);
 
@@ -3338,7 +3342,16 @@ class ProductCore extends ObjectModel
 		WHERE `id_product` = '.(int)($this->id).'
 		ORDER BY `position`');
 	}
-
+	
+	public function getWsTags()
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT `id_tag` as id
+		FROM `'._DB_PREFIX_.'product_tag`
+		WHERE `id_product` = '.(int)($this->id));
+	}
+	
+	
 	public function getWsManufacturerName()
 	{
 		return Manufacturer::getNameById((int)$this->id_manufacturer);
