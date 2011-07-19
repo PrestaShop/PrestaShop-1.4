@@ -5,9 +5,7 @@ $_MODULE = array();
 $_MODULE['<{trustedshops}prestashop>display_products_02ecb4a4709d9bcc590f1a25fc82c0e2'] = 'Trusted Shops protection acheteur (recommandée)';
 $_MODULE['<{trustedshops}prestashop>display_products_b55aab8932a39ca85bb0a1b6eb83f83f'] = 'Protection acheteur jusqu\'à';
 $_MODULE['<{trustedshops}prestashop>display_products_69db1ddc2a15253abb0a11beb1eae734'] = 'TVA incluse';
-$_MODULE['<{trustedshops}prestashop>display_products_8aa975a901488366de6bd42568c80597'] = 'La protection acheteur Trusted Shops';
-$_MODULE['<{trustedshops}prestashop>display_products_3626eb90ea7324c113642df680ffe034'] = 'sécurise';
-$_MODULE['<{trustedshops}prestashop>display_products_23fc33df88ea7dcfd792f22a3cff7d9d'] = 'votre achat en ligne. J’accepte le transfert et la';
+$_MODULE['<{trustedshops}prestashop>display_products_b3c25d2f94cf87ece3dbb2907318520c'] = 'La protection acheteur Trusted Shops sécurise votre achat en ligne. J’accepte le transfert et la';
 $_MODULE['<{trustedshops}prestashop>display_products_536a056b710e94b16169efd17a4a657b'] = 'sauvegarde';
 $_MODULE['<{trustedshops}prestashop>display_products_2dc4be4d5564180e6df95d5a5a679195'] = 'de mon adresse email pour le traitement de la protection acheteur par Trusted Shops.';
 $_MODULE['<{trustedshops}prestashop>display_products_229eb04083e06f419f9ac494329f957d'] = 'Conditions';
@@ -22,7 +20,7 @@ $_MODULE['<{trustedshops}prestashop>trustedshops_8b61f54775adf535d4da32eb434309e
 $_MODULE['<{trustedshops}prestashop>trustedshops_f3607bb2fb5f04aa4937e7846c560faa'] = 'Donnez confiance en affichant sur votre boutique le label de qualité, la protection acheteur et les évaluations client.';
 $_MODULE['<{trustedshops}prestashop>trustedshops_968e0f78caa7d3245c8f6f858de993d8'] = 'Etes-vous sûr de vouloir supprimer votre configuration?';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_79fc246c2b70963d27ebb0e9ebaab349'] = 'Veuillez contacter Trusted Shops à l\'adresse service@trustedshops.fr';
-$_MODULE['<{trustedshops}prestashop>tsbpexception_de14ce5aee772cd0330819c0ecf76adb'] = 'Le nom d\'utilisateur ou le mot de passe n\'est pas valable.';
+$_MODULE['<{trustedshops}prestashop>tsbpexception_3a2a06b3a1f05cde765219211bf2e9bd'] = 'Le nom d\'utilisateur ou le mot de passe n\'est pas valable.';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_43048f232a4ebab67835c425a1113b29'] = 'La ligne de crédit accordée par Trusted Shops a été annulée.';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_eb601fb44b908fec1ee41383d4d948ac'] = 'Aucune ligne de crédit n\'existe chez Trusted Shops.';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_cb71cc86f5c38200b3821adb49966522'] = 'Les données n\'ont pas pu être sauvegardées.';
@@ -132,7 +130,6 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_23a58bf9274bedb19375e527a0
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fd5291d7f0624933870702ff183bb14e'] = 'module de paiement';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b3b1a406e097bc87c8745db26e11904e'] = 'Le mettre à jour';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c9ba5f6e6d58162530424afaa68bf496'] = 'Configuration de la tâche cron';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_6c35b8f5b3e56cf1b4a4aa0775bb9fbf'] = 'Si vous utilisez le certificat Trusted Shops EXCELLENCE dans votre boutique, installez une tâche cron sur votre web server.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f811271eb84f3df1a430c3c78b6e7640'] = 'Lancez le fichier';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_06ec9154ce96a389f7b1d884e021818b'] = 'avec un intervalle de 10 minutes.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f89b7100efcc136900c909690e43f008'] = 'La ligne correspondante dans votre fichier cron apparaît ainsi :';
@@ -175,6 +172,5 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_866a520be0de10a4fc8958a9e
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9c6dfeed0caab43f7ff0f6bbd19b27dd'] = 'Par leurs interventions, vos clients vous aident à optimiser les processus de votre site. Car mieux un site marchand fonctionne, plus vos clients sont satisfaits.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0fac19c0cc6e205682dd52d61dd5a0a2'] = 'Diffusion sur Facebook, Twitter et Google';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_afe906fe9448ed1b480b3eec383461de'] = 'Vos clients diffusent avis et évaluations sur Facebook et Twitter directement à leurs amis et connaissances. Les évaluations sont intégrées automatiquement dans le Google-Index et prises en compte dans Google Shopping.';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_273769f3a3d91979bfdb5ca4909c517a'] = 'Créer un compte Trusted Shops';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Etes-vous satisfait de votre achat chez';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Donnez nous votre avis!';

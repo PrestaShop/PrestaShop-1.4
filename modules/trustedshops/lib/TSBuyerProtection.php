@@ -1191,7 +1191,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$out = '<fieldset>
 				<legend><img src="../img/admin/warning.gif" alt="" />'.$this->l('Cronjob configuration').'</legend>';
 		$out .= '<p>'
-					.$this->l('If you are utilising a Trusted Shops EXCELLENCE cetificate in your shop, set up a cron job on your web server.').'<br />'
+					.$this->l('If you are using a Trusted Shops EXCELLENCE cetificate in your shop, set up a cron job on your web server.').'<br />'
 					.$this->l('Run the script file ').' <b style="color:red;">'.$this->getCronFilePath().'</b> '.$this->l('with an interval of 10 minutes.').'<br /><br />'
 					.$this->l('The corresponding line in your cron file may look like this:').' <br /><b style="color:red;">*/10 * * * * '.$this->getCronFilePath().'>/dev/null 2>&1</b><br />'
 				.'</p>';
