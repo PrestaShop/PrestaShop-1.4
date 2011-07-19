@@ -38,6 +38,11 @@ class UpgraderCore{
 	public $version_name;
 	public $version_num;
 
+	public function __get($var)
+	{
+		if($var == 'needUpgrade')
+			return $this->isLastVersion();
+	}
 	/**
 	 * we need to checkPSVersion when we use that class
 	 * 
@@ -66,7 +71,6 @@ class UpgraderCore{
 		else
 			return false;
 	}
-
 	public function isLastVersion()
 	{
 		if (empty($this->link))
