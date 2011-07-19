@@ -261,7 +261,7 @@ class ProductCore extends ObjectModel
 			'out_of_stock' => array('required' => true),
 			'new' => array(),
 			'cache_default_attribute' => array(),
-			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => false, 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
+			'id_default_image' => array('getter' => 'getCoverWs', 'setter' => 'setCoverWs', 'xlink_resource' => array('resourceName' => 'images', 'subResourceName' => 'products')),
 			'id_default_combination' => array('getter' => 'getWsDefaultCombination', 'setter' => 'setWsDefaultCombination', 'xlink_resource' => array('resourceName' => 'combinations')),
 			'position_in_category' => array('getter' => 'getWsPositionInCategory', 'setter' => false),
 			'manufacturer_name' => array('getter' => 'getWsManufacturerName', 'setter' => false),
@@ -3310,6 +3310,21 @@ class ProductCore extends ObjectModel
 		return $result['id_image'];
 	}
 
+	/**
+	* Webservice setter : set virtual field id_default_image in category
+	*
+	* @return bool
+	*/
+	public function setCoverWs($id_image)
+	{
+		Db::getInstance()->ExecuteS('UPDATE `'._DB_PREFIX_.'image`
+									SET `cover` = 0 WHERE `id_product` = '.(int)($this->id).'
+									');
+		Db::getInstance()->ExecuteS('UPDATE `'._DB_PREFIX_.'image`
+									SET `cover` = 1 WHERE `id_product` = '.(int)($this->id).' AND `id_image` = '.(int)$id_image);
+		return true;
+	}
+	
 	/**
 	* Webservice getter : get image ids of current product for association
 	*
