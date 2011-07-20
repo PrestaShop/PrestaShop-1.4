@@ -37,7 +37,6 @@ class AdminWebservice extends AdminTab
 	 	$this->lang = false;
 	 	$this->edit = true;
 	 	$this->delete = true;
-	 	
  		$this->id_lang_default = Configuration::get('PS_LANG_DEFAULT');
 		
 		$this->fieldsDisplay = array(
@@ -95,6 +94,11 @@ class AdminWebservice extends AdminTab
 		
 		$this->displayWarning($warnings);
 		
+		foreach ($this->_list as $k => $item)
+			if ($item['is_module'] && $item['class_name'] && $item['module_name'] && 
+				($instance = Module::getInstanceByName($item['module_name'])) && 
+				!$instance->useNormalPermissionBehaviour())
+				unset($this->_list[$k]);
 		parent::displayList();
 	}
 	
@@ -175,37 +179,37 @@ echo '
 				
 						$(function() {
 							$('table.permissions input.all').click(function() {
-								if ($(this).is(':checked'))
+								if($(this).is(':checked'))
 									$(this).parent().parent().find('input.get:not(:checked), input.put:not(:checked), input.post:not(:checked), input.delete:not(:checked), input.head:not(:checked)').click();
 								else
 									$(this).parent().parent().find('input.get:checked, input.put:checked, input.post:checked, input.delete:checked, input.head:checked').click();
 							});
 							$('table.permissions .all_get').click(function() {
-								if ($(this).is(':checked'))
+								if($(this).is(':checked'))
 									$(this).parent().parent().parent().find('input.get:not(:checked)').click();
 								else
 									$(this).parent().parent().parent().find('input.get:checked').click();
 							});
 							$('table.permissions .all_put').click(function() {
-								if ($(this).is(':checked'))
+								if($(this).is(':checked'))
 									$(this).parent().parent().parent().find('input.put:not(:checked)').click();
 								else
 									$(this).parent().parent().parent().find('input.put:checked').click();
 							});
 							$('table.permissions .all_post').click(function() {
-								if ($(this).is(':checked'))
+								if($(this).is(':checked'))
 									$(this).parent().parent().parent().find('input.post:not(:checked)').click();
 								else
 									$(this).parent().parent().parent().find('input.post:checked').click();
 							});
 							$('table.permissions .all_delete').click(function() {
-								if ($(this).is(':checked'))
+								if($(this).is(':checked'))
 									$(this).parent().parent().parent().find('input.delete:not(:checked)').click();
 								else
 									$(this).parent().parent().parent().find('input.delete:checked').click();
 							});
 							$('table.permissions .all_head').click(function() {
-								if ($(this).is(':checked'))
+								if($(this).is(':checked'))
 									$(this).parent().parent().parent().find('input.head:not(:checked)').click();
 								else
 									$(this).parent().parent().parent().find('input.head:checked').click();
@@ -225,6 +229,8 @@ echo '
 	{
 		if (Tools::getValue('key') && strlen(Tools::getValue('key')) < 32)
 			$this->_errors[] = Tools::displayError($this->l('Key length must be 32 character long'));
+		if (WebserviceKey::keyExists(Tools::getValue('key')) && !Tools::getValue('id_webservice_account'))
+			$this->_errors[] = Tools::displayError($this->l('Key already exists'));
 		return parent::postProcess();
 	}
 }
