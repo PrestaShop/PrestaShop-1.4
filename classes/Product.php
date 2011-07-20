@@ -3055,13 +3055,14 @@ class ProductCore extends ObjectModel
 		$stockMvt->quantity = (int)$quantity;
 		$stockMvt->id_stock_mvt_reason = (int)$id_reason;
 		$result = $stockMvt->add();
-
+		
+		$stockMvtReason = new StockMvtReason($id_reason);
 		// Increase or decrease current product quantity value
-		if ($id_reason == 1)
+		if ($stockMvtReason->sign == 1)
 			$this->quantity += abs($quantity);
-		elseif ($id_reason == 2)
+		elseif ($stockMvtReason->sign == -1)
 			$this->quantity -= abs($quantity);
-
+		
 		Hook::updateQuantity($this, null);
 
 		return $result;
