@@ -1686,7 +1686,7 @@ class ToolsCore
 		return self::getHttpHost();
 	}
 
-	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '')
+	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '', $disableMuliviews = false)
 	{
 		$tab = array('ErrorDocument' => array(), 'RewriteEngine' => array(), 'RewriteRule' => array());
 		$multilang = (Language::countActiveLanguages() > 1);
@@ -1794,6 +1794,11 @@ class ToolsCore
 
 		// RewriteEngine
 		fwrite($writeFd, "\n<IfModule mod_rewrite.c>\n");
+
+		if ($disableMuliviews)
+			fwrite($writeFd, "\n# Disable Multiviews\nOptions -Multiviews\n\n");
+		elog($disableMuliviews);
+
 		fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
 		fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
 		// Webservice

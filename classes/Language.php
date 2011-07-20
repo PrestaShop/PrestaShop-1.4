@@ -107,7 +107,8 @@ class LanguageCore extends ObjectModel
 		return ($resUpdateSQL AND Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
-			Configuration::get('PS_HTACCESS_SPECIFIC')
+			Configuration::get('PS_HTACCESS_SPECIFIC'),
+			(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 		));
 	}
 
@@ -122,7 +123,8 @@ class LanguageCore extends ObjectModel
 		return (Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 			(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 			(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
-			Configuration::get('PS_HTACCESS_SPECIFIC')
+			Configuration::get('PS_HTACCESS_SPECIFIC'),
+			(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 		));
 	}
 
@@ -408,7 +410,8 @@ class LanguageCore extends ObjectModel
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
-									Configuration::get('PS_HTACCESS_SPECIFIC')
+									Configuration::get('PS_HTACCESS_SPECIFIC'),
+									(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 								);
 	}
 
@@ -431,7 +434,8 @@ class LanguageCore extends ObjectModel
 		Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 								(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
-								Configuration::get('PS_HTACCESS_SPECIFIC')
+								Configuration::get('PS_HTACCESS_SPECIFIC'),
+								(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 							);
 
 		return $result;
@@ -563,7 +567,8 @@ class LanguageCore extends ObjectModel
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 							(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 							(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
-							Configuration::get('PS_HTACCESS_SPECIFIC')
+							Configuration::get('PS_HTACCESS_SPECIFIC'),
+							(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 							);
 	}
 
