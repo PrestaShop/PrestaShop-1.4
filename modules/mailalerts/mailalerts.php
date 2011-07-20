@@ -86,7 +86,7 @@ class MailAlerts extends Module
 				PRIMARY KEY  (`id_customer`,`customer_email`,`id_product`,`id_product_attribute`)
 			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci')
 		)
-	 		return false;
+			return false;
 
 		/* This hook is optional */
 		$this->registerHook('myAccountBlock');
@@ -100,8 +100,8 @@ class MailAlerts extends Module
 		Configuration::deleteByName('MA_CUSTOMER_QTY');
 		Configuration::deleteByName('MA_MERCHANT_MAILS');
 		Configuration::deleteByName('MA_LAST_QTIES');
-	 	if (!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'mailalert_customer_oos'))
-	 		return false;
+		if (!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'mailalert_customer_oos'))
+			return false;
 		return parent::uninstall();
 	}
 	
@@ -190,6 +190,8 @@ class MailAlerts extends Module
 			'{firstname}' => $customer->firstname,
 			'{lastname}' => $customer->lastname,
 			'{email}' => $customer->email,
+			'{delivery_block_txt}' => $this->_getFormatedAddress($delivery, "\n"),
+			'{invoice_block_txt}' => $this->_getFormatedAddress($invoice, "\n"),
 			'{delivery_block_html}' => $this->_getFormatedAddress($delivery, "<br />", 
 						array(
 							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>', 
@@ -310,11 +312,11 @@ class MailAlerts extends Module
 			$id_lang = (is_object($cookie) AND isset($cookie->id_lang)) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
 			$iso = Language::getIsoById((int)$id_lang);
 			
-		    if ($params['product']['active'] == 1)
-		    {
-		    	if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
-			      Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'productoutofstock', Mail::l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
-		    }
+			if ($params['product']['active'] == 1)
+			{
+				if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
+					Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'productoutofstock', Mail::l('Product out of stock'), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			}
 		}
 		if ($this->_customer_qty AND $params['product']['quantity'] > 0)
 			$this->sendCustomerAlert((int)$params['product']['id'], 0);
