@@ -2718,8 +2718,42 @@ class AdminProducts extends AdminTab
 							<br /><input type="radio" name="out_of_stock" id="out_of_stock_3" value="2" '.($this->getFieldValue($obj, 'out_of_stock') == 2 ? 'checked="checked"' : '').'/> <label for="out_of_stock_3" class="t" id="label_out_of_stock_3">'.$this->l('Default:').' <i>'.$this->l(((int)(Configuration::get('PS_ORDER_OUT_OF_STOCK')) ? 'Allow orders' : 'Deny orders')).'</i> ('.$this->l('as set in').' <a href="index.php?tab=AdminPPreferences&token='.Tools::getAdminToken('AdminPPreferences'.(int)(Tab::getIdFromClassName('AdminPPreferences')).(int)($cookie->id_employee)).'"  onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');">'.$this->l('Preferences').'</a>)</label>
 						</td>
 					</tr>
-					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
-					<tr id="tr_categories"></tr>
+					<tr>
+						<td colspan="2" style="padding-bottom:5px;">
+							<hr style="width:100%;" />
+						</td>
+					</tr>
+					<tr>
+						<td class="col-left"><label for="id_category_default" class="t">'.$this->l('Default category:').'</label></td>
+						<td>
+						<div id="no_default_category" style="color: red;font-weight: bold;display: none;">'.$this->l('Please check a category in order to select the default category.').'</div>
+						<script>var post_selected_cat;</script>';
+						if (Tools::isSubmit('categoryBox'))
+						{
+							$postCat = Tools::getValue('categoryBox');
+							$selectedCat = Category::getSimpleCategories($this->_defaultFormLanguage, false, true, 'AND c.`id_category` IN ('.(empty($postCat) ? '1' : implode(',', $postCat)).')');
+							echo '<script>post_selected_cat = \''.implode(',', $postCat).'\';</script>';
+						}
+						if ($obj->id)
+							$selectedCat = $obj::getProductCategoriesFull($obj->id, $this->_defaultFormLanguage);
+						else if(!Tools::isSubmit('categoryBox'))
+							$selectedCat[] = array('id_category' => 1, 'name' => $this->l('Home'));
+						echo '<select id="id_category_default" name="id_category_default">';
+						
+							foreach($selectedCat as $cat)
+								echo '<option value="'.$cat['id_category'].'" '.($obj->id_category_default == $cat['id_category'] ? 'selected' : '').'>'.$cat['name'].'</option>';
+						echo '</select>
+						</td> 
+					</tr>
+					<tr id="tr_categories">
+						<td colspan="2">
+						';
+					$trads = array();
+					foreach(Helper::$translationsKeysForAdminCategorieTree as $key)
+						$trads[$key] = $this->l($key);
+					echo Helper::renderAdminCategorieTree($trads, 'categoryBox', $selectedCat).'
+						</td>
+					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr><td colspan="2">
 						<span onclick="$(\'#seo\').slideToggle();" style="cursor: pointer"><img src="../img/admin/arrow.gif" alt="'.$this->l('SEO').'" title="'.$this->l('SEO').'" style="float:left; margin-right:5px;"/>'.$this->l('Click here to improve product\'s rank in search engines (SEO)').'</span><br />
@@ -2902,18 +2936,10 @@ class AdminProducts extends AdminTab
 			<script type="text/javascript" src="'.__PS_BASE_URI__.'js/tinymce.inc.js"></script>
 			<script type="text/javascript">
 					toggleVirtualProduct(getE(\'is_virtual_good\'));
-					unitPriceWithTax(\'unit\');';
+					unitPriceWithTax(\'unit\');
+			</script>';
 		$categoryBox = Tools::getValue('categoryBox', array());
-		echo '
-		$(function() {
-			$.ajax({
-				type: \'POST\',
-				url: \'ajax_category_list.php\',
-				data: \''.(sizeof($categoryBox) > 0 ? 'categoryBox='.serialize($categoryBox).'&' : '').'id_product='.$obj->id.'&id_category_default='.($this->getFieldValue($obj, 'id_category_default') ? $this->getFieldValue($obj, 'id_category_default') : Tools::getValue('id_category', 1)).'&id_category='.(int)(Tools::getValue('id_category')).'&token='.$this->token.'\',
-				async : true,
-				success: function(msg) { $(\'#tr_categories\').replaceWith(msg); }
-			});
-		});</script>';
+		
 	}
 
 	function displayFormImages($obj, $token = NULL)
