@@ -184,6 +184,11 @@ class AdminPreferences extends AdminTab
 			foreach ($files AS $file)
 				if (!preg_match('/^\..*/', $file))
 						$smarty->clearCache($file);
+						
+			$modules = scandir(_PS_THEME_DIR_.'modules/');
+			foreach ($modules AS $file)
+				if (!preg_match('/^\..*/', $file))
+						$smarty->clearCache($file);
 		}
 		else
 			$smarty->clear_all_cache();
