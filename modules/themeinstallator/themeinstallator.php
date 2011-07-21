@@ -49,6 +49,9 @@ class ThemeInstallator extends Module
 	
 	public function __construct()
 	{
+		set_time_limit(0);
+		ini_set('memory_limit', '2G');
+		
 		$this->name = 'themeinstallator';
 		$this->version = '1.4';
 		$this->author = 'PrestaShop';
