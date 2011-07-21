@@ -2140,6 +2140,19 @@ FileETag INode MTime Size
 			die($msg);
 		return Logger::addLog($msg);
 	}
+	
+	/**
+	 * Clear cache for Smarty
+	 * 
+	 * @param objet $smarty
+	 */
+	 public static function clearCache($smarty)
+	 {
+		if (!Configuration::get('PS_FORCE_SMARTY_2'))
+			$smarty->clearAllCache();
+		else
+			$smarty->clear_all_cache();
+	}
 }
 
 /**

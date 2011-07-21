@@ -1044,13 +1044,7 @@ abstract class ModuleCore
 	protected function _clearCache($template, $cacheId = NULL, $compileId = NULL)
 	{
 		global $smarty;
-
-		/* Use Smarty 3 API calls */
-		if (!Configuration::get('PS_FORCE_SMARTY_2')) /* PHP version > 5.1.2 */
-			return $smarty->clearCache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
-		/* or keep a backward compatibility if PHP version < 5.1.2 */
-		else
-			return $smarty->clear_cache($template ? $this->_getApplicableTemplateDir($template).$template : NULL, $cacheId, $compileId);
+		Tools::clearCache($smarty);
 	}
 	
 	protected function _generateConfigXml()
