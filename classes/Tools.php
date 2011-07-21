@@ -1797,7 +1797,6 @@ class ToolsCore
 
 		if ($disableMuliviews)
 			fwrite($writeFd, "\n# Disable Multiviews\nOptions -Multiviews\n\n");
-		elog($disableMuliviews);
 
 		fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
 		fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
