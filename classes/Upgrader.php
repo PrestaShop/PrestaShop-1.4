@@ -26,7 +26,7 @@
 */
 
 class UpgraderCore{
-
+	const DEFAULT_CHECK_VERSION_DELAY_HOURS = 24;
 	/**
 	 * link contains hte url where to download the file
 	 * 
@@ -34,6 +34,7 @@ class UpgraderCore{
 	 */
 	private $link;
 	private $needUpgrade = false;
+	private $autoUpgrade;
 
 	public $version_name;
 	public $version_num;
@@ -45,11 +46,12 @@ class UpgraderCore{
 	}
 	/**
 	 * we need to checkPSVersion when we use that class
-	 * 
+	 * @param boolean autoupgrade 
 	 * @return object Upgrader 
 	 */
-	public function __construct()
+	public function __construct($autoUpgrade = false)
 	{
+		$this->autoUpgrade = $autoUpgrade;
 	}
 
 	/**
@@ -85,16 +87,32 @@ class UpgraderCore{
 	 * 
 	 * @return mixed
 	 */
-	public function checkPSVersion()
+	public function checkPSVersion($force = false)
 	{
 		if (empty($this->link))
 		{
-			libxml_set_streams_context(stream_context_create(array('http' => array('timeout' => 3))));
-			if ($feed = @simplexml_load_file('http://www.prestashop.com/xml/version.xml'))
+			$lastCheck = Configuration::get('PS_LAST_VERSION_CHECK');
+			// if we use the autoupgrade process, we will never refresh it
+			// except if no check has been done before
+			if (!($this->autoUpgrade AND $lastCheck) AND ($force OR ($lastCheck < time() - (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS))) )
 			{
-				$this->version_name = $feed->version->name;
-				$this->version_num = $feed->version->num;
-				$this->link = $feed->download->link;
+				libxml_set_streams_context(stream_context_create(array('http' => array('timeout' => 3))));
+				if ($feed = @simplexml_load_file('http://www.prestashop.com/xml/version.xml'))
+				{
+					$this->version_name = (string)$feed->version->name;
+					$this->version_num = (string)$feed->version->num;
+					$this->link = (string)$feed->download->link;
+					$configLastVersion = array('name'=>$this->version_name, 'num'=>$this->version_num,'link'=>$this->version_link );
+					Configuration::updateValue('PS_LAST_VERSION',serialize($configLastVersion));
+					Configuration::updateValue('PS_LAST_VERSION_CHECK',time());
+				}
+			}
+			else
+			{
+				$lastVersionCheck = unserialize(Configuration::get('PS_LAST_VERSION'));
+				$this->version_name = $lastVersionCheck['name'];
+				$this->version_num = $lastVersionCheck['num'];
+				$this->link = $lastVersionCheck['link'];
 			}
 		}
 

@@ -36,9 +36,10 @@ if (defined('_PS_ROOT_DIR_') AND !defined('_PS_MODULE_DIR_'))
 	define('_PS_MODULE_DIR_', _PS_ROOT_DIR_.'/modules/');
 else
 	if (!defined('_PS_MODULE_DIR_'))
-		define('_PS_MODULE_DIR_', realpath(INSTALL_PATH).'/../modules/');
+		define('_PS_MODULE_DIR_', realpath(INSTALL_PATH.'/../').'/modules/');
 
-define('_PS_INSTALLER_PHP_UPGRADE_DIR_', INSTALL_PATH.'/php/');
+if(!defined('_PS_INSTALLER_PHP_UPGRADE_DIR_'))
+	define('_PS_INSTALLER_PHP_UPGRADE_DIR_',  INSTALL_PATH.DIRECTORY_SEPARATOR.'php/');
 // Only if loyalty module is installed
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
 // desactivate non-native module
@@ -126,8 +127,6 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_duplicate_category_groups.ph
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'migrate_block_info_to_cms_block.php');
 
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_order_state.php');
-
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;
@@ -139,14 +138,14 @@ if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
 }
 else
 {
-	$logger->logError('The config/settings.inc.php file was not found.');
 	die('<action result="fail" error="30" />'."\n");
+	$logger->logError('The config/settings.inc.php file was not found.');
 }
 
 if (!file_exists(DEFINES_FILE))
 {
-	$logger->logError('The config/settings.inc.php file was not found.');
 	die('<action result="fail" error="37" />'."\n");
+	$logger->logError('The config/settings.inc.php file was not found.');
 }
 include_once(SETTINGS_FILE);
 
@@ -162,8 +161,7 @@ include_once(DEFINES_FILE);
 
 $oldversion = _PS_VERSION_;
 
-$versionCompare =  version_compare(INSTALL_VERSION, $oldversion);
-
+$versionCompare =  version_compare(INSTALL_VERSION, _PS_VERSION_);
 if ($versionCompare == '-1')
 {
 	$logger->logError('This installer is too old.');
@@ -171,7 +169,7 @@ if ($versionCompare == '-1')
 }
 elseif ($versionCompare == 0)
 {
-	$logger->logError(sprintf('You already have the %s version.',INSTALL_VERSION));
+	$logger->logError('You already have the '.INSTALL_VERSION.' version.');
 	die('<action result="fail" error="28" />'."\n");
 }
 elseif ($versionCompare === false)
@@ -205,27 +203,9 @@ if (empty($upgradeFiles))
 }
 natcasesort($upgradeFiles);
 $neededUpgradeFiles = array();
-
-// fix : complete version number if there is not all 4 numbers
-// for example replace 1.4.3 by 1.4.3.0
-// consequences : file 1.4.3.0.sql will be skipped if oldversion = 1.4.3
-// @since 1.4.4.0
-$arrayVersion = preg_split('#\.#', $oldversion);
-$versionNumbers = sizeof($arrayVersion);
-
-if ($versionNumbers != 4)
-	$arrayVersion = array_pad($arrayVersion, 4, '0');
-
-$oldversion = implode('.', $arrayVersion);
-// end of fix 
-
 foreach ($upgradeFiles AS $version)
-{
-
-	if (version_compare($version, $oldversion) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
+	if (version_compare($version, _PS_VERSION_) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
 		$neededUpgradeFiles[] = $version;
-}
-
 if (empty($neededUpgradeFiles))
 {
 	$logger->logError('No upgrade is possible.');
@@ -261,13 +241,13 @@ if (defined('_RIJNDAEL_KEY_'))
 	$datas[] = array('_RIJNDAEL_KEY_', _RIJNDAEL_KEY_);
 if (defined('_RIJNDAEL_IV_'))
 	$datas[] = array('_RIJNDAEL_IV_', _RIJNDAEL_IV_);
-if (!defined('_PS_CACHE_ENABLED_'))
+if(!defined('_PS_CACHE_ENABLED_'))
 	define('_PS_CACHE_ENABLED_', '0');
-if (!defined('_MYSQL_ENGINE_'))
+if(!defined('_MYSQL_ENGINE_'))
 	define('_MYSQL_ENGINE_', 'MyISAM');
 
 $sqlContent = '';
-if (isset($_GET['customModule']) AND $_GET['customModule'] == 'desactivate')
+if(isset($_GET['customModule']) AND $_GET['customModule'] == 'desactivate')
 	desactivate_custom_modules();
 
 foreach($neededUpgradeFiles AS $version)
@@ -323,7 +303,7 @@ foreach ($arrayToClean as $dir)
 
 // delete cache filesystem if activated
 $depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
-if ($depth)
+if($depth)
 {
 	CacheFS::deleteCacheDirectory();
 	CacheFS::createCacheDirectories((int)$depth);
@@ -339,7 +319,7 @@ Configuration::loadConfiguration();
 foreach($sqlContent as $query)
 {
 	$query = trim($query);
-	if (!empty($query))
+	if(!empty($query))
 	{
 		/* If php code have to be executed */
 		if (strpos($query, '/* PHP:') !== false)
@@ -384,7 +364,7 @@ foreach($sqlContent as $query)
 		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
 	</request>'."\n";
 		}
-		elseif (!Db::getInstance()->Execute($query))
+		elseif(!Db::getInstance()->Execute($query))
 		{
 			$logger->logError('SQL query: '."\r\n".$query);
 			$logger->logError('SQL error: '."\r\n".Db::getInstance()->getMsgError());
