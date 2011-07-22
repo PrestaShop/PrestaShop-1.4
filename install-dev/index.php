@@ -245,18 +245,30 @@ if ($lm->getIncludeTradFilename())
 </div>
 
 <div id="container">
+<div id="header" class="clearfix">
+	<ul id="headerLinks">
+		<li class="lnk_forum"><a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Forum'); ?></a></li>
+		<li class="lnk_blog last"><a href="http://www.prestashop.com/blog/"><?php echo lang('Blog'); ?></a></li>
+		<?php if ((isset($_GET['language']) AND $_GET['language'] == 1) OR $lm->getIsoCodeSelectedLang() == 'fr'): ?>
+		<li id="phone_block" class="last">
+			<div><?php echo '<span>'.lang('Contact us!').'</span><br />'.lang('+33 (0)1.40.18.30.04'); ?></div>
+		</li>
+		<?php endif; ?>
+	</ul>
+	
+	<div id="PrestaShopLogo">PrestaShop</div>
+	
+	<div id="infosSup">
+		<div class="installerVersion" id="installerVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">PrestaShop <?php echo INSTALL_VERSION.'<br />'.lang('Installer'); ?></div>
+		<div class="updaterVersion" id="updaterVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">PrestaShop <?php echo INSTALL_VERSION.'<br />'.lang('Updater'); ?></div>
+	</div>
+</div><!-- /end header -->
 
 <div id="loaderSpace">
 	<div id="loader">&nbsp;</div>
-</div>
+</div><!-- /end loaderSpace -->
 
 <div id="leftpannel">
-	<h1>
-		<div id="PrestaShopLogo">&nbsp;</div>
-		<div class="installerVersion" id="installerVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">PrestaShop <?php echo INSTALL_VERSION.'<br />'.lang('Installer'); ?></div>
-		<div class="updaterVersion" id="updaterVersion-<?php echo $lm->getIsoCodeSelectedLang()?>">PrestaShop <?php echo INSTALL_VERSION.'<br />'.lang('Updater'); ?></div>
-	</h1>
-
 	<ol id="tabs"><li>&nbsp;</li></ol>
 
 	<div id="help">
@@ -265,27 +277,28 @@ if ($lm->getIncludeTradFilename())
 		<div class="content">
 			<p class="title"><?php echo lang('Need help?'); ?></p>
 			<p class="title_down"><?php echo lang('All tips and advice about PrestaShop'); ?></p>
-
-			<ul>
-				<li><img src="img/puce.gif" alt="" /> <a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Forum'); ?></a><br class="clear" /></li>
-				<li><img src="img/puce.gif" alt="" /> <a href="http://www.prestashop.com/blog/"><?php echo lang('Blog'); ?></a><br class="clear" /></li>
-			</ul>
 		</div>
-	</div>
-
-	<?php if ((isset($_GET['language']) AND $_GET['language'] == 1) OR $lm->getIsoCodeSelectedLang() == 'fr'): ?>
-	<p id="phone_block">
-		<?php echo '<span>'.lang('A question about PrestaShop or issues during installation or upgrade? Call us!').'</span><br /><img src="img/phone.png" style="vertical-align: middle;" alt="" /> '.lang('+33 (0)1.40.18.30.04'); ?>
-	</p>
-	<?php endif; ?>
-</div>
+	</div><!-- /end help -->
+</div><!-- /end leftpannel -->
 
 
 <div id="sheets">
 
 	<div class="sheet shown" id="sheet_lang">
-		<h2><?php echo lang('Welcome')?></h2>
-		<h3><?php echo lang('Welcome to the PrestaShop '.INSTALL_VERSION.' Installer.')?><br /><?php echo lang('Please allow 5-15 minutes to complete the installation process.')?></h3>
+		<div class="contentTitle">
+			<h1><?php echo lang('Welcome')?></h1>
+			
+			<ul id="stepList_1" class="stepList clearfix">
+				<li>Etape 1</li>
+				<li>Etape 2</li>
+				<li>Etape 3</li>
+				<li>Etape 4</li>
+				<li>Etape 5</li>
+			</ul>
+		</div>
+		
+		<h2><?php echo lang('Welcome to the PrestaShop '.INSTALL_VERSION.' Installer.')?></h2>
+		<p><?php echo lang('Please allow 5-15 minutes to complete the installation process.')?></p>
 		<p><?php echo lang('The PrestaShop Installer will do most of the work in just a few clicks.')?><br /><?php echo lang('However, you must know how to do the following manually:')?></p>
 		<ul>
 			<li><?php echo lang('Set permissions on folders & subfolders using Terminal or an FTP client')?></li>
@@ -296,7 +309,7 @@ if ($lm->getIncludeTradFilename())
 			<?php echo lang('For more information, please consult our') ?> <a href="http://www.prestashop.com/wiki/Getting_Started/"><?php echo lang('online documentation') ?></a>.
 		</p>
 
-		<h3><?php echo lang('Choose the installer language:')?></h3>
+		<h2><?php echo lang('Choose the installer language:')?></h2>
 		<form id="formSetInstallerLanguage" action="<?php $_SERVER['REQUEST_URI']; ?>" method="get">
 			<ul id="langList" style="line-height: 20px;">
 			<?php foreach ($lm->getAvailableLangs() as $lang): ?>
@@ -314,10 +327,10 @@ if ($lm->getIncludeTradFilename())
 			<?php echo lang('Prestashop and community offers over 40 different languages for free download on'); ?> <a href="http://www.prestashop.com" target="_blank">http://www.prestashop.com</a>
 		</p>
 
-		<h3><?php echo lang('Installation method')?></h3>
+		<h2><?php echo lang('Installation method')?></h2>
 		<form id="formSetMethod" action="<?php $_SERVER['REQUEST_URI']; ?>" method="post">
-			<p><input <?php echo (!($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion)) ? 'checked="checked"' : '' ?> type="radio" value="install" name="typeInstall" id="typeInstallInstall"/><label for="typeInstallInstall"><?php echo lang('Installation : complete install of the PrestaShop Solution')?></label></p>
-			<p <?php echo ($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion) ? '' : 'class="disabled"'; ?>><input <?php echo ($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion) ? 'checked="checked"' : 'disabled="disabled"'; ?> type="radio" value="upgrade" name="typeInstall" id="typeInstallUpgrade"/><label <?php echo ($oldversion === false) ? 'class="disabled"' : ''; ?> for="typeInstallUpgrade"><?php echo lang('Upgrade: get the latest stable version!')?> <?php echo ($oldversion === false) ? lang('(no old version detected)') : ("(".(  ($tooOld) ? lang('the already installed version detected is too old, no more update available') : ($installOfOldVersion ? lang('the already installed version detected is too recent, no update available') : lang('installed version detected').' : '.$oldversion    )).")") ?></label></p>
+			<p><input <?php echo (!($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion)) ? 'checked="checked"' : '' ?> type="radio" value="install" name="typeInstall" id="typeInstallInstall"/> <label for="typeInstallInstall"><?php echo lang('Installation : complete install of the PrestaShop Solution')?></label></p>
+			<p <?php echo ($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion) ? '' : 'class="disabled"'; ?>><input <?php echo ($oldversion AND !$tooOld AND !$sameVersions AND !$installOfOldVersion) ? 'checked="checked"' : 'disabled="disabled"'; ?> type="radio" value="upgrade" name="typeInstall" id="typeInstallUpgrade"/> <label <?php echo ($oldversion === false) ? 'class="disabled"' : ''; ?> for="typeInstallUpgrade"><?php echo lang('Upgrade: get the latest stable version!')?> <?php echo ($oldversion === false) ? lang('(no old version detected)') : ("(".(  ($tooOld) ? lang('the already installed version detected is too old, no more update available') : ($installOfOldVersion ? lang('the already installed version detected is too recent, no update available') : lang('installed version detected').' : '.$oldversion    )).")") ?></label></p>
 		</form>
 		<h2><?php echo lang('Licenses Agreement')?></h2>
 		<div style="height:200px; border:1px solid #ccc; margin-bottom:8px; padding:5px; background:#fff; overflow: auto; overflow-x:hidden; overflow-y:scroll;">
@@ -377,15 +390,24 @@ if ($lm->getIncludeTradFilename())
 			<p><strong>16. Modification of This License.</strong> This License is Copyright © 2005 Lawrence Rosen. Permission is granted to copy, distribute, or communicate this License without modification. Nothing in this License permits You to modify this License as applied to the Original Work or to Derivative Works. However, You may modify the text of this License and copy, distribute or communicate your modified version (the "Modified License") and apply it to other original works of authorship subject to the following conditions: (i) You may not indicate in any way that your Modified License is the "Academic Free License" or "AFL" and you may not use those names in the name of your Modified License; (ii) You must replace the notice specified in the first paragraph above with the notice "Licensed under <insert your license name here>" or with a notice of your own that is not confusingly similar to the notice in this License; and (iii) You may not claim that your original works are open source software unless your Modified License has been approved by Open Source Initiative (OSI) and You comply with its license review and certification process.</p>
 		</div>
 		<p>
-			<input type="checkbox" id="set_license" class="required" style="vertical-align: middle;" /><label for="set_license"><strong><?php echo lang('I agree to the above terms and conditions.'); ?></strong></label><br/>
+			<input type="checkbox" id="set_license" class="required" style="vertical-align: middle;" /> <label for="set_license"><strong><?php echo lang('I agree to the above terms and conditions.'); ?></strong></label><br/>
 		</p>
 	</div>
 
-		<div class="sheet" id="sheet_require">
+		<div class="sheet clearfix" id="sheet_require">
+			<div class="contentTitle">
+				<h1><?php echo lang('System and permissions')?></h1>
+			
+			<ul id="stepList_2" class="stepList clearfix">
+				<li class="ok">Etape 1</li>
+				<li>Etape 2</li>
+				<li>Etape 3</li>
+				<li>Etape 4</li>
+				<li>Etape 5</li>
+			</ul>
+			</div>
 
-			<h2><?php echo lang('System and permissions')?></h2>
-
-			<h3><?php echo lang('Required set-up. Please verify the following checklist items are true.')?></h3>
+			<h2><?php echo lang('Required set-up. Please verify the following checklist items are true.')?></h2>
 
 			<p>
 				<?php echo lang('If you have any questions, please visit our '); ?>
@@ -394,7 +416,7 @@ if ($lm->getIncludeTradFilename())
 				<a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 
-			<h3 id="resultConfig" style="font-size: 20px; text-align: center; padding: 0px; display: none;"></h3>
+			<h3 id="resultConfig"></h3>
 			<ul id="required">
 				<li class="title"><?php echo lang('PHP parameters:')?></li>
 				<li class="required"><?php echo lang('PHP 5.0 or later installed')?></li>
@@ -436,64 +458,80 @@ if ($lm->getIncludeTradFilename())
 
 		</div>
 
-		<div class="sheet" id="sheet_db">
-			<h2><?php echo lang('Database configuration')?></h2>
-
-			<p><?php echo lang('Configure your database by filling out the following fields:')?></p>
-			<form id="formCheckSQL" class="aligned" action="<?php $_SERVER['REQUEST_URI']; ?>" onsubmit="verifyDbAccess(); return false;" method="post">
-				<h3 style="padding:0;margin:0;"><?php echo lang('You have to create a database, help available in readme_en.txt'); ?></h3>
-				<p style="margin-top: 15px;">
-					<label for="dbServer"><?php echo lang('Server:')?> </label>
-					<input size="25" class="text" type="text" id="dbServer" value="localhost"/>
-				</p>
-				<p>
-					<label for="dbName"><?php echo lang('Database name:')?> </label>
-					<input size="10" class="text" type="text" id="dbName" value="prestashop"/>
-				</p>
-				<p>
-					<label for="dbLogin"><?php echo lang('Login:')?> </label>
-					<input class="text" size="10" type="text" id="dbLogin" value="root"/>
-				</p>
-				<p>
-					<label for="dbPassword"><?php echo lang('Password:')?> </label>
-					<input class="text" autocomplete="off" size="10" type="password" id="dbPassword"/>
-				</p>
-				<p>
-					<label for="dbEngine"><?php echo lang('Database Engine:')?></label>
-					<select id="dbEngine" name="dbEngine">
-						<option value="InnoDB">InnoDB</option>
-						<option value="MyISAM">MyISAM</option>
-					</select>
-				</p>
-				<p class="aligned">
-					<input id="btTestDB" class="button" type="submit" value="<?php echo lang('Verify now!')?>"/>
-				</p>
-				<p id="dbResultCheck"></p>
-			</form>
+		<div class="sheet clearfix" id="sheet_db">
+			<div class="contentTitle">
+				<h1><?php echo lang('Database configuration')?></h1>
+			
+			<ul id="stepList_3" class="stepList clearfix">
+				<li class="ok">Etape 1</li>
+				<li class="ok">Etape 2</li>
+				<li>Etape 3</li>
+				<li>Etape 4</li>
+				<li>Etape 5</li>
+			</ul>
+			</div>
+			
+			<div id="dbPart">
+				<h2><?php echo lang('Configure your database by filling out the following fields:')?></h2>
+				<p><?php echo lang('You have to create a database, help available in readme_en.txt'); ?></p>
+				<form id="formCheckSQL" class="aligned" action="<?php $_SERVER['REQUEST_URI']; ?>" onsubmit="verifyDbAccess(); return false;" method="post">
+					<p class="first" style="margin-top: 15px;">
+						<label for="dbServer"><?php echo lang('Server:')?> </label>
+						<input size="25" class="text" type="text" id="dbServer" value="localhost"/>
+					</p>
+					<p>
+						<label for="dbName"><?php echo lang('Database name:')?> </label>
+						<input size="10" class="text" type="text" id="dbName" value="prestashop"/>
+					</p>
+					<p>
+						<label for="dbLogin"><?php echo lang('Login:')?> </label>
+						<input class="text" size="10" type="text" id="dbLogin" value="root"/>
+					</p>
+					<p>
+						<label for="dbPassword"><?php echo lang('Password:')?> </label>
+						<input class="text" autocomplete="off" size="10" type="password" id="dbPassword"/>
+					</p>
+					<p>
+						<label for="dbEngine"><?php echo lang('Database Engine:')?></label>
+						<select id="dbEngine" name="dbEngine">
+							<option value="InnoDB">InnoDB</option>
+							<option value="MyISAM">MyISAM</option>
+						</select>
+					</p>
+					<p class="last">
+						<label for="db_prefix"><?php echo lang('Tables prefix:')?></label> 
+						<input class="text" type="text" id="db_prefix" value="ps_"/>
+					</p>
+					<p class="aligned">
+						<input id="btTestDB" class="button" type="submit" value="<?php echo lang('Verify now!')?>"/>
+					</p>
+					<p id="dbResultCheck"></p>
+				</form>
+			</div>
 
 			<div id="dbTableParam">
 				<form action="#" method="post" onsubmit="createDB(); return false;">
-				<p><label for="db_prefix"><?php echo lang('Tables prefix:')?> </label><input class="text" type="text" id="db_prefix" value="ps_"/></p>
 				<h2><?php echo lang('Installation type')?></h2>
 				<p id="dbModeSetter" style="line-height: 20px;">
-					<input value="lite" type="radio" name="db_mode" id="db_mode_simple" style="vertical-align: middle;" /><label for="db_mode_simple"><?php echo lang('Simple mode: Basic installation')?> <span style="color: #CC0000; font-weight: bold;"><?php echo lang('(FREE)'); ?></span></label><br />
-					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet" style="vertical-align: middle;" /><label for="db_mode_complet"><?php echo lang('Full mode: includes').' <b>'.lang('100+ additional modules').'</b> '.lang('and demo products'); ?> <span style="color: #CC0000; font-weight: bold;"><?php echo lang('(FREE too!)'); ?></span></label>
+					<input value="lite" type="radio" name="db_mode" id="db_mode_simple" style="vertical-align: middle;" /> <label for="db_mode_simple"><?php echo lang('Simple mode: Basic installation')?> <span><?php echo lang('(FREE)'); ?></span></label><br />
+					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet" style="vertical-align: middle;" /> <label for="db_mode_complet"><?php echo lang('Full mode: includes').' <b>'.lang('100+ additional modules').'</b> '.lang('and demo products'); ?> <span><?php echo lang('(FREE too!)'); ?></span></label>
 				</p>
 				</form>
 				<p id="dbCreateResultCheck"></p>
 			</div>
+			
 			<div id="mailPart">
 				<h2><?php echo lang('E-mail delivery set-up')?></h2>
 
-				<p>
-					<input type="checkbox" id="set_stmp" style="vertical-align: middle;" /><label for="set_stmp"><?php echo lang('Configure SMTP manually (advanced users only)'); ?></label><br/>
+				<p id="configsmtp">
+					<input type="checkbox" id="set_stmp" style="vertical-align: middle;" /> <label for="set_stmp"><?php echo lang('Configure SMTP manually (advanced users only)'); ?></label><br/>
 					<span class="userInfos"><?php echo lang('By default, the PHP \'mail()\' function is used'); ?></span>
 				</p>
 
 				<div id="mailSMTPParam">
 					<form class="aligned" action="#" method="post" onsubmit="verifyMail(); return false;">
 						<p>
-							<label for="smtpSrv"><?php echo lang('SMTP server:'); ?> </label>
+							<label for="smtpSrv"><?php echo lang('SMTP server:'); ?></label>
 							<input class="text" type="text" id="smtpSrv" value="smtp."/>
 						</p>
 						<p>
@@ -507,7 +545,7 @@ if ($lm->getIncludeTradFilename())
 
 						<p>
 							<label for="smtpPort"><?php echo lang('Port:'); ?></label>
-							<input type="text" size="5" id="smtpPort" value="25" />
+							<input type="text" size="5" id="smtpPort" value="25" class="text" />
 						</p>
 
 						<p>
@@ -523,205 +561,287 @@ if ($lm->getIncludeTradFilename())
 					</form>
 				</div>
 				<p>
-					<input class="text" id="testEmail" type="text" size="15" value="<?php echo lang('enter@your.email'); ?>"></input>
-					<input id="btVerifyMail" class="button" type="submit" value="<?php echo lang('Send me a test email!'); ?>"></input>
+					<input class="text" id="testEmail" type="text" size="15" value="<?php echo lang('enter@your.email'); ?>" /> &nbsp; 
+					<input id="btVerifyMail" class="button" type="submit" value="<?php echo lang('Send me a test email!'); ?>" />
 				</p>
 
-				<p id="mailResultCheck" class="userInfos"></p>
+				<p id="mailResultCheck"></p>
 			</div>
 		</div>
 
-		<div class="sheet" id="sheet_infos">
+		<div class="sheet clearfix" id="sheet_infos">
 			<form action="<?php $_SERVER['REQUEST_URI']; ?>" method="post" onsubmit="return false;" enctype="multipart/form-data">
+				<div class="contentTitle">
+					<h1><?php echo lang('Shop configuration')?></h1>
+			
+					<ul id="stepList_4" class="stepList clearfix">
+						<li class="ok">Etape 1 ok</li>
+						<li class="ok">Etape 2 ok</li>
+						<li class="ok">Etape 3 ok</li>
+						<li>Etape 4</li>
+						<li>Etape 5</li>
+					</ul>
+				</div>
+				
+				<div id="infosShopBlock">
+					<h2><?php echo lang('Merchant info'); ?></h2>
+					<div class="field">
+						<label for="infosShop" class="aligned"><?php echo lang('Shop name:'); ?> </label>
+						<span class="contentinput">
+							<input class="text required" type="text" id="infosShop" value=""/>
+						</span>
+						<span id="resultInfosShop" class="result aligned"></span>
+					</div>
+					<div class="field">
+						<label for="infosActivity" class="aligned"><?php echo lang('Main activity:'); ?></label>
+						<span class="contentinput">
+							<select id="infosActivity">
+								<option value="0"><?php echo lang('-- Please choose your main activity --'); ?></option>
+								<option value="1"><?php echo lang('Adult'); ?></option>
+								<option value="2"><?php echo lang('Animals and Pets'); ?></option>
+								<option value="3"><?php echo lang('Art and Culture'); ?></option>
+								<option value="4"><?php echo lang('Babies'); ?></option>
+								<option value="5"><?php echo lang('Beauty and Personal Care'); ?></option>
+								<option value="6"><?php echo lang('Cars'); ?></option>
+								<option value="7"><?php echo lang('Computer Hardware and Software'); ?></option>
+								<option value="8"><?php echo lang('Download'); ?></option>
+								<option value="9"><?php echo lang('Fashion and accessories'); ?></option>
+								<option value="10"><?php echo lang('Flowers, Gifts and Crafts'); ?></option>
+								<option value="11"><?php echo lang('Food and beverage'); ?></option>
+								<option value="12"><?php echo lang('HiFi, Photo and Video'); ?></option>
+								<option value="13"><?php echo lang('Home and Garden'); ?></option>
+								<option value="14"><?php echo lang('Home Appliances'); ?></option>
+								<option value="15"><?php echo lang('Jewelry'); ?></option>
+								<option value="16"><?php echo lang('Mobile and Telecom'); ?></option>
+								<option value="17"><?php echo lang('Services'); ?></option>
+								<option value="18"><?php echo lang('Shoes and accessories'); ?></option>
+								<option value="19"><?php echo lang('Sport and Entertainment'); ?></option>
+								<option value="20"><?php echo lang('Travel'); ?></option>
+								<option value="0"><?php echo lang('Other activity...'); ?></option>
+							</select>
+						</span>
+						<p class="userInfos aligned"><?php echo lang('This information isn\'t required, it will be used for statistical purposes. This information doesn\'t change anything in your store.'); ?></p>
+					</div>
+					<div class="field">
+						<label for="infosCountry" class="aligned"><?php echo lang('Default country:'); ?></label>
+						<span class="contentinput">
+							<select id="infosCountry">
+							</select>
+						</span>
+					</div>
+					<div class="field">
+						<label for="infosTimezone" class="aligned"><?php echo lang('Shop\'s timezone:'); ?></label>
+						<span class="contentinput">
+							<select id="infosTimezone">
+							</select>
+						</span>
+					</div>
+					<div class="field">
+						<label for="infosLogo" class="aligned logo"><?php echo lang('Shop logo'); ?> : </label>
+						<span class="contentinput">
+							<p id="alignedLogo"><img id="uploadedImage" src="<?php echo PS_BASE_URI ?>img/logo.jpg" alt="Logo" /></p>
+						</span>
+						<p class="userInfos aligned"><?php echo lang('recommended dimensions: 230px X 75px'); ?></p>
+						
+						<span id="inputFileLogo" class="contentinput">
+							<input type="file" onchange="uploadLogo()" name="fileToUpload" id="fileToUpload"/>
+						</span>
+						<span id="resultInfosLogo" class="result"></span>
+					</div>
+					<div class="field">
+						<label for="catalogMode" class="aligned"><?php echo lang('Catalog mode:'); ?></label>
+						<span class="contentinput">
+							<input type="radio" name="catalogMode" id="catalogMode_1" value="1" />
+							<label for="catalogMode_1" class="radiolabel"><?php echo lang('Yes'); ?></label>&nbsp; &nbsp;
+							<input type="radio" name="catalogMode" id="catalogMode_0" value="0" checked="checked"/>
+							<label for="catalogMode_0" class="radiolabel"><?php echo lang('No'); ?></label>
+						</span>
+						<p class="userInfos aligned"><?php echo lang('If you activate this feature, all purchase features will be disabled. You can activate this feature later in your back office'); ?></p>
+					</div>
 
-				<h2><?php echo lang('Shop configuration'); ?></h2>
+					<div class="field">
+						<label for="infosFirstname" class="aligned"><?php echo lang('First name:'); ?> </label>
+						<span class="contentinput">
+							<input class="text required" type="text" id="infosFirstname"/><br/>
+						</span>
+						<span id="resultInfosFirstname" class="result aligned"></span>
+					</div>
 
-				<h3><?php echo lang('Merchant info'); ?></h3>
-				<div class="field">
-					<label for="infosShop" class="aligned"><?php echo lang('Shop name:'); ?> </label><input class="text required" type="text" id="infosShop" value=""/><br/>
-					<span id="resultInfosShop" class="result aligned"></span>
-				</div>
-				<div class="field">
-					<label for="infosActivity" class="aligned"><?php echo lang('Main activity:'); ?></label>
-					<select id="infosActivity" style="border:1px solid #D41958">
-						<option value="0"><?php echo lang('-- Please choose your main activity --'); ?></option>
-						<option value="1"><?php echo lang('Adult'); ?></option>
-						<option value="2"><?php echo lang('Animals and Pets'); ?></option>
-						<option value="3"><?php echo lang('Art and Culture'); ?></option>
-						<option value="4"><?php echo lang('Babies'); ?></option>
-						<option value="5"><?php echo lang('Beauty and Personal Care'); ?></option>
-						<option value="6"><?php echo lang('Cars'); ?></option>
-						<option value="7"><?php echo lang('Computer Hardware and Software'); ?></option>
-						<option value="8"><?php echo lang('Download'); ?></option>
-						<option value="9"><?php echo lang('Fashion and accessories'); ?></option>
-						<option value="10"><?php echo lang('Flowers, Gifts and Crafts'); ?></option>
-						<option value="11"><?php echo lang('Food and beverage'); ?></option>
-						<option value="12"><?php echo lang('HiFi, Photo and Video'); ?></option>
-						<option value="13"><?php echo lang('Home and Garden'); ?></option>
-						<option value="14"><?php echo lang('Home Appliances'); ?></option>
-						<option value="15"><?php echo lang('Jewelry'); ?></option>
-						<option value="16"><?php echo lang('Mobile and Telecom'); ?></option>
-						<option value="17"><?php echo lang('Services'); ?></option>
-						<option value="18"><?php echo lang('Shoes and accessories'); ?></option>
-						<option value="19"><?php echo lang('Sport and Entertainment'); ?></option>
-						<option value="20"><?php echo lang('Travel'); ?></option>
-						<option value="0"><?php echo lang('Other activity...'); ?></option>
-					</select>
-					<p class="userInfos aligned"><?php echo lang('This information isn\'t required, it will be used for statistical purposes. This information doesn\'t change anything in your store.'); ?></p>
-				</div>
-				<div class="field">
-					<label for="infosCountry" class="aligned"><?php echo lang('Default country:'); ?></label>
-					<select id="infosCountry" style="width:175px;border:1px solid #D41958">
-					</select>
-				</div>
-				<div class="field">
-					<label for="infosTimezone" class="aligned"><?php echo lang('Shop\'s timezone:'); ?></label>
-					<select id="infosTimezone" style="width:175px;border:1px solid #D41958">
-					</select>
-				</div>
-				<div class="field">
-					<label for="infosLogo" class="aligned logo"><?php echo lang('Shop logo'); ?> : </label>
-					<input type="file" onchange="uploadLogo()" name="fileToUpload" id="fileToUpload"/>
-					<span id="resultInfosLogo" class="result"></span>
-					<p class="userInfos aligned"><?php echo lang('recommended dimensions: 230px X 75px'); ?></p>
-					<p id="alignedLogo"><img id="uploadedImage" src="<?php echo PS_BASE_URI ?>img/logo.jpg" alt="Logo" /></p>
-				</div>
-				<div class="field">
-					<label for="catalogMode" class="aligned"><?php echo lang('Catalog mode:'); ?></label>
-					<input type="radio" name="catalogMode" id="catalogMode_1" value="1" />
-					<label for="catalogMode_1"><?php echo lang('Yes'); ?></label>
-					<input type="radio" name="catalogMode" id="catalogMode_0" value="0" checked="checked"/>
-					<label for="catalogMode_0"><?php echo lang('No'); ?></label>
-					<p class="userInfos aligned"><?php echo lang('If you activate this feature, all purchase features will be disabled. You can activate this feature later in your back office'); ?></p>
-				</div>
+					<div class="field">
+						<label for="infosName" class="aligned"><?php echo lang('Last name:'); ?> </label>
+						<span class="contentinput">
+							<input class="text required" type="text" id="infosName"/>
+						</span>
+						<span id="resultInfosName" class="result aligned"></span>
+					</div>
 
-				<div class="field">
-					<label for="infosFirstname" class="aligned"><?php echo lang('First name:'); ?> </label><input class="text required" type="text" id="infosFirstname"/><br/>
-					<span id="resultInfosFirstname" class="result aligned"></span>
-				</div>
+					<div class="field">
+						<label for="infosEmail" class="aligned"><?php echo lang('E-mail address:'); ?> </label>
+						<span class="contentinput">
+							<input type="text" class="text required" id="infosEmail"/>
+						</span>
+						<span id="resultInfosEmail" class="result aligned"></span>
+					</div>
 
-				<div class="field">
-					<label for="infosName" class="aligned"><?php echo lang('Last name:'); ?> </label><input class="text required" type="text" id="infosName"/><br/>
-					<span id="resultInfosName" class="result aligned"></span>
-				</div>
+					<div class="field">
+						<label for="infosPassword" class="aligned"><?php echo lang('Shop password:'); ?> </label>
+						<span class="contentinput">
+							<input autocomplete="off" type="password" class="text required" id="infosPassword"/>
+						</span>
+						<span id="resultInfosPassword" class="result aligned"></span>
+					</div>
+					<div class="field">
+						<label class="aligned" for="infosPasswordRepeat"><?php echo lang('Re-type to confirm:'); ?> </label>
+						<span class="contentinput">
+							<input type="password" autocomplete="off" class="text required" id="infosPasswordRepeat"/>
+						</span>
+						<span id="resultInfosPasswordRepeat" class="result aligned"></span>
+					</div>
 
-				<div class="field">
-					<label for="infosEmail" class="aligned"><?php echo lang('E-mail address:'); ?> </label><input type="text" class="text required" id="infosEmail"/><br/>
-					<span id="resultInfosEmail" class="result aligned"></span>
+					<div class="field" id="contentInfosNotification">
+						<span class="contentinput">
+							<input type="checkbox" id="infosNotification" class="aligned" style="vertical-align: middle;" /> <label for="infosNotification"><?php echo lang('Receive notifications by e-mail'); ?></label><br/>
+							<span id="resultInfosNotification" class="result aligned"></span>
+						</span>
+						
+						<p class="userInfos aligned"><?php echo lang('If you check this box and your mail configuration is wrong, your installation might be blocked. If so, please uncheck the box to go to the next step.'); ?></p>
+					</div>
 				</div>
-
-				<div class="field">
-					<label for="infosPassword" class="aligned"><?php echo lang('Shop password:'); ?> </label><input autocomplete="off" type="password" class="text required" id="infosPassword"/><br/>
-					<span id="resultInfosPassword" class="result aligned"></span>
-				</div>
-				<div class="field">
-					<label class="aligned" for="infosPasswordRepeat"><?php echo lang('Re-type to confirm:'); ?> </label><input type="password" autocomplete="off" class="text required" id="infosPasswordRepeat"/><br/>
-					<span id="resultInfosPasswordRepeat" class="result aligned"></span>
-				</div>
-
-				<div class="field">
-					<input type="checkbox" id="infosNotification" class="aligned" style="vertical-align: middle;" /><label for="infosNotification"><?php echo lang('Receive notifications by e-mail'); ?></label><br/>
-					<span id="resultInfosNotification" class="result aligned"></span>
-					<p class="userInfos aligned"><?php echo lang('If you check this box and your mail configuration is wrong, your installation might be blocked. If so, please uncheck the box to go to the next step.'); ?></p>
-				</div>
-
-				<!-- Partner Modules -->
-				<?php
-					if (!isset($_GET['language']))
-						$_GET['language'] = 0;
-				?>
-				<link href="../css/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />
-				<script src="../js/jquery/jquery.fancybox-1.3.4.js" type="text/javascript"></script>
-				<style>
-					.installModuleList { display: none; }
-					.installModuleList.selected { display: block; }
-				</style>
-				<script>
-					var moduleChecked = new Array();
-					$(document).ready(function() {
-						$('#infosCountry').change(function() {
-							$(".installModuleList.selected").removeClass("selected");
-							if ($("#modulesList" + $('select#infosCountry option:selected').attr('rel')))
-								$("#modulesList" + $('select#infosCountry option:selected').attr('rel')).addClass("selected");
-							$.ajax({
-								type: "GET",
-								url: "./php/country_to_timezone.php?country="+$("select#infosCountry option:selected").attr('rel'),
-								success: function(timezone){
-									$("select#infosTimezone").val(timezone);
-								}
+				
+				<div id="benefitsBlock">
+					<!-- Partner Modules -->
+					<?php
+						if (!isset($_GET['language']))
+							$_GET['language'] = 0;
+					?>
+					<link href="../css/jquery.fancybox-1.3.4.css" rel="stylesheet" type="text/css" media="screen" />
+					<script src="../js/jquery/jquery.fancybox-1.3.4.js" type="text/javascript"></script>
+					<script type="text/javascript">
+						var moduleChecked = new Array();
+						$(document).ready(function() {
+							$('#infosCountry').change(function() {
+								$(".installModuleList.selected").removeClass("selected");
+								if ($("#modulesList" + $('select#infosCountry option:selected').attr('rel')))
+									$("#modulesList" + $('select#infosCountry option:selected').attr('rel')).addClass("selected");
+								$.ajax({
+									type: "GET",
+									url: "./php/country_to_timezone.php?country="+$("select#infosCountry option:selected").attr('rel'),
+									success: function(timezone){
+										$("select#infosTimezone").val(timezone);
+									}
+								});
 							});
 						});
-					});
-				</script>
+					</script>
 
-				<?php
+					<?php
 
-					if (!isset($_GET['language']))
-						$_GET['language'] = 0;
+						if (!isset($_GET['language']))
+							$_GET['language'] = 0;
 
-					function getPreinstallXmlLang($object, $field)
-					{
-						if (Tools::property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
-							return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_'.((int)($_GET['language'])+1)}));
-						if (Tools::property_exists($object, $field.'_1'))
-							return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_1'}));
-						return '';
-					}
-
-					$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 3)));
-					$content = @file_get_contents('http://www.prestashop.com/partner/preactivation/partners.php?version=1.0', false, $context);
-					if ($content && $content[0] == '<')
-					{
-						$result = simplexml_load_string($content);
-						if ($result->partner)
+						function getPreinstallXmlLang($object, $field)
 						{
-							echo '
-							<h2>'.lang('Additional Benefits').'</h2>
-							<h3>'.lang('Exclusive offers dedicated to PrestaShop merchants').'</h3>';
-				
-							$modulesHelpInstall = array();
-							$modulesDescription = array();
-							$modulesPrechecked = array();
-							foreach ($result->partner as $p)
-							{
-								$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo_medium), 'label' => getPreinstallXmlLang($p, 'label'), 'description' => getPreinstallXmlLang($p, 'description'), 'more' => getPreinstallXmlLang($p, 'more'));
-								foreach ($p->country as $country_iso_code)
-									$modulesHelpInstall[trim($country_iso_code)][] = trim($p->key);
-								if ($p->prechecked)
-									foreach ($p->prechecked as $country_iso_code)
-										$modulesPrechecked[trim($p->key)][trim($country_iso_code)] = 1;
-							}
+							if (Tools::property_exists($object, $field.'_'.((int)($_GET['language'])+1)))
+								return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_'.((int)($_GET['language'])+1)}));
+							if (Tools::property_exists($object, $field.'_1'))
+								return str_replace(array('!|', '|!'), array('<', '>'), trim($object->{$field.'_1'}));
+							return '';
+						}
 
-							foreach ($modulesHelpInstall as $country_iso_code => $modulesList)
+						$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 3)));
+						$content = @file_get_contents('http://www.prestashop.com/partner/preactivation/partners.php?version=1.0', false, $context);
+						if ($content && $content[0] == '<')
+						{
+							$result = simplexml_load_string($content);
+							if ($result->partner)
 							{
-								echo '<div class="installModuleList'.($country_iso_code == 'FR' ? ' selected' : '').'" id="modulesList'.$country_iso_code.'">';
-								foreach ($modulesList as $module)
+								echo '
+								<h2>'.lang('Additional Benefits').'</h2>
+								<h3>'.lang('Exclusive offers dedicated to PrestaShop merchants').'</h3>';
+					
+								$modulesHelpInstall = array();
+								$modulesDescription = array();
+								$modulesPrechecked = array();
+								foreach ($result->partner as $p)
 								{
-									echo '
-									<table style="border: 1px solid #CCC; padding: 5px; width: 650px">
+									$modulesDescription[trim($p->key)] = array('name' => trim($p->label), 'logo' => trim($p->logo_medium), 'label' => getPreinstallXmlLang($p, 'label'), 'description' => getPreinstallXmlLang($p, 'description'), 'more' => getPreinstallXmlLang($p, 'more'));
+									foreach ($p->country as $country_iso_code)
+										$modulesHelpInstall[trim($country_iso_code)][] = trim($p->key);
+									if ($p->prechecked)
+										foreach ($p->prechecked as $country_iso_code)
+											$modulesPrechecked[trim($p->key)][trim($country_iso_code)] = 1;
+								}
+								echo '<table cellpadding="0" callspacing="0" border="0" class="moduleTable">
 									<tr>
-									<td style="width: 100px; text-align: center;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'">'.(isset($modulesDescription[$module]['more']) ? $modulesDescription[$module]['more'] : '').'</td>
-									<td style="padding-left: 15px; width: 430px;">
-									'.$modulesDescription[$module]['description'].'
-									</td>
-									<td style="text-align: center; width: 30px; background: #FFF;">
-									<span style="padding: 3px 4px 6px 2px; background: none repeat scroll 0pt 0pt #7EB423;">
-									<input type="checkbox" id="preInstallModules_'.$country_iso_code.'_'.$module.'" value="'.$module.'" class="'.$module.' preInstallModules_'.$country_iso_code.'" style="vertical-align: middle;" />
-									</span>
-									</td>
-									</tr>
-									<tr><td colspan="3"><div id="divForm_'.$country_iso_code.'_'.$module.'">&nbsp;</div></td></tr>
+										<th style="width: 30px;"></th>
+										<th style="width: 100px;">Modules</th>
+										<th style="padding: 12px; width: 430px;">Avantages</th>
+										</tr>
 									</table>
-									<br />';
-									echo "<script>
-										moduleChecked['".$country_iso_code.'_'.$module."'] = 0;
-										$(document).ready(function() {
-											$('#preInstallModules_".$country_iso_code.'_'.$module."').change(function() {
-												var idDivForm = '#divForm_".$country_iso_code."_".$module."';
-												if ($(this).attr('checked'))
-												{
+								';
+								
+								foreach ($modulesHelpInstall as $country_iso_code => $modulesList)
+								{
+									echo '<div class="installModuleList'.($country_iso_code == 'FR' ? ' selected' : '').'" id="modulesList'.$country_iso_code.'">';
+									foreach ($modulesList as $module)
+									{
+										echo '
+										<table cellpadding="0" callspacing="0" border="0" class="moduleTable">
+										<tr>
+										<td valign="top" style="text-align: center; padding-top:10px; width: 30px; background: #FFF;">
+										<span style="padding: 12px 4px 6px 2px;">
+										<input type="checkbox" id="preInstallModules_'.$country_iso_code.'_'.$module.'" value="'.$module.'" class="'.$module.' preInstallModules_'.$country_iso_code.'" style="vertical-align: middle;" />
+										</span>
+										</td>
+										<td valign="top" style="width: 100px; text-align: center;"><img src="'.$modulesDescription[$module]['logo'].'" alt="'.$modulesDescription[$module]['name'].'" title="'.$modulesDescription[$module]['name'].'">'.(isset($modulesDescription[$module]['more']) ? $modulesDescription[$module]['more'] : '').'</td>
+										<td style="padding: 15px; width: 430px;">
+										'.$modulesDescription[$module]['description'].'
+										</td>
+										</tr>
+										<tr><td colspan="3"><div id="divForm_'.$country_iso_code.'_'.$module.'">&nbsp;</div></td></tr></table>
+										';
+										echo "<script>
+											moduleChecked['".$country_iso_code.'_'.$module."'] = 0;
+											$(document).ready(function() {
+												$('#preInstallModules_".$country_iso_code.'_'.$module."').change(function() {
+													var idDivForm = '#divForm_".$country_iso_code."_".$module."';
+													if ($(this).attr('checked'))
+													{
+														moduleChecked['".$country_iso_code.'_'.$module."'] = 1;
+														$(idDivForm).css({'display' : 'block'});
+														$.ajax({
+														  url: 'preactivation.php?request=form&partner=".$module."&language=".$_GET['language']."'+
+															'&language_iso_code='+isoCodeLocalLanguage+
+															'&country_iso_code=".$country_iso_code."'+
+															'&activity='+ encodeURIComponent($('select#infosActivity').val())+
+															'&timezone='+ encodeURIComponent($('select#infosTimezone').val())+
+															'&shop='+ encodeURIComponent($('input#infosShop').val())+
+															'&firstName='+ encodeURIComponent($('input#infosFirstname').val())+
+															'&lastName='+ encodeURIComponent($('input#infosName').val())+
+															'&email='+ encodeURIComponent($('input#infosEmail').val()),
+															success: function(data) {
+																	$(idDivForm).html(data);
+															},
+															error: function() {
+																errorOccured = true;
+															}
+														});
+													}
+													else
+													{
+														moduleChecked['".$country_iso_code.'_'.$module."'] = 0;
+														$(idDivForm).css({'display' : 'none'});
+														$(idDivForm).html('');
+													}
+												});
+											});
+											";
+											if (isset($modulesPrechecked[$module][$country_iso_code]) && $modulesPrechecked[$module][$country_iso_code] == 1)
+											{
+												echo "$(document).ready(function() {
 													moduleChecked['".$country_iso_code.'_'.$module."'] = 1;
-													$(idDivForm).css({'display' : 'block'});
+													$('#preInstallModules_".$country_iso_code."_".$module."').attr('checked', true);
+													$('#divForm_".$country_iso_code."_".$module."').css({'display' : 'block'});
 													$.ajax({
 													  url: 'preactivation.php?request=form&partner=".$module."&language=".$_GET['language']."'+
 														'&language_iso_code='+isoCodeLocalLanguage+
@@ -732,126 +852,100 @@ if ($lm->getIncludeTradFilename())
 														'&firstName='+ encodeURIComponent($('input#infosFirstname').val())+
 														'&lastName='+ encodeURIComponent($('input#infosName').val())+
 														'&email='+ encodeURIComponent($('input#infosEmail').val()),
-													  	success: function(data) {
-													    		$(idDivForm).html(data);
-													  	},
-													  	error: function() {
-													  		errorOccured = true;
-													  	}
+														success: function(data) {
+																$('#divForm_".$country_iso_code."_".$module."').html(data);
+														},
+														error: function() {
+															errorOccured = true;
+														}
 													});
-												}
-												else
-												{
-													moduleChecked['".$country_iso_code.'_'.$module."'] = 0;
-													$(idDivForm).css({'display' : 'none'});
-													$(idDivForm).html('');
-												}
-											});
-										});
-										";
-										if (isset($modulesPrechecked[$module][$country_iso_code]) && $modulesPrechecked[$module][$country_iso_code] == 1)
-										{
-											echo "$(document).ready(function() {
-												moduleChecked['".$country_iso_code.'_'.$module."'] = 1;
-												$('#preInstallModules_".$country_iso_code."_".$module."').attr('checked', true);
-												$('#divForm_".$country_iso_code."_".$module."').css({'display' : 'block'});
-												$.ajax({
-												  url: 'preactivation.php?request=form&partner=".$module."&language=".$_GET['language']."'+
-													'&language_iso_code='+isoCodeLocalLanguage+
-													'&country_iso_code=".$country_iso_code."'+
-													'&activity='+ encodeURIComponent($('select#infosActivity').val())+
-													'&timezone='+ encodeURIComponent($('select#infosTimezone').val())+
-													'&shop='+ encodeURIComponent($('input#infosShop').val())+
-													'&firstName='+ encodeURIComponent($('input#infosFirstname').val())+
-													'&lastName='+ encodeURIComponent($('input#infosName').val())+
-													'&email='+ encodeURIComponent($('input#infosEmail').val()),
-												  	success: function(data) {
-												    		$('#divForm_".$country_iso_code."_".$module."').html(data);
-												  	},
-												  	error: function() {
-												  		errorOccured = true;
-												  	}
-												});
-											});";
-										}
-
-										echo "</script>";
+												});";
+											}
+											echo "</script>";
+									}
+									echo '</div>';
 								}
-								echo '</div>';
 							}
 						}
-					}
 
-				?>
+					?>
+					<!-- Partner Modules -->
 
-				<!-- Partner Modules -->
+					<!--<h3><?php echo lang('Shop\'s languages'); ?></h3>
+					<p class="userInfos"><?php echo lang('Select the different languages available for your shop'); ?></p>-->
+					<div id="availablesLanguages" style=" float:left; text-align: center; display:none;">
 
-
-
-
-
-				<!--<h3><?php echo lang('Shop\'s languages'); ?></h3>
-				<p class="userInfos"><?php echo lang('Select the different languages available for your shop'); ?></p>-->
-				<div id="availablesLanguages" style=" float:left; text-align: center; display:none;">
-
-					<?php echo lang('Optional languages'); ?><br/>
-					<select style="width:300px;" id="aLList" multiple="multiple" size="4">
-					<?php foreach ($lm->getAvailableLangs() as $lang){
-						if ( $lang['id'] != $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
-							<option value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
-					<?php }} ?>
-					</select>
-				</div>
-
-				<div id="RightLeft" style="float: left; width:50px; margin-top: 1.7em; text-align:center; display:none;">
-					<input id="al2wl" value="&gt;" type="button"/><br/>
-					<input id="wl2al" value="&lt;" type="button" />
-				</div>
-
-				<div id="websitesLanguages" style="float:left; text-align: center; display:none;">
-					<?php echo lang('Available shop languages'); ?><br/>
-					<select style="width:240px;" id="wLList" size="4">
-						<option value="en">English (English)</option>
+						<?php echo lang('Optional languages'); ?><br/>
+						<select style="width:300px;" id="aLList" multiple="multiple" size="4">
 						<?php foreach ($lm->getAvailableLangs() as $lang){
-							if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
+							if ( $lang['id'] != $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
 								<option value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
 						<?php }} ?>
+						</select>
+					</div>
 
-					</select><br/>
-					<label for="dLList"><?php echo lang('Shop\'s default language'); ?></label><br/>
-					<select style="width:180px;" id="dLList">
-						<option selected="selected" value="en">English (English)</option>
-						<?php foreach ($lm->getAvailableLangs() as $lang){
-							if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
-								<option selected="selected" value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
-						<?php }} ?>
-					</select>
+					<div id="RightLeft" style="float: left; width:50px; margin-top: 1.7em; text-align:center; display:none;">
+						<input id="al2wl" value="&gt;" type="button"/><br/>
+						<input id="wl2al" value="&lt;" type="button" />
+					</div>
+
+					<div id="websitesLanguages" style="float:left; text-align: center; display:none;">
+						<?php echo lang('Available shop languages'); ?><br/>
+						<select style="width:240px;" id="wLList" size="4">
+							<option value="en">English (English)</option>
+							<?php foreach ($lm->getAvailableLangs() as $lang){
+								if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
+									<option value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
+							<?php }} ?>
+
+						</select><br/>
+						<label for="dLList"><?php echo lang('Shop\'s default language'); ?></label><br/>
+						<select style="width:180px;" id="dLList">
+							<option selected="selected" value="en">English (English)</option>
+							<?php foreach ($lm->getAvailableLangs() as $lang){
+								if ( $lang['id'] == $lm->getIdSelectedLang() AND $lang['id']  != "0" ){ ?>
+									<option selected="selected" value="<?php echo $lang->idLangPS ?>"><?php echo $lang['label'] ?></option>
+							<?php }} ?>
+						</select>
+					</div>
+				
 				</div>
-			</form>
+				</form>
 
-			<div id="resultEnd">
-				<span id="resultInfosSQL" class="result"></span>
-				<span id="resultInfosLanguages" class="result"></span>
-			</div>
-
+				<div id="resultEnd">
+					<span id="resultInfosSQL" class="result"></span>
+					<span id="resultInfosLanguages" class="result"></span>
+				</div>
 		</div>
 
-		<div class="sheet" id="sheet_end" style="padding:0">
-			<div style="padding:1em">
-				<h2><?php echo lang('PrestaShop is ready!'); ?></h2>
-				<h3><?php echo lang('Your installation is finished!'); ?></h3>
+		<div class="sheet clearfix" id="sheet_end">
+			
+			<div class="contentTitle">
+				<h1><?php echo lang('PrestaShop is ready!'); ?></h1>
+				
+				<ul id="stepList_5" class="stepList clearfix">
+					<li class="ok">Etape 1 ok</li>
+					<li class="ok">Etape 2 ok</li>
+					<li class="ok">Etape 3 ok</li>
+					<li class="ok">Etape 4 ok</li>
+					<li class="ok">Etape 5</li>
+				</ul>
+			</div>
+		
+			<div class="clearfix">
+				<h2><?php echo lang('Your installation is finished!'); ?></h2>
 				<p><?php echo lang('You have just installed and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
 				<p><?php echo lang('Here are your shop information. You can modify them once logged in.'); ?></p>
-				<table id="resultInstall" cellspacing="0">
-					<tr>
-						<td class="label"><?php echo lang('Shop name:'); ?></td>
-						<td id="endShopName" class="resultEnd">&nbsp;</td>
+				<table cellpadding="0" cellspacing="0" border="0" id="resultInstall" width="620">
+					<tr class="odd">
+						<td width="220" class="label"><?php echo lang('Shop name:'); ?></td>
+						<td width="400" id="endShopName" class="resultEnd">&nbsp;</td>
 					</tr>
 					<tr>
 						<td class="label"><?php echo lang('First name:'); ?></td>
 						<td id="endFirstName" class="resultEnd">&nbsp;</td>
 					</tr>
-					<tr>
+					<tr class="odd">
 						<td class="label"><?php echo lang('Last name:'); ?></td>
 						<td id="endName" class="resultEnd">&nbsp;</td>
 					</tr>
@@ -860,23 +954,26 @@ if ($lm->getIncludeTradFilename())
 						<td id="endEmail" class="resultEnd">&nbsp;</td>
 					</tr>
 				</table>
-				<h3><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?></h3>
-
-				<a href="../admin" id="access" class="BO" target="_blank">
-					<span class="title"><?php echo lang('Back Office'); ?></span>
-					<span class="description"><?php echo lang('Manage your store with your back office. Manage your orders and customers, add modules, change your theme, etc...'); ?></span>
-					<span class="message"><?php echo lang('Manage your store'); ?></span>
-				</a>
-				<a href="../" id="access" class="FO" target="_blank">
-					<span class="title"><?php echo lang('Front Office'); ?></span>
-					<span class="description"><?php echo lang('Find your store as your future customers will see!'); ?></span>
-					<span class="message"><?php echo lang('Discover your store'); ?></span>
-				</a>
+				
+				<h3 class="infosBlock"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?></h3>
+				
+				<div id="boBlock" class="blockInfoEnd clearfix">
+						<img src="img/visu_boBlock.png" />
+						<h3><?php echo lang('Back Office'); ?></h3>
+						<p class="description"><?php echo lang('Manage your store with your back office. Manage your orders and customers, add modules, change your theme, etc...'); ?></p>
+						<a href="../admin" id="access" class="BO" target="_blank"><span><?php echo lang('Manage your store'); ?></span></a>
+				</div>
+				<div id="foBlock" class="blockInfoEnd last clearfix">
+						<img src="img/visu_foBlock.png" />
+						<h3><?php echo lang('Front Office'); ?></h3>
+						<p class="description"><?php echo lang('Find your store as your future customers will see!'); ?></p>
+						<a href="../" id="access" class="FO" target="_blank"><span><?php echo lang('Discover your store'); ?></span></a>
+				</div>
+				
 				<div id="resultEnd"></div>
 			</div>
 			<?php
 			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)): ?>
-
 			<iframe src="http://addons.prestashop.com/psinstall.php?lang=<?php echo $lm->getIsoCodeSelectedLang()?>" scrolling="no" id="prestastore">
 				<p>Your browser does not support iframes.</p>
 			</iframe>
@@ -884,10 +981,19 @@ if ($lm->getIncludeTradFilename())
 			endif; ?>
 
 		</div>
-
-		<div class="sheet" id="sheet_disclaimer">
-			<h2><?php echo lang('Disclaimer'); ?></h2>
-			<h3><?php echo lang('Warning: a manual backup is HIGHLY recommended before continuing!'); ?></h3>
+		
+		<div class="sheet clearfix" id="sheet_disclaimer">
+			<div class="contentTitle">
+				<h1><?php echo lang('Disclaimer'); ?></h1>
+		
+				<ul id="stepList_6" class="stepList clearfix">
+					<li class="ok">Etape 1</li>
+					<li>Etape 2</li>
+					<li>Etape 3</li>
+					<li>Etape 4</li>
+				</ul>
+			</div>
+			<h2><?php echo lang('Warning: a manual backup is HIGHLY recommended before continuing!'); ?></h2>
 			<p><?php echo lang('Please backup the database and application files.'); ?></p>
 			<p><?php echo lang('When your files and database are saving in an other support, please certify that your shop is really backed up.'); ?><br /><br /></p>
 
@@ -908,7 +1014,7 @@ if ($lm->getIncludeTradFilename())
 					$(document).ready(function() {
 						$.ajax({
 							url: 'xml/getNonNativeModules.php',
-							async: false,
+							async: true,
 							dataType: "json",
 							success: function (json) 
 							{
@@ -991,20 +1097,20 @@ if ($lm->getIncludeTradFilename())
 					if (sizeof($upgradeFiles))
 					{
 						echo '
-						<table cellpadding="5" border="1" style="font-size: 11px; margin-top: 10px;">
+						<table cellpadding="0" cellspacing="0" border="0">
 							<tr>
 								<th>'.lang('Upgrade file').'</th>
-								<th style="width: 100px;">'.lang('Modifications to process').'</th>
+								<th  style="text-align: right;">'.lang('Modifications to process').'</th>
 							</tr>';
 
 						uasort($upgradeFiles, 'sortnatversion');
 						$totalInstructions = 0;
 						foreach ($upgradeFiles AS $file)
 						{
-							echo '<tr><td style="'.($file['is_major'] ? 'font-weight: bold;' : 'padding-left: 12px;').'">v'.$file['version'].($file['is_major'] ? ' '.lang('(major)') : '').'</td><td style="text-align: right; padding-right: 5px;">'.(int)$file['instructions'].'</td></tr>';
+							echo '<tr><td style="'.($file['is_major'] ? 'font-weight: bold;' : '').'">v'.$file['version'].($file['is_major'] ? ' '.lang('(major)') : '').'</td><td style="text-align: right;">'.(int)$file['instructions'].'</td></tr>';
 							$totalInstructions += (int)$file['instructions'];
 						}
-						echo '<tr style="font-weight: bold;"><td>'.lang('TOTAL').'</td><td style="text-align: right; padding-right: 5px;">'.(int)$totalInstructions.'</td></tr>';
+						echo '<tr style="font-weight: bold;"><td>'.lang('TOTAL').'</td><td style="text-align: right;">'.(int)$totalInstructions.'</td></tr>';
 						echo '
 						</table>';
 
@@ -1012,7 +1118,7 @@ if ($lm->getIncludeTradFilename())
 						$minutes = (int)($upgradeTime / 60);
 						$seconds = (int)($upgradeTime - ($minutes * 60));
 
-						echo '<p><img src="../img/admin/time.gif" alt="" style="vertical-align: middle;" /> '.lang('Estimated time to complete the').' '.(int)$totalInstructions.' '.lang('modifications:').' <b style="font-size: 14px;">'.(int)$minutes.' '.($minutes > 1 ? lang('minutes') : lang('minute')).' '.(int)$seconds.' '.($seconds > 1 ? lang('seconds') : lang('second')).'</b><br />
+						echo '<p><img src="../img/admin/time.gif" alt="" style="vertical-align: absmiddle;" /> '.lang('Estimated time to complete the').' '.(int)$totalInstructions.' '.lang('modifications:').' <b style="font-size: 14px;">'.(int)$minutes.' '.($minutes > 1 ? lang('minutes') : lang('minute')).' '.(int)$seconds.' '.($seconds > 1 ? lang('seconds') : lang('second')).'</b><br />
 						<i style="font-size: 11px;">'.lang('Depending on your server and the size of your shop').'</i></p>';
 
 						if ($majorReleases > 1)
@@ -1040,7 +1146,7 @@ if ($lm->getIncludeTradFilename())
 				<br />
 				<h2>'.lang('Hosting parameters').'</h2>
 				<p>'.lang('PrestaShop tries to automatically set the best settings for your server in order the update to be successful.').'</p>
-				<table cellpadding="5" border="1" style="font-size: 11px;">
+				<table cellpadding="0" cellspacing="0" border="0">
 					<tr>
 						<th>'.lang('PHP parameter').'</th>
 						<th>'.lang('Description').'</th>
@@ -1057,29 +1163,33 @@ if ($lm->getIncludeTradFilename())
 						<td style="text-align: right;">'.ini_get('memory_limit').'</td>
 					</tr>
 				</table>
-				<div style="font-weight: bold; background: '.$color.'; color: #000; padding: 10px; border: 1px solid #999; margin-top: 10px;">';
+				<div class="infosBlock">';
 
 				if ($color == '#D9F2D0')
-					echo '<img src="../img/admin/ok.gif" alt="" style="vertical-align: middle;" /> '.lang('All your settings seem to be OK, go for it!');
+					echo '<img src="../img/admin/ok.gif" alt="" style="vertical-align: absmiddle;" /> '.lang('All your settings seem to be OK, go for it!');
 				elseif ($color == '#FFDEB7')
-					echo '<img src="../img/admin/warning.gif" alt="" style="vertical-align: middle;" /> '.lang('Beware, your settings look correct but are not optimal, if you encounter problems (upgrade too long, memory error...), please ask your hosting provider to increase the values of these parameters (max_execution_time & memory_limit).');
+					echo '<img src="../img/admin/warning.gif" alt="" style="vertical-align: absmiddle;" /> '.lang('Beware, your settings look correct but are not optimal, if you encounter problems (upgrade too long, memory error...), please ask your hosting provider to increase the values of these parameters (max_execution_time & memory_limit).');
 				elseif ($color == '#FAE2E3')
-					echo '<img src="../img/admin/error2.png" alt="" style="vertical-align: middle;" /> '.lang('We strongly recommend that you inform your hosting provider to modify the settings before process to the update.');
-
-				echo '
-				</div><br />';
-
+					echo '<img src="../img/admin/error2.png" alt="" style="vertical-align: absmiddle;" /> '.lang('We strongly recommend that you inform your hosting provider to modify the settings before process to the update.');
+				echo '</div>';
 
 				?>
 			</div>
 		</div>
 
-		<div class="sheet" id="sheet_require_update">
+		<div class="sheet clearfix" id="sheet_require_update">
+			<div class="contentTitle">
+				<h1><?php echo lang('System and permissions')?></h1>
 
-			<h2><?php echo lang('System and permissions'); ?></h2>
-
-			<h3><?php echo lang('Required set-up. Please verify the following checklist items are true.'); ?></h3>
-
+				<ul id="stepList_7" class="stepList clearfix">
+					<li class="ok">Etape 1 ok</li>
+					<li class="ok">Etape 2 ok</li>
+					<li>Etape 3</li>
+					<li>Etape 4</li>
+				</ul>
+			</div>
+			<h2><?php echo lang('Required set-up. Please verify the following checklist items are true.'); ?></h2>
+			
 			<p>
 				<?php echo lang('If you have any questions, please visit our '); ?>
 				<a href="http://www.prestashop.com/wiki" target="_blank"><?php echo lang('Documentation Wiki'); ?></a>
@@ -1087,7 +1197,7 @@ if ($lm->getIncludeTradFilename())
 				<a href="http://www.prestashop.com/forums/" target="_blank"><?php echo lang('Community Forum'); ?></a><?php echo lang('.'); ?>
 			</p>
 
-			<h3 id="resultConfig_update" style="font-size: 20px; text-align: center; padding: 0px; display: none;"></h3>
+			<h3 id="resultConfig_update"></h3>
 			<ul id="required_update">
 				<li class="title"><?php echo lang('PHP parameters:')?></li>
 				<li class="required"><?php echo lang('PHP 5.0 or later installed')?></li>
@@ -1129,21 +1239,44 @@ if ($lm->getIncludeTradFilename())
 
 		</div>
 
-		<div class="sheet" id="sheet_updateErrors">
-			<h2><?php echo lang('Error!'); ?></h2>
+		<div class="sheet clearfix" id="sheet_updateErrors">
+			<div class="contentTitle">
+				<h1><?php echo lang('Error!'); ?></h1>
+
+				<ul id="stepList_8" class="stepList clearfix">
+					<li class="ok">Etape 1 ok</li>
+					<li class="ok">Etape 2 ok</li>
+					<li class="ko">Etape 3</li>
+					<li>Etape 4</li>
+				</ul>
+			</div>
+			
 			<h3><?php echo lang('One or more errors have occurred, you can find more informations below or in the log/installation.log file.'); ?></h3>
-			<p id="resultUpdate"></p>
-			<p id="detailsError"></p>
+			
+			<p id="resultUpdate" class="errorBlock"></p>
+			<br />
+			<p id="detailsError" class="infosBlock"><?php echo lang('No more informations'); ?></p>
 		</div>
 
-		<div class="sheet" id="sheet_end_update" style="padding:0px;">
-			<div style="padding:1em;">
-				<h1><?php echo lang('Your update is completed!'); ?></h1>
-				<h3><?php echo lang('Your shop version is now').' '.INSTALL_VERSION; ?></h3>
-				<p class="fail" id="txtErrorUpdateSQL"></p>
-				<p><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
+		<div class="sheet clearfix" id="sheet_end_update">
+			<div>
+				<div class="contentTitle">
+					<h1><?php echo lang('Your update is completed!'); ?></h1>
+
+					<ul id="stepList_7" class="stepList clearfix">
+						<li class="ok">Etape 1 ok</li>
+						<li class="ok">Etape 2 ok</li>
+						<li class="ok">Etape 3</li>
+						<li class="ok">Etape 4</li>
+					</ul>
+				</div>
+				<div class="okBlock">
+					<?php echo lang('Your shop version is now').' '.INSTALL_VERSION; ?>
+				</div>
+				<p class="errorBlock" id="txtErrorUpdateSQL" style="display:none;"></p>
+				<p style="padding-bottom: 5px;"><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
 				<div id="updateLog"></div>
-				<p><?php echo lang('You have just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p><br />
+				<p><?php echo lang('You have just updated and configured PrestaShop as your online shop solution. We wish you all the best with the success of your online shop.'); ?></p>
 
 				<?php
 
@@ -1151,19 +1284,23 @@ if ($lm->getIncludeTradFilename())
 					{
 						echo '
 						<h2>'.lang('New features in PrestaShop v').INSTALL_VERSION.'</h2>
-						<iframe style="width: 595px; margin-top: 5px; padding: 5px; border: 1px solid #BBB;" src="http://features.prestashop.com/lang/'.$lm->getIsoCodeSelectedLang().'/version/'.INSTALL_VERSION.'">
+						<iframe style="width: 638px; margin-top: 5px; padding: 5px; border: 1px solid #BBB;" src="http://features.prestashop.com/lang/'.$lm->getIsoCodeSelectedLang().'/version/'.INSTALL_VERSION.'">
 							<p>Your browser does not support iframes.</p>
 						</iframe>';
 					}
 
 				?>
 
-				<h3 style="margin-top: 15px;"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?></h3>
-				<a href="../" id="access_update" target="_blank">
-					<span class="title"><?php echo lang('Front Office'); ?></span>
-					<span class="description"><?php echo lang('Find your store as your future customers will see!'); ?></span>
-					<span class="message"><?php echo lang('Discover your store'); ?></span>
-				</a>
+				<div class="infosBlock">
+					<?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?>
+				</div>
+				
+				<div id="foBlock" class="blockInfoEnd clearfix">
+						<img src="img/visu_foBlock.png" />
+						<h3><?php echo lang('Front Office'); ?></h3>
+						<p class="description"><?php echo lang('Find your store as your future customers will see!'); ?></p>
+						<a href="../" id="access" class="FO" target="_blank"><span><?php echo lang('Discover your store'); ?></span></a>
+				</div>
 			</div>
 			<?php
 			if (@fsockopen('addons.prestashop.com', 80, $errno, $errst, 3)): ?>
