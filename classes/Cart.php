@@ -1683,6 +1683,8 @@ class CartCore extends ObjectModel
 	{
 		$carrier = new Carrier((int)$id_carrier, Configuration::get('PS_LANG_DEFAULT'));
 		$shippingMethod = $carrier->getShippingMethod();
+		if (!$carrier->range_behavior)
+			return true;
 
 		if ($shippingMethod == Carrier::SHIPPING_METHOD_FREE)
 			return true;
