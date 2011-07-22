@@ -2735,7 +2735,7 @@ class AdminProducts extends AdminTab
 							echo '<script>post_selected_cat = \''.implode(',', $postCat).'\';</script>';
 						}
 						if ($obj->id)
-							$selectedCat = $obj::getProductCategoriesFull($obj->id, $this->_defaultFormLanguage);
+							$selectedCat = Product::getProductCategoriesFull($obj->id, $this->_defaultFormLanguage);
 						else if(!Tools::isSubmit('categoryBox'))
 							$selectedCat[] = array('id_category' => 1, 'name' => $this->l('Home'));
 						echo '<select id="id_category_default" name="id_category_default">';
