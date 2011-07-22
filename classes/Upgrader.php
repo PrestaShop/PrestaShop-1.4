@@ -102,7 +102,7 @@ class UpgraderCore{
 					$this->version_name = (string)$feed->version->name;
 					$this->version_num = (string)$feed->version->num;
 					$this->link = (string)$feed->download->link;
-					$configLastVersion = array('name'=>$this->version_name, 'num'=>$this->version_num,'link'=>$this->version_link );
+					$configLastVersion = array('name'=>$this->version_name, 'num'=>$this->version_num,'link'=>$this->link );
 					Configuration::updateValue('PS_LAST_VERSION',serialize($configLastVersion));
 					Configuration::updateValue('PS_LAST_VERSION_CHECK',time());
 				}
@@ -115,7 +115,6 @@ class UpgraderCore{
 				$this->link = $lastVersionCheck['link'];
 			}
 		}
-
 		// retro-compatibility :
 		// return array(name,link) if you don't use the last version
 		// false otherwise
