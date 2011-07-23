@@ -588,7 +588,7 @@ if ($lm->getIncludeTradFilename())
 					<div class="field">
 						<label for="infosShop" class="aligned"><?php echo lang('Shop name:'); ?> </label>
 						<span class="contentinput">
-							<input class="text required" type="text" id="infosShop" value=""/>
+							<input class="text required" type="text" id="infosShop" value=""/> <sup class="required">*</sup>
 						</span>
 						<span id="resultInfosShop" class="result aligned"></span>
 					</div>
@@ -662,7 +662,7 @@ if ($lm->getIncludeTradFilename())
 					<div class="field">
 						<label for="infosFirstname" class="aligned"><?php echo lang('First name:'); ?> </label>
 						<span class="contentinput">
-							<input class="text required" type="text" id="infosFirstname"/><br/>
+							<input class="text required" type="text" id="infosFirstname"/> <sup class="required">*</sup>
 						</span>
 						<span id="resultInfosFirstname" class="result aligned"></span>
 					</div>
@@ -670,7 +670,7 @@ if ($lm->getIncludeTradFilename())
 					<div class="field">
 						<label for="infosName" class="aligned"><?php echo lang('Last name:'); ?> </label>
 						<span class="contentinput">
-							<input class="text required" type="text" id="infosName"/>
+							<input class="text required" type="text" id="infosName"/> <sup class="required">*</sup>
 						</span>
 						<span id="resultInfosName" class="result aligned"></span>
 					</div>
@@ -678,7 +678,7 @@ if ($lm->getIncludeTradFilename())
 					<div class="field">
 						<label for="infosEmail" class="aligned"><?php echo lang('E-mail address:'); ?> </label>
 						<span class="contentinput">
-							<input type="text" class="text required" id="infosEmail"/>
+							<input type="text" class="text required" id="infosEmail"/> <sup class="required">*</sup>
 						</span>
 						<span id="resultInfosEmail" class="result aligned"></span>
 					</div>
@@ -686,14 +686,14 @@ if ($lm->getIncludeTradFilename())
 					<div class="field">
 						<label for="infosPassword" class="aligned"><?php echo lang('Shop password:'); ?> </label>
 						<span class="contentinput">
-							<input autocomplete="off" type="password" class="text required" id="infosPassword"/>
+							<input autocomplete="off" type="password" class="text required" id="infosPassword"/> <sup class="required">*</sup>
 						</span>
 						<span id="resultInfosPassword" class="result aligned"></span>
 					</div>
 					<div class="field">
 						<label class="aligned" for="infosPasswordRepeat"><?php echo lang('Re-type to confirm:'); ?> </label>
 						<span class="contentinput">
-							<input type="password" autocomplete="off" class="text required" id="infosPasswordRepeat"/>
+							<input type="password" autocomplete="off" class="text required" id="infosPasswordRepeat"/> <sup class="required">*</sup>
 						</span>
 						<span id="resultInfosPasswordRepeat" class="result aligned"></span>
 					</div>

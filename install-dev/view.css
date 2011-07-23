@@ -151,6 +151,8 @@ a, a:active, a:visited {
 }
 	a:hover {text-decoration:underline;}
 
+.required {color: red;}
+
 /*buttons */
 
 
@@ -189,13 +191,11 @@ input.text {
 	padding:0 6px;
 	height:22px;
 	width:218px;/* 230 */
-	color:#999;
 	background:#fff img(img/bg-input-text.png) repeat-x 0 0;
 	border:1px solid #ccc;
 }
 select {
 	width: 232px;
-	color:#999;
 	border:1px solid #ccc;
 }
 

@@ -73,7 +73,10 @@ function showStep(aStep, way)
 		.removeClass("selected")
 		.removeClass("finished");
 		if (step < 6) {
-			$('#tabs li:nth-child(' + step + ')').addClass("selected");
+			if (step == 5)
+				$('#tabs li:nth-child(' + step + ')').addClass("finished");
+			else
+				$('#tabs li:nth-child(' + step + ')').addClass("selected");
 			$('#tabs li:lt(' + (step - 1) + ')').addClass("finished");
 		}
 		else
@@ -106,7 +109,7 @@ function showStep(aStep, way)
 				$('#tabs li:nth-child(1)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(2)').removeClass("selected").addClass("finished");
 				$('#tabs li:nth-child(3)').removeClass("selected").addClass("finished");
-				$('#tabs li:nth-child(4)').addClass("selected").removeClass("finished");
+				$('#tabs li:nth-child(4)').addClass("finished");
 				break;
 				
 			}
