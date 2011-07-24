@@ -87,7 +87,7 @@ class HelperCore
 		';
 		
 		$home_is_selected = false;
-		foreach($selected_cat as $cat)
+		foreach($selected_cat AS $cat)
 		{
 			if (is_array($cat))
 			{

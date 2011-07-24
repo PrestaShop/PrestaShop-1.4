@@ -2740,7 +2740,7 @@ class AdminProducts extends AdminTab
 							$selectedCat[] = array('id_category' => 1, 'name' => $this->l('Home'));
 						echo '<select id="id_category_default" name="id_category_default">';
 						
-							foreach($selectedCat as $cat)
+							foreach($selectedCat AS $cat)
 								echo '<option value="'.$cat['id_category'].'" '.($obj->id_category_default == $cat['id_category'] ? 'selected' : '').'>'.$cat['name'].'</option>';
 						echo '</select>
 						</td> 
@@ -2749,7 +2749,7 @@ class AdminProducts extends AdminTab
 						<td colspan="2">
 						';
 					$trads = array();
-					foreach(Helper::$translationsKeysForAdminCategorieTree as $key)
+					foreach(Helper::$translationsKeysForAdminCategorieTree AS $key)
 						$trads[$key] = $this->l($key);
 					echo Helper::renderAdminCategorieTree($trads, 'categoryBox', $selectedCat).'
 						</td>
@@ -2762,7 +2762,7 @@ class AdminProducts extends AdminTab
 								<tr>
 									<td class="col-left">'.$this->l('Meta title:').'</td>
 									<td class="translatable">';
-		foreach ($this->_languages as $language)
+		foreach ($this->_languages AS $language)
 			echo '					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="meta_title_'.$language['id_lang'].'" name="meta_title_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'meta_title', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" />

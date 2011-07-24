@@ -1103,9 +1103,9 @@ abstract class AdminTabCore
 	public function displayConf()
 	{
 		if ($conf = Tools::getValue('conf'))
-			echo '<div class="conf">
-				<img src="../img/admin/ok2.png" />
-				'.$this->_conf[(int)($conf)].'
+			echo '
+			<div class="conf">
+				<img src="../img/admin/ok2.png" alt="" /> '.$this->_conf[(int)($conf)].'
 			</div>';
 	}
 
@@ -1516,9 +1516,9 @@ abstract class AdminTabCore
 					elseif (isset($params['float']))
 						echo rtrim(rtrim($tr[$key], '0'), '.');
 					elseif (isset($params['type']) AND $params['type'] == 'date')
-						echo Tools::displayDate($tr[$key], $cookie->id_lang);
+						echo Tools::displayDate($tr[$key], (int)$cookie->id_lang);
 					elseif (isset($params['type']) AND $params['type'] == 'datetime')
-						echo Tools::displayDate($tr[$key], $cookie->id_lang, true);
+						echo Tools::displayDate($tr[$key], (int)$cookie->id_lang, true);
 					elseif (isset($tr[$key]))
 					{
 						$echo = ($key == 'price' ? round($tr[$key], 2) : isset($params['maxlength']) ? Tools::substr($tr[$key], 0, $params['maxlength']).'...' : $tr[$key]);
