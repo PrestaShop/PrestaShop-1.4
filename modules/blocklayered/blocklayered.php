@@ -84,8 +84,8 @@ class BlockLayered extends Module
 			return;
 		Tools::addJS(($this->_path).'blocklayered.js');
 		Tools::addJS(_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js');
-		Tools::addCSS(($this->_path).'blocklayered.css', 'all');
-		Tools::addCSS(_PS_CSS_DIR_.'jquery-ui-1.8.10.custom.css', 'all');	
+		Tools::addCSS(_PS_CSS_DIR_.'jquery-ui-1.8.10.custom.css', 'all');
+		Tools::addCSS(($this->_path).'blocklayered.css', 'all');		
 	}
 	
 	public function hookFooter($params)
@@ -166,8 +166,8 @@ class BlockLayered extends Module
 				{
 					$n = 0;
 					foreach ($_POST AS $key => $value)
-						if (substr($key, 0, 8) == 'layered_' AND $value == 'on')
-						{
+						if (substr($key, 0, 17) == 'layered_selection' AND $value == 'on')
+						{							
 							$filterValues[$key] = $value;
 							
 							$n++;
@@ -181,10 +181,10 @@ class BlockLayered extends Module
 								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'weight\','.(int)$n.'),';
 							elseif ($key == 'layered_selection_manufacturer')
 								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'manufacturer\','.(int)$n.'),';
-							elseif (substr($key, 0, 11) == 'layered_ag_')
-								$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_ag_', '', $key).',\'id_attribute_group\','.(int)$n.'),';
-							elseif (substr($key, 0, 11) == 'layered_feat_')
-								$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_feat_', '', $key).',\'id_feature\','.(int)$n.'),';
+							elseif (substr($key, 0, 21) == 'layered_selection_ag_')
+								$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_selection_ag_', '', $key).',\'id_attribute_group\','.(int)$n.'),';
+							elseif (substr($key, 0, 23) == 'layered_selection_feat_')
+								$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_selection_feat_', '', $key).',\'id_feature\','.(int)$n.'),';
 						}
 					$filterValues['categories'] = Tools::getValue('categoryBox');
 				}
@@ -215,7 +215,7 @@ class BlockLayered extends Module
 				Configuration::updateValue('PS_LAYERED_BITLY_API_KEY', Tools::getValue('bitly_api_key'));
 				Configuration::updateValue('PS_LAYERED_SHARE', Tools::getValue('share_url'));
 				Configuration::updateValue('PS_LAYERED_TPL', Tools::getValue('ps_layered_tpl'));
-				Configuration::updateValue('PS_LAYERED_HIDE_FILTER', Tools::getValue('ps_layered_hide_filter'));
+				Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', Tools::getValue('ps_layered_hide_0_values'));
 				Configuration::updateValue('PS_LAYERED_SHOW_QTIES', Tools::getValue('ps_layered_show_qties'));
 				
 				$html .= '
@@ -337,7 +337,7 @@ class BlockLayered extends Module
 				#layered-step-2-3 { display: none; }
 				#table-filter-templates tr th, #table-filter-templates tr td { text-align: center; }
 			</style>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';		
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';
 			
 		$html.= '
 			<h2>'.$this->l('Step 1/3 - Select categories').'</h2>
@@ -347,6 +347,9 @@ class BlockLayered extends Module
 				<input type="radio" id="scope_2" name="scope" value="2" style="margin-left: 15px;" onclick="$(\'label a#inline\').click(); $(\'#layered-step-2-3\').show();" /> 
 				<label for="scope" style="float: none;"><a id="inline" href="#layered-categories-selection" style="text-decoration: underline;">'.$this->l('Specific').'</a> '.$this->l('categories').' (<span id="layered-cat-counter"></span> '.$this->l('selected').')</label>
 			</p>
+			<div id="error-treeview" class="error" style="display: none;">
+				<img src="../img/admin/error2.png" alt="" /> '.$this->l('Please select at least one specific category.').'
+			</div>
 			<div style="display: none;">
 				<div id="layered-categories-selection" style="padding: 10px; text-align: left;">
 					<h2>'.$this->l('Categories using this template').'</h2>
@@ -356,10 +359,10 @@ class BlockLayered extends Module
 					</ol>';
 
 			$trads = array();
-			$selectedCat[] = array('id_category' => 1, 'name' => $this->l('Home'));
+			$selectedCat = array();
 			foreach(Helper::$translationsKeysForAdminCategorieTree AS $key)
 				$trads[$key] = $this->l($key);
-			$html .= Helper::renderAdminCategorieTree($trads, 'categoryBox', $selectedCat);
+			$html .= Helper::renderAdminCategorieTree($trads, $selectedCat, 'categoryBox');
 			
 			$html .= '
 					<br />
@@ -415,13 +418,14 @@ class BlockLayered extends Module
 						{
 							type: \'GET\',
 							url: '.__PS_BASE_URI__.' + \'modules/blocklayered/blocklayered-ajax-back.php\',
-							data: \'1\'+(all ? \'\' : $(\'input[name="categoryBox[]"]\').serialize())+(id_layered_filter ? \'&id_layered_filter=\'+parseInt(id_layered_filter)+\'\' : \'\'),
+							data: (all ? \'\' : $(\'input[name="categoryBox[]"]\').serialize()+\'&\')+(id_layered_filter ? \'id_layered_filter=\'+parseInt(id_layered_filter)+\'\' : \'\'),
 							success: function(result)
 							{
 								$(\'#layered-ajax-refresh\').css(\'background-color\', \'transparent\');
 								$(\'#layered-ajax-refresh\').css(\'opacity\', \'1\');
 								$(\'#layered-ajax-refresh\').html(result);
 								updHeight();
+								updLayCounters();
 							}
 						});
 					}
@@ -457,16 +461,33 @@ class BlockLayered extends Module
 										$(\'p#no-filters\').show();
 								});
 							}
+							enableSortable();
 						});
 						
 						$(\'label a#inline\').fancybox({ 
 							\'hideOnContentClick\': false,
 							\'onClosed\': function() {
 								updCatCounter();
+								if ($(\'#categories-treeview\').find(\'input:checked\').length == 0)
+								{
+									$(\'#error-treeview\').show(500);
+									$(\'#layered-step-2-3\').hide();
+								}
+								else
+									$(\'#error-treeview\').hide(500);
 								updElements(0, 0);
 							}
 						});
-	
+
+						updHeight();
+						updLayCounters();
+						updPositions();
+						updCatCounter();
+						enableSortable();
+					}
+					
+					function enableSortable()
+					{
 						$(function() {
 							$(\'ul#selected_filters\').sortable({
 								axis: \'y\',
@@ -476,14 +497,11 @@ class BlockLayered extends Module
 							});
 							$(\'ul#selected_filters\').disableSelection();
 						});
-
-						updHeight();
-						updLayCounters();
-						updPositions();
-						updCatCounter();
 					}
 
-					$(document).ready(function() { launch(); });
+					$(document).ready(function() {
+						launch();					
+					});
 				</script>
 				<h2>'.$this->l('Step 3/3 - Name your template').'</h2>
 				<p>'.$this->l('Template name:').' <input type="text" id="layered_tpl_name" name="layered_tpl_name" maxlength="64" value="'.$this->l('My template').' '.date('Y-m-d').'" style="width: 200px; font-size: 11px;" /> <span style="font-size: 10px; font-style: italic;">('.$this->l('only as a reminder').'</span>)</p>
@@ -495,6 +513,7 @@ class BlockLayered extends Module
 			</form>
 		</fieldset><br />
 		<fieldset class="width2">
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
 			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Configuration').'</legend>
 				<table border="0" style="font-size: 11px; width: 100%; margin: 0 auto;" class="table">
 					<tr>
@@ -502,12 +521,12 @@ class BlockLayered extends Module
 						<th style="text-align: center;">'.$this->l('Value').'</th>
 					</tr>
 					<tr>
-						<td style="text-align: right;">'.$this->l('Hide a filter if no product is matching').'</td>
+						<td style="text-align: right;">'.$this->l('Hide filter values with no product is matching').'</td>
 						<td>
 							<img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />
-							'.$this->l('Yes').' <input type="radio" name="ps_layered_hide_filter" value="1" '.(Configuration::get('PS_LAYERED_HIDE_FILTER') ? 'checked="checked"' : '').' />
+							'.$this->l('Yes').' <input type="radio" name="ps_layered_hide_0_values" value="1" '.(Configuration::get('PS_LAYERED_HIDE_0_VALUES') ? 'checked="checked"' : '').' />
 							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
-							'.$this->l('No').' <input type="radio" name="ps_layered_hide_filter" value="0" '.(!Configuration::get('PS_LAYERED_HIDE_FILTER') ? 'checked="checked"' : '').' />
+							'.$this->l('No').' <input type="radio" name="ps_layered_hide_0_values" value="0" '.(!Configuration::get('PS_LAYERED_HIDE_0_VALUES') ? 'checked="checked"' : '').' />
 						</td>
 					</tr>
 					<tr>
@@ -800,7 +819,6 @@ class BlockLayered extends Module
 					FROM '._DB_PREFIX_.'feature_value fv
 					LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
 					WHERE (fv.custom IS NULL OR fv.custom = 0) AND fv.id_feature = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND fvl.id_lang = '.(int)$id_lang);
-
 					break;
 
 				case 'id_attribute_group':
@@ -874,6 +892,9 @@ class BlockLayered extends Module
 					foreach ($productCat AS $product)
 						if (in_array($idSubCategory, $product['c']))
 							$filterBlock['values'][(int)$idSubCategory]['nbr']++;
+							
+				if (Configuration::get('PS_LAYERED_HIDE_0_VALUES') AND !$filterBlock['values'][(int)$idSubCategory]['nbr'])
+					unset($filterBlock['values'][(int)$subCat['id_category']]);
 			}
 			elseif ($filterBlock['type_lite'] == 'id_feature')
 			{
@@ -886,12 +907,15 @@ class BlockLayered extends Module
 				{	
 					foreach ($productFeat AS $product)
 					{
-						if (in_array($value['id_feature_value'], $product['f']))
+						if (Configuration::get('PS_LAYERED_HIDE_0_VALUES') AND !in_array($value['id_feature_value'], $product['f']))
+							continue;
+						else
 						{
 							$filterBlock['values'][(int)$value['id_feature_value']]['name'] = $value['value'];
 							if (!isset($filterBlock['values'][(int)$value['id_feature_value']]['nbr']))
 								$filterBlock['values'][(int)$value['id_feature_value']]['nbr'] = 0;
-							$filterBlock['values'][(int)$value['id_feature_value']]['nbr']++;							
+							if (in_array($value['id_feature_value'], $product['f']))
+								$filterBlock['values'][(int)$value['id_feature_value']]['nbr']++;							
 						}
 						if (in_array($value['id_feature_value'], $product['f']) AND !isset($filterBlock['values'][(int)$value['id_feature_value']]))
 						{
@@ -954,6 +978,13 @@ class BlockLayered extends Module
 					if (isset($selectedFilters['condition']) AND in_array($conditionKey, $selectedFilters['condition']))
 						$condition['checked'] = true;
 				}
+				
+				if (Configuration::get('PS_LAYERED_HIDE_0_VALUES'))
+				{
+					foreach ($filterBlock['values'] AS $conditionKey2 => $condition2)
+						if (!$condition2['nbr'])
+							unset($filterBlock['values'][$conditionKey2]);
+				}
 			}
 			elseif ($filterBlock['type_lite'] == 'quantity')
 			{
@@ -971,6 +1002,13 @@ class BlockLayered extends Module
 							$quantity['nbr']++;
 					if (isset($selectedFilters['quantity']) AND in_array($quantKey, $selectedFilters['quantity']))
 						$quantity['checked'] = true;
+				}
+				
+				if (Configuration::get('PS_LAYERED_HIDE_0_VALUES'))
+				{
+					foreach ($filterBlock['values'] AS $quantKey2 => $quantity2)
+						if (!$quantity2['nbr'])
+							unset($filterBlock['values'][$quantKey2]);
 				}
 			}
 			elseif ($filterBlock['type_lite'] == 'manufacturer')
@@ -1052,6 +1090,9 @@ class BlockLayered extends Module
 			$layeredFilter = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'layered_filter WHERE id_layered_filter = '.(int)$id_layered_filter);
 			if ($layeredFilter AND isset($layeredFilter['filters']) AND !empty($layeredFilter['filters']))
 				$layeredValues = unserialize($layeredFilter['filters']);
+			if (isset($layeredValues['categories']) AND sizeof($layeredValues['categories']))
+				foreach ($layeredValues['categories'] AS $id_category)
+					$categoryBox[] = (int)$id_category;
 		}
 		
 		$attributeGroups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -1102,7 +1143,7 @@ class BlockLayered extends Module
 				{
 					$html .= '<ul>';
 					foreach ($attributeGroups AS $attributeGroup)
-						$html .= '<li class="ui-state-default layered_right"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input type="checkbox" id="layered_ag_'.(int)$attributeGroup['id_attribute_group'].'" name="layered_ag_'.(int)$attributeGroup['id_attribute_group'].'" /> <span class="position"></span>'.$this->l('Attribute group:').' '.$attributeGroup['name'].' ('.(int)$attributeGroup['n'].' '.($attributeGroup['n'] > 1 ? $this->l('attributes') : $this->l('attribute')).')'.($attributeGroup['is_color_group'] ? ' <img src="../img/admin/color_swatch.png" alt="" title="'.$this->l('This group will allow user to select a color').'" />' : '').'</li>';
+						$html .= '<li class="ui-state-default layered_right"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input type="checkbox" id="layered_selection_ag_'.(int)$attributeGroup['id_attribute_group'].'" name="layered_selection_ag_'.(int)$attributeGroup['id_attribute_group'].'" /> <span class="position"></span>'.$this->l('Attribute group:').' '.$attributeGroup['name'].' ('.(int)$attributeGroup['n'].' '.($attributeGroup['n'] > 1 ? $this->l('attributes') : $this->l('attribute')).')'.($attributeGroup['is_color_group'] ? ' <img src="../img/admin/color_swatch.png" alt="" title="'.$this->l('This group will allow user to select a color').'" />' : '').'</li>';
 					$html .= '</ul>';
 				}
 
@@ -1110,7 +1151,7 @@ class BlockLayered extends Module
 				{
 					$html .= '<ul>';
 					foreach ($features AS $feature)
-						$html .= '<li class="ui-state-default layered_right"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input type="checkbox" id="layered_feat_'.(int)$feature['id_feature'].'" name="layered_feat_'.(int)$feature['id_feature'].'" /> <span class="position"></span>'.$this->l('Feature:').' '.$feature['name'].' ('.(int)$feature['n'].' '.($feature['n'] > 1 ? $this->l('values') : $this->l('value')).')</li>';
+						$html .= '<li class="ui-state-default layered_right"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span><input type="checkbox" id="layered_selection_feat_'.(int)$feature['id_feature'].'" name="layered_selection_feat_'.(int)$feature['id_feature'].'" /> <span class="position"></span>'.$this->l('Feature:').' '.$feature['name'].' ('.(int)$feature['n'].' '.($feature['n'] > 1 ? $this->l('values') : $this->l('value')).')</li>';
 					$html .= '</ul>';
 				}
 
@@ -1190,12 +1231,12 @@ class BlockLayered extends Module
 		$smarty->assign('nb_products', $nbProducts);
 		$pagination_infos = array(
 			'pages_nb' => (int)($pages_nb),
-			'p' => (int)($p),
-			'n' => (int)($n),
-			'range' => (int)($range),
-			'start' => (int)($start),
-			'stop' => (int)($stop),
-			'nArray' => $nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50)
+			'p' => (int)$p,
+			'n' => (int)$n,
+			'range' => (int)$range,
+			'start' => (int)$start,
+			'stop' => (int)$stop,
+			'nArray' => $nArray = (int)Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50)
 		);
 		$smarty->assign($pagination_infos);
 		
