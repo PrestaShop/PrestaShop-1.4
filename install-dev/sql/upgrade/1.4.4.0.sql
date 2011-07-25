@@ -62,3 +62,13 @@ phone'
 WHERE `id_country` = (SELECT `id_country` FROM `PREFIX_country` WHERE `iso_code`='US');
 
 ALTER TABLE `PREFIX_attachment` CHANGE `mime` `mime` VARCHAR(128) NOT NULL;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_compare_product` (
+  `id_compare_product` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_product` int(10) unsigned NOT NULL,
+  `id_guest` int(10) unsigned NOT NULL,
+  `id_customer` int(10) unsigned NOT NULL,
+  `date_add` datetime NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY  (`id_compare_product`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
