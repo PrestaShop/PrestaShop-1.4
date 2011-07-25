@@ -72,3 +72,5 @@ CREATE TABLE IF NOT EXISTS `PREFIX_compare_product` (
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_compare_product`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+DELETE FROM `PREFIX_configuration` WHERE name = 'PS_LAYERED_NAVIGATION_CHECKBOXES' LIMIT 1;
