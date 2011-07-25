@@ -76,7 +76,7 @@
 	<a href="{$link->getPageLink('pdf-invoice.php', true)}?id_order={$order->id|intval}{if $is_guest}&secure_key={$order->secure_key}{/if}">{l s='Download your invoice as a .PDF file'}</a>
 </p>
 {/if}
-{if $order->recyclable}
+{if $order->recyclable && isset($isRecyclable) && $isRecyclable}
 <p><img src="{$img_dir}icon/recyclable.gif" alt="" class="icon" />&nbsp;{l s='You have given permission to receive your order in recycled packaging.'}</p>
 {/if}
 {if $order->gift}
