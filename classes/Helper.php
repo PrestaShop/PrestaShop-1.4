@@ -37,8 +37,8 @@ class HelperCore
 	
 	/**
 	 *
-	 * @param type $trads values of translations keys in self::$translationsKeysForAdminCategorieTree
-	 * @param type $input_name name of input
+	 * @param type $trads values of translations keys
+	 *					For the moment, translation are not automatic
 	 * @param type $selected_cat array of selected categories
 	 *					Format
 	 *						Array
@@ -56,9 +56,10 @@ class HelperCore
 											[link_rewrite] => home
 									  )
 							)
+	 * @param type $input_name name of input
 	 * @return string 
 	 */
-	public static function renderAdminCategorieTree($trads, $input_name = 'categoryBox', $selected_cat = array())
+	public static function renderAdminCategorieTree($trads, $selected_cat = array(), $input_name = 'categoryBox')
 	{
 		$html = '
 		<script src="../js/jquery/treeview/jquery.treeview.js" type="text/javascript"></script>
@@ -70,8 +71,7 @@ class HelperCore
 			var selectedCat = "'.implode(',', array_keys($selected_cat)).'";
 		</script>
 		<script type="text/javascript">
-			var selectedLabelSingular = \''.$trads['selected'].'\';
-			var selectedLabelPlurial = \''.$trads['selecteds'].'\';
+			var selectedLabel = \''.$trads['selected'].'\';
 			var home = \''.$trads['Home'].'\';
 		</script>
 		<link type="text/css" rel="stylesheet" href="../css/jquery.treeview.css" />

@@ -234,10 +234,7 @@ function updateNbSubCategorySelected(category, add)
 		var newValue = parseInt(parentNbSubCategorySelected)-1;
 	
 	currentSpan.children('.nb_sub_cat_selected_value').html(newValue);
-	if (newValue > 1)
-		currentSpan.children('.nb_sub_cat_selected_word').html(selectedLabelPlurial);
-	else
-		currentSpan.children('.nb_sub_cat_selected_word').html(selectedLabelSingular);
+	currentSpan.children('.nb_sub_cat_selected_word').html(selectedLabel);
 	
 	if (newValue == 0)
 		currentSpan.hide();

@@ -326,10 +326,16 @@ class Loyalty extends Module
 				<label>'.$this->l('Vouchers created by the loyalty system can be used in the following categories :').'</label>';
 		$index = explode(',', Configuration::get('PS_LOYALTY_VOUCHER_CATEGORY'));
 		$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : $index;
-		$trads = array();
-		foreach(Helper::$translationsKeysForAdminCategorieTree as $key)
-			$trads[$key] = $this->l($key);
-		$html .= '<div class="margin-form">'.Helper::renderAdminCategorieTree($trads, 'categoryBox', $indexedCategories).'</div>';
+		// Translations are not automatic for the moment ;)
+		$trads = array(
+			 'Home' => $this->l('Home'), 
+			 'selected' => $this->l('selected'), 
+			 'Collapse All' => $this->l('Collapse All'), 
+			 'Expand All' => $this->l('Expand All'), 
+			 'Check All' => $this->l('Check All'), 
+			 'Uncheck All'  => $this->l('Uncheck All')
+		);
+		$html .= '<div class="margin-form">'.Helper::renderAdminCategorieTree($trads, $indexedCategories).'</div>';
 		 $html .= '
 				<p style="padding-left:200px;">'.$this->l('Mark the box(es) of categories in which loyalty vouchers are usable.').'</p>
 				<div class="clear"></div>

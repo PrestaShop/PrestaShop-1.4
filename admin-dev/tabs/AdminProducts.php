@@ -2748,10 +2748,16 @@ class AdminProducts extends AdminTab
 					<tr id="tr_categories">
 						<td colspan="2">
 						';
-					$trads = array();
-					foreach(Helper::$translationsKeysForAdminCategorieTree AS $key)
-						$trads[$key] = $this->l($key);
-					echo Helper::renderAdminCategorieTree($trads, 'categoryBox', $selectedCat).'
+					// Translations are not automatic for the moment ;)
+					$trads = array(
+						 'Home' => $this->l('Home'), 
+						 'selected' => $this->l('selected'), 
+						 'Collapse All' => $this->l('Collapse All'), 
+						 'Expand All' => $this->l('Expand All'), 
+						 'Check All' => $this->l('Check All'), 
+						 'Uncheck All'  => $this->l('Uncheck All')
+					);
+					echo Helper::renderAdminCategorieTree($trads, $selectedCat).'
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
