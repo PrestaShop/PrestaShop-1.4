@@ -1180,6 +1180,8 @@ class CartCore extends ObjectModel
 				if ($shipping_cost === false)
 					return false;
 			}
+			else
+				return false;
 		}
 
 		// Apply tax
