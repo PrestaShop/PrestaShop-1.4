@@ -241,27 +241,27 @@ class MySQLCore extends Db
 	 */
 	public function getMsgError($query = false)
 	{
-		return mysql_error();
+		return mysql_error($this->_link);
 	}
 
 	public function getNumberError()
 	{
-		return mysql_errno();
+		return mysql_errno($this->_link);
 	}
 
 	public function displayMySQLError($query = false)
 	{
 		global $webservice_call;
-		if ($webservice_call && mysql_errno())
+		if ($webservice_call && mysql_errno($this->_link))
 		{
-			WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.mysql_error().'. Query was : '.$query, 97);
+			WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.mysql_error($this->_link).'. Query was : '.$query, 97);
 
 		}
-		elseif (_PS_DEBUG_SQL_ AND mysql_errno() AND !defined('PS_INSTALLATION_IN_PROGRESS'))
+		elseif (_PS_DEBUG_SQL_ AND mysql_errno($this->_link) AND !defined('PS_INSTALLATION_IN_PROGRESS'))
 		{
 			if ($query)
-				die(Tools::displayError(mysql_error().'<br /><br /><pre>'.$query.'</pre>'));
-			die(Tools::displayError((mysql_error())));
+				die(Tools::displayError(mysql_error($this->_link).'<br /><br /><pre>'.$query.'</pre>'));
+			die(Tools::displayError((mysql_error($this->_link))));
 		}
 	}
 
