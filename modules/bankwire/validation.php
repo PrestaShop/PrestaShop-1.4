@@ -34,6 +34,17 @@ $bankwire = new BankWire();
 if ($cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$bankwire->active)
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
+// Check that this payment option is still available in case the customer changed his address just before the end of the checkout process
+$authorized = false;
+foreach (Module::getPaymentModules() as $module)
+	if ($module['name'] == 'bankwire')
+	{
+		$authorized = true;
+		break;
+	}
+if (!$authorized)
+	die(Tools::displayError('This payment method is not available.'));
+	
 $customer = new Customer((int)$cart->id_customer);
 
 if (!Validate::isLoadedObject($customer))

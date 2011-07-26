@@ -740,10 +740,24 @@ abstract class ModuleCore
 	{
 		global $cart, $cookie;
 		$hookArgs = array('cookie' => $cookie, 'cart' => $cart);
-		$id_customer = (int)($cookie->id_customer);
-		$billing = new Address((int)($cart->id_address_invoice));
 		$output = '';
 
+		$result = self::getPaymentModules();
+
+		if ($result)
+			foreach ($result AS $module)
+				if (($moduleInstance = Module::getInstanceByName($module['name'])) AND is_callable(array($moduleInstance, 'hookpayment')))
+					if (!$moduleInstance->currencies OR ($moduleInstance->currencies AND sizeof(Currency::checkPaymentCurrencies($moduleInstance->id))))
+						$output .= call_user_func(array($moduleInstance, 'hookpayment'), $hookArgs);
+		return $output;
+	}
+	
+	public static function getPaymentModules()
+	{
+		global $cart, $cookie;
+		$id_customer = (int)($cookie->id_customer);
+		$billing = new Address((int)($cart->id_address_invoice));
+		
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT h.`id_hook`, m.`name`, hm.`position`
 		FROM `'._DB_PREFIX_.'module_country` mc
@@ -755,13 +769,9 @@ abstract class ModuleCore
 		WHERE h.`name` = \'payment\'
 		AND mc.id_country = '.(int)($billing->id_country).'
 		AND m.`active` = 1
-		ORDER BY hm.`position`, m.`name` DESC');
-		if ($result)
-			foreach ($result AS $module)
-				if (($moduleInstance = Module::getInstanceByName($module['name'])) AND is_callable(array($moduleInstance, 'hookpayment')))
-					if (!$moduleInstance->currencies OR ($moduleInstance->currencies AND sizeof(Currency::checkPaymentCurrencies($moduleInstance->id))))
-						$output .= call_user_func(array($moduleInstance, 'hookpayment'), $hookArgs);
-		return $output;
+		ORDER BY hm.`position`, m.`name` DESC');		
+		
+		return $result;
 	}
 
 	/**
