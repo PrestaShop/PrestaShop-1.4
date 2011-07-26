@@ -176,6 +176,16 @@ class CategoryCore extends ObjectModel
 		Module::hookExec('categoryUpdate', array('category' => $this));
 		return $ret;
 	}
+	
+	/**
+	 * @see ObjectModel::toggleStatus()
+	 */
+	public function toggleStatus()
+	{
+		$result = parent::toggleStatus();
+		Module::hookExec('categoryUpdate');
+		return $result;
+	}
 
 	/**
 	  * Recursive scan of subcategories
