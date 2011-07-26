@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class	ConfigurationTest
+class	ConfigurationTestCore
 {
 	static function check($tests)
 	{

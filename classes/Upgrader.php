@@ -32,12 +32,13 @@ class UpgraderCore{
 	 * 
 	 * @var string 
 	 */
-	private $link;
 	private $needUpgrade = false;
-	private $autoUpgrade;
+	private $noRefresh = false;
 
 	public $version_name;
 	public $version_num;
+	public $link;
+	public $autoupgrade;
 
 	public function __get($var)
 	{
@@ -46,12 +47,12 @@ class UpgraderCore{
 	}
 	/**
 	 * we need to checkPSVersion when we use that class
-	 * @param boolean autoupgrade 
+	 * @param boolean noRefresh if true, checkPSVersion will not refresh its information
 	 * @return object Upgrader 
 	 */
-	public function __construct($autoUpgrade = false)
+	public function __construct($noRefresh = false)
 	{
-		$this->autoUpgrade = $autoUpgrade;
+		$this->noRefresh = (bool)$noRefresh;
 	}
 
 	/**
@@ -102,7 +103,13 @@ class UpgraderCore{
 					$this->version_name = (string)$feed->version->name;
 					$this->version_num = (string)$feed->version->num;
 					$this->link = (string)$feed->download->link;
-					$configLastVersion = array('name'=>$this->version_name, 'num'=>$this->version_num,'link'=>$this->link );
+					$this->autoupgrade = (int)$feed->autoupgrade;
+					$configLastVersion = array(
+						'name' => $this->version_name,
+						'num' => $this->version_num,
+						'link' => $this->link,
+						'autoupgrade' => $this->autoupgrade
+					);
 					Configuration::updateValue('PS_LAST_VERSION',serialize($configLastVersion));
 					Configuration::updateValue('PS_LAST_VERSION_CHECK',time());
 				}
@@ -113,6 +120,7 @@ class UpgraderCore{
 				$this->version_name = $lastVersionCheck['name'];
 				$this->version_num = $lastVersionCheck['num'];
 				$this->link = $lastVersionCheck['link'];
+				$this->autoupgrade = $lastVersionCheck['autoupgrade'];
 			}
 		}
 		// retro-compatibility :
