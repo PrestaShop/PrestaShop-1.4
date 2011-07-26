@@ -468,14 +468,18 @@ class AdminImages extends AdminTab
 	 */
 	private function _moveImagesToNewFileSystem()
 	{
-		global $currentIndex;
-		ini_set('max_execution_time', $this->max_execution_time); // ini_set may be disabled, we need the real value
-		$this->max_execution_time = (int)ini_get('max_execution_time');		
-		$result = Image::moveToNewFileSystem($this->max_execution_time);
-		if ($result === 'timeout')
-			$this->_errors[] =  Tools::displayError('Not all images have been moved, server timed out before finishing. Click on \"Move images\" again to resume moving images');
-		elseif ($result === false)
-			$this->_errors[] =  Tools::displayError('Error: some or all images could not be moved.');
+		if (!Image::testFileSystem())
+			$this->_errors[] =  Tools::displayError('Error: your server configuration is not compatible with the new image system. No images were moved');
+		else
+		{
+			ini_set('max_execution_time', $this->max_execution_time); // ini_set may be disabled, we need the real value
+			$this->max_execution_time = (int)ini_get('max_execution_time');	
+			$result = Image::moveToNewFileSystem($this->max_execution_time);
+			if ($result === 'timeout')
+				$this->_errors[] =  Tools::displayError('Not all images have been moved, server timed out before finishing. Click on \"Move images\" again to resume moving images');
+			elseif ($result === false)
+				$this->_errors[] =  Tools::displayError('Error: some or all images could not be moved.');
+		}
 		return (sizeof($this->_errors) > 0 ? false : true);
 	}
 

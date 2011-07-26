@@ -478,8 +478,8 @@ class ImageCore extends ObjectModel
 		if (!file_exists(_PS_PROD_IMG_DIR_.$this->getImgFolder()))
 		{
 			// Apparently sometimes mkdir cannot set the rights, and sometimes chmod can't. Trying both.
-			$success = @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777, true) 
-						|| @chmod(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0777);
+			$success = @mkdir(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0755, true) 
+						|| @chmod(_PS_PROD_IMG_DIR_.$this->getImgFolder(), 0755);
 			
 			// Create an index.php file in the new folder
 			if ($success 
@@ -548,6 +548,31 @@ class ImageCore extends ObjectModel
 			if ((int)$max_execution_time != 0 && (time() - $start_time > (int)$max_execution_time - 4))
 				return 'timeout';
 		}
+		return true;
+	}
+	
+	public static function testFileSystem()
+	{
+		$safe_mode = ini_get('safe_mode');
+		if ($safe_mode)
+			return false;
+		$folder1 = _PS_PROD_IMG_DIR_.'testfilesystem/';
+		$test_folder = $folder1.'testsubfolder/';
+		if (file_exists($test_folder))
+		{
+			@rmdir($test_folder);
+			@rmdir($folder1);
+		}
+		if (file_exists($test_folder))
+			return false;
+		@mkdir($test_folder, 0755, true);
+		@chmod($test_folder, 0755);
+		if (!is_writeable($test_folder))
+			return false;
+		@rmdir($test_folder);
+		@rmdir($folder1);
+		if (file_exists($folder1))
+			return false;
 		return true;
 	}
 	
