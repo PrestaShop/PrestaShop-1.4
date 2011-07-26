@@ -444,10 +444,21 @@ class ProductControllerCore extends FrontController
 			}
 			else
 			{
+                global $cookie;
+                $id_currency = (int)$cookie->id_currency;
+
 			    if ($row['reduction_type'] == 'amount')
-			        $row['real_value'] = Product::$_taxCalculationMethod == PS_TAX_INC ? $row['reduction'] : $row['reduction'] / (1 + $taxRate / 100);
+			    {
+	    	        $reduction_amount = $row['reduction'];
+    		        if (!$row['id_currency'])
+	    	            $reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
+
+			        $row['real_value'] = Product::$_taxCalculationMethod == PS_TAX_INC ? $reduction_amount : $reduction_amount / (1 + $taxRate / 100);
+                }
 			    else
-				    $row['real_value'] = $row['reduction'] * 100;
+                {
+				    $row['real_value'] = $row['reduction'] * 100;   
+                }
 			}
 			$row['nextQuantity'] = (isset($specificPrices[$key + 1]) ? (int)($specificPrices[$key + 1]['from_quantity']) : -1);
 		}
