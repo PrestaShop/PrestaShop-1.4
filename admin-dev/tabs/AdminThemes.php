@@ -264,6 +264,7 @@ class AdminThemes extends AdminPreferences
 	 */
 	public function postProcess()
 	{
+		global $smarty;
 		// new check compatibility theme feature (1.4) :
 		$val = Tools::getValue('PS_THEME');
 		Configuration::updateValue('PS_IMG_UPDATE_TIME', time());
