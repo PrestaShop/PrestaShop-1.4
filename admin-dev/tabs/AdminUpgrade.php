@@ -1565,7 +1565,7 @@ function doAjaxRequest(action, nextParams){
 			{
 				if (textStatus == "timeout" && action == "download")
 				{
-					updateInfoStep("Your server can\'t download the file. Please upload it first by ftp in your admin/autoupgrade directory");
+					updateInfoStep("'.$this->l('Your server can\'t download the file. Please upload it first by ftp in your admin/autoupgrade directory').'");
 				}
 				else
 				{
@@ -1614,8 +1614,6 @@ function handleSuccess(res)
 		updateInfoStep(res.nextDesc);
 		addQuickInfo(res.nextQuickInfo);
 
-		$("input.ajaxRequest").removeClass("nextStep");
-
 		$("#"+res.next).addClass("nextStep");
 		if (manualMode)
 		{
@@ -1642,22 +1640,18 @@ function handleSuccess(res)
 function handleError(res)
 {
 	// display error message in the main process thing
-	updateInfoStep("error detected <br/>"
-		+res.nextDesc
-		+"<br/>Data : "+res.nextParams
-		+"<br/>=====<br/>");
+	updateInfoStep(res.nextDesc);
 	addQuickInfo(res.nextQuickInfo);
+	// In case the rollback button has been desactivated, just re-enable it
 	prepareNextButton("#rollback",res.nextParams);
-	$("input.ajaxRequest").removeClass("nextStep");
 	// ask if you want to rollback
 	// @TODO !!!
-	if (confirm(res.NextDesc+"\r\rDo you want to rollback ?"))
+	if (confirm(res.NextDesc+"\r\r'.$this->l('Do you want to rollback ?').'"))
 	{
 		if (manualMode)
-			alert("manually go to rollback button ");
+			alert("'.$this->l('Please go manually go to rollback button').'");
 		else
 		{
-			alert("auto rollback oO");
 			$("#rollback").click();
 		}
 			
