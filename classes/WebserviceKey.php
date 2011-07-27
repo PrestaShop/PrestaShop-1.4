@@ -43,6 +43,21 @@ class WebserviceKeyCore extends ObjectModel
 	protected 	$table = 'webservice_account';
 	protected 	$identifier = 'id_webservice_account';
 
+	
+	public function add($autodate = true, $nullValues = false)
+	{
+		if (WebserviceKey::keyExists($this->key))
+			return false;
+		return parent::add($autodate = true, $nullValues = false);
+	}
+	
+	static public function keyExists($key)
+	{
+		return (!Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `key` 
+			FROM '._DB_PREFIX_.'webservice_account 
+			WHERE `key` = \''.pSQL($key).'\'') ? false : true);
+	}
+	
 	public function getFields()
 	{
 		parent::validateFields();
