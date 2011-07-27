@@ -61,8 +61,8 @@ if (empty($tab) and !sizeof($_POST))
 					$adminObj->{'ajaxProcess'.Tools::toCamelCase($action)}();
 				else
 					$adminObj->ajaxProcess();
-				
 
+				// @TODO We should use a displayAjaxError
 				$adminObj->displayErrors();
 				if (!empty($action) AND method_exists($adminObj, 'displayAjax'.Tools::toCamelCase($action)) )
 					$adminObj->{'displayAjax'.$action}();
