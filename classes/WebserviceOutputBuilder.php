@@ -213,6 +213,9 @@ class WebserviceOutputBuilderCore
 			case 401 :
 				$this->status = $_SERVER['SERVER_PROTOCOL'].' 401 Unauthorized';
 				break;
+			case 403 :
+				$this->status = $_SERVER['SERVER_PROTOCOL'].' 403 Forbidden';
+				break;
 			case 404 :
 				$this->status = $_SERVER['SERVER_PROTOCOL'].' 404 Not Found';
 				break;
