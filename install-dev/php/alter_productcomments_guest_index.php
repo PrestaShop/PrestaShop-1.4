@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -25,11 +25,15 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-function gridextjs_deprecated()
+function alter_productcomments_guest_index()
 {
-	if (file_exists(dirname(__FILE__).'/../../modules/gridextjs'))
-		return rename(dirname(__FILE__).'/../../modules/gridextjs', dirname(__FILE__).'/../../modules/gridextjs.deprecated');
-
-	return true;
+	Configuration::loadConfiguration();
+	$productcomments = Module::getInstanceByName('productcomments');
+	if (!$productcomments->id)
+		return;
+	
+	DB::getInstance()->Execute('
+	ALTER TABLE `'._DB_PREFIX_.'product_comment` DROP INDEX `id_guest`,
+	ADD INDEX `id_guest` USING BTREE(`id_guest`);');
 }
 

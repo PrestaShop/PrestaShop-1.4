@@ -263,7 +263,7 @@ if (isFormValid())
 	unset($dbInstance);
 
 	//select the version of Smarty for the version of php
-    Tools::selectionVersionSmarty();
+	Tools::selectionVersionSmarty();
 }
 
 //////////////////////////

@@ -463,28 +463,30 @@ class GetVersionFromDb
 			// List keys
 			$struct[$virtualTable]['@keys'] = array();
 			$sql = 'SHOW INDEX FROM ' . $table;
-			foreach (Db::getInstance()->executeS($sql) as $rowIndex)
-			{
-				$keyName = strtolower($rowIndex['Key_name']);
-				$type = 'index';
-				if ($keyName == 'primary')
+			$results = Db::getInstance()->executeS($sql);
+			if($results)
+				foreach ($results as $rowIndex)
 				{
-					$type = 'primary';
+					$keyName = strtolower($rowIndex['Key_name']);
+					$type = 'index';
+					if ($keyName == 'primary')
+					{
+						$type = 'primary';
+					}
+					elseif (!$rowIndex['Non_unique'])
+					{
+						$type = 'unique';
+					}
+	
+					if (!isset($struct[$virtualTable]['@keys'][$keyName]))
+					{
+						$struct[$virtualTable]['@keys'][$keyName] = array(
+							'type' =>	$type,
+							'fields' =>	array(),
+						);
+					}
+					$struct[$virtualTable]['@keys'][$keyName]['fields'][] = $rowIndex['Column_name'];
 				}
-				elseif (!$rowIndex['Non_unique'])
-				{
-					$type = 'unique';
-				}
-
-				if (!isset($struct[$virtualTable]['@keys'][$keyName]))
-				{
-					$struct[$virtualTable]['@keys'][$keyName] = array(
-						'type' =>	$type,
-						'fields' =>	array(),
-					);
-				}
-				$struct[$virtualTable]['@keys'][$keyName]['fields'][] = $rowIndex['Column_name'];
-			}
 		}
 
 		$this->currentSchema = $struct;

@@ -698,13 +698,13 @@ ul#optional_update {list-style-type:none;}
 		border-top:1px solid #fff;
 		border-bottom:1px solid #ccc;
 	}
-	ul#required_update li.ok, 
-	ul#optional_update li.ok{
-		background:#f8f8f8 url(img/pict_ok.png) no-repeat 100% 10px;
-	}
 	ul#required_update li.fail,
 	ul#optional_update li.fail {
 		background:#f8f8f8 url(img/pict_error.png) no-repeat 100% 8px;
+	}
+	ul#required_update li.ok, 
+	ul#optional_update li.ok{
+		background:#f8f8f8 url(img/pict_ok.png) no-repeat 100% 10px;
 	}
 #sheet_require_update #req_bt_refresh_update {float:right;}
 

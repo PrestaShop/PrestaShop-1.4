@@ -111,6 +111,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_cms_block.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_blocklink.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_productcomments_guest_index.php');
+
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_followup.php');
@@ -191,10 +193,10 @@ if ($resultDB !== true)
 $upgradeFiles = array();
 if ($handle = opendir(INSTALL_PATH.'/sql/upgrade'))
 {
-    while (false !== ($file = readdir($handle)))
-        if ($file != '.' AND $file != '..')
-            $upgradeFiles[] = str_replace(".sql", "", $file);
-    closedir($handle);
+	while (false !== ($file = readdir($handle)))
+		if ($file != '.' AND $file != '..')
+			$upgradeFiles[] = str_replace(".sql", "", $file);
+	closedir($handle);
 }
 if (empty($upgradeFiles))
 {
@@ -255,6 +257,7 @@ foreach($neededUpgradeFiles AS $version)
 	$file = INSTALL_PATH.'/sql/upgrade/'.$version.'.sql';
 	if (!file_exists($file))
 	{
+		error_log('here?'.$file);
 		$logger->logError('Error while loading sql upgrade file.');
 		die('<action result="fail" error="33" />'."\n");
 	}
