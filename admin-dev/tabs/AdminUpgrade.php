@@ -318,7 +318,7 @@ class AdminUpgrade extends AdminPreferences
 		}
 		else{
 				$this->next = "error";
-				$this->nextDesc = sprintf($this->l('unable to extract %2$s into %2$s ...'),$filepath,$destExtract);
+				$this->nextDesc = sprintf($this->l('unable to extract %1$s into %2$s ...'),$filepath,$destExtract);
 				return true;
 		}
 	}
