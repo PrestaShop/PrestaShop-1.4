@@ -208,11 +208,27 @@ if (empty($upgradeFiles))
 }
 natcasesort($upgradeFiles);
 $neededUpgradeFiles = array();
+
+// fix : complete version number if there is not all 4 numbers
+// for example replace 1.4.3 by 1.4.3.0
+// consequences : file 1.4.3.0.sql will be skipped if oldversion = 1.4.3
+// @since 1.4.4.0
+$arrayVersion = preg_split('#\.#', $oldversion);
+$versionNumbers = sizeof($arrayVersion);
+
+if ($versionNumbers != 4)
+	$arrayVersion = array_pad($arrayVersion, 4, '0');
+
+$oldversion = implode('.', $arrayVersion);
+// end of fix
+
 foreach ($upgradeFiles AS $version)
 {
+
 	if (version_compare($version, $oldversion) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
 		$neededUpgradeFiles[] = $version;
 }
+
 if (empty($neededUpgradeFiles))
 {
 	$logger->logError('No upgrade is possible.');
