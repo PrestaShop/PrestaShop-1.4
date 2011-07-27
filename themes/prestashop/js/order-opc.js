@@ -440,7 +440,7 @@ $(function() {
 				async: false,
 				cache: false,
 				dataType : "json",
-				data: 'SubmitLogin=true&ajax=true&email='+encodeURIComponent($('#login_email').val())+'&passwd='+encodeURIComponent($('#passwd').val())+'&token=' + static_token ,
+				data: 'SubmitLogin=true&ajax=true&email='+encodeURIComponent($('#login_email').val())+'&passwd='+encodeURIComponent($('#login_passwd').val())+'&token=' + static_token ,
 				success: function(jsonData)
 				{
 					if (jsonData.hasError)
