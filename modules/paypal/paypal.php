@@ -1258,7 +1258,7 @@ class PayPal extends PaymentModule
 				$orderState->logable = true;
 				$orderState->invoice = true;
 				if ($orderState->add())
-					copy(_PS_ROOT_DIR_.'/img/os/'.Configuration::get('PS_OS_PAYPAL').'.gif', _PS_ROOT_DIR_.'/img/os/'.(int)($orderState->id).'.gif');
+					@copy(_PS_ROOT_DIR_.'/img/os/'.Configuration::get('PS_OS_PAYPAL').'.gif', _PS_ROOT_DIR_.'/img/os/'.(int)($orderState->id).'.gif');
 				Configuration::updateValue('PAYPAL_OS_AUTHORIZATION', (int)($orderState->id));
 			}
 			/* Delete unseless configuration */

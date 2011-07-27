@@ -264,6 +264,8 @@ class AdminImages extends AdminTab
 	  */
 	private function _deleteOldImages($dir, $type, $product = false)
 	{
+		if (!is_dir($dir))
+			return false;
 		$toDel = scandir($dir);
 		foreach ($toDel AS $d)
 			foreach ($type AS $imageType)
@@ -295,6 +297,8 @@ class AdminImages extends AdminTab
 	// Regenerate images
 	private function _regenerateNewImages($dir, $type, $productsImages = false)
 	{
+		if (!is_dir($dir))
+			return false;
 		$errors = false;
 		$toRegen = scandir($dir);
 		if (!$productsImages)
