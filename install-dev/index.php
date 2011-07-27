@@ -73,6 +73,20 @@ if (file_exists(INSTALL_PATH.'/../config/settings.inc.php'))
 {
 	include(INSTALL_PATH.'/../config/settings.inc.php');
 	$oldversion =_PS_VERSION_;
+	
+	// fix : complete version number if there is not all 4 numbers
+	// for example replace 1.4.3 by 1.4.3.0
+	// consequences : file 1.4.3.0.sql will be skipped if oldversion = 1.4.3
+	// @since 1.4.4.0
+	$arrayVersion = preg_split('#\.#', $oldversion);
+	$versionNumbers = sizeof($arrayVersion);
+
+	if ($versionNumbers != 4)
+		$arrayVersion = array_pad($arrayVersion, 4, '0');
+
+	$oldversion = implode('.', $arrayVersion);
+	// end of fix
+	
 	$tooOld = (version_compare($oldversion, MINIMUM_VERSION_TO_UPDATE) == -1);
 	$sameVersions = (version_compare($oldversion, INSTALL_VERSION) == 0);
 	$installOfOldVersion = (version_compare($oldversion, INSTALL_VERSION) == 1);
