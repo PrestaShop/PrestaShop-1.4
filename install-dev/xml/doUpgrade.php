@@ -129,6 +129,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_duplicate_category_groups.ph
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'migrate_block_info_to_cms_block.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_order_state.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;
@@ -140,14 +142,14 @@ if (file_exists(SETTINGS_FILE) AND file_exists(DEFINES_FILE))
 }
 else
 {
-	die('<action result="fail" error="30" />'."\n");
 	$logger->logError('The config/settings.inc.php file was not found.');
+	die('<action result="fail" error="30" />'."\n");
 }
 
 if (!file_exists(DEFINES_FILE))
 {
-	die('<action result="fail" error="37" />'."\n");
 	$logger->logError('The config/settings.inc.php file was not found.');
+	die('<action result="fail" error="37" />'."\n");
 }
 include_once(SETTINGS_FILE);
 
@@ -163,7 +165,8 @@ include_once(DEFINES_FILE);
 
 $oldversion = _PS_VERSION_;
 
-$versionCompare =  version_compare(INSTALL_VERSION, _PS_VERSION_);
+$versionCompare =  version_compare(INSTALL_VERSION, $oldversion);
+
 if ($versionCompare == '-1')
 {
 	$logger->logError('This installer is too old.');
@@ -171,7 +174,7 @@ if ($versionCompare == '-1')
 }
 elseif ($versionCompare == 0)
 {
-	$logger->logError('You already have the '.INSTALL_VERSION.' version.');
+	$logger->logError(sprintf('You already have the %s version.',INSTALL_VERSION));
 	die('<action result="fail" error="28" />'."\n");
 }
 elseif ($versionCompare === false)
@@ -206,8 +209,10 @@ if (empty($upgradeFiles))
 natcasesort($upgradeFiles);
 $neededUpgradeFiles = array();
 foreach ($upgradeFiles AS $version)
-	if (version_compare($version, _PS_VERSION_) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
+{
+	if (version_compare($version, $oldversion) == 1 AND version_compare(INSTALL_VERSION, $version) != -1)
 		$neededUpgradeFiles[] = $version;
+}
 if (empty($neededUpgradeFiles))
 {
 	$logger->logError('No upgrade is possible.');
@@ -243,13 +248,13 @@ if (defined('_RIJNDAEL_KEY_'))
 	$datas[] = array('_RIJNDAEL_KEY_', _RIJNDAEL_KEY_);
 if (defined('_RIJNDAEL_IV_'))
 	$datas[] = array('_RIJNDAEL_IV_', _RIJNDAEL_IV_);
-if(!defined('_PS_CACHE_ENABLED_'))
+if (!defined('_PS_CACHE_ENABLED_'))
 	define('_PS_CACHE_ENABLED_', '0');
-if(!defined('_MYSQL_ENGINE_'))
+if (!defined('_MYSQL_ENGINE_'))
 	define('_MYSQL_ENGINE_', 'MyISAM');
 
 $sqlContent = '';
-if(isset($_GET['customModule']) AND $_GET['customModule'] == 'desactivate')
+if (isset($_GET['customModule']) AND $_GET['customModule'] == 'desactivate')
 	desactivate_custom_modules();
 
 foreach($neededUpgradeFiles AS $version)
@@ -257,7 +262,6 @@ foreach($neededUpgradeFiles AS $version)
 	$file = INSTALL_PATH.'/sql/upgrade/'.$version.'.sql';
 	if (!file_exists($file))
 	{
-		error_log('here?'.$file);
 		$logger->logError('Error while loading sql upgrade file.');
 		die('<action result="fail" error="33" />'."\n");
 	}
@@ -306,7 +310,7 @@ foreach ($arrayToClean as $dir)
 
 // delete cache filesystem if activated
 $depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
-if($depth)
+if ($depth)
 {
 	CacheFS::deleteCacheDirectory();
 	CacheFS::createCacheDirectories((int)$depth);
@@ -322,7 +326,7 @@ Configuration::loadConfiguration();
 foreach($sqlContent as $query)
 {
 	$query = trim($query);
-	if(!empty($query))
+	if (!empty($query))
 	{
 		/* If php code have to be executed */
 		if (strpos($query, '/* PHP:') !== false)
@@ -367,7 +371,7 @@ foreach($sqlContent as $query)
 		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
 	</request>'."\n";
 		}
-		elseif(!Db::getInstance()->Execute($query))
+		elseif (!Db::getInstance()->Execute($query))
 		{
 			$logger->logError('SQL query: '."\r\n".$query);
 			$logger->logError('SQL error: '."\r\n".Db::getInstance()->getMsgError());
