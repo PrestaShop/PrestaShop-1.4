@@ -340,9 +340,9 @@ class MoneyBookers extends PaymentModule
 			$iso_img = 'en';
 
 		$manual_links = array(
-			'en' => 'http://www.prestashop.com/partner/Activation_Manual_Prestashop_EN.pdf',
+			'en' => 'http://moneybookers.com/creatives/integrationmanual/MB-Prestashop-Integration_en.pdf',
 			'es' => 'http://www.prestashop.com/partner/Manual%20de%20Activacion%20Prestashop_ES.pdf',
-			'fr' => 'http://www.prestashop.com/partner/Manuel_Activation_Prestashop_FR.pdf');
+			'fr' => 'http://www.moneybookers.com/creatives/integrationmanual/MB-Prestashop-Integration_fr.pdf');
 
 		$iso_manual = $lang->iso_code;
 		if (!array_key_exists($lang->iso_code, $manual_links))
