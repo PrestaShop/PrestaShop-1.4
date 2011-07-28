@@ -1,5 +1,4 @@
 <?php
-define('_PS_ALLOW_UPGRADE_UNSTABLE_',true);
 /*
 * 2007-2011 PrestaShop
 *
@@ -108,7 +107,7 @@ class AdminUpgrade extends AdminPreferences
 
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_KEEP_DEFAULT_THEME'] = array(
 			'title' => $this->l('Keep theme "prestashop"'), 'cast' => 'intval', 'validation' => 'isBool',
-			'type' => 'bool', 'desc'=>$this->l('If you have customized PrestaShop\'s default theme, you can protect it from upgrade (not recommended)'),
+			'type' => 'bool', 'desc'=>$this->l('If you have customized PrestaShop default theme, you can protect it from upgrade (not recommended)'),
 		);
 
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_KEEP_TRAD'] = array(
@@ -269,9 +268,22 @@ class AdminUpgrade extends AdminPreferences
 			$this->_postConfig($this->_fieldsAutoUpgrade);
 	}
 
+	public function ajaxProcessRollbackComplete()
+	{
+		$this->nextDesc = $this->l('Rollback process done.');
+		$this->next = '';
+	}
+
+
+	public function ajaxProcessUpgradeComplete()
+	{
+		$this->nextDesc = $this->l('Upgrade process done. Congratulations ! You can now reactive your shop.');
+		$this->next = '';
+	}
+
 	public function ajaxProcessUpgradeNow()
 	{
-		$this->nextDesc = 'Starting upgrade ...';
+		$this->nextDesc = $this->l('Starting upgrade ...');
 		$this->next = 'desactiveShop';
 	}
 	public function ajaxProcessSvnExport()
@@ -671,7 +683,7 @@ class AdminUpgrade extends AdminPreferences
 				// all theses cases are handled by the method ajaxRequestRollback()
 				$this->next = ''; // next is empty : nothing next :)
 				$this->status = 'ok';
-				$this->nextDesc = $this->l('All your site is restored... ');
+				$this->nextDesc = $this->l('All your site have been restored.');
 			}
 		}
 	}
@@ -1259,6 +1271,12 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 				$srcExecTime = '../img/admin/warning.gif';
 			echo '<b>'.$this->l('PHP time limit').' : </b>'.'<img src="'.$srcExecTime.'" />'.($max_exec_time == 0?$this->l('disabled'):$max_exec_time.' '.$this->l('seconds')).' <br/><br/>';
 
+			if ($this->rootWritable)
+				$srcRootWritable = '../img/admin/enabled.gif';
+			else
+				$srcRootWritable = '../img/admin/disabled.gif';
+			echo '<b>'.$this->l('Root directory').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('writable recursively'):$this->l('not writable recursively')).'. <br/><br/>';
+
 			echo '<a class="button" id="scrollToOptions" href="#options">'.$this->l('Modify your options').'</a>';
 			echo '</fieldset>';
 
@@ -1475,7 +1493,7 @@ function parseXMLResult(xmlRet)
 			.hide("slow");
 
 		// difference with the original function
-		ret = {next:"upgradeComplete",nextParams:""};
+		ret = {next:"upgradeComplete",nextParams:{typeResult:"json"},status:"ok"};
 
 	}
 	else
@@ -1490,7 +1508,7 @@ function parseXMLResult(xmlRet)
 		
 		// propose rollback if there is an error
 		if (confirm(txtError[parseInt(ret.getAttribute("error"))]+"\r\n\r\n'.$this->l('Do you want to rollback ?').'"))
-			ret = {next:"rollback","nextParams":nextParams};
+			ret = {next:"rollback",nextParams:{typeResult:"json"},status:"error"};
 	}
 
 	return ret
@@ -1538,6 +1556,11 @@ function doAjaxRequest(action, nextParams){
 			},
 			success : function(res,textStatus,jqXHR)
 			{
+				if(eval("typeof nextParams") == "undefined")
+				{
+					nextParams = {typeResult : "json"};
+				}
+
 				if (nextParams.typeResult == "xml")
 				{
 					xmlRes = parseXMLResult(res);
@@ -1545,37 +1568,38 @@ function doAjaxRequest(action, nextParams){
 					res.next = xmlRes.next;
 					// if xml, we keep the next params
 					nextParams = myNext;
-					
-					// res.status = "ok",
+					res.status = xmlRes.status;
 				}
 				else
 				{
 					res = $.parseJSON(res);
-					if (res.status == "ok")
-					{
-						// a
-						$("#"+action).addClass("done");
-						if (res.stepDone)
-							$("#"+action).addClass("stepok");
-						
-						// if a function "after[action name]" exists, it should be called.
-						// This is used for enabling restore buttons for example
-						funcName = "after"+ucFirst(action);
-						if (typeof funcName == "string" &&
-							eval("typeof " + funcName) == "function") {
+					nextParams = res.nextParams;
+				}
 
-							eval(funcName+"()");
-						}
+				if (res.status == "ok")
+				{
+					// a
+					$("#"+action).addClass("done");
+					if (res.stepDone)
+						$("#"+action).addClass("stepok");
+					
+					// if a function "after[action name]" exists, it should be called.
+					// This is used for enabling restore buttons for example
+					funcName = "after"+ucFirst(action);
+					if (typeof funcName == "string" &&
+						eval("typeof " + funcName) == "function") {
 
-						handleSuccess(res,nextParams.typeResult);
+						eval(funcName+"()");
 					}
-					else
-					{
-						// display progression
-						$("#"+action).addClass("done");
-						$("#"+action).addClass("steperror");
-						handleError(res);
-					}
+
+					handleSuccess(res,nextParams.typeResult);
+				}
+				else
+				{
+					// display progression
+					$("#"+action).addClass("done");
+					$("#"+action).addClass("steperror");
+					handleError(res);
 				}
 			},
 			error: function(res,textStatus,jqXHR)
@@ -1626,9 +1650,9 @@ function prepareNextButton(button_selector, nextParams)
  */
 function handleSuccess(res)
 {
+	updateInfoStep(res.nextDesc);
 	if (res.next != "")
 	{
-		updateInfoStep(res.nextDesc);
 		addQuickInfo(res.nextQuickInfo);
 
 		$("#"+res.next).addClass("nextStep");
