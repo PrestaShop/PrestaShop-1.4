@@ -102,16 +102,16 @@ class AdminUpgrade extends AdminPreferences
 	{
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_DONT_SAVE_IMAGES'] = array(
 			'title' => $this->l('Don\'t save images'), 'cast' => 'intval', 'validation' => 'isBool',
-			'type' => 'bool', 'desc'=>$this->l('You can exclude the image directory from backup if you already saved it by an other method. (not recommended)'),
+			'type' => 'bool', 'desc'=>$this->l('You can exclude the image directory from backup if you already saved it by another method (not recommended)'),
 		);
 
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_KEEP_DEFAULT_THEME'] = array(
 			'title' => $this->l('Keep theme "prestashop"'), 'cast' => 'intval', 'validation' => 'isBool',
-			'type' => 'bool', 'desc'=>$this->l('if you have customized prestashop default theme, you can protect it from upgrade (not recommended)'),
+			'type' => 'bool', 'desc'=>$this->l('If you have customized PrestaShop\'s default theme, you can protect it from upgrade (not recommended)'),
 		);
 
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_KEEP_TRAD'] = array(
-			'title' => $this->l('Don\'t keep translations'), 'cast' => 'intval', 'validation' => 'isBool',
+			'title' => $this->l('Keep translations'), 'cast' => 'intval', 'validation' => 'isBool',
 			'type' => 'bool', 'desc'=>$this->l('If set too yes, you will keep all your translations'),
 		);
 		// allow manual mode only for dev
@@ -1222,13 +1222,13 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 
 			echo '<fieldset class="width autoupgrade " >';
 			echo '<legend>'.$this->l('Your current configuration').'</legend>';
-			echo '<b>'.$this->l('root directory').' : </b>'.$this->prodRootDir.'<br/><br/>';
+			echo '<b>'.$this->l('Root directory').' : </b>'.$this->prodRootDir.'<br/><br/>';
 
 			if ($this->rootWritable)
 				$srcRootWritable = '../img/admin/enabled.gif';
 			else
 				$srcRootWritable = '../img/admin/disabled.gif';
-			echo '<b>'.$this->l('Root directory').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('root directory is fully writable'):$this->l('root directory is not writable recursively')).'. <br/><br/>';
+			echo '<b>'.$this->l('Root directory status').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('fully writable'):$this->l('not writable recursively')).'<br/><br/>';
 			
 			if ($this->upgrader->needUpgrade)
 			{
@@ -1256,13 +1256,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 				$srcExecTime = '../img/admin/enabled.gif';
 			else
 				$srcExecTime = '../img/admin/warning.gif';
-			echo '<b>'.$this->l('php time limit').' : </b>'.'<img src="'.$srcExecTime.'" />'.($max_exec_time == 0?$this->l('disabled'):$max_exec_time.' '.$this->l('seconds')).' <br/><br/>';
-
-			if ($this->rootWritable)
-				$srcRootWritable = '../img/admin/enabled.gif';
-			else
-				$srcRootWritable = '../img/admin/disabled.gif';
-			echo '<b>'.$this->l('Root directory').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('writable recursively'):$this->l('not writable recursively')).'. <br/><br/>';
+			echo '<b>'.$this->l('PHP time limit').' : </b>'.'<img src="'.$srcExecTime.'" />'.($max_exec_time == 0?$this->l('disabled'):$max_exec_time.' '.$this->l('seconds')).' <br/><br/>';
 
 			echo '<a class="button" id="scrollToOptions" href="#options">'.$this->l('Modify your options').'</a>';
 			echo '</fieldset>';
@@ -1356,7 +1350,7 @@ echo '</script>';
 	}
 	public function display()
 	{
-		$this->displayWarning('This function is experimental. It\'s currently recommended to make a backup of your files and database.');
+		$this->displayWarning($this->l('This function is experimental. It\'s highly recommended to make a backup of your files and database before starting the upgrade process.'));
 
 		global $currentIndex;
 		if ($this->apacheModExists('mod_evasive'))
