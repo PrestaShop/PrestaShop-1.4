@@ -28,7 +28,7 @@
 				echo '<br clear="left" /><hr /><br clear="left" />';
 				foreach ($result->field as $field)
 				{
-					echo '<div><label class="aligned">'.getPreinstallXmlLang($field, 'label').' :</label>';
+					echo '<div><label class="aligned" style="float:left;width:200px;padding-left:10px;">'.getPreinstallXmlLang($field, 'label').' :</label>';
 					if ($field->type == 'text' || $field->type == 'password')
 						echo '<input type="'.$field->type.'" class="text required" id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" />';
 					elseif ($field->type == 'radio')
