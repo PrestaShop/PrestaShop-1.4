@@ -2109,6 +2109,7 @@ class AdminProducts extends AdminTab
 					updateFriendlyURL();
 					$.ajax({
 						url: "'.dirname($currentIndex).'/ajax.php",
+						cache: false,
 						dataType: "json",
 						data: "ajaxProductManufacturers=1",
 						success: function(j) {
@@ -2126,6 +2127,7 @@ class AdminProducts extends AdminTab
 					});
 					$.ajax({
 						url: "'.dirname($currentIndex).'/ajax.php",
+						cache: false,
 						dataType: "json",
 						data: "ajaxProductSuppliers=1",
 						success: function(j) {
