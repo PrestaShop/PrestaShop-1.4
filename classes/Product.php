@@ -1690,7 +1690,7 @@ class ProductCore extends ObjectModel
 	* @return float Product price
 	*/
 	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false,
-	$usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = TRUE)
+	$usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = true, $use_groupReduction = true)
 	{
    		global $cookie, $cart;
         $cur_cart = $cart;
@@ -1767,7 +1767,7 @@ class ProductCore extends ObjectModel
 		$id_shop = (int)(Shop::getCurrentShop());
 
 		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country,  $id_state, $id_county, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
-		$usereduc, $with_ecotax, $specificPriceOutput);
+		$usereduc, $with_ecotax, $specificPriceOutput, $use_groupReduction);
 	}
 
 	/**
@@ -1789,7 +1789,7 @@ class ProductCore extends ObjectModel
 	* @param variable_reference $specific_price_output If a specific price applies regarding the previous parameters, this variable is filled with the corresponding SpecificPrice object
 	* @return float Product price
 	**/
-	public static function priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $use_tax, $decimals, $only_reduc, $use_reduc, $with_ecotax, &$specific_price)
+	public static function priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $use_tax, $decimals, $only_reduc, $use_reduc, $with_ecotax, &$specific_price, $use_groupReduction)
 	{
 		// Caching
 		if ($id_product_attribute === NULL)
@@ -1859,13 +1859,15 @@ class ProductCore extends ObjectModel
 			$price -= $reduc;
 
 		// Group reduction
-		if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
-			$price -= $price * $reductionFromCategory;
-		else // apply group reduction if there is no group reduction for this category
-			$price *= ((100 - Group::getReductionByIdGroup($id_group)) / 100);
+		if ($use_groupReduction)
+		{
+			if ($reductionFromCategory = (float)(GroupReduction::getValueForProduct($id_product, $id_group)))
+				$price -= $price * $reductionFromCategory;
+			else // apply group reduction if there is no group reduction for this category
+				$price *= ((100 - Group::getReductionByIdGroup($id_group)) / 100);
+		}
 
 		$price = Tools::ps_round($price, $decimals);
-
 		// Eco Tax
 		if (($result['ecotax'] OR isset($result['attribute_ecotax'])) AND $with_ecotax)
 		{
