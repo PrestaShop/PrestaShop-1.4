@@ -1268,7 +1268,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		// @TODO : this should be checked when init()
 		if ($this->isUpgradeAllowed()) {
 			if ($pleaseUpdate) {
-				echo '<li><img src="'.$this->prodRootDir.'img/information.png" alt="information"/> '.$this->l('Latest Prestashop version available is:').' <b>'.$pleaseUpdate['name'].'</b></li>';
+				echo '<li><img src="'._PS_ADMIN_IMG_.'img/information.png" alt="information"/> '.$this->l('Latest Prestashop version available is:').' <b>'.$pleaseUpdate['name'].'</b></li>';
 			}
 //			echo '<input class="button" type="submit" name="sumbitUpdateVersion" value="'.$this->l('Backup Database, backup files and update right now and in one click !').'"/>';
 //			echo '<input class="button" type="submit" id="refreshCurrent" value="'.$this->l("refresh update dir / current").'"/>';
