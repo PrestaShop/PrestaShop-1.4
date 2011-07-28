@@ -185,7 +185,18 @@ class AdminUpgrade extends AdminPreferences
 			$this->nextParams['filesToUpgrade'] = $this->currentParams['filesToUpgrade'];
 
 		$this->backupDbFilename = Configuration::get('UPGRADER_BACKUPDB_FILENAME');
+		if(!file_exists($this->backupDbFilename))
+		{
+			$this->backupDbFilename = '';
+			Configuration::updateValue('UPGRADER_BACKUPDB_FILENAME','');
+		}
 		$this->backupFilesFilename = Configuration::get('UPGRADER_BACKUPFILES_FILENAME');
+		if(!file_exists($this->backupFilesFilename))
+		{
+			$this->backupFilesFilename = '';
+			Configuration::updateValue('UPGRADER_BACKUPFILES_FILENAME','');
+		}
+
 
 		$this->autoupgradePath = $this->adminDir.DIRECTORY_SEPARATOR.$this->autoupgradeDir;
 
@@ -1190,17 +1201,17 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 	private function _displayRollbackForm()
 	{
 		echo '<fieldset><legend>'.$this->l('Rollback').'</legend>
-		<div id="rollbackContainer">';
+		<div id="rollbackForm">';
 		if (empty($this->backupFilesFilename) AND empty($this->backupDbFilename))
 			echo $this->l('No rollback available');
 		else if (!empty($this->backupFilesFilename) OR !empty($this->backupDbFilename))
 		{
-			echo '<div id="rollbackContainer"><a class="upgradestep button" href="" id="rollback">'.$this->l('rollback').'</a></div>';
+			echo '<div id="rollbackContainer"><a class="upgradestep button" href="" id="rollback">'.$this->l('rollback').'</a></div><br/>';
 		}
 		if (!empty($this->backupFilesFilename))
-			echo '<div id="restoreFilesContainer"><a href="" class="upgradestep button" id="restoreFiles">restoreFiles</a> '.sprintf($this->l('click to restore %s'),$this->backupFilesFilename).'</div>';
+			echo '<div id="restoreFilesContainer"><a href="" class="upgradestep button" id="restoreFiles">restoreFiles</a> '.sprintf($this->l('click to restore %s'),$this->backupFilesFilename).'</div><br/>';
 		if (!empty($this->backupDbFilename))
-			echo '<div id="restoreDbContainer"><a href="" class="upgradestep button" id="restoreDb">restoreDb</a> '.sprintf($this->l('click to restore %s'), $this->backupDbFilename).'</div>';
+			echo '<div id="restoreDbContainer"><a href="" class="upgradestep button" id="restoreDb">restoreDb</a> '.sprintf($this->l('click to restore %s'), $this->backupDbFilename).'</div><br/>';
 
 		echo '</div></fieldset>';
 	}
@@ -1268,7 +1279,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		// @TODO : this should be checked when init()
 		if ($this->isUpgradeAllowed()) {
 			if ($pleaseUpdate) {
-				echo '<li><img src="'._PS_ADMIN_IMG_.'img/information.png" alt="information"/> '.$this->l('Latest Prestashop version available is:').' <b>'.$pleaseUpdate['name'].'</b></li>';
+				echo '<li><img src="'._PS_ADMIN_IMG_.'information.png" alt="information"/> '.$this->l('Latest Prestashop version available is:').' <b>'.$pleaseUpdate['name'].'</b></li>';
 			}
 //			echo '<input class="button" type="submit" name="sumbitUpdateVersion" value="'.$this->l('Backup Database, backup files and update right now and in one click !').'"/>';
 //			echo '<input class="button" type="submit" id="refreshCurrent" value="'.$this->l("refresh update dir / current").'"/>';
@@ -1364,7 +1375,7 @@ echo '</script>';
 		$this->_displayRollbackForm();
 
 		echo '<br/>';
-		$this->_displayForm('autoUpgradeOptions',$this->_fieldsAutoUpgrade,'<a href="" name="options" id="options">'.$this->l('Options').'</a>', 'my-autoupgrade-option','');
+		$this->_displayForm('autoUpgradeOptions',$this->_fieldsAutoUpgrade,'<a href="" name="options" id="options">'.$this->l('Options').'</a>', '','prefs');
 		echo '<script type="text/javascript">'.$this->_getJsInit().'</script>';
 	}
 
