@@ -537,17 +537,20 @@ class ImageCore extends ObjectModel
 				// don't recreate an image object for each image type
 				if (!$image || $image->id !== (int)$matches[2])
 					$image = new Image((int)$matches[2]);
-
-				// create the new folder if it does not exist
-				if (!$image->createImgFolder())
-					return false;
-				
-				// move the image
-				$new_path = _PS_PROD_IMG_DIR_.$image->getImgPath().(isset($matches[3]) ? $matches[3] : '').'.jpg';
-				if (file_exists($new_path))
-					return false;
-				if (!@rename(_PS_PROD_IMG_DIR_.$file, $new_path) || !file_exists($new_path))
-					return false;
+					
+				if (Validate::isLoadedObject($image))
+				{
+					// create the new folder if it does not exist
+					if (!$image->createImgFolder())
+						return false;
+					
+					// move the image
+					$new_path = _PS_PROD_IMG_DIR_.$image->getImgPath().(isset($matches[3]) ? $matches[3] : '').'.jpg';
+					if (file_exists($new_path))
+						return false;
+					if (!@rename(_PS_PROD_IMG_DIR_.$file, $new_path) || !file_exists($new_path))
+						return false;
+				}
 			}
 			if ((int)$max_execution_time != 0 && (time() - $start_time > (int)$max_execution_time - 4))
 				return 'timeout';
