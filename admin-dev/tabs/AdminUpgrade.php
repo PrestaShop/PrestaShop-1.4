@@ -1,4 +1,5 @@
 <?php
+define('_PS_ALLOW_UPGRADE_UNSTABLE_',true);
 /*
 * 2007-2011 PrestaShop
 *
@@ -1348,29 +1349,40 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 
 echo '</script>';
 	}
+
 	public function display()
 	{
 		$this->displayWarning($this->l('This function is experimental. It\'s highly recommended to make a backup of your files and database before starting the upgrade process.'));
 
 		global $currentIndex;
-		if ($this->apacheModExists('mod_evasive'))
-			sleep(1);
 		// update['name'] = version name
 		// update['num'] = only the version
 		// update['link'] = download link
 		// @TODO
-		if ($this->useSvn AND FALSE)
-			echo '<div class="error"><h1>'.$this->l('Unstable upgrade').'</h1>
-			<p class="warning">'.$this->l('Your current configuration indicate you want to upgrade your system from the unstable development branch, with no version number. If you upgrade, you will not be able to follow the official release process anymore').'.</p>
-		</div>';
 
+		if ($this->isUpgradeAllowed())
+		{
+			if ($this->useSvn)
+				echo '<div class="error"><h1>'.$this->l('Unstable upgrade').'</h1>
+				<p class="warning">'.$this->l('Your current configuration indicate you want to upgrade your system from the unstable development branch, with no version number. If you upgrade, you will not be able to follow the official release process anymore').'.</p>
+				</div>';
 			$this->_displayUpgraderForm();
-		echo '<br/>';
-		$this->_displayRollbackForm();
+		
+			echo '<br/>';
+			$this->_displayRollbackForm();
+	
+			echo '<br/>';
+			$this->_displayForm('autoUpgradeOptions',$this->_fieldsAutoUpgrade,'<a href="" name="options" id="options">'.$this->l('Options').'</a>', '','prefs');
+			echo '<script type="text/javascript">'.$this->_getJsInit().'</script>';
+		}
+		else
+		{
+			echo '<fieldset>
+			<legend>'.$this->l('Update').'</legend>';
+			echo '<p>'.$this->l('You currently don\'t need to use this feature.').'</p>';
+			echo '</fieldset>';
+		}
 
-		echo '<br/>';
-		$this->_displayForm('autoUpgradeOptions',$this->_fieldsAutoUpgrade,'<a href="" name="options" id="options">'.$this->l('Options').'</a>', '','prefs');
-		echo '<script type="text/javascript">'.$this->_getJsInit().'</script>';
 	}
 
 	private function _getJsInit()
