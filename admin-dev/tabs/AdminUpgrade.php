@@ -268,13 +268,6 @@ class AdminUpgrade extends AdminPreferences
 			$this->_postConfig($this->_fieldsAutoUpgrade);
 	}
 
-	public function ajaxProcessRollbackComplete()
-	{
-		$this->nextDesc = $this->l('Rollback process done.');
-		$this->next = '';
-	}
-
-
 	public function ajaxProcessUpgradeComplete()
 	{
 		$this->nextDesc = $this->l('Upgrade process done. Congratulations ! You can now reactive your shop.');
@@ -683,7 +676,7 @@ class AdminUpgrade extends AdminPreferences
 				// all theses cases are handled by the method ajaxRequestRollback()
 				$this->next = ''; // next is empty : nothing next :)
 				$this->status = 'ok';
-				$this->nextDesc = $this->l('All your site have been restored.');
+				$this->nextDesc = $this->l('All your site is restored... ');
 			}
 		}
 	}
