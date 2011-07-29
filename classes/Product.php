@@ -241,7 +241,7 @@ class ProductCore extends ObjectModel
 		'cache_has_attachments' => 'isBool'
 	);
 	protected $fieldsRequiredLang = array('link_rewrite', 'name');
-	/* Description short is limited to 400 chars, but without html, so it can't be generic */
+	/* Description short is limited to 400 chars (but can be configured in Preferences Tab), but without html, so it can't be generic */
 	protected $fieldsSizeLang = array('meta_description' => 255, 'meta_keywords' => 255,
 		'meta_title' => 128, 'link_rewrite' => 128, 'name' => 128, 'available_now' => 255, 'available_later' => 255);
 	protected $fieldsValidateLang = array(
@@ -533,13 +533,16 @@ class ProductCore extends ObjectModel
 
 	public function validateFieldsLang($die = true, $errorReturn = false)
 	{
+		$limit = (int)Configuration::get('PS_PRODUCT_SHORT_DESC_LIMIT');
+		if ($limit <= 0)
+			$limit = 400;
 		if (!is_array($this->description_short))
 			$this->description_short = array();
 		foreach ($this->description_short as $k => $value)
-			if (Tools::strlen(strip_tags($value)) > 400)
+			if (Tools::strlen(strip_tags($value)) > $limit)
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).'->description: length > 400 for language '.$k.')');
-				return $errorReturn ? get_class($this).'->'.Tools::displayError('description: length > 400 for language').' '.$k : false;
+				if ($die) die (Tools::displayError().' ('.get_class($this).'->description: length > '.$limit.' for language '.$k.')');
+				return $errorReturn ? get_class($this).'->'.Tools::displayError('description: length >').' '.$limit.' '.Tools::displayError('for language').' '.$k : false;
 			}
 		return parent::validateFieldsLang($die, $errorReturn);
 	}
