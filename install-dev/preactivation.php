@@ -16,8 +16,8 @@
 		$p = addslashes(strtolower($_GET['partner']));
 		$c = addslashes(strtolower($_GET['country_iso_code']));
 
-		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$content = @file_get_contents('http://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.$p.'&country_iso_code='.$c, false, $context);
+		$stream_context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+		$content = @file_get_contents('http://www.prestashop.com/partner/preactivation/fields.php?version=1.0&partner='.$p.'&country_iso_code='.$c, false, $stream_context);
 
 		if ($content && $content[0] == '<')
 		{
@@ -99,7 +99,7 @@
 
 	if ($_GET['request'] == 'send')
 	{
-		$context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+		$stream_context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
 		$url = 'http://www.prestashop.com/partner/preactivation/actions.php?version=1.0&partner='.addslashes($_GET['partner']);
 
 		// Protect fields
@@ -111,7 +111,7 @@
 		foreach ($_GET as $key => $val)
 			$url .= '&'.$key.'='.urlencode($val);
 		$url .= '&security='.md5($_GET['email']._COOKIE_IV_);
-		$content = @file_get_contents($url, false, $context);
+		$content = @file_get_contents($url, false, $stream_context);
 		if ($content)
 			echo $content;
 		else

@@ -150,7 +150,7 @@ class MoneyBookers extends PaymentModule
 	*/
 	private function _fetchWebContent($url, $timeout = 5, $contextOptions = array())
 	{
-		$context = NULL;
+		$stream_context = NULL;
 		$defaultContextOptions = array(
 				'http' => array(
        	'user_agent'			=> $_SERVER['HTTP_USER_AGENT'],
@@ -177,14 +177,14 @@ class MoneyBookers extends PaymentModule
 				$contextOptions = $defaultContextOptions;
 			
 			// Create a stream context
-			$context = stream_context_create($contextOptions);
+			$stream_context = stream_context_create($contextOptions);
 		
-			if (($fp = @fopen($url, $mode, false, $context)))
+			if (($fp = @fopen($url, $mode, false, $stream_context)))
 			{
 				$content = fgets($fp, 4096);
 				fclose($fp);
 			}
-			else if (!($content = @file_get_contents($url, false, $context)))
+			else if (!($content = @file_get_contents($url, false, $stream_context)))
 				if (($fp = @fsockopen($url, 80, $errnom, $errstr, $timeout)))
 					{
 						preg_match('@^(?:http://)?([^/]+)@i', $url, $matches);  
