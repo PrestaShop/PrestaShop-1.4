@@ -234,7 +234,11 @@ class OrderOpcControllerCore extends ParentOrderController
 		$this->_assignWrappingAndTOS();
 
 		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-		$countries = Country::getCountries((int)(self::$cookie->id_lang), true);
+		if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
+			$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
+		else
+			$countries = Country::getCountries((int)self::$cookie->id_lang, true);
+		
 		self::$smarty->assign(array(
 			'isLogged' => $this->isLogged,
 			'isGuest' => isset(self::$cookie->is_guest) ? self::$cookie->is_guest : 0,

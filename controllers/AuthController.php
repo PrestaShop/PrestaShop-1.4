@@ -304,7 +304,11 @@ class AuthControllerCore extends FrontController
 			}*/
 			if (!isset($selectedCountry))
 				$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-			$countries = Country::getCountries((int)(self::$cookie->id_lang), true);
+			if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
+				$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
+			else
+				$countries = Country::getCountries((int)self::$cookie->id_lang, true);
+				
 
 			self::$smarty->assign(array(
 				'countries' => $countries,
@@ -362,7 +366,11 @@ class AuthControllerCore extends FrontController
 			self::$smarty->assign('back', Tools::safeOutput($back));
 			if (strpos($back, 'order.php') !== false)
 			{
-				$countries = Country::getCountries((int)(self::$cookie->id_lang), true);
+				if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
+					$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
+				else
+					$countries = Country::getCountries((int)self::$cookie->id_lang, true);
+				
 				self::$smarty->assign(array(
 					'inOrderProcess' => true,
 					'PS_GUEST_CHECKOUT_ENABLED' => Configuration::get('PS_GUEST_CHECKOUT_ENABLED'),
