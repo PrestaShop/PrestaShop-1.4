@@ -65,7 +65,7 @@ class AdminMondialRelay extends AdminTab
 				<span></span>
 			</div>';
 
-		$orders = MondialRelay::getOrders();
+		$orders = MondialRelay::getOrders(array(), MondialRelay::WITHOUT_HOME_DELIVERY);
 		if (empty($orders))
 			$html.= '<h3 style="color:red;">' . $this->l('No orders with this state.') . '</h3>';
 		else
@@ -85,7 +85,7 @@ class AdminMondialRelay extends AdminTab
 			$html.= '<th>'.$this->l('Exp Number').'</th>';
 			$html.= '<th>'.$this->l('Detail').'</th>';
 			$html.= '</tr>';
-			
+	
 			foreach ($orders as $order)
 			{
 				if ($order['weight'] == 0) 
