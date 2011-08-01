@@ -163,7 +163,7 @@ if ($employee->bo_uimode == 'hover')
 					$(this).addClass("active");
 				}
 			</script>';
-echo '		<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder"' : '').'>'.$mainsubtablist.'</ul>
+echo '		<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder clearfix"' : '').'>'.$mainsubtablist.'</ul>
 			<div id="main">
 				<div id="content">'
 			.(file_exists(PS_ADMIN_DIR.'/../install') ? '<div style="background-color: #FFEBCC;border: 1px solid #F90;line-height: 20px;margin: 0px 0px 10px;padding: 10px 20px;">'
