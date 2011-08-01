@@ -1354,7 +1354,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		// temporary infoUpdate will be in #tmpInformation
 		echo '<script type="text/javascript">';
 		// _PS_MODE_DEV_ is available in js
-		if (defined('_PS_MODE_DEV_' AND _PS_MODE_DEV_))
+		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
 			echo 'var _PS_MODE_DEV_ = true;';
 		echo $this->_getJsErrorMsgs();
 
