@@ -628,7 +628,6 @@ function PS_MRGmapPlaceViewOnMarker($map, marker)
 			args:[marker.position],
 			callback: function()
 			{
-				console.log($map);
 				(function(m)
 				{
       		setTimeout(function() 
@@ -701,7 +700,6 @@ function PS_MRAddGMapMarker(id_carrier, relayPointNumber, contentBlockid)
 	// Add Marker to the map
 	fullFormatedAddress = relayInfo.LgAdr1 + ' ' + relayInfo.LgAdr3 + ' ' + 
 		relayInfo.CP + ' ' + relayInfo.Ville + ' ' + relayInfo.Pays;
-	console.log(GmapList);
 	GmapList[id_carrier].gmap3(
 	{ 
 		action: 'addMarker',
