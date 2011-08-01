@@ -168,6 +168,6 @@ echo '		<ul id="submenu" '.(strlen($mainsubtablist) ? 'class="withLeftBorder"' :
 				<div id="content">'
 			.(file_exists(PS_ADMIN_DIR.'/../install') ? '<div style="background-color: #FFEBCC;border: 1px solid #F90;line-height: 20px;margin: 0px 0px 10px;padding: 10px 20px;">'
 				.translate('For security reasons, you must also:').' '.
-				translate('deleted the /install folder').
+				translate('delete the /install folder').
 				'</div>' : '').'
 				';
