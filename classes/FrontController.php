@@ -54,7 +54,6 @@ class FrontControllerCore
 	public function __construct()
 	{
 		global $useSSL;
-
 		$useSSL = $this->ssl;
 	}
 
@@ -344,7 +343,7 @@ class FrontControllerCore
 			{
 				// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 				$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
-				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				if (!Tools::getValue('ajax') && !preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 				{
 					header('HTTP/1.0 301 Moved');
 					$params = '';
