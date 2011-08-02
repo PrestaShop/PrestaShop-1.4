@@ -111,7 +111,7 @@ abstract class ObjectModelCore
 		if ($id_lang != NULL && Validate::isLoadedObject(new Language($id_lang)))
 			$this->id_lang = $id_lang;
 		elseif ($id_lang != NULL)
-			die(Tools::displayError());
+			$this->id_lang = Configuration::get('PS_LANG_DEFAULT');
 			
 	 	/* Connect to database and check SQL table/identifier */
 	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
