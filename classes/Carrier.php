@@ -428,6 +428,12 @@ class CarrierCore extends ObjectModel
 		return $countries;
 	}
 	
+	/**
+	 *
+	 * @param int $id_zone
+	 * @param Array $groups group of the customer
+	 * @return Array 
+	 */
 	public static function getCarriersForOrder($id_zone, $groups = NULL)
 	{
 		global $cookie, $cart;

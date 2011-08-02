@@ -42,7 +42,6 @@ class OrderDetailControllerCore extends FrontController
 	public function preProcess()
 	{
 		parent::preProcess();
-		
 
 		if (Tools::isSubmit('submitMessage'))
 		{
@@ -165,6 +164,16 @@ class OrderDetailControllerCore extends FrontController
 		}
 	}
 
+	public function setMedia()
+	{
+		if (Tools::getValue('ajax') != 'true')
+		{
+			parent::setMedia();
+			Tools::addCSS(_THEME_CSS_DIR_.'history.css');
+			Tools::addCSS(_THEME_CSS_DIR_.'addresses.css');
+		}
+	}
+	
 	public function displayHeader()
 	{
 		if (Tools::getValue('ajax') != 'true')
