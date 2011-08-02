@@ -3034,23 +3034,33 @@ class ProductCore extends ObjectModel
 	public function checkAccess($id_customer)
 	{
 		if (!$id_customer)
-		{
 			return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT ctg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 			WHERE cp.`id_product` = '.(int)$this->id.' AND ctg.`id_group` = 1');
-		} else {
+		else 
 			return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT cg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
 			WHERE cp.`id_product` = '.(int)$this->id.' AND cg.`id_customer` = '.(int)$id_customer);
-		}
 	}
 
-	public function addStockMvt($quantity, $id_reason, $id_product_attribute = NULL, $id_order = NULL, $id_employee = NULL)
+	/**
+	 * This method allow to get the stock available in database
+	 * @return type int
+	 */
+	public function getStockAvailable()
+	{
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT `quantity` 
+			FROM `'._DB_PREFIX_.'product` 
+			WHERE `id_product` = '.(int)$this->id);
+	}
+	
+	public function addStockMvt($quantity, $id_reason, $id_product_attribute = null, $id_order = null, $id_employee = null)
 	{
 		$stockMvt = new StockMvt();
 		$stockMvt->id_product = (int)$this->id;
@@ -3059,18 +3069,18 @@ class ProductCore extends ObjectModel
 		$stockMvt->id_employee = (int)$id_employee;
 		$stockMvt->quantity = (int)$quantity;
 		$stockMvt->id_stock_mvt_reason = (int)$id_reason;
-		$result = $stockMvt->add();
 		
-		$stockMvtReason = new StockMvtReason($id_reason);
-		// Increase or decrease current product quantity value
-		if ($stockMvtReason->sign == 1)
-			$this->quantity += abs($quantity);
-		elseif ($stockMvtReason->sign == -1)
-			$this->quantity -= abs($quantity);
-		
-		Hook::updateQuantity($this, null);
+		// adding stock mouvement, this action update the sotck of product in database only
+		if ($stockMvt->add())
+		{
+			// update quantity in object after adding the stock movement
+			$this->quantity = $this->getStockAvailable();
 
-		return $result;
+			Hook::updateQuantity($this, null);
+			
+			return true;
+		}
+		return false;
 	}
 
 	public function getStockMvts($id_lang)
