@@ -588,7 +588,7 @@ function PS_MRGetRelayPoint(carrierSelected)
 */
 function PS_MRCreateGmap(id_carrier)
 {
-	$('#carrierTable').children('tbody').prepend('\
+	$('body').prepend('\
 		<tr id="PS_MRGmapDefaultPosition_' + id_carrier + '" class="PS_MRGmapDefaultPosition">\
 			<td colspan="4"> \
 				<div id="PS_MRGmap_' + id_carrier + '" class="PS_MRGmapStyle">\
@@ -695,6 +695,9 @@ function PS_MRDisplayGmap(contentBlockid, $map)
 */
 function PS_MRAddGMapMarker(id_carrier, relayPointNumber, contentBlockid)
 {
+	// Check if the gmap has been properly created
+	if (GmapList[id_carrier] == undefined)
+		return ;
 	relayInfo = relayPointDataContainers[relayPointNumber];
 	
 	// Add Marker to the map
