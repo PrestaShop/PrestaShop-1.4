@@ -319,7 +319,7 @@ class DateOfDelivery extends Module
 	{
 		global $currentIndex, $cookie;
 		
-		$carriers = Carrier::getCarriers((int)($cookie->id_lang), true , false,false, NULL, ALL_CARRIERS);
+		$carriers = Carrier::getCarriers((int)($cookie->id_lang), true , false,false, NULL, Carrier::ALL_CARRIERS);
 		if (Tools::isSubmit('editCarrierRule') AND $this->_isCarrierRuleExists((int)(Tools::getValue('id_carrier_rule'))))
 			$carrier_rule = $this->_getCarrierRule((int)(Tools::getValue('id_carrier_rule')));
 		

@@ -27,6 +27,15 @@
 
 class CarrierCore extends ObjectModel
 {
+	/**
+	 * getCarriers method filter
+	 */
+	const PS_CARRIERS_ONLY = 1;
+	const CARRIERS_MODULE = 2;
+	const CARRIERS_MODULE_NEED_RANGE = 3;
+	const PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE = 4;
+	const ALL_CARRIERS = 5;
+	
 	const SHIPPING_METHOD_DEFAULT = 0;
 	const SHIPPING_METHOD_WEIGHT = 1;
 	const SHIPPING_METHOD_PRICE = 2;
@@ -329,7 +338,7 @@ class CarrierCore extends ObjectModel
 	 * @param boolean $active Returns only active carriers when true
 	 * @return array Carriers
 	 */
-	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false, $ids_group = NULL, $modules_filters = 1)
+	public static function getCarriers($id_lang, $active = false, $delete = false, $id_zone = false, $ids_group = NULL, $modules_filters = self::PS_CARRIERS_ONLY)
 	{
 	 	if (!Validate::isBool($active))
 	 		die(Tools::displayError());
@@ -340,7 +349,7 @@ class CarrierCore extends ObjectModel
 				$ids .= (int)($id).', ';
 			$ids = rtrim($ids, ', ');
 			if ($ids == '')
-				return (array());
+				return array();
 		}
 		$sql = '
 			SELECT c.*, cl.delay
@@ -424,9 +433,9 @@ class CarrierCore extends ObjectModel
 		global $cookie, $cart;
 
 		if (is_array($groups) AND !empty($groups))
-			$result = Carrier::getCarriers((int)$cookie->id_lang, true, false, (int)$id_zone, $groups, PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+			$result = Carrier::getCarriers((int)$cookie->id_lang, true, false, (int)$id_zone, $groups, self::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		else
-			$result = Carrier::getCarriers((int)$cookie->id_lang, true, false, (int)$id_zone, array(1), PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+			$result = Carrier::getCarriers((int)$cookie->id_lang, true, false, (int)$id_zone, array(1), self::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$resultsArray = array();
 
 		foreach ($result AS $k => $row)

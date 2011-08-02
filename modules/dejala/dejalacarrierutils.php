@@ -89,7 +89,7 @@ class DejalaCarrierUtils
 	public static function getCarrierByName($name) {
 		global $cookie ;
 
-		$carriers = Carrier::getCarriers((int)$cookie->id_lang, true, false, false, NULL, ALL_CARRIERS);
+		$carriers = Carrier::getCarriers((int)$cookie->id_lang, true, false, false, NULL, Carrier::ALL_CARRIERS);
 		foreach($carriers as $carrier)
 			if (!$carrier['deleted'] AND $carrier['external_module_name'] == $name)
 				return new Carrier((int)$carrier['id_carrier']) ;
