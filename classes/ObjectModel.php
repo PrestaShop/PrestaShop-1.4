@@ -713,5 +713,21 @@ abstract class ObjectModelCore
 				return false;
 		return true;
 	}
+
+	/**
+	* Specify if an ObjectModel is already in database
+	*
+	* @param $id_entity entity id
+	* @return boolean
+	*/
+	public static function existsInDatabase($id_entity)
+	{
+		$row = Db::getInstance()->getRow('
+		SELECT `id_'.self::$table.'`
+		FROM `'._DB_PREFIX_.self::$table.'` e
+		WHERE e.`id_'.self::$table.'` = '.(int)($id_entity));
+
+		return isset($row['id_product']);
+	}
 }
 

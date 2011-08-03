@@ -2995,22 +2995,6 @@ class ProductCore extends ObjectModel
 		return true;
 	}
 
-	/**
-	* Specify if a product is already in database
-	*
-	* @param $id_product Product id
-	* @return boolean
-	*/
-	public static function existsInDatabase($id_product)
-	{
-		$row = Db::getInstance()->getRow('
-		SELECT `id_product`
-		FROM '._DB_PREFIX_.'product p
-		WHERE p.`id_product` = '.(int)($id_product));
-
-		return isset($row['id_product']);
-	}
-
 	public static function idIsOnCategoryId($id_product, $categories)
 	{
 		$sql = 'SELECT id_product FROM `'._DB_PREFIX_.'category_product` WHERE `id_product`='.(int)($id_product).' AND `id_category` IN(';

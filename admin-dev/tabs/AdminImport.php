@@ -1144,7 +1144,11 @@ class AdminImport extends AdminTab
 			$info = self::getMaskedRow($line);
 
 			self::setDefaultValues($info);
-			$manufacturer = new Manufacturer();
+
+			if (array_key_exists('id', $info) AND (int)($info['id']) AND Manufacturer::existsInDatabase((int)($info['id'])))
+				$manufacturer = new Manufacturer((int)($info['id']));
+			else
+				$manufacturer = new Manufacturer();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $manufacturer);
 
 			$res = false;
@@ -1177,7 +1181,7 @@ class AdminImport extends AdminTab
 
 			self::setDefaultValues($info);
 
-			if (array_key_exists('id', $info) AND (int)($info['id']) AND Product::existsInDatabase((int)($info['id'])))
+			if (array_key_exists('id', $info) AND (int)($info['id']) AND Supplier::existsInDatabase((int)($info['id'])))
 				$supplier = new Supplier((int)($info['id']));
 			else
 				$supplier = new Supplier();
