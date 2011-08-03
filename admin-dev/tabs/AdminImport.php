@@ -1176,13 +1176,12 @@ class AdminImport extends AdminTab
 			$info = self::getMaskedRow($line);
 
 			self::setDefaultValues($info);
-			$supplier = new Supplier();
+
 			if (array_key_exists('id', $info) AND (int)($info['id']) AND Product::existsInDatabase((int)($info['id'])))
-			{
 				$supplier = new Supplier((int)($info['id']));
-			}
 			else
 				$supplier = new Supplier();
+
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $supplier);
 			if (($fieldError = $supplier->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $supplier->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
