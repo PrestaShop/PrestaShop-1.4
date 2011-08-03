@@ -58,7 +58,8 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.1';
+		$this->version = '1.2';
+		$this->author = 'PrestaShop';
 		parent::__construct ();
 		$this->displayName = $this->l('eBay');
 		$this->description = $this->l('Open your shop on the eBay market place !');
@@ -94,6 +95,10 @@ class Ebay extends Module
 		// Check if installed
 		if (self::isInstalled($this->name))
 		{
+			// Upgrade eBay module
+			if (Configuration::get('EBAY_VERSION') != $this->version)
+				$this->upgrade();
+
 			// Generate warnings
 			if (!Configuration::get('EBAY_API_TOKEN'))
 				$this->warning = $this->l('You must register your module on eBay.');
@@ -231,6 +236,20 @@ class Ebay extends Module
 		return true;
 	}
 
+	public function upgrade()
+	{
+		$version = Configuration::get('EBAY_VERSION');
+		if ($version == '1.1' || empty($version))
+		{
+			// Upgrade SQL
+			include(dirname(__FILE__).'/sql-upgrade-1-2.php');
+			foreach ($sql as $s)
+				if (!Db::getInstance()->Execute($s))
+					return false;	
+			Configuration::updateValue('EBAY_VERSION', $this->version);
+		}
+	}
+	
 
 	/******************************************************************/
 	/** Hook Methods **************************************************/
@@ -298,96 +317,114 @@ class Ebay extends Module
 		if (Configuration::get('EBAY_ORDER_LAST_UPDATE') < date('Y-m-d', strtotime('-45 minutes')).'T'.date('H:i:s', strtotime('-45 minutes')).'.000Z')
 		{
 			$ebay = new eBayRequest();
-			$orderList = $ebay->getOrders(Configuration::get('EBAY_ORDER_LAST_UPDATE'), $dateNew);
+			$orderList = $ebay->getOrders(date('Y-m-d', strtotime('-90 days')).'T'.date('H:i:s', strtotime('-45 minutes')).'.000Z', $dateNew);
+
 			if ($orderList)
 				foreach ($orderList as $order)
-					if ($order['status'] == 'Complete'&& 
-						isset($order['product_list']) && count($order['product_list']))
+					if ($order['status'] == 'Complete' && $order['amount'] > 0.1 && isset($order['product_list']) && count($order['product_list']))
 					{
-						$result = Db::getInstance()->getRow('SELECT `id_customer` FROM `'._DB_PREFIX_.'customer` WHERE `active` = 1 AND `email` = \''.pSQL($order['email']).'\' AND `deleted` = 0'.(substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
-						$id_customer = (isset($result['id_customer']) ? $result['id_customer'] : 0);
-
-						// Add customer if he doesn't exist
-						if ($id_customer < 1)
+						if (!Db::getInstance()->getValue('SELECT `id_ebay_order` FROM `'._DB_PREFIX_.'ebay_order` WHERE `id_order_ref` = \''.pSQL($order['id_order_ref']).'\''))
 						{
-							$customer = new Customer();
-							$customer->id_gender = 9;
-							$customer->id_default_group = 1;
-							$customer->secure_key = md5(uniqid(rand(), true));
-							$customer->email = $order['email'];
-							$customer->passwd = md5(pSQL(_COOKIE_KEY_.rand()));
-							$customer->last_passwd_gen = pSQL(date('Y-m-d H:i:s'));
-							$customer->newsletter = 0;
-							$customer->lastname = pSQL($order['familyname']);
-							$customer->firstname = pSQL($order['firstname']);
-							$customer->active = 1;
-							$customer->add();
-							$id_customer = $customer->id;
-						}
+							$result = Db::getInstance()->getRow('SELECT `id_customer` FROM `'._DB_PREFIX_.'customer` WHERE `active` = 1 AND `email` = \''.pSQL($order['email']).'\' AND `deleted` = 0'.(substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
+							$id_customer = (isset($result['id_customer']) ? $result['id_customer'] : 0);
+
+							// Check for empty name
+							$order['firstname'] = str_replace('_', '', trim($order['firstname']));
+							$order['familyname'] = str_replace('_', '', trim($order['familyname']));
+							if (empty($order['familyname']))
+								$order['familyname'] = $order['firstname'];
+							if (empty($order['firstname']))
+								$order['firstname'] = $order['familyname'];
+
+							if (Validate::isEmail($order['email']) && !empty($order['firstname']) && !empty($order['familyname']))
+							{
+
+								// Add customer if he doesn't exist
+								if ($id_customer < 1)
+								{
+									$customer = new Customer();
+									$customer->id_gender = 9;
+									$customer->id_default_group = 1;
+									$customer->secure_key = md5(uniqid(rand(), true));
+									$customer->email = $order['email'];
+									$customer->passwd = md5(pSQL(_COOKIE_KEY_.rand()));
+									$customer->last_passwd_gen = pSQL(date('Y-m-d H:i:s'));
+									$customer->newsletter = 0;
+									$customer->lastname = pSQL($order['familyname']);
+									$customer->firstname = pSQL($order['firstname']);
+									$customer->active = 1;
+									$customer->add();
+									$id_customer = $customer->id;
+								}
 			
-						$address = new Address();
-						$address->id_customer = (int)$id_customer;
-						$address->id_country = (int)Country::getByIso($order['country_iso_code']);
-						$address->alias = 'eBay '.date('Y-m-d H:i:s');
-						$address->lastname = pSQL($order['familyname']);
-						$address->firstname = pSQL($order['firstname']);
-						$address->address1 = pSQL($order['address1']);
-						$address->address2 = pSQL($order['address2']);
-						$address->postcode = pSQL($order['postalcode']);
-						$address->city = pSQL($order['city']);
-						$address->phone = pSQL($order['phone']);
-						$address->active = 1;
-						$address->add();
-						$id_address = $address->id;
+								$address = new Address();
+								$address->id_customer = (int)$id_customer;
+								$address->id_country = (int)Country::getByIso($order['country_iso_code']);
+								$address->alias = 'eBay '.date('Y-m-d H:i:s');
+								$address->lastname = pSQL($order['familyname']);
+								$address->firstname = pSQL($order['firstname']);
+								$address->address1 = pSQL($order['address1']);
+								$address->address2 = pSQL($order['address2']);
+								$address->postcode = pSQL($order['postalcode']);
+								$address->city = pSQL($order['city']);
+								$address->phone = pSQL($order['phone']);
+								$address->active = 1;
+								$address->add();
+								$id_address = $address->id;
 
-						$flag = 1;
-						foreach ($order['product_list'] as $product)
-						{
-							if ((int)$product['id_product'] < 1 || !Db::getInstance()->getValue('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product['id_product']))
-								$flag = 0;
-							if (isset($product['id_product_attribute']) && !Db::getInstance()->getValue('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$product['id_product'].' AND `id_product_attribute` = '.(int)$product['id_product_attribute']))
-								$flag = 0;
-						}
+								$flag = 1;
+								foreach ($order['product_list'] as $product)
+								{
+									if ((int)$product['id_product'] < 1 || !Db::getInstance()->getValue('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product['id_product']))
+										$flag = 0;
+									if (isset($product['id_product_attribute']) && !Db::getInstance()->getValue('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$product['id_product'].' AND `id_product_attribute` = '.(int)$product['id_product_attribute']))
+										$flag = 0;
+								}
 						
-						if ($flag == 1)
-						{
-	 						$cartAdd = new Cart();
-							$cartAdd->id_customer = $id_customer;
-							$cartAdd->id_address_invoice = $id_address;
-							$cartAdd->id_address_delivery = $id_address;
-							$cartAdd->id_carrier = 1;
-							$cartAdd->id_lang = $this->id_lang;
-							$cartAdd->id_currency = Currency::getIdByIsoCode('EUR');
-		 					$cartAdd->add();
-							foreach ($order['product_list'] as $product)
-								$cartAdd->updateQty((int)($product['quantity']), (int)($product['id_product']), (isset($product['id_product_attribute']) ? $product['id_product_attribute'] : NULL));
-							$cartAdd->update();
+								if ($flag == 1)
+								{
+			 						$cartAdd = new Cart();
+									$cartAdd->id_customer = $id_customer;
+									$cartAdd->id_address_invoice = $id_address;
+									$cartAdd->id_address_delivery = $id_address;
+									$cartAdd->id_carrier = 1;
+									$cartAdd->id_lang = $this->id_lang;
+									$cartAdd->id_currency = Currency::getIdByIsoCode('EUR');
+				 					$cartAdd->add();
+									foreach ($order['product_list'] as $product)
+										$cartAdd->updateQty((int)($product['quantity']), (int)($product['id_product']), (isset($product['id_product_attribute']) ? $product['id_product_attribute'] : NULL));
+									$cartAdd->update();
 	
-							// Fix on sending e-mail
-							Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int)$id_customer);
-							$customerClear = new Customer();
-							if (method_exists($customerClear, 'clearCache'))
-								$customerClear->clearCache(true);
+									// Fix on sending e-mail
+									Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int)$id_customer);
+									$customerClear = new Customer();
+									if (method_exists($customerClear, 'clearCache'))
+										$customerClear->clearCache(true);
 	
-							// Validate order
-							$paiement = new eBayPayment();
-							$paiement->validateOrder(intval($cartAdd->id), Configuration::get('PS_OS_PAYMENT'), floatval($cartAdd->getOrderTotal(true, 3)), 'Paypal eBay', NULL, array(), intval($cartAdd->id_currency));
-							$id_order = $paiement->currentOrder;
+									// Validate order
+									$paiement = new eBayPayment();
+									$paiement->validateOrder(intval($cartAdd->id), Configuration::get('PS_OS_PAYMENT'), floatval($cartAdd->getOrderTotal(true, 3)), 'Paypal eBay', NULL, array(), intval($cartAdd->id_currency));
+									$id_order = $paiement->currentOrder;
 	
-							// Fix on sending e-mail
-							Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($order['email'])), 'UPDATE', '`id_customer` = '.(int)$id_customer);
+									// Fix on sending e-mail
+									Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($order['email'])), 'UPDATE', '`id_customer` = '.(int)$id_customer);
 	
-							// Update price (because of possibility of price impact)
-							$updateOrder = array(
-								'total_paid' => floatval($order['amount']),
-								'total_paid_real' => floatval($order['amount']),
-								'total_products' => floatval($order['amount']),
-								'total_products_wt' => floatval($order['amount']),
-								'total_shipping' => floatval($order['shippingServiceCost']),
-							);
-							Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', $updateOrder, 'UPDATE', '`id_order` = '.(int)$id_order);
-							foreach ($order['product_list'] as $product)
-								Db::getInstance()->autoExecute(_DB_PREFIX_.'order_detail', array('product_price' => floatval($product['price']), 'tax_rate' => 0, 'reduction_percent' => 0), 'UPDATE', '`id_order` = '.(int)$id_order.' AND `product_id` = '.(int)$product['id_product'].' AND `product_attribute_id` = '.(int)$product['id_product_attribute']);
+									// Update price (because of possibility of price impact)
+									$updateOrder = array(
+										'total_paid' => floatval($order['amount']),
+										'total_paid_real' => floatval($order['amount']),
+										'total_products' => floatval($order['amount']),
+										'total_products_wt' => floatval($order['amount']),
+										'total_shipping' => floatval($order['shippingServiceCost']),
+									);
+									Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', $updateOrder, 'UPDATE', '`id_order` = '.(int)$id_order);
+									foreach ($order['product_list'] as $product)
+										Db::getInstance()->autoExecute(_DB_PREFIX_.'order_detail', array('product_price' => floatval($product['price']), 'tax_rate' => 0, 'reduction_percent' => 0), 'UPDATE', '`id_order` = '.(int)$id_order.' AND `product_id` = '.(int)$product['id_product'].' AND `product_attribute_id` = '.(int)$product['id_product_attribute']);
+
+									// Register the ebay order ref
+									Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order', array('id_order_ref' => pSQL($order['id_order_ref']), 'id_order' => (int)$id_order), 'INSERT');
+								}
+							}
 						}
 					}
 
@@ -1094,11 +1131,13 @@ class Ebay extends Module
 		$nbProductsModeA = Db::getInstance()->getValue('
 		SELECT COUNT(`id_product`) as nb
 		FROM `'._DB_PREFIX_.'product`
-		WHERE `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_ebay_category` > 0)');
+		WHERE `quantity` > 0 AND `active` = 1
+		AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_ebay_category` > 0)');
 		$nbProductsModeB = Db::getInstance()->getValue('
 		SELECT COUNT(`id_product`) as nb
 		FROM `'._DB_PREFIX_.'product`
-		WHERE `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_ebay_category` > 0 AND `sync` = 1)');
+		WHERE `quantity` > 0 AND `active` = 1
+		AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_ebay_category` > 0 AND `sync` = 1)');
 
 		$nbProducts = $nbProductsModeA;
 		if (Configuration::get('EBAY_SYNC_MODE') == 'B')
@@ -1232,7 +1271,7 @@ class Ebay extends Module
 			Configuration::updateValue('EBAY_SYNC_MODE', 'A');
 
 			// Retrieve product list for eBay (which have matched categories)
-			$productsList = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `active` = 1 AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0)');
+			$productsList = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `quantity` > 0 AND `active` = 1 AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0)');
 
 			// Send each product on eBay
 			$this->_syncProducts($productsList);
@@ -1246,7 +1285,7 @@ class Ebay extends Module
 			Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', array('sync' => 0), 'UPDATE', '');
 			foreach ($_POST['category'] as $id_category)
 				Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_category_configuration', array('sync' => 1), 'UPDATE', '`id_category` = '.(int)$id_category);
-			$productsList = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `active` = 1 AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0 AND `sync` = 1)');
+			$productsList = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `quantity` > 0 AND `active` = 1 AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0 AND `sync` = 1)');
 
 			// Send each product on eBay
 			$this->_syncProducts($productsList);
@@ -1302,6 +1341,7 @@ class Ebay extends Module
 					{
 						$variationsList[$c['group_name']][$c['attribute_name']] = 1;
 						$variations[$c['id_product'].'-'.$c['id_product_attribute']]['id_attribute'] = $c['id_product_attribute'];
+						$variations[$c['id_product'].'-'.$c['id_product_attribute']]['reference'] = $c['reference'];
 						$variations[$c['id_product'].'-'.$c['id_product_attribute']]['quantity'] = $c['quantity'];
 						$variations[$c['id_product'].'-'.$c['id_product_attribute']]['variations'][] = array('name' => $c['group_name'], 'value' => $c['attribute_name']);
 						$variations[$c['id_product'].'-'.$c['id_product_attribute']]['price_static'] = Product::getPriceStatic((int)$c['id_product'], true, (int)$c['id_product_attribute']);
@@ -1342,6 +1382,7 @@ class Ebay extends Module
 				// Generate array and try insert in database
 				$datas = array(
 					'id_product' => $product->id,
+					'reference' => $product->reference,
 					'name' => str_replace('&', '&amp;', $product->name),
 					'brand' => $product->manufacturer_name,
 					'description' => $product->description,
@@ -1708,4 +1749,4 @@ class Ebay extends Module
 
 }
 
-?>
+
