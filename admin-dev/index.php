@@ -40,14 +40,14 @@ if (empty($tab) and !sizeof($_POST))
 
 	if ($id_tab = checkingTab($tab))
 	{
-    	$isoUser = Language::getIsoById(intval($cookie->id_lang));
+		$isoUser = Language::getIsoById(intval($cookie->id_lang));
 		$tabs = array();
 		recursiveTab($id_tab);
 		$tabs = array_reverse($tabs);
 		$bread = '';
 
 		foreach ($tabs AS $key => $item)
-			$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" />
+			$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;" />
 			'.((sizeof($tabs) - 1 > $key)
 				? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">'
 				: '').'
