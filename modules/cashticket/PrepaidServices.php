@@ -559,7 +559,7 @@ abstract class PrepaidServices extends PaymentModule
 							 'payment_name' => $this->displayName,
 							 'module_name' => $this->name));
 
-		return $this->display(__FILE__, 'payment.tpl');
+		return $this->display(dirname(__FILE__), 'payment.tpl');
 	}
 
 
