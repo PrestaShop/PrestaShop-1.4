@@ -300,8 +300,12 @@ abstract class PSCPrepaidServices extends PaymentModule
 		{
 			$mid = Configuration::get($this->prefix.'MERCHANT_ID_'.$currency['iso_code']);
 			$certificateExiste = '';
+			$passwordExist = '';
 			if (file_exists($this->certificat_dir.$mid.'.pem'))
-				$certificateExiste = '<div style="color:#00b511; text-align:center;">A certificate has been found for this configuration : '.$mid.'.pem'.'</div><br />';
+				$certificateExiste = '<div style="color:#00b511; text-align:center;">'.$this->l('A certificate has been found for this configuration').' : '.$mid.'.pem'.'</div><br />';
+			if (Configuration::get($this->prefix.'KEYRING_PW_'.$currency['iso_code']))
+				$passwordExist = '<div style="color:#00b511; text-align:center;">'.$this->l('A password has already been saved');
+				
 			$currencies_configuration .= '
 			<tr>
 				<td class="currency_label">'.$this->getL('configuration_in').' '.$currency['name'].' '.$currency['sign'].'</td>
@@ -318,8 +322,9 @@ abstract class PSCPrepaidServices extends PaymentModule
 					'.$certificateExiste.'
 					<label>'.$this->getL('keyring_pw').'</label>
 					<div class="margin-form">
-						<input type="password" name="ct_keyring_pw_'.$currency['iso_code'].'" value="'.Configuration::get($this->prefix.'KEYRING_PW_'.$currency['iso_code']).'"/>
+						<input type="password" name="ct_keyring_pw_'.$currency['iso_code'].'" value=""/>
 					</div>
+					'.$passwordExist.'
 				</td>
 			</tr>';
 		}
@@ -518,7 +523,9 @@ abstract class PSCPrepaidServices extends PaymentModule
 			$mid = trim(Tools::getValue('ct_merchant_id_'.$currency['iso_code']));
 
 			Configuration::updateValue($this->prefix.'MERCHANT_ID_'.$currency['iso_code'], $mid);
-			Configuration::updateValue($this->prefix.'KEYRING_PW_'.$currency['iso_code'], Tools::getValue('ct_keyring_pw_'.$currency['iso_code']));
+			$pass = Tools::getValue('ct_keyring_pw_'.$currency['iso_code']);
+			if (!empty($pass))
+				Configuration::updateValue($this->prefix.'KEYRING_PW_'.$currency['iso_code'], Tools::getValue('ct_keyring_pw_'.$currency['iso_code']));
 
 			if (isset($_FILES['ct_keyring_certificate_'.$currency['iso_code']]))
 				move_uploaded_file($_FILES['ct_keyring_certificate_'.$currency['iso_code']]['tmp_name'], $this->certificat_dir.$mid.'.pem');
