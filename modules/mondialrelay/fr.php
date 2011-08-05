@@ -82,7 +82,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_0c24ec05a02c710cedd400e3680d8b8
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_14039af96b01e718a9c9d9c1259b6472'] = 'Aucun transporteur créé';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_8596361cec00f8d2438d264827eee737'] = 'Modification de la configuration';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_759e1f68a70bbe8c48eb30fa4b512de8'] = 'Il semblerait que vous venez de mettre à jour Mondial Relay sans avoir réinitialisé le module : il est requis de configurer les champs ci-dessous afin de pouvoir générer les étiquettes';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_c437cbdaa5799236b2f5b07634679e3d'] = 'Personnalisation des champs';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_9ffc3ccc968a96d902af963c6d7b4e97'] = 'Paramètres avancés';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_1d1d57f5840e1da871622295ba206b30'] = 'Cliquez pour afficher / cacher les options';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_bbd9bc77f1f5b6a9edce6db062b607c9'] = 'Cette partie permet de réécrire les données envoyées à Mondial Relay lorsque vous lancez le processus de génération de tickets. Certains champs sont assez restrictifs en terme de longueur ou de caractères utilisés.';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_9127fe218b2cac7f0c8aecd7016a891d'] = 'Nom de la boutique';
@@ -94,6 +94,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_d02bbc3cb147c272b0445ac5ca7d1a3
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_818f954f4838ecad839c5dcbd287d291'] = 'Choississez le statut pour la génération d\'étiquette. Vous pouvez administrer vos étiquettes sur';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_5117e194c641ad4fc55417b554aead3c'] = 'la page d\'administration de Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_1ba3935c9858ffb8e19a35ca640b8505'] = 'Paramètres du compte Mondial Relay';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_a125105400f6e4ee4574da3793af5ef2'] = 'Ces paramẻtres sont fournis par Mondial Relay lors de la souscription à leur service';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_12a3fbd35c1cab4b1101b91d708efd15'] = 'Enseigne Webservice:';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_6f0434b67007b555dfd1201f4e0d5254'] = 'Code marque:';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_08f785193c96b2a78dec8d76a46648d6'] = 'Clé Webservice:';

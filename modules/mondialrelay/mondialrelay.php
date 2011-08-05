@@ -937,7 +937,7 @@ class MondialRelay extends Module
 		$form .= '
 			<fieldset class="PS_MRFormStyle">
 				<legend>
-					<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Fields personalization'). ' - 
+					<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Advanced Settings'). ' - 
 					<a href="javascript:void(0);" id="PS_MRDisplayPersonalizedOptions"><font style="color:#00b511;">'.$this->l('Click to display / hide the options').'</font>	</a>'.
 			'</legend>'.
 			$warn.'
@@ -1000,6 +1000,9 @@ class MondialRelay extends Module
 			<form action="' . $_SERVER['REQUEST_URI'] . '" method="post" >
 				<fieldset>
 					<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Mondial Relay Account Settings').'</legend>
+					<div>
+						- '.$this->l('These parameters are provided by Mondial Relay once you subscribed to their service').'
+					</div>
 					<ul>
 						<li class="PS_MRRequireFields">
 							<sup>* ' . $this->l('Required') . '</sup>
