@@ -930,8 +930,7 @@ class MondialRelay extends Module
 
 		if (!Configuration::get('PS_MR_SHOP_NAME'))
 			$warn .= '<div class="warn">'.
-				$this->l('Its seems you updated Mondialrelay without use the uninstall / install method, 
-				you have to set up this part to make working the generating ticket process').
+				$this->l('Its seems you updated Mondialrelay without use the uninstall / install method, you have to set up this part to make working the generating ticket process').
 				'</div>';			
 		// Form
 		$form = '<form action="'.$_SERVER['REQUEST_URI'].'" method="post" class="form">';
