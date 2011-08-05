@@ -69,8 +69,9 @@ class CompareProduct extends ObjectModel
 	
 		$compareProducts = null;
 		
-		foreach($results as $result)
-			$compareProducts[] = $result['id_product'];
+		if ($results)
+			foreach ($results as $result)
+				$compareProducts[] = $result['id_product'];
 		
 		return $compareProducts; 
 	}
@@ -129,8 +130,9 @@ class CompareProduct extends ObjectModel
 	
 		$compareProducts = null;
 		
-		foreach($results as $result)
-			$compareProducts[] = $result['id_product'];
+		if ($results)
+			foreach ($results as $result)
+				$compareProducts[] = $result['id_product'];
 		
 		return $compareProducts; 
 	}
