@@ -30,23 +30,26 @@ if (!defined('_CAN_LOAD_FILES_'))
 
 class sendToAFriend extends Module
 {
- 	function __construct()
- 	{
- 	 	$this->name = 'sendtoafriend';
- 	 	$this->version = '1.1';
+	function __construct($dontTranslate = false)
+	{
+		$this->name = 'sendtoafriend';
+		$this->version = '1.1';
 		$this->author = 'PrestaShop';
- 	 	$this->tab = 'front_office_features';
+		$this->tab = 'front_office_features';
 		$this->need_instance = 0;
 
 		parent::__construct();
 
-		$this->displayName = $this->l('Send to a Friend module');
-		$this->description = $this->l('Allows customers to send a product link to a friend.');
- 	}
+		if(!$dontTranslate)
+		{
+			$this->displayName = $this->l('Send to a Friend module');
+			$this->description = $this->l('Allows customers to send a product link to a friend.');
+		}
+	}
 
 	function install()
 	{
-	 	return (parent::install() AND $this->registerHook('extraLeft'));
+		return (parent::install() AND $this->registerHook('extraLeft'));
 	}
 
 	function hookExtraLeft($params)
