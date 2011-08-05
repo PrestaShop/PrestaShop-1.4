@@ -64,9 +64,9 @@ class ProductComments extends Module
 		foreach ($sql AS $query)
 			if (!Db::getInstance()->Execute(trim($query)))
 				return false;
-		if (parent::install() == false OR $this->registerHook('productTab') == false
-		OR $this->registerHook('extraProductComparison') == false OR $this->registerHook('productTabContent') == false
-		OR $this->registerHook('header') == false OR !Configuration::updateValue('PRODUCT_COMMENTS_MINIMAL_TIME', 30)
+		if (!parent::install() OR !$this->registerHook('productTab') 
+		OR !$this->registerHook('extraProductComparison') OR !$this->registerHook('productTabContent') 
+		OR !$this->registerHook('header') OR !$this->registerHook('extraRight') OR !Configuration::updateValue('PRODUCT_COMMENTS_MINIMAL_TIME', 30)
 		OR !Configuration::updateValue('PRODUCT_COMMENTS_ALLOW_GUESTS', 0)
 		OR !Configuration::updateValue('PRODUCT_COMMENTS_MODERATE', 1))
 			return false;
@@ -101,6 +101,7 @@ class ProductComments extends Module
 	public function getContent()
 	{
 		include_once(dirname(__FILE__).'/ProductCommentCriterion.php');
+		Tools::addCSS(dirname(__FILE__).'/styles.css');
 		
 		$this->_setBaseUrl();		
 		$this->_productCommentsCriterionTypes = ProductCommentCriterion::getTypes();
@@ -486,6 +487,40 @@ class ProductComments extends Module
 		}
 	}
 	
+	public function hookExtraRight($params)
+	{
+		global $smarty, $cookie;
+		
+		require_once(dirname(__FILE__).'/ProductComment.php');
+		require_once(dirname(__FILE__).'/ProductCommentCriterion.php');
+				
+		$id_guest = (!$id_customer = (int)$cookie->id_customer) ? (int)$cookie->id_guest : false;
+		$customerComment = ProductComment::getByCustomer((int)(Tools::getValue('id_product')), (int)$cookie->id_customer, true, (int)$id_guest);
+		
+		$averages = ProductComment::getAveragesByProduct((int)Tools::getValue('id_product'), (int)$cookie->id_lang);
+		$averageTotal = 0;
+		foreach ($averages AS $average)
+			$averageTotal += (float)($average);
+		$averageTotal = count($averages) ? ($averageTotal / count($averages)) : 0;
+
+		$image = Product::getCover((int)($_GET['id_product']));
+		
+		$smarty->assign(array(
+			'productcomment_cover' => (int)Tools::getValue('id_product').'-'.(int)$image['id_image'],
+			'mediumSize' => Image::getSize('medium'),
+			'allow_guests' => (int)Configuration::get('PRODUCT_COMMENTS_ALLOW_GUESTS'),
+			'criterions' => ProductCommentCriterion::getByProduct((int)Tools::getValue('id_product'), (int)$cookie->id_lang),
+			'action_url' => '',
+			'averageTotal' => (int)$averageTotal,
+			'too_early' => ($customerComment AND (strtotime($customerComment['date_add']) + Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME')) > time()),
+			'nbComments' => (int)(ProductComment::getCommentNumber((int)($_GET['id_product'])))
+		));
+		
+		$controller = new FrontController();
+		
+		return ($this->display(__FILE__, '/productcomments-extra.tpl'));
+	}
+	
 	public function hookProductTab($params)
     {
 		global $smarty, $cookie;
@@ -508,13 +543,13 @@ class ProductComments extends Module
 
 		require_once(dirname(__FILE__).'/ProductComment.php');
 		require_once(dirname(__FILE__).'/ProductCommentCriterion.php');
-		
+
 		$allow_guests = (int)Configuration::get('PRODUCT_COMMENTS_ALLOW_GUESTS');
 		if (Tools::isSubmit('submitMessage') AND (empty($cookie->id_customer) === false OR ($cookie->id_guest AND $allow_guests)))
 		{
 			$id_guest = (!$id_customer = (int)$cookie->id_customer) ? (int)$cookie->id_guest : false;
 			$customerComment = ProductComment::getByCustomer((int)(Tools::getValue('id_product')), (int)$cookie->id_customer, true, (int)$id_guest);
-			
+
 			if (!$customerComment OR ($customerComment AND (strtotime($customerComment['date_add']) + Configuration::get('PRODUCT_COMMENTS_MINIMAL_TIME')) < time()))
 			{
 				$customer_name = false;
@@ -594,6 +629,7 @@ class ProductComments extends Module
 
 	public function hookHeader()
 	{
+		Tools::addCSS(($this->_path).'styles.css', 'all');
 		$this->_frontOfficePostProcess();
 	}
 	
