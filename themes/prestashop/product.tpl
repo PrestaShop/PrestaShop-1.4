@@ -349,11 +349,13 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 				<span {if $product->quantity > 1} style="display: none;"{/if} id="quantityAvailableTxt">{l s='item in stock'}</span>
 				<span {if $product->quantity == 1} style="display: none;"{/if} id="quantityAvailableTxtMultiple">{l s='items in stock'}</span>
 			</p>
-     		{/if}
+			{/if}
 			<!-- Out of stock hook -->
+			{if $allowBuyWhenOutOfStock}
 			<p id="oosHook"{if $product->quantity > 0} style="display: none;"{/if}>
 				{$HOOK_PRODUCT_OOS}
 			</p>
+			{/if}
 
 			<p class="warning_inline" id="last_quantities"{if ($product->quantity > $last_qties OR $product->quantity <= 0) OR $allow_oosp OR !$product->available_for_order OR $PS_CATALOG_MODE} style="display: none;"{/if} >{l s='Warning: Last items in stock!'}</p>
 
@@ -394,7 +396,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 				{if $quantity_discount.price != 0 OR $quantity_discount.reduction_type == 'amount'}
 					-{convertPrice price=$quantity_discount.real_value|floatval}
 				{else}
-    				-{$quantity_discount.real_value|floatval}%
+					-{$quantity_discount.real_value|floatval}%
 				{/if}
 				</td>
 			{/foreach}
