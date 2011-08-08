@@ -351,7 +351,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 			</p>
 			{/if}
 			<!-- Out of stock hook -->
-			{if $allowBuyWhenOutOfStock}
+			{if !$allow_oosp}
 			<p id="oosHook"{if $product->quantity > 0} style="display: none;"{/if}>
 				{$HOOK_PRODUCT_OOS}
 			</p>
