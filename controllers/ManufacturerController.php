@@ -41,13 +41,16 @@ class ManufacturerControllerCore extends FrontController
 	{
 		if (Validate::isLoadedObject($this->manufacturer))
 		{
-			$canonicalURL = self::$link->getManufacturerLink($this->manufacturer);
-			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			if (Configuration::get('PS_CANONICAL_REDIRECT'))
 			{
-				header('HTTP/1.0 301 Moved');
-				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
-					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-				Tools::redirectLink($canonicalURL);
+				$canonicalURL = self::$link->getManufacturerLink($this->manufacturer);
+				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				{
+					header('HTTP/1.0 301 Moved');
+					if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+					Tools::redirectLink($canonicalURL);
+				}
 			}
 		}
 	}

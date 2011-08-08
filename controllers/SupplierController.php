@@ -39,15 +39,18 @@ class SupplierControllerCore extends FrontController
 	
 	public function canonicalRedirection()
 	{
-		if (Validate::isLoadedObject($this->supplier))
+		if (Configuration::get('PS_CANONICAL_REDIRECT'))
 		{
-			$canonicalURL = self::$link->getSupplierLink($this->supplier);
-			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			if (Validate::isLoadedObject($this->supplier))
 			{
-				header('HTTP/1.0 301 Moved');
-				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
-					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-				Tools::redirectLink($canonicalURL);
+				$canonicalURL = self::$link->getSupplierLink($this->supplier);
+				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				{
+					header('HTTP/1.0 301 Moved');
+					if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+					Tools::redirectLink($canonicalURL);
+				}
 			}
 		}
 	}

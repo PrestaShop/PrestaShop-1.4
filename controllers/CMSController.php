@@ -37,22 +37,26 @@ class CmsControllerCore extends FrontController
 	{
 		// Automatically redirect to the canonical URL if the current in is the right one
 		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-		if (Validate::isLoadedObject($this->cms) AND $canonicalURL = self::$link->getCMSLink($this->cms))
-			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
-			{
-				header('HTTP/1.0 301 Moved');
-				if (_PS_MODE_DEV_)
-					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-				Tools::redirectLink($canonicalURL);
-			}
-		if (Validate::isLoadedObject($this->cms_category) AND $canonicalURL = self::$link->getCMSCategoryLink($this->cms_category))
-			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
-			{
-				header('HTTP/1.0 301 Moved');
-				if (_PS_MODE_DEV_ )
-					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-				Tools::redirectLink($canonicalURL);
-			}
+
+		if (Configuration::get('PS_CANONICAL_REDIRECT'))
+		{
+			if (Validate::isLoadedObject($this->cms) AND $canonicalURL = self::$link->getCMSLink($this->cms))
+				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				{
+					header('HTTP/1.0 301 Moved');
+					if (_PS_MODE_DEV_)
+						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+					Tools::redirectLink($canonicalURL);
+				}
+			if (Validate::isLoadedObject($this->cms_category) AND $canonicalURL = self::$link->getCMSCategoryLink($this->cms_category))
+				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				{
+					header('HTTP/1.0 301 Moved');
+					if (_PS_MODE_DEV_ )
+						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+					Tools::redirectLink($canonicalURL);
+				}
+		}
 	}
 	
 	public function preProcess()

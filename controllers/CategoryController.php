@@ -52,18 +52,21 @@ class CategoryControllerCore extends FrontController
 
 	public function canonicalRedirection()
 	{
-		// Automatically redirect to the canonical URL if the current in is the right one
-		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-		if (Validate::isLoadedObject($this->category))
+		if (Configuration::get('PS_CANONICAL_REDIRECT'))
 		{
-			$currentURL = self::$link->getCategoryLink($this->category);
-			$currentURL = preg_replace('/[?&].*$/', '', $currentURL);
-			if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+			// Automatically redirect to the canonical URL if the current in is the right one
+			// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
+			if (Validate::isLoadedObject($this->category))
 			{
-				header('HTTP/1.0 301 Moved');
-				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ )
-					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$currentURL.'">'.$currentURL.'</a>');
-				Tools::redirectLink($currentURL);
+				$currentURL = self::$link->getCategoryLink($this->category);
+				$currentURL = preg_replace('/[?&].*$/', '', $currentURL);
+				if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				{
+					header('HTTP/1.0 301 Moved');
+					if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ )
+						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$currentURL.'">'.$currentURL.'</a>');
+					Tools::redirectLink($currentURL);
+				}
 			}
 		}
 	}
