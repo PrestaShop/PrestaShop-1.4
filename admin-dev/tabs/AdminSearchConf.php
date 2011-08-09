@@ -59,14 +59,23 @@ class AdminSearchConf extends AdminPreferences
 	
 		parent::__construct();
 	}
-public function postProcess()
-{
-if (isset($_POST['submitSearch'.$this->table]))
-{ if ($this->tabAccess['edit'] === '1') $this->_postConfig($this->_fieldsSearch); else $this->_errors[] = Tools::displayError('You do not have permission to edit here.'); }
 
-if (isset($_POST['submitWeight'.$this->table]))
-{ if ($this->tabAccess['edit'] === '1') $this->_postConfig($this->_fieldsWeight); else $this->_errors[] = Tools::displayError('You do not have permission to edit here.'); }
-}
+	public function postProcess()
+	{
+		if (isset($_POST['submitSearch'.$this->table]))
+		{
+			if ($this->tabAccess['edit'] === '1') 
+				$this->_postConfig($this->_fieldsSearch); else $this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+		}
+
+		if (isset($_POST['submitWeight'.$this->table]))
+		{
+			if ($this->tabAccess['edit'] === '1') 
+				$this->_postConfig($this->_fieldsWeight);
+			else 
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+		}
+	}
 	
 	public function display()
 	{
@@ -81,8 +90,8 @@ if (isset($_POST['submitWeight'.$this->table]))
 				'.$this->l('Indexed products:').' <b>'.(int)($indexed).' / '.(int)($total).'</b>.
 			</p>
 			<p>'.$this->l('Building the product index can take a few minutes or more. If your server stop the process before it ends, you can resume the indexation by clicking "Add missing products".').'</p>
-			-&gt; <a href="searchcron.php?token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Add missing products to index.').'</a><br />
-			-&gt; <a href="searchcron.php?full=1&token='.substr(_COOKIE_KEY_, 34, 8).'" class="bold">'.$this->l('Re-build entire index.').'</a><br /><br />
+			-&gt; <a href="searchcron.php?token='.substr(_COOKIE_KEY_, 34, 8).'&redirect=1" class="bold">'.$this->l('Add missing products to index.').'</a><br />
+			-&gt; <a href="searchcron.php?full=1&token='.substr(_COOKIE_KEY_, 34, 8).'&redirect=1" class="bold">'.$this->l('Re-build entire index.').'</a><br /><br />
 			'.$this->l('You can set a cron job that will re-build your index using the following URL:').' <a href="'.$cronUrl.'">'.$cronUrl.'</a>.
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
