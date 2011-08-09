@@ -116,9 +116,9 @@ foreach (QuickAccess::getQuickAccesses((int)($cookie->id_lang)) AS $quick)
 }
 echo '			</select>
 			</div>
-			<div class="flatclear">&nbsp;</div>
-			'.Module::hookExec('backOfficeTop').'
-			<ul id="menu">';
+			<div class="flatclear">&nbsp;</div>';
+			echo Module::hookExec('backOfficeTop');
+			echo '<ul id="menu">';
 if (empty($tab))
 	echo '<div class="mainsubtablist" style="display:none"></div>';
 
