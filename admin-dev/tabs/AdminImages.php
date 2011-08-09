@@ -60,8 +60,8 @@ class AdminImages extends AdminTab
 		global $currentIndex;
 		if (Tools::getValue('submitRegenerate'.$this->table))
 		{
-		 	if ($this->tabAccess['edit'] === '1')
-		 	{
+			if ($this->tabAccess['edit'] === '1')
+			{
 				if ($this->_regenerateThumbnails(Tools::getValue('type'), Tools::getValue('erase')))
 					Tools::redirectAdmin($currentIndex.'&conf=9'.'&token='.$this->token);
 			}
@@ -70,10 +70,10 @@ class AdminImages extends AdminTab
 		}elseif (Tools::getValue('submitMoveImages'.$this->table))
 		{
 			if ($this->tabAccess['edit'] === '1')
-		 	{
+			{
 				if ($this->_moveImagesToNewFileSystem())
 					Tools::redirectAdmin($currentIndex.'&conf=25'.'&token='.$this->token);
-		 	}
+			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}elseif (Tools::getValue('submitImagePreferences'))
