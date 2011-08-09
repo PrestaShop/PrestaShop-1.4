@@ -39,17 +39,17 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.6';
+		$this->version = '2.7';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
 
-        parent::__construct();
+	        parent::__construct();
 
-        $this->_errors = array();
+        	$this->_errors = array();
 		$this->page = basename(__FILE__, '.php');
-        $this->displayName = $this->l('PayPal');
-        $this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
+	        $this->displayName = $this->l('PayPal');
+	        $this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 		if (Configuration::get('PAYPAL_BUSINESS') == 'paypal@prestashop.com')
 			$this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.');
@@ -57,17 +57,20 @@ class PayPal extends PaymentModule
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND $this->active)
 			$this->warning = $this->l('All features of Paypal API module are be include in the new Paypal module. In order to don\'t have any conflict, please don\'t use and remove PayPalAPI module.');
 
-		global $cookie;
-		$stream_context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
-		$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-warnings.php?version=1.0&partner=paypal&iso_country='.Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))).'&iso_lang='.Tools::strtolower(Language::getIsoById(intval($cookie->id_lang))).'&id_lang='.(int)$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $stream_context);
-		$content = explode('|', $content);
-		if ($content[0] == 'OK')
+		/* For 1.4.3 and less compatibility */
+		$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
+		if (!Configuration::get('PS_OS_PAYMENT'))
+			foreach ($updateConfig as $u)
+				if (!Configuration::get($u) && defined('_'.$u.'_'))
+					Configuration::updateValue($u, constant('_'.$u.'_'));
+
+		/* Check preactivation warning */
+		if (Configuration::get('PS_PREACTIVATION_PAYPAL_WARNING'))
 		{
 			if (!empty($this->warning))
 				$this->warning .= ', ';
-			$this->warning .= $content[1];
+			$this->warning .= Configuration::get('PS_PREACTIVATION_PAYPAL_WARNING');
 		}
-
 	}
 	
 	public function install()
@@ -91,11 +94,6 @@ class PayPal extends PaymentModule
 			return $this->_checkAndUpdateFromOldVersion(true);
 		}
 
-		/* For 1.4.3 and less compatibility */
-		$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
-		foreach ($updateConfig as $u)
-			if (!Configuration::get($u) && defined('_'.$u.'_'))
-				Configuration::updateValue($u, constant('_'.$u.'_'));
 
 		/* Set database */
 		if (!Db::getInstance()->Execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'paypal_order` (
@@ -1232,12 +1230,6 @@ class PayPal extends PaymentModule
 			/* Hook */
 			$this->registerHook('cancelProduct');
 			$this->registerHook('adminOrder');
-
-			/* For 1.4.3 and less compatibility */
-			$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
-			foreach ($updateConfig as $u)
-				if (!Configuration::get($u) && defined('_'.$u.'_'))
-					Configuration::updateValue($u, constant('_'.$u.'_'));
 
 			/* Create OrderState */
 			if (!Configuration::get('PAYPAL_OS_AUTHORIZATION'))
