@@ -31,11 +31,11 @@ class GroupReductionCore extends ObjectModel
 	public	$id_category;
 	public	$reduction;
 
- 	protected 	$fieldsRequired = array('id_group', 'id_category', 'reduction');
- 	protected 	$fieldsValidate = array('id_group' => 'isUnsignedId', 'id_category' => 'isUnsignedId', 'reduction' => 'isPrice');
+ 	protected $fieldsRequired = array('id_group', 'id_category', 'reduction');
+ 	protected $fieldsValidate = array('id_group' => 'isUnsignedId', 'id_category' => 'isUnsignedId', 'reduction' => 'isPrice');
 
-	protected 	$table = 'group_reduction';
-	protected 	$identifier = 'id_group_reduction';
+	protected $table = 'group_reduction';
+	protected $identifier = 'id_group_reduction';
 
 	protected static $reductionCache = array();
 	
@@ -57,7 +57,7 @@ class GroupReductionCore extends ObjectModel
 	{
 		return (parent::update($nullValues) AND $this->_updateCache());
 	}
-	
+
 	public function delete()
 	{
 		$resource = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -102,7 +102,7 @@ class GroupReductionCore extends ObjectModel
 	}
 
 	protected function _updateCache()
-	{	
+	{
 		$resource = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT p.`id_product`
 			FROM `'._DB_PREFIX_.'product` p
@@ -111,7 +111,9 @@ class GroupReductionCore extends ObjectModel
 		
 		while ($row = Db::getInstance()->nextRow($resource))
 		{
-			$query = 'UPDATE `'._DB_PREFIX_.'product_group_reduction_cache` SET `reduction` = '.(float)($this->reduction).' WHERE `id_product` = '.(int)($row['id_product']).' AND `id_group` = '.(int)($this->id_group);
+			$query = 'UPDATE `'._DB_PREFIX_.'product_group_reduction_cache`
+                                  SET `reduction` = '.(float)($this->reduction).'
+                                  WHERE `id_product` = '.(int)($row['id_product']).' AND `id_group` = '.(int)($this->id_group);
 			if (Db::getInstance()->Execute($query) === false)
 				return false;
 		}
@@ -131,13 +133,17 @@ class GroupReductionCore extends ObjectModel
 	public static function getValueForProduct($id_product, $id_group)
 	{
 		if (!isset(self::$reductionCache[$id_product.'-'.$id_group]))
-			self::$reductionCache[$id_product.'-'.$id_group] = Db::getInstance()->getValue('SELECT `reduction` FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_product` = '.(int)($id_product).' AND `id_group` = '.(int)($id_group));
+			self::$reductionCache[$id_product.'-'.$id_group] = Db::getInstance()->getValue('SELECT `reduction`
+                                                                                                       FROM `'._DB_PREFIX_.'product_group_reduction_cache`
+                                                                                                       WHERE `id_product` = '.(int)($id_product).' AND `id_group` = '.(int)($id_group));
 		return self::$reductionCache[$id_product.'-'.$id_group];
 	}
 
 	public static function doesExist($id_group, $id_category)
 	{
-		return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `id_group` FROM `'._DB_PREFIX_.'group_reduction` WHERE `id_group` = '.(int)($id_group).' AND `id_category` = '.(int)($id_category));
+		return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `id_group`
+                                                                           FROM `'._DB_PREFIX_.'group_reduction`
+                                                                           WHERE `id_group` = '.(int)($id_group).' AND `id_category` = '.(int)($id_category));
 	}
 	
 	public function getGroupByCategoryId($id_category)
@@ -157,10 +163,9 @@ class GroupReductionCore extends ObjectModel
 			WHERE `id_category` = '.(int)$id_category
 		, false);
 	}
-	
+
 	public function setProductReduction($id_product, $id_group, $id_category, $reduction)
 	{
-		
 		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT pgr.`id_product`, pgr.`id_group`, pgr.`reduction` 
 			FROM `'._DB_PREFIX_.'product_group_reduction_cache` pgr
@@ -168,13 +173,16 @@ class GroupReductionCore extends ObjectModel
 		);
 		
 		if (Db::getInstance()->NumRows() == 0)
-			$query = 'INSERT INTO `'._DB_PREFIX_.'product_group_reduction_cache` (`id_product`, `id_group`, `reduction`) VALUES ('.(int)($id_product).', '.(int)($id_group).', '.(float)($reduction).')';
+			$query = 'INSERT INTO `'._DB_PREFIX_.'product_group_reduction_cache` (`id_product`, `id_group`, `reduction`)
+                                  VALUES ('.(int)($id_product).', '.(int)($id_group).', '.(float)($reduction).')';
 		else
-			$query = 'UPDATE `'._DB_PREFIX_.'product_group_reduction_cache` SET `reduction` = '.(float)($reduction).' WHERE `id_product` = '.(int)($id_product).' AND `id_group` = '.(int)($id_group);
+			$query = 'UPDATE `'._DB_PREFIX_.'product_group_reduction_cache`
+                                  SET `reduction` = '.(float)($reduction).'
+                                  WHERE `id_product` = '.(int)($id_product).' AND `id_group` = '.(int)($id_group);
 
 		return (Db::getInstance()->Execute($query));
 	}
-	
+
 	public function deleteProductReduction($id_product)
 	{
 		$query = 'DELETE FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_product` = '.(int)($id_product);
@@ -206,5 +214,3 @@ class GroupReductionCore extends ObjectModel
 		return true;
 	}
 }
-
-
