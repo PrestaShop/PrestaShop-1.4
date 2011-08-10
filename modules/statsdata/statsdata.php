@@ -25,24 +25,24 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsData extends Module
 {
-    public function __construct()
-    {
-        $this->name = 'statsdata';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	public function __construct()
+	{
+		$this->name = 'statsdata';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
-        parent::__construct();
-		
-        $this->displayName = $this->l('Data mining for statistics');
-        $this->description = $this->l('This module must be enabled if you want to use Statistics.');
-    }
+		parent::__construct();
+
+		$this->displayName = $this->l('Data mining for statistics');
+		$this->description = $this->l('This module must be enabled if you want to use Statistics.');
+	}
 
 	public function install()
 	{

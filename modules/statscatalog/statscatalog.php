@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsCatalog extends Module
@@ -33,19 +33,19 @@ class StatsCatalog extends Module
 	private $_join = '';
 	private $_where = '';
 
-    function __construct()
-    {
-        $this->name = 'statscatalog';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statscatalog';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
-        parent::__construct();
-		
-        $this->displayName = $this->l('Catalog statistics');
-        $this->description = $this->l('General statistics about your catalog.');
-    }
+
+		parent::__construct();
+
+		$this->displayName = $this->l('Catalog statistics');
+		$this->description = $this->l('General statistics about your catalog.');
+	}
 	
 	public function install()
 	{

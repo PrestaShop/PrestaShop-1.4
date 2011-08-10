@@ -25,27 +25,27 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsRegistrations extends ModuleGraph
 {
-    private $_html = '';
-    private $_query = '';
+	private $_html = '';
+	private $_query = '';
 
-    function __construct()
-    {
-        $this->name = 'statsregistrations';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statsregistrations';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-			
+
 		parent::__construct();
-		
-        $this->displayName = $this->l('Customer accounts');
-        $this->description = $this->l('Display the progress of customer registration.');
-    }
+
+		$this->displayName = $this->l('Customer accounts');
+		$this->description = $this->l('Display the progress of customer registration.');
+	}
 	
 	public function install()
 	{

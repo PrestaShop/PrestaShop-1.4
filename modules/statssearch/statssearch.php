@@ -25,23 +25,23 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsSearch extends ModuleGraph
 {
-    private $_html = '';
+	private $_html = '';
 	private $_query = '';
 	private $_query2 = '';
 
-    function __construct()
-    {
-        $this->name = 'statssearch';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statssearch';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		$this->_query = '
 		SELECT ss.`keywords`, COUNT(TRIM(ss.`keywords`)) as occurences, MAX(results) as total
 		FROM `'._DB_PREFIX_.'statssearch` ss
@@ -51,11 +51,11 @@ class StatsSearch extends ModuleGraph
 		HAVING occurences > 1
 		ORDER BY occurences DESC';
 
-        parent::__construct();
-		
-        $this->displayName = $this->l('Shop search');
-        $this->description = $this->l('Display which keywords have been searched by your visitors.');
-    }
+        	parent::__construct();
+
+		$this->displayName = $this->l('Shop search');
+		$this->description = $this->l('Display which keywords have been searched by your visitors.');
+	}
 
 	function install()
 	{

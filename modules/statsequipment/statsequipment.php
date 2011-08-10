@@ -25,27 +25,27 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsEquipment extends ModuleGraph
 {
-    private $_html = '';
-    private $_query = '';
-    private $_query2 = '';
+	private $_html = '';
+	private $_query = '';
+	private $_query2 = '';
 
-    function __construct()
-    {
-        $this->name = 'statsequipment';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statsequipment';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
-		
-        $this->displayName = $this->l('Software');
-        $this->description = $this->l('Display the software used by your visitors.');
+
+		$this->displayName = $this->l('Software');
+		$this->description = $this->l('Display the software used by your visitors.');
 	}
 	
 	public function install()

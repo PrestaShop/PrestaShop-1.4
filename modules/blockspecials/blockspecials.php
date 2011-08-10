@@ -24,7 +24,8 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-if (!defined('_CAN_LOAD_FILES_'))
+
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class BlockSpecials extends Module
@@ -32,11 +33,11 @@ class BlockSpecials extends Module
 	private $_html = '';
 	private $_postErrors = array();
 
-    function __construct()
-    {
-        $this->name = 'blockspecials';
-        $this->tab = 'pricing_promotion';
-        $this->version = 0.8;
+    	function __construct()
+	{
+		$this->name = 'blockspecials';
+		$this->tab = 'pricing_promotion';
+		$this->version = 0.8;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 

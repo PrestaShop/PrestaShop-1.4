@@ -25,29 +25,29 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsProduct extends ModuleGraph
 {
-    private $_html = '';
+	private $_html = '';
 	private $_query = '';
 	private $_option = 0;
 	private $_id_product = 0;
 
-    function __construct()
-    {
-        $this->name = 'statsproduct';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statsproduct';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
-        parent::__construct();
-		
-        $this->displayName = $this->l('Product details');
-        $this->description = $this->l('Get detailed statistics for each product.');
-    }
+		parent::__construct();
+
+		$this->displayName = $this->l('Product details');
+		$this->description = $this->l('Get detailed statistics for each product.');
+	}
 	
 	public function install()
 	{

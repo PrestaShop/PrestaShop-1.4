@@ -25,24 +25,24 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsLive extends Module
 {
-    function __construct()
-    {
-        $this->name = 'statslive';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statslive';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
-        parent::__construct();
-		
-        $this->displayName = $this->l('Visitors online');
-        $this->description = $this->l('Display the list of customers and visitors currently online.');
-    }
+
+		parent::__construct();
+
+		$this->displayName = $this->l('Visitors online');
+		$this->description = $this->l('Display the list of customers and visitors currently online.');
+	}
 	
 	public function install()
 	{

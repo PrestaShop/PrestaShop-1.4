@@ -25,6 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+// Security
+if (!defined('_PS_VERSION_'))
+	exit;
 
 // Loading eBay Class Request
 if (file_exists(dirname(__FILE__).'/eBayRequest.php'))

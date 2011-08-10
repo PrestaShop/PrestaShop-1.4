@@ -24,7 +24,8 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-if (!defined('_CAN_LOAD_FILES_'))
+
+if (!defined('_PS_VERSION_'))
 	exit;
 	
 class Ekomi extends Module
@@ -32,11 +33,11 @@ class Ekomi extends Module
 	private $_html = '';
 	private $_postErrors = array();
 
-    function __construct()
-    {
-        $this->name = 'ekomi';
-        $this->tab = 'advertising_marketing';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'ekomi';
+		$this->tab = 'advertising_marketing';
+		$this->version = 1.0;
 		$this->need_instance = 0;
 
 		parent::__construct();

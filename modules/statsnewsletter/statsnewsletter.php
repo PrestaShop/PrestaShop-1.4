@@ -25,29 +25,29 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsNewsletter extends ModuleGraph
 {
-    private $_html = '';
-    private $_query = '';
-    private $_query2 = '';
-    private $_option = '';
+	private $_html = '';
+	private $_query = '';
+	private $_query2 = '';
+	private $_option = '';
 
-    function __construct()
-    {
-        $this->name = 'statsnewsletter';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statsnewsletter';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
-		
-        $this->displayName = $this->l('Newsletter');
-        $this->description = $this->l('Display the newsletter registrations');
-    }
+
+		$this->displayName = $this->l('Newsletter');
+		$this->description = $this->l('Display the newsletter registrations');
+	}
 	
 	public function install()
 	{

@@ -25,30 +25,30 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsSales extends ModuleGraph
 {
-    private $_html = '';
-    private $_query = '';
-    private $_query2 = '';
-    private $_option = '';
-    private $id_country = '';
+	private $_html = '';
+	private $_query = '';
+	private $_query2 = '';
+	private $_option = '';
+	private $id_country = '';
 
-    function __construct()
-    {
-        $this->name = 'statssales';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statssales';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
-		
-        $this->displayName = $this->l('Sales and orders');
-        $this->description = $this->l('Display the sales evolution and orders by statuses');
-    }
+
+		$this->displayName = $this->l('Sales and orders');
+		$this->description = $this->l('Display the sales evolution and orders by statuses');
+	}
 	
 	public function install()
 	{

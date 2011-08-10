@@ -25,30 +25,29 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsVisits extends ModuleGraph
 {
-    private $_html = '';
-    private $_query = '';
-    private $_query2 = '';
-    private $_option;
+	private $_html = '';
+	private $_query = '';
+	private $_query2 = '';
+	private $_option;
 
-    function __construct()
-    {
-        $this->name = 'statsvisits';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statsvisits';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-			
+
 		parent::__construct();
-		
-        $this->displayName = $this->l('Visits and Visitors');
-        $this->description = $this->l('Display statistics about your visits and visitors.');
-    }
+
+		$this->displayName = $this->l('Visits and Visitors');
+		$this->description = $this->l('Display statistics about your visits and visitors.');
+	}
 	
 	public function install()
 	{

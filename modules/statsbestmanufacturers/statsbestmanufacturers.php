@@ -25,9 +25,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
-
   
 class StatsBestManufacturers extends ModuleGrid
 {

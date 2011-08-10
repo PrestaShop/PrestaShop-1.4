@@ -24,7 +24,8 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-if (!defined('_CAN_LOAD_FILES_'))
+
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsForecast extends Module
@@ -39,19 +40,19 @@ class StatsForecast extends Module
 	private $t7 = 0;
 	private $t8 = 0;
 
-    public function __construct()
-    {
-        $this->name = 'statsforecast';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	public function __construct()
+	{
+		$this->name = 'statsforecast';
+        	$this->tab = 'analytics_stats';
+        	$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
-        parent::__construct();
-		
-        $this->displayName = $this->l('Stats Dashboard');
-        $this->description = '';
-    }
+
+	        parent::__construct();
+
+	        $this->displayName = $this->l('Stats Dashboard');
+	        $this->description = '';
+	}
 
 	public function install()
 	{

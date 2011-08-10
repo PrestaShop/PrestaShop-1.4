@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class Reverso extends Module
@@ -33,20 +33,20 @@ class Reverso extends Module
 	private $_html;
 	private $_api_url = 'http://api2.reversoform.com/includes/api.controler.reverso2.php?phone_number={ARG_PHONE}&serial={ARG_SERIAL}&remoteAddress={ARG_ADDRESS}';
 	
-  function __construct()
-   {
-       $this->name = 'reverso';
-       $this->tab = 'front_office_features';
-       $this->version = '1.0';
-	   // Iso code of countries where the module can be used, if none module available for all countries
+  	function __construct()
+   	{
+		$this->name = 'reverso';
+		$this->tab = 'front_office_features';
+		$this->version = '1.0';
+		// Iso code of countries where the module can be used, if none module available for all countries
 		$this->limited_countries = array('fr');
 		$this->need_instance = 0;
 		
-       parent::__construct();
-        /* The parent construct is required for translations */
-       $this->displayName = $this->l('ReversoForm');
-       $this->description = $this->l('Fill Authentication form with ReversoForm');
-   }
+		parent::__construct();
+		/* The parent construct is required for translations */
+		$this->displayName = $this->l('ReversoForm');
+		$this->description = $this->l('Fill Authentication form with ReversoForm');
+	}
 
 	public function install()
 	{

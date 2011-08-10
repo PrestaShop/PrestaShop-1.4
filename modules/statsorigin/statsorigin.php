@@ -25,26 +25,26 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!defined('_CAN_LOAD_FILES_'))
+if (!defined('_PS_VERSION_'))
 	exit;
 
 class StatsOrigin extends ModuleGraph
 {
 	private $_html;
 	
-    function __construct()
-    {
-        $this->name = 'statsorigin';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'statsorigin';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
-        parent::__construct();
-		
-        $this->displayName = $this->l('Visitors origin');
-        $this->description = $this->l('Display the websites your visitors come from.');
-    }
+
+		parent::__construct();
+
+		$this->displayName = $this->l('Visitors origin');
+		$this->description = $this->l('Display the websites your visitors come from.');
+	}
 
 	function install()
 	{
