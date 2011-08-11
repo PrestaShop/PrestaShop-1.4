@@ -117,7 +117,9 @@ class LanguageCore extends ObjectModel
 		if (file_exists(_PS_MAIL_DIR_.$this->iso_code))
 			rename(_PS_MAIL_DIR_.$this->iso_code, _PS_MAIL_DIR_.$newIso);
 
-		foreach (Module::getModulesDirOnDisk() as $moduleDir) {
+		$modulesList = Module::getModulesDirOnDisk();
+		foreach ($modulesList as $moduleDir)
+		{
 			if (file_exists(_PS_MODULE_DIR_.$moduleDir.'/mails/'.$this->iso_code))
 				rename(_PS_MODULE_DIR_.$moduleDir.'/mails/'.$this->iso_code, _PS_MODULE_DIR_.$moduleDir.'/mails/'.$newIso);
 			
@@ -125,9 +127,18 @@ class LanguageCore extends ObjectModel
 				rename(_PS_MODULE_DIR_.$moduleDir.'/'.$this->iso_code.'.php', _PS_MODULE_DIR_.$moduleDir.'/'.$newIso.'.php');
 		}
 
-		foreach($this->_getThemesList() as $theme => $data)
+		foreach ($this->_getThemesList() as $theme => $data)
+		{
 			if (file_exists(_PS_ALL_THEMES_DIR_.$theme.'/lang/'.$this->iso_code.'.php'))
 				rename(_PS_ALL_THEMES_DIR_.$theme.'/lang/'.$this->iso_code.'.php', _PS_ALL_THEMES_DIR_.$theme.'/lang/'.$newIso.'.php');
+
+			if (file_exists(_PS_ALL_THEMES_DIR_.$theme.'/mails/'.$this->iso_code))
+				rename(_PS_ALL_THEMES_DIR_.$theme.'/mails/'.$this->iso_code, _PS_ALL_THEMES_DIR_.$theme.'/mails/'.$newIso);
+
+			foreach ($modulesList as $module)
+				if (file_exists(_PS_ALL_THEMES_DIR_.$theme.'/modules/'.$module.'/'.$this->iso_code.'.php'))
+					rename(_PS_ALL_THEMES_DIR_.$theme.'/modules/'.$module.'/'.$this->iso_code.'.php', _PS_ALL_THEMES_DIR_.$theme.'/modules/'.$module.'/'.$newIso.'.php');
+		}
 	}
 	
 	/**
