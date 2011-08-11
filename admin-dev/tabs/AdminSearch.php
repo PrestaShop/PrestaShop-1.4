@@ -135,9 +135,7 @@ class AdminSearch extends AdminTab
 					'reference' => array('title' => $this->l('Reference')),
 					'name' => array('title' => $this->l('Name')),
 					'price' => array('title' => $this->l('Price')),
-					'tax' => array('title' => $this->l('Tax')),
 					'stock' => array('title' => $this->l('Stock')),
-					'weight' => array('title' => $this->l('Weight')),
 					'status' => array('title' => $this->l('Status')),
 					'action' => array('title' => $this->l('Actions'))
 				));
@@ -248,9 +246,7 @@ class AdminSearch extends AdminTab
 					<td>'.$product['reference'].'</td>
 					<td><a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&addproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.stripslashes($product['nameh']).'</a></td>
 					<td>'.Tools::displayPrice($product['price'], $currency).'</td>
-					<td>'.stripslashes($product['tax_name']).'</td>
 					<td align="center">'.$product['quantity'].'</td>
-					<td align="center">'.$product['weight'].' '.Configuration::get('PS_WEIGHT_UNIT').'</td>
 					<td align="center"><a href="'.$currentIndex.'?tab=AdminCatalog&id_product='.$product['id_product'].'&status&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">
 					<img src="../img/admin/'.($product['active'] ? 'enabled.gif' : 'forbbiden.gif').'" alt="" /></a></td>
 					<td>

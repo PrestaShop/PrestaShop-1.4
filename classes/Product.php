@@ -2379,20 +2379,13 @@ class ProductCore extends ObjectModel
 	public static function searchByName($id_lang, $query)
 	{
 		$result = Db::getInstance()->ExecuteS('
-		SELECT p.`id_product`, pl.`name`, pl.`link_rewrite`, p.`weight`, p.`active`, p.`ecotax`, i.`id_image`, p.`reference`, p.`cache_is_pack`,
-		il.`legend`, m.`name` AS manufacturer_name, tl.`name` AS tax_name
+		SELECT p.`id_product`, pl.`name`, p.`active`, p.`reference`, m.`name` AS manufacturer_name
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
-		   AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
-		   AND tr.`id_state` = 0)
-	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
-		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON m.`id_manufacturer` = p.`id_manufacturer`
-		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product`) AND i.`cover` = 1
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		WHERE pl.`name` LIKE \'%'.pSQL($query).'%\' OR p.`reference` LIKE \'%'.pSQL($query).'%\' OR p.`supplier_reference` LIKE \'%'.pSQL($query).'%\'
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product` = p.`id_product`
+		WHERE pl.`name` LIKE \'%'.pSQL($query).'%\' OR p.`reference` LIKE \'%'.pSQL($query).'%\' OR p.`supplier_reference` LIKE \'%'.pSQL($query).'%\' OR pa.`reference` LIKE \'%'.pSQL($query).'%\'
 		GROUP BY `id_product`
 		ORDER BY pl.`name` ASC');
 
@@ -2403,7 +2396,7 @@ class ProductCore extends ObjectModel
 		foreach ($result AS $row)
 		{
 			$row['price'] = Product::getPriceStatic($row['id_product'], true, NULL, 2);
-			$row['quantity'] = Product::getQuantity($row['id_product'], NULL, $row['cache_is_pack']);
+			$row['quantity'] = Product::getQuantity($row['id_product']);
 			$resultsArray[] = $row;
 		}
 		return $resultsArray;
