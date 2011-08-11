@@ -29,13 +29,13 @@ class AdminLanguages extends AdminTab
 {
 	public function __construct()
 	{
-	 	$this->table = 'lang';
-	 	$this->className = 'Language';
-	 	$this->lang = false;
-	 	$this->edit = true;
-	 	$this->delete = true;
- 		
- 		$this->fieldImageSettings = array(array('name' => 'flag', 'dir' => 'l'), array('name' => 'no-picture', 'dir' => 'p'));
+		$this->table = 'lang';
+		$this->className = 'Language';
+		$this->lang = false;
+		$this->edit = true;
+		$this->delete = true;
+		
+		$this->fieldImageSettings = array(array('name' => 'flag', 'dir' => 'l'), array('name' => 'no-picture', 'dir' => 'p'));
 		
 		$this->fieldsDisplay = array(
 		'id_lang' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -88,7 +88,6 @@ class AdminLanguages extends AdminTab
 				}
 				unlink($tmpName);
 			}
-
 	}
 	
 	/**
@@ -99,7 +98,7 @@ class AdminLanguages extends AdminTab
 	 */
 	private function deleteNoPictureImages($id_language)
 	{
-	 	$language = Language::getIsoById($id_language);
+		$language = Language::getIsoById($id_language);
 		$imagesTypes = ImageType::getImagesTypes('products');
 		$dirs = array(_PS_PROD_IMG_DIR_, _PS_CAT_IMG_DIR_, _PS_MANU_IMG_DIR_, _PS_SUPP_IMG_DIR_, _PS_MANU_IMG_DIR_);
 		foreach ($dirs AS $dir)
@@ -117,7 +116,14 @@ class AdminLanguages extends AdminTab
 		return !sizeof($this->_errors) ? true : false;
 	}
 
-
+	protected function copyFromPost(&$object, $table)
+	{
+		if($object->id AND  ($object->iso_code != $_POST['iso_code']))
+			if(Validate::isLanguageIsoCode($_POST['iso_code']))
+				$object->moveToIso($_POST['iso_code']);
+		parent::copyFromPost($object, $table);
+	}
+	
 	public function postProcess()
 	{
 		global $currentIndex, $cookie;
@@ -125,7 +131,7 @@ class AdminLanguages extends AdminTab
 		if (isset($_GET['delete'.$this->table]))
 		{
 			if ($this->tabAccess['delete'] === '1') 	
-		 	{
+			{
 				if (Validate::isLoadedObject($object = $this->loadObject()) AND isset($this->fieldImageSettings))
 				{
 					// English is needed by the system (ex. translations)
@@ -146,7 +152,7 @@ class AdminLanguages extends AdminTab
 		}
 		elseif (Tools::getValue('submitDel'.$this->table) AND isset($_POST[$this->table.'Box']))
 		{
-		 	if ($this->tabAccess['delete'] === '1')
+			if ($this->tabAccess['delete'] === '1')
 			{
 				if (in_array(Configuration::get('PS_LANG_DEFAULT'), $_POST[$this->table.'Box']))
 					$this->_errors[] = $this->l('you cannot delete the default language');
