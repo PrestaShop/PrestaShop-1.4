@@ -68,7 +68,8 @@ class VatNumber extends Module
 	
 	public static function getPrefixIntracomVAT()
 	{
-		$intracom_array = array('AT'=>'AT',	//Austria
+		$intracom_array = array(
+			'AT'=>'AT',	//Austria
 			'BE'=>'BE',	//Belgium
 			'DK'=>'DK',	//Denmark
 			'FI'=>'FI',	//Finland
@@ -102,12 +103,7 @@ class VatNumber extends Module
 
 	public static function isApplicable($id_country) 
 	{
-		$isApplicable = in_array(Country::getIsoById((int)$id_country), VatNumber::getPrefixIntracomVAT());
-		if ($isApplicable == "")
-		{
-			return 0;
-		}
-		return 1;
+		return (((int)$id_country AND in_array(Country::getIsoById($id_country), self::getPrefixIntracomVAT())) ? 1 : 0);
 	}
 
 	public static function WebServiceCheck($vatNumber)
@@ -141,7 +137,7 @@ class VatNumber extends Module
 			else
 				sleep(1);
 		}
-		ini_restore('default_socket_timeout');
+		@ini_restore('default_socket_timeout');
 		return array(Tools::displayError('VAT number validation service unavailable'));
 	}
 
