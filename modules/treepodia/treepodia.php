@@ -47,7 +47,7 @@ class Treepodia extends Module
 	{
 	 	$this->name = 'treepodia';
 	 	$this->tab = 'front_office_features';
-	 	$this->version = '1.4';
+	 	$this->version = '1.5';
 		$this->displayName = 'Treepodia';
 
 	 	parent::__construct();
@@ -76,16 +76,18 @@ class Treepodia extends Module
 		Configuration::updateValue('TREEPODIA_INTEGRATION_TYPE', $type);
 		Configuration::updateValue('TREEPODIA_PLAY_LOGO', $logo);
 		Configuration::updateValue('TREEPODIA_POSITION', $position);
-        Configuration::updateValue('TREEPODIA_HOOK', $hook);
+		Configuration::updateValue('TREEPODIA_HOOK', $hook);
 
 		return true;
 	}
 
 	private function _getShopURL()
 	{
-		$host = ((Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')) ? Tools::getShopDomainSsl() : Tools::getShopDomain()).__PS_BASE_URI__;
-		if (substr($host, 0, 4) != 'http')
-			$host = ((Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://'.$host : 'http://'.$host);
+		if (!($domain = Configuration::get('PS_SHOP_DOMAIN')))
+			$domain = $_SERVER['HTTP_HOST'];
+
+		$host = ((Configuration::get('PS_SSL_ENABLED') OR (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://'.$domain : 'http://'.$domain).__PS_BASE_URI__;
+
 		return $host;
 	}
 
