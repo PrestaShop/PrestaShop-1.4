@@ -3235,6 +3235,7 @@ $_LANGADM['indexf84b4e2770ec98e3db2926cd49864d2f'] = 'Mes préférences';
 $_LANGADM['indexcbebc850f5f849e8956b5f8075f48f69'] = 'tout';
 $_LANGADM['index46f22f2a56ddd091f4b2b2c35c5ca989'] = 'catalogue';
 $_LANGADM['index4b6f7d34a58ba399f077685951d06738'] = 'clients';
+$_LANGADM['index50d7eaecd64b277cdaac58e0cd48ad83'] = 'adresse IP';
 $_LANGADM['index12c500ed0b7879105fb46af0f246be87'] = 'commandes';
 $_LANGADM['index56deca22a707214865f7ea3ae6391d67'] = 'factures';
 $_LANGADM['index8642a2f37a5d42b54ce53b1fbdd1583f'] = 'paniers';

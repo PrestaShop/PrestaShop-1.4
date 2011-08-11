@@ -28,6 +28,19 @@
 
 class AdminSearch extends AdminTab
 {
+	public function	searchIP($query)
+	{
+		if (!ip2long(trim($query)))
+			return;
+			
+		$this->_list['customers'] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT DISTINCT c.*
+		FROM `'._DB_PREFIX_.'customer` c
+		LEFT JOIN `'._DB_PREFIX_.'guest` g ON g.id_customer = c.id_customer
+		LEFT JOIN `'._DB_PREFIX_.'connections` co ON g.id_guest = co.id_guest
+		WHERE co.`ip_address` = \''.ip2long(trim($query)).'\'');
+	}
+	
 	/**
 	* Search a specific string in the products and categories
 	*
@@ -139,7 +152,7 @@ class AdminSearch extends AdminTab
 			}
 
 			/* Customer */
-			if (!$searchType OR $searchType == 2)
+			if (!$searchType OR $searchType == 2 OR $searchType == 6)
 			{
 				$this->fieldsDisplay['customers'] = (array(
 					'ID' => array('title' => $this->l('ID')),
@@ -153,13 +166,19 @@ class AdminSearch extends AdminTab
 					'actions' => array('title' => $this->l('Actions'))
 				));
 
-				/* Handle customer ID */
-				if ($searchType AND (int)$query AND Validate::isUnsignedInt((int)$query))
-					if ($customer = new Customer((int)$query) AND Validate::isLoadedObject($customer))
-						Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)));
+				if (!$searchType OR $searchType == 2)
+				{
+					/* Handle customer ID */
+					if ($searchType AND (int)$query AND Validate::isUnsignedInt((int)$query))
+						if ($customer = new Customer((int)$query) AND Validate::isLoadedObject($customer))
+							Tools::redirectAdmin('index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&viewcustomer'.'&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)));
 
-				/* Normal customer search */
-				$this->searchCustomer($query);
+					/* Normal customer search */
+					$this->searchCustomer($query);
+				}
+				
+				if ($searchType == 6)
+					$this->searchIP($query);
 			}
 
 			/* Order */
@@ -185,6 +204,9 @@ class AdminSearch extends AdminTab
 					Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.(int)($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee)));
 				$this->_errors[] = Tools::displayError('No cart found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
+			
+			/* IP */
+			// 6 - but it is included in the customer block
 		}
 	}
 
