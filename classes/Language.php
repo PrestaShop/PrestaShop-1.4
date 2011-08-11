@@ -124,6 +124,25 @@ class LanguageCore extends ObjectModel
 			if (file_exists(_PS_MODULE_DIR_.$moduleDir.'/'.$this->iso_code.'.php'))
 				rename(_PS_MODULE_DIR_.$moduleDir.'/'.$this->iso_code.'.php', _PS_MODULE_DIR_.$moduleDir.'/'.$newIso.'.php');
 		}
+
+		foreach($this->_getThemesList() as $theme => $data)
+			if (file_exists(_PS_ALL_THEMES_DIR_.$theme.'/lang/'.$this->iso_code.'.php'))
+				rename(_PS_ALL_THEMES_DIR_.$theme.'/lang/'.$this->iso_code.'.php', _PS_ALL_THEMES_DIR_.$theme.'/lang/'.$newIso.'.php');
+	}
+	
+	/**
+	  * Return an array with themes and thumbnails
+	  *
+	  * @return array
+	  */
+	private function _getThemesList()
+	{
+		$dir = opendir(_PS_ALL_THEMES_DIR_);
+		while ($folder = readdir($dir))
+			if ($folder != '.' AND $folder != '..' AND file_exists(_PS_ALL_THEMES_DIR_.'/'.$folder.'/preview.jpg'))
+				$themes[$folder]['name'] = $folder;
+		closedir($dir);	
+		return isset($themes) ? $themes : array();
 	}
 	
 	public function add($autodate = true, $nullValues = false)
