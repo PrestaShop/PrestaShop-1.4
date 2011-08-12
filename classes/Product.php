@@ -914,7 +914,7 @@ class ProductCore extends ObjectModel
 		$price = str_replace(',', '.', $price);
 		$weight = str_replace(',', '.', $weight);
 		Db::getInstance()->AutoExecute(_DB_PREFIX_.'product_attribute',
-		array('id_product' => (int)($this->id), 'price' => (float)($price), 'ecotax' => (float)($ecotax), 'quantity' => (int)($quantity),
+		array('id_product' => (int)($this->id), 'price' => (float)($price), 'ecotax' => (float)($ecotax), 'quantity' => 0,
 		'weight' => ($weight ? (float)($weight) : 0), 'unit_price_impact' => ($unit_impact ? (float)($unit_impact) : 0),
 		'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference),
 		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'upc' => pSQL($upc), 'default_on' => (int)($default)),
@@ -923,6 +923,9 @@ class ProductCore extends ObjectModel
 		Product::updateDefaultAttribute($this->id);
 		if (!$id_product_attribute)
 			return false;
+
+		$this->addStockMvt((int)$quantity, 1, $id_product_attribute);
+
 		if (empty($id_images))
 			return (int)($id_product_attribute);
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
