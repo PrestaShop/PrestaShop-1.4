@@ -40,7 +40,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.7';
+		$this->version = '2.8';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -360,7 +360,7 @@ class PayPal extends PaymentModule
 		$products = $order->getProducts();
 		$amt = $products[(int)($order_detail->id)]['product_price_wt'] * (int)($_POST['cancelQuantity'][(int)($order_detail->id)]);
 		
-		$response = $this->_makeRefund($id_transaction, (float)($amt));
+		$response = $this->_makeRefund($id_transaction, $order->id, (float)($amt));
 		$message = $this->l('Cancel products result:').'<br>';
 		foreach ($response AS $k => $value)
 			$message .= $k.': '.$value.'<br>';
@@ -550,8 +550,8 @@ class PayPal extends PaymentModule
 			'Paypal error: (invalid or undefined business account email)' => $this->l('Paypal error: (invalid or undefined business account e-mail)'),
 			'Paypal error: (invalid address or customer)' => $this->l('Paypal error: (invalid address or customer)')
 		);
-    if (!isset($translations[$key]))
-      return $key;
+		if (!isset($translations[$key]))
+			return $key;
 		return $translations[$key];
 	}
 	
@@ -1000,7 +1000,7 @@ class PayPal extends PaymentModule
 		WHERE `id_order` = '.(int)$id_order);
 	}
 	
-	private function _makeRefund($id_transaction, $amt = false)
+	private function _makeRefund($id_transaction, $id_order, $amt = false)
 	{
 		include_once(_PS_MODULE_DIR_.'paypal/api/paypallib.php');
 		
@@ -1016,7 +1016,8 @@ class PayPal extends PaymentModule
 			$isoCurrency = Db::getInstance()->getValue('
 			SELECT `iso_code`
 			FROM `'._DB_PREFIX_.'orders` o
-			LEFT JOIN `'._DB_PREFIX_.'currency` c ON (o.`id_currency` = c.`id_currency`)');
+			LEFT JOIN `'._DB_PREFIX_.'currency` c ON (o.`id_currency` = c.`id_currency`)
+			WHERE o.`id_order` = '.(int)$id_order);
 			$request = '&TRANSACTIONID='.urlencode($id_transaction).'&REFUNDTYPE=Partial&AMT='.(float)($amt).'&CURRENCYCODE='.urlencode(strtoupper($isoCurrency));
 		}
 		$paypalLib = new PaypalLib();
@@ -1055,17 +1056,18 @@ class PayPal extends PaymentModule
 		if (!Validate::isLoadedObject($order))
 			return false;
 		$products = $order->getProducts();
+
 		// Amount for refund
 		$amt = 0.00;
 		foreach ($products AS $product)
-			if ($product['product_quantity_refunded'] == 0)
-				$amt += (float)($product['total_price']);
-		$amt += (float)($order->total_shipping);
+			$amt += (float)($product['total_price']) * ($product['product_quantity'] - $product['product_quantity_refunded']);
+		$amt += (float)($order->total_shipping) + (float)($order->total_wrapping) - (float)($order->total_discounts);
+
 		// check if total or partial
-		if ($order->total_products_wt == $amt)
-			$response = $this->_makeRefund($id_transaction);
+		if ($this->PayPalRound($order->total_paid_real) == $this->PayPalRound($amt))
+			$response = $this->_makeRefund($id_transaction, $id_order);
 		else
-			$response = $this->_makeRefund($id_transaction, (float)($amt));
+			$response = $this->_makeRefund($id_transaction, $id_order, (float)($amt));
 		$message = $this->l('Refund operation result:').'<br>';
 		foreach ($response AS $k => $value)
 			$message .= $k.': '.$value.'<br>';
