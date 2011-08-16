@@ -34,9 +34,9 @@ class GCheckout extends PaymentModule
 	{
 		$this->name = 'gcheckout';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.1;
+		$this->version = '1.2';
 		$this->author = 'PrestaShop';
-		
+
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
 
@@ -44,9 +44,16 @@ class GCheckout extends PaymentModule
 
 		$this->displayName = $this->l('Google Checkout');
 		$this->description = $this->l('Google Checkout API implementation');
-		
-			if (!sizeof(Currency::checkPaymentCurrencies($this->id)))
-				$this->warning = $this->l('No currency set for this module');
+
+		if (!sizeof(Currency::checkPaymentCurrencies($this->id)))
+			$this->warning = $this->l('No currency set for this module');
+
+		/* For 1.4.3 and less compatibility */
+		$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
+		if (!Configuration::get('PS_OS_PAYMENT'))
+			foreach ($updateConfig as $u)
+				if (!Configuration::get($u) && defined('_'.$u.'_'))
+					Configuration::updateValue($u, constant('_'.$u.'_'));
 	}
 
 	public function install()
