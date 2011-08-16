@@ -389,7 +389,8 @@ class eBayRequest
 		$requestXml .= '      <CategoryID>'.$datas['categoryId'].'</CategoryID>'."\n";
 		$requestXml .= '    </PrimaryCategory>'."\n";
 		$requestXml .= '    <ConditionID>1000</ConditionID>'."\n";
-		$requestXml .= '    <StartPrice>'.$datas['price'].'</StartPrice>'."\n";
+		if (!isset($datas['noPriceUpdate']))
+			$requestXml .= '    <StartPrice>'.$datas['price'].'</StartPrice>'."\n";
 		$requestXml .= '    <CategoryMappingAllowed>true</CategoryMappingAllowed>'."\n";
 		$requestXml .= '    <Country>FR</Country>'."\n";
 		$requestXml .= '    <Currency>EUR</Currency>'."\n";
@@ -505,7 +506,8 @@ class eBayRequest
 		$requestXml .= '    <ItemID>'.$datas['itemID'].'</ItemID>'."\n";
 		$requestXml .= '    <SKU>prestashop-'.$datas['id_product'].'</SKU>';
 		$requestXml .= '    <Quantity>'.$datas['quantity'].'</Quantity>'."\n";
-		$requestXml .= '    <StartPrice>'.$datas['price'].'</StartPrice>'."\n";
+		if (!isset($datas['noPriceUpdate']))
+			$requestXml .= '    <StartPrice>'.$datas['price'].'</StartPrice>'."\n";
 		if (Configuration::get('EBAY_SYNC_OPTION_RESYNC') != 1)
 		{
 			$requestXml .= '    <Title>'.substr($datas['name'], 0, 55).'</Title>'."\n";
@@ -734,7 +736,8 @@ class eBayRequest
 			{
 				$requestXml .= '      <Variation>'."\n";
 				$requestXml .= '        <SKU>prestashop-'.$key.'</SKU>'."\n";
-				$requestXml .= '        <StartPrice>'.$variation['price'].'</StartPrice>'."\n";
+				if (!isset($datas['noPriceUpdate']))
+					$requestXml .= '        <StartPrice>'.$variation['price'].'</StartPrice>'."\n";
 				$requestXml .= '        <Quantity>'.$variation['quantity'].'</Quantity>'."\n";
 				$requestXml .= '        <VariationSpecifics>'."\n";
 				foreach ($variation['variations'] as $v)
@@ -900,7 +903,8 @@ class eBayRequest
 			{
 				$requestXml .= '      <Variation>'."\n";
 				$requestXml .= '        <SKU>prestashop-'.$key.'</SKU>'."\n";
-				$requestXml .= '        <StartPrice>'.$variation['price'].'</StartPrice>'."\n";
+				if (!isset($datas['noPriceUpdate']))
+					$requestXml .= '        <StartPrice>'.$variation['price'].'</StartPrice>'."\n";
 				$requestXml .= '        <Quantity>'.$variation['quantity'].'</Quantity>'."\n";
 				$requestXml .= '        <VariationSpecifics>'."\n";
 				foreach ($variation['variations'] as $v)
