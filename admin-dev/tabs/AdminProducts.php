@@ -1583,14 +1583,18 @@ class AdminProducts extends AdminTab
 					function loadTab(id) {';
 		if ($obj->id)
 		{
-			echo ' 	if (toload[id]) {
+			echo '	if (toload[id]) {
 							toload[id] = false;
-							$.post(
-								"'.dirname($currentIndex).'/ajax.php", {
+							$.ajax({
+								url: "'.dirname($currentIndex).'/ajax.php",
+								data: {
 									ajaxProductTab: id, id_product: '.$obj->id.',
 									token: \''.Tools::getValue('token').'\',
-									id_category: '.(int)(Tools::getValue('id_category')).'},
-								function(rep) {
+									id_category: '.(int)(Tools::getValue('id_category')).'
+								},
+								cache: false,
+								type: \'POST\',
+								success: function(rep) {
 									$("#step" + id).html(rep);var languages = new Array();
 									if (id == 3)
 										populate_attrs();
@@ -1609,7 +1613,7 @@ class AdminProducts extends AdminTab
 										});
 									}
 								}
-							)
+							})
 						}';
 		}
 		echo '	}
