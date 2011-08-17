@@ -25,12 +25,6 @@
 *}
 
 <script type="text/javascript">
-//<![CDATA[
-	var baseDir = '{$base_dir_ssl}';
-//]]>
-</script>
-
-<script type="text/javascript">
 // <![CDATA[
 	ThickboxI18nClose = "{l s='Close' mod='referralprogram'}";
 	ThickboxI18nOrEscKey = "{l s='or Esc key' mod='referralprogram'}";

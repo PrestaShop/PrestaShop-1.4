@@ -144,7 +144,7 @@ class authorizeAIM extends PaymentModule
 	{
 		global $cookie, $smarty;
 
-		if (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off' AND Configuration::get('PS_SSL_ENABLED'))
+		if (Tools::usingSecureMode() AND Configuration::get('PS_SSL_ENABLED'))
 		{
 			$invoiceAddress = new Address((int)$params['cart']->id_address_invoice);
 			$customer = new Customer((int)$cookie->id_customer);
@@ -180,6 +180,6 @@ class authorizeAIM extends PaymentModule
 
 			return $this->display(__FILE__, 'authorizeaim.tpl');
 		}
-    }
+	}
 }
 ?>

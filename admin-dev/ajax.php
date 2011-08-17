@@ -612,7 +612,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 {
 	$result = array();
 
-	$protocol = (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off') ? 'https' : 'http';
+	$protocol = Tools::usingSecureMode() ? 'https' : 'http';
 	$isoUser = Language::getIsoById(intval($cookie->id_lang));
 	$isoCountry = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 	$stream_context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));

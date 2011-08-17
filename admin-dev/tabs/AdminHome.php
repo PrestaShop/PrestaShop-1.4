@@ -155,7 +155,7 @@ class AdminHome extends AdminTab
 		$this->warnDomainName();
 
 		$tab = get_class();
-		$protocol = (!empty($_SERVER['HTTPS']) AND strtolower($_SERVER['HTTPS']) != 'off')?'https':'http';
+		$protocol = Tools::usingSecureMode()?'https':'http';
 		$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
 		$isoUser = Language::getIsoById(intval($cookie->id_lang));
 		$isoCountry = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));

@@ -123,7 +123,8 @@ class MetaCore extends ObjectModel
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-									Configuration::get('PS_HTACCESS_SPECIFIC')
+									Configuration::get('PS_HTACCESS_SPECIFIC'),
+									(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 									);
 	}
 
@@ -134,7 +135,8 @@ class MetaCore extends ObjectModel
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-									Configuration::get('PS_HTACCESS_SPECIFIC')
+									Configuration::get('PS_HTACCESS_SPECIFIC'),
+									(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 									);
 	}
 	
@@ -146,7 +148,8 @@ class MetaCore extends ObjectModel
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 								(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 								(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-								Configuration::get('PS_HTACCESS_SPECIFIC')
+								Configuration::get('PS_HTACCESS_SPECIFIC'),
+								(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 								);
 	}
 	
@@ -164,7 +167,8 @@ class MetaCore extends ObjectModel
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
-									Configuration::get('PS_HTACCESS_SPECIFIC')
+									Configuration::get('PS_HTACCESS_SPECIFIC'),
+									(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
 									);
 	}
 
