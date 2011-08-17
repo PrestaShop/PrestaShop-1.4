@@ -3385,5 +3385,19 @@ class ProductCore extends ObjectModel
 				return false;
 		return true;
 	}
+        
+        /**
+         * Checks if reference exists
+         * @return boolean
+         */
+        public function existsRefInDatabase($reference)
+        {
+		$row = Db::getInstance()->getRow('
+		SELECT `reference`
+		FROM `'._DB_PREFIX_.'product` p
+		WHERE p.reference = "'.$reference.'"');
+                
+		return isset($row['reference']);
+        }
 }
 
