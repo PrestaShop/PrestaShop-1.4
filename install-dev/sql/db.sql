@@ -538,6 +538,7 @@ CREATE TABLE `PREFIX_discount` (
   `date_from` datetime NOT NULL,
   `date_to` datetime NOT NULL,
   `minimal` decimal(17,2) default NULL,
+  `include_tax` tinyint(1) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
   `cart_display` tinyint(1) unsigned NOT NULL default '0',
 	`date_add` datetime NOT NULL,
