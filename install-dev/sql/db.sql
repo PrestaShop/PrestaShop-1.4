@@ -108,7 +108,7 @@ CREATE TABLE `PREFIX_attribute_impact` (
   `weight` float NOT NULL,
   `price` decimal(17,2) NOT NULL,
   PRIMARY KEY  (`id_attribute_impact`),
-  UNIQUE KEY (`id_product`,`id_attribute`)
+  UNIQUE KEY `id_product` (`id_product`,`id_attribute`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_attribute_lang` (
