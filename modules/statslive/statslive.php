@@ -80,6 +80,7 @@ class StatsLive extends Module
 	private function getVisitorsOnline()
 	{
 		if (Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
+		{
 			$query = 'SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer, pt.name as page
 			FROM `'._DB_PREFIX_.'connections` c
 			LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
@@ -88,16 +89,19 @@ class StatsLive extends Module
 			INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
 			WHERE cp.`time_end` IS NULL
 			AND (g.id_customer IS NULL OR g.id_customer = 0)
-			AND cp.`time_start` > '.strtotime('-15 minutes').'
+			AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
 			GROUP BY c.id_connections
 			ORDER BY c.date_add DESC';
+		}
 		else
+		{
 			$query = 'SELECT c.id_guest, c.ip_address, c.date_add, c.http_referer
 			FROM `'._DB_PREFIX_.'connections` c
 			INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
 			WHERE (g.id_customer IS NULL OR g.id_customer = 0)
 			AND c.`date_add` > "'.date('Y-m-d H:i:s', strtotime('-15 minutes')).'"
 			ORDER BY c.date_add DESC';
+		}
 			
 		$result =  Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
 		return array($result, Db::getInstance()->NumRows());
