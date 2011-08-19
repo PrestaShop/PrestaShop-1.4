@@ -88,7 +88,7 @@ class ProductDownloadCore extends ObjectModel
 	public function __construct($id_product_download = NULL)
 	{
 		parent::__construct($id_product_download);
-		// TODO check if the file is present on hard drive
+		// @TODO check if the file is present on hard drive
 	}
 	
 	public function delete($deleteFile=false)
@@ -100,6 +100,9 @@ class ProductDownloadCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
+		
+		if (!$this->date_expiration)
+			$this->date_expiration = '0000-00-00 00:00:00';
 
 		$fields['id_product'] = (int)($this->id_product);
 		$fields['display_filename'] = pSQL($this->display_filename);
