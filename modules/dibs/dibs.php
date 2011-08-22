@@ -84,6 +84,7 @@ class dibs extends PaymentModule
 	 * @var array
 	 */
 	public static $dibs_subscription_link = array(
+		'fr'	=> 'http://www.dibspayment.com/order/fr_request/',
 		'en'	=> 'http://www.dibspayment.com/order/uk_request_2eng',
 		'da'	=> 'http://www.dibs.dk/bestil/internet/',
 		'sv'	=> 'http://www.dibs.se/bestall/internet/',
@@ -96,7 +97,7 @@ class dibs extends PaymentModule
 		$this->smarty = $smarty;
 		$this->name = 'dibs';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0';
+		$this->version = '1.1';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -190,8 +191,9 @@ class dibs extends PaymentModule
 	private function _displayPresentation()
 	{
 		$href = '';
-		if (isset(dibs::$dibs_subscription_link[Configuration::get('PS_LANG_DEFAULT')]))
-			$href = dibs::$dibs_subscription_link[Configuration::get('PS_LANG_DEFAULT')];
+		$langIsoCode = Language::getIsoById(Configuration::get('PS_LANG_DEFAULT'));
+		if (isset(dibs::$dibs_subscription_link[$langIsoCode]))
+			$href = dibs::$dibs_subscription_link[$langIsoCode];
 		else
 			$href = dibs::$dibs_subscription_link['en'];
 		$out = '
