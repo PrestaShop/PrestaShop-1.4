@@ -1247,6 +1247,7 @@ class BlockLayered extends Module
 		);
 		$smarty->assign($pagination_infos);
 		
+		$smarty->assign('comparator_max_item', (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')));
 		$smarty->assign('products', $products);
 		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
