@@ -215,7 +215,7 @@ class ToolsCore
 	{
 		if (isset($_SERVER['HTTPS']))
 			return ($_SERVER['HTTPS'] == 1 || strtolower($_SERVER['HTTPS']) == 'on');
-		// $_SERVER['SSL'] exists only in certain specific configuration
+		// $_SERVER['SSL'] exists only in some specific configuration
 		if (isset($_SERVER['SSL']))
 			return ($_SERVER['SSL'] == 1 || strtolower($_SERVER['SSL']) == 'on');
 		
