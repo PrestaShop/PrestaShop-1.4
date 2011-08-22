@@ -143,8 +143,8 @@ XML;
 			
 			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCategoryLink((int)$category['id_category'], $category['link_rewrite'], (int)$category['id_lang']) : $link->getCategoryLink((int)$category['id_category']);	
 			$this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($category['date_upd'], 0, 10));
-      }
-
+      	}    
+      	
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') date_upd, pl.id_lang, cl.`link_rewrite` category, ean13, i.id_image, il.legend legend_image, (
 			SELECT MIN(level_depth)
@@ -156,7 +156,7 @@ XML;
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product)
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND pl.`id_lang` = cl.`id_lang`)
 		LEFT JOIN '._DB_PREFIX_.'image i ON p.id_product = i.id_product
-		LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image)
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND pl.`id_lang` = il.`id_lang`)
 		LEFT JOIN '._DB_PREFIX_.'lang l ON (pl.id_lang = l.id_lang)
 		WHERE l.`active` = 1 AND p.`active` = 1
 		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
