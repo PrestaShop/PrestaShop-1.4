@@ -588,7 +588,6 @@ if (Tools::isSubmit('getHookableModuleList'))
 if (Tools::isSubmit('saveHook'))
 {
 	$hooks_list = explode(',', Tools::getValue('hooks_list'));
-	$hookableList = array();
 	foreach ($hooks_list as $hook)
 	{
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_hook` = (SELECT id_hook FROM `'._DB_PREFIX_.'hook` WHERE `name` = \''.pSQL($hook).'\' LIMIT 0, 1)');
