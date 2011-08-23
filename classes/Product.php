@@ -315,7 +315,7 @@ class ProductCore extends ObjectModel
 		if ($this->id_category_default)
 			$this->category = Category::getLinkRewrite((int)$this->id_category_default, (int)$id_lang);
 	}
-	
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -402,7 +402,7 @@ class ProductCore extends ObjectModel
 		}
 		return $fields;
 	}
-	
+
 	public static function initPricesComputation($id_customer = NULL)
 	{
 		global $cookie;
@@ -551,7 +551,7 @@ class ProductCore extends ObjectModel
 	{
 		if (!GroupReduction::deleteProductReduction($this->id))
 			return false;
-		
+
 		Hook::deleteProduct($this);
 		if (!parent::delete() OR
 			!$this->deleteCategories(true) OR
@@ -684,7 +684,7 @@ class ProductCore extends ObjectModel
 
 		if (!$this->setGroupReduction())
 			return false;
-		
+
 		return true;
 	}
 
@@ -1569,7 +1569,7 @@ class ProductCore extends ObjectModel
 				$ret[] = $val['id_category'];
 		return $ret;
 	}
-	
+
 	public static function getProductCategoriesFull($id_product = '', $id_lang)
 	{
 		$ret = array();
@@ -1728,6 +1728,7 @@ class ProductCore extends ObjectModel
 			$cur_cart = $id_cart ? new Cart((int)($id_cart)) : new Cart((int)($cookie->id_cart));
 		}
 
+		$cart_quantity = 0;
 		if ((int)($id_cart))
 		{
 			if (!isset(self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)]) OR self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)] !=  (int)($quantity))
@@ -2998,7 +2999,7 @@ class ProductCore extends ObjectModel
 		return true;
 	}
 
-	
+
 	/**
 	 * Checks if the product is in at least one of the submited categories
 	 *
@@ -3037,7 +3038,7 @@ class ProductCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 			WHERE cp.`id_product` = '.(int)$this->id.' AND ctg.`id_group` = 1');
-		else 
+		else
 			return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT cg.`id_group`
 			FROM `'._DB_PREFIX_.'category_product` cp
@@ -3053,11 +3054,11 @@ class ProductCore extends ObjectModel
 	public function getStockAvailable()
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT `quantity` 
-			FROM `'._DB_PREFIX_.'product` 
+			SELECT `quantity`
+			FROM `'._DB_PREFIX_.'product`
 			WHERE `id_product` = '.(int)$this->id);
 	}
-	
+
 	public function addStockMvt($quantity, $id_reason, $id_product_attribute = null, $id_order = null, $id_employee = null)
 	{
 		$stockMvt = new StockMvt();
@@ -3067,7 +3068,7 @@ class ProductCore extends ObjectModel
 		$stockMvt->id_employee = (int)$id_employee;
 		$stockMvt->quantity = (int)$quantity;
 		$stockMvt->id_stock_mvt_reason = (int)$id_reason;
-		
+
 		// adding stock mouvement, this action update the sotck of product in database only
 		if ($stockMvt->add())
 		{
@@ -3075,7 +3076,7 @@ class ProductCore extends ObjectModel
 			$this->quantity = $this->getStockAvailable();
 
 			Hook::updateQuantity($this, null);
-			
+
 			return true;
 		}
 		return false;
@@ -3342,7 +3343,7 @@ class ProductCore extends ObjectModel
 									SET `cover` = 1 WHERE `id_product` = '.(int)($this->id).' AND `id_image` = '.(int)$id_image);
 		return true;
 	}
-	
+
 	/**
 	* Webservice getter : get image ids of current product for association
 	*
@@ -3356,7 +3357,7 @@ class ProductCore extends ObjectModel
 		WHERE `id_product` = '.(int)($this->id).'
 		ORDER BY `position`');
 	}
-	
+
 	public function getWsTags()
 	{
 		return Db::getInstance()->ExecuteS('
@@ -3364,8 +3365,8 @@ class ProductCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'product_tag`
 		WHERE `id_product` = '.(int)($this->id));
 	}
-	
-	
+
+
 	public function getWsManufacturerName()
 	{
 		return Manufacturer::getNameById((int)$this->id_manufacturer);
@@ -3378,14 +3379,14 @@ class ProductCore extends ObjectModel
 		SET ecotax = 0
 		');
 	}
-	
+
 	/**
 	 * Set Group reduction if needed
 	 */
 	public function setGroupReduction()
 	{
 		$row = GroupReduction::getGroupByCategoryId((int)$this->id_category_default);
-		
+
 		if (!$row) // Remove
 		{
 			if (!GroupReduction::deleteProductReduction((int)$this->id))
@@ -3395,7 +3396,7 @@ class ProductCore extends ObjectModel
 				return false;
 		return true;
 	}
-        
+
         /**
          * Checks if reference exists
          * @return boolean
@@ -3406,7 +3407,7 @@ class ProductCore extends ObjectModel
 		SELECT `reference`
 		FROM `'._DB_PREFIX_.'product` p
 		WHERE p.reference = "'.$reference.'"');
-                
+
 		return isset($row['reference']);
         }
 }
