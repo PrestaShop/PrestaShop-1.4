@@ -46,7 +46,10 @@ function updateAddress(phone)
 			var fields = data.split(',');
 			$(fields).each(function(){
 				var field  = this.split(':');
-				$('form#account-creation_form  input[name=\''+ field[0] +'\']').val(field[1]);
+				if (orderProcess == 'order-opc')
+					$('form#opc_account_form  input[name=\''+ field[0] +'\']').val(field[1]);
+				else
+					$('form#account-creation_form  input[name=\''+ field[0] +'\']').val(field[1]);
 			});
 		}
 	});
