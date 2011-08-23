@@ -34,7 +34,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_acf2b73b741f10cd1e0d075ed43fed3
 $_MODULE['<{moneybookers}prestashop>moneybookers_76264fd7352f803c63396bc27b0ee893'] = 'Moneybookers change de nom et devient Skrill !';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuration';
 $_MODULE['<{moneybookers}prestashop>moneybookers_e86e85752dd7a7b31bb935c862480cee'] = 'Choisir la position du logo';
-$_MODULE['<{moneybookers}prestashop>moneybookers_239d45036930947dbf41506d27fa1aa7'] = 'Change la position du logo dans le Front Office. Fonctionne avec ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_239d45036930947dbf41506d27fa1aa7'] = 'Change la position du logo dans le Front Office. Fonctionne avec';
 $_MODULE['<{moneybookers}prestashop>moneybookers_81149af5698332fdf2d6869a66b6ad12'] = 'Live edit';
 $_MODULE['<{moneybookers}prestashop>moneybookers_708c440d8915f957ee6717efc426a863'] = 'Envoyer ';
 $_MODULE['<{moneybookers}prestashop>moneybookers_5138738b54f0d4bdf7c72780db651abc'] = 'Ouverture de compte';
@@ -48,6 +48,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_d5086eeb1bc1994c5abf945fd79d424
 $_MODULE['<{moneybookers}prestashop>moneybookers_68db2cda800ddb2ae307c60b0a96252f'] = 'Solution de Paiement en ligne Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_b9c758264b134743b13a85ca4055c629'] = 'Estimation du volume mensuel passant par Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7d294d4900ff1a38f5b0a89612916eac'] = 'Pour les marchands au-dessus de €100,000 des tarifs sur mesure peuvent être mis en place.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_936ccdb97115e9f35a11d35e3d5b5cad'] = 'Cliquez ici';
 $_MODULE['<{moneybookers}prestashop>moneybookers_11c8ff1cde03aa19406dfe5971b92553'] = 'Porte-monnaie électronique Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_223b661f7b13d33498a9274bb10e3538'] = 'Portail de Paiements Directs Moneybookers ';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f284fe53995a4cc2e1e099cb1e511ec8'] = 'Validation de votre compte';
