@@ -119,8 +119,6 @@ class ManufacturerCore extends ObjectModel
 		{
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
 			$fields[$language['id_lang']][$this->identifier] = (int)($this->id);
-			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
-			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? pSQL($this->short_description[$language['id_lang']], true) : '';
 
 			foreach ($fieldsArray as $field)
 			{
@@ -136,6 +134,9 @@ class ManufacturerCore extends ObjectModel
 					$fields[$language['id_lang']][$field] = '';
 
 			}
+			
+			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
+			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? pSQL($this->short_description[$language['id_lang']], true) : '';
 		}
 		return $fields;
 	}
