@@ -914,6 +914,7 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 (2, 86, 0, 0, 0, 0),
 (2, 87, 0, 0, 0, 0),
 (2, 88, 1, 1, 1, 1),
+(2, 89, 0, 0, 0, 0),
 (3, 1, 1, 1, 1, 1),
 (3, 2, 0, 0, 0, 0),
 (3, 3, 0, 0, 0, 0),
@@ -993,6 +994,7 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 (3, 86, 0, 0, 0, 0),
 (3, 87, 0, 0, 0, 0),
 (3, 88, 1, 1, 1, 1),
+(3, 89, 0, 0, 0, 0),
 (4, 1, 1, 1, 1, 1),
 (4, 2, 1, 1, 1, 1),
 (4, 3, 1, 1, 1, 1),
@@ -1071,7 +1073,8 @@ INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `del
 (4, 85, 0, 0, 0, 0),
 (4, 86, 0, 0, 0, 0),
 (4, 87, 0, 0, 0, 0),
-(4, 88, 1, 1, 1, 1);
+(4, 88, 1, 1, 1, 1),
+(4, 89, 0, 0, 0, 0);
 
 INSERT INTO `PREFIX_profile` (`id_profile`) VALUES (2),(3),(4);
 INSERT INTO `PREFIX_profile_lang` (`id_lang`, `id_profile`, `name`) VALUES
