@@ -315,7 +315,7 @@ class ReferralProgram extends Module
 		$iso = Language::getIsoById((int)($cookie->id_lang));
 		$isoTinyMCE = (file_exists(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
 		$ad = dirname($_SERVER["PHP_SELF"]);
-		echo '
+		$this->_html .= '
 			<script type="text/javascript">	
 			var iso = \''.$isoTinyMCE.'\' ;
 			var pathCSS = \''._THEME_CSS_DIR_.'\' ;
@@ -326,7 +326,7 @@ class ReferralProgram extends Module
 			<script language="javascript">id_language = Number('.$defaultLanguage.');</script>
 		<form method="post" action="'.$_SERVER['REQUEST_URI'].'" enctype="multipart/form-data">
 			<fieldset>
-				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" /> '.$this->l('Referral program rules').'</legend>';
+				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" /> '.$this->l('Conditions of the referral program').'</legend>';
 		foreach ($languages AS $language)
 		{
 			$this->_html .= '
