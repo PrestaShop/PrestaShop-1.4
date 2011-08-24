@@ -629,7 +629,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 	else
 	{
 		$content = explode('|', $content);
-		if ($content[0] == 'OK')
+		if ($content[0] == 'OK' && Validate::isCleanHtml($content[2]) && Validate::isCleanHtml($content[1]))
 		{
 			$result['partner_preactivation'] = $content[2];
 			$content[1] = explode('#%#', $content[1]);
@@ -651,7 +651,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 	// PREACTIVATION PAYPAL WARNING
 	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-warnings.php?version=1.0&partner=paypal&iso_country='.Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))).'&iso_lang='.Tools::strtolower(Language::getIsoById(intval($cookie->id_lang))).'&id_lang='.(int)$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $stream_context);
 	$content = explode('|', $content);
-	if ($content[0] == 'OK')
+	if ($content[0] == 'OK' && Validate::isCleanHtml($content[1]))
 		Configuration::updateValue('PS_PREACTIVATION_PAYPAL_WARNING', $content[1]);
 	else
 		Configuration::updateValue('PS_PREACTIVATION_PAYPAL_WARNING', '');
@@ -663,7 +663,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 	else
 	{
 		$content = explode('|', $content);
-		if ($content[0] == 'OK')
+		if ($content[0] == 'OK' && Validate::isCleanHtml($content[1]))
 			$result['discover_prestashop'] = $content[1];
 		else
 			$result['discover_prestashop'] = 'NOK';
@@ -673,7 +673,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 
 		$content = @file_get_contents($protocol.'://www.prestashop.com/partner/paypal/paypal-tips.php?protocol='.$protocol.'&iso_country='.$isoCountry.'&iso_lang='.Tools::strtolower($isoUser).'&id_lang='.(int)$cookie->id_lang, false, $stream_context);
 		$content = explode('|', $content);
-		if ($content[0] == 'OK')
+		if ($content[0] == 'OK' && Validate::isCleanHtml($content[1]))
 			$result['discover_prestashop'] .= $content[1];
 	}
 
