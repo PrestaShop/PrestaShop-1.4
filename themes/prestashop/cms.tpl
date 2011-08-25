@@ -45,7 +45,7 @@
 	</div>
 {elseif isset($category)}
 	<div class="block-cms">
-		<h1><a href="{$link->getCategoryLink($category->id, $category->link_rewrite)}">{$category->name|escape:'htmlall':'UTF-8'}</a></h1>
+		<h1><a href="{if $category->id eq 1}{$base_dir}{else}{$link->getCategoryLink($category->id, $category->link_rewrite)}{/if}">{$category->name|escape:'htmlall':'UTF-8'}</a></h1>
 		{if isset($sub_category) & !empty($sub_category)}	
 			<h4>{l s='List of sub categories in '}{$category->name}{l s=':'}</h4>
 			<ul class="bullet">
