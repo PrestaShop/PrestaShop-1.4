@@ -24,6 +24,14 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.4.1 - NONE (2011-08-25)  #
+####################################
+
+	Fixed bugs:
+
+	[-] Security: security fix on AdminHome file
+	
+####################################
 #   v1.4.4.0 - 7803 (2011-07-28)  #
 ####################################
 
