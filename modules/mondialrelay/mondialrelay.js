@@ -458,7 +458,7 @@ function PS_MRHandleSelectedRelayPoint()
 			$(this).children('a').text(PS_MRTranslationList['Select']);
 		});
 		// Make the Selection
-		$(this).text(PS_MRTranslationList['Selected']);
+		$(this).html(PS_MRTranslationList['Selected']);
 		$(this).parent().attr('class', 'PS_MRFloatRelayPointSelected');
 		
 		// Get the info about the relay point (relayPoint_RelayPointNumber_IdCarrier)
@@ -773,7 +773,7 @@ $(document).ready(function()
 	});
 	$('#PS_MRDisplayPersonalizedOptions').click(function()
 	{
-		$('#PS_MRPersonalizedFields').toggle('fast');
+		$('#PS_MRAdvancedSettings').toggle('fast');
 	});
 });
 
