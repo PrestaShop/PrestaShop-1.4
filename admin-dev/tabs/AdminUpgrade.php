@@ -1127,10 +1127,11 @@ class AdminUpgrade extends AdminPreferences
 	function apacheModExists($name)
 	{
 		static $apacheModuleList = null;
-
-		if (!is_array($apacheModuleList))
+		
+		if (!is_array($apacheModuleList) AND function_exists('apache_get_modules'))
+		{
 			$apacheModuleList = apache_get_modules();
-
+		}
 		// we need strpos (example can be evasive20
 		foreach($apacheModuleList as $module)
 			if (strpos($name, $module)!==false)
