@@ -760,6 +760,21 @@ class ValidateCore
 			return preg_match('/^https?:\/\/[:#%&_=\(\)\.\? \+\-@\/a-zA-Z0-9]+$/', $url);
 		return true;
 	}
+	
+	public static function isMySQLEngine($engine)
+	{
+		return (in_array($engine, array('InnoDB', 'MyISAM')));
+	}
+	
+	public static function isUnixName($data)
+	{
+		return preg_match('/^[a-z0-9_-]+$/ui', $data);
+	}
+	
+	public static function isTablePrefix($data)
+	{
+		return preg_match('/^[a-z0-9_]+$/ui', $data);
+	}
 
 	/**
 	* Check for standard name file validity

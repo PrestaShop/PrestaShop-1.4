@@ -42,33 +42,26 @@ global $logger;
 
 //check db access
 include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
-$resultDB = ToolsInstall::checkDB($_GET['server'], $_GET['login'], $_GET['password'], $_GET['name'], true, $_GET['engine']);
+$resultDB = ToolsInstall::checkDB($_GET['server'], $_GET['login'], $_GET['password'], $_GET['name'], true);
 if ($resultDB !== true){
 	$logger->logError('Invalid database configuration');
 	die("<action result='fail' error='".$resultDB."'/>\n");
 }
 
-
-// Check POST data...
-$data_check = array(
-	!isset($_GET['mode']) OR ( $_GET['mode'] != "full" AND $_GET['mode'] != "lite"),
-	!isset($_GET['tablePrefix']) OR !Validate::isMailName($_GET['tablePrefix']) OR !preg_match('/^[a-z0-9_]*$/i', $_GET['tablePrefix'])
-);
-foreach ($data_check AS $data)
-	if ($data)
-		die('<action result="fail" error="8"/>'."\n");
+if (!isset($_GET['mode']) OR ($_GET['mode'] != "full" AND $_GET['mode'] != "lite"))
+	die('<action result="fail" error="8"/>'."\n");
 
 // Writing data in settings file
 $oldLevel = error_reporting(E_ALL);
 $__PS_BASE_URI__ = str_replace(' ', '%20', INSTALLER__PS_BASE_URI);
 $datas = array(
 	array('_DB_SERVER_', trim($_GET['server'])),
-	array('_DB_TYPE_', trim($_GET['type'])),
+	array('_DB_TYPE_', 'MySQL'),
 	array('_DB_NAME_', trim($_GET['name'])),
 	array('_DB_USER_', trim($_GET['login'])),
 	array('_DB_PASSWD_', trim($_GET['password'])),
 	array('_DB_PREFIX_', trim($_GET['tablePrefix'])),
-	array('_MYSQL_ENGINE_', $_GET['engine']),
+	array('_MYSQL_ENGINE_', trim($_GET['engine'])),
 	array('__PS_BASE_URI__', $__PS_BASE_URI__),
 	array('_PS_CACHING_SYSTEM_', 'MCached'),
 	array('_PS_CACHE_ENABLED_', '0'),

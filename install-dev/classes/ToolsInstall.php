@@ -36,7 +36,7 @@ class ToolsInstall
 	 * @param string $posted 
 	 * @return void
 	 */
-	public static function checkDB ($srv, $login, $password, $name, $posted = true)
+	public static function checkDB($srv, $login, $password, $name, $posted = true)
 	{
 		// Don't include theses files if classes are already defined
 		if (!class_exists('Validate', false))
@@ -52,16 +52,14 @@ class ToolsInstall
 		{
 			// Check POST data...
 			$data_check = array(
-				!isset($_GET['server']) OR empty($_GET['server']),
-				!Validate::isMailName($_GET['server']),
-				!isset($_GET['type']) OR empty($_GET['type']),
-				!Validate::isMailName($_GET['type']),
-				!isset($_GET['name']) OR empty($_GET['name']),
-				!Validate::isMailName($_GET['name']),
-				!isset($_GET['login']) OR empty($_GET['login']),
-				!Validate::isMailName($_GET['login']),
-				!isset($_GET['password'])
+				!isset($_GET['server']) OR empty($_GET['server']) OR !Validate::isUrl($_GET['server']),
+				!isset($_GET['engine']) OR empty($_GET['engine']) OR !Validate::isMySQLEngine($_GET['engine']),
+				!isset($_GET['name']) OR empty($_GET['name']) OR !Validate::isUnixName($_GET['name']),
+				!isset($_GET['login']) OR empty($_GET['login']) OR !Validate::isUnixName($_GET['login']),
+				!isset($_GET['password']),
+				!isset($_GET['tablePrefix']) OR !Validate::isTablePrefix($_GET['tablePrefix']),
 			);
+
 			foreach ($data_check AS $data)
 				if ($data)
 					return 8;

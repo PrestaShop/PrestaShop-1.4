@@ -173,7 +173,7 @@ if ($lm->getIncludeTradFilename())
 		txtError[5] = "<?php echo lang('Can\'t create settings file, if /config/settings.inc.php exists, please give the public write permissions to this file, else please create a file named settings.inc.php in config directory.'); ?>";
 		txtError[6] = "<?php echo lang('Can\'t write settings file, please create a file named settings.inc.php in config directory.'); ?>";
 		txtError[7] = "<?php echo lang('Impossible to upload the file!'); ?>";
-		txtError[8] = "<?php echo lang('Data integrity is not valided. Hack attempt?'); ?>";
+		txtError[8] = "<?php echo lang('Your database connection settings are not valid. Please check your server, name, login and prefix.'); ?>";
 		txtError[9] = "<?php echo lang('Impossible to read the content of a MySQL content file.'); ?>";
 		txtError[10] = "<?php echo lang('Impossible the access the a MySQL content file.'); ?>";
 		txtError[11] = "<?php echo lang('Error while inserting data in the database:'); ?>";
