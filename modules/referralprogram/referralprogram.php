@@ -499,7 +499,7 @@ class ReferralProgram extends Module
 
 		$html = '
 		<div class="clear">&nbsp;</div>
-		<h2>'.$this->l('Referral program').'</h2>
+		<h2>'.$this->l('Referral program').' ('.count($friends).')</h2>
 		<h3>'.(isset($sponsor) ? $this->l('Customer\'s sponsor:').' <a href="index.php?tab=AdminCustomers&id_customer='.(int)$sponsor->id.'&viewcustomer&token='.Tools::getAdminToken('AdminCustomers'.(int)(Tab::getIdFromClassName('AdminCustomers')).(int)($cookie->id_employee)).'">'.$sponsor->firstname.' '.$sponsor->lastname.'</a>' : $this->l('No one has sponsored this customer.')).'</h3>';
 
 		if ($friends AND sizeof($friends))
