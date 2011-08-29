@@ -33,10 +33,10 @@ if (file_exists(SETTINGS_FILE))
 	if (!unlink(SETTINGS_FILE))
 		die('<action result="fail" error="17" />'."\n");
 
-include(INSTALL_PATH.'/classes/AddConfToFile.php');
-include(INSTALL_PATH.'/../classes/Validate.php');
-include(INSTALL_PATH.'/../classes/Db.php');
-include(INSTALL_PATH.'/../classes/Tools.php');
+require_once(INSTALL_PATH.'/classes/AddConfToFile.php');
+require_once(INSTALL_PATH.'/../classes/Validate.php');
+require_once(INSTALL_PATH.'/../classes/Db.php');
+require_once(INSTALL_PATH.'/../classes/Tools.php');
 
 global $logger;
 
@@ -94,8 +94,8 @@ foreach (array(INSTALL_PATH.'/../tools/smarty/cache/', INSTALL_PATH.'/../tools/s
 if ($confFile->error != false)
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
 
-//load new settings
-include(SETTINGS_FILE);
+//load new settings, and fatal error if you can't
+require_once(SETTINGS_FILE);
 
 //-----------
 //import SQL data

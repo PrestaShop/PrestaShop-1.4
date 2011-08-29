@@ -31,11 +31,11 @@ if (function_exists('date_default_timezone_set'))
 define('_PS_MAGIC_QUOTES_GPC_', get_magic_quotes_gpc());
 define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
-include(INSTALL_PATH.'/classes/AddConfToFile.php');
-include(INSTALL_PATH.'/../classes/Validate.php');
-include(INSTALL_PATH.'/../classes/Db.php');
-include(INSTALL_PATH.'/../classes/Tools.php');
-include_once(INSTALL_PATH.'/../config/settings.inc.php');
+require_once(INSTALL_PATH.'/classes/AddConfToFile.php');
+require_once(INSTALL_PATH.'/../classes/Validate.php');
+require_once(INSTALL_PATH.'/../classes/Db.php');
+require_once(INSTALL_PATH.'/../classes/Tools.php');
+require_once(INSTALL_PATH.'/../config/settings.inc.php');
 
 function isFormValid()
 {

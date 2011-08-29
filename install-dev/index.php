@@ -54,9 +54,9 @@ if (version_compare(phpversion(), '5.0.0', '<'))
 	die;
 }
 
-require(dirname(__FILE__).'/../config/autoload.php');
-include_once(INSTALL_PATH.'/classes/ToolsInstall.php');
-include_once(INSTALL_PATH.'/classes/GetVersionFromDb.php');
+require_once(dirname(__FILE__).'/../config/autoload.php');
+require_once(INSTALL_PATH.'/classes/ToolsInstall.php');
+require_once(INSTALL_PATH.'/classes/GetVersionFromDb.php');
 
 /* Prevent from bad URI parsing when using index.php */
 $requestUri = str_replace('index.php', '', $_SERVER['REQUEST_URI']);
@@ -71,7 +71,7 @@ $tooOld = true;
 $installOfOldVersion = false;
 if (file_exists(INSTALL_PATH.'/../config/settings.inc.php'))
 {
-	include(INSTALL_PATH.'/../config/settings.inc.php');
+	require_once(INSTALL_PATH.'/../config/settings.inc.php');
 	$oldversion =_PS_VERSION_;
 	
 	// fix : complete version number if there is not all 4 numbers
@@ -92,7 +92,7 @@ if (file_exists(INSTALL_PATH.'/../config/settings.inc.php'))
 	$installOfOldVersion = (version_compare($oldversion, INSTALL_VERSION) == 1);
 }
 
-include(INSTALL_PATH.'/classes/LanguagesManager.php');
+require_once(INSTALL_PATH.'/classes/LanguagesManager.php');
 $lm = new LanguageManager(dirname(__FILE__).'/langs/list.xml');
 $_LANG = array();
 $_LIST_WORDS = array();
@@ -101,7 +101,7 @@ function lang($txt) {
 	return (isset($_LANG[$txt]) ? $_LANG[$txt] : $txt);
 }
 if ($lm->getIncludeTradFilename())
-	include_once($lm->getIncludeTradFilename());
+	require_once($lm->getIncludeTradFilename());
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
