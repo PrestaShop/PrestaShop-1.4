@@ -773,6 +773,7 @@ class ValidateCore
 	
 	public static function isTablePrefix($data)
 	{
+		// Even if "-" is theorically allowed, it will be considered a syntax error if you do not add backquotes (`) around the table name
 		return preg_match('/^[a-z0-9_]+$/ui', $data);
 	}
 
