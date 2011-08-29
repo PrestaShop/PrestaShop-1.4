@@ -139,7 +139,7 @@ class SpecificPriceCore extends ObjectModel
 					AND
 					(`to` = \'0000-00-00 00:00:00\' OR \''.$now.'\' <= `to`)
 				)
-				ORDER BY `score` DESC, `from_quantity` DESC');
+				ORDER BY `from_quantity` DESC, `score` DESC, `from_quantity` DESC');
 		}
 		return self::$_specificPriceCache[$key];
 	}
@@ -178,11 +178,11 @@ class SpecificPriceCore extends ObjectModel
 	public static function getQuantityDiscounts($id_product, $id_shop, $id_currency, $id_country, $id_group)
 	{
 		$now = date('Y-m-d H:i:s');
-		$res =  Db::getInstance()->ExecuteS('
+		$res = Db::getInstance()->ExecuteS('
 			SELECT *,
 					'.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
+			WHERE   `id_product` IN(0, '.(int)($id_product).') AND
 					`id_shop` IN(0, '.(int)($id_shop).') AND
 					`id_currency` IN(0, '.(int)($id_currency).') AND
 					`id_country` IN(0, '.(int)($id_country).') AND
@@ -193,21 +193,22 @@ class SpecificPriceCore extends ObjectModel
 						AND
 						(`to` = \'0000-00-00 00:00:00\' OR \''.$now.'\' <= `to`)
 					)
-					ORDER BY `score`  DESC, `from_quantity` DESC
+					ORDER BY `from_quantity` DESC, `score` DESC
 		');
 
 		$targeted_prices = array();
-		$max_score = NULL;
+		$last_quantity = NULL; 
 
 		foreach($res as $specific_price)
 		{
-		    if (!isset($max_score))
-		        $max_score = $specific_price['score'];
-		    elseif ($max_score != $specific_price['score'])
-		        break;
+			if (!isset($last_quantity))
+				 $last_quantity = $specific_price['from_quantity']; 
+			else if ($last_quantity == $specific_price['from_quantity'])
+				break; 
 
-            if ($specific_price['from_quantity'] > 1)
-    		    $targeted_prices[] = $specific_price;
+			$last_quantity = $specific_price['from_quantity']; 
+			if ($specific_price['from_quantity'] > 1)
+				$targeted_prices[] = $specific_price;
 		}
 
 		return $targeted_prices;
