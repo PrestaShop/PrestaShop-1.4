@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -31,28 +31,28 @@ class AdminStores extends AdminTab
 {
 	/** @var array countries list */
 	private $countriesArray = array();
-	
+
 	public function __construct()
 	{
 		global $cookie;
-		
+
 	 	$this->table = 'store';
 	 	$this->className = 'Store';
 	 	$this->lang = false;
 	 	$this->edit = true;
 	 	$this->delete = true;
-		
+
 		$this->fieldImageSettings = array('name' => 'image', 'dir' => 'st');
-		
+
 		$this->_select = 'cl.`name` country, st.`name` state';
 		$this->_join = '
 		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'state` st ON (st.`id_state` = a.`id_state`)';
-		
+
 		$countries = Country::getCountries((int)($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
-				
+
 		$this->fieldsDisplay = array(
 			'id_store' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 			'country' => array('title' => $this->l('Country'), 'width' => 100),
@@ -64,7 +64,7 @@ class AdminStores extends AdminTab
 			'fax' => array('title' => $this->l('Fax'), 'width' => 70),
 			'active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false)
 		);
-		
+
 		$this->optionTitle = $this->l('Parameters');
 		$this->_fieldsOptions = array(
 			'PS_STORES_DISPLAY_FOOTER' => array('title' => $this->l('Display in the footer:'), 'desc' => $this->l('Display a link to the store locator in the footer'), 'cast' => 'intval', 'type' => 'bool'),
@@ -72,10 +72,10 @@ class AdminStores extends AdminTab
 			'PS_STORES_SIMPLIFIED' => array('title' => $this->l('Show a simplified store locator:'), 'desc' => $this->l('No map, no search, only a store directory'), 'cast' => 'intval', 'type' => 'bool'),
 			'PS_STORES_CENTER_LAT' => array('title' => $this->l('Latitude by default:'), 'desc' => $this->l('Used for the default map position'), 'cast' => 'floatval', 'type' => 'float', 'size' => '10'),
 			'PS_STORES_CENTER_LONG' => array('title' => $this->l('Longitude by default:'), 'desc' => $this->l('Used for the default map position'), 'cast' => 'floatval', 'type' => 'float', 'size' => '10'));
-		
+
 		parent::__construct();
 	}
-	
+
 	protected function postImage($id)
 	{
 		$ret = parent::postImage($id);
@@ -87,14 +87,14 @@ class AdminStores extends AdminTab
 		}
 		return $ret;
 	}
-	
+
 	public function displayOptionsList()
 	{
 		parent::displayOptionsList();
-		
+
 		echo '<br /><p><img src="../img/admin/asterisk.gif" class="middle" /> '.$this->l('You can also replace the icon representing your store in Google Maps. Go to the Preferences tab, and then the Appearance subtab.').'</p>';
 	}
-	
+
 	public function postProcess()
 	{
 		if (isset($_POST['submitAdd'.$this->table]))
@@ -111,9 +111,10 @@ class AdminStores extends AdminTab
 			/* If the selected country contains states, then a state have to be selected */
 			if ((int)($country->contains_states) AND !$id_state)
 				$this->_errors[] = Tools::displayError('An address located in a country containing states must have a state selected.');
-				
-			$latitude = (int)(Tools::getValue('latitude'));
-		    $longitude = (int)(Tools::getValue('longitude'));
+
+			$latitude = (float)(Tools::getValue('latitude'));
+		    $longitude = (float)(Tools::getValue('longitude'));
+
 			if(empty($latitude) OR empty($longitude))
 			   $this->_errors[] = Tools::displayError('Latitude and longitude are required.');
 
@@ -148,12 +149,12 @@ class AdminStores extends AdminTab
 		if (!sizeof($this->_errors))
 			parent::postProcess();
 	}
-	
+
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
 		parent::displayForm();
-		
+
 		if (!($obj = $this->loadObject(true)))
 			return;
 		echo '
@@ -267,7 +268,7 @@ class AdminStores extends AdminTab
 						<p class="clear">'.$this->l('Store window picture').'</p>';
 
 				echo $this->displayImage($obj->id, _PS_STORE_IMG_DIR_.'/'.$obj->id.'.jpg', 350, NULL, Tools::getAdminToken('AdminStores'.(int)(Tab::getIdFromClassName('AdminStores')).(int)($cookie->id_employee)), true);
-				
+
 				echo '</div>
 					<table cellpadding="2" cellspacing="2" style="padding: 10px; margin-top: 15px; border: 1px solid #BBB;">
 						<tr>
@@ -277,7 +278,7 @@ class AdminStores extends AdminTab
 							<td>&nbsp;</td>
 							<td style="font-size: 0.85em;">'.$this->l('Sample: 10:00AM - 9:30PM').'</td>
 						</tr>';
-						
+
 						$days = array();
 						$days[1] = $this->l('Monday');
 						$days[2] = $this->l('Tuesday');
@@ -286,11 +287,11 @@ class AdminStores extends AdminTab
 						$days[5] = $this->l('Friday');
 						$days[6] = $this->l('Saturday');
 						$days[7] = $this->l('Sunday');
-						
+
 						$hours = $this->getFieldValue($obj, 'hours');
 						if (!empty($hours))
 							$hoursUnserialized = unserialize($hours);
-						
+
 						for ($i = 1; $i < 8; $i++)
 							echo '
 							<tr style="color: #7F7F7F; font-size: 0.85em;">
