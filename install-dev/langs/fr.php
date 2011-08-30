@@ -289,3 +289,4 @@ $_LANG['Additional Benefits'] = 'Avantages exclusifs PrestaShop';
 $_LANG['Exclusive offers dedicated to PrestaShop merchants'] = 'Offres réservées aux marchands PrestaShop';
 $_LANG['PHP magic quotes option is off (recommended)'] = 'L\'option PHP "magic quotes" est désactivée (recommandé)';
 $_LANG['Dom extension loaded'] = 'L\'extension Dom est activée';
+$_LANG['Other activity...'] = 'Autre activité..';
