@@ -223,7 +223,6 @@ class MySQLCore extends Db
 		if ($this->_link)
 		{
 			$result =  mysql_query($query, $this->_link);
-			$this->_lastQuery = $query;
 			if ($webservice_call)
 				$this->displayMySQLError($query);
 			if ($use_cache AND _PS_CACHE_ENABLED_)

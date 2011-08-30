@@ -163,7 +163,7 @@ class MondialRelay extends Module
 		else 
 		{
 			// Reactive transport if database wasn't remove at the last uninstall
-			Db::getInstance()->ExecuteS('
+			Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'carrier` c, `'._DB_PREFIX_.'mr_method` m
 					SET `deleted` = 0
 					WHERE c.id_carrier = m.id_carrier');

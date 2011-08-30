@@ -3336,10 +3336,10 @@ class ProductCore extends ObjectModel
 	*/
 	public function setCoverWs($id_image)
 	{
-		Db::getInstance()->ExecuteS('UPDATE `'._DB_PREFIX_.'image`
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'image`
 									SET `cover` = 0 WHERE `id_product` = '.(int)($this->id).'
 									');
-		Db::getInstance()->ExecuteS('UPDATE `'._DB_PREFIX_.'image`
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'image`
 									SET `cover` = 1 WHERE `id_product` = '.(int)($this->id).' AND `id_image` = '.(int)$id_image);
 		return true;
 	}
