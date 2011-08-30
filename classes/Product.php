@@ -541,8 +541,8 @@ class ProductCore extends ObjectModel
 		foreach ($this->description_short as $k => $value)
 			if (Tools::strlen(strip_tags($value)) > $limit)
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).'->description: length > '.$limit.' for language '.$k.')');
-				return $errorReturn ? get_class($this).'->'.Tools::displayError('description: length >').' '.$limit.' '.Tools::displayError('for language').' '.$k : false;
+				if ($die) die (Tools::displayError().' ('.get_class($this).'->description_short: length > '.$limit.' for language '.$k.')');
+				return $errorReturn ? get_class($this).'->'.Tools::displayError('description_short: length >').' '.$limit.' '.Tools::displayError('for language').' '.$k : false;
 			}
 		return parent::validateFieldsLang($die, $errorReturn);
 	}
