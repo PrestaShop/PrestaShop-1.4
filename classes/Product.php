@@ -1731,13 +1731,26 @@ class ProductCore extends ObjectModel
 		$cart_quantity = 0;
 		if ((int)($id_cart))
 		{
-			if (!isset(self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)]) OR self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)] !=  (int)($quantity))
-				self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			$condition = '';
+			$cache_name = (int)($id_cart).'_'.(int)($id_product);
+			
+			if(Configuration::get('PS_QTY_DISCOUNT_ON_COMBINATION'))
+			{
+				$cache_name = (int)($id_cart).'_'.(int)($id_product).'_'.(int)($id_product_attribute);
+				$condition = ' AND `id_product_attribute` = '.(int)($id_product_attribute);
+			}
+				
+			if (!isset(self::$_cart_quantity[$cache_name]) OR self::$_cart_quantity[$cache_name] !=  (int)($quantity))
+			{
+				self::$_cart_quantity[$cache_name] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 				SELECT SUM(`quantity`)
 				FROM `'._DB_PREFIX_.'cart_product`
-				WHERE `id_product` = '.(int)($id_product).' AND `id_cart` = '.(int)($id_cart)
-			);
-			$cart_quantity = self::$_cart_quantity[(int)($id_cart).'_'.(int)($id_product)];
+				WHERE `id_product` = '.(int)($id_product).' 
+				AND `id_cart` = '.(int)($id_cart).' '.$condition					
+				);
+				
+				$cart_quantity = self::$_cart_quantity[$cache_name];
+			}
 		}
 		$quantity = ($id_cart AND $cart_quantity) ? $cart_quantity : $quantity;
 		$id_currency = (int)(Validate::isLoadedObject($cur_cart) ? $cur_cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
