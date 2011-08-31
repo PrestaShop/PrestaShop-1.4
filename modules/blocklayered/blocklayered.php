@@ -52,7 +52,6 @@ class BlockLayered extends Module
 		if ($result = parent::install() AND $this->registerHook('leftColumn') AND $this->registerHook('header') AND $this->registerHook('footer')
 		AND $this->registerHook('categoryAddition') AND $this->registerHook('categoryUpdate') AND $this->registerHook('categoryDeletion'))
 		{
-			Configuration::updateValue('PS_LAYERED_SHARE', 0);
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', 0);
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
 			
@@ -66,11 +65,8 @@ class BlockLayered extends Module
 	public function uninstall()
 	{
 		/* Delete all configurations */
-		Configuration::deleteByName('PS_LAYERED_SHARE');
 		Configuration::deleteByName('PS_LAYERED_HIDE_0_VALUES');
 		Configuration::deleteByName('PS_LAYERED_SHOW_QTIES');
-		Configuration::deleteByName('PS_LAYERED_BITLY_USERNAME');
-		Configuration::deleteByName('PS_LAYERED_BITLY_API_KEY');
 		
 		return parent::uninstall();
 	}
@@ -165,6 +161,11 @@ class BlockLayered extends Module
 			
 			if (sizeof($_POST['categoryBox']))
 			{
+				/* Clean categoryBox before use */
+				if (isset($_POST['categoryBox']) AND is_array($_POST['categoryBox']))
+					foreach ($_POST['categoryBox'] AS &$value)
+						$value = (int)$value;
+				
 				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_category WHERE id_category IN ('.implode(',', $_POST['categoryBox']).')');
 
 				$filterValues = array();
@@ -208,20 +209,9 @@ class BlockLayered extends Module
 			}
 		}
 		elseif (Tools::isSubmit('submitLayeredSettings'))
-		{
-			if (Tools::getValue('share_url'))
-			{
-				if (Tools::getValue('bitly_username') == '')
-					$errors[] = $this->l('Bit.ly username is empty');
-				if (Tools::getValue('bitly_api_key') == '')
-					$errors[] = $this->l('Bit.ly api_key is empty');
-			}
-			
+		{			
 			if (!sizeof($errors))
 			{
-				Configuration::updateValue('PS_LAYERED_BITLY_USERNAME', Tools::getValue('bitly_username'));
-				Configuration::updateValue('PS_LAYERED_BITLY_API_KEY', Tools::getValue('bitly_api_key'));
-				Configuration::updateValue('PS_LAYERED_SHARE', Tools::getValue('share_url'));
 				Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', Tools::getValue('ps_layered_hide_0_values'));
 				Configuration::updateValue('PS_LAYERED_SHOW_QTIES', Tools::getValue('ps_layered_show_qties'));
 				
@@ -268,22 +258,6 @@ class BlockLayered extends Module
 		}
 		
 		$html .= '
-		<script type="text/javascript">
-			$(document).ready(function()
-			{
-				$(\'.share_url\').change(function(){
-					toggleBitly();
-				});
-				toggleBitly();
-				
-				function toggleBitly(){
-					if ($(\'#share_url_on\').attr(\'checked\'))
-						$(\'#bitly\').slideDown();
-					else
-						$(\'#bitly\').slideUp();
-				}
-			});
-		</script>
 		<h2>'.$this->l('Layered navigation').'</h2>
 		<fieldset class="width4">
 			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Existing filters templates').'</legend>';
@@ -573,29 +547,8 @@ class BlockLayered extends Module
 							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
 							'.$this->l('No').' <input type="radio" name="ps_layered_show_qties" value="0" '.(!Configuration::get('PS_LAYERED_SHOW_QTIES') ? 'checked="checked"' : '').' />
 						</td>
-					</tr>
-					<tr>
-						<td style="text-align: right;">'.$this->l('Allow customers to share URLs').'</td>
-						<td>
-							<label class="t" for="share_url_on"><img src="../img/admin/enabled.gif" alt="Yes" title="Yes"></label>
-							'.$this->l('Yes').' <input type="radio" id="share_url_on" name="share_url" class="share_url" value="1" '.(Configuration::get('PS_LAYERED_SHARE') ? 'checked="checked"' : '').'>
-							<label class="t" for="share_url_off"><img src="../img/admin/disabled.gif" alt="No" title="No" style="margin-left: 10px;"></label>
-							'.$this->l('No').' <input type="radio" id="share_url_off" name="share_url" class="share_url" value="0" '.(!Configuration::get('PS_LAYERED_SHARE') ? 'checked="checked"' : '').'>
-						</td>
-					</tr>				
+					</tr>			
 				</table>
-				<div id="bitly">
-					<p>'.$this->l('To offer your customers short links, create an account on bit.ly, then copy and paste login and API key.').'
-					<a style="text-decoration:underline" href="http://bit.ly/a/sign_up">'.$this->l('Sign Up').'</a></p>
-					<label>'.$this->l('Login bit.ly').'</label>
-					<div class="margin-form">
-							<input type="text" name="bitly_username" value="'. Tools::getValue('bitly_username', Configuration::get('PS_LAYERED_BITLY_USERNAME')).'">
-					</div>
-					<label>'.$this->l('API Key bit.ly').'</label>
-					<div class="margin-form">
-						<input type="text" name="bitly_api_key" value="'.Tools::getValue('bitly_api_key', Configuration::get('PS_LAYERED_BITLY_API_KEY')).'">
-					</div>
-				</div>
 				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredSettings" value="'.$this->l('Save configuration').'" /></p>
 			</form>
 		</fieldset>';
@@ -724,7 +677,7 @@ class BlockLayered extends Module
 		
 		/* Return only the number of products */
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(p.`id_product`) AS total
+		SELECT COUNT(p.`id_product`) total
 		FROM `'._DB_PREFIX_.'product` p
 		WHERE 1 '.$queryFilters);
 		
@@ -735,7 +688,7 @@ class BlockLayered extends Module
 		$this->products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, p.on_sale, p.out_of_stock, p.available_for_order, p.quantity, p.minimal_quantity, p.id_category_default, p.customizable, p.show_price, p.`weight`,
 		p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name, p.condition, p.id_manufacturer,
-		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
+		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 new
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
 		LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product AND i.cover = 1)
@@ -760,7 +713,7 @@ class BlockLayered extends Module
 
 		/* First we need to get all subcategories of current category */
 		$category = new Category((int)$id_parent);
-		
+
 		$groups = FrontController::getCurrentCustomerGroups();
 
 		$subCategories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -780,15 +733,15 @@ class BlockLayered extends Module
 		$whereC = rtrim($whereC, 'OR ').')';
 		$productsSQL = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_product`, p.`condition`, p.`id_manufacturer`, p.`quantity`, p.`weight`,
-		(SELECT GROUP_CONCAT(`id_category`) FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_product` = p.`id_product`) as ids_cat,
-			(SELECT GROUP_CONCAT(`id_feature_value`) FROM `'._DB_PREFIX_.'feature_product` fp WHERE fp.`id_product` = p.`id_product`) as ids_feat,
+		(SELECT GROUP_CONCAT(`id_category`) FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_product` = p.`id_product`) ids_cat,
+			(SELECT GROUP_CONCAT(`id_feature_value`) FROM `'._DB_PREFIX_.'feature_product` fp WHERE fp.`id_product` = p.`id_product`) ids_feat,
 			(SELECT GROUP_CONCAT(DISTINCT(pac.`id_attribute`)) 
 				FROM `'._DB_PREFIX_.'product_attribute_combination` pac 
 				LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = pac.`id_product_attribute`) 
-				WHERE pa.`id_product` = p.`id_product` ) as ids_attr
+				WHERE pa.`id_product` = p.`id_product`) ids_attr
 		FROM '._DB_PREFIX_.'product p 
-		WHERE p.`active` = 1 AND p.`id_product` IN ( SELECT id_product FROM `'._DB_PREFIX_.'category_product` cp WHERE'.$whereC, false);
-
+		WHERE p.`active` = 1 AND p.`id_product` IN (SELECT id_product FROM `'._DB_PREFIX_.'category_product` cp WHERE'.$whereC, false);
+		
 		$products = array();
 		$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
 		$weight = array();
@@ -817,7 +770,7 @@ class BlockLayered extends Module
 		/* Get the filters for the current category */
 		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'layered_category WHERE id_category = '.(int)$id_parent.' ORDER BY position ASC');
 		$filterBlocks = $f = $a = array();
-
+		
 		foreach ($filters AS $filter)
 		{
 			$filterBlocks[(int)$filter['position']]['type_lite'] = $filter['type'];
@@ -877,7 +830,6 @@ class BlockLayered extends Module
 			}
 		}
 
-		$weight_unit = Configuration::get('PS_WEIGHT_UNIT');
 		foreach ($filterBlocks AS &$filterBlock)
 		{
 			if ($filterBlock['type_lite'] == 'category')
@@ -1064,7 +1016,7 @@ class BlockLayered extends Module
 						$filterBlock['values'] = array($selectedFilters['weight'][0], $selectedFilters['weight'][1]);
 					else
 						$filterBlock['values'] = array(min($weight), max($weight));
-					$filterBlock['unit'] = $weight_unit;
+					$filterBlock['unit'] = Configuration::get('PS_WEIGHT_UNIT');
 				}
 				else
 					unset($selectedFilters['weight']);
@@ -1079,18 +1031,14 @@ class BlockLayered extends Module
 		foreach($_GET AS $key => $val)
 			$params .= $key.'='.$val.'&';
 		
-		$share_url = $link->getCategoryLink((int)$category->id, $category->link_rewrite[(int)$cookie->id_lang], (int)$cookie->id_lang).rtrim($params, '&');
-				
 		$smarty->assign(array(
-		'display_share' => (int)Configuration::get('PS_LAYERED_SHARE'),
-		'share_url' => $this->getShortLink($share_url),
 		'layered_show_qties' => (int)Configuration::get('PS_LAYERED_SHOW_QTIES'),
 		'id_category_layered' => (int)$id_parent,
 		'selected_filters' => $selectedFilters,
 		'n_filters' => (int)$nFilters,
 		'nbr_filterBlocks' => sizeof($filterBlocks),
 		'filters' => $filterBlocks));
-
+		
 		return $this->display(__FILE__, 'blocklayered.tpl');
 	}
 	
@@ -1107,6 +1055,11 @@ class BlockLayered extends Module
 				foreach ($layeredValues['categories'] AS $id_category)
 					$categoryBox[] = (int)$id_category;
 		}
+		
+		/* Clean categoryBox before use */
+		if (isset($categoryBox) AND is_array($categoryBox))
+			foreach ($categoryBox AS &$value)
+				$value = (int)$value;
 		
 		$attributeGroups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT ag.id_attribute_group, ag.is_color_group, agl.name, COUNT(DISTINCT(a.id_attribute)) n
@@ -1214,6 +1167,7 @@ class BlockLayered extends Module
 		$selectedFilters = $this->getSelectedFilters();
 		$products = $this->getProductByFilters($selectedFilters);
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
+		
 		$nbProducts = $this->nbr_products;
 		$range = 2; /* how many pages around page selected */
 		
@@ -1246,7 +1200,6 @@ class BlockLayered extends Module
 			'nArray' => $nArray = (int)Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50)
 		);
 		$smarty->assign($pagination_infos);
-		
 		$smarty->assign('comparator_max_item', (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')));
 		$smarty->assign('products', $products);
 		
@@ -1471,24 +1424,5 @@ class BlockLayered extends Module
 			}
 		}
 		return $products;
-	}
-	
-	private function getShortLink($share_url) {
-	
-		$return = '';
-		if (extension_loaded('curl'))
-		{
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, "http://api.bitly.com/v3/shorten");
-			curl_setopt($ch, CURLOPT_HEADER, 0);
-			curl_setopt($ch, CURLOPT_HTTPGET, 1);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, 'login='.Configuration::get('PS_LAYERED_BITLY_USERNAME').'&apiKey='.Configuration::get('PS_LAYERED_BITLY_API_KEY').'&longUrl='.urlencode($share_url).'&format=txt');
-			$return = curl_exec($ch);
-		}
-		if ($return != 'INVALID_LOGIN' AND $return != 'INVALID_APIKEY' AND extension_loaded('curl'))
-			return $return;
-		else
-			return $share_url;
 	}
 }
