@@ -314,3 +314,14 @@ div#PS_MRPersonalizedFields
 {
 	display:none;
 }
+
+.clearfix:before,
+.clearfix:after 
+{
+	content: ".";
+	display: block;
+	height: 0;
+	overflow: hidden
+}
+.clearfix:after {clear: both}
+.clearfix {zoom: 1}
