@@ -1498,7 +1498,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			echo '<span class="button-autoupgrade upgradestep" >'.$this->l('Your shop is already up to date.').'</span> ';
 		}
 		echo '<small>'.sprintf($this->l('last datetime check : %s '),date('Y-m-d H:i:s',Configuration::get('PS_LAST_VERSION_CHECK'))).'</span> 
-		<a class="button" href="index.php?tab=AdminUpgrade&token='.Tools::getAdminToken(get_class($this).(int)(Tab::getIdFromClassName(get_class($this))).(int)$cookie->id_employee).'&refreshCurrentVersion=1">'.$this->l('Please click to refresh').'"</a>
+		<a class="button" href="index.php?tab=AdminUpgrade&token='.Tools::getAdminToken(get_class($this).(int)(Tab::getIdFromClassName(get_class($this))).(int)$cookie->id_employee).'&refreshCurrentVersion=1">'.$this->l('Please click to refresh').'</a>
 		</small>';
 	
 			echo'</div>
