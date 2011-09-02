@@ -71,9 +71,9 @@ class BlockLayered extends Module
 	 */
 	public static function fullIndexProcess($cursor = 0, $ajax = false, $smart = false)
 	{
-		if($cursor == 0 && !$smart) {
+		if($cursor == 0 && !$smart)
 			self::_installPriceIndexTable();
-		}
+		
 		return self::_indexer($cursor, true, $ajax, $smart);
 	}
 	
@@ -103,7 +103,8 @@ class BlockLayered extends Module
 		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
 		
 		// Php is slower and slower. limit script time
-		if($maxExecutionTime > 5) {
+		if($maxExecutionTime > 5)
+		{
 			$maxExecutionTime = 5;
 		}
 		
@@ -978,11 +979,14 @@ class BlockLayered extends Module
 						$queryFilters .= ' AND p.`weight` BETWEEN '.(float)($selectedFilters['weight'][0] - 0.001).' AND '.(float)($selectedFilters['weight'][1] + 0.001);
 
 				case 'price':
-					if($selectedFilters['price'][0] != 0 || $selectedFilters['price'][1] != 0) {
+					if($selectedFilters['price'][0] != 0 || $selectedFilters['price'][1] != 0)
+					{
 						$priceFilter = array();
 						$priceFilter['min'] = (float)($selectedFilters['price'][0]);
 						$priceFilter['max'] = (float)($selectedFilters['price'][1]);
-					} else {
+					}
+					else
+					{
 						$priceFilter = false;
 					}
 				break;
@@ -1679,7 +1683,8 @@ class BlockLayered extends Module
 			ORDER BY id_attribute_group')
 			as $attributes)
 		{
-			if(!isset($attributesArray[$attributes['id_attribute_group']])) {
+			if(!isset($attributesArray[$attributes['id_attribute_group']]))
+			{
 				$attributesArray[$attributes['id_attribute_group']] = array (
 					'type_lite' => 'id_attribute_group',
 					'type' => 'id_attribute_group_'.$attributes['id_attribute_group'],
