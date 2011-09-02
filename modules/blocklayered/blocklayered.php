@@ -1063,9 +1063,6 @@ class BlockLayered extends Module
 	}
 	public function generateFiltersBlockOld($selectedFilters = array())
 	{
-		elog('$selectedFilters::old01');
-		elog($selectedFilters);
-		
 		global $smarty, $link, $cookie;
 		$id_lang = (int)$cookie->id_lang;
 		
@@ -1442,8 +1439,6 @@ class BlockLayered extends Module
 	 */
 	public function generateFiltersBlockNew($selectedFilters = array())
 	{
-		elog('$selectedFilters::new01');
-		elog($selectedFilters);
 		global $smarty, $link, $cookie;
 		$id_lang = (int)$cookie->id_lang;
 		
