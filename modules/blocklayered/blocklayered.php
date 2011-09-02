@@ -786,6 +786,14 @@ class BlockLayered extends Module
 								else
 									$(\'#error-treeview\').hide(500);
 								updElements(0, 0);
+							},
+							\'onComplete\': function() {
+								$(\'#categories-treeview li#1\').removeClass(\'static\');
+								$(\'#categories-treeview li#1 span\').trigger(\'click\');
+								$(\'#categories-treeview li#1\').children(\'div\').remove();
+								$(\'#categories-treeview li#1\').
+									removeClass(\'collapsable lastCollapsable\').
+									addClass(\'last static\');
 							}
 						});
 
