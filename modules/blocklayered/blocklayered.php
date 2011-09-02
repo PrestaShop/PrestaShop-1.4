@@ -1441,7 +1441,7 @@ class BlockLayered extends Module
 		'n_filters' => (int)$nFilters,
 		'nbr_filterBlocks' => sizeof($filterBlocks),
 		'filters' => $filterBlocks));
-		
+//		elog($filterBlocks);
 		return $this->display(__FILE__, 'blocklayered.tpl');
 	}
 	
@@ -1451,6 +1451,7 @@ class BlockLayered extends Module
 	 */
 	public function generateFiltersBlockNew($selectedFilters = array())
 	{
+//		elog($selectedFilters);
 		global $smarty, $link, $cookie;
 		$id_lang = (int)$cookie->id_lang;
 		
@@ -1469,7 +1470,6 @@ class BlockLayered extends Module
 		foreach ($selectedFilters AS $filters)
 			$nFilters += sizeof($filters);
 	
-	//$stime = microtime(true);
 		$filterBlocks = array();
 		
 		// Categories
@@ -1558,7 +1558,11 @@ class BlockLayered extends Module
 			#AND p.`id_product` IN (SELECT id_product FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_category` = '.$id_parent.')')
 			as $product)
 		{
+			//@TODO do the same, for other attributes
 			$conditionArray[$product['condition']]['nbr']++;
+			if(isset($selectedFilters['condition']) && in_array($product['condition'], $selectedFilters['condition']))
+				$conditionArray[$product['condition']]['checked'] = true;
+				
 			$quantityArray[(int)($product['quantity'] > 0)]['nbr']++;
 			$weightArray['values'][] = $product['weight'];
 			if(is_null($weightArray['min']))
@@ -1755,8 +1759,13 @@ class BlockLayered extends Module
 	}
 	public function generateFiltersBlock($selectedFilters = array())
 	{
+		
+		//elog($selectedFilters); // < My own debug function
+		
+		self::generateFiltersBlockOld($selectedFilters);
 		return self::generateFiltersBlockNew($selectedFilters);
 		
+		 // My own debugs functions
 		/*pickStart('generateFiltersBlock01');
 		$returnNew = self::generateFiltersBlockNew($selectedFilters);
 		pickStop('generateFiltersBlock01');
