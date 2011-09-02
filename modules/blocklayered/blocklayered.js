@@ -109,7 +109,7 @@ function reloadContent(params_plus)
 
 	if (!ajaxLoaderOn)
 	{
-		$('#product_list').prepend($('#layered_ajax_loader').html());	
+		$('#product_list').prepend($('#layered_ajax_loader').html());
 		$('#product_list').css('opacity', '0.7');
 		ajaxLoaderOn = 1;
 	}
