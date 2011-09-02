@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -30,7 +30,7 @@ class LanguageManager
 	private $url_xml;
 	private $lang;
 	private $xml_file;
-	
+
 	function __construct ($url_xml)
 	{
 		$this->loadXML($url_xml);
@@ -44,33 +44,33 @@ class LanguageManager
 		if (!$this->xml_file = simplexml_load_file($url_xml))
 			$errors = 'Error when loading XML language file : '.$url_xml;
 	}
-	
+
 	public function getIdSelectedLang()
 	{
 		return $this->lang['id'];
 	}
-	
+
 	public function getIsoCodeSelectedLang()
 	{
 		return $this->lang->idLangPS;
 	}
-	
+
 	public function countLangs()
 	{
 		return sizeof($this->xml_file);
 	}
-	
+
 	public function getAvailableLangs()
 	{
 		return $this->xml_file;
 	}
-	
+
 	public function getSelectedLang()
 	{
 		return $this->lang;
 	}
-	
-	/** get the http_accept_language isocode (if exists), 
+
+	/** get the http_accept_language isocode (if exists),
 	 * and use it to find the corresponding prestashop id_lang
 	 * otherwise, return 0.
 	 * @return int id_lang to use
@@ -89,21 +89,22 @@ class LanguageManager
 		else
 			return 0;
 	}
-	
-	/** set lang property with param $_GET['language'] if present, 
+
+	/** set lang property with param $_GET['language'] if present,
 		* or by $_SERVER['HTTP_ACCEPT_LANGUAGE'] otherwise
 		*/
 	private function setLanguage()
 	{
-		if ( !empty($_GET['language']))
+		if (isset($_GET['language']))
 			$id_lang =  (int)($_GET['language'])>0 ? $_GET['language'] : 0;
-		if (empty($id_lang))
+		if (!isset($id_lang))
 			$id_lang = ($this->getIdByHAL());
 		$this->lang = $this->xml_file->lang[(int)($id_lang)];
 	}
-	
+
 	public function getIncludeTradFilename()
 	{
 		return ($this->lang == NULL) ? false : dirname(__FILE__).$this->lang['trad_file'];
 	}
 }
+
