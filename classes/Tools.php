@@ -2076,14 +2076,28 @@ FileETag INode MTime Size
 	 * @param string $type by|way
 	 * @param string $value If no index given, use default order from admin -> pref -> products
 	 */
-	public static function getProductsOrder($type, $value = null)
+	public static function getProductsOrder($type, $value = null, $prefix = false)
 	{
 		switch ($type)
 		{
 			case 'by' :
+				$orderByPrefix = '';
+				if($prefix) {
+					if ($value == 'id_product' OR	$value == 'date_add')
+						$orderByPrefix = 'p.';
+					elseif ($value == 'name')
+						$orderByPrefix = 'pl.';
+					elseif ($value == 'manufacturer')
+					{
+						$orderByPrefix = 'm.';
+					}
+					elseif ($value == 'position')
+						$orderByPrefix = 'cp.';
+				}
+				
 				$value = (is_null($value) || $value === false || $value === '') ? (int)Configuration::get('PS_PRODUCTS_ORDER_BY') : $value;
 				$list = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
-				return ((isset($list[$value])) ? $list[$value] : ((in_array($value, $list)) ? $value : 'position'));
+				return $orderByPrefix.((isset($list[$value])) ? $list[$value] : ((in_array($value, $list)) ? $value : 'position'));
 			break;
 
 			case 'way' :
@@ -2153,8 +2167,8 @@ FileETag INode MTime Size
 	 * 
 	 * @param objet $smarty
 	 */
-	 public static function clearCache($smarty)
-	 {
+	public static function clearCache($smarty)
+	{
 		if (!Configuration::get('PS_FORCE_SMARTY_2'))
 			$smarty->clearAllCache();
 		else
