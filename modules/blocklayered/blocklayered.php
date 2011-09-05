@@ -1582,7 +1582,7 @@ class BlockLayered extends Module
 							(
 								SELECT count(*) # ';
 					$sqlQuery['from'] = ' FROM '._DB_PREFIX_.'category_product as cp
-								LEFT JOIN product as p
+								LEFT JOIN '._DB_PREFIX_.'product as p
 									ON p.id_product = cp.id_product ';
 									
 					$sqlQuery['where'] = '
