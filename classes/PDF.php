@@ -434,10 +434,11 @@ class PDFCore extends PDF_PageGroupCore
 	 */
 	public static function generateHeaderAddresses(&$pdf, $order, $addressType, $patternRules, $width)
 	{
+		
 		$maxY = 0;
 		$pdf->setY($pdf->GetY() + 5);
 		foreach(array_keys($addressType) as $type)
-		{
+		{			
 			$currentY = $pdf->GetY();
 
 			$attributeName = 'id_address_'.$type;
@@ -458,8 +459,12 @@ class PDFCore extends PDF_PageGroupCore
 							if ($pattern == 'State:name' && 
 								Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
 							{
-								$state = &$addressType[$type]['addressFormatedValues'][$pattern];
-								$state = strtoupper(substr($state, 0, 2));
+								$state_name = &$addressType[$type]['addressFormatedValues'][$pattern];
+								$state = new State((int)State::getIdByName($state_name));
+								if (Validate::isLoadedObject($state))
+									$state_name = $state->iso_code;
+								else 
+									$state_name = strtoupper(substr($state_name, 0, 2));
 							}
 							$tmp .= ((isset($addressType[$type]['addressFormatedValues'][$pattern]) &&
 								!empty($addressType[$type]['addressFormatedValues'][$pattern])) ?
