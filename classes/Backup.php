@@ -50,7 +50,7 @@ class BackupCore
 			$this->id = $this->getRealBackupPath($filename);
 
 			$psBackupAll = Configuration::get('PS_BACKUP_ALL');
-			$psBackupDropTable = Configuration::get('PS_BACKUP_DROP_TABLE')
+			$psBackupDropTable = Configuration::get('PS_BACKUP_DROP_TABLE');
 			$this->psBackupAll = $psBackupAll !== false ? $psBackupAll : true;
 			$this->psBackupDropTable = $psBackupDropTable !== false ? $psBackupDropTable : true;
 	}
