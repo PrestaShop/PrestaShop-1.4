@@ -55,8 +55,9 @@ class MRTools
 				FROM `'._DB_PREFIX_.'country`
 				WHERE `id_country` = '.(int)$id_country);
 
+		// Skip the cheking format if doesn't exist
 		if (!$zipcodeFormat)
-			return false;
+			return true;
 
 		$regxMask = str_replace(
 				array('N', 'C', 'L'),
