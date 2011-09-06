@@ -60,6 +60,7 @@ class BlockLayered extends Module
 		}
 		
 		self::_installPriceIndexTable();
+		self::_installFriendlyUrlTable();
 
 		return $result;
 	}
@@ -91,6 +92,23 @@ class BlockLayered extends Module
 		)
 		ENGINE = '._MYSQL_ENGINE_.';
 		');
+	}
+	
+	private function _installFriendlyUrlTable()
+	{
+		Db::getInstance()->execute('
+		DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_friendly_url`;
+		');
+		Db::getInstance()->execute('
+		CREATE TABLE `'._DB_PREFIX_.'layered_friendly_url` (
+			`id_layered_friendly_url` INT NOT NULL AUTO_INCREMENT,
+			`url_key` varchar(32) NOT NULL,
+			`data` varchar(200) NOT NULL,
+			PRIMARY KEY (`id_layered_friendly_url`)
+		)
+		ENGINE = '._MYSQL_ENGINE_.';
+		');
+		Db::getInstance()->execute('CREATE INDEX `url_key` ON `layered_friendly_url`(url_key(5))');
 	}
 	
 	/*
@@ -836,6 +854,13 @@ class BlockLayered extends Module
 		$id_parent = (int)Tools::getValue('id_category', Tools::getValue('id_category_layered', 1));
 		if ($id_parent == 1)
 			return;
+		
+		if(strpos($_SERVER['SCRIPT_FILENAME'], 'blocklayered-ajax.php') !== false) // @TODO to be change, friendly_url auto-check box
+		{
+			$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5($_SERVER['REQUEST_URI']).'\'');
+			if($data !== false)
+				return unserialize($data);
+		}
 
 		/* Analyze all the filters selected by the user and store them into a tab */
 		$selectedFilters = array('category' => array(), 'manufacturer' => array(), 'quantity' => array(), 'condition' => array());
