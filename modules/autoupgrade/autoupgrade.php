@@ -35,7 +35,7 @@ class Autoupgrade extends Module
 		{
 			$idTab = Tab::getIdFromClassName('AdminUpgrade');
 			$tab = new Tab($idTab);
-			$tab->delete();
+			$res = $tab->delete();
 		}
 		else
 		{
