@@ -87,7 +87,6 @@
 								<div style="margin-top:5px;" class="layered_slider" id="layered_{$filter.type}_slider"></div>
 							</div>
 							<script type="text/javascript">
-							unit = '{$filter.unit}';
 							{literal}
 								$(document).ready(function()
 								{
@@ -97,32 +96,17 @@
 										max: {/literal}{$filter.max}{literal},
 										values: [ {/literal}{$filter.values[0]}{literal}, {/literal}{$filter.values[1]}{literal}],
 										slide: function( event, ui ) {
-											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + unit + ' - ' + ui.values[ 1 ] + unit);
+											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + '{/literal}{$filter.unit}{literal}' + ' - ' + ui.values[ 1 ] + '{/literal}{$filter.unit}{literal}');
 										},
 										stop: function () {
 											reloadContent();
 										}
 									});
-									$('#layered_{/literal}{$filter.type}{literal}_range').html($('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 0 ) +unit+
-										' - ' + $('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 1 )+unit );
+									$('#layered_{/literal}{$filter.type}{literal}_range').html($('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 0 ) +'{/literal}{$filter.unit}{literal}'+
+										' - ' + $('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 1 )+'{/literal}{$filter.unit}{literal}');
 								});
 							{/literal}
 							</script>
-							<!--
-							<script type="text/javascript">
-							unit = '{$filter.unit}';
-							type = '{$filter.type}';
-							max = '{$filter.max}';
-							min = '{$filter.min}';
-							values = [{$filter.values[0]}, {$filter.values[1]}];
-							{literal}
-								$(document).ready(function()
-								{
-									initSlider(type, min, max, values, unit);
-								});
-							{/literal}
-							</script>
-							-->
 						{/if}
 						</ul>
 					</div>

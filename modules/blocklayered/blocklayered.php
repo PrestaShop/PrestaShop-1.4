@@ -98,7 +98,7 @@ class BlockLayered extends Module
 	 */
 	public static function fullIndexProcess($cursor = 0, $ajax = false, $smart = false)
 	{
-		if ($cursor == 0 && !$smart)
+		if ($cursor == 0 AND !$smart)
 			self::_installPriceIndexTable();
 		
 		return self::_indexer($cursor, true, $ajax, $smart);
@@ -236,7 +236,7 @@ class BlockLayered extends Module
 					$maxPrice[$currency['id_currency']] = $price;
 				if ($price == 0)
 					continue;
-				if (is_null($minPrice[$currency['id_currency']]) || $price < $minPrice[$currency['id_currency']])
+				if (is_null($minPrice[$currency['id_currency']]) OR $price < $minPrice[$currency['id_currency']])
 					$minPrice[$currency['id_currency']] = $price;
 			}
 		
@@ -254,7 +254,7 @@ class BlockLayered extends Module
 					$maxPrice[$currency['id_currency']] = $price;
 				if ($price == 0)
 					continue;
-				if (is_null($minPrice[$currency['id_currency']]) || $price < $minPrice[$currency['id_currency']])
+				if (is_null($minPrice[$currency['id_currency']]) OR $price < $minPrice[$currency['id_currency']])
 					$minPrice[$currency['id_currency']] = $price;
 			}
 		
@@ -951,13 +951,13 @@ class BlockLayered extends Module
 				break;
 
 				case 'weight':
-					if ($selectedFilters['weight'][0] != 0 || $selectedFilters['weight'][1] != 0)
+					if ($selectedFilters['weight'][0] != 0 OR $selectedFilters['weight'][1] != 0)
 						$queryFilters .= ' AND p.`weight` BETWEEN '.(float)($selectedFilters['weight'][0] - 0.001).' AND '.(float)($selectedFilters['weight'][1] + 0.001);
 
 				case 'price':
 					if (isset($selectedFilters['price']))
 					{
-						if ($selectedFilters['price'][0] != 0 || $selectedFilters['price'][1] != 0)
+						if ($selectedFilters['price'][0] != 0 OR $selectedFilters['price'][1] != 0)
 						{
 							$priceFilter = array();
 							$priceFilter['min'] = (float)($selectedFilters['price'][0]);
@@ -973,7 +973,7 @@ class BlockLayered extends Module
 		$idCurrency = Currency::getCurrent()->id;
 		$priceFilterQueryIn = ''; // All products with price range between price filters limits
 		$priceFilterQueryOut = ''; // All products with a price filters limit on it price range
-		if (isset($priceFilter) && $priceFilter)
+		if (isset($priceFilter) AND $priceFilter)
 		{
 			$priceFilterQueryIn = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi
 			ON psi.price_min >= '.(int)$priceFilter['min'].'
@@ -1353,7 +1353,7 @@ class BlockLayered extends Module
 			}
 			elseif ($filterBlock['type_lite'] == 'weight')
 			{
-				if (!empty($weight) && max($weight) != min($weight))
+				if (!empty($weight) AND max($weight) != min($weight))
 				{
 					$filterBlock['name'] = $this->l('Weight');
 					$filterBlock['slider'] = true;
@@ -1370,7 +1370,7 @@ class BlockLayered extends Module
 			}
 			elseif ($filterBlock['type_lite'] == 'price')
 			{
-				if (!empty($price) && max($price) != min($price))
+				if (!empty($price) AND max($price) != min($price))
 				{
 					$filterBlock['name'] = $this->l('Price');
 					$filterBlock['slider'] = true;
@@ -1422,7 +1422,7 @@ class BlockLayered extends Module
 			{
 				case 'price':
 				case 'weight':
-					if ($value[0] == '' && $value[1] == '' || $value[0] == 0 && $value[1] == 0)
+					if ($value[0] == '' AND $value[1] == '' OR $value[0] == 0 AND $value[1] == 0)
 						unset($selectedFilters[$key]);
 					break;
 				default:
@@ -1712,7 +1712,7 @@ class BlockLayered extends Module
 	{
 		$idCurrency = Currency::getCurrent()->id;
 		$priceFilterQuery = '';
-		if (isset($filterValue) && $filterValue)
+		if (isset($filterValue) AND $filterValue)
 		{
 			$idCurrency = Currency::getCurrent()->id;
 			$priceFilterQuery = '
@@ -1739,7 +1739,7 @@ class BlockLayered extends Module
 			AND ((int)$filterValue[0] > $product['price_min'] OR (int)$filterValue[1] < $product['price_max']))
 			{
 				$price = Product::getPriceStatic($product['id_product']);
-				if ($price < $filterValue[0] || $price > $filterValue[1])
+				if ($price < $filterValue[0] OR $price > $filterValue[1])
 					continue;
 				unset($productCollection[$key]);
 			}
@@ -1749,8 +1749,8 @@ class BlockLayered extends Module
 	
 	private static function getWeightFilterSubQuery($filterValue)
 	{
-		if (isset($filterValue) && $filterValue)
-			if ($filterValue[0] != 0 || $filterValue[1] != 0)
+		if (isset($filterValue) AND $filterValue)
+			if ($filterValue[0] != 0 OR $filterValue[1] != 0)
 				return array('where' => ' AND p.`weight` BETWEEN '.(float)($filterValue[0] - 0.001).' AND '.(float)($filterValue[1] + 0.001).' ');
 		
 		return array();
