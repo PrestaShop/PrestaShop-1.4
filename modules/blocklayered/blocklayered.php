@@ -1506,7 +1506,7 @@ class BlockLayered extends Module
 					GROUP BY pac.id_attribute, p.id_product) tmp
 					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang al ON (al.id_attribute_group = tmp.id_attribute_group AND al.id_lang = '.(int)$cookie->id_lang.')
 					LEFT JOIN '._DB_PREFIX_.'attribute_group a ON (a.id_attribute_group = al.id_attribute_group)
-					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND al.id_lang = '.(int)$cookie->id_lang.')
+					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND agl.id_lang = '.(int)$cookie->id_lang.')
 					GROUP BY tmp.id_attribute
 					ORDER BY id_attribute_group';
 					break;
@@ -1678,6 +1678,8 @@ class BlockLayered extends Module
 					break;
 
 				case 'id_attribute_group':
+					elog($sqlQuery['select']."\n".$sqlQuery['from']."\n".$sqlQuery['join']."\n".$sqlQuery['where']."\n".$sqlQuery['group']);
+					
 					$attributesArray = array();
 					if (isset($products) AND $products)
 					{
