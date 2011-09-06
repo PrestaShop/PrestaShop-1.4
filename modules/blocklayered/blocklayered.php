@@ -85,8 +85,9 @@ class BlockLayered extends Module
 			`price_min` INT NOT NULL,
 			`price_max` INT NOT NULL,
 			PRIMARY KEY (`id_product`, `id_currency`),
-			INDEX price_min (price_min),
-			INDEX price_max (price_max)
+			INDEX `id_currency` (`id_currency`),
+			INDEX `price_min` (`price_min`),
+			INDEX `price_max` (`price_max`)
 		)
 		ENGINE = InnoDB;
 		');
