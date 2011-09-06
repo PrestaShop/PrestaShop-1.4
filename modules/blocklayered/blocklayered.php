@@ -76,39 +76,28 @@ class BlockLayered extends Module
 	
 	private function _installPriceIndexTable()
 	{
-		Db::getInstance()->execute('
-		DROP TABLE IF EXISTS  `'._DB_PREFIX_.'price_static_index`;
-		');
-		Db::getInstance()->execute('
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'price_static_index`');
+		
+		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'price_static_index` (
-			`id_product` INT  NOT NULL,
-			`id_currency` INT NOT NULL,
-			`price_min` INT NOT NULL,
-			`price_max` INT NOT NULL,
-			PRIMARY KEY (`id_product`, `id_currency`),
-			INDEX `id_currency` (`id_currency`),
-			INDEX `price_min` (`price_min`),
-			INDEX `price_max` (`price_max`)
-		)
-		ENGINE = '._MYSQL_ENGINE_.';
-		');
+		`id_product` INT  NOT NULL, `id_currency` INT NOT NULL,
+		`price_min` INT NOT NULL, `price_max` INT NOT NULL,
+		PRIMARY KEY (`id_product`, `id_currency`), INDEX `id_currency` (`id_currency`),
+		INDEX `price_min` (`price_min`), INDEX `price_max` (`price_max`)) ENGINE = '._MYSQL_ENGINE_);
 	}
 	
 	private function _installFriendlyUrlTable()
 	{
-		Db::getInstance()->execute('
-		DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_friendly_url`;
-		');
-		Db::getInstance()->execute('
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_friendly_url`');
+		
+		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'layered_friendly_url` (
-			`id_layered_friendly_url` INT NOT NULL AUTO_INCREMENT,
-			`url_key` varchar(32) NOT NULL,
-			`data` varchar(200) NOT NULL,
-			PRIMARY KEY (`id_layered_friendly_url`)
-		)
-		ENGINE = '._MYSQL_ENGINE_.';
-		');
-		Db::getInstance()->execute('CREATE INDEX `url_key` ON `layered_friendly_url`(url_key(5))');
+		`id_layered_friendly_url` INT NOT NULL AUTO_INCREMENT,
+		`url_key` varchar(32) NOT NULL,
+		`data` varchar(200) NOT NULL,
+		PRIMARY KEY (`id_layered_friendly_url`)) ENGINE = '._MYSQL_ENGINE_);
+
+		Db::getInstance()->Execute('CREATE INDEX `url_key` ON `'._DB_PREFIX_.'layered_friendly_url`(url_key(5))');
 	}
 	
 	/*
@@ -192,7 +181,7 @@ class BlockLayered extends Module
 		else
 			$query = '
 			SELECT p.id_product
-			FROM `'._DB_PREFIX_.'product` as p
+			FROM `'._DB_PREFIX_.'product` p
 			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product)
 			WHERE `active` = 1 AND psi.id_product is null
 			ORDER by id_product LIMIT 0,'.(int)$length;
@@ -208,7 +197,7 @@ class BlockLayered extends Module
 		static $groups = null;
 
 		if (is_null($groups))
-			$groups = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT id_group FROM `'._DB_PREFIX_.'group_reduction`');
+			$groups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_group FROM `'._DB_PREFIX_.'group_reduction`');
 		
 		static $currencyList = null;
 		if (is_null($currencyList))
@@ -217,13 +206,12 @@ class BlockLayered extends Module
 		$minPrice = array();
 		$maxPrice = array();
 		
-		
 		if ($smart)
 			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'price_static_index` WHERE `id_product` = '.(int)$idProduct);
 		
 		$maxTaxRate = Db::getInstance()->getValue('
-		SELECT max(t.rate) as max_rate
-		FROM `'._DB_PREFIX_.'product` as p
+		SELECT max(t.rate) max_rate
+		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'tax_rules_group` trg ON (trg.id_tax_rules_group = p.id_tax_rules_group)
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.id_tax_rules_group = trg.id_tax_rules_group)
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.id_tax = tr.id_tax AND t.active = 1)
@@ -263,7 +251,7 @@ class BlockLayered extends Module
 			{
 				$price = Product::priceCalculation(null, (int)$idProduct, null, null, null, null, (int)$currency['id_currency'], (int)$group['id_group'],
 					null, false, true, false, true, true, $specificPriceOutput, true);
-					
+				
 				if (!isset($maxPrice[$currency['id_currency']]))
 					$maxPrice[$currency['id_currency']] = 0;
 				if (!isset($minPrice[$currency['id_currency']]))
@@ -485,14 +473,14 @@ class BlockLayered extends Module
 			});
 			</script>';
 		$html .= '
-			- <a class="bold ajaxcall" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'">'.$this->l('Index all missing products.').'</a>
+			- <a class="bold ajaxcall" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing products.').'</a>
 			<br />
-			- <a class="bold ajaxcall" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'&full=1">'.$this->l('Re-build entire index.').'</a>
+			- <a class="bold ajaxcall" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire index.').'</a>
 			<br />
 			<br />
-			'.$this->l('You can set a cron job that will re-build your index using the following URL: ').Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'&full=1
-			<br />
-			'.$this->l('A full re-index process must be done each time products are modified. A nightly rebuild is recomanded.').'
+			'.$this->l('You can set a cron job that will re-build your index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1</b>
+			<br /><br />
+			'.$this->l('A full re-index process must be done each time products are modified. A nightly rebuild is recommended.').'
 			<script type="text/javascript">
 				$(\'.ajaxcall\').each(function(it, elm) {
 					$(elm).click(function() {
@@ -816,8 +804,8 @@ class BlockLayered extends Module
 			</form>
 		</fieldset><br />
 		<fieldset class="width2">
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
-			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Configuration').'</legend>
+			<legend><img src="../img/admin/cog.gif" alt="" /> '.$this->l('Configuration').'</legend>
+			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">			
 				<table border="0" style="font-size: 11px; width: 100%; margin: 0 auto;" class="table">
 					<tr>
 						<th style="text-align: center;">'.$this->l('Option').'</th>
@@ -1000,13 +988,13 @@ class BlockLayered extends Module
 		$priceFilterQueryOut = ''; // All products with a price filters limit on it price range
 		if (isset($priceFilter) AND $priceFilter)
 		{
-			$priceFilterQueryIn = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi
+			$priceFilterQueryIn = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` psi
 			ON psi.price_min >= '.(int)$priceFilter['min'].'
 				AND psi.price_max <= '.(int)$priceFilter['max'].'
 				AND psi.`id_product` = p.`id_product`
 				AND psi.`id_currency` = '.(int)$idCurrency;
 			
-			$priceFilterQueryOut = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi
+			$priceFilterQueryOut = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` psi
 			ON 
 				((psi.price_min < '.(int)$priceFilter['min'].' AND psi.price_max > '.(int)$priceFilter['min'].')
 				OR
@@ -1102,7 +1090,7 @@ class BlockLayered extends Module
 				LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = pac.`id_product_attribute`) 
 				WHERE pa.`id_product` = p.`id_product`) ids_attr
 		FROM '._DB_PREFIX_.'product p 
-		LEFT JOIN  `'._DB_PREFIX_.'price_static_index` as psi
+		LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi
 			ON psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)Currency::getCurrent()->id.'
 		WHERE p.`active` = 1 AND p.`id_product` IN (SELECT id_product FROM `'._DB_PREFIX_.'category_product` cp WHERE'.$whereC, false);
 		
@@ -1480,9 +1468,9 @@ class BlockLayered extends Module
 					$sqlQuery['where'] = 'WHERE p.`active` = 1 ';
 					break;
 				case 'manufacturer':
-					$sqlQuery['select'] = 'SELECT m.name, count(p.id_product) AS nbr, m.id_manufacturer ';
+					$sqlQuery['select'] = 'SELECT m.name, count(p.id_product) nbr, m.id_manufacturer ';
 					$sqlQuery['from'] = '
-					FROM `'._DB_PREFIX_.'category_product` AS cp
+					FROM `'._DB_PREFIX_.'category_product` cp
 					INNER JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product AND p.active = 1)
 					INNER JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer) ';
 					$sqlQuery['where'] = '
@@ -1491,8 +1479,8 @@ class BlockLayered extends Module
 					break;
 				case 'id_attribute_group':// attribute group
 					$sqlQuery['select'] = '
-					SELECT COUNT(tmp.id_attribute) nbr, tmp.id_attribute_group, tmp.color, tmp.name AS name, agl.public_name AS attributeName,
-					tmp.id_attribute AS id_attribute, a.is_color_group FROM (SELECT p.id_product, pac.id_attribute, a.color, al.name, a.id_attribute_group';
+					SELECT COUNT(tmp.id_attribute) nbr, tmp.id_attribute_group, tmp.color, tmp.name name, agl.public_name attributeName,
+					tmp.id_attribute id_attribute, a.is_color_group FROM (SELECT p.id_product, pac.id_attribute, a.color, al.name, a.id_attribute_group';
 					$sqlQuery['from'] = '
 					FROM '._DB_PREFIX_.'product_attribute_combination pac
 					LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
@@ -1532,7 +1520,7 @@ class BlockLayered extends Module
 					WHERE cp.id_category = c.id_category ';
 					$sqlQuery['group'] = ') count_products
 					FROM '._DB_PREFIX_.'category c
-					LEFT JOIN '._DB_PREFIX_.'category_lang as cl ON (cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.')
+					LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.')
 					WHERE c.id_parent = '.(int)$id_parent.'
 					GROUP BY c.id_category ORDER BY level_depth';
 			}
@@ -1547,9 +1535,7 @@ class BlockLayered extends Module
 					else
 						$subQueryFilter = self::$methodName(@$selectedFilters[$filterTmp['type']]);
 					foreach ($subQueryFilter as $key => $value)
-					{
 						$sqlQuery[$key] .= $value;
-					}
 				}
 			}
 			
@@ -1666,20 +1652,16 @@ class BlockLayered extends Module
 				case 'manufacturer':
 					$manufaturersArray = array();
 					if (isset($products) AND $products)
-					{
 						foreach ($products as $manufacturer)
 						{
 							$manufaturersArray[$manufacturer['id_manufacturer']] = array('name' => $manufacturer['name'], 'nbr' => $manufacturer['nbr']);
 							if (isset($selectedFilters['manufacturer']) AND in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
 								$manufaturersArray[$manufacturer['id_manufacturer']]['checked'] = true;
 						}
-					}
 					$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => $this->l('Manufacturer'), 'values' => $manufaturersArray);
 					break;
 
-				case 'id_attribute_group':
-					elog($sqlQuery['select']."\n".$sqlQuery['from']."\n".$sqlQuery['join']."\n".$sqlQuery['where']."\n".$sqlQuery['group']);
-					
+				case 'id_attribute_group':					
 					$attributesArray = array();
 					if (isset($products) AND $products)
 					{
@@ -1750,13 +1732,13 @@ class BlockLayered extends Module
 		{
 			$idCurrency = Currency::getCurrent()->id;
 			$priceFilterQuery = '
-			INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
+			INNER JOIN `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
 			AND psi.price_min <= '.(int)$filterValue[1].' AND psi.price_max >= '.(int)$filterValue[0].' AND psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)$idCurrency.') ';
 		}
 		else{
 			$idCurrency = Currency::getCurrent()->id;
 			$priceFilterQuery = '
-			INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
+			INNER JOIN `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
 			AND psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)$idCurrency.') ';
 		}
 		
