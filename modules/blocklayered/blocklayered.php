@@ -1546,7 +1546,7 @@ class BlockLayered extends Module
 				switch($filter['type'])
 				{
 					case 'price':
-						$priceArray = array('type_lite' => 'price', 'type' => 'price', 'id_key' => 0, 'name' => 'Price',
+						$priceArray = array('type_lite' => 'price', 'type' => 'price', 'id_key' => 0, 'name' => $this->l('Price'),
 						'slider' => true, 'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Currency::getCurrent()->sign);
 						foreach ($products as $product)
 						{
@@ -1579,7 +1579,7 @@ class BlockLayered extends Module
 						break;
 
 					case 'weight':
-						$weightArray = array('type_lite' => 'weight', 'type' => 'weight', 'id_key' => 0, 'name' => 'Weight', 'slider' => true,
+						$weightArray = array('type_lite' => 'weight', 'type' => 'weight', 'id_key' => 0, 'name' => $this->l('Weight'), 'slider' => true,
 						'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Configuration::get('PS_WEIGHT_UNIT'));
 						foreach ($products as $product)
 						{
@@ -1621,17 +1621,17 @@ class BlockLayered extends Module
 								$conditionArray[$key]['checked'] = true;
 						foreach ($products as $product)
 							$conditionArray[$product['condition']]['nbr']++;
-						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => 'Condition', 'values' => $conditionArray);
+						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => $this->l('Condition'), 'values' => $conditionArray);
 						break;
 
 					case 'quantity':
-						$quantityArray = array (0 => array('name' => 'Not available', 'nbr' => 0), 1 => array('name' => 'In stock', 'nbr' => 0));
+						$quantityArray = array (0 => array('name' => $this->l('Not available'), 'nbr' => 0), 1 => array('name' => $this->l('In stock'), 'nbr' => 0));
 						foreach ($quantityArray as $key => $quantity)
 							if (isset($selectedFilters['quantity']) AND in_array($key, $selectedFilters['quantity']))
 								$quantityArray[$key]['checked'] = true;
 						foreach ($products as $product)
 							$quantityArray[(int)($product['quantity'] > 0)]['nbr']++;
-						$filterBlocks[] = array('type_lite' => 'quantity', 'type' => 'quantity', 'id_key' => 0, 'name' => 'Quantity', 'values' => $quantityArray);
+						$filterBlocks[] = array('type_lite' => 'quantity', 'type' => 'quantity', 'id_key' => 0, 'name' => $this->l('Availability'), 'values' => $quantityArray);
 						break;
 
 					case 'manufacturer':
@@ -1642,7 +1642,7 @@ class BlockLayered extends Module
 							if (isset($selectedFilters['manufacturer']) AND in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
 								$manufaturersArray[$manufacturer['id_manufacturer']]['checked'] = true;
 						}
-						$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => 'Manufacturer', 'values' => $manufaturersArray);
+						$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => $this->l('Manufacturer'), 'values' => $manufaturersArray);
 						break;
 
 					case 'id_attribute_group':
@@ -1681,7 +1681,7 @@ class BlockLayered extends Module
 						$tmpArray = array();
 						foreach ($products as $category)
 							$tmpArray[] = array('name' => $category['name'], 'nbr' => (int)$category['count_products']);
-						$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => 'Categories', 'values' => $tmpArray);
+						$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => $this->l('Categories'), 'values' => $tmpArray);
 						break;
 				}
 				
