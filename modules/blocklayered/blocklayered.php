@@ -1539,7 +1539,8 @@ class BlockLayered extends Module
 			foreach ($filters as $filterTmp)
 			{
 				$methodName = 'get'.ucfirst($filterTmp['type']).'FilterSubQuery';
-				if (method_exists('BlockLayered', $methodName))
+				if (method_exists('BlockLayered', $methodName) &&
+				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filterTmp['type'] || $filter['type'] == $filterTmp['type']))
 				{
 					if ($filter['type'] == $filterTmp['type'])
 						$subQueryFilter = self::$methodName(array());
@@ -1556,23 +1557,24 @@ class BlockLayered extends Module
 			if (!empty($sqlQuery['from']))
 				$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sqlQuery['select']."\n".$sqlQuery['from']."\n".$sqlQuery['join']."\n".$sqlQuery['where']."\n".$sqlQuery['group']);
 			
-			if (isset($products) AND $products)
+			foreach ($filters as $filterTmp)
 			{
-				foreach ($filters as $filterTmp)
-				{
-					$methodName = 'filterProductsBy'.ucfirst($filterTmp['type']);
-					if (method_exists('BlockLayered', $methodName))
-						if ($filter['type'] == $filterTmp['type'])
-							$products = self::$methodName(array(), $products);
-						else
-							$products = self::$methodName(@$selectedFilters[$filterTmp['type']], $products);
-				}
+				$methodName = 'filterProductsBy'.ucfirst($filterTmp['type']);
+				if (method_exists('BlockLayered', $methodName) &&
+				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filterTmp['type'] || $filter['type'] == $filterTmp['type']))
+					if ($filter['type'] == $filterTmp['type'])
+						$products = self::$methodName(array(), $products);
+					else
+						$products = self::$methodName(@$selectedFilters[$filterTmp['type']], $products);
+			}
 
-				switch($filter['type'])
-				{
-					case 'price':
-						$priceArray = array('type_lite' => 'price', 'type' => 'price', 'id_key' => 0, 'name' => $this->l('Price'),
-						'slider' => true, 'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Currency::getCurrent()->sign);
+			switch($filter['type'])
+			{
+				case 'price':
+					$priceArray = array('type_lite' => 'price', 'type' => 'price', 'id_key' => 0, 'name' => $this->l('Price'),
+					'slider' => true, 'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Currency::getCurrent()->sign);
+					if (isset($products) AND $products)
+					{
 						foreach ($products as $product)
 						{
 							if (is_null($priceArray['min']))
@@ -1585,27 +1587,28 @@ class BlockLayered extends Module
 								$priceArray['min'] = $product['price_min'];
 								$priceArray['values'][0] = $product['price_min'];
 							}
-
+	
 							if ($priceArray['max'] < $product['price_max'])
 							{
 								$priceArray['max'] = $product['price_max'];
 								$priceArray['values'][1] = $product['price_max'];
 							}
-							
-							if (isset($selectedFilters['price']) AND isset($selectedFilters['price'][0])
-							AND isset($selectedFilters['price'][1]) AND !empty($selectedFilters['price'][0])
-							AND !empty($selectedFilters['price'][1]))
-							{
-								$priceArray['values'][0] = $selectedFilters['price'][0];
-								$priceArray['values'][1] = $selectedFilters['price'][1];
-							}
 						}
-						$filterBlocks[] = $priceArray;
-						break;
+					}
+					if (isset($selectedFilters['price']) AND isset($selectedFilters['price'][0])
+					AND isset($selectedFilters['price'][1]))
+					{
+						$priceArray['values'][0] = $selectedFilters['price'][0];
+						$priceArray['values'][1] = $selectedFilters['price'][1];
+					}
+					$filterBlocks[] = $priceArray;
+					break;
 
-					case 'weight':
-						$weightArray = array('type_lite' => 'weight', 'type' => 'weight', 'id_key' => 0, 'name' => $this->l('Weight'), 'slider' => true,
-						'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Configuration::get('PS_WEIGHT_UNIT'));
+				case 'weight':
+					$weightArray = array('type_lite' => 'weight', 'type' => 'weight', 'id_key' => 0, 'name' => $this->l('Weight'), 'slider' => true,
+					'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Configuration::get('PS_WEIGHT_UNIT'));
+					if (isset($products) AND $products)
+					{
 						foreach ($products as $product)
 						{
 							if (is_null($weightArray['min']))
@@ -1624,54 +1627,60 @@ class BlockLayered extends Module
 								$weightArray['max'] = $product['weight'];
 								$weightArray['values'][1] = $product['weight'];
 							}
-							
-							if (isset($selectedFilters['weight']) AND isset($selectedFilters['weight'][0])
-							AND isset($selectedFilters['weight'][1]) AND !empty($selectedFilters['weight'][0])
-							AND !empty($selectedFilters['weight'][1]))
-							{
-								$weightArray['values'][0] = $selectedFilters['weight'][0];
-								$weightArray['values'][1] = $selectedFilters['weight'][1];
-							}
 						}
-						$filterBlocks[] = $weightArray;
-						break;
+					}
+					if (isset($selectedFilters['weight']) AND isset($selectedFilters['weight'][0])
+					AND isset($selectedFilters['weight'][1]))
+					{
+						$weightArray['values'][0] = $selectedFilters['weight'][0];
+						$weightArray['values'][1] = $selectedFilters['weight'][1];
+					}
+					$filterBlocks[] = $weightArray;
+					break;
 
-					case 'condition':
-						$conditionArray =  array('new' => array('name' => $this->l('New'), 'nbr' => 0), 
-						'used' => array('name' => $this->l('Used'), 'nbr' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'nbr' => 0));
-						if (isset($selectedFilters['condition']) AND in_array($product['condition'], $selectedFilters['condition']))
-							$conditionArray[$product['condition']]['checked'] = true;
-						foreach ($conditionArray as $key => $condition)
-							if (isset($selectedFilters['condition']) AND in_array($key, $selectedFilters['condition']))
-								$conditionArray[$key]['checked'] = true;
+				case 'condition':
+					$conditionArray =  array('new' => array('name' => $this->l('New'), 'nbr' => 0), 
+					'used' => array('name' => $this->l('Used'), 'nbr' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'nbr' => 0));
+					if (isset($selectedFilters['condition']) AND in_array($product['condition'], $selectedFilters['condition']))
+						$conditionArray[$product['condition']]['checked'] = true;
+					foreach ($conditionArray as $key => $condition)
+						if (isset($selectedFilters['condition']) AND in_array($key, $selectedFilters['condition']))
+							$conditionArray[$key]['checked'] = true;
+					if (isset($products) AND $products)
 						foreach ($products as $product)
 							$conditionArray[$product['condition']]['nbr']++;
+					break;
 						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => $this->l('Condition'), 'values' => $conditionArray);
-						break;
 
-					case 'quantity':
-						$quantityArray = array (0 => array('name' => $this->l('Not available'), 'nbr' => 0), 1 => array('name' => $this->l('In stock'), 'nbr' => 0));
-						foreach ($quantityArray as $key => $quantity)
-							if (isset($selectedFilters['quantity']) AND in_array($key, $selectedFilters['quantity']))
-								$quantityArray[$key]['checked'] = true;
+				case 'quantity':
+					$quantityArray = array (0 => array('name' => $this->l('Not available'), 'nbr' => 0), 1 => array('name' => $this->l('In stock'), 'nbr' => 0));
+					foreach ($quantityArray as $key => $quantity)
+						if (isset($selectedFilters['quantity']) AND in_array($key, $selectedFilters['quantity']))
+							$quantityArray[$key]['checked'] = true;
+					if (isset($products) AND $products)
 						foreach ($products as $product)
 							$quantityArray[(int)($product['quantity'] > 0)]['nbr']++;
-						$filterBlocks[] = array('type_lite' => 'quantity', 'type' => 'quantity', 'id_key' => 0, 'name' => $this->l('Availability'), 'values' => $quantityArray);
-						break;
+					$filterBlocks[] = array('type_lite' => 'quantity', 'type' => 'quantity', 'id_key' => 0, 'name' => $this->l('Availability'), 'values' => $quantityArray);
+					break;
 
-					case 'manufacturer':
-						$manufaturersArray = array();
+				case 'manufacturer':
+					$manufaturersArray = array();
+					if (isset($products) AND $products)
+					{
 						foreach ($products as $manufacturer)
 						{
 							$manufaturersArray[$manufacturer['id_manufacturer']] = array('name' => $manufacturer['name'], 'nbr' => $manufacturer['nbr']);
 							if (isset($selectedFilters['manufacturer']) AND in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
 								$manufaturersArray[$manufacturer['id_manufacturer']]['checked'] = true;
 						}
-						$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => $this->l('Manufacturer'), 'values' => $manufaturersArray);
-						break;
+					}
+					$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => $this->l('Manufacturer'), 'values' => $manufaturersArray);
+					break;
 
-					case 'id_attribute_group':
-						$attributesArray = array();
+				case 'id_attribute_group':
+					$attributesArray = array();
+					if (isset($products) AND $products)
+					{
 						foreach ($products as $attributes)
 						{
 							if (!isset($attributesArray[$attributes['id_attribute_group']]))
@@ -1686,9 +1695,12 @@ class BlockLayered extends Module
 								$attributesArray[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']]['checked'] = true;
 						}
 						$filterBlocks = array_merge($filterBlocks, $attributesArray);
-						break;
-					case 'id_feature':
-						$featureArray = array ();
+					}
+					break;
+				case 'id_feature':
+					$featureArray = array ();
+					if (isset($products) AND $products)
+					{
 						foreach ($products as $feature)
 						{
 							if (!isset($featureArray[$feature['id_feature']]))
@@ -1700,22 +1712,17 @@ class BlockLayered extends Module
 								$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']]['checked'] = true;
 						}
 						$filterBlocks = array_merge($filterBlocks, $featureArray);
-						break;
+					}
+					break;
 
-					case 'category':
-						$tmpArray = array();
+				case 'category':
+					$tmpArray = array();
+					if (isset($products) AND $products)
 						foreach ($products as $category)
 							$tmpArray[] = array('name' => $category['name'], 'nbr' => (int)$category['count_products']);
-						$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => $this->l('Categories'), 'values' => $tmpArray);
-						break;
-				}
+					$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => $this->l('Categories'), 'values' => $tmpArray);
+					break;
 				
-			}
-			else {
-				// Debug
-				// We must never enter here
-				// The next line must be remove before the release
-				//var_export($sqlQuery['select']."\n".$sqlQuery['from']."\n".$sqlQuery['join']."\n".$sqlQuery['where']."\n".$sqlQuery['group']);die();
 			}
 		}
 		
