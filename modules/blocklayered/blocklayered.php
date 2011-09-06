@@ -75,11 +75,21 @@ class BlockLayered extends Module
 	
 	private function _installPriceIndexTable()
 	{
-		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'price_static_index`');
-		Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'price_static_index` (`id_product` INT  NOT NULL, `id_currency` INT NOT NULL,
-		`price_min` INT NOT NULL, `price_max` INT NOT NULL, PRIMARY KEY (`id_product`, `id_currency`),
-		INDEX price_min (price_min), INDEX price_max (price_max))');
+		Db::getInstance()->execute('
+		DROP TABLE IF EXISTS  `'._DB_PREFIX_.'price_static_index`;
+		');
+		Db::getInstance()->execute('
+		CREATE TABLE `'._DB_PREFIX_.'price_static_index` (
+			`id_product` INT  NOT NULL,
+			`id_currency` INT NOT NULL,
+			`price_min` INT NOT NULL,
+			`price_max` INT NOT NULL,
+			PRIMARY KEY (`id_product`, `id_currency`),
+			INDEX price_min (price_min),
+			INDEX price_max (price_max)
+		)
+		ENGINE = InnoDB;
+		');
 	}
 	
 	/*
@@ -87,10 +97,10 @@ class BlockLayered extends Module
 	 */
 	public static function fullIndexProcess($cursor = 0, $ajax = false, $smart = false)
 	{
-		if (!$cursor AND !$smart)
+		if ($cursor == 0 && !$smart)
 			self::_installPriceIndexTable();
-
-		return self::_indexer((int)$cursor, true, (bool)$ajax, (bool)$smart);
+		
+		return self::_indexer($cursor, true, $ajax, $smart);
 	}
 	
 	/*
@@ -98,17 +108,17 @@ class BlockLayered extends Module
 	 */
 	public static function indexProcess($cursor = 0, $ajax = false)
 	{
-		return self::_indexer((int)$cursor, false, (bool)$ajax);
+		return self::_indexer($cursor, false, $ajax);
 	}
 	
 	private static function _indexer($cursor = null, $full = false, $ajax = false, $smart = false)
 	{
 		if ($full)
-			$nbProducts = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'product WHERE `active` = 1');
+			$nbProducts = (int)Db::getInstance()->getValue('SELECT count(*) FROM '._DB_PREFIX_.'product WHERE `active` = 1');
 		else
-			$nbProducts = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+			$nbProducts = (int)Db::getInstance()->getValue(
 			'SELECT COUNT(*) FROM `'._DB_PREFIX_.'product` p
-			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product)
+			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p .id_product)
 			WHERE `active` = 1 AND psi.id_product IS NULL');
 		
 		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
@@ -147,7 +157,7 @@ class BlockLayered extends Module
 	{
 		static $length = 100; // Nb of products to index
 		
-		if ($cursor == NULL OR $cursor == 0)
+		if (is_null($cursor))
 			$cursor = 0;
 		
 		if ($full)
@@ -157,14 +167,14 @@ class BlockLayered extends Module
 			WHERE `active` = 1
 			ORDER by id_product LIMIT '.(int)$cursor.','.(int)$length;
 		else
-			$query = '*
+			$query = '
 			SELECT p.id_product
-			FROM `'._DB_PREFIX_.'product` p
+			FROM `'._DB_PREFIX_.'product` as p
 			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product)
-			WHERE `active` = 1 AND psi.id_product IS NULL
+			WHERE `active` = 1 AND psi.id_product is null
 			ORDER by id_product LIMIT 0,'.(int)$length;
 		
-		foreach (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query) AS $product)
+		foreach (Db::getInstance()->executeS($query) as $product)
 			self::indexProduct((int)$product['id_product'], ($smart AND $full));
 
 		return (int)($cursor + $length);
@@ -172,24 +182,25 @@ class BlockLayered extends Module
 	
 	public static function indexProduct($idProduct, $smart = true)
 	{
-		static $groups = NULL;
+		static $groups = null;
 
 		if (is_null($groups))
-			$groups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_group FROM `'._DB_PREFIX_.'group_reduction`');
+			$groups = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('SELECT id_group FROM `'._DB_PREFIX_.'group_reduction`');
 		
-		static $currencyList = NULL;
+		static $currencyList = null;
 		if (is_null($currencyList))
 			$currencyList = Currency::getCurrencies();
 		
 		$minPrice = array();
 		$maxPrice = array();
 		
-		if ($smart)
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'price_static_index` WHERE `id_product` = '.(int)$idProduct);
 		
-		$maxTaxRate = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT max(t.rate) max_rate
-		FROM `'._DB_PREFIX_.'product` p
+		if ($smart)
+			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'price_static_index` WHERE `id_product` = '.(int)$idProduct);
+		
+		$maxTaxRate = Db::getInstance()->getValue('
+		SELECT max(t.rate) as max_rate
+		FROM `'._DB_PREFIX_.'product` as p
 		LEFT JOIN `'._DB_PREFIX_.'tax_rules_group` trg ON (trg.id_tax_rules_group = p.id_tax_rules_group)
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.id_tax_rules_group = trg.id_tax_rules_group)
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.id_tax = tr.id_tax AND t.active = 1)
@@ -202,20 +213,20 @@ class BlockLayered extends Module
 		WHERE id_product = '.(int)$idProduct);
 		
 		// Get min price
-		foreach ($productMinPrices AS $specificPrice)
-			foreach ($currencyList AS $currency)
+		foreach ($productMinPrices as $specificPrice)
+			foreach ($currencyList as $currency)
 			{
 				if ($specificPrice['id_currency'] AND $specificPrice['id_currency'] != $currency['id_currency'])
 					continue;
-				$price = Product::priceCalculation((($specificPrice['id_shop'] == 0) ? NULL : (int)$specificPrice['id_shop']), (int)$idProduct,
-					NULL, (($specificPrice['id_country'] == 0) ? NULL : (int)$specificPrice['id_country']), NULL, NULL, (int)$currency['id_currency'],
-					(($specificPrice['id_group'] == 0) ? NULL : (int)$specificPrice['id_group']),
+				$price = Product::priceCalculation((($specificPrice['id_shop'] == 0) ? null : (int)$specificPrice['id_shop']), (int)$idProduct,
+					null, (($specificPrice['id_country'] == 0) ? null : $specificPrice['id_country']), null, null,
+					$currency['id_currency'], (($specificPrice['id_group'] == 0) ? null : $specificPrice['id_group']),
 					$specificPrice['from_quantity'], false, true, false, true, true, $specificPriceOutput, true);
 				
 				if (!isset($maxPrice[$currency['id_currency']]))
 					$maxPrice[$currency['id_currency']] = 0;
 				if (!isset($minPrice[$currency['id_currency']]))
-					$minPrice[$currency['id_currency']] = NULL;
+					$minPrice[$currency['id_currency']] = null;
 				if ($price > $maxPrice[$currency['id_currency']])
 					$maxPrice[$currency['id_currency']] = $price;
 				if ($price == 0)
@@ -224,16 +235,16 @@ class BlockLayered extends Module
 					$minPrice[$currency['id_currency']] = $price;
 			}
 		
-		foreach ($groups AS $group)
-			foreach ($currencyList AS $currency)
+		foreach ($groups as $group)
+			foreach ($currencyList as $currency)
 			{
-				$price = Product::priceCalculation(NULL, (int)$idProduct, NULL, NULL, NULL, NULL, (int)$currency['id_currency'], (int)$group['id_group'],
-				NULL, false, true, false, true, true, $specificPriceOutput, true);
+				$price = Product::priceCalculation(null, (int)$idProduct, null, null, null, null, (int)$currency['id_currency'], (int)$group['id_group'],
+					null, false, true, false, true, true, $specificPriceOutput, true);
 					
 				if (!isset($maxPrice[$currency['id_currency']]))
 					$maxPrice[$currency['id_currency']] = 0;
 				if (!isset($minPrice[$currency['id_currency']]))
-					$minPrice[$currency['id_currency']] = NULL;
+					$minPrice[$currency['id_currency']] = null;
 				if ($price > $maxPrice[$currency['id_currency']])
 					$maxPrice[$currency['id_currency']] = $price;
 				if ($price == 0)
@@ -242,7 +253,7 @@ class BlockLayered extends Module
 					$minPrice[$currency['id_currency']] = $price;
 			}
 		
-		foreach ($currencyList AS $currency)
+		foreach ($currencyList as $currency)
 			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'price_static_index` (id_product, id_currency, price_min, price_max)
 			VALUES ('.(int)$idProduct.', '.(int)$currency['id_currency'].', '.(int)$minPrice[$currency['id_currency']].', '.(int)$maxPrice[$currency['id_currency']].')');
@@ -972,10 +983,10 @@ class BlockLayered extends Module
 
 		$productIdList = array();
 		
-		foreach ($allProductsIn AS $product)
+		foreach ($allProductsIn as $product)
 			$productIdList[] = (int)$product['id_product'];
 
-		foreach ($allProductsOut AS $product)
+		foreach ($allProductsOut as $product)
 			if (isset($priceFilter) AND $priceFilter)
 			{
 				$price = Product::getPriceStatic($product['id_product']);
@@ -1385,7 +1396,7 @@ class BlockLayered extends Module
 		/* Get the filters for the current category */
 		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'layered_category WHERE id_category = '.(int)$id_parent.' ORDER BY position ASC');
 		// Remove all empty selected filters
-		foreach ($selectedFilters AS $key => $value)
+		foreach ($selectedFilters as $key => $value)
 			switch($key)
 			{
 				case 'price':
@@ -1400,7 +1411,7 @@ class BlockLayered extends Module
 			}
 		
 		$filterBlocks = array();
-		foreach ($filters AS $filter)
+		foreach ($filters as $filter)
 		{
 			$sqlQuery = array('select' => '', 'from' => '', 'join' => '', 'where' => '', 'group' => '');
 			switch($filter['type'])
@@ -1475,20 +1486,20 @@ class BlockLayered extends Module
 					WHERE cp.id_category = c.id_category ';
 					$sqlQuery['group'] = ') count_products
 					FROM '._DB_PREFIX_.'category c
-					LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.')
+					LEFT JOIN '._DB_PREFIX_.'category_lang as cl ON (cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.')
 					WHERE c.id_parent = '.(int)$id_parent.'
 					GROUP BY c.id_category ORDER BY level_depth';
 			}
-			foreach ($filters AS $filterTmp)
+			foreach ($filters as $filterTmp)
 			{
 				$methodName = 'get'.ucfirst($filterTmp['type']).'FilterSubQuery';
 				if (method_exists('BlockLayered', $methodName))
 				{
 					if ($filter['type'] == $filterTmp['type'])
-						$subQuerieFilter = self::$methodName(array(), $whereClause = false);
+						$subQueryFilter = self::$methodName(array());
 					else
-						$subQuerieFilter = self::$methodName(@$selectedFilters[$filterTmp['type']], $whereClause = false);
-					foreach ($subQuerieFilter AS $key => $value)
+						$subQueryFilter = self::$methodName(@$selectedFilters[$filterTmp['type']]);
+					foreach ($subQueryFilter as $key => $value)
 					{
 						$sqlQuery[$key] .= $value;
 					}
@@ -1501,19 +1512,22 @@ class BlockLayered extends Module
 			
 			if (isset($products) AND $products)
 			{
-				foreach ($filters AS $filterTmp)
+				foreach ($filters as $filterTmp)
 				{
 					$methodName = 'filterProductsBy'.ucfirst($filterTmp['type']);
 					if (method_exists('BlockLayered', $methodName))
-						$products = ($filter['type'] == $filterTmp['type']) ? self::$methodName(array(), $products) : self::$methodName(@$selectedFilters[$filterTmp['type']], $products);
+						if ($filter['type'] == $filterTmp['type'])
+							$products = self::$methodName(array(), $products);
+						else
+							$products = self::$methodName(@$selectedFilters[$filterTmp['type']], $products);
 				}
 
 				switch($filter['type'])
 				{
 					case 'price':
-						$priceArray = array('type_lite' => 'price', 'type' => 'price', 'id_key' => 0, 'name' => 'Price', 
-						'slider' => true, 'max' => '0', 'min' => NULL, 'values' => array ('1' => 0), 'unit' => Currency::getCurrent()->sign);
-						foreach ($products AS $product)
+						$priceArray = array('type_lite' => 'price', 'type' => 'price', 'id_key' => 0, 'name' => 'Price',
+						'slider' => true, 'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Currency::getCurrent()->sign);
+						foreach ($products as $product)
 						{
 							if (is_null($priceArray['min']))
 							{
@@ -1545,8 +1559,8 @@ class BlockLayered extends Module
 
 					case 'weight':
 						$weightArray = array('type_lite' => 'weight', 'type' => 'weight', 'id_key' => 0, 'name' => 'Weight', 'slider' => true,
-						'max' => '0', 'min' => NULL, 'values' => array ('1' => 0), 'unit' => Configuration::get('PS_WEIGHT_UNIT'));
-						foreach ($products AS $product)
+						'max' => '0', 'min' => null, 'values' => array ('1' => 0), 'unit' => Configuration::get('PS_WEIGHT_UNIT'));
+						foreach ($products as $product)
 						{
 							if (is_null($weightArray['min']))
 							{
@@ -1581,27 +1595,27 @@ class BlockLayered extends Module
 						'used' => array('name' => $this->l('Used'), 'nbr' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'nbr' => 0));
 						if (isset($selectedFilters['condition']) AND in_array($product['condition'], $selectedFilters['condition']))
 							$conditionArray[$product['condition']]['checked'] = true;
-						foreach ($conditionArray AS $key => $condition)
+						foreach ($conditionArray as $key => $condition)
 							if (isset($selectedFilters['condition']) AND in_array($key, $selectedFilters['condition']))
 								$conditionArray[$key]['checked'] = true;
-						foreach ($products AS $product)
+						foreach ($products as $product)
 							$conditionArray[$product['condition']]['nbr']++;
 						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => 'Condition', 'values' => $conditionArray);
 						break;
 
 					case 'quantity':
 						$quantityArray = array (0 => array('name' => 'Not available', 'nbr' => 0), 1 => array('name' => 'In stock', 'nbr' => 0));
-						foreach ($quantityArray AS $key => $quantity)
+						foreach ($quantityArray as $key => $quantity)
 							if (isset($selectedFilters['quantity']) AND in_array($key, $selectedFilters['quantity']))
 								$quantityArray[$key]['checked'] = true;
-						foreach ($products AS $product)
+						foreach ($products as $product)
 							$quantityArray[(int)($product['quantity'] > 0)]['nbr']++;
 						$filterBlocks[] = array('type_lite' => 'quantity', 'type' => 'quantity', 'id_key' => 0, 'name' => 'Quantity', 'values' => $quantityArray);
 						break;
 
 					case 'manufacturer':
 						$manufaturersArray = array();
-						foreach ($products AS $manufacturer)
+						foreach ($products as $manufacturer)
 						{
 							$manufaturersArray[$manufacturer['id_manufacturer']] = array('name' => $manufacturer['name'], 'nbr' => $manufacturer['nbr']);
 							if (isset($selectedFilters['manufacturer']) AND in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
@@ -1612,7 +1626,7 @@ class BlockLayered extends Module
 
 					case 'id_attribute_group':
 						$attributesArray = array();
-						foreach ($products AS $attributes)
+						foreach ($products as $attributes)
 						{
 							if (!isset($attributesArray[$attributes['id_attribute_group']]))
 							{
@@ -1627,10 +1641,9 @@ class BlockLayered extends Module
 						}
 						$filterBlocks = array_merge($filterBlocks, $attributesArray);
 						break;
-
 					case 'id_feature':
 						$featureArray = array ();
-						foreach ($products AS $feature)
+						foreach ($products as $feature)
 						{
 							if (!isset($featureArray[$feature['id_feature']]))
 								$featureArray[$feature['id_feature']] = array('type_lite' => 'id_feature', 'type' => 'id_feature_'.(int)$feature['id_feature'],
@@ -1640,18 +1653,24 @@ class BlockLayered extends Module
 							if (isset($selectedFilters['id_feature']) AND in_array($feature['id_feature_value'], $selectedFilters['id_feature']))
 								$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']]['checked'] = true;
 						}
-						$filterBlocks[] = array_merge($filterBlocks, $featureArray);
+						$filterBlocks = array_merge($filterBlocks, $featureArray);
 						break;
 
 					case 'category':
 						$tmpArray = array();
-						foreach ($products AS $category)
+						foreach ($products as $category)
 							$tmpArray[] = array('name' => $category['name'], 'nbr' => (int)$category['count_products']);
 						$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => 'Categories', 'values' => $tmpArray);
 						break;
 				}
 				
-			}			
+			}
+			else {
+				// Debug
+				// We must never enter here
+				// The next line must be remove before the release
+				//var_export($sqlQuery['select']."\n".$sqlQuery['from']."\n".$sqlQuery['join']."\n".$sqlQuery['where']."\n".$sqlQuery['group']);die();
+			}
 		}
 		
 		$nFilters = 0;
@@ -1662,6 +1681,130 @@ class BlockLayered extends Module
 		'selected_filters' => $selectedFilters, 'n_filters' => (int)$nFilters, 'nbr_filterBlocks' => sizeof($filterBlocks), 'filters' => $filterBlocks));
 
 		return $this->display(__FILE__, 'blocklayered.tpl');
+	}
+	
+	/*
+	 * This function must be improved
+	 * For the moment, we don't "filter filters"
+	 */
+	private static function getPriceFilterSubQuery($filterValue)
+	{
+		$idCurrency = Currency::getCurrent()->id;
+		$priceFilterQuery = '';
+		if (isset($filterValue) && $filterValue)
+		{
+			$idCurrency = Currency::getCurrent()->id;
+			$priceFilterQuery = '
+			INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
+			AND psi.price_min <= '.(int)$filterValue[1].' AND psi.price_max >= '.(int)$filterValue[0].' AND psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)$idCurrency.') ';
+		}
+		else{
+			$idCurrency = Currency::getCurrent()->id;
+			$priceFilterQuery = '
+			INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
+			AND psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)$idCurrency.') ';
+		}
+		
+		return array('join' => $priceFilterQuery, 'select' => ', psi.price_min, psi.price_max');
+	}
+	
+	private static function filterProductsByPrice($filterValue, $productCollection)
+	{
+		if (empty($filterValue))
+			return $productCollection;
+		foreach ($productCollection as $key => $product)
+		{
+			if (isset($filterValue) AND $filterValue AND isset($product['price_min']) AND isset($product['id_product'])
+			AND ((int)$filterValue[0] > $product['price_min'] OR (int)$filterValue[1] < $product['price_max']))
+			{
+				$price = Product::getPriceStatic($product['id_product']);
+				if ($price < $filterValue[0] || $price > $filterValue[1])
+					continue;
+				unset($productCollection[$key]);
+			}
+		}
+		return $productCollection;
+	}
+	
+	private static function getWeightFilterSubQuery($filterValue)
+	{
+		if (isset($filterValue) && $filterValue)
+			if ($filterValue[0] != 0 || $filterValue[1] != 0)
+				return array('where' => ' AND p.`weight` BETWEEN '.(float)($filterValue[0] - 0.001).' AND '.(float)($filterValue[1] + 0.001).' ');
+		
+		return array();
+	}
+	
+	private static function getFeatureFilterSubQuery($filterValue)
+	{
+		if (empty($filterValue))
+			return array();
+		$queryFilters = ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'feature_product fp WHERE ';
+		foreach ($filterValue AS $filterVal)
+			$queryFilters .= 'fp.`id_feature_value` = '.(int)$filterVal.' OR ';
+		$queryFilters = rtrim($queryFilters, 'OR ').') ';
+		
+		return array('where' => $queryFilters);
+	}
+	private static function getId_attribute_groupFilterSubQuery($filterValue)
+	{
+		if (empty($filterValue))
+			return array();
+		$queryFilters = '
+		AND p.id_product IN (SELECT pa.`id_product`
+		FROM `'._DB_PREFIX_.'product_attribute_combination` pac
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = pac.`id_product_attribute`)
+		WHERE ';
+						
+		foreach ($filterValue AS $filterVal)
+			$queryFilters .= 'pac.`id_attribute` = '.(int)$filterVal.' OR ';
+		$queryFilters = rtrim($queryFilters, 'OR ').') ';
+		
+		return array('where' => $queryFilters);
+	}
+	
+	private static function getCategoryFilterSubQuery($filterValue)
+	{
+		if (empty($filterValue))
+			return array();
+		$queryFiltersJoin = '';
+		$queryFiltersWhere = ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE ';
+		foreach ($filterValue AS $id_category)
+			$queryFiltersWhere .= 'cp.`id_category` = '.(int)$id_category.' OR ';
+		$queryFiltersWhere = rtrim($queryFilters, 'OR ').') ';
+		
+		return array('where' => $queryFiltersWhere, 'join' => $queryFiltersJoin);
+	}
+	
+	private static function getQuantityFilterSubQuery($filterValue)
+	{
+		if (sizeof($filterValue) == 2 OR empty($filterValue))
+			return array();
+		$queryFilters = ' AND p.quantity '.(!$filterValue[0] ? '=' : '>').' 0 ';
+		
+		return array('where' => $queryFilters);
+	}
+	
+	private static function getManufacturerFilterSubQuery($filterValue)
+	{
+		if (empty($filterValue))
+			return array();
+		
+		$queryFilters = ' AND p.id_manufacturer IN ('.implode($filterValue, ',').')';
+		
+		return array('where' => $queryFilters, 'select' => ', m.name');
+	}
+	
+	private static function getConditionFilterSubQuery($filterValue)
+	{
+		if (sizeof($filterValue) == 3 OR empty($filterValue))
+			return array();
+		$queryFilters = ' AND p.condition IN (';
+		foreach ($filterValue AS $cond)
+			$queryFilters .= '\''.$cond.'\',';
+		$queryFilters = rtrim($queryFilters, ',').') ';
+		
+		return array('where' => $queryFilters);
 	}
 	
 	/*
