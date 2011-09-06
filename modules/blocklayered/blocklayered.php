@@ -89,7 +89,7 @@ class BlockLayered extends Module
 			INDEX `price_min` (`price_min`),
 			INDEX `price_max` (`price_max`)
 		)
-		ENGINE = InnoDB;
+		ENGINE = '._MYSQL_ENGINE_.';
 		');
 	}
 	
