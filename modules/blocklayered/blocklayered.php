@@ -47,249 +47,6 @@ class BlockLayered extends Module
 		$this->description = $this->l('Displays a block with layered navigation filters.');
 	}
 	
-	private function _installPriceIndexTable()
-	{
-		Db::getInstance()->execute('
-		DROP TABLE IF EXISTS  `'._DB_PREFIX_.'price_static_index`;
-		');
-		Db::getInstance()->execute('
-		CREATE TABLE `'._DB_PREFIX_.'price_static_index` (
-			`id_product` INT  NOT NULL,
-			`id_currency` INT NOT NULL,
-			`price_min` INT NOT NULL,
-			`price_max` INT NOT NULL,
-			PRIMARY KEY (`id_product`, `id_currency`),
-			INDEX price_min (price_min),
-			INDEX price_max (price_max)
-		)
-		ENGINE = InnoDB;
-		');
-	}
-	
-	/*
-	 * $cursor $cursor in order to restart indexing from the last state
-	 */
-	public static function fullIndexProcess($cursor = 0, $ajax = false, $smart = false)
-	{
-		if ($cursor == 0 && !$smart)
-			self::_installPriceIndexTable();
-		
-		return self::_indexer($cursor, true, $ajax, $smart);
-	}
-	
-	/*
-	 * $cursor $cursor in order to restart indexing from the last state
-	 */
-	public static function indexProcess($cursor = 0, $ajax = false)
-	{
-		return self::_indexer($cursor, false, $ajax);
-	}
-	
-	private static function _indexer($cursor = null, $full = false, $ajax = false, $smart = false)
-	{
-		$memoryLimit = Tools::getMemoryLimit() * 0.9; // 10% of safety margin
-		$stime = microtime(true);
-		
-		if ($full)
-			$nbProducts = Db::getInstance()->getValue('SELECT count(*) FROM '._DB_PREFIX_.'product WHERE `active` = 1');
-		else
-			$nbProducts = Db::getInstance()->getValue(
-			'SELECT count(*) FROM `'._DB_PREFIX_.'product` as p
-			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` as psi
-				ON psi.id_product = p .id_product
-			WHERE `active` = 1
-				AND psi.id_product is null');
-		
-		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
-		
-		// Php is slower and slower. limit script time
-		if ($maxExecutionTime > 5)
-		{
-			$maxExecutionTime = 5;
-		}
-		
-		$startTime = microtime(true);
-		
-		do
-		{
-			$cursor = self::_index($cursor, $full, $smart);
-			$timeElapsed = microtime(true) - $startTime;
-		} while($cursor < $nbProducts && $memoryLimit > memory_get_peak_usage() && $timeElapsed < $maxExecutionTime);
-		
-		if (($nbProducts > 0 && !$full || $cursor < $nbProducts && $full) && !$ajax)
-		{
-			if (!Tools::file_get_contents(Tools::getProtocol().Tools::getHttpHost().'/modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'&cursor='.$cursor.'&full='.(int)$full))
-				self::_indexer($cursor, $full);
-			return $cursor;
-		}
-		if ($ajax && $nbProducts > 0 && $cursor < $nbProducts && $full)
-			return '{"cursor": '.$cursor.', "count": '.($nbProducts - $cursor).'}';
-		if ($ajax && $nbProducts > 0 && !$full)
-			return '{"cursor": '.$cursor.', "count": '.($nbProducts).'}';
-		if ($ajax)
-			return '{"result": "ok"}';
-		return -1;
-	}
-	
-	/*
-	 * $cursor $cursor in order to restart indexing from the last state
-	 */
-	private static function _index($cursor, $full = false, $smart = false)
-	{
-		static $length = 100; // Nb of products to index
-		
-		if ($cursor == null || $cursor == 0)
-			$cursor = 0;
-		
-		if ($full)
-			$query = 'SELECT id_product FROM `'._DB_PREFIX_.'product` WHERE `active` = 1 ORDER by id_product LIMIT '.(int)$cursor.','.$length;
-		else
-			$query = '	SELECT p.id_product FROM `'._DB_PREFIX_.'product` as p
-						LEFT JOIN  `'._DB_PREFIX_.'price_static_index` as psi
-							ON psi.id_product = p .id_product
-						WHERE `active` = 1
-							AND psi.id_product is null
-						ORDER by id_product LIMIT 0,'.$length;
-		
-		foreach (Db::getInstance()->executeS($query) as $product) {
-			self::indexProduct($product['id_product'], ($smart && $full));
-		}
-		$maxExecutionTime = ini_get('max_execution_time') * 0.0001; // 90% of safety margin
-		
-		
-		
-		return $cursor + $length;
-	}
-	
-	public static function indexProduct($idProduct, $smart = true)
-	{
-		static $groups = null;
-		if (is_null($groups))
-			$groups = Db::getInstance()->executeS('SELECT id_group FROM `'._DB_PREFIX_.'group_reduction`');
-		
-		static $currencyList = null;
-		if (is_null($currencyList))
-			$currencyList = Currency::getCurrencies();
-		
-		$minPrice = array();
-		$maxPrice = array();
-		$minSpecificPrice = array();
-		$maxSpecificPrice = array();
-		
-		
-		if ($smart)
-			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'price_static_index` WHERE `id_product` = '.$idProduct);
-		
-		$maxTaxRate = Db::getInstance()->getValue('
-			SELECT
-				max(t.rate) as max_rate
-			FROM `'._DB_PREFIX_.'product` as p
-			LEFT JOIN `'._DB_PREFIX_.'tax_rules_group` as trg
-				ON trg.id_tax_rules_group = p.id_tax_rules_group
-			LEFT JOIN `'._DB_PREFIX_.'tax_rule` as tr
-				ON tr.id_tax_rules_group = trg.id_tax_rules_group
-			LEFT JOIN `'._DB_PREFIX_.'tax` as t
-				ON t.id_tax = tr.id_tax AND t.active = 1
-			WHERE id_product = '.$idProduct.'
-			GROUP BY id_product;');
-		
-		// Get min price
-		foreach (
-			Db::getInstance()->executeS('
-				SELECT
-					id_shop,
-					id_currency,
-					id_country,
-					id_group,
-					from_quantity
-				FROM `'._DB_PREFIX_.'specific_price`
-				WHERE id_product = '.$idProduct.';')
-			as $specificPrice)
-		{
-			foreach ($currencyList as $currency)
-			{
-				if ($specificPrice['id_currency'] && $specificPrice['id_currency'] != $currency['id_currency'])
-					continue;
-				$price = Product::priceCalculation(
-					(($specificPrice['id_shop'] == 0)?null:$specificPrice['id_shop']),
-					$idProduct,
-					$id_product_attribute = null,
-					(($specificPrice['id_country'] == 0)?null:$specificPrice['id_country']),
-					$id_state = null,
-					$id_county = null, 
-					$currency['id_currency'],
-					(($specificPrice['id_group'] == 0)?null:$specificPrice['id_group']),
-					$specificPrice['from_quantity'],
-					$usetax = false,
-					$decimals = true,
-					$only_reduc = false,
-					$usereduc = true,
-					$with_ecotax = true,
-					$specificPriceOutput,
-					$use_groupReduction = true);
-				
-				if (!isset($maxPrice[$currency['id_currency']]))
-					$maxPrice[$currency['id_currency']] = 0;
-				if (!isset($minPrice[$currency['id_currency']]))
-					$minPrice[$currency['id_currency']] = null;
-				
-				if ($price > $maxPrice[$currency['id_currency']])
-					$maxPrice[$currency['id_currency']] = $price;
-				if ($price == 0)
-					continue;
-				if (is_null($minPrice[$currency['id_currency']]) || $price < $minPrice[$currency['id_currency']])
-					$minPrice[$currency['id_currency']] = $price;
-			}
-		}
-		
-		foreach ($groups as $group)
-		{
-			foreach ($currencyList as $currency)
-			{
-				$price = Product::priceCalculation(
-					null,
-					$idProduct,
-					$id_product_attribute = null,
-					null,
-					$id_state = null,
-					$id_county = null, 
-					$currency['id_currency'],
-					$group['id_group'],
-					null,
-					$usetax = false,
-					$decimals = true,
-					$only_reduc = false,
-					$usereduc = true,
-					$with_ecotax = true,
-					$specificPriceOutput,
-					$use_groupReduction = true);
-					
-				if (!isset($maxPrice[$currency['id_currency']]))
-					$maxPrice[$currency['id_currency']] = 0;
-				if (!isset($minPrice[$currency['id_currency']]))
-					$minPrice[$currency['id_currency']] = null;
-				
-				if ($price > $maxPrice[$currency['id_currency']])
-					$maxPrice[$currency['id_currency']] = $price;
-				if ($price == 0)
-					continue;
-				if (is_null($minPrice[$currency['id_currency']]) || $price < $minPrice[$currency['id_currency']])
-					$minPrice[$currency['id_currency']] = $price;
-			}
-		}
-		
-		foreach ($currencyList as $currency)
-		{
-			Db::getInstance()->execute('
-				INSERT INTO `'._DB_PREFIX_.'price_static_index` SET
-					`id_product` = '.$idProduct.',
-					`id_currency` = '.$currency['id_currency'].',
-					`price_min` = '.(int)$minPrice[$currency['id_currency']].',
-					`price_max` = '.(int)$maxPrice[$currency['id_currency']].'
-				');
-		}
-	}
-
 	public function install()
 	{
 		if ($result = parent::install() AND $this->registerHook('leftColumn') AND $this->registerHook('header') AND $this->registerHook('footer')
@@ -314,6 +71,181 @@ class BlockLayered extends Module
 		Configuration::deleteByName('PS_LAYERED_SHOW_QTIES');
 		
 		return parent::uninstall();
+	}
+	
+	private function _installPriceIndexTable()
+	{
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'price_static_index`');
+		Db::getInstance()->Execute('
+		CREATE TABLE `'._DB_PREFIX_.'price_static_index` (`id_product` INT  NOT NULL, `id_currency` INT NOT NULL,
+		`price_min` INT NOT NULL, `price_max` INT NOT NULL, PRIMARY KEY (`id_product`, `id_currency`),
+		INDEX price_min (price_min), INDEX price_max (price_max))');
+	}
+	
+	/*
+	 * $cursor $cursor in order to restart indexing from the last state
+	 */
+	public static function fullIndexProcess($cursor = 0, $ajax = false, $smart = false)
+	{
+		if (!$cursor AND !$smart)
+			self::_installPriceIndexTable();
+
+		return self::_indexer((int)$cursor, true, (bool)$ajax, (bool)$smart);
+	}
+	
+	/*
+	 * $cursor $cursor in order to restart indexing from the last state
+	 */
+	public static function indexProcess($cursor = 0, $ajax = false)
+	{
+		return self::_indexer((int)$cursor, false, (bool)$ajax);
+	}
+	
+	private static function _indexer($cursor = null, $full = false, $ajax = false, $smart = false)
+	{
+		if ($full)
+			$nbProducts = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'product WHERE `active` = 1');
+		else
+			$nbProducts = (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue(
+			'SELECT COUNT(*) FROM `'._DB_PREFIX_.'product` p
+			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product)
+			WHERE `active` = 1 AND psi.id_product IS NULL');
+		
+		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
+		if ($maxExecutionTime > 5)
+			$maxExecutionTime = 5;
+		
+		$startTime = microtime(true);
+		
+		do
+		{
+			$cursor = (int)self::_index((int)$cursor, $full, $smart);
+			$timeElapsed = microtime(true) - $startTime;
+		}
+		while($cursor < $nbProducts AND (Tools::getMemoryLimit() * 0.9) > memory_get_peak_usage() AND $timeElapsed < $maxExecutionTime);
+		
+		if (($nbProducts > 0 AND !$full OR $cursor < $nbProducts AND $full) AND !$ajax)
+		{
+			if (!Tools::file_get_contents(Tools::getProtocol().Tools::getHttpHost().'/modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&cursor='.(int)$cursor.'&full='.(int)$full))
+				self::_indexer((int)$cursor, (int)$full);
+			return $cursor;
+		}
+		if ($ajax AND $nbProducts > 0 AND $cursor < $nbProducts AND $full)
+			return '{"cursor": '.$cursor.', "count": '.($nbProducts - $cursor).'}';
+		elseif ($ajax AND $nbProducts > 0 AND !$full)
+			return '{"cursor": '.$cursor.', "count": '.($nbProducts).'}';
+		elseif ($ajax)
+			return '{"result": "ok"}';
+		else
+			return -1;
+	}
+	
+	/*
+	 * $cursor $cursor in order to restart indexing from the last state
+	 */
+	private static function _index($cursor, $full = false, $smart = false)
+	{
+		static $length = 100; // Nb of products to index
+		
+		if ($cursor == NULL OR $cursor == 0)
+			$cursor = 0;
+		
+		if ($full)
+			$query = '
+			SELECT id_product
+			FROM `'._DB_PREFIX_.'product`
+			WHERE `active` = 1
+			ORDER by id_product LIMIT '.(int)$cursor.','.(int)$length;
+		else
+			$query = '*
+			SELECT p.id_product
+			FROM `'._DB_PREFIX_.'product` p
+			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product)
+			WHERE `active` = 1 AND psi.id_product IS NULL
+			ORDER by id_product LIMIT 0,'.(int)$length;
+		
+		foreach (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query) AS $product)
+			self::indexProduct((int)$product['id_product'], ($smart AND $full));
+
+		return (int)($cursor + $length);
+	}
+	
+	public static function indexProduct($idProduct, $smart = true)
+	{
+		static $groups = NULL;
+
+		if (is_null($groups))
+			$groups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_group FROM `'._DB_PREFIX_.'group_reduction`');
+		
+		static $currencyList = NULL;
+		if (is_null($currencyList))
+			$currencyList = Currency::getCurrencies();
+		
+		$minPrice = array();
+		$maxPrice = array();
+		
+		if ($smart)
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'price_static_index` WHERE `id_product` = '.(int)$idProduct);
+		
+		$maxTaxRate = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT max(t.rate) max_rate
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'tax_rules_group` trg ON (trg.id_tax_rules_group = p.id_tax_rules_group)
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.id_tax_rules_group = trg.id_tax_rules_group)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.id_tax = tr.id_tax AND t.active = 1)
+		WHERE id_product = '.(int)$idProduct.'
+		GROUP BY id_product;');
+		
+		$productMinPrices = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT id_shop, id_currency, id_country, id_group, from_quantity
+		FROM `'._DB_PREFIX_.'specific_price`
+		WHERE id_product = '.(int)$idProduct);
+		
+		// Get min price
+		foreach ($productMinPrices AS $specificPrice)
+			foreach ($currencyList AS $currency)
+			{
+				if ($specificPrice['id_currency'] AND $specificPrice['id_currency'] != $currency['id_currency'])
+					continue;
+				$price = Product::priceCalculation((($specificPrice['id_shop'] == 0) ? NULL : (int)$specificPrice['id_shop']), (int)$idProduct,
+					NULL, (($specificPrice['id_country'] == 0) ? NULL : (int)$specificPrice['id_country']), NULL, NULL, (int)$currency['id_currency'],
+					(($specificPrice['id_group'] == 0) ? NULL : (int)$specificPrice['id_group']),
+					$specificPrice['from_quantity'], false, true, false, true, true, $specificPriceOutput, true);
+				
+				if (!isset($maxPrice[$currency['id_currency']]))
+					$maxPrice[$currency['id_currency']] = 0;
+				if (!isset($minPrice[$currency['id_currency']]))
+					$minPrice[$currency['id_currency']] = NULL;
+				if ($price > $maxPrice[$currency['id_currency']])
+					$maxPrice[$currency['id_currency']] = $price;
+				if ($price == 0)
+					continue;
+				if (is_null($minPrice[$currency['id_currency']]) || $price < $minPrice[$currency['id_currency']])
+					$minPrice[$currency['id_currency']] = $price;
+			}
+		
+		foreach ($groups AS $group)
+			foreach ($currencyList AS $currency)
+			{
+				$price = Product::priceCalculation(NULL, (int)$idProduct, NULL, NULL, NULL, NULL, (int)$currency['id_currency'], (int)$group['id_group'],
+				NULL, false, true, false, true, true, $specificPriceOutput, true);
+					
+				if (!isset($maxPrice[$currency['id_currency']]))
+					$maxPrice[$currency['id_currency']] = 0;
+				if (!isset($minPrice[$currency['id_currency']]))
+					$minPrice[$currency['id_currency']] = NULL;
+				if ($price > $maxPrice[$currency['id_currency']])
+					$maxPrice[$currency['id_currency']] = $price;
+				if ($price == 0)
+					continue;
+				if (is_null($minPrice[$currency['id_currency']]) || $price < $minPrice[$currency['id_currency']])
+					$minPrice[$currency['id_currency']] = $price;
+			}
+		
+		foreach ($currencyList AS $currency)
+			Db::getInstance()->Execute('
+			INSERT INTO `'._DB_PREFIX_.'price_static_index` (id_product, id_currency, price_min, price_max)
+			VALUES ('.(int)$idProduct.', '.(int)$currency['id_currency'].', '.(int)$minPrice[$currency['id_currency']].', '.(int)$maxPrice[$currency['id_currency']].')');
 	}
 
 	public function hookLeftColumn($params)
@@ -399,7 +331,7 @@ class BlockLayered extends Module
 			if (Tools::getValue('scope') == 1)
 			{
 				Db::getInstance()->Execute('TRUNCATE TABLE '._DB_PREFIX_.'layered_filter');
-				$categories = Db::getInstance()->ExecuteS('SELECT id_category FROM '._DB_PREFIX_.'category');
+				$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_category FROM '._DB_PREFIX_.'category');
 				foreach ($categories AS $category)
 					$_POST['categoryBox'][] = (int)$category['id_category'];
 			}
@@ -571,11 +503,11 @@ class BlockLayered extends Module
 			$html .= '<p>'.sizeof($filtersTemplates).' '.$this->l('filters templates are configured:').'</p>
 			<table id="table-filter-templates" class="table" style="width: 700px;">
 				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Categories</th>
-					<th>Created on</th>
-					<th>Actions</th>
+					<th>'.$this->l('ID').'</th>
+					<th>'.$this->l('Name').'</th>
+					<th>'.$this->l('Categories').'</th>
+					<th>'.$this->l('Created on').'</th>
+					<th>'.$this->l('Actions').'</th>
 				</tr>';
 				
 			foreach ($filtersTemplates AS $filtersTemplate)
@@ -876,7 +808,6 @@ class BlockLayered extends Module
 		/* Analyze all the filters selected by the user and store them into a tab */
 		$selectedFilters = array('category' => array(), 'manufacturer' => array(), 'quantity' => array(), 'condition' => array());
 		foreach ($_GET AS $key => $value)
-		{
 			if (substr($key, 0, 8) == 'layered_')
 			{
 				preg_match('/^(.*)_[0-9|new|used|refurbished|slider]+$/', substr($key, 8, strlen($key) - 8), $res);
@@ -909,7 +840,7 @@ class BlockLayered extends Module
 						$selectedFilters[$res[1]] = $tmpTab;
 				}
 			}
-		}
+
 		return $selectedFilters;
 	}
 
@@ -1028,33 +959,30 @@ class BlockLayered extends Module
 		}
 		
 		$allProductsOut = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.`id_product` AS id_product
+		SELECT p.`id_product` id_product
 		FROM `'._DB_PREFIX_.'product` p
 		'.$priceFilterQueryOut.'
 		WHERE 1 '.$queryFilters);
 		
 		$allProductsIn = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.`id_product` AS id_product
+		SELECT p.`id_product` id_product
 		FROM `'._DB_PREFIX_.'product` p
 		'.$priceFilterQueryIn.'
 		WHERE 1 '.$queryFilters);
 
 		$productIdList = array();
 		
-		foreach ($allProductsIn as $product)
-		{
-			$productIdList[] = $product['id_product'];
-		}
-		foreach ($allProductsOut as $product)
-		{
-			if (isset($priceFilter) && $priceFilter)
+		foreach ($allProductsIn AS $product)
+			$productIdList[] = (int)$product['id_product'];
+
+		foreach ($allProductsOut AS $product)
+			if (isset($priceFilter) AND $priceFilter)
 			{
 				$price = Product::getPriceStatic($product['id_product']);
-				if ($price < $priceFilter['min'] || $price > $priceFilter['max'])
+				if ($price < $priceFilter['min'] OR $price > $priceFilter['max'])
 					continue;
-				$productIdList[] = $product['id_product'];
+				$productIdList[] = (int)$product['id_product'];
 			}
-		}
 		$this->nbr_products = count($productIdList);
 		
 		if ($this->nbr_products == 0)
@@ -1082,9 +1010,6 @@ class BlockLayered extends Module
 	public function generateFiltersBlockOld($selectedFilters = array())
 	{
 		global $smarty, $link, $cookie;
-		$id_lang = (int)$cookie->id_lang;
-		
-		$idCurrency = Currency::getCurrent()->id;
 
 		/* If the current category isn't defined of if it's homepage, we have nothing to display */
 		$id_parent = (int)Tools::getValue('id_category', Tools::getValue('id_category_layered', 1));
@@ -1121,7 +1046,7 @@ class BlockLayered extends Module
 				WHERE pa.`id_product` = p.`id_product`) ids_attr
 		FROM '._DB_PREFIX_.'product p 
 		LEFT JOIN  `'._DB_PREFIX_.'price_static_index` as psi
-			ON psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)$idCurrency.'
+			ON psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)Currency::getCurrent()->id.'
 		WHERE p.`active` = 1 AND p.`id_product` IN (SELECT id_product FROM `'._DB_PREFIX_.'category_product` cp WHERE'.$whereC, false);
 		
 		$products = array();
@@ -1175,7 +1100,7 @@ class BlockLayered extends Module
 					SELECT fvl.id_feature_value, fvl.value
 					FROM '._DB_PREFIX_.'feature_value fv
 					LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
-					WHERE (fv.custom IS NULL OR fv.custom = 0) AND fv.id_feature = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND fvl.id_lang = '.(int)$id_lang);
+					WHERE (fv.custom IS NULL OR fv.custom = 0) AND fv.id_feature = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND fvl.id_lang = '.(int)$cookie->id_lang);
 					break;
 
 				case 'id_attribute_group':
@@ -1185,7 +1110,7 @@ class BlockLayered extends Module
 					SELECT al.id_attribute, al.name, a.color
 					FROM '._DB_PREFIX_.'attribute a
 					LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
-					WHERE a.id_attribute_group = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND al.id_lang = '.(int)$id_lang);
+					WHERE a.id_attribute_group = '.(int)$filterBlocks[(int)$filter['position']]['id_key'].' AND al.id_lang = '.(int)$cookie->id_lang);
 					break;
 			}
 		}
@@ -1219,8 +1144,6 @@ class BlockLayered extends Module
 					$colorGroups[(int)$aName['id_attribute_group']] = true;
 			}
 		}
-
-		//$weight_unit = Configuration::get('PS_WEIGHT_UNIT');
 
 		foreach ($filterBlocks AS &$filterBlock)
 		{
@@ -1462,11 +1385,11 @@ class BlockLayered extends Module
 		/* Get the filters for the current category */
 		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'layered_category WHERE id_category = '.(int)$id_parent.' ORDER BY position ASC');
 		// Remove all empty selected filters
-		foreach ($selectedFilters as $key => $value)
-		{
+		foreach ($selectedFilters AS $key => $value)
 			switch($key)
 			{
-				case 'price': case 'weight':
+				case 'price':
+				case 'weight':
 					if ($value[0] == '' && $value[1] == '' || $value[0] == 0 && $value[1] == 0)
 						unset($selectedFilters[$key]);
 					break;
@@ -1475,126 +1398,88 @@ class BlockLayered extends Module
 						unset($selectedFilters[$key]);
 					break;
 			}
-		}
 		
 		$filterBlocks = array();
-		
-		foreach ($filters as $filter)
+		foreach ($filters AS $filter)
 		{
 			$sqlQuery = array('select' => '', 'from' => '', 'join' => '', 'where' => '', 'group' => '');
-//var_export('  ___  '.$filter['type']);
 			switch($filter['type'])
 			{
 				// conditions + quantities + weight + price
 				case 'price': case 'weight': case 'condition': case 'quantity':
 					$sqlQuery['select'] = '
-						SELECT
-							p.`id_product`, p.`condition`, p.`id_manufacturer`, p.`quantity`, p.`weight`,
-							(SELECT GROUP_CONCAT(`id_category`) FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_product` = p.`id_product`) ids_cat,
-							(SELECT GROUP_CONCAT(`id_feature_value`) FROM `'._DB_PREFIX_.'feature_product` fp WHERE fp.`id_product` = p.`id_product`) ids_feat,
-							(SELECT GROUP_CONCAT(DISTINCT(pac.`id_attribute`)) 
-								FROM `'._DB_PREFIX_.'product_attribute_combination` pac
-								LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = pac.`id_product_attribute`) 
-								WHERE pa.`id_product` = p.`id_product`) ids_attr';
+					SELECT p.`id_product`, p.`condition`, p.`id_manufacturer`, p.`quantity`, p.`weight`,
+					(SELECT GROUP_CONCAT(`id_category`) FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_product` = p.`id_product`) ids_cat,
+					(SELECT GROUP_CONCAT(`id_feature_value`) FROM `'._DB_PREFIX_.'feature_product` fp WHERE fp.`id_product` = p.`id_product`) ids_feat,
+					(SELECT GROUP_CONCAT(DISTINCT(pac.`id_attribute`)) 
+					FROM `'._DB_PREFIX_.'product_attribute_combination` pac
+					LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = pac.`id_product_attribute`) 
+					WHERE pa.`id_product` = p.`id_product`) ids_attr';
 					$sqlQuery['from'] = '
-						FROM '._DB_PREFIX_.'product p ';
+					FROM '._DB_PREFIX_.'product p ';
 					$sqlQuery['join'] = '
-						INNER JOIN '._DB_PREFIX_.'category_product AS cp
-							ON cp.id_product = p.id_product
-						INNER JOIN '._DB_PREFIX_.'category c
-							ON c.id_category = cp.id_category AND c.id_category = '.$id_parent.' ';
+					INNER JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
+					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.id_category = '.(int)$id_parent.') ';
 					$sqlQuery['where'] = 'WHERE p.`active` = 1 ';
 					break;
 				case 'manufacturer':
 					$sqlQuery['select'] = 'SELECT m.name, count(p.id_product) AS nbr, m.id_manufacturer ';
 					$sqlQuery['from'] = '
-						FROM `'._DB_PREFIX_.'category_product` AS cp
-						INNER JOIN '._DB_PREFIX_.'product AS p
-							ON p.id_product = cp.id_product AND p.active = 1
-						INNER JOIN '._DB_PREFIX_.'manufacturer AS m
-							ON m.id_manufacturer = p.id_manufacturer ';
+					FROM `'._DB_PREFIX_.'category_product` AS cp
+					INNER JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product AND p.active = 1)
+					INNER JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer) ';
 					$sqlQuery['where'] = '
-						WHERE cp.`id_category` = '.$id_parent.' ';
+					WHERE cp.`id_category` = '.(int)$id_parent.' ';
 					$sqlQuery['group'] = ' GROUP BY p.id_manufacturer ';
 					break;
 				case 'id_attribute_group':// attribute group
-					$sqlQuery['select'] = 'SELECT
-						count(tmp.id_attribute) AS nbr,
-						tmp.id_attribute_group,
-						tmp.color,
-						tmp.name AS name,
-						agl.public_name AS attributeName,
-						tmp.id_attribute AS id_attribute,
-						a.is_color_group
-						FROM (
-							SELECT p.id_product, pac.id_attribute, a.color, al.name, a.id_attribute_group';
+					$sqlQuery['select'] = '
+					SELECT COUNT(tmp.id_attribute) nbr, tmp.id_attribute_group, tmp.color, tmp.name AS name, agl.public_name AS attributeName,
+					tmp.id_attribute AS id_attribute, a.is_color_group FROM (SELECT p.id_product, pac.id_attribute, a.color, al.name, a.id_attribute_group';
 					$sqlQuery['from'] = '
-							FROM '._DB_PREFIX_.'product_attribute_combination as pac
-							LEFT JOIN '._DB_PREFIX_.'product_attribute AS pa
-								ON pa.id_product_attribute = pac.id_product_attribute
-							LEFT JOIN '._DB_PREFIX_.'product AS p
-								ON pa.id_product = p.id_product
-							LEFT JOIN '._DB_PREFIX_.'category_product AS cp
-								ON cp.id_product  = pa.id_product
-							INNER JOIN '._DB_PREFIX_.'category c
-								ON c.id_category = cp.id_category AND c.id_category = '.$id_parent.'
-							LEFT JOIN '._DB_PREFIX_.'attribute AS a
-								ON a.id_attribute = pac.id_attribute
-							LEFT JOIN '._DB_PREFIX_.'attribute_lang AS al
-								ON al.id_attribute = pac.id_attribute AND al.id_lang = '.(int)$cookie->id_lang.' ';
+					FROM '._DB_PREFIX_.'product_attribute_combination pac
+					LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
+					LEFT JOIN '._DB_PREFIX_.'product p ON (pa.id_product = p.id_product)
+					LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = pa.id_product)
+					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.id_category = '.(int)$id_parent.')
+					LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute = pac.id_attribute)
+					LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = pac.id_attribute AND al.id_lang = '.(int)$cookie->id_lang.') ';
 					$sqlQuery['group'] = '
-							WHERE p.`active` = 1
-								AND a.id_attribute_group = '.(int)$filter['id_value'].'
-							GROUP BY pac.id_attribute, p.id_product
-						) tmp
-						LEFT JOIN '._DB_PREFIX_.'attribute_group_lang as al
-							ON al.id_attribute_group = tmp.id_attribute_group AND al.id_lang = '.(int)$cookie->id_lang.'
-						LEFT JOIN '._DB_PREFIX_.'attribute_group as a
-							ON a.id_attribute_group = al.id_attribute_group 
-						LEFT JOIN '._DB_PREFIX_.'attribute_group_lang AS agl
-							ON a.id_attribute_group = agl.id_attribute_group AND al.id_lang = '.(int)$cookie->id_lang.'
-						GROUP BY tmp.id_attribute
-						ORDER BY id_attribute_group';
+					WHERE p.`active` = 1 AND a.id_attribute_group = '.(int)$filter['id_value'].'
+					GROUP BY pac.id_attribute, p.id_product) tmp
+					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang al ON (al.id_attribute_group = tmp.id_attribute_group AND al.id_lang = '.(int)$cookie->id_lang.')
+					LEFT JOIN '._DB_PREFIX_.'attribute_group a ON (a.id_attribute_group = al.id_attribute_group)
+					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND al.id_lang = '.(int)$cookie->id_lang.')
+					GROUP BY tmp.id_attribute
+					ORDER BY id_attribute_group';
 					break;
 				case 'id_feature':
-					$sqlQuery['select'] = 'SELECT fl.name, fp.id_feature, fv.id_feature_value, fvl.value, count(fv.id_feature_value) as nbr ';
+					$sqlQuery['select'] = 'SELECT fl.name, fp.id_feature, fv.id_feature_value, fvl.value, count(fv.id_feature_value) nbr ';
 					$sqlQuery['from'] = '
-						FROM '._DB_PREFIX_.'feature_product AS fp
-						LEFT JOIN `'._DB_PREFIX_.'category_product` AS cp
-							ON cp.`id_category` = '.$id_parent.' AND cp.`id_product` = fp.`id_product`
-						INNER JOIN '._DB_PREFIX_.'product AS p
-							ON p.id_product = cp.id_product AND p.active = 1
-						LEFT JOIN '._DB_PREFIX_.'feature_lang AS fl
-							ON fl.id_feature = fp.id_feature AND fl.id_lang = '.(int)$cookie->id_lang.'
-						INNER JOIN '._DB_PREFIX_.'feature_value AS fv
-							ON  fv.id_feature_value = fp.id_feature_value AND (fv.custom IS NULL OR fv.custom = 0)
-						LEFT JOIN '._DB_PREFIX_.'feature_value_lang AS fvl
-							ON fvl.id_feature_value = fp.id_feature_value AND fvl.id_lang = '.(int)$cookie->id_lang.' ';
+					FROM '._DB_PREFIX_.'feature_product fp
+					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = '.(int)$id_parent.' AND cp.`id_product` = fp.`id_product`)
+					INNER JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product AND p.active = 1)
+					LEFT JOIN '._DB_PREFIX_.'feature_lang fl ON (fl.id_feature = fp.id_feature AND fl.id_lang = '.(int)$cookie->id_lang.')
+					INNER JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature_value = fp.id_feature_value AND (fv.custom IS NULL OR fv.custom = 0))
+					LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fp.id_feature_value AND fvl.id_lang = '.(int)$cookie->id_lang.') ';
 					$sqlQuery['where'] = 'WHERE p.`active` = 1 ';
 					$sqlQuery['group'] = 'GROUP BY fv.id_feature_value ';
 					break;
 				case 'category':
 					$sqlQuery['select'] = '
-						SELECT
-							c.id_category,
-							c.id_parent,
-							cl.name,
-							(
-								SELECT count(*) # ';
-					$sqlQuery['from'] = ' FROM '._DB_PREFIX_.'category_product as cp
-								LEFT JOIN '._DB_PREFIX_.'product as p
-									ON p.id_product = cp.id_product ';
-									
+					SELECT c.id_category, c.id_parent, cl.name, (SELECT count(*) # ';
+					$sqlQuery['from'] = '
+					FROM '._DB_PREFIX_.'category_product cp
+					LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product) ';
 					$sqlQuery['where'] = '
-							WHERE cp.id_category = c.id_category ';
-					$sqlQuery['group'] = ') as count_products
-						FROM '._DB_PREFIX_.'category as c
-						LEFT JOIN '._DB_PREFIX_.'category_lang as cl
-							ON cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.'
-						WHERE c.id_parent = '.$id_parent.'
-						GROUP BY c.id_category ORDER BY level_depth';
+					WHERE cp.id_category = c.id_category ';
+					$sqlQuery['group'] = ') count_products
+					FROM '._DB_PREFIX_.'category c
+					LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.')
+					WHERE c.id_parent = '.(int)$id_parent.'
+					GROUP BY c.id_category ORDER BY level_depth';
 			}
-			foreach ($filters as $filterTmp)
+			foreach ($filters AS $filterTmp)
 			{
 				$methodName = 'get'.ucfirst($filterTmp['type']).'FilterSubQuery';
 				if (method_exists('BlockLayered', $methodName))
@@ -1603,7 +1488,7 @@ class BlockLayered extends Module
 						$subQuerieFilter = self::$methodName(array(), $whereClause = false);
 					else
 						$subQuerieFilter = self::$methodName(@$selectedFilters[$filterTmp['type']], $whereClause = false);
-					foreach ($subQuerieFilter as $key => $value)
+					foreach ($subQuerieFilter AS $key => $value)
 					{
 						$sqlQuery[$key] .= $value;
 					}
@@ -1614,57 +1499,42 @@ class BlockLayered extends Module
 			if (!empty($sqlQuery['from']))
 				$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sqlQuery['select']."\n".$sqlQuery['from']."\n".$sqlQuery['join']."\n".$sqlQuery['where']."\n".$sqlQuery['group']);
 			
-			if (isset($products) && $products)
+			if (isset($products) AND $products)
 			{
-				foreach ($filters as $filterTmp)
+				foreach ($filters AS $filterTmp)
 				{
 					$methodName = 'filterProductsBy'.ucfirst($filterTmp['type']);
 					if (method_exists('BlockLayered', $methodName))
-						if ($filter['type'] == $filterTmp['type'])
-							$products = self::$methodName(array(), $products);
-						else
-							$products = self::$methodName(@$selectedFilters[$filterTmp['type']], $products);
+						$products = ($filter['type'] == $filterTmp['type']) ? self::$methodName(array(), $products) : self::$methodName(@$selectedFilters[$filterTmp['type']], $products);
 				}
-				// Treatment
+
 				switch($filter['type'])
 				{
 					case 'price':
-						$priceArray = array(
-							'type_lite' => 'price',
-							'type' => 'price',
-							'id_key' => 0,
-							'name' => 'Price',
-							'slider' => true,
-							'max' => '0',
-							'min' => null,
-							'values' => array ('1' => 0),
-							'unit' => Currency::getCurrent()->sign);
-						foreach ($products as $product)
+						$priceArray = array('type_lite' => 'price', 'type' => 'price', 'id_key' => 0, 'name' => 'Price', 
+						'slider' => true, 'max' => '0', 'min' => NULL, 'values' => array ('1' => 0), 'unit' => Currency::getCurrent()->sign);
+						foreach ($products AS $product)
 						{
 							if (is_null($priceArray['min']))
 							{
 								$priceArray['min'] = $product['price_min'];
 								$priceArray['values'][0] = $product['price_min'];
 							}
-								
 							elseif ($priceArray['min'] > $product['price_min'])
 							{
 								$priceArray['min'] = $product['price_min'];
 								$priceArray['values'][0] = $product['price_min'];
 							}
-								
+
 							if ($priceArray['max'] < $product['price_max'])
 							{
 								$priceArray['max'] = $product['price_max'];
 								$priceArray['values'][1] = $product['price_max'];
 							}
 							
-							if (
-								isset($selectedFilters['price'])
-								AND isset($selectedFilters['price'][0])
-								AND isset($selectedFilters['price'][1])
-								AND !empty($selectedFilters['price'][0])
-								AND !empty($selectedFilters['price'][1]))
+							if (isset($selectedFilters['price']) AND isset($selectedFilters['price'][0])
+							AND isset($selectedFilters['price'][1]) AND !empty($selectedFilters['price'][0])
+							AND !empty($selectedFilters['price'][1]))
 							{
 								$priceArray['values'][0] = $selectedFilters['price'][0];
 								$priceArray['values'][1] = $selectedFilters['price'][1];
@@ -1672,18 +1542,11 @@ class BlockLayered extends Module
 						}
 						$filterBlocks[] = $priceArray;
 						break;
+
 					case 'weight':
-						$weightArray = array(
-							'type_lite' => 'weight',
-							'type' => 'weight',
-							'id_key' => 0,
-							'name' => 'Weight',
-							'slider' => true,
-							'max' => '0',
-							'min' => null,
-							'values' => array ('1' => 0),
-							'unit' => Configuration::get('PS_WEIGHT_UNIT'));
-						foreach ($products as $product)
+						$weightArray = array('type_lite' => 'weight', 'type' => 'weight', 'id_key' => 0, 'name' => 'Weight', 'slider' => true,
+						'max' => '0', 'min' => NULL, 'values' => array ('1' => 0), 'unit' => Configuration::get('PS_WEIGHT_UNIT'));
+						foreach ($products AS $product)
 						{
 							if (is_null($weightArray['min']))
 							{
@@ -1702,296 +1565,103 @@ class BlockLayered extends Module
 								$weightArray['values'][1] = $product['weight'];
 							}
 							
-							if (
-								isset($selectedFilters['weight'])
-								AND isset($selectedFilters['weight'][0])
-								AND isset($selectedFilters['weight'][1])
-								AND !empty($selectedFilters['weight'][0])
-								AND !empty($selectedFilters['weight'][1]))
+							if (isset($selectedFilters['weight']) AND isset($selectedFilters['weight'][0])
+							AND isset($selectedFilters['weight'][1]) AND !empty($selectedFilters['weight'][0])
+							AND !empty($selectedFilters['weight'][1]))
 							{
 								$weightArray['values'][0] = $selectedFilters['weight'][0];
 								$weightArray['values'][1] = $selectedFilters['weight'][1];
 							}
-			
 						}
 						$filterBlocks[] = $weightArray;
 						break;
+
 					case 'condition':
-						$conditionArray =  array(
-							'new' => array('name' => $this->l('New'), 'nbr' => 0), 
-							'used' => array('name' => $this->l('Used'), 'nbr' => 0), 
-							'refurbished' => array('name' => $this->l('Refurbished'), 'nbr' => 0));
-						if (isset($selectedFilters['condition']) && in_array($product['condition'], $selectedFilters['condition']))
+						$conditionArray =  array('new' => array('name' => $this->l('New'), 'nbr' => 0), 
+						'used' => array('name' => $this->l('Used'), 'nbr' => 0), 'refurbished' => array('name' => $this->l('Refurbished'), 'nbr' => 0));
+						if (isset($selectedFilters['condition']) AND in_array($product['condition'], $selectedFilters['condition']))
 							$conditionArray[$product['condition']]['checked'] = true;
-						foreach ($conditionArray as $key => $condition)
-							if (isset($selectedFilters['condition']) && in_array($key, $selectedFilters['condition']))
+						foreach ($conditionArray AS $key => $condition)
+							if (isset($selectedFilters['condition']) AND in_array($key, $selectedFilters['condition']))
 								$conditionArray[$key]['checked'] = true;
-						foreach ($products as $product)
+						foreach ($products AS $product)
 							$conditionArray[$product['condition']]['nbr']++;
-						$filterBlocks[] = array (
-							'type_lite' => 'condition',
-							'type' => 'condition',
-							'id_key' => 0,
-							'name' => 'Condition',
-							'values' => $conditionArray);;
+						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => 'Condition', 'values' => $conditionArray);
 						break;
+
 					case 'quantity':
-						$quantityArray = array (
-							0 => array (
-								'name' => 'Not available',
-								'nbr' => 0,
-							),
-							1 => array (
-								'name' => 'In stock',
-								'nbr' => 0,
-							),
-						);
-						foreach ($quantityArray as $key => $quantity)
-							if (isset($selectedFilters['quantity']) && in_array($key, $selectedFilters['quantity']))
+						$quantityArray = array (0 => array('name' => 'Not available', 'nbr' => 0), 1 => array('name' => 'In stock', 'nbr' => 0));
+						foreach ($quantityArray AS $key => $quantity)
+							if (isset($selectedFilters['quantity']) AND in_array($key, $selectedFilters['quantity']))
 								$quantityArray[$key]['checked'] = true;
-						foreach ($products as $product)
-						{
+						foreach ($products AS $product)
 							$quantityArray[(int)($product['quantity'] > 0)]['nbr']++;
-						}
-						$filterBlocks[] = array (
-							'type_lite' => 'quantity',
-							'type' => 'quantity',
-							'id_key' => 0,
-							'name' => 'Quantity',
-							'values' => $quantityArray);
+						$filterBlocks[] = array('type_lite' => 'quantity', 'type' => 'quantity', 'id_key' => 0, 'name' => 'Quantity', 'values' => $quantityArray);
 						break;
+
 					case 'manufacturer':
-						// Manufacturers
 						$manufaturersArray = array();
-						foreach ($products as $manufacturer)
+						foreach ($products AS $manufacturer)
 						{
-							$manufaturersArray[$manufacturer['id_manufacturer']] = array(
-								'name' => $manufacturer['name'],
-								'nbr' => $manufacturer['nbr'],
-							);
-							if (isset($selectedFilters['manufacturer']) && in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
+							$manufaturersArray[$manufacturer['id_manufacturer']] = array('name' => $manufacturer['name'], 'nbr' => $manufacturer['nbr']);
+							if (isset($selectedFilters['manufacturer']) AND in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
 								$manufaturersArray[$manufacturer['id_manufacturer']]['checked'] = true;
 						}
-						$filterBlocks[] = array (
-							'type_lite' => 'manufacturer',
-							'type' => 'manufacturer',
-							'id_key' => 0,
-							'name' => 'Manufacturer',
-							'values' => $manufaturersArray);
+						$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => 'Manufacturer', 'values' => $manufaturersArray);
 						break;
-					case 'id_attribute_group':// attribute group
+
+					case 'id_attribute_group':
 						$attributesArray = array();
-						foreach ($products as $attributes)
+						foreach ($products AS $attributes)
 						{
 							if (!isset($attributesArray[$attributes['id_attribute_group']]))
 							{
-								$attributesArray[$attributes['id_attribute_group']] = array (
-									'type_lite' => 'id_attribute_group',
-									'type' => 'id_attribute_group_'.$attributes['id_attribute_group'],
-									'id_key' => $attributes['id_attribute_group'],
-									'name' =>  $attributes['attributeName'],
-									'is_color_group' => (bool)$attributes['is_color_group'],
-									'values' => array());
+								$attributesArray[$attributes['id_attribute_group']] = array ('type_lite' => 'id_attribute_group',
+								'type' => 'id_attribute_group_'.(int)$attributes['id_attribute_group'], 'id_key' => (int)$attributes['id_attribute_group'],
+								'name' =>  $attributes['attributeName'], 'is_color_group' => (bool)$attributes['is_color_group'], 'values' => array());
 							}
 							$attributesArray[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']] = array(
-								'color' => $attributes['color'],
-								'name' => $attributes['name'],
-								'nbr' => $attributes['nbr'],
-							);
+							'color' => $attributes['color'], 'name' => $attributes['name'], 'nbr' => (int)$attributes['nbr']);
 							if (isset($selectedFilters['id_attribute_group'][$attributes['id_attribute']]))
 								$attributesArray[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']]['checked'] = true;
 						}
 						$filterBlocks = array_merge($filterBlocks, $attributesArray);
 						break;
+
 					case 'id_feature':
 						$featureArray = array ();
-						foreach ($products as $feature)
+						foreach ($products AS $feature)
 						{
 							if (!isset($featureArray[$feature['id_feature']]))
-								$featureArray[$feature['id_feature']] = array(
-									'type_lite' => 'id_feature',
-									'type' => 'id_feature_'.$feature['id_feature'],
-									'id_key' => $feature['id_feature'],
-									'values' => array(),
-									'name' => $feature['name'],
-								);
+								$featureArray[$feature['id_feature']] = array('type_lite' => 'id_feature', 'type' => 'id_feature_'.(int)$feature['id_feature'],
+								'id_key' => (int)$feature['id_feature'], 'values' => array(), 'name' => $feature['name']);
 								
-							$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']] = array(
-								'nbr' => $feature['nbr'],
-								'name' => $feature['value'],
-							);
-							if (isset($selectedFilters['id_feature']) && in_array($feature['id_feature_value'], $selectedFilters['id_feature']))
+							$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']] = array('nbr' => (int)$feature['nbr'], 'name' => $feature['value']);
+							if (isset($selectedFilters['id_feature']) AND in_array($feature['id_feature_value'], $selectedFilters['id_feature']))
 								$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']]['checked'] = true;
 						}
-						$filterBlocks = array_merge($filterBlocks, $featureArray);
+						$filterBlocks[] = array_merge($filterBlocks, $featureArray);
 						break;
+
 					case 'category':
 						$tmpArray = array();
-						foreach ($products as $category)
-						{
-							$tmpArray[] = array(
-								'name' => $category['name'],
-								'nbr' =>  $category['count_products']
-							);
-						}
-						$filterBlocks[] = array (
-							'type_lite' => 'category',
-							'type' => 'category',
-							'id_key' => 0,
-							'name' => 'Categories',
-							'values' => $tmpArray);
+						foreach ($products AS $category)
+							$tmpArray[] = array('name' => $category['name'], 'nbr' => (int)$category['count_products']);
+						$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => 'Categories', 'values' => $tmpArray);
 						break;
 				}
 				
-			}
-			else {
-				// Debug
-				// We must never enter here
-				// The next line must be remove before the release
-				//var_export($sqlQuery['select']."\n".$sqlQuery['from']."\n".$sqlQuery['join']."\n".$sqlQuery['where']."\n".$sqlQuery['group']);die();
-			}
-			
+			}			
 		}
 		
 		$nFilters = 0;
 		foreach ($selectedFilters AS $filters)
 			$nFilters += sizeof($filters);
 		
-		$smarty->assign(array(
-		'layered_show_qties' => (int)Configuration::get('PS_LAYERED_SHOW_QTIES'),
-		'id_category_layered' => (int)$id_parent,
-		'selected_filters' => $selectedFilters,
-		'n_filters' => (int)$nFilters,
-		'nbr_filterBlocks' => sizeof($filterBlocks),
-		'filters' => $filterBlocks));
+		$smarty->assign(array('layered_show_qties' => (int)Configuration::get('PS_LAYERED_SHOW_QTIES'), 'id_category_layered' => (int)$id_parent,
+		'selected_filters' => $selectedFilters, 'n_filters' => (int)$nFilters, 'nbr_filterBlocks' => sizeof($filterBlocks), 'filters' => $filterBlocks));
+
 		return $this->display(__FILE__, 'blocklayered.tpl');
-	}
-	
-	private static function getPriceFilterSubQuery($filterValue, $whereClause = false)
-	{
-		$idCurrency = Currency::getCurrent()->id;
-		$priceFilterQuery = '';
-		if (isset($filterValue) && $filterValue)
-		{
-			$idCurrency = Currency::getCurrent()->id;
-			$priceFilterQuery = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi
-			ON  psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
-				AND psi.price_min <= '.(int)$filterValue[1].'
-				AND psi.price_max >= '.(int)$filterValue[0].'
-				AND psi.`id_product` = p.`id_product`
-				AND psi.`id_currency` = '.(int)$idCurrency.' ';
-		}
-		else{
-			$idCurrency = Currency::getCurrent()->id;
-			$priceFilterQuery = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` as psi
-			ON  psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
-				AND psi.`id_product` = p.`id_product`
-				AND psi.`id_currency` = '.(int)$idCurrency.' ';
-		}
-		
-		return array('join' => $priceFilterQuery, 'select' => ', psi.price_min, psi.price_max');
-	}
-	
-	private static function filterProductsByPrice($filterValue, $productCollection)
-	{
-		if (empty($filterValue))
-			return $productCollection;
-		foreach ($productCollection as $key => $product)
-		{
-			if (
-				isset($filterValue) && $filterValue
-				&& isset($product['price_min']) && isset($product['id_product'])
-				&& ((int)$filterValue[0] > $product['price_min']
-					|| (int)$filterValue[1] < $product['price_max'])
-				)
-			{
-				$price = Product::getPriceStatic($product['id_product']);
-				if ($price < $filterValue[0] || $price > $filterValue[1])
-					continue;
-				unset($productCollection[$key]);
-			}
-		}
-		return $productCollection;
-	}
-	
-	private static function getWeightFilterSubQuery($filterValue, $whereClause = false)
-	{
-		if (isset($filterValue) && $filterValue)
-			if ($filterValue[0] != 0 || $filterValue[1] != 0)
-				return array('where' => ' AND p.`weight` BETWEEN '.(float)($filterValue[0] - 0.001).' AND '.(float)($filterValue[1] + 0.001).' ');
-		
-		return array();
-	}
-	
-	private static function getFeatureFilterSubQuery($filterValue, $whereClause = false)
-	{
-		if (empty($filterValue))
-			return array();
-		$queryFilters = ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'feature_product fp WHERE ';
-		foreach ($filterValue AS $filterVal)
-			$queryFilters .= 'fp.`id_feature_value` = '.(int)$filterVal.' OR ';
-		$queryFilters = rtrim($queryFilters, 'OR ').') ';
-		
-		return array('where' => $queryFilters);
-	}
-	private static function getId_attribute_groupFilterSubQuery($filterValue, $whereClause = false)
-	{
-		if (empty($filterValue))
-			return array();
-		$queryFilters = ' AND p.id_product IN (SELECT pa.`id_product`
-							FROM `'._DB_PREFIX_.'product_attribute_combination` pac
-							LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
-							ON (pa.`id_product_attribute` = pac.`id_product_attribute`) WHERE ';
-						
-		foreach ($filterValue AS $filterVal)
-			$queryFilters .= 'pac.`id_attribute` = '.(int)$filterVal.' OR ';
-		$queryFilters = rtrim($queryFilters, 'OR ').') ';
-		
-		return array('where' => $queryFilters);
-	}
-	
-	private static function getCategoryFilterSubQuery($filterValue, $whereClause = false)
-	{
-		if (empty($filterValue))
-			return array();
-		$queryFiltersJoin = '';
-		$queryFiltersWhere = ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE ';
-		foreach ($filterValue AS $id_category)
-			$queryFiltersWhere .= 'cp.`id_category` = '.(int)$id_category.' OR ';
-		$queryFiltersWhere = rtrim($queryFilters, 'OR ').') ';
-		
-		return array('where' => $queryFiltersWhere, 'where' => $queryFiltersJoin);
-	}
-	
-	private static function getQuantityFilterSubQuerie($filterValue, $whereClause = false)
-	{
-		if (sizeof($filterValue) == 2 || empty($filterValue))
-			return array();
-		$queryFilters = ' AND p.quantity '.(!$filterValue[0] ? '=' : '>').' 0 ';
-		
-		return array('where' => $queryFilters);
-	}
-	
-	private static function getManufacturerFilterSubQuerye($filterValue, $whereClause = false)
-	{
-		if (empty($filterValue))
-			return array();
-		
-		$queryFilters = ' AND p.id_manufacturer IN ('.implode($filterValue, ',').')';
-		
-		return array('where' => $queryFilters, 'select' => ', m.name');
-	}
-	
-	private static function getConditionFilterSubQuery($filterValue, $whereClause = false)
-	{
-		if (sizeof($filterValue) == 3 || empty($filterValue))
-			return array();
-		$queryFilters = ' AND p.condition IN (';
-		foreach ($filterValue AS $cond)
-			$queryFilters .= '\''.$cond.'\',';
-		$queryFilters = rtrim($queryFilters, ',').') ';
-		
-		return array('where' => $queryFilters);
 	}
 	
 	/*
@@ -2001,7 +1671,7 @@ class BlockLayered extends Module
 	public function generateFiltersBlock($selectedFilters = array())
 	{
 		return self::generateFiltersBlockNew($selectedFilters);
-		return self::generateFiltersBlockOld($selectedFilters);
+		// return self::generateFiltersBlockOld($selectedFilters);
 	}
 	
 	public function ajaxCallBackOffice($categoryBox = array(), $id_layered_filter = NULL)
@@ -2010,7 +1680,7 @@ class BlockLayered extends Module
 		
 		if (!empty($id_layered_filter))
 		{
-			$layeredFilter = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'layered_filter WHERE id_layered_filter = '.(int)$id_layered_filter);
+			$layeredFilter = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT * FROM '._DB_PREFIX_.'layered_filter WHERE id_layered_filter = '.(int)$id_layered_filter);
 			if ($layeredFilter AND isset($layeredFilter['filters']) AND !empty($layeredFilter['filters']))
 				$layeredValues = unserialize($layeredFilter['filters']);
 			if (isset($layeredValues['categories']) AND sizeof($layeredValues['categories']))
@@ -2153,25 +1823,17 @@ class BlockLayered extends Module
 			$stop = (int)($pages_nb);
 			
 		$smarty->assign('nb_products', $nbProducts);
-		$pagination_infos = array(
-			'pages_nb' => (int)($pages_nb),
-			'p' => (int)$p,
-			'n' => (int)$n,
-			'range' => (int)$range,
-			'start' => (int)$start,
-			'stop' => (int)$stop,
-			'nArray' => $nArray = (int)Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50)
-		);
+		$pagination_infos = array('pages_nb' => (int)($pages_nb), 'p' => (int)$p, 'n' => (int)$n, 'range' => (int)$range, 'start' => (int)$start, 'stop' => (int)$stop,
+		'nArray' => $nArray = (int)Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50));
 		$smarty->assign($pagination_infos);
 		$smarty->assign('comparator_max_item', (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')));
 		$smarty->assign('products', $products);
 		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
 		return Tools::jsonEncode(array(
-			'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
-			'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
-			'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl')
-		));
+		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
+		'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
+		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl')));
 	}
 
 	public function rebuildLayeredStructure()
@@ -2334,7 +1996,7 @@ class BlockLayered extends Module
 		static $priceStatics = array();
 		$productsToKeep = array();
 		$filterByLetter = array('id_attribute_group' => 'a', 'id_feature' => 'f', 'category' => 'c', 'manufacturer' => 'id_manufacturer',
-								'quantity' => 'quantity', 'condition' => 'condition', 'weight' => 'weight', 'price' => 'price');
+		'quantity' => 'quantity', 'condition' => 'condition', 'weight' => 'weight', 'price' => 'price');
 
 		foreach ($selectedFilters AS $type => $filters)
 		{		
@@ -2382,11 +2044,8 @@ class BlockLayered extends Module
 						foreach ($products AS $k => $product)
 							if ((float)$min <= (float)$product['price_min'] AND (float)$product['price_max'] <= (float)$max)
 								$productsToKeep[] = (int)$k;
-							elseif (
-								(float)$product['price_min'] < (float)$max AND (float)$product['price_max'] > (float)$max
-								OR
-								(float)$product['price_min'] < (float)$min AND (float)$product['price_max'] > (float)$min
-								)
+							elseif ((float)$product['price_min'] < (float)$max AND (float)$product['price_max'] > (float)$max
+							OR (float)$product['price_min'] < (float)$min AND (float)$product['price_max'] > (float)$min)
 							{
 								if (!isset($priceStatics[(int)$k]))
 									$priceStatics[(int)$k] = Product::getPriceStatic((int)$k);
