@@ -144,10 +144,14 @@ class BlockLayered extends Module
 			return '{"cursor": '.$cursor.', "count": '.($nbProducts - $cursor).'}';
 		elseif ($ajax AND $nbProducts > 0 AND !$full)
 			return '{"cursor": '.$cursor.', "count": '.($nbProducts).'}';
-		elseif ($ajax)
-			return '{"result": "ok"}';
 		else
-			return -1;
+		{
+			Configuration::updateValue('PS_LAYERED_INDEXED', 1);
+			if ($ajax)
+				return '{"result": "ok"}';
+			else
+				return -1;
+		}
 	}
 	
 	/*
@@ -452,12 +456,24 @@ class BlockLayered extends Module
 		$html .= '
 		<fieldset class="width4">
 			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Indexes and caches').'</legend>
-			- <a class="bold ajaxcall" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'">Index all missing products.</a>
+			<span id="indexing-warning" style="display: none; color:red; font-weight: bold">'.$this->l('Indexing are in progress. Please don\'t leave this page').'<br/><br/></span>
+		';
+		if(!Configuration::get('PS_LAYERED_INDEXED'))
+			$html .= '
+			<script type="text/javascript">
+			$(document).ready(function() {
+				$(\'#full-index\').click();
+			});
+			</script>';
+		$html .= '
+			- <a class="bold ajaxcall" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'">'.$this->l('Index all missing products.').'</a>
 			<br />
-			- <a class="bold ajaxcall" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'&full=1">Re-build entire index.</a>
+			- <a class="bold ajaxcall" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'&full=1">'.$this->l('Re-build entire index.').'</a>
 			<br />
 			<br />
 			'.$this->l('You can set a cron job that will re-build your index using the following URL: ').Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'),0,10).'&full=1
+			<br />
+			'.$this->l('A full re-index process must be done each time products are modified. A nightly rebuild is recomanded.').'
 			<script type="text/javascript">
 				$(\'.ajaxcall\').each(function(it, elm) {
 					$(elm).click(function() {
@@ -476,7 +492,10 @@ class BlockLayered extends Module
 						this.running = true;
 						
 						if ($(this).html() == this.legend)
+						{
 							$(this).html(this.legend+\' (in progress)\');
+							$(\'#indexing-warning\').show();
+						}
 							
 						
 						$.ajax({
@@ -489,6 +508,7 @@ class BlockLayered extends Module
 								if (res.result)
 								{
 									this.cursor = 0;
+									$(\'#indexing-warning\').hide();
 									$(this).html(this.legend+\' (finished)\');
 									return;
 								}
