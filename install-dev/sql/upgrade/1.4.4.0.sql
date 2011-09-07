@@ -24,7 +24,7 @@ INSERT IGNORE INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_up
 ALTER TABLE `PREFIX_lang` ADD `is_rtl` TINYINT(1) NOT NULL DEFAULT '0';
 
 UPDATE `PREFIX_country_lang`
-SET `name` = 'United State'
+SET `name` = 'United States'
 WHERE `name` = 'USA'
 AND `id_lang` = (
 	SELECT `id_lang`
@@ -56,9 +56,9 @@ ALTER TABLE `PREFIX_tax_rule` MODIFY `id_county` INT NOT NULL AFTER `id_country`
 UPDATE `PREFIX_address_format` set `format`='firstname lastname
 company
 address1 address2
-city, State:name postcode 
+city, State:name postcode
 Country:name
-phone' 
+phone'
 WHERE `id_country` = (SELECT `id_country` FROM `PREFIX_country` WHERE `iso_code`='US');
 
 ALTER TABLE `PREFIX_attachment` CHANGE `mime` `mime` VARCHAR(128) NOT NULL;
@@ -78,3 +78,4 @@ DELETE FROM `PREFIX_configuration` WHERE name = 'PS_LAYERED_NAVIGATION_CHECKBOXE
 /* PHP:add_new_tab(AdminUpgrade, en:Upgrade|fr:Mise à jour,  9); */;
 
 /* PHP:alter_productcomments_guest_index(); */;
+
