@@ -1589,7 +1589,7 @@ class BlockLayered extends Module
 					$sqlQuery['from'] = '
 					FROM `'._DB_PREFIX_.'category_product` cp
 					INNER JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product AND p.active = 1)
-					#INNER JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer) ';
+					INNER JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer) ';
 					$sqlQuery['where'] = '
 					WHERE cp.`id_category` = '.(int)$id_parent.' ';
 					$sqlQuery['group'] = ' GROUP BY p.id_manufacturer ';
@@ -1648,9 +1648,9 @@ class BlockLayered extends Module
 				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filterTmp['type'] || $filter['type'] == $filterTmp['type']))
 				{
 					if ($filter['type'] == $filterTmp['type'])
-						$subQueryFilter = self::$methodName(array());
+						$subQueryFilter = self::$methodName(array(), $filter['type'] == $filterTmp['type']);
 					else
-						$subQueryFilter = self::$methodName(@$selectedFilters[$filterTmp['type']]);
+						$subQueryFilter = self::$methodName(@$selectedFilters[$filterTmp['type']], $filter['type'] == $filterTmp['type']);
 					foreach ($subQueryFilter as $key => $value)
 						$sqlQuery[$key] .= $value;
 				}
@@ -1778,7 +1778,7 @@ class BlockLayered extends Module
 					$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => $this->l('Manufacturer'), 'values' => $manufaturersArray);
 					break;
 
-				case 'id_attribute_group':					
+				case 'id_attribute_group':
 					$attributesArray = array();
 					if (isset($products) AND $products)
 					{
@@ -1903,7 +1903,7 @@ class BlockLayered extends Module
 			$idCurrency = Currency::getCurrent()->id;
 			$priceFilterQuery = '
 			INNER JOIN `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
-			AND psi.price_min <= '.(int)$filterValue[1].' AND psi.price_max >= '.(int)$filterValue[0].' AND psi.`id_product` = p.`id_product` AND psi.`id_currency` = '.(int)$idCurrency.') ';
+			AND psi.price_min <= '.(int)$filterValue[1].' AND psi.price_max >= '.(int)$filterValue[0].') ';
 		}
 		else{
 			$idCurrency = Currency::getCurrent()->id;
@@ -1933,7 +1933,7 @@ class BlockLayered extends Module
 		return $productCollection;
 	}
 	
-	private static function getWeightFilterSubQuery($filterValue)
+	private static function getWeightFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (isset($filterValue) AND $filterValue)
 			if ($filterValue[0] != 0 OR $filterValue[1] != 0)
@@ -1942,7 +1942,7 @@ class BlockLayered extends Module
 		return array();
 	}
 	
-	private static function getFeatureFilterSubQuery($filterValue)
+	private static function getFeatureFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (empty($filterValue))
 			return array();
@@ -1953,7 +1953,7 @@ class BlockLayered extends Module
 		
 		return array('where' => $queryFilters);
 	}
-	private static function getId_attribute_groupFilterSubQuery($filterValue)
+	private static function getId_attribute_groupFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (empty($filterValue))
 			return array();
@@ -1970,7 +1970,7 @@ class BlockLayered extends Module
 		return array('where' => $queryFilters);
 	}
 	
-	private static function getCategoryFilterSubQuery($filterValue)
+	private static function getCategoryFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (empty($filterValue))
 			return array();
@@ -1983,7 +1983,7 @@ class BlockLayered extends Module
 		return array('where' => $queryFiltersWhere, 'join' => $queryFiltersJoin);
 	}
 	
-	private static function getQuantityFilterSubQuery($filterValue)
+	private static function getQuantityFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (sizeof($filterValue) == 2 OR empty($filterValue))
 			return array();
@@ -1992,17 +1992,20 @@ class BlockLayered extends Module
 		return array('where' => $queryFilters);
 	}
 	
-	private static function getManufacturerFilterSubQuery($filterValue)
+	private static function getManufacturerFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (empty($filterValue))
 			$queryFilters = '';
 		else
 			$queryFilters = ' AND p.id_manufacturer IN ('.implode($filterValue, ',').')';
 		
-		return array('where' => $queryFilters, 'select' => ', m.name', 'join' => 'INNER JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.id_manufacturer = p.id_manufacturer) ');
+			if($ignoreJoin)
+				return array('where' => $queryFilters, 'select' => ', m.name');
+			else
+				return array('where' => $queryFilters, 'select' => ', m.name', 'join' => 'LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.id_manufacturer = p.id_manufacturer) ');
 	}
 	
-	private static function getConditionFilterSubQuery($filterValue)
+	private static function getConditionFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (sizeof($filterValue) == 3 OR empty($filterValue))
 			return array();
