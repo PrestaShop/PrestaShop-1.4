@@ -287,6 +287,9 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->prodRootDir = _PS_ROOT_DIR_;
 		$this->adminDir = _PS_ADMIN_DIR_;
 
+		// from $_POST or $_GET
+		$this->action = empty($_REQUEST['action'])?null:$_REQUEST['action'];
+		$this->currentParams = empty($_REQUEST['params'])?null:$_REQUEST['params'];
 		// test writable recursively
 		if(version_compare(_PS_VERSION_,'1.4.4.0','<'))
 		{
@@ -297,7 +300,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		if (ConfigurationTest::test_dir($this->prodRootDir,true))
 			$this->rootWritable = true;
 
-		if(!$this->ajax)
+		if(!in_array($this->action,array('upgradeFile','upgradeDb') ))
 		{
 		// checkPSVersion will be not 
 			$this->upgrader = new Upgrader();
@@ -316,9 +319,6 @@ class AdminSelfUpgrade extends AdminSelfTab
 		else
 			$this->useSvn = false;
 		
-		// from $_POST or $_GET
-		$this->action = empty($_REQUEST['action'])?null:$_REQUEST['action'];
-		$this->currentParams = empty($_REQUEST['params'])?null:$_REQUEST['params'];
 
 		// If not exists in this sessions, "create"
 		// session handling : from current to next params
