@@ -989,7 +989,7 @@ if ($lm->getIncludeTradFilename())
 					</tr>
 				</table>
 				
-				<h3 class="infosBlock"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder.'); ?></h3>
+				<h3 class="infosBlock"><?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files(readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?></h3>
 				
 				<div id="boBlock" class="blockInfoEnd clearfix">
 						<img src="img/visu_boBlock.png" />
@@ -1326,7 +1326,7 @@ if ($lm->getIncludeTradFilename())
 				?>
 
 				<div class="infosBlock">
-					<?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files (readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?>
+					<?php echo lang('WARNING: For more security, you must delete the \'install\' folder and readme files(readme_fr.txt, readme_en.txt, readme_es.txt, readme_de.txt, readme_it.txt, CHANGELOG).'); ?>
 				</div>
 				
 				<div id="foBlock" class="blockInfoEnd clearfix">
@@ -1357,7 +1357,7 @@ if ($lm->getIncludeTradFilename())
 <ul id="footer">
 	<li><a href="http://www.prestashop.com/forum/" title="<?php echo lang('Official forum'); ?>"><?php echo lang('Official forum'); ?></a> | </li>
 	<li><a href="http://www.prestashop.com" title="PrestaShop.com">PrestaShop.com</a> | </li>
-	<li><a href="http://www.prestashop.com/contact.php" title="<?php echo lang('Contact us'); ?>"><?php echo lang('Contact us'); ?></a> | </li>
+	<li><a href="http://www.prestashop.com/contact.php" title="<?php echo lang('Contact us!'); ?>"><?php echo lang('Contact us!'); ?></a> | </li>
 	<li>&copy; 2005-<?php echo date('Y'); ?></li>
 </ul>
 </body>
