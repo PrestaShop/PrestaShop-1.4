@@ -61,7 +61,7 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.2.3';
+		$this->version = '1.2.4';
 		$this->author = 'PrestaShop';
 		parent::__construct ();
 		$this->displayName = $this->l('eBay');
@@ -113,43 +113,50 @@ class Ebay extends Module
 			if (!Configuration::get('EBAY_API_TOKEN'))
 				$this->warning = $this->l('You must register your module on eBay.');
 
-			// Shipping methods
-			$this->_shippingMethod = array(
-					7104 => array('description' => 'Colissimo', 'shippingService' => 'FR_ColiposteColissimo', 'shippingServiceID' => '7104'),
-					7112 => array('description' => 'Ecopli', 'shippingService' => 'FR_Ecopli', 'shippingServiceID' => '7112'),
-					57104 => array('description' => 'La Poste - Courrier International Prioritaire', 'shippingService' => 'FR_LaPosteInternationalPriorityCourier', 'shippingServiceID' => '57104'),
-					7101 => array('description' => 'Lettre', 'shippingService' => 'FR_PostOfficeLetter', 'shippingServiceID' => '7101'),
-					57105 => array('description' => 'La Poste - Courrier International Economique', 'shippingService' => 'FR_LaPosteInternationalEconomyCourier', 'shippingServiceID' => '57105'),
-					57106 => array('description' => 'La Poste - Colissimo International', 'shippingService' => 'FR_LaPosteColissimoInternational', 'shippingServiceID' => '57106'),
-					7102 => array('description' => 'Lettre avec suivi', 'shippingService' => 'FR_PostOfficeLetterFollowed', 'shippingServiceID' => '7102'),
-					57107 => array('description' => 'La Poste - Colis Economique International', 'shippingService' => 'FR_LaPosteColisEconomiqueInternational', 'shippingServiceID' => '57107'),
-					7103 => array('description' => 'Lettre recommand&eacute;e', 'shippingService' => 'FR_PostOfficeLetterRecommended', 'shippingServiceID' => '7103'),
-					7121 => array('description' => 'Lettre Max', 'shippingService' => 'FR_LaPosteLetterMax', 'shippingServiceID' => '7121'),
-					7113 => array('description' => 'Coli&eacute;co', 'shippingService' => 'FR_Colieco', 'shippingServiceID' => '7113'),
-					57108 => array('description' => 'La Poste - Colissimo Emballage International', 'shippingService' => 'FR_LaPosteColissimoEmballageInternational', 'shippingServiceID' => '57108'),
-					57114 => array('description' => 'Chronopost Express International', 'shippingService' => 'FR_ChronopostExpressInternational', 'shippingServiceID' => '57114'),
-					7106 => array('description' => 'Colissimo Recommand&eacute;', 'shippingService' => 'FR_ColiposteColissimoRecommended', 'shippingServiceID' => '7106'),
-					57109 => array('description' => 'Chronopost Classic International', 'shippingService' => 'FR_ChronopostClassicInternational', 'shippingServiceID' => '57109'),
-					57110 => array('description' => 'Chronopost Premium International', 'shippingService' => 'FR_ChronopostPremiumInternational', 'shippingServiceID' => '57110'),
-					7117 => array('description' => 'Chronopost - Chrono Relais', 'shippingService' => 'FR_ChronopostChronoRelais', 'shippingServiceID' => '7117'),
-					57111 => array('description' => 'UPS Standard', 'shippingService' => 'FR_UPSStandardInternational', 'shippingServiceID' => '57111'),
-					7111 => array('description' => 'Autre mode d\'envoi de courrier', 'shippingService' => 'FR_Autre', 'shippingServiceID' => '7111'),
-					57112 => array('description' => 'UPS Express', 'shippingService' => 'FR_UPSExpressInternational', 'shippingServiceID' => '57112'),
-					7114 => array('description' => 'Autre mode d\'envoi de colis', 'shippingService' => 'FR_AuteModeDenvoiDeColis', 'shippingServiceID' => '7114'),
-					57113 => array('description' => 'DHL', 'shippingService' => 'FR_DHLInternational', 'shippingServiceID' => '57113'),
-					57101 => array('description' => 'Frais de livraison internationale fixes', 'shippingService' => 'FR_StandardInternational', 'shippingServiceID' => '57101'),
-					7116 => array('description' => 'Chronopost', 'shippingService' => 'FR_Chronopost', 'shippingServiceID' => '7116'),
-					57102 => array('description' => 'Frais fixes pour livraison internationale express', 'shippingService' => 'FR_ExpeditedInternational', 'shippingServiceID' => '57102'),
-					57103 => array('description' => 'Autres livraisons internationales (voir description)', 'shippingService' => 'FR_OtherInternational', 'shippingServiceID' => '57103'),
-					7118 => array('description' => 'Chrono 10', 'shippingService' => 'FR_Chrono10', 'shippingServiceID' => '7118'),
-					7119 => array('description' => 'Chrono 13', 'shippingService' => 'FR_Chrono13', 'shippingServiceID' => '7119'),
-					7120 => array('description' => 'Chrono 18', 'shippingService' => 'FR_Chrono18', 'shippingServiceID' => '7120'),
-					7105 => array('description' => 'Coliposte - Colissimo Direct', 'shippingService' => 'FR_ColiposteColissimoDirect', 'shippingServiceID' => '7105'),
-					7107 => array('description' => 'Chronoposte - Chrono Classic International', 'shippingService' => 'FR_ChronoposteInternationalClassic', 'shippingServiceID' => '7107'),
-					7108 => array('description' => 'DHL - Express Europack', 'shippingService' => 'FR_DHLExpressEuropack', 'shippingServiceID' => '7108'),
-					7109 => array('description' => 'UPS - Standard', 'shippingService' => 'FR_UPSStandard', 'shippingServiceID' => '7109'),
-			);
+			// Loading Shipping Method
+			$this->loadShippingMethod();
 		}
+	}
+
+
+	public function loadShippingMethod()
+	{
+		// Shipping methods
+		$this->_shippingMethod = array(
+				7104 => array('description' => 'Colissimo', 'shippingService' => 'FR_ColiposteColissimo', 'shippingServiceID' => '7104'),
+				7112 => array('description' => 'Ecopli', 'shippingService' => 'FR_Ecopli', 'shippingServiceID' => '7112'),
+				57104 => array('description' => 'La Poste - Courrier International Prioritaire', 'shippingService' => 'FR_LaPosteInternationalPriorityCourier', 'shippingServiceID' => '57104'),
+				7101 => array('description' => 'Lettre', 'shippingService' => 'FR_PostOfficeLetter', 'shippingServiceID' => '7101'),
+				57105 => array('description' => 'La Poste - Courrier International Economique', 'shippingService' => 'FR_LaPosteInternationalEconomyCourier', 'shippingServiceID' => '57105'),
+				57106 => array('description' => 'La Poste - Colissimo International', 'shippingService' => 'FR_LaPosteColissimoInternational', 'shippingServiceID' => '57106'),
+				7102 => array('description' => 'Lettre avec suivi', 'shippingService' => 'FR_PostOfficeLetterFollowed', 'shippingServiceID' => '7102'),
+				57107 => array('description' => 'La Poste - Colis Economique International', 'shippingService' => 'FR_LaPosteColisEconomiqueInternational', 'shippingServiceID' => '57107'),
+				7103 => array('description' => 'Lettre recommand&eacute;e', 'shippingService' => 'FR_PostOfficeLetterRecommended', 'shippingServiceID' => '7103'),
+				7121 => array('description' => 'Lettre Max', 'shippingService' => 'FR_LaPosteLetterMax', 'shippingServiceID' => '7121'),
+				7113 => array('description' => 'Coli&eacute;co', 'shippingService' => 'FR_Colieco', 'shippingServiceID' => '7113'),
+				57108 => array('description' => 'La Poste - Colissimo Emballage International', 'shippingService' => 'FR_LaPosteColissimoEmballageInternational', 'shippingServiceID' => '57108'),
+				57114 => array('description' => 'Chronopost Express International', 'shippingService' => 'FR_ChronopostExpressInternational', 'shippingServiceID' => '57114'),
+				7106 => array('description' => 'Colissimo Recommand&eacute;', 'shippingService' => 'FR_ColiposteColissimoRecommended', 'shippingServiceID' => '7106'),
+				57109 => array('description' => 'Chronopost Classic International', 'shippingService' => 'FR_ChronopostClassicInternational', 'shippingServiceID' => '57109'),
+				57110 => array('description' => 'Chronopost Premium International', 'shippingService' => 'FR_ChronopostPremiumInternational', 'shippingServiceID' => '57110'),
+				7117 => array('description' => 'Chronopost - Chrono Relais', 'shippingService' => 'FR_ChronopostChronoRelais', 'shippingServiceID' => '7117'),
+				57111 => array('description' => 'UPS Standard', 'shippingService' => 'FR_UPSStandardInternational', 'shippingServiceID' => '57111'),
+				7111 => array('description' => 'Autre mode d\'envoi de courrier', 'shippingService' => 'FR_Autre', 'shippingServiceID' => '7111'),
+				57112 => array('description' => 'UPS Express', 'shippingService' => 'FR_UPSExpressInternational', 'shippingServiceID' => '57112'),
+				7114 => array('description' => 'Autre mode d\'envoi de colis', 'shippingService' => 'FR_AuteModeDenvoiDeColis', 'shippingServiceID' => '7114'),
+				57113 => array('description' => 'DHL', 'shippingService' => 'FR_DHLInternational', 'shippingServiceID' => '57113'),
+				57101 => array('description' => 'Frais de livraison internationale fixes', 'shippingService' => 'FR_StandardInternational', 'shippingServiceID' => '57101'),
+				7116 => array('description' => 'Chronopost', 'shippingService' => 'FR_Chronopost', 'shippingServiceID' => '7116'),
+				57102 => array('description' => 'Frais fixes pour livraison internationale express', 'shippingService' => 'FR_ExpeditedInternational', 'shippingServiceID' => '57102'),
+				57103 => array('description' => 'Autres livraisons internationales (voir description)', 'shippingService' => 'FR_OtherInternational', 'shippingServiceID' => '57103'),
+				7118 => array('description' => 'Chrono 10', 'shippingService' => 'FR_Chrono10', 'shippingServiceID' => '7118'),
+				7119 => array('description' => 'Chrono 13', 'shippingService' => 'FR_Chrono13', 'shippingServiceID' => '7119'),
+				7120 => array('description' => 'Chrono 18', 'shippingService' => 'FR_Chrono18', 'shippingServiceID' => '7120'),
+				7105 => array('description' => 'Coliposte - Colissimo Direct', 'shippingService' => 'FR_ColiposteColissimoDirect', 'shippingServiceID' => '7105'),
+				7107 => array('description' => 'Chronoposte - Chrono Classic International', 'shippingService' => 'FR_ChronoposteInternationalClassic', 'shippingServiceID' => '7107'),
+				7108 => array('description' => 'DHL - Express Europack', 'shippingService' => 'FR_DHLExpressEuropack', 'shippingServiceID' => '7108'),
+				7109 => array('description' => 'UPS - Standard', 'shippingService' => 'FR_UPSStandard', 'shippingServiceID' => '7109'),
+		);
 	}
 
 
@@ -523,7 +530,7 @@ class Ebay extends Module
 
 
 		// If isset Post Var, post process else display form
-		if (!empty($_POST) AND Tools::isSubmit('submitSave'))
+		if (!empty($_POST) && (Tools::isSubmit('submitSave') || Tools::isSubmit('submitSave1') || Tools::isSubmit('submitSave2')))
 		{
 			$this->_postValidation();
 			if (!sizeof($this->_postErrors))
@@ -1194,7 +1201,10 @@ class Ebay extends Module
 
 
 		// Display Form
-		$html = '<style>#button_ebay_sync{background-image:url('.$this->_path.'ebay.gif);background-repeat:no-repeat;background-position:center 90px;width:500px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}</style>
+		$html = '<style>
+			#button_ebay_sync1{background-image:url('.$this->_path.'ebay.gif);background-repeat:no-repeat;background-position:center 90px;width:400px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
+			#button_ebay_sync2{background-image:url('.$this->_path.'ebay.gif);background-repeat:no-repeat;background-position:center 90px;width:400px;height:191px;cursor:pointer;padding-bottom:100px;font-weight:bold;font-size:25px;}
+		</style>
 		<script>
 			var nbProducts = '.$nbProducts.';
 			var nbProductsModeA = '.$nbProductsModeA.';
@@ -1215,7 +1225,8 @@ class Ebay extends Module
 						success: function(data) {
 					  		nbProducts = data;
 					  		nbProductsModeB = data;
-							$("#button_ebay_sync").attr("value", "'.$this->l('Sync with eBay').'\n(" + data + " '.$this->l('products').')");
+							$("#button_ebay_sync1").attr("value", "'.$this->l('Sync with eBay').'\n(" + data + " '.$this->l('products').')");
+							$("#button_ebay_sync2").attr("value", "'.$this->l('Sync and update with eBay').'\n(" + data + " '.$this->l('products').')");
 						}
 					});
 				});
@@ -1226,37 +1237,41 @@ class Ebay extends Module
 				$("#ebay_sync_mode1").click(function() {
 					nbProducts = nbProductsModeA;
 					$("#catSync").hide("slow");
-					$("#button_ebay_sync").attr("value", "'.$this->l('Sync with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
+					$("#button_ebay_sync1").attr("value", "'.$this->l('Sync with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
+					$("#button_ebay_sync2").attr("value", "'.$this->l('Sync and update with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
 				});
 				$("#ebay_sync_mode2").click(function() {
 					nbProducts = nbProductsModeB;
 					$("#catSync").show("slow");
-					$("#button_ebay_sync").attr("value", "'.$this->l('Sync with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
+					$("#button_ebay_sync1").attr("value", "'.$this->l('Sync with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
+					$("#button_ebay_sync2").attr("value", "'.$this->l('Sync and update with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
 				});
 			});
 
-			function eBaySync()
+			function eBaySync(option)
 			{
 				$(".categorySync").attr("disabled", "true");
 				$("#ebay_sync_mode1").attr("disabled", "true");
 				$("#ebay_sync_mode2").attr("disabled", "true");
 				$("#ebay_sync_option_resync").attr("disabled", "true");
-				$("#button_ebay_sync").attr("disabled", "true");
-				$("#button_ebay_sync").hide("slow");
+				$("#button_ebay_sync1").attr("disabled", "true");
+				$("#button_ebay_sync1").css("background-color", "#D5D5D5");
+				$("#button_ebay_sync2").attr("disabled", "true");
+				$("#button_ebay_sync2").css("background-color", "#D5D5D5");
 				$("#resultSync").html("<img src=\"../modules/ebay/loading-small.gif\" border=\"0\" />");
-				eBaySyncProduct();
+				eBaySyncProduct(option);
 			}
 
-			function eBaySyncProduct()
+			function eBaySyncProduct(option)
 			{
 				$.ajax({
-				  url: \''._MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&time='.pSQL(date('Ymdhis').rand()).'\',
+				  url: \''._MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&time='.pSQL(date('Ymdhis').rand()).'\',
 				  success: function(data)
 				  {
 					tab = data.split("|");
 					$("#resultSync").html(tab[1]);
 					if (tab[0] != "OK")
-						eBaySyncProduct();
+						eBaySyncProduct(option);
 				  }
 				});
 			}
@@ -1311,8 +1326,10 @@ class Ebay extends Module
 				}
 			}
 			$html .= '</tbody></table>';
-			if (Tools::getValue('section') == 'sync')
-				$html .= '<script>$(document).ready(function() { eBaySync(); });</script>';
+			if (Tools::getValue('section') == 'sync' && Tools::getValue('submitSave1') != '')
+				$html .= '<script>$(document).ready(function() { eBaySync(1); });</script>';
+			if (Tools::getValue('section') == 'sync' && Tools::getValue('submitSave2') != '')
+				$html .= '<script>$(document).ready(function() { eBaySync(2); });</script>';
 
 			if (Configuration::get('EBAY_SYNC_MODE') == 'B')
 			{
@@ -1327,8 +1344,21 @@ class Ebay extends Module
 			$html .= '
 					</div>
 				</fieldset>
-				<div class="margin-form"><input id="button_ebay_sync" class="button" name="submitSave" value="'.$this->l('Sync with eBay')."\n".'('.$nbProducts.' '.$this->l('products').')" OnClick="return confirm(\''.$this->l('You will push').' \' + nbProducts + \' '.$this->l('products on eBay. Do you want to confirm ?').'\');" type="submit"></div>
 				<h4>'.$this->l('Beware ! If some of your categories are not multi sku compliant, some of your products may create more than one product on eBay.').'</h4>
+
+				<table>
+					<tr>
+						<td style="color: #268CCD"><h4>'.$this->l('"Sync with eBay" option will only sync the products that are not already sync with eBay : ').'</h4></td>
+						<td style="width: 50px">&nbsp;</td>
+						<td style="color: #268CCD"><h4>'.$this->l('"Sync and update with eBay" will sync the products that are not already sync with eBay and update the products already sync with eBay : ').'</h4></td>
+					</tr>
+					<tr>
+						<td><input id="button_ebay_sync1" class="button" name="submitSave1" value="'.$this->l('Sync with eBay')."\n".'('.$nbProducts.' '.$this->l('products').')" OnClick="return confirm(\''.$this->l('You will push').' \' + nbProducts + \' '.$this->l('products on eBay. Do you want to confirm ?').'\');" type="submit"></td>
+						<td style="width: 50px">&nbsp;</td>
+						<td><input id="button_ebay_sync2" class="button" name="submitSave2" value="'.$this->l('Sync and update with eBay')."\n".'('.$nbProducts.' '.$this->l('products').')" OnClick="return confirm(\''.$this->l('You will push').' \' + nbProducts + \' '.$this->l('products on eBay. Do you want to confirm ?').'\');" type="submit"></td>
+					</tr>
+				</table>
+				<br />
 			</form>';
 
 
@@ -1367,11 +1397,7 @@ class Ebay extends Module
 
 	public function ajaxProductSync()
 	{
-		// Take the next product
-		$where = '';
-		if ((int)Configuration::get('EBAY_SYNC_LAST_PRODUCT') > 0)
-			$where = 'AND `id_product` > '.(int)Configuration::get('EBAY_SYNC_LAST_PRODUCT');
-
+		$whereOption1 = 'AND `id_product` NOT IN (SELECT `id_product` FROM `'._DB_PREFIX_.'ebay_product`)';
 
 		if (Configuration::get('EBAY_SYNC_MODE') == 'A')
 		{
@@ -1387,8 +1413,8 @@ class Ebay extends Module
 			SELECT `id_product` FROM `'._DB_PREFIX_.'product`
 			WHERE `quantity` > 0 AND `active` = 1
 			AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0)
-			AND `id_product` NOT IN (SELECT `id_product` FROM `'._DB_PREFIX_.'ebay_product`)
-			'.$where.'
+			'.(Tools::getValue('option') == 1 ? $whereOption1 : '').'
+			AND `id_product` > '.(int)Configuration::get('EBAY_SYNC_LAST_PRODUCT').'
 			ORDER BY `id_product`
 			LIMIT 1');
 
@@ -1397,8 +1423,8 @@ class Ebay extends Module
 			SELECT COUNT(`id_product`) FROM `'._DB_PREFIX_.'product`
 			WHERE `quantity` > 0 AND `active` = 1
 			AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0)
-			AND `id_product` NOT IN (SELECT `id_product` FROM `'._DB_PREFIX_.'ebay_product`)
-			'.$where);
+			'.(Tools::getValue('option') == 1 ? $whereOption1 : '').'
+			AND `id_product` > '.(int)Configuration::get('EBAY_SYNC_LAST_PRODUCT'));
 		}
 		else
 		{
@@ -1414,8 +1440,8 @@ class Ebay extends Module
 			SELECT `id_product` FROM `'._DB_PREFIX_.'product`
 			WHERE `quantity` > 0 AND `active` = 1
 			AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0 AND `sync` = 1)
-			AND `id_product` NOT IN (SELECT `id_product` FROM `'._DB_PREFIX_.'ebay_product`)
-			'.$where.'
+			'.(Tools::getValue('option') == 1 ? $whereOption1 : '').'
+			AND `id_product` > '.(int)Configuration::get('EBAY_SYNC_LAST_PRODUCT').'
 			ORDER BY `id_product`
 			LIMIT 1');
 
@@ -1424,8 +1450,8 @@ class Ebay extends Module
 			SELECT COUNT(`id_product`) FROM `'._DB_PREFIX_.'product`
 			WHERE `quantity` > 0 AND `active` = 1
 			AND `id_category_default` IN (SELECT `id_category` FROM `'._DB_PREFIX_.'ebay_category_configuration` WHERE `id_category` > 0 AND `id_ebay_category` > 0 AND `sync` = 1)
-			AND `id_product` NOT IN (SELECT `id_product` FROM `'._DB_PREFIX_.'ebay_product`)
-			'.$where);
+			'.(Tools::getValue('option') == 1 ? $whereOption1 : '').'
+			AND `id_product` > '.(int)Configuration::get('EBAY_SYNC_LAST_PRODUCT'));
 		}
 
 		// Send each product on eBay
@@ -1550,6 +1576,11 @@ class Ebay extends Module
 				elseif ($categoryDefaultCache[$product->id_category_default]['percent'] < 0)
 					$price *= (1 - ($categoryDefaultCache[$product->id_category_default]['percent'] / (-100)));
 				$price = round($price, 2);
+
+
+				// Loading Shipping Method
+				if (!isset($this->_shippingMethod[Configuration::get('EBAY_SHIPPING_CARRIER_ID')]['shippingService']))
+					$this->loadShippingMethod();
 
 
 				// Generate array and try insert in database
