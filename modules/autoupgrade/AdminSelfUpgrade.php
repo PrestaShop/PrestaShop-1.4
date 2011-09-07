@@ -380,7 +380,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$this->keepDefaultTheme = $this->currentParams['keepDefaultTheme'];
 			$this->keepTrad = $this->currentParams['keepTrad'];
 			$this->manualMode = $this->currentParams['manualMode'];
-			$this->desactivateCustomModule = $this->current['desactivateCustomModule'];
+			$this->desactivateCustomModule = $this->currentParams['desactivateCustomModule'];
 		}
 		// We can add any file or directory in the exclude dir : theses files will be not removed or overwritten	
 		// @TODO cache should be ignored recursively, but we have to reconstruct it after upgrade
