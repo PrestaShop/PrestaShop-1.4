@@ -45,7 +45,14 @@ $(document).ready(function()
 	{
 		reloadContent();
 	});
-	
+
+	$("label a").live({
+		  click: function() {
+			  $(this).parent().parent().find('input').click();
+			  reloadContent();
+			  return false;
+		  }
+		});
 	paginationButton();
 	reloadContent();
 });
