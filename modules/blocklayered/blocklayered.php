@@ -122,23 +122,104 @@ class BlockLayered extends Module
 	/*
 	 * Url indexation
 	 */
-	static function _indexUrl()
+	public static function indexUrl()
 	{
 		
-		$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_category FROM '._DB_PREFIX_.'layered_category GROUP BY id_category');
-		
-		if(!$categories)
-			return;
-		
-		// We want all attributes of each categories
-		$attributeValuesByCategory = array();
-		foreach($categories as $category)
+//$atttributeGroupToIndexList = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_attribute_group FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE indexable = 1');
+//$featureToIndexList = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_feature FROM '._DB_PREFIX_.'layered_indexable_feature WHERE indexable = 1');
+		$attributeValues = array();
+		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT lc.*, id_lang, name, link_rewrite, cl.id_category
+		FROM '._DB_PREFIX_.'layered_category lc
+		INNER JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = lc.id_category)
+		#GROUP BY type, id_value, id_lang
+		ORDER BY position ASC');
+		if(!$filters)
+			continue;
+		//var_export($filters);
+		$i = 0;
+		foreach($filters as $filter)
 		{
-			$attributeValuesByCategory[(int)$category['id_category']] = array();
-			$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'layered_category WHERE id_category = '.(int)$category['id_category'].' ORDER BY position ASC');
-			if(!$categories)
-				continue;
+			switch($filter['type'])
+			{
+				case 'id_attribute_group':
+					$attributes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+					SELECT agl.name name, a.id_attribute_group id_name, al.name value, a.id_attribute id_value, al.id_lang
+					FROM '._DB_PREFIX_.'attribute_group ag
+					INNER JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (agl.id_attribute_group = ag.id_attribute_group)
+					INNER JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute_group = ag.id_attribute_group)
+					INNER JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = a.id_attribute)
+					INNER JOIN '._DB_PREFIX_.'layered_indexable_attribute_group liag ON (liag.id_attribute_group = a.id_attribute_group AND liag.indexable = 1)
+					WHERE a.id_attribute_group = '.$filter['id_value'].' AND agl.id_lang = al.id_lang AND agl.id_lang = '.$filter['id_lang'].'');
+					foreach($attributes as $attribute)
+					{
+						if(!isset($attributeValues[$attribute['id_lang']]))
+							$attributeValues[$attribute['id_lang']] = array();
+						if(!isset($attributeValues[$attribute['id_lang']][$filter['id_category']]))
+							$attributeValues[$attribute['id_lang']][$filter['id_category']] = array();
+						$attributeValues[$attribute['id_lang']][$filter['id_category']][] = array('name' => $attribute['name'],
+						'id_name' => $attribute['id_name'], 'value' => $attribute['value'], 'id_value' => $attribute['id_value'],
+						'category_name' => $filter['link_rewrite']);
+					}
+					break;
+				
+				case 'id_featured':
+					$features = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+					SELECT fl.name name, fl.id_feature id_name, fvl.id_feature_value id_value, fvl.value value, fl.id_lang
+					FROM '._DB_PREFIX_.'feature_lang fl
+					INNER JOIN '._DB_PREFIX_.'layered_indexable_feature lif ON (lif.id_feature = fl.id_feature AND indexable = 1)
+					INNER JOIN '._DB_PREFIX_.'feature_value fv ON (fv.id_feature = fl.id_feature)
+					INNER JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = fv.id_feature_value)
+					WHERE fl.id_feature = '.$filter['id_value'].' AND fvl.id_lang = fl.id_lang AND fvl.id_lang = '.$filter['id_lang']);
+					foreach($features as $feature)
+					{
+						if(!isset($attributeValues[$feature['id_lang']]))
+							$attributeValues[$feature['id_lang']] = array();
+						if(!isset($attributeValues[$feature['id_lang']][$filter['id_category']]))
+							$attributeValues[$feature['id_lang']][$filter['id_category']] = array();
+						$attributeValues[$feature['id_lang']][$filter['id_category']][] = array('name' => $feature['name'],
+						'id_name' => $feature['id_name'], 'value' => $feature['value'], 'id_value' => $feature['id_value'],
+						'category_name' => $filter['link_rewrite']);
+					}
+					break;
+				
+				case 'category':
+					// @TODO
+					break;
+			}
 		}
+		//var_export($attributeValues[1][22]);
+		//die();
+		$v=0;
+		foreach($attributeValues as $id_lang => $tmp)
+			foreach($tmp as $id_category => $values)
+			{
+				$v++;
+				//var_export($id_category);
+				//die($id_category);
+				$count = count($values);
+				$nbValues = pow(2, $count);
+				//var_export($nbValues);
+				for($i = 1; $i < $nbValues; $i++)
+				{
+					$mask = decbin($i);
+					//echo $mask . '---';
+					$attr = array();
+					//echo sprintf('[%0'.$count.'s]', $mask). '----';
+					foreach(str_split(sprintf('%0'.$count.'s', $mask)) as $id => $selected)
+						if($selected)
+							$attr[] = $values[$id];
+					//var_export($attr);
+					//var_export($values);
+					//foreach($attr as $att)
+					//	echo($att['value']). '--';
+					echo '<br />';
+					echo '';
+				}
+				if($v == 5)
+					die('here');
+				echo '<br/>';
+			}
+		//var_export($attributeValues);
 	}
 	public function hookAfterSaveFeature($params)
 	{
