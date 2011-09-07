@@ -297,13 +297,16 @@ class AdminSelfUpgrade extends AdminSelfTab
 		if (ConfigurationTest::test_dir($this->prodRootDir,true))
 			$this->rootWritable = true;
 
+		if(!$this->ajax)
+		{
 		// checkPSVersion will be not 
-		$this->upgrader = new Upgrader();
-		$this->upgrader->checkPSVersion();
-		if (version_compare(_PS_VERSION_,'1.4.4.0','<') OR $this->upgrader->need_standalone)
-			$this->standalone = true;
-		else
-			$this->standalone = false;
+			$this->upgrader = new Upgrader();
+			$this->upgrader->checkPSVersion();
+			if (version_compare(_PS_VERSION_,'1.4.4.0','<') OR $this->upgrader->need_standalone)
+				$this->standalone = true;
+			else
+				$this->standalone = false;
+		}
 		// If you have defined this somewhere, you know what you do
 		if (defined('_PS_ALLOW_UPGRADE_UNSTABLE_') AND _PS_ALLOW_UPGRADE_UNSTABLE_ AND function_exists('svn_checkout'))
 		{
