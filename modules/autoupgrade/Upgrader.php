@@ -95,7 +95,10 @@ class UpgraderCore{
 	{
 		if (empty($this->link))
 		{
-			$lastCheck = Configuration::get('PS_LAST_VERSION_CHECK');
+			if (class_exists('Configuration'))
+				$lastCheck = Configuration::get('PS_LAST_VERSION_CHECK');
+			else
+				$lastCheck = 0;
 			// if we use the autoupgrade process, we will never refresh it
 			// except if no check has been done before
 			if ($force OR ($lastCheck < time() - (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS)) )
@@ -119,8 +122,11 @@ class UpgraderCore{
 						'changelog' => $this->changelog,
 						'desc' => $this->desc
 					);
-					Configuration::updateValue('PS_LAST_VERSION',serialize($configLastVersion));
-					Configuration::updateValue('PS_LAST_VERSION_CHECK',time());
+					if (class_exists('Configuration'))
+					{
+						Configuration::updateValue('PS_LAST_VERSION',serialize($configLastVersion));
+						Configuration::updateValue('PS_LAST_VERSION_CHECK',time());
+					}
 				}
 			}
 			else

@@ -40,24 +40,22 @@ if(empty($_POST['action']) OR !in_array($_POST['action'],array('upgradeDb')))
 }
 	require_once(dirname(__FILE__).'/AdminSelfTab.php');
 	require_once(dirname(__FILE__).'/SelfModule.php');
+
+// Add Upgrader class 
 	if(file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
-	{
 		require_once(_PS_ROOT_DIR_.'/classes/Upgrader.php');
-	}
 	else
 		require_once(dirname(__FILE__).'/Upgrader.php');
 
 	if(!class_exists('Upgrader',false))
 	{
 		if(file_exists(_PS_ROOT_DIR_.'/override/classes/Upgrader.php'))
-		{
 			require_once(_PS_ROOT_DIR_.'/override/classes/Upgrader.php');
-		}
 		else
-		{
 			eval('class Upgrader extends UpgraderCore{}');
-		}
 	}
+
+
 
 require_once(dirname(__FILE__).'/Tools14.php');
 if(!class_exists('Tools',false))
@@ -300,7 +298,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$this->rootWritable = true;
 
 		// checkPSVersion will be not 
-		$this->upgrader = new Upgrader(true);
+		$this->upgrader = new Upgrader();
 		$this->upgrader->checkPSVersion();
 		if (version_compare(_PS_VERSION_,'1.4.4.0','<') OR $this->upgrader->need_standalone)
 			$this->standalone = true;
