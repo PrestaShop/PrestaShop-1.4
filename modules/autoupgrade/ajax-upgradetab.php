@@ -30,10 +30,10 @@ if($_POST['action'] == 'upgradeDb')
 
 // ajax-upgrade-tab is located in admin/autoupgrade directory
 if (!defined('_PS_ROOT_DIR_'))
-	define('_PS_ROOT_DIR_', dirname(__FILE__).'/../../');
+	define('_PS_ROOT_DIR_', realpath(dirname(__FILE__).'/../../'));
 require_once(_PS_ROOT_DIR_.'/config/settings.inc.php');
 if (!defined('_PS_MODULE_DIR_'))
-	define('_PS_MODULE_DIR_', _PS_ROOT_DIR_ .'modules/');
+	define('_PS_MODULE_DIR_', _PS_ROOT_DIR_ .'/modules/');
 
 define('AUTOUPGRADE_MODULE_DIR', _PS_MODULE_DIR_.'autoupgrade/');
 require_once(AUTOUPGRADE_MODULE_DIR.'functions.php');
