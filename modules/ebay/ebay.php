@@ -1226,7 +1226,7 @@ class Ebay extends Module
 					  		nbProducts = data;
 					  		nbProductsModeB = data;
 							$("#button_ebay_sync1").attr("value", "'.$this->l('Sync with eBay').'\n(" + data + " '.$this->l('products').')");
-							$("#button_ebay_sync2").attr("value", "'.$this->l('Sync and update with eBay').'\n(" + data + " '.$this->l('products').')");
+							$("#button_ebay_sync2").attr("value", "'.$this->l('Sync with eBay').'\n'.$this->l('and update').'\n(" + data + " '.$this->l('products').')");
 						}
 					});
 				});
@@ -1238,13 +1238,13 @@ class Ebay extends Module
 					nbProducts = nbProductsModeA;
 					$("#catSync").hide("slow");
 					$("#button_ebay_sync1").attr("value", "'.$this->l('Sync with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
-					$("#button_ebay_sync2").attr("value", "'.$this->l('Sync and update with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
+					$("#button_ebay_sync2").attr("value", "'.$this->l('Sync with eBay').'\n'.$this->l('and update').'\n(" + nbProducts + " '.$this->l('products').')");
 				});
 				$("#ebay_sync_mode2").click(function() {
 					nbProducts = nbProductsModeB;
 					$("#catSync").show("slow");
 					$("#button_ebay_sync1").attr("value", "'.$this->l('Sync with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
-					$("#button_ebay_sync2").attr("value", "'.$this->l('Sync and update with eBay').'\n(" + nbProducts + " '.$this->l('products').')");
+					$("#button_ebay_sync2").attr("value", "'.$this->l('Sync with eBay').'\n'.$this->l('and update').'\n(" + nbProducts + " '.$this->l('products').')");
 				});
 			});
 
@@ -1355,7 +1355,7 @@ class Ebay extends Module
 					<tr>
 						<td><input id="button_ebay_sync1" class="button" name="submitSave1" value="'.$this->l('Sync with eBay')."\n".'('.$nbProducts.' '.$this->l('products').')" OnClick="return confirm(\''.$this->l('You will push').' \' + nbProducts + \' '.$this->l('products on eBay. Do you want to confirm ?').'\');" type="submit"></td>
 						<td style="width: 50px">&nbsp;</td>
-						<td><input id="button_ebay_sync2" class="button" name="submitSave2" value="'.$this->l('Sync and update with eBay')."\n".'('.$nbProducts.' '.$this->l('products').')" OnClick="return confirm(\''.$this->l('You will push').' \' + nbProducts + \' '.$this->l('products on eBay. Do you want to confirm ?').'\');" type="submit"></td>
+						<td><input id="button_ebay_sync2" class="button" name="submitSave2" value="'.$this->l('Sync with eBay')."\n".$this->l('and update')."\n".'('.$nbProducts.' '.$this->l('products').')" OnClick="return confirm(\''.$this->l('You will push').' \' + nbProducts + \' '.$this->l('products on eBay. Do you want to confirm ?').'\');" type="submit"></td>
 					</tr>
 				</table>
 				<br />
