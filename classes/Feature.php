@@ -111,36 +111,42 @@ class FeatureCore extends ObjectModel
 
 	public function add($autodate = true, $nullValues = false)
 	{
-		return parent::add($autodate, true);
+		$return = parent::add($autodate, true);
+		Module::hookExec('afterSaveFeature', array('id_feature' => $this->id));
+		return $return;
 	}
 
 	public function delete()
 	{
-	 	/* Also delete related attributes */
+		/* Also delete related attributes */
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value_lang` WHERE `id_feature_value` IN (SELECT id_feature_value FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.(int)($this->id).')');
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_value` WHERE `id_feature` = '.(int)($this->id));
 		/* Also delete related products */
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature` = '.(int)($this->id));
-		return parent::delete();
+		$return = parent::delete();
+		if($return)
+			Module::hookExec('afterDeleteFeature', array('id_feature' => $this->id));
+		return $return;
 	}
-	
+
 	public function update($nullValues = false)
 	{
-	 	$this->clearCache();
-	 	
-	 	$result = 1;
-	 	$fields = $this->getTranslationsFieldsChild();
+		$this->clearCache();
+		
+		$result = 1;
+		$fields = $this->getTranslationsFieldsChild();
 		foreach ($fields as $field)
 		{
 			foreach (array_keys($field) as $key)
-			 	if (!Validate::isTableOrIdentifier($key))
-	 				die(Tools::displayError());
+				if (!Validate::isTableOrIdentifier($key))
+					die(Tools::displayError());
 			$mode = Db::getInstance()->getRow('SELECT `id_lang` FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).
 			'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
 			$result *= (!Db::getInstance()->NumRows()) ? Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') : 
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'UPDATE', '`'.
 			pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']));
 		}
+		Module::hookExec('afterSaveFeature', array('id_feature' => $this->id));
 		return $result;
 	}
 	

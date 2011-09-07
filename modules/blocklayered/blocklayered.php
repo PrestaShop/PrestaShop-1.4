@@ -49,8 +49,10 @@ class BlockLayered extends Module
 	
 	public function install()
 	{
-		if ($result = parent::install() AND $this->registerHook('leftColumn') AND $this->registerHook('header') AND $this->registerHook('footer')
-		AND $this->registerHook('categoryAddition') AND $this->registerHook('categoryUpdate') AND $this->registerHook('categoryDeletion'))
+		if ($result = parent::install() && $this->registerHook('leftColumn') && $this->registerHook('header') && $this->registerHook('footer')
+		&& $this->registerHook('categoryAddition') && $this->registerHook('categoryUpdate') && $this->registerHook('attributeGroupForm')
+		&& $this->registerHook('afterSaveAttributeGroup') && $this->registerHook('afterDeleteAttributeGroup') && $this->registerHook('featureForm')
+		&& $this->registerHook('afterDeleteFeature') && $this->registerHook('afterSaveFeature') && $this->registerHook('categoryDeletion'))
 		{
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', 0);
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
@@ -99,6 +101,119 @@ class BlockLayered extends Module
 
 		Db::getInstance()->Execute('CREATE INDEX `url_key` ON `'._DB_PREFIX_.'layered_friendly_url`(url_key(5))');
 	}
+	
+	private function _installIndexableAttributeTable()
+	{
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_indexable_attribute_group`');
+		Db::getInstance()->Execute('
+		CREATE TABLE `'._DB_PREFIX_.'layered_indexable_attribute_group` (
+		`id_attribute_group` INT NOT NULL,
+		`indexable` BOOL NOT NULL DEFAULT 0,
+		PRIMARY KEY (`id_attribute_group`)) ENGINE = '._MYSQL_ENGINE_);
+		
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_indexable_feature`');
+		Db::getInstance()->Execute('
+		CREATE TABLE `'._DB_PREFIX_.'layered_indexable_feature` (
+		`id_feature` INT NOT NULL,
+		`indexable` BOOL NOT NULL DEFAULT 0,
+		PRIMARY KEY (`id_feature`)) ENGINE = '._MYSQL_ENGINE_);
+	}
+	
+	/*
+	 * Url indexation
+	 */
+	static function _indexUrl()
+	{
+		
+		$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_category FROM '._DB_PREFIX_.'layered_category GROUP BY id_category');
+		
+		if(!$categories)
+			return;
+		
+		// We want all attributes of each categories
+		$attributeValuesByCategory = array();
+		foreach($categories as $category)
+		{
+			$attributeValuesByCategory[(int)$category['id_category']] = array();
+			$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'layered_category WHERE id_category = '.(int)$category['id_category'].' ORDER BY position ASC');
+			if(!$categories)
+				continue;
+		}
+	}
+	public function hookAfterSaveFeature($params)
+	{
+		$idFeature = $params['id_feature'];
+		
+		if(!$idFeature)
+			return;
+		if(Tools::getValue('layered_indexable') === false)
+			return;
+		
+		Db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'layered_indexable_feature WHERE id_feature = '.(int)$idFeature);
+		Db::getInstance()->execute('INSERT INTO '._DB_PREFIX_.'layered_indexable_feature VALUES ('.(int)$idFeature.', '.(int)Tools::getValue('layered_indexable').')');
+	}
+	public function hookAfterDeleteFeature($params)
+	{
+		$idFeature = $params['id_feature'];
+		
+		if(!$idFeature)
+			return;
+		Db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'layered_indexable_feature WHERE id_feature = '.(int)$idFeature);
+	}
+	
+	public function hookAfterSaveAttributeGroup($params)
+	{
+		$idAttributeGroup = $params['id_attribute_group'];
+		
+		if(!$idAttributeGroup)
+			return;
+		if(Tools::getValue('layered_indexable') === false)
+			return;
+		
+		Db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE id_attribute_group = '.(int)$idAttributeGroup);
+		Db::getInstance()->execute('INSERT INTO '._DB_PREFIX_.'layered_indexable_attribute_group VALUES ('.(int)$idAttributeGroup.', '.(int)Tools::getValue('layered_indexable').')');
+	}
+	public function hookAfterDeleteAttributeGroup($params)
+	{
+		$idAttributeGroup = $params['id_attribute_group'];
+		
+		if(!$idAttributeGroup)
+			return;
+		Db::getInstance()->execute('DELETE FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE id_attribute_group = '.(int)$idAttributeGroup);
+	}
+	
+	public function hookAttributeGroupForm($params)
+	{
+		$idAttributeGroup = $params['id_attribute_group'];
+		$on = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT indexable FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE id_attribute_group = '.(int)$idAttributeGroup);
+		
+		return '<label>'.$this->l('Indexable:').' </label>
+				<div class="margin-form">
+					<input type="radio" '.(($on)?'checked="checked"':'').' value="1" id="indexable_on" name="layered_indexable">
+					<label for="indexable_on" class="t"><img title="Yes" alt="Enabled" src="../img/admin/enabled.gif"></label>
+					<input type="radio" '.((!$on)?'checked="checked"':'').' value="0" id="indexable_off" name="layered_indexable">
+					<label for="indexable_off" class="t"><img title="No" alt="Disabled" src="../img/admin/disabled.gif"></label>
+					<p>'.$this->l('Use this attribute in url generated by the module block layered navigation').'</p>
+				</div>';
+	}
+	
+	public function hookFeatureForm($params)
+	{
+		$this->registerHook('afterDeleteFeature');
+		$this->registerHook('afterSaveFeature');
+		$idAttributeGroup = $params['id_attribute_group'];
+		$on = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT indexable FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE id_attribute_group = '.(int)$idAttributeGroup);
+		
+		return '<label>'.$this->l('Indexable:').' </label>
+				<div class="margin-form">
+					<input type="radio" '.(($on)?'checked="checked"':'').' value="1" id="indexable_on" name="layered_indexable">
+					<label for="indexable_on" class="t"><img title="Yes" alt="Enabled" src="../img/admin/enabled.gif"></label>
+					<input type="radio" '.((!$on)?'checked="checked"':'').' value="0" id="indexable_off" name="layered_indexable">
+					<label for="indexable_off" class="t"><img title="No" alt="Disabled" src="../img/admin/disabled.gif"></label>
+					<p>'.$this->l('Use this feature in url generated by the module block layered navigation').'</p>
+				</div>';
+	}
+	
 	
 	/*
 	 * $cursor $cursor in order to restart indexing from the last state

@@ -65,17 +65,17 @@ class AdminAttributesGroups extends AdminTab
 
 	public function postProcess()
 	{
-	 	global	$cookie, $currentIndex;
+		global $cookie, $currentIndex;
 		
 		$this->adminAttributes->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 		$this->adminAttributes->postProcess($this->token);
 
 		if (Tools::getValue('submitDel'.$this->table))
 		{
-		 	if ($this->tabAccess['delete'] === '1')
+			if ($this->tabAccess['delete'] === '1')
 			{
-			 	if (isset($_POST[$this->table.'Box']))
-			 	{
+				if (isset($_POST[$this->table.'Box']))
+				{
 					$object = new $this->className();
 					if ($object->deleteSelection($_POST[$this->table.'Box']))
 						Tools::redirectAdmin($currentIndex.'&conf=2'.'&token='.$this->token);
@@ -214,6 +214,7 @@ class AdminAttributesGroups extends AdminTab
 					<label class="t" for="is_color_group_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('No').'" /></label>
 					<p>'.$this->l('This is a color group').'</p>
 				</div>
+				'.Module::hookExec('attributeGroupForm', array('id_attribute_group' => $obj->id)).'
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
