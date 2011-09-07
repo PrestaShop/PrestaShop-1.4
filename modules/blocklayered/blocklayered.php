@@ -1711,7 +1711,57 @@ class BlockLayered extends Module
 				
 			}
 		}
+
+		//generate SEO link
 		
+		$paramSelected = '';
+		$optionCheckedArray = array();
+		$paramGroupSelectedArray = array();
+		//get filters checked by group
+		foreach ($filterBlocks as $typeFilter)
+		{
+			$paramGroupSelected = '';
+			foreach ($typeFilter['values'] as $key => $value)
+			{
+				if(is_array($value) AND array_key_exists('checked',$value )){
+					$paramGroupSelected .= '-'.Tools::link_rewrite($value['name']);
+					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = Tools::link_rewrite($value['name']);
+				}else 
+					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][] = array();
+			}
+			if(!empty($paramGroupSelected))
+			{
+				$paramSelected .= '/'.Tools::link_rewrite($typeFilter['name']).$paramGroupSelected;
+				$optionCheckedArray[Tools::link_rewrite($typeFilter['name'])] = $paramGroupSelected;
+			}
+		}
+
+		$blackList = array('weight','price');
+		foreach ($filterBlocks as &$typeFilter)
+		{	
+			if(count($typeFilter) > 0 AND !in_array($typeFilter['type'], $blackList))
+			{	
+				foreach ($typeFilter['values'] as $key => $values)
+				{
+					$optionCheckedCloneArray = $optionCheckedArray;
+					//if not filters checked, add parameter
+					if(!in_array(Tools::link_rewrite($values['name']), $paramGroupSelectedArray[Tools::link_rewrite($typeFilter['name'])]))
+					{
+						//update parameter filter checked before
+						if(array_key_exists(Tools::link_rewrite($typeFilter['name']), $optionCheckedArray))
+							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])].'-'.Tools::link_rewrite($values['name']);
+						else 
+							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] =  '-'.Tools::link_rewrite($values['name']);
+					}
+					$parameters = '';
+					foreach ($optionCheckedCloneArray as $keyGroup => $valueGroup)
+						$parameters .= '/'.$keyGroup.$valueGroup;
+					//write link
+					$typeFilter['values'][$key]['link'] =  $linkBase.$parameters;
+				}
+			}
+		}
+
 		$nFilters = 0;
 		foreach ($selectedFilters AS $filters)
 			$nFilters += sizeof($filters);
