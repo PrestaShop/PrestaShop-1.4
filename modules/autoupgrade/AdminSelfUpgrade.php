@@ -398,6 +398,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->excludeFilesFromUpgrade[] = '.svn';
 		$this->excludeFilesFromUpgrade[] = 'install';
 		$this->excludeFilesFromUpgrade[] = 'settings.inc.php';
+		// this will exclude autoupgrade dir from admin, and autoupgrade from modules
 		$this->excludeFilesFromUpgrade[] = 'autoupgrade';
 		$this->backupIgnoreFiles[] = '.';
 		$this->backupIgnoreFiles[] = '..';

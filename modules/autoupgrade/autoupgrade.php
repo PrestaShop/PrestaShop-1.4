@@ -68,6 +68,7 @@ class Autoupgrade extends Module
 		$path = dirname(__FILE__).'/';
 		
 		$res &= copy($path.'ajax-upgradetab.php',$autoupgradeDir . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php');
+		$res &= copy($path.'logo.gif',_PS_ROOT_DIR_. DIRECTORY_SEPARATOR . 'img/t/AdminSelfUpgrade.gif');
 
 		if (!$res 
 			OR !Tab::getIdFromClassName('AdminSelfUpgrade')
@@ -94,7 +95,8 @@ class Autoupgrade extends Module
 			$res = $tab->save();
 		}
 		
-		$res &= @unlink(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade'.DIRECTORY_SEPARATOR.'ajax-upgradetab.php');
+		if (file_exists(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade'.DIRECTORY_SEPARATOR.'ajax-upgradetab.php'))
+			$res &= @unlink(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade'.DIRECTORY_SEPARATOR.'ajax-upgradetab.php');
 		if ($res OR !parent::uninstall())
 			return false;
 
