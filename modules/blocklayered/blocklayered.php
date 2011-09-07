@@ -1717,6 +1717,9 @@ class BlockLayered extends Module
 		$paramSelected = '';
 		$optionCheckedArray = array();
 		$paramGroupSelectedArray = array();
+		$link = new Link();
+		$linkBase = $link->getCategoryLink($id_parent,Category::getLinkRewrite($id_parent, (int)($cookie->id_lang),(int)($cookie->id_lang) ), (int)($cookie->id_lang));
+			
 		//get filters checked by group
 		foreach ($filterBlocks as $typeFilter)
 		{
