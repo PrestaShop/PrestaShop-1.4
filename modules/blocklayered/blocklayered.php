@@ -1589,15 +1589,15 @@ class BlockLayered extends Module
 					$sqlQuery['from'] = '
 					FROM `'._DB_PREFIX_.'category_product` cp
 					INNER JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product AND p.active = 1)
-					INNER JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer) ';
+					#INNER JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer) ';
 					$sqlQuery['where'] = '
 					WHERE cp.`id_category` = '.(int)$id_parent.' ';
 					$sqlQuery['group'] = ' GROUP BY p.id_manufacturer ';
 					break;
 				case 'id_attribute_group':// attribute group
 					$sqlQuery['select'] = '
-					SELECT COUNT(tmp.id_attribute) nbr, tmp.id_attribute_group, tmp.color, tmp.name name, agl.public_name attributeName,
-					tmp.id_attribute id_attribute, a.is_color_group FROM (SELECT p.id_product, pac.id_attribute, a.color, al.name, a.id_attribute_group';
+					SELECT COUNT(tmp.id_attribute) nbr, tmp.id_attribute_group, tmp.color, tmp.attribute_name name, agl.public_name attributeName,
+					tmp.id_attribute id_attribute, a.is_color_group FROM (SELECT p.id_product, pac.id_attribute, a.color, al.name as attribute_name, a.id_attribute_group';
 					$sqlQuery['from'] = '
 					FROM '._DB_PREFIX_.'product_attribute_combination pac
 					LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
@@ -1995,11 +1995,11 @@ class BlockLayered extends Module
 	private static function getManufacturerFilterSubQuery($filterValue)
 	{
 		if (empty($filterValue))
-			return array();
+			$queryFilters = '';
+		else
+			$queryFilters = ' AND p.id_manufacturer IN ('.implode($filterValue, ',').')';
 		
-		$queryFilters = ' AND p.id_manufacturer IN ('.implode($filterValue, ',').')';
-		
-		return array('where' => $queryFilters, 'select' => ', m.name');
+		return array('where' => $queryFilters, 'select' => ', m.name', 'join' => 'INNER JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.id_manufacturer = p.id_manufacturer) ');
 	}
 	
 	private static function getConditionFilterSubQuery($filterValue)
