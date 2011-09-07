@@ -1335,7 +1335,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			}
 		}
 
-		if ($this->apacheModExists('mod_evasive'))
+		if ($this->apacheModExists('evasive'))
 			sleep(1);
 	}
 	/**
@@ -1356,8 +1356,10 @@ class AdminSelfUpgrade extends AdminSelfTab
 	
 			// we need strpos (example can be evasive20
 			foreach($apacheModuleList as $module)
-				if (strpos($name, $module)!==false)
+			{
+				if (strpos($module, $name)!==false)
 					return true;
+			}
 		}
 		else{
 			// If apache_get_modules does not exists,
