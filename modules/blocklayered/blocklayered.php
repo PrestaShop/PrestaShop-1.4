@@ -52,7 +52,8 @@ class BlockLayered extends Module
 		if ($result = parent::install() && $this->registerHook('leftColumn') && $this->registerHook('header') && $this->registerHook('footer')
 		&& $this->registerHook('categoryAddition') && $this->registerHook('categoryUpdate') && $this->registerHook('attributeGroupForm')
 		&& $this->registerHook('afterSaveAttributeGroup') && $this->registerHook('afterDeleteAttributeGroup') && $this->registerHook('featureForm')
-		&& $this->registerHook('afterDeleteFeature') && $this->registerHook('afterSaveFeature') && $this->registerHook('categoryDeletion'))
+		&& $this->registerHook('afterDeleteFeature') && $this->registerHook('afterSaveFeature') && $this->registerHook('categoryDeletion')
+		&& $this->registerHook('afterSaveProduct'))
 		{
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', 0);
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
@@ -220,6 +221,16 @@ class BlockLayered extends Module
 				echo '<br/>';
 			}
 		//var_export($attributeValues);
+	}
+	
+	public function hookAfterSaveProduct($params)
+	{
+		$idProduct = $params['id_product'];
+		
+		if(!$idProduct)
+			return;
+		
+		self::indexProduct($idProduct);
 	}
 	public function hookAfterSaveFeature($params)
 	{

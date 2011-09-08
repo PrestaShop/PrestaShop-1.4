@@ -219,7 +219,7 @@ class ProductCore extends ObjectModel
 		'unit_price' => 'isPrice',
 		'unity' => 'isString',
 		'reference' => 'isReference',
-    	'supplier_reference' => 'isReference',
+		'supplier_reference' => 'isReference',
 		'location' => 'isReference',
 		'width' => 'isUnsignedFloat',
 		'height' => 'isUnsignedFloat',
@@ -290,7 +290,7 @@ class ProductCore extends ObjectModel
 		),
 	);
 
-	public	function __construct($id_product = NULL, $full = false, $id_lang = NULL)
+	public function __construct($id_product = NULL, $full = false, $id_lang = NULL)
 	{
 		global $cart;
 
@@ -335,7 +335,7 @@ class ProductCore extends ObjectModel
 		$fields['online_only'] = (int)($this->online_only);
 		$fields['ecotax'] = (float)($this->ecotax);
 		$fields['unity'] = pSQL($this->unity);
-    	$fields['unit_price_ratio'] = (float)($this->unit_price > 0 ? $this->price / $this->unit_price : 0);
+		$fields['unit_price_ratio'] = (float)($this->unit_price > 0 ? $this->price / $this->unit_price : 0);
 		$fields['ean13'] = pSQL($this->ean13);
 		$fields['upc'] = pSQL($this->upc);
 		$fields['reference'] = pSQL($this->reference);
@@ -478,7 +478,7 @@ class ProductCore extends ObjectModel
 	 */
 	public static function cleanPositions($id_category)
 	{
-    $return = true;
+		$return = true;
 
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_product`
@@ -560,7 +560,7 @@ class ProductCore extends ObjectModel
 			!$this->deleteProductFeatures() OR
 			!$this->deleteTags() OR
 			!$this->deleteCartProducts() OR
-        	!$this->deleteAttributesImpacts() OR
+			!$this->deleteAttributesImpacts() OR
 			!$this->deleteAttachments() OR
 			!$this->deleteCustomization() OR
 			!SpecificPrice::deleteByProductId((int)($this->id)) OR
@@ -801,9 +801,9 @@ class ProductCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
-		   AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
-		   AND tr.`id_state` = 0)
-	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
+			AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+			AND tr.`id_state` = 0)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		LEFT JOIN `'._DB_PREFIX_.'supplier` s ON (s.`id_supplier` = p.`id_supplier`)'.
 		($id_category ? 'LEFT JOIN `'._DB_PREFIX_.'category_product` c ON (c.`id_product` = p.`id_product`)' : '').'
@@ -1464,9 +1464,9 @@ class ProductCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
-		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
-	                                           	   AND tr.`id_state` = 0)
-	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
+													AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+													AND tr.`id_state` = 0)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		WHERE p.id_product = '.(int)$id_product);
 
 		return Product::getProductProperties($id_lang, $row);
@@ -1493,7 +1493,7 @@ class ProductCore extends ObjectModel
 		if ($orderBy == 'id_product' OR $orderBy == 'price' OR $orderBy == 'date_add')
 			$orderByPrefix = 'p';
 		elseif ($orderBy == 'name')
-            $orderByPrefix = 'pl';
+			$orderByPrefix = 'pl';
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
 		$currentDate = date('Y-m-d H:i:s');
@@ -1528,9 +1528,9 @@ class ProductCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
-		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
-	                                           	   AND tr.`id_state` = 0)
-	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
+													AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+													AND tr.`id_state` = 0)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		WHERE 1
 		AND p.`active` = 1
@@ -1705,11 +1705,11 @@ class ProductCore extends ObjectModel
 	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false,
 	$usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = true, $use_groupReduction = true)
 	{
-   		global $cookie, $cart;
-        $cur_cart = $cart;
+		global $cookie, $cart;
+		$cur_cart = $cart;
 
-        if (isset($divisor))
-            Tools::displayParameterAsDeprecated('divisor');
+		if (isset($divisor))
+			Tools::displayParameterAsDeprecated('divisor');
 
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
@@ -1846,7 +1846,7 @@ class ProductCore extends ObjectModel
 
 		$price = (float)(!$specific_price OR $specific_price['price'] == 0) ? $result['price'] : $specific_price['price'];
 		// convert only if the specific price is in the default currency (id_currency = 0)
-	    if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
+		if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
 
 		// Attribute price
@@ -1868,16 +1868,16 @@ class ProductCore extends ObjectModel
 		$reduc = 0;
 		if (($only_reduc OR $use_reduc) AND $specific_price)
 		{
-		    if ($specific_price['reduction_type'] == 'amount')
-		    {
-		        $reduction_amount = $specific_price['reduction'];
+			if ($specific_price['reduction_type'] == 'amount')
+			{
+				$reduction_amount = $specific_price['reduction'];
 
-		        if (!$specific_price['id_currency'])
-		            $reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
-		        $reduc = Tools::ps_round(!$use_tax ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, $decimals);
-		    }
+				if (!$specific_price['id_currency'])
+					$reduction_amount = Tools::convertPrice($reduction_amount, $id_currency);
+				$reduc = Tools::ps_round(!$use_tax ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, $decimals);
+			}
 			else
-		        $reduc = Tools::ps_round($price * $specific_price['reduction'], $decimals);
+				$reduc = Tools::ps_round($price * $specific_price['reduction'], $decimals);
 		}
 
 		if ($only_reduc)
@@ -2261,9 +2261,9 @@ class ProductCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (p.`id_manufacturer`= m.`id_manufacturer`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
-		                                           AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
-	                                           	   AND tr.`id_state` = 0)
-	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
+													AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
+													AND tr.`id_state` = 0)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		WHERE `id_product_1` = '.(int)($this->id).'
 		'.($active ? 'AND p.`active` = 1' : ''));
 
@@ -3410,18 +3410,33 @@ class ProductCore extends ObjectModel
 		return true;
 	}
 
-        /**
-         * Checks if reference exists
-         * @return boolean
-         */
-        public function existsRefInDatabase($reference)
-        {
+	/**
+	 * Checks if reference exists
+	 * @return boolean
+	 */
+	public function existsRefInDatabase($reference)
+	{
 		$row = Db::getInstance()->getRow('
 		SELECT `reference`
 		FROM `'._DB_PREFIX_.'product` p
 		WHERE p.reference = "'.$reference.'"');
 
 		return isset($row['reference']);
-        }
+	}
+
+	
+	public function add($autodate = true, $nullValues = false)
+	{
+		$return = parent::add($autodate, $nullValues);
+		Module::hookExec('afterSaveProduct', array('id_product' => $this->id));
+		return $return;
+	}
+	
+	public function update($nullValues = false)
+	{
+		$return = parent::update($nullValues);
+		Module::hookExec('afterSaveProduct', array('id_product' => $this->id));
+		return $return;
+	}
 }
 

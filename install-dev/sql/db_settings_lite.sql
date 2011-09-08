@@ -70,9 +70,10 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (67, 'attributeGroupForm', 'Add fileds to the form "attribute group"', 'Add fileds to the form "attribute group"', 0, 0),
 (68, 'afterSaveAttributeGroup', 'On saving attribute group', 'On saving attribute group', 0, 0),
 (69, 'afterDeleteAttributeGroup', 'On deleting attribute group', 'On deleting attribute group', 0, 0),
-(70, 'featureForm', 'Add fileds to the form "feature"', 'Add fileds to the form "feature"', 0, 0),
+(70, 'featureForm', 'Add fields to the form "feature"', 'Add fields to the form "feature"', 0, 0),
 (71, 'afterSaveFeature', 'On saving attribute feature', 'On saving attribute feature', 0, 0),
-(72, 'afterDeleteFeature', 'On deleting attribute feature', 'On deleting attribute feature', 0, 0);
+(72, 'afterDeleteFeature', 'On deleting attribute feature', 'On deleting attribute feature', 0, 0),
+(73, 'afterSaveProduct', 'On saving products', 'On saving products', 0, 0);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),
