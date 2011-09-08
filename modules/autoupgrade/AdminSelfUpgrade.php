@@ -1074,7 +1074,6 @@ class AdminSelfUpgrade extends AdminSelfTab
 				unlink($this->backupFilesFilename);
 
 			$this->nextQuickInfo[]	= sprintf($this->l('backup files initialized in %s'), $this->backupFilesFilename);
-			info($this->backupFilesFilename,'reminder backupFiles');
 		}
 
 		/////////////////////
