@@ -422,6 +422,25 @@ class BlockLayered extends Module
 		WHERE id_product = '.(int)$idProduct);
 		
 		// Get min price
+		
+		foreach ($currencyList as $currency)
+		{
+			$price = Product::priceCalculation(null, (int)$idProduct, null, null, null, null,
+				$currency['id_currency'], null, null, false, true, false, true, true,
+				$specificPriceOutput, true);
+			
+			if (!isset($maxPrice[$currency['id_currency']]))
+				$maxPrice[$currency['id_currency']] = 0;
+			if (!isset($minPrice[$currency['id_currency']]))
+				$minPrice[$currency['id_currency']] = null;
+			if ($price > $maxPrice[$currency['id_currency']])
+				$maxPrice[$currency['id_currency']] = $price;
+			if ($price == 0)
+				continue;
+			if (is_null($minPrice[$currency['id_currency']]) OR $price < $minPrice[$currency['id_currency']])
+				$minPrice[$currency['id_currency']] = $price;
+		}
+		
 		foreach ($productMinPrices as $specificPrice)
 			foreach ($currencyList as $currency)
 			{
@@ -696,12 +715,13 @@ class BlockLayered extends Module
 						
 						this.running = true;
 						
-						if ($(this).html() == this.legend)
+						if (typeof(this.restartAllowed) == \'undefined\' || this.restartAllowed)
 						{
 							$(this).html(this.legend+\' (in progress)\');
 							$(\'#indexing-warning\').show();
 						}
 							
+						this.restartAllowed = false;
 						
 						$.ajax({
 							url: this.href+\'&ajax=1&cursor=\'+this.cursor,
@@ -720,6 +740,15 @@ class BlockLayered extends Module
 								this.cursor = parseInt(res.cursor);
 								$(this).html(this.legend+\' (in progress, \'+res.count+\' products to index)\');
 								this.click();
+							},
+							error: function(res)
+							{
+								this.restartAllowed = true;
+								alert(\'Indexation failed\');
+								$(\'#indexing-warning\').hide();
+									$(this).html(this.legend+\' (failed)\');
+								this.cursor = 0;
+								this.running = false;
 							}
 						});
 						return false;
@@ -1694,7 +1723,7 @@ class BlockLayered extends Module
 					LEFT JOIN '._DB_PREFIX_.'attribute_group a ON (a.id_attribute_group = al.id_attribute_group)
 					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND agl.id_lang = '.(int)$cookie->id_lang.')
 					GROUP BY tmp.id_attribute
-					ORDER BY id_attribute_group';
+					ORDER BY id_attribute_group, id_attribute';
 					break;
 				case 'id_feature':
 					$sqlQuery['select'] = 'SELECT fl.name, fp.id_feature, fv.id_feature_value, fvl.value, count(fv.id_feature_value) nbr ';
