@@ -492,10 +492,13 @@ class BlockLayered extends Module
 					$minPrice[$currency['id_currency']] = $price;
 			}
 		
+		$values = array();
 		foreach ($currencyList as $currency)
-			Db::getInstance()->Execute('
+			$values[] = '('.(int)$idProduct.', '.(int)$currency['id_currency'].', '.(int)$minPrice[$currency['id_currency']].', '.(int)$maxPrice[$currency['id_currency']].')';
+		
+		Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'price_static_index` (id_product, id_currency, price_min, price_max)
-			VALUES ('.(int)$idProduct.', '.(int)$currency['id_currency'].', '.(int)$minPrice[$currency['id_currency']].', '.(int)$maxPrice[$currency['id_currency']].')');
+			VALUES '.implode(',', $values));
 	}
 
 	public function hookLeftColumn($params)
@@ -1908,7 +1911,7 @@ class BlockLayered extends Module
 							if (!isset($attributesArray[$attributes['id_attribute_group']]))
 							{
 								$attributesArray[$attributes['id_attribute_group']] = array ('type_lite' => 'id_attribute_group',
-								'type' => 'id_attribute_group_'.(int)$attributes['id_attribute_group'], 'id_key' => (int)$attributes['id_attribute_group'],
+								'type' => 'id_attribute_group', 'id_key' => (int)$attributes['id_attribute_group'],
 								'name' =>  $attributes['attributeName'], 'is_color_group' => (bool)$attributes['is_color_group'], 'values' => array());
 							}
 							$attributesArray[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']] = array(
@@ -1926,7 +1929,7 @@ class BlockLayered extends Module
 						foreach ($products as $feature)
 						{
 							if (!isset($featureArray[$feature['id_feature']]))
-								$featureArray[$feature['id_feature']] = array('type_lite' => 'id_feature', 'type' => 'id_feature_'.(int)$feature['id_feature'],
+								$featureArray[$feature['id_feature']] = array('type_lite' => 'id_feature', 'type' => 'id_feature',
 								'id_key' => (int)$feature['id_feature'], 'values' => array(), 'name' => $feature['feature_name']);
 								
 							$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']] = array('nbr' => (int)$feature['nbr'], 'name' => $feature['value']);
@@ -1940,9 +1943,11 @@ class BlockLayered extends Module
 				case 'category':
 					$tmpArray = array();
 					if (isset($products) AND $products)
+					{
 						foreach ($products as $category)
 							$tmpArray[] = array('name' => $category['name'], 'nbr' => (int)$category['count_products']);
-					$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => $this->l('Categories'), 'values' => $tmpArray);
+						$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => $this->l('Categories'), 'values' => $tmpArray);
+					}
 					break;
 				
 			}
