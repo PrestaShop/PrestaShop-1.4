@@ -70,6 +70,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 	public $next = 'N/A';
 	
 	public $upgrader = null;
+	public $standalone = true;
 	
 	/**
 	 * set to false if the current step is a loop
