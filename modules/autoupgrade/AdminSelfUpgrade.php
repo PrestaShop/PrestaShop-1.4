@@ -296,7 +296,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->action = empty($_REQUEST['action'])?null:$_REQUEST['action'];
 		$this->currentParams = empty($_REQUEST['params'])?null:$_REQUEST['params'];
 		// test writable recursively
-		if(version_compare(_PS_VERSION_,'1.4.4.0','<'))
+		if(version_compare(_PS_VERSION_,'1.4.5.0','<'))
 		{
 			require_once('ConfigurationTest.php');
 			if(!class_exists('ConfigurationTest', false) AND class_exists('ConfigurationTestCore'))
@@ -305,13 +305,13 @@ class AdminSelfUpgrade extends AdminSelfTab
 		if (ConfigurationTest::test_dir($this->prodRootDir,true))
 			$this->rootWritable = true;
 
-		if(!in_array($this->action,array('upgradeFile','upgradeDb') ))
+		if (!in_array($this->action,array('upgradeFile', 'upgradeDb', 'upgradeComplete','rollback','restoreFiles','restoreDb')))
 		{
 		// checkPSVersion will be not 
 			$this->upgrader = new Upgrader();
 			$this->upgrader->checkPSVersion();
 			$this->currentParams['install_version'] = $this->upgrader->version_num;
-			if (version_compare(_PS_VERSION_,'1.4.4.0','<') OR $this->upgrader->need_standalone)
+			if (version_compare(_PS_VERSION_,'1.4.5.0','<') OR $this->upgrader->need_standalone)
 				$this->standalone = true;
 			else
 				$this->standalone = false;
@@ -319,7 +319,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		// If you have defined this somewhere, you know what you do
 		if (defined('_PS_ALLOW_UPGRADE_UNSTABLE_') AND _PS_ALLOW_UPGRADE_UNSTABLE_ AND function_exists('svn_checkout'))
 		{
-			if(version_compare(_PS_VERSION_,'1.4.4.0','<') OR class_exists('Configuration',false))
+			if(version_compare(_PS_VERSION_,'1.4.5.0','<') OR class_exists('Configuration',false))
 				$this->useSvn = Configuration::get('PS_AUTOUP_USE_SVN');
 		}
 		else
@@ -371,7 +371,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 		$this->latestRootDir = $latest.DIRECTORY_SEPARATOR.'prestashop';
 		$this->adminDir = str_replace($this->prodRootDir,'',$this->adminDir);
-		// @TODO future option
+		// @TODO future option "install in test dir"
 		//	$this->testRootDir = $this->autoupgradePath.DIRECTORY_SEPARATOR.'test';
 
 		/* option */
@@ -501,7 +501,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 	}
 
 	public function ajaxProcessUnzip(){
-		if(version_compare(_PS_VERSION_,'1.4.4.0','<')
+		if(version_compare(_PS_VERSION_,'1.4.5.0','<')
 			AND !class_exists('Tools',false)
 		)
 			require_once('Tools.php');
@@ -625,7 +625,6 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->next = 'upgradeFiles';
 		if (!is_array($this->nextParams['filesToUpgrade']))
 		{
-			error($this->nextParams);
 			$this->next = 'error';
 			$this->nextDesc = $this->l('filesToUpgrade is not an array');
 			$this->nextQuickInfo[] = $this->l('filesToUpgrade is not an array');
@@ -851,7 +850,10 @@ class AdminSelfUpgrade extends AdminSelfTab
 				// all theses cases are handled by the method ajaxRequestRollback()
 				$this->next = ''; // next is empty : nothing next :)
 				$this->status = 'ok';
-				$this->nextDesc = $this->l('All your site is restored... ');
+				if (isset($this->currentParams['firstTime']))
+						$this->nextDesc = $this->l('Nothing has to be restored');
+					else
+						$this->nextDesc = $this->l('All your site is restored... ');
 			}
 		}
 	}
@@ -980,6 +982,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 	public function ajaxProcessBackupDb()
 	{
+		// Manual inclusion of all classes used
 		if(!class_exists('ObjectModel',false))
 		{
 			require_once(_PS_ROOT_DIR_.'/classes/ObjectModel.php');
@@ -1022,15 +1025,15 @@ class AdminSelfUpgrade extends AdminSelfTab
 		{
 			if (!class_exists('BackupCore', false))
 				require_once('Backup.php');
-			if(file_exists(_PS_ROOT_DIR_.'/override/classes/Backup.php'))
-				require_once(_PS_ROOT_DIR_.'/override/classes/Backup.php');
-			else
-				eval('Class Backup extends BackupCore{}');
+				if(file_exists(_PS_ROOT_DIR_.'/override/classes/Backup.php'))
+					require_once(_PS_ROOT_DIR_.'/override/classes/Backup.php');
+				else
+					eval('Class Backup extends BackupCore{}');
 		}
 
-		if(!defined('_PS_MAGIC_QUOTES_GPC_'))
+		if (!defined('_PS_MAGIC_QUOTES_GPC_'))
 			define('_PS_MAGIC_QUOTES_GPC_', get_magic_quotes_gpc());
-		if(!defined('_PS_MYSQL_REAL_ESCAPE_STRING_'))
+		if (!defined('_PS_MYSQL_REAL_ESCAPE_STRING_'))
 			define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
 		$backup = new Backup();
@@ -1168,7 +1171,6 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 	public function ajaxProcessRemoveSamples(){
 		$this->stepDone = false;
-		// @TODO : list exaustive list of files to remove :
 		// all images from img dir exept admin ?
 		// all images like logo, favicon, ?.
 		// all custom image from modules ?
@@ -1317,8 +1319,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 	{
 		if(!$this->standalone)
 		{
-			if (version_compare(_PS_VERSION_,'1.4.4.0','<') AND false)
-				$this->_errors[] = Tools::displayError('This class depends of several files modified in 1.4.4.0 version and should not be used in an older version');
+			if (version_compare(_PS_VERSION_,'1.4.5.0','<') AND false)
+				$this->_errors[] = Tools::displayError('This class depends of several files modified in 1.4.5.0 version and should not be used in an older version');
 		}
 		parent::displayConf();
 		
@@ -1729,6 +1731,7 @@ function addQuickInfo(arrQuickInfo){
 	$js .= '
 var firstTimeParams = '.$this->buildAjaxResult().';
 firstTimeParams = firstTimeParams.nextParams;
+firstTimeParams.firstTime = "1";
 
 $(document).ready(function(){
 	$(".upgradestep").click(function(e)
@@ -1770,7 +1773,7 @@ function parseXMLResult(xmlRet)
 		$("#dbCreateResultCheck")
 			.hide("slow");
 
-		// difference with the original function
+		// as xml is only after upgradeDb, the next step is always upgradeComplete
 		ret = {next:"upgradeComplete",nextParams:{typeResult:"json"},status:"ok"};
 
 	}
@@ -1825,6 +1828,8 @@ function afterBackupFiles()
 }
 
 function doAjaxRequest(action, nextParams){
+		// myNext, used when json is not available but response is correct
+		myNext = nextParams;
 		req = $.ajax({
 			type:"POST",
 			url : "'.($this->standalone? __PS_BASE_URI__ . trim($this->adminDir,'/').'/autoupgrade/ajax-upgradetab.php' : str_replace('index','ajax-tab',$currentIndex)).'",
@@ -1925,8 +1930,6 @@ function doAjaxRequest(action, nextParams){
  */
 function prepareNextButton(button_selector, nextParams)
 {
-//	myNext;
-	myNext = nextParams;
 	$(button_selector).unbind();
 	$(button_selector).click(function(e){
 		e.preventDefault();
