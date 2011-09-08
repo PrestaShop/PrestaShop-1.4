@@ -112,7 +112,7 @@ class OrderControllerCore extends ParentOrderController
 					if (self::$cookie->is_guest)
 					{
 						$email = self::$cookie->email;
-						self::$cookie->logout(); // If guest we clear the cookie for security reason
+						self::$cookie->mylogout(); // If guest we clear the cookie for security reason
 						Tools::redirect('guest-tracking.php?id_order='.(int)$id_order.'&email='.urlencode($email));
 					}
 					else
