@@ -64,7 +64,7 @@ class AdminPPreferences extends AdminPreferences
 			'PS_PRODUCT_PICTURE_WIDTH' => array('title' => $this->l('Product pictures width:'), 'desc' => $this->l('The maximum width of pictures uploadable by customers'), 'validation' => 'isUnsignedId', 'required' => true, 'cast' => 'intval', 'type' => 'text'),
 			'PS_PRODUCT_PICTURE_HEIGHT' => array('title' => $this->l('Product pictures height:'), 'desc' => $this->l('The maximum height of pictures uploadable by customers'), 'validation' => 'isUnsignedId', 'required' => true, 'cast' => 'intval', 'type' => 'text'),
 			'PS_LEGACY_IMAGES' => array('title' => $this->l('Use the legacy image filesystem:'), 'desc' => $this->l('This should be set to yes unless you successfully moved images in Preferences > Images tab'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
-			'PS_QTY_DISCOUNT_ON_COMBINATION' => array('title' => $this->l('Quantity discounts based on:'), 'desc' => $this->l('The way of calculate quantity discounts'), 'cast' => 'intval', 'show' => true, 'required' => true, 'type' => 'radio', 'validation' => 'isBool', 'choices' => array(0 => $this->l('Products'), 1 => $this->l('Combinations')))
+			'PS_QTY_DISCOUNT_ON_COMBINATION' => array('title' => $this->l('Quantity discounts based on:'), 'desc' => $this->l('How to calculate quantity discounts'), 'cast' => 'intval', 'show' => true, 'required' => true, 'type' => 'radio', 'validation' => 'isBool', 'choices' => array(0 => $this->l('Products'), 1 => $this->l('Combinations')))
 		);
 	
 		parent::__construct();
