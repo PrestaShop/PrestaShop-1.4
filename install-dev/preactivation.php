@@ -26,46 +26,49 @@
 			if ($result)
 			{
 				$varList = "";
-				echo '<br clear="left" /><hr /><br clear="left" />';
-				foreach ($result->field AS $field)
+				if (count($result->field) > 0)
 				{
-					echo '<div><label class="aligned" style="float:left;width:200px;padding-left:10px;">'.getPreinstallXmlLang($field, 'label').' :</label>';
-					if ($field->type == 'text' || $field->type == 'password')
-						echo '<input type="'.$field->type.'" class="text required" id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" />';
-					elseif ($field->type == 'radio')
+					echo '<br clear="left" /><hr /><br clear="left" />';
+					foreach ($result->field AS $field)
 					{
-						foreach ($field->values as $key => $value)
-							echo getPreinstallXmlLang($value, 'label').' <input type="radio" id="'.$p.'_'.$c.'_form_'.$field->key.'_'.$key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" value="'.$value->value.'" '.($value->value == $field->default ? 'checked="checked"' : '').' />';
+						echo '<div><label class="aligned" style="float:left;width:200px;padding-left:10px;">'.getPreinstallXmlLang($field, 'label').' :</label>';
+						if ($field->type == 'text' || $field->type == 'password')
+							echo '<input type="'.$field->type.'" class="text required" id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" '.(isset($field->size) ? 'size="'.$field->size.'"' : '').' value="'.(isset($_GET[trim($field->key)]) ? $_GET[trim($field->key)] : $field->default).'" />';
+						elseif ($field->type == 'radio')
+						{
+							foreach ($field->values as $key => $value)
+								echo getPreinstallXmlLang($value, 'label').' <input type="radio" id="'.$p.'_'.$c.'_form_'.$field->key.'_'.$key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" value="'.$value->value.'" '.($value->value == $field->default ? 'checked="checked"' : '').' />';
+						}
+						elseif ($field->type == 'select')
+						{
+							echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" style="width:175px;border:1px solid #D41958">';
+							foreach ($field->values as $key => $value)
+								echo '<option id="'.$p.'_'.$c.'_form_'.$field->key.'_'.$key.'" value="'.$value->value.'" '.(trim($value->value) == trim($field->default) ? 'selected="selected"' : '').'>'.getPreinstallXmlLang($value, 'label').'</option>';
+							echo '</select>';
+						}
+						elseif ($field->type == 'date')
+						{
+							echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_year" name="'.$p.'_'.$c.'_form_'.$field->key.'_year" style="border:1px solid #D41958">';
+							for ($i = 81; (date('Y') - $i) <= date('Y'); $i--)
+								echo '<option value="'.(date('Y') - $i).'">'.(date('Y') - $i).'</option>';
+							echo '</select>';
+							echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_month" name="'.$p.'_'.$c.'_form_'.$field->key.'_month" style="border:1px solid #D41958">';
+							for ($i = 1; $i <= 12; $i++)
+								echo '<option value="'.($i < 10 ? '0'.$i : $i).'">'.($i < 10 ? '0'.$i : $i).'</option>';
+							echo '</select>';
+							echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_day" name="'.$p.'_'.$c.'_form_'.$field->key.'_day" style="border:1px solid #D41958">';
+							for ($i = 1; $i <= 31; $i++)
+								echo '<option value="'.($i < 10 ? '0'.$i : $i).'">'.($i < 10 ? '0'.$i : $i).'</option>';
+							echo '</select>';
+						}
+						if (getPreinstallXmlLang($field, 'help'))
+							echo ' '.getPreinstallXmlLang($field, 'help');
+						echo '<br /></div><br clear="left" />';
+						if ($field->type == 'date')
+							$varList .= "'&".$field->key."='+$('#".$p."_".$c."_form_".$field->key."_year').val()+'-'+$('#".$p."_".$c."_form_".$field->key."_month').val()+'-'+$('#".$p."_".$c."_form_".$field->key."_day').val()+\n";
+						else
+							$varList .= "'&".$field->key."='+ encodeURIComponent($('#".$p."_".$c."_form_".$field->key."').val())+\n";
 					}
-					elseif ($field->type == 'select')
-					{
-						echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'" name="'.$p.'_'.$c.'_form_'.$field->key.'" style="width:175px;border:1px solid #D41958">';
-						foreach ($field->values as $key => $value)
-							echo '<option id="'.$p.'_'.$c.'_form_'.$field->key.'_'.$key.'" value="'.$value->value.'" '.(trim($value->value) == trim($field->default) ? 'selected="selected"' : '').'>'.getPreinstallXmlLang($value, 'label').'</option>';
-						echo '</select>';
-					}
-					elseif ($field->type == 'date')
-					{
-						echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_year" name="'.$p.'_'.$c.'_form_'.$field->key.'_year" style="border:1px solid #D41958">';
-						for ($i = 81; (date('Y') - $i) <= date('Y'); $i--)
-							echo '<option value="'.(date('Y') - $i).'">'.(date('Y') - $i).'</option>';
-						echo '</select>';
-						echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_month" name="'.$p.'_'.$c.'_form_'.$field->key.'_month" style="border:1px solid #D41958">';
-						for ($i = 1; $i <= 12; $i++)
-							echo '<option value="'.($i < 10 ? '0'.$i : $i).'">'.($i < 10 ? '0'.$i : $i).'</option>';
-						echo '</select>';
-						echo '<select id="'.$p.'_'.$c.'_form_'.$field->key.'_day" name="'.$p.'_'.$c.'_form_'.$field->key.'_day" style="border:1px solid #D41958">';
-						for ($i = 1; $i <= 31; $i++)
-							echo '<option value="'.($i < 10 ? '0'.$i : $i).'">'.($i < 10 ? '0'.$i : $i).'</option>';
-						echo '</select>';
-					}
-					if (getPreinstallXmlLang($field, 'help'))
-						echo ' '.getPreinstallXmlLang($field, 'help');
-					echo '<br /></div><br clear="left" />';
-					if ($field->type == 'date')
-						$varList .= "'&".$field->key."='+$('#".$p."_".$c."_form_".$field->key."_year').val()+'-'+$('#".$p."_".$c."_form_".$field->key."_month').val()+'-'+$('#".$p."_".$c."_form_".$field->key."_day').val()+\n";
-					else
-						$varList .= "'&".$field->key."='+ encodeURIComponent($('#".$p."_".$c."_form_".$field->key."').val())+\n";
 				}
 				echo '
 				<script>'."

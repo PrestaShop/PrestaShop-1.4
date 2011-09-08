@@ -812,15 +812,21 @@ if ($lm->getIncludeTradFilename())
 											<th style="padding: 12px; width: 430px;">'.lang('Benefits').'</th>
 										</tr>
 									</table>';
-									
+
+									$country_iso_code_default = '';
+									if ($_GET['language'] == 1) $country_iso_code_default = 'FR';
+									else if ($_GET['language'] == 2) $country_iso_code_default = 'ES';
+									else if ($_GET['language'] == 3) $country_iso_code_default = 'DE';
+									else if ($_GET['language'] == 4) $country_iso_code_default = 'IT';
+
 									foreach ($modulesHelpInstall AS $country_iso_code => $modulesList)
 									{
-										echo '<div class="installModuleList'.($country_iso_code == 'FR' ? ' selected' : '').'" id="modulesList'.$country_iso_code.'">';
+										echo '<div class="installModuleList'.($country_iso_code == $country_iso_code_default ? ' selected' : '').'" id="modulesList'.$country_iso_code.'">';
 										foreach ($modulesList AS $module)
 										{
 											echo '
 											<table cellpadding="0" callspacing="0" border="0" class="moduleTable">
-											<tr>
+											<tr style="border-bottom:0px">
 											<td valign="top" style="text-align: center; padding-top:10px; width: 30px;">
 											<span style="padding: 12px 4px 6px 2px;">
 											<input type="checkbox" id="preInstallModules_'.$country_iso_code.'_'.$module.'" value="'.$module.'" class="'.$module.' preInstallModules_'.$country_iso_code.'" style="vertical-align: middle;" />
