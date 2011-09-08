@@ -40,23 +40,14 @@ class ToolsInstall
 	{
 		// Don't include theses files if classes are already defined
 		if (!class_exists('Validate', false))
-		{
-			include_once(INSTALL_PATH.'/../classes/Validate.php');
-			eval('class Validate extends ValidateCore{}');
-		}
+			require_once(INSTALL_PATH.'/../classes/Validate.php');
 
 		if (!class_exists('Db', false))
-		{
-			include_once(INSTALL_PATH.'/../classes/Db.php');
-			eval('abstract class Db extends DbCore{}');
-		}
+			require_once(INSTALL_PATH.'/../classes/Db.php');
 
 		if (!class_exists('MySQL', false))
-		{
-			include_once(INSTALL_PATH.'/../classes/MySQL.php');
-			eval('abstract class MySQL extends MySQLCore{}');
-		}
-				
+			require_once(INSTALL_PATH.'/../classes/MySQL.php');
+		
 		if ($posted)
 		{
 			// Check POST data...
