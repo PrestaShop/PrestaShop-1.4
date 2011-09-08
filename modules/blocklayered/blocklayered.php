@@ -1726,7 +1726,7 @@ class BlockLayered extends Module
 					ORDER BY id_attribute_group, id_attribute';
 					break;
 				case 'id_feature':
-					$sqlQuery['select'] = 'SELECT fl.name, fp.id_feature, fv.id_feature_value, fvl.value, count(fv.id_feature_value) nbr ';
+					$sqlQuery['select'] = 'SELECT fl.name feature_name, fp.id_feature, fv.id_feature_value, fvl.value, count(fv.id_feature_value) nbr ';
 					$sqlQuery['from'] = '
 					FROM '._DB_PREFIX_.'feature_product fp
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = '.(int)$id_parent.' AND cp.`id_product` = fp.`id_product`)
@@ -1862,9 +1862,9 @@ class BlockLayered extends Module
 					if (isset($products) AND $products)
 						foreach ($products as $product)
 							$conditionArray[$product['condition']]['nbr']++;
-					break;
 						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => $this->l('Condition'), 'values' => $conditionArray);
-
+					break;
+				
 				case 'quantity':
 					$quantityArray = array (0 => array('name' => $this->l('Not available'), 'nbr' => 0), 1 => array('name' => $this->l('In stock'), 'nbr' => 0));
 					foreach ($quantityArray as $key => $quantity)
@@ -1916,7 +1916,7 @@ class BlockLayered extends Module
 						{
 							if (!isset($featureArray[$feature['id_feature']]))
 								$featureArray[$feature['id_feature']] = array('type_lite' => 'id_feature', 'type' => 'id_feature_'.(int)$feature['id_feature'],
-								'id_key' => (int)$feature['id_feature'], 'values' => array(), 'name' => $feature['name']);
+								'id_key' => (int)$feature['id_feature'], 'values' => array(), 'name' => $feature['feature_name']);
 								
 							$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']] = array('nbr' => (int)$feature['nbr'], 'name' => $feature['value']);
 							if (isset($selectedFilters['id_feature']) AND in_array($feature['id_feature_value'], $selectedFilters['id_feature']))
