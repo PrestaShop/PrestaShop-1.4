@@ -154,7 +154,8 @@ class GAnalytics extends Module
 		global $smarty, $cookie;
 		
 		// hookOrderConfirmation() already send the sats bypass this step
-		if (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order-confirmation.php') === 0) return '';
+		if (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order-confirmation.php') === 0)
+			return '';
 	
 		// Otherwise, create Google Analytics stats
 		$ganalytics_id = Configuration::get('GANALYTICS_ID');
@@ -171,8 +172,9 @@ class GAnalytics extends Module
 	function hookFooter($params)
 	{
 		// for retrocompatibility
-		if (!$this->isRegisteredInHook('header')) $this->registerHook('header');
-		return ;
+		if (!$this->isRegisteredInHook('header'))
+			$this->registerHook('header');
+		return;
 	}
 
 	function hookOrderConfirmation($params)
@@ -194,39 +196,39 @@ class GAnalytics extends Module
 			}
 
 			// Order general information
-		$trans = array('id' => intval($order->id),				// order ID - required
-						'store' => htmlentities(Configuration::get('PS_SHOP_NAME')), // affiliation or store name
-						'total' => Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2),		// total - required
-						'tax' => '0', // tax
-						'shipping' => Tools::ps_round(floatval($order->total_shipping) / floatval($conversion_rate), 2),	// shipping
-						'city' => addslashes($deliveryAddress->city),		// city
-						'state' => '',				// state or province
-						'country' => addslashes($deliveryAddress->country) // country
-						);
+			$trans = array(
+				'id' => intval($order->id),				// order ID - required
+				'store' => htmlentities(Configuration::get('PS_SHOP_NAME')), // affiliation or store name
+				'total' => Tools::ps_round(floatval($order->total_paid) / floatval($conversion_rate), 2),		// total - required
+				'tax' => '0', // tax
+				'shipping' => Tools::ps_round(floatval($order->total_shipping) / floatval($conversion_rate), 2),	// shipping
+				'city' => addslashes($deliveryAddress->city),		// city
+				'state' => '',				// state or province
+				'country' => addslashes($deliveryAddress->country) // country
+			);
 
 			// Product information
 			$products = $order->getProducts();
 			foreach ($products AS $product)
 			{
 				$category = Db::getInstance()->getRow('
-								SELECT name FROM `'._DB_PREFIX_.'category_lang` , '._DB_PREFIX_.'product 
-								WHERE `id_product` = '.intval($product['product_id']).' AND `id_category_default` = `id_category` 
-								AND `id_lang` = '.intval($parameters['PS_LANG_DEFAULT']));
+				SELECT name FROM `'._DB_PREFIX_.'category_lang` , '._DB_PREFIX_.'product 
+				WHERE `id_product` = '.intval($product['product_id']).' AND `id_category_default` = `id_category` 
+				AND `id_lang` = '.intval($parameters['PS_LANG_DEFAULT']));
 				
-				$items[] = array('OrderId' => intval($order->id),				// order ID - required
-								'SKU' => addslashes($product['product_id']),		// SKU/code - required
-								'Product' => addslashes($product['product_name']),		// product name
-								'Category' => addslashes($category['name']),			// category or variation
-								'Price' => Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2),	// unit price - required
-								'Quantity' => addslashes(intval($product['product_quantity']))	//quantity - required
-								);
+				$items[] = array(
+					'OrderId' => intval($order->id),								// order ID - required
+					'SKU' => addslashes($product['product_id']),					// SKU/code - required
+					'Product' => addslashes($product['product_name']),				// product name
+					'Category' => addslashes($category['name']),					// category or variation
+					'Price' => Tools::ps_round(floatval($product['product_price_wt']) / floatval($conversion_rate), 2),	// unit price - required
+					'Quantity' => addslashes(intval($product['product_quantity']))	//quantity - required
+				);
 			}
 			$ganalytics_id = Configuration::get('GANALYTICS_ID');
-			$pageTrack = (strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ? '/order/step'.intval($step).'.html' : '');
 			$smarty->assign('items', $items);
 			$smarty->assign('trans', $trans);
 			$smarty->assign('ganalytics_id', $ganalytics_id);
-			$smarty->assign('pageTrack', $pageTrack);
 			$smarty->assign('isOrder', true);
 			return $this->display(__FILE__, 'header.tpl');
 		}
