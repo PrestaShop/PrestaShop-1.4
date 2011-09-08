@@ -1249,13 +1249,13 @@ class BlockLayered extends Module
 		SELECT p.`id_product` id_product
 		FROM `'._DB_PREFIX_.'product` p
 		'.$priceFilterQueryOut.'
-		WHERE 1 '.$queryFilters);
+		WHERE 1 '.$queryFilters.' GROUP BY id_product');
 		
 		$allProductsIn = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_product` id_product
 		FROM `'._DB_PREFIX_.'product` p
 		'.$priceFilterQueryIn.'
-		WHERE 1 '.$queryFilters);
+		WHERE 1 '.$queryFilters.' GROUP BY id_product');
 
 		$productIdList = array();
 		
@@ -1288,7 +1288,7 @@ class BlockLayered extends Module
 			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image AND il.id_lang = '.(int)($cookie->id_lang).')
 			LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
 			WHERE p.`active` = 1 AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.' AND pl.id_lang = '.(int)$cookie->id_lang.' AND p.id_product IN ('.implode(',', $productIdList).')'
-			.' ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby'), true).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
+			.' GROUP BY p.id_product ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby'), true).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
 			' LIMIT '.(((int)Tools::getValue('p', 1) - 1) * $n.','.$n));
 		}
 		
@@ -1946,7 +1946,11 @@ class BlockLayered extends Module
 					if (isset($products) AND $products)
 					{
 						foreach ($products as $category)
-							$tmpArray[] = array('name' => $category['name'], 'nbr' => (int)$category['count_products']);
+						{
+							$tmpArray[$category['id_category']] = array('name' => $category['name'], 'nbr' => (int)$category['count_products']);
+							if (isset($selectedFilters['category']) AND in_array($category['id_category'], $selectedFilters['category']))
+								$tmpArray[$category['id_category']]['checked'] = true;
+						}
 						$filterBlocks[] = array ('type_lite' => 'category', 'type' => 'category', 'id_key' => 0, 'name' => $this->l('Categories'), 'values' => $tmpArray);
 					}
 					break;
@@ -2105,7 +2109,7 @@ class BlockLayered extends Module
 		$queryFiltersWhere = ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE ';
 		foreach ($filterValue AS $id_category)
 			$queryFiltersWhere .= 'cp.`id_category` = '.(int)$id_category.' OR ';
-		$queryFiltersWhere = rtrim($queryFilters, 'OR ').') ';
+		$queryFiltersWhere = rtrim($queryFiltersWhere, 'OR ').') ';
 		
 		return array('where' => $queryFiltersWhere, 'join' => $queryFiltersJoin);
 	}
