@@ -1300,7 +1300,15 @@ abstract class AdminSelfTab
 				  </script>
 			<div class="warn">';
 			if (!is_array($warn))
-				$str_output .= '<img src="../img/admin/warn2.png" />'.$warn;
+			{
+				if (file_exists(__PS_BASE_URI__.'img/admin/warn2.png'))
+					$str_output .= '<img src="'.__PS_BASE_URI__.'img/admin/warn2.png" />';
+				else
+					$str_output .= '<img src="'.__PS_BASE_URI__.'img/admin/warning.gif" />';
+
+
+				$str_output .= $warn;
+			}
 			else
 			{	$str_output .= '<span style="float:right"><a id="hideWarn" href=""><img alt="X" src="../img/admin/close.png" /></a></span><img src="../img/admin/warn2.png" />'.
 				(count($warn) > 1 ? $this->l('There are') : $this->l('There is')).' '.count($warn).' '.(count($warn) > 1 ? $this->l('warnings') : $this->l('warning'))
