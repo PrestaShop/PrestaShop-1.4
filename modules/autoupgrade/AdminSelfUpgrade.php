@@ -333,6 +333,18 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 		if (isset($this->currentParams['filesToUpgrade']))
 			$this->nextParams['filesToUpgrade'] = $this->currentParams['filesToUpgrade'];
+		
+		// set autoupgradePath, to be used in backupFiles and backupDb config values
+		$this->autoupgradePath = $this->adminDir.DIRECTORY_SEPARATOR.$this->autoupgradeDir;
+
+		if (!file_exists($this->autoupgradePath))
+			if (!@mkdir($this->autoupgradePath,0777))
+				$this->_errors[] = Tools::displayError(sprintf($this->l('unable to create directory %s'),$this->autoupgradePath));
+
+		$latest = $this->autoupgradePath.DIRECTORY_SEPARATOR.'latest';
+		if (!file_exists($latest))
+			if (!@mkdir($latest,0777))
+				$this->_errors[] = Tools::displayError(sprintf($this->l('unable to create directory %s'),$latest));
 
 		if (class_exists('Configuration',false))
 		{
@@ -358,16 +370,6 @@ class AdminSelfUpgrade extends AdminSelfTab
 			// backupFilesFilename should never etc.
 			$this->backupFilesFilename = $this->currentParams['backupFilesFilename'];
 		}
-		$this->autoupgradePath = $this->adminDir.DIRECTORY_SEPARATOR.$this->autoupgradeDir;
-
-		if (!file_exists($this->autoupgradePath))
-			if (!@mkdir($this->autoupgradePath,0777))
-				$this->_errors[] = Tools::displayError(sprintf($this->l('unable to create directory %s'),$this->autoupgradePath));
-
-		$latest = $this->autoupgradePath.DIRECTORY_SEPARATOR.'latest';
-		if (!file_exists($latest))
-			if (!@mkdir($latest,0777))
-				$this->_errors[] = Tools::displayError(sprintf($this->l('unable to create directory %s'),$latest));
 
 		$this->latestRootDir = $latest.DIRECTORY_SEPARATOR.'prestashop';
 		$this->adminDir = str_replace($this->prodRootDir,'',$this->adminDir);
@@ -1072,6 +1074,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				unlink($this->backupFilesFilename);
 
 			$this->nextQuickInfo[]	= sprintf($this->l('backup files initialized in %s'), $this->backupFilesFilename);
+			info($this->backupFilesFilename,'reminder backupFiles');
 		}
 
 		/////////////////////
