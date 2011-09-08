@@ -31,6 +31,9 @@ if(!defined('_PS_USE_SQL_SLAVE_'))
 
 if(empty($_POST['action']) OR !in_array($_POST['action'],array('upgradeDb')))
 {
+	if(!defined('_PS_CACHE_ENABLED_'))
+		define('_PS_CACHE_ENABLED_',false);
+
 	if(!defined('PS_ORDER_PROCESS_STANDARD'))
 		define('PS_ORDER_PROCESS_STANDARD',true);
 	if(!defined('PS_ORDER_PROCESS_OPC'))
@@ -42,7 +45,7 @@ if(empty($_POST['action']) OR !in_array($_POST['action'],array('upgradeDb')))
 	require_once(dirname(__FILE__).'/SelfModule.php');
 
 // Add Upgrader class 
-	if(file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
+	if(!version_compare(_PS_VERSION_,'1.4.5.0','<') AND file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
 		require_once(_PS_ROOT_DIR_.'/classes/Upgrader.php');
 	else
 		require_once(dirname(__FILE__).'/Upgrader.php');
@@ -65,6 +68,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 	public $ajax = false;
 	public $nextResponseType = 'json'; // json, xml
 	public $next = 'N/A';
+	
+	public $upgrader = null;
 	
 	/**
 	 * set to false if the current step is a loop
@@ -163,7 +168,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		global $cookie;
 		$id_employee = $cookie->id_employee;
 
-		$cookiePath = __PS_BASE_URI__.str_replace($this->prodRootDir,'',trim($this->adminDir,'/'));
+		$cookiePath = __PS_BASE_URI__.str_replace($this->prodRootDir,'',trim($this->adminDir,DIRECTORY_SEPARATOR));
 		setcookie('id_employee', $id_employee, time()+3600, $cookiePath);
 		setcookie('id_tab', $this->id, time()+3600, $cookiePath);
 		setcookie('autoupgrade', $this->encrypt($id_employee), time()+3600, $cookiePath);
@@ -305,6 +310,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		// checkPSVersion will be not 
 			$this->upgrader = new Upgrader();
 			$this->upgrader->checkPSVersion();
+			$this->currentParams['install_version'] = $this->upgrader->version_num;
 			if (version_compare(_PS_VERSION_,'1.4.4.0','<') OR $this->upgrader->need_standalone)
 				$this->standalone = true;
 			else
@@ -694,10 +700,14 @@ class AdminSelfUpgrade extends AdminSelfTab
 		///////////////////////
 		// Copy from model.php
 		///////////////////////
-		$upgrader = $this->upgrader;
-		$upgrader->checkPSVersion();
+		if (!is_object($this->upgrader))
+			$this->upgrader = new Upgrader();
 
-		define('INSTALL_VERSION', $upgrader->version_num);
+		$upgrader = $this->upgrader;
+
+		$upgrader->checkPSVersion();
+		
+		define('INSTALL_VERSION', $this->currentParams['install_version']);
 		// now the install dir to use is in a subdirectory of the admin dir
 		define('INSTALL_PATH', realpath($this->latestRootDir.DIRECTORY_SEPARATOR.'install'));
 
@@ -735,14 +745,12 @@ class AdminSelfUpgrade extends AdminSelfTab
 		// 2) confirm config is correct (r/w rights)
 		//	install/model.php?method=checkConfig&firsttime=0
 		// later
-
 		// 3) save current activated modules in nextParams, or don't desactivate them ?
 		// @TODO
 		// 4) upgrade
 		//	install/model.php?_=1309193641470&method=doUpgrade&customModule=desactivate
 		if (!empty($this->currentParams['desactivateCustomModule']))
 			$_GET['customModule'] = 'desactivate';
-
 		if (!$this->_modelDoUpgrade())
 		{
 			$this->next = 'error';
@@ -985,12 +993,6 @@ class AdminSelfUpgrade extends AdminSelfTab
 			if(!class_exists('Language',false))
 				eval('Class Language extends LanguageCore{}');
 		}
-		if(!class_exists('Validate',false))
-		{
-			require_once(_PS_ROOT_DIR_.'/classes/Validate.php');
-			if(!class_exists('Validate',false))
-				eval('Class Validate extends ValidateCore{}');
-		}
 		if(!class_exists('Db',false))
 		{
 			require_once(_PS_ROOT_DIR_.'/classes/Db.php');
@@ -1002,6 +1004,13 @@ class AdminSelfUpgrade extends AdminSelfTab
 			require_once(_PS_ROOT_DIR_.'/classes/MySQL.php');
 			if(!class_exists('MySQL',false))
 				eval('Class MySQL extends MySQLCore{}');
+		}
+		
+		if(!class_exists('Validate',false))
+		{
+			require_once(_PS_ROOT_DIR_.'/classes/Validate.php');
+			if(!class_exists('Validate',false))
+				eval('Class Validate extends ValidateCore{}');
 		}
 		if(!class_exists('Configuration',false))
 		{
@@ -1381,7 +1390,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 	private function _getJsErrorMsgs()
 	{
-		$INSTALL_VERSION = $this->upgrader->version_num;
+		$INSTALL_VERSION = $this->currentParams['install_version'];
 		$ret = '
 var txtError = new Array();
 txtError[0] = "'.$this->l('Required field').'";
