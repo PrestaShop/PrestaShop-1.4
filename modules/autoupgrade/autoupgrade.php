@@ -26,21 +26,15 @@ class Autoupgrade extends Module
 	}
 	function install()
 	{
-		$autoupgradeCanWork = true;
-		if (!$autoupgradeCanWork)
-			return false;
 
 		$res = true;
 		// before adding AdminSelfUpgrade, we should remove AdminUpgrade
-		if (version_compare(_PS_VERSION_,'1.4.4.0','==') OR version_compare(_PS_VERSION_,'1.4.4.1','=='))
-		{
-			$idTab = Tab::getIdFromClassName('AdminUpgrade');
+		$idTab = Tab::getIdFromClassName('AdminUpgrade');
 
-			if ($idTab)
-			{
-				$tab = new Tab($idTab);
-				$res &= $tab->delete();
-			}
+		if ($idTab)
+		{
+			$tab = new Tab($idTab);
+			$res &= $tab->delete();
 		}
 		
 		$idTab = Tab::getIdFromClassName('AdminSelfUpgrade');
@@ -53,10 +47,12 @@ class Autoupgrade extends Module
 			$tab->id_parent = 9;
 			$tab->name = array_fill(1,sizeof(Language::getLanguages(false)), 'Upgrade');
 			$res &= $tab->save();
+			info('creation');
 		}
 		else
 		{
 			$tab = new Tab($idTab);
+			info('existe deja');
 		}
 		Configuration::updateValue('PS_AUTOUPDATE_MODULE_IDTAB',$tab->id);
 

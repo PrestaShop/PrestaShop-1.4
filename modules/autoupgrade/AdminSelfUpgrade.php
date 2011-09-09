@@ -225,7 +225,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 	private function _setFields()
 	{
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_DONT_SAVE_IMAGES'] = array(
-			'title' => $this->l('Don\'t save images'), 'cast' => 'intval', 'validation' => 'isBool',
+			'title' => $this->l('Also save images'), 'cast' => 'intval', 'validation' => 'isBool',
 			'type' => 'bool', 'desc'=>$this->l('You can exclude the image directory from backup if you already saved it by another method (not recommended)'),
 		);
 
@@ -263,6 +263,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 	{
 		$allowed = (ConfigurationTest::test_fopen() && $this->rootWritable);
 		$allowed &= !Configuration::get('PS_SHOP_ENABLE');
+		$allowed &= (Configuration::get('PS_AUTOUP_KEEP_TRAD') !== false);
 
 		return $allowed;
 	}
@@ -312,7 +313,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$this->upgrader = new Upgrader();
 			$this->upgrader->checkPSVersion();
 			$this->currentParams['install_version'] = $this->upgrader->version_num;
-			if (version_compare(_PS_VERSION_,'1.4.5.0','<') OR $this->upgrader->need_standalone)
+
+			if ($this->upgrader->autoupgrade_module)
 				$this->standalone = true;
 			else
 				$this->standalone = false;
@@ -380,7 +382,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		/* option */
 		if (class_exists('Configuration',false))
 		{
-			$this->dontBackupImages = Configuration::get('PS_AUTOUP_DONT_SAVE_IMAGES');
+			$this->dontBackupImages = !Configuration::get('PS_AUTOUP_DONT_SAVE_IMAGES');
 			$this->keepDefaultTheme = Configuration::get('PS_AUTOUP_KEEP_DEFAULT_THEME');
 			$this->keepTrad = Configuration::get('PS_AUTOUP_KEEP_TRAD');
 			$this->manualMode = Configuration::get('PS_AUTOUP_MANUAL_MODE');
@@ -836,7 +838,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		{
 			$this->next = 'restoreFiles';
 			$this->status = 'ok';
-			$this->nextDesc = $this->l('Files restored, now restoring database.');
+			$this->nextDesc = $this->l('Restoring files...');
 		}
 		else
 		{
@@ -844,7 +846,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			{
 				$this->next = 'restoreDb';
 				$this->status = 'ok';
-				$this->nextDesc = $this->l('Database restored');
+				$this->nextDesc = $this->l('restoring Database ...');
 			}
 			else
 			{
@@ -885,15 +887,14 @@ class AdminSelfUpgrade extends AdminSelfTab
 				{
 					// once it's restored, delete the file !
 					unlink($this->backupFilesFilename);
-					Configuration::updateValue('UPGRADER_BACKUPFILES_FILENAME', '');
-					if (!empty($this->backupDbFilename))
+					if (!empty($this->backupDbFilename) AND file_exists($this->backupDbFilename) )
 					{
 						$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
-						$this->next = '';
+						$this->next = 'rollback';
 					}
 					else
 					{
-						$this->nextDesc = $this->l('Files restored.');
+						$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
 						$this->next = 'rollback';
 					}
 					return true;
@@ -1519,11 +1520,11 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 				$srcExecTime = '../img/admin/warning.gif';
 			echo '<b>'.$this->l('PHP time limit').' : </b>'.'<img src="'.$srcExecTime.'" />'.($max_exec_time == 0?$this->l('disabled'):$max_exec_time.' '.$this->l('seconds')).' <br/><br/>';
 
-			if ($this->rootWritable)
-				$srcRootWritable = '../img/admin/enabled.gif';
+			if (($testConfigDone = Configuration::get('PS_AUTOUP_DONT_SAVE_IMAGES')) !== false)
+				$configurationDone = '../img/admin/enabled.gif';
 			else
-				$srcRootWritable = '../img/admin/disabled.gif';
-			echo '<b>'.$this->l('Root directory').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('writable recursively'):$this->l('not writable recursively')).'. <br/><br/>';
+				$configurationDone = '../img/admin/disabled.gif';
+			echo '<b>'.$this->l('Options chosen').' : </b>'.'<img src="'.$configurationDone.'" /> '.($testConfigDone?$this->l('autoupgrade configuration ok'):$this->l('Please configure autoupgrade options')).'<br/><br/>';
 
 			echo '<a class="button" id="scrollToOptions" href="#options">'.$this->l('Modify your options').'</a>';
 			echo '</fieldset>';

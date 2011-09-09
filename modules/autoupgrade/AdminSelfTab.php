@@ -2155,5 +2155,112 @@ abstract class AdminSelfTab
 			<a href="index.php?tab=AdminMeta&token='.Tools14::getAdminTokenLite('AdminMeta').'#SEO%20%26%20URLs">'.
 			$this->l('Click here if you want to modify the main shop domain name').'</a>');
 	}
+	/*
+	* from 1.4 AdminPreferences
+	*/
+	protected function _postConfig($fields)
+	{
+		global $currentIndex, $smarty;
+
+		$languages = Language::getLanguages(false);
+		if (function_exists('Tools','clearCache'))
+			Tools::clearCache($smarty);
+
+		/* Check required fields */
+		foreach ($fields AS $field => $values)
+			if (isset($values['required']) AND $values['required'])
+				if (isset($values['type']) AND $values['type'] == 'textLang')
+				{
+					foreach ($languages as $language)
+						if (($value = Tools::getValue($field.'_'.$language['id_lang'])) == false AND (string)$value != '0')
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
+				}
+				elseif (($value = Tools::getValue($field)) == false AND (string)$value != '0')
+					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is required.');
+
+		/* Check fields validity */
+		foreach ($fields AS $field => $values)
+			if (isset($values['type']) AND $values['type'] == 'textLang')
+			{
+				foreach ($languages as $language)
+					if (Tools::getValue($field.'_'.$language['id_lang']) AND isset($values['validation']))
+						if (!Validate::$values['validation'](Tools::getValue($field.'_'.$language['id_lang'])))
+							$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid.');
+			}
+			elseif (Tools::getValue($field) AND isset($values['validation']))
+				if (!Validate::$values['validation'](Tools::getValue($field)))
+					$this->_errors[] = Tools::displayError('field').' <b>'.$values['title'].'</b> '.Tools::displayError('is invalid.');
+
+		/* Default value if null */
+		foreach ($fields AS $field => $values)
+			if (!Tools::getValue($field) AND isset($values['default']))
+				$_POST[$field] = $values['default'];
+
+		/* Save process */
+		if (!sizeof($this->_errors))
+		{
+			if (Tools::isSubmit('submitAppearanceconfiguration'))
+			{
+				if (isset($_FILES['PS_LOGO']['tmp_name']) AND $_FILES['PS_LOGO']['tmp_name'])
+				{
+					if ($error = checkImage($_FILES['PS_LOGO'], 300000))
+						$this->_errors[] = $error;
+					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['PS_LOGO']['tmp_name'], $tmpName))
+						return false;
+					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo.jpg'))
+						$this->_errors[] = 'an error occurred during logo copy';
+					unlink($tmpName);
+				}
+				if (isset($_FILES['PS_LOGO_MAIL']['tmp_name']) AND $_FILES['PS_LOGO_MAIL']['tmp_name'])
+				{
+					if ($error = checkImage($_FILES['PS_LOGO_MAIL'], 300000))
+						$this->_errors[] = $error;
+					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_MAIL') OR !move_uploaded_file($_FILES['PS_LOGO_MAIL']['tmp_name'], $tmpName))
+						return false;
+					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_mail.jpg'))
+						$this->_errors[] = 'an error occurred during logo copy';
+					unlink($tmpName);
+				}
+				if (isset($_FILES['PS_LOGO_INVOICE']['tmp_name']) AND $_FILES['PS_LOGO_INVOICE']['tmp_name'])
+				{
+					if ($error = checkImage($_FILES['PS_LOGO_INVOICE'], 300000))
+						$this->_errors[] = $error;
+					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_INVOICE') OR !move_uploaded_file($_FILES['PS_LOGO_INVOICE']['tmp_name'], $tmpName))
+						return false;
+					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_invoice.jpg'))
+						$this->_errors[] = 'an error occurred during logo copy';
+					unlink($tmpName);
+				}
+				if (isset($_FILES['PS_STORES_ICON']['tmp_name']) AND $_FILES['PS_STORES_ICON']['tmp_name'])
+				{
+					if ($error = checkImage($_FILES['PS_STORES_ICON'], 300000))
+						$this->_errors[] = $error;
+					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_STORES_ICON') OR !move_uploaded_file($_FILES['PS_STORES_ICON']['tmp_name'], $tmpName))
+						return false;
+					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_stores.gif'))
+						$this->_errors[] = 'an error occurred during logo copy';
+					unlink($tmpName);
+				}
+				$this->uploadIco('PS_FAVICON', _PS_IMG_DIR_.'favicon.ico');
+			}
+
+			/* Update settings in database */
+			if (!sizeof($this->_errors))
+			{
+				foreach ($fields AS $field => $values)
+				{
+					unset($val);
+					if (isset($values['type']) AND $values['type'] == 'textLang')
+						foreach ($languages as $language)
+							$val[$language['id_lang']] = isset($values['cast']) ? $values['cast'](Tools::getValue($field.'_'.$language['id_lang'])) : Tools::getValue($field.'_'.$language['id_lang']);
+					else
+						$val = isset($values['cast']) ? $values['cast'](Tools::getValue($field)) : Tools::getValue($field);
+
+					Configuration::updateValue($field, $val);
+				}
+				Tools::redirectAdmin($currentIndex.'&conf=6'.'&token='.$this->token);
+			}
+		}
+	}
 }
 
