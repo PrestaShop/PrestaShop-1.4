@@ -1635,13 +1635,12 @@ class BlockLayered extends Module
 		}
 
 		//generate SEO link
-		$paramSelected = '';
 		$optionCheckedArray = array();
 		$paramGroupSelectedArray = array();
 		$link = new Link();
 		$linkBase = $link->getCategoryLink($id_parent,Category::getLinkRewrite($id_parent, (int)($cookie->id_lang)), (int)($cookie->id_lang));
-			
-		//get filters checked by group
+		$filterBlockList = array();
+
 		foreach ($filterBlocks as $typeFilter)
 		{
 			$paramGroupSelected = '';
@@ -1656,34 +1655,35 @@ class BlockLayered extends Module
 					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][] = array();
 			}
 			if (!empty($paramGroupSelected))
-			{
-				$paramSelected .= '/'.Tools::link_rewrite($typeFilter['name']).$paramGroupSelected;
-				$optionCheckedArray[Tools::link_rewrite($typeFilter['name'])] = $paramGroupSelected;
-			}
+				$optionCheckedArray[Tools::link_rewrite($typeFilter['name'])] = $paramGroupSelected ;
+			
+			$filterBlockList[] = Tools::link_rewrite($typeFilter['name']);
 		}
 
 		$blackList = array('weight','price');
+		
 		foreach ($filterBlocks as &$typeFilter)
-			if (count($typeFilter) > 0 AND !in_array($typeFilter['type'], $blackList))
+			if (count($typeFilter) > 0 AND !in_array($typeFilter['type'], $blackList)){
 				foreach ($typeFilter['values'] as $key => $values)
 				{
 					$optionCheckedCloneArray = $optionCheckedArray;
 					//if not filters checked, add parameter
 					if (!in_array(Tools::link_rewrite($values['name']), $paramGroupSelectedArray[Tools::link_rewrite($typeFilter['name'])]))
 					{
-						//update parameter filter checked before
-						if (array_key_exists(Tools::link_rewrite($typeFilter['name']), $optionCheckedArray))
-							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])].'-'.Tools::link_rewrite($values['name']);
-						else 
-							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] =  '-'.Tools::link_rewrite($values['name']);
+						//filter checked
+						$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = '-'.Tools::link_rewrite($values['name']);		
 					}
-					$parameters = '';
-					foreach ($optionCheckedCloneArray as $keyGroup => $valueGroup)
-						$parameters .= '/'.$keyGroup.$valueGroup;
+					$parametersLink = '';
+					//create order order by filter position
+					foreach ($filterBlockList as $keyFilter => $valueFilter)
+					{
+						if(!empty($optionCheckedCloneArray[$valueFilter]))
+							$parametersLink .= '/'.$valueFilter.$optionCheckedCloneArray[$valueFilter];
+					}
 					//write link
-					$typeFilter['values'][$key]['link'] =  $linkBase.$parameters;
+					$typeFilter['values'][$key]['link'] =  $linkBase.$parametersLink;
 				}
-
+			}
 		$nFilters = 0;
 		foreach ($selectedFilters AS $filters)
 			$nFilters += sizeof($filters);
