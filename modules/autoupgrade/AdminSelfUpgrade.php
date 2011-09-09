@@ -922,6 +922,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 	*/
 	public function ajaxProcessRestoreDb()
 	{
+		$this->_loadDbRelatedClasses();
+
 		$exts = explode('.', $this->backupDbFilename);
 		$fileext = $exts[count($exts)-1];
 		$requests = array();
@@ -983,8 +985,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->next = 'rollback';
 		$this->nextDesc = 'Database restore done.';
 	}
-
-	public function ajaxProcessBackupDb()
+	
+	private function _loadDbRelatedClasses()
 	{
 		// Manual inclusion of all classes used
 		if(!class_exists('ObjectModel',false))
@@ -1039,6 +1041,11 @@ class AdminSelfUpgrade extends AdminSelfTab
 			define('_PS_MAGIC_QUOTES_GPC_', get_magic_quotes_gpc());
 		if (!defined('_PS_MYSQL_REAL_ESCAPE_STRING_'))
 			define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
+		Configuration::loadConfiguration();
+	}
+	public function ajaxProcessBackupDb()
+	{
+		$this->_loadDbRelatedClasses();
 
 		$backup = new Backup();
 		// for backup db, use autoupgrade directory
