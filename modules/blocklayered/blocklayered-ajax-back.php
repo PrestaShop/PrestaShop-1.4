@@ -28,6 +28,10 @@
 /* Getting cookie or logout */
 include(dirname(__FILE__).'/../../config/config.inc.php');
 require_once(dirname(__FILE__).'/../../init.php');
+
+if (!isset($_GET['layered_token']) OR (Configuration::get('PS_LAYERED_TOKEN') != Tools::getValue('layered_token')))
+	die('Bad token');
+
 include(dirname(__FILE__).'/blocklayered.php');
 
 /* Clean categoryBox before use */
