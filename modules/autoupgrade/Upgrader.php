@@ -40,6 +40,7 @@ class UpgraderCore{
 	public $version_num;
 	public $link;
 	public $autoupgrade;
+	public $autoupgrade_module;
 	public $changelog;
 	public $md5;
 
@@ -106,12 +107,14 @@ class UpgraderCore{
 				libxml_set_streams_context(stream_context_create(array('http' => array('timeout' => 3))));
 				if ($feed = @simplexml_load_file($this->rss_version_link))
 				{
+
 					$this->version_name = (string)$feed->version->name;
 					$this->version_num = (string)$feed->version->num;
 					$this->link = (string)$feed->download->link;
 					$this->md5 = (string)$feed->download->md5;
 					$this->changelog = (string)$feed->download->changelog;
 					$this->autoupgrade = (int)$feed->autoupgrade;
+					$this->autoupgrade_module = (int)$feed->autoupgrade_module;
 					$this->desc = (string)$feed->desc ;
 					$configLastVersion = array(
 						'name' => $this->version_name,
@@ -119,6 +122,7 @@ class UpgraderCore{
 						'link' => $this->link,
 						'md5' => $this->md5,
 						'autoupgrade' => $this->autoupgrade,
+						'autoupgrade_module' => $this->autoupgrade_module,
 						'changelog' => $this->changelog,
 						'desc' => $this->desc
 					);
@@ -136,6 +140,7 @@ class UpgraderCore{
 				$this->version_num = $lastVersionCheck['num'];
 				$this->link = $lastVersionCheck['link'];
 				$this->autoupgrade = $lastVersionCheck['autoupgrade'];
+				$this->autoupgrade_module = $lastVersionCheck['autoupgrade_module'];
 				$this->md5 = $lastVersionCheck['md5'];
 				$this->desc = $lastVersionCheck['desc'];
 				$this->changelog = $lastVersionCheck['changelog'];
