@@ -607,67 +607,81 @@ class BlockLayered extends Module
 
 		if (Tools::isSubmit('SubmitFilter'))
 		{
-			if (isset($_POST['id_layered_filter']) AND $_POST['id_layered_filter'])
-				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_filter WHERE id_layered_filter = '.(int)Tools::getValue('id_layered_filter'));
 			
-			if (Tools::getValue('scope') == 1)
+			if(!Tools::getValue('layered_tpl_name'))
 			{
-				Db::getInstance()->Execute('TRUNCATE TABLE '._DB_PREFIX_.'layered_filter');
-				$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_category FROM '._DB_PREFIX_.'category');
-				foreach ($categories AS $category)
-					$_POST['categoryBox'][] = (int)$category['id_category'];
+				$html .= '
+				<div class="error">
+					<span style="float:right">
+						<a href="" id="hideError"><img src="../img/admin/close.png" alt="X"></a>
+					</span>
+					<img src="../img/admin/error2.png">'.$this->l('Filter template name required (cannot be empty)').'
+				</div>';
 			}
-			
-			if (sizeof($_POST['categoryBox']))
+			else
 			{
-				/* Clean categoryBox before use */
-				if (isset($_POST['categoryBox']) AND is_array($_POST['categoryBox']))
-					foreach ($_POST['categoryBox'] AS &$value)
-						$value = (int)$value;
-				
-				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_category WHERE id_category IN ('.implode(',', $_POST['categoryBox']).')');
-
-				$filterValues = array();
-				foreach (Tools::getValue('categoryBox') AS $idc)
-					$filterValues['categories'][] = (int)$idc;
-
-				$sqlToInsert = 'INSERT INTO '._DB_PREFIX_.'layered_category (id_category, id_value, type, position) VALUES ';
-				foreach ($_POST['categoryBox'] AS $id_category_layered)
-				{
-					$n = 0;
-					foreach ($_POST AS $key => $value)
-						if (substr($key, 0, 17) == 'layered_selection' AND $value == 'on')
-						{							
-							$filterValues[$key] = $value;
-							$n++;
-							if ($key == 'layered_selection_stock')
-								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'quantity\','.(int)$n.'),';
-							elseif ($key == 'layered_selection_subcategories')
-								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'category\','.(int)$n.'),';
-							elseif ($key == 'layered_selection_condition')
-								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'condition\','.(int)$n.'),';
-							elseif ($key == 'layered_selection_weight_slider')
-								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'weight\','.(int)$n.'),';
-							elseif ($key == 'layered_selection_price_slider')
-								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'price\','.(int)$n.'),';
-							elseif ($key == 'layered_selection_manufacturer')
-								$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'manufacturer\','.(int)$n.'),';
-							elseif (substr($key, 0, 21) == 'layered_selection_ag_')
-								$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_selection_ag_', '', $key).',\'id_attribute_group\','.(int)$n.'),';
-							elseif (substr($key, 0, 23) == 'layered_selection_feat_')
-								$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_selection_feat_', '', $key).',\'id_feature\','.(int)$n.'),';
-						}
-				}
-
-				Db::getInstance()->Execute(rtrim($sqlToInsert, ','));
-				
-				$valuesToInsert = array('name' => pSQL(Tools::getValue('layered_tpl_name')), 'filters' => pSQL(serialize($filterValues)), 'n_categories' => (int)sizeof($filterValues['categories']), 'date_add' => date('Y-m-d H:i:s'));
 				if (isset($_POST['id_layered_filter']) AND $_POST['id_layered_filter'])
-					$valuesToInsert['id_layered_filter'] = (int)Tools::getValue('id_layered_filter');
+					Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_filter WHERE id_layered_filter = '.(int)Tools::getValue('id_layered_filter'));
 				
-				Db::getInstance()->AutoExecute(_DB_PREFIX_.'layered_filter', $valuesToInsert, 'INSERT');
-
-				echo '<div class="conf"><img src="../img/admin/ok2.png" alt="" /> '.$this->l('Your filter').' "'.Tools::getValue('layered_tpl_name').'" '.((isset($_POST['id_layered_filter']) AND $_POST['id_layered_filter']) ? $this->l('was updated successfully.') : $this->l('was added successfully.')).'</div>';
+				if (Tools::getValue('scope') == 1)
+				{
+					Db::getInstance()->Execute('TRUNCATE TABLE '._DB_PREFIX_.'layered_filter');
+					$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT id_category FROM '._DB_PREFIX_.'category');
+					foreach ($categories AS $category)
+						$_POST['categoryBox'][] = (int)$category['id_category'];
+				}
+				
+				if (sizeof($_POST['categoryBox']))
+				{
+					/* Clean categoryBox before use */
+					if (isset($_POST['categoryBox']) AND is_array($_POST['categoryBox']))
+						foreach ($_POST['categoryBox'] AS &$value)
+							$value = (int)$value;
+					
+					Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_category WHERE id_category IN ('.implode(',', $_POST['categoryBox']).')');
+	
+					$filterValues = array();
+					foreach (Tools::getValue('categoryBox') AS $idc)
+						$filterValues['categories'][] = (int)$idc;
+	
+					$sqlToInsert = 'INSERT INTO '._DB_PREFIX_.'layered_category (id_category, id_value, type, position) VALUES ';
+					foreach ($_POST['categoryBox'] AS $id_category_layered)
+					{
+						$n = 0;
+						foreach ($_POST AS $key => $value)
+							if (substr($key, 0, 17) == 'layered_selection' AND $value == 'on')
+							{							
+								$filterValues[$key] = $value;
+								$n++;
+								if ($key == 'layered_selection_stock')
+									$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'quantity\','.(int)$n.'),';
+								elseif ($key == 'layered_selection_subcategories')
+									$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'category\','.(int)$n.'),';
+								elseif ($key == 'layered_selection_condition')
+									$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'condition\','.(int)$n.'),';
+								elseif ($key == 'layered_selection_weight_slider')
+									$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'weight\','.(int)$n.'),';
+								elseif ($key == 'layered_selection_price_slider')
+									$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'price\','.(int)$n.'),';
+								elseif ($key == 'layered_selection_manufacturer')
+									$sqlToInsert .= '('.(int)$id_category_layered.',NULL,\'manufacturer\','.(int)$n.'),';
+								elseif (substr($key, 0, 21) == 'layered_selection_ag_')
+									$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_selection_ag_', '', $key).',\'id_attribute_group\','.(int)$n.'),';
+								elseif (substr($key, 0, 23) == 'layered_selection_feat_')
+									$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_selection_feat_', '', $key).',\'id_feature\','.(int)$n.'),';
+							}
+					}
+	
+					Db::getInstance()->Execute(rtrim($sqlToInsert, ','));
+					
+					$valuesToInsert = array('name' => pSQL(Tools::getValue('layered_tpl_name')), 'filters' => pSQL(serialize($filterValues)), 'n_categories' => (int)sizeof($filterValues['categories']), 'date_add' => date('Y-m-d H:i:s'));
+					if (isset($_POST['id_layered_filter']) AND $_POST['id_layered_filter'])
+						$valuesToInsert['id_layered_filter'] = (int)Tools::getValue('id_layered_filter');
+					
+					Db::getInstance()->AutoExecute(_DB_PREFIX_.'layered_filter', $valuesToInsert, 'INSERT');
+	
+					echo '<div class="conf"><img src="../img/admin/ok2.png" alt="" /> '.$this->l('Your filter').' "'.Tools::getValue('layered_tpl_name').'" '.((isset($_POST['id_layered_filter']) AND $_POST['id_layered_filter']) ? $this->l('was updated successfully.') : $this->l('was added successfully.')).'</div>';
+				}
 			}
 		}
 		elseif (Tools::isSubmit('submitLayeredSettings'))
@@ -678,7 +692,7 @@ class BlockLayered extends Module
 			$html .= '
 			<div class="conf">
 				<img src="../img/admin/ok2.png" alt="" /> '.$this->l('Settings saved successfully').'
-			</div>';				
+			</div>';
 		}
 		elseif (isset($_GET['deleteFilterTemplate']))
 		{
@@ -1062,7 +1076,7 @@ class BlockLayered extends Module
 					</ul>
 				</div>
 				<h2>'.$this->l('Step 3/3 - Name your template').'</h2>
-				<p>'.$this->l('Template name:').' <input type="text" id="layered_tpl_name" onkeyup="if ($(this).val() != \'\') { $(\'#error-filter-name\').hide(); } else { $(\'#error-filter-name\').show(); }" name="layered_tpl_name" maxlength="64" value="'.$this->l('My template').' '.date('Y-m-d').'" style="width: 200px; font-size: 11px;" /> <span style="font-size: 10px; font-style: italic;">('.$this->l('only as a reminder').'</span>)</p>
+				<p>'.$this->l('Template name:').' <input type="text" id="layered_tpl_name" onkeyup="if ($(this).val() != \'\') { $(\'#error-filter-name\').hide(); } else { $(\'#error-filter-name\').show(); }" name="layered_tpl_name" maxlength="64" value="'.$this->l('My template').' '.date('Y-m-d').'" style="width: 200px; font-size: 11px;" /> <span style="font-size: 10px; font-style: italic;">('.$this->l('only as a reminder').')</span></p>
 				<hr size="1" noshade />
 				<br />
 				<center><input type="submit" class="button" name="SubmitFilter" value="'.$this->l('Save this filter template').'" /></center>
