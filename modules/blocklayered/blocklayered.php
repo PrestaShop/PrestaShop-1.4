@@ -609,7 +609,6 @@ class BlockLayered extends Module
 		{
 			
 			if(!Tools::getValue('layered_tpl_name'))
-			{
 				$html .= '
 				<div class="error">
 					<span style="float:right">
@@ -617,7 +616,6 @@ class BlockLayered extends Module
 					</span>
 					<img src="../img/admin/error2.png">'.$this->l('Filter template name required (cannot be empty)').'
 				</div>';
-			}
 			else
 			{
 				if (isset($_POST['id_layered_filter']) AND $_POST['id_layered_filter'])
