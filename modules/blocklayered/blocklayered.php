@@ -53,7 +53,7 @@ class BlockLayered extends Module
 		&& $this->registerHook('categoryAddition') && $this->registerHook('categoryUpdate') && $this->registerHook('attributeGroupForm')
 		&& $this->registerHook('afterSaveAttributeGroup') && $this->registerHook('afterDeleteAttributeGroup') && $this->registerHook('featureForm')
 		&& $this->registerHook('afterDeleteFeature') && $this->registerHook('afterSaveFeature') && $this->registerHook('categoryDeletion')
-		&& $this->registerHook('afterSaveProduct'))
+		&& $this->registerHook('afterSaveProduct') && $this->registerHook('productListAssign'))
 		{
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', 0);
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
@@ -267,6 +267,14 @@ class BlockLayered extends Module
 				}
 			}
 		}
+	}
+	
+	public function hookProductListAssign($params)
+	{
+		$params['hookExecuted'] = true;
+		$params['catProducts'] = array();
+		$selectedFilters = $this->getSelectedFilters();
+		$this->getProducts($selectedFilters, $params['catProducts'], $params['nbProducts'], $p, $n, $pages_nb, $start, $stop, $range);
 	}
 	
 	public function hookAfterSaveProduct($params)
@@ -1934,9 +1942,30 @@ class BlockLayered extends Module
 	
 	public function ajaxCall()
 	{
-		global $smarty, $cookie;
+		global $smarty;
 
 		$selectedFilters = $this->getSelectedFilters();
+		
+		$this->getProducts($selectedFilters, $products, $nbProducts, $p, $n, $pages_nb, $start, $stop, $range);
+			
+		$smarty->assign('nb_products', $nbProducts);
+		$pagination_infos = array('pages_nb' => (int)($pages_nb), 'p' => (int)$p, 'n' => (int)$n, 'range' => (int)$range, 'start' => (int)$start, 'stop' => (int)$stop,
+		'nArray' => $nArray = (int)Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50));
+		$smarty->assign($pagination_infos);
+		$smarty->assign('comparator_max_item', (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')));
+		$smarty->assign('products', $products);
+		
+		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
+		return Tools::jsonEncode(array(
+		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
+		'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
+		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl')));
+	}
+	
+	public function getProducts($selectedFilters, &$products, &$nbProducts, &$p, &$n, &$pages_nb, &$start, &$stop, &$range)
+	{
+		global $cookie;
+		
 		$products = $this->getProductByFilters($selectedFilters);
 		$products = Product::getProductsProperties((int)$cookie->id_lang, $products);
 		
@@ -1960,19 +1989,6 @@ class BlockLayered extends Module
 		$stop = (int)($p + $range);
 		if ($stop > $pages_nb)
 			$stop = (int)($pages_nb);
-			
-		$smarty->assign('nb_products', $nbProducts);
-		$pagination_infos = array('pages_nb' => (int)($pages_nb), 'p' => (int)$p, 'n' => (int)$n, 'range' => (int)$range, 'start' => (int)$start, 'stop' => (int)$stop,
-		'nArray' => $nArray = (int)Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50));
-		$smarty->assign($pagination_infos);
-		$smarty->assign('comparator_max_item', (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')));
-		$smarty->assign('products', $products);
-		
-		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
-		return Tools::jsonEncode(array(
-		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
-		'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
-		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl')));
 	}
 
 	public function rebuildLayeredStructure()

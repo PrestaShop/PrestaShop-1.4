@@ -73,7 +73,8 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (70, 'featureForm', 'Add fields to the form "feature"', 'Add fields to the form "feature"', 0, 0),
 (71, 'afterSaveFeature', 'On saving attribute feature', 'On saving attribute feature', 0, 0),
 (72, 'afterDeleteFeature', 'On deleting attribute feature', 'On deleting attribute feature', 0, 0),
-(73, 'afterSaveProduct', 'On saving products', 'On saving products', 0, 0);
+(73, 'afterSaveProduct', 'On saving products', 'On saving products', 0, 0),
+(74, 'productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0);;
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),

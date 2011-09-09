@@ -26,5 +26,6 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edi
 ('featureForm', 'Add fileds to the form "feature"', 'Add fileds to the form "feature"', 0, 0),
 ('afterSaveFeature', 'On saving attribute feature', 'On saving attribute feature', 0, 0),
 ('afterDeleteFeature', 'On deleting attribute feature', 'On deleting attribute feature', 0, 0),
-('afterSaveProduct', 'On saving products', 'On saving products', 0, 0);
+('afterSaveProduct', 'On saving products', 'On saving products', 0, 0),
+('productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0);
 

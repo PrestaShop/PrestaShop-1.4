@@ -2093,7 +2093,7 @@ FileETag INode MTime Size
 					{
 						$orderByPrefix = 'm.';
 					}
-					elseif ($value == 'position')
+					elseif ($value == 'position' || empty($position))
 						$orderByPrefix = 'cp.';
 				}
 				

@@ -133,13 +133,10 @@ class CategoryControllerCore extends FrontController
 				}
 				if ($this->category->id != 1)
 				{
-					$nbProducts = $this->category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
-					$this->pagination((int)$nbProducts);
-					self::$smarty->assign('nb_products', (int)$nbProducts);
-					$cat_products = $this->category->getProducts((int)(self::$cookie->id_lang), (int)($this->p), (int)($this->n), $this->orderBy, $this->orderWay);
+					$this->productListAssign();
 				}
 				self::$smarty->assign(array(
-					'products' => (isset($cat_products) AND $cat_products) ? $cat_products : NULL,
+					'products' => (isset($this->cat_products) AND $this->cat_products) ? $this->cat_products : NULL,
 					'id_category' => (int)($this->category->id),
 					'id_category_parent' => (int)($this->category->id_parent),
 					'return_category_name' => Tools::safeOutput($this->category->name),
@@ -152,7 +149,7 @@ class CategoryControllerCore extends FrontController
 				));
 				
 				if (isset(self::$cookie->id_customer))
-					self::$smarty->assign('compareProducts', CompareProduct::getCustomerCompareProducts((int)self::$cookie->id_customer));			
+					self::$smarty->assign('compareProducts', CompareProduct::getCustomerCompareProducts((int)self::$cookie->id_customer));
 				elseif (isset(self::$cookie->id_guest))
 					self::$smarty->assign('compareProducts', CompareProduct::getGuestCompareProducts((int)self::$cookie->id_guest));
 			}
@@ -163,6 +160,19 @@ class CategoryControllerCore extends FrontController
 			'comparator_max_item' => (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')),
 			'suppliers' => Supplier::getSuppliers()
 		));
+	}
+	
+	public function productListAssign()
+	{
+		$hookExecuted = false;
+		Module::hookExec('productListAssign', array('nbProducts' => &$this->nbProducts, 'catProducts' => &$this->cat_products, 'hookExecuted' => &$hookExecuted));
+		if(!$hookExecuted)
+		{
+			$this->nbProducts = $this->category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
+			$this->cat_products = $this->category->getProducts((int)(self::$cookie->id_lang), (int)($this->p), (int)($this->n), $this->orderBy, $this->orderWay);
+		}
+		$this->pagination((int)$this->nbProducts);
+		self::$smarty->assign('nb_products', (int)$this->nbProducts);
 	}
 
 	public function displayContent()
