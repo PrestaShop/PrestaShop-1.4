@@ -216,12 +216,13 @@ class BlockLayered extends Module
 			// Foreach categories
 			foreach ($tmp1 as $id_category => $tmp2)
 			{
-				$urlMatchSelectedFilters = array();
 				$cursors = array_fill(0, count($tmp2), 0);
 				$limits = array();
 				$nbName = count($tmp2);
 				$nbPosibilities = 1;
 				$tmp2 = array_values($tmp2);
+				
+				// fill limits and calculate the number of combination possible
 				foreach ($tmp2 as $name)
 				{
 					$count = count($name)+1;
@@ -236,18 +237,18 @@ class BlockLayered extends Module
 					$a = 1;
 					foreach ($cursors as $position => $cursor)
 					{
+						// Get all possible combination (one by group)
+						// 0 means no combinations selected in the group
 						$cursors[$position] = (($i / ($a)) % $limits[$position]);
 						$a *= $limits[$position];
 					}
 					
 					$link = '';
-					//$linkBase;
 					$selectedFilters = array('category' => array());
 					
 					// Generate url with selected filters
 					foreach ($cursors as $position => $cursor)
 					{
-						//var_export($tmp2);die();
 						if ($cursor != 0)
 						{
 							$link .= '/'.Tools::link_rewrite($tmp2[$position][$cursor-1]['name'].'-'.$tmp2[$position][$cursor-1]['value']);
@@ -648,7 +649,7 @@ class BlockLayered extends Module
 						$n = 0;
 						foreach ($_POST AS $key => $value)
 							if (substr($key, 0, 17) == 'layered_selection' AND $value == 'on')
-							{							
+							{
 								$filterValues[$key] = $value;
 								$n++;
 								if ($key == 'layered_selection_stock')
@@ -804,7 +805,7 @@ class BlockLayered extends Module
 	
 		$filtersTemplates = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM '._DB_PREFIX_.'layered_filter ORDER BY date_add DESC');
 		if (sizeof($filtersTemplates))
-		{		
+		{
 			$html .= '<p>'.sizeof($filtersTemplates).' '.$this->l('filters templates are configured:').'</p>
 			<table id="table-filter-templates" class="table" style="width: 700px;">
 				<tr>
@@ -1165,7 +1166,6 @@ class BlockLayered extends Module
 						$selectedFilters[$res[1]] = $tmpTab;
 				}
 			}
-
 		return $selectedFilters;
 	}
 
@@ -1329,7 +1329,6 @@ class BlockLayered extends Module
 			.' GROUP BY p.id_product ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby'), true).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
 			' LIMIT '.(((int)Tools::getValue('p', 1) - 1) * $n.','.$n));
 		}
-		
 		return $this->products;
 	}
 	
