@@ -423,7 +423,7 @@ abstract class AdminSelfTab
 			$_LANGADM = array();
 		// if the class is extended by a module, use modules/[module_name]/xx.php lang file
 		$currentClass = get_class($this);
-		if (class_exists('Module'))
+		if (class_exists('Module') AND method_exists('Module','getModuleNameFromClass'))
 			if (Module::getModuleNameFromClass($currentClass))
 			{
 				$string = str_replace('\'', '\\\'', $string);
