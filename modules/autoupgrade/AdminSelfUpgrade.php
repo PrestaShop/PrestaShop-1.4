@@ -965,12 +965,12 @@ class AdminSelfUpgrade extends AdminSelfTab
 		// This way we avoid extra blank lines
 		// option s (PCRE_DOTALL) added
 		// @TODO need to check if a ";" in description could block that (I suppose it can at the end of a line)
-		preg_match_all('/.*;[\n]\+/s', $content, $requests);
+		preg_match_all('/(.*;)[\n\r]+/Usm', $content, $requests);
 		/* @TODO maybe improve regex pattern ... */
 		$db = Db::getInstance();	
-		if (count($requests)>0)
+		if (count($requests[0])>0)
 		{
-			foreach ($requests as $request)
+			foreach ($requests[1] as $request)
 				if (!empty($request))
 					if (!$db->Execute($request))
 						$this->nextQuickInfo[] = $db->getMsgError();
