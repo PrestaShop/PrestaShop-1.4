@@ -362,11 +362,11 @@ class TrustedShopsRating extends AbsTrustedShops
 
 		$link = '';
 		if (strtolower(Language::getIsoById((int)$cookie->id_lang)) == 'de')
-			$link = '<p><b><a style="text-decoration: underline; font-weight: bold; color: #0000CC;" target="_blank" href="https://www.trustedshops.de/shopbetreiber/kundenbewertung_anmeldung.html?partnerPackage=PrestaShop&ratingProduct=RATING_PRO&et_cid=14en&et_lid=29069" target="_blank">Jetzt bei Trusted Shops anmelden!</a></b></p><br />';
+			$link = '<p><b><a style="text-decoration: underline; font-weight: bold; color: #0000CC;" target="_blank" href="https://www.trustedshops.de/shopbetreiber/kundenbewertung_anmeldung.html?shopsw=PRESTA&partnerPackage=PrestaShop&ratingProduct=RATING_PRO&et_cid=14en&et_lid=29069" target="_blank">Jetzt bei Trusted Shops anmelden!</a></b></p><br />';
 		if (strtolower(Language::getIsoById((int)$cookie->id_lang)) == 'en')
-			$link = '<p><b><a style="text-decoration: underline; font-weight: bold; color: #0000CC;" target="_blank" href="http://www.trustedshops.com/merchants/membership.html?shopsw=PRESTA&et_cid=53&et_lid=3361" target="_blank">Apply now!</a></b></p><br />';
+			$link = '<p><b><a style="text-decoration: underline; font-weight: bold; color: #0000CC;" target="_blank" href="http://www.trustedshops.com/merchants/membership.html?shopsw=PRESTA&partnerPackage=PrestaShop&et_cid=53&et_lid=3361" target="_blank">Apply now!</a></b></p><br />';
 		if (strtolower(Language::getIsoById((int)$cookie->id_lang)) == 'fr')
-			$link = '<p><b><a style="text-decoration: underline; font-weight: bold; color: #0000CC;" target="_blank" href="http://www.trustedshops.fr/marchands/tarifs.html?shopsw=PRESTA&et_cid=53&et_lid=3362" target="_blank">Enregistrement Trusted Shops</a></b></p><br />';
+			$link = '<p><b><a style="text-decoration: underline; font-weight: bold; color: #0000CC;" target="_blank" href="http://www.trustedshops.fr/marchands/tarifs.html?shopsw=PRESTA&partnerPackage=PrestaShop&et_cid=53&et_lid=3362" target="_blank">Enregistrement Trusted Shops</a></b></p><br />';
 
 		return '<fieldset>
 					<legend><img src="'.__PS_BASE_URI__.'modules/'.self::$module_name.'/logo.gif" alt="" />'.$this->l('Learn More').'</legend>
@@ -449,6 +449,16 @@ class TrustedShopsRating extends AbsTrustedShops
 		self::$smarty->assign('display_rating_link', (int)(Configuration::get('TS_TAB0_DISPLAY_RATING_FRONT_END')));
 		if (Configuration::get('TS_TAB0_DISPLAY_RATING_FRONT_END'))
 			self::$smarty->assign(array('rating_url' => $this->getRatingUrl(), 'language' => Language::getIsoById((int)($params['cookie']->id_lang))));
+
+		$displayWidget = false;
+		foreach (TSBuyerProtection::$CERTIFICATE as $lang => $certificate)
+		{
+			$certificate = (array)$certificate;
+			if (isset($certificate['tsID']) && $certificate['tsID'] !== '' && $certificate['user'] != '')
+				$displayWidget = true;
+		}
+		if ($displayWidget == false)
+			return '';
 		
 		return $this->display(self::$module_name, 'widget.tpl');
 	}
