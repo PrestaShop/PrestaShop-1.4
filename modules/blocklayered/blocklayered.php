@@ -102,7 +102,6 @@ class BlockLayered extends Module
 	private function _installFriendlyUrlTable()
 	{
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_friendly_url`');
-		
 		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'layered_friendly_url` (
 		`id_layered_friendly_url` INT NOT NULL AUTO_INCREMENT,
@@ -123,6 +122,9 @@ class BlockLayered extends Module
 		`id_attribute_group` INT NOT NULL,
 		`indexable` BOOL NOT NULL DEFAULT 0,
 		PRIMARY KEY (`id_attribute_group`)) ENGINE = '._MYSQL_ENGINE_);
+		Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'layered_indexable_attribute_group`
+		SELECT id_attribute_group, 1 FROM `'._DB_PREFIX_.'attribute_group`');
 		
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_indexable_feature`');
 		Db::getInstance()->Execute('
@@ -130,6 +132,9 @@ class BlockLayered extends Module
 		`id_feature` INT NOT NULL,
 		`indexable` BOOL NOT NULL DEFAULT 0,
 		PRIMARY KEY (`id_feature`)) ENGINE = '._MYSQL_ENGINE_);
+		Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'layered_indexable_feature`
+		SELECT id_feature, 1 FROM `'._DB_PREFIX_.'feature`');
 	}
 	
 	/*
