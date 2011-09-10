@@ -274,6 +274,8 @@ class BlockLayered extends Module
 	
 	public function hookProductListAssign($params)
 	{
+		if (!Configuration::get('PS_LAYERED_INDEXED'))
+			return;
 		$params['hookExecuted'] = true;
 		$params['catProducts'] = array();
 		$selectedFilters = $this->getSelectedFilters();
