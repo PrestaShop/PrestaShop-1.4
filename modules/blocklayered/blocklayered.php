@@ -716,6 +716,12 @@ class BlockLayered extends Module
 		}
 		
 		$html .= '
+		<div id="ajax-message-ok" class="conf ajax-message" style="display: none">
+			<img alt="" src="../img/admin/ok2.png"><span class="message"></span>
+		</div>
+		<div id="ajax-message-ko" class="error ajax-message" style="display: none">
+			<img src="../img/admin/error2.png" alt="" /><span class="message"></span>
+		</div>
 		<h2>'.$this->l('Layered navigation').'</h2>
 		<fieldset class="width4">
 			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Indexes and caches').'</legend>
@@ -820,6 +826,8 @@ class BlockLayered extends Module
 						if (this.running == true)
 							return false;
 						
+						$(\'.ajax-message\').hide();
+						
 						this.running = true;
 						
 						if (typeof(this.restartAllowed) == \'undefined\' || this.restartAllowed)
@@ -841,7 +849,9 @@ class BlockLayered extends Module
 								{
 									this.cursor = 0;
 									$(\'#indexing-warning\').hide();
-									$(this).html(this.legend+\' (finished)\');
+									$(this).html(this.legend);
+									$(\'#ajax-message-ok span\').html(\''.$this->l('Product indexation finished').'\');
+									$(\'#ajax-message-ok\').show();
 									return;
 								}
 								this.cursor = parseInt(res.cursor);
@@ -851,9 +861,11 @@ class BlockLayered extends Module
 							error: function(res)
 							{
 								this.restartAllowed = true;
-								alert(\'Indexation failed\');
 								$(\'#indexing-warning\').hide();
-									$(this).html(this.legend+\' (failed)\');
+								$(\'#ajax-message-ko span\').html(\''.$this->l('Product indexation failed').'\');
+								$(\'#ajax-message-ko\').show();
+								$(this).html(this.legend);
+								
 								this.cursor = 0;
 								this.running = false;
 							}
