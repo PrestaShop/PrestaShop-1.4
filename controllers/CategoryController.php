@@ -169,9 +169,11 @@ class CategoryControllerCore extends FrontController
 		if(!$hookExecuted)
 		{
 			$this->nbProducts = $this->category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
+			$this->pagination((int)$this->nbProducts);
 			$this->cat_products = $this->category->getProducts((int)(self::$cookie->id_lang), (int)($this->p), (int)($this->n), $this->orderBy, $this->orderWay);
 		}
-		$this->pagination((int)$this->nbProducts);
+		else
+			$this->pagination((int)$this->nbProducts);
 		self::$smarty->assign('nb_products', (int)$this->nbProducts);
 	}
 

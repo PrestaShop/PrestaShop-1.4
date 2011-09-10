@@ -1264,7 +1264,7 @@ class BlockLayered extends Module
 		if ($id_parent == 1)
 			return;
 
-		$queryFilters = '';
+		$queryFilters = ' AND p.active = 1';
 		
 		$parent = new Category((int)$id_parent);
 		if (!sizeof($selectedFilters['category']))
