@@ -38,24 +38,51 @@ $(document).ready(function()
 			$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
 		else
 			$('\'input[name='+$(this).attr('name')+']:hidden\'').remove();
+		window.location =  updatelink( $(this).parent().children(1).children(0).attr('href'));
 		reloadContent();
 	});
 	
 	$('#layered_form input[type=checkbox]').live('click', function()
 	{
+		window.location =  updatelink( $(this).parent().children(1).children(0).attr('href'));
 		reloadContent();
 	});
-
+	
 	$("label a").live({
-		  click: function() {
-			  $(this).parent().parent().find('input').click();
-			  reloadContent();
-			  return false;
+		  click: function() {  
+			$(this).parent().parent().find('input').click();
+			reloadContent();  
+			window.location = updatelink($(this).attr('href'));
+			return false;
 		  }
 		});
 	paginationButton();
 	reloadContent();
 });
+
+function updatelink($link)
+{
+	linkFilter = $link;
+	linkFilterMatch = linkFilter.match(/^(http[s]?:\/\/[^#]+([0-9]+-[^\/]*))/);
+	//linkFilterMatch = linkFilter.match(/^http:?\/\/[^#]+([0-9]+-[^\/]*)/);
+	//linkFilterMatch = linkFilter.match(/^(http[s]?:\/\/[^#][0-9a-z._/-]+)/);
+	linkFilterUpdate = linkFilterMatch[0]+''+getValueSelected();
+	return linkFilterUpdate;
+}
+
+function  getValueSelected(){
+	
+	var checkboxChecked = "";
+	   $("#layered_form input:checkbox:checked").each(function(){
+		   checkboxChecked += '#' + $(this).attr('id')+"="+$(this).val();
+	      }
+	   ); 
+	   $("#layered_form input:hidden").each(function(){
+		   checkboxChecked += '#' + $(this).attr('name')+"="+$(this).val();
+	      }
+	   ); 
+	return checkboxChecked;
+}
 
 function paginationButton() {
 	$('#pagination li').not('.current, .disabled').each( function () {
