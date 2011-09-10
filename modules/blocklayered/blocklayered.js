@@ -82,8 +82,18 @@ function cancelFilter()
 {
 	$('#enabled_filters a').live('click', function(e)
 	{
-		$('#'+$(this).attr('rel')).attr('checked', false);
-		$('#layered_form input[name='+$(this).attr('rel')+']:hidden').remove();
+		if($(this).attr('rel').search(/_slider$/) > 0)
+		{
+			$('#'+$(this).attr('rel')).slider("values" , 0, $('#'+$(this).attr('rel')).slider( "option" , 'min' ));
+			$('#'+$(this).attr('rel')).slider("values" , 1, $('#'+$(this).attr('rel')).slider( "option" , 'max' ));
+			$('#'+$(this).attr('rel')).slider('option', 'slide')(0,{values:[$('#'+$(this).attr('rel')).slider( "option" , 'min' ), $('#'+$(this).attr('rel')).slider( "option" , 'max' )]});
+		}
+		else
+		{
+			console.log('here');
+			$('#'+$(this).attr('rel')).attr('checked', false);
+			$('#layered_form input[name='+$(this).attr('rel')+']:hidden').remove();
+		}
 		reloadContent();
 		e.preventDefault();
 	});
