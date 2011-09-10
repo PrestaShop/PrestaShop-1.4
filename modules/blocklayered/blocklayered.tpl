@@ -67,7 +67,11 @@
 				{/if}
 				{foreach from=$filters item=filter}
 					{if isset($filter.values)}
-					<div>
+						{if isset($filter.slider)}
+						<div class="layered_{$filter.type}" style="display: none;">
+						{else}
+						<div>
+						{/if}
 						<span class="layered_subtitle">{$filter.name|escape:html:'UTF-8'}</span>
 						<span class="layered_close"><a href="#" rel="layered_{$filter.type}_{$filter.id_key}">v</a></span>
 						<div class="clear"></div>
@@ -93,6 +97,7 @@
 							{literal}
 								$(document).ready(function()
 								{
+									$('.layered_{/literal}{$filter.type}{literal}').show();
 									$('#layered_{/literal}{$filter.type}{literal}_slider').slider({
 										range: true,
 										min: {/literal}{$filter.min}{literal},
