@@ -1766,6 +1766,13 @@ class BlockLayered extends Module
 				}
 			}
 		$nFilters = 0;
+		if(isset($selectedFilters['price']))
+			if($priceArray['min'] == $selectedFilters['price'][0] && $priceArray['max'] == $selectedFilters['price'][1])
+				unset($selectedFilters['price']);
+		if(isset($selectedFilters['weight']))
+			if($weightArray['min'] == $selectedFilters['weight'][0] && $weightArray['max'] == $selectedFilters['weight'][1])
+				unset($selectedFilters['weight']);
+				
 		foreach ($selectedFilters AS $filters)
 			$nFilters += sizeof($filters);
 		
