@@ -113,15 +113,6 @@ class BlockLayered extends Module
 		INDEX `id_lang` (`id_lang`)) ENGINE = '._MYSQL_ENGINE_);
 
 		Db::getInstance()->Execute('CREATE INDEX `url_key` ON `'._DB_PREFIX_.'layered_friendly_url`(url_key(5))');
-		
-		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_friendly_url_category`');
-		
-		Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'layered_friendly_url_category` (
-		`id_layered_friendly_url` INT NOT NULL,
-		`id_category` INT NOT NULL,
-		`id_lang` INT NOT NULL,
-		PRIMARY KEY (`id_category`, `id_layered_friendly_url`)) ENGINE = '._MYSQL_ENGINE_);
 	}
 	
 	private function _installIndexableAttributeTable()
@@ -149,10 +140,15 @@ class BlockLayered extends Module
 		if($truncate)
 			Db::getInstance()->execute('TRUNCATE '._DB_PREFIX_.'layered_friendly_url');
 		
+		if(!empty($idCategory))
+			$categorySubQuery = ' AND lc.id_category = '.(int)$idCategory;
+		else
+			$categorySubQuery = '';
+		
 		$attributeValues = array();
 		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT lc.*, id_lang, name, link_rewrite, cl.id_category
 		FROM '._DB_PREFIX_.'layered_category lc
-		INNER JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = lc.id_category)
+		INNER JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = lc.id_category AND lc.id_category <> 1'.$categorySubQuery.')
 		ORDER BY position ASC');
 		if (!$filters)
 			return;
@@ -268,6 +264,7 @@ class BlockLayered extends Module
 				}
 			}
 		}
+		return 1;
 	}
 	
 	public function hookProductListAssign($params)
@@ -728,20 +725,87 @@ class BlockLayered extends Module
 			$html .= '
 			<script type="text/javascript">
 			$(document).ready(function() {
+				$(\'#url-indexer\').click();
 				$(\'#full-index\').click();
 			});
 			</script>';
+		
+		$categoryList = array();
+		foreach(Db::getInstance()->ExecuteS('SELECT id_category FROM `'._DB_PREFIX_.'category`') as $category)
+			if($category['id_category'] != 1)
+				$categoryList[] = $category['id_category'];
+		
 
 		$html .= '
-			<a class="bold ajaxcall" style="width: 200px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing products').'</a>
+			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing products').'</a>
 			<br />
-			<a class="bold ajaxcall" style="width: 200px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire index').'</a>
+			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire index').'</a>
+			<br />
+			<a class="bold" id="url-indexer" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1">'.$this->l('Build url indexer').'</a>
 			<br />
 			<br />
-			'.$this->l('You can set a cron job that will re-build your index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1</b>
+			'.$this->l('You can set a cron job that will re-build price index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1</b>
+			<br />
+			'.$this->l('You can set a cron job that will re-build url index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1</b>
 			<br /><br />
-			'.$this->l('A full re-index process must be done each time products are modified. A nightly rebuild is recommended.').'
+			'.$this->l('A nightly rebuild is recommended.').'
 			<script type="text/javascript">
+				$(\'#url-indexer\').click(function() {
+					if (this.cursor == undefined)
+						this.cursor = 0;
+						
+					if (this.legend == undefined)
+							this.legend = $(this).html();
+					
+					if (this.running == undefined)
+							this.running = false;
+						
+					if (this.running == true)
+						return false;
+						
+					this.running = true;
+					
+					this.categories = '.Tools::jsonEncode($categoryList).';
+					
+					$(this).html(this.legend+\' (in progress, 0/\'+this.categories.length+\')\');
+					$(\'#indexing-warning\').show();
+					
+					
+					var first = true;
+					var it = this;
+					$(this.categories).each(function(cursor, idCategory) {
+						it.cursor = cursor;
+						if(cursor == 0) {
+							var truncate = 1;
+						}
+						else {
+							var truncate = 0;
+						}
+						it.idCategory = idCategory;
+						$.ajax({
+							url: it.href.replace(\'&truncate=1\',\'\')+\'&id_category=\'+it.idCategory+\'&truncate=\'+truncate,
+							context: it,
+							dataType: \'json\',
+							async: false,
+							success: function(res) {
+								$(this).html(this.legend+\' (in progress, \'+(parseInt(it.cursor)+1)+\'/\'+it.categories.length+\')\');
+							},
+							error: function(res) {
+								alert(\'Indexation failed\');
+								$(\'#indexing-warning\').hide();
+									$(it).html(this.legend+\' (failed)\');
+								it.cursor = 0;
+							}
+						});
+					});
+					
+					
+					$(this).html(this.legend);
+					$(\'#indexing-warning\').hide();
+					this.running = false;
+					
+					return false;
+				});
 				$(\'.ajaxcall\').each(function(it, elm) {
 					$(elm).click(function() {
 						if (this.cursor == undefined)
