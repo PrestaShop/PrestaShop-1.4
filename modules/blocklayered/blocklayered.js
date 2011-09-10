@@ -165,6 +165,8 @@ function reloadContent(params_plus)
 		{
 			$('#layered_block_left').after('<div id="tmp_layered_block_left"></div>').remove();
 			$('#tmp_layered_block_left').html(result.filtersBlock).attr('id', 'layered_block_left');
+			
+			$('.category-product-count').html(result.categoryCount);
 
 			$('#product_list').html(result.productList).html();
 			$('#product_list').css('opacity', '1');

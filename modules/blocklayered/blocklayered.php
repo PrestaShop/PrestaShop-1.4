@@ -2041,6 +2041,7 @@ class BlockLayered extends Module
 		$this->getProducts($selectedFilters, $products, $nbProducts, $p, $n, $pages_nb, $start, $stop, $range);
 			
 		$smarty->assign('nb_products', $nbProducts);
+		$smarty->assign('category', (object)array('id' => Tools::getValue('id_category_layered', 1)));
 		$pagination_infos = array('pages_nb' => (int)($pages_nb), 'p' => (int)$p, 'n' => (int)$n, 'range' => (int)$range, 'start' => (int)$start, 'stop' => (int)$stop,
 		'nArray' => $nArray = (int)Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50));
 		$smarty->assign($pagination_infos);
@@ -2051,7 +2052,8 @@ class BlockLayered extends Module
 		return Tools::jsonEncode(array(
 		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
 		'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
-		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl')));
+		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl'),
+		'categoryCount' => $smarty->fetch(_PS_THEME_DIR_.'category-count.tpl')));
 	}
 	
 	public function getProducts($selectedFilters, &$products, &$nbProducts, &$p, &$n, &$pages_nb, &$start, &$stop, &$range)
