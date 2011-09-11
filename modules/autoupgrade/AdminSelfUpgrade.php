@@ -1125,7 +1125,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 						}
 						// filesForBackup already contains all the correct files
 						$file = array_shift($this->nextParams['filesForBackup']);
-						$archiveFilename = str_replace($this->prodRootDir,'',$file);
+						// remove the potential extra(s) directory_separator 
+						$archiveFilename = ltrim(str_replace($this->prodRootDir,'',$file),DIRECTORY_SEPARATOR);
 						// @TODO : maybe put several files at the same times ?
 						if ($zip->addFile($file,$archiveFilename))
 							$this->nextQuickInfo[] = sprintf($this->l('%1$s added to archive. %2$s left.'),$file, sizeof($this->nextParams['filesForBackup']));
