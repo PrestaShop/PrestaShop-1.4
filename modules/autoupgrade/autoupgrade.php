@@ -47,13 +47,9 @@ class Autoupgrade extends Module
 			$tab->id_parent = 9;
 			$tab->name = array_fill(1,sizeof(Language::getLanguages(false)), 'Upgrade');
 			$res &= $tab->save();
-			info('creation');
 		}
 		else
-		{
 			$tab = new Tab($idTab);
-			info('existe deja');
-		}
 		Configuration::updateValue('PS_AUTOUPDATE_MODULE_IDTAB',$tab->id);
 
 		$autoupgradeDir = _PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade';
