@@ -338,7 +338,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$this->nextParams['filesToUpgrade'] = $this->currentParams['filesToUpgrade'];
 		
 		// set autoupgradePath, to be used in backupFiles and backupDb config values
-		$this->autoupgradePath = $this->adminDir.DIRECTORY_SEPARATOR.$this->autoupgradeDir;
+		$this->autoupgradePath = trim($this->adminDir,DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$this->autoupgradeDir;
 
 		if (!file_exists($this->autoupgradePath))
 			if (!@mkdir($this->autoupgradePath,0777))
@@ -487,7 +487,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				// export means svn means install-dev and admin-dev.
 				// let's rename admin to the correct admin dir
 				// and rename install-dev to install
-				$adminDir = str_replace($this->prodRootDir, '', $this->adminDir);
+				$adminDir = str_replace($this->prodRootDir, '', trim($this->adminDir,DIRECTORY_SEPARATOR));
 				rename($this->latestRootDir.DIRECTORY_SEPARATOR.'install-dev', $this->latestRootDir.DIRECTORY_SEPARATOR.'install');
 				rename($this->latestRootDir.DIRECTORY_SEPARATOR.'admin-dev', $this->latestRootDir.DIRECTORY_SEPARATOR.$adminDir);
 
@@ -1582,7 +1582,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		
 		
 
-			if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+			if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $this->manualMode)
 			{
 				echo '<br class="clear"/>';
 				echo '<fieldset class="autoupgradeSteps"><legend>'.$this->l('Step').'</legend>';
@@ -1844,10 +1844,10 @@ function doAjaxRequest(action, nextParams){
 		myNext = nextParams;
 		req = $.ajax({
 			type:"POST",
-			url : "'.($this->standalone? __PS_BASE_URI__ . trim($this->adminDir,'/').'/autoupgrade/ajax-upgradetab.php' : str_replace('index','ajax-tab',$currentIndex)).'",
+			url : "'.($this->standalone? __PS_BASE_URI__ . trim($this->adminDir,DIRECTORY_SEPARATOR).'/autoupgrade/ajax-upgradetab.php' : str_replace('index','ajax-tab',$currentIndex)).'",
 			async: true,
 			data : {
-				dir:"'.trim($this->adminDir,'/').'",
+				dir:"'.trim($this->adminDir,DIRECTORY_SEPARATOR).'",
 				ajaxMode : "1",
 				token : "'.$this->token.'",
 				tab : "'.get_class($this).'",
