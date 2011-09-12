@@ -56,7 +56,7 @@ class FedexCarrier extends CarrierModule
 	{
 		$this->name = 'fedexcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.1';
+		$this->version = '1.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 
@@ -1643,7 +1643,7 @@ class FedexCarrier extends CarrierModule
 
 		// Enable Php Soap
 		ini_set("soap.wsdl_cache_enabled", "0");
-		$client = new SoapClient($dir.'/RateService_v9.wsdl', array('trace' => 1)); // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
+		$client = new SoapClient($dir.'/RateService_v10.wsdl', array('trace' => 1)); // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
 
 		// Country / State
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('FEDEX_CARRIER_COUNTRY')));
@@ -1652,8 +1652,8 @@ class FedexCarrier extends CarrierModule
 		// Generating soap request
 		$request['WebAuthenticationDetail']['UserCredential'] = array('Key' => Configuration::get('FEDEX_CARRIER_API_KEY'), 'Password' => Configuration::get('FEDEX_CARRIER_PASSWORD')); 
 		$request['ClientDetail'] = array('AccountNumber' => Configuration::get('FEDEX_CARRIER_ACCOUNT'), 'MeterNumber' => Configuration::get('FEDEX_CARRIER_METER'));
-		$request['TransactionDetail'] = array('CustomerTransactionId' => ' *** Rate Available Services Request v9 using PHP ***');
-		$request['Version'] = array('ServiceId' => 'crs', 'Major' => '9', 'Intermediate' => '0', 'Minor' => '0');
+		$request['TransactionDetail'] = array('CustomerTransactionId' => ' *** Rate Available Services Request v10 using PHP ***');
+		$request['Version'] = array('ServiceId' => 'crs', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0');
 		$request['ReturnTransitAndCommit'] = true;
 		$request['RequestedShipment']['DropoffType'] = Configuration::get('FEDEX_CARRIER_PICKUP_TYPE'); // valid values REGULAR_PICKUP, REQUEST_COURIER, ...
 		$request['RequestedShipment']['ShipTimestamp'] = date('c');
@@ -1666,9 +1666,8 @@ class FedexCarrier extends CarrierModule
 		$request['RequestedShipment']['ShippingChargesPayment'] = array('PaymentType' => 'SENDER', 'Payor' => array('AccountNumber' => Configuration::get('FEDEX_CARRIER_ACCOUNT'), 'CountryCode' => 'US'));
 		$request['RequestedShipment']['RateRequestTypes'] = 'ACCOUNT'; 
 		$request['RequestedShipment']['RateRequestTypes'] = 'LIST'; 
-		$request['RequestedShipment']['PackageCount'] = '2';
-		$request['RequestedShipment']['PackageDetail'] = 'INDIVIDUAL_PACKAGES';
-		$request['RequestedShipment']['RequestedPackageLineItems'] = array('0' => array('Weight' => array('Value' => 2.0, 'Units' => 'LB'), 'Dimensions' => array('Length' => 10, 'Width' => 10, 'Height' => 3, 'Units' => 'IN')));
+		$request['RequestedShipment']['PackageCount'] = '1';
+		$request['RequestedShipment']['RequestedPackageLineItems'] = array('0' => array('SequenceNumber' => 1, 'GroupPackageCount' => 1, 'Weight' => array('Value' => 2.0, 'Units' => 'LB'), 'Dimensions' => array('Length' => 10, 'Width' => 10, 'Height' => 3, 'Units' => 'IN')));
 
 
 		// Unit or Large Test
@@ -1690,7 +1689,10 @@ class FedexCarrier extends CarrierModule
 			if ($resultTabTmp)
 				$resultTab = unserialize($resultTabTmp);
 			else
-				$resultTab = $client->getRates($request);
+			{
+				try { $resultTab = $client->getRates($request); }
+				catch (Exception $e) { }				
+			}
 
 			// Cache test result
 			if (empty($resultTabTmp) && isset($resultTab->HighestSeverity) && ($resultTab->HighestSeverity == 'SUCCESS' OR $resultTab->HighestSeverity == 'ERROR'))
@@ -1729,7 +1731,7 @@ class FedexCarrier extends CarrierModule
 
 		// Enable Php Soap
 		ini_set("soap.wsdl_cache_enabled", "0");
-		$client = new SoapClient($dir.'/RateService_v9.wsdl', array('trace' => 1)); // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
+		$client = new SoapClient($dir.'/RateService_v10.wsdl', array('trace' => 1)); // Refer to http://us3.php.net/manual/en/ref.soap.php for more information
 
 		// Country / State
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('FEDEX_CARRIER_COUNTRY')));
@@ -1738,8 +1740,8 @@ class FedexCarrier extends CarrierModule
 		// Generating soap request
 		$request['WebAuthenticationDetail']['UserCredential'] = array('Key' => Configuration::get('FEDEX_CARRIER_API_KEY'), 'Password' => Configuration::get('FEDEX_CARRIER_PASSWORD')); 
 		$request['ClientDetail'] = array('AccountNumber' => Configuration::get('FEDEX_CARRIER_ACCOUNT'), 'MeterNumber' => Configuration::get('FEDEX_CARRIER_METER'));
-		$request['TransactionDetail'] = array('CustomerTransactionId' => ' *** Rate Available Services Request v9 using PHP ***');
-		$request['Version'] = array('ServiceId' => 'crs', 'Major' => '9', 'Intermediate' => '0', 'Minor' => '0');
+		$request['TransactionDetail'] = array('CustomerTransactionId' => ' *** Rate Available Services Request v10 using PHP ***');
+		$request['Version'] = array('ServiceId' => 'crs', 'Major' => '10', 'Intermediate' => '0', 'Minor' => '0');
 		$request['ReturnTransitAndCommit'] = true;
 		$request['RequestedShipment']['DropoffType'] = Configuration::get('FEDEX_CARRIER_PICKUP_TYPE'); // valid values REGULAR_PICKUP, REQUEST_COURIER, ...
 		$request['RequestedShipment']['ShipTimestamp'] = date('c');
@@ -1753,14 +1755,22 @@ class FedexCarrier extends CarrierModule
 		$request['RequestedShipment']['RateRequestTypes'] = 'ACCOUNT'; 
 		$request['RequestedShipment']['RateRequestTypes'] = 'LIST'; 
 		$request['RequestedShipment']['PackageCount'] = '2';
-		$request['RequestedShipment']['PackageDetail'] = 'INDIVIDUAL_PACKAGES';
+		$count = 1;
 		foreach ($wsParams['package_list'] as $p)
-			$request['RequestedShipment']['RequestedPackageLineItems'][] = array('Weight' => array('Value' => $p['weight'], 'Units' => substr($this->_weightUnit, 0, 2)), 'Dimensions' => array('Length' => $p['depth'], 'Width' => $p['width'], 'Height' => $p['height'], 'Units' => $this->_dimensionUnit));
+		{
+			$request['RequestedShipment']['RequestedPackageLineItems'][] = array(
+				'SequenceNumber' => $count,
+				'GroupPackageCount' => $count,
+				'Weight' => array('Value' => $p['weight'], 'Units' => substr($this->_weightUnit, 0, 2)),
+				'Dimensions' => array('Length' => $p['depth'], 'Width' => $p['width'], 'Height' => $p['height'], 'Units' => $this->_dimensionUnit));
+			$count++;
+		}
 		$request['RequestedShipment']['PackageCount'] = count($request['RequestedShipment']['RequestedPackageLineItems']);
 
 
 		// Get Rates
-		$resultTab = $client->getRates($request);
+		try { $resultTab = $client->getRates($request); }
+		catch (Exception $e) { return array('connect' => false, 'cost' => 0); }
 
 
 		// Check currency
