@@ -40,10 +40,8 @@ require_once(AUTOUPGRADE_MODULE_DIR.'functions.php');
 if (!defined('_PS_USE_SQL_SLAVE_'))
 	define('_PS_USE_SQL_SLAVE_',0);
 // dir = admin-dev
-if (!isset($_POST['dir']))
-	die('not allowed (no dir)');
 if ( _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$_POST['dir'] !==  realpath(_PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$_POST['dir']))
-	die('not allowed (wrong dir)');
+	die('not allowed');
 
 define('_PS_ADMIN_DIR_', _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$_POST['dir']);
 define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility

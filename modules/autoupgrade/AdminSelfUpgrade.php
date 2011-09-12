@@ -1,4 +1,6 @@
 <?php
+require('/usr/share/php/FirePHPCore/FirePHP.class.php');
+require('/usr/share/php/FirePHPCore/fb.php');
 /*
 * 2007-2011 PrestaShop
 *
@@ -115,8 +117,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 	public $rootWritable = false;
 	public $svnDir = 'svn';
 	public $destDownloadFilename = 'prestashop.zip';
-	public $toUpgradeFileList = array();
-	public $backupFileList = array();
+	public $toUpgradeFileList = 'filesToUpgrade.list';
+	public $toBackupFileList = 'filesToBackup.list';
 	public $sampleFileList = array();
 	private $backupIgnoreFiles = array();
 	private $backupIgnoreAbsoluteFiles = array();
@@ -318,6 +320,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				$this->standalone = true;
 			else
 				$this->standalone = false;
+$this->standalone = true;
 		}
 		// If you have defined this somewhere, you know what you do
 		if (defined('_PS_ALLOW_UPGRADE_UNSTABLE_') AND _PS_ALLOW_UPGRADE_UNSTABLE_ AND function_exists('svn_checkout'))
@@ -338,7 +341,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$this->nextParams['filesToUpgrade'] = $this->currentParams['filesToUpgrade'];
 		
 		// set autoupgradePath, to be used in backupFiles and backupDb config values
-		$this->autoupgradePath = trim($this->adminDir,DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$this->autoupgradeDir;
+		$this->autoupgradePath = $this->adminDir.DIRECTORY_SEPARATOR.$this->autoupgradeDir;
 
 		if (!file_exists($this->autoupgradePath))
 			if (!@mkdir($this->autoupgradePath,0777))
@@ -487,7 +490,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				// export means svn means install-dev and admin-dev.
 				// let's rename admin to the correct admin dir
 				// and rename install-dev to install
-				$adminDir = str_replace($this->prodRootDir, '', trim($this->adminDir,DIRECTORY_SEPARATOR));
+				$adminDir = str_replace($this->prodRootDir, '', $this->adminDir);
 				rename($this->latestRootDir.DIRECTORY_SEPARATOR.'install-dev', $this->latestRootDir.DIRECTORY_SEPARATOR.'install');
 				rename($this->latestRootDir.DIRECTORY_SEPARATOR.'admin-dev', $this->latestRootDir.DIRECTORY_SEPARATOR.$adminDir);
 
@@ -569,26 +572,31 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 	public function _listBackupFiles($dir)
 	{
+		static $list = array();
 		$allFiles = scandir($dir);
 		foreach ($allFiles as $file)
 		{
-			$fullPath = $dir.DIRECTORY_SEPARATOR.$file;
-			
-			if (!$this->_skipFile($file, $fullPath,'backup'))
+			if ($file[0] != '.')
 			{
+				$fullPath = $dir.DIRECTORY_SEPARATOR.$file;
+			
+				if (!$this->_skipFile($file, $fullPath,'backup'))
+				{
 					if (is_dir($fullPath))
 						$this->_listBackupFiles($fullPath);
 					else
-						$this->backupFileList[] = $fullPath;					
+						$list[] = $fullPath;					
+				}
+				else
+					$list[] = $fullPath;
 			}
-			else
-					$this->backupIgnoreFiles[] = $fullPath;
-
 		}
+		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($list));
 	}
 
 	public function _listFilesToUpgrade($dir)
 	{
+		static $list = array();
 		$allFiles = scandir($dir);
 		foreach ($allFiles as $file)
 		{
@@ -596,20 +604,15 @@ class AdminSelfUpgrade extends AdminSelfTab
 			
 			if (!$this->_skipFile($file, $fullPath, "upgrade"))
 			{
+				$list[] = $fullPath;
+				// if is_dir, we will create it :)
 				if (is_dir($fullPath))
-				{
-						// if is_dir, we will create it :)e it :)
-						$this->toUpgradeFileList[] = $fullPath;
-							if (strpos($dir.DIRECTORY_SEPARATOR.$file, 'install') === false)
-							{
-								$this->_listFilesToUpgrade($fullPath);
-							}
-				}
-				else
-						$this->toUpgradeFileList[] = $fullPath;
+					if (strpos($dir.DIRECTORY_SEPARATOR.$file, 'install') === false)
+						$this->_listFilesToUpgrade($fullPath);
 			}
 		}
-
+		
+		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeFileList,serialize($list));
 		$this->nextParams['filesToUpgrade'] = $this->toUpgradeFileList;
 	}
 
@@ -619,7 +622,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->nextParams = $this->currentParams;
 		if (!isset($this->nextParams['filesToUpgrade']))
 			$this->_listFilesToUpgrade($this->latestRootDir);
-
+		
 		// later we could choose between _PS_ROOT_DIR_ or _PS_TEST_DIR_
 		$this->destUpgradePath = $this->prodRootDir;
 
@@ -628,7 +631,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 		// @TODO :
 		// foreach files in latest, copy
 		$this->next = 'upgradeFiles';
-		if (!is_array($this->nextParams['filesToUpgrade']))
+		$filesToUpgrade = @unserialize(file_get_contents($this->nextParams['filesToUpgrade']));
+		if (!is_array($filesToUpgrade))
 		{
 			$this->next = 'error';
 			$this->nextDesc = $this->l('filesToUpgrade is not an array');
@@ -637,31 +641,33 @@ class AdminSelfUpgrade extends AdminSelfTab
 		}
 
 		// @TODO : does not upgrade files in modules, translations if they have not a correct md5 (or crc32, or whatever) from previous version
-		for ($i=0;$i<self::$loopUpgradeFiles;$i++)
+		for ($i=0;$i < self::$loopUpgradeFiles;$i++)
 		{
-			if (sizeof($this->nextParams['filesToUpgrade'])<=0)
+			if (sizeof($filesToUpgrade)<=0)
 			{
 				$this->next = 'upgradeDb';
+				unlink($this->nextParams['filesToUpgrade']);
 				$this->nextDesc = $this->l('All files upgraded. Now upgrading database');
 				$this->nextResponseType = 'xml';
 				break;
 			}
 
-			//$file = array_shift($this->nextParams['filesToUpgrade']);
-			$file = array_shift($this->nextParams['filesToUpgrade']);
+			$file = array_shift($filesToUpgrade);
 			if (!$this->upgradeThisFile($file))
 			{
 				// put the file back to the begin of the list
-				$totalFiles = array_unshift($this->nextParams['filesToUpgrade'],$file);
+				$totalFiles = array_unshift($filesToUpgrade,$file);
 				$this->next = 'error';
 				$this->nextQuickInfo[] = sprintf($this->l('error when trying to upgrade %s'),$file);
 				break;
 			}
 			else{
+				$this->nextQuickInfo[] = sprintf($this->l('copied %1$s in %2$s. %3$s files left to upgrade.'),$file, $dest, sizeof($filesToUpgrade));
 				// @TODO : maybe put several files at the same times ?
-				$this->nextDesc = sprintf($this->l('%2$s files left to upgrade.'),$file,sizeof($this->nextParams['filesToUpgrade']));
+				$this->nextDesc = sprintf($this->l('%2$s files left to upgrade.'),$file,sizeof($filesToUpgrade));
 			}
 		}
+		file_put_contents($this->nextParams['filesToUpgrade'],serialize($filesToUpgrade));
 	}
 
 	/**
@@ -789,39 +795,35 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 			if (is_dir($file))
 			{
+				// if $dest is not a directory (that can happen), just remove that file
+				if (!is_dir($dest))
+					unlink($dest);
+
 				if (!file_exists($dest))
 				{
 					if (@mkdir($dest))
-					{
-						$this->nextQuickInfo[] = sprintf($this->l('created dir %2$s. %3$s files left to upgrade.'),$file, $dest, sizeof($this->nextParams['filesToUpgrade']));
 						return true;
-					}
 					else
 					{
 						$this->next = 'error';
-						$this->nextQuickInfo[] = sprintf($this->l('error when creating directory %s'),$dest);
-						$this->nextDesc = sprintf($this->l('error when creating directory %s'),$dest);
+						$this->nextQuickInfo[] = sprintf($this->l('error when creating directory %s'), $dest);
+						$this->nextDesc = sprintf($this->l('error when creating directory %s'), $dest);
 						return false;
 					}
 				}
 				else
-				{
 					// directory already exists
 					return true;
-				}
 			}
 			else
 			{
 				if (copy($file,$dest))
-				{
-					$this->nextQuickInfo[] = sprintf($this->l('copied %1$s in %2$s. %3$s files left to upgrade.'),$file, $dest, sizeof($this->nextParams['filesToUpgrade']));
 					return true;
-				}
 				else
 				{
 					$this->next = 'error';
-					$this->nextQuickInfo[] = sprintf($this->l('error for copy %1$s in %2$s'),$file,$dest);
-					$this->nextDesc = sprintf($this->l('error for copy %1$s in %2$s'),$file,$dest);
+					$this->nextQuickInfo[] = sprintf($this->l('error for copy %1$s in %2$s'), $file, $dest);
+					$this->nextDesc = sprintf($this->l('error for copy %1$s in %2$s'), $file, $dest);
 					return false;
 				}
 			}
@@ -882,11 +884,11 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 				$filepath = $this->backupFilesFilename;
 				$destExtract = $this->prodRootDir;
+				
 
 				if (self::ZipExtract($filepath, $destExtract))
 				{
-					// once it's restored, delete the file !
-					unlink($this->backupFilesFilename);
+					// once it's restored, do not delete the archive file. This has to be done manually
 					if (!empty($this->backupDbFilename) AND file_exists($this->backupDbFilename) )
 					{
 						$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
@@ -1075,8 +1077,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 		if (!isset($this->nextParams['filesForBackup']))
 		{
 			$list = $this->_listBackupFiles($this->prodRootDir);
-			$this->nextQuickInfo[] = sprintf($this->l('%s Files to backup.'), sizeof($this->backupFileList));
-			$this->nextParams['filesForBackup'] = $this->backupFileList;
+			$this->nextQuickInfo[] = sprintf($this->l('%s Files to backup.'), sizeof($this->toBackupFileList));
+			$this->nextParams['filesForBackup'] = $this->toBackupFileList;
 
 			// delete old backup, create new
 			if (file_exists($this->backupFilesFilename))
@@ -1084,12 +1086,13 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 			$this->nextQuickInfo[]	= sprintf($this->l('backup files initialized in %s'), $this->backupFilesFilename);
 		}
+		$filesToBackup = unserialize(file_get_contents($this->toBackupFileList));
 
 		/////////////////////
 		$this->next = 'backupFiles';
 		// @TODO : display % instead of this
-		$this->nextDesc = sprintf($this->l('Backup files in progress. %s files left'), sizeof($this->nextParams['filesForBackup']));
-		if (is_array($this->nextParams['filesForBackup']))
+		$this->nextDesc = sprintf($this->l('Backup files in progress. %s files left'), sizeof($filesToBackup));
+		if (is_array($filesToBackup))
 		{
 			// @TODO later
 			// 1) calculate crc32 of next file
@@ -1114,7 +1117,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 					// @TODO min(self::$loopBackupFiles, sizeof())
 					for($i=0;$i<self::$loopBackupFiles;$i++)
 					{
-						if (sizeof($this->nextParams['filesForBackup'])<=0)
+						if (sizeof($filesToBackup)<=0)
 						{
 							$this->stepok = true;
 							$this->status = 'ok';
@@ -1124,12 +1127,11 @@ class AdminSelfUpgrade extends AdminSelfTab
 							break;
 						}
 						// filesForBackup already contains all the correct files
-						$file = array_shift($this->nextParams['filesForBackup']);
-						// remove the potential extra(s) directory_separator 
+						$file = array_shift($filesToBackup);
 						$archiveFilename = ltrim(str_replace($this->prodRootDir,'',$file),DIRECTORY_SEPARATOR);
 						// @TODO : maybe put several files at the same times ?
 						if ($zip->addFile($file,$archiveFilename))
-							$this->nextQuickInfo[] = sprintf($this->l('%1$s added to archive. %2$s left.'),$file, sizeof($this->nextParams['filesForBackup']));
+							$this->nextQuickInfo[] = sprintf($this->l('%1$s added to archive. %2$s left.'),$file, sizeof($filesToBackup));
 						else
 						{
 						// if an error occur, it's more safe to delete the corrupted backup
@@ -1141,6 +1143,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 						}
 					}
 					$zip->close();
+					file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($filesToBackup));
 					return true;
 				}
 				else{
