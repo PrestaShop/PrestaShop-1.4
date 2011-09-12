@@ -29,7 +29,7 @@
 include(dirname(__FILE__).'/../../config/config.inc.php');
 require_once(dirname(__FILE__).'/../../init.php');
 
-if (!isset($_GET['layered_token']) OR (Configuration::get('PS_LAYERED_TOKEN') != Tools::getValue('layered_token')))
+if (substr(Tools::encrypt('blocklayered/index'),0,10) != Tools::getValue('layered_token') || !Module::isInstalled('blocklayered'))
 	die('Bad token');
 
 include(dirname(__FILE__).'/blocklayered.php');

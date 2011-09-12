@@ -57,7 +57,6 @@ class BlockLayered extends Module
 		{
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', 0);
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
-			Configuration::updateValue('PS_LAYERED_TOKEN', Tools::passwdGen(16));
 			
 			$this->rebuildLayeredStructure();
 			$this->rebuildLayeredCache();
@@ -75,7 +74,6 @@ class BlockLayered extends Module
 		/* Delete all configurations */
 		Configuration::deleteByName('PS_LAYERED_HIDE_0_VALUES');
 		Configuration::deleteByName('PS_LAYERED_SHOW_QTIES');
-		Configuration::deleteByName('PS_LAYERED_TOKEN');
 		
 		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'price_static_index');
 		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'layered_friendly_url');
@@ -786,7 +784,7 @@ class BlockLayered extends Module
 			<br />
 			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire price index').'</a>
 			<br />
-			<a class="bold" id="url-indexer" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1">'.$this->l('Build url indexer').'</a>
+			<a class="bold" id="url-indexer" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1">'.$this->l('Build url index').'</a>
 			<br />
 			<br />
 			'.$this->l('You can set a cron job that will re-build price index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1</b>
@@ -1071,7 +1069,7 @@ class BlockLayered extends Module
 						{
 							type: \'GET\',
 							url: \''.__PS_BASE_URI__.'\' + \'modules/blocklayered/blocklayered-ajax-back.php\',
-							data: \'layered_token='.Configuration::get('PS_LAYERED_TOKEN').'&\'+(all ? \'\' : $(\'input[name="categoryBox[]"]\').serialize()+\'&\')+(id_layered_filter ? \'id_layered_filter=\'+parseInt(id_layered_filter)+\'\' : \'\'),
+							data: \'layered_token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&\'+(all ? \'\' : $(\'input[name="categoryBox[]"]\').serialize()+\'&\')+(id_layered_filter ? \'id_layered_filter=\'+parseInt(id_layered_filter)+\'\' : \'\'),
 							success: function(result)
 							{
 								$(\'#layered-ajax-refresh\').css(\'background-color\', \'transparent\');
