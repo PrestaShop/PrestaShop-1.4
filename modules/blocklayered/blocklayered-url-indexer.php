@@ -7,4 +7,5 @@ include(dirname(__FILE__).'/blocklayered.php');
 if (substr(Tools::encrypt('blocklayered/index'),0,10) != Tools::getValue('token') || !Module::isInstalled('blocklayered'))
 	die;
 
-echo BlockLayered::indexUrl((int)Tools::getValue('id_category'), (int)Tools::getValue('truncate'));
+$blockLayered = new BlockLayered();
+echo $blockLayered->indexUrl((int)Tools::getValue('id_category'), (int)Tools::getValue('truncate'));

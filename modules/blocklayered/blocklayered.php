@@ -140,7 +140,7 @@ class BlockLayered extends Module
 	/*
 	 * Url indexation
 	 */
-	public static function indexUrl($idCategory = null, $truncate = true)
+	public function indexUrl($idCategory = null, $truncate = true)
 	{
 		if($truncate)
 			Db::getInstance()->execute('TRUNCATE '._DB_PREFIX_.'layered_friendly_url');
@@ -207,6 +207,33 @@ class BlockLayered extends Module
 					break;
 				
 				case 'category':
+					$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+					SELECT cl.name, cl.id_lang, c.id_category
+					FROM '._DB_PREFIX_.'category c
+					INNER JOIN '._DB_PREFIX_.'category_lang cl ON (c.id_category = cl.id_category)
+					WHERE nleft > (SELECT nleft FROM category WHERE id_category = 2)
+					AND  nright < (SELECT nright FROM category WHERE id_category = 2)
+					');
+					foreach ($categories as $category)
+					{
+						if (!isset($attributeValues[$category['id_lang']]))
+							$attributeValues[$category['id_lang']] = array();
+						if (!isset($attributeValues[$category['id_lang']][$filter['id_category']]))
+							$attributeValues[$category['id_lang']][$filter['id_category']] = array();
+						if (!isset($attributeValues[$category['id_lang']][$filter['id_category']]['cat'.$category['id_category']]))
+							$attributeValues[$category['id_lang']][$filter['id_category']]['cat'.$category['id_category']] = array();
+						$attributeValues[$category['id_lang']][$filter['id_category']]['cat'.$category['id_category']][] = array('name' => $this->l('Categories'),
+						'id_name' => null, 'value' => $category['name'], 'id_value' => $category['id_category'],
+						'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
+					}
+					$filter['id_category'];
+					break;
+					
+				case 'manufacturer':
+					// @TODO
+					break;
+				
+				case 'avaibility':
 					// @TODO
 					break;
 			}
