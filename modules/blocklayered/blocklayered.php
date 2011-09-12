@@ -211,8 +211,8 @@ class BlockLayered extends Module
 					SELECT cl.name, cl.id_lang, c.id_category
 					FROM '._DB_PREFIX_.'category c
 					INNER JOIN '._DB_PREFIX_.'category_lang cl ON (c.id_category = cl.id_category)
-					WHERE nleft > (SELECT nleft FROM category WHERE id_category = 2)
-					AND  nright < (SELECT nright FROM category WHERE id_category = 2)
+					WHERE nleft > (SELECT nleft FROM '._DB_PREFIX_.'category WHERE id_category = 2)
+					AND  nright < (SELECT nright FROM '._DB_PREFIX_.'category WHERE id_category = 2)
 					');
 					foreach ($categories as $category)
 					{
