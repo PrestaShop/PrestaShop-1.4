@@ -352,7 +352,11 @@ class BlockLayered extends Module
 	
 	public function hookAttributeGroupForm($params)
 	{
-		$on = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT indexable FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE id_attribute_group = '.(int)$params['id_attribute_group']);
+		$indexable = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT indexable FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE id_attribute_group = '.(int)$params['id_attribute_group']);
+		if($indexable === false)
+			$on = true;
+		else
+			$on = (bool)$indexable;
 		
 		return '<label>'.$this->l('Indexable:').' </label>
 				<div class="margin-form">
@@ -366,10 +370,11 @@ class BlockLayered extends Module
 	
 	public function hookFeatureForm($params)
 	{
-		$this->registerHook('afterDeleteFeature');
-		$this->registerHook('afterSaveFeature');
-
-		$on = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT indexable FROM '._DB_PREFIX_.'layered_indexable_attribute_group WHERE id_attribute_group = '.(int)$params['id_attribute_group']);
+		$indexable = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT indexable FROM '._DB_PREFIX_.'layered_indexable_feature WHERE id_feature = '.(int)$params['id_feature']);
+		if($indexable === false)
+			$on = true;
+		else
+			$on = (bool)$indexable;
 		
 		return '
 		<label>'.$this->l('Indexable:').' </label>
