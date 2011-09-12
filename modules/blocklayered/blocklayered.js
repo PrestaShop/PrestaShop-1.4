@@ -38,13 +38,11 @@ $(document).ready(function()
 			$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
 		else
 			$('\'input[name='+$(this).attr('name')+']:hidden\'').remove();
-		window.location =  updatelink( $(this).parent().children(1).children(0).attr('href'));
 		reloadContent();
 	});
 	
 	$('#layered_form input[type=checkbox]').live('click', function()
 	{
-		window.location =  updatelink( $(this).parent().children(1).children(0).attr('href'));
 		reloadContent();
 	});
 	
@@ -52,7 +50,6 @@ $(document).ready(function()
 		  click: function() {  
 			$(this).parent().parent().find('input').click();
 			reloadContent();  
-			window.location = updatelink($(this).attr('href'));
 			return false;
 		  }
 		});
@@ -60,13 +57,10 @@ $(document).ready(function()
 	reloadContent();
 });
 
-function updatelink($link)
+function updatelink(link)
 {
-	linkFilter = $link;
-	linkFilterMatch = linkFilter.match(/^(http[s]?:\/\/[^#]+([0-9]+-[^\/]*))/);
-	//linkFilterMatch = linkFilter.match(/^http:?\/\/[^#]+([0-9]+-[^\/]*)/);
-	//linkFilterMatch = linkFilter.match(/^(http[s]?:\/\/[^#][0-9a-z._/-]+)/);
-	linkFilterUpdate = linkFilterMatch[0]+''+getValueSelected();
+	baseUrl = link.split('#');
+	linkFilterUpdate = baseUrl[0]+getValueSelected();
 	return linkFilterUpdate;
 }
 
@@ -146,6 +140,7 @@ function openCloseFilter()
 
 function reloadContent(params_plus)
 {
+	window.location =  updatelink( window.location.href);
 	for(i = 0; i < ajaxQueries.length; i++)
 		ajaxQueries[i].abort();
 	ajaxQueries = new Array();
