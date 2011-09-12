@@ -54,8 +54,19 @@ $(document).ready(function()
 		  }
 		});
 	paginationButton();
+	initLayered();
 	reloadContent();
 });
+
+function initLayered()
+{
+	var params = document.location.toString().split('#');
+	params.shift();
+	$(params).each(function(it, val)
+	{
+		$('#'+val.split('=')[0]).click();
+	});
+}
 
 function updatelink(link)
 {
