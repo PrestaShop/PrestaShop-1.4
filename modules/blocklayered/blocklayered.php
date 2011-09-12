@@ -782,9 +782,9 @@ class BlockLayered extends Module
 		
 
 		$html .= '
-			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing products').'</a>
+			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing prices').'</a>
 			<br />
-			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire index').'</a>
+			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire price index').'</a>
 			<br />
 			<a class="bold" id="url-indexer" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1">'.$this->l('Build url indexer').'</a>
 			<br />
@@ -1273,7 +1273,7 @@ class BlockLayered extends Module
 					{
 						if (!isset($selectedFilters[$res[1]]))
 							$selectedFilters[$res[1]] = array();
-						$selectedFilters[$res[1]][$value] = (int)$value;
+						$selectedFilters[$res[1]][(int)$value] = $id_key.'_'.(int)$value;
 					}
 					elseif ($res[1] == 'weight')
 						$selectedFilters[$res[1]] = $tmpTab;
@@ -1315,25 +1315,46 @@ class BlockLayered extends Module
 			switch ($key)
 			{
 				case 'id_feature':
-					$queryFilters .= ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'feature_product fp WHERE ';
+					$subQueries = array();
 					foreach ($filterValues AS $filterValue)
-						$queryFilters .= 'fp.`id_feature_value` = '.(int)$filterValue.' OR ';
-					$queryFilters = rtrim($queryFilters, 'OR ').')';
+					{
+						$filterValueArray = explode('_',$filterValue);
+						if(!isset($subQueries[$filterValueArray[0]]))
+							$subQueries[$filterValueArray[0]] = array();
+						$subQueries[$filterValueArray[0]][] = 'fp.`id_feature_value` = '.(int)$filterValueArray[1];
+						//$queryFilters .= 'pac.`id_attribute` = '.(int)$filterValue.' OR ';
+					}
+					foreach($subQueries as $subQuery)
+					{
+						$queryFilters .= ' AND p.id_product IN (SELECT `id_product` FROM `'._DB_PREFIX_.'feature_product` fp WHERE ';
+						$queryFilters .= implode(' OR ', $subQuery).') ';
+					}
 				break;
 
 				case 'id_attribute_group':
-					$queryFilters .= ' AND p.id_product IN (SELECT pa.`id_product`
+					$subQueries = array();
+					
+					
+					foreach ($filterValues AS $filterValue)
+					{
+						$filterValueArray = explode('_',$filterValue);
+						if(!isset($subQuery[$filterValueArray[0]]))
+							$subQueries[$filterValueArray[0]] = array();
+						$subQueries[$filterValueArray[0]][] = 'pac.`id_attribute` = '.(int)$filterValueArray[1];
+						//$queryFilters .= 'pac.`id_attribute` = '.(int)$filterValue.' OR ';
+					}
+					foreach($subQueries as $subQuery)
+					{
+						$queryFilters .= ' AND p.id_product IN (SELECT pa.`id_product`
 										FROM `'._DB_PREFIX_.'product_attribute_combination` pac
 										LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
 										ON (pa.`id_product_attribute` = pac.`id_product_attribute`) WHERE ';
-										
-					foreach ($filterValues AS $filterValue)
-						$queryFilters .= 'pac.`id_attribute` = '.(int)$filterValue.' OR ';
-					$queryFilters = rtrim($queryFilters, 'OR ').')';
+						$queryFilters .= implode(' OR ', $subQuery).') ';
+					}
 				break;
 
 				case 'category':
-					$queryFilters .= ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE ';				
+					$queryFilters .= ' AND p.id_product IN (SELECT id_product FROM '._DB_PREFIX_.'category_product cp WHERE ';
 					foreach ($selectedFilters['category'] AS $id_category)
 						$queryFilters .= 'cp.`id_category` = '.(int)$id_category.' OR ';
 					$queryFilters = rtrim($queryFilters, 'OR ').')';
@@ -1728,9 +1749,8 @@ class BlockLayered extends Module
 							if (!isset($featureArray[$feature['id_feature']]))
 								$featureArray[$feature['id_feature']] = array('type_lite' => 'id_feature', 'type' => 'id_feature',
 								'id_key' => (int)$feature['id_feature'], 'values' => array(), 'name' => $feature['feature_name']);
-								
 							$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']] = array('nbr' => (int)$feature['nbr'], 'name' => $feature['value']);
-							if (isset($selectedFilters['id_feature']) AND in_array($feature['id_feature_value'], $selectedFilters['id_feature']))
+							if (isset($selectedFilters['id_feature'][$feature['id_feature_value']]))
 								$featureArray[$feature['id_feature']]['values'][$feature['id_feature_value']]['checked'] = true;
 						}
 						$filterBlocks = array_merge($filterBlocks, $featureArray);

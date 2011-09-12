@@ -36,7 +36,7 @@
 					<span class="layered_subtitle" style="float: none;">{l s='Enabled filters:' mod='blocklayered'}</span>
 					<ul>
 					{foreach from=$selected_filters key=filter_type item=filter_values}
-						{foreach from=$filter_values item=filter_value name=f_values}
+						{foreach from=$filter_values key=filter_key item=filter_value name=f_values}
 							{foreach from=$filters item=filter}
 								{if $filter.type == $filter_type && isset($filter.values)}
 									{if isset($filter.slider) && $smarty.foreach.f_values.first}
@@ -48,7 +48,7 @@
 										</li>
 									{else}
 										{foreach from=$filter.values key=id_value item=value}
-											{if $id_value == $filter_value}
+											{if $id_value == $filter_key && !is_numeric($filter_value) && ($filter.type eq 'id_attribute_group' || $filter.type eq 'id_feature') || $id_value == $filter_value && $filter.type neq 'id_attribute_group'}
 												<li>
 													<a href="#" rel="layered_{$filter.type_lite}_{$id_value}" title="{l s='Cancel' mod='blocklayered'}">x</a>
 													{$filter.name|escape:html:'UTF-8'}{l s=':'} {$value.name|escape:html:'UTF-8'}
