@@ -85,6 +85,7 @@ function initLayered()
 	params.shift();
 	$(params).each(function(it, val)
 	{
+		allowReload = true;
 		if (val.split('=')[0] == 'price' || val.split('=')[0] == 'weight')
 		{
 			$("#layered_"+val.split('=')[0]+"_slider").slider('values', 0, val.split('=')[1].split('_')[0]);
@@ -188,6 +189,12 @@ function openCloseFilter()
 
 function reloadContent(params_plus)
 {
+	if (typeof(allowReload) == 'undefined')
+	{
+		allowReload = true;
+		return;
+	}
+	
 	window.location =  updatelink( window.location.href);
 	for(i = 0; i < ajaxQueries.length; i++)
 		ajaxQueries[i].abort();
