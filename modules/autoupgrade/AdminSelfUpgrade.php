@@ -1,6 +1,4 @@
 <?php
-require('/usr/share/php/FirePHPCore/FirePHP.class.php');
-require('/usr/share/php/FirePHPCore/fb.php');
 /*
 * 2007-2011 PrestaShop
 *
