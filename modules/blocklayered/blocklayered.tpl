@@ -93,23 +93,21 @@
 							</div>
 							<script type="text/javascript">
 							{literal}
+								addSlider('{/literal}{$filter.type}{literal}',{
+									range: true,
+									min: {/literal}{$filter.min}{literal},
+									max: {/literal}{$filter.max}{literal},
+									values: [ {/literal}{$filter.values[0]}{literal}, {/literal}{$filter.values[1]}{literal}],
+									slide: function( event, ui ) {
+										$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + '{/literal}{$filter.unit}{literal}' + ' - ' + ui.values[ 1 ] + '{/literal}{$filter.unit}{literal}');
+									},
+									stop: function () {
+										reloadContent();
+									}
+								}, '{/literal}{$filter.unit}{literal}');
 								$(document).ready(function()
 								{
 									$('.layered_{/literal}{$filter.type}{literal}').show();
-									$('#layered_{/literal}{$filter.type}{literal}_slider').slider({
-										range: true,
-										min: {/literal}{$filter.min}{literal},
-										max: {/literal}{$filter.max}{literal},
-										values: [ {/literal}{$filter.values[0]}{literal}, {/literal}{$filter.values[1]}{literal}],
-										slide: function( event, ui ) {
-											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + '{/literal}{$filter.unit}{literal}' + ' - ' + ui.values[ 1 ] + '{/literal}{$filter.unit}{literal}');
-										},
-										stop: function () {
-											reloadContent();
-										}
-									});
-									$('#layered_{/literal}{$filter.type}{literal}_range').html($('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 0 ) +'{/literal}{$filter.unit}{literal}'+
-										' - ' + $('#layered_{/literal}{$filter.type}{literal}_slider').slider('values', 1 )+'{/literal}{$filter.unit}{literal}');
 								});
 							{/literal}
 							</script>
