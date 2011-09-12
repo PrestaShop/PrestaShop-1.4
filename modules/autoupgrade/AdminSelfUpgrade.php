@@ -277,7 +277,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$allowed = (ConfigurationTest::test_fopen() && $this->rootWritable);
 
 		if (!defined('_PS_MODE_DEV_') OR !_PS_MODE_DEV_)
-			$allowed &= $this->upgrader->autoupgrade;
+			$allowed &= $this->upgrader->autoupgrade_module;
 
 		return $allowed;
 	}
@@ -660,7 +660,7 @@ $this->standalone = true;
 				break;
 			}
 			else{
-				$this->nextQuickInfo[] = sprintf($this->l('copied %1$s in %2$s. %3$s files left to upgrade.'),$file, $dest, sizeof($filesToUpgrade));
+				$this->nextQuickInfo[] = sprintf($this->l('copied %1$s. %2$s files left to upgrade.'),$file, sizeof($filesToUpgrade));
 				// @TODO : maybe put several files at the same times ?
 				$this->nextDesc = sprintf($this->l('%2$s files left to upgrade.'),$file,sizeof($filesToUpgrade));
 			}
@@ -794,7 +794,7 @@ $this->standalone = true;
 			if (is_dir($file))
 			{
 				// if $dest is not a directory (that can happen), just remove that file
-				if (!is_dir($dest))
+				if (!is_dir($dest) AND file_exists($dest))
 					unlink($dest);
 
 				if (!file_exists($dest))
