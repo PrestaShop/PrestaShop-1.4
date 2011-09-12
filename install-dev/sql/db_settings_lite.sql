@@ -813,8 +813,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (53, 'AdminBackup', 9, 8),(57, 'AdminCMSContent', 9, 9),(64, 'AdminGenerator', 9, 10),(43, 'AdminSearch', -1, 0),(69, 'AdminInformation', 9, 11),
 (70, 'AdminPerformance', 8, 11),(71, 'AdminCustomerThreads', 29, 4),(72, 'AdminWebservice', 9, 12),(73, 'AdminStockMvt', 1, 9),
 (80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3),(84, 'AdminGeolocation', 8, 12),
-(85, 'AdminTaxRulesGroup', 4, 3),(86, 'AdminLogs', 9, 13), (87, 'AdminCounty', 5, 4),(88,'AdminHome',-1,0),
-(89,'AdminUpgrade',9,14);
+(85, 'AdminTaxRulesGroup', 4, 3),(86, 'AdminLogs', 9, 13), (87, 'AdminCounty', 5, 4),(88,'AdminHome',-1,0);
 
 INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (SELECT 1, id_tab, 1, 1, 1, 1 FROM PREFIX_tab);
 
@@ -831,7 +830,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 61, 'Search Engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Shopping Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
 (1, 68, 'Attachments'),(1, 69, 'Configuration Information'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
 (1, 80, 'Modules & Themes Catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocation'),(1, 85, 'Tax Rules'),(1, 86, 'Log'),
-(1, 87, 'Counties'),(1, 88, 'Home'),(1, 89, 'Upgrade');
+(1, 87, 'Counties'),(1, 88, 'Home');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 1, 'Catalogue'),(2, 2, 'Clients'),(2, 3, 'Commandes'),(2, 4, 'Paiement'),(2, 5, 'Transport'),
@@ -875,7 +874,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (4, 61, 'Suchmaschinen'),(4, 62, 'Referrer'),(4, 63, 'Gruppen'),(4, 64, 'Generatoren'),(4, 65, 'Warenkörbe'),(4, 66, 'Tags'),(4, 67, 'Suche'),
 (4, 68, 'Anhänge'),(4, 69, 'Konfigurationsinformationen'),(4, 70, 'Leistung'),(4, 71, 'Kundenservice'),(4, 72, 'Webservice'),(4, 73, 'Lagerbewegungen'),
 (4, 80, 'Module und Themenkatalog'),(4, 81, 'Mein Konto'),(4, 82, 'Shops'),(4, 83, 'Themen'),(4, 84, 'Geotargeting'),(4, 85, 'Steuerregeln'),(4, 86, 'Log'),
-(4,87,'Counties'),(4,88,'Home'),(4, 89, 'Upgrade');
+(4,87,'Counties'),(4,88,'Home');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (5, 1, 'Catalogo'),(5, 2, 'Clienti'),(5, 3, 'Ordini'),(5, 4, 'Pagamento'),
@@ -890,7 +889,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (5, 61, 'Motori di ricerca'),(5, 62, 'Referenti'),(5, 63, 'Gruppi'),(5, 64, 'Generatori'),(5, 65, 'Carrelli shopping'),(5, 66, 'Tag'),(5, 67, 'Cerca'),
 (5, 68, 'Allegati'),(5, 69, 'Informazioni di configurazione'),(5, 70, 'Performance'),(5, 71, 'Servizio clienti'),(5, 72, 'Webservice'),(5, 73, 'Movimenti magazzino'),
 (5, 80, 'Moduli & Temi catalogo'),(5, 81, 'Il mio Account'),(5, 82, 'Negozi'),(5, 83, 'Temi'),(5, 84, 'Geolocalizzazione'),(5, 85, 'Regimi fiscali'),(5, 86, 'Log'),
-(5,87,'Counties'),(5,88,'Home'),(5, 89, 'Aggiornamento');
+(5,87,'Counties'),(5,88,'Home');
 
 INSERT IGNORE INTO `PREFIX_tab_lang` (`id_tab`, `id_lang`, `name`)
     (SELECT `id_tab`, id_lang, (SELECT tl.`name`
