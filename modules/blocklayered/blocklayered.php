@@ -614,16 +614,16 @@ class BlockLayered extends Module
 		$selectedFilters = $this->getSelectedFilters();
 		$filterBlock = self::getFilterBlock($selectedFilters);
 		$title = '';
-		if(is_array($filterBlock['title_values']))
-			foreach($filterBlock['title_values'] as $key => $val)
+		if (is_array($filterBlock['title_values']))
+			foreach ($filterBlock['title_values'] as $key => $val)
 				$title .= $key.' '.implode('/', $val).' – ';
 		$title = rtrim($title, ' – ');
 		$metaComplement = ucfirst(strtolower($title));
 		$metaKeyWordsComplement = str_replace(' – ', ', ', strtolower($title));
 		
 		$smarty->assign('meta_title', str_replace(' - '.Configuration::get('PS_SHOP_NAME'), ' – '.$metaComplement.' - '.Configuration::get('PS_SHOP_NAME'), $categoryMetas['meta_title']));
-		$smarty->assign('meta_description', $categoryTitle.' – '.$metaComplement.' – '.$categoryMetas['meta_description']);
-		$smarty->assign('meta_keywords', $categoryTitle.', '.$metaKeyWordsComplement.', '.$categoryMetas['meta_keywords']);
+		$smarty->assign('meta_description', rtrim($categoryTitle.' – '.$metaComplement.' – '.$categoryMetas['meta_description'], ' – '));
+		$smarty->assign('meta_keywords', rtrim($categoryTitle.', '.$metaKeyWordsComplement.', '.$categoryMetas['meta_keywords'], ', '));
 		
 		Tools::addJS(($this->_path).'blocklayered.js');
 		Tools::addJS(_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js');
