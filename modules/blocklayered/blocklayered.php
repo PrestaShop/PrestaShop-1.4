@@ -600,10 +600,15 @@ class BlockLayered extends Module
 
 	public function hookHeader($params)
 	{
-		global $smarty;
+		global $smarty, $cookie;
 		
 		if (Tools::getValue('id_category', Tools::getValue('id_category_layered', 1)) == 1)
 			return;
+		
+		$idLang = (int)$cookie->id_lang;
+		$category = new Category((int)Tools::getValue('id_category'));
+		$categoryMetas = Tools::getMetaTags($idLang, '');
+		$categoryTitle = (empty($category->meta_title[$idLang])?$category->name[$idLang]:$category->meta_title[$idLang]);
 
 		// Generate meta title and meta description
 		$selectedFilters = $this->getSelectedFilters();
@@ -613,9 +618,12 @@ class BlockLayered extends Module
 			foreach($filterBlock['title_values'] as $key => $val)
 				$title .= $key.' '.implode('/', $val).' – ';
 		$title = rtrim($title, ' – ');
-		$meta = Tools::completeMetaTags(array(), ucfirst(strtolower($title)));
-		$smarty->assign('meta_title', $meta['meta_title']);
-		$smarty->assign('meta_description', $meta['meta_title']);
+		$metaComplement = ucfirst(strtolower($title));
+		$metaKeyWordsComplement = str_replace(' – ', ', ', strtolower($title));
+		
+		$smarty->assign('meta_title', str_replace(' - '.Configuration::get('PS_SHOP_NAME'), ' – '.$metaComplement.' - '.Configuration::get('PS_SHOP_NAME'), $categoryMetas['meta_title']));
+		$smarty->assign('meta_description', $categoryTitle.' – '.$metaComplement.' – '.$categoryMetas['meta_description']);
+		$smarty->assign('meta_keywords', $categoryTitle.', '.$metaKeyWordsComplement.', '.$categoryMetas['meta_keywords']);
 		
 		Tools::addJS(($this->_path).'blocklayered.js');
 		Tools::addJS(_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js');
