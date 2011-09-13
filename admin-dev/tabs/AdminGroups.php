@@ -147,7 +147,7 @@ class AdminGroups extends AdminTab
 					</div>
 					<label>'.$this->l('Discount (in %):').' </label>
 					<div class="margin-form">
-						<input type="text" name="reduction" value="" /><sup>*</sup>
+						<input type="text" name="reductionByCategory" value="" /><sup>*</sup>
 					</div>
 					<div class="clear">&nbsp;</div>
 					<div class="margin-form">
@@ -306,8 +306,10 @@ class AdminGroups extends AdminTab
 				$groupReduction = new GroupReduction();
 				if (!$id_category = Tools::getValue('id_category') OR !Validate::isUnsignedId($id_category))
 					$this->_errors[] = Tools::displayError('Wrong category ID');
-				elseif (!$reduction = Tools::getValue('reduction') OR !Validate::isPrice($reduction))
+				elseif (!$reduction = Tools::getValue('reductionByCategory') OR !Validate::isPrice($reduction))
 					$this->_errors[] = Tools::displayError('Invalid reduction (must be a percentage)');
+				elseif (Tools::getValue('reductionByCategory') > 100 OR Tools::getValue('reductionByCategory') < 0)
+					$this->_errors[] = Tools::displayError('Reduction value is incorrect');
 				elseif (GroupReduction::doesExist((int)($obj->id), $id_category))
 					$this->_errors[] = Tools::displayError('A reduction already exists for this category.');
 				else
@@ -338,7 +340,9 @@ class AdminGroups extends AdminTab
 					{
 						foreach ($id_group_reductions AS $key => $id_group_reduction)
 							if (!Validate::isUnsignedId($id_group_reductions[$key]) OR !Validate::isPrice($reductions[$key]))
-								$this->_errors[] = Tools::displayError();
+								$this->_errors[] = Tools::displayError('Invalid reduction (must be a percentage)');
+							elseif ($reductions[$key] > 100 OR $reductions[$key] < 0)
+								$this->_errors[] = Tools::displayError('Reduction value is incorrect');
 							else
 							{
 								$groupReduction = new GroupReduction((int)($id_group_reductions[$key]));
