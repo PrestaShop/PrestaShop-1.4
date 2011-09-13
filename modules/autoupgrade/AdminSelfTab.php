@@ -2163,7 +2163,7 @@ abstract class AdminSelfTab
 		global $currentIndex, $smarty;
 
 		$languages = Language::getLanguages(false);
-		if (function_exists('Tools','clearCache'))
+		if (method_exists('Tools','clearCache'))
 			Tools::clearCache($smarty);
 
 		/* Check required fields */
