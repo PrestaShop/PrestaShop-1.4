@@ -81,7 +81,9 @@ function initSliders()
 function initLayered()
 {
 	initSliders();
-	var params = document.location.toString().split('#');
+	var params = document.location.toString();
+	params = friendlyUrl(params, 'long');
+	params = params.split('#');
 	params.shift();
 	$(params).each(function(it, val)
 	{
@@ -103,6 +105,7 @@ function updatelink(link)
 {
 	baseUrl = link.split('#');
 	linkFilterUpdate = baseUrl[0]+getValueSelected();
+	linkFilterUpdate = friendlyUrl(linkFilterUpdate, 'short');
 	return linkFilterUpdate;
 }
 
@@ -125,6 +128,32 @@ function  getValueSelected(){
 		}
 	});
 	return checkboxChecked;
+}
+
+function friendlyUrl(link, encode)
+{
+		 var friendlyTab = {
+				 'layered_condition_' : 'cond_',
+				 'layered_id_attribute_group_' : 'g_',
+				 'id_category_layered=' : 'c=',
+				 'layered_manufacturer_' : 'm_',
+				 'layered_id_feature_' : 'f_',
+				 'layered_category_' : 'cat_',
+				};
+		
+		 if(encode == 'short'){
+			 $.each(friendlyTab, function(key, value) {
+				 	Expression = new RegExp(key,'g');
+				 	link = link.replace(Expression, value);
+			 });
+		 }else{
+			 $.each(friendlyTab, function(key, value) {
+				 Expression = new RegExp(value,'g');
+				 link = link.replace(Expression, key);
+			 });
+		 }
+	
+	return link;
 }
 
 function paginationButton() {
