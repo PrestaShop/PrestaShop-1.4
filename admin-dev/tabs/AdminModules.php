@@ -270,12 +270,13 @@ class AdminModules extends AdminTab
 					}
 				if (sizeof($module_errors))
 				{
+					// If error during module installation, no redirection
 					$htmlError = '';
 
 					foreach ($module_errors AS $module_error)
 						$htmlError .= '<li>'.$module_error.'</li>';
 					$htmlError .= '</ul>';
-					$this->_errors[] = Tools::displayError('The following module(s) were not installed successfully:'.$htmlError);
+					$this->_errors[] = sprintf(Tools::displayError('The following module(s) were not installed successfully: %s'), $htmlError);
 				}
 			}
 			if ($return)
