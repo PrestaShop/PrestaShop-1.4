@@ -224,11 +224,27 @@ class BlockLayered extends Module
 						'id_name' => null, 'value' => $category['name'], 'id_value' => $category['id_category'],
 						'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
 					}
-					$filter['id_category'];
 					break;
-					
+						
 				case 'manufacturer':
-					// @TODO
+					$manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+					SELECT m.name as name,l.id_lang as id_lang,  id_manufacturer
+					FROM '._DB_PREFIX_.'manufacturer m , '._DB_PREFIX_.'lang l
+					');
+				
+					foreach ($manufacturers as $manufacturer)
+					{
+						if (!isset($attributeValues[$manufacturer['id_lang']]))
+							$attributeValues[$manufacturer['id_lang']] = array();
+						if (!isset($attributeValues[$manufacturer['id_lang']][$filter['id_category']]))
+							$attributeValues[$manufacturer['id_lang']][$filter['id_category']] = array();
+						if (!isset($attributeValues[$manufacturer['id_lang']][$filter['id_category']]['manufacturer']))
+							$attributeValues[$manufacturer['id_lang']][$filter['id_category']]['manufacturer'] = array();
+						$attributeValues[$manufacturer['id_lang']][$filter['id_category']]['manufacturer'][] = array('name' => $this->translateWord('Manufacturer', $manufacturer['id_lang']),
+						'id_name' => null, 'value' => $manufacturer['name'], 'id_value' => $manufacturer['id_manufacturer'],
+						'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
+
+					}
 					break;
 				
 				case 'avaibility':
@@ -287,7 +303,7 @@ class BlockLayered extends Module
 					}
 					
 					$urlKey = md5($link);
-					$idLayeredFriendlyUrl = Db::getInstance()->getValue('SELECT id_layered_friendly_url FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.$urlKey.'\'');
+					$idLayeredFriendlyUrl = Db::getInstance()->getValue('SELECT id_layered_friendly_url FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `id_lang` = '.$id_lang.' AND `url_key` = \''.$urlKey.'\'');
 					if ($idLayeredFriendlyUrl == false)
 					{
 						Db::getInstance()->AutoExecute(_DB_PREFIX_.'layered_friendly_url', array('url_key' => $urlKey, 'data' => serialize($selectedFilters), 'id_lang' => $id_lang), 'INSERT');
@@ -297,6 +313,39 @@ class BlockLayered extends Module
 			}
 		}
 		return 1;
+	}
+	
+	public function translateWord($string, $id_lang ) 
+	{
+		static $_MODULES = array();
+		global $_MODULE;
+
+		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
+
+		if(!array_key_exists($id_lang,$_MODULES)){
+			include $file;
+			$_MODULES[$id_lang] = $_MODULE;
+		}
+
+		$string = str_replace('\'', '\\\'', $string);
+
+		// set array key to lowercase for 1.3 compatibility
+		$_MODULES[$id_lang] = array_change_key_case($_MODULES[$id_lang]);
+		$currentKey = '<{'.strtolower( $this->name).'}'.strtolower(_THEME_NAME_).'>'.strtolower($this->name).'_'.md5($string);
+		$defaultKey = '<{'.strtolower( $this->name).'}prestashop>'.strtolower($this->name).'_'.md5($string);
+			
+		if (isset($_MODULES[$id_lang][$currentKey]))
+			$ret = stripslashes($_MODULES[$id_lang][$currentKey]);
+		elseif (isset($_MODULES[$id_lang][Tools::strtolower($currentKey)]))
+			$ret = stripslashes($_MODULES[$id_lang][Tools::strtolower($currentKey)]);
+		elseif (isset($_MODULES[$id_lang][$defaultKey]))
+			$ret = stripslashes($_MODULES[$id_lang][$defaultKey]);
+		elseif (isset($_MODULES[$id_lang][Tools::strtolower($defaultKey)]))
+			$ret = stripslashes($_MODULES[$id_lang][Tools::strtolower($defaultKey)]);
+		else
+			$ret = stripslashes($string);
+
+		return  str_replace('"', '&quot;', $ret);
 	}
 	
 	public function hookProductListAssign($params)
