@@ -78,19 +78,19 @@ class BlockLayered extends Module
 		Configuration::deleteByName('PS_LAYERED_HIDE_0_VALUES');
 		Configuration::deleteByName('PS_LAYERED_SHOW_QTIES');
 		
-		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'price_static_index');
-		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'layered_friendly_url');
-		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'layered_indexable_attribute_group');
-		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'layered_indexable_feature');
-		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'layered_category');
-		Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'layered_filter');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'price_static_index');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_friendly_url');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_indexable_attribute_group');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_indexable_feature');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_category');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_filter');
 		
 		return parent::uninstall();
 	}
 	
 	private function _installPriceIndexTable()
 	{
-		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'price_static_index`');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'price_static_index`');
 		
 		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'price_static_index` (
