@@ -122,7 +122,7 @@ class CategoryControllerCore extends FrontController
 
 				$this->category->description = nl2br2($this->category->description);
 				$subCategories = $this->category->getSubCategories((int)(self::$cookie->id_lang));
-				self::$smarty->assign('category', $this->category);	
+				self::$smarty->assign('category', $this->category);
 				
 				if (isset($subCategories) AND !empty($subCategories) AND $subCategories)
 				{
@@ -168,6 +168,7 @@ class CategoryControllerCore extends FrontController
 		Module::hookExec('productListAssign', array('nbProducts' => &$this->nbProducts, 'catProducts' => &$this->cat_products, 'hookExecuted' => &$hookExecuted));
 		if(!$hookExecuted)
 		{
+			self::$smarty->assign('categoryNameComplement', '');
 			$this->nbProducts = $this->category->getProducts(NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
 			$this->pagination((int)$this->nbProducts);
 			$this->cat_products = $this->category->getProducts((int)(self::$cookie->id_lang), (int)($this->p), (int)($this->n), $this->orderBy, $this->orderWay);
