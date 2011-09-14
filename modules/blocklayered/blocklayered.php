@@ -1867,71 +1867,64 @@ class BlockLayered extends Module
 			}
 		}
 
-		//generate SEO link
+	//generate SEO link
+		$paramSelected = '';
 		$optionCheckedArray = array();
 		$paramGroupSelectedArray = array();
 		$titleValues = array();
 		$link = new Link();
 		
-		$linkBase = $link->getCategoryLink($id_parent,Category::getLinkRewrite($id_parent, (int)($cookie->id_lang)), (int)($cookie->id_lang));
-		$filterBlockList = array();
+		$linkBase = $link->getCategoryLink($id_parent,Category::getLinkRewrite($id_parent, (int)($cookie->id_lang),(int)($cookie->id_lang) ), (int)($cookie->id_lang));
+		$filterBlockList = array();	
+		//get filters checked by group
 		foreach ($filterBlocks as $typeFilter)
 		{
 			$paramGroupSelected = '';
 			foreach ($typeFilter['values'] as $key => $value)
 			{
-				if (is_array($value) AND array_key_exists('checked', $value ))
-				{
-					/*
-					$paramGroupSelected .= '-'.str_replace('-', '_', Tools::link_rewrite($value['name']));
-					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = str_replace('-', '_', Tools::link_rewrite($value['name']));
-					*/
-					if(is_array($value) AND array_key_exists('checked',$value )){
-						$paramGroupSelected .= '-'.str_replace('-', '_', Tools::link_rewrite($value['name']));
-						$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = str_replace('-', '_', Tools::link_rewrite($value['name']));
-					}else 
-						$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][] = array();
-					
-					
-					if (!isset($titleValues[$typeFilter['name']]))
-						$titleValues[$typeFilter['name']] = array();
-					$titleValues[$typeFilter['name']][] = $value['name'];
-				}
-				else 
-					$paramGroupSelectedArray [str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))][] = array();
+				if(is_array($value) AND array_key_exists('checked',$value )){
+					$paramGroupSelected .= '-'.Tools::link_rewrite($value['name']);
+					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = Tools::link_rewrite($value['name']);
+				}else 
+					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][] = array();
 			}
-			if (!empty($paramGroupSelected))
-				$optionCheckedArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = $paramGroupSelected ;
+			if(!empty($paramGroupSelected))
+			{
+				$paramSelected .= '/'.Tools::link_rewrite($typeFilter['name']).$paramGroupSelected;
+				$optionCheckedArray[Tools::link_rewrite($typeFilter['name'])] = $paramGroupSelected;
+			}
 			
-			$filterBlockList[] = str_replace('-', '_', Tools::link_rewrite($typeFilter['name']));
+			if (!isset($titleValues[$typeFilter['name']]))
+				$titleValues[$typeFilter['name']] = array();
+			$titleValues[$typeFilter['name']][] = $value['name'];
 		}
 
 		$blackList = array('weight','price');
-		
 		foreach ($filterBlocks as &$typeFilter)
-			if (count($typeFilter) > 0 AND !in_array($typeFilter['type'], $blackList)){
+		{	
+			if(count($typeFilter) > 0 AND !in_array($typeFilter['type'], $blackList))
+			{	
 				foreach ($typeFilter['values'] as $key => $values)
 				{
 					$optionCheckedCloneArray = $optionCheckedArray;
 					//if not filters checked, add parameter
-					if (!in_array(str_replace('-', '_', Tools::link_rewrite($values['name'])), $paramGroupSelectedArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))]))
+					if(!in_array(Tools::link_rewrite($values['name']), $paramGroupSelectedArray[Tools::link_rewrite($typeFilter['name'])]))
 					{
+						//update parameter filter checked before
 						if(array_key_exists(Tools::link_rewrite($typeFilter['name']), $optionCheckedArray))
-							$optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = $optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))].'-'.Tools::link_rewrite($values['name']);
+							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])].'-'.Tools::link_rewrite($values['name']);
 						else 
-							$optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
-						}
-					$parametersLink = '';
-					//create order order by filter position
-					foreach ($filterBlockList as $keyFilter => $valueFilter)
-					{
-						if (!empty($optionCheckedCloneArray[$valueFilter]))
-							$parametersLink .= '/'.$valueFilter.$optionCheckedCloneArray[$valueFilter];
+							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] =  '-'.Tools::link_rewrite($values['name']);
 					}
+				//	str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))
+					$parameters = '';
+					foreach ($optionCheckedCloneArray as $keyGroup => $valueGroup)
+						$parameters .= '/'.str_replace('-', '_',$keyGroup).$valueGroup;
 					//write link
-					$typeFilter['values'][$key]['link'] =  $linkBase.$parametersLink;
+					$typeFilter['values'][$key]['link'] =  $linkBase.$parameters;
 				}
 			}
+		}
 		
 		$nFilters = 0;
 		if (isset($selectedFilters['price']))
