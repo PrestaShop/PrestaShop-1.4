@@ -34,22 +34,28 @@ $(document).ready(function()
 	cancelFilter();
 	openCloseFilter();
 	
+	// Click on color
 	$('#layered_form input[type=button], #layered_form label.layered_color').live('click', function()
 	{
 		if (!$('\'input[name='+$(this).attr('name')+']:hidden\'').length)
 			$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
 		else
 			$('\'input[name='+$(this).attr('name')+']:hidden\'').remove();
+		window.location = '#'+$(this).next().children(1).attr('href').replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
 		reloadContent();
 	});
 	
+	// Click on checkbox
 	$('#layered_form input[type=checkbox]').live('click', function()
 	{
+		window.location = '#'+$(this).next().children(1).attr('href').replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
 		reloadContent();
 	});
 	
+	// Click on label
 	$("label a").live({
 		 click: function() {
+			window.location = '#'+this.href.replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
 			$(this).parent().parent().find('input').click();
 			reloadContent();  
 			return false;
@@ -57,7 +63,6 @@ $(document).ready(function()
 	});
 	paginationButton();
 	initLayered();
-	reloadContent();
 });
 
 function addSlider(type, data, unit)
@@ -81,24 +86,33 @@ function initSliders()
 function initLayered()
 {
 	initSliders();
-	var params = document.location.toString();
-	params = friendlyUrl(params, 'long');
-	params = params.split('#');
-	params.shift();
-	$(params).each(function(it, val)
+	if (window.location.href.split('#').length == 2)
 	{
-		allowReload = true;
-		if (val.split('=')[0] == 'price' || val.split('=')[0] == 'weight')
+		var params = window.location.href.split('#')[1];
+		reloadContent('&selected_filters='+params, true);
+	}
+	else
+	{
+		var params = window.location.href;
+		params = friendlyUrl(params, 'long');
+		params = params.split('#');
+		params.shift();
+		$(params).each(function(it, val)
 		{
-			$("#layered_"+val.split('=')[0]+"_slider").slider('values', 0, val.split('=')[1].split('_')[0]);
-			$("#layered_"+val.split('=')[0]+"_slider").slider('values', 1, val.split('=')[1].split('_')[1]);
-			$("#layered_"+val.split('=')[0]+"_slider").slider('option', 'slide')(0,{values:[val.split('=')[1].split('_')[0], val.split('=')[1].split('_')[1]]});
-		}
-		else
-		{
-			$('#'+val.split('=')[0]).click();
-		}
-	});
+			allowReload = true;
+			if (val.split('=')[0] == 'price' || val.split('=')[0] == 'weight')
+			{
+				$("#layered_"+val.split('=')[0]+"_slider").slider('values', 0, val.split('=')[1].split('_')[0]);
+				$("#layered_"+val.split('=')[0]+"_slider").slider('values', 1, val.split('=')[1].split('_')[1]);
+				$("#layered_"+val.split('=')[0]+"_slider").slider('option', 'slide')(0,{values:[val.split('=')[1].split('_')[0], val.split('=')[1].split('_')[1]]});
+			}
+			else
+			{
+				$('#'+val.split('=')[0]).click();
+			}
+		});
+		reloadContent();
+	}
 }
 
 function updatelink(link)
@@ -216,15 +230,14 @@ function openCloseFilter()
 	});
 }
 
-function reloadContent(params_plus)
+function reloadContent(params_plus, force)
 {
-	if (typeof(allowReload) == 'undefined')
+	if (typeof(allowReload) == 'undefined' && typeof(force) != 'undefined' && force != true)
 	{
 		allowReload = true;
 		return;
 	}
 	
-	window.location =  updatelink( window.location.href);
 	for(i = 0; i < ajaxQueries.length; i++)
 		ajaxQueries[i].abort();
 	ajaxQueries = new Array();
