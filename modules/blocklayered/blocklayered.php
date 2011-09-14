@@ -138,7 +138,7 @@ class BlockLayered extends Module
 	/*
 	 * Url indexation
 	 */
-	public function indexUrl($cursor = array(), $ajax = false, $truncate = true)
+	public function indexUrl($ajax = false, $truncate = true)
 	{
 		if ($truncate)
 			Db::getInstance()->execute('TRUNCATE '._DB_PREFIX_.'layered_friendly_url');
@@ -261,118 +261,33 @@ class BlockLayered extends Module
 					break;
 			}
 		
-		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
-		if ($maxExecutionTime > 5 || $maxExecutionTime <= 0)
-			$maxExecutionTime = 5;
-		$startTime = microtime(true);
-		$memoryLimit = (Tools::getMemoryLimit() * 0.9);
-		
-		if (empty($cursor))
-		{
-			$cursor = array(
-				'attribute_values' => 0,
-				'tmp1' => 0,
-				'possibility' => 0,
-				'total' => 0
-			);
-			
-			if ($ajax)
-			{
-				// Calculation, to eval progression
-				$nbPosibilities = 0;
-				foreach ($attributeValues as $idLang => $tmp1)
-					foreach ($tmp1 as $key => $tmp2)
-					{
-						$nbPosibilitiesTmp = 1;
-						foreach ($tmp2 as $name)
-						{
-							$count = count($name)+1;
-							$nbPosibilitiesTmp *= $count;
-						}
-						$nbPosibilities += $nbPosibilitiesTmp;
-					}
-				$cursor['nb_posibilities'] = $nbPosibilities;
-			}
-		}
-		
-		
 		// Foreach langs
 		$attributeValuesKeys = array_keys($attributeValues);
-		for (;$cursor['attribute_values'] < count($attributeValuesKeys); $cursor['attribute_values']++)
+		foreach($attributeValues as $id_lang => $attributesByCategoriesByLang)
 		{
-			$id_lang = $attributeValuesKeys[$cursor['attribute_values']];
-			$tmp1 = &$attributeValues[$id_lang];
-			
 			// Foreach categories
-			$tmp1Keys = array_keys($tmp1);
-			for(; $cursor['tmp1'] < count($tmp1Keys); $cursor['tmp1']++)
+			foreach($attributesByCategoriesByLang as $id_category => $attributesByCategory)
 			{
-				$id_category = $tmp1Keys[$cursor['tmp1']];
-				$tmp2 = &$tmp1[$id_category];
-				
-				$cursors = array_fill(0, count($tmp2), 0);
-				$limits = array();
-				$nbName = count($tmp2);
-				$nbPosibilities = 1;
-				$tmp2 = array_values($tmp2);
-				
-				// fill limits and calculate the number of combination possible
-				foreach ($tmp2 as $name)
+				foreach($attributesByCategory as $attribute)
 				{
-					$count = count($name)+1;
-					$limits[] = $count;
-					$nbPosibilities *= $count;
-				}
-				
-				// Loop all url posibilities
-				for (; $cursor['possibility'] < $nbPosibilities; $cursor['possibility']++)
-				{
-					if ($memoryLimit < memory_get_peak_usage() OR (microtime(true) - $startTime) > $maxExecutionTime)
+					foreach($attribute as $param)
 					{
-						if ($ajax)
-							return Tools::jsonEncode(array('cursor' => Tools::jsonEncode($cursor)));
-						Tools::file_get_contents(Tools::getProtocol().Tools::getHttpHost().'/modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&cursor='.Tools::jsonEncode($cursor));
-						return 1;
-					}
-					
-					$cursor['total']++;
-					// generate all parameters posibilities
-					$a = 1;
-					foreach ($cursors as $position => $cursorP)
-					{
-						// Get all possible combination (one by group)
-						// 0 means no combinations selected in the group
-						$cursors[$position] = (($cursor['possibility'] / ($a)) % $limits[$position]);
-						$a *= $limits[$position];
-					}
-					$link = '';
-					$selectedFilters = array('category' => array());
-					
-					// Generate url with selected filters
-					foreach ($cursors as $position => $cursorP)
-					{
-						if ($cursorP != 0)
+						$selectedFilters = array();
+						$link = '/'.Tools::link_rewrite($param['name'].'-'.$param['value']);
+						$selectedFilters[$param['type']] = array();
+						if (!isset($param['id_id_value']))
+							$param['id_id_value'] = $param['id_value'];
+						$selectedFilters[$param['type']][$param['id_id_value']] = $param['id_value'];
+						$urlKey = md5($link);
+						$idLayeredFriendlyUrl = Db::getInstance()->getValue('SELECT id_layered_friendly_url FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `id_lang` = '.$id_lang.' AND `url_key` = \''.$urlKey.'\'');
+						if ($idLayeredFriendlyUrl == false)
 						{
-							$link .= '/'.Tools::link_rewrite($tmp2[$position][$cursorP-1]['name'].'-'.$tmp2[$position][$cursorP-1]['value']);
-							if (!isset($selectedFilters[$tmp2[$position][$cursorP-1]['type']]))
-								$selectedFilters[$tmp2[$position][$cursorP-1]['type']] = array();
-							if (!isset($tmp2[$position][$cursorP-1]['id_id_value']))
-								$tmp2[$position][$cursorP-1]['id_id_value'] = $tmp2[$position][$cursorP-1]['id_value'];
-							$selectedFilters[$tmp2[$position][$cursorP-1]['type']][$tmp2[$position][$cursorP-1]['id_id_value']] = $tmp2[$position][$cursorP-1]['id_value'];
+							Db::getInstance()->AutoExecute(_DB_PREFIX_.'layered_friendly_url', array('url_key' => $urlKey, 'data' => serialize($selectedFilters), 'id_lang' => $id_lang), 'INSERT');
+							$idLayeredFriendlyUrl = Db::getInstance()->Insert_ID();
 						}
 					}
-
-					$urlKey = md5($link);
-					$idLayeredFriendlyUrl = Db::getInstance()->getValue('SELECT id_layered_friendly_url FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `id_lang` = '.$id_lang.' AND `url_key` = \''.$urlKey.'\'');
-					if ($idLayeredFriendlyUrl == false)
-					{
-						Db::getInstance()->AutoExecute(_DB_PREFIX_.'layered_friendly_url', array('url_key' => $urlKey, 'data' => serialize($selectedFilters), 'id_lang' => $id_lang), 'INSERT');
-						$idLayeredFriendlyUrl = Db::getInstance()->Insert_ID();
-					}
 				}
-				$cursor['possibility'] = 0;
 			}
-			$cursor['tmp1'] = 0;
 		}
 		if ($ajax)
 			return '{"result": 1}';
@@ -967,35 +882,19 @@ class BlockLayered extends Module
 						
 					this.restartAllowed = false;
 					
-					if (this.cursor == undefined)
-					{
-						var url  = this.href;
-						this.cursor = \'{}\';
-					}
-					else
-					{
-						var url  = this.href.replace(\'&truncate=1\',\'\');
-					}
 					$.ajax({
-						url: url+\'&ajax=1&cursor=\'+this.cursor,
+						url: this.href+\'&ajax=1&cursor=\'+this.cursor,
 						context: this,
 						dataType: \'json\',
 						success: function(res)
 						{
 							this.running = false;
-							if (res.result)
-							{
-								this.cursor = 0;
-								$(\'#indexing-warning\').hide();
-								$(this).html(this.legend);
-								$(\'#ajax-message-ok span\').html(\''.$this->l('Url indexation finished').'\');
-								$(\'#ajax-message-ok\').show();
-								return;
-							}
-							this.cursor = res.cursor;
-							var cursorObj = JSON.parse(this.cursor);
-							$(this).html(this.legend+\' (in progress, \'+(cursorObj.total / cursorObj.nb_posibilities * 100).toFixed(2) +\'%)\');
-							$(this).click();
+							this.cursor = 0;
+							$(\'#indexing-warning\').hide();
+							$(this).html(this.legend);
+							$(\'#ajax-message-ok span\').html(\''.$this->l('Url indexation finished').'\');
+							$(\'#ajax-message-ok\').show();
+							return;
 						},
 						error: function(res)
 						{
@@ -1401,9 +1300,30 @@ class BlockLayered extends Module
 		
 		if (strpos($_SERVER['SCRIPT_FILENAME'], 'blocklayered-ajax.php') === false)
 		{
-			$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5(preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '',$_SERVER['REQUEST_URI'])).'\'');
-			if ($data !== false)
-				return unserialize($data);
+			$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', $_SERVER['REQUEST_URI']);
+			$urlParameters = explode('/',$url);
+			array_shift($urlParameters);
+			$selectedFilters = array('category' => array());
+			if(!empty($urlParameters))
+			{
+				foreach($urlParameters as $urlParameter)
+				{
+					$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$urlParameter).'\'');
+					if($data)
+						foreach(unserialize($data) as $keyParams => $params)
+						{
+							if(!isset($selectedFilters[$keyParams]))
+								$selectedFilters[$keyParams] = array();
+							foreach($params as $keyParam => $param)
+							{
+								if(!isset($selectedFilters[$keyParams][$keyParam]))
+									$selectedFilters[$keyParams][$keyParam] = array();
+								$selectedFilters[$keyParams][$keyParam] = $param;
+							}
+						}
+				}
+				return $selectedFilters;
+			}
 		}
 
 		/* Analyze all the filters selected by the user and store them into a tab */
