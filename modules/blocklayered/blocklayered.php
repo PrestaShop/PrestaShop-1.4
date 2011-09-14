@@ -204,8 +204,9 @@ class BlockLayered extends Module
 					SELECT cl.name, cl.id_lang, c.id_category
 					FROM '._DB_PREFIX_.'category c
 					INNER JOIN '._DB_PREFIX_.'category_lang cl ON (c.id_category = cl.id_category)
-					WHERE nleft > (SELECT nleft FROM '._DB_PREFIX_.'category WHERE id_category = 2)
-					AND  nright < (SELECT nright FROM '._DB_PREFIX_.'category WHERE id_category = 2)
+					WHERE nleft > (SELECT nleft FROM '._DB_PREFIX_.'category WHERE id_category = '.$filter['id_category'].')
+					AND  nright < (SELECT nright FROM '._DB_PREFIX_.'category WHERE id_category = '.$filter['id_category'].')
+					AND cl.id_lang = '.(int)$filter['id_lang'].'
 					');
 					foreach ($categories as $category)
 					{
@@ -225,6 +226,7 @@ class BlockLayered extends Module
 					$manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 					SELECT m.name as name,l.id_lang as id_lang,  id_manufacturer
 					FROM '._DB_PREFIX_.'manufacturer m , '._DB_PREFIX_.'lang l
+					WHERE l.id_lang = '.(int)$filter['id_lang'].'
 					');
 				
 					foreach ($manufacturers as $manufacturer)
