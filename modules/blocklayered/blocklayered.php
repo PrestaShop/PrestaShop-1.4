@@ -273,7 +273,7 @@ class BlockLayered extends Module
 					foreach($attribute as $param)
 					{
 						$selectedFilters = array();
-						$link = '/'.Tools::link_rewrite($param['name'].'-'.$param['value']);
+						$link = '/'.str_replace('-', '_', Tools::link_rewrite($param['name'])).'-'.str_replace('-', '_', Tools::link_rewrite($param['value']));
 						$selectedFilters[$param['type']] = array();
 						if (!isset($param['id_id_value']))
 							$param['id_id_value'] = $param['id_value'];
@@ -1301,26 +1301,31 @@ class BlockLayered extends Module
 		if (strpos($_SERVER['SCRIPT_FILENAME'], 'blocklayered-ajax.php') === false)
 		{
 			$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', $_SERVER['REQUEST_URI']);
-			$urlParameters = explode('/',$url);
-			array_shift($urlParameters);
+			$urlAttributes = explode('/',$url);
+			array_shift($urlAttributes);
 			$selectedFilters = array('category' => array());
-			if(!empty($urlParameters))
+			if(!empty($urlAttributes))
 			{
-				foreach($urlParameters as $urlParameter)
+				foreach($urlAttributes as $urlAttribute)
 				{
-					$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$urlParameter).'\'');
-					if($data)
-						foreach(unserialize($data) as $keyParams => $params)
-						{
-							if(!isset($selectedFilters[$keyParams]))
-								$selectedFilters[$keyParams] = array();
-							foreach($params as $keyParam => $param)
+					$urlParameters = explode('-', $urlAttribute);
+					$attributeName  = array_shift($urlParameters);
+					foreach($urlParameters as $urlParameter)
+					{
+						$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attributeName.'-'.$urlParameter).'\'');
+						if($data)
+							foreach(unserialize($data) as $keyParams => $params)
 							{
-								if(!isset($selectedFilters[$keyParams][$keyParam]))
-									$selectedFilters[$keyParams][$keyParam] = array();
-								$selectedFilters[$keyParams][$keyParam] = $param;
+								if(!isset($selectedFilters[$keyParams]))
+									$selectedFilters[$keyParams] = array();
+								foreach($params as $keyParam => $param)
+								{
+									if(!isset($selectedFilters[$keyParams][$keyParam]))
+										$selectedFilters[$keyParams][$keyParam] = array();
+									$selectedFilters[$keyParams][$keyParam] = $param;
+								}
 							}
-						}
+					}
 				}
 				return $selectedFilters;
 			}
@@ -1873,19 +1878,19 @@ class BlockLayered extends Module
 			{
 				if (is_array($value) AND array_key_exists('checked', $value ))
 				{
-					$paramGroupSelected .= '-'.Tools::link_rewrite($value['name']);
-					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = Tools::link_rewrite($value['name']);
+					$paramGroupSelected .= '-'.str_replace('-', '_', Tools::link_rewrite($value['name']));
+					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = str_replace('-', '_', Tools::link_rewrite($value['name']));
 					if (!isset($titleValues[$typeFilter['name']]))
 						$titleValues[$typeFilter['name']] = array();
 					$titleValues[$typeFilter['name']][] = $value['name'];
 				}
 				else 
-					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][] = array();
+					$paramGroupSelectedArray [str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))][] = array();
 			}
 			if (!empty($paramGroupSelected))
-				$optionCheckedArray[Tools::link_rewrite($typeFilter['name'])] = $paramGroupSelected ;
+				$optionCheckedArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = $paramGroupSelected ;
 			
-			$filterBlockList[] = Tools::link_rewrite($typeFilter['name']);
+			$filterBlockList[] = str_replace('-', '_', Tools::link_rewrite($typeFilter['name']));
 		}
 
 		$blackList = array('weight','price');
@@ -1896,10 +1901,10 @@ class BlockLayered extends Module
 				{
 					$optionCheckedCloneArray = $optionCheckedArray;
 					//if not filters checked, add parameter
-					if (!in_array(Tools::link_rewrite($values['name']), $paramGroupSelectedArray[Tools::link_rewrite($typeFilter['name'])]))
+					if (!in_array(str_replace('-', '_', Tools::link_rewrite($values['name'])), $paramGroupSelectedArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))]))
 					{
 						//filter checked
-						$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = '-'.Tools::link_rewrite($values['name']);
+						$optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
 					}
 					$parametersLink = '';
 					//create order order by filter position
