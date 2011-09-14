@@ -67,8 +67,8 @@ smartyRegisterFunction($smarty, 'modifier', 'secureReferrer', array('Tools', 'se
 
 smartyRegisterFunction($smarty, 'function', 't', 'smartyTruncate'); // unused
 smartyRegisterFunction($smarty, 'function', 'm', 'smartyMaxWords'); // unused
-smartyRegisterFunction($smarty, 'function', 'p', 'smartyShowObject'); // unused
-smartyRegisterFunction($smarty, 'function', 'd', 'smartyDieObject'); // unused
+smartyRegisterFunction($smarty, 'function', 'p', 'smartyShowObject'); // Debug only
+smartyRegisterFunction($smarty, 'function', 'd', 'smartyDieObject'); // Debug only
 smartyRegisterFunction($smarty, 'function', 'l', 'smartyTranslate');
 
 smartyRegisterFunction($smarty, 'function', 'dateFormat', array('Tools', 'dateFormat'));
@@ -142,13 +142,11 @@ function smartyTranslate($params, &$smarty)
 
 function smartyDieObject($params, &$smarty)
 {
-	Tools::displayAsDeprecated();
 	return Tools::d($params['var']);
 }
 
 function smartyShowObject($params, &$smarty)
 {
-	Tools::displayAsDeprecated();
 	return Tools::p($params['var']);
 }
 
