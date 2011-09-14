@@ -172,11 +172,14 @@ class CategoryCore extends ObjectModel
 			$this->position = self::getLastPosition((int)$this->id_parent);
 		$ret = parent::update($nullValues);
 		if (!isset($this->doNotRegenerateNTree) OR !$this->doNotRegenerateNTree)
+		{
 			self::regenerateEntireNtree();
+			$this->recalculateLevelDepth($this->id_category);
+		}
 		Module::hookExec('categoryUpdate', array('category' => $this));
 		return $ret;
 	}
-	
+
 	/**
 	 * @see ObjectModel::toggleStatus()
 	 */
@@ -310,7 +313,7 @@ class CategoryCore extends ObjectModel
 			self::regenerateEntireNtree();
 
 		Module::hookExec('categoryDeletion', array('category' => $this));
-		
+
 		/* Delete Categories in GroupReduction */
 		foreach ($toDelete AS $category)
 			if (GroupReduction::getGroupReductionByCategoryId((int)$category))
@@ -361,7 +364,7 @@ class CategoryCore extends ObjectModel
 		$categoriesArray = array();
 		foreach ($categories AS $category)
 			$categoriesArray[(int)$category['id_parent']]['subcategories'][(int)$category['id_category']] = 1;
-			$n = 1;
+		$n = 1;
 		self::_subTree($categoriesArray, 1, $n);
 	}
 
@@ -374,6 +377,28 @@ class CategoryCore extends ObjectModel
 		$right = (int)$n++;
 
 		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'category SET nleft = '.(int)$left.', nright = '.(int)$right.' WHERE id_category = '.(int)$id_category.' LIMIT 1');
+	}
+
+	/**
+	 * Re-calculate the levels of all childs
+	 */
+	public function recalculateLevelDepth($id_category)
+	{
+		/* Gets all childs */
+		$categories = Db::getInstance()->ExecuteS('SELECT id_category, id_parent, level_depth FROM '._DB_PREFIX_.'category
+												   WHERE id_parent = '.$id_category);
+		$level = Db::getInstance()->getRow('SELECT level_depth FROM '._DB_PREFIX_.'category
+											WHERE id_category = '.$id_category);
+
+		/* Update level of depth  for all childs */
+		foreach ($categories as $sub_category)
+		{
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'category
+										SET level_depth = '.($level['level_depth'] + 1).'
+										WHERE id_category = '.$sub_category['id_category']);
+			/* Recursive call */
+			$this->recalculateLevelDepth($sub_category['id_category']);
+		}
 	}
 
 	/**
@@ -1010,12 +1035,12 @@ class CategoryCore extends ObjectModel
 			return -1;
 		return $result[0]['nb_product_recursive'];
 	}
-	
+
 	/**
 	 *
 	 * @param Array $ids_category
 	 * @param int $id_lang
-	 * @return Array 
+	 * @return Array
 	 */
 	public static function getCategoryInformations($ids_category, $id_lang = null)
 	{
@@ -1024,22 +1049,22 @@ class CategoryCore extends ObjectModel
 			global $cookie;
 			$id_lang = $cookie->id_lang;
 		}
-		
+
 		if (!is_array($ids_category) || !sizeof($ids_category))
 			return;
-		
+
 		$categories = array();
 		$results = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`, cl.`id_lang` 
-			FROM `'._DB_PREFIX_.'category` c 
+			SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`, cl.`id_lang`
+			FROM `'._DB_PREFIX_.'category` c
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
 			WHERE cl.`id_lang` = '.(int)$id_lang.'
 			AND c.`id_category` IN ('.implode(',', $ids_category).')
 		');
-		
+
 		foreach($results as $category)
 			$categories[$category['id_category']] = $category;
-		
+
 		return $categories;
 	}
 }
