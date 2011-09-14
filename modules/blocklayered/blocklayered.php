@@ -1302,9 +1302,13 @@ class BlockLayered extends Module
 		if ($id_parent == 1)
 			return;
 		
-		if (strpos($_SERVER['SCRIPT_FILENAME'], 'blocklayered-ajax.php') === false)
+		if (strpos($_SERVER['SCRIPT_FILENAME'], 'blocklayered-ajax.php') === false || Tools::getValue('selected_filters') !== false)
 		{
-			$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', $_SERVER['REQUEST_URI']);
+			if(Tools::getValue('selected_filters'))
+				$url = Tools::getValue('selected_filters');
+			else
+				$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', $_SERVER['REQUEST_URI']);
+			
 			$urlAttributes = explode('/',$url);
 			array_shift($urlAttributes);
 			$selectedFilters = array('category' => array());
@@ -1912,11 +1916,10 @@ class BlockLayered extends Module
 					{
 						//update parameter filter checked before
 						if(array_key_exists(Tools::link_rewrite($typeFilter['name']), $optionCheckedArray))
-							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])].'-'.Tools::link_rewrite($values['name']);
+							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])].'-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
 						else 
-							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] =  '-'.Tools::link_rewrite($values['name']);
+							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] =  '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
 					}
-				//	str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))
 					$parameters = '';
 					foreach ($optionCheckedCloneArray as $keyGroup => $valueGroup)
 						$parameters .= '/'.str_replace('-', '_',$keyGroup).$valueGroup;
