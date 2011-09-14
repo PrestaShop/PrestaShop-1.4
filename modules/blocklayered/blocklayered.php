@@ -143,15 +143,10 @@ class BlockLayered extends Module
 		if ($truncate)
 			Db::getInstance()->execute('TRUNCATE '._DB_PREFIX_.'layered_friendly_url');
 		
-		if (!empty($idCategory))
-			$categorySubQuery = ' AND lc.id_category = '.(int)$idCategory;
-		else
-			$categorySubQuery = '';
-		
 		$attributeValues = array();
 		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT lc.*, id_lang, name, link_rewrite, cl.id_category
 		FROM '._DB_PREFIX_.'layered_category lc
-		INNER JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = lc.id_category AND lc.id_category <> 1'.$categorySubQuery.')
+		INNER JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = lc.id_category AND lc.id_category <> 1 )
 		ORDER BY position ASC');
 		if (!$filters)
 			return;
@@ -265,7 +260,7 @@ class BlockLayered extends Module
 			}
 		
 		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
-		if ($maxExecutionTime > 5)
+		if ($maxExecutionTime > 5 || $maxExecutionTime <= 0)
 			$maxExecutionTime = 5;
 		$startTime = microtime(true);
 		$memoryLimit = (Tools::getMemoryLimit() * 0.9);
@@ -545,7 +540,7 @@ class BlockLayered extends Module
 			WHERE `active` = 1 AND psi.id_product IS NULL');
 		
 		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
-		if ($maxExecutionTime > 5)
+		if ($maxExecutionTime > 5 || $maxExecutionTime <= 0)
 			$maxExecutionTime = 5;
 		
 		$startTime = microtime(true);
@@ -992,7 +987,7 @@ class BlockLayered extends Module
 							this.cursor = res.cursor;
 							var cursorObj = JSON.parse(this.cursor);
 							$(this).html(this.legend+\' (in progress, \'+(cursorObj.total / cursorObj.nb_posibilities * 100).toFixed(2) +\'%)\');
-							this.click();
+							$(this).click();
 						},
 						error: function(res)
 						{
@@ -1052,7 +1047,7 @@ class BlockLayered extends Module
 								}
 								this.cursor = parseInt(res.cursor);
 								$(this).html(this.legend+\' (in progress, \'+res.count+\' products to index)\');
-								this.click();
+								$(this).click();
 							},
 							error: function(res)
 							{
