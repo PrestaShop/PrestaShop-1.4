@@ -1882,8 +1882,17 @@ class BlockLayered extends Module
 			{
 				if (is_array($value) AND array_key_exists('checked', $value ))
 				{
+					/*
 					$paramGroupSelected .= '-'.str_replace('-', '_', Tools::link_rewrite($value['name']));
 					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = str_replace('-', '_', Tools::link_rewrite($value['name']));
+					*/
+					if(is_array($value) AND array_key_exists('checked',$value )){
+						$paramGroupSelected .= '-'.str_replace('-', '_', Tools::link_rewrite($value['name']));
+						$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = str_replace('-', '_', Tools::link_rewrite($value['name']));
+					}else 
+						$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][] = array();
+					
+					
 					if (!isset($titleValues[$typeFilter['name']]))
 						$titleValues[$typeFilter['name']] = array();
 					$titleValues[$typeFilter['name']][] = $value['name'];
@@ -1907,9 +1916,11 @@ class BlockLayered extends Module
 					//if not filters checked, add parameter
 					if (!in_array(str_replace('-', '_', Tools::link_rewrite($values['name'])), $paramGroupSelectedArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))]))
 					{
-						//filter checked
-						$optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
-					}
+						if(array_key_exists(Tools::link_rewrite($typeFilter['name']), $optionCheckedArray))
+							$optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = $optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))].'-'.Tools::link_rewrite($values['name']);
+						else 
+							$optionCheckedCloneArray[str_replace('-', '_', Tools::link_rewrite($typeFilter['name']))] = '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
+						}
 					$parametersLink = '';
 					//create order order by filter position
 					foreach ($filterBlockList as $keyFilter => $valueFilter)
