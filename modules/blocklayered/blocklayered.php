@@ -944,9 +944,6 @@ class BlockLayered extends Module
 			'.$this->l('A nightly rebuild is recommended.').'
 			<script type="text/javascript">
 				$(\'#url-indexer\').click(function() {
-					if (this.cursor == undefined)
-						this.cursor = {};
-					
 					if (this.legend == undefined)
 						this.legend = $(this).html();
 						
@@ -968,8 +965,17 @@ class BlockLayered extends Module
 						
 					this.restartAllowed = false;
 					
+					if (this.cursor == undefined)
+					{
+						var url  = this.href;
+						this.cursor = \'{}\';
+					}
+					else
+					{
+						var url  = this.href.replace(\'&truncate=1\',\'\');
+					}
 					$.ajax({
-						url: this.href+\'&ajax=1&cursor=\'+this.cursor,
+						url: url+\'&ajax=1&cursor=\'+this.cursor,
 						context: this,
 						dataType: \'json\',
 						success: function(res)
