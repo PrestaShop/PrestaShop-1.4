@@ -1387,7 +1387,7 @@ class BlockLayered extends Module
 		/* If the current category isn't defined of if it's homepage, we have nothing to display */
 		$id_parent = (int)Tools::getValue('id_category', Tools::getValue('id_category_layered', 1));
 		if ($id_parent == 1)
-			return;
+			return false;
 
 		$queryFilters = ' AND p.active = 1';
 		
@@ -1871,7 +1871,7 @@ class BlockLayered extends Module
 			}
 		}
 
-	//generate SEO link
+		//generate SEO link
 		$paramSelected = '';
 		$optionCheckedArray = array();
 		$paramGroupSelectedArray = array();
@@ -1888,7 +1888,7 @@ class BlockLayered extends Module
 			{
 				if (is_array($value) AND array_key_exists('checked',$value ))
 				{
-					$paramGroupSelected .= '-'.Tools::link_rewrite($value['name']);
+					$paramGroupSelected .= '-'.str_replace('-', '_', Tools::link_rewrite($value['name']));
 					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = Tools::link_rewrite($value['name']);
 				
 					if (!isset($titleValues[$typeFilter['name']]))
@@ -1922,6 +1922,13 @@ class BlockLayered extends Module
 						else 
 							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] =  '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
 					}
+					else
+					{
+						// Remove selected parameters
+						$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = str_replace('-'.str_replace('-', '_', Tools::link_rewrite($values['name'])), '', $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])]);
+						if(empty($optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])]))
+							unset($optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])]);
+					}
 					$parameters = '';
 					foreach ($optionCheckedCloneArray as $keyGroup => $valueGroup)
 						$parameters .= '/'.str_replace('-', '_',$keyGroup).$valueGroup;
@@ -1952,8 +1959,13 @@ class BlockLayered extends Module
 	public function generateFiltersBlock($selectedFilters)
 	{
 		global $smarty;
-		$smarty->assign($this->getFilterBlock($selectedFilters));
-		return $this->display(__FILE__, 'blocklayered.tpl');
+		if($filterBlock = $this->getFilterBlock($selectedFilters))
+		{
+			$smarty->assign($this->getFilterBlock($selectedFilters));
+			return $this->display(__FILE__, 'blocklayered.tpl');
+		}
+		else
+			return false;
 	}
 	
 	/*
