@@ -41,14 +41,14 @@ $(document).ready(function()
 			$('<input />').attr('type', 'hidden').attr('name', $(this).attr('name')).val($(this).attr('rel')).appendTo('#layered_form');
 		else
 			$('\'input[name='+$(this).attr('name')+']:hidden\'').remove();
-		window.location = '#'+$(this).next().children(1).attr('href').replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
+		window.location = '#'+$(this).next().children(1).attr('href').replace(/https?:\/\/.*\/\d+-[^\/]+|https?:\/\/.*\.php\?[^\/]*/, '');
 		reloadContent();
 	});
 	
 	// Click on checkbox
 	$('#layered_form input[type=checkbox]').live('click', function()
 	{
-		window.location = '#'+$(this).next().children(1).attr('href').replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
+		window.location = '#'+$(this).next().children(1).attr('href').replace(/https?:\/\/.*\/\d+-[^\/]+|https?:\/\/.*\.php\?[^\/]*/, '');
 		reloadContent();
 	});
 	
@@ -57,7 +57,7 @@ $(document).ready(function()
 		click: function() {
 			if($(this).parent().parent().find('input').attr('disabled') == '')
 			{
-				window.location = '#'+this.href.replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
+				window.location = '#'+this.href.replace(/https?:\/\/.*\/\d+-[^\/]+|https?:\/\/.*\.php\?[^\/]*/, '');
 				$(this).parent().parent().find('input').click();
 				reloadContent();  
 			}
