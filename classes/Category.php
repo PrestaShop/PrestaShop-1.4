@@ -380,8 +380,8 @@ class CategoryCore extends ObjectModel
 	}
 
 	/**
-	 * Re-calculate the levels of all childs
-	 */
+	  * Re-calculate the levels of all childs
+	  */
 	public function recalculateLevelDepth($id_category)
 	{
 		/* Gets all childs */
@@ -389,7 +389,6 @@ class CategoryCore extends ObjectModel
 												   WHERE id_parent = '.$id_category);
 		$level = Db::getInstance()->getRow('SELECT level_depth FROM '._DB_PREFIX_.'category
 											WHERE id_category = '.$id_category);
-
 		/* Update level of depth  for all childs */
 		foreach ($categories as $sub_category)
 		{
