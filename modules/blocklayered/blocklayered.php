@@ -1886,10 +1886,16 @@ class BlockLayered extends Module
 			$paramGroupSelected = '';
 			foreach ($typeFilter['values'] as $key => $value)
 			{
-				if(is_array($value) AND array_key_exists('checked',$value )){
+				if (is_array($value) AND array_key_exists('checked',$value ))
+				{
 					$paramGroupSelected .= '-'.Tools::link_rewrite($value['name']);
 					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][]  = Tools::link_rewrite($value['name']);
-				}else 
+				
+					if (!isset($titleValues[$typeFilter['name']]))
+						$titleValues[$typeFilter['name']] = array();
+					$titleValues[$typeFilter['name']][] = $value['name'];
+				}
+				else 
 					$paramGroupSelectedArray [Tools::link_rewrite($typeFilter['name'])][] = array();
 			}
 			if(!empty($paramGroupSelected))
@@ -1897,10 +1903,6 @@ class BlockLayered extends Module
 				$paramSelected .= '/'.Tools::link_rewrite($typeFilter['name']).$paramGroupSelected;
 				$optionCheckedArray[Tools::link_rewrite($typeFilter['name'])] = $paramGroupSelected;
 			}
-			
-			if (!isset($titleValues[$typeFilter['name']]))
-				$titleValues[$typeFilter['name']] = array();
-			$titleValues[$typeFilter['name']][] = $value['name'];
 		}
 
 		$blackList = array('weight','price');
