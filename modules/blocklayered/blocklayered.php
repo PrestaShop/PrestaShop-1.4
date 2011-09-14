@@ -65,6 +65,9 @@ class BlockLayered extends Module
 		self::_installPriceIndexTable();
 		self::_installFriendlyUrlTable();
 		self::_installIndexableAttributeTable();
+		
+		$this->indexUrl();
+		self::fullIndexProcess();
 
 		return $result;
 	}
@@ -172,7 +175,7 @@ class BlockLayered extends Module
 						if (!isset($attributeValues[$attribute['id_lang']][$filter['id_category']]['c'.$attribute['id_name']]))
 							$attributeValues[$attribute['id_lang']][$filter['id_category']]['c'.$attribute['id_name']] = array();
 						$attributeValues[$attribute['id_lang']][$filter['id_category']]['c'.$attribute['id_name']][] = array('name' => $attribute['name'],
-						'id_name' => 'c'.$attribute['id_name'], 'value' => $attribute['value'], 'id_value' => $attribute['id_value'].'_'.$attribute['id_name'],
+						'id_name' => 'c'.$attribute['id_name'], 'value' => $attribute['value'], 'id_value' => $attribute['id_name'].'_'.$attribute['id_value'],
 						'id_id_value' => $attribute['id_value'], 'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
 					}
 					break;
@@ -889,6 +892,7 @@ class BlockLayered extends Module
 						success: function(res)
 						{
 							this.running = false;
+							this.restartAllowed = true;
 							this.cursor = 0;
 							$(\'#indexing-warning\').hide();
 							$(this).html(this.legend);
