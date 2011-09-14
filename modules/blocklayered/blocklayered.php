@@ -138,7 +138,7 @@ class BlockLayered extends Module
 	/*
 	 * Url indexation
 	 */
-	public function indexUrl($idCategory = null, $truncate = true)
+	public function indexUrl($cursor = array(), $ajax = false, $truncate = true)
 	{
 		if ($truncate)
 			Db::getInstance()->execute('TRUNCATE '._DB_PREFIX_.'layered_friendly_url');
@@ -218,9 +218,9 @@ class BlockLayered extends Module
 							$attributeValues[$category['id_lang']] = array();
 						if (!isset($attributeValues[$category['id_lang']][$filter['id_category']]))
 							$attributeValues[$category['id_lang']][$filter['id_category']] = array();
-						if (!isset($attributeValues[$category['id_lang']][$filter['id_category']]['cat'.$category['id_category']]))
-							$attributeValues[$category['id_lang']][$filter['id_category']]['cat'.$category['id_category']] = array();
-						$attributeValues[$category['id_lang']][$filter['id_category']]['cat'.$category['id_category']][] = array('name' => $this->l('Categories'),
+						if (!isset($attributeValues[$category['id_lang']][$filter['id_category']]['category']))
+							$attributeValues[$category['id_lang']][$filter['id_category']]['category'] = array();
+						$attributeValues[$category['id_lang']][$filter['id_category']]['category'][] = array('name' => $this->l('Categories'),
 						'id_name' => null, 'value' => $category['name'], 'id_value' => $category['id_category'],
 						'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
 					}
@@ -243,21 +243,76 @@ class BlockLayered extends Module
 						$attributeValues[$manufacturer['id_lang']][$filter['id_category']]['manufacturer'][] = array('name' => $this->translateWord('Manufacturer', $manufacturer['id_lang']),
 						'id_name' => null, 'value' => $manufacturer['name'], 'id_value' => $manufacturer['id_manufacturer'],
 						'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
-
 					}
 					break;
 				
-				case 'avaibility':
-					// @TODO
+				case 'quantity':
+					foreach (array (0 => $this->translateWord('Not available',(int)$filter['id_lang']), 1 => $this->translateWord('In stock', (int)$filter['id_lang']))
+					as $key => $quantity)
+						$attributeValues[$filter['id_lang']][$filter['id_category']]['quantity'][] = array('name' => $this->translateWord('Availability', (int)$filter['id_lang']),
+						'id_name' => null, 'value' => $quantity, 'id_value' => $key, 'id_id_value' => 0,
+						'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
+					break;
+				
+				case 'condition':
+					foreach (array('new' => $this->translateWord('New', (int)$filter['id_lang']), 'used' => $this->translateWord('Used', (int)$filter['id_lang']),
+					'refurbished' => $this->translateWord('Refurbished', (int)$filter['id_lang']))
+					as $key => $condition)
+						$attributeValues[$filter['id_lang']][$filter['id_category']]['condition'][] = array('name' => $this->translateWord('Condition', (int)$filter['id_lang']),
+						'id_name' => null, 'value' => $condition, 'id_value' => $key,
+						'category_name' => $filter['link_rewrite'], 'type' => $filter['type']);
 					break;
 			}
-
-		// Foreach langs
-		foreach ($attributeValues as $id_lang => $tmp1)
+		
+		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
+		if ($maxExecutionTime > 5)
+			$maxExecutionTime = 5;
+		$startTime = microtime(true);
+		$memoryLimit = (Tools::getMemoryLimit() * 0.9);
+		
+		if (empty($cursor))
 		{
-			// Foreach categories
-			foreach ($tmp1 as $id_category => $tmp2)
+			$cursor = array(
+				'attribute_values' => 0,
+				'tmp1' => 0,
+				'possibility' => 0,
+				'total' => 0
+			);
+			
+			if ($ajax)
 			{
+				// Calculation, to eval progression
+				$nbPosibilities = 0;
+				foreach ($attributeValues as $idLang => $tmp1)
+					foreach ($tmp1 as $key => $tmp2)
+					{
+						$nbPosibilitiesTmp = 1;
+						foreach ($tmp2 as $name)
+						{
+							$count = count($name)+1;
+							$nbPosibilitiesTmp *= $count;
+						}
+						$nbPosibilities += $nbPosibilitiesTmp;
+					}
+				$cursor['nb_posibilities'] = $nbPosibilities;
+			}
+		}
+		
+		
+		// Foreach langs
+		$attributeValuesKeys = array_keys($attributeValues);
+		for (;$cursor['attribute_values'] < count($attributeValuesKeys); $cursor['attribute_values']++)
+		{
+			$id_lang = $attributeValuesKeys[$cursor['attribute_values']];
+			$tmp1 = &$attributeValues[$id_lang];
+			
+			// Foreach categories
+			$tmp1Keys = array_keys($tmp1);
+			for(; $cursor['tmp1'] < count($tmp1Keys); $cursor['tmp1']++)
+			{
+				$id_category = $tmp1Keys[$cursor['tmp1']];
+				$tmp2 = &$tmp1[$id_category];
+				
 				$cursors = array_fill(0, count($tmp2), 0);
 				$limits = array();
 				$nbName = count($tmp2);
@@ -273,35 +328,43 @@ class BlockLayered extends Module
 				}
 				
 				// Loop all url posibilities
-				for ($i = 1; $i < $nbPosibilities; $i++)
+				for (; $cursor['possibility'] < $nbPosibilities; $cursor['possibility']++)
 				{
+					if ($memoryLimit < memory_get_peak_usage() OR (microtime(true) - $startTime) > $maxExecutionTime)
+					{
+						if ($ajax)
+							return Tools::jsonEncode(array('cursor' => Tools::jsonEncode($cursor)));
+						Tools::file_get_contents(Tools::getProtocol().Tools::getHttpHost().'/modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&cursor='.Tools::jsonEncode($cursor));
+						return 1;
+					}
+					
+					$cursor['total']++;
 					// generate all parameters posibilities
 					$a = 1;
-					foreach ($cursors as $position => $cursor)
+					foreach ($cursors as $position => $cursorP)
 					{
 						// Get all possible combination (one by group)
 						// 0 means no combinations selected in the group
-						$cursors[$position] = (($i / ($a)) % $limits[$position]);
+						$cursors[$position] = (($cursor['possibility'] / ($a)) % $limits[$position]);
 						$a *= $limits[$position];
 					}
-					
 					$link = '';
 					$selectedFilters = array('category' => array());
 					
 					// Generate url with selected filters
-					foreach ($cursors as $position => $cursor)
+					foreach ($cursors as $position => $cursorP)
 					{
-						if ($cursor != 0)
+						if ($cursorP != 0)
 						{
-							$link .= '/'.Tools::link_rewrite($tmp2[$position][$cursor-1]['name'].'-'.$tmp2[$position][$cursor-1]['value']);
-							if (!isset($selectedFilters[$tmp2[$position][$cursor-1]['type']]))
-								$selectedFilters[$tmp2[$position][$cursor-1]['type']] = array();
-							if (!isset($tmp2[$position][$cursor-1]['id_id_value']))
-								$tmp2[$position][$cursor-1]['id_id_value'] = $tmp2[$position][$cursor-1]['id_value'];
-							$selectedFilters[$tmp2[$position][$cursor-1]['type']][$tmp2[$position][$cursor-1]['id_id_value']] = $tmp2[$position][$cursor-1]['id_value'];
+							$link .= '/'.Tools::link_rewrite($tmp2[$position][$cursorP-1]['name'].'-'.$tmp2[$position][$cursorP-1]['value']);
+							if (!isset($selectedFilters[$tmp2[$position][$cursorP-1]['type']]))
+								$selectedFilters[$tmp2[$position][$cursorP-1]['type']] = array();
+							if (!isset($tmp2[$position][$cursorP-1]['id_id_value']))
+								$tmp2[$position][$cursorP-1]['id_id_value'] = $tmp2[$position][$cursorP-1]['id_value'];
+							$selectedFilters[$tmp2[$position][$cursorP-1]['type']][$tmp2[$position][$cursorP-1]['id_id_value']] = $tmp2[$position][$cursorP-1]['id_value'];
 						}
 					}
-					
+
 					$urlKey = md5($link);
 					$idLayeredFriendlyUrl = Db::getInstance()->getValue('SELECT id_layered_friendly_url FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `id_lang` = '.$id_lang.' AND `url_key` = \''.$urlKey.'\'');
 					if ($idLayeredFriendlyUrl == false)
@@ -310,9 +373,14 @@ class BlockLayered extends Module
 						$idLayeredFriendlyUrl = Db::getInstance()->Insert_ID();
 					}
 				}
+				$cursor['possibility'] = 0;
 			}
+			$cursor['tmp1'] = 0;
 		}
-		return 1;
+		if ($ajax)
+			return '{"result": 1}';
+		else
+			return 1;
 	}
 	
 	public function translateWord($string, $id_lang ) 
@@ -322,7 +390,10 @@ class BlockLayered extends Module
 
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
 
-		if(!array_key_exists($id_lang,$_MODULES)){
+		if (!array_key_exists($id_lang,$_MODULES))
+		{
+			if (!file_exists($file))
+				return $string;
 			include $file;
 			$_MODULES[$id_lang] = $_MODULE;
 		}
@@ -670,12 +741,12 @@ class BlockLayered extends Module
 		$metaComplement = ucfirst(strtolower($title));
 		$metaKeyWordsComplement = str_replace(' – ', ', ', strtolower($title));
 		
-		if(!empty($metaComplement))
+		if (!empty($metaComplement))
 		{
 			$smarty->assign('meta_title', str_replace(' - '.Configuration::get('PS_SHOP_NAME'), ' – '.$metaComplement.' - '.Configuration::get('PS_SHOP_NAME'), $categoryMetas['meta_title']));
 			$smarty->assign('meta_description', rtrim($categoryTitle.' – '.$metaComplement.' – '.$categoryMetas['meta_description'], ' – '));
 		}
-		if(!empty($metaKeyWordsComplement))
+		if (!empty($metaKeyWordsComplement))
 			$smarty->assign('meta_keywords', rtrim($categoryTitle.', '.$metaKeyWordsComplement.', '.$categoryMetas['meta_keywords'], ', '));
 		
 		Tools::addJS(($this->_path).'blocklayered.js');
@@ -879,58 +950,62 @@ class BlockLayered extends Module
 			<script type="text/javascript">
 				$(\'#url-indexer\').click(function() {
 					if (this.cursor == undefined)
-						this.cursor = 0;
-						
-					if (this.legend == undefined)
-							this.legend = $(this).html();
+						this.cursor = {};
 					
-					if (this.running == undefined)
-							this.running = false;
+					if (this.legend == undefined)
+						this.legend = $(this).html();
 						
+					if (this.running == undefined)
+						this.running = false;
+					
 					if (this.running == true)
 						return false;
-						
+					
+					$(\'.ajax-message\').hide();
+					
 					this.running = true;
 					
-					this.categories = '.Tools::jsonEncode($categoryList).';
+					if (typeof(this.restartAllowed) == \'undefined\' || this.restartAllowed)
+					{
+						$(this).html(this.legend+\' (in progress)\');
+						$(\'#indexing-warning\').show();
+					}
+						
+					this.restartAllowed = false;
 					
-					$(this).html(this.legend+\' (in progress, 0/\'+this.categories.length+\')\');
-					$(\'#indexing-warning\').show();
-					
-					
-					var first = true;
-					var it = this;
-					$(this.categories).each(function(cursor, idCategory) {
-						it.cursor = cursor;
-						if (cursor == 0) {
-							var truncate = 1;
-						}
-						else {
-							var truncate = 0;
-						}
-						it.idCategory = idCategory;
-						$.ajax({
-							url: it.href.replace(\'&truncate=1\',\'\')+\'&id_category=\'+it.idCategory+\'&truncate=\'+truncate,
-							context: it,
-							dataType: \'json\',
-							async: false,
-							success: function(res) {
-								$(this).html(this.legend+\' (in progress, \'+(parseInt(it.cursor)+1)+\'/\'+it.categories.length+\')\');
-							},
-							error: function(res) {
-								alert(\'Indexation failed\');
+					$.ajax({
+						url: this.href+\'&ajax=1&cursor=\'+this.cursor,
+						context: this,
+						dataType: \'json\',
+						success: function(res)
+						{
+							this.running = false;
+							if (res.result)
+							{
+								this.cursor = 0;
 								$(\'#indexing-warning\').hide();
-									$(it).html(this.legend+\' (failed)\');
-								it.cursor = 0;
+								$(this).html(this.legend);
+								$(\'#ajax-message-ok span\').html(\''.$this->l('Url indexation finished').'\');
+								$(\'#ajax-message-ok\').show();
+								return;
 							}
-						});
+							this.cursor = res.cursor;
+							var cursorObj = JSON.parse(this.cursor);
+							$(this).html(this.legend+\' (in progress, \'+(cursorObj.total / cursorObj.nb_posibilities * 100).toFixed(2) +\'%)\');
+							this.click();
+						},
+						error: function(res)
+						{
+							this.restartAllowed = true;
+							$(\'#indexing-warning\').hide();
+							$(\'#ajax-message-ko span\').html(\''.$this->l('Url indexation failed').'\');
+							$(\'#ajax-message-ko\').show();
+							$(this).html(this.legend);
+							
+							this.cursor = 0;
+							this.running = false;
+						}
 					});
-					
-					
-					$(this).html(this.legend);
-					$(\'#indexing-warning\').hide();
-					this.running = false;
-					
 					return false;
 				});
 				$(\'.ajaxcall\').each(function(it, elm) {
