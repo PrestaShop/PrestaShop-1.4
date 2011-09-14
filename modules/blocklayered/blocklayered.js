@@ -54,10 +54,14 @@ $(document).ready(function()
 	
 	// Click on label
 	$("label a").live({
-		 click: function() {
-			window.location = '#'+this.href.replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
-			$(this).parent().parent().find('input').click();
-			reloadContent();  
+		click: function() {
+			if($(this).parent().parent().find('input').attr('disabled') == '')
+			{
+				window.location = '#'+this.href.replace(/https?:\/\/.*\/\d+-[^\/]+/, '');
+				$(this).parent().parent().find('input').click();
+				reloadContent();  
+			}
+				
 			return false;
 		}
 	});
