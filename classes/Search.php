@@ -172,6 +172,7 @@ class SearchCore
 			{
 				$word = str_replace('%', '\\%', $word);
 				$word = str_replace('_', '\\_', $word);
+				
 				$intersectArray[] = 'SELECT id_product
 					FROM '._DB_PREFIX_.'search_word sw
 					LEFT JOIN '._DB_PREFIX_.'search_index si ON sw.id_word = si.id_word
@@ -428,6 +429,9 @@ class SearchCore
 						if (!empty($word))
 						{
 							$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
+							// Remove accents
+							$word = Tools::replaceAccentedChars($word);
+							
 							if (!isset($pArray[$word]))
 								$pArray[$word] = 0;
 							$pArray[$word] += $weightArray[$key];
@@ -441,22 +445,26 @@ class SearchCore
 				foreach ($pArray AS $word => $weight)
 					$list .= '\''.$word.'\',';
 				$list = rtrim($list, ',');
-
+				
 				$queryArray = array();
 				$queryArray2 = array();
 				foreach ($pArray AS $word => $weight)
 					if ($weight AND !isset($wordIdsByWord['_'.$word]))
 					{
-						$queryArray[] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
+						$queryArray[$word] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
 						$queryArray2[] = '\''.pSQL($word).'\'';
 						$wordIdsByWord[$product['id_lang']]['_'.$word] = 0;
 					}
-				
-				$existingWords = $db->ExecuteS('SELECT word FROM '._DB_PREFIX_.'search_word WHERE word IN ('.implode(',', $queryArray2).') GROUP BY word');
+
+				$existingWords = $db->ExecuteS('
+					SELECT word FROM '._DB_PREFIX_.'search_word 
+					WHERE word IN ('.implode(',', $queryArray2).')
+					AND id_lang = '.(int)$product['id_lang'].' GROUP BY word');
+
 				if($existingWords)
 					foreach($existingWords as $data)
-						unset($queryArray[$data['word']]);
-				
+						unset($queryArray[Tools::replaceAccentedChars($data['word'])]);
+
 				if (count($queryArray))
 				{
 					// The words are inserted...
@@ -464,7 +472,6 @@ class SearchCore
 					INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word)
 					VALUES '.implode(',',$queryArray));
 				}
-				
 				if (count($queryArray2))
 				{
 					// ...then their IDs are retrieved and added to the cache
@@ -474,8 +481,9 @@ class SearchCore
 					WHERE sw.word IN ('.implode(',', $queryArray2).')
 					AND sw.id_lang = '.(int)$product['id_lang'].'
 					LIMIT '.count($queryArray2));
+					// replace accents from the retrieved words so that words without accents or with differents accents can still be linked
 					foreach ($addedWords AS $wordId)
-						$wordIdsByWord[$product['id_lang']]['_'.$wordId['word']] = (int)$wordId['id_word'];
+						$wordIdsByWord[$product['id_lang']]['_'.Tools::replaceAccentedChars($wordId['word'])] = (int)$wordId['id_word'];
 				}
 			}
 
@@ -493,7 +501,7 @@ class SearchCore
 				if (++$countWords % 200 == 0)
 					Search::saveIndex($queryArray3);
 			}
-			
+
 			if (!in_array($product['id_product'], $productsArray))
 				$productsArray[] = (int)$product['id_product'];
 
