@@ -1900,7 +1900,7 @@ class BlockLayered extends Module
 			}
 			if(!empty($paramGroupSelected))
 			{
-				$paramSelected .= '/'.Tools::link_rewrite($typeFilter['name']).$paramGroupSelected;
+				$paramSelected .= '/'.str_replace('-', '_', Tools::link_rewrite($typeFilter['name'])).$paramGroupSelected;
 				$optionCheckedArray[Tools::link_rewrite($typeFilter['name'])] = $paramGroupSelected;
 			}
 		}
@@ -1951,7 +1951,7 @@ class BlockLayered extends Module
 		
 		$cache = array('layered_show_qties' => (int)Configuration::get('PS_LAYERED_SHOW_QTIES'), 'id_category_layered' => (int)$id_parent,
 		'selected_filters' => $selectedFilters, 'n_filters' => (int)$nFilters, 'nbr_filterBlocks' => sizeof($filterBlocks), 'filters' => $filterBlocks,
-		'title_values' => $titleValues);
+		'title_values' => $titleValues, 'current_friendly_url' => htmlentities($paramSelected));
 		
 		return $cache;
 	}

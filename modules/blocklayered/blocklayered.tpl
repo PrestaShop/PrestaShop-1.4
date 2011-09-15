@@ -26,6 +26,9 @@
 
 <!-- Block layered navigation module -->
 {if $nbr_filterBlocks != 0}
+<script type="text/javascript">
+current_friendly_url = '#{$current_friendly_url}';
+</script>
 <div id="layered_block_left" class="block">
 	<h4>{l s='Catalog' mod='blocklayered'}</h4>
 	<div class="block_content">
