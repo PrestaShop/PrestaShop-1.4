@@ -1912,15 +1912,18 @@ class BlockLayered extends Module
 			{	
 				foreach ($typeFilter['values'] as $key => $values)
 				{
+					$nofollow = false;
 					$optionCheckedCloneArray = $optionCheckedArray;
 					//if not filters checked, add parameter
 					if(!in_array(Tools::link_rewrite($values['name']), $paramGroupSelectedArray[Tools::link_rewrite($typeFilter['name'])]))
 					{
 						//update parameter filter checked before
-						if(array_key_exists(Tools::link_rewrite($typeFilter['name']), $optionCheckedArray))
+						if(array_key_exists(Tools::link_rewrite($typeFilter['name']), $optionCheckedArray)) {
 							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])].'-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
+							$nofollow = true;
+						}
 						else 
-							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] =  '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
+							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
 					}
 					else
 					{
@@ -1934,6 +1937,7 @@ class BlockLayered extends Module
 						$parameters .= '/'.str_replace('-', '_',$keyGroup).$valueGroup;
 					//write link
 					$typeFilter['values'][$key]['link'] =  $linkBase.$parameters;
+					$typeFilter['values'][$key]['rel'] = ($nofollow)?'nofollow':'';
 				}
 			}
 		}
@@ -1951,7 +1955,7 @@ class BlockLayered extends Module
 		
 		$cache = array('layered_show_qties' => (int)Configuration::get('PS_LAYERED_SHOW_QTIES'), 'id_category_layered' => (int)$id_parent,
 		'selected_filters' => $selectedFilters, 'n_filters' => (int)$nFilters, 'nbr_filterBlocks' => sizeof($filterBlocks), 'filters' => $filterBlocks,
-		'title_values' => $titleValues, 'current_friendly_url' => htmlentities($paramSelected));
+		'title_values' => $titleValues, 'current_friendly_url' => htmlentities($paramSelected), 'nofollow' => $nofollow);
 		
 		return $cache;
 	}
