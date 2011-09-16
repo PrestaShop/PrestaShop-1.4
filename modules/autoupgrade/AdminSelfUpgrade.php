@@ -1620,7 +1620,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 //			echo '<input class="button" type="submit" name="sumbitUpdateVersion" value="'.$this->l('Backup Database, backup files and update right now and in one click !').'"/>';
 //			echo '<input class="button" type="submit" id="refreshCurrent" value="'.$this->l("refresh update dir / current").'"/>';
 			echo '<br/>';
-		if ($this->upgrader->needUpgrade)
+		if ($this->upgrader->need_upgrade)
 		{
 			if($this->configOk())
 			{
