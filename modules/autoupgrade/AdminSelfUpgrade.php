@@ -459,15 +459,29 @@ $this->standalone = true;
 	}
 	public function ajaxProcessCheckFilesVersion()
 	{
-		if ($testOrigCore = $this->upgrader->isAuthenticPrestashopVersion() !== false)
+		if ($this->upgrader->isAuthenticPrestashopVersion() !== false)
+		{
 			$this->nextParams['status'] = 'ok';
+			$testOrigCore = true;
+		}
 		else
-			$this->nextParams['status'] = 'nok';
+		{
+			$testOrigCore = false;
+			$this->nextParams['status'] = 'warn';
+		}
 		
 		$changedFileList = $this->upgrader->getChangedFilesList();
-
-	//		echo '<img src="'.$originalCore.'" /> '.
-		$this->nextParams['msg'] = ($testOrigCore?$this->l('Core files are ok'):sprintf($this->l('%s core files have been modified'), sizeof($changedFileList)));
+		if ($changedFileList === false)
+		{
+			$changedFileList = array();
+			$this->nextParams['msg'] = $this->l('Unable to check files');
+			$this->nextParams['status'] = 'error';
+		}
+		else
+		{
+				//		echo '<img src="'.$originalCore.'" /> '.
+			$this->nextParams['msg'] = ($testOrigCore?$this->l('Core files are ok'):sprintf($this->l('%s core files have been modified'), sizeof($changedFileList)));
+		}
 		$this->nextParams['result'] = $changedFileList;
 	}
 	public function ajaxProcessUpgradeNow()
@@ -2129,17 +2143,21 @@ $js.= '$(document).ready(function(){
 				res = $.parseJSON(res);
 				answer = res.nextParams;
 				$("#checkPrestaShopFilesVersion").html("<span>"+answer.msg+"</span> ");
-				$("#checkPrestaShopFilesVersion").append("<a id=\"toggleChangedList\" class=\"button\" href=\"\">'.$this->l('See or hide the list').'</a><br/>");
-
-				$("#checkPrestaShopFilesVersion").append("<div id=\"changedList\" style=\"display:none \">");
+				if (answer.status == "error")
+					$("#checkPrestaShopFilesVersion").prepend("<img src=\"../img/admin/warning.gif\" /> ");
+				else
+				{
+					$("#checkPrestaShopFilesVersion").prepend(answer.status);
+					$("#checkPrestaShopFilesVersion").append("<a id=\"toggleChangedList\" class=\"button\" href=\"\">'.$this->l('See or hide the list').'</a><br/>");
+					$("#checkPrestaShopFilesVersion").append("<div id=\"changedList\" style=\"display:none \">");
 				
-				$("#changedList").html("<ul>");
-				$(answer.result).each(function(k,v){
-					$("#changedList ul").append("<li>"+v+"</li>");
-				});
+					$("#changedList").html("<ul>");
+					$(answer.result).each(function(k,v){
+						$("#changedList ul").append("<li>"+v+"</li>");
+					});
 
-$("#toggleChangedList").bind("click",function(e){e.preventDefault();$("#changedList").toggle();});
-
+					$("#toggleChangedList").bind("click",function(e){e.preventDefault();$("#changedList").toggle();});
+				}
 			}
 			,
 			error: function(res,textStatus,jqXHR)
