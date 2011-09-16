@@ -27,23 +27,23 @@
 
 class SpecificPriceCore extends ObjectModel
 {
-	public	$id_product;
-	public	$id_shop;
-	public	$id_currency;
-	public	$id_country;
-	public	$id_group;
-	public	$price;
-	public	$from_quantity;
-	public	$reduction;
-	public	$reduction_type;
-	public	$from;
-	public	$to;
+	public $id_product;
+	public $id_shop;
+	public $id_currency;
+	public $id_country;
+	public $id_group;
+	public $price;
+	public $from_quantity;
+	public $reduction;
+	public $reduction_type;
+	public $from;
+	public $to;
 
- 	protected 	$fieldsRequired = array('id_product', 'id_shop', 'id_currency', 'id_country', 'id_group', 'price', 'from_quantity', 'reduction', 'reduction_type', 'from', 'to');
- 	protected 	$fieldsValidate = array('id_product' => 'isUnsignedId', 'id_shop' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_group' => 'isUnsignedId', 'price' => 'isPrice', 'from_quantity' => 'isUnsignedInt', 'reduction' => 'isPrice', 'reduction_type' => 'isReductionType', 'from' => 'isDateFormat', 'to' => 'isDateFormat');
+ 	protected $fieldsRequired = array('id_product', 'id_shop', 'id_currency', 'id_country', 'id_group', 'price', 'from_quantity', 'reduction', 'reduction_type', 'from', 'to');
+ 	protected $fieldsValidate = array('id_product' => 'isUnsignedId', 'id_shop' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_group' => 'isUnsignedId', 'price' => 'isPrice', 'from_quantity' => 'isUnsignedInt', 'reduction' => 'isPrice', 'reduction_type' => 'isReductionType', 'from' => 'isDateFormat', 'to' => 'isDateFormat');
 
-	protected 	$table = 'specific_price';
-	protected 	$identifier = 'id_specific_price';
+	protected $table = 'specific_price';
+	protected $identifier = 'id_specific_price';
 
 	protected static $_specificPriceCache = array();
 	protected static $_cache_priorities = array();
@@ -51,14 +51,14 @@ class SpecificPriceCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_product'] = (int)($this->id_product);
-		$fields['id_shop'] = (int)($this->id_shop);
-		$fields['id_currency'] = (int)($this->id_currency);
-		$fields['id_country'] = (int)($this->id_country);
-		$fields['id_group'] = (int)($this->id_group);
-		$fields['price'] = (float)($this->price);
-		$fields['from_quantity'] = (int)($this->from_quantity);
-		$fields['reduction'] = (float)($this->reduction);
+		$fields['id_product'] = (int)$this->id_product;
+		$fields['id_shop'] = (int)$this->id_shop;
+		$fields['id_currency'] = (int)$this->id_currency;
+		$fields['id_country'] = (int)$this->id_country;
+		$fields['id_group'] = (int)$this->id_group;
+		$fields['price'] = (float)$this->price;
+		$fields['from_quantity'] = (int)$this->from_quantity;
+		$fields['reduction'] = (float)$this->reduction;
 		$fields['reduction_type'] = pSQL($this->reduction_type);
 		$fields['from'] = pSQL($this->from);
 		$fields['to'] = pSQL($this->to);
@@ -68,7 +68,7 @@ class SpecificPriceCore extends ObjectModel
 	public static function getByProductId($id_product)
 	{
 		return Db::getInstance()->ExecuteS('
-			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product)
+			SELECT * FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product
 		);
 	}
 
@@ -88,7 +88,7 @@ class SpecificPriceCore extends ObjectModel
        $select .= ' IF (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`, '.pow(2, 0).', 0) + ';
 
 	    $priority = SpecificPrice::getPriority($id_product);
-	    foreach (array_reverse($priority) AS $k => $field)
+	    foreach (array_reverse($priority) as $k => $field)
            $select .= ' IF (`'.$field.'` = '.(int)(${$field}).', '.pow(2, $k + 1).', 0) + ';
 
 	    return rtrim($select, ' +').') AS `score`';
@@ -97,8 +97,8 @@ class SpecificPriceCore extends ObjectModel
     public static function getPriority($id_product)
     {
 
-    	if (!isset(self::$_cache_priorities[(int)$id_product]))
-    	{
+		if (!isset(self::$_cache_priorities[(int)$id_product]))
+		{
 		   self::$_cache_priorities[(int)$id_product] = Db::getInstance()->getValue('
 		   SELECT `priority`
 			FROM `'._DB_PREFIX_.'specific_price_priority`
@@ -139,7 +139,7 @@ class SpecificPriceCore extends ObjectModel
 					AND
 					(`to` = \'0000-00-00 00:00:00\' OR \''.$now.'\' <= `to`)
 				)
-				ORDER BY `from_quantity` DESC, `score` DESC, `from_quantity` DESC');
+				ORDER BY `from_quantity` DESC, `score` DESC');
 		}
 		return self::$_specificPriceCache[$key];
 	}
@@ -182,11 +182,11 @@ class SpecificPriceCore extends ObjectModel
 			SELECT *,
 					'.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE   `id_product` IN(0, '.(int)($id_product).') AND
-					`id_shop` IN(0, '.(int)($id_shop).') AND
-					`id_currency` IN(0, '.(int)($id_currency).') AND
-					`id_country` IN(0, '.(int)($id_country).') AND
-					`id_group` IN(0, '.(int)($id_group).')
+			WHERE   `id_product` IN(0, '.(int)$id_product.') AND
+					`id_shop` IN(0, '.(int)$id_shop.') AND
+					`id_currency` IN(0, '.(int)$id_currency.') AND
+					`id_country` IN(0, '.(int)$id_country.') AND
+					`id_group` IN(0, '.(int)$id_group.')
 					AND
 					(
 						(`from` = \'0000-00-00 00:00:00\' OR \''.$now.'\' >= `from`)
@@ -197,16 +197,16 @@ class SpecificPriceCore extends ObjectModel
 		');
 
 		$targeted_prices = array();
-		$last_quantity = NULL; 
+		$last_quantity = null;
 
-		foreach($res as $specific_price)
+		foreach ($res as $specific_price)
 		{
 			if (!isset($last_quantity))
-				 $last_quantity = $specific_price['from_quantity']; 
+				 $last_quantity = $specific_price['from_quantity'];
 			else if ($last_quantity == $specific_price['from_quantity'])
-				break; 
+				break;
 
-			$last_quantity = $specific_price['from_quantity']; 
+			$last_quantity = $specific_price['from_quantity'];
 			if ($specific_price['from_quantity'] > 1)
 				$targeted_prices[] = $specific_price;
 		}
@@ -221,19 +221,19 @@ class SpecificPriceCore extends ObjectModel
 			SELECT *,
 					'.self::_getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group).'
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_product` IN(0, '.(int)($id_product).') AND
-					`id_shop` IN(0, '.(int)($id_shop).') AND
-					`id_currency` IN(0, '.(int)($id_currency).') AND
-					`id_country` IN(0, '.(int)($id_country).') AND
-					`id_group` IN(0, '.(int)($id_group).') AND
-					`from_quantity` >= '.(int)($quantity).'
+			WHERE	`id_product` IN(0, '.(int)$id_product.') AND
+					`id_shop` IN(0, '.(int)$id_shop.') AND
+					`id_currency` IN(0, '.(int)$id_currency.') AND
+					`id_country` IN(0, '.(int)$id_country.') AND
+					`id_group` IN(0, '.(int)$id_group.') AND
+					`from_quantity` >= '.(int)$quantity.'
 					AND
 					(
 						(`from` = \'0000-00-00 00:00:00\' OR \''.$now.'\' >= `from`)
 						AND
 						(`to` = \'0000-00-00 00:00:00\' OR \''.$now.'\' <= `to`)
 					)
-					ORDER BY `score` DESC, `from_quantity` DESC
+					ORDER BY `from_quantity` DESC, `score` DESC
 		');
 	}
 
@@ -242,10 +242,10 @@ class SpecificPriceCore extends ObjectModel
 		$resource = Db::getInstance()->ExecuteS('
 			SELECT `id_product`
 			FROM `'._DB_PREFIX_.'specific_price`
-			WHERE	`id_shop` IN(0, '.(int)($id_shop).') AND
-					`id_currency` IN(0, '.(int)($id_currency).') AND
-					`id_country` IN(0, '.(int)($id_country).') AND
-					`id_group` IN(0, '.(int)($id_group).') AND
+			WHERE	`id_shop` IN(0, '.(int)$id_shop.') AND
+					`id_currency` IN(0, '.(int)$id_currency.') AND
+					`id_country` IN(0, '.(int)$id_country.') AND
+					`id_group` IN(0, '.(int)$id_group.') AND
 					`from_quantity` = 1 AND
 					(
 						(`from` = \'0000-00-00 00:00:00\' OR \''.$beginning.'\' >= `from`)
@@ -257,19 +257,19 @@ class SpecificPriceCore extends ObjectModel
 		', false);
 		$ids_product = array();
 		while ($row = DB::getInstance()->nextRow($resource))
-			$ids_product[] = (int)($row['id_product']);
+			$ids_product[] = (int)$row['id_product'];
 		return $ids_product;
 	}
 
 	public static function deleteByProductId($id_product)
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)($id_product));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product);
 	}
 
 	public function duplicate($id_product = false)
 	{
 		if ($id_product)
-			$this->id_product = (int)($id_product);
+			$this->id_product = (int)$id_product;
 		return $this->add();
 	}
 }
