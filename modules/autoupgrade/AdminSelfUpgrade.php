@@ -1562,7 +1562,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 				$srcRootWritable = '../img/admin/disabled.gif';
 			echo '<b>'.$this->l('Root directory status').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('fully writable'):$this->l('not writable recursively')).'<br/><br/>';
 			
-			if ($this->upgrader->needUpgrade)
+			if ($this->upgrader->need_upgrade)
 			{
 				if ($this->upgrader->autoupgrade)
 					$srcAutoupgrade = '../img/admin/enabled.gif';
@@ -1570,6 +1570,12 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 					$srcAutoupgrade = '../img/admin/disabled.gif';
 				echo '<b>'.$this->l('Autoupgrade allowed').' : </b>'.'<img src="'.$srcAutoupgrade.'" /> '.($this->upgrader->autoupgrade?$this->l('This release allow autoupgrade.'):$this->l('This release does not allow autoupgrade')).'. <br/><br/>';
 			}
+			else
+			{
+				$srcAutoupgrade = '../img/admin/disabled.gif';
+				echo '<b>'.$this->l('Autoupgrade allowed').' : </b>'.'<img src="../img/admin/disabled.gif" /> . <br/><br/>';
+			}
+
 
 			if (Configuration::get('PS_SHOP_ENABLE'))
 			{
