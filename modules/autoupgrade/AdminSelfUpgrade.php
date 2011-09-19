@@ -949,9 +949,11 @@ $this->standalone = true;
 				if (self::ZipExtract($filepath, $destExtract))
 				{
 					// once it's restored, do not delete the archive file. This has to be done manually
+					// but we can empty the var, to avoid loop.
+					$this->backupFilesFilename = '';
 					if (!empty($this->backupDbFilename) AND file_exists($this->backupDbFilename) )
 					{
-						$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
+						$this->nextDesc = $this->l('Files restored. Checking next step ...');
 						$this->next = 'rollback';
 					}
 					else
