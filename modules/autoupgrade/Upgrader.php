@@ -194,6 +194,9 @@ class UpgraderCore
 						$path .= $current_path[$i].'/';
 					$path .= (string)$child['name'];
 					$path = str_replace('ps_root_dir', _PS_ROOT_DIR_, $path);
+
+					// replace default admin dir by current one 
+					$path = str_replace(_PS_ROOT_DIR.'/admin', _PS_ADMIN_DIR_, $path);
 					if (!file_exists($path))
 						$this->addMissingFile($path);
 					else if (!$this->compareChecksum($path, (string)$child))
