@@ -29,7 +29,7 @@ class UpgraderCore
 {
 	const DEFAULT_CHECK_VERSION_DELAY_HOURS = 24;
 	public $rss_version_link = 'http://www.prestashop.com/xml/version.xml';
-	public $rss_md5file_link_dir = 'http://localhost/xml/md5/';
+	public $rss_md5file_link_dir = 'http://www.prestashop.com/xml/md5/';
 	/**
 	 * link contains hte url where to download the file
 	 * 
