@@ -1305,6 +1305,7 @@ class BlockLayered extends Module
 		if ($id_parent == 1)
 			return;
 		
+		// Force attributes selection (by url '.../2-mycategory/color-blue' or by get parameter 'selected_filters')
 		if (strpos($_SERVER['SCRIPT_FILENAME'], 'blocklayered-ajax.php') === false || Tools::getValue('selected_filters') !== false)
 		{
 			if(Tools::getValue('selected_filters'))
@@ -1315,27 +1316,32 @@ class BlockLayered extends Module
 			$urlAttributes = explode('/',$url);
 			array_shift($urlAttributes);
 			$selectedFilters = array('category' => array());
-			if(!empty($urlAttributes))
+			if (!empty($urlAttributes))
 			{
-				foreach($urlAttributes as $urlAttribute)
+				foreach ($urlAttributes as $urlAttribute)
 				{
 					$urlParameters = explode('-', $urlAttribute);
 					$attributeName  = array_shift($urlParameters);
-					foreach($urlParameters as $urlParameter)
+					if (in_array($attributeName, array('price', 'weight')))
+						$selectedFilters[$attributeName] = array($urlParameters[0], $urlParameters[1]);
+					else
 					{
-						$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attributeName.'-'.$urlParameter).'\'');
-						if($data)
-							foreach(unserialize($data) as $keyParams => $params)
-							{
-								if(!isset($selectedFilters[$keyParams]))
-									$selectedFilters[$keyParams] = array();
-								foreach($params as $keyParam => $param)
+						foreach ($urlParameters as $urlParameter)
+						{
+							$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attributeName.'-'.$urlParameter).'\'');
+							if($data)
+								foreach (unserialize($data) as $keyParams => $params)
 								{
-									if(!isset($selectedFilters[$keyParams][$keyParam]))
-										$selectedFilters[$keyParams][$keyParam] = array();
-									$selectedFilters[$keyParams][$keyParam] = $param;
+									if (!isset($selectedFilters[$keyParams]))
+										$selectedFilters[$keyParams] = array();
+									foreach ($params as $keyParam => $param)
+									{
+										if (!isset($selectedFilters[$keyParams][$keyParam]))
+											$selectedFilters[$keyParams][$keyParam] = array();
+										$selectedFilters[$keyParams][$keyParam] = $param;
+									}
 								}
-							}
+						}
 					}
 				}
 				return $selectedFilters;

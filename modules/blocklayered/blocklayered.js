@@ -287,8 +287,25 @@ function reloadContent(params_plus)
 			}
 			initSliders();
 			
-			if(typeof(current_friendly_url != 'undefined'))
-				window.location = current_friendly_url;
+			// Currente page url
+			if(typeof(current_friendly_url) == 'undefined')
+				current_friendly_url = '#';
+				
+			// Get all sliders value
+			$(['price', 'weight']).each(function(it, sliderType)
+			{
+				if($("#layered_"+sliderType+"_slider"))
+				{
+					if($("#layered_"+sliderType+"_slider").slider('values', 0) != $("#layered_"+sliderType+"_slider").slider("option" , 'min')
+					|| $("#layered_"+sliderType+"_slider").slider('values', 1) != $("#layered_"+sliderType+"_slider").slider("option" , 'max'))
+					{
+						current_friendly_url += '/'+sliderType+'-'+$("#layered_"+sliderType+"_slider").slider('values', 0)+'-'+$("#layered_"+sliderType+"_slider").slider('values', 1)
+					}
+				}
+			});
+			if(current_friendly_url == '#')
+				current_friendly_url = '#/';
+			window.location = current_friendly_url;
 		}
 	});
 	ajaxQueries.push(ajaxQuery);
