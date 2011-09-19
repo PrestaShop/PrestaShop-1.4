@@ -1387,7 +1387,7 @@ class BlockLayered extends Module
 		if (!empty($this->products))
 			return $this->products;
 
-		/* If the current category isn't defined of if it's homepage, we have nothing to display */
+		/* If the current category isn't defined or if it's homepage, we have nothing to display */
 		$id_parent = (int)Tools::getValue('id_category', Tools::getValue('id_category_layered', 1));
 		if ($id_parent == 1)
 			return false;
@@ -1872,6 +1872,29 @@ class BlockLayered extends Module
 				
 			}
 		}
+		
+		// All non indexable attribute and feature
+		$nonIndexable = array();
+		
+		// Get all non indexable attribute groups
+		foreach(Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT public_name
+		FROM `'._DB_PREFIX_.'attribute_group_lang` agl
+		LEFT JOIN `'._DB_PREFIX_.'layered_indexable_attribute_group` liag
+		ON liag.id_attribute_group = agl.id_attribute_group
+		WHERE indexable IS NULL OR indexable = 0
+		AND id_lang = '.(int)$cookie->id_lang) as $attribute)
+			$nonIndexable[] = Tools::link_rewrite($attribute['public_name']);
+		
+		// Get all non indexable features
+		foreach(Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT name
+		FROM `'._DB_PREFIX_.'feature_lang` fl
+		LEFT JOIN  `'._DB_PREFIX_.'layered_indexable_feature` lif
+		ON lif.id_feature = fl.id_feature
+		WHERE indexable IS NULL OR indexable = 0
+		AND id_lang = '.(int)$cookie->id_lang) as $attribute)
+			$nonIndexable[] = Tools::link_rewrite($attribute['name']);
 
 		//generate SEO link
 		$paramSelected = '';
@@ -1910,7 +1933,7 @@ class BlockLayered extends Module
 		$blackList = array('weight','price');
 		$nofollow = false;
 		foreach ($filterBlocks as &$typeFilter)
-		{	
+		{
 			if(count($typeFilter) > 0 AND !in_array($typeFilter['type'], $blackList))
 			{	
 				foreach ($typeFilter['values'] as $key => $values)
@@ -1925,7 +1948,7 @@ class BlockLayered extends Module
 							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = $optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])].'-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
 							$nofollow = true;
 						}
-						else 
+						else
 							$optionCheckedCloneArray[Tools::link_rewrite($typeFilter['name'])] = '-'.str_replace('-', '_', Tools::link_rewrite($values['name']));
 					}
 					else
@@ -1938,6 +1961,11 @@ class BlockLayered extends Module
 					$parameters = '';
 					foreach ($optionCheckedCloneArray as $keyGroup => $valueGroup)
 						$parameters .= '/'.str_replace('-', '_',$keyGroup).$valueGroup;
+					
+					// Check if there is an non indexable attribute or feature in the url
+					foreach($nonIndexable as $value)
+						if(strpos($parameters, '/'.$value) !== false)
+							$nofollow = true;
 					//write link
 					$typeFilter['values'][$key]['link'] =  $linkBase.$parameters;
 					$typeFilter['values'][$key]['rel'] = ($nofollow)?'nofollow':'';
