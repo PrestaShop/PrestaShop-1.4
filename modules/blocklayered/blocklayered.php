@@ -1685,22 +1685,22 @@ class BlockLayered extends Module
 					SELECT count(lpa.id_attribute) nbr, lpa.id_attribute_group,
 					a.color, al.name attribute_name, agl.public_name attribute_group_name , lpa.id_attribute, ag.is_color_group ';
 					$sqlQuery['from'] = '
-					FROM ps_layered_product_attribute lpa
-					INNER JOIN ps_attribute a
+					FROM '._DB_PREFIX_.'layered_product_attribute lpa
+					INNER JOIN '._DB_PREFIX_.'attribute a
 					ON a.id_attribute = lpa.id_attribute
-					INNER JOIN ps_attribute_lang al
+					INNER JOIN '._DB_PREFIX_.'attribute_lang al
 					ON al.id_attribute = a.id_attribute
 					AND al.id_lang = '.(int)$cookie->id_lang.'
-					INNER JOIN ps_product as p
+					INNER JOIN '._DB_PREFIX_.'product as p
 					ON p.id_product = lpa.id_product
 					AND p.active = 1
-					INNER JOIN ps_attribute_group ag
+					INNER JOIN '._DB_PREFIX_.'attribute_group ag
 					ON ag.id_attribute_group = lpa.id_attribute_group
-					INNER JOIN ps_attribute_group_lang agl
+					INNER JOIN '._DB_PREFIX_.'attribute_group_lang agl
 					ON agl.id_attribute_group = lpa.id_attribute_group
 					AND agl.id_lang = '.(int)$cookie->id_lang.'
-					LEFT JOIN ps_category_product cp ON (cp.id_product = p.id_product)
-					INNER JOIN ps_category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')
+					LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
+					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')
 					';
 					$sqlQuery['where'] = 'WHERE a.id_attribute_group = '.(int)$filter['id_value'].' ';
 					$sqlQuery['group'] = '
