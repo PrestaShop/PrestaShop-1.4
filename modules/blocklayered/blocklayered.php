@@ -65,8 +65,10 @@ class BlockLayered extends Module
 		self::_installPriceIndexTable();
 		self::_installFriendlyUrlTable();
 		self::_installIndexableAttributeTable();
+		self::_installIndexProdutctAttribute();
 		
 		$this->indexUrl();
+		$this->indexAttribute();
 		self::fullIndexProcess();
 
 		return $result;
@@ -78,22 +80,22 @@ class BlockLayered extends Module
 		Configuration::deleteByName('PS_LAYERED_HIDE_0_VALUES');
 		Configuration::deleteByName('PS_LAYERED_SHOW_QTIES');
 		
-		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'price_static_index');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_price_index');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_friendly_url');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_indexable_attribute_group');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_indexable_feature');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_category');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_filter');
-		
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_product_attribute');
 		return parent::uninstall();
 	}
 	
 	private function _installPriceIndexTable()
 	{
-		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'price_static_index`');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'layered_price_index`');
 		
 		Db::getInstance()->Execute('
-		CREATE TABLE `'._DB_PREFIX_.'price_static_index` (
+		CREATE TABLE `'._DB_PREFIX_.'layered_price_index` (
 		`id_product` INT  NOT NULL, `id_currency` INT NOT NULL,
 		`price_min` INT NOT NULL, `price_max` INT NOT NULL,
 		PRIMARY KEY (`id_product`, `id_currency`), INDEX `id_currency` (`id_currency`),
@@ -138,6 +140,42 @@ class BlockLayered extends Module
 		SELECT id_feature, 1 FROM `'._DB_PREFIX_.'feature`');
 	}
 	
+	/**
+	 * 
+	 * create table product attribute
+	 */
+	public function _installIndexProdutctAttribute()
+	{
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS  `'._DB_PREFIX_.'layered_product_attribute`');
+		Db::getInstance()->Execute('
+		CREATE TABLE `'._DB_PREFIX_.'layered_product_attribute` (
+		  `id_attribute` int(10) unsigned NOT NULL,
+		  `id_product` int(10) unsigned NOT NULL,
+		  `id_attribute_group` int(10) unsigned NOT NULL DEFAULT "0",
+		  KEY `id_attribute` (`id_attribute`)
+		) ENGINE= '._MYSQL_ENGINE_);
+		
+		
+	}
+	
+	/**
+	 * 
+	 * Generate data product attribute
+	 */
+	public function indexAttribute()
+	{
+		Db::getInstance()->execute('TRUNCATE '._DB_PREFIX_.'layered_product_attribute');
+		
+		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'layered_product_attribute` (`id_attribute`, `id_product`, `id_attribute_group`) 
+		SELECT pac.id_attribute, pa.id_product, ag.id_attribute_group 
+		FROM '._DB_PREFIX_.'product_attribute pa 
+		INNER JOIN '._DB_PREFIX_.'product_attribute_combination pac ON pac.id_product_attribute = pa.id_product_attribute 
+		INNER JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute = pac.id_attribute) 
+		INNER JOIN '._DB_PREFIX_.'attribute_group ag ON ag.id_attribute_group = a.id_attribute_group  
+		GROUP BY a.id_attribute, pa.id_product');
+		
+		return 1;
+	}
 	/*
 	 * Url indexation
 	 */
@@ -456,7 +494,7 @@ class BlockLayered extends Module
 		else
 			$nbProducts = (int)Db::getInstance()->getValue(
 			'SELECT COUNT(*) FROM `'._DB_PREFIX_.'product` p
-			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p .id_product)
+			LEFT JOIN  `'._DB_PREFIX_.'layered_price_index` psi ON (psi.id_product = p .id_product)
 			WHERE `active` = 1 AND psi.id_product IS NULL');
 		
 		$maxExecutionTime = ini_get('max_execution_time') * 0.9; // 90% of safety margin
@@ -512,7 +550,7 @@ class BlockLayered extends Module
 			$query = '
 			SELECT p.id_product
 			FROM `'._DB_PREFIX_.'product` p
-			LEFT JOIN  `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product)
+			LEFT JOIN  `'._DB_PREFIX_.'layered_price_index` psi ON (psi.id_product = p.id_product)
 			WHERE `active` = 1 AND psi.id_product is null
 			ORDER by id_product LIMIT 0,'.(int)$length;
 		
@@ -539,7 +577,7 @@ class BlockLayered extends Module
 		$maxPrice = array();
 		
 		if ($smart)
-			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'price_static_index` WHERE `id_product` = '.(int)$idProduct);
+			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'layered_price_index` WHERE `id_product` = '.(int)$idProduct);
 		
 		$maxTaxRate = Db::getInstance()->getValue('
 		SELECT max(t.rate) max_rate
@@ -619,7 +657,7 @@ class BlockLayered extends Module
 			$values[] = '('.(int)$idProduct.', '.(int)$currency['id_currency'].', '.(int)$minPrice[$currency['id_currency']].', '.(int)$maxPrice[$currency['id_currency']].')';
 		
 		Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'price_static_index` (id_product, id_currency, price_min, price_max)
+			INSERT INTO `'._DB_PREFIX_.'layered_price_index` (id_product, id_currency, price_min, price_max)
 			VALUES '.implode(',', $values));
 	}
 
@@ -853,20 +891,24 @@ class BlockLayered extends Module
 		
 
 		$html .= '
-			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing prices').'</a>
+			<a class="bold ajaxcall-recurcive" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing prices').'</a>
 			<br />
-			<a class="bold ajaxcall" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire price index').'</a>
+			<a class="bold ajaxcall-recurcive" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.$this->l('Re-build entire price index').'</a>
 			<br />
-			<a class="bold" id="url-indexer" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1">'.$this->l('Build url index').'</a>
+			<a class="bold ajaxcall" id="attribute-indexer" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-attribute-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Build attribute index').'</a>
+			<br />
+			<a class="bold ajaxcall" id="url-indexer" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1">'.$this->l('Build url index').'</a>
 			<br />
 			<br />
 			'.$this->l('You can set a cron job that will re-build price index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1</b>
 			<br />
 			'.$this->l('You can set a cron job that will re-build url index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1</b>
+			<br />
+			'.$this->l('You can set a cron job that will re-build attribute index using the following URL:').'<br /><b>'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-attribute-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'</b>
 			<br /><br />
 			'.$this->l('A nightly rebuild is recommended.').'
 			<script type="text/javascript">
-				$(\'#url-indexer\').click(function() {
+				$(\'.ajaxcall\').click(function() {
 					if (this.legend == undefined)
 						this.legend = $(this).html();
 						
@@ -889,14 +931,13 @@ class BlockLayered extends Module
 					this.restartAllowed = false;
 					
 					$.ajax({
-						url: this.href+\'&ajax=1&cursor=\'+this.cursor,
+						url: this.href+\'&ajax=1\',
 						context: this,
 						dataType: \'json\',
 						success: function(res)
 						{
 							this.running = false;
 							this.restartAllowed = true;
-							this.cursor = 0;
 							$(\'#indexing-warning\').hide();
 							$(this).html(this.legend);
 							$(\'#ajax-message-ok span\').html(\''.$this->l('Url indexation finished').'\');
@@ -911,13 +952,12 @@ class BlockLayered extends Module
 							$(\'#ajax-message-ko\').show();
 							$(this).html(this.legend);
 							
-							this.cursor = 0;
 							this.running = false;
 						}
 					});
 					return false;
 				});
-				$(\'.ajaxcall\').each(function(it, elm) {
+				$(\'.ajaxcall-recurcive\').each(function(it, elm) {
 					$(elm).click(function() {
 						if (this.cursor == undefined)
 							this.cursor = 0;
@@ -1508,13 +1548,13 @@ class BlockLayered extends Module
 		$priceFilterQueryOut = ''; // All products with a price filters limit on it price range
 		if (isset($priceFilter) AND $priceFilter)
 		{
-			$priceFilterQueryIn = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` psi
+			$priceFilterQueryIn = 'INNER JOIN `'._DB_PREFIX_.'layered_price_index` psi
 			ON psi.price_min >= '.(int)$priceFilter['min'].'
 				AND psi.price_max <= '.(int)$priceFilter['max'].'
 				AND psi.`id_product` = p.`id_product`
 				AND psi.`id_currency` = '.(int)$idCurrency;
 			
-			$priceFilterQueryOut = 'INNER JOIN `'._DB_PREFIX_.'price_static_index` psi
+			$priceFilterQueryOut = 'INNER JOIN `'._DB_PREFIX_.'layered_price_index` psi
 			ON 
 				((psi.price_min < '.(int)$priceFilter['min'].' AND psi.price_max > '.(int)$priceFilter['min'].')
 				OR
@@ -1642,24 +1682,31 @@ class BlockLayered extends Module
 
 				case 'id_attribute_group':// attribute group
 					$sqlQuery['select'] = '
-					SELECT COUNT(tmp.id_attribute) nbr, tmp.id_attribute_group, tmp.color, tmp.attribute_name name, agl.public_name attributeName,
-					tmp.id_attribute id_attribute, a.is_color_group FROM (SELECT p.id_product, pac.id_attribute, a.color, al.name attribute_name, a.id_attribute_group';
+					SELECT count(lpa.id_attribute) nbr, lpa.id_attribute_group,
+					a.color, al.name attribute_name, agl.public_name attribute_group_name , lpa.id_attribute, ag.is_color_group ';
 					$sqlQuery['from'] = '
-					FROM '._DB_PREFIX_.'product_attribute_combination pac
-					LEFT JOIN '._DB_PREFIX_.'product_attribute pa ON (pa.id_product_attribute = pac.id_product_attribute)
-					LEFT JOIN '._DB_PREFIX_.'product p ON (pa.id_product = p.id_product)
-					LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = pa.id_product)
-					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')
-					LEFT JOIN '._DB_PREFIX_.'attribute a ON (a.id_attribute = pac.id_attribute)
-					LEFT JOIN '._DB_PREFIX_.'attribute_lang al ON (al.id_attribute = pac.id_attribute AND al.id_lang = '.(int)$cookie->id_lang.') ';
+					FROM ps_layered_product_attribute lpa
+					INNER JOIN ps_attribute a
+					ON a.id_attribute = lpa.id_attribute
+					INNER JOIN ps_attribute_lang al
+					ON al.id_attribute = a.id_attribute
+					AND al.id_lang = '.(int)$cookie->id_lang.'
+					INNER JOIN ps_product as p
+					ON p.id_product = lpa.id_product
+					AND p.active = 1
+					INNER JOIN ps_attribute_group ag
+					ON ag.id_attribute_group = lpa.id_attribute_group
+					INNER JOIN ps_attribute_group_lang agl
+					ON agl.id_attribute_group = lpa.id_attribute_group
+					AND agl.id_lang = '.(int)$cookie->id_lang.'
+					LEFT JOIN ps_category_product cp ON (cp.id_product = p.id_product)
+					INNER JOIN ps_category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')
+					';
+					$sqlQuery['where'] = 'WHERE a.id_attribute_group = '.(int)$filter['id_value'].' ';
 					$sqlQuery['group'] = '
-					WHERE p.`active` = 1 AND a.id_attribute_group = '.(int)$filter['id_value'].'
-					GROUP BY pac.id_attribute, p.id_product) tmp
-					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang al ON (al.id_attribute_group = tmp.id_attribute_group AND al.id_lang = '.(int)$cookie->id_lang.')
-					LEFT JOIN '._DB_PREFIX_.'attribute_group a ON (a.id_attribute_group = al.id_attribute_group)
-					LEFT JOIN '._DB_PREFIX_.'attribute_group_lang agl ON (a.id_attribute_group = agl.id_attribute_group AND agl.id_lang = '.(int)$cookie->id_lang.')
-					GROUP BY tmp.id_attribute
-					ORDER BY id_attribute_group, id_attribute';
+					GROUP BY lpa.id_attribute
+					ORDER BY id_attribute_group, id_attribute ';
+					
 					break;
 
 				case 'id_feature':
@@ -1835,10 +1882,10 @@ class BlockLayered extends Module
 							{
 								$attributesArray[$attributes['id_attribute_group']] = array ('type_lite' => 'id_attribute_group',
 								'type' => 'id_attribute_group', 'id_key' => (int)$attributes['id_attribute_group'],
-								'name' =>  $attributes['attributeName'], 'is_color_group' => (bool)$attributes['is_color_group'], 'values' => array());
+								'name' =>  $attributes['attribute_group_name'], 'is_color_group' => (bool)$attributes['is_color_group'], 'values' => array());
 							}
 							$attributesArray[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']] = array(
-							'color' => $attributes['color'], 'name' => $attributes['name'], 'nbr' => (int)$attributes['nbr']);
+							'color' => $attributes['color'], 'name' => $attributes['attribute_name'], 'nbr' => (int)$attributes['nbr']);
 							if (isset($selectedFilters['id_attribute_group'][$attributes['id_attribute']]))
 								$attributesArray[$attributes['id_attribute_group']]['values'][$attributes['id_attribute']]['checked'] = true;
 						}
@@ -2021,14 +2068,14 @@ class BlockLayered extends Module
 		{
 			$idCurrency = Currency::getCurrent()->id;
 			$priceFilterQuery = '
-			INNER JOIN `'._DB_PREFIX_.'price_static_index` psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
+			INNER JOIN `'._DB_PREFIX_.'layered_price_index` psi ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.'
 			AND psi.price_min <= '.(int)$filterValue[1].' AND psi.price_max >= '.(int)$filterValue[0].') ';
 		}
 		else
 		{
 			$idCurrency = Currency::getCurrent()->id;
 			$priceFilterQuery = '
-			INNER JOIN `'._DB_PREFIX_.'price_static_index` psi 
+			INNER JOIN `'._DB_PREFIX_.'layered_price_index` psi 
 			ON (psi.id_product = p.id_product AND psi.id_currency = '.(int)$idCurrency.') ';
 		}
 		
