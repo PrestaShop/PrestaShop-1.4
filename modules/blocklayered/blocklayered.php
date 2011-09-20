@@ -187,7 +187,7 @@ class BlockLayered extends Module
 		$attributeValues = array();
 		$filters = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT lc.*, id_lang, name, link_rewrite, cl.id_category
 		FROM '._DB_PREFIX_.'layered_category lc
-		INNER JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = lc.id_category AND lc.id_category <> 1 )
+		INNER JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = lc.id_category AND lc.id_category <> 1)
 		ORDER BY position ASC');
 		if (!$filters)
 			return;
