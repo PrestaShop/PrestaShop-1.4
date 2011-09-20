@@ -28,6 +28,13 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edi
 ('afterDeleteFeature', 'On deleting attribute feature', 'On deleting attribute feature', 0, 0),
 ('afterSaveProduct', 'On saving products', 'On saving products', 0, 0),
 ('productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0),
-('postProcessAttributeGroup', 'On pre-process in admin attribute group', 'On pre-process in admin attribute group', 0, 0),
-('postProcessFeature', 'On pre-process in admin feature', 'On pre-process in admin feature', 0, 0);
-
+('postProcessAttributeGroup', 'On post-process in admin attribute group', 'On post-process in admin attribute group', 0, 0),
+('postProcessFeature', 'On post-process in admin feature', 'On post-process in admin feature', 0, 0),
+('featureValueForm', 'Add fileds to the form "feature value"', 'Add fileds to the form "feature value"', 0, 0),
+('postProcessFeatureValue', 'On post-process in admin feature value', 'On post-process in admin feature value', 0, 0),
+('afterDeleteFeatureValue', 'On deleting attribute feature value', 'On deleting attribute feature value', 0, 0),
+('afterSaveFeatureValue', 'On saving attribute feature value', 'On saving attribute feature value', 0, 0),
+('attributeForm', 'Add fileds to the form "feature value"', 'Add fileds to the form "feature value"', 0, 0),
+('postProcessAttribute', 'On post-process in admin feature value', 'On post-process in admin feature value', 0, 0),
+('afterDeleteAttribute', 'On deleting attribute feature value', 'On deleting attribute feature value', 0, 0),
+('afterSaveAttribute', 'On saving attribute feature value', 'On saving attribute feature value', 0, 0);

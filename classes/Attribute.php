@@ -88,7 +88,26 @@ class AttributeCore extends ObjectModel
 			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(', ', $combinationIds).')') === false)
 				return false;
 		}
-		return parent::delete();
+		$return = parent::delete();
+		if ($return)
+			Module::hookExec('afterDeleteAttribute', array('id_attribute' => $this->id));
+		return $return;
+	}
+	
+	public function update($nullValues = false)
+	{
+		$return = parent::update($nullValues);
+		if ($return)
+			Module::hookExec('afterSaveAttribute', array('id_attribute' => $this->id));
+		return $return;
+	}
+	
+	public function add($autodate = true, $nullValues = false)
+	{
+		$return = parent::add($autodate, $nullValues);
+		if ($return)
+			Module::hookExec('afterSaveAttribute', array('id_attribute' => $this->id));
+		return $return;
 	}
 
 	/**

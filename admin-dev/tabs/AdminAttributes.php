@@ -75,7 +75,11 @@ class AdminAttributes extends AdminTab
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlspecialchars($this->getFieldValue($obj, 'name', (int)($language['id_lang']))).'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name', 'name');
+			echo '
+				<script type="text/javascript">
+					var flag_fields = \'name\';
+				</script>';
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'flag_fields', 'name', false, true);
 		echo '
 					<div class="clear"></div>
 				</div>
@@ -108,6 +112,7 @@ class AdminAttributes extends AdminTab
 						).'</p>
 					</div>
 				</div>
+				'.Module::hookExec('attributeForm', array('id_attribute' => $obj->id)).'
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAddattribute" class="button" />
 				</div>
@@ -127,6 +132,10 @@ class AdminAttributes extends AdminTab
 	public function postProcess($token = NULL)
 	{
 		global $currentIndex;
+		
+		Module::hookExec('postProcessAttribute',
+		array('errors' => &$this->_errors)); // send _errors as reference to allow postProcessFeatureValue to stop saving process
+		
 		if (Tools::getValue('submitDel'.$this->table))
 		{
 			if ($this->tabAccess['delete'] === '1')
@@ -147,7 +156,7 @@ class AdminAttributes extends AdminTab
 		elseif (Tools::isSubmit('submitAddattribute'))
 		{
 			// clean \n\r characters
-			foreach($_POST as $key => $value)
+			foreach ($_POST as $key => $value)
 				if (preg_match('/^name_/Ui', $key))
 					$_POST[$key] = str_replace ('\n', '', str_replace('\r', '', $value));
 			parent::postProcess();

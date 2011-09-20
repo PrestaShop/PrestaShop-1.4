@@ -124,7 +124,7 @@ class FeatureCore extends ObjectModel
 		/* Also delete related products */
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'feature_product` WHERE `id_feature` = '.(int)($this->id));
 		$return = parent::delete();
-		if($return)
+		if ($return)
 			Module::hookExec('afterDeleteFeature', array('id_feature' => $this->id));
 		return $return;
 	}
