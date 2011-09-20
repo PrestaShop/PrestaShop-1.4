@@ -548,7 +548,7 @@ $this->standalone = true;
 		if (file_exists($destExtract))
 			Tools::deletedirectory($destExtract);
 
-		if (Tools::ZipExtract($filepath,$destExtract))
+		if (self::ZipExtract($filepath,$destExtract))
 		{
 				$adminDir = str_replace($this->prodRootDir, '', $this->adminDir);
 				rename($this->latestRootDir.DIRECTORY_SEPARATOR.'admin', $this->latestRootDir.DIRECTORY_SEPARATOR.$adminDir);
