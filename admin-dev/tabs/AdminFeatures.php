@@ -32,11 +32,11 @@ class AdminFeatures extends AdminTab
 	public function __construct()
 	{
 		$this->adminFeaturesValues = new AdminFeaturesValues();
-	 	$this->table = 'feature';
-	 	$this->className = 'Feature';
-	 	$this->lang = true;
-	 	$this->edit = true;
-	 	$this->delete = true;
+		$this->table = 'feature';
+		$this->className = 'Feature';
+		$this->lang = true;
+		$this->edit = true;
+		$this->delete = true;
 
 		$this->fieldsDisplay = array(
 			'name' => array('title' => $this->l('Name'), 'width' => 128),
@@ -75,11 +75,11 @@ class AdminFeatures extends AdminTab
 		if (!sizeof($this->_list))
 			echo '<tr><td class="center" colspan="'.sizeof($this->_list).'">'.$this->l('No features found.').'</td></tr>';
 
-					$irow = 0;
+		$irow = 0;
 		foreach ($this->_list AS $tr)
 		{
 			$id = (int)($tr['id_'.$this->table]);
-		 	echo '
+			echo '
 			<tr'.($irow++ % 2 ? ' class="alt_row"' : '').'>
 				<td style="vertical-align: top; padding: 4px 0 4px 0" class="center"><input type="checkbox" name="'.$this->table.'Box[]" value="'.$id.'" class="noborder" /></td>
 				<td style="width: 140px; vertical-align: top; padding: 4px 0 4px 0; cursor: pointer" onclick="$(\'#features_values_'.$id.'\').slideToggle();">'.$tr['name'].'</td>
@@ -177,20 +177,19 @@ class AdminFeatures extends AdminTab
 
 	public function postProcess()
 	{
-	 	global	$cookie, $currentIndex;
+		global $cookie, $currentIndex;
 		$this->adminFeaturesValues->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 		$this->adminFeaturesValues->postProcess($this->token);
 		
-elog('hookExec::postProcessFeature');
 		Module::hookExec('postProcessFeature',
 		array('errors' => &$this->_errors)); // send _errors as reference to allow postProcessFeature to stop saving process
 
 		if (Tools::getValue('submitDel'.$this->table))
 		{
-		 	if ($this->tabAccess['delete'] === '1')
-		 	{
-			 	if (isset($_POST[$this->table.'Box']))
-			 	{
+			if ($this->tabAccess['delete'] === '1')
+			{
+				if (isset($_POST[$this->table.'Box']))
+				{
 					$object = new $this->className();
 					if ($object->deleteSelection($_POST[$this->table.'Box']))
 						Tools::redirectAdmin($currentIndex.'&conf=2'.'&token='.$this->token);
@@ -206,5 +205,3 @@ elog('hookExec::postProcessFeature');
 			parent::postProcess();
 	}
 }
-
-
