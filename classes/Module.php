@@ -539,10 +539,6 @@ abstract class ModuleCore
 				foreach (libxml_get_errors() as $error)
 					$errors[] = '['.$module.'] '.Tools::displayError('Error found in config file:').' '.htmlentities($error->message);
 				libxml_clear_errors();
-if($module=="mailalerts") {
-echo var_dump($module);
-echo var_dump($xml_module);
-}
 
 				if (!count($errors) AND (int)$xml_module->need_instance == 0 AND !$needNewConfigFile)
 				{

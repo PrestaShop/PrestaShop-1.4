@@ -76,7 +76,7 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (73, 'afterSaveProduct', 'On saving products', 'On saving products', 0, 0),
 (74, 'productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0),
 (75, 'postProcessAttributeGroup', 'On post-process in admin attribute group', 'On post-process in admin attribute group', 0, 0),
-(76, 'postProcessFeature', 'On post-process in admin feature', 'On post-process in admin feature', 0, 0)
+(76, 'postProcessFeature', 'On post-process in admin feature', 'On post-process in admin feature', 0, 0),
 (77, 'featureValueForm', 'Add fileds to the form "feature value"', 'Add fileds to the form "feature value"', 0, 0),
 (78, 'postProcessFeatureValue', 'On post-process in admin feature value', 'On post-process in admin feature value', 0, 0),
 (79, 'afterDeleteFeatureValue', 'On deleting attribute feature value', 'On deleting attribute feature value', 0, 0),

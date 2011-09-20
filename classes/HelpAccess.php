@@ -52,15 +52,11 @@ class HelpAccessCore
 
     public static function retrieveInfos($label, $iso_lang, $country, $version)
     {
-   	    $image = self::$_images[0];
-	       $tooltip = '';
-   	    $url = HelpAccess::URL.'/documentation/renderIcon?label='.$label.'&iso_lang='.$iso_lang.'&country='.$country.'&version='.$version;
+	$image = self::$_images[0];
+	$tooltip = '';
+	$url = HelpAccess::URL.'/documentation/renderIcon?label='.$label.'&iso_lang='.$iso_lang.'&country='.$country.'&version='.$version;
 
-   	    $ctx = stream_context_create(array(
-                    'http' => array(
-                    'timeout' => 10
-                    )
-                ));
+	$ctx = @stream_context_create(array('http' => array('timeout' => 10)));
 
         $res = @file_get_contents($url, 0, $ctx);
 

@@ -188,7 +188,7 @@ class AdminCustomerThreads extends AdminTab
 					Tools::redirectAdmin($currentIndex.'&id_customer_thread='.(int)$id_customer_thread.'&viewcustomer_thread&token='.Tools::getValue('token'));
 				}
 				else
-					$this->_errors[] = Tools::displayError('An error occurred, your message was not sent.  Please contact your system administrator.');
+					$this->_errors[] = Tools::displayError('An error occurred, your message was not sent. Please contact your system administrator.');
 			}
 		}
 

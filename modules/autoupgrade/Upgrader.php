@@ -98,7 +98,7 @@ class UpgraderCore
 			// except if no check has been done before
 			if ($force || ($last_check < time() - (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS)))
 			{
-				libxml_set_streams_context(stream_context_create(array('http' => array('timeout' => 3))));
+				libxml_set_streams_context(@stream_context_create(array('http' => array('timeout' => 3))));
 				if ($feed = @simplexml_load_file($this->rss_version_link))
 				{
 

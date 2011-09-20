@@ -614,7 +614,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 	$protocol = Tools::usingSecureMode() ? 'https' : 'http';
 	$isoUser = Language::getIsoById(intval($cookie->id_lang));
 	$isoCountry = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
-	$stream_context = stream_context_create(array('http' => array('method'=>"GET", 'timeout' => 5)));
+	$stream_context = @stream_context_create(array('http' => array('method'=> 'GET', 'timeout' => 5)));
 
 	// SCREENCAST
 	if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))

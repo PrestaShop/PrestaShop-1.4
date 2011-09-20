@@ -1257,7 +1257,7 @@ class ToolsCore
 	public static function file_get_contents($url, $useIncludePath = false, $streamContext = NULL, $curlTimeOut = 5)
 	{
 		if ($streamContext == NULL)
-			$streamContext = stream_context_create(array('http' => array('timeout' => 5)));
+			$streamContext = @stream_context_create(array('http' => array('timeout' => 5)));
 
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 			return @file_get_contents($url, $useIncludePath, $streamContext);
