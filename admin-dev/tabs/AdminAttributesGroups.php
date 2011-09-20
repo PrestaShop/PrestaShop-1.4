@@ -189,7 +189,11 @@ class AdminAttributesGroups extends AdminTab
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlspecialchars($this->getFieldValue($obj, 'name', (int)($language['id_lang']))).'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤public_name', 'name');
+		echo '
+				<script type="text/javascript">
+					var flag_fields = \'name¤public_name\';
+				</script>';
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'flag_fields', 'name', false, true);
 		echo '
 					<div class="clear"></div>
 				</div>
@@ -202,7 +206,7 @@ class AdminAttributesGroups extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						<p style="clear: both">'.$this->l('Term or phrase displayed to the customer').'</p>
 					</div>';
-		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤public_name', 'public_name');
+		$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'flag_fields', 'public_name', false, true);
 		echo '
 					<div class="clear"></div>
 				</div>

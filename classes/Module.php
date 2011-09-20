@@ -281,23 +281,27 @@ abstract class ModuleCore
 	  * Display flags in forms for translations
 	  *
 	  * @param array $languages All languages available
-	  * @param integer $defaultLanguage Default language id
+	  * @param integer $default_language Default language id
 	  * @param string $ids Multilingual div ids in form
 	  * @param string $id Current div id]
-	  * #param boolean $return define the return way : false for a display, true for a return
+	  * @param boolean $return define the return way : false for a display, true for a return
+	  * @param boolean $use_vars_instead_of_ids use an js vars instead of ids seperate by "¤"
 	  */
-	public function displayFlags($languages, $defaultLanguage, $ids, $id, $return = false)
+	public function displayFlags($languages, $default_language, $ids, $id, $return = false, $use_vars_instead_of_ids = false)
 	{
 		if (sizeof($languages) == 1)
 			return false;
 		$output = '
 		<div class="displayed_flag">
-			<img src="../img/l/'.$defaultLanguage.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="toggleLanguageFlags(this);" alt="" />
+			<img src="../img/l/'.$default_language.'.jpg" class="pointer" id="language_current_'.$id.'" onclick="toggleLanguageFlags(this);" alt="" />
 		</div>
 		<div id="languages_'.$id.'" class="language_flags">
 			'.$this->l('Choose language:').'<br /><br />';
 		foreach ($languages as $language)
-			$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
+			if($use_vars_instead_of_ids)
+				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', '.$ids.', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
+			else
+				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
 		$output .= '</div>';
 
 		if ($return)
@@ -535,9 +539,14 @@ abstract class ModuleCore
 				foreach (libxml_get_errors() as $error)
 					$errors[] = '['.$module.'] '.Tools::displayError('Error found in config file:').' '.htmlentities($error->message);
 				libxml_clear_errors();
+if($module=="mailalerts") {
+echo var_dump($module);
+echo var_dump($xml_module);
+}
 
 				if (!count($errors) AND (int)$xml_module->need_instance == 0 AND !$needNewConfigFile)
 				{
+
 					$file = _PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php';
 					if (Tools::file_exists_cache($file) AND include_once($file))
 						if (isset($_MODULE) AND is_array($_MODULE))
