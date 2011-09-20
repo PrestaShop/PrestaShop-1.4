@@ -53,7 +53,7 @@ $(document).ready(function()
 	// Click on label
 	$('label a').live({
 		click: function() {
-			if($(this).parent().parent().find('input').attr('disabled') == '')
+			if ($(this).parent().parent().find('input').attr('disabled') == '')
 			{
 				$(this).parent().parent().find('input').click();
 				reloadContent();  
@@ -179,7 +179,7 @@ function cancelFilter()
 {
 	$('#enabled_filters a').live('click', function(e)
 	{
-		if($(this).attr('rel').search(/_slider$/) > 0)
+		if ($(this).attr('rel').search(/_slider$/) > 0)
 		{
 			$('#'+$(this).attr('rel')).slider('values' , 0, $('#'+$(this).attr('rel')).slider('option' , 'min' ));
 			$('#'+$(this).attr('rel')).slider('values' , 1, $('#'+$(this).attr('rel')).slider('option' , 'max' ));
@@ -231,7 +231,7 @@ function reloadContent(params_plus)
 	$('.layered_slider').each( function () {
 		var sliderStart = $(this).slider('values', 0);
 		var sliderStop = $(this).slider('values', 1);
-		if(typeof(sliderStart) == 'number' && typeof(sliderStop) == 'number')
+		if (typeof(sliderStart) == 'number' && typeof(sliderStop) == 'number')
 			data += '&'+$(this).attr('id')+'='+sliderStart+'_'+sliderStop;
 	});
 	
@@ -241,15 +241,14 @@ function reloadContent(params_plus)
 		data += '&orderby='+splitData[0]+'&orderway='+splitData[1];
 	}
 	
-	if(params_plus == undefined)
+	if (params_plus == undefined)
 		params_plus = '';
 	
 	// Get nb items per page
 	var n = '';
 	$('#pagination #nb_item').children().each(function(it, option) {
-		if(option.selected) {
+		if (option.selected)
 			n = '&n='+option.value;
-		}
 	});
 	
 	ajaxQuery = $.ajax(
@@ -275,11 +274,10 @@ function reloadContent(params_plus)
 			$('#pagination form').submit(function() {
 				val = $('#pagination #nb_item').val();
 				$('#pagination #nb_item').children().each(function(it, option) {
-					if(option.value == val) {
+					if (option.value == val)
 						$(option).attr('selected', 'selected');
-					} else {
+					else
 						$(option).removeAttr('selected');
-					}
 				});
 				// Reload products and pagination
 				reloadContent();
@@ -287,28 +285,27 @@ function reloadContent(params_plus)
 			});
 			ajaxCart.overrideButtonsInThePage();
 			
-			if(typeof(reloadProductComparison) == 'function') {
+			if (typeof(reloadProductComparison) == 'function')
 				reloadProductComparison();
-			}
 			initSliders();
 			
 			// Currente page url
-			if(typeof(current_friendly_url) == 'undefined')
+			if (typeof(current_friendly_url) == 'undefined')
 				current_friendly_url = '#';
 				
 			// Get all sliders value
 			$(['price', 'weight']).each(function(it, sliderType)
 			{
-				if($('#layered_'+sliderType+'_slider'))
+				if ($('#layered_'+sliderType+'_slider'))
 				{
-					if($('#layered_'+sliderType+'_slider').slider('values', 0) != $('#layered_'+sliderType+'_slider').slider('option' , 'min')
+					if ($('#layered_'+sliderType+'_slider').slider('values', 0) != $('#layered_'+sliderType+'_slider').slider('option' , 'min')
 					|| $('#layered_'+sliderType+'_slider').slider('values', 1) != $('#layered_'+sliderType+'_slider').slider('option' , 'max'))
 					{
 						current_friendly_url += '/'+sliderType+'-'+$('#layered_'+sliderType+'_slider').slider('values', 0)+'-'+$('#layered_'+sliderType+'_slider').slider('values', 1)
 					}
 				}
 			});
-			if(current_friendly_url == '#')
+			if (current_friendly_url == '#')
 				current_friendly_url = '#/';
 			window.location = current_friendly_url;
 		}

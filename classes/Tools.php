@@ -543,7 +543,8 @@ class ToolsCore
 	/**
 	* Display an error according to an error code
 	*
-	* @param integer $code Error code
+	* @param string $string Error message
+	* @param boolean $htmlentities By default at true for parsing error message with htmlentities
 	*/
 	public static function displayError($string = 'Fatal error', $htmlentities = true)
 	{

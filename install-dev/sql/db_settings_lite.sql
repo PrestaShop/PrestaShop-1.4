@@ -74,7 +74,9 @@ INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`
 (71, 'afterSaveFeature', 'On saving attribute feature', 'On saving attribute feature', 0, 0),
 (72, 'afterDeleteFeature', 'On deleting attribute feature', 'On deleting attribute feature', 0, 0),
 (73, 'afterSaveProduct', 'On saving products', 'On saving products', 0, 0),
-(74, 'productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0);;
+(74, 'productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0),
+(75, 'postProcessAttributeGroup', 'On pre-process in admin attribute group', 'On pre-process in admin attribute group', 0, 0),
+(76, 'postProcessFeature', 'On pre-process in admin feature', 'On pre-process in admin feature', 0, 0);
 
 INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_add`, `date_upd`) VALUES
 (1, 'PS_LANG_DEFAULT', '1', NOW(), NOW()),

@@ -66,7 +66,7 @@ abstract class ModuleCore
 	/** @var string Message display before uninstall a module */
 	public $beforeUninstall = NULL;
 
-	public $_errors = false;
+	protected $_errors = false;
 
 	protected $table = 'module';
 

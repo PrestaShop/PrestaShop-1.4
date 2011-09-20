@@ -44,11 +44,11 @@ class ValidateCore
 	* @return boolean Validity is ok or not
 	*/
 	public static function isEmail($email)
-    {
-    	return empty($email) OR preg_match('/^[a-z0-9!#$%&\'*+\/=?^`{}|~_-]+[.a-z0-9!#$%&\'*+\/=?^`{}|~_-]*@[a-z0-9]+[._a-z0-9-]*\.[a-z0-9]+$/ui', $email);
-    }
+	{
+		return empty($email) OR preg_match('/^[a-z0-9!#$%&\'*+\/=?^`{}|~_-]+[.a-z0-9!#$%&\'*+\/=?^`{}|~_-]*@[a-z0-9]+[._a-z0-9-]*\.[a-z0-9]+$/ui', $email);
+	}
 
-    /**
+	/**
 	* Check for module URL validity
 	*
 	* @param string $url module URL to validate
@@ -102,13 +102,13 @@ class ValidateCore
 	* @param float $float Float number to validate
 	* @return boolean Validity is ok or not
 	*/
-    public static function isFloat($float)
-    {
+	public static function isFloat($float)
+	{
 		return strval((float)($float)) == strval($float);
 	}
 	
-    public static function isUnsignedFloat($float)
-    {
+	public static function isUnsignedFloat($float)
+	{
 			return strval((float)($float)) == strval($float) AND $float >= 0;
 	}
 
@@ -118,8 +118,8 @@ class ValidateCore
 	* @param float $float Float number to validate
 	* @return boolean Validity is ok or not
 	*/
-    public static function isOptFloat($float)
-    {
+	public static function isOptFloat($float)
+	{
 		return empty($float) OR self::isFloat($float);
 	}
 

@@ -69,6 +69,9 @@ class AdminAttributesGroups extends AdminTab
 		
 		$this->adminAttributes->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 		$this->adminAttributes->postProcess($this->token);
+		
+		Module::hookExec('postProcessAttributeGroup',
+		array('errors' => &$this->_errors)); // send _errors as reference to allow postProcessAttributeGroup to stop saving process
 
 		if (Tools::getValue('submitDel'.$this->table))
 		{
@@ -188,8 +191,7 @@ class AdminAttributesGroups extends AdminTab
 					<div id="name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 						<input size="33" type="text" name="name_'.$language['id_lang'].'" value="'.htmlspecialchars($this->getFieldValue($obj, 'name', (int)($language['id_lang']))).'" /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-					</div>';
-		echo '
+					</div>
 				<script type="text/javascript">
 					var flag_fields = \'name¤public_name\';
 				</script>';

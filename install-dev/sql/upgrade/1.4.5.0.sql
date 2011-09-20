@@ -27,5 +27,7 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edi
 ('afterSaveFeature', 'On saving attribute feature', 'On saving attribute feature', 0, 0),
 ('afterDeleteFeature', 'On deleting attribute feature', 'On deleting attribute feature', 0, 0),
 ('afterSaveProduct', 'On saving products', 'On saving products', 0, 0),
-('productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0);
+('productListAssign', 'Assign product list to a category', 'Assign product list to a category', 0, 0),
+('postProcessAttributeGroup', 'On pre-process in admin attribute group', 'On pre-process in admin attribute group', 0, 0),
+('postProcessFeature', 'On pre-process in admin feature', 'On pre-process in admin feature', 0, 0);
 
