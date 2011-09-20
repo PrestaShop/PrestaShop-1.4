@@ -2180,7 +2180,7 @@ class BlockLayered extends Module
 						// Remove selected parameters
 						$optionCheckedCloneArray[Tools::link_rewrite($filterName)] = str_replace('-'.str_replace('-', '_', Tools::link_rewrite($values['name'])), '', $optionCheckedCloneArray[Tools::link_rewrite($filterName)]);
 						if (empty($optionCheckedCloneArray[Tools::link_rewrite($filterName)]))
-							unset($optionCheckedCloneArray[Tools::link_rewrite($$filterName)]);
+							unset($optionCheckedCloneArray[Tools::link_rewrite($filterName)]);
 					}
 					$parameters = '';
 					foreach ($optionCheckedCloneArray as $keyGroup => $valueGroup)
