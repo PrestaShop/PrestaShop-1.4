@@ -28,10 +28,6 @@
 ob_start();
 $timerStart = microtime(true);
 
-$currentFileName = array_reverse(explode("/", $_SERVER['SCRIPT_NAME']));
-
-$adminFilename = trim($_POST['dir'],'/').'/';
-// die(info($adminFilename));
 require_once(AUTOUPGRADE_MODULE_DIR.'Tools14.php');
 require_once(AUTOUPGRADE_MODULE_DIR.'AdminSelfTab.php');
 require_once(AUTOUPGRADE_MODULE_DIR.'AdminSelfUpgrade.php');

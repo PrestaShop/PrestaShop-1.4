@@ -28,7 +28,7 @@
 class UpgraderCore
 {
 	const DEFAULT_CHECK_VERSION_DELAY_HOURS = 24;
-	public $rss_version_link = 'http://www.prestashop.com/xml/version.xml';
+	public $rss_version_link = 'http://www.prestashop.com/xml/upgrader.xml';
 	public $rss_md5file_link_dir = 'http://www.prestashop.com/xml/md5/';
 	/**
 	 * link contains hte url where to download the file
@@ -196,7 +196,7 @@ class UpgraderCore
 					$path = str_replace('ps_root_dir', _PS_ROOT_DIR_, $path);
 
 					// replace default admin dir by current one 
-					$path = str_replace(_PS_ROOT_DIR.'/admin', _PS_ADMIN_DIR_, $path);
+					$path = str_replace(_PS_ROOT_DIR_.'/admin', _PS_ADMIN_DIR_, $path);
 					if (!file_exists($path))
 						$this->addMissingFile($path);
 					else if (!$this->compareChecksum($path, (string)$child))
