@@ -605,6 +605,10 @@ function PS_MRGetRelayPoint(carrierSelected)
 */
 function PS_MRCreateGmap(id_carrier)
 {
+	// This has been write this way because it needed to have a known block
+	// present everytime in the page. Body is the only one sure.
+	// It's an hidden block it's replaced in the good block when user select his
+	// own carrier
 	$('body').prepend('\
 		<tr id="PS_MRGmapDefaultPosition_' + id_carrier + '" class="PS_MRGmapDefaultPosition">\
 			<td colspan="4"> \
