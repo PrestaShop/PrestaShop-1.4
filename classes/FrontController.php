@@ -553,7 +553,7 @@ class FrontControllerCore
 			$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', $url);
 			$selected_filters = preg_replace('/.*\?[^\/]*\//', '/', $url);
 			//delete parameter page
-			$selected_filters = current(explode('?', $selected_filters));
+			$selected_filters = current(explode('?', $selected_filters)).'/';
         }
 		$range = 2; /* how many pages around page selected */
 
