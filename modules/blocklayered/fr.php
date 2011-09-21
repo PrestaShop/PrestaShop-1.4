@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Bloc navigation à facettes';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Affiche un bloc avec les filtres de la navigation à facettes';
+$_MODULE['<{blocklayered}prestashop>blocklayered_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
 $_MODULE['<{blocklayered}prestashop>blocklayered_817c37b9c1f5cd4a450dad384e63e6c7'] = 'Votre filtre';
 $_MODULE['<{blocklayered}prestashop>blocklayered_3185cefd67b575e582063148e4f15860'] = 'a été mis à jour avec succès.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7ccab4d8de5d6b9bb61e99c7bba343ab'] = 'a été ajouté avec succès.';
@@ -15,7 +16,6 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_7c47bdf0ef7a058e0243fd870019f10
 $_MODULE['<{blocklayered}prestashop>blocklayered_a607dc3941415ecea04bb1eb8a978962'] = 'Modèles de filtres existants';
 $_MODULE['<{blocklayered}prestashop>blocklayered_9923a3739235561cc50eb9446dc1771e'] = 'modèles de filtres sont configurés :';
 $_MODULE['<{blocklayered}prestashop>blocklayered_49ee3087348e8d44e1feda1917443987'] = 'Nom';
-$_MODULE['<{blocklayered}prestashop>blocklayered_af1b98adf7f686b84cd0b443e022b7a0'] = 'Catégories';
 $_MODULE['<{blocklayered}prestashop>blocklayered_f7f19392da30e81c3abf433ce7b8ca38'] = 'Créée le';
 $_MODULE['<{blocklayered}prestashop>blocklayered_06df33001c1d7187fdd81ea1f5b277aa'] = 'Actions';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7dce122004969d56ae2e0245cb754d35'] = 'Modifier';
@@ -77,6 +77,6 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_f09cc7ee3a9a93273f4b80601cafb00
 $_MODULE['<{blocklayered}prestashop>blocklayered_2063c1608d6e0baf80249c42e2be5804'] = 'valeur';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogue';
 $_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtres actifs :';
-$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ' :';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
+$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ' :';
 $_MODULE['<{blocklayered}prestashop>blocklayered_75954a3c6f2ea54cb9dff249b6b5e8e6'] = 'Tranche';

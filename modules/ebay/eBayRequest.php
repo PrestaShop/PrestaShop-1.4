@@ -57,7 +57,7 @@ class eBayRequest
 
 	private $compatibilityLevel;
 
-
+	private $debug = true;
 
 	/******************************************************************/
 	/** Constructor And Request Methods *******************************/
@@ -124,7 +124,15 @@ class eBayRequest
         		
 		// Close the connection
 		curl_close($connection);
-		
+
+		// Debug
+		if ($this->debug == true)
+		{
+			if (!file_exists(dirname(__FILE__).'/log/request.php'))
+				file_put_contents(dirname(__FILE__).'/log/request.php', "<?php\n\n", FILE_APPEND | LOCK_EX);
+			file_put_contents(dirname(__FILE__).'/log/request.php', date('d/m/Y H:i:s')."\n\n".$request."\n\n".$response."\n\n-------------------\n\n", FILE_APPEND | LOCK_EX); 
+		}
+
 		// Return the response
 		return $response;
 	}
@@ -889,13 +897,14 @@ class eBayRequest
 			// Generate Variations Set
 			$requestXml .= '      <VariationSpecificsSet>'."\n";
 			foreach ($datas['variationsList'] as $group => $v)
-			{
-				$requestXml .= '        <NameValueList>'."\n";
-				$requestXml .= '          <Name>'.$group.'</Name>'."\n";
-				foreach ($v as $attr => $val)
-					$requestXml .= '          <Value>'.$attr.'</Value>'."\n";
-				$requestXml .= '        </NameValueList>'."\n";
-			}
+				if (isset($group) && !empty($group))
+				{
+					$requestXml .= '        <NameValueList>'."\n";
+					$requestXml .= '          <Name>'.$group.'</Name>'."\n";
+					foreach ($v as $attr => $val)
+						$requestXml .= '          <Value>'.$attr.'</Value>'."\n";
+					$requestXml .= '        </NameValueList>'."\n";
+				}
 			$requestXml .= '        </VariationSpecificsSet>'."\n";
 
 			// Generate Variations
@@ -1049,7 +1058,7 @@ class eBayRequest
 		$requestXml .= '  <CreateTimeFrom>'.$CreateTimeFrom.'</CreateTimeFrom>'."\n";
 		$requestXml .= '  <CreateTimeTo>'.$CreateTimeTo.'</CreateTimeTo>'."\n";
 		$requestXml .= '  <OrderRole>Seller</OrderRole>'."\n";
-		$requestXml .= '  <OrderStatus>Completed</OrderStatus>'."\n";
+		//$requestXml .= '  <OrderStatus>Completed</OrderStatus>'."\n";
 		$requestXml .= '  <Pagination>'."\n";
 		$requestXml .= '    <EntriesPerPage>100</EntriesPerPage>'."\n";
 		$requestXml .= '    <PageNumber>'.$page.'</PageNumber>'."\n";
