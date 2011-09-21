@@ -438,6 +438,8 @@ class BlockLayered extends Module
 		
 		$smarty->assign('categoryNameComplement', $title);
 		$this->getProducts($selectedFilters, $params['catProducts'], $params['nbProducts'], $p, $n, $pages_nb, $start, $stop, $range);
+		//test nofollow link
+		$smarty->assign('no_follow', $filterBlock['nofollow']);
 	}
 	
 	public function hookAfterSaveProduct($params)
@@ -1676,8 +1678,7 @@ class BlockLayered extends Module
 				$url = Tools::getValue('selected_filters');
 			else
 			{
-				$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', $_SERVER['REQUEST_URI']);
-				$url = preg_replace('/\?.*$/', '', $_SERVER['REQUEST_URI']);
+				$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']));
 			}
 			
 			$urlAttributes = explode('/',$url);
@@ -2367,8 +2368,12 @@ class BlockLayered extends Module
 					foreach ($nonIndexable as $value)
 						if (strpos($parameters, '/'.$value) !== false)
 							$nofollow = true;
-					//write link
-					$typeFilter['values'][$key]['link'] =  $linkBase.$parameters;
+					//write link by mode rewriting
+					if (!Configuration::get('PS_REWRITING_SETTINGS'))
+						$typeFilter['values'][$key]['link'] = $linkBase.'&selected_filters='.$parameters;
+					else
+						$typeFilter['values'][$key]['link'] =  $linkBase.$parameters;
+						
 					$typeFilter['values'][$key]['rel'] = ($nofollow) ? 'nofollow' : '';
 				}
 			}
@@ -2387,7 +2392,7 @@ class BlockLayered extends Module
 		
 		$cache = array('layered_show_qties' => (int)Configuration::get('PS_LAYERED_SHOW_QTIES'), 'id_category_layered' => (int)$id_parent,
 		'selected_filters' => $selectedFilters, 'n_filters' => (int)$nFilters, 'nbr_filterBlocks' => sizeof($filterBlocks), 'filters' => $filterBlocks,
-		'title_values' => $titleValues, 'current_friendly_url' => htmlentities($paramSelected), 'nofollow' => $nofollow);
+		'title_values' => $titleValues, 'current_friendly_url' => htmlentities($paramSelected), 'nofollow' => !empty($paramSelected) || $nofollow);
 		
 		return $cache;
 	}

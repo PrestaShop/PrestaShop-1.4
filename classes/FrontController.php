@@ -544,6 +544,17 @@ class FrontControllerCore
 		asort($nArray);
 		$this->n = abs((int)(Tools::getValue('n', ((isset(self::$cookie->nb_item_per_page) AND self::$cookie->nb_item_per_page >= 10) ? self::$cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
 		$this->p = abs((int)(Tools::getValue('p', 1)));
+		
+		//get only filters
+        $url = tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']);
+        if(Configuration::get('PS_REWRITING_SETTINGS'))
+        {
+        	// get data link after host
+			$url = preg_replace('/\/(\w*)\/([0-9]+[-\w]*)/', '', $url);
+			$selected_filters = preg_replace('/.*\?[^\/]*\//', '/', $url);
+			//delete parameter page
+			$selected_filters = current(explode('?', $selected_filters));
+        }
 		$range = 2; /* how many pages around page selected */
 
 		if ($this->p < 0)
@@ -570,7 +581,8 @@ class FrontControllerCore
 			'nArray' => $nArray,
 			'range' => (int)($range),
 			'start' => (int)($start),
-			'stop' => (int)($stop)
+			'stop' => (int)($stop),
+			'select_filters' => $selected_filters
 		);
 		self::$smarty->assign($pagination_infos);
 	}

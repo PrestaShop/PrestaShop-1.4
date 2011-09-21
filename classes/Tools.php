@@ -643,7 +643,7 @@ class ToolsCore
 			/* Categories specifics meta tags */
 			elseif ($id_category = self::getValue('id_category'))
 			{
-				$page_number = self::getValue('p');
+				$page_number = (int)self::getValue('p');
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description`
 				FROM `'._DB_PREFIX_.'category_lang`
@@ -655,7 +655,7 @@ class ToolsCore
 					if (!empty($row['meta_title']))
 						$row['meta_title'] = $row['meta_title'].(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
 					else
-						$row['meta_title'] = $row['name'].(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
+						$row['meta_title'] = $row['name'].(!empty($page_number) ? ' - page '.$page_number : '').' - '.Configuration::get('PS_SHOP_NAME');
 					
 					return self::completeMetaTags($row, $row['name']);
 				}
@@ -664,7 +664,7 @@ class ToolsCore
 			/* Manufacturers specifics meta tags */
 			elseif ($id_manufacturer = self::getValue('id_manufacturer'))
 			{
-				$page_number = self::getValue('p');
+				$page_number = (int)self::getValue('p');
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'manufacturer_lang` ml
