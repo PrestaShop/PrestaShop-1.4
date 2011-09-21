@@ -1020,7 +1020,7 @@ class BlockLayered extends Module
 		
 		if (!empty($metaComplement))
 		{
-			$smarty->assign('meta_title', ucfirst(strtolower(str_replace(' - '.Configuration::get('PS_SHOP_NAME'), ' – '.$metaComplement.' - '.Configuration::get('PS_SHOP_NAME'), $categoryMetas['meta_title']))));
+			$smarty->assign('meta_title', ucfirst(strtolower(preg_replace('/^'.$categoryTitle.'/', $categoryTitle.' – '.$metaComplement, $categoryMetas['meta_title']))));
 			$smarty->assign('meta_description', rtrim($categoryTitle.' – '.$metaComplement.' – '.$categoryMetas['meta_description'], ' – '));
 		}
 		else
