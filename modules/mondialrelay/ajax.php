@@ -27,16 +27,12 @@
 
 /*
  * File called by ajax. It's like a controler, you have to send the
- * method name of the webservice and implement it.
+* method name of the webservice and implement it.
  * Each Name method allow to instanciate an object containing
- * methods to manage correctly the data and name fields
+* methods to manage correctly the data and name fields
  */
  
 require_once(realpath(dirname(__FILE__).'/../../config/config.inc.php'));
-
-if (Tools::getValue('mrtoken') != sha1('mr'._COOKIE_KEY_.'mrAgain'))
-	die();
-
 require_once(realpath(dirname(__FILE__).'/../../init.php'));
 require(dirname(__FILE__).'/mondialrelay.php');
 require(dirname(__FILE__).'/classes/MRCreateTickets.php');
@@ -46,9 +42,29 @@ require(dirname(__FILE__).'/classes/MRManagement.php');
 
 global $cookie, $cart, $customer;
 
+MondialRelay::initModuleAccess();
+
+// Access page List liable to the generated token
+$accessPageList = array(
+	MondialRelay::getToken('front') => array(
+		'MRGetRelayPoint',
+		'addSelectedCarrierToDB'),
+	MondialRelay::getToken('back') => array(
+		'MRGetTickets',
+		'MRCreateTickets',
+		'MRDeleteHistory',
+		'uninstallDetail',
+		'DeleteHistory'));
+
 $method = Tools::getValue('method');
+$token = Tools::getValue('mrtoken');
 $params = array();
 $result = array();
+
+// If the method name assoacited to the token received doesn't match with
+// the list, then we kill the request
+if (!isset($accessPageList[$token]) || !in_array($method, $accessPageList[$token]))
+	exit();
 
 // Method name allow to instanciate his object to properly call the 
 // implemented interface method and do his job

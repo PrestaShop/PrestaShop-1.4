@@ -56,7 +56,6 @@ function getTickets(detailedExpeditionList)
 		},
 		error: function(xhr, ajaxOptions, thrownError)
 		{
-			//console.log(thrownError);
 			displayBackGenerateSubmitButton();
 		}
 	});
@@ -309,7 +308,6 @@ function PS_MRGetUninstallDetail()
 		},
 		error: function(xhr, ajaxOptions, thrownError) 
 		{
-			//console.log(thrownError);
 			// Put debug to see error detail
 		}
 	});
@@ -361,7 +359,6 @@ function PS_MRBackupDatabase()
 		},
 		error: function(xhr, ajaxOptions, thrownError) 
 		{
-			//console.log(thrownError);
 			// Put debug to see error detail
 		}
 	});
@@ -385,13 +382,9 @@ function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
     	'mrtoken' : mrtoken},
     success: function(json)
     {
-    // 	console.log(json);
     },
     error: function(xhr, ajaxOptions, thrownError)
     {
-     	//console.log(xhr);
-     	//console.log(thrownError);
-     	//console.log(ajaxOptions);
     }
 	});
 }
@@ -413,13 +406,9 @@ function PS_MRAddSelectedCarrierInDB(id_carrier)
     	'mrtoken' : mrtoken},
     success: function(json)
     {
-     	//console.log(json);
     },
     error: function(xhr, ajaxOptions, thrownError)
     {
-     	//console.log(xhr);
-     	//console.log(thrownError);
-     	//console.log(ajaxOptions);
     }
 	});
 }
@@ -519,7 +508,6 @@ function PS_MRDisplayErrorRelayPoint(errorList, blockContent)
 	
 	blockContent.fadeOut('fast', function()
 	{
-		console.log($(this));
 		$(this).children('td').html('');
 		for (numError in errorList)
 		{
@@ -562,7 +550,6 @@ function PS_MRFetchRelayPoint(carrierSelected)
 		},
 		error: function(xhr, ajaxOptions, thrownError) 
 		{
-			//console.log(thrownError);
 			// Put debug to see error detail
 		}
 	});
