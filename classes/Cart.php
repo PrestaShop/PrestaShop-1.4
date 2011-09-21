@@ -1077,30 +1077,17 @@ class CartCore extends ObjectModel
 				}
 
 				if ($carrier->getShippingMethod() == Carrier::SHIPPING_METHOD_WEIGHT)
-				{
 					$shipping = $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
-
-					if (!isset($tmp))
-						$tmp = $shipping;
-
-					if ($shipping <= $tmp)
-					{
-						$id_carrier = (int)($row['id_carrier']);
-						$tmp = $shipping;
-					}
-				}
-				else // by price
-				{
+				else
 					$shipping = $carrier->getDeliveryPriceByPrice($order_total, $id_zone, (int)($this->id_currency));
+				
+				if (!isset($minShippingPrice))
+					$minShippingPrice = $shipping;
 
-					if (!isset($tmp))
-						$tmp = $shipping;
-
-					if ($shipping <= $tmp)
-					{
-						$id_carrier = (int)($row['id_carrier']);
-						$tmp = $shipping;
-					}
+				if ($shipping <= $minShippingPrice)
+				{
+					$id_carrier = (int)($row['id_carrier']);
+					$minShippingPrice = $shipping;
 				}
 			}
 		}
