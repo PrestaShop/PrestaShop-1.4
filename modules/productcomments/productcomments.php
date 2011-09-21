@@ -614,9 +614,14 @@ class ProductComments extends Module
 			if (sizeof($grades) > 0)
 			{
 				foreach ($criterions AS $criterion)
-				{					
-					$list_product_grades[$criterion['id_product_comment_criterion']][$id_product] = $grades[$criterion['id_product_comment_criterion']];
-					$grade_total += (float)($grades[$criterion['id_product_comment_criterion']]);
+				{
+					if(isset($grades[$criterion['id_product_comment_criterion']]))
+					{
+						$list_product_grades[$criterion['id_product_comment_criterion']][$id_product] = $grades[$criterion['id_product_comment_criterion']];
+						$grade_total += (float)($grades[$criterion['id_product_comment_criterion']]);
+					}
+					else
+						$list_product_grades[$criterion['id_product_comment_criterion']][$id_product] = 0;
 					
 					if (!array_key_exists($criterion['id_product_comment_criterion'], $list_grades))
 						$list_grades[$criterion['id_product_comment_criterion']] = $criterion['name'];
@@ -625,12 +630,12 @@ class ProductComments extends Module
 				$list_product_average[$id_product] = $grade_total / sizeof($criterion);
 				$list_product_comment[$id_product] = ProductComment::getByProduct($id_product, 0, 3);
 			}
-		}				
+		}
 		
 		if (sizeof($list_grades) < 1) 
 			return false;
 			
-		$smarty->assign(array('grades' => $list_grades,	'product_grades' => $list_product_grades, 'list_ids_product' => $params['list_ids_product'], 
+		$smarty->assign(array('grades' => $list_grades, 'product_grades' => $list_product_grades, 'list_ids_product' => $params['list_ids_product'],
 		'list_product_average' => $list_product_average, 'product_comments' => $list_product_comment));
 		
 		return $this->display(__FILE__,'/products-comparison.tpl');
