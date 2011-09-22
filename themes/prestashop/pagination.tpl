@@ -32,10 +32,10 @@
 
 {if isset($p) AND $p}
 	{if isset($smarty.get.id_category) && $smarty.get.id_category && isset($category)}
-		{if !isset($select_filters)}
+		{if !isset($current_url)}
 			{assign var='requestPage' value=$link->getPaginationLink('category', $category, false, false, true, false)}
 		{else}
-			{assign var='requestPage' value=$select_filters}
+			{assign var='requestPage' value=$current_url}
 		{/if}
 		{assign var='requestNb' value=$link->getPaginationLink('category', $category, true, false, false, true)}
 	{elseif isset($smarty.get.id_manufacturer) && $smarty.get.id_manufacturer && isset($manufacturer)}
