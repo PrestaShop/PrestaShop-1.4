@@ -70,7 +70,9 @@ class BlockLayered extends Module
 			
 			$this->indexUrl();
 			$this->indexAttribute();
-			self::fullIndexProcess();
+			
+			if(Db::getInstance()->getValue('SELECT count(*) FROM `'._DB_PREFIX_.'product`') < 10000) // Lock price indexation if too many products
+				self::fullIndexProcess();
 			
 			return true;
 		}
@@ -87,6 +89,7 @@ class BlockLayered extends Module
 		/* Delete all configurations */
 		Configuration::deleteByName('PS_LAYERED_HIDE_0_VALUES');
 		Configuration::deleteByName('PS_LAYERED_SHOW_QTIES');
+		Configuration::deleteByName('PS_LAYERED_INDEXED');
 		
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_price_index');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_friendly_url');
