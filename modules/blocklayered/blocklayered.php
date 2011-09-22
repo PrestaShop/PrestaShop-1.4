@@ -49,32 +49,33 @@ class BlockLayered extends Module
 	
 	public function install()
 	{
-		if ($result = parent::install() && $this->registerHook('leftColumn') && $this->registerHook('header') && $this->registerHook('footer')
+		if ($this->registerHook('leftColumn') && $this->registerHook('header') && $this->registerHook('footer')
 		&& $this->registerHook('categoryAddition') && $this->registerHook('categoryUpdate') && $this->registerHook('attributeGroupForm')
 		&& $this->registerHook('afterSaveAttributeGroup') && $this->registerHook('afterDeleteAttributeGroup') && $this->registerHook('featureForm')
 		&& $this->registerHook('afterDeleteFeature') && $this->registerHook('afterSaveFeature') && $this->registerHook('categoryDeletion')
 		&& $this->registerHook('afterSaveProduct') && $this->registerHook('productListAssign') && $this->registerHook('postProcessAttributeGroup')
 		&& $this->registerHook('postProcessFeature') && $this->registerHook('featureValueForm') && $this->registerHook('postProcessFeatureValue')
 		&& $this->registerHook('afterDeleteFeatureValue') && $this->registerHook('afterSaveFeatureValue') && $this->registerHook('attributeForm')
-		&& $this->registerHook('postProcessAttribute') && $this->registerHook('afterDeleteAttribute') && $this->registerHook('afterSaveAttribute'))
+		&& $this->registerHook('postProcessAttribute') && $this->registerHook('afterDeleteAttribute') && $this->registerHook('afterSaveAttribute')
+		&& parent::install())
 		{
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', 0);
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
 			
 			$this->rebuildLayeredStructure();
 			$this->rebuildLayeredCache();
+			self::_installPriceIndexTable();
+			self::_installFriendlyUrlTable();
+			self::_installIndexableAttributeTable();
+			self::_installProductAttributeTable();
+			
+			$this->indexUrl();
+			$this->indexAttribute();
+			self::fullIndexProcess();
+			
+			return true;
 		}
-		
-		self::_installPriceIndexTable();
-		self::_installFriendlyUrlTable();
-		self::_installIndexableAttributeTable();
-		self::_installProductAttributeTable();
-		
-		$this->indexUrl();
-		$this->indexAttribute();
-		self::fullIndexProcess();
-
-		return $result;
+		return false;
 	}
 
 	public function uninstall()
