@@ -2670,12 +2670,18 @@ class BlockLayered extends Module
 		$smarty->assign('comparator_max_item', (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')));
 		$smarty->assign('products', $products);
 		
+		// Prevent bug with old template where category.tpl contain the title of the category and category-count.tpl do not exists
+		if(file_exists(_PS_THEME_DIR_.'category-count.tpl'))
+			$categoryCount = $smarty->fetch(_PS_THEME_DIR_.'category-count.tpl');
+		else
+			$categoryCount = '';
+		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
 		return Tools::jsonEncode(array(
 		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
 		'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
 		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl'),
-		'categoryCount' => $smarty->fetch(_PS_THEME_DIR_.'category-count.tpl')));
+		'categoryCount' => $categoryCount));
 	}
 	
 	public function getProducts($selectedFilters, &$products, &$nbProducts, &$p, &$n, &$pages_nb, &$start, &$stop, &$range)
