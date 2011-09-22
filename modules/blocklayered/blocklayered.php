@@ -1017,17 +1017,16 @@ class BlockLayered extends Module
 			foreach ($filterBlock['title_values'] as $key => $val)
 				$title .= $key.' '.implode('/', $val).' – ';
 		$title = rtrim($title, ' – ');
-		$metaComplement = $title;
-		$metaKeyWordsComplement = substr(str_replace(' – ', ', ', strtolower($title)), 1000);
 		
-		if (!empty($metaComplement))
+		if (!empty($title))
 		{
-			$smarty->assign('meta_title', ucfirst(strtolower(preg_replace('/^'.$categoryTitle.'/', $categoryTitle.' – '.$metaComplement, $categoryMetas['meta_title']))));
-			$smarty->assign('meta_description', rtrim($categoryTitle.' – '.$metaComplement.' – '.$categoryMetas['meta_description'], ' – '));
+			$smarty->assign('meta_title', ucfirst(strtolower(preg_replace('/^'.$categoryTitle.'/', $categoryTitle.' – '.$title, $categoryMetas['meta_title']))));
+			$smarty->assign('meta_description', rtrim($categoryTitle.' – '.$title.' – '.$categoryMetas['meta_description'], ' – '));
 		}
 		else
 			$smarty->assign('meta_title', ucfirst(strtolower($categoryMetas['meta_title'])));
 		
+		$metaKeyWordsComplement = substr(str_replace(' – ', ', ', strtolower($title)), 1000);
 		if (!empty($metaKeyWordsComplement))
 			$smarty->assign('meta_keywords', rtrim($categoryTitle.', '.$metaKeyWordsComplement.', '.$categoryMetas['meta_keywords'], ', '));
 		
@@ -2129,13 +2128,17 @@ class BlockLayered extends Module
 								$priceArray['values'][1] = $product['price_max'];
 							}
 						}
-					if (isset($selectedFilters['price']) AND isset($selectedFilters['price'][0])
-					AND isset($selectedFilters['price'][1]))
+						
+					if ($priceArray['max'] != $priceArray['min'] && $priceArray['min'] != null)
 					{
-						$priceArray['values'][0] = $selectedFilters['price'][0];
-						$priceArray['values'][1] = $selectedFilters['price'][1];
+						if (isset($selectedFilters['price']) AND isset($selectedFilters['price'][0])
+						AND isset($selectedFilters['price'][1]))
+						{
+							$priceArray['values'][0] = $selectedFilters['price'][0];
+							$priceArray['values'][1] = $selectedFilters['price'][1];
+						}
+						$filterBlocks[] = $priceArray;
 					}
-					$filterBlocks[] = $priceArray;
 					break;
 
 				case 'weight':
@@ -2161,13 +2164,16 @@ class BlockLayered extends Module
 								$weightArray['values'][1] = $product['weight'];
 							}
 						}
-					if (isset($selectedFilters['weight']) AND isset($selectedFilters['weight'][0])
-					AND isset($selectedFilters['weight'][1]))
+					if ($weightArray['max'] != $weightArray['min'] && $weightArray['min'] != null)
 					{
-						$weightArray['values'][0] = $selectedFilters['weight'][0];
-						$weightArray['values'][1] = $selectedFilters['weight'][1];
+						if (isset($selectedFilters['weight']) AND isset($selectedFilters['weight'][0])
+						AND isset($selectedFilters['weight'][1]))
+						{
+							$weightArray['values'][0] = $selectedFilters['weight'][0];
+							$weightArray['values'][1] = $selectedFilters['weight'][1];
+						}
+						$filterBlocks[] = $weightArray;
 					}
-					$filterBlocks[] = $weightArray;
 					break;
 
 				case 'condition':
@@ -2198,15 +2204,17 @@ class BlockLayered extends Module
 					break;
 
 				case 'manufacturer':
-					$manufaturersArray = array();
 					if (isset($products) AND $products)
-						foreach ($products as $manufacturer)
-						{
-							$manufaturersArray[$manufacturer['id_manufacturer']] = array('name' => $manufacturer['name'], 'nbr' => $manufacturer['nbr']);
-							if (isset($selectedFilters['manufacturer']) AND in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
-								$manufaturersArray[$manufacturer['id_manufacturer']]['checked'] = true;
-						}
-					$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => $this->l('Manufacturer'), 'values' => $manufaturersArray);
+					{
+						$manufaturersArray = array();
+							foreach ($products as $manufacturer)
+							{
+								$manufaturersArray[$manufacturer['id_manufacturer']] = array('name' => $manufacturer['name'], 'nbr' => $manufacturer['nbr']);
+								if (isset($selectedFilters['manufacturer']) AND in_array((int)$manufacturer['id_manufacturer'], $selectedFilters['manufacturer']))
+									$manufaturersArray[$manufacturer['id_manufacturer']]['checked'] = true;
+							}
+						$filterBlocks[] = array('type_lite' => 'manufacturer', 'type' => 'manufacturer', 'id_key' => 0, 'name' => $this->l('Manufacturer'), 'values' => $manufaturersArray);
+					}
 					break;
 
 				case 'id_attribute_group':
