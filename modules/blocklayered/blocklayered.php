@@ -1249,7 +1249,7 @@ class BlockLayered extends Module
 					
 					if (typeof(this.restartAllowed) == \'undefined\' || this.restartAllowed)
 					{
-						$(this).html(this.legend+\' (in progress)\');
+						$(this).html(this.legend+\' '.$this->l('(in progress)').'\');
 						$(\'#indexing-warning\').show();
 					}
 						
@@ -1302,7 +1302,7 @@ class BlockLayered extends Module
 						
 						if (typeof(this.restartAllowed) == \'undefined\' || this.restartAllowed)
 						{
-							$(this).html(this.legend+\' (in progress)\');
+							$(this).html(this.legend+\' '.$this->l('(in progress)').'\');
 							$(\'#indexing-warning\').show();
 						}
 							
@@ -1325,7 +1325,7 @@ class BlockLayered extends Module
 									return;
 								}
 								this.cursor = parseInt(res.cursor);
-								$(this).html(this.legend+\' (in progress, \'+res.count+\' products to index)\');
+								$(this).html(this.legend+\' '.$this->l('(in progress, %s products to index)').'\'.replace(\'%s\', res.count));
 								$(this).click();
 							},
 							error: function(res)
