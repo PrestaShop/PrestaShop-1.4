@@ -1078,7 +1078,6 @@ class BlockLayered extends Module
 
 		if (Tools::isSubmit('SubmitFilter'))
 		{
-			
 			if (!Tools::getValue('layered_tpl_name'))
 				$html .= '
 				<div class="error">
@@ -1140,7 +1139,7 @@ class BlockLayered extends Module
 									$sqlToInsert .= '('.(int)$id_category_layered.','.(int)str_replace('layered_selection_feat_', '', $key).',\'id_feature\','.(int)$n.'),';
 							}
 					}
-
+					
 					Db::getInstance()->Execute(rtrim($sqlToInsert, ','));
 					
 					$valuesToInsert = array('name' => pSQL(Tools::getValue('layered_tpl_name')), 'filters' => pSQL(serialize($filterValues)), 'n_categories' => (int)sizeof($filterValues['categories']), 'date_add' => date('Y-m-d H:i:s'));
@@ -1148,7 +1147,7 @@ class BlockLayered extends Module
 						$valuesToInsert['id_layered_filter'] = (int)Tools::getValue('id_layered_filter');
 					
 					Db::getInstance()->AutoExecute(_DB_PREFIX_.'layered_filter', $valuesToInsert, 'INSERT');
-	
+					
 					echo '<div class="conf"><img src="../img/admin/ok2.png" alt="" /> '.$this->l('Your filter').' "'.Tools::getValue('layered_tpl_name').'" '.((isset($_POST['id_layered_filter']) AND $_POST['id_layered_filter']) ? $this->l('was updated successfully.') : $this->l('was added successfully.')).'</div>';
 				}
 			}
@@ -1214,7 +1213,6 @@ class BlockLayered extends Module
 			if ($category['id_category'] != 1)
 				$categoryList[] = $category['id_category'];
 		
-
 		$html .= '
 			<a class="bold ajaxcall-recurcive" style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" href="'.Tools::getProtocol().Tools::getHttpHost().__PS_BASE_URI__.'modules/blocklayered/blocklayered-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.$this->l('Index all missing prices').'</a>
 			<br />
@@ -1410,7 +1408,7 @@ class BlockLayered extends Module
 			
 		$html.= '
 			<h2>'.$this->l('Step 1/3 - Select categories').'</h2>
-			<p style="margin-top: 20px;">'.$this->l('Use this template for:').' 
+			<p style="margin-top: 20px;">'.$this->l('Use this template for:').'
 				<input type="radio" id="scope_1" name="scope" value="1" style="margin-left: 15px;" onclick="$(\'#error-treeview\').hide(); $(\'#layered-step-2\').show(); updElements(1, 0);" /> 
 				<label for="scope_1" style="float: none;">'.$this->l('All categories').'</label>
 				<input type="radio" id="scope_2" name="scope" value="2" style="margin-left: 15px;" onclick="$(\'label a#inline\').click(); $(\'#layered-step-2\').show();" /> 
@@ -1512,7 +1510,7 @@ class BlockLayered extends Module
 								$(\'#layered_container_right li input\').each(function() {
 									if ($(\'#layered_container_left\').find(\'input[id="\'+$(this).attr(\'id\')+\'"]\').length > 0)
 										$(this).parent().remove();
-								});								
+								});
 								
 								updHeight();
 								updLayCounters();
@@ -1526,7 +1524,7 @@ class BlockLayered extends Module
 						{
 							$(\'#error-filter-name\').show();
 							return false;
-						}						
+						}
 						else if ($(\'#scope_1\').attr(\'checked\') && $(\'#n_existing\').val() > 0)
 							if (!confirm(\''.addslashes($this->l('You selected -All categories-, all existing filter templates will be deleted, OK?')).'\'))
 								return false;
@@ -1609,7 +1607,7 @@ class BlockLayered extends Module
 					}
 
 					$(document).ready(function() {
-						launch();					
+						launch();
 					});
 				</script>
 			</div>
@@ -1655,7 +1653,7 @@ class BlockLayered extends Module
 							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
 							'.$this->l('No').' <input type="radio" name="ps_layered_show_qties" value="0" '.(!Configuration::get('PS_LAYERED_SHOW_QTIES') ? 'checked="checked"' : '').' />
 						</td>
-					</tr>			
+					</tr>
 				</table>
 				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredSettings" value="'.$this->l('Save configuration').'" /></p>
 			</form>
@@ -1791,7 +1789,6 @@ class BlockLayered extends Module
 						if (!isset($subQueries[$filterValueArray[0]]))
 							$subQueries[$filterValueArray[0]] = array();
 						$subQueries[$filterValueArray[0]][] = 'fp.`id_feature_value` = '.(int)$filterValueArray[1];
-						//$queryFiltersWhere .= 'pac.`id_attribute` = '.(int)$filterValue.' OR ';
 					}
 					foreach ($subQueries as $subQuery)
 					{
@@ -1807,16 +1804,16 @@ class BlockLayered extends Module
 					foreach ($filterValues as $filterValue)
 					{
 						$filterValueArray = explode('_',$filterValue);
-						if (!isset($subQuery[$filterValueArray[0]]))
+						if (!isset($subQueries[$filterValueArray[0]]))
 							$subQueries[$filterValueArray[0]] = array();
 						$subQueries[$filterValueArray[0]][] = 'pac.`id_attribute` = '.(int)$filterValueArray[1];
 					}
 					foreach ($subQueries as $subQuery)
 					{
 						$queryFiltersWhere .= ' AND p.id_product IN (SELECT pa.`id_product`
-										FROM `'._DB_PREFIX_.'product_attribute_combination` pac
-										LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
-										ON (pa.`id_product_attribute` = pac.`id_product_attribute`) WHERE ';
+						FROM `'._DB_PREFIX_.'product_attribute_combination` pac
+						LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa
+						ON (pa.`id_product_attribute` = pac.`id_product_attribute`) WHERE ';
 						$queryFiltersWhere .= implode(' OR ', $subQuery).') ';
 					}
 				break;
