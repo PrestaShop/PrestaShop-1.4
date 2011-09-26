@@ -56,7 +56,7 @@ class FedexCarrier extends CarrierModule
 	{
 		$this->name = 'fedexcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.1';
+		$this->version = '1.2.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 
@@ -1770,7 +1770,7 @@ class FedexCarrier extends CarrierModule
 
 		// Get Rates
 		try { $resultTab = $client->getRates($request); }
-		catch (Exception $e) { return array('connect' => false, 'cost' => 0); }
+		catch (Exception $e) { }
 
 
 		// Check currency
