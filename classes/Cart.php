@@ -346,7 +346,7 @@ class CartCore extends ObjectModel
 		IF (IFNULL(pa.`supplier_reference`, \'\') = \'\', p.`supplier_reference`, pa.`supplier_reference`) AS supplier_reference,
 		(p.`weight`+ pa.`weight`) weight_attribute,
 		IF (IFNULL(pa.`ean13`, \'\') = \'\', p.`ean13`, pa.`ean13`) AS ean13, IF (IFNULL(pa.`upc`, \'\') = \'\', p.`upc`, pa.`upc`) AS upc,
-		pai.`id_image` as pai_id_image
+		pai.`id_image` pai_id_image, il.`legend` pai_legend
 		FROM `'._DB_PREFIX_.'cart_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)$this->id_lang.')
@@ -358,6 +358,7 @@ class CartCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)$this->id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'customization` cu ON (cp.`id_product` = cu.`id_product` AND cp.`id_product_attribute` = cu.`id_product_attribute` AND cu.`id_cart` = cp.`id_cart`)
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute_image` pai ON (pai.`id_product_attribute` = pa.`id_product_attribute`)
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (il.`id_image` = pai.`id_image` AND il.`id_lang` = '.(int)$this->id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.(int)$this->id_lang.')
 		WHERE cp.`id_cart` = '.(int)$this->id.'
 		'.($id_product ? ' AND cp.`id_product` = '.(int)$id_product : '').'
@@ -413,24 +414,23 @@ class CartCore extends ObjectModel
 				$row['total'] = Tools::ps_round($row['price'] * (int)($row['cart_quantity']), 2);
 			}
 	
-			$row2 = Db::getInstance()->getRow('
-			SELECT i.`id_image`, il.`legend`
-			FROM `'._DB_PREFIX_.'image` i
-			LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)$this->id_lang.')
-			WHERE '.((isset($row['`pai_id_image`']) AND $row['`pai_id_image`'])
-				? 'i.`id_image` = (
-				SELECT i2.`id_image`
-					FROM `'._DB_PREFIX_.'image` i2
-					INNER JOIN `'._DB_PREFIX_.'product_attribute_image` pai2 ON (pai2.`id_image` = i2.`id_image`)
-					WHERE i2.`id_product` = p.`id_product` AND pai2.`id_product_attribute` = pa.`id_product_attribute`
-					ORDER BY i2.`position`
-					LIMIT 1
-				)'
-				: 'i.`id_product` = '.(int)$row['id_product'].' AND i.`cover` = 1').'
-			');
-			if (!$row2)
-				$row2 = array('id_image' => false, 'legend' => false);
-			$row = array_merge($row, $row2);
+			if (!isset($row['pai_id_image']))
+			{
+				$row2 = Db::getInstance()->getRow('
+				SELECT i.`id_image`, il.`legend`
+				FROM `'._DB_PREFIX_.'image` i
+				LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)$this->id_lang.')
+				WHERE i.`id_product` = '.(int)$row['id_product'].' AND i.`cover` = 1');
+				if (!$row2)
+					$row2 = array('id_image' => false, 'legend' => false);
+				else
+					$row = array_merge($row, $row2);
+			}
+			else
+			{
+				$row['id_image'] = $row['pai_id_image'];
+				$row['legend'] = $row['pai_legend'];
+			}
 	
 			$row['reduction_applies'] = ($specificPriceOutput AND (float)$specificPriceOutput['reduction']);
 			$row['id_image'] = Product::defineProductImage($row, $this->id_lang);
@@ -441,6 +441,7 @@ class CartCore extends ObjectModel
 
 			$this->_products[] = $row;
 		}
+		
 		return $this->_products;
 	}
 
