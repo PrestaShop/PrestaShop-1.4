@@ -1290,7 +1290,7 @@ class BlockLayered extends Module
 					
 					if (typeof(this.restartAllowed) == \'undefined\' || this.restartAllowed)
 					{
-						$(this).html(this.legend+\' '.$this->l('(in progress)').'\');
+						$(this).html(this.legend+\' '.addslashes($this->l('(in progress)')).'\');
 						$(\'#indexing-warning\').show();
 					}
 						
@@ -1306,7 +1306,7 @@ class BlockLayered extends Module
 							this.restartAllowed = true;
 							$(\'#indexing-warning\').hide();
 							$(this).html(this.legend);
-							$(\'#ajax-message-ok span\').html(\''.$this->l('Url indexation finished').'\');
+							$(\'#ajax-message-ok span\').html(\''.addslashes($this->l('Url indexation finished')).'\');
 							$(\'#ajax-message-ok\').show();
 							return;
 						},
@@ -1314,7 +1314,7 @@ class BlockLayered extends Module
 						{
 							this.restartAllowed = true;
 							$(\'#indexing-warning\').hide();
-							$(\'#ajax-message-ko span\').html(\''.$this->l('Url indexation failed').'\');
+							$(\'#ajax-message-ko span\').html(\''.addslashes($this->l('Url indexation failed')).'\');
 							$(\'#ajax-message-ko\').show();
 							$(this).html(this.legend);
 							
@@ -1343,7 +1343,7 @@ class BlockLayered extends Module
 						
 						if (typeof(this.restartAllowed) == \'undefined\' || this.restartAllowed)
 						{
-							$(this).html(this.legend+\' '.$this->l('(in progress)').'\');
+							$(this).html(this.legend+\' '.addslashes($this->l('(in progress)')).'\');
 							$(\'#indexing-warning\').show();
 						}
 							
@@ -1361,19 +1361,19 @@ class BlockLayered extends Module
 									this.cursor = 0;
 									$(\'#indexing-warning\').hide();
 									$(this).html(this.legend);
-									$(\'#ajax-message-ok span\').html(\''.$this->l('Price indexation finished').'\');
+									$(\'#ajax-message-ok span\').html(\''.addslashes($this->l('Price indexation finished')).'\');
 									$(\'#ajax-message-ok\').show();
 									return;
 								}
 								this.cursor = parseInt(res.cursor);
-								$(this).html(this.legend+\' '.$this->l('(in progress, %s products price to index)').'\'.replace(\'%s\', res.count));
+								$(this).html(this.legend+\' '.addslashes($this->l('(in progress, %s products price to index)').'\'.replace(\'%s\', res.count));
 								$(this).click();
 							},
 							error: function(res)
 							{
 								this.restartAllowed = true;
 								$(\'#indexing-warning\').hide();
-								$(\'#ajax-message-ko span\').html(\''.$this->l('Price indexation failed').'\');
+								$(\'#ajax-message-ko span\').html(\''.addslashes($this->l('Price indexation failed').'\');
 								$(\'#ajax-message-ko\').show();
 								$(this).html(this.legend);
 								
