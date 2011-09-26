@@ -1366,14 +1366,14 @@ class BlockLayered extends Module
 									return;
 								}
 								this.cursor = parseInt(res.cursor);
-								$(this).html(this.legend+\' '.addslashes($this->l('(in progress, %s products price to index)').'\'.replace(\'%s\', res.count));
+								$(this).html(this.legend+\' '.addslashes($this->l('(in progress, %s products price to index)')).'\'.replace(\'%s\', res.count));
 								$(this).click();
 							},
 							error: function(res)
 							{
 								this.restartAllowed = true;
 								$(\'#indexing-warning\').hide();
-								$(\'#ajax-message-ko span\').html(\''.addslashes($this->l('Price indexation failed').'\');
+								$(\'#ajax-message-ko span\').html(\''.addslashes($this->l('Price indexation failed')).'\');
 								$(\'#ajax-message-ko\').show();
 								$(this).html(this.legend);
 								
@@ -1418,7 +1418,7 @@ class BlockLayered extends Module
 						<a href="#" onclick="updElements('.($filtersTemplate['n_categories'] ? 0 : 1).', '.(int)$filtersTemplate['id_layered_filter'].');">
 						<img src="../img/admin/edit.gif" alt="" title="'.$this->l('Edit').'" /></a> 
 						<a href="'.$_SERVER['REQUEST_URI'].'&deleteFilterTemplate=1&id_layered_filter='.(int)$filtersTemplate['id_layered_filter'].'"
-						onclick="return confirm(\''.addslashes($this->l('Delete filter template #').(int)$filtersTemplate['id_layered_filter'].$this->l('?')).'\');">
+						onclick="return confirm(\''.addslashes($this->l('Delete filter template #')).(int)$filtersTemplate['id_layered_filter'].$this->l('?').'\');">
 						<img src="../img/admin/delete.gif" alt="" title="'.$this->l('Delete').'" /></a>
 					</td>
 				</tr>';
@@ -1541,17 +1541,16 @@ class BlockLayered extends Module
 							$(\'#layered-step-2\').hide();
 						$(\'#layered-ajax-refresh\').css(\'background-color\', \'black\');
 						$(\'#layered-ajax-refresh\').css(\'opacity\', \'0.2\');
-						$(\'#layered-ajax-refresh\').html(\'<div style="margin: 0 auto; padding: 10px; text-align: center;">
-							<img src="../img/admin/ajax-loader-big.gif" alt="" /><br /><p style="color: white;">'.$this->l('Loading...').'</p></div>\');
+						$(\'#layered-ajax-refresh\').html(\'<div style="margin: 0 auto; padding: 10px; text-align: center;">\'
+						+\'<img src="../img/admin/ajax-loader-big.gif" alt="" /><br /><p style="color: white;">'.addslashes($this->l('Loading...')).'</p></div>\');
 						
 						$.ajax(
 						{
 							type: \'GET\',
 							url: \''.__PS_BASE_URI__.'\' + \'modules/blocklayered/blocklayered-ajax-back.php\',
-							data: \'layered_token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&\
+							data: \'layered_token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&\'
 								+(all ? \'\' : $(\'input[name="categoryBox[]"]\').serialize()+\'&\')
-								+(id_layered_filter ? \'id_layered_filter=\'+parseInt(id_layered_filter)
-								+\'\' : \'\'),
+								+(id_layered_filter ? \'id_layered_filter=\'+parseInt(id_layered_filter) : \'\'),
 							success: function(result)
 							{
 								$(\'#layered-ajax-refresh\').css(\'background-color\', \'transparent\');
