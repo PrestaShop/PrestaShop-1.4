@@ -99,7 +99,7 @@ class StatsLive extends Module
 			FROM `'._DB_PREFIX_.'connections` c
 			INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
 			WHERE (g.id_customer IS NULL OR g.id_customer = 0)
-			AND c.`date_add` > "'.date('Y-m-d H:i:s', strtotime('-15 minutes')).'"
+			AND TIME_TO_SEC(TIMEDIFF(NOW(), c.`date_add`)) < 900
 			ORDER BY c.date_add DESC';
 		}
 			
