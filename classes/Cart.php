@@ -66,26 +66,26 @@ class CartCore extends ObjectModel
 	public		$secure_key;
 
 	/** @var string Object last modification date */
-	public 		$date_upd;
+	public		$date_upd;
 
 	protected static $_nbProducts = array();
 	protected static $_isVirtualCart = array();
 
-	protected	$fieldsRequired = array('id_currency', 'id_lang');
-	protected	$fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
+	protected $fieldsRequired = array('id_currency', 'id_lang');
+	protected $fieldsValidate = array('id_address_delivery' => 'isUnsignedId', 'id_address_invoice' => 'isUnsignedId',
 		'id_currency' => 'isUnsignedId', 'id_customer' => 'isUnsignedId', 'id_guest' => 'isUnsignedId', 'id_lang' => 'isUnsignedId',
 		'id_carrier' => 'isUnsignedId', 'recyclable' => 'isBool', 'gift' => 'isBool', 'gift_message' => 'isMessage');
 
-	protected	$_products = NULL;
-	protected 	static $_totalWeight = array();
-	protected	$_taxCalculationMethod = PS_TAX_EXC;
-	protected	static $_discounts = NULL;
-	protected	static $_discountsLite = NULL;
-	protected	static $_carriers = NULL;
-	protected	static $_taxes_rate = NULL;
-	protected 	static $_attributesLists = array();
-	protected 	$table = 'cart';
-	protected 	$identifier = 'id_cart';
+	protected $_products = NULL;
+	protected static $_totalWeight = array();
+	protected $_taxCalculationMethod = PS_TAX_EXC;
+	protected static $_discounts = NULL;
+	protected static $_discountsLite = NULL;
+	protected static $_carriers = NULL;
+	protected static $_taxes_rate = NULL;
+	protected static $_attributesLists = array();
+	protected $table = 'cart';
+	protected $identifier = 'id_cart';
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
@@ -356,7 +356,7 @@ class CartCore extends ObjectModel
 			AND tr.`id_state` = 0)
 		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)$this->id_lang.')
-		LEFT JOIN `'._DB_PREFIX_.'customization` cu ON (p.`id_product` = cu.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'customization` cu ON (cp.`id_product` = cu.`id_product` AND cp.`id_product_attribute` = cu.`id_product_attribute` AND cu.`id_cart` = cp.`id_cart`)
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute_image` pai ON (pai.`id_product_attribute` = pa.`id_product_attribute`)
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.(int)$this->id_lang.')
 		WHERE cp.`id_cart` = '.(int)$this->id.'
@@ -550,7 +550,7 @@ class CartCore extends ObjectModel
 			unset(self::$_totalWeight[$this->id]);
 		if ((int)$quantity <= 0)
 			return $this->deleteProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
-		elseif (!$product->available_for_order OR Configuration::get('PS_CATALOG_MODE'))
+		else if (!$product->available_for_order OR Configuration::get('PS_CATALOG_MODE'))
 			return false;
 		else
 		{
@@ -589,7 +589,7 @@ class CartCore extends ObjectModel
 				/* Delete product from cart */
 				if ($newQty <= 0)
 					return $this->deleteProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
-				elseif ($newQty < $minimalQuantity)
+				else if ($newQty < $minimalQuantity)
 					return -1;
 				else
 					Db::getInstance()->Execute('
@@ -1415,8 +1415,8 @@ class CartCore extends ObjectModel
 
 	public static function lastNoneOrderedCart($id_customer)
 	{
-	 	if (!$result = Db::getInstance()->getRow('
-		 	SELECT c.`id_cart`
+		if (!$result = Db::getInstance()->getRow('
+			SELECT c.`id_cart`
 			FROM '._DB_PREFIX_.'cart c
 			LEFT JOIN '._DB_PREFIX_.'orders o ON (c.`id_cart` = o.`id_cart`)
 			WHERE c.`id_customer` = '.(int)($id_customer).' AND o.`id_cart` IS NULL
@@ -1555,7 +1555,7 @@ class CartCore extends ObjectModel
 			FROM '._DB_PREFIX_.'cart c
 			WHERE c.`id_customer` = '.(int)($id_customer).'
 			ORDER BY c.`date_add` DESC');
-	 	return $result;
+		return $result;
 	}
 
 	public static function replaceZeroByShopName($echo, $tr)
