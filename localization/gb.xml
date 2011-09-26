@@ -6,7 +6,7 @@
 	<taxes>
 		<tax id="1" name="VAT UK 20%" rate="20.0"/>
 		<tax id="2" name="VAT UK 5%" rate="5"/>
-		
+
 		<taxRulesGroup name="UK Standard Rate (20%)">
 			<taxRule iso_code_country="be" id_tax="1"/>
 			<taxRule iso_code_country="bg" id_tax="1"/>
@@ -34,7 +34,7 @@
 			<taxRule iso_code_country="sk" id_tax="1"/>
 			<taxRule iso_code_country="fi" id_tax="1"/>
 			<taxRule iso_code_country="se" id_tax="1"/>
-			<taxRule iso_code_country="uk" id_tax="1"/>
+			<taxRule iso_code_country="gb" id_tax="1"/>
 		</taxRulesGroup>
 
 		<taxRulesGroup name="UK Reduced Rate (5%)">
@@ -64,7 +64,7 @@
 			<taxRule iso_code_country="sk" id_tax="2"/>
 			<taxRule iso_code_country="fi" id_tax="2"/>
 			<taxRule iso_code_country="se" id_tax="2"/>
-			<taxRule iso_code_country="uk" id_tax="2"/>
+			<taxRule iso_code_country="gb" id_tax="2"/>
 		</taxRulesGroup>
 	</taxes>
 	<units>
@@ -75,3 +75,4 @@
 		<unit type="long_distance" value="mi"/>
 	</units>
 </localizationPack>
+
