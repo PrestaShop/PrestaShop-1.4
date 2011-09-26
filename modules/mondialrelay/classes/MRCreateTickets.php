@@ -414,10 +414,10 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			
 		Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'mr_selected`
-			SET `MR_poids` = \''.$params['Poids'].'\',
-					`exp_number` = \''.$expeditionNum.'\',
-					`url_etiquette` = \''.$ticketURL.'\',
-					`url_suivi` = \''.$trackingURL.'\'
+			SET `MR_poids` = \''.pSQL($params['Poids']).'\',
+					`exp_number` = \''.pSQL($expeditionNum).'\',
+					`url_etiquette` = \''.pSQL($ticketURL).'\',
+					`url_suivi` = \''.pSQL($trackingURL).'\'
 			WHERE id_mr_selected = '.(int)$id_mr_selected);
 		
 		// NDossier contains the id_order
@@ -433,9 +433,9 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			_PS_OS_SHIPPING_;
 						
 		$history = new OrderHistory();
-		$history->id_order = (int)($params['NDossier']);
-		$history->changeIdOrderState($orderState, (int)($params['NDossier'])); 
-		$history->id_employee = (int)($cookie->id_employee);
+		$history->id_order = (int)$params['NDossier'];
+		$history->changeIdOrderState($orderState, (int)$params['NDossier']);
+		$history->id_employee = (int)$cookie->id_employee;
 		$history->addWithemail(true, $templateVars);
 
 		unset($order);

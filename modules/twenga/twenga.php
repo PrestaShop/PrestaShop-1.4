@@ -193,7 +193,7 @@ class Twenga extends PaymentModule
 			FROM '._DB_PREFIX_.'country as c
 			LEFT JOIN '._DB_PREFIX_.'country_lang as c_l
 			ON c_l.id_country = c.id_country
-			WHERE c_l.id_lang = '.$cookie->id_lang.' 
+			WHERE c_l.id_lang = '.(int)$cookie->id_lang.' 
 			AND c.id_country = '.	Configuration::get('PS_COUNTRY_DEFAULT'));
 
 		if (isset($country[0]['iso']))
@@ -235,10 +235,10 @@ class Twenga extends PaymentModule
 				<br /><br />'.$this->l('To unsubscribe or for any question, please contact Twenga on your account.').'
 				<div style="margin: 10px 0 5px 0; font-size:14px; color:#FFF; text-align:center;">
 				<b><a '.(($_POST['type'] == 'uninstall') ? 
-				'onClick="$.fancybox.close(); window.location=\''.$url.'\' '. 
-				$this->_getAjaxScript('send_mail.php', $_POST['type'], $url, false).'"' : ' ') . 
-				'href="'.$url.'">'.$type.'</a></b>  - 
-				<b><a href="'.$link.'">'.
+				'onClick="$.fancybox.close(); window.location=\''.Tools::safeOutput($url).'\' '. 
+				$this->_getAjaxScript('send_mail.php', Tools::safeOutput($_POST['type']), Tools::safeOutput($url), false).'"' : ' ') . 
+				'href="'.Tools::safeOutput($url).'">'.Tools::safeOutput($type).'</a></b>  - 
+				<b><a href="'.Tools::safeOutput($link).'">'.
 				$this->l('Newer version').'</a></b> - 
 				<b><a href="javacript:void(0);"i onclick="$.fancybox.close(); return false;">'.
 				$this->l('Cancel').'</a></b>
@@ -561,7 +561,7 @@ class Twenga extends PaymentModule
 				FROM '._DB_PREFIX_.'country_lang as c_l
 				LEFT JOIN '._DB_PREFIX_.'country as c
 				ON c_l.id_country = c.id_country
-				WHERE c_l.id_lang = '.$cookie->id_lang.' 
+				WHERE c_l.id_lang = '.(int)$cookie->id_lang.' 
 				AND c.iso_code IN ('; 
 			foreach($this->limited_countries as $iso)
 				$query .= "'".strtoupper($iso)."', ";

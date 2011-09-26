@@ -1128,7 +1128,7 @@ class BlockLayered extends Module
 						foreach ($_POST['categoryBox'] as &$categoryBoxTmp)
 							$categoryBoxTmp = (int)$categoryBoxTmp;
 					
-					Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_category WHERE id_category IN ('.implode(',', $_POST['categoryBox']).')');
+					Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'layered_category WHERE id_category IN ('.implode(',', array_map('intval', $_POST['categoryBox'])).')');
 	
 					$filterValues = array();
 					foreach ($_POST['categoryBox'] as $idc)
@@ -1175,7 +1175,7 @@ class BlockLayered extends Module
 					Db::getInstance()->AutoExecute(_DB_PREFIX_.'layered_filter', $valuesToInsert, 'INSERT');
 					
 					echo '<div class="conf"><img src="../img/admin/ok2.png" alt="" />
-					'.$this->l('Your filter').' "'.Tools::getValue('layered_tpl_name').'" '.
+					'.$this->l('Your filter').' "'.Tools::safeOutput(Tools::getValue('layered_tpl_name')).'" '.
 					((isset($_POST['id_layered_filter']) && $_POST['id_layered_filter']) ? $this->l('was updated successfully.') : $this->l('was added successfully.')).'</div>';
 				}
 			}
@@ -1417,7 +1417,7 @@ class BlockLayered extends Module
 					<td>
 						<a href="#" onclick="updElements('.($filtersTemplate['n_categories'] ? 0 : 1).', '.(int)$filtersTemplate['id_layered_filter'].');">
 						<img src="../img/admin/edit.gif" alt="" title="'.$this->l('Edit').'" /></a> 
-						<a href="'.$_SERVER['REQUEST_URI'].'&deleteFilterTemplate=1&id_layered_filter='.(int)$filtersTemplate['id_layered_filter'].'"
+						<a href="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'&deleteFilterTemplate=1&id_layered_filter='.(int)$filtersTemplate['id_layered_filter'].'"
 						onclick="return confirm(\''.addslashes($this->l('Delete filter template #')).(int)$filtersTemplate['id_layered_filter'].$this->l('?').'\');">
 						<img src="../img/admin/delete.gif" alt="" title="'.$this->l('Delete').'" /></a>
 					</td>
@@ -1450,7 +1450,7 @@ class BlockLayered extends Module
 				#layered-step-2, #layered-step-3 { display: none; }
 				#table-filter-templates tr th, #table-filter-templates tr td { text-align: center; }
 			</style>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post" onsubmit="return checkForm();">';
+			<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post" onsubmit="return checkForm();">';
 			
 		$html .= '
 			<h2>'.$this->l('Step 1/3 - Select categories').'</h2>
@@ -1682,7 +1682,7 @@ class BlockLayered extends Module
 		</fieldset><br />
 		<fieldset class="width2">
 			<legend><img src="../img/admin/cog.gif" alt="" /> '.$this->l('Configuration').'</legend>
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">			
+			<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">			
 				<table border="0" style="font-size: 11px; width: 100%; margin: 0 auto;" class="table">
 					<tr>
 						<th style="text-align: center;">'.$this->l('Option').'</th>

@@ -185,7 +185,7 @@ class TagCore extends ObjectModel
 		if (is_array($array))
 		{
 			$array = array_map('intval', $array);
-			$result1 = Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 0 WHERE id_product IN ('.implode(',', $array).')');
+			$result1 = Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 0 WHERE id_product IN ('.implode(',', array_map('intval', $array)).')');
 			$ids = array();
 			foreach ($array as $id_product)
 				$ids[] = '('.(int)$id_product.','.(int)$this->id.')';

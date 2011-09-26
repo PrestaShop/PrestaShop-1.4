@@ -1509,7 +1509,7 @@ class ProductCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'product` p
 			WHERE p.`active` = 1
 			AND p.`show_price` = 1
-			'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.((is_array($ids_product) AND sizeof($ids_product)) ? implode(', ', $ids_product) : 0).')' : '').'
+			'.((!$beginning AND !$ending) ? ' AND p.`id_product` IN('.((is_array($ids_product) AND sizeof($ids_product)) ? implode(', ', array_map('intval', $ids_product)) : 0).')' : '').'
 			AND p.`id_product` IN (
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
@@ -3419,7 +3419,7 @@ class ProductCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `reference`
 		FROM `'._DB_PREFIX_.'product` p
-		WHERE p.reference = "'.$reference.'"');
+		WHERE p.reference = "'.pSQL($reference).'"');
 
 		return isset($row['reference']);
 	}

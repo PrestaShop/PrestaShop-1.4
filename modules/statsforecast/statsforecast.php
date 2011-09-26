@@ -74,7 +74,7 @@ class StatsForecast extends Module
 		if (!isset($cookie->stats_granularity))
 			$cookie->stats_granularity = 10;
 		if (Tools::isSubmit('submitIdZone'))
-			$cookie->stats_id_zone = Tools::getValue('stats_id_zone');
+			$cookie->stats_id_zone = (int)Tools::getValue('stats_id_zone');
 		if (Tools::isSubmit('submitGranularity'))
 			$cookie->stats_granularity = Tools::getValue('stats_granularity');
 		
@@ -442,7 +442,7 @@ class StatsForecast extends Module
 		if ((int)$cookie->stats_id_zone)
 		{
 			$join =  ' LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_invoice = a.id_address LEFT JOIN `'._DB_PREFIX_.'country` co ON co.id_country = a.id_country';
-			$where = ' AND co.id_zone = '.$cookie->stats_id_zone.' ';
+			$where = ' AND co.id_zone = '.(int)$cookie->stats_id_zone.' ';
 		}
 		
 		$ca = array();

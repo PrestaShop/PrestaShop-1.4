@@ -597,7 +597,7 @@ if (Tools::isSubmit('saveHook'))
 		foreach($hookedModules as $module)
 		{
 			$ids = explode('_', $module);
-			$value .= '('.$ids[1].', (SELECT id_hook FROM `'._DB_PREFIX_.'hook` WHERE `name` = \''.pSQL($hook).'\' LIMIT 0, 1), '.$i.'),';
+			$value .= '('.(int)$ids[1].', (SELECT id_hook FROM `'._DB_PREFIX_.'hook` WHERE `name` = \''.pSQL($hook).'\' LIMIT 0, 1), '.(int)$i.'),';
 			$i ++;
 		}
 		$value = rtrim($value, ',');

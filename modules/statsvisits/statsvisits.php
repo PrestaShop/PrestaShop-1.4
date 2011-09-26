@@ -85,7 +85,7 @@ class StatsVisits extends ModuleGraph
 			<div style="margin-top:20px"></div>
 			<p>'.$this->l('Total visits:').' '.$totalVisits.'</p>
 			<p>'.$this->l('Total visitors:').' '.$totalGuests.'</p>
-			'.($totalVisits ? ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => 3)).'<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>' : '').'
+			'.($totalVisits ? ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => 3)).'<p><a href="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>' : '').'
 			
 		</fieldset>
 		<br class="clear" />

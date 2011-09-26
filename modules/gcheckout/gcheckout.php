@@ -107,13 +107,13 @@ class GCheckout extends PaymentModule
 				Configuration::updateValue('GCHECKOUT_NO_SHIPPING', 0);
 
 			if (!sizeof($errors))
-				Tools::redirectAdmin($currentIndex.'&configure=gcheckout&token='.Tools::getValue('token').'&conf=4');
+				Tools::redirectAdmin($currentIndex.'&configure=gcheckout&token='.Tools::safeOutput(Tools::getValue('token')).'&conf=4');
 			foreach ($errors as $error)
 				echo $error;
 		}
 		
 		$html = '<h2>'.$this->displayName.'</h2>
-		<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+		<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset>
 			<legend><img src="'.__PS_BASE_URI__.'modules/gcheckout/logo.gif" />'.$this->l('Settings').'</legend>
 			<p>
@@ -141,13 +141,13 @@ class GCheckout extends PaymentModule
 					'.$this->l('Merchant ID').'
 				</label>
 				<div class="margin-form">
-					<input type="text" name="gcheckout_merchant_id" value="'.Tools::getValue('gcheckout_merchant_id', Configuration::get('GCHECKOUT_MERCHANT_ID')).'" />
+					<input type="text" name="gcheckout_merchant_id" value="'.Tools::safeOutput(Tools::getValue('gcheckout_merchant_id', Configuration::get('GCHECKOUT_MERCHANT_ID'))).'" />
 				</div>
 				<label>
 					'.$this->l('Merchant Key').'
 				</label>
 				<div class="margin-form">
-					<input type="text" name="gcheckout_merchant_key" value="'.Tools::getValue('gcheckout_merchant_key', Configuration::get('GCHECKOUT_MERCHANT_KEY')).'" />
+					<input type="text" name="gcheckout_merchant_key" value="'.Tools::safeOutput(Tools::getValue('gcheckout_merchant_key', Configuration::get('GCHECKOUT_MERCHANT_KEY'))).'" />
 				</div>
 				<p>'.$this->l('If you click this box, buyers will be able to see the shipping fees you have setup in Google Checkout on the purchase page.').'</p>
 				<label>

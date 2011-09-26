@@ -267,7 +267,7 @@ abstract class ModuleGraphCore extends Module
 		
 		global $cookie;
 		$id_employee = (int)($cookie->id_employee);
-		$drawer = 'drawer.php?render='.$render.'&module='.Tools::getValue('module').'&type='.$params['type'].'&layers='.$params['layers'].'&id_employee='.$id_employee.'&id_lang='.$id_lang;
+		$drawer = 'drawer.php?render='.$render.'&module='.Tools::safeOutput(Tools::getValue('module')).'&type='.Tools::safeOutput($params['type']).'&layers='.Tools::safeOutput($params['layers']).'&id_employee='.$id_employee.'&id_lang='.$id_lang;
 		if (isset($params['option']))
 			$drawer .= '&option='.$params['option'];
 			

@@ -320,6 +320,11 @@ function pSQL($string, $htmlOK = false)
 	return $string;
 }
 
+function bqSQL($string)
+{
+	return str_replace('`', '\`', pSQL($string));
+}
+
 /**
  * Convert \n and \r\n and \r to <br />
  *

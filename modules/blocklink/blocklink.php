@@ -270,7 +270,7 @@ class BlockLink extends Module
 		</script>
 		<fieldset>
 			<legend><img src="'.$this->_path.'add.png" alt="" title="" /> '.$this->l('Add a new link').'</legend>
-			<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
+			<form method="post" action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'">
 				<label>'.$this->l('Text:').'</label>
 				<div class="margin-form">';
 			foreach ($languages as $language)
@@ -295,7 +295,7 @@ class BlockLink extends Module
 		</fieldset>
 		<fieldset class="space">
 			<legend><img src="'.$this->_path.'logo.gif" alt="" title="" /> '.$this->l('Block title').'</legend>
-			<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
+			<form method="post" action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'">
 				<label>'.$this->l('Block title:').'</label>
 				<div class="margin-form">';
 		foreach ($languages as $language)
@@ -314,7 +314,7 @@ class BlockLink extends Module
 		</fieldset>
 		<fieldset class="space">
 			<legend><img src="'.$this->_path.'prefs.gif" alt="" title="" /> '.$this->l('Settings').'</legend>
-			<form method="post" action="'.$_SERVER['REQUEST_URI'].'">
+			<form method="post" action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'">
 				<label>'.$this->l('Order list:').'</label>
 				<div class="margin-form">
 					<select name="orderWay">

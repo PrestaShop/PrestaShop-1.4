@@ -488,7 +488,7 @@ class Dejala extends CarrierModule
 			
 		$smarty->assign("currentTab", $currentTab);
 		$smarty->assign("moduleConfigURL", 'index.php?tab=AdminModules&configure=dejala&token='.$_GET['token']);
-		$smarty->assign("formAction", $_SERVER['REQUEST_URI']);
+		$smarty->assign("formAction", Tools::safeOutput($_SERVER['REQUEST_URI']));
 		$outputMenu = $this->display(__FILE__, 'dejala_menu.tpl');
 
 		if ($currentTab==='home') 
@@ -1018,7 +1018,7 @@ class Dejala extends CarrierModule
 			else
 			{
 				$_html = '';
-				$_html .= '<form action="'.$_SERVER['REQUEST_URI'].'" method="post">';
+				$_html .= '<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">';
 				$_html .= '<input type="hidden" name="dejala_action" value="order">';
 				$_html .= '<input type="submit" value="Commander la course">';
 				$_html .= '</form><br />';

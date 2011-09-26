@@ -167,10 +167,10 @@ class StatsProduct extends ModuleGraph
 			<p>'.$this->l('Conversion rate:').' '.number_format($totalViewed ? $totalBought / $totalViewed : 0, 2).'</p>
 			<center>'.ModuleGraph::engine(array('layers' => 2, 'type' => 'line', 'option' => '1-'.$id_product)).'</center>
 			<br />
-			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>';
+			<p><a href="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'&export=1&exportType=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p>';
 			if ($hasAttribute = $product->hasAttributes() AND $totalBought)
 				$this->_html .= '<h3 class="space">'.$this->l('Attribute sales distribution').'</h3><center>'.ModuleGraph::engine(array('type' => 'pie', 'option' => '3-'.$id_product)).'</center><br />
-			<p><a href="'.$_SERVER['REQUEST_URI'].'&export=1&exportType=2"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br />';
+			<p><a href="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'&export=1&exportType=2"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a></p><br />';
 			if ($totalBought)
 			{
 				$sales = $this->getSales($id_product, $cookie->id_lang);
@@ -257,9 +257,9 @@ class StatsProduct extends ModuleGraph
 				</tr>
 			</thead><tbody>';
 			foreach ($this->getProducts($cookie->id_lang) AS $product)
-				$this->_html .= '<tr><td>'.$product['reference'].'</td><td><a href="'.$currentIndex.'&token='.Tools::getValue('token').'&module='.$this->name.'&id_product='.$product['id_product'].'">'.$product['name'].'</a></td><td>'.$product['quantity'].'</td></tr>';
+				$this->_html .= '<tr><td>'.$product['reference'].'</td><td><a href="'.$currentIndex.'&token='.Tools::safeOutput(Tools::getValue('token')).'&module='.$this->name.'&id_product='.$product['id_product'].'">'.$product['name'].'</a></td><td>'.$product['quantity'].'</td></tr>';
 			$this->_html .= '</tbody></table><br /></div><br />
-				<a href="'.$_SERVER['REQUEST_URI'].'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a><br />';
+				<a href="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'&export=1"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a><br />';
 		}
 		
 		$this->_html .= '</fieldset><br />
