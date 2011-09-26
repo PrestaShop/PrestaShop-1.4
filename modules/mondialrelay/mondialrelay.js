@@ -372,7 +372,7 @@ function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
 {
 	// Ajax call to add the selection in the database (compatibility for 1.3)
 	// But keep this way to add a selection better that the hook
-	$.ajax({
+	MRjQuery.ajax({
 		type: 'POST',
     url: _PS_MR_MODULE_DIR_ + 'ajax.php',
     data: {'method' : 'addSelectedCarrierToDB',
@@ -382,6 +382,7 @@ function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
     	'mrtoken' : mrtoken},
     success: function(json)
     {
+			
     },
     error: function(xhr, ajaxOptions, thrownError)
     {
@@ -533,7 +534,7 @@ function PS_MRFetchRelayPoint(carrierSelected)
 		</td></tr>');
 	
 	fetchingRelayPoint[carrier_id] = $('#PS_MRSelectedCarrier_' + carrier_id);
-	$.ajax(
+	MRjQuery.ajax(
 	{
 		type: 'POST',
 		url: _PS_MR_MODULE_DIR_ + 'ajax.php',

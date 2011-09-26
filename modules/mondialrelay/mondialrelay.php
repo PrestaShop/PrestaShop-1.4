@@ -396,13 +396,20 @@ class MondialRelay extends Module
 	** Override a jQuery version included by another one us.
 	** Allow a compatibility for Presta < 1.4
 	*/
-	public static function getJqueryCompatibility()
+	public static function getJqueryCompatibility($overloadCurrent = false)
 	{
-		return '
-			<script type="text/javascript">
-				jq13 = jQuery.noConflict(true); 
-			</script>
+		if ($overloadCurrent)
+			return '
+				<script type="text/javascript">
+					current = jQuery.noConflict(true); 
+				</script>
 			<script type="text/javascript" src="'.self::$moduleURL.'/jquery-1.4.4.min.js"></script>';
+
+		return '
+			<script type="text/javascript" src="'.self::$moduleURL.'/jquery-1.4.4.min.js"></script>
+			<script type="text/javascript">
+				MRjQuery = jQuery.noConflict(true); 
+			</script>';
 	}
 	
 	public function hookNewOrder($params)
@@ -424,7 +431,8 @@ class MondialRelay extends Module
 				var _PS_MR_MODULE_DIR_ = "'.self::$moduleURL.'";
 				var mrtoken = "'.self::$MRBackToken.'";
 			</script>
-			<script type="text/javascript" src="'.$jsFilePath.'"></script>';
+			<script type="text/javascript" src="'.$jsFilePath.'"></script>'.
+			self::getJqueryCompatibility(true);
 	}
 	
 	private function _postValidation()
@@ -635,7 +643,8 @@ class MondialRelay extends Module
 			'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
 			'new_base_dir' => self::$moduleURL,
 			'MRToken' => self::$MRFrontToken,
-			'carriersextra' => $carriersList));
+			'carriersextra' => $carriersList,
+			'jQueryOverload' => self::getJqueryCompatibility()));
 			
 		return $this->display(__FILE__, 'mondialrelay.tpl');
 	}
@@ -782,7 +791,7 @@ class MondialRelay extends Module
 				Db::getInstance()->Execute('
 				INSERT INTO `' . _DB_PREFIX_ . 'carrier`
 				(`url`, `name`, `active`, `is_module`, `range_behavior`)
-				VALUES(NULL, "'.pSQL('mondialrelay').'", "1", "1", "1")');
+				VALUES(NULL, "'.pSQL('mondialrelay').'", "1", "0", "1")');
 				
 			$get   = Db::getInstance()->getRow('SELECT * FROM `' . _DB_PREFIX_ . 'carrier` WHERE `id_carrier` = "' . mysql_insert_id() . '"');
 			Db::getInstance()->Execute('UPDATE `' . _DB_PREFIX_ . 'mr_method` SET `id_carrier` = "' . (int)($get['id_carrier']) . '" WHERE `id_mr_method` = "' . pSQL($mainInsert) . '"');
@@ -1218,7 +1227,7 @@ class MondialRelay extends Module
 	{
 		$id_order_state = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
 		$sql = self::getBaseOrdersSQLQuery($id_order_state);
-		
+
 		if (count($orderIdList))
 		{
 			$sql .= ' AND o.id_order IN (';

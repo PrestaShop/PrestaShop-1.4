@@ -24,6 +24,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{$jQueryOverload}
+
 <link href="{$new_base_dir}/style.css" rel="stylesheet" type="text/css" media="all" /> 
 
 <script type="text/javascript">
