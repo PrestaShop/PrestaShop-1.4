@@ -261,6 +261,8 @@ class AuthControllerCore extends FrontController
 					self::$cart->id_carrier = 0;
 					self::$cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
 					self::$cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
+					// If a logged guest logs in as a customer, the cart secure key was already set and needs to be updated
+					self::$cart->secure_key = $customer->secure_key;
 					self::$cart->update();
 					Module::hookExec('authentication');
 					if (!Tools::isSubmit('ajax'))
@@ -308,7 +310,7 @@ class AuthControllerCore extends FrontController
 				$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
 			else
 				$countries = Country::getCountries((int)self::$cookie->id_lang, true);
-				
+
 
 			self::$smarty->assign(array(
 				'countries' => $countries,
@@ -370,7 +372,7 @@ class AuthControllerCore extends FrontController
 					$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
 				else
 					$countries = Country::getCountries((int)self::$cookie->id_lang, true);
-				
+
 				self::$smarty->assign(array(
 					'inOrderProcess' => true,
 					'PS_GUEST_CHECKOUT_ENABLED' => Configuration::get('PS_GUEST_CHECKOUT_ENABLED'),
@@ -394,16 +396,16 @@ class AuthControllerCore extends FrontController
 		$addressItems = array();
 		$addressFormat = AddressFormat::getOrderedAddressFields(Configuration::get('PS_COUNTRY_DEFAULT'), false, true);
 		$requireFormFieldsList = AddressFormat::$requireFormFieldsList;
-		
+
 		foreach ($addressFormat as $addressline)
 			foreach (explode(' ', $addressline) as $addressItem)
 				$addressItems[] = trim($addressItem);
-		
+
 		// Add missing require fields for a new user susbscription form
 		foreach($requireFormFieldsList as $fieldName)
 			if (!in_array($fieldName, $addressItems))
 				$addressItems[] = trim($fieldName);
-				
+
 		foreach (array('inv', 'dlv') as $addressType)
 			self::$smarty->assign(array($addressType.'_adr_fields' => $addressFormat, $addressType.'_all_fields' => $addressItems));
 	}
