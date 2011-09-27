@@ -2105,7 +2105,7 @@ class BlockLayered extends Module
 					ON (lifl.id_feature = fp.id_feature AND lifl.id_lang = '.(int)$cookie->id_lang.')
 					LEFT JOIN '._DB_PREFIX_.'layered_indexable_feature_value_lang lifvl
 					ON (lifvl.id_feature_value = fp.id_feature_value AND lifvl.id_lang = '.(int)$cookie->id_lang.') ';
-					$sqlQuery['where'] = 'WHERE p.`active` = 1 ';
+					$sqlQuery['where'] = 'WHERE p.`active` = 1 AND fp.id_feature = '.(int)$filter['id_value'].' ';
 					$sqlQuery['group'] = 'GROUP BY fv.id_feature_value ';
 					break;
 
