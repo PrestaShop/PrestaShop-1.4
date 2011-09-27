@@ -94,11 +94,11 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			'Expe_Tel1'			=>  array(
 						'required'				=> true,
 						'value'						=> '',
-						'regexValidation' => '#^((00|\+)33|0)[0-9][0-9]{8}$#'),
+						'regexValidation' => '#^((00|\+)[1-9]{2}|0)[0-9][0-9]{7,8}$#'),
 			'Expe_Tel2'			=>  array(
 						'required'				=> false,
 						'value'						=> '',
-						'regexValidation' => '#^((00|\+)33|0)[0-9][0-9]{8}$#'),
+						'regexValidation' => '#^((00|\+)[1-9]{2}|0)[0-9][0-9]{7,8}$#'),
 			'Expe_Mail'			=>  array(
 						'required'				=> false,
 						'value'						=> '',
@@ -139,11 +139,11 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			'Dest_Tel1'			=>  array(
 						'required'				=> false,
 						'value'						=> '',
-						'regexValidation' => '#^((00|\+)33|0)[0-9][0-9]{8}$#'),
+						'regexValidation' => '#^((00|\+)[1-9]{2}|0)[0-9][0-9]{7,8}$#'),
 			'Dest_Tel2'			=>  array(
 						'required'				=> false,
 						'value'						=> '',
-						'regexValidation' => '#^((00|\+)33|0)[0-9][0-9]{8}$#'),
+						'regexValidation' => '#^((00|\+)[1-9]{2}|0)[0-9][0-9]{7,8}$#'),
 			'Dest_Mail'			=>  array(
 						'required'				=> false,
 						'value'						=> '',
@@ -294,7 +294,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		$this->_fields['list']['CRT_Valeur']['value'] = 0;
 		$this->_fields['list']['CRT_Devise']['value'] = 'EUR';
 	}
-	
+
 	/*
 	 * Initiate the data needed to be send properly
 	 * Can manage a list of data for multiple request
@@ -325,13 +325,13 @@ class MRCreateTickets implements IMondialRelayWSMethod
 					if (count($detail) == 2 && $detail[1] == $orderDetail['id_order'])
 						$tmp['Poids']['value'] = $this->_weightFormat($detail[0]);
 				}
-				
+			
 				$destIsoCode = Country::getIsoById($deliveriesAddress->id_country);
 				$tmp['ModeCol']['value'] = $orderDetail['mr_ModeCol'];
 				$tmp['ModeLiv']['value'] = $orderDetail['mr_ModeLiv'];
 				$tmp['NDossier']['value'] = $orderDetail['id_order'];
 				$tmp['NClient']['value'] = $orderDetail['id_customer'];
-				$tmp['Dest_Langage']['value'] = $destIsoCode;
+				$tmp['Dest_Langage']['value'] = 'FR'; //Language::getIsoById($orderDetail['id_lang']);
 				$tmp['Dest_Ad1']['value'] = $deliveriesAddress->lastname;
 				$tmp['Dest_Ad2']['value'] = $deliveriesAddress->address2;
 				$tmp['Dest_Ad3']['value'] = $deliveriesAddress->address1;

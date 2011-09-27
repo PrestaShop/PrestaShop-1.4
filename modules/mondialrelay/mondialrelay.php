@@ -59,7 +59,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.7.3';
+		$this->version	= '1.7.4';
 
 		parent::__construct();
 
@@ -1157,7 +1157,8 @@ class MondialRelay extends Module
 		return 'SELECT  o.`id_address_delivery` as id_address_delivery, 
 							o.`id_order` as id_order, 
 							o.`id_customer` as id_customer,
-							o.`id_cart` as id_cart, 
+							o.`id_cart` as id_cart,
+							o.`id_lang` as id_lang,
 							mrs.`id_mr_selected` as id_mr_selected,
 							CONCAT(c.`firstname`, \' \', c.`lastname`) AS `customer`,
 							o.`total_paid_real` as total, o.`total_shipping` as shipping,
