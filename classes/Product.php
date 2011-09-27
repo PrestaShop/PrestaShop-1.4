@@ -2653,8 +2653,9 @@ class ProductCore extends ObjectModel
 
 	public static function defineProductImage($row, $id_lang)
 	{
-		if ($row['id_image'])
-			return $row['id_product'].'-'.$row['id_image'];
+		if (isset($row['id_image']))
+			if ($row['id_image'])
+				return $row['id_product'].'-'.$row['id_image'];
 		return Language::getIsoById((int)$id_lang).'-default';
 	}
 
