@@ -56,7 +56,7 @@ class FedexCarrier extends CarrierModule
 	{
 		$this->name = 'fedexcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.2';
+		$this->version = '1.2.3';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 
@@ -1700,7 +1700,7 @@ class FedexCarrier extends CarrierModule
 				Db::getInstance()->autoExecute(_DB_PREFIX_.'fedex_cache_test', array('hash' => pSQL(md5(var_export($requestHash, true))), 'result' => pSQL(serialize($resultTab)), 'date_add' => pSQL(date('Y-m-d H:i:s')), 'date_upd' => pSQL(date('Y-m-d H:i:s'))), 'INSERT');
 
 			// Return results
-			if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity == 'SUCCESS')
+			if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity != 'ERROR' && isset($resultTab->RateReplyDetails->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount))
 				return true;
 
 			if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity == 'ERROR')
@@ -1783,7 +1783,7 @@ class FedexCarrier extends CarrierModule
 		}
 
 		// Return results
-		if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity == 'SUCCESS')
+		if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity != 'ERROR' && isset($resultTab->RateReplyDetails->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount))
 			return array('connect' => true, 'cost' => number_format($resultTab->RateReplyDetails->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount,2,'.',',') * $conversionRate);
 
 		if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity == 'ERROR')
