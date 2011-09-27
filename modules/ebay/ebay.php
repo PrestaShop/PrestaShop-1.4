@@ -61,7 +61,7 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.2.5';
+		$this->version = '1.2.6';
 		$this->author = 'PrestaShop';
 		parent::__construct ();
 		$this->displayName = $this->l('eBay');
@@ -482,7 +482,10 @@ class Ebay extends Module
 										Db::getInstance()->autoExecute(_DB_PREFIX_.'ebay_order', array('id_order_ref' => pSQL($order['id_order_ref']), 'id_order' => (int)$id_order), 'INSERT');
 									}
 									else
+									{
+										$cartAdd->delete();
 										$orderList[$korder]['errors'][] = $this->l('Could not add product to cart (maybe your stock quantity is 0)');
+									}
 								}
 								else
 									$orderList[$korder]['errors'][] = $this->l('Could not found products in database');
@@ -1555,9 +1558,9 @@ class Ebay extends Module
 				$images = $product->getImages($this->id_lang);
 				foreach ($images as $image)
 				{
-					$pictures[] = $prefix.$link->getImageLink('', $product->id.'-'.$image['id_image'], NULL);
-					$picturesMedium[] = $prefix.$link->getImageLink('', $product->id.'-'.$image['id_image'], 'medium');
-					$picturesLarge[] = $prefix.$link->getImageLink('', $product->id.'-'.$image['id_image'], 'large');
+					$pictures[] = str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $product->id.'-'.$image['id_image'], NULL));
+					$picturesMedium[] = str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $product->id.'-'.$image['id_image'], 'medium'));
+					$picturesLarge[] = str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $product->id.'-'.$image['id_image'], 'large'));
 				}
 
 				// Load Variations
