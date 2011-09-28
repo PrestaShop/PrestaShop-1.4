@@ -13,6 +13,9 @@ DELETE FROM `PREFIX_configuration` WHERE name IN ('PS_LAYERED_BITLY_USERNAME', '
 
 ALTER TABLE `PREFIX_delivery` CHANGE `price` `price` DECIMAL(20, 6) NOT NULL;
 
+ALTER TABLE `PREFIX_store` CHANGE `latitude` `latitude` DECIMAL(10, 8) NULL DEFAULT NULL;
+ALTER TABLE `PREFIX_store` CHANGE `longitude` `longitude` DECIMAL(10, 8) NULL DEFAULT NULL;
+
 INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edit`) VALUES
 ('attributeGroupForm', 'Add fields to the form "attribute group"', 'Add fields to the form "attribute group"', 0, 0),
 ('afterSaveAttributeGroup', 'On saving attribute group', 'On saving attribute group', 0, 0),

@@ -46,7 +46,7 @@ class AdminStores extends AdminTab
 
 		$this->_select = 'cl.`name` country, st.`name` state';
 		$this->_join = '
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)$cookie->id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'state` st ON (st.`id_state` = a.`id_state`)';
 
 		$countries = Country::getCountries((int)($cookie->id_lang));
@@ -232,7 +232,7 @@ class AdminStores extends AdminTab
 					</div>
 					<label>'.$this->l('Latitude / Longitude:').'</label>
 					<div class="margin-form">
-						<input type="text" size="8" maxlength="10" name="latitude" value="'.htmlentities($this->getFieldValue($obj, 'latitude'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> / <input type="text" size="8" maxlength="10" name="longitude" value="'.htmlentities($this->getFieldValue($obj, 'longitude'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />
+						<input type="text" size="11" maxlength="12" name="latitude" value="'.htmlentities($this->getFieldValue($obj, 'latitude'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" /> / <input type="text" size="11" maxlength="12" name="longitude" value="'.htmlentities($this->getFieldValue($obj, 'longitude'), ENT_COMPAT, 'UTF-8').'" onKeyUp="javascript:this.value = this.value.replace(/,/g, \'.\');" />
 						<sup>*</sup>
 						<p class="clear">'.$this->l('Store coords, eg. 45.265469 / -47.226478').'</p>
 					</div>
