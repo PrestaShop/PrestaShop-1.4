@@ -83,6 +83,11 @@ class AuthControllerCore extends FrontController
 			$_POST['firstname'] = $_POST['customer_firstname'];
 			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
+
+			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
+				$this->errors[] = Tools::displayError('Invalid date of birth');
+			$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
+
 			$this->errors = array_unique(array_merge($this->errors, $customer->validateControler()));
 			/* Preparing address */
 			$address = new Address();
@@ -123,8 +128,7 @@ class AuthControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
 			elseif (!Country::isNeedDniByCountryId($address->id_country))
 				$address->dni = NULL;
-			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND !(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
-				$this->errors[] = Tools::displayError('Invalid date of birth');
+
 			if (!sizeof($this->errors))
 			{
 				if (Customer::customerExists(Tools::getValue('email')))
@@ -134,9 +138,7 @@ class AuthControllerCore extends FrontController
 					$customer->ip_registration_newsletter = pSQL(Tools::getRemoteAddr());
 					$customer->newsletter_date_add = pSQL(date('Y-m-d H:i:s'));
 				}
-
-				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
-
+			
 				if (!sizeof($this->errors))
 				{
 					if (!$country = new Country($address->id_country, Configuration::get('PS_LANG_DEFAULT')) OR !Validate::isLoadedObject($country))
