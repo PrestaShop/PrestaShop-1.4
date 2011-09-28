@@ -2652,13 +2652,13 @@ class AdminProducts extends AdminTab
 									<td style="padding-bottom:5px;">
 										<input size="3" maxlength="6" name="quantity" type="text" value="0" />
 									</td>';
-						/*echo  '<tr>
+						echo  '<tr>
 								<td class="col-left">'.$this->l('Minimum quantity:').'</td>
 									<td style="padding-bottom:5px;">
 										<input size="3" maxlength="6" name="minimal_quantity" id="minimal_quantity" type="text" value="'.($this->getFieldValue($obj, 'minimal_quantity') ? $this->getFieldValue($obj, 'minimal_quantity') : 1).'" />
 										<p>'.$this->l('The minimum quantity to buy this product (set to 1 to disable this feature)').'</p>
 									</td>
-								</tr>';*/
+								</tr>';
 					}
 					
 					if ($obj->id)
@@ -2676,11 +2676,10 @@ class AdminProducts extends AdminTab
 							</tr>';
 				}
 				else
+				{
 					echo '<tr>
 							<td colspan="2">'.$this->l('The stock management is disabled').'</td>
 						</tr>';
-
-					
 
 					echo  '
 						<tr>
@@ -2691,7 +2690,8 @@ class AdminProducts extends AdminTab
 							</td>
 						</tr>
 					';
-						
+				}
+							
 				echo '
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>
