@@ -264,17 +264,20 @@ class AdminTaxRulesGroup extends AdminTab
 	public function renderStates($tax_rules, $id_zone, $id_country, $id_lang)
 	{
 		$states = State::getStatesByIdCountry((int)$id_country);
-		$countStates = sizeof($states);
+		$count_states = count($states);
 		$i = 1;
 		$html = '';
-		foreach ($states AS $state)
+		foreach ($states as $state)
 		{
 			$id_tax = 0;
 			$selected = PS_PRODUCT_TAX;
 
+			if ($state['id_zone'] != $id_zone)
+				continue;
+
 			if (array_key_exists($id_country, $tax_rules)
-				AND array_key_exists($state['id_state'], $tax_rules[$id_country])
-				AND array_key_exists(0, $tax_rules[$id_country][$state['id_state']]))
+				&& array_key_exists($state['id_state'], $tax_rules[$id_country])
+				&& array_key_exists(0, $tax_rules[$id_country][$state['id_state']]))
 			{
 				$id_tax = (int)$tax_rules[$id_country][$state['id_state']][0]['id_tax'];
 				$selected = (int)$tax_rules[$id_country][$state['id_state']][0]['state_behavior'];
@@ -284,14 +287,14 @@ class AdminTaxRulesGroup extends AdminTab
 			$html .= '
 			<tr class="states state_'.(int)$id_country.' alt_row">
 				<td>'.(State::hasCounties($state['id_state']) ? '<a class="open_county" id="county_'.(int)$state['id_state'].'"><img id="county_'.(int)$state['id_state'].'_button" class="county_state_'.(int)$id_country.'_button" src="../img/admin/more.png" alt="" /></a>' : '').'</td>
-				<td><img src="../img/admin/lv3_'.($i == $countStates ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($state['name']).'</label></td>
+				<td><img src="../img/admin/lv3_'.($i == $count_states ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($state['name']).'</label></td>
 				<td>
 					'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone,
  																	'id' => 'tax_'.$id_country.'_'.$state['id_state'],
  																	'name' => 'tax_'.$id_country.'_'.$state['id_state'],
  																	'disabled' => $disable )).'&nbsp;-&nbsp;
  					<select id="behavior_state_'.$state['id_state'].'" name="behavior_state_'.$state['id_state'].'" onchange="disableStateTaxRate(\''.$id_country.'\',\''.$state['id_state'].'\')">
-						<option value="'.(int)PS_PRODUCT_TAX.'" '.($selected  == PS_PRODUCT_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply country tax only').'</option>
+						<option value="'.(int)PS_PRODUCT_TAX.'" '.($selected == PS_PRODUCT_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply country tax only').'</option>
 						<option value="'.(int)PS_STATE_TAX.'" '.($selected == PS_STATE_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply state tax only').'</option>
 						<option value="'.(int)PS_BOTH_TAX.'" '.($selected == PS_BOTH_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply both taxes').'</option>
 					</select>
@@ -311,16 +314,16 @@ class AdminTaxRulesGroup extends AdminTab
 	public function renderCounties($tax_rules, $id_zone, $id_country, $id_state, $id_lang)
 	{
 		$counties = County::getCounties((int)$id_state);
-		$countCounties = sizeof($counties);
+		$count_counties = count($counties);
 		$i = 1;
 		$html = '';
-		foreach ($counties AS $county)
+		foreach ($counties as $county)
 		{
 			$id_tax = 0;
 			$selected = County::USE_STATE_TAX;
 			if (array_key_exists($id_country, $tax_rules)
-				AND array_key_exists($id_state, $tax_rules[$id_country])
-				AND array_key_exists($county['id_county'], $tax_rules[$id_country][$id_state]))
+				&& array_key_exists($id_state, $tax_rules[$id_country])
+				&& array_key_exists($county['id_county'], $tax_rules[$id_country][$id_state]))
 			{
 				$id_tax = (int)$tax_rules[$id_country][$id_state][$county['id_county']]['id_tax'];
 				$selected = (int)$tax_rules[$id_country][$id_state][$county['id_county']]['county_behavior'];
@@ -330,14 +333,14 @@ class AdminTaxRulesGroup extends AdminTab
 			$html .= '
 			<tr class="counties county_state_'.(int)$id_country.' county_'.(int)$id_state.'">
 				<td></td>
-				<td><img src="../img/admin/lv4_'.($i == $countCounties ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($county['name']).'</label></td>
+				<td><img src="../img/admin/lv4_'.($i == $count_counties ? 'f' : 'b').'.png" alt="" style="vertical-align:middle;" /> <label class="t">'.Tools::htmlentitiesUTF8($county['name']).'</label></td>
 				<td>
 					'.$this->renderTaxesSelect($id_lang, $id_tax, array('class' => 'tax_'.$id_zone,
 																		'id' => 'tax_'.$id_country.'_'.$id_state.'_'.$county['id_county'],
 																		'name' => 'tax_'.$id_country.'_'.$id_state.'_'.$county['id_county'],
 																		'disabled' => $disable )).'&nbsp;-&nbsp;
  					<select id="behavior_county_'.$county['id_county'].'" name="behavior_county_'.$county['id_county'].'" onchange="disableCountyTaxRate(\''.$id_country.'\',\''.$id_state.'\',\''.$county['id_county'].'\')">
-						<option value="'.(int)County::USE_STATE_TAX.'" '.($selected  == County::USE_STATE_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply state tax only').'</option>
+						<option value="'.(int)County::USE_STATE_TAX.'" '.($selected == County::USE_STATE_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply state tax only').'</option>
 						<option value="'.(int)County::USE_COUNTY_TAX.'" '.($selected == County::USE_COUNTY_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply county tax only').'</option>
 						<option value="'.(int)County::USE_BOTH_TAX.'" '.($selected == County::USE_BOTH_TAX ? 'selected="selected"' : '').'>'.$this->l('Apply both taxes').'</option>
 					</select>
@@ -352,7 +355,7 @@ class AdminTaxRulesGroup extends AdminTab
 	public function renderTaxesSelect($id_lang, $default_value, $html_options)
 	{
 		$opt = '';
-		foreach( array('id', 'class', 'name', 'disabled') AS $prop)
+		foreach (array('id', 'class', 'name', 'disabled') as $prop)
 			if (array_key_exists($prop, $html_options) && !empty($html_options[$prop]))
 				$opt .= $prop.'="'.$html_options[$prop].'"';
 
@@ -360,7 +363,7 @@ class AdminTaxRulesGroup extends AdminTab
 					<option value="0">'.$this->l('No Tax').'</option>';
 
 		$taxes = Tax::getTaxes((int)$id_lang, true);
-		foreach ($taxes AS $tax)
+		foreach ($taxes as $tax)
 		{
 			$selected = ($default_value == $tax['id_tax']) ? 'selected="selected"' : '';
 			$html .= '<option value="'.(int)$tax['id_tax'].'" '.$selected.'>'.Tools::htmlentitiesUTF8($tax['name']).'</option>';
@@ -383,7 +386,7 @@ class AdminTaxRulesGroup extends AdminTab
 		TaxRule::deleteByGroupId($object->id);
 
 
-		foreach(Country::getCountries($cookie->id_lang, true) AS $country)
+		foreach (Country::getCountries($cookie->id_lang, true) as $country)
 		{
 			$id_tax = (int)Tools::getValue('tax_'.$country['id_country'].'_0');
 
@@ -404,7 +407,7 @@ class AdminTaxRulesGroup extends AdminTab
 			// state specific rule
 			if (!empty($country['contains_states']))
 			{
-				foreach ($country['states'] AS $state)
+				foreach ($country['states'] as $state)
 				{
 					$state_behavior = (int)Tools::getValue('behavior_state_'.$state['id_state']);
 					if ($state_behavior != PS_PRODUCT_TAX)
@@ -424,7 +427,7 @@ class AdminTaxRulesGroup extends AdminTab
 					if (State::hasCounties($state['id_state']))
 					{
 							$counties = County::getCounties($state['id_state']);
-							foreach ($counties AS $county)
+							foreach ($counties as $county)
 							{
    							  $county_behavior = (int)Tools::getValue('behavior_county_'.$county['id_county']);
 
