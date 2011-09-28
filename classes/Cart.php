@@ -295,9 +295,11 @@ class CartCore extends ObjectModel
 			$row['description'] = $discount->description ? $discount->description : $discount->name;
 			$row['value_real'] = $discount->getValue(sizeof($result), $total_products_wt, $shipping_wt, $this->id);
 			$row['value_tax_exc'] = $discount->getValue(sizeof($result), $total_products, $shipping, $this->id, false);
-			self::$_discounts[$this->id][] = $row;
+			if ($row['value_real'] !== 0)
+				self::$_discounts[$this->id][] = $row;
+			else
+				$this->deleteDiscount($row['id_discount']);
 		}
-
 		return isset(self::$_discounts[$this->id]) ? self::$_discounts[$this->id] : NULL;
 	}
 
@@ -1264,7 +1266,7 @@ class CartCore extends ObjectModel
 		
 		$groups = Customer::getGroupsStatic($this->id_customer);
 
-	    if (($discountObj->id_customer OR $discountObj->id_group) AND ((($this->id_customer != $discountObj->id_customer) OR ($this->id_customer == 0)) AND !in_array($discountObj->id_group, $groups)))
+		if (($discountObj->id_customer OR $discountObj->id_group) AND ((($this->id_customer != $discountObj->id_customer) OR ($this->id_customer == 0)) AND !in_array($discountObj->id_group, $groups)))
 		{
 			if (!$cookie->isLogged())
 				return Tools::displayError('You cannot use this voucher.').' - '.Tools::displayError('Please log in.');

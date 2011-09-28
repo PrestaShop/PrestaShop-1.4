@@ -170,30 +170,30 @@ class ParentOrderControllerCore extends FrontController
 		if ($messageContent)
 		{
 			if (!Validate::isMessage($messageContent))
-    			$this->errors[] = Tools::displayError('Invalid message');
-    		elseif ($oldMessage = Message::getMessageByCartId((int)(self::$cart->id)))
-    		{
-    			$message = new Message((int)($oldMessage['id_message']));
-    			$message->message = htmlentities($messageContent, ENT_COMPAT, 'UTF-8');
-    			$message->update();
-    		}
-    		else
-    		{
-    			$message = new Message();
-    			$message->message = htmlentities($messageContent, ENT_COMPAT, 'UTF-8');
-    			$message->id_cart = (int)(self::$cart->id);
-    			$message->id_customer = (int)(self::$cart->id_customer);
-    			$message->add();
-    		}
-    	}
-    	else
-    	{
-    		if ($oldMessage = Message::getMessageByCartId((int)(self::$cart->id)))
-    		{
-    			$message = new Message((int)($oldMessage['id_message']));
-    			$message->delete();
-    		}
-    	}
+				$this->errors[] = Tools::displayError('Invalid message');
+			elseif ($oldMessage = Message::getMessageByCartId((int)(self::$cart->id)))
+			{
+				$message = new Message((int)($oldMessage['id_message']));
+				$message->message = htmlentities($messageContent, ENT_COMPAT, 'UTF-8');
+				$message->update();
+			}
+			else
+			{
+				$message = new Message();
+				$message->message = htmlentities($messageContent, ENT_COMPAT, 'UTF-8');
+				$message->id_cart = (int)(self::$cart->id);
+				$message->id_customer = (int)(self::$cart->id_customer);
+				$message->add();
+			}
+		}
+		else
+		{
+			if ($oldMessage = Message::getMessageByCartId((int)(self::$cart->id)))
+			{
+				$message = new Message((int)($oldMessage['id_message']));
+				$message->delete();
+			}
+		}
 		return true;
 	}
 
