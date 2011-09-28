@@ -590,9 +590,7 @@ class CarrierCore extends ObjectModel
 	{
 	 	if (!Validate::isValuesList($priceList))
 	 		die(Tools::displayError());
-		return Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'delivery` (`id_range_price`, `id_range_weight`, `id_carrier`, `id_zone`, `price`)
-		VALUES '.$priceList);
+		return Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'delivery` (`id_range_price`, `id_range_weight`, `id_carrier`, `id_zone`, `price`) VALUES '.$priceList);
 	}
 
 	/**

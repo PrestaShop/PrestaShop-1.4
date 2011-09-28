@@ -514,7 +514,7 @@ CREATE TABLE `PREFIX_delivery` (
   `id_range_price` int(10) unsigned default NULL,
   `id_range_weight` int(10) unsigned default NULL,
   `id_zone` int(10) unsigned NOT NULL,
-  `price` decimal(17,2) NOT NULL,
+  `price` decimal(20,6) NOT NULL,
   PRIMARY KEY  (`id_delivery`),
   KEY `id_zone` (`id_zone`),
   KEY `id_carrier` (`id_carrier`,`id_zone`),

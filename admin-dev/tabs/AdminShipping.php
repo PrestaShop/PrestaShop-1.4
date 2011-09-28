@@ -25,7 +25,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-
 class AdminShipping extends AdminTab
 {
 	private $_fieldsHandling;
@@ -106,8 +105,8 @@ class AdminShipping extends AdminTab
 							{
 								$tmpArray = explode('_', $key);
 								$priceList .= '('.($shipping_method == Carrier::SHIPPING_METHOD_PRICE ? (int)($tmpArray[2]) : 'NULL').',
-								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? (int)($tmpArray[2]) : 'NULL').', '.$carrier->id.',
-								'.(int)($tmpArray[1]).', '.number_format(abs(preg_replace("#,#", '.', $value)), 2, '.', '').'),';
+								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? (int)($tmpArray[2]) : 'NULL').', '.(int)$carrier->id.',
+								'.(int)$tmpArray[1].', '.number_format(abs(preg_replace("#,#", '.', $value)), 6, '.', '').'),';
 								unset($tmpArray);
 							}
 						$priceList = rtrim($priceList, ',');
