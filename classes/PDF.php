@@ -102,7 +102,7 @@ class PDFCore extends PDF_PageGroupCore
 	/**
 	* Constructor
 	*/
-	public function __construct($orientation='P', $unit='mm', $format='A4')
+	public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4')
 	{
 		global $cookie;
 
@@ -132,6 +132,10 @@ class PDFCore extends PDF_PageGroupCore
 			$this->AddFont($font);
 			$this->AddFont($font, 'B');
 		}
+		
+		/* If the user is using a ISO code no present in the languages, use the first language available instead */
+		if (!isset(self::$_pdfparams[self::$_iso]) && isset($languages[0]['iso_code']))
+			self::$_iso = strtoupper($languages[0]['iso_code']);
 	}
 
 	/**
@@ -150,9 +154,19 @@ class PDFCore extends PDF_PageGroupCore
 		$conf['PS_SHOP_STATE'] = isset($conf['PS_SHOP_STATE']) ? Tools::iconv('utf-8', self::encoding(), $conf['PS_SHOP_STATE']) : '';
 
 		if (file_exists(_PS_IMG_DIR_.'/logo_invoice.jpg'))
-			$this->Image(_PS_IMG_DIR_.'/logo_invoice.jpg', 10, 8, 0, 15);
+		{
+			if ($this->_isPngFile(_PS_IMG_DIR_.'/logo_invoice.jpg'))
+				$this->Image(_PS_IMG_DIR_.'/logo_invoice.jpg', 10, 8, 0, 15, 'PNG');
+			else
+				$this->Image(_PS_IMG_DIR_.'/logo_invoice.jpg', 10, 8, 0, 15);
+		}
 		elseif (file_exists(_PS_IMG_DIR_.'/logo.jpg'))
-			$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15);
+		{
+			if ($this->_isPngFile(_PS_IMG_DIR_.'/logo.jpg'))
+				$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15, 'PNG');
+			else			
+				$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15);
+		}
 		$this->SetFont(self::fontname(), 'B', 15);
 		$this->Cell(115);
 
@@ -167,13 +181,38 @@ class PDFCore extends PDF_PageGroupCore
 		else
 			$this->Cell(77, 10, self::l('ORDER #').' '.sprintf('%06d', self::$order->id), 0, 1, 'R');
    }
+   
+	/*
+	* Detect if the file header match a PNG file
+	* 
+	* @param string $file Filename to check (include full path)
+	* @return boolean True if the file is a PNG file
+	*/
+	private function _isPngFile($file)
+	{
+		$pngReferenceHeader = array(137, 80, 78, 71, 13, 10, 26, 10);
+		$fp = fopen($file, 'r');
+		if ($fp)
+		{
+			for ($n = 0; $n < 8; $n++)
+				if (ord(fread($fp, 1)) !== $pngReferenceHeader[$n])
+				{
+					fclose($fp);
+					return false;
+				}
+		}
+		else
+			return false;
 
-   /*
-    * Return the complete Address format
-    */
-   private function _getCompleteUSAddressFormat($conf)
-   {
-   	$shopCity = (isset($conf['PS_SHOP_CITY']) && !empty($conf['PS_SHOP_CITY'])) ? $conf['PS_SHOP_CITY'] : '';
+		return true;
+	}
+
+	/*
+	* Return the complete Address format
+	*/
+	private function _getCompleteUSAddressFormat($conf)
+	{
+		$shopCity = (isset($conf['PS_SHOP_CITY']) && !empty($conf['PS_SHOP_CITY'])) ? $conf['PS_SHOP_CITY'] : '';
 		$shopState = ((isset($conf['PS_SHOP_STATE']) && !empty($conf['PS_SHOP_STATE'])) ? $conf['PS_SHOP_STATE'] : '');
 		$shopZipcode = (isset($conf['PS_SHOP_CODE']) && !empty($conf['PS_SHOP_CODE'])) ? $conf['PS_SHOP_CODE'] : '';
 
@@ -186,38 +225,39 @@ class PDFCore extends PDF_PageGroupCore
 
 		// Clean the string
 		return ($completeAddressShop = trim($completeAddressShop, ' '));
-   }
+	}
 
-   /*
-    * Build the the detailed footer of the merchant
-    */
-   private function _builMerchantFooterDetail($conf)
-   {
-   	$footerText;
+	/*
+	* Build the the detailed footer of the merchant
+	*/
+	private function _builMerchantFooterDetail($conf)
+	{
+		$footerText;
 
-   	// If the country is USA
-   	if (Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
-   	{
-   		$completeAddressShop = $this->_getCompleteUSAddressFormat($conf);
+		// If the country is USA
+		if (Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
+		{
+			$completeAddressShop = $this->_getCompleteUSAddressFormat($conf);
 
-   		$footerText = self::l('Headquarters:')."\n".
-				$conf['PS_SHOP_NAME_UPPER']."\n".
-				(isset($conf['PS_SHOP_ADDR1']) && !empty($conf['PS_SHOP_ADDR1']) ? $conf['PS_SHOP_ADDR1']."\n" : '').
-				(isset($conf['PS_SHOP_ADDR2']) && !empty($conf['PS_SHOP_ADDR2']) ? $conf['PS_SHOP_ADDR2']."\n" : '').
-				(!empty($completeAddressShop) ? $completeAddressShop."\n" : '').
-				(isset($conf['PS_SHOP_COUNTRY']) && !empty($conf['PS_SHOP_COUNTRY']) ? $conf['PS_SHOP_COUNTRY']."\n" : '').
-				((isset($conf['PS_SHOP_PHONE']) && !empty($conf['PS_SHOP_PHONE'])) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
-   	}
-   	else
-   	{
-   		$footerText = $conf['PS_SHOP_NAME_UPPER'].(!empty($conf['PS_SHOP_ADDR1']) ? ' - '.self::l('Headquarters:').' '.$conf['PS_SHOP_ADDR1'].
-   			(!empty($conf['PS_SHOP_ADDR2']) ? ' '.$conf['PS_SHOP_ADDR2'] : '').' '.$conf['PS_SHOP_CODE'].' '.$conf['PS_SHOP_CITY'].
-   			((isset($conf['PS_SHOP_STATE']) AND !empty($conf['PS_SHOP_STATE'])) ? (', '.$conf['PS_SHOP_STATE']) : '').' '.$conf['PS_SHOP_COUNTRY'] : '').
-   			"\n".(!empty($conf['PS_SHOP_DETAILS']) ? self::l('Details:').' '.$conf['PS_SHOP_DETAILS'].' - ' : '').
-				(!empty($conf['PS_SHOP_PHONE']) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
-   	}
+			$footerText = self::l('Headquarters:')."\n".
+					$conf['PS_SHOP_NAME_UPPER']."\n".
+					(isset($conf['PS_SHOP_ADDR1']) && !empty($conf['PS_SHOP_ADDR1']) ? $conf['PS_SHOP_ADDR1']."\n" : '').
+					(isset($conf['PS_SHOP_ADDR2']) && !empty($conf['PS_SHOP_ADDR2']) ? $conf['PS_SHOP_ADDR2']."\n" : '').
+					(!empty($completeAddressShop) ? $completeAddressShop."\n" : '').
+					(isset($conf['PS_SHOP_COUNTRY']) && !empty($conf['PS_SHOP_COUNTRY']) ? $conf['PS_SHOP_COUNTRY']."\n" : '').
+					((isset($conf['PS_SHOP_PHONE']) && !empty($conf['PS_SHOP_PHONE'])) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
+		}
+		else
+		{
+			$footerText = $conf['PS_SHOP_NAME_UPPER'].(!empty($conf['PS_SHOP_ADDR1']) ? ' - '.self::l('Headquarters:').' '.$conf['PS_SHOP_ADDR1'].
+				(!empty($conf['PS_SHOP_ADDR2']) ? ' '.$conf['PS_SHOP_ADDR2'] : '').' '.$conf['PS_SHOP_CODE'].' '.$conf['PS_SHOP_CITY'].
+				((isset($conf['PS_SHOP_STATE']) AND !empty($conf['PS_SHOP_STATE'])) ? (', '.$conf['PS_SHOP_STATE']) : '').' '.$conf['PS_SHOP_COUNTRY'] : '').
+				"\n".(!empty($conf['PS_SHOP_DETAILS']) ? self::l('Details:').' '.$conf['PS_SHOP_DETAILS'].' - ' : '').
+					(!empty($conf['PS_SHOP_PHONE']) ? self::l('PHONE:').' '.$conf['PS_SHOP_PHONE'] : '');
+		}
+
 		return $footerText;
-   }
+	}
 
 	/**
 	* Invoice footer
