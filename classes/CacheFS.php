@@ -45,10 +45,8 @@ class CacheFSCore extends Cache {
 	{
 		$path = _PS_CACHEFS_DIRECTORY_;
 		for ($i = 0; $i < $this->_depth; $i++)
-		{
-			$path.=$key[$i].'/';
-		}
-		if (file_put_contents($path.$key, serialize($value)))
+			$path .= $key[$i].'/';
+		if (@file_put_contents($path.$key, serialize($value)))
 		{
 			$this->_keysCached[$key] = true;
 			return $key;
@@ -149,8 +147,8 @@ class CacheFSCore extends Cache {
 	public function __destruct()
 	{
 		parent::__destruct();
-		file_put_contents(_PS_CACHEFS_DIRECTORY_.'keysCached', serialize($this->_keysCached));
-		file_put_contents(_PS_CACHEFS_DIRECTORY_.'tablesCached', serialize($this->_tablesCached));
+		@file_put_contents(_PS_CACHEFS_DIRECTORY_.'keysCached', serialize($this->_keysCached));
+		@file_put_contents(_PS_CACHEFS_DIRECTORY_.'tablesCached', serialize($this->_tablesCached));
 	}
 
 	public static function deleteCacheDirectory()
