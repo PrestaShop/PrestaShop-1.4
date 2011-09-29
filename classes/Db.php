@@ -335,5 +335,3 @@ function nl2br2($string)
 {
 	return str_replace(array("\r\n", "\r", "\n"), '<br />', $string);
 }
-
-
