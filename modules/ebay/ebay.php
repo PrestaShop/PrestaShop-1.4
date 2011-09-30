@@ -61,7 +61,7 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.2.8';
+		$this->version = '1.2.9';
 		$this->author = 'PrestaShop';
 		parent::__construct ();
 		$this->displayName = $this->l('eBay');
