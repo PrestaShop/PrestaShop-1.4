@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,48 +28,52 @@
 class EmployeeCore extends ObjectModel
 {
 	public 		$id;
-	
+
 	/** @var string Determine employee profile */
 	public 		$id_profile;
-	
+
 	/** @var string employee language */
 	public 		$id_lang;
-	
+
 	/** @var string Lastname */
 	public 		$lastname;
-	
+
 	/** @var string Firstname */
 	public 		$firstname;
-	
+
 	/** @var string e-mail */
 	public 		$email;
-	
+
 	/** @var string Password */
 	public 		$passwd;
-	
+
 	/** @var datetime Password */
 	public 		$last_passwd_gen;
-	
+
 	public		$stats_date_from;
 	public		$stats_date_to;
-	
+
 	/** @var string Display back office background in the specified color */
 	public		$bo_color;
-	
+
 	/** @var string employee's chosen theme */
 	public		$bo_theme;
-	
+
 	/** @var string / enum hover or click mode */
 	public		$bo_uimode;
-	
+
+	/** @var bool, true */
+	public		$bo_show_screencast;
+
 	/** @var boolean Status */
 	public 		$active = 1;
-	
+
  	protected 	$fieldsRequired = array('lastname', 'firstname', 'email', 'passwd', 'id_profile', 'id_lang');
  	protected 	$fieldsSize = array('lastname' => 32, 'firstname' => 32, 'email' => 128, 'passwd' => 32, 'bo_color' => 32, 'bo_theme' => 32);
- 	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'id_lang' => 'isUnsignedInt', 
-		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt', 'bo_color' => 'isColor', 'bo_theme' => 'isGenericName', 'bo_uimode' => 'isGenericName');
-	
+ 	protected 	$fieldsValidate = array('lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'id_lang' => 'isUnsignedInt',
+		'passwd' => 'isPasswdAdmin', 'active' => 'isBool', 'id_profile' => 'isInt', 'bo_color' => 'isColor', 'bo_theme' => 'isGenericName',
+		'bo_uimode' => 'isGenericName', 'bo_show_screencast' => 'isBool');
+
 	protected 	$table = 'employee';
 	protected 	$identifier = 'id_employee';
 
@@ -82,12 +86,12 @@ class EmployeeCore extends ObjectModel
 			'passwd' => array('setter' => 'setWsPasswd'),
 		),
 	);
-	
-	
+
+
 	public	function getFields()
 	{
 	 	parent::validateFields();
-		
+
 		$fields['id_profile'] = (int)$this->id_profile;
 		$fields['id_lang'] = (int)$this->id_lang;
 		$fields['lastname'] = pSQL($this->lastname);
@@ -95,23 +99,24 @@ class EmployeeCore extends ObjectModel
 		$fields['email'] = pSQL($this->email);
 		$fields['passwd'] = pSQL($this->passwd);
 		$fields['last_passwd_gen'] = pSQL($this->last_passwd_gen);
-		
+
 		if (empty($this->stats_date_from))
 			$this->stats_date_from = date('Y-m-d 00:00:00');
 		$fields['stats_date_from'] = pSQL($this->stats_date_from);
-		
+
 		if (empty($this->stats_date_to))
 			$this->stats_date_to = date('Y-m-d 23:59:59');
 		$fields['stats_date_to'] = pSQL($this->stats_date_to);
-		
+
 		$fields['bo_color'] = pSQL($this->bo_color);
 		$fields['bo_theme'] = pSQL($this->bo_theme);
 		$fields['bo_uimode'] = pSQL($this->bo_uimode);
+		$fields['bo_show_screencast'] = (int)$this->bo_show_screencast;
 		$fields['active'] = (int)$this->active;
-		
+
 		return $fields;
 	}
-	
+
 	/**
 	 * Return all employee id and email
 	 *
@@ -127,16 +132,16 @@ class EmployeeCore extends ObjectModel
 		WHERE `active` = 1
 		ORDER BY `email`');
 	}
-	
+
 	public function add($autodate = true, $nullValues = true)
 	{
 		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_BACK').'minutes'));
 	 	return parent::add($autodate, $nullValues);
 	}
-		
+
 	/**
 	  * Return employee instance from its e-mail (optionnaly check password)
-	  * 
+	  *
 	  * @param string $email e-mail
 	  * @param string $passwd Password is also checked if specified
 	  * @return Employee instance
@@ -147,7 +152,7 @@ class EmployeeCore extends ObjectModel
 	 		die(Tools::displayError());
 
 		$result = Db::getInstance()->getRow('
-		SELECT * 
+		SELECT *
 		FROM `'._DB_PREFIX_.'employee`
 		WHERE `active` = 1
 		AND `email` = \''.pSQL($email).'\'
@@ -161,12 +166,12 @@ class EmployeeCore extends ObjectModel
 				$this->{$key} = $value;
 		return $this;
 	}
-	
+
 	public static function employeeExists($email)
 	{
 	 	if (!Validate::isEmail($email))
 	 		die (Tools::displayError());
-	 	
+
 		return (bool)Db::getInstance()->getValue('
 		SELECT `id_employee`
 		FROM `'._DB_PREFIX_.'employee`
@@ -175,7 +180,7 @@ class EmployeeCore extends ObjectModel
 
 	/**
 	  * Check if employee password is the right one
-	  * 
+	  *
 	  * @param string $passwd Password
 	  * @return boolean result
 	  */
@@ -183,7 +188,7 @@ class EmployeeCore extends ObjectModel
 	{
 	 	if (!Validate::isUnsignedId($id_employee) OR !Validate::isPasswd($passwd, 8))
 	 		die (Tools::displayError());
-			
+
 		return Db::getInstance()->getValue('
 		SELECT `id_employee`
 		FROM `'._DB_PREFIX_.'employee`
@@ -191,24 +196,24 @@ class EmployeeCore extends ObjectModel
 		AND `passwd` = \''.pSQL($passwd).'\'
 		AND active = 1');
 	}
-	
+
 	public static function countProfile($id_profile, $activeOnly = false)
 	{
 		return Db::getInstance()->getValue('
 		SELECT COUNT(*)
-		FROM `'._DB_PREFIX_.'employee`  				
+		FROM `'._DB_PREFIX_.'employee`
 		WHERE `id_profile` = '.(int)$id_profile.'
 		'.($activeOnly ? ' AND `active` = 1' : ''));
 	}
-	
+
 	public function isLastAdmin()
 	{
-		return ($this->id_profile == _PS_ADMIN_PROFILE_		
+		return ($this->id_profile == _PS_ADMIN_PROFILE_
 			AND Employee::countProfile($this->id_profile, true) == 1
 			AND $this->active
 		);
 	}
-	
+
 	public function setWsPasswd($passwd)
 	{
 		if ($this->id != 0)

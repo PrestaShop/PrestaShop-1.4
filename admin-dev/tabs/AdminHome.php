@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -46,7 +46,7 @@ class AdminHome extends AdminTab
 					$rewrite = 0;
 			}
 		}
-		
+
 		$htaccessAfterUpdate = 2;
 		$htaccessOptimized = (Configuration::get('PS_HTACCESS_CACHE_CONTROL') ? 2 : 0);
 		if (!file_exists(dirname(__FILE__).'/../../.htaccess'))
@@ -60,7 +60,7 @@ class AdminHome extends AdminTab
 			$dateUpdHtaccess = Db::getInstance()->getValue('SELECT date_upd FROM '._DB_PREFIX_.'configuration WHERE name = "PS_HTACCESS_CACHE_CONTROL"');
 			if (Configuration::get('PS_HTACCESS_CACHE_CONTROL') AND strtotime($dateUpdHtaccess) > $stat['mtime'])
 				$htaccessOptimized = 1;
-			
+
 			$dateUpdate = Configuration::get('PS_LAST_SHOP_UPDATE');
 			if ($dateUpdate AND strtotime($dateUpdate) > $stat['mtime'])
 				$htaccessAfterUpdate = 0;
@@ -69,7 +69,7 @@ class AdminHome extends AdminTab
 		$needRebuild=Configuration::get('PS_NEED_REBUILD_INDEX');
 		if ($needRebuild !='0');
 			$indexRebuiltAfterUpdate = 2;
-		
+
 		$smartyOptimized = 0;
 		if (!Configuration::get('PS_SMARTY_FORCE_COMPILE'))
 			++$smartyOptimized;
@@ -84,15 +84,15 @@ class AdminHome extends AdminTab
 			$cccOptimized = 2;
 		else
 			$cccOptimized = 1;
-			
+
 		$shopEnabled = (Configuration::get('PS_SHOP_ENABLE') ? 2 : 1);
-		
+
 		$lights = array(
-		0 => array('image'=>'error2.png','color'=>'#fbe8e8'), 
+		0 => array('image'=>'error2.png','color'=>'#fbe8e8'),
 		1 => array('image'=>'warn2.png','color'=>'#fffac6'),
 		2 => array('image'=>'ok2.png','color'=>'#dffad3'));
-		
-		
+
+
 		if ($rewrite + $htaccessOptimized + $smartyOptimized + $cccOptimized + $shopEnabled + $htaccessAfterUpdate + $indexRebuiltAfterUpdate != 14)
 		{
 			echo '
@@ -148,7 +148,7 @@ class AdminHome extends AdminTab
 			</div>';
 		}
 	}
-	
+
 	public function display()
 	{
 		global $cookie;
@@ -160,6 +160,8 @@ class AdminHome extends AdminTab
 		$isoUser = Language::getIsoById(intval($cookie->id_lang));
 		$isoCountry = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
 		$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+		$employee = new Employee($cookie->id_employee);
+
 		echo '<div>
 		<h1>'.$this->l('Dashboard').'</h1>
 		<hr style="background-color: #812143;color: #812143;" />
@@ -170,7 +172,7 @@ class AdminHome extends AdminTab
 			if($update = $upgrade->checkPSVersion())
 				echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.$this->l('New PrestaShop version available').' : <a style="text-decoration: underline;" href="'.$update['link'].'" target="_blank">'.$this->l('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
 		}
-		else 
+		else
 		{
 			echo '<p>'.$this->l('Update notification unavailable').'</p>';
 			echo '<p>&nbsp;</p>';
@@ -178,10 +180,8 @@ class AdminHome extends AdminTab
 			echo '<p>'.$this->l('If you don\'t know how to do that, please contact your host administrator !').'</p><br>';
 		}
 	  echo '</div>';
-	
-	  	if (!isset($cookie->show_screencast))
-	  		$cookie->show_screencast = true;
-	  	if ($cookie->show_screencast)
+
+	  	if ($employee->bo_show_screencast)
 			echo'
 			<div id="adminpresentation">
 				<iframe src="'.$protocol.'://screencasts.prestashop.com/screencast.php?iso_lang='.Tools::strtolower($isoUser).'" style="border:none;width:100%;height:420px;" scrolling="no"></iframe>
@@ -208,8 +208,8 @@ class AdminHome extends AdminTab
 			});
 			</script>
 			<div class="clear"></div><br />';
-	
-	
+
+
 		echo '
 		<div id="column_left">
 			<ul class="F_list clearfix">
@@ -331,11 +331,11 @@ class AdminHome extends AdminTab
 					</tr>
 				</table>
 			</div>
-	
+
 			<div id="table_info_large">
 				<h5><a href="index.php?tab=AdminStats&token='.Tools::getAdminTokenLite('AdminStats').'">'.$this->l('View more').'</a> <strong>'.$this->l('Statistics').'</strong> / '.$this->l('Sales of the week').'</h5>
 				<div id="stat_google">';
-	
+
 		define('PS_BASE_URI', __PS_BASE_URI__);
 		$chart = new Chart();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -362,7 +362,7 @@ class AdminHome extends AdminTab
 					<tr>
 				</thead>
 				<tbody>';
-	
+
 		$orders = Order::getOrdersWithInformations(10);
 		$i = 0;
 		foreach ($orders AS $order)
@@ -381,7 +381,7 @@ class AdminHome extends AdminTab
 				';
 			$i++;
 		}
-	
+
 		echo '
 				</tbody>
 			</table>
@@ -398,7 +398,7 @@ class AdminHome extends AdminTab
 								$(\'#adminpresentation\').fadeIn(\'slow\');
 							else
 								$(\'#adminpresentation\').fadeOut(\'slow\');
-								
+
 							$(\'#partner_preactivation\').fadeOut(\'slow\', function() {
 								if (json.partner_preactivation != \'NOK\')
 									$(\'#partner_preactivation\').html(json.partner_preactivation);
@@ -406,7 +406,7 @@ class AdminHome extends AdminTab
 									$(\'#partner_preactivation\').html(\'\');
 								$(\'#partner_preactivation\').fadeIn(\'slow\');
 							});
-							
+
 							$(\'#discover_prestashop\').fadeOut(\'slow\', function() {
 								if (json.discover_prestashop != \'NOK\')
 									$(\'#discover_prestashop\').html(json.discover_prestashop);
@@ -418,7 +418,7 @@ class AdminHome extends AdminTab
 						error: function(XMLHttpRequest, textStatus, errorThrown)
 						{
 							$(\'#adminpresentation\').fadeOut(\'slow\');
-							$(\'#partner_preactivation\').fadeOut(\'slow\');	
+							$(\'#partner_preactivation\').fadeOut(\'slow\');
 							$(\'#discover_prestashop\').fadeOut(\'slow\');
 						}
 					});
@@ -431,7 +431,7 @@ class AdminHome extends AdminTab
 
 		if (Tools::isSubmit('hideOptimizationTips'))
 			Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 1);
-			
+
 		$this->_displayOptimizationTips();
 
 		echo '
@@ -440,7 +440,7 @@ class AdminHome extends AdminTab
 			</div>
 		</div>
 		<div class="clear"></div>';
-	
+
 		echo Module::hookExec('backOfficeHome');
 	}
 }

@@ -505,7 +505,13 @@ if (Tools::isSubmit('loadImportMatchs'))
 if (Tools::isSubmit('toggleScreencast'))
 {
 	global $cookie;
-	$cookie->show_screencast = (int)(!(bool)$cookie->show_screencast);
+
+	$employee = new Employee($cookie->id_employee);
+	if (Validate::isLoadedObject($employee))
+	{
+		$employee->bo_show_screencast = !$employee->bo_show_screencast;
+		$employee->update();
+	}
 }
 
 if (Tools::isSubmit('ajaxAddZipCode') OR Tools::isSubmit('ajaxRemoveZipCode'))
@@ -681,7 +687,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 }
 
 if (Tools::isSubmit('getChildrenCategories') && Tools::getValue('id_category_parent'))
-{ 
+{
 	$children_categories = Category::getChildrenWithNbSelectedSubCat(Tools::getValue('id_category_parent'), Tools::getValue('selectedCat', array()), $cookie->id_lang);
 	die(Tools::jsonEncode($children_categories));
 }
