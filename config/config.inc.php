@@ -60,9 +60,9 @@ require_once(dirname(__FILE__).'/settings.inc.php');
 /* Include all defines */
 require_once(dirname(__FILE__).'/defines.inc.php');
 if (!defined('_PS_MAGIC_QUOTES_GPC_'))
-	define('_PS_MAGIC_QUOTES_GPC_',         get_magic_quotes_gpc());
+	define('_PS_MAGIC_QUOTES_GPC_', get_magic_quotes_gpc());
 if (!defined('_PS_MODULE_DIR_'))
-	define('_PS_MODULE_DIR_',           _PS_ROOT_DIR_.'/modules/');
+	define('_PS_MODULE_DIR_', _PS_ROOT_DIR_.'/modules/');
 if (!defined('_PS_MYSQL_REAL_ESCAPE_STRING_'))
 	define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
@@ -81,6 +81,10 @@ if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
 			$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 	}
 }
+
+/* Trying to redefine HTTP_HOST if empty (on some webservers...) */
+if (!isset($_SERVER['HTTP_HOST']) OR empty($_SERVER['HTTP_HOST']))
+	$_SERVER['HTTP_HOST'] = @getenv('HTTP_HOST');
 
 /* aliases */
 function p($var) {
