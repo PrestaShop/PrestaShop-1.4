@@ -94,13 +94,15 @@ class MCachedCore extends Cache
 		if ($this->isBlacklist($query))
 			return true;
 		$md5_query = md5($query);
+		$this->_setKeys();
 		if (isset($this->_keysCached[$md5_query]))
 			return true;
 		$key = $this->set($md5_query, $result);
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach($res[1] AS $table)
 				if (!isset($this->_tablesCached[$table][$key]))
-					$this->_tablesCached[$table][$key] = true;	
+					$this->_tablesCached[$table][$key] = true;
+		$this->_writeKeys();
 	}
 	
 	public function delete($key, $timeout = 0)
@@ -115,6 +117,7 @@ class MCachedCore extends Cache
 	{
 		if (!$this->_isConnected)
 			return false;
+		$this->_setKeys();
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
 			foreach ($res[1] AS $table)
 				if (isset($this->_tablesCached[$table]))
@@ -126,6 +129,7 @@ class MCachedCore extends Cache
 					}
 					unset($this->_tablesCached[$table]);
 				}
+		$this->_writeKeys();
 	}
 
 	protected function close()
@@ -143,17 +147,16 @@ class MCachedCore extends Cache
 			return $this->_setKeys();
 		return false;
 	}
-
-	public function __destruct()
+	
+	private function _writeKeys()
 	{
-		parent::__destruct();
 		if (!$this->_isConnected)
 			return false;
 		$this->_memcacheObj->set('keysCached', $this->_keysCached, 0, 0);
 		$this->_memcacheObj->set('tablesCached', $this->_tablesCached, 0, 0);
 		$this->close();
 	}
-
+	
 	public static function addServer($ip, $port, $weight)
 	{
 		return Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'memcached_servers (ip, port, weight) VALUES(\''.pSQL($ip).'\', '.(int)$port.', '.(int)$weight.')', false);

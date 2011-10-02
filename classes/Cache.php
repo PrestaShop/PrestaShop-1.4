@@ -29,7 +29,7 @@ abstract class CacheCore
 {
 	
 	protected static $_instance;
-	protected $_keysCached;
+	protected $_keysCached = array();
 	protected $_tablesCached = array();
 	protected $_blackList = array('cart',
 												'cart_discount',
@@ -76,5 +76,5 @@ abstract class CacheCore
 	abstract public function flush();
 	abstract public function setQuery($query, $result);
 	abstract public function deleteQuery($query);
-	
+
 }
