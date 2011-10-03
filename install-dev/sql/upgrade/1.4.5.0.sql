@@ -37,3 +37,5 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`, `live_edi
 ('afterSaveAttribute', 'On saving attribute feature value', 'On saving attribute feature value', 0, 0);
 
 ALTER TABLE `PREFIX_employee` ADD `bo_show_screencast` TINYINT(1) NOT NULL DEFAULT '1' AFTER `bo_uimode`;
+
+UPDATE `PREFIX_country` SET id_zone = (SELECT id_zone FROM `PREFIX_zone` WHERE name = 'Oceania') WHERE iso_code = 'KI' LIMIT 1
