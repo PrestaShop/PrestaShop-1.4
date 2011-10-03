@@ -91,6 +91,12 @@ class TabCore extends ObjectModel
 		return false;
 	}
 	
+	/** When creating a new tab $id_tab, this add default rights to the table access
+	 * 
+	 * @todo this should not be public static but protected
+	 * @param int $id_tab 
+	 * @return boolean true if succeed
+	 */
 	public static function initAccess($id_tab)
 	{
 	 	/* Cookie's loading */
@@ -98,16 +104,22 @@ class TabCore extends ObjectModel
 	 	if (!is_object($cookie) OR !$cookie->profile)
 	 		return false;
 	 	/* Profile selection */
-	 	$profiles = Db::getInstance()->ExecuteS('SELECT `id_profile` FROM '._DB_PREFIX_.'profile');
+	 	$profiles = Db::getInstance()->ExecuteS('SELECT `id_profile` FROM '._DB_PREFIX_.'profile where `id_profile` != 1');
 	 	if (!$profiles OR empty($profiles))
 	 		return false;
 	 	/* Query definition */
-	 	$query = 'INSERT INTO `'._DB_PREFIX_.'access` VALUES ';
+		// note : insert ignore should be avoided
+	 	$query = 'INSERT IGNORE INTO `'._DB_PREFIX_.'access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) VALUES ';
+		// default admin 
+		$query .= '(1, '.(int)$id_tab.', 1, 1, 1, 1),';
 	 	foreach ($profiles AS $profile)
 	 	{
-	 	 	$rights = (((int)($profile['id_profile']) == 1 OR (int)($profile['id_profile']) == $cookie->profile) ? 1 : 0);
-	 	 	$query .= ($profile === $profiles[0] ? '' : ', ').'('.(int)($profile['id_profile']).', '.(int)($id_tab).', '.$rights.', '.$rights.', '.$rights.', '.$rights.')';
+			// no cast needed for profile[id_profile], which cames from db
+			// And we disable all profile but current one 
+	 	 	$rights = $profile['id_profile'] == $cookie->profile ? 1 : 0;
+			$query .= '('.$profile['id_profile'].', '.(int)$id_tab.', '.$rights.', '.$rights.', '.$rights.', '.$rights.'),';
 	 	}
+		$query = trim($query, ', ');
 	 	return Db::getInstance()->Execute($query);
 	}
 
