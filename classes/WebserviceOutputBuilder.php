@@ -512,9 +512,10 @@ class WebserviceOutputBuilderCore
 			$field['synopsis_details'] = $this->getSynopsisDetails($field);
 			if ($field_name === 'id')
 				$show_field = false;
-			elseif (isset($field['setter']) && !$field['setter'])
-				$show_field = false;
 		}
+		if ($this->schemaToDisplay === 'blank')
+			if (isset($field['setter']) && !$field['setter'])
+				$show_field = false;
 
 		// don't set any value for a schema
 		if (isset($field['synopsis_details']) || $this->schemaToDisplay === 'blank')
