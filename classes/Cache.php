@@ -57,11 +57,7 @@ abstract class CacheCore
 	protected function __construct()
 	{
 	}
-	
-	protected function __destruct()
-	{
-	}
-	
+		
 	protected function isBlacklist($query)
 	{
 		foreach ($this->_blackList AS $find)
