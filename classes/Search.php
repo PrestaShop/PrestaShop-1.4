@@ -451,11 +451,6 @@ class SearchCore
 				// If we find words that need to be indexed, they're added to the word table in the database
 				if (sizeof($pArray))
 				{
-					$list = '';
-					foreach ($pArray AS $word => $weight)
-						$list .= '\''.$word.'\',';
-					$list = rtrim($list, ',');
-					
 					$queryArray = array();
 					$queryArray2 = array();
 					foreach ($pArray AS $word => $weight)
@@ -467,9 +462,9 @@ class SearchCore
 						}
 
 					$existingWords = $db->ExecuteS('
-						SELECT word FROM '._DB_PREFIX_.'search_word 
-						WHERE word IN ('.implode(',', $queryArray2).')
-						AND id_lang = '.(int)$product['id_lang'].' GROUP BY word');
+					SELECT word FROM '._DB_PREFIX_.'search_word 
+					WHERE word IN ('.implode(',', $queryArray2).')
+					AND id_lang = '.(int)$product['id_lang'].' GROUP BY word');
 
 					if($existingWords)
 						foreach($existingWords as $data)
@@ -480,7 +475,7 @@ class SearchCore
 						// The words are inserted...
 						$db->Execute('
 						INSERT IGNORE INTO '._DB_PREFIX_.'search_word (id_lang, word)
-						VALUES '.implode(',',$queryArray));
+						VALUES '.implode(',', $queryArray));
 					}
 					if (count($queryArray2))
 					{
