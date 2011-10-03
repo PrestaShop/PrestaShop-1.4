@@ -317,6 +317,7 @@ class WebserviceRequestCore
 			$use_reduc = (isset($value['use_reduction']) ? $value['use_reduction'] : true);
 			$use_ecotax = (isset($value['use_ecotax']) ? $value['use_ecotax'] : Configuration::get('PS_USE_ECOTAX'));
 			$specific_price_output = null;
+			$id_county = (isset($value['county']) ? $value['county'] : 0);
 			$return_value = Product::priceCalculation(null, $value['object_id'], $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
 									$use_tax, $decimals, $only_reduc, $use_reduc, $use_ecotax, $specific_price_output, null);
 			$arr_return[$name] = array('sqlId'=>strtolower($name), 'value'=>$return_value);
@@ -385,7 +386,7 @@ class WebserviceRequestCore
 		$this->objOutput->setObjectRender($this->getOutputObject($this->outputFormat));
 		
 		// Check webservice activation and request authentication
-		if ($this->isActivated() && $this->authenticate())
+		if ($this->webserviceChecks())
 		{
 			if ($bad_class_name)
 				$this->setError(500, 'Bad override class name for this key. Please update class_name field', 126);
@@ -475,8 +476,8 @@ class WebserviceRequestCore
 				// if the management is specific
 				else
 				{
-					$specificObjectName = 'WebserviceSpecificManagement'.ucfirst($this->urlSegment[0]);
-					if (!class_exists($specificObjectName))
+					$specificObjectName = 'WebserviceSpecificManagement'.ucfirst(Tools::toCamelCase($this->urlSegment[0]));
+					if(!class_exists($specificObjectName))
 						$this->setError(501, sprintf('The specific management class is not implemented for the "%s" entity.', $this->urlSegment[0]), 124);
 					else
 					{
@@ -502,6 +503,10 @@ class WebserviceRequestCore
 		unset ($display_errors);
 	}
 	
+	protected function webserviceChecks()
+	{
+		return ($this->isActivated() && $this->authenticate());
+	}
 	
 	/**
 	 * Set a webservice error
@@ -662,7 +667,7 @@ class WebserviceRequestCore
 					{
 						$this->setError(401, 'Authentification key does not exist', 19);
 					}
-					elseif ($keyValidation === true)
+					else if ($keyValidation === true)
 					{
 						$this->keyPermissions = WebserviceKey::getPermissionForAccount($this->_key);
 					}
@@ -1509,7 +1514,7 @@ class WebserviceRequestCore
 						$arr_languages[] = $i;
 				}
 			}
-			elseif (preg_match('#\[(\d)+\]#Ui', $this->urlFragments['language'], $match_lang))
+			else if (preg_match('#\[(\d)+\]#Ui', $this->urlFragments['language'], $match_lang))
 			{
 				$arr_languages[] = $match_lang[1];
 			}
