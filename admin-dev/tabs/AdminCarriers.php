@@ -266,11 +266,11 @@ class AdminCarriers extends AdminTab
 	private function changeGroups($id_carrier, $delete = true)
 	{
 		if ($delete)
-			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.(int)($id_carrier));
+			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier = '.(int)$id_carrier);
 		$groups = Db::getInstance()->ExecuteS('SELECT id_group FROM `'._DB_PREFIX_.'group`');
 		foreach ($groups as $group)
 			if (in_array($group['id_group'], $_POST['groupBox']))
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier) VALUES('.(int)($group['id_group']).','.(int)($id_carrier).')');
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier) VALUES('.(int)$group['id_group'].','.(int)$id_carrier.')');
 	}
 
 	public function postProcess()
@@ -293,7 +293,7 @@ class AdminCarriers extends AdminTab
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
-							Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier='.(int)($id));
+							Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier = '.(int)$id);
 							$object->deleted = 1;
 							$object->update();
 							$objectNew = new $this->className();

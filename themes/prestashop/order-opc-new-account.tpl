@@ -60,6 +60,7 @@
 					<ul class="bullet">
 						<li>{l s='Personalized and secure access'}</li>
 						<li>{l s='Fast and easy check out'}</li>
+						<li>{l s='Separate billing and shipping addresses'}</li>
 					</ul>
 					<p>
 						<input type="button" class="button_large" id="opc_createAccount" value="{l s='Create an account'}" />
@@ -316,7 +317,7 @@
 						<input type="text" class="text" id="company_invoice" name="company_invoice" value="" />
 					</p>
 					{elseif $field_name eq "vat_number"}
-					<div id="vat_number_block_invoice" class="is_customer_param" style="display:none;">
+					<div id="vat_number_block_invoice" class="is_customer_param" style="display: none;">
 						<p class="text">
 							<label for="vat_number_invoice">{l s='VAT number'}</label>
 							<input type="text" class="text" id="vat_number_invoice" name="vat_number_invoice" value="" />
