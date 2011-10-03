@@ -70,9 +70,18 @@ class TabCore extends ObjectModel
 		return parent::getTranslationsFields(array('name'));
 	}
 
+	/**
+	 * additionnal treatments for Tab when creating new one : 
+	 * - generate a new position
+	 * - add access for admin profile
+	*
+	 * @param boolean $autodate 
+	 * @param boolean $nullValues 
+	 * @return int id_tab
+	 */
 	public function add($autodate = true, $nullValues = false)
 	{
-		$this->position = self::getNbTabs($this->id_parent) + 1;
+		$this->position = self::getNewLastPosition($this->id_parent);
 		if (parent::add($autodate, $nullValues))
 		{
 			// refresh cache when adding new tab
@@ -213,6 +222,17 @@ class TabCore extends ObjectModel
 		SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'tab` t
 		'.($id_parent !== NULL ? 'WHERE t.`id_parent` = '.(int)$id_parent : ''));
+	}
+
+	/**
+	 * return an available position in subtab for parent $id_parent
+	 * 
+	 * @param mixed $id_parent
+	 * @return int 
+	 */
+	public static function getNewLastPosition($id_parent)
+	{
+		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'tab` WHERE `id_parent` = '.(int)($id_category_parent)));
 	}
 
 	public function move($direction)
