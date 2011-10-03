@@ -1283,3 +1283,12 @@ State:name
 Country:name
 phone' where `id_country`=10;
 
+UPDATE `PREFIX_address_format` set `format` = 'firstname lastname
+company
+address1
+address2
+city State:name postcode
+Country:name
+phone' WHERE `PREFIX_address_format`.`id_country` =4;
+
+
