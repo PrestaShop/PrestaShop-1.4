@@ -158,7 +158,7 @@ class WebserviceOutputBuilderCore
 		
 		if (!is_null($key))
 		{
-			if (Validate::isCleanHtml($key))
+			if (!Validate::isCleanHtml($key))
 				throw new WebserviceException('the key you write is a corrupted text.', array(95, 500));
 			if (!array_key_exists($key, $this->headerParams))
 				throw new WebserviceException(sprintf('The key %s does\'nt exist', $key), array(96, 500));
