@@ -620,7 +620,6 @@ class AdminModules extends AdminTab
 			'.$this->l('Add a module from my computer').'
 		</span>
 		&nbsp;|&nbsp;';
-		if (@fsockopen('www.prestashop.com', 80))
 		echo '<a href="index.php?tab=AdminAddonsMyAccount&token='.Tools::getAdminTokenLite('AdminAddonsMyAccount').'">
 			<img src="https://addons.prestashop.com/modules.php?'.(isset($_SERVER['SERVER_ADDR']) ? 'server='.ip2long($_SERVER['SERVER_ADDR']).'&' : '').'mods='.$serialModules.'" alt="Add" class="middle" />
 			'.$this->l('Add a module from PrestaShop Addons').'
