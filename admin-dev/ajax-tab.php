@@ -34,9 +34,6 @@ include(_PS_ADMIN_DIR_.'/functions.php');
 
 include(_PS_ADMIN_DIR_.'/init.php');
 
-// If mod_evasive exists, keep it quiet
-if (Tools::apacheModExists('evasive'))
-	sleep(1);
 
 if (empty($tab) and !sizeof($_POST))
 {
@@ -52,6 +49,9 @@ if (empty($tab) and !sizeof($_POST))
 		if (Validate::isLoadedObject($adminObj))
 		{
 			$adminObj->ajax = true;
+			// If mod_evasive exists, keep it quiet
+			if (!$adminObj->ignore_sleep && Tools::apacheModExists('evasive'))
+				sleep(1);
 			if ($adminObj->checkToken())
 			{
 				// the differences with index.php is here 
