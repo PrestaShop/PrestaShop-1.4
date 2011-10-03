@@ -820,7 +820,7 @@ INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUE
 (38, 'AdminAppearance', 8, 2),(56, 'AdminMeta', 8, 3),(27, 'AdminPPreferences', 8, 4),(24, 'AdminEmails', 8, 5),(26, 'AdminImages', 8, 6),(23, 'AdminDb', 8, 7),
 (48, 'AdminPDF', 3, 8),(44, 'AdminLocalization', 8, 9),(67, 'AdminSearchConf', 8, 10),(32, 'AdminLanguages', 9, 1),(33, 'AdminTranslations', 9, 2),
 (35, 'AdminTabs', 29, 3),(37, 'AdminQuickAccesses', 9, 4),(40, 'AdminAliases', 8, 5),(41, 'AdminImport', 9, 6),(52, 'AdminSubDomains', 9, 7),
-(53, 'AdminBackup', 9, 8),(57, 'AdminCMSContent', 9, 9),(64, 'AdminGenerator', 9, 10),(43, 'AdminSearch', -1, 0),(69, 'AdminInformation', 9, 11),
+(53, 'AdminBackup', 9, 8),(57, 'AdminCMSContent', 9, 9),(64, 'AdminGenerator', 9, 10),(43, 'AdminSearch', -1, 0),(69, 'AdminInformation', 9, 5),
 (70, 'AdminPerformance', 8, 11),(71, 'AdminCustomerThreads', 29, 4),(72, 'AdminWebservice', 9, 12),(73, 'AdminStockMvt', 1, 9),
 (80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3),(84, 'AdminGeolocation', 8, 12),
 (85, 'AdminTaxRulesGroup', 4, 3),(86, 'AdminLogs', 9, 13), (87, 'AdminCounty', 5, 4),(88,'AdminHome',-1,0);
