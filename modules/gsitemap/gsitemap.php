@@ -143,8 +143,8 @@ XML;
 			
 			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCategoryLink((int)$category['id_category'], $category['link_rewrite'], (int)$category['id_lang']) : $link->getCategoryLink((int)$category['id_category']);	
 			$this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($category['date_upd'], 0, 10));
-      	}    
-      	
+		}
+
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') date_upd, pl.id_lang, cl.`link_rewrite` category, ean13, i.id_image, il.legend legend_image, (
 			SELECT MIN(level_depth)
@@ -216,17 +216,17 @@ XML;
 			foreach($pages AS $page => $ssl)
 				$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl), '0.5', 'monthly');
 
-        $xmlString = $xml->asXML();
+		$xmlString = $xml->asXML();
 		
-        $fp = fopen(GSITEMAP_FILE, 'w');
-        fwrite($fp, $xmlString);
-        fclose($fp);
+		$fp = fopen(GSITEMAP_FILE, 'w');
+		fwrite($fp, $xmlString);
+		fclose($fp);
 
-        $res = file_exists(GSITEMAP_FILE);
-        $this->_html .= '<h3 class="'. ($res ? 'conf confirm' : 'alert error') .'" style="margin-bottom: 20px">';
-        $this->_html .= $res ? $this->l('Sitemap file generated') : $this->l('Error while creating sitemap file');
-        $this->_html .= '</h3>';
-    }
+		$res = file_exists(GSITEMAP_FILE);
+		$this->_html .= '<h3 class="'. ($res ? 'conf confirm' : 'alert error') .'" style="margin-bottom: 20px">';
+		$this->_html .= $res ? $this->l('Sitemap file generated') : $this->l('Error while creating sitemap file');
+		$this->_html .= '</h3>';
+	}
 	
 	private function _addSitemapNode($xml, $loc, $priority, $change_freq, $last_mod = NULL)
 	{		
@@ -253,25 +253,25 @@ XML;
 		}
 	}
 
-    private function _displaySitemap()
-    {
-        if (file_exists(GSITEMAP_FILE) AND filesize(GSITEMAP_FILE))
-        {			
-            $fp = fopen(GSITEMAP_FILE, 'r');
-            $fstat = fstat($fp);
-            fclose($fp);
-            $xml = simplexml_load_file(GSITEMAP_FILE);
+	private function _displaySitemap()
+	{
+		if (file_exists(GSITEMAP_FILE) AND filesize(GSITEMAP_FILE))
+		{
+			$fp = fopen(GSITEMAP_FILE, 'r');
+			$fstat = fstat($fp);
+			fclose($fp);
+			$xml = simplexml_load_file(GSITEMAP_FILE);
 			
-            $nbPages = sizeof($xml->url);
+			$nbPages = sizeof($xml->url);
 
-            $this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />
-            <a href="'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml" target="_blank"><b>'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
+			$this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />
+			<a href="'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml" target="_blank"><b>'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
 
-            $this->_html .= $this->l('Update:').' <b>'.utf8_encode(strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime'])).'</b><br />';
-            $this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'MB</b><br />';
-            $this->_html .= $this->l('Indexed pages:').' <b>'.$nbPages.'</b><br /><br />';
-        }
-    }
+			$this->_html .= $this->l('Update:').' <b>'.utf8_encode(strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime'])).'</b><br />';
+			$this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'MB</b><br />';
+			$this->_html .= $this->l('Indexed pages:').' <b>'.$nbPages.'</b><br /><br />';
+		}
+	}
 
 	private function _displayForm()
 	{
