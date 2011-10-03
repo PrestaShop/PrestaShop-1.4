@@ -214,7 +214,7 @@ abstract class PaymentModuleCore extends Module
                     $ecotaxTaxRate = 0;
                     if (!empty($product['ecotax']))
                         $ecotaxTaxRate = Tax::getProductEcotaxRate($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
-					
+
                     $product_price = (float)Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), (Product::getTaxCalculationMethod((int)($order->id_customer)) == PS_TAX_EXC ? 2 : 6), NULL, false, false, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}), $specificPrice, false, false);
 
 					$quantityDiscount = SpecificPrice::getQuantityDiscount((int)$product['id_product'], Shop::getCurrentShop(), (int)$cart->id_currency, (int)$vat_address->id_country, (int)$customer->id_default_group, (int)$product['cart_quantity']);
@@ -253,15 +253,15 @@ abstract class PaymentModuleCore extends Module
 							if (isset($customization['datas'][_CUSTOMIZE_TEXTFIELD_]))
 								foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] AS $text)
 									$customizationText .= $text['name'].':'.' '.$text['value'].'<br />';
-							
+
 							if (isset($customization['datas'][_CUSTOMIZE_FILE_]))
 								$customizationText .= sizeof($customization['datas'][_CUSTOMIZE_FILE_]) .' '. Tools::displayError('image(s)').'<br />';
-								
-							$customizationText .= '---<br />';							
+
+							$customizationText .= '---<br />';
 						}
-						
+
 						$customizationText = rtrim($customizationText, '---<br />');
-						
+
 						$customizationQuantity = (int)($product['customizationQuantityTotal']);
 						$productsList .=
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
@@ -384,11 +384,11 @@ abstract class PaymentModuleCore extends Module
 					'{email}' => $customer->email,
 					'{delivery_block_txt}' => $this->_getFormatedAddress($delivery, "\n"),
 					'{invoice_block_txt}' => $this->_getFormatedAddress($invoice, "\n"),
-					'{delivery_block_html}' => $this->_getFormatedAddress($delivery, "<br />", 
+					'{delivery_block_html}' => $this->_getFormatedAddress($delivery, "<br />",
 						array(
-							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>', 
+							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>',
 							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
-					'{invoice_block_html}' => $this->_getFormatedAddress($invoice, "<br />", 
+					'{invoice_block_html}' => $this->_getFormatedAddress($invoice, "<br />",
 						array(
 							'firstname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>',
 							'lastname'	=> '<span style="color:#DB3484; font-weight:bold;">%s</span>')),
@@ -531,6 +531,58 @@ abstract class PaymentModuleCore extends Module
 		if (!isset($id_currency) OR empty($id_currency))
 			return false;
 		return (new Currency($id_currency));
+	}
+
+	/**
+	 * Allows specified payment modules to be used by a specific currency
+	 *
+	 * @since 1.4.5
+	 * @param int $id_currency
+	 * @param array $id_module_list
+	 * @return boolean
+	 */
+	public static function addCurrencyPermissions($id_currency, array $id_module_list = array())
+	{
+		$values = '';
+		if (count($id_module_list) == 0)
+		{
+			// fetch all installed module ids
+			$modules = PaymentModuleCore::getInstalledPaymentModules();
+			foreach ($modules as $module)
+				$id_module_list[] = $module['id_module'];
+		}
+
+		foreach ($id_module_list as $id_module)
+			$values .= '('.(int)$id_module.','.(int)$id_currency.'),';
+
+		if (!empty($values))
+		{
+			return Db::getInstance()->Execute('
+			INSERT INTO `'._DB_PREFIX_.'module_currency` (`id_module`, `id_currency`)
+			VALUES '.rtrim($values, ',')
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * List all installed and active payment modules
+	 * @see Module::getPaymentModules() if you need a list of module related to the user context
+	 *
+	 * @since 1.4.5
+	 * @return array module informations
+	 */
+	public static function getInstalledPaymentModules()
+	{
+		return Db::getInstance()->executeS('
+		SELECT DISTINCT m.`id_module`, h.`id_hook`, m.`name`, hm.`position`
+		FROM `'._DB_PREFIX_.'module` m
+		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
+		LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
+		WHERE h.`name` = \'payment\'
+		AND m.`active` = 1
+		');
 	}
 }
 

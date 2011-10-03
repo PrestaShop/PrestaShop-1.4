@@ -315,6 +315,8 @@ class LocalizationPackCore
 						$this->_errors[] = Tools::displayError('An error occurred while importing the currency: ').strval($attributes['name']);
 						return false;
 					}
+
+					PaymentModule::addCurrencyPermissions($currency->id);
 				}
 			}
 
