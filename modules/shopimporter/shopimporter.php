@@ -1435,7 +1435,7 @@ class shopimporter extends ImportModule
 				$order->module = $this->name;
 			
 			$currency = new Currency($order->id_currency);
-			$order->conversion_rate = $currency->conversion_rate;
+			$order->conversion_rate = !empty($currency->conversion_rate) ? $currency->conversion_rate : 1;
 			$order->total_products = (float)$item['total_products'];
 			$order->total_products_wt = (float)$item['total_products_wt'];
 			$order->total_discounts = (float)$item['total_discounts'];
