@@ -451,8 +451,7 @@ class AdminImport extends AdminTab
 				$path = _PS_CAT_IMG_DIR_.(int)($id_entity);
 			break;
 		}
-
-		if (copy(trim($url), $tmpfile))
+		if (copy(str_replace(' ', '%20', trim($url)), $tmpfile))
 		{
 			imageResize($tmpfile, $path.'.jpg');
 			$imagesTypes = ImageType::getImagesTypes($entity);
