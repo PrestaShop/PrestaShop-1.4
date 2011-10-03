@@ -100,7 +100,10 @@ class ProductDownloadCore extends ObjectModel
 
 	public function getFields()
 	{
-		parent::validateFields();
+		static $fieldValidated = false;
+		if(!$fieldValidated)
+			parent::validateFields();
+		$fieldValidated = true;
 		
 		if (!$this->date_expiration)
 			$this->date_expiration = '0000-00-00 00:00:00';
