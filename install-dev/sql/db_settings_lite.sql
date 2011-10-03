@@ -855,7 +855,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (2, 62, 'Sites affluents'),(2, 63, 'Groupes'),(2, 64, 'Générateurs'),(2, 65, 'Paniers'),(2, 66, 'Tags'),(2, 67, 'Recherche'),
 (2, 68, 'Documents joints'),(2, 69, 'Informations'),(2, 70, 'Performances'),(2, 71, 'SAV'),(2, 72, 'Service web'),(2, 73, 'Mouvements de Stock'),
 (2, 80, 'Catalogue de modules et thèmes'),(2, 81, 'Mon compte'),(2, 82, 'Magasins'),(2, 83, 'Thèmes'),(2, 84, 'Géolocalisation'),(2, 85, 'Règles de taxes'),(2, 86, 'Log'),
-(2, 87, 'Comtés'),(2,88,'Accueil'),(2, 89, 'Mise à jour');
+(2, 87, 'Comtés'),(2,88,'Accueil');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 1, 'Catálogo'),(3, 2, 'Clientes'),(3, 3, 'Pedidos'),(3, 4, 'Pago'),(3, 5, 'Transporte'),
@@ -869,7 +869,7 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (3, 55, 'Albaranes de entrega'),(3, 56, 'SEO & URLs'),(3, 57, 'CMS'),(3, 58, 'Mapeo de la imagen'),(3, 59, 'Mensajes del cliente'),(3, 60, 'Rastreo'),
 (3, 61, 'Motores de búsqueda'),(3, 62, 'Referido'),(3, 63, 'Grupos'),(3, 64, 'Generadores'),(3, 65, 'Carritos'),(3, 66, 'Etiquetas'),(3, 67, 'Búsqueda'),(3, 68, 'Adjuntos'),
 (3, 69, 'Informaciones'),(3, 70, 'Rendimiento'),(3, 72, 'Web service'),(3, 71, 'Servicio al cliente'),(3, 73, 'Movimiento de Stock'), (3, 82, 'Tiendas'),(3, 83, 'Temas'),(3, 84, 'Geolocalización'),(3, 85, 'Reglas de Impuestos'),(3, 86, 'Log'),
-(3, 87, 'Condados'),(3,88,'Home'),(3, 89, 'Mejorar');
+(3, 87, 'Condados'),(3,88,'Home');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (4, 1, 'Katalog'),(4, 2, 'Kunden'),(4, 3, 'Bestellungen'),(4, 4, 'Zahlung'),

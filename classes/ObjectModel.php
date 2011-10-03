@@ -185,7 +185,7 @@ abstract class ObjectModelCore
 	public function add($autodate = true, $nullValues = false)
 	{
 	 	if (!Validate::isTableOrIdentifier($this->table))
-			die(Tools::displayError());
+			die(Tools::displayError('not table or identifier : ').$this->table);
 
 		/* Automatically fill dates */
 		if ($autodate AND key_exists('date_add', $this))
@@ -212,9 +212,9 @@ abstract class ObjectModelCore
 				{
 					foreach (array_keys($field) AS $key)
 					 	if (!Validate::isTableOrIdentifier($key))
-			 				die(Tools::displayError());
+			 				die(Tools::displayError('key is not table or identifier, ').$key);
 					$field[$this->identifier] = (int)$this->id;
-					$result = Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT') && $result;
+					$result &= Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT');
 				}
 		}
 		return $result;
@@ -344,7 +344,7 @@ abstract class ObjectModelCore
 	{
 		/* WARNING : Product do not use this function, so do not forget to report any modification if necessary */
 	 	if (!Validate::isTableOrIdentifier($this->identifier))
-	 		die(Tools::displayError());
+	 		die(Tools::displayError('identifier is not table or identifier : ').$this->identifier);
 
 		$fields = array();
 
