@@ -256,6 +256,7 @@ class WebserviceRequestCore
 			'stock_movements' => array('description' => 'Stock movements management', 'class' => 'StockMvt', 'forbidden_method' => array('PUT')),
 			'search' => array('description' => 'Search', 'specific_management' => true, 'forbidden_method' => array('PUT', 'POST', 'DELETE')),
 			'stock_movement_reasons' => array('description' => 'The stock movement reason', 'class' => 'StockMvtReason'),
+			'taxes' => array('description' => 'The tax rate', 'class' => 'Tax'),
 		);
 		ksort($resources);
 		return $resources;
