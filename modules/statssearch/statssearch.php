@@ -80,7 +80,7 @@ class StatsSearch extends ModuleGraph
 	
 	function hookSearch($params)
 	{
-		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'statssearch` (`keywords`,`results`,`date_add`) VALUES (\''.pSQL($params['expr']).'\', '.(int)($params['total']).', NOW())');
+		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'statssearch` (`keywords`,`results`,`date_add`) VALUES (\''.pSQL($params['expr']).'\', '.(int)($params['total']).', '.date('Y-M-d H:i:s').')');
 	}
 	
 	function hookAdminStatsModules()
