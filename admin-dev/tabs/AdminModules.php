@@ -41,7 +41,7 @@ class AdminModules extends AdminTab
 	private $listPartnerModules = array();
 	private $listNativeModules = array();
 	private $_moduleCacheFile = '/config/modules_list.xml';
- 	public static $xml_modules_list = 'http://www.prestashop.com/xml/modules_list.xml';
+ 	public $xml_modules_list = 'http://www.prestashop.com/xml/modules_list.xml';
 	static private $MAX_DISP_AUTHOR = 20;		// maximum length to display
 	
 
