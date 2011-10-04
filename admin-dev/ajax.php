@@ -555,7 +555,9 @@ if (Tools::isSubmit('getHookableList'))
 	$modules_list = explode(',', Tools::getValue('modules_list'));
 	$hooks_list = explode(',', Tools::getValue('hooks_list'));
 	$hookableList = array();
-
+	
+	if (!sizeof($modules_list))
+		die('{"hasError" : true, "errors" : ["no module on this page"]}');
 	foreach ($modules_list as $module)
 	{
 		$moduleInstance = Module::getInstanceByName($module);
@@ -568,6 +570,7 @@ if (Tools::isSubmit('getHookableList'))
 		}
 
 	}
+	$hookableList['hasError'] = false;
 	die(Tools::jsonEncode($hookableList));
 }
 

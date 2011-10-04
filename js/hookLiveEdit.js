@@ -126,7 +126,17 @@ function getHookableList() {
         dataType: 'json',
         data: 'ajax=true&getHookableList&hooks_list=' + hooks_list + '&modules_list=' + modules_list,
         success: function(jsonData) {
-            hookable_list = jsonData;
+        	if (jsonData.hasError)
+        	{
+	        	var errors = '';
+				for(error in jsonData.errors)
+					//IE6 bug fix
+					if(error != 'indexOf')
+						errors += jsonData.errors[error] + "\n";
+				alert(errors);
+			}
+			else
+				hookable_list = jsonData;
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             $('#live_edit_feedback_str').html('<div class="live_edit_feed_back_ko"><img src="img/admin/error.png"><h3>TECHNICAL ERROR:</h3>' + loadFail + '<br><br><a style="margin:auto" class="button" href="#" onclick="closeFancybox();">' + close + '</a></div>');
