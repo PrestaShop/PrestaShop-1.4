@@ -132,7 +132,7 @@ class PDFCore extends PDF_PageGroupCore
 			$this->AddFont($font);
 			$this->AddFont($font, 'B');
 		}
-		
+
 		/* If the user is using a ISO code no present in the languages, use the first language available instead */
 		if (!isset(self::$_pdfparams[self::$_iso]) && isset($languages[0]['iso_code']))
 			self::$_iso = strtoupper($languages[0]['iso_code']);
@@ -164,7 +164,7 @@ class PDFCore extends PDF_PageGroupCore
 		{
 			if ($this->_isPngFile(_PS_IMG_DIR_.'/logo.jpg'))
 				$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15, 'PNG');
-			else			
+			else
 				$this->Image(_PS_IMG_DIR_.'/logo.jpg', 10, 8, 0, 15);
 		}
 		$this->SetFont(self::fontname(), 'B', 15);
@@ -181,10 +181,10 @@ class PDFCore extends PDF_PageGroupCore
 		else
 			$this->Cell(77, 10, self::l('ORDER #').' '.sprintf('%06d', self::$order->id), 0, 1, 'R');
    }
-   
+
 	/*
 	* Detect if the file header match a PNG file
-	* 
+	*
 	* @param string $file Filename to check (include full path)
 	* @return boolean True if the file is a PNG file
 	*/
@@ -474,11 +474,11 @@ class PDFCore extends PDF_PageGroupCore
 	 */
 	public static function generateHeaderAddresses(&$pdf, $order, $addressType, $patternRules, $width)
 	{
-		
+
 		$maxY = 0;
 		$pdf->setY($pdf->GetY() + 5);
 		foreach(array_keys($addressType) as $type)
-		{			
+		{
 			$currentY = $pdf->GetY();
 
 			$attributeName = 'id_address_'.$type;
@@ -488,7 +488,7 @@ class PDFCore extends PDF_PageGroupCore
 			$addressType[$type]['addressFormatedValues'] = AddressFormat::getFormattedAddressFieldsValues(
 				$addressType[$type]['addressObject'],
 				$addressType[$type]['addressFields']);
-				
+
 			foreach ($addressType[$type]['addressFields'] as $line)
 				if (($patternsList = explode(' ', $line)))
 				{
@@ -496,14 +496,14 @@ class PDFCore extends PDF_PageGroupCore
 					foreach($patternsList as $pattern)
 						if (!in_array($pattern, $patternRules['avoid']))
 						{
-							if ($pattern == 'State:name' && 
+							if ($pattern == 'State:name' &&
 								Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
 							{
 								$state_name = &$addressType[$type]['addressFormatedValues'][$pattern];
 								$state = new State((int)State::getIdByName($state_name));
 								if (Validate::isLoadedObject($state))
 									$state_name = $state->iso_code;
-								else 
+								else
 									$state_name = strtoupper(substr($state_name, 0, 2));
 							}
 							$tmp .= ((isset($addressType[$type]['addressFormatedValues'][$pattern]) &&
@@ -781,7 +781,7 @@ class PDFCore extends PDF_PageGroupCore
 				$products = self::$order->getProducts();
 		}
 		else
-			$products = self::$orderSlip->getProducts();
+			$products = self::$orderSlip->getOrdersSlipProducts(self::$orderSlip->id, self::$order);
 		$customizedDatas = Product::getAllCustomizedDatas((int)(self::$order->id_cart));
 		Product::addCustomizationPrice($products, $customizedDatas);
 
@@ -949,7 +949,7 @@ class PDFCore extends PDF_PageGroupCore
 			if (!isset($priceBreakDown['totalsEcotax'][$product['tax_rate']]))
 				$priceBreakDown['totalsEcotax'][$product['tax_rate']] = 0;
 			if (!isset($priceBreakDown['totalsEcotaxWithTax'][$product['tax_rate']]))
-				$priceBreakDown['totalsEcotaxWithTax'][$product['tax_rate']] = 0;				
+				$priceBreakDown['totalsEcotaxWithTax'][$product['tax_rate']] = 0;
 			if (!isset($priceBreakDown['totalsWithoutTax'][$product['tax_rate']]))
 				$priceBreakDown['totalsWithoutTax'][$product['tax_rate']] = 0;
 			if (!isset($taxes[$product['tax_rate']]))
@@ -980,7 +980,10 @@ class PDFCore extends PDF_PageGroupCore
 		$tmp = 0;
 		$product = &$tmp;
 		/* And secondly assign to each tax its own reduction part */
-		$discountAmount = (float)(self::$order->total_discounts);
+		$discountAmount = 0;
+		if (!self::$orderSlip)
+			$discountAmount = (float)(self::$order->total_discounts);
+
 		foreach ($products as $product)
 		{
 			$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
