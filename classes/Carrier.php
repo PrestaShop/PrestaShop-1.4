@@ -444,10 +444,9 @@ class CarrierCore extends ObjectModel
 			foreach ($carriers AS $carrier)
 				if ($carrier['id_carrier'] == (int)$defaultCarrier)
 					return (int)$carrier['id_carrier'];
-		if (!$defaultCarrierIsPresent)
-			foreach ($carriers AS $carrier)
-				if ($carrier['id_carrier'] == (int)Configuration::get('PS_CARRIER_DEFAULT'))
-					return (int)$carrier['id_carrier'];
+		foreach ($carriers AS $carrier)
+			if ($carrier['id_carrier'] == (int)Configuration::get('PS_CARRIER_DEFAULT'))
+				return (int)$carrier['id_carrier'];
 			
 		return (int)$carriers[0]['id_carrier'];
 	}
