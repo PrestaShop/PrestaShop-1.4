@@ -428,25 +428,7 @@ class ParentOrderControllerCore extends FrontController
 	 */
 	protected function _setDefaultCarrierSelection($carriers)
 	{
-		if (sizeof($carriers))
-		{
-			$defaultCarrierIsPresent = false;
-			if ((int)self::$cart->id_carrier != 0)
-				foreach ($carriers AS $carrier)
-					if ($carrier['id_carrier'] == (int)self::$cart->id_carrier)
-						$defaultCarrierIsPresent = true;
-			if (!$defaultCarrierIsPresent)
-				foreach ($carriers AS $carrier)
-					if ($carrier['id_carrier'] == (int)Configuration::get('PS_CARRIER_DEFAULT'))
-					{
-						$defaultCarrierIsPresent = true;
-						self::$cart->id_carrier = (int)$carrier['id_carrier'];
-					}
-			if (!$defaultCarrierIsPresent)
-				self::$cart->id_carrier = (int)$carriers[0]['id_carrier'];
-		}
-		else
-			self::$cart->id_carrier = 0;
+		self::$cart->id_carrier = Carrier::getDefaultCarrierSelection($carriers, (int)self::$cart->id_carrier);
 		if (self::$cart->update())
 			return self::$cart->id_carrier;
 		return 0;
