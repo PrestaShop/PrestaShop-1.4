@@ -1,5 +1,5 @@
 {*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -50,6 +50,10 @@
 		{/literal}
 	//]]>
 	</script>
+{else}
+	<script type="text/javascript">
+		var txtFree = "{l s='Free!'}";
+	</script>
 {/if}
 
 {if !$virtual_cart && $giftAllowed && $cart->gift == 1}
@@ -97,7 +101,7 @@
 	<input id="input_virtual_carrier" class="hidden" type="hidden" name="id_carrier" value="0" />
 {else}
 	<h3 class="carrier_title">{l s='Choose your delivery method'}</h3>
-	
+
 	<div id="HOOK_BEFORECARRIER">{if isset($carriers)}{$HOOK_BEFORECARRIER}{/if}</div>
 	{if isset($isVirtualCart) && $isVirtualCart}
 	<p class="warning">{l s='No carrier needed for this order'}</p>
@@ -148,7 +152,7 @@
 		</tbody>
 	</table>
 	<div style="display: none;" id="extra_carrier"></div>
-	
+
 		{if $giftAllowed}
 		<h3 class="gift_title">{l s='Gift'}</h3>
 		<p class="checkbox">

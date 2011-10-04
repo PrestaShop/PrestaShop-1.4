@@ -1,5 +1,5 @@
 {*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -51,7 +51,7 @@
 	var countriesNeedIDNumber = new Array();
 	var countriesNeedZipCode = new Array();
 	var vat_management = {$vat_management|intval};
-	
+
 	var txtWithTax = "{l s='(tax incl.)'}";
 	var txtWithoutTax = "{l s='(tax excl.)'}";
 	var txtHasBeenSelected = "{l s='has been selected'}";
@@ -91,7 +91,7 @@
 		<!-- Carrier -->
 		{include file="$tpl_dir./order-carrier.tpl"}
 		<!-- END Carrier -->
-	
+
 		<!-- Payment -->
 		{include file="$tpl_dir./order-payment.tpl"}
 		<!-- END Payment -->

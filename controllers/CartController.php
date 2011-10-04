@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,10 +28,10 @@
 class CartControllerCore extends FrontController
 {
 	public $php_self = 'cart.php';
-	
+
 	// This is not a public page, so the canonical redirection is disabled
 	public function canonicalRedirection(){}
-	
+
 	public function run()
 	{
 		$this->init();
@@ -77,7 +77,7 @@ class CartControllerCore extends FrontController
 
 	public function includeCartModule()
 	{
-		require_once(_PS_MODULE_DIR_.'/blockcart/blockcart-ajax.php'); 
+		require_once(_PS_MODULE_DIR_.'/blockcart/blockcart-ajax.php');
 	}
 
 	public function preProcess()
@@ -167,7 +167,7 @@ class CartControllerCore extends FrontController
 									die('{"hasError" : true, "errors" : ["'.Tools::displayError('Cannot add this product because current voucher does not allow additional discounts.').'"]}');
 								else
 									$this->errors[] = Tools::displayError('Cannot add this product because current voucher does not allow additional discounts.');
-							
+
 						}
 					}
 					if (!sizeof($this->errors))
