@@ -341,6 +341,18 @@ class AdminCarriers extends AdminTab
 				}
 			}
 		}
+		elseif ((isset($_GET['status'.$this->table]) OR isset($_GET['status'])) AND Tools::getValue($this->identifier))
+		{
+			if ($this->tabAccess['edit'] === '1')
+			{
+				if (Tools::getValue('id_carrier') == Configuration::get('PS_CARRIER_DEFAULT'))
+					$this->_errors[] = Tools::displayError('You can\'t disable the default carrier, please change your default carrier first.');
+				else
+					parent::postProcess();
+			}
+			else
+				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
+		}
 		else
 		{
 			if ((Tools::isSubmit('submitDel'.$this->table) && in_array(Configuration::get('PS_CARRIER_DEFAULT'), Tools::getValue('carrierBox')))
@@ -377,4 +389,3 @@ class AdminCarriers extends AdminTab
 		parent::displayListContent($token);
 	}
 }
-
