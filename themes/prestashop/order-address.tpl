@@ -91,8 +91,8 @@
 	function getAddressesTitles()
 	{ldelim}
 		return {ldelim}
-						'invoice': "{l s='Your billing address'}"
-						, 'delivery': "{l s='Your delivery address'}"
+						'invoice': "{l s='Your billing address'}",
+						'delivery': "{l s='Your delivery address'}"
 			{rdelim};
 
 	{rdelim}
@@ -160,7 +160,7 @@
 <form action="{$link->getPageLink('order.php', true)}" method="post">
 {else}
 <div id="opc_account" class="opc-main-block">
-	<div id="opc_account-overlay" class="opc-overlay" style="display: none;"></div>
+	<div id="opc_account-overlay" class="opc-overlay" style="display:none;"></div>
 {/if}
 	<div class="addresses">
 		<p class="address_delivery select">
@@ -173,7 +173,7 @@
 			
 			</select>
 		</p>
-		<p class="checkbox">
+		<p class="checkbox" {if $cart->isVirtualCart()}style="display:none;"{/if}>
 			<input type="checkbox" name="same" id="addressesAreEquals" value="1" onclick="updateAddressesDisplay();{if $opc}updateAddressSelection();{/if}" {if $cart->id_address_invoice == $cart->id_address_delivery || $addresses|@count == 1}checked="checked"{/if} />
 			<label for="addressesAreEquals">{l s='Use the same address for billing.'}</label>
 		</p>
@@ -192,9 +192,9 @@
 			{/if}
 		</p>
 		<div class="clear"></div>
-		<ul class="address item" id="address_delivery">
+		<ul class="address item" id="address_delivery" {if $cart->isVirtualCart()}style="display:none;"{/if}>
 		</ul>
-		<ul class="address alternate_item" id="address_invoice">
+		<ul class="address alternate_item {if $cart->isVirtualCart()}full_width{/if}" id="address_invoice">
 		</ul>
 		<br class="clear" />
 		<p class="address_add submit">
