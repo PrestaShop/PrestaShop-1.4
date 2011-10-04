@@ -552,12 +552,14 @@ if (Tools::isSubmit('helpAccess'))
 
 if (Tools::isSubmit('getHookableList'))
 {
+	if (!strlen(Tools::getValue('hooks_list')))
+		die('{"hasError" : true, "errors" : ["Live Edit : no module on this page"]}');
+	
 	$modules_list = explode(',', Tools::getValue('modules_list'));
 	$hooks_list = explode(',', Tools::getValue('hooks_list'));
 	$hookableList = array();
 	
-	if (!sizeof($modules_list))
-		die('{"hasError" : true, "errors" : ["no module on this page"]}');
+	
 	foreach ($modules_list as $module)
 	{
 		$moduleInstance = Module::getInstanceByName($module);
