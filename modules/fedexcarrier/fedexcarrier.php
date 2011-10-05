@@ -56,7 +56,7 @@ class FedexCarrier extends CarrierModule
 	{
 		$this->name = 'fedexcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.3';
+		$this->version = '1.2.4';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 
@@ -595,7 +595,7 @@ class FedexCarrier extends CarrierModule
 					</div>
 				</fieldset>
 				
-				<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
+				<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Configure').'"></div>
 			</form>
 
 			<script>
@@ -1570,6 +1570,14 @@ class FedexCarrier extends CarrierModule
 	{	
 		// Init var
 		$address = new Address($params->id_address_delivery);
+		if (!Validate::isLoadedObject($address))
+		{
+			// If address is not loaded, we take data from shipping estimator module (if installed)
+			global $cookie;
+			$address->id_country = $cookie->id_country;
+			$address->id_state = $cookie->id_state;
+			$address->postcode = $cookie->postcode;
+		}
 		$recipient_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($address->id_country));
 		$recipient_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)($address->id_state));
 		$shipper_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)(Configuration::get('FEDEX_CARRIER_COUNTRY')));
@@ -1691,6 +1699,7 @@ class FedexCarrier extends CarrierModule
 				$resultTab = unserialize($resultTabTmp);
 			else
 			{
+				echo '<pre>'.print_r($resultTab, true).'</pre>';
 				try { $resultTab = $client->getRates($request); }
 				catch (Exception $e) { }				
 			}
@@ -1784,7 +1793,7 @@ class FedexCarrier extends CarrierModule
 
 		// Return results
 		if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity != 'ERROR' && isset($resultTab->RateReplyDetails->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount))
-			return array('connect' => true, 'cost' => number_format($resultTab->RateReplyDetails->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount,2,'.',',') * $conversionRate);
+			return array('connect' => true, 'cost' => number_format($resultTab->RateReplyDetails->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount, 2, '.', ',') * $conversionRate);
 
 		if (isset($resultTab->HighestSeverity) && $resultTab->HighestSeverity == 'ERROR')
 			$this->_webserviceError = $this->l('Error').' '.(isset($resultTab->Notifications->Code) ? $resultTab->Notifications->Code : '').' : '.(isset($resultTab->Notifications->Message) ? $resultTab->Notifications->Message : '');
