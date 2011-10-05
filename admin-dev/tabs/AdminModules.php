@@ -47,7 +47,7 @@ class AdminModules extends AdminTab
 
 	public function __construct()
 	{
-		parent::__construct ();
+		parent::__construct();
 		
 		$this->listTabModules['administration'] = $this->l('Administration');
 		$this->listTabModules['advertising_marketing'] = $this->l('Advertising & Marketing');
