@@ -25,10 +25,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-/**
- * @author Lucas Cherifi - Nans Pellicari - Anatole Korczak - PrestaShop Team
- */
- 
 class WebserviceExceptionCore extends Exception
 {
 	protected $status;

@@ -29,8 +29,7 @@
  * Twenga module allow to use the Twenga API to :
  * 1. subscribe to their Ready to Sell engine,
  * 2. activate a tracking for order process if user has been used twenga engine,
- * 3. submit a xml feed of shop products to Twenga. 
- * @author Nans Pellicari - Prestashop
+ * 3. submit a xml feed of shop products to Twenga.
  * @version 1.3
  */
 
