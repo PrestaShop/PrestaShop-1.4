@@ -530,16 +530,16 @@ class Twenga extends PaymentModule
 	{
 		global $cookie;
 
-		$id_lang = ((isset($cookie->id_lang)) ? $cookie->id_lang : 
-			((isset($_POST['id_lang'])) ? $_POST['id_lang'] : NULL));
+		$id_lang = ((isset($cookie->id_lang)) ? (int)$cookie->id_lang : 
+			((isset($_POST['id_lang'])) ? (int)$_POST['id_lang'] : NULL));
 
 		if ($id_lang === NULL)
 			return 'Undefined id_lang';
 		$country = Db::getInstance()->ExecuteS('
 			SELECT c.name as name
 			FROM '._DB_PREFIX_.'country_lang as c
-			WHERE c.id_lang = '.$id_lang.' 
-			AND c.id_country = '.	Configuration::get('PS_COUNTRY_DEFAULT'));
+			WHERE c.id_lang = '.(int)$id_lang.' 
+			AND c.id_country = '.(int)Configuration::get('PS_COUNTRY_DEFAULT'));
 	
 		if (!isset($country[0]['name']))
 			$country[0]['name'] = 'Undefined';

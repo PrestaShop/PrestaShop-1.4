@@ -649,6 +649,7 @@ class CategoryCore extends ObjectModel
 	 */
 	public static function getChildrenWithNbSelectedSubCat($id_parent, $selectedCat,  $id_lang)
 	{
+		$selectedCat = explode(',', str_replace(' ', '', $selectedCat));		
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_category`, c.`level_depth`, cl.`name`, IF((
 			SELECT COUNT(*)
@@ -659,7 +660,7 @@ class CategoryCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'category` c3
 			WHERE c3.`nleft` > c.`nleft`
 			AND c3.`nright` < c.`nright`
-			AND c3.`id_category`  IN ('.pSQL($selectedCat).')
+			AND c3.`id_category`  IN ('.implode(',', array_map('intval', $selectedCat)).')
 		)' : '0').' AS nbSelectedSubCat
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
