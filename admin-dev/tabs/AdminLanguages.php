@@ -43,6 +43,8 @@ class AdminLanguages extends AdminTab
 		'name' => array('title' => $this->l('Name'), 'width' => 120),
 		'iso_code' => array('title' => $this->l('ISO code'), 'width' => 70, 'align' => 'center'),
 		'language_code' => array('title' => $this->l('Language code'), 'width' => 70, 'align' => 'center'),
+		'date_format_lite' => array('title' => $this->l('Date format')),
+		'date_format_full' => array('title' => $this->l('Date format (full)')),
 		'active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool'));
 	
 		$this->optionTitle = $this->l('Languages options');
@@ -340,17 +342,27 @@ class AdminLanguages extends AdminTab
 				<input type="hidden" value="'._PS_VERSION_.'" name="ps_version" id="ps_version" />
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">
-					<input type="text" size="8" maxlength="32" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+					<input type="text" size="8" maxlength="32" name="name" value="'.Tools::htmlentitiesUTF8($this->getFieldValue($obj, 'name')).'" /> <sup>*</sup>
 				</div>
 				<label>'.$this->l('ISO code:').' </label>
 				<div class="margin-form">
-					<input type="text" size="4" maxlength="2" name="iso_code" id="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" onKeyUp="checkLangPack();" /> <sup>*</sup>
+					<input type="text" size="4" maxlength="2" name="iso_code" id="iso_code" value="'.Tools::htmlentitiesUTF8($this->getFieldValue($obj, 'iso_code')).'" onKeyUp="checkLangPack();" /> <sup>*</sup>
 					<p>'.$this->l('2-letter ISO code (e.g., fr, en, de)').'</p>
 				</div>
 				<label>'.$this->l('Language code:').' </label>
 				<div class="margin-form">
-					<input type="text" size="10" maxlength="5" name="language_code" id="language_code" value="'.htmlentities($this->getFieldValue($obj, 'language_code'), ENT_COMPAT, 'UTF-8').'"/> <sup>*</sup>
+					<input type="text" size="10" maxlength="5" name="language_code" id="language_code" value="'.Tools::htmlentitiesUTF8($this->getFieldValue($obj, 'language_code')).'"/> <sup>*</sup>
 					<p>'.$this->l('Full language code (e.g., en-us, pt-br)').'</p>
+				</div>
+				<label>'.$this->l('Date format:').' </label>
+				<div class="margin-form">
+					<input type="text" size="15" name="date_format_lite" id="date_format_lite" value="'.Tools::htmlentitiesUTF8($this->getFieldValue($obj, 'date_format_lite')).'"/> <sup>*</sup>
+					<p>'.$this->l('Date format, lite (e.g., Y-m-d, d/m/Y)').'</p>
+				</div>
+				<label>'.$this->l('Date format (full):').' </label>
+				<div class="margin-form">
+					<input type="text" size="25" name="date_format_full" id="date_format_full" value="'.Tools::htmlentitiesUTF8($this->getFieldValue($obj, 'date_format_full')).'"/> <sup>*</sup>
+					<p>'.$this->l('Date format, full (e.g., Y-m-d H:i:s, d/m/Y H:i)').'</p>
 				</div>
 				<label>'.$this->l('Flag:').' </label>
 				<div class="margin-form">

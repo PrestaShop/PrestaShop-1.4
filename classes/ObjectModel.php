@@ -134,6 +134,7 @@ abstract class ObjectModelCore
 				$this->id = (int)($id);
 				foreach ($result AS $key => $value)
 					if (key_exists($key, $this))
+						// Todo: stripslashes() MUST BE removed in 1.4.6 and later, but is kept in 1.4.5 for a compatibility issue
 						$this->{$key} = stripslashes($value);
 	
 				/* Join multilingual tables */
@@ -150,6 +151,7 @@ abstract class ObjectModelCore
 								{
 									if (!is_array($this->{$key}))
 										$this->{$key} = array();
+									// Todo: stripslashes() MUST BE removed in 1.4.6 and later, but is kept in 1.4.5 for a compatibility issue
 									$this->{$key}[(int)$row['id_lang']] = stripslashes($value);
 								}
 				}

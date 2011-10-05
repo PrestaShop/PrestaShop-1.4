@@ -38,15 +38,22 @@ class LanguageCore extends ObjectModel
 	/** @var string 5-letter iso code */
 	public 		$language_code;
 
+	/** @var string date format http://http://php.net/manual/en/function.date.php with the date only */
+	public 		$date_format_lite = 'Y-m-d';
+	
+	/** @var string date format http://http://php.net/manual/en/function.date.php with hours and minutes */
+	public 		$date_format_full = 'Y-m-d H:i:s';
+
 	/** @var bool true if this language is right to left language */
 	public		$is_rtl = false;
 
 	/** @var boolean Status */
 	public 		$active = true;
 
-	protected 	$fieldsRequired = array('name', 'iso_code');
-	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 2, 'language_code' => 5);
-	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'language_code' => 'isLanguageCode', 'active' => 'isBool', 'is_rtl' => 'isBool');
+	protected 	$fieldsRequired = array('name', 'iso_code', 'date_format_lite', 'date_format_full');
+	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 2, 'language_code' => 5, 'date_format_lite' => 32, 'date_format_full' => 32);
+	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'language_code' => 'isLanguageCode',
+	'active' => 'isBool', 'is_rtl' => 'isBool', 'date_format_lite' => 'isPhpDateFormat', 'date_format_full' => 'isPhpDateFormat');
 
 	protected 	$table = 'lang';
 	protected 	$identifier = 'id_lang';
@@ -56,17 +63,17 @@ class LanguageCore extends ObjectModel
 	protected static $_LANGUAGES;
 	protected static $countActiveLanguages;
 
-	protected	$webserviceParameters = array(
+	protected $webserviceParameters = array(
 		'objectNodeName' => 'language',
 		'objectsNodeName' => 'languages',
 	);
 
 	protected $translationsFilesAndVars = array(
-			'fields' => '_FIELDS',
-			'errors' => '_ERRORS',
-			'admin' => '_LANGADM',
-			'pdf' => '_LANGPDF',
-		);
+		'fields' => '_FIELDS',
+		'errors' => '_ERRORS',
+		'admin' => '_LANGADM',
+		'pdf' => '_LANGPDF',
+	);
 
 	public	function __construct($id = NULL, $id_lang = NULL)
 	{
@@ -82,6 +89,8 @@ class LanguageCore extends ObjectModel
 		$fields['is_rtl'] = (int)$this->is_rtl;
 		if (empty($fields['language_code']))
 			$fields['language_code'] = $fields['iso_code'];
+		$fields['date_format_lite'] = pSQL($this->date_format_lite);
+		$fields['date_format_full'] = pSQL($this->date_format_full);
 		$fields['active'] = (int)$this->active;
 		return $fields;
 	}
@@ -592,13 +601,9 @@ class LanguageCore extends ObjectModel
 	public static function loadLanguages()
 	{
 		self::$_LANGUAGES = array();
-
-		$result = Db::getInstance()->ExecuteS('
-		SELECT `id_lang`, `name`, `iso_code`, `active`
-		FROM `'._DB_PREFIX_.'lang`');
-
+		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'lang`');
 		foreach ($result AS $row)
-			self::$_LANGUAGES[(int)$row['id_lang']] = array('id_lang' => (int)$row['id_lang'], 'name' => $row['name'], 'iso_code' => $row['iso_code'], 'active' => (int)$row['active']);
+			self::$_LANGUAGES[(int)$row['id_lang']] = $row;
 	}
 
 	public function update($nullValues = false)

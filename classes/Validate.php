@@ -493,6 +493,18 @@ class ValidateCore
 	{
 		return preg_match('/^[a-zA-Z_0-9-]+$/', $configName);
 	}
+	
+	/**
+	* Check date formats like http://php.net/manual/en/function.date.php
+	*
+	* @param string $date_format date format to check
+	* @return boolean Validity is ok or not
+	*/
+	public static function isPhpDateFormat($date_format)
+	{
+		// We can't really check if this is valid or not, because this is a string and you can write whatever you want in it. That's why only < et > are forbidden (HTML)
+		return preg_match('/^[^<>]+$/', $date_format);
+	}
 
 	/**
 	* Check for date format

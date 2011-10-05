@@ -234,8 +234,12 @@ INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`,
 (74, 4, 'Lieber Kunde,\r\n\r\nMit freundlichen Grüßen,\r\nIhr Kundenservice', NOW()),
 (74, 5, 'Gentile Cliente,\r\n\r\nCordiali saluti,\r\nServizio Clienti', NOW());
 
-INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`, `language_code`) VALUES
-(1, 'English (English)', 1, 'en', 'en-us'),(2, 'Français (French)', 1, 'fr', 'fr'),(3, 'Español (Spanish)', 1, 'es', 'es'),(4, 'Deutsch (German)', 1, 'de', 'de'),(5, 'Italiano (Italian)', 1, 'it', 'it');
+INSERT INTO `PREFIX_lang` (`id_lang`, `name`, `active`, `iso_code`, `language_code`, `date_format_lite`, `date_format_full`) VALUES
+(1, 'English (English)', 1, 'en', 'en-us', 'm/j/Y', 'm/j/Y H:i:s'),
+(2, 'Français (French)', 1, 'fr', 'fr', 'd/m/Y', 'd/m/Y H:i:s'),
+(3, 'Español (Spanish)', 1, 'es', 'es', 'd/m/Y', 'd/m/Y H:i:s'),
+(4, 'Deutsch (German)', 1, 'de', 'de', 'd.m.Y', 'd.m.Y H:i:s'),
+(5, 'Italiano (Italian)', 1, 'it', 'it', 'd/m/Y', 'd/m/Y H:i:s');
 
 INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES (1, 0, 0, 1, 8, 1, NOW(), NOW(), 0);
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
