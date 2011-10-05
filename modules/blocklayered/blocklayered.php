@@ -483,7 +483,7 @@ class BlockLayered extends Module
 			// Data are validated by method "hookPostProcessFeature"
 			$id_lang = (int)$language['id_lang'];
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'layered_indexable_feature_lang
-			VALUES ('.(int)$params['id_feature'].', '.$id_lang.', \''.Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)).'\',
+			VALUES ('.(int)$params['id_feature'].', '.$id_lang.', \''.pSQL(Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang))).'\',
 			\''.pSQL(Tools::safeOutput(Tools::getValue('meta_title_'.$id_lang), true)).'\')');
 		}
 	}
@@ -499,7 +499,7 @@ class BlockLayered extends Module
 			// Data are validated by method "hookPostProcessFeatureValue"
 			$id_lang = (int)$language['id_lang'];
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'layered_indexable_feature_value_lang
-			VALUES ('.(int)$params['id_feature_value'].', '.$id_lang.', \''.Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)).'\',
+			VALUES ('.(int)$params['id_feature_value'].', '.$id_lang.', \''.pSQL(Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang))).'\',
 			\''.pSQL(Tools::safeOutput(Tools::getValue('meta_title_'.$id_lang), true)).'\')');
 		}
 	}
@@ -571,7 +571,7 @@ class BlockLayered extends Module
 			// Data are validated by method "hookPostProcessAttribute"
 			$id_lang = (int)$language['id_lang'];
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'layered_indexable_attribute_lang
-			VALUES ('.(int)$params['id_attribute'].', '.$id_lang.', \''.Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)).'\',
+			VALUES ('.(int)$params['id_attribute'].', '.$id_lang.', \''.pSQL(Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang))).'\',
 			\''.pSQL(Tools::safeOutput(Tools::getValue('meta_title_'.$id_lang), true)).'\')');
 		}
 	}
@@ -658,7 +658,7 @@ class BlockLayered extends Module
 			// Data are validated by method "hookPostProcessAttributeGroup"
 			$id_lang = (int)$language['id_lang'];
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'layered_indexable_attribute_group_lang
-			VALUES ('.(int)$params['id_attribute_group'].', '.$id_lang.', \''.Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang)).'\',
+			VALUES ('.(int)$params['id_attribute_group'].', '.$id_lang.', \''.pSQL(Tools::link_rewrite(Tools::getValue('url_name_'.$id_lang))).'\',
 			\''.pSQL(Tools::safeOutput(Tools::getValue('meta_title_'.$id_lang), true)).'\')');
 		}
 	}

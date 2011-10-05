@@ -401,8 +401,8 @@ class CategoryCore extends ObjectModel
 		{
 			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute('
 				UPDATE '._DB_PREFIX_.'category
-				SET level_depth = '.($level['level_depth'] + 1).'
-				WHERE id_category = '.$sub_category['id_category']);
+				SET level_depth = '.(int)($level['level_depth'] + 1).'
+				WHERE id_category = '.(int)$sub_category['id_category']);
 			/* Recursive call */
 			$this->recalculateLevelDepth($sub_category['id_category']);
 		}

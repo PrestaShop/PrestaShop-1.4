@@ -439,7 +439,7 @@ class Followup extends Module
 
 		if ($count OR !sizeof($emails))
 			return sizeof($emails);
-			
+
 		$conf = Configuration::getMultiple(array('PS_FOLLOW_UP_AMOUNT_4', 'PS_FOLLOW_UP_DAYS_4'));
 		foreach ($emails AS $email)
 		{
