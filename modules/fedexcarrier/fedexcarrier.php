@@ -1699,7 +1699,6 @@ class FedexCarrier extends CarrierModule
 				$resultTab = unserialize($resultTabTmp);
 			else
 			{
-				echo '<pre>'.print_r($resultTab, true).'</pre>';
 				try { $resultTab = $client->getRates($request); }
 				catch (Exception $e) { }				
 			}
