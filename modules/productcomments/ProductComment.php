@@ -116,15 +116,15 @@ class ProductComment extends ObjectModel
 		$results = Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'product_comment` pc
-		WHERE pc.`id_product` = '.(int)($id_product).' AND '.(!$id_guest ? 'pc.`id_customer` = '.(int)($id_customer) : 'pc.`id_guest` = '.(int)($id_guest)).'
-		ORDER BY pc.`date_add` DESC '
-		.($last ? 'LIMIT 1' : '')
-		);
+		WHERE pc.`id_product` = '.(int)$id_product.' AND '.(!$id_guest ? 'pc.`id_customer` = '.(int)$id_customer : 'pc.`id_guest` = '.(int)$id_guest).'
+		ORDER BY pc.`date_add` DESC '.($last ? ' LIMIT 1' : ''));
 		
-		if ($last) 
+		if (!$results)
+			return false;
+		elseif ($last)
 			return array_shift($results);
-		
-		return $results;
+		else
+			return $results;
 	}
 	
 	/**

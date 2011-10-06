@@ -121,7 +121,7 @@ class CategoryControllerCore extends FrontController
 				}
 
 				$this->category->description = nl2br2($this->category->description);
-				$subCategories = $this->category->getSubCategories((int)(self::$cookie->id_lang));
+				$subCategories = $this->category->getSubCategories((int)self::$cookie->id_lang);
 				self::$smarty->assign('category', $this->category);
 				
 				if (isset($subCategories) AND !empty($subCategories) AND $subCategories)
@@ -132,9 +132,8 @@ class CategoryControllerCore extends FrontController
 						'subcategories_nb_half' => ceil(sizeof($subCategories) / 2)));
 				}
 				if ($this->category->id != 1)
-				{
 					$this->productListAssign();
-				}
+
 				self::$smarty->assign(array(
 					'products' => (isset($this->cat_products) AND $this->cat_products) ? $this->cat_products : NULL,
 					'id_category' => (int)($this->category->id),
