@@ -284,7 +284,8 @@ function reloadContent(params_plus)
 				reloadContent();
 				return false;
 			});
-			ajaxCart.overrideButtonsInThePage();
+			if (typeof(ajaxCart) != "undefined")
+				ajaxCart.overrideButtonsInThePage();
 			
 			if (typeof(reloadProductComparison) == 'function')
 				reloadProductComparison();
