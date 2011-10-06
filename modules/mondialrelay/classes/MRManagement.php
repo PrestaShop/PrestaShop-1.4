@@ -47,6 +47,14 @@ class MRManagement extends MondialRelay
 		
 	}
 
+	if (!function_exists('bqSQL')) 
+	{
+		function bqSQL($string)
+		{
+			return str_replace('`', '\`', pSQL($string));
+		}
+	}
+
 	/*
 	** This method fill the database with the selected carrier
 	*/
