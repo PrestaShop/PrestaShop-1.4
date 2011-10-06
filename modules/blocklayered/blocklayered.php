@@ -2238,7 +2238,8 @@ class BlockLayered extends Module
 							$conditionArray[$key]['checked'] = true;
 					if (isset($products) && $products)
 						foreach ($products as $product)
-							$conditionArray[$product['condition']]['nbr']++;
+							if(isset($conditionArray[$product['condition']]))
+								$conditionArray[$product['condition']]['nbr']++;
 						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => $this->l('Condition'), 'values' => $conditionArray);
 					break;
 				
