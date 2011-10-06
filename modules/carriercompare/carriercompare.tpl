@@ -88,7 +88,7 @@
 		<p class="warning center" id="noCarrier" style="display: none;">{l s='No carrier is available for this selection' mod='carriercompare'}</p>
 		
 		<p class="center">
-			<input class="exclusive_large" id="carriercompare_submit" type="submit" name="carriercompare_submit" value="{l s='Get available carriers and price' mod='carriercompare'}"/>
+			<input class="exclusive_large" id="carriercompare_submit" type="submit" name="carriercompare_submit" value="{l s='Refresh' mod='carriercompare'}"/>
 		</p>
 	</fieldset>
 </form>
