@@ -47,14 +47,6 @@ class MRManagement extends MondialRelay
 		
 	}
 
-	if (!function_exists('bqSQL')) 
-	{
-		function bqSQL($string)
-		{
-			return str_replace('`', '\`', pSQL($string));
-		}
-	}
-
 	/*
 	** This method fill the database with the selected carrier
 	*/
@@ -71,7 +63,7 @@ class MRManagement extends MondialRelay
 				SET `id_method` = '.(int)$this->_params['id_mr_method'].', ';
 			if (is_array($this->_params['relayPointInfo']))
 				foreach($this->_params['relayPointInfo'] as $nameKey => $value)
-					$query .= '`MR_Selected_'.bqSQL($nameKey).'` = "'.pSQL($value).'", ';
+					$query .= '`MR_Selected_'.MRTools::bqSQL($nameKey).'` = "'.pSQL($value).'", ';
 			else // Clean the existing relay point data
 				$query .= '
 					MR_Selected_Num = NULL,
@@ -90,7 +82,7 @@ class MRManagement extends MondialRelay
 				(`id_customer`, `id_method`, `id_cart`, ';
 			if (is_array($this->_params['relayPointInfo']))
 				foreach($this->_params['relayPointInfo'] as $nameKey => $value)
-					$query .= '`MR_Selected_'.bqSQL($nameKey).'`, ';
+					$query .= '`MR_Selected_'.MRTools::bqSQL($nameKey).'`, ';
 			$query = rtrim($query, ', ').') VALUES (
 					'.(int)$this->_params['id_customer'].',
 					'.(int)$this->_params['id_mr_method'].',
