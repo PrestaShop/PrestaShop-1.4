@@ -1444,7 +1444,7 @@ $this->standalone = true;
 			}
 		}
 
-		if (Tools::apacheModExists('evasive'))
+		if (!method_exists('Tools', 'apacheModExists') || Tools::apacheModExists('evasive'))
 			sleep(1);
 	}
 
@@ -1851,7 +1851,7 @@ function handleXMLResult(xmlRet, previousParams)
 	// use xml2json and put the result in the global var
 	// this will be used in after** javascript functions
 	resGlobal = $.xml2json(xmlRet);
-
+	result = "ok";
 	switch(previousParams.upgradeDbStep) 
 	{
 		case 0: // getVersionFromDb
