@@ -310,35 +310,38 @@ function reloadContent(params_plus)
 			if (current_friendly_url == '#')
 				current_friendly_url = '#/';
 			window.location = current_friendly_url;
+			lockLocationChecking = true;
 		}
 	});
 	ajaxQueries.push(ajaxQuery);
 }
 
-function initLocationChange(func, time) {
+function initLocationChange(func, time)
+{
 	if(!time) time = 500;
-	var currLoc = '';
+	var current_friendly_url = getUrlParams();
 	setInterval(function()
 	{
-		if(window.location.href != currLoc)
+		if(getUrlParams() != current_friendly_url && !lockLocationChecking)
 		{
-			currLoc = window.location.href;
-			
 			// Don't reload page if current_friendly_url and real url match
-			if (window.location.href.split('#').length == 2 && window.location.href.split('#')[1] != '')
-				current_url = '#'+window.location.href.split('#')[1];
-			else
-				current_url = '';
-			if (current_friendly_url.replace(/^#(\/)?/, '') == current_url.replace(/^#(\/)?/, ''))
+			if (current_friendly_url.replace(/^#(\/)?/, '') == getUrlParams().replace(/^#(\/)?/, ''))
 				return;
 			
-			if (window.location.href.split('#').length == 2 && window.location.href.split('#')[1] != '')
-			{
-				var params = window.location.href.split('#')[1];
-				reloadContent('&selected_filters='+params);
-			}
-			else
-				reloadContent('&selected_filters=#');
+			lockLocationChecking = true;
+			reloadContent('&selected_filters='+getUrlParams().replace(/^#/, ''));
+		}
+		else {
+			lockLocationChecking = false;
+			current_friendly_url = getUrlParams();
 		}
 	}, time);
+}
+
+function getUrlParams()
+{
+	var params = current_friendly_url;
+	if(window.location.href.split('#').length == 2 && window.location.href.split('#')[1] != '')
+		params = '#'+window.location.href.split('#')[1];
+	return params;
 }
