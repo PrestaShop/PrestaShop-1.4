@@ -406,8 +406,11 @@ class AdminTranslations extends AdminTab
 		{
 			if ((preg_match('/^(.*).tpl$/', $template_file) OR ($is_default AND preg_match('/^(.*).php$/', $template_file))) AND file_exists($tpl = $dir.$template_file))
 			{
-				// Get translations key
 				$content = file_get_contents($tpl);
+				// module files can now be ignored by adding this string in a file
+				if (strpos($content, 'IGNORE_THIS_FILE_FOR_TRANSLATION') !== 'false')
+					continue;
+				// Get translations key
 				preg_match_all(substr($template_file, -4) == '.tpl' ? self::$tpl_regexp : self::$php_regexp, $content, $matches);
 				
 				// Write each translation on its module file

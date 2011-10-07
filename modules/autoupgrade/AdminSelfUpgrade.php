@@ -25,6 +25,7 @@
 *	International Registered Trademark & Property of PrestaShop SA
 */
 
+
 if(!defined('_PS_ADMIN_DIR_'))
 	define('_PS_ADMIN_DIR_',PS_ADMIN_DIR);
 if(!defined('_PS_USE_SQL_SLAVE_'))
