@@ -1392,12 +1392,15 @@ $this->standalone = true;
 		$return['next'] = $this->next;
 		$return['status'] = $this->next == 'error' ? 'error' : 'ok';
 		$return['nextDesc'] = $this->nextDesc;
+		$return['upgradeDbStep'] = 0;
 
 		foreach($this->ajaxParams as $v)
 			if(property_exists($this,$v))
 				$this->nextParams[$v] = $this->$v;
 
 		$return['nextParams'] = $this->nextParams;
+		if (!isset($return['nextParams']['upgradeDbStep']))
+			$return['nextParams']['upgradeDbStep'] = 0;
 		
 		$return['nextParams']['typeResult'] = $this->nextResponseType;
 
