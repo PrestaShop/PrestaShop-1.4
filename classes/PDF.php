@@ -300,7 +300,7 @@ class PDFCore extends PDF_PageGroupCore
 		if (Configuration::get('PS_INVOICE_FREE_TEXT', $cookie->id_lang))
 		{
 
-			$this->Cell(0, 10, Configuration::get('PS_INVOICE_FREE_TEXT', $cookie->id_lang), 0, 0, 'C', 0);
+			$this->Cell(0, 10, utf8_decode(Configuration::get('PS_INVOICE_FREE_TEXT', $cookie->id_lang)), 0, 0, 'C', 0);
 			$this->Ln(4);
 		}
 
