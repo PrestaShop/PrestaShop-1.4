@@ -474,6 +474,13 @@ $this->standalone = true;
 		}
 		
 		$changedFileList = $this->upgrader->getChangedFilesList();
+		if (!isset($changedFileList['core']))
+			$changedFileList['core'] = array();
+		if (!isset($changedFileList['translation']))
+			$changedFileList['translation'] = array();
+		if (!isset($changedFileList['mail']))
+			$changedFileList['mail'] = array();
+
 		if ($changedFileList === false)
 		{
 			$changedFileList = array();
