@@ -27,7 +27,6 @@
 
 if (file_exists(dirname(__FILE__).'/../config/settings.inc.php'))
 	include_once(dirname(__FILE__).'/../config/settings.inc.php');
-//include_once(dirname(__FILE__).'/../classes/MySQL.php');
 
 abstract class DbCore
 {

@@ -58,7 +58,7 @@ header('Content-Type: text/xml');
 
 // Switching method
 if (isset($_GET['method']))
-{
+{	
 	if (in_array($_GET['method'], array('doUpgrade', 'createDB', 'checkShopInfos')))
 	{
 		global $logger;
@@ -96,4 +96,3 @@ if (isset($_GET['method']))
 		break;
 	}
 }
-

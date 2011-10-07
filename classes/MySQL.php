@@ -252,10 +252,7 @@ class MySQLCore extends Db
 	{
 		global $webservice_call;
 		if ($webservice_call && mysql_errno($this->_link))
-		{
 			WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.mysql_error($this->_link).'. Query was : '.$query, 97);
-
-		}
 		elseif (_PS_DEBUG_SQL_ AND mysql_errno($this->_link) AND !defined('PS_INSTALLATION_IN_PROGRESS'))
 		{
 			if ($query)
