@@ -1360,8 +1360,16 @@ $this->standalone = true;
 		{
 			$res = $this->upgrader->downloadLast($this->autoupgradePath,$this->destDownloadFilename);
 			if ($res){
-				$this->next = 'unzip';
-				$this->nextDesc = $this->l('Download complete. Now extracting');
+			 	if (md5_file(realpath($this->autoupgradePath).DIRECTORY_SEPARATOR.$this->destDownloadFilename) == $this->upgrader->md5 )
+				{
+					$this->next = 'unzip';
+					$this->nextDesc = $this->l('Download complete. Now extracting');
+				}
+				else
+				{
+					$this->next = 'error';
+					$this->nextDesc = $this->l('Download complete but md5sum does not match. Operation aborted.');
+				}
 			}
 			else
 			{

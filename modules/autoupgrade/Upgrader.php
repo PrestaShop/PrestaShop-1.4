@@ -68,7 +68,7 @@ class UpgraderCore
 			$this->checkPSVersion();
 
 		$destPath =  realpath($dest).DIRECTORY_SEPARATOR.$filename;
-		if (@copy($this->link, $destPath) && md5_file($destPath) == $this->md5 )
+		if (@copy($this->link, $destPath))
 			return true;
 		else
 			return false;
