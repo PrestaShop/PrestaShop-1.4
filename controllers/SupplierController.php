@@ -39,18 +39,15 @@ class SupplierControllerCore extends FrontController
 	
 	public function canonicalRedirection()
 	{
-		if (Configuration::get('PS_CANONICAL_REDIRECT'))
+		if (Validate::isLoadedObject($this->supplier) && Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')
 		{
-			if (Validate::isLoadedObject($this->supplier))
+			$canonicalURL = self::$link->getSupplierLink($this->supplier);
+			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
-				$canonicalURL = self::$link->getSupplierLink($this->supplier);
-				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
-				{
-					header('HTTP/1.0 301 Moved');
-					if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
-						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
-					Tools::redirectLink($canonicalURL);
-				}
+				header('HTTP/1.0 301 Moved');
+				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
+				Tools::redirectLink($canonicalURL);
 			}
 		}
 	}

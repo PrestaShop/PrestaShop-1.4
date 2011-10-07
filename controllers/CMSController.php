@@ -38,7 +38,7 @@ class CmsControllerCore extends FrontController
 		// Automatically redirect to the canonical URL if the current in is the right one
 		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 
-		if (Configuration::get('PS_CANONICAL_REDIRECT'))
+		if (Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')
 		{
 			if (Validate::isLoadedObject($this->cms) AND $canonicalURL = self::$link->getCMSLink($this->cms))
 				if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))

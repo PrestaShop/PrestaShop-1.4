@@ -56,7 +56,7 @@ class ProductControllerCore extends FrontController
 	{
 		// Automatically redirect to the canonical URL if the current in is the right one
 		// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
-		if (Validate::isLoadedObject($this->product))
+		if (Validate::isLoadedObject($this->product) && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')
 		{
 			$canonicalURL = self::$link->getProductLink($this->product);
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))

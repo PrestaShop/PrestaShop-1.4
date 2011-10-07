@@ -341,7 +341,7 @@ class FrontControllerCore
 	{
 		global $link, $cookie;
 
-		if (Configuration::get('PS_CANONICAL_REDIRECT'))
+		if (Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')
 		{
 			// Automatically redirect to the canonical URL if needed
 			if (isset($this->php_self) AND !empty($this->php_self))
