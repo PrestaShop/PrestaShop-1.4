@@ -408,7 +408,7 @@ class AdminTranslations extends AdminTab
 			{
 				$content = file_get_contents($tpl);
 				// module files can now be ignored by adding this string in a file
-				if (strpos($content, 'IGNORE_THIS_FILE_FOR_TRANSLATION') !== 'false')
+				if (strpos($content, 'IGNORE_THIS_FILE_FOR_TRANSLATION') !== false)
 					continue;
 				// Get translations key
 				preg_match_all(substr($template_file, -4) == '.tpl' ? self::$tpl_regexp : self::$php_regexp, $content, $matches);
