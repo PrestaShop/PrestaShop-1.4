@@ -173,3 +173,6 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_1607e6098b7b62a2791653b059c9
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_6d9194a23c9f3983d8bc75a75ae86893'] = 'fichiers de la solutions';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_37f3a51de63012d9060d5ff8ccab2b0f'] = 'fichiers des courriels';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_22a31963fda5661b3a0919f7bda0debc'] = 'fichiers de traductions';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_e79aed52aa295a8d68ff3ecf777cd42d'] = 'Cette version de PrestaShop ne peut pas être mise à jour : la constante PS_ADMIN_DIR est manquante';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_2a037c3ccd26d087a2a39e6e1f2aa2ac'] = 'module Autoupgrade';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_9f90d42cd3a3297519c04bdac6da96a1'] = 'Fournit une méthode automatique de mettre à jour votre boutique à la dernière version de PrestaShop. Attention : les thèmes personnalisés ne sont pas mis à jour.';
