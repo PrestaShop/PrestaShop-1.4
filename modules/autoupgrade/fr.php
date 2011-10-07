@@ -61,9 +61,12 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_d82eef1ba081c54686767c555670
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_344c592d141604c614c219fad3fa0dae'] = '%1$s fichiers exemple à supprimer';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0baf8c94d1d03d1621c17cd6eabf7b9f'] = 'Tous les exemples de fichiers supprimés. Sauvegarde des fichiers en cours...';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_84e31682487d5a0937f9184ebcf594ba'] = 'copie de travail déjà %s à jour. exportation vers le répertoire latest';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_762ab46f0b1e4eae1526ca7d637926f3'] = 'Mise à jour SVN fait pour s% copie de travail. maintenant l\'exporter plus tard dans la ...';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_dcefd261c0dea53fdb159b218503009e'] = 'SVN Checkout fait à partir de% s. maintenant l\'exporter plus tard dans la ...';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8f4c8c87daa3bc0311cfb61b7d36e27b'] = 'Erreur d\'extraction du SVN';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0e81132066d433d212e237678e1193a3'] = 'non autorisé à utiliser SVN';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_b0d51f91a1118b7c39ee1835cc6c926a'] = 'Téléchargement terminé. Extraction ...';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_4723092f623f18928fb35e90cea5e736'] = 'Téléchargement terminé, mais md5sum ne correspond pas. Opération annulée.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0c0db54fe8212c1a7215005fef75d7dd'] = 'Erreur pendant le téléchargement';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_93120c07d8c5cee44042627cd493e0e0'] = 'vous avez besoin allow_url_fopen pour le téléchargement automatique. Vous pouvez également placer le fichier manuellement dans %s';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_3bb38e7d0bfd5a02f7c06cae446fee86'] = 'l\'action %s ignorée';
