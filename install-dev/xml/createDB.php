@@ -203,6 +203,7 @@ switch (_DB_TYPE_) {
 		}
 	break;
 }
+
 $xml = '<result><action result="ok" error="" />'."\n";
 
 $countries = Db::getInstance()->ExecuteS('
