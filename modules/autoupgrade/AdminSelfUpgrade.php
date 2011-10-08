@@ -802,11 +802,6 @@ $this->standalone = true;
 			switch ($this->currentParams['upgradeDbStep'])
 			{
 				default:
-					$this->next = 'upgradeComplete';
-					$this->nextResponseType = 'json';
-					return true;
-					// $this->_model('checkConfig');
-				break;
 			// 1) confirm version is correct(DB)
 			// install/model.php?method=getVersionFromDb&language=0
 				case '1':
@@ -1877,7 +1872,7 @@ function handleXMLResult(xmlRet, previousParams)
 	if (result == "ok")
 	{
 		nextParams = previousParams;
-			nextParams.upgradeDbStep = previousParams.upgradeDbStep+1;
+			nextParams.upgradeDbStep = parseInt(previousParams.upgradeDbStep)+1;
 			if(nextParams.upgradeDbStep >= 4)
 			{
 				resGlobal.next = "upgradeComplete";
