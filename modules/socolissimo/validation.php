@@ -59,7 +59,13 @@ if (isset($return['SIGNATURE']) AND isset($return['CENAME']) AND isset($return['
 				if (saveOrderShippingDetails((int)($cookie->id_cart),(int)($return['TRCLIENTNUMBER']),$return))
 				{	
 					global $cookie;
-					$cart->id_carrier = (int)($_POST['TRPARAMPLUS']);
+					$cart = new Cart((int)($cookie->id_cart));
+					$TRPARAMPLUS = explode('|', Tools::getValue('TRPARAMPLUS'));
+					$cart->id_carrier = $TRPARAMPLUS[0];
+					$cart->gift = (int)$TRPARAMPLUS[1];
+					if ((int)$cart->gift)
+						if (Validate::isMessage($TRPARAMPLUS[2]))
+							$cart->gift_message = strip_tags($TRPARAMPLUS[2]);
 					if (!$cart->update())
 						Tools::redirect();
 					else
