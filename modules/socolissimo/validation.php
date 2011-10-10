@@ -183,6 +183,7 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 		}
 		else
 		{
+					(isset($soParams['PRID']) ? $values['prid'] = pSQL($soParams['PRID']) : $values['prid'] = '');
 					(isset($soParams['CENAME']) ? $values['prname'] = ucfirst(pSQL($soParams['CENAME'])) : '');
 					(isset($soParams['CEFIRSTNAME']) ? $values['prfirstname'] = ucfirst(pSQL($soParams['CEFIRSTNAME'])) : '');
 					(isset($soParams['CECOMPLADRESS']) ? $values['prcompladress'] = pSQL($soParams['CECOMPLADRESS']) : '');
@@ -205,6 +206,3 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 			return true;
 	}
 }
-
-
-
