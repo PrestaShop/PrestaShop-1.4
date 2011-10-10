@@ -247,7 +247,7 @@ class AdminCarts extends AdminTab
 			</table>';
 			}
 				echo '<div style="float:left; margin-top:15px;">'.
-				$this->l('According to the group of this customer, prices are printed:').' '.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).'
+				$this->l('According to the group of this customer, prices are printed:').' <b>'.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).'</b>
 				</div></div>';
 
 				// Cancel product
@@ -266,10 +266,10 @@ class AdminCarts extends AdminTab
 			if ($image = new Image($image['id_image']))
 				echo '
 					<tr>
-						<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.$image->getExistingImgPath().'.jpg',
+						<td align="center">'.(isset($image->id_image) ? cacheImage(_PS_IMG_DIR_.'p/'.$image->getExistingImgPath().'.jpg',
 						'product_mini_'.(int)($product['id_product']).(isset($product['id_product_attribute']) ? '_'.(int)($product['id_product_attribute']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 						<td><a href="index.php?tab=AdminCatalog&id_product='.$product['id_product'].'&updateproduct&token='.$tokenCatalog.'">
-							<span class="productName">'.$product['name'].'</span><br />
+							<span class="productName">'.$product['name'].'</span>'.(isset($product['attributes']) ? '<br />'.$product['attributes'] : '').'<br />
 							'.($product['reference'] ? $this->l('Ref:').' '.$product['reference'] : '')
 							.(($product['reference'] AND $product['supplier_reference']) ? ' / '.$product['supplier_reference'] : '')
 							.'</a></td>
@@ -287,7 +287,7 @@ class AdminCarts extends AdminTab
 					if ($type == _CUSTOMIZE_FILE_)
 					{
 						$i = 0;
-						echo '<ul style="margin: 4px 0px 4px 0px; padding: 0px; list-style-type: none;">';
+						echo '<ul style="margin: 0; padding: 0; list-style-type: none;">';
 						foreach ($datas AS $data)
 							echo '<li style="display: inline; margin: 2px;">
 									<a href="displayImage.php?img='.$data['value'].'&name='.(int)($order->id).'-file'.++$i.'" target="_blank"><img src="'._THEME_PROD_PIC_DIR_.$data['value'].'_small" alt="" /></a>
@@ -297,9 +297,9 @@ class AdminCarts extends AdminTab
 					elseif ($type == _CUSTOMIZE_TEXTFIELD_)
 					{
 						$i = 0;
-						echo '<ul style="margin: 0px 0px 4px 0px; padding: 0px 0px 0px 6px; list-style-type: none;">';
+						echo '<ul style="margin-bottom: 4px; padding: 0; list-style-type: none;">';
 						foreach ($datas AS $data)
-							echo '<li>'.($data['name'] ? $data['name'] : $this->l('Text #').++$i).$this->l(':').' '.$data['value'].'</li>';
+							echo '<li>'.($data['name'] ? $data['name'] : $this->l('Text #').++$i).$this->l(':').' <b>'.$data['value'].'</b></li>';
 						echo '</ul>';
 					}
 				echo '</td>

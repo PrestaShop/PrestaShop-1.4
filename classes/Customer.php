@@ -539,7 +539,7 @@ class CustomerCore extends ObjectModel
 		FROM '._DB_PREFIX_.'customer_group cg
 		WHERE cg.`id_customer` = '.(int)($id_customer));
 		foreach ($result AS $group)
-			$groups[] = (int)($group['id_group']);
+			$groups[] = (int)$group['id_group'];
 		return $groups;
 	}
 
