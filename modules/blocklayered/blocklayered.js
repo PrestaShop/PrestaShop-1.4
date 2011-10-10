@@ -265,7 +265,7 @@ function reloadContent(params_plus)
 			
 			$('.category-product-count').html(result.categoryCount);
 
-			$('#product_list').html(result.productList).html();
+			$('#product_list').replaceWith(result.productList);
 			$('#product_list').css('opacity', '1');
 			$('div#pagination').html(result.pagination);
 			paginationButton();
