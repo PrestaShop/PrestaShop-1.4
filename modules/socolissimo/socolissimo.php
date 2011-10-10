@@ -59,7 +59,7 @@ class Socolissimo extends CarrierModule
 
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.0';
+		$this->version = '2.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
