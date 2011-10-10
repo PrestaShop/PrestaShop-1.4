@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,11 +32,11 @@ class AdminAddresses extends AdminTab
 {
 	/** @var array countries list */
 	private $countriesArray = array();
-	
+
 	public function __construct()
 	{
 	 	global $cookie;
-	 	
+
 	 	$this->table = 'address';
 	 	$this->className = 'Address';
 	 	$this->lang = false;
@@ -44,13 +44,13 @@ class AdminAddresses extends AdminTab
 	 	$this->delete = true;
 		$this->requiredDatabase = true;
 		$this->addressType = 'customer';
-		
+
 		if (!Tools::getValue('realedit'))
 			$this->deleted = true;
 		$this->_select = 'cl.`name` as country';
-		$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON 
+		$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON
 		(cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).')';
-		
+
 		$countries = Country::getCountries((int)($cookie->id_lang));
 		foreach ($countries AS $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
@@ -76,7 +76,8 @@ class AdminAddresses extends AdminTab
 			{
 				if (Validate::isEmail(Tools::getValue('email')))
 				{
-					$customer = new Customer(Tools::getValue('id_customer'));
+					$customer = new Customer();
+					$customer->getByEmail(Tools::getValue('email'));
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
@@ -84,7 +85,7 @@ class AdminAddresses extends AdminTab
 				}
 				elseif ($id_customer = Tools::getValue('id_customer'))
 				{
-					$customer = new Customer((int)($id_customer));
+					$customer = new Customer((int)$id_customer);
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
@@ -157,13 +158,13 @@ class AdminAddresses extends AdminTab
 				Tools::redirectAdmin(Tools::getValue('back').'&conf=4');
 		}
 	}
-	
+
 	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
 	{
 	 	parent::getList($id_lang, $orderBy, $orderWay, $start, $limit);
-		
+
 		global $cookie;
-		
+
 	 	/* Manage default params values */
 	 	if (empty($limit))
 			$limit = ((!isset($cookie->{$this->table.'_pagination'})) ? $this->_pagination[0] : $limit = $cookie->{$this->table.'_pagination'});
@@ -176,18 +177,18 @@ class AdminAddresses extends AdminTab
 			$orderWay = Tools::getValue($this->table.'Orderway', 'ASC');
 		$limit = (int)(Tools::getValue('pagination', $limit));
 		$cookie->{$this->table.'_pagination'} = $limit;
-		
+
 		/* Check params validity */
-		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay) 
+		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay)
 			OR !is_numeric($start) OR !is_numeric($limit)
 			OR !Validate::isUnsignedId($id_lang))
-			die(Tools::displayError('get list params is not valid'));		
-		
+			die(Tools::displayError('get list params is not valid'));
+
 		/* Determine offset from current page */
-		if ((isset($_POST['submitFilter'.$this->table]) OR 
-		isset($_POST['submitFilter'.$this->table.'_x']) OR 
-		isset($_POST['submitFilter'.$this->table.'_y'])) AND 
-		!empty($_POST['submitFilter'.$this->table]) AND 
+		if ((isset($_POST['submitFilter'.$this->table]) OR
+		isset($_POST['submitFilter'.$this->table.'_x']) OR
+		isset($_POST['submitFilter'.$this->table.'_y'])) AND
+		!empty($_POST['submitFilter'.$this->table]) AND
 		is_numeric($_POST['submitFilter'.$this->table]))
 			$start = (int)($_POST['submitFilter'.$this->table] - 1) * $limit;
 
@@ -195,39 +196,39 @@ class AdminAddresses extends AdminTab
 		$this->_lang = (int)($id_lang);
 		$this->_orderBy = $orderBy;
 		$this->_orderWay = Tools::strtoupper($orderWay);
-		
+
 		/* SQL table : orders, but class name is Order */
 		$sqlTable = $this->table == 'order' ? 'orders' : $this->table;
-		
+
 		/* Query in order to get results number */
 		$queryTotal = Db::getInstance()->getRow('
 		SELECT COUNT(a.`id_'.$this->table.'`) AS total
 		FROM `'._DB_PREFIX_.$sqlTable.'` a
-		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.(int)($id_lang).')' : '').' 
+		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.(int)($id_lang).')' : '').'
 		'.(isset($this->_join) ? $this->_join.' ' : '').'
-		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').(($this->deleted OR $this->table == 'currency') ? 'AND a.`deleted` = 0 ' : '').$this->_filter.' 
+		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').(($this->deleted OR $this->table == 'currency') ? 'AND a.`deleted` = 0 ' : '').$this->_filter.'
 		'.(isset($this->_group) ? $this->_group.' ' : '').'
 		'.(isset($this->addressType) ? 'AND a.id_'.strval($this->addressType).' != 0' : ''));
 		$this->_listTotal = (int)($queryTotal['total']);
 
 		/* Query in order to get results with all fields */
 		$this->_list = Db::getInstance()->ExecuteS('
-		SELECT a.*'.($this->lang ? ', b.*' : '').(isset($this->_select) ? ', '.$this->_select.' ' : '').' 
-		FROM `'._DB_PREFIX_.$sqlTable.'` a 
-		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.(int)($id_lang).')' : '').' 
+		SELECT a.*'.($this->lang ? ', b.*' : '').(isset($this->_select) ? ', '.$this->_select.' ' : '').'
+		FROM `'._DB_PREFIX_.$sqlTable.'` a
+		'.($this->lang ? 'LEFT JOIN `'._DB_PREFIX_.$this->table.'_lang` b ON (b.`id_'.$this->table.'` = a.`id_'.$this->table.'` AND b.`id_lang` = '.(int)($id_lang).')' : '').'
 		'.(isset($this->_join) ? $this->_join.' ' : '').'
-		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').(($this->deleted OR $this->table == 'currency') ? 'AND a.`deleted` = 0 ' : '').$this->_filter.' 
+		WHERE 1 '.(isset($this->_where) ? $this->_where.' ' : '').(($this->deleted OR $this->table == 'currency') ? 'AND a.`deleted` = 0 ' : '').$this->_filter.'
 		'.(isset($this->_group) ? $this->_group.' ' : '').'
 		'.(isset($this->addressType) ? 'AND a.id_'.strval($this->addressType).' != 0' : '').'
-		ORDER BY '.(($orderBy == 'id_'.$this->table) ? 'a.' : '').'`'.bqSQL($orderBy).'` '.bqSQL($orderWay).' 
+		ORDER BY '.(($orderBy == 'id_'.$this->table) ? 'a.' : '').'`'.bqSQL($orderBy).'` '.bqSQL($orderWay).'
 		LIMIT '.(int)($start).','.(int)($limit));
 	}
-	
+
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex, $cookie;
 		parent::displayForm();
-		
+
 		if (!($obj = $this->loadObject(true)))
 			return;
 
@@ -288,11 +289,11 @@ class AdminAddresses extends AdminTab
 				</div>';
 				break;
 		}
-		
+
 		$addresses_fields = $this->processAddressFormat();
 		$addresses_fields = $addresses_fields["dlv_all_fields"];	// we use  delivery address
 
-	
+
 
 		foreach($addresses_fields as $addr_field_item)
 		{
@@ -451,14 +452,14 @@ class AdminAddresses extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="33" name="phone" value="'.htmlentities($this->getFieldValue($obj, 'phone'), ENT_COMPAT, 'UTF-8').'" />
 				</div>';
-			
+
 			echo '
 				<label>'.$this->l('Mobile phone').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="phone_mobile" value="'.htmlentities($this->getFieldValue($obj, 'phone_mobile'), ENT_COMPAT, 'UTF-8').'" />
 				</div>';
 
-			
+
 			echo '
 				<label>'.$this->l('Other').'</label>
 				<div class="margin-form">
@@ -479,10 +480,10 @@ class AdminAddresses extends AdminTab
 	protected function processAddressFormat()
 	{
 		$tmp_addr = new Address((int)Tools::getValue("id_address"));
-		
-		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country : 
+
+		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country :
 				(int)(Configuration::get('PS_COUNTRY_DEFAULT'));
-		
+
 		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);
 		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);
 
