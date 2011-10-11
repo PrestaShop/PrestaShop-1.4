@@ -2470,7 +2470,11 @@ class BlockLayered extends Module
 		global $smarty;
 		if ($filterBlock = $this->getFilterBlock($selectedFilters))
 		{
-			$smarty->assign($this->getFilterBlock($selectedFilters));
+			if($filterBlock['nbr_filterBlocks'] == 0)
+				return false;
+				
+			$smarty->assign($filterBlock);
+			
 			return $this->display(__FILE__, 'blocklayered.tpl');
 		}
 		else
@@ -2789,11 +2793,16 @@ class BlockLayered extends Module
 			$categoryCount = $smarty->fetch(_PS_THEME_DIR_.'category-count.tpl');
 		else
 			$categoryCount = '';
+
+		if ($nbProducts == 0)
+			$product_list_tpl = 'blocklayered-no-products.tpl';
+		else
+			$product_list_tpl = _PS_THEME_DIR_.'product-list.tpl';
 		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
 		return Tools::jsonEncode(array(
 		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
-		'productList' => $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl'),
+		'productList' => $smarty->fetch($product_list_tpl),
 		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl'),
 		'categoryCount' => $categoryCount));
 	}
