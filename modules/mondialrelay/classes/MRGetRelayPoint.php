@@ -151,7 +151,7 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 				}
 			}
 			$concatenationValue .= $this->_webServiceKey;
-			$this->_fields['list']['Security']['value'	] = strtoupper(md5($concatenationValue));	
+			$this->_fields['list']['Security']['value'] = strtoupper(md5($concatenationValue));	
 	}
 
 	/*
@@ -165,6 +165,41 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 		foreach($fields as $keyName => $valueDetailed)
 			$params[$keyName] = $valueDetailed['value'];
 		return $params;
+	}
+	
+	/*
+	** Get detail information for each relay
+	*/
+	private function _getRelayPointDetails($relayPointList)
+	{
+		$relayPointNumList = array();
+		foreach($relayPointList as $num => $relayPoint)
+			$relayPointNumList[] = $relayPoint['Num'];
+			
+		$MRRelayDetail = new MRRelayDetail(array(
+			'relayPointNumList' => $relayPointNumList,
+			'id_address_delivery' => $this->_id_address_delivery));
+ 		$MRRelayDetail->init();
+ 		$MRRelayDetail->send();
+ 		return $MRRelayDetail->getResult();
+	}
+	
+	/*
+	** Generate a perman link to view relay detail on their website
+	*/
+	private function _addLinkHoursDetail(&$relayPointList)
+	{
+		$relayPointNumList = array();
+		foreach($relayPointList as $num => $relayPoint)
+			$relayPointNumList[] = $relayPoint['Num'];
+		$permaList = MRRelayDetail::getPermaLink($relayPointNumList, $this->_id_address_delivery);
+		foreach($relayPointList as $num => &$relayPoint)
+		{
+			$relayPoint['permaLinkDetail'] = '';
+			if (array_key_exists($relayPoint['Num'], $permaList))
+				$relayPoint['permaLinkDetail'] = $permaList[$relayPoint['Num']];
+		}
+		return $relayPointList;
 	}
 	
 	/*
@@ -206,7 +241,15 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
  			}
  			if (!count($result))
  				$errors[] = $this->_mondialRelay->l('MondialRelay can\'t find any relay point near your address. Maybe your address isn\'t properly filled ?');
-			$success = $result;
+ 			else
+ 			{
+ 				$this->_addLinkHoursDetail($result);
+ 				
+ 				// Fetch detail info using webservice (not used anymore)
+ 				// $this->_generateLinkHoursDetail($result);
+ 				// $result = (count($relayDetail['success'])) ? $relayDetail['success'] : $result;
+ 			}
+ 			$success = $result;
 		}
 		$this->_resultList['error'] = $errors;
 		$this->_resultList['success'] = $success;

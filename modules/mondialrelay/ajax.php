@@ -38,7 +38,9 @@ require(dirname(__FILE__).'/mondialrelay.php');
 require(dirname(__FILE__).'/classes/MRCreateTickets.php');
 require(dirname(__FILE__).'/classes/MRGetTickets.php');
 require(dirname(__FILE__).'/classes/MRGetRelayPoint.php');
+require(dirname(__FILE__).'/classes/MRRelayDetail.php');
 require(dirname(__FILE__).'/classes/MRManagement.php');
+
 
 global $cookie, $cart, $customer;
 

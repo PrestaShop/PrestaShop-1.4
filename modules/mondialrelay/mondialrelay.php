@@ -59,7 +59,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.7.5.1';
+		$this->version	= '1.7.6';
 
 		parent::__construct();
 
@@ -548,6 +548,15 @@ class MondialRelay extends Module
 	
 	public function hookupdateCarrier($params)
 	{
+		// TODO : History shipping
+		/*if ((int)($params['id_carrier']) != (int)($params['carrier']->id))
+    {
+      $serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'mr_method` WHERE `id_carrier` = '.(int)$params['id_carrier']);
+      $update = array('id_carrier' => (int)($params['carrier']->id), 'id_carrier_history' => pSQL($serviceSelected['id_carrier_history'].'|'.(int)($params['carrier']->id)));
+      Db::getInstance()->autoExecute(_DB_PREFIX_.'mr_method', $update, 'UPDATE', '`id_carrier` = '.(int)$params['id_carrier']);
+    }*/
+
+		// TODO : Delete for shipping history
 		$new_carrier = $params['carrier'];
 		// Depends of the Prestashop version, the matches key isn't the same
 		if ((_PS_VERSION_ >= '1.4' && $new_carrier->external_module_name == 'mondialrelay') ||
@@ -568,7 +577,7 @@ class MondialRelay extends Module
 						"'.pSQL($mr_data['mr_ModeLiv']).'", 
 						"'.pSQL($mr_data['mr_ModeAss']).'", 
 						'.(int)($new_carrier->id).')');
-			}	
+			}
 	}
 	
 	/*
@@ -675,6 +684,10 @@ class MondialRelay extends Module
 			self::mrDelete((int)($_GET['delete_mr']));
 
 		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>
+		
+		<div class="warn">'.
+			$this->l('Try to turn off the cache and put the force compilation to on if you have any problems with the module after an update').'
+		</div>
 		<fieldset>
 			<legend>
 				<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('To create a Mondial Relay carrier').
@@ -786,7 +799,7 @@ class MondialRelay extends Module
 				Db::getInstance()->Execute('
 					INSERT INTO `' . _DB_PREFIX_ . 'carrier` 
 					(`id_tax_rules_group`, `url`, `name`, `active`, `is_module`, `range_behavior`, `shipping_external`, `need_range`, `external_module_name`, `shipping_method`)
-					VALUES("0", NULL, "'.pSQL($array[0]).'", "1", "1", "1", "0", "1", "mondialrelay", "1")');
+					VALUES("0", NULL, "'.pSQL($array[1]).'", "1", "1", "1", "0", "1", "mondialrelay", "1")');
 			else
 				Db::getInstance()->Execute('
 				INSERT INTO `' . _DB_PREFIX_ . 'carrier`
@@ -830,6 +843,7 @@ class MondialRelay extends Module
 		$zones = Db::getInstance()->ExecuteS("SELECT * FROM " . _DB_PREFIX_ . "zone WHERE active = 1");
 		$output = '
 		<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post" >
+			<input type="hidden" name="mr_ModeCol" value="CCC" />
 			<fieldset>
 				<legend><img src="../modules/mondialrelay/images/logo.gif" alt="" />'.$this->l('Add a Shipping Method').'</legend>
 				<ul>
@@ -839,15 +853,15 @@ class MondialRelay extends Module
 					<li>
 						<label for="mr_Name" class="shipLabel">'.$this->l('Carrier\'s name').'<sup>*</sup></label>
 						<input type="text" id="mr_Name" name="mr_Name" '.(Tools::getValue('mr_Name') ? 'value="'.Tools::safeOutput(Tools::getValue('mr_Name')).'"' : '').'/>
-					</li>
-					<li>
+					</li>';
+					/*<li>
 						<label for="mr_ModeCol" class="shipLabel">'.$this->l('Collection Mode').'<sup>*</sup></label>
 						<select name="mr_ModeCol" id="mr_ModeCol" style="width:200px">
 							<option value="CCC" selected >CCC : '.$this->l('Collection at the store').'</option>
 						</select> 
-					</li>
+					</li>*/
 
-					<li>
+	$output .= '<li>
 						<label for="mr_ModeLiv" class="shipLabel">'.$this->l('Delivery mode').'<sup>*</sup></label>
 						<select name="mr_ModeLiv" id="mr_ModeLiv" style="width:200px">
 						<option value="24R" selected >24R : '.$this->l('Delivery to a relay point').'</option>
@@ -906,7 +920,7 @@ class MondialRelay extends Module
 		<form action="' . Tools::safeOutput($_SERVER['REQUEST_URI']) . '" method="post">
 			<fieldset class="shippingList">
 				<legend><img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Shipping Method\'s list').'</legend>
-				<ol>';
+				<ul>';
 		if (!sizeof($query))
 			$output .= '<li>'.$this->l('No shipping methods created').'</li>';
 		foreach ($query AS $Options)
@@ -914,12 +928,11 @@ class MondialRelay extends Module
 			$output .= '
 					<li>
 						<a href="' . 'index.php?tab=AdminModules&configure=mondialrelay&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)).'&delete_mr=' . $Options['id_mr_method'] . '"><img src="../img/admin/disabled.gif" alt="Delete" title="Delete" /></a>' . str_replace('_', ' ', $Options['mr_Name']) . ' (' . $Options['mr_ModeCol'] . '-' . $Options['mr_ModeLiv'] . ' - ' . $Options['mr_ModeAss'] . ' : '.$Options['mr_Pays_list'].') 
-						<a href="index.php?tab=AdminCarriers&id_carrier=' . (int)($Options['id_carrier']) . '&updatecarrier&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'">'.$this->l('Config Shipping.').'</a>	
+						<div style="float:right;"><a href="index.php?tab=AdminCarriers&id_carrier=' . (int)($Options['id_carrier']) . '&updatecarrier&token='.Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)($cookie->id_employee)).'"><b><u>'.$this->l('Config Shipping.').'</u></b></a></div>	
 					</li>';
 		}
 		$output .= ' 
-
-				</ol>
+				</ul>
 			</fieldset>
 		</form><br />
 		';
