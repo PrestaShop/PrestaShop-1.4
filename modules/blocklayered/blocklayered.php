@@ -1628,12 +1628,19 @@ class BlockLayered extends Module
 								updElements(0, 0);
 							},
 							\'onComplete\': function() {
+								if($(\'#categories-treeview li#1\').attr(\'cleaned\'))
+									return;
+								if($(\'#categories-treeview li#1\').attr(\'cleaned\', true))
 								$(\'#categories-treeview li#1\').removeClass(\'static\');
 								$(\'#categories-treeview li#1 span\').trigger(\'click\');
 								$(\'#categories-treeview li#1\').children(\'div\').remove();
 								$(\'#categories-treeview li#1\').
 									removeClass(\'collapsable lastCollapsable\').
 									addClass(\'last static\');
+								$(\'.hitarea\').click(function(it)
+								{
+									$(this).parent().find(\'> .category_label\').click();
+								});
 							}
 						});
 
