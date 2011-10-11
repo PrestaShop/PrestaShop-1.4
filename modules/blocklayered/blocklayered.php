@@ -1002,7 +1002,8 @@ class BlockLayered extends Module
 		
 		$values = array();
 		foreach ($currencyList as $currency)
-			$values[] = '('.(int)$idProduct.', '.(int)$currency['id_currency'].', '.(int)$minPrice[$currency['id_currency']].', '.(int)$maxPrice[$currency['id_currency']].')';
+			$values[] = '('.(int)$idProduct.', '.(int)$currency['id_currency'].',
+			'.(int)$minPrice[$currency['id_currency']].', '.(int)($maxPrice[$currency['id_currency']] * (100+$maxTaxRate) / 100).')';
 		
 		Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'layered_price_index` (id_product, id_currency, price_min, price_max)
@@ -1929,9 +1930,9 @@ class BlockLayered extends Module
 			
 			$priceFilterQueryOut = 'INNER JOIN `'._DB_PREFIX_.'layered_price_index` psi
 			ON 
-				((psi.price_min < '.(int)$priceFilter['min'].' AND psi.price_max > '.(int)$priceFilter['min'].')
+				((psi.price_min <= '.(int)$priceFilter['min'].' AND psi.price_max >= '.(int)$priceFilter['min'].')
 				OR
-				(psi.price_max > '.(int)$priceFilter['max'].' AND psi.price_min < '.(int)$priceFilter['max'].'))
+				(psi.price_max >= '.(int)$priceFilter['max'].' AND psi.price_min <= '.(int)$priceFilter['max'].'))
 				AND psi.`id_product` = p.`id_product`
 				AND psi.`id_currency` = '.(int)$idCurrency;
 		}
@@ -1958,7 +1959,7 @@ class BlockLayered extends Module
 		while ($product = DB::getInstance()->nextRow($allProductsOut))
 			if (isset($priceFilter) && $priceFilter)
 			{
-				$price = Product::getPriceStatic($product['id_product']);
+				$price = (int)Product::getPriceStatic($product['id_product']); // Cast to int because we don't care about cents
 				if ($price < $priceFilter['min'] || $price > $priceFilter['max'])
 					continue;
 				$productIdList[] = (int)$product['id_product'];
