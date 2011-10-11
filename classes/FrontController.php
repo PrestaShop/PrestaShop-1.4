@@ -569,13 +569,14 @@ class FrontControllerCore
 			$stop = (int)($pages_nb);
 		self::$smarty->assign('nb_products', $nbProducts);
 		$pagination_infos = array(
-			'pages_nb' => (int)($pages_nb),
-			'p' => (int)($this->p),
-			'n' => (int)($this->n),
+			'products_per_page' => (int)Configuration::get('PS_PRODUCTS_PER_PAGE'),
+			'pages_nb' => $pages_nb,
+			'p' => $this->p,
+			'n' => $this->n,
 			'nArray' => $nArray,
-			'range' => (int)($range),
-			'start' => (int)($start),
-			'stop' => (int)($stop),
+			'range' => $range,
+			'start' => $start,
+			'stop' => $stop,
 			'current_url' => $current_url
 		);
 		self::$smarty->assign($pagination_infos);
