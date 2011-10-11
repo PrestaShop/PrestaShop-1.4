@@ -1300,10 +1300,12 @@ class Ebay extends Module
 				eBaySyncProduct(option);
 			}
 
+			var counter = 0;
 			function eBaySyncProduct(option)
 			{
+				counter++;
 				$.ajax({
-				  url: \''._MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&time='.pSQL(date('Ymdhis').rand()).'\',
+				  url: \''._MODULE_DIR_.'ebay/ajax/eBaySyncProduct.php?token='.Configuration::get('EBAY_SECURITY_TOKEN').'&option=\'+option+\'&time='.pSQL(date('Ymdhis')).'\'+counter,
 				  success: function(data)
 				  {
 					tab = data.split("|");
@@ -1574,7 +1576,7 @@ class Ebay extends Module
 				$images = $product->getImages($this->id_lang);
 				foreach ($images as $image)
 				{
-					$pictures[] = str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $product->id.'-'.$image['id_image'], NULL));
+					$pictures[] = str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $product->id.'-'.$image['id_image'], 'large'));
 					$picturesMedium[] = str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $product->id.'-'.$image['id_image'], 'medium'));
 					$picturesLarge[] = str_replace('https://', 'http://', $prefix.$link->getImageLink('ebay', $product->id.'-'.$image['id_image'], 'large'));
 				}
