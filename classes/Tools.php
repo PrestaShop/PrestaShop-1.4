@@ -480,7 +480,6 @@ class ToolsCore
 		$language = Language::getLanguage((int)$id_lang);
 		return date($full ? $language['date_format_full'] : $language['date_format_lite'], $time);
 	}
-	
 
 	/**
 	* Sanitize a string
@@ -2189,7 +2188,7 @@ FileETag INode MTime Size
 		else
 			$smarty->clear_all_cache();
 	}
-	
+
 	/**
 	 * getMemoryLimit allow to get the memory limit in octet
 	 * 
@@ -2216,7 +2215,6 @@ FileETag INode MTime Size
 	{
 		return (PHP_INT_MAX == '9223372036854775807');
 	}
-
 
 	/**
 	 * apacheModExists return true if the apache module $name is loaded
