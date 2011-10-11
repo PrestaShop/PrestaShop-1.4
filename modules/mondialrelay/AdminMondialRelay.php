@@ -66,7 +66,7 @@ class AdminMondialRelay extends AdminTab
 			$html .= '<div class="error">'.
 				$this->l('Thanks to kindly correct the following errors on ').
 				'<a href="index.php?tab=AdminContact&token='.Tools::getAdminToken('AdminContact'.
-				(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" style="color:#f00;">'.
+				(int)(Tab::getIdFromClassName('AdminContact')).(int)($cookie->id_employee)).'" style="color:#f00;">&nbsp;'.
 			$this->l('the contact page').'</a>:<ul>';
 			foreach($errorListTicket as $type => $error)
 				$html .= '<li>'.$type.': '.$error.'</li>';

@@ -552,9 +552,21 @@ class MondialRelay extends Module
 	public function hookupdateCarrier($params)
 	{
 		if ((int)($params['id_carrier']) != (int)($params['carrier']->id))
-     Db::getInstance()->autoExecute(_DB_PREFIX_.'mr_method', 
-     	array('id_carrier' => (int)($params['carrier']->id)), 
-     	'UPDATE', '`id_carrier` = '.(int)$params['id_carrier']); 
+		{
+			Db::getInstance()->Execute('
+				INSERT INTO `'._DB_PREFIX_.'mr_method`
+				(mr_Name, mr_Pays_list, mr_ModeCol, mr_ModeLiv, mr_ModeAss, id_carrier)
+				(
+					SELECT 
+						mr_Name, 
+						mr_Pays_list, 
+						mr_ModeCol, 
+						mr_ModeLiv, 
+						mr_ModeAss, 
+						"'.(int)$params['carrier']->id.'" 
+					FROM `'._DB_PREFIX_.'mr_method` 
+					WHERE id_carrier ='.(int)$params['id_carrier'].')');
+		} 	
 	}
 	
 	/*
