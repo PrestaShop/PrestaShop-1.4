@@ -828,7 +828,7 @@ $this->standalone = true;
 				case '4':
 					$this->next = 'upgradeComplete';
 					$this->nextResponseType = 'json';
-					$this->nextDesc = $this->l('Way to go ! Upgrade complete.');
+					$this->nextDesc = $this->l('Way to go ! Upgrade complete. You can now reactivate your shop.');
 					break;
 			}
 
@@ -1515,6 +1515,10 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 	{
 		echo '<fieldset><legend>'.$this->l('Rollback').'</legend>
 		<div id="rollbackForm">';
+		echo '<p>'
+		.$this->l('After upgrading your shop, you can rollback to the previously database and files. Use this function if your theme or an essential module is not working correctly.')
+		.'</p><br/>';
+
 		if (empty($this->backupFilesFilename) AND empty($this->backupDbFilename))
 			echo $this->l('No rollback available');
 		else if (!empty($this->backupFilesFilename) OR !empty($this->backupDbFilename))
@@ -1529,150 +1533,172 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		echo '</div></fieldset>';
 	}
 
+	/** this returns fieldset containing the configuration points you need to use autoupgrade
+	 * @return string 
+	 */
+	private function getCurrentConfiguration()
+	{
+		$content = '<fieldset class="width autoupgrade " >';
+		$content .= '<legend><a href="#" id="currentConfigurationToggle">'.$this->l('Your current configuration').'</a></legend>';
+		$content .= '<div id="currentConfiguration">
+		<p>'.$this->l('All the following points must be ok in order to allow the upgrade.').'</p>
+		<b>'.$this->l('Root directory').' : </b>'.$this->prodRootDir.'<br/><br/>';
+
+		if ($this->rootWritable)
+			$srcRootWritable = '../img/admin/enabled.gif';
+		else
+			$srcRootWritable = '../img/admin/disabled.gif';
+		$content .= '<b>'.$this->l('Root directory status').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('fully writable'):$this->l('not writable recursively')).'<br/><br/>';
+		
+		if ($this->upgrader->need_upgrade)
+		{
+			if ($this->upgrader->autoupgrade)
+				$srcAutoupgrade = '../img/admin/enabled.gif';
+			else
+				$srcAutoupgrade = '../img/admin/disabled.gif';
+
+			$content .= '<b>'.$this->l('Upgrade available').' : </b>'.'<img src="'.$srcAutoupgrade.'" /> '.($this->upgrader->autoupgrade?$this->l('This release allows autoupgrade.'):$this->l('This release does not allow autoupgrade')).' <br/><br/>';
+		}
+		else
+		{
+			$srcAutoupgrade = '../img/admin/disabled.gif';
+			$content .= '<b>'.$this->l('Upgrade available').' : </b>'.'<img src="../img/admin/disabled.gif" />'.$this->l('You already have the last version.').'<br/><br/>';
+		}
+
+
+		if (Configuration::get('PS_SHOP_ENABLE'))
+		{
+			$srcShopStatus = '../img/admin/disabled.gif';
+			$label = $this->l('No');
+		}
+		else
+		{
+			$srcShopStatus = '../img/admin/enabled.gif';
+			$label = $this->l('Yes');
+		}
+		$content .= '<b>'.$this->l('Shop desactivated').' : </b>'.'<img src="'.$srcShopStatus.'" /><a href="index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'" class="button">'.$label.'</a><br/><br/>';
+		$max_exec_time = ini_get('max_execution_time');
+		if ($max_exec_time == 0)
+			$srcExecTime = '../img/admin/enabled.gif';
+		else
+			$srcExecTime = '../img/admin/warning.gif';
+		$content .= '<b>'.$this->l('PHP time limit').' : </b>'.'<img src="'.$srcExecTime.'" />'.($max_exec_time == 0?$this->l('disabled'):$max_exec_time.' '.$this->l('seconds')).' <br/><br/>';
+
+		if (($testConfigDone = Configuration::get('PS_AUTOUP_DONT_SAVE_IMAGES')) !== false)
+			$configurationDone = '../img/admin/enabled.gif';
+		else
+			$configurationDone = '../img/admin/disabled.gif';
+		$content .= '<b>'.$this->l('Options chosen').' : </b>'.'<img src="'.$configurationDone.'" /> '.($testConfigDone?$this->l('autoupgrade configuration ok'):$this->l('Please configure autoupgrade options')).'<br/><br/>';
+
+		$content .= '<b>'.$this->l('PrestaShop Original version').' : </b>'.'<span id="checkPrestaShopFilesVersion">
+		<img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/>
+		</span>';
+
+		$content .= '<p> <a class="button" id="scrollToOptions" href="#options">'.$this->l('Modify your options').'</a></p>
+		</div>';
+		$content .= '</fieldset>';
+
+		$content .= '<script type="text/javascript">
+			$("#currentConfigurationToggle").click(function(e){e.preventDefault();$("#currentConfiguration").toggle()});'
+		
+			.($this->configOk()?'$("#currentConfiguration").hide();$("#currentConfigurationToggle").after("<img src=\"../img/admin/enabled.gif\" />");':'').'</script>';
+
+
+		return $content;
+	}
+
 	private function _displayUpgraderForm()
 	{
 		global $cookie;
-			$pleaseUpdate = $this->upgrader->checkPSVersion();
+		$content = '';
+		$pleaseUpdate = $this->upgrader->checkPSVersion();
 
-			echo '<fieldset class="width autoupgrade " >';
-			echo '<legend>'.$this->l('Your current configuration').'</legend>';
-			echo '<b>'.$this->l('Root directory').' : </b>'.$this->prodRootDir.'<br/><br/>';
-
-			if ($this->rootWritable)
-				$srcRootWritable = '../img/admin/enabled.gif';
-			else
-				$srcRootWritable = '../img/admin/disabled.gif';
-			echo '<b>'.$this->l('Root directory status').' : </b>'.'<img src="'.$srcRootWritable.'" /> '.($this->rootWritable?$this->l('fully writable'):$this->l('not writable recursively')).'<br/><br/>';
-			
-			if ($this->upgrader->need_upgrade)
-			{
-				if ($this->upgrader->autoupgrade)
-					$srcAutoupgrade = '../img/admin/enabled.gif';
-				else
-					$srcAutoupgrade = '../img/admin/disabled.gif';
-				echo '<b>'.$this->l('Autoupgrade allowed').' : </b>'.'<img src="'.$srcAutoupgrade.'" /> '.($this->upgrader->autoupgrade?$this->l('This release allow autoupgrade.'):$this->l('This release does not allow autoupgrade')).'. <br/><br/>';
-			}
-			else
-			{
-				$srcAutoupgrade = '../img/admin/disabled.gif';
-				echo '<b>'.$this->l('Autoupgrade allowed').' : </b>'.'<img src="../img/admin/disabled.gif" /> . <br/><br/>';
-			}
+		$content .= $this->getCurrentConfiguration();
 
 
-			if (Configuration::get('PS_SHOP_ENABLE'))
-			{
-				$srcShopStatus = '../img/admin/disabled.gif';
-				$label = $this->l('No');
-			}
-			else
-			{
-				$srcShopStatus = '../img/admin/enabled.gif';
-				$label = $this->l('Yes');
-			}
-			echo '<b>'.$this->l('Shop desactivated').' : </b>'.'<img src="'.$srcShopStatus.'" />'.$label.'<br/><br/>';
+			$content .= '<br/>';
 
-			$max_exec_time = ini_get('max_execution_time');
-			if ($max_exec_time == 0)
-				$srcExecTime = '../img/admin/enabled.gif';
-			else
-				$srcExecTime = '../img/admin/warning.gif';
-			echo '<b>'.$this->l('PHP time limit').' : </b>'.'<img src="'.$srcExecTime.'" />'.($max_exec_time == 0?$this->l('disabled'):$max_exec_time.' '.$this->l('seconds')).' <br/><br/>';
-
-			if (($testConfigDone = Configuration::get('PS_AUTOUP_DONT_SAVE_IMAGES')) !== false)
-				$configurationDone = '../img/admin/enabled.gif';
-			else
-				$configurationDone = '../img/admin/disabled.gif';
-			echo '<b>'.$this->l('Options chosen').' : </b>'.'<img src="'.$configurationDone.'" /> '.($testConfigDone?$this->l('autoupgrade configuration ok'):$this->l('Please configure autoupgrade options')).'<br/><br/>';
-
-			echo '<b>'.$this->l('PrestaShop Original version').' : </b>'.'<span id="checkPrestaShopFilesVersion">
-			<img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/>
-			</span>';
-
-			echo '<p> <a class="button" id="scrollToOptions" href="#options">'.$this->l('Modify your options').'</a></p>';
-			echo '</fieldset>';
-
-			echo '<br/>';
-
-			echo '<fieldset class=""><legend>'.$this->l('Update').'</legend>';
+			$content .= '<fieldset class=""><legend>'.$this->l('Update').'</legend>';
 
 
-		echo '<div style="float:left">
+		$content .= '<div style="float:left">
 		<h1>'.sprintf($this->l('Your current prestashop version : %s '),_PS_VERSION_).'</h1>';
-		echo '<p>'.sprintf($this->l('Last version is %1$s (%2$s) '), $this->upgrader->version_name, $this->upgrader->version_num).'</p>';
+		$content .= '<p>'.sprintf($this->l('Last version is %1$s (%2$s) '), $this->upgrader->version_name, $this->upgrader->version_num).'</p>';
 
 		// @TODO : this should be checked when init()
 		if ($this->isUpgradeAllowed()) {
 			if ($pleaseUpdate) {
-				echo '<li><img src="'._PS_ADMIN_IMG_.'information.png" alt="information"/> '.$this->l('Latest Prestashop version available is:').' <b>'.$pleaseUpdate['name'].'</b></li>';
+				$content .= '<li><img src="'._PS_ADMIN_IMG_.'information.png" alt="information"/> '.$this->l('Latest Prestashop version available is:').' <b>'.$pleaseUpdate['name'].'</b></li>';
 			}
 //			echo '<input class="button" type="submit" name="sumbitUpdateVersion" value="'.$this->l('Backup Database, backup files and update right now and in one click !').'"/>';
 //			echo '<input class="button" type="submit" id="refreshCurrent" value="'.$this->l("refresh update dir / current").'"/>';
-			echo '<br/>';
+			$content .= '<br/>';
 		if ($this->upgrader->need_upgrade)
 		{
 			if($this->configOk())
 			{
-				echo '<p><a href="" id="upgradeNow" class="button-autoupgrade upgradestep">'.$this->l('Upgrade PrestaShop now !').'</a></p>';
-				echo '<small>'.sprintf($this->l('PrestaShop will be downloaded from %s'), $this->upgrader->link).'</small><br/>';
-				echo '<small><a href="'.$this->upgrader->changelog.'">'.$this->l('see CHANGELOG').'</a></small>';
+				$content .= '<p><a href="" id="upgradeNow" class="button-autoupgrade upgradestep">'.$this->l('Upgrade PrestaShop now !').'</a></p>';
+info($this->upgrader->link);
+				$content .= '<small>'.sprintf($this->l('PrestaShop will be downloaded from %s'), $this->upgrader->link).'</small><br/>';
+				$content .= '<small><a href="'.$this->upgrader->changelog.'">'.$this->l('see CHANGELOG').'</a></small>';
 			}
 			else
-				echo $this->displayWarning('Your current configuration does not allow upgrade.');
+				$content .= $this->displayWarning('Your current configuration does not allow upgrade.');
 		}
 		else
 		{
-			echo '<span class="button-autoupgrade upgradestep" >'.$this->l('Your shop is already up to date.').'</span> ';
+			$content .= '<span class="button-autoupgrade upgradestep" >'.$this->l('Your shop is already up to date.').'</span> ';
 		}
-		echo '<br/><br/><small>'.sprintf($this->l('last datetime check : %s '),date('Y-m-d H:i:s',Configuration::get('PS_LAST_VERSION_CHECK'))).'</span> 
+		$content .= '<br/><br/><small>'.sprintf($this->l('last datetime check : %s '),date('Y-m-d H:i:s',Configuration::get('PS_LAST_VERSION_CHECK'))).'</span> 
 		<a class="button" href="index.php?tab=AdminSelfUpgrade&token='.Tools::getAdminToken('AdminSelfUpgrade'.(int)(Tab::getIdFromClassName(get_class($this))).(int)$cookie->id_employee).'&refreshCurrentVersion=1">'.$this->l('Please click to refresh').'</a>
 		</small>';
 	
-			echo'</div>
+			$content .='</div>
 			<div id="currentlyProcessing" style="display:none;float:right"><h4>Currently processing <img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/></h4>
 			
 			<div id="infoStep" class="processing" style=height:50px;width:400px;" >'.$this->l('I\'m waiting for your command, sir').'</div>';
-			echo '</div>';
+			$content .= '</div>';
 
-			echo '</fieldset>';
+			$content .= '</fieldset>';
 		
 		
 
 			if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $this->manualMode)
 			{
-				echo '<br class="clear"/>';
-				echo '<fieldset class="autoupgradeSteps"><legend>'.$this->l('Step').'</legend>';
-				echo '<h4>'.$this->l('Upgrade steps').'</h4>';
-				echo '<div>';
-				echo '<a href="" id="download" class="button upgradestep" >download</a>';
-				echo '<a href="" id="unzip" class="button upgradestep" >unzip</a>'; // unzip in autoupgrade/latest
-				echo '<a href="" id="removeSamples" class="button upgradestep" >removeSamples</a>'; // remove samples (iWheel images)
-				echo '<a href="" id="backupFiles" class="button upgradestep" >backupFiles</a>'; // backup files
-				echo '<a href="" id="backupDb" class="button upgradestep" >backupDb</a>';
-				echo '<a href="" id="upgradeFiles" class="button upgradestep" >upgradeFiles</a>';
-				echo '<a href="" id="upgradeDb" class="button upgradestep" >upgradeDb</a>';
-				echo '</div>';
+				$content .= '<br class="clear"/>';
+				$content .= '<fieldset class="autoupgradeSteps"><legend>'.$this->l('Step').'</legend>';
+				$content .= '<h4>'.$this->l('Upgrade steps').'</h4>';
+				$content .= '<div>';
+				$content .= '<a href="" id="download" class="button upgradestep" >download</a>';
+				$content .= '<a href="" id="unzip" class="button upgradestep" >unzip</a>'; // unzip in autoupgrade/latest
+				$content .= '<a href="" id="removeSamples" class="button upgradestep" >removeSamples</a>'; // remove samples (iWheel images)
+				$content .= '<a href="" id="backupFiles" class="button upgradestep" >backupFiles</a>'; // backup files
+				$content .= '<a href="" id="backupDb" class="button upgradestep" >backupDb</a>';
+				$content .= '<a href="" id="upgradeFiles" class="button upgradestep" >upgradeFiles</a>';
+				$content .= '<a href="" id="upgradeDb" class="button upgradestep" >upgradeDb</a>';
+				$content .= '</div>';
 
 				if (defined('_PS_ALLOW_UPGRADE_UNSTABLE_') AND _PS_ALLOW_UPGRADE_UNSTABLE_ )
 				{
-					echo '<h4>Development tools </h4><div>';
-					echo '<a href="" name="action" id="svnCheckout"	class="button upgradestep" type="submit" >svnCheckout</a>';
-					echo '<a href="" name="action" id="svnUpdate"	class="button upgradestep" type="submit" >svnUpdate</a>';
-					echo '<a href="" name="action" id="svnExport"	class="button upgradestep" type="submit" >svnExport</a>';
-					echo '<br class="clear"/>';
-					echo '</div>';
+					$content .= '<h4>Development tools </h4><div>';
+					$content .= '<a href="" name="action" id="svnCheckout"	class="button upgradestep" type="submit" >svnCheckout</a>';
+					$content .= '<a href="" name="action" id="svnUpdate"	class="button upgradestep" type="submit" >svnUpdate</a>';
+					$content .= '<a href="" name="action" id="svnExport"	class="button upgradestep" type="submit" >svnExport</a>';
+					$content .= '<br class="clear"/>';
+					$content .= '</div>';
 				}
 			}
 
-			echo'	<div id="quickInfo" class="processing" style="height:100px;">&nbsp;</div>';
+			$content .='	<div id="quickInfo" class="processing" style="height:100px;">&nbsp;</div>';
 			// for upgradeDb
-			echo '<p id="dbResultCheck"></p>';
-			echo '<p id="dbCreateResultCheck"></p>';
+			$content .= '<p id="dbResultCheck"></p>';
+			$content .= '<p id="dbCreateResultCheck"></p>';
 		}
 		else
-			echo '<p>'.$this->l('Your current configuration does not allow upgrade.').'</p>';
+			$content .= '<p>'.$this->l('Your current configuration does not allow upgrade.').'</p>';
 
-		echo '</fieldset>';
-/*		echo '<fieldset class="right">
+		$content .= '</fieldset>';
+/*		$content .= '<fieldset class="right">
 		<legend>Error</legend>
 		<div id="errorWindow" > no error yet</div>
 		</fieldset>';
@@ -1680,13 +1706,14 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		*/
 		// information to keep will be in #infoStep
 		// temporary infoUpdate will be in #tmpInformation
-		echo '<script type="text/javascript">';
+		$content .= '<script type="text/javascript">';
 		// _PS_MODE_DEV_ is available in js
 		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
-			echo 'var _PS_MODE_DEV_ = true;';
-		echo $this->_getJsErrorMsgs();
+			$content .= 'var _PS_MODE_DEV_ = true;';
+		$content .= $this->_getJsErrorMsgs();
 
-echo '</script>';
+		$content .= '</script>';
+		echo $content;
 	}
 
 	public function display()
@@ -1708,7 +1735,7 @@ echo '</script>';
 #checkPrestaShopFilesVersion{margin-bottom:20px;}
 #changedList ul{list-style-type:circle}
 .changedFileList {margin-left:20px; padding-left:5px;}
-.changedNotice li{color:lightgrey;}
+.changedNotice li{color:grey;}
 .changedImportant li{color:red;font-weight:bold}
 </style>';
 		$this->displayWarning($this->l('This function is experimental. It\'s highly recommended to make a backup of your files and database before starting the upgrade process.'));
@@ -1732,13 +1759,11 @@ echo '</script>';
 			echo '<br/>';
 			$this->_displayForm('autoUpgradeOptions',$this->_fieldsAutoUpgrade,'<a href="" name="options" id="options">'.$this->l('Options').'</a>', '','prefs');
 
-			if ($this->standalone)
-			{
-				echo '<script type="text/javascript">
-				  jq13 = jQuery.noConflict(true);
-					</script>
-					<script type="text/javascript" src="'.__PS_BASE_URI__.'modules/autoupgrade/jquery-1.6.2.min.js"></script>';
-			}
+			// We need jquery 1.6 for json 
+			echo '<script type="text/javascript">
+			jq13 = jQuery.noConflict(true);
+			</script>
+			<script type="text/javascript" src="'.__PS_BASE_URI__.'modules/autoupgrade/jquery-1.6.2.min.js"></script>';
 			echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'modules/autoupgrade/jquery.xml2json.js"></script>';
 			echo '<script type="text/javascript">'.$this->_getJsInit().'</script>';
 
@@ -1781,8 +1806,8 @@ function addQuickInfo(arrQuickInfo){
 		$("#quickInfo").show();
 		for(i=0;i<arrQuickInfo.length;i++)
 			$("#quickInfo").append(arrQuickInfo[i]+"<br/>");
-		
-		$("#quickInfo").attr({ scrollTop: $("#quickInfo").attr("scrollHeight") });
+		// Note : jquery 1.6 make uses of prop() instead of attr()
+		$("#quickInfo").prop({ scrollTop: $("#quickInfo").prop("scrollHeight") },1);
 	}
 }';
 
@@ -1913,12 +1938,14 @@ function afterUpgradeComplete()
 	$("#dbResultCheck")
 		.addClass("ok")
 		.removeClass("fail")
-		.html("<p>'.$this->l('upgrade complete. Please check your front-office (try to make an order, check theme)').'</p>")
-		.show("slow");
+		.html("<p>'.$this->l('upgrade complete. Please check your front-office theme is functionnal (try to make an order, check theme)').'</p>")
+		.show("slow")
+		.append("<a href=\"index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'\" class=\"button\">'.$this->l('activate your shop here').'</a>");
 	$("#dbCreateResultCheck")
 		.hide("slow");
 	$("#infoStep").html("<h3>'.$this->l('Upgrade Complete ! ').'</h3>");
 }
+
 /**
  * afterBackupDb display the button 
  * 
@@ -2124,7 +2151,7 @@ function handleError(res)
 	$(fileList).each(function(k,v){
 		$(subList).append("<li>"+v+"</li>");
 	});
-	$("#changedList").append("<h3><a class=\"toggleSublist\">"+title+"</a></h3>");
+	$("#changedList").append("<h3><a class=\"toggleSublist\">"+title+"</a> (" + fileList.length + ")</h3>");
 	$("#changedList").append(subList);
 	$("#cchangedList").append("<br/>");
 
@@ -2133,7 +2160,7 @@ function handleError(res)
 		$js.= '$(document).ready(function(){
 	$.ajax({
 			type:"POST",
-			url : "'.($this->standalone? __PS_BASE_URI__ . trim($this->adminDir,DIRECTORY_SEPARATOR).'/autoupgrade/ajax-upgradetab.php' : str_replace('index','ajax-tab',$currentIndex)).'",
+			url : "'. __PS_BASE_URI__ . trim($this->adminDir,DIRECTORY_SEPARATOR).'/autoupgrade/ajax-upgradetab.php",
 			async: true,
 			data : {
 				dir:"'.trim($this->adminDir,DIRECTORY_SEPARATOR).'",
@@ -2154,9 +2181,12 @@ function handleError(res)
 					$("#checkPrestaShopFilesVersion").prepend("<img src=\"../img/admin/warning.gif\" /> ");
 					$("#checkPrestaShopFilesVersion").append("<a id=\"toggleChangedList\" class=\"button\" href=\"\">'.$this->l('See or hide the list').'</a><br/>");
 					$("#checkPrestaShopFilesVersion").append("<div id=\"changedList\" style=\"display:none \"><br/>");
-					addModifiedFileList("'.$this->l('Core files').'", answer.result.core, "changedImportant");
-					addModifiedFileList("'.$this->l('Mail files').'", answer.result.mail, "changedNotice");
-					addModifiedFileList("'.$this->l('Translation files').'", answer.result.translation, "changedNotice");
+					if(answer.result.core.length)
+						addModifiedFileList("'.$this->l('Core file(s)').'", answer.result.core, "changedImportant");
+					if(answer.result.mail.length)
+						addModifiedFileList("'.$this->l('Mail file(s)').'", answer.result.mail, "changedNotice");
+					if(answer.result.translation.length)
+						addModifiedFileList("'.$this->l('Translation file(s)').'", answer.result.translation, "changedNotice");
 
 					$("#toggleChangedList").bind("click",function(e){e.preventDefault();$("#changedList").toggle();});
 					$(".toggleSublist").live("click",function(e){e.preventDefault();$(this).parent().next().toggle();});

@@ -31,9 +31,7 @@ class UpgraderCore
 	public $rss_version_link = 'http://www.prestashop.com/xml/upgrader.xml';
 	public $rss_md5file_link_dir = 'http://www.prestashop.com/xml/md5/';
 	/**
-	 * link contains hte url where to download the file
-	 * 
-	 * @var string 
+	 * @var boolean contains true if last version is not installed
 	 */
 	private $need_upgrade = false;
 	private $changed_files = array();
@@ -41,6 +39,9 @@ class UpgraderCore
 
 	public $version_name;
 	public $version_num;
+	/**
+	 * @var string contains hte url where to download the file
+	 */
 	public $link;
 	public $autoupgrade;
 	public $autoupgrade_module;
@@ -131,14 +132,22 @@ class UpgraderCore
 			else
 			{
 				$last_version_check = @unserialize(Configuration::get('PS_LAST_VERSION'));
-				$this->version_name = $last_version_check['name'];
-				$this->version_num = $last_version_check['num'];
-				$this->link = $last_version_check['link'];
-				$this->autoupgrade = $last_version_check['autoupgrade'];
-				$this->autoupgrade_module = $last_version_check['autoupgrade_module'];
-				$this->md5 = $last_version_check['md5'];
-				$this->desc = $last_version_check['desc'];
-				$this->changelog = $last_version_check['changelog'];
+				if (isset($last_version_check['name']))
+					$this->version_name = $last_version_check['name'];
+				if (isset($last_version_check['num']))
+					$this->version_num = $last_version_check['num'];
+				if (isset($last_version_check['link']))
+					$this->link = $last_version_check['link'];
+				if (isset($last_version_check['autoupgrade']))
+					$this->autoupgrade = $last_version_check['autoupgrade'];
+				if (isset($last_version_check['autoupgrade_module']))
+					$this->autoupgrade_module = $last_version_check['autoupgrade_module'];
+				if (isset($last_version_check['md5']))
+					$this->md5 = $last_version_check['md5'];
+				if (isset($last_version_check['desc']))
+					$this->desc = $last_version_check['desc'];
+				if (isset($last_version_check['changelog']))
+					$this->changelog = $last_version_check['changelog'];
 			}
 		}
 		// retro-compatibility :
