@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -110,7 +110,7 @@ class AdminImages extends AdminTab
 	{
 		global $currentIndex;
 		parent::displayForm();
-		
+
 		if (!($obj = $this->loadObject(true)))
 			return;
 
@@ -227,7 +227,7 @@ class AdminImages extends AdminTab
 				echo '
 					</select>
 				</div>';
-				
+
 			foreach ($types AS $k => $type)
 			{
 				$formats = ImageType::getImagesTypes($k);
@@ -272,7 +272,7 @@ class AdminImages extends AdminTab
 				if (preg_match('/^[0-9]+\-'.($product ? '[0-9]+\-' : '').$imageType['name'].'\.jpg$/', $d) OR preg_match('/^([[:lower:]]{2})\-default\-(.*)\.jpg$/', $d))
 					if (file_exists($dir.$d))
 						unlink($dir.$d);
-						
+
 		// delete product images using new filesystem.
 		if ($product)
 		{
@@ -289,8 +289,8 @@ class AdminImages extends AdminTab
 							if (preg_match('/^[0-9]+\-'.$imageType['name'].'\.jpg$/', $d))
 								if (file_exists($dir.$imageObj->getImgFolder().$d))
 									unlink($dir.$imageObj->getImgFolder().$d);
-				}				
-			}	
+				}
+			}
 		}
 	}
 
@@ -310,9 +310,9 @@ class AdminImages extends AdminTab
 						// Customizable writing dir
 						$newDir = $dir;
 						if ($imageType['name'] == 'thumb_scene')
-							$newDir .= 'thumbs/';						
+							$newDir .= 'thumbs/';
 						if (!file_exists($newDir))
-							continue;						
+							continue;
 						if (!file_exists($newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg'))
 							if (!imageResize($dir.$image, $newDir.substr($image, 0, -4).'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height'])))
 								$errors = true;
@@ -417,7 +417,7 @@ class AdminImages extends AdminTab
 						if ($form['id_image_type'] != $format)
 							unset($formats[$k]);
 			}
-			
+
 			if ($deleteOldImages)
 				$this->_deleteOldImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false));
 			if (($return = $this->_regenerateNewImages($proc['dir'], $formats, ($proc['type'] == 'products' ? true : false))) === true)
@@ -436,7 +436,7 @@ class AdminImages extends AdminTab
 		}
 		return (sizeof($this->_errors) > 0 ? false : true);
 	}
-	
+
 	/**
 	 * Display the block for moving images
 	 */
@@ -466,15 +466,15 @@ class AdminImages extends AdminTab
 					$this->l('You can choose to keep your images stored in the previous system - nothing wrong with that.').'<br />'.
 					$this->l('You can also decide to move your images to the new storage system: in this case, click on the "Move images" button below.	Please be patient, as this can take several minutes.').
 					'<br /><br /><p class="hint clear" style="display: block;">&nbsp;'.
-					$this->l('After moving all of your product images, for best performance go to the '). 
+					$this->l('After moving all of your product images, for best performance go to the ').
 					'<a style="text-decoration:underline" href="index.php?tab=AdminPPreferences&token='.Tools::getAdminTokenLite('AdminPPreferences').'#PS_LEGACY_IMAGES_on">'.$this->l('product preferences tab').'</a>'.
-					$this->l(' and set "Activate legacy images compatibility" to NO.').'
+					$this->l(' and set "Use the legacy image filesystem" to NO.').'
 					</p>
 					<center><input type="Submit" name="submitMoveImages'.$this->table.'" value="'.$this->l('Move images').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" /></center>
 				</fieldset>
 			</form>';
 	}
-	
+
 	/**
 	 * Move product images to the new filesystem
 	 */
@@ -485,7 +485,7 @@ class AdminImages extends AdminTab
 		else
 		{
 			ini_set('max_execution_time', $this->max_execution_time); // ini_set may be disabled, we need the real value
-			$this->max_execution_time = (int)ini_get('max_execution_time');	
+			$this->max_execution_time = (int)ini_get('max_execution_time');
 			$result = Image::moveToNewFileSystem($this->max_execution_time);
 			if ($result === 'timeout')
 				$this->_errors[] =  Tools::displayError('Not all images have been moved, server timed out before finishing. Click on \"Move images\" again to resume moving images');
@@ -529,7 +529,7 @@ class AdminImages extends AdminTab
 				<div class="margin-form">
 					<input type="text" name="PS_PNG_QUALITY" id="PS_PNG_QUALITY" value="'.(int)Configuration::get('PS_PNG_QUALITY').'" size="3" />
 					<p>'.$this->l('Ranges from 9 (worst quality, smallest file) to 0 (best quality, biggest file)').'</p>
-				</div>		
+				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitImagePreferences" class="button" />
 				</div>
