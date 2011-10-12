@@ -1,11 +1,9 @@
-Hi,
-		
-New log alert
-	
-Unfortunately, new log alert message has been saved.
+Hello,
 
-You can check this on your Back office > Tools > Log on our Website.
-		
+Warning: you have received a new log alert in your Back Office.
+
+You can check for it in the "Tools" > "Logs" section of your Back Office.
+
 {shop_name} - {shop_url}
 
 {shop_url} powered by PrestaShop™
