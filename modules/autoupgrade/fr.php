@@ -7,9 +7,6 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_a8d6c6734da0083021561b23f2fa
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_af98608eaedd4ba7ffd47a0204e84b23'] = 'Conserver le thème \"prestashop\" actuel';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_4ea56ca1a757e426911ff20889c0e93c'] = 'Si vous avez personnalisé le thème par défaut de PrestaShop, vous pouvez le protéger de la mise à niveau (non recommandé)';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8413c63a6ef3717a974094785fd0b588'] = 'Garder les traductions';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_51bbcf7afb0f8d35501d0a7b28979b06'] = 'Si \"oui\", vous conserverez toutes vos traductions';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_08f302d660c7dbf20416d6b4225238c2'] = 'Désactiver les modules non natifs';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8c09b80e27810f6697c90824ab8151d6'] = 'Si vous ne désactivez pas ces modules, des problèmes de compatibilité peuvent apparaitre et la page module peut ne pas se charger correctement.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8c8194a465f0163a6724907755ac1b82'] = 'Mode manuel';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_dd9dbd4916653d683244119a067ca467'] = 'Choisissze \"oui\" si vous voulez vous ';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_e7b6d601ff4e9069e726927e211274ea'] = 'Utiliser Subversion';
