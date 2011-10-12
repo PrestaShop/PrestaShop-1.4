@@ -2239,10 +2239,10 @@ FileETag INode MTime Size
 			if (!is_array($apacheModuleList))
 				$apacheModuleList = apache_get_modules();
 	
-			// we need strpos (example can be evasive20
+			// we need strpos (example, evasive can be evasive20)
 			foreach($apacheModuleList as $module)
 			{
-				if (strpos($module, $name)!==false)
+				if (strpos($module, $name) !== false)
 					return true;
 			}
 		}
@@ -2254,10 +2254,9 @@ FileETag INode MTime Size
 			phpinfo(INFO_MODULES);
 			$phpinfo = ob_get_contents();
 			ob_end_clean();
-			if (strpos($phpinfo, $module) !== false)
+			if (strpos($phpinfo, $name) !== false)
 				return true;
 		}
-
 		return false;
 	}
 }
