@@ -1025,6 +1025,11 @@ class BlockLayered extends Module
 	{
 		global $smarty, $cookie;
 		
+		// No filters => module disable
+		if ($filterBlock = $this->getFilterBlock($this->getSelectedFilters()))
+			if ($filterBlock['nbr_filterBlocks'] == 0)
+				return false;
+		
 		if (Tools::getValue('id_category', Tools::getValue('id_category_layered', 1)) == 1)
 			return;
 		
@@ -1034,7 +1039,6 @@ class BlockLayered extends Module
 		$categoryTitle = (empty($category->meta_title[$idLang]) ? $category->name[$idLang] : $category->meta_title[$idLang]);
 
 		// Generate meta title and meta description
-		$filterBlock = self::getFilterBlock($this->getSelectedFilters());
 		$title = '';
 		if (is_array($filterBlock['title_values']))
 			foreach ($filterBlock['title_values'] as $key => $val)
