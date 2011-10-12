@@ -1003,7 +1003,7 @@ class BlockLayered extends Module
 		$values = array();
 		foreach ($currencyList as $currency)
 			$values[] = '('.(int)$idProduct.', '.(int)$currency['id_currency'].',
-			'.(int)$minPrice[$currency['id_currency']].', '.(int)($maxPrice[$currency['id_currency']] * (100+$maxTaxRate) / 100).')';
+			'.(int)$minPrice[$currency['id_currency']].', '.(int)($maxPrice[$currency['id_currency']] * (100 + $maxTaxRate) / 100).')';
 		
 		Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'layered_price_index` (id_product, id_currency, price_min, price_max)
@@ -2084,13 +2084,15 @@ class BlockLayered extends Module
 					INNER JOIN '._DB_PREFIX_.'attribute_group_lang agl
 					ON agl.id_attribute_group = lpa.id_attribute_group
 					AND agl.id_lang = '.(int)$cookie->id_lang.'
-					LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
-					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')
 					LEFT JOIN '._DB_PREFIX_.'layered_indexable_attribute_group_lang_value liagl
 					ON (liagl.id_attribute_group = lpa.id_attribute_group AND liagl.id_lang = '.(int)$cookie->id_lang.')
 					LEFT JOIN '._DB_PREFIX_.'layered_indexable_attribute_lang_value lial
 					ON (lial.id_attribute = lpa.id_attribute AND lial.id_lang = '.(int)$cookie->id_lang.') ';
-					$sqlQuery['where'] = 'WHERE a.id_attribute_group = '.(int)$filter['id_value'].' ';
+					$sqlQuery['where'] = 'WHERE a.id_attribute_group = '.(int)$filter['id_value'].'
+					AND p.id_product IN (
+					SELECT id_product
+					FROM '._DB_PREFIX_.'category_product cp
+					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')) ';
 					$sqlQuery['group'] = '
 					GROUP BY lpa.id_attribute
 					ORDER BY id_attribute_group, id_attribute ';
@@ -2137,10 +2139,16 @@ class BlockLayered extends Module
 				if (method_exists('BlockLayered', $methodName) &&
 				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filterTmp['type'] || $filter['type'] == $filterTmp['type']))
 				{
-					if ($filter['type'] == $filterTmp['type'])
-						$subQueryFilter = self::$methodName(array(), $filter['type'] == $filterTmp['type']);
+					if ($filter['type'] == $filterTmp['type'] && $filter['id_value'] == $filterTmp['id_value'])
+						$subQueryFilter = self::$methodName(array(), true);
 					else
-						$subQueryFilter = self::$methodName(@$selectedFilters[$filterTmp['type']], $filter['type'] == $filterTmp['type']);
+					{
+						if (!is_null($filterTmp['id_value']))
+							$selected_filters_cleaned = $this->cleanFilterByIdValue(@$selectedFilters[$filterTmp['type']], $filterTmp['id_value']);
+						else
+							$selected_filters_cleaned = @$selectedFilters[$filterTmp['type']];
+						$subQueryFilter = self::$methodName($selected_filters_cleaned, $filter['type'] == $filterTmp['type']);
+					}
 					foreach ($subQueryFilter as $key => $value)
 						$sqlQuery[$key] .= $value;
 				}
@@ -2246,7 +2254,7 @@ class BlockLayered extends Module
 							$conditionArray[$key]['checked'] = true;
 					if (isset($products) && $products)
 						foreach ($products as $product)
-							if(isset($conditionArray[$product['condition']]))
+							if (isset($conditionArray[$product['condition']]))
 								$conditionArray[$product['condition']]['nbr']++;
 						$filterBlocks[] = array('type_lite' => 'condition', 'type' => 'condition', 'id_key' => 0, 'name' => $this->l('Condition'), 'values' => $conditionArray);
 					break;
@@ -2465,12 +2473,26 @@ class BlockLayered extends Module
 		return $cache;
 	}
 	
+	public function cleanFilterByIdValue($attributes, $id_value)
+	{
+		$selected_filters = array();
+		if (is_array($attributes))
+			foreach ($attributes as $attribute)
+			{
+				$attribute_data = explode('_', $attribute);
+				elog($attribute_data);
+				if ($attribute_data[0] == $id_value)
+					$selected_filters[] = $attribute_data[1];
+			}
+		return $selected_filters;
+	}
+	
 	public function generateFiltersBlock($selectedFilters)
 	{
 		global $smarty;
 		if ($filterBlock = $this->getFilterBlock($selectedFilters))
 		{
-			if($filterBlock['nbr_filterBlocks'] == 0)
+			if ($filterBlock['nbr_filterBlocks'] == 0)
 				return false;
 				
 			$smarty->assign($filterBlock);
@@ -2550,7 +2572,7 @@ class BlockLayered extends Module
 		FROM `'._DB_PREFIX_.'product_attribute_combination` pac
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product_attribute` = pac.`id_product_attribute`)
 		WHERE ';
-						
+		
 		foreach ($filterValue as $filterVal)
 			$queryFilters .= 'pac.`id_attribute` = '.(int)$filterVal.' OR ';
 		$queryFilters = rtrim($queryFilters, 'OR ').') ';
