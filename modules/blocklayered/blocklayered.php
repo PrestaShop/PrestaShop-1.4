@@ -1057,6 +1057,7 @@ class BlockLayered extends Module
 		Tools::addJS(_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js');
 		Tools::addCSS(_PS_CSS_DIR_.'jquery-ui-1.8.10.custom.css', 'all');
 		Tools::addCSS(($this->_path).'blocklayered.css', 'all');
+		Tools::addJS(_PS_JS_DIR_.'jquery/jquery.scrollTo-1.4.2-min.js');
 	}
 	
 	public function hookFooter($params)
