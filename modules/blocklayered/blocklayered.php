@@ -2480,7 +2480,6 @@ class BlockLayered extends Module
 			foreach ($attributes as $attribute)
 			{
 				$attribute_data = explode('_', $attribute);
-				elog($attribute_data);
 				if ($attribute_data[0] == $id_value)
 					$selected_filters[] = $attribute_data[1];
 			}
