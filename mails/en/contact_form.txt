@@ -1,6 +1,6 @@
 Hello,
 
-Your message has been successfully sent to {shop_name} Customer Service.
+Your message has been sent successfully to {shop_name} Customer Service.
 
 Your message:
 
