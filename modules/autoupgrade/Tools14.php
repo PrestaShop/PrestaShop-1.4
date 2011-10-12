@@ -31,7 +31,7 @@ if (!defined('_PS_DISPLAY_COMPATIBILITY_WARNING_'))
 if(!class_exists('Tools14',false))
 {
 
-class Tools14Core
+class Tools14
 {
 	protected static $file_exists_cache = array();
 	protected static $_forceCompile;
