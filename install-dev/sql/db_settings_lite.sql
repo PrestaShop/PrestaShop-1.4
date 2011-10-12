@@ -814,20 +814,20 @@ INSERT INTO `PREFIX_profile_lang` (`id_profile`, `id_lang`, `name`) VALUES (1, 1
 
 INSERT INTO `PREFIX_tab` (`id_tab`, `class_name`, `id_parent`, `position`) VALUES (1, 'AdminCatalog', 0, 1),(2, 'AdminCustomers', 0, 2),(3, 'AdminOrders', 0, 3),
 (4, 'AdminPayment', 0, 4),(5, 'AdminShipping', 0, 5),(6, 'AdminStats', 0, 6),(7, 'AdminModules', 0, 7),(29, 'AdminEmployees', 0, 8),(8, 'AdminPreferences', 0, 9),
-(9, 'AdminTools', 0, 10),(82, 'AdminStores', 9, 11),(60, 'AdminTracking', 1, 1),(10, 'AdminManufacturers', 1, 2),(34, 'AdminSuppliers', 1, 3),(11, 'AdminAttributesGroups', 1, 4),
-(36, 'AdminFeatures', 1, 5),(58, 'AdminScenes', 1, 6),(66, 'AdminTags', 1, 7),(68, 'AdminAttachments', 1, 7),(12, 'AdminAddresses', 2, 1),(63, 'AdminGroups', 2, 2),
-(65, 'AdminCarts', 2, 3),(42, 'AdminInvoices', 3, 1),(55, 'AdminDeliverySlip', 3, 2),(47, 'AdminReturn', 3, 3),(49, 'AdminSlip', 3, 4),(59, 'AdminMessages', 3, 5),
-(13, 'AdminStatuses', 3, 6),(54, 'AdminOrderMessage', 3, 7),(14, 'AdminDiscounts', 4, 4),(15, 'AdminCurrencies', 4, 1),(16, 'AdminTaxes', 4, 2),
-(17, 'AdminCarriers', 5, 1),(46, 'AdminStates', 5, 2),(18, 'AdminCountries', 5, 3),(19, 'AdminZones', 5, 5),(20, 'AdminRangePrice', 5, 6),
+(9, 'AdminTools', 0, 10),(11, 'AdminAttributesGroups', 1, 1),(36, 'AdminFeatures', 1, 2),(68, 'AdminAttachments', 1, 3),(58, 'AdminScenes', 1, 4),
+(10, 'AdminManufacturers', 1, 5),(34, 'AdminSuppliers', 1, 6),(73, 'AdminStockMvt', 1, 7),(66, 'AdminTags', 1, 8),(60, 'AdminTracking', 1, 9),
+(12, 'AdminAddresses', 2, 1),(63, 'AdminGroups', 2, 2),(65, 'AdminCarts', 2, 3),(59, 'AdminMessages', 3, 1),(42, 'AdminInvoices', 3, 2),
+(13, 'AdminStatuses', 3, 3),(55, 'AdminDeliverySlip', 3, 4),(47, 'AdminReturn', 3, 5),(49, 'AdminSlip', 3, 6),(54, 'AdminOrderMessage', 3, 7),
+(48, 'AdminPDF', 3, 8),(15, 'AdminCurrencies', 4, 1),(16, 'AdminTaxes', 4, 2),(85, 'AdminTaxRulesGroup', 4, 3),(14, 'AdminDiscounts', 4, 4),
+(17, 'AdminCarriers', 5, 1),(18, 'AdminCountries', 5, 2),(46, 'AdminStates', 5, 3),(87, 'AdminCounty', 5, 4),(19, 'AdminZones', 5, 5),(20, 'AdminRangePrice', 5, 6),
 (21, 'AdminRangeWeight', 5, 7),(51, 'AdminStatsConf', 6, 1),(61, 'AdminSearchEngines', 6, 2),(62, 'AdminReferrers', 6, 3),
-(22, 'AdminModulesPositions', 7, 4),(30, 'AdminProfiles', 29, 1),(31, 'AdminAccess', 29, 2),(28, 'AdminContacts', 29, 3),(39, 'AdminContact', 8, 1),
-(38, 'AdminAppearance', 8, 2),(56, 'AdminMeta', 8, 3),(27, 'AdminPPreferences', 8, 4),(24, 'AdminEmails', 8, 5),(26, 'AdminImages', 8, 6),(23, 'AdminDb', 8, 7),
-(48, 'AdminPDF', 3, 8),(44, 'AdminLocalization', 8, 9),(67, 'AdminSearchConf', 8, 10),(32, 'AdminLanguages', 9, 1),(33, 'AdminTranslations', 9, 2),
-(35, 'AdminTabs', 29, 3),(37, 'AdminQuickAccesses', 9, 4),(40, 'AdminAliases', 8, 5),(41, 'AdminImport', 9, 6),(52, 'AdminSubDomains', 9, 7),
-(53, 'AdminBackup', 9, 8),(57, 'AdminCMSContent', 9, 9),(64, 'AdminGenerator', 9, 10),(43, 'AdminSearch', -1, 0),(69, 'AdminInformation', 9, 5),
-(70, 'AdminPerformance', 8, 11),(71, 'AdminCustomerThreads', 29, 4),(72, 'AdminWebservice', 9, 12),(73, 'AdminStockMvt', 1, 9),
-(80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3),(84, 'AdminGeolocation', 8, 12),
-(85, 'AdminTaxRulesGroup', 4, 3),(86, 'AdminLogs', 9, 13), (87, 'AdminCounty', 5, 4),(88,'AdminHome',-1,0);
+(80, 'AdminAddonsCatalog', 7, 1),(81, 'AdminAddonsMyAccount', 7, 2),(83, 'AdminThemes', 7, 3),(22, 'AdminModulesPositions', 7, 4),
+(30, 'AdminProfiles', 29, 1),(31, 'AdminAccess', 29, 2),(28, 'AdminContacts', 29, 3),(71, 'AdminCustomerThreads', 29, 4),(37, 'AdminQuickAccesses', 29, 5),(35, 'AdminTabs', 29, 6),
+(38, 'AdminAppearance', 8, 1),(23, 'AdminDb', 8, 2),(24, 'AdminEmails', 8, 3),(26, 'AdminImages', 8, 4),(70, 'AdminPerformance', 8, 5),(56, 'AdminMeta', 8, 6),
+(67, 'AdminSearchConf', 8, 7),(40, 'AdminAliases', 8, 8),(44, 'AdminLocalization', 8, 9),(84, 'AdminGeolocation', 8, 10),(27, 'AdminPPreferences', 8, 11),
+(39, 'AdminContact', 8, 12),(41, 'AdminImport', 9, 1),(32, 'AdminLanguages', 9, 2),(33, 'AdminTranslations', 9, 3),(64, 'AdminGenerator', 9, 4),
+(52, 'AdminSubDomains', 9, 5),(57, 'AdminCMSContent', 9, 6),(82, 'AdminStores', 9, 7),(72, 'AdminWebservice', 9, 8),(53, 'AdminBackup', 9, 9),
+(86, 'AdminLogs', 9, 10),(69, 'AdminInformation', 9, 11),(43, 'AdminSearch', -1, 0),(88,'AdminHome', -1, 0);
 
 INSERT INTO `PREFIX_access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) (SELECT 1, id_tab, 1, 1, 1, 1 FROM PREFIX_tab);
 
@@ -835,15 +835,15 @@ INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
 (1, 1, 'Catalog'),(1, 2, 'Customers'),(1, 3, 'Orders'),(1, 4, 'Payment'),
 (1, 5, 'Shipping'),(1, 6, 'Stats'),(1, 7, 'Modules'),(1, 8, 'Preferences'),(1, 9, 'Tools'),(1, 10, 'Manufacturers'),(1, 11, 'Attributes and Groups'),
 (1, 12, 'Addresses'),(1, 13, 'Statuses'),(1, 14, 'Vouchers'),(1, 15, 'Currencies'),(1, 16, 'Taxes'),(1, 17, 'Carriers'),(1, 18, 'Countries'),
-(1, 19, 'Zones'),(1, 20, 'Price Ranges'),(1, 21, 'Weight Ranges'),(1, 22, 'Positions'),(1, 23, 'Database'),(1, 24, 'E-mail'),(1, 26, 'Image'),
+(1, 19, 'Zones'),(1, 20, 'Price Ranges'),(1, 21, 'Weight Ranges'),(1, 22, 'Positions'),(1, 23, 'Database'),(1, 24, 'E-mail'),(1, 26, 'Images'),
 (1, 27, 'Products'),(1, 28, 'Contacts'),(1, 29, 'Employees'),(1, 30, 'Profiles'),(1, 31, 'Permissions'),(1, 32, 'Languages'),(1, 33, 'Translations'),
-(1, 34, 'Suppliers'),(1, 35, 'Tabs'),(1, 36, 'Features'),(1, 37, 'Quick Access'),(1, 38, 'Appearance'),(1, 39, 'Contact Information'),(1, 40, 'Aliases'),
-(1, 41, 'Import'),(1, 42, 'Invoices'),(1, 43, 'Search'),(1, 44, 'Localization'),(1, 46, 'States'),(1, 47, 'Merchandise Returns'),(1, 48, 'PDF'),
-(1, 49, 'Credit Slips'),(1, 51, 'Settings'),(1, 52, 'Subdomains'),(1, 53, 'DB backup'),(1, 54, 'Order Messages'),
-(1, 55, 'Delivery Slips'),(1, 56, 'SEO & URLs'),(1, 57, 'CMS'),(1, 58, 'Image Mapping'),(1, 59, 'Customer Messages'),(1, 60, 'Tracking'),
+(1, 34, 'Suppliers'),(1, 35, 'Tabs'),(1, 36, 'Features'),(1, 37, 'Quick Access'),(1, 38, 'Appearance'),(1, 39, 'Contact Information'),(1, 40, 'Keyword Typos'),
+(1, 41, 'CSV Import'),(1, 42, 'Invoices'),(1, 43, 'Search'),(1, 44, 'Localization'),(1, 46, 'States'),(1, 47, 'Merchandise Returns'),(1, 48, 'PDF'),
+(1, 49, 'Credit Slips'),(1, 51, 'Settings'),(1, 52, 'Subdomains'),(1, 53, 'DB Backup'),(1, 54, 'Order Messages'),
+(1, 55, 'Delivery Slips'),(1, 56, 'SEO & URLs'),(1, 57, 'CMS'),(1, 58, 'Image Mapping'),(1, 59, 'Customer Messages'),(1, 60, 'Monitoring'),
 (1, 61, 'Search Engines'),(1, 62, 'Referrers'),(1, 63, 'Groups'),(1, 64, 'Generators'),(1, 65, 'Shopping Carts'),(1, 66, 'Tags'),(1, 67, 'Search'),
-(1, 68, 'Attachments'),(1, 69, 'Configuration Information'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movements'),
-(1, 80, 'Modules & Themes Catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocation'),(1, 85, 'Tax Rules'),(1, 86, 'Log'),
+(1, 68, 'Attachments'),(1, 69, 'Configuration Information'),(1, 70, 'Performance'),(1, 71, 'Customer Service'),(1, 72, 'Webservice'),(1, 73, 'Stock Movement'),
+(1, 80, 'Modules & Themes Catalog'),(1, 81, 'My Account'),(1, 82, 'Stores'),(1, 83, 'Themes'),(1, 84, 'Geolocation'),(1, 85, 'Tax Rules'),(1, 86, 'Logs'),
 (1, 87, 'Counties'),(1, 88, 'Home');
 
 INSERT INTO `PREFIX_tab_lang` (`id_lang`, `id_tab`, `name`) VALUES
@@ -1275,7 +1275,7 @@ company
 address1 address2
 city, State:name postcode
 Country:name
-phone' where `id_country`=21;
+phone' where `id_country` = 21;
 
 UPDATE `PREFIX_address_format` set `format`= 'firstname lastname
 company
@@ -1285,7 +1285,7 @@ address2
 postcode city
 State:name
 Country:name
-phone' where `id_country`=10;
+phone' where `id_country` = 10;
 
 UPDATE `PREFIX_address_format` set `format` = 'firstname lastname
 company
@@ -1293,6 +1293,4 @@ address1
 address2
 city State:name postcode
 Country:name
-phone' WHERE `PREFIX_address_format`.`id_country` =4;
-
-
+phone' WHERE `PREFIX_address_format`.`id_country` = 4;
