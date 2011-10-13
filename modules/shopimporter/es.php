@@ -47,7 +47,6 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_782c8b38bce4f2f6975ca7f33ac8189
 $_MODULE['<{shopimporter}prestashop>shopimporter_f2931b8b1622867fcc461d7de388e319'] = 'Import del historial de los pedidos';
 $_MODULE['<{shopimporter}prestashop>shopimporter_32a6deec3cca312a54d6b8769c9b8dd7'] = 'no se encuentra disponible en este módulo';
 $_MODULE['<{shopimporter}prestashop>shopimporter_1e411d25230ba738b9ae583bcb9b0b57'] = 'Connexión a la base de datos OK';
-$_MODULE['<{shopimporter}prestashop>shopimporter_472f0b8c78cc382302e094c94856c951'] = 'La conexión al servicio web Aceptar';
 $_MODULE['<{shopimporter}prestashop>shopimporter_3596c777cbc8b72d678f34daabc9148b'] = 'Mostrar los errores';
 $_MODULE['<{shopimporter}prestashop>shopimporter_89a399eee52b2a6daaea92eba3e14cad'] = 'Lanzar el test de import';
 $_MODULE['<{shopimporter}prestashop>shopimporter_bf79359f8edda6f7df97ef57a4ee09b6'] = 'Ejecutar importación';
@@ -61,6 +60,14 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_60474e812295a5adc371de63dc62a16
 $_MODULE['<{shopimporter}prestashop>shopimporter_05f4be265d59ea66f3a1fb12ba103583'] = 'Elegir un import';
 $_MODULE['<{shopimporter}prestashop>shopimporter_961f2247a2070bedff9f9cd8d64e2650'] = 'Elegir';
 $_MODULE['<{shopimporter}prestashop>shopimporter_151a0fbfcc4894aa53335091c2512de5'] = 'No hay ningún módulo de importación instalado';
+$_MODULE['<{shopimporter}prestashop>shopimporter_9aa1b03934893d7134a660af4204f2a9'] = 'Servidor';
+$_MODULE['<{shopimporter}prestashop>shopimporter_770b2f7556eecbe5000cfcbddc9f9885'] = '(Por ejemplo: mysql.mydomain.com)';
+$_MODULE['<{shopimporter}prestashop>shopimporter_8f9bfe9d1345237cb3b2b205864da075'] = 'Usuario';
+$_MODULE['<{shopimporter}prestashop>shopimporter_dc647eb65e6711e155375218212b3964'] = 'Contraseña';
+$_MODULE['<{shopimporter}prestashop>shopimporter_14ae0ea02f571a833786d13d9ca6a897'] = '(La contraseña puede estar vacía)';
+$_MODULE['<{shopimporter}prestashop>shopimporter_e307db07b3975fef922a80d07455ee5e'] = 'Base de datos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_dac130bdd2c5492a8108a4145bd9f04a'] = 'Prefijo de la base de datos';
+$_MODULE['<{shopimporter}prestashop>shopimporter_6bdc02625540b5264cffe801c37a82dd'] = '(El prefijo es opcional. Si todas las tablas de su base de datos comienzan con \"pref_\", el prefijo es \"pref_\")';
 $_MODULE['<{shopimporter}prestashop>shopimporter_2bb4cbbf4c51025867d47131e79ad05f'] = 'Etapa siguiente';
 $_MODULE['<{shopimporter}prestashop>shopimporter_72dd98a453e92ccc01697f29bb5dbeb9'] = 'Opción de import';
 $_MODULE['<{shopimporter}prestashop>shopimporter_9dfc5d5738312210c3c75e68a468691d'] = 'Opciones avanzadas';

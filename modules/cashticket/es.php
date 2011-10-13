@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{cashticket}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Un título se ha encontrado para esta configuración';
-$_MODULE['<{cashticket}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'La contraseña ya se ha guardado';
 $_MODULE['<{cashticket}prestashop>cashticket-accept-payment_330bf06fb43e715e5d03c9fd016df4cd'] = 'El pago aún no ha sido aceptado';
 $_MODULE['<{cashticket}prestashop>cashticket-accept-payment_486cb12e1ec3c8b28b80a8eb9f2db2c0'] = 'Aceptar el pago';
 $_MODULE['<{cashticket}prestashop>cashticket-accept-payment_e9b3579d8e877bcd29ab436f2ef87cc8'] = 'Rechazar el pago';
