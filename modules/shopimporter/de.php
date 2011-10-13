@@ -11,7 +11,7 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_386c339d37e737a436499d423a77df0
 $_MODULE['<{shopimporter}prestashop>shopimporter_4234c64201820401dfa04eeb449c1bbc'] = 'Währungen importieren';
 $_MODULE['<{shopimporter}prestashop>shopimporter_719fec04166d6fa75f89cd29ad61fa8c'] = 'Steuern';
 $_MODULE['<{shopimporter}prestashop>shopimporter_94c5ffc9d364127b232f58b4cfd8c88a'] = 'Steuern importieren';
-$_MODULE['<{shopimporter}prestashop>shopimporter_3c994b8c6c4e8b756185f74ded711f69'] = 'Steuern Regeln';
+$_MODULE['<{shopimporter}prestashop>shopimporter_3c994b8c6c4e8b756185f74ded711f69'] = 'Steuerregeln';
 $_MODULE['<{shopimporter}prestashop>shopimporter_6ec25fc9cc7df7b0d1fce57923f46ec1'] = 'Steuerregeln importieren';
 $_MODULE['<{shopimporter}prestashop>shopimporter_b3ff996fe5c77610359114835baf9b38'] = 'Zone';
 $_MODULE['<{shopimporter}prestashop>shopimporter_21d250d17e35e3e02db9f1a618bad913'] = 'Zone importieren';

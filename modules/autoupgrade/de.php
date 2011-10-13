@@ -172,7 +172,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_7f786b903ea8045f5b5b7e3c5a4e
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_3a3a651c9a67bca9ac902da789466b93'] = 'Instabile Upgrade';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_a22eff458b4f4bce6d3232e367ff0138'] = 'Ihre aktuelle Konfiguration geben Sie Ihr System von der instabilen Entwicklungszweig Upgrade, ohne Versionsnummer. Wenn Sie ein Upgrade, werden Sie nicht in der Lage sein, das offizielle Release-Prozess folgen mehr';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_dae8ace18bdcbcc6ae5aece263e14fe8'] = 'Optionen';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_91195bbbacc2147a736c849c46368ed8'] = 'Möchten Sie das Rollback?';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_444f052812f8f341905e60226c5b04c6'] = 'Sie können ein Rollback müssen.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_98a399b35ec9e03ec985254acfe5e3a0'] = 'Upgrade PrestaShop';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_3794983e0533ce2499b168f8e9bdca3c'] = 'Aktualisierung abzuschließen. Bitte überprüfen Sie Ihre Front-Office-Thema ist functionnal (versuchen Sie, einen Auftrag bilden, überprüfen Thema)';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_d99d3bf83d7667d30974da1a5b693b64'] = 'aktivieren Sie Ihr Shop hier';
@@ -180,6 +180,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_c208c3853a0c9515bbf0d330fdd5
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_a498f9476a893d51ee02b3601678d318'] = 'Klicken Sie auf Datenbank wiederherstellen';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_f34d5debb2bba76aa3e077937a07e373'] = 'Klicken Sie zum Wiederherstellen von Dateien';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_60283aa37e2063b2ada2f99216e1332a'] = 'Ihr Server kann die Datei nicht herunterladen. Bitte laden Sie es zunächst per FTP in Ihrem admin / autoupgrade Verzeichnis';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_91195bbbacc2147a736c849c46368ed8'] = 'Möchten Sie das Rollback?';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_6ef7ebe46f6d16cdbf9e2169e3dd048e'] = 'Bitte gehen Sie manuell gehen Rollback-Taste';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_1607e6098b7b62a2791653b059c975d2'] = 'Siehe Ein-oder Ausblenden der Liste';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_25b91596a896c6cf688104169b4b6a71'] = 'Core-Datei (en)';
