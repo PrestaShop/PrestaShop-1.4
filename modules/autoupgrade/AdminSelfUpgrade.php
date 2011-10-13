@@ -46,13 +46,15 @@ if(empty($_POST['action']) OR !in_array($_POST['action'],array('upgradeDb')))
 	require_once(dirname(__FILE__).'/AdminSelfTab.php');
 	require_once(dirname(__FILE__).'/SelfModule.php');
 
-// Add Upgrader class 
-	if(!version_compare(_PS_VERSION_,'1.4.5.0','<') AND file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
+	// Add Upgrader class : if > 1.4.5.0 , uses core class
+	// otherwise, use Upgrader.php in modules.
+	// in both cases, use override if files exists
+	if (!version_compare(_PS_VERSION_,'1.4.5.0','<') && file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
 		require_once(_PS_ROOT_DIR_.'/classes/Upgrader.php');
 	else
 		require_once(dirname(__FILE__).'/Upgrader.php');
 
-	if(!class_exists('Upgrader',false))
+	if (!class_exists('Upgrader',false))
 	{
 		if(file_exists(_PS_ROOT_DIR_.'/override/classes/Upgrader.php'))
 			require_once(_PS_ROOT_DIR_.'/override/classes/Upgrader.php');
@@ -121,6 +123,9 @@ class AdminSelfUpgrade extends AdminSelfTab
 	public $destDownloadFilename = 'prestashop.zip';
 	public $toUpgradeFileList = 'filesToUpgrade.list';
 	public $toBackupFileList = 'filesToBackup.list';
+
+	public $toRemoveFileList = 'filesToRemove.list';
+	public $fromArchiveFileList = 'filesFromArchive.list';
 	public $sampleFileList = array();
 	private $backupIgnoreFiles = array();
 	private $backupIgnoreAbsoluteFiles = array();
@@ -140,15 +145,19 @@ class AdminSelfUpgrade extends AdminSelfTab
  */
 	public static $loopUpgradeFiles = 1000;
 /**
- * intloopRemoveSamples : if your server has a low memory size, lower this value
+ * int loopRemoveSamples : if your server has a low memory size, lower this value
  */
 	public static $loopRemoveSamples = 1000;
+/**
+ * int loopRemoveUpgraderFiles : remove files to keep only files that where in backup archive
+ */
+	public static $loopRemoveUpgradedFiles = 1000;
 
 	/* usage :  key = the step you want to ski
   * value = the next step you want instead
- 	*	example : public static $skipAction = array('download'=>'upgradeFiles');
+ 	*	example : public static $skipAction = array('download' => 'upgradeFiles');
 	*/
-	public static $skipAction;
+	public static $skipAction = array('download' => 'upgradeDb');
 	public $useSvn;
 
 	protected $_includeContainer = false;
@@ -548,6 +557,11 @@ $this->standalone = true;
 		}
 	}
 
+	/**
+	 * extract last version into admin/autoupgrade/latest directory
+	 * 
+	 * @return void
+	 */
 	public function ajaxProcessUnzip(){
 		if(version_compare(_PS_VERSION_,'1.4.5.0','<')
 			AND !class_exists('Tools',false)
@@ -610,9 +624,9 @@ $this->standalone = true;
 		return $res;
 	}
 
-	public function _listBackupFiles($dir)
+	public function _listFilesInDir($dir, $way = 'backup')
 	{
-		static $list = array();
+		$list = array();
 		$allFiles = scandir($dir);
 		foreach ($allFiles as $file)
 		{
@@ -620,10 +634,10 @@ $this->standalone = true;
 			{
 				$fullPath = $dir.DIRECTORY_SEPARATOR.$file;
 			
-				if (!$this->_skipFile($file, $fullPath,'backup'))
+				if (!$this->_skipFile($file, $fullPath, $way))
 				{
 					if (is_dir($fullPath))
-						$this->_listBackupFiles($fullPath);
+						$list = array_merge($list, $this->_listFilesInDir($fullPath, $way));
 					else
 						$list[] = $fullPath;					
 				}
@@ -631,7 +645,7 @@ $this->standalone = true;
 					$list[] = $fullPath;
 			}
 		}
-		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($list));
+		return $list;
 	}
 
 	public function _listFilesToUpgrade($dir)
@@ -791,7 +805,7 @@ $this->standalone = true;
 
 		// use something like actual in install-dev
 		// Notice : xml used here ...
-		if (!isset($this->currentParams['upgradeDbStep']))
+		if (!isset($this->nextParams['upgradeDbStep']))
 		{
 			$this->nextParams['upgradeDbStep'] = 1;
 			$this->next = 'upgradeDb';
@@ -799,16 +813,16 @@ $this->standalone = true;
 			$this->nextResponseType = 'xml';
 		}
 		else
-			switch ($this->currentParams['upgradeDbStep'])
+			switch ($this->nextParams['upgradeDbStep'])
 			{
 				default:
-			// 1) confirm version is correct(DB)
-			// install/model.php?method=getVersionFromDb&language=0
+				// 1) confirm version is correct(DB)
+				// install/model.php?method=getVersionFromDb&language=0
 				case '1':
 				$this->_modelDo('getVersionFromDb');
 				break;
-			// 2) confirm config is correct (r/w rights)
-			//	install/model.php?method=checkConfig&firsttime=0
+				// 2) confirm config is correct (r/w rights)
+				//	install/model.php?method=checkConfig&firsttime=0
 				case '2':
 				if(!$this->_modelDo('checkConfig'))
 				{
@@ -824,7 +838,6 @@ $this->standalone = true;
 					$this->nextDesc = $this->l('error during upgrade Db. You may need to restore your database');
 				}
 				break;
-
 				case '4':
 					$this->next = 'upgradeComplete';
 					$this->nextResponseType = 'json';
@@ -932,57 +945,116 @@ $this->standalone = true;
 	}
 
 	/**
-	 * ajaxProcessRestoreFiles restore the previously saved files.
+	 * ajaxProcessRestoreFiles restore the previously saved files, 
+	 * and delete files that weren't archived
 	 * 
 	 * @return boolean true if succeed
 	 */
 	public function ajaxProcessRestoreFiles()
 	{
 		// @TODO : workaround max_execution_time / ajax batch unzip
+		// very first restoreFiles step : extract backup 
 		if (!empty($this->backupFilesFilename) AND file_exists($this->backupFilesFilename))
 		{
 			// cleanup current PS tree
-			$list = $this->_listArchivedFiles();
-			if (count($list) > 0)
+			$fromArchive = $this->_listArchivedFiles();
+			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->fromArchiveFileList, serialize($fromArchive));
+	
+			//$this->_cleanUp($this->prodRootDir.'/');
+			$this->nextQuickInfo[] = $this->l('root directory cleaned.');
+
+			$filepath = $this->backupFilesFilename;
+			$destExtract = $this->prodRootDir;
+			
+			if (self::ZipExtract($filepath, $destExtract))
 			{
-				$this->_cleanUp($this->prodRootDir.'/');
-				$this->nextQuickInfo[] = $this->l('root directory cleaned.');
+				$this->next = 'restoreFiles';
+				// get new file list 
+				$this->nextDesc = $this->l('Files restored. Removing files added by upgrade ...');
+				return true;
+				// once it's restored, do not delete the archive file. This has to be done manually
+				// but we can empty the var, to avoid loop.
+				$this->backupFilesFilename = '';
+				$this->next = 'restoreFiles';
+				$this->nextDesc = 'Files restored, now removing files from release ...';
+				return true;
+			}
+			else
+			{
+				$this->next = "error";
+				$this->nextDesc = sprintf($this->l('unable to extract $1$s into %2$s .'), $filepath, $destExtract);
+				return false;
+			}
+		}
+		
+		// very second restoreFiles step : remove new files that shouldn't be there
+		// for that, we will make a diff between the current filelist in root dir 
+		// and the archive file list we previously saved
+		// files to remove : differences between complete list and archive list
+		if (!file_exists($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList))
+		{
+			if (!isset($fromArchive))
+				$fromArchive = unserialize(file_get_contents($this->fromArchiveFileList));
+			$toRemove = array_diff($this->_listFilesInDir($this->prodRootDir), $fromArchive);
+			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList,serialize($toRemove));
+		}
+		
+		if (!isset($toRemove))
+			$toRemove = unserialize(file_get_contents($this->toRemoveFileList));
 
-				$filepath = $this->backupFilesFilename;
-				$destExtract = $this->prodRootDir;
-				
-
-				if (self::ZipExtract($filepath, $destExtract))
+			for($i=0;$i<self::$loopToRemoveFiles;$i++)
+			{
+				if (count($toRemove)<=0)
 				{
-					// once it's restored, do not delete the archive file. This has to be done manually
-					// but we can empty the var, to avoid loop.
-					$this->backupFilesFilename = '';
-					if (!empty($this->backupDbFilename) AND file_exists($this->backupDbFilename) )
-					{
-						$this->nextDesc = $this->l('Files restored. Checking next step ...');
-						$this->next = 'rollback';
-					}
-					else
-					{
-						$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
-						$this->next = 'rollback';
-					}
-					return true;
+					$this->stepok = true;
+					$this->status = 'ok';
+					$this->next = 'rollback';
+					$this->nextDesc = $this->l('Files from upgrade has been removed.');
+					$this->nextQuickInfo[] = $this->l('files from upgrade has been removed.');
+					break;
 				}
 				else
 				{
-					$this->next = "error";
-					$this->nextDesc = sprintf($this->l('unable to extract $1$s into %2$s .'), $filepath, $destExtract);
-					return false;
+					$checkFile = array_shift($toRemove);
+					// 
+					if (in_array($checkFile, $toRemove) 
+						&& !$this->_skipFile('', $path.$file, 'backup')
+						&& !$this->_skipFile('', $path.$file, 'upgrade')
+					)
+					{
+						$this->nextQuickInfo[] = sprintf($this->l('%s removed (fake)'), $file);
+						// 
+						//
+						//echo "deleting $file"; 
+						// file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.'testRestore.log'.$file."\r\n", FILE_APPEND);
+						// @todo unlink($file)"; 
+					}
 				}
 			}
+		
+		$filesRestored = unserialize(file_get_contents($this->toRestoreFileList));
+		//$scandir = 
+		for($i=0;$i<self::$loopRemoveUpgradedFiles;$i++)
+		{
+					
+			// At this point, files are already restored
+			info($filesRestored,'file restored');
+			// now we delete the new files, now useless
+			// cleanup current PS tree
+//					$this->_cleanUp($this->prodRootDir.'/');
+		}
+
+		if (!empty($this->backupDbFilename) AND file_exists($this->backupDbFilename) )
+		{
+			$this->nextDesc = $this->l('Files restored. Checking next step ...');
+			$this->next = 'rollback';
 		}
 		else
 		{
-			$this->next = 'error';
-			$this->nextDesc = $this->l('no known backup. nothing to restore.');
-			return false;
+			$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
+			$this->next = 'rollback';
 		}
+		return true;
 	}
 
 	/**
@@ -1045,9 +1117,10 @@ $this->standalone = true;
 					if (!$db->Execute($request))
 						$this->nextQuickInfo[] = $db->getMsgError();
 
-			// once it's restored, delete the file !
-			unlink($this->backupDbFilename);
-			Configuration::updateValue('UPGRADER_BACKUPDB_FILENAME','');
+			// once it's restored, delete the file for that "session"
+			$this->backupDbFilename = '';
+			// unlink($this->backupDbFilename);
+			// Configuration::updateValue('UPGRADER_BACKUPDB_FILENAME','');
 		}
 		else
 			$this->nextQuickInfo[] = $this->l('Nothing to restore (no request found)');
@@ -1144,7 +1217,9 @@ $this->standalone = true;
 
 		if (!isset($this->nextParams['filesForBackup']))
 		{
-			$list = $this->_listBackupFiles($this->prodRootDir);
+			$list = $this->_listFilesInDir($this->prodRootDir);
+			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($list));
+
 			$this->nextQuickInfo[] = sprintf($this->l('%s Files to backup.'), sizeof($this->toBackupFileList));
 			$this->nextParams['filesForBackup'] = $this->toBackupFileList;
 
@@ -1163,7 +1238,7 @@ $this->standalone = true;
 		if (is_array($filesToBackup))
 		{
 			// @TODO later
-			// 1) calculate crc32 of next file
+			// 1) calculate crc32 or md5 of next file
 			// 2) use the provided xml with crc32 calculated from previous versions ?
 			// or simply use the latest dir ?
 			//$current = crc32(file_get_contents($file));
@@ -1387,15 +1462,12 @@ $this->standalone = true;
 		$return['next'] = $this->next;
 		$return['status'] = $this->next == 'error' ? 'error' : 'ok';
 		$return['nextDesc'] = $this->nextDesc;
-		$return['upgradeDbStep'] = 0;
 
 		foreach($this->ajaxParams as $v)
 			if(property_exists($this,$v))
 				$this->nextParams[$v] = $this->$v;
 
 		$return['nextParams'] = $this->nextParams;
-		if (!isset($return['nextParams']['upgradeDbStep']))
-			$return['nextParams']['upgradeDbStep'] = 0;
 		
 		$return['nextParams']['typeResult'] = $this->nextResponseType;
 
@@ -1565,7 +1637,6 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			$content .= '<b>'.$this->l('Upgrade available').' : </b>'.'<img src="../img/admin/disabled.gif" />'.$this->l('You already have the last version.').'<br/><br/>';
 		}
 
-
 		if (Configuration::get('PS_SHOP_ENABLE'))
 		{
 			$srcShopStatus = '../img/admin/disabled.gif';
@@ -1584,25 +1655,17 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			$srcExecTime = '../img/admin/warning.gif';
 		$content .= '<b>'.$this->l('PHP time limit').' : </b>'.'<img src="'.$srcExecTime.'" />'.($max_exec_time == 0?$this->l('disabled'):$max_exec_time.' '.$this->l('seconds')).' <br/><br/>';
 
-		if (($testConfigDone = Configuration::get('PS_AUTOUP_DONT_SAVE_IMAGES')) !== false)
+		if ($testConfigDone = (Configuration::get('PS_AUTOUP_DONT_SAVE_IMAGES') !== false))
 			$configurationDone = '../img/admin/enabled.gif';
 		else
 			$configurationDone = '../img/admin/disabled.gif';
-		$content .= '<b>'.$this->l('Options chosen').' : </b>'.'<img src="'.$configurationDone.'" /> '.($testConfigDone?$this->l('autoupgrade configuration ok'):$this->l('Please configure autoupgrade options')).'<br/><br/>';
-
-		$content .= '<b>'.$this->l('PrestaShop Original version').' : </b>'.'<span id="checkPrestaShopFilesVersion">
-		<img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/>
-		</span>';
-
-		$content .= '<p> <a class="button" id="scrollToOptions" href="#options">'.$this->l('Modify your options').'</a></p>
-		</div>';
-		$content .= '</fieldset>';
-
-		$content .= '<script type="text/javascript">
-			$("#currentConfigurationToggle").click(function(e){e.preventDefault();$("#currentConfiguration").toggle()});'
-		
-			.($this->configOk()?'$("#currentConfiguration").hide();$("#currentConfigurationToggle").after("<img src=\"../img/admin/enabled.gif\" />");':'').'</script>';
-
+		$content .= '<b>'.$this->l('Options chosen').' : </b>'.'<img src="'.$configurationDone.'" /> 
+		<a class="button" id="scrollToOptions" href="#options">'
+		.($testConfigDone
+			?$this->l('autoupgrade configuration ok').' - '.$this->l('Modify your options')
+			:$this->l('Please configure autoupgrade options')
+		).'</a><br/><br/>';
+		$content .= '</div></fieldset>';
 
 		return $content;
 	}
@@ -1614,13 +1677,16 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		$pleaseUpdate = $this->upgrader->checkPSVersion();
 
 		$content .= $this->getCurrentConfiguration();
+		$content .= '<br/>';
 
+		$content .= '<fieldset class=""><legend>'.$this->l('Update').'</legend>';
 
-			$content .= '<br/>';
-
-			$content .= '<fieldset class=""><legend>'.$this->l('Update').'</legend>';
-
-
+		$content .= '<b>'.$this->l('PrestaShop Original version').' : </b>'.'<span id="checkPrestaShopFilesVersion">
+		<img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/>
+		</span>';
+		$content .= '<script type="text/javascript">
+			$("#currentConfigurationToggle").click(function(e){e.preventDefault();$("#currentConfiguration").toggle()});'
+			.($this->configOk()?'$("#currentConfiguration").hide();$("#currentConfigurationToggle").after("<img src=\"../img/admin/enabled.gif\" />");':'').'</script>';
 		$content .= '<div style="float:left">
 		<h1>'.sprintf($this->l('Your current prestashop version : %s '),_PS_VERSION_).'</h1>';
 		$content .= '<p>'.sprintf($this->l('Last version is %1$s (%2$s) '), $this->upgrader->version_name, $this->upgrader->version_num).'</p>';
@@ -1638,7 +1704,6 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			if($this->configOk())
 			{
 				$content .= '<p><a href="" id="upgradeNow" class="button-autoupgrade upgradestep">'.$this->l('Upgrade PrestaShop now !').'</a></p>';
-info($this->upgrader->link);
 				$content .= '<small>'.sprintf($this->l('PrestaShop will be downloaded from %s'), $this->upgrader->link).'</small><br/>';
 				$content .= '<small><a href="'.$this->upgrader->changelog.'">'.$this->l('see CHANGELOG').'</a></small>';
 			}
@@ -1653,13 +1718,13 @@ info($this->upgrader->link);
 		<a class="button" href="index.php?tab=AdminSelfUpgrade&token='.Tools::getAdminToken('AdminSelfUpgrade'.(int)(Tab::getIdFromClassName(get_class($this))).(int)$cookie->id_employee).'&refreshCurrentVersion=1">'.$this->l('Please click to refresh').'</a>
 		</small>';
 	
-			$content .='</div>
-			<div id="currentlyProcessing" style="display:none;float:right"><h4>Currently processing <img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/></h4>
+		$content .= '</div>
+		<div id="currentlyProcessing" style="display:none;float:right"><h4>Currently processing <img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/></h4>
 			
-			<div id="infoStep" class="processing" style=height:50px;width:400px;" >'.$this->l('I\'m waiting for your command, sir').'</div>';
-			$content .= '</div>';
+		<div id="infoStep" class="processing" style=height:50px;width:400px;" >'.$this->l('I\'m waiting for your command, sir').'</div>';
+		$content .= '</div>';
 
-			$content .= '</fieldset>';
+		$content .= '</fieldset>';
 		
 		
 
@@ -1696,6 +1761,10 @@ info($this->upgrader->link);
 		}
 		else
 			$content .= '<p>'.$this->l('Your current configuration does not allow upgrade.').'</p>';
+		
+		$content .= '<br/><br/><small>'.sprintf($this->l('last datetime check : %s '),date('Y-m-d H:i:s',Configuration::get('PS_LAST_VERSION_CHECK'))).'</span> 
+		<a class="button" href="index.php?tab=AdminSelfUpgrade&token='.Tools::getAdminToken('AdminSelfUpgrade'.(int)(Tab::getIdFromClassName(get_class($this))).(int)$cookie->id_employee).'&refreshCurrentVersion=1">'.$this->l('Please click to refresh').'</a>
+		</small>';
 
 		$content .= '</fieldset>';
 /*		$content .= '<fieldset class="right">
@@ -1758,6 +1827,7 @@ info($this->upgrader->link);
 	
 			echo '<br/>';
 			$this->_displayForm('autoUpgradeOptions',$this->_fieldsAutoUpgrade,'<a href="" name="options" id="options">'.$this->l('Options').'</a>', '','prefs');
+			// @todo manual upload with a form
 
 			// We need jquery 1.6 for json 
 			echo '<script type="text/javascript">
@@ -1926,6 +1996,11 @@ function handleXMLResult(xmlRet, previousParams)
 };
 
 var resGlobal = {};
+function afterUpgradeNow()
+{
+	$("#upgradeNow").unbind();
+	$("#upgradeNow").replaceWith("<span class=\"button-autoupgrade\">'.$this->l('Upgrading PrestaShop').'</span>");
+}
 function afterUpgradeDb()
 {
 	// console.info("inside afterUpgradeDb");
@@ -1974,6 +2049,7 @@ function afterBackupFiles()
 }
 
 function doAjaxRequest(action, nextParams){
+		$("#pleaseWait").show();
 		// myNext, used when json is not available but response is correct
 		myNext = nextParams;
 		req = $.ajax({
@@ -1990,6 +2066,7 @@ function doAjaxRequest(action, nextParams){
 			},
 			success : function(res,textStatus,jqXHR)
 			{
+				$("#pleaseWait").hide();
 				if(eval("typeof nextParams") == "undefined")
 				{
 					nextParams = {typeResult : "json"};
@@ -2052,6 +2129,7 @@ function doAjaxRequest(action, nextParams){
 			},
 			error: function(res,textStatus,jqXHR)
 			{
+				$("#pleaseWait").hide();
 				if (textStatus == "timeout" && action == "download")
 				{
 					updateInfoStep("'.$this->l('Your server can\'t download the file. Please upload it first by ftp in your admin/autoupgrade directory').'");
@@ -2263,7 +2341,7 @@ function handleError(res)
 		if (class_exists('ZipArchive', false))
 		{
 			$zip = new ZipArchive();
-			if ($zip->open($fromFile) === true AND $zip->extractTo($toDir) AND $zip->close())
+			if ($zip->open($fromFile) === true && $zip->extractTo($toDir) && $zip->close())
 				return true;
 			return false;
 		}
@@ -2285,24 +2363,26 @@ function handleError(res)
 	
 	private function _listArchivedFiles()
 	{
-		if (!empty($this->nextParams['backupFilesFilepath']))
+		if (!empty($this->currentParams['backupFilesFilename']))
 		{
 			if (class_exists('ZipArchive', false))
 			{
 				$files=array();
-				if ($zip = zip_open($this->currentParams['backupFilesFilepath']))
+				if ($zip = zip_open($this->currentParams['backupFilesFilename']))
 				{
 					while ($entry=zip_read($zip))
 						$files[] = zip_entry_name($entry);
-	
 					zip_close($zip);
+					return $files;
 				}
+				// @todo : else throw new Exception()
 			}
 			else
 			{
 				require_once($this->prodRootDir.'/tools/pclzip/pclzip.lib.php');
-				if ($zip = new PclZip($this->currentParams['backupFilesFilepath']))
+				if ($zip = new PclZip($this->currentParams['backupFilesFilename']))
 					return $zip->listContent();
+				// @todo : else throw new Exception()
 			}
 		}
 		return false;
