@@ -157,7 +157,7 @@ class AdminSelfUpgrade extends AdminSelfTab
   * value = the next step you want instead
  	*	example : public static $skipAction = array('download' => 'upgradeFiles');
 	*/
-	public static $skipAction = array('download' => 'upgradeDb');
+	public static $skipAction;
 	public $useSvn;
 
 	protected $_includeContainer = false;
