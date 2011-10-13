@@ -53,9 +53,11 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_d38ac03101faea9ed5f9ea96bf8627b4'
 $_MODULE['<{socolissimo}prestashop>socolissimo_9954970bc5804ff557ced19516e2a55c'] = 'Tenga cuidado con estos parámetros, su modificación puede provocar un disfuncionamiento del módulo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b0b2896e75025245cbb05e96bd1466d6'] = 'Dirección FO';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce88aabea3b363c753b02ddcb2fbafff'] = 'URL de la administración de So Colissimo';
-$_MODULE['<{socolissimo}prestashop>socolissimo_85068ddf0b9bcbb6913008356fe328a0'] = 'Supervisión';
+$_MODULE['<{socolissimo}prestashop>socolissimo_45313bad96da16bf04f88c1fb39419b7'] = 'FancyBox';
 $_MODULE['<{socolissimo}prestashop>socolissimo_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';
+$_MODULE['<{socolissimo}prestashop>socolissimo_09dbe81fba2031934c74555768a0e990'] = 'Si se habilita esta opción, la página de socolissimo se muestran en una FancyBox';
+$_MODULE['<{socolissimo}prestashop>socolissimo_85068ddf0b9bcbb6913008356fe328a0'] = 'Supervisión';
 $_MODULE['<{socolissimo}prestashop>socolissimo_fdd526b84abc0b8fc17060e62d022b84'] = 'Autorizar o no la comprobación de la disponiblidad de los servicios SoColissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_32996bdf4214d6cb8bf7fa02273813c8'] = 'Dirección de comprobación';
 $_MODULE['<{socolissimo}prestashop>socolissimo_947d84460ad5676c9d79fa05727f1e8a'] = 'La dirección URL de supervisión asegura la disponibilidad del servicio  socolissimo. No se recomienda desactivarla: ';
@@ -72,6 +74,8 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_c3288acdf9ecd0a4fb1e308442b06867'
 $_MODULE['<{socolissimo}prestashop>socolissimo_1a89bc7d83f6e90b2368e3401690a87a'] = 'Coste adicional no válido';
 $_MODULE['<{socolissimo}prestashop>socolissimo_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuración actualizada';
 $_MODULE['<{socolissimo}prestashop>socolissimo_126d781eae70fa41e9e848f3013e1799'] = 'Imposible guardar los parámetros';
+$_MODULE['<{socolissimo}prestashop>socolissimo_898d22b4259367825dbbbc174f049197'] = 'Seleccionar el modo de entrega';
+$_MODULE['<{socolissimo}prestashop>socolissimo_6e55ec92b403f0ab31c29f62c837834a'] = 'Modo de edición de la entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7ea4eac85d1d1967562869cf1e14b1d0'] = 'Para elegir SoColissimo, marque un modo en entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_201bdb87f8e278b943d07ae924d5de6e'] = 'Modo de entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce26601dac0dea138b7295f02b7620a7'] = 'Cliente';
