@@ -671,7 +671,8 @@ $this->standalone = true;
 	}
 
 
-	public function ajaxProcessUpgradeFiles(){
+	public function ajaxProcessUpgradeFiles()
+	{
 		// @TODO :
 		$this->nextParams = $this->currentParams;
 		if (!isset($this->nextParams['filesToUpgrade']))
@@ -722,6 +723,7 @@ $this->standalone = true;
 			}
 		}
 		file_put_contents($this->nextParams['filesToUpgrade'],serialize($filesToUpgrade));
+		return true;
 	}
 
 	public function _modelDo($method)
@@ -798,22 +800,22 @@ $this->standalone = true;
 			break;
 		}
 	}
-	public function ajaxProcessUpgradeDb(){
+	public function ajaxProcessUpgradeDb()
+	{
 
 		// @TODO : 1/2/3 have to be done at the beginning !!!!!!!!!!!!!!!!!!!!!!
 		$this->nextParams = $this->currentParams;
 
 		// use something like actual in install-dev
 		// Notice : xml used here ...
-		if (!isset($this->nextParams['upgradeDbStep']))
+		if (!isset($this->currentParams['upgradeDbStep']))
 		{
 			$this->nextParams['upgradeDbStep'] = 1;
 			$this->next = 'upgradeDb';
 			$this->nextDesc = 'upgrading database';
 			$this->nextResponseType = 'xml';
 		}
-		else
-			switch ($this->nextParams['upgradeDbStep'])
+		switch ($this->currentParams['upgradeDbStep'])
 			{
 				default:
 				// 1) confirm version is correct(DB)
@@ -1452,6 +1454,8 @@ $this->standalone = true;
 				$this->nextParams[$v] = $this->$v;
 
 		$return['nextParams'] = $this->nextParams;
+		if (!isset($return['nextParams']['upgradeDbStep']))
+			$return['nextParams']['upgradeDbStep'] = 0;
 		
 		$return['nextParams']['typeResult'] = $this->nextResponseType;
 
@@ -1941,41 +1945,37 @@ function handleXMLResult(xmlRet, previousParams)
 	// this will be used in after** javascript functions
 	resGlobal = $.xml2json(xmlRet);
 	result = "ok";
-	nextParams = previousParams;
 	switch(previousParams.upgradeDbStep) 
 	{
 		case 0: // getVersionFromDb
-		nextParams.upgradeDbSte = 1;
 		resGlobal.result = "ok";
 		break;
 		case 1: // getVersionFromDb
-		nextParams.upgradeDbSte = 2;
 		result = resGlobal.result;
 		break;
 		case 2: // checkConfig
-		nextParams.upgradeDbSte = 3;
 		result = checkConfig(resGlobal);
 		break;
 		case 3: // doUpgrade:
-		nextParams.upgradeDbSte = 4;
 		result = resGlobal.result;
 		break;
 		case 4: // upgradeComplete
-		nextParams.upgradeDbSte = 5;
 		result = resGlobal.result;
 		break;
 	}
 
 	if (result == "ok")
 	{
-			if(nextParams.upgradeDbStep >= 4)
-			{
-				resGlobal.next = "upgradeComplete";
-				nextParams.typeResult = "json";
-			}
-			else 
-				resGlobal.next = "upgradeDb";
-			resGlobal = {next:resGlobal.next,nextParams:nextParams,status:"ok"};
+		nextParams = previousParams;
+		nextParams.upgradeDbStep = parseInt(previousParams.upgradeDbStep)+1;
+		if(nextParams.upgradeDbStep >= 4)
+		{
+			resGlobal.next = "upgradeComplete";
+			nextParams.typeResult = "json";
+		}
+		else 
+			resGlobal.next = "upgradeDb";
+		resGlobal = {next:resGlobal.next,nextParams:nextParams,status:"ok"};
 
 	}
 	else
@@ -1988,7 +1988,7 @@ function handleXMLResult(xmlRet, previousParams)
 			.hide("slow");
 		
 		// propose rollback if there is an error
-		if (confirm("An error happen\r\n'.$this->l('Do you want to rollback ?').'"))
+		if (confirm("An error happen\r\n'.$this->l('You may need to rollback.').'"))
 			resGlobal = {next:"rollback",nextParams:{typeResult:"json"},status:"error"};
 	}
 
@@ -2000,11 +2000,6 @@ function afterUpgradeNow()
 {
 	$("#upgradeNow").unbind();
 	$("#upgradeNow").replaceWith("<span class=\"button-autoupgrade\">'.$this->l('Upgrading PrestaShop').'</span>");
-}
-function afterUpgradeDb()
-{
-	// console.info("inside afterUpgradeDb");
-	// console.log(resGlobal);
 }
 
 function afterUpgradeComplete()
@@ -2075,11 +2070,6 @@ function doAjaxRequest(action, nextParams){
 				if (nextParams.typeResult == "xml")
 				{
 					res = handleXMLResult(res,nextParams);
-					// res.next = xmlRes;
-					// if xml, we keep the next params
-					// nextParams = xmlRes;
-					// console.info(nextParams);
-					// res.status = xmlRes.status;
 				}
 				else
 				{
