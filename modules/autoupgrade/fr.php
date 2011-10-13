@@ -172,7 +172,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_7f786b903ea8045f5b5b7e3c5a4e
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_3a3a651c9a67bca9ac902da789466b93'] = 'Mise à jour instable';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_a22eff458b4f4bce6d3232e367ff0138'] = 'Votre configuration actuelle indique que vous voulez mettre à jour votre système à partir d\'une branche de développement instable, sans numéro de version. Si vous mettez à jour, vous ne pourrez plus appliquer le processus de versions stables officiel.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_dae8ace18bdcbcc6ae5aece263e14fe8'] = 'Options';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_91195bbbacc2147a736c849c46368ed8'] = 'Voulez vous restaurer votre boutique';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_444f052812f8f341905e60226c5b04c6'] = 'Vous devriez peut-être utiliser la restauration.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_98a399b35ec9e03ec985254acfe5e3a0'] = 'Mise à jour PrestaShop';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_3794983e0533ce2499b168f8e9bdca3c'] = 'Mise à jour terminée. Vérifiez le thème de votre ';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_d99d3bf83d7667d30974da1a5b693b64'] = 'activer votre magasin ici';
@@ -180,6 +180,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_c208c3853a0c9515bbf0d330fdd5
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_a498f9476a893d51ee02b3601678d318'] = 'Cliquez pour restaurer la base de donnée';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_f34d5debb2bba76aa3e077937a07e373'] = 'Cliquez pour restaurer les fichiers';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_60283aa37e2063b2ada2f99216e1332a'] = 'Votre serveur ne peut pas télécharger le fichier. S\'il vous plaît le télécharger d\'abord par ftp dans votre répertoire admin/autoupgrade';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_91195bbbacc2147a736c849c46368ed8'] = 'Voulez vous restaurer votre boutique';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_6ef7ebe46f6d16cdbf9e2169e3dd048e'] = 'Allez manuellement au bouton restaurer';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_1607e6098b7b62a2791653b059c975d2'] = 'Afficher / masquer la liste';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_25b91596a896c6cf688104169b4b6a71'] = 'Fichier(s) de la solution';
