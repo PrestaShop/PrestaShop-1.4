@@ -952,6 +952,7 @@ $this->standalone = true;
 	 */
 	public function ajaxProcessRestoreFiles()
 	{
+				$this->next = 'restoreFiles';
 		// @TODO : workaround max_execution_time / ajax batch unzip
 		// very first restoreFiles step : extract backup 
 		if (!empty($this->backupFilesFilename) AND file_exists($this->backupFilesFilename))
@@ -971,12 +972,9 @@ $this->standalone = true;
 				$this->next = 'restoreFiles';
 				// get new file list 
 				$this->nextDesc = $this->l('Files restored. Removing files added by upgrade ...');
-				return true;
 				// once it's restored, do not delete the archive file. This has to be done manually
 				// but we can empty the var, to avoid loop.
 				$this->backupFilesFilename = '';
-				$this->next = 'restoreFiles';
-				$this->nextDesc = 'Files restored, now removing files from release ...';
 				return true;
 			}
 			else
@@ -1002,58 +1000,43 @@ $this->standalone = true;
 		if (!isset($toRemove))
 			$toRemove = unserialize(file_get_contents($this->toRemoveFileList));
 
-			for($i=0;$i<self::$loopToRemoveFiles;$i++)
+		for($i=0;$i<self::$loopRemoveUpgradedFiles ;$i++)
+		{
+			if (count($toRemove)<=0)
 			{
-				if (count($toRemove)<=0)
+				$this->stepok = true;
+				$this->status = 'ok';
+				$this->next = 'rollback';
+				$this->nextDesc = $this->l('Files from upgrade has been removed.');
+				$this->nextQuickInfo[] = $this->l('files from upgrade has been removed.');
+				break;
+			}
+			else
+			{
+				$checkFile = array_shift($toRemove);
+				// 
+				if (in_array($checkFile, $toRemove) 
+					&& !$this->_skipFile('', $path.$file, 'backup')
+					&& !$this->_skipFile('', $path.$file, 'upgrade')
+				)
 				{
-					$this->stepok = true;
-					$this->status = 'ok';
-					$this->next = 'rollback';
-					$this->nextDesc = $this->l('Files from upgrade has been removed.');
-					$this->nextQuickInfo[] = $this->l('files from upgrade has been removed.');
-					break;
-				}
-				else
-				{
-					$checkFile = array_shift($toRemove);
-					// 
-					if (in_array($checkFile, $toRemove) 
-						&& !$this->_skipFile('', $path.$file, 'backup')
-						&& !$this->_skipFile('', $path.$file, 'upgrade')
-					)
+					if (file_exists($file) && @unlink($file))
 					{
-						$this->nextQuickInfo[] = sprintf($this->l('%s removed (fake)'), $file);
-						// 
-						//
-						//echo "deleting $file"; 
-						// file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.'testRestore.log'.$file."\r\n", FILE_APPEND);
-						// @todo unlink($file)"; 
+						$this->nextQuickInfo[] = sprintf($this->l('%s removed'), $file);
+					}
+					else
+					{
+						$this->next = 'error';
+						$this->nextDesc = sprintf($this->l('error when removing %1$s'), $file);
+						$this->nextQuickInfo[] = sprintf($this->l('%s not removed'), $file);
+						return false;
 					}
 				}
 			}
-		
-		$filesRestored = unserialize(file_get_contents($this->toRestoreFileList));
-		//$scandir = 
-		for($i=0;$i<self::$loopRemoveUpgradedFiles;$i++)
-		{
-					
-			// At this point, files are already restored
-			info($filesRestored,'file restored');
-			// now we delete the new files, now useless
-			// cleanup current PS tree
-//					$this->_cleanUp($this->prodRootDir.'/');
 		}
-
-		if (!empty($this->backupDbFilename) AND file_exists($this->backupDbFilename) )
-		{
-			$this->nextDesc = $this->l('Files restored. Checking next step ...');
-			$this->next = 'rollback';
-		}
-		else
-		{
-			$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
-			$this->next = 'rollback';
-		}
+		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList,serialize($toRemove));
+		$this->nextDesc = sprintf($this->l('%s left to remove'), count($toRemove));
+				$checkFile = array_shift($toRemove);
 		return true;
 	}
 
@@ -1463,6 +1446,7 @@ $this->standalone = true;
 		$return['status'] = $this->next == 'error' ? 'error' : 'ok';
 		$return['nextDesc'] = $this->nextDesc;
 
+		$return['upgradeDbStep'] = 0;
 		foreach($this->ajaxParams as $v)
 			if(property_exists($this,$v))
 				$this->nextParams[$v] = $this->$v;
@@ -1647,7 +1631,12 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			$srcShopStatus = '../img/admin/enabled.gif';
 			$label = $this->l('Yes');
 		}
-		$content .= '<b>'.$this->l('Shop desactivated').' : </b>'.'<img src="'.$srcShopStatus.'" /><a href="index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'" class="button">'.$label.'</a><br/><br/>';
+		if (method_exists('Tools','getAdminTokenLite'))
+			$token_preferences = Tools::getAdminTokenLite('AdminPreferences');
+		else
+			$token_preferences = Tools14::getAdminTokenLite('AdminPreferences');
+
+		$content .= '<b>'.$this->l('Shop desactivated').' : </b>'.'<img src="'.$srcShopStatus.'" /><a href="index.php?tab=AdminPreferences&token='.$token_preferences.'" class="button">'.$label.'</a><br/><br/>';
 		$max_exec_time = ini_get('max_execution_time');
 		if ($max_exec_time == 0)
 			$srcExecTime = '../img/admin/enabled.gif';
@@ -1842,6 +1831,13 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 	private function _getJsInit()
 	{
 		global $currentIndex;
+
+		if (method_exists('Tools','getAdminTokenLite'))
+			$token_preferences = Tools::getAdminTokenLite('AdminPreferences');
+		else
+			$token_preferences = Tools14::getAdminTokenLite('AdminPreferences');
+
+
 		$js = '';
 		$js .= '
 function ucFirst(str) {
@@ -1945,29 +1941,33 @@ function handleXMLResult(xmlRet, previousParams)
 	// this will be used in after** javascript functions
 	resGlobal = $.xml2json(xmlRet);
 	result = "ok";
+	nextParams = previousParams;
 	switch(previousParams.upgradeDbStep) 
 	{
 		case 0: // getVersionFromDb
+		nextParams.upgradeDbSte = 1;
 		resGlobal.result = "ok";
 		break;
 		case 1: // getVersionFromDb
+		nextParams.upgradeDbSte = 2;
 		result = resGlobal.result;
 		break;
 		case 2: // checkConfig
+		nextParams.upgradeDbSte = 3;
 		result = checkConfig(resGlobal);
 		break;
 		case 3: // doUpgrade:
+		nextParams.upgradeDbSte = 4;
 		result = resGlobal.result;
 		break;
 		case 4: // upgradeComplete
+		nextParams.upgradeDbSte = 5;
 		result = resGlobal.result;
 		break;
 	}
 
 	if (result == "ok")
 	{
-		nextParams = previousParams;
-			nextParams.upgradeDbStep = parseInt(previousParams.upgradeDbStep)+1;
 			if(nextParams.upgradeDbStep >= 4)
 			{
 				resGlobal.next = "upgradeComplete";
@@ -2015,7 +2015,7 @@ function afterUpgradeComplete()
 		.removeClass("fail")
 		.html("<p>'.$this->l('upgrade complete. Please check your front-office theme is functionnal (try to make an order, check theme)').'</p>")
 		.show("slow")
-		.append("<a href=\"index.php?tab=AdminPreferences&token='.Tools::getAdminTokenLite('AdminPreferences').'\" class=\"button\">'.$this->l('activate your shop here').'</a>");
+		.append("<a href=\"index.php?tab=AdminPreferences&token='.$token_preferences.'\" class=\"button\">'.$this->l('activate your shop here').'</a>");
 	$("#dbCreateResultCheck")
 		.hide("slow");
 	$("#infoStep").html("<h3>'.$this->l('Upgrade Complete ! ').'</h3>");
@@ -2341,9 +2341,26 @@ function handleError(res)
 		if (class_exists('ZipArchive', false))
 		{
 			$zip = new ZipArchive();
-			if ($zip->open($fromFile) === true && $zip->extractTo($toDir) && $zip->close())
-				return true;
+			if ($zip->open($fromFile) === true)
+			{
+				if(@$zip->extractTo($toDir.'/') 
+					&& $zip->close()
+				)
+				{
+					return true;
+				}
+				else
+				{
+					$this->next = 'error';
+					$this->nextDesc = '[TECHNICAL ERROR] Error on extract';
+				}
 			return false;
+			}
+			else
+			{
+				$this->next = 'error';
+				$this->nextDesc = '[TECHNICAL ERROR] Error on zip open';
+			}
 		}
 		else
 		{
