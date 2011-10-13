@@ -960,7 +960,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	private function _displayFormRegistrationLink($link = false)
 	{
 		$out = '
-		<form action="'.$this->_makeFormAction(Tools::safeOutput($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
+		<form action="'.$this->_makeFormAction(strip_tags($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
 			<fieldset>
 				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Get the Registration Link').'</legend>
 				<p>'.$this->l('This variable was sent to you via e-mail by TrustedShops').'</p>
@@ -1000,7 +1000,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	private function _displayFormAddCertificate()
 	{
 		$out = '
-		<form action="'.$this->_makeFormAction(Tools::safeOutput($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
+		<form action="'.$this->_makeFormAction(strip_tags($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
 			<fieldset>
 				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Add Trusted Shops certificate').'</legend>
 				<label>'.$this->l('New certificate').'</label>
@@ -1025,7 +1025,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				});
 			});
 		</script>
-		<form action="'.$this->_makeFormAction(Tools::safeOutput($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
+		<form action="'.$this->_makeFormAction(strip_tags($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
 		<fieldset>
 			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Manage Trusted Shops certificates').'</legend>
 				<table width="100%">
@@ -1130,7 +1130,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			});
 
 		</script>
-		<form action="'.$this->_makeFormAction(Tools::safeOutput($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
+		<form action="'.$this->_makeFormAction(strip_tags($_SERVER['REQUEST_URI']), $this->id_tab).'" method="post" >
 			<fieldset>
 				<legend><img src="../img/admin/tab-tools.gif" alt="" />'.$this->l('Edit certificate').'</legend>
 				<input type="hidden" name="iso_lang" value="'.$certificate['language'].'" />
