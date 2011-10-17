@@ -1509,6 +1509,7 @@ class AdminTranslations extends AdminTab
 			_PS_ROOT_DIR_.'/controllers',
 			_PS_ROOT_DIR_.'/classes',
 			PS_ADMIN_DIR.'/tabs',
+			PS_ADMIN_DIR,
 		);
 		$arr_files_to_parse = array_merge($arr_files_to_parse, $modules_has_mails);
 		foreach ($arr_files_to_parse as $path) {
