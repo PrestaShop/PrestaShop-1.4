@@ -117,7 +117,11 @@ class importerosc extends ImportModule
 	public function getLangagues($limit = 0, $nrb_import = 100)
 	{
 		$identifier = 'id_lang';
-		$langagues = $this->ExecuteS('SELECT languages_id as id_lang, name as name, code as iso_code, 1 as active FROM  `'.bqSQL($this->prefix).'languages` LIMIT '.(int)($limit).' , '.(int)$nrb_import);
+		$langagues = $this->ExecuteS('
+			SELECT languages_id as id_lang, name as name, code as iso_code, 1 as active, (\'m/j/Y\') as date_format_lite, (\'m/j/Y H:i:s\') as date_format_full
+			FROM  `'.bqSQL($this->prefix).'languages` 
+			LIMIT '.(int)($limit).' , '.(int)$nrb_import);
+				
 		return $this->autoFormat($langagues, $identifier);		
 	}
 	
