@@ -3,15 +3,15 @@
 	require_once(_PS_MODULE_DIR_ . "dejala/dejalaconfig.php");
 	require_once(_PS_MODULE_DIR_. "dejala/dejalautils.php");
 
-	function doubleQuoteArray($array) 
+	function doubleQuoteArray($array)
 	{
 		$l_array = array();
-		foreach ($array as $key=>$val) 
+		foreach ($array as $key=>$val)
 			if (is_array($val))
 				$l_array[$key] = doubleQuoteArray($val);
 			else
 				$l_array[$key] = ereg_replace('"', '""', $val);
-		
+
 		return ($l_array);
 	}
 
@@ -25,7 +25,7 @@
 	{
 				$dateFrom = mktime(0, 0, 1, (int)(substr($from, 3, 2)), (int)(substr($from, 0, 2)), (int)(substr($from, 6, 4)));
 				$dateTo = mktime(23, 59, 59, (int)(substr($to, 3, 2)), (int)(substr($to, 0, 2)), (int)(substr($to, 6, 4)));
-				if ($dateFrom > $dateTo) 
+				if ($dateFrom > $dateTo)
 				{
 					$tmp = $dateTo;
 					$dateTo = $dateFrom;
@@ -41,19 +41,19 @@
 					header("Content-type: text/csv");
 					header("Content-disposition: attachment; filename=\"deliveries.csv\"");
 
-					foreach ($deliveries as $key=>$delivery) 
+					foreach ($deliveries as $key=>$delivery)
 					{
 						$l_delivery = doubleQuoteArray($delivery);
 						$l_delivery['price']=ereg_replace('\.', ',', $l_delivery['price']);
 						$l_delivery['creation_date'] = date('d/m/Y', $delivery['creation_utc']);
 						$l_delivery['creation_time'] = date('H\hi', $delivery['creation_utc']);
-						if (isset($delivery['shipping_start_utc'])) 
+						if (isset($delivery['shipping_start_utc']))
 						{ 
 							$l_delivery['shipping_date'] = date('d/m/Y', $delivery['shipping_start_utc']);
 							$l_delivery['shipping_start'] = date('H\hi', $delivery['shipping_start_utc']);
 							$l_delivery['shipping_stop'] = date('H\hi', (int)($delivery['shipping_start_utc']) + 3600*(int)($delivery['timelimit']) );
 						}
-						else 
+						else
 						{
 							$delivery['shipping_date'] = '';
 							$delivery['shipping_start'] = '';
