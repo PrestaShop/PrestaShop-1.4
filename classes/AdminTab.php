@@ -227,8 +227,8 @@ abstract class AdminTabCore
 	}
 
 	/**
-	 * ajaxDisplay is the default ajax return sytem 
-	 * 
+	 * ajaxDisplay is the default ajax return sytem
+	 *
 	 * @return void
 	 */
 	public function displayAjax()
@@ -506,8 +506,8 @@ abstract class AdminTabCore
 	}
 
 	/**
-	 * ajaxPreProcess is a method called in ajax-tab.php before displayConf(). 
-	 * 
+	 * ajaxPreProcess is a method called in ajax-tab.php before displayConf().
+	 *
 	 * @return void
 	 */
 	public function ajaxPreProcess()
@@ -516,7 +516,7 @@ abstract class AdminTabCore
 
 	/**
 	 * ajaxProcess is the default handle method for request with ajax-tab.php
-	 * 
+	 *
 	 * @return void
 	 */
 	public function ajaxProcess()
@@ -608,8 +608,7 @@ abstract class AdminTabCore
 			elseif (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
-				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = (int)(Tools::getValue($this->identifier))) ? ('&'.$this->identifier.'='.$id_category) : '').'&token='.$token);
-				 Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.((($id_category = (int)(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$token);
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_identifier = (int)(Tools::getValue($this->identifier))) ? ('&'.$this->identifier.'='.$id_identifier) : '').'&token='.$token);
 		}
 		/* Delete multiple objects */
 		elseif (Tools::getValue('submitDel'.$this->table))
@@ -1236,7 +1235,7 @@ abstract class AdminTabCore
 		echo '<form method="post" action="'.$currentIndex;
 		if (Tools::getIsset($this->identifier))
 			echo '&'.$this->identifier.'='.(int)(Tools::getValue($this->identifier));
-		echo '&token='.$token;		
+		echo '&token='.$token;
 		if (Tools::getIsset($this->table.'Orderby'))
 			echo '&'.$this->table.'Orderby='.urlencode($this->_orderBy).'&'.$this->table.'Orderway='.urlencode(strtolower($this->_orderWay));
 		echo '#'.$this->table.'" class="form">
