@@ -210,6 +210,8 @@ var shopImporter = {
 			if (isOk)
 			{
 				shopImporter.syncCurrency(function (isOk) {			
+					if (isOk)
+					{
 					$.ajax({
 					       type: 'GET',
 					       url: '../modules/shopimporter/ajax.php',
@@ -268,6 +270,7 @@ var shopImporter = {
 					       		$('#technical_error_feedback').fadeIn('slow');
 					       }
 					   });
+					}
 				});
 			}
 		});
