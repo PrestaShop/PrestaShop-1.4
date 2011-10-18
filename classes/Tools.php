@@ -492,7 +492,7 @@ class ToolsCore
 	{
 	 	if (!$html)
 			$string = strip_tags($string);
-		return @Tools::htmlentitiesUTF8($string, ENT_QUOTES);;
+		return @Tools::htmlentitiesUTF8($string, ENT_QUOTES);
 	}
 
 	public static function htmlentitiesUTF8($string, $type = ENT_QUOTES)
@@ -2097,8 +2097,12 @@ FileETag INode MTime Size
 		switch ($type)
 		{
 			case 'by' :
+				$list = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
+				$value = (is_null($value) || $value === false || $value === '') ? (int)Configuration::get('PS_PRODUCTS_ORDER_BY') : $value;
+				$value = (isset($list[$value])) ? $list[$value] : ((in_array($value, $list)) ? $value : 'position');
 				$orderByPrefix = '';
-				if($prefix) {
+				if ($prefix)
+				{
 					if ($value == 'id_product' || $value == 'date_add' || $value == 'price')
 						$orderByPrefix = 'p.';
 					elseif ($value == 'name')
@@ -2109,9 +2113,7 @@ FileETag INode MTime Size
 						$orderByPrefix = 'cp.';
 				}
 				
-				$value = (is_null($value) || $value === false || $value === '') ? (int)Configuration::get('PS_PRODUCTS_ORDER_BY') : $value;
-				$list = array(0 => 'name', 1 => 'price', 2 => 'date_add', 3 => 'date_upd', 4 => 'position', 5 => 'manufacturer_name', 6 => 'quantity');
-				return $orderByPrefix.((isset($list[$value])) ? $list[$value] : ((in_array($value, $list)) ? $value : 'position'));
+				return $orderByPrefix.$value;
 			break;
 
 			case 'way' :
