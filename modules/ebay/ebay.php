@@ -1676,15 +1676,25 @@ class Ebay extends Module
 				// Fix hook update product
 				if (isset($cookie->id_employee) && $cookie->id_employee > 0 && isset($_POST['submitProductAttribute']) && isset($_POST['id_product_attribute']) && isset($_POST['attribute_mvt_quantity']) && isset($_POST['id_mvt_reason']))
 				{
-					$action = Db::getInstance()->getValue('SELECT `sign` FROM `'._DB_PREFIX_.'stock_mvt_reason` WHERE `id_stock_mvt_reason` = '.(int)$_POST['id_mvt_reason']);
-					$id_product_attribute_fix = (int)$_POST['id_product_attribute'];
-					$quantity_fix = (int)$_POST['attribute_mvt_quantity'];
-					if ($id_product_attribute_fix > 0 && $quantity_fix > 0 && isset($datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity']))
+					if (substr(_PS_VERSION_, 0, 3) == '1.3')
 					{
-						if ($action > 0)
-							$datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity'] += (int)$quantity_fix;
-						if ($action < 0)
-							$datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity'] -= (int)$quantity_fix;
+						$id_product_attribute_fix = (int)$_POST['id_product_attribute'];
+						$quantity_fix = (int)$_POST['attribute_quantity'];
+						if ($id_product_attribute_fix > 0 && $quantity_fix > 0 && isset($datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity']))
+							$datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity'] = (int)$quantity_fix;
+					}
+					else
+					{
+						$action = Db::getInstance()->getValue('SELECT `sign` FROM `'._DB_PREFIX_.'stock_mvt_reason` WHERE `id_stock_mvt_reason` = '.(int)$_POST['id_mvt_reason']);
+						$id_product_attribute_fix = (int)$_POST['id_product_attribute'];
+						$quantity_fix = (int)$_POST['attribute_mvt_quantity'];
+						if ($id_product_attribute_fix > 0 && $quantity_fix > 0 && isset($datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity']))
+						{
+							if ($action > 0)
+								$datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity'] += (int)$quantity_fix;
+							if ($action < 0)
+								$datas['variations'][$product->id.'-'.$id_product_attribute_fix]['quantity'] -= (int)$quantity_fix;
+						}
 					}
 				}
 
