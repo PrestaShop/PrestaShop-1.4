@@ -729,15 +729,15 @@ class PayPal extends PaymentModule
 			<input type="hidden" name="tabs" id="tabs" value="0" />
 			<div class="tab-pane" id="tab-pane-1" style="width:100%;">
 				 <div class="tab-page" id="step1">
-					<h4 class="tab">'.$this->l('Solution').'</h2>
+					<h4 class="tab">'.$this->l('Solution').'</h4>
 					'.$this->_getSolutionTabHtml().'
 				</div>
 				<div class="tab-page" id="step2">
-					<h4 class="tab">'.$this->l('Settings').'</h2>
+					<h4 class="tab">'.$this->l('Settings').'</h4>
 					'.$this->_getSettingsTabHtml().'
 				</div>
 				<div class="tab-page" id="step3">
-					<h4 class="tab">'.$this->l('Logos and personalization').'</h2>
+					<h4 class="tab">'.$this->l('Logos and personalization').'</h4>
 					'.$this->_getPersonalizationsTabHtml().'
 				</div>
 			</div>
