@@ -31,6 +31,14 @@ class AdminAccess extends AdminTab
 {
 	public function postProcess()
 	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		
 		if (Tools::isSubmit('submitAddaccess') AND $action = Tools::getValue('action') AND $id_tab = (int)(Tools::getValue('id_tab')) AND $id_profile = (int)(Tools::getValue('id_profile')) AND $this->tabAccess['edit'] == 1)
 		{
 			if ($id_tab == -1 AND $action == 'all' AND (int)(Tools::getValue('perm')) == 0)

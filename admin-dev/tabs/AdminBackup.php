@@ -295,6 +295,29 @@ class AdminBackup extends AdminTab
 		$this->_list = array_slice($this->_list, $start, $limit);
 	}
 	
+	
+	public function display() 
+	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+	}
+	
+	public function postProcess()
+	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+	}
+	
 	public function int_sort($a, $b)
 	{
 		return $this->_orderWay == 'ASC' ? $a[$this->_sortBy] - $b[$this->_sortBy] : $b[$this->_sortBy] - $a[$this->_sortBy];

@@ -1655,7 +1655,13 @@ class AdminImport extends AdminTab
 	public function postProcess()
 	{
 		global $currentIndex;
-
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
 		if (Tools::isSubmit('submitFileUpload'))
 		{
 			if (isset($_FILES['file']) AND !empty($_FILES['file']['error']))

@@ -131,6 +131,14 @@ class AdminPreferences extends AdminTab
 
 		if (isset($_POST['submitGeneral'.$this->table]))
 		{
+			/* PrestaShop demo mode */
+			if (_PS_MODE_DEMO_ && in_array($key, array('PS_SHOP_ENABLE', 'PS_MAINTENANCE_IP', 'PS_BASE_URI', 'PS_SSL_ENABLED')))
+			{
+				$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+				return;
+			}
+			/* PrestaShop demo mode*/
+			
 			Module::hookExec('categoryUpdate'); // We call this hook, for regenerate cache of categories
 			if (Tools::getValue('PS_CONDITIONS') == true AND (Tools::getValue('PS_CONDITIONS_CMS_ID') == 0 OR !Db::getInstance()->getValue('
 			SELECT `id_cms` FROM `'._DB_PREFIX_.'cms`
@@ -361,6 +369,14 @@ class AdminPreferences extends AdminTab
 			<fieldset><legend><img src="../img/admin/'.strval($icon).'.gif" />'.$tabname.'</legend>';
 		foreach ($fields AS $key => $field)
 		{
+			/* PrestaShop demo mode */
+			if (_PS_MODE_DEMO_ && in_array($key, array('PS_SHOP_ENABLE', 'PS_MAINTENANCE_IP', 'PS_BASE_URI', 'PS_SSL_ENABLED')))
+			{
+				echo '<div class="error">'.$this->l('This functionnality has been disabled.').' => '.$field['title'].'</div>';
+				continue;
+			}
+			/* PrestaShop demo mode*/
+			
 			/* Specific line for e-mails settings */
 			if (get_class($this) == 'Adminemails' AND $key == 'PS_MAIL_SERVER')
 				echo '<div id="smtp" style="display: '.((isset($confValues['PS_MAIL_METHOD']) AND $confValues['PS_MAIL_METHOD'] == 2) ? 'block' : 'none').';">';

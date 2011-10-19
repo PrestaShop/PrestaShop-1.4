@@ -46,7 +46,15 @@ class AdminDb extends AdminPreferences
 	public function postProcess()
 	{
 		global $currentIndex;
-
+		
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		
 		if (isset($_POST['submitDatabase'.$this->table]))
 		{
 		 	if ($this->tabAccess['edit'] === '1')	 	

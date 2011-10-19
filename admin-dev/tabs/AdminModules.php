@@ -205,6 +205,13 @@ class AdminModules extends AdminTab
 		/* Automatically copy a module from external URL and unarchive it in the appropriated directory */
 		if (Tools::isSubmit('submitDownload'))
 		{
+			/* PrestaShop demo mode */
+			if (_PS_MODE_DEMO_)
+			{
+				$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+				return;
+			}
+			/* PrestaShop demo mode*/
 		 	if ($this->tabAccess['add'] === '1')
 			{
 				if (Validate::isModuleUrl($url = Tools::getValue('url'), $this->_errors))
@@ -220,6 +227,13 @@ class AdminModules extends AdminTab
 		}
 		if (Tools::isSubmit('submitDownload2'))
 		{
+		 	/* PrestaShop demo mode */
+			if (_PS_MODE_DEMO_)
+			{
+				$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+				return;
+			}
+			/* PrestaShop demo mode*/
 		 	if ($this->tabAccess['add'] === '1')
 			{
 				if (!isset($_FILES['file']['tmp_name']) OR empty($_FILES['file']['tmp_name']))

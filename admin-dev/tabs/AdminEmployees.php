@@ -189,6 +189,14 @@ class AdminEmployees extends AdminTab
 
 		if (Tools::isSubmit('deleteemployee') OR Tools::isSubmit('status') OR Tools::isSubmit('statusemployee'))
 		{
+			/* PrestaShop demo mode */
+			if (_PS_MODE_DEMO_ && $id_employee = Tools::getValue('id_employee') && (int)$id_employee == _PS_DEMO_MAIN_BO_ACCOUNT_)
+			{
+				$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+				return;
+			}
+			/* PrestaShop demo mode*/
+			
 			if ($cookie->id_employee == Tools::getValue('id_employee'))
 			{
 				$this->_errors[] = Tools::displayError('You cannot disable or delete your own account.');
