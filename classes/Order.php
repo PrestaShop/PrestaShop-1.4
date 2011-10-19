@@ -285,14 +285,14 @@ class OrderCore extends ObjectModel
 		/* Update order */
 		$shippingDiff = $this->total_shipping - $cart->getOrderShippingCost();
 		$this->total_products -= $productPriceWithoutTax;
-		
+
 		// After upgrading from old version
 		// total_products_wt is null
 		// removing a product made order total negative
 		// and don't recalculating totals (on getTotalProductsWithTaxes)
 		if ($this->total_products_wt != 0)
 			$this->total_products_wt -= $productPrice;
-		
+
 		$this->total_shipping = $cart->getOrderShippingCost();
 
 		/* It's temporary fix for 1.3 version... */
@@ -445,13 +445,13 @@ class OrderCore extends ObjectModel
 			else
 				$row['product_price_wt'] = Tools::ps_round(($row['product_price_wt'] - $row['reduction_amount']), 2);
 		}
-		
+
 		if ($row['group_reduction'] > 0)
 		{
 			if ($this->_taxCalculationMethod == PS_TAX_EXC)
-				$row['product_price'] = $row['product_price'] * $group_reduction; 
+				$row['product_price'] = $row['product_price'] * $group_reduction;
 			else
-				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] * $group_reduction , 2); 
+				$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] * $group_reduction , 2);
 		}
 
 		if (($row['reduction_percent'] OR $row['reduction_amount'] OR $row['group_reduction']) AND $this->_taxCalculationMethod == PS_TAX_EXC)
@@ -468,7 +468,7 @@ class OrderCore extends ObjectModel
 		$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
 		$row['total_price'] = $row['product_quantity'] * $row['product_price'];
 	}
-	
+
 
 	/**
 	 * Get order products
@@ -526,7 +526,7 @@ class OrderCore extends ObjectModel
 
 	/**
 	* Check if order contains (only) virtual products
-	* 
+	*
 	* @param boolean $strict If false return true if there are at least one product virtual
 	* @return boolean true if is a virtual order or false
 	*
@@ -922,7 +922,7 @@ class OrderCore extends ObjectModel
 				// I use mysql 4, I can't make sub query in FROM
 			$number = Order::getLastInvoiceNumber() + 1;
 			}
-			else 
+			else
 			$number = '(SELECT `invoice_number`
 						FROM (
 							SELECT MAX(`invoice_number`) + 1 AS `invoice_number`
@@ -946,16 +946,18 @@ class OrderCore extends ObjectModel
 
 	public function setDelivery()
 	{
-		// Set delivery number
-		$number = (int)(Configuration::get('PS_DELIVERY_NUMBER'));
-		if (!(int)($number))
-			die(Tools::displayError('Invalid delivery number'));
-		$this->delivery_number = $number;
-		Configuration::updateValue('PS_DELIVERY_NUMBER', $number + 1);
+		// Set delivery number if it does not exist
+		if (!$this->delivery_number)
+		{
+			$number = (int)(Configuration::get('PS_DELIVERY_NUMBER'));
+			if (!(int)($number))
+				die(Tools::displayError('Invalid delivery number'));
+			$this->delivery_number = $number;
+			Configuration::updateValue('PS_DELIVERY_NUMBER', $number + 1);
+		}
 
 		// Set delivery date
 		$this->delivery_date = date('Y-m-d H:i:s');
-
 		// Update object
 		$this->update();
 	}
@@ -1059,6 +1061,7 @@ class OrderCore extends ObjectModel
 		$this->invoice_date = $res['invoice_date'];
 		$this->invoice_number = $res['invoice_number'];
 		$this->delivery_date = $res['delivery_date'];
+		d($this->delivery_date);
 		$this->delivery_number = $res['delivery_number'];
 		$history->addWithemail();
 	}
