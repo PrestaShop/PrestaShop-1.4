@@ -2447,7 +2447,7 @@ class AdminProducts extends AdminTab
 					<p><?php echo $this->l('Your server\'s maximum upload file size is') . ':&nbsp;' . ini_get('upload_max_filesize') ?></p>
 					<?php if (!strval(Tools::getValue('virtual_product_filename'))): ?>
 					<label id="virtual_product_file_label" for="virtual_product_file" class="t"><?php echo $this->l('Upload a file') ?></label>
-					<p><input type="file" id="virtual_product_file" name="virtual_product_file" onchange="uploadFile();" maxlength="<?php echo $this->maxFileSize ?>" /></p>
+					<p><input type="file" id="virtual_product_file" name="virtual_product_file" onchange="uploadFile();" /></p>
 					<?php endif; ?>
 					<div id="upload-confirmation">
 					<?php if ($up_filename = strval(Tools::getValue('virtual_product_filename'))): ?>
