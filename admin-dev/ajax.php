@@ -552,6 +552,11 @@ if (Tools::isSubmit('helpAccess'))
 
 if (Tools::isSubmit('getHookableList'))
 {
+	/* PrestaShop demo mode */
+	if (_PS_MODE_DEMO_)
+		die('{"hasError" : true, "errors" : ["Live Edit : This functionnality has been disabled"]}');
+	/* PrestaShop demo mode*/
+		
 	if (!strlen(Tools::getValue('hooks_list')))
 		die('{"hasError" : true, "errors" : ["Live Edit : no module on this page"]}');
 	
@@ -578,7 +583,11 @@ if (Tools::isSubmit('getHookableList'))
 
 if (Tools::isSubmit('getHookableModuleList'))
 {
-
+	/* PrestaShop demo mode */
+	if (_PS_MODE_DEMO_)
+		die('{"hasError" : true, "errors" : ["Live Edit : This functionnality has been disabled"]}');
+	/* PrestaShop demo mode*/
+	
 	include('../init.php');
 	$hook_name = Tools::getValue('hook');
 	$hookableModulesList = array();
@@ -598,6 +607,11 @@ if (Tools::isSubmit('getHookableModuleList'))
 
 if (Tools::isSubmit('saveHook'))
 {
+	/* PrestaShop demo mode */
+	if (_PS_MODE_DEMO_)
+		die('{"hasError" : true, "errors" : ["Live Edit : This functionnality has been disabled"]}');
+	/* PrestaShop demo mode*/
+	
 	$hooks_list = explode(',', Tools::getValue('hooks_list'));
 	foreach ($hooks_list as $hook)
 	{
