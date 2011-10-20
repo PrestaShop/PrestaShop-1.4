@@ -305,6 +305,7 @@ class AdminBackup extends AdminTab
 			return;
 		}
 		/* PrestaShop demo mode*/
+		parent::display();
 	}
 	
 	public function postProcess()
@@ -316,6 +317,7 @@ class AdminBackup extends AdminTab
 			return;
 		}
 		/* PrestaShop demo mode*/
+		parent::postProcess();
 	}
 	
 	public function int_sort($a, $b)
