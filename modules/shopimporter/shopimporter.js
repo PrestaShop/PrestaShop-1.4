@@ -789,7 +789,6 @@ $(document).ready(function (){
 	
 	$('#displayOptions').unbind('click').click(function (){
 		$('#displayOptions').show();
-		alert('ka');
 		if(type_connector == 'ws')
 		{
 			if($('#loginws').val() == '' || $('#apikey').val() == '' || $('#url').val() == '')
