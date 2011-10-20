@@ -157,10 +157,14 @@ class AdminProducts extends AdminTab
 
 	public function deleteVirtualProduct()
 	{
-		if (!($id_product_download = ProductDownload::getIdFromIdProduct(intval(Tools::getValue('id_product')))))
+		if (!($id_product_download = ProductDownload::getIdFromIdProduct((int)Tools::getValue('id_product'))) && !Tools::getValue('file'))
 			return false;
+		$file = Tools::getValue('file');
 		$productDownload = new ProductDownload((int)($id_product_download));
-		return $productDownload->deleteFile();
+		$return = $productDownload->deleteFile();
+		if (!$return && file_exists(_PS_DOWNLOAD_DIR_.$file))
+			$return = unlink(_PS_DOWNLOAD_DIR_.$file);
+		return $return;
 	}
 
 	/**
@@ -169,14 +173,14 @@ class AdminProducts extends AdminTab
 	 * @param mixed $token
 	 * @return void
 	 */
-	public function postProcess($token = NULL)
+	public function postProcess($token = null)
 	{
 		global $cookie, $currentIndex;
 		
-		/* Add a new product */
-		if (Tools::isSubmit('submitAddproduct') OR Tools::isSubmit('submitAddproductAndStay') OR  Tools::isSubmit('submitAddProductAndPreview'))
+		// Add a new product
+		if (Tools::isSubmit('submitAddproduct') || Tools::isSubmit('submitAddproductAndStay') ||  Tools::isSubmit('submitAddProductAndPreview'))
 		{
-			if ((Tools::getValue('id_product') AND $this->tabAccess['edit'] === '1') OR ($this->tabAccess['add'] === '1' AND !Tools::isSubmit('id_product')))
+			if ((Tools::getValue('id_product') && $this->tabAccess['edit'] === '1') || ($this->tabAccess['add'] === '1' && !Tools::isSubmit('id_product')))
 				$this->submitAddproduct($token);
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to add here.');
@@ -199,7 +203,7 @@ class AdminProducts extends AdminTab
 
 				$languages = Language::getLanguages(false);
 				$is_attachment_name_valid = false;
-				foreach ($languages AS $language)
+				foreach ($languages as $language)
 				{
 					$attachment_name_lang = Tools::getValue('attachment_name_'.(int)($language['id_lang']));
 					if (strlen($attachment_name_lang ) > 0)
@@ -217,7 +221,7 @@ class AdminProducts extends AdminTab
 
 				if (empty($this->_errors))
 				{
-					if (isset($_FILES['attachment_file']) AND is_uploaded_file($_FILES['attachment_file']['tmp_name']))
+					if (isset($_FILES['attachment_file']) && is_uploaded_file($_FILES['attachment_file']['tmp_name']))
 					{
 						if ($_FILES['attachment_file']['size'] > (Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024 * 1024))
 							$this->_errors[] = $this->l('File too large, maximum size allowed:').' '.(Configuration::get('PS_ATTACHMENT_MAXIMUM_SIZE') * 1024).' '.$this->l('kb').'. '.$this->l('File size you\'re trying to upload is:').number_format(($_FILES['attachment_file']['size']/1024), 2, '.', '').$this->l('kb');
@@ -231,8 +235,8 @@ class AdminProducts extends AdminTab
 					}
 					elseif ((int)$_FILES['attachment_file']['error'] === 1)
 					{
-						$max_upload = (int)(ini_get('upload_max_filesize'));
-						$max_post = (int)(ini_get('post_max_size'));
+						$max_upload = (int)ini_get('upload_max_filesize');
+						$max_post = (int)ini_get('post_max_size');
 						$upload_mb = min($max_upload, $max_post);
 						$this->_errors[] = $this->l('the File').' <b>'.$_FILES['attachment_file']['name'].'</b> '.$this->l('exceeds the size allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 					}
@@ -2396,6 +2400,8 @@ class AdminProducts extends AdminTab
 						$('#virtual_product_file').remove();
 						$('#virtual_product_file_label').hide();
 						$('#file_missing').hide();
+						new_href = $('#delete_downloadable_product').attr('href').replace('%26deleteVirtualProduct%3Dtrue', '%26file%3D'+msg+'%26deleteVirtualProduct%3Dtrue');
+						$('#delete_downloadable_product').attr('href', new_href);
 						$('#delete_downloadable_product').show();
 						$('#virtual_product_name').attr('value', fileName);
 						$('#upload-confirmation').html(
