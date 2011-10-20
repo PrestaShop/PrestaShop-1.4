@@ -516,7 +516,7 @@ $this->standalone = true;
 		else
 		{
 			$this->next = 'download';
-			$this->nextDesc = $this->l('Shop desactivated. Now downloading (this can takes some times )...');
+			$this->nextDesc = $this->l('Shop deactivated. Now downloading (this can takes some times )...');
 		}
 	}
 
@@ -1640,7 +1640,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		else
 			$token_preferences = Tools14::getAdminTokenLite('AdminPreferences');
 
-		$content .= '<b>'.$this->l('Shop desactivated').' : </b>'.'<img src="'.$srcShopStatus.'" /><a href="index.php?tab=AdminPreferences&token='.$token_preferences.'" class="button">'.$label.'</a><br/><br/>';
+		$content .= '<b>'.$this->l('Shop deactivated').' : </b>'.'<img src="'.$srcShopStatus.'" /><a href="index.php?tab=AdminPreferences&token='.$token_preferences.'" class="button">'.$label.'</a><br/><br/>';
 		$max_exec_time = ini_get('max_execution_time');
 		if ($max_exec_time == 0)
 			$srcExecTime = '../img/admin/enabled.gif';
