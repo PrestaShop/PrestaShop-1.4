@@ -120,6 +120,14 @@ class AdminPreferences extends AdminTab
 	{
 		global $currentIndex;
 		
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		
 		if (Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE'))
         {
             $uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));
@@ -131,13 +139,6 @@ class AdminPreferences extends AdminTab
 
 		if (isset($_POST['submitGeneral'.$this->table]))
 		{
-			/* PrestaShop demo mode */
-			if (_PS_MODE_DEMO_ && in_array($key, array('PS_SHOP_ENABLE', 'PS_MAINTENANCE_IP', 'PS_BASE_URI', 'PS_SSL_ENABLED')))
-			{
-				$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
-				return;
-			}
-			/* PrestaShop demo mode*/
 			
 			Module::hookExec('categoryUpdate'); // We call this hook, for regenerate cache of categories
 			if (Tools::getValue('PS_CONDITIONS') == true AND (Tools::getValue('PS_CONDITIONS_CMS_ID') == 0 OR !Db::getInstance()->getValue('
