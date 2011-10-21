@@ -37,7 +37,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = 1.4;
+		$this->version = 1.5;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -2831,6 +2831,7 @@ class BlockLayered extends Module
 		return Tools::jsonEncode(array(
 		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
 		'productList' => $smarty->fetch($product_list_tpl),
+		'products_per_page' => (int)Configuration::get('PS_PRODUCTS_PER_PAGE'),
 		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl'),
 		'categoryCount' => $categoryCount));
 	}
