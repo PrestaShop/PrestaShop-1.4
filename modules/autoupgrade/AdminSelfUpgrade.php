@@ -157,7 +157,7 @@ class AdminSelfUpgrade extends AdminSelfTab
   * value = the next step you want instead
  	*	example : public static $skipAction = array('download' => 'upgradeFiles');
 	*/
-	public static $skipAction;
+	public static $skipAction = array('download'=>'upgradeComplete');
 	public $useSvn;
 
 	protected $_includeContainer = false;
@@ -462,6 +462,7 @@ $this->standalone = true;
 
 		if (!empty($_POST))
 			$this->_postConfig($this->_fieldsAutoUpgrade);
+			
 	}
 
 	public function ajaxProcessUpgradeComplete()
@@ -1481,6 +1482,11 @@ $this->standalone = true;
 
 	public function ajaxPreProcess()
 	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+			return;
+		/* PrestaShop demo mode*/
+		
 		if (!empty($_POST['responseType']) AND $_POST['responseType'] == 'json')
 			header('Content-Type: application/json');
 		
@@ -1780,6 +1786,15 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 
 	public function display()
 	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			echo '<div class="error">'.Tools::displayError('This functionnality has been disabled.').'</div>';
+			return;
+		}
+		/* PrestaShop demo mode*/
+
+		
 		if(isset($_GET['refreshCurrentVersion']))
 		{
 			$upgrader = new Upgrader();

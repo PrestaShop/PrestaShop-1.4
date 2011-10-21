@@ -31,6 +31,14 @@ class AdminPerformance extends AdminTab
 	{
 		global $currentIndex;
 		
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		
 		if (Tools::isSubmit('submitCaching'))
 		{
 			if ($this->tabAccess['edit'] === '1')

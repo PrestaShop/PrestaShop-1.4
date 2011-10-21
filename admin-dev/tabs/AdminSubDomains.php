@@ -40,7 +40,7 @@ class AdminSubDomains extends AdminTab
 		);
 		parent::__construct();
 	}
-	
+
 	public function displayList()
 	{
 		$this->displayWarning($this->l('Cookies are different on each subdomain of your Website. If you want to use the same cookie, please add here the subdomains used by your shop. The most common is "www".'));
@@ -74,6 +74,15 @@ class AdminSubDomains extends AdminTab
 	
 	public function postProcess()
 	{
+		
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		
 		$result = Db::getInstance()->ExecuteS('
 			SELECT `id_subdomain`
 			FROM `'._DB_PREFIX_.'subdomain`

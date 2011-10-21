@@ -125,10 +125,25 @@ class AdminInformation extends AdminTab
 		return $html;
 	}
 	
+	public function postProcess()
+	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		parent::postProcess();
+	}
+	
 	public function display()
 	{
 		global $currentIndex;
-		
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+			return;
+		/* PrestaShop demo mode*/
 		echo '
 		<h2>'.$this->l('Information').'</h2>
 		<fieldset>

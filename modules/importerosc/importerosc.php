@@ -303,6 +303,7 @@ class importerosc extends ImportModule
 				$category_product['category_product'][$res['categories_id']] = $product['id_product'];
 			$product['association'] = $category_product;
 		}
+		d($this->autoFormat($products, $identifier, $keyLanguage, $multiLangFields));
 		return $this->autoFormat($products, $identifier, $keyLanguage, $multiLangFields);
 	}
 

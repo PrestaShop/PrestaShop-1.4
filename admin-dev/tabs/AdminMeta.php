@@ -155,6 +155,14 @@ class AdminMeta extends AdminTab
 	
 	public function postProcess()
 	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		
 		if (Tools::isSubmit('submitAddmeta'))
 		{
 			$langs = Language::getLanguages(true);
