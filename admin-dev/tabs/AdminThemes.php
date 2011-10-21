@@ -114,6 +114,11 @@ class AdminThemes extends AdminPreferences
 	{
 		global $currentIndex;
 		
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+		/* PrestaShop demo mode*/
+		
 		if (file_exists(_PS_IMG_DIR_.'logo.jpg'))
 		{
 			list($width, $height, $type, $attr) = getimagesize(_PS_IMG_DIR_.'logo.jpg');
@@ -265,6 +270,13 @@ class AdminThemes extends AdminPreferences
 	public function postProcess()
 	{
 		global $smarty;
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
 		// new check compatibility theme feature (1.4) :
 		$val = Tools::getValue('PS_THEME');
 		Configuration::updateValue('PS_IMG_UPDATE_TIME', time());
@@ -274,5 +286,3 @@ class AdminThemes extends AdminPreferences
 		parent::postProcess();
 	}
 }
-
-?>

@@ -68,6 +68,7 @@ class AdminWebservice extends AdminTab
 	public function displayList()
 	{
 		global $cookie, $currentIndex;
+
 		$warnings = array();
 		if (!file_exists(_PS_ROOT_DIR_.'/.htaccess'))
 			$warnings[] = $this->l('In order to enable the PrestaShop Webservice, please generate the .htaccess file via the "Generators" tab (in the "Tools" tab).');
@@ -99,6 +100,7 @@ class AdminWebservice extends AdminTab
 				($instance = Module::getInstanceByName($item['module_name'])) && 
 				!$instance->useNormalPermissionBehaviour())
 				unset($this->_list[$k]);
+		
 		parent::displayList();
 	}
 	
@@ -227,6 +229,14 @@ echo '
 	}
 	public function postProcess()
 	{
+		/* PrestaShop demo mode */
+		if (_PS_MODE_DEMO_)
+		{
+			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+			return;
+		}
+		/* PrestaShop demo mode*/
+		
 		if (Tools::getValue('key') && strlen(Tools::getValue('key')) < 32)
 			$this->_errors[] = Tools::displayError($this->l('Key length must be 32 character long'));
 		if (WebserviceKey::keyExists(Tools::getValue('key')) && !Tools::getValue('id_webservice_account'))
