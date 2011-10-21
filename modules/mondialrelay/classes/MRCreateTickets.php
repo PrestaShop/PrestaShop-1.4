@@ -513,7 +513,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	*/
 	public function checkPreValidation()
 	{
-		$errorList = array();
+		$errorList = array('error' => array(), 'warn' => array());
 		
 		if (!$this->_mondialRelay)
 			$this->_mondialRelay = new MondialRelay();
@@ -533,7 +533,8 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				'error' => $this->_mondialRelay->l('Please check your city configuration')),
 			'Expe_CP' => array(
 				'value' => Configuration::get('PS_SHOP_CODE'),
-				'error' => $this->_mondialRelay->l('Please check your zipcode configuration')),
+				'error' => $this->_mondialRelay->l('Please check your zipcode configuration'),
+				'warn' => $this->_mondialRelay->l('It seems the layout of your zipcode country is not configured or you didn\'t set a right zipcode')),
 			'Expe_Pays' => array(
 				'value' => ((_PS_VERSION_ >= '1.4') ? 
 					Country::getIsoById(Configuration::get('PS_SHOP_COUNTRY_ID')) : 
@@ -547,17 +548,23 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				'error' => $this->_mondialRelay->l('Please check your mail configuration')));
 		
 		foreach($list as $name => $tab)
-		{
-			$tab['value'] = strtoupper($tab['value']);
+		{	
+			// Mac server make an empty string instead of a cleaned string
+			// TODO : test on windows and linux server
+			$cleanedString = MRTools::replaceAccentedCharacters($tab['value']);
+			$tab['value'] = !empty($cleanedString) ? strtoupper($cleanedString) : strtoupper($tab['value']);
+				
 			if ($name == 'Expe_CP')
 			{
-				if (!MRTools::checkZipcodeByCountry($tab['value'], array(
-						'id_country' => Configuration::get('PS_COUNTRY_DEFAULT'))))
-					$errorList[$name] = $tab['error'];
+				if (!($zipcodeError = MRTools::checkZipcodeByCountry($tab['value'], array(
+						'id_country' => Configuration::get('PS_COUNTRY_DEFAULT')))))
+					$errorList['error'][$name] = $tab['error'];
+				else if ($zipcodeError < 0)
+					$errorList['warn'][$name] = $tab['warn'];
 			}
 			else if (isset($this->_fields['list'][$name]['regexValidation']) && 
 					(!preg_match($this->_fields['list'][$name]['regexValidation'], $tab['value'], $matches)))
-				$errorList[$name] = $tab['error'];
+				$errorList['error'][$name] = $tab['error'];
 		}
 		return $errorList;
 	}

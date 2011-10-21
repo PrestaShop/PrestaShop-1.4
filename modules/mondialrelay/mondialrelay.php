@@ -59,7 +59,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.7.6';
+		$this->version	= '1.7.7';
 
 		parent::__construct();
 
@@ -114,38 +114,41 @@ class MondialRelay extends Module
 
 		if (!$result)
 		{
+			// AdminOrders id_tab
+			$id_parent = 3;
+			
 			/*tab install */
 			$result = Db::getInstance()->getRow('
 				SELECT position 
 				FROM `' . _DB_PREFIX_ . 'tab` 
-				WHERE `id_parent` = 3
+				WHERE `id_parent` = '.(int)$id_parent.'
 				ORDER BY `'. _DB_PREFIX_ .'tab`.`position` DESC');
-
+			
 			$pos = (isset($result['position'])) ? $result['position'] + 1 : 0;
 
 			Db::getInstance()->Execute('
 				INSERT INTO ' . _DB_PREFIX_ . 'tab 
 				(id_parent, class_name, position, module) 
-				VALUES(3, "AdminMondialRelay",  "'.(int)($pos).'", "mondialrelay")');	 	
+				VALUES('.(int)$id_parent.', "AdminMondialRelay",  "'.(int)($pos).'", "mondialrelay")');	 	
 
 			$id_tab = Db::getInstance()->Insert_ID();		
 			
 			$languages = Language::getLanguages();
 			foreach ($languages as $language)
 				Db::getInstance()->Execute('
-				INSERT INTO ' . _DB_PREFIX_ . 'tab_lang 
-				(id_lang, id_tab, name) 
-				VALUES("'.(int)($language['id_lang']).'", "'.(int)($id_tab).'", "Mondial Relay")');
+					INSERT INTO ' . _DB_PREFIX_ . 'tab_lang 
+					(id_lang, id_tab, name) 
+					VALUES("'.(int)($language['id_lang']).'", "'.(int)($id_tab).'", "Mondial Relay")');
 
 			$profiles = Profile::getProfiles(Configuration::get('PS_LANG_DEFAULT'));
 			foreach ($profiles as $profile)
 				Db::getInstance()->Execute('
-				INSERT INTO ' . _DB_PREFIX_ . 'access 
-				(`id_profile`,`id_tab`,`view`,`add`,`edit`,`delete`)
-				VALUES('.$profile['id_profile'].', '.(int)($id_tab).', 1, 1, 1, 1)');
+					INSERT INTO ' . _DB_PREFIX_ . 'access 
+					(`id_profile`,`id_tab`,`view`,`add`,`edit`,`delete`)
+					VALUES('.$profile['id_profile'].', '.(int)($id_tab).', 1, 1, 1, 1)');
 
 			@copy(_PS_MODULE_DIR_.'mondialrelay/AdminMondialRelay.gif', _PS_IMG_DIR_.'/AdminMondialRelay.gif');
-		}	
+		}
 
 		// If module isn't installed, set default value
 		if (!Configuration::get('MONDIAL_RELAY'))
@@ -324,7 +327,7 @@ class MondialRelay extends Module
 				"mondialrelay", 
 				`shipping_method` = 1 
 			WHERE `id_carrier` 
-			IN (SELECT `id_mr_method` 
+			IN (SELECT `id_carrier` 
 					FROM `'._DB_PREFIX_.'mr_method`)');
 	}
 	
@@ -403,10 +406,10 @@ class MondialRelay extends Module
 				<script type="text/javascript">
 					current = jQuery.noConflict(true); 
 				</script>
-			<script type="text/javascript" src="'.self::$moduleURL.'/jquery-1.4.4.min.js"></script>';
+			<script type="text/javascript" src="'.self::$moduleURL.'/js/jquery-1.6.4.min.js"></script>';
 
 		return '
-			<script type="text/javascript" src="'.self::$moduleURL.'/jquery-1.4.4.min.js"></script>
+			<script type="text/javascript" src="'.self::$moduleURL.'/js/jquery-1.6.4.min.js"></script>
 			<script type="text/javascript">
 				MRjQuery = jQuery.noConflict(true); 
 			</script>';
@@ -674,7 +677,7 @@ class MondialRelay extends Module
 
 		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>
 		
-		<div class="warn">'.
+		<div class="MR_warn">'.
 			$this->l('Try to turn off the cache and put the force compilation to on if you have any problems with the module after an update').'
 		</div>
 		<fieldset>
