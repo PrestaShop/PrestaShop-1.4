@@ -176,6 +176,9 @@ abstract class PaymentModuleCore extends Module
 				$customizedDatas = Product::getAllCustomizedDatas((int)($order->id_cart));
 				Product::addCustomizationPrice($products, $customizedDatas);
 				$outOfStock = false;
+				
+				$storeAllTaxes = array();
+				
 				foreach ($products AS $key => $product)
 				{
 					$productQuantity = (int)(Product::getQuantity((int)($product['id_product']), ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL)));
@@ -191,6 +194,39 @@ abstract class PaymentModuleCore extends Module
 					}
 					$price = Product::getPriceStatic((int)($product['id_product']), false, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), 6, NULL, false, true, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 					$price_wt = Product::getPriceStatic((int)($product['id_product']), true, ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL), 2, NULL, false, true, $product['cart_quantity'], false, (int)($order->id_customer), (int)($order->id_cart), (int)($order->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+					
+					/* Store tax info */
+					$id_country = (int)Country::getDefaultCountryId();
+					$id_state = 0;
+					$id_county = 0;
+					$rate = 0;
+					$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
+					$address_infos = Address::getCountryAndState($id_address);
+					if ($address_infos['id_country'])
+					{
+						$id_country = (int)($address_infos['id_country']);
+						$id_state = (int)$address_infos['id_state'];
+						$id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
+					}					
+					$allTaxes = TaxRulesGroup::getTaxes((int)Product::getIdTaxRulesGroupByIdProduct((int)$product['id_product']), $id_country, $id_state, $id_county);
+					$nTax = 0;
+					foreach ($allTaxes AS $res)
+					{
+						if (!isset($storeAllTaxes[$res->id]))
+							$storeAllTaxes[$res->id] = array();
+						$storeAllTaxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
+						$storeAllTaxes[$res->id]['rate'] = $res->rate;
+						
+						if (!$nTax++)
+							$storeAllTaxes[$res->id]['amount'] = ($price * (1 + ($res->rate * 0.01))) - $price;
+						else
+						{						
+							$priceTmp = $price_wt / (1 + ($res->rate * 0.01));
+							$storeAllTaxes[$res->id]['amount'] = $price_wt - $priceTmp;
+						}
+					}
+					/* End */					
+					
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
 					$download_hash = NULL;
@@ -285,6 +321,34 @@ abstract class PaymentModuleCore extends Module
 				} // end foreach ($products)
 				$query = rtrim($query, ',');
 				$result = $db->Execute($query);
+				
+				/* Add carrier tax */
+				$shippingCostTaxExcl = $cart->getOrderShippingCost((int)$order->id_carrier, false);
+				$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)$order->id_carrier), $id_country, $id_state, $id_county);
+				$nTax = 0;
+				foreach ($allTaxes AS $res)
+				{
+					if (!isset($storeAllTaxes[$res->id]))
+						$storeAllTaxes[$res->id] = array();
+					if (!isset($storeAllTaxes[$res->id]['amount']))
+						$storeAllTaxes[$res->id]['amount'] = 0;
+					$storeAllTaxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
+					$storeAllTaxes[$res->id]['rate'] = $res->rate;
+					
+					if (!$nTax++)
+						$storeAllTaxes[$res->id]['amount'] += ($shippingCostTaxExcl * (1 + ($res->rate * 0.01))) - $shippingCostTaxExcl;
+					else
+					{						
+						$priceTmp = $order->total_shipping / (1 + ($res->rate * 0.01));
+						$storeAllTaxes[$res->id]['amount'] += $order->total_shipping - $priceTmp;
+					}
+				}
+				
+				/* Store taxes */
+				foreach ($storeAllTaxes AS $t)
+					Db::getInstance()->Execute('
+					INSERT INTO '._DB_PREFIX_.'order_tax (id_order, tax_name, tax_rate, amount) 
+					VALUES ('.(int)$order->id.', \''.pSQL($t['name']).'\', \''.pSQL($t['rate']).'\', '.(float)$t['amount'].')');
 
 				// Insert discounts from cart into order_discount table
 				$discounts = $cart->getDiscounts();

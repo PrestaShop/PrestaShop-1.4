@@ -42,6 +42,9 @@ class TaxRulesGroupCore extends ObjectModel
 
     protected static $_taxes = array();
 
+	public static $canada_iso = 'CA';
+	public static $canada_states_iso = array('QC', 'PE');
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -55,8 +58,7 @@ class TaxRulesGroupCore extends ObjectModel
 	    return Db::getInstance()->ExecuteS('
 	    SELECT *
 	    FROM `'._DB_PREFIX_.'tax_rules_group` g'
-	    .($only_active ? ' WHERE g.`active` = 1' : '')
-	    );
+	    .($only_active ? ' WHERE g.`active` = 1' : ''));
 	}
 
 	public static function getTaxRulesGroupsForOptions()
@@ -73,6 +75,14 @@ class TaxRulesGroupCore extends ObjectModel
        if (isset(self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state.'-'.$id_county]))
             return self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state.'-'.$id_county];
 
+		$order = 'DESC';
+
+		$state = new State((int)$id_state);
+
+		/* Canada (Country then State) */
+		if (Country::getIsoById((int)$id_country) == self::$canada_iso && in_array($state->iso_code, self::$canada_states_iso))
+			$order = 'ASC';
+
 	    $rows = Db::getInstance()->ExecuteS('
 	    SELECT *
 	    FROM `'._DB_PREFIX_.'tax_rule`
@@ -80,9 +90,7 @@ class TaxRulesGroupCore extends ObjectModel
 	    AND `id_tax_rules_group` = '.(int)$id_tax_rules_group.'
 	    AND `id_state` IN (0, '.(int)$id_state.')
 	    AND `id_county` IN (0, '.(int)$id_county.')
-	    ORDER BY `id_county` DESC, `id_state` DESC'
-	    );
-
+	    ORDER BY `id_county` '.$order.', `id_state` '.$order);
 
 	    $taxes = array();
 	    foreach ($rows AS $row)
@@ -148,11 +156,25 @@ class TaxRulesGroupCore extends ObjectModel
 
 	public static function getTaxesRate($id_tax_rules_group, $id_country, $id_state, $id_county)
 	{
-	    $rate = 0;
-	    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) AS $tax)
-	        $rate += (float)$tax->rate;
+		$state = new State((int)$id_state);
 
-	    return $rate;
+		if (Country::getIsoById((int)$id_country) == self::$canada_iso && in_array($state->iso_code, self::$canada_states_iso))
+		{
+			 $rate = 1;
+			 foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) AS $tax)
+			     $rate *= (1 + ((float)$tax->rate * 0.01));
+
+			$rate *= 100;
+			$rate -= 100;
+		}
+		else
+		{
+		    $rate = 0;
+		    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) AS $tax)
+	       	$rate += (float)$tax->rate;
+		}
+
+	   return $rate;
 	}
 
 	public static function getIdByName($name)
@@ -164,3 +186,4 @@ class TaxRulesGroupCore extends ObjectModel
 	    );
 	}
 }
+
