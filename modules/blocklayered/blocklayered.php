@@ -2146,12 +2146,9 @@ class BlockLayered extends Module
 			foreach ($filters as $filterTmp)
 			{
 				$methodName = 'get'.ucfirst($filterTmp['type']).'FilterSubQuery';
-				elog($methodName);
 				if (method_exists('BlockLayered', $methodName) &&
 				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filterTmp['type'] || $filter['type'] == $filterTmp['type']))
 				{
-					elog($filter['id_value']);
-					elog($filterTmp['id_value']);
 					if ($filter['type'] == $filterTmp['type'] && $filter['id_value'] == $filterTmp['id_value'])
 						$subQueryFilter = self::$methodName(array(), true);
 					else
