@@ -29,8 +29,8 @@
 @ini_set('max_execution_time', '0');
 // setting the memory limit to 128M only if current is lower
 $memory_limit = ini_get('memory_limit');
-if (substr($memory_limit,-1) != 'G' 
-	AND ((substr($memory_limit,-1) == 'M' AND substr($memory_limit,0,-1) < 128) 
+if (substr($memory_limit,-1) != 'G'
+	AND ((substr($memory_limit,-1) == 'M' AND substr($memory_limit,0,-1) < 128)
 	OR is_numeric($memory_limit) AND (intval($memory_limit) < 131072))
 ){
 	@ini_set('memory_limit','128M');
@@ -44,7 +44,7 @@ if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 $_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
-define('INSTALL_VERSION', '1.4.5.1');
+define('INSTALL_VERSION', '1.4.6.0');
 define('INSTALL_PATH', dirname(__FILE__));
 define('PS_INSTALLATION_IN_PROGRESS', true);
 require_once(INSTALL_PATH.'/classes/ToolsInstall.php');
@@ -58,7 +58,7 @@ header('Content-Type: text/xml');
 
 // Switching method
 if (isset($_GET['method']))
-{	
+{
 	if (in_array($_GET['method'], array('doUpgrade', 'createDB', 'checkShopInfos')))
 	{
 		global $logger;
@@ -90,9 +90,10 @@ if (isset($_GET['method']))
 		case 'doUpgrade' :
 			require_once('xml/doUpgrade.php');
 		break;
-		
+
 		case 'getVersionFromDb' :
 			require_once('xml/getVersionFromDb.php');
 		break;
 	}
 }
+
