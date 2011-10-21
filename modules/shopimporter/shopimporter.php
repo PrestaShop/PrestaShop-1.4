@@ -416,7 +416,6 @@ class shopimporter extends ImportModule
 							<input type="submit" class="button" name="checkAndSaveConfig" id="checkAndSaveConfig" value="'.$this->l('Next Step').'">
 						</div>
 					</div>
-				</div>
 				</fieldset>';
 		return $html;
 	}
