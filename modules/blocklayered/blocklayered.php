@@ -71,7 +71,7 @@ class BlockLayered extends Module
 			$this->indexUrl();
 			$this->indexAttribute();
 			
-			if (Db::getInstance()->getValue('SELECT count(*) FROM `'._DB_PREFIX_.'product`') < 10000) // Lock price indexation if too many products
+			if (Db::getInstance()->getValue('SELECT COUNT(*) FROM `'._DB_PREFIX_.'product`') < 10000) // Lock price indexation if too many products
 				self::fullPricesIndexProcess();
 			
 			return true;
@@ -2060,7 +2060,7 @@ class BlockLayered extends Module
 					break;
 
 				case 'manufacturer':
-					$sqlQuery['select'] = 'SELECT m.name, count(DISTINCT p.id_product) nbr, m.id_manufacturer ';
+					$sqlQuery['select'] = 'SELECT m.name, COUNT(DISTINCT p.id_product) nbr, m.id_manufacturer ';
 					$sqlQuery['from'] = '
 					FROM `'._DB_PREFIX_.'category_product` cp
 					INNER JOIN  `'._DB_PREFIX_.'category` c ON (c.id_category = cp.id_category)
@@ -2073,7 +2073,7 @@ class BlockLayered extends Module
 
 				case 'id_attribute_group':// attribute group
 					$sqlQuery['select'] = '
-					SELECT count(lpa.id_attribute) nbr, lpa.id_attribute_group,
+					SELECT COUNT(DISTINCT p.id_product) nbr, lpa.id_attribute_group,
 					a.color, al.name attribute_name, agl.public_name attribute_group_name , lpa.id_attribute, ag.is_color_group,
 					liagl.url_name name_url_name, liagl.meta_title name_meta_title, lial.url_name value_url_name, lial.meta_title value_meta_title';
 					$sqlQuery['from'] = '
@@ -2108,7 +2108,7 @@ class BlockLayered extends Module
 
 				case 'id_feature':
 					$sqlQuery['select'] = 'SELECT fl.name feature_name, fp.id_feature, fv.id_feature_value, fvl.value,
-					count(fv.id_feature_value) nbr,
+					COUNT(DISTINCT p.id_product) nbr,
 					lifl.url_name name_url_name, lifl.meta_title name_meta_title, lifvl.url_name value_url_name, lifvl.meta_title value_meta_title ';
 					$sqlQuery['from'] = '
 					FROM '._DB_PREFIX_.'feature_product fp
@@ -2130,7 +2130,7 @@ class BlockLayered extends Module
 
 				case 'category':
 					$sqlQuery['select'] = '
-					SELECT c.id_category, c.id_parent, cl.name, (SELECT count(*) # ';
+					SELECT c.id_category, c.id_parent, cl.name, (SELECT COUNT(*) # ';
 					$sqlQuery['from'] = '
 					FROM '._DB_PREFIX_.'category_product cp
 					LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product) ';
@@ -2142,12 +2142,16 @@ class BlockLayered extends Module
 					WHERE c.id_parent = '.(int)$id_parent.'
 					GROUP BY c.id_category ORDER BY level_depth';
 			}
+			
 			foreach ($filters as $filterTmp)
 			{
 				$methodName = 'get'.ucfirst($filterTmp['type']).'FilterSubQuery';
+				elog($methodName);
 				if (method_exists('BlockLayered', $methodName) &&
 				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filterTmp['type'] || $filter['type'] == $filterTmp['type']))
 				{
+					elog($filter['id_value']);
+					elog($filterTmp['id_value']);
 					if ($filter['type'] == $filterTmp['type'] && $filter['id_value'] == $filterTmp['id_value'])
 						$subQueryFilter = self::$methodName(array(), true);
 					else
@@ -2560,7 +2564,7 @@ class BlockLayered extends Module
 		return array();
 	}
 	
-	private static function getFeatureFilterSubQuery($filterValue, $ignoreJoin)
+	private static function getId_featureFilterSubQuery($filterValue, $ignoreJoin)
 	{
 		if (empty($filterValue))
 			return array();
