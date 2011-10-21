@@ -1306,6 +1306,7 @@ class BlockLayered extends Module
 						url: this.href+\'&ajax=1\',
 						context: this,
 						dataType: \'json\',
+						cache: \'false\',
 						success: function(res)
 						{
 							this.running = false;
@@ -1359,6 +1360,7 @@ class BlockLayered extends Module
 							url: this.href+\'&ajax=1&cursor=\'+this.cursor,
 							context: this,
 							dataType: \'json\',
+							cache: \'false\',
 							success: function(res)
 							{
 								this.running = false;
@@ -2058,7 +2060,7 @@ class BlockLayered extends Module
 					break;
 
 				case 'manufacturer':
-					$sqlQuery['select'] = 'SELECT m.name, count(p.id_product) nbr, m.id_manufacturer ';
+					$sqlQuery['select'] = 'SELECT m.name, count(DISTINCT p.id_product) nbr, m.id_manufacturer ';
 					$sqlQuery['from'] = '
 					FROM `'._DB_PREFIX_.'category_product` cp
 					INNER JOIN  `'._DB_PREFIX_.'category` c ON (c.id_category = cp.id_category)
