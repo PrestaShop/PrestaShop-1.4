@@ -2450,7 +2450,11 @@ class AdminProducts extends AdminTab
 						<?php echo realpath(_PS_DOWNLOAD_DIR_) .'/'. $productDownload->physically_filename ?>
 					</p>
 		<?php endif; ?>
-					<p><?php echo $this->l('Your server\'s maximum upload file size is') . ':&nbsp;' . ini_get('upload_max_filesize') ?></p>
+					<p><?php 
+						$max_upload = (int)ini_get('upload_max_filesize');
+						$max_post = (int)ini_get('post_max_size');
+						$upload_mb = min($max_upload, $max_post);
+					echo $this->l('Your server\'s maximum upload file size is') . ':&nbsp;'.$upload_mb.$this->l('Mb') ?></p>
 					<?php if (!strval(Tools::getValue('virtual_product_filename'))): ?>
 					<label id="virtual_product_file_label" for="virtual_product_file" class="t"><?php echo $this->l('Upload a file') ?></label>
 					<p><input type="file" id="virtual_product_file" name="virtual_product_file" onchange="uploadFile();" /></p>
