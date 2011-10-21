@@ -2815,6 +2815,7 @@ class BlockLayered extends Module
 		$smarty->assign($pagination_infos);
 		$smarty->assign('comparator_max_item', (int)(Configuration::get('PS_COMPARATOR_MAX_ITEM')));
 		$smarty->assign('products', $products);
+		$smarty->assign('products_per_page', (int)Configuration::get('PS_PRODUCTS_PER_PAGE'));
 		
 		// Prevent bug with old template where category.tpl contain the title of the category and category-count.tpl do not exists
 		if (file_exists(_PS_THEME_DIR_.'category-count.tpl'))
@@ -2831,7 +2832,6 @@ class BlockLayered extends Module
 		return Tools::jsonEncode(array(
 		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
 		'productList' => $smarty->fetch($product_list_tpl),
-		'products_per_page' => (int)Configuration::get('PS_PRODUCTS_PER_PAGE'),
 		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl'),
 		'categoryCount' => $categoryCount));
 	}
