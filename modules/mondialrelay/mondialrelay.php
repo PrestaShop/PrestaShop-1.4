@@ -162,7 +162,6 @@ class MondialRelay extends Module
 			Configuration::updateValue('MR_KEY_WEBSERVICE', '');
 			Configuration::updateValue('MR_LANGUAGE', '');
 			Configuration::updateValue('MR_WEIGHT_COEF', '');
-			Configuration::updateValue('PS_MR_SHOP_NAME', Configuration::get('PS_SHOP_NAME'));
 		}
 		else 
 		{
@@ -270,8 +269,7 @@ class MondialRelay extends Module
 				!Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE') ||
 				!Configuration::deleteByName('MR_CODE_MARQUE') ||
 				!Configuration::deleteByName('MR_KEY_WEBSERVICE') ||
-				!Configuration::deleteByName('MR_WEIGHT_COEF') ||
-				!Configuration::deleteByName('PS_MR_SHOP_NAME'))
+				!Configuration::deleteByName('MR_WEIGHT_COEF'))
 			return false;
 		
 		// Drop databases
@@ -476,12 +474,13 @@ class MondialRelay extends Module
 			if (!Validate::isUnsignedInt(Tools::getValue('id_order_state')))
 				$this->_postErrors[] = $this->l('Invalid order state');
 		}
+		/*
 		elseif (Tools::isSubmit('PS_MRSubmitFieldPersonalization'))
 		{
 			$addr1 = Tools::getValue('Expe_ad1');
 			if (!preg_match('#^[0-9A-Z_\-\'., /]{2,32}$#', strtoupper($addr1), $match))
 				$this->_postErrors[] = $this->l('The Main address submited hasn\'t a good format');
-		}
+		}*/
 	}
 
 	private function _postProcess()
@@ -498,8 +497,8 @@ class MondialRelay extends Module
 			self::mrUpdate('settings', $setArray, $keyArray);
 		elseif (isset($_POST['submitShipping']) AND $_POST['submitShipping'])
 			self::mrUpdate('shipping', $_POST, array());
-		elseif (Tools::getValue('PS_MRSubmitFieldPersonalization'))
-			$this->updateFieldsPersonalization();
+		/*elseif (Tools::getValue('PS_MRSubmitFieldPersonalization'))
+			$this->updateFieldsPersonalization();*/
 		elseif (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
 			self::mrUpdate('addShipping', $setArray, $keyArray);
 		elseif (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])

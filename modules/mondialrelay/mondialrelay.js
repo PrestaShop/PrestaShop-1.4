@@ -832,17 +832,23 @@ function PS_MRAddGMapMarker(id_carrier, relayPointNumber, contentBlockid)
 					});
 					return true;
 				}
+				else
+					$('#' + contentBlockid).children('p').click(function()
+					{
+						PS_MROpenPopupDetail(relayInfo.permaLinkDetail);
+					});
 			}
 		},
 		infowindow:
 		{
 			options: {content:detailContentHtml},
 			tag:relayInfo.Num,
-			callback: function() {
-				// To avoid any bug, foreach anytime the elements and try to close them
+			callback: function(infowindow) {
+			
 				var windowList = $(this).gmap3({action:'get', name:'infowindow', all:true});
-				for (var x in windowList)
-					windowList[x].close();
+        $.each(windowList, function(i, elem) {
+          elem.close();
+				});
 			}
 		}	
 	});
