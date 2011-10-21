@@ -274,7 +274,8 @@ return;
 				var removedProductData = null;
 				var removedProductDomId = null;
 				//look for a product to delete...
-				$('#'+parentId+' #cart_block_list dl.products dt').each(function(){
+				$('#'+parentId+' #cart_block_list dl.products dt').each(function()
+				{
 					//retrieve idProduct and idCombination from the displayed product in the block cart
 					var domIdProduct = $(this).attr('id');
 					var firstCut =  domIdProduct.replace('cart_block_product_', '');
@@ -299,31 +300,31 @@ return;
 						removedProductId = $(this).attr('id');
 						//return false; // Regarding that the customer can only remove products one by one, we break the loop
 					}
+	
+					//if there is a removed product, delete it from the displayed block cart
+					if (removedProductId != null)
+					{
+						var firstCut =  removedProductId.replace('cart_block_product_', '');
+						var ids = firstCut.split('_');
+		
+						$('#'+parentId+' #'+removedProductId).addClass('strike').fadeTo('slow', 0, function(){
+							$(this).slideUp('slow', function(){
+								$(this).remove();
+								//if the cart is now empty, show the 'no product in the cart' message
+								if($('#'+parentId+' #cart_block dl.products dt').length == 0)
+								{
+									$('#'+parentId+' p#cart_block_no_products').slideDown('fast');
+									$('#'+parentId+' div#cart_block dl.products').remove();
+								}
+							});
+						});
+						$('#'+parentId+' dd#cart_block_combination_of_' + ids[0] + (ids[1] ? '_'+ids[1] : '') ).fadeTo('fast', 0, function(){
+							$(this).slideUp('fast', function(){
+								$(this).remove();
+							});
+						});
+					}
 				});
-	
-				//if there is a removed product, delete it from the displayed block cart
-				if (removedProductId != null)
-				{
-					var firstCut =  removedProductId.replace('cart_block_product_', '');
-					var ids = firstCut.split('_');
-	
-					$('#'+parentId+' #'+removedProductId).addClass('strike').fadeTo('slow', 0, function(){
-						$(this).slideUp('slow', function(){
-							$(this).remove();
-							//if the cart is now empty, show the 'no product in the cart' message
-							if($('#'+parentId+' #cart_block dl.products dt').length == 0)
-							{
-								$('#'+parentId+' p#cart_block_no_products').slideDown('fast');
-								$('#'+parentId+' div#cart_block dl.products').remove();
-							}
-						});
-					});
-					$('#'+parentId+' dd#cart_block_combination_of_' + ids[0] + (ids[1] ? '_'+ids[1] : '') ).fadeTo('fast', 0, function(){
-						$(this).slideUp('fast', function(){
-							$(this).remove();
-						});
-					});
-				}
 			}
 		});
 	},
