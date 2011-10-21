@@ -150,9 +150,10 @@ class importerosc extends ImportModule
 		$identifier = 'id_country';
 		$defaultIdLang = $this->getDefaultIdLang();
 		$countries = $this->ExecuteS('
-										SELECT countries_id as id_country, countries_name as name, countries_iso_code_2 as iso_code, `'.bqSQL($defaultIdLang).'̀  as id_lang,
+										SELECT countries_id as id_country, countries_name as name, countries_iso_code_2 as iso_code, '.(int)$defaultIdLang.' as id_lang,
 										1 as id_zone, 0 as id_currency, 1 as contains_states, 1 as need_identification_number, 1 as active, 1 as display_tax_label
 										FROM  `'.bqSQL($this->prefix).'countries` as c  LIMIT '.(int)($limit).' , '.(int)$nrb_import);
+
 		return $this->autoFormat($countries, $identifier, $keyLanguage, $multiLangFields);
 	}
 
