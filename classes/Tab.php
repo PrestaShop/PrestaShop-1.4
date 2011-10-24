@@ -244,7 +244,7 @@ class TabCore extends ObjectModel
 	 */
 	public static function getNewLastPosition($id_parent)
 	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'tab` WHERE `id_parent` = '.(int)($id_parent)));
+		return (Db::getInstance()->getValue('SELECT IFNULL(MAX(position),0)+1 FROM `'._DB_PREFIX_.'tab` WHERE `id_parent` = '.(int)($id_parent)));
 	}
 
 	public function move($direction)
