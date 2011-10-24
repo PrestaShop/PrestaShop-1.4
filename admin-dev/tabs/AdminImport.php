@@ -550,10 +550,11 @@ class AdminImport extends AdminTab
 				/* No automatic nTree regeneration for import */
 				$category->doNotRegenerateNTree = true;
 
-				// If id category AND id category already in base, trying to update
-				if ($category->id AND $category->categoryExists($category->id))
+				// If id category AND id category already in base, and not root category, trying to update
+				if ($category->id AND $category->categoryExists($category->id) AND $category->id != 1)
 					$res = $category->update();
-
+				if ($category->id == 1)
+					$this->_errors[] = Tools::displayError('Root category cannot be modify');
 				// If no id_category or update failed
 				if (!$res)
 					$res = $category->add();
@@ -569,7 +570,6 @@ class AdminImport extends AdminTab
 				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
 			}
 		}
-
 		/* Import has finished, we can regenerate the categories nested tree */
 		Category::regenerateEntireNtree();
 
