@@ -383,9 +383,9 @@ class AdminDiscounts extends AdminTab
 										}
 										if (obj.customers.length >= 50)
 										{
-											formDiscount.id_target.options[groups_length+50+i].text = "'.$this->l('Too many results...',__CLASS__ , true, false).'";
-											formDiscount.id_target.options[groups_length+50+i].value = "_";
-											formDiscount.id_target.options[groups_length+50+i].className = "customers_filtered";
+											formDiscount.id_target.options[groups_length+i].text = "'.$this->l('Too many results...',__CLASS__ , true, false).'";
+											formDiscount.id_target.options[groups_length+i].value = "_";
+											formDiscount.id_target.options[groups_length+i].className = "customers_filtered";
 										}
 									}
 									$(".groups_filtered").appendTo($("#id_target_group"));
