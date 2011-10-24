@@ -60,6 +60,7 @@ class AdminModules extends AdminTab
 		$this->listTabModules['i18n_localization'] = $this->l('I18n & Localization');
 		$this->listTabModules['merchandizing'] = $this->l('Merchandizing');
 		$this->listTabModules['migration_tools'] = $this->l('Migration Tools');
+		$this->listTabModules['mobile'] = $this->l('Mobile');
 		$this->listTabModules['payments_gateways'] = $this->l('Payments & Gateways');
 		$this->listTabModules['payment_security'] = $this->l('Payment Security');
 		$this->listTabModules['pricing_promotion'] = $this->l('Pricing & Promotion');
