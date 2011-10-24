@@ -64,8 +64,11 @@ class MailCore
 		}
 		
 		// Do not crash for this error, that may be a complicated customer name
-		if (!empty($toName) AND !Validate::isMailName($toName))
-	 		$toName = NULL;
+		if(is_string($toName))
+		{
+			if (!empty($toName) AND !Validate::isMailName($toName))
+	 			$toName = NULL;
+		}
 			
 		if (!Validate::isTplName($template))
 		{
@@ -80,7 +83,7 @@ class MailCore
 		}
 
 		/* Construct multiple recipients list if needed */
-		if (is_array($to))
+		if (is_array($to) and isset($to))
 		{
 			$to_list = new Swift_RecipientList();
 			foreach ($to AS $key => $addr)
@@ -92,8 +95,11 @@ class MailCore
 					Tools::dieOrLog(Tools::displayError('Error: invalid email address'), $die);
 					return false;
 				}
-				if ($toName AND is_array($toName) AND Validate::isGenericName($toName[$key]))
-					$to_name = $toName[$key];
+				if(is_array($toName))
+				{
+					if ($toName AND is_array($toName) AND Validate::isGenericName($toName[$key]))
+						$to_name = $toName[$key];
+				}
 				$to_list->addTo($addr, $to_name);
 			}
 			$to_plugin = $to[0];
