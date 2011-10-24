@@ -865,7 +865,7 @@ class shopimporter extends ImportModule
 				foreach($item['images'] as $key => $image)
 				{
 					$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'import');
-					if (@copy($image, $tmpfile))
+					if (@copy(str_replace(' ', '%20', $image), $tmpfile))
 					{
 
 						$imagesTypes = ImageType::getImagesTypes($type);
