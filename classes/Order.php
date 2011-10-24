@@ -1061,7 +1061,6 @@ class OrderCore extends ObjectModel
 		$this->invoice_date = $res['invoice_date'];
 		$this->invoice_number = $res['invoice_number'];
 		$this->delivery_date = $res['delivery_date'];
-		d($this->delivery_date);
 		$this->delivery_number = $res['delivery_number'];
 		$history->addWithemail();
 	}
