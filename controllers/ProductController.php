@@ -175,10 +175,13 @@ class ProductControllerCore extends FrontController
 				if (Pack::isPack((int)$this->product->id) AND !Pack::isInStock((int)$this->product->id))
 					$this->product->quantity = 0;
 
-				$group_reduction = (100 - Group::getReduction((int)self::$cookie->id_customer)) / 100;
 				$id_customer = (isset(self::$cookie->id_customer) AND self::$cookie->id_customer) ? (int)(self::$cookie->id_customer) : 0;
 				$id_group = $id_customer ? (int)(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
 				$id_country = (int)($id_customer ? Customer::getCurrentCountry($id_customer) : Configuration::get('PS_COUNTRY_DEFAULT'));
+
+				$group_reduction = GroupReduction::getValueForProduct($this->product->id, $id_group);
+				if ($group_reduction == 0)
+					$group_reduction = Group::getReduction((int)self::$cookie->id_customer) / 100;
 
 				// Tax
 				$tax = (float)(Tax::getProductTaxRate((int)($this->product->id), $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
@@ -208,7 +211,7 @@ class ProductControllerCore extends FrontController
 					'attachments' => $attachments,
 					'allow_oosp' => $this->product->isAvailableWhenOutOfStock((int)($this->product->out_of_stock)),
 					'last_qties' =>  (int)Configuration::get('PS_LAST_QTIES'),
-					'group_reduction' => $group_reduction,
+					'group_reduction' => (1 - $group_reduction),
 					'col_img_dir' => _PS_COL_IMG_DIR_,
 				));
 				self::$smarty->assign(array(
@@ -457,7 +460,7 @@ class ProductControllerCore extends FrontController
                 }
 			    else
                 {
-				    $row['real_value'] = $row['reduction'] * 100;   
+				    $row['real_value'] = $row['reduction'] * 100;
                 }
 			}
 			$row['nextQuantity'] = (isset($specificPrices[$key + 1]) ? (int)($specificPrices[$key + 1]['from_quantity']) : -1);
