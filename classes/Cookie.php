@@ -214,6 +214,7 @@ class	CookieCore
 	  */
 	public function mylogout()
 	{
+		unset($this->_content['id_compare']);
 		unset($this->_content['id_customer']);
 		unset($this->_content['id_guest']);
 		unset($this->_content['is_guest']);

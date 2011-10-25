@@ -47,27 +47,16 @@ class CompareControllerCore extends FrontController
 		{				
 			if (Tools::getValue('action') == 'add')
 			{
-				if (isset(self::$cookie->id_customer))
-				{
-					if(CompareProduct::getCustomerNumberProducts(self::$cookie->id_customer) < Configuration::get('PS_COMPARATOR_MAX_ITEM'))
-						CompareProduct::addCustomerCompareProduct((int)self::$cookie->id_customer, (int)Tools::getValue('id_product'));
-					else
-						die('0');
-				}					
+				$id_compare = isset(self::$cookie->id_compare) ? self::$cookie->id_compare: false;
+				if(CompareProduct::getNumberProducts($id_compare) < Configuration::get('PS_COMPARATOR_MAX_ITEM'))
+					CompareProduct::addCompareProduct($id_compare, (int)Tools::getValue('id_product'));
 				else
-				{
-					if ((isset(self::$cookie->id_guest) AND CompareProduct::getGuestNumberProducts(self::$cookie->id_guest) < Configuration::get('PS_COMPARATOR_MAX_ITEM')))
-						CompareProduct::addGuestCompareProduct((int)self::$cookie->id_guest, (int)Tools::getValue('id_product'));
-					else
-						die('0');
-				}
+					die('0');
 			}
 			elseif (Tools::getValue('action') == 'remove')
 			{
-				if (isset(self::$cookie->id_customer))
-					CompareProduct::removeCustomerCompareProduct((int)self::$cookie->id_customer, (int)Tools::getValue('id_product'));			
-				elseif (isset(self::$cookie->id_guest))
-					CompareProduct::removeGuestCompareProduct((int)self::$cookie->id_guest, (int)Tools::getValue('id_product'));
+				if (isset(self::$cookie->id_compare))
+					CompareProduct::removeCompareProduct((int)self::$cookie->id_compare, (int)Tools::getValue('id_product'));
 				else
 					die('0');
 			}
@@ -92,10 +81,8 @@ class CompareControllerCore extends FrontController
 	
 		if ($product_list = Tools::getValue('compare_product_list') AND $postProducts = (isset($product_list) ? rtrim($product_list,'|') : ''))
 			$ids = array_unique(explode('|', $postProducts));
-		elseif (isset(self::$cookie->id_customer))
-			$ids = CompareProduct::getCustomerCompareProducts(self::$cookie->id_customer);
-		elseif(isset(self::$cookie->id_guest))
-			$ids = CompareProduct::getGuestCompareProducts(self::$cookie->id_guest);
+		elseif (isset(self::$cookie->id_compare))
+			$ids = CompareProduct::getCompareProducts(self::$cookie->id_compare);
 		else
 			$ids = null;
 		

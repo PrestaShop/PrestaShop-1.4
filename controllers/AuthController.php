@@ -250,6 +250,7 @@ class AuthControllerCore extends FrontController
 				}
 				else
 				{
+					self::$cookie->id_compare = isset(self::$cookie->id_compare) ? self::$cookie->id_compare: CompareProduct::getIdCompareByIdCustomer($customer->id);
 					self::$cookie->id_customer = (int)($customer->id);
 					self::$cookie->customer_lastname = $customer->lastname;
 					self::$cookie->customer_firstname = $customer->firstname;
