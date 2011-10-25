@@ -63,10 +63,14 @@ class importerosc extends ImportModule
 
 	public function displaySpecificOptions()
 	{
+		$html = '';
+		if (!$this->checkCategoriesLevel())
+			$html .= $this->displayCategoriesLevelConf();
+
 		$langagues = $this->ExecuteS('SELECT * FROM  `'.bqSQL($this->prefix).'languages`');
 		$curencies = $this->ExecuteS('SELECT * FROM  `'.bqSQL($this->prefix).'currencies`');
 
-		$html = '<label style=\'width:220px\'>'.$this->l('Default osCommerce language  : ').'</label>
+		$html .= '<label style=\'width:220px\'>'.$this->l('Default osCommerce language  : ').'</label>
 				<div class="margin-form">
 				<select name=\'defaultOscLang\'><option value=\'0\'>------</option>';
 				foreach($langagues AS $lang)
@@ -224,17 +228,18 @@ class importerosc extends ImportModule
 		$identifier = 'id_category';
 
 		$categories = $this->ExecuteS('
-									SELECT c.categories_id as id_category, c.parent_id as id_parent, 0 as level_depth, cd.language_id as id_lang, cd.categories_name as name , 1 as active, categories_image as images
+									SELECT c.categories_id as id_category, c.parent_id as id_parent, level as level_depth, cd.language_id as id_lang, cd.categories_name as name , 1 as active, categories_image as images
 									FROM `'.bqSQL($this->prefix).'categories` c
 									LEFT JOIN `'.bqSQL($this->prefix).'categories_description` cd ON (c.categories_id = cd.categories_id)
 									WHERE cd.categories_name IS NOT NULL AND cd.language_id IS NOT NULL
-									ORDER BY c.categories_id, cd.language_id
+									ORDER BY c.level ASC
 									LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 		foreach($categories as& $cat)
 		{
 			$cat['link_rewrite'] = Tools::link_rewrite($cat['name']);
 			$cat['images'] = array(Tools::getProtocol().Tools::getValue('shop_url').'/images/'.$cat['images']);
 		}
+
 		return $this->autoFormat($categories, $identifier, $keyLanguage, $multiLangFields);
 	}
 
@@ -491,7 +496,138 @@ class importerosc extends ImportModule
 						</div>';
 		return $content;
 	}
+	
+	public function checkCategoriesLevel()
+	{
+		$columns = $this->ExecuteS('SHOW COLUMNS FROM `'.bqSQL($this->prefix).'categories` ');
+		foreach($columns as $field)
+			if ($field['Field'] ==  'level')
+				return true;
+		return false;
+	}
+	
+	public function displayCategoriesLevelConf()
+	{
+		$html = '<div class="warn" id="warn_category_level" style="width:450px;display:none">
+					<img src="../img/admin/warn2.png">
+				'.$this->l('You are trying to import categories and we\'ve detected, that your oscommerce database don\'t have the field "level" in the table categorie. You must have this field to continue the import of categories.');
+		
+		$html .= '<button class="button" onclick="addAndCalculateLevel();" style="padding:10px;font-size:13px;text:align:center">'.$this->l('Click to add and calculate the filed "level" .').'</button> <span id="loading" style="display:none"><img src="../img/loader.gif"></span></div>
+				<div class="conf" id="conf_category_level" style="width:450px;display:none"><img src="../img/admin/ok2.png">'.$this->l('Level field\'s has been created and calculated, You can continue').'</div>';
+		
+		$html .= '
+			<script>
+			$(document).ready(function (){
+				
+				function checkCategorySelected() 
+				{
+					if ($(\'#id_category_on:radio\').attr(\'checked\'))
+					{
+						$(\'#warn_category_level\').show();
+						$(\'#checkAndSaveConfig\').attr(\'disabled\', \'disabled\');
+						$(\'#checkAndSaveConfig\').hide();
+					}
+					else
+					{
+						$(\'#warn_category_level\').hide();
+						$(\'#checkAndSaveConfig\').removeAttr(\'disabled\');
+						$(\'#checkAndSaveConfig\').show();
+					}
+				
+				}
+				checkCategorySelected();
+				$(\'input[name="getCategories"]\').change( function () {
+					checkCategorySelected();
+				});
+				
+			});
+			
+			function addAndCalculateLevel()
+			{
+				if (confirm(\''.$this->l('It is highly recommended to backup your database before proceeding. Did you make a backup?').'\'))
+				{
+					$(\'#loading\').show();
+					$.ajax({
+				       type: "GET",
+				       url: "../modules/importerosc/ajax.php",
+				       async: false,
+				       cache: false,
+				       dataType : "json",
+				       data: "ajax=true&token='.sha1(_COOKIE_KEY_.'importosc').'&server="+$(\'#server\').val()+"&user="+$(\'#user\').val()+"&password="+$(\'#password\').val()+"&database="+$(\'#database\').val()+"&prefix="+$(\'#prefix\').val() ,
+				       success: function (jsonData)
+				       {
+							if (jsonData.hasError)
+	    						alert(jsonData.error);
+	    					else
+	    					{
+	    						$(\'#warn_category_level\').remove();
+	    						$(\'#checkAndSaveConfig\').removeAttr(\'disabled\');
+								$(\'#checkAndSaveConfig\').show();
+	    						$(\'#conf_category_level\').show();
+	    					}	
+				       },
+				      error: function (XMLHttpRequest, textStatus, errorThrown) 
+				       {
+				       		
+				       }
+				   });
+			   }
+			   return false;
+			}
+			</script>';
+		
+		return $html;
+	}
+	
+	public function createLevelAndCalculate()
+	{		
+		if ($this->checkCategoriesLevel())
+			die('{"hasError" : false}');
+			
+		if ($this->createLevel())
+			$this->calculateLevel();
+		else
+			die('{"hasError" : true, "error" : "'.$this->l('Can not ALTER TABLE').'"}');
+	}
 
+	public function createLevel()
+	{
+		return $this->Execute('ALTER TABLE `'.bqSQL($this->prefix).'categories` ADD `level` INT NOT NULL');
+	}
+	
+	public function calculateLevel()
+	{
+		$this->updateLevel($this->getSubCat(0), 1);
+		die('{"hasError" : false}');
+	}
+	
+	public function updateLevel($ids_cat, $level = 1)
+	{
+		$this->Execute('
+			UPDATE `'.bqSQL($this->prefix).'categories` 
+			SET level = '.(int)$level.' 
+			WHERE categories_id IN ('.implode(',', $ids_cat).')');
+		foreach($ids_cat as $id)
+			if ($sub_cat = $this->getSubCat($id))
+				$this->updateLevel($sub_cat, $level + 1);
+	
+	}
+	
+	public function getSubCat($id_parent)
+	{
+		$result = $this->ExecuteS('SELECT `categories_id` FROM `'.bqSQL($this->prefix).'categories` WHERE `parent_id`='.(int)$id_parent);		
+		if (!is_array($result) OR empty($result))
+			return false;
+		return $this->formatCategoriesIds($result);
+	}
+	
+	public function formatCategoriesIds($result)
+	{
+		$return = array();
+		foreach($result as $key => $val)
+			$return[] = $val['categories_id'];
+		return $return;		
+	}
 }
 
 ?>
