@@ -283,3 +283,5 @@ $_LANG['Ok, please deactivate the following modules, I will reactivate them late
 $_LANG['You will be able to manually reactivate them in your Back Office once the update process has succeeded.'] = '';
 $_LANG['No more information'] = '';
 $_LANG['If your theme is not valid, you may experience some problems in your front-office aspect, but don\'t panic ! To solve this, you can make it compatible by correcting the validators errors or by using a theme compatible with '] = '';
+$_LANG['-- Select your country --'] = '-- scegliere il paese --';
+$_LANG['-- Select your timezone --'] = '-- Scegli il fuso orario --';

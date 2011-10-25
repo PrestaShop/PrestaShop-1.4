@@ -300,3 +300,5 @@ $_LANG['Database login:'] = 'Identifiant base de données';
 $_LANG['Database password:'] = 'Mot de passe base de données';
 $_LANG['Please create a MySQL database and then verify your settings below. If you need assistance, please ask your hosting provider for this information.'] = 'Merci de créer une base de données MySQL puis de saisir et vérifier les paramètres ci-dessous. Si vous avez besoin d\'aide pour ces paramètres, demandez à votre hébergeur.';
 $_LANG['No more information'] = 'Pas d\'autres informations';
+$_LANG['-- Select your country --'] = '-- Choisissez votre pays --';
+$_LANG['-- Select your timezone --'] = '-- Choisissez votre fuseau horaire --';
