@@ -2133,14 +2133,14 @@ class BlockLayered extends Module
 					SELECT c.id_category, c.id_parent, cl.name, (SELECT COUNT(*) # ';
 					$sqlQuery['from'] = '
 					FROM '._DB_PREFIX_.'category_product cp
-					LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product) ';
+					LEFT JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product AND p.active = 1) ';
 					$sqlQuery['where'] = '
 					WHERE cp.id_category = c.id_category ';
 					$sqlQuery['group'] = ') count_products
 					FROM '._DB_PREFIX_.'category c
 					LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.')
 					WHERE c.id_parent = '.(int)$id_parent.'
-					GROUP BY c.id_category ORDER BY level_depth';
+					GROUP BY c.id_category ORDER BY level_depth, c.position';
 			}
 			
 			foreach ($filters as $filterTmp)
