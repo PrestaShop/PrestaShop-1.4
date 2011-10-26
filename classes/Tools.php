@@ -2103,11 +2103,11 @@ FileETag INode MTime Size
 				$orderByPrefix = '';
 				if ($prefix)
 				{
-					if ($value == 'id_product' || $value == 'date_add' || $value == 'price')
+					if ($value == 'id_product' || $value == 'date_add' || $value == 'date_upd' || $value == 'price')
 						$orderByPrefix = 'p.';
 					elseif ($value == 'name')
 						$orderByPrefix = 'pl.';
-					elseif ($value == 'manufacturer')
+					elseif ($value == 'manufacturer_name')
 						$orderByPrefix = 'm.';
 					elseif ($value == 'position' || empty($value))
 						$orderByPrefix = 'cp.';
