@@ -70,6 +70,11 @@ class OrderControllerCore extends ParentOrderController
 
 		if ($this->nbProducts)
 			self::$smarty->assign('virtual_cart', $isVirtualCart);
+
+		// Update carrier selected on preProccess in order to fix a bug of
+		// block cart when it's hooked on leftcolumn
+		if ($this->step == 3 && Tools::isSubmit('processCarrier'))
+			$this->processCarrier();
 	}
 
 	public function displayHeader()
@@ -98,13 +103,11 @@ class OrderControllerCore extends ParentOrderController
 				$this->_assignCarrier();
 				break;
 			case 3:
-				//Test that the conditions (so active) were accepted by the customer 
+				//Test that the conditions (so active) were accepted by the customer
 				$cgv = Tools::getValue('cgv');
 				if (Configuration::get('PS_CONDITIONS') AND (!Validate::isBool($cgv)))
 					Tools::redirect('order.php?step=2');
-				
-				if (Tools::isSubmit('processCarrier'))
-					$this->processCarrier();
+
 				$this->autoStep();
 				/* Bypass payment step if total is 0 */
 				if (($id_order = $this->_checkFreeOrder()) AND $id_order)
@@ -133,7 +136,7 @@ class OrderControllerCore extends ParentOrderController
 
 		$invoiceAddressFields = AddressFormat::getOrderedAddressFields($addressInvoice->id_country, false, true);
 		$deliveryAddressFields = AddressFormat::getOrderedAddressFields($addressDelivery->id_country, false, true);
-		
+
 		self::$smarty->assign(array(
 			'inv_adr_fields' => $invoiceAddressFields,
 			'dlv_adr_fields' => $deliveryAddressFields));
