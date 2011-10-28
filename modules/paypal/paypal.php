@@ -380,6 +380,10 @@ class PayPal extends PaymentModule
 	public function makePayPalAPIValidation($cookie, $cart, $id_currency, $payerID, $type)
 	{
 		global $cookie;
+		logDebug(dirname(__FILE__), 'start');
+
+		logDebug(dirname(__FILE__), $_POST);
+		logDebug(dirname(__FILE__), $_GET);
 
 		if (!$this->active)
 			return ;
@@ -455,6 +459,9 @@ class PayPal extends PaymentModule
 			$logs[] = '<b>'.$ppExpress->l('Token given by PayPal is not the same as the cookie token', 'submit').'</b>';
 			$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal return error.', 'submit'), $logs);
 		}
+		
+			logDebug(dirname(__FILE__), $result);
+
 
 		// Making log
 		$id_transaction = $result['TRANSACTIONID'];
@@ -479,7 +486,8 @@ class PayPal extends PaymentModule
 			default:
 				$id_order_state = Configuration::get('PS_OS_ERROR');
 		}
-
+		
+		
 		// Call payment validation method
 		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, Cart::BOTH)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false, $cart->secure_key);
 		
@@ -492,12 +500,21 @@ class PayPal extends PaymentModule
 		
 	}
 	
-	public function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, $secure_key = false)
+	public function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', 
+		$message = NULL, $extraVars = array(), $currency_special = NULL, $dont_touch_amount = false, 
+		$secure_key = false)
 	{
 		if (!$this->active)
 			return;
-
-		parent::validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod, $message, $extraVars, $currency_special, $dont_touch_amount, $secure_key);
+		
+		// Set transaction details if pcc is defiend in PaymentModule class_exists
+		if ($this->pcc)
+		{
+			$this->pcc->transaction_id = (isset($extraVars['transaction_id']) ?
+				$extraVars['transaction_id'] : '');
+		}	
+		parent::validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod, $message, 
+			$extraVars, $currency_special, $dont_touch_amount, $secure_key);
 		
 		if (array_key_exists('transaction_id', $extraVars) AND array_key_exists('payment_status', $extraVars))
 			$this->_saveTransaction($id_cart, $extraVars);
