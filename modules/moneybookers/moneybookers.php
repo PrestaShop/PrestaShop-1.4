@@ -38,7 +38,7 @@ class MoneyBookers extends PaymentModule
 	{
 		$this->name = 'moneybookers';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.6.1';
+		$this->version = '1.6.2';
 
 		parent::__construct();
 
@@ -697,6 +697,30 @@ class MoneyBookers extends PaymentModule
 
 		return $this->display(__FILE__, 'confirmation.tpl');
 	}
+	
+	/**
+  * Set the detail of a payment - Call before the validate order init
+  * correctly the pcc object
+  * See Authorize documentation to know the associated key => value
+  * @param array fields
+  */
+  public function setTransactionDetail($response)
+  {
+    // If Exist we can store the details
+    if (isset($this->pcc))
+    {
+      $this->pcc->transaction_id = (string)$response['mb_transaction_id'];
+
+      $this->pcc->card_number = '';
+
+      $this->pcc->card_brand = (string)$response['payment_type'];
+
+      $this->pcc->card_expiration = '';
+
+      $this->pcc->card_holder = (string)(isset($response['pay_to_email']) ? 
+      	$response['pay_to_email'] : '';
+    }
+  }
 }
 
 

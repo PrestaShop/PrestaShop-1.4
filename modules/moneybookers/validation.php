@@ -64,15 +64,18 @@ $secure_cart = explode('_', $_POST['transaction_id']);
 $status = (int)($_POST['status']);
 if (!isset($secure_cart[2]))
 	$secure_cart[2] = 'KO';
+
 switch ($status)
 {	
 	/* Bankwire */
 	case 0:
+		$moneyBookers->setTransactionDetail($_POST);
 		$moneyBookers->validateOrder((int)($secure_cart[0]), Configuration::get('PS_OS_BANKWIRE'), (float)($_POST['amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
 	/* Payment OK */
 	case 2:
+		$moneyBookers->setTransactionDetail($_POST);
 		$moneyBookers->validateOrder((int)($secure_cart[0]), Configuration::get('PS_OS_PAYMENT'), (float)($_POST['amount']), $moneyBookers->displayName, $message, array(), NULL, false, $secure_cart[2]);
 		break;
 
