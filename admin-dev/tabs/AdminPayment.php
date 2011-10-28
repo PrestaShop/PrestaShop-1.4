@@ -89,7 +89,7 @@ class AdminPayment extends AdminTab
 			if ($module->active AND isset($_POST[$module->name.'_'.$type.'']))
 				foreach ($_POST[$module->name.'_'.$type.''] as $selected)
 					$values[] = '('.(int)($module->id).', '.(int)($selected).')';
-		d($values);
+
 		if (sizeof($values))
 			Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_'.$type.' (`id_module`, `id_'.$type.'`) VALUES '.implode(',', $values));
 		Tools::redirectAdmin($currentIndex.'&conf=4'.'&token='.$this->token);
