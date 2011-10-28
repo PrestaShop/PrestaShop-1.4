@@ -1065,49 +1065,49 @@ class shopimporter extends ImportModule
 
 		if ((sizeof($rules['requiredLang']) || sizeof($rules['sizeLang']) || sizeof($rules['validateLang'])))
 		{
-		$matchIdLang = $this->getMatchIdLang(0);
-		/* Checking for multilingual required fields */
-		foreach ($rules['requiredLang'] AS $fieldLang)
-		{
-			if (($empty = $fields[$fieldLang][$matchIdLang[$defaultLanguage->id]]) === false || empty($empty))
-				if ($hasErrors == 2)
-				{
-					if (array_key_exists($fieldLang, $rules['sizeLang']))
-						$size = $rules['sizeLang'][$fieldLang];
-					else
-						$size = 1;
-					$fields[$fieldLang][$matchIdLang[$defaultLanguage->id]] = $this->generateData($size, $rules['validateLang'][$fieldLang]);
-				}
-				else
-					$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).'</b> '.$this->l('is required at least in').' '.$defaultLanguage->name;
-		}
-		/* Checking for maximum multilingual fields size */
-		foreach ($rules['sizeLang'] AS $fieldLang => $maxLength)
-			foreach ($languages AS $language)
-				if (isset($fields[$fieldLang][$language['id_lang']]) && $fields[$fieldLang] !== false AND Tools::strlen($fields[$fieldLang][$language['id_lang']]) > $maxLength)
-					if ($hasErrors == 2)
-						$fields[$fieldLang] = substr($fields[$fieldLang], 0, $maxLength);
-					else
-						$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
-		/* Checking for multilingual fields validity */
-		foreach ($rules['validateLang'] AS $fieldLang => $function)
-			foreach ($languages AS $language)
+			$matchIdLang = $this->getMatchIdLang(0);
+			/* Checking for multilingual required fields */
+			foreach ($rules['requiredLang'] AS $fieldLang)
 			{
-				if (array_key_exists($fieldLang, $fields) AND ($value = $fields[$fieldLang][$language['id_lang']]) !== false AND !empty($value))
-				{
-					if (!Validate::$function($value))
-						if ($hasErrors == 2)
-						{
-							if (array_key_exists($fieldLang, $rules['sizeLang']))
-								$size = $rules['sizeLang'][$fieldLang];
-							else
-								$size = 1;
-							$fields[$fieldLang][$language['id_lang']] = $this->generateData($size, $rules['validateLang'][$fieldLang]);
-						}
+				if (($empty = $fields[$fieldLang][$matchIdLang[$defaultLanguage->id]]) === false || empty($empty))
+					if ($hasErrors == 2)
+					{
+						if (array_key_exists($fieldLang, $rules['sizeLang']))
+							$size = $rules['sizeLang'][$fieldLang];
 						else
-							$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
-				}
+							$size = 1;
+						$fields[$fieldLang][$matchIdLang[$defaultLanguage->id]] = $this->generateData($size, $rules['validateLang'][$fieldLang]);
+					}
+					else
+						$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).'</b> '.$this->l('is required at least in').' '.$defaultLanguage->name;
 			}
+			/* Checking for maximum multilingual fields size */
+			foreach ($rules['sizeLang'] AS $fieldLang => $maxLength)
+				foreach ($languages AS $language)
+					if (isset($fields[$fieldLang][$language['id_lang']]) && $fields[$fieldLang] !== false AND Tools::strlen($fields[$fieldLang][$language['id_lang']]) > $maxLength)
+						if ($hasErrors == 2)
+							$fields[$fieldLang] = substr($fields[$fieldLang], 0, $maxLength);
+						else
+							$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
+			/* Checking for multilingual fields validity */
+			foreach ($rules['validateLang'] AS $fieldLang => $function)
+				foreach ($languages AS $language)
+				{
+					if (array_key_exists($fieldLang, $fields) AND ($value = $fields[$fieldLang][$language['id_lang']]) !== false AND !empty($value))
+					{
+						if (!Validate::$function($value))
+							if ($hasErrors == 2)
+							{
+								if (array_key_exists($fieldLang, $rules['sizeLang']))
+									$size = $rules['sizeLang'][$fieldLang];
+								else
+									$size = 1;
+								$fields[$fieldLang][$language['id_lang']] = $this->generateData($size, $rules['validateLang'][$fieldLang]);
+							}
+							else
+								$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
+					}
+				}
 		}
 		return $returnErrors;
 	}
