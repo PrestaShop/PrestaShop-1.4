@@ -65,7 +65,7 @@ if (!isset($response[7]) OR !isset($response[3]) OR !isset($response[9]))
 }
 
 if ($response[0] == 3)
-	Tools::redirect('index.php?controller=order&step=3&aimerror=1');
+	Tools::redirect('order.php?step=3&aimerror=1');
 else 
 {
 	/* Does the cart exist and is valid? */
@@ -82,10 +82,9 @@ else
 	$authorizeaim = new authorizeaim();
 	$message = $response[3];
 	if ($response[0] == 1)
-	{
-		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_PAYMENT'), (float)$response[9], $authorizeaim->displayName, $message, NULL, NULL, false, $customer->secure_key);
-		if (compare_version(_PS_VERSION_, '1.4') >= 0)
-			$authorizeaim->setTransactionDetail($response);		
+	{		
+		$authorizeaim->setTransactionDetail($response);	
+		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_PAYMENT'), (float)$response[9], $authorizeaim->displayName, $message, NULL, NULL, false, $customer->secure_key);	
 	}
 	else
 		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_ERROR'), (float)$response[9], $authorizeaim->displayName, $message, NULL, NULL, false, $customer->secure_key);

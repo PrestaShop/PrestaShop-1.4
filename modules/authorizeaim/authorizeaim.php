@@ -94,13 +94,15 @@ class authorizeAIM extends PaymentModule
 
 	public function hookOrderConfirmation($params)
 	{
+		global $smarty;
+		
 		if ($params['objOrder']->module != $this->name) 
 			return;
 
 		if ($params['objOrder']->getCurrentState() != Configuration::get('PS_OS_ERROR')) 
-			$this->context->smarty->assign(array('status' => 'ok', 'id_order' => intval($params['objOrder']->id)));
+			$smarty->assign(array('status' => 'ok', 'id_order' => intval($params['objOrder']->id)));
 		else
-			$this->context->smarty->assign('status', 'failed');
+			$smarty->assign('status', 'failed');
 
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl'); 
 	}
@@ -162,9 +164,12 @@ class authorizeAIM extends PaymentModule
 
 	public function hookPayment($params)
 	{
+		global $cookie, $smarty;
+		
 		if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off'))
-		{
+		{	
 			$invoiceAddress = new Address((int)$params['cart']->id_address_invoice);
+			$customer = new Customer((int)$cookie->id_customer);
 			
 			$authorizeAIMParams = array();
 			$authorizeAIMParams['x_login'] = Configuration::get('AUTHORIZE_AIM_LOGIN_ID');
@@ -180,8 +185,8 @@ class authorizeAIM extends PaymentModule
 			$authorizeAIMParams['x_amount'] = number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '');
 			$authorizeAIMParams['x_address'] = $invoiceAddress->address1.' '.$invoiceAddress->address2;
 			$authorizeAIMParams['x_zip'] = $invoiceAddress->postcode;
-			$authorizeAIMParams['x_first_name'] = $this->context->customer->firstname;
-			$authorizeAIMParams['x_last_name'] = $this->context->customer->lastname;
+			$authorizeAIMParams['x_first_name'] = $customer->firstname;
+			$authorizeAIMParams['x_last_name'] = $customer->lastname;
 			
 			$isFailed = Tools::getValue('aimerror');
 
@@ -191,47 +196,38 @@ class authorizeAIM extends PaymentModule
 			$cards['discover'] = Configuration::get('AUTHORIZE_AIM_CARD_DISCOVER') == 'on' ? 1 : 0;
 			$cards['ax'] = Configuration::get('AUTHORIZE_AIM_CARD_AX') == 'on' ? 1 : 0;
 
-			$this->context->smarty->assign('p', $authorizeAIMParams);
-			$this->context->smarty->assign('cards', $cards);
-			$this->context->smarty->assign('isFailed', $isFailed);
+			$smarty->assign('p', $authorizeAIMParams);
+			$smarty->assign('cards', $cards);
+			$smarty->assign('isFailed', $isFailed);
 
 			return $this->display(__FILE__, 'authorizeaim.tpl');
 		}
 	}
 	
   /**
-  * Set the detail of a payment - Call after un validateOrder
+  * Set the detail of a payment - Call before the validate order init
+  * correctly the pcc object
   * See Authorize documentation to know the associated key => value
   * @param array fields
-  * @return bool success state
   */
   public function setTransactionDetail($response)
   {
-  	$pcc = new PaymentCC();
-		
-		$order = Db::getInstance()->getRow('
-			SELECT * 
-			FROM '._DB_PREFIX_.'orders 
-			WHERE id_cart = '.(int)$response[7]);
-		
-		$pcc->id_order = (int)$order['id_order'];
-		$pcc->id_currency = (int)$order['id_currency'];
-		$pcc->amount = (float)$response[9];
-		$pcc->transaction_id = (string)$response[6];
-		
-		// 50 => Card number (XXXX0000)
-		$pcc->card_number = (string)substr($response[50], -4);
-		
-		// 51 => Card Mark (Visa, Master card)
-		$pcc->card_brand = (string)$response[51];
-		
-		$pcc->card_expiration = (string)Tools::getValue('x_exp_date');
-		
-		// 68 => Owner name
-		$pcc->card_holder = (string)$response[68];
-		$pcc->add();
-		
-		unset($pcc);
+  	// If Exist we can store the details
+  	if (isset($this->pcc))
+  	{
+  		$this->pcc->transaction_id = (string)$response[6];
+			
+			// 50 => Card number (XXXX0000)
+			$this->pcc->card_number = (string)substr($response[50], -4);
+			
+			// 51 => Card Mark (Visa, Master card)
+			$this->pcc->card_brand = (string)$response[51];
+			
+			$this->pcc->card_expiration = (string)Tools::getValue('x_exp_date');
+			
+			// 68 => Owner name
+			$this->pcc->card_holder = (string)$response[68];
+  	}
   }
 }
 ?>
