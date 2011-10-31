@@ -89,6 +89,6 @@ else
 	else
 		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_ERROR'), (float)$response[9], $authorizeaim->displayName, $message, NULL, NULL, false, $customer->secure_key);
 
-	Tools::redirect('index.php?controller=order-confirmation&id_module='.(int)$authorizeaim->id.'&id_cart='.(int)$cart->id.'&key='.$customer->secure_key);
+	Tools::redirect('order-confirmation.php?id_module='.(int)$authorizeaim->id.'&id_cart='.(int)$cart->id.'&key='.$customer->secure_key);
 }
 
