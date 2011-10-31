@@ -253,6 +253,7 @@ class ProductCore extends ObjectModel
 	protected 	$identifier = 'id_product';
 
 	protected	$webserviceParameters = array(
+		'objectMethods' => array('add' => 'addWs', 'update' => 'updateWs'),
 		'objectNodeNames' => 'products',
 		'fields' => array(
 			'id_manufacturer' => array('xlink_resource' => 'manufacturers'),
@@ -3440,6 +3441,22 @@ class ProductCore extends ObjectModel
 		$return = parent::update($nullValues);
 		Module::hookExec('afterSaveProduct', array('id_product' => $this->id));
 		return $return;
+	}
+	
+	public function addWs($autodate = true, $nullValues = false)
+	{
+		$success = parent::add($autodate, $nullValues);
+		if ($success)
+			Search::indexation(false, $this->id);
+		return $success;
+	}
+	
+	public function updateWs($nullValues = false)
+	{
+		$success = parent::update($nullValues);
+		if ($success)
+			Search::indexation(false, $this->id);
+		return $success;
 	}
 }
 
