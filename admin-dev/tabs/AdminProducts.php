@@ -424,6 +424,14 @@ class AdminProducts extends AdminTab
 		/* Product images management */
 		elseif (($id_image = (int)(Tools::getValue('id_image'))) AND Validate::isUnsignedId($id_image) AND Validate::isLoadedObject($image = new Image($id_image)))
 		{
+			/* PrestaShop demo mode */
+			if (_PS_MODE_DEMO_)
+			{
+				$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
+				return;
+			}
+			/* PrestaShop demo mode*/
+			
 			if ($this->tabAccess['edit'] === '1')
 			{
 				/* Delete product image */
