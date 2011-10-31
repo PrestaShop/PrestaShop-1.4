@@ -61,7 +61,7 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.3.2';
+		$this->version = '1.3.3';
 		$this->author = 'PrestaShop';
 		parent::__construct();
 		$this->displayName = $this->l('eBay');
@@ -448,7 +448,7 @@ class Ebay extends Module
 									$cartAdd->id_customer = $id_customer;
 									$cartAdd->id_address_invoice = $id_address;
 									$cartAdd->id_address_delivery = $id_address;
-									$cartAdd->id_carrier = 1;
+									$cartAdd->id_carrier = 0;
 									$cartAdd->id_lang = $this->id_lang;
 									$cartAdd->id_currency = Currency::getIdByIsoCode('EUR');
 									$cartAdd->recyclable = 0;
