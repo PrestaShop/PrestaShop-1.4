@@ -285,6 +285,7 @@ function updateDisplay()
 		var tax = (taxRate / 100) + 1;
 		var taxExclPrice = (specific_price ? (specific_currency ? specific_price : specific_price * currencyRate) : priceTaxExclWithoutGroupReduction) + selectedCombination['price'] * currencyRate;
 
+
 		if (specific_price)
 			var productPriceWithoutReduction = priceTaxExclWithoutGroupReduction + selectedCombination['price'] * currencyRate;
 
@@ -304,6 +305,7 @@ function updateDisplay()
 		var reduction = 0;
 		if (reduction_price || reduction_percent)
 		{
+            reduction_price = (specific_currency ? reduction_price : reduction_price * currencyRate);
 			reduction = productPrice * (parseFloat(reduction_percent) / 100) + reduction_price;
 			if (reduction_price && (displayPrice || noTaxForThisProduct))
 				reduction = ps_round(reduction / tax, 6);
