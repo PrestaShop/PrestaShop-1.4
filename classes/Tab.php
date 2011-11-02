@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -32,7 +32,7 @@ class TabCore extends ObjectModel
 
 	/** @var string Class and file name*/
 	public		$class_name;
-	
+
 	public		$module;
 
 	/** @var integer parent ID */
@@ -51,9 +51,9 @@ class TabCore extends ObjectModel
 
 	protected 	$table = 'tab';
 	protected 	$identifier = 'id_tab';
-	
+
 	protected static $_getIdFromClassName = null;
-	
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -71,12 +71,12 @@ class TabCore extends ObjectModel
 	}
 
 	/**
-	 * additionnal treatments for Tab when creating new one : 
+	 * additionnal treatments for Tab when creating new one :
 	 * - generate a new position
 	 * - add access for admin profile
 	*
-	 * @param boolean $autodate 
-	 * @param boolean $nullValues 
+	 * @param boolean $autodate
+	 * @param boolean $nullValues
 	 * @return int id_tab
 	 */
 	public function add($autodate = true, $nullValues = false)
@@ -90,11 +90,11 @@ class TabCore extends ObjectModel
 		}
 		return false;
 	}
-	
+
 	/** When creating a new tab $id_tab, this add default rights to the table access
-	 * 
+	 *
 	 * @todo this should not be public static but protected
-	 * @param int $id_tab 
+	 * @param int $id_tab
 	 * @return boolean true if succeed
 	 */
 	public static function initAccess($id_tab)
@@ -105,20 +105,19 @@ class TabCore extends ObjectModel
 	 		return false;
 	 	/* Profile selection */
 	 	$profiles = Db::getInstance()->ExecuteS('SELECT `id_profile` FROM '._DB_PREFIX_.'profile where `id_profile` != 1');
-	 	if (!$profiles OR empty($profiles))
-	 		return false;
 	 	/* Query definition */
 		// note : insert ignore should be avoided
 	 	$query = 'INSERT IGNORE INTO `'._DB_PREFIX_.'access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) VALUES ';
-		// default admin 
+		// default admin
 		$query .= '(1, '.(int)$id_tab.', 1, 1, 1, 1),';
-	 	foreach ($profiles AS $profile)
-	 	{
-			// no cast needed for profile[id_profile], which cames from db
-			// And we disable all profile but current one 
-	 	 	$rights = $profile['id_profile'] == $cookie->profile ? 1 : 0;
-			$query .= '('.$profile['id_profile'].', '.(int)$id_tab.', '.$rights.', '.$rights.', '.$rights.', '.$rights.'),';
-	 	}
+	 	if (sizeof($profiles))
+			foreach ($profiles AS $profile)
+		 	{
+				// no cast needed for profile[id_profile], which cames from db
+				// And we disable all profile but current one
+		 	 	$rights = $profile['id_profile'] == $cookie->profile ? 1 : 0;
+				$query .= '('.$profile['id_profile'].', '.(int)$id_tab.', '.$rights.', '.$rights.', '.$rights.', '.$rights.'),';
+		 	}
 		$query = trim($query, ', ');
 	 	return Db::getInstance()->Execute($query);
 	}
@@ -238,9 +237,9 @@ class TabCore extends ObjectModel
 
 	/**
 	 * return an available position in subtab for parent $id_parent
-	 * 
+	 *
 	 * @param mixed $id_parent
-	 * @return int 
+	 * @return int
 	 */
 	public static function getNewLastPosition($id_parent)
 	{
