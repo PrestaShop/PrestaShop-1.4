@@ -31,7 +31,7 @@
 	// Global JS Value
 	var _PS_MR_MODULE_DIR_ = "{$new_base_dir}";
 	var mrtoken = "{$MRToken}";
-	var PS_MROPC = {($one_page_checkout && (isset($opc) && $opc)) ? 1 : 0};
+	var PS_MROPC = {$one_page_checkout};
 	var PS_MRTranslationList = new Array();
 	var PS_MRCarrierMethodList =  new Array();
 	var PS_MRSelectedRelayPoint = {literal}{{/literal}'carrier_id': 0, 'relayPointNum': 0{literal}}{/literal};
