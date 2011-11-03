@@ -1142,7 +1142,27 @@ class Smarty
                     $this->debugging = true;
                 }
             } else {
-                $this->debugging = (bool)($this->request_use_auto_globals ? @$_COOKIE['SMARTY_DEBUG'] : @$GLOBALS['HTTP_COOKIE_VARS']['SMARTY_DEBUG']);
+		
+		/* PrestaShop */
+		$this->debugging = false;
+		if ($this->request_use_auto_globals)
+		{
+			if (!isset($_COOKIE['SMARTY_DEBUG']))
+				$this->debugging = false;
+			else
+				$this->debugging = $_COOKIE['SMARTY_DEBUG'];
+		}
+		else
+		{
+			if (!isset($GLOBALS['HTTP_COOKIE_VARS']['SMARTY_DEBUG']))
+				$this->debugging = false;
+			else
+				$this->debugging = $GLOBALS['HTTP_COOKIE_VARS']['SMARTY_DEBUG'];
+		}	
+			
+		// $this->debugging = (bool)(($this->request_use_auto_globals ? @$_COOKIE['SMARTY_DEBUG'] : @$GLOBALS['HTTP_COOKIE_VARS']['SMARTY_DEBUG']);
+		
+		/* End */               
             }
         }
 

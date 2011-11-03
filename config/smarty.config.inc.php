@@ -123,7 +123,7 @@ function smartyTranslate($params, &$smarty)
 		if(!is_array($_MODULES))
 			$_MODULES = array();
 		if (@include_once($translationsFile))
-			if(is_array($_MODULE))
+			if (is_array($_MODULE))
 				$_MODULES = array_merge($_MODULES, $_MODULE);
 		$lang_array = $_MODULES;
 	}
