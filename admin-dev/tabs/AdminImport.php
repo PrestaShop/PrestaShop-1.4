@@ -900,7 +900,7 @@ class AdminImport extends AdminTab
 			//delete existing images if "delete_existing_images" is set to 1
 			if (array_key_exists('delete_existing_images', $info) && $info['delete_existing_images'])
 				$product->deleteImages();
-			elseif (array_key_exists('image_url', $info))
+			elseif (array_key_exists('image_url', $info) && !empty($info['image_url']))
 				$product->deleteImages();
 			
 			if (isset($info['image_url']) && $info['image_url'])
