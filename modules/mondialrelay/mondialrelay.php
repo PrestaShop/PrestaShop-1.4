@@ -1285,7 +1285,7 @@ class MondialRelay extends Module
 	public function hookpaymentTop($params)
  	{
  		if ($this->isMondialRelayCarrier($params['cart']->id_carrier) && 
-  		!$this->getRelayPointSelected($params['cart']->id))	
-   	$params['cart']->id_carrier = 0;
+  			!$this->getRelayPointSelected($params['cart']->id))	
+   		$params['cart']->id_carrier = 0;
  	}
 }

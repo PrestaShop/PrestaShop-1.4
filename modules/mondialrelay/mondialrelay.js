@@ -531,7 +531,7 @@ function PS_MRDisplayRelayPoint(json, blockContent, carrier_id)
 						+ ' - ' + json.success[relayPoint].CP + ' - ' + json.success[relayPoint].Ville
 						+ ' ' + json.success[relayPoint].Pays + '</p> \
 						<div class="' + classSelection + '"> \
-							<a class="PS_MRSelectRelayPointButton">' + PS_MRTranslationList['Select'] + '</a> \
+							<a class="PS_MRSelectRelayPointButton">' + BtTranslation + '</a> \
 						</div> \
 					</div>').appendTo($(this).children('td'));
 					
