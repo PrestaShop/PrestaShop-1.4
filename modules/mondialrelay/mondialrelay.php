@@ -59,7 +59,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.7.7';
+		$this->version	= '1.7.8';
 
 		parent::__construct();
 
@@ -399,10 +399,11 @@ class MondialRelay extends Module
 	*/
 	public static function getJqueryCompatibility($overloadCurrent = false)
 	{
+		// Store the last inclusion into a variable and include the new one
 		if ($overloadCurrent)
 			return '
 				<script type="text/javascript">
-					current = jQuery.noConflict(true); 
+					currentJquery = jQuery.noConflict(true); 
 				</script>
 			<script type="text/javascript" src="'.self::$moduleURL.'/js/jquery-1.6.4.min.js"></script>';
 
@@ -425,15 +426,18 @@ class MondialRelay extends Module
 	{
 		$cssFilePath = $this->_path.'style.css';
 		$jsFilePath= $this->_path.'mondialrelay.js';
-		
-		return '
-			<link type="text/css" rel="stylesheet" href="'.$cssFilePath.'" />
-			<script type="text/javascript">
-				var _PS_MR_MODULE_DIR_ = "'.self::$moduleURL.'";
-				var mrtoken = "'.self::$MRBackToken.'";
-			</script>
-			<script type="text/javascript" src="'.$jsFilePath.'"></script>'.
-			self::getJqueryCompatibility(true);
+
+		$ret = '';
+		if (Tools::getValue('tab') == 'AdminMondialRelay')
+			$ret = '
+				<link type="text/css" rel="stylesheet" href="'.$cssFilePath.'" />
+				<script type="text/javascript">
+					var _PS_MR_MODULE_DIR_ = "'.self::$moduleURL.'";
+					var mrtoken = "'.self::$MRBackToken.'";
+				</script>
+				<script type="text/javascript" src="'.$jsFilePath.'"></script>'.
+				self::getJqueryCompatibility(true);
+		return $ret;
 	}
 	
 	private function _postValidation()
@@ -1186,8 +1190,7 @@ class MondialRelay extends Module
 				SELECT moh.`id_order_state` 
 				FROM `'._DB_PREFIX_.'order_history` moh 
 				WHERE moh.`id_order` = o.`id_order` 
-				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).' 
-			AND ca.`external_module_name` = "mondialrelay"';
+				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state); 
 	}
 	
 	public static function ordersSQLQuery1_3($id_order_state)
@@ -1206,8 +1209,8 @@ class MondialRelay extends Module
 							mr.`mr_ModeCol` as mr_ModeCol, mr.`mr_ModeLiv` as mr_ModeLiv, mr.`mr_ModeAss` as mr_ModeAss 
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'carrier` ca 
-			ON (ca.`id_carrier` = o.`id_carrier`)
-			AND ca.`name` = "mondialrelay"
+			ON (ca.`id_carrier` = o.`id_carrier`
+			AND ca.`name` = "mondialrelay")
 			LEFT JOIN `'._DB_PREFIX_.'mr_selected` mrs 
 			ON (mrs.`id_cart` = o.`id_cart`)
 			LEFT JOIN `'._DB_PREFIX_.'mr_method` mr 
@@ -1218,8 +1221,7 @@ class MondialRelay extends Module
 				SELECT moh.`id_order_state` 
 				FROM `'._DB_PREFIX_.'order_history` moh 
 				WHERE moh.`id_order` = o.`id_order` 
-				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).'
-			AND ca.`name` = "mondialrelay"';
+				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state);
 	}
 	
 	public static function getBaseOrdersSQLQuery($id_order_state)
