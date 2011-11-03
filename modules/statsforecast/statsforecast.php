@@ -130,7 +130,7 @@ class StatsForecast extends Module
 		{
 			$dateEnd = strtotime($employee->stats_date_to.' 23:59:59');
 			$dateToday = time();
-			for ($i = strtotime($employee->stats_date_from.' 00:00:00'); $i <= $dateEnd AND $i <= $dateToday; $i += 86400)
+			for ($i = strtotime($employee->stats_date_from.' 00:00:00'); $i <= $dateEnd AND $i <= $dateToday; $i = strtotime('+1 day', $i))
 				$dataTable[$i] = array('fix_date' => date('Y-m-d', $i), 'countOrders' => 0, 'countProducts' => 0, 'totalProducts' => 0);
 		}
 		while ($row = $db->nextRow($result))
