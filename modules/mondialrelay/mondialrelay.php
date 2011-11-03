@@ -195,14 +195,14 @@ class MondialRelay extends Module
 				!$this->registerHook('extraCarrier') ||
 				!$this->registerHook('updateCarrier') ||
 				!$this->registerHook('newOrder') ||
-				!$this->registerHook('BackOfficeHeader') ||
-				!$this->registerHook('paymentTop')))
+				!$this->registerHook('BackOfficeHeader')))
 			return false;
 			
 		if (_PS_VERSION_ >= '1.4' &&
 				(!$this->registerHook('processCarrier') ||
 				!$this->registerHook('orderDetail') ||
-				!$this->registerHook('orderDetailDisplayed')))
+				!$this->registerHook('orderDetailDisplayed') ||
+				!$this->registerHook('paymentTop')))
 			return false;
 		return true;
 	}
@@ -428,16 +428,17 @@ class MondialRelay extends Module
 		$cssFilePath = $this->_path.'style.css';
 		$jsFilePath= $this->_path.'mondialrelay.js';
 
-		$ret = '';
+		$ret = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
+		
 		if (Tools::getValue('tab') == 'AdminMondialRelay')
-			$ret = '
+			$ret .= self::getJqueryCompatibility(true);
+		
+		$ret .= '
 				<link type="text/css" rel="stylesheet" href="'.$cssFilePath.'" />
 				<script type="text/javascript">
 					var _PS_MR_MODULE_DIR_ = "'.self::$moduleURL.'";
 					var mrtoken = "'.self::$MRBackToken.'";
-				</script>
-				<script type="text/javascript" src="'.$jsFilePath.'"></script>'.
-				self::getJqueryCompatibility(true);
+				</script>';
 		return $ret;
 	}
 	
