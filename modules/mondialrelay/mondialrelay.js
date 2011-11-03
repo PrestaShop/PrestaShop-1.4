@@ -385,7 +385,8 @@ function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
     	'mrtoken' : mrtoken},
     success: function(json)
     {
-			
+			if (PS_MROPC)
+				updateCarrierSelectionAndGift();
     },
     error: function(xhr, ajaxOptions, thrownError)
     {
@@ -517,12 +518,19 @@ function PS_MRDisplayRelayPoint(json, blockContent, carrier_id)
 				contentBlockid =  'relayPoint_' + json.success[relayPoint].Num + '_' + carrier_id;
 				if (!$('#' + contentBlockid).size())
 				{
+					// Set translation if a preselection exist
+					var BtTranslation = (PS_MRPreSelectedRelay == json.success[relayPoint].Num) ?
+						PS_MRTranslationList['Selected'] : PS_MRTranslationList['Select'];
+					
+					var classSelection = (PS_MRPreSelectedRelay == json.success[relayPoint].Num) ?
+						'PS_MRFloatRelayPointSelected' : 'PS_MRFloatRelayPointSelecteIt';
+					
 					$('<div class="PS_MRRelayPointInfo clearfix" id="' + contentBlockid + '"> \
 						<img src="' + _PS_MR_MODULE_DIR_ + 'logo_hd.png" /> \
 						<p><b>' + json.success[relayPoint].LgAdr1 + '</b><br /> ' +  json.success[relayPoint].LgAdr3
 						+ ' - ' + json.success[relayPoint].CP + ' - ' + json.success[relayPoint].Ville
 						+ ' ' + json.success[relayPoint].Pays + '</p> \
-						<div class="PS_MRFloatRelayPointSelecteIt"> \
+						<div class="' + classSelection + '"> \
 							<a class="PS_MRSelectRelayPointButton">' + PS_MRTranslationList['Select'] + '</a> \
 						</div> \
 					</div>').appendTo($(this).children('td'));

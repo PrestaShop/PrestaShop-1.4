@@ -195,7 +195,8 @@ class MondialRelay extends Module
 				!$this->registerHook('extraCarrier') ||
 				!$this->registerHook('updateCarrier') ||
 				!$this->registerHook('newOrder') ||
-				!$this->registerHook('BackOfficeHeader')))
+				!$this->registerHook('BackOfficeHeader') ||
+				!$this->registerHook('paymentTop')))
 			return false;
 			
 		if (_PS_VERSION_ >= '1.4' &&
@@ -616,10 +617,8 @@ class MondialRelay extends Module
 			Configuration::get('MR_LANGUAGE') == '')
 			return '';
 
-	//	$totalweight = Configuration::get('MR_WEIGHT_COEF') * $cart->getTotalWeight();
 		$address = new Address((int)($cart->id_address_delivery));
 		$id_zone = Address::getZoneById((int)($address->id));
-		//$country = new Country((int)($address->id_country));
 		$carriersList = self::_getCarriers();
 
 		// Check if the defined carrier are ok
@@ -640,14 +639,14 @@ class MondialRelay extends Module
 						unset($carriersList[$k]);
 			}
 	 	}
-		
-	//	$address_map = $address->address1.', '.$address->postcode.', '.
-		//	MRTools::replaceAccentedCharacters($address->city).', '.$country->iso_code;
+	 	
+	 	$preSelectedRelay = $this->getRelayPointSelected($params['cart']->id);
 		$smarty->assign( array(
 			'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
 			'new_base_dir' => self::$moduleURL,
 			'MRToken' => self::$MRFrontToken,
 			'carriersextra' => $carriersList,
+			'preSelectedRelay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : '',
 			'jQueryOverload' => self::getJqueryCompatibility()));
 			
 		return $this->display(__FILE__, 'mondialrelay.tpl');
@@ -1266,4 +1265,27 @@ class MondialRelay extends Module
 			return $statCode[$code];
 		return $this->l('This error isn\'t referred : ') . $code;
 	}
+	
+	public function getRelayPointSelected($id_cart)
+	{
+		return Db::getInstance()->getRow('
+			SELECT s.`MR_selected_num`
+			FROM `'._DB_PREFIX_.'mr_selected` s
+			WHERE s.`id_cart` = '.(int)$id_cart);
+	}
+	
+	public function isMondialRelayCarrier($id_carrier)
+	{
+		return Db::getInstance()->getRow('
+			SELECT `id_carrier`
+			FROM `'._DB_PREFIX_.'mr_method`
+			WHERE `id_carrier` = '.(int)$id_carrier);
+	}
+	
+	public function hookpaymentTop($params)
+ 	{
+ 		if ($this->isMondialRelayCarrier($params['cart']->id_carrier) && 
+  		!$this->getRelayPointSelected($params['cart']->id))	
+   	$params['cart']->id_carrier = 0;
+ 	}
 }
