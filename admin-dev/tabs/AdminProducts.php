@@ -163,7 +163,7 @@ class AdminProducts extends AdminTab
 		$productDownload = new ProductDownload((int)($id_product_download));
 		$return = $productDownload->deleteFile();
 		if (!$return && file_exists(_PS_DOWNLOAD_DIR_.$file))
-			$return = unlink(_PS_DOWNLOAD_DIR_.$file);		
+			$return = unlink(_PS_DOWNLOAD_DIR_.$file);
 		return $return;
 	}
 
@@ -978,9 +978,7 @@ class AdminProducts extends AdminTab
 
 		// Unzip the file to a subdirectory
 		$subdir = _PS_TMP_IMG_DIR_.uniqid().'/';
-		
-		
-		
+
 		try
 		{
 			if (!Tools::ZipExtract($zipfile, $subdir))
@@ -1000,7 +998,7 @@ class AdminProducts extends AdminTab
 				$image->id_product = (int)$product->id;
 				$image->position = ++$highestPosition;
 				$image->cover = ($highestPosition == 1 ? true : false);
-			
+
 				// Call automated copy function
 				$this->validateRules('Image', 'image');
 				$this->copyFromPost($image, 'image');
@@ -1016,28 +1014,28 @@ class AdminProducts extends AdminTab
 					$image->delete();
 					throw new Exception(Tools::displayError('Image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('kB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('kB'));
 				}
-				
+
 				$ext = (substr($file, -4) == 'jpeg') ? '.jpeg' : substr($file, -4);
 				$type = (isset($types[$ext]) ? $types[$ext] : '');
 				if (!isPicture(array('tmp_name' => $subdir.$file, 'type' => $type)))
-				{					
+				{
 					$image->delete();
 					throw new Exception(Tools::displayError('Image format not recognized, allowed formats are: .gif, .jpg, .png'));
 				}
-				
+
 				if (!$new_path = $image->getPathForCreation())
 					throw new Exception(Tools::displayError('An error occurred during new folder creation'));
-			
+
 				if (!imageResize($subdir.$file, $new_path.'.'.$image->image_format))
 				{
 					$image->delete();
 					throw new Exception(Tools::displayError('An error occurred while resizing image.'));
 				}
-					
+
 				foreach ($imagesTypes AS $k => $imageType)
-					if (!imageResize($image->getPathForCreation().'.jpg', $image->getPathForCreation().'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))						
+					if (!imageResize($image->getPathForCreation().'.jpg', $image->getPathForCreation().'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 					{
-						$image->delete();	
+						$image->delete();
 						throw new Exception(Tools::displayError('An error occurred while copying image.').' '.stripslashes($imageType['name']));
 					}
 
@@ -1123,7 +1121,7 @@ class AdminProducts extends AdminTab
 		foreach ($rules['size'] AS $field => $maxLength)
 			if ($value = Tools::getValue($field) AND Tools::strlen($value) > $maxLength)
 				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
-		
+
 		if (isset($_POST['description_short']))
 		{
 			$saveShort = $_POST['description_short'];
@@ -1355,9 +1353,9 @@ class AdminProducts extends AdminTab
 			$download->nb_days_accessible  = Tools::getValue('virtual_product_nb_days');
 			$download->nb_downloadable     = Tools::getValue('virtual_product_nb_downloable');
 			$download->active              = 1;
-	
+
 			if ($download->save())
-				return true;		
+				return true;
 		}
 		else
 		{
