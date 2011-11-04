@@ -105,7 +105,7 @@ class OrderControllerCore extends ParentOrderController
 			case 3:
 				//Test that the conditions (so active) were accepted by the customer
 				$cgv = Tools::getValue('cgv');
-				if (Configuration::get('PS_CONDITIONS') AND (!Validate::isBool($cgv)))
+				if (Configuration::get('PS_CONDITIONS') AND (!Validate::isBool($cgv) OR $cgv == false))
 					Tools::redirect('order.php?step=2');
 
 				$this->autoStep();
