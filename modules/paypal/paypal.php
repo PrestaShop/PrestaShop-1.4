@@ -380,10 +380,6 @@ class PayPal extends PaymentModule
 	public function makePayPalAPIValidation($cookie, $cart, $id_currency, $payerID, $type)
 	{
 		global $cookie;
-		logDebug(dirname(__FILE__), 'start');
-
-		logDebug(dirname(__FILE__), $_POST);
-		logDebug(dirname(__FILE__), $_GET);
 
 		if (!$this->active)
 			return ;
