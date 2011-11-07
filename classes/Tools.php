@@ -59,7 +59,7 @@ class ToolsCore
 			if (strpos($url, $baseUri) !== FALSE && strpos($url, $baseUri) == 0)
 				$url = substr($url, strlen($baseUri));
 			$explode = explode('?', $url, 2);
-			// don't use ssl if url is home page 
+			// don't use ssl if url is home page
 			// used when logout for example
 			$useSSL = !empty($url);
 			$url = $link->getPageLink($explode[0], $useSSL);
@@ -218,7 +218,7 @@ class ToolsCore
 		// $_SERVER['SSL'] exists only in some specific configuration
 		if (isset($_SERVER['SSL']))
 			return ($_SERVER['SSL'] == 1 || strtolower($_SERVER['SSL']) == 'on');
-		
+
 		return false;
 	}
 
@@ -476,7 +476,7 @@ class ToolsCore
 	 		return $date;
 		if (!Validate::isDate($date) OR !Validate::isBool($full))
 			die (self::displayError('Invalid date'));
-		
+
 		$language = Language::getLanguage((int)$id_lang);
 		return date($full ? $language['date_format_full'] : $language['date_format_lite'], $time);
 	}
@@ -647,13 +647,13 @@ class ToolsCore
 				{
 					if (empty($row['meta_description']))
 						$row['meta_description'] = strip_tags($row['description']);
-					
+
 					// Paginate title
 					if (!empty($row['meta_title']))
 						$row['meta_title'] = $row['meta_title'].(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
 					else
 						$row['meta_title'] = $row['name'].(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
-					
+
 					return self::completeMetaTags($row, $row['name']);
 				}
 			}
@@ -1008,9 +1008,9 @@ class ToolsCore
 		$str = preg_replace('/[\x{017C}\x{017A}\x{017B}\x{0179}\x{017E}]/u','z', $str);
 		$str = preg_replace('/[\x{00E6}]/u','ae', $str);
 		$str = preg_replace('/[\x{0153}]/u','oe', $str);
-		return $str;		
+		return $str;
 	}
-	
+
 	/**
 	* Truncate strings
 	*
@@ -1358,11 +1358,12 @@ class ToolsCore
 				'/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i'
 				,array('Tools', 'packJSinHTMLpregCallback')
 				,$html_content);
-			
-			// If the string is too big preg_replace return an error
+
+			// If the string is too big preg_replace return null: http://php.net/manual/en/function.preg-replace-callback.php
 			// In this case, we don't compress the content
-			if ( preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR ) {
-				error_log('ERROR: PREG_BACKTRACK_LIMIT_ERROR in function packJSinHTML');
+			if ($html_content === null)
+			{
+				error_log('Error occured in function packJSinHTML');
 				return $htmlContentCopy;
 			}
 			return $html_content;
@@ -2112,7 +2113,7 @@ FileETag INode MTime Size
 					elseif ($value == 'position' || empty($value))
 						$orderByPrefix = 'cp.';
 				}
-				
+
 				return $orderByPrefix.$value;
 			break;
 
@@ -2163,10 +2164,10 @@ FileETag INode MTime Size
 		include(dirname(__FILE__).'/../404.php');
 		die;
 	}
-	
+
 	/**
 	 * Display error and dies or silently log the error.
-	 * 
+	 *
 	 * @param string $msg
 	 * @param bool $die
 	 * @return success of logging
@@ -2177,10 +2178,10 @@ FileETag INode MTime Size
 			die($msg);
 		return Logger::addLog($msg);
 	}
-	
+
 	/**
 	 * Clear cache for Smarty
-	 * 
+	 *
 	 * @param objet $smarty
 	 */
 	public static function clearCache($smarty)
@@ -2193,26 +2194,26 @@ FileETag INode MTime Size
 
 	/**
 	 * getMemoryLimit allow to get the memory limit in octet
-	 * 
+	 *
 	 * @since 1.4.5.0
-	 * @return int the memory limit value in octet 
+	 * @return int the memory limit value in octet
 	 */
 	public static function getMemoryLimit()
 	{
 		$memory_limit = @ini_get('memory_limit');
-		
+
 		if (preg_match('/[0-9]+k/i', $memory_limit))
 			return 1024 * (int)$memory_limit;
-		
+
 		if (preg_match('/[0-9]+m/i', $memory_limit))
 			return 1024 * 1024 * (int)$memory_limit;
-		
+
 		if (preg_match('/[0-9]+g/i', $memory_limit))
 			return 1024 * 1024 * 1024 * (int)$memory_limit;
-		
+
 		return $memory_limit;
 	}
-	
+
 	public static function isX86_64arch()
 	{
 		return (PHP_INT_MAX == '9223372036854775807');
@@ -2231,10 +2232,10 @@ FileETag INode MTime Size
 		if(function_exists('apache_get_modules'))
 		{
 			static $apacheModuleList = null;
-	
+
 			if (!is_array($apacheModuleList))
 				$apacheModuleList = apache_get_modules();
-	
+
 			// we need strpos (example, evasive can be evasive20)
 			foreach($apacheModuleList as $module)
 			{
@@ -2244,7 +2245,7 @@ FileETag INode MTime Size
 		}
 		else{
 			// If apache_get_modules does not exists,
-			// one solution should be parsing httpd.conf, 
+			// one solution should be parsing httpd.conf,
 			// but we could simple parse phpinfo(INFO_MODULES) return string
 			ob_start();
 			phpinfo(INFO_MODULES);
