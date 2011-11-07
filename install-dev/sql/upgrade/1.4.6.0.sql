@@ -23,3 +23,6 @@ ALTER TABLE `PREFIX_compare_product`
 	 
 ALTER TABLE `PREFIX_store` CHANGE `latitude` `latitude` DECIMAL(11, 8) NULL DEFAULT NULL;
 ALTER TABLE `PREFIX_store` CHANGE `longitude` `longitude` DECIMAL(11, 8) NULL DEFAULT NULL;
+
+ALTER TABLE `PREFIX_address_format` ADD PRIMARY KEY (`id_country`);
+ALTER TABLE `PREFIX_address_format` DROP INDEX `country`;

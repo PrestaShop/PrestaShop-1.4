@@ -1665,6 +1665,6 @@ CREATE TABLE `PREFIX_county_zip_code` (
 CREATE TABLE `PREFIX_address_format` (
   `id_country` int(10) unsigned NOT NULL,
   `format` varchar(255) NOT NULL DEFAULT '',
-  KEY `country` (`id_country`)
+  PRIMARY KEY (`id_country`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
