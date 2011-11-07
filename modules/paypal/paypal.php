@@ -456,7 +456,7 @@ class PayPal extends PaymentModule
 			$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal return error.', 'submit'), $logs);
 		}
 		
-			logDebug(dirname(__FILE__), $result);
+
 
 
 		// Making log
