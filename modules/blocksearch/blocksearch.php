@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -39,21 +39,32 @@ class BlockSearch extends Module
 		$this->need_instance = 0;
 
 		parent::__construct();
-		
+
 		$this->displayName = $this->l('Quick Search block');
 		$this->description = $this->l('Adds a block with a quick search field.');
 	}
 
 	public function install()
 	{
-		if (!parent::install() OR !$this->registerHook('top') 
-				OR !$this->registerHook('leftColumn') 
+		if (!parent::install() OR !$this->registerHook('top')
+				OR !$this->registerHook('leftColumn')
 				OR !$this->registerHook('rightColumn')
+				OR !$this->registerHook('header')
 			)
 			return false;
 		return true;
 	}
 
+	public function hookHeader($params)
+	{
+		if (Configuration::get('PS_SEARCH_AJAX'))
+		{
+			Tools::addCSS(_PS_CSS_DIR_.'jquery.autocomplete.css');
+			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.autocomplete.js');
+		}
+		Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
+		Tools::addCSS(($this->_path).'blocksearch.css', 'all');
+	}
 
 	public function hookLeftColumn($params)
 	{
@@ -74,28 +85,20 @@ class BlockSearch extends Module
 
 	/**
 	 * _hookAll has to be called in each hookXXX methods. This is made to avoid code duplication.
-	 * 
-	 * @param mixed $params 
+	 *
+	 * @param mixed $params
 	 * @return void
 	 */
 	private function _hookCommon($params)
 	{
 		global $smarty;
+
 		$smarty->assign('ENT_QUOTES', ENT_QUOTES);
 		$smarty->assign('search_ssl', (int)Tools::usingSecureMode());
-		
-		$ajaxSearch=(int)(Configuration::get('PS_SEARCH_AJAX'));
-		$smarty->assign('ajaxsearch', $ajaxSearch);
 
-		$instantSearch = (int)(Configuration::get('PS_INSTANT_SEARCH'));
-		$smarty->assign('instantsearch', $instantSearch);
-		if ($ajaxSearch)
-		{
-			Tools::addCSS(_PS_CSS_DIR_.'jquery.autocomplete.css');
-			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.autocomplete.js');
-		}
-		Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
-		Tools::addCSS(($this->_path).'blocksearch.css', 'all');
+		$smarty->assign('ajaxsearch', Configuration::get('PS_SEARCH_AJAX'));
+		$smarty->assign('instantsearch', Configuration::get('PS_INSTANT_SEARCH'));
+
 		return true;
 	}
 }

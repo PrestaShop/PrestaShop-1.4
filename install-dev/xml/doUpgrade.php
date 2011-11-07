@@ -131,6 +131,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'migrate_block_info_to_cms_block.php
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_order_state.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'hook_blocksearch_on_header.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;

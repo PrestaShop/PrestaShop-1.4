@@ -26,3 +26,5 @@ ALTER TABLE `PREFIX_store` CHANGE `longitude` `longitude` DECIMAL(11, 8) NULL DE
 
 ALTER TABLE `PREFIX_address_format` ADD PRIMARY KEY (`id_country`);
 ALTER TABLE `PREFIX_address_format` DROP INDEX `country`;
+
+/* PHP:hook_blocksearch_on_header(); */;
