@@ -87,7 +87,7 @@ class FrontControllerCore
 		}
 
 		ob_start();
-		
+
 		/* Loading default country */
 		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
 		$cookieLifetime = (time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_FO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_FO') : 1)* 3600));
@@ -137,8 +137,8 @@ class FrontControllerCore
 			if ($cart->OrderExists())
 				unset($cookie->id_cart, $cart, $cookie->checkedTOS);
 			/* Delete product of cart, if user can't make an order from his country */
-			elseif (intval(Configuration::get('PS_GEOLOCATION_ENABLED')) AND 
-					!in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND 
+			elseif (intval(Configuration::get('PS_GEOLOCATION_ENABLED')) AND
+					!in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND
 					$cart->nbProducts() AND intval(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR')) != -1 AND
 					!self::isInWhitelistForGeolocation())
 				unset($cookie->id_cart, $cart);
@@ -151,7 +151,7 @@ class FrontControllerCore
 				$cart->update();
 			}
 			/* Select an address if not set */
-			if (isset($cart) && (!isset($cart->id_address_delivery) || $cart->id_address_delivery == 0 || 
+			if (isset($cart) && (!isset($cart->id_address_delivery) || $cart->id_address_delivery == 0 ||
 				!isset($cart->id_address_invoice) || $cart->id_address_invoice == 0) && $cookie->id_customer)
 			{
 				$to_update = false;
@@ -541,14 +541,16 @@ class FrontControllerCore
 			$this->init();
 
 		$nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
+		// Clean duplicate values
+		$nArray = array_unique($nArray);
 		asort($nArray);
 		$this->n = abs((int)(Tools::getValue('n', ((isset(self::$cookie->nb_item_per_page) AND self::$cookie->nb_item_per_page >= 10) ? self::$cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
 		$this->p = abs((int)(Tools::getValue('p', 1)));
-		
+
 		$current_url = tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']);
 		//delete parameter page
 		$current_url = preg_replace('/(\?)?(&amp;)?p=\d+/', '$1', $current_url);
-		
+
 		$range = 2; /* how many pages around page selected */
 
 		if ($this->p < 0)
