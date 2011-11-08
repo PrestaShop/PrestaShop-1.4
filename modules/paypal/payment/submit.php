@@ -95,8 +95,8 @@ function displayConfirm()
 		'logo' => $ppPayment->getLogo(),
 		'cust_currency' => $cart->id_currency,
 		'currency' => $ppPayment->getCurrency((int)$cart->id_currency),
-		'total' => $cart->getOrderTotal(true, Cart::BOTH),
-		'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
+		'total' => $cart->getOrderTotal(true, PayPal::BOTH),
+		'this_path_ssl' => PayPal::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppPayment->name.'/',
 		'mode' => 'payment/'
 	));
 
@@ -116,7 +116,7 @@ function submitConfirm()
 	}
 	elseif (!$id_currency = (int)(Tools::getValue('currency_payement')))
 		die('No currency');
-	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
+	elseif (!$cart->getOrderTotal(true, PayPal::BOTH))
 		die('Empty cart');
 	$currency = new Currency((int)($id_currency));
 	if (!Validate::isLoadedObject($currency))
@@ -133,7 +133,7 @@ function validOrder()
 		header('location:../../../'); exit;
 		die('Not logged');
 	}
-	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
+	elseif (!$cart->getOrderTotal(true, PayPal::BOTH))
 		die('Empty cart');
 	if (!$token = Tools::htmlentitiesUTF8(strval(Tools::getValue('token'))))
 	{
@@ -154,7 +154,7 @@ function validOrder()
 
 if (!$cookie->isLogged(true))
 	die('Not logged');
-elseif (!$cart->getOrderTotal(true, Cart::BOTH))
+elseif (!$cart->getOrderTotal(true, PayPal::BOTH))
 	die('Empty cart');
 
 // No submit, confirmation page

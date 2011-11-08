@@ -115,8 +115,8 @@ function displayConfirm()
 		'ppToken' => strval($cookie->paypal_token),
 		'cust_currency' => $cart->id_currency,
 		'currencies' => $ppExpress->getCurrency((int)$cart->id_currency),
-		'total' => $cart->getOrderTotal(true, Cart::BOTH),
-		'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppExpress->name.'/',
+		'total' => $cart->getOrderTotal(true, PayPal::BOTH),
+		'this_path_ssl' => PayPal::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'. $ppExpress->name.'/',
 		'payerID' => $payerID,
 		'mode' => 'express/'
 	));
@@ -136,7 +136,7 @@ function submitConfirm()
 		die('No currency');
 	elseif (!$payerID = Tools::htmlentitiesUTF8(strval(Tools::getValue('payerID'))))
 		die('No payer ID');
-	elseif (!$cart->getOrderTotal(true, Cart::BOTH))
+	elseif (!$cart->getOrderTotal(true, PayPal::BOTH))
 		die('Empty cart');
 
 	$ppExpress->makePayPalAPIValidation($cookie, $cart, $currency, $payerID, 'express');
@@ -338,7 +338,7 @@ function displayAccount()
 	displayAccount();
 	die('Not logged');
 }*/
-if (!$cart->getOrderTotal(true, Cart::BOTH))
+if (!$cart->getOrderTotal(true, PayPal::BOTH))
 	die('Empty cart');
 
 // No token, we need to get one by making PayPal Authorisation

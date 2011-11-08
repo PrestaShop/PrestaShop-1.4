@@ -40,7 +40,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.8.4';
+		$this->version = '2.8.5';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -391,11 +391,11 @@ class PayPal extends PaymentModule
 		$currency = new Currency((int)($id_currency));
 		$iso_currency = $currency->iso_code;
 		$token = $cookie->paypal_token;
-		$total = (float)($cart->getOrderTotal(true, Cart::BOTH));
+		$total = (float)($cart->getOrderTotal(true, PayPal::BOTH));
 		$paymentType = Configuration::get('PAYPAL_CAPTURE') == 1 ? 'Authorization' : 'Sale';
 		$serverName = urlencode($_SERVER['SERVER_NAME']);
 		$bn = ($type == 'express' ? 'ECS' : 'ECM');
-		$notifyURL = urlencode(Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/paypal/ipn.php');
+		$notifyURL = urlencode(PayPal::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/paypal/ipn.php');
 
 		// Getting address
 		if (isset($cookie->id_cart) AND $cookie->id_cart)
@@ -412,7 +412,7 @@ class PayPal extends PaymentModule
 
 		// Making request
 		$request='&TOKEN='.urlencode($token).'&PAYERID='.urlencode($payerID).'&PAYMENTACTION='.$paymentType.'&AMT='.$total.'&CURRENCYCODE='.$iso_currency.'&IPADDRESS='.$serverName.'&NOTIFYURL='.$notifyURL.'&BUTTONSOURCE=PRESTASHOP_'.$bn.$requestAddress ;
-		$discounts = (float)$cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS);
+		$discounts = (float)$cart->getOrderTotal(true, PayPal::ONLY_DISCOUNTS);
 		if ($discounts == 0)
 		{
 			$products = $cart->getProducts();
@@ -485,7 +485,7 @@ class PayPal extends PaymentModule
 		
 		
 		// Call payment validation method
-		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, Cart::BOTH)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false, $cart->secure_key);
+		$this->validateOrder($id_cart, $id_order_state, (float)($cart->getOrderTotal(true, PayPal::BOTH)), $this->displayName, $message, array('transaction_id' => $id_transaction, 'payment_status' => $result['PAYMENTSTATUS'], 'pending_reason' => $result['PENDINGREASON']), $id_currency, false, $cart->secure_key);
 		
 		// Clean cookie
 		unset($cookie->paypal_token);
@@ -1297,4 +1297,78 @@ class PayPal extends PaymentModule
 		FROM `'._DB_PREFIX_.'paypal_order` 
 		WHERE `id_transaction` = \''.pSQL($id_transaction).'\'');
 	}
+
+
+
+	// Retrocompatibility to 1.3
+	const ONLY_PRODUCTS = 1;
+	const ONLY_DISCOUNTS = 2;
+	const BOTH = 3;
+	const BOTH_WITHOUT_SHIPPING = 4;
+	const ONLY_SHIPPING = 5;
+	const ONLY_WRAPPING = 6;
+	const ONLY_PRODUCTS_WITHOUT_SHIPPING = 7;
+
+
+	/**
+	 * getShopDomain returns domain name according to configuration and ignoring ssl
+	 *
+	 * @param boolean $http if true, return domain name with protocol
+	 * @param boolean $entities if true,
+	 * @return string domain
+	 */
+	public static function getShopDomain($http = false, $entities = false)
+	{
+		if (!($domain = Configuration::get('PS_SHOP_DOMAIN')))
+			$domain = Tools::getHttpHost();
+		if ($entities)
+			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
+		if ($http)
+			$domain = 'http://'.$domain;
+		return $domain;
+	}
+
+	/**
+	 * getShopDomainSsl returns domain name according to configuration and depending on ssl activation
+	 *
+	 * @param boolean $http if true, return domain name with protocol
+	 * @param boolean $entities if true,
+	 * @return string domain
+	 */
+	public static function getShopDomainSsl($http = false, $entities = false)
+	{
+		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SSL')))
+			$domain = Tools::getHttpHost();
+		if ($entities)
+			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
+		if ($http)
+			$domain = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$domain;
+		return $domain;
+	}
+
+	public static function display($file, $template, $cacheId = NULL, $compileId = NULL)
+	{
+		if (substr(_PS_VERSION_, 0, 3) != '1.3')
+			return parent::display($file, $template);
+
+		global $smarty;
+		$previousTemplate = $smarty->currentTemplate;
+		$smarty->currentTemplate = substr(basename($template), 0, -4);
+		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
+		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.basename($file, '.php').'/'.$template))
+		{
+			$smarty->assign('module_template_dir', _THEME_DIR_.'modules/'.basename($file, '.php').'/');
+			$result = $smarty->fetch(_PS_THEME_DIR_.'modules/'.basename($file, '.php').'/'.$template);
+		}
+		elseif (Tools::file_exists_cache(dirname(__FILE__).'/'.$template))
+		{
+			$smarty->assign('module_template_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
+			$result = $smarty->fetch(dirname(__FILE__).'/'.$template);
+		}
+		else
+			$result = Tools::displayError('No template found');
+		$smarty->currentTemplate = $previousTemplate;
+		return $result;
+	}
+
 }
