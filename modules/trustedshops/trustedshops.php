@@ -49,7 +49,7 @@ class TrustedShops extends Module
 		global $smarty;
 		$this->name = 'trustedshops';
 		$this->tab = 'payment_security';
-		$this->version = '1.3.1';
+		$this->version = '1.3.2';
 
 		parent::__construct();
 

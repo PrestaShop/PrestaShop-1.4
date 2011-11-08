@@ -109,7 +109,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	 * )
 	 * @var array
 	 */
-	private static $CERTIFICATE;
+	public static $CERTIFICATE;
 	private static $DEFAULT_LANG;
 	private static $CAT_ID;
 	private static $ENV_API;
@@ -1063,7 +1063,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				$out .= '
 							</td>
 							<td>';
-				if ($certificate['typeEnum'] === 'EXCELLENCE') {
+				if ($certificate['typeEnum'] === 'EXCELLENCE' || $certificate['typeEnum'] === 'CLASSIC') {
 					$out .= '<input type="checkbox" name="certificate_delete[]" value="'.$lang.'" />';
 				} else {
 					$out .= $this->l('No need');
