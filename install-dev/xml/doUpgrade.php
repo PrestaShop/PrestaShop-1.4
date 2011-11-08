@@ -133,6 +133,8 @@ require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_order_state.php');
 
 require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'hook_blocksearch_on_header.php');
 
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_order_canada.php');
+
 //old version detection
 global $oldversion, $logger;
 $oldversion = false;
@@ -314,9 +316,9 @@ if ($confFile->error != false)
 
 // Settings updated, compile and cache directories must be emptied
 $arrayToClean = array(
-	INSTALL_PATH.'/../tools/smarty/cache/', 
-	INSTALL_PATH.'/../tools/smarty/compile/', 
-	INSTALL_PATH.'/../tools/smarty_v2/cache/', 
+	INSTALL_PATH.'/../tools/smarty/cache/',
+	INSTALL_PATH.'/../tools/smarty/compile/',
+	INSTALL_PATH.'/../tools/smarty_v2/cache/',
 	INSTALL_PATH.'/../tools/smarty_v2/compile/');
 foreach ($arrayToClean as $dir)
 	if (!file_exists($dir))
