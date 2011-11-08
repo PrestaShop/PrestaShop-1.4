@@ -2828,14 +2828,14 @@ class BlockLayered extends Module
 			$categoryCount = '';
 
 		if ($nbProducts == 0)
-			$product_list_tpl = 'blocklayered-no-products.tpl';
+			$product_list = $this->display(__FILE__, 'blocklayered-no-products.tpl');
 		else
-			$product_list_tpl = _PS_THEME_DIR_.'product-list.tpl';
+			$product_list = $smarty->fetch(_PS_THEME_DIR_.'product-list.tpl');
 		
 		/* We are sending an array in jSon to the .js controller, it will update both the filters and the products zones */
 		return Tools::jsonEncode(array(
 		'filtersBlock' => $this->generateFiltersBlock($selectedFilters),
-		'productList' => $smarty->fetch($product_list_tpl),
+		'productList' => $product_list,
 		'pagination' => $smarty->fetch(_PS_THEME_DIR_.'pagination.tpl'),
 		'categoryCount' => $categoryCount));
 	}
