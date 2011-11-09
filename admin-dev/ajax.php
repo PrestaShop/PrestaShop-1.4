@@ -619,10 +619,15 @@ if (Tools::isSubmit('saveHook'))
 		$hookedModules = explode(',', Tools::getValue($hook));
 		$i = 1;
 		$value = '';
+		$ids = array();
 		foreach($hookedModules as $module)
 		{
-			$ids = explode('_', $module);
-			$value .= '('.(int)$ids[1].', (SELECT id_hook FROM `'._DB_PREFIX_.'hook` WHERE `name` = \''.pSQL($hook).'\' LIMIT 0, 1), '.(int)$i.'),';
+			$id = explode('_', $module);
+			if (!in_array($id[1], $ids))
+			{
+				$ids[] = $id[1];
+				$value .= '('.(int)$id[1].', (SELECT id_hook FROM `'._DB_PREFIX_.'hook` WHERE `name` = \''.pSQL($hook).'\' LIMIT 0, 1), '.(int)$i.'),';
+			}
 			$i ++;
 		}
 		$value = rtrim($value, ',');
