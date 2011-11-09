@@ -649,8 +649,8 @@ class TSBuyerProtection extends AbsTrustedShops
 		$sql = '
 		DELETE ts, p, pl
 		FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` AS ts
-		LEFT JOIN `ps_product` AS p ON ts.`id_product` = p.`id_product`
-		LEFT JOIN `ps_product_lang` AS pl ON ts.`id_product` = pl.`id_product`
+		LEFT JOIN `'._DB_PREFIX_.'product` AS p ON ts.`id_product` = p.`id_product`
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` AS pl ON ts.`id_product` = pl.`id_product`
 		WHERE ts.`ts_id`="'.$ts_id.'"';
 		Db::getInstance()->Execute($sql);
 
