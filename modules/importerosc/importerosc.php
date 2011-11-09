@@ -226,13 +226,12 @@ class importerosc extends ImportModule
 		$multiLangFields = array('name', 'link_rewrite');
 		$keyLanguage = 'id_lang';
 		$identifier = 'id_category';
-
 		$categories = $this->ExecuteS('
 									SELECT c.categories_id as id_category, c.parent_id as id_parent, level as level_depth, cd.language_id as id_lang, cd.categories_name as name , 1 as active, categories_image as images
 									FROM `'.bqSQL($this->prefix).'categories` c
 									LEFT JOIN `'.bqSQL($this->prefix).'categories_description` cd ON (c.categories_id = cd.categories_id)
 									WHERE cd.categories_name IS NOT NULL AND cd.language_id IS NOT NULL
-									ORDER BY c.level ASC
+									ORDER BY c.level ASC , c.`categories_id` 
 									LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 		foreach($categories as& $cat)
 		{
@@ -264,6 +263,7 @@ class importerosc extends ImportModule
 									SELECT p.`products_options_values_id` as id_attribute, p.`products_options_values_name` as name, p.`language_id` as id_lang , po.`products_options_id` as id_attribute_group
 									FROM  `'.bqSQL($this->prefix).'products_options_values` p
 									LEFT JOIN `'.bqSQL($this->prefix).'products_options_values_to_products_options` po ON (po.products_options_values_id = p.products_options_values_id)
+									ORDER BY p.`products_options_values_id`
 									LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 		return $this->autoFormat($countries, $identifier, $keyLanguage, $multiLangFields);
 	}
@@ -282,6 +282,7 @@ class importerosc extends ImportModule
 									FROM	`'.bqSQL($this->prefix).'products` p
 									LEFT JOIN `'.bqSQL($this->prefix).'products_description` pd ON (p.products_id = pd.products_id)
 									WHERE pd.products_name IS NOT NULL AND pd.language_id IS NOT NULL
+									ORDER BY p.`products_id`
 									LIMIT '.(int)($limit).' , '.(int)$nrb_import);
 
 		$this->Execute('CREATE TABLE IF NOT EXISTS`products_images` (
