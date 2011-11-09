@@ -859,7 +859,7 @@ class AdminTranslations extends AdminTab
 		if (!file_exists($dir.'/'.$file))
 			if (!file_put_contents($dir.'/'.$file, "<?php\n\nglobal \$".$var.";\n\$".$var." = array();\n\n?>"))
 				die('Please create a "'.$file.'" file in '.$dir);
-		if (!is_writable($dir.'/'.$file))
+		if (!is_writable($dir.'/'.$file) AND !_PS_MODE_DEMO_)
 			$this->displayWarning(Tools::displayError('This file must be writable:').' '.$dir.'/'.$file);
 		include($dir.'/'.$file);
 		return ${$var};
