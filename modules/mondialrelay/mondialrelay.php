@@ -538,12 +538,13 @@ class MondialRelay extends Module
 		global $smarty;
 	
 		$res = Db::getInstance()->getRow('
-		SELECT s.`MR_Selected_LgAdr1`, s.`MR_Selected_LgAdr2`, s.`MR_Selected_LgAdr3`, s.`MR_Selected_LgAdr4`, s.`MR_Selected_CP`, s.`MR_Selected_Ville`, s.`MR_Selected_Pays`, s.`MR_Selected_Num`
+		SELECT s.`MR_Selected_LgAdr1`, s.`MR_Selected_LgAdr2`, s.`MR_Selected_LgAdr3`, s.`MR_Selected_LgAdr4`, s.`MR_Selected_CP`, s.`MR_Selected_Ville`, s.`MR_Selected_Pays`, s.`MR_Selected_Num`, S.`url_suivi`
 		FROM `'._DB_PREFIX_.'mr_selected` s
 		WHERE s.`id_cart` = '.$params['order']->id_cart);
 		if ((!$res) OR ($res['MR_Selected_Num'] == 'LD1') OR ($res['MR_Selected_Num'] == 'LDS'))
 			return '';
 		$smarty->assign('mr_addr', $res['MR_Selected_LgAdr1'].($res['MR_Selected_LgAdr1'] ? ' - ' : '').$res['MR_Selected_LgAdr2'].($res['MR_Selected_LgAdr2'] ? ' - ' : '').$res['MR_Selected_LgAdr3'].($res['MR_Selected_LgAdr3'] ? ' - ' : '').$res['MR_Selected_LgAdr4'].($res['MR_Selected_LgAdr4'] ? ' - ' : '').$res['MR_Selected_CP'].' '.$res['MR_Selected_Ville'].' - '.$res['MR_Selected_Pays']);
+		$smarty->assign('mr_url', $res['url_suivi']);
 		return $this->display(__FILE__, 'orderDetail.tpl');
 	}
 	
@@ -680,8 +681,10 @@ class MondialRelay extends Module
 
 		$this->_html .= '<h2>'.$this->l('Configure Mondial Relay Rate Module').'</h2>
 		
-		<div class="MR_warn">'.
-			$this->l('Try to turn off the cache and put the force compilation to on if you have any problems with the module after an update').'
+		<div class="MR_warn">
+			<a style="color:#383838;text-decoration:underline" href="index.php?tab=AdminPerformance&token='.Tools::getAdminToken('AdminPerformance'.(int)(Tab::getIdFromClassName('AdminPerformance')).(int)($cookie->id_employee)).'">
+					'.$this->l('Try to turn off the cache and put the force compilation to on').'
+					</a> '.$this->l('if you have any problems with the module after an update').'.
 		</div>
 		<fieldset>
 			<legend>

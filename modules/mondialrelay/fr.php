@@ -46,7 +46,8 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_c888438d14855d7d96a2724ee9c306b
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_07213a0161f52846ab198be103b5ab43'] = 'erreurs';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_cb5e100e5a9a3e7f6d1fd97512215282'] = 'erreur';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_350c1cc4343826a89f08a33bb49c6d98'] = 'Configuration du Module Mondial Relay';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_192a5439bcfb850e8885cd4b5e01ced4'] = 'Essayez de désactiver le cache et de forcer la compilation smarty si vous rencontrez le moindre problème après une mise à jour du module';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_5a2355a42ba3ab265701183c914467f2'] = 'Essayez de désactiver le cache et de forcer la compilation smarty';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_3de769f9a81eed916583d5b35c58dbdd'] = 'si vous rencontrez le moindre problème après une mise à jour du module';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d21a9f93917604d5490ad529a7cf1ff9'] = 'Pour créer un transporteur Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Remplissez et sauvegarder vos paramètres Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_94fbe32464fcfa902feed9f256439833'] = 'Créez un transporteur via le formulaire ‘’ajouter un transporteur’’ ci-dessous';
@@ -114,6 +115,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_ef2a1f426c2c289ed5986c7636a5d69
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_80a0c205cd57b22fca7f174253870300'] = 'Heures d\'ouvertures';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_2b56b60f878922093facd42284848a0c'] = 'Plus de détails';
 $_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Livraison à';
+$_MODULE['<{mondialrelay}prestashop>orderdetail_c2d05abc7f5ebdc72b6656df35038b43'] = 'Suivre mon colis sur le site de Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_a1c3470a944b9625cfb924fd15c8bdbf'] = 'Veuillez choisir au moins une commande';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_dc41aac14af17f1d19fca5e3b9439e74'] = 'Cette clé';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_306b346c19017609403424203ea3d720'] = 'est vide et doit être renseignée';
