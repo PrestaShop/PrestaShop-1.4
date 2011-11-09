@@ -28,6 +28,7 @@ var readyToExpand = true;
 var needCheckAll = false;
 var needUncheckAll = false;
 var interval = null;
+var intervalCheck = null;
 var id = 0;
 var arrayCatToExpand = new Array();
 
@@ -86,10 +87,10 @@ function callbackToggle(element)
 function closeChildrenCategories(element)
 {
 	var arrayLevel = new Array();
-	
+
 	if (element.children('ul').find('li.collapsable').length == 0)
 		return false;
-	
+
 	element.children('ul').find('li.collapsable').each(function() {
 		var level = $(this).children('span.category_level').html();
 		if (arrayLevel[level] == undefined)
@@ -97,13 +98,13 @@ function closeChildrenCategories(element)
 		
 		arrayLevel[level].push($(this).attr('id'));
 	});
-	
+
 	for(i=arrayLevel.length-1;i!=0;i--)
 		if (arrayLevel[i] != undefined)
 			for(j=0;j<arrayLevel[i].length;j++)
 			{
-				$('li#'+arrayLevel[i][j]+'.collapsable').children('span.category_label').trigger('click');
-				$('li#'+arrayLevel[i][j]+'.expandable').children('ul').hide();
+				$('#categories-treeview').find('li#'+arrayLevel[i][j]+'.collapsable').children('span.category_label').trigger('click');
+				$('#categories-treeview').find('li#'+arrayLevel[i][j]+'.expandable').children('ul').hide();
 			}
 }
 
@@ -113,7 +114,7 @@ function setCategoryToExpand()
 	
 	id = 0;
 	arrayCatToExpand = new Array();
-	$('li.expandable:visible').each(function() {
+	$('#categories-treeview').find('li.expandable:visible').each(function() {
 		arrayCatToExpand.push($(this).attr('id'));
 		ret = true;
 	});
@@ -168,9 +169,9 @@ function openCategory()
 	
 	if (readyToExpand)
 	{
-		if ($('li#'+arrayCatToExpand[id]+'.hasChildren').length > 0)
+		if ($('#categories-treeview').find('li#'+arrayCatToExpand[id]+'.hasChildren').length > 0)
 			readyToExpand = false;
-		$('li#'+arrayCatToExpand[id]+'.expandable:visible span.category_label').trigger('click');
+		$('#categories-treeview').find('li#'+arrayCatToExpand[id]+'.expandable:visible span.category_label').trigger('click');
 		id++;
 	}
 }
@@ -207,7 +208,7 @@ function uncheckAllCategories()
 }
 
 function clickOnCategoryBox(category)
-{	
+{
 	if (category.is(':checked'))
 	{
 		$('select#id_category_default').append('<option value="'+category.val()+'">'+(category.val() !=1 ? category.parent().find('span').html() : home)+'</option>');
@@ -256,4 +257,86 @@ function updateNbSubCategorySelected(category, add)
 	
 	if (currentSpan.parent().children('.nb_sub_cat_selected').length != 0)
 		updateNbSubCategorySelected(currentSpan.parent().children('input'), add);
+}
+
+$(document).ready( function() {
+	var category_to_check;
+	if ($('#search_cat').length)
+	{
+		$('#search_cat').autocomplete('ajax.php?searchCategory=1', {
+			delay: 100,
+			minChars: 3,
+			autoFill: true,
+			max:20,
+			matchContains: true,
+			mustMatch:true,
+			scroll:false,
+			cacheLength:0,
+			multipleSeparator:'||',
+			formatItem: function(item) 
+			{
+				return item[1]+' - '+item[0];
+			}
+		}).result(function(event, item)
+		{ 
+			parent_ids = getParentCategoriesIdAndOpen(item[1]);
+		});
+	}
+});
+
+function getParentCategoriesIdAndOpen(id_category)
+{
+	category_to_check = id_category;
+	$.ajax({
+        type: 'POST',
+        url: 'ajax.php',
+        async: true,
+        dataType: 'json',
+        data: 'ajax=true&getParentCategoriesId=true&id_category=' + id_category ,
+        success: function(jsonData) {
+            for(var i= 0; i < jsonData.length; i++)
+			    if (jsonData[i].id_category != 1)
+			    	arrayCatToExpand.push(jsonData[i].id_category);
+			readyToExpand = true;   	
+			interval = setInterval(openParentCategories, 10);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("TECHNICAL ERROR: \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+        }
+    });
+}
+
+function openParentCategories()
+{
+	intervalCheck = setInterval(checkCategory, 20);
+	
+	if (id >= arrayCatToExpand.length && !readyToExpand)
+	{
+		clearInterval(interval);
+		// delete interval value
+		interval = null;
+		readyToExpand = false;
+	}
+	
+	if (readyToExpand)
+	{
+		if ($('li#'+arrayCatToExpand[id]+'.hasChildren').length > 0)
+			readyToExpand = false;
+		$('li#'+arrayCatToExpand[id]+'.expandable span').trigger('click');
+		id++;
+	}
+}
+
+function checkCategory()
+{
+	if ($('li#'+category_to_check+' > input[type=checkbox]').attr('checked'))
+	{
+		clearInterval(intervalCheck);
+		intervalCheck = null;
+	}
+	else
+	{
+		$('li#'+category_to_check+' > input').attr('checked', 'checked');
+		updateNbSubCategorySelected($('li#'+category_to_check+' > input[type=checkbox]'), true);
+	}
 }
