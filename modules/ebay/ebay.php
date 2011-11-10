@@ -61,7 +61,7 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.3.4';
+		$this->version = '1.3.5';
 		$this->author = 'PrestaShop';
 		parent::__construct();
 		$this->displayName = $this->l('eBay');
@@ -375,8 +375,6 @@ class Ebay extends Module
 					{
 						if (!Db::getInstance()->getValue('SELECT `id_ebay_order` FROM `'._DB_PREFIX_.'ebay_order` WHERE `id_order_ref` = \''.pSQL($order['id_order_ref']).'\''))
 						{
-							$id_customer = (int)Db::getInstance()->getValue('SELECT `id_customer` FROM `'._DB_PREFIX_.'customer` WHERE `active` = 1 AND `email` = \''.pSQL($order['email']).'\' AND `deleted` = 0'.(substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
-
 							// Check for empty name
 							$order['firstname'] = trim($order['firstname']);
 							$order['familyname'] = trim($order['familyname']);
@@ -389,6 +387,9 @@ class Ebay extends Module
 
 							if (Validate::isEmail($order['email']) && !empty($order['firstname']) && !empty($order['familyname']))
 							{
+								// Getting the customer
+								$id_customer = (int)Db::getInstance()->getValue('SELECT `id_customer` FROM `'._DB_PREFIX_.'customer` WHERE `active` = 1 AND `email` = \''.pSQL($order['email']).'\' AND `deleted` = 0'.(substr(_PS_VERSION_, 0, 3) == '1.3' ? '' : ' AND `is_guest` = 0'));
+
 								// Add customer if he doesn't exist
 								if ($id_customer < 1)
 								{
@@ -460,7 +461,7 @@ class Ebay extends Module
 									$cartAdd->update();
 	
 									// Check number of products in the cart
-									if ($cartNbProducts > 0)
+									if ($cartNbProducts > 0 && !Db::getInstance()->getValue('SELECT `id_ebay_order` FROM `'._DB_PREFIX_.'ebay_order` WHERE `id_order_ref` = \''.pSQL($order['id_order_ref']).'\''))
 									{
 										// Fix on sending e-mail
 										Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'NOSEND-EBAY'), 'UPDATE', '`id_customer` = '.(int)$id_customer);
