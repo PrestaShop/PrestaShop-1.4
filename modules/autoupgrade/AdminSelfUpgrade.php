@@ -1831,7 +1831,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 	public function display()
 	{
 		/* PrestaShop demo mode */
-		if (_PS_MODE_DEMO_)
+		if (defined('_PS_MODE_DEMO_') && _PS_MODE_DEMO_)
 		{
 			echo '<div class="error">'.Tools::displayError('This functionnality has been disabled.').'</div>';
 			return;
