@@ -669,13 +669,14 @@ class shopimporter extends ImportModule
 		//creating temporary fields for identifiers matching and password
 		if (array_key_exists('alterTable', $this->supportedImports[strtolower($className)]))
 			$this->alterTable(strtolower($className));
+		$matchIdLang = $this->getMatchIdLang(1);
 		foreach($items as $item)
 		{
 			$object = new $className;
 			$id = $item[$this->supportedImports[strtolower($className)]['identifier']];
 			if (array_key_exists('foreign_key', $this->supportedImports[strtolower($className)]))
 				$this->replaceForeignKey($item, $table);
-			$matchIdLang = $this->getMatchIdLang(1);
+			
 			foreach($item as $key => $val)
 			{
 				if ($key == 'passwd')
@@ -685,14 +686,16 @@ class shopimporter extends ImportModule
 				}
 				if (is_array($val) AND $key != 'images')
 				{
-
+					$tmp = array();
 					foreach($matchIdLang as $k => $v)
-						if (($k != $v) AND array_key_exists($k, $val))
+					{
+						if (array_key_exists($k, $val))
 						{
-							$item[$key][$v] = $val[$k];
-							unset($item[$key][$k]);
+							$tmp[$v] = $val[$k];
 						}
-					$object->$key = $item[$key];
+					}
+					
+					$object->$key = $tmp;
 				}
 				else
 					$object->$key = $val;
@@ -1091,9 +1094,10 @@ class shopimporter extends ImportModule
 							$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
 			/* Checking for multilingual fields validity */
 			foreach ($rules['validateLang'] AS $fieldLang => $function)
+			{
 				foreach ($languages AS $language)
 				{
-					if (array_key_exists($fieldLang, $fields) AND ($value = $fields[$fieldLang][$language['id_lang']]) !== false AND !empty($value))
+					if (array_key_exists($fieldLang, $fields) AND array_key_exists($language['id_lang'], $fields[$fieldLang]) AND ($value = $fields[$fieldLang][$language['id_lang']]) !== false AND !empty($value))
 					{
 						if (!Validate::$function($value))
 							if ($hasErrors == 2)
@@ -1108,6 +1112,7 @@ class shopimporter extends ImportModule
 								$returnErrors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
 					}
 				}
+			}
 		}
 		return $returnErrors;
 	}
