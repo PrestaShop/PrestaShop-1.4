@@ -27,11 +27,11 @@
 
 class Autoupgrade extends Module
 {
-		function __construct()
+	function __construct()
 	{
 		$this->name = 'autoupgrade';
 		$this->tab = 'administration';
-		$this->version = 0.1;
+		$this->version = 0.2;
 
 		if (!defined('_PS_ADMIN_DIR_'))
 		{
@@ -102,8 +102,13 @@ class Autoupgrade extends Module
 	public function uninstall()
 	{
 		$idtab = Configuration::get('PS_AUTOUPDATE_MODULE_IDTAB');
-		$tab = new Tab($idtab,1);
-		$res = $tab->delete();
+		if ($idTab)
+		{
+			$tab = new Tab($idtab,1);
+			$res = $tab->delete();
+		}
+		else
+			$res = true;
 		if (file_exists(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'tabs'.'AdminUpgrade.php'))
 		{
 			// Should we create the correct AdminUpgrade tab (not the module)

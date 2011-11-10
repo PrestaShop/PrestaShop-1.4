@@ -27,7 +27,7 @@
 
 
 if(!defined('_PS_ADMIN_DIR_'))
-	define('_PS_ADMIN_DIR_',PS_ADMIN_DIR);
+	define('_PS_ADMIN_DIR_', PS_ADMIN_DIR);
 if(!defined('_PS_USE_SQL_SLAVE_'))
 	define('_PS_USE_SQL_SLAVE_',false);
 
@@ -49,7 +49,7 @@ if(empty($_POST['action']) OR !in_array($_POST['action'],array('upgradeDb')))
 	// Add Upgrader class : if > 1.4.5.0 , uses core class
 	// otherwise, use Upgrader.php in modules.
 	// in both cases, use override if files exists
-	if (!version_compare(_PS_VERSION_,'1.4.5.0','<') && file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
+	if (!version_compare(_PS_VERSION_,'1.4.6.0','<') && file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
 		require_once(_PS_ROOT_DIR_.'/classes/Upgrader.php');
 	else
 		require_once(dirname(__FILE__).'/Upgrader.php');
@@ -74,10 +74,10 @@ class AdminSelfUpgrade extends AdminSelfTab
 	public $ajax = false;
 	public $nextResponseType = 'json'; // json, xml
 	public $next = 'N/A';
-	
+
 	public $upgrader = null;
 	public $standalone = true;
-	
+
 	/**
 	 * set to false if the current step is a loop
 	 *
@@ -102,16 +102,15 @@ class AdminSelfUpgrade extends AdminSelfTab
 		'manualMode',
 		'desactivateCustomModule',
 
-		//
 		'backupDbFilename',
 		'backupFilesFilename',
 
-		
+
 	);
 	public $autoupgradePath = null;
 	/**
-	 * autoupgradeDir 
-	 * 
+	 * autoupgradeDir
+	 *
 	 * @var string directory relative to admin dir
 	 */
 	public $autoupgradeDir = 'autoupgrade';
@@ -119,6 +118,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 	public $prodRootDir = '';
 	public $adminDir = '';
 	public $rootWritable = false;
+
+	public $lastAutoupgradeVersion = '';
 	public $svnDir = 'svn';
 	public $destDownloadFilename = 'prestashop.zip';
 	public $toUpgradeFileList = 'filesToUpgrade.list';
@@ -134,7 +135,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 	private $backupFilesFilename = '';
 	private $backupDbFilename = '';
-	
+
 /**
  * int loopBackupFiles : if your server has a low memory size, lower this value
  * @TODO remove the static, add a const, and use it like this : min(AdminUpgrade::DEFAULT_LOOP_ADD_FILE_TO_ZIP,Configuration::get('LOOP_ADD_FILE_TO_ZIP');
@@ -157,7 +158,7 @@ class AdminSelfUpgrade extends AdminSelfTab
   * value = the next step you want instead
  	*	example : public static $skipAction = array('download' => 'upgradeFiles');
 	*/
-	public static $skipAction = array('download'=>'upgradeComplete');
+	public static $skipAction = array();
 	public $useSvn;
 
 	protected $_includeContainer = false;
@@ -235,7 +236,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 	/**
 	 * _setFields function to set fields (only when we need it).
-	 * 
+	 *
 	 * @return void
 	 */
 	private function _setFields()
@@ -274,19 +275,48 @@ class AdminSelfUpgrade extends AdminSelfTab
 			);
 		}
 	}
-	
+
 	public function configOk()
 	{
-		$allowed = (ConfigurationTest::test_fopen() && $this->rootWritable);
-		$allowed &= !Configuration::get('PS_SHOP_ENABLE');
-		$allowed &= $this->upgrader->autoupgrade;
-		$allowed &= (Configuration::get('PS_AUTOUP_KEEP_TRAD') !== false);
-
+		$allowed_array = $this->getCheckCurrentConfig();
+		$allowed = array_product($allowed_array);
 		return $allowed;
 	}
+
+	public function getcheckCurrentConfig()
+	{
+		static $allowed_array;
+
+		if(empty($allowed_array))
+		{
+			$allowed_array = array();
+			$allowed_array['fopen'] = ConfigurationTest::test_fopen();
+			$allowed_array['root_writable'] = $this->rootWritable;
+			$allowed_array['shop_enabled'] = !Configuration::get('PS_SHOP_ENABLE');
+			$allowed_array['autoupgrade_allowed'] = $this->upgrader->autoupgrade;
+			$module_version = '0.1';
+			if ($module_version = simplexml_load_file(dirname(__FILE__).'/config.xml'))
+				$module_version = (string)$module_version->version;
+			$allowed_array['module_version_ok'] = version_compare($module_version, $this->upgrader->autoupgrade_last_version, '>=');
+			// if one option has been defined, all options are.
+			$allowed_array['module_configured'] = (Configuration::get('PS_AUTOUP_KEEP_TRAD') !== false);
+		}
+		return $allowed_array;
+	}
+
+
+	public function checkAutoupgradeLastVersion(){
+		if ($module_version = simplexml_load_file(_PS_MODULE_DIR_.'autoupgrade'.'/config.xml'))
+			$module_version = (string)$module_version['version'];
+		else
+			$module_version = '';
+		
+		return version_compare($this->upgrader->autoupgrade_last_version, $module_version, '==');
+	}
+
 	/**
 	 * isUpgradeAllowed checks if all server configuration is valid for upgrade
-	 * 
+	 *
 	 * @return void
 	 */
 	public function isUpgradeAllowed()
@@ -315,7 +345,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->action = empty($_REQUEST['action'])?null:$_REQUEST['action'];
 		$this->currentParams = empty($_REQUEST['params'])?null:$_REQUEST['params'];
 		// test writable recursively
-		if(version_compare(_PS_VERSION_,'1.4.5.0','<'))
+		if(version_compare(_PS_VERSION_,'1.4.6.0','<') || !class_exists('ConfigurationTest', false))
 		{
 			require_once('ConfigurationTest.php');
 			if(!class_exists('ConfigurationTest', false) AND class_exists('ConfigurationTestCore'))
@@ -324,18 +354,13 @@ class AdminSelfUpgrade extends AdminSelfTab
 		if (ConfigurationTest::test_dir($this->prodRootDir,true))
 			$this->rootWritable = true;
 
-		if (!in_array($this->action,array('upgradeFile', 'upgradeDb', 'upgradeComplete','rollback','restoreFiles','restoreDb')))
+		if (!in_array($this->action, array('upgradeFile', 'upgradeDb', 'upgradeComplete','rollback','restoreFiles','restoreDb', 'checkFilesVersion')))
 		{
-		// checkPSVersion will be not 
+		// checkPSVersion will be not
+
 			$this->upgrader = new Upgrader();
 			$this->upgrader->checkPSVersion();
 			$this->nextParams['install_version'] = $this->upgrader->version_num;
-
-			if ($this->upgrader->autoupgrade_module)
-				$this->standalone = true;
-			else
-				$this->standalone = false;
-$this->standalone = true;
 		}
 		// If you have defined this somewhere, you know what you do
 		if (defined('_PS_ALLOW_UPGRADE_UNSTABLE_') AND _PS_ALLOW_UPGRADE_UNSTABLE_ AND function_exists('svn_checkout'))
@@ -345,7 +370,7 @@ $this->standalone = true;
 		}
 		else
 			$this->useSvn = false;
-		
+
 
 		// If not exists in this sessions, "create"
 		// session handling : from current to next params
@@ -354,7 +379,7 @@ $this->standalone = true;
 
 		if (isset($this->currentParams['filesToUpgrade']))
 			$this->nextParams['filesToUpgrade'] = $this->currentParams['filesToUpgrade'];
-		
+
 		// set autoupgradePath, to be used in backupFiles and backupDb config values
 		$this->autoupgradePath = $this->adminDir.DIRECTORY_SEPARATOR.$this->autoupgradeDir;
 
@@ -373,7 +398,7 @@ $this->standalone = true;
 			$this->backupDbFilename = Configuration::get('UPGRADER_BACKUPDB_FILENAME');
 			if(!file_exists($this->backupDbFilename))
 			{
-				// If not exists, the filename is generated by Backup.php 
+				// If not exists, the filename is generated by Backup.php
 				$this->backupDbFilename = '';
 				Configuration::updateValue('UPGRADER_BACKUPDB_FILENAME', $this->backupDbFilename);
 			}
@@ -437,18 +462,18 @@ $this->standalone = true;
 
 		if ($this->dontBackupImages)
 			$this->backupIgnoreAbsoluteFiles[] = "/img";
-		
-		
+
+
 		if ($this->keepDefaultTheme)
 			$this->excludeAbsoluteFilesFromUpgrade[] = "/themes/prestashop";
-			
+
 		if ($this->keepTrad)
 			$this->excludeFilesFromUpgrade[] = "translations";
 	}
 
 	/**
 	 * getFilePath return the path to the zipfile containing prestashop.
-	 * 
+	 *
 	 * @return void
 	 */
 	private function getFilePath()
@@ -462,7 +487,6 @@ $this->standalone = true;
 
 		if (!empty($_POST))
 			$this->_postConfig($this->_fieldsAutoUpgrade);
-			
 	}
 
 	public function ajaxProcessUpgradeComplete()
@@ -472,37 +496,49 @@ $this->standalone = true;
 	}
 	public function ajaxProcessCheckFilesVersion()
 	{
-		if ($this->upgrader->isAuthenticPrestashopVersion() !== false)
-		{
-			$this->nextParams['status'] = 'ok';
-			$testOrigCore = true;
-		}
-		else
-		{
-			$testOrigCore = false;
-			$this->nextParams['status'] = 'warn';
-		}
-		
-		$changedFileList = $this->upgrader->getChangedFilesList();
-		if (!isset($changedFileList['core']))
-			$changedFileList['core'] = array();
-		if (!isset($changedFileList['translation']))
-			$changedFileList['translation'] = array();
-		if (!isset($changedFileList['mail']))
-			$changedFileList['mail'] = array();
+		$this->_loadDbRelatedClasses();
+		$this->upgrader = new Upgrader();
 
-		if ($changedFileList === false)
+		$changedFileList = $this->upgrader->getChangedFilesList();
+		if ($this->upgrader->isAuthenticPrestashopVersion() == true
+			&& !is_array($changedFileList) )
 		{
-			$changedFileList = array();
-			$this->nextParams['msg'] = $this->l('Unable to check files');
 			$this->nextParams['status'] = 'error';
+			$this->nextParams['msg'] = '[TECHNICAL ERROR] Unable to check files';
+			$testOrigCore = false;
 		}
 		else
 		{
-				//		echo '<img src="'.$originalCore.'" /> '.
-			$this->nextParams['msg'] = ($testOrigCore?$this->l('Core files are ok'):sprintf($this->l('%1$s core files have been modified (%2$s total)'), count($changedFileList['core']), count(array_merge($changedFileList['core'], $changedFileList['mail'], $changedFileList['translation']))));
+			if ($this->upgrader->isAuthenticPrestashopVersion() != false)
+			{
+				$this->nextParams['status'] = 'ok';
+				$testOrigCore = true;
+			}
+			else
+			{
+				$testOrigCore = false;
+				$this->nextParams['status'] = 'warn';
+			}
+
+			if (!isset($changedFileList['core']))
+				$changedFileList['core'] = array();
+			if (!isset($changedFileList['translation']))
+				$changedFileList['translation'] = array();
+			if (!isset($changedFileList['mail']))
+				$changedFileList['mail'] = array();
+
+			if ($changedFileList === false)
+			{
+				$changedFileList = array();
+				$this->nextParams['msg'] = $this->l('Unable to check files');
+				$this->nextParams['status'] = 'error';
+			}
+			else
+			{
+				$this->nextParams['msg'] = ($testOrigCore?$this->l('Core files are ok'):sprintf($this->l('%1$s core files have been modified (%2$s total)'), count($changedFileList['core']), count(array_merge($changedFileList['core'], $changedFileList['mail'], $changedFileList['translation']))));
+			}
+			$this->nextParams['result'] = $changedFileList;
 		}
-		$this->nextParams['result'] = $changedFileList;
 	}
 
 	public function ajaxProcessUpgradeNow()
@@ -634,13 +670,13 @@ $this->standalone = true;
 			if ($file[0] != '.')
 			{
 				$fullPath = $dir.DIRECTORY_SEPARATOR.$file;
-			
+
 				if (!$this->_skipFile($file, $fullPath, $way))
 				{
 					if (is_dir($fullPath))
 						$list = array_merge($list, $this->_listFilesInDir($fullPath, $way));
 					else
-						$list[] = $fullPath;					
+						$list[] = $fullPath;
 				}
 				else
 					$list[] = $fullPath;
@@ -656,7 +692,7 @@ $this->standalone = true;
 		foreach ($allFiles as $file)
 		{
 			$fullPath = $dir.DIRECTORY_SEPARATOR.$file;
-			
+
 			if (!$this->_skipFile($file, $fullPath, "upgrade"))
 			{
 				$list[] = $fullPath;
@@ -666,7 +702,7 @@ $this->standalone = true;
 						$this->_listFilesToUpgrade($fullPath);
 			}
 		}
-		
+
 		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeFileList,serialize($list));
 		$this->nextParams['filesToUpgrade'] = $this->toUpgradeFileList;
 	}
@@ -678,7 +714,7 @@ $this->standalone = true;
 		$this->nextParams = $this->currentParams;
 		if (!isset($this->nextParams['filesToUpgrade']))
 			$this->_listFilesToUpgrade($this->latestRootDir);
-		
+
 		// later we could choose between _PS_ROOT_DIR_ or _PS_TEST_DIR_
 		$this->destUpgradePath = $this->prodRootDir;
 
@@ -729,38 +765,38 @@ $this->standalone = true;
 
 	public function _modelDo($method)
 	{
-	@set_time_limit(0);
-	@ini_set('max_execution_time', '0');
-	// setting the memory limit to 128M only if current is lower
-	$memory_limit = ini_get('memory_limit');
-	if (substr($memory_limit,-1) != 'G' 
-		AND ((substr($memory_limit,-1) == 'M' AND substr($memory_limit,0,-1) < 128) 
-		OR is_numeric($memory_limit) AND (intval($memory_limit) < 131072))
-	){
-		@ini_set('memory_limit','128M');
-	}
-	require_once($this->prodRootDir.'/config/autoload.php');
+		@set_time_limit(0);
+		@ini_set('max_execution_time', '0');
+		// setting the memory limit to 128M only if current is lower
+		$memory_limit = ini_get('memory_limit');
+		if (substr($memory_limit,-1) != 'G'
+			AND ((substr($memory_limit,-1) == 'M' AND substr($memory_limit,0,-1) < 128)
+			OR is_numeric($memory_limit) AND (intval($memory_limit) < 131072))
+		){
+			@ini_set('memory_limit','128M');
+		}
+		require_once($this->prodRootDir.'/config/autoload.php');
 
-	/* Redefine REQUEST_URI if empty (on some webservers...) */
-	if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
-		$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-	if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
-		$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
-	$_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
+		/* Redefine REQUEST_URI if empty (on some webservers...) */
+		if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
+			$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+		if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
+			$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
+		$_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
-	define('INSTALL_VERSION', $this->currentParams['install_version']);
-	define('INSTALL_PATH', realpath($this->latestRootDir.DIRECTORY_SEPARATOR.'install'));
+		define('INSTALL_VERSION', $this->currentParams['install_version']);
+		define('INSTALL_PATH', realpath($this->latestRootDir.DIRECTORY_SEPARATOR.'install'));
 
 
-	define('PS_INSTALLATION_IN_PROGRESS', true);
-	require_once(INSTALL_PATH.'/classes/ToolsInstall.php');
-	define('SETTINGS_FILE', $this->prodRootDir . '/config/settings.inc.php');
-	define('DEFINES_FILE', $this->prodRootDir . '/config/defines.inc.php');
-	define('INSTALLER__PS_BASE_URI', substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen($_SERVER['REQUEST_URI']) - strrpos($_SERVER['REQUEST_URI'], '/')) - strlen(substr(dirname($_SERVER['REQUEST_URI']), strrpos(dirname($_SERVER['REQUEST_URI']), '/')+1))));
-	define('INSTALLER__PS_BASE_URI_ABSOLUTE', 'http://'.ToolsInstall::getHttpHost(false, true).INSTALLER__PS_BASE_URI);
+		define('PS_INSTALLATION_IN_PROGRESS', true);
+		require_once(INSTALL_PATH.'/classes/ToolsInstall.php');
+		define('SETTINGS_FILE', $this->prodRootDir . '/config/settings.inc.php');
+		define('DEFINES_FILE', $this->prodRootDir .'/config/defines.inc.php');
+		define('INSTALLER__PS_BASE_URI', substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen($_SERVER['REQUEST_URI']) - strrpos($_SERVER['REQUEST_URI'], '/')) - strlen(substr(dirname($_SERVER['REQUEST_URI']), strrpos(dirname($_SERVER['REQUEST_URI']), '/')+1))));
+		define('INSTALLER__PS_BASE_URI_ABSOLUTE', 'http://'.ToolsInstall::getHttpHost(false, true).INSTALLER__PS_BASE_URI);
 
-	// XML Header
-	header('Content-Type: text/xml');
+		// XML Header
+		header('Content-Type: text/xml');
 
 	// Switching method
 		if (in_array($method, array('doUpgrade', 'createDB', 'checkShopInfos')))
@@ -795,7 +831,7 @@ $this->standalone = true;
 			case 'doUpgrade' :
 				require_once(INSTALL_PATH.DIRECTORY_SEPARATOR.'xml'.DIRECTORY_SEPARATOR.'doUpgrade.php');
 			break;
-			
+
 			case 'getVersionFromDb' :
 				require_once(INSTALL_PATH.DIRECTORY_SEPARATOR.'xml'.DIRECTORY_SEPARATOR.'getVersionFromDb.php');
 			break;
@@ -817,16 +853,16 @@ $this->standalone = true;
 			$this->nextResponseType = 'xml';
 		}
 		switch ($this->currentParams['upgradeDbStep'])
-			{
-				default:
-				// 1) confirm version is correct(DB)
-				// install/model.php?method=getVersionFromDb&language=0
-				case '1':
+		{
+			default:
+			// 1) confirm version is correct(DB)
+			// install/model.php?method=getVersionFromDb&language=0
+			case '1':
 				$this->_modelDo('getVersionFromDb');
 				break;
-				// 2) confirm config is correct (r/w rights)
-				//	install/model.php?method=checkConfig&firsttime=0
-				case '2':
+			// 2) confirm config is correct (r/w rights)
+			//	install/model.php?method=checkConfig&firsttime=0
+			case '2':
 				if(!$this->_modelDo('checkConfig'))
 				{
 					$this->next = 'error';
@@ -834,23 +870,23 @@ $this->standalone = true;
 				}
 				break;
 
-				case '3':
+			case '3':
 				if (!$this->_modelDo('doUpgrade'))
 				{
 					$this->next = 'error';
 					$this->nextDesc = $this->l('error during upgrade Db. You may need to restore your database');
 				}
 				break;
-				case '4':
-					$this->next = 'upgradeComplete';
-					$this->nextResponseType = 'json';
-					$this->nextDesc = $this->l('Way to go ! Upgrade complete. You can now reactivate your shop.');
-					break;
-			}
+			case '4':
+				$this->next = 'upgradeComplete';
+				$this->nextResponseType = 'json';
+				$this->nextDesc = $this->l('Way to go ! Upgrade complete. You can now reactivate your shop.');
+				break;
+		}
 
 		// 5) compare activated modules and reactivate them
 		// @TODO
-			return true;
+		return true;
 
 	}
 
@@ -893,8 +929,7 @@ $this->standalone = true;
 						return false;
 					}
 				}
-				else
-					// directory already exists
+				else // directory already exists
 					return true;
 			}
 			else
@@ -950,7 +985,7 @@ $this->standalone = true;
 	/**
 	 * ajaxProcessRestoreFiles restore the previously saved files, 
 	 * and delete files that weren't archived
-	 * 
+	 *
 	 * @return boolean true if succeed
 	 */
 	public function ajaxProcessRestoreFiles()
@@ -969,7 +1004,7 @@ $this->standalone = true;
 
 			$filepath = $this->backupFilesFilename;
 			$destExtract = $this->prodRootDir;
-			
+
 			if (self::ZipExtract($filepath, $destExtract))
 			{
 				$this->next = 'restoreFiles';
@@ -1095,7 +1130,7 @@ $this->standalone = true;
 		// @TODO need to check if a ";" in description could block that (I suppose it can at the end of a line)
 		preg_match_all('/(.*;)[\n\r]+/Usm', $content, $requests);
 		/* @TODO maybe improve regex pattern ... */
-		$db = Db::getInstance();	
+		$db = Db::getInstance();
 		if (count($requests[0])>0)
 		{
 			foreach ($requests[1] as $request)
@@ -1114,7 +1149,7 @@ $this->standalone = true;
 		$this->next = 'rollback';
 		$this->nextDesc = 'Database restore done.';
 	}
-	
+
 	private function _loadDbRelatedClasses()
 	{
 		// Manual inclusion of all classes used
@@ -1143,7 +1178,7 @@ $this->standalone = true;
 			if(!class_exists('MySQL',false))
 				eval('Class MySQL extends MySQLCore{}');
 		}
-		
+
 		if(!class_exists('Validate',false))
 		{
 			require_once(_PS_ROOT_DIR_.'/classes/Validate.php');
@@ -1160,10 +1195,10 @@ $this->standalone = true;
 		{
 			if (!class_exists('BackupCore', false))
 				require_once('Backup.php');
-				if(file_exists(_PS_ROOT_DIR_.'/override/classes/Backup.php'))
-					require_once(_PS_ROOT_DIR_.'/override/classes/Backup.php');
-				else
-					eval('Class Backup extends BackupCore{}');
+			if(file_exists(_PS_ROOT_DIR_.'/override/classes/Backup.php'))
+				require_once(_PS_ROOT_DIR_.'/override/classes/Backup.php');
+			else
+				eval('Class Backup extends BackupCore{}');
 		}
 
 		if (!defined('_PS_MAGIC_QUOTES_GPC_'))
@@ -1185,7 +1220,7 @@ $this->standalone = true;
 		if ($res)
 		{
 			$this->nextParams['backupDbFilename'] = $backup->id;
-			// We need to load configuration to use it ... 
+			// We need to load configuration to use it ...
 			Configuration::loadConfiguration();
 			Configuration::updateValue('UPGRADER_BACKUPDB_FILENAME', $backup->id);
 
@@ -1230,12 +1265,12 @@ $this->standalone = true;
 			//$current = crc32(file_get_contents($file));
 			//$file = $this->nextParams['filesForBackup'][0];
 			//$latestFile = str_replace(_PS_ROOT_DIR_,$this->latestRootDir,$file);
-	
+
 			//	if (file_exists($latestFile))
 			//		$latest = crc32($latestFile);
 			//	else
 			//		$latest = '';
-			
+
 				$zip = new ZipArchive();
 				if ($zip->open($this->backupFilesFilename, ZIPARCHIVE::CREATE))
 				{
@@ -1352,13 +1387,13 @@ $this->standalone = true;
 
 		return $resRemove;
 	}
-	
+
 	public function ajaxProcessSvnCheckout()
 	{
 		$this->nextParams = $this->currentParams;
 		if ($this->useSvn){
 			$dest = $this->autoupgradePath . DIRECTORY_SEPARATOR . $this->svnDir;
-			
+
 			$svnStatus = svn_status($dest);
 			if (is_array($svnStatus))
 			{
@@ -1457,7 +1492,7 @@ $this->standalone = true;
 		$return['nextParams'] = $this->nextParams;
 		if (!isset($return['nextParams']['upgradeDbStep']))
 			$return['nextParams']['upgradeDbStep'] = 0;
-		
+
 		$return['nextParams']['typeResult'] = $this->nextResponseType;
 
 		$return['nextQuickInfo'] = $this->nextQuickInfo;
@@ -1471,25 +1506,22 @@ $this->standalone = true;
 	 */
 	public function displayConf()
 	{
-		if(!$this->standalone)
-		{
-			if (version_compare(_PS_VERSION_,'1.4.5.0','<') AND false)
-				$this->_errors[] = Tools::displayError('This class depends of several files modified in 1.4.5.0 version and should not be used in an older version');
-		}
+
+		if (version_compare(_PS_VERSION_,'1.4.5.0','<') AND false)
+			$this->_errors[] = Tools::displayError('This class depends of several files modified in 1.4.5.0 version and should not be used in an older version');
 		parent::displayConf();
-		
 	}
 
 	public function ajaxPreProcess()
 	{
 		/* PrestaShop demo mode */
-		if (_PS_MODE_DEMO_)
+		if (defined('_PS_MODE_DEMO_') && _PS_MODE_DEMO_)
 			return;
 		/* PrestaShop demo mode*/
 		
 		if (!empty($_POST['responseType']) AND $_POST['responseType'] == 'json')
 			header('Content-Type: application/json');
-		
+
 		if(!empty($_POST['action']))
 		{
 			$action = $_POST['action'];
@@ -1610,6 +1642,19 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		<p>'.$this->l('All the following points must be ok in order to allow the upgrade.').'</p>
 		<b>'.$this->l('Root directory').' : </b>'.$this->prodRootDir.'<br/><br/>';
 
+		if ($this->checkAutoupgradeLastVersion())
+			$srcModuleVersion = '../img/admin/enabled.gif';
+		else
+			$srcModuleVersion = '../img/admin/disabled.gif';
+
+		if ($module_version = simplexml_load_file(dirname(__FILE__).'/config.xml'))
+			$module_version = (string)$module_version->version;
+
+		$content .= '<b>'.$this->l('Module version').' : </b>'
+			.'<img src="'.$srcModuleVersion.'" /> '
+			.sprintf($this->lastAutoupgradeVersion?
+				$this->l('You have the last version (%s)'):$this->l('You currently use the version %1$s of the autoupgrade module. Please install the last version (%2$s)'), $module_version, $this->upgrader->autoupgrade_last_version).'<br/><br/>';
+
 		if ($this->rootWritable)
 			$srcRootWritable = '../img/admin/enabled.gif';
 		else
@@ -1686,7 +1731,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		$content .= '<script type="text/javascript">
 			$("#currentConfigurationToggle").click(function(e){e.preventDefault();$("#currentConfiguration").toggle()});'
 			.($this->configOk()?'$("#currentConfiguration").hide();$("#currentConfigurationToggle").after("<img src=\"../img/admin/enabled.gif\" />");':'').'</script>';
-		$content .= '<div style="float:left">
+		$content .= '<div style="clear:left">&nbsp;</div><div style="float:left">
 		<h1>'.sprintf($this->l('Your current prestashop version : %s '),_PS_VERSION_).'</h1>';
 		$content .= '<p>'.sprintf($this->l('Last version is %1$s (%2$s) '), $this->upgrader->version_name, $this->upgrader->version_num).'</p>';
 
@@ -1719,13 +1764,12 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 	
 		$content .= '</div>
 		<div id="currentlyProcessing" style="display:none;float:right"><h4>Currently processing <img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/></h4>
-			
+
 		<div id="infoStep" class="processing" style=height:50px;width:400px;" >'.$this->l('I\'m waiting for your command, sir').'</div>';
 		$content .= '</div>';
 
 		$content .= '</fieldset>';
-		
-		
+
 
 			if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $this->manualMode)
 			{
@@ -1760,7 +1804,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		}
 		else
 			$content .= '<p>'.$this->l('Your current configuration does not allow upgrade.').'</p>';
-		
+
 		$content .= '<br/><br/><small>'.sprintf($this->l('last datetime check : %s '),date('Y-m-d H:i:s',Configuration::get('PS_LAST_VERSION_CHECK'))).'</span> 
 		<a class="button" href="index.php?tab=AdminSelfUpgrade&token='.Tools::getAdminToken('AdminSelfUpgrade'.(int)(Tab::getIdFromClassName(get_class($this))).(int)$cookie->id_employee).'&refreshCurrentVersion=1">'.$this->l('Please click to refresh').'</a>
 		</small>';
@@ -1829,19 +1873,19 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 				<p class="warning">'.$this->l('Your current configuration indicate you want to upgrade your system from the unstable development branch, with no version number. If you upgrade, you will not be able to follow the official release process anymore').'.</p>
 				</div>';
 			$this->_displayUpgraderForm();
-		
+
 			echo '<br/>';
 			$this->_displayRollbackForm();
-	
+
 			echo '<br/>';
 			$this->_displayForm('autoUpgradeOptions',$this->_fieldsAutoUpgrade,'<a href="" name="options" id="options">'.$this->l('Options').'</a>', '','prefs');
 			// @todo manual upload with a form
 
 			// We need jquery 1.6 for json 
 			echo '<script type="text/javascript">
-			jq13 = jQuery.noConflict(true);
-			</script>
-			<script type="text/javascript" src="'.__PS_BASE_URI__.'modules/autoupgrade/jquery-1.6.2.min.js"></script>';
+				jq13 = jQuery.noConflict(true);
+				</script>
+				<script type="text/javascript" src="'.__PS_BASE_URI__.'modules/autoupgrade/jquery-1.6.2.min.js"></script>';
 			echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'modules/autoupgrade/jquery.xml2json.js"></script>';
 			echo '<script type="text/javascript">'.$this->_getJsInit().'</script>';
 
@@ -1901,7 +1945,7 @@ function addQuickInfo(arrQuickInfo){
 		else
 			$js .= 'var manualMode = false;';
 
-			$js .= '
+		$js .= '
 var firstTimeParams = '.$this->buildAjaxResult().';
 firstTimeParams = firstTimeParams.nextParams;
 firstTimeParams.firstTime = "1";
@@ -1915,11 +1959,11 @@ $(document).ready(function(){
 
 	// more convenient to have that param for handling success and error
 	var requestParams;
-		
+
 		// set timeout to 5 minutes (download can be long)?
 		$.ajaxSetup({timeout:300000});
 
-	
+
 	// prepare available button here, without params ?
 	prepareNextButton("#upgradeNow",firstTimeParams);
 	prepareNextButton("#rollback",firstTimeParams);
@@ -1960,7 +2004,7 @@ function handleXMLResult(xmlRet, previousParams)
 	// this will be used in after** javascript functions
 	resGlobal = $.xml2json(xmlRet);
 	result = "ok";
-	switch(previousParams.upgradeDbStep) 
+	switch(previousParams.upgradeDbStep)
 	{
 		case 0: // getVersionFromDb
 		resGlobal.result = "ok";
@@ -1988,7 +2032,7 @@ function handleXMLResult(xmlRet, previousParams)
 			resGlobal.next = "upgradeComplete";
 			nextParams.typeResult = "json";
 		}
-		else 
+		else
 			resGlobal.next = "upgradeDb";
 		resGlobal = {next:resGlobal.next,nextParams:nextParams,status:"ok"};
 
@@ -2001,7 +2045,7 @@ function handleXMLResult(xmlRet, previousParams)
 			.show("slow");
 		$("#dbCreateResultCheck")
 			.hide("slow");
-		
+
 		// propose rollback if there is an error
 		if (confirm("An error happen\r\n'.$this->l('You may need to rollback.').'"))
 			resGlobal = {next:"rollback",nextParams:{typeResult:"json"},status:"error"};
@@ -2032,8 +2076,8 @@ function afterUpgradeComplete()
 }
 
 /**
- * afterBackupDb display the button 
- * 
+ * afterBackupDb display the button
+ *
  */
 function afterBackupDb()
 {
@@ -2064,7 +2108,7 @@ function doAjaxRequest(action, nextParams){
 		myNext = nextParams;
 		req = $.ajax({
 			type:"POST",
-			url : "'.($this->standalone? __PS_BASE_URI__ . trim($this->adminDir,DIRECTORY_SEPARATOR).'/autoupgrade/ajax-upgradetab.php' : str_replace('index','ajax-tab',$currentIndex)).'",
+			url : "'. __PS_BASE_URI__ .trim($this->adminDir,DIRECTORY_SEPARATOR).'/autoupgrade/ajax-upgradetab.php'.'",
 			async: true,
 			data : {
 				dir:"'.trim($this->adminDir,DIRECTORY_SEPARATOR).'",
@@ -2113,7 +2157,7 @@ function doAjaxRequest(action, nextParams){
 					$("#"+action).addClass("done");
 					if (res.stepDone)
 						$("#"+action).addClass("stepok");
-					
+
 					// if a function "after[action name]" exists, it should be called.
 					// This is used for enabling restore buttons for example
 					funcName = "after"+ucFirst(action);
@@ -2210,7 +2254,7 @@ function handleError(res)
 	// display error message in the main process thing
 	updateInfoStep(res.nextDesc);
 	addQuickInfo(res.nextQuickInfo);
-	// In case the rollback button has been desactivated, just re-enable it
+	// In case the rollback button has been deactivated, just re-enable it
 	prepareNextButton("#rollback",res.nextParams);
 	// ask if you want to rollback
 	// @TODO !!!
@@ -2222,11 +2266,11 @@ function handleError(res)
 		{
 			$("#rollback").click();
 		}
-			
+
 	}
 }
 ';
-		// ajax to check md5 files
+// ajax to check md5 files
 		$js .= 'function addModifiedFileList(title, fileList, css_class)
 {
 	subList = $("<ul class=\"changedFileList "+css_class+"\"></ul>");
@@ -2254,30 +2298,31 @@ function handleError(res)
 			},
 			success : function(res,textStatus,jqXHR)
 			{
-				res = $.parseJSON(res);
-				answer = res.nextParams;
-				$("#checkPrestaShopFilesVersion").html("<span> "+answer.msg+" </span> ");
-				if (answer.status == "error")
-					$("#checkPrestaShopFilesVersion").prepend("<img src=\"../img/admin/warning.gif\" /> ");
-				else
-				{
-					$("#checkPrestaShopFilesVersion").prepend("<img src=\"../img/admin/warning.gif\" /> ");
-					$("#checkPrestaShopFilesVersion").append("<a id=\"toggleChangedList\" class=\"button\" href=\"\">'.$this->l('See or hide the list').'</a><br/>");
-					$("#checkPrestaShopFilesVersion").append("<div id=\"changedList\" style=\"display:none \"><br/>");
-					if(answer.result.core.length)
-						addModifiedFileList("'.$this->l('Core file(s)').'", answer.result.core, "changedImportant");
-					if(answer.result.mail.length)
-						addModifiedFileList("'.$this->l('Mail file(s)').'", answer.result.mail, "changedNotice");
-					if(answer.result.translation.length)
-						addModifiedFileList("'.$this->l('Translation file(s)').'", answer.result.translation, "changedNotice");
+					res = $.parseJSON(res);
+					answer = res.nextParams;
+					$("#checkPrestaShopFilesVersion").html("<span> "+answer.msg+" </span> ");
+					if (answer.status == "error")
+						$("#checkPrestaShopFilesVersion").prepend("<img src=\"../img/admin/warning.gif\" /> ");
+					else
+					{
+						$("#checkPrestaShopFilesVersion").prepend("<img src=\"../img/admin/warning.gif\" /> ");
+						$("#checkPrestaShopFilesVersion").append("<a id=\"toggleChangedList\" class=\"button\" href=\"\">'.$this->l('See or hide the list').'</a><br/>");
+						$("#checkPrestaShopFilesVersion").append("<div id=\"changedList\" style=\"display:none \"><br/>");
+						if(answer.result.core.length)
+							addModifiedFileList("'.$this->l('Core file(s)').'", answer.result.core, "changedImportant");
+						if(answer.result.mail.length)
+							addModifiedFileList("'.$this->l('Mail file(s)').'", answer.result.mail, "changedNotice");
+						if(answer.result.translation.length)
+							addModifiedFileList("'.$this->l('Translation file(s)').'", answer.result.translation, "changedNotice");
 
-					$("#toggleChangedList").bind("click",function(e){e.preventDefault();$("#changedList").toggle();});
-					$(".toggleSublist").live("click",function(e){e.preventDefault();$(this).parent().next().toggle();});
+						$("#toggleChangedList").bind("click",function(e){e.preventDefault();$("#changedList").toggle();});
+						$(".toggleSublist").live("click",function(e){e.preventDefault();$(this).parent().next().toggle();});
 				}
 			}
 			,
-			error: function(res,textStatus,jqXHR)
+			error: function(res, textStatus, jqXHR)
 			{
+				//$("#checkPrestaShopFilesVersion").html("<img src=\"../img/admin/warning.gif\" /> "+textStatus);
 				if (textStatus == "timeout" && action == "download")
 				{
 					updateInfoStep("'.$this->l('Your server can\'t download the file. Please upload it first by ftp in your admin/autoupgrade directory').'");
@@ -2292,42 +2337,7 @@ function handleError(res)
 		return $js;
 	}
 
-	private function _cleanUp($path)
-	{
-		// as we need theses files for restore operation, we can't remove them.
-		// They will be overwritten
-		$skipDirs = array('backups', 'pclzip', 'autoupgrade', '.', '..', '.svn');
-		$skipFiles = array('autoload.php', 'init.php', 'settings.inc.php', 'config.inc.php', 'Tools.php', 'AdminUpgrade.php');
-		$skipFiles[] = $this->standalone?'ajax-upgradetab.php':'ajax-tab.php';
-		if (is_dir($path))
-		{
-			$fp = opendir($path);
-			while ($file = readdir($fp))
-			{
-				if (!in_array($file, $skipDirs) AND !$this->_skipFile('', $path.$file, 'backup'))
-				{
-					$fullpath = $path.$file;
-					if (is_dir($fullpath))
-						$this->_cleanUp($fullpath.'/');
-					else
-					{
-						if (!in_array($file, $skipFiles))
-						{
-							unlink($fullpath);
-						}
-					}
-				}
-			}
-			closedir($fp);
-			/* fortunately not empty dir won't be removed by the following */
-			@rmdir($path);
-		}
-		else
-			if (!$this->_skipFile($file, '', 'backup')) unlink($path);
 
-		return true;
-	}
-	
 	/**
 	 * @desc extract a zip file to the given directory
 	 * @return bool success
@@ -2348,7 +2358,7 @@ function handleError(res)
 			$zip = new ZipArchive();
 			if ($zip->open($fromFile) === true)
 			{
-				if(@$zip->extractTo($toDir.'/') 
+				if (@$zip->extractTo($toDir.'/') 
 					&& $zip->close()
 				)
 				{
@@ -2359,7 +2369,7 @@ function handleError(res)
 					$this->next = 'error';
 					$this->nextDesc = '[TECHNICAL ERROR] Error on extract';
 				}
-			return false;
+				return false;
 			}
 			else
 			{
@@ -2382,7 +2392,7 @@ function handleError(res)
 			return true;
 		}
 	}
-	
+
 	private function _listArchivedFiles()
 	{
 		if (!empty($this->currentParams['backupFilesFilename']))
@@ -2409,7 +2419,7 @@ function handleError(res)
 		}
 		return false;
 	}
-	
+
 	/**
 	 *	bool _skipFile : check whether a file is in backup or restore skip list
 	 *
@@ -2436,7 +2446,7 @@ function handleError(res)
 			case 'upgrade':
 				if (in_array($file, $this->excludeFilesFromUpgrade))
 					return true;
-			
+
 				foreach ($this->excludeAbsoluteFilesFromUpgrade as $path)
 					if (strpos($fullpath, $rootpath.$path) !== false)
 						return true;
