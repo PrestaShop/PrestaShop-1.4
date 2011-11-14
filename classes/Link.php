@@ -105,22 +105,22 @@ class LinkCore
 				$link .= (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang));
 				
 				if ($category AND $category != 'home')
-					$string .= $category.'/';
+					$link .= $category.'/';
 				else 
-				 	$string .= '';
+				 	$link .= '';
 				 
-				$string .= (int)$id_product.'-'.$alias;
+				$link .= (int)$id_product.'-'.$alias;
 				
 				if ($ean13) 
-					$string .='-'.$ean13;
+					$link .='-'.$ean13;
 				else 
-					$string .= '';
+					$link .= '';
 			
-				$string .= '.html';
+				$link .= '.html';
 			}
 			else
-				$string .=(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)$id_product);
-			return $string;
+				$link .=(_PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)$id_product);
+			return $link;
 		}
 		
 		else
