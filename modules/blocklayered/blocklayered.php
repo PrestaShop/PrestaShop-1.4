@@ -1047,11 +1047,11 @@ class BlockLayered extends Module
 		
 		if (!empty($title))
 		{
-			$smarty->assign('meta_title', ucfirst(strtolower(preg_replace('/^'.$categoryTitle.'/', $categoryTitle.' – '.$title, $categoryMetas['meta_title']))));
+			$smarty->assign('meta_title', preg_replace('/^'.$categoryTitle.'/', $categoryTitle.' � '.$title, $categoryMetas['meta_title']));
 			$smarty->assign('meta_description', rtrim($categoryTitle.' – '.$title.' – '.$categoryMetas['meta_description'], ' – '));
 		}
 		else
-			$smarty->assign('meta_title', ucfirst(strtolower($categoryMetas['meta_title'])));
+			$smarty->assign('meta_title', $categoryMetas['meta_title']);
 		
 		$metaKeyWordsComplement = substr(str_replace(' – ', ', ', strtolower($title)), 1000);
 		if (!empty($metaKeyWordsComplement))
