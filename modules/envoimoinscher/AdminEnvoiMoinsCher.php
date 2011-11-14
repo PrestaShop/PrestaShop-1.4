@@ -114,6 +114,7 @@ class AdminEnvoiMoinsCher extends AdminTab
 	private function displayOrders($orders)
 	{
 		global $cookie;
+		$emc = new Envoimoinscher();
 		echo '<table cellspacing="0" cellpadding="0" class="table" align="center" style="margin:10px 0px 0px 25px;">
 					<tr>
 						<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'ordersBox[]\', this.checked)" /></th>
