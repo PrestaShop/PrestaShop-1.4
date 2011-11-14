@@ -1194,7 +1194,8 @@ class MondialRelay extends Module
 				SELECT moh.`id_order_state` 
 				FROM `'._DB_PREFIX_.'order_history` moh 
 				WHERE moh.`id_order` = o.`id_order` 
-				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state); 
+				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).'
+			AND ca.`external_module_name` = "mondialrelay"'; 
 	}
 	
 	public static function ordersSQLQuery1_3($id_order_state)
@@ -1225,7 +1226,8 @@ class MondialRelay extends Module
 				SELECT moh.`id_order_state` 
 				FROM `'._DB_PREFIX_.'order_history` moh 
 				WHERE moh.`id_order` = o.`id_order` 
-				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state);
+				ORDER BY moh.`date_add` DESC LIMIT 1) = '.(int)($id_order_state).'
+			AND ca.`name` = "mondialrelay"';
 	}
 	
 	public static function getBaseOrdersSQLQuery($id_order_state)
