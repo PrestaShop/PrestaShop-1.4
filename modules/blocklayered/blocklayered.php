@@ -1035,8 +1035,6 @@ class BlockLayered extends Module
 		
 		$idLang = (int)$cookie->id_lang;
 		$category = new Category((int)Tools::getValue('id_category'));
-		$categoryMetas = Tools::getMetaTags($idLang, '');
-		$categoryTitle = (empty($category->meta_title[$idLang]) ? $category->name[$idLang] : $category->meta_title[$idLang]);
 
 		// Generate meta title and meta description
 		$title = '';
@@ -1044,11 +1042,13 @@ class BlockLayered extends Module
 			foreach ($filterBlock['title_values'] as $key => $val)
 				$title .= $key.' '.implode('/', $val).' – ';
 		$title = rtrim($title, ' – ');
+		$categoryMetas = Tools::getMetaTags($idLang, '', $title);
+		$categoryTitle = (empty($category->meta_title[$idLang]) ? $category->name[$idLang] : $category->meta_title[$idLang]);
 		
 		if (!empty($title))
 		{
-			$smarty->assign('meta_title', preg_replace('/^'.$categoryTitle.'/', $categoryTitle.' � '.$title, $categoryMetas['meta_title']));
-			$smarty->assign('meta_description', rtrim($categoryTitle.' – '.$title.' – '.$categoryMetas['meta_description'], ' – '));
+			$smarty->assign('meta_title', $categoryTitle.$categoryMetas['meta_title']); 
+			$smarty->assign('meta_description', $categoryTitle.$categoryMetas['meta_description']);
 		}
 		else
 			$smarty->assign('meta_title', $categoryMetas['meta_title']);

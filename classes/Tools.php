@@ -613,7 +613,7 @@ class ToolsCore
 	* @param integer $id_lang Language id
 	* @return array Meta tags
 	*/
-	public static function getMetaTags($id_lang, $page_name)
+	public static function getMetaTags($id_lang, $page_name, $title = '')
 	{
 		global $maintenance;
 
@@ -638,6 +638,8 @@ class ToolsCore
 			/* Categories specifics meta tags */
 			elseif ($id_category = self::getValue('id_category'))
 			{
+				if (!empty($title))
+					$title = ' - '.$title;
 				$page_number = (int)self::getValue('p');
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description`
@@ -650,10 +652,13 @@ class ToolsCore
 
 					// Paginate title
 					if (!empty($row['meta_title']))
-						$row['meta_title'] = $row['meta_title'].(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
+						$row['meta_title'] = $title.$row['meta_title'].(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
 					else
 						$row['meta_title'] = $row['name'].(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
-
+					
+					if (!empty($title))
+						$row['meta_title'] = $title.(!empty($page_number) ? ' ('.$page_number.')' : '').' - '.Configuration::get('PS_SHOP_NAME');
+						
 					return self::completeMetaTags($row, $row['name']);
 				}
 			}
