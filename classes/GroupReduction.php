@@ -133,9 +133,10 @@ class GroupReductionCore extends ObjectModel
 	public static function getValueForProduct($id_product, $id_group)
 	{
 		if (!isset(self::$reductionCache[$id_product.'-'.$id_group]))
-			self::$reductionCache[$id_product.'-'.$id_group] = Db::getInstance()->getValue('SELECT `reduction`
-                                                                                                       FROM `'._DB_PREFIX_.'product_group_reduction_cache`
-                                                                                                       WHERE `id_product` = '.(int)($id_product).' AND `id_group` = '.(int)($id_group));
+			self::$reductionCache[$id_product.'-'.$id_group] = Db::getInstance()->getValue(
+																'SELECT `reduction`
+																FROM `'._DB_PREFIX_.'product_group_reduction_cache`
+																WHERE `id_product` = '.(int)($id_product).' AND `id_group` = '.(int)($id_group));
 		return self::$reductionCache[$id_product.'-'.$id_group];
 	}
 
