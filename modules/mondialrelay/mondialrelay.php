@@ -59,7 +59,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.7.8';
+		$this->version	= '1.7.9';
 
 		parent::__construct();
 
@@ -386,7 +386,7 @@ class MondialRelay extends Module
 		$protocol = (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) 
 			&& strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
 		
-		$endURL = __PS_BASE_URI__.'/modules/mondialrelay/';
+		$endURL = __PS_BASE_URI__.'modules/mondialrelay/';
 	
 		if (method_exists('Tools', 'getShopDomainSsl'))
 			self::$moduleURL = $protocol.Tools::getShopDomainSsl().$endURL;
@@ -404,14 +404,14 @@ class MondialRelay extends Module
 		if ($overloadCurrent)
 			return '
 				<script type="text/javascript">
-					currentJquery = jQuery.noConflict(true); 
+						currentJquery = jQuery.noConflict(true); 
 				</script>
-			<script type="text/javascript" src="'.self::$moduleURL.'/js/jquery-1.6.4.min.js"></script>';
+			<script type="text/javascript" src="'.self::$moduleURL.'js/jquery-1.6.4.min.js"></script>';
 
 		return '
-			<script type="text/javascript" src="'.self::$moduleURL.'/js/jquery-1.6.4.min.js"></script>
+			<script type="text/javascript" src="'.self::$moduleURL.'js/jquery-1.6.4.min.js"></script>
 			<script type="text/javascript">
-				MRjQuery = jQuery.noConflict(true); 
+					MRjQuery = jQuery.noConflict(true);
 			</script>';
 	}
 	
@@ -419,8 +419,8 @@ class MondialRelay extends Module
 	{
 		DB::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'mr_selected`
-			SET `id_order` = '.$params['order']->id.'
-			WHERE `id_cart` = '.$params['cart']->id);
+			SET `id_order` = '.(int)$params['order']->id.'
+			WHERE `id_cart` = '.(int)$params['cart']->id);
 	}
 	
 	public function hookBackOfficeHeader()
@@ -610,7 +610,7 @@ class MondialRelay extends Module
 	}
 	
 	public function hookextraCarrier($params)
-	{	
+	{
 		global $smarty, $cart, $cookie, $defaultCountry, $nbcarriers;
 
 		if (Configuration::get('MR_ENSEIGNE_WEBSERVICE') == '' ||
@@ -622,7 +622,7 @@ class MondialRelay extends Module
 		$address = new Address((int)($cart->id_address_delivery));
 		$id_zone = Address::getZoneById((int)($address->id));
 		$carriersList = self::_getCarriers();
-
+		
 		// Check if the defined carrier are ok
 		foreach ($carriersList as $k => $row)
 		{
@@ -643,13 +643,13 @@ class MondialRelay extends Module
 	 	}
 	 	
 	 	$preSelectedRelay = $this->getRelayPointSelected($params['cart']->id);
-		$smarty->assign( array(
+		$smarty->assign(array(
 			'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
 			'new_base_dir' => self::$moduleURL,
 			'MRToken' => self::$MRFrontToken,
 			'carriersextra' => $carriersList,
 			'preSelectedRelay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : '',
-			'jQueryOverload' => self::getJqueryCompatibility()));
+			'jQueryOverload' => self::getJqueryCompatibility(false)));
 			
 		return $this->display(__FILE__, 'mondialrelay.tpl');
 	}
@@ -686,6 +686,11 @@ class MondialRelay extends Module
 					'.$this->l('Try to turn off the cache and put the force compilation to on').'
 					</a> '.$this->l('if you have any problems with the module after an update').'.
 		</div>
+		<div class="MR_hint">
+			'.$this->l('Have a look to the following HOW-TO to help you to configure the Mondial Relay module').'
+			<b><a href="'.self::$moduleURL.'/docs/install.pdf"><img width="20" src="'.self::$moduleURL.'images/pdf_icon.jpg" /></a></b>
+		</div>
+		<br />
 		<fieldset>
 			<legend>
 				<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('To create a Mondial Relay carrier').
@@ -1187,7 +1192,7 @@ class MondialRelay extends Module
 			LEFT JOIN `'._DB_PREFIX_.'mr_selected` mrs 
 			ON (mrs.`id_cart` = o.`id_cart`)
 			LEFT JOIN `'._DB_PREFIX_.'mr_method` mr 
-			ON (mr.`id_carrier` = ca.`id_carrier`)
+			ON (mr.`id_mr_method` = mrs.`id_method`)
 			LEFT JOIN `'._DB_PREFIX_.'customer` c 
 			ON (c.`id_customer` = o.`id_customer`)
 			WHERE (
@@ -1219,7 +1224,7 @@ class MondialRelay extends Module
 			LEFT JOIN `'._DB_PREFIX_.'mr_selected` mrs 
 			ON (mrs.`id_cart` = o.`id_cart`)
 			LEFT JOIN `'._DB_PREFIX_.'mr_method` mr 
-			ON (mr.`id_carrier` = ca.`id_carrier`)
+			ON (mr.`id_mr_method` = mrs.`id_method`)
 			LEFT JOIN `'._DB_PREFIX_.'customer` c 
 			ON (c.`id_customer` = o.`id_customer`)
 			WHERE (
