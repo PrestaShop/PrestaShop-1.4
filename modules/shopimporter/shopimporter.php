@@ -1241,7 +1241,7 @@ class shopimporter extends ImportModule
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'country');
 			case 'group' :
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'customer_group');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'ps_group_lang');
+				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'group_lang');
 				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'group');
 				break;
 			case 'combination' :
