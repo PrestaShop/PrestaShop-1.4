@@ -28,7 +28,6 @@ function updateCarrierList(json)
 {
 	var carriers = json.carriers;
 	
-	console.log('toto');
 	/* contains all carrier available for this address */
 	if (carriers.length == 0)
 	{
