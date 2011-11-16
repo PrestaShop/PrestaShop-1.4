@@ -28,6 +28,7 @@ function updateCarrierList(json)
 {
 	var carriers = json.carriers;
 	
+	console.log('toto');
 	/* contains all carrier available for this address */
 	if (carriers.length == 0)
 	{
@@ -80,7 +81,7 @@ function updateCarrierList(json)
 			'<tr class="'+itemType+'">'+
 				'<td class="carrier_action radio"><input type="radio" name="id_carrier" value="'+carriers[i].id_carrier+'" id="id_carrier'+carriers[i].id_carrier+'"  onclick="updateCarrierSelectionAndGift();" '+extraHtml+' /></td>'+
 				'<td class="carrier_name"><label for="id_carrier'+carriers[i].id_carrier+'">'+name+'</label></td>'+
-				'<td class="carrier_infos">'+carriers[i].delay+'</td>'+
+				'<td class="carrier_infos">'+(carriers[i].delay != null ? carriers[i].delay : '')+'</td>'+
 				'<td class="carrier_price">'+price;
 			if (carriers[i].price != 0)
 			{
