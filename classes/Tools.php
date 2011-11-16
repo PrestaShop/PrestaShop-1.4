@@ -581,7 +581,7 @@ class ToolsCore
 	*/
 	public static function d($object, $kill = true)
 	{
-		return (self::dieObject($object, $kill = true));
+		return (self::dieObject($object, $kill));
 	}
 
 	/**
