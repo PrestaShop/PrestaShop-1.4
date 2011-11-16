@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,11 +28,11 @@
 class CmsControllerCore extends FrontController
 {
 	public $php_self = 'cms.php';
-	
+
 	public $assignCase;
 	public $cms;
 	public $cms_category;
-	
+
 	public function canonicalRedirection()
 	{
 		// Automatically redirect to the canonical URL if the current in is the right one
@@ -58,17 +58,16 @@ class CmsControllerCore extends FrontController
 				}
 		}
 	}
-	
+
 	public function preProcess()
 	{
 		if ($id_cms = (int)Tools::getValue('id_cms'))
-		    $this->cms = new CMS($id_cms, self::$cookie->id_lang); 
+		    $this->cms = new CMS($id_cms, self::$cookie->id_lang);
 		elseif ($id_cms_category = (int)Tools::getValue('id_cms_category'))
-		    $this->cms_category = new CMSCategory($id_cms_category, self::$cookie->id_lang); 
+		    $this->cms_category = new CMSCategory($id_cms_category, self::$cookie->id_lang);
 		$this->canonicalRedirection();
-		
+
 		parent::preProcess();
-		
 		/* assignCase (1 = CMS page, 2 = CMS category) */
 		if (Validate::isLoadedObject($this->cms) AND ($this->cms->active OR (Tools::getValue('adtoken') == Tools::encrypt('PreviewCMS'.$this->cms->id) AND file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php'))))
 			$this->assignCase = 1;
@@ -76,18 +75,19 @@ class CmsControllerCore extends FrontController
 			$this->assignCase = 2;
 		else
 			Tools::display404Error('404.php');
+
+		// too early if in setMedia
+		if ($this->assignCase == 1)
+			Tools::addJS(_THEME_JS_DIR_.'cms.js');
 	}
-	
+
 	public function setMedia()
 	{
 		parent::setMedia();
-		
-		if ($this->assignCase == 1)
-			Tools::addJS(_THEME_JS_DIR_.'cms.js');
-		
+
 		Tools::addCSS(_THEME_CSS_DIR_.'cms.css');
 	}
-	
+
 	public function process()
 	{
 		parent::process();
@@ -113,7 +113,7 @@ class CmsControllerCore extends FrontController
 			));
 		}
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
