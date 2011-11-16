@@ -43,9 +43,9 @@ class ValidateCore
 	* @param string $email e-mail address to validate
 	* @return boolean Validity is ok or not
 	*/
-	public static function isEmail($email)
+	public static function isEmail($email, $required = true)
 	{
-		return filter_var($email, FILTER_VALIDATE_EMAIL);
+		return !empty($email) AND preg_match('/^[a-z0-9!#$%&\'*+\/=?^`{}|~_-]+[.a-z0-9!#$%&\'*+\/=?^`{}|~_-]*@[a-z0-9]+[._a-z0-9-]*\.[a-z0-9]+$/ui', $email);
 	}
 
 	/**
