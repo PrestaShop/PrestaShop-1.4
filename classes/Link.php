@@ -80,15 +80,15 @@ class LinkCore
 
 				$link .= (int)$id_product->id.'-';
 				if (is_array($id_product->link_rewrite))
-					$id_product->link_rewrite[(int)$cookie->id_lang];
+					$link.= $id_product->link_rewrite[(int)$cookie->id_lang];
 				else 
-				 	$id_product->link_rewrite;
-									if ($id_product->ean13)
+				 	$link.= $id_product->link_rewrite;
+				if ($id_product->ean13)
 					$link .='-'.$id_product->ean13;
 				else
 					$link .= '';
 
-				$link .= 'html';
+				$link .= '.html';
 			}
 			else 
 			{
