@@ -1373,7 +1373,7 @@ CREATE TABLE `PREFIX_specific_price` (
 	`id_country` INT UNSIGNED NOT NULL,
 	`id_group` INT UNSIGNED NOT NULL,
 	`price` DECIMAL(20, 6) NOT NULL,
-	`from_quantity` SMALLINT UNSIGNED NOT NULL,
+	`from_quantity` mediumint(8) UNSIGNED NOT NULL,
 	`reduction` DECIMAL(20, 6) NOT NULL,
 	`reduction_type` ENUM('amount', 'percentage') NOT NULL,
 	`from` DATETIME NOT NULL,
