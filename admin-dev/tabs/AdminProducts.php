@@ -28,8 +28,8 @@ include_once(PS_ADMIN_DIR.'/tabs/AdminProfiles.php');
 
 class AdminProducts extends AdminTab
 {
-	protected $maxImageSize = 2000000;
-	protected $maxFileSize  = 10000000;
+	protected $maxImageSize = NULL;
+	protected $maxFileSize  = NULL;
 
 	private $_category;
 
@@ -45,7 +45,9 @@ class AdminProducts extends AdminTab
 		$this->view = false;
 		$this->duplicate = true;
 		$this->imageType = 'jpg';
-		
+		$this->maxImageSize = (Configuration::get('PS_LIMIT_UPLOAD_IMAGE_VALUE') * 1000000);
+		$this->maxFileSize = (Configuration::get('PS_LIMIT_UPLOAD_FILE_VALUE') * 1000000);
+
 		$this->fieldsDisplay = array(
 			'id_product' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 20),
 			'image' => array('title' => $this->l('Photo'), 'align' => 'center', 'image' => 'p', 'width' => 45, 'orderby' => false, 'filter' => false, 'search' => false),

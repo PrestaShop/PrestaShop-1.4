@@ -33,7 +33,11 @@ class AdminPreferences extends AdminTab
 
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
-
+		
+		$max_upload = (int)ini_get('upload_max_filesize');
+		$max_post = (int)ini_get('post_max_size');
+		$upload_mb = min($max_upload, $max_post);
+		
 		$timezones = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT name FROM '._DB_PREFIX_.'timezone');
 		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
 		foreach (Tax::getTaxes((int)($cookie->id_lang)) as $tax)
@@ -97,6 +101,8 @@ class AdminPreferences extends AdminTab
 			'PS_HIDE_OPTIMIZATION_TIPS' => array('title' => $this->l('Hide optimization tips'), 'desc' => $this->l('Hide optimization tips on the back office homepage'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_DISPLAY_SUPPLIERS' => array('title' => $this->l('Display suppliers and manufacturers'), 'desc' => $this->l('Display manufacturers and suppliers list even if corresponding blocks are disabled'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_FORCE_SMARTY_2' => array('title' => $this->l('Use Smarty 2 instead of 3'), 'desc' => $this->l('Enable if your theme is incompatible with Smarty 3 (you should update your theme, since Smarty 2 will be unsupported from PrestaShop v1.5)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+		    'PS_LIMIT_UPLOAD_FILE_VALUE' => array('title' => $this->l('Limit upload file value'), 'desc' => $this->l('Define the limit upload for a downloadable product, this value have to be inferior or egal to your server\'s maximum upload file ').sprintf('(%s MB).',$upload_mb), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'limit', 'default' => '1'),
+			'PS_LIMIT_UPLOAD_IMAGE_VALUE' => array('title' => $this->l('Limit upload image value'), 'desc' => $this->l('Define the limit upload for an image, this value have to be inferior or egal to your server\'s maximum upload file ').sprintf('(%s MB).',$upload_mb), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'limit', 'default' => '1'),
 		);
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
@@ -127,14 +133,30 @@ class AdminPreferences extends AdminTab
 			return;
 		}
 		/* PrestaShop demo mode*/
-		
-		if (Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE'))
+		if (Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE') OR Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE') OR Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE'))
         {
             $uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));
             $postMaxSize = (int)str_replace('M', '', ini_get('post_max_size'));
             $maxSize = $uploadMaxSize < $postMaxSize ? $uploadMaxSize : $postMaxSize;
            
             $_POST['PS_ATTACHMENT_MAXIMUM_SIZE'] = $maxSize < Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE') ? $maxSize : Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE');
+            
+            if (Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE') > $maxSize or Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE') > $maxSize)
+            {
+            	$this->_errors[] = Tools::displayError('The limit choosen is superior to the server\'s maximum upload file You need to improve the limit of your server.');
+            	return;
+            }
+            else if (!Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE'))
+        		$_POST['PS_LIMIT_UPLOAD_FILE_VALUE'] = 1;
+        		
+        	else if (!Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE'))
+        		$_POST['PS_LIMIT_UPLOAD_IMAGE_VALUE'] = 1;
+        		
+			else
+			{
+            	$_POST['PS_LIMIT_UPLOAD_FILE_VALUE'] = Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE');
+            	$_POST['PS_LIMIT_UPLOAD_IMAGE_VALUE'] = Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE');
+			}
         }
 
 		if (isset($_POST['submitGeneral'.$this->table]))
@@ -501,11 +523,16 @@ class AdminPreferences extends AdminTab
 				
 				case 'maintenance_ip':
 					echo '<input type="'.$field['type'].'"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '').' &nbsp<a href="#" class="button" onclick="addRemoteAddr(); return false;">'.$this->l('Add my IP').'</a>';
-				break;
-
-				case 'text':
+					
+				case 'limit':
+					echo '<input type="'.$field['type'].'" size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" /> MB';
+				break;	
+							
+					case 'text':
 				default:
 					echo '<input type="'.$field['type'].'"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '');
+					
+
 			}
 			echo ((isset($field['required']) AND $field['required'] AND !in_array($field['type'], array('image', 'radio')))  ? ' <sup>*</sup>' : '');
 			echo (isset($field['desc']) ? '<p style="clear:both">'.((isset($field['thumb']) AND $field['thumb'] AND $field['thumb']['pos'] == 'after') ? '<img src="'.$field['thumb']['file'].'" alt="'.$field['title'].'" title="'.$field['title'].'" style="float:left;" />' : '' ).$field['desc'].'</p>' : '');
