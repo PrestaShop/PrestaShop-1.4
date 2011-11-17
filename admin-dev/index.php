@@ -136,4 +136,3 @@ if (empty($tab) and !sizeof($_POST))
 	}
 
 include(PS_ADMIN_DIR.'/footer.inc.php');
-

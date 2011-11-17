@@ -75,8 +75,8 @@ class authorizeAIM extends PaymentModule
 
 	public function install()
 	{
-		return (parent::install() AND $this->registerHook('orderConfirmation') AND 
-			$this->registerHook('payment') AND Configuration::updateValue('AUTHORIZE_AIM_DEMO', 1));
+		return (parent::install() AND $this->registerHook('orderConfirmation') AND $this->registerHook('payment') 
+		AND $this->registerHook('header') AND Configuration::updateValue('AUTHORIZE_AIM_DEMO', 1));
 	}
 
 	public function uninstall()
@@ -204,18 +204,23 @@ class authorizeAIM extends PaymentModule
 		}
 	}
 	
-  /**
-  * Set the detail of a payment - Call before the validate order init
-  * correctly the pcc object
-  * See Authorize documentation to know the associated key => value
-  * @param array fields
-  */
-  public function setTransactionDetail($response)
-  {
-  	// If Exist we can store the details
-  	if (isset($this->pcc))
-  	{
-  		$this->pcc->transaction_id = (string)$response[6];
+	public function hookHeader()
+	{
+		Tools::addJS(_PS_JS_DIR_.'jquery/jquery.validate.creditcard2-1.0.1.js');		
+	}	
+	
+	/**
+	* Set the detail of a payment - Call before the validate order init
+	* correctly the pcc object
+	* See Authorize documentation to know the associated key => value
+	* @param array fields
+	*/
+	public function setTransactionDetail($response)
+	{
+	// If Exist we can store the details
+	if (isset($this->pcc))
+	{
+		$this->pcc->transaction_id = (string)$response[6];
 			
 			// 50 => Card number (XXXX0000)
 			$this->pcc->card_number = (string)substr($response[50], -4);
@@ -227,7 +232,7 @@ class authorizeAIM extends PaymentModule
 			
 			// 68 => Owner name
 			$this->pcc->card_holder = (string)$response[68];
-  	}
-  }
+	}
+	}
 }
 ?>

@@ -135,9 +135,10 @@ class AddressCore extends ObjectModel
 		/* Get and cache address country name */
 		if ($this->id)
 		{
-			$result = Db::getInstance()->getRow('SELECT `name` FROM `'._DB_PREFIX_.'country_lang`
-												WHERE `id_country` = '.(int)($this->id_country).'
-												AND `id_lang` = '.($id_lang ? (int)($id_lang) : Configuration::get('PS_LANG_DEFAULT')));
+			$result = Db::getInstance()->getRow('
+			SELECT `name` FROM `'._DB_PREFIX_.'country_lang`
+			WHERE `id_country` = '.(int)($this->id_country).'
+			AND `id_lang` = '.($id_lang ? (int)($id_lang) : Configuration::get('PS_LANG_DEFAULT')));
 			$this->country = $result['name'];
 		}
 	}
