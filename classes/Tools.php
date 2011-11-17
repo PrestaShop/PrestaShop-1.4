@@ -1286,6 +1286,7 @@ class ToolsCore
 			return false;
 	}
 
+	public static $a = 0;
 	public static function minifyHTML($html_content)
 	{
 		if (strlen($html_content) > 0)
@@ -1350,7 +1351,11 @@ class ToolsCore
 		preg_match_all('/[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']/is', $preg_matches[2], $args);
 		$args = $args[0];
 		sort($args);
-		$output = $preg_matches[1].' '.implode(' ', $args).'>';
+		// if there is no args in the balise, we don't write a space (avoid previous : <title >, now : <title>)
+		if (empty($args))
+			$output = $preg_matches[1].'>';
+		else
+			$output = $preg_matches[1].' '.implode(' ', $args).'>';
 		return $output;
 	}
 
