@@ -24,6 +24,12 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{if $opc}
+	{assign var="back_order_page" value="order-opc.php"}
+{else}
+	{assign var="back_order_page" value="order.php"}
+{/if}
+
 {*
 ** Retro compatibility for PrestaShop version < 1.4.2.5 with a recent theme
 ** Syntax smarty for v2
@@ -110,7 +116,7 @@
 		dest_comp.html('');
 
 		li_content['title'] = adr_titles_vals[address_type];
-		li_content['update'] = '<a href="{$link->getPageLink('address.php', true)}?id_address='+id_address+'&amp;back=order.php?step=1{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a>';
+		li_content['update'] = '<a href="{$link->getPageLink('address.php', true)}?id_address='+id_address+'&amp;back={$back_order_page}?step=1{if $back}&mod={$back}{/if}" title="{l s='Update'}">{l s='Update'}</a>';
 
 		appendAddressList(dest_comp, li_content, ordered_fields_name);
 	{rdelim}
@@ -157,7 +163,7 @@
 {assign var='current_step' value='address'}
 {include file="$tpl_dir./order-steps.tpl"}
 {include file="$tpl_dir./errors.tpl"}
-<form action="{$link->getPageLink('order.php', true)}" method="post">
+<form action="{$link->getPageLink($back_order_page, true)}" method="post">
 {else}
 <div id="opc_account" class="opc-main-block">
 	<div id="opc_account-overlay" class="opc-overlay" style="display:none;"></div>
@@ -188,7 +194,7 @@
 			{/section}
 			</select>
 			{else}
-				<a style="margin-left: 221px;" href="{$link->getPageLink('address.php', true)}?back=order.php?step=1&select_address=1{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+				<a style="margin-left: 221px;" href="{$link->getPageLink('address.php', true)}?back={$back_order_page}?step=1&select_address=1{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 			{/if}
 		</p>
 		<div class="clear"></div>
@@ -198,7 +204,7 @@
 		</ul>
 		<br class="clear" />
 		<p class="address_add submit">
-			<a href="{$link->getPageLink('address.php', true)}?back=order.php?step=1{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
+			<a href="{$link->getPageLink('address.php', true)}?back={$back_order_page}?step=1{if $back}&mod={$back}{/if}" title="{l s='Add'}" class="button_large">{l s='Add a new address'}</a>
 		</p>
 		{if !$opc}
 		<div id="ordermsg">
@@ -211,7 +217,7 @@
 	<p class="cart_navigation submit">
 		<input type="hidden" class="hidden" name="step" value="2" />
 		<input type="hidden" name="back" value="{$back}" />
-		<a href="{$link->getPageLink('order.php', true)}?step=0{if $back}&back={$back}{/if}" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
+		<a href="{$link->getPageLink($back_order_page, true)}?step=0{if $back}&back={$back}{/if}" title="{l s='Previous'}" class="button">&laquo; {l s='Previous'}</a>
 		<input type="submit" name="processAddress" value="{l s='Next'} &raquo;" class="exclusive" />
 	</p>
 </form>
