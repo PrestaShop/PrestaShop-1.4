@@ -420,19 +420,21 @@ class dibs extends PaymentModule
   */
   public function setTransactionDetail($response)
   {
-		if (isset($this->pcc))
-		{
-			$this->pcc->transaction_id = (string)$response[6];
+		// If Exist we can store the details
+  	if (isset($this->pcc))
+  	{
+  		$this->pcc->transaction_id = (string)$response['transact'];
+			
 			// 50 => Card number (XXXX0000)
-			$this->pcc->card_number = (string)substr($response[50], -4);
-
+			$this->pcc->card_number = (string)substr($response['cardnomask'], -4);
+			
 			// 51 => Card Mark (Visa, Master card)
-			$this->pcc->card_brand = (string)$response[51];
-
-			$this->pcc->card_expiration = (string)Tools::getValue('x_exp_date');
-
+			$this->pcc->card_brand = (string)$response['paytype'];
+			
+			$this->pcc->card_expiration = '0000';
+			
 			// 68 => Owner name
-			$this->pcc->card_holder = (string)$response[68];
-		}
+			$this->pcc->card_holder = '';
+  	}
   }
 }
