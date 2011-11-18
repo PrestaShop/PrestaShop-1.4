@@ -34,7 +34,7 @@ function fillCombinaison(wholesale_price, price_impact, weight_impact, unit_impa
 	$('#attribute_quantity').html(quantity);
 	$('#attribute_quantity').show();
 	$('#attr_qty_stock').show();
-	getE('minimal_quantity').value = minimal_quantity;
+	$('#attribute_minimal_quantity').val(minimal_quantity);
 	getE('attribute_reference').value = reference;
 	getE('attribute_supplier_reference').value = supplier_reference;
 	getE('attribute_ean13').value = ean;
