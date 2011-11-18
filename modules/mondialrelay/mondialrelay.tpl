@@ -73,4 +73,3 @@
 		{literal}}{/literal})
 	{literal}}{/literal});
 </script>
-

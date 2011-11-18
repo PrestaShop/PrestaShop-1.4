@@ -426,7 +426,7 @@ class MondialRelay extends Module
 	public function hookBackOfficeHeader()
 	{
 		$cssFilePath = $this->_path.'style.css';
-		$jsFilePath= $this->_path.'mondialrelay.js';
+		$jsFilePath = $this->_path.'mondialrelay.js';
 
 		$ret = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
 		
