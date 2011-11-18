@@ -908,9 +908,10 @@ class ProductCore extends ObjectModel
 	* @param string $location Location
 	* @param string $ean13 Ean-13 barcode
 	* @param boolean $default Is default attribute for product
+	* @param integer $minimal_quantity Minimal quantity to add to cart
 	* @return mixed $id_product_attribute or false
 	*/
-	public function addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
+	public function addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL, $minimal_quantity = 1)
 	{
 		$price = str_replace(',', '.', $price);
 		$weight = str_replace(',', '.', $weight);
@@ -918,7 +919,7 @@ class ProductCore extends ObjectModel
 		array('id_product' => (int)($this->id), 'price' => (float)($price), 'ecotax' => (float)($ecotax), 'quantity' => 0,
 		'weight' => ($weight ? (float)($weight) : 0), 'unit_price_impact' => ($unit_impact ? (float)($unit_impact) : 0),
 		'reference' => pSQL($reference), 'supplier_reference' => pSQL($supplier_reference),
-		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'upc' => pSQL($upc), 'default_on' => (int)($default)),
+		'location' => pSQL($location), 'ean13' => pSQL($ean13), 'upc' => pSQL($upc), 'default_on' => (int)($default), 'minimal_quantity' => (int)$minimal_quantity),
 		'INSERT');
 		$id_product_attribute = Db::getInstance()->Insert_ID();
 		Product::updateDefaultAttribute($this->id);
@@ -938,10 +939,10 @@ class ProductCore extends ObjectModel
 		return (int)($id_product_attribute);
 	}
 
-	public function addCombinationEntity($wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL)
+	public function addCombinationEntity($wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL, $minimal_quantity = 1)
 	{
 		if (
-			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc)
+			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc, $minimal_quantity)
 			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.(float)($wholesale_price).' WHERE `id_product_attribute` = '.(int)($id_product_attribute))
 		)
 			return false;

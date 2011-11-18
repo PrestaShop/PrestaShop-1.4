@@ -559,11 +559,13 @@ class AdminProducts extends AdminTab
 							if ($product->productAttributeExists($_POST['attribute_combinaison_list']))
 								$this->_errors[] = Tools::displayError('This combination already exists.');
 							else
+							{
 								$id_product_attribute = $product->addCombinationEntity(Tools::getValue('attribute_wholesale_price'),
 								Tools::getValue('attribute_price') * Tools::getValue('attribute_price_impact'), Tools::getValue('attribute_weight') * Tools::getValue('attribute_weight_impact'),
 								Tools::getValue('attribute_unity') * Tools::getValue('attribute_unit_impact'),
 								Tools::getValue('attribute_ecotax'), Tools::getValue('attribute_quantity'),	Tools::getValue('id_image_attr'), Tools::getValue('attribute_reference'),
-								Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'));
+								Tools::getValue('attribute_supplier_reference'), Tools::getValue('attribute_ean13'), Tools::getValue('attribute_default'), Tools::getValue('attribute_location'), Tools::getValue('attribute_upc'), Tools::getValue('attribute_minimal_quantity'));
+							}
 						}
 						else
 							$this->_errors[] = Tools::displayError('You do not have permission to').'<hr>'.Tools::displayError('Edit here.');
