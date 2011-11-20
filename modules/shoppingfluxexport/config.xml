@@ -2,7 +2,7 @@
 <module>
 	<name>shoppingfluxexport</name>
 	<displayName><![CDATA[Export Shopping Flux]]></displayName>
-	<version><![CDATA[1.4]]></version>
+	<version><![CDATA[1.4.1]]></version>
 	<description><![CDATA[Export du catalogue pour Shopping Flux]]></description>
 	<author><![CDATA[]]></author>
 	<tab><![CDATA[advertising_marketing]]></tab>
