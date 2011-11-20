@@ -34,8 +34,8 @@ class shoppingfluxexport extends Module
 	public function __construct()
 	{
 	 	$this->name = 'shoppingfluxexport';
-	 	$this->tab = 'Tools';
-	 	$this->version = '1.4';
+	 	$this->tab = 'advertising_marketing';
+	 	$this->version = '1.4.1';
 
 	 	parent::__construct();
 
@@ -44,12 +44,38 @@ class shoppingfluxexport extends Module
 		$this->confirmUninstall = $this->l('Êtes-vous sur de vouloir supprimer ce module ?');
 	}
 
+	public function install()
+	{
+		// Create Token
+		if (!Configuration::updateValue('SHOPPING_FLUX_TOKEN', md5(rand())))
+			return false;
+
+		// Install Module
+		if (!parent::install())
+			return false;
+
+		return true;
+	}
+
+	public function uninstall()
+	{
+		// Delete Token
+		if (!Configuration::deleteByName('SHOPPING_FLUX_TOKEN'))
+			return false;
+
+		// Uninstall Module
+		if (!parent::uninstall())
+			return false;
+
+		return true;
+	}
+
 	public function getContent()
 	{
 		if (isset($_POST['generateFlux']) && $_POST['generateFlux'] != NULL)
 			$this->generateFlux();
 		
-		$uri = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/shoppingfluxexport/flux.php';
+		$uri = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/shoppingfluxexport/flux.php?token='.Configuration::get('SHOPPING_FLUX_TOKEN');
 
 		$this->_html = '<h2>'.$this->displayName.'</h2>
 		<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">
@@ -77,7 +103,10 @@ class shoppingfluxexport extends Module
 	}
 
 	public function generateFlux()
-	{		
+	{
+		if (Tools::getValue('token') == '' || Tools::getValue('token') != Configuration::get('SHOPPING_FLUX_TOKEN'))
+			die('Invalid Token');
+		
 		$titles = array(
 			0 => 'id_produit',
 			1 => 'nom_produit',

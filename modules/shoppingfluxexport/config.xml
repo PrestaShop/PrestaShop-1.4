@@ -5,7 +5,7 @@
 	<version><![CDATA[1.4]]></version>
 	<description><![CDATA[Export du catalogue pour Shopping Flux]]></description>
 	<author><![CDATA[]]></author>
-	<tab><![CDATA[Tools]]></tab>
+	<tab><![CDATA[advertising_marketing]]></tab>
 	<confirmUninstall>Êtes-vous sur de vouloir supprimer ce module ?</confirmUninstall>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
