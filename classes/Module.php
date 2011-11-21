@@ -1076,7 +1076,7 @@ abstract class ModuleCore
 
 	protected function _getApplicableTemplateDir($template)
 	{
-		return $this->_isTemplateOverloaded($template) ? _PS_THEME_DIR_ : _PS_MODULE_DIR_.$this->name.'/';
+		return ($this->_isTemplateOverloaded($template) ? _PS_THEME_DIR_.'modules/' : _PS_MODULE_DIR_).$this->name.'/';
 	}
 
 	public function isCached($template, $cacheId = NULL, $compileId = NULL)
