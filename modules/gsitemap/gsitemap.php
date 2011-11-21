@@ -90,34 +90,53 @@ XML;
 		
 		$xml = new SimpleXMLElement($xmlString);
 
-		if (Configuration::get('PS_REWRITING_SETTINGS') AND sizeof($langs) > 1)
+		if (Configuration::get('PS_REWRITING_SETTINGS') && count($langs) > 1)
 			foreach($langs as $lang)
 				$this->_addSitemapNode($xml, Tools::getShopDomain(true, true).__PS_BASE_URI__.$lang['iso_code'].'/', '1.00', 'daily', date('Y-m-d'));
 		else
 			$this->_addSitemapNode($xml, Tools::getShopDomain(true, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
-		
-		/* CMS Generator */
-		if (Configuration::get('GSITEMAP_ALL_CMS') OR !Module::isInstalled('blockcms'))
-			$sql_cms = '
-			SELECT DISTINCT '.(Configuration::get('PS_REWRITING_SETTINGS') ? 'cl.id_cms, cl.link_rewrite, cl.id_lang' : 'cl.id_cms').
-			' FROM '._DB_PREFIX_.'cms_lang cl
-			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
-			WHERE l.`active` = 1
-			ORDER BY cl.id_cms, cl.id_lang ASC';
-		elseif (Module::isInstalled('blockcms'))
-			$sql_cms = '
-			SELECT DISTINCT '.(Configuration::get('PS_REWRITING_SETTINGS') ? 'cl.id_cms, cl.link_rewrite, cl.id_lang' : 'cl.id_cms').
-			' FROM '._DB_PREFIX_.'cms_block_page b
-			LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
-			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
-			WHERE l.`active` = 1
-			ORDER BY cl.id_cms, cl.id_lang ASC';
-		
-		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
-		foreach($cmss AS $cms)
+
+		/* Product Generator */
+		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') date_upd, pl.id_lang, cl.`link_rewrite` category, ean13, i.id_image, il.legend legend_image, (
+			SELECT MIN(level_depth)
+			FROM '._DB_PREFIX_.'product p2
+			LEFT JOIN '._DB_PREFIX_.'category_product cp2 ON p2.id_product = cp2.id_product
+			LEFT JOIN '._DB_PREFIX_.'category c2 ON cp2.id_category = c2.id_category
+			WHERE p2.id_product = p.id_product AND p2.`active` = 1 AND c2.`active` = 1) AS level_depth
+		FROM '._DB_PREFIX_.'product p
+		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product)
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND pl.`id_lang` = cl.`id_lang`)
+		LEFT JOIN '._DB_PREFIX_.'image i ON p.id_product = i.id_product
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND pl.`id_lang` = il.`id_lang`)
+		LEFT JOIN '._DB_PREFIX_.'lang l ON (pl.id_lang = l.id_lang)
+		WHERE l.`active` = 1 AND p.`active` = 1
+		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
+		ORDER BY pl.id_product, pl.id_lang ASC');
+
+		$tmp = null;
+		$res = null;
+		foreach ($products as $product)
 		{
-			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCMSLink((int)$cms['id_cms'], $cms['link_rewrite'], false, (int)$cms['id_lang']) : $link->getCMSLink((int)$cms['id_cms']);
-			$this->_addSitemapNode($xml, $tmpLink, '0.8', 'daily');				
+			if ($tmp == $product['id_product'])
+				$res[$tmp]['images'] []= array('id_image' => $product['id_image'], 'legend_image' => $product['legend_image']);
+			else
+			{
+				$tmp = $product['id_product'];
+				$res[$tmp] = $product;
+				unset($res[$tmp]['id_image'], $res[$tmp]['legend_image']);
+				$res[$tmp]['images'] []= array('id_image' => $product['id_image'], 'legend_image' => $product['legend_image']);
+			}
+		}
+		
+		foreach ($res as $product)
+		{
+			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
+				$priority = 0.1;
+
+			$tmpLink = $link->getProductLink((int)($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], (int)($product['id_lang']));
+			$sitemap = $this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($product['date_upd'], 0, 10));
+			$sitemap = $this->_addSitemapNodeImage($sitemap, $product);
 		}
 		
 		/* Categories Generator */
@@ -144,61 +163,41 @@ XML;
 			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCategoryLink((int)$category['id_category'], $category['link_rewrite'], (int)$category['id_lang']) : $link->getCategoryLink((int)$category['id_category']);	
 			$this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($category['date_upd'], 0, 10));
 		}
-
-		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') date_upd, pl.id_lang, cl.`link_rewrite` category, ean13, i.id_image, il.legend legend_image, (
-			SELECT MIN(level_depth)
-			FROM '._DB_PREFIX_.'product p2
-			LEFT JOIN '._DB_PREFIX_.'category_product cp2 ON p2.id_product = cp2.id_product
-			LEFT JOIN '._DB_PREFIX_.'category c2 ON cp2.id_category = c2.id_category
-			WHERE p2.id_product = p.id_product AND p2.`active` = 1 AND c2.`active` = 1) AS level_depth
-		FROM '._DB_PREFIX_.'product p
-		LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (p.id_product = pl.id_product)
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND pl.`id_lang` = cl.`id_lang`)
-		LEFT JOIN '._DB_PREFIX_.'image i ON p.id_product = i.id_product
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND pl.`id_lang` = il.`id_lang`)
-		LEFT JOIN '._DB_PREFIX_.'lang l ON (pl.id_lang = l.id_lang)
-		WHERE l.`active` = 1 AND p.`active` = 1
-		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
-		ORDER BY pl.id_product, pl.id_lang ASC');
-
-		$tmp = null;
-		$res = null;
-		foreach($products AS $product)
-		{
-			if ($tmp == $product['id_product'])
-				$res[$tmp]['images'] []= array('id_image' => $product['id_image'], 'legend_image' => $product['legend_image']);
-			else
-			{
-				$tmp = $product['id_product'];
-				$res[$tmp] = $product;
-				unset($res[$tmp]['id_image'], $res[$tmp]['legend_image']);
-				$res[$tmp]['images'] []= array('id_image' => $product['id_image'], 'legend_image' => $product['legend_image']);
-			}
-		}
 		
-		foreach ($res as $product)
+		/* CMS Generator */
+		if (Configuration::get('GSITEMAP_ALL_CMS') || !Module::isInstalled('blockcms'))
+			$sql_cms = '
+			SELECT DISTINCT '.(Configuration::get('PS_REWRITING_SETTINGS') ? 'cl.id_cms, cl.link_rewrite, cl.id_lang' : 'cl.id_cms').
+			' FROM '._DB_PREFIX_.'cms_lang cl
+			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
+			WHERE l.`active` = 1
+			ORDER BY cl.id_cms, cl.id_lang ASC';
+		else if (Module::isInstalled('blockcms'))
+			$sql_cms = '
+			SELECT DISTINCT '.(Configuration::get('PS_REWRITING_SETTINGS') ? 'cl.id_cms, cl.link_rewrite, cl.id_lang' : 'cl.id_cms').
+			' FROM '._DB_PREFIX_.'cms_block_page b
+			LEFT JOIN '._DB_PREFIX_.'cms_lang cl ON (b.id_cms = cl.id_cms)
+			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
+			WHERE l.`active` = 1
+			ORDER BY cl.id_cms, cl.id_lang ASC';
+		
+		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
+		foreach($cmss as $cms)
 		{
-			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
-				$priority = 0.1;
-
-			$tmpLink = $link->getProductLink((int)($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], (int)($product['id_lang']));
-			$sitemap = $this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($product['date_upd'], 0, 10));
-			$sitemap = $this->_addSitemapNodeImage($sitemap, $product);
+			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCMSLink((int)$cms['id_cms'], $cms['link_rewrite'], false, (int)$cms['id_lang']) : $link->getCMSLink((int)$cms['id_cms']);
+			$this->_addSitemapNode($xml, $tmpLink, '0.8', 'daily');				
 		}
 		
 		/* Add classic pages (contact, best sales, new products...) */
 		$pages = array(
-			'authentication' => true, 
-			'best-sales' => false, 
-			'contact-form' => true, 
-			'discount' => false, 
-			'index' => false,
-			'manufacturer' => false, 
-			'new-products' => false, 
-			'prices-drop' => false, 
-			'supplier' => false, 
-			'store' => false);
+			'supplier' => false,
+			'manufacturer' => false,
+			'new-products' => false,
+			'prices-drop' => false,
+			'stores' => false,
+			'authentication' => true,
+			'best-sales' => false,
+			'contact-form' => true);
 		
 		// Don't show suppliers and manufacturers if they are disallowed
 		if (!Module::getInstanceByName('blockmanufacturer')->id && !Configuration::get('PS_DISPLAY_SUPPLIERS'))
@@ -209,11 +208,11 @@ XML;
 
 		// Generate nodes for pages
 		if (Configuration::get('PS_REWRITING_SETTINGS'))		
-			foreach ($pages AS $page => $ssl)		
+			foreach ($pages as $page => $ssl)		
 				foreach($langs as $lang)
 					$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl, $lang['id_lang']), '0.5', 'monthly');
 		else
-			foreach($pages AS $page => $ssl)
+			foreach($pages as $page => $ssl)
 				$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl), '0.5', 'monthly');
 
 		$xmlString = $xml->asXML();
@@ -232,7 +231,7 @@ XML;
 	{		
 		$sitemap = $xml->addChild('url');
 		$sitemap->addChild('loc', $loc);
-		$sitemap->addChild('priority',  $priority);
+		$sitemap->addChild('priority', $priority);
 		if ($last_mod)
 			$sitemap->addChild('lastmod', $last_mod);
 		$sitemap->addChild('changefreq', $change_freq);
@@ -255,19 +254,19 @@ XML;
 
 	private function _displaySitemap()
 	{
-		if (file_exists(GSITEMAP_FILE) AND filesize(GSITEMAP_FILE))
+		if (file_exists(GSITEMAP_FILE) && filesize(GSITEMAP_FILE))
 		{
 			$fp = fopen(GSITEMAP_FILE, 'r');
 			$fstat = fstat($fp);
 			fclose($fp);
 			$xml = simplexml_load_file(GSITEMAP_FILE);
 			
-			$nbPages = sizeof($xml->url);
+			$nbPages = count($xml->url);
 
 			$this->_html .= '<p>'.$this->l('Your Google sitemap file is online at the following address:').'<br />
 			<a href="'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml" target="_blank"><b>'.Tools::getShopDomain(true, true).__PS_BASE_URI__.'sitemap.xml</b></a></p><br />';
 
-			$this->_html .= $this->l('Update:').' <b>'.utf8_encode(strftime('%A %d %B %Y %H:%M:%S',$fstat['mtime'])).'</b><br />';
+			$this->_html .= $this->l('Update:').' <b>'.utf8_encode(strftime('%A %d %B %Y %H:%M:%S', $fstat['mtime'])).'</b><br />';
 			$this->_html .= $this->l('Filesize:').' <b>'.number_format(($fstat['size']*.000001), 3).'MB</b><br />';
 			$this->_html .= $this->l('Indexed pages:').' <b>'.$nbPages.'</b><br /><br />';
 		}
@@ -291,15 +290,15 @@ XML;
 	public function getContent()
 	{
 		$this->_html .= '<h2>'.$this->l('Search Engine Optimization').'</h2>
-		'.$this->l('See').' <a href="https://www.google.com/webmasters/tools/docs/en/about.html" style="font-weight:bold;text-decoration:underline;" target="_blank">
+		'.$this->l('See').' <a href="http://www.google.com/support/webmasters/bin/answer.py?hl=en&answer=156184&from=40318&rd=1" style="font-weight:bold;text-decoration:underline;" target="_blank">
 		'.$this->l('this page').'</a> '.$this->l('for more information').'<br /><br />';
 		if (Tools::isSubmit('btnSubmit'))
 		{
 			$this->_postValidation();
-			if (!sizeof($this->_postErrors))
+			if (!count($this->_postErrors))
 				$this->_postProcess();
 			else
-				foreach ($this->_postErrors AS $err)
+				foreach ($this->_postErrors as $err)
 					$this->_html .= '<div class="alert error">'.$err.'</div>';
 		}
 
