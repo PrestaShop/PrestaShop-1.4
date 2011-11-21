@@ -135,7 +135,7 @@ class AdminEmployees extends AdminTab
 					<select name="bo_theme">';
 		$path = dirname(__FILE__).'/../themes/';
 		foreach (scandir($path) as $theme)
-			if ($theme[0] != '.' AND file_exists($path.$theme.'/admin.css'))
+			if ($theme[0] != '.' AND is_dir($path.$theme) AND file_exists($path.$theme.'/admin.css'))
 				echo '	<option value="'.Tools::htmlentitiesUTF8($theme).'" '.($this->getFieldValue($obj, 'bo_theme') == $theme ? 'selected="selected"' : '').'>'.Tools::htmlentitiesUTF8($theme).'</option>';
 		echo '		</select> <sup>*</sup>
 				</div>';
