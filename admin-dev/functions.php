@@ -252,8 +252,8 @@ function checkingTab($tab)
 		echo Tools::displayError('Tab cannot be found.');
 		return false;
 	}
-	if ($row['module'] AND file_exists(_PS_MODULE_DIR_.'/'.$row['module'].'/'.$tab.'.php'))
-		include_once(_PS_MODULE_DIR_.'/'.$row['module'].'/'.$tab.'.php');
+	if ($row['module'] AND file_exists(_PS_MODULE_DIR_.$row['module'].'/'.$tab.'.php'))
+		include_once(_PS_MODULE_DIR_.$row['module'].'/'.$tab.'.php');
 	elseif (file_exists(PS_ADMIN_DIR.'/tabs/'.$tab.'.php'))
 		include_once(PS_ADMIN_DIR.'/tabs/'.$tab.'.php');
 
