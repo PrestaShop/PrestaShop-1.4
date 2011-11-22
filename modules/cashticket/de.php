@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{cashticket}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Ein Zertifikat ist für diese Konfiguration gefunden';
-$_MODULE['<{cashticket}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'Ein Passwort wurde bereits gespeichert';
 $_MODULE['<{cashticket}prestashop>cashticket-accept-payment_330bf06fb43e715e5d03c9fd016df4cd'] = 'Die Zahlung wurde noch nicht akzeptiert:';
 $_MODULE['<{cashticket}prestashop>cashticket-accept-payment_486cb12e1ec3c8b28b80a8eb9f2db2c0'] = 'Zahlung akzeptieren ';
 $_MODULE['<{cashticket}prestashop>cashticket-accept-payment_e9b3579d8e877bcd29ab436f2ef87cc8'] = 'Zu zahlender Betrag';
@@ -14,6 +12,11 @@ $_MODULE['<{cashticket}prestashop>cashticket-confirmation_2c987f462c2ab7fc63e061
 $_MODULE['<{cashticket}prestashop>cashticket-confirmation_e6dc7945b557a1cd949bea92dd58963e'] = 'Ihre Bestellung wird sehr bald geschickt werden.';
 $_MODULE['<{cashticket}prestashop>cashticket-confirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Bei Fragen oder für weitere Informationen, kontaktieren Sie bitte unser';
 $_MODULE['<{cashticket}prestashop>cashticket-confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'Kunden-Support';
+$_MODULE['<{cashticket}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'Der Dispositionsstauts ist ungültig';
+$_MODULE['<{cashticket}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = '. Sie sind nicht berechtigt, die Zahlung durchzuführen.';
+$_MODULE['<{cashticket}prestashop>payment_da9c72b9e543135f3f59e3c8ac68ef35'] = 'Bezahlen Sie mit';
+$_MODULE['<{cashticket}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Es wurde ein Zertifikat für dieses Modul gefunden';
+$_MODULE['<{cashticket}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'Das Passwort wurde bereits gespiechert';
 $_MODULE['<{cashticket}prestashop>cashticket_4512bbd48918c03027387a6c8e911342'] = 'CashTicket';
 $_MODULE['<{cashticket}prestashop>cashticket_21d3d890383dc93343ce57c221ce5b3d'] = 'Akzeptiert Zahlungen per CashTicket';
 $_MODULE['<{cashticket}prestashop>cashticket_bed51f5187d4bf98e08f44d93f3098d9'] = 'Disposition erstellt. Wartet auf Abbuchung.';
@@ -48,6 +51,5 @@ $_MODULE['<{cashticket}prestashop>cashticket_d929c5e5e5643c622400e837914206da'] 
 $_MODULE['<{cashticket}prestashop>cashticket_d59048f21fd887ad520398ce677be586'] = 'Erfahren Sie mehr';
 $_MODULE['<{cashticket}prestashop>cashticket_930320ced1b8c376237844049b570a7f'] = 'Ein Fehler ist aufgetreten, überprüfen Sie die Nachrichten für mehr Infos';
 $_MODULE['<{cashticket}prestashop>cashticket_a9ced76f2dd6907220fa95b3a136b04a'] = 'Ungültiger Betrag';
-$_MODULE['<{cashticket}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'Der Dispositionsstauts ist ungültig';
-$_MODULE['<{cashticket}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = '. Sie sind nicht berechtigt, die Zahlung durchzuführen.';
-$_MODULE['<{cashticket}prestashop>payment_da9c72b9e543135f3f59e3c8ac68ef35'] = 'Bezahlen Sie mit';
+
+?>

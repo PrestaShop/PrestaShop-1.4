@@ -21,3 +21,5 @@ $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_a90083861c168ef985bf70763980a
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_535ff57deda0b45d32cb37fd430accc8'] = 'Se il tuo provider supporta il file htaccess, è possibile crearlo nella directory principale di PrestaShop e inserirvi dentro la seguente riga:';
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_9cfaa8e935f9e3e65b0959b15b070b15'] = 'Un utente che richiede una pagina che non esiste verrà reindirizzato alla pagina';
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_feb436b0dabe28068aa6d866ac47bf0a'] = 'Questo modulo registra gli accessi a questa pagina: la pagina richiesta, la provenienza e il numero di volte che si è verificato.';
+
+?>

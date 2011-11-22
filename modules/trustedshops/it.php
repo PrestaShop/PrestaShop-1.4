@@ -15,10 +15,6 @@ $_MODULE['<{trustedshops}prestashop>order-confirmation-tsbp-classic_4052048c767f
 $_MODULE['<{trustedshops}prestashop>order-confirmation-tsbp-classic_f975f42362625cf21e592009ff4b3d7b'] = 'Registrati per la Protezione acquirente Trusted shops';
 $_MODULE['<{trustedshops}prestashop>seal_of_approval_ee9ae315b086e1b1a0c8fdc6078f9add'] = 'Sigillo di Approvazione Trusted Shops  - Clicca per verificare.';
 $_MODULE['<{trustedshops}prestashop>seal_of_approval_750bea678eeb1d07f21fe86173288e2e'] = 'è un negozio on-line certificato con Protezione acquirente Trusted Shops. Maggiori informazioni ...';
-$_MODULE['<{trustedshops}prestashop>trustedshops_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Questo modulo richiede l\'estensione SOAP di PHP per funzionare correttamente.';
-$_MODULE['<{trustedshops}prestashop>trustedshops_8b61f54775adf535d4da32eb434309ea'] = 'Trusted Shops fiducia soluzioni';
-$_MODULE['<{trustedshops}prestashop>trustedshops_f3607bb2fb5f04aa4937e7846c560faa'] = 'Costruire la fiducia nel vostro negozio online con il sigillo di qualità Trusted Negozi, protezione acquirente e il rating del cliente.';
-$_MODULE['<{trustedshops}prestashop>trustedshops_968e0f78caa7d3245c8f6f858de993d8'] = 'Sei sicuro di voler eliminare tutte le impostazioni?';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_79fc246c2b70963d27ebb0e9ebaab349'] = 'Si prega di contattare Trusted Shops a service@trustedshops.co.uk.';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_3a2a06b3a1f05cde765219211bf2e9bd'] = 'Nome utente o password non valida.';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_43048f232a4ebab67835c425a1113b29'] = 'Hai raggiunto il limite di credito.';
@@ -175,3 +171,9 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0fac19c0cc6e205682dd52d61
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_afe906fe9448ed1b480b3eec383461de'] = 'I tuoi clienti diffondono opinioni e valutazioni su Facebook e Twitter direttamente ad amici e seguaci. Le valutazioni sono automaticamente elencate nel Google Index e vengono visualizzati in Google Shopping.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Sei soddisfatto di';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Scrivi una recensione!';
+$_MODULE['<{trustedshops}prestashop>trustedshops_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Questo modulo richiede l\'estensione SOAP di PHP per funzionare correttamente.';
+$_MODULE['<{trustedshops}prestashop>trustedshops_8b61f54775adf535d4da32eb434309ea'] = 'Trusted Shops fiducia soluzioni';
+$_MODULE['<{trustedshops}prestashop>trustedshops_f3607bb2fb5f04aa4937e7846c560faa'] = 'Costruire la fiducia nel vostro negozio online con il sigillo di qualità Trusted Negozi, protezione acquirente e il rating del cliente.';
+$_MODULE['<{trustedshops}prestashop>trustedshops_968e0f78caa7d3245c8f6f858de993d8'] = 'Sei sicuro di voler eliminare tutte le impostazioni?';
+
+?>

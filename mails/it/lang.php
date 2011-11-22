@@ -24,6 +24,7 @@ $_LANGMAIL['Newsletter confirmation'] = 'Conferma newsletter';
 $_LANGMAIL['Newsletter voucher'] = 'Buono sconto newsletter';
 $_LANGMAIL['Your wishlist\\\'s link'] = 'Il tuo collegamento alla lista dei desideri';
 $_LANGMAIL['Message from '] = 'Messaggio da';
+$_LANGMAIL['$subject'] = '$soggetto';
 $_LANGMAIL['Your cart and your discount'] = 'Il tuo carrello e il tuo sconto';
 $_LANGMAIL['Thanks for your order'] = 'Grazie dell\'ordine';
 $_LANGMAIL['You are one of our best customers'] = 'Sei uno dei nostri clienti migliori';

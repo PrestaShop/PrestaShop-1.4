@@ -20,3 +20,5 @@ $_MODULE['<{importerosc}prestashop>importerosc_14ae0ea02f571a833786d13d9ca6a897'
 $_MODULE['<{importerosc}prestashop>importerosc_e307db07b3975fef922a80d07455ee5e'] = 'Database';
 $_MODULE['<{importerosc}prestashop>importerosc_dac130bdd2c5492a8108a4145bd9f04a'] = 'Database prefisso';
 $_MODULE['<{importerosc}prestashop>importerosc_6bdc02625540b5264cffe801c37a82dd'] = '(Il prefisso è opzionale. Se tutte le tabelle del database iniziano con \"pref_\", il prefisso è \"pref_\")';
+
+?>

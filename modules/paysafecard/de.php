@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{paysafecard}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Ein Zertifikat ist für diese Konfiguration gefunden';
-$_MODULE['<{paysafecard}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'Ein Passwort wurde bereits gespeichert';
 $_MODULE['<{paysafecard}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'Der Dispositionsstatus ist ungültig';
 $_MODULE['<{paysafecard}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = 'Sie sind nicht berechtigt, die Zahlung durchzuführen.';
 $_MODULE['<{paysafecard}prestashop>payment_da9c72b9e543135f3f59e3c8ac68ef35'] = 'Bezahlen Sie mit';
@@ -51,3 +49,5 @@ $_MODULE['<{paysafecard}prestashop>paysafecard_315e941f57cf90350aea15d968e190f8'
 $_MODULE['<{paysafecard}prestashop>paysafecard_d59048f21fd887ad520398ce677be586'] = 'Erfahren Sie mehr';
 $_MODULE['<{paysafecard}prestashop>paysafecard_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Ein Fehler ist aufgetreten, überprüfen Sie die Mitteilungen, um mehr zu erfahren';
 $_MODULE['<{paysafecard}prestashop>paysafecard_a9ced76f2dd6907220fa95b3a136b04a'] = 'Ungültiger Betrag';
+
+?>

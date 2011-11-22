@@ -105,3 +105,5 @@ $_MODULE['<{ebay}prestashop>ebay_694e8d1f2ee056f98ee488bdc4982d73'] = 'Quantità
 $_MODULE['<{ebay}prestashop>ebay_3601146c4e948c32b6424d2c0a7f0118'] = 'Prezzo';
 $_MODULE['<{ebay}prestashop>ebay_eacb7a77450c68e3936ff0475c010cdb'] = 'Stato importazione';
 $_MODULE['<{ebay}prestashop>ebay_59fc75ecf1ce372c9ed534d5e545ff88'] = 'Il mancato dettagli';
+
+?>

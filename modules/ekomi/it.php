@@ -15,3 +15,5 @@ $_MODULE['<{ekomi}prestashop>ekomi_b9f5c797ebbf55adccdd8539a65a0241'] = 'Disatti
 $_MODULE['<{ekomi}prestashop>ekomi_ced21fe73878a0139d427ab2927f6772'] = 'Mostrare o non mostrare il blocco (gli ordini verranno inviati a eKomi se si sceglie di nascondere o visualizzare il blocco).';
 $_MODULE['<{ekomi}prestashop>ekomi_6a794dc942b2e8b4716dbc654e83d094'] = 'Si prega di compilare il modulo con i dati che eKomi vi dà.';
 $_MODULE['<{ekomi}prestashop>ekomi_c9cc8cce247e49bae79f15173ce97354'] = 'Salva';
+
+?>

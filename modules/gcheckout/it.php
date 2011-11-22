@@ -42,3 +42,5 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_dba727a9adc372723baef4533a7fc9da'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_0d46d15f70a7cfa670545b308c022840'] = 'Gli ordini devono essere posizionati con la stessa valuta del tuo account venditore. Carrelli in altre valute saranno convertiti se il cliente sceglie di pagare con questo modulo.';
 $_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Paga con GoogleCheckout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_ba794350deb07c0c96fe73bd12239059'] = 'Confezione';
+
+?>
