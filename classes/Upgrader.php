@@ -47,6 +47,7 @@ class UpgraderCore
 	public $autoupgrade;
 	public $autoupgrade_module;
 	public $autoupgrade_last_version;
+	public $autoupgrade_module_link;
 	public $changelog;
 	public $md5;
 
@@ -121,6 +122,7 @@ class UpgraderCore
 				$this->autoupgrade = (int)$feed->autoupgrade;
 				$this->autoupgrade_module = (int)$feed->autoupgrade_module;
 				$this->autoupgrade_last_version = (string)$feed->autoupgrade_last_version;
+				$this->autoupgrade_module_link = (string)$feed->autoupgrade_module_link;
 				$this->desc = (string)$feed->desc ;
 				$config_last_version = array(
 					'name' => $this->version_name,
@@ -130,6 +132,7 @@ class UpgraderCore
 					'autoupgrade' => $this->autoupgrade,
 					'autoupgrade_module' => $this->autoupgrade_module,
 					'autoupgrade_last_version' => $this->autoupgrade_last_version,
+					'autoupgrade_module_link' => $this->autoupgrade_module_link,
 					'changelog' => $this->changelog,
 					'desc' => $this->desc
 				);
@@ -176,6 +179,8 @@ class UpgraderCore
 				$this->autoupgrade_module = $last_version_check['autoupgrade_module'];
 			if (isset($last_version_check['autoupgrade_last_version']))
 				$this->autoupgrade_last_version = $last_version_check['autoupgrade_last_version'];
+			if (isset($last_version_check['autoupgrade_module_link']))
+				$this->autoupgrade_module_link= $last_version_check['autoupgrade_module_link'];
 			if (isset($last_version_check['md5']))
 				$this->md5 = $last_version_check['md5'];
 			if (isset($last_version_check['desc']))
