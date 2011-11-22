@@ -1836,6 +1836,12 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			echo '<div class="error">'.Tools::displayError('This functionnality has been disabled.').'</div>';
 			return;
 		}
+
+		if (!file_exists($this->autoupgradePath.DIRECTORY_SEPARATOR.'ajax-upgradetab.php'))
+		{
+			echo '<div class="error">'.'<img src="../img/admin/warning.gif" /> [TECHNICAL ERROR] '.$this->l('ajax-upgrade.php is missing. please reinstall or reset the module').'</div>';
+			return false;
+		}
 		/* PrestaShop demo mode*/
 
 		
@@ -2283,8 +2289,12 @@ function handleError(res)
 	$("#cchangedList").append("<br/>");
 
 }';
-					
-		$js.= '$(document).ready(function(){
+	if(!file_exists($this->autoupgradePath.DIRECTORY_SEPARATOR.'ajax-upgradetab.php'))
+		$js .= '$(document).ready(function(){
+			$("#checkPrestaShopFilesVersion").html("<img src=\"../img/admin/warning.gif\" /> [TECHNICAL ERROR] ajax-upgradetab.php '.$this->l('is missing. please reinstall the module').'");
+			})';
+	else
+		$js .= '$(document).ready(function(){
 	$.ajax({
 			type:"POST",
 			url : "'. __PS_BASE_URI__ . trim($this->adminDir,DIRECTORY_SEPARATOR).'/autoupgrade/ajax-upgradetab.php",
@@ -2322,14 +2332,14 @@ function handleError(res)
 			,
 			error: function(res, textStatus, jqXHR)
 			{
-				//$("#checkPrestaShopFilesVersion").html("<img src=\"../img/admin/warning.gif\" /> "+textStatus);
 				if (textStatus == "timeout" && action == "download")
 				{
 					updateInfoStep("'.$this->l('Your server can\'t download the file. Please upload it first by ftp in your admin/autoupgrade directory').'");
 				}
 				else
 				{
-					updateInfoStep("[Server Error] Status message : " + textStatus);
+					// technical error : no translation needed
+					$("#checkPrestaShopFilesVersion").html("<img src=\"../img/admin/warning.gif\" /> [TECHNICAL ERROR] Unable to check md5 files");
 				}
 			}
 		})
