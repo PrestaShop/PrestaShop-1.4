@@ -49,7 +49,7 @@ if(empty($_POST['action']) OR !in_array($_POST['action'],array('upgradeDb')))
 	// Add Upgrader class : if > 1.4.5.0 , uses core class
 	// otherwise, use Upgrader.php in modules.
 	// in both cases, use override if files exists
-	if (!version_compare(_PS_VERSION_,'1.4.6.0','<') && file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
+	if (!version_compare(_PS_VERSION_,'1.4.6.1','<') && file_exists(_PS_ROOT_DIR_.'/classes/Upgrader.php'))
 		require_once(_PS_ROOT_DIR_.'/classes/Upgrader.php');
 	else
 		require_once(dirname(__FILE__).'/Upgrader.php');
@@ -61,7 +61,6 @@ if(empty($_POST['action']) OR !in_array($_POST['action'],array('upgradeDb')))
 		else
 			eval('class Upgrader extends UpgraderCore{}');
 	}
-
 
 
 require_once(dirname(__FILE__).'/Tools14.php');
@@ -159,7 +158,9 @@ class AdminSelfUpgrade extends AdminSelfTab
  	*	example : public static $skipAction = array('download' => 'upgradeFiles');
 	*/
 	public static $skipAction = array();
+
 	public $useSvn;
+	public static $force_pclZip = true;
 
 	protected $_includeContainer = false;
 
@@ -294,10 +295,17 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$allowed_array['root_writable'] = $this->rootWritable;
 			$allowed_array['shop_enabled'] = !Configuration::get('PS_SHOP_ENABLE');
 			$allowed_array['autoupgrade_allowed'] = $this->upgrader->autoupgrade;
-			$module_version = '0.1';
 			if ($module_version = simplexml_load_file(dirname(__FILE__).'/config.xml'))
+			{
 				$module_version = (string)$module_version->version;
-			$allowed_array['module_version_ok'] = version_compare($module_version, $this->upgrader->autoupgrade_last_version, '>=');
+				$allowed_array['module_version_ok'] = version_compare($module_version, $this->upgrader->autoupgrade_last_version, '>=');
+			}
+			else
+			{
+				$allowed_array['module_version_ok'] = 1; // unable to check, let's assume it's ok 
+
+			}
+				
 			// if one option has been defined, all options are.
 			$allowed_array['module_configured'] = (Configuration::get('PS_AUTOUP_KEEP_TRAD') !== false);
 		}
@@ -306,12 +314,13 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 
 	public function checkAutoupgradeLastVersion(){
-		if ($module_version = simplexml_load_file(_PS_MODULE_DIR_.'autoupgrade'.'/config.xml'))
-			$module_version = (string)$module_version['version'];
+		if ($xml_module_version = simplexml_load_file(_PS_MODULE_DIR_.'autoupgrade'.'/config.xml'))
+			$module_version = (string)$xml_module_version->version;
 		else
-			$module_version = '';
+			$module_version = 'error';
 		
-		return version_compare($this->upgrader->autoupgrade_last_version, $module_version, '==');
+		$this->lastAutoupgradeVersion = version_compare($this->upgrader->autoupgrade_last_version, $module_version, '<=');
+		return $this->lastAutoupgradeVersion;
 	}
 
 	/**
@@ -1271,50 +1280,66 @@ class AdminSelfUpgrade extends AdminSelfTab
 			//	else
 			//		$latest = '';
 
+			if (!self::$force_pclZip && class_exists('ZipArchive', false))
+			{
 				$zip = new ZipArchive();
-				if ($zip->open($this->backupFilesFilename, ZIPARCHIVE::CREATE))
+				$zip->open($this->backupFilesFilename, ZIPARCHIVE::CREATE);
+				$zip_add_method = 'addFile';
+				$zip_close_method = 'close';
+			}
+			else
+			{
+				if (!class_exists('PclZip',false))
+					require_once(dirname(__FILE__).'/pclzip.lib.php');
+				$zip = new PclZip($this->backupFilesFilename);
+				$zip->create($this->backupFilesFilename);
+				$zip_add_method = 'add';
+				$zip_close_method = 'privCloseFd';
+			}
+			if ($zip)
+			{
+				$this->next = 'backupFiles';
+				// @TODO all in one time will be probably too long
+				// 1000 ok during test, but 10 by 10 to be sure
+				$this->stepok = false;
+				// @TODO min(self::$loopBackupFiles, sizeof())
+				for($i=0;$i<self::$loopBackupFiles;$i++)
 				{
-					$this->next = 'backupFiles';
-					// @TODO all in one time will be probably too long
-					// 1000 ok during test, but 10 by 10 to be sure
-					$this->stepok = false;
-					// @TODO min(self::$loopBackupFiles, sizeof())
-					for($i=0;$i<self::$loopBackupFiles;$i++)
+					if (sizeof($filesToBackup)<=0)
 					{
-						if (sizeof($filesToBackup)<=0)
-						{
-							$this->stepok = true;
-							$this->status = 'ok';
-							$this->next = 'backupDb';
-							$this->nextDesc = $this->l('All files saved. Now backup Database');
-							$this->nextQuickInfo[] = $this->l('all files have been added to archive.');
-							break;
-						}
-						// filesForBackup already contains all the correct files
-						$file = array_shift($filesToBackup);
-						$archiveFilename = ltrim(str_replace($this->prodRootDir,'',$file),DIRECTORY_SEPARATOR);
-						// @TODO : maybe put several files at the same times ?
-						if ($zip->addFile($file,$archiveFilename))
-							$this->nextQuickInfo[] = sprintf($this->l('%1$s added to archive. %2$s left.'),$file, sizeof($filesToBackup));
-						else
-						{
-						// if an error occur, it's more safe to delete the corrupted backup
-							if (file_exists($this->backupFilesFilename))
-								unlink($this->backupFilesFilename);
-							$this->next = 'error';
-							$this->nextDesc = sprintf($this->l('error when trying to add %1$s to archive %2$s.'),$file, $backupFilePath);
-							break;
-						}
+						$this->stepok = true;
+						$this->status = 'ok';
+						$this->next = 'backupDb';
+						$this->nextDesc = $this->l('All files saved. Now backup Database');
+						$this->nextQuickInfo[] = $this->l('all files have been added to archive.');
+						break;
 					}
-					$zip->close();
-					file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($filesToBackup));
-					return true;
+					// filesForBackup already contains all the correct files
+					$file = array_shift($filesToBackup);
+					$archiveFilename = ltrim(str_replace($this->prodRootDir,'',$file),DIRECTORY_SEPARATOR);
+					// @TODO : maybe put several files at the same times ?
+					if ($zip->{$zip_add_method}($file,$archiveFilename))
+						$this->nextQuickInfo[] = sprintf($this->l('%1$s added to archive. %2$s left.'),$file, sizeof($filesToBackup));
+					else
+					{
+					// if an error occur, it's more safe to delete the corrupted backup
+						if (file_exists($this->backupFilesFilename))
+							unlink($this->backupFilesFilename);
+						$this->next = 'error';
+						$this->nextDesc = sprintf($this->l('error when trying to add %1$s to archive %2$s.'),$file, $backupFilePath);
+						break;
+					}
 				}
-				else{
-					$this->next = 'error';
-					$this->nextDesc = $this->l('unable to open archive');
-					return false;
-				}
+
+				$zip->$zip_close_method();
+				file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($filesToBackup));
+				return true;
+			}
+			else{
+				$this->next = 'error';
+				$this->nextDesc = $this->l('unable to open archive');
+				return false;
+			}
 		}
 		else
 		{
@@ -1651,9 +1676,15 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			$module_version = (string)$module_version->version;
 
 		$content .= '<b>'.$this->l('Module version').' : </b>'
-			.'<img src="'.$srcModuleVersion.'" /> '
-			.sprintf($this->lastAutoupgradeVersion?
-				$this->l('You have the last version (%s)'):$this->l('You currently use the version %1$s of the autoupgrade module. Please install the last version (%2$s)'), $module_version, $this->upgrader->autoupgrade_last_version).'<br/><br/>';
+			.'<img src="'.$srcModuleVersion.'" /> ';
+			if($this->lastAutoupgradeVersion)
+				$content .= sprintf($this->l('Your version is up-to-date (%s)'), $module_version, $this->upgrader->autoupgrade_last_version).'<br/><br/>';
+			else
+			{
+				$token_modules = Tools14::getAdminTokenLite('AdminModules');
+				$content .= sprintf($this->l('Module version is outdated ( %1$s ). Please install the last version (%2$s)'), $module_version, $this->upgrader->autoupgrade_last_version);
+				$content .= '<br/><br/><a class="button" href="index.php?tab=AdminModules&amp;'.$token_modules.'&amp;url='.$this->upgrader->autoupgrade_module_link.'">'.$this->l('Install the latest by clicking "Add from my computer"').'</a><br/><br/>' ;
+			}
 
 		if ($this->rootWritable)
 			$srcRootWritable = '../img/admin/enabled.gif';
@@ -2363,7 +2394,7 @@ function handleError(res)
 				return false;
 			}
 
-		if (class_exists('ZipArchive', false))
+		if (!self::$force_pclZip && class_exists('ZipArchive', false))
 		{
 			$zip = new ZipArchive();
 			if ($zip->open($fromFile) === true)
@@ -2376,22 +2407,18 @@ function handleError(res)
 				}
 				else
 				{
-					$this->next = 'error';
-					$this->nextDesc = '[TECHNICAL ERROR] Error on extract';
+					return false;
 				}
 				return false;
 			}
 			else
-			{
-				$this->next = 'error';
-				$this->nextDesc = '[TECHNICAL ERROR] Error on zip open';
-			}
+				return false;
 		}
 		else
 		{
-
+			// todo : no relative path
 			if (!class_exists('PclZip',false))
-				require_once($this->prodRootDir.'/tools/pclzip/pclzip.lib.php');
+				require_once(dirname(__FILE__).'/pclzip.lib.php');
 
 			$zip = new PclZip($fromFile);
 			$list = $zip->extract(PCLZIP_OPT_PATH, $toDir);
@@ -2407,7 +2434,7 @@ function handleError(res)
 	{
 		if (!empty($this->currentParams['backupFilesFilename']))
 		{
-			if (class_exists('ZipArchive', false))
+			if (!self::$force_pclZip && class_exists('ZipArchive', false))
 			{
 				$files=array();
 				if ($zip = zip_open($this->currentParams['backupFilesFilename']))
@@ -2421,7 +2448,7 @@ function handleError(res)
 			}
 			else
 			{
-				require_once($this->prodRootDir.'/tools/pclzip/pclzip.lib.php');
+				require_once(dirname(__FILE__).'/pclzip.lib.php');
 				if ($zip = new PclZip($this->currentParams['backupFilesFilename']))
 					return $zip->listContent();
 				// @todo : else throw new Exception()
