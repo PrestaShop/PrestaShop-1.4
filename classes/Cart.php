@@ -1273,12 +1273,12 @@ class CartCore extends ObjectModel
 			return Tools::displayError('You cannot use this voucher.');
 		}
 
-		$onlyProductWithDiscount = true;
+		$onlyProductWithDiscount = false;
 		if (!$discountObj->cumulable_reduction)
 		{
 			foreach ($products as $product)
-				if (!$product['reduction_applies'] AND !$product['on_sale'])
-					$onlyProductWithDiscount = false;
+				if ($product['reduction_applies'] OR $product['on_sale'])
+					$onlyProductWithDiscount = true;
 		}
 		if (!$discountObj->cumulable_reduction AND $onlyProductWithDiscount)
 			return Tools::displayError('This voucher is not valid for marked or reduced products.');
