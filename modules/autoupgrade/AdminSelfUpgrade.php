@@ -160,7 +160,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 	public static $skipAction = array();
 
 	public $useSvn;
-	public static $force_pclZip = true;
+	public static $force_pclZip = false;
 
 	protected $_includeContainer = false;
 
