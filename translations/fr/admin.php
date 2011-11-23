@@ -1945,6 +1945,7 @@ $_LANGADM['AdminPreferences8cde7b1fa570f328143c41677032b507'] = 'Définit la lim
 $_LANGADM['AdminPreferencesd5bc5fd307b108537039b6b6f98889d5'] = 'Fuseau horaire :';
 $_LANGADM['AdminPreferencesbbd6622dbbdf4bcb166f5e3f018a2351'] = 'Cliquez ici pour utiliser le protocole HTTPS avant d\'activer le mode SSL.';
 $_LANGADM['AdminPreferences0db377921f4ce762c62526131097968f'] = 'Général';
+$_LANGADM['AdminPreferences77cdfaefb21a2a1187a097ade3ab89c8'] = 'La limite choisie est superieure à celle du serveur. Vous devez augmenter la limite d\'envoi de votre serveur';
 $_LANGADM['AdminPreferences4e871525b7518538075dddfad5e292dc'] = 'Cette fonctionnalité a été désactivée.';
 $_LANGADM['AdminPreferences93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
 $_LANGADM['AdminPreferencesbafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';

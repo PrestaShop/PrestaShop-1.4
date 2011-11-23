@@ -143,7 +143,7 @@ class AdminPreferences extends AdminTab
 
             if (Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE') > $maxSize or Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE') > $maxSize)
             {
-            	$this->_errors[] = Tools::displayError('The limit choosen is superior to the server\'s maximum upload file You need to improve the limit of your server.');
+            	$this->_errors[] = Tools::displayError($this->l('The limit choosen is superior to the server\'s maximum upload file You need to improve the limit of your server.'));
             	return;
             }
             else if (!Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE'))

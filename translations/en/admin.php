@@ -1102,7 +1102,6 @@ $_LANGADM['AdminImages0fb0d96026cc27f8a45d6cb909289903'] = 'You can choose to ke
 $_LANGADM['AdminImages6e9b08be274aa15f116c641e4c9b8599'] = 'You can also decide to move your images to the new storage system: in this case, click on the \"Move images\" button below. Please be patient, this can take several minutes.';
 $_LANGADM['AdminImages1bd266b7c30df50f9b77b0e0f55f2878'] = 'After moving all of your product images, for best performance go to the ';
 $_LANGADM['AdminImagese686877843ac3c9f4c45aaea265fe59c'] = 'product preferences tab';
-$_LANGADM['AdminImagesfb3164a4f7305b347948b8aca17c1735'] = 'and set \"Use the legacy image filesystem\" option to \"No\".';
 $_LANGADM['AdminImagesff17d73fa2731689640e8afa0f591b0f'] = 'JPEG images have a small file size and standard quality. PNG images have a bigger file size, a higher quality and support transparency. Note that in all cases the image files will have the .jpg extension.';
 $_LANGADM['AdminImagesff167676b1516b34e7f9be0fea5349d6'] = 'WARNING: This feature may not be compatible with your theme or with some modules. In particular, PNG mode is not compatible with the Watermark module. If you encounter any issue, turn it off by selecting \"Use JPEG\".';
 $_LANGADM['AdminImages42ceb344b0aaf896b362b0db70b46f98'] = 'Image quality';
@@ -1136,8 +1135,6 @@ $_LANGADM['AdminImport7a1920d61156abc05a60135aefe8bc67'] = 'Default';
 $_LANGADM['AdminImport9b93b45649ec5961b8cc84e905964683'] = 'Image position';
 $_LANGADM['AdminImport9c163d2934fbdd2775356db804d451fc'] = 'Position of the product image to use for this combination. If you use this field, leave image URL empty.';
 $_LANGADM['AdminImport427b6d816d7fdd86cabe48d8180a3cc9'] = 'Image URL';
-$_LANGADM['AdminImport14913d7e9d486e77b5c8d085e3797f94'] = 'Delete existing images (0 = No, 1 = Yes)';
-$_LANGADM['AdminImporte6691747add3b37b9c381b8d9476fd4c'] = 'If you do not fill in this column but you fill in the column \"Image URLs (x,y,z...)\", all previously uploaded product images will be deleted and replaced by these new images';
 $_LANGADM['AdminImportb718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_LANGADM['AdminImportfd0dcc6233b026d257763713c133cf72'] = 'Active (0/1)';
 $_LANGADM['AdminImport2688a544cd5ac33f27ab78c8d8c3acaa'] = 'Name *';
@@ -1168,6 +1165,8 @@ $_LANGADM['AdminImportf2149c422ab7577f063b69a2884d17f0'] = 'Available for order'
 $_LANGADM['AdminImportb1a2a959c20b1bd847895e73a5fddbc9'] = 'Product creation date';
 $_LANGADM['AdminImporte1a5e653bc356ed6745d6814d50213eb'] = 'Show price';
 $_LANGADM['AdminImport4d2589e1bcd4263cb99927b59f0f88d2'] = 'Image URLs (x,y,z...)';
+$_LANGADM['AdminImport14913d7e9d486e77b5c8d085e3797f94'] = 'Delete existing images (0 = No, 1 = Yes)';
+$_LANGADM['AdminImporte6691747add3b37b9c381b8d9476fd4c'] = 'If you do not fill in this column but you fill in the column \"Image URLs (x,y,z...)\", all previously uploaded product images will be deleted and replaced by these new images';
 $_LANGADM['AdminImport21021ea0e52be8e9c599f4dff41e5be0'] = 'Feature';
 $_LANGADM['AdminImport71d0ceacdf562024f2d4c3a76d3b63e4'] = 'Available online only';
 $_LANGADM['AdminImport9e2941b3c81256fac10392aaca4ccfde'] = 'Condition';
@@ -3008,7 +3007,6 @@ $_LANGADM['AdminUpgradef70307d8297e48a8783d41e6f3313d51'] = 'Error with SVN expo
 $_LANGADM['AdminUpgrade4eecd9c195e46c054ef7da6d9d1a738b'] = 'Extract complete. Removing sample files...';
 $_LANGADM['AdminUpgrade0929f38eaac3ca38801f08b7269574e0'] = 'Unable to extract %1$s into %2$s...';
 $_LANGADM['AdminUpgrade6b2d0404b7faba0e791e15a52586a149'] = 'Switching to SVN checkout (useSvn set to true)';
-$_LANGADM['AdminUpgradef0e38ac0c558a7f216ae98382b9e58f5'] = 'Shop deactivated. Now downloading (this may take some time)...';
 $_LANGADM['AdminUpgrade4f7c02592a962e40a920f32f3a24f2df'] = 'filesToUpgrade is not an array';
 $_LANGADM['AdminUpgrade3f10faa8b44a7175ae8fc5dcb8dec5de'] = 'All files upgraded. Now upgrading database';
 $_LANGADM['AdminUpgrade1ad932e3b85eb2907a817cd3e3e6907e'] = 'Error when trying to upgrade %s';
@@ -3139,7 +3137,7 @@ $_LANGADM['AdminUpgrade6b28abf9b513f912c60cad33e7d9656f'] = 'Please click to rem
 $_LANGADM['AdminUpgrade35d388690a72b9c4dc5b77d200875e77'] = 'Previous UpgradeTab has been removed. Please go to the new Upgrade tab, or install the module first.';
 $_LANGADM['AdminUpgrade7f786b903ea8045f5b5b7e3c5a4e0385'] = 'This function is experimental. It is highly recommended to make a backup of your files and database before starting the upgrade process.';
 $_LANGADM['AdminUpgrade3a3a651c9a67bca9ac902da789466b93'] = 'Unstable upgrade';
-$_LANGADM['AdminUpgradea22eff458b4f4bce6d3232e367ff0138'] = '= \r\nYour current configuration indicate you want to upgrade your system from the unstable development branch, with no version number. If you upgrade, you will not be able to follow the official release process anymore';
+$_LANGADM['AdminUpgradea22eff458b4f4bce6d3232e367ff0138'] = '= rnYour current configuration indicate you want to upgrade your system from the unstable development branch, with no version number. If you upgrade, you will not be able to follow the official release process anymore';
 $_LANGADM['AdminUpgradedae8ace18bdcbcc6ae5aece263e14fe8'] = 'Options';
 $_LANGADM['AdminUpgradec747916b25dcb02e0e81ee84dbd966ea'] = 'You currently do not need to use this feature.';
 $_LANGADM['AdminUpgrade6b3930a184368a458be6e4429f409877'] = 'Upgrade complete. Please check your front-office (try to make an order, check theme, etc.)';
