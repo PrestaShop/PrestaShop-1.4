@@ -1149,7 +1149,8 @@ class MondialRelay extends Module
 	  	WHERE id_mr_selected=\''.(int)($shipping_number).'\';';
 	  	  
 		$settings = Db::getInstance()->ExecuteS($query);
-		
+		if(!isset($settings[0]['url_suivi']))
+			return null;
 		return $settings[0]['url_suivi'];
 	}
 
