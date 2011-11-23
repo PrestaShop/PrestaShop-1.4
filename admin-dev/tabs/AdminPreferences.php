@@ -33,11 +33,11 @@ class AdminPreferences extends AdminTab
 
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
-		
+
 		$max_upload = (int)ini_get('upload_max_filesize');
 		$max_post = (int)ini_get('post_max_size');
 		$upload_mb = min($max_upload, $max_post);
-		
+
 		$timezones = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT name FROM '._DB_PREFIX_.'timezone');
 		$taxes[] = array('id' => 0, 'name' => $this->l('None'));
 		foreach (Tax::getTaxes((int)($cookie->id_lang)) as $tax)
@@ -106,7 +106,7 @@ class AdminPreferences extends AdminTab
 		);
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
-			
+
 			// No HTTPS activation if you haven't already.
 			if (!Tools::usingSecureMode())
 			{
@@ -125,7 +125,7 @@ class AdminPreferences extends AdminTab
 	public function postProcess()
 	{
 		global $currentIndex;
-		
+
 		/* PrestaShop demo mode */
 		if (_PS_MODE_DEMO_)
 		{
@@ -138,9 +138,9 @@ class AdminPreferences extends AdminTab
             $uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));
             $postMaxSize = (int)str_replace('M', '', ini_get('post_max_size'));
             $maxSize = $uploadMaxSize < $postMaxSize ? $uploadMaxSize : $postMaxSize;
-           
+
             $_POST['PS_ATTACHMENT_MAXIMUM_SIZE'] = $maxSize < Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE') ? $maxSize : Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE');
-            
+
             if (Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE') > $maxSize or Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE') > $maxSize)
             {
             	$this->_errors[] = Tools::displayError('The limit choosen is superior to the server\'s maximum upload file You need to improve the limit of your server.');
@@ -148,10 +148,10 @@ class AdminPreferences extends AdminTab
             }
             else if (!Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE'))
         		$_POST['PS_LIMIT_UPLOAD_FILE_VALUE'] = 1;
-        		
+
         	else if (!Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE'))
         		$_POST['PS_LIMIT_UPLOAD_IMAGE_VALUE'] = 1;
-        		
+
 			else
 			{
             	$_POST['PS_LIMIT_UPLOAD_FILE_VALUE'] = Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE');
@@ -161,7 +161,7 @@ class AdminPreferences extends AdminTab
 
 		if (isset($_POST['submitGeneral'.$this->table]))
 		{
-			
+
 			Module::hookExec('categoryUpdate'); // We call this hook, for regenerate cache of categories
 			if (Tools::getValue('PS_CONDITIONS') == true AND (Tools::getValue('PS_CONDITIONS_CMS_ID') == 0 OR !Db::getInstance()->getValue('
 			SELECT `id_cms` FROM `'._DB_PREFIX_.'cms`
@@ -203,7 +203,7 @@ class AdminPreferences extends AdminTab
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
-		
+
 		parent::postProcess();
 	}
 
@@ -378,9 +378,9 @@ class AdminPreferences extends AdminTab
 		echo '
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
-			
+
 			function addRemoteAddr(){
-				var length = $(\'input[name=PS_MAINTENANCE_IP]\').attr(\'value\').length;	
+				var length = $(\'input[name=PS_MAINTENANCE_IP]\').attr(\'value\').length;
 				if (length > 0)
 					$(\'input[name=PS_MAINTENANCE_IP]\').attr(\'value\',$(\'input[name=PS_MAINTENANCE_IP]\').attr(\'value\') +\','.Tools::getRemoteAddr().'\');
 				else
@@ -399,7 +399,7 @@ class AdminPreferences extends AdminTab
 				continue;
 			}
 			/* PrestaShop demo mode*/
-			
+
 			/* Specific line for e-mails settings */
 			if (get_class($this) == 'Adminemails' AND $key == 'PS_MAIL_SERVER')
 				echo '<div id="smtp" style="display: '.((isset($confValues['PS_MAIL_METHOD']) AND $confValues['PS_MAIL_METHOD'] == 2) ? 'block' : 'none').';">';
@@ -520,18 +520,17 @@ class AdminPreferences extends AdminTab
 				case 'container_end':
 					echo (isset($field['content']) === true ? $field['content'] : '').'</div>';
 				break;
-				
+
 				case 'maintenance_ip':
-					echo '<input type="'.$field['type'].'"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '').' &nbsp<a href="#" class="button" onclick="addRemoteAddr(); return false;">'.$this->l('Add my IP').'</a>';
-					
+					echo '<input type="text"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '').' &nbsp<a href="#" class="button" onclick="addRemoteAddr(); return false;">'.$this->l('Add my IP').'</a>';
+					break;
 				case 'limit':
-					echo '<input type="'.$field['type'].'" size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" /> MB';
-				break;	
-							
-					case 'text':
+					echo '<input type="text" size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" /> MB';
+					break;
+				case 'text':
 				default:
 					echo '<input type="'.$field['type'].'"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '');
-					
+
 
 			}
 			echo ((isset($field['required']) AND $field['required'] AND !in_array($field['type'], array('image', 'radio')))  ? ' <sup>*</sup>' : '');
