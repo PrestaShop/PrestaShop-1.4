@@ -46,11 +46,11 @@ class AdminAccess extends AdminTab
 			elseif ($id_tab == -1 AND $action == 'all')
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `view` = '.(int)(Tools::getValue('perm')).', `add` = '.(int)(Tools::getValue('perm')).', `edit` = '.(int)(Tools::getValue('perm')).', `delete` = '.(int)(Tools::getValue('perm')).' WHERE `id_profile` = '.(int)($id_profile));
 			elseif ($id_tab == -1)
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `'.pSQL($action).'` = '.(int)(Tools::getValue('perm')).' WHERE `id_profile` = '.(int)($id_profile));
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `'.bqSQL($action).'` = '.(int)(Tools::getValue('perm')).' WHERE `id_profile` = '.(int)($id_profile));
 			elseif ($action == 'all')
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `view` = '.(int)(Tools::getValue('perm')).', `add` = '.(int)(Tools::getValue('perm')).', `edit` = '.(int)(Tools::getValue('perm')).', `delete` = '.(int)(Tools::getValue('perm')).' WHERE `id_tab` = '.(int)($id_tab).' AND `id_profile` = '.(int)($id_profile));
 			else
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `'.pSQL($action).'` = '.(int)(Tools::getValue('perm')).' WHERE `id_tab` = '.(int)($id_tab).' AND `id_profile` = '.(int)($id_profile));
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'access` SET `'.bqSQL($action).'` = '.(int)(Tools::getValue('perm')).' WHERE `id_tab` = '.(int)($id_tab).' AND `id_profile` = '.(int)($id_profile));
 		}
 	}
 	
