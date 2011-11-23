@@ -292,6 +292,7 @@ class ProductControllerCore extends FrontController
 						$combinations[$row['id_product_attribute']]['weight'] = (float)($row['weight']);
 						$combinations[$row['id_product_attribute']]['quantity'] = (int)($row['quantity']);
 						$combinations[$row['id_product_attribute']]['reference'] = $row['reference'];
+						$combinations[$row['id_product_attribute']]['ean13'] = $row['ean13'];
 						$combinations[$row['id_product_attribute']]['unit_impact'] = $row['unit_price_impact'];
 						$combinations[$row['id_product_attribute']]['minimal_quantity'] = $row['minimal_quantity'];
 						$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
