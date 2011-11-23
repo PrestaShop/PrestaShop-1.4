@@ -56,6 +56,7 @@ else
 	define('_PS_BASE_URL_SSL_', Tools::getShopDomainSsl(true));
 
 	$employee = new Employee((int)$cookie->id_employee);
+	$cookie->profile = $employee->id_profile;
 	$cookie->id_lang = (int)$employee->id_lang;
 	$iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
 	include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
