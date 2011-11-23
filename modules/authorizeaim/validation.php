@@ -24,6 +24,7 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
+
 include(dirname(__FILE__). '/../../config/config.inc.php');
 include(dirname(__FILE__). '/../../init.php');
 include(dirname(__FILE__). '/authorizeaim.php');
@@ -64,8 +65,15 @@ if (!isset($response[7]) OR !isset($response[3]) OR !isset($response[9]))
 		die('Authorize.net returned a malformed response, aborted.');
 }
 
-if ($response[0] == 3)
-	Tools::redirect('order.php?step=3&aimerror=1');
+if ($response[0] != 1)
+{
+	if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], 'order.php'))
+		Tools::redirect('order.php?step=3&cgv=1&aimerror=1');
+	elseif (strstr($_SERVER['HTTP_REFERER'], '?'))
+		Tools::redirect($_SERVER['HTTP_REFERER'].'&aimerror=1', '');
+	else
+		Tools::redirect($_SERVER['HTTP_REFERER'].'?aimerror=1', '');
+}
 else 
 {
 	/* Does the cart exist and is valid? */

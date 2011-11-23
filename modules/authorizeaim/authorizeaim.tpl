@@ -30,7 +30,7 @@
 		<p style="color: red;">{l s='Error, please verify the card information' mod='authorizeaim'}</p>
 	{/if}
 
-	<form id="aut" name="authorizeaim_form" id="authorizeaim_form" action="{$module_dir}validation.php" method="post">
+	<form name="authorizeaim_form" id="authorizeaim_form" action="{$module_dir}validation.php" method="post">
 		<span style="border: 1px solid #595A5E;display: block;padding: 0.6em;text-decoration: none;margin-left: 0.7em;">
 			<a id="click_authorizeaim" href="#" title="{l s='Pay with authorizeaim' mod='authorizeaim'}" style="display: block;text-decoration: none; font-weight: bold;">
 				{if $cards.visa == 1}<img src="{$module_dir}cards/visa.gif" alt="{l s='visa logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
@@ -40,11 +40,8 @@
 				&nbsp;&nbsp;{l s='Secured credit card payment with Authorize.net' mod='authorizeaim'}
 			</a>
 
-				{if $isFailed == 0}
-						<div id="aut2"style="display:none">
-				{else}
-						<div id="aut2">
-				{/if}
+				<div id="aut2">
+
 				<br /><br />			
 
 				<div style="width: 136px; height: 165px; float: left; padding-top:40px; padding-right: 20px; border-right: 1px solid #DDD;">
@@ -54,7 +51,7 @@
 					<input type="hidden" name="{$k}" value="{$v}" />
 				{/foreach}
 
-				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Full name' mod='authorizeaim'}</label> <input type="text" name="name" id="fullname" size="30" maxlength="25S" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
+				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Full name' mod='authorizeaim'}</label> <input type="text" name="name" id="fullname" size="27" maxlength="25S" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
 				
 				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Card Type' mod='authorizeaim'}</label>
 				<select id="cardType">
@@ -65,7 +62,7 @@
 				</select>
 				<img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
 				
-				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Card number' mod='authorizeaim'}</label> <input type="text" name="x_card_num" id="cardnum" size="30" maxlength="16" autocomplete="Off" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
+				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Card number' mod='authorizeaim'}</label> <input type="text" name="x_card_num" id="cardnum" size="27" maxlength="16" autocomplete="Off" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
 				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Expiration date' mod='authorizeaim'}</label> 
 				<select name="x_exp_date_m" style="width: 40px;">{section name=date_m start=01 loop=13}
 					<option value="{$smarty.section.date_m.index}">{$smarty.section.date_m.index}</option>{/section}
@@ -76,8 +73,9 @@
 				</select>
 				<img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
 				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='CVV' mod='authorizeaim'}</label> <input type="text" name="x_card_code" id="x_card_code" size="4" maxlength="4" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;"/> <img src="{$module_dir}help.png" id="cvv_help" title="{l s='the 3 last digits on the back of your credit card' mod='authorizeaim'}" alt="" /><br /><br />
-			<img src="{$module_dir}cvv.png" id="cvv_help_img" alt=""style="display: none;margin-left: 211px;" />
-				<input type="button" id="asubmit" value="{l s='Validate order' mod='authorizeaim'}" style="margin-left: 129px; padding-left: 25px; padding-right: 25px;" class="button" />
+				<img src="{$module_dir}cvv.png" id="cvv_help_img" alt=""style="display: none;margin-left: 211px;" />
+				<p style="text-align: center; width: 200px; float: left; margin: 10px 0 15px 102px;"><input type="submit" id="asubmit" value="{l s='Make payment' mod='authorizeaim'}" onclick="return checkAimForm();" style="" class="button exclusive_large" /></p>
+				<div class="clear"></div>
 			</div>
 		</span>
 	</form>
@@ -86,38 +84,28 @@
 	var mess_error = "{l s='Please check your credit card information (Credit card type, number and expiration date)' mod='authorizeaim' js=1}";
 	var mess_error2 = "{l s='Please specify your Full Name' mod='authorizeaim' js=1}";
 	{literal}
-		$(document).ready(function(){
-			$('#click_authorizeaim').click(function(e){
-				e.preventDefault();
-				$('#click_authorizeaim').fadeOut("fast",function(){
-					$("#aut2").show();
-					$('#click_authorizeaim').fadeIn('fast');
-				});
-				$('#click_authorizeaim').unbind();
-				$('#click_authorizeaim').click(function(e){
-					e.preventDefault();
-				});
-			});
-
-			$('#cvv_help').click(function(){
-				$("#cvv_help_img").show();
-				$('#cvv_help').unbind();
-			});
-
-			$('#asubmit').click(function()
+		function checkAimForm()
+		{
+			if ($('#fullname').val() == '')
 			{
-				if ($('#fullname').val() == '')
-				{
-					alert(mess_error2);
-				}
-				else if (!validateCC($('#cardnum').val(), $('#cardType').val()) || $('#x_card_code').val() == '')
-				{
-					alert(mess_error);
-				}
-				else
-				{
-					$('#aut').submit();
-				}
+				alert(mess_error2);
+				return false;
+			}
+			else if (!validateCC($('#cardnum').val(), $('#cardType').val()) || $('#x_card_code').val() == '')
+			{
+				alert(mess_error);
+				return false;
+			}
+			else
+			{
+				return $('#authorizeaim_form').submit();
+			}
+		}
+			
+		$(document).ready(function(){
+			$('#cvv_help').click(function(){
+				$('#cvv_help_img').show();
+				$('#cvv_help').unbind();
 			});
 		});
 
