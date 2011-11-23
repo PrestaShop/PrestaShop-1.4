@@ -26,12 +26,14 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_2937b5dab08029b1055b37c98a98d74
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_3b8a6fa58a71e7448c264c9dc61e6904'] = 'logo american express';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_1edaf23879c3b52a8df80069d2af3cef'] = 'Paiement sécurisé avec Authorize.net';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f11b368cddfe37c47af9b9d91c6ba4f0'] = 'Nom';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_379c80c789f0f3e0165b5e6d5df839ca'] = 'Type de carte';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_a44217022190f5734b2f72ba1e4f8a79'] = 'Numero de CB';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_8c1279db4db86553e4b9682f78cf500e'] = 'Date d\'expiration';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_60a104dc50579d60cbc90158fada1dcf'] = 'Code CVV';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_6149e52c36edb9ee4494d5412e42eef2'] = 'les 3 derniers chifres au dos de votre carte';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_40566b26dcc126bce704f2c1d622a6a3'] = 'Confirmer la commande';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_9286982d71addb45ad3a9472282f2c69'] = 'Votre numero de CB est erroné';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_5dfe4041e37dfb15cdbdfe8b977950f5'] = 'Veuillez vérifier vos informations bancaires (type de carte de crédit, numéro et date d\'expiration)';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_90c9737c99792791c8fe7c9e469bae9c'] = 'Merci de spécifier votre prénom et nom';
 $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Votre commande sur';
 $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'Est reussie';
 $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab5bf32aec87'] = 'Votre commende vous sera expedié le plus rapidement possible';
