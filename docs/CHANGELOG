@@ -24,6 +24,165 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.6.1 - 10553 (2011-11-23)  #
+####################################
+
+	Added Features:
+
+	[+] Project : added new mode "_PS_MODE _DEMO_" when this option is activated, some features are disable, like module upload...
+
+	[+] BO : New Mobile tab for modules
+	[+] BO : fixed bug on category tree view
+
+	[+] MO : Module MailJet (1.0)
+	[+] MO : Module Shopping Flux Export (1.4)
+	[+] MO : Update Ogone to use the new system to store payment cc details
+	[+] MO : Update Paypal to use the new system to store payment cc details
+	[+] MO : autoupgrade - now autoupgrade handle ZipArchive missing class
+	[+] MO : importermagento management of real payment
+
+	[+] TR : Added translations for Authorize.net AIM module
+
+	Improved/changed features:
+
+	[*] Installer : Canada taxes
+
+	[*] FO : #PSCFI-3841 : Bug Fixed : Comparator error: You cannot add more than 3 products(s) in the product comparator
+
+	[*] BO : #PSCFI-3830 Deleted upload files are not removed from download directory (when adding a product)
+	[*] BO : #PSCFI-3875 Can't search for customers when creating vouchers
+	[*] BO : #PSCFI-3911 : Bug fixed : Combination Import Deletes Existing Images
+	[*] BO : Autoupgrade update
+	[*] BO : Cleanup extra tabs and spaces
+	[*] BO : Flush Memcache server after enable it PSCFI-4056
+	[*] BO : combination import works now without the "delete existing images" option, because every images from the .csv file were deleted if the option was set to '1', except the last one.
+
+	[*] MO : Added a validation method for Credit cards in Authorize.net AIM
+	[*] MO : Module eBay (1.3.2) - Now handle tax, short description, features and quantity synchronisation on multi sku
+	[*] MO : MondialRelay update
+	[*] MO : Re-designed the Authorize.net AIM module
+	[*] MO : TNT (1.1)
+
+	[*] WS : Add error_log to error handler
+
+	[*] LO : Canada - Default group use tax excluded display
+
+	Fixed bugs:
+
+	[-] Project : Daylight Saving Time fix
+	[-] Project : stripslashes removed in ObjectModel::__construct(). Beware of collateral effects !
+
+	[-] Installer : some unique keys have been converted to primary keys
+
+	[-] FO : #PSCFI-3812 : bug fixed : Product comparison using SSL (Product comparison doesn't use SSL anymore)
+	[-] FO : #PSCFI-3812 : bug fixed : Product comparison using SSL (Product comparison doesn't use SSL anymore)
+	[-] FO : #PSCFI-3992: bug fixed : title tag missing in and not generated properly when minify html is turned on
+	[-] FO : #PSCFI-4018 : fixed a problem friendly URLS with the block module
+	[-] FO : #PSCFI-4028 : Modified the treatment in Module::_getApplicableTemplateDir(). Added the correct path for access to modules
+	[-] FO : #PSCFI-4041 : fixed a problem of treatment of datas formet in Link::getProductLink()
+	[-] FO : #PSCFI-4041 : fixed too a problem of variable name
+	[-] FO : #PSCFI-4053 : Modified the "smarty_modifier_truncate" method for middle params
+	[-] FO : #PSCFI-4084 : Deleted strtolower for the blockcms when the blocklayered is installed
+	[-] FO : #PSCFI-4084 : fixed a problem of encoding and added some treatments
+	[-] FO : #PSCFI-4197 : fixed a problem of voucher
+	[-] FO : Bug Fixed #PSCFI-3785 - Incorrect price on product page (combination + discount amount + currency)
+	[-] FO : Bug Fixed #PSCFI-3797 - Reduction by client group/category incorrect on combination (product page)
+	[-] FO : Ean13 added to the combinations for the product sheet
+	[-] FO : Fixed bug PSCFI-3987 -  Accept term of service during order checkout was not working if Javascript was disabled
+	[-] FO : PSCFI-3838 : Added a character in for the English version for order-detail.tpl
+	[-] FO : fixed bug #PSCFI-3665 - Error in Products per Page in F.O.
+	[-] FO : fixed bug #PSCFI-3770 - Authenticatio.tpl wrong for attribute for email fiedl
+	[-] FO : fixed bug #PSCFI-3782 - Some debug in a template that have been forget
+	[-] FO : fixed bug #PSCFI-3829 Illegal use of maxlength attribute for input element of type file
+	[-] FO : fixed bug #PSCFI-3857 - Shipping costs are not updated in cart block if cart block (with ajax disabled) is in left column
+	[-] FO : fixed bug on live edit when 2 module are in the same column
+	[-] FO : removed the empty space in the my account block
+
+	[-] BO :  Fixed bug PSCFI-3956 - imageResize was not pointing to the right folder
+	[-] BO : #PSCFI-3827 : Modified treatment. now the limit of upload can be modified in the "preferences" tab
+	[-] BO : #PSCFI-3922 : Added a space in a sentence
+	[-] BO : #PSCFI-3941 : add a number for obtaining coordinates that were not allowed in the structure of the 'store' table (for longitude and latitude, above 100.0 he returned 99.999999)
+	[-] BO : #PSCFI-4048 : Deleted a double "/" in functions.php
+	[-] BO : #PSCFI-4121 : bug fixed : Combination minimum quantity
+	[-] BO : #PSCFI-4121 : bug fixed : Combination minimum quantity (even when adding a combination)
+	[-] BO : #PSCFI-4160 : bug fixed : Theme directory check for AdminEmployees.php
+	[-] BO : Added a check on AdminTab to avoid error with fields validation
+	[-] BO : Added a translation for the upload limit
+	[-] BO : Bug Fixed #PSCFI-3890 - Group category reduction = incorrect price on AdminOrders
+	[-] BO : Changed isEmail back to revision 9590. FILTER_VAR not compliant with PHP < 5.2
+	[-] BO : Fixed #PSTP-41 - regex for mailsubject now handle correctly second parameter
+	[-] BO : Fixed PSCFI-3831 - The maximum size of sending files is now correctly displayed in the AdminProducts tab
+	[-] BO : Fixed bug #PSCFI-4014 - isEmail allowed invalid emails (repeated dots in email)
+	[-] BO : Fixed bug PSCFI-3941 - Store latitude length was not long enough
+	[-] BO : Fixed some code standards
+	[-] BO : fix bug on AdminPreference on Maintenance IP field
+	[-] BO : fix redirection when processing position change
+	[-] BO : fixed bug #PSCFI-3762 - E-mail subject "Your new admin password"
+	[-] BO : fixed bug #PSCFI-3843 - Excel has detected that "categories_import.cvs" is a SYLK file, but cannot load it
+	[-] BO : fixed bug #PSCFI-3854 - Import a product CSV instead of category CSV
+	[-] BO : fixed bug with broken action buttons on CMS page preview
+	[-] BO : no need to logout in order to use the new permissions
+	[-] BO : you can now set up quantities > 999999
+
+	[-] Classes : BugFix #PSCFI-4129 : Return syntax corrected
+	[-] Classes : BugFix #PSCFI-4184 : Invoice / Delivery PDF encoding
+	[-] Classes : fix bug #PSCFI-3794 - order delivery date was not updated when the order state is changed if it was already set.
+	[-] Classes : fixed bug #PSCFI-3824 - preg_last_error doesn't exist before PHP 5.2
+
+	[-] CORE : Fix the refreshing carrier box when the cart changes for carriers module
+
+	[-] MO : Bug Fixed #PSCFI-3768 - Little fix on translation
+	[-] MO : BugFix #PSCFI-3358 - The Cart dont refresh correctly When you ADD more of one product ... And you confirm the Order
+	[-] MO : BugFix #PSCFI-3358 - The Cart dont refresh correctly When you ADD more of one product ... And you confirm the Order
+	[-] MO : BugFix #PSCFI-3789 - I upgraded my store from 1.4.4.1 to 1.4.5.1 after this i cannot browse my categories i allways get "There are no products in this category."
+	[-] MO : BugFix #PSCFI-3834 - blocklayered - No access to product view under IE
+	[-] MO : Fedex Module (1.2.5) - better configuration check
+	[-] MO : Fix Module Paypal (2.8.4) fix fatal error
+	[-] MO : Fix Module Paypal (2.8.5) retrocompatibility to 1.3
+	[-] MO : Fix client address length (limit to 32 chars) and bad chad for number phone
+	[-] MO : Fixed Bug for Mondialrelay, Googlemap isn't activated anymore for IE users (all version) as the dancing markers for Mozilla
+	[-] MO : Fixed bug PSCFI-3718,  Better authentification compatibility using htaccess way
+	[-] MO : Fixed bug PSCFI-3861, Variable are properly casted to avoid any errors
+	[-] MO : Fixed bug PSCFI-3935, Jquery is now overloaded just under the AdminMondialrelay tab.
+	[-] MO : Fixed bug PSCFI-3954 - Wrong loyalty status displayed
+	[-] MO : Fixed several issues with Authorize.net module (AIM version)
+	[-] MO : Module Authorize.net test mode is now working properly (thx Wil :)
+	[-] MO : Module Trusted Shop (1.3.2) - Bug fixed on widget
+	[-] MO : Module Trusted Shop (1.3.3) - Bug fixed on PREFIX Table
+	[-] MO : Module eBay (1.3.3) - Fix on eBay order importer (problem with id carrier)
+	[-] MO : Module eBay (1.3.5) - Fix on eBay order importer (fixing duplicate order)
+	[-] MO : Mondialrelay, Improve One page checkout and fix the validation without a selection of a relay
+	[-] MO : PayPal Bug #PSCFI-3800
+	[-] MO : Shopping Flux (1.4.1) - Change module category
+	[-] MO : Twenga Bug #PSCFI-3793 - module now handle 64 char for login
+	[-] MO : Update gmap3 plugin and got better compatibilities with browsers
+	[-] MO : added, creation of level field in oscommerce import to improve the categories import
+	[-] MO : autoupgrade : #PSCFI-4037 - module is now correctly installed in all available languages present (Tools > Upgrade)
+	[-] MO : eKomi (1.2) - Language is based on default lang now
+	[-] MO : fixed bug #PSCFI-3584 - Blocksearch buggy when hooked into RIGHT_COLUMN (CSS and JS files not loaded, added too late)
+	[-] MO : fixed bug #PSCFI-3731 - Category and Subcategory not sorted - NOW you can choose if categories are sort by name or position and Ascending and Descending
+	[-] MO : fixed bug #PSCFI-3736 - Importing products from OSCommerce only imports in default category
+	[-] MO : fixed bug #PSCFI-3737 - Import product images from OSCommerce does not import images with space characters
+	[-] MO : fixed bug #PSCFI-3743 - ShopImporter doesnt recreate the /img/p directory after cleanup
+	[-] MO : fixed bug #PSCFI-3746 - The producttooltip module not compliant w3c
+	[-] MO : fixed bug #PSCFI-3761 - Typo in Block RSS module
+	[-] MO : fixed bug #PSCFI-3767 Typo in Autoupgrade module
+	[-] MO : fixed bug #PSCFI-3796 - ShopImporter validateSpecificOptions token is undefined
+	[-] MO : fixed bug #PSCFI-3811 - ShopImporter  allow to use an extended importmodule
+	[-] MO : fixed bug #PSCFI-4098 - Notice: Undefined variable: emc in Module "envoi moins cher"
+	[-] MO : fixed bug SQL Syntax error at mondialrelay
+	[-] MO : fixed bug import ocs required fields : date_format_lite, date_format_full
+	[-] MO : fixed bug on ShopImport when import multi languages
+	[-] MO : shopimporter :  fix test validate currency oscommerce/prestashop
+
+	[-] WS : Bug fix PSCFI-3904
+	[-] WS : Issue PSCFI-3804, setCurrentState 2nd parameter now optional (only for webservice)
+
+	[-] TR : thanks a lot to Conny for improving our translations
+	[-] TR : thanks to Conny, Christian and Lucas for theses translations
+
+
+####################################
 #   v1.4.5.1 - 9352 (2011-10-14)  #
 ####################################
 
