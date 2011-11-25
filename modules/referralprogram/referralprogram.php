@@ -461,7 +461,9 @@ class ReferralProgram extends Module
 			{
 				$referralprogram->id_customer = (int)$newCustomer->id;
 				$referralprogram->save();
-				if ($referralprogram->registerDiscountForSponsored((int)$params['cookie']->id_currency))
+				$stats = $sponsor->getStats();
+				$nb_orders_customer = (int)$stats['nb_orders'];
+				if ((int)$nb_orders_customer >= (int)$this->_configuration['REFERRAL_ORDER_QUANTITY'] && $referralprogram->registerDiscountForSponsored((int)$params['cookie']->id_currency))
 				{
 					$discount = new Discount((int)$referralprogram->id_discount);
 					if (Validate::isLoadedObject($discount))
