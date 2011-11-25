@@ -79,6 +79,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_9868c3ac0748acf3b981a96cfe163ee
 $_MODULE['<{blocklayered}prestashop>blocklayered_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
 $_MODULE['<{blocklayered}prestashop>blocklayered_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8531c73de81b9ed94322dda7cf947daa'] = 'Afficher le nombre de produits qui correspondent';
+$_MODULE['<{blocklayered}prestashop>blocklayered_ee61c015043c79c1370fc14980dd27b9'] = 'Voir les produits des sous-catégories';
 $_MODULE['<{blocklayered}prestashop>blocklayered_cf565402d32b79d33f626252949a6941'] = 'Configuration enregistré';
 $_MODULE['<{blocklayered}prestashop>blocklayered_3601146c4e948c32b6424d2c0a7f0118'] = 'Prix';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8c489d0946f66d17d73f26366a4bf620'] = 'Poids';

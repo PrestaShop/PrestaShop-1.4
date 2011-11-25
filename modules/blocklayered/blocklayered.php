@@ -37,7 +37,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = 1.5;
+		$this->version = '1.6';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -60,6 +60,7 @@ class BlockLayered extends Module
 		{
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', 0);
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
+			Configuration::updateValue('PS_LAYERED_FULL_TREE', 1);
 			
 			$this->rebuildLayeredStructure();
 			$this->rebuildLayeredCache();
@@ -89,6 +90,7 @@ class BlockLayered extends Module
 		/* Delete all configurations */
 		Configuration::deleteByName('PS_LAYERED_HIDE_0_VALUES');
 		Configuration::deleteByName('PS_LAYERED_SHOW_QTIES');
+		Configuration::deleteByName('PS_LAYERED_FULL_TREE');
 		Configuration::deleteByName('PS_LAYERED_INDEXED');
 		
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_price_index');
@@ -1190,6 +1192,7 @@ class BlockLayered extends Module
 		{
 			Configuration::updateValue('PS_LAYERED_HIDE_0_VALUES', Tools::getValue('ps_layered_hide_0_values'));
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', Tools::getValue('ps_layered_show_qties'));
+			Configuration::updateValue('PS_LAYERED_FULL_TREE', Tools::getValue('ps_layered_full_tree'));
 			
 			$html .= '
 			<div class="conf">
@@ -1721,6 +1724,15 @@ class BlockLayered extends Module
 							'.$this->l('No').' <input type="radio" name="ps_layered_show_qties" value="0" '.(!Configuration::get('PS_LAYERED_SHOW_QTIES') ? 'checked="checked"' : '').' />
 						</td>
 					</tr>
+					<tr>
+						<td style="text-align: right;">'.$this->l('Show products from subcategories').'</td>
+						<td>
+							<img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />
+							'.$this->l('Yes').' <input type="radio" name="ps_layered_full_tree" value="1" '.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'checked="checked"' : '').' />
+							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
+							'.$this->l('No').' <input type="radio" name="ps_layered_full_tree" value="0" '.(!Configuration::get('PS_LAYERED_FULL_TREE') ? 'checked="checked"' : '').' />
+						</td>
+					</tr>
 				</table>
 				<p style="text-align: center;"><input type="submit" class="button" name="submitLayeredSettings" value="'.$this->l('Save configuration').'" /></p>
 			</form>
@@ -1833,10 +1845,18 @@ class BlockLayered extends Module
 		
 		$parent = new Category((int)$id_parent);
 		if (!count($selectedFilters['category']))
-			$queryFiltersFrom .= ' INNER JOIN '._DB_PREFIX_.'category_product cp
-			ON p.id_product = cp.id_product
-			INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category
-			AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')';
+		{
+			if (Configuration::get('PS_LAYERED_FULL_TREE'))
+				$queryFiltersFrom .= ' INNER JOIN '._DB_PREFIX_.'category_product cp
+				ON p.id_product = cp.id_product
+				INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND
+				'.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright : 'c.id_category = '.(int)$id_parent).')';
+			else
+				$queryFiltersFrom .= ' INNER JOIN '._DB_PREFIX_.'category_product cp
+				ON p.id_product = cp.id_product
+				INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category
+				AND c.id_category = '.(int)$id_parent.')';
+		}
 
 		foreach ($selectedFilters as $key => $filterValues)
 		{
@@ -1997,7 +2017,9 @@ class BlockLayered extends Module
 			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product AND i.cover = 1)
 			LEFT JOIN '._DB_PREFIX_.'image_lang il ON (i.id_image = il.id_image AND il.id_lang = '.(int)($cookie->id_lang).')
 			LEFT JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer)
-			WHERE p.`active` = 1 AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.' AND pl.id_lang = '.(int)$cookie->id_lang.'
+			WHERE p.`active` = 1 AND
+			'.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright : 'c.id_category = '.(int)$id_parent).'
+			AND pl.id_lang = '.(int)$cookie->id_lang.'
 			AND p.id_product IN ('.implode(',', $productIdList).')'
 			.' GROUP BY p.id_product ORDER BY '.Tools::getProductsOrder('by', Tools::getValue('orderby'), true).' '.Tools::getProductsOrder('way', Tools::getValue('orderway')).
 			' LIMIT '.(((int)Tools::getValue('p', 1) - 1) * $n.','.$n));
@@ -2055,7 +2077,8 @@ class BlockLayered extends Module
 					FROM '._DB_PREFIX_.'product p ';
 					$sqlQuery['join'] = '
 					INNER JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
-					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.') ';
+					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND
+					'.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright : 'c.id_category = '.(int)$id_parent).') ';
 					$sqlQuery['where'] = 'WHERE p.`active` = 1 ';
 					$sqlQuery['group'] = ' GROUP BY p.id_product ';
 					break;
@@ -2067,8 +2090,8 @@ class BlockLayered extends Module
 					INNER JOIN  `'._DB_PREFIX_.'category` c ON (c.id_category = cp.id_category)
 					INNER JOIN '._DB_PREFIX_.'product p ON (p.id_product = cp.id_product AND p.active = 1)
 					INNER JOIN '._DB_PREFIX_.'manufacturer m ON (m.id_manufacturer = p.id_manufacturer) ';
-					$sqlQuery['where'] = '
-					WHERE c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.' ';
+					$sqlQuery['where'] = 'WHERE 
+					'.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright : 'c.id_category = '.(int)$id_parent).' ';
 					$sqlQuery['group'] = ' GROUP BY p.id_manufacturer ';
 					break;
 
@@ -2100,7 +2123,8 @@ class BlockLayered extends Module
 					AND p.id_product IN (
 					SELECT id_product
 					FROM '._DB_PREFIX_.'category_product cp
-					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')) ';
+					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND 
+					'.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright : 'c.id_category = '.(int)$id_parent).')) ';
 					$sqlQuery['group'] = '
 					GROUP BY lpa.id_attribute
 					ORDER BY id_attribute_group, id_attribute ';
@@ -2125,7 +2149,8 @@ class BlockLayered extends Module
 					AND p.id_product IN (
 					SELECT id_product
 					FROM '._DB_PREFIX_.'category_product cp
-					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright.')) ';
+					INNER JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category AND
+					'.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'c.nleft >= '.(int)$parent->nleft.' AND c.nright <= '.(int)$parent->nright : 'c.id_category = '.(int)$id_parent).')) ';
 					$sqlQuery['group'] = 'GROUP BY fv.id_feature_value ';
 					break;
 
