@@ -24,6 +24,21 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.6.2 - 10647 (2011-11-25)  #
+####################################
+
+	Added Features:
+
+	[+] MO : Shopping Flux / MailJet
+
+	Fixed bugs:
+
+	[-] BO : fixed bug #PSCFI-4154 - submit image product bug
+
+	[-] SQL : fixed primary keys issue on Cart_product
+
+
+####################################
 #   v1.4.6.1 - 10553 (2011-11-23)  #
 ####################################
 
@@ -61,7 +76,6 @@ Release Notes for PrestaShop 1.4
 	[*] MO : Module eBay (1.3.2) - Now handle tax, short description, features and quantity synchronisation on multi sku
 	[*] MO : MondialRelay update
 	[*] MO : Re-designed the Authorize.net AIM module
-	[*] MO : TNT (1.1)
 
 	[*] WS : Add error_log to error handler
 
@@ -74,7 +88,6 @@ Release Notes for PrestaShop 1.4
 
 	[-] Installer : some unique keys have been converted to primary keys
 
-	[-] FO : #PSCFI-3812 : bug fixed : Product comparison using SSL (Product comparison doesn't use SSL anymore)
 	[-] FO : #PSCFI-3812 : bug fixed : Product comparison using SSL (Product comparison doesn't use SSL anymore)
 	[-] FO : #PSCFI-3992: bug fixed : title tag missing in and not generated properly when minify html is turned on
 	[-] FO : #PSCFI-4018 : fixed a problem friendly URLS with the block module
@@ -91,7 +104,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : Fixed bug PSCFI-3987 -  Accept term of service during order checkout was not working if Javascript was disabled
 	[-] FO : PSCFI-3838 : Added a character in for the English version for order-detail.tpl
 	[-] FO : fixed bug #PSCFI-3665 - Error in Products per Page in F.O.
-	[-] FO : fixed bug #PSCFI-3770 - Authenticatio.tpl wrong for attribute for email fiedl
+	[-] FO : fixed bug #PSCFI-3770 - Authenticatio.tpl wrong for attribute for email field
 	[-] FO : fixed bug #PSCFI-3782 - Some debug in a template that have been forget
 	[-] FO : fixed bug #PSCFI-3829 Illegal use of maxlength attribute for input element of type file
 	[-] FO : fixed bug #PSCFI-3857 - Shipping costs are not updated in cart block if cart block (with ajax disabled) is in left column
@@ -104,7 +117,6 @@ Release Notes for PrestaShop 1.4
 	[-] BO : #PSCFI-3941 : add a number for obtaining coordinates that were not allowed in the structure of the 'store' table (for longitude and latitude, above 100.0 he returned 99.999999)
 	[-] BO : #PSCFI-4048 : Deleted a double "/" in functions.php
 	[-] BO : #PSCFI-4121 : bug fixed : Combination minimum quantity
-	[-] BO : #PSCFI-4121 : bug fixed : Combination minimum quantity (even when adding a combination)
 	[-] BO : #PSCFI-4160 : bug fixed : Theme directory check for AdminEmployees.php
 	[-] BO : Added a check on AdminTab to avoid error with fields validation
 	[-] BO : Added a translation for the upload limit
@@ -132,7 +144,6 @@ Release Notes for PrestaShop 1.4
 	[-] CORE : Fix the refreshing carrier box when the cart changes for carriers module
 
 	[-] MO : Bug Fixed #PSCFI-3768 - Little fix on translation
-	[-] MO : BugFix #PSCFI-3358 - The Cart dont refresh correctly When you ADD more of one product ... And you confirm the Order
 	[-] MO : BugFix #PSCFI-3358 - The Cart dont refresh correctly When you ADD more of one product ... And you confirm the Order
 	[-] MO : BugFix #PSCFI-3789 - I upgraded my store from 1.4.4.1 to 1.4.5.1 after this i cannot browse my categories i allways get "There are no products in this category."
 	[-] MO : BugFix #PSCFI-3834 - blocklayered - No access to product view under IE
