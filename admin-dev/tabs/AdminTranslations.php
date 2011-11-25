@@ -349,7 +349,7 @@ class AdminTranslations extends AdminTab
 					if (array_key_exists($post_key, $_POST) AND !empty($_POST[$post_key]) AND !in_array($pattern, $array_check_duplicate))
 					{
 						$array_check_duplicate[] = $pattern;
-						$str_write .= '$_MODULE['.$pattern.'] = \''.pSQL($_POST[$post_key]).'\';'."\n";
+						$str_write .= '$_MODULE['.$pattern.'] = \''.pSQL(str_replace(array("\r\n", "\r", "\n"), ' ', $_POST[$post_key])).'\';'."\n";
 						$this->total_expression++;
 					}
 				}
