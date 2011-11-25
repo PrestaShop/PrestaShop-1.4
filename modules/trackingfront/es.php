@@ -49,3 +49,5 @@ $_MODULE['<{trackingfront}prestashop>trackingfront_11ff9f68afb6b8b5b8eda218d7c83
 $_MODULE['<{trackingfront}prestashop>trackingfront_da9cb586c6689202ca65cd77fd9b84ef'] = 'Carrito medio';
 $_MODULE['<{trackingfront}prestashop>trackingfront_200f5c9c419f0a53d5d361eff7b33abc'] = 'Evolución de registros';
 $_MODULE['<{trackingfront}prestashop>trackingfront_89741aae300253f498b0993fa678fa18'] = 'Evolución pedidos';
+
+?>

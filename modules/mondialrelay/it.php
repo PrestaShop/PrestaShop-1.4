@@ -27,7 +27,9 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_c888438d14855d7d96a2724ee9c306b
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_07213a0161f52846ab198be103b5ab43'] = 'errori';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_cb5e100e5a9a3e7f6d1fd97512215282'] = 'errore';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_350c1cc4343826a89f08a33bb49c6d98'] = 'Configura del Modulo Mondial Relay';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_192a5439bcfb850e8885cd4b5e01ced4'] = 'Prova a disattivare la cache e mettere la compilazione forza su se avete problemi con il modulo dopo un aggiornamento';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_5a2355a42ba3ab265701183c914467f2'] = 'Prova a mettere su off la cache, e forza la ricompilazione';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_3de769f9a81eed916583d5b35c58dbdd'] = 'se hai qualche problema con il modulo dopo l\'aggiornamento';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_8f8b21bd013b38d1e3059557c22a57e7'] = 'Guarda il link seguente HOW-TO per trovare aiuto nella configurazione del modulo Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d21a9f93917604d5490ad529a7cf1ff9'] = 'Per creare un corriere Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Inserisci e salva le impostazioni dell\'account Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_94fbe32464fcfa902feed9f256439833'] = 'Creare un Carrier utilizzando il modulo \"aggiungi un vettore\" qui sotto';
@@ -90,6 +92,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_c6aefd5e2191e1210a2f50416812b51
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_61e70b58e38fd01daa254f44c4fa264b'] = 'N. Point Relay:';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_bba366864d25056c941b72f18ef79e7c'] = 'Questo errore non è contemplata:';
 $_MODULE['<{mondialrelay}prestashop>orderdetail_81b7b4587a2a3ea7a0d6bb1df3fbba54'] = 'Consegna a';
+$_MODULE['<{mondialrelay}prestashop>orderdetail_c2d05abc7f5ebdc72b6656df35038b43'] = 'Segui il tracking del tuo pacco sul sito di Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_a1c3470a944b9625cfb924fd15c8bdbf'] = 'Si prega di selezionare almeno un ordine';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_dc41aac14af17f1d19fca5e3b9439e74'] = 'Questo tasto';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_306b346c19017609403424203ea3d720'] = 'è vuoto e deve essere riempito';
@@ -105,6 +108,7 @@ $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_557595c2e17c9948a9448eb763ac
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_017ca6b770ad53669a4eec82894dfcd3'] = 'Verifica il tuo indirizzo 1 configurazione';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_3f79e1fc66b4f9cca7bd68cab176020d'] = 'Si prega di controllare la configurazione della città';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_404665d9b65239985d59b30b3dcb26b5'] = 'Si prega di controllare la configurazione del codice postale';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_74cb73eddbe6eaf556023f943fc7e1fd'] = 'Sembra che il layout del CAP della tua nazione non sia configurato o settato correttamente';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_0b8a30478b9572b86718989d483fd88d'] = 'Si prega di controllare la configurazione del paese';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_7ddf2d94bf037b7d1088c0600ea589c3'] = 'Si prega di controllare la configurazione del telefono';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_9c7ce7be9a2c593b24d448edb4f804e0'] = 'Controlla la tua configurazione della posta';
@@ -145,6 +149,7 @@ $_MODULE['<{mondialrelay}prestashop>mrrelaydetail_9d1a0949c39e66a0cd65240bc0ac91
 $_MODULE['<{mondialrelay}prestashop>mrrelaydetail_2653c23b8c0daac59571e4be5e8fa7d0'] = 'Il webservice Mondial Relay non è attualmente affidabile';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_d1908b9b04e81c4b6112e38b608c49af'] = 'Grazie per correggere gli errori gentilmente seguenti';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_ccce63109db30895153094de05c60fa5'] = 'la pagina contatti';
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_7c5fd3d93bd19d81953db3b374997961'] = 'Per favore guarda questo avvertimento, probabilmente il ticket non è stato generato';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_de21dc13e1ea638777fbfad49f88b332'] = 'Tutti gli ordini che hanno lo stato';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_a0bf3c9ac2d785f053d883b8746e91ba'] = 'sarà disponibile per la creazione di adesivi';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_2345e28c9b93f368968be4781ed70f5c'] = 'Modificare la configurazione';

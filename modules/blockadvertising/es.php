@@ -13,3 +13,5 @@ $_MODULE['<{blockadvertising}prestashop>blockadvertising_56d9dfa26d7848a3fbcd2ae
 $_MODULE['<{blockadvertising}prestashop>blockadvertising_9ce38727cff004a058021a6c7351a74a'] = 'Enlace de la imagen';
 $_MODULE['<{blockadvertising}prestashop>blockadvertising_b78a3223503896721cca1303f776159b'] = 'Título';
 $_MODULE['<{blockadvertising}prestashop>blockadvertising_f9ab05454998236921a6b0e281fae632'] = 'Validar';
+
+?>

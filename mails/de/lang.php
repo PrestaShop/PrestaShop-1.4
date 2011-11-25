@@ -35,6 +35,9 @@ $_LANGMAIL['Error reporting from your PayPal module'] = 'Fehlerbericht aus Ihrem
 $_LANGMAIL['Congratulations!'] = 'Gratulation';
 $_LANGMAIL['Referral Program'] = 'Partnerprogramm';
 $_LANGMAIL['A friend sent you a link to'] = 'Ein Freund hat Ihnen einen Link gesandt zu';
+$_LANGMAIL['Log: You have a new alert from your shop'] = 'Sie haben eine neue Log-Warnung erhalten';
+$_LANGMAIL['Message from \').$customer->lastname.\' '] = 'Nachricht von \').$customer->lastname.\'';
 $_LANGMAIL[' $subject'] = 'Betreff';
+$_LANGMAIL['A friend sent you a link to\').\' '] = 'Ein Freund hat ein Link an \').\' gesendet.';
 
 ?>

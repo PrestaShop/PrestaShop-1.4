@@ -11,6 +11,6 @@ $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_63b1ba91576576e6cf2da6fab76
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_95d2137c196c7f84df5753ed78f18332'] = 'Meine Gutscheine';
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_c87aacf5673fada1108c9f809d354311'] = 'Abmelden';
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_ecf3e4f8f34a293099620cc25d5b4d93'] = 'Mein Kontoblock';
-$_MODULE['<{blockmyaccount}prestashop>blockmyaccount_0b9bc7f3bb601ef8959509352aea493b'] = 'Zeigt ein Block mit Links bezüglich des Benutzerkontos an';
+$_MODULE['<{blockmyaccount}prestashop>blockmyaccount_0b9bc7f3bb601ef8959509352aea493b'] = 'Fügt einen Benutzerkontoblock hinzu';
 
 ?>

@@ -15,3 +15,5 @@ $_MODULE['<{statsdata}prestashop>statsdata_6511e0043f774246017a4c255e1e10c3'] = 
 $_MODULE['<{statsdata}prestashop>statsdata_48f08588e7f264b5ea1e7ea56ed768f6'] = 'Detección de plug-ins';
 $_MODULE['<{statsdata}prestashop>statsdata_54e5f8bdd6c51a73d79ed702cdc9ac05'] = 'La detección de los plug-ins carga un archivo javascript de 20 ko suplementario para los nuevos visitantes.';
 $_MODULE['<{statsdata}prestashop>statsdata_06933067aafd48425d67bcb01bba5cb6'] = 'Actualizar';
+
+?>

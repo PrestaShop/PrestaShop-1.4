@@ -2,6 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_9ff0635f5737513b1a6f559ac2bff745'] = 'Novedades';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_60efcc704ef1456678f77eb9ee20847b'] = 'Todas las novedades';
+$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_2bc4c1efe10bba9f03fac3c59b4d2ae9'] = 'no hay nuevos productos en este momento';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_f7c34fc4a48bc683445c1e7bbc245508'] = 'Bloque de novedades';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_cc68052332d758d991b64087c6e4352e'] = 'Mostrar el bloque con los nuevos productos añadidos';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_57af4b7e82ba04c42eb3ac111310a505'] = 'Debe rellenar el campo \"productos mostrados\"';
@@ -16,6 +19,5 @@ $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_00d23a76e43b46dae9ec7aa
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_53d61d1ac0507b1bd8cd99db8d64fb19'] = 'Mostrar este bloque aunque no haya productos disponibles';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_9ff0635f5737513b1a6f559ac2bff745'] = 'Novedades';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_60efcc704ef1456678f77eb9ee20847b'] = 'Todas las novedades';
-$_MODULE['<{blocknewproducts}prestashop>blocknewproducts_2bc4c1efe10bba9f03fac3c59b4d2ae9'] = 'no hay nuevos productos en este momento';
+
+?>

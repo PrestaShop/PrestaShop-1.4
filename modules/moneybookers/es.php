@@ -11,6 +11,7 @@ $_MODULE['<{moneybookers}prestashop>confirmation_df194447dfecf36bb8043bd8d94feed
 $_MODULE['<{moneybookers}prestashop>confirmation_047e219d25b398033511b18041dbfd7a'] = 'Su pedido será enviado tan pronto como recibamos su transferencia bancaria.';
 $_MODULE['<{moneybookers}prestashop>confirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nos hemos dado cuenta de un problema con su pedido.  Si usted piensa que esto es un error, puede contactar con nuestro';
 $_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'rnNo puede efectuar el pago de su pedido con Moneybookers ya que su divisa actual no está autorizada. Por favor, elija otra.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_27266fe4d37bf06589c7c6dbf2d5c067'] = 'Pagar por';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28c'] = 'Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a356736cbcf740f8648d71067fca090d'] = 'Acepta pagos por Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de que quiere eliminar sus datos?';
@@ -33,6 +34,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_4f4c1b5e5d775709e08ccc3afad1a5c
 $_MODULE['<{moneybookers}prestashop>moneybookers_acf2b73b741f10cd1e0d075ed43fed39'] = 'Con más de 17 millones de usuarios y más de 15.000 nuevas cuentas creadas cada día, Moneybookers también ofrece uno de los mayores monedero electrónico en el mundo. Sus clientes también pueden pagar por medio de su e-mail y contraseña gracias a la solución de e-Wallet.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_76264fd7352f803c63396bc27b0ee893'] = '¡Moneybookers cambia de nombre y se convierte en Skrill!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
+$_MODULE['<{moneybookers}prestashop>moneybookers_dcb9d2155cf2b2ca72e501943e26c20c'] = 'Puede mostrar el logo de Skrill/Moneybookers  en su tienda, esto ayuda a sus compradores a saber que es un comerciante serio';
 $_MODULE['<{moneybookers}prestashop>moneybookers_e86e85752dd7a7b31bb935c862480cee'] = 'Seleccione la posición del logotipo';
 $_MODULE['<{moneybookers}prestashop>moneybookers_239d45036930947dbf41506d27fa1aa7'] = 'Cambie de posición del logotipo en el Front Office. Funciona con';
 $_MODULE['<{moneybookers}prestashop>moneybookers_81149af5698332fdf2d6869a66b6ad12'] = 'Live edit';
@@ -45,9 +47,12 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_3513f0ecb96b6c959454534578ee140
 $_MODULE['<{moneybookers}prestashop>moneybookers_64d37ad3bf2f0aee7c8a321321c7e9d9'] = 'Ya tengo una cuenta en Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_b0e8c8326985417a5efdd6649f02e385'] = 'Gracias a la asociación entre PrestaShop y Moneybookers,';
 $_MODULE['<{moneybookers}prestashop>moneybookers_d5086eeb1bc1994c5abf945fd79d4246'] = '¡obtendrá una tasa de comisión preferencial!';
+$_MODULE['<{moneybookers}prestashop>moneybookers_fd90882b9b7c8653dd645f5e986b5402'] = 'Comisión disponible desde el 21 de Marzo  del 2011';
 $_MODULE['<{moneybookers}prestashop>moneybookers_68db2cda800ddb2ae307c60b0a96252f'] = 'Solución de pago en línea  de Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_b9c758264b134743b13a85ca4055c629'] = 'Estimación del volumen mensual de los pagos realizados a través de Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7d294d4900ff1a38f5b0a89612916eac'] = 'Para los comerciantes que sobrepasan 100 000€ se pueden establecer tarifas especiales.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_1467fcd161d2aee8146c7808c9377852'] = 'Para mirar la ultima actualización de las comisiones';
+$_MODULE['<{moneybookers}prestashop>moneybookers_936ccdb97115e9f35a11d35e3d5b5cad'] = 'Cliquear aqui';
 $_MODULE['<{moneybookers}prestashop>moneybookers_11c8ff1cde03aa19406dfe5971b92553'] = 'Monedero electrónico Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_223b661f7b13d33498a9274bb10e3538'] = 'Portal de Pedido Rápido Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f284fe53995a4cc2e1e099cb1e511ec8'] = 'Validación de cuenta';
@@ -56,8 +61,11 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_bd8df5ae85f76ba759fa979ada8566e
 $_MODULE['<{moneybookers}prestashop>moneybookers_558b256c79bbcf473cc7347ec1ca9d54'] = 'validar su cuenta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_71b5b9efebe9c2f73fad6dd1849b4312'] = 'Validar mi cuenta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_ece6bf0de28bb0442df6e3a1fd7657d4'] = 'Si necesita ayuda, lea la activación manual';
+$_MODULE['<{moneybookers}prestashop>moneybookers_32e70e9f3def9ebdcdbc872b739b919f'] = 'Puede probar la cuenta de Moneybookers con la cuenta de prueba testaccount2@moneybookers.com y al palabra secreta mbtest ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_f5944cfc42cfb20119407c59a97bd9d1'] = 'Cuidado, esta es solo una cuenta de prueba: No recibirá dinero si usa esta cuenta en su tienda. Para cobrar, debe usar su propio usuario y password de Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_0b65457508cf73c9ed8c96f56b8910ce'] = 'Validación de la palabra secreta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_e44efbda9396a5641d730f0ac4866e52'] = 'Su palabra secreta ha sido activada';
+$_MODULE['<{moneybookers}prestashop>moneybookers_98061690dbf6a359c5b2aeb84d0eb317'] = 'Usted necesita';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7360d9333103eec04f2d91fa513a1f46'] = 'valide su palabra secreta';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7986dbc3b2bf0e8f72a328c094981836'] = 'por favor, escriba la misma palabra secreta que introdujo en su cuenta en Moneybookers:';
 $_MODULE['<{moneybookers}prestashop>moneybookers_22f2d26badcc700d11b93f57dc96d386'] = 'Validar mi palabra secreta';
@@ -79,4 +87,5 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_554fd8768f165251646ce21ba499820
 $_MODULE['<{moneybookers}prestashop>moneybookers_a190bc880b04cf478e0370d1b315a5a3'] = 'Todos los logos en un bloque';
 $_MODULE['<{moneybookers}prestashop>moneybookers_852d04b5f455aaf5264e9a8c561ced71'] = 'Un bloque para cada logo';
 $_MODULE['<{moneybookers}prestashop>moneybookers_d4dccb8ca2dac4e53c01bd9954755332'] = 'Guardar los parámetros';
-$_MODULE['<{moneybookers}prestashop>moneybookers_27266fe4d37bf06589c7c6dbf2d5c067'] = 'Pagar por';
+
+?>

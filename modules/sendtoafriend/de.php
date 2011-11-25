@@ -12,7 +12,7 @@ $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_7ae8a9a7a5d8fa40d4515fc52f16b
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_2541d938b0a58946090d7abdde0d3890'] = 'senden';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_68728c1897e5936032fe21ffb6b10c2e'] = 'Zurück zur Produktseite';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_2074615eb70699e55b1f9289c6c77c25'] = 'An einen Freund senden-Modul';
-$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_3234e2609dd694d8763c390fe97eba04'] = 'Ermöglicht den Kunden, einen Produktlink an einen Freund zu senden';
+$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_3234e2609dd694d8763c390fe97eba04'] = 'Ermöglicht Ihren Kunden, einen Produktlink an Freunde zu senden';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_666f6333e43c215212b916fef3d94af0'] = 'Sie müssen alle Felder ausfüllen.';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_ed95f7e7c4691956e0d6f2cd0136d483'] = 'Die E-Mail Ihres Freunds ist ungültig.';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_0e2a8a9d9c363a1ed93e7822eb3fc0ca'] = 'Der Name Ihres Freundes ist ungültig.';

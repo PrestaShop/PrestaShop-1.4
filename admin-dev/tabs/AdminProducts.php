@@ -178,7 +178,7 @@ class AdminProducts extends AdminTab
 	public function postProcess($token = null)
 	{
 		global $cookie, $currentIndex;
-		
+
 		// Add a new product
 		if (Tools::isSubmit('submitAddproduct') || Tools::isSubmit('submitAddproductAndStay') ||  Tools::isSubmit('submitAddProductAndPreview'))
 		{
@@ -433,7 +433,7 @@ class AdminProducts extends AdminTab
 				return;
 			}
 			/* PrestaShop demo mode*/
-			
+
 			if ($this->tabAccess['edit'] === '1')
 			{
 				/* Delete product image */
@@ -931,6 +931,7 @@ class AdminProducts extends AdminTab
 		/* Adding a new product image */
 		elseif (isset($_FILES['image_product']['name']) && $_FILES['image_product']['name'] != NULL )
 		{
+
 			if ($error = checkImageUploadError($_FILES['image_product']))
 				$this->_errors[] = $error;
 
@@ -1073,7 +1074,7 @@ class AdminProducts extends AdminTab
 		else
 		{
 			$image = new Image($id_image);
-			
+
 			if (!$new_path = $image->getPathForCreation())
 				$this->_errors[] = Tools::displayError('An error occurred during new folder creation');
 			if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['image_product']['tmp_name'], $tmpName))
@@ -2465,7 +2466,7 @@ class AdminProducts extends AdminTab
 						<?php echo realpath(_PS_DOWNLOAD_DIR_) .'/'. $productDownload->physically_filename ?>
 					</p>
 		<?php endif; ?>
-					<p><?php 
+					<p><?php
 						$max_upload = (int)ini_get('upload_max_filesize');
 						$max_post = (int)ini_get('post_max_size');
 						$upload_mb = min($max_upload, $max_post);
@@ -2642,11 +2643,11 @@ class AdminProducts extends AdminTab
 						</td>
 					</tr>
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>';
-					
-				
+
+
 				if ((int)Configuration::get('PS_STOCK_MANAGEMENT'))
 				{
-					
+
 					if (!$has_attribute)
 					{
 						if ($obj->id)
@@ -2685,7 +2686,7 @@ class AdminProducts extends AdminTab
 									</td>
 								</tr>';
 					}
-					
+
 					if ($obj->id)
 						echo '
 							<tr><td class="col-left">'.$this->l('Quantity in stock:').'</td>
@@ -2716,7 +2717,7 @@ class AdminProducts extends AdminTab
 						</tr>
 					';
 				}
-							
+
 				echo '
 					<tr><td colspan="2" style="padding-bottom:5px;"><hr style="width:100%;" /></td></tr>
 					<tr>
@@ -2792,23 +2793,23 @@ class AdminProducts extends AdminTab
 							else
 								$selectedCat = Product::getProductCategoriesFull($obj->id, $this->_defaultFormLanguage);
 						}
-						
+
 						echo '<select id="id_category_default" name="id_category_default">';
 						foreach($selectedCat AS $cat)
 							echo '<option value="'.$cat['id_category'].'" '.($obj->id_category_default == $cat['id_category'] ? 'selected' : '').'>'.$cat['name'].'</option>';
 						echo '</select>
-						</td> 
+						</td>
 					</tr>
 					<tr id="tr_categories">
 						<td colspan="2">
 						';
 					// Translations are not automatic for the moment ;)
 					$trads = array(
-						 'Home' => $this->l('Home'), 
-						 'selected' => $this->l('selected'), 
-						 'Collapse All' => $this->l('Collapse All'), 
-						 'Expand All' => $this->l('Expand All'), 
-						 'Check All' => $this->l('Check All'), 
+						 'Home' => $this->l('Home'),
+						 'selected' => $this->l('selected'),
+						 'Collapse All' => $this->l('Collapse All'),
+						 'Expand All' => $this->l('Expand All'),
+						 'Check All' => $this->l('Check All'),
 						 'Uncheck All'  => $this->l('Uncheck All')
 					);
 					echo Helper::renderAdminCategorieTree($trads, $selectedCat).'
@@ -2999,7 +3000,7 @@ class AdminProducts extends AdminTab
 					unitPriceWithTax(\'unit\');
 			</script>';
 		$categoryBox = Tools::getValue('categoryBox', array());
-		
+
 	}
 
 	function displayFormImages($obj, $token = NULL)
@@ -3751,27 +3752,27 @@ class AdminProducts extends AdminTab
 				}
 				else if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemQty\').val() == \'\')
 				{
-					alert(\''.$this->l('Thanks to set a quantity to add a product.').'\');	
+					alert(\''.$this->l('Thanks to set a quantity to add a product.').'\');
 					return false;
 				}
-	
+
 				var lineDisplay = $(\'#curPackItemQty\').val()+ \'x \' +$(\'#curPackItemName\').val();
-	
+
 				var divContent = $(\'#divPackItems\').html();
 				divContent += lineDisplay;
 				divContent += \'<span onclick="delPackItem(\' + $(\'#curPackItemId\').val() + \');" style="cursor: pointer;"><img src="../img/admin/delete.gif" /></span><br />\';
-	
+
 				// QTYxID-QTYxID
 				var line = $(\'#curPackItemQty\').val()+ \'x\' +$(\'#curPackItemId\').val();
-	
-	
+
+
 				$(\'#inputPackItems\').val($(\'#inputPackItems\').val() + line  + \'-\');
 				$(\'#divPackItems\').html(divContent);
 				$(\'#namePackItems\').val($(\'#namePackItems\').val() + lineDisplay + \'Â¤\');
-	
+
 				$(\'#curPackItemId\').val(\'\');
 				$(\'#curPackItemName\').val(\'\');
-	
+
 				$(\'#curPackItemName\').setOptions({
 					extraParams: {excludeIds :  getSelectedIds()}
 				});

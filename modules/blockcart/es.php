@@ -2,17 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blockcart}prestashop>blockcart_c2e1362a9710a3dd86f937c2ea1f336d'] = 'Carrito';
-$_MODULE['<{blockcart}prestashop>blockcart_e03093a5753b436ee1de63b6e3e1bd02'] = 'Añadir un bloque que contenga el carrito de compra del cliente';
-$_MODULE['<{blockcart}prestashop>blockcart_eb4ae207521bbe6403f7fe9564d38cda'] = 'Ajax: opción incorrecta.';
-$_MODULE['<{blockcart}prestashop>blockcart_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';
-$_MODULE['<{blockcart}prestashop>blockcart_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
-$_MODULE['<{blockcart}prestashop>blockcart_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
-$_MODULE['<{blockcart}prestashop>blockcart_614a8820aa4ac08ce2ee398a41b10778'] = 'Carrito Ajax';
-$_MODULE['<{blockcart}prestashop>blockcart_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
-$_MODULE['<{blockcart}prestashop>blockcart_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';
-$_MODULE['<{blockcart}prestashop>blockcart_dba281afb9a38e654ea9dab4cd6cb0ca'] = 'Modo AJAX para el carrito (compatible con el tema por defecto)';
-$_MODULE['<{blockcart}prestashop>blockcart_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{blockcart}prestashop>blockcart_20351b3328c35ab617549920f5cb4939'] = 'Personalización n°';
 $_MODULE['<{blockcart}prestashop>blockcart_ed6e9a09a111035684bb23682561e12d'] = 'eliminar este producto de mi carrito';
 $_MODULE['<{blockcart}prestashop>blockcart_a85eba4c6c699122b2bb1387ea4813ad'] = 'Carrito';
@@ -30,3 +19,16 @@ $_MODULE['<{blockcart}prestashop>blockcart_96b0141273eabab320119c467cdcaf17'] = 
 $_MODULE['<{blockcart}prestashop>blockcart_0d11c2b75cf03522c8d97938490466b2'] = 'Estos precios se entienden IVA incluído';
 $_MODULE['<{blockcart}prestashop>blockcart_41202aa6b8cf7ae885644717dab1e8b4'] = 'Estos precios se entienden sin IVA';
 $_MODULE['<{blockcart}prestashop>blockcart_377e99e7404b414341a9621f7fb3f906'] = 'Confirmar';
+$_MODULE['<{blockcart}prestashop>blockcart_c2e1362a9710a3dd86f937c2ea1f336d'] = 'Carrito';
+$_MODULE['<{blockcart}prestashop>blockcart_e03093a5753b436ee1de63b6e3e1bd02'] = 'Añadir un bloque que contenga el carrito de compra del cliente';
+$_MODULE['<{blockcart}prestashop>blockcart_eb4ae207521bbe6403f7fe9564d38cda'] = 'Ajax: opción incorrecta.';
+$_MODULE['<{blockcart}prestashop>blockcart_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';
+$_MODULE['<{blockcart}prestashop>blockcart_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
+$_MODULE['<{blockcart}prestashop>blockcart_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
+$_MODULE['<{blockcart}prestashop>blockcart_614a8820aa4ac08ce2ee398a41b10778'] = 'Carrito Ajax';
+$_MODULE['<{blockcart}prestashop>blockcart_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';
+$_MODULE['<{blockcart}prestashop>blockcart_b9f5c797ebbf55adccdd8539a65a0241'] = 'Desactivado';
+$_MODULE['<{blockcart}prestashop>blockcart_dba281afb9a38e654ea9dab4cd6cb0ca'] = 'Modo AJAX para el carrito (compatible con el tema por defecto)';
+$_MODULE['<{blockcart}prestashop>blockcart_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
+
+?>

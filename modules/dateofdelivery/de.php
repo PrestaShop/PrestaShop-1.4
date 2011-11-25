@@ -15,7 +15,7 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0ea55758c7a68c0309b915e4b71
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_7ccf58c950043c9fbfed668df13ce608'] = 'Die Einstellungen werden aktualisiert';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_ecfe3ba0ff66a97029088e8e90a3f051'] = 'Minimale Dauer ist ungültig';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0245cd1cce5ecea8eb23b043be00d80a'] = 'Maximale Dauer ist ungültig';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_e6843321c8b0edea8cf333519316ed7b'] = 'Lieferant ist ungültig';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_e6843321c8b0edea8cf333519316ed7b'] = 'Versanddienst ist ungültig';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_17673c1595a3722522f581c854b8edc5'] = 'Sie können diesen Lieferanten nicht nutzen, eine Regel wurde bereits gespeichert';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_50e1f1030812a9a8fd66dfff17099fcd'] = 'ein Fehler ist beim Hinzufügen einer Lieferanten-Regel aufgetreten';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_240276f48ff2e0e5fe620ff311e677b5'] = 'ein Fehler ist beim Aktualisieren einer Lieferanten-Regel aufgetreten';

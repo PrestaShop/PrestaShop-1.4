@@ -2,15 +2,19 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_d7897df448ce113a0205078a9255f7b7'] = 'U.S.P.S. Calculador de radio';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_660e7e160b8b390f9d36f6886cbeaa9d'] = 'Calcula la tasa de envio para el USPS en USA';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_883fa0069f4b0454e2277dd567ab3991'] = '\"Unidad de peso (LB o KG)\"';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\"Unidad de medida (cm o in)\"';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'debe estar configurado para funcionar correctamente';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d2d22fe4f85d971b090bcbacec8f0123'] = 'ID del usuario USPS ';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_813c2f71e65f4cd51a9c529ee2dd7efe'] = 'Código Zip de USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_20449d3f0b6c6b9265a5cd2a470a6451'] = 'Peso del paquete';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_bfc00de34bc04366e7fee516adf7dca5'] = 'Gastos de gestión';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_761c02f2b956cac5abe5539c6d908508'] = 'Tamaño de los paquetes USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ca9df8a12e7558c34bcf7b88aab5cba5'] = 'Tipo de paquete USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f347d2e6d32688d9174b7aa1fc0124b1'] = 'Puede ser tratado por una máquina';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_abca8ad9739957246c02470f31f040e0'] = 'Calculador del modo USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d2203cb1237cb6460cbad94564e39345'] = 'Regular';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_3a69b34ce86dacb205936a8094f6c743'] = 'Ancho';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_47c14840d8e15331fa420b9b2f757cd9'] = 'Variable';
@@ -25,7 +29,12 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_f8320b26d30ab433c5a54546d21f414c'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f827cf462f62848df37c5e1e94a4da74'] = 'Verdadero';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_386aad80d82f8245e9ef80352a2240e8'] = 'Todos los artículos en un solo paquete';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f35eb2a913a3fd6fd8e661012cf0ebd8'] = 'Un artículo en cada paquete';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_3a3a3ea18546ae6529e6e439a97b040a'] = 'U.S.P.S calculador de grados';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f57cff5425b6e64843c5f066c5b310d0'] = 'Estado del módulo USPS';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_2923c2caf8d0b17f409e66e798ea94cf'] = 'U.S.P.S. Calculador de tasas esta configurado y online!';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_82d36b7a513a66cfdcede4d0b56ba36e'] = 'U.S.P.S. Calculador de tasas no esta configurado aun, usted necesita:';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_15507d23c7b911b14ebd95a9a0e12560'] = 'Complete en USPS ID de usuario y el código postal de origen en \" OPCIONES GENERALES\"';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_5ea70d7b669a7e15e6d402bd423aa56e'] = 'Seleccione sus servicios de envió disponibles';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test de conexión webservicios';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d5377c8cc8c83b501472660c69f694e8'] = 'cURL extensión no está activada, el módulo USPS puede funcionar sin cURL pero sería preferible activarlo.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Configuración general';
@@ -35,8 +44,18 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_6a26f548831e6a8c26bfbbd9f6ec61e0'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d2126da975d5b9a5b846efaf57d3fd53'] = 'Configuración general';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b150f21f4d216c6c275de3d69dffac68'] = 'Su login USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ebbbab87d3a60b18f370b76f59dab31e'] = 'Pulse aquí para obtener su clave API USPS';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_87b78c2dbb5786947e830f13097aece5'] = 'Código Zip de origen';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_4412f0268c3b3690de46390018a96d1f'] = 'Servicio de envío';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_25365926cec8ff5e8fbf1e518505c3e7'] = 'GRADO COMERCIAL';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b9c1e1209dbba5bb9b802c765d27e8a1'] = 'GRADO REGULAR';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_78945de8de090e90045d299651a68a9b'] = 'Disponible';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'No disponible';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_04ff9e6bb8238bad1936e3bdf84e8f23'] = 'Seleccione el servicio de envió que desea habilitar para sus clientes.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_a691732939e7e7ef90cfe0d6e738f3e9'] = 'Para Primera clase,  Express y mail de prioridad, tiene la opción de TASA COMERCIAL o TASA REGULAR.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_e3cc25ccb469ec7047d9e7c4c13f4e46'] = 'Si usted paga por gastos de envío ya sea en línea o con un medidor de correo a continuación, elija TASA COMERCIAL.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b3e6424dbec51d0cbf5c272eca58e275'] = 'Si usted paga por gastos de envío ya sea en línea o con un medidor de correo a continuación, elija eTASA REGULAR.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_55219991df83d7a6e4a0ed60c1a11e40'] = '-Elija sólo la tarifa comercial o la tarifa normal. No elija dos';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_319c2c41aa9f6b4d5b70b56651abe6e9'] = 'Para paquetes postales, Media Mail y los medios de comunicación de Biblioteca que se mostrará como tarifa regular sólo porque no hay diferencia de precio.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_db06a2900c66a3a2cb78fe3a470f1b85'] = 'Peso del paquete';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_0274f749472f365e7d48a501e14793e6'] = 'Gastos de gestión';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_83ad4fdaf06650e6d9d7ca18f82fb975'] = 'Configuración de ubicación';
@@ -51,6 +70,15 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_da42caf26ef85de3d7e48e16ca60b891'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Elija en la lista el tipo de paquete por defecto';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_93c8645dbbc33cf8d126266a827a5501'] = 'Machinable';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_67cd0f5256c40c16a6cfd6effe3ab06b'] = 'Elija si puede ser tratado por una máquina por defecto o no.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_6a88783cc26a04f204c844a555af04f9'] = 'Modo de calculo';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_68c2e29510ba1fade36948082c1a460d'] = 'Uso del modo de cálculo \"Todos los artículos en un solo paquete\" utilizará automáticamente el tamaño por defecto de embalaje, tipo de embalaje y entrega. Configuraciones específicas para las categorías o productos no serán utilizados.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_dd3635ee8f6dbca808391e9e2115114f'] = 'Su usuario USPS ID no esta especificado';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_0304084f81483b19b6ef76799d0dcc98'] = 'El codigo Zip de origen no esta especificado';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_1416b880efa6a1706ec5a3a2e354b38b'] = 'El codigo Zip de origen no es válido';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_89849083c326e9e338193a29b398c8d6'] = 'EL peso del paquete  debe ser igual a o mayor que 0';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_0a4c0dd36c1c6d407a696ba431661cb4'] = 'EL costo de manejo debe ser igual a o mayor que 0';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b0e371d9aaf4dd29dcdf94c8f04a73f8'] = 'Debe seleccionar al menos un modo de Envío';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_2c73878daaa3c04dfa31722352c48620'] = 'Debe seleccionar TARIFA COMERCIAL o TARIFA  REGULAR para cada tipo de email. No puede seleccionar ambos';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f858ebce2deafd485f17522ca80bca2b'] = 'PrestaShop no ha podido conectarse al webservicio de USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Ninguna descripción de error';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
@@ -88,6 +116,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_e41495cddec502278844d90501b8f688'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_04f65a638b5713539804e1f851f11f6f'] = 'Esta sección le ayudará a entender mejor como configurar correctamente este módulo.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ec0e6948e8f34818d80f27c309f46661'] = 'A continuación las descripciones de cada campo:';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_2d6a1f95c12c41a1937520809bb3e0b0'] = 'Debe inscribirse a USPS en la siguiente dirección';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_997eaba18a174723bb35c745d3bcba04'] = 'Este campo identifica el punto de inicio del Código postal de su paquete ';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_59716c97497eb9694541f7c3d37b1a4d'] = 'País';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b79cacaef47c6e646f6afaf139b2863a'] = 'Este campo debe ser el país del punto de salida de los paquetes.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_1d3fce5a25604726c1b3c726f9938858'] = 'Este campo corresponde al tipo de paquete por defecto (cuando no hay configuración específica para el producto o para la categoría del producto).';
@@ -98,3 +127,5 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_902b0d55fddef6f8d651fe1035b7d4bd'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ad20d10621babf619967b16f690a05f2'] = 'Los webservicios de USPS aparecen como inaccesibles, espere unos minutos e inténtelo de nuevo.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_a4692f93340d1d8c0c01e94baa56b8b9'] = 'USPS timed out.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ef87d840de42d54364089d1d45f8d08c'] = 'No ha podido conectarse a USPS.com';
+
+?>

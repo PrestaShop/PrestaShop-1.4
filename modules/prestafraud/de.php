@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{prestafraud}prestashop>prestafraud_eed029a9cfe78c1230a654e58fe8b6f8'] = 'PrestaShop Security';
-$_MODULE['<{prestafraud}prestashop>prestafraud_95d311a37e934646eec0c79c4f266feb'] = 'Schützen Sie Ihr Shop von betrügerischen Zahlungen';
+$_MODULE['<{prestafraud}prestashop>prestafraud_95d311a37e934646eec0c79c4f266feb'] = 'Schützen Sie Ihr Shop gegen betrügerischen Zahlungen';
 $_MODULE['<{prestafraud}prestashop>prestafraud_4d0a6a9777a818ecc3b59b9a8ecd0c43'] = '- Bitte wählen Sie Ihre Haupttätigkeit -';
 $_MODULE['<{prestafraud}prestashop>prestafraud_5a600f5b88f416c470991c6831add13a'] = 'Erwachsene';
 $_MODULE['<{prestafraud}prestashop>prestafraud_0fe4ca3df29658482098bb33a2ff66e5'] = 'Tiere und Haustiere';

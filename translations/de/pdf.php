@@ -2,15 +2,15 @@
 
 global $_LANGPDF;
 $_LANGPDF = array();
-$_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Rücksendung Nr.';
+$_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Rücksendungs-Nr.';
 $_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] = 'Guthaben Nr.';
-$_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Lieferschein Nr.';
-$_LANGPDF['PDF_invoicefe4da50838bb10dcbf1bf8dcd9b12ab5'] = 'Rechnung Nr.';
-$_LANGPDF['PDF_invoiceba160acb58001c904c57507da3689265'] = 'Bestellung Nr.';
+$_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Lieferschein-Nr.';
+$_LANGPDF['PDF_invoicefe4da50838bb10dcbf1bf8dcd9b12ab5'] = 'Rechnungs-Nr.';
+$_LANGPDF['PDF_invoiceba160acb58001c904c57507da3689265'] = 'Bestell-Nr.';
 $_LANGPDF['PDF_invoice808a04117534f9dfb63b9accd7efc609'] = 'Firmensitz';
 $_LANGPDF['PDF_invoicea54cedc1e053a70d4a6319feccf531ca'] = 'Telefonnr.:';
 $_LANGPDF['PDF_invoice2babe53026309ed1bc4d26626dbaf9b3'] = 'Details:';
-$_LANGPDF['PDF_invoice15b57bef332e7e0327d89fe93711a954'] = 'Eine elektronische Version steht auf Ihrem Konto bereit. Um auf Sie zuzugreifen, melden Sie sich bitte auf der Webseite';
+$_LANGPDF['PDF_invoice15b57bef332e7e0327d89fe93711a954'] = 'Eine elektronische Version dieser Rechnun steht Ihnen in Ihrem Kundenkonto zur weiteren Verwendung bereit. Um die Rechnung einzusehen, melden Sie sich ';
 $_LANGPDF['PDF_invoiceb1fb57b55075a4a51cf83e44d0440358'] = 'mit Ihren Zugangsdaten an (die Sie bei Ihrer ersten Bestellung erhalten haben).';
 $_LANGPDF['PDF_invoiced98a07f84921b24ee30f86fd8cd85c3c'] = 'vom';
 $_LANGPDF['PDF_invoice88be9ea838e21273267409d76af3b284'] = 'Wir haben Ihre Bitte um Rücksendung gespeichert.';

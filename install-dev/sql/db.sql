@@ -190,7 +190,7 @@ CREATE TABLE `PREFIX_cart_product` (
   `id_product_attribute` int(10) unsigned default NULL,
   `quantity` int(10) unsigned NOT NULL default '0',
   `date_add` datetime NOT NULL,
-  PRIMARY KEY (`id_cart`,`id_product`),
+  PRIMARY KEY (`id_cart`,`id_product`, `id_product_attribute`),
   KEY `id_product_attribute` (`id_product_attribute`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 

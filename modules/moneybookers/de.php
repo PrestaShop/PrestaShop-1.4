@@ -13,7 +13,7 @@ $_MODULE['<{moneybookers}prestashop>confirmation_8de637e24570c1edb0357826a2ad5ae
 $_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'Sie können mit Ihren derzeitigen Währung nicht mit Moneybookers bezahlen, wählen Sie bitte eine andere Währung';
 $_MODULE['<{moneybookers}prestashop>moneybookers_27266fe4d37bf06589c7c6dbf2d5c067'] = 'Zahlung mit';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28c'] = 'Moneybookers';
-$_MODULE['<{moneybookers}prestashop>moneybookers_a356736cbcf740f8648d71067fca090d'] = 'Akzeptiert Zahlungen per Moneybookers';
+$_MODULE['<{moneybookers}prestashop>moneybookers_a356736cbcf740f8648d71067fca090d'] = 'Zahlungen per Moneybookers akzeptieren';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999d'] = 'Sie sind sicher, dass Sie Ihre Daten löschen wollen?';
 $_MODULE['<{moneybookers}prestashop>moneybookers_088b74050a381d98fca38d5990b097be'] = 'Sie nutzen zur Zeit die Standard-E-Mail-Adresse von Moneybookers, Sie müssen Ihre eigene E-Mail-Adresse verwenden';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7593ded970377fe25371c952eb944770'] = 'Inhalt kann nicht abgefragt werden';
@@ -61,7 +61,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_bd8df5ae85f76ba759fa979ada8566e
 $_MODULE['<{moneybookers}prestashop>moneybookers_558b256c79bbcf473cc7347ec1ca9d54'] = 'Ihr Konto bestätigen ';
 $_MODULE['<{moneybookers}prestashop>moneybookers_71b5b9efebe9c2f73fad6dd1849b4312'] = 'Mein Konto bestätigen';
 $_MODULE['<{moneybookers}prestashop>moneybookers_ece6bf0de28bb0442df6e3a1fd7657d4'] = 'Wenn Sie Hilfe benötigen, lesen Sie das Aktivierungshandbuch';
-$_MODULE['<{moneybookers}prestashop>moneybookers_4d8e842055eff4180273c00c3c6dbb51'] = 'Sie können Moneybookers mit dem folgenden Test-Account - testaccount2@moneybookers.com und das Kennwort MBTest - kostenlos testen.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_32e70e9f3def9ebdcdbc872b739b919f'] = 'Sie können Moneybookers mit dem folgenden Testzugang ausprobieren: testaccount2@moneybookers.com, Kennwort: mbtest.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f5944cfc42cfb20119407c59a97bd9d1'] = 'Warnung: dies ist nur ein Test-Account. Sie erhalten kein Geld, wenn Sie diesen Test-Account in Ihrem Shop nutzen. rnUm Geld empfangen zu können, müssen Sie Ihre persönlichen Anmeldedaten und Kennwort verwenden!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_0b65457508cf73c9ed8c96f56b8910ce'] = 'Kennwortbestätigung';
 $_MODULE['<{moneybookers}prestashop>moneybookers_e44efbda9396a5641d730f0ac4866e52'] = 'Ihr Kennwort wurde aktiviert';

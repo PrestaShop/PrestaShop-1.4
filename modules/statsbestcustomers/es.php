@@ -21,3 +21,5 @@ $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_410008089d5bb723438
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_397a5e109a5897ee7d699050cbc93347'] = 'Operaciones puntuales: recompensas comerciales (ofertas especiales personalizadas, producto o servicio ofrecidos), recompensas no comerciales (prioridad en el envío de un pedido o de un producto), recompensas pecuniarias (enlaces, cupones del descuento, reembolsos...)';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_4bc24eed56e0ba89fc3ab4e094d18d8a'] = 'Operaciones sostenibles: tarjetas clientes o puntos de fidelidad, que no sólo justifican la comunicación entre el comerciante y el cliente, pero también ofrecen ventajas a los clientes (ofertas, descuentos privados).';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_b18d224f0c27b329bc0bd2f7f876228b'] = 'Estas operaciones animan a sus clientes a comprar y también a volver a su tienda regularmente.';
+
+?>

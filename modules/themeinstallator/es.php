@@ -85,3 +85,5 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_5da618e8e4b89c66fe86e32
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_3271e801d0a5db9dc2963a19ed9695d6'] = 'El nombre de su tienda';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ea4788705e6873b424c65e91c2846b19'] = 'Anular';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_abb381ee4077396e5d5d475b9022ba86'] = '¡Generar el archivo ahora!';
+
+?>

@@ -18,11 +18,11 @@ $_MODULE['<{fianetfraud}prestashop>fianetfraud_3adbdb3ac060038aa0e6e6c138ef9873'
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_32b1e872d533aced68e8fd06117c35d9'] = 'Kategorie Typ';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_bb8d6a9f57dcf8f450d8c8b6107cfabb'] = 'Wählen Sie eine Kategorie ...';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_5f001485711e47385cb84b10c888bbfd'] = 'Lieferanten-Konfiguration';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_84a4ee79ed85180a743340dceb2f98d1'] = 'Lieferant Detail';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_914419aa32f04011357d3b604a86d7eb'] = 'Lieferant';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_fecb07f7ab46e23e9b520a9a9af7b97b'] = 'Lieferantenart';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_b04ad61ad875f6e7149fdd51c2e60ce2'] = 'Wählen Sie eine Lieferantenart ...';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_803d8f90719db3a605cf4af72ab2d8ee'] = 'Standard-Lieferantenart';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_84a4ee79ed85180a743340dceb2f98d1'] = 'Versanddienst-Detail';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_914419aa32f04011357d3b604a86d7eb'] = 'Versanddienst';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_fecb07f7ab46e23e9b520a9a9af7b97b'] = 'Versanddienstart';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_b04ad61ad875f6e7149fdd51c2e60ce2'] = 'Wählen Sie eine Versandart ...';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_803d8f90719db3a605cf4af72ab2d8ee'] = 'Standard-Versandart';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_4a04490d2817c00012562df7bc43299d'] = 'Zahlungskonfiguration';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_ff18b8d27988b97ba1dd72120dd524ea'] = 'Zahlungsdetails';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_ec51b543e5a38f6044c83f21dce2b23d'] = 'Zahlungs-Modul';
@@ -33,6 +33,6 @@ $_MODULE['<{fianetfraud}prestashop>fianetfraud_7f2a1b59ac1ab6d2d892dbbf4f132c40'
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Unbekannt';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_d13270d4831bb2a2723f0fb5b573807c'] = 'Fianet Bestätigung';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_e010021939a49b7cce07f0e546c1d54f'] = 'Detailansicht';
-$_MODULE['<{fianetfraud}prestashop>fianetfraud_b086843368d1c92d0a86cbee76b20b6f'] = 'Evaluate';
+$_MODULE['<{fianetfraud}prestashop>fianetfraud_b086843368d1c92d0a86cbee76b20b6f'] = 'Evaluiere';
 
 ?>

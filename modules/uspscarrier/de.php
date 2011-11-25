@@ -3,6 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d7897df448ce113a0205078a9255f7b7'] = 'U.S.P.S Fracht-Kalkulator';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_660e7e160b8b390f9d36f6886cbeaa9d'] = 'Versandkosten für USA Postservice und Paketservice innerhalb von USA berechnen';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_883fa0069f4b0454e2277dd567ab3991'] = '\'Gewichtseinheit (la oder kg).\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\'Maßeinheit (cm oder in).\'';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'muss konfiguriert sein, um dieses Modul richtig zu nutzen';
@@ -30,6 +31,10 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_386aad80d82f8245e9ef80352a2240e8'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f35eb2a913a3fd6fd8e661012cf0ebd8'] = 'In eine Einheit pro Paket aufteilen';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_3a3a3ea18546ae6529e6e439a97b040a'] = 'U.S.P.S Gebühren Kalkulator';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f57cff5425b6e64843c5f066c5b310d0'] = 'Usps Modulstatus';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_2923c2caf8d0b17f409e66e798ea94cf'] = 'USPS Gebührenrechner wurde konfiguriert und ist ab sofort einsatzbereit';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_82d36b7a513a66cfdcede4d0b56ba36e'] = 'USPS Gebührenrechner wurde noch nicht konfiguriert. Sie müssen:';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_15507d23c7b911b14ebd95a9a0e12560'] = 'USPS Anmelde-ID und PLZ müssen in den Allgemeinen Einstellungen hinterlegt sein.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_5ea70d7b669a7e15e6d402bd423aa56e'] = 'Wählen Sie Ihren Versandservice';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice Testverbindung';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d5377c8cc8c83b501472660c69f694e8'] = 'cURL-Erweiterung ist nicht aktiviert, das USPS-Modul kann ohne cURL arbeiten, aber es wäre besser, es zu aktivieren.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Allgemeine Einstellungen';
@@ -40,8 +45,17 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_d2126da975d5b9a5b846efaf57d3fd53'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b150f21f4d216c6c275de3d69dffac68'] = 'Ihre USPS Benutzer-ID';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ebbbab87d3a60b18f370b76f59dab31e'] = 'Bitte klicken Sie hier, um Ihren USPS API Key zu erhalten.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_87b78c2dbb5786947e830f13097aece5'] = 'PLZ';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_4412f0268c3b3690de46390018a96d1f'] = 'Versandservice';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_25365926cec8ff5e8fbf1e518505c3e7'] = 'Gebühren für Massenversand';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b9c1e1209dbba5bb9b802c765d27e8a1'] = 'Gebühren für den Einzelversand';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_78945de8de090e90045d299651a68a9b'] = 'Verfügbar';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'Nicht verfügbar';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_04ff9e6bb8238bad1936e3bdf84e8f23'] = 'Wählen Sie den Versandservice aus, welchen Sie Ihren Kunden zur Auswahl anbieten möchten.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_a691732939e7e7ef90cfe0d6e738f3e9'] = 'Für First-Class, Priority und Express Mail, haben Sie die Möglichkeit Massenversand oder Einzelversand anzubieten.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_e3cc25ccb469ec7047d9e7c4c13f4e46'] = 'Wenn Sie das Porto online oder mittels Frankiermaschine bezahlen, dann wählen Sie bitte die Option Gebühren für Massenversand';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b3e6424dbec51d0cbf5c272eca58e275'] = 'Wenn Sie das Porto am Postschalter entrichten, dann wählen Sie bitte Gebühren für den Einzelversand.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_55219991df83d7a6e4a0ed60c1a11e40'] = 'Wählen Sie entweder Gebühren für den Massenversand ODER Gebühren für den Einzelversand. Die Auswahl beider ist nicht zugelassen.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_319c2c41aa9f6b4d5b70b56651abe6e9'] = 'Für Paketversand, Briefsendung und Buchsendung wird der übliche Preis verrechnet, da kein Preisunterschied besteht.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_db06a2900c66a3a2cb78fe3a470f1b85'] = 'Verpackungsgewicht';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_0274f749472f365e7d48a501e14793e6'] = 'Bearbeitungsgebühr';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_83ad4fdaf06650e6d9d7ca18f82fb975'] = 'Lokalisierungskonfiguration';
@@ -77,7 +91,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_d9bc28a26253438f5b16cea5eb35681a'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_3f1be04ab9373dcab986c862fb540c3f'] = 'Packungsgröße';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_20cde117cbc92b9ec1fb4e5bc4a7b9bd'] = 'Zusätzliche Gebühren';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_992a0f0542384f1ee5ef51b7cf4ae6c4'] = 'Dienstleistungen';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_06df33001c1d7187fdd81ea1f5b277aa'] = 'Handlungen';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_06df33001c1d7187fdd81ea1f5b277aa'] = 'Aktion';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5406dcacf84176fecac51364e10dcdcf'] = 'Es ist keine spezifische Konfiguration für USPS-Kategorien an dieser Stelle vorhanden.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5dd4dce839d0bddf557af415308a9224'] = 'Sind Sie sicher, dass Sie diese spezifische USPS-Konfiguration für diese Kategorie löschen wollen?';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_3e0cb9fd22b124c0839302fef54762d7'] = 'Eine Regel aktualisieren';
@@ -85,7 +99,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_dd593f8a542ab628cbba98c709255e60'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_8d2ee0603dfce09b57d60db628cde269'] = 'Wählen Sie eine Verpackungsart ...';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_52c46f87566159d11390162e99ed9f68'] = 'Wählen Sie eine Packungsgröße ...';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_56ee8a6c40098a28b2e4859d7f36bfc2'] = 'Wählen Sie eine maschinell bearbeitbare ...';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Liefer-Service';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Versandservice';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_bafff0b69daa3ece3cf792eba6c3ef98'] = 'Wählen Sie den Lieferservice, der für die Kunden verfügbar sein wird.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_7fcafa7c47e984693fcb8a92c0fd1beb'] = 'Wählen Sie eine Kategorie ...';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d725c0166e978cc30853996c70440873'] = 'Sie müssen eine Kategorie auswählen.';

@@ -34,3 +34,5 @@ $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_e7f407fa37f8cd8c590
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_73b0130037e21b76351aebfd29d0b9aa'] = 'distribución del país';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_28e81c8343702f6c813cc31a7f90616a'] = 'Distribución de la moneda';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_f1dd68fb6a00d3e4d7f751deacde995d'] = 'Distribución del idioma';
+
+?>

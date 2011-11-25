@@ -14,7 +14,7 @@ $_MODULE['<{carriercompare}prestashop>carriercompare_3601146c4e948c32b6424d2c0a7
 $_MODULE['<{carriercompare}prestashop>carriercompare_f620c0ed0c89129c9dd8953406300061'] = 'Kein Versenddienst für diese Zone ausgewählt';
 $_MODULE['<{carriercompare}prestashop>carriercompare_63a6a88c066880c5ac42394a22803ca6'] = 'Refresh';
 $_MODULE['<{carriercompare}prestashop>carriercompare_115484428c82f859100c07ae1170d9e0'] = 'Versandkalkulation';
-$_MODULE['<{carriercompare}prestashop>carriercompare_68e114c207a6820a8f14d0eceacf17d7'] = 'Module um Versandmöglichkeiten zu vergleichen, bevor Bestellprozess abgeschlossen wird.';
+$_MODULE['<{carriercompare}prestashop>carriercompare_68e114c207a6820a8f14d0eceacf17d7'] = 'Versandmöglichkeiten vergleichen, bevor der Bestellprozess abgeschlossen wird.';
 $_MODULE['<{carriercompare}prestashop>carriercompare_ed70a57a190d596171cf324c16a2277d'] = 'Ungültige Bundesland-ID';
 $_MODULE['<{carriercompare}prestashop>carriercompare_ff22c3e7b4cd12813e2033774d987e96'] = 'Bitte wählen Sie ein Bundesland';
 $_MODULE['<{carriercompare}prestashop>carriercompare_fb9e838d470b2c27c2c128d127165f9e'] = 'Bitte wählen Sie ein Land';

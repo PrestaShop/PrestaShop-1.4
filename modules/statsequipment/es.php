@@ -13,3 +13,5 @@ $_MODULE['<{statsequipment}prestashop>statsequipment_501361472d0528ee07f202297f5
 $_MODULE['<{statsequipment}prestashop>statsequipment_8ebe1665d646cc99d4a80835d1734cad'] = 'Cuando se administran sitios web, es importante no perder de vista el software utilizado por los visitantes con el fin de asegurarse de que el sitio se muestra de manera idéntica para cada uno. PrestaShop fue creado para ser compatible con la mayoría de los buscadores recientes y de los sistemas operativos de ordenadores (OS) de la red. Sin embargo, puesto que usted puede terminar agregando características avanzadas a su sitio Web o incluso modificar el código de base de PrestaShop, estas adiciones pueden no ser accesibles para todos. Por esa razón es una buena idea guardar en pestañas una relación del porcentaje de usuarios para cada tipo de software antes de hacer algún cambio al que sólo podrá acceder un número limitado de usuarios. ';
 $_MODULE['<{statsequipment}prestashop>statsequipment_8ce59076ab4eaa3570ff2a931706d3c1'] = 'Buscador utilizado';
 $_MODULE['<{statsequipment}prestashop>statsequipment_eb84ea9e8324beffd94fdeff011edfd7'] = 'Sistema operativo utilizado';
+
+?>

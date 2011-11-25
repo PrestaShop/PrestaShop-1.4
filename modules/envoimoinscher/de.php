@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_e0b8a2c577580cb773bda0486acc4bf8'] = 'Envoimoinscher';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_bbd983fbdc5928ce36d6edce53639718'] = 'Finden Sie den günstigsten Versand. Vergleichen und fordern Sie Angebote von Lieferanten sowie ausgehandelte Preise an.';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_bbd983fbdc5928ce36d6edce53639718'] = 'Finden Sie den günstigsten Versand. Vergleichen und fordern Sie Angebote von Versanddiensten an. Verhandeln Sie Preise.';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_cc89336eed19f4c3bef8ae484eb43109'] = '\'Breite\'';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_fab811cb477e7794389f16624ac9aff9'] = '\'Höhe\'';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_7854da902d5f2ad746fe1b6f950da08e'] = '\'Tiefe\'';
@@ -82,7 +82,7 @@ $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_1fa598730b02d78aa07d07337c8
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_c5ac8560e3b92c7941286fa8c2b3a1ed'] = 'Höhe nicht angegeben';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_0eed429f3ae1e71de73b94e13f786893'] = 'Tiefe nicht angegeben';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_5d50fc169bba225de3df710ff98188c6'] = 'Bestellstatus nicht angegeben';
-$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_340ffdfdc019d0b001a4753b57aa398a'] = 'Lieferant nicht angegeben';
+$_MODULE['<{envoimoinscher}prestashop>envoimoinscher_340ffdfdc019d0b001a4753b57aa398a'] = 'Versanddienst nicht angegeben';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_4ecdf47576d5d0d024f30199900c1761'] = 'Bestellstatus \"Bestellung abgeschlossen\" genicht angegeben';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_c6a9265e0dcf5d7a7f331055b9b93609'] = 'Bestellstatus Senden nicht angegeben';
 $_MODULE['<{envoimoinscher}prestashop>envoimoinscher_9f3440922590dae1ebc28c40555c6203'] = 'Bestellstatus Lieferung nicht angegeben';
