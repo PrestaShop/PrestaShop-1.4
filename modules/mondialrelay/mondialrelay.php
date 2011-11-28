@@ -549,13 +549,6 @@ class MondialRelay extends Module
 	}
 	
 	/*
-	** No need anymore
-	*/
-	public function hookProcessCarrier($params)
-	{
-	}
-	
-	/*
 	** Update the carrier id to use the new one if changed
 	*/ 
 	public function hookupdateCarrier($params)
@@ -609,6 +602,25 @@ class MondialRelay extends Module
 		return $carriers;
 	}
 	
+	/*
+	** Added to be used properly with OPC 
+	*/
+	public function hookHeader($params)
+	{
+		global $smarty;
+		
+		if (in_array(basename($_SERVER['SCRIPT_NAME']), array('order-opc.php', 'order.php')))
+		{
+			$smarty->assign(array(
+				'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
+				'new_base_dir' => self::$moduleURL,
+				'MRToken' => self::$MRFrontToken,
+				'jQueryOverload' => self::getJqueryCompatibility(false)));
+			return $this->display(__FILE__, 'header.tpl');
+		}
+		return '';
+	}
+	
 	public function hookextraCarrier($params)
 	{
 		global $smarty, $cart, $cookie, $defaultCountry, $nbcarriers;
@@ -644,13 +656,9 @@ class MondialRelay extends Module
 	 	
 	 	$preSelectedRelay = $this->getRelayPointSelected($params['cart']->id);
 		$smarty->assign(array(
-			'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
-			'new_base_dir' => self::$moduleURL,
-			'MRToken' => self::$MRFrontToken,
 			'carriersextra' => $carriersList,
-			'preSelectedRelay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : '',
-			'jQueryOverload' => self::getJqueryCompatibility(false)));
-			
+			'preSelectedRelay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : ''));
+		
 		return $this->display(__FILE__, 'mondialrelay.tpl');
 	}
 	
