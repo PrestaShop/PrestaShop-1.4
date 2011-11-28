@@ -608,8 +608,9 @@ class MondialRelay extends Module
 	public function hookHeader($params)
 	{
 		global $smarty;
-		
-		if (in_array(basename($_SERVER['SCRIPT_NAME']), array('order-opc.php', 'order.php')))
+	
+		if ($this->isModuleAvailable() &&
+				in_array(basename($_SERVER['SCRIPT_NAME']), array('order-opc.php', 'order.php')))
 		{
 			$smarty->assign(array(
 				'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
