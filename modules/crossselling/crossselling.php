@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -31,7 +31,7 @@ if (!defined('_PS_VERSION_'))
 class CrossSelling extends Module
 {
 	private $_html;
-	
+
 	public function __construct()
 	{
 		$this->name = 'crossselling';
@@ -41,10 +41,10 @@ class CrossSelling extends Module
 		$this->need_instance = 0;
 
 		parent::__construct();
-		
+
 		$this->displayName = $this->l('Cross Selling');
-		$this->description = $this->l('Customers who bought this product also bought:');
-		
+		$this->description = $this->l('Customers who bought this product also bought...');
+
 		if (!$this->isRegisteredInHook('header'))
 			$this->registerHook('header');
 	}
@@ -61,7 +61,7 @@ class CrossSelling extends Module
 
 	public function uninstall()
 	{
-		if (!parent::uninstall() OR 
+		if (!parent::uninstall() OR
 			!Configuration::deleteByName('CROSSSELLING_DISPLAY_PRICE'))
 			return false;
 		return true;
@@ -93,7 +93,7 @@ class CrossSelling extends Module
 		</form>';
 		return $this->_html;
 	}
-	
+
 	public function hookHeader()
 	{
 		Tools::addCSS(($this->_path).'crossselling.css', 'all');
@@ -105,20 +105,20 @@ class CrossSelling extends Module
 	public function hookProductFooter($params)
 	{
 		global $smarty, $cookie, $link;
-		
+
 		$orders = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT o.id_order
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON (od.id_order = o.id_order)
 		WHERE o.valid = 1 AND od.product_id = '.(int)$params['product']->id);
-		
+
 		if (sizeof($orders))
 		{
 			$list = '';
 			foreach ($orders AS $order)
 				$list .= (int)$order['id_order'].',';
 			$list = rtrim($list, ',');
-		
+
 			$orderProducts = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT DISTINCT od.product_id, pl.name, pl.link_rewrite, p.reference, i.id_image, p.show_price, cl.link_rewrite category, p.ean13
 			FROM '._DB_PREFIX_.'order_detail od
@@ -126,11 +126,11 @@ class CrossSelling extends Module
 			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = od.product_id)
 			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = p.id_category_default)
 			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = od.product_id)
-			WHERE od.id_order IN ('.$list.') AND pl.id_lang = '.(int)($cookie->id_lang).' AND cl.id_lang = '.(int)($cookie->id_lang).' 
+			WHERE od.id_order IN ('.$list.') AND pl.id_lang = '.(int)($cookie->id_lang).' AND cl.id_lang = '.(int)($cookie->id_lang).'
 			AND od.product_id != '.(int)$params['product']->id.' AND i.cover = 1 AND p.active = 1
 			ORDER BY RAND()
 			LIMIT 10');
-			
+
 			$taxCalc = Product::getTaxCalculationMethod();
 			foreach ($orderProducts AS &$orderProduct)
 			{
@@ -141,7 +141,7 @@ class CrossSelling extends Module
 				elseif (Configuration::get('CROSSSELLING_DISPLAY_PRICE') AND $taxCalc == 1)
 					$orderProduct['displayed_price'] = Product::getPriceStatic((int)$orderProduct['product_id'], false, NULL);
 			}
-			
+
 			$smarty->assign(array('orderProducts' => $orderProducts, 'middlePosition_crossselling' => round(sizeof($orderProducts) / 2, 0),
 			'crossDisplayPrice' => Configuration::get('CROSSSELLING_DISPLAY_PRICE')));
 		}
