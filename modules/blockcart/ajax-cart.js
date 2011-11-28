@@ -137,7 +137,6 @@ var ajaxCart = {
 
 	// try to collapse the cart
 	collapse : function(){
-return;
 
 		if ($('#cart_block #cart_block_list').hasClass('expanded'))
 		{
