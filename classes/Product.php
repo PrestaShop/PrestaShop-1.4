@@ -3384,6 +3384,19 @@ class ProductCore extends ObjectModel
 		WHERE `id_product` = '.(int)($this->id));
 	}
 
+	public function setWsTags($tags)
+	{
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_tag` WHERE `id_product` = '.(int)($this->id));
+		if (count($tags))
+		{
+			$query = 'INSERT INTO `'._DB_PREFIX_.'product_tag` (`id_product`, `id_tag`) VALUES';
+			foreach($tags as $tag)
+				$query .= ' ('.(int)($this->id).', '.(int)($tag['id']).'),';
+			$query = rtrim($query, ',');
+			Db::getInstance()->Execute($query);
+		}
+		return true;
+	}
 
 	public function getWsManufacturerName()
 	{
