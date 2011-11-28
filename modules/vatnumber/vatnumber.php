@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -34,38 +34,42 @@ class VatNumber extends Module
 	{
 		$this->name = 'vatnumber';
 		$this->tab = 'billing_invoicing';
-		$this->version = 1.0;
+		$this->version = 1.1;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
-		
+		$id_country = (int)Configuration::get('VATNUMBER_COUNTRY');
+
+		if ($id_country == 0)
+			$this->warning = $this->l('No default country set.');
+
 		$this->displayName = $this->l('European VAT number');
 		$this->description = $this->l('Enable entering of the VAT intra-community number when creating the address (You must fill in the company field to allow keyboarding VAT number)');
 	}
-   
+
 	public function install()
 	{
 		return (parent::install() AND Configuration::updateValue('VATNUMBER_MANAGEMENT', 1));
 	}
-	
+
 	public function uninstall()
 	{
 		return (parent::uninstall() AND Configuration::updateValue('VATNUMBER_MANAGEMENT', 0));
 	}
-	
+
 	public function enable()
 	{
 		parent::enable();
 		Configuration::updateValue('VATNUMBER_MANAGEMENT', 1);
 	}
-	
+
 	public function disable()
 	{
 		parent::disable();
 		Configuration::updateValue('VATNUMBER_MANAGEMENT', 0);
 	}
-	
+
 	public static function getPrefixIntracomVAT()
 	{
 		$intracom_array = array(
@@ -95,13 +99,13 @@ class VatNumber extends Module
 			'SK'=>'SK',	//Slovakia
 			'CZ'=>'CZ',	//Czech Republic
 			'SI'=>'SI',	//Slovenia
-			'RO'=>'RO', //Romania			
-			'BG'=>'BG'	//Bulgaria   
+			'RO'=>'RO', //Romania
+			'BG'=>'BG'	//Bulgaria
 		);
 		return $intracom_array;
 	}
 
-	public static function isApplicable($id_country) 
+	public static function isApplicable($id_country)
 	{
 		return (((int)$id_country AND in_array(Country::getIsoById($id_country), self::getPrefixIntracomVAT())) ? 1 : 0);
 	}
@@ -144,7 +148,7 @@ class VatNumber extends Module
 	public function getContent()
 	{
 		global $cookie;
-		
+
 		if (Tools::isSubmit('submitVatNumber'))
 		{
 			if (Tools::getValue('vatnumber_country'))
@@ -179,5 +183,4 @@ class VatNumber extends Module
 		</fieldset>';
 	}
 }
-
 
