@@ -218,7 +218,7 @@ class Fianetfraud extends Module
 			FIA-NET, le leader français de la lutte contre la fraude à la carte bancaire sur internet !<br /><br />
 			Avec son réseau mutualisé de plus de 1 700 sites marchands, et sa base de données de 14 millions de cyber-acheteurs, le Système d’Analyse des Commandes vous offre une protection complète et unique contre le risque d’impayé.<br /><br />
 			Le logiciel expert (SAC) score vos transactions en quasi temps réel à partir de plus de 200 critères pour valider plus de 92 % de vos transactions.<br />
-			Le contrôle humain, prenant en charge les transactions les plus risqués, associé à l’assurance FIA-NET vous permet de valider et garantir jusqu’à 100 % de vos transactions.<br /><br />
+			Le contrôle humain, prenant en charge les transactions les plus risquées, associé à l’assurance FIA-NET vous permet de valider et garantir jusqu’à 100 % de vos transactions.<br /><br />
 			Ne restez pas isolé face à l’explosion des réseaux de fraudeurs !
 			<p>'.$this->l('To sign in, check out: ').' <u><a href="https://www.fia-net.com/marchands/devispartenaire.php?p=185" target="_blank">'.$this->l('Fia-net Website').'</a></u></p>
 		</fieldset><br />
