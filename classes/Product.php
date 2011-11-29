@@ -550,6 +550,10 @@ class ProductCore extends ObjectModel
 
 	public function delete()
 	{
+		// check if the product is not used in a non validated order
+		if (!$this->isDeletable())
+			return false;
+
 		if (!GroupReduction::deleteProductReduction($this->id))
 			return false;
 
@@ -3471,6 +3475,24 @@ class ProductCore extends ObjectModel
 		if ($success)
 			Search::indexation(false, $this->id);
 		return $success;
+	}
+
+	/**
+	 * check if a product can be deleted (in a non-valid order)
+	 * @return boolean 
+	 */
+	protected function isDeletable()
+	{
+		$is_deletable = Db::getInstance()->getValue('
+		SELECT COUNT(`product_id`) as `nb_product`
+		FROM `'._DB_PREFIX_.'order_detail` od
+		LEFT JOIN `'._DB_PREFIX_.'orders` o
+			ON (o.`id_order` = od.`id_order`)
+		WHERE `valid` = 0
+		AND `product_id` = '.(int)$this->id.'
+		');
+
+		return !(bool)$is_deletable;
 	}
 }
 
