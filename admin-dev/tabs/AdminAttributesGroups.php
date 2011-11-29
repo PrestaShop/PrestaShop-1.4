@@ -140,7 +140,7 @@ class AdminAttributesGroups extends AdminTab
 						<tr>
 							<td class="center"><input type="checkbox" name="attribute'.$id.'Box[]" value="'.$attribute['id_attribute'].'" class="noborder" /></td>
 							<td>
-								'.($tr['is_color_group'] ? '<div style="float: left; width: 18px; height: 12px; border: 1px solid #996633; background-color: '.$attribute['color'].'; margin-right: 4px;"></div>' : '')
+								'.($tr['is_color_group'] ? '<div style="float: left; width: 18px; height: 12px; border: 1px solid #996633; '.(!file_exists('../img/co/'.$attribute['id_attribute'].'.jpg') ? 'background-color: '.$attribute['color'].';' : 'background-image: url(../img/co/'.$attribute['id_attribute'].'.jpg);').' margin-right: 4px;"></div>' : '')
 								.$attribute['name'].'
 							</td>
 							<td class="center">

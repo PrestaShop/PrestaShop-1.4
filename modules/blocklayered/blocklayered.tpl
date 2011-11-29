@@ -81,7 +81,7 @@ current_friendly_url = '#{$current_friendly_url}';
 							{foreach from=$filter.values key=id_value item=value}
 								<li class="nomargin">
 								{if isset($filter.is_color_group) && $filter.is_color_group}
-									<input type="button" name="layered_{$filter.type_lite}_{$id_value}" rel="{$id_value}_{$filter.id_key}" id="layered_id_attribute_group_{$id_value}" {if !$value.nbr} value="X" disabled="disabled"{/if} style="background: {if isset($value.color)}{$value.color}{else}#CCC{/if}; margin-left: 0; width: 16px; height: 16px; padding:0; border: 1px solid {if isset($value.checked) && $value.checked}red{else}#666{/if};" />
+									<input type="button" name="layered_{$filter.type_lite}_{$id_value}" rel="{$id_value}_{$filter.id_key}" id="layered_id_attribute_group_{$id_value}" {if !$value.nbr} value="X" disabled="disabled"{/if} style="background: {if isset($value.color)}{if file_exists("img/co/$id_value.jpg")}url(img/co/{$id_value}.jpg){else}{$value.color}{/if}{else}#CCC{/if}; margin-left: 0; width: 16px; height: 16px; padding:0; border: 1px solid {if isset($value.checked) && $value.checked}red{else}#666{/if};" />
 									{if isset($value.checked) && $value.checked}<input type="hidden" name="layered_{$filter.type_lite}_{$id_value}" value="{$id_value}" />{/if}
 								{else}
 									<input type="checkbox" class="checkbox" name="layered_{$filter.type_lite}_{$id_value}" id="layered_{$filter.type_lite}{if $id_value || $filter.type == 'quantity'}_{$id_value}{/if}" value="{$id_value}{if $filter.id_key}_{$filter.id_key}{/if}"{if isset($value.checked)} checked="checked"{/if}{if !$value.nbr} disabled="disabled"{/if} /> 
