@@ -195,7 +195,8 @@ class MondialRelay extends Module
 				!$this->registerHook('extraCarrier') ||
 				!$this->registerHook('updateCarrier') ||
 				!$this->registerHook('newOrder') ||
-				!$this->registerHook('BackOfficeHeader')))
+				!$this->registerHook('BackOfficeHeader') ||
+				!$this->registerHook('header')))
 			return false;
 			
 		if (_PS_VERSION_ >= '1.4' &&
