@@ -3,12 +3,6 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blocklayered}prestashop>blocklayered-no-products_5c9838becf9bbce28ba90a7426daf171'] = 'Non ci sono prodotti.';
-$_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogo';
-$_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtri abilitati:';
-$_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
-$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
-$_MODULE['<{blocklayered}prestashop>blocklayered_75954a3c6f2ea54cb9dff249b6b5e8e6'] = 'Raggio d\'azione:';
-$_MODULE['<{blocklayered}prestashop>blocklayered_8524de963f07201e5c086830d370797f'] = 'Caricamento in corso ...';
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Blocco di navigazione a strati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Visualizza un blocco con i filtri di navigazione a strati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_af1b98adf7f686b84cd0b443e022b7a0'] = 'Categorie';
@@ -70,6 +64,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_72dd03f11489ff6f604a4eb57c95720
 $_MODULE['<{blocklayered}prestashop>blocklayered_2e527847e8c785f3fd99651f64006798'] = 'Passo 2 / 3 - Filtri Seleziona';
 $_MODULE['<{blocklayered}prestashop>blocklayered_3488a51eb7f723d65daeff912e69b177'] = 'Filtri personalizzati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_cf3cd81b30d4c4fd996ae5374fe656da'] = 'Nessun filtro selezionato ancora.';
+$_MODULE['<{blocklayered}prestashop>blocklayered_8524de963f07201e5c086830d370797f'] = 'Caricamento in corso ...';
 $_MODULE['<{blocklayered}prestashop>blocklayered_597c70730ebddba7d845e686665f9f28'] = 'È stata selezionata, tutte le categorie-, tutti i modelli esistenti filtro sarà cancellato, OK?';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c48c42c966b3a35ad3b893e798bdec7c'] = 'Errori:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_74a6a547d86659933a210680efb6e6d1'] = 'Passo 3 / 3 - Nome del modello';
@@ -109,5 +104,8 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_ee59f74265cd7f85d0ad30206a1a89b
 $_MODULE['<{blocklayered}prestashop>blocklayered_b07e7131a6007b2a1a765bdd0e1e4894'] = 'Caratteristica:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_f09cc7ee3a9a93273f4b80601cafb00c'] = 'valori';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2063c1608d6e0baf80249c42e2be5804'] = 'valore';
-
-?>
+$_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogo';
+$_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtri abilitati:';
+$_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
+$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
+$_MODULE['<{blocklayered}prestashop>blocklayered_75954a3c6f2ea54cb9dff249b6b5e8e6'] = 'Raggio d\'azione:';
