@@ -360,7 +360,7 @@ class CategoryCore extends ObjectModel
 	  */
 	public static function regenerateEntireNtree()
 	{
-		$categories = Db::getInstance()->ExecuteS('SELECT id_category, id_parent FROM '._DB_PREFIX_.'category ORDER BY id_category ASC');
+		$categories = Db::getInstance()->ExecuteS('SELECT id_category, id_parent FROM '._DB_PREFIX_.'category ORDER BY id_parent ASC, position ASC');
 		$categoriesArray = array();
 		foreach ($categories AS $category)
 			$categoriesArray[(int)$category['id_parent']]['subcategories'][(int)$category['id_category']] = 1;

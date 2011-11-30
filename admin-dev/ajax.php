@@ -246,7 +246,7 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 	}
 	else
 		die('{"hasError" : true, "errors" : "This category can not be loaded"}');
-
+	$category::regenerateEntireNtree();
 }
 
 if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
