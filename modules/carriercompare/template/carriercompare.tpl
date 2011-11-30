@@ -19,7 +19,7 @@
 *
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2011 PrestaShop SA
-*  @version  Release: $Revision$
+*  @version  Release: $Revision: 9095 $
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 **}
@@ -35,10 +35,17 @@
 	var currencyBlank = '{$currencyBlank|intval}';
 	var id_carrier = '{$id_carrier|intval}';
 	var id_state = '{$id_state|intval}';
+	var SE_RedirectTS = "{l s='Refreshing page and updating cart…' mod='carriercompare'}";
+	var SE_RefreshStateTS = "{l s='Checking available states…' mod='carriercompare'}";
+	var SE_RetrievingInfoTS = "{l s='Retrieving information…' mod='carriercompare'}";
+	var SE_RefreshMethod = {$refresh_method};
 
 	var txtFree = "{l s='Free!' mod='carriercompare'}";
+	
+	PS_SE_HandleEvent();
 	//]]>
 </script>
+
 <form class="std" id="compare_shipping_form" method="POST" action="#" >
 	<fieldset id="compare_shipping">
 		<h3>{l s='Estimate your shipping & taxes' mod='carriercompare'}</h3>
@@ -70,6 +77,11 @@
 			<input type="text" name="zipcode" id="zipcode" value="{$zipcode|escape:'htmlall':'UTF-8'}"/> ({l s='Needed for certain carriers' mod='carriercompare'})
 		</p>
 		
+		<div id="SE_AjaxDisplay">
+			<img src="{$new_base_dir}loader.gif" /><br />
+			<p></p>
+		</div>
+		
 		<div id="availableCarriers" style="display: none;">
 			<table cellspacing="0" cellpadding="0" id="availableCarriers_table" class="std">
 				<thead>
@@ -87,8 +99,9 @@
 		</div>
 		<p class="warning center" id="noCarrier" style="display: none;">{l s='No carrier is available for this selection' mod='carriercompare'}</p>
 		
-		<p class="center">
-			<input class="exclusive_large" id="carriercompare_submit" type="submit" name="carriercompare_submit" value="{l s='Refresh' mod='carriercompare'}"/>
+		<p class="SE_SubmitRefreshCard">
+			<input class="exclusive_large" id="carriercompare_submit" type="submit" name="carriercompare_submit" value="{l s='Update Cart' mod='carriercompare'}"/>
+			<input id="update_carriers_list" type="button" class="exclusive_large" value="{l s='Update carrier list'}" />
 		</p>
 	</fieldset>
 </form>
