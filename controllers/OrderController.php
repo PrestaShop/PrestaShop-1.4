@@ -65,6 +65,16 @@ class OrderControllerCore extends ParentOrderController
 			' '.Tools::displayError('is required in order to validate your order.');
 		}
 
+		if (Tools::getValue('ajax') && Tools::isSubmit('checkMinQuantity'))
+			if (count($this->errors))
+			{
+				self::$smarty->assign('errors', $this->errors);
+				$errors = self::$smarty->fetch(_PS_THEME_DIR_.'errors.tpl');
+				die('{"hasError" : false, "errors" : [""], "data" : '.Tools::jsonEncode($errors).'}');
+			}
+			else
+				die('{"hasError" : false, "errors" : [""]}');
+
 		if (!self::$cookie->isLogged(true) AND in_array($this->step, array(1, 2, 3)))
 			Tools::redirect('authentication.php?back='.urlencode('order.php?step='.$this->step));
 
