@@ -67,7 +67,7 @@ if (!isset($response[7]) OR !isset($response[3]) OR !isset($response[9]))
 
 if ($response[0] != 1)
 {
-	if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], 'order.php'))
+	if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], 'order'))
 		Tools::redirect('order.php?step=3&cgv=1&aimerror=1');
 	elseif (strstr($_SERVER['HTTP_REFERER'], '?'))
 		Tools::redirect($_SERVER['HTTP_REFERER'].'&aimerror=1', '');
