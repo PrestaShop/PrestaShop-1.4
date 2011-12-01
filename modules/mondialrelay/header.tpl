@@ -26,7 +26,7 @@
 
 {$jQueryOverload}
 
-<link href="{$new_base_dir}/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="{$new_base_dir}style.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript">
 	// Global JS Value
 	var _PS_MR_MODULE_DIR_ = "{$new_base_dir}";

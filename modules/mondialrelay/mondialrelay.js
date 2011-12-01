@@ -527,14 +527,14 @@ function PS_MRDisplayRelayPoint(json, blockContent, carrier_id)
 					var classSelection = (PS_MRPreSelectedRelay == json.success[relayPoint].Num) ?
 						'PS_MRFloatRelayPointSelected' : 'PS_MRFloatRelayPointSelecteIt';
 					
-					$('<div class="PS_MRRelayPointInfo clearfix" id="' + contentBlockid + '"> \
-						<img src="' + _PS_MR_MODULE_DIR_ + 'logo_hd.png" /> \
-						<p><b>' + json.success[relayPoint].LgAdr1 + '</b><br /> ' +  json.success[relayPoint].LgAdr3
+					$('<div class="PS_MRRelayPointInfo clearfix" id="' + contentBlockid + '">'
+						+ '<img src="' + _PS_MR_MODULE_DIR_ + 'logo_hd.png" />'
+						+ '<p><b>' + json.success[relayPoint].LgAdr1 + '</b><br /> ' +  json.success[relayPoint].LgAdr3
 						+ ' - ' + json.success[relayPoint].CP + ' - ' + json.success[relayPoint].Ville
-						+ ' ' + json.success[relayPoint].Pays + '</p> \
-						<div class="' + classSelection + '"> \
-							<a class="PS_MRSelectRelayPointButton">' + BtTranslation + '</a> \
-						</div> \
+						+ ' ' + json.success[relayPoint].Pays + '</p>'
+						+ '<div class="' + classSelection + '">'
+						+	'<a class="PS_MRSelectRelayPointButton">' + BtTranslation + '</a>'
+						+ '</div> \
 					</div>').appendTo($(this).children('td'));
 					
 					// Store all the object content to prevent an ajax request
@@ -719,18 +719,17 @@ function PS_MRStopDancingMarkers(currentMarkerList)
 ** Display the Gmap of the selected relay point 
 */
 function PS_MRDisplayGmap(contentBlockid, $map)
-{	
-	tab = contentBlockid.split('_');
-	relayPointNumber = tab[1];
-	id_carrier = tab[2];
-	
+{
+	var tab = contentBlockid.split('_');
+	var relayPointNumber = tab[1];
+	var id_carrier = tab[2];
+
 	// Stop the dancing marker of the current carrier
 	PS_MRStopDancingMarkers(markerList[id_carrier]);
 	if ($('#PS_MRGmap_' + id_carrier).css('display') == 'none')
 	{
 		$('#' + contentBlockid).after($('#PS_MRGmap_' + id_carrier));
-		$('#PS_MRGmap_' + id_carrier).slideDown('fast', function()
-		{
+		$('#PS_MRGmap_' + id_carrier).slideDown('fast', function() {
 			PS_MRGmapResizeEvent($map);
 			PS_MRGmapPlaceViewOnMarker($map, markerList[id_carrier][relayPointNumber], relayPointNumber);
 		});
@@ -739,13 +738,11 @@ function PS_MRDisplayGmap(contentBlockid, $map)
 	{
 		previousElem = $('#PS_MRGmap_' + id_carrier).prev();	
 		//$('#' + contentBlockid).after($('#PS_MRGmap_' + id_carrier));	
-		$('#PS_MRGmap_' + id_carrier).toggle('fast', function()
-		{
+		$('#PS_MRGmap_' + id_carrier).toggle('fast', function() {
 			if (previousElem.attr('id') != contentBlockid)
 			{
 				$('#' + contentBlockid).after($(this));	
-				$('#PS_MRGmap_' + id_carrier).slideDown('fast', function()
-				{
+				$('#PS_MRGmap_' + id_carrier).slideDown('fast', function() {
 					PS_MRGmapPlaceViewOnMarker($map, markerList[id_carrier][relayPointNumber], relayPointNumber);
 				});
 			}
