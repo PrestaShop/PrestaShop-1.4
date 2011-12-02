@@ -25,6 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+
 if (!defined('_PS_VERSION_'))
 	exit;
 	
@@ -41,7 +42,7 @@ class Ekomi extends Module
 		$this->name = 'ekomi';
 		$this->tab = 'advertising_marketing';
 		$this->author = 'PrestaShop';
-		$this->version = 1.2;
+		$this->version = 1.3;
 		$this->need_instance = 0;
 
 		parent::__construct();
@@ -55,8 +56,8 @@ class Ekomi extends Module
 			$this->iso_lang = pSQL(Language::getIsoById($this->id_lang));
 
 			/* Check Mail Directory */
-			if (!file_exists(dirname(__FILE__.'/'.$this->iso_lang.'/')))
-				$this->warning .= $this->l('directory').' "'.$this->iso_lang.'" does not exist ';
+			if (!is_dir('../modules/'.$this->name.'/mails/'.$this->iso_lang.'/'))
+				$this->warning .= $this->l('directory').' "'.$this->iso_lang.'" does not exist '.'../modules/'.$this->name.'/mails/'.$this->iso_lang.'/';
 		}
 	}
 
@@ -149,5 +150,4 @@ class Ekomi extends Module
 		return true;
 	}
 }
-
 
