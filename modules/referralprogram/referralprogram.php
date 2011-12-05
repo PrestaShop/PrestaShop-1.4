@@ -470,7 +470,7 @@ class ReferralProgram extends Module
 					{
 						$data = array('{firstname}' => $newCustomer->firstname, '{lastname}' => $newCustomer->lastname, '{voucher_num}' => $discount->name,
 						'{voucher_amount}' => (Configuration::get('REFERRAL_DISCOUNT_TYPE') == 2 ? Tools::displayPrice((float)Configuration::get('REFERRAL_DISCOUNT_VALUE_'.(int)($cookie->id_currency)), (int)Configuration::get('PS_CURRENCY_DEFAULT')) : (float)Configuration::get('REFERRAL_PERCENTAGE').'%'));
-						Mail::Send((int)$cookie->id_lang, 'referralprogram-voucher', Mail::l('Congratulations!'), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+						Mail::Send((int)$cookie->id_lang, 'referralprogram-voucher', Mail::l('Congratulations!', (int)$cookie->id_lang), $data, $newCustomer->email, $newCustomer->firstname.' '.$newCustomer->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 					}
 				}
 				return true;
@@ -598,7 +598,7 @@ class ReferralProgram extends Module
 			$currency = new Currency((int)$order->id_currency);
 			$discount_display = $discount->display($discount->value, (int)$discount->id_discount_type, $currency);
 			$data = array('{sponsored_firstname}' => $customer->firstname, '{sponsored_lastname}' => $customer->lastname, '{discount_display}' => $discount_display, '{discount_name}' => $discount->name);
-			Mail::Send((int)$order->id_lang, 'referralprogram-congratulations', Mail::l('Congratulations!'), $data, $sponsor->email, $sponsor->firstname.' '.$sponsor->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+			Mail::Send((int)$order->id_lang, 'referralprogram-congratulations', Mail::l('Congratulations!', (int)$order->id_lang), $data, $sponsor->email, $sponsor->firstname.' '.$sponsor->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			return true;
 		}
 		return false;

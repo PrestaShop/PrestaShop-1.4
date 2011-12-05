@@ -103,7 +103,7 @@ class sendToAFriend extends Module
 				);
 
 				/* Email sending */
-				if (!Mail::Send((int)$cookie->id_lang, 'send_to_a_friend', Mail::l('A friend sent you a link to').' '.$product->name, $templateVars, $_POST['email'], NULL, ($cookie->email ? $cookie->email : NULL), ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : NULL), NULL, NULL, dirname(__FILE__).'/mails/'))
+				if (!Mail::Send((int)$cookie->id_lang, 'send_to_a_friend', Mail::l('A friend sent you a link to', (int)$cookie->id_lang).' '.$product->name, $templateVars, $_POST['email'], NULL, ($cookie->email ? $cookie->email : NULL), ($cookie->customer_firstname ? $cookie->customer_firstname.' '.$cookie->customer_lastname : NULL), NULL, NULL, dirname(__FILE__).'/mails/'))
 					$error = $this->l('An error occurred during the process.');
 				else
 					Tools::redirect(_MODULE_DIR_.'/'.$this->name.'/sendtoafriend-form.php?id_product='.(int)$product->id.'&submited');

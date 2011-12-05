@@ -153,8 +153,8 @@ class ContactControllerCore extends FrontController
 				}
 				if (!empty($contact->email))
 				{
-					if (Mail::Send((int)(self::$cookie->id_lang), 'contact', Mail::l('Message from contact form'), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)(self::$cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : ''), $fileAttachment)
-						AND Mail::Send((int)(self::$cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from))
+					if (Mail::Send((int)self::$cookie->id_lang, 'contact', Mail::l('Message from contact form', (int)self::$cookie->id_lang), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)(self::$cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : ''), $fileAttachment)
+						AND Mail::Send((int)self::$cookie->id_lang, 'contact_form', Mail::l('Your message has been correctly sent', (int)self::$cookie->id_lang), array('{message}' => stripslashes($message)), $from))
 						self::$smarty->assign('confirmation', 1);
 					else
 						$this->errors[] = Tools::displayError('An error occurred while sending message.');
@@ -203,7 +203,7 @@ class ContactControllerCore extends FrontController
 						if ($cm->add())
 						{
 							if (empty($contact->email))
-								Mail::Send((int)(self::$cookie->id_lang), 'contact_form', Mail::l('Your message has been correctly sent'), array('{message}' => stripslashes($message)), $from);
+								Mail::Send((int)self::$cookie->id_lang, 'contact_form', Mail::l('Your message has been correctly sent', (int)self::$cookie->id_lang), array('{message}' => stripslashes($message)), $from);
 							self::$smarty->assign('confirmation', 1);
 						}
 						else

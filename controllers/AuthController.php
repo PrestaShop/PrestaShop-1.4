@@ -164,7 +164,7 @@ class AuthControllerCore extends FrontController
 							{
 								if (!$customer->is_guest)
 								{
-									if (!Mail::Send((int)(self::$cookie->id_lang), 'account', Mail::l('Welcome!'),
+									if (!Mail::Send((int)self::$cookie->id_lang, 'account', Mail::l('Welcome!', (int)self::$cookie->id_lang),
 									array('{firstname}' => $customer->firstname, '{lastname}' => $customer->lastname, '{email}' => $customer->email, '{passwd}' => Tools::getValue('passwd')), $customer->email, $customer->firstname.' '.$customer->lastname))
 										$this->errors[] = Tools::displayError('Cannot send email');
 								}

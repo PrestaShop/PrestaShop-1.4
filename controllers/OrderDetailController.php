@@ -75,7 +75,7 @@ class OrderDetailControllerCore extends FrontController
 					$toName = strval(Configuration::get('PS_SHOP_NAME'));
 					$customer = new Customer((int)(self::$cookie->id_customer));
 					if (Validate::isLoadedObject($customer))
-						Mail::Send((int)(self::$cookie->id_lang), 'order_customer_comment', Mail::l('Message from a customer'),
+						Mail::Send((int)self::$cookie->id_lang, 'order_customer_comment', Mail::l('Message from a customer', (int)self::$cookie->id_lang),
 						array(
 						'{lastname}' => $customer->lastname,
 						'{firstname}' => $customer->firstname,

@@ -51,7 +51,7 @@ class PasswordControllerCore extends FrontController
 						$this->errors[] = Tools::displayError('You can regenerate your password only every').' '.(int)($min_time).' '.Tools::displayError('minute(s)');
 					else
 					{	
-						if (Mail::Send((int)(self::$cookie->id_lang), 'password_query', Mail::l('Password query confirmation'), 
+						if (Mail::Send((int)self::$cookie->id_lang, 'password_query', Mail::l('Password query confirmation', (int)self::$cookie->id_lang), 
 						array('{email}' => $customer->email, 
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname,
@@ -80,7 +80,7 @@ class PasswordControllerCore extends FrontController
 					$customer->last_passwd_gen = date('Y-m-d H:i:s', time());
 					if ($customer->update())
 					{
-						if (Mail::Send((int)(self::$cookie->id_lang), 'password', Mail::l('Your password'), 
+						if (Mail::Send((int)self::$cookie->id_lang, 'password', Mail::l('Your password', (int)self::$cookie->id_lang), 
 						array('{email}' => $customer->email, 
 							  '{lastname}' => $customer->lastname, 
 							  '{firstname}' => $customer->firstname, 

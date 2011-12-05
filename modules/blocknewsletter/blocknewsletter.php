@@ -199,7 +199,7 @@ class Blocknewsletter extends Module
 		global $cookie;
 
 		if ($discount = Configuration::get('NW_VOUCHER_CODE'))
-			return Mail::Send((int)($cookie->id_lang), 'newsletter_voucher', Mail::l('Newsletter voucher'), array('{discount}' => $discount), $email, NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+			return Mail::Send((int)$cookie->id_lang, 'newsletter_voucher', Mail::l('Newsletter voucher', (int)$cookie->id_lang), array('{discount}' => $discount), $email, NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
 		return false;
 	}
 
@@ -226,7 +226,7 @@ class Blocknewsletter extends Module
 			elseif ($this->valid)
 			{
 				if (Configuration::get('NW_CONFIRMATION_EMAIL') AND isset($_POST['action']) AND (int)($_POST['action']) == 0)
-					Mail::Send((int)($params['cookie']->id_lang), 'newsletter_conf', Mail::l('Newsletter confirmation'), array(), pSQL($_POST['email']), NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
+					Mail::Send((int)$params['cookie']->id_lang, 'newsletter_conf', Mail::l('Newsletter confirmation', (int)$params['cookie']->id_lang), array(), pSQL($_POST['email']), NULL, NULL, NULL, NULL, NULL, dirname(__FILE__).'/mails/');
 				$smarty->assign(array('color' => 'green',
 										'msg' => $this->valid,
 										'nw_error' => false));

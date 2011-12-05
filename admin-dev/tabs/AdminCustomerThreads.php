@@ -129,7 +129,7 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					if (Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
+					if (Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message', (int)($cookie->id_lang)), $params,
 						$employee->email, $employee->firstname.' '.$employee->lastname,
 						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname,
 						NULL, NULL, _PS_MAIL_DIR_, true))
@@ -144,7 +144,7 @@ class AdminCustomerThreads extends AdminTab
 					'{messages}' => $output,
 					'{employee}' => $currentEmployee->firstname.' '.$currentEmployee->lastname,
 					'{comment}' => stripslashes($_POST['message_forward']));
-					if (Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message'), $params,
+					if (Mail::Send((int)($cookie->id_lang), 'forward_msg', Mail::l('Fwd: Customer message', (int)($cookie->id_lang)), $params,
 						$email, NULL,
 						$currentEmployee->email, $currentEmployee->firstname.' '.$currentEmployee->lastname,
 						NULL, NULL, _PS_MAIL_DIR_, true))
@@ -178,7 +178,7 @@ class AdminCustomerThreads extends AdminTab
 					$params = array(
 					'{reply}' => nl2br2(Tools::getValue('reply_message')),
 					'{link}' => $link->getPageLink('contact-form.php', true).'?id_customer_thread='.(int)($ct->id).'&token='.$ct->token);
-					if (Mail::Send($ct->id_lang, 'reply_msg', Mail::l('An answer to your message is available'), 
+					if (Mail::Send((int)$ct->id_lang, 'reply_msg', Mail::l('An answer to your message is available', (int)$ct->id_lang), 
 						$params, Tools::getValue('msg_email'), NULL, NULL, NULL, $fileAttachment, NULL, 
 						_PS_MAIL_DIR_, true))
 					{
