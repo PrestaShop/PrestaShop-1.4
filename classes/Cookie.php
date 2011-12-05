@@ -250,7 +250,8 @@ class	CookieCore
 			$content = $this->_cipherTool->decrypt($_COOKIE[$this->_name]);
 
 			/* Get cookie checksum */
-			$checksum = crc32($this->_iv.substr($content, 0, strrpos($content, '¤') + 2));
+			$mbStrValue = ((1 << 1) & ini_get('mbstring.func_overload')) ? 1 : 2;
+			$checksum = crc32($this->_iv.substr($content, 0, strrpos($content, '¤') + $mbStrValue));
 
 			/* Unserialize cookie content */
 			$tmpTab = explode('¤', $content);
