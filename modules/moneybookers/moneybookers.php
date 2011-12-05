@@ -34,11 +34,13 @@ class MoneyBookers extends PaymentModule
 	const RIGHT_COLUMN = 1;
 	const DISABLE = -1;
 
+	private $host_url;
+
 	public function __construct()
 	{
 		$this->name = 'moneybookers';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.6.2';
+		$this->version = '1.6.3';
 
 		parent::__construct();
 
@@ -60,6 +62,7 @@ class MoneyBookers extends PaymentModule
 				else
 					Configuration::updateValue($u, $v);
 			}
+		$this->host_url = (Configuration::get('PS_SHOP_DOMAIN') ? Configuration::get('PS_SHOP_DOMAIN') : $_SERVER['HTTP_HOST']);
 
 		/* MoneyBookers payment methods */
 		$this->_internationalPaymentMethods = array(
@@ -129,7 +132,7 @@ class MoneyBookers extends PaymentModule
 			return false;
 		Configuration::updateValue('MB_HIDE_LOGIN', 1);
 		Configuration::updateValue('MB_PAY_TO_EMAIL', '');
-		Configuration::updateValue('MB_CANCEL_URL', (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+		Configuration::updateValue('MB_CANCEL_URL', (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$this->host_url.__PS_BASE_URI__);
 		Configuration::updateValue('MB_ID_LOGO', 1);
 		Configuration::updateValue('MB_ID_LOGO_WALLET', 1);
 		Configuration::updateValue('MB_PARAMETERS', 0);
@@ -233,7 +236,7 @@ class MoneyBookers extends PaymentModule
 			{
 				try 
 				{
-					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url=http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__;
+					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.$_POST['mb_email_to_validate'].'&url=http://'.$this->host_url.__PS_BASE_URI__;
 					$content = $this->_fetchWebContent($url);
 					$response = trim(strtolower($content));
 					if (!strstr('ok', $response))
@@ -265,7 +268,7 @@ class MoneyBookers extends PaymentModule
 				try
 				{
 					$url = 'http://moneybookers.prestashop.com/email_check.php?email='.Configuration::get('MB_PAY_TO_EMAIL').'&url=http://'
-						.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']);
+						.$this->host_url.__PS_BASE_URI__.'&sw=1&secret_word='.md5($_POST['mb_sw_to_validate']);
 					$content = $this->_fetchWebContent($url);
 					$response = trim(strtolower($content));
 					if (strstr('velocity_check_exceeded', $response))
@@ -639,7 +642,7 @@ class MoneyBookers extends PaymentModule
 			$mbParams['recipient_description'] = Configuration::get('PS_SHOP_NAME');
 			$mbParams['hide_login'] = (int)(Configuration::get('MB_HIDE_LOGIN'));
 			$mbParams['id_logo'] = (int)(Configuration::get('MB_ID_LOGO'));
-			$mbParams['return_url'] = (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)($params['cart']->id).'&id_module='.(int)($this->id).'&key='.$customer->secure_key;
+			$mbParams['return_url'] = (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$this->host_url.__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)($params['cart']->id).'&id_module='.(int)($this->id).'&key='.$customer->secure_key;
 			$mbParams['cancel_url'] = Configuration::get('MB_CANCEL_URL');
 
 			/* About the customer */
@@ -661,7 +664,7 @@ class MoneyBookers extends PaymentModule
 			$mbParams['amount'] = number_format($params['cart']->getOrderTotal(), 2, '.', '');
 
 			/* URLs */
-			$mbParams['status_url'] = (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/validation.php';
+			$mbParams['status_url'] = (Configuration::get('PS_SSL_ENABLED') ? 'https' : 'http').'://'.$this->host_url.__PS_BASE_URI__.'modules/'.$this->name.'/validation.php';
 
 			/* Assign settings to Smarty template */
 			$smarty->assign($mbParams);
