@@ -356,7 +356,7 @@ abstract class PaymentModuleCore extends Module
 				foreach ($storeAllTaxes AS $t)
 					Db::getInstance()->Execute('
 					INSERT INTO '._DB_PREFIX_.'order_tax (id_order, tax_name, tax_rate, amount)
-					VALUES ('.(int)$order->id.', \''.pSQL($t['name']).'\', \''.(float)($t['rate']).'\', '.(float)$t['amount'].')');
+					VALUES ('.(int)$order->id.', \''.pSQL($t['name']).'\', '.(float)($t['rate']).', '.(float)$t['amount'].')');
 
 				// Insert discounts from cart into order_discount table
 				$discounts = $cart->getDiscounts();
