@@ -251,6 +251,7 @@ class OrderControllerCore extends ParentOrderController
 		if (sizeof($this->errors))
 		{
 			self::$smarty->assign('errors', $this->errors);
+			$this->displayHeader();
 			$this->_assignCarrier();
 			$this->step = 2;
 			$this->displayContent();
