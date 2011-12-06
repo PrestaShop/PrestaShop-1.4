@@ -83,12 +83,21 @@ class AdminEmployees extends AdminTab
 
 	public function displayForm($isMainTab = true)
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex, $cookie, $employee;
 		parent::displayForm();
 
 		if (!($obj = $this->loadObject(true)))
 			return;
-		$profiles = Profile::getProfiles((int)($cookie->id_lang));
+
+		$profiles = Profile::getProfiles((int)$cookie->id_lang);
+		// If the current employee is not an Admin, don't make it possible to select the Admin profile
+		if ($employee->id_profile != 1)
+			foreach ($profiles as $i => $profile)
+				if ($profile['id_profile'] == 1)
+				{
+					unset($profiles[$i]);
+					break;
+				}
 
 		echo '<script type="text/javascript" src="'._PS_JS_DIR_.'/jquery/jquery-colorpicker.js"></script>
 		 	 <script type="text/javascript">
@@ -185,7 +194,7 @@ class AdminEmployees extends AdminTab
 
 	public function postProcess()
 	{
-		global $cookie;
+		global $cookie, $employee;
 
 		/* PrestaShop demo mode */
 		if (_PS_MODE_DEMO_)
@@ -203,8 +212,8 @@ class AdminEmployees extends AdminTab
 				return false;
 			}
 
-			$employee = new Employee(Tools::getValue('id_employee'));
-			if ($employee->isLastAdmin())
+			$edited_employee = new Employee(Tools::getValue('id_employee'));
+			if ($edited_employee->isLastAdmin())
 			{
 					$this->_errors[] = Tools::displayError('You cannot disable or delete the last administrator account.');
 					return false;
@@ -212,11 +221,19 @@ class AdminEmployees extends AdminTab
 		}
 		elseif (Tools::isSubmit('submitAddemployee'))
 		{
-			$employee = new Employee((int)Tools::getValue('id_employee'));
-			if (!(int)$this->tabAccess['edit'])
-				$_POST['id_profile'] = $_GET['id_profile'] = $employee->id_profile;
+			$edited_employee = new Employee((int)Tools::getValue('id_employee'));
 
-			if ($employee->isLastAdmin())
+			// Employee is changing its own profile
+			if (!(int)$this->tabAccess['edit'])
+				$_POST['id_profile'] = $_GET['id_profile'] = $edited_employee->id_profile;
+			// Employee tries to change profile to Admin without being Admin himself
+			elseif ($_POST['id_profile'] == 1 && $employee->id_profile != 1)
+			{
+				$this->_errors[] = Tools::displayError('Only an Administrator can give the Administrator profile.');
+				return false;
+			}
+
+			if ($edited_employee->isLastAdmin())
 			{
 				if  (Tools::getValue('id_profile') != (int)_PS_ADMIN_PROFILE_)
 				{
