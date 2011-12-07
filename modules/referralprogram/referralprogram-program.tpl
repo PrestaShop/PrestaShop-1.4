@@ -155,7 +155,7 @@
 			{foreach from=$pendingFriends item=pendingFriend name=myLoop}
 				<tr>
 					<td>
-						<input type="checkbox" name="friendChecked[{$pendingFriend.id_referralprogram}]" id="friendChecked[{$pendingFriend.id_referralprogram}]" value="1" />
+						<input type="checkbox" name="friendChecked[{$pendingFriend.id_referralprogram}]" id="friendChecked[{$pendingFriend.id_referralprogram}]" value="{$pendingFriend.id_referralprogram}" />
 					</td>
 					<td>
 						<label for="friendChecked[{$pendingFriend.id_referralprogram}]">{$pendingFriend.lastname|substr:0:22}</label>
