@@ -2082,19 +2082,19 @@ class BlockLayered extends Module
 				AND psi.`id_currency` = '.$idCurrency;
 		}
 		
-		$allProductsOut = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$allProductsOut = self::query('
 		SELECT p.`id_product` id_product
 		FROM `'._DB_PREFIX_.'product` p
 		'.$priceFilterQueryOut.'
 		'.$queryFiltersFrom.'
-		WHERE 1 '.$queryFiltersWhere.' GROUP BY id_product', false);
+		WHERE 1 '.$queryFiltersWhere.' GROUP BY id_product');
 		
-		$allProductsIn = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$allProductsIn = self::query('
 		SELECT p.`id_product` id_product
 		FROM `'._DB_PREFIX_.'product` p
 		'.$priceFilterQueryIn.'
 		'.$queryFiltersFrom.'
-		WHERE 1 '.$queryFiltersWhere.' GROUP BY id_product', false);
+		WHERE 1 '.$queryFiltersWhere.' GROUP BY id_product');
 
 		$productIdList = array();
 		
@@ -2136,6 +2136,14 @@ class BlockLayered extends Module
 			' LIMIT '.(((int)$this->page - 1) * $n.','.$n));
 		}
 		return $this->products;
+	}
+	
+	private static function query($sql_query)
+	{
+		if (version_compare(_PS_VERSION_,'1.5','>'))
+			self::query($sql_query);
+		else
+			Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql_query, false);
 	}
 	
 	public function getFilterBlock($selectedFilters = array())
@@ -3304,7 +3312,7 @@ class BlockLayered extends Module
 		$nCategories = array();
 		$doneCategories = array();
 
-		$attributeGroups = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$attributeGroups = self::query('
 		SELECT a.id_attribute, a.id_attribute_group
 		FROM '._DB_PREFIX_.'attribute a
 		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_attribute = a.id_attribute)
@@ -3313,13 +3321,13 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
 		LEFT JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category)
 		WHERE c.active = 1'.(count($categoriesIds) ? ' AND cp.id_category IN ('.implode(',', $categoriesIds).')' : '').' AND p.active = 1'.(count($productsIds) ? '
-		AND p.id_product IN ('.implode(',', $productsIds).')' : ''), false);
+		AND p.id_product IN ('.implode(',', $productsIds).')' : ''));
 
 		$attributeGroupsById = array();
 		while ($row = $db->nextRow($attributeGroups))
 			$attributeGroupsById[(int)$row['id_attribute']] = (int)$row['id_attribute_group'];
 
-		$features = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$features = self::query('
 		SELECT fv.id_feature_value, fv.id_feature
 		FROM '._DB_PREFIX_.'feature_value fv
 		LEFT JOIN '._DB_PREFIX_.'feature_product fp ON (fp.id_feature_value = fv.id_feature_value)
@@ -3327,13 +3335,13 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
 		LEFT JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category)
 		WHERE (fv.custom IS NULL OR fv.custom = 0) AND c.active = 1'.(count($categoriesIds) ? ' AND cp.id_category IN ('.implode(',', $categoriesIds).')' : '').'
-		AND p.active = 1'.(count($productsIds) ? ' AND p.id_product IN ('.implode(',', $productsIds).')' : ''), false);
+		AND p.active = 1'.(count($productsIds) ? ' AND p.id_product IN ('.implode(',', $productsIds).')' : ''));
 
 		$featuresById = array();
 		while ($row = $db->nextRow($features))
 			$featuresById[(int)$row['id_feature_value']] = (int)$row['id_feature'];
 
-		$result = $db->ExecuteS('
+		$result = $db->query('
 		SELECT p.id_product, GROUP_CONCAT(DISTINCT fv.id_feature_value) features, GROUP_CONCAT(DISTINCT cp.id_category) categories, GROUP_CONCAT(DISTINCT pac.id_attribute) attributes
 		FROM '._DB_PREFIX_.'product p
 		LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)
@@ -3344,7 +3352,7 @@ class BlockLayered extends Module
 		LEFT JOIN '._DB_PREFIX_.'product_attribute_combination pac ON (pac.id_product_attribute = pa.id_product_attribute)
 		WHERE c.active = 1'.(count($categoriesIds) ? ' AND cp.id_category IN ('.implode(',', $categoriesIds).')' : '').' AND p.active = 1'.(count($productsIds) ? '
 		AND p.id_product IN ('.implode(',', $productsIds).')' : '').' AND (fv.custom IS NULL OR fv.custom = 0)
-		GROUP BY p.id_product', false);
+		GROUP BY p.id_product');
 
 		while ($product = $db->nextRow($result))
 		{
