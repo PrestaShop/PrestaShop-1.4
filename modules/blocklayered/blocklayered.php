@@ -2141,9 +2141,9 @@ class BlockLayered extends Module
 	private static function query($sql_query)
 	{
 		if (version_compare(_PS_VERSION_,'1.5','>'))
-			self::query($sql_query);
+			return Db::getInstance(_PS_USE_SQL_SLAVE_)->query($sql_query);
 		else
-			Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql_query, false);
+			return Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS($sql_query, false);
 	}
 	
 	public function getFilterBlock($selectedFilters = array())
