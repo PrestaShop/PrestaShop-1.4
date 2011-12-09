@@ -1842,15 +1842,19 @@ class ProductCore extends ObjectModel
 		if (!isset(self::$_pricesLevel2[$cacheId2]))
 			self::$_pricesLevel2[$cacheId2] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT p.`price`,
-			'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.(int)($id_product).' AND default_on = 1), 0)').' AS attribute_price,
+			'.($id_product_attribute ? 'pa.`price`' : 'IFNULL((SELECT pa.price FROM `'._DB_PREFIX_.'product_attribute` pa WHERE id_product = '.(int)$id_product.' AND default_on = 1), 0)').' AS attribute_price,
 			p.`ecotax`
 			'.($id_product_attribute ? ', pa.`ecotax` AS attribute_ecotax' : '').'
 			FROM `'._DB_PREFIX_.'product` p
 			'.($id_product_attribute ? 'LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON pa.`id_product_attribute` = '.(int)($id_product_attribute) : '').'
-			WHERE p.`id_product` = '.(int)($id_product));
+			WHERE p.`id_product` = '.(int)$id_product);
 		$result = self::$_pricesLevel2[$cacheId2];
 
-		$price = (float)(!$specific_price OR $specific_price['price'] == 0) ? $result['price'] : $specific_price['price'];
+    if (!$specific_price || $specific_price['price'] == 0)
+		  $price = (float)$result['price'];
+    else
+      $price = (float)$specific_price['price'];
+
 		// convert only if the specific price is in the default currency (id_currency = 0)
 		if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
