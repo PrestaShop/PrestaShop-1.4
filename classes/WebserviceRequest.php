@@ -1457,42 +1457,40 @@ class WebserviceRequestCore
 	protected function getSQLRetrieveFilter($sqlId, $filterValue, $tableAlias = 'main.')
 	{
 		$ret = '';
-		// "LIKE" case (=%[foo]%, =%[foo], =[foo]%)
 		preg_match('/^(.*)\[(.*)\](.*)$/', $filterValue, $matches);
 		if (count($matches) > 1)
 		{
 			if ($matches[1] == '%' || $matches[3] == '%')
-				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` LIKE "'.$matches[1].pSQL($matches[2]).$matches[3]."\"\n";// AND field LIKE %value%
+				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` LIKE "'.$matches[1].pSQL($matches[2]).$matches[3]."\"\n";
 			elseif ($matches[1] == '' && $matches[3] == '')
 			{
-				// "OR" case
 				if (strpos($matches[2], '|') > 0)
 				{
 					$values = explode('|', $matches[2]);
 					$ret .= ' AND (';
 					$temp = '';
 					foreach ($values as $value)
-						$temp .= $tableAlias.'`'.pSQL($sqlId).'` = "'.pSQL($value).'" OR ';// AND (field = value3 OR field = value7 OR field = value9)
+						$temp .= $tableAlias.'`'.pSQL($sqlId).'` = "'.pSQL($value).'" OR ';
 					$ret .= rtrim($temp, 'OR ').')'."\n";
 				}
-				elseif (preg_match('/^([\d\.:-\s]+),([\d\.:-\s]+)$/', $matches[2], $matches3))// "AND" case
+				elseif (preg_match('/^([\d\.:-\s]+),([\d\.:-\s]+)$/', $matches[2], $matches3))
 				{
 					unset($matches3[0]);
 					if (count($matches3) > 0)
 					{
 						sort($matches3);
-						$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` BETWEEN "'.$matches3[0].'" AND "'.$matches3[1]."\"\n";// AND field BETWEEN value3 AND value4
+						$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` BETWEEN "'.pSQL($matches3[0]).'" AND "'.pSQL($matches3[1])."\"\n";
 					}
 				}
 				else
-					$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'`="'.$matches[2].'"'."\n";// AND field = value1
+					$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'`="'.pSQL($matches[2]).'"'."\n";
 			}
 			elseif ($matches[1] == '>')
-				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` > "'.pSQL($matches[2])."\"\n";// AND field > value3
+				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` > "'.pSQL($matches[2])."\"\n";
 			elseif ($matches[1] == '<')
-				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` < "'.pSQL($matches[2])."\"\n";// AND field < value3
+				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` < "'.pSQL($matches[2])."\"\n";
 			elseif ($matches[1] == '!')
-				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` != "'.pSQL($matches[2])."\"\n";// AND field IS NOT value3
+				$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` != "'.pSQL($matches[2])."\"\n";
 		}
 		else
 			$ret .= ' AND '.$tableAlias.'`'.pSQL($sqlId).'` '.(Validate::isFloat(pSQL($filterValue)) ? 'LIKE' : '=').' "'.pSQL($filterValue)."\"\n";
