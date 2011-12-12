@@ -26,6 +26,7 @@
 <style>.tooltip{ position: absolute; top: 0; left: 0; z-index: 3; display: none; padding: 10px 13px; width: 300px; background-color: #ffffff; border: 1px solid #ff6600; }</style>
 <script type="text/javascript" src="{$base_dir}/modules/socolissimoflex/jquery.simpletip-1.3.1.min.js"></script>
 <script type="text/javascript">
+var ajax_loader = '<img src="{$base_dir}/modules/socolissimoflex/loader.gif" border="0" />';
 var ajax_url = '{$base_dir}/modules/socolissimoflex/ajax.php';
 var delivery_point_selected = '{$delivery_point_selected}';
 
@@ -54,6 +55,7 @@ function hideDeliveryPoint()
 
 function displayDeliveryPoint()
 {
+	$('#deliveryPointListSocoFlex').html(ajax_loader);
 	$("#deliveryPointSocoFlex").show();
 	$.ajax({
 	  url: ajax_url,
@@ -70,8 +72,7 @@ $(document).ready(function () {
 	$("#id_carrier"+id_carrier_homedelivery).parent().parent().simpletip({content: message_homedelivery, fixed: false, offset: [150, 5] });
 	$("#id_carrier"+id_carrier_appdelivery).parent().parent().simpletip({content: message_appdelivery, fixed: false, offset: [150, 5] });
 	$("#id_carrier"+id_carrier_deliverypoint).parent().parent().simpletip({content: message_deliverypoint, fixed: false, offset: [150, 5] });
-	$("#id_carrier"+id_carrier_homedelivery).parent().parent().click(function(){hideDeliveryPoint();});
-	$("#id_carrier"+id_carrier_appdelivery).parent().parent().click(function(){hideDeliveryPoint();});
+	$("input[name=id_carrier]").parent().parent().click(function(){hideDeliveryPoint();});
 	$("#id_carrier"+id_carrier_deliverypoint).parent().parent().click(function(){displayDeliveryPoint();});
 });
 {/literal}

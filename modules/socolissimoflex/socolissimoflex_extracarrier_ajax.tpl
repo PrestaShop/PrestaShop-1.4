@@ -28,14 +28,14 @@
 	<table width="100%">
 	{foreach from=$deliveryPointList item=deliveryPoint}
 		<tr>
-			<td><input type="radio" name="deliveryPointSelected" value="{$deliveryPoint.identifiant}"></td>
-			<td><img src="{$base_dir}/modules/socolissimoflex/carrier-delivery-point.jpg" /></td>
-			<td width="80%">
+			<td style="border-top: 0px; border-bottom: 1px solid #BDC2C9;"><input type="radio" name="deliveryPointSelected" value="{$deliveryPoint.identifiant}" {if $delivery_point eq $deliveryPoint.identifiant}checked="checked"{/if}></td>
+			<td style="border-top: 0px; border-bottom: 1px solid #BDC2C9;"><img src="{$base_dir}/modules/socolissimoflex/carrier-delivery-point.jpg" /></td>
+			<td width="80%" style="border-top: 0px; border-bottom: 1px solid #BDC2C9;">
 				<b>{$deliveryPoint.nom}</b><br />
 				{$deliveryPoint.adresse1}<br />
 				{$deliveryPoint.codePostal} {$deliveryPoint.localite}<br />
 			</td>
-			<td>Distance:<br />{$deliveryPoint.distanceEnMetre/1000}km</td>
+			<td style="border-top: 0px; border-bottom: 1px solid #BDC2C9;">Distance:<br />{$deliveryPoint.distanceEnMetre/1000}km</td>
 		</tr>
 	{/foreach}
 	</table>

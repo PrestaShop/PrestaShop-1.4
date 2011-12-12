@@ -21,4 +21,3 @@ $_MODULE['<{carriercompare}prestashop>carriercompare_914419aa32f04011357d3b604a8
 $_MODULE['<{carriercompare}prestashop>carriercompare_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Information';
 $_MODULE['<{carriercompare}prestashop>carriercompare_3601146c4e948c32b6424d2c0a7f0118'] = 'Prix';
 $_MODULE['<{carriercompare}prestashop>carriercompare_f620c0ed0c89129c9dd8953406300061'] = 'Aucun  transporteur n\'est disponible pour cette sélection';
-$_MODULE['<{carriercompare}prestashop>carriercompare_63a6a88c066880c5ac42394a22803ca6'] = 'Rafraichir';

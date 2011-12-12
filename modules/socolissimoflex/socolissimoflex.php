@@ -52,7 +52,7 @@ class SocolissimoFlex extends CarrierModule
 	{
 		$this->name = 'socolissimoflex';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.0';
+		$this->version = '1.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -107,7 +107,7 @@ class SocolissimoFlex extends CarrierModule
 		);
 
 		// Loading hooks to register
-		$this->_hooksRegistration = array('updateCarrier', 'extraCarrier', 'AdminOrder', 'paymentTop', 'newOrder');
+		$this->_hooksRegistration = array('updateCarrier', 'extraCarrier', 'paymentTop', 'newOrder');
 	}
 
 
@@ -122,12 +122,6 @@ class SocolissimoFlex extends CarrierModule
 		// Install Module
 		if (!parent::install())
 			return false;
-
-		// Install SQL
-		include(dirname(__FILE__).'/sql-install.php');
-		foreach ($sql as $s)
-			if (!Db::getInstance()->Execute($s))
-				return false;
 
 		// Add configuration values
 		foreach ($this->_fieldsList as $keyConfiguration => $name)
@@ -155,12 +149,6 @@ class SocolissimoFlex extends CarrierModule
 		// Uninstall Config
 		foreach ($this->_fieldsList as $keyConfiguration => $name)
 			if (!Configuration::deleteByName($keyConfiguration))
-				return false;
-
-		// Uninstall SQL
-		include(dirname(__FILE__).'/sql-uninstall.php');
-		foreach ($sql as $s)
-			if (!Db::getInstance()->Execute($s))
 				return false;
 
 		// Unregister Hooks
@@ -316,7 +304,7 @@ class SocolissimoFlex extends CarrierModule
 
 
 		$this->_html .= '</fieldset><div class="clear">&nbsp;</div>
-			<style>label{width:300px}</style>
+			<style>label{width:400px}</style>
 			<form action="index.php?tab='.Tools::safeOutput(Tools::getValue('tab')).'&configure='.Tools::safeOutput(Tools::getValue('configure')).'&token='.Tools::safeOutput(Tools::getValue('token')).'&tab_module='.Tools::safeOutput(Tools::getValue('tab_module')).'&module_name='.Tools::safeOutput(Tools::getValue('module_name')).'" method="post" class="form" id="configForm">
 
 				<fieldset style="border: 0px;">
@@ -377,7 +365,7 @@ class SocolissimoFlex extends CarrierModule
 	*/
 
 
-	public function hookupdateCarrier($params)
+	public function hookUpdateCarrier($params)
 	{
 		if ((int)($params['id_carrier']) == (int)(Configuration::get('SOCOFLEX_HOME_DELIVERY')))
 		{
@@ -409,9 +397,9 @@ class SocolissimoFlex extends CarrierModule
 		$carrierDeliveryPoint = new Carrier((int)(Configuration::get('SOCOFLEX_DELIVERY_POINT')));
 
 		// Is delivery point selected
-		$delivery_point_selected = true;
+		$delivery_point_selected = 'false';
 		if (isset($carrierDeliveryPoint->active) && $carrierDeliveryPoint->active == 1 && (int)$params['cart']->id_carrier == (int)$carrierDeliveryPoint->id)
-			$delivery_point_selected = false;
+			$delivery_point_selected = 'true';
 
 		// Display
 		$smarty->assign('id_carrier_homedelivery', Configuration::get('SOCOFLEX_HOME_DELIVERY'));
@@ -436,12 +424,28 @@ class SocolissimoFlex extends CarrierModule
 		$deliveryPointList = $this->getDeliveryLocation($address);
 
 		// Display
+		$smarty->assign('delivery_point', (isset($cookie->socolissimo_delivery_point) ? htmlentities(pSQL($cookie->socolissimo_delivery_point)) : 0));
 		$smarty->assign('deliveryPointList', $deliveryPointList);
 		return $this->display(__FILE__, 'socolissimoflex_extracarrier_ajax.tpl');
 	}
 
-	public function displayInfoByCart()
+	public function hookPaymentTop($params)
 	{
+		// Retrieve cookie
+		global $cookie;
+
+		// If delivery point selected, we store it in cookie and db
+		if (isset($_POST['id_carrier']) && isset($_POST['deliveryPointSelected']) && (int)$_POST['id_carrier'] == (int)Configuration::get('SOCOFLEX_DELIVERY_POINT'))
+			$cookie->socolissimo_delivery_point = pSQL($_POST['deliveryPointSelected']);
+
+		// If no delivery point selected (when delivery point carrier is selected), then we stop the customer
+		if ($params['cart']->id_carrier == (int)Configuration::get('SOCOFLEX_DELIVERY_POINT') && !$cookie->socolissimo_delivery_point)
+			$params['cart']->id_carrier = 0;
+	}
+
+	public function hookNewOrder($params)
+	{
+		//$params['order']->id;
 	}
 
 
@@ -562,7 +566,7 @@ class SocolissimoFlex extends CarrierModule
 			$url .= '&'.$key.'='.$param;
 		$content = '<?xml version="1.0" encoding="UTF-8" ?>'.Tools::file_get_contents($url);
 		$content = str_replace(array('soap:', 'ns1:'), array('soap', 'ns1'), $content);
-		return simplexml_load_string($content);
+		return @simplexml_load_string($content);
 	}
 }
 

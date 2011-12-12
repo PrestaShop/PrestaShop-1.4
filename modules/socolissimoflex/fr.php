@@ -1,0 +1,37 @@
+<?php
+
+global $_MODULE;
+$_MODULE = array();
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_06cb23542c166c3dfff52e4f4426156c'] = 'Socolissimo Flexibilité';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_f428a4e9c779f5270c23fa438cd56a30'] = 'Offrez à vos clients, différentes méthodes avec Socolissimo Flexibilité';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_ff86cba2f7fe4a2dec854d107a4d99d2'] = 'Classe Soap';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_4d470fde8487e755a50e9235e3dc13ab'] = 'doit être configuré pour que le module fonctionne correctement.';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_610d30be201152c64b77cd6a6b0a0504'] = 'Compte Socolissimo';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_e3048712d31bcafb92b3d034030c06ab'] = 'Mot de passe Socolissimo';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_6cefaa978ccec960693d10cefeb2c2bf'] = 'Livraison à domicile';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_96d5d405307b6f9da4a33af68c52bbe5'] = 'Socolissimo flexibilité : À l\'adresse saisie';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_61c2ea75a9312964531673adf2fa412f'] = 'Sur rendez-vous entre 17h et 21h30 à l\'adresse saisie';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_76d55d35b4fbaddb0a329f525999e436'] = 'Socolissimo flexibilité : Sur rendez-vous entre 17h et 21h30 à l\'adresse saisie';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_6d798d0011662cb14c3ec6acd6a82710'] = 'Choississez un point de livraison';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_dd921a4c20c7c86c78d18afff6d1d5e8'] = 'Socolissimo flexibilité : À proximité de l\'adresse saisie';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_71f19af6691839da7fa6d7389fb78fd1'] = 'Transporteur Socolissimo Flexibilité';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_e136d55eb7193b0ac3037cdc6d1cdcac'] = 'Status du module Socolissimo Flexibilité';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_2956a0e086ce46603078eb3d3554445a'] = 'Le transporteur Socolissimo Flexibilité est configuré et en ligne !';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_e772b17def50850da58972fdc2f045ef'] = 'Le transporteur Socolissimo Flexibilité n\'est pas opérationnel, vous devez :';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_3e203b9a16f360b88d90bba6eb61ce61'] = 'Remplir la configuration du module';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test de connection webservices';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_5378f4ad5f6616fda3ef972deba67f8a'] = 'L\'extension cURL est activée';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_bcf52f13aae44c82d31e8cfde9695fcd'] = 'L\'option url_fopen est activée';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_254f642527b45bc260048e30704edb39'] = 'Configuration';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_66c0b8c40f5e95a5c570b9f80543406f'] = 'Votre compte Socolissimo Flexibilité';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_ef06bd2875156b26f2278c56bc303c84'] = 'Votre mot de passe Socolissimo Flexibilité';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_8db1969332a3d42da51b4193b95a9c3d'] = 'Coût supplémentaire pour la livraison à domicile';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_cc0252cee60c85e1a041ddd926a6793a'] = 'Coût supplémentaire de la livraison à domicile';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_55c6993f1eeab33281faaa24ec97cc3a'] = 'Coût supplémentaire de livraison à un point relais';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_f1206f9fadc5ce41694f69129aecac26'] = 'Configurer';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_132dcb1a3d2a593c60240f644c96ff08'] = 'Votre compte Socolissimo Flexibilité n\'est pas spécifié';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_8285860d84703be3cb673cabc7b649bb'] = 'Votre mot de passe Socolissimo Flexibilité n\'est pas spécifié';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_292efa82e1497be4ee27639e3a2ed09b'] = 'PrestaShop n\'a pas pu se connecter aux webservices Socolissimo Flexibilité';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_9d1b485edd50e6fbd288b340b386b07d'] = 'Pas de description d\'erreur trouvée';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
+$_MODULE['<{socolissimoflex}prestashop>socolissimoflex_b9284bff13acffdd879ef4ac7fca5234'] = 'Configuration non mise à jour';
