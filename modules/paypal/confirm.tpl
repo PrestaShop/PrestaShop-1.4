@@ -55,10 +55,10 @@
 	</p>
 	<p class="cart_navigation">
 		{if isset($paypalError)}
-			<a href="order.php?step=3" class="button_large">{l s='Return' mod='paypal'}</a><br /><br />
+			<a href="{$base_dir}order.php?step=3" class="button_large">{l s='Return' mod='paypal'}</a><br /><br />
 			<span style="color: red;">{l s='Session expired, please go back and try again' mod='paypal'}</span>
 		{else}
-			<a href="order.php?step=3" class="button_large">{l s='Other payment methods' mod='paypal'}</a>
+			<a href="{$base_dir}order.php?step=3" class="button_large">{l s='Other payment methods' mod='paypal'}</a>
 			<input type="submit" name="submitPayment" value="{l s='I confirm my order' mod='paypal'}" class="exclusive_large" />
 		{/if}
 	</p>
