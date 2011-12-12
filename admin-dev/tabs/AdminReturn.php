@@ -186,7 +186,7 @@ class AdminReturn extends AdminTab
 				<p style="clear: both"><a href="index.php?tab=AdminOrders&id_order='.$order->id.'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'">'.$this->l('View details on order page').'</a></p>
 				</div>
 				<label>'.$this->l('Customer explanation:').' </label>
-				<div class="margin-form">'.$obj->question.'</div>
+				<div class="margin-form">'.nl2br2($obj->question).'</div>
 
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
