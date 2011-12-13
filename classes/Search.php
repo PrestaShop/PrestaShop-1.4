@@ -404,7 +404,7 @@ class SearchCore
 		$total_languages = count(Language::getLanguages(false));
 
 		// Products are processed 50 by 50 in order to avoid overloading MySQL
-		while ($products = Search::getProductsToIndex($total_languages, $id_product, 50) && is_array($products) && count($products) > 0)
+		while (($products = Search::getProductsToIndex($total_languages, $id_product, 50)) && is_array($products) && (count($products) > 0))
 		{
 			// Now each non-indexed product is processed one by one, langage by langage
 			foreach ($products as $product)
