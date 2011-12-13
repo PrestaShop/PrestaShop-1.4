@@ -95,8 +95,8 @@ class CountryCore extends ObjectModel
 		$fields['contains_states'] = (int)($this->contains_states);
 		$fields['need_identification_number'] = (int)($this->need_identification_number);
 		$fields['need_zip_code'] = (int)($this->need_zip_code);
-		$fields['zip_code_format'] = $this->zip_code_format;
-		$fields['display_tax_label'] = $this->display_tax_label;
+		$fields['zip_code_format'] = pSQL($this->zip_code_format);
+		$fields['display_tax_label'] = (int)$this->display_tax_label;
 		return $fields;
 	}
 
