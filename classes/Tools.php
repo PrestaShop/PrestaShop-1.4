@@ -1835,7 +1835,12 @@ class ToolsCore
 		fwrite($writeFd, $tab['RewriteEngine']['comment']."\nRewriteEngine on\n\n");
 		fwrite($writeFd, $tab['RewriteRule']['comment']."\n");
 		// Webservice
-		fwrite($writeFd, 'RewriteRule ^api/?(.*)$ '.__PS_BASE_URI__."webservice/dispatcher.php?url=$1 [QSA,L]\n");
+		if (Configuration::get('PS_WEBSERVICE'))
+		{
+			fwrite($writeFd, 'RewriteRule ^api/?(.*)$ '.__PS_BASE_URI__."webservice/dispatcher.php?url=$1 [QSA,L]\n");
+			if (Configuration::get('PS_WEBSERVICE_CGI_HOST'))
+				fwrite($writeFd, 'RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]'."\n");
+		}
 
 		// Classic URL rewriting
 		if ($rewrite_settings)
