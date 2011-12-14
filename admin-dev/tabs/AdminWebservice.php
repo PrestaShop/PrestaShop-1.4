@@ -53,7 +53,12 @@ class AdminWebservice extends AdminTab
 																						'</li><li>'.$this->l('be certain that the 5 methods GET, POST, PUT, DELETE and HEAD are supported by this server').
 																						'</li></ol>', 
 																	'cast' => 'intval',
-																	'type' => 'bool'));
+																	'type' => 'bool'),
+															'PS_WEBSERVICE_CGI_HOST' => array('title' => $this->l('Active mode CGI for PHP:'), 
+																	'desc' => $this->l('Be sure PHP is not configured as an Apache module on your server'),
+																	'cast' => 'intval',
+																	'type' => 'bool'),
+																	);
 		parent::__construct();
 	}
 	
