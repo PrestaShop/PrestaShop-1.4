@@ -51,15 +51,25 @@ if ($cookie->isLogged())
 	{
 		if (!isset($cookie->id_wishlist) OR $cookie->id_wishlist == '')
 		{
-			$wishlist = new WishList();
-			$modWishlist = new BlockWishList();
-			$wishlist->name = $modWishlist->default_wishlist_name;
-			$wishlist->id_customer = (int)($cookie->id_customer);
-			list($us, $s) = explode(' ', microtime());
-			srand($s * $us);
-			$wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$cookie->id_customer), 0, 16));
-			$wishlist->add();
-			$cookie->id_wishlist = (int)($wishlist->id);
+			// Try to get an existing wishlist before creating a new one (useful if there is no wishlist block hooked left or right)
+			$wishlists = Wishlist::getByIdCustomer($cookie->id_customer);
+			if (!empty($wishlists))
+			{
+				$id_wishlist = (int)$wishlists[0]['id_wishlist'];
+				$cookie->id_wishlist = (int)$id_wishlist;
+			}
+			else
+			{
+				$wishlist = new WishList();
+				$modWishlist = new BlockWishList();
+				$wishlist->name = $modWishlist->default_wishlist_name;
+				$wishlist->id_customer = (int)($cookie->id_customer);
+				list($us, $s) = explode(' ', microtime());
+				srand($s * $us);
+				$wishlist->token = strtoupper(substr(sha1(uniqid(rand(), true)._COOKIE_KEY_.$cookie->id_customer), 0, 16));
+				$wishlist->add();
+				$cookie->id_wishlist = (int)($wishlist->id);
+			}
 		}
 		if ($add AND $quantity)
 			WishList::addProduct($cookie->id_wishlist, $cookie->id_customer, $id_product, $id_product_attribute, $quantity);
