@@ -150,8 +150,7 @@ abstract class ObjectModelCore
 								{
 									if (!is_array($this->{$key}))
 										$this->{$key} = array();
-									// Todo: stripslashes() MUST BE removed in 1.4.6 and later, but is kept in 1.4.5 for a compatibility issue
-									$this->{$key}[(int)$row['id_lang']] = stripslashes($value);
+									$this->{$key}[(int)$row['id_lang']] = $value;
 								}
 				}
 			}
