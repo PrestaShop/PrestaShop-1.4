@@ -2691,7 +2691,16 @@ class ProductCore extends ObjectModel
 
 		$cacheKey = $row['id_product'].'-'.$row['id_product_attribute'].'-'.$id_lang.'-'.(int)($usetax);
 		if (array_key_exists($cacheKey, self::$producPropertiesCache))
+		{
+			// If product is in a pack, we want to add pack_quantity to the cached data returned
+			if (isset($row['pack_quantity']))
+			{
+				$pack_product = self::$producPropertiesCache[$cacheKey];
+				$pack_product['pack_quantity'] = $row['pack_quantity'];
+				return $pack_product;
+			}
 			return self::$producPropertiesCache[$cacheKey];
+		}
 
 		// Datas
 		$link = new Link();
@@ -2727,6 +2736,7 @@ class ProductCore extends ObjectModel
 		$row['pack'] = (!isset($row['cache_is_pack']) ? Pack::isPack($row['id_product']) : (int)$row['cache_is_pack']);
 		$row['packItems'] = $row['pack'] ? Pack::getItemTable($row['id_product'], $id_lang) : array();
 		$row['nopackprice'] = $row['pack'] ? Pack::noPackPrice($row['id_product']) : 0;
+
 		if ($row['pack'] AND !Pack::isInStock($row['id_product']))
 			$row['quantity'] =  0;
 
