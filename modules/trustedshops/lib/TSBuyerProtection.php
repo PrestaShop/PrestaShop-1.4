@@ -575,8 +575,8 @@ class TSBuyerProtection extends AbsTrustedShops
 			}
 			$sql = '
 			UPDATE `'.$db_name.'`
-			SET `statut_number` = "'.$code.'"
-			WHERE `id_application` >= "'.$application['id_application'].'"
+			SET `statut_number` = "'.pSQL($code).'"
+			WHERE `id_application` >= "'.pSQL($application['id_application']).'"
 			';
 			Db::getInstance()->Execute($sql);
 			$msg = new Message();
@@ -651,7 +651,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` AS ts
 		LEFT JOIN `'._DB_PREFIX_.'product` AS p ON ts.`id_product` = p.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` AS pl ON ts.`id_product` = pl.`id_product`
-		WHERE ts.`ts_id`="'.$ts_id.'"';
+		WHERE ts.`ts_id`="'.pSQL($ts_id).'"';
 		Db::getInstance()->Execute($sql);
 
 		foreach ($protection_items as $key=>$item)
