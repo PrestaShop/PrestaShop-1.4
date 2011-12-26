@@ -83,7 +83,7 @@ class AdminImport extends AdminTab
 
 				self::$required_fields = array('id_product', 'options');
 				$this->available_fields = array(
-					'no' => array('label' => $this->l('Ignore this column')), 
+					'no' => array('label' => $this->l('Ignore this column')),
 					'id_product' => array('label' => $this->l('Product ID').'*'),
 					'options' => array('label' => $this->l('Options (Group:Value)').'*'),
 					'reference' => array('label' => $this->l('Reference')),
@@ -96,7 +96,7 @@ class AdminImport extends AdminTab
 					'quantity' => array('label' => $this->l('Quantity')),
 					'weight' => array('label' => $this->l('Weight')),
 					'default_on' => array('label' => $this->l('Default')),
-					'image_position' => array('label' => $this->l('Image position'), 
+					'image_position' => array('label' => $this->l('Image position'),
 						'help' => $this->l('Position of the product image to use for this combination. If you use this field, leave image URL empty.')),
 					'image_url' => array('label' => $this->l('Image URL')),
 				);
@@ -255,7 +255,7 @@ class AdminImport extends AdminTab
 				//Overwrite validators AS name is not MultiLangField
 				self::$validators = array(
 				'description' => array('AdminImport', 'createMultiLangField'),
-				'description_short' => array('AdminImport', 'createMultiLangField'),
+				'short_description' => array('AdminImport', 'createMultiLangField'),
 				'meta_title' => array('AdminImport', 'createMultiLangField'),
 				'meta_keywords' => array('AdminImport', 'createMultiLangField'),
 				'meta_description' => array('AdminImport', 'createMultiLangField'));
@@ -426,11 +426,11 @@ class AdminImport extends AdminTab
 
 	/**
 	 * copyImg copy an image located in $url and save it in a path
-	 * according to $entity->$id_entity . 
+	 * according to $entity->$id_entity .
 	 * $id_image is used if we need to add a watermark
-	 * 
+	 *
 	 * @param int $id_entity id of product or category (set in entity)
-	 * @param int $id_image (default null) id of the image if watermark enabled. 
+	 * @param int $id_image (default null) id of the image if watermark enabled.
 	 * @param string $url path or url to use
 	 * @param string entity 'products' or 'categories'
 	 * @return void
@@ -731,7 +731,7 @@ class AdminImport extends AdminTab
 				// check quantity
 				if ($product->quantity == NULL)
 					$product->quantity = 0;
-				
+
 				// If match ref is specified AND ref product AND ref product already in base, trying to update
 				if (Tools::getValue('match_ref') == 1 AND $product->reference AND Product::existsRefInDatabase($product->reference))
 				{
@@ -827,7 +827,7 @@ class AdminImport extends AdminTab
 						$product->deleteImages();
 				elseif (isset($product->image) AND is_array($product->image) AND sizeof($product->image))
 					$product->deleteImages();
-				
+
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))
 				{
 					$productHasImages = (bool)Image::getImages((int)($cookie->id_lang), (int)($product->id));
@@ -891,10 +891,10 @@ class AdminImport extends AdminTab
 			$info = array_map('trim', $info);
 
 			self::setDefaultValues($info);
-			
+
 			$product = new Product((int)($info['id_product']), false, $defaultLanguage);
 			$id_image = null;
-			
+
 			if (isset($info['image_url']) && $info['image_url'])
 			{
 				$productHasImages = (bool)Image::getImages((int)($cookie->id_lang), (int)($product->id));
@@ -1079,7 +1079,7 @@ class AdminImport extends AdminTab
 			}
 
 			if (isset($address->customer_email) and !empty($address->customer_email))
-			{	
+			{
 				if ( Validate::isEmail($address->customer_email))
 				{
 					$customer = Customer::customerExists($address->customer_email, true);
@@ -1152,24 +1152,27 @@ class AdminImport extends AdminTab
 
 			self::setDefaultValues($info);
 
-			if (array_key_exists('id', $info) AND (int)($info['id']) AND Manufacturer::existsInDatabase((int)($info['id']), 'manufacturer'))
-				$manufacturer = new Manufacturer((int)($info['id']));
+			if (array_key_exists('id', $info) && (int)$info['id'] && Manufacturer::existsInDatabase((int)$info['id'], 'manufacturer'))
+				$manufacturer = new Manufacturer((int)$info['id']);
 			else
 				$manufacturer = new Manufacturer();
+
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $manufacturer);
 
 			$res = false;
-			if (($fieldError = $manufacturer->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
+			if (($field_error = $manufacturer->validateFields(UNFRIENDLY_ERROR, true)) === true &&
+				($lang_field_error = $manufacturer->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
-				if ($manufacturer->id AND $manufacturer->manufacturerExists($manufacturer->id))
+				if ($manufacturer->id && $manufacturer->manufacturerExists($manufacturer->id))
 					$res = $manufacturer->update();
 				if (!$res)
 					$res = $manufacturer->add();
 			}
+
 			if (!$res)
 			{
 				$this->_errors[] = mysql_error().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
-				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+				$this->_errors[] = ($field_error !== true ? $field_error : '').($lang_field_error !== true ? $lang_field_error : '').mysql_error();
 			}
 		}
 		$this->closeCsvFile($handle);
@@ -1379,7 +1382,7 @@ class AdminImport extends AdminTab
 						$("label[for=match_ref],#match_ref").show();
 					}
 					$("#entitie").html($("#entity > option:selected").text().toLowerCase());
-					$.getJSON("'.dirname($currentIndex).'/ajax.php", 
+					$.getJSON("'.dirname($currentIndex).'/ajax.php",
 						{
 						getAvailableFields:1,
 						entity: $("#entity").val()},
@@ -1407,7 +1410,7 @@ class AdminImport extends AdminTab
 				$array[$key] = utf8_encode($value);
 		else
 			$array = utf8_encode($array);
-		
+
 		return $array;
 	}
 
@@ -1436,7 +1439,7 @@ class AdminImport extends AdminTab
 
 		if (!$handle)
 			die(Tools::displayError('Cannot read the CSV file'));
-		
+
 		self::rewindBomAware($handle);
 
 		for ($i = 0; $i < (int)(Tools::getValue('skip')); ++$i)
@@ -1491,7 +1494,7 @@ class AdminImport extends AdminTab
 	{
 		global $currentIndex;
 		$importMatchs = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'import_match');
-		
+
 		echo '
 		<script src="'._PS_JS_DIR_.'adminImport.js"></script>
 		<script type="text/javascript">
@@ -1509,7 +1512,7 @@ class AdminImport extends AdminTab
 				</select>
 				<a class="button" id="loadImportMatchs" href="#">'.$this->l('Load').'</a>
 				<a class="button" id="deleteImportMatchs" href="#">'.$this->l('Delete').'</a>';
-		
+
 		echo '</div></div><h3>'.$this->l('Please set the value type of each column').'</h3>
 		<div id="error_duplicate_type" class="warning warn" style="display:none;">
 			<h3>'.$this->l('Columns cannot have the same value type').'</h3>
@@ -1683,7 +1686,7 @@ class AdminImport extends AdminTab
 						$this->_errors[] = Tools::displayError('No file was uploaded');
 						break;
 					break;
-				}	
+				}
 			}
 			elseif (!file_exists($_FILES['file']['tmp_name']) OR !@move_uploaded_file($_FILES['file']['tmp_name'], dirname(__FILE__).'/../import/'.$_FILES['file']['name'].'.'.date('Ymdhis')))
 				$this->_errors[] = $this->l('an error occurred while uploading and copying file');
