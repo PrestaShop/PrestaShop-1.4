@@ -700,12 +700,17 @@ class AdminCustomers extends AdminTab
 				<div class="margin-form">
 					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<label>'.$this->l('Password:').' </label>
-				<div class="margin-form">
-					<input type="password" size="33" name="passwd" value="" /> '.(!$obj->id ? '<sup>*</sup>' : '').'
-					<p>'.($obj->id ? $this->l('Leave blank if no change') : $this->l('5 characters min., only letters, numbers, or').' -_').'</p>
-				</div>
+				</div>';
+				// if the customer is guest, he hasn't any password
+				if ($obj->id && !$obj->is_guest)
+				{
+					echo '<label>'.$this->l('Password:').' </label>
+					<div class="margin-form">
+						<input type="password" size="33" name="passwd" value="" /> '.(!$obj->id ? '<sup>*</sup>' : '').'
+						<p>'.($obj->id ? $this->l('Leave blank if no change') : $this->l('5 characters min., only letters, numbers, or').' -_').'</p>
+					</div>';
+				}
+				echo '
 				<label>'.$this->l('E-mail address:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
