@@ -889,61 +889,6 @@ class AdminTranslations extends AdminTab
 			<input type="submit" name="submitTranslations'.ucfirst($name).'AndStay" value="'.$this->l('Update and stay').'" class="button" />';
 	}
 	
-	public function displayAutoTranslate()
-	{
-		$languageCode = Tools::htmlentitiesUTF8(Language::getLanguageCodeByIso(Tools::getValue('lang')));
-		return '
-		<input type="button" class="button" onclick="translateAll();" value="'.$this->l('Translate with Google (experimental)').'" />
-		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-		<script type="text/javascript">
-			var gg_translate = {
-				language_code : \''.$languageCode.'\',
-				not_available : \''.addslashes(html_entity_decode($this->l('this language is not available on Google Translate API'), ENT_QUOTES, 'utf-8')).'\',
-				tooltip_title : \''.addslashes(html_entity_decode($this->l('Google translate suggests :'), ENT_QUOTES, 'utf-8')).'\'
-			};
-		</script>
-		<script type="text/javascript" src="../js/gg-translate.js"></script>
-		<script type="text/javascript">
-			var displayOnce = 0;
-			google.load("language", "1");
-			function translateAll() {
-				if (!ggIsTranslatable(gg_translate[\'language_code\']))
-					alert(\'"\'+gg_translate[\'language_code\']+\'" : \'+gg_translate[\'not_available\']);
-				else
-				{
-					$.each($(\'input[type="text"]\'), function() {
-						var tdinput = $(this);
-						if (tdinput.attr("value") == "" && tdinput.parent("td").prev().html()) {
-							google.language.translate(tdinput.parent("td").prev().html(), "en", gg_translate[\'language_code\'], function(result) {
-								if (!result.error)
-									tdinput.val(result.translation);
-								else if (displayOnce == 0)
-								{
-									displayOnce = 1;
-									alert(result.error.message);
-								}
-							});
-						}
-					});
-					$.each($("textarea"), function() {
-						var tdtextarea = $(this);
-						if (tdtextarea.html() == "" && tdtextarea.parent("td").prev().html()) {
-							google.language.translate(tdtextarea.parent("td").prev().html(), "en", gg_translate[\'language_code\'], function(result) {
-								if (!result.error)
-									tdtextarea.html(result.translation);
-								else if (displayOnce == 0)
-								{
-									displayOnce = 1;
-									alert(result.error.message);
-								}
-							});
-						}
-					});
-				}
-			}
-		</script>';
-	}
-	
 	public function displayLimitPostWarning($count)
 	{
 		$str_output = '';
@@ -1012,7 +957,6 @@ class AdminTranslations extends AdminTab
 			$str_output .= '
 			<form method="post" action="'.$currentIndex.'&submitTranslationsFront=1&token='.$this->token.'" class="form">';
 			$str_output .= $this->displayToggleButton(sizeof($_LANG) >= $count);
-			$str_output .= $this->displayAutoTranslate();
 			$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsFront" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 			foreach ($files AS $k => $newLang)
 				if (sizeof($newLang))
@@ -1091,7 +1035,6 @@ class AdminTranslations extends AdminTab
 			$str_output .= '
 			<form method="post" action="'.$currentIndex.'&submitTranslationsBack=1&token='.$this->token.'" class="form">';
 			$str_output .= $this->displayToggleButton();
-			$str_output .= $this->displayAutoTranslate();
 			$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsBack" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 			foreach ($tabsArray AS $k => $newLang)
 				if (sizeof($newLang))
@@ -1161,7 +1104,6 @@ class AdminTranslations extends AdminTab
 						$stringToTranslate[$key] = (key_exists(md5($key), $_ERRORS)) ? html_entity_decode($_ERRORS[md5($key)], ENT_COMPAT, 'UTF-8') : '';
 				}
 		$irow = 0;
-		$str_output .= $this->displayAutoTranslate();
 		$str_output .= '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Error translations').'</h2>'
 		.$this->l('Errors to translate').' : <b>'.sizeof($stringToTranslate).'</b><br /><br />';
 		$str_output .= $this->displayLimitPostWarning(sizeof($stringToTranslate));
@@ -1204,7 +1146,6 @@ class AdminTranslations extends AdminTab
 				$count += sizeof($classArray[$className]['validateLang']);
 		}
 
-		$str_output .= $this->displayAutoTranslate();
 		$str_output .= '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Field name translations').'</h2>';
 		$str_output .= $this->displayLimitPostWarning($count);
@@ -1804,7 +1745,6 @@ class AdminTranslations extends AdminTab
 				$str_output .= '
 				<form method="post" action="'.$currentIndex.'&submitTranslationsModules=1&token='.$this->token.'" class="form">';
 				$str_output .= $this->displayToggleButton();
-				$str_output .= $this->displayAutoTranslate();
 				$str_output .= '<input type="hidden" name="lang" value="'.$lang.'" /><input type="submit" name="submitTranslationsModules" value="'.$this->l('Update translations').'" class="button" /><br /><br />';
 				
 				if (count($this->modules_translations) > 1) 
@@ -1900,8 +1840,7 @@ class AdminTranslations extends AdminTab
 
 		$count += isset($tabsArray[$tab]) ? sizeof($tabsArray[$tab]) : 0;
 		$closed = sizeof($_LANGPDF) >= $count;
-		
-		$str_output .= $this->displayAutoTranslate();
+
 		$str_output .= '<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).'</h2>'
 			.$this->l('Expressions to translate').' : <b>'.$count.'</b>. '.$this->l('Click on the titles to open fieldsets').'.<br /><br />';
 		$str_output .= $this->displayLimitPostWarning($count);
