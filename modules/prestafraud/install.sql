@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_prestafraud_carts`
 CREATE TABLE IF NOT EXISTS `PREFIX_prestafraud_orders`
 (
 	`id_order` int(11) default NULL,
-	`scoring` decimal(2,2) default NULL,
+	`scoring` decimal(4,2) default NULL,
 	`comment` VARCHAR(255) default NULL,
 	PRIMARY KEY  (`id_order`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
