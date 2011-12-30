@@ -560,7 +560,6 @@ class ProductCore extends ObjectModel
 		Hook::deleteProduct($this);
 		if (!parent::delete() OR
 			!$this->deleteCategories(true) OR
-			!$this->deleteImages() OR
 			!$this->deleteProductAttributes() OR
 			!$this->deleteProductFeatures() OR
 			!$this->deleteTags() OR
@@ -576,6 +575,10 @@ class ProductCore extends ObjectModel
 			!$this->deleteAccessories() OR
 			!$this->deleteFromAccessories())
 		return false;
+		
+		if (!_PS_MODE_DEMO_ AND !$this->deleteImages())
+			return false;
+		
 		if ($id = ProductDownload::getIdFromIdProduct($this->id))
 			if ($productDownload = new ProductDownload($id) AND !$productDownload->delete(true))
 				return false;
