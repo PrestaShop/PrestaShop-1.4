@@ -47,6 +47,19 @@ class CustomerThreadCore extends ObjectModel
 	protected $fieldsValidate = array('id_lang' => 'isUnsignedId', 'id_contact' => 'isUnsignedId', 'id_customer' => 'isUnsignedId',
 									'id_order' => 'isUnsignedId', 'id_product' => 'isUnsignedId', 'email' => 'isEmail', 'token' => 'isGenericName');
 
+	protected	$webserviceParameters = array(
+			'fields' => array(
+					'id_lang' => array('xlink_resource' => 'languages'),
+					'id_contact' => array('xlink_resource' => 'employees'),
+					'id_customer' => array('xlink_resource' => 'customers'),
+					'id_order' => array('xlink_resource' => 'orders'),
+					'id_product' => array('xlink_resource' => 'products'),
+					'status' => array(),
+					'email' => array(),
+					'token' => array(),
+			),
+	);
+	
 	public	function getFields()
 	{
 	 	parent::validateFields();
@@ -77,6 +90,6 @@ class CustomerThreadCore extends ObjectModel
 		SELECT * FROM '._DB_PREFIX_.'customer_thread ct
 		LEFT JOIN '._DB_PREFIX_.'customer_message cm ON ct.id_customer_thread = cm.id_customer_thread
 		WHERE id_customer = '.(int)($id_customer));
-	}	
+	}
 }
 

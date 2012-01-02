@@ -258,6 +258,8 @@ class WebserviceRequestCore
 			'stock_movement_reasons' => array('description' => 'The stock movement reason', 'class' => 'StockMvtReason'),
 			'content_management_system' => array('description' => 'Content management system', 'class' => 'CMS'),
 			'taxes' => array('description' => 'The tax rate', 'class' => 'Tax'),
+			'customer_messages' => array('description' => 'Customer messages', 'class' => 'CustomerMessage'),
+			'customer_threads' => array('description' => 'Customer threads', 'class' => 'CustomerThread'),
 		);
 		ksort($resources);
 		return $resources;

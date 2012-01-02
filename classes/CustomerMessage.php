@@ -42,7 +42,18 @@ class CustomerMessageCore extends ObjectModel
 	protected $fieldsRequired = array('message');
 	protected $fieldsSize = array('message' => 65000);
 	protected $fieldsValidate = array('message' => 'isCleanHtml', 'id_employee' => 'isUnsignedId', 'ip_address' => 'isIp2Long');
-
+	
+	protected	$webserviceParameters = array(
+			'fields' => array(
+					'id_customer_thread' => array('xlink_resource' => 'customer_threads'),
+					'id_employee' => array('xlink_resource' => 'employees'),
+					'message' => array(),
+					'file_name' => array(),
+					'ip_address' => array('getter' => 'getWsIp', 'setter' => 'setWsIp'),
+					'user_agent' => array(),
+			),
+	);
+	
 	public	function getFields()
 	{
 	 	parent::validateFields();
@@ -54,6 +65,16 @@ class CustomerMessageCore extends ObjectModel
 		$fields['user_agent'] = pSQL($this->user_agent);
 		$fields['date_add'] = pSQL($this->date_add);
 		return $fields;
+	}
+	
+	public function getWsIp()
+	{
+		return long2ip($this->ip_address);
+	}
+	
+	public function setWsIp()
+	{
+		return ip2long($this->ip_address);
 	}
 }
 
