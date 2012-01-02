@@ -119,7 +119,7 @@ class MailCore
 					return false;
 				}
 				$connection = new Swift_Connection_SMTP($configuration['PS_MAIL_SERVER'], $configuration['PS_MAIL_SMTP_PORT'], ($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "ssl") ? Swift_Connection_SMTP::ENC_SSL : (($configuration['PS_MAIL_SMTP_ENCRYPTION'] == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_OFF));
-				$connection->setTimeout(4);
+				$connection->setTimeout(20);
 				if (!$connection)
 					return false;
 				if (!empty($configuration['PS_MAIL_USER']))
@@ -204,7 +204,7 @@ class MailCore
 				$smtp = new Swift_Connection_SMTP($smtpServer, $smtpPort, ($smtpEncryption == "off") ? Swift_Connection_SMTP::ENC_OFF : (($smtpEncryption == "tls") ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_SSL));
 				$smtp->setUsername($smtpLogin);
 				$smtp->setpassword($smtpPassword);
-				$smtp->setTimeout(5);
+				$smtp->setTimeout(20);
 				$swift = new Swift($smtp, Configuration::get('PS_MAIL_DOMAIN'));
 			}
 			else
