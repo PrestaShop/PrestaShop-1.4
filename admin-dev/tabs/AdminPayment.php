@@ -220,7 +220,7 @@ class AdminPayment extends AdminTab
 			foreach ($this->paymentModules as $module)
 				if ($module->active)
 					echo '
-					<td style="text-align: center">'.(($module->currencies AND $module->currencies_mode == 'radio') ? '<input type="radio" name="'.$module->name.'_'.$nameId.'[]" value="-1"'.(in_array(-1, $module->{$nameId}) ? ' checked="checked"' : '').' />' : '--').'</td>';
+					<td style="text-align: center">'.(($module->currencies AND $module->currencies_mode == 'radio') ? '<input type="radio" name="'.$module->name.'_'.$nameId.'[]" value="-1"'.((is_array($module->currency) AND in_array(-1, $module->currency)) ? ' checked="checked"' : '').' />' : '--').'</td>';
 			echo '
 				</tr>';
 			echo '
@@ -229,7 +229,7 @@ class AdminPayment extends AdminTab
 			foreach ($this->paymentModules as $module)
 				if ($module->active)
 					echo '
-					<td style="text-align: center">'.(($module->currencies AND $module->currencies_mode == 'radio') ? '<input type="radio" name="'.$module->name.'_'.$nameId.'[]" value="-2"'.(in_array(-2, $module->{$nameId}) ? ' checked="checked"' : '').' />' : '--').'</td>';
+					<td style="text-align: center">'.(($module->currencies AND $module->currencies_mode == 'radio') ? '<input type="radio" name="'.$module->name.'_'.$nameId.'[]" value="-2"'.((is_array($module->currency) AND in_array(-2, $module->currency)) ? ' checked="checked"' : '').' />' : '--').'</td>';
 			echo '
 				</tr>';
 		}
