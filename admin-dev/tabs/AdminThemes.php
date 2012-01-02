@@ -263,12 +263,17 @@ class AdminThemes extends AdminPreferences
 		return $return;
 	}
 
-	/** this functions make checks about AdminThemes configuration edition only.
-	 * 
+	/**
+	 * Checks submitted values
+	 *
 	 * @since 1.4
 	 */
 	public function postProcess()
 	{
+		// FPDF does not support PNG images with alpha channel
+		if (isset($_FILES['PS_LOGO_INVOICE']) && $_FILES['PS_LOGO_INVOICE']['type'] == 'image/png')
+			$this->_errors[] = Tools::displayError('Invoice logo does not accept PNG images.');
+
 		global $smarty;
 		/* PrestaShop demo mode */
 		if (_PS_MODE_DEMO_)

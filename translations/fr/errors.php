@@ -268,6 +268,7 @@ $_ERRORS['a328aae6eaecda76cb31c7347cb926f6'] = 'ID du groupe invalide pour cette
 $_ERRORS['607e1d854783c8229998ac2b5b6923d3'] = 'token invalide';
 $_ERRORS['0861a67f819158c5690a1844d95390b4'] = 'Liste blanche invalide';
 $_ERRORS['7cff73659ca47fea5d29644da84f35e2'] = 'Token de liste de voeux invalide';
+$_ERRORS['a15240ff097a6557a0164e5a06cb5a57'] = 'Le logo des factures n\'accepte pas les images PNG.';
 $_ERRORS['f5d5ae2070effc7b3eee52adc882bb6b'] = 'facture introuvable';
 $_ERRORS['6b9cc232bf4044274ec42062b60736fb'] = 'les factures sont désactivées sur cette boutique';
 $_ERRORS['65c02cc2c82051fccca8e5b5647f03e5'] = 'n\'est pas un e-mail valide';
