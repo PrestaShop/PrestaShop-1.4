@@ -164,8 +164,6 @@ class OrderCore extends ObjectModel
 			'delivery_date' => array(),
 			'valid' => array(),
 			'current_state' => array('getter' => 'getCurrentState', 'setter' => 'setCurrentState', 'xlink_resource'=> 'order_states'),
-			'date_add' => array(),
-			'date_upd' => array(),
 		),
 		'associations' => array(
 			'order_rows' => array('resource' => 'order_row', 'setter' => false, 'virtual_entity' => true,

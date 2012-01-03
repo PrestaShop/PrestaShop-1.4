@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -29,13 +29,13 @@ class OrderMessageCore extends ObjectModel
 {
 	/** @var string name name */
 	public 		$name;
-	
+
 	/** @var string message content */
 	public 		$message;
-	
+
 	/** @var string Object creation date */
 	public 		$date_add;
-	
+
 	protected	$fieldsRequired = array();
 	protected	$fieldsValidate = array();
 	protected   $fieldsSize = array();
@@ -43,18 +43,17 @@ class OrderMessageCore extends ObjectModel
 	protected	$fieldsRequiredLang = array('name', 'message');
 	protected	$fieldsSizeLang = array('name' => 128, 'message' => 1200);
 	protected	$fieldsValidateLang = array('name' => 'isGenericName', 'message' => 'isMessage');
-	
+
 	protected 	$table = 'order_message';
 	protected 	$identifier = 'id_order_message';
-	
+
 	protected	$webserviceParameters = array(
 			'fields' => array(
 			'id' => array('sqlId' => 'id_discount_type', 'xlink_resource' => 'order_message_lang'),
-			'date_add' => array('sqlId' => 'date_add')
 		)
 	);
-	
-	
+
+
 	public function getFields()
 	{
 		parent::validateFields();
