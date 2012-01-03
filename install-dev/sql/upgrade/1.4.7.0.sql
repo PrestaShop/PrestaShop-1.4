@@ -10,3 +10,6 @@ CREATE TABLE IF NOT EXISTS `PREFIX_order_tax` (
   `tax_rate` decimal(6,3) NOT NULL,
   `amount` decimal(20,6) NOT NULL
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
+
+ALTER TABLE `PREFIX_order_state` ADD COLUMN `deleted` tinyint(1) UNSIGNED NOT NULL default '0' AFTER `delivery`;
+

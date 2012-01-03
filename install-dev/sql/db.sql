@@ -1047,6 +1047,7 @@ CREATE TABLE `PREFIX_order_state` (
   `hidden` tinyint(1) UNSIGNED NOT NULL default '0',
   `logable` tinyint(1) NOT NULL default '0',
   `delivery` tinyint(1) unsigned NOT NULL default '0',
+  `deleted` tinyint(1) UNSIGNED NOT NULL default '0',
   PRIMARY KEY  (`id_order_state`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
