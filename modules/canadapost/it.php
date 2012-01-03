@@ -95,5 +95,3 @@ $_MODULE['<{canadapost}prestashop>canadapost_902b0d55fddef6f8d651fe1035b7d4bd'] 
 $_MODULE['<{canadapost}prestashop>canadapost_43c9c583cfcb8523ad269708ddcde8b8'] = 'Canada Webservice messaggio sembra essere il basso, si prega di attendere alcuni minuti e riprovare.';
 $_MODULE['<{canadapost}prestashop>canadapost_f1c83c0ed9e0f992f7f448f7321d9743'] = 'Canada Webservice Messaggio scaduta.';
 $_MODULE['<{canadapost}prestashop>canadapost_b7f155fe0169108902b447f572639d0b'] = 'Impossibile connettersi al CanadaPost.com';
-
-?>

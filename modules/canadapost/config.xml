@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>canadapost</name>
-	<displayName><![CDATA[Canada Post Carrier]]></displayName>
-	<version><![CDATA[0.5]]></version>
+	<displayName><![CDATA[Canada Post Rates Calculator]]></displayName>
+	<version><![CDATA[0.8]]></version>
 	<description><![CDATA[Offer your customers, different delivery methods with Canada Post]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[shipping_logistics]]></tab>

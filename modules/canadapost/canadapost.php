@@ -44,6 +44,8 @@ class CanadaPost extends CarrierModule
 	private $_weightUnitList = array('KG' => 'KGS', 'KGS' => 'KGS', 'LBS' => 'LBS', 'LB' => 'LBS');
 	private $_moduleName = 'canadapost';
 
+	protected static $request_cache = array();
+
 	/*
 	** Construct Method
 	**
@@ -53,14 +55,17 @@ class CanadaPost extends CarrierModule
 	{
 		$this->name = 'canadapost';
 		$this->tab = 'shipping_logistics';
-		$this->version = '0.5';
+		$this->version = '0.8';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('ca');
 
 		parent::__construct ();
 
-		$this->displayName = $this->l('Canada Post Carrier');
+		$this->displayName = $this->l('Canada Post Rates Calculator');
 		$this->description = $this->l('Offer your customers, different delivery methods with Canada Post');
+
+		/** Backward compatibility */
+		require(dirname(__FILE__).'/backward_compatibility/backward.php');
 
 		if (self::isInstalled($this->name))
 		{
@@ -130,7 +135,7 @@ class CanadaPost extends CarrierModule
 		// Install SQL
 		include(dirname(__FILE__).'/sql-install.php');
 		foreach ($sql as $s)
-			if (!Db::getInstance()->Execute($s))
+			if (!Db::getInstance()->execute($s))
 				return false;
 
 		// Install Carriers
@@ -156,7 +161,7 @@ class CanadaPost extends CarrierModule
 		// Uninstall SQL
 		include(dirname(__FILE__).'/sql-uninstall.php');
 		foreach ($sql as $s)
-			if (!Db::getInstance()->Execute($s))
+			if (!Db::getInstance()->execute($s))
 				return false;
 
 		// Uninstall Module
@@ -172,7 +177,7 @@ class CanadaPost extends CarrierModule
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'cp_rate_service_code', array('active' => 0), 'UPDATE');
 
 		// Get all services availables
-		$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
+		$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
 		foreach ($rateServiceList as $rateService)
 			if (!$rateService['id_carrier'])
 			{
@@ -268,7 +273,7 @@ class CanadaPost extends CarrierModule
 
 	public function getContent()
 	{
-		$this->_html .= '<h2>' . $this->l('Canada Post Carrier').'</h2>';
+		$this->_html .= '<h2>' . $this->l('Canada Post Rates Calculator').'</h2>';
 		if (!empty($_POST) AND Tools::isSubmit('submitSave'))
 		{
 			$this->_postValidation();
@@ -300,10 +305,10 @@ class CanadaPost extends CarrierModule
 
 
 		if (!count($alert))
-			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('Canada Post Carrier is configured and online!').'</strong>';
+			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('Canada Post module is configured and online!').'</strong>';
 		else
 		{
-			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('Canada Post Carrier is not configured yet, you must:').'</strong>';
+			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('Canada Post module is not configured yet, you must:').'</strong>';
 			$this->_html .= '<br />'.(isset($alert['generalSettings']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 1) '.$this->l('Fill the "General Settings" form');
 			$this->_html .= '<br />'.(isset($alert['deliveryServices']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 2) '.$this->l('Select your available delivery service');
 			$this->_html .= '<br />'.(isset($alert['webserviceTest']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Webservice test connection').($this->_webserviceError ? ' : '.$this->_webserviceError : '');
@@ -389,7 +394,6 @@ class CanadaPost extends CarrierModule
 
 	private function _displayFormGeneral()
 	{
-		global $cookie;
 		$configCurrency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 
 		$html = '<script>
@@ -465,7 +469,7 @@ class CanadaPost extends CarrierModule
 						<select name="cp_carrier_country" id="cp_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
 							$idcountries = array();
-							foreach (Country::getCountries($cookie->id_lang) as $v)
+							foreach (Country::getCountries((int)$this->context->language->id) as $v)
 							{
 								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('cp_carrier_country', Configuration::get('CP_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
 								$idcountries[] = $v['id_country'];
@@ -476,7 +480,7 @@ class CanadaPost extends CarrierModule
 					<label>'.$this->l('State').' : </label>
 					<div class="margin-form">';
 						$id_country_current = 0;
-						$statesList = Db::getInstance()->ExecuteS('
+						$statesList = Db::getInstance()->executeS('
 						SELECT `id_state`, `id_country`, `name`
 						FROM `'._DB_PREFIX_.'state` WHERE `active` = 1
 						ORDER BY `id_country`, `name` ASC');
@@ -511,15 +515,15 @@ class CanadaPost extends CarrierModule
 					</div>
 					<label>'.$this->l('Delivery Service').' : </label>
 					<div class="margin-form">';
-						$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
+						$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
 						foreach($rateServiceList as $rateService)
-							$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<br />';
+							$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' <!--'.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'--><br />';
 					$html .= '
 					<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 					</div>
 				</fieldset>
 				
-				<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
+				<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 			</form>
 
 			<script>
@@ -620,8 +624,6 @@ class CanadaPost extends CarrierModule
 
 	private function _getPathInTab($id_category)
 	{
-		global $cookie;
-
 		$category = Db::getInstance()->getRow('
 		SELECT id_category, level_depth, nleft, nright
 		FROM '._DB_PREFIX_.'category
@@ -629,11 +631,11 @@ class CanadaPost extends CarrierModule
 
 		if (isset($category['id_category']))
 		{
-			$categories = Db::getInstance()->ExecuteS('
+			$categories = Db::getInstance()->executeS('
 			SELECT c.id_category, cl.name, cl.link_rewrite
 			FROM '._DB_PREFIX_.'category c
-			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category)
-			WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($cookie->id_lang).'
+			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category '.(version_compare(_PS_VERSION_, '1.5.0') >= 0 ? $this->context->shop->addSqlRestrictionOnLang('cl') : '').')
+			WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)$this->context->language->id.'
 			ORDER BY c.level_depth ASC
 			LIMIT '.(int)($category['level_depth'] + 1));
 
@@ -678,8 +680,6 @@ class CanadaPost extends CarrierModule
 	
 	private function _displayFormCategory()
 	{
-		global $cookie;
-
 		// Check if the module is configured
 		if (!$this->_webserviceTestResult)
 			return '<p><b>'.$this->l('You have to configure "General Settings" tab before using this tab.').'</b></p><br />';
@@ -699,7 +699,7 @@ class CanadaPost extends CarrierModule
 			<tbody>';
 
 		// Loading config list
-		$configCategoryList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_category` > 0');
+		$configCategoryList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_category` > 0');
 		if (!$configCategoryList)
 			$html .= '<tr><td colspan="6">'.$this->l('There is no specific Canada Post configuration for categories at this point.').'</td></tr>';
 		foreach ($configCategoryList as $k => $c)
@@ -718,7 +718,7 @@ class CanadaPost extends CarrierModule
 
 			// Loading services attached to this config
 			$services = '';
-			$servicesTab = Db::getInstance()->ExecuteS('
+			$servicesTab = Db::getInstance()->executeS('
 			SELECT ursc.`service`
 			FROM `'._DB_PREFIX_.'cp_rate_config_service` urcs
 			LEFT JOIN `'._DB_PREFIX_.'cp_rate_service_code` ursc ON (ursc.`id_cp_rate_service_code` = urcs.`id_cp_rate_service_code`)
@@ -775,7 +775,7 @@ class CanadaPost extends CarrierModule
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::safeOutput(Tools::getValue('additional_charges', $configSelected['additional_charges'])).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 								{
 									$configServiceSelected = Db::getInstance()->getValue('SELECT `id_cp_rate_service_code` FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)(Tools::getValue('id_cp_rate_config')).' AND `id_cp_rate_service_code` = '.(int)($rateService['id_cp_rate_service_code']));
@@ -784,7 +784,7 @@ class CanadaPost extends CarrierModule
 						$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
-						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
+						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';
 		}
 		else
@@ -795,20 +795,20 @@ class CanadaPost extends CarrierModule
 						<div class="margin-form">
 							<select name="id_category">
 								<option value="0">'.$this->l('Select a category ...').'</option>
-								'.$this->_getChildCategories(Category::getCategories($cookie->id_lang), 0).'
+								'.$this->_getChildCategories(Category::getCategories((int)$this->context->language->id), 0).'
 							</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::safeOutput(Tools::getValue('additional_charges')).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_cp_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
-						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
+						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';
 		}
 
@@ -880,7 +880,7 @@ class CanadaPost extends CarrierModule
 				'date_upd' => pSQL($date)
 			);
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'cp_rate_config', $updTab, 'UPDATE', '`id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
+			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
 			foreach ($services as $s)
 			{
 				$addTab = array('id_cp_rate_service_code' => pSQL($s), 'id_cp_rate_config' => (int)Tools::getValue('id_cp_rate_config'), 'date_add' => pSQL($date), 'date_upd' => pSQL($date));
@@ -897,8 +897,8 @@ class CanadaPost extends CarrierModule
 		// Delete Script
 		if (Tools::getValue('action') == 'delete' && Tools::getValue('id_cp_rate_config'))
 		{
-			$result1 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
-			$result2 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
+			$result1 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
+			$result2 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
 
 			// Display Results
 			if ($result1)
@@ -917,8 +917,6 @@ class CanadaPost extends CarrierModule
 
 	private function _displayFormProduct()
 	{
-		global $cookie;
-
 		// Check if the module is configured
 		if (!$this->_webserviceTestResult)
 			return '<p><b>'.$this->l('You have to configure "General Settings" tab before using this tab.').'</b></p><br />';
@@ -938,20 +936,20 @@ class CanadaPost extends CarrierModule
 			<tbody>';
 
 		// Loading config list
-		$configProductList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_product` > 0');
+		$configProductList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_product` > 0');
 		if (!$configProductList)
 			$html .= '<tr><td colspan="6">'.$this->l('There is no specific Canada Post configuration for products at this point.').'</td></tr>';
 		foreach ($configProductList as $k => $c)
 		{
 			// Loading Product
-			$product = new Product((int)$c['id_product'], false, (int)$cookie->id_lang);
+			$product = new Product((int)$c['id_product'], false, (int)$this->context->language->id);
 
 			// Loading config currency
 			$configCurrency = new Currency($c['id_currency']);
 
 			// Loading services attached to this config
 			$services = '';
-			$servicesTab = Db::getInstance()->ExecuteS('
+			$servicesTab = Db::getInstance()->executeS('
 			SELECT ursc.`service`
 			FROM `'._DB_PREFIX_.'cp_rate_config_service` urcs
 			LEFT JOIN `'._DB_PREFIX_.'cp_rate_service_code` ursc ON (ursc.`id_cp_rate_service_code` = urcs.`id_cp_rate_service_code`)
@@ -989,7 +987,7 @@ class CanadaPost extends CarrierModule
 		{
 			// Loading config
 			$configSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_cp_rate_config` = '.(int)(Tools::getValue('id_cp_rate_config')));
-			$product = new Product((int)$configSelected['id_product'], false, (int)$cookie->id_lang);
+			$product = new Product((int)$configSelected['id_product'], false, (int)$this->context->language->id);
 
 			$html .= '<p align="center"><b>'.$this->l('Update a rule').' (<a href="index.php?tab='.Tools::safeOutput(Tools::getValue('tab')).'&configure='.Tools::safeOutput(Tools::getValue('configure')).'&token='.Tools::safeOutput(Tools::getValue('token')).'&tab_module='.Tools::safeOutput(Tools::getValue('tab_module')).'&module_name='.Tools::safeOutput(Tools::getValue('module_name')).'&id_tab=3&section=product&action=add">'.$this->l('Add a rule').' ?</a>)</b></p>
 					<form action="index.php?tab='.Tools::safeOutput(Tools::getValue('tab')).'&configure='.Tools::safeOutput(Tools::getValue('configure')).'&token='.Tools::safeOutput(Tools::getValue('token')).'&tab_module='.Tools::safeOutput(Tools::getValue('tab_module')).'&module_name='.Tools::safeOutput(Tools::getValue('module_name')).'&id_tab=3&section=product&action=edit&id_cp_rate_config='.(int)(Tools::getValue('id_cp_rate_config')).'" method="post" class="form">
@@ -1000,7 +998,7 @@ class CanadaPost extends CarrierModule
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::safeOutput(Tools::getValue('additional_charges', $configSelected['additional_charges'])).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 								{
 									$configServiceSelected = Db::getInstance()->getValue('SELECT `id_cp_rate_service_code` FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)(Tools::getValue('id_cp_rate_config')).' AND `id_cp_rate_service_code` = '.(int)($rateService['id_cp_rate_service_code']));
@@ -1009,7 +1007,7 @@ class CanadaPost extends CarrierModule
 						$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
-						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
+						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';
 		}
 		else
@@ -1020,9 +1018,9 @@ class CanadaPost extends CarrierModule
 						<div class="margin-form">
 							<select name="id_product">
 								<option value="0">'.$this->l('Select a product ...').'</option>';
-						$productsList = Db::getInstance()->ExecuteS('
+						$productsList = Db::getInstance()->executeS('
 						SELECT pl.* FROM `'._DB_PREFIX_.'product` p
-						LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int)$cookie->id_lang.')
+						LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int)$this->context->language->id.' '.(version_compare(_PS_VERSION_, '1.5.0') >= 0 ? $this->context->shop->addSqlRestrictionOnLang('pl') : '').')
 						WHERE p.`active` = 1
 						ORDER BY pl.`name`');
 						foreach ($productsList as $product)
@@ -1034,13 +1032,13 @@ class CanadaPost extends CarrierModule
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::safeOutput(Tools::getValue('additional_charges')).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_cp_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
-						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
+						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';
 		}
 
@@ -1112,7 +1110,7 @@ class CanadaPost extends CarrierModule
 				'date_upd' => pSQL($date)
 			);
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'cp_rate_config', $updTab, 'UPDATE', '`id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
+			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
 			foreach ($services as $s)
 			{
 				$addTab = array('id_cp_rate_service_code' => pSQL($s), 'id_cp_rate_config' => (int)Tools::getValue('id_cp_rate_config'), 'date_add' => pSQL($date), 'date_upd' => pSQL($date));
@@ -1129,8 +1127,8 @@ class CanadaPost extends CarrierModule
 		// Delete Script
 		if (Tools::getValue('action') == 'delete' && Tools::getValue('id_cp_rate_config'))
 		{
-			$result1 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
-			$result2 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
+			$result1 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
+			$result2 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'cp_rate_config_service` WHERE `id_cp_rate_config` = '.(int)Tools::getValue('id_cp_rate_config'));
 
 			// Display Results
 			if ($result1)
@@ -1272,7 +1270,7 @@ class CanadaPost extends CarrierModule
 			$productConfiguration = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_product` = '.(int)($product['id_product']));
 			if ($productConfiguration['id_cp_rate_config'])
 			{
-				$servicesConfiguration = Db::getInstance()->ExecuteS('
+				$servicesConfiguration = Db::getInstance()->executeS('
 				SELECT urcs.*, ursc.`id_carrier`
 				FROM `'._DB_PREFIX_.'cp_rate_config_service` urcs
 				LEFT JOIN `'._DB_PREFIX_.'cp_rate_service_code` ursc ON (ursc.`id_cp_rate_service_code` = urcs.`id_cp_rate_service_code`)
@@ -1289,7 +1287,7 @@ class CanadaPost extends CarrierModule
 			$categoryConfiguration = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'cp_rate_config` WHERE `id_category` = '.(int)($product['id_category_default']));
 			if ($categoryConfiguration['id_cp_rate_config'])
 			{
-				$servicesConfiguration = Db::getInstance()->ExecuteS('
+				$servicesConfiguration = Db::getInstance()->executeS('
 				SELECT urcs.*, ursc.`id_carrier`
 				FROM `'._DB_PREFIX_.'cp_rate_config_service` urcs
 				LEFT JOIN `'._DB_PREFIX_.'cp_rate_service_code` ursc ON (ursc.`id_cp_rate_service_code` = urcs.`id_cp_rate_service_code`)
@@ -1301,7 +1299,7 @@ class CanadaPost extends CarrierModule
 		}
 
 		// Return general config
-		$servicesConfiguration = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code` WHERE `active` = 1');
+		$servicesConfiguration = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code` WHERE `active` = 1');
 		foreach ($servicesConfiguration as $service)
 			$config['services'][$service['id_cp_rate_service_code']] = $service;
 		return $config;
@@ -1333,7 +1331,7 @@ class CanadaPost extends CarrierModule
 			$weight += Tools::getValue('cp_carrier_packaging_weight', Configuration::get('CP_CARRIER_PACKAGING_WEIGHT'));
 
 			// Get service in adequation with carrier and check if available
-			$servicesConfiguration = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code` WHERE `active` = 1');
+			$servicesConfiguration = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code` WHERE `active` = 1');
 			foreach ($servicesConfiguration as $service)
 				$config['services'][$service['id_cp_rate_service_code']] = $service;
 			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'cp_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
@@ -1400,10 +1398,9 @@ class CanadaPost extends CarrierModule
 		if (!Validate::isLoadedObject($address))
 		{
 			// If address is not loaded, we take data from shipping estimator module (if installed)
-			global $cookie;
-			$address->id_country = $cookie->id_country;
-			$address->id_state = $cookie->id_state;
-			$address->postcode = $cookie->postcode;
+			$address->id_country = $this->context->cookie->id_country;
+			$address->id_state = $this->context->cookie->id_state;
+			$address->postcode = $this->context->cookie->postcode;
 		}
 		$recipient_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($address->id_country));
 		$recipient_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)($address->id_state));
@@ -1494,7 +1491,7 @@ class CanadaPost extends CarrierModule
 		if (!empty($service))
 			$servicesList = array(array('service' => $service));
 		else
-			$servicesList = Db::getInstance()->ExecuteS('SELECT `service` FROM `'._DB_PREFIX_.'cp_rate_service_code`');
+			$servicesList = Db::getInstance()->executeS('SELECT `service` FROM `'._DB_PREFIX_.'cp_rate_service_code`');
 
 		// Testing Service
 		foreach ($servicesList as $service)
@@ -1572,6 +1569,11 @@ class CanadaPost extends CarrierModule
 		$errno = $errstr = $result = '';
 		$xml = $this->getXml($wsParams);
 
+		// Cache
+		unset($wsParams['service']);
+		if (isset(self::$request_cache[md5(var_export($wsParams, true))]))
+			return self::$request_cache[md5(var_export($wsParams, true))];
+
 		if (is_callable('curl_exec'))
 		{
 			// Curl Request
@@ -1590,7 +1592,7 @@ class CanadaPost extends CarrierModule
 		{
 			// FsockOpen Request
 			$timeout = 5;
-			$fp = fsockopen("http://sellonline.canadapost.ca:30000", "80", $errno, $errstr, $timeout); 
+			$fp = fsockopen("sellonline.canadapost.ca:30000", "80", $errno, $errstr, $timeout); 
 			if ($fp)
 			{
 				$request = "POST HTTP/1.1\r\n";
@@ -1628,6 +1630,10 @@ class CanadaPost extends CarrierModule
 		$data = strstr($result, '<?');
 		$resultTab = simplexml_load_string($data);
 
+		// Save Cache
+		self::$request_cache[md5(var_export($wsParams, true))] = $resultTab;
+
+		// Return result
 		return $resultTab;
 	}
 
