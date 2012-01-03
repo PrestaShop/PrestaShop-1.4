@@ -451,7 +451,8 @@ class AdminImport extends AdminTab
 				$path = _PS_CAT_IMG_DIR_.(int)($id_entity);
 			break;
 		}
-		if (copy(str_replace(' ', '%20', trim($url)), $tmpfile))
+		$url_source_file = str_replace(' ', '%20', trim($url));
+		if (@copy($url_source_file, $tmpfile))
 		{
 			imageResize($tmpfile, $path.'.jpg');
 			$imagesTypes = ImageType::getImagesTypes($entity);
@@ -482,6 +483,9 @@ class AdminImport extends AdminTab
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
+
+			if (!isset($info['id']) || (int)$info['id'] < 2)
+				continue;
 
 			self::setDefaultValues($info);
 			$category = new Category();
