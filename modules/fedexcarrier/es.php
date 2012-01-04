@@ -58,8 +58,6 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3e203b9a16f360b88d90bba6eb61ce6
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8c0987b9315003df7dae7f130e3cf58e'] = 'Seleccione el servicio de entrega disponible que desee';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Conexión de prueba al servicio web';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_807b063fceafae2c51dc6afb45612389'] = 'SOAP está habilitado';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_bcf52f13aae44c82d31e8cfde9695fcd'] = 'url fopen esta activado';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0aa5a377393863e514580a07328b641f'] = 'OpenSSL esta activado';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Configuración general';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_277d63a9b24a09697e3c64092eaf4353'] = 'Configuración de las categorías';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_098eec2cabe2c39c6dec3fc522b6571a'] = 'Configuración de los productos';
@@ -99,7 +97,6 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5cdd307ba6e260beb4801c0c10e22a3
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_78945de8de090e90045d299651a68a9b'] = 'Disponible';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'No disponible';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d63e135774e62574e2a1921267dad142'] = 'Elija el servicio de entrega que estará disponible para los clientes.';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f1206f9fadc5ce41694f69129aecac26'] = 'Configurar';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9b8c4a7116e8c44e4ebc955fafd47586'] = 'No se ha especificado su cuenta Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b9cc1a101547b3ece6d946dbbe3469d7'] = 'No se ha especificado su Fedex meter Lumber';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5ce0f66588bbbbbb3ef0634e5ea7da69'] = 'No se ha especificado su contraseña Fedex';
@@ -154,5 +151,3 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_71ffd676000b4ec8ea95f4096adc3d3
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_89a9eabc8fc9335d484dcb1eb7ef4ac5'] = 'Esta sección le permite definir una configuración específica de FEDEX para cada producto (tales como tipo de embalaje y gastos adicionales).';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Error';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5e303843029d99ced59415005037969d'] = 'El servicio web de Fedex parece estar fuera de servicio, por favor, espere unos minutos y vuelva a intentarlo';
-
-?>
