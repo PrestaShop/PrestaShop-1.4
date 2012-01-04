@@ -303,7 +303,7 @@ class AdminCustomerThreads extends AdminTab
 		
 		if (!$email)
 		{
-			if (!empty($message['id_product']) AND empty($message['employee_name']))
+			if (!empty($message['id_product']) AND empty($message['id_employee']))
 				$id_order_product = Db::getInstance()->getValue('
 				SELECT o.id_order
 				FROM '._DB_PREFIX_.'orders o
@@ -313,8 +313,8 @@ class AdminCustomerThreads extends AdminTab
 				ORDER BY o.date_add DESC');
 			
 			$output = '
-			<fieldset style="'.(!empty($message['employee_name']) ? 'background: rgb(255,236,242);' : '').'width:600px;margin-top:10px">
-				<legend '.(empty($message['employee_name']) ? '' : 'style="background:rgb(255,210,225)"').'>'.(
+			<fieldset style="'.(!empty($message['id_employee']) ? 'background: rgb(255,236,242);' : '').'width:600px;margin-top:10px">
+				<legend '.(empty($message['id_employee']) ? '' : 'style="background:rgb(255,210,225)"').'>'.(
 					!empty($message['employee_name'])
 					? '<img src="../img/t/AdminCustomers.gif" alt="'.Configuration::get('PS_SHOP_NAME').'" /> '.Configuration::get('PS_SHOP_NAME').' - '.$message['employee_name']
 					: '<img src="'.__PS_BASE_URI__.'img/admin/tab-customers.gif" alt="'.Configuration::get('PS_SHOP_NAME').'" /> '.(
@@ -324,12 +324,12 @@ class AdminCustomerThreads extends AdminTab
 					)
 				).'</legend>
 				<div style="font-size:11px">'.(
-						(!empty($message['id_customer']) AND empty($message['employee_name']))
+						(!empty($message['id_customer']) AND empty($message['id_employee']))
 						? '<b>'.$this->l('Customer ID:').'</b> <a href="index.php?tab=AdminCustomers&id_customer='.(int)($message['id_customer']).'&viewcustomer&token='.$customersToken.'" title="'.$this->l('View customer').'">'.(int)($message['id_customer']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).'
 					<b>'.$this->l('Sent on:').'</b> '.Tools::displayDate($message['date_add'], (int)($cookie->id_lang), true).'<br />'.(
-						empty($message['employee_name'])
+						empty($message['id_employee'])
 						? '<b>'.$this->l('Browser:').'</b> '.strip_tags($message['user_agent']).'<br />'
 						: ''
 					).(
@@ -337,11 +337,11 @@ class AdminCustomerThreads extends AdminTab
 						? '<b>'.$this->l('File attachment').'</b> <a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.$message['id_customer_thread'].'&viewcustomer_thread&token='.Tools::getAdminToken('AdminCustomerThreads'.(int)(Tab::getIdFromClassName('AdminCustomerThreads')).(int)($cookie->id_employee)).'&filename='.$message['file_name'].'" title="'.$this->l('View file').'"><img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).(
-						(!empty($message['id_order']) AND empty($message['employee_name']))
+						(!empty($message['id_order']) AND empty($message['id_employee']))
 						? '<b>'.$this->l('Order #').'</b> <a href="index.php?tab=AdminOrders&id_order='.(int)($message['id_order']).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'" title="'.$this->l('View order').'">'.(int)($message['id_order']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).(
-						(!empty($message['id_product']) AND empty($message['employee_name']))
+						(!empty($message['id_product']) AND empty($message['id_employee']))
 						? '<b>'.$this->l('Product #').'</b> <a href="index.php?tab=AdminOrders&id_order='.(int)($id_order_product).'&vieworder&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)).'" title="'.$this->l('View order').'">'.(int)($message['id_product']).' <img src="../img/admin/search.gif" alt="'.$this->l('view').'" /></a><br />'
 						: ''
 					).'<br />
