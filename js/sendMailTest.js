@@ -50,17 +50,18 @@ function verifyMail(testMsg, testSubject)
 		{
 		   url: "ajax_send_mail_test.php",
 		   cache: false,
+		   type : "POST",
 		   data:
-				"mailMethod="+(($("input#PS_MAIL_METHOD").val() == 2) ? "smtp" : "native")+
-				"&smtpSrv="+ $("input#PS_MAIL_SERVER").val()+
-				"&testEmail="+ $("#testEmail").val()+
-		   		"&smtpLogin="+ $("input#PS_MAIL_USER").val()+
-		   		"&smtpPassword="+ $("input#PS_MAIL_PASSWD").val()+
-				"&smtpPort="+ $("input#PS_MAIL_SMTP_PORT").val()+
-				"&smtpEnc="+ $("select#PS_MAIL_SMTP_ENCRYPTION").val()+
-				"&testMsg="+textMsg+
-				"&testSubject="+textSubject
-			,
+		   {	"mailMethod" 	: (($("input#PS_MAIL_METHOD").val() == 2) ? "smtp" : "native"),
+				"smtpSrv"   	: $("input#PS_MAIL_SERVER").val(),
+				"testEmail" 	: $("#testEmail").val(),
+		   		"smtpLogin" 	: $("input#PS_MAIL_USER").val(),
+		   		"smtpPassword" 	: $("input#PS_MAIL_PASSWD").val(),
+				"smtpPort" 		: $("input#PS_MAIL_SMTP_PORT").val(),
+				"smtpEnc" 		: $("select#PS_MAIL_SMTP_ENCRYPTION").val(),
+				"testMsg" 		: textMsg,
+				"testSubject" 	: textSubject
+			},
 		   success: function(ret)
 		   {
 				if (ret == "ok")
