@@ -488,13 +488,13 @@ function PS_MRHandleSelectedRelayPoint()
 		$(this).parent().attr('class', 'PS_MRFloatRelayPointSelected');
 		
 		// Get the info about the relay point (relayPoint_RelayPointNumber_IdCarrier)
-		tab = $(this).parent().parent().attr('id').split('_');
+		var tab = $(this).parent().parent().attr('id').split('_');
 		
 		// Store Separated data for the ajax query
 		if (tab.length == 3)
 		{
-			relayPointNumber = tab[1];
-			id_carrier = tab[2];
+			var relayPointNumber = tab[1];
+			var id_carrier = tab[2];
 			PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier);
 		}
 	});	

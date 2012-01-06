@@ -287,7 +287,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		else
 			$this->_fields['list']['Expe_Pays']['value'] = substr(Configuration::get('PS_SHOP_COUNTRY'), 0, 2);
 			
-		$this->_fields['list']['Expe_Tel1']['value'] = str_replace(array('.', ' ', '-', '_'), '', Configuration::get('PS_SHOP_PHONE'));
+		$this->_fields['list']['Expe_Tel1']['value'] = preg_replace('/[^0-9+\(\)]*/', '', Configuration::get('PS_SHOP_PHONE'));
 		$this->_fields['list']['Expe_Mail']['value'] = Configuration::get('PS_SHOP_EMAIL');
 		$this->_fields['list']['NbColis']['value'] = 1;
 		$this->_fields['list']['CRT_Valeur']['value'] = 0;
@@ -338,8 +338,8 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				$tmp['Dest_CP']['value'] = $deliveriesAddress->postcode;
 				$tmp['Dest_CP']['params']['id_country'] = $deliveriesAddress->id_country;
 				$tmp['Dest_Pays']['value'] = $destIsoCode;
-				$tmp['Dest_Tel1']['value'] = str_replace(array('.', ' ', '-', '_'), '', $deliveriesAddress->phone);
-				$tmp['Dest_Tel2']['value'] = str_replace(array('.', ' ', '-', '_'), '', $deliveriesAddress->phone_mobile);
+				$tmp['Dest_Tel1']['value'] = preg_replace('/[^0-9+\(\)]*/', '', $deliveriesAddress->phone);
+				$tmp['Dest_Tel2']['value'] = preg_replace('/[^0-9+\(\)]*/', '', $deliveriesAddress->phone_mobile);
 				$tmp['Dest_Mail']['value'] = $customer->email;
 				$tmp['Assurance']['value'] = $orderDetail['mr_ModeAss'];
 				if ($orderDetail['MR_Selected_Num'] != 'LD1' && $orderDetail['MR_Selected_Num'] != 'LDS')
@@ -540,7 +540,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 					substr(Configuration::get('PS_SHOP_COUNTRY'), 0, 2)),
 				'error' => $this->_mondialRelay->l('Please check your country configuration')),
 			'Expe_Tel1' => array(
-				'value' => str_replace(array('.', ' ', '-'), '', Configuration::get('PS_SHOP_PHONE')),
+				'value' => preg_replace('/[^0-9+\(\)]*/', '', Configuration::get('PS_SHOP_PHONE')),
 				'error' => $this->_mondialRelay->l('Please check your Phone configuration')),
 			'Expe_Mail' => array(
 				'value' => Configuration::get('PS_SHOP_EMAIL'),
@@ -552,15 +552,21 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			// TODO : test on windows and linux server
 			$cleanedString = MRTools::replaceAccentedCharacters($tab['value']);
 			$tab['value'] = !empty($cleanedString) ? strtoupper($cleanedString) : strtoupper($tab['value']);
-				
+
 			if ($name == 'Expe_CP')
 			{
-				if (!($zipcodeError = MRTools::checkZipcodeByCountry($tab['value'], array(
-						'id_country' => Configuration::get('PS_COUNTRY_DEFAULT')))))
-					$errorList['error'][$name] = $tab['error'];
-				else if ($zipcodeError < 0)
-					$errorList['warn'][$name] = $tab['warn'];
+				if (version_compare(_PS_VERSION_, '1.4', '>='))
+				{
+					if (!($zipcodeError = MRTools::checkZipcodeByCountry($tab['value'], array(
+										'id_country' => Configuration::get('PS_COUNTRY_DEFAULT')))))
+						$errorList['error'][$name] = $tab['error'];
+					else if ($zipcodeError < 0)
+						$errorList['warn'][$name] = $tab['warn'];
+				}
+				else
+					$errorList['warn'][$name] = $this->_mondialRelay->l('Using a PrestaShop version less than 1.4, we can\'t validate the zipcode');
 			}
+
 			else if (isset($this->_fields['list'][$name]['regexValidation']) && 
 					(!preg_match($this->_fields['list'][$name]['regexValidation'], $tab['value'], $matches)))
 				$errorList['error'][$name] = $tab['error'];
