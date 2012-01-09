@@ -48,7 +48,7 @@ class Pagesnotfound extends Module
 
 	function install()
 	{
-		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('AdminStatsModules'))
+		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('frontCanonicalRedirect') OR !$this->registerHook('AdminStatsModules'))
 			return false;
 		return Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'pagenotfound` (
@@ -155,6 +155,8 @@ class Pagesnotfound extends Module
 	
 	function hookTop($params)
 	{
+		if (Configuration::get('PS_CANONICAL_REDIRECT'))
+		  return;
 		if (strstr($_SERVER['REQUEST_URI'], '404.php') AND isset($_SERVER['REDIRECT_URL']))
 			$_SERVER['REQUEST_URI'] = $_SERVER['REDIRECT_URL'];
 		if (!Validate::isUrl($request_uri = $_SERVER['REQUEST_URI']) OR strstr($_SERVER['REQUEST_URI'], '-admin404'))
@@ -166,6 +168,23 @@ class Pagesnotfound extends Module
 				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'pagenotfound` (`request_uri`,`http_referer`,`date_add`) VALUES (\''.pSQL($request_uri).'\',\''.pSQL($http_referer).'\',NOW())');
 		}
 	}
+	
+	function hookFrontCanonicalRedirect($params)
+	{
+		if (!Configuration::get('PS_CANONICAL_REDIRECT'))
+			return;
+		if (strstr($_SERVER['REQUEST_URI'], '404.php') AND isset($_SERVER['REDIRECT_URL']))
+			$_SERVER['REQUEST_URI'] = $_SERVER['REDIRECT_URL'];
+		if (!Validate::isUrl($request_uri = $_SERVER['REQUEST_URI']) OR strstr($_SERVER['REQUEST_URI'], '-admin404'))
+			return;
+		if (strstr($_SERVER['PHP_SELF'], '404.php') AND !strstr($_SERVER['REQUEST_URI'], '404.php'))
+		{
+			$http_referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+			if (empty($http_referer) OR Validate::isAbsoluteUrl($http_referer))
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'pagenotfound` (`request_uri`,`http_referer`,`date_add`) VALUES (\''.pSQL($request_uri).'\',\''.pSQL($http_referer).'\',NOW())');
+		}
+	}
+
 }
 
 function pnfSort($a, $b) {
