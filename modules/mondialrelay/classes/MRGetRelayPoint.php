@@ -62,7 +62,7 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 			'Poids'					=> array(
 						'required'				=> false,
 						'value'						=> '',
-						'regexValidation' => '#^[0-9]{1,6}$#'),
+						'regexValidation' => '#^[0-9]{3,7}$#'),
 			'Action'				=> array(
 						'required'				=> false,
 						'value'						=> '',
@@ -102,12 +102,13 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 	{	
 		$this->_mondialRelay = new MondialRelay();
 		$address = new Address($this->_id_address_delivery);
-		
+		$weight = Configuration::get('MR_WEIGHT_COEF') * $this->_weight;
+
 		if (!$address)
 			throw new Exception($this->_mondialrelay->l('Customer address can\'t be found'));
 		
 		$this->_fields['list']['Enseigne']['value'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
-		$this->_fields['list']['Poids']['value'] = Configuration::get('MR_WEIGHT_COEF') * $this->_weight;
+		$this->_fields['list']['Poids']['value'] = ($weight < 100) ? 100 : $weight;
 		$this->_fields['list']['Pays']['value'] = Country::getIsoById($address->id_country);
 		$this->_fields['list']['Ville']['value'] = $address->city;
 		$this->_fields['list']['CP']['value'] = $address->postcode;

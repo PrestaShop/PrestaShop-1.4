@@ -157,7 +157,6 @@ class MondialRelay extends Module
 			Configuration::updateValue('MONDIAL_RELAY', $this->version);
 			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', 3);
 			Configuration::updateValue('MONDIAL_RELAY_SECURE_KEY', md5(time().rand(0,10)));
-			Configuration::updateValue('MR_GOOGLE_MAP', '1');
 			Configuration::updateValue('MR_ENSEIGNE_WEBSERVICE', '');
 			Configuration::updateValue('MR_CODE_MARQUE', '');
 			Configuration::updateValue('MR_KEY_WEBSERVICE', '');
@@ -169,10 +168,8 @@ class MondialRelay extends Module
 			// Reactive transport if database wasn't remove at the last uninstall
 			Db::getInstance()->execute('
 				UPDATE `'._DB_PREFIX_.'carrier` c, `'._DB_PREFIX_.'mr_method` m
-					SET `deleted` = 0
+					SET c.`deleted` = 0
 					WHERE c.id_carrier = m.id_carrier');
-			if (Configuration::get('MONDIAL_RELAY') < $this->version)
-				;// TODO : ADD upgrade process depending of the last and new version
 		}
 		return true;
 	}
@@ -228,17 +225,12 @@ class MondialRelay extends Module
 			}
 		}
 
-		if (_PS_VERSION_ >= '1.4' &&
-			!Db::getInstance()->execute('
-					UPDATE  '._DB_PREFIX_ .'carrier
-					SET `active` = 0, `deleted` = 1
-					WHERE `external_module_name` = "mondialrelay"'))
+		if (!Db::getInstance()->execute('
+					UPDATE '._DB_PREFIX_.'carrier, '._DB_PREFIX_.'mr_method m
+					SET c.`active` = 0, c.`deleted` = 1
+					WHERE c.`id_carrier` = m.`id_carrier`'))
 			return false;
-		else if (!Db::getInstance()->execute('
-					UPDATE  '._DB_PREFIX_ .'carrier
-					SET `active` = 0, `deleted` = 1
-					WHERE `name` = "mondialrelay"'))
-			return false;
+
 		return true;
 	}
 
@@ -256,7 +248,7 @@ class MondialRelay extends Module
 			// Retro Compatibility for older Version than 1.7
 			if (Configuration::get('MONDIAL_RELAY_1_4'))
 			{
-				Configuration::updateValue('MONDIAL_RELAY', '1.6');
+				Configuration::updateValue('MONDIAL_RELAY', $this->version);
 				Configuration::deleteByName('MONDIAL_RELAY_1_4');
 				Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE_1');
 			}
@@ -265,14 +257,13 @@ class MondialRelay extends Module
 
 		// MondialRelay Configuration
 		if (!Configuration::deleteByName('MONDIAL_RELAY') ||
-			!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') ||
-			!Configuration::deleteByName('MONDIAL_RELAY_SECURE_KEY') ||
-			!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') ||
-			!Configuration::deleteByName('MR_GOOGLE_MAP') ||
-			!Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE') ||
-			!Configuration::deleteByName('MR_CODE_MARQUE') ||
-			!Configuration::deleteByName('MR_KEY_WEBSERVICE') ||
-			!Configuration::deleteByName('MR_WEIGHT_COEF'))
+				!Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE') ||
+				!Configuration::deleteByName('MONDIAL_RELAY_SECURE_KEY') ||
+				!Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE') ||
+				!Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE') ||
+				!Configuration::deleteByName('MR_CODE_MARQUE') ||
+				!Configuration::deleteByName('MR_KEY_WEBSERVICE') ||
+				!Configuration::deleteByName('MR_WEIGHT_COEF'))
 			return false;
 
 		// Drop databases
@@ -282,10 +273,29 @@ class MondialRelay extends Module
 					'._DB_PREFIX_ .'mr_method,
 					'._DB_PREFIX_ .'mr_selected'))
 			return false;
-		else if (!Db::getInstance()->execute('UPDATE '._DB_PREFIX_.'carrier SET `active` = 0, `deleted` = 1 WHERE `name` = "mondialrelay"'))
+
+		// If drop failed, try to turn off the carriers
+		else if (!Db::getInstance()->execute('
+				UPDATE '._DB_PREFIX_.'carrier, '._DB_PREFIX_.'mr_method m
+				SET c.`active` = 0, c.`deleted` = 1
+				WHERE c.`id_carrier` = m.`id_carrier`'))
 			return false;
 
 		return true;
+	}
+
+	/**
+	 * Launch upgrade process
+	 *
+	 * @param string $installedVersion
+	 * @TODO: Launch the same process use in 1.5 for 1.4 / 1.3
+	 */
+	public function runUpgrade($installedVersion)
+	{
+		if ($installedVersion < '1.4')
+			$this->_update_v1_4();
+		if ($installedVersion < '1.4.2')
+			$this->_update_v1_4_2();
 	}
 
 	/*
@@ -296,13 +306,10 @@ class MondialRelay extends Module
 	{
 		if (Module::isInstalled('mondialrelay') &&
 			(($installedVersion = Configuration::get('MONDIAL_RELAY')) ||
-				$installedVersion = Configuration::get('MONDIAL_RELAY_1_4'))
+			$installedVersion = Configuration::get('MONDIAL_RELAY_1_4'))
 			&& $installedVersion < $this->version)
 		{
-			if ($installedVersion < '1.4')
-				$this->_update_v1_4();
-			if ($installedVersion < '1.4.2')
-				$this->_update_v1_4_2();
+			$this->runUpgrade($installedVersion);
 		}
 
 		// Process update done just try to update the new configuration value
@@ -324,8 +331,7 @@ class MondialRelay extends Module
 			SET
 				`shipping_external` = 0,
 				`need_range` = 1,
-				`external_module_name` =
-				"mondialrelay",
+				`external_module_name` = "mondialrelay",
 				`shipping_method` = 1
 			WHERE `id_carrier`
 			IN (SELECT `id_carrier`
@@ -476,18 +482,9 @@ class MondialRelay extends Module
 		}
 		else if (Tools::isSubmit('submit_order_state'))
 		{
-			if (!Validate::isBool(Tools::getValue('mr_google_key')))
-				$this->_postErrors[] = $this->l('Invalid google key');
 			if (!Validate::isUnsignedInt(Tools::getValue('id_order_state')))
 				$this->_postErrors[] = $this->l('Invalid order state');
 		}
-		/*
-		else if (Tools::isSubmit('PS_MRSubmitFieldPersonalization'))
-		{
-			$addr1 = Tools::getValue('Expe_ad1');
-			if (!preg_match('#^[0-9A-Z_\-\'., /]{2,32}$#', strtoupper($addr1), $match))
-				$this->_postErrors[] = $this->l('The Main address submited hasn\'t a good format');
-		}*/
 	}
 
 	private function _postProcess()
@@ -504,14 +501,11 @@ class MondialRelay extends Module
 			self::mrUpdate('settings', $setArray, $keyArray);
 		else if (isset($_POST['submitShipping']) AND $_POST['submitShipping'])
 			self::mrUpdate('shipping', $_POST, array());
-		/*elseif (Tools::getValue('PS_MRSubmitFieldPersonalization'))
-			$this->updateFieldsPersonalization();*/
 		elseif (isset($_POST['submitMethod']) AND $_POST['submitMethod'])
 			self::mrUpdate('addShipping', $setArray, $keyArray);
 		else if (isset($_POST['submit_order_state']) AND $_POST['submit_order_state'])
 		{
 			Configuration::updateValue('MONDIAL_RELAY_ORDER_STATE', Tools::getValue('id_order_state'));
-			Configuration::updateValue('MR_GOOGLE_MAP', Tools::getValue('mr_google_key'));
 			$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated').'</div>';
 		}
 	}
@@ -859,12 +853,6 @@ class MondialRelay extends Module
 						<label for="mr_Name" class="shipLabel">'.$this->l('Carrier\'s name').'<sup>*</sup></label>
 						<input type="text" id="mr_Name" name="mr_Name" '.(Tools::getValue('mr_Name') ? 'value="'.Tools::safeOutput(Tools::getValue('mr_Name')).'"' : '').'/>
 					</li>';
-		/*<li>
-				 <label for="mr_ModeCol" class="shipLabel">'.$this->l('Collection Mode').'<sup>*</sup></label>
-				 <select name="mr_ModeCol" id="mr_ModeCol" style="width:200px">
-					 <option value="CCC" selected >CCC : '.$this->l('Collection at the store').'</option>
-				 </select>
-			 </li>*/
 
 		$output .= '<li>
 						<label for="mr_ModeLiv" class="shipLabel">'.$this->l('Delivery mode').'<sup>*</sup></label>
@@ -970,59 +958,6 @@ class MondialRelay extends Module
 		return $form;
 	}
 
-	/*
-	** Form to allow personalization fields sent for MondialRelay
-	** Not used anymore but still present if needed
-	*/
-	public function personalizeFormFields()
-	{
-		$form = '';
-		$warn = '';
-
-		// Load the Default value from the configuration
-		$addr1 = (Configuration::get('PS_MR_SHOP_NAME')) ?
-			Configuration::get('PS_MR_SHOP_NAME') :
-			Configuration::get('PS_SHOP_NAME');
-
-		// Check if a request exist and if errors occured, use the post variable
-		if (Tools::isSubmit('PS_MRSubmitFieldPersonalization') && count($this->_postErrors))
-			$addr1 = Tools::safeOutput(Tools::getValue('Expe_ad1'));
-
-
-		if (!Configuration::get('PS_MR_SHOP_NAME'))
-			$warn .= '<div class="warn">'.
-				$this->l('Its seems you updated Mondialrelay without use the uninstall / install method, you have to set up this part to make working the generating ticket process').
-				'</div>';
-		// Form
-		$form = '<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post" class="form">';
-		$form .= '
-			<fieldset class="PS_MRFormStyle">
-				<legend>
-					<img src="../modules/mondialrelay/images/logo.gif" />'.$this->l('Advanced Settings'). ' -
-					<a href="javascript:void(0);" id="PS_MRDisplayPersonalizedOptions"><font style="color:#00b511;">'.$this->l('Click to display / hide the options').'</font>	</a>'.
-			'</legend>'.
-			$warn.'
-			<div id="PS_MRPersonalizedFields">
-				<div style="margin-bottom:20px;">
-				- '.$this->l('This part allow to override the data sent at MondialRelay when you want to generate Ticket. Some fields are restricted by the length, or forbidden char').'.
-				</div>
-				<label for="PS_MR_SHOP_NAME">'.$this->l('Shop Name').'</label>
-			<div class="margin-form">
-				<input type="text" name="Expe_ad1" value="'.$addr1.'" /><br />
-				<p>'.$this->l('The key used by Mondialrelay is').' <b>Expe_ad1</b> '.$this->l('and has this default value').'
-			 	: <b>'.Configuration::get('PS_SHOP_NAME').'</b></p>
-			</div>
-
-		<div class="margin-form">
-			<input type="submit" name="PS_MRSubmitFieldPersonalization"  value="' . $this->l('Save') . '" class="button" />
-		</div>
-			</div>
-		</fieldset>
-		</form><br  />';
-		return $form;
-	}
-
-
 	public function settingsstateorderForm()
 	{
 		$this->orderState = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
@@ -1079,17 +1014,16 @@ class MondialRelay extends Module
 						<li>
 							<label for="mr_Key_WebService" class="mrLabel">' . $this->l('Webservice Key:') . '<sup>*</sup></label>
 							<input id="mr_Key_WebService" class="mrInput" type="text" name="mr_Key_WebService" value="' .
-			(Tools::getValue('mr_Key_WebService') ? Tools::safeOutput(Tools::getValue('mr_Key_WebService')) : Configuration::get('MR_KEY_WEBSERVICE')) . '"/>
+							(Tools::getValue('mr_Key_WebService') ? Tools::safeOutput(Tools::getValue('mr_Key_WebService')) : Configuration::get('MR_KEY_WEBSERVICE')) . '"/>
 						</li>
 						<li>
-							<label for="mr_Langage" class="mrLabel">' . $this->l('Etiquette\'s Language:') . '<sup>*</sup></label>
-							<select id="mr_Langage" name="mr_Langage" value="'.
-			(Tools::getValue('mr_Langage') ? Tools::safeOutput(Tools::getValue('mr_Langage')) : Configuration::get('MR_LANGUAGE')).'" >';
+						<label for="mr_Langage" class="mrLabel">' . $this->l('Etiquette\'s Language:') . '<sup>*</sup></label>
+						<select id="mr_Langage" name="mr_Langage">';
+
 		$languages = Language::getLanguages();
 		foreach ($languages as $language)
-			$output .= '<option value="'.strtoupper($language['iso_code']).'" '.(strtoupper($language['iso_code']) == Configuration::get('MR_LANGUAGE') ? 'selected="selected"' : '').'>'.$language['name'].'</option>';
-
-		$output .= '</select>
+								$output .= '<option value="'.strtoupper($language['iso_code']).'" '.(strtoupper($language['iso_code']) == Configuration::get('MR_LANGUAGE') ? 'selected="selected"' : '').'>'.$language['name'].'</option>';
+			$output .= '</select>
 						</li>
 						<li>
 							<label for="mr_weight_coef" class="mrLabel">' . $this->l('Weight Coefficient:') . '<sup>*</sup></label>
@@ -1143,9 +1077,9 @@ class MondialRelay extends Module
 	public function get_followup($shipping_number)
 	{
 		$query = 'SELECT url_suivi
-	  	FROM '._DB_PREFIX_ .'mr_selected
-	  	WHERE id_mr_selected=\''.(int)($shipping_number).'\';';
-
+	  		FROM '._DB_PREFIX_ .'mr_selected
+	  		WHERE id_mr_selected=\''.(int)($shipping_number).'\';';
+	  	  
 		$settings = Db::getInstance()->executeS($query);
 		if(!isset($settings[0]['url_suivi']))
 			return null;

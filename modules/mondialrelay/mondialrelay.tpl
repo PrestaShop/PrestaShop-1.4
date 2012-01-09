@@ -24,8 +24,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{$jQueryOverload}
-
 <script type="text/javascript">
 	// Global JS Value
 	var PS_MRPreSelectedRelay = '{$preSelectedRelay}';
