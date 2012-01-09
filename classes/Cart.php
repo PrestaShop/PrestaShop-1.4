@@ -238,21 +238,21 @@ class CartCore extends ObjectModel
 
 	/**
 	 * Return cart discounts
-	 * 
+	 *
 	 * @param bool true will return discounts with basic informations
-	 * @param bool true will erase the cache  
+	 * @param bool true will erase the cache
 	 * @result array Discounts
 	 */
 	public function getDiscounts($lite = false, $refresh = false)
 	{
 		if (!$this->id)
 			return array();
-		
+
 		if (!$refresh)
 		{
 			if (!$lite AND isset(self::$_discounts[$this->id]))
 				return self::$_discounts[$this->id];
-			
+
 			if ($lite AND isset(self::$_discountsLite[$this->id]))
 				return self::$_discountsLite[$this->id];
 		}
@@ -415,7 +415,7 @@ class CartCore extends ObjectModel
 				$row['total_wt'] = $row['price_wt'] * (int)($row['cart_quantity']);
 				$row['total'] = Tools::ps_round($row['price'] * (int)($row['cart_quantity']), 2);
 			}
-	
+
 			if (!isset($row['pai_id_image']) OR $row['pai_id_image'] == 0)
 			{
 				$row2 = Db::getInstance()->getRow('
@@ -433,7 +433,7 @@ class CartCore extends ObjectModel
 				$row['id_image'] = $row['pai_id_image'];
 				$row['legend'] = $row['pai_legend'];
 			}
-	
+
 			$row['reduction_applies'] = ($specificPriceOutput AND (float)$specificPriceOutput['reduction']);
 			$row['id_image'] = Product::defineProductImage($row, $this->id_lang);
 			$row['allow_oosp'] = Product::isAvailableWhenOutOfStock($row['out_of_stock']);
@@ -443,7 +443,7 @@ class CartCore extends ObjectModel
 
 			$this->_products[] = $row;
 		}
-		
+
 		return $this->_products;
 	}
 
@@ -1083,7 +1083,7 @@ class CartCore extends ObjectModel
 					$shipping = $carrier->getDeliveryPriceByWeight($this->getTotalWeight(), $id_zone);
 				else
 					$shipping = $carrier->getDeliveryPriceByPrice($order_total, $id_zone, (int)($this->id_currency));
-				
+
 				if (!isset($minShippingPrice))
 					$minShippingPrice = $shipping;
 
@@ -1170,16 +1170,16 @@ class CartCore extends ObjectModel
 		{
 			$moduleName = $carrier->external_module_name;
 			$module = Module::getInstanceByName($moduleName);
-	
+
 			if (Validate::isLoadedObject($module))
 			{
 				if (array_key_exists('id_carrier', $module))
-					$module->id_carrier = $carrier->id;		
+					$module->id_carrier = $carrier->id;
 				if ($carrier->need_range)
 					$shipping_cost = $module->getOrderShippingCost($this, $shipping_cost);
 				else
 					$shipping_cost = $module->getOrderShippingCostExternal($this);
-	
+
 				// Check if carrier is available
 				if ($shipping_cost === false)
 					return false;
@@ -1233,24 +1233,27 @@ class CartCore extends ObjectModel
 
 		if (!$order_total)
 			 return Tools::displayError('Cannot add voucher if order is free.');
+
 		if (!$discountObj->active)
 			return Tools::displayError('This voucher has already been used or is disabled.');
-		if (!$discountObj->quantity)
+
+		if ($discountObj->quantity <= 0)
 			return Tools::displayError('This voucher has expired (usage limit attained).');
+
 		if ($discountObj->id_discount_type == 2 AND $this->id_currency != $discountObj->id_currency)
 			return Tools::displayError('This voucher can only be used in the following currency:').'
 				'.Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `name` FROM `'._DB_PREFIX_.'currency` WHERE id_currency = '.(int)$discountObj->id_currency);
+
 		if ($checkCartDiscount
-			AND (
-				$this->getDiscountsCustomer($discountObj->id) >= $discountObj->quantity_per_user
-				OR (Order::getDiscountsCustomer((int)($cookie->id_customer), $discountObj->id) + $this->getDiscountsCustomer($discountObj->id) >= $discountObj->quantity_per_user) >= $discountObj->quantity_per_user
-				)
-			)
-			return Tools::displayError('You cannot use this voucher anymore (usage limit attained).');
+			AND ((Order::getDiscountsCustomer((int)($cookie->id_customer), $discountObj->id) + $this->getDiscountsCustomer($discountObj->id)) >= $discountObj->quantity_per_user))
+				return Tools::displayError('You cannot use this voucher anymore (usage limit attained).');
+
 		if (strtotime($discountObj->date_from) > time())
 			return Tools::displayError('This voucher is not yet valid');
+
 		if (strtotime($discountObj->date_to) < time())
 			return Tools::displayError('This voucher has expired.');
+
 		if (sizeof($discounts) >= 1 AND $checkCartDiscount)
 		{
 			if (!$discountObj->cumulable)
@@ -1258,12 +1261,12 @@ class CartCore extends ObjectModel
 			foreach ($discounts as $discount)
 				if (!$discount['cumulable'])
 					return Tools::displayError('Voucher is not valid with other discounts.');
-			
+
 			foreach($discounts as $discount)
 				if ($discount['id_discount'] == $discountObj->id)
 					return Tools::displayError('This voucher is already in your cart');
 		}
-		
+
 		$groups = Customer::getGroupsStatic($this->id_customer);
 
 		if (($discountObj->id_customer OR $discountObj->id_group) AND ((($this->id_customer != $discountObj->id_customer) OR ($this->id_customer == 0)) AND !in_array($discountObj->id_group, $groups)))
@@ -1331,11 +1334,11 @@ class CartCore extends ObjectModel
 
 		$delivery = new Address((int)($this->id_address_delivery));
 		$invoice = new Address((int)($this->id_address_invoice));
-		
+
 		// New layout system with personalization fields
 		$formattedAddresses['invoice'] = AddressFormat::getFormattedLayoutData($invoice);
 		$formattedAddresses['delivery'] = AddressFormat::getFormattedLayoutData($delivery);
-		
+
 		$total_tax = $this->getOrderTotal() - $this->getOrderTotal(false);
 
 		if ($total_tax < 0)
