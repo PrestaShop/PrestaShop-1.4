@@ -168,7 +168,7 @@ class MondialRelay extends Module
 			// Reactive transport if database wasn't remove at the last uninstall
 			Db::getInstance()->execute('
 				UPDATE `'._DB_PREFIX_.'carrier` c, `'._DB_PREFIX_.'mr_method` m
-					SET c.`deleted` = 0
+					SET c.`deleted` = 0, active = 1
 					WHERE c.id_carrier = m.id_carrier');
 		}
 		return true;
@@ -226,7 +226,7 @@ class MondialRelay extends Module
 		}
 
 		if (!Db::getInstance()->execute('
-					UPDATE '._DB_PREFIX_.'carrier, '._DB_PREFIX_.'mr_method m
+					UPDATE '._DB_PREFIX_.'carrier c, '._DB_PREFIX_.'mr_method m
 					SET c.`active` = 0, c.`deleted` = 1
 					WHERE c.`id_carrier` = m.`id_carrier`'))
 			return false;
@@ -615,8 +615,6 @@ class MondialRelay extends Module
 
 	public function hookextraCarrier($params)
 	{
-		global $nbcarriers;
-
 		if (Configuration::get('MR_ENSEIGNE_WEBSERVICE') == '' ||
 			Configuration::get('MR_CODE_MARQUE') == '' ||
 			Configuration::get('MR_KEY_WEBSERVICE') == '' ||
