@@ -168,7 +168,7 @@ class MondialRelay extends Module
 			// Reactive transport if database wasn't remove at the last uninstall
 			Db::getInstance()->execute('
 				UPDATE `'._DB_PREFIX_.'carrier` c, `'._DB_PREFIX_.'mr_method` m
-					SET c.`deleted` = 0, active = 1
+					SET c.`deleted` = 0, c.`active` = 1
 					WHERE c.id_carrier = m.id_carrier');
 		}
 		return true;
@@ -276,7 +276,7 @@ class MondialRelay extends Module
 
 		// If drop failed, try to turn off the carriers
 		else if (!Db::getInstance()->execute('
-				UPDATE '._DB_PREFIX_.'carrier, '._DB_PREFIX_.'mr_method m
+				UPDATE '._DB_PREFIX_.'carrier c, '._DB_PREFIX_.'mr_method m
 				SET c.`active` = 0, c.`deleted` = 1
 				WHERE c.`id_carrier` = m.`id_carrier`'))
 			return false;
@@ -296,6 +296,10 @@ class MondialRelay extends Module
 			$this->_update_v1_4();
 		if ($installedVersion < '1.4.2')
 			$this->_update_v1_4_2();
+		
+		// Litle fix for a force upgrade without uninstall / install the module
+		if ($installedVersion < '1.7.9' && !$this->isRegisteredInHook('header'))
+			$this->registerHook('header')
 	}
 
 	/*
