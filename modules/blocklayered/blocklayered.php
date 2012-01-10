@@ -1096,7 +1096,7 @@ class BlockLayered extends Module
 		else
 			$smarty->assign('meta_title', $categoryMetas['meta_title']);
 		
-		$metaKeyWordsComplement = substr(str_replace(' – ', ', ', strtolower($title)), 1000);
+		$metaKeyWordsComplement = substr(str_replace(' – ', ', ', strtolower($title)), 0, 1000);
 		if (!empty($metaKeyWordsComplement))
 			$smarty->assign('meta_keywords', rtrim($categoryTitle.', '.$metaKeyWordsComplement.', '.$categoryMetas['meta_keywords'], ', '));
 		
@@ -1200,7 +1200,7 @@ class BlockLayered extends Module
 						}
 					}
 					else
-						$shop_list = array(0);
+						$shop_list = array(Context::getContext()->shop->getID(true));
 				}
 				else
 					$shop_list = array(0);
@@ -1613,8 +1613,23 @@ class BlockLayered extends Module
 
 			$selectedCat = array();
 			// Translations are not automatic for the moment ;)
+			if (version_compare(_PS_VERSION_,'1.5','>'))
+			{
+				if ($this->context->shop() == Shop::CONTEXT_SHOP)
+				{
+					$root_category = Category::getRootCategory();
+					$root_category = array('id_category' => $root_category->id_category, 'name' => $root_category->name);
+				}
+				else
+					$root_category = array('id_category' => '0', 'name' => $this->l('Root'));
+			}
+			else
+			{
+				$root_category = array('id_category' => '1', 'name' => $this->l('Home'));
+			}
 			$trads = array(
-				 'Home' => $this->l('Home'),
+				 'Root' => $root_category,
+				 'Home' => $root_category, // for retrocompatibility 1.4
 				 'selected' => $this->l('selected'),
 				 'Collapse All' => $this->l('Collapse All'),
 				 'Expand All' => $this->l('Expand All'),
