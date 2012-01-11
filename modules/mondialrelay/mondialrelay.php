@@ -299,7 +299,7 @@ class MondialRelay extends Module
 		
 		// Litle fix for a force upgrade without uninstall / install the module
 		if ($installedVersion < '1.7.9' && !$this->isRegisteredInHook('header'))
-			$this->registerHook('header')
+			$this->registerHook('header');
 	}
 
 	/*
