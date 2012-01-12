@@ -175,6 +175,7 @@ class authorizeAIM extends PaymentModule
 			$authorizeAIMParams['x_login'] = Configuration::get('AUTHORIZE_AIM_LOGIN_ID');
 			$authorizeAIMParams['x_tran_key'] = Configuration::get('AUTHORIZE_AIM_KEY');
 			$authorizeAIMParams['x_version'] = '3.1';
+			$authorizeAIMParams['x_solution_ID'] = 'A1000006';
 			$authorizeAIMParams['x_delim_data'] = 'TRUE';
 			$authorizeAIMParams['x_delim_char'] = '|';
 			$authorizeAIMParams['x_relay_response'] = 'FALSE';
