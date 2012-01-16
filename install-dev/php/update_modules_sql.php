@@ -27,12 +27,11 @@
 
 function update_modules_sql()
 {
-	Configuration::loadConfiguration();
-	$blocklink = Module::getInstanceByName('blocklink');
-	if ($blocklink->id)
+	$id_blocklink = Db::getInstance()->getValue('SELECT id_module FROM  `'._DB_PREFIX_.'module` WHERE name = "blocklink"');
+	if ($id_blocklink)
 		Db::getInstance()->Execute('ALTER IGNORE TABLE `'._DB_PREFIX_.'blocklink_lang` ADD PRIMARY KEY (`id_link`, `id_lang`);');
-	$productComments = Module::getInstanceByName('productcomments');
-	if ($productComments->id)
+	$id_productcomments = Db::getInstance()->getValue('SELECT id_module FROM  `'._DB_PREFIX_.'module` WHERE name = "productcomments"');
+	if ($id_productcomments)
 	{
 		Db::getInstance()->Execute('ALTER IGNORE TABLE `'._DB_PREFIX_.'product_comment_grade` ADD PRIMARY KEY (`id_product_comment`, `id_product_comment_criterion`);');
 		Db::getInstance()->Execute('ALTER IGNORE TABLE `'._DB_PREFIX_.'product_comment_criterion` DROP PRIMARY KEY, ADD PRIMARY KEY (`id_product_comment_criterion`, `id_lang`);');

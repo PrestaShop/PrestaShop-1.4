@@ -25,16 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-function setAllGroupsOnHomeCategory()
+function group_reduction_column_fix()
 {
-	$results = Group::getGroups(Configuration::get('PS_LANG_DEFAULT'));
-	$groups = array();
-	foreach ($results AS $result)
-		$groups[] = $result['id_group'];
-	if (is_array($groups) && sizeof($groups))
-	{
-		$category = new Category(1);
-		$category->cleanGroups();
-		$category->addGroups($groups);
-	}
+	if (!Db::getInstance()->execute('SELECT `group_reduction` FROM `'._DB_PREFIX_.'order_detail` LIMIT 1'))
+		return Db::getInstance()->execute('ALTER TABLE `'._DB_PREFIX_.'order_detail` ADD `group_reduction` DECIMAL(10, 2) NOT NULL AFTER `reduction_amount`');
+	return true;
 }

@@ -25,23 +25,23 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-function group_reduction_column_fix()
+function setAllGroupsOnHomeCategory()
 {
-	if (!Db::getInstance()->execute('SELECT `group_reduction` FROM `'._DB_PREFIX_.'order_detail` LIMIT 1'))
-		return Db::getInstance()->execute('ALTER TABLE `'._DB_PREFIX_.'order_detail` ADD `group_reduction` DECIMAL(10, 2) NOT NULL AFTER `reduction_amount`');
-	return true;
-}
+	$ps_lang_default = Db::getInstance()->getValue('SELECT value 
+		FROM `'._DB_PREFIX_.'`configuration WHERE name="PS_LANG_DEFAULT"');
 
-function ecotax_tax_application_fix()
-{
-	if (!Db::getInstance()->execute('SELECT `ecotax_tax_rate` FROM `'._DB_PREFIX_.'order_detail` LIMIT 1'))
-		return Db::getInstance()->execute('ALTER TABLE `'._DB_PREFIX_.'order_detail` ADD `ecotax_tax_rate` DECIMAL(5, 3) NOT NULL AFTER `ecotax`');
-	return true;
-}
+	$results = Db::getInstance()->executeS('SELECT id_group FROM `'._DB_PREFIX_.'group`');
+	$groups = array();
+	foreach ($results AS $result)
+		$groups[] = $result['id_group'];
 
-function id_currency_country_fix()
-{
-	if (!Db::getInstance()->execute('SELECT `id_currency` FROM `'._DB_PREFIX_.'country` LIMIT 1'))
-		return Db::getInstance()->execute('ALTER TABLE `'._DB_PREFIX_.'country` ADD `id_currency` INT NOT NULL DEFAULT \'0\' AFTER `id_zone`');
-	return true;
+	if (is_array($groups) && sizeof($groups))
+	{
+		// cleanGroups
+		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'category_group` 
+			WHERE `id_category` = 1');
+		// addGroups($groups);
+		$row = array('id_category' => 1, 'id_group' => (int)($groups));
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'category_group', $row, 'INSERT');
+	}
 }

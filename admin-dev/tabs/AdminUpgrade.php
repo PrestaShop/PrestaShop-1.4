@@ -453,7 +453,6 @@ class AdminUpgrade extends AdminPreferences
 		$this->next = 'upgradeFiles';
 		if (!is_array($this->nextParams['filesToUpgrade']))
 		{
-			error($this->nextParams);
 			$this->next = 'error';
 			$this->nextDesc = $this->l('filesToUpgrade is not an array');
 			$this->nextQuickInfo[] = $this->l('filesToUpgrade is not an array');

@@ -2,19 +2,21 @@
 
 function generate_tax_rules()
 {
-	$taxes = Tax::getTaxes(Configuration::get('PS_LANG_DEFAULT'), true);
-	$countries = Country::getCountries(Configuration::get('PS_LANG_DEFAULT'));
+	$ps_lang_default = Db::getInstance()->getValue('SELECT value FROM `'._DB_PREFIX_.'configuration`
+		WHERE name="PS_LANG_DEFAULT"');
+	$taxes = Db::getInstance('SELECT * from `'._DB_PREFIX_.'tax` WHERE active = 1');
 
 	foreach ($taxes AS $tax)
 	{
 		$insert = '';
 		$id_tax = $tax['id_tax'];
-
-		$group = new TaxRulesGroup();
-		$group->active = 1;
-		$group->name = 'Rule '.$tax['rate'].'%';
-		$group->save();
-		$id_tax_rules_group = $group->id;
+		$row = array(
+			'active' => 1,
+			'id_tax' => $id_tax,
+			'name' => 'Rule '.$tax['rate'].'%',
+		);
+		Db::getInstance()->AutoExecute(_DB_PREFIX_.'category_group', $row, 'INSERT');
+		$id_tax_rules_group = Db::getInstance()->insert_id;
 
 
 		$countries = Db::getInstance()->ExecuteS('
@@ -30,7 +32,7 @@ function generate_tax_rules()
 					 $res = Db::getInstance()->Execute('
 					 INSERT INTO `'._DB_PREFIX_.'tax_rule` (`id_tax_rules_group`, `id_country`, `id_state`, `state_behavior`, `id_tax`)
 					 VALUES (
-					 '.(int)$group->id.',
+					 '.(int)$id_tax_rules_group.',
 					 '.(int)$country['id_country'].',
 					 0,
 					 0,
@@ -55,10 +57,10 @@ function generate_tax_rules()
 			    else
 			        $tax_behavior = $state['tax_behavior'];
 
-					 $res = Db::getInstance()->Execute('
+					 $res = Db::getInstance()->execute('
 					 INSERT INTO `'._DB_PREFIX_.'tax_rule` (`id_tax_rules_group`, `id_country`, `id_state`, `state_behavior`, `id_tax`)
 					 VALUES (
-					 '.(int)$group->id.',
+					 '.(int)$id_tax_rules_group.',
 					 '.(int)$state['id_country'].',
 					 '.(int)$state['id_state'].',
 					 '.(int)$tax_behavior.',
@@ -67,21 +69,24 @@ function generate_tax_rules()
 			}
 		}
 
-		Db::getInstance()->Execute('
+		Db::getInstance()->execute('
 		UPDATE `'._DB_PREFIX_.'product`
-		SET `id_tax_rules_group` = '.(int)$group->id.'
+		SET `id_tax_rules_group` = '.(int)$id_tax_rules_group.'
 		WHERE `id_tax` = '.(int)$id_tax
 		);
 
-		Db::getInstance()->Execute('
+		Db::getInstance()->execute('
 		UPDATE `'._DB_PREFIX_.'carrier`
-		SET `id_tax_rules_group` = '.(int)$group->id.'
+		SET `id_tax_rules_group` = '.(int)$id_tax_rules_group.'
 		WHERE `id_tax` = '.(int)$id_tax
 		);
 
 
-		if (Configuration::get('SOCOLISSIMO_OVERCOST_TAX') == $id_tax)
-			Configuration::updateValue('SOCOLISSIMO_OVERCOST_TAX', $group->id);
+	$socolissimo_overcost_tax = Db::getInstance()->getValue('SELECT value FROM `'._DB_PREFIX_.'configuration`
+		WHERE name="SOCOLISSIMO_OVERCOST_TAX"');
+		if ($socolissimo_overcost_tax == $id_tax)
+			$res &= Db::getInstance()->getValue('REPLACE INTO `'._DB_PREFIX_.'configuration`
+				(name, value) VALUES ("PS_POUET", "'.$id_tax_rules_group.'"');
 	}
 }
 

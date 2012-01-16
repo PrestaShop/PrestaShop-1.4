@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -25,25 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-// backward compatibility vouchers should be available in all categories
-function update_module_loyalty()
+function id_currency_country_fix()
 {
-	$ps_loyalty_point_value = Db::getInstance()->getValue('SELECT value 
-		FROM `'._DB_PREFIX_.'configuration`
-		WHERE name="PS_LOYALTY_POINT_VALUE"');
-	if ($ps_loyalty_point_value !== false)
-	{
-		$category_list = '';
-		$categories = Db::getInstance('SELECT id_category FROM `'._DB_PREFIX_.'category`');
-		foreach($categories as $category)
-			$category_list .= $category['id_category'].',';
-
-		if (!empty($category_list))
-		{
-			$category_list = rtrim($category_list, ',');
-			$res &= Db::getInstance()->getValue('REPLACE INTO `'._DB_PREFIX_.'configuration`
-			(name, value) VALUES ("PS_LOYALTY_VOUCHER_CATEGORY", "'.$category_list.'"');
-		}
-	}
+	if (!Db::getInstance()->execute('SELECT `id_currency` FROM `'._DB_PREFIX_.'country` LIMIT 1'))
+		return Db::getInstance()->execute('ALTER TABLE `'._DB_PREFIX_.'country` ADD `id_currency` INT NOT NULL DEFAULT \'0\' AFTER `id_zone`');
+	return true;
 }
-

@@ -40,100 +40,9 @@ else
 
 if(!defined('_PS_INSTALLER_PHP_UPGRADE_DIR_'))
 	define('_PS_INSTALLER_PHP_UPGRADE_DIR_',  INSTALL_PATH.DIRECTORY_SEPARATOR.'php/');
-// Only if loyalty module is installed
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
-// desactivate non-native module
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'desactivatecustommodules.php');
-// utf-8 conversion if needed (before v0.9.8.1 utf-8 was badly supported)
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'utf8.php');
-// Configuration cleaner in order to get unique configuration names
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'confcleaner.php');
-// Order number in goal to add a number to each old orders
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'invoicenumber.php');
-// Order number in goal to add a number to each old orders
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'deliverynumber.php');
-// Set all groups for home category
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setallgroupsonhomecategory.php');
-// Set payment module for each currency/country
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodule.php');
-// Set payment module for each group
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setpaymentmodulegroup.php');
-// Set discount for all categories
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'setdiscountcategory.php');
-// Module installation tools
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'module_tools.php');
-// Customizations
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'customizations.php');
-// Block newsletter
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'blocknewsletter.php');
-// Reorder product positions for drag an drop
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'reorderpositions.php');
-// Clean some module sql structures
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatemodulessql.php');
-// Clean carrier URL
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatecarrierurl.php');
-// Convert prices to the new 1.3 rounding system
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'price_converter.php');
-// Update editorial module to delete all xml methods
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'editorial_update.php');
-// Update logo and editorial image size
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_image_size_in_db.php');
-// Update product comments
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updateproductcomments.php');
-// Update order details
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_order_details.php');
-// Update database structure (use algorithms requiring PHP)
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'database_structure.php');
-// Update cms block
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'cms_block.php');
-// Move crossselling
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'move_crossselling.php');
-// generate_tax_rules
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_tax_rules.php');
-// generate_ntree
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'generate_ntree.php');
-// Before version 1.3.3 ecotax are not calculated into the price
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_products_ecotax_v133.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'shop_url.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'gridextjs_deprecated.php');
-// generate level depth
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'regenerate_level_depth.php');
-// add a new tab
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_new_tab.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_module_to_hook.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_for_13version.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_cms_block.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_blocklink.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'alter_productcomments_guest_index.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_loyalty.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_module_followup.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_module_from_hook.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'updatetabicon_from_11version.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'check_webservice_account_table.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_missing_rewrite_value.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'remove_duplicate_category_groups.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'migrate_block_info_to_cms_block.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'add_order_state.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'hook_blocksearch_on_header.php');
-
-require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'update_order_canada.php');
+// deactivate non-native module is outside the upgrade process, 
+// so we have to add it manually
+require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.'deactivate_custom_modules.php');
 
 //old version detection
 global $oldversion, $logger;
@@ -275,7 +184,7 @@ if (!defined('_MYSQL_ENGINE_'))
 
 $sqlContent = '';
 if (isset($_GET['customModule']) AND $_GET['customModule'] == 'desactivate')
-	desactivate_custom_modules();
+	deactivate_custom_modules();
 
 foreach($neededUpgradeFiles AS $version)
 {
@@ -314,27 +223,6 @@ if ($confFile->error != false)
 	die('<action result="fail" error="'.$confFile->error.'" />'."\n");
 }
 
-// Settings updated, compile and cache directories must be emptied
-$arrayToClean = array(
-	INSTALL_PATH.'/../tools/smarty/cache/',
-	INSTALL_PATH.'/../tools/smarty/compile/',
-	INSTALL_PATH.'/../tools/smarty_v2/cache/',
-	INSTALL_PATH.'/../tools/smarty_v2/compile/');
-foreach ($arrayToClean as $dir)
-	if (!file_exists($dir))
-		$logger->logError('directory '.$dir." doesn't exist and can't be emptied.\r\n");
-	else
-		foreach (scandir($dir) as $file)
-			if ($file[0] != '.' AND $file != 'index.php' AND $file != '.htaccess')
-				unlink($dir.$file);
-
-// delete cache filesystem if activated
-$depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
-if ($depth)
-{
-	CacheFS::deleteCacheDirectory();
-	CacheFS::createCacheDirectories((int)$depth);
-}
 
 //sql file execution
 global $requests, $warningExist;
@@ -366,20 +254,30 @@ foreach($sqlContent as $query)
 				foreach ($parameters AS &$parameter)
 					$parameter = str_replace('\'', '', $parameter);
 
-			/* Call a simple function */
-			if (strpos($phpString, '::') === false)
-				$phpRes = call_user_func_array(str_replace($pattern[0], '', $php[0]), $parameters);
-			/* Or an object method */
+			// Call a simple function
+			// note : method call from class is no longer supported
+			$func_name = str_replace($pattern[0], '', $php[0]);
+			if (!function_exists($func_name) 
+				&& !file_exists(_PS_INSTALLER_PHP_UPGRADE_DIR_.$func_name.'.php')
+			)
+			{
+				$logger->logError('PHP error: '.$func_name.' does not exists and '.$func_name.'.php is missing '."\r\n");
+				$requests .= '	<request result="fail">
+	<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
+	<phpMsgError><![CDATA[file is missing]]></sqlMsgError>
+	<phpNumberError><![CDATA[666]]></sqlNumberError>
+</request>'."\n";
+			}
 			else
-				$phpRes = call_user_func_array(array($php[0], str_replace($pattern[0], '', $php[1])), $parameters);
+				require_once(_PS_INSTALLER_PHP_UPGRADE_DIR_.$func_name.'.php');
+			
+			$phpRes = call_user_func_array($func_name, $parameters);
+
 			if ((is_array($phpRes) AND !empty($phpRes['error'])) OR $phpRes === false )
 			{
 				$logger->logError('PHP error: '.$query."\r\n".(empty($phpRes['msg'])?'':' - '.$phpRes['msg']));
 				$logger->logError(empty($phpRes['error'])?'':$phpRes['error']);
-				if (!isset($request))
-					$request = '';
-				$request .=
-'	<request result="fail">
+				$requests.= '	<request result="fail">
 		<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
 		<phpMsgError><![CDATA['.(empty($phpRes['msg'])?'':$phpRes['msg']).']]></sqlMsgError>
 		<phpNumberError><![CDATA['.(empty($phpRes['error'])?'':$phpRes['error']).']]></sqlNumberError>
@@ -410,6 +308,34 @@ foreach($sqlContent as $query)
 	</request>'."\n";
 	}
 }
+// at this point, the base is up-to-date 
+// and all classes are supposed to work properly
+
+
+
+
+// Settings updated, compile and cache directories must be emptied
+$arrayToClean = array(
+	INSTALL_PATH.'/../tools/smarty/cache/',
+	INSTALL_PATH.'/../tools/smarty/compile/',
+	INSTALL_PATH.'/../tools/smarty_v2/cache/',
+	INSTALL_PATH.'/../tools/smarty_v2/compile/');
+foreach ($arrayToClean as $dir)
+	if (!file_exists($dir))
+		$logger->logError('directory '.$dir." doesn't exist and can't be emptied.\r\n");
+	else
+		foreach (scandir($dir) as $file)
+			if ($file[0] != '.' AND $file != 'index.php' AND $file != '.htaccess')
+				unlink($dir.$file);
+
+// delete cache filesystem if activated
+$depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
+if ($depth)
+{
+	CacheFS::deleteCacheDirectory();
+	CacheFS::createCacheDirectories((int)$depth);
+}
+
 Configuration::updateValue('PS_HIDE_OPTIMIZATION_TIPS', 0);
 Configuration::updateValue('PS_NEED_REBUILD_INDEX', 1);
 Configuration::updateValue('PS_VERSION_DB', INSTALL_VERSION);

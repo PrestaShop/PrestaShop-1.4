@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -25,25 +25,23 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-// backward compatibility vouchers should be available in all categories
-function update_module_loyalty()
+function attribute_group_clean_combinations()
 {
-	$ps_loyalty_point_value = Db::getInstance()->getValue('SELECT value 
-		FROM `'._DB_PREFIX_.'configuration`
-		WHERE name="PS_LOYALTY_POINT_VALUE"');
-	if ($ps_loyalty_point_value !== false)
+	$attributeCombinations = Db::getInstance()->ExecuteS('SELECT 
+		pac.`id_attribute`, pa.`id_product_attribute` 
+		FROM `'._DB_PREFIX_.'product_attribute` pa 
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac 
+			ON (pa.`id_product_attribute` = pac.`id_product_attribute`)');
+	$toRemove = array();
+	foreach ($attributeCombinations AS $attributeCombination)
+		if ((int)($attributeCombination['id_attribute']) == 0)
+			$toRemove[] = (int)($attributeCombination['id_product_attribute']);
+
+	if (!empty($toRemove))
 	{
-		$category_list = '';
-		$categories = Db::getInstance('SELECT id_category FROM `'._DB_PREFIX_.'category`');
-		foreach($categories as $category)
-			$category_list .= $category['id_category'].',';
-
-		if (!empty($category_list))
-		{
-			$category_list = rtrim($category_list, ',');
-			$res &= Db::getInstance()->getValue('REPLACE INTO `'._DB_PREFIX_.'configuration`
-			(name, value) VALUES ("PS_LOYALTY_VOUCHER_CATEGORY", "'.$category_list.'"');
-		}
+		$res = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` 
+			WHERE `id_product_attribute` IN ('.implode(', ', $toRemove).')');
+		return $res;
 	}
+	return true;
 }
-

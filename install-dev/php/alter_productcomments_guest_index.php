@@ -27,9 +27,10 @@
 
 function alter_productcomments_guest_index()
 {
-	Configuration::loadConfiguration();
-	$productcomments = Module::getInstanceByName('productcomments');
-	if (!$productcomments->id)
+	$id_productcomments = Db::getInstance()->getValue('SELECT id_module 
+		FROM  `'._DB_PREFIX_.'module` WHERE name = "productcomments"');
+
+	if (!$id_productcomments)
 		return;
 	
 	DB::getInstance()->Execute('

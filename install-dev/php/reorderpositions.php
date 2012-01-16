@@ -27,21 +27,37 @@
 
 function reorderpositions()
 {
+	$res = true;
+	$ps_lang_default = Db::getInstance()->getValue('SELECT value 
+		FROM `'._DB_PREFIX_.'configuration`
+		WHERE name="PS_LANG_DEFAULT"');
 	/* Clean products positions */
-	if ($cat = Category::getCategories(1, false, false))
-		foreach($cat AS $i => $categ)
-			Product::cleanPositions((int)$categ['id_category']);
+	$cat = Db::getInstance()->executeS('SELECT id_category FROM `'._DB_PREFIX_.'category`');
+	if ($cat)
+		foreach($cat AS $categ)
+		{
+			$id_category = $categ['id_category'];
+			$result = Db::getInstance()->executeS('
+				SELECT `id_product`
+				FROM `'._DB_PREFIX_.'category_product`
+				WHERE `id_category` = '.$id_category.'
+				ORDER BY `position`'); 
+			$sizeof = sizeof($result);
+			for ($i = 0; $i < $sizeof; $i++)
+				$res &= Db::getInstance()->execute('
+					UPDATE `'._DB_PREFIX_.'category_product`
+					SET `position` = '.$i.'
+					WHERE `id_category` = '.$id_category.'
+					AND `id_product` = '.(int)($result[$i]['id_product']));
+		}
 	
-	//clean Category position and delete old position system
-	Language::loadLanguages();
-	$language = Language::getLanguages();
 	$cat_parent = Db::getInstance()->ExecuteS('SELECT DISTINCT c.id_parent FROM `'._DB_PREFIX_.'category` c WHERE id_category != 1');
 	foreach($cat_parent AS $parent)
 	{
 		$result = Db::getInstance()->ExecuteS('
 							SELECT DISTINCT c.*, cl.*
 							FROM `'._DB_PREFIX_.'category` c 
-							LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)(Configuration::get('PS_LANG_DEFAULT')).')
+							LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.$ps_lang_default.')
 							WHERE c.id_parent = '.(int)($parent['id_parent']).'
 							ORDER BY name ASC');
 		foreach($result AS $i => $categ)
@@ -69,7 +85,24 @@ function reorderpositions()
 	}
 	
 	/* Clean CMS positions */
-	if ($cms_cat = CMSCategory::getCategories(1, false, false))
+	$cms_cat = Db::getInstance()->executeS('SELECT id_cms_category FROM `'._DB_PREFIX_.'cms_category` WHERE active=1');
+	if ($cms_cat)
 		foreach($cms_cat AS $i => $categ)
-			CMS::cleanPositions((int)($categ['id_cms_category']));
+		{
+			$id_category_parent = $categ['id_cms_category'];
+			$result &= Db::getInstance()->ExecuteS('
+				SELECT `id_cms_category`
+				FROM `'._DB_PREFIX_.'cms_category`
+				WHERE `id_parent` = '.(int)($id_category_parent).'
+				ORDER BY `position`');
+				$sizeof = sizeof($result);
+				for ($i = 0; $i < $sizeof; ++$i){
+					$sql = ' 
+						UPDATE `'._DB_PREFIX_.'cms_category`
+						SET `position` = '.(int)($i).'
+						WHERE `id_parent` = '.(int)($id_category_parent).'
+						AND `id_cms_category` = '.(int)($result[$i]['id_cms_category']);
+					$res &= Db::getInstance()->Execute($sql);
+				}
+		}
 }

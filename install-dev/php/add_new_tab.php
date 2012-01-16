@@ -38,7 +38,8 @@ function add_new_tab($className, $name, $id_parent)
 		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tab` (`id_parent`, `class_name`, `module`, `position`) VALUES ('.(int)$id_parent.', \''.pSQL($className).'\', \'\', 
 									(SELECT MAX(t.position)+ 1 FROM `'._DB_PREFIX_.'tab` t WHERE t.id_parent = '.(int)$id_parent.'))');
 		
-	foreach (Language::getLanguages() AS $lang)
+	$languages = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'lang`');
+	foreach ($languages AS $lang)
 	{
 		Db::getInstance()->Execute('
 		INSERT IGNORE INTO `'._DB_PREFIX_.'tab_lang` (`id_lang`, `id_tab`, `name`) 
