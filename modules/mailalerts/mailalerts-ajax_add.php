@@ -45,8 +45,8 @@ if (!$cookie->isLogged())
 	if (Db::getInstance()->ExecuteS('
 	SELECT * 
 	FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
-	WHERE `id_customer` = '.(int)($id_customer).'
-	AND `customer_email` = \''.pSQL($customer_email).'\'
+	WHERE (`id_customer` = '.(int)($id_customer).'
+	OR `customer_email` = \''.pSQL($customer_email).'\')
 	AND `id_product` = '.(int)($id_product).'
 	AND `id_product_attribute` = '.(int)($id_product_attribute)))
 		die('1');
