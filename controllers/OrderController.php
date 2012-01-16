@@ -107,6 +107,7 @@ class OrderControllerCore extends ParentOrderController
 				$this->_assignAddress();
 				break;
 			case 2:
+				$this->_assignAddress();
 				if (Tools::isSubmit('processAddress'))
 					$this->processAddress();
 				$this->autoStep();

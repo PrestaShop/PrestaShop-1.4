@@ -32,7 +32,7 @@ class ParentOrderControllerCore extends FrontController
 {
 	public $ssl = true;
 	public $php_self = 'order.php';
-		
+
 	public $nbProducts;
 
 	public function __construct()
@@ -139,7 +139,7 @@ class ParentOrderControllerCore extends FrontController
 
 		// Adding JS files
 		Tools::addJS(_THEME_JS_DIR_.'tools.js');
-		if ((Configuration::get('PS_ORDER_PROCESS_TYPE') == 0 AND Tools::getValue('step') == 1) OR Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
+		if ((Configuration::get('PS_ORDER_PROCESS_TYPE') == 0 && Tools::getValue('step') == 1) || Configuration::get('PS_ORDER_PROCESS_TYPE') == 1 || Tools::getValue('step') == 2)
 			Tools::addJS(_THEME_JS_DIR_.'order-address.js');
 		Tools::addJS(_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js');
 		if ((int)(Configuration::get('PS_BLOCK_CART_AJAX')) OR Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
