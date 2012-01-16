@@ -57,7 +57,10 @@ class BlockCms extends Module
 		foreach ($languages AS $language)
 			$queryLang .= '(1, '.(int)($language['id_lang']).'),';
 	
-		if (!parent::install() OR !$this->registerHook('leftColumn') OR !$this->registerHook('rightColumn') OR !$this->registerHook('footer') OR !$this->registerHook('header') OR
+		if (!parent::install() || !$this->registerHook('leftColumn') 
+			|| !$this->registerHook('rightColumn') 
+			|| !$this->registerHook('footer') 
+			|| !$this->registerHook('header') OR
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block`(
 		`id_cms_block` int(10) unsigned NOT NULL auto_increment,
