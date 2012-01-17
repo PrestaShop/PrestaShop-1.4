@@ -25,6 +25,17 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+// Retro 1.3, 'class_exists' cause problem with autoload...
+if (version_compare(_PS_VERSION_, '1.4', '<'))
+{
+	// Not exist for 1.3
+	class Shop
+	{
+
+	}
+}
+
+// Not exist for 1.3 and 1.4
 class Context
 {
 	/**

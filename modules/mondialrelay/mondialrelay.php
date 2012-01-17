@@ -960,7 +960,7 @@ class MondialRelay extends Module
 		return $form;
 	}
 
-	public function settingsstateorderForm()
+	public function settingsStateOrderForm()
 	{
 		$this->orderState = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
 		$output = '';
@@ -1170,6 +1170,10 @@ class MondialRelay extends Module
 		return Db::getInstance()->executeS($sql);
 	}
 
+	/**
+	 * @param $code
+	 * @return string
+	 */
 	public function getErrorCodeDetail($code)
 	{
 		global $statCode;
@@ -1179,6 +1183,10 @@ class MondialRelay extends Module
 		return $this->l('This error isn\'t referred : ') . $code;
 	}
 
+	/**
+	 * @param $id_cart
+	 * @return mixed
+	 */
 	public function getRelayPointSelected($id_cart)
 	{
 		return Db::getInstance()->getRow('
@@ -1187,6 +1195,10 @@ class MondialRelay extends Module
 			WHERE s.`id_cart` = '.(int)$id_cart);
 	}
 
+	/**
+	 * @param $id_carrier
+	 * @return mixed
+	 */
 	public function isMondialRelayCarrier($id_carrier)
 	{
 		return Db::getInstance()->getRow('
@@ -1195,6 +1207,10 @@ class MondialRelay extends Module
 			WHERE `id_carrier` = '.(int)$id_carrier);
 	}
 
+	/**
+	 *
+	 * @param $params
+	 */
 	public function hookpaymentTop($params)
 	{
 		if ($this->isMondialRelayCarrier($params['cart']->id_carrier) &&

@@ -31,8 +31,8 @@
  */
 
 // Get out if the context is already defined
-if (!class_exists('Context'))
-	include_once(dirname(__FILE__).'/Context.php');
+if (!in_array('Context', get_declared_classes()))
+	require_once(dirname(__FILE__).'/Context.php');
 
 if (isset($this->context))
 	return;
