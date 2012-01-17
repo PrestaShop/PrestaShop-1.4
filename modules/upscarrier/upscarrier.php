@@ -468,7 +468,7 @@ class UpsCarrier extends CarrierModule
 					<label>'.$this->l('Your UPS API Key').' : </label>
 					<div class="margin-form">
 						<input type="text" size="20" name="ups_carrier_api_key" value="'.Tools::safeOutput(Tools::getValue('ups_carrier_api_key', Configuration::get('UPS_CARRIER_API_KEY'))).'" />
-						<p><a href="https://www.ups.com/upsdeveloperkit" target="_blank">' . $this->l('Please click here to get your UPS API Key.') . '</a></p>
+						<p><a href="https://www.ups.com/upsdeveloperkit?loc=en_SG" target="_blank">' . $this->l('Please click here to get your UPS API Key.') . '</a></p>
 					</div>
 					<br /><br />
 					<label>'.$this->l('Packaging Weight').' : </label>
