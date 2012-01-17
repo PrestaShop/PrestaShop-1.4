@@ -34,13 +34,13 @@ class shoppingfluxexport extends Module
 	public function __construct()
 	{
 	 	$this->name = 'shoppingfluxexport';
-	 	$this->tab = 'advertising_marketing';
-	 	$this->version = '1.4.1';
+	 	$this->tab = 'smart_shopping';
+	 	$this->version = '1.5';
 
 	 	parent::__construct();
 
 		$this->displayName = $this->l('Export Shopping Flux');
-		$this->description = $this->l('Export du catalogue pour Shopping Flux');
+		$this->description = $this->l('Exportez vos produits vers plus de 100 comparateurs de prix et places de marché');
 		$this->confirmUninstall = $this->l('Êtes-vous sur de vouloir supprimer ce module ?');
 	}
 
@@ -72,32 +72,71 @@ class shoppingfluxexport extends Module
 
 	public function getContent()
 	{
-		if (isset($_POST['generateFlux']) && $_POST['generateFlux'] != NULL)
-			$this->generateFlux();
-		
+		//uri feed
 		$uri = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/shoppingfluxexport/flux.php?token='.Configuration::get('SHOPPING_FLUX_TOKEN');
-
-		$this->_html = '<h2>'.$this->displayName.'</h2>
+		//uri images
+		$uri_img = 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/shoppingfluxexport/screens/';
+		//owner object
+		$owner = new Employee(1);
+		//post process
+		if (isset($_POST['envoi_mail']) && $_POST['envoi_mail'] != NULL)
+			$this->sendMail();
+		
+		//first fieldset
+		$this->_html .= '<h2>'.$this->displayName.'</h2>
+		<fieldset>
+				<legend>'.$this->l('Informations').'</legend>
+				<p><b>'.$this->l('Shopping Flux vous permettra de :').'</b></p>
+				<p>
+					<ol>
+						<li>'.$this->l('Promouvoir vos produits sur plus  de 100 Comparateurs de Prix (Google Shopping, Leguide.com, Kelkoo, Cherchons.com, etc…)').'</li>
+						<li>'.$this->l('Choisir les produits que vous souhaitez diffuser et en calculer la rentabilité en fonction du Comparateur de Prix').'</li>
+						<li>'.$this->l('Vendre sur toutes les Places de Marché (PriceMinister, Amazon, RueDuCommerce, eBay, Cdiscount, Fnac, etc…)').'</li>
+						<li>'.$this->l('Ré-importer vos commandes Places de Marché directement dans votre Prestashop').'</li>
+						<li>'.$this->l('Créer en masse des campagnes Adwords pour chacune de vos fiches produit.').'</li>
+					</ol>
+				</p>
+				<p>'.$this->l('Le tout, via une interface unique, pratique et agréable d’utilisation').' :</p>
+				<p style="text-align:center">
+		';
+				
+		//add 6 screens
+		for($i=1; $i<=6; $i++)
+			$this->_html .= '<a href="'.$uri_img.$i.'.jpg" target="_blank"><img style="margin:10px" src="'.$uri_img.$i.'.jpg" width="250" /></a>';
+				
+		$this->_html .= '</p></fieldset><br/>';
+	
+		//second fieldset
+		$this->_html .= '
 		<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">
 			<fieldset>
-				<legend>'.$this->l('Export Shopping Flux').'</legend>
-
-				<p>'.$this->l('Adresse du fichier :').'
-				<a href="'.$uri.'" target="_blank">
-				'.$uri.'</a></p>
+				<legend>'.$this->l('Demandez ici votre clé d’activation').'</legend>
+				<p style="margin-bottom:20px" >'.$this->l('Ce module vous est offert par Shopping Flux et est utilisable via une souscription mensuelle au service. Envoyez-nous simplement ce formualaire :').'</p>
+				<p><label>'.$this->l('Nom du site').' : </label><input type="text" name="site" value="'.Configuration::get('PS_SHOP_NAME').'"></p>
+				<p><label>'.$this->l('Nom').' : </label><input type="text" name="nom" value="'.$owner->lastname.'"></p>
+				<p><label>'.$this->l('Prenom').' : </label><input type="text" name="prenom" value="'.$owner->firstname.'"></p>
+				<p><label>'.$this->l('E-mail').' : </label><input type="text" name="email" value="'.Configuration::get('PS_SHOP_EMAIL').'"></p>
+				<p><label>'.$this->l('Téléphone').' : </label><input type="text" name="telephone" value="'.Configuration::get('PS_SHOP_PHONE').'"></p>
+				<input type="hidden" name="flux" value="'.$uri.'"/>
+				<p style="text-align:center" ><input type="submit" value="'.$this->l('Envoyer la demande').'" name="envoi_mail" class="button"/></p>
 			</fieldset>
-
 		</form>
 		';
 		
 		return $this->_html;
 	}
+	
+	private function sendMail(){
+	
+		//TODO
+		//mail shopping flux + prestashop : natif-prestashop@shopping-flux.com
+		$this->_html .= $this->displayError($this->l('Votre enregistrement Shopping Flux a rencontré un soucis.'));
+	}
 
 	private function clean($string)
 	{
-	
-		$string = str_replace("\r\n", " ", $string); 
-		$string = str_replace("|", " ", $string); 
+		$string = strip_tags($string); 
+		$string = str_replace("\r\n","",$string);
 		
 		return $string;
 	}
@@ -108,29 +147,27 @@ class shoppingfluxexport extends Module
 			die('Invalid Token');
 		
 		$titles = array(
-			0 => 'id_produit',
-			1 => 'nom_produit',
-			2 => 'url_produit',
-			3 => 'url_image',
+			0 => 'id-produit',
+			1 => 'nom-produit',
+			2 => 'url-produit',
+			3 => 'url-image',
 			4 => 'description',
-			5 => 'description_courte',
+			5 => 'description-courte',
 			6 => 'prix',
-			7 => 'prix_barre',
-			8 => 'frais_de_port',
-			9 => 'delaiLiv',
+			7 => 'prix-barre',
+			8 => 'frais-de-port',
+			9 => 'delai-de-livraison',
 			10 => 'marque',
 			11 => 'rayon',
 			12 => 'stock',
 			13 => 'qte_stock',
-			14 => 'EAN',
+			14 => 'eab',
 			15 => 'poids',
 			16 => 'ecotaxe',
-			17 => 'TVA',
-			18 => 'Reference constructeur',
-			19 => 'Reference fournisseur'
+			17 => 'tva',
+			18 => 'ref-constructeur',
+			19 => 'ref-fournisseur'
 		);
-		
-		echo implode("|", $titles)."\r\n";
 		
 		//For Shipping
 		$configuration = Configuration::getMultiple(array('PS_TAX_ADDRESS_TYPE','PS_CARRIER_DEFAULT','PS_COUNTRY_DEFAULT', 'PS_LANG_DEFAULT', 'PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_HANDLING', 'PS_SHIPPING_METHOD', 'PS_SHIPPING_FREE_WEIGHT'));
@@ -142,6 +179,10 @@ class shoppingfluxexport extends Module
 			
 		$carrier = new Carrier((int)$configuration['PS_CARRIER_DEFAULT']);
 		$carrierTax = Tax::getCarrierTaxRate((int)$carrier->id, (int)$this->{$configuration['PS_TAX_ADDRESS_TYPE']});
+		
+		//Header Feed
+		echo "<?xml version='1.0' encoding='utf-8'?>\r\n";
+		echo "<produits>\r\n";
 		
 		foreach ($products as $key => $produit)
 		{
@@ -197,12 +238,18 @@ class shoppingfluxexport extends Module
 			$data[18] = $product->reference;
 			$data[19] = $product->supplier_reference;
 			
-			foreach($data as $key => $value)
-				$data[$key] = $this->clean($value);
-				
-			echo implode("|", $data)."\r\n";
+			//Product Node
+			echo "\t<produit>\r\n";
 			
+			foreach ($titles as $key => $balise)
+				//strip_tags node content
+				echo "\t\t<$balise><![CDATA[".$this->clean($data[$key])."]]></$balise>\r\n";
+				
+			echo "\t</produit>\r\n";
 		}
+		
+		//End Feed
+		echo "</produits>";
 	}
 }
 

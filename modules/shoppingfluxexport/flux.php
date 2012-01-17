@@ -31,6 +31,9 @@ include(dirname(__FILE__).'/../../init.php');
 include(dirname(__FILE__).'/shoppingfluxexport.php');
 @ini_set('display_errors', 'off');
 
+//xml output
+header ("Content-Type:text/xml");
+
 $f = new shoppingfluxexport();
 echo $f->generateFlux();
 
