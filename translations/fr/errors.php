@@ -329,6 +329,7 @@ $_ERRORS['378f2b22734553a38505b1f8f0d48ccb'] = 'quantité nulle';
 $_ERRORS['9211c38458f969f18498096a400a2214'] = 'objet impossible à charger';
 $_ERRORS['5ca4012f9738274ebeb214a961f1c829'] = 'objet impossible à charger (identifiant manquant ou invalide)';
 $_ERRORS['56b207f28525081cec398738b3d25225'] = 'objet impossible à charger (introuvable)';
+$_ERRORS['963f051b39ff48613d7f0f04dd98c223'] = 'Seul un administrateur peut donner le profil administrateur';
 $_ERRORS['27ab5a6a3e4b4cb32f0484a1f93d5f64'] = 'Seule une partie des images ont été régénérés, le serveur a expiré avant la fin.';
 $_ERRORS['86eb7a8a11e8d60cc214c71970f11c11'] = 'ID de commande manquant';
 $_ERRORS['b08d3867be98e6fff3233cd40ab8134a'] = 'La création de la commande a échoué';
