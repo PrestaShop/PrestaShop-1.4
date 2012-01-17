@@ -60,7 +60,7 @@ class BlockCms extends Module
 		if (!parent::install() || !$this->registerHook('leftColumn') 
 			|| !$this->registerHook('rightColumn') 
 			|| !$this->registerHook('footer') 
-			|| !$this->registerHook('header') OR
+			|| !$this->registerHook('header') ||
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block`(
 		`id_cms_block` int(10) unsigned NOT NULL auto_increment,
@@ -69,7 +69,7 @@ class BlockCms extends Module
 		`position` int(10) unsigned NOT NULL default \'0\',
 		`display_store` tinyint(1) unsigned NOT NULL default \'1\',
 		PRIMARY KEY (`id_cms_block`)
-		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') ||
 		!Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'cms_block` (`id_cms_category`, `location`, `position`) VALUES(1, 0, 0)') OR
 		!Db::getInstance()->Execute('
@@ -78,8 +78,8 @@ class BlockCms extends Module
 		`id_lang` int(10) unsigned NOT NULL,
 		`name` varchar(40) NOT NULL default \'\',
 		PRIMARY KEY (`id_cms_block`, `id_lang`)
-		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
-		!Db::getInstance()->Execute(rtrim($queryLang, ',')) OR
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') ||
+		!Db::getInstance()->Execute(rtrim($queryLang, ',')) ||
 		!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cms_block_page`(
 		`id_cms_block_page` int(10) unsigned NOT NULL auto_increment,
@@ -87,9 +87,9 @@ class BlockCms extends Module
 		`id_cms` int(10) unsigned NOT NULL,
 		`is_category` tinyint(1) unsigned NOT NULL,
 		PRIMARY KEY (`id_cms_block_page`)
-		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') OR
-		!Configuration::updateValue('FOOTER_CMS', '') OR
-		!Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', 1) OR
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8') ||
+		!Configuration::updateValue('FOOTER_CMS', '') ||
+		!Configuration::updateValue('FOOTER_BLOCK_ACTIVATION', 1) ||
 		!Configuration::updateValue('FOOTER_POWEREDBY', 1))
 			return false;
 		return true;
