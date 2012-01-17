@@ -25,7 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-// P3P Policies (http://www.w3.org/TR/2002/REC-P3P-20020416/#compact_policies)
+/*
+* P3P Policies (http://www.w3.org/TR/2002/REC-P3P-20020416/#compact_policies)
+*/
 header('P3P: CP="IDC DSP COR CURa ADMa OUR IND PHY ONL COM STA"');
 header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 header('Pragma: no-cache');
@@ -37,7 +39,7 @@ echo '
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.$iso.'" lang="'.$iso.'">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
 		<meta name="robots" content="NOFOLLOW, NOINDEX" />
 		<link type="text/css" rel="stylesheet" href="'._PS_JS_DIR_.'jquery/datepicker/datepicker.css" />
 		<link type="text/css" rel="stylesheet" href="'._PS_CSS_DIR_.'admin.css" />
@@ -105,7 +107,7 @@ echo '
 				</script>
 				<select onchange="quickSelect(this);" id="quick_select">
 					<option value="0">'.translate('Quick Access').'</option>';
-foreach (QuickAccess::getQuickAccesses((int)($cookie->id_lang)) AS $quick)
+foreach (QuickAccess::getQuickAccesses((int)($cookie->id_lang)) as $quick)
 {
 	preg_match('/tab=(.+)(&.+)?$/', $quick['link'], $adminTab);
 	if (isset($adminTab[1]))
@@ -128,13 +130,13 @@ $id_parent_tab_current = (int)(Tab::getCurrentParentId());
 $tabs = Tab::getTabs((int)$cookie->id_lang, 0);
 $echoLis = '';
 $mainsubtablist = '';
-foreach ($tabs AS $t)
+foreach ($tabs as $t)
 	if (checkTabRights($t['id_tab']) === true)
 	{
 		$img = (Tools::file_exists_cache(_PS_ADMIN_DIR_.'/themes/'.$employee->bo_theme.'/img/t/'.$t['class_name'].'.gif') ? 'themes/'.$employee->bo_theme.'/img/' : _PS_IMG_).'t/'.$t['class_name'].'.gif';
 		if (trim($t['module']) != '')
 			$img = _MODULE_DIR_.$t['module'].'/'.$t['class_name'].'.gif';
-		$current = (($t['class_name'] == $tab) OR ($id_parent_tab_current == $t['id_tab']));
+		$current = (($t['class_name'] == $tab) || ($id_parent_tab_current == $t['id_tab']));
 		echo '<li class="submenu_size '.($current ? 'active' : '').'" id="maintab'.$t['id_tab'].'">
 			<a href="index.php?tab='.$t['class_name'].'&token='.Tools::getAdminToken($t['class_name'].(int)($t['id_tab']).(int)($cookie->id_employee)).'">
 				<img src="'.$img.'" alt="" /> '.$t['name'].'
@@ -142,7 +144,7 @@ foreach ($tabs AS $t)
 		</li>';
 		$echoLi = '';
 		$subTabs = Tab::getTabs((int)$cookie->id_lang, (int)$t['id_tab']);
-		foreach ($subTabs AS $t2)
+		foreach ($subTabs as $t2)
 			if (checkTabRights($t2['id_tab']) === true)
 				$echoLi .= '<li><a href="index.php?tab='.$t2['class_name'].'&token='.Tools::getAdminTokenLite($t2['class_name']).'">'.$t2['name'].'</a></li>';
 		if ($current)
