@@ -196,7 +196,9 @@ class MailCore
 		}
 
 		catch (Swift_ConnectionException $e)
+		{
 			return false;
+		}
 	}
 
 	public static function sendMailTest($smtpChecked, $smtpServer, $content, $subject, $type, $to, $from, $smtpLogin, $smtpPassword, $smtpPort = 25, $smtpEncryption)
