@@ -1264,8 +1264,8 @@ class AdminImport extends AdminTab
 					<li style="text-decoration: underline"><a href="../docs/csv_import/products_import.csv">'.$this->l('Products sample file').'</a></li>
 					<li style="text-decoration: underline"><a href="../docs/csv_import/combinations_import.csv">'.$this->l('Combinations sample file').'</a></li>
 					<li style="text-decoration: underline"><a href="../docs/csv_import/customers_import.csv">'.$this->l('Customers sample file').'</a></li>
-					<li style="text-decoration: underline"><a href="../docs/csv_import/adresses_import.csv">'.$this->l('Addresses sample file').'</a></li>
-					<li style="text-decoration: underline"><a href="../docs/csv_import/manufacturer_import.csv">'.$this->l('Manufacturers sample file').'</a></li>
+					<li style="text-decoration: underline"><a href="../docs/csv_import/addresses_import.csv">'.$this->l('Addresses sample file').'</a></li>
+					<li style="text-decoration: underline"><a href="../docs/csv_import/manufacturers_import.csv">'.$this->l('Manufacturers sample file').'</a></li>
 					<li style="text-decoration: underline"><a href="../docs/csv_import/suppliers_import.csv">'.$this->l('Suppliers sample file').'</a></li>
 				</ul>
 		</fieldset>
