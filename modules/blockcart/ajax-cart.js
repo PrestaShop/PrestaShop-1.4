@@ -104,7 +104,7 @@ var ajaxCart = {
 				$('#'+parentId+' #cart_block h4 span#block_cart_expand').fadeOut('slow', function(){
 					$('#'+parentId+' #cart_block h4 span#block_cart_collapse').fadeIn('fast');
 				});
-	
+
 				// save the expand statut in the user cookie
 				$.ajax({
 					type: 'GET',
@@ -164,7 +164,7 @@ var ajaxCart = {
 	updateCartInformation : function (jsonData, addedFromProductPage)
 	{
 		ajaxCart.updateCart(jsonData);
-		
+
 		//reactive the button when adding has finished
 		if (addedFromProductPage)
 			$('body#product p#add_to_cart input').removeAttr('disabled').addClass('exclusive').removeClass('exclusive_disabled');
@@ -279,7 +279,7 @@ var ajaxCart = {
 					var domIdProduct = $(this).attr('id');
 					var firstCut =  domIdProduct.replace('cart_block_product_', '');
 					var ids = firstCut.split('_');
-	
+
 					//try to know if the current product is still in the new list
 					var stayInTheCart = false;
 					for (aProduct in jsonData.products)
@@ -299,13 +299,13 @@ var ajaxCart = {
 						removedProductId = $(this).attr('id');
 						//return false; // Regarding that the customer can only remove products one by one, we break the loop
 					}
-	
+
 					//if there is a removed product, delete it from the displayed block cart
 					if (removedProductId != null)
 					{
 						var firstCut =  removedProductId.replace('cart_block_product_', '');
 						var ids = firstCut.split('_');
-		
+
 						$('#'+parentId+' #'+removedProductId).addClass('strike').fadeTo('slow', 0, function(){
 							$(this).slideUp('slow', function(){
 								$(this).remove();
@@ -432,7 +432,7 @@ var ajaxCart = {
 						$('#'+parentId+' p#cart_block_no_products').fadeTo('fast', 0, function(){
 							$(this).slideUp('fast').fadeTo(0, 1);
 						}).before('<dl class="products"></dl>');
-	
+
 					//if product is not in the displayed cart, add a new product's line
 					var domIdProduct = this.id + (this.idCombination ? '_' + this.idCombination : '');
 					var domIdProductAttribute = this.id + '_' + (this.idCombination ? this.idCombination : '0');
@@ -448,21 +448,22 @@ var ajaxCart = {
 							content += '<span class="price">' + this.priceByLine + '</span>';
 							content += '</dt>';
 						if (this.hasAttributes)
-							  content += '<dd id="cart_block_combination_of_' + domIdProduct + '" class="hidden"><a href="' + this.link + '" title="' + this.name + '">' + this.attributes + '</a>';
+							content += '<dd id="cart_block_combination_of_' + domIdProduct + '" class="hidden"><a href="' + this.link + '" title="' + this.name + '">' + this.attributes + '</a>';
 						if (this.hasCustomizedDatas)
 							content += ajaxCart.displayNewCustomizedDatas(this);
 						if (this.hasAttributes) content += '</dd>';
 						$('#'+parentId+' #cart_block dl.products').append(content);
 					}
 					//else update the product's line
-					else{
+					else
+					{
 						var jsonProduct = this;
 						if($('#'+parentId+' dt#cart_block_product_' + domIdProduct + ' .quantity').text() != jsonProduct.quantity || $('dt#cart_block_product_' + domIdProduct + ' .price').text() != jsonProduct.priceByLine)
 						{
 							// Usual product
 							$('#'+parentId+' dt#cart_block_product_' + domIdProduct + ' .price').text(jsonProduct.priceByLine);
 							ajaxCart.updateProductQuantity(jsonProduct, jsonProduct.quantity);
-	
+
 							// Customized product
 							if (jsonProduct.hasCustomizedDatas)
 							{
@@ -480,7 +481,7 @@ var ajaxCart = {
 						}
 					}
 					$('#'+parentId+' #cart_block dl.products .hidden').slideDown('slow').removeClass('hidden');
-	
+
 				var removeLinks = $('#'+parentId+' #cart_block_product_' + domIdProduct).find('a.ajax_cart_block_remove_link');
 				if (this.hasCustomizedDatas && removeLinks.length)
 					$(removeLinks).each(function() {
@@ -493,28 +494,28 @@ var ajaxCart = {
 
 	displayNewCustomizedDatas : function(product)
 	{
-		$(['left_column', 'right_column']).each(function(id, parentId)
+		var content = '';
+		$('#cart_block').each(function(id, parentId)
 		{
-			var content = '';
 			var productId = parseInt(product.id);
 			var productAttributeId = typeof(product.idCombination) == 'undefined' ? 0 : parseInt(product.idCombination);
-			var hasAlreadyCustomizations = $('#'+parentId+' #cart_block ul#customization_' + productId + '_' + productAttributeId).length;
-	
+			var hasAlreadyCustomizations = $(this).children('ul#customization_' + productId + '_' + productAttributeId).length;
+
 			if (!hasAlreadyCustomizations)
 			{
 				if (!product.hasAttributes) content += '<dd id="cart_block_combination_of_' + productId + '" class="hidden">';
 				content += '<ul class="cart_block_customizations" id="customization_' + productId + '_' + productAttributeId + '">';
 			}
-	
+
 			$(product.customizedDatas).each(function(){
 				var done = 0;
 				customizationId = parseInt(this.customizationId);
 				productAttributeId = typeof(product.idCombination) == 'undefined' ? 0 : parseInt(product.idCombination);
 				// If the customization is already displayed on the cart, no update's needed
-				if($('#'+parentId+' #cart_block').find("div[id^=deleteCustomizableProduct_" + customizationId + "_]").length)
+				if ($(this).find("div[id^=deleteCustomizableProduct_" + customizationId + "_]").length)
 					return ('');
 				content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a  rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
-	
+
 				// Give to the customized product the first textfield value as name
 				$(this.datas).each(function(){
 					if (this['type'] == CUSTOMIZE_TEXTFIELD)
@@ -529,7 +530,7 @@ var ajaxCart = {
 						})
 					}
 				});
-	
+
 				// If the customized product did not have any textfield, it will have the customizationId as name
 				if (!done)
 					content += customizationIdMessage + customizationId;
@@ -537,18 +538,18 @@ var ajaxCart = {
 				// Field cleaning
 				if (customizationId)
 				{
-					$('#'+parentId+' #uploadable_files li div.customizationUploadBrowse img').remove();
-					$('#'+parentId+' #text_fields li input').attr('value', '');
+					$(this).children('#uploadable_files li div.customizationUploadBrowse img').remove();
+					$(this).children('#text_fields li input').attr('value', '');
 				}
 			});
-	
+
 			if (!hasAlreadyCustomizations)
 			{
 				content += '</ul>';
 				if (!product.hasAttributes) content += '</dd>';
 			}
-			return (content);
 		});
+		return content;
 	},
 
 
@@ -570,7 +571,7 @@ var ajaxCart = {
 				ajaxCart.hideOldProducts(jsonData);
 				ajaxCart.displayNewProducts(jsonData);
 				ajaxCart.refreshVouchers(jsonData);
-	
+
 				//update 'first' and 'last' item classes
 				$(['left_column', 'right_column']).each(function(id, parentId)
 				{
@@ -579,7 +580,7 @@ var ajaxCart = {
 					$('#'+parentId+' #cart_block dl.products dt:not(:first,:last)').addClass('item');
 					$('#'+parentId+' #cart_block dl.products dt:last').addClass('last_item');
 				});
-	
+
 				//reset the onlick events in relation to the cart block (it allow to bind the onclick event to the new 'delete' buttons added)
 				ajaxCart.overrideButtonsInThePage();
 			}
