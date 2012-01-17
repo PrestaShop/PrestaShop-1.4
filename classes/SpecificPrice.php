@@ -82,16 +82,16 @@ class SpecificPriceCore extends ObjectModel
    // score generation for quantity discount
 	protected static function _getScoreQuery($id_product, $id_shop, $id_currency, $id_country, $id_group)
 	{
-	    $select = '(';
+		$select = '(';
 
-       $now = date('Y-m-d H:i:s');
-       $select .= ' IF (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`, '.pow(2, 0).', 0) + ';
+		$now = date('Y-m-d H:i:s');
+		$select .= ' IF (\''.$now.'\' >= `from` AND \''.$now.'\' <= `to`, '.pow(2, 0).', 0) + ';
 
-	    $priority = SpecificPrice::getPriority($id_product);
-	    foreach (array_reverse($priority) as $k => $field)
-           $select .= ' IF (`'.$field.'` = '.(int)(${$field}).', '.pow(2, $k + 1).', 0) + ';
+		$priority = SpecificPrice::getPriority($id_product);
+		foreach (array_reverse($priority) as $k => $field)
+			$select .= ' IF (`'.bqSQL($field).'` = '.(int)$$field.', '.pow(2, $k + 1).', 0) + ';
 
-	    return rtrim($select, ' +').') AS `score`';
+		return rtrim($select, ' +').') AS `score`';
 	}
 
     public static function getPriority($id_product)
