@@ -181,7 +181,7 @@ class BlockAdvertising extends Module
 			$output .= '<input class="button" type="submit" name="submitDeleteImgConf" value="'.$this->l('Delete image').'" style=""/>';
 		}
 		else
-			$output .= '<div style="margin-left: 100px;width:163px;"/>'.$this->l('no image').'</div>';
+			$output .= '<div style="margin-left: 100px;width:163px;">'.$this->l('no image').'</div>';
 		$output .= '</a>';
 		$output .= '<br/>
 <br/>
