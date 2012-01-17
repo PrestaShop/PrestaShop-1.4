@@ -1280,7 +1280,7 @@ class CartCore extends ObjectModel
 		if (!$discountObj->cumulable_reduction)
 		{
 			foreach ($products as $product)
-				if (!$product['reduction_applies'] || !$product['on_sale'])
+				if (!$product['reduction_applies'] && !$product['on_sale'])
 					$onlyProductWithDiscount = false;
 		}
 		if (!$discountObj->cumulable_reduction AND $onlyProductWithDiscount)
