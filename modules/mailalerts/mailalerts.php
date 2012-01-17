@@ -377,8 +377,6 @@ class MailAlerts extends Module
 			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.html'))
 				Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'customer_qty', Mail::l('Product available', (int)Configuration::get('PS_LANG_DEFAULT')), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			
-			$customer_email = $this->getEmailValue((int)($customer_id), (int)($id_product), (int)($id_product_attribute));
-
 			self::deleteAlert((int)$customer_id, strval($customer_email), (int)$id_product, (int)$id_product_attribute);
 		}
 	}
@@ -570,17 +568,6 @@ class MailAlerts extends Module
 			$products[$i]['link_rewrite'] = $obj->link_rewrite;
 		}
 		return ($products);
-	}
-
-	public function getEmailValue($id_customer, $id_product, $id_product_attribute)
-	{
-		$value = Db::getInstance()->getRow('
-		SELECT `customer_email`
-		FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
-		WHERE `id_customer` = '.(int)($id_customer).' 
-		AND `id_product` = '.(int)($id_product).' 
-		AND `id_product_attribute` = '.(int)($id_product_attribute));
-		return $value['customer_email'];
 	}
 
 	public static function deleteAlert($id_customer, $customer_email, $id_product, $id_product_attribute)
