@@ -369,7 +369,7 @@ class AdminCarriers extends AdminTab
 		$carrier = new $this->className($id);
 		if (!Validate::isLoadedObject($carrier))
 			die (Tools::displayError('Object cannot be loaded'));
-		$zones = Zone::getZones(true);
+		$zones = Zone::getZones(false);
 		foreach ($zones as $zone)
 			if (sizeof($carrier->getZone($zone['id_zone'])))
 			{
