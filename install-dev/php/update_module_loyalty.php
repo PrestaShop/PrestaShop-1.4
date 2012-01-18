@@ -41,7 +41,7 @@ function update_module_loyalty()
 		if (!empty($category_list))
 		{
 			$category_list = rtrim($category_list, ',');
-			$res &= Db::getInstance()->getValue('REPLACE INTO `'._DB_PREFIX_.'configuration`
+			$res &= Db::getInstance()->execute('REPLACE INTO `'._DB_PREFIX_.'configuration`
 			(name, value) VALUES ("PS_LOYALTY_VOUCHER_CATEGORY", "'.$category_list.'"');
 		}
 	}
