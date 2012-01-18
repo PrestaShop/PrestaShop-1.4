@@ -1,0 +1,71 @@
+
+-----------------------------------
+responseCode----99
+responseDescription----Probleme technique au niveau du serveur MNOP
+detailResponseCode----
+transactionReference----BuysterRef2011111502113734
+transactionDateTime----
+status----
+authorisationId----
+guaranteeIndicator----
+enrollmentIndicator----
+-----------------------------------
+responseCode----00
+responseDescription----Transaction approuvee ou traitee avec succes
+detailResponseCode----00
+transactionReference----BuysterRef201111220449092
+transactionDateTime----2011-11-22T16:49:25.512+01:00
+status----TO_CAPTURE
+authorisationId----045598
+guaranteeIndicator----Y
+enrollmentIndicator----N
+-----------------------------------
+responseCode----00
+responseDescription----Transaction approuvee ou traitee avec succes
+detailResponseCode----00
+transactionReference----BuysterRef201111230951293
+transactionDateTime----2011-11-23T09:51:50.581+01:00
+status----TO_VALIDATE
+authorisationId----060791
+guaranteeIndicator----N
+enrollmentIndicator----N
+-----------------------------------
+responseCode----00
+responseDescription----Transaction approuvee ou traitee avec succes
+detailResponseCode----00
+transactionReference----BuysterRef201111230954144
+transactionDateTime----2011-11-23T09:54:28.555+01:00
+status----TO_CAPTURE
+authorisationId----794487
+guaranteeIndicator----Y
+enrollmentIndicator----N
+-----------------------------------
+responseCode----17
+responseDescription----Annulation du porteur
+detailResponseCode----
+transactionReference----BuysterRef2011122609510374
+transactionDateTime----
+status----
+authorisationId----
+guaranteeIndicator----
+enrollmentIndicator----
+-----------------------------------
+responseCode----05
+responseDescription----Transaction refusee (plafond buyster porteur dÃ©passÃ©)
+detailResponseCode----51
+transactionReference----BuysterRef2011122609540775
+transactionDateTime----2011-12-26T09:54:31.883+01:00
+status----REFUSED
+authorisationId----
+guaranteeIndicator----Y
+enrollmentIndicator----N
+-----------------------------------
+responseCode----00
+responseDescription----Transaction approuvee ou traitee avec succes
+detailResponseCode----00
+transactionReference----BuysterRef2011122610402376
+transactionDateTime----2011-12-26T10:40:46.539+01:00
+status----TO_VALIDATE
+authorisationId----233060
+guaranteeIndicator----N
+enrollmentIndicator----N
