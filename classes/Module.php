@@ -517,7 +517,7 @@ abstract class ModuleCore
 		foreach ($modules_dir AS $module)
 		{
 			// Memory usage checking
-			if (function_exists('memory_get_usage') && $memory_limit !== -1)
+			if (function_exists('memory_get_usage') && $memory_limit != '-1')
 			{
 				$current_memory = memory_get_usage(true);
 				// memory_threshold in MB
