@@ -39,7 +39,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = '1.7.4';
+		$this->version = '1.7.5';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -548,7 +548,8 @@ class BlockLayered extends Module
 				<div class="margin-form">
 				<script type="text/javascript">
 					flag_fields += \'¤url_name¤meta_title\';
-				</script>';
+				</script>
+				<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 					<div id="url_name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
@@ -556,20 +557,26 @@ class BlockLayered extends Module
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}_<span class="hint-pointer">&nbsp;</span></span>
 						<p style="clear: both">'.$this->l('Specific format in url block layered generation').'</p>
 					</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>
 					<label>'.$this->l('Meta title:').' </label>
-					<div class="margin-form">';
+					<div class="margin-form">
+						<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 						<div id="meta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
 							<input size="33" type="text" name="meta_title_'.$language['id_lang'].'" value="'.Tools::safeOutput(@$langValue[$language['id_lang']]['meta_title'], true).'" />
 							<p style="clear: both">'.$this->l('Specific format for meta title').'</p>
 						</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
+			
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>';
 		return $return;
@@ -620,7 +627,8 @@ class BlockLayered extends Module
 				<div class="margin-form">
 				<script type="text/javascript">
 					flag_fields += \'¤url_name¤meta_title\';
-				</script>';
+				</script>
+				<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 					<div id="url_name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
@@ -628,20 +636,25 @@ class BlockLayered extends Module
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}_<span class="hint-pointer">&nbsp;</span></span>
 						<p style="clear: both">'.$this->l('Specific format in url block layered generation').'</p>
 					</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>
 					<label>'.$this->l('Meta title:').' </label>
-					<div class="margin-form">';
+					<div class="margin-form">
+						<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 						<div id="meta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
 							<input size="33" type="text" name="meta_title_'.$language['id_lang'].'" value="'.Tools::safeOutput(@$langValue[$language['id_lang']]['meta_title'], true).'" />
 							<p style="clear: both">'.$this->l('Specific format for meta title').'</p>
 						</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>';
 		return $return;
@@ -733,7 +746,8 @@ class BlockLayered extends Module
 				<div class="margin-form">
 				<script type="text/javascript">
 					flag_fields += \'¤url_name¤meta_title\';
-				</script>';
+				</script>
+				<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 					<div id="url_name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
@@ -741,20 +755,25 @@ class BlockLayered extends Module
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}_<span class="hint-pointer">&nbsp;</span></span>
 						<p style="clear: both">'.$this->l('Specific format in url block layered generation').'</p>
 					</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>
 					<label>'.$this->l('Meta title:').' </label>
-					<div class="margin-form">';
+					<div class="margin-form">
+						<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 						<div id="meta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
 							<input size="33" type="text" name="meta_title_'.$language['id_lang'].'" value="'.Tools::safeOutput(@$langValue[$language['id_lang']]['meta_title'], true).'" />
 							<p style="clear: both">'.$this->l('Specific format for meta title').'</p>
 						</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>
 			<label>'.$this->l('Indexable:').' </label>
@@ -793,7 +812,8 @@ class BlockLayered extends Module
 				<div class="margin-form">
 				<script type="text/javascript">
 					flag_fields += \'¤url_name¤meta_title\';
-				</script>';
+				</script>
+				<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 					<div id="url_name_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
@@ -801,20 +821,25 @@ class BlockLayered extends Module
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}_<span class="hint-pointer">&nbsp;</span></span>
 						<p style="clear: both">'.$this->l('Specific format in url block layered generation').'</p>
 					</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'url_name', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>
 					<label>'.$this->l('Meta title:').' </label>
-					<div class="margin-form">';
+					<div class="margin-form">
+						<div class="translatable">';
 		foreach ($languages as $language)
 			$return .= '
 						<div id="meta_title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $default_form_language ? 'block' : 'none').'; float: left;">
 							<input size="33" type="text" name="meta_title_'.$language['id_lang'].'" value="'.Tools::safeOutput(@$langValue[$language['id_lang']]['meta_title'], true).'" />
 							<p style="clear: both">'.$this->l('Specific format for meta title').'</p>
 						</div>';
-		$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
+		if (version_compare(_PS_VERSION_,'1.5','<'))
+			$return .= $this->displayFlags($languages, $default_form_language, 'flag_fields', 'meta_title', true, true);
 		$return .= '
+						</div>
 						<div class="clear"></div>
 					</div>
 			<label>'.$this->l('Indexable:').' </label>
@@ -1624,12 +1649,11 @@ class BlockLayered extends Module
 					$root_category = array('id_category' => '0', 'name' => $this->l('Root'));
 			}
 			else
-			{
-				$root_category = array('id_category' => '1', 'name' => $this->l('Home'));
-			}
+				$root_category = '';
+			
 			$trads = array(
 				 'Root' => $root_category,
-				 'Home' => $root_category, // for retrocompatibility 1.4
+				 'Home' => $this->l('Home'), // for retrocompatibility 1.4
 				 'selected' => $this->l('selected'),
 				 'Collapse All' => $this->l('Collapse All'),
 				 'Expand All' => $this->l('Expand All'),
@@ -1678,8 +1702,14 @@ class BlockLayered extends Module
 				
 			}
 			
-			$html .= '<script type="text/javascript">
-					
+			$html .= '
+					<style>
+						#fancybox-content {
+							height: 400px !important;
+							overflow: auto;
+						}
+					</style>
+					<script type="text/javascript">
 					function updLayCounters()
 					{
 						$(\'#num_sel_filters\').html(\'(\'+$(\'ul#selected_filters\').find(\'li\').length+\')\');
@@ -1798,6 +1828,8 @@ class BlockLayered extends Module
 						$(\'label a#inline\').fancybox({ 
 							\'hideOnContentClick\': false,
 							\'onClosed\': function() {
+								lock_treeview_hidding = false;
+								$(\'#categories-treeview\').parent().parent().hide();
 								updCatCounter();
 								if ($(\'#categories-treeview\').find(\'input:checked\').length == 0)
 									$(\'#error-treeview\').show(500);
@@ -1806,20 +1838,23 @@ class BlockLayered extends Module
 								updElements(0, 0);
 							},
 							\'onComplete\': function() {
+							lock_treeview_hidding = true;
+							$(\'#categories-treeview\').parent().parent().show();
 							'.(version_compare(_PS_VERSION_,'1.5','<') ? '
 								if($(\'#categories-treeview li#1\').attr(\'cleaned\'))
 									return;
 								if($(\'#categories-treeview li#1\').attr(\'cleaned\', true))
 								$(\'#categories-treeview li#1\').removeClass(\'static\');
 								$(\'#categories-treeview li#1 span\').trigger(\'click\');
-								$(\'#categories-treeview li#1\').children(\'div\').remove();
+								//$(\'#categories-treeview li#1\').children(\'div\').remove();
 								$(\'#categories-treeview li#1\').
 									removeClass(\'collapsable lastCollapsable\').
 									addClass(\'last static\');
 								$(\'.hitarea\').live(\'click\', function(it)
 								{
 									$(this).parent().find(\'> .category_label\').click();
-								});' : '').'
+								});
+								' : '').'
 							}
 						});
 
@@ -1867,17 +1902,17 @@ class BlockLayered extends Module
 				<input type="hidden" name="n_existing" id="n_existing" value="'.(int)count($filtersTemplates).'" />
 			</form>
 		</fieldset><br />
-		<fieldset class="width2">
+		<fieldset class="width4">
 			<legend><img src="../img/admin/cog.gif" alt="" /> '.$this->l('Configuration').'</legend>
 			<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">			
 				<table border="0" style="font-size: 11px; width: 100%; margin: 0 auto;" class="table">
 					<tr>
 						<th style="text-align: center;">'.$this->l('Option').'</th>
-						<th style="text-align: center;">'.$this->l('Value').'</th>
+						<th style="text-align: center; width: 200px;">'.$this->l('Value').'</th>
 					</tr>
 					<tr>
 						<td style="text-align: right;">'.$this->l('Hide filter values with no product is matching').'</td>
-						<td>
+						<td style="text-align: center;">
 							<img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />
 							'.$this->l('Yes').' <input type="radio" name="ps_layered_hide_0_values" value="1" '.(Configuration::get('PS_LAYERED_HIDE_0_VALUES') ? 'checked="checked"' : '').' />
 							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
@@ -1886,7 +1921,7 @@ class BlockLayered extends Module
 					</tr>
 					<tr>
 						<td style="text-align: right;">'.$this->l('Show the number of matching products').'</td>
-						<td>
+						<td style="text-align: center;">
 							<img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />
 							'.$this->l('Yes').' <input type="radio" name="ps_layered_show_qties" value="1" '.(Configuration::get('PS_LAYERED_SHOW_QTIES') ? 'checked="checked"' : '').' />
 							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
@@ -1895,14 +1930,14 @@ class BlockLayered extends Module
 					</tr>
 					<tr>
 						<td style="text-align: right;">'.$this->l('Show products from subcategories').'</td>
-						<td>
+						<td style="text-align: center;">
 							<img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />
 							'.$this->l('Yes').' <input type="radio" name="ps_layered_full_tree" value="1" '.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'checked="checked"' : '').' />
 							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
 							'.$this->l('No').' <input type="radio" name="ps_layered_full_tree" value="0" '.(!Configuration::get('PS_LAYERED_FULL_TREE') ? 'checked="checked"' : '').' />
 						</td>
 					</tr>
-					<tr>
+					<tr style="text-align: center;">
 						<td style="text-align: right;">'.$this->l('Use tax to filter price').'</td>
 						<td>
 							<img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />
@@ -3269,7 +3304,6 @@ class BlockLayered extends Module
 		{
 			$html .= '
 			<script type="text/javascript">
-				//<![CDATA[
 				$(document).ready(function()
 				{
 					$(\'#selected_filters li\').remove();
@@ -3287,8 +3321,67 @@ class BlockLayered extends Module
 			
 			if (isset($layeredValues['categories']) && count($layeredValues['categories']))
 			{
-				foreach ($layeredValues['categories'] as $id_category)
-					$html .= '$(\'#categories-treeview\').find(\'input[name="categoryBox[]"][value='.(int)$id_category.']\').attr(\'checked\', \'checked\');'."\n";
+				$html .= '
+							function expandCategories(categories, iteration, id_category, init) {
+								if (categories[iteration])
+								{
+									category = $(\'#categories-treeview\').find(\'input[name="categoryBox[]"][value=\'+categories[iteration]+\']\');
+								
+									if (category.length)
+									{
+										if (category.parent().hasClass(\'expandable\'))
+										{
+											$(\'#\'+categories[iteration]+\' .hitarea\').click();
+										}
+										
+										if (parseInt(categories[iteration]) == parseInt(id_category))
+										{
+											$(\'#layered-cat-counter\').html(parseInt($(\'#layered-cat-counter\').html()) + 1);
+											if ($(\'#categories-treeview\').find(\'input[name="categoryBox[]"][value=\'+id_category+\']:checked\').length == 0)
+											{
+												$(\'#categories-treeview\').find(\'input[name="categoryBox[]"][value=\'+id_category+\']\').click();
+												clickOnCategoryBox($(\'#categories-treeview\').find(\'input[name="categoryBox[]"][value=\'+id_category+\']\'));
+											}
+											collapseAllCategories();
+										}
+									}
+									else {
+										setTimeout(function() { expandCategories(categories, iteration, id_category, false); }, 20 );
+										return;
+									}
+									$(\'#categories-treeview\').parent().parent().show();
+									expandCategories(categories, iteration+1, id_category);
+									if (typeof(lock_treeview_hidding) == \'undefined\' || !lock_treeview_hidding)
+										$(\'#categories-treeview\').parent().parent().hide();
+								}
+							}
+							$(\'#layered-cat-counter\').html(0);
+							$(\'.nb_sub_cat_selected\').hide();
+							$(\'#categories-treeview\').find(\'input[name="categoryBox[]"]:checked\').each(function(i, it) {
+								$(it).click();
+								updateNbSubCategorySelected($(it), false);
+							});';
+				
+				foreach ($layeredValues['categories'] as $id_category) {
+					if ($id_category != 1) // @todo do we need to use the root of the current shop ?
+					{
+						$category = new Category($id_category);
+						$parent_list = array_reverse($category->getParentsCategories());
+					}
+					else
+						$parent_list = array(array('id_category' => 1));
+					$html .= 'var categories = [];
+					';
+					foreach ($parent_list as $parent)
+					{
+						$html .= '
+							categories.push('.(int)$parent['id_category'].');';
+					}
+
+					$html .= '
+						expandCategories(categories, 0, '.(int)$id_category.', false);';
+				}
+				
 				$html .= '
 				updCatCounter();
 				$(\'#scope_1\').attr(\'checked\', \'\');
@@ -3303,7 +3396,8 @@ class BlockLayered extends Module
 				
 			$html .= '
 			$(\'#layered_tpl_name\').val(\''.addslashes($layeredFilter['name']).'\');
-			$(\'#id_layered_filter\').val(\''.(int)$layeredFilter['id_layered_filter'].'\')';
+			$(\'#id_layered_filter\').val(\''.(int)$layeredFilter['id_layered_filter'].'\');
+			';
 				
 			$html .= '
 				});
