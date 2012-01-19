@@ -35,7 +35,7 @@ class shoppingfluxexport extends Module
 	{
 	 	$this->name = 'shoppingfluxexport';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.5';
+	 	$this->version = '1.5.1';
 
 	 	parent::__construct();
 
@@ -127,10 +127,8 @@ class shoppingfluxexport extends Module
 	}
 	
 	private function sendMail(){
-	
-		//TODO
-		//mail shopping flux + prestashop : natif-prestashop@shopping-flux.com
-		$this->_html .= $this->displayError($this->l('Votre enregistrement Shopping Flux a rencontré un soucis.'));
+		$this->_html .= $this->displayConfirmation($this->l('Votre enregistrement Shopping Flux est effectif, vous serez contacté sous peu.')).'
+		<img src="http://www.prestashop.com/partner/shoppingflux/image.php?site='.htmlentities($_POST['site']).'&nom='.htmlentities($_POST['nom']).'&prenom='.htmlentities($_POST['prenom']).'&email='.htmlentities($_POST['email']).'&telephone='.htmlentities($_POST['telephone']).'&flux='.htmlentities($_POST['flux']).'" border="0" />';
 	}
 
 	private function clean($string)
