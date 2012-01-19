@@ -1595,6 +1595,7 @@ class BlockLayered extends Module
 				#layered_container_left ul li { cursor: move; position: relative; }
 				#layered-cat-counter { display: none; }
 				#layered-step-2, #layered-step-3 { display: none; }
+				#layered-step-2 h3 { margin-top: 0; }
 				#table-filter-templates tr th, #table-filter-templates tr td { text-align: center; }
 				.filter_type { width: 70px; position: absolute; right: 53px; top: 5px;}
 				.filter_show_limit { position: absolute; width: 40px; right: 5px; top: 5px; }
@@ -1844,15 +1845,14 @@ class BlockLayered extends Module
 								$(\'#categories-treeview\').parent().parent().hide();
 								updCatCounter();
 								if ($(\'#categories-treeview\').find(\'input:checked\').length == 0)
-									$(\'#error-treeview\').show(500);
+									$(\'#error-treeview\').show();
 								else
-									$(\'#error-treeview\').hide(500);
+									$(\'#error-treeview\').hide();
 								updElements(0, 0);
 							},
 							\'onComplete\': function() {
-							lock_treeview_hidding = true;
-							$(\'#categories-treeview\').parent().parent().show();
-							'.(version_compare(_PS_VERSION_,'1.5','<') ? '
+								lock_treeview_hidding = true;
+								$(\'#categories-treeview\').parent().parent().show();
 								if($(\'#categories-treeview li#1\').attr(\'cleaned\'))
 									return;
 								if($(\'#categories-treeview li#1\').attr(\'cleaned\', true))
@@ -1866,7 +1866,6 @@ class BlockLayered extends Module
 								{
 									$(this).parent().find(\'> .category_label\').click();
 								});
-								' : '').'
 							}
 						});
 
