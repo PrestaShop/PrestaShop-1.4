@@ -26,7 +26,7 @@
 
 {$jQueryOverload}
 
-<link href="{$new_base_dir}style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="{$new_base_dir}css/style.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript">
 	// Global JS Value
 	var _PS_MR_MODULE_DIR_ = "{$new_base_dir}";
@@ -43,6 +43,6 @@
 	PS_MRTranslationList['moreDetails'] = "{l s='More details' mod='mondialrelay'}";
 </script>
 
-<script type="text/javascript" src="{$new_base_dir}mondialrelay.js"></script>
+<script type="text/javascript" src="{$new_base_dir}js/mondialrelay.js"></script>
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript" src="{$new_base_dir}js/gmap.js"></script>

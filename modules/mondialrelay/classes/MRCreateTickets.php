@@ -262,7 +262,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	 */
 	private function _weightFormat($weight)
 	{
-		while (strlen($weight) != 5)
+		while (strlen($weight) < 5)
 			$weight = '0'.$weight;
 		return $weight;
 	}
@@ -316,7 +316,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				
 				$deliveriesAddress = new Address($orderDetail['id_address_delivery']);
 				$customer = new Customer($orderDetail['id_customer']);
-				
+
 				// Store the weight order set by the user
 				foreach($this->_weightList as $orderWeightInfos)
 				{

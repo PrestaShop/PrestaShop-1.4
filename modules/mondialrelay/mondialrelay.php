@@ -28,12 +28,11 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-require_once(_PS_MODULE_DIR_.'mondialrelay/classes/MondialRelayClass.php');
 require_once(_PS_MODULE_DIR_.'mondialrelay/classes/MRTools.php');
 
 class MondialRelay extends Module
 {
-	const INSTALL_SQL_FILE = 'mrInstall.sql';
+	const INSTALL_SQL_FILE = 'sql/mrInstall.sql';
 
 	private $_postErrors;
 
@@ -63,7 +62,6 @@ class MondialRelay extends Module
 
 		parent::__construct();
 
-		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Mondial Relay');
 		$this->description = $this->l('Deliver in Relay points');
 
@@ -73,7 +71,7 @@ class MondialRelay extends Module
 		$this->_updateProcess();
 
 		/** Backward compatibility */
-		require(dirname(__FILE__).'/backward_compatibility/backward.php');
+		require(_PS_MODULE_DIR_.'/mondialrelay/backward_compatibility/backward.php');
 	}
 
 	public function install()
@@ -272,14 +270,14 @@ class MondialRelay extends Module
 					'._DB_PREFIX_ .'mr_historique,
 					'._DB_PREFIX_ .'mr_method,
 					'._DB_PREFIX_ .'mr_selected'))
+		{
+			// If drop failed, try to turn off the carriers
+			!Db::getInstance()->execute('
+					UPDATE '._DB_PREFIX_.'carrier c, '._DB_PREFIX_.'mr_method m
+					SET c.`active` = 0, c.`deleted` = 1
+					WHERE c.`id_carrier` = m.`id_carrier`');
 			return false;
-
-		// If drop failed, try to turn off the carriers
-		else if (!Db::getInstance()->execute('
-				UPDATE '._DB_PREFIX_.'carrier c, '._DB_PREFIX_.'mr_method m
-				SET c.`active` = 0, c.`deleted` = 1
-				WHERE c.`id_carrier` = m.`id_carrier`'))
-			return false;
+		}
 
 		return true;
 	}
@@ -437,8 +435,8 @@ class MondialRelay extends Module
 
 	public function hookBackOfficeHeader()
 	{
-		$cssFilePath = $this->_path.'style.css';
-		$jsFilePath= $this->_path.'mondialrelay.js';
+		$cssFilePath = $this->_path.'css/style.css';
+		$jsFilePath= $this->_path.'js/mondialrelay.js';
 
 		$ret = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
 		if (Tools::getValue('tab') == 'AdminMondialRelay')
@@ -547,7 +545,7 @@ class MondialRelay extends Module
 					($res['MR_Selected_LgAdr4'] ? ' - ' : '').$res['MR_Selected_CP'].' '.
 					$res['MR_Selected_Ville'].' - '.$res['MR_Selected_Pays'],
 				'mr_url' => $res['url_suivi']));
-		return $this->context->smarty->fetch(dirname(__FILE__).'/orderDetail.tpl');
+		return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/order_detail.tpl');
 	}
 
 	/*
@@ -612,7 +610,7 @@ class MondialRelay extends Module
 				'new_base_dir' => self::$moduleURL,
 				'MRToken' => self::$MRFrontToken,
 				'jQueryOverload' => self::getJqueryCompatibility(false)));
-			return $this->context->smarty->fetch(dirname(__FILE__).'/header.tpl');
+			return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/header.tpl');
 		}
 		return '';
 	}
@@ -653,7 +651,7 @@ class MondialRelay extends Module
 			'carriersextra' => $carriersList,
 			'preSelectedRelay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : ''));
 
-		return $this->context->smarty->fetch(dirname(__FILE__).'/mondialrelay.tpl');
+		return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/checkout_process.tpl');
 	}
 
 	public function getContent()

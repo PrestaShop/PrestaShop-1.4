@@ -25,7 +25,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-require_once(dirname(__FILE__).'/classes/MondialRelayClass.php');
 require_once(dirname(__FILE__).'/classes/MRCreateTickets.php');
 require_once(dirname(__FILE__).'/mondialrelay.php');
 
@@ -38,7 +37,6 @@ class AdminMondialRelay extends AdminTab
 		MondialRelay::initModuleAccess();
 		
 		$this->table = 'mr_selected';
-		$this->className = 'MondialRelayClass';
 	
 		parent::__construct();
 	}
