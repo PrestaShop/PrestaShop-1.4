@@ -79,6 +79,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_74a6a547d86659933a210680efb6e6d
 $_MODULE['<{blocklayered}prestashop>blocklayered_f8263d99054a4cdb3428196f078fa212'] = 'Nom du modèle :';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b96ce93c61b856a0163c116820646b19'] = 'Mon modèle';
 $_MODULE['<{blocklayered}prestashop>blocklayered_5f514b580ea1b6bdb681916bc1deb207'] = 'uniquement pour le retrouver facilement';
+$_MODULE['<{blocklayered}prestashop>blocklayered_188185ae335eb523e53d6d31ede21f1c'] = 'Aucun filtre sélectionné, la navigation à facette sera désactivée pour les catégories concernées.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ef1094d9826e98f5417e0a37f1742133'] = 'Sauvegarder ce modèle de filtres';
 $_MODULE['<{blocklayered}prestashop>blocklayered_254f642527b45bc260048e30704edb39'] = 'Configuration';
 $_MODULE['<{blocklayered}prestashop>blocklayered_054b4f3ea543c990f6b125f41af6ebf7'] = 'Option';

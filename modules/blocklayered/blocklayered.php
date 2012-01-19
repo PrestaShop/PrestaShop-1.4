@@ -39,7 +39,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = '1.7.5';
+		$this->version = '1.7.6';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -1249,6 +1249,7 @@ class BlockLayered extends Module
 				
 	
 					$sqlToInsert = 'INSERT INTO '._DB_PREFIX_.'layered_category (id_category, id_shop, id_value, type, position, filter_show_limit, filter_type) VALUES ';
+					$values = false;
 					foreach ($_POST['categoryBox'] as $id_category_layered)
 					{
 						$n = 0;
@@ -1256,6 +1257,7 @@ class BlockLayered extends Module
 						foreach ($_POST as $key => $value)
 							if (substr($key, 0, 17) == 'layered_selection' && $value == 'on')
 							{
+								$values = true;
 								$type = 0;
 								$limit = 0;
 								if (Tools::getValue($key.'_filter_type'))
@@ -1291,8 +1293,8 @@ class BlockLayered extends Module
 								}
 							}
 					}
-					
-					Db::getInstance()->Execute(rtrim($sqlToInsert, ','));
+					if ($values)
+						Db::getInstance()->Execute(rtrim($sqlToInsert, ','));
 					
 					$valuesToInsert = array(
 						'name' => pSQL(Tools::getValue('layered_tpl_name')),
@@ -1596,6 +1598,11 @@ class BlockLayered extends Module
 				#table-filter-templates tr th, #table-filter-templates tr td { text-align: center; }
 				.filter_type { width: 70px; position: absolute; right: 53px; top: 5px;}
 				.filter_show_limit { position: absolute; width: 40px; right: 5px; top: 5px; }
+				#layered-step-3 .alert { width: auto; }
+				#fancybox-content {
+					height: 400px !important;
+					overflow: auto !important;
+				}
 			</style>
 			<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post" onsubmit="return checkForm();">';
 			
@@ -1703,22 +1710,27 @@ class BlockLayered extends Module
 			}
 			
 			$html .= '
-					<style>
-						#fancybox-content {
-							height: 400px !important;
-							overflow: auto;
-						}
-					</style>
-					<script type="text/javascript">
-					function updLayCounters()
+				<script type="text/javascript">
+					function updLayCounters(showAlert)
 					{
 						$(\'#num_sel_filters\').html(\'(\'+$(\'ul#selected_filters\').find(\'li\').length+\')\');
 						$(\'#num_avail_filters\').html(\'(\'+$(\'#layered_container_right ul\').find(\'li\').length+\')\');
 						
 						if ($(\'ul#selected_filters\').find(\'li\').length >= 1)
+						{
 							$(\'#layered-step-3\').show();
+							$(\'#layered-step-3 .alert\').hide();
+						}
 						else
-							$(\'#layered-step-3\').hide();
+						{
+							if (showAlert)
+								$(\'#layered-step-3\').show();
+							else
+								$(\'#layered-step-3\').hide();
+							
+							$(\'#layered-step-3 .alert\').show();
+							
+						}
 					}
 
 					function updPositions()
@@ -1771,7 +1783,7 @@ class BlockLayered extends Module
 								});
 								
 								updHeight();
-								updLayCounters();
+								updLayCounters(true);
 							}
 						});
 						return false;
@@ -1803,7 +1815,7 @@ class BlockLayered extends Module
 								$(this).parent().addClass(\'layered_left\');
 								$(this).effect(\'transfer\', { to: $(\'#layered_container_left ul#selected_filters\') }, 300, function() {
 									$(this).parent().appendTo(\'ul#selected_filters\');
-									updLayCounters();
+									updLayCounters(false);
 									updHeight();
 									updPositions();
 								});
@@ -1815,7 +1827,7 @@ class BlockLayered extends Module
 									$(this).parent().removeClass(\'layered_left\');
 									$(this).parent().addClass(\'layered_right\');
 									$(this).parent().appendTo(\'ul#all_filters\');
-									updLayCounters();
+									updLayCounters(true);
 									updHeight();
 									updPositions();
 									if ($(\'#layered_container_left ul\').length == 0)
@@ -1846,7 +1858,7 @@ class BlockLayered extends Module
 								if($(\'#categories-treeview li#1\').attr(\'cleaned\', true))
 								$(\'#categories-treeview li#1\').removeClass(\'static\');
 								$(\'#categories-treeview li#1 span\').trigger(\'click\');
-								//$(\'#categories-treeview li#1\').children(\'div\').remove();
+								$(\'#categories-treeview li#1\').children(\'div\').remove();
 								$(\'#categories-treeview li#1\').
 									removeClass(\'collapsable lastCollapsable\').
 									addClass(\'last static\');
@@ -1859,7 +1871,7 @@ class BlockLayered extends Module
 						});
 
 						updHeight();
-						updLayCounters();
+						updLayCounters(false);
 						updPositions();
 						updCatCounter();
 						enableSortable();
@@ -1895,6 +1907,7 @@ class BlockLayered extends Module
 				{ $(\'#error-filter-name\').hide(); } else { $(\'#error-filter-name\').show(); }" name="layered_tpl_name" maxlength="64" value="'.$this->l('My template').' '.date('Y-m-d').'"
 				style="width: 200px; font-size: 11px;" /> <span style="font-size: 10px; font-style: italic;">('.$this->l('only as a reminder').')</span></p>
 				<hr size="1" noshade />
+				<p class="alert">'.$this->l('No filters selected, the blocklayered will be disable for the categories seleted.').'</p>
 				<br />
 				<center><input type="submit" class="button" name="SubmitFilter" value="'.$this->l('Save this filter template').'" /></center>
 			</div>
