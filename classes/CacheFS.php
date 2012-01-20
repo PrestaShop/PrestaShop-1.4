@@ -162,7 +162,7 @@ class CacheFSCore extends Cache {
 	{
 		if (!$directory)
 			$directory = _PS_CACHEFS_DIRECTORY_;
-		$chars = '0123456789abcdefghijklmnopqrstuvwxyz';
+		$chars = '0123456789abcdef';
 		for ($i = 0; $i < strlen($chars); $i++)
 		{
 			$new_dir = $directory.$chars[$i].'/';
