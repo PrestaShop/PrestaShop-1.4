@@ -213,16 +213,19 @@ abstract class PaymentModuleCore extends Module
 					foreach ($allTaxes AS $res)
 					{
 						if (!isset($storeAllTaxes[$res->id]))
+						{
 							$storeAllTaxes[$res->id] = array();
+							$storeAllTaxes[$res->id]['amount'] = 0;
+						}
 						$storeAllTaxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
 						$storeAllTaxes[$res->id]['rate'] = $res->rate;
 
 						if (!$nTax++)
-							$storeAllTaxes[$res->id]['amount'] = ($price * (1 + ($res->rate * 0.01))) - $price;
+							$storeAllTaxes[$res->id]['amount'] += ($price * ($res->rate * 0.01)) * $product['cart_quantity'];
 						else
 						{
 							$priceTmp = $price_wt / (1 + ($res->rate * 0.01));
-							$storeAllTaxes[$res->id]['amount'] = $price_wt - $priceTmp;
+							$storeAllTaxes[$res->id]['amount'] += ($price_wt - $priceTmp) * $product['cart_quantity'];
 						}
 					}
 					/* End */
