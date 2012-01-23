@@ -130,6 +130,7 @@ var ajaxCart = {
 				ajaxCart.updateCart(jsonData);
 			},
 			error: function(XMLHttpRequest, textStatus, errorThrown) {
+				// in front-office, do not display technical error
 				//alert("TECHNICAL ERROR: unable to refresh the cart.\n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
 			}
 		});
