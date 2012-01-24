@@ -33,13 +33,13 @@ function updatetabicon_from_11version()
 		$rows = Db::getInstance()->ExecuteS('SELECT `id_tab`,`class_name` FROM '._DB_PREFIX_.'tab');
 		if (sizeof($rows))
 		{
-			$img_dir = scandir(_PS_IMG_DIR_.'/t/');
+			$img_dir = scandir(_PS_ROOT_DIR_.'/img/t/');
 			$result = true;
 			foreach ($rows as $tab)
 			{
-				if (file_exists(_PS_IMG_DIR_.'/t/'.$tab['id_tab'].'.gif') 
-					AND !file_exists(_PS_IMG_DIR_.'/t/'.$tab['class_name'].'.gif'))
-					$result &= rename(_PS_IMG_DIR_.'/t/'.$tab['id_tab'].'.gif',_PS_IMG_DIR_.'/t/'.$tab['class_name'].'.gif');
+				if (file_exists(_PS_ROOT_DIR_.'/img/t/'.$tab['id_tab'].'.gif') 
+					AND !file_exists(_PS_ROOT_DIR_.'/img/t/'.$tab['class_name'].'.gif'))
+					$result &= rename(_PS_ROOT_DIR_.'/img/t/'.$tab['id_tab'].'.gif',_PS_ROOT_DIR_.'/img/t/'.$tab['class_name'].'.gif');
 			}
 		}
 	}

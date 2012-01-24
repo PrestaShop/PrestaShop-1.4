@@ -38,7 +38,7 @@ function update_order_canada()
 		  `tax_name` varchar(40) NOT NULL,
 		  `tax_rate` decimal(6,3) NOT NULL,
 		  `amount` decimal(20,6) NOT NULL
-		) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8');
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8');
 
 
 		$address_field = Db::getInstance()->getValue('SELECT value 
