@@ -120,8 +120,8 @@ function saveOrderShippingDetails($idCart, $idCustomer, $soParams)
 		if ($soParams['DELIVERYMODE'] != 'DOM' AND $soParams['DELIVERYMODE'] != 'RDV')
 			$sql .= '\''.pSQL($soParams['DELIVERYMODE']).'\''.',
 					'.(isset($soParams['PRID']) ? '\''.pSQL($soParams['PRID']).'\'' : '').',
-					'.(isset($soParams['PRNAME']) ? '\''.ucfirst(pSQL($soParams['PRNAME'])).'\'' : '').',
-					'.(isset($deliveryMode[$soParams['DELIVERYMODE']]) ? '\''.$deliveryMode[$soParams['DELIVERYMODE']].'\'' : 'So Colissimo').',
+					'.(isset($soParams['CENAME']) ? '\''.ucfirst(pSQL($soParams['CENAME'])).'\'' : '').',
+					'.(isset($soParams['CEFIRSTNAME']) ? '\''.ucfirst(pSQL($soParams['CEFIRSTNAME'])).'\'' : '').',
 					'.(isset($soParams['PRCOMPLADRESS']) ? '\''.pSQL($soParams['PRCOMPLADRESS']).'\'' : '\'\'').',
 					'.(isset($soParams['PRADRESS1']) ? '\''.pSQL($soParams['PRADRESS1']).'\'' : '\'\'').',
 					'.(isset($soParams['PRADRESS2']) ? '\''.pSQL($soParams['PRADRESS2']).'\'' : '\'\'').',
