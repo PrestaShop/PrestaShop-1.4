@@ -2697,7 +2697,7 @@ class AdminProducts extends AdminTab
 						echo '<tr>
 								<td class="col-left">&nbsp;</td>
 								<td>
-									<div class="hint clear" style="display: block;width: 70%;">'.$this->l('You used combinations, for this reason you can\'t edit your stock quantity here, but in the Combinations tab').'</div>
+									<div class="hint clear" style="display: block;width: 70%;">'.$this->l('You used combinations, for this reason you cannot edit your stock quantity here, but in the Combinations tab').'</div>
 								</td>
 							</tr>';
 				}

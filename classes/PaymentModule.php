@@ -530,7 +530,7 @@ abstract class PaymentModuleCore extends Module
 		}
 		else
 		{
-			$errorMessage = Tools::displayError('Cart can\'t be loaded or an order has already been placed using this cart');
+			$errorMessage = Tools::displayError('Cart cannot be loaded or an order has already been placed using this cart');
 			Logger::addLog($errorMessage, 4, '0000001', 'Cart', intval($cart->id));
 			die($errorMessage);
 		}

@@ -69,8 +69,8 @@ class AdminGeolocation extends AdminTab
 				<label>'.$this->l('Geolocation behavior for restricted countries:').'</label>
 				<div class="margin-form">
 					<select name="PS_GEOLOCATION_BEHAVIOR">
-						<option value="'._PS_GEOLOCATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors can\'t see your catalog').'</option>
-						<option value="'._PS_GEOLOCATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but can\'t make an order').'</option>
+						<option value="'._PS_GEOLOCATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors cannot see your catalog').'</option>
+						<option value="'._PS_GEOLOCATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but cannot make an order').'</option>
 					</select>	
 				</div>
 				
@@ -80,8 +80,8 @@ class AdminGeolocation extends AdminTab
 				<div class="margin-form">
 					<select name="PS_GEOLOCATION_NA_BEHAVIOR">
 						<option value="-1" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == -1 ? 'selected' : '').'>'.$this->l('All features are available').'</option>
-						<option value="'._PS_GEOLOCATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors can\'t see your catalog').'</option>
-						<option value="'._PS_GEOLOCATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but can\'t make an order').'</option>
+						<option value="'._PS_GEOLOCATION_NO_CATALOG_.'" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_ ? 'selected' : '').'>'.$this->l('Visitors cannot see your catalog').'</option>
+						<option value="'._PS_GEOLOCATION_NO_ORDER_.'" '.(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_ORDER_ ? 'selected' : '').'>'.$this->l('Visitors can see your catalog but cannot make an order').'</option>
 					</select>	
 				</div>
 				

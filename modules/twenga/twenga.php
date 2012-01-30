@@ -591,7 +591,7 @@ class Twenga extends PaymentModule
 			if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
 				$this->_html .= '
 					<div class="warn" style="font-weight:bolder;">
-						'.$this->l('Twenga can\'t work under the one page checkout process').'
+						'.$this->l('Twenga cannot work under the one page checkout process').'
 					</div>';
 		}
 		catch (Exception $e)

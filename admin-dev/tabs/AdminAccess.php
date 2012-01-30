@@ -112,7 +112,7 @@ class AdminAccess extends AdminTab
 		if (!sizeof($tabs))
 			echo '<tr><td colspan="5">'.$this->l('No tab').'</td></tr>';
 		elseif ($currentProfile == (int)(_PS_ADMIN_PROFILE_))
-			echo '<tr><td colspan="5">'.$this->l('Administrator permissions can\'t be modified.').'</td></tr>';
+			echo '<tr><td colspan="5">'.$this->l('Administrator permissions cannot be modified.').'</td></tr>';
 		else 
 			foreach ($tabs AS $tab)
 				if (!$tab['id_parent'] OR (int)($tab['id_parent']) == -1)

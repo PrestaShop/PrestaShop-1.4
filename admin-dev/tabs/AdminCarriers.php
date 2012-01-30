@@ -346,7 +346,7 @@ class AdminCarriers extends AdminTab
 			if ($this->tabAccess['edit'] === '1')
 			{
 				if (Tools::getValue('id_carrier') == Configuration::get('PS_CARRIER_DEFAULT'))
-					$this->_errors[] = Tools::displayError('You can\'t disable the default carrier, please change your default carrier first.');
+					$this->_errors[] = Tools::displayError('You cannot disable the default carrier, please change your default carrier first.');
 				else
 					parent::postProcess();
 			}

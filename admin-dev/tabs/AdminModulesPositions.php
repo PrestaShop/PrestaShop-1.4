@@ -80,7 +80,7 @@ class AdminModulesPositions extends AdminTab
 				elseif (Hook::getModuleFromHook($id_hook, $id_module))
 					$this->_errors[] = Tools::displayError('This module is already transplanted to this hook.');
 				elseif (!$module->isHookableOn($hook->name))
-					$this->_errors[] = Tools::displayError('This module can\'t be transplanted to this hook.');
+					$this->_errors[] = Tools::displayError('This module cannot be transplanted to this hook.');
 				// Adding vars...
 				elseif (!$module->registerHook($hook->name))
 					$this->_errors[] = Tools::displayError('An error occurred while transplanting module to hook.');

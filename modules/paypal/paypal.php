@@ -546,8 +546,8 @@ class PayPal extends PaymentModule
 	public function getL($key)
 	{
 		$translations = array(
-			'mc_gross' => $this->l('Paypal key \'mc_gross\' not specified, can\'t control amount paid.'),
-			'payment_status' => $this->l('Paypal key \'payment_status\' not specified, can\'t control payment validity'),
+			'mc_gross' => $this->l('Paypal key \'mc_gross\' not specified, cannot control amount paid.'),
+			'payment_status' => $this->l('Paypal key \'payment_status\' not specified, cannot control payment validity'),
 			'payment' => $this->l('Payment: '),
 			'custom' => $this->l('Paypal key \'custom\' not specified, cannot relay to cart'),
 			'txn_id' => $this->l('Paypal key \'txn_id\' not specified, transaction unknown'),

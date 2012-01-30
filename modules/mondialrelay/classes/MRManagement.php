@@ -149,7 +149,7 @@ class MRManagement extends MondialRelay
 			$totalDeleted = Db::getInstance()->Execute($query);
 			if (count($success['deletedListId']) != $totalDeleted)
 			{
-				$error[] = $this->l('Some items can\'t be removed, please try to remove it again');
+				$error[] = $this->l('Some items cannot be removed, please try to remove it again');
 				foreach($success['deletedListId'] as $id)
 				{
 					$query = '

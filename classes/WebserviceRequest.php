@@ -1365,7 +1365,7 @@ class WebserviceRequestCore
 					elseif (Tools::property_exists($object, $sqlId))
 						$object->$sqlId = (string)$attributes->$fieldName;
 					else
-						$this->setError(400, 'Parameter "'.$fieldName.'" can\'t be set to the object "'.$this->resourceConfiguration['retrieveData']['className'].'"', 123);
+						$this->setError(400, 'Parameter "'.$fieldName.'" cannot be set to the object "'.$this->resourceConfiguration['retrieveData']['className'].'"', 123);
 						
 				}
 				elseif (isset($fieldProperties['required']) && $fieldProperties['required'] && !$fieldProperties['i18n'])

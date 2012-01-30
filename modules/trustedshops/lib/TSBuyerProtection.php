@@ -1326,7 +1326,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		// because of a buyer could never add multiple Buyer protection products.
 		if (count($item) > 1)
 		{
-			$this->errors[] = $this->l('A buyer can\'t buy multiple Buyer Protection Products.');
+			$this->errors[] = $this->l('A buyer cannot buy multiple Buyer Protection Products.');
 			die($this->errors);
 		}
 		$item = $item[0];

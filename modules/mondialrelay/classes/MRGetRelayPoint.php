@@ -105,7 +105,7 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 		$weight = Configuration::get('MR_WEIGHT_COEF') * $this->_weight;
 
 		if (!$address)
-			throw new Exception($this->_mondialrelay->l('Customer address can\'t be found'));
+			throw new Exception($this->_mondialrelay->l('Customer address cannot be found'));
 		
 		$this->_fields['list']['Enseigne']['value'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
 		$this->_fields['list']['Poids']['value'] = ($weight < 100) ? 100 : $weight;
@@ -241,7 +241,7 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
  					unset($result[$num]);
  			}
  			if (!count($result))
- 				$errors[] = $this->_mondialRelay->l('MondialRelay can\'t find any relay point near your address. Maybe your address isn\'t properly filled ?');
+ 				$errors[] = $this->_mondialRelay->l('MondialRelay cannot find any relay point near your address. Maybe your address isn\'t properly filled ?');
  			else
  			{
  				$this->_addLinkHoursDetail($result);

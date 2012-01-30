@@ -85,7 +85,7 @@ class MRRelayDetail implements IMondialRelayWSMethod
 		$address = new Address($this->_id_address_delivery);
 		
 		if (!$address)
-			throw new Exception($this->_mondialrelay->l('Customer address can\'t be found'));
+			throw new Exception($this->_mondialrelay->l('Customer address cannot be found'));
 		
 		$this->_fields['list']['Enseigne']['value'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
 		$this->_fields['list']['Pays']['value'] = Country::getIsoById($address->id_country);

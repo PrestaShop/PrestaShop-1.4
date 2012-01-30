@@ -564,7 +564,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 						$errorList['warn'][$name] = $tab['warn'];
 				}
 				else
-					$errorList['warn'][$name] = $this->_mondialRelay->l('Using a PrestaShop version less than 1.4, we can\'t validate the zipcode');
+					$errorList['warn'][$name] = $this->_mondialRelay->l('Using a PrestaShop version less than 1.4, we cannot validate the zipcode');
 			}
 
 			else if (isset($this->_fields['list'][$name]['regexValidation']) && 

@@ -122,7 +122,7 @@ try
 				method_exists($management, $method))
 			$result = $management->{$method}();
 	else 
-		throw new Exception('Method Class : '.$method.' can\'t be found');
+		throw new Exception('Method Class : '.$method.' cannot be found');
 	unset($management);
 }
 catch(Exception $e)
