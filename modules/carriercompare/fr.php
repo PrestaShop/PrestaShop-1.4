@@ -10,7 +10,7 @@ $_MODULE['<{carriercompare}prestashop>carriercompare_fb9e838d470b2c27c2c128d1271
 $_MODULE['<{carriercompare}prestashop>carriercompare_b72dd62d03697b37417288c63e78c8c6'] = 'Veuillez utiliser un code postal valide en fonction du pays choisi';
 $_MODULE['<{carriercompare}prestashop>carriercompare_3f63451bbacbb1c3303d99d0309fdfe9'] = 'Choississez un transporteur';
 $_MODULE['<{carriercompare}prestashop>carriercompare_efaf5c3827ef576b05de32ad458f196c'] = 'Cet identifiant de transporteur n\'est pas disponible pour cette sélection';
-$_MODULE['<{carriercompare}prestashop>carriercompare_edc5cf1b3bab64b1d45ef51c63b53887'] = 'Impossibilité de mettre a jour le panier';
+$_MODULE['<{carriercompare}prestashop>carriercompare_a0593567d9366b570d33cd3ac81042df'] = 'Impossibilité de mettre a jour le panier';
 $_MODULE['<{carriercompare}prestashop>carriercompare_36126598ecb1141cd37a92f48e7727f1'] = 'Rafraichissement de la page et mise a jour du panier...';
 $_MODULE['<{carriercompare}prestashop>carriercompare_43b6864a312731efd637b6f15716656f'] = 'Verification des états disponibles...';
 $_MODULE['<{carriercompare}prestashop>carriercompare_c38be8e252777b47067cfe4de79b80a3'] = 'Récuperation d\'informations...';

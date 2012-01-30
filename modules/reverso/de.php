@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{reverso}prestashop>reverso_9dd6474008963ad22e9fd0f28447e7b2'] = 'Wir können diese Nummer nicht finden ';
+$_MODULE['<{reverso}prestashop>reverso_b5e7d000db2c076ebc57e7a8666107f7'] = 'Wir können diese Nummer nicht finden ';
 $_MODULE['<{reverso}prestashop>reverso_87094afb0ee64892a41b1f6acab60b02'] = 'Tragen Sie Ihre Telefonnummer automatisch in dieses Formular ein ';
 $_MODULE['<{reverso}prestashop>reverso_86774f1550b9ad3cc207184b35afb514'] = 'ReversoForm';
 $_MODULE['<{reverso}prestashop>reverso_1e9fcdadfd0ced6424c9692da9373fbf'] = 'Installieren Sie ReversoForm (Formulare werden gespeichert und automatisch ausgefüllt)';

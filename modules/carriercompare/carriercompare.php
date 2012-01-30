@@ -212,7 +212,7 @@ class CarrierCompare extends Module
 		$cookie->postcode = $zipcode;
 		$cart->id_carrier = $id_carrier;
 		if (!$cart->update())
-			return array($this->l('Can\'t update the cart'));
+			return array($this->l('Cannot update the cart'));
 		return array();
 	}
 

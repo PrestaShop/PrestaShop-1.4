@@ -12,5 +12,5 @@ $_MODULE['<{reverso}prestashop>reverso_a67fe5b600cc617a0cc6f782b2b466e1'] = 'Con
 $_MODULE['<{reverso}prestashop>reverso_af21713c577d79637cb7ce743b9522be'] = 'Vous n\'avez pas de compte Reverso ?';
 $_MODULE['<{reverso}prestashop>reverso_15e80d88e64872dffe151e5ba783270b'] = 'Enregistrez vous maintenant !';
 $_MODULE['<{reverso}prestashop>reverso_7ccf58c950043c9fbfed668df13ce608'] = 'Paramètres mis à jour';
-$_MODULE['<{reverso}prestashop>reverso_9dd6474008963ad22e9fd0f28447e7b2'] = 'Impossible de trouver ce numéro';
+$_MODULE['<{reverso}prestashop>reverso_b5e7d000db2c076ebc57e7a8666107f7'] = 'Impossible de trouver ce numéro';
 $_MODULE['<{reverso}prestashop>reverso_87094afb0ee64892a41b1f6acab60b02'] = 'Complétez automatiquement le formulaire avec votre numéro de téléphone';

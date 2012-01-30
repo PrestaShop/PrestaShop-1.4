@@ -89,7 +89,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		'administration'	=> array(
 			'test'				=> 'https://qa.trustedshops.de/ts/services/TsProtection?wsdl',
 			'production'		=> 'https://www.trustedshops.de/ts/services/TsProtection?wsdl',
-		),
+		),	
 		'front-end'			=> array(
 			'test'				=> 'https://protection-qa.trustedshops.com/ts/protectionservices/ApplicationRequestService?wsdl',
 			'production'		=> 'https://protection.trustedshops.com/ts/protectionservices/ApplicationRequestService?wsdl',

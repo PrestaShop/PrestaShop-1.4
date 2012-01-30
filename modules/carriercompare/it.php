@@ -21,6 +21,6 @@ $_MODULE['<{carriercompare}prestashop>carriercompare_fb9e838d470b2c27c2c128d1271
 $_MODULE['<{carriercompare}prestashop>carriercompare_b72dd62d03697b37417288c63e78c8c6'] = 'Si prega di utilizzare un valido zip / codice postale a seconda della selezione del paese';
 $_MODULE['<{carriercompare}prestashop>carriercompare_3f63451bbacbb1c3303d99d0309fdfe9'] = 'Si prega di selezionare un vettore';
 $_MODULE['<{carriercompare}prestashop>carriercompare_efaf5c3827ef576b05de32ad458f196c'] = 'Questo ID del corriere non è disponibile per la tua selezione';
-$_MODULE['<{carriercompare}prestashop>carriercompare_edc5cf1b3bab64b1d45ef51c63b53887'] = 'Impossibile aggiornare il carrello';
+$_MODULE['<{carriercompare}prestashop>carriercompare_a0593567d9366b570d33cd3ac81042df'] = 'Impossibile aggiornare il carrello';
 
 ?>

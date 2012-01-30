@@ -21,6 +21,6 @@ $_MODULE['<{carriercompare}prestashop>carriercompare_fb9e838d470b2c27c2c128d1271
 $_MODULE['<{carriercompare}prestashop>carriercompare_b72dd62d03697b37417288c63e78c8c6'] = 'Por favor, utilice un código postal válido en función del país elegido';
 $_MODULE['<{carriercompare}prestashop>carriercompare_3f63451bbacbb1c3303d99d0309fdfe9'] = 'Por favor seleccione un transportista';
 $_MODULE['<{carriercompare}prestashop>carriercompare_efaf5c3827ef576b05de32ad458f196c'] = 'Este identificante de transportista no se encuentra disponible para esta selección';
-$_MODULE['<{carriercompare}prestashop>carriercompare_edc5cf1b3bab64b1d45ef51c63b53887'] = 'Imposible actualizar el carrito';
+$_MODULE['<{carriercompare}prestashop>carriercompare_a0593567d9366b570d33cd3ac81042df'] = 'Imposible actualizar el carrito';
 
 ?>
