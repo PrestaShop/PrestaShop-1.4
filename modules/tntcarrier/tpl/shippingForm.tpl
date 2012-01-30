@@ -31,12 +31,12 @@
 		<br/><br/>
 		<span style="font-weight:bold">{l s='Label Format for printing (This Label will have to be sticked on the package)' mod='tntcarrier'} : </span><br/><br/>
         <div style="padding-left:210px">
-		<select name="tnt_carrier_print_sticker" value="{$varShipping.sticker}" >
-			<option value="STDA4">{l s='A4 printing' mod='tntcarrier'}</option>
-			<option value="THERMAL">THERMAL</option>
-			<option value="THERMAL,NO_LOGO">THERMAL {l s='without printing the logo TNT' mod='tntcarrier'}</option>
-			<option value="THERMAL,ROTATE_180">THERMAL {l s='with a reverse print' mod='tntcarrier'}</option>
-			<option value="THERMAL,NO_LOGO,ROTATE_180">THERMAL {l s='without printing the logo TNT and with a reverse print' mod='tntcarrier'}</option>
+		<select name="tnt_carrier_print_sticker">
+			<option {if $varShipping.sticker == "STDA4"}selected="selected"{/if} value="STDA4">{l s='A4 printing' mod='tntcarrier'}</option>
+			<option {if $varShipping.sticker == "THERMAL"}selected="selected"{/if} value="THERMAL">THERMAL</option>
+			<option {if $varShipping.sticker == "THERMAL,NO_LOGO"}selected="selected"{/if} value="THERMAL,NO_LOGO">THERMAL {l s='without printing the logo TNT' mod='tntcarrier'}</option>
+			<option {if $varShipping.sticker == "THERMAL,ROTATE_180"}selected="selected"{/if} value="THERMAL,ROTATE_180">THERMAL {l s='with a reverse print' mod='tntcarrier'}</option>
+			<option {if $varShipping.sticker == "THERMAL,NO_LOGO,ROTATE_180"}selected="selected"{/if} value="THERMAL,NO_LOGO,ROTATE_180">THERMAL {l s='without printing the logo TNT and with a reverse print' mod='tntcarrier'}</option>
 		</select></div><br/><br/>
 		<div class="margin-form"><input class="button" name="submitSave" type="submit" value="{l s='save' mod='tntcarrier'}"></div>
 	</form>

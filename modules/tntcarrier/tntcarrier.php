@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.6';
+		$this->version = '1.6.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -1065,7 +1065,7 @@ class TntCarrier extends CarrierModule
 	{	
 		//var_dump($params);
 		if (!$this->active)
-			return ;
+			return false;
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
 			return false;
 		if (!Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') || !Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') || !Configuration::get('TNT_CARRIER_SHIPPING_CITY'))
