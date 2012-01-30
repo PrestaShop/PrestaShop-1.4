@@ -192,13 +192,9 @@ class TntCarrier extends CarrierModule
 			$rangeWeight->delimiter2 = '10000';
 			$rangeWeight->add();
 
-			$zones = Zone::getZones(true);
-			foreach ($zones as $zone)
-			{
-				Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier_zone', array('id_carrier' => (int)($carrier->id), 'id_zone' => (int)($zone['id_zone'])), 'INSERT');
-				Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.'delivery', array('id_carrier' => (int)($carrier->id), 'id_range_price' => (int)($rangePrice->id), 'id_range_weight' => null, 'id_zone' => (int)($zone['id_zone']), 'price' => '0'), 'INSERT');
-				Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.'delivery', array('id_carrier' => (int)($carrier->id), 'id_range_price' => null, 'id_range_weight' => (int)($rangeWeight->id), 'id_zone' => (int)($zone['id_zone']), 'price' => '0'), 'INSERT');
-			}
+			Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier_zone', array('id_carrier' => (int)($carrier->id), 'id_zone' => (int)($carrier->id_zone)), 'INSERT');
+			Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.'delivery', array('id_carrier' => (int)($carrier->id), 'id_range_price' => (int)($rangePrice->id), 'id_range_weight' => null, 'id_zone' => (int)($carrier->id_zone), 'price' => '0'), 'INSERT');
+			Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.'delivery', array('id_carrier' => (int)($carrier->id), 'id_range_price' => null, 'id_range_weight' => (int)($rangeWeight->id), 'id_zone' => (int)($carrier->id_zone), 'price' => '0'), 'INSERT');
 
 			// Copy Logo
 			if (!copy(dirname(__FILE__).'/carrier.jpg', _PS_SHIP_IMG_DIR_.'/'.(int)$carrier->id.'.jpg'))
@@ -913,7 +909,7 @@ class TntCarrier extends CarrierModule
 	public function hookadminOrder($params)
 	{
 		if (!$this->active)
-			return ;
+			return false;
 		global $currentIndex, $smarty;
 		$table = 'order';
 		$token = Tools::safeOutput(Tools::getValue('token'));
@@ -1063,7 +1059,6 @@ class TntCarrier extends CarrierModule
 	
 	public function getOrderShippingCost($params, $shipping_cost)
 	{	
-		//var_dump($params);
 		if (!$this->active)
 			return false;
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
@@ -1135,7 +1130,7 @@ class TntCarrier extends CarrierModule
 			$add += (float)(Configuration::get('TNT_CARRIER_CORSE_OVERCOST'));
 		
 		if (isset($priceCarrier))
-			return (($priceCarrier + $add) * $currency['conversion_rate']);
+			return ((($priceCarrier + $add) * $currency['conversion_rate']) + $shipping_cost);
 		return false;
 	}
 	
