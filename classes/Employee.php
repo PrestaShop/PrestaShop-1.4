@@ -213,6 +213,15 @@ class EmployeeCore extends ObjectModel
 			AND $this->active
 		);
 	}
+	
+	public static function getLastAdmin($activeOnly = false)
+	{
+		return Db::getInstance()->getValue('
+		SELECT id_employee
+		FROM `'._DB_PREFIX_.'employee`
+		WHERE `id_profile` = '.(int)_PS_ADMIN_PROFILE_.'
+		'.($activeOnly ? ' AND `active` = 1' : '').' ORDER BY id_employee DESC');
+	}
 
 	public function setWsPasswd($passwd)
 	{

@@ -248,7 +248,19 @@ class AdminEmployees extends AdminTab
 				}
 			}
 		}
-
+		elseif (Tools::isSubmit('submitDelemployee'))
+		{
+			if (in_array($cookie->id_employee, $_POST['employeeBox']))
+			{
+				$this->_errors[] = Tools::displayError('You cannot disable or delete your own account.');
+				return false;
+			}
+			if (in_array(Employee::getLastAdmin(true), $_POST['employeeBox']))
+			{
+				$this->_errors[] = Tools::displayError('You cannot disable or delete the last administrator account.');
+				return false;
+			}
+		}		
 		return parent::postProcess();
 	}
 }
