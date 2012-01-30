@@ -260,7 +260,7 @@ class AdminEmployees extends AdminTab
 				$this->_errors[] = Tools::displayError('You cannot disable or delete the last administrator account.');
 				return false;
 			}
-		}		
+		}
 		return parent::postProcess();
 	}
 }

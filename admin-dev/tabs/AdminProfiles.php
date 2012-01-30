@@ -62,7 +62,14 @@ class AdminProfiles extends AdminTab
 	 	if (isset($_GET['delete'.$this->table]) AND $_GET[$this->identifier] == (int)(_PS_ADMIN_PROFILE_))
 			$this->_errors[] = $this->l('For security reasons, you cannot delete the Administrator profile');
 		else
+		{
+			if (Tools::isSubmit('submitDelprofile') && in_array(_PS_ADMIN_PROFILE_, $_POST['profileBox']))
+			{
+				$this->_errors[] = $this->l('For security reasons, you cannot delete the Administrator profile');
+				return;
+			}
 			parent::postProcess();
+		}
 	}
 	
 	public function displayForm($isMainTab = true)
