@@ -73,9 +73,10 @@
     function HttpAuthentication($headers=null, $die=true) {
       if (!is_null($headers))
         $_SERVER = $headers;
-			
-			list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_GET['HTTP_AUTHORIZATIOIZATION'], 6)));
-      
+
+			list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', 
+					base64_decode(substr($_SERVER['HTTP_AUTHORIZATIOIZATION'], 6)));
+
 			if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $compare_mer_id = $_SERVER['PHP_AUTH_USER']; 
         $compare_mer_key = $_SERVER['PHP_AUTH_PW'];
