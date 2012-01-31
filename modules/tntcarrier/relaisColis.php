@@ -13,7 +13,7 @@ function phoneForm($mob, $tel)
 	{
 		echo 'Afin d\'ameliorer les conditions de livraison, veuillez renseigner votre numero de mobile<br/>';
 		echo 'Numero de telephone mobile : <input type="mobile" name="mobileTnt" id="mobileTnt" onblur="postMobile()"/>
-		<input type="hidden" id="id_cart" value="'.$_GET['idcart'].'"/>';
+		<input type="hidden" id="id_cart" value="'.Tools::safeOutput($_GET['idcart']).'"/>';
 		return true;
 	}
 	else
