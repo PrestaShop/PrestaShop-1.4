@@ -118,19 +118,19 @@ class CarrierCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
- $fields['id_tax_rules_group'] = (int)($this->id_tax_rules_group);
- $fields['name'] = pSQL($this->name);
- $fields['url'] = pSQL($this->url);
- $fields['active'] = (int)($this->active);
- $fields['deleted'] = (int)($this->deleted);
- $fields['shipping_handling'] = (int)($this->shipping_handling);
- $fields['range_behavior'] = (int)($this->range_behavior);
- $fields['shipping_method'] = (int)($this->shipping_method);
- $fields['is_module'] = (int)($this->is_module);
- $fields['is_free'] = (int)($this->is_free);
- $fields['shipping_external'] = (int)($this->shipping_external);
- $fields['external_module_name'] = $this->external_module_name;
- $fields['need_range'] = $this->need_range;
+		$fields['id_tax_rules_group'] = (int)($this->id_tax_rules_group);
+		$fields['name'] = pSQL($this->name);
+		$fields['url'] = pSQL($this->url);
+		$fields['active'] = (int)($this->active);
+		$fields['deleted'] = (int)($this->deleted);
+		$fields['shipping_handling'] = (int)($this->shipping_handling);
+		$fields['range_behavior'] = (int)($this->range_behavior);
+		$fields['shipping_method'] = (int)($this->shipping_method);
+		$fields['is_module'] = (int)($this->is_module);
+		$fields['is_free'] = (int)($this->is_free);
+		$fields['shipping_external'] = (int)($this->shipping_external);
+		$fields['external_module_name'] = strval($this->external_module_name);
+		$fields['need_range'] = (boolean)$this->need_range;
 
 		return $fields;
 	}
