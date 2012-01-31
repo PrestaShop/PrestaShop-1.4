@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.6.1';
+		$this->version = '1.6.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -85,7 +85,8 @@ class TntCarrier extends CarrierModule
 			'TNT_CARRIER_SHIPPING_COLLECT' => '',
 			'TNT_CARRIER_SHIPPING_PEX' => '',
 			'TNT_CARRIER_PRINT_STICKER' => '',
-			'TNT_CARRIER_CORSE_OVERCOST' => ''
+			'TNT_CARRIER_CORSE_OVERCOST' => '',
+			'TNT_CARRIER_TOKEN' => ''
 		);
 		
 		$option = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'tnt_carrier_option`');
@@ -144,6 +145,9 @@ class TntCarrier extends CarrierModule
 			else
 				copy(dirname(__FILE__).'/carrier.jpg', _PS_SHIP_IMG_DIR_.'/'.(int)$carrier->id.'.jpg');
 		}
+		
+		Configuration::updateValue('TNT_CARRIER_TOKEN', md5(rand()));
+		
 		return true;
 	}
 	
@@ -256,7 +260,8 @@ class TntCarrier extends CarrierModule
 		'configure' => htmlentities(Tools::getValue('configure')),
 		'token' => htmlentities(Tools::getValue('token')),
 		'tab_module' => htmlentities(Tools::getValue('tab_module')),
-		'module_name' => htmlentities(Tools::getValue('module_name')));
+		'module_name' => htmlentities(Tools::getValue('module_name')),
+		'tnt_token' => Configuration::get('TNT_CARRIER_TOKEN'));
 		
 		$smarty->assign('glob', $globalVar);
 		

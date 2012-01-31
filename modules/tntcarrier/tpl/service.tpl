@@ -1,20 +1,5 @@
 <script type="text/javascript" src="../modules/{$glob.module_name}/js/service.js"></script>
 <p>{l s='You can bill to your customers additionnal fees from the cost charged by TNT, according to the type of service, the region of France(ex: Corse) or the weight of the package' mod='tntcarrier'}</p><br/>
-<!--<div style="float:right;margin-right: 100px;margin-top: 30px;">
-	<table class="table" cellspacing="0" cellpading="0">
-		<tr><th colspan="2">{l s='Code' mod='tntcarier'}</th></tr>
-		<tr><td>N : </td><td>{l s='8:00 Express' mod='tntcarier'}</td></tr>
-		<tr><td>A : </td><td>{l s='9:00 Express' mod='tntcarier'}</td></tr>
-		<tr><td>T : </td><td>{l s='10:00 Express' mod='tntcarier'}</td></tr>
-		<tr><td>M : </td><td>{l s='12:00 Express' mod='tntcarier'}</td></tr>
-		<tr><td>J : </td><td>{l s='Express' mod='tntcarier'}</td></tr>
-		<tr><td>P : </td><td>{l s='Express (P)' mod='tntcarier'}</td></tr>
-		<tr><th colspan="2">{l s='Code Option (Optional)' mod='tntcarrier'}</th></tr>
-		<tr><td>D : </td><td>{l s='relay package' mod='tntcarier'}</td></tr>
-		<tr><td>Z : </td><td>{l s='Home delivery' mod='tntcarier'}</td></tr>
-		<tr><td>&Oslash; : </td><td>{l s='Enterprise Service' mod='tntcarier'}</td></tr>
-	</table>
-</div>-->
 <a href="index.php?tab={$glob.tab}&configure={$glob.configure}&token={$glob.token}&tab_module={$glob.tab_module}&module_name={$glob.module_name}&id_tab=3&section=service&action=new">
 <img src="../img/admin/add.gif" alt="add"/> {l s='Add a TNT service via its specific code' mod='tntcarrier'} {l s='(cf. Configuration guide attached)' mod='tntcarrier'}</a></br><br/>
 <table class="table" cellspacing="0" cellpading="0">
@@ -36,9 +21,9 @@
 		<td>{$v.optionOvercost}</td>
 		<td>
 			{if $v.deleted != 1}
-			<img style="cursor:pointer" onclick="changeActive(this,'{$v.optionId}')" src="../img/admin/enabled.gif" />
+			<img style="cursor:pointer" onclick="changeActive(this,'{$v.optionId}', '{$glob.tnt_token}')" src="../img/admin/enabled.gif" />
 			{else}
-			<img style="cursor:pointer" onclick="changeActive(this,'{$v.optionId}')" src="../img/admin/disabled.gif" />
+			<img style="cursor:pointer" onclick="changeActive(this,'{$v.optionId}', '{$glob.tnt_token}')" src="../img/admin/disabled.gif" />
 			{/if}
 		</td>
 		<td>
