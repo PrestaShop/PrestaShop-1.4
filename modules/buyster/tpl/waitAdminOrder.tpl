@@ -46,24 +46,6 @@ function orderAction(action, param)
 	document.getElementById('actionBuyster').value = action;
 	document.getElementById('paramBuyster').value = param;
 	document.getElementById("refreshAdminOrder").submit();
-		
-	/*$('#waitingBuysterOrder').css('height', $("#fieldset_order_buyster").height());
-	$('#waitingBuysterOrder').show('fast');
-	var id_order = $('#order_id_buyster').val();
-	$('#resultWebServiceBuyster').load('../modules/buyster/merchantAction.php?action='+action+'&reference='+ref+'&price='+price+'&param='+param+'&id_order='+id_order,
-	function(response, status, xhr) 
-		{
-			$("#waitingBuysterOrder").hide();		
-			if (status == "error") 
-				$("#resultWebServiceBuyster").html(xhr.status + " " + xhr.statusText);
-			else
-			{
-				$("#returnWebService").val(response);
-				$("#refreshAdminOrder").submit();
-			}
-			
-		}
-	)*/
 }
 {/literal}
 </script>
