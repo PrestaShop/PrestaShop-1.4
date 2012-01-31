@@ -34,7 +34,7 @@ class UspsCarrier extends CarrierModule
 
 	private $_html = '';
 	private $_postErrors = array();
-	private $_webserviceTestResult = '';	
+	private $_webserviceTestResult = '';
 	private $_webserviceError = '';
 	private $_fieldsList = array();
 	private $_packagingSizeList = array();
@@ -53,7 +53,7 @@ class UspsCarrier extends CarrierModule
 	{
 		$this->name = 'uspscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.1';
+		$this->version = '1.2.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 
@@ -61,6 +61,9 @@ class UspsCarrier extends CarrierModule
 
 		$this->displayName = $this->l('U.S.P.S. Rate Calulator');
 		$this->description = $this->l('Calculates shipping rates for United States Postal Service for Domestic shipping within the USA.');
+
+		/** Backward compatibility 1.4 / 1.5 */
+		require(dirname(__FILE__).'/backward_compatibility/backward.php');
 
 		if (self::isInstalled($this->name))
 		{
@@ -149,7 +152,7 @@ class UspsCarrier extends CarrierModule
 		// Install SQL
 		include(dirname(__FILE__).'/sql-install.php');
 		foreach ($sql as $s)
-			if (!Db::getInstance()->Execute($s))
+			if (!Db::getInstance()->execute($s))
 				return false;
 
 		// Install Carriers
@@ -175,7 +178,7 @@ class UspsCarrier extends CarrierModule
 		// Uninstall SQL
 		include(dirname(__FILE__).'/sql-uninstall.php');
 		foreach ($sql as $s)
-			if (!Db::getInstance()->Execute($s))
+			if (!Db::getInstance()->execute($s))
 				return false;
 
 		// Uninstall Module
@@ -185,13 +188,27 @@ class UspsCarrier extends CarrierModule
 		return true;
 	}
 
+	public function disable()
+	{
+		// Disable Carriers
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 0), 'UPDATE', '`external_module_name` = \'uspscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');	
+		parent::disable();
+	}
+
+	public function enable()
+	{
+		// Disable Carriers
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 1), 'UPDATE', '`external_module_name` = \'uspscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');	
+		parent::enable();
+	}
+
 	public function installCarriers()
 	{
 		// Unactive all USPS Carriers
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('active' => 0), 'UPDATE');
 
 		// Get all services availables
-		$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+		$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 		foreach ($rateServiceList as $rateService)
 			if (!$rateService['id_carrier'])
 			{
@@ -213,7 +230,7 @@ class UspsCarrier extends CarrierModule
 				Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_service_code', array('id_carrier' => (int)($id_carrier), 'id_carrier_history' => (int)($id_carrier)), 'UPDATE', '`id_usps_rate_service_code` = '.(int)($rateService['id_usps_rate_service_code']));
 			}
 	}
-	
+
 	public static function installExternalCarrier($config)
 	{
 		$carrier = new Carrier();
@@ -326,9 +343,6 @@ class UspsCarrier extends CarrierModule
 			$this->_html .= '<br />'.(isset($alert['webserviceTest']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Webservice test connection').($this->_webserviceError ? ' : '.$this->_webserviceError : '');
 		}
 
-		if (!is_callable('curl_exec'))
-			$this->_html .= '<br /><br />'.$this->l('cURL Extension is not enabled, USPS module can work without cURL but it would be better to enable it.');
-
 		$this->_html .= '</fieldset><div class="clear">&nbsp;</div>';
 		$this->_html .= $this->_displayFormConfig();
 	}
@@ -407,7 +421,6 @@ class UspsCarrier extends CarrierModule
 
 	private function _displayFormGeneral()
 	{
-		global $cookie;
 		$configCurrency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 
 		$html = '<script>
@@ -448,7 +461,7 @@ class UspsCarrier extends CarrierModule
 					<div class="margin-form"><input type="text" size="20" name="usps_carrier_postal_code" value="'.Tools::getValue('usps_carrier_postal_code', Configuration::get('USPS_CARRIER_POSTAL_CODE')).'" /></div><br />
 					<label>'.$this->l('Delivery Services').' : </label>
 					<div class="margin-form">';
-					$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+					$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 				        foreach($rateServiceList as $rateService)
 						$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.('COMMERCIAL' == substr($rateService['code'], -10) ? '['.$this->l('COMMERCIAL RATE').']' : '['.$this->l('REGULAR RATE').']').' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<input type="hidden" name="service_validate['.$rateService['id_usps_rate_service_code'].']" value="'.$rateService['code'].'"><br />';
 					$html .= '<p>'.$this->l('Choose the Delivery Services you want to be available to your customers.').'<br />
@@ -489,16 +502,16 @@ class UspsCarrier extends CarrierModule
 					<label>'.$this->l('Packaging Size').' : </label>
 						<div class="margin-form">
 							<select name="usps_carrier_packaging_size">';
-							foreach($this->_packagingSizeList as $kpickup => $vpickup)
-								$html .= '<option value="'.$kpickup.'" '.($kpickup == (Tools::getValue('usps_carrier_packaging_size', Configuration::get('USPS_CARRIER_PACKAGING_SIZE'))) ? 'selected="selected"' : '').'>'.$vpickup.'</option>';
+								foreach($this->_packagingSizeList as $kpickup => $vpickup)
+									$html .= '<option value="'.$kpickup.'" '.($kpickup == (Tools::getValue('usps_carrier_packaging_size', Configuration::get('USPS_CARRIER_PACKAGING_SIZE'))) ? 'selected="selected"' : '').'>'.$vpickup.'</option>';
 					$html .= '</select>
 					<p>' . $this->l('Select packaging size from within the list.') . '</p>
 					</div>
 					<label>'.$this->l('Packaging Type').' : </label>
 						<div class="margin-form">
 							<select name="usps_carrier_packaging_type">';
-							foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-								$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (Tools::getValue('usps_carrier_packaging_type', Configuration::get('USPS_CARRIER_PACKAGING_TYPE'))) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+								foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
+									$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (Tools::getValue('usps_carrier_packaging_type', Configuration::get('USPS_CARRIER_PACKAGING_TYPE'))) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
 					$html .= '</select>
 					<p>' . $this->l('Select packaging type from within the list.') . '</p>
 					</div>
@@ -521,7 +534,7 @@ class UspsCarrier extends CarrierModule
 					<p>' . $this->l('Using Calculation Mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specific configurations for categories or products won\'t be used.') . '</p>
 					</div>
 				</fieldset>
-				
+
 				<div class="margin-form"><input class="button" name="submitSave" type="submit" value="Configure"></div>
 			</form>
 
@@ -574,13 +587,13 @@ class UspsCarrier extends CarrierModule
 				}
                 		if ($usps_was_picked)
 				{
-					// If it was checked, then continue 
+					// If it was checked, then continue
 					foreach ($usps_service_validate_picks as $usps_pick)
 					{
 						//Loop thru checked services only
 						if ($usps_sva_id != $usps_pick)
 						{
-							// Don't compare it to itself 
+							// Don't compare it to itself
 							$usps_str_len = strlen($usps_sva_code);
 							$usps_pick_start = substr($usps_service_validate_all[$usps_pick], 0, $usps_str_len);
 							// Compare the first part of the CODE to see if match (ex: PRIORITY == PRIORITY)
@@ -664,8 +677,6 @@ class UspsCarrier extends CarrierModule
 
 	private function _getPathInTab($id_category)
 	{
-		global $cookie;
-
 		$category = Db::getInstance()->getRow('
 		SELECT id_category, level_depth, nleft, nright
 		FROM '._DB_PREFIX_.'category
@@ -673,11 +684,11 @@ class UspsCarrier extends CarrierModule
 
 		if (isset($category['id_category']))
 		{
-			$categories = Db::getInstance()->ExecuteS('
+			$categories = Db::getInstance()->executeS('
 			SELECT c.id_category, cl.name, cl.link_rewrite
 			FROM '._DB_PREFIX_.'category c
-			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category)
-			WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($cookie->id_lang).'
+			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category'.(version_compare(_PS_VERSION_, '1.5.0') >= 0 ? ' '.$this->context->shop->addSqlRestrictionOnLang('cl') : '').')
+			WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($this->context->language->id).'
 			ORDER BY c.level_depth ASC
 			LIMIT '.(int)($category['level_depth'] + 1));
 
@@ -686,11 +697,11 @@ class UspsCarrier extends CarrierModule
 			$nCategories = (int)sizeof($categories);
 			foreach ($categories AS $category)
 				$pathTab[] = htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8');
-		
+
 			return $pathTab;
 		}
 	}
-	
+
 	private function _getChildCategories($categories, $id, $path = array(), $pathAdd = '')
 	{
 		$html = '';
@@ -719,11 +730,9 @@ class UspsCarrier extends CarrierModule
 					return 1;
 		return 0;
 	}
-	
+
 	private function _displayFormCategory()
 	{
-		global $cookie;
-
 		// Check if the module is configured
 		if (!$this->_webserviceTestResult)
 			return '<p><b>'.$this->l('You must configure "General Settings" before using this tab.').'</b></p><br />';
@@ -746,7 +755,7 @@ class UspsCarrier extends CarrierModule
 			<tbody>';
 
 		// Loading config list
-		$configCategoryList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_category` > 0');
+		$configCategoryList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_category` > 0');
 		if (!$configCategoryList)
 			$html .= '<tr><td colspan="6">'.$this->l('There is no specific USPS configuration for categories at this point.').'</td></tr>';
 		foreach ($configCategoryList as $k => $c)
@@ -765,7 +774,7 @@ class UspsCarrier extends CarrierModule
 
 			// Loading services attached to this config
 			$services = '';
-			$servicesTab = Db::getInstance()->ExecuteS('
+			$servicesTab = Db::getInstance()->executeS('
 			SELECT ursc.`service`
 			FROM `'._DB_PREFIX_.'usps_rate_config_service` urcs
 			LEFT JOIN `'._DB_PREFIX_.'usps_rate_service_code` ursc ON (ursc.`id_usps_rate_service_code` = urcs.`id_usps_rate_service_code`)
@@ -806,7 +815,7 @@ class UspsCarrier extends CarrierModule
 		{
 			// Loading config
 			$configSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_usps_rate_config` = '.(int)(Tools::getValue('id_usps_rate_config')));
-			
+
 			// Category Path
 			$path = '';
 			$pathTab = $this->_getPathInTab($configSelected['id_category']);
@@ -848,7 +857,7 @@ class UspsCarrier extends CarrierModule
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges', $configSelected['additional_charges']).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 								{
 									$configServiceSelected = Db::getInstance()->getValue('SELECT `id_usps_rate_service_code` FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)(Tools::getValue('id_usps_rate_config')).' AND `id_usps_rate_service_code` = '.(int)($rateService['id_usps_rate_service_code']));
@@ -868,7 +877,7 @@ class UspsCarrier extends CarrierModule
 						<div class="margin-form">
 							<select name="id_category">
 								<option value="0">'.$this->l('Select a category ...').'</option>
-								'.$this->_getChildCategories(Category::getCategories($cookie->id_lang), 0).'
+								'.$this->_getChildCategories(Category::getCategories($this->context->language->id), 0).'
 							</select>
 						</div>
 						<label>'.$this->l('Packaging Type').' : </label>
@@ -899,7 +908,7 @@ class UspsCarrier extends CarrierModule
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges').'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.('COMMERCIAL' == substr($rateService['code'], -10) ? '['.$this->l('COMMERCIAL RATE').']' : '['.$this->l('REGULAR RATE').']').'<br />';
 						$html .= '
@@ -983,7 +992,7 @@ class UspsCarrier extends CarrierModule
 				'date_upd' => pSQL($date)
 			);
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_config', $updTab, 'UPDATE', '`id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
+			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
 			foreach ($services as $s)
 			{
 				$addTab = array('id_usps_rate_service_code' => pSQL($s), 'id_usps_rate_config' => (int)Tools::getValue('id_usps_rate_config'), 'date_add' => pSQL($date), 'date_upd' => pSQL($date));
@@ -1000,14 +1009,14 @@ class UspsCarrier extends CarrierModule
 		// Delete Script
 		if (Tools::getValue('action') == 'delete' && Tools::getValue('id_usps_rate_config'))
 		{
-			$result1 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
-			$result2 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
+			$result1 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
+			$result2 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
 
 			// Display Results
 			if ($result1)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayErrors($this->l('Settings failed'));			
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 	}
 
@@ -1020,8 +1029,6 @@ class UspsCarrier extends CarrierModule
 
 	private function _displayFormProduct()
 	{
-		global $cookie;
-
 		// Check if the module is configured
 		if (!$this->_webserviceTestResult)
 			return '<p><b>'.$this->l('You must configure "General Settings" before using this tab.').'</b></p><br />';
@@ -1044,20 +1051,20 @@ class UspsCarrier extends CarrierModule
 			<tbody>';
 
 		// Loading config list
-		$configProductList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_product` > 0');
+		$configProductList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_product` > 0');
 		if (!$configProductList)
 			$html .= '<tr><td colspan="6">'.$this->l('There is no specific USPS configuration for products at this point.').'</td></tr>';
 		foreach ($configProductList as $k => $c)
 		{
 			// Loading Product
-			$product = new Product((int)$c['id_product'], false, (int)$cookie->id_lang);
+			$product = new Product((int)$c['id_product'], false, (int)$this->context->language->id);
 
 			// Loading config currency
 			$configCurrency = new Currency($c['id_currency']);
 
 			// Loading services attached to this config
 			$services = '';
-			$servicesTab = Db::getInstance()->ExecuteS('
+			$servicesTab = Db::getInstance()->executeS('
 			SELECT ursc.`service`
 			FROM `'._DB_PREFIX_.'usps_rate_config_service` urcs
 			LEFT JOIN `'._DB_PREFIX_.'usps_rate_service_code` ursc ON (ursc.`id_usps_rate_service_code` = urcs.`id_usps_rate_service_code`)
@@ -1098,7 +1105,7 @@ class UspsCarrier extends CarrierModule
 		{
 			// Loading config
 			$configSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_usps_rate_config` = '.(int)(Tools::getValue('id_usps_rate_config')));
-			$product = new Product((int)$configSelected['id_product'], false, (int)$cookie->id_lang);
+			$product = new Product((int)$configSelected['id_product'], false, (int)$this->context->language->id);
 
 			$html .= '<p align="center"><b>'.$this->l('Update a rule').' (<a href="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=3&section=product&action=add">'.$this->l('Add a rule').' ?</a>)</b></p>
 					<form action="index.php?tab='.Tools::getValue('tab').'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&id_tab=3&section=product&action=edit&id_usps_rate_config='.(int)(Tools::getValue('id_usps_rate_config')).'" method="post" class="form">
@@ -1132,7 +1139,7 @@ class UspsCarrier extends CarrierModule
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges', $configSelected['additional_charges']).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 								{
 									$configServiceSelected = Db::getInstance()->getValue('SELECT `id_usps_rate_service_code` FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)(Tools::getValue('id_usps_rate_config')).' AND `id_usps_rate_service_code` = '.(int)($rateService['id_usps_rate_service_code']));
@@ -1152,9 +1159,9 @@ class UspsCarrier extends CarrierModule
 						<div class="margin-form">
 							<select name="id_product">
 								<option value="0">'.$this->l('Select a product ...').'</option>';
-						$productsList = Db::getInstance()->ExecuteS('
+						$productsList = Db::getInstance()->executeS('
 						SELECT pl.* FROM `'._DB_PREFIX_.'product` p
-						LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int)$cookie->id_lang.')
+						LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = '.(int)$this->context->language->id.(version_compare(_PS_VERSION_, '1.5.0') >= 0 ? ' '.$this->context->shop->addSqlRestrictionOnLang('pl') : '').')
 						WHERE p.`active` = 1
 						ORDER BY pl.`name`');
 						foreach ($productsList as $product)
@@ -1189,7 +1196,7 @@ class UspsCarrier extends CarrierModule
 						<div class="margin-form"><input type="text" size="20" name="additional_charges" value="'.Tools::getValue('additional_charges').'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_usps_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_usps_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.('COMMERCIAL' == substr($rateService['code'], -10) ? '['.$this->l('COMMERCIAL RATE').']' : '['.$this->l('REGULAR RATE').']').'<br />';
 						$html .= '
@@ -1201,7 +1208,7 @@ class UspsCarrier extends CarrierModule
 
 		return $html;
 	}
-	
+
 	private function _postValidationProduct()
 	{
 		// Check post values
@@ -1225,7 +1232,7 @@ class UspsCarrier extends CarrierModule
 				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 		}
 	}
-	
+
 	private function _postProcessProduct()
 	{
 		// Init Var
@@ -1273,7 +1280,7 @@ class UspsCarrier extends CarrierModule
 				'date_upd' => pSQL($date)
 			);
 			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.'usps_rate_config', $updTab, 'UPDATE', '`id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
+			Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
 			foreach ($services as $s)
 			{
 				$addTab = array('id_usps_rate_service_code' => pSQL($s), 'id_usps_rate_config' => (int)Tools::getValue('id_usps_rate_config'), 'date_add' => pSQL($date), 'date_upd' => pSQL($date));
@@ -1290,14 +1297,14 @@ class UspsCarrier extends CarrierModule
 		// Delete Script
 		if (Tools::getValue('action') == 'delete' && Tools::getValue('id_usps_rate_config'))
 		{
-			$result1 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
-			$result2 = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
+			$result1 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
+			$result2 = Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'usps_rate_config_service` WHERE `id_usps_rate_config` = '.(int)Tools::getValue('id_usps_rate_config'));
 
 			// Display Results
 			if ($result1)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayErrors($this->l('Settings failed'));			
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 	}
 
@@ -1364,7 +1371,7 @@ class UspsCarrier extends CarrierModule
 		}
 		return $conversionRate;
 	}
-	
+
 	public function getOrderShippingCostHash($wsParams)
 	{
 		$paramHash = '';
@@ -1403,7 +1410,7 @@ class UspsCarrier extends CarrierModule
 			// Return Cache
 			return $row;
 		}
-		
+
 		return false;
 	}
 
@@ -1431,14 +1438,14 @@ class UspsCarrier extends CarrierModule
 	{
 		// Init var
 		$config = array();
-	
+
 		// Check if there is a specific product configuration
 		if ($product['id_product'] > 0)
 		{
 			$productConfiguration = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_product` = '.(int)($product['id_product']));
 			if ($productConfiguration['id_usps_rate_config'])
 			{
-				$servicesConfiguration = Db::getInstance()->ExecuteS('
+				$servicesConfiguration = Db::getInstance()->executeS('
 				SELECT urcs.*, ursc.`id_carrier`
 				FROM `'._DB_PREFIX_.'usps_rate_config_service` urcs
 				LEFT JOIN `'._DB_PREFIX_.'usps_rate_service_code` ursc ON (ursc.`id_usps_rate_service_code` = urcs.`id_usps_rate_service_code`)
@@ -1455,7 +1462,7 @@ class UspsCarrier extends CarrierModule
 			$categoryConfiguration = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_config` WHERE `id_category` = '.(int)($product['id_category_default']));
 			if ($categoryConfiguration['id_usps_rate_config'])
 			{
-				$servicesConfiguration = Db::getInstance()->ExecuteS('
+				$servicesConfiguration = Db::getInstance()->executeS('
 				SELECT urcs.*, ursc.`id_carrier`
 				FROM `'._DB_PREFIX_.'usps_rate_config_service` urcs
 				LEFT JOIN `'._DB_PREFIX_.'usps_rate_service_code` ursc ON (ursc.`id_usps_rate_service_code` = urcs.`id_usps_rate_service_code`)
@@ -1468,7 +1475,7 @@ class UspsCarrier extends CarrierModule
 
 		// Return general config
 		$config['packaging_type_code'] = Configuration::get('USPS_CARRIER_PACKAGING_TYPE');
-		$servicesConfiguration = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `active` = 1');
+		$servicesConfiguration = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `active` = 1');
 		foreach ($servicesConfiguration as $service)
 			$config['services'][$service['id_usps_rate_service_code']] = $service;
 		return $config;
@@ -1497,7 +1504,7 @@ class UspsCarrier extends CarrierModule
 			$weight += Tools::getValue('usps_carrier_packaging_weight', Configuration::get('USPS_CARRIER_PACKAGING_WEIGHT'));
 
 			// Get service in adequation with carrier and check if available
-			$servicesConfiguration = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `active` = 1');
+			$servicesConfiguration = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `active` = 1');
 			foreach ($servicesConfiguration as $service)
 				$config['services'][$service['id_usps_rate_service_code']] = $service;
 			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'usps_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
@@ -1561,16 +1568,15 @@ class UspsCarrier extends CarrierModule
 	}
 
 	public function getOrderShippingCost($params, $shipping_cost)
-	{	
+	{
 		// Init var
 		$address = new Address($params->id_address_delivery);
 		if (!Validate::isLoadedObject($address))
 		{
 			// If address is not loaded, we take data from shipping estimator module (if installed)
-			global $cookie;
-			$address->id_country = $cookie->id_country;
-			$address->id_state = $cookie->id_state;
-			$address->postcode = $cookie->postcode;
+			$address->id_country = $this->context->cookie->id_country;
+			$address->id_state = $this->context->cookie->id_state;
+			$address->postcode = $this->context->cookie->postcode;
 		}
 		$recipient_country = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($address->id_country));
 		$recipient_state = Db::getInstance()->getRow('SELECT `iso_code` FROM `'._DB_PREFIX_.'state` WHERE `id_state` = '.(int)($address->id_state));
@@ -1649,14 +1655,14 @@ class UspsCarrier extends CarrierModule
 			'package_list' => array(
 				array('width' => 10, 'height' => 3, 'depth' => 10, 'weight' => 0.75, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
 				array('width' => 3, 'height' => 3, 'depth' => 3, 'weight' => 0.75, 'packaging_size' => Configuration::get('USPS_CARRIER_PACKAGING_SIZE'), 'packaging_type' => Configuration::get('USPS_CARRIER_PACKAGING_TYPE'), 'machinable' => Configuration::get('USPS_CARRIER_MACHINABLE')),
-			),			
+			),
 		);
 
 		// Unit or Large Test
 		if (!empty($service))
 			$servicesList = array(array('code' => $service));
 		else
-			$servicesList = Db::getInstance()->ExecuteS('SELECT `code` FROM `'._DB_PREFIX_.'usps_rate_service_code`');
+			$servicesList = Db::getInstance()->executeS('SELECT `code` FROM `'._DB_PREFIX_.'usps_rate_service_code`');
 
 		// Testing Service
 		foreach ($servicesList as $service)
@@ -1736,57 +1742,20 @@ class UspsCarrier extends CarrierModule
 		// Loop on Xml
 		foreach ($xmlTab as $xml)
 		{
-			if (is_callable('curl_exec'))
-			{
-				// Curl Request
-				$ch = curl_init("http://production.shippingapis.com/ShippingAPI.dll");
-				curl_setopt($ch, CURLOPT_HEADER, 1);
-				curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, 'API=RateV4&XML='.$xml);
-				$result = curl_exec($ch);
-			}
-			else
-			{
-				// FsockOpen Request
-				$timeout = 5;
-				$fp = fsockopen("http://production.shippingapis.com", "80", $errno, $errstr, $timeout); 
-				if ($fp)
-				{
-					$xml = 'API=RateV4&XML='.$xml;
-					$request = "POST /ShippingAPI.dll HTTP/1.1\r\n";
-					$request .= "Host: production.shippingapis.com\r\n";
-					$request .= "Content-type: application/x-www-form-urlencoded\r\n";
-					$request .= "Connection: Close\r\n";
-					$request .= "Content-length: ".strlen($xml)."\r\n\r\n";
-					$request .= $xml."\r\n\r\n";
-					fwrite($fp, $request);
+			// Make the request
+			$opts = array(
+  				'http'=>array(
+					'method'=> 'POST',
+					'content' => 'API=RateV4&XML='.$xml,
+					'header'  => 'Content-type: application/x-www-form-urlencoded',
+					'timeout' => 5,
+ 				)
+			);
+			$context = stream_context_create($opts);
+			$result = @file_get_contents('http://production.shippingapis.com/ShippingAPI.dll', false, $context);
+			if (!$result)
+				$this->_webserviceError = $this->l('Could not connect to USPS.com');
 
-					stream_set_blocking($fp, TRUE);
-					stream_set_timeout($fp,$timeout);
-					$info = stream_get_meta_data($fp);
-
-					$result = '';
-					while ((!feof($fp)) && (!$info['timed_out']))
-					{
-						$result .= fgets($fp, 4096);
-						$info = stream_get_meta_data($fp);
-					}
-					if ($info['timed_out'])
-					{
-						$this->_webserviceError = $this->l('USPS Webservice timed out.');
-						return false;
-					}
-				}
-				else
-				{
-					$this->_webserviceError = $this->l('Could not connect to USPS.com');
-					return false;
-				}
-			}
 
 			// Get xml from HTTP Result
 			$data = strstr($result, '<?');
@@ -1893,16 +1862,16 @@ class UspsCarrier extends CarrierModule
 				$xmlTab[] = str_replace($search, $replace, $xmlTemplate);
 				$xmlPackageList = '';
 				$count = 0;
-			}
+		}
 		}
 
 
 		// Template Xml
 		if ($count > 0)
 		{
-			$search = array('[[USERID]]', '[[PackageList]]');
-			$replace = array(Configuration::get('USPS_CARRIER_USER_ID'), $xmlPackageList);
-			$xmlTemplate = @file_get_contents(dirname(__FILE__).'/xml.tpl');
+		$search = array('[[USERID]]', '[[PackageList]]');
+		$replace = array(Configuration::get('USPS_CARRIER_USER_ID'), $xmlPackageList);
+		$xmlTemplate = @file_get_contents(dirname(__FILE__).'/xml.tpl');
 			$xmlTab[] = str_replace($search, $replace, $xmlTemplate);
 		}
 

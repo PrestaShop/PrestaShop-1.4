@@ -8,4 +8,3 @@
 	$sql[] = 'DROP TABLE IF EXISTS `'._DB_PREFIX_.'usps_rate_config`;';
 	$sql[] = 'DROP TABLE IF EXISTS `'._DB_PREFIX_.'usps_rate_config_service`;';
 
-?>
