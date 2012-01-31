@@ -115,7 +115,12 @@ $(document).ready(function()
 		hideFilterValueAction(this);
 	});
 	
-	$('#selectPrductSort').live('change', function() {
+	// Unbind event change on #selectPrductSort
+	$('#selectPrductSort').unbind('change');
+
+	// To be sure there is no other events attached to the selectPrductSort, change the ID
+	$('#selectPrductSort').attr('id', 'selectPrductSort2');
+	$('#selectPrductSort2').live('change', function(event) {
 		reloadContent();
 	});
 	
@@ -299,9 +304,9 @@ function reloadContent(params_plus)
 		}
 	});
 	
-	if ($('#selectPrductSort').length)
+	if ($('#selectPrductSort2').length)
 	{
-		var splitData = $('#selectPrductSort').val().split(':');
+		var splitData = $('#selectPrductSort2').val().split(':');
 		data += '&orderby='+splitData[0]+'&orderway='+splitData[1];
 	}
 	
