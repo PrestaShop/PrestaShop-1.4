@@ -6,8 +6,9 @@ require_once(_PS_MODULE_DIR_.'/buyster/classes/BuysterOperation.php');
 
 global $smarty, $cookie;
 
-/*$iso_code = strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')));
-echo $iso_code;*/
+if (Tools::getValue('token') == '' || Tools::getValue('token') != Configuration::get('BUYSTER_PAYMENT_TOKEN'))
+	die('Invalid Token');
+
 $cookie->id_lang = '2';
 
 $orderId = (int)$_GET['id_order'];

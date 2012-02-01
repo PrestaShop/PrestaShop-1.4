@@ -62,6 +62,7 @@ class Buyster extends PaymentModule
 			Configuration::updateValue('BUYSTER_PAYMENT_STATE', $this->addState('En attente du paiement par Buyster', 'Waiting payment from Buyster'));
 		if (!Configuration::get('BUYSTER_PAYMENT_STATE_VALIDATION'))
 			Configuration::updateValue('BUYSTER_PAYMENT_STATE_VALIDATION', $this->addState('En attente de validation par '.Configuration::get('PS_SHOP_NAME'), 'Waiting for validation from '.Configuration::get('PS_SHOP_NAME')));
+		Configuration::updateValue('BUYSTER_PAYMENT_TOKEN', md5(rand()));
 		return true;
 	}
 	
@@ -120,7 +121,8 @@ class Buyster extends PaymentModule
 			'BUYSTER_PAYMENT_SEVERAL_PAYMENT' => '',
 			'BUYSTER_PAYMENT_DELAYED_SEVERAL' => '',
 			'BUYSTER_PAYMENT_STATE' => '',
-			'BUYSTER_PAYMENT_STATE_VALIDATION' => ''
+			'BUYSTER_PAYMENT_STATE_VALIDATION' => '',
+			'BUYSTER_PAYMENT_TOKEN' => ''
 		);
 	}
 	
@@ -396,6 +398,7 @@ class Buyster extends PaymentModule
 		$smarty->assign('index', 'index.php?tab=AdminOrders');
 		$smarty->assign('token', Tools::safeOutput(Tools::getValue('token')));
 		$smarty->assign('resultWebServiceBuyster', $resultWebServiceBuyster);
+		$smarty->assign('buyster_token', Configuration::get('BUYSTER_PAYMENT_TOKEN'));
 		return $this->display(__FILE__, 'tpl/waitAdminOrder.tpl');
 	}
 	

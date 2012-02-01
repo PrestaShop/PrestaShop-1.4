@@ -8,6 +8,7 @@
 	<legend><img src="../img/admin/details.gif" />{l s='Buyster transaction state' mod='buyster'}</legend>
 	{$resultWebServiceBuyster}<br/>
 	<input type="hidden" value="{$order_id_buyster}" id="order_id_buyster"/>
+	<input type="hidden" value="{$buyster_token}" id="buyster_token"/>
 	{l s='You can cancel or refund the transaction (depending on whether it has already been funded or not) by clicking the button below. Ditto for the payment validation. The status of the command (above) will be automatically updated in all cases.' mod='buyster'}<br/>
 	{$returnWebService}<br/>
 	<div id="resultWebServiceBuyster"></div>
@@ -24,7 +25,8 @@ $(document).ready(function() {
 		$("#loader_buyster_order").css('margin-top', ($("#waitingBuysterOrder").height() - 24) / 2);
 	$("#waitingBuysterOrder").show('fast');
 	var id_order = $("#order_id_buyster").val();
-	$("#resultWebServiceBuyster").load('../modules/buyster/adminOrder.php?id_order='+id_order,
+	var token = $("#buyster_token").val();
+	$("#resultWebServiceBuyster").load('../modules/buyster/adminOrder.php?id_order='+id_order+'&token='+token,
 	function(response, status, xhr) 
 		{
 			document.getElementById("waitingBuysterOrder").style.display = 'none';
