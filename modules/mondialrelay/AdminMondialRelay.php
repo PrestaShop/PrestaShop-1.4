@@ -91,10 +91,16 @@ class AdminMondialRelay extends AdminTab
 
 	public function displaySettings($post_action)
 	{
+		$curr_order_state = new OrderState((int)$this->mondialrelay->account_shop['MR_ORDER_STATE']);
+		$order_state = array(
+			'id_order_state' => $this->mondialrelay->account_shop['MR_ORDER_STATE'],
+			'name' => $curr_order_state->name[$this->context->language->id]
+		);
+
 		$this->context->smarty->assign(array(
 			'MR_token_admin_mondialrelay' => Tools::getAdminToken('AdminMondialRelay'.(int)(Tab::getIdFromClassName('AdminMondialRelay')).(int)$this->context->employee->id),
 			'MR_account_set' => MondialRelay::isAccountSet(),
-			'MR_order_state' => (int)$this->mondialrelay->account_shop['MR_ORDER_STATE'],
+			'MR_order_state' =>  $order_state,
 			'MR_orders_states_list' => OrderState::getOrderStates($this->context->language->id),
 			'MR_form_action' => $post_action,
 			'MR_error_list' => $this->post_errors

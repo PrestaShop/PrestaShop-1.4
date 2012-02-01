@@ -173,6 +173,13 @@ div.PS_MRLoader
 	display:none;
 }
 
+.MR_form_admintab h3
+{
+	margin: 10px;
+	margin-bottom: .5em;
+	line-height: 1.4em;
+}
+
 div#PS_MRAskBackupContent
 {
 	border:1px solid #000;

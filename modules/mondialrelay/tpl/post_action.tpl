@@ -38,4 +38,3 @@
 	{$MR_form_action.message_success}
 </div>
 {/if}
-{/if}

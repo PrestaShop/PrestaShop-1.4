@@ -27,7 +27,7 @@
 <fieldset>
 	<legend>{l s='History of labels creation' mod='mondialrelay'}</legend>
 	<div style="overflow-x: auto;overflow-y: scroller; padding-top: 0.6em;" >
-		<form method="post" action="{$smarty.server.REQUEST_URI}">
+		<form method="post" action="{$smarty.server.REQUEST_URI}" class="MR_form_admintab">
 			<table class="table" id="PS_MRHistoriqueTableList">
 				<tbody>
 					<tr>

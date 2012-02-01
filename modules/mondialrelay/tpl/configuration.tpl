@@ -274,14 +274,4 @@
 		</fieldset>
 	</form>
 </div>
-{/if}'mondialrelay'}</u></b>
-										</a>
-									</div>
-								</li>
-							{/foreach}
-						{/if}
-					</ul>
-				</fieldset>
-			</form>
-	</div>
-{/if}
+{/if}	

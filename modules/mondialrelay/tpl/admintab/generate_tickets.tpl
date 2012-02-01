@@ -49,10 +49,7 @@
 {/if}
 
 <p>
-{l s='All orders which have the state' mod='mondialrelay'} "<b>{$MR_order_state}</b>" {l s='will be available for sticker creation' mod='mondialrelay'}
-	<a href="index.php?tab=AdminModules&configure=mondialrelay&token={$MR_token_admin_module}" class="green">
-	{l s='Change configuration' mod='mondialrelay'}
-	</a>
+{l s='All orders which have the state' mod='mondialrelay'} "<b>{$MR_order_state.name}</b>" {l s='will be available for sticker creation' mod='mondialrelay'}
 </p>
 
 <div class="PS_MRErrorList error" id="otherErrors">
@@ -61,7 +58,7 @@
 
 <fieldset>
 	<legend>{l s='Orders list' mod='mondialrelay'}</legend>
-	<form method="post" action="{$smarty.server.REQUEST_URI}">
+	<form method="post" action="{$smarty.server.REQUEST_URI}" class="MR_form_admintab">
 		<table class="table" id='orders'>
 			<tr>
 				<th><input type="checkbox" id="toggleStatusOrderList" /></th>

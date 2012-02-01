@@ -38,7 +38,7 @@
 				<select id="id_order_state" name="id_order_state" style="width:250px">
 				{foreach from=$MR_orders_states_list key=num_state item=order_state}
 					{assign var='selected_option' value=''}
-					{if $order_state.id_order_state == $MR_order_state}
+					{if $order_state.id_order_state == $MR_order_state.id_order_state}
 						{assign var='selected_option' value='selected="selected"'}
 					{/if}
 					<option value="{$order_state.id_order_state}" style="background-color:{$order_state.color};" {$selected_option}>{$order_state.name}</option>
