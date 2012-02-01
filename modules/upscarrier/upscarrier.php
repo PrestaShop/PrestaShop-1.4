@@ -209,18 +209,18 @@ class UpsCarrier extends CarrierModule
 		return true;
 	}
 
-	public function disable()
+	public function disable($forceAll = false)
 	{
 		// Disable Carriers
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 0), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');	
-		parent::disable();
+		parent::disable($forceAll);
 	}
 
-	public function enable()
+	public function enable($forceAll = false)
 	{
 		// Disable Carriers
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 1), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');	
-		parent::enable();
+		parent::enable($forceAll);
 	}
 
 	public function installCarriers($id_ups_rate_service_group)
