@@ -129,7 +129,7 @@ class CarrierCore extends ObjectModel
 		$fields['is_module'] = (int)($this->is_module);
 		$fields['is_free'] = (int)($this->is_free);
 		$fields['shipping_external'] = (int)($this->shipping_external);
-		$fields['external_module_name'] = strval($this->external_module_name);
+		$fields['external_module_name'] = pSQL($this->external_module_name);
 		$fields['need_range'] = (boolean)$this->need_range;
 
 		return $fields;
