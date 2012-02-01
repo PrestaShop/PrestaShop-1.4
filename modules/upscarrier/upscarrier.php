@@ -212,14 +212,14 @@ class UpsCarrier extends CarrierModule
 	public function disable($forceAll = false)
 	{
 		// Disable Carriers
-		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 0), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');	
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 0), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'ups_rate_service_code`)');	
 		parent::disable($forceAll);
 	}
 
 	public function enable($forceAll = false)
 	{
 		// Disable Carriers
-		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 1), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'usps_rate_service_code`)');	
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 1), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'ups_rate_service_code`)');	
 		parent::enable($forceAll);
 	}
 
