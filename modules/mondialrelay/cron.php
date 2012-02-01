@@ -31,7 +31,9 @@ include_once('mondialrelay.php');
 if (Tools::getValue('secure_key') != Configuration::get('MONDIAL_RELAY_SECURE_KEY'))
 	exit;
 
-$expeditions = Db::getInstance()->ExecuteS('
+$account_shop = MondialRelay::getAccountDetail();
+
+$expeditions = Db::getInstance()->executeS('
 SELECT ms.`exp_number`, ms.`id_cart`, o.`id_order`
 FROM `'._DB_PREFIX_.'mr_selected` ms
 LEFT JOIN `'._DB_PREFIX_.'orders` o ON (o.`id_cart` = ms.`id_cart`) 
@@ -41,7 +43,7 @@ if (empty($expeditions))
 	exit;
 
 $params = array(
-'Enseigne' => Configuration::get('MR_ENSEIGNE_WEBSERVICE'),
+'Enseigne' => $account_shop['MR_ENSEIGNE_WEBSERVICE'],
 'Langue' => 'FR'
 );
 
@@ -57,7 +59,7 @@ foreach ($expeditions as $expedition)
 	if (OrderHistory::getLastOrderState((int)($expedition['id_order']))->id == Configuration::get('PS_OS_DELIVERED'))
 		continue;
 	$params['Expedition'] = $expedition['exp_number'];
-	$params['Security'] = strtoupper(md5($params['Enseigne'].$params['Expedition'].'FR'.Configuration::get('MR_KEY_WEBSERVICE')));
+	$params['Security'] = strtoupper(md5($params['Enseigne'].$params['Expedition'].'FR'.$account_shop['MR_KEY_WEBSERVICE']));
 	
 	$is_delivered = 0;
 	$result_mr = $client_mr->call('WSI2_TracingColisDetaille', $params, 'http://www.mondialrelay.fr/webservice/', 'http://www.mondialrelay.fr/webservice/WSI2_TracingColisDetaille');

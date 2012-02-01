@@ -18,18 +18,29 @@ var GmapList = new Object();
 // List the marker liable to the relay pint
 var markerList = new Object();
 
+/**
+ * Toggle selected orders
+ */
 function toggleOrderListSelection()
 {
 	toggle_status_order_list = !toggle_status_order_list;
 	$('input[name="order_id_list[]"]').attr('checked', toggle_status_order_list);
 }
 
+/**
+ * Toggle selected histories
+ */
 function toggleHistoryListSelection()
 {
 	toggle_history_order_list = !toggle_history_order_list;
 	$('input[name="history_id_list[]"]').attr('checked', toggle_history_order_list);
 }
 
+/**
+ * Request Ajax call to get tickets
+ *
+ * @param detailedExpeditionList
+ */
 function getTickets(detailedExpeditionList)
 {
 	$.ajax(
@@ -41,6 +52,8 @@ function getTickets(detailedExpeditionList)
 		success: function(json) 
 		{
 			if (json && json.success)
+			{
+				$('#MR_error_histories').remove();
 				for (id_order in json.success)
 					if (json.success[id_order])
 					{
@@ -52,6 +65,7 @@ function getTickets(detailedExpeditionList)
 						$('#detailHistory_' + id_order).children('td').children('input').attr('value', json.success[id_order].id_mr_history);
 						$('#detailHistory_' + id_order).children('td').children('input').attr('id', 'PS_MRHistoryId_' + json.success[id_order].id_mr_history);
 					}
+			}
 			displayBackGenerateSubmitButton();
 			displayBackHistoriesSubmitButton();
 		},
@@ -62,7 +76,11 @@ function getTickets(detailedExpeditionList)
 	});
 }
 
-function checkErrorGenetateTickets(json)
+/**
+ * Check error for the generated tickets
+ * @param json
+ */
+function checkErrorGeneratedTickets(json)
 {
 	i = 0;
 	$('.PS_MRErrorList').fadeOut('fast', function()
@@ -81,6 +99,10 @@ function checkErrorGenetateTickets(json)
 	checkOtherErrors(json);
 }
 
+/**
+ * Check Errors code
+ * @param json
+ */
 function checkOtherErrors(json)
 {
 	$('#otherErrors').fadeOut('fast', function()
@@ -96,6 +118,10 @@ function checkOtherErrors(json)
 	});
 }
 
+/**
+ * Check anything about generated tickets
+ * @param json
+ */
 function checkSucceedGenerateTickets(json)
 {
 	detailedExpeditionList = new Array();
@@ -125,7 +151,7 @@ function checkSucceedGenerateTickets(json)
 							</tr>');
 					} 
 					else 
-					{	
+					{
 						$('#detailHistory_' + id_order).children('#URLA4_' + id_order).html('<img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" />');
 						$('#detailHistory_' + id_order).children('#URLA5_' + id_order).html('<img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" />');
 						$('#detailHistory_' + id_order).children('#expeditionNumber_' + id_order).html('<img src="' + _PS_MR_MODULE_DIR_ + 'images/getTickets.gif" />');
@@ -136,6 +162,9 @@ function checkSucceedGenerateTickets(json)
 	return detailedExpeditionList;
 }
 
+/**
+ * Display the button to generate tickets
+ */
 function displayBackGenerateSubmitButton()
 {
 	$('#PS_MRSubmitGenerateLoader').css('display', 'none');
@@ -143,6 +172,9 @@ function displayBackGenerateSubmitButton()
 		$('#PS_MRSubmitButtonGenerateTicket').fadeIn('slow');	
 }
 
+/**
+ * Display the button to delete histories
+ */
 function displayBackHistoriesSubmitButton()
 {
 	$('#PS_MRSubmitDeleteHistoriesLoader').css('display', 'none');
@@ -150,6 +182,9 @@ function displayBackHistoriesSubmitButton()
 		$('#PS_MRSubmitButtonDeleteHistories').fadeIn('slow');	
 }
 
+/**
+ * Request an ajax call to generate the tickets
+ */
 function generateTicketsAjax()
 {
 	var order_id_list = new Array();
@@ -179,7 +214,7 @@ function generateTicketsAjax()
 		{
 			detailedExpeditionList = new Array();
 			
-			checkErrorGenetateTickets(json);
+			checkErrorGeneratedTickets(json);
 			detailedExpeditionList = checkSucceedGenerateTickets(json);
 			
 			if (detailedExpeditionList.length)
@@ -197,6 +232,9 @@ function generateTicketsAjax()
 	delete(weight_list);
 }
 
+/**
+ * Display deleted history details
+ */
 function displayDeletedHistoryInformation()
 {
 	$('input[name="history_id_list[]"]:checked').each(function()
@@ -206,18 +244,20 @@ function displayDeletedHistoryInformation()
 	displayBackHistoriesSubmitButton();
 }
 
-/*
-** Manage the removed histories id
-*/
+/**
+ * Manage the removed histories id
+ *
+ * @param json
+ */
 function checkDeletedHistoriesId(json)
 {
-	if (json && json.success) 
+	if (json && json.success)
 	{
 		// Allow to wait the end of the loop to manage unremoved item
 		i = 0;
 		for (numberHistoryId in json.success.deletedListId) 
 		{
-			$('#PS_MRHistoryId_' + json.success.deletedListId[numberHistoryId]).parent().parent().fadeOut('fast', function(){
+			$('#PS_MRHistoryId_' + json.success.deletedListId[numberHistoryId]).parent().parent().fadeOut('fast', function() {
 				$(this).remove();
 				// Fadeout is asynchome verify everytime the number element
 				if (++i == json.success.deletedListId.length)
@@ -232,9 +272,9 @@ function checkDeletedHistoriesId(json)
 		displayBackHistoriesSubmitButton();
 }
 
-/*
-** Delete the histories selected by the merchant 
-*/
+/**
+ * Delete the histories selected by the merchant
+ */
 function deleteSelectedHistories()
 {
 	var history_id_list = new Array();
@@ -257,12 +297,12 @@ function deleteSelectedHistories()
 				'method' : 'DeleteHistory',
 				'mrtoken' : mrtoken},
 		dataType: 'json',
-		success: function(json) 
+		success: function(json)
 		{
 			checkOtherErrors(json);
 			checkDeletedHistoriesId(json);
 		},
-		error: function(xhr, ajaxOptions, thrownError) 
+		error: function(xhr, ajaxOptions, thrownError)
 		{
 			display_generate_button = true;
 			displayBackHistoriesSubmitButton();
@@ -270,10 +310,10 @@ function deleteSelectedHistories()
 	});
 }
 
-/*
-** Display a fancy box displaying details about the 
-** backup of the database
-*/
+/**
+ * Display a fancy box displaying details about the
+ * backup of the database
+ */
 function PS_MRGetUninstallDetail()
 {
 	$.ajax(
@@ -315,9 +355,9 @@ function PS_MRGetUninstallDetail()
 	return false;
 }
 
-/*
-** Handle the button when a user clicked on the uninstall button
-*/
+/**
+ * Handle the button when a user clicked on the uninstall button
+ */
 function PS_MRHandleUninstallButton()
 {
 	$('#PS_MR_BackupAction').click(function()
@@ -340,9 +380,9 @@ function PS_MRHandleUninstallButton()
 	});
 }
 
-/*
-** ajax call to keep the database of the module safe
-*/
+/**
+ * Ajax call to keep the database of the module safe
+ */
 function PS_MRBackupDatabase()
 {	
 	$.ajax(
@@ -365,10 +405,13 @@ function PS_MRBackupDatabase()
 	});
 }
 
-/*
-** Add / update a entry to the selected carrier to the mr_selected table
-** with the selected relay point information
-*/
+/**
+ * Add / update a entry to the selected carrier to the mr_selected table
+ * with the selected relay point information
+ *
+ * @param relayPointNumber
+ * @param id_carrier
+ */
 function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
 {
 	PS_MRSelectedRelayPoint['relayPointNum'] = relayPointNumber;
@@ -394,10 +437,12 @@ function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
 	});
 }
 
-/*
-** Add / update a entry to the selected carrier to the mr_selected table
-** Without relay point information
-*/
+/**
+ *  Add / update a entry to the selected carrier to the mr_selected table
+ * Without relay point information
+ *
+ * @param id_carrier
+ */
 function PS_MRAddSelectedCarrierInDB(id_carrier)
 {
 	PS_MRHideLastRelayPointList();
@@ -419,6 +464,13 @@ function PS_MRAddSelectedCarrierInDB(id_carrier)
 	});
 }
 
+/**
+ * Handle function when an user click on a shipping
+ *
+ * @param carrierSelected
+ * @param id_carrier
+ * @param MRLivraisonType
+ */
 function PS_MRCarrierSelectedProcess(carrierSelected, id_carrier, MRLivraisonType)
 {
 	// Reset for any carrier changement
@@ -440,17 +492,17 @@ function PS_MRCarrierSelectedProcess(carrierSelected, id_carrier, MRLivraisonTyp
 	}
 }
 
-/*
-** Hide the last displayed relay point list
-*/
+/**
+ * Hide the last displayed relay point list
+ */
 function PS_MRHideLastRelayPointList()
 {
 	$('.PS_MRSelectedCarrier').fadeOut('fast');
 }
 
-/*
-** Check if the user select a carrier and a relay point if exist
-*/
+/**
+ * Check if the user select a carrier and a relay point if exist
+ */
 function PS_MRCheckSelectedRelayPoint()
 {
 	var input;
@@ -468,10 +520,10 @@ function PS_MRCheckSelectedRelayPoint()
 	return true;
 }
 
-/*
-** Link the generated relay point to an handle click
-** Allow to add the selected relay point in the database
-*/
+/**
+ * Link the generated relay point to an handle click
+ * Allow to add the selected relay point in the database
+ */
 function PS_MRHandleSelectedRelayPoint()
 {	
 	// Link all new generated relay point Selected button to an action
@@ -501,7 +553,13 @@ function PS_MRHandleSelectedRelayPoint()
 }
 
 
-// Display the relay point fetched
+/**
+ * Display the relay point fetched
+ *
+ * @param json
+ * @param blockContent
+ * @param carrier_id
+ */
 function PS_MRDisplayRelayPoint(json, blockContent, carrier_id)
 {
 	if (typeof json != 'undefined' && typeof blockContent != 'undefined')
@@ -555,6 +613,12 @@ function PS_MRDisplayRelayPoint(json, blockContent, carrier_id)
 	}
 }
 
+/**
+ * Display error about the fetch of the relay point
+ *
+ * @param errorList
+ * @param blockContent
+ */
 function PS_MRDisplayErrorRelayPoint(errorList, blockContent)
 {
 	
@@ -569,7 +633,11 @@ function PS_MRDisplayErrorRelayPoint(errorList, blockContent)
 	});
 }
 
-// Fetch the relay point
+/**
+ * Fetch the relay point
+ *
+ * @param carrierSelected
+ */
 function PS_MRFetchRelayPoint(carrierSelected)
 {
 	carrier_id = carrierSelected.val();
@@ -607,8 +675,12 @@ function PS_MRFetchRelayPoint(carrierSelected)
 	});
 }
 
-// Display the relay point of a selected Carrier and keep fetched data
-// in the html page (cache)
+/**
+ * Display the relay point of a selected Carrier and keep fetched data
+ * in the html page (cache)
+ *
+ * @param carrierSelected
+ */
 function PS_MRGetRelayPoint(carrierSelected)
 {
 	carrier_id = carrierSelected.val();
@@ -639,9 +711,11 @@ function PS_MRGetRelayPoint(carrierSelected)
 		PS_MRFetchRelayPoint(carrierSelected);
 }
 
-/*
-** Create the Gmap Block and cache the js object for the carrier
-*/
+/**
+ * Create the Gmap Block and cache the js object for the carrier
+ *
+ * @param id_carrier
+ */
 function PS_MRCreateGmap(id_carrier)
 {
 	// This has been write this way because it needed to have a known block
@@ -667,19 +741,25 @@ function PS_MRCreateGmap(id_carrier)
 	);
 }
 
-/*
-** Resize the map when the div got changement about dimension / position and displaying
-*/
+/**
+ * Resize the map when the div got changement about dimension / position and displaying
+ *
+ * @param $map
+ */
 function PS_MRGmapResizeEvent($map)
 {
 	gmap = $map.gmap3({action:'get'});	
 	google.maps.event.trigger(gmap, 'resize');
 }
 
-/*
-** Move the view of the gmap to a marker 
-** liable to the relay point 
-*/
+/**
+ * Move the view of the gmap to a marker
+ * liable to the relay point
+ *
+ * @param $map
+ * @param marker
+ * @param relayNum
+ */
 function PS_MRGmapPlaceViewOnMarker($map, marker, relayNum)
 {
 	$map.gmap3(
@@ -704,9 +784,11 @@ function PS_MRGmapPlaceViewOnMarker($map, marker, relayNum)
 	});
 }
 
-/*
-** Stop all dancing marker of the current selected carrier
-*/
+/**
+ * Stop all dancing marker of the current selected carrier
+ *
+ * @param currentMarkerList
+ */
 function PS_MRStopDancingMarkers(currentMarkerList)
 {
 	for (markerNumber in currentMarkerList)
@@ -715,9 +797,12 @@ function PS_MRStopDancingMarkers(currentMarkerList)
 		 		currentMarkerList[markerNumber].setAnimation(null);
 }
 
-/*
-** Display the Gmap of the selected relay point 
-*/
+/**
+ * Display the Gmap of the selected relay point
+ *
+ * @param contentBlockid
+ * @param $map
+ */
 function PS_MRDisplayGmap(contentBlockid, $map)
 {
 	var tab = contentBlockid.split('_');
@@ -729,7 +814,8 @@ function PS_MRDisplayGmap(contentBlockid, $map)
 	if ($('#PS_MRGmap_' + id_carrier).css('display') == 'none')
 	{
 		$('#' + contentBlockid).after($('#PS_MRGmap_' + id_carrier));
-		$('#PS_MRGmap_' + id_carrier).slideDown('fast', function() {
+		$('#PS_MRGmap_' + id_carrier).slideDown('fast', function()
+		{
 			PS_MRGmapResizeEvent($map);
 			PS_MRGmapPlaceViewOnMarker($map, markerList[id_carrier][relayPointNumber], relayPointNumber);
 		});
@@ -738,11 +824,13 @@ function PS_MRDisplayGmap(contentBlockid, $map)
 	{
 		previousElem = $('#PS_MRGmap_' + id_carrier).prev();	
 		//$('#' + contentBlockid).after($('#PS_MRGmap_' + id_carrier));	
-		$('#PS_MRGmap_' + id_carrier).toggle('fast', function() {
+		$('#PS_MRGmap_' + id_carrier).toggle('fast', function()
+		{
 			if (previousElem.attr('id') != contentBlockid)
 			{
 				$('#' + contentBlockid).after($(this));	
-				$('#PS_MRGmap_' + id_carrier).slideDown('fast', function() {
+				$('#PS_MRGmap_' + id_carrier).slideDown('fast', function()
+				{
 					PS_MRGmapPlaceViewOnMarker($map, markerList[id_carrier][relayPointNumber], relayPointNumber);
 				});
 			}
@@ -750,9 +838,11 @@ function PS_MRDisplayGmap(contentBlockid, $map)
 	}
 }
 
-/*
-** Generate an html block to display the opening hours details
-*/
+/**
+ * Generate an html block to display the opening hours details
+ *
+ * @param relayInfo
+ */
 function PS_MRGetTimeRelayDetail(relayInfo)
 {
 	onClick = 'onClick="PS_MROpenPopupDetail(\'' + relayInfo.permaLinkDetail + '\')"';
@@ -768,9 +858,11 @@ function PS_MRGetTimeRelayDetail(relayInfo)
 	return html;
 }
 
-/*
-** Call a MondialRelay page into a popup
-*/
+/**
+ * Call a MondialRelay page into a popup
+ *
+ * @param url
+ */
 function PS_MROpenPopupDetail(url)
 {
 	window.open(url, 'MondialRelay', 
@@ -778,9 +870,13 @@ function PS_MROpenPopupDetail(url)
 		location=no, resizable=yes, scrollbars=no, status=no');
 }
 
-/*
-** Display the gmap windows selected by the user
-*/
+/**
+ * Display the gmap windows selected by the user
+ *
+ * @param marker
+ * @param relayNum
+ * @param mapObject
+ */
 function PS_MRDisplayClickedGmapWindow(marker, relayNum, mapObject)
 {	
 	if (last_gmap_info_clicked.length)
@@ -797,10 +893,14 @@ function PS_MRDisplayClickedGmapWindow(marker, relayNum, mapObject)
   last_gmap_info_clicked = relayNum;
 }
 
-/*
-** Add a new Marker to a Gmap for a carrier using the 
-** relay point information 
-*/
+/**
+ * Add a new Marker to a Gmap for a carrier using the
+ * relay point information
+ *
+ * @param id_carrier
+ * @param relayPointNumber
+ * @param contentBlockid
+ */
 function PS_MRAddGMapMarker(id_carrier, relayPointNumber, contentBlockid)
 {
 	// Check if the gmap has been properly created
@@ -869,8 +969,34 @@ function PS_MRAddGMapMarker(id_carrier, relayPointNumber, contentBlockid)
 		}	
 	});
 	return false;
-}	
+}
 
+/**
+ * Display the selected form block for the configuration page
+ * @param block_id
+ */
+function PS_MRDisplayConfigurationForm(block_id)
+{
+	var block_form_id = block_id + '_block';
+	var total_form = $('.PS_MRFormType').length;
+	var i = 0;
+
+	$('.PS_MRFormType').each(function()
+	{
+		if ($(this).attr('id') != block_form_id)
+			$(this).css('display', 'none');
+		if ((i + 1) == total_form)
+		{
+			$('#' + block_form_id).fadeIn('fast');
+			$('#' + block_id).parents('ul').children('li').attr('class', '');
+			$('#' + block_id).parent().attr('class', 'selected');
+		}
+		++i;
+	});
+
+	if ($('#' + block_form_id).length == 0)
+		$('#MR_error_account').fadeIn('fast');
+}
 
 $(document).ready(function()
 {
@@ -878,26 +1004,32 @@ $(document).ready(function()
 	{
 		return PS_MRCheckSelectedRelayPoint();
 	});
-	$('#toggleStatusOrderList').click(function() 
+	$('#toggleStatusOrderList').click(function()
 	{
 		toggleOrderListSelection();
 	});
-	$('#toggleStatusHistoryList').click(function() 
+	$('#toggleStatusHistoryList').click(function()
 	{
 		toggleHistoryListSelection();
 	});
-	$('#generate').click(function() 
+	$('#generate').click(function()
 	{
 		generateTicketsAjax();
 	});
-	$('#PS_MRSubmitButtonDeleteHistories').click(function() 
+	$('#PS_MRSubmitButtonDeleteHistories').click(function()
 	{
 		deleteSelectedHistories();
 	});
-	$('#PS_MRDisplayPersonalizedOptions').click(function()
-	{
-		$('#PS_MRAdvancedSettings').toggle('fast');
-	});
+
+	// Configuration form page
+	$('#MR_config_menu a').each(function() {
+		$(this).click(function() {
+			PS_MRDisplayConfigurationForm($(this).attr('id'));
+		});
+	})
+
+	if (typeof(PS_MR_SELECTED_TAB ) != 'undefined')
+		$('#MR_' + PS_MR_SELECTED_TAB + '_block').fadeIn('fast');
 });
 
 

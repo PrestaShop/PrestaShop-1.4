@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -20,23 +20,17 @@
 *
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2011 PrestaShop SA
-*  @version  Release: $Revision: 7723 $
+*  @version  Release: $Revision: 7776 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-
-/**
- * Backward function compatibility
- * Need to be called for each module in 1.4
- */
-
-// Get out if the context is already defined
-if (!in_array('Context', get_declared_classes()))
-	require_once(dirname(__FILE__).'/Context.php');
-
-if (!isset($this) || isset($this->context))
-	return;
-
-$this->context = Context::getContext();
-$this->smarty = $this->context->smarty;
-
+			    	
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+	
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+	
+header("Location: ../");
+exit;

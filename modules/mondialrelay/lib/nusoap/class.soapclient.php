@@ -110,7 +110,7 @@ class nusoap_client extends nusoap_base  {
 		$this->appendDebug('endpoint=' . $this->varDump($endpoint));
 
 		// make values
-		if ($wsdl){
+		if($wsdl){
 			if (is_object($endpoint) && (get_class($endpoint) == 'wsdl')) {
 				$this->wsdl = $endpoint;
 				$this->endpoint = $this->wsdl->wsdl;
@@ -177,7 +177,7 @@ class nusoap_client extends nusoap_base  {
 				return false;
 		}
 		// serialize parameters
-		if ($this->endpointType == 'wsdl' && $opData = $this->getOperationData($operation)){
+		if($this->endpointType == 'wsdl' && $opData = $this->getOperationData($operation)){
 			// use WSDL for operation
 			$this->opData = $opData;
 			$this->debug("found operation");
@@ -194,7 +194,7 @@ class nusoap_client extends nusoap_base  {
 			$style = $opData['style'];
 			$use = $opData['input']['use'];
 			// add ns to ns array
-			if ($namespace != '' && !isset($this->wsdl->namespaces[$namespace])){
+			if($namespace != '' && !isset($this->wsdl->namespaces[$namespace])){
 				$nsPrefix = 'ns' . rand(1000, 9999);
 				$this->wsdl->namespaces[$nsPrefix] = $namespace;
 			}
@@ -224,7 +224,7 @@ class nusoap_client extends nusoap_base  {
 				$this->setError('wsdl error: '.$errstr);
 				return false;
 			}
-		} elseif ($this->endpointType == 'wsdl') {
+		} elseif($this->endpointType == 'wsdl') {
 			// operation not in WSDL
 			$this->appendDebug($this->wsdl->getDebug());
 			$this->wsdl->clearDebug();
@@ -288,7 +288,7 @@ class nusoap_client extends nusoap_base  {
 		$this->debug('SOAP message length=' . strlen($soapmsg) . ' contents (max 1000 bytes)=' . substr($soapmsg, 0, 1000));
 		// send
 		$return = $this->send($this->getHTTPBody($soapmsg),$soapAction,$this->timeout,$this->response_timeout);
-		if ($errstr = $this->getError()){
+		if($errstr = $this->getError()){
 			$this->debug('Error: '.$errstr);
 			return false;
 		} else {
@@ -297,7 +297,7 @@ class nusoap_client extends nusoap_base  {
            	$this->appendDebug('return=' . $this->varDump($return));
 			
 			// fault?
-			if (is_array($return) && isset($return['faultcode'])){
+			if(is_array($return) && isset($return['faultcode'])){
 				$this->debug('got fault');
 				$this->setError($return['faultcode'].': '.$return['faultstring']);
 				$this->fault = true;
@@ -312,10 +312,10 @@ class nusoap_client extends nusoap_base  {
 				return $return;
 			} else {
 				// array of return values
-				if (is_array($return)){
+				if(is_array($return)){
 					// multiple 'out' parameters, which we return wrapped up
 					// in the array
-					if (sizeof($return) > 1){
+					if(sizeof($return) > 1){
 						return $return;
 					}
 					// single 'out' parameter (normally the return value)
@@ -391,7 +391,7 @@ class nusoap_client extends nusoap_base  {
 			if ($this->getError())
 				return false;
 		}
-		if (isset($this->operations[$operation])){
+		if(isset($this->operations[$operation])){
 			return $this->operations[$operation];
 		}
 		$this->debug("No data for operation: $operation");
@@ -418,7 +418,7 @@ class nusoap_client extends nusoap_base  {
 			// http(s)
 			case preg_match('/^http/',$this->endpoint):
 				$this->debug('transporting via HTTP');
-				if ($this->persistentConnection == true && is_object($this->persistentConnection)){
+				if($this->persistentConnection == true && is_object($this->persistentConnection)){
 					$http =& $this->persistentConnection;
 				} else {
 					$http = new soap_transport_http($this->endpoint, $this->curl_options, $this->use_curl);
@@ -428,22 +428,22 @@ class nusoap_client extends nusoap_base  {
 				}
 				$http->setContentType($this->getHTTPContentType(), $this->getHTTPContentTypeCharset());
 				$http->setSOAPAction($soapaction);
-				if ($this->proxyhost && $this->proxyport){
+				if($this->proxyhost && $this->proxyport){
 					$http->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);
 				}
-                if ($this->authtype != '') {
+                if($this->authtype != '') {
 					$http->setCredentials($this->username, $this->password, $this->authtype, array(), $this->certRequest);
 				}
-				if ($this->http_encoding != ''){
+				if($this->http_encoding != ''){
 					$http->setEncoding($this->http_encoding);
 				}
 				$this->debug('sending message, length='.strlen($msg));
-				if (preg_match('/^http:/',$this->endpoint)){
-				//if (strpos($this->endpoint,'http:')){
+				if(preg_match('/^http:/',$this->endpoint)){
+				//if(strpos($this->endpoint,'http:')){
 					$this->responseData = $http->send($msg,$timeout,$response_timeout,$this->cookies);
-				} elseif (preg_match('/^https/',$this->endpoint)){
-				//} elseif (strpos($this->endpoint,'https:')){
-					//if (phpversion() == '4.3.0-dev'){
+				} elseif(preg_match('/^https/',$this->endpoint)){
+				//} elseif(strpos($this->endpoint,'https:')){
+					//if(phpversion() == '4.3.0-dev'){
 						//$response = $http->send($msg,$timeout,$response_timeout);
                    		//$this->request = $http->outgoing_payload;
 						//$this->response = $http->incoming_payload;
@@ -465,10 +465,10 @@ class nusoap_client extends nusoap_base  {
 					}
 				}
 				
-				if ($err = $http->getError()){
+				if($err = $http->getError()){
 					$this->setError('HTTP Error: '.$err);
 					return false;
-				} elseif ($this->getError()){
+				} elseif($this->getError()){
 					return false;
 				} else {
 					$this->debug('got response, length='. strlen($this->responseData).' type='.$http->incoming_headers['content-type']);
@@ -504,7 +504,7 @@ class nusoap_client extends nusoap_base  {
 		if (strpos($headers['content-type'], '=')) {
 			$enc = str_replace('"', '', substr(strstr($headers["content-type"], '='), 1));
 			$this->debug('Got response encoding: ' . $enc);
-			if (preg_match('/^(ISO-8859-1|US-ASCII|UTF-8)$/i',$enc)){
+			if(preg_match('/^(ISO-8859-1|US-ASCII|UTF-8)$/i',$enc)){
 				$this->xml_encoding = strtoupper($enc);
 			} else {
 				$this->xml_encoding = 'US-ASCII';
@@ -518,7 +518,7 @@ class nusoap_client extends nusoap_base  {
 		// add parser debug data to our debug
 		$this->appendDebug($parser->getDebug());
 		// if parse errors
-		if ($errstr = $parser->getError()){
+		if($errstr = $parser->getError()){
 			$this->setError( $errstr);
 			// destroy the parser object
 			unset($parser);

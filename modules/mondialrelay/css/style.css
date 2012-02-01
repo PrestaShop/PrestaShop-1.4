@@ -1,4 +1,4 @@
-div.PS_MRFormType 
+div.PS_MRFormType
 {
 	width:100%;
 	margin-top:20px;
@@ -32,11 +32,10 @@ div.PS_MRSubmitButton
 	margin-top:20px;
 }
 
-div.PS_MRFormType fieldset > ul > li.PS_MRRequireFields
+.PS_MRRequireFields
 {
-	display:block;
-	text-align:right;
-	margin-right:10px;
+	display:inline;
+	padding:2px 10px;
 }
 
 tr.PS_MRErrorList td
@@ -61,7 +60,7 @@ tr.PS_MRSuccessList td
 
 table#PS_MRHistoriqueTableList
 {
-	text-align:center;	
+	text-align:center;
 }
 
 table#PS_MRHistoriqueTableList tr > td > img
@@ -140,33 +139,33 @@ table#orders
 {
 	width:100%;
 }
-			
+
 table#orders td
 {
-		text-align:center;
-		height: 30px;		
+	text-align:center;
+	height: 30px;
 }
-			
+
 table#orders th
 {
-		text-align:center;
-		height: 40px;
-}			
-			
+	text-align:center;
+	height: 40px;
+}
+
 table#orders th.fixed
 {
-		width:70px;
+	width:70px;
 }
-			
+
 table#orders tr
 {
-		text-align:center;
+	text-align:center;
 }
-			
+
 div.submit_button
 {
-		margin-top:10px;
-		text-align:center;
+	margin-top:10px;
+	text-align:center;
 }
 
 div.PS_MRLoader
@@ -180,7 +179,7 @@ div#PS_MRAskBackupContent
 	background: url(../logo_hd.png) no-repeat 10px 50px #BEBEBE;
 	line-height:18px;
 	font-size:14px;
-	height:190px;	
+	height:190px;
 }
 
 div#PS_MRAskBackupContent div
@@ -231,13 +230,14 @@ tr.PS_MRSelectedCarrier > td
 {
 	height: 40px;
 	float:left;
+	padding: 0 10px;
 }
 
 .PS_MRRelayPointInfo p
 {
- float:left;
- width:380px;
- text-align: justify;
+	float:left;
+	width:360px;
+	text-align: justify;
 }
 
 .PS_MRFloatRelayPointSelecteIt
@@ -261,7 +261,7 @@ tr.PS_MRSelectedCarrier > td
 	display:block;
 }
 
-.PS_MRFloatRelayPointSelecteIt a.PS_MRSelectRelayPointButton 
+.PS_MRFloatRelayPointSelecteIt a.PS_MRSelectRelayPointButton
 {
 	float:right;
 	display: block;
@@ -274,7 +274,7 @@ tr.PS_MRSelectedCarrier > td
 	background:url(../images/selectRelayPoint.png) no-repeat 0px 0px;
 }
 
-.PS_MRFloatRelayPointSelected a.PS_MRSelectRelayPointButton 
+.PS_MRFloatRelayPointSelected a.PS_MRSelectRelayPointButton
 {
 	font-size: 10px;
 	float:right;
@@ -288,7 +288,7 @@ tr.PS_MRSelectedCarrier > td
 	background:url(../images/selectRelayPoint.png) no-repeat 0px -25px;
 }
 
-a.PS_MRSelectRelayPointButton:hover 
+a.PS_MRSelectRelayPointButton:hover
 {
 	color:#333333;
 	background:url(../images/selectRelayPoint.png) no-repeat 0px -25px;
@@ -312,7 +312,7 @@ div#PS_MRPersonalizedFields
 }
 
 .clearfix:before,
-.clearfix:after 
+.clearfix:after
 {
 	content: ".";
 	display: block;
@@ -346,7 +346,8 @@ div#PS_MRPersonalizedFields
 	font-weight: 700;
 	margin: 0 0 10px 0;
 	line-height: 20px;
-	padding: 10px 15px;
+	padding: 10px 0px;
+	text-align: center;
 }
 
 /* 1.3 compatibility*/
@@ -358,7 +359,14 @@ div#PS_MRPersonalizedFields
 	font-weight: 700;
 	margin: 0 0 10px 0;
 	line-height: 20px;
-	padding: 10px 15px;
+	padding: 10px 0px;
+	text-align: center;
+}
+
+.MR_error ul > li, .MR_warn ul > li
+{
+	list-style: none;
+	text-align: left;
 }
 
 /* 1.3 - 1.4 compatibility*/
@@ -373,7 +381,59 @@ div#PS_MRPersonalizedFields
 	border-radius: 3px;
 }
 
-#PS_MRAdvancedSettings
+#MR_config_menu
+{
+	background-color: #F8F8F8;
+	border: 1px solid #CCC;
+	margin-bottom: 10px;
+	padding: 10px 0;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-image: initial;
+	height: 110px;
+}
+
+#MR_config_menu ul
+{
+	margin: 0 auto;
+	padding: 0;
+	width: 700px;
+}
+
+#MR_config_menu ul > li
+{
+	color: #666;
+	float: left;
+	list-style: none outside none;
+	padding: 10px 40px;
+	text-align: center;
+}
+
+#MR_config_menu ul > li.selected
+{
+	color: #383838;
+	font-weight: bolder;
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	background-color: #EBEDF4;
+}
+
+#MR_config_menu ul > li.selected > a
+{
+	color: #383838;
+	font-weight: bolder;
+}
+
+#MR_error_account
+{
+	display: none;
+	text-align: center;
+}
+
+.PS_MRFormType
 {
 	display: none;
 }

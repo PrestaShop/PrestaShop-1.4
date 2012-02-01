@@ -1,6 +1,6 @@
-<?php 
+<?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -27,13 +27,39 @@
 
 /*
  * File called by ajax. It's like a controler, you have to send the
-* method name of the webservice and implement it.
+ * method name of the webservice and implement it.
  * Each Name method allow to instanciate an object containing
-* methods to manage correctly the data and name fields
+ * methods to manage correctly the data and name fields
  */
- 
+
+$back_office_method =  array(
+	'MRGetTickets',
+	'MRCreateTickets',
+	'MRDeleteHistory',
+	'uninstallDetail',
+	'DeleteHistory'
+);
+
+$front_office_method = array(
+	'MRGetRelayPoint',
+	'addSelectedCarrierToDB'
+);
+
+// Can't use Tools at this time... Need to know if _PS_ADMIN_DIR_ has to be defined
+$method = isset($_POST['method']) ? $_POST['method'] : '';
+$token = isset($_POST['mrtoken']) ? $_POST['mrtoken'] : '';
+
+if (in_array($method, $back_office_method))
+	define('_PS_ADMIN_DIR_', true);
+
 require_once(realpath(dirname(__FILE__).'/../../config/config.inc.php'));
-require_once(realpath(dirname(__FILE__).'/../../init.php'));
+
+if (_PS_VERSION_ < '1.5' || !defined('_PS_ADMIN_DIR_'))
+	require_once(realpath(dirname(__FILE__).'/../../init.php'));
+
+/** Backward compatibility */
+require(dirname(__FILE__).'/backward_compatibility/backward.php');
+
 require(dirname(__FILE__).'/mondialrelay.php');
 require(dirname(__FILE__).'/classes/MRCreateTickets.php');
 require(dirname(__FILE__).'/classes/MRGetTickets.php');
@@ -41,34 +67,23 @@ require(dirname(__FILE__).'/classes/MRGetRelayPoint.php');
 require(dirname(__FILE__).'/classes/MRRelayDetail.php');
 require(dirname(__FILE__).'/classes/MRManagement.php');
 
-
-global $cookie, $cart, $customer;
-
 MondialRelay::initModuleAccess();
 
 // Access page List liable to the generated token
 $accessPageList = array(
-	MondialRelay::getToken('front') => array(
-		'MRGetRelayPoint',
-		'addSelectedCarrierToDB'),
-	MondialRelay::getToken('back') => array(
-		'MRGetTickets',
-		'MRCreateTickets',
-		'MRDeleteHistory',
-		'uninstallDetail',
-		'DeleteHistory'));
+	MondialRelay::getToken('front') => $front_office_method,
+	MondialRelay::getToken('back') => $back_office_method
+);
 
-$method = Tools::getValue('method');
-$token = Tools::getValue('mrtoken');
 $params = array();
 $result = array();
 
-// If the method name assoacited to the token received doesn't match with
+// If the method name associated to the token received doesn't match with
 // the list, then we kill the request
 if (!isset($accessPageList[$token]) || !in_array($method, $accessPageList[$token]))
 	exit();
 
-// Method name allow to instanciate his object to properly call the 
+// Method name allow to instanciate his object to properly call the
 // implemented interface method and do his job
 switch($method)
 {
@@ -88,13 +103,13 @@ switch($method)
 		break;
 	case 'MRGetRelayPoint':
 		$params['id_carrier'] = Tools::getValue('id_carrier');
-		$params['weight'] = $cart->getTotalWeight();
-		$params['id_address_delivery'] = $cart->id_address_delivery;
+		$params['weight'] = Context::getContext()->cart->getTotalWeight();
+		$params['id_address_delivery'] = Context::getContext()->cart->id_address_delivery;
 		break;
 	case 'addSelectedCarrierToDB':
 		$params['id_carrier'] = Tools::getValue('id_carrier');
-		$params['id_cart'] = $cart->id;
-		$params['id_customer'] = $cookie->id_customer;
+		$params['id_cart'] = Context::getContext()->cart->id;
+		$params['id_customer'] = Context::getContext()->customer->id;
 		$params['id_mr_method'] = Tools::getValue('id_mr_method');
 		$params['relayPointInfo'] = Tools::getValue('relayPointInfo');
 		break;
@@ -102,12 +117,12 @@ switch($method)
 }
 
 // Try to instanciate the method object name and call the necessaries method
-try 
+try
 {
 	if (class_exists($method, false))
 	{
 		$obj = new $method($params);
-		
+
 		// Verify that the class implement correctly the interface
 		// Else use a Management class to do some ajax stuff
 		if (($obj instanceof IMondialRelayWSMethod))
@@ -118,18 +133,18 @@ try
 		}
 		unset($obj);
 	}
-	elseif (($management = new MRManagement($params)) &&
-				method_exists($management, $method))
-			$result = $management->{$method}();
-	else 
-		throw new Exception('Method Class : '.$method.' cannot be found');
+	else if (($management = new MRManagement($params)) &&
+		method_exists($management, $method))
+		$result = $management->{$method}();
+	else
+		throw new Exception('Method Class : '.$method.' can\'t be found');
 	unset($management);
 }
 catch(Exception $e)
 {
-	echo MondialRelay::jsonEncode(array('other' => array('error' => array($e->getMessage()))));
+	echo MRTools::jsonEncode(array('other' => array('error' => array($e->getMessage()))));
 	exit(-1);
 }
-echo MondialRelay::jsonEncode($result);
+echo MRTools::jsonEncode($result);
 exit(0);
 ?>

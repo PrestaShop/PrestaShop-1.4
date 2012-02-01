@@ -86,11 +86,12 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 	private $_webserviceURL = 'http://www.mondialrelay.fr/webservice/Web_Services.asmx?WSDL';
 	
 	public function __construct($params)	
-	{	
+	{
+		$this->_mondialRelay = new MondialRelay();
 		$this->_id_address_delivery = (int)($params['id_address_delivery']);
 		$this->_id_carrier = (int)($params['id_carrier']);
 		$this->_weight = (float)($params['weight']);	
-		$this->_webServiceKey = Configuration::get('MR_KEY_WEBSERVICE');
+		$this->_webServiceKey = $this->_mondialRelay->account_shop['MR_KEY_WEBSERVICE'];
 	}
 	
 	public function __destruct()
@@ -99,19 +100,18 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 	}
 	
 	public function init()
-	{	
-		$this->_mondialRelay = new MondialRelay();
+	{
 		$address = new Address($this->_id_address_delivery);
-		$weight = Configuration::get('MR_WEIGHT_COEF') * $this->_weight;
-
-		if (!$address)
-			throw new Exception($this->_mondialrelay->l('Customer address cannot be found'));
+		$weight = $this->_mondialRelay->account_shop['MR_WEIGHT_COEFFICIENT'] * $this->_weight;
 		
-		$this->_fields['list']['Enseigne']['value'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
+		if (!$address)
+			throw new Exception($this->_mondialrelay->l('Customer address can\'t be found'));
+		
+		$this->_fields['list']['Enseigne']['value'] = $this->_mondialRelay->account_shop['MR_ENSEIGNE_WEBSERVICE'];
 		$this->_fields['list']['Poids']['value'] = ($weight < 100) ? 100 : $weight;
-		$this->_fields['list']['Pays']['value'] = Country::getIsoById($address->id_country);
-		$this->_fields['list']['Ville']['value'] = $address->city;
-		$this->_fields['list']['CP']['value'] = $address->postcode;
+		$this->_fields['list']['Pays']['value'] = trim(Country::getIsoById($address->id_country));
+		$this->_fields['list']['Ville']['value'] = trim($address->city);
+		$this->_fields['list']['CP']['value'] = trim($address->postcode);
 		$this->_fields['list']['CP']['params']['id_country'] = $address->id_country;
 		
 		$this->_generateMD5SecurityKey();
@@ -221,7 +221,7 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
 		{
 			$errors[] = $this->_mondialRelay->l('There is an error number : ').$errorNumber;
 			$errors[] = $this->_mondialRelay->l('Details : ').
-				$this->_mondialRelay->getErrorCodeDetail($errorNumber);
+			$this->_mondialRelay->getErrorCodeDetail($errorNumber);
 		}
 		else
 		{
@@ -241,7 +241,7 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
  					unset($result[$num]);
  			}
  			if (!count($result))
- 				$errors[] = $this->_mondialRelay->l('MondialRelay cannot find any relay point near your address. Maybe your address isn\'t properly filled ?');
+ 				$errors[] = $this->_mondialRelay->l('MondialRelay can\'t find any relay point near your address. Maybe your address isn\'t properly filled ?');
  			else
  			{
  				$this->_addLinkHoursDetail($result);
@@ -250,7 +250,7 @@ class MRGetRelayPoint implements IMondialRelayWSMethod
  				// $this->_generateLinkHoursDetail($result);
  				// $result = (count($relayDetail['success'])) ? $relayDetail['success'] : $result;
  			}
- 			$success = $result;
+			$success = $result;
 		}
 		$this->_resultList['error'] = $errors;
 		$this->_resultList['success'] = $success;

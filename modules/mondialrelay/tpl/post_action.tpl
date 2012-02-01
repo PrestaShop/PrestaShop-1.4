@@ -1,13 +1,12 @@
-<?php
-/*
+{*
 * 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
-* This source file is subject to the Open Software License (OSL 3.0)
+* This source file is subject to the Academic Free License (AFL 3.0)
 * that is bundled with this package in the file LICENSE.txt.
 * It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/osl-3.0.php
+* http://opensource.org/licenses/afl-3.0.php
 * If you did not receive a copy of the license and are unable to
 * obtain it through the world-wide-web, please send an email
 * to license@prestashop.com so we can send you a copy immediately.
@@ -20,23 +19,23 @@
 *
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2011 PrestaShop SA
-*  @version  Release: $Revision: 7723 $
-*  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+*  @version  Release: $Revision: 10285 $
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
-*/
+*}
 
-/**
- * Backward function compatibility
- * Need to be called for each module in 1.4
- */
-
-// Get out if the context is already defined
-if (!in_array('Context', get_declared_classes()))
-	require_once(dirname(__FILE__).'/Context.php');
-
-if (!isset($this) || isset($this->context))
-	return;
-
-$this->context = Context::getContext();
-$this->smarty = $this->context->smarty;
-
+{if $MR_error_list|count}
+<div class="alert error">
+	{$MR_error_list|count} {l s='error(s)'}
+	<ul>
+		{foreach from=$MR_error_list key=error_num item=error_message}
+			<li>{$error_message}</li>
+		{/foreach}
+	</ul>
+</div>
+	{elseif $MR_form_action.type|strlen != 0}
+<div class="conf confirm">
+	{$MR_form_action.message_success}
+</div>
+{/if}
+{/if}

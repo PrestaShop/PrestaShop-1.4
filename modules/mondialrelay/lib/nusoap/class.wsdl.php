@@ -168,10 +168,10 @@ class wsdl extends nusoap_base {
 						isset($this->bindings[$binding]['operations'][$operation]['output']) ?
 						array_merge($this->bindings[$binding]['operations'][$operation]['output'], $this->portTypes[ $bindingData['portType'] ][$operation]['output']) :
 						$this->portTypes[ $bindingData['portType'] ][$operation]['output'];
-                    if (isset($this->messages[ $this->bindings[$binding]['operations'][$operation]['input']['message'] ])){
+                    if(isset($this->messages[ $this->bindings[$binding]['operations'][$operation]['input']['message'] ])){
 						$this->bindings[$binding]['operations'][$operation]['input']['parts'] = $this->messages[ $this->bindings[$binding]['operations'][$operation]['input']['message'] ];
 					}
-					if (isset($this->messages[ $this->bindings[$binding]['operations'][$operation]['output']['message'] ])){
+					if(isset($this->messages[ $this->bindings[$binding]['operations'][$operation]['output']['message'] ])){
                    		$this->bindings[$binding]['operations'][$operation]['output']['parts'] = $this->messages[ $this->bindings[$binding]['operations'][$operation]['output']['message'] ];
                     }
                     // Set operation style if necessary, but do not override one already provided
@@ -210,7 +210,7 @@ class wsdl extends nusoap_base {
 	        $tr = new soap_transport_http($wsdl, $this->curl_options, $this->use_curl);
 			$tr->request_method = 'GET';
 			$tr->useSOAPAction = false;
-			if ($this->proxyhost && $this->proxyport){
+			if($this->proxyhost && $this->proxyport){
 				$tr->setProxy($this->proxyhost,$this->proxyport,$this->proxyusername,$this->proxypassword);
 			}
 			if ($this->authtype != '') {
@@ -222,7 +222,7 @@ class wsdl extends nusoap_base {
 			//$this->debug("WSDL response\n" . $tr->incoming_payload);
 			$this->appendDebug($tr->getDebug());
 			// catch errors
-			if ($err = $tr->getError() ){
+			if($err = $tr->getError() ){
 				$errstr = 'Getting ' . $wsdl . ' - HTTP ERROR: '.$err;
 				$this->debug($errstr);
 	            $this->setError($errstr);
@@ -282,7 +282,7 @@ class wsdl extends nusoap_base {
         xml_parser_free($this->parser);
         $this->debug('Parsing WSDL done');
 		// catch wsdl parse errors
-		if ($this->getError()){
+		if($this->getError()){
 			return false;
 		}
         return true;
@@ -814,7 +814,7 @@ class wsdl extends nusoap_base {
 		//Makes crossbrowser object.
 		function makeObj(obj){
 		    this.evnt=bw.dom? document.getElementById(obj):bw.ie4?document.all[obj]:bw.ns4?document.layers[obj]:0;
-		    if (!this.evnt) return false
+		    if(!this.evnt) return false
 		    this.css=bw.dom||bw.ie4?this.evnt.style:bw.ns4?this.evnt:0;
 		    this.wref=bw.dom||bw.ie4?this.evnt:bw.ns4?this.css.document:0;
 		    this.writeIt=b_writeIt;
@@ -829,12 +829,12 @@ class wsdl extends nusoap_base {
 		//Shows the messages
 		var oDesc;
 		function popup(divid){
-		    if (oDesc = new makeObj(divid)){
+		    if(oDesc = new makeObj(divid)){
 			oDesc.css.visibility = "visible"
 		    }
 		}
 		function popout(){ // Hides message
-		    if (oDesc) oDesc.css.visibility = "hidden"
+		    if(oDesc) oDesc.css.visibility = "hidden"
 		}
 		//-->
 		</script>
@@ -853,12 +853,12 @@ class wsdl extends nusoap_base {
 				    $b .= "<div id='$op' class='hidden'>
 				    <a href='#' onclick='popout()'><font color='#ffffff'>Close</font></a><br><br>";
 				    foreach($data as $donnie => $marie){ // loop through opdata
-						if ($donnie == 'input' || $donnie == 'output'){ // show input/output data
+						if($donnie == 'input' || $donnie == 'output'){ // show input/output data
 						    $b .= "<font color='white'>".ucfirst($donnie).':</font><br>';
 						    foreach($marie as $captain => $tenille){ // loop through data
-								if ($captain == 'parts'){ // loop thru parts
+								if($captain == 'parts'){ // loop thru parts
 								    $b .= "&nbsp;&nbsp;$captain:<br>";
-					                //if (is_array($tenille)){
+					                //if(is_array($tenille)){
 								    	foreach($tenille as $joanie => $chachi){
 											$b .= "&nbsp;&nbsp;&nbsp;&nbsp;$joanie: $chachi<br>";
 								    	}
@@ -928,7 +928,7 @@ class wsdl extends nusoap_base {
 		if (count($this->messages) >= 1) {
 			foreach($this->messages as $msgName => $msgParts) {
 				$xml .= "\n<message name=\"" . $msgName . '">';
-				if (is_array($msgParts)){
+				if(is_array($msgParts)){
 					foreach($msgParts as $partName => $partType) {
 						// print 'serializing '.$partType.', sv: '.$this->XMLSchemaVersion.'<br>';
 						if (strpos($partType, ':')) {
@@ -992,7 +992,7 @@ class wsdl extends nusoap_base {
 					    $portType_xml .= ' parameterOrder="' . $opParts['parameterOrder'] . '"';
 					} 
 					$portType_xml .= '>';
-					if (isset($opParts['documentation']) && $opParts['documentation'] != '') {
+					if(isset($opParts['documentation']) && $opParts['documentation'] != '') {
 						$portType_xml .= "\n" . '    <documentation>' . htmlspecialchars($opParts['documentation']) . '</documentation>';
 					}
 					$portType_xml .= "\n" . '    <input message="tns:' . $opParts['input']['message'] . '"/>';
@@ -1128,7 +1128,7 @@ class wsdl extends nusoap_base {
 
 		// Get encoding style for output and set to current
 		$encodingStyle = 'http://schemas.xmlsoap.org/soap/encoding/';
-		if (($direction == 'input') && isset($opData['output']['encodingStyle']) && ($opData['output']['encodingStyle'] != $encodingStyle)) {
+		if(($direction == 'input') && isset($opData['output']['encodingStyle']) && ($opData['output']['encodingStyle'] != $encodingStyle)) {
 			$encodingStyle = $opData['output']['encodingStyle'];
 			$enc_style = $encodingStyle;
 		}
@@ -1230,7 +1230,7 @@ class wsdl extends nusoap_base {
 		
 		// Get encoding style for output and set to current
 		$encodingStyle = 'http://schemas.xmlsoap.org/soap/encoding/';
-		if (($direction == 'input') && isset($opData['output']['encodingStyle']) && ($opData['output']['encodingStyle'] != $encodingStyle)) {
+		if(($direction == 'input') && isset($opData['output']['encodingStyle']) && ($opData['output']['encodingStyle'] != $encodingStyle)) {
 			$encodingStyle = $opData['output']['encodingStyle'];
 			$enc_style = $encodingStyle;
 		}
@@ -1248,7 +1248,7 @@ class wsdl extends nusoap_base {
 				foreach($opData[$direction]['parts'] as $name => $type) {
 					$this->debug('serializing part "'.$name.'" of type "'.$type.'"');
 					// Track encoding style
-					if (isset($opData[$direction]['encodingStyle']) && $encodingStyle != $opData[$direction]['encodingStyle']) {
+					if(isset($opData[$direction]['encodingStyle']) && $encodingStyle != $opData[$direction]['encodingStyle']) {
 						$encodingStyle = $opData[$direction]['encodingStyle'];			
 						$enc_style = $encodingStyle;
 					} else {
@@ -1293,7 +1293,7 @@ class wsdl extends nusoap_base {
 	{
 		$this->debug("in serializeType: name=$name, type=$type, use=$use, encodingStyle=$encodingStyle, unqualified=" . ($unqualified ? "unqualified" : "qualified"));
 		$this->appendDebug("value=" . $this->varDump($value));
-		if ($use == 'encoded' && $encodingStyle) {
+		if($use == 'encoded' && $encodingStyle) {
 			$encodingStyle = ' SOAP-ENV:encodingStyle="' . $encodingStyle . '"';
 		}
 
@@ -1337,7 +1337,7 @@ class wsdl extends nusoap_base {
 				$this->debug("in serializeType: expanded prefixed type: $uqType, $ns");
 			}
 
-			if ($ns == $this->XMLSchemaVersion || $ns == 'http://schemas.xmlsoap.org/soap/encoding/'){
+			if($ns == $this->XMLSchemaVersion || $ns == 'http://schemas.xmlsoap.org/soap/encoding/'){
 				$this->debug('in serializeType: type namespace indicates XML Schema or SOAP Encoding type');
 				if ($unqualified && $use == 'literal') {
 					$elementNS = " xmlns=\"\"";
@@ -1389,7 +1389,7 @@ class wsdl extends nusoap_base {
 					return $xml;
 				}
 				$this->debug('custom type extends XML Schema or SOAP Encoding namespace (yuck)');
-			} elseif ($ns == 'http://xml.apache.org/xml-soap') {
+			} else if ($ns == 'http://xml.apache.org/xml-soap') {
 				$this->debug('in serializeType: appears to be Apache SOAP type');
 				if ($uqType == 'Map') {
 					$tt_prefix = $this->getPrefixFromNamespace('http://xml.apache.org/xml-soap');
@@ -1429,7 +1429,7 @@ class wsdl extends nusoap_base {
 			$ns = '';
 			$uqType = $type;
 		}
-		if (!$typeDef = $this->getTypeDef($uqType, $ns)){
+		if(!$typeDef = $this->getTypeDef($uqType, $ns)){
 			$this->setError("$type ($uqType) is not a supported type.");
 			$this->debug("in serializeType: $type ($uqType) is not a supported type.");
 			return false;
@@ -1907,11 +1907,11 @@ class wsdl extends nusoap_base {
 		'documentation' => $documentation); 
 		// add portTypes
 		// add messages
-		if ($in)
+		if($in)
 		{
 			foreach($in as $pName => $pType)
 			{
-				if (strpos($pType,':')) {
+				if(strpos($pType,':')) {
 					$pType = $this->getNamespaceFromPrefix($this->getPrefix($pType)).":".$this->getLocalPart($pType);
 				}
 				$this->messages[$name.'Request'][$pName] = $pType;
@@ -1919,11 +1919,11 @@ class wsdl extends nusoap_base {
 		} else {
             $this->messages[$name.'Request']= '0';
         }
-		if ($out)
+		if($out)
 		{
 			foreach($out as $pName => $pType)
 			{
-				if (strpos($pType,':')) {
+				if(strpos($pType,':')) {
 					$pType = $this->getNamespaceFromPrefix($this->getPrefix($pType)).":".$this->getLocalPart($pType);
 				}
 				$this->messages[$name.'Response'][$pName] = $pType;

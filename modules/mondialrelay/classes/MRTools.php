@@ -48,6 +48,13 @@ class MRTools
 			'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
 		return $cleanedString;
 	}
+
+	// Add for 1.3 compatibility and avoid duplicate code
+	public static function jsonEncode($result)
+	{
+		return (method_exists('Tools', 'jsonEncode')) ?
+			Tools::jsonEncode($result) : json_encode($result);
+	}
 	
 	/*
 	** Fix security and compatibility for PS < 1.4.5

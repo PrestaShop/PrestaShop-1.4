@@ -1,5 +1,5 @@
 {*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -24,25 +24,19 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{include file="$MR_local_path/tpl/jquery-overload.tpl"}
-
 <link href="{$new_base_dir}css/style.css" rel="stylesheet" type="text/css" media="all" />
+
+{if $MR_overload_current_jquery}
+	{include file="$MR_local_path/tpl/jquery-overload.tpl"}
+{/if}
+
 <script type="text/javascript">
-	// Global JS Value
+	var PS_MR_ACCOUNT_SET = {if $MR_account_set}true{else}false{/if};
 	var _PS_MR_MODULE_DIR_ = "{$new_base_dir}";
-	var mrtoken = "{$MRToken}";
-	var PS_MROPC = {$one_page_checkout};
-	var PS_MRTranslationList = new Array();
-	var PS_MRCarrierMethodList =  new Array();
-	var PS_MRSelectedRelayPoint = {literal}{{/literal}'carrier_id': 0, 'relayPointNum': 0{literal}}{/literal};
-	
-	PS_MRTranslationList['Select'] = "{l s='Select' mod='mondialrelay'}";
-	PS_MRTranslationList['Selected'] = "{l s='Selected' mod='mondialrelay'}";
-	PS_MRTranslationList['errorSelection'] = "{l s='Please choose a relay point' mod='mondialrelay'}";
-	PS_MRTranslationList['openingRelay'] = "{l s='Opening hours' mod='mondialrelay'}";
-	PS_MRTranslationList['moreDetails'] = "{l s='More details' mod='mondialrelay'}";
+	var mrtoken = "{$MR_token}";
 </script>
 
 <script type="text/javascript" src="{$new_base_dir}js/mondialrelay.js"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-<script type="text/javascript" src="{$new_base_dir}js/gmap.js"></script>
+
+
+

@@ -29,9 +29,24 @@
 if (version_compare(_PS_VERSION_, '1.4', '<'))
 {
 	// Not exist for 1.3
-	class Shop
+	class Shop extends ObjectModel
 	{
+		public function __construct()
+		{
 
+		}
+
+		public static function getShops()
+		{
+			return array(
+				array('id_shop' => 1, 'name' => 'Default shop')
+			);
+		}
+
+		public static function getCurrentShop()
+		{
+				return 1;
+		}
 	}
 }
 
@@ -166,6 +181,12 @@ class ShopBackwardModule extends Shop
 	public function getContextType()
 	{
 		return ShopBackwardModule::CONTEXT_ALL;
+	}
+
+	// Simulate shop for 1.3 / 1.4
+	public function getID()
+	{
+		return 1;
 	}
 }
 

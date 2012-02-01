@@ -46,7 +46,7 @@ class MRManagement extends MondialRelay
 	{
 		
 	}
-
+	
 	/*
 	** This method fill the database with the selected carrier
 	*/
@@ -95,9 +95,9 @@ class MRManagement extends MondialRelay
 					$query .= '"'.pSQL($value).'", ';
 			$query = rtrim($query, ', ').')';
 		}
-		Db::getInstance()->Execute($query);
+		Db::getInstance()->execute($query);
 	}
-	
+
 	public function uninstallDetail()
 	{
 		$html = '';
@@ -139,21 +139,21 @@ class MRManagement extends MondialRelay
 		if (is_array($this->_params['historyIdList']) && count($this->_params['historyIdList']))
 		{
 			$query = '
-				DELETE FROM `'._DB_PREFIX_.'mr_historique`
+				DELETE FROM `'._DB_PREFIX_.'mr_history`
 				WHERE id IN(';
 			foreach($this->_params['historyIdList'] as $id)
 				$query .= (int)$id.', ';
 			$query = trim($query, ', ').')';
 			
 			$success['deletedListId'] = $this->_params['historyIdList'];
-			$totalDeleted = Db::getInstance()->Execute($query);
+			$totalDeleted = Db::getInstance()->execute($query);
 			if (count($success['deletedListId']) != $totalDeleted)
 			{
-				$error[] = $this->l('Some items cannot be removed, please try to remove it again');
+				$error[] = $this->l('Some items can\'t be removed, please try to remove it again');
 				foreach($success['deletedListId'] as $id)
 				{
 					$query = '
-						SELECT id FROM `'._DB_PREFIX_.'mr_historique`
+						SELECT id FROM `'._DB_PREFIX_.'mr_history`
 						WHERE id='.(int)$id;
 					if (Db::getInstance()->getRow($query) && 
 							($key = array_search($id, $success['deletedListId'])) !== FALSE)

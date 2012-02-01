@@ -57,7 +57,7 @@ class MRRelayDetail implements IMondialRelayWSMethod
 	private $_relayPointNumList = array(); 
 	private $_id_address_delivery = 0;
 	private $_webServiceKey = '';
-	private $_mondialRelay = NULL;
+	private $_mondialrelay = NULL;
 	private $_markCode = '';
 	
 	private $_resultList = array(
@@ -68,26 +68,27 @@ class MRRelayDetail implements IMondialRelayWSMethod
 	
 	public function __construct($params)	
 	{
+		$this->_mondialrelay = new MondialRelay();
+
 		$this->_relayPointNumList = $params['relayPointNumList'];
 		$this->_id_address_delivery = (int)($params['id_address_delivery']);
-		$this->_webServiceKey = Configuration::get('MR_KEY_WEBSERVICE');
-		$this->_markCode = Configuration::get('MR_CODE_MARQUE');
+		$this->_webServiceKey = $this->_mondialRelay->account_shop['MR_KEY_WEBSERVICE'];
+		$this->_markCode = $this->_mondialRelay->account_shop['MR_CODE_MARQUE'];
 	}
 	
 	public function __destruct()
 	{
-		 unset($this->_mondialRelay);
+		 unset($this->_mondialrelay);
 	}
 	
 	public function init()
-	{	
-		$this->_mondialRelay = new MondialRelay();
+	{
 		$address = new Address($this->_id_address_delivery);
 		
 		if (!$address)
-			throw new Exception($this->_mondialrelay->l('Customer address cannot be found'));
+			throw new Exception($this->_mondialrelay->l('Customer address can\'t be found'));
 		
-		$this->_fields['list']['Enseigne']['value'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
+		$this->_fields['list']['Enseigne']['value'] = $this->_mondialRelay->account_shop['MR_ENSEIGNE_WEBSERVICE'];
 		$this->_fields['list']['Pays']['value'] = Country::getIsoById($address->id_country);
 		
 		foreach ($this->_relayPointNumList as $num)
@@ -135,7 +136,7 @@ class MRRelayDetail implements IMondialRelayWSMethod
 					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
 					{
 						if (empty($valueDetailed['value']))
-							$error = $this->_mondialRelay->l('This key').' ['.$paramName.'] '.$this->_mondialRelay->l('is empty and need to be filled');
+							$error = $this->_mondialrelay->l('This key').' ['.$paramName.'] '.$this->_mondialrelay->l('is empty and need to be filled');
 						else
 							$error = 'This key ['.$paramName.'] hasn\'t a valid value format : '.$valueDetailed['value']; 
 						$this->_resultList['error'][$rootCase['list']['Num']['value']] = $error;
@@ -168,25 +169,25 @@ class MRRelayDetail implements IMondialRelayWSMethod
 		$errors = array();
 
 		if ($client->fault)
-			$errors[$errorTotal++] = $this->_mondialRelay->l('It seems the request isn\'t valid:').
+			$errors[$errorTotal++] = $this->_mondialrelay->l('It seems the request isn\'t valid:').
 				$result;
 		$result = $result['WSI2_DetailPointRelaisResult'];
 		if (($errorNumber = $result['STAT']) != 0)
 		{
-			$errors[] = $this->_mondialRelay->l('There is an error number : ').$errorNumber;
-			$errors[] = $this->_mondialRelay->l('Details : ').
-				$this->_mondialRelay->getErrorCodeDetail($errorNumber);
+			$errors[] = $this->_mondialrelay->l('There is an error number : ').$errorNumber;
+			$errors[] = $this->_mondialrelay->l('Details : ').
+				$this->_mondialrelay->getErrorCodeDetail($errorNumber);
 		}
 		else
 		{
 			$HDayList = array(
-				'Horaires_Lundi' => $this->_mondialRelay->l('Monday'),
-				'Horaires_Mardi' => $this->_mondialRelay->l('Tuesday'),
-				'Horaires_Mercredi' => $this->_mondialRelay->l('Wednesday'),
-				'Horaires_Jeudi' => $this->_mondialRelay->l('Thursday'),
-				'Horaires_Vendredi' => $this->_mondialRelay->l('Friday'),
-				'Horaires_Samedi' => $this->_mondialRelay->l('Saturday'),
-				'Horaires_Dimanche' => $this->_mondialRelay->l('Sunday'));
+				'Horaires_Lundi' => $this->_mondialrelay->l('Monday'),
+				'Horaires_Mardi' => $this->_mondialrelay->l('Tuesday'),
+				'Horaires_Mercredi' => $this->_mondialrelay->l('Wednesday'),
+				'Horaires_Jeudi' => $this->_mondialrelay->l('Thursday'),
+				'Horaires_Vendredi' => $this->_mondialrelay->l('Friday'),
+				'Horaires_Samedi' => $this->_mondialrelay->l('Saturday'),
+				'Horaires_Dimanche' => $this->_mondialrelay->l('Sunday'));
 		
 			$orderedDate = array();
 			// Format hour properly
@@ -231,7 +232,7 @@ class MRRelayDetail implements IMondialRelayWSMethod
 			unset($client);
 		}
 		else
-			throw new Exception($this->_mondialRelay->l('The Mondial Relay webservice isn\'t currently reliable'));
+			throw new Exception($this->_mondialrelay->l('The Mondial Relay webservice isn\'t currently reliable'));
 	}
 	
 	/*
