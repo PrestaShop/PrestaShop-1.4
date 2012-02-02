@@ -132,7 +132,7 @@ class MondialRelay extends Module
 
 			$id_tab = Db::getInstance()->Insert_ID();
 
-			$languages = Language::getLanguages();
+			$languages = Language::getLanguages(false);
 			foreach ($languages as $language)
 				Db::getInstance()->execute('
 				INSERT INTO ' . _DB_PREFIX_ . 'tab_lang
