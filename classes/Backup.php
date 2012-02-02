@@ -209,7 +209,7 @@ class BackupCore
 
 		$this->id = realpath($backupfile);
 
-		fwrite($fp, '/* Backup for ' . Tools::getHttpHost(false, false) . __PS_BASE_URI__ . "\n *  at " . date($date) . "\n */\n");
+		fwrite($fp, '/* Backup for '.Tools::getShopDomain(false, false).__PS_BASE_URI__."\n *  at ".date($date)."\n */\n");
 		fwrite($fp, "\n".'SET NAMES \'utf8\';'."\n\n");
 
 		// Find all tables

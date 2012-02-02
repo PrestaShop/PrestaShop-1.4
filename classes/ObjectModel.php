@@ -212,7 +212,7 @@ abstract class ObjectModelCore
 				{
 					foreach (array_keys($field) AS $key)
 					 	if (!Validate::isTableOrIdentifier($key))
-			 				die(Tools::displayError('key is not table or identifier, ').$key);
+			 				die(Tools::displayError('key is not table or identifier, ').Tools::safeOutput($key));
 					$field[$this->identifier] = (int)$this->id;
 					$result &= Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table.'_lang', $field, 'INSERT');
 				}
@@ -344,7 +344,7 @@ abstract class ObjectModelCore
 	{
 		/* WARNING : Product do not use this function, so do not forget to report any modification if necessary */
 	 	if (!Validate::isTableOrIdentifier($this->identifier))
-	 		die(Tools::displayError('identifier is not table or identifier : ').$this->identifier);
+	 		die(Tools::displayError('identifier is not table or identifier : ').Tools::safeOutput($this->identifier));
 
 		$fields = array();
 
@@ -387,13 +387,13 @@ abstract class ObjectModelCore
 		foreach ($fieldsRequired as $field)
 			if (Tools::isEmpty($this->{$field}) AND (!is_numeric($this->{$field})))
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' is empty)');
+				if ($die) die (Tools::displayError().' ('.Tools::safeOutput(get_class($this)).' -> '.Tools::safeOutput($field).' is empty)');
 				return $errorReturn ? get_class($this).' -> '.$field.' is empty' : false;
 			}
 		foreach ($this->fieldsSize as $field => $size)
 			if (isset($this->{$field}) AND Tools::strlen($this->{$field}) > $size)
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' Length '.$size.')');
+				if ($die) die (Tools::displayError().' ('.Tools::safeOutput(get_class($this)).' -> '.Tools::safeOutput($field).' Length '.Tools::safeOutput($size).')');
 				return $errorReturn ? get_class($this).' -> '.$field.' Length '.$size : false;
 			}
 		$validate = new Validate();
@@ -402,7 +402,7 @@ abstract class ObjectModelCore
 				die (Tools::displayError('Validation function not found.').' '.$method);
 			elseif (!empty($this->{$field}) AND !call_user_func(array('Validate', $method), $this->{$field}))
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).' -> '.$field.' = '.$this->{$field}.')');
+				if ($die) die (Tools::displayError().' ('.Tools::safeOutput(get_class($this)).' -> '.Tools::safeOutput($field).' = '.Tools::safeOutput($this->{$field}).')');
 				return $errorReturn ? get_class($this).' -> '.$field.' = '.$this->{$field} : false;
 			}
 		return true;
@@ -420,7 +420,7 @@ abstract class ObjectModelCore
 				continue ;
 			if (!$this->{$fieldArray} OR !sizeof($this->{$fieldArray}) OR ($this->{$fieldArray}[$defaultLanguage] !== '0' AND empty($this->{$fieldArray}[$defaultLanguage])))
 			{
-				if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language.').')');
+				if ($die) die (Tools::displayError().' ('.Tools::safeOutput(get_class($this)).'->'.Tools::safeOutput($fieldArray).' '.Tools::displayError('is empty for default language.').')');
 				return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language.') : false;
 			}
 		}
@@ -431,7 +431,7 @@ abstract class ObjectModelCore
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (Tools::strlen($value) > $size)
 				{
-					if ($die) die (Tools::displayError().' ('.get_class($this).'->'.$fieldArray.' '.Tools::displayError('Length').' '.$size.' '.Tools::displayError('for language').')');
+					if ($die) die (Tools::displayError().' ('.Tools::safeOutput(get_class($this)).'->'.Tools::safeOutput($fieldArray).' '.Tools::displayError('Length').' '.Tools::safeOutput($size).' '.Tools::displayError('for language').')');
 					return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('Length').' '.$size.' '.Tools::displayError('for language') : false;
 				}
 		}
@@ -442,10 +442,10 @@ abstract class ObjectModelCore
 				continue ;
 			foreach ($this->{$fieldArray} as $k => $value)
 				if (!method_exists($validate, $method))
-					die (Tools::displayError('Validation function not found.').' '.$method);
+					die (Tools::displayError('Validation function not found.').' '.Tools::safeOutput($method));
 				elseif (!empty($value) AND !call_user_func(array('Validate', $method), $value))
 				{
-					if ($die) die (Tools::displayError('The following field is invalid according to the validate method ').'<b>'.$method.'</b>:<br/> ('.get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k.')');
+					if ($die) die (Tools::displayError('The following field is invalid according to the validate method ').'<b>'.Tools::safeOutput($method).'</b>:<br/> ('.Tools::safeOutput(get_class($this)).'->'.Tools::safeOutput($fieldArray).' = '.Tools::safeOutput($value).' '.Tools::displayError('for language').' '.Tools::safeOutput($k).')');
 					return $errorReturn ? Tools::displayError('The following field is invalid according to the validate method ').'<b>'.$method.'</b>:<br/> ('. get_class($this).'->'.$fieldArray.' = '.$value.' '.Tools::displayError('for language').' '.$k : false;
 				}
 		}

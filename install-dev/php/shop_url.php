@@ -33,8 +33,8 @@ function shop_url()
 		$host = (isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : $_SERVER['HTTP_HOST']);
 	$res = Db::getInstance()->getValue('REPLACE INTO `'._DB_PREFIX_.'configuration`
 		(name, value) VALUES 
-		("PS_SHOP_DOMAIN", "'.$host.'"),
-		("PS_SHOP_DOMAIN_SSL", "'.$host.'")
+		("PS_SHOP_DOMAIN", "'.pSQL($host).'"),
+		("PS_SHOP_DOMAIN_SSL", "'.pSQL($host).'")
 		');
 	return true;
 }

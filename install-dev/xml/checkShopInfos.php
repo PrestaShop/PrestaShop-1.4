@@ -183,8 +183,8 @@ $error['infosInsertSQL'] = '';
 if (isFormValid())
 {
 	$sqlParams = array();
-	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_DOMAIN', '".Tools::getHttpHost()."', NOW(), NOW())";
-	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_DOMAIN_SSL', '".Tools::getHttpHost()."', NOW(), NOW())";
+	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_DOMAIN', '".pSQL(Tools::getHttpHost())."', NOW(), NOW())";
+	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_DOMAIN_SSL', '".pSQL(Tools::getHttpHost())."', NOW(), NOW())";
 	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_INSTALL_VERSION', '".pSQL(INSTALL_VERSION)."', NOW(), NOW())";
 	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_NAME', '".pSQL($_GET['infosShop'])."', NOW(), NOW())";
 	$sqlParams[] = "INSERT IGNORE INTO "._DB_PREFIX_."configuration (name, value, date_add, date_upd) VALUES ('PS_SHOP_EMAIL', '".pSQL($_GET['infosEmail'])."', NOW(), NOW())";

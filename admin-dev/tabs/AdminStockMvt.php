@@ -39,7 +39,7 @@ class AdminStockMvt extends AdminTab
 		'id_stock_mvt' => array('title' => $this->l('ID'), 'width' => 40),
 		'product_name' => array('title' => $this->l('Product Name'), 'width' => 250, 'havingFilter' => true),
 		'quantity' => array('title' => $this->l('Quantity'), 'width' => 40),
-		'reason' => array('title' => $this->l('Reason'), 'width' => 250),
+		'reason' => array('title' => $this->l('Reason'), 'width' => 250, 'havingFilter' => true),
 		'id_order' => array('title' => $this->l('ID Order'), 'width' => 40),
 		'employee' => array('title' => $this->l('Employee'), 'width' => 100, 'havingFilter' => true),
 		);
