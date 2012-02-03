@@ -136,7 +136,6 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_06ec9154ce96a389f7b1d884e0
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f89b7100efcc136900c909690e43f008'] = 'La ligne correspondante dans votre fichier cron apparaît ainsi :';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b40495f7999e31d4abed3183d2e3cd25'] = 'La protection acheteur de Trusted Shops à besoin d\'un login pour fonctionner. Veuillez contacter l\'administrateur de la boutique.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_9d36bad327b052a9bdec7003f95ce4bd'] = 'Une erreur est apparue avec votre langue :';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_03e9e3ceaf5769311c57b5903a958e94'] = 'Un acheteur ne peut pas acheter plusieurs produits de protection d\'acheteur';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_26a7019f9c88a24e63ebc690e9527f31'] = 'Vous allez recevoir un mail de la part de Trusted Shops à propos de votre numéro de garantie.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2b83e3a2e08203b9892ad8801d6b2543'] = 'Trusted Shops Système d’évaluation client';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b20a16afda98421bbf7457ccfa50e311'] = 'Ce module nécessite les droits de lecture et d\'écriture sur le répertoire cache du module.';

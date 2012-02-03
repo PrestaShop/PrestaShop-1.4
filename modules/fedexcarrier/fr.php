@@ -11,6 +11,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4d470fde8487e755a50e9235e3dc13a
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a1d8be175eff378884736e1b44da526e'] = 'Votre compte Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c481cd53864462a87dcb89c33589ff8e'] = 'Votre Fedex meter number';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_918356c887962073f010ee06e1395713'] = 'Votre mot de passe Fedex';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f028d1298ed2c231ec5bbf677f3c6f01'] = 'Clé d\'authentification Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3ef2f9d666a37f95d963a84c46bae646'] = 'Ramassage par défaut';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_72f18dde0a5c9f75dd487adeacb92b56'] = 'Type de colis par défaut';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_20449d3f0b6c6b9265a5cd2a470a6451'] = 'Poids du colis';
