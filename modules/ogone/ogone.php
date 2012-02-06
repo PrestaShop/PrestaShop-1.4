@@ -36,7 +36,7 @@ class Ogone extends PaymentModule
 	{
 		$this->name = 'ogone';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.2';
+		$this->version = '2.3';
 
 		parent::__construct();
 
@@ -49,6 +49,9 @@ class Ogone extends PaymentModule
 			foreach ($updateConfig as $u)
 				if (!Configuration::get($u) && defined('_'.$u.'_'))
 					Configuration::updateValue($u, constant('_'.$u.'_'));
+
+		/** Backward compatibility */
+		require(_PS_MODULE_DIR_.'ogone/backward_compatibility/backward.php');
 	}
 	
 	public function install()
@@ -67,7 +70,7 @@ class Ogone extends PaymentModule
 			Configuration::updateValue('OGONE_SHA_OUT', Tools::getValue('OGONE_SHA_OUT'));
 			Configuration::updateValue('OGONE_MODE', (int)Tools::getValue('OGONE_MODE'));
 			$dataSync = (($pspid = Configuration::get('OGONE_PSPID'))
-				? '<img src="http://www.prestashop.com/modules/ogone.png?pspid='.urlencode($pspid).'&mode='.(int)Tools::getValue('OGONE_MODE').'" style="float:right" />'
+				? '<img src="http://api.prestashop.com/modules/ogone.png?pspid='.urlencode($pspid).'&mode='.(int)Tools::getValue('OGONE_MODE').'" style="float:right" />'
 				: ''
 			);
 			echo $this->displayConfirmation($this->l('Configuration updated').$dataSync);
@@ -157,8 +160,6 @@ class Ogone extends PaymentModule
 	
 	public function hookPayment($params)
 	{
-		global $smarty;
-		
 		$currency = new Currency((int)($params['cart']->id_currency));
 		$lang = new Language((int)($params['cart']->id_lang));
 		$customer = new Customer((int)($params['cart']->id_customer));
@@ -188,44 +189,36 @@ class Ogone extends PaymentModule
 			$shasign .= strtoupper($key).'='.$value.Configuration::get('OGONE_SHA_IN');
 		$ogoneParams['SHASign'] = strtoupper(sha1($shasign));
 		
-		$smarty->assign('ogone_params', $ogoneParams);
-		$smarty->assign('OGONE_MODE', Configuration::get('OGONE_MODE'));
+		$this->context->smarty->assign('ogone_params', $ogoneParams);
+		$this->context->smarty->assign('OGONE_MODE', Configuration::get('OGONE_MODE'));
 		
 		return $this->display(__FILE__, 'ogone.tpl');
     }
 	
 	public function hookOrderConfirmation($params)
 	{
-		global $smarty, $cookie;
-		
 		if ($params['objOrder']->module != $this->name)
 			return;
 		
 		if ($params['objOrder']->valid)
-			$smarty->assign(array('status' => 'ok', 'id_order' => $params['objOrder']->id));
+			$this->context->smarty->assign(array('status' => 'ok', 'id_order' => $params['objOrder']->id));
 		else
-			$smarty->assign('status', 'failed');
-		$link = new Link();
-		$smarty->assign('ogone_link', (method_exists($link, 'getPageLink') ? $link->getPageLink('contact-form.php', true) : Tools::getHttpHost(true).'contact-form.php'));
+			$this->context->smarty->assign('status', 'failed');
+
+		$this->context->smarty->assign('ogone_link', (method_exists($link, 'getPageLink') ? $this->context->link->getPageLink('contact', true) : Tools::getHttpHost(true).'contact'));
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
 	
 	public function validate($id_cart, $id_order_state, $amount, $message = '', $secure_key)
 	{
-		$this->validateOrder((int)$id_cart, $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true, pSQL($secure_key));
-		if ($amount > 0 AND file_exists('../../classes/PaymentCC.php'))
+		if (isset($this->pcc))
 		{
-			$pcc = new PaymentCC();
-			$order = Db::getInstance()->getRow('SELECT * FROM '._DB_PREFIX_.'orders WHERE id_cart = '.(int)$secure_cart[0]);
-			$pcc->id_order = (int)$order['id_order'];
-			$pcc->id_currency = (int)$order['id_currency'];
-			$pcc->amount = $amount;
-			$pcc->transaction_id = Tools::getValue('PAYID');
-			$pcc->card_number = Tools::getValue('CARDNO');
-			$pcc->card_brand = Tools::getValue('BRAND');
-			$pcc->card_expiration = Tools::getValue('ED');
-			$pcc->card_holder = Tools::getValue('CN');
-			$pcc->add();
+			$this->pcc->transaction_id = Tools::getValue('PAYID');
+			$this->pcc->card_number = Tools::getValue('CARDNO');
+			$this->pcc->card_brand = Tools::getValue('BRAND');
+			$this->pcc->card_expiration = Tools::getValue('ED');
+			$this->pcc->card_holder = Tools::getValue('CN');
 		}
+		$this->validateOrder((int)$id_cart, $id_order_state, $amount, $this->displayName, $message, NULL, NULL, true, pSQL($secure_key));		
 	}
 }
