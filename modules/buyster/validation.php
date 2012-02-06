@@ -44,7 +44,7 @@ else
 	if ($operation == 'paymentValidation' && $result['status'] == 'TO_VALIDATE')
 		$buyster->validateOrder($cart->id,
 						Configuration::get('BUYSTER_PAYMENT_STATE_VALIDATION'), 
-						(float)$cart->getOrderTotal(), 
+						(float)($result['amount'] / 100),
 						$buyster->name, 
 						$responseDescription,
 						array(), 
@@ -54,7 +54,7 @@ else
 	else if ($result['status'] == 'TO_CAPTURE')
 		$buyster->validateOrder($cart->id,
 						Configuration::get('PS_OS_PAYMENT'),
-						(float)$cart->getOrderTotal(), 
+						(float)($result['amount'] / 100),
 						$buyster->name, 
 						$responseDescription,
 						array(), 
