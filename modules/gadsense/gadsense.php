@@ -32,30 +32,33 @@ class GAdsense extends Module
 {	
 	function __construct()
 	{
-	 	$this->name = 'gadsense';
-	 	$this->tab = 'advertising_marketing';
-	 	$this->version = '1.1';
+		$this->name = 'gadsense';
+		$this->tab = 'advertising_marketing';
+		$this->version = '1.2';
 		$this->author = 'PrestaShop';
-        $this->displayName = $this->l('Google Adsense');
-		
-	 	parent::__construct();
-		
-		if ($this->id AND !Configuration::get('GADSENSE_ID'))
+		$this->displayName = $this->l('Google Adsense');
+
+		parent::__construct();
+
+		if ($this->id && !Configuration::get('GADSENSE_ID'))
 			$this->warning = $this->l('You have not yet set your Google Adsense code');
-    	$this->description = $this->l('Integrate Google Adsense script into your shop');
+		$this->description = $this->l('Integrate Google Adsense script into your shop');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details ?');
+
+		/** Backward compatibility */
+		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 	}
-	
-    function install()
-    {
-        if (!parent::install() OR !$this->registerHook('home'))
+
+	function install()
+	{
+		if (!parent::install() || !$this->registerHook('home'))
 			return false;
 		return true;
-    }
+	}
 	
 	function uninstall()
 	{
-		if (!Configuration::deleteByName('GADSENSE_ID') OR !parent::uninstall())
+		if (!Configuration::deleteByName('GADSENSE_ID') || !parent::uninstall())
 			return false;
 		return true;
 	}
