@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.6.2';
+		$this->version = '1.6.3';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -538,7 +538,7 @@ class TntCarrier extends CarrierModule
 	
 	private function _postValidationShipping()
 	{
-		$collect = '1';//Tools::getValue('tnt_carrier_shipping_collect');
+		$collect = (Tools::getValue('tnt_carrier_shipping_collect') == 'on' ? 1 : 0);
 		$company = pSQL(Tools::getValue('tnt_carrier_shipping_company'));
 		$pex = pSQL(Tools::getValue('tnt_carrier_shipping_pex'));
 		$lname = pSQL(Tools::getValue('tnt_carrier_shipping_last_name'));
@@ -555,8 +555,8 @@ class TntCarrier extends CarrierModule
 		
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
 			$this->_postErrors[] = $this->l('You need a TNT account to complete your shipping address');
-		if (!$collect && $pex == '')
-			$this->_postErrors[] = $this->l('The pex code is missing');
+		/*if (!$collect && $pex == '')
+			$this->_postErrors[] = $this->l('The pex code is missing');*/
 		if ($collect && $company == '')
 			$this->_postErrors[] = $this->l('Company name is missing');
 		if ($collect && !$lname)
@@ -908,6 +908,7 @@ class TntCarrier extends CarrierModule
 			});
 			</script>';
 		$smarty->assign('id_cart', $id_cart);
+		$smarty->assign('tnt_token', Configuration::get('TNT_CARRIER_TOKEN'));
 		return $this->display( __FILE__, 'tpl/relaisColis.tpl' );
 	}
 	
@@ -931,18 +932,10 @@ class TntCarrier extends CarrierModule
 			$smarty->assign('var', $var);
 			return $this->display( __FILE__, 'tpl/shippingNumber.tpl' );
 		}
-		if (Configuration::get('TNT_CARRIER_SHIPPING_COLLECT'))
-		{
-			if (!Configuration::get('TNT_CARRIER_SHIPPING_COMPANY') || !Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') || !Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') || !Configuration::get('TNT_CARRIER_SHIPPING_CITY') || !Configuration::get('TNT_CARRIER_SHIPPING_EMAIL') 
-				|| !Configuration::get('TNT_CARRIER_SHIPPING_PHONE') || !Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'))
+		if (!Configuration::get('TNT_CARRIER_SHIPPING_COMPANY') || !Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') || !Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') || !Configuration::get('TNT_CARRIER_SHIPPING_CITY') || !Configuration::get('TNT_CARRIER_SHIPPING_EMAIL') 
+			|| !Configuration::get('TNT_CARRIER_SHIPPING_PHONE') || !Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'))
 				$errorShipping = 1;
-		}
-		else
-		{
-			if (!Configuration::get('TNT_CARRIER_SHIPPING_PEX') || !Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') || !Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') || !Configuration::get('TNT_CARRIER_SHIPPING_CITY') || !Configuration::get('TNT_CARRIER_SHIPPING_EMAIL') 
-				|| !Configuration::get('TNT_CARRIER_SHIPPING_PHONE'))
-				$errorShipping = 1;
-		}
+
 		if ($errorShipping)
 		{
 			$var = array("error" => $this->l("You didn't give a collect address in the TNT module configuration"),
@@ -1080,9 +1073,9 @@ class TntCarrier extends CarrierModule
 		$date_exp = $params->date_upd;
 		$id_adress_delivery = $params->id_address_delivery;
 		$info = Db::getInstance()->getRow('SELECT postcode, city, company FROM `'._DB_PREFIX_.'address` WHERE `id_address` = "'.(int)($id_adress_delivery).'"');
-		
+
 		foreach($product as $k => $v)
-				$weight += (float)($v['weight']);
+				$weight += (float)($v['weight'] * (int)$v['cart_quantity']);
 		$serviceCache = new serviceCache($params->id, $info['postcode'], $info['city'], $info['company'], Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), Configuration::get('TNT_CARRIER_SHIPPING_CITY'));
 		$serviceCache->clean();
 		if (!$serviceCache->getFaisabilityAtThisTime())

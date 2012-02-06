@@ -96,8 +96,8 @@ class TntWebService
 		$soapclient->__setSOAPHeaders(array($this->_header));
 		
 		$sender = array(
-			'type' => (Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') ? "ENTERPRISE" : "DEPOT"), //ENTREPRISE OR DEPOT
-			'typeId' => (Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') ? "" : Configuration::get('TNT_CARRIER_SHIPPING_PEX')) , // code PEX if DEPOT is ON
+			'type' => "ENTERPRISE",//(Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') ? "ENTERPRISE" : "DEPOT"), //ENTREPRISE OR DEPOT
+			'typeId' => "",//(Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') ? "" : Configuration::get('TNT_CARRIER_SHIPPING_PEX')) , // code PEX if DEPOT is ON
 			'name' => Configuration::get('TNT_CARRIER_SHIPPING_COMPANY'), // raison social
 			'address1' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1'),
 			'address2' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2'),
@@ -202,7 +202,7 @@ class TntWebService
 			'serviceCode' => $info[3]['option'],
 			'quantity' => count($info[1]['weight']), //number of package; count($parcelsRequest)
 			'parcelsRequest' => $parcelsRequest,
-			'saturdayDelivery' => '0',//Configuration::get('TNT_CARRIER_SHIPPING_DELIVERY'),
+			'saturdayDelivery' => ($info[5]['saturday'] ? '1' : '0'),
 			//'paybackInfo' => $paybackInfo,
 			'labelFormat' => (!Configuration::get('TNT_CARRIER_PRINT_STICKER') ? "STDA4" : Configuration::get('TNT_CARRIER_PRINT_STICKER'))
 			);

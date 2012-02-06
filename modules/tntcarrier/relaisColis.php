@@ -12,7 +12,7 @@ function phoneForm($mob, $tel)
 	if ($tel != '06' && $mob != '06' && $tel != '07' && $mob != '07')
 	{
 		echo 'Afin d\'ameliorer les conditions de livraison, veuillez renseigner votre numero de mobile<br/>';
-		echo 'Numero de telephone mobile : <input type="mobile" name="mobileTnt" id="mobileTnt" onblur="postMobile()"/>
+		echo 'Numero de telephone mobile : <input type="mobile" name="mobileTnt" id="mobileTnt" onblur="postMobile(\''.Configuration::get('TNT_CARRIER_TOKEN').'\')"/>
 		<input type="hidden" id="id_cart" value="'.Tools::safeOutput($_GET['idcart']).'"/>';
 		return true;
 	}
@@ -49,8 +49,6 @@ phoneForm($mob, $tel);
 }
 else
 {
-	/*$address->deleted = 1;
-	$address->save();*/
 	if (!phoneForm($mob, $tel))
 		echo "none";
 }

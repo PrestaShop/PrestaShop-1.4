@@ -58,10 +58,10 @@
 		$(".opc-main-block").css('position', 'relative');
 	}
 	
-	function selectCities()
+	function selectCities(token)
 	{
 		$.get(
-			"./modules/tntcarrier/changeCity.php?city="+$("#citiesGuide").val()+"&id="+$("#cartRelaisColis").val(),
+			"./modules/tntcarrier/changeCity.php?city="+$("#citiesGuide").val()+"&id="+$("#cartRelaisColis").val()+"&token="+token,
 			function(response, status, xhr) 
 			{
 				/*if (status == "error") 
@@ -91,7 +91,7 @@
 {if isset($error)}
 	<h3>{$error}</h3>
 	{l s='Postal Code' mod='tntcarrier'} : {$postalCode}
-	<select id="citiesGuide" style="width:130px" onchange="selectCities()">
+	<select id="citiesGuide" style="width:130px" onchange="selectCities('{$tnt_token}')">
 		<option selected="selected">{l s='Choose' mod='tntcarrier'}</option>
 	 {foreach from=$cities item=v}
 		<option value='{$v}'>{$v}</option>

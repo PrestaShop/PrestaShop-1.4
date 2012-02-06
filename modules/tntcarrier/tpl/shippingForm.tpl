@@ -27,7 +27,10 @@
 		<label>{l s='Contact Email Address' mod='tntcarrier'} : </label>
 		<div class="margin-form"><input type="text" size="20" name="tnt_carrier_shipping_email" value="{$varShipping.email}" /> <span style="color:red">*</span></div>
 		<label>{l s='Contact Phone Number' mod='tntcarrier'} : </label>
-		<div class="margin-form"><input type="text" size="20" name="tnt_carrier_shipping_phone" value="{$varShipping.phone}" /> <span style="color:red">*</span></div>
+		<div class="margin-form"><input type="text" size="20" name="tnt_carrier_shipping_phone" value="{$varShipping.phone}" /> <span style="color:red">*</span></div><br/>
+		<div style="padding-left:210px">
+		<input type='checkbox' name='tnt_carrier_shipping_collect' {if $varShipping.collect} checked='checked'{/if}/> : {l s='Check this box if you are in on-demand pickup' mod='tntcarrier'}
+		</div>
 		<br/><br/>
 		<span style="font-weight:bold">{l s='Label Format for printing (This Label will have to be sticked on the package)' mod='tntcarrier'} : </span><br/><br/>
         <div style="padding-left:210px">

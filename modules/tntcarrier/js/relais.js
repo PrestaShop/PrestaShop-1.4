@@ -10,20 +10,12 @@ $("#form").submit(function()
 		}
 	});
 
-function postMobile()
+function postMobile(token)
 {
 	var id = $("#id_cart").val();
 	var ph = $("#mobileTnt").val();;
 	
-	/*$.ajax({
-	   type: "POST",
-	   url: "./modules/tntcarrier/relaisColis/postMobileData.php",
-	   data: "id_cart="+id_cart+"&phone="+phone,
-	   success: function(msg){
-		alert(msg);
-	   }
-	});*/
-	$.get("./modules/tntcarrier/relaisColis/postMobileData.php?id_cart="+id+"&phone="+ph);
+	$.get("./modules/tntcarrier/relaisColis/postMobileData.php?id_cart="+id+"&phone="+ph+"&token="+token);
 }
 	
 function resetMap() {
