@@ -20,7 +20,7 @@ class Buyster extends PaymentModule
 	{
 		$this->name = 'buyster';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.2 ;
+		$this->version = 1.3 ;
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 

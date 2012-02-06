@@ -26,6 +26,12 @@ class BuysterOperation
 		Db::getInstance()->execute('UPDATE `'._DB_PREFIX_.'buyster_operation` SET `reference` = "'.pSQL($ref).'" WHERE `id_cart` = "'.(int)$this->_idCart.'"');
 	}
 	
+	public function setToken($token)
+	{
+		Db::getInstance()->execute('UPDATE `'._DB_PREFIX_.'buyster_operation` SET `token` = "'.pSQL($token).'" WHERE `id_cart` = "'.(int)$this->_idCart.'"');
+	}
+	
+	
 	public function setStatus($status)
 	{
 		$this->_status = $status;
@@ -60,6 +66,11 @@ class BuysterOperation
 	public static function getReferenceId($id)
 	{
 		return (Db::getInstance()->getValue('SELECT `reference` FROM `'._DB_PREFIX_.'buyster_operation` WHERE `id_cart` = "'.(int)$id.'"'));
+	}
+	
+	public static function getTokenId($id)
+	{
+		return (Db::getInstance()->getValue('SELECT `token` FROM `'._DB_PREFIX_.'buyster_operation` WHERE `id_cart` = "'.(int)$id.'"'));
 	}
 	
 	public static function getStatusId($id)

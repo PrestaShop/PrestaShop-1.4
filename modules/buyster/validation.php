@@ -8,8 +8,15 @@ require_once(_PS_MODULE_DIR_."/buyster/classes/BuysterOperation.php");
 require_once(_PS_MODULE_DIR_."/buyster/classes/BuysterWebService.php");
 
 $buyster = new Buyster();
-$cartId = substr(htmlentities($_POST['transactionReference']), 24); //[BuysterRef][YYYYMMDDhhmmss][cartId]
+
+$cartId = substr(htmlentities($_POST['transactionReference']), 30); //[BuysterRef][YYYYMMDDhhmmss][token][cartId]
 $cart = new Cart($cartId);
+
+$post_token = substr($_POST['transactionReference'], 24, 6);
+$payment_token = BuysterOperation::getTokenId($cart->id);
+
+if ($post_token != $payment_token || $payment_token == '')
+	die('Invalid Token');
 
 $ref = BuysterOperation::getReferenceId($cart->id);
 $webService = new BuysterWebService();
