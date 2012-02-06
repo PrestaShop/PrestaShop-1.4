@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -28,8 +28,8 @@
 class UpgraderCore
 {
 	const DEFAULT_CHECK_VERSION_DELAY_HOURS = 24;
-	public $rss_version_link = 'http://www.prestashop.com/xml/upgrader.xml';
-	public $rss_md5file_link_dir = 'http://www.prestashop.com/xml/md5/';
+	public $rss_version_link = 'http://api.prestashop.com/xml/upgrader.xml';
+	public $rss_md5file_link_dir = 'http://api.prestashop.com/xml/md5/';
 	/**
 	 * @var boolean contains true if last version is not installed
 	 */
@@ -68,7 +68,7 @@ class UpgraderCore
 
 	/**
 	 * downloadLast download the last version of PrestaShop and save it in $dest/$filename
-	 * 
+	 *
 	 * @param string $dest directory where to save the file
 	 * @param string $filename new filename
 	 * @return boolean
@@ -97,7 +97,7 @@ class UpgraderCore
 
 	/**
 	 * checkPSVersion ask to prestashop.com if there is a new version. return an array if yes, false otherwise
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function checkPSVersion($force = false)
@@ -159,7 +159,7 @@ class UpgraderCore
 
 	/**
 	 * load the last version informations stocked in base
-	 * 
+	 *
 	 * @return $this
 	 */
 	public function loadFromConfig()
@@ -180,7 +180,7 @@ class UpgraderCore
 			if (isset($last_version_check['autoupgrade_last_version']))
 				$this->autoupgrade_last_version = $last_version_check['autoupgrade_last_version'];
 			if (isset($last_version_check['autoupgrade_module_link']))
-				$this->autoupgrade_module_link= $last_version_check['autoupgrade_module_link'];
+				$this->autoupgrade_module_link = $last_version_check['autoupgrade_module_link'];
 			if (isset($last_version_check['md5']))
 				$this->md5 = $last_version_check['md5'];
 			if (isset($last_version_check['desc']))
@@ -192,7 +192,7 @@ class UpgraderCore
 	}
 
 	/**
-	 * return an array of files 
+	 * return an array of files
 	 * that the md5file does not match to the original md5file (provided by $rss_md5file_link_dir )
 	 * @return void
 	 */
@@ -200,6 +200,7 @@ class UpgraderCore
 	{
 		if (is_array($this->changed_files) && count($this->changed_files) == 0)
 		{
+			libxml_set_streams_context(@stream_context_create(array('http' => array('timeout' => 3))));
 			$checksum = @simplexml_load_file($this->rss_md5file_link_dir._PS_VERSION_.'.xml');
 			if ($checksum == false)
 			{
@@ -212,13 +213,13 @@ class UpgraderCore
 	}
 
 	/** populate $this->changed_files with $path
-	 * in sub arrays  mail, translation and core items 
+	 * in sub arrays  mail, translation and core items
 	 * @param string $path filepath to add, relative to _PS_ROOT_DIR_
 	 */
 	protected function addChangedFile($path)
 	{
 		$this->version_is_modified = true;
-		
+
 		if (strpos($path, 'mails/') !== false)
 			$this->changed_files['mail'][] = $path;
 		else if (
@@ -264,7 +265,7 @@ class UpgraderCore
 
 				$fullpath = str_replace('ps_root_dir', _PS_ROOT_DIR_, $fullpath);
 
-					// replace default admin dir by current one 
+					// replace default admin dir by current one
 				$fullpath = str_replace(_PS_ROOT_DIR_.'/admin', _PS_ADMIN_DIR_, $fullpath);
 				if (!file_exists($fullpath))
 					$this->addMissingFile($relative_path);
