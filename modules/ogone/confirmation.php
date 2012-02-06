@@ -35,14 +35,17 @@ $id_cart = Tools::getValue('orderID');
 $key = Db::getInstance()->getValue('SELECT secure_key FROM '._DB_PREFIX_.'customer WHERE id_customer = '.(int)$cookie->id_customer);
 $context = Context::getContext();
 
+$page = (_PS_VERSION_ < '1.5') ? 'my-account.php' : 'my-account';
+
+$ogone_link = method_exists($context->link, 'getPageLink') ? $context->link->getPageLink($page) : _PS_BASE_URL_.$page;
+
 $smarty->assign(array(
 	'id_module' => $id_module,
 	'id_cart' => $id_cart,
 	'key' => $key,
-	'ogone_link' => (method_exists($context->link, 'getPageLink') ? $context->link->getPageLink('my-account') : _PS_BASE_URL_.'my-account')
-	));
+	'ogone_link' => $ogone_link)
+);
+
 echo $ogone->display(dirname(__FILE__), 'waiting.tpl');
 
 include(dirname(__FILE__).'/../../footer.php');
-
-
