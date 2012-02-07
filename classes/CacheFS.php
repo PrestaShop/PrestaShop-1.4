@@ -56,7 +56,12 @@ class CacheFSCore extends Cache {
 	
 	public function setNumRows($key, $value, $expire = 0)
 	{
-		return $this->set($key.'_nrows', $value, $expire);
+		$this->_setKeys();
+		if (isset($this->_keysCached[$key.'_nrows']))
+			return true;
+		$return = $this->set($key.'_nrows', $value, $expire);
+		$this->_writeKeys();
+		return $return;
 	}
 	
 	public function getNumRows($key)
@@ -85,7 +90,7 @@ class CacheFSCore extends Cache {
 		if (file_exists(_PS_CACHEFS_DIRECTORY_.'keysCached'))
 		{
 			$file = file_get_contents(_PS_CACHEFS_DIRECTORY_.'keysCached');
-			$this->_keysCached =	unserialize($file);
+			$this->_keysCached = unserialize($file);
 		}
 		if (file_exists(_PS_CACHEFS_DIRECTORY_.'tablesCached'))
 		{
