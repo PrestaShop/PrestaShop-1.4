@@ -723,11 +723,16 @@ class PDFCore extends PDF_PageGroupCore
 
 			if (self::$order->total_shipping != '0.00' AND (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost)))
 			{
-				$pdf->Cell($width, 0, self::l('Total shipping').' : ', 0, 0, 'R');
 				if (self::$_priceDisplayMethod == PS_TAX_EXC)
+                {
+                    $pdf->Cell($width, 0, self::l('Total shipping (tax excl.)').' : ', 0, 0, 'R');
 					$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(Tools::ps_round($priceBreakDown['shippingCostWithoutTax'], 2), self::$currency, true)), 0, 0, 'R');
+                }
 				else
+                {
+                    $pdf->Cell($width, 0, self::l('Total shipping (tax incl.)').' : ', 0, 0, 'R');
 					$pdf->Cell(0, 0, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice(self::$order->total_shipping, self::$currency, true)), 0, 0, 'R');
+                }
 				$pdf->Ln(4);
 			}
 
@@ -934,7 +939,14 @@ class PDFCore extends PDF_PageGroupCore
 			$this->Cell($w[2], 6, '', 'B');
 			$this->Cell($w[3], 6, '', 'B', 0, 'R');
 			$this->Cell($w[4], 6, '1', 'B', 0, 'C');
-			$this->Cell($w[5], 6, ((!self::$orderSlip AND $discount['value'] != 0.00) ? '-' : '').self::convertSign(Tools::displayPrice($discount['value'], self::$currency, true)), 'B', 0, 'R');
+
+            $discount_value = $discount['value'];
+            if (self::$_priceDisplayMethod == PS_TAX_EXC)
+                $tax_rate_discount = self::$order->getTaxesAverageUsed();
+
+            $discount_value = $discount_value / (1 + $tax_rate_discount / 100);
+
+			$this->Cell($w[5], 6, ((!self::$orderSlip && ($discount['value'] != 0.00)) ? '-' : '').self::convertSign(Tools::displayPrice($discount_value, self::$currency, true)), 'B', 0, 'R');
 			$this->Ln();
 		}
 
@@ -1012,7 +1024,7 @@ class PDFCore extends PDF_PageGroupCore
 		{
 			$ratio = $amountWithoutTax == 0 ? 0 : $product['priceWithoutTax'] / $amountWithoutTax;
 			$priceWithTaxAndReduction = $product['priceWithTax'] - $discountAmount * $ratio;
-			$discountAmountWithoutTax = Tools::ps_round(($discountAmount * $ratio) / (1 + ($product['tax_rate'] / 100)), 2);
+			$discountAmountWithoutTax = ($discountAmount * $ratio) / (1 + ($product['tax_rate'] / 100));
 			if (self::$_priceDisplayMethod == PS_TAX_EXC)
 			{
 				$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / (((float)($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
@@ -1051,16 +1063,18 @@ class PDFCore extends PDF_PageGroupCore
 			{
 				$priceBreakDown['totalsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
 				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsWithoutTax'][$tax_rate], 2);
-				$priceBreakDown['totalsWithTax'][$tax_rate] = Tools::ps_round(($priceBreakDown['totalsWithoutTax'][$tax_rate]- $priceBreakDown['totalsEcotax'][$tax_rate]) * (1 + $tax_rate / 100) + $priceBreakDown['totalsEcotaxWithTax'][$tax_rate], 2);
+                //$total_with_tax = Tools::ps_round(($priceBreakDown['totalsWithoutTax'][$tax_rate]- $priceBreakDown['totalsEcotax'][$tax_rate]) * (1 + $tax_rate / 100) + $priceBreakDown['totalsEcotaxWithTax'][$tax_rate], 2);
+				$priceBreakDown['totalsWithTax'][$tax_rate] = $priceBreakDown['totalsProductsWithTax'][$tax_rate];
+                $priceBreakDown['totalWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
 			}
 			else
 			{
 				$priceBreakDown['totalsWithoutTax'][$tax_rate] = $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
 				$priceBreakDown['totalsProductsWithoutTax'][$tax_rate] = Tools::ps_round($priceBreakDown['totalsProductsWithoutTax'][$tax_rate], 2);
 				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$tax_rate] = $priceBreakDown['totalsProductsWithTaxAndReduction'][$tax_rate] / (1 + ($tax_rate / 100));
+                $priceBreakDown['totalWithTax'] += $priceBreakDown['totalsProductsWithTaxAndReduction'][$tax_rate];
 			}
 
-			$priceBreakDown['totalWithTax'] += $priceBreakDown['totalsProductsWithTaxAndReduction'][$tax_rate];
 			$priceBreakDown['totalWithoutTax'] += $priceBreakDown['totalsWithoutTax'][$tax_rate];
 			$priceBreakDown['totalProductsWithoutTax'] += $priceBreakDown['totalsProductsWithoutTax'][$tax_rate];
 			$priceBreakDown['totalProductsWithTax'] += $priceBreakDown['totalsProductsWithTax'][$tax_rate];
@@ -1085,7 +1099,7 @@ class PDFCore extends PDF_PageGroupCore
 		if (strtoupper(Country::getIsoById((int)$taxable_address->id_country)) == 'CA')
 		 	return;
 
-		if (Configuration::get('VATNUMBER_MANAGEMENT') AND !empty($invoiceAddress->vat_number) AND $invoiceAddress->id_country != Configuration::get('VATNUMBER_COUNTRY'))
+		if (Configuration::get('VATNUMBER_MANAGEMENT') && !empty($taxable_address->vat_number) && $taxable_address->id_country != Configuration::get('VATNUMBER_COUNTRY'))
 		{
 			$this->Ln();
 			$this->Cell(30, 0, self::l('Exempt of VAT according section 259B of the General Tax Code.'), 0, 0, 'L');
